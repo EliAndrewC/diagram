@@ -108,6 +108,7 @@ cadastral register	cadastre
 cadastral survey	cadastre
 cadastre	cadastre
 cadastres	cadastre
+caishen	Caishen
 calamagrostis	Calamagrostis
 canal corridor	canal corridor
 canal corridors	canal corridor
@@ -124,6 +125,8 @@ causeway	causeway
 center-pivot	center-pivot
 cesspit	koedame
 cesspits	koedame
+chan	Chan
+chan buddhism	Chan
 chaoguan	chaoguan
 chenghuangmiao	chenghuangmiao
 chi	chi
@@ -141,6 +144,8 @@ chugen	chugen
 chōzuya	temizuya
 circuit	wall circuit
 circuit's length	wall circuit
+city god	City God
+city gods	City God
 coefficient of variation	coefficient of variation
 collar	planted collar
 collars	planted collar
@@ -211,6 +216,7 @@ danna-ba	kusaba
 danna-dera	danna-dera
 danzaemon	Danzaemon
 daozuofang	daozuofang
+daxiangguo	Daxiangguo
 db	dBA
 dba	dBA
 dbh	DBH
@@ -451,6 +457,10 @@ heian	Heian
 heimen	heimen
 heimin	heimen
 hem	hem
+hereditary house	hereditary temple
+hereditary monastery	hereditary temple
+hereditary temple	hereditary temple
+hereditary temples	hereditary temple
 hinin	hinin
 hinoki	hinoki
 hinomi-yagura	hinomi-yagura
@@ -661,6 +671,8 @@ leats	leat
 levee	levee
 levees	levee
 li	li
+liberties	liberty
+liberty	liberty
 lifang	lifang
 light bamboo	light bamboo
 lijia	lijia
@@ -715,6 +727,7 @@ mengxi bitan	Mengxi Bitan
 mimizuka	ear mound
 ming	Ming dynasty
 ming dynasty	Ming dynasty
+ming taizu	Taizu
 ming-dynasty	Ming dynasty
 ming-qing	Qing dynasty
 minka	minka
@@ -730,7 +743,6 @@ module	module
 momi	momi
 mon	mon
 mongol yam	yam
-monk	monk outlet
 monk outlet	monk outlet
 monk-style outlet	monk outlet
 monospecific	monospecific
@@ -865,6 +877,8 @@ provincial capital	provincial seat
 provincial capitals	provincial seat
 provincial seats	provincial seat
 provincial-capital	provincial seat
+public monasteries	public monastery
+public monastery	public monastery
 puddled	puddling
 puddling	puddling
 qi	qi
@@ -1070,6 +1084,7 @@ taihu	Lower Yangzi
 taiping-gang	taiping-gang
 taisho	Taisho
 taishō	Taisho
+taizu	Taizu
 takasebune	takasebune
 take-yabu	take-yabu
 takeyabu	take-yabu
@@ -1097,6 +1112,7 @@ teikaku	teikaku
 temizuya	temizuya
 tenshu	tenshu
 tensuioke	tensuioke
+tera-machi	teramachi
 teramachi	teramachi
 terauke	terauke
 terauke seido	terauke
@@ -1207,7 +1223,7 @@ well sweep	jiegao
 well-sweep	well-sweep
 weng cheng	wengcheng
 wengcheng	wengcheng
-wenmiao	chenghuangmiao
+wenmiao	wenmiao
 wetted perimeter	wetted perimeter
 white-tawed	shironameshi
 willow association	plant association
@@ -1255,6 +1271,7 @@ yuan rebuild	Yuan dynasty
 yulin wei	yulin wei
 zaimokuya	zaimokuya
 zaofang	zaofang
+zaojun	Zaojun
 zelkova	keyaki
 zhalan	zhalan
 zhang	zhang

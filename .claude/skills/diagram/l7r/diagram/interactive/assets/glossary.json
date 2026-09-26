@@ -921,10 +921,9 @@
   ]
  },
  "chenghuangmiao": {
-  "def": "A Chinese county seat's two mandatory temples: the City God temple (chenghuangmiao) and the Confucian school-temple (wenmiao).",
+  "def": "The City God temple that stood at every seat of Chinese local government, where the highest local official led the state sacrifices to the City God.",
   "variants": [
-   "chenghuangmiao",
-   "wenmiao"
+   "chenghuangmiao"
   ]
  },
  "chi": {
@@ -2722,8 +2721,7 @@
   "def": "The older of a fish pond's two draining works: an upright boarded shaft against the dike, as against a sluice cut through it.",
   "variants": [
    "monk-style outlet",
-   "monk outlet",
-   "monk"
+   "monk outlet"
   ]
  },
  "monzen": {
@@ -3789,9 +3787,10 @@
   ]
  },
  "teramachi": {
-  "def": "A castle town's temple quarter: the belt along its outer rim where the lord gathered the temples, their spacious precincts doubling as a line of defense.",
+  "def": "A castle town's temple quarter, where the lord gathered the temples - often along the town's outer rim or at its road entrances, their spacious precincts useful in its defense.",
   "variants": [
-   "teramachi"
+   "teramachi",
+   "tera-machi"
   ]
  },
  "tertiary source": {
@@ -5113,6 +5112,74 @@
   "def": "Meng Yuanlao's memoir of 1147 recalling life in Kaifeng, the Northern Song capital.",
   "variants": [
    "Dongjing Meng Hua Lu"
+  ]
+ },
+ "Daxiangguo": {
+  "def": "The great imperially patronized Buddhist monastery in Kaifeng, the Northern Song capital, said at its height to have managed sixty-four departments with several thousand monks.",
+  "variants": [
+   "Daxiangguo"
+  ]
+ },
+ "hereditary temple": {
+  "def": "A Chinese Buddhist temple handed down from master to disciple within one lineage, as against a public monastery, whose abbot was chosen from outside the lineage and which took in any ordained monk.",
+  "variants": [
+   "hereditary temple",
+   "hereditary temples",
+   "hereditary house",
+   "hereditary monastery"
+  ]
+ },
+ "public monastery": {
+  "def": "A large Chinese Buddhist monastery whose abbot was chosen from outside any one lineage and which took in any ordained monk, as against a hereditary temple.",
+  "variants": [
+   "public monastery",
+   "public monasteries"
+  ]
+ },
+ "Chan": {
+  "def": "The Chinese school of Buddhism centered on meditation, known in Japan as Zen.",
+  "variants": [
+   "Chan",
+   "Chan Buddhism"
+  ]
+ },
+ "City God": {
+  "def": "The guardian deity of a walled city, worshipped in an official state cult: each seat of local government had a City God temple, and its highest official led the sacrifices at set times.",
+  "variants": [
+   "City God",
+   "City Gods"
+  ]
+ },
+ "liberty": {
+  "def": "A deliberate departure from what history attests, made for the game's sake and stated openly in the record.",
+  "variants": [
+   "liberty",
+   "liberties"
+  ]
+ },
+ "Taizu": {
+  "def": "The temple name of the founding emperor of the Ming dynasty, the Hongwu Emperor.",
+  "variants": [
+   "Taizu",
+   "Ming Taizu"
+  ]
+ },
+ "Caishen": {
+  "def": "The Chinese god of wealth.",
+  "variants": [
+   "Caishen"
+  ]
+ },
+ "Zaojun": {
+  "def": "The Chinese Kitchen God, the household deity of the stove.",
+  "variants": [
+   "Zaojun"
+  ]
+ },
+ "wenmiao": {
+  "def": "The Confucian temple attached to a Chinese prefectural or county school, required for every county school by a Tang decree of 630.",
+  "variants": [
+   "wenmiao"
   ]
  }
 }
