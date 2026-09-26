@@ -82,7 +82,14 @@ wake_call "$T/plain.jsonl" "x" "x" stop; rc=$?
 printf '{"tool_name":"Bash","tool_input":{"command":"ls"}}' | "$HOOK" pretool 2>/dev/null; rc=$?
 [ "$rc" -eq 0 ] && ok "any other tool is ignored" || no "another tool was refused" "(rc=$rc)"
 printf 'not json' | "$HOOK" pretool 2>/dev/null; rc=$?
-[ "$rc" -eq 0 ] && ok "an unreadable payload does not refuse on a guess" || no "a garbage payload was refused" "(rc=$rc)"
+[ "$rc" -eq 2 ] && ok "an unreadable payload is refused - closed on the call (plan review)" || no "a garbage payload let a wakeup through" "(rc=$rc)"
+wake_call "$T/missing.jsonl" "fallback" "$WAKE_PROMPT"; rc=$?
+[ "$rc" -eq 2 ] && ok "a missing transcript is refused - no live loop can be shown" || no "a missing transcript let a wakeup through" "(rc=$rc)"
+printf 'this line is not json\n' > "$T/broken.jsonl"
+wake_call "$T/broken.jsonl" "fallback" "$WAKE_PROMPT"; rc=$?
+[ "$rc" -eq 2 ] && ok "an unparsable transcript is refused" || no "an unparsable transcript let a wakeup through" "(rc=$rc)"
+wake_call "$T/missing.jsonl" "x" "x" stop; rc=$?
+[ "$rc" -eq 0 ] && ok "...but stop:true still passes without a transcript (ending a loop is always allowed)" || no "stop:true refused without a transcript" "(rc=$rc)"
 
 echo "2. layer 2 - a turn cannot end with a stale wakeup pending"
 stop_call s2 "$T/plain.jsonl" "[$(cron 43582eac "$WAKE_PROMPT")]"; rc=$?

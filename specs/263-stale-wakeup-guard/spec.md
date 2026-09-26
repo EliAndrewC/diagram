@@ -64,8 +64,10 @@ the transcript and no live loop; it blocks, naming the id.
 
 ### Edge Cases
 
-- A payload with no `transcript_path`, an unreadable transcript, or malformed JSON: the hook exits 0 (a guard that
-  cannot read its inputs does not refuse on a guess), and the Stop layer still sees no wakeup to name.
+- An unreadable payload, a missing or unparsable transcript, or a failure of the check itself: the ScheduleWakeup layer
+  REFUSES the call (it cannot show the call belongs to a live loop, and failing open would let the incident through
+  whole); `stop: true` still passes. The Stop layer exits 0, because without the transcript it cannot tell a wakeup
+  from a reminder the GM asked for, and must never block the latter.
 - A background session (`kind: "bg"`) continuing a parked tab has its own transcript and session id; the rule reads
   that transcript, so it holds there as well.
 
@@ -126,3 +128,5 @@ the transcript and no live loop; it blocks, naming the id.
   itself through. (3) the `/loop` exemption scoped to a LIVE loop's own wakeup and measured (`research.md` R3). (4) the
   once-per-id valve removed: the Stop layer blocks at every turn end, since one `CronDelete` always satisfies it.
 - Round 2 (2026-09-26, `spec-fidelity-verify`, Opus): FAITHFUL - all four round-1 items resolved.
+- Amendment after acceptance (plan review, 2026-09-26, BLOCKED on D4): the fail-open edge case is scoped to the Stop
+  layer; the ScheduleWakeup layer fails closed.

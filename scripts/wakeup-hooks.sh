@@ -69,7 +69,15 @@ try:
     if not isinstance(p, dict):
         raise ValueError
 except Exception:
-    print("PASS unreadable-payload"); sys.exit(0)
+    # FAIL CLOSED ON THE CALL, OPEN ON THE TURN END (plan review, 2026-09-26; GUARD_EDIT_OK: feature 263). The
+    # PreToolUse matcher already says this IS a ScheduleWakeup, and one that cannot be shown to belong to a live loop
+    # is refused - failing open here would let the incident through whole, since the Stop layer (which must fail
+    # open, or it would block reminders it cannot tell from wakeups) cannot name it either.
+    print("REFUSE unreadable" if mode == "pretool" else "PASS unreadable-payload"); sys.exit(0)
+if mode == "pretool" and p.get("tool_name") not in (None, "ScheduleWakeup"):
+    # GUARD_EDIT_OK: feature 263 plan review - decided BEFORE the transcript read, so failing closed on an unreadable
+    # transcript can never touch another tool (the matcher names ScheduleWakeup; this is the belt to its braces)
+    print("PASS not-a-wakeup"); sys.exit(0)
 
 # THE TRANSCRIPT, IN ORDER: every ScheduleWakeup prompt (what makes a pending cron a wakeup - research.md R1), and
 # whether a loop is LIVE - its latest event a /loop invocation (the command entry, or the `loop` skill) rather than
@@ -102,7 +110,9 @@ try:
                     wakeup_prompts.add(inp["prompt"])
             elif b.get("name") == "Skill" and inp.get("skill") == "loop":
                 loop_live = True
-except OSError:
+except Exception:  # GUARD_EDIT_OK: feature 263 plan review - an unreadable or unparsable transcript: closed on the call
+    if mode == "pretool" and not (p.get("tool_input") or {}).get("stop"):
+        print("REFUSE unreadable"); sys.exit(0)
     print("PASS no-transcript"); sys.exit(0)
 
 if mode == "pretool":
@@ -151,7 +161,12 @@ pretool() {
         printf 'There is no escape: a case that seems to need one is a question for the GM, not a token.\n'
       } >&2
       guard_log wakeup blocked "ScheduleWakeup" outside-loop; exit 2 ;;
-    *) exit 0 ;;
+    PASS*) exit 0 ;;
+    *)
+      # GUARD_EDIT_OK: feature 263 plan review - REFUSE unreadable, an empty verdict (the decision crashed) or
+      # anything unforeseen is CLOSED: the call cannot be shown to belong to a live loop, so it is refused
+      printf 'BLOCKED: ScheduleWakeup, and this guard could not establish that the session is running a live /loop\n(its transcript was unreadable, or the check itself failed - %s). Outside a loop, background work wakes\nthe session by itself; a reminder the GM asked for is CronCreate'"'"'s job. (feature 263)\n' "${verdict:-no verdict}" >&2
+      guard_log wakeup blocked "ScheduleWakeup" unreadable; exit 2 ;;
   esac
 }
 

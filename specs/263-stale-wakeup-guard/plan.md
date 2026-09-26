@@ -39,10 +39,15 @@ against a `ScheduleWakeup(stop: true)` - decides whether a loop is live; only a 
 Exit 2 with the `CronDelete <id>` lines on stderr, every time a stale wakeup is pending - there is no once-only
 state, because the block is always satisfiable by one call (spec-fidelity round 1).
 
-### D4 - Fail open on unreadable input only
+### D4 - Closed on the call, open on the turn end
 
-An unreadable payload or transcript exits 0: a guard that cannot read its inputs does not refuse on a guess, and a
-Stop layer that failed closed would risk blocking the reminders FR-003 protects.
+- **ScheduleWakeup layer: fails CLOSED.** An unreadable payload, a missing or unparsable transcript, an empty verdict (the
+  decision crashed) or anything unforeseen is a refusal: the matcher already says the call is a `ScheduleWakeup`, one
+  that cannot be shown to belong to a live loop is refused, and failing open would let the incident through whole
+  (plan review 2026-09-26). `stop: true` still passes; a non-`ScheduleWakeup` tool is decided before the transcript is
+  read, so failing closed never touches another tool.
+- **Stop layer: fails OPEN** on an unreadable payload or transcript: without the transcript a wakeup cannot be told from
+  a `CronCreate` reminder (R1), and blocking the GM's own reminder is what FR-003 forbids.
 
 ### D5 - The payload reaches the decision through a file
 

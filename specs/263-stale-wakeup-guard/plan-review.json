@@ -1,0 +1,53 @@
+{
+ "feature": "263-stale-wakeup-guard",
+ "plan_sha256": "a214c96dc3a8d9f6f673c4417e1e62a0a2a7dcb9054889b192c9fbb95fbe9513",
+ "reviewed": "2026-09-26",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "A pending cron is a wakeup when its prompt equals a ScheduleWakeup call's prompt in the session transcript.",
+   "class": "within",
+   "why": "The spec's Wakeup entity and FR-002/FR-003 verbatim; research R1 measured that the Stop payload cannot tell the two tools apart. It carries the GM-approved proposal's 'never block reminders the GM asks for'."
+  },
+  {
+   "id": "D2",
+   "summary": "A loop is live while the transcript's latest loop event is an invocation (command entry or loop skill call) rather than ScheduleWakeup(stop: true); only a /loop-prompt or sentinel wakeup is exempt, and only while live.",
+   "class": "within",
+   "why": "The spec's Live loop entity and FR-001/FR-002, measured in R3. The code checks the /loop form rather than the specific input, but a wakeup whose prompt is '/loop X' re-invokes the loop when it fires, so it is a loop wakeup by construction."
+  },
+  {
+   "id": "D3",
+   "summary": "The Stop layer exits 2 naming CronDelete <id> at every turn end a stale wakeup is pending; no once-only state.",
+   "class": "within",
+   "why": "FR-002 and FR-004 as written; the code keeps no state."
+  },
+  {
+   "id": "D4-stop",
+   "summary": "The Stop layer exits 0 when the payload or transcript cannot be read.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Without the transcript a wakeup cannot be told from a CronCreate reminder (R1). Failing closed would block the GM's own reminders, which the proposal the GM approved names as what the second layer must never block. So the exception follows from the GM's own words."
+  },
+  {
+   "id": "D4-pretool",
+   "summary": "The PreToolUse layer lets a ScheduleWakeup through when the payload or transcript cannot be read. As built, it also lets one through on any crash of the decision (an uncaught exception, a mktemp failure), not on unreadable input only.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The GM approved 'refuse ScheduleWakeup unless the session is actually running /loop' and asked that it be 'literally impossible for them to do the wrong thing'. Failing closed is possible: the matcher already guarantees the call is a ScheduleWakeup. Failing closed costs at most a /loop whose transcript cannot be read, and R3 counts zero real /loop uses in 123 transcripts. Failing open lets the incident through whole, because the Stop layer fails open on the same unreadable transcript and nothing then names the wakeup. The only argument offered is guard-doctrine consistency ('does not refuse on a guess'), and consistency with existing code is not a ground for an exception. Measured: a missing transcript exits 0, and so does a transcript line that crashes the parser. A readable but empty transcript exits 2. This exception is carried by the spec's first Edge Case and was accepted there, and this mode exists to catch that."
+  },
+  {
+   "id": "D5",
+   "summary": "The payload reaches the embedded Python through a temp file, because the heredoc is python's stdin.",
+   "class": "within",
+   "why": "An implementation mechanism with no effect on scope."
+  },
+  {
+   "id": "D6",
+   "summary": "Wired as a PreToolUse matcher on ScheduleWakeup and a Stop entry in .claude/settings.json, with rows in CLAUDE.md and docs/guards.md.",
+   "class": "within",
+   "why": "FR-007 and the two layers the GM approved; both rows are present."
+  }
+ ],
+ "verdict": "BLOCKED"
+}
