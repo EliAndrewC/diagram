@@ -205,7 +205,11 @@ class FixtureSitingMixin:
             # board reach the frontage. It moved nothing on Inashiro - the frontage has no verge seat that `_fits` a
             # board after the re-seat (4 of 60 probes around the houses fit), so the choice of routes was never the
             # constraint; the room is. Recorded so the lever is not pulled again (`research.md` R6).
-            _main = [ln for ln in _ways if not ln.get("web")] or _ways
+            # ...AND THE CONNECTOR IS NOT A MAIN WAY EITHER (2026-09-26). It carries no `web` flag, so a hamlet whose
+            # web declared no spine left the connector as the ONLY "main" route and the web lanes out: Kuwabata,
+            # re-packed when its homesteads began turning as one piece, found no verge on the connector that fit a
+            # board and shipped with none. The frame's re-seat already leaves the connector out; this now agrees.
+            _main = [ln for ln in _ways if not ln.get("web") and not ln.get("connector")] or _ways
             routes.extend(([(p[0], p[1]) for p in ln["pts"]], float(ln.get("w", 8))) for ln in _main)
             routes.extend(([(p[0], p[1]) for p in st["pts"]], float(st.get("w", 18))) for st in self.M.get("town_streets") or [])
         spots = [(b["x"], b["y"]) for b in self.M["houses"]] + [(b["x"], b["y"]) for b in self.M["buildings"]]

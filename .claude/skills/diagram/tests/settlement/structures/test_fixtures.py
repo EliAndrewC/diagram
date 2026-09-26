@@ -166,6 +166,23 @@ def test_the_board_can_be_sited_on_a_manifest_that_records_runs_but_no_lane_reco
     assert 4.0 < abs(y - 500.0) < 60.0, f"the board should hug the verge, got {abs(y - 500.0):.1f} ft off"
 
 
+def test_the_connector_is_not_a_main_way_the_web_is_offered_when_no_spine_is_declared() -> None:
+    """A hamlet whose web declared no spine left the connector as its only 'main' route (it carries no `web`
+    flag), the web lanes were kept out, and Kuwabata found no seat on the connector and shipped with no board
+    (2026-09-26). With no main way the whole network is offered, as the frame's re-seat already did."""
+    s = Settlement(1400, 1000, seed=5)
+    s.meta(name="Fixture", scale="hamlet")
+    s.M["lanes"] = [
+        {"pts": [(1200.0, 900.0), (1210.0, 990.0)], "w": 5.0, "connector": True},  # a stub out to the road, hemmed in
+        {"pts": [(200.0, 500.0), (1100.0, 500.0)], "w": 3.0, "web": True},
+    ]
+    s.M["houses"] = [{"x": x, "y": 430.0, "w": 46.0, "h": 28.0, "rot": 0.0} for x in (500.0, 620.0, 740.0, 860.0)]
+    s.placed.append((1205.0, 945.0, 120.0, 120.0))  # nothing fits beside the connector
+    spot = s.place_kosatsuba()
+    assert spot is not None, "a hamlet with web lanes and no spine still seats its board"
+    assert abs(spot[1] - 500.0) < 60.0, "on the web lane's verge, not the connector's"
+
+
 def test_a_settlement_is_only_offered_the_board_placements_it_can_site() -> None:
     """THE AFFORDANCE RULE IS THE TYPING RULE. A settlement with no recorded approach cannot put its
     board at one, and one recording no house for its official cannot put it at their gate - so those

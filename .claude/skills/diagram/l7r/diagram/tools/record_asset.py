@@ -17,7 +17,7 @@ from __future__ import annotations
 import argparse
 import sys
 
-from l7r.diagram.interactive.record.store import RecordError, check, read_page, record_pages, write_fragments
+from l7r.diagram.interactive.record.store import RecordError, check, record_pages, write_fragments, write_pages
 from l7r.diagram.interactive.sources import RESEARCH_DIR
 
 
@@ -56,16 +56,12 @@ def _check(research_dir: str) -> int:
 
 
 def _write(page: str, research_dir: str) -> int:
+    """Write each page through `write_pages` - the research page, its citations page and the hover script,
+    the files `check` compares. This wrote the research page alone until 2026-09-26, so a new footnote left
+    `citations/<page>.html` stale with no command that would rewrite it: `CHECK=1` and the gate named it,
+    and `make record` answered "wrote 0 page(s)"."""
     pages = [_page_rel(page)] if page else record_pages(research_dir)
-    written = 0
-    for page_rel in pages:
-        want = read_page(page_rel, research_dir)
-        path = f"{research_dir}/{page_rel}"
-        if _read(path) == want:
-            continue
-        with open(path, "w", encoding="utf-8") as fh:
-            fh.write(want)
-        written += 1
+    written = sum(write_pages(page_rel, research_dir) for page_rel in pages)
     print(f"record: wrote {written} page(s)")
     return 0
 
@@ -75,14 +71,6 @@ def _page_rel(name: str) -> str:
     if name in ("sources", "SOURCES"):
         return "SOURCES.html"
     return name if name.endswith(".html") else f"{name}.html"
-
-
-def _read(path: str) -> str | None:
-    try:
-        with open(path, encoding="utf-8") as fh:
-            return fh.read()
-    except OSError:
-        return None
 
 
 if __name__ == "__main__":
