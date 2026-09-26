@@ -345,7 +345,8 @@ The GM, on R6: *"Implement all of your recommendations and then do another measu
 4. **Per question checked** (recommendation 4). `tokens.py summary --files ... --questions N --items N` gives a
    page's row, per question checked as the headline and per item beside it.
 5. **The measured page is `cities/fabric`**: three FR-002 items and no FR-006, as `cities/government` had, and one
-   item falls in question 140 (36,858 bytes), so the page exercises the in-session split. Worked as the last three
+   item falls in question 140 (36,858 bytes with its notes; observed 2026-09-26, method: `wc -c` of 140 and its notes,
+   as `brief.py over_cap` prints it), so the page exercises the in-session split. Worked as the last three
    were - a write session, then check sessions of two questions - and compared in R7 with R4 to R6, computed the same
    way.
 

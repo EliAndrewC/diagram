@@ -445,7 +445,8 @@ so what a `quote-check` read fell to 19,400 characters from 34,800 on the last p
 from 31,300 - about half, and below `cities/defenses` too. The mean agent run fell to 60,000 from 89,000. Every
 session started at 19,300 and none passed 95,000.
 
-**The main session is now where the tokens go.** It was 83% of this page's measured total, and the agents 17%. The
+**The main session is now where the tokens go.** It was 83% of this page's measured total, and the agents 17% (observed 2026-09-26; method: the table's main
+and agent rows, 5.30 of 6.38 million). The
 largest single cost on each of the three pages is the APPLY step of a check session - 1.41 million over 27 turns in
 this page's first group, against 1.92 and 1.66 million on the last two - each turn re-reading a context of 60,000 to
 90,000. Next is the write session's reading: 19 turns and 0.97 million here for three items, where `cities/defenses`
