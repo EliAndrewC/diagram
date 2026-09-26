@@ -1,6 +1,6 @@
 {
  "feature": "250-close-the-record-checks",
- "plan_sha256": "ce6d99194a734b41bce30bf245e1ddfe382aca62e9d9f7124d9eedc71888c4d3",
+ "plan_sha256": "3648d178025e1b1e83a25de5d25d83de677eb0f7f74715ec4f720153da683a05",
  "reviewed": "2026-09-26",
  "declared": "spec-fidelity",
  "decisions": [
@@ -98,10 +98,11 @@
    "why": "Recommendation 2 ('Run one session per research page'), adopted. The launcher and derived brief are the mechanism of that recommendation, not a separate behavior."
   },
   {
-   "id": "D8-report-to-file-one-line-reply",
-   "summary": "The five bundled check contracts gain Write; the whole report goes to REPORT.md in the bundle and the reply is one line of counts naming it; no guard on the write.",
-   "class": "within",
-   "why": "Recommendation 3 (\"Write agent reports to a file and return only a one-line verdict\"), adopted. Round-5 item 2 RESOLVED: D8 now says five, and entry-drift.md at f4f89cdd carries tools Read, Grep, Write and the REPORT.md/one-line rule, as do the other four contracts."
+   "id": "D8-compact-inline-report",
+   "summary": "The report-to-file form failed (the harness refuses a subagent's report file: 'Subagents should return findings as text, not write report files'); the five check contracts reply with the report itself - counts on the first line, then only the findings to act on, a pass in one line, never the quotation or the reasoning it passed - and Write is off their tool lists. The file route that remains possible (a headless check whose launcher writes the file) is priced and not taken; raised with the GM with the result.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Narrows recommendation 3 as adopted ('Agent reports to a file, a verdict line to the session: a report is applied once and then re-read for the rest of the session'). Not physically impossible in the literal sense - the headless route can file a report - so it stands only on the purpose test, and it passes it concretely. The recommendation's purpose is its own stated reason: a report's tokens re-read on every later turn. Measured in measure/d8-pricing.txt (observed 2026-09-26, labeled; arithmetic re-derived here: report mean 16,304/10 = 1,630, turns 297/10 = 29.7, the ten products sum to 509,089, mean 50,909; 15,076 x 5.8 = 87,441 against the file's 87,439, rounding of the turn mean): the headless route costs about 87,000 tokens a check to save at most about 51,000, and less than that in practice, because a file route still puts the findings the session must act on into its context when it reads them, and the compact form now cuts the pass reasoning and quotations out of the inline reply. So the literal route defeats the recommendation's own purpose, while the compact reply keeps its operative half (a verdict first, nothing re-read that is not acted on). Class check: one harness rule applies alike to all five subagent checks, so the single justification does not stretch over unlike things. Noted, not blocking: one of the ten reports (2,208 tokens re-read on 46 turns = 101,568) would individually have been cheaper headless, but which one cannot be known when a check is dispatched, and one-page sessions (recommendation 2) bound the remaining turns. The decision is raised with the GM with the result, as the project's exception rule requires."
   },
   {
    "id": "D9-the-comparison",

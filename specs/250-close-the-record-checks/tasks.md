@@ -77,10 +77,11 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
       an agent whose bundle leg loses a finding keeps reading the tree
       research: rendering
       verify: DONE. DONE. 30 seeded runs, three a leg, five agents (measure/seeded-results.json): every run of both legs named every planted fault (rf 4/4, qc 2/2, sa 1/1, ed 1/1, sr 2/2). Bundle leg: 0 nested CLAUDE.md, peak 28,000-45,000 against 54,000-82,000 in the tree; all 30 wrote REPORT.md and replied in one line. No agent keeps reading the tree.
-- [ ] T16 **The comparison the GM asked for** (D9): T18 worked in a page session, measured against R1,
+- [x] T16 **The comparison the GM asked for** (D9): T18 worked in a page session, measured against R1,
       recorded as R2 with the next recommendations
       research: rendering
       measure: `python3 specs/250-close-the-record-checks/measure/tokens.py report --session <child transcript> --marks <its marks>`
+      verify: DONE. research.md R2: homesteads (8 items) in one page session, 12.5 million tokens against the slice's 8.0 million for 5 - 1.56 against 1.60 million an item; checks attached no CLAUDE.md (0 of 10); seeded runs 30 of 30 findings kept; the report file refused by the harness and replaced by a compact reply (D8, priced in d8-pricing.txt); five next recommendations.
 
 ## Phase 2 - FR-002 and FR-006, one page per session (D7)
 
