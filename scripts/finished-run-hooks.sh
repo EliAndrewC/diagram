@@ -373,9 +373,8 @@ except Exception: pass' 2>/dev/null)
       if [ -n "$STALE" ]; then
         printf 'A WAITER IS SPINNING ON A DEAD PRODUCER - it will never finish on its own:\n'
         printf '%s\n' "$STALE" | sed 's/^/  pid /'
+        # GUARD_EDIT_OK: the 2026-09-12 story is in stale_waiters' comment, not the output (GM 2026-09-26, terse output)
         printf 'Nothing is writing that file any more. Read what it DOES have, then stop the loop by its pid.\n'
-        printf 'These show in the GM status line as running shells, which is how three of them went unnoticed\n'
-        printf 'for eight hours on 2026-09-12 while this session twice reported that nothing was running.\n'
         # shellcheck source=/dev/null
         . "$FR_HERE/_guardlog.sh"
         guard_log finished-run reminded "$STALE" waiter-on-a-dead-producer

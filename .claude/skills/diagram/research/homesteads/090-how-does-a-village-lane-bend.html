@@ -29,8 +29,12 @@ Two lines of evidence, one from how paths form and one from how villages are lai
 <p><strong>The rule</strong>: pull every lane taut like a string<!-- string-pull every lane (a chord at the web's own margins, or at footprint margins when it only removes jogs within 6 ft of the old line); collapse ends within 25 ft of one another onto ONE node. hamletgen/ways.py _smooth_web, the last pass of stage_web; the gate's lanes_bend_like_paths --> (a straight chord within the lane
 network's own margins, or right up to the buildings' footprints when that only removes jogs within 6 ft
 of the old line); cut a hairpin's arm when it is under 40 ft; join ends within 25 ft of one another at
-ONE point; cut a tail that runs on past a crossing for under 40 ft; and make each junction once. The
-140-degree and 50-degree turn limits, and the 40 ft / 25 ft / 6 ft distances, are drawing thresholds
-chosen at the scale of a dozen paces rather than measured findings.</p>
+ONE point; cut a tail that runs on past a crossing for under 40 ft; and make each junction once. Two
+lanes that meet end to end with nothing else at the point are one path to whoever walks it, so they are
+read as one: where the one would turn back into the other, the arriving lane meets the other's side as a
+T instead, and a jog across the meeting point is pulled straight like any other.<!-- hamletgen/ways/joints.py straighten_joints, the last pass of stage_web (GM 2026-09-26: "they are not going to walk in one direction and then turn at a 30-degree angle to keep walking"); the gate's test_no_two_lanes_meet_end_to_end_in_a_fold_and_no_lane_ends_in_a_hook --> A lane's end
+that hooks back - a last leg of 12 ft or less turning 90 degrees or more - loses the hook. The
+140-degree, 90-degree and 50-degree turn limits, and the 40 ft / 25 ft / 12 ft / 6 ft distances, are
+drawing thresholds chosen at the scale of a dozen paces rather than measured findings.</p>
 <!-- Classification: the principle is ACCURATE (a worn path minimizes its turns; a bend sits at a plot corner); the thresholds are DRAWING conventions. -->
 <!-- Sources (read): Wikipedia "Desire path" (https://en.wikipedia.org/wiki/Desire_path; citing Hampton and Cole 1988 for the fifteen-passage figure - footnote 37, which now stands on the fifteen-passage sentence above); 99% Invisible, "Least Resistance: How Desire Paths Can Lead to Better Design" (https://99percentinvisible.org/article/least-resistance-desire-paths-can-lead-better-design/). Pointers, not read (paywalled/403): Ma, Brandt, Seipel and Ma (2024), Environment and Planning B (SOURCES.html#ma-2024-desire-paths; agent-based desire paths; its abstract, read via ideas.repec.org, is about the agents' angle of VISION, not turning - the turn-minimization sentence is not from it); the 2025 Landscape and Urban Planning energy-based desire-path paper. The plot-corner geometry is the lane-access entry's. Corrected 2026-08-27 under T44 and the T45 spot-check. -->
