@@ -60,7 +60,12 @@ CASES = [
     ("agent-model", _payload(_tool="Agent", subagent_type="general-purpose", prompt="read three pages"), "blocked", "no-model"),
     ("check-bundle", _payload(_tool="Agent", subagent_type="record-format", prompt="check .claude/skills/diagram/research/ways/010-x.html"), "blocked", "repo-path"),
     ("check-bundle", _payload(_tool="Agent", subagent_type="record-format", prompt="read /tmp/l7r-check/ways-010/MANIFEST.md"), "permitted", "bundle-named"),
-    ("check-bundle", _payload(_tool="Agent", subagent_type="record-format", prompt='read .claude/skills/diagram/research/ways/010-x.html CHECK_BUNDLE_OK="the term file itself is under review"'), "escaped", "check-bundle-ok"),
+    (
+        "check-bundle",
+        _payload(_tool="Agent", subagent_type="record-format", prompt='read .claude/skills/diagram/research/ways/010-x.html CHECK_BUNDLE_OK="the term file itself is under review"'),
+        "escaped",
+        "check-bundle-ok",
+    ),
     ("agent-model", _payload(_tool="Agent", subagent_type="general-purpose", model="sonnet", prompt="read three pages"), "permitted", "model-named"),
     ("agent-model", _payload(_tool="Agent", subagent_type="fork", prompt="carry on"), "permitted", "fork-inherits"),
     ("make-only", _payload(command="make -f /tmp/other.mk all"), "blocked", "foreign-makefile"),
