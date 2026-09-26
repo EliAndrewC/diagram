@@ -20,7 +20,7 @@ ROOT="$(cd "$HERE/.." && pwd)"
 PASS=0; FAIL=0
 
 ev() { python3 -c 'import json,sys; print(json.dumps({"session_id":"g","tool_name":sys.argv[3],"tool_input":{"file_path":sys.argv[1],"new_string":sys.argv[2]}}))' "$1" "$2" "${3:-Edit}"; }
-run() { ev "$1" "${2:-x}" "${3:-Edit}" | "$HOOK" pretool >/dev/null 2>/tmp/gf.err; echo $?; }
+run() { ev "$1" "${2:-x}" "${3:-Edit}" | "$HOOK" pretool >/dev/null 2>/tmp/gf.$$.err; echo $?; }
 
 check() { local rc; rc=$(run "$2" "${3:-x}" "${4:-Edit}")
   if { [ "$1" = ok ] && [ "$rc" -eq 0 ]; } || { [ "$1" = blocked ] && [ "$rc" -ne 0 ]; }; then
@@ -56,7 +56,7 @@ check ok "$ROOT/scripts/gate-hooks.sh" "GUARD_EDIT_OK - it was firing on correct
 echo
 echo "4. THE REFUSAL TELLS YOU WHAT TO DO"
 rc=$(run "$ROOT/.claude/skills/diagram/Makefile")
-if [ "$rc" -ne 0 ] && grep -q "GUARD_EDIT_OK" /tmp/gf.err && grep -q "fires on correct work" /tmp/gf.err; then
+if [ "$rc" -ne 0 ] && grep -q "GUARD_EDIT_OK" /tmp/gf.$$.err && grep -q "fires on correct work" /tmp/gf.$$.err; then
   echo "  ok      names the escape and distinguishes legitimate edits"; PASS=$((PASS+1))
 else echo "  FAIL    refusal did not carry the escape or the categories"; FAIL=$((FAIL+1)); fi
 
@@ -69,7 +69,7 @@ hazard() { # label, expected, new_string (Edit) - against the skill Makefile
   local rc; rc=$(run "$ROOT/.claude/skills/diagram/Makefile" "$3" Edit)
   if { [ "$2" = ok ] && [ "$rc" -eq 0 ]; } || { [ "$2" = blocked ] && [ "$rc" -ne 0 ]; }; then
     echo "  ok      $1"; PASS=$((PASS+1))
-  else echo "  FAIL    $1 (expected $2, rc=$rc)"; sed 's/^/          /' /tmp/gf.err | head -3; FAIL=$((FAIL+1)); fi
+  else echo "  FAIL    $1 (expected $2, rc=$rc)"; sed 's/^/          /' /tmp/gf.$$.err | head -3; FAIL=$((FAIL+1)); fi
 }
 hazard "the 207 shape: a backtick in a : \"...\" comment, WITH the marker" blocked "${TAB}: \"GUARD_EDIT_OK: feature 207 - \`make test-full\` is the gate's test phase\" ; \\"
 hazard "an @-prefixed comment with a backtick" blocked "${TAB}@: \"see \`make help\`\""
@@ -83,7 +83,7 @@ hazard "a backtick in a recipe COMMAND is the session's business" ok "${TAB}@ech
 RC=$(ev "$ROOT/other/Makefile" "${TAB}: \"a \`backtick\` comment\"" Write | "$HOOK" pretool >/dev/null 2>&1; echo $?)
 [ "$RC" -ne 0 ] && { echo "  ok      any Makefile, by Write too"; PASS=$((PASS+1)); } || { echo "  FAIL    a Write to another Makefile was not checked"; FAIL=$((FAIL+1)); }
 run "$ROOT/.claude/skills/diagram/Makefile" "${TAB}: \"\`x\`\"" Edit >/dev/null
-grep -q "There is no escape token" /tmp/gf.err && { echo "  ok      the refusal says there is no escape and how to write it"; PASS=$((PASS+1)); } || { echo "  FAIL    the refusal is unhelpful"; FAIL=$((FAIL+1)); }
+grep -q "There is no escape token" /tmp/gf.$$.err && { echo "  ok      the refusal says there is no escape and how to write it"; PASS=$((PASS+1)); } || { echo "  FAIL    the refusal is unhelpful"; FAIL=$((FAIL+1)); }
 
 echo
 echo

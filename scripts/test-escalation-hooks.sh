@@ -27,7 +27,7 @@ bash_call() { # a non-Agent tool must be ignored entirely
     | ( cd "$FIX" && "$HOOK" pretool 2>/dev/null )
 }
 stop_call() { # run the stop hook in the fixture, return its exit code, stderr to a file
-  printf '{"session_id":"t1"}' | ( cd "$FIX" && "$HOOK" stop 2>/tmp/eh.err );
+  printf '{"session_id":"t1"}' | ( cd "$FIX" && "$HOOK" stop 2>/tmp/eh.$$.err );
 }
 armed_by() { ( cd "$FIX" && "$HOOK" state ) | awk '/^armed by/{print $3}'; }
 
@@ -40,8 +40,8 @@ printf '%s' "$out" | grep -q "escalation-check" && ok "...naming the filter to d
 echo "2. the turn cannot close while findings are unfiltered"
 stop_call; rc=$?
 [ "$rc" -ne 0 ] && ok "stop refuses with a review armed" || no "stop allowed the turn to close" "(rc=$rc)"
-grep -q "FINDINGS UNFILTERED" /tmp/eh.err && ok "...and says what is wrong" || no "the refusal does not say what is wrong"
-grep -q "process narrative" /tmp/eh.err && ok "...and what the filter is for" || no "the refusal does not say what the filter cuts"
+grep -q "FINDINGS UNFILTERED" /tmp/eh.$$.err && ok "...and says what is wrong" || no "the refusal does not say what is wrong"
+grep -q "process narrative" /tmp/eh.$$.err && ok "...and what the filter is for" || no "the refusal does not say what the filter cuts"
 stop_call; rc=$?
 [ "$rc" -eq 0 ] && ok "ONCE per armed review, never a loop" || no "stop refused twice for one review" "(rc=$rc)"
 

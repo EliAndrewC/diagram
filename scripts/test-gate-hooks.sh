@@ -20,13 +20,13 @@ teardown() { rm -rf "$STATE_DIR"; }
 # command and every heredoc vector here passed for the wrong reason.
 bash_ev() { CMD="$1" python3 -c 'import json,os; print(json.dumps({"session_id":"g1","tool_name":"Bash","tool_input":{"command":os.environ["CMD"]}}))'; }
 edit_ev() { printf '{"session_id":"g1","tool_name":"Edit","tool_input":{"file_path":"%s"}}' "$1"; }
-run()  { "$HOOK" pretool <<<"$1" 2>/tmp/gt.err; }
+run()  { "$HOOK" pretool <<<"$1" 2>/tmp/gt.$$.err; }
 
 check() { # label expected(ok|blocked) rc
   if { [ "$2" = ok ] && [ "$3" -eq 0 ]; } || { [ "$2" = blocked ] && [ "$3" -ne 0 ]; }; then
     echo "  ok    $1"; PASS=$((PASS+1))
   else
-    echo "  FAIL  $1 (expected $2, rc=$3)"; [ -s /tmp/gt.err ] && sed 's/^/        /' /tmp/gt.err; FAIL=$((FAIL+1))
+    echo "  FAIL  $1 (expected $2, rc=$3)"; [ -s /tmp/gt.$$.err ] && sed 's/^/        /' /tmp/gt.$$.err; FAIL=$((FAIL+1))
   fi
 }
 
@@ -34,7 +34,7 @@ echo "1. THE MOTIVATING CASE: a -k subset, then the gate"
 setup
 run "$(bash_ev 'python3 -m pytest test_settlement.py -q -n auto --no-cov -k \"kura_side or punishment\"')"; check "the subset run itself is allowed" ok $?
 run "$(bash_ev 'make done')"; check "make done BLOCKED after a subset-only run" blocked $?
-grep -q "WHOLE test file" /tmp/gt.err && { echo "  ok    message says what to run instead"; PASS=$((PASS+1)); } || { echo "  FAIL  message unhelpful"; FAIL=$((FAIL+1)); }
+grep -q "WHOLE test file" /tmp/gt.$$.err && { echo "  ok    message says what to run instead"; PASS=$((PASS+1)); } || { echo "  FAIL  message unhelpful"; FAIL=$((FAIL+1)); }
 run "$(bash_ev 'make done')"; check "re-issuing the gate goes through (blocks once, no deadlock)" ok $?
 teardown
 

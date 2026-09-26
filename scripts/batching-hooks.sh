@@ -146,7 +146,7 @@ case "$MODE" in
       # window arithmetic "probably just burns tokens and then distracts"); their record is the header above.
       {
         echo "BLOCKED (batching): $N of your last ${#HIST} turns were one quick call each, and this is another bare read."
-        echo "Send the lookups you already know you need TOGETHER, as parallel tool calls in one message. A folded command (a; b; c) avoids this block but still counts as a turn. After a patch MISS, send the corrected patch and its check as one command. Never pad with no-op turns."
+        echo "Send the lookups you already know you need TOGETHER, as parallel tool calls in one message. A folded command (a; b; c) does not count. After a patch MISS, send the corrected patch and its check as one command. Never pad with no-op turns."
       } >&2
       # GUARD_EDIT_OK: feature 168 - THE LOUDEST GUARD FINALLY RECORDS (GM 2026-08-30). 119 firings in
       # six days, more than every other guard combined, and not one of them written down - so nobody
@@ -157,7 +157,7 @@ case "$MODE" in
       BH_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
       # shellcheck source=/dev/null
       . "$BH_HERE/_guardlog.sh"
-      guard_log batching blocked "$N of the last ${#HIST} turns were single quick calls (history $HIST, bar $REARM)" serial-recon
+      guard_log batching blocked "$N of the last ${#HIST} turns were single bare reads (history $HIST, bar $REARM)" serial-recon
       exit 2
     fi
     # GUARD_EDIT_OK: the notice fires AT OR ABOVE one below the bar, after the block check (2026-09-26,
@@ -165,9 +165,9 @@ case "$MODE" in
     # stayed loaded - a folded single command is still one round trip and counts - and heard nothing more; of
     # the 42 blocks since feature 249 that the transcripts hold, 29 came 3+ turns after the last notice and 173
     # of the 242 turns before them were folded single commands. Placed after the block so a refused call never
-    # carries both. The text now says a folded command still counts, which is what those sessions did not know.
+    # carries both. (Since option A, 2026-09-26, a folded command no longer fills the window at all.)
     if [ "$CALLS" -eq 1 ] && [ "$N" -ge "$((REARM - 1))" ]; then
-      printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","additionalContext":"BATCHING NOTICE: %s of your last %s turns were one quick call each; a folded command (a; b; c) still counts, it is one round trip. The next bare Read/Grep/Glob or single-command Bash on its own is refused. Send calls you already know you need as PARALLEL tool calls in one message. Nothing is refused yet."}}\n' "$N" "${#HIST}"
+      printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","additionalContext":"BATCHING NOTICE: %s of your last %s turns were a single bare read each (a folded command does not count). The next bare Read/Grep/Glob or single-command Bash on its own is refused. Send calls you already know you need as PARALLEL tool calls in one message. Nothing is refused yet."}}\n' "$N" "${#HIST}"
       # GUARD_EDIT_OK: THE NOTICE RECORDS, which it never did (found 2026-09-13, when the GM asked
       # whether the one-turn-early notice works and the answer had to be "the log cannot say"). The log
       # held 700 batching entries and every one was `blocked`: feature 164 added this branch, feature
@@ -184,7 +184,7 @@ case "$MODE" in
       # GUARD_EDIT_OK: the record is written in the BACKGROUND (2026-09-26): it costs ~300 ms of python, and now that the
       # notice speaks on every loaded turn that would sit in front of every such call; detached from stdout so the
       # harness does not wait on it.
-      ( guard_log batching reminded "$N of the last ${#HIST} turns were single quick calls - at or above one below the bar (history $HIST, bar $REARM)" serial-recon-notice ) >/dev/null 2>&1 &
+      ( guard_log batching reminded "$N of the last ${#HIST} turns were single bare reads - at or above one below the bar (history $HIST, bar $REARM)" serial-recon-notice ) >/dev/null 2>&1 &
     fi
     # A NEW TURN APPENDS ITS OWN (provisional) ENTRY HERE, after the check above has read the
     # window. It cannot be left to posttool: on a batched turn the FIRST posttool already sees
@@ -202,8 +202,14 @@ case "$MODE" in
     # call in the same turn rewrites that entry to '0', because the turn turned out to be batched.
     # (Appending per CALL instead would let one 3-call turn flush the whole window with zeros.)
     DUR=$((NOW - LAST_PRE))
-    if [ "$CALLS" -le 1 ] && [ "$DUR" -lt "$CHEAP_MS" ] && ! is_background; then
-      HIST="${HIST%?}1"               # one call and it was quick: a batchable turn
+    # GUARD_EDIT_OK: ONLY A RECON-SHAPED TURN COUNTS (GM 2026-09-26, option A: "yes please implement option A").
+    # The window counted any quick single call, a folded command included, while only a bare read could be blocked -
+    # so a session folding exactly as asked filled the window and its first bare read was refused for the chain
+    # before it. A folded command has already batched; a run of them is usually a dependent chain no message could
+    # merge (71% of the turns before the blocks since feature 249 were folded single commands, and after a block
+    # sessions mostly sent another). What counts is now what can be blocked: a bare single read in a row.
+    if [ "$CALLS" -le 1 ] && [ "$DUR" -lt "$CHEAP_MS" ] && ! is_background && is_recon_call; then
+      HIST="${HIST%?}1"               # one bare quick read: a batchable turn
     else
       HIST="${HIST%?}0"               # batched (the behavior we want) or real work
       if [ "$REARM" -gt "$THRESHOLD" ]; then REARM=$((REARM - 1)); fi   # backoff decays as turns batch

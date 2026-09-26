@@ -20,7 +20,7 @@ ev() { printf '{"session_id":"t1","tool_name":"%s"}' "$1"; }
 # one serial turn: a pre, a quick call, a post - with a gap first so it counts as a NEW turn
 serial_turn() {
   sleep 0.35                                   # > SAME_TURN_MS: a new turn
-  "$HOOK" pretool <<<"$(ev Read)" 2>/tmp/bt.err
+  "$HOOK" pretool <<<"$(ev Read)" 2>/tmp/bt.$$.err
   local rc=$?
   [ $rc -ne 0 ] && return $rc
   "$HOOK" posttool <<<"$(ev Read)" >/dev/null 2>&1   # immediate post = a fast call
@@ -31,7 +31,7 @@ check() { # label, expected(ok|blocked), actual_rc
   if { [ "$2" = ok ] && [ "$3" -eq 0 ]; } || { [ "$2" = blocked ] && [ "$3" -ne 0 ]; }; then
     echo "  ok    $1"; PASS=$((PASS+1))
   else
-    echo "  FAIL  $1 (expected $2, rc=$3)"; [ -s /tmp/bt.err ] && sed 's/^/        /' /tmp/bt.err; FAIL=$((FAIL+1))
+    echo "  FAIL  $1 (expected $2, rc=$3)"; [ -s /tmp/bt.$$.err ] && sed 's/^/        /' /tmp/bt.$$.err; FAIL=$((FAIL+1))
   fi
 }
 
@@ -44,11 +44,11 @@ serial_turn; check "turn 4 BLOCKED (streak hit 3)" blocked $?
 teardown; setup
 # an image Read is acting on a result, never recon (GM 2026-08-26): at the threshold it passes
 serial_turn; serial_turn; serial_turn
-sleep 0.35; "$HOOK" pretool <<<'{"session_id":"t1","tool_name":"Read","tool_input":{"file_path":"/tmp/x/crop.png"}}' 2>/tmp/bt.err; check "image Read at the threshold is NOT blocked" ok $?
-sleep 0.35; "$HOOK" pretool <<<'{"session_id":"t1","tool_name":"Read","tool_input":{"file_path":"/tmp/x/notes.md"}}' 2>/tmp/bt.err; check "text Read at the threshold still IS" blocked $?
-grep -q "you need TOGETHER" /tmp/bt.err && { echo "  ok    block message says what to do"; PASS=$((PASS+1)); } || { echo "  FAIL  block message unhelpful"; FAIL=$((FAIL+1)); }
-grep -q "patch MISS" /tmp/bt.err && { echo "  ok    block message carries the retry-patch fold tip"; PASS=$((PASS+1)); } || { echo "  FAIL  no retry-patch tip in the message"; FAIL=$((FAIL+1)); }
-grep -q "pad with no-op" /tmp/bt.err && { echo "  ok    block message forbids padding the window"; PASS=$((PASS+1)); } || { echo "  FAIL  no anti-padding tip in the message"; FAIL=$((FAIL+1)); }
+sleep 0.35; "$HOOK" pretool <<<'{"session_id":"t1","tool_name":"Read","tool_input":{"file_path":"/tmp/x/crop.png"}}' 2>/tmp/bt.$$.err; check "image Read at the threshold is NOT blocked" ok $?
+sleep 0.35; "$HOOK" pretool <<<'{"session_id":"t1","tool_name":"Read","tool_input":{"file_path":"/tmp/x/notes.md"}}' 2>/tmp/bt.$$.err; check "text Read at the threshold still IS" blocked $?
+grep -q "you need TOGETHER" /tmp/bt.$$.err && { echo "  ok    block message says what to do"; PASS=$((PASS+1)); } || { echo "  FAIL  block message unhelpful"; FAIL=$((FAIL+1)); }
+grep -q "patch MISS" /tmp/bt.$$.err && { echo "  ok    block message carries the retry-patch fold tip"; PASS=$((PASS+1)); } || { echo "  FAIL  no retry-patch tip in the message"; FAIL=$((FAIL+1)); }
+grep -q "pad with no-op" /tmp/bt.$$.err && { echo "  ok    block message forbids padding the window"; PASS=$((PASS+1)); } || { echo "  FAIL  no anti-padding tip in the message"; FAIL=$((FAIL+1)); }
 teardown
 
 echo "2. it never deadlocks: the call right after a block is allowed through"
@@ -105,20 +105,23 @@ check "the backgrounded call is allowed" ok $RC
 printf '%s' "$NOTICE" | grep -q "BATCHING NOTICE" && { echo "  ok    ...and it carries the notice"; PASS=$((PASS+1)); } || { echo "  FAIL  a backgrounded call one below the bar got no notice"; FAIL=$((FAIL+1)); }
 teardown
 
-# GUARD_EDIT_OK: 2026-09-26 - THE NOTICE KEEPS SPEAKING WHILE THE WINDOW STAYS LOADED. It fired only at EXACTLY one
-# below the bar, so a session that heeded it with a folded command (still one quick round trip, so still counted)
-# sat at the bar with no further word and was refused cold on a later bare read.
-echo "2e. a session that folds after the notice hears it again before a bare read is refused"
+# GUARD_EDIT_OK: 2026-09-26 - OPTION A (the GM's choice): A FOLDED COMMAND DOES NOT FILL THE WINDOW. It used to count (one
+# quick round trip) while only a bare read could be blocked, so a session folding as asked was refused on its first bare
+# read afterwards. The fixture sends the real PostToolUse shape, which carries the command, because that is what decides.
+echo "2e. folded commands never fill the window; bare reads still do, and the notice says which is which"
 setup
-serial_turn; serial_turn
-fold() { sleep 0.35; "$HOOK" pretool <<<'{"session_id":"t1","tool_name":"Bash","tool_input":{"command":"grep a f; grep b g"}}' 2>/dev/null; RC=$?; "$HOOK" posttool <<<"$(ev Bash)" >/dev/null 2>&1; return $RC; }
-fold >/dev/null; check "folded call one below the bar allowed" ok $?
-NOTICE=$(fold); check "the next folded call, AT the bar, is allowed" ok $?
-printf '%s' "$NOTICE" | grep -q "BATCHING NOTICE" && { echo "  ok    ...and carries the notice again"; PASS=$((PASS+1)); } || { echo "  FAIL  no notice at the bar - the next bare read is refused cold"; FAIL=$((FAIL+1)); }
-printf '%s' "$NOTICE" | grep -q "folded command" && { echo "  ok    ...saying a folded command still counts"; PASS=$((PASS+1)); } || { echo "  FAIL  the notice does not say folding still counts"; FAIL=$((FAIL+1)); }
-sleep 0.35; OUT=$("$HOOK" pretool <<<"$(ev Read)" 2>/tmp/bt.err); check "a bare read at the bar is refused" blocked $?
+FOLD='{"session_id":"t1","tool_name":"Bash","tool_input":{"command":"grep a f; grep b g"}}'
+fold() { sleep 0.35; "$HOOK" pretool <<<"$FOLD" 2>/dev/null; RC=$?; "$HOOK" posttool <<<"$FOLD" >/dev/null 2>&1; return $RC; }
+fold >/dev/null; fold >/dev/null; fold >/dev/null; fold >/dev/null
+serial_turn; check "four folded turns then a bare read: allowed" ok $?
+serial_turn; check "...and a second bare read (window holds two)" ok $?
+NOTICE=$(fold); check "a folded call one below the bar is allowed" ok $?
+printf '%s' "$NOTICE" | grep -q "BATCHING NOTICE" && { echo "  ok    ...and carries the notice"; PASS=$((PASS+1)); } || { echo "  FAIL  no notice one below the bar"; FAIL=$((FAIL+1)); }
+printf '%s' "$NOTICE" | grep -q "folded command does not count" && { echo "  ok    ...saying a folded command does not count"; PASS=$((PASS+1)); } || { echo "  FAIL  the notice does not say folding is exempt"; FAIL=$((FAIL+1)); }
+serial_turn; check "a third bare read reaches the bar, allowed" ok $?
+sleep 0.35; OUT=$("$HOOK" pretool <<<"$(ev Read)" 2>/tmp/bt.$$.err); check "a fourth bare read is refused" blocked $?
 [ -z "$OUT" ] && { echo "  ok    ...with no notice printed alongside the refusal"; PASS=$((PASS+1)); } || { echo "  FAIL  a refused call also printed the notice"; FAIL=$((FAIL+1)); }
-grep -rhq 'history 1' "$GUARD_LOG_ROOT" && { echo "  ok    the log records the window state"; PASS=$((PASS+1)); } || { echo "  FAIL  the log carries no window state"; FAIL=$((FAIL+1)); }
+grep -rhq 'history ' "$GUARD_LOG_ROOT" && { echo "  ok    the log records the window state"; PASS=$((PASS+1)); } || { echo "  FAIL  the log carries no window state"; FAIL=$((FAIL+1)); }
 teardown
 
 echo "3. a batched turn is never interrupted below the threshold"
@@ -134,7 +137,7 @@ batched_turn() {  # two calls in one turn; echoes the rc of each
   # without the redirect the notice landed in the caller's `read` and three vectors failed on text
   # where an integer belonged. The hook's behavior was correct; the harness was conflating the two.
   sleep 0.35
-  "$HOOK" pretool <<<"$(ev Read)" >/dev/null 2>/tmp/bt.err; local r1=$?
+  "$HOOK" pretool <<<"$(ev Read)" >/dev/null 2>/tmp/bt.$$.err; local r1=$?
   "$HOOK" pretool <<<"$(ev Grep)" >/dev/null 2>/dev/null;   local r2=$?
   "$HOOK" posttool <<<"$(ev Read)" >/dev/null 2>&1
   "$HOOK" posttool <<<"$(ev Grep)" >/dev/null 2>&1
@@ -158,13 +161,13 @@ read -r r1 r2 <<<"$(batched_turn)"             # window "110"
 check "the batch itself is allowed" ok "$r1"
 serial_turn; check "serial turn after the batch allowed (window '1101')" ok $?
 serial_turn; check "BLOCKED - the batch did not erase the serial turns around it" blocked $?
-grep -q "of your last" /tmp/bt.err && { echo "  ok    block message reports the window"; PASS=$((PASS+1)); } || { echo "  FAIL  block message does not report the window"; FAIL=$((FAIL+1)); }
+grep -q "of your last" /tmp/bt.$$.err && { echo "  ok    block message reports the window"; PASS=$((PASS+1)); } || { echo "  FAIL  block message does not report the window"; FAIL=$((FAIL+1)); }
 teardown
 
 echo "5. a SLOW call is real work, not a batchable turn"
 setup
 serial_turn; serial_turn                       # window "11"
-slow_turn() { sleep 0.35; "$HOOK" pretool <<<"$(ev Bash)" 2>/tmp/bt.err || return $?; sleep 2.1; "$HOOK" posttool <<<"$(ev Bash)" >/dev/null 2>&1; }
+slow_turn() { sleep 0.35; "$HOOK" pretool <<<"$(ev Bash)" 2>/tmp/bt.$$.err || return $?; sleep 2.1; "$HOOK" posttool <<<"$(ev Bash)" >/dev/null 2>&1; }
 slow_turn; check "the slow turn itself is allowed" ok $?   # window "110"
 serial_turn; check "serial turn after it allowed" ok $?
 serial_turn; check "BLOCKED at 3 serial turns inside the window" blocked $?
@@ -181,7 +184,7 @@ echo "8. a BACKGROUNDED call is never counted as recon, and is never blocked"
 # returns to the model in milliseconds, so the duration test reads the cheapest possible turn -
 # and the hook blocked the one thing the loop rules most want you to do.
 setup
-bg_turn() { sleep 0.35; "$HOOK" pretool <<<'{"session_id":"t1","tool_name":"Bash","tool_input":{"command":"make done","run_in_background":true}}' 2>/tmp/bt.err; local rc=$?; [ $rc -ne 0 ] && return $rc; "$HOOK" posttool <<<'{"session_id":"t1","tool_name":"Bash","tool_input":{"command":"make done","run_in_background":true}}' >/dev/null 2>&1; return 0; }
+bg_turn() { sleep 0.35; "$HOOK" pretool <<<'{"session_id":"t1","tool_name":"Bash","tool_input":{"command":"make done","run_in_background":true}}' 2>/tmp/bt.$$.err; local rc=$?; [ $rc -ne 0 ] && return $rc; "$HOOK" posttool <<<'{"session_id":"t1","tool_name":"Bash","tool_input":{"command":"make done","run_in_background":true}}' >/dev/null 2>&1; return 0; }
 serial_turn; serial_turn; serial_turn          # window "111" - the very next serial call blocks
 bg_turn; check "the backgrounded launch is NOT blocked, even standing at the threshold" ok $?
 serial_turn; check "a real serial call right after it still blocks" blocked $?
@@ -203,7 +206,7 @@ teardown
 
 bash_turn() {  # one Bash turn with the given command string (plain chars only)
   sleep 0.35
-  printf '{"session_id":"t1","tool_name":"Bash","tool_input":{"command":"%s"}}' "$1" | "$HOOK" pretool 2>/tmp/bt.err
+  printf '{"session_id":"t1","tool_name":"Bash","tool_input":{"command":"%s"}}' "$1" | "$HOOK" pretool 2>/tmp/bt.$$.err
   local rc=$?
   [ $rc -ne 0 ] && return $rc
   printf '{"session_id":"t1","tool_name":"Bash","tool_input":{"command":"%s"}}' "$1" | "$HOOK" posttool >/dev/null 2>&1
@@ -219,9 +222,13 @@ bash_turn "python3 - <<PYEOF_INNER"; check "a heredoc patch script passes at the
 bash_turn "grep -n foo x.py && sed -n 1,4p y.py"; check "an &&-fold (the requested batching) passes" ok $?
 bash_turn "python3 -m pytest test_checks.py -q"; check "a test run passes" ok $?
 sleep 0.35
-printf '{"session_id":"t1","tool_name":"Edit","tool_input":{"file_path":"x.py"}}' | "$HOOK" pretool 2>/tmp/bt.err
+printf '{"session_id":"t1","tool_name":"Edit","tool_input":{"file_path":"x.py"}}' | "$HOOK" pretool 2>/tmp/bt.$$.err
 check "an Edit (real work) passes" ok $?
 printf '{"session_id":"t1","tool_name":"Edit","tool_input":{"file_path":"x.py"}}' | "$HOOK" posttool >/dev/null 2>&1
+# option A (GM 2026-09-26): the four substantive turns above recorded as NOT counting, so the window is "110000"
+H=$("$HOOK" status <<<"$(ev Read)" | sed 's/.*history=\([01]*\).*/\1/')
+[ "$H" = 110000 ] && { echo "  ok    the heredoc, fold, test run and Edit did not fill the window"; PASS=$((PASS+1)); } || { echo "  FAIL  substantive turns filled the window (history $H)"; FAIL=$((FAIL+1)); }
+serial_turn; serial_turn; serial_turn         # three bare reads re-arm it: "000111"
 bash_turn "grep -n foo settlement.py"; check "a naked single grep IS blocked" blocked $?
 teardown
 
