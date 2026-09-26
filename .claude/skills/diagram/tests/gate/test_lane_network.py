@@ -155,6 +155,33 @@ def test_no_lane_doubles_back_or_kinks(lanes) -> None:
     assert not bad, f"lane(s) do not bend like paths: {bad[:4]}"
 
 
+def test_no_two_lanes_meet_end_to_end_in_a_fold_and_no_lane_ends_in_a_hook(lanes) -> None:
+    """Two records meeting end to end are ONE way to the walker, so the fold the per-lane rule above cannot see -
+    one lane turning back at the point the next begins - is refused here, and so is a hook at a lane's end (GM
+    2026-09-26: *"they are not going to walk in one direction and then turn at a 30-degree angle to keep
+    walking"*). The joint rule and the hook thresholds are the engine's own (`hamletgen/ways/joints.py`)."""
+    from l7r.diagram.hamletgen.ways.geom import _turn_deg
+    from l7r.diagram.hamletgen.ways.joints import _HOOK_DEG, _HOOK_FT, joints, oriented
+
+    M, _ways_all = lanes
+    web = M.get("lanes") or []
+    folds = []
+    for i, ei, j, ej in joints(web):
+        x, y = oriented(web, i, ei, j, ej)
+        if _turn_deg(x[-2], x[-1], y[1]) >= DOUBLE_BACK_DEG:
+            folds.append((round(x[-1][0]), round(x[-1][1])))
+    hooks = []
+    for ln in web:
+        p = [(float(a), float(b)) for a, b in (ln.get("pts") or [])]
+        if ln.get("connector") or len(p) < 3:
+            continue
+        for q in (p, p[::-1]):
+            if math.dist(q[-2], q[-1]) <= _HOOK_FT and _turn_deg(q[-3], q[-2], q[-1]) >= _HOOK_DEG:
+                hooks.append((round(q[-2][0]), round(q[-2][1])))
+    assert not folds, f"two lanes meet end to end and double back at {folds[:4]}"
+    assert not hooks, f"a lane ends in a hook at {hooks[:4]}"
+
+
 def test_every_lane_end_reaches_something_worth_walking_to(lanes) -> None:
     """`lanes_reach_something`. A path exists because somebody had a reason to go there. An end that meets
     no other way, no house and no field is a line that stops in open ground, and there is nothing at the

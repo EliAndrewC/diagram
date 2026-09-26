@@ -25,6 +25,7 @@ from .checks import drawn_water_segs
 from .clearance import clear_runs, clip_to_clear
 from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _homestead_polys, _margin_frame, _net_segs, _pass, _pull_back_to_service
 from .geom import _trim_to_service, polyline_len, steading_footprints
+from .joints import straighten_joints
 from .route import _route
 from .serve import _lay_web_lane, _serve_stragglers
 from .smooth import _STUB_REACH_FT, _smooth_web
@@ -297,6 +298,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.hamletgen.ways.sweeps._sweep_steading_fouls
         l7r.diagram.hamletgen.ways.sweeps._sweep_doubled_remnants
         l7r.diagram.hamletgen.ways.sweeps._keep_the_route_wide
+        l7r.diagram.hamletgen.ways.joints.straighten_joints
         l7r.diagram.settlement.Settlement.trim_lane_stubs
     """
     _pass("cut")
@@ -556,6 +558,9 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     _sweep_dangling_ends(s)  # LAST: an end the passes above left in open ground is pulled back to something, or dropped
     _sweep_debris(s)  # a fragment the passes above whittled below the floor and left standing alone
     _keep_the_route_wide(s, hard_built, walls, list(plan.watercourses) + drawn_water)  # ...and a cart route may not neck to a footpath
+    # AND READ THE JOINTS AS ONE WAY (GM 2026-09-26): two records meeting end to end are one lane to the walker;
+    # a fold there becomes a T and a jog is pulled straight. Last, because every pass above can lay a joint.
+    straighten_joints(s, hard_built, walls, list(plan.watercourses) + drawn_water)
     s.M["meta"]["lane_web"] = plan.lane_web
 
 
