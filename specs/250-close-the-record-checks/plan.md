@@ -242,9 +242,11 @@ that."* Each built in its smallest form:
 3. **A report's findings in one turn.** The check brief's apply step says: every finding of one report in ONE
    message, the record commands and tests once for all of it.
 4. **`research/CLAUDE.md` holds the rules only.** Its 43,500 characters move VERBATIM to
-   `docs/research-record-rules.md` (links rewritten), and the file keeps every rule, compactly, at 11,100 -
-   under the same headings, so the full reasoning is one lookup away. No rule is dropped; the two tests that read
-   the file are green.
+   `docs/research-record-rules.md` (links rewritten), and the file keeps every rule, compactly, at 12,400 -
+   under the same headings, so the full reasoning is one lookup away. The plan review of 2026-09-26 compared the two
+   files section by section and found about twenty short rules the first cut had dropped (among them the
+   `Not cited` marker, the translator in a translation note, the pixel figure in a spec's comment); each is back
+   under its heading. The two tests that read the file are green.
 5. **`entry-drift` belongs to the check session, budgeted.** Each group's brief runs `_entry_owed.py` and checks
    the modals written from its own questions, with the question they were written from.
 
