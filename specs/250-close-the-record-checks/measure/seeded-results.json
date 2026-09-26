@@ -1,0 +1,482 @@
+[
+ {
+  "run": "ed-bundle-1",
+  "case": "ed",
+  "leg": "bundle",
+  "found": {
+   "DRIFTED on the modal's two thirds": true
+  },
+  "report_file": true,
+  "reply_lines": 1,
+  "turns": 4,
+  "nested": 0,
+  "input": 103806,
+  "output": 2487,
+  "peak": 31087
+ },
+ {
+  "run": "ed-bundle-2",
+  "case": "ed",
+  "leg": "bundle",
+  "found": {
+   "DRIFTED on the modal's two thirds": true
+  },
+  "report_file": true,
+  "reply_lines": 1,
+  "turns": 4,
+  "nested": 0,
+  "input": 103687,
+  "output": 2355,
+  "peak": 30968
+ },
+ {
+  "run": "ed-bundle-3",
+  "case": "ed",
+  "leg": "bundle",
+  "found": {
+   "DRIFTED on the modal's two thirds": true
+  },
+  "report_file": true,
+  "reply_lines": 1,
+  "turns": 4,
+  "nested": 0,
+  "input": 103713,
+  "output": 2398,
+  "peak": 30994
+ },
+ {
+  "run": "ed-tree-1",
+  "case": "ed",
+  "leg": "tree",
+  "found": {
+   "DRIFTED on the modal's two thirds": true
+  },
+  "report_file": true,
+  "reply_lines": 1,
+  "turns": 4,
+  "nested": 2,
+  "input": 250199,
+  "output": 3577,
+  "peak": 78051
+ },
+ {
+  "run": "ed-tree-2",
+  "case": "ed",
+  "leg": "tree",
+  "found": {
+   "DRIFTED on the modal's two thirds": true
+  },
+  "report_file": true,
+  "reply_lines": 1,
+  "turns": 3,
+  "nested": 2,
+  "input": 182609,
+  "output": 4246,
+  "peak": 81815
+ },
+ {
+  "run": "ed-tree-3",
+  "case": "ed",
+  "leg": "tree",
+  "found": {
+   "DRIFTED on the modal's two thirds": true
+  },
+  "report_file": true,
+  "reply_lines": 1,
+  "turns": 4,
+  "nested": 2,
+  "input": 249050,
+  "output": 3246,
+  "peak": 77230
+ },
+ {
+  "run": "qc-bundle-1",
+  "case": "qc",
+  "leg": "bundle",
+  "found": {
+   "a mark on a sentence its quote does not support": true,
+   "the unfootnoted 60 square meters": true
+  },
+  "report_file": true,
+  "reply_lines": 1,
+  "turns": 4,
+  "nested": 0,
+  "input": 111196,
+  "output": 4938,
+  "peak": 35074
+ },
+ {
+  "run": "qc-bundle-2",
+  "case": "qc",
+  "leg": "bundle",
+  "found": {
+   "a mark on a sentence its quote does not support": true,
+   "the unfootnoted 60 square meters": true
+  },
+  "report_file": true,
+  "reply_lines": 1,
+  "turns": 4,
+  "nested": 0,
+  "input": 108524,
+  "output": 4628,
+  "peak": 33675
+ },
+ {
+  "run": "qc-bundle-3",
+  "case": "qc",
+  "leg": "bundle",
+  "found": {
+   "a mark on a sentence its quote does not support": true,
+   "the unfootnoted 60 square meters": true
+  },
+  "report_file": true,
+  "reply_lines": 1,
+  "turns": 4,
+  "nested": 0,
+  "input": 109090,
+  "output": 5198,
+  "peak": 34241
+ },
+ {
+  "run": "qc-tree-1",
+  "case": "qc",
+  "leg": "tree",
+  "found": {
+   "a mark on a sentence its quote does not support": true,
+   "the unfootnoted 60 square meters": true
+  },
+  "report_file": true,
+  "reply_lines": 1,
+  "turns": 4,
+  "nested": 2,
+  "input": 253682,
+  "output": 7481,
+  "peak": 81955
+ },
+ {
+  "run": "qc-tree-2",
+  "case": "qc",
+  "leg": "tree",
+  "found": {
+   "a mark on a sentence its quote does not support": true,
+   "the unfootnoted 60 square meters": true
+  },
+  "report_file": true,
+  "reply_lines": 1,
+  "turns": 4,
+  "nested": 2,
+  "input": 253308,
+  "output": 6874,
+  "peak": 81304
+ },
+ {
+  "run": "qc-tree-3",
+  "case": "qc",
+  "leg": "tree",
+  "found": {
+   "a mark on a sentence its quote does not support": true,
+   "the unfootnoted 60 square meters": true
+  },
+  "report_file": true,
+  "reply_lines": 1,
+  "turns": 4,
+  "nested": 2,
+  "input": 255011,
+  "output": 6921,
+  "peak": 81391
+ },
+ {
+  "run": "rf-bundle-1",
+  "case": "rf",
+  "leg": "bundle",
+  "found": {
+   "SESSION NOTE: the Grounds field": true,
+   "HISTORY: what the entry used to say": true,
+   "SESSION NOTE: the TODO": true,
+   "VOCABULARY: corbel": true
+  },
+  "report_file": true,
+  "reply_lines": 1,
+  "turns": 6,
+  "nested": 0,
+  "input": 165992,
+  "output": 4478,
+  "peak": 32426
+ },
+ {
+  "run": "rf-bundle-2",
+  "case": "rf",
+  "leg": "bundle",
+  "found": {
+   "SESSION NOTE: the Grounds field": true,
+   "HISTORY: what the entry used to say": true,
+   "SESSION NOTE: the TODO": true,
+   "VOCABULARY: corbel": true
+  },
+  "report_file": true,
+  "reply_lines": 1,
+  "turns": 6,
+  "nested": 0,
+  "input": 167055,
+  "output": 5646,
+  "peak": 33602
+ },
+ {
+  "run": "rf-bundle-3",
+  "case": "rf",
+  "leg": "bundle",
+  "found": {
+   "SESSION NOTE: the Grounds field": true,
+   "HISTORY: what the entry used to say": true,
+   "SESSION NOTE: the TODO": true,
+   "VOCABULARY: corbel": true
+  },
+  "report_file": true,
+  "reply_lines": 1,
+  "turns": 6,
+  "nested": 0,
+  "input": 166372,
+  "output": 4907,
+  "peak": 32885
+ },
+ {
+  "run": "rf-tree-1",
+  "case": "rf",
+  "leg": "tree",
+  "found": {
+   "SESSION NOTE: the Grounds field": true,
+   "HISTORY: what the entry used to say": true,
+   "SESSION NOTE: the TODO": true,
+   "VOCABULARY: corbel": true
+  },
+  "report_file": true,
+  "reply_lines": 1,
+  "turns": 3,
+  "nested": 2,
+  "input": 172769,
+  "output": 7550,
+  "peak": 77809
+ },
+ {
+  "run": "rf-tree-2",
+  "case": "rf",
+  "leg": "tree",
+  "found": {
+   "SESSION NOTE: the Grounds field": true,
+   "HISTORY: what the entry used to say": true,
+   "SESSION NOTE: the TODO": true,
+   "VOCABULARY: corbel": true
+  },
+  "report_file": true,
+  "reply_lines": 1,
+  "turns": 3,
+  "nested": 2,
+  "input": 173596,
+  "output": 8423,
+  "peak": 78638
+ },
+ {
+  "run": "rf-tree-3",
+  "case": "rf",
+  "leg": "tree",
+  "found": {
+   "SESSION NOTE: the Grounds field": true,
+   "HISTORY: what the entry used to say": true,
+   "SESSION NOTE: the TODO": true,
+   "VOCABULARY: corbel": true
+  },
+  "report_file": true,
+  "reply_lines": 1,
+  "turns": 4,
+  "nested": 2,
+  "input": 240863,
+  "output": 6152,
+  "peak": 75600
+ },
+ {
+  "run": "sa-bundle-1",
+  "case": "sa",
+  "leg": "bundle",
+  "found": {
+   "the missing limit: the article's maintenance banners": true
+  },
+  "report_file": true,
+  "reply_lines": 1,
+  "turns": 5,
+  "nested": 0,
+  "input": 152479,
+  "output": 3194,
+  "peak": 44697
+ },
+ {
+  "run": "sa-bundle-2",
+  "case": "sa",
+  "leg": "bundle",
+  "found": {
+   "the missing limit: the article's maintenance banners": true
+  },
+  "report_file": true,
+  "reply_lines": 1,
+  "turns": 5,
+  "nested": 0,
+  "input": 152345,
+  "output": 3024,
+  "peak": 44565
+ },
+ {
+  "run": "sa-bundle-3",
+  "case": "sa",
+  "leg": "bundle",
+  "found": {
+   "the missing limit: the article's maintenance banners": true
+  },
+  "report_file": true,
+  "reply_lines": 1,
+  "turns": 5,
+  "nested": 0,
+  "input": 152460,
+  "output": 3174,
+  "peak": 44679
+ },
+ {
+  "run": "sa-tree-1",
+  "case": "sa",
+  "leg": "tree",
+  "found": {
+   "the missing limit: the article's maintenance banners": true
+  },
+  "report_file": true,
+  "reply_lines": 1,
+  "turns": 3,
+  "nested": 2,
+  "input": 161560,
+  "output": 3081,
+  "peak": 71302
+ },
+ {
+  "run": "sa-tree-2",
+  "case": "sa",
+  "leg": "tree",
+  "found": {
+   "the missing limit: the article's maintenance banners": true
+  },
+  "report_file": true,
+  "reply_lines": 1,
+  "turns": 3,
+  "nested": 2,
+  "input": 161794,
+  "output": 3290,
+  "peak": 71503
+ },
+ {
+  "run": "sa-tree-3",
+  "case": "sa",
+  "leg": "tree",
+  "found": {
+   "the missing limit: the article's maintenance banners": true
+  },
+  "report_file": true,
+  "reply_lines": 1,
+  "turns": 3,
+  "nested": 2,
+  "input": 161602,
+  "output": 3194,
+  "peak": 71393
+ },
+ {
+  "run": "sr-bundle-1",
+  "case": "sr",
+  "leg": "bundle",
+  "found": {
+   "CONTRADICTED: the page gives 70%, not 90%": true,
+   "READ: the density contrast": true
+  },
+  "report_file": true,
+  "reply_lines": 1,
+  "turns": 4,
+  "nested": 0,
+  "input": 101557,
+  "output": 1663,
+  "peak": 28131
+ },
+ {
+  "run": "sr-bundle-2",
+  "case": "sr",
+  "leg": "bundle",
+  "found": {
+   "CONTRADICTED: the page gives 70%, not 90%": true,
+   "READ: the density contrast": true
+  },
+  "report_file": true,
+  "reply_lines": 1,
+  "turns": 4,
+  "nested": 0,
+  "input": 101307,
+  "output": 1407,
+  "peak": 27881
+ },
+ {
+  "run": "sr-bundle-3",
+  "case": "sr",
+  "leg": "bundle",
+  "found": {
+   "CONTRADICTED: the page gives 70%, not 90%": true,
+   "READ: the density contrast": true
+  },
+  "report_file": true,
+  "reply_lines": 1,
+  "turns": 4,
+  "nested": 0,
+  "input": 102014,
+  "output": 1352,
+  "peak": 28200
+ },
+ {
+  "run": "sr-tree-1",
+  "case": "sr",
+  "leg": "tree",
+  "found": {
+   "CONTRADICTED: the page gives 70%, not 90%": true,
+   "READ: the density contrast": true
+  },
+  "report_file": true,
+  "reply_lines": 1,
+  "turns": 3,
+  "nested": 2,
+  "input": 130370,
+  "output": 1736,
+  "peak": 54203
+ },
+ {
+  "run": "sr-tree-2",
+  "case": "sr",
+  "leg": "tree",
+  "found": {
+   "CONTRADICTED: the page gives 70%, not 90%": true,
+   "READ: the density contrast": true
+  },
+  "report_file": true,
+  "reply_lines": 1,
+  "turns": 3,
+  "nested": 2,
+  "input": 133277,
+  "output": 1763,
+  "peak": 55630
+ },
+ {
+  "run": "sr-tree-3",
+  "case": "sr",
+  "leg": "tree",
+  "found": {
+   "CONTRADICTED: the page gives 70%, not 90%": true,
+   "READ: the density contrast": true
+  },
+  "report_file": true,
+  "reply_lines": 1,
+  "turns": 3,
+  "nested": 2,
+  "input": 132009,
+  "output": 1488,
+  "peak": 54900
+ }
+]

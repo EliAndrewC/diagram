@@ -57,21 +57,26 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
 
 ## Phase 1b - the token work (GM 2026-09-26; plan D6 to D10)
 
-- [ ] T11 `make quote-verbatim ... SECTION=` checks only that question's notes (the rule dropped the
+- [x] T11 `make quote-verbatim ... SECTION=` checks only that question's notes (the rule dropped the
       argument), and an unmatched SECTION exits 2
       research: rendering
-- [ ] T12 `make check-bundle` (`KIND=` for entry-drift) and the five contracts that read a bundle and write `REPORT.md` (D6, D8);
+      verify: DONE. DONE. The Makefile rule now passes SECTION; make quote-verbatim PAGE=cities/sizing SECTION=010 checks 4 notes where it checked 11; SECTION=nonesuch exits 2. quote-verbatim tests green.
+- [x] T12 `make check-bundle` (`KIND=` for entry-drift) and the five contracts that read a bundle and write `REPORT.md` (D6, D8);
       tests in `tests/tooling/test_check_bundle.py`
       research: rendering
-- [ ] T13 `check-bundle-hooks.sh`, its suite, its settings entry and its row in the root CLAUDE.md;
+      verify: DONE. DONE. scripts/_check_bundle.py and make check-bundle (PAGE+SECTION, KEY, KIND, EXTRA, NO_QUOTES); tests/tooling/test_check_bundle.py 9 passed, including the exact-key lookup (edo-enwiki is not fires-in-edo-enwiki). The five contracts read the bundle, carry Write, and reply in one line.
+- [x] T13 `check-bundle-hooks.sh`, its suite, its settings entry and its row in the root CLAUDE.md;
       proven to go red with its refusal removed
       research: rendering
-- [ ] T14 `make page-session` and `measure/brief.py` (D7); `research/CLAUDE.md` says how a check and a
+      verify: DONE. DONE. check-bundle-hooks.sh refuses a dispatch of the five checks into the repository with the make check-bundle command; test-check-bundle-hooks.sh 22 passed, 6 red with the refusal removed; settings.json entry; root CLAUDE.md row.
+- [x] T14 `make page-session` and `measure/brief.py` (D7); `research/CLAUDE.md` says how a check and a
       page are now run
       research: rendering
-- [ ] T15 The seeded-fault runs, three a leg for each of the five agents (D6), recorded as R2's first half;
+      verify: DONE. DONE. make page-session (scripts/page-session.sh: headless, named like the clone, session id chosen in advance, detached) and measure/brief.py (items derived from assertions.py and worklist.py); a probe session routed to this clone by name. research/CLAUDE.md and the root CLAUDE.md say how a check and a page are run now.
+- [x] T15 The seeded-fault runs, three a leg for each of the five agents (D6), recorded as R2's first half;
       an agent whose bundle leg loses a finding keeps reading the tree
       research: rendering
+      verify: DONE. DONE. 30 seeded runs, three a leg, five agents (measure/seeded-results.json): every run of both legs named every planted fault (rf 4/4, qc 2/2, sa 1/1, ed 1/1, sr 2/2). Bundle leg: 0 nested CLAUDE.md, peak 28,000-45,000 against 54,000-82,000 in the tree; all 30 wrote REPORT.md and replied in one line. No agent keeps reading the tree.
 - [ ] T16 **The comparison the GM asked for** (D9): T18 worked in a page session, measured against R1,
       recorded as R2 with the next recommendations
       research: rendering
