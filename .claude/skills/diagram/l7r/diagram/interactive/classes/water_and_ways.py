@@ -210,11 +210,12 @@ class GraveIsland(Kind):
 
     Why: Graves among the paddy are a north-China dry-plain signature, corroborated in Japan - NOT the rice-south
     default, where feng-shui puts the dead on the slope with a backing hill and a downslope water view. The
-    GM approved both looks, so the island is drawn rarely (about three valley, terrace or ribbon maps in
-    ten) as a deliberate departure.
+    GM accepted both looks, so the island is drawn rarely (about three valley, terrace or ribbon maps in
+    ten, a rate chosen for the maps rather than read from any source) as a deliberate departure.
 
     Note: A calibrated liberty, disclosed: the in-field grave is drawn where the rice-south record would put the
-    dead on the slope, at a rate the GM approved.
+    dead on the slope. How often it is drawn is the project's own choice, and the evidence for graves out
+    among the paddy is thin.
 
     Name: grave island
     Covers: `field_graves` - the rare in-field grave mound

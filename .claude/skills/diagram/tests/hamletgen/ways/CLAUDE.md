@@ -22,6 +22,7 @@ Runs in the quick tier, unchanged: the tier is decided by the top-level tree (`t
 | `test_clearance.py` (125) | may a way BE here - `clear_runs`, `_clear_link`, `_clear_touch`, `may_write`, the bend and nub judgments |
 | `test_fabric.py` (210) | the settlement fabric a way must respect - `_crosses_fabric`, `_fabric_hits`, `_homestead_polys`, `_margin_frame`, `_draw_web` |
 | `test_geom.py` (468) | point and segment math on a bare polyline - `polyline_len`, `_turn_deg`, `_components`, the two pushes, `_trim_to_service` |
+| `test_joints.py` | two lanes meeting end to end - the fold that becomes a T, the jog pulled straight across a chain of joints, the hook taken off a lane end, and the guards (`keeps_the_web`) that refuse a rewrite losing a junction, splitting the web or stranding a farmhouse |
 | `test_route.py` (94) | the router: `_route` going round hard ground, `_unjog`, and the pad multiplier that lets a link take the long way |
 | `test_serve.py` (154) | getting a way to a house that has none - `_lay_web_lane` and the straggler search |
 | `test_sweeps.py` (247) | the passes that REMOVE or REPAIR - doubled remnants, steading fouls, end nubs, collinear breaks, orphaned pieces |
