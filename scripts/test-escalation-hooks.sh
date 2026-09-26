@@ -13,7 +13,10 @@ PASS=0; FAIL=0
 # a throwaway git work tree, so the hook's clone detection and its state file are real
 FIX=$(mktemp -d)/test-clone; mkdir -p "$FIX"
 git -C "$FIX" init -q 2>/dev/null
-trap 'rm -rf "$GUARD_LOG_ROOT" "$(dirname "$FIX")"' EXIT
+# GUARD_EDIT_OK: 2026-09-26 - stderr is captured in a file of THIS run's own, not a fixed /tmp path that every
+# concurrent hooks-test (one per session's gate) rewrote under the others (it failed the batching suite's greps).
+HOOK_ERR=$(mktemp)
+trap 'rm -rf "$GUARD_LOG_ROOT" "$HOOK_ERR" "$(dirname "$FIX")"' EXIT
 
 ok() { echo "  ok      $1"; PASS=$((PASS+1)); }
 no() { echo "  FAIL    $1 ${2:-}"; FAIL=$((FAIL+1)); }
@@ -27,7 +30,7 @@ bash_call() { # a non-Agent tool must be ignored entirely
     | ( cd "$FIX" && "$HOOK" pretool 2>/dev/null )
 }
 stop_call() { # run the stop hook in the fixture, return its exit code, stderr to a file
-  printf '{"session_id":"t1"}' | ( cd "$FIX" && "$HOOK" stop 2>/tmp/eh.$$.err );
+  printf '{"session_id":"t1"}' | ( cd "$FIX" && "$HOOK" stop 2>"$HOOK_ERR" );
 }
 armed_by() { ( cd "$FIX" && "$HOOK" state ) | awk '/^armed by/{print $3}'; }
 
@@ -40,8 +43,8 @@ printf '%s' "$out" | grep -q "escalation-check" && ok "...naming the filter to d
 echo "2. the turn cannot close while findings are unfiltered"
 stop_call; rc=$?
 [ "$rc" -ne 0 ] && ok "stop refuses with a review armed" || no "stop allowed the turn to close" "(rc=$rc)"
-grep -q "FINDINGS UNFILTERED" /tmp/eh.$$.err && ok "...and says what is wrong" || no "the refusal does not say what is wrong"
-grep -q "process narrative" /tmp/eh.$$.err && ok "...and what the filter is for" || no "the refusal does not say what the filter cuts"
+grep -q "FINDINGS UNFILTERED" "$HOOK_ERR" && ok "...and says what is wrong" || no "the refusal does not say what is wrong"
+grep -q "process narrative" "$HOOK_ERR" && ok "...and what the filter is for" || no "the refusal does not say what the filter cuts"
 stop_call; rc=$?
 [ "$rc" -eq 0 ] && ok "ONCE per armed review, never a loop" || no "stop refused twice for one review" "(rc=$rc)"
 

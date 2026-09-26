@@ -12,7 +12,10 @@ PASS=0; FAIL=0
 # exists to answer whether a guard is worth what it costs: 160 entries appeared there within
 # minutes of the census landing, nearly all of them fixtures.
 GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
-trap 'rm -rf "$GUARD_LOG_ROOT"' EXIT
+# GUARD_EDIT_OK: 2026-09-26 - stderr is captured in a file of THIS run's own, not a fixed /tmp path that every
+# concurrent hooks-test (one per session's gate) rewrote under the others (it failed the batching suite's greps).
+HOOK_ERR=$(mktemp)
+trap 'rm -rf "$GUARD_LOG_ROOT" "$HOOK_ERR"' EXIT
 
 setup() { STATE_DIR=$(mktemp -d); export MEASURE_STATE_DIR="$STATE_DIR"; }
 teardown() { rm -rf "$STATE_DIR"; }
@@ -22,13 +25,13 @@ teardown() { rm -rf "$STATE_DIR"; }
 # command and every heredoc vector here passed for the wrong reason.
 bash_ev() { CMD="$1" python3 -c 'import json,os; print(json.dumps({"session_id":"m1","tool_name":"Bash","tool_input":{"command":os.environ["CMD"]}}))'; }
 edit_ev() { printf '{"session_id":"m1","tool_name":"Edit","tool_input":{"file_path":"%s"}}' "$1"; }
-run() { "$HOOK" pretool <<<"$1" 2>/tmp/mt.$$.err; }
+run() { "$HOOK" pretool <<<"$1" 2>"$HOOK_ERR"; }
 
 check() { # label expected(ok|blocked) rc
   if { [ "$2" = ok ] && [ "$3" -eq 0 ]; } || { [ "$2" = blocked ] && [ "$3" -ne 0 ]; }; then
     echo "  ok    $1"; PASS=$((PASS+1))
   else
-    echo "  FAIL  $1 (expected $2, rc=$3)"; [ -s /tmp/mt.$$.err ] && sed 's/^/        /' /tmp/mt.$$.err; FAIL=$((FAIL+1))
+    echo "  FAIL  $1 (expected $2, rc=$3)"; [ -s "$HOOK_ERR" ] && sed 's/^/        /' "$HOOK_ERR"; FAIL=$((FAIL+1))
   fi
 }
 
@@ -40,14 +43,14 @@ setup
 run "$(bash_ev 'make test-full')"; check "the first measurement is allowed" ok $?
 run "$(edit_ev '/diagram/.claude/skills/diagram/tests/settlement/test_geom.py')"
 run "$(bash_ev 'make test-full')"; check "the SECOND is BLOCKED" blocked $?
-grep -q "Measure ONCE" /tmp/mt.$$.err && { echo "  ok    the message says what to do instead"; PASS=$((PASS+1)); } || { echo "  FAIL  message unhelpful"; FAIL=$((FAIL+1)); }
-grep -q "make quick" /tmp/mt.$$.err && { echo "  ok    the message names the cheap loop"; PASS=$((PASS+1)); } || { echo "  FAIL  message does not name make quick"; FAIL=$((FAIL+1)); }
+grep -q "Measure ONCE" "$HOOK_ERR" && { echo "  ok    the message says what to do instead"; PASS=$((PASS+1)); } || { echo "  FAIL  message unhelpful"; FAIL=$((FAIL+1)); }
+grep -q "make quick" "$HOOK_ERR" && { echo "  ok    the message names the cheap loop"; PASS=$((PASS+1)); } || { echo "  FAIL  message does not name make quick"; FAIL=$((FAIL+1)); }
 # ...AND THE COMMAND THAT ANSWERS THE BLOCKED QUESTION. A session reaching for `make test-full` a third time
 # is almost always asking "which lines does this test reach?", and `make quick` does not answer that - so a
 # message that names only the cheap loop sends it back to the expensive call (GM 2026-08-29: *"Does the make
 # cov-file get suggested automatically when you are warned about running make test-full too often"* - it did
 # not). A guard that blocks a legitimate question without giving the route is one that gets worked around.
-grep -q "make cov-file" /tmp/mt.$$.err && { echo "  ok    the message names the targeted coverage probe"; PASS=$((PASS+1)); } || { echo "  FAIL  message does not name make cov-file"; FAIL=$((FAIL+1)); }
+grep -q "make cov-file" "$HOOK_ERR" && { echo "  ok    the message names the targeted coverage probe"; PASS=$((PASS+1)); } || { echo "  FAIL  message does not name make cov-file"; FAIL=$((FAIL+1)); }
 run "$(bash_ev 'make test-full')"; check "re-issuing goes through (blocks once, no deadlock)" ok $?
 teardown
 

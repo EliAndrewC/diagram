@@ -15,12 +15,15 @@ HOOK="$HERE/make-only-hooks.sh"
 # whole purpose is to price a guard from real firings: 24 fixture entries appeared there the first
 # time these conversions ran their suites.
 GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
-trap 'rm -rf "$GUARD_LOG_ROOT"' EXIT
+# GUARD_EDIT_OK: 2026-09-26 - stderr is captured in a file of THIS run's own, not a fixed /tmp path that every
+# concurrent hooks-test (one per session's gate) rewrote under the others (it failed the batching suite's greps).
+HOOK_ERR=$(mktemp)
+trap 'rm -rf "$GUARD_LOG_ROOT" "$HOOK_ERR"' EXIT
 
 PASS=0; FAIL=0
 
 ev() { python3 -c 'import json,sys; print(json.dumps({"session_id":"m1","tool_name":"Bash","tool_input":{"command":sys.argv[1]}}))' "$1"; }
-run() { ev "$1" | "$HOOK" pretool >/tmp/mo.$$.out 2>/tmp/mo.$$.err; echo $?; }
+run() { ev "$1" | "$HOOK" pretool >/tmp/mo.out 2>"$HOOK_ERR"; echo $?; }
 
 check() { # label expected(ok|blocked) command
   local rc; rc=$(run "$3")
@@ -33,7 +36,7 @@ check() { # label expected(ok|blocked) command
 
 names_a_target() { # the refusal must say what to run instead (FR-006)
   local rc; rc=$(run "$2")
-  if [ "$rc" -ne 0 ] && grep -q "Run this instead" /tmp/mo.$$.err && grep -q "make " /tmp/mo.$$.err; then
+  if [ "$rc" -ne 0 ] && grep -q "Run this instead" "$HOOK_ERR" && grep -q "make " "$HOOK_ERR"; then
     echo "  ok      $1"; PASS=$((PASS+1))
   else
     echo "  FAIL    $1 (refusal did not name a make target)"; FAIL=$((FAIL+1))
@@ -121,10 +124,10 @@ names_a_target "a forged makefile names a target" "make -f /tmp/evil.mk x"
 echo
 echo "4. A TARGETED PYTEST RUN IS REWRITTEN INTO make test-file (feature 212)"
 rewritten() { # label, command, the exact rewritten command
-  ev "$2" | "$HOOK" pretool >/tmp/mo.$$.out 2>/tmp/mo.$$.err; local rc=$?
+  ev "$2" | "$HOOK" pretool >/tmp/mo.out 2>"$HOOK_ERR"; local rc=$?
   local got; got=$(python3 -c 'import json,sys
 try: print(json.load(sys.stdin)["hookSpecificOutput"]["updatedInput"]["command"])
-except Exception: pass' < /tmp/mo.$$.out 2>/dev/null)
+except Exception: pass' < /tmp/mo.out 2>/dev/null)
   if [ "$rc" -eq 0 ] && [ "$got" = "$3" ]; then
     echo "  ok      $1"; PASS=$((PASS+1))
   else
@@ -132,8 +135,8 @@ except Exception: pass' < /tmp/mo.$$.out 2>/dev/null)
   fi
 }
 refused_because() { # label, command, the text the refusal must carry
-  ev "$2" | "$HOOK" pretool >/tmp/mo.$$.out 2>/tmp/mo.$$.err; local rc=$?
-  if [ "$rc" -ne 0 ] && grep -qF -- "$3" /tmp/mo.$$.err; then
+  ev "$2" | "$HOOK" pretool >/tmp/mo.out 2>"$HOOK_ERR"; local rc=$?
+  if [ "$rc" -ne 0 ] && grep -qF -- "$3" "$HOOK_ERR"; then
     echo "  ok      $1"; PASS=$((PASS+1))
   else
     echo "  FAIL    $1 (rc=$rc; refusal did not name '$3')"; FAIL=$((FAIL+1))
@@ -163,7 +166,7 @@ refused_because "a coverage flag names its token"     "python3 -m pytest tests/x
 refused_because "a plugin LOAD names its token"       "python3 -m pytest tests/x/test_y.py -p l7r.diagram.ci.selection" 'loads a plugin'
 refused_because "an absolute path names its token"    "python3 -m pytest /tmp/base/tests/test_y.py" 'absolute path'
 refused_because "an in-process pytest.main is refused" "python3 -c 'import pytest; pytest.main()'" 'no test path'
-grep -q "make test-file FILE=tests/gate/hamletgen/test_driver.py" /tmp/mo.$$.out 2>/dev/null; ev "python3 -m pytest tests/gate/hamletgen/test_driver.py -q" | "$HOOK" pretool 2>/dev/null | grep -q "SUBSET" \
+grep -q "make test-file FILE=tests/gate/hamletgen/test_driver.py" /tmp/mo.out 2>/dev/null; ev "python3 -m pytest tests/gate/hamletgen/test_driver.py -q" | "$HOOK" pretool 2>/dev/null | grep -q "SUBSET" \
   && { echo "  ok      the context teaches the K= form and the subset rule"; PASS=$((PASS+1)); } \
   || { echo "  FAIL    the rewrite's context does not teach the form"; FAIL=$((FAIL+1)); }
 

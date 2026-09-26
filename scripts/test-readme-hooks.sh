@@ -11,7 +11,10 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # GUARD_EDIT_OK: feature 168 - this guard records its firings now, so the suite writes its fixtures to
 # a throwaway log rather than into the census `make audit` reads.
 GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
-trap 'rm -rf "$GUARD_LOG_ROOT"' EXIT
+# GUARD_EDIT_OK: 2026-09-26 - stderr is captured in a file of THIS run's own, not a fixed /tmp path that every
+# concurrent hooks-test (one per session's gate) rewrote under the others (it failed the batching suite's greps).
+HOOK_ERR=$(mktemp)
+trap 'rm -rf "$GUARD_LOG_ROOT" "$HOOK_ERR"' EXIT
 HOOK="$HERE/readme-hooks.sh"
 PASS=0; FAIL=0
 
@@ -19,7 +22,7 @@ tool_ev() { python3 -c 'import json,sys; print(json.dumps({"tool_name":sys.argv[
 bash_ev() { python3 -c 'import json,sys; print(json.dumps({"tool_name":"Bash","tool_input":{"command":sys.argv[1]}}))' "$1"; }
 
 check() { # label expected payload
-  local rc; printf '%s' "$3" | "$HOOK" pretool >/dev/null 2>/tmp/rm.$$.err; rc=$?
+  local rc; printf '%s' "$3" | "$HOOK" pretool >/dev/null 2>"$HOOK_ERR"; rc=$?
   if { [ "$2" = ok ] && [ "$rc" -eq 0 ]; } || { [ "$2" = blocked ] && [ "$rc" -ne 0 ]; }; then
     echo "  ok      $1"; PASS=$((PASS+1))
   else echo "  FAIL    $1 (expected $2, rc=$rc)"; FAIL=$((FAIL+1)); fi
@@ -56,8 +59,8 @@ check "a filename merely starting readme-ish" ok "$(tool_ev Write /repo/readme-h
 
 echo
 echo "3. THE REFUSAL SAYS WHERE TO PUT IT INSTEAD"
-printf '%s' "$(tool_ev Write /repo/README.md)" | "$HOOK" pretool >/dev/null 2>/tmp/rm.$$.err || true
-if grep -q "CLAUDE.md in the directory it governs" /tmp/rm.$$.err; then
+printf '%s' "$(tool_ev Write /repo/README.md)" | "$HOOK" pretool >/dev/null 2>"$HOOK_ERR" || true
+if grep -q "CLAUDE.md in the directory it governs" "$HOOK_ERR"; then
   echo "  ok      names the alternative"; PASS=$((PASS+1))
 else echo "  FAIL    refusal does not say where knowledge belongs"; FAIL=$((FAIL+1)); fi
 

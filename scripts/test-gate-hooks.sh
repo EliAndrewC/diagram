@@ -10,7 +10,10 @@ PASS=0; FAIL=0
 # exists to answer whether a guard is worth what it costs: 160 entries appeared there within
 # minutes of the census landing, nearly all of them fixtures.
 GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
-trap 'rm -rf "$GUARD_LOG_ROOT"' EXIT
+# GUARD_EDIT_OK: 2026-09-26 - stderr is captured in a file of THIS run's own, not a fixed /tmp path that every
+# concurrent hooks-test (one per session's gate) rewrote under the others (it failed the batching suite's greps).
+HOOK_ERR=$(mktemp)
+trap 'rm -rf "$GUARD_LOG_ROOT" "$HOOK_ERR"' EXIT
 
 setup() { STATE_DIR=$(mktemp -d); export GATE_STATE_DIR="$STATE_DIR"; }
 teardown() { rm -rf "$STATE_DIR"; }
@@ -20,13 +23,13 @@ teardown() { rm -rf "$STATE_DIR"; }
 # command and every heredoc vector here passed for the wrong reason.
 bash_ev() { CMD="$1" python3 -c 'import json,os; print(json.dumps({"session_id":"g1","tool_name":"Bash","tool_input":{"command":os.environ["CMD"]}}))'; }
 edit_ev() { printf '{"session_id":"g1","tool_name":"Edit","tool_input":{"file_path":"%s"}}' "$1"; }
-run()  { "$HOOK" pretool <<<"$1" 2>/tmp/gt.$$.err; }
+run()  { "$HOOK" pretool <<<"$1" 2>"$HOOK_ERR"; }
 
 check() { # label expected(ok|blocked) rc
   if { [ "$2" = ok ] && [ "$3" -eq 0 ]; } || { [ "$2" = blocked ] && [ "$3" -ne 0 ]; }; then
     echo "  ok    $1"; PASS=$((PASS+1))
   else
-    echo "  FAIL  $1 (expected $2, rc=$3)"; [ -s /tmp/gt.$$.err ] && sed 's/^/        /' /tmp/gt.$$.err; FAIL=$((FAIL+1))
+    echo "  FAIL  $1 (expected $2, rc=$3)"; [ -s "$HOOK_ERR" ] && sed 's/^/        /' "$HOOK_ERR"; FAIL=$((FAIL+1))
   fi
 }
 
@@ -34,7 +37,7 @@ echo "1. THE MOTIVATING CASE: a -k subset, then the gate"
 setup
 run "$(bash_ev 'python3 -m pytest test_settlement.py -q -n auto --no-cov -k \"kura_side or punishment\"')"; check "the subset run itself is allowed" ok $?
 run "$(bash_ev 'make done')"; check "make done BLOCKED after a subset-only run" blocked $?
-grep -q "WHOLE test file" /tmp/gt.$$.err && { echo "  ok    message says what to run instead"; PASS=$((PASS+1)); } || { echo "  FAIL  message unhelpful"; FAIL=$((FAIL+1)); }
+grep -q "WHOLE test file" "$HOOK_ERR" && { echo "  ok    message says what to run instead"; PASS=$((PASS+1)); } || { echo "  FAIL  message unhelpful"; FAIL=$((FAIL+1)); }
 run "$(bash_ev 'make done')"; check "re-issuing the gate goes through (blocks once, no deadlock)" ok $?
 teardown
 

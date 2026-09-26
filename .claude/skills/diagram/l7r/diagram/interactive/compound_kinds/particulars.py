@@ -32,8 +32,9 @@ class ThresholdStones(Kind):
     Note: the threshold stones and the Pact-Bowl are the Fox Clan's road wardings, from the campaign's own
     canon, a departure made by the setting with no historical counterpart. Canon sets one stone at each
     checkpoint; the flanking pair is the GM's ruling for this drawing, a stone on each side of the road so
-    that neither stands in it. Nor does the drawing match the canon's size - canon makes each stone a
-    river-stone the size of two fists, and the plan draws each at about 3.3 by 4.7 ft.
+    that neither stands in it. And the pair is drawn larger than canon's stones on purpose - canon makes each
+    stone a river-stone the size of two fists, and Ochiba's pair stands about 3.3 by 4.7 ft, because Ochiba is
+    where the threshold stones are made and painted (the GM's ruling).
 
     Name: threshold stones
     Covers: the vermilion pair outside the main gate and their label with the "buried Pact-Bowl" sublabel
