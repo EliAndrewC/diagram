@@ -241,12 +241,15 @@ that."* Each built in its smallest form:
    group is a fresh session, and the last one closes the page. The registry keys go to the first group.
 3. **A report's findings in one turn.** The check brief's apply step says: every finding of one report in ONE
    message, the record commands and tests once for all of it.
-4. **`research/CLAUDE.md` holds the rules only.** Its 43,500 characters move VERBATIM to
-   `docs/research-record-rules.md` (links rewritten), and the file keeps every rule, compactly, at 12,400 -
+4. **`research/CLAUDE.md` holds the rules only.** Its 43,525 characters move VERBATIM to
+   `docs/research-record-rules.md` (links rewritten), and the file keeps every rule, compactly, at 13,290 (both
+   observed 2026-09-26; method: `len` of the file's text at 37c20e57 and after this change) -
    under the same headings, so the full reasoning is one lookup away. The plan review of 2026-09-26 compared the two
    files section by section and found about twenty short rules the first cut had dropped (among them the
    `Not cited` marker, the translator in a translation note, the pixel figure in a spec's comment); each is back
-   under its heading. The two tests that read the file are green.
+   under its heading, and a second comparison of the whole old file found the rest (the citation link's full-text
+   and original-language page, the checker's anchor, the roster's parenthetical, and others); the GROUNDS sentence
+   keeps its own words, "on an existing note". The two tests that read the file are green.
 5. **`entry-drift` belongs to the check session, budgeted.** Each group's brief runs `_entry_owed.py` and checks
    the modals written from its own questions, with the question they were written from.
 
