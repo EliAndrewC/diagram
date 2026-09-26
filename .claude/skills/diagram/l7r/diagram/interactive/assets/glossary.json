@@ -2295,7 +2295,9 @@
   "variants": [
    "kichin-yado",
    "flophouse",
-   "flophouses"
+   "flophouses",
+   "wood-fee lodging",
+   "wood-fee lodgings"
   ]
  },
  "kido": {
@@ -5316,6 +5318,12 @@
   "variants": [
    "rampart",
    "ramparts"
+  ]
+ },
+ "trunk street": {
+  "def": "A town's main street, the one that runs between its gates and that the lesser streets branch off. The standard Chinese plans laid out trunk streets as a cross or a T, and most surviving plans bend them so that none runs straight from one gate to the opposite one.",
+  "variants": [
+   "trunk streets"
   ]
  }
 }

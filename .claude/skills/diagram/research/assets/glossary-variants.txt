@@ -1191,6 +1191,7 @@ tread	tread
 treads	tread
 tributary	tributary
 true duty	water duty
+trunk streets	trunk street
 tsubo	tsubo
 tsuijibei	tsuijibei
 tsuijimatsu	tsuijimatsu
@@ -1268,6 +1269,8 @@ wingwalls	wingwall
 withies	withies
 withy	withies
 wokou	wokou
+wood-fee lodging	kichin-yado
+wood-fee lodgings	kichin-yado
 wrought iron	wrought iron
 wujing zongyao	Wujing Zongyao
 xiang	xiang

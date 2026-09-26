@@ -90,7 +90,10 @@ def apply_edit(root: pathlib.Path, b: dict, dry: bool) -> str:
 
 
 def slug(term: str) -> str:
-    return re.sub(r"[^\w-]+", "-", term.lower()).strip("-")
+    """The glossary's own filename rule, restated exactly (`glossary_source._encode`): the term as it is,
+    case and spaces kept, with only `%` and `/` percent-encoded. A hyphenated lowercase slug wrote
+    `7960-trunk-street.json` for `trunk street`, and `make glossary` refused it (feature 250)."""
+    return term.replace("%", "%25").replace("/", "%2F")
 
 
 def apply_term(root: pathlib.Path, b: dict, dry: bool) -> str:

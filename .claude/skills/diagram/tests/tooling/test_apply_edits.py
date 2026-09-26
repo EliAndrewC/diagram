@@ -73,7 +73,7 @@ def test_skip_and_dry_run_write_nothing(tmp_path, capsys) -> None:
     assert "stipend" in q.read_text(encoding="utf-8") and not list((tmp_path / ae.TERMS).glob("*new-term*"))
     assert ae.main([str(report), "--root", str(tmp_path), "--skip", "1"]) == 0
     assert "stipend" in q.read_text(encoding="utf-8")
-    added = json.loads(next((tmp_path / ae.TERMS).glob("*new-term.json")).read_text(encoding="utf-8"))
+    added = json.loads(next((tmp_path / ae.TERMS).glob("*-new term.json")).read_text(encoding="utf-8"))
     assert added["variants"] == ["new term"]
     out = capsys.readouterr().out
     assert "dry run, nothing written" in out and "skipped (--skip)" in out
