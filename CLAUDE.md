@@ -211,7 +211,7 @@ doctrine for writing a guard: `docs/guards.md`.
 | `escalation-hooks.sh` | a review dispatch arms, an `escalation-check` dispatch disarms, before the turn ends | `ESCALATION_OK` |
 | `review-round-hooks.sh` | a later `spec-fidelity` round is handed the diff and routed to `spec-fidelity-verify`; refused first when the feature still carries the OLD value of something the change moved (`make stale-terms`) | `REVIEW_ROUND_OK`, `STALE_TERMS_OK` |
 | `agent-model-hooks.sh` | an ad-hoc agent dispatch (no file under `.claude/agents/`) that names no `model` is refused, with the rule for choosing one | none - name the model |
-| `check-bundle-hooks.sh` | a `quote-check`, `record-format`, `source-applicability` or `source-reader` dispatch that points into the repository instead of at a bundle is refused, with the `make check-bundle` command for the question it names | `CHECK_BUNDLE_OK` |
+| `check-bundle-hooks.sh` | a `quote-check`, `record-format`, `source-applicability`, `source-reader` or `entry-drift` dispatch that points into the repository instead of at a bundle is refused, with the `make check-bundle` command for the question it names | `CHECK_BUNDLE_OK` |
 | `record-edit-hooks.sh` | an Edit aimed at an assembled record page is re-aimed at the one fragment holding its text; refused where none or several hold it, and a Write always | none - the guard hands you the edit |
 | `finished-run-hooks.sh` | a finished run is reported; a live `make` is not abandoned; a waiter on a dead producer is reported | - |
 | `agent-stall-hooks.sh` | a stalled background agent is reported | - |

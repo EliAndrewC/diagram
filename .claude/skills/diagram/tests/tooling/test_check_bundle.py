@@ -85,7 +85,7 @@ def test_an_unmatched_question_writes_nothing(tmp_path: pathlib.Path) -> None:
 
 def test_a_source_bundle_holds_the_entry(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
     fetched: list[list[str]] = []
-    monkeypatch.setattr(cb, "run_script", lambda name, args, root: (fetched.append([name, *args]) or (0, "")))
+    monkeypatch.setattr(cb, "run_script", lambda name, args, root: fetched.append([name, *args]) or (0, ""))
     out = tmp_path / "key"
     assert cb.main(["--key", "edo-enwiki", "--out", str(out), "--root", str(REPO)]) == 0
     assert (out / "sources" / "edo-enwiki.html").is_file()

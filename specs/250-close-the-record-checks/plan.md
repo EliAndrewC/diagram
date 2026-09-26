@@ -140,16 +140,22 @@ R1 finding 2: an agent that reads a file under the repository is handed every `C
 (or `KEY=`) copies what one check reads - the fragment, its notes, the prepass, the quote-verbatim report,
 the registry entries its notes cite, the variant index - to `/tmp/l7r-check/`, with a `MANIFEST.md` naming
 each copy's origin. The contracts of `quote-check`, `record-format`, `source-applicability` and
-`source-reader` read the bundle and nothing under `/diagram`; `check-bundle-hooks.sh` refuses a dispatch of
-one of them that points into the repository and prints the command. `entry-drift` is left out: its input is
-a modal's explanation in the engine's assets, and the slice did not measure it.
+`source-reader` read the bundle and nothing under `/diagram`; so does `entry-drift` (plan review of
+2026-09-26: it is a check agent this feature runs at FR-007, and it reads the same fragments), whose bundle adds
+`kind.txt`, the docstring of the one modal class it compares (`KIND=<class>`), rather than the whole classes
+module. `check-bundle-hooks.sh` refuses a dispatch of any of the five that points into the repository and prints
+the command.
 
 **Does a check still find what it found?** A check that loses the CLAUDE.md files loses nothing its contract
 does not carry (feature 256's position), but that is a claim, and the tier rule measures it: seeded-fault runs,
-THREE a leg. `record-format` and `quote-check`: one entry with planted faults, three runs in the tree and three
-from its bundle, each leg judged on whether it names every planted fault. `source-applicability`: the recorded
-case of the slice (`edo-enwiki` before its limit was added, where the in-tree run found the missing limit),
-three runs from the bundle against that recorded verdict. Recorded as R2. A leg that loses a finding the other
+THREE a leg, for every one of the five agents the bundle moves. Each case is one input with known findings,
+read three times in the tree (under `research/_seeded250/`, where the CLAUDE.md files attach) and three times
+from its bundle - the same bytes in two places - and each run is judged on whether its report names every known
+finding: `record-format` on ways 010 with a visible Grounds field, a history sentence, a note to a session and an
+undefined term planted; `quote-check` on sizing 020 with a mark moved to a sentence its quote does not support and
+an unfootnoted figure added; `source-applicability` on the slice's recorded case (`edo-enwiki` before its limit was
+added); `entry-drift` on the `WetPaddy` modal against its section with the section's two thirds made a tenth;
+`source-reader` on three claims against the saved Edo page, one of them contradicted by it. Recorded as R2. A leg that loses a finding the other
 catches is a regression, and the bundle is not adopted for that agent.
 
 ### D7 - One page per session, started fresh from a brief (GM 2026-09-26)
@@ -164,7 +170,7 @@ push; the parent session does not edit the clone while it runs.
 ### D8 - A check's report goes to a file; its reply is one line
 
 R1 finding 3: thirteen whole reports sat in the main session's context and were re-read on every later turn.
-The four contracts D6 names gain the `Write` tool and one rule: the whole report goes to `REPORT.md` in the
+The five contracts D6 names gain the `Write` tool and one rule: the whole report goes to `REPORT.md` in the
 bundle, the reply is one line of counts naming it. The report is opened when the line says there is something
 to apply. The contract limits the one write to the bundle; no guard enforces it, because a hook cannot tell
 an agent's write from the session's.

@@ -1,7 +1,7 @@
 {
  "feature": "250-close-the-record-checks",
- "plan_sha256": "d60423a54e742d0dcc40944904067605dd8f8d24b86d74ae36254311d0f122ef",
- "reviewed": "2026-09-21",
+ "plan_sha256": "c961678cd3dd169802f820723a926afdd8e69d66ff5e93239a2a8946478fb839",
+ "reviewed": "2026-09-26",
  "declared": "spec-fidelity",
  "decisions": [
   {
@@ -32,22 +32,22 @@
    "id": "D3-a-measured-slice-first-then-the-GM",
    "summary": "Phase 1 does FR-001 whole on cities/sizing plus FR-003 for one entry, reports the token measurement (T10), and stops for the GM.",
    "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "RESOLVED at round 2 and unchanged since (the round-3 and round-4 diffs touch only D4's Measured line). The narrowing is the GM's own instruction of 2026-09-21, quoted in the decision; the decision names the two agents the slice cannot run (entry-drift, owed only at the close under FR-007; source-applicability, only if the slice changes a registry write-up) and requires T10 to name every agent the slice did not measure. Standing note for the implementer, not a finding against the plan: tasks.md T10 still asks only for the per-window table, what each agent read, and the implication for phases 2 to 4 - it does not carry the naming clause D3 promises."
+   "why": "RESOLVED at round 2 and unchanged since (the round-3 and round-4 diffs touch only D4's Measured line). The narrowing is the GM's own instruction of 2026-09-21, quoted in the decision; the decision names the two agents the slice cannot run (entry-drift, owed only at the close under FR-007; source-applicability, only if the slice changes a registry write-up) and requires T10 to name every agent the slice did not measure. Standing note for the implementer, not a finding against the plan: tasks.md T10 still asks only for the per-window table, what each agent read, and the implication for phases 2 to 4 - it does not carry the naming clause D3 promises.",
+   "ruling": "LEGITIMATE"
   },
   {
    "id": "D4-FR-002s-list-derived-by-a-script-over-the-reports",
    "summary": "measure/assertions.py matches a LINE, heading or not, carrying 'assertion' plus 'footnote'/'unfootnoted', takes the bullets that follow it by the measured block rule, fails where a report has no such line, excludes a matched line that is itself a bullet or a table row, and names where each item's page and section come from; the closing report prints the script's own count.",
    "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "RESOLVED. Round 2's fatal finding was that the block rule and the page/section carriers were stated rather than measured, so hw-quotecheck's pair-per-bullet listing would silently yield zero items; round 3 confirmed the substance is fixed and left one wrong figure ('twelve pages' where the script returns fifteen). Commit 50969d46 corrects that clause to 'fifteen pages, 72 items' and prints the three figures from the script's own last line; the round-4 diff (d48298a4..50969d46 over plan.md) touches nothing else. Re-run at this HEAD, not read: 'total: 72 item(s) over 6 reports and 15 page(s)', with hw-quotecheck now yielding 7 items ({'homesteads': 5, 'water': 2}) rather than zero, and each of the six reports printing '0 with no section found', which is the 'every item carries both a page and a section - 0 without' claim measured. A narrowing of HOW FR-002's list is derived that makes the derivation reliably happen rather than gutting it."
+   "why": "RESOLVED. Round 2's fatal finding was that the block rule and the page/section carriers were stated rather than measured, so hw-quotecheck's pair-per-bullet listing would silently yield zero items; round 3 confirmed the substance is fixed and left one wrong figure ('twelve pages' where the script returns fifteen). Commit 50969d46 corrects that clause to 'fifteen pages, 72 items' and prints the three figures from the script's own last line; the round-4 diff (d48298a4..50969d46 over plan.md) touches nothing else. Re-run at this HEAD, not read: 'total: 72 item(s) over 6 reports and 15 page(s)', with hw-quotecheck now yielding 7 items ({'homesteads': 5, 'water': 2}) rather than zero, and each of the six reports printing '0 with no section found', which is the 'every item carries both a page and a section - 0 without' claim measured. A narrowing of HOW FR-002's list is derived that makes the derivation reliably happen rather than gutting it.",
+   "ruling": "LEGITIMATE"
   },
   {
    "id": "D5-unlocated-items-found-by-their-own-words",
    "summary": "worklist.py's section label is treated as a hint only; each NOT-LOCATED, TOO-SHORT or AMBIGUOUS item is found by grepping its distinctive words over research/<page>/*.html, and an item no fragment carries is recorded as such with the words tried and searched by subject, never confirmed against a fragment the grep did not name.",
    "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "RESOLVED at round 2 and unchanged since. The decision states the measured fact that section_of returns the last ### heading of the REPORT, and replaces the mechanism with one grounded in the item's own text; 'never confirmed against a fragment the grep did not name' closes the round-1 failure of an item confirmed against the wrong text. A narrowing of HOW the search is done that serves FR-006 and SC-006."
+   "why": "RESOLVED at round 2 and unchanged since. The decision states the measured fact that section_of returns the last ### heading of the REPORT, and replaces the mechanism with one grounded in the item's own text; 'never confirmed against a fragment the grep did not name' closes the round-1 failure of an item confirmed against the wrong text. A narrowing of HOW the search is done that serves FR-006 and SC-006.",
+   "ruling": "LEGITIMATE"
   },
   {
    "id": "Technical-context-route-and-the-record-tests",
@@ -72,7 +72,89 @@
    "summary": "FR-006's items are worked beside FR-002 page by page.",
    "class": "within",
    "why": "Unchanged since round 1: an ordering the spec itself pairs ('worked as a bare item under FR-002'). Both halves are now clear, D4 and D5 being resolved."
+  },
+  {
+   "id": "D6-bundle-for-four-check-agents",
+   "summary": "make check-bundle copies what one check reads to /tmp/l7r-check/ with a MANIFEST.md; quote-check, record-format, source-applicability and source-reader read only the bundle.",
+   "class": "within",
+   "why": "Recommendation 1 as the GM was shown it on 2026-09-26 (transcript: 'Stop the ~28K CLAUDE.md attachment on check agents, for example by handing them copies of the files outside the repo'), adopted by 'all of those recommendations should be implemented'. The GM was shown THREE recommendations, not R1's five, so leaving R1 items 4 and 5 out is not a narrowing."
+  },
+  {
+   "id": "D6-entry-drift-left-out-of-the-bundle",
+   "summary": "entry-drift is not bundled: its input is a modal's explanation in the engine's assets, and the slice did not measure it.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The adopted recommendation is for 'check agents', and entry-drift is one this feature dispatches (spec FR-007, T23). Its contract reads the research FRAGMENTS and notes files its dispatch names, under research/, as well as engine assets under .claude/skills/diagram/ - both under nested CLAUDE.md files, so the premise that its input lies outside the attachment is half wrong. 'The slice did not measure it' is not impossibility, is not implied by the GM's words, and literal application does not defeat the purpose. Fix: bundle entry-drift too, with its own three-a-leg seeded runs, or bring the exclusion to the GM."
+  },
+  {
+   "id": "D6-guard-check-bundle-hooks",
+   "summary": "check-bundle-hooks.sh refuses a dispatch of one of the bundled check agents that points into the repository and prints the command.",
+   "class": "within",
+   "why": "A refusing guard is behavior, scoped part by part: its reach is exactly the check agents the adopted recommendation names and exactly the thing it asks (they read outside the repo). No other agent types, commands or defaults. Enforcement of what was asked."
+  },
+  {
+   "id": "D6-seeded-runs-record-format-quote-check",
+   "summary": "record-format and quote-check: one entry with planted faults, three runs in the tree and three from the bundle; a leg that loses a finding keeps the agent on the tree.",
+   "class": "within",
+   "why": "The precondition the GM was shown with recommendation 1: 'three test runs per leg to confirm the checks' findings don't get worse before adopting it'."
+  },
+  {
+   "id": "D6-seeded-runs-source-applicability-one-tree-run",
+   "summary": "source-applicability's check is the recorded edo-enwiki case: three bundle runs against the ONE recorded in-tree verdict.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The GM adopted 'three test runs per leg'; the in-tree leg here is one recorded run, the exact 'one run of a judging agent is not a stable oracle' the tier rule exists for. Rerunning the tree leg three times on the same recorded case is possible and cheap, the GM's words do not imply the shortcut, and the literal form does not defeat the purpose. Fix: three in-tree runs on the recorded case as well."
+  },
+  {
+   "id": "D6-source-reader-bundled-without-seeded-runs",
+   "summary": "source-reader's contract is moved onto the bundle, but D6 and T15 name seeded runs only for record-format, quote-check and source-applicability.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "Recommendation 1 as adopted carries its precondition ('three test runs per leg ... before adopting it'); D6 drops it for one of the four agents it bundles, with no reason stated. Not impossible, not implied by the GM. Fix: three-a-leg seeded runs for source-reader in T15, or leave source-reader on the tree."
+  },
+  {
+   "id": "D7-one-page-per-session",
+   "summary": "make page-session BRIEF=<file> starts a detached headless claude -p in this clone with the appended system prompt and a preassigned session id; the brief carries the page's derived items and the procedure; it commits, does not push.",
+   "class": "within",
+   "why": "Recommendation 2 ('Run one session per research page'), adopted. The launcher and derived brief are the mechanism of that recommendation, not a separate behavior."
+  },
+  {
+   "id": "D8-report-to-file-one-line-reply",
+   "summary": "The four bundled check contracts gain Write; the whole report goes to REPORT.md in the bundle and the reply is one line of counts naming it; no guard on the write.",
+   "class": "within",
+   "why": "Recommendation 3 ('Write agent reports to a file and return only a one-line verdict'), adopted, for the four agents. Declining a guard adds nothing unasked."
+  },
+  {
+   "id": "D8-entry-drift-left-out-of-one-line-reports",
+   "summary": "D8 applies to 'the four contracts D6 names', so entry-drift keeps returning its whole report into the session.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "Recommendation 3 as shown to the GM is 'Write agent reports to a file', not limited to bundled agents; entry-drift runs in this feature (FR-007). D8 inherits D6's exclusion without its own reason, and D6's reason (the slice did not measure its reading) does not bear on where its report goes. Fix: entry-drift writes REPORT.md and replies one line too."
+  },
+  {
+   "id": "D9-the-comparison",
+   "summary": "The next subset is FR-002 and FR-006 for homesteads (five FR-002 items, three FR-006), in one page session with bundled checks, measured against R1 whole, per item, and per check run split floor/read; FR-006 its own window; seeded runs a separate line.",
+   "class": "within",
+   "why": "The GM: 'resuming some of the research itself to compare the token usage of the next subset of research tasks with the token usage from the previous set'. Choosing the subset and keeping the seeded runs off both sides serves a like-for-like comparison."
+  },
+  {
+   "id": "D10-route-gated",
+   "summary": "The delta carries engine Python (tools/record_asset.py, fixed under XIV), so the push is gated; the spec is not amended.",
+   "class": "within",
+   "why": "Follows from the GM's 'Do not move tooling fixes to another clone or make them a standalone fix'; the route is chosen from the delta by sync-with-main.sh, not by the plan."
+  },
+  {
+   "id": "T11-quote-verbatim-section-fix",
+   "summary": "Phase 1b fixes make quote-verbatim SECTION= (reported NOT fixed in R1) here.",
+   "class": "within",
+   "why": "The GM: 'Just go ahead and make them as part of your work here.'"
+  },
+  {
+   "id": "renumbering-T11-T18-to-T17-T25",
+   "summary": "Old T11 -> T17; old T12 split into T18 (homesteads, the comparison page) and T19 (every other page, one session each, cut when T16's figures are read), both with the five research boxes; old T13-T18 -> T20-T25 with unchanged text.",
+   "class": "within",
+   "why": "Diff 50969d46..f8abf77c read in full: no FR dropped or reworded; the only removed clause is old T12's 'in the order T11 prints', a plan-level ordering the spec does not carry (spec has no ordering requirement), displaced by D9's choice of homesteads first. plan.md and spec.md carry no stale task number."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }

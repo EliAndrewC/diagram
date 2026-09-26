@@ -8,7 +8,7 @@
 # times what the check read of the record. `omitClaudeMd` (feature 256) drops only the copy given at
 # LAUNCH. A check handed copies outside the repository attached nothing; peak 47,700 -> 14,500.
 #
-# WHAT IT DOES. A dispatch of `quote-check`, `record-format`, `source-applicability` or `source-reader`
+# WHAT IT DOES. A dispatch of `quote-check`, `record-format`, `source-applicability`, `source-reader` or `entry-drift`
 # whose prompt names a file under the repository and no bundle is REFUSED, and the refusal carries the
 # `make check-bundle` command for the question the prompt names, read off its path. It cannot BUILD the
 # bundle itself: the bundle fetches every quoted page, and a hook that takes a minute is worse than a
@@ -28,7 +28,7 @@ CB_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 . "$CB_HERE/_guardlog.sh"
 
 #: the checks whose contract reads a bundle (`.claude/agents/<name>.md`, "Read the BUNDLE")
-CHECKS="quote-check record-format source-applicability source-reader"
+CHECKS="quote-check record-format source-applicability source-reader entry-drift"
 
 pretool() {
   local verdict kind detail reason

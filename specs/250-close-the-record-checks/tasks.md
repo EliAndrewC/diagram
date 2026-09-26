@@ -60,7 +60,7 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
 - [ ] T11 `make quote-verbatim ... SECTION=` checks only that question's notes (the rule dropped the
       argument), and an unmatched SECTION exits 2
       research: rendering
-- [ ] T12 `make check-bundle` and the four contracts that read a bundle and write `REPORT.md` (D6, D8);
+- [ ] T12 `make check-bundle` (`KIND=` for entry-drift) and the five contracts that read a bundle and write `REPORT.md` (D6, D8);
       tests in `tests/tooling/test_check_bundle.py`
       research: rendering
 - [ ] T13 `check-bundle-hooks.sh`, its suite, its settings entry and its row in the root CLAUDE.md;
@@ -69,8 +69,8 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
 - [ ] T14 `make page-session` and `measure/brief.py` (D7); `research/CLAUDE.md` says how a check and a
       page are now run
       research: rendering
-- [ ] T15 The seeded-fault runs, three a leg (D6), recorded as R2's first half; an agent whose bundle leg
-      loses a finding keeps reading the tree
+- [ ] T15 The seeded-fault runs, three a leg for each of the five agents (D6), recorded as R2's first half;
+      an agent whose bundle leg loses a finding keeps reading the tree
       research: rendering
 - [ ] T16 **The comparison the GM asked for** (D9): T18 worked in a page session, measured against R1,
       recorded as R2 with the next recommendations

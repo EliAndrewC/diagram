@@ -14,7 +14,8 @@ The agent writes its whole report to `REPORT.md` here and replies with one line 
 
     _check_bundle.py PAGE --section S [--out DIR] [--extra PATH ...] [--no-quotes]
         one question: its fragment and notes, the prepass, the quote-verbatim report, the registry
-        entries its notes cite, the glossary's variant index - for quote-check and record-format
+        entries its notes cite, the glossary's variant index - for quote-check and record-format;
+        with --kind <Class> (and --no-quotes), the modal written from it too - for entry-drift
     _check_bundle.py --key KEY [--out DIR]
         one source: its registry entry and the saved text of its page - for source-applicability
         and source-reader
@@ -25,6 +26,7 @@ The default directory is under `/tmp/l7r-check/`, which no `CLAUDE.md` sits abov
 from __future__ import annotations
 
 import argparse
+import ast
 import datetime
 import pathlib
 import re
@@ -36,6 +38,7 @@ HERE = pathlib.Path(__file__).resolve().parent
 RECORD = pathlib.Path(".claude/skills/diagram/research")
 REGISTRY = RECORD / "sources" / "010-works-cited"
 VARIANTS = RECORD / "assets" / "glossary-variants.txt"
+CLASSES = pathlib.Path(".claude/skills/diagram/l7r/diagram/interactive/classes")
 DEFAULT_ROOT = pathlib.Path("/tmp/l7r-check")
 REPORT = "REPORT.md"
 MANIFEST = "MANIFEST.md"
@@ -65,6 +68,17 @@ def registry_entry(root: pathlib.Path, key: str) -> pathlib.Path | None:
     is another work's entry; the name is the four-digit prefix and the key, nothing between."""
     exact = re.compile(rf"\d+-{re.escape(key)}\.html")
     return next((p for p in sorted((root / REGISTRY).glob(f"*{key}.html")) if exact.fullmatch(p.name)), None)
+
+
+def kind_docstring(root: pathlib.Path, name: str) -> tuple[str, str] | None:
+    """(origin `file:line`, docstring) of one modal class - what `entry-drift` compares with its section.
+    The class, not its file: a classes module holds a dozen modals, and the check is about one."""
+    for path in sorted((root / CLASSES).glob("*.py")):
+        tree = ast.parse(path.read_text(encoding="utf-8"))
+        for node in ast.walk(tree):
+            if isinstance(node, ast.ClassDef) and node.name == name:
+                return f"{path.relative_to(root)}:{node.lineno}", ast.get_docstring(node) or ""
+    return None
 
 
 def slug(text: str) -> str:
@@ -112,7 +126,7 @@ def copy(src: pathlib.Path, out: pathlib.Path, name: str | None = None) -> str:
     return str(dest.relative_to(out))
 
 
-def entry_bundle(root: pathlib.Path, page: str, section: str, out: pathlib.Path, extra: list[str], quotes: bool) -> int:
+def entry_bundle(root: pathlib.Path, page: str, section: str, out: pathlib.Path, extra: list[str], quotes: bool, kind: str = "") -> int:
     sys.path.insert(0, str(HERE))
     from _hm_record import fragments_for  # noqa: PLC0415
 
@@ -120,9 +134,16 @@ def entry_bundle(root: pathlib.Path, page: str, section: str, out: pathlib.Path,
     if not fragments:
         print(f"check-bundle: SECTION={section!r} matched no question of {page}", file=sys.stderr)
         return 2
+    found_kind = kind_docstring(root, kind) if kind else None
+    if kind and found_kind is None:
+        print(f"check-bundle: no modal class {kind!r} under {CLASSES}", file=sys.stderr)
+        return 2
     fresh(out)
     rows: list[tuple[str, str, str]] = []
     keys: list[str] = []
+    if found_kind:
+        (out / "kind.txt").write_text(f"class {kind}  ({found_kind[0]})\n\n{found_kind[1]}\n", encoding="utf-8")
+        rows.append(("kind.txt", found_kind[0], f"for entry-drift: the modal `{kind}` - its docstring, which IS what the map says"))
     for rel in fragments:
         what = "the question's footnotes" if rel.endswith(".notes.html") else "the question, as its reader meets it"
         rows.append((copy(root / rel, out), rel, what))
@@ -179,6 +200,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--key", default="", help="one registry key, for a source bundle")
     ap.add_argument("--out", default="", help=f"the bundle directory (default under {DEFAULT_ROOT})")
     ap.add_argument("--extra", nargs="*", default=[], help="further files to copy in, relative to the root")
+    ap.add_argument("--kind", default="", help="a modal class name, for entry-drift: its docstring is copied in")
     ap.add_argument("--no-quotes", action="store_true", help="skip the quote-verbatim report (it fetches every cited page)")
     ap.add_argument("--root", default=".")
     args = ap.parse_args(argv)
@@ -188,7 +210,7 @@ def main(argv: list[str] | None = None) -> int:
     if not args.page or not args.section:
         ap.error("PAGE and --section, or --key")
     out = pathlib.Path(args.out or DEFAULT_ROOT / f"{slug(args.page)}-{slug(args.section)}")
-    return entry_bundle(root, args.page.removesuffix(".html"), args.section, out, args.extra, not args.no_quotes)
+    return entry_bundle(root, args.page.removesuffix(".html"), args.section, out, args.extra, not args.no_quotes, args.kind)
 
 
 if __name__ == "__main__":

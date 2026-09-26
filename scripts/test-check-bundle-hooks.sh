@@ -47,6 +47,8 @@ dispatch source-reader "Report per claim whether https://en.wikipedia.org/wiki/E
 [ "$(rc)" -eq 0 ] && logged no-repo-path && ok "a dispatch naming no repository file passes (a reader handed URLs)" || no "a URL-only dispatch was refused" "(rc=$(rc))"
 dispatch record-format "CHECK_BUNDLE_OK=\"the glossary term file itself is under review\" read $Q"
 [ "$(rc)" -eq 0 ] && logged check-bundle-ok && ok "an escape with a reason passes and is recorded" || no "a reasoned escape was refused" "(rc=$(rc))"
+dispatch entry-drift "Compare the modal with /diagram/.claude/skills/diagram/research/fields/190-the-wettest.html"
+[ "$(rc)" -eq 2 ] && grep -q "PAGE=fields SECTION=190" "$T/err" && ok "an entry-drift dispatch into the tree is refused too" || no "entry-drift passed" "(rc=$(rc))"
 dispatch spec-fidelity "Review /diagram/.claude/skills/diagram/research/ways/010-x.html"
 [ "$(rc)" -eq 0 ] && ok "an agent that is not a record check is not this guard's business" || no "spec-fidelity was refused" "(rc=$(rc))"
 out=$(printf '{"session_id":"t","tool_name":"Bash","tool_input":{"command":"make done"}}' | ( cd "$T" && "$HOOK" pretool 2>/dev/null )); r=$?
@@ -56,7 +58,7 @@ out=$(printf 'not json' | ( cd "$T" && "$HOOK" pretool 2>/dev/null )); r=$?
 
 echo "3. the guard and the contracts agree"
 ROOT="$(dirname "$HERE")"
-for a in quote-check record-format source-applicability source-reader; do
+for a in quote-check record-format source-applicability source-reader entry-drift; do
   grep -q 'Read the BUNDLE you are given' "$ROOT/.claude/agents/$a.md" && grep -q '^tools: .*Write' "$ROOT/.claude/agents/$a.md" \
     && ok "$a's contract reads the bundle and may write its report" || no "$a's contract does not match the guard"
 done
