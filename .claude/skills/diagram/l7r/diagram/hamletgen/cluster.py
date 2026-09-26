@@ -220,7 +220,11 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
         # seated - the same shape as the wet-ground foul above, and it reads the band's own sample points.
         if brook and not plan.seat_ignores_brook:
             _bp = [(mid[0] + nx * d - ny * lat * t, mid[1] + ny * d + nx * lat * t) for d in (dep * 0.5, dep + 34.0, dep * 2.0) for t in (-0.9, -0.45, 0.0, 0.45, 0.9)]
-            _sides = brook_banks(_bp, brook, dep * 2.0)
+            # ...AND THE FIELD'S OWN EDGE COUNTS AS A POINT OF THE BAND (feature 261, settlement-review of Inashiro): a
+            # band whose houses all stand on one bank while the brook runs between them and the margin they front has
+            # put the whole rice field across water no way crosses - the farmers' daily walk to the paddy. The margin
+            # midpoint and the band on different banks is the same division, one step out.
+            _sides = brook_banks([mid, *_bp], brook, dep * 2.0)
             crossed = sum(1 for q in _bp if min((seg_dist(q[0], q[1], a, b) for a, b in zip(brook, brook[1:], strict=False)), default=1e9) < 30.0) / len(_bp)
             score -= 3.0 * crossed
             plan.seat_brook_steered += crossed > 0.0 or len(_sides) > 1
