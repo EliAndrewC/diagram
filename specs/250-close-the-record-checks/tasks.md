@@ -105,9 +105,10 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
 - [x] T31 The one-file seeded leg, three runs per agent on the planted inputs; recorded in R3
       research: rendering
       verify: DONE. DONE. One-file leg, 15 runs, every run named every planted fault. Mean input per check against the multi-file bundle: rf 166K->112K, qc 110K->53K, sa 152K->107K, ed 104K->57K, sr 102K->74K; turns 4-6 -> 2-4 (seeded-results.json).
-- [ ] T32 FR-002 and FR-006 for `vegetation`, in two page sessions (D11)
+- [x] T32 FR-002 and FR-006 for `vegetation`, in two page sessions (D11)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. vegetation checked and applied: 5 questions (020 060 090 110 150) quote-checked and record-formatted, meadow-enwiki source-applicability APPLICABLE-WITH-LIMITS (write-up corrected); ~35 findings applied (claims narrowed to their quotes or labeled as the record's reasoning, scythe-swath framing dropped, 3 translations fixed, 1 new citation each in 020 and 150, stale history and session notes removed), 14 glossary terms + 10 variants; 5 note-scoped re-checks, remaining PARTIALs closed; 5 entry-drift DRIFTED modals rewritten; FR-006 19/19 footnoted; open: Coggins, Aomori and forests-2020 PDF quotes unverifiable here (no PDF text tool)
 - [ ] T33 **The comparison the GM asked for** (D11): T32 measured against R1 and R2, recorded as R3 with the
       next recommendations
       research: rendering
