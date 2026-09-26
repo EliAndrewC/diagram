@@ -59,7 +59,8 @@ REFERENCES_LEAD: str = _TEXT["references_lead"]
 #: The BROAD kinds, over which the cursor stays the normal arrow (GM 2026-09-26: *"very large things don't need to
 #: turn the mouse into a pointer"* - grassland, marshland, paddies, copses, windbreak forests and woodland commons).
 #: Every other clickable kind turns it into the link hand (`page.js`, `cursorFor`). Grassland is the scrub and rough
-#: grazing class, and paddies are both paddy classes.
+#: grazing class, and paddies are both paddy classes. The dry crops and fallow keep the hand (GM 2026-09-26, asked:
+#: *"No, the dry crops should still get the hand"*).
 PLAIN_CURSOR: frozenset[str] = frozenset(_TEXT["plain_cursor"])
 
 
