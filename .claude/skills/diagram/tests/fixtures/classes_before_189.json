@@ -911,7 +911,7 @@
  "windbreak": {
   "caveat": "",
   "covers": "`village_groves[role=windbreak]`",
-  "entry": "research/vegetation.html - 'The fengshui forest - real scale, and why ours is honest'; research/homesteads.html - 'The garden's sun, and how far the windbreak shades'",
+  "entry": "research/vegetation.html - 'The fengshui forest - real scale, and why ours is honest'; research/vegetation.html - 'Does a shelter belt wrap the settlement? No - it stands on one or two windward sides'; research/homesteads.html - 'The garden's sun, and how far the windbreak shades'",
   "key": "windbreak",
   "label": "accurate",
   "label_note": "Scale, density and placement follow the surveyed figures (forests-2020); the belt's shape follows the terrain and the cluster.",

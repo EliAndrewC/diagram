@@ -17,6 +17,13 @@ from the seed and the record attests both forms evenly, but all five pool seeds 
 weir, and a knob owes one map per VALUE on the sheet. Pinning the value on the map whose water
 already leaves by the plainest route is how the pool shows the other one. Measured 2026-09-12: the
 roll is even over a thousand seeds (477 weirs), so this is the sample's luck, not a biased draw.
+
+THE SEED IS 24, NOT 6 (feature 261). The wind is the regional northwest unless a map declares one, and the
+cluster is seated with its back to it. This land falls northwest, so the field's northwest margin is its wet
+low foot, and at seed 6 no margin whose back faces the wind was open: the seat fell back to one that does not
+and the belt came out 27 trees. A seed is a roll, not a fact about the place, so the map was re-seeded with its
+fall, its sink and its intake kept: over seeds 1-30 only seed 24 seats all 19 households on a wind-facing
+margin (specs/261 research).
 """
 
 import os
@@ -27,5 +34,5 @@ SKILL = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))  # <tree>/<tier>
 sys.path.insert(0, SKILL)
 from l7r.diagram.hamletgen import HamletSpec, generate  # noqa: E402
 
-report = generate(HamletSpec(name="Sawada", seed=6, households=19, down_deg=225, water_sink="offmap", intake="open"), out_base=os.path.join(HERE, "sawada"))
+report = generate(HamletSpec(name="Sawada", seed=24, households=19, down_deg=225, water_sink="offmap", intake="open"), out_base=os.path.join(HERE, "sawada"))
 print(report.line())

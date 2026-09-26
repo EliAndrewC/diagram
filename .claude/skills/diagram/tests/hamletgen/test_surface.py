@@ -144,6 +144,7 @@ CONSUMED_PUBLIC = [
     "polder_flanks",
     "push_out_of",
     "route_around",
+    "brook_banks",
     "seat_cluster",
     "shallow_crossing",
     "stage_notice",
@@ -151,7 +152,6 @@ CONSUMED_PUBLIC = [
     "unit",
     "waterward_flanks",
     "well_target",
-    "windward_for",
 ]
 
 # The four underscore names with external consumers (test_hamletgen), and the submodule

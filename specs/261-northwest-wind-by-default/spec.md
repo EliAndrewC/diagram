@@ -205,3 +205,6 @@ engine actually follows.
   re-seed assumption did not say what happens when no seed works**: the Edge Cases now name the five exits
   that are NOT taken and route the case to the exception check and the GM, and the plan owes a per-map
   measurement at the current seeds before relying on re-seeding.
+- Round 2 (2026-09-26, `spec-fidelity`, Opus): **FAITHFUL**. Both round-1 items RESOLVED; the fall bearings of
+  all three maps named were re-checked against their generators, and the requirement ids the new Edge Case
+  cites point where they should. Accepted.

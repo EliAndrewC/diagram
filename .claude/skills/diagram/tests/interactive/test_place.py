@@ -29,6 +29,8 @@ from l7r.diagram.interactive.place import (
     KINDS,
     PER_HOUSEHOLD,
     PLACE_KEYS,
+    WIND_NAMES,
+    WIND_SIDES,
     crop_sentence,
     dwellings_shown,
     join,
@@ -36,6 +38,7 @@ from l7r.diagram.interactive.place import (
     place_card,
     size_sentence,
     where_sentences,
+    windbreak_default,
 )
 
 HAMLET = {"scale": "hamlet", "name": "Inashiro", "households": 15}
@@ -393,3 +396,30 @@ def test_the_card_names_the_households_when_the_arithmetic_would_not_work() -> N
     """
     assert size_sentence(KINDS["village"], {"scale": "village", "households": 70}, 66) == "66 farmhouses, about 70 households, population ~350"
     assert size_sentence(KINDS["village"], {"scale": "village", "households": 66}, 66) == "66 farmhouses, population ~330", "equal counts divide cleanly, so the households go unsaid"
+
+
+# --- the windbreak's side and its reason (feature 261) ---
+
+
+def test_the_windbreak_says_it_stands_on_the_north_and_west_for_the_regional_wind() -> None:
+    """The GM, on Kashikawa's belt: "I don't see any, any explanation for that." Every map that records its wind
+    says which side the belt is on and why."""
+    assert (
+        windbreak_default({"windward": "NW", "wind_source": "regional"})
+        == "Here the belt stands on the north and west of the houses: the winter wind across this region blows from the northwest, and no local wind is recorded for this place."
+    )
+
+
+def test_a_declared_local_wind_is_named_as_a_departure_from_the_regional_one() -> None:
+    got = windbreak_default({"windward": "SE", "wind_source": "declared"})
+    assert got == "Here the belt stands on the south and east of the houses, because this place has a local wind from the southeast that departs from the region's northwesterly winter wind."
+
+
+@pytest.mark.parametrize("meta", [{}, {"windward": "NW"}, {"windward": "NNW", "wind_source": "regional"}, {"windward": "NW", "wind_source": "rolled"}])
+def test_no_windbreak_sentence_where_the_map_does_not_record_its_wind(meta: dict[str, str]) -> None:
+    """A frozen hand-authored map records no wind source, so the class's own explanation stands alone."""
+    assert windbreak_default(meta) == ""
+
+
+def test_every_quarter_has_its_sides_and_its_name() -> None:
+    assert set(WIND_SIDES) == set(WIND_NAMES) == {"N", "NE", "E", "SE", "S", "SW", "W", "NW"}

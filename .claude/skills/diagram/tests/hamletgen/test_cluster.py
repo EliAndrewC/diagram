@@ -56,7 +56,25 @@ def test_the_cluster_avoids_a_margin_whose_back_is_under_the_hem() -> None:
     the windbreak behind it would stand in the barley."""
     plan = a_plan()
     hem = [(400.0, 100.0), (1000.0, 100.0), (1000.0, 395.0), (400.0, 395.0)]  # the whole north back
-    assert hg.seat_cluster(plan, dry_plots=[hem])["cy"] > hg.seat_cluster(plan)["cy"]
+    hemmed = hg.seat_cluster(plan, dry_plots=[hem])
+    assert hemmed["cy"] > hg.seat_cluster(plan)["cy"]
+    # ...and with the one wind-facing margin gone, the seat is the last fallback and says so (feature 261)
+    assert hemmed["offwind"] is True and hg.seat_cluster(plan)["offwind"] is False
+
+
+@pytest.mark.parametrize("windward", sorted(hg.WIND_VECTORS))
+@pytest.mark.parametrize("down_deg", [0.0, 90.0, 180.0, 270.0])
+def test_the_seat_turns_its_back_to_the_wind_whatever_the_slope(windward: str, down_deg: float) -> None:
+    """THE SEAT BENDS TO THE WIND (feature 261): whichever way the land falls, the settlement's back - the seat's
+    outward normal - faces within 45 degrees of the windward bearing, so the belt behind it stands on the
+    windward side instead of in the crop. Before feature 261 the wind was renamed after the seat instead."""
+    spec = hg.HamletSpec(name="Test", seed=3, households=10, down_deg=down_deg, windward=windward)
+    plan = hg.plan_site(spec)
+    plan.envelope = [(400.0, 400.0), (700.0, 250.0), (1000.0, 400.0), (1150.0, 700.0), (1000.0, 1000.0), (700.0, 1150.0), (400.0, 1000.0), (250.0, 700.0)]
+    seat = hg.seat_cluster(plan)
+    wx, wy = plan.wind
+    assert seat["out"][0] * wx + seat["out"][1] * wy >= hg.WIND_BACK_MIN_DOT
+    assert seat["offwind"] is False
 
 
 def test_a_field_with_no_buildable_flank_is_a_loud_error() -> None:
@@ -155,3 +173,26 @@ def test_every_margin_divided_still_seats_the_hamlet() -> None:
     seat = hg.seat_cluster(plan, brook=brook)
     assert seat["divided"] is True
     assert not hg.point_in_poly(seat["cx"], seat["cy"], SQUARE), "still outside the field"
+    assert seat["offwind"] is False, "among divided margins the wind-facing one wins (feature 261)"
+
+
+def test_the_banks_are_the_sides_of_the_brook_not_the_halves_of_the_band() -> None:
+    """Feature 261: a brook running BEHIND a band, parallel to it, comes near both of the band's halves and divides
+    nothing - every point stands on one bank. One running THROUGH it puts points on both banks."""
+    band = [(x, 100.0) for x in (0.0, 50.0, 100.0)] + [(x, 200.0) for x in (0.0, 50.0, 100.0)]
+    behind = [(-500.0, 300.0), (600.0, 300.0)]
+    through = [(-500.0, 150.0), (600.0, 150.0)]
+    assert hg.brook_banks(band, behind, 400.0) == {1} or hg.brook_banks(band, behind, 400.0) == {-1}
+    assert hg.brook_banks(band, through, 400.0) == {1, -1}
+    assert hg.brook_banks(band, behind, 50.0) == set(), "nothing within reach, no bank"
+
+
+def test_a_clean_off_wind_margin_beats_a_divided_wind_facing_one() -> None:
+    """THE BROOK'S STRIKE-OUT OUTRANKS THE WIND (feature 261): the only wind-facing margin is divided, so the seat
+    falls back to a clean off-wind margin and says so, rather than standing astride the brook."""
+    plan = a_plan()
+    plain = hg.seat_cluster(plan)
+    ax, ay = plain["along"]
+    brook = [(plain["cx"] - ax * 900.0, plain["cy"] - ay * 900.0), (plain["cx"] + ax * 900.0, plain["cy"] + ay * 900.0)]
+    moved = hg.seat_cluster(plan, brook=brook)
+    assert (moved["divided"], moved["offwind"]) == (False, True)

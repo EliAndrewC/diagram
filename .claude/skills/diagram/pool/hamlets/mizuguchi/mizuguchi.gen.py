@@ -10,6 +10,11 @@ The brief: 12 households on land falling east (`down_deg=0`), the field draining
 into a tameike (`water_sink="pond"`) - named for the sluice mouth where the brook is taken onto the
 field, the one piece of engineering that makes the place possible. See `mizuguchi.notes.md` for the
 kanji triangle and the review log.
+
+THE SEED IS 27, NOT 23 (feature 261). The wind is the regional northwest unless a map declares one, and the
+cluster is seated with its back to it. At seed 23 the brook divides every wind-facing margin and the map
+seated 8 of its 12 households; a seed is a roll, not a fact about the place, so the map was re-seeded with its
+fall and its pond kept. Seed 27 seats all twelve on a margin the brook does not cross (specs/261 research).
 """
 
 import os
@@ -20,5 +25,5 @@ SKILL = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))  # <tree>/<tier>
 sys.path.insert(0, SKILL)
 from l7r.diagram.hamletgen import HamletSpec, generate  # noqa: E402
 
-report = generate(HamletSpec(name="Mizuguchi", seed=23, households=12, down_deg=0, water_sink="pond"), out_base=os.path.join(HERE, "mizuguchi"))
+report = generate(HamletSpec(name="Mizuguchi", seed=27, households=12, down_deg=0, water_sink="pond"), out_base=os.path.join(HERE, "mizuguchi"))
 print(report.line())

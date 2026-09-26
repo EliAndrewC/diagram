@@ -976,3 +976,12 @@ def test_merge_primitives_returns_a_string_with_under_two_elements_untouched_wit
     assert merge_primitives(one) is one and merge_primitives("") == "" and merge_primitives("<g></g>") == "<g></g>"
     two_uses = '<use href="#a"/><use href="#b"/>'  # two self-closing elements, neither a primitive: past the count, nothing to merge
     assert merge_primitives(two_uses) is two_uses
+
+
+def test_the_windbreak_pop_up_names_its_side_and_an_authored_note_beats_it() -> None:
+    """Feature 261: the windbreak's `on_this_map` says which side the belt is on and why, unless the notes say."""
+    meta = {"scale": "hamlet", "name": "Kashikawa", "households": 20, "windward": "NW", "wind_source": "regional"}
+    data = _render([PLACE, "windbreak"], meta)
+    assert data["windbreak"]["on_this_map"].startswith("Here the belt stands on the north and west of the houses")
+    notes = MapNotes(place={}, features={"windbreak": "This one is planted on the old dike."})
+    assert _render([PLACE, "windbreak"], meta, notes)["windbreak"]["on_this_map"] == "This one is planted on the old dike."

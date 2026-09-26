@@ -16,7 +16,6 @@ from ..consts import (
     POLDER_ARCHETYPES,
     SPUR_SETBACK,
     TRACK_FABRIC_GAP,
-    WIND_VECTORS,
     Poly,
     Pt,
 )
@@ -270,21 +269,12 @@ def stage_seat(s: Settlement, plan: SitePlan) -> None:
     # margin the brook divides, which happens only when every margin does, or when refusing them cost the
     # map a household and `generate` rolled it again with them allowed.
     s.M["meta"]["seat_divided"] = bool(seat.get("divided"))
-    # THE SITE'S BACK IS THE WINDWARD SIDE, and where the two disagree the site wins.
-    #
-    # The wind is derived from the slope (cold air drains off the high ground) and the cluster is
-    # seated partly by it - back to the hill, face to the water. But the seat has hard constraints
-    # the wind does not: not below the drain, not on the hem, not off the canvas. When those rule
-    # out every wind-facing margin, the settlement ends up with its back to the FIELD, and a belt
-    # placed on the declared windward side is then planted in the rice - where `village_grove`
-    # throws away almost every clump and the map fails both windbreak checks with a grove of eight
-    # trees. Re-reading the exposure off the seat is the self-consistent answer and the true one: a
-    # settlement's sheltered side is the side it actually turns its back to, and this map is
-    # declaring which quarter that is. A GM who knows the region's real prevailing wind pins it on
-    # the spec, and then the seat search is what bends instead.
-    if plan.wind[0] * seat["out"][0] + plan.wind[1] * seat["out"][1] < 0.34:  # more than ~70 deg apart
-        plan.windward = min(WIND_VECTORS, key=lambda q: -(WIND_VECTORS[q][0] * seat["out"][0] + WIND_VECTORS[q][1] * seat["out"][1]))
-        s.M["meta"]["windward"] = plan.windward
+    # THE SEAT BENDS TO THE WIND, NEVER THE WIND TO THE SEAT (feature 261). Until then this stage renamed the
+    # wind after whatever the seat's back faced whenever the two disagreed by more than ~70 degrees, which is how
+    # Kashikawa's belt came to stand on the south and east: the wind a map declares was being rewritten by where
+    # its houses happened to land. `seat_cluster` now seats only on a margin whose back faces the wind, and a map
+    # that had to fall back to one that does not says so here, rather than changing the wind to hide it.
+    s.M["meta"]["seat_offwind"] = bool(seat.get("offwind"))
     s.M["meta"]["lane_skeleton"] = plan.lane_skeleton
     # THE SIDE THE HOUSES STAND ON, told to the settlement (feature 140): every field test from here on measures
     # the outline's few chords facing this seat (`rolling/fit.py::_field_chains`), never the whole outline.

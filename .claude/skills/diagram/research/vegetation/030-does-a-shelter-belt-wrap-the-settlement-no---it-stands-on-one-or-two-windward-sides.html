@@ -1,6 +1,6 @@
 <h2 id="does-a-shelter-belt-wrap-the-settlement-no---it-stands-on-one-or-two-windward-sides">Does a shelter belt wrap the settlement? No - it stands on one or two windward sides</h2>
 <!-- moved from the retired rule file, 2026-09-12 -->
-<!-- Grounds: _BELT_GAP_FT in settlement/homestead_parts/_helpers.py; belt_polygon; WIND_TURNS in hamletgen/consts.py -->
+<!-- Grounds: _BELT_GAP_FT in settlement/homestead_parts/_helpers.py; belt_polygon; DEFAULT_WINDWARD in hamletgen/consts.py -->
 <!-- Evidence: attested (Honda's founding definition; the survey's separate patches); the 30 ft figure is ours -->
 <p><strong>Sources:</strong> <a href="https://jayna.usfca.edu/asia-pacific-perspectives/pdfs/1-coggins-minor-fengshui-forests.pdf"><code>coggins-minor-2018</code></a> (the separate patches at named topographic points), <a href="https://ja.wikipedia.org/wiki/屋敷林"><code>yashikirin-jawiki</code></a> (the homestead grove enclosing the whole house before Meiji, and on the north and west sides after), <a href="https://agriknowledge.affrc.go.jp/RN/2010935166.pdf"><code>irie-2020-igune</code></a> (the grove formed on the north or the west and lacking the south or the east, and kept that way for centuries), <a href="https://www.city.sendai.jp/ryokuchihozen/kurashi/shizen/midori/hyakunen/hozen.html"><code>sendai-igune-hozen</code></a> (the city's encircling definition of the word), <a href="https://centerforagroforestry.org/wp-content/uploads/2024/04/06_Windbreaks_TrainingManual_2024Master_0410_Digital-7.pdf"><code>umca-windbreak-manual</code></a> (what a gap does to the wind, and how a crossing that cannot be avoided is cut); the GM's rulings of 2026-08-29. No readable source was found for what the grove's open flank is used for, <a href="https://ja.wikipedia.org/wiki/季節風"><code>kisetsufu-jawiki</code></a>, <a href="https://en.wikipedia.org/wiki/Katabatic_wind"><code>katabatic-wind-enwiki</code></a></p>
 <p><strong>The ruling that opened the question</strong> (the GM, 2026-08-29): <em>"The actual ruling that I
@@ -54,11 +54,16 @@ settlements is being told a real fact about the regional wind, and a per-settlem
 scramble that signal for variety's sake. This is the rare case where two supportable answers are answered
 with a ruling instead of a knob - not because the second form is unsupported, but because the first carries
 information the map is trying to convey. The full-ring form stays recorded here and undrawn.</p>
-<p>The
-regional-against-local rule the GM describes is already how the maps are built - northwest by default,
-because at the scale of a province that is the right answer, while any one map's windward quarter is its
-upslope bearing, cold air draining downhill making the high side and the windward side the same
-fact.<sup class="fn" data-note="kisetsufu-jawiki"></sup><!-- WIND_TURNS in hamletgen/consts.py --> And the belts already draw as hooks. Measured over the
+<p><strong>How the maps apply it: the northwest on every map, unless the map declares a local
+wind.</strong> The winter wind over Japan blows out of the Siberian high from the northwest, and cold air,
+being denser, drains downhill off high ground, so a valley can have a cold local wind of its own off its
+high side.<sup class="fn" data-note="kisetsufu-jawiki"></sup> The GM's ruling keeps the regional wind
+wherever the local geography does not override it, and a map's local geography overrides it only when the
+map says so: a place with a wind of its own records it, and every other place takes the northwest (the GM,
+2026-09-26: <em>"only when declared"</em>). No map drawn so far records one, so every belt stands on the
+north and west of its houses, and the settlement is seated with its back to that side rather than the wind
+being turned to suit wherever the houses stand. The map's own pop-up for the windbreak says which side the
+belt is on and why.<!-- DEFAULT_WINDWARD and WIND_BACK_MIN_DOT in hamletgen/consts.py; feature 261 --> And the belts already draw as hooks. Measured over the
 scripted hamlets, the arc each belt subtends around its own cluster: 102 degrees, 146, 97, 136 and 129 -
 one side or two sides apiece, none past 200 degrees, none wrapping its settlement.<!-- Inashiro W 102, Kashikawa SE 146, Kuwabata NW 97, Mizuguchi S 136, Sawada NE 129 --></p>
 <p class="spec"><strong>The rule the map follows:</strong> a shelter belt stands on the windward one or two

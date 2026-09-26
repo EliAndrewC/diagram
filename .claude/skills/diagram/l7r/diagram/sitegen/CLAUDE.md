@@ -35,7 +35,7 @@ dependency edges refuted that (`frame.py` is three `stage_*(s, plan: SitePlan)` 
 prints a hamlet cohort row - both stay in `hamletgen`).
 
 A first extraction should be small. The remaining candidates - `WIND_VECTORS`, `FALL_BEARINGS`,
-`CARDINAL_BEARINGS`, `WIND_TURNS`, all genuinely terrain doctrine a village shares - move when the
+`CARDINAL_BEARINGS`, `DEFAULT_WINDWARD`, all genuinely terrain doctrine a village shares - move when the
 village tier makes them a **second real consumer**. Extracting on the second use means the seam is
 observed; extracting on the first means it is predicted, and a predicted seam has to be re-cut.
 

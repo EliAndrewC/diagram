@@ -18,6 +18,7 @@ from .consts import (
     CARDINAL_BEARINGS,
     CLUSTER_SHAPES,
     COPSE_SITINGS,
+    DEFAULT_WINDWARD,
     DIKE_CROPS,
     FALL_BEARINGS,
     FAN_ASPECTS,
@@ -42,7 +43,6 @@ from .consts import (
     SETTLEMENT_FORMS,
     SINKS,
     SQ_FT_PER_ACRE,
-    WIND_TURNS,
     WIND_VECTORS,
     Poly,
     Pt,
@@ -266,13 +266,6 @@ def canvas_for(target_acres: float, ftpx: float) -> tuple[int, int]:
     return side, side
 
 
-def windward_for(down_deg: float, seed: int) -> str:
-    """The compass quarter the cold wind blows FROM: upslope, turned by a rolled 45 deg. See
-    `WIND_TURNS` for why the wind is read off the slope instead of drawn independently."""
-    bearing = (down_deg + 180.0 + float(_roll(seed, "wind_turn", WIND_TURNS))) % 360.0
-    return min(WIND_VECTORS, key=lambda q: abs(((math.degrees(math.atan2(WIND_VECTORS[q][1], WIND_VECTORS[q][0])) - bearing + 180.0) % 360.0) - 180.0))
-
-
 def plan_site(spec: HamletSpec) -> SitePlan:
     """Turn a spec into a fully-resolved plan. PURE - no drawing, no engine, no RNG stream."""
     # A POLDER IS LAID TO THE CARDINAL SURVEY GRID, so its fall is rolled from the four cardinals
@@ -293,7 +286,8 @@ def plan_site(spec: HamletSpec) -> SitePlan:
     # which (skill SKILL.md: "these are not the same fact and must not be derived from each other")
     # and leaves the door open for a spec that sets a channel running across the fall.
     water_flow = spec.water_flow if spec.water_flow is not None else down_deg
-    windward = spec.windward or windward_for(down_deg, spec.seed)
+    # THE REGIONAL NORTHWEST unless the spec declares a local wind (feature 261; `DEFAULT_WINDWARD` for why).
+    windward = spec.windward or DEFAULT_WINDWARD
     target_acres = spec.households * GROSS_ACRES_PER_HOUSEHOLD
     a, b = offtakes_for(spec.households)
     W, H = canvas_for(target_acres, 1.0)

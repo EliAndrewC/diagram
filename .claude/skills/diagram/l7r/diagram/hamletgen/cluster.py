@@ -12,7 +12,7 @@ from typing import Any
 from l7r.diagram.settlement import point_in_poly, seg_closest, seg_dist, seg_intersect
 from l7r.diagram.sitegen.geom import centroid, unit
 
-from .consts import BUNDLE_PITCH, CLUSTER_BAND_ASPECT, Poly, Pt
+from .consts import BUNDLE_PITCH, CLUSTER_BAND_ASPECT, WIND_BACK_MIN_DOT, Poly, Pt
 from .plan import SitePlan
 
 # ---- STAGE 4: seating the settlement, and its ways ----------------------------------------------
@@ -52,6 +52,29 @@ def back_fouled(anchor: Pt, out: Pt, dep: float, dry_plots: Sequence[Poly], reac
     return hit / total
 
 
+def brook_banks(points: Sequence[Pt], brook: Sequence[Pt], reach: float) -> set[int]:
+    """Which BANKS of the brook the band's sample points stand on: +1 / -1 per point within `reach` of it, by the
+    side of the nearest segment. Two banks means the brook runs through the band - the division feature 230's
+    strike-out is about, a hamlet standing astride its own stream.
+
+    IT USED TO ASK THE WRONG QUESTION (feature 261). The set held each near point's LATERAL half of the band - left
+    or right of the band's own center line - so a brook running BEHIND the band, parallel to the margin, came near
+    both halves and read as dividing a band it never touched. Measured on the pool: Kashikawa and Inashiro were
+    both "divided" with every house on one bank (20 of 20, 15 of 15) - and since a divided margin is struck out,
+    that false reading is what cost those two maps every wind-facing seat once the wind became the northwest
+    (specs/261 research R4). Asking which bank each point is on is the division itself."""
+    banks: set[int] = set()
+    for q in points:
+        near: tuple[float, int] | None = None
+        for a, b in zip(brook, brook[1:], strict=False):
+            dist = seg_dist(q[0], q[1], a, b)
+            if dist < reach and (near is None or dist < near[0]):
+                near = (dist, 1 if (b[0] - a[0]) * (q[1] - a[1]) - (b[1] - a[1]) * (q[0] - a[0]) > 0 else -1)
+        if near is not None:
+            banks.add(near[1])
+    return banks
+
+
 def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | None = None, toe: Poly | None = None, wet: Sequence[Poly] = (), brook: Sequence[Pt] = ()) -> dict[str, Any]:
     """WHERE THE HOUSES GO - the one derivation that decides how the whole map reads.
 
@@ -61,7 +84,9 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
     So the cluster is seated on the field-envelope margin whose OUTWARD NORMAL best points into the
     wind, tie-broken toward the UPSLOPE end - which is also where the gate needs the dwellings to be
     (`dwellings_above_field_drain`: the ground below the drainage line is the wettest in the valley
-    and is not building ground).
+    and is not building ground). A margin whose normal is more than 45 degrees off the wind is not a
+    candidate at all (`WIND_BACK_MIN_DOT`, feature 261) - only the last fallback, reported as
+    `offwind` - because the wind is the regional northwest unless declared, and the seat bends to it.
 
     Scoring every margin point of the DRAWN envelope, rather than picking a compass corner, is what
     makes this survive a field that came out a different shape: the seat follows the fan.
@@ -98,6 +123,7 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
 
     best: tuple[float, Pt, Pt] | None = None
     divided: list[tuple[float, Pt, Pt]] = []  # margins the brook runs through, kept only as the fallback
+    offwind: list[tuple[float, Pt, Pt]] = []  # margins whose back is more than 45 deg off the wind, kept only as the last fallback
     n = len(env)
     for i in range(n):
         ax, ay = env[i]
@@ -194,7 +220,7 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
         # seated - the same shape as the wet-ground foul above, and it reads the band's own sample points.
         if brook and not plan.seat_ignores_brook:
             _bp = [(mid[0] + nx * d - ny * lat * t, mid[1] + ny * d + nx * lat * t) for d in (dep * 0.5, dep + 34.0, dep * 2.0) for t in (-0.9, -0.45, 0.0, 0.45, 0.9)]
-            _sides = {1 if ((q[0] - mid[0]) * -ny + (q[1] - mid[1]) * nx) > 0 else -1 for q in _bp for a, b in zip(brook, brook[1:], strict=False) if seg_dist(q[0], q[1], a, b) < dep * 2.0}
+            _sides = brook_banks(_bp, brook, dep * 2.0)
             crossed = sum(1 for q in _bp if min((seg_dist(q[0], q[1], a, b) for a, b in zip(brook, brook[1:], strict=False)), default=1e9) < 30.0) / len(_bp)
             score -= 3.0 * crossed
             plan.seat_brook_steered += crossed > 0.0 or len(_sides) > 1
@@ -230,10 +256,19 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
                 # is recorded on it (`meta.seat_divided`) rather than decided silently either way.
                 divided.append((score, mid, (nx, ny)))
                 continue
+        if nx * wx + ny * wy < WIND_BACK_MIN_DOT:
+            offwind.append((score, mid, (nx, ny)))
+            continue
         if best is None or score > best[0]:
             best = (score, mid, (nx, ny))
+    # THE FALLBACK ORDER (feature 261): a clean wind-facing margin; then a clean off-wind one, recorded on the map as
+    # `seat_offwind`; then, only when every margin is divided, the best divided one, a wind-facing one first -
+    # feature 230's strike-out unchanged. Putting the wind ahead of the strike-out was put to the exception check
+    # and refused: a map whose clean seats all face off the wind is re-seeded instead (specs/261 research R2, R4).
+    if best is None and offwind:
+        best = max(offwind, key=lambda t: t[0])
     if best is None and divided:
-        best = max(divided, key=lambda t: t[0])  # every margin is divided: the best of them, rather than no seat at all
+        best = max(divided, key=lambda t: (t[2][0] * wx + t[2][1] * wy >= WIND_BACK_MIN_DOT, t[0]))  # every margin is divided: the best of them, rather than no seat at all
     if best is None:
         raise ValueError("no field margin is clear of the drain and the dry hem - the fan has no buildable flank")
     _, anchor, out = best
@@ -249,7 +284,17 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
     # fronts the paddy across its lane rather than standing in the rice.
     cx = anchor[0] + out[0] * (dep + 12.0)
     cy = anchor[1] + out[1] * (dep + 12.0)
-    return {"cx": cx, "cy": cy, "along": along, "out": out, "lat": lat, "dep": dep, "anchor": anchor, "divided": any(anchor == d[1] for d in divided)}
+    return {
+        "cx": cx,
+        "cy": cy,
+        "along": along,
+        "out": out,
+        "lat": lat,
+        "dep": dep,
+        "anchor": anchor,
+        "divided": any(anchor == d[1] for d in divided),
+        "offwind": out[0] * wx + out[1] * wy < WIND_BACK_MIN_DOT,
+    }
 
 
 def _arm_hit(a: Poly, b: Poly) -> Pt | None:

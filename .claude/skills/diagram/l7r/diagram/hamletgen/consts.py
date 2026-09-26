@@ -625,27 +625,33 @@ OFFTAKE_LADDER: tuple[tuple[int, tuple[float, ...], tuple[float, ...]], ...] = (
 FALL_BEARINGS = (0.0, 45.0, 90.0, 135.0, 180.0, 225.0, 270.0, 315.0)
 CARDINAL_BEARINGS = (0.0, 90.0, 180.0, 270.0)  # the survey grid a polder is laid to; see plan_site
 
-# WHICH WAY THE COLD WIND COMES FROM - and why it is DERIVED from the slope rather than rolled.
+# WHICH WAY THE COLD WIND COMES FROM: THE NORTHWEST, UNLESS THE MAP DECLARES A LOCAL WIND (feature 261).
 #
-# The engine's default is NW, the East Asian winter monsoon, and at the scale of a province that is
-# the right answer. At the scale of ONE VALLEY it is not the whole answer, because the wind a
-# settlement actually shelters from is the local one, and the local one follows the ground: cold air
-# is dense, it pools on the high ground overnight and DRAINS DOWNHILL (the katabatic / mountain
-# breeze), so in a valley the cold night wind comes off the high side. That is why the doctrine
-# 背山面水 - back to the hill, face the water - shelters a settlement at all: the hill is both the
-# high side AND the windward side, and they are the same fact rather than two that happen to agree.
+# The East Asian winter monsoon blows out of the Siberian high from the northwest across China and Japan, and
+# the GM ruled (2026-08-29) that it does across Rokugan too "in most places when the local geography does not
+# override the regional geography" - which is why shelter belts stand on the north and west, and why a reader
+# who sees them there is being told a real fact about the regional wind (research/vegetation, 'Does a shelter
+# belt wrap the settlement?'). A local wind that departs from it - a valley whose cold air drains off its own
+# high side, say - is a DECLARATION on the spec (`HamletSpec.windward`), and nothing else (GM 2026-09-26:
+# "only when declared"). No pool map declares one.
 #
-# So the windward quarter is the UPSLOPE bearing, turned by a rolled 45 degrees either way (real
-# terrain is not a smooth ramp and the wind follows the valley's own line, not the field's fall) and
-# snapped to a compass quarter. `HamletSpec.windward` pins the regional answer when the GM knows it.
-#
-# THIS ALSO FIXED A REAL DEFECT, which is how it was found. Rolling the wind independently produced
-# maps whose wind and slope disagreed - and the cluster is seated by BOTH (its back to the wind, its
-# feet out of the wet), so on a map where they pointed opposite ways the wind term won and the
-# settlement was seated at the field's drain outfall, among the drainage ditch and the tameike. That
-# is three gate failures (a structure on a channel, a bridge on an oblique crossing, dwellings in
-# the wet toe) with one cause: two facts about the same landscape, rolled as if they were unrelated.
-WIND_TURNS = (-45.0, 0.0, 0.0, 45.0)
+# WHAT THIS RETIRED, and why. Until feature 261 every map's wind was its UPSLOPE bearing turned by a rolled 45
+# degrees (`WIND_TURNS`, the katabatic reading: cold air pools on the high ground and drains downhill), and
+# `stage_ways` then RENAMED it after whatever the seat's back faced when the two disagreed by more than ~70
+# degrees. Between them the regional northwest never reached a map: the five scripted hamlets came out W/N,
+# SE, NW, S and NE, and Kashikawa's belt stood on the south and east with no explanation on the page. The GM
+# asked whether that was a bug; it was. The katabatic finding stays in the record as the reason a map MAY
+# declare a local wind.
+DEFAULT_WINDWARD = "NW"
+
+# THE SEAT TURNS ITS BACK TO THE WIND, and the wind is never renamed to fit the seat (feature 261). A field
+# margin is a candidate seat only if its outward normal - the direction the settlement's back faces - lies
+# within 45 degrees of the windward bearing: cos 45 deg = 0.7071. 45 degrees is half the spacing of the
+# compass quarters a wind is named in, so a seat inside the bar is one whose back faces the windward quarter
+# itself rather than a neighboring one. A map convention, not a finding: nothing read gives a tolerance for
+# how squarely a settlement faces away from its wind. A margin outside the bar is kept only as the last
+# fallback, and a map that falls back to it records `meta.seat_offwind`, which the gate refuses on the pool.
+WIND_BACK_MIN_DOT = 0.7071
 
 WIND_VECTORS: dict[str, Pt] = {
     "N": (0.0, -1.0),

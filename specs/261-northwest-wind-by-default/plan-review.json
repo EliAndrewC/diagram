@@ -1,0 +1,77 @@
+{
+ "feature": "261-northwest-wind-by-default",
+ "plan_sha256": "68bfef020d4c7fbd445cef48a1627486595eca983cb72e4870ad4cb685cf4745",
+ "reviewed": "2026-09-26",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1-default-constant-declaration-only-override",
+   "summary": "plan_site takes spec.windward or DEFAULT_WINDWARD ('NW'); windward_for and WIND_TURNS are deleted with the reasoning kept at the constant; HamletSpec.windward, unchanged, is the declaration; the manifest records wind_source = declared | regional.",
+   "class": "within",
+   "why": "FR-001, FR-002, FR-003 and FR-007 word for word, and the request's first two proposal bullets (northwest by default, a local override only where a map DECLARES one). Reusing the field that already exists as the declaration narrows nothing. Checked against the working tree: all five re-rolled manifests record windward NW and wind_source regional."
+  },
+  {
+   "id": "D2-45-degree-bar",
+   "summary": "seat_cluster refuses a margin whose outward normal is more than 45 degrees off the wind (WIND_BACK_MIN_DOT = cos 45), recorded at the constant as a map convention.",
+   "class": "within",
+   "why": "FR-004 states the 45-degree bar itself, and round 1 of the spec review judged it calibration, not a loophole. The plan implements the number the accepted spec carries."
+  },
+  {
+   "id": "D2-offwind-last-fallback",
+   "summary": "A margin under the bar is kept in an offwind list and used only when no wind-facing margin (clean or divided - see D3 for the order) can be taken; the seat reports it, stage_ways writes meta.seat_offwind where it used to rename the wind, and the pool test fails any pool map that carries it.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "It narrows FR-004's first sentence and US1 scenario 4 ('places the cluster with its back to the northwest instead') for a map outside the pool. Ruled on the case it actually covers - a seed where NO margin whose back faces the wind survives the seat's hard constraints (the drain, the hem, the canvas): there the literal rule is physically impossible, and the two alternatives are no map at all or renaming the wind after the seat, which is the exact behavior the GM asked to end. The request's purpose survives: the wind is never renamed, the belt's side stays the northwest (US1 scenario 1 already contemplates this: 'the northwest, whatever its slope and wherever its cluster is seated'), and the departure is recorded on the map rather than silent. FR-004's measurable bar is scoped by the spec to 'every pool map', and on the pool the spec's own remedy (re-seed, D4) is applied and ENFORCED: test_pool_wind.py asserts seat_offwind is False on every scripted hamlet. Measured in the working tree at this review: all five manifests carry seat_offwind false. Note for the session: the plan's Constitution Check XVI row says 'no exception', which is not accurate - this is a recorded fallback, and the project rule is to raise it with the GM once the implementation works."
+  },
+  {
+   "id": "D3-fallback-order",
+   "summary": "The order is a clean wind-facing margin, then a clean off-wind one (seat_offwind), then - only when every margin is divided - the best divided margin with a wind-facing one first. So where the only wind-facing margins are ones the brook divides, a clean off-wind seat is taken over a wind-facing divided one.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Adjudicated separately from D2's fallback, because it covers a different case: a wind-facing seat EXISTS (divided) and is passed over. That narrows 'the seat search places the village with its back to the northwest' for such a seed. It is legitimate on the accepted spec's own terms, not on elegance: at that seed FR-004's first clause and FR-010 cannot both hold. FR-010 requires every rule the seat obeyed before to still hold and names 'no household lost'; feature 230's strike-out (a divided margin is used only when every margin is divided) is such a rule, enforced by test_a_margin_the_brook_divides_is_struck_out_and_the_strike_is_counted, which is what caught the intermediate cut; and the other order measured 8 of 12 households at Mizuguchi seed 23 (R1). The spec resolves that conflict for the maps the GM said must be fixed ('none of our maps... fixed everywhere for now') by re-seeding, which D4 does, and the pool test forbids seat_offwind on every pool map - so the carve-out cannot reach any map the GM has. The purpose test: the GM's complaint was a belt on the wrong side with no explanation; under D3 the wind is never renamed, the belt is planted on the northwest, and an off-wind seat is recorded, so the purpose is not gutted. Measured at this review, the five re-rolled manifests after the final D3 edit (cluster.py 19:25, manifests 19:26): windward NW, wind_source regional, seat_offwind false, every household seated, windbreak 111/169/293/349/154 clumps (Kuwabata, Inashiro, Kashikawa, Mizuguchi, Sawada) with belt centers at 296-331 degrees compass, all within 45 degrees of 315. The ruling does NOT rest on the plan's supporting figure, which overstates: '250-odd clumps on 29 of 30 Sawada seeds' is a median over a 65-303 range (R2), rolled through the CLI without Sawada's intake='open', while the real generator's off-wind Sawada at seed 6 drew 27 clumps (R1) - an off-wind seat can starve the belt, which is exactly why the pool enforcement, not that figure, is what makes this carve-out safe. The '4 of 12' figure is also one seed: R2 records Mizuguchi seeds 8, 12 and 16 seating 12/12 on divided margins."
+  },
+  {
+   "id": "D4-reseed-sawada-and-mizuguchi",
+   "summary": "Sawada 6 -> 24 and Mizuguchi 23 -> 27, with the declared fall, sink, intake and household count kept and the reason in each generator's docstring; nothing from the spec's 'When no seed works' list is done.",
+   "class": "within",
+   "why": "The spec's Edge Cases and Assumptions name re-seeding as the path ('its seed is a roll, not a fact about the place; its declared fall, water and other declared knobs are kept') and require the per-map measurement at the current seeds first, which R1 and R2 record. Checked in the diff: only seed= changes in both generators; down_deg=225/water_sink='offmap'/intake='open' and down_deg=0/water_sink='pond' stand. Both shipped manifests: 19/19 and 12/12 seated, seat_offwind false, belts at 317 and about 325 degrees. The re-seed scope was decided under R1's bar table, which predates the final D3 order; after the final order the other three maps were re-rolled at their own seeds and meet FR-004 (see D3), so two remains the right count. R4 is still the placeholder 'Filled from the final re-roll' and is owed."
+  },
+  {
+   "id": "D5-popup",
+   "summary": "place.windbreak_default(meta) states the belt's sides and whether the wind is the region's or a declared one; a manifest without wind_source (the frozen hand-authored pool) gets nothing added and the class text stands alone; the class What drops 'high side' and gains the north-and-west rule, its Entry names vegetation/030, siblings.json follows.",
+   "class": "within",
+   "why": "FR-008 and US3, and the request's 'the windbreak pop-up says so and gives the reason'. Leaving the legacy manifests without a per-map sentence is within: the spec puts the frozen legacy pool out of scope, and the class text those pages keep now states the north-and-west rule and its reason rather than the false 'high side'."
+  },
+  {
+   "id": "D6-record-and-docs",
+   "summary": "research/vegetation/030's false 'northwest by default' paragraph rewritten to the rule as built with the arcs re-measured on the re-rolled maps; the kisetsufu-jawiki footnote gloss corrected; hamletgen.md, the two package indexes and the five notes files updated.",
+   "class": "within",
+   "why": "FR-009 and US4, and the request's fourth proposal bullet ('the record's false northwest by default sentence gets corrected')."
+  },
+  {
+   "id": "CC-XII-no-new-source",
+   "summary": "No task is research: physical; no source-reader or source-applicability run is owed because no new source is used; quote-check and record-format run on the rewritten entry, entry-drift on the windbreak class.",
+   "class": "within",
+   "why": "The northwest default and the katabatic reading are already cited in vegetation/030; the change is which recorded form is the default, by the GM's ruling. Narrows nothing the request or spec asked for."
+  },
+  {
+   "id": "CC-XIII-cohort-baseline",
+   "summary": "The 48-seed cohort is rolled on the unmodified engine in a detached worktree and on this one; the seven scatter_frame_breach seeds that fail on both are ledgered as pre-existing.",
+   "class": "within",
+   "why": "The spec's cohort Edge Case ('re-measured, and any new failure is fixed, not pinned') and constitution XIII. R3's recorded run is of the intermediate D3 cut ('New (final D3): see R4', R4 unfilled), so the final-order cohort is still owed before this row's PASS is true; that is a verification debt, not a narrowing."
+  },
+  {
+   "id": "Perf-and-index",
+   "summary": "The seat filter is one dot product per margin, no overlap index owed; stage times on the pool move because the geometry moved, judged by make done's ratchet and explained against R4.",
+   "class": "within",
+   "why": "No overlap check is added, so the project's index rule does not bite; the perf treatment adds no scope."
+  },
+  {
+   "id": "Phases-1-6",
+   "summary": "Engine, measurement, pool, page, record, acceptance (make done, settlement-review one agent per map, ledger rows).",
+   "class": "within",
+   "why": "Each phase carries requirements of the accepted spec (FR-006's full gate) or the project's standing acceptance rules; nothing beyond the five scripted hamlets is re-rolled or reviewed."
+  }
+ ],
+ "verdict": "CLEAR"
+}

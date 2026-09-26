@@ -3,8 +3,6 @@
 Split from test_hamletgen.py by feature 111; test bodies verbatim. See hamletgen/CLAUDE.md.
 """
 
-import math
-
 import pytest
 
 from l7r.diagram import hamletgen as hg
@@ -104,14 +102,20 @@ def test_the_drainage_bearing_follows_the_fall_unless_declared() -> None:
     assert hg.plan_site(hg.HamletSpec(name="X", seed=2, down_deg=45.0)).water_flow == 45.0
 
 
-@pytest.mark.parametrize("down_deg", [0.0, 45.0, 90.0, 135.0, 180.0, 225.0, 270.0, 315.0])
-def test_the_cold_wind_comes_off_the_high_ground(down_deg: float) -> None:
-    """Cold air drains downhill, so the wind a valley settlement shelters from blows from upslope
-    (turned up to 45 deg). This is what makes 'back to the hill' and 'back to the wind' one fact
-    rather than two, and rolling them apart put a cluster in the drainage ditch - see WIND_TURNS."""
-    wx, wy = hg.WIND_VECTORS[hg.windward_for(down_deg, seed=4)]
-    up = (-math.cos(math.radians(down_deg)), -math.sin(math.radians(down_deg)))
-    assert wx * up[0] + wy * up[1] > 0.5  # within 60 deg of straight upslope
+@pytest.mark.parametrize("seed", [1, 3, 4, 21])
+@pytest.mark.parametrize("down_deg", [None, 0.0, 45.0, 90.0, 135.0, 180.0, 225.0, 270.0, 315.0])
+def test_the_cold_wind_is_the_regional_northwest_unless_declared(down_deg: float | None, seed: int) -> None:
+    """THE WIND IS THE NORTHWEST ON EVERY MAP THAT DECLARES NONE (feature 261, GM 2026-09-26: "only when declared").
+    Neither the slope nor the seed moves it - until feature 261 it was the upslope bearing turned by a rolled 45
+    degrees, and Kashikawa's belt stood on the south and east."""
+    plan = hg.plan_site(hg.HamletSpec(name="X", seed=seed, down_deg=down_deg))
+    assert plan.windward == hg.DEFAULT_WINDWARD == "NW"
+
+
+@pytest.mark.parametrize("windward", sorted(hg.WIND_VECTORS))
+def test_a_declared_local_wind_is_used_as_declared(windward: str) -> None:
+    """A declaration is the ONLY way a map's wind departs from the northwest, and it is taken as written."""
+    assert hg.plan_site(hg.HamletSpec(name="X", seed=4, down_deg=90.0, windward=windward)).windward == windward
 
 
 def test_a_nonsense_field_archetype_is_refused() -> None:
