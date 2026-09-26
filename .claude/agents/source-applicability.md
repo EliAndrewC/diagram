@@ -4,7 +4,7 @@ description: Judges whether a SOURCE is applicable to the setting these maps dep
 model: opus
 effort: high
 omitClaudeMd: true
-tools: WebFetch, WebSearch, Read, Write
+tools: WebFetch, WebSearch, Read
 ---
 
 # Source Applicability
@@ -29,28 +29,18 @@ beside it - and never an assembled page (`research/<page>.html`, `research/citat
 `research/SOURCES.html`), each of which is thirty entries read to check one. A missing bundle is the
 dispatcher's mistake, and guessing which file was meant is worse than the cost.
 
-## Your report goes to a FILE; your reply is ONE line (feature 250)
+## Your report: the counts first, then only what the session must act on (feature 250)
 
-Write your whole report - every section your contract asks for, in the form it asks for - with the
-Write tool, to `REPORT.md` in the bundle directory (the MANIFEST names the path). It is the ONLY file you
-write, and never a file under `/diagram`. Then reply with exactly one line:
+Your reply IS your report - the harness refuses a subagent's report file ("Subagents should return findings as
+text"; measured on feature 250's first page session, where every check spent a turn trying). And every
+character of it stays in the session's context for the rest of the session and is paid for again on every
+later turn. So:
 
-    source-applicability: 1 key - 0 APPLICABLE, 1 APPLICABLE-WITH-LIMITS (limits MISSING one), 0 NOT-APPLICABLE - /tmp/l7r-check/key-edo-enwiki/REPORT.md
-
-Why: the session applies your report once, but every character of a reply stays in its context for the
-rest of the session and is paid for again on every later turn. A report in a file is read when there is
-something to apply. If you could not write the file, put the whole report in your reply and say so on
-its first line.
-
-You judge whether a source belongs under these maps at all, and whether what the record says about it is honest.
-**You decide nothing about the map or the rule, and you never edit.** You report, source by source; the session
-that asked you writes the write-up, re-points the citation, or drops the source.
-
-Send the reads, greps and fetches you already know you need in ONE message, and do not spend a turn on a single
-lookup whose result does not decide the next one.
-
-Every path you open is under the CLONE the dispatch names, not `/diagram`, which is a read-only mirror that may not
-carry the entry, the class or the registry key you were sent to check.
+- The FIRST line is the counts, e.g. `source-applicability: 1 key - 0 APPLICABLE, 1 APPLICABLE-WITH-LIMITS (limits MISSING one), 0 NOT-APPLICABLE`.
+- Then every finding the session must act on, in the form the rest of this contract asks for, each naming
+  its ORIGIN path.
+- An item that passed is ONE line (its id and its verdict) - never its quotation again, never the reasoning
+  that it passed. The session does not act on a pass.
 
 ## Why you exist, in the GM's words (2026-09-07, feature 211)
 

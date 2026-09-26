@@ -131,3 +131,99 @@ one that did not grow was "inevitably left with large tracts of intramural land"
 that. The map's rule survives on the same source - the spare ground was farmed or under water, so every
 open was claimed by something - and no rule or number moved. The budget's tight ring was already labeled
 a deliberate departure in the same entry.
+
+## R2 - did the token work pay? The next page against the slice (2026-09-26, T15, T16, plan D6 to D9)
+
+The GM adopted R1's three recommendations on 2026-09-26 and asked for the next subset of the research to be
+measured against the slice. What was built: record checks read a BUNDLE copied out of the repository
+(`make check-bundle`, refused otherwise by `check-bundle-hooks.sh`); a check's report was to go to a file with
+a one-line reply; and a page is worked in a FRESH headless session started from a brief (`make page-session`).
+The next subset was `homesteads`: five FR-002 items (the slice had five) and three FR-006 items. Every figure is
+from `measure/tokens.py` over the transcripts, kept in `measure/tokens-homesteads.json`,
+`measure/tokens-slice.json` and `measure/seeded-results.json`; "input" is fresh plus cached input summed over
+turns.
+
+### The comparison
+
+| | the slice (R1), its research windows T03-T07 | `homesteads`, one page session |
+|---|---|---|
+| items | 5 | 8 (5 FR-002, 3 FR-006) |
+| main session | 7.13 million over 35 turns, mean 204,000 a turn | 11.28 million over 70 turns, mean 161,000 a turn |
+| agents | 7 runs, 0.86 million | 10 runs, 1.22 million |
+| total | 7.98 million, **1.60 million an item** | 12.51 million, **1.56 million an item** |
+| a check's mean input / peak / turns | 117,000 / 52,000 / 3.2 | 126,000 / 34,000 / 5.9 |
+| what a check read of the record | 5,400 tokens | 9,100 tokens |
+| nested CLAUDE.md attached to a check | 18 over 6 runs | **0 over 10 runs** |
+
+The slice's whole session was 21.4 million; 13.4 million of it was orientation, four plan-review rounds, a
+tooling defect and the vocabulary entry, none of which a page session repeats. The page session cost $10.21
+(the harness's own figure) and ran 48.5 minutes (observed 2026-09-26; method: `total_cost_usd` and `duration_ms` in the session's `result.json`).
+
+**Read honestly: per item the page cost the same.** The session started at 40,000 tokens where the slice's
+research began at 138,000, and its mean turn was a fifth smaller - but it took twice the turns, and its main
+session was still 90% of its tokens (observed 2026-09-26; method: main over total in the table). The work was
+bigger than the slice's: three new registry keys where the slice had none, two check rounds where the slice
+had one (the first found older defects in two large entries), and entries whose checks read 70% more.
+
+### The bundle, measured on the same bytes (T15)
+
+Five agents, three runs a leg, each case read in the tree and from its bundle:
+
+| agent | tree: input / peak | bundle: input / peak | planted findings named |
+|---|---|---|---|
+| `record-format` | 196,000 / 77,000 | 166,000 / 33,000 | 3 of 3 runs, both legs |
+| `quote-check` | 254,000 / 82,000 | 110,000 / 34,000 | 3 of 3, both legs |
+| `source-applicability` | 162,000 / 71,000 | 152,000 / 45,000 | 3 of 3, both legs |
+| `entry-drift` | 227,000 / 79,000 | 104,000 / 31,000 | 3 of 3, both legs |
+| `source-reader` | 132,000 / 55,000 | 102,000 / 28,000 | 3 of 3, both legs |
+
+No finding was lost; peak context fell 37% to 62%, billed input 6% to 57% (observed 2026-09-26; method: the two columns above, per agent). The input fell least where the
+bundle leg took MORE turns (`record-format` six against three): an agent reads the MANIFEST, then each file in
+a turn of its own. These runs were headless sessions, where two CLAUDE.md files attach rather than a
+subagent's three, so the tree legs understate what a subagent in the tree pays.
+
+### What failed, and was replaced (D8)
+
+As subagents, every check in the page session tried to write its `REPORT.md` and the harness refused it:
+*"Subagents should return findings as text, not write report files."* That is a deliberate harness rule and is
+not worked around. Each attempt cost the agent a turn. The contracts now reply with the report itself - counts
+on the first line, then only what the session must act on, a pass in one line - and `Write` is off their tool
+lists. Running each check as a headless process whose output a launcher files was priced and not taken: the
+seeded runs put a headless session's floor at about three times a subagent's.
+
+### Where the page session's tokens went
+
+Its context grew from 40,000 to 264,000 over 70 turns. The largest parts, measured on the transcript:
+
+- its own edits and reasoning, 72,000 output tokens, which stay in the context like everything else;
+- 106 tool results, 174,000 characters (about 43,000 tokens), the largest a 20,000-character grep of notes;
+- the nested CLAUDE.md files in its OWN main session - the engine dev loop (about 7,500 tokens, nothing in it
+  bears on research) and `research/CLAUDE.md` (about 10,900) - attached on its first read under `research/`;
+- ten agent reports inline, about 20,000 tokens.
+
+The 17 turns of applying findings, at 190,000 to 247,000 a turn, cost 3.8 million by themselves - a third of
+the main session.
+
+### Recommendations for the next round
+
+1. **One file per bundle.** Write the bundle as a single `BUNDLE.md` holding every copy inline under its origin
+   heading, so a check reads it in one turn. The bundle legs took up to twice the turns of the tree legs for
+   this reason alone, and every turn re-reads the whole context. Cheap; worth a seeded re-run of three a leg.
+2. **Split a page into two sessions: write, then check-and-apply.** The applying turns were a third of the main
+   session because they ran at the END of a session that had already read every source. A second fresh
+   session that starts from the committed fragments and the checks' replies would run those turns at about
+   60,000 rather than 220,000.
+3. **Move the engine's dev-loop CLAUDE.md where research never reaches it.** `.claude/skills/diagram/CLAUDE.md`
+   attaches to every session that reads a research file, because `research/` sits under it. Its content
+   belongs to `l7r/diagram/` (the engine) and `pool/`; a short skill-level index would stay. About 7,500 tokens on
+   every turn of every research session, roughly 5% of this page's main session (observed 2026-09-26; method:
+   7,500 over the mean turn of 161,000).
+4. **Grep, do not dump.** The session's largest reads were whole notes files and multi-line `sed` ranges of
+   large fragments (17,000 to 20,000 characters each) where it needed a few notes by key. A `make notes
+   PAGE= SECTION= KEYS=` that prints the named notes alone would cut those.
+5. **Re-check only what moved.** The second quote-check round re-read two whole entries to confirm a handful of
+   corrected notes; `quote-verbatim NOTES=` and a note-scoped bundle would check the corrected notes alone.
+
+What the remaining work costs at this rate: FR-002 has 64 items left over 14 pages. At 1.56 million tokens and
+about $1.30 an item, that is on the order of 100 million tokens and $80 to $90 before recommendations 1 to 5,
+and before the cosmetic sweeps (FR-003 to FR-005) and the close.

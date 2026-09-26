@@ -1,0 +1,513 @@
+[
+ {
+  "window": "(before the first mark)",
+  "main": {
+   "fresh": 33045,
+   "cached": 50516,
+   "output": 456,
+   "thinking": 13,
+   "turns": 2,
+   "peak_context": 43170
+  },
+  "agents": []
+ },
+ {
+  "window": "homesteads 1-locate",
+  "main": {
+   "fresh": 19814,
+   "cached": 353843,
+   "output": 3631,
+   "thinking": 1760,
+   "turns": 7,
+   "peak_context": 62970
+  },
+  "agents": []
+ },
+ {
+  "window": "homesteads 2-read",
+  "main": {
+   "fresh": 73061,
+   "cached": 1715943,
+   "output": 17560,
+   "thinking": 4803,
+   "turns": 18,
+   "peak_context": 135995
+  },
+  "agents": [
+   {
+    "agent": "source-reader",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "Read sources for homesteads claims",
+    "fresh": 27076,
+    "cached": 67236,
+    "output": 11624,
+    "thinking": 1226,
+    "turns": 5,
+    "peak_context": 27068,
+    "first_turn": 8659,
+    "read_chars": 11087,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     [
+      2616,
+      "Grep \u30ab\u30a4\u30cb\u30e7|\u30a4\u30b0\u30cd|\u3044\u3050\u306d|\u304b\u3044\u306b\u3087|\u82af\u6b62|\u9ad8\u3055|\u5207\u308a\u305d\u308d|\u5208\u308a\u8fbc|\u526a\u5b9a|\u5929\u7aef|\u982d"
+     ],
+     [
+      1705,
+      "Grep \u6771|\u5357|\u897f|\u5317|\u67ff|\u6843|\u30b9\u30ae|\u6749|\u30b1\u30e4\u30ad|\u6b05|\u30ab\u30b7|\u6a2b|\u30a8\u30ce\u30ad|\u698e|\u30cf\u30f3\u30ce\u30ad|\u7af9|\u98a8|10|\uff11\uff10|\u9ad8\u6728"
+     ],
+     [
+      1414,
+      "Grep \u4e95\u6238|\u4e95"
+     ],
+     [
+      1312,
+      "Grep \u5806\u80a5|\u6577|\u8e0f|\u843d\u8449|\u85c1|\u308f\u3089"
+     ],
+     [
+      1233,
+      "Read /tmp/l7r-check/hs-read/yashikirin-jawiki.txt"
+     ],
+     [
+      593,
+      "Read /tmp/l7r-check/hs-read/kikanchiiki-6543.txt"
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "window": "homesteads 3-write",
+  "main": {
+   "fresh": 8649,
+   "cached": 420966,
+   "output": 2858,
+   "thinking": 385,
+   "turns": 3,
+   "peak_context": 144638
+  },
+  "agents": []
+ },
+ {
+  "window": "homesteads 4-check",
+  "main": {
+   "fresh": 46058,
+   "cached": 1917318,
+   "output": 9276,
+   "thinking": 4736,
+   "turns": 12,
+   "peak_context": 190672
+  },
+  "agents": [
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "applicability tonami-yashikirin-haichi",
+    "fresh": 9945,
+    "cached": 39170,
+    "output": 5477,
+    "thinking": 1408,
+    "turns": 5,
+    "peak_context": 15274,
+    "first_turn": 6155,
+    "read_chars": 6477,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     [
+      3280,
+      "Read /tmp/l7r-check/key-tonami-yashikirin-haichi/pages/01-1073shoso.jp.txt"
+     ],
+     [
+      1980,
+      "Read /tmp/l7r-check/key-tonami-yashikirin-haichi/sources/tonami-yashikirin-haichi.html"
+     ],
+     [
+      940,
+      "Read /tmp/l7r-check/key-tonami-yashikirin-haichi/MANIFEST.md"
+     ],
+     [
+      151,
+      "Write /tmp/l7r-check/key-tonami-yashikirin-haichi/REPORT.md"
+     ],
+     [
+      126,
+      "Read /tmp/l7r-check/key-tonami-yashikirin-haichi/pages/MANIFEST.txt"
+     ]
+    ]
+   },
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "record-format homesteads 210",
+    "fresh": 44104,
+    "cached": 187975,
+    "output": 16831,
+    "thinking": 7636,
+    "turns": 7,
+    "peak_context": 51818,
+    "first_turn": 8535,
+    "read_chars": 61616,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     [
+      19891,
+      "Read /tmp/l7r-check/homesteads-210/210-the-farmsteads-fixtures---privy-woodpile-manure-heap-bath-coop-household-shr"
+     ],
+     [
+      17620,
+      "Read /tmp/l7r-check/homesteads-210/210-the-farmsteads-fixtures---privy-woodpile-manure-heap-bath-coop-household-shr"
+     ],
+     [
+      16975,
+      "Read /tmp/l7r-check/homesteads-210/prepass.txt"
+     ],
+     [
+      5568,
+      "Read /tmp/l7r-check/homesteads-210/MANIFEST.md"
+     ],
+     [
+      1021,
+      "Grep ^(kawaya|benjo|koedame|kyuhi|umayagoe|goemon|kimon|hokora|ujigami|bunrei|liuchu|qimin|waraguro|warazuka|kura|n"
+     ],
+     [
+      234,
+      "Grep ^(cess|soffit|eave|rick|straw rick|stable|compost|outbuild|b1|b i|draught|urinal|nanking|buck|sendai|kameyama|"
+     ]
+    ]
+   },
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "record-format homesteads 040",
+    "fresh": 34063,
+    "cached": 116305,
+    "output": 15333,
+    "thinking": 5609,
+    "turns": 7,
+    "peak_context": 34051,
+    "first_turn": 8535,
+    "read_chars": 29935,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     [
+      13632,
+      "Read /tmp/l7r-check/homesteads-040/040-the-gardens-sun-and-how-far-the-windbreak-shades.html"
+     ],
+     [
+      10095,
+      "Read /tmp/l7r-check/homesteads-040/040-the-gardens-sun-and-how-far-the-windbreak-shades.notes.html"
+     ],
+     [
+      3328,
+      "Read /tmp/l7r-check/homesteads-040/MANIFEST.md"
+     ],
+     [
+      2159,
+      "Read /tmp/l7r-check/homesteads-040/prepass.txt"
+     ],
+     [
+      473,
+      "Grep ^(igune|kainyo|tsuijimatsu|sugi|keyaki|kuromatsu|hinoki|fukugi|edauchi|daikon|minka|kashi|enoki|persimmon|cops"
+     ],
+     [
+      151,
+      "Write /tmp/l7r-check/homesteads-040/REPORT-record-format.md"
+     ]
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check homesteads 040",
+    "fresh": 46172,
+    "cached": 116189,
+    "output": 17551,
+    "thinking": 6271,
+    "turns": 7,
+    "peak_context": 46160,
+    "first_turn": 6959,
+    "read_chars": 54280,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     [
+      18542,
+      "Read /tmp/l7r-check/homesteads-040/quote-verbatim.json"
+     ],
+     [
+      13632,
+      "Read /tmp/l7r-check/homesteads-040/040-the-gardens-sun-and-how-far-the-windbreak-shades.html"
+     ],
+     [
+      10095,
+      "Read /tmp/l7r-check/homesteads-040/040-the-gardens-sun-and-how-far-the-windbreak-shades.notes.html"
+     ],
+     [
+      3328,
+      "Read /tmp/l7r-check/homesteads-040/MANIFEST.md"
+     ],
+     [
+      1770,
+      "Read /tmp/l7r-check/homesteads-040/quote-verbatim.txt"
+     ],
+     [
+      1312,
+      "Read /tmp/l7r-check/homesteads-040/MANIFEST.md"
+     ]
+    ]
+   },
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "applicability kyuhi-jawiki",
+    "fresh": 11428,
+    "cached": 34032,
+    "output": 4871,
+    "thinking": 1024,
+    "turns": 5,
+    "peak_context": 13254,
+    "first_turn": 6152,
+    "read_chars": 5025,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     [
+      2513,
+      "Read /tmp/l7r-check/key-kyuhi-jawiki/pages/01-ja.wikipedia.org.txt"
+     ],
+     [
+      1389,
+      "Read /tmp/l7r-check/key-kyuhi-jawiki/sources/kyuhi-jawiki.html"
+     ],
+     [
+      861,
+      "Read /tmp/l7r-check/key-kyuhi-jawiki/MANIFEST.md"
+     ],
+     [
+      151,
+      "Write /tmp/l7r-check/key-kyuhi-jawiki/REPORT.md"
+     ],
+     [
+      111,
+      "Read /tmp/l7r-check/key-kyuhi-jawiki/pages/MANIFEST.txt"
+     ]
+    ]
+   },
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "applicability kikanchiiki-igune",
+    "fresh": 10954,
+    "cached": 52606,
+    "output": 6248,
+    "thinking": 1287,
+    "turns": 6,
+    "peak_context": 16281,
+    "first_turn": 6152,
+    "read_chars": 7716,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     [
+      3199,
+      "Read /tmp/l7r-check/key-kikanchiiki-igune/pages/01-kikanchiiki.net.txt"
+     ],
+     [
+      1745,
+      "WebSearch \u5c45\u4e45\u6839 \u679d\u6253\u3061 \u4ed9\u53f0\u85e9 \u5c4b\u6577\u6797 \u6b74\u53f2 \u5927\u5d0e\u8015\u571f \u7ba1\u7406"
+     ],
+     [
+      1615,
+      "Read /tmp/l7r-check/key-kikanchiiki-igune/sources/kikanchiiki-igune.html"
+     ],
+     [
+      891,
+      "Read /tmp/l7r-check/key-kikanchiiki-igune/MANIFEST.md"
+     ],
+     [
+      151,
+      "Write /tmp/l7r-check/key-kikanchiiki-igune/REPORT.md"
+     ],
+     [
+      115,
+      "Read /tmp/l7r-check/key-kikanchiiki-igune/pages/MANIFEST.txt"
+     ]
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check homesteads 210",
+    "fresh": 58977,
+    "cached": 198595,
+    "output": 21338,
+    "thinking": 8667,
+    "turns": 7,
+    "peak_context": 65119,
+    "first_turn": 6959,
+    "read_chars": 83691,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     [
+      34192,
+      "Read /tmp/l7r-check/homesteads-210/quote-verbatim.json"
+     ],
+     [
+      19891,
+      "Read /tmp/l7r-check/homesteads-210/210-the-farmsteads-fixtures---privy-woodpile-manure-heap-bath-coop-household-shr"
+     ],
+     [
+      17620,
+      "Read /tmp/l7r-check/homesteads-210/210-the-farmsteads-fixtures---privy-woodpile-manure-heap-bath-coop-household-shr"
+     ],
+     [
+      5568,
+      "Read /tmp/l7r-check/homesteads-210/MANIFEST.md"
+     ],
+     [
+      3418,
+      "Read /tmp/l7r-check/homesteads-210/quote-verbatim.txt"
+     ],
+     [
+      1235,
+      "WebFetch https://library.bunmori.tokushima.jp/digital/webkiyou/50/131-133.pdf"
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "window": "homesteads 5-apply",
+  "main": {
+   "fresh": 56476,
+   "cached": 3771146,
+   "output": 31250,
+   "thinking": 6530,
+   "turns": 17,
+   "peak_context": 247114
+  },
+  "agents": []
+ },
+ {
+  "window": "homesteads 5b-recheck",
+  "main": {
+   "fresh": 14846,
+   "cached": 2276135,
+   "output": 6222,
+   "thinking": 1534,
+   "turns": 9,
+   "peak_context": 261942
+  },
+  "agents": [
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "re-check quotes homesteads 210",
+    "fresh": 31484,
+    "cached": 89640,
+    "output": 8615,
+    "thinking": 4026,
+    "turns": 5,
+    "peak_context": 37630,
+    "first_turn": 7162,
+    "read_chars": 48354,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     [
+      20829,
+      "Read /tmp/l7r-check/homesteads-210/210-the-farmsteads-fixtures---privy-woodpile-manure-heap-bath-coop-household-shr"
+     ],
+     [
+      18084,
+      "Read /tmp/l7r-check/homesteads-210/210-the-farmsteads-fixtures---privy-woodpile-manure-heap-bath-coop-household-shr"
+     ],
+     [
+      5568,
+      "Read /tmp/l7r-check/homesteads-210/MANIFEST.md"
+     ],
+     [
+      2486,
+      "Read /tmp/l7r-check/homesteads-210/quote-verbatim.txt"
+     ],
+     [
+      612,
+      "WebFetch https://kotobank.jp/word/%E8%97%81%E5%A1%9A"
+     ],
+     [
+      323,
+      "WebFetch https://ameblo.jp/toyoko-housing/entry-11418946119.html"
+     ]
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "re-check quotes homesteads 040",
+    "fresh": 22213,
+    "cached": 25786,
+    "output": 5992,
+    "thinking": 3426,
+    "turns": 4,
+    "peak_context": 22207,
+    "first_turn": 7083,
+    "read_chars": 31264,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     [
+      14575,
+      "Read /tmp/l7r-check/homesteads-040/040-the-gardens-sun-and-how-far-the-windbreak-shades.html"
+     ],
+     [
+      10566,
+      "Read /tmp/l7r-check/homesteads-040/040-the-gardens-sun-and-how-far-the-windbreak-shades.notes.html"
+     ],
+     [
+      3328,
+      "Read /tmp/l7r-check/homesteads-040/MANIFEST.md"
+     ],
+     [
+      1405,
+      "Read /tmp/l7r-check/homesteads-040/quote-verbatim.txt"
+     ],
+     [
+      1312,
+      "Read /tmp/l7r-check/homesteads-040/MANIFEST.md"
+     ],
+     [
+      78,
+      "Read /tmp/l7r-check/homesteads-040"
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "window": "homesteads 6-close",
+  "main": {
+   "fresh": 1665,
+   "cached": 525123,
+   "output": 1161,
+   "thinking": 0,
+   "turns": 2,
+   "peak_context": 263603
+  },
+  "agents": []
+ }
+]

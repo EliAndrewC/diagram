@@ -81,8 +81,8 @@ is `.claude/skills/diagram/research/CLAUDE.md`, which auto-loads when a session 
   `record-format`, `make size-table PLAN=<svg>` before `size-audit`.
 - A record check reads a BUNDLE: `make check-bundle PAGE=<p> SECTION=<q>` (or `KEY=<k>`) copies what it
   needs, prepass output included, OUT of the repository, and the dispatch names its `MANIFEST.md` - an
-  agent reading a file here is handed every `CLAUDE.md` above it, ~28,000 tokens (feature 250). The agent
-  writes `REPORT.md` there and replies with one line. A research feature is worked one page per session,
+  agent reading a file here is handed every `CLAUDE.md` above it, ~28,000 tokens (feature 250). The agent's
+  reply is compact: counts first, then only what to act on. A research feature is worked one page per session,
   each started fresh from a brief (`make page-session BRIEF=<file>`).
 
 ## Development workflow

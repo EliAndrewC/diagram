@@ -82,8 +82,8 @@ its origin in a `MANIFEST.md`. Dispatch `quote-check`, `record-format`, `source-
 dispatch that points into the repository and prints the command. **Why copies** (feature 250, research
 R1): an agent that reads a file here gets every `CLAUDE.md` above it attached - this file among them,
 about 28,400 tokens - which `omitClaudeMd` does not stop; on the measured runs that was 55-65% of a
-check's context. **The report comes back as a file**: the agent writes `REPORT.md` in the bundle and
-replies with one line of counts. Open the report when the line says there is something to apply.
+check's context. **The report is compact**: counts on its first line, then only what the session must act on, a pass in one
+line (the harness refuses a subagent's report file, so the reply is the report).
 
 **One session per page** (feature 250 D7). A session's cost is its turns times its context, and every
 report, file and tool result stays in the context for every later turn: on the measured slice the main

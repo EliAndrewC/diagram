@@ -74,7 +74,7 @@ def test_a_question_bundle_on_the_real_record(tmp_path: pathlib.Path) -> None:
     assert "WORDS TO RULE ON" in (out / "prepass.txt").read_text(encoding="utf-8")
     manifest = (out / "MANIFEST.md").read_text(encoding="utf-8")
     assert ".claude/skills/diagram/research/ways/010-how-far-past-the-bank-does-a-bridge-land.html" in manifest, "the origin is named"
-    assert str(out / "REPORT.md") in manifest
+    assert "counts on the first line" in manifest
 
 
 def test_an_unmatched_question_writes_nothing(tmp_path: pathlib.Path) -> None:

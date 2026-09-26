@@ -167,13 +167,20 @@ brief carries the page's items (derived: `measure/brief.py` reads `assertions.py
 procedure (D2, D5, D6, D8), so the session does not read the spec and plan to orient. It commits and does not
 push; the parent session does not edit the clone while it runs.
 
-### D8 - A check's report goes to a file; its reply is one line
+### D8 - A check's report is compact: counts first, then only what to act on
 
 R1 finding 3: thirteen whole reports sat in the main session's context and were re-read on every later turn.
-The five contracts D6 names gain the `Write` tool and one rule: the whole report goes to `REPORT.md` in the
-bundle, the reply is one line of counts naming it. The report is opened when the line says there is something
-to apply. The contract limits the one write to the bundle; no guard enforces it, because a hook cannot tell
-an agent's write from the session's.
+**The form first built FAILED, and is recorded here so it is not re-tried:** the contracts gained `Write` and
+wrote the report to `REPORT.md` in the bundle with a one-line reply. Headless, as the seeded runs were, that
+worked (30 of 30); as SUBAGENTS in the first page session every one was refused by the harness itself -
+*"Subagents should return findings as text, not write report files"* - and spent a turn on the attempt. That
+is a deliberate harness rule, not a bug, so it is not worked around. What replaced it: the reply IS the
+report, and the contracts of the five checks say its first line is the counts, then only the findings the
+session must act on, a pass in one line - never the quotation again or the reasoning that it passed. `Write`
+is off their tool lists again. The alternative priced and not taken: run each check as a headless process
+whose output a launcher writes to a file - the seeded runs measured a headless floor about three times a
+subagent's, which on a four-to-six-turn check costs about what an inline report of three to five thousand
+tokens costs over a session's remaining turns (research R2).
 
 ### D9 - The comparison (research R2)
 

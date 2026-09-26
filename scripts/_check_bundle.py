@@ -10,7 +10,7 @@ that was 55-65% of every check's context and five to twelve times what the check
 
 So a check reads COPIES, and this writes them - with the prepass output the check is handed anyway,
 and a MANIFEST naming each copy's origin, because a finding has to cite the file the session will edit.
-The agent writes its whole report to `REPORT.md` here and replies with one line (feature 250 D8).
+The agent's reply is its report, counts first and passes in one line each (feature 250 D8: the harness refuses a subagent's report file).
 
     _check_bundle.py PAGE --section S [--out DIR] [--extra PATH ...] [--no-quotes]
         one question: its fragment and notes, the prepass, the quote-verbatim report, the registry
@@ -40,7 +40,6 @@ REGISTRY = RECORD / "sources" / "010-works-cited"
 VARIANTS = RECORD / "assets" / "glossary-variants.txt"
 CLASSES = pathlib.Path(".claude/skills/diagram/l7r/diagram/interactive/classes")
 DEFAULT_ROOT = pathlib.Path("/tmp/l7r-check")
-REPORT = "REPORT.md"
 MANIFEST = "MANIFEST.md"
 _CITED = re.compile(r'<a href="[^"]*">\s*<code>([a-z0-9][a-z0-9-]*)</code>\s*</a>')
 _URL = re.compile(r"https?://[^\s<\"]+")
@@ -113,7 +112,7 @@ def manifest(out: pathlib.Path, title: str, rows: list[tuple[str, str, str]]) ->
         "|---|---|---|",
         *(f"| `{f}` | `{o}` | {w} |" for f, o, w in rows),
         "",
-        f"**Write your whole report to `{out / REPORT}`** and reply with ONE line (your contract gives its form).",
+        "Reply with your report: the counts on the first line, then only what the session must act on (your contract gives the form).",
         "",
     ]
     return "\n".join(lines)

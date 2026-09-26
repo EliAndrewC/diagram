@@ -59,8 +59,8 @@ out=$(printf 'not json' | ( cd "$T" && "$HOOK" pretool 2>/dev/null )); r=$?
 echo "3. the guard and the contracts agree"
 ROOT="$(dirname "$HERE")"
 for a in quote-check record-format source-applicability source-reader entry-drift; do
-  grep -q 'Read the BUNDLE you are given' "$ROOT/.claude/agents/$a.md" && grep -q '^tools: .*Write' "$ROOT/.claude/agents/$a.md" \
-    && ok "$a's contract reads the bundle and may write its report" || no "$a's contract does not match the guard"
+  grep -q 'Read the BUNDLE you are given' "$ROOT/.claude/agents/$a.md" && ! grep -q '^tools: .*Write' "$ROOT/.claude/agents/$a.md" \
+    && ok "$a's contract reads the bundle, and writes nothing (the harness refuses a subagent's report file)" || no "$a's contract does not match the guard"
 done
 "$HOOK" bogus >/dev/null 2>&1; [ $? -eq 1 ] && ok "an unknown mode is an error, not a pass" || no "an unknown mode passed"
 
