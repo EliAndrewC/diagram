@@ -180,6 +180,14 @@ if ( cd "$T/g" && REVIEW_GATE_OK="superseded before implementation" "$GATE" main
   echo "  ok      the documented escape"; PASS=$((PASS+1))
 else echo "  FAIL    the escape did not work"; FAIL=$((FAIL+1)); fi
 
+# GUARD_EDIT_OK: 2026-09-26 - ANOTHER SESSION'S PUSH IS NOT THIS CLONE'S CHANGE. The default range was two-dot, a tree
+# diff, and the gate runs before the pull: a map another session pushed after this clone synced read as ours.
+mkrepo mv withmap; echo tool > tool.sh; git add -A; git commit -qm tooling
+git checkout -q main; echo '{"v":2}' > "$POOL/m.json"; git commit -qam "another session's map"; git update-ref refs/remotes/origin/main main; git checkout -q work
+if ( cd "$T/mv" && "$GATE" >/dev/null 2>&1 ); then
+  echo "  ok      main moved on a map after this clone synced: the default range does not charge it here"; PASS=$((PASS+1))
+else echo "  FAIL    another session's map change was charged to this clone"; FAIL=$((FAIL+1)); fi
+
 echo
 echo "passed $PASS, failed $FAIL"
 [ "$FAIL" -eq 0 ]

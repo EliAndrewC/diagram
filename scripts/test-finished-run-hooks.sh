@@ -7,6 +7,8 @@ HOOK="$HERE/finished-run-hooks.sh"
 PASS=0; FAIL=0
 T=$(mktemp -d)
 trap 'rm -rf "$T"' EXIT
+# GUARD_EDIT_OK: a per-run token, so the pkill cleanups below never reach another clone's concurrent run of this suite
+NEVER="NEVER_APPEARS_${T##*/}"
 export GUARD_LOG_DIR="$T/guard-log"
 
 CLONE=$T/clone
@@ -78,7 +80,7 @@ check "a live make in the clone is found, with its target" yes "$(has "$("$HOOK"
 
 lstop() { printf '{"session_id":"t","cwd":"%s"%s}' "$LV" "${1:-}" | "$HOOK" stop >/dev/null 2>"$T/fr.err"; }
 lstop; check "stop refuses a turn that would close over a live run" 2 "$?"
-check "...and says so" yes "$(has "$(cat "$T/fr.err")" 'A MAKE RUN IS STILL GOING')"
+check "...and says so" yes "$(has "$(cat "$T/fr.err")" 'IS STILL GOING, DETACHED')"
 check "...and what to do about it" yes "$(has "$(cat "$T/fr.err")" 'REPORT WHAT IT SAID')"
 lstop; check "ONCE per run, never a loop" 0 "$?"
 
@@ -131,19 +133,19 @@ rm -f "$LV/.git/live-run.told"
 ( setsid nohup bash -c "cd $LV && exec make sleeper" </dev/null > "$T/run.log" 2>&1 & )
 sleep 1
 check "detached and unwatched: the judge says so, naming the log" yes "$(has "$("$HOOK" judge "$LV")" " unwatched $T/run.log")"
-setsid nohup bash -c "until grep -q NEVER_APPEARS $T/other.log 2>/dev/null; do sleep 3; done" </dev/null >/dev/null 2>&1 &
+setsid nohup bash -c "until grep -q $NEVER $T/other.log 2>/dev/null; do sleep 3; done" </dev/null >/dev/null 2>&1 &
 sleep 1
 lstop; check "a waiter on a DIFFERENT file does not count: refused" 2 "$?"
 check "...and the refusal prescribes the loop on the run's OWN log" yes "$(has "$(cat "$T/fr.err")" "GATE FAILED\" $T/run.log")"
 check "...and says a background-mode run needs no loop" yes "$(has "$(cat "$T/fr.err")" 'needs NO loop')"
-setsid nohup bash -c "until grep -q NEVER_APPEARS $T/run.log; do sleep 3; done" </dev/null >/dev/null 2>&1 &
+setsid nohup bash -c "until grep -q $NEVER $T/run.log; do sleep 3; done" </dev/null >/dev/null 2>&1 &
 sleep 1
 rm -f "$LV/.git/live-run.told"
 check "the judge sees the run as watched, with its waiter" yes "$(has "$("$HOOK" judge "$LV")" " sleeper watched ")"
 OUT=$(printf '{"session_id":"t","cwd":"%s"}' "$LV" | "$HOOK" stop 2>"$T/fr.err"); RC=$?
 check "stop lets a watched run through" 0 "$RC"
 check "...with one line naming the waiter" yes "$(has "$OUT" 'a waiter (pid')"
-pkill -f "NEVER_APPEARS" 2>/dev/null; for p in $("$HOOK" live "$LV" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; sleep 1
+pkill -f "$NEVER" 2>/dev/null; for p in $("$HOOK" live "$LV" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; sleep 1
 
 echo "--- 6d. ONCE PER ROOT RUN: a phase child appearing does not refuse again (the R1 shape) ---"
 rm -f "$LV/.git/live-run.told"
@@ -164,6 +166,36 @@ print(dict(collections.Counter((r['event'], r.get('rule')) for r in rows)))" 2>/
 check "the tracked pass records with its own rule" yes "$(has "$RULES3" "'permitted', 'tracked-run'")"
 check "the watched pass records with its own rule" yes "$(has "$RULES3" "'permitted', 'waiter-armed'")"
 
+# GUARD_EDIT_OK: 2026-09-26 - A RUN BELONGS TO ITS NEAREST WORKING TREE. Ownership was `cwd.startswith(clone)`, so a
+# session whose cwd was the mirror (/diagram) saw every run in every clone under /diagram/.clones/ as its own and was
+# refused over other sessions' gates; and `x` owned the runs of a sibling `x2`. Real processes again.
+echo "--- 6e. another session's run is not this session's: nested clone, prefix sibling ---"
+NEST=$LV/.clones/other; mkdir -p "$NEST"; git init -q "$NEST"; printf 'sleeper:\n\t@sleep 12\n' > "$NEST/Makefile"
+SIB=${LV}2; mkdir -p "$SIB"; git init -q "$SIB"; printf 'sleeper:\n\t@sleep 12\n' > "$SIB/Makefile"
+( setsid nohup bash -c "cd $NEST && exec make sleeper" </dev/null >"$T/nest.log" 2>&1 & )
+( setsid nohup bash -c "cd $SIB && exec make sleeper" </dev/null >"$T/sib.log" 2>&1 & )
+sleep 1
+check "a run in a clone NESTED under this tree is not live here" "" "$("$HOOK" live "$LV")"
+check "...nor judged here" "" "$("$HOOK" judge "$LV")"
+check "...but is live in its own clone" yes "$(has "$("$HOOK" live "$NEST")" sleeper)"
+check "a run in a PREFIX sibling (x vs x2) is not live here" "" "$("$HOOK" live "$LV" | grep -c . | grep -v '^0$')"
+rm -f "$LV/.git/live-run.told"; lstop; check "stop lets the turn close over other sessions' runs" 0 "$?"
+for d in "$NEST" "$SIB"; do for p in $("$HOOK" live "$d" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; done; sleep 1
+
+# GUARD_EDIT_OK: 2026-09-26 - ONCE PER ROOT AS A SET. The told marker was compared for equality, so when one of two
+# refused runs finished the turn was refused again over the one it had already named.
+echo "--- 6f. told about two runs, one finishes: the other does not refuse again ---"
+rm -f "$LV/.git/live-run.told"
+( setsid nohup bash -c "cd $LV && exec make sleeper" </dev/null > "$T/a.log" 2>&1 & )
+( setsid nohup bash -c "cd $LV && exec make sleeper" </dev/null > "$T/b.log" 2>&1 & )
+sleep 1
+lstop; check "two unwatched runs: refused once" 2 "$?"
+check "...naming each run's own log" yes "$(has "$(cat "$T/fr.err")" "$T/b.log")"
+kill "$("$HOOK" live "$LV" | head -1 | cut -d' ' -f1)" 2>/dev/null; sleep 1
+check "one of them is gone" 1 "$("$HOOK" live "$LV" | wc -l)"
+lstop; check "...and the survivor, already told, lets the turn close" 0 "$?"
+for p in $("$HOOK" live "$LV" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; sleep 1
+
 # GUARD_EDIT_OK: GM 2026-09-12 - THE THIRD RULE: a waiter spinning on a DEAD PRODUCER. The GM found three in
 # their own status line, re-grepping every 15 s for EIGHT HOURS on logs from the OOM-killed runs of that
 # morning - the same incident that produced the proof-of-life clause, whose waiters predate it. Two census
@@ -171,21 +203,30 @@ check "the watched pass records with its own rule" yes "$(has "$RULES3" "'permit
 # filtering by process AGE cannot see the loop and filtering by NAME sees only `sleep`.
 echo "--- 7. a waiter spinning on a dead producer is reported (GM 2026-09-12) ---"
 DEAD=$T/deadlog.txt; echo stub > "$DEAD"; touch -d "2 hours ago" "$DEAD"
-check "no waiter, nothing reported" "" "$("$HOOK" stale)"
-setsid nohup bash -c "until grep -q NEVER_APPEARS $DEAD; do sleep 3; done" </dev/null >/dev/null 2>&1 &
+check "no waiter, nothing reported" "" "$("$HOOK" stale "$CLONE")"
+( cd "$CLONE" && setsid nohup bash -c "until grep -q $NEVER $DEAD; do sleep 3; done" </dev/null >/dev/null 2>&1 & )
 sleep 2
-check "the spinning waiter is found, with the file it watches" yes "$(has "$("$HOOK" stale)" "$DEAD")"
+check "the spinning waiter is found, with the file it watches" yes "$(has "$("$HOOK" stale "$CLONE")" "$DEAD")"
 OUT=$(printf '{"session_id":"t","cwd":"%s"}' "$CLONE" | "$HOOK" stop 2>&1)
 check "...and it is reported at turn end" yes "$(has "$OUT" 'SPINNING ON A DEAD PRODUCER')"
 check "...with what to do about it" yes "$(has "$OUT" 'stop the loop by its pid')"
 check "it REPORTS rather than blocks (the loop is harmless; not knowing is not)" 0 "$(printf '{"session_id":"t","cwd":"%s"}' "$CLONE" | "$HOOK" stop >/dev/null 2>&1; echo $?)"
 # a waiter whose producer is ALIVE must not be reported
 LIVEF=$T/livelog.txt; : > "$LIVEF"
-setsid nohup bash -c "exec 9>>$LIVEF; until grep -q NEVER_APPEARS $LIVEF; do sleep 3; done" </dev/null >/dev/null 2>&1 &
+( cd "$CLONE" && setsid nohup bash -c "exec 9>>$LIVEF; until grep -q $NEVER $LIVEF; do sleep 3; done" </dev/null >/dev/null 2>&1 & )
 sleep 2
-check "a waiter whose file is still held open is NOT reported" no "$(has "$("$HOOK" stale)" "$LIVEF")"
-for p in $("$HOOK" stale | cut -d' ' -f1); do kill -TERM "$p" 2>/dev/null; done
-pkill -f "NEVER_APPEARS" 2>/dev/null
+check "a waiter whose file is still held open is NOT reported" no "$(has "$("$HOOK" stale "$CLONE")" "$LIVEF")"
+# GUARD_EDIT_OK: 2026-09-26 - a waiter in ANOTHER working tree is never this session's to report (the remedy says to
+# kill it by pid, and concurrent sessions each run their own).
+OTHER=$T/other-tree; mkdir -p "$OTHER"; git init -q "$OTHER"; DEAD2=$T/deadlog2.txt; echo stub > "$DEAD2"
+( cd "$OTHER" && setsid nohup bash -c "until grep -q $NEVER $DEAD2; do sleep 3; done" </dev/null >/dev/null 2>&1 & )
+sleep 2
+check "another tree's dead-producer waiter is not reported for this clone" no "$(has "$("$HOOK" stale "$CLONE")" "$DEAD2")"
+check "...while this clone's own still is" yes "$(has "$("$HOOK" stale "$CLONE")" "$DEAD")"
+# GUARD_EDIT_OK: scoped to the fixture clone - unscoped, this cleanup killed EVERY dead-producer waiter on the machine,
+# other sessions' included (found 2026-09-26, when the unscoped census here reported a real session's loop).
+for p in $("$HOOK" stale "$CLONE" | cut -d' ' -f1); do kill -TERM "$p" 2>/dev/null; done
+pkill -f "$NEVER" 2>/dev/null
 RULES2=$(python3 -c "
 import collections, glob, json, os
 rows=[json.load(open(f)) for f in glob.glob(os.path.join('$GUARD_LOG_DIR','*.json'))]
