@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="140 116 600 1236" font-family="Georgia, 'Times New Roman', serif">
   <!-- ============================================================ -->
   <!-- Hoshigaoka Country Shrine - top-down diagrammatic plan          -->
-  <!-- North at top; the approach enters from the village, south.     -->
+  <!-- North at top; the village lies north, the approach rises from the south. -->
   <!-- 3 px = 1 ft. The country shrine's program: buildings/programs.md -->
   <!-- THE SHEET MATCHES THE VILLAGE MAP (feature 257): the hall's     -->
   <!-- center is map (392, 1074) of hoshigaoka.json; 6 sheet px = 1   -->
@@ -76,7 +76,7 @@
   <!-- The approach (sando): a 10 ft gravel way from the outermost of the seven arches to the hall's front step - 206 ft, through the avenue -->
   <rect x="425" y="572" width="30" height="618" fill="#D9CFB4" stroke="#C4B48E" stroke-width="0.8" id="approach"/>
 
-  <!-- The arch (torii) over the approach where the way crosses the fence, 20 ft in front of the hall's face (the first of the map's seven torii): two posts and a lintel, 15 ft outer span -->
+  <!-- The arch (torii) over the approach where the way crosses the fence, 20 ft in front of the hall's face (the innermost of the map's seven torii): two posts and a lintel, 15 ft outer span -->
   <rect x="417" y="620" width="46" height="24" fill="none" id="arch"/>
   <g fill="#A03020" stroke="#6B2A18" stroke-width="0.8">
     <rect x="420" y="624" width="4" height="20"/>
@@ -84,7 +84,7 @@
     <rect x="417" y="620" width="46" height="3"/>
     <rect x="421" y="627" width="38" height="2"/>
   </g>
-  <!-- The six arches beyond it down the avenue (the GM's seven, 2026-09-26), 30 ft apart as the map marches them, the same 15 ft span -->
+  <!-- The six outer arches (all marked id="arch": the checks find a sheet's arches by that id, and matches_map pairs each with the map's) down the avenue (the GM's seven, 2026-09-26), 30 ft apart as the map marches them, the same 15 ft span -->
   <rect x="417" y="710" width="46" height="24" fill="none" id="arch"/>
   <g fill="#A03020" stroke="#6B2A18" stroke-width="0.8">
     <rect x="420" y="714" width="4" height="20"/>
