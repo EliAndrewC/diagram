@@ -125,9 +125,11 @@ recommendation 2). Read only your own lines of the handoff.
    `Edit` calls (or one patch), never one finding a turn - every turn re-reads your whole context. Then run
    `make record && make citations` and the four record tests ONCE for everything applied, not once per report.
    A glossary term is a file in `l7r/diagram/interactive/assets/glossary/`, then `make glossary`.
-7. **Re-check only what moved.** A note changed on a check's finding: `make check-bundle PAGE={page}
+7. **Re-check ONCE, only what moved.** A note changed on a check's finding: `make check-bundle PAGE={page}
    SECTION=<NNN> NOTES=<key,key>` and one `quote-check` naming its MANIFEST. A modal rewritten: one `entry-drift`
-   on its bundle again.
+   on its bundle again. That is the only re-check round: a PARTIAL left after it is not re-checked again - label it
+   honestly in the note (what the quote carries and what it does not, or the assertion narrowed to the quote) and
+   move on (feature 250 R4: one group re-checked a question three times, a third of its session).
 {close}"""
 
 CLOSE_LAST = """8. **Close the page.** `python3 specs/242-cite-the-unfootnoted-assertions/measure/worklist.py {page}.html` (from

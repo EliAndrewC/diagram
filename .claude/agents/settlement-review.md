@@ -1,11 +1,17 @@
 ---
 name: settlement-review
-description: Independent review of Mode B settlement maps from the /diagram skill (hamlets, villages, towns, provincial cities - walled or unwalled). Judges the things the automated validator structurally CANNOT - glyph legibility, the FORM of a feature as opposed to its position, agreement with any Mode A sheet of a compound standing on the map, generic annotations, whether open ground is a real feature or a check being satisfied, and whether the map reads as a distinct PLACE. Use BEFORE declaring any Mode B map done - the author is not a reliable reviewer of their own visual output (Constitution Principle I, same rationale as building-review / frontend-review).
+description: Independent review of a Mode B settlement map for what the validator cannot judge - legibility, form, whether it reads as a place - run before any Mode B map is declared done.
 tools: Read, Bash, Grep, WebSearch, WebFetch
 model: opus
 effort: high
 omitClaudeMd: true
 ---
+
+## When to dispatch this agent
+
+Independent review of Mode B settlement maps from the /diagram skill (hamlets, villages, towns, provincial cities - walled or unwalled). Judges the things the automated validator structurally CANNOT - glyph legibility, the FORM of a feature as opposed to its position, agreement with any Mode A sheet of a compound standing on the map, generic annotations, whether open ground is a real feature or a check being satisfied, and whether the map reads as a distinct PLACE. Use BEFORE declaring any Mode B map done - the author is not a reliable reviewer of their own visual output (Constitution Principle I, same rationale as building-review / frontend-review).
+
+<!-- The frontmatter description is one sentence: the harness shows every agent's description to every session on every turn (feature 250, research R4, recommendation 3); the full statement of when to dispatch is this section. -->
 
 # Settlement Review (Mode B settlement maps)
 

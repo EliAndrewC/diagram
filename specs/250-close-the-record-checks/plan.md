@@ -261,12 +261,37 @@ opacity in the same tick as the highlight; under a loaded gate the style had not
 The page is `cities/defenses` - five FR-002 items and one FR-006, the size of the last - measured over every
 session the runner starts (listed in `.git/page-sessions/index.txt`) against R1 to R3. Recorded as R4.
 
+### D13 - The fourth round: R4's recommendations 2 to 4, then an equivalent page before the rest (GM 2026-09-26)
+
+The GM, on R4: *"Go ahead and implement recommendations two, three, and four. then kick off another round of
+equivalent work to the others so that we can do an apples to apples comparison before we proceed with all
+remaining pages. Because I really want to get this right before we burn through too many tokens again."* So R4's
+recommendation 1 (go) waits for this round's figures, and:
+
+2. **One re-check round.** The check brief's step 7 allows a single note-scoped re-check per question; a PARTIAL
+   left after it is labeled honestly in its note - what the quote carries and what it does not, or the assertion
+   narrowed to the quote - and not re-checked again.
+3. **One-sentence agent descriptions.** Each of the twelve defined agents' `description` is one sentence (8,448
+   characters to 2,122 in all, observed 2026-09-26; method: `len` of the twelve fields before and after); the full
+   statement moves verbatim into the contract body under "When to dispatch this agent". The built-in agent types'
+   descriptions, the rest of the listing, are the harness's and are not ours to shorten.
+4. **Every clone without the mirror's CLAUDE.md.** `scripts/_clone_local_settings.py`, run by the clone-sync
+   prompt hook, writes `claudeMdExcludes` naming the mirror's root CLAUDE.md into the clone's untracked
+   `.claude/settings.local.json`, keeping every other key; the mirror is never touched. Measured on a probe with the
+   local file alone (no launch flag): only the clone's own CLAUDE.md loaded, and with the shorter descriptions a
+   page session's first turn fell from 21,267 to 19,413 tokens (observed 2026-09-26; method: first-turn usage of two
+   headless probes in this clone).
+
+The page is `religion-and-death` - four FR-002 items and one FR-006, the nearest in size to the last two - worked
+exactly as `cities/defenses` was (a write session, then check sessions of two questions) and measured the same way.
+Recorded as R5, with the updated table over all five rounds.
+
 ## Phases
 
 0. Baseline and the meter (T01, T02).
 1. **The measured slice** (T03 to T09), ending in the measurement report (T10). STOP for the GM - who ruled
    on 2026-09-26 (D6).
-1b. **The token work** (T11 to T16), its second round (T26 to T33, D11) and its third (T34 to T41, D12): the fixes, the bundle and the guard (D6, D8), the page session (D7), the
+1b. **The token work** (T11 to T16), its second round (T26 to T33, D11) its third (T34 to T41, D12) and its fourth (T42 to T46, D13): the fixes, the bundle and the guard (D6, D8), the page session (D7), the
    seeded-fault runs (D6), and the comparison (D9) - which is phase 2's first page.
 2. FR-002 page by page, one page per session; FR-006 beside it, since both open the same fragments.
 3. FR-003, FR-004, FR-005 (the cosmetic sweeps).
