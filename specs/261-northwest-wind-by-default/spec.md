@@ -112,12 +112,21 @@ engine actually follows.
 
 ### Edge Cases
 
-- **A map whose fall makes a northwest-backed seat hard** (Kashikawa falls to the northeast, Mizuguchi
-  to the east, Sawada to the southwest). The seat's hard constraints (not below the drain, not on the
-  wet toe, on the canvas, clear ground behind) still hold; the seat search must find a margin whose
-  back faces the northwest among the margins they allow. The wind is not renamed to rescue a seat.
-  If a map has no such margin at its current seed, the map is re-seeded (its seed is a roll, not a
-  fact about the place); its declared fall and water are kept.
+- **A map whose fall makes a northwest-backed seat hard.** Kashikawa falls to the northeast and
+  Mizuguchi to the east (both put the northwest margin on a flank), and **Sawada falls to the northwest**
+  (`down_deg=225` in the engine's screen convention, 0 = east, 90 = south; `sawada.gen.py`: "land falling
+  northwest"), which is the direct opposition: its uphill side is the southeast, so its northwest margin
+  is the field's low foot, where the seat's hard constraints (dwellings above the drain, off the wet toe)
+  bite. Sawada is the hardest map. The seat's hard constraints still hold; the seat search must find a
+  margin whose back faces the northwest among the margins they allow. The wind is not renamed to rescue
+  a seat. If a map has no such margin at its current seed, the map is re-seeded (its seed is a roll, not
+  a fact about the place); its declared fall, water and other declared knobs are kept.
+- **When no seed works.** If no seed seats a northwest-backed cluster under a map's declared fall and
+  water, NONE of these is done: the 45-degree bar loosened for that map, a wind declared on it (FR-005),
+  the wind renamed from the seat (FR-003), a declared knob changed, or the belt planted in the crop
+  (FR-010). The case goes to the `spec-fidelity` exception check with the GM's words, and then to the GM.
+  Before relying on re-seeding, the plan measures each pool hamlet at its current seed under the new
+  rule and records which needed a new seed and what the seed search found.
 - **The belt and the cropland.** A northwest belt must still stand clear of the crop and the dry hem,
   and still pass every rule the belt obeys today (continuous within its sides, embracing the cluster).
 - **The homestead groves.** Each farmstead's own grove (the yashikirin L-belt) takes its sides from
@@ -185,3 +194,14 @@ engine actually follows.
   kept, since those are what the map was made to show (Kashikawa's `brook_side` confluence included).
 - Only the scripted hamlet generator derives a wind; the older settlement engine already defaults to the
   northwest and the legacy pool is frozen.
+
+## Review history
+
+- Round 1 (2026-09-26, `spec-fidelity`, Opus): CHANGES REQUIRED, two items, both applied. The round found
+  nothing unrequested and nothing kept of the behavior the GM asked to change, and judged FR-004's 45-degree
+  bar calibration rather than a loophole (one compass quarter; a seat backing due N or due W is still "north
+  and west"). (1) **Sawada's fall was misstated** as southwest; it is northwest (`down_deg=225`, screen
+  convention), which makes it the direct-opposition map and the hardest - the Edge Case now says so. (2) **The
+  re-seed assumption did not say what happens when no seed works**: the Edge Cases now name the five exits
+  that are NOT taken and route the case to the exception check and the GM, and the plan owes a per-map
+  measurement at the current seeds before relying on re-seeding.
