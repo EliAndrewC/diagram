@@ -1,0 +1,245 @@
+[
+ {
+  "window": "religion-and-death 4-handoff",
+  "main": {
+   "fresh": 12217,
+   "cached": 28013,
+   "output": 315,
+   "thinking": 0,
+   "turns": 2,
+   "peak_context": 20883
+  },
+  "agents": []
+ },
+ {
+  "window": "religion-and-death 2a-5 check",
+  "main": {
+   "fresh": 13642,
+   "cached": 164173,
+   "output": 1983,
+   "thinking": 164,
+   "turns": 6,
+   "peak_context": 34511
+  },
+  "agents": [
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "applicability kotobank-teramachi",
+    "fresh": 35742,
+    "cached": 58378,
+    "output": 5126,
+    "thinking": 3024,
+    "turns": 5,
+    "peak_context": 41136,
+    "first_turn": 6241,
+    "read_chars": 34267,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     22126,
+     9181,
+     2835,
+     125
+    ]
+   },
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "record-format 020",
+    "fresh": 14815,
+    "cached": 59708,
+    "output": 6113,
+    "thinking": 2959,
+    "turns": 4,
+    "peak_context": 22519,
+    "first_turn": 8546,
+    "read_chars": 32444,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     31712,
+     471,
+     261
+    ]
+   },
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "applicability l7r-castes",
+    "fresh": 1803,
+    "cached": 11638,
+    "output": 1015,
+    "thinking": 326,
+    "turns": 2,
+    "peak_context": 7203,
+    "first_turn": 6238,
+    "read_chars": 2289,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     2289
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check 020",
+    "fresh": 22073,
+    "cached": 85434,
+    "output": 6186,
+    "thinking": 3528,
+    "turns": 5,
+    "peak_context": 28215,
+    "first_turn": 6986,
+    "read_chars": 43778,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     31712,
+     10901,
+     780,
+     242,
+     143
+    ]
+   },
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "record-format 010",
+    "fresh": 20189,
+    "cached": 75850,
+    "output": 6064,
+    "thinking": 2974,
+    "turns": 6,
+    "peak_context": 20179,
+    "first_turn": 8546,
+    "read_chars": 18843,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     18267,
+     455,
+     82,
+     20,
+     19
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check 010",
+    "fresh": 17899,
+    "cached": 21576,
+    "output": 3896,
+    "thinking": 1948,
+    "turns": 3,
+    "peak_context": 17895,
+    "first_turn": 6986,
+    "read_chars": 25704,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     18267,
+     7437
+    ]
+   },
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "applicability cremation-enwiki",
+    "fresh": 7889,
+    "cached": 30830,
+    "output": 2801,
+    "thinking": 1059,
+    "turns": 5,
+    "peak_context": 9479,
+    "first_turn": 6240,
+    "read_chars": 5035,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     2252,
+     1488,
+     1176,
+     119
+    ]
+   }
+  ]
+ },
+ {
+  "window": "religion-and-death 2a-6 apply",
+  "main": {
+   "fresh": 45789,
+   "cached": 1138947,
+   "output": 19540,
+   "thinking": 7103,
+   "turns": 18,
+   "peak_context": 80262
+  },
+  "agents": []
+ },
+ {
+  "window": "religion-and-death 2a-7 recheck",
+  "main": {
+   "fresh": 11571,
+   "cached": 858464,
+   "output": 4508,
+   "thinking": 626,
+   "turns": 10,
+   "peak_context": 91813
+  },
+  "agents": [
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "re-check quote 020",
+    "fresh": 17880,
+    "cached": 75399,
+    "output": 4892,
+    "thinking": 2479,
+    "turns": 5,
+    "peak_context": 24022,
+    "first_turn": 7838,
+    "read_chars": 34025,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     21862,
+     10076,
+     1203,
+     741,
+     143
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "re-check quote 010",
+    "fresh": 9319,
+    "cached": 27131,
+    "output": 2275,
+    "thinking": 1177,
+    "turns": 3,
+    "peak_context": 15465,
+    "first_turn": 7838,
+    "read_chars": 17246,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     12343,
+     4903
+    ]
+   }
+  ]
+ }
+]

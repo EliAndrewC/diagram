@@ -159,9 +159,10 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
       verify: DONE. religion-and-death closed: 010/020 (2a) and 190/200 (2b) quote-checked, record-formatted and applied with one re-check round each; 13 glossary terms added in 2b+2a's 10; FR-006 worklist 33 bare items - FOOTNOTED 31, LOCATED 1, NOT-LOCATED 1 (item 14, confirmed in session 1 as an absence note); 4 PDF notes UNFETCHABLE in-container (tama-100, tanigawa, sinoss), l7r-castes canon citation left as session 1 placed it
-- [ ] T46 **The comparison the GM asked for** (D13): T45 against R1 to R4, recorded as R5 with the table over all
+- [x] T46 **The comparison the GM asked for** (D13): T45 against R1 to R4, recorded as R5 with the table over all
       five rounds
       research: rendering
+      verify: DONE. research.md R5: religion-and-death (5 items) 7.42 million, 1.48 million an item; first turn 19,300, largest context 92,000, mean main turn 58,000; one re-check round held; the table over all five rounds.
 
 ## Phase 2 - FR-002 and FR-006, one page per session (D7)
 

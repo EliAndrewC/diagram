@@ -364,3 +364,43 @@ question twice more (`quote-check` three times on 060), a loop the brief does no
   wait ends when the runner does, finished or killed, and the guard's liveness check finds the runner holding the
   file. The last session of this page ended at 18:14; the hand-built wait that replaced the dead one reported at
   18:15:43, after its own 90-second check that no further session was starting.
+
+## R5 - the fourth round, and the five rounds side by side (2026-09-26, T42 to T46, plan D13)
+
+The GM asked for R4's recommendations 2 to 4 - one re-check round, one-sentence agent descriptions, every clone
+without the mirror's CLAUDE.md - and one more equivalent page before the rest. The page was `religion-and-death`,
+four FR-002 items and one FR-006, worked exactly as `cities/defenses` was: a write session, then two check sessions
+of two questions (010 and 020; 190 and 200). Figures from `measure/tokens.py` (`measure/tokens-religion-*.json`).
+
+| | slice (R1) | `homesteads` (R2) | `vegetation` (R3) | `cities/defenses` (R4) | `religion-and-death` (R5) |
+|---|---|---|---|---|---|
+| items | 5 | 8 | 6 | 6 | 5 |
+| sessions | one long | one | two | three | three |
+| first turn of a session | 138,000 | 40,000 | 40,000 | 21,400 | **19,300** |
+| largest context any turn | 324,000 | 264,000 | 218,000 | 104,000 | **92,000** |
+| main session | 7.13 M, 35 turns | 11.28 M, 70 turns | 14.04 M, 110 turns | 5.74 M, 95 turns | 6.00 M, 104 turns |
+| mean main turn | 204,000 | 161,000 | 128,000 | 60,000 | **58,000** |
+| agent runs | 7 (0.86 M) | 10 (1.22 M) | 23 (1.45 M) | 16 (0.81 M) | 17 (1.42 M) |
+| mean agent run | 122,000 | 122,000 | 63,000 | 51,000 | 84,000 |
+| total | 7.98 M | 12.51 M | 15.48 M | 6.56 M | 7.42 M |
+| **per item** | 1.60 M | 1.56 M | 2.58 M | **1.09 M** | **1.48 M** |
+| harness cost | - | $10.21 | $11.77 | $7.39 | $9.33 |
+
+(Observed 2026-09-26; method: the rows of `measure/tokens-*.json`, main and agents summed per page; the first turn
+and largest context are the main sessions' own; the cost is each session's `total_cost_usd`, summed.)
+
+**What the three changes did, measured where they act.** Every session started at 19,300 rather than 21,400 (the
+shorter descriptions; the clone's own settings now drop the duplicate CLAUDE.md for every session, not only page
+sessions). No session grew past 92,000. The mean main turn fell again, to 58,000. The re-check stayed at one round
+per group, where the last page ran one question's three times.
+
+**Why this page still cost more per item than `cities/defenses`: its content, not the tooling.** Its questions carry
+more and longer notes, and the checks read them: a `quote-check` read 8,700 tokens of this page against 5,500 of the
+last, and its mean input doubled to 93,000 (observed 2026-09-26; method: the agents' `read_chars` and input in the
+two pages' records, by kind). The main session was within 5% of the last page's (6.00 against 5.74 million). So the
+spread between 1.09 and 1.48 million an item is what two pages of the record differ by; with the tooling as it now
+stands, a page's cost follows the size of what it has to read and check.
+
+**For the remaining pages.** 53 FR-002 items remain over 11 pages. At the two structured pages' range, 1.09 to 1.48
+million an item, that is on the order of 58 to 78 million tokens and $65 to $100 - against 83 to 137 million at the
+first two rounds' rates for the same work.
