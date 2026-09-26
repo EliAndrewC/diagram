@@ -47,6 +47,7 @@ main village's name (`l7r.md`, "Place Names"), so Hoshigaoka names both.*
 | Fall | NW-high, water falls SE |
 | Field form | ONE contiguous block - the base case, not a variant |
 | Focal feature | the crescent pond (fire water + the fengshui "gathering of qi"), distinct from the NW irrigation pond - Hoshigaoka's optional distinctiveness axis against Kikuta, read by the twin-detector via `focal_set` |
+| Shrine avenue | SEVEN torii (GM 2026-09-26: "Yes, I do want the seven"; the ruling of 2026-07-22). The shrine's avenue was drawn with one arch because the per-hall roll gave 1, against the seven-arch ruling of 2026-07-22. The map is frozen, and regenerating it under the current engine re-laid the whole village (61 houses for 70 households), so the GM chose a hand edit: six arches added to the svg at the generator's own points (392, 1111-1186, 15 px apart), the png re-rasterized, the manifest's `torii` and the hall's `torii_count` brought to seven, and `torii_count=7` pinned in the generator for conversion. |
 
 ## Review log
 

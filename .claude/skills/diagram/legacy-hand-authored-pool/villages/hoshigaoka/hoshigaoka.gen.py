@@ -415,7 +415,7 @@ s.cemetery(178, 1030, 62, 44, parish=False, organic=True)   # no label - the mar
 # (crop_to_content's set-apart-shrine rule). It sits APART from the village, beyond the communal wells, so it
 # keeps its OWN ablution well (remote_shrine_has_own_well); the ring search sites that well clear of the avenue.
 s.shrine_hall(SHRINE[0], SHRINE[1], "", w=30, h=24, kind="shrine", primary=True,
-              torii=SHRINE_TORII, graveyard=False)
+              torii=SHRINE_TORII, torii_count=7, graveyard=False)   # PINNED 7 (GM 2026-09-26: "Yes, I do want the seven"): the seven-arch avenue above is this map's canon, so the per-hall roll (which gave 1) is pinned, not rolled. This map is FROZEN (migration-plan.md), so the pin takes effect at conversion; the exhibit's six further arches were added by hand to its svg, png and manifest at these same points
 s.shrine_well(SHRINE[0], SHRINE[1])
 # THE OFFICIAL NOTICE BOARD (kosatsuba), auto-sited on a lane verge at the busiest node (GM
 # 2026-07-24: every settlement tier posts the state's standing law - the ofuregaki reached the
