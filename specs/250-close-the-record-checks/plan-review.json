@@ -1,6 +1,6 @@
 {
  "feature": "250-close-the-record-checks",
- "plan_sha256": "414afcc72ae13c93616cd5d953a1a5a3de8a8965e0083d5cab1f95e45c5ec923",
+ "plan_sha256": "915795514c4b8d1c1ffd2f9f342ab40379067f59deb3196d84db32bbd74437f8",
  "reviewed": "2026-09-26",
  "declared": "spec-fidelity",
  "decisions": [
@@ -46,6 +46,36 @@
    "summary": "T19's exclusion list adds cities/government and its cut point moves to T51.",
    "class": "within",
    "why": "Nothing dropped; unchanged since the last CLEAR."
+  },
+  {
+   "id": "D15.1",
+   "summary": "A report is applied with one command: quote-check and record-format end each finding with an EDIT block (or EDIT: none - why), make apply-edits applies a block only where its old text occurs exactly once under research/, SKIP= for disagreement; agents still never edit.",
+   "class": "within",
+   "why": "The GM on R6: 'Implement all of your recommendations and then do another measured page for comparison.' This is R6 recommendation 1 as proposed; the session still reads and applies, so nothing the earlier decisions required is dropped."
+  },
+  {
+   "id": "D15.2",
+   "summary": "A split happens in the write session (brief.py over_cap names over-cap questions; step 3b splits one an item falls in); the standalone split brief stays for questions no page's items touch.",
+   "class": "within",
+   "why": "The GM on R6: 'Implement all of your recommendations and then do another measured page for comparison.' R6 recommendation 2; keeps D14.3b's split brief rather than narrowing it."
+  },
+  {
+   "id": "D15.3",
+   "summary": "The write session's read step, measured first (labeled, transcript d93e4c76): source-pages adds to an existing directory, the brief asks for one message of parallel reads and names the newest registry entry as the shape.",
+   "class": "within",
+   "why": "The GM on R6: 'Implement all of your recommendations and then do another measured page for comparison.' R6 recommendation 3, which asked for the measurement first; the figure is labeled with date and method."
+  },
+  {
+   "id": "D15.4",
+   "summary": "tokens.py summary gives per question checked as the headline and per item beside it.",
+   "class": "within",
+   "why": "The GM on R6: 'Implement all of your recommendations and then do another measured page for comparison.' R6 recommendation 4; per item is kept, nothing dropped."
+  },
+  {
+   "id": "D15.5",
+   "summary": "The next measured page is cities/fabric (three FR-002 items, no FR-006, one item in question 140 at 36,858 bytes with notes, labeled 2026-09-26 wc -c), worked as the last three and compared in R7 with R4-R6.",
+   "class": "within",
+   "why": "The GM on R6: 'Implement all of your recommendations and then do another measured page for comparison.' 'another measured page for comparison'. The previous round's one item (the unlabeled 36,858) is resolved by commit 15a76fbe; re-measured this round: 36,858 bytes for 140 and its notes. research.md R6's 83% now carries its method (5.30 of 6.38 million = 83.1%, reproduced)."
   }
  ],
  "verdict": "CLEAR"
