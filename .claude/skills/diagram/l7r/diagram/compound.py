@@ -108,6 +108,11 @@ class BuildingSpec:
     wall: str  # "N" | "S" | "E" | "W" | "divider"
     order: int = 0  # higher places first (largest/most-important win a contested corner)
     rank: int = 1  # 1 = hug the wall; 2 = sit as a second rank BEHIND the rank-1 row
+    # The Mode A KIND the building is (feature 262): the `data-kind` the emitter writes on it, a key of the
+    # registry in `interactive/compound/`, so the draft's interactive page knows what it drew. `emit_svg`
+    # refuses a building without one, naming it - a draft with an unkinded building would be a page with
+    # ink nobody ruled on.
+    feature: str = ""
 
 
 @dataclass(frozen=True)
@@ -277,6 +282,19 @@ def place(program: CompoundProgram) -> PlaceResult:
 
 # ---- SVG emit (feet -> px at FTPX; a composed DRAFT the GM refines) -----------------------
 
+#: The Mode A kind of each reserved court zone (feature 262) - what its ground lights as on the page.
+ZONE_KINDS: dict[str, str] = {
+    "forecourt": "outer court",
+    "oshirasu": "hearing court",
+    "garden": "garden",
+    "yard": "outer court",
+    "practice ground": "practice ground",
+}
+
+
+def _kind_attr(kind: str) -> str:
+    return f' data-kind="{kind}"' if kind else ""
+
 _DEFS = (
     '<defs>'
     '<pattern id="court-earth" patternUnits="userSpaceOnUse" width="16" height="16">'
@@ -305,51 +323,59 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 7
     iw, ih = env.w_ft * FTPX, env.h_ft * FTPX
     cw, ch = iw + 2 * ox, ih + oy + margin_ft * FTPX
 
-    def rect(x: float, y: float, w: float, h: float, fill: str, stroke: str, sw: float, ident: str = "") -> str:
+    def rect(x: float, y: float, w: float, h: float, fill: str, stroke: str, sw: float, ident: str = "", kind: str = "") -> str:
         tag = f' id="{ident}"' if ident else ""
-        return f'<rect x="{ox + x * FTPX:.0f}" y="{oy + y * FTPX:.0f}" width="{w * FTPX:.0f}" height="{h * FTPX:.0f}" fill="{fill}"{tag} stroke="{stroke}" stroke-width="{sw}"/>'
+        return f'<rect x="{ox + x * FTPX:.0f}" y="{oy + y * FTPX:.0f}" width="{w * FTPX:.0f}" height="{h * FTPX:.0f}" fill="{fill}"{tag} stroke="{stroke}" stroke-width="{sw}"{_kind_attr(kind)}/>'
 
-    def label(cx: float, cy: float, s: str, size: int, italic: bool, fill: str) -> str:
+    def label(cx: float, cy: float, s: str, size: int, italic: bool, fill: str, kind: str = "") -> str:
         st = ' font-style="italic"' if italic else ' font-weight="bold"'
-        return f'<text x="{ox + cx * FTPX:.0f}" y="{oy + cy * FTPX:.0f}" text-anchor="middle" font-size="{size}"{st} fill="{fill}">{s}</text>'
+        return f'<text x="{ox + cx * FTPX:.0f}" y="{oy + cy * FTPX:.0f}" text-anchor="middle" font-size="{size}"{st} fill="{fill}"{_kind_attr(kind)}>{s}</text>'
+
+    for p in result.placed:
+        if not p.spec.feature:
+            raise ValueError(f"{p.spec.name}: a building declares its Mode A kind (`feature=`) so the draft's page can say what it is (feature 262)")
 
     parts = [
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {cw:.0f} {ch:.0f}" font-family="Georgia, \'Times New Roman\', serif">',
         _DEFS,
-        f'<rect x="0" y="0" width="{cw:.0f}" height="{ch:.0f}" fill="#EFE3C2"/>',
-        rect(0, 0, env.w_ft, env.h_ft, "url(#court-earth)", "none", 0, ident="precinct"),  # the declared precinct (feature 254)
-        label(env.w_ft / 2, -9, program.title, 20, False, "#3A2E1C"),
-        label(env.w_ft / 2, -3, "(perimeter-first composed draft - refine by hand)", 10, True, "#6B4F2A"),
+        f'<rect x="0" y="0" width="{cw:.0f}" height="{ch:.0f}" fill="#EFE3C2" data-kind="-"/>',
+        # the declared precinct (feature 254), one rect per court so the page can light each court's ground
+        # (feature 262); both keep the id, and they abut at the divider - which renders as the one rect did
+        rect(0, 0, env.w_ft, env.divider_ft, "url(#court-earth)", "none", 0, "precinct", "inner court"),
+        rect(0, env.divider_ft, env.w_ft, env.h_ft - env.divider_ft, "url(#court-earth)", "none", 0, "precinct", "outer court"),
+        label(env.w_ft / 2, -9, program.title, 20, False, "#3A2E1C", "-"),
+        label(env.w_ft / 2, -3, "(perimeter-first composed draft - refine by hand)", 10, True, "#6B4F2A", "-"),
     ]
     for z in program.spine:  # reserved open courts, drawn + named
-        parts.append(rect(z.x_ft, z.y_ft, z.w_ft, z.h_ft, COURT_FILL.get(z.name, "url(#court-earth)"), "#9C7A40", 0.8))
-        parts.append(label(z.x_ft + z.w_ft / 2, z.y_ft + z.h_ft / 2, z.name, 11, True, "#5C4318"))
+        zk = ZONE_KINDS.get(z.name, "outer court" if z.y_ft >= env.divider_ft else "inner court")
+        parts.append(rect(z.x_ft, z.y_ft, z.w_ft, z.h_ft, COURT_FILL.get(z.name, "url(#court-earth)"), "#9C7A40", 0.8, "", zk))
+        parts.append(label(z.x_ft + z.w_ft / 2, z.y_ft + z.h_ft / 2, z.name, 11, True, "#5C4318", zk))
         if z.name == "practice ground":
             # The program item's durable equipment (buildings.md "Practice ground"): a weapon
             # rack on the zone's south edge (the hand-refined map moves it flush to the
             # adjacent lodging's wall) and two tategi striking posts as r2 location markers.
-            parts.append(rect(z.x_ft + z.w_ft / 2 - 4, z.y2 - 2, 8, 2, "#8C6F3E", "#4A3318", 0.8))
-            parts.append(label(z.x_ft + z.w_ft / 2, z.y_ft + 8, "striking posts", 8, True, "#5C4830"))
+            parts.append(rect(z.x_ft + z.w_ft / 2 - 4, z.y2 - 2, 8, 2, "#8C6F3E", "#4A3318", 0.8, "", zk))
+            parts.append(label(z.x_ft + z.w_ft / 2, z.y_ft + 8, "striking posts", 8, True, "#5C4830", zk))
             for dx_ft, dy_ft in ((-5.0, 14.0), (5.0, 27.0)):
                 cx, cy = z.x_ft + z.w_ft / 2 + dx_ft, z.y_ft + dy_ft
-                parts.append(f'<circle cx="{ox + cx * FTPX:.0f}" cy="{oy + cy * FTPX:.0f}" r="2" fill="#7A5430" stroke="#4A3318" stroke-width="0.8"/>')
+                parts.append(f'<circle cx="{ox + cx * FTPX:.0f}" cy="{oy + cy * FTPX:.0f}" r="2" fill="#7A5430" stroke="#4A3318" stroke-width="0.8"{_kind_attr(zk)}/>')
     for p in result.placed:  # buildings
         fill, stroke = KINDS.get(p.spec.kind, KINDS["service"])
-        parts.append(rect(p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, fill, stroke, 2))
-        parts.append(label(p.x_ft + p.spec.w_ft / 2, p.y_ft + p.spec.h_ft / 2 + 1, p.spec.name, 10, False, "#3A2E1C"))
+        parts.append(rect(p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, fill, stroke, 2, "", p.spec.feature))
+        parts.append(label(p.x_ft + p.spec.w_ft / 2, p.y_ft + p.spec.h_ft / 2 + 1, p.spec.name, 10, False, "#3A2E1C", p.spec.feature))
     parts += _point_features(program, result, rect, label, ox, oy)
     # the scale bar every Mode A sheet carries (buildings.md "Scale"; the registered check `scale_bar_present`)
     sx, sy = ox, oy - 12 * FTPX
     parts.append(
-        f'<g stroke="#3A2E1C"><line x1="{sx:.0f}" y1="{sy:.0f}" x2="{sx + 90:.0f}" y2="{sy:.0f}" stroke-width="2"/><line x1="{sx:.0f}" y1="{sy - 5:.0f}" x2="{sx:.0f}" y2="{sy + 5:.0f}" stroke-width="2"/><line x1="{sx + 90:.0f}" y1="{sy - 5:.0f}" x2="{sx + 90:.0f}" y2="{sy + 5:.0f}" stroke-width="2"/><line x1="{sx + 45:.0f}" y1="{sy - 3:.0f}" x2="{sx + 45:.0f}" y2="{sy + 3:.0f}" stroke-width="1"/></g>'
+        f'<g stroke="#3A2E1C" data-kind="-"><line x1="{sx:.0f}" y1="{sy:.0f}" x2="{sx + 90:.0f}" y2="{sy:.0f}" stroke-width="2"/><line x1="{sx:.0f}" y1="{sy - 5:.0f}" x2="{sx:.0f}" y2="{sy + 5:.0f}" stroke-width="2"/><line x1="{sx + 90:.0f}" y1="{sy - 5:.0f}" x2="{sx + 90:.0f}" y2="{sy + 5:.0f}" stroke-width="2"/><line x1="{sx + 45:.0f}" y1="{sy - 3:.0f}" x2="{sx + 45:.0f}" y2="{sy + 3:.0f}" stroke-width="1"/></g>'
     )
-    parts.append(f'<text x="{sx + 45:.0f}" y="{sy + 16:.0f}" text-anchor="middle" font-size="10" fill="#3A2E1C">30 ft</text>')
-    parts.append(f'<text x="{sx + 45:.0f}" y="{sy + 27:.0f}" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">(3 px = 1 ft)</text>')
+    parts.append(f'<text x="{sx + 45:.0f}" y="{sy + 16:.0f}" text-anchor="middle" font-size="10" fill="#3A2E1C" data-kind="-">30 ft</text>')
+    parts.append(f'<text x="{sx + 45:.0f}" y="{sy + 27:.0f}" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830" data-kind="-">(3 px = 1 ft)</text>')
     # compound wall (4 segments; S wall broken by the gate) + divider - each in a `<g stroke=...>` group,
     # the authoring form the audit's gate-opening and divider readers parse (feature 254: the drafts are
     # swept by the gate like the hand-drawn sheets, so they are drawn the way the checks read)
     gl, gr = _gate_interval(env)
-    parts.append('<g stroke="#2D2A24" stroke-width="9">')
+    parts.append('<g stroke="#2D2A24" stroke-width="9" data-kind="compound wall">')
     for x1, y1, x2, y2 in [
         (0, 0, env.w_ft, 0),
         (0, 0, 0, env.h_ft),
@@ -359,7 +385,7 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 7
     ]:
         parts.append(f'<line x1="{ox + x1 * FTPX:.0f}" y1="{oy + y1 * FTPX:.0f}" x2="{ox + x2 * FTPX:.0f}" y2="{oy + y2 * FTPX:.0f}"/>')
     parts.append("</g>")
-    parts.append(f'<g stroke="#3F3A30" stroke-width="6"><line x1="{ox:.0f}" y1="{oy + env.divider_ft * FTPX:.0f}" x2="{ox + iw:.0f}" y2="{oy + env.divider_ft * FTPX:.0f}"/></g>')
+    parts.append(f'<g stroke="#3F3A30" stroke-width="6" data-kind="court divider"><line x1="{ox:.0f}" y1="{oy + env.divider_ft * FTPX:.0f}" x2="{ox + iw:.0f}" y2="{oy + env.divider_ft * FTPX:.0f}"/></g>')
     parts.append("</svg>")
     return "\n".join(parts)
 
@@ -419,8 +445,8 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
             taken.append((z.x_ft + 1.35, z.y_ft + 1.35, z.x_ft + 8.65, z.y_ft + 8.65))
             bx, by = z.x2 - 18.0, z.y_ft + max(0.0, (z.h_ft - 12.0) / 2)
             taken.append((bx, by, bx + 15.0, by + 12.0))
-            parts.append(rect(bx, by, 15.0, 12.0, KINDS["service"][0], KINDS["service"][1], 1.5))
-            parts.append(label(bx + 7.5, by + 7.0, "bath", 8, False, "#3A2E1C"))
+            parts.append(rect(bx, by, 15.0, 12.0, KINDS["service"][0], KINDS["service"][1], 1.5, "", "bath"))
+            parts.append(label(bx + 7.5, by + 7.0, "bath", 8, False, "#3A2E1C", "bath"))
     for name in ("barracks", "stables", "servants"):
         if name in by_name and (v := seat(by_name[name], 5.0, (0.85, 0.15, 0.5), (4.5, 7.0))):
             privies.append(v)
@@ -431,20 +457,20 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
             if tub := seat(p, 2.6, (0.15, 0.85, 0.4, 0.6), (2.5,)):
                 tubs.append(tub)
     for cx, cy in wells:
-        parts.append(rect(cx - 3.65, cy - 3.65, 7.3, 7.3, "#9C8C70", "#5C4830", 1.2))
-        parts.append(label(cx, cy + 9.0, "well", 8, True, "#3A2E1C"))
+        parts.append(rect(cx - 3.65, cy - 3.65, 7.3, 7.3, "#9C8C70", "#5C4830", 1.2, "", "well"))
+        parts.append(label(cx, cy + 9.0, "well", 8, True, "#3A2E1C", "well"))
     for cx, cy in privies:
-        parts.append(rect(cx - 2.5, cy - 2.5, 5.0, 5.0, "#7E726A", "#4A3318", 0.8))
-        parts.append(label(cx, cy + 7.0, "latrine", 7, True, "#3A2E1C"))
+        parts.append(rect(cx - 2.5, cy - 2.5, 5.0, 5.0, "#7E726A", "#4A3318", 0.8, "", "latrine"))
+        parts.append(label(cx, cy + 7.0, "latrine", 7, True, "#3A2E1C", "latrine"))
     if tubs:
-        parts.append('<g fill="#8FB0C6" stroke="#3A5060" stroke-width="1">')
+        parts.append('<g fill="#8FB0C6" stroke="#3A5060" stroke-width="1" data-kind="fire-water tubs">')
         parts += [f'<circle cx="{ox + cx * FTPX:.0f}" cy="{oy + cy * FTPX:.0f}" r="3.8"/>' for cx, cy in tubs]
         parts.append("</g>")
         tx, ty = tubs[0]
-        parts.append(label(tx + 9.0, ty + 1.0, "fire-water tubs", 7, True, "#3A5060"))
+        parts.append(label(tx + 9.0, ty + 1.0, "fire-water tubs", 7, True, "#3A5060", "fire-water tubs"))
     gl, _gr = _gate_interval(env)
-    parts.append(rect(gl - 14.0, env.h_ft + 3.0, 6.0, 1.5, "#4A3318", "#2D2A24", 0.6))
-    parts.append(label(gl - 11.0, env.h_ft + 9.0, "notice board", 7, True, "#3A2E1C"))
+    parts.append(rect(gl - 14.0, env.h_ft + 3.0, 6.0, 1.5, "#4A3318", "#2D2A24", 0.6, "", "notice board"))
+    parts.append(label(gl - 11.0, env.h_ft + 9.0, "notice board", 7, True, "#3A2E1C", "notice board"))
     return parts
 
 
@@ -479,22 +505,22 @@ def county_magistracy_program() -> CompoundProgram:
     b = BuildingSpec
     buildings = (
         # inner (residence) court - buildings ring N/E/W walls + back the divider
-        b("residence", "lord", 92.0, 36.0, "inner", "N", order=10),
-        b("servants", "service", 66.0, 15.0, "inner", "N", order=2),
-        b("kitchen", "service", 44.0, 36.0, "inner", "W", order=5),
-        b("shrine", "shrine", 36.0, 30.0, "inner", "E", order=4),  # at the hall-shrine ceiling (~36 x 30 ft); the 40 x 32 it was drew over it (feature 254)
-        b("guest house", "lord", 33.0, 30.0, "inner", "E", order=3),
-        b("karo's house", "lord", 37.0, 26.0, "inner", "divider", order=3),
+        b("residence", "lord", 92.0, 36.0, "inner", "N", order=10, feature="residence"),
+        b("servants", "service", 66.0, 15.0, "inner", "N", order=2, feature="servants' quarters"),
+        b("kitchen", "service", 44.0, 36.0, "inner", "W", order=5, feature="kitchen"),
+        b("shrine", "shrine", 36.0, 30.0, "inner", "E", order=4, feature="compound shrine"),  # at the hall-shrine ceiling (~36 x 30 ft); the 40 x 32 it was drew over it (feature 254)
+        b("guest house", "lord", 33.0, 30.0, "inner", "E", order=3, feature="guest quarters"),
+        b("karo's house", "lord", 37.0, 26.0, "inner", "divider", order=3, feature="karo's house"),
         # outer (administrative) court - office hall backs the divider (oshirasu in front)
-        b("office hall", "lord", 113.0, 34.0, "outer", "divider", order=10),
-        b("tax archive", "kura", 34.0, 30.0, "outer", "W", order=6),
-        b("senior retainers", "service", 60.0, 18.0, "outer", "W", order=4),
-        b("clerks' room", "plain", 30.0, 20.0, "outer", "W", order=2),
-        b("granary", "kura", 52.0, 28.0, "outer", "E", order=6),
-        b("barracks", "service", 33.0, 34.0, "outer", "E", order=4),
-        b("cell", "cell", 18.0, 16.0, "outer", "E", order=1),
-        b("gatehouse", "dark", 42.0, 15.0, "outer", "S", order=8),
-        b("stables", "service", 33.0, 23.0, "outer", "S", order=5),
+        b("office hall", "lord", 113.0, 34.0, "outer", "divider", order=10, feature="office hall"),
+        b("tax archive", "kura", 34.0, 30.0, "outer", "W", order=6, feature="tax archive"),
+        b("senior retainers", "service", 60.0, 18.0, "outer", "W", order=4, feature="retainers' quarters"),
+        b("clerks' room", "plain", 30.0, 20.0, "outer", "W", order=2, feature="clerks' room"),
+        b("granary", "kura", 52.0, 28.0, "outer", "E", order=6, feature="granary"),
+        b("barracks", "service", 33.0, 34.0, "outer", "E", order=4, feature="barracks"),
+        b("cell", "cell", 18.0, 16.0, "outer", "E", order=1, feature="cell"),
+        b("gatehouse", "dark", 42.0, 15.0, "outer", "S", order=8, feature="gatehouse"),
+        b("stables", "service", 33.0, 23.0, "outer", "S", order=5, feature="stables"),
     )
     return CompoundProgram("County Magistracy (example)", env, spine, buildings)
 

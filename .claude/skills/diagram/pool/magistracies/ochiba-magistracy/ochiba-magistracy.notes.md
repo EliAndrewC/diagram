@@ -61,3 +61,19 @@
 
 - 2026-07 accuracy review (magistrate's-manor program pass): converted the freestanding dais pavilion into the office hall (day office + official study + dais band); restyled the tax archive as a sealed plaster kura; added the kitchen postern, notice board, guest-room note, and rain barrels.
 - 2026-07 building-review round 1 (verdict needs-work), all errors FIXED: gatehouse moved beside the gate (was drawn across the opening); residence wing trimmed to x=220-820 (its east end was buried under the shrine hall, hiding the guest room - guest room now labeled in the family-quarters section); clerks' duty room added as the office hall's west rear room; em-dashes purged. Also applied: inner latrine to the NW corner pocket (clear of kitchen and hearth); outer latrine label off the wall stroke; rain barrels moved south of the hall-granary corridor; barracks grown (junior bushi + ashigaru under option (a)); sizing-notes wording aligned; Key now shows the sealed-kura fill. OVERRULED/annotated: divider-gate-behind-hall (deliberate baffle, now program-documented); pond on axis (deliberate); cell size (documented glyph exemption).
+
+## Map notes
+
+<!-- READ BY THE INTERACTIVE MAP: these bullets appear in the feature modals of this map's page, under "On this map". Everything is optional and the reader is forgiving by design - a missing or misspelled key simply contributes nothing. Keys are the Mode A kind keys. Every other word in this file is prose and is never parsed. -->
+
+### Features
+
+- **compound shrine**: Ochiba's shrine is a full hall with two altars - Ta-no-Kami (rice) to the west, the Myobu (fox) to the east - rather than the modest shrine a magistracy usually keeps. That is a deliberate departure: Magistrate Kitsune Tatsuya is a senior priest of Inari. Even so, the hall stays smaller than the residence.
+- **threshold stones**: This pair is the senior checkpoint of the Fox road wardings, which the County Magistrate of Ochiba - a Fox priest - is responsible for keeping. The service gate has none.
+- **fox-fire lantern**: By day the lantern rests at the Ta-no-Kami altar of the Inari hall; for a hearing held in the evening it goes to the dais.
+- **fox relics**: The Akami-fude and the Chigiri-no-Chou pass with the office, not the family: every County Magistrate of Ochiba since the Year of the Long Cutting has kept them.
+- **cinnabar workshop**: The colonnade adjoins the Inari hall, with river-stones laid out beside it to dry.
+- **residence**: Two offset blocks: the reception room and Tatsuya's quarters and study to the west, the family quarters and the guest room to the east. There is no ancestral alcove - Ochiba is not held by one lineage, and what passes down here passes with the office.
+- **guest quarters**: Ochiba keeps no guest house; the guest room is a bay of the residence's east block.
+- **retainers' quarters**: The whole working platoon lives on the grounds: the senior retainers in these quarters by the stables, the junior samurai and the standing ashigaru in the barracks.
+- **fire-water tubs**: Eleven tubs, two of them at the kitchen; the plaster tax archive carries none.

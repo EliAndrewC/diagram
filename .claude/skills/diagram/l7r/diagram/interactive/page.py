@@ -25,7 +25,7 @@ from concurrent.futures import ThreadPoolExecutor
 from typing import Any
 
 from . import raster
-from .classes import CLASSES, NOT_HIGHLIGHTED, PLACE, lead_sentence, slug
+from .classes import CLASSES, NOT_HIGHLIGHTED, PLACE, FeatureClass, lead_sentence, slug
 from .content import content
 from .glossary import GLOSSARY
 from .notes import EMPTY, MapNotes, read_map_notes
@@ -574,10 +574,11 @@ def ink_census(strings: Sequence[str], tags: Sequence[ClsTag]) -> tuple[dict[str
     return counts, unclassed
 
 
-def unregistered_classes(counts: dict[str, int]) -> list[str]:
-    """Class keys the engine tagged that `classes.py` has no entry for - a typo, or a class the
-    vocabulary does not name yet. The gate fails on either (FR-009 reads this beside the census)."""
-    return sorted(k for k in counts if k not in (NOT_HIGHLIGHTED, PLACE) and k not in CLASSES)
+def unregistered_classes(counts: dict[str, int], registry: dict[str, FeatureClass] = CLASSES) -> list[str]:
+    """Class keys the engine tagged that the registry has no entry for - a typo, or a class the
+    vocabulary does not name yet. The gate fails on either (FR-009 reads this beside the census).
+    `registry` is the hamlet vocabulary unless a Mode A sheet passes its own (feature 262)."""
+    return sorted(k for k in counts if k not in (NOT_HIGHLIGHTED, PLACE) and k not in registry)
 
 
 def present_classes(tags: Sequence[ClsTag]) -> set[str]:
@@ -594,12 +595,13 @@ def present_classes(tags: Sequence[ClsTag]) -> set[str]:
     return keys
 
 
-def explanations(present: set[str], notes: MapNotes = EMPTY) -> dict[str, dict[str, Any]]:
+def explanations(present: set[str], notes: MapNotes = EMPTY, registry: dict[str, FeatureClass] = CLASSES) -> dict[str, dict[str, Any]]:
     """The embedded data: one entry per present class, in vocabulary order, with only the sibling
     paragraphs whose OTHER class is also present (spec US4 scenario 4 - an absent sibling is never
-    claimed). A present key the registry does not know gets a stub that says so, never silence."""
+    claimed). A present key the registry does not know gets a stub that says so, never silence.
+    `registry` is the hamlet vocabulary unless a Mode A sheet passes its own (feature 262)."""
     out: dict[str, dict[str, Any]] = {}
-    for key, fc in CLASSES.items():
+    for key, fc in registry.items():
         if key not in present:
             continue
         out[key] = {
@@ -633,7 +635,7 @@ def explanations(present: set[str], notes: MapNotes = EMPTY) -> dict[str, dict[s
             # which is nearly all of them on nearly every map.
             "on_this_map": notes.features.get(key, ""),
         }
-    for key in sorted(present - CLASSES.keys() - {PLACE}):
+    for key in sorted(present - registry.keys() - {PLACE}):
         out[key] = {
             "name": key,
             "what": "This kind of feature has no entry in the class registry yet (interactive/classes/).",
@@ -794,7 +796,14 @@ def _keep_clear_clip(manifest: dict[str, Any] | None) -> tuple[str, str]:
 
 
 def render_page(
-    strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta: dict[str, Any] | None = None, manifest: dict[str, Any] | None = None, notes: MapNotes = EMPTY, with_raster: bool = True
+    strings: Sequence[str],
+    tags: Sequence[ClsTag],
+    name: str,
+    meta: dict[str, Any] | None = None,
+    manifest: dict[str, Any] | None = None,
+    notes: MapNotes = EMPTY,
+    with_raster: bool = True,
+    registry: dict[str, FeatureClass] = CLASSES,
 ) -> str:
     """The whole page as one string - `write_html` writes it; tests read it.
 
@@ -861,7 +870,7 @@ def render_page(
         image = f'<g class="raster"><image id="raster" x="{vb[0]:g}" y="{vb[1]:g}" width="{vb[2]:g}" height="{vb[3]:g}" style="pointer-events: none"/></g>'
         at = svg.find('<g class="f ')
         svg = svg[:at] + image + svg[at:] if at != -1 else svg.replace("</svg>", image + "</svg>", 1)
-    data = explanations(present, notes)
+    data = explanations(present, notes, registry)
     # THE PLACE CARD rides in the same map, under the placard's own reserved key, so the page opens it
     # through the one modal every other feature uses (feature 156). None for a tier the vocabulary does
     # not describe - and then the placard simply has nothing to open, exactly as before.
@@ -917,11 +926,20 @@ def raster_wanted(with_raster: bool, vb: tuple[float, float, float, float] | Non
     return bool(with_raster) and vb is not None
 
 
-def write_html(path: str, strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta: dict[str, Any] | None = None, manifest: dict[str, Any] | None = None, with_raster: bool = True) -> None:
+def write_html(
+    path: str,
+    strings: Sequence[str],
+    tags: Sequence[ClsTag],
+    name: str,
+    meta: dict[str, Any] | None = None,
+    manifest: dict[str, Any] | None = None,
+    with_raster: bool = True,
+    registry: dict[str, FeatureClass] = CLASSES,
+) -> None:
     """`<base>.html`, beside the map's other outputs. The map's `<base>.notes.md` is read here if it
     exists - one place, derived from the output path rather than searched for, so a stale or foreign
     notes file in the same directory can never be picked up (spec, Edge Cases). `with_raster` is the
-    render condition (feature 208) - see `render_page`."""
+    render condition (feature 208) - see `render_page`; `registry` the vocabulary (feature 262)."""
     notes = read_map_notes(path[: -len(".html")] + ".notes.md") if path.endswith(".html") else EMPTY
     with open(path, "w", encoding="utf-8") as fh:
-        fh.write(render_page(strings, tags, name, meta, manifest, notes, with_raster=with_raster))
+        fh.write(render_page(strings, tags, name, meta, manifest, notes, with_raster=with_raster, registry=registry))

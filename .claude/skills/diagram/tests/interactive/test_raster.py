@@ -304,3 +304,15 @@ def test_the_direct_shape_parse_matches_the_general_one_in_any_attribute_order()
     assert a.count("<") == b.count("<") == 4, (a, b)
     assert 'cx="150" cy="250"' in a and 'x1="90"' in a and 'x="410"' in a and 'ry="20"' in a
     assert 'cx="10"' not in a and 'cy="700"' not in a and 'x="430"' not in a and 'x1="10"' not in a
+
+
+def test_a_key_with_an_apostrophe_is_read_by_the_id_map_under_its_own_name() -> None:
+    """Feature 262: the Mode A vocabulary brought keys like `karo's house`. The CSS token must be one the id map's
+    group pattern reads, and the palette must carry the key unescaped - measured on the Ochiba page, both failed and
+    a click inside the karo's house opened the inner court beneath it."""
+    from l7r.diagram.interactive.classes import slug
+    from l7r.diagram.interactive.page import wrap
+
+    assert slug("karo's house") == "karo-s-house" and slug("storage shed") == "storage-shed"
+    svg = '<svg viewBox="0 0 10 10">' + wrap('<rect x="0" y="0" width="5" height="5" fill="#123456"/>', "karo's house") + "</svg>"
+    assert raster.class_keys(svg) == ["karo's house"]

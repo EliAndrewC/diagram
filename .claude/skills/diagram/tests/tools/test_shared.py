@@ -338,3 +338,24 @@ def test_a_tree_may_stand_on_a_garden_bed_and_over_no_glyph_or_tub() -> None:
     findings = s.trees_overlap(plan)
     assert not [f for f in findings if "svg(60,60)" in f]
     assert any("svg(212,195)" in f for f in findings) and any("svg(296,296)" in f and "tub" in f for f in findings)
+
+
+def _kind_types() -> _bt.BuildingType:
+    return _bt.parse_types(
+        [{"tier": "stores", "title": "Stores", "program": "Store", "hand_drawn": True, "checks": [], "required": [{"id": "store", "kind": "granary", "band_ft": {"w": [10, 20], "h": [10, 20]}}]}]
+    )[0]
+
+
+def test_a_kind_item_is_found_by_the_sheet_s_tag_not_by_its_label_text() -> None:
+    """Feature 262 FR-003a: a program item that names a kind is on the sheet when an element carries that kind, and
+    its band is measured on the structure a label of that kind stands on - whatever the label says."""
+    types = _kind_types()
+    _, plan = _plan('<g data-kind="granary">' + _rect(40, 40, 45, 45, BLDG) + _text(62, 66, "rice store") + "</g>")
+    assert L.check_program(plan, types, None) == [] and L.check_bands(plan, types, None) == []
+    _, untagged = _plan(_rect(40, 40, 45, 45, BLDG), _text(62, 66, "granary"))
+    assert L.check_program(untagged, types, None) == ['no `store` on the sheet (an element tagged data-kind="granary", or an element marked id="store")']
+    _, big = _plan('<g data-kind="granary">' + _rect(40, 40, 90, 45, BLDG) + _text(85, 66, "rice store") + "</g>")
+    from l7r.diagram.interactive.compound_kinds import COMPOUND_CLASSES
+
+    found = L.check_bands(big, types, None)
+    assert len(found) == 1 and "`store` ('rice store') is 30 x 15 ft" in found[0] and COMPOUND_CLASSES["granary"].label_note in found[0]

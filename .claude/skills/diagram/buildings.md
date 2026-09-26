@@ -136,7 +136,7 @@ The historical Mode A layout is NOT "buildings scattered inside the walls with b
 
 ## Compound programs
 
-A building TYPE with a documented program has it recorded in [`buildings/programs.md`](buildings/programs.md) - load that file when the subject matches one. Today the catalog holds the **county magistrate's manor** (the 8-knob generic program, its Japan-first interior doctrine, and the heimen-clerk budget cascade) and the **country shrine** (a village district's shrine, where the country monk lives). Each type's required items are DECLARED ONCE in [`l7r/diagram/buildings/types.json`](l7r/diagram/buildings/types.json) - the label a check finds each by, its size band, its class and why - and the catalog's tables are rendered from that declaration (`make building-programs`); the checks read the same declaration, so the reviewer's table and the gate's sweep cannot disagree.
+A building TYPE with a documented program has it recorded in [`buildings/programs.md`](buildings/programs.md) - load that file when the subject matches one. Today the catalog holds the **county magistrate's manor** (the 8-knob generic program, its Japan-first interior doctrine, and the heimen-clerk budget cascade) and the **country shrine** (a village district's shrine, where the country monk lives). Each type's required items are DECLARED ONCE in [`l7r/diagram/buildings/types.json`](l7r/diagram/buildings/types.json) - the label a check finds each by, its size band, its class and why - and the catalog's tables are rendered from that declaration (`make building-programs`); the checks read the same declaration, so the reviewer's table and the gate's sweep cannot disagree. **A magistracy item names its KIND instead** (feature 262): the sheet's own `data-kind` tags find it, and its class and why are that kind's entry in the Mode A registry ([`l7r/diagram/interactive/compound_kinds/`](l7r/diagram/interactive/compound_kinds/__init__.py)) - the write-up the interactive page shows - so the classification is stated in one place for the audit, the catalog and the reader.
 
 ## Adding a building type
 
@@ -180,7 +180,8 @@ Before declaring done (Mode A):
 - [ ] Design notes written to `pool/<subject>.notes.md` (knob settings, particulars, deliberate choices)
 - [ ] `building-review` subagent pass: iterate until no findings, or remaining findings overruled with rationale recorded in the notes file's Review log
 - [ ] `size-audit` subagent pass ([`/.claude/agents/size-audit.md`](../../agents/size-audit.md)): every feature checked in real feet against independently researched historical anchors - documented tolerances get RE-VERIFIED, not assumed (a wrong size once laundered itself into the docs as a tolerance). It runs [`tools/pack_audit/`](l7r/diagram/tools/pack_audit/CLAUDE.md) for the packing/whitespace sweep (coverage %, largest vacant rectangle, aligned building gaps)
-- [ ] `.svg`, `.png`, and `.notes.md` all saved in `pool/`
+- [ ] Every drawn element carries a KIND (feature 262): `data-kind="<key>"` on it or on its group (the nearest wins; a label goes in its feature's group), `data-kind="-"` on the sheet's apparatus (background, title, scale bar); the precinct one rect per court, abutting at the divider, so each court lights on the page. A new kind is a class in [`interactive/compound_kinds/`](l7r/diagram/interactive/compound_kinds/__init__.py), written from the record. `tests/interactive/test_compound_kinds.py` names any ink with no kind, and the gen writes `<name>.html` - open it and click the new thing once
+- [ ] `.svg`, `.png`, `.html` and `.notes.md` all saved in `pool/`
 - [ ] Historical-accuracy review offered to the GM at completion
 
 ## Historical grounding

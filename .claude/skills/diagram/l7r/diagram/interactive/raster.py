@@ -27,6 +27,7 @@ Every number here is a rendering decision (constitution XII), recorded in specs/
 from __future__ import annotations
 
 import base64
+import html
 import math
 import pickle
 import re
@@ -315,8 +316,11 @@ def class_keys(svg_text: str) -> list[str]:
     """Every class key on the page, in order of first appearance - derived from the groups, never listed."""
     keys: list[str] = []
     for m in _GROUP.finditer(svg_text):
-        if m.group(1) not in keys:
-            keys.append(m.group(1))
+        # UNESCAPED (feature 262): `data-k` is written HTML-escaped, so `karo's house` arrives as `karo&#x27;s house`,
+        # and the palette must hand page.js the key its classes are keyed by
+        key = html.unescape(m.group(1))
+        if key not in keys:
+            keys.append(key)
     return keys
 
 
@@ -355,7 +359,7 @@ def id_map(svg_text: str, keys: Sequence[str]) -> tuple[bytes | None, dict[str, 
             depth += -1 if mm.group(0) == "</g>" else 1
             i = mm.end()
         out.append(_unpaint(svg_text[pos : m.start()]))
-        out.append(_recolor_group(svg_text[m.start() : i], color[m.group(1)]))
+        out.append(_recolor_group(svg_text[m.start() : i], color[html.unescape(m.group(1))]))
         pos = i
     out.append(_unpaint(svg_text[pos:]))
     doc = _OPACITY.sub("", "".join(out))

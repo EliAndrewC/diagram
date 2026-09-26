@@ -12,7 +12,7 @@ def _env(w: float = 200.0, h: float = 200.0, div: float = 100.0, gate: float = 1
 
 
 def _b(name: str, w: float, h: float, court: str, wall: str, order: int = 0, rank: int = 1) -> c.BuildingSpec:
-    return c.BuildingSpec(name, "service", w, h, court, wall, order, rank)
+    return c.BuildingSpec(name, "service", w, h, court, wall, order, rank, feature="barracks")
 
 
 def test_courtzone_and_placed_props() -> None:
@@ -232,7 +232,7 @@ def test_point_features_follow_the_masses_and_skip_what_the_program_lacks() -> N
         _b("archive", 30.0, 26.0, "outer", "W", order=6),
         spine=(c.CourtZone("garden", 60.0, 30.0, 80.0, 30.0),),
     )
-    full = c.CompoundProgram(full.title, full.envelope, full.spine, (*full.buildings, c.BuildingSpec("kura", "kura", 30.0, 26.0, "outer", "W", order=1)))
+    full = c.CompoundProgram(full.title, full.envelope, full.spine, (*full.buildings, c.BuildingSpec("kura", "kura", 30.0, 26.0, "outer", "W", order=1, feature="tax archive")))
     svg = c.emit_svg(full, c.place(full))
     assert svg.count(">well<") == 3 and svg.count(">latrine<") == 3 and ">bath<" in svg and ">notice board<" in svg and ">fire-water tubs<" in svg
     assert _tub_circles(svg) == 6  # two at the kitchen, one at each other wooden building, none at the kura
@@ -259,3 +259,25 @@ def test_a_seat_that_would_leave_the_envelope_is_refused() -> None:
     prog = c.CompoundProgram("t", env, (), (_b("stables", 30.0, 15.0, "outer", "S", order=5),))
     parts = c._point_features(prog, c.place(prog), lambda *a: "R", lambda *a: "L", 0.0, 0.0)
     assert ">well<" not in "".join(parts) and "<circle" not in "".join(parts)
+
+
+def test_emit_refuses_a_building_that_declares_no_kind() -> None:
+    """Feature 262: a draft's page must know what every building is, so a program that leaves one out fails
+    at emit, naming it - not silently, as ink nobody ruled on."""
+    prog = c.CompoundProgram("t", _env(200.0, 200.0, 100.0, 13.0), (), (c.BuildingSpec("mystery", "service", 30.0, 20.0, "outer", "W", order=1),))
+    with pytest.raises(ValueError, match="mystery"):
+        c.emit_svg(prog, c.place(prog))
+
+
+def test_every_element_of_the_county_draft_carries_a_kind() -> None:
+    """Feature 262 FR-008: the placer writes the kind of everything it draws, so its draft needs no tagging by
+    hand - the reader finds no untagged ink, the precinct is one rect per court, and the zones are kinded."""
+    from l7r.diagram.interactive.sheet import census
+
+    prog = c.county_magistracy_program()
+    svg = c.emit_svg(prog, c.place(prog))
+    got = census(svg, {})
+    assert got.unclassed == []
+    assert {"inner court", "outer court", "hearing court", "garden", "practice ground", "office hall", "compound wall", "court divider", "notice board"} <= set(got.counts)
+    assert svg.count('id="precinct"') == 2
+

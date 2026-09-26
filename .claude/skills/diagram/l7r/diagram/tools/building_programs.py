@@ -18,7 +18,7 @@ import os
 import re
 import sys
 
-from ..buildings.types import BuildingType, load_types
+from ..buildings.types import BuildingType, classification, load_types
 
 SKILL = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", ".."))
 PROGRAMS = os.path.join(SKILL, "buildings", "programs.md")
@@ -38,7 +38,7 @@ def _band(item_band) -> str:
 def render(btype: BuildingType) -> str:
     """The Markdown table for one type: item, the label it is found by, its band, its class, its why."""
     lines = [
-        "| item | found by the label (or declared by id) | band (feet; either orientation) | class | why |",
+        "| item | found by the tag or label (or declared by id) | band (feet; either orientation) | class | why |",
         "|---|---|---|---|---|",
     ]
     for it in btype.required:
@@ -46,7 +46,9 @@ def render(btype: BuildingType) -> str:
         band = _band(it.band) + (f" ({forms})" if forms else "") + (" - optional, a knob" if it.optional else "")
         if it.site:  # a SITE item (feature 257): drawn where the declared map shows its class, and only there
             band += f" - a site item: drawn where the sheet's declared map shows a {it.site.replace('_', ' ')} inside the frame"
-        lines.append(f"| `{it.id}` | `/{it.label.pattern}/` | {band} | {it.cls} | {it.why} |")
+        found = f'`data-kind="{it.kind}"`' if it.kind is not None else f"`/{it.label.pattern if it.label else ''}/`"
+        cls, why = classification(it)
+        lines.append(f"| `{it.id}` | {found} | {band} | {cls} | {why} |")
     if btype.notes:
         lines += ["", btype.notes]
     return "\n".join(lines)

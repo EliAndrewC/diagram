@@ -117,7 +117,9 @@ def test_every_glossary_term_is_used_by_a_modal_or_a_record_page() -> None:
     from l7r.diagram.interactive.classes import CLASSES
     from l7r.diagram.interactive.page import explanations, glossary_for
 
-    in_modals = {g["term"] for g in glossary_for(explanations(set(CLASSES)))}
+    from l7r.diagram.interactive.compound_kinds import COMPOUND_CLASSES
+
+    in_modals = {g["term"] for g in glossary_for(explanations(set(CLASSES)))} | {g["term"] for g in glossary_for(explanations(set(COMPOUND_CLASSES), registry=COMPOUND_CLASSES))}
     record = " ".join(visible_text(_COMMENT.sub(" ", re.sub(r"<code>.*?</code>", " ", p.read_text(encoding="utf-8"), flags=re.S))) for p in _all_pages()).lower()
     in_record = {term for term, (variants, _) in GLOSSARY.items() if any(_bounded_in(v.lower(), record) for v in variants)}
     unused = set(GLOSSARY) - in_modals - in_record
