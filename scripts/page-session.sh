@@ -27,8 +27,18 @@ LOG="$ROOT/.git/page-sessions/$SID"; mkdir -p "$LOG"
 ASP="$ROOT/container-scripts/append-system-prompt.md"
 PROMPT="You are a fresh session started to do the work ONE brief describes. Read $BRIEF first, and do what it says, end to end and unattended. Commit in this clone as you finish each part; never run the stop-work push. When the brief's work is done, or it tells you to stop, write the one-paragraph summary it asks for and stop."
 EXTRA=(); [ -r "$ASP" ] && EXTRA+=(--append-system-prompt "$(cat "$ASP")"); [ -n "$MODEL" ] && EXTRA+=(--model "$MODEL")
-( cd "$ROOT" && setsid nohup claude -p "$PROMPT" -n "$NAME" --session-id "$SID" --permission-mode bypassPermissions \
-    "${EXTRA[@]}" --output-format json > "$LOG/result.json" 2> "$LOG/stderr.txt" < /dev/null & )
+# Started through Popen with close_fds and a new session, not `setsid nohup ... &`: the shell form hands the
+# child every descriptor the caller holds open, and a caller reading this script through a pipe then waits
+# for the CHILD to end - measured on the first run (feature 250 T18), which held its `make` for the session's
+# whole length.
+python3 - "$ROOT" "$LOG" "$PROMPT" "$NAME" "$SID" "${EXTRA[@]}" <<'PY'
+import subprocess, sys
+root, log, prompt, name, sid, *extra = sys.argv[1:]
+with open(f"{log}/result.json", "w") as out, open(f"{log}/stderr.txt", "w") as err:
+    subprocess.Popen(["claude", "-p", prompt, "-n", name, "--session-id", sid, "--permission-mode", "bypassPermissions",
+                      *extra, "--output-format", "json"], cwd=root, stdin=subprocess.DEVNULL, stdout=out, stderr=err,
+                     start_new_session=True, close_fds=True)
+PY
 MANGLED=$(printf '%s' "$ROOT" | sed 's#[/.]#-#g')
 printf 'page-session: started %s\n  session:    %s\n  transcript: %s\n  log:        %s  (result.json is written when it ends)\n' \
   "$NAME" "$SID" "$HOME/.claude/projects/$MANGLED/$SID.jsonl" "$LOG"
