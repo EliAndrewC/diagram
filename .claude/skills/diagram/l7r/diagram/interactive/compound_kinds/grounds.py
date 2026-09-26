@@ -51,8 +51,9 @@ class InnerCourt(Kind):
     Why: The chief's household living inside the working compound is the point of the institution - the
     office is a household, and the wall between the two courts is the hinge between state and home. So the
     inner court lies behind the office hall, away from the gate, reached from the outer court only by the
-    household's own door. Its prized formal garden faces the reception rooms on the sunny south side, and
-    the household's service economy fills the shady rear.
+    household's own door. The record's ideal puts its prized formal garden on the sunny south side, facing
+    the reception rooms, and a plan seats it there where its buildings allow; the household's service
+    economy fills the shady rear.
 
     Note: The two-court split, the household inside the compound and the formal garden south of the
     reception rooms follow the record. The service strip along the shady north rear is this record's own
@@ -82,12 +83,15 @@ class BorderCourt(Kind):
     building. So a guests' door opens into a court fit to receive them, and not onto the hearing court where
     the accused kneel.
 
-    Note: The staged arrival, and a guests' door that opens onto a court, follow the record. A magistracy that
-    receives delegations from across a clan border, and keeps a court for them, is this setting's own, and
-    the record has nothing on it.
+    Note: A guests' door that opens onto a court is the record's rule. The staged arrival behind it - gate,
+    then a court or garden, then the formal entrance - is the record's own reading and the GM's rule for
+    these plans; no page a reader can open sets it out. A magistracy that receives delegations from across a
+    clan border, and keeps a court for them, is this setting's own, and the record has nothing on it.
 
-    Caveat: A magistracy that receives delegations from across a clan border, and keeps a court for them, is
-    this setting's own, and the record has nothing on it.
+    Caveat: The staged arrival behind it - gate, then a court or garden, then the formal entrance - is the
+    record's own reading and the GM's rule for these plans; no page a reader can open sets it out. A
+    magistracy that receives delegations from across a clan border, and keeps a court for them, is this
+    setting's own, and the record has nothing on it.
 
     Name: border court
     Covers: the receiving court behind a border posting's parley door, and its label
@@ -130,8 +134,8 @@ class HearingCourt(Kind):
 
 class PracticeGround(Kind):
     """
-    What: A patch of swept earth in the outer court beside where the watch lodges, with a weapon rack and
-    striking posts: the place where the compound's samurai keep up their daily practice.
+    What: A patch of swept earth in the outer court, with a weapon rack and striking posts: the place where
+    the compound's samurai keep up their daily practice.
 
     Why: A dojo with a resident teacher and enrolled students was an institution of cities, in Japan and
     China alike; rural samurai trained at home in an earthen yard, in a hall cleared for the purpose, or on
@@ -161,20 +165,22 @@ class PracticeGround(Kind):
 class CompoundGarden(Kind):
     """
     What: The compound's ornamental ground - planting, with stone lanterns and sometimes a pond: the inner
-    garden before the residence's reception rooms and, where a plan has them, a garden around the shrine or
-    one kept for guests.
+    garden at the heart of the private court and, where a plan has them, a garden around the shrine or one
+    kept for guests.
 
-    Why: A samurai house's prized formal garden lay on the sunny south side, facing the reception rooms, so
-    the inner garden sits at the heart of the private court. A guest of rank was received through a staged
-    arrival - gate, then a court or garden, then the formal entrance - which is why a guests' door opens into
-    a garden rather than against a building.
+    Why: A samurai house's prized formal garden lay on the sunny south side, facing the reception rooms, and
+    a plan seats its inner garden there where its buildings allow. A guest of rank was received through a
+    staged arrival - gate, then a court or garden, then the formal entrance - which is why a guests' door
+    opens into a garden rather than against a building.
 
-    Note: The inner court's garden, as a zone, follows the record, and so does the garden a guest steps into.
-    The record says nothing of a garden around a compound's shrine; one drawn there rests on the inner
-    garden's reasoning.
+    Note: The inner court's garden, as a zone, and the formal garden south of the reception rooms follow the
+    record. The garden a guest steps into rests on the staged arrival, which is the record's own reading and
+    the GM's rule for these plans; no page a reader can open sets it out. The record says nothing of a garden
+    around a compound's shrine; one drawn there rests on the inner garden's reasoning.
 
-    Caveat: The record says nothing of a garden around a compound's shrine; one drawn there rests on the inner
-    garden's reasoning.
+    Caveat: The garden a guest steps into rests on the staged arrival, which is the record's own reading and
+    the GM's rule for these plans; no page a reader can open sets it out. The record says nothing of a garden
+    around a compound's shrine; one drawn there rests on the inner garden's reasoning.
 
     Name: garden
     Covers: the inner garden, a shrine garden and a guest garden, with their lanterns, ponds and labels
@@ -275,12 +281,15 @@ class MainGate(Kind):
     a Chinese county office took by regulation. Behind it, arrival is staged: the gate, then the forecourt,
     and only then the buildings, so no visitor steps from the road into a room.
 
-    Note: The gate and the way it faces follow the record. The width of its opening is this project's own
-    calibration rather than a measured gate: the record finds no width for a samurai residence's gate or a
-    county office's.
+    Note: The gate and the way it faces follow the record. The staged arrival behind it - gate, then a court
+    or garden, then the formal entrance - is the record's own reading and the GM's rule for these plans; no
+    page a reader can open sets it out. The width of its opening is this project's own calibration rather
+    than a measured gate: the record finds no width for a samurai residence's gate or a county office's.
 
-    Caveat: The width of its opening is this project's own calibration rather than a measured gate: the
-    record finds no width for a samurai residence's gate or a county office's.
+    Caveat: The staged arrival behind it - gate, then a court or garden, then the formal entrance - is the
+    record's own reading and the GM's rule for these plans; no page a reader can open sets it out. The width
+    of its opening is this project's own calibration rather than a measured gate: the record finds no width
+    for a samurai residence's gate or a county office's.
 
     Name: main gate
     Covers: the posts flanking the main opening
@@ -323,20 +332,23 @@ class SideGate(Kind):
 class CourtDivider(Kind):
     """
     What: The lighter wall that splits the compound into its outer and inner courts, with one narrow
-    household door in it, the nakamon, customarily on the main axis directly behind the office hall.
+    household door in it, the nakamon, which the plan places on the main axis directly behind the office
+    hall.
 
     Why: The internal gate between the courts is the hinge between state and home. Formal visitors are
     received in the office hall and go no deeper; the household door serves the family and its servants, and
     the hall standing in front of it screens the private court from the public one.
 
-    Note: The internal wall and its gate between the two courts follow the record. No source measures the
-    household door or the divider: the door's 8 ft width and the wall's 2 ft thickness are this project's
-    own figures.
-
-    Caveat: No source measures the household door or the divider: the door's 8 ft width and the wall's 2 ft
+    Note: The internal wall and its gate between the two courts follow the record. The door's seat on the
+    main axis directly behind the office hall is the drawing program's own placement, not a recorded custom,
+    and no source measures the household door or the divider: the door's 8 ft width and the wall's 2 ft
     thickness are this project's own figures.
 
-    Name: court divider (nakamon)
+    Caveat: The door's seat on the main axis directly behind the office hall is the drawing program's own
+    placement, not a recorded custom, and no source measures the household door or the divider: the door's
+    8 ft width and the wall's 2 ft thickness are this project's own figures.
+
+    Name: court divider and nakamon
     Covers: the internal wall's strokes and its household gate posts
     Label: accurate
     Sources: neixiang-yamen-zhwiki, machi-bugyo-jawiki, yamen-enwiki

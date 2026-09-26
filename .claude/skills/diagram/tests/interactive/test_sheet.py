@@ -128,7 +128,7 @@ def test_the_page_is_written_beside_the_sheet_with_the_sheet_s_kinds(tmp_path: p
         page = fh.read()
     assert c.unclassed == [] and c.unregistered == []
     assert 'data-k="granary"' in page and "<title>Demo Sheet - interactive map</title>" in page
-    assert '"Granary"' in page
+    assert '"Granary"' in page and "On the drawing: " not in page
 
 
 def test_the_render_condition_picks_the_raster_default(tmp_path: pytest.TempPathFactory, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -139,3 +139,20 @@ def test_the_render_condition_picks_the_raster_default(tmp_path: pytest.TempPath
     write_sheet_page(path, REG)
     with open(path[:-4] + ".html", encoding="utf-8") as fh:
         assert '"raster": {"r": 0}' in fh.read()
+
+
+def test_a_mode_a_caveat_opens_with_the_research_lead_not_the_drawing_lead(tmp_path: pytest.TempPathFactory) -> None:
+    """Building-review, feature 262: a compound caveat is as often a rule of the setting or a research gap as a drawing
+    note, so the sheet's page opens it with its own words, never the hamlet's "On the drawing:"."""
+    from dataclasses import replace
+
+    from l7r.diagram.interactive.sheet import CAVEAT_LEAD
+
+    path = os.path.join(str(tmp_path), "c.svg")
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write(HEAD + '<g data-kind="granary"><rect x="1" y="1" width="5" height="5" fill="#C00"/></g></svg>')
+    reg = {"granary": replace(_fc("granary"), label_note="Read. The size is unmeasured.", caveat="The size is unmeasured.")}
+    write_sheet_page(path, reg, with_raster=False)
+    with open(path[:-4] + ".html", encoding="utf-8") as fh:
+        page = fh.read()
+    assert CAVEAT_LEAD + "The size is unmeasured." in page and "On the drawing: " not in page and CAVEAT_LEAD.startswith("Where this rests")

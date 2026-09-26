@@ -200,9 +200,9 @@ class Gatehouse(Kind):
 class Barracks(Kind):
     """
     What: A plain long building divided into bunk rooms, where the compound's working platoon and its duty
-    watch lodge, with the practice ground beside it.
+    watch lodge.
 
-    Why: Rural intendants' offices housed their staff on the grounds, in row houses inside the walls; it was
+    Why: Rural intendants' offices housed their staff on the grounds; it was
     the great city magistrate's offices that lodged their constables in a district of their own, keeping only the
     magistrate's household inside. A county posting's staff is a working platoon, mostly without dependents,
     so by default it lives on the grounds. The barracks outranks the stable in size: a stable for a few

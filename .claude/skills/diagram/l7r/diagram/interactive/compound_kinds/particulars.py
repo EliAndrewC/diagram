@@ -29,10 +29,11 @@ class ThresholdStones(Kind):
     stones flank the road rather than stand in it, because a threshold stone stands above ground - something
     to walk between, not to roll a cart over.
 
-    Note: A deliberate departure made by the setting: the threshold stones and the Pact-Bowl are the Fox Clan's
-    road wardings, from the campaign's own canon, and have no historical counterpart. The drawing does not
-    match the canon's size - canon makes each stone a river-stone the size of two fists, and the plan draws
-    each at about 3.3 by 4.7 ft.
+    Note: the threshold stones and the Pact-Bowl are the Fox Clan's road wardings, from the campaign's own
+    canon, a departure made by the setting with no historical counterpart. Canon sets one stone at each
+    checkpoint; the flanking pair is the GM's ruling for this drawing, a stone on each side of the road so
+    that neither stands in it. Nor does the drawing match the canon's size - canon makes each stone a
+    river-stone the size of two fists, and the plan draws each at about 3.3 by 4.7 ft.
 
     Name: threshold stones
     Covers: the vermilion pair outside the main gate and their label with the "buried Pact-Bowl" sublabel
@@ -46,18 +47,21 @@ class ThresholdStones(Kind):
 
 class FoxFireLantern(Kind):
     """
-    What: The Fox-Fire Lantern, a lantern kept at the rice altar of the compound's Inari hall by day and carried
-    to the magistrate's dais when a hearing is held in the evening - drawn at both of its places.
+    What: The Fox-Fire Lantern, a small stone lantern kept at the compound's Inari shrine by day and carried
+    to the magistrate's bench when a grain-tax hearing is held in the evening - drawn at both of its places.
 
-    Why: It belongs to the compound's shrine and to its bench at once, which is why the plan marks it twice:
-    at rest by the altar, and at the dais, where an evening hearing brings it.
+    Why: It is a votive offering to Inari: a small lantern of gray granite, carved by a stonemason once
+    falsely accused of shorting his village's tax grain, and given to the County Magistrate so that it would
+    burn at grain-tax hearings. Its flame is said to flicker blue when a witness conceals the truth about a
+    harvest. It belongs to the compound's shrine and to its bench at once, which is why the plan marks it
+    twice: at rest at the shrine, and in the hearing court, where an evening hearing brings it.
 
-    Note: A deliberate departure made by this map's design: the Fox-Fire Lantern is a particular of a
-    priest-magistrate's compound in Fox lands, written from the map's own design notes; the setting's canon
-    does not describe it, and the record holds nothing like it.
+    Note: the lantern is one of the relics of the setting's own record, which describes it; it has no
+    historical counterpart, and the research record holds nothing like it, so it is a departure made by the
+    setting.
 
     Name: fox-fire lantern
-    Covers: the lantern's sublabel at the rice altar and the note at the dais
+    Covers: the lantern's sublabel at the rice altar and the note in the hearing court
     Label: deviation
     Sources: not recorded
     Entry: research/buildings.html (no dedicated entry - recorded as silent)
@@ -69,15 +73,15 @@ class FoxFireLantern(Kind):
 class CinnabarWorkshop(Kind):
     """
     What: An open-sided covered colonnade against the shrine where the threshold stones are painted with their
-    cinnabar fox-tracks, river-stones laid out to dry beside it.
+    cinnabar fox-tracks, with river-stones laid out in it.
 
-    Why: The stones of the Fox road wardings are painted with cinnabar, and the painting is sacred work, so it
-    is done at the compound's own shrine, under the priest-magistrate who keeps the wardings - which is why
-    the workshop adjoins the shrine hall rather than standing in the service yard.
+    Why: The stones of the Fox road wardings are painted with cinnabar, and the painting is sacred work: the
+    setting's record has the magistrate paint each newly dressed stone by their own hand, in daylight, at the
+    colonnade off the shrine's eastern altar - which is why the workshop adjoins the shrine hall rather than
+    standing in the service yard.
 
-    Note: A deliberate departure made by the setting and this map: the painted threshold stones are the
-    campaign's canon, and a workshop where they are painted is this map's design in service of it, with no
-    historical counterpart in the record.
+    Note: the painted threshold stones and the colonnade where they are painted belong to the setting's own
+    canon and record, a departure made by the setting with no historical counterpart in the research record.
 
     Name: cinnabar workshop
     Covers: the hatched colonnade, its posts, the drying river-stones and its label
@@ -98,9 +102,10 @@ class FoxRelics(Kind):
     the duty of the road wardings - so they rest in the compound's own shrine, at the altar of the fox, beside
     the work of the wardings.
 
-    Note: A deliberate departure made by this map's design: the relics are particulars of the Fox wardings,
-    written from the map's own design notes; the setting's canon does not name them, and the record holds
-    nothing like them.
+    Note: the Akami-fude is the setting's own relic - the brush that paints the fox-tracks on each threshold
+    stone, kept on its own stand at the shrine's eastern, fox altar - and the Chigiri-no-Chou is this map's
+    own name, found in no setting file. Neither has a historical counterpart, and the research record holds
+    nothing like them, so both are a departure made by the setting and this map.
 
     Name: fox relics
     Covers: the fox-altar sublabel and the relics annotation below the workshop
@@ -121,10 +126,9 @@ class SaltWards(Kind):
     inside the wall, and every door so warded carries its own pair - the gates, the posterns and the river
     door alike.
 
-    Note: The research record has no entry on salt wards. The small cone of salt set out at a doorway has a
-    Japanese name, morijio, but the record holds no finding on it, so the form, the pairing at each door and
-    the placement outside are a guess, and each heap is drawn as a marker far larger than a real cone of salt
-    a few inches across.
+    Note: the small cone of salt set out at a doorway has a Japanese name, morijio, but the research record
+    has no entry on salt wards, so the form, the pairing at each door and the placement outside are a guess,
+    and each heap is drawn as a marker far larger than a real cone of salt a few inches across.
 
     Name: salt wards
     Covers: every salt-ward marker at the doors, the "salt wards" label and the salt-wards note box
@@ -224,8 +228,8 @@ class ParleyRoom(Kind):
     stepping onto the other's ground. Its inner door opens into a receiving court, never into the court where
     the accused kneel, because the room receives guests.
 
-    Note: A deliberate departure made by this map's design: a room built across a clan border is part of its
-    map's story, and the record has no historical evidence for one. The drawn border line it stands on is the
+    Note: a room built across a clan border is part of its map's story, a departure made by the map's design
+    with no historical evidence for one in the record. The drawn border line it stands on is the
     attested part; the record calls the room the architectural counterpart of that line, by analogy only.
 
     Name: parley room
@@ -297,8 +301,8 @@ class WoodKamiAltar(Kind):
     this one stands in the shrine grove, among the trees it is kept for. It is kept up by a private hand,
     though anyone may pray at it.
 
-    Note: A deliberate departure made by this map's design: the altar's dedication to the kami of the wood, and
-    its keeping by a private hand with no monk behind it, are its map's story. Its form - a small altar with
+    Note: the altar's dedication to the kami of the wood, and its keeping by a private hand with no monk
+    behind it, are its map's story, a departure made by the map's design. Its form - a small altar with
     no torii, below the rank of a shrine - is the historical one, and it is drawn about 6 ft square.
 
     Name: wood-kami altar

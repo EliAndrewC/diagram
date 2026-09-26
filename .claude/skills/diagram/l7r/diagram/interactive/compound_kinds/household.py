@@ -25,19 +25,24 @@ class Residence(Kind):
     Why: The household living inside the working compound, behind the office, is the point of the
     institution - the office is a household, and the gate between the two courts is the hinge between state
     and home. A visitor of rank crosses a court or garden and steps up at the genkan, never straight from the
-    street into a room; the prized garden lies on the sunny side facing the reception rooms, and the shady
-    rear carries the service strip. The residence is the largest domestic building on the plan - only the
-    office hall may out-measure it.
+    street into a room. In the record's ideal the prized garden lies on the sunny south side facing the
+    reception rooms, and a plan seats it there where its buildings allow; the shady rear carries the service
+    strip. The residence is the largest domestic building on the plan - only the office hall may out-measure
+    it.
 
-    Note: The household inside the working compound, the staged arrival at the genkan and the garden before
-    the reception rooms are recorded findings, and the program classes the wing as accurate - about 180 to
-    200 ft long, checked against the size audit, its label naming a zone. Each labeled room is a suite of
-    several rooms compressed to one label and named by who lives in it rather than by its historical room
-    name, a schematic convenience; the veranda along each garden face has no entry of its own in the record.
+    Note: The household inside the working compound and the garden south of the reception rooms are recorded
+    findings, and the program classes the wing as accurate - about 180 to 200 ft long, checked against the
+    size audit, its label naming a zone. The staged arrival - gate, then a court or garden, then the formal
+    entrance - is the record's own reading and the GM's rule for these plans; no page a reader can open sets
+    it out. Each labeled room is a suite of several rooms compressed to one label and named by who lives in
+    it rather than by its historical room name, a schematic convenience; the veranda along each garden face
+    has no entry of its own in the record.
 
-    Caveat: Each labeled room is a suite of several rooms compressed to one label and named by who lives in it
-    rather than by its historical room name, a schematic convenience; the veranda along each garden face has
-    no entry of its own in the record.
+    Caveat: The staged arrival - gate, then a court or garden, then the formal entrance - is the record's own
+    reading and the GM's rule for these plans; no page a reader can open sets it out. Each labeled room is a
+    suite of several rooms compressed to one label and named by who lives in it rather than by its historical
+    room name, a schematic convenience; the veranda along each garden face has no entry of its own in the
+    record.
 
     Name: residence
     Covers: the lord's residence blocks, their veranda strips, the genkan porch, the reception and room labels, and the RESIDENCE band label
@@ -82,15 +87,15 @@ class AncestralAlcove(Kind):
 class KarosHouse(Kind):
     """
     What: The separate house of the karo, the house elder - the magistrate's chief retainer - standing in the
-    residence court with a door of its own onto the court.
+    residence court with a door of its own.
 
     Why: It stands in the inner court, on the household's side of the compound, but as a dwelling of its own
     rather than a bay of the lord's wing: the plan keeps the residence for the lord's family and gives a chief
     retainer of any standing a house of their own.
 
-    Note: The research record has no entry on a chief retainer's house at a magistrate's compound. That a karo
-    kept a separate dwelling rather than rooms in the lord's wing is a rule of the drawing program with no
-    research section behind it, so the house's form, size and seat are a guess.
+    Note: the karo's separate dwelling, rather than rooms in the lord's wing, is a rule of the drawing program
+    with no research section behind it - the research record has no entry on a chief retainer's house at a
+    magistrate's compound - so the house's form, size and seat are a guess.
 
     Name: karo's house
     Covers: the karo's house, its informal door and its label with the "house elder" gloss
@@ -171,12 +176,14 @@ class GuestQuarters(Kind):
 
     Note: The program classes the guest quarters as accurate: a guest room in the residence or a detached guest
     house. The research record has no entry of its own on either form, so the kind rests on the program's
-    classification alone; the rule that a guest's door opens into a court or garden is the record's, and
-    no page read sets out that staged arrival.
+    classification alone. The rule that a guest's door opens into a court or garden rests on the staged
+    arrival - gate, then a court or garden, then the formal entrance - which is the record's own reading and
+    the GM's rule for these plans; no page a reader can open sets it out.
 
     Caveat: The research record has no entry of its own on either form, so the kind rests on the program's
-    classification alone; the rule that a guest's door opens into a court or garden is the record's, and
-    no page read sets out that staged arrival.
+    classification alone. The rule that a guest's door opens into a court or garden rests on the staged
+    arrival - gate, then a court or garden, then the formal entrance - which is the record's own reading and
+    the GM's rule for these plans; no page a reader can open sets it out.
 
     Name: guest quarters
     Covers: the guest room of the residence, or a detached guest house with its door and label
@@ -200,11 +207,12 @@ class Kitchen(Kind):
 
     Note: The kitchen's rank below the living quarters, its fire risk and its postern into work space are
     recorded findings, and the program classes it as accurate: an institutional daidokoro of about 40 by 33 ft,
-    smaller than a residence block, checked against the size audit. The whole mid-rank house it is measured
-    against, about 67 tsubo, rests on no page a reader can open.
-
-    Caveat: The whole mid-rank house it is measured against, about 67 tsubo, rests on no page a reader can
+    smaller than a residence block, checked against the size audit. The kitchen is measured against a whole
+    mid-rank samurai house of about 67 tsubo (some 2,400 sq ft), a figure that rests on no page a reader can
     open.
+
+    Caveat: The kitchen is measured against a whole mid-rank samurai house of about 67 tsubo (some 2,400 sq
+    ft), a figure that rests on no page a reader can open.
 
     Name: kitchen
     Covers: the kitchen and pantries building, its hearth and its label
@@ -221,9 +229,8 @@ class Bath(Kind):
     What: A small detached bath house standing in the inner garden near the residence, drawn with a curl of
     steam rising above it.
 
-    Why: It stands on the household's side of the compound, in the garden apart from the living blocks, and
-    near enough to the kitchen well that its water is carried from there rather than drawn from a well of its
-    own.
+    Why: It stands on the household's side of the compound, in the garden apart from the living blocks. The
+    plan gives it no well of its own.
 
     Note: The program classes the bath as accurate: a detached pavilion of 12 to 18 ft, checked against the size
     audit. The research record has no entry on a manor's bath; its only bath entry is the farmstead's bath shed,
@@ -249,8 +256,8 @@ class Well(Kind):
 
     Why: Samurai and government households drew their water from wells inside their own walled compounds,
     not from the communal wells where commoners gathered. The kitchen well is the busiest; the stables well
-    waters the horses; the garden well serves the family, and the well sits in the service ground rather than
-    in a court meant for ceremony.
+    waters the horses; the garden well serves the family. The kitchen well sits in the service ground rather
+    than in a court meant for ceremony.
 
     Note: we have drawn each well as a stone-curb marker about 7 ft square, larger than the curb itself, in
     order to mark where the well stands without claiming that its pixels are the well's size. A hand-dug
@@ -331,9 +338,9 @@ class Kennel(Kind):
     Why: It stands with the stables because both keep the household's animals and share the service yard, its
     well and the service gate, away from the ceremonial ground of the forecourt.
 
-    Note: The research record has no entry on a kennel at a magistrate's compound. Hunting hounds have a real
-    historical counterpart, but nothing in the record describes, measures or places one, so the kennel's
-    form, size and seat beside the stables are a guess.
+    Note: hunting hounds have a real historical counterpart, but the research record has no entry on a kennel
+    at a magistrate's compound - nothing in it describes, measures or places one - so the kennel's form, size
+    and seat beside the stables are a guess.
 
     Name: kennel
     Covers: the kennel building and its label
@@ -376,26 +383,28 @@ class FireWaterTubs(Kind):
 class CompoundShrine(Kind):
     """
     What: The shrine every administrative compound keeps inside its walls - a modest hall, Inari's by default,
-    with a torii before it and ground around it kept as garden or grove.
+    with ground around it kept as garden or grove. Where the shrine stands in a grove of its own, a torii
+    stands before the hall.
 
     Why: Even a small Japanese branch office kept shrines within its walls, and a full Chinese yamen kept three,
     so a shrine is part of the equipment of any office, not a sign of a pious magistrate; what varies is its
-    size and its dedication. It stands in the inner court with the household, stays smaller than the
-    residence - a worship hall is small even at a great shrine - and takes a single arch, the overwhelming
-    form, set about 20 ft before its hall as at a village shrine.
+    size and its dedication. It stands in the inner court with the household and stays smaller than the
+    residence - a worship hall is small even at a great shrine. Where it stands in its own grove it takes a
+    single arch, the overwhelming form, set about 20 ft before its hall as at a village shrine; a shrine set
+    in a garden may be drawn with no arch at all.
 
     Note: The shrine as standard equipment, its Inari default, the small worship hall and the single torii are
     recorded findings, and the program classes it as accurate: a modest shrine, with a hall-shrine ceiling of
     about 36 by 30 ft subordinate to the residence. The Japanese branch office with two shrines inside its
-    walls rests on an excavation plan no reader can open, and the worship-hall sizes the ceiling is set
-    against are the record's reading rather than a page's figures.
+    walls rests on an excavation plan no reader can open, and the shrine's size ceiling of about 36 by 30 ft
+    is set against worship-hall sizes that are the record's reading rather than a page's figures.
 
     Caveat: The Japanese branch office with two shrines inside its walls rests on an excavation plan no reader
-    can open, and the worship-hall sizes the ceiling is set against are the record's reading rather than a
-    page's figures.
+    can open, and the shrine's size ceiling of about 36 by 30 ft is set against worship-hall sizes that are
+    the record's reading rather than a page's figures.
 
     Name: compound shrine
-    Covers: the shrine hall or halls, their altars and inner glyphs, the approach torii, and the shrine labels
+    Covers: the shrine hall or halls, their altars and inner glyphs, the approach torii where one is drawn, and the shrine labels
     Label: accurate
     Sources: neixiang-yamen-zhwiki, henan-neixiang, fushimi-inari-senbon, fushimi-inari-jawiki, torii-enwiki, hokora-jawiki, meiji-jingu-access, nara-nagao-jinja
     Entry: research/buildings.html - 'Every administrative compound keeps a shrine', 'The compound has a size HIERARCHY'; research/religion-and-death.html - 'Torii are VOTIVE DONATIONS', 'Torii spacing'
@@ -413,9 +422,8 @@ class WritingPavilion(Kind):
     set apart in the garden gives its owner a room that belongs to neither, which is why it stands alone
     rather than as a bay of either building.
 
-    Note: The research record has no entry on a detached garden study at a magistrate's compound. The drawing's
-    own notes call such a study a real form, but no research section records it, so the pavilion's form, size
-    and place are a guess.
+    Note: the drawing's own notes call a detached garden study a real form, but the research record has no
+    entry on one at a magistrate's compound, so the pavilion's form, size and place are a guess.
 
     Name: writing pavilion
     Covers: the pavilion and its label

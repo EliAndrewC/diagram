@@ -595,11 +595,12 @@ def present_classes(tags: Sequence[ClsTag]) -> set[str]:
     return keys
 
 
-def explanations(present: set[str], notes: MapNotes = EMPTY, registry: dict[str, FeatureClass] = CLASSES) -> dict[str, dict[str, Any]]:
+def explanations(present: set[str], notes: MapNotes = EMPTY, registry: dict[str, FeatureClass] = CLASSES, caveat_lead: str = CAVEAT_LEAD) -> dict[str, dict[str, Any]]:
     """The embedded data: one entry per present class, in vocabulary order, with only the sibling
     paragraphs whose OTHER class is also present (spec US4 scenario 4 - an absent sibling is never
     claimed). A present key the registry does not know gets a stub that says so, never silence.
-    `registry` is the hamlet vocabulary unless a Mode A sheet passes its own (feature 262)."""
+    `registry` is the hamlet vocabulary unless a Mode A sheet passes its own (feature 262), and `caveat_lead` the words
+    the caveat opens with - a Mode A caveat is as often about the research as the drawing (building-review, feature 262)."""
     out: dict[str, dict[str, Any]] = {}
     for key, fc in registry.items():
         if key not in present:
@@ -618,7 +619,7 @@ def explanations(present: set[str], notes: MapNotes = EMPTY, registry: dict[str,
             # every caveat - including the place card's, which is about where the card's claims come
             # from and not about the drawing at all. A renderer cannot tell those apart; the writer of
             # the string can.
-            "caveat": (CAVEAT_LEAD + fc.caveat) if fc.caveat else "",
+            "caveat": (caveat_lead + fc.caveat) if fc.caveat else "",
             # THE REFERENCES ARE QUESTIONS, READ FROM THE RECORD (feature 180, GM 2026-09-05): the
             # research sections the class's entry names, each linking to its anchor on GitHub. The
             # sources those sections cite no longer ride on the page - a reader reaches them through
@@ -804,6 +805,7 @@ def render_page(
     notes: MapNotes = EMPTY,
     with_raster: bool = True,
     registry: dict[str, FeatureClass] = CLASSES,
+    caveat_lead: str = CAVEAT_LEAD,
 ) -> str:
     """The whole page as one string - `write_html` writes it; tests read it.
 
@@ -870,7 +872,7 @@ def render_page(
         image = f'<g class="raster"><image id="raster" x="{vb[0]:g}" y="{vb[1]:g}" width="{vb[2]:g}" height="{vb[3]:g}" style="pointer-events: none"/></g>'
         at = svg.find('<g class="f ')
         svg = svg[:at] + image + svg[at:] if at != -1 else svg.replace("</svg>", image + "</svg>", 1)
-    data = explanations(present, notes, registry)
+    data = explanations(present, notes, registry, caveat_lead)
     # THE PLACE CARD rides in the same map, under the placard's own reserved key, so the page opens it
     # through the one modal every other feature uses (feature 156). None for a tier the vocabulary does
     # not describe - and then the placard simply has nothing to open, exactly as before.
@@ -935,6 +937,7 @@ def write_html(
     manifest: dict[str, Any] | None = None,
     with_raster: bool = True,
     registry: dict[str, FeatureClass] = CLASSES,
+    caveat_lead: str = CAVEAT_LEAD,
 ) -> None:
     """`<base>.html`, beside the map's other outputs. The map's `<base>.notes.md` is read here if it
     exists - one place, derived from the output path rather than searched for, so a stale or foreign
@@ -942,4 +945,4 @@ def write_html(
     render condition (feature 208) - see `render_page`; `registry` the vocabulary (feature 262)."""
     notes = read_map_notes(path[: -len(".html")] + ".notes.md") if path.endswith(".html") else EMPTY
     with open(path, "w", encoding="utf-8") as fh:
-        fh.write(render_page(strings, tags, name, meta, manifest, notes, with_raster=with_raster, registry=registry))
+        fh.write(render_page(strings, tags, name, meta, manifest, notes, with_raster=with_raster, registry=registry, caveat_lead=caveat_lead))
