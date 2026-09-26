@@ -33,8 +33,14 @@ import pathlib
 import re
 import sys
 
-EDIT = re.compile(r"^EDIT[ \t]+`?(?P<path>[^\n`]+?)`?[ \t]*\n<<<\n(?P<old>.*?)\n===\n(?P<new>.*?)\n?>>>[ \t]*$", re.S | re.M)
-GLOSSARY = re.compile(r"^GLOSSARY[ \t]+(?P<term>[^|\n]+?)[ \t]*\|[ \t]*(?P<variants>[^|\n]*?)[ \t]*\|[ \t]*(?P<def>[^\n]+?)[ \t]*$", re.M)
+# A block may sit indented under a numbered finding, every line of it carrying the same indent; the indent is
+# the list's, not the file's, and is taken off each line of the old and new text. record-format wrote its first
+# cities/fabric 140 report that way and the unindented pattern found no block in it at all (feature 250 T55).
+EDIT = re.compile(
+    r"^(?P<ind>[ \t]*)EDIT[ \t]+`?(?P<path>[^\n`]+?)`?[ \t]*\n(?P=ind)<<<\n(?P<old>.*?)\n(?P=ind)===\n(?P<new>.*?)\n?(?P=ind)>>>[ \t]*$",
+    re.S | re.M,
+)
+GLOSSARY = re.compile(r"^[ \t]*GLOSSARY[ \t]+(?P<term>[^|\n]+?)[ \t]*\|[ \t]*(?P<variants>[^|\n]*?)[ \t]*\|[ \t]*(?P<def>[^\n]+?)[ \t]*$", re.M)
 RECORD = ".claude/skills/diagram/research/"
 TERMS = ".claude/skills/diagram/l7r/diagram/interactive/assets/glossary/"
 
@@ -57,9 +63,14 @@ def reply_of(path: pathlib.Path) -> str:
     return last
 
 
+def dedent(text: str, indent: str) -> str:
+    """The block's text without the indent of the list it sat in."""
+    return "\n".join(line.removeprefix(indent) for line in text.split("\n")) if indent else text
+
+
 def blocks(report: str) -> list[dict]:
     """Every EDIT and GLOSSARY block, in the report's order, numbered from 1."""
-    found = [(m.start(), {"kind": "edit", "path": m["path"].strip(), "old": m["old"], "new": m["new"]}) for m in EDIT.finditer(report)]
+    found = [(m.start(), {"kind": "edit", "path": m["path"].strip(), "old": dedent(m["old"], m["ind"]), "new": dedent(m["new"], m["ind"])}) for m in EDIT.finditer(report)]
     found += [
         (m.start(), {"kind": "glossary", "term": m["term"].strip(), "variants": [v.strip() for v in m["variants"].split(",") if v.strip() not in ("", "-")], "def": m["def"].strip()})
         for m in GLOSSARY.finditer(report)

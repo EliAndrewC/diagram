@@ -1730,7 +1730,8 @@
  "hansho": {
   "def": "The small bronze alarm bell on a fire-watch tower, struck in a cadence that says how near the fire is.",
   "variants": [
-   "hansho"
+   "hansho",
+   "hanshō"
   ]
  },
  "hari-ma": {
@@ -1763,7 +1764,10 @@
  "hatamoto": {
   "def": "A direct retainer of the shogun, ranking below a domain lord and above ordinary samurai.",
   "variants": [
-   "hatamoto"
+   "hatamoto",
+   "bannerman",
+   "bannerman's",
+   "bannermen"
   ]
  },
  "hazakake": {
@@ -1790,7 +1794,8 @@
  "headman": {
   "def": "The peasant head of a village and its district, answerable for its taxes and its order; his house is the largest on a village map.",
   "variants": [
-   "headman"
+   "headman",
+   "headmen"
   ]
  },
  "headworks": {
@@ -5324,6 +5329,33 @@
   "def": "A town's main street, the one that runs between its gates and that the lesser streets branch off. The standard Chinese plans laid out trunk streets as a cross or a T, and most surviving plans bend them so that none runs straight from one gate to the opposite one.",
   "variants": [
    "trunk streets"
+  ]
+ },
+ "kotaiyoriai": {
+  "def": "A bannerman (hatamoto) house of high rank that held its own land and, like a daimyo, made the alternate attendance to Edo, though its stipend was below a daimyo's.",
+  "variants": [
+   "kotaiyoriai",
+   "kotai-yoriai"
+  ]
+ },
+ "jishinban": {
+  "def": "A town ward's own watch house in an Edo-period city, kept by the townspeople: from it the neighborhood was patrolled and the fire watch kept, and its ladder, alarm bell and firefighting gear stood there.",
+  "variants": [
+   "jishinban"
+  ]
+ },
+ "town magistrate": {
+  "def": "In Edo, the shogunate's official over the townsmen's quarters; the machi-bikeshi fire companies were placed under the town magistrate's command.",
+  "variants": [
+   "town magistrates",
+   "South Town Magistrate",
+   "machi-bugyo"
+  ]
+ },
+ "kidoban": {
+  "def": "The watchman the townsmen of Edo kept at the ward gate (kido) on a machi's boundary.",
+  "variants": [
+   "kidobans"
   ]
  }
 }

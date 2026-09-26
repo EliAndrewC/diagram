@@ -99,3 +99,13 @@ def test_the_report_is_the_last_reply_of_a_transcript(tmp_path, capsys) -> None:
     missing.write_text(_report(ae.RECORD + "ways/999-none.html", "a", "b"), encoding="utf-8")
     assert ae.main([str(missing), "--root", str(tmp_path)]) == 1
     assert "no file" in capsys.readouterr().out
+
+
+def test_a_block_indented_under_a_numbered_finding_is_applied_without_its_indent(tmp_path) -> None:
+    q = _tree(tmp_path)
+    report = tmp_path / "r.md"
+    block = _report(str(q), "the gloss said stipend", "the gloss said\nassessed yield")
+    report.write_text("1. **stipend**, in the notes.\n" + "".join("   " + ln + "\n" for ln in block.splitlines()) + "   GLOSSARY heimin | | Commoners.\n", encoding="utf-8")
+    assert ae.main([str(report), "--root", str(tmp_path)]) == 0
+    assert "the gloss said\nassessed yield</li>" in q.read_text(encoding="utf-8")
+    assert list((tmp_path / ae.TERMS).glob("*-heimin.json"))

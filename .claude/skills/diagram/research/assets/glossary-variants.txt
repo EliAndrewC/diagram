@@ -51,6 +51,9 @@ bakumatsu	bakumatsu
 bamboo grass	sasa
 bamboo-grass	sasa
 banfang	banfang
+bannerman	hatamoto
+bannerman's	hatamoto
+bannermen	hatamoto
 bansho	bansho
 banyuetang	banyuetang
 barbican	barbican
@@ -452,6 +455,7 @@ hanchiku	rammed earth
 hangtu	rammed earth
 hanko	hanko
 hansho	hansho
+hanshō	hansho
 hardiness zone	hardiness zone
 hari-ma	hari-ma
 hasa	hazakake
@@ -466,6 +470,7 @@ head works	head works
 head-race	head race
 head-works	head works
 headman	headman
+headmen	headman
 headworks	headworks
 heian	Heian
 heimen	heimen
@@ -561,6 +566,7 @@ jingū-ji	jingūji
 jingūji	jingūji
 jinja	jinja
 jinya	jin'ya
+jishinban	jishinban
 jitter	jitter
 jittered	jitter
 jittering	jitter
@@ -631,6 +637,7 @@ keyaki	keyaki
 khitan	Khitan
 kichin-yado	kichin-yado
 kido	kido
+kidobans	kidoban
 kimoiri	shoya
 kimon	kimon
 king post	king post
@@ -662,6 +669,8 @@ konya	kon-ya
 koraimon	koraimon
 kosatsu	kosatsuba
 kosatsuba	kosatsuba
+kotai-yoriai	kotaiyoriai
+kotaiyoriai	kotaiyoriai
 kuchiireya	hitoyado
 kumi	kumi
 kumi-yashiki	kumi-yashiki
@@ -722,6 +731,7 @@ lulu	lulu
 luocheng	luocheng
 machi	machi
 machi-bikeshi	machi-bikeshi
+machi-bugyo	town magistrate
 machi-bugyosho	machi-bugyosho
 machi-bugyōsho	machi-bugyosho
 machi-dojo	machi-dojo
@@ -1072,6 +1082,7 @@ song dynasty	Song dynasty
 song yingxing	Song Yingxing
 song-dynasty	Song dynasty
 sotobori	sotobori
+south town magistrate	town magistrate
 southern song	Song dynasty
 species richness	species richness
 sphere	Sphere
@@ -1181,6 +1192,7 @@ torii	torii
 toro	Toro
 toro site	Toro
 total length and fall	fall
+town magistrates	town magistrate
 towpath	towpath
 towpaths	towpath
 tozama	tozama

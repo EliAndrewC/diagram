@@ -60,6 +60,10 @@ UA = "Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0"
 BLOCK = {"p", "div", "br", "li", "ul", "ol", "tr", "td", "th", "table", "h1", "h2", "h3", "h4", "h5", "h6", "section", "article", "blockquote", "dd", "dt", "pre", "figcaption"}
 PAIRS = {"「": "」", "“": "”", '"': '"', "『": "』"}
 TRANSLATED = re.compile(r"^\s*\((?:title\s+)?translated from ([^;()]*(?:\([^()]*\))?[^;()]*?) by this project;\s*original:\s*$")
+# Between two quotations of one run - `「Q1」 and 「Q2」 (translated ...; original: 「O1」 and original: 「O2」)` -
+# and between two originals of one parenthetical. Without the run, Q2 was paired with O1 and O2 never checked:
+# cities/fabric 143 (feature 250 T55) had two notes reported NOT-READABLE that were verbatim on their pages.
+JOINER = re.compile(r"^\s*(?:and|/|,)?\s*(?:original:)?\s*$")
 ELISION = re.compile(r"\s*(?:\[\s*(?:\.\.\.|…)\s*\]|\.\.\.|…)\s*")
 REF_MARK = re.compile(r"\s*\[(?:\d{1,3}|注\s*\d+|note\s*\d+|citation needed|要出典)\]")
 
@@ -148,6 +152,26 @@ def top_level_quotes(text: str) -> list[tuple[int, int]]:
     return spans
 
 
+def translated_run(note_text: str, spans: list[tuple[int, int]], k: int) -> list[dict]:
+    """Two or more quotations from span `k` that share ONE translation parenthetical holding as many originals,
+    paired in order; empty when the spans do not have that shape (the one-quote case is `passages`' own)."""
+    gap = lambda a, b: note_text[spans[a][1] : spans[b][0]]  # noqa: E731
+    m = k
+    while m + 1 < len(spans) and "(" not in gap(m, m + 1) and JOINER.match(gap(m, m + 1)):
+        m += 1
+    n = m - k + 1
+
+    if n < 2 or m + n >= len(spans) or not (between := TRANSLATED.match(gap(m, m + 1))):
+        return []
+    if not all(JOINER.match(gap(j, j + 1)) for j in range(m + 1, m + n)):
+        return []
+    language = squeeze(between.group(1))
+    return [
+        {"quote": note_text[spans[k + i][0] + 1 : spans[k + i][1] - 1], "original": note_text[spans[m + 1 + i][0] + 1 : spans[m + 1 + i][1] - 1], "language": language}
+        for i in range(n)
+    ]
+
+
 def passages(note_text: str) -> list[dict]:
     """The quoted passages of one note: each `{quote, original, language}`; `original` is what is matched."""
     spans = top_level_quotes(note_text)
@@ -160,6 +184,11 @@ def passages(note_text: str) -> list[dict]:
         # also sits in parentheses, but it is consumed with its translation below and never reaches this test.
         if note_text.count("(", 0, start) > note_text.count(")", 0, start):
             k += 1
+            continue
+        run = translated_run(note_text, spans, k)
+        if run:
+            found += run
+            k += 2 * len(run)
             continue
         quote = note_text[start + 1 : end - 1]
         entry = {"quote": quote, "original": "", "language": ""}
