@@ -471,7 +471,10 @@ def load(gen: str) -> bool:
     for out in _outputs(gen):
         cached = os.path.join(entry, os.path.basename(out))
         if os.path.isfile(cached):
-            shutil.copy2(cached, out)
+            # copied beside it, then moved into place: a reader in another gate worker sees the old artifact
+            # or the new one, never a half-copied one (feature 261; the same reason as `finish`'s manifest write)
+            shutil.copy2(cached, out + ".tmp")
+            os.replace(out + ".tmp", out)
         elif os.path.isfile(out):
             # DELETE an output the entry LACKS - do not leave it standing (2026-08-17). This used to
             # keep it, arguing that "the key just matched, so any standing artifact was derived from

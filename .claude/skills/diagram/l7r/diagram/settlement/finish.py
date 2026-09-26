@@ -740,8 +740,12 @@ class FinishMixin:
         self.M["ink_classes"], self.M["unclassed_ink"] = ink_census(body, body_cls)
         self.M["unregistered_classes"] = unregistered_classes(self.M["ink_classes"])
         write_html(basepath + '.html', body, body_cls, name=str(self.M["meta"].get("name") or os.path.basename(basepath)), meta=self.M["meta"], manifest=self.M, with_raster=rendering)
-        with open(basepath + '.json', 'w') as f:
+        # WRITTEN WHOLE, THEN MOVED INTO PLACE (feature 261): the gate reads a pool map's manifest in one worker
+        # while another re-rolls it, and an in-place write let a reader see it half-written - measured as a
+        # JSONDecodeError at char 122944 of kashikawa.json. A rename is atomic, so a reader sees old or new.
+        with open(basepath + '.json.tmp', 'w') as f:
             json.dump(self.M, f)
+        os.replace(basepath + '.json.tmp', basepath + '.json')
         # Two env knobs make iteration cheap without changing committed output (see SKILL.md
         # 'Render pipeline'; since the resvg switch the raster is ~0.6s even for the biggest map,
         # so these mostly save the render when nothing will look at the PNG):
