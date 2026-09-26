@@ -29,38 +29,38 @@ Stop hook is handed `transcript_path`.
 
 ### User Story 1 - A fallback wakeup is refused before it exists (Priority: P1)
 
-A session outside `/loop` calls `ScheduleWakeup` to guard a background run. The call is refused with the reason: the
+A session outside a live `/loop` calls `ScheduleWakeup` to guard a background run. The call is refused with the reason: the
 harness wakes the session when background work finishes, `agent-stall-hooks.sh` reports a stall, and a reminder the
 GM asked for is `CronCreate`'s job.
 
-**Independent Test**: drive the hook with a `ScheduleWakeup` payload whose transcript has no `/loop`; it refuses.
+**Independent Test**: drive the hook with a `ScheduleWakeup` payload whose transcript has no live loop; it refuses.
 
 **Acceptance Scenarios**:
 
-1. **Given** a session whose transcript shows no `/loop`, **When** it calls `ScheduleWakeup`, **Then** the call is
-   refused (exit 2) with the reason and the alternatives.
-2. **Given** a session running `/loop`, **When** it calls `ScheduleWakeup`, **Then** the call passes.
-3. **Given** a `ScheduleWakeup` whose `reason` or `prompt` carries `WAKEUP_OK` with a reason of two words or more,
-   **When** it is called, **Then** it passes and the escape is recorded like every other escape.
+1. **Given** a session with no live loop, **When** it calls `ScheduleWakeup`, **Then** the call is refused (exit 2)
+   with the reason and the alternatives - and there is no escape token.
+2. **Given** a live loop, **When** it calls `ScheduleWakeup` with the loop's own prompt (`/loop <input>`), **Then** the
+   call passes; **When** it calls it with any other prompt (a fallback riding on the loop), **Then** it is refused.
+3. **Given** a loop that was ended with `ScheduleWakeup(stop: true)`, **When** a later `ScheduleWakeup` is called,
+   **Then** it is refused - a loop once run is not a loop live.
 
 ### User Story 2 - A turn cannot end with a stale wakeup pending (Priority: P1)
 
-However a wakeup came to exist (before this guard, through the escape, in a `/loop` that has since stopped), a turn
-that would end with it pending is stopped, naming the exact `CronDelete <id>` to run.
+However a wakeup came to exist (before this guard, or in a `/loop` that has since stopped), a turn that would end with
+it pending is stopped, naming the exact `CronDelete <id>` to run - at every turn end until it is cancelled.
 
 **Independent Test**: drive the Stop hook with a payload carrying a cron whose prompt matches a `ScheduleWakeup` in
-the transcript and no `/loop`; it blocks, naming the id.
+the transcript and no live loop; it blocks, naming the id.
 
 **Acceptance Scenarios**:
 
-1. **Given** a pending cron whose prompt is a `ScheduleWakeup` prompt from this transcript, no `/loop`, **When** the
-   turn ends, **Then** the Stop hook blocks and names `CronDelete <id>`.
+1. **Given** a pending cron whose prompt is a `ScheduleWakeup` prompt from this transcript and no live loop, **When**
+   the turn ends, **Then** the Stop hook blocks and names `CronDelete <id>`.
 2. **Given** a pending cron made by `CronCreate` (its prompt matches no `ScheduleWakeup` call), **When** the turn ends,
    **Then** the hook does not block - a reminder the GM asked for is never cancelled by this guard.
-3. **Given** a session running `/loop`, **When** a turn ends with its wakeup pending, **Then** the hook does not block.
-4. **Given** a wakeup whose prompt carries `WAKEUP_OK` with a reason, **When** the turn ends, **Then** it does not block.
-5. **Given** the hook has already blocked once for a given cron id, **When** the next turn end sees the same id,
-   **Then** it does not block again - once per wakeup, never a loop (the `escalation-hooks.sh` rule).
+3. **Given** a live loop, **When** a turn ends with the loop's own wakeup pending, **Then** the hook does not block.
+4. **Given** the hook has already blocked for a cron id, **When** the next turn end still has it pending, **Then** it
+   blocks again - there is no once-only valve, because one `CronDelete <id>` always satisfies it.
 
 ### Edge Cases
 
@@ -73,15 +73,15 @@ the transcript and no `/loop`; it blocks, naming the id.
 
 ### Functional Requirements
 
-- **FR-001**: A PreToolUse hook on `ScheduleWakeup` MUST refuse the call unless the session's transcript shows a
-  `/loop` invocation or the call carries `WAKEUP_OK` with a reason; the refusal MUST name the alternatives.
+- **FR-001**: A PreToolUse hook on `ScheduleWakeup` MUST refuse the call unless it is a live loop's own wakeup (a live
+  loop, and a prompt that is the loop's: `/loop <input>` or the autonomous sentinel) or `stop: true`; the refusal MUST
+  name the alternatives. There is no escape.
 - **FR-002**: A Stop hook MUST block the turn from ending when a pending session cron's prompt equals the `prompt` of a
-  `ScheduleWakeup` call in the session's transcript, unless the session shows `/loop` or that prompt carries
-  `WAKEUP_OK` with a reason; the block MUST name `CronDelete <id>` for each such cron.
+  `ScheduleWakeup` call in the session's transcript, unless it is a live loop's own wakeup; the block MUST name
+  `CronDelete <id>` for each such cron. There is no escape.
 - **FR-003**: A cron that no `ScheduleWakeup` call made MUST never be blocked or named.
-- **FR-004**: The Stop hook MUST block at most once per cron id.
-- **FR-005**: Both layers MUST record every firing and escape through `_guardlog.sh`, and the escape MUST state a reason
-  (the feature-170 floor).
+- **FR-004**: The Stop hook MUST block at EVERY turn end at which a stale wakeup is pending - no once-only valve.
+- **FR-005**: Both layers MUST record every firing through `_guardlog.sh`.
 - **FR-006**: The guard MUST have a companion suite that `make hooks-test` runs, proving each refusal and each pass
   above against real payloads, and each layer MUST be shown to go red when its rule is removed.
 - **FR-007**: The guard MUST appear in `CLAUDE.md`'s "What is enforced" table and in `docs/guards.md`.
@@ -89,16 +89,19 @@ the transcript and no `/loop`; it blocks, naming the id.
 ### Key Entities
 
 - **Wakeup**: a session cron whose prompt equals a `ScheduleWakeup` call's `prompt` in the same transcript.
-- **Loop session**: a session whose transcript shows `/loop` invoked (the command, or the `loop` skill).
+- **Live loop**: the transcript's latest loop event is a `/loop` invocation (the command entry
+  `<command-name>/loop</command-name>`, or a `loop` skill call) rather than a `ScheduleWakeup(stop: true)` (measured,
+  `research.md` R3). A loop's own wakeup carries the prompt `/loop <input>` (or the autonomous sentinel).
 
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
 
-- **SC-001** (FR-001, FR-005): the suite proves a `ScheduleWakeup` outside `/loop` refused, inside `/loop` passed, and
-  escaped with a reason passed and logged.
-- **SC-002** (FR-002, FR-003, FR-004): the suite proves a stale wakeup blocks once naming its id, a `CronCreate`
-  reminder never blocks, a `/loop` wakeup never blocks.
+- **SC-001** (FR-001, FR-005): the suite proves a `ScheduleWakeup` outside a live loop refused (a `WAKEUP_OK` token
+  changing nothing), a live loop's own wakeup passed, a fallback inside a live loop refused, a stopped loop not live,
+  and every firing logged.
+- **SC-002** (FR-002, FR-003, FR-004): the suite proves a stale wakeup blocks at every turn end naming its id, a
+  `CronCreate` reminder never blocks, a live loop's own wakeup never blocks, a fallback after the loop stopped blocks.
 - **SC-003** (FR-006, FR-007): `make hooks-test` green with the new suite; deleting either rule turns a case red; the
   guard is in both tables.
 
@@ -111,8 +114,14 @@ the transcript and no `/loop`; it blocks, naming the id.
 - The tab-title hook (`~/.claude/hooks/tab-title.sh`, outside this repository) was fixed directly on 2026-09-26: a
   session is found by the hook payload's `session_id` in Claude Code's session registry, and a background
   continuation titles the tab that parked it, under that tab's name - which removes the "(2)" and restores the
-  research tab's icon. It is not part of this repository and so not of this feature's code.
-- `/loop` is detected from the transcript, where its invocation is recorded; a `/loop` session keeps that marker for
-  its life, which errs toward passing (the Stop layer's `/loop` exemption can let a wakeup outlive a stopped loop -
-  priced: `/loop` ends by `ScheduleWakeup(stop: true)`, which removes its wakeup, so the case needs a loop abandoned
-  without stopping).
+  research tab's icon. It is not part of this repository and so not of this feature's code. Seen: after the fix every
+  tab carried its icon (tmux pane titles read 2026-09-26 20:52: `⏳ Diagram research`, not `Diagram research (2)`).
+- A loop abandoned without `stop: true` stays "live" to this guard, and its own `/loop` wakeup is exempt: that wakeup
+  is the loop continuing, which is what `/loop` is for, and it fires and re-enters the loop rather than lingering.
+
+## Review history
+
+- Round 1 (2026-09-26, `spec-fidelity`, Opus): CHANGES REQUIRED, four items, all applied. (1) and (2) the `WAKEUP_OK`
+  escape removed from both layers - no out-of-loop case needs one, and on the Stop layer it would let the incident
+  itself through. (3) the `/loop` exemption scoped to a LIVE loop's own wakeup and measured (`research.md` R3). (4) the
+  once-per-id valve removed: the Stop layer blocks at every turn end, since one `CronDelete` always satisfies it.
