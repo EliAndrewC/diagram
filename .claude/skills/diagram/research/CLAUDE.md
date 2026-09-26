@@ -76,8 +76,8 @@ cites one work several times they are `fei-1939`, `fei-1939-2`, and so on.
     make check-bundle KEY=<registry key>                    one source, with its page saved
 
 The bundle holds the fragment, its notes, the prepass (`make record-prepass`), the quote-verbatim report
-(`make quote-verbatim`), the registry entries the notes cite and the glossary's variant index, each with
-its origin in a `MANIFEST.md`. Dispatch `quote-check`, `record-format`, `source-applicability` or
+(`make quote-verbatim`), the registry entries the notes cite and the glossary's variant index, each written
+inline in one `MANIFEST.md` under its origin, so a check reads one file in one turn. Dispatch `quote-check`, `record-format`, `source-applicability` or
 `source-reader` naming that MANIFEST and nothing under `/diagram`; `check-bundle-hooks.sh` refuses a
 dispatch that points into the repository and prints the command. **Why copies** (feature 250, research
 R1): an agent that reads a file here gets every `CLAUDE.md` above it attached - this file among them,
@@ -85,11 +85,13 @@ about 28,400 tokens - which `omitClaudeMd` does not stop; on the measured runs t
 check's context. **The report is compact**: counts on its first line, then only what the session must act on, a pass in one
 line (the harness refuses a subagent's report file, so the reply is the report).
 
-**One session per page** (feature 250 D7). A session's cost is its turns times its context, and every
+**Two sessions per page** (feature 250 D7, and research R2's recommendation 2). A session's cost is its turns times its context, and every
 report, file and tool result stays in the context for every later turn: on the measured slice the main
 session was 87% of the input and ended at 324,000 tokens a turn. So a research feature is worked a page
-at a time, each page in a FRESH session started from a written brief (`make page-session BRIEF=<file>`),
-and the brief and the work list, not the context, carry the state between them.
+at a time, each page in two FRESH sessions - one locates, reads and writes, the next checks and applies - started
+from written briefs (`make page-session BRIEF="<1> <2>"` runs them in order), and the briefs and the handoff
+between them, not the context, carry the state. `make notes PAGE= SECTION= KEYS=` prints a few notes and the
+paragraphs carrying them; a re-check names only the notes that moved (`make check-bundle ... NOTES=<key,key>`).
 
 This file auto-loads when a research entry is being written or changed - which is exactly when the
 rule below applies. The entry FORMAT, the evidence classes, the citing rules and the table of which

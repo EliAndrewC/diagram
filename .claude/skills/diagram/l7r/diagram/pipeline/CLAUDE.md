@@ -57,7 +57,7 @@ running it after a change here more important, not less.
 
 The full reasoning - what the key covers, the soundness argument, the concurrency and
 container-rebuild cases, and THE TRAP that costs three wrong conclusions per session if you do not
-know it - is in `gencache.py`'s own docstring and in the skill's [`../CLAUDE.md`](../../../CLAUDE.md).
+know it - is in `gencache.py`'s own docstring and in the skill's [`../CLAUDE.md`](../CLAUDE.md).
 
 
 ## `poolmaps.bundles()` - ask, do not glob (feature 161)

@@ -83,6 +83,29 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
       measure: `python3 specs/250-close-the-record-checks/measure/tokens.py report --session <child transcript> --marks <its marks>`
       verify: DONE. research.md R2: homesteads (8 items) in one page session, 12.5 million tokens against the slice's 8.0 million for 5 - 1.56 against 1.60 million an item; checks attached no CLAUDE.md (0 of 10); seeded runs 30 of 30 findings kept; the report file refused by the harness and replaced by a compact reply (D8, priced in d8-pricing.txt); five next recommendations.
 
+## Phase 1c - the second round (GM 2026-09-26; plan D11)
+
+- [ ] T26 One file per bundle: the MANIFEST holds every copy inline; the five contracts read it once
+      research: rendering
+- [ ] T27 Two sessions per page: `brief.py` writes a write brief and a check brief joined by a handoff;
+      `make page-session` runs several briefs in order (`_page_session_runner.py`)
+      research: rendering
+- [ ] T28 The engine's dev loop moves to `l7r/diagram/CLAUDE.md`; `pool/` and `tests/` import it; the skill's
+      `CLAUDE.md` is a short index; every link resolves
+      research: rendering
+- [ ] T29 `make notes PAGE= SECTION= KEYS=`
+      research: rendering
+- [ ] T30 `make check-bundle ... NOTES=<key,key>` - a re-check of the named notes only
+      research: rendering
+- [ ] T31 The one-file seeded leg, three runs per agent on the planted inputs; recorded in R3
+      research: rendering
+- [ ] T32 FR-002 and FR-006 for `vegetation`, in two page sessions (D11)
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+- [ ] T33 **The comparison the GM asked for** (D11): T32 measured against R1 and R2, recorded as R3 with the
+      next recommendations
+      research: rendering
+
 ## Phase 2 - FR-002 and FR-006, one page per session (D7)
 
 - [ ] T17 `measure/assertions.py` derives FR-002's list from the six quote-check reports (D4)
@@ -91,8 +114,8 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
       verify: DONE. homesteads: FR-002 5 items - 3 now CITATION (kyuhi-jawiki; tonami-yashikirin-haichi for the Tonami grove sides and winds; the 040 height band on kashima-kainyo-1987 + minami-2022), 2 stay ABSENCE re-searched 2026-09-26 (060 in-house well, 080 interconnected-lanes quotation) plus the 030 6-7 m ridge ABSENCE confirmed; the Tonami model-homestead remainder re-dated ABSENCE; 0 GROUNDS. FR-006 3 of 3 confirmed by grep (22 -> the-gardens-sun...-4 citation, 23 -> kikanchiiki-igune citation + -3 absence, 24 -> yashikirin-jawiki-5 citation); worklist: 45 items, 40 FOOTNOTED, 2 LOCATED (080 items 11-12, outside this brief), 3 NOT-LOCATED (22-24). New keys kyuhi-jawiki, tonami-yashikirin-haichi, kikanchiiki-igune. Agents: 1 source-reader, 3 source-applicability, 4 quote-check (2 rounds), 2 record-format; all findings applied bar the scanned PDFs (6 added to TO-DOWNLOAD 233-238) and the Kameyama NW roll (for the GM); 8 glossary terms, 6 variants.
-- [ ] T19 FR-002 and FR-006 for every other page `assertions.py` names, one task and one session per
-      page, cut when T16's figures are read
+- [ ] T19 FR-002 and FR-006 for every other page `assertions.py` names (not `homesteads` or `vegetation`), one
+      task per page and two sessions each, cut when T33's figures are read
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
 

@@ -2,7 +2,7 @@
 
 **Load this file when:** You are about to launch `settlement-review`, `building-review` or `backstory-review`.
 
-Split out of [`../CLAUDE.md`](../CLAUDE.md) so it is not in every diagram session's
+Split out of [`../CLAUDE.md`](../l7r/diagram/CLAUDE.md) so it is not in every diagram session's
 context. The text is verbatim; the short always-on version of each rule stays in the index.
 
 ## Invoking a review agent: SCOPE it, SPLIT it, and launch it EARLY

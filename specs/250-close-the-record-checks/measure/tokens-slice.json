@@ -50,30 +50,12 @@
     "nested_chars": 38971,
     "nested_files": 1,
     "reads": [
-     [
-      8619,
-      "Read /diagram/.clones/diagram-research/specs/250-close-the-record-checks/spec.md"
-     ],
-     [
-      6534,
-      "Read /diagram/.clones/diagram-research/specs/250-close-the-record-checks/plan.md"
-     ],
-     [
-      6307,
-      "Read /diagram/.clones/diagram-research/specs/260-mechanical-vocabulary-candidates/plan-review.json"
-     ],
-     [
-      4254,
-      "Read /diagram/.clones/diagram-research/specs/250-close-the-record-checks/tasks.md"
-     ],
-     [
-      3132,
-      "Bash cd /diagram/.clones/diagram-research && grep -niE \"(no footnote|unfootnoted|bare assertion|without a footnote|"
-     ],
-     [
-      2764,
-      "Read /diagram/.clones/diagram-research/specs/242-cite-the-unfootnoted-assertions/measure/worklist.py"
-     ]
+     8619,
+     6534,
+     6307,
+     4254,
+     3132,
+     2764
     ]
    }
   ]
@@ -105,30 +87,12 @@
     "nested_chars": 113715,
     "nested_files": 3,
     "reads": [
-     [
-      6968,
-      "Read /tmp/claude-1000/-diagram/e34913cb-bb99-485e-9f5d-ecbd754898cd/scratchpad/250-sizing/01-en.wikipedia.org.txt"
-     ],
-     [
-      5350,
-      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/fabric/030-a-county-seats-street-shar"
-     ],
-     [
-      4039,
-      "Read /tmp/claude-1000/-diagram/e34913cb-bb99-485e-9f5d-ecbd754898cd/scratchpad/250-sizing/02-www.japanesewiki.com.t"
-     ],
-     [
-      2483,
-      "WebSearch castle town sogamae proportion of samurai residences located outside the outer moat"
-     ],
-     [
-      1711,
-      "Grep densit|per cent|percent|%|area|land|crowd|space"
-     ],
-     [
-      903,
-      "Grep ashigaru|samurai|retainer|sogamae|outer moat|inside the|outside the wall"
-     ]
+     6968,
+     5350,
+     4039,
+     2483,
+     1711,
+     903
     ]
    }
   ]
@@ -172,30 +136,12 @@
     "nested_chars": 0,
     "nested_files": 0,
     "reads": [
-     [
-      10866,
-      "Bash sha256sum /diagram/.clones/diagram-research/specs/250-close-the-record-checks/plan.md; echo \"---PREV---\"; cat "
-     ],
-     [
-      4199,
-      "Bash git -C /diagram/.clones/diagram-research diff 81ac3e3c b98e9f1e -- specs/250-close-the-record-checks/plan.md"
-     ],
-     [
-      3717,
-      "Bash cd /diagram/.clones/diagram-research; awk 'NR>=180 && NR<=205' specs/242-cite-the-unfootnoted-assertions/hando"
-     ],
-     [
-      3484,
-      "Bash cd /diagram/.clones/diagram-research/specs/242-cite-the-unfootnoted-assertions/handoff/reports/; for f in *.md"
-     ],
-     [
-      3109,
-      "Bash cd /diagram/.clones/diagram-research; awk 'NR>=107 && NR<=132 {printf \"%d|%s\\n\", NR, $0}' specs/242-cite-the-u"
-     ],
-     [
-      846,
-      "Bash cd /diagram/.clones/diagram-research; grep -n \"T10\" specs/250-close-the-record-checks/plan.md specs/250-close-"
-     ]
+     10866,
+     4199,
+     3717,
+     3484,
+     3109,
+     846
     ]
    }
   ]
@@ -227,22 +173,10 @@
     "nested_chars": 113715,
     "nested_files": 3,
     "reads": [
-     [
-      10173,
-      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/sizing/010-how-big-is-a-citys-wall-fo"
-     ],
-     [
-      5350,
-      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/fabric/030-a-county-seats-street-shar"
-     ],
-     [
-      2669,
-      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/sizing/010-how-big-is-a-citys-wall-fo"
-     ],
-     [
-      1312,
-      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/sizing/010-how-big-is-a-citys-wall-fo"
-     ]
+     10173,
+     5350,
+     2669,
+     1312
     ]
    },
    {
@@ -261,18 +195,9 @@
     "nested_chars": 113715,
     "nested_files": 3,
     "reads": [
-     [
-      23560,
-      "Read /tmp/claude-1000/-diagram/e34913cb-bb99-485e-9f5d-ecbd754898cd/scratchpad/250-sizing/01-en.wikipedia.org.txt"
-     ],
-     [
-      932,
-      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/sources/010-works-cited/4220-edo-enwiki.html"
-     ],
-     [
-      134,
-      "Bash cd /tmp/claude-1000/-diagram/e34913cb-bb99-485e-9f5d-ecbd754898cd/scratchpad/250-sizing && grep -n -i -E \"dens"
-     ]
+     23560,
+     932,
+     134
     ]
    },
    {
@@ -291,30 +216,12 @@
     "nested_chars": 113715,
     "nested_files": 3,
     "reads": [
-     [
-      27229,
-      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/assets/glossary-variants.txt"
-     ],
-     [
-      10173,
-      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/sizing/010-how-big-is-a-citys-wall-fo"
-     ],
-     [
-      2669,
-      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/sizing/010-how-big-is-a-citys-wall-fo"
-     ],
-     [
-      1312,
-      "Grep ."
-     ],
-     [
-      623,
-      "Grep ."
-     ],
-     [
-      476,
-      "Read /tmp/claude-1000/-diagram/e34913cb-bb99-485e-9f5d-ecbd754898cd/scratchpad/pp-010.txt"
-     ]
+     27229,
+     10173,
+     2669,
+     1312,
+     623,
+     476
     ]
    },
    {
@@ -333,30 +240,12 @@
     "nested_chars": 113715,
     "nested_files": 3,
     "reads": [
-     [
-      9715,
-      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/sizing/020-how-densely-is-a-quarter-b"
-     ],
-     [
-      3015,
-      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/sizing/020-how-densely-is-a-quarter-b"
-     ],
-     [
-      1389,
-      "Read /tmp/claude-1000/-diagram/e34913cb-bb99-485e-9f5d-ecbd754898cd/scratchpad/pp-020.txt"
-     ],
-     [
-      571,
-      "Grep (?i)^(yamen|burakumin|machi|daimyo|daimy\u014ds?|rampart|precinct|warren|ward|quarter|muster|hitching|bund|comb|pre"
-     ],
-     [
-      141,
-      "Grep (?i)(populated|polygon|void|footprint|dead ground|dead zone|civic|reserve|neighborhood|forecourt|beaten earth|"
-     ],
-     [
-      90,
-      "Grep (?i)(rampart|precinct|muster|hitching|intramural|prefectural|patrol strip|ring road|stable|^acre|^quarter|^war"
-     ]
+     9715,
+     3015,
+     1389,
+     571,
+     141,
+     90
     ]
    },
    {
@@ -375,14 +264,8 @@
     "nested_chars": 113715,
     "nested_files": 3,
     "reads": [
-     [
-      7587,
-      "Read /tmp/claude-1000/-diagram/e34913cb-bb99-485e-9f5d-ecbd754898cd/scratchpad/250-sizing/02-www.japanesewiki.com.t"
-     ],
-     [
-      1577,
-      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/sources/010-works-cited/4350-jokamachi-wiki."
-     ]
+     7587,
+     1577
     ]
    },
    {
@@ -401,22 +284,10 @@
     "nested_chars": 113715,
     "nested_files": 3,
     "reads": [
-     [
-      9715,
-      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/sizing/020-how-densely-is-a-quarter-b"
-     ],
-     [
-      5350,
-      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/fabric/030-a-county-seats-street-shar"
-     ],
-     [
-      3015,
-      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/sizing/020-how-densely-is-a-quarter-b"
-     ],
-     [
-      134,
-      "Bash cd /tmp/claude-1000/-diagram/e34913cb-bb99-485e-9f5d-ecbd754898cd/scratchpad/250-sizing/ && grep -n -i \"densel"
-     ]
+     9715,
+     5350,
+     3015,
+     134
     ]
    }
   ]
@@ -448,26 +319,11 @@
     "nested_chars": 113715,
     "nested_files": 3,
     "reads": [
-     [
-      3439,
-      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/ways/010-how-far-past-the-bank-does-a-bridge"
-     ],
-     [
-      3171,
-      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/ways/010-how-far-past-the-bank-does-a-bridge"
-     ],
-     [
-      1471,
-      "Read /tmp/claude-1000/-diagram/e34913cb-bb99-485e-9f5d-ecbd754898cd/scratchpad/pp-ways-010.txt"
-     ],
-     [
-      1312,
-      "Read /tmp/claude-1000/-diagram/e34913cb-bb99-485e-9f5d-ecbd754898cd/scratchpad/pp-ways-010.txt"
-     ],
-     [
-      250,
-      "Grep (?i)^(abutment|abutments|scour|riprap|gabion|gabions|glulam|stringer|stringers|sill|embankment|obliquity|footp"
-     ]
+     3439,
+     3171,
+     1471,
+     1312,
+     250
     ]
    },
    {
@@ -486,30 +342,12 @@
     "nested_chars": 38971,
     "nested_files": 1,
     "reads": [
-     [
-      7736,
-      "Read /diagram/.clones/diagram-research/specs/250-close-the-record-checks/plan-review.json"
-     ],
-     [
-      6555,
-      "Read /diagram/.clones/diagram-research/specs/250-close-the-record-checks/measure/assertions.py"
-     ],
-     [
-      5977,
-      "Bash cd /diagram/.clones/diagram-research/specs/242-cite-the-unfootnoted-assertions/handoff/reports && grep -n -i -"
-     ],
-     [
-      3434,
-      "Bash cd /diagram/.clones/diagram-research && sha256sum specs/250-close-the-record-checks/plan.md && git -C /diagram"
-     ],
-     [
-      1955,
-      "Bash cd /diagram/.clones/diagram-research && python3 specs/250-close-the-record-checks/measure/assertions.py --list"
-     ],
-     [
-      1280,
-      "Bash cd /diagram/.clones/diagram-research && sed -n '45,60p' specs/250-close-the-record-checks/tasks.md; echo \"=== "
-     ]
+     7736,
+     6555,
+     5977,
+     3434,
+     1955,
+     1280
     ]
    }
   ]
@@ -541,30 +379,12 @@
     "nested_chars": 0,
     "nested_files": 0,
     "reads": [
-     [
-      7524,
-      "Bash cat specs/250-close-the-record-checks/plan-review.json; echo \"=== makefile ===\"; grep -n \"plan-verdict\" -A12 M"
-     ],
-     [
-      983,
-      "Bash sha256sum /diagram/.clones/diagram-research/specs/250-close-the-record-checks/plan.md; git -C /diagram/.clones"
-     ],
-     [
-      975,
-      "Bash python3 specs/250-close-the-record-checks/measure/assertions.py 2>&1; echo \"=== targets ===\"; ls; grep -rln \"p"
-     ],
-     [
-      260,
-      "Bash cat > /tmp/claude-1000/-diagram/e34913cb-bb99-485e-9f5d-ecbd754898cd/scratchpad/plan-review-r4.json <<'JSON' {"
-     ],
-     [
-      60,
-      "Bash ls specs/250-close-the-record-checks/ && ls specs/250-close-the-record-checks/*verdict* 2>/dev/null; find . -p"
-     ],
-     [
-      41,
-      "Bash grep -rn \"plan-verdict\" Makefile* makefiles/ 2>/dev/null | head; echo \"=== script check for unattributed ===\";"
-     ]
+     7524,
+     983,
+     975,
+     260,
+     60,
+     41
     ]
    }
   ]
@@ -596,30 +416,12 @@
     "nested_chars": 0,
     "nested_files": 0,
     "reads": [
-     [
-      3440,
-      "Read /tmp/claude-1000/-diagram/e34913cb-bb99-485e-9f5d-ecbd754898cd/scratchpad/outside/010-how-far-past-the-bank-do"
-     ],
-     [
-      3171,
-      "Read /tmp/claude-1000/-diagram/e34913cb-bb99-485e-9f5d-ecbd754898cd/scratchpad/outside/010-how-far-past-the-bank-do"
-     ],
-     [
-      1349,
-      "Read /tmp/claude-1000/-diagram/e34913cb-bb99-485e-9f5d-ecbd754898cd/scratchpad/outside/prepass.txt"
-     ],
-     [
-      1312,
-      "Grep (?i)^(carried|spread|bearing|tier|tiers|sheet|deck|decking|toe|watercourse|channel|obliquity|sine|centerline|i"
-     ],
-     [
-      396,
-      "Grep (?i)^(abutment|abutments|scour|girder|sill|glulam|stringers|stringer|riprap|gabions|footplank|jetty|footing|fo"
-     ],
-     [
-      219,
-      "Grep (?i)(carried|spread|strip|tier|sheet|deck|watercourse|channel)"
-     ]
+     3440,
+     3171,
+     1349,
+     1312,
+     396,
+     219
     ]
    }
   ]

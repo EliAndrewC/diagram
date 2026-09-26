@@ -50,30 +50,12 @@
     "nested_chars": 0,
     "nested_files": 0,
     "reads": [
-     [
-      2616,
-      "Grep \u30ab\u30a4\u30cb\u30e7|\u30a4\u30b0\u30cd|\u3044\u3050\u306d|\u304b\u3044\u306b\u3087|\u82af\u6b62|\u9ad8\u3055|\u5207\u308a\u305d\u308d|\u5208\u308a\u8fbc|\u526a\u5b9a|\u5929\u7aef|\u982d"
-     ],
-     [
-      1705,
-      "Grep \u6771|\u5357|\u897f|\u5317|\u67ff|\u6843|\u30b9\u30ae|\u6749|\u30b1\u30e4\u30ad|\u6b05|\u30ab\u30b7|\u6a2b|\u30a8\u30ce\u30ad|\u698e|\u30cf\u30f3\u30ce\u30ad|\u7af9|\u98a8|10|\uff11\uff10|\u9ad8\u6728"
-     ],
-     [
-      1414,
-      "Grep \u4e95\u6238|\u4e95"
-     ],
-     [
-      1312,
-      "Grep \u5806\u80a5|\u6577|\u8e0f|\u843d\u8449|\u85c1|\u308f\u3089"
-     ],
-     [
-      1233,
-      "Read /tmp/l7r-check/hs-read/yashikirin-jawiki.txt"
-     ],
-     [
-      593,
-      "Read /tmp/l7r-check/hs-read/kikanchiiki-6543.txt"
-     ]
+     2616,
+     1705,
+     1414,
+     1312,
+     1233,
+     593
     ]
    }
   ]
@@ -117,26 +99,11 @@
     "nested_chars": 0,
     "nested_files": 0,
     "reads": [
-     [
-      3280,
-      "Read /tmp/l7r-check/key-tonami-yashikirin-haichi/pages/01-1073shoso.jp.txt"
-     ],
-     [
-      1980,
-      "Read /tmp/l7r-check/key-tonami-yashikirin-haichi/sources/tonami-yashikirin-haichi.html"
-     ],
-     [
-      940,
-      "Read /tmp/l7r-check/key-tonami-yashikirin-haichi/MANIFEST.md"
-     ],
-     [
-      151,
-      "Write /tmp/l7r-check/key-tonami-yashikirin-haichi/REPORT.md"
-     ],
-     [
-      126,
-      "Read /tmp/l7r-check/key-tonami-yashikirin-haichi/pages/MANIFEST.txt"
-     ]
+     3280,
+     1980,
+     940,
+     151,
+     126
     ]
    },
    {
@@ -155,30 +122,12 @@
     "nested_chars": 0,
     "nested_files": 0,
     "reads": [
-     [
-      19891,
-      "Read /tmp/l7r-check/homesteads-210/210-the-farmsteads-fixtures---privy-woodpile-manure-heap-bath-coop-household-shr"
-     ],
-     [
-      17620,
-      "Read /tmp/l7r-check/homesteads-210/210-the-farmsteads-fixtures---privy-woodpile-manure-heap-bath-coop-household-shr"
-     ],
-     [
-      16975,
-      "Read /tmp/l7r-check/homesteads-210/prepass.txt"
-     ],
-     [
-      5568,
-      "Read /tmp/l7r-check/homesteads-210/MANIFEST.md"
-     ],
-     [
-      1021,
-      "Grep ^(kawaya|benjo|koedame|kyuhi|umayagoe|goemon|kimon|hokora|ujigami|bunrei|liuchu|qimin|waraguro|warazuka|kura|n"
-     ],
-     [
-      234,
-      "Grep ^(cess|soffit|eave|rick|straw rick|stable|compost|outbuild|b1|b i|draught|urinal|nanking|buck|sendai|kameyama|"
-     ]
+     19891,
+     17620,
+     16975,
+     5568,
+     1021,
+     234
     ]
    },
    {
@@ -197,30 +146,12 @@
     "nested_chars": 0,
     "nested_files": 0,
     "reads": [
-     [
-      13632,
-      "Read /tmp/l7r-check/homesteads-040/040-the-gardens-sun-and-how-far-the-windbreak-shades.html"
-     ],
-     [
-      10095,
-      "Read /tmp/l7r-check/homesteads-040/040-the-gardens-sun-and-how-far-the-windbreak-shades.notes.html"
-     ],
-     [
-      3328,
-      "Read /tmp/l7r-check/homesteads-040/MANIFEST.md"
-     ],
-     [
-      2159,
-      "Read /tmp/l7r-check/homesteads-040/prepass.txt"
-     ],
-     [
-      473,
-      "Grep ^(igune|kainyo|tsuijimatsu|sugi|keyaki|kuromatsu|hinoki|fukugi|edauchi|daikon|minka|kashi|enoki|persimmon|cops"
-     ],
-     [
-      151,
-      "Write /tmp/l7r-check/homesteads-040/REPORT-record-format.md"
-     ]
+     13632,
+     10095,
+     3328,
+     2159,
+     473,
+     151
     ]
    },
    {
@@ -239,30 +170,12 @@
     "nested_chars": 0,
     "nested_files": 0,
     "reads": [
-     [
-      18542,
-      "Read /tmp/l7r-check/homesteads-040/quote-verbatim.json"
-     ],
-     [
-      13632,
-      "Read /tmp/l7r-check/homesteads-040/040-the-gardens-sun-and-how-far-the-windbreak-shades.html"
-     ],
-     [
-      10095,
-      "Read /tmp/l7r-check/homesteads-040/040-the-gardens-sun-and-how-far-the-windbreak-shades.notes.html"
-     ],
-     [
-      3328,
-      "Read /tmp/l7r-check/homesteads-040/MANIFEST.md"
-     ],
-     [
-      1770,
-      "Read /tmp/l7r-check/homesteads-040/quote-verbatim.txt"
-     ],
-     [
-      1312,
-      "Read /tmp/l7r-check/homesteads-040/MANIFEST.md"
-     ]
+     18542,
+     13632,
+     10095,
+     3328,
+     1770,
+     1312
     ]
    },
    {
@@ -281,26 +194,11 @@
     "nested_chars": 0,
     "nested_files": 0,
     "reads": [
-     [
-      2513,
-      "Read /tmp/l7r-check/key-kyuhi-jawiki/pages/01-ja.wikipedia.org.txt"
-     ],
-     [
-      1389,
-      "Read /tmp/l7r-check/key-kyuhi-jawiki/sources/kyuhi-jawiki.html"
-     ],
-     [
-      861,
-      "Read /tmp/l7r-check/key-kyuhi-jawiki/MANIFEST.md"
-     ],
-     [
-      151,
-      "Write /tmp/l7r-check/key-kyuhi-jawiki/REPORT.md"
-     ],
-     [
-      111,
-      "Read /tmp/l7r-check/key-kyuhi-jawiki/pages/MANIFEST.txt"
-     ]
+     2513,
+     1389,
+     861,
+     151,
+     111
     ]
    },
    {
@@ -319,30 +217,12 @@
     "nested_chars": 0,
     "nested_files": 0,
     "reads": [
-     [
-      3199,
-      "Read /tmp/l7r-check/key-kikanchiiki-igune/pages/01-kikanchiiki.net.txt"
-     ],
-     [
-      1745,
-      "WebSearch \u5c45\u4e45\u6839 \u679d\u6253\u3061 \u4ed9\u53f0\u85e9 \u5c4b\u6577\u6797 \u6b74\u53f2 \u5927\u5d0e\u8015\u571f \u7ba1\u7406"
-     ],
-     [
-      1615,
-      "Read /tmp/l7r-check/key-kikanchiiki-igune/sources/kikanchiiki-igune.html"
-     ],
-     [
-      891,
-      "Read /tmp/l7r-check/key-kikanchiiki-igune/MANIFEST.md"
-     ],
-     [
-      151,
-      "Write /tmp/l7r-check/key-kikanchiiki-igune/REPORT.md"
-     ],
-     [
-      115,
-      "Read /tmp/l7r-check/key-kikanchiiki-igune/pages/MANIFEST.txt"
-     ]
+     3199,
+     1745,
+     1615,
+     891,
+     151,
+     115
     ]
    },
    {
@@ -361,30 +241,12 @@
     "nested_chars": 0,
     "nested_files": 0,
     "reads": [
-     [
-      34192,
-      "Read /tmp/l7r-check/homesteads-210/quote-verbatim.json"
-     ],
-     [
-      19891,
-      "Read /tmp/l7r-check/homesteads-210/210-the-farmsteads-fixtures---privy-woodpile-manure-heap-bath-coop-household-shr"
-     ],
-     [
-      17620,
-      "Read /tmp/l7r-check/homesteads-210/210-the-farmsteads-fixtures---privy-woodpile-manure-heap-bath-coop-household-shr"
-     ],
-     [
-      5568,
-      "Read /tmp/l7r-check/homesteads-210/MANIFEST.md"
-     ],
-     [
-      3418,
-      "Read /tmp/l7r-check/homesteads-210/quote-verbatim.txt"
-     ],
-     [
-      1235,
-      "WebFetch https://library.bunmori.tokushima.jp/digital/webkiyou/50/131-133.pdf"
-     ]
+     34192,
+     19891,
+     17620,
+     5568,
+     3418,
+     1235
     ]
    }
   ]
@@ -428,30 +290,12 @@
     "nested_chars": 0,
     "nested_files": 0,
     "reads": [
-     [
-      20829,
-      "Read /tmp/l7r-check/homesteads-210/210-the-farmsteads-fixtures---privy-woodpile-manure-heap-bath-coop-household-shr"
-     ],
-     [
-      18084,
-      "Read /tmp/l7r-check/homesteads-210/210-the-farmsteads-fixtures---privy-woodpile-manure-heap-bath-coop-household-shr"
-     ],
-     [
-      5568,
-      "Read /tmp/l7r-check/homesteads-210/MANIFEST.md"
-     ],
-     [
-      2486,
-      "Read /tmp/l7r-check/homesteads-210/quote-verbatim.txt"
-     ],
-     [
-      612,
-      "WebFetch https://kotobank.jp/word/%E8%97%81%E5%A1%9A"
-     ],
-     [
-      323,
-      "WebFetch https://ameblo.jp/toyoko-housing/entry-11418946119.html"
-     ]
+     20829,
+     18084,
+     5568,
+     2486,
+     612,
+     323
     ]
    },
    {
@@ -470,30 +314,12 @@
     "nested_chars": 0,
     "nested_files": 0,
     "reads": [
-     [
-      14575,
-      "Read /tmp/l7r-check/homesteads-040/040-the-gardens-sun-and-how-far-the-windbreak-shades.html"
-     ],
-     [
-      10566,
-      "Read /tmp/l7r-check/homesteads-040/040-the-gardens-sun-and-how-far-the-windbreak-shades.notes.html"
-     ],
-     [
-      3328,
-      "Read /tmp/l7r-check/homesteads-040/MANIFEST.md"
-     ],
-     [
-      1405,
-      "Read /tmp/l7r-check/homesteads-040/quote-verbatim.txt"
-     ],
-     [
-      1312,
-      "Read /tmp/l7r-check/homesteads-040/MANIFEST.md"
-     ],
-     [
-      78,
-      "Read /tmp/l7r-check/homesteads-040"
-     ]
+     14575,
+     10566,
+     3328,
+     1405,
+     1312,
+     78
     ]
    }
   ]

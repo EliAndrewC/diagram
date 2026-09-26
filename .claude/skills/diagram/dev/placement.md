@@ -2,7 +2,7 @@
 
 **Load this file when:** You are adding a new map feature, changing where something is placed or drawn, or wondering why the placer allowed an overlap the gate then caught. Read the DRAW ORDER section before moving any placement.
 
-Split out of [`../CLAUDE.md`](../CLAUDE.md) so it is not in every diagram session's
+Split out of [`../CLAUDE.md`](../l7r/diagram/CLAUDE.md) so it is not in every diagram session's
 context. The text is verbatim; the short always-on version of each rule stays in the index.
 
 ## DRAW ORDER: read this BEFORE changing where anything is placed or drawn

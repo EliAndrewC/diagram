@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """The brief a fresh page session starts from (feature 250 D7): what ONE page owes, and how to do it.
 
-    brief.py <page> <task>      writes specs/250-close-the-record-checks/briefs/<page>.md and prints its path
+    brief.py <page> <task>      writes briefs/<page>-1.md (locate, read, write) and briefs/<page>-2.md (check,
+                                apply, close) - two FRESH sessions per page (feature 250, recommendation 2: the first
+                                page's applying turns ran at the end of a session that had read every source, and were
+                                a third of it)
 
 The items are DERIVED - FR-002's from `assertions.py`, FR-006's from 242's `worklist.py` - never typed.
 The procedure is the plan's (D2, D5, D6, D8) written out so the session does not have to read the spec,
@@ -48,20 +51,25 @@ def fr006(page: str) -> list[str]:
     return [f"- {ln}" for ln in keep]
 
 
-BRIEF = """# Brief - feature 250, page `{page}` ({task})
+COMMON = """# Brief - feature 250, page `{page}` ({task}), session {n} of 2: {what}
 
-You are a FRESH session for one page of feature 250 (close the record checks). This brief is the whole of
-what you need; do not read the feature's spec, plan or research files to orient - they cost you tokens on
-every later turn, and everything they would tell you about this page is here. Work in this clone
-(`{clone}`); the project's CLAUDE.md files still apply to you.
+You are a FRESH session for one half of one page of feature 250 (close the record checks). This brief is the
+whole of what you need; do not read the feature's spec, plan or research files to orient - everything you read
+stays in your context and is paid for again on every later turn. Work in this clone (`{clone}`); the project's
+CLAUDE.md files still apply to you.
 
-## Measure as you go
+**Read narrowly.** For a few notes of a question use `make notes PAGE={page} SECTION=<NNN> KEYS=<key,key>` (in
+`.claude/skills/diagram`), which prints those notes and only the paragraphs carrying them - never `cat` a notes
+file or `sed` a wide range of a fragment. Grep with `-o` and a short context. Send the lookups you know you need
+in one message.
 
-Before each numbered step below, open a window on the token meter:
+**Measure.** Before each numbered step, open a window:
 
-    python3 specs/250-close-the-record-checks/measure/tokens.py mark "<page> <step>" --marks {marks}
+    python3 specs/250-close-the-record-checks/measure/tokens.py mark "{page} <step>" --marks {marks}
 
-## What this page owes
+"""
+
+WRITE = COMMON + """## What this page owes
 
 **FR-002 - assertions a quote-check found carrying no footnote.** Each ends in exactly one of three forms: a
 CITATION (a quotation from a public page that says it), an ABSENCE note (`no publicly readable source
@@ -71,45 +79,52 @@ CITATION (a quotation from a public page that says it), an ABSENCE note (`no pub
 {fr002}
 
 **FR-006 - items 242's work list can no longer find.** Each was rewritten during 242. Find it by grepping its
-distinctive words (a figure, a name, a term) over `research/{page}/*.html` - the section label beside it is
-the REPORT's heading, not the record's, and is only a hint. Then either confirm the sentence carries its note
-(say which note) or work it as an FR-002 item. Never confirm against a fragment the grep did not name.
+distinctive words over `research/{page}/*.html` - the label beside it is the REPORT's heading, only a hint.
+Then confirm the sentence carries its note (say which) or work it as an FR-002 item. Never confirm against a
+fragment the grep did not name.
 
 {fr006}
 
-## The procedure
+## The procedure (session 1: locate, read, write)
 
-1. **Locate.** For every item, grep its words over `.claude/skills/diagram/research/{page}/` and note the
-   fragment and sentence. Read only the fragments that hold items.
-2. **Read the sources.** Save the candidate pages with `make source-pages OUT=<dir> URLS="<u1> <u2>"` (in
-   `.claude/skills/diagram`; `<dir>` under `/tmp/l7r-check/`), grep them yourself for the passages, then
-   dispatch ONE `source-reader` over every item at once. Hand it the saved-pages directory and each claim's
-   text written into the prompt - never a path under `/diagram` (a reader that opens one is handed ~28,000
-   tokens of CLAUDE.md files; `check-bundle-hooks.sh` refuses the dispatch). A source already in the
-   registry: `make check-bundle KEY=<key>` and name its MANIFEST.md.
-3. **Write the notes.** In the fragment, `<sup class="fn" data-note="<key>"></sup>` at the sentence; in its
-   `.notes.html`, `<li data-note="<key>">...</li>` (no numbers anywhere). A new registry key needs both
-   write-ups in a new `research/sources/010-works-cited/NNNN-<key>.html` (a free prefix; copy a neighbor's
-   shape). Use `Edit`, not a script, on a file you have read. Then in `.claude/skills/diagram`:
-   `make record && make citations && make test-file FILE="tests/interactive/test_footnotes.py
+1. **Locate.** Grep each item's words over `.claude/skills/diagram/research/{page}/`; note the fragment and
+   sentence.
+2. **Read the sources.** Save candidate pages with `make source-pages OUT=/tmp/l7r-check/{slug}-pages URLS="<u1>
+   <u2>"`, grep them yourself, then dispatch ONE `source-reader` over every item at once, handing it the saved
+   directory and each claim's text in the prompt - never a path under `/diagram` (`check-bundle-hooks.sh`
+   refuses that). A source already in the registry: `make check-bundle KEY=<key>` and name its MANIFEST.md.
+3. **Write the notes.** In the fragment `<sup class="fn" data-note="<key>"></sup>`; in its `.notes.html`
+   `<li data-note="<key>">...</li>` (no numbers). A new key needs both write-ups in a new
+   `research/sources/010-works-cited/NNNN-<key>.html`. `Edit` a file you have read; never script it. Then in
+   `.claude/skills/diagram`: `make record && make citations && make test-file FILE="tests/interactive/test_footnotes.py
    tests/interactive/test_citations.py tests/interactive/test_sources.py tests/interactive/test_record_format.py"`.
-4. **Check, one agent per changed entry or key, all in one message, in the background.** For each changed
-   question: `make check-bundle PAGE={page} SECTION=<NNN>`, then `quote-check` and `record-format`, each
-   naming the MANIFEST.md it printed and nothing else. For each new or changed registry key:
-   `make check-bundle KEY=<key>` and `source-applicability`. Each replies with ONE line of counts and writes
-   its report to `REPORT.md` in its bundle.
-5. **Apply.** Open a REPORT.md only when its line reports something to apply; apply every finding (a new
-   glossary term is a file in `l7r/diagram/interactive/assets/glossary/`, then `make glossary`); re-run
-   step 3's commands.
-6. **Close.** `python3 specs/242-cite-the-unfootnoted-assertions/measure/worklist.py {page}.html` (from
-   `.claude/skills/diagram`) for the FR-006 figure; commit; tick with
-   `make tick F=250-close-the-record-checks T={task} BOXES=1 NOTE="<what closed, with the counts>"`.
-   Do NOT run `scripts/sync-with-main.sh done` - the feature has other open tasks.
-7. **Report.** Your last message is one paragraph: items closed per form (citation / absence / grounds),
-   FR-006 items confirmed or worked, the agents run, and anything left open and why.
+4. **Hand off.** Write `{handoff}`: one line per changed question (`SECTION=<NNN>`), one per new or changed
+   registry key (`KEY=<key>`), each item's form (citation / absence / grounds), each FR-006 item's verdict, and
+   anything left open and why. Commit. Do NOT run the checks, do NOT tick, do NOT push - session 2 does the checks
+   in a fresh context. Your last message is one paragraph saying what you wrote.
+"""
 
-If a finding needs the GM (a claim the record contradicts, a rule that would change), do not decide it: write
-it into your last paragraph and leave the text as it is.
+CHECK = COMMON + """Session 1 has written this page's notes and committed them. Its handoff, `{handoff}`, lists the questions
+and registry keys it changed - read it first; it is your work list.
+
+## The procedure (session 2: check, apply, close)
+
+5. **Check, one agent per changed question or key, all in one message, in the background.** For each question:
+   `make check-bundle PAGE={page} SECTION=<NNN>`, then `quote-check` and `record-format`, each naming the
+   MANIFEST.md it printed and nothing else (the MANIFEST holds every copy inline). For each new or changed key:
+   `make check-bundle KEY=<key>` and `source-applicability`. Each replies with its counts first, then only what
+   you must act on.
+6. **Apply** every finding (a glossary term is a file in `l7r/diagram/interactive/assets/glossary/`, then
+   `make glossary`), then re-run the record commands and tests.
+7. **Re-check only what moved.** If you changed a note on a check's finding, re-check THAT note alone:
+   `make check-bundle PAGE={page} SECTION=<NNN> NOTES=<key,key>` and one `quote-check` naming its MANIFEST.
+8. **Close.** `python3 specs/242-cite-the-unfootnoted-assertions/measure/worklist.py {page}.html` (from
+   `.claude/skills/diagram`) for the FR-006 figure; commit; tick with
+   `make tick F=250-close-the-record-checks T={task} BOXES=1 NOTE="<what closed, with the counts>"`. Do NOT run
+   `scripts/sync-with-main.sh done`.
+9. **Report.** One paragraph: items closed per form, FR-006 items confirmed or worked, the agents run, anything
+   left open and why. A finding that needs the GM (the record contradicts itself, a rule would change) is not
+   decided: leave the text and say so.
 """
 
 
@@ -122,12 +137,19 @@ def main(argv: list[str]) -> int:
     if not items2 and not items6:
         print(f"brief: {page} owes nothing under FR-002 or FR-006", file=sys.stderr)
         return 2
-    out = FEATURE / "briefs" / f"{page.replace('/', '-')}.md"
-    out.parent.mkdir(exist_ok=True)
-    marks = HERE / f"marks-{page.replace('/', '-')}.json"
-    out.write_text(BRIEF.format(page=page, task=task, clone=CLONE, marks=marks.relative_to(CLONE),
-                                fr002="\n".join(items2) or "- none", fr006="\n".join(items6) or "- none"), encoding="utf-8")
-    print(f"brief: {len(items2)} FR-002 and {len(items6)} FR-006 item(s) -> {out}")
+    slug = page.replace("/", "-")
+    briefs = FEATURE / "briefs"
+    briefs.mkdir(exist_ok=True)
+    marks = HERE / f"marks-{slug}.json"
+    fields = dict(page=page, task=task, clone=CLONE, marks=marks.relative_to(CLONE), slug=slug,
+                  handoff=(briefs / f"{slug}-handoff.md").relative_to(CLONE),
+                  fr002="\n".join(items2) or "- none", fr006="\n".join(items6) or "- none")
+    outs = []
+    for n, (what, template) in enumerate((("locate, read and write", WRITE), ("check, apply and close", CHECK)), 1):
+        out = briefs / f"{slug}-{n}.md"
+        out.write_text(template.format(n=n, what=what, **fields), encoding="utf-8")
+        outs.append(out)
+    print(f"brief: {len(items2)} FR-002 and {len(items6)} FR-006 item(s) -> " + " then ".join(str(o) for o in outs))
     return 0
 
 

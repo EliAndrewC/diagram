@@ -80,6 +80,48 @@ def kind_docstring(root: pathlib.Path, name: str) -> tuple[str, str] | None:
     return None
 
 
+_BLOCK = re.compile(r"<(p|li|blockquote|td|dd)\b[^>]*>.*?</\1>", re.S)
+_NOTE_LI = re.compile(r'<li data-note="([^"]+)">.*?</li>\n?', re.S)
+
+
+def notes_subset(notes_html: str, keys: set[str]) -> str:
+    """Only the named notes of a question's notes file, in their order."""
+    return "".join(m.group(0) for m in _NOTE_LI.finditer(notes_html) if m.group(1) in keys)
+
+
+def excerpt(fragment_html: str, keys: set[str]) -> str:
+    """The question's heading and only the blocks whose text carries a mark for one of the keys - what a
+    re-check of those notes reads (feature 250, recommendation 5: the second quote-check round of the first
+    page session re-read two whole entries to confirm a handful of corrected notes)."""
+    head = re.search(r"<h[23][^>]*>.*?</h[23]>", fragment_html, re.S)
+    marks = tuple(f'data-note="{k}"' for k in keys)
+    blocks = [m.group(0) for m in _BLOCK.finditer(fragment_html) if any(mk in m.group(0) for mk in marks)]
+    kept = "\n".join(dict.fromkeys(blocks))
+    return (head.group(0) + "\n" if head else "") + "<!-- an EXCERPT: only the blocks carrying the named notes -->\n" + kept + "\n"
+
+
+def inline(out: pathlib.Path, rows: list[tuple[str, str, str]]) -> str:
+    """Every copy written into the MANIFEST under its origin, so a check reads ONE file in ONE turn - the
+    seeded runs took up to twice the turns of the tree legs reading a manifest and then each file in turn
+    (feature 250, recommendation 1). Grep targets stay files of their own: the variant index and saved pages."""
+    parts = []
+    for name, origin, _what in rows:
+        path = out / name
+        if not path.is_file() or name in ("glossary-variants.txt", "quote-verbatim.json") or name.startswith("pages"):
+            continue
+        parts.append(f"## `{name}` - origin `{origin}`\n\n```\n{path.read_text(encoding='utf-8').rstrip()}\n```\n")
+    return "\n".join(parts)
+
+
+def refresh(out: pathlib.Path) -> None:
+    """Rewrite a bundle's MANIFEST from the files now beside it - for a harness that edits a copy after the
+    bundle was made (the seeded-fault runs plant their faults this way)."""
+    text = (out / MANIFEST).read_text(encoding="utf-8")
+    title = text.splitlines()[0].removeprefix("# Check bundle - ")
+    rows = [(m.group(1), m.group(2), m.group(3)) for m in re.finditer(r"^\| `([^`]+)` \| `([^`]+)` \| (.*) \|$", text, re.M)]
+    (out / MANIFEST).write_text(manifest(out, title, rows), encoding="utf-8")
+
+
 def slug(text: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", text.casefold()).strip("-")
 
@@ -108,10 +150,14 @@ def manifest(out: pathlib.Path, title: str, rows: list[tuple[str, str, str]]) ->
         "meant for the main session (feature 250). A finding names the ORIGIN column, which is the file the "
         "session will edit.",
         "",
+        "**Everything you need is in THIS file**, each copy under its origin below; read it once. The two grep",
+        "targets that are not inlined - the glossary's variant index and a source's saved pages - are files beside it.",
+        "",
         "| file | origin | what it is for |",
         "|---|---|---|",
         *(f"| `{f}` | `{o}` | {w} |" for f, o, w in rows),
         "",
+        inline(out, rows),
         "Reply with your report: the counts on the first line, then only what the session must act on (your contract gives the form).",
         "",
     ]
@@ -125,7 +171,7 @@ def copy(src: pathlib.Path, out: pathlib.Path, name: str | None = None) -> str:
     return str(dest.relative_to(out))
 
 
-def entry_bundle(root: pathlib.Path, page: str, section: str, out: pathlib.Path, extra: list[str], quotes: bool, kind: str = "") -> int:
+def entry_bundle(root: pathlib.Path, page: str, section: str, out: pathlib.Path, extra: list[str], quotes: bool, kind: str = "", notes: frozenset[str] = frozenset()) -> int:
     sys.path.insert(0, str(HERE))
     from _hm_record import fragments_for  # noqa: PLC0415
 
@@ -145,9 +191,14 @@ def entry_bundle(root: pathlib.Path, page: str, section: str, out: pathlib.Path,
         rows.append(("kind.txt", found_kind[0], f"for entry-drift: the modal `{kind}` - its docstring, which IS what the map says"))
     for rel in fragments:
         what = "the question's footnotes" if rel.endswith(".notes.html") else "the question, as its reader meets it"
-        rows.append((copy(root / rel, out), rel, what))
+        name = copy(root / rel, out)
+        if notes:
+            dest, text = out / name, (root / rel).read_text(encoding="utf-8")
+            dest.write_text(notes_subset(text, set(notes)) if rel.endswith(".notes.html") else excerpt(text, set(notes)), encoding="utf-8")
+            what += f" - ONLY the notes {', '.join(sorted(notes))} and the blocks that carry them"
+        rows.append((name, rel, what))
         if rel.endswith(".notes.html"):
-            keys += cited_keys((root / rel).read_text(encoding="utf-8"))
+            keys += cited_keys((out / name).read_text(encoding="utf-8"))
     code, text = run_script("_record_prepass.py", [page, "--root", str(root), "--section", section], root)
     (out / "prepass.txt").write_text(text, encoding="utf-8")
     rows.append(("prepass.txt", f"make record-prepass PAGE={page} SECTION={section}", "for record-format: the WORDS TO RULE ON and the pattern candidates"))
@@ -156,6 +207,8 @@ def entry_bundle(root: pathlib.Path, page: str, section: str, out: pathlib.Path,
         return code
     if quotes:
         code, text = run_script("_quote_verbatim.py", [page, "--root", str(root), "--section", section, "--json", str(out / "quote-verbatim.json")], root)
+        if notes and not code:
+            text = scoped_verbatim(out, text)
         (out / "quote-verbatim.txt").write_text(text, encoding="utf-8")
         rows.append(("quote-verbatim.txt", f"make quote-verbatim PAGE={page} SECTION={section}", "for quote-check: which quotations are on their pages, character for character"))
         if code:
@@ -171,6 +224,40 @@ def entry_bundle(root: pathlib.Path, page: str, section: str, out: pathlib.Path,
         rows.append((copy(src, out, f"extra/{src.name}"), str(path), "named by the dispatcher"))
     (out / MANIFEST).write_text(manifest(out, f"{page}, question {section}", rows), encoding="utf-8")
     print(f"check-bundle: {len(rows)} file(s) in {out} - hand the agent {out / MANIFEST}")
+    return 0
+
+
+def scoped_verbatim(out: pathlib.Path, full_text: str) -> str:
+    """The quote-verbatim report cut to the notes being re-checked: an entry is kept when one of its passages
+    is quoted in the cut notes file, or its assertion stands in the excerpt."""
+    import json  # noqa: PLC0415
+
+    data = json.loads((out / "quote-verbatim.json").read_text(encoding="utf-8"))
+    kept_text = "".join(p.read_text(encoding="utf-8") for p in out.glob("*.html"))
+    kept = [e for e in data["footnotes"] if any(str(p)[:40] in kept_text for p in e.get("passages") or [])
+            or (e.get("assertion") and str(e["assertion"])[:40] in re.sub(r"<[^>]+>", "", kept_text))]
+    data["footnotes"] = kept
+    (out / "quote-verbatim.json").write_text(json.dumps(data, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    lines = [ln for ln in full_text.splitlines() if not re.match(r"\s+fn-\d+ ", ln)]
+    lines += [f"  {e['id']} {e.get('key') or e.get('class')} - {e.get('readability')}" for e in kept]
+    return "\n".join(lines) + f"\n  (scoped to the {len(kept)} footnote(s) of the notes being re-checked)\n"
+
+
+def print_notes(root: pathlib.Path, page: str, section: str, keys: frozenset[str]) -> int:
+    """`make notes`: the named notes of one question and the blocks carrying them, and nothing else - what a
+    session needs to edit a few notes, where the first page session dumped whole notes files and wide `sed`
+    ranges of large fragments, 17,000 to 20,000 characters apiece (feature 250, recommendation 4)."""
+    sys.path.insert(0, str(HERE))
+    from _hm_record import fragments_for  # noqa: PLC0415
+
+    found = fragments_for(page, section, str(root))
+    if not found or not keys:
+        print(f"notes: PAGE={page} SECTION={section} KEYS=<key,key> - {'no such question' if not found else 'name the keys'}", file=sys.stderr)
+        return 2
+    for rel in found:
+        text = (root / rel).read_text(encoding="utf-8")
+        body = notes_subset(text, set(keys)) if rel.endswith(".notes.html") else excerpt(text, set(keys))
+        print(f"== {rel}\n{body}")
     return 0
 
 
@@ -199,6 +286,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--key", default="", help="one registry key, for a source bundle")
     ap.add_argument("--out", default="", help=f"the bundle directory (default under {DEFAULT_ROOT})")
     ap.add_argument("--extra", nargs="*", default=[], help="further files to copy in, relative to the root")
+    ap.add_argument("--notes", default="", help="re-check only these note keys, comma-separated: the notes file and the fragment are cut to them")
+    ap.add_argument("--print-notes", action="store_true", help="print the named notes and the blocks carrying them, and write nothing (make notes)")
     ap.add_argument("--kind", default="", help="a modal class name, for entry-drift: its docstring is copied in")
     ap.add_argument("--no-quotes", action="store_true", help="skip the quote-verbatim report (it fetches every cited page)")
     ap.add_argument("--root", default=".")
@@ -208,8 +297,11 @@ def main(argv: list[str] | None = None) -> int:
         return key_bundle(root, args.key, pathlib.Path(args.out or DEFAULT_ROOT / f"key-{args.key}"))
     if not args.page or not args.section:
         ap.error("PAGE and --section, or --key")
+    wanted = frozenset(k.strip() for k in args.notes.split(",") if k.strip())
+    if args.print_notes:
+        return print_notes(root, args.page.removesuffix(".html"), args.section, wanted)
     out = pathlib.Path(args.out or DEFAULT_ROOT / f"{slug(args.page)}-{slug(args.section)}")
-    return entry_bundle(root, args.page.removesuffix(".html"), args.section, out, args.extra, not args.no_quotes, args.kind)
+    return entry_bundle(root, args.page.removesuffix(".html"), args.section, out, args.extra, not args.no_quotes, args.kind, wanted)
 
 
 if __name__ == "__main__":

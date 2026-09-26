@@ -181,8 +181,32 @@ def run_one(out: pathlib.Path) -> str:
     return f"{out.name} rc={rc}"
 
 
+def setup_one() -> None:
+    """The ONE-FILE leg (feature 250, recommendation 1): each case's planted base bundle re-made so its
+    MANIFEST holds every copy inline, three runs a case. The tree and multi-file legs are already recorded."""
+    sys.path.insert(0, str(CLONE / "scripts"))
+    import _check_bundle  # noqa: PLC0415
+
+    for case in CASES:
+        base = BASE / f"base-{case}"
+        _check_bundle.refresh(base)
+        for n in range(1, RUNS + 1):
+            out = BASE / f"{case}-one-{n}"
+            shutil.rmtree(out, ignore_errors=True)
+            shutil.copytree(base, out)
+            m = out / "MANIFEST.md"
+            m.write_text(m.read_text(encoding="utf-8").replace(str(base), str(out)), encoding="utf-8")
+            files = f"Your bundle is {out}/MANIFEST.md - it holds every file inline; read it once."
+            (out / "prompt.txt").write_text(PROMPTS[case].format(files=files), encoding="utf-8")
+            (out / "agent").write_text(CASES[case][0], encoding="utf-8")
+            for stale in ("REPORT.md", "run.json", "run.err", "session"):
+                (out / stale).unlink(missing_ok=True)
+    print(f"seeded: {len(CASES) * RUNS} one-file runs under {BASE}")
+
+
 def run(only: tuple[str, ...] = ()) -> None:
-    dirs = sorted(p for p in BASE.iterdir() if (p / "prompt.txt").is_file() and (not only or p.name.split("-")[0] in only))
+    dirs = sorted(p for p in BASE.iterdir() if (p / "prompt.txt").is_file()
+                  and (not only or p.name.split("-")[0] in only or p.name.split("-")[1] in only))
     with ThreadPoolExecutor(max_workers=3) as pool:
         for line in pool.map(run_one, dirs):
             print(line, flush=True)
@@ -229,6 +253,8 @@ def main(argv: list[str]) -> int:
     verb = argv[0] if argv else ""
     if verb == "setup":
         setup(tuple(argv[1:]))
+    elif verb == "setup-one":
+        setup_one()
     elif verb == "run":
         run(tuple(argv[1:]))
     elif verb == "judge":

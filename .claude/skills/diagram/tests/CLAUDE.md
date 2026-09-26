@@ -1,5 +1,8 @@
 # `tests/` - the diagram skill's test bed
 
+<!-- the engine's dev loop applies to test work too (feature 250 moved it out of the skill's CLAUDE.md) -->
+@../l7r/diagram/CLAUDE.md
+
 ## THE DIRECTORY DECIDES WHEN A TEST RUNS (feature 135, GM 2026-08-27)
 
 *"if we have one directory for our quick tests, one directory for our done tests, and one directory

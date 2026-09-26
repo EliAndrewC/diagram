@@ -199,12 +199,38 @@ Spec D2 expected no engine Python. The slice fixed `tools/record_asset.py` (cons
 carries engine code and the push takes the gated route on a green `make done`. The spec is not amended for
 it: D2 recorded an expectation, and the route is chosen from the delta by `sync-with-main.sh`, never by a spec.
 
+### D11 - The second round: R2's five recommendations, then another measured page (GM 2026-09-26)
+
+The GM, on R2: *"Yes, I agree with your suggestion. So please do all five things, then do another measured page,
+the same as this round, and then let's see if that helps."* The five, each the smallest form that does what R2
+measured:
+
+1. **One file per bundle.** `make check-bundle` writes every copy INLINE in its `MANIFEST.md` under its origin;
+   the variant index and saved pages stay files beside it, as grep targets. The five contracts say to read it
+   once. Proven the way D6 was: a one-file leg of three seeded runs per agent on the same planted inputs,
+   judged on the same findings, beside the tree and multi-file legs already recorded (R2).
+2. **Two sessions per page.** `measure/brief.py` writes two briefs - locate, read and write; then check, apply
+   and close - joined by a handoff file that names the changed questions and keys; `make page-session` runs
+   several briefs one after another, each a fresh session (`scripts/_page_session_runner.py`).
+3. **The engine's dev loop moves under the engine.** The skill's `CLAUDE.md` body moves to
+   `l7r/diagram/CLAUDE.md` with every link rewritten for its depth; `pool/CLAUDE.md` and `tests/CLAUDE.md` import it
+   (`@../l7r/diagram/CLAUDE.md` - a nested import was proven to attach on a probe, 2026-09-26); the skill's
+   `CLAUDE.md` becomes a short index. Nothing in the doctrine changes, only where it auto-loads.
+4. **`make notes PAGE= SECTION= KEYS=`** prints the named notes of one question and only the blocks of its
+   fragment that carry them. The briefs tell a session to use it, and never to dump a notes file.
+5. **Re-check only what moved.** `make check-bundle ... NOTES=<key,key>` cuts the notes file and the fragment to
+   the named notes and the blocks carrying them, and the quote-verbatim report to their footnotes; the check
+   brief's re-check step uses it.
+
+The page is `vegetation` - five FR-002 items (as both earlier pages had) and one FR-006 - worked in two sessions
+and measured with `measure/tokens.py` over both transcripts, against R1 and R2. Recorded as R3.
+
 ## Phases
 
 0. Baseline and the meter (T01, T02).
 1. **The measured slice** (T03 to T09), ending in the measurement report (T10). STOP for the GM - who ruled
    on 2026-09-26 (D6).
-1b. **The token work** (T11 to T16): the fixes, the bundle and the guard (D6, D8), the page session (D7), the
+1b. **The token work** (T11 to T16), and its second round (T26 to T33, D11): the fixes, the bundle and the guard (D6, D8), the page session (D7), the
    seeded-fault runs (D6), and the comparison (D9) - which is phase 2's first page.
 2. FR-002 page by page, one page per session; FR-006 beside it, since both open the same fragments.
 3. FR-003, FR-004, FR-005 (the cosmetic sweeps).

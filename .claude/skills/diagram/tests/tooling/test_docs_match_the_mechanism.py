@@ -36,6 +36,7 @@ OPERATIVE = [
     ROOT / ".specify/templates/plan-template.md",
     ROOT / "docs/efficiency-tooling.md",
     SKILL / "CLAUDE.md",
+    SKILL / "l7r/diagram/CLAUDE.md",
     SKILL / "SKILL.md",
     SKILL / "tests/CLAUDE.md",
     SKILL / "dev/gate.md",

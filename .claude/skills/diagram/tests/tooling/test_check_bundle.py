@@ -91,3 +91,28 @@ def test_a_source_bundle_holds_the_entry(tmp_path: pathlib.Path, monkeypatch: py
     assert (out / "sources" / "edo-enwiki.html").is_file()
     assert fetched == [["_source_pages.py", str(out / "pages"), "https://en.wikipedia.org/wiki/Edo"]]
     assert cb.main(["--key", "no-such-key", "--out", str(tmp_path / "none"), "--root", str(REPO)]) == 2
+
+
+def test_the_manifest_holds_every_copy_so_a_check_reads_one_file(tmp_path: pathlib.Path) -> None:
+    out = tmp_path / "bundle"
+    assert cb.main(["ways", "--section", "010", "--out", str(out), "--no-quotes", "--root", str(REPO)]) == 0
+    manifest = (out / "MANIFEST.md").read_text(encoding="utf-8")
+    fragment = (out / "010-how-far-past-the-bank-does-a-bridge-land.html").read_text(encoding="utf-8").rstrip()
+    assert fragment in manifest and "WORDS TO RULE ON" in manifest, "the fragment and the prepass are inline"
+    assert "sources/ritter-timber-bridges.html` - origin" in manifest
+    assert "glossary-variants.txt` - origin" not in manifest, "the grep target stays a file of its own"
+
+
+def test_a_recheck_bundle_carries_only_the_named_notes_and_their_blocks() -> None:
+    fragment = '<h2 id="q">Q</h2>\n<p>One.<sup class="fn" data-note="a"></sup></p>\n<p>Two.<sup class="fn" data-note="b"></sup></p>\n<ul><li>Three.<sup class="fn" data-note="a-2"></sup></li></ul>\n'
+    notes = '<li data-note="a">A</li>\n<li data-note="b">B</li>\n<li data-note="a-2">A2</li>\n'
+    cut = cb.excerpt(fragment, {"a", "a-2"})
+    assert '<h2 id="q">' in cut and "One." in cut and "Three." in cut and "Two." not in cut
+    assert cb.notes_subset(notes, {"a-2"}) == '<li data-note="a-2">A2</li>\n'
+
+
+def test_make_notes_prints_the_named_notes_and_refuses_without_keys(capsys: pytest.CaptureFixture[str]) -> None:
+    assert cb.main(["ways", "--section", "010", "--notes", "ritter-timber-bridges", "--print-notes", "--root", str(REPO)]) == 0
+    out = capsys.readouterr().out
+    assert 'data-note="ritter-timber-bridges"' in out and out.count("<li data-note=") == 1
+    assert cb.main(["ways", "--section", "010", "--print-notes", "--root", str(REPO)]) == 2

@@ -5,8 +5,8 @@
 This repository is the `/diagram` skill of the GM's L5R worldbuilding project: building plans
 (Mode A) and settlement maps (Mode B), deliberately one skill and one package at
 `.claude/skills/diagram/` (why one, and what would change it: `dev/skill-boundary.md`). Usage is
-`.claude/skills/diagram/SKILL.md`; the engine dev loop is `.claude/skills/diagram/CLAUDE.md`, which
-auto-loads under that tree.
+`.claude/skills/diagram/SKILL.md`; the engine dev loop is `.claude/skills/diagram/l7r/diagram/CLAUDE.md`,
+which auto-loads under the engine, `pool/` and `tests/` - not under `research/` (feature 250).
 
 The GM's setting notes that the research cites live in gm-assistant, mounted at
 `/host-l7r-repo/gm-assistant` (`setting/`, `cosmology/`, `campaigns/`; on GitHub at
@@ -82,8 +82,8 @@ is `.claude/skills/diagram/research/CLAUDE.md`, which auto-loads when a session 
 - A record check reads a BUNDLE: `make check-bundle PAGE=<p> SECTION=<q>` (or `KEY=<k>`) copies what it
   needs, prepass output included, OUT of the repository, and the dispatch names its `MANIFEST.md` - an
   agent reading a file here is handed every `CLAUDE.md` above it, ~28,000 tokens (feature 250). The agent's
-  reply is compact: counts first, then only what to act on. A research feature is worked one page per session,
-  each started fresh from a brief (`make page-session BRIEF=<file>`).
+  reply is compact: counts first, then only what to act on. A research page is worked in two fresh sessions, write then
+  check-and-apply, from briefs (`make page-session BRIEF="<1> <2>"`); `make notes` prints only the notes you name.
 
 ## Development workflow
 

@@ -194,6 +194,11 @@ def main(argv: list[str] | None = None) -> int:
         print(f"  {_n(size):>10} chars  {what}")
     print(f"  {_n(sum(s for s, _w in main_reads)):>10} chars in all, over {len(main_reads)} tool results")
     if args.json:
+        # the record keeps each read's SIZE, not the command that made it: a command quotes whatever it grepped
+        # for, a source's own spelling among it, and the figures are what the record is for
+        for w in report:
+            for a in w["agents"]:
+                a["reads"] = [size for size, _what in a["reads"]]
         pathlib.Path(args.json).write_text(json.dumps(report, indent=1) + "\n", encoding="utf-8")
     return 0
 
