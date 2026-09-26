@@ -46,6 +46,8 @@ bailey	bailey
 baileys	bailey
 bakufu	bakufu
 bakumatsu	bakumatsu
+bamboo grass	sasa
+bamboo-grass	sasa
 banfang	banfang
 bansho	bansho
 banyuetang	banyuetang
@@ -153,6 +155,8 @@ comb net	comb
 combs	comb
 command area	command area
 confluence	confluence
+conservation headland	conservation headland
+conservation headlands	conservation headland
 consolidated paddies	kochi seiri
 consolidated paddy	kochi seiri
 cooper	cooper
@@ -170,6 +174,11 @@ county seats	county seat
 crib	cribbing
 cribbing	cribbing
 cribs	cribbing
+crop margin	crop margin
+crop margins	crop margin
+crop-margin	crop margin
+crown shyness	crown shyness
+cryptomeria	sugi
 cryptomeria japonica	sugi
 culm	culm
 culms	culm
@@ -180,6 +189,8 @@ cun	cun
 curfew ward	lifang
 curtain	curtain
 curtain wall	curtain
+cutbank	cutbank
+cutbanks	cutbank
 cyanobacteria	cyanobacterium
 cyanobacterium	cyanobacterium
 dachedian	wagon inn
@@ -239,6 +250,7 @@ drill ground	drill ground
 drum tower	gulou
 ds/m	dS/m
 duty of water	water duty
+dwarf bamboo	sasa
 dōba	dōba
 ear mound	ear mound
 earth god	tudi miao
@@ -296,6 +308,7 @@ fengshui	fengshui grove
 fengshui back grove	fengshui grove
 fengshui forest	fengshui grove
 fengshui grove	fengshui grove
+fengshuilin	fengshui grove
 fertilizer boat	fertilizer boat
 fertilizer boats	fertilizer boat
 fetch	fetch
@@ -415,6 +428,7 @@ hanchiku	rammed earth
 hangtu	rammed earth
 hanko	hanko
 hansho	hansho
+hardiness zone	hardiness zone
 hari-ma	hari-ma
 hasa	hazakake
 hata	hatake
@@ -457,6 +471,7 @@ hucheng he	hucheng he
 hutong	hutong
 hutongs	hutong
 hyakusho denki	Hyakusho Denki
+hydrophilic	hydrophilic
 hyo	hyō
 hyojosho	Hyōjōsho
 hyō	hyō
@@ -480,6 +495,8 @@ intendants	daikan
 interceptor	interceptor
 interceptor channel	interceptor
 interlinear commentary	interlinear commentary
+internode	internode
+internodes	internode
 intramural	intramural
 inverted siphon	inverted siphon
 inverted siphons	inverted siphon
@@ -498,6 +515,7 @@ isotherm	isohyet
 isotherms	isohyet
 itabashi	itabashi
 jagama	jagama
+japanese zelkova	keyaki
 jetties	jetty
 jetty	jetty
 jiangnan	Lower Yangzi
@@ -510,6 +528,9 @@ jingū-ji	jingūji
 jingūji	jingūji
 jinja	jinja
 jinya	jin'ya
+jitter	jitter
+jittered	jitter
+jittering	jitter
 jizo	jizo
 jo	jo
 jochi	jochi
@@ -650,6 +671,8 @@ liuchu	liuchu
 loess	loess
 log boom	boom
 lognormal	lognormal
+longan	longan
+longans	longan
 loose-log drive	kanagashi
 loose-log driving	kanagashi
 louzeyuan	louzeyuan
@@ -704,6 +727,7 @@ mongol yam	yam
 monk	monk outlet
 monk outlet	monk outlet
 monk-style outlet	monk outlet
+monospecific	monospecific
 monzen	monzen
 moso	moso
 mu	mu
@@ -734,6 +758,7 @@ natural village	natural village
 natural villages	natural village
 nawabari	nawabari
 naya	naya
+near-monospecific	monospecific
 neige	neige
 nengu	nengu
 neribei	neribei
@@ -825,6 +850,7 @@ precinct	precinct
 precincts	precinct
 puddled	puddling
 puddling	puddling
+qi	qi
 qiandao	qiandao
 qiaolou	gulou
 qimin yaoshu	Qimin Yaoshu
@@ -857,6 +883,8 @@ return flow	return flow
 revetment	revetment
 revetments	revetment
 revetted	revetment
+rhizome	rhizome
+rhizomes	rhizome
 ri	ri
 ridge span	ridge span
 riffle	riffle
@@ -899,6 +927,7 @@ sanshaku-michi	sanshaku-michi
 sanson	sankyoson
 sara-ike	sara-ike
 sarae	sarae
+sasa	sasa
 satetsu	satetsu
 satoyama	satoyama
 schistosomiasis	schistosomiasis
@@ -926,6 +955,8 @@ shakuhachi	shakuhachi
 shaso	shasō
 shasō	shasō
 shatian	shatian
+sheath	sheath
+sheaths	sheath
 sheer boom	boom
 shi	shi
 shibai-goya	shibai-goya
@@ -1022,6 +1053,7 @@ taisho	Taisho
 taishō	Taisho
 takasebune	takasebune
 take-yabu	take-yabu
+takeyabu	take-yabu
 tamagaki	tamagaki
 tamajari	tamajari
 tameike	tameike
@@ -1142,7 +1174,9 @@ water duty	water duty
 water gate	water gate
 water gates	water gate
 water mouth	water-mouth
+water tail	water-mouth
 water-mouth	water-mouth
+water-tail	water-mouth
 wazi	goulan
 weathering	weathering
 wei-tian	weitian
@@ -1199,6 +1233,7 @@ yuan rebuild	Yuan dynasty
 yulin wei	yulin wei
 zaimokuya	zaimokuya
 zaofang	zaofang
+zelkova	keyaki
 zhalan	zhalan
 zhang	zhang
 zhengyi	Zhengyi
@@ -1221,11 +1256,14 @@ zuku	zuku
 御蔵	kura
 枝打ち	edauchi
 梁間	hari-ma
+水口林	water-mouth
 清明上河図	Qingming Shanghe Tu
 畑永法	hata-ei
 百姓伝記	Hyakusho Denki
 築地松	tsuijimatsu
 纤道	qiandao
+背山面水	beishan mianshui
 農業全書	Nogyo Zensho
 鈔關	chaoguan
+雑木林	zokibayashi
 馬宿	umayado

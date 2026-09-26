@@ -726,7 +726,8 @@
  "beishan mianshui": {
   "def": "'Back to the hill, facing the water': the fengshui seat that puts a house or a village with high ground behind it and open water in front.",
   "variants": [
-   "beishan mianshui"
+   "beishan mianshui",
+   "背山面水"
   ]
  },
  "beitang": {
@@ -1402,7 +1403,8 @@
    "fengshui",
    "fung shui woods",
    "fung shui wood",
-   "fung shui"
+   "fung shui",
+   "fengshuilin"
   ]
  },
  "fertilizer boat": {
@@ -2282,7 +2284,9 @@
  "keyaki": {
   "def": "Zelkova, a tall broadleaf timber tree of the homestead grove's planting list.",
   "variants": [
-   "keyaki"
+   "keyaki",
+   "zelkova",
+   "Japanese zelkova"
   ]
  },
  "kichin-yado": {
@@ -3634,7 +3638,8 @@
   "def": "Japanese cedar: the tall, straight conifer planted for timber and shelter, and the mainstay of a homestead grove.",
   "variants": [
    "sugi",
-   "Cryptomeria japonica"
+   "Cryptomeria japonica",
+   "cryptomeria"
   ]
  },
  "sugumagi": {
@@ -3691,9 +3696,10 @@
   ]
  },
  "take-yabu": {
-  "def": "A bamboo thicket: a clonal stand of bamboo with a hard edge, held and cut like a coppice.",
+  "def": "A bamboo thicket: a clonal stand of bamboo, in most cases of nearly a single species, cut for its canes and shoots like a coppice.",
   "variants": [
-   "take-yabu"
+   "take-yabu",
+   "takeyabu"
   ]
  },
  "tamajari": {
@@ -4007,7 +4013,10 @@
   "def": "The low point where a village's stream and track leave the valley, and the grove planted there to hold the water in - the shuikou of a Chinese village.",
   "variants": [
    "water-mouth",
-   "water mouth"
+   "water mouth",
+   "water tail",
+   "water-tail",
+   "水口林"
   ]
  },
  "weir": {
@@ -4197,9 +4206,10 @@
   ]
  },
  "zokibayashi": {
-  "def": "The scrub wood at the far end of a new-field household's strip, grown and cut for that household's own fuel.",
+  "def": "A worked scrub wood of mixed broadleaf trees regrowing from the stump and cut for fuel; on a new-field household's strip, the wood at its far end kept for that household's own fuel.",
   "variants": [
-   "zokibayashi"
+   "zokibayashi",
+   "雑木林"
   ]
  },
  "zonation": {
@@ -4943,6 +4953,104 @@
    "soffit",
    "soffits",
    "eave soffit"
+  ]
+ },
+ "cutbank": {
+  "def": "The steep outer bank of a stream's bend, where the current cuts into the land.",
+  "variants": [
+   "cutbank",
+   "cutbanks"
+  ]
+ },
+ "jitter": {
+  "def": "Varied at random within a set range, so that repeated features such as tree crowns are not all drawn at one size or spacing.",
+  "variants": [
+   "jitter",
+   "jittered",
+   "jittering"
+  ]
+ },
+ "longan": {
+  "def": "A south Chinese evergreen fruit tree, related to the litchi, with small round brown-skinned fruit.",
+  "variants": [
+   "longan",
+   "longans"
+  ]
+ },
+ "monospecific": {
+  "def": "Made up of a single species; a bamboo stand is one clone, with little else growing in it.",
+  "variants": [
+   "monospecific",
+   "near-monospecific"
+  ]
+ },
+ "qi": {
+  "def": "In fengshui, the vital energy believed to flow through land, wind and water; a grove at the water mouth was held to keep evil qi out.",
+  "variants": [
+   "qi"
+  ]
+ },
+ "rhizome": {
+  "def": "The underground stem a bamboo spreads by; new shoots come up from it, so a stand is one plant creeping outward.",
+  "variants": [
+   "rhizome",
+   "rhizomes"
+  ]
+ },
+ "sasa": {
+  "def": "Dwarf bamboo, or bamboo grass, under 2 m tall, common on and near ridgelines; Japan's topographic maps give it a symbol of its own, separate from the bamboo grove.",
+  "variants": [
+   "sasa",
+   "bamboo grass",
+   "bamboo-grass",
+   "dwarf bamboo"
+  ]
+ },
+ "sheath": {
+  "def": "The papery leaf that wraps a young bamboo culm at each joint and is shed as the culm grows; madake's were used to wrap food and to cover geta.",
+  "variants": [
+   "sheath",
+   "sheaths"
+  ]
+ },
+ "conservation headland": {
+  "def": "A strip along the edge of a crop field managed for wildlife rather than farmed as usual - a modern British practice, introduced in the 1980s.",
+  "variants": [
+   "conservation headland",
+   "conservation headlands"
+  ]
+ },
+ "crop margin": {
+  "def": "The band 6 ft wide along a field's edge that the map keeps free of scrub, because the grass beside a crop was kept cut.",
+  "variants": [
+   "crop margin",
+   "crop margins",
+   "crop-margin"
+  ]
+ },
+ "crown shyness": {
+  "def": "The gap many tree species keep between neighboring crowns, so that even a fully stocked canopy does not touch branch to branch.",
+  "variants": [
+   "crown shyness"
+  ]
+ },
+ "hardiness zone": {
+  "def": "A North American scale that ranks plants by the coldest winter they survive; zone 7 is a winter low of about 5°F (-15°C).",
+  "variants": [
+   "hardiness zone"
+  ]
+ },
+ "hydrophilic": {
+  "def": "Water-loving; of plants, those that grow in wet ground at the water's edge, like the vegetation of a natural stream bank.",
+  "variants": [
+   "hydrophilic"
+  ]
+ },
+ "internode": {
+  "def": "The hollow length of a bamboo culm between two joints; madake's are long, which suits it for weaving baskets and fans.",
+  "variants": [
+   "internode",
+   "internodes"
   ]
  }
 }

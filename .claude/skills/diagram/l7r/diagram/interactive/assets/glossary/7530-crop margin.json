@@ -1,0 +1,9 @@
+{
+ "term": "crop margin",
+ "def": "The band 6 ft wide along a field's edge that the map keeps free of scrub, because the grass beside a crop was kept cut.",
+ "variants": [
+  "crop margin",
+  "crop margins",
+  "crop-margin"
+ ]
+}
