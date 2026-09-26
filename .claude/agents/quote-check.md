@@ -48,6 +48,32 @@ later turn. So:
 - An item that passed is ONE line (its id and its verdict) - never its quotation again, never the reasoning
   that it passed. The session does not act on a pass.
 
+## End each finding with its EDIT (feature 250 D15)
+
+The session applies your report with ONE command, `make apply-edits`, which reads blocks of exactly this shape
+from your reply (measured, research R6: applying a report by hand took 12 to 27 turns a check session, each
+re-reading 60,000 to 90,000 tokens of context):
+
+    EDIT <the ORIGIN path of the fragment or notes file, as the MANIFEST gives it>
+    <<<
+    the exact text now in that file
+    ===
+    the text that should replace it
+    >>>
+
+- Copy the old text CHARACTER FOR CHARACTER from the bundle's copy of that file - its quotation marks, dashes and
+  tags included - and make it just long enough to occur ONCE in the file (a clause or a sentence, not a
+  paragraph). The script applies a block only where its old text occurs exactly once; anything else is refused
+  and the session does that finding by hand.
+- One block per change; several blocks per finding when it changes several places. The block carries the
+  wording, so the finding's own prose stays to what is wrong and why.
+- A finding whose fix needs what you cannot settle from the bundle - a source to find, a figure to re-derive, a
+  choice for the GM, two wordings you cannot choose between - ends with `EDIT: none - <why>` instead, and the
+  session works it.
+- Inside a quoted passage (「...」 or a quotation in the source's own language) an EDIT only ever restores the
+  SOURCE's characters - the page's text, never a house-style change. A translation fix is an EDIT to the
+  translation; the original stays as quoted.
+
 ## Why you exist, in the GM's words (2026-09-06, feature 194)
 
 *"Anytime we add a new reference in order to support something, then in our references section, we quote the
@@ -135,7 +161,7 @@ run the whole procedure: nothing this check covers goes unchecked for want of th
 ## Output
 
 One block per footnote: `fn-n` - key - Readability verdict - Quotation verdict - Support verdict - the page text
-where it differs. Put every NOT-READABLE first: under the rule of 2026-09-06 it is the finding that changes the
+where it differs. Each finding the session must act on ends with its EDIT block(s) or `EDIT: none - <why>`. Put every NOT-READABLE first: under the rule of 2026-09-06 it is the finding that changes the
 record.
 Then, per section, the unfootnoted assertions. Then a summary table: counts of each verdict, and the hosts that
 refused. Never fix anything; never write to a file. Report what you found.

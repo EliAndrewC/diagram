@@ -167,14 +167,48 @@ def render(report: list[dict]) -> str:
     return "\n".join(lines)
 
 
+def summary(files: list[pathlib.Path], questions: int, items: int) -> dict:
+    """One page's figures from its sessions' `--json` records - the row R6 and later compare (feature 250 D15).
+
+    PER QUESTION CHECKED is the headline (R6, recommendation 4): the check work scales with the questions a page's
+    check sessions take, not with its items - three items on `cities/government` were four questions checked.
+    Totals are fresh + cached + output, main and agents, summed over every window of every session."""
+    main_t = turns = peak = 0
+    agents: dict[str, list[int]] = {}
+    for f in files:
+        for w in json.loads(f.read_text(encoding="utf-8")):
+            m = w["main"]
+            main_t += m["fresh"] + m["cached"] + m["output"]
+            turns += m["turns"]
+            peak = max(peak, m["peak_context"])
+            for a in w["agents"]:
+                k = agents.setdefault(a["agent"], [0, 0, 0])
+                k[0] += 1
+                k[1] += a["fresh"] + a["cached"] + a["output"]
+                k[2] += a["read_chars"]
+    runs = sum(k[0] for k in agents.values())
+    agent_t = sum(k[1] for k in agents.values())
+    total = main_t + agent_t
+    return {"sessions": len(files), "main": main_t, "turns": turns, "mean_turn": main_t // max(turns, 1), "peak": peak,
+            "agent_runs": runs, "agents": agent_t, "mean_agent": agent_t // max(runs, 1), "total": total,
+            "per_question": total // max(questions, 1), "per_item": total // max(items, 1),
+            "by_kind": {k: {"runs": v[0], "tokens": v[1], "mean_read_chars": v[2] // v[0]} for k, v in sorted(agents.items())}}
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("verb", choices=("mark", "report"))
+    ap.add_argument("verb", choices=("mark", "report", "summary"))
     ap.add_argument("label", nargs="?", default="")
     ap.add_argument("--session", default=str(SESSION))
     ap.add_argument("--json", default="")
     ap.add_argument("--marks", default=str(MARKS), help="the windows file - a page session keeps its own")
+    ap.add_argument("--files", nargs="*", default=[], help="summary: the page's sessions' --json records")
+    ap.add_argument("--questions", type=int, default=0, help="summary: the questions the check sessions took")
+    ap.add_argument("--items", type=int, default=0, help="summary: the page's FR-002 and FR-006 items")
     args = ap.parse_args(argv)
+    if args.verb == "summary":
+        print(json.dumps(summary([pathlib.Path(f) for f in args.files], args.questions, args.items), indent=1))
+        return 0
     marks_file = pathlib.Path(args.marks)
     marks = json.loads(marks_file.read_text(encoding="utf-8")) if marks_file.is_file() else []
     if args.verb == "mark":

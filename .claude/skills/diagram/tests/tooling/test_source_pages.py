@@ -74,3 +74,16 @@ def test_main(tmp_path: pathlib.Path, capsys) -> None:  # noqa: ANN001
     assert "saved 1 of 1" in capsys.readouterr().out
     assert sp.main([str(tmp_path / "o")]) == 2
     assert "no pointer given" in capsys.readouterr().err
+
+
+def test_a_second_save_adds_to_the_directory_and_never_overwrites(tmp_path: pathlib.Path) -> None:
+    """D15: a write session's second batch, numbered from 01 again, overwrote the first batch's pages."""
+    pages = sp.qv.Pages(opener=_opener)
+    out = tmp_path / "out"
+    sp.save(["https://ok.example/a", "https://refuses.example/b"], out, pages)
+    first = (out / "01-ok.example.txt").read_text(encoding="utf-8")
+    rows = sp.save(["https://ok.example/a", "https://refuses.example/b", "https://ok.example/c"], out, sp.qv.Pages(opener=_opener))
+    assert [r["pointer"] for r in rows] == ["https://ok.example/a", "https://refuses.example/b", "https://ok.example/c"]
+    assert [r["file"] for r in rows] == ["01-ok.example.txt", "-", "04-ok.example.txt"], "a saved page is kept; a failed one is retried past every old number"
+    assert (out / "01-ok.example.txt").read_text(encoding="utf-8") == first
+    assert "https://ok.example/c | 04-ok.example.txt | FETCHED" in (out / "MANIFEST.txt").read_text(encoding="utf-8")

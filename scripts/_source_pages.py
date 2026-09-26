@@ -46,10 +46,29 @@ def wrapped(text: str) -> str:
     return re.sub(r"(?<=[.!?。！？])\s*(?=\S)", "\n", text).strip() + "\n"
 
 
+def saved_rows(out: pathlib.Path) -> list[dict]:
+    """The rows an earlier save into `out` listed - kept, so a second save ADDS to the directory.
+
+    WHY (feature 250 D15): a write session saved a second batch into the same directory and its files, numbered
+    from 01 again, overwrote the first batch's; it re-saved everything, a turn and a fetch per page for nothing."""
+    manifest = out / "MANIFEST.txt"
+    if not manifest.is_file():
+        return []
+    rows = []
+    for line in manifest.read_text(encoding="utf-8").splitlines()[1:]:
+        pointer, file, state = (line.split(" | ", 2) + ["", ""])[:3]
+        state, _, why = state.partition(" - ")
+        rows.append({"pointer": pointer, "file": file, "state": state, "why": why})
+    return rows
+
+
 def save(urls: list[str], out: pathlib.Path, pages) -> list[dict]:  # noqa: ANN001
     out.mkdir(parents=True, exist_ok=True)
-    rows: list[dict] = []
-    for index, url in enumerate(dict.fromkeys(urls), 1):
+    rows = saved_rows(out)
+    start = len(rows) + 1  # past every earlier file, so a new page never takes an old one's number
+    have = {r["pointer"] for r in rows if r["state"] == "FETCHED"}
+    rows = [r for r in rows if r["pointer"] in have or r["pointer"] not in urls]
+    for index, url in enumerate((u for u in dict.fromkeys(urls) if u not in have), start):
         got = pages.get(url)
         row = {"pointer": url, "file": "-", "state": got["state"], "why": got.get("why", "")}
         if got["state"] == "FETCHED":

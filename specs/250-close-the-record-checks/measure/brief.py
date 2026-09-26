@@ -86,6 +86,8 @@ fragment the grep did not name.
 
 {fr006}
 
+**Over the size cap on this page:** {over}
+
 ## The procedure (session 1: locate, read, write)
 
 1. **Locate.** Grep each item's words over `.claude/skills/diagram/research/{page}/`; note the fragment and
@@ -93,10 +95,14 @@ fragment the grep did not name.
 2. **Read the sources.** Save candidate pages with `make source-pages OUT=/tmp/l7r-check/{slug}-pages URLS="<u1>
    <u2>"`, grep them yourself, then dispatch ONE `source-reader` over every item at once, handing it the saved
    directory and each claim's text in the prompt - never a path under `/diagram` (`check-bundle-hooks.sh`
-   refuses that). A source already in the registry: `make check-bundle KEY=<key>` and name its MANIFEST.md.
-3. **Write the notes.** In the fragment `<sup class="fn" data-note="<key>"></sup>`; in its `.notes.html`
-   `<li data-note="<key>">...</li>` (no numbers). A new key needs both write-ups in a new
-   `research/sources/010-works-cited/NNNN-<key>.html`. `Edit` a file you have read; never script it. Then in
+   refuses that). Keep ONE directory for the page: a second `make source-pages` into it ADDS pages, it never
+   overwrites the first batch. A source already in the registry: `make check-bundle KEY=<key>` and name its MANIFEST.md.
+3. **Write the notes.** First `Read` every fragment and notes file you will change, ALL IN ONE MESSAGE (parallel
+   `Read` calls): `Edit` needs the read, and a file a turn re-reads your whole context each time (feature 250 R6:
+   the write step took 19 turns for three items). In the fragment `<sup class="fn" data-note="<key>"></sup>`; in its
+   `.notes.html` `<li data-note="<key>">...</li>` (no numbers). A new key needs both write-ups in a new
+   `research/sources/010-works-cited/NNNN-<key>.html`, shaped as `{example}` is - copy its shape rather than
+   studying others. `Edit` a file you have read; never script it. Then in
    `.claude/skills/diagram`: `make record && make citations && make test-file FILE="tests/interactive/test_footnotes.py
    tests/interactive/test_citations.py tests/interactive/test_sources.py tests/interactive/test_record_format.py"`.
 3b. **Keep every question you touched under the size cap** - 20,000 bytes, question plus notes
@@ -106,7 +112,11 @@ fragment the grep did not name.
    keys its notes quote, and the notes that its sentences cite moved into its own `.notes.html`; and the sentences that
    join the parts POINT at each other (a link and what the other question is about) rather than restating its
    evidence, so a check reading one part alone meets no claim without its footnote. If a split would separate a
-   finding from what it needs to be understood, say so in the handoff instead of splitting.
+   finding from what it needs to be understood, say so in the handoff instead of splitting. A question named
+   above as over the cap that one of your items falls in is split HERE, in this session, while you have it read
+   (feature 250 R6: a split in a session of its own cost about 0.8 million, most of it re-reading the question);
+   every part goes in the handoff as its own `SECTION=` line, and in one line say what each part relies on from
+   the others.
 4. **Hand off.** Write `{handoff}`: one line per changed question (`SECTION=<NNN>`), one per new or changed
    registry key (`KEY=<key>`), each item's form (citation / absence / grounds), each FR-006 item's verdict, and
    anything left open and why. Commit. Do NOT run the checks, do NOT tick, do NOT push - session 2 does the checks
@@ -130,10 +140,14 @@ recommendation 2). Read only your own lines of the handoff.
    `python3 scripts/_entry_owed.py` from the clone root; for each class it names whose entry is one of YOUR
    questions, `make check-bundle PAGE={page} SECTION=<NNN> NO_QUOTES=1 FOR=entry-drift KIND=<class>` and `entry-drift` naming its
    MANIFEST (a drifted modal is owed at the push, so it is checked here, with the question it was written from).
-6. **Apply ONE REPORT PER TURN.** Every finding of one report goes in ONE message: all its edits as parallel
-   `Edit` calls (or one patch), never one finding a turn - every turn re-reads your whole context. Then run
-   `make record && make citations` and the four record tests ONCE for everything applied, not once per report.
-   A glossary term is a file in `l7r/diagram/interactive/assets/glossary/`, then `make glossary`.
+6. **Apply each report with ONE command.** `quote-check` and `record-format` end every finding with an `EDIT`
+   block (or `EDIT: none - <why>`) and every glossary term with a `GLOSSARY` line. When a report arrives, read its
+   findings, and run `make apply-edits FROM=<the output_file its dispatch printed>` (in `.claude/skills/diagram`),
+   with `SKIP=<n,n>` for any block you disagree with. Then do BY HAND only what it lists as REFUSED, what you
+   skipped, and the `EDIT: none` findings - all of them in ONE message of parallel `Edit` calls, never one a turn
+   (feature 250 R6: applying by hand took 12 to 27 turns a group, each re-reading 60,000 to 90,000 of context).
+   When every report is applied: `make glossary` if a term was added, then `make record && make citations` and
+   the four record tests ONCE.
 7. **Re-check ONCE, only what moved.** A note changed on a check's finding: `make check-bundle PAGE={page}
    SECTION=<NNN> NOTES=<key,key> FOR=quote-check` and one `quote-check` naming its MANIFEST. A modal rewritten: one `entry-drift`
    on its bundle again. That is the only re-check round: a PARTIAL left after it is not re-checked again - label it
@@ -181,6 +195,29 @@ def checks(page: str, task: str) -> int:
                                     closing=" and close the page" if last else "", close=(CLOSE_LAST if last else CLOSE_GROUP).format(**fields), **fields), encoding="utf-8")
         print(out)
     return 0
+
+
+CAP = 20_000   # scripts/check-question-size.py's cap, bytes of a question and its notes (feature 250 D14)
+
+
+def over_cap(page: str) -> str:
+    """The page's questions over the size cap, largest first - the write session splits one an item falls in (D15)."""
+    d = SKILL / "research" / page
+    sizes = []
+    for q in sorted(d.glob("[0-9][0-9][0-9]-*.html")):
+        if q.name.endswith(".notes.html"):
+            continue
+        n = q.with_name(q.name[:-5] + ".notes.html")
+        size = q.stat().st_size + (n.stat().st_size if n.exists() else 0)
+        if size > CAP:
+            sizes.append((size, q.name[:3]))
+    return ", ".join(f"SECTION={s} ({b:,} bytes)" for b, s in sorted(sizes, reverse=True)) or "none"
+
+
+def newest_entry() -> str:
+    """The registry entry a new one copies its shape from: the highest-numbered, so the newest form."""
+    entries = sorted((SKILL / "research/sources/010-works-cited").glob("[0-9]*.html"))
+    return str(entries[-1].relative_to(CLONE)) if entries else "-"
 
 
 def _fields(page: str, task: str) -> dict:
@@ -249,7 +286,7 @@ def main(argv: list[str]) -> int:
     briefs.mkdir(exist_ok=True)
     write = briefs / f"{fields['slug']}-1.md"
     write.write_text(WRITE.format(n=1, what="locate, read and write", fr002="\n".join(items2) or "- none",
-                                  fr006="\n".join(items6) or "- none", **fields), encoding="utf-8")
+                                  fr006="\n".join(items6) or "- none", over=over_cap(page), example=newest_entry(), **fields), encoding="utf-8")
     then = briefs / f"{fields['slug']}-checks.sh"
     then.write_text(f"#!/bin/sh\n# the check briefs, made from session 1's handoff when it ends (feature 250 R3, recommendation 2)\n"
                     f"exec python3 {HERE / 'brief.py'} checks {page} {task}\n", encoding="utf-8")

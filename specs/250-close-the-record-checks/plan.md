@@ -319,6 +319,36 @@ more round on one more page, and then do another set of measurements."*
    pages were, measured the same way and set against R1 to R5 as R6. It is the smallest page measured, so its per-item
    figure is the noisiest; R6 says so.
 
+### D15 - The sixth round: R6's four recommendations, then another measured page (GM 2026-09-26)
+
+The GM, on R6: *"Implement all of your recommendations and then do another measured page for comparison."*
+
+1. **A report is applied with one command** (R6 recommendation 1). `quote-check` and `record-format` end every
+   finding with an `EDIT` block - the origin file, the exact old text, the new text - or `EDIT: none - <why>` where
+   the fix needs what the bundle cannot settle; `record-format` writes each glossary term as one `GLOSSARY` line.
+   `make apply-edits FROM=<the agent's output_file>` (`scripts/_apply_edits.py`) applies a block only where its old
+   text occurs exactly once in a file under `research/`, refuses the rest with the reason, and takes `SKIP=` for a
+   block the session disagrees with. The agents still never edit: the block is a proposal the session reads and
+   applies, and the check brief's step 6 does the refused, skipped and `EDIT: none` findings by hand in one message.
+   The bundle's copies are the origin files' own lines (`_check_bundle.py` copies or excerpts, never assembles), so
+   old text copied from a bundle matches its origin.
+2. **A split happens in the write session** (recommendation 2). The write brief names the page's questions over the
+   cap (`brief.py over_cap`), and step 3b splits one an item falls in there, while the session has it read, each part
+   its own `SECTION=` line in the handoff. The standalone split brief stays for a question no page's items touch.
+3. **The write session's read step** (recommendation 3), measured first as R6 asked: the government write session's
+   19 read-and-write turns went to a `make source-pages` batch that overwrote the first (numbered from 01 again), five
+   files read one a turn so `Edit` would accept them, turns studying the registry's shape, and a stray one-word agent
+   call (observed 2026-09-26; method: the tool calls of transcript `d93e4c76`, in order). So: `source-pages` ADDS to
+   an existing directory (a saved page is kept, a failed one retried, numbering continues past every old file); the
+   brief says to read every file to be edited in ONE message of parallel reads, and names the newest registry entry
+   as the shape to copy.
+4. **Per question checked** (recommendation 4). `tokens.py summary --files ... --questions N --items N` gives a
+   page's row, per question checked as the headline and per item beside it.
+5. **The measured page is `cities/fabric`**: three FR-002 items and no FR-006, as `cities/government` had, and one
+   item falls in question 140 (36,858 bytes), so the page exercises the in-session split. Worked as the last three
+   were - a write session, then check sessions of two questions - and compared in R7 with R4 to R6, computed the same
+   way.
+
 ## Phases
 
 0. Baseline and the meter (T01, T02).

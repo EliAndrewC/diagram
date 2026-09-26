@@ -1076,6 +1076,11 @@ notes: ## [project] print the named notes of ONE question and only the blocks of
 	@if [ -z "$(PAGE)" ] || [ -z "$(SECTION)" ] || [ -z "$(KEYS)" ]; then printf 'make notes: PAGE=<page> SECTION=<question> KEYS=<key,key> are required\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_check_bundle.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" --section "$(SECTION)" --notes "$(KEYS)" --print-notes
 
+# GUARD_EDIT_OK: feature 250 D15 - a new operation (apply the EDIT and GLOSSARY blocks a check report ends with); no guard changes.
+apply-edits: ## [project] apply a quote-check or record-format report's EDIT and GLOSSARY blocks in one command - each only where its old text occurs once in a record file; the rest are listed REFUSED for you (feature 250 D15)   FROM=<the agent's output_file or a saved reply> [SKIP=2,5] [DRY=1]
+	@if [ -z "$(FROM)" ]; then printf 'make apply-edits: FROM=<the output_file the agent dispatch named> is required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_apply_edits.py" "$(FROM)" --root "$$(git rev-parse --show-toplevel)" $(if $(SKIP),--skip "$(SKIP)",) $(if $(DRY),--dry-run,)
+
 # GUARD_EDIT_OK: feature 250 - a new operation (one page's work in a fresh headless session, started from a brief); no guard changes.
 page-session: ## [project] start ONE page's work in a FRESH headless session, detached, from written briefs, one after another - absolute paths; a then:<script> step queues the briefs it prints (feature 250 D7, R3)   BRIEF="<file> then:<script>" [NAME=<session name, default this clone's>] [MODEL=<model>]
 	@if [ -z "$(BRIEF)" ]; then printf 'make page-session: BRIEF=<file> is required - e.g. make page-session BRIEF=specs/250-close-the-record-checks/briefs/homesteads.md\n' >&2; exit 2; fi
