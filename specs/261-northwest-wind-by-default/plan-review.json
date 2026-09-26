@@ -1,6 +1,6 @@
 {
  "feature": "261-northwest-wind-by-default",
- "plan_sha256": "559a0b57637c2de376dd8d57f34e413605dbf1cbc30a706071b4280155d8b743",
+ "plan_sha256": "a3bb51a4ae19c4ac2dc2d211d5b71e17e1e313a089e57859967c25e0a30e2e3a",
  "reviewed": "2026-09-26",
  "declared": "spec-fidelity",
  "decisions": [
@@ -28,7 +28,7 @@
    "summary": "Clean wind-facing, then clean off-wind (seat_offwind), then - only when every margin is divided - the best divided margin, wind-facing first. Feature 230's strike-out outranks the wind.",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Unchanged decision; the previous ruling stands and is now reinforced: the alternative (a wind-facing divided margin ahead of a clean off-wind one) was put to spec-fidelity in MODE 1 twice and refused twice (R4), the second time on both orders rolled over the 48 cohort specs, where the wind-first order put a structure across the brook from its houses in 3 of 12 divided seats - feature 230's own failure, which FR-010 forbids. At a seed where FR-004's first clause and FR-010 cannot both hold, the spec's own remedy for the pool is re-seeding (D4), and the pool test enforces it. The plan's supporting figures in D3's prose ('four of twelve', '250-odd clumps on 29 of 30 Sawada seeds') remain the overstatements the previous round named; the ruling does not rest on them."
+   "why": "Unchanged decision; the previous ruling stands. Where FR-004's wind-facing clause and FR-010's strike-out cannot both hold at a seed, the alternative order (a wind-facing divided margin ahead of a clean off-wind one) was refused twice in MODE 1 and measured over the 48 cohort specs (R4): 12 divided seats, 3 with a byre, well, garden or fixtures across the brook from their houses - feature 230's own failure, which FR-010 forbids - against 0 under this order. The spec's remedy for the pool is re-seeding (D4), enforced by the pool test. The previous round's finding is answered: D3's evidence paragraph now rests on R4 and its figures (12 divided, 3 across the brook, none under this order; 22 of 48 off-wind, 10 belts under 50 clumps, 4 with none) match R4's table; the overstated 'four of twelve' and '250-odd clumps on 29 of 30 Sawada seeds' are gone. The diff changes only that paragraph."
   },
   {
    "id": "D4-reseed-sawada-mizuguchi-kashikawa",

@@ -27,7 +27,7 @@ Consumers: `test_hamletgen.py`, `cohort_audit.py`.
 
 ### Constants (6)
 
-`ROLLED_ARCHETYPES`, `OFFTAKE_LADDER`, `WIND_VECTORS`, `WIND_BACK_MIN_DOT`, `DEFAULT_WINDWARD` (feature 261), `FIELD_ARCHETYPES`, `SQ_FT_PER_ACRE`,
+`ROLLED_ARCHETYPES`, `OFFTAKE_LADDER`, `WIND_VECTORS`, `FIELD_ARCHETYPES`, `SQ_FT_PER_ACRE`,
 `GROSS_ACRES_PER_HOUSEHOLD`
 
 Object identity matters: consumers read these, so re-export must bind the same objects, never
@@ -35,7 +35,7 @@ copies.
 
 ### Public functions (36)
 
-`plan_site`, `canvas_for`, `offtakes_for`, `net_acres`, `poly_area`, `centroid`,
+`plan_site`, `canvas_for`, `offtakes_for`, `windward_for`, `net_acres`, `poly_area`, `centroid`,
 `unit`, `pull_clear`, `crosses_disc`, `crosses_poly`, `point_in_poly`, `head_sluice`,
 `net_bends_acutely`, `stage_water_frame`, `drain_outfall`, `drain_heading`, `edge_run`, `pond_clear_of_crop`,
 `pond_setback`, `below_drain`, `back_fouled`, `seat_cluster`, `push_out_of`, `route_around`,

@@ -171,12 +171,16 @@ engine actually follows.
 
 ### Measurable Outcomes
 
-- **SC-001**: 5 of 5 scripted hamlets record `windward: NW` (today: 1 of 5).
-- **SC-002**: 5 of 5 have their windbreak belt's center to the north-west of their cluster's center,
-  with the cluster's back facing within 45 degrees of northwest.
-- **SC-003**: 0 pool specs declare a wind; 0 code paths derive or rewrite the wind (a test covers both).
-- **SC-004**: every re-rolled map passes the full gate and seats all its declared households.
-- **SC-005**: every windbreak pop-up names its side and its reason.
+- **SC-001** (FR-001, FR-006): 5 of 5 scripted hamlets record `windward: NW` (today: 1 of 5).
+- **SC-002** (FR-004, FR-006): 5 of 5 have their windbreak belt's center to the north-west of their cluster's
+  center, with the cluster's back facing within 45 degrees of northwest.
+- **SC-003** (FR-002, FR-003, FR-005): 0 pool specs declare a wind; 0 code paths derive or rewrite the wind, and a
+  declared wind is used as declared (a test covers each).
+- **SC-004** (FR-006, FR-010): every re-rolled map passes the full gate and seats all its declared households.
+- **SC-005** (FR-008): every windbreak pop-up names its side and its reason.
+- **SC-006** (FR-007): 5 of 5 manifests record where their wind came from.
+- **SC-007** (FR-009): 0 passages in the research entry, `hamletgen.md` or the five notes files still say the
+  wind is derived from the slope or re-read from the seat, except as a dated closure in a notes log.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 

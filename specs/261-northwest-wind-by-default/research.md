@@ -92,7 +92,7 @@ dry hem behind the west ones, the wet toe under the northwest ones, and the broo
 (a logged run). Belt arcs round the cluster: 7 182, 8 134, 14 **333**, 21 113, 23 103 degrees. Seed 14's belt, the
 fullest, stood in the middle of the cluster's north edge with houses on three sides - the wrap the record rules out -
 so seed 8 (264 clumps at 288 degrees, 134-degree arc) was taken, and the pool test now holds the arc to 200 degrees.
-Every candidate's drain ends as near the brook as seed 3's did (54-94 px against 83), so the confluence stands.
+Every candidate's drain ends as near the brook as seed 3's did (54-94 px against 83; observed 2026-09-26, method: the distance from the drain polyline's ends to the nearest brook segment, on each candidate's manifest), so the confluence stands.
 
 ## R5 - The shipped maps, and the final cohort
 
