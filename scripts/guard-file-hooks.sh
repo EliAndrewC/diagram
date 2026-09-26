@@ -37,7 +37,7 @@ TOOL=$(printf '%s' "$INPUT" | python3 -c 'import json,sys
 try: print(json.load(sys.stdin).get("tool_name",""))
 except Exception: print("")' 2>/dev/null || true)
 if [ "$TOOL" = "Read" ]; then
-  printf '%s' "$INPUT" | python3 -c '
+  GF_OUT=$(printf '%s' "$INPUT" | python3 -c '
 import json, re, sys
 try:
     path = json.load(sys.stdin).get("tool_input", {}).get("file_path", "") or ""
@@ -67,7 +67,12 @@ if guard and not re.search(r"/scripts/test-[\w-]+-hooks\.sh$", path):
         "hookEventName": "PreToolUse",
         "additionalContext": context,
     }}))
-' 2>/dev/null || true
+' 2>/dev/null || true)
+  # GUARD_EDIT_OK: RECORDED ONLY WHEN SAID (2026-09-26). The record was written on EVERY Read, guard file or not:
+  # 4,662 of the 4,681 read-reminder entries from 2026-09-12 to 09-26 were ordinary files that got no reminder,
+  # which made it the loudest line in the log while saying nothing - and put a python start on every Read.
+  [ -n "$GF_OUT" ] || exit 0
+  printf '%s\n' "$GF_OUT"
   # GUARD_EDIT_OK: feature 164 - the teach-at-Read is recorded too, so its worth is a total
   GF_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
   # shellcheck source=/dev/null

@@ -105,5 +105,19 @@ if printf '%s' "$ctx" | grep -q "GUARD file" && ! printf '%s' "$ctx" | grep -q "
   echo "  ok      another guard's Read keeps the generic context"; PASS=$((PASS+1))
 else echo "  FAIL    the generic Read context changed: $ctx"; FAIL=$((FAIL+1)); fi
 
+echo
+# GUARD_EDIT_OK: 2026-09-26 - the Read reminder was RECORDED on every Read, guard file or not (4,662 of 4,681 entries
+# in two weeks were ordinary files that got no reminder). It records only when it said something.
+echo "7. A READ IS RECORDED ONLY WHEN IT WAS REMINDED"
+rm -rf "$GUARD_LOG_ROOT"/*
+ctx=$(ev "$ROOT/.claude/skills/diagram/l7r/diagram/settlement/hamletgen.py" "" "Read" | "$HOOK" pretool 2>/dev/null)
+n=$(grep -rl read-reminder "$GUARD_LOG_ROOT" 2>/dev/null | wc -l)
+if [ -z "$ctx" ] && [ "$n" -eq 0 ]; then echo "  ok      an ordinary Read says nothing and records nothing"; PASS=$((PASS+1))
+else echo "  FAIL    an ordinary Read said '$ctx' or recorded $n entries"; FAIL=$((FAIL+1)); fi
+ev "$ROOT/.claude/skills/diagram/Makefile" "" "Read" | "$HOOK" pretool >/dev/null 2>&1
+n=$(grep -rl read-reminder "$GUARD_LOG_ROOT" 2>/dev/null | wc -l)
+if [ "$n" -eq 1 ]; then echo "  ok      a guard file's Read records its reminder"; PASS=$((PASS+1))
+else echo "  FAIL    a guard file's Read recorded $n entries, not 1"; FAIL=$((FAIL+1)); fi
+
 echo "passed $PASS, failed $FAIL"
 [ "$FAIL" -eq 0 ]
