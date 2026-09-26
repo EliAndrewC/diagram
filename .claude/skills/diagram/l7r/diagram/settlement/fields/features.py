@@ -110,7 +110,9 @@ class FieldFeaturesMixin:
         if arch == "contour_terraces" or (arch == "ribbon_valley" and rng.random() < 0.5):
             for _ in range(rng.randint(1, 3)):
                 self._plot_rock(rng.choice(plots), rng)
-        # GRAVE ISLAND: calibrated liberty (GM 2026-07-20), RARE - the "graves among the paddy" look.
+        # GRAVE ISLAND: calibrated liberty (GM 2026-07-20: both placements acceptable), RARE - the "graves among the
+        # paddy" look. The 0.3 is feature 012's own choice, not the GM's and not from a source; research owed
+        # (future-work/farming-communities.md "Is the in-field grave island attested?").
         if arch in self._PADDY_GRAVE_KINDS and rng.random() < 0.3:
             self._plot_grave_island(rng.choice(plots), rng)
 
