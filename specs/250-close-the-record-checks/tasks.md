@@ -85,20 +85,26 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
 
 ## Phase 1c - the second round (GM 2026-09-26; plan D11)
 
-- [ ] T26 One file per bundle: the MANIFEST holds every copy inline; the five contracts read it once
+- [x] T26 One file per bundle: the MANIFEST holds every copy inline; the five contracts read it once
       research: rendering
-- [ ] T27 Two sessions per page: `brief.py` writes a write brief and a check brief joined by a handoff;
+      verify: DONE. DONE. make check-bundle writes every copy inline in MANIFEST.md under its origin (the variant index and saved pages stay grep targets); the five contracts read it once; test_check_bundle.py 12 passed.
+- [x] T27 Two sessions per page: `brief.py` writes a write brief and a check brief joined by a handoff;
       `make page-session` runs several briefs in order (`_page_session_runner.py`)
       research: rendering
-- [ ] T28 The engine's dev loop moves to `l7r/diagram/CLAUDE.md`; `pool/` and `tests/` import it; the skill's
+      verify: DONE. DONE. brief.py writes <page>-1.md (locate, read, write, hand off) and <page>-2.md (check, apply, re-check, close); page-session.sh runs several briefs in order through _page_session_runner.py; test_page_session.py passed.
+- [x] T28 The engine's dev loop moves to `l7r/diagram/CLAUDE.md`; `pool/` and `tests/` import it; the skill's
       `CLAUDE.md` is a short index; every link resolves
       research: rendering
-- [ ] T29 `make notes PAGE= SECTION= KEYS=`
+      verify: DONE. DONE. The dev loop is l7r/diagram/CLAUDE.md (every link rewritten and resolving; the doctrine unchanged but for a header comment, as the plan review confirmed); pool/ and tests/ import it; the skill CLAUDE.md is an index of 1,155 bytes, down from 30,073; a nested @import was proven to attach on a probe.
+- [x] T29 `make notes PAGE= SECTION= KEYS=`
       research: rendering
-- [ ] T30 `make check-bundle ... NOTES=<key,key>` - a re-check of the named notes only
+      verify: DONE. DONE. make notes PAGE= SECTION= KEYS= prints the named notes and the blocks carrying them - 2,044 bytes for two notes of sizing 020; tested.
+- [x] T30 `make check-bundle ... NOTES=<key,key>` - a re-check of the named notes only
       research: rendering
-- [ ] T31 The one-file seeded leg, three runs per agent on the planted inputs; recorded in R3
+      verify: DONE. DONE. make check-bundle ... NOTES=<keys> cuts the notes, the fragment and the quote-verbatim report to the named notes; tested on sizing 020.
+- [x] T31 The one-file seeded leg, three runs per agent on the planted inputs; recorded in R3
       research: rendering
+      verify: DONE. DONE. One-file leg, 15 runs, every run named every planted fault. Mean input per check against the multi-file bundle: rf 166K->112K, qc 110K->53K, sa 152K->107K, ed 104K->57K, sr 102K->74K; turns 4-6 -> 2-4 (seeded-results.json).
 - [ ] T32 FR-002 and FR-006 for `vegetation`, in two page sessions (D11)
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed

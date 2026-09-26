@@ -1,132 +1,57 @@
 {
  "feature": "250-close-the-record-checks",
- "plan_sha256": "3648d178025e1b1e83a25de5d25d83de677eb0f7f74715ec4f720153da683a05",
+ "plan_sha256": "7966fc3f9f5fb1ae9a03f056f91659d2a01cf86de75db49852a7cc1dd81dba51",
  "reviewed": "2026-09-26",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "D1-paths-read-through-the-split",
-   "summary": "The spec's named edit targets are assembled files; the requirement is judged on the assembled file and the EDIT lands in the fragment.",
+   "id": "D11.1-inline",
+   "summary": "One file per bundle: every copy inline in MANIFEST.md under its origin; contracts say read it once; proven by a one-file seeded leg of three runs per agent (T26, T31)",
    "class": "within",
-   "why": "Unchanged since round 1. Changes the address of an edit, not what it must achieve; record-edit-hooks.sh makes hand-editing an assembled page impossible."
+   "why": "R2 rec 1 asks for a single file holding every copy inline under its origin heading so a check reads it in one turn, and a seeded re-run of three a leg; built as that. The file name MANIFEST.md rather than BUNDLE.md is not a change of substance."
   },
   {
-   "id": "D1-notes-hand-placed",
-   "summary": "Notes are hand-placed as a sup data-note in the fragment and an li data-note in the .notes.html beside it.",
-   "class": "within",
-   "why": "Unchanged since round 1. The note forms FR-001 requires are unchanged; only the harness is inapplicable."
-  },
-  {
-   "id": "D1-worklist-still-judges-SC-001",
-   "summary": "242's measure/worklist.py reads the assembled page and still runs, so SC-001 and SC-006 are judged with it unchanged.",
-   "class": "within",
-   "why": "Unchanged since round 1; reproduced then ('cities/sizing.html: 6 bare items; FOOTNOTED 1, LOCATED 5'). The section-attribution half is ruled under D5."
-  },
-  {
-   "id": "D2-check-per-entry-with-its-pre-pass",
-   "summary": "quote-check, record-format, source-applicability and source-reader are dispatched per entry with their script pre-pass, never per page.",
-   "class": "within",
-   "why": "Unchanged since round 1. FR-007 names that scope; on cities/sizing the two forms coincide as measured."
-  },
-  {
-   "id": "D3-a-measured-slice-first-then-the-GM",
-   "summary": "Phase 1 does FR-001 whole on cities/sizing plus FR-003 for one entry, reports the token measurement (T10), and stops for the GM.",
-   "class": "narrowing",
-   "why": "RESOLVED at round 2 and unchanged since (the round-3 and round-4 diffs touch only D4's Measured line). The narrowing is the GM's own instruction of 2026-09-21, quoted in the decision; the decision names the two agents the slice cannot run (entry-drift, owed only at the close under FR-007; source-applicability, only if the slice changes a registry write-up) and requires T10 to name every agent the slice did not measure. Standing note for the implementer, not a finding against the plan: tasks.md T10 still asks only for the per-window table, what each agent read, and the implication for phases 2 to 4 - it does not carry the naming clause D3 promises.",
-   "ruling": "LEGITIMATE"
-  },
-  {
-   "id": "D4-FR-002s-list-derived-by-a-script-over-the-reports",
-   "summary": "measure/assertions.py matches a LINE, heading or not, carrying 'assertion' plus 'footnote'/'unfootnoted', takes the bullets that follow it by the measured block rule, fails where a report has no such line, excludes a matched line that is itself a bullet or a table row, and names where each item's page and section come from; the closing report prints the script's own count.",
-   "class": "narrowing",
-   "why": "RESOLVED. Round 2's fatal finding was that the block rule and the page/section carriers were stated rather than measured, so hw-quotecheck's pair-per-bullet listing would silently yield zero items; round 3 confirmed the substance is fixed and left one wrong figure ('twelve pages' where the script returns fifteen). Commit 50969d46 corrects that clause to 'fifteen pages, 72 items' and prints the three figures from the script's own last line; the round-4 diff (d48298a4..50969d46 over plan.md) touches nothing else. Re-run at this HEAD, not read: 'total: 72 item(s) over 6 reports and 15 page(s)', with hw-quotecheck now yielding 7 items ({'homesteads': 5, 'water': 2}) rather than zero, and each of the six reports printing '0 with no section found', which is the 'every item carries both a page and a section - 0 without' claim measured. A narrowing of HOW FR-002's list is derived that makes the derivation reliably happen rather than gutting it.",
-   "ruling": "LEGITIMATE"
-  },
-  {
-   "id": "D5-unlocated-items-found-by-their-own-words",
-   "summary": "worklist.py's section label is treated as a hint only; each NOT-LOCATED, TOO-SHORT or AMBIGUOUS item is found by grepping its distinctive words over research/<page>/*.html, and an item no fragment carries is recorded as such with the words tried and searched by subject, never confirmed against a fragment the grep did not name.",
-   "class": "narrowing",
-   "why": "RESOLVED at round 2 and unchanged since. The decision states the measured fact that section_of returns the last ### heading of the REPORT, and replaces the mechanism with one grounded in the item's own text; 'never confirmed against a fragment the grep did not name' closes the round-1 failure of an item confirmed against the wrong text. A narrowing of HOW the search is done that serves FR-006 and SC-006.",
-   "ruling": "LEGITIMATE"
-  },
-  {
-   "id": "Technical-context-route-and-the-record-tests",
-   "summary": "DIRECT route, no engine Python; the four record tests after each page and make page-check at the close.",
-   "class": "within",
-   "why": "Unchanged since round 1. Spec D2 names the DIRECT route and SC-010 names make page-check."
-  },
-  {
-   "id": "Performance-bookends-none-owed",
-   "summary": "No performance bookends: no engine code, no map moves.",
-   "class": "within",
-   "why": "Unchanged since round 1; correct on the feature's own delta."
-  },
-  {
-   "id": "Constitution-check-XII-XIII-XVI",
-   "summary": "Every FR-001 and FR-002 task is research: physical with the five boxes; T01 takes the regression baseline; the decisions go to spec-fidelity before a task is ticked.",
-   "class": "within",
-   "why": "Unchanged since round 1; restates standing project rules."
-  },
-  {
-   "id": "Phase-2-pairs-FR-002-with-FR-006",
-   "summary": "FR-006's items are worked beside FR-002 page by page.",
-   "class": "within",
-   "why": "Unchanged since round 1: an ordering the spec itself pairs ('worked as a bare item under FR-002'). Both halves are now clear, D4 and D5 being resolved."
-  },
-  {
-   "id": "D6-bundle-for-five-check-agents",
-   "summary": "make check-bundle copies what one check reads to /tmp/l7r-check/ with a MANIFEST.md; quote-check, record-format, source-applicability, source-reader and entry-drift (KIND=<class> adds kind.txt, its modal docstring) read only the bundle.",
-   "class": "within",
-   "why": "Recommendation 1 as the GM was shown it on 2026-09-26 (\"Stop the ~28K CLAUDE.md attachment on check agents ...\"), adopted by \"all of those recommendations should be implemented\". Round-5 item 1 RESOLVED: entry-drift is now bundled; checked at f4f89cdd in .claude/agents/entry-drift.md (bundle section, kind.txt), scripts/_check_bundle.py --kind, the Makefile KIND= plumbing and check-bundle-hooks.sh CHECKS listing all five."
-  },
-  {
-   "id": "D6-guard-check-bundle-hooks",
-   "summary": "check-bundle-hooks.sh refuses a dispatch of one of the bundled check agents that points into the repository and prints the command.",
-   "class": "within",
-   "why": "A refusing guard is behavior, scoped part by part: its reach is exactly the check agents the adopted recommendation names and exactly the thing it asks (they read outside the repo). No other agent types, commands or defaults. Enforcement of what was asked."
-  },
-  {
-   "id": "D6-seeded-runs-all-five-agents",
-   "summary": "Seeded-fault runs, three a leg, tree and bundle, for each of the five bundled agents; a leg that loses a finding keeps that agent on the tree.",
-   "class": "within",
-   "why": "The precondition the GM was shown with recommendation 1 (\"three test runs per leg ... before adopting it\"). Round-5 items 3 and 4 RESOLVED: measure/seeded.py CASES carries rf, qc, sa, ed and sr, and make_runs loops leg in (tree, bundle) x range(1, RUNS+1) with RUNS = 3 for every case, so source-applicability gets three in-tree runs on the recorded edo-enwiki case and source-reader gets its own case (a CONTRADICTED 70% claim and a READ claim against the saved Edo page). Not a finding: the module docstring still says \"Three agents\"."
-  },
-  {
-   "id": "D7-one-page-per-session",
-   "summary": "make page-session BRIEF=<file> starts a detached headless claude -p in this clone with the appended system prompt and a preassigned session id; the brief carries the page's derived items and the procedure; it commits, does not push.",
-   "class": "within",
-   "why": "Recommendation 2 ('Run one session per research page'), adopted. The launcher and derived brief are the mechanism of that recommendation, not a separate behavior."
-  },
-  {
-   "id": "D8-compact-inline-report",
-   "summary": "The report-to-file form failed (the harness refuses a subagent's report file: 'Subagents should return findings as text, not write report files'); the five check contracts reply with the report itself - counts on the first line, then only the findings to act on, a pass in one line, never the quotation or the reasoning it passed - and Write is off their tool lists. The file route that remains possible (a headless check whose launcher writes the file) is priced and not taken; raised with the GM with the result.",
+   "id": "D11.1-grep-targets",
+   "summary": "The glossary variant index and a source's saved pages stay files beside the MANIFEST (grep targets), not inlined; quote-verbatim.json stays a file (its report is inlined as quote-verbatim.txt)",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Narrows recommendation 3 as adopted ('Agent reports to a file, a verdict line to the session: a report is applied once and then re-read for the rest of the session'). Not physically impossible in the literal sense - the headless route can file a report - so it stands only on the purpose test, and it passes it concretely. The recommendation's purpose is its own stated reason: a report's tokens re-read on every later turn. Measured in measure/d8-pricing.txt (observed 2026-09-26, labeled; arithmetic re-derived here: report mean 16,304/10 = 1,630, turns 297/10 = 29.7, the ten products sum to 509,089, mean 50,909; 15,076 x 5.8 = 87,441 against the file's 87,439, rounding of the turn mean): the headless route costs about 87,000 tokens a check to save at most about 51,000, and less than that in practice, because a file route still puts the findings the session must act on into its context when it reads them, and the compact form now cuts the pass reasoning and quotations out of the inline reply. So the literal route defeats the recommendation's own purpose, while the compact reply keeps its operative half (a verdict first, nothing re-read that is not acted on). Class check: one harness rule applies alike to all five subagent checks, so the single justification does not stretch over unlike things. Noted, not blocking: one of the ten reports (2,208 tokens re-read on 46 turns = 101,568) would individually have been cheaper headless, but which one cannot be known when a check is dispatched, and one-page sessions (recommendation 2) bound the remaining turns. The decision is raised with the GM with the result, as the project's exception rule requires."
+   "why": "Narrows R2's 'every copy inline'. Legitimate on the purpose test: the GM adopted the five to cut token cost ('let's see if that helps'), and R2 rec 1's mechanism is fewer turns because every turn re-reads the whole context. Inlining a grep target puts it in the context of every later turn: glossary-variants.txt is 23,661 bytes (measured 2026-09-26, wc -c), larger than the 040 bundle's fragment or notes, and saved pages are whole source pages whose grep-not-read form the GM adopted in feature 255. Adjudicated separately: variant index - literal inlining would add ~6k tokens to every turn of every check, defeating the purpose; saved pages - same, and reading them whole reverses a GM-adopted rule; quote-verbatim.json - a machine duplicate of the inlined .txt report, so nothing a check reads is withheld. Every file a check READS whole is inlined (checked in _check_bundle.inline)."
   },
   {
-   "id": "D9-the-comparison",
-   "summary": "The next subset is FR-002 and FR-006 for homesteads (five FR-002 items, three FR-006), in one page session with bundled checks, measured against R1 whole, per item, and per check run split floor/read; FR-006 its own window; seeded runs a separate line.",
+   "id": "D11.2",
+   "summary": "Two sessions per page: write brief (locate, read, write) and check brief (check, apply, close) joined by a handoff; make page-session runs several briefs in order",
    "class": "within",
-   "why": "The GM: 'resuming some of the research itself to compare the token usage of the next subset of research tasks with the token usage from the previous set'. Choosing the subset and keeping the seeded runs off both sides serves a like-for-like comparison."
+   "why": "R2 rec 2 is 'write, then check-and-apply', the second session fresh and starting from the committed fragments; D11 and briefs/vegetation-1.md, -2.md implement that split. The sequential runner is the mechanism for running both, not added scope."
   },
   {
-   "id": "D10-route-gated",
-   "summary": "The delta carries engine Python (tools/record_asset.py, fixed under XIV), so the push is gated; the spec is not amended.",
+   "id": "D11.3",
+   "summary": "Skill CLAUDE.md body moves to l7r/diagram/CLAUDE.md; pool/ and tests/ import it; skill CLAUDE.md becomes a short index; nothing in the doctrine changes",
    "class": "within",
-   "why": "Follows from the GM's 'Do not move tooling fixes to another clone or make them a standalone fix'; the route is chosen from the delta by sync-with-main.sh, not by the plan."
+   "why": "R2 rec 3: content belongs to l7r/diagram/ and pool/, a short skill-level index stays. Verified: the moved body differs from the old one only in link targets plus a header comment (diff with links normalized); the index is short. The tests/ import extends rather than narrows - tests/ never lies under research/, so it costs a research session nothing and keeps the dev loop where test work had it."
   },
   {
-   "id": "T11-quote-verbatim-section-fix",
-   "summary": "Phase 1b fixes make quote-verbatim SECTION= (reported NOT fixed in R1) here.",
+   "id": "D11.4",
+   "summary": "make notes PAGE= SECTION= KEYS= prints named notes and their carrying blocks; briefs say use it and never dump a notes file",
    "class": "within",
-   "why": "The GM: 'Just go ahead and make them as part of your work here.'"
+   "why": "R2 rec 4 exactly; Makefile target and _check_bundle.print_notes exist, both briefs carry the instruction."
   },
   {
-   "id": "renumbering-T11-T18-to-T17-T25",
-   "summary": "Old T11 -> T17; old T12 split into T18 (homesteads, the comparison page) and T19 (every other page, one session each, cut when T16's figures are read), both with the five research boxes; old T13-T18 -> T20-T25 with unchanged text.",
+   "id": "D11.5",
+   "summary": "check-bundle NOTES=<keys> cuts notes, fragment and quote-verbatim report to the named notes; the check brief's re-check uses it",
    "class": "within",
-   "why": "Diff 50969d46..f8abf77c read in full: no FR dropped or reworded; the only removed clause is old T12's 'in the order T11 prints', a plan-level ordering the spec does not carry (spec has no ordering requirement), displaced by D9's choice of homesteads first. plan.md and spec.md carry no stale task number."
+   "why": "R2 rec 5 ('quote-verbatim NOTES= and a note-scoped bundle ... check the corrected notes alone'); implemented in entry_bundle/scoped_verbatim and used at vegetation-2.md step 30."
+  },
+  {
+   "id": "D11-page",
+   "summary": "The next measured page is vegetation (five FR-002, one FR-006), two sessions, measured with tokens.py against R1 and R2, recorded as R3 (T32, T33)",
+   "class": "within",
+   "why": "The GM: 'then do another measured page, the same as this round, and then let's see if that helps'. Same measurement as R2, compared against it; worked in two sessions because the GM adopted rec 2."
+  },
+  {
+   "id": "T19-reword",
+   "summary": "T19 now excludes homesteads and vegetation, runs two sessions per page, and is cut when T33's figures are read",
+   "class": "within",
+   "why": "Drops nothing: every page assertions.py names is still covered (homesteads by T18, vegetation by T32, the rest by T19), one task per page and the five research boxes are kept; two sessions follows the adopted rec 2; waiting for T33 follows 'then let's see if that helps'."
   }
  ],
  "verdict": "CLEAR"
