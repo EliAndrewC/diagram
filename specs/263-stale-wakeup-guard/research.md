@@ -3,7 +3,7 @@
 ## R1 - What a pending cron looks like in the Stop payload (measured 2026-09-26, one-shot)
 
 Method: the tab-title hook keeps each session's last Stop payload (`/tmp/tab-title-<uid>/<pid>.stop.json`). One
-`CronCreate` one-shot (a stand-in for a reminder the GM asked for) and one `ScheduleWakeup` (60 s, one-shot observation 2026-09-26, the probe's own delaySeconds) were created, the
+`CronCreate` one-shot (a stand-in for a reminder the GM asked for) and one `ScheduleWakeup` (60 s, observed 2026-09-26 as the probe's own delaySeconds) were created, the
 turn ended, and the payload was read on the wakeup. `session_crons` held:
 
     {"id": "106428e0", "schedule": "17 9 24 12 *", "recurring": false, "prompt": "MEASUREMENT PROBE (feature 263): ..."}
@@ -16,7 +16,7 @@ reminder by `CronDelete`).
 
 ## R2 - The incident (2026-09-26)
 
-A fallback `ScheduleWakeup` (1500 s, one-shot observation 2026-09-26, read from the session transcript) set while a prose-fix agent ran stayed pending after the agent reported and the
+A fallback `ScheduleWakeup` (1500 s, observed 2026-09-26 in the session transcript) set while a prose-fix agent ran stayed pending after the agent reported and the
 work landed; `CronList` showed `43582eac - Every day at 8:51 PM (one-shot)`; the tab showed the hourglass until it was
 cancelled by hand.
 
