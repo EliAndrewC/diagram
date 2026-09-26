@@ -100,7 +100,7 @@ Every candidate's drain ends as near the brook as seed 3's did (54-94 px against
 
 | map | seed | households | seat | belt clumps | belt bearing | off NW | arc |
 |---|---|---|---|---|---|---|---|
-| Inashiro | 4 | 15/15 | wind-facing, clean | 278 | 346 | 31 | 124 |
+| Inashiro | 4 | 15/15 | wind-facing, clean | 279 | 346 | 31 | 124 |
 | Kashikawa | 8 (was 3) | 20/20 | wind-facing, clean | 281 | 353 | 38 | 169 |
 | Kuwabata | 21 | 16/16 | wind-facing, clean | 141 | 283 | 32 | 88 |
 | Mizuguchi | 27 (was 23) | 12/12 | wind-facing, clean | 356 | 323 | 8 | 168 |
