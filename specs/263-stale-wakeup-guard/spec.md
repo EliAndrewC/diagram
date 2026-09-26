@@ -130,3 +130,4 @@ the transcript and no live loop; it blocks, naming the id.
 - Round 2 (2026-09-26, `spec-fidelity-verify`, Opus): FAITHFUL - all four round-1 items resolved.
 - Amendment after acceptance (plan review, 2026-09-26, BLOCKED on D4): the fail-open edge case is scoped to the Stop
   layer; the ScheduleWakeup layer fails closed.
+- Amendment review (2026-09-26, `spec-fidelity`, Opus): FAITHFUL; plan re-review CLEAR.

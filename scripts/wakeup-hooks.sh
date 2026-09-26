@@ -15,8 +15,8 @@
 # TWO LAYERS, because either alone leaves a way through:
 #   pretool (PreToolUse, ScheduleWakeup) - REFUSE the call unless this session is running /loop. The source.
 #   stop    (Stop) - BLOCK the turn from ending while a wakeup is pending outside /loop, naming `CronDelete <id>`.
-#           The backstop, for a wakeup made any other way: before this guard, through the escape, or by a loop
-#           abandoned without `stop: true`.
+#           The backstop, for a wakeup made any other way: before this guard, or after a loop was stopped.
+#           (GUARD_EDIT_OK: feature 263 - the header brought in line with the no-escape rule)
 #
 # WHAT IS A WAKEUP (measured, specs/263-stale-wakeup-guard/research.md R1). In the Stop payload a pending cron is
 # `{id, schedule, recurring, prompt}` - a `ScheduleWakeup` and a `CronCreate` reminder are the SAME shape, no field
@@ -38,7 +38,9 @@
 # on the Stop layer would let the incident itself through ("WAKEUP_OK guarding the agent"). A case that seems to
 # need one is a question for the GM.
 #
-# A guard that cannot read its inputs does not refuse on a guess: an unreadable payload or transcript exits 0.
+# UNREADABLE INPUT (plan review, 2026-09-26; GUARD_EDIT_OK: feature 263 - the header states the split rule): the
+# ScheduleWakeup layer fails CLOSED - a call that cannot be shown to belong to a live loop is refused - and the Stop
+# layer fails OPEN, because without the transcript it cannot tell a wakeup from a reminder the GM asked for.
 set -uo pipefail
 MODE=${1:-}
 WH_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

@@ -18,7 +18,9 @@ Bash + an embedded Python decision (the repo's guard idiom); `_guardlog.sh` for 
 - VI: PASS - each task names its verification; the suite drives the real hook with measured payload shapes.
 - X: PASS - no Python module added to the engine; the guard's decision is tested case by case in its suite.
 - XIII: PASS - the suite is new; `make hooks-test` is the regression bed and ran green.
-- XVI: PASS - no exception: both layers, no escape, no once-only valve (spec-fidelity round 1).
+- XVI: PASS - both layers, no escape, no once-only valve (spec-fidelity round 1). One ruled exception, raised with the
+  GM in the closing report: the Stop layer fails OPEN on an unreadable transcript (D4), ruled LEGITIMATE because it
+  would otherwise block reminders the GM asked for.
 
 ## The design
 
