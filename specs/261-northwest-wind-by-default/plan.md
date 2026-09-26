@@ -9,8 +9,8 @@ The scripted hamlet generator's wind becomes the regional northwest on every map
 slope-derived wind (`windward_for`, `WIND_TURNS`) and the seat re-read in `stage_ways` are retired; the seat
 search refuses a margin whose back is more than 45 degrees off the wind except as a recorded last fallback;
 the manifest records the wind's source; the windbreak's pop-up says the belt's side and why; the record, the
-docs and the notes say the new rule; and the five pool hamlets are re-rolled - two of them re-seeded, as the
-spec's Edge Cases allow, because R1 measured them failing at their old seeds.
+docs and the notes say the new rule; and the five pool hamlets are re-rolled - three of them re-seeded, as the
+spec's Edge Cases allow, because R1 and R4 measured them failing at their old seeds.
 
 ## Technical Context
 
@@ -39,9 +39,9 @@ own perf ratchet judges it, and any band it reports is explained against R4's re
   entry is rewritten to state the rule and its footnote gloss corrected, and `quote-check` and `record-format`
   run on it.
 - **XIII. No known regressions**: **PASS with a measured baseline** - the 48-seed cohort was rolled on the
-  unmodified engine in a detached worktree and on this one (R3).
-- **XIV. Fix defects where found**: the divided-margin fallback that let an off-wind divided margin win before
-  the off-wind fallback was found in this work and fixed in it (D3).
+  unmodified engine in a detached worktree and on this one (R3, and the final engine in R5).
+- **XIV. Fix defects where found**: the divided test that read a band's halves instead of the brook's banks (D7),
+  and `make record` leaving a notes-only edit unwritable, were found in this work and fixed in it.
 - **XVI. Build what was asked**: **PASS** - the wind is never renamed and no map declares one. Two exceptions were
   put to `spec-fidelity` in MODE 1 and both were REFUSED (R4): putting a wind-facing divided seat ahead of feature
   230's strike-out, engine-wide. What stands instead is the spec's own path - re-seeding - for the three maps that
@@ -121,7 +121,7 @@ no spec field. No wind rule moves: the declarations are re-rolled and measured w
 ## Phases
 
 1. Engine: D1, D2, D3 with their unit tests (plan, cluster, surface).
-2. Measurement: R1-R3 (trial, seed search, cohort both ways).
+2. Measurement: R1-R6 (trial, seed searches, cohort both ways, the shipped maps, the knob values).
 3. Pool: D4, the five re-rolls, the pool test, R4.
 4. Page: D5 with its tests.
 5. Record and docs: D6; `quote-check` and `record-format` on the entry; `entry-drift` on the windbreak class.

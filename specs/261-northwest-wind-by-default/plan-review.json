@@ -1,6 +1,6 @@
 {
  "feature": "261-northwest-wind-by-default",
- "plan_sha256": "a3bb51a4ae19c4ac2dc2d211d5b71e17e1e313a089e57859967c25e0a30e2e3a",
+ "plan_sha256": "03ce8bdff7271d1e15e2648456f88871a4f0e66ae3abc6bedbfe4853235edf5e",
  "reviewed": "2026-09-26",
  "declared": "spec-fidelity",
  "decisions": [
@@ -34,7 +34,7 @@
    "id": "D4-reseed-sawada-mizuguchi-kashikawa",
    "summary": "Sawada 6 -> 24, Mizuguchi 23 -> 27 and now Kashikawa 3 -> 8, declared fall, sink, brook flank and household count kept, reason in each generator's docstring; seed 8 chosen over 14 because 14's belt wrapped 333 degrees round the houses; the pool test holds the belt's arc to 200 degrees; nothing from the spec's 'When no seed works' list is done.",
    "class": "within",
-   "why": "The spec's Edge Cases and Assumptions name re-seeding as THE path when a map has no northwest-backed margin at its current seed ('its seed is a roll, not a fact about the place; its declared fall, water and other declared knobs are kept (Kashikawa's brook_side confluence included)'). Kashikawa is a pool map at the same footing as the other two: R4 records that at seed 3, on the fixed divided test and feature 230's order, no clean wind-facing margin was open and the belt came out with no trees - the very defect the GM asked about. Checked in the diff: kashikawa.gen.py changes seed=3 to seed=8 and adds the docstring; households=20, down_deg=315, water_sink='offmap', brook_side=-1 stand; R4 records the drain still ends by the brook (54-94 px against 83), so the confluence the spec names is kept. Choosing 8 over 14 among the five clean seeds is a choice among spec-permitted rolls, and it serves the request: a belt wrapped 333 degrees round the cluster is not 'to the north and west', and FR-010 names 'embracing the cluster' as a rule that must still hold. The 200-degree arc assertion in test_pool_wind.py is a test that fails only when the requested thing (the belt on the north and west) is absent - enforcement, not scope. Re-checked on the shipped manifests: 20/20, seat_offwind false, seat_divided false, 264 belt clumps, matching R5; all five maps likewise match R5's household and clump columns. Inashiro keeps seed 4 (not a re-seed). One stale literal outside the plan: the test's comment says the pool's belts measured 87-171 degrees where R5 says 87-168."
+   "why": "The spec's Edge Cases and Assumptions name re-seeding as THE path when a map has no northwest-backed margin at its current seed ('its seed is a roll, not a fact about the place; its declared fall, water and other declared knobs are kept (Kashikawa's brook_side confluence included)'). Kashikawa is a pool map at the same footing as the other two: R4 records that at seed 3, on the fixed divided test and feature 230's order, no clean wind-facing margin was open and the belt came out with no trees - the very defect the GM asked about. Checked in the diff: kashikawa.gen.py changes seed=3 to seed=8 and adds the docstring; households=20, down_deg=315, water_sink='offmap', brook_side=-1 stand; R4 records the drain still ends by the brook (54-94 px against 83), so the confluence the spec names is kept. Choosing 8 over 14 among the five clean seeds is a choice among spec-permitted rolls, and it serves the request: a belt wrapped 333 degrees round the cluster is not 'to the north and west', and FR-010 names 'embracing the cluster' as a rule that must still hold. The 200-degree arc assertion in test_pool_wind.py is a test that fails only when the requested thing (the belt on the north and west) is absent - enforcement, not scope. Re-checked this round by re-running measure.py on the shipped manifests (after D8's re-roll): Kashikawa 20/20, seat_offwind false, seat_divided false, 281 belt clumps at 353 degrees, arc 169; all five maps match R5's table row for row. D4's own 264-at-288 / 134-degree figures are the seed-search observation (R4), not the shipped map. Inashiro keeps seed 4 (not a re-seed). One stale literal outside the plan: the test's comment says the pool's belts measured 87-171 degrees where R5 says 87-168. This round: the Summary now says three maps re-seeded on R1 and R4's measurements, matching D4 (R1: Sawada, Mizuguchi; R4: Kashikawa)."
   },
   {
    "id": "D5-popup",
@@ -55,6 +55,12 @@
    "why": "A defect found in this work and fixed in it (constitution XIV). It narrows nothing the request or spec asked for: it makes feature 230's strike-out - a rule FR-010 requires to still hold - test what that rule is for (houses on one bank), where it had been striking margins with every house on one bank (R4: Kashikawa 20 | 0, Inashiro 15 | 0). The rule's purpose is measured as kept under the fixed test: R4's cohort table records 0 houses on both banks and 0 structures across the brook under feature 230's order. Its effect on the request is in the request's favor: Inashiro seats wind-facing at its reference seed without a re-seed. brook_banks is present in cluster.py with tests in test_cluster.py and test_surface.py."
   },
   {
+   "id": "D8-knob-exhibits-declared-back",
+   "summary": "Re-seeding lost the pool's only exhibit of four knob values (bamboo both, byre_form courtyard, copse_siting against_the_belt, lane_web alleys; R6), which the gate's coverage floor caught; each is declared on the map that showed it on main (Kashikawa bamboo=both, Mizuguchi byre_form=courtyard and copse_siting=against_the_belt, Sawada lane_web=alleys), by the mechanism Sawada's intake='open' already uses; HamletSpec gains byre_form, validated against and pinned onto the settlement engine's existing knob.",
+   "class": "within",
+   "why": "It narrows nothing the GM asked for. The request's only 'declared' constraint is the WIND ('none of our maps should have this declared'); no wind is declared, and the shipped manifests (re-read this round) record windward NW, wind_source regional, seat_offwind false and seat_divided false on all five, with measure.py reproducing R5 exactly. Against the spec: the Edge Case requires a re-seeded map's 'declared fall, water and other declared knobs' be kept - they are (seeds 8/27/24, falls, sinks, brook_side, intake unchanged in the diff). 'A declared knob changed' is in the 'When no seed works' list, which forbids departing from a map's declarations to RESCUE a northwest seat; D8 is neither in that case (every map found a clean wind-facing seed first) nor a departure from any existing declaration - it adds declarations whose values were not chosen for the wind but fixed by what each map showed on main (checked against origin/main's manifests: Kashikawa bamboo both; Mizuguchi courtyard, against_the_belt; Sawada alleys and courtyard). Its effect is to make each map differ from its pre-feature self in the wind and seat, which the GM asked to change, rather than in four unrelated knobs the re-roll happened to flip. It serves FR-006 ('each MUST pass the full gate' - the coverage floor failed without it) and the standing one-map-per-value knob rule the pool already enforces. HamletSpec.byre_form is the minimal mechanism for that: a validated field onto an existing settlement knob, one unit test, no new behavior. No wind rule moved (R5 re-measured)."
+  },
+  {
    "id": "CC-XII-no-new-source",
    "summary": "No research: physical task; no new source; quote-check and record-format on the rewritten entry, entry-drift on the windbreak class.",
    "class": "within",
@@ -64,7 +70,13 @@
    "id": "CC-XIII-cohort-baseline",
    "summary": "48-seed cohort on the unmodified engine (37/48) and on the final engine (38/48, R5); every final failure also fails on the baseline; seed 37 now passes.",
    "class": "within",
-   "why": "The spec's cohort Edge Case and constitution XIII. The debt the previous round named (the final-order cohort) is now recorded in R5."
+   "why": "The spec's cohort Edge Case and constitution XIII. The debt the previous round named (the final-order cohort) is now recorded in R5. This round: the row's text now cites R5 alongside R3, matching R5's recorded 38/48 final cohort."
+  },
+  {
+   "id": "CC-XIV-defects-fixed",
+   "summary": "The XIV row names two defects found and fixed in this work: the divided test that read a band's halves instead of the brook's banks (D7), and make record leaving a notes-only edit unwritable (record_asset.py, commit f28ac4a9).",
+   "class": "within",
+   "why": "Constitution XIV fixes, not narrowings: D7 is ruled within above, and the make record fix is tooling the record edit (FR-009, D6) needed, narrowing nothing the request or spec asked for. This round's change corrects the previous round's stale finding that the row cited D3."
   },
   {
    "id": "CC-XVI-record",
@@ -82,7 +94,7 @@
    "id": "Phases-1-6",
    "summary": "Engine, measurement, pool, page, record, acceptance.",
    "class": "within",
-   "why": "Unchanged; each phase carries requirements of the accepted spec or the standing acceptance rules; only the five scripted hamlets are re-rolled or reviewed."
+   "why": "Unchanged; each phase carries requirements of the accepted spec or the standing acceptance rules; only the five scripted hamlets are re-rolled or reviewed. This round: Phase 2 now cites R1-R6, all six present in research.md."
   }
  ],
  "verdict": "CLEAR"
