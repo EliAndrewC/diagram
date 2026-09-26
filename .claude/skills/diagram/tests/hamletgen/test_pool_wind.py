@@ -58,7 +58,7 @@ def test_every_pool_hamlet_has_its_belt_on_the_regional_northwest(gen: str) -> N
     bearing = math.degrees(math.atan2(bx - cx, -(by - cy))) % 360.0  # compass: 0 = north, screen y points down
     assert abs((bearing - NW_COMPASS + 180.0) % 360.0 - 180.0) <= 45.0, f"belt center at {bearing:.0f} deg from the cluster"
     # ...AND ON ONE OR TWO SIDES, NEVER ROUND THE HOUSES (research/vegetation, 'Does a shelter belt wrap the settlement?':
-    # the record's shape is a hook, and the pool's belts measured 87-171 degrees). A seed whose belt stands in the
+    # the record's shape is a hook, and the pool's belts measured 87-168 degrees). A seed whose belt stands in the
     # middle of the cluster's north edge with houses on three sides of it read as 333 degrees and was refused.
     angs = sorted(math.degrees(math.atan2(c[0] - cx, -(c[1] - cy))) % 360.0 for c in belt)
     gap = max([b - a for a, b in zip(angs, angs[1:], strict=False)] + [angs[0] + 360.0 - angs[-1]])

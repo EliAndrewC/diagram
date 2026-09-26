@@ -62,9 +62,9 @@ class SharedBambooGrove(Kind):
 
 class Windbreak(Kind):
     """
-    What: The village shelter belt - the fengshui back grove: a dense, cedar-backed stand of real crowns on the
-    windward side of the cluster, embracing it - the north and west, where the region's winter wind comes from,
-    unless the place has a local wind of its own.
+    What: The village shelter belt - the fengshui back grove: a dense, cedar-backed stand of real crowns hooked
+    round the windward side of the cluster rather than ringing it - the north and west, where the region's winter
+    wind comes from, unless the place has a local wind of its own.
 
     Why: A nucleated village shelters behind one village-scale grove against the winter monsoon. Fujian villages
     keep about two fengshui forests each, at closed-canopy density in the well-kept Pearl River Delta patches;
@@ -76,7 +76,9 @@ class Windbreak(Kind):
     Note: The grove count follows the Fujian figure (forests-2020), the density the Pearl-delta patches
     (hu-2011-fengshui-patches), and the size the Hong Kong survey (afcd-ncsc-9-06); the water-mouth cluster's
     size and the tree counts are guesses bracketed by Korean village-grove analogues; the belt's shape follows
-    the terrain and the cluster.
+    the terrain and the cluster. The side it stands on follows the Japanese homestead grove, kept on the north
+    and west against the northwesterly winter wind (irie-2020-igune, yashikirin-jawiki), and the GM's rulings
+    that the maps show that regional wind unless a place declares its own.
 
     Name: windbreak forest
     Covers: `village_groves[role=windbreak]`

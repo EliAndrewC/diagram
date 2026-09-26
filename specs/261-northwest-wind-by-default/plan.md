@@ -70,11 +70,12 @@ constant. The pool may not carry `seat_offwind` (the pool test).
 
 Feature 230's rule stands: a margin the brook divides is used only when EVERY margin is divided. So the order is
 a clean wind-facing margin, then a clean off-wind one (recorded as `seat_offwind`), then the best divided margin
-with a wind-facing one first. The brook's strike-out outranks the wind on measurement, not preference (R1, R2):
-a wind-facing divided seat cost Mizuguchi four of twelve households at seed 23, while clean off-wind seats still
-drew northwest belts of 250-odd clumps on 29 of 30 Sawada seeds. An intermediate cut of this work put the divided
-wind-facing margin ahead of the clean off-wind one; `test_a_margin_the_brook_divides_is_struck_out_and_the_strike_is_counted`
-caught it, and the order above is the fix.
+with a wind-facing one first. Putting a wind-facing divided margin ahead of a clean off-wind one was measured and
+put to the exception check twice, and refused (R4): over the 48 cohort specs that order took 12 divided seats, and
+in 3 of them a byre, a well, a garden or farm fixtures stood across the brook from their houses - feature 230's
+own failure - where this order produced none. What this order costs instead is off-wind seats outside the pool
+(22 of the 48, 10 with belts under 50 clumps, 4 with none; R4), which is why a pool map that falls back is
+re-seeded (D4) and why the fallback is raised with the GM.
 
 ### D4 - Re-seeding, and only re-seeding, for the three maps that failed at their seeds
 

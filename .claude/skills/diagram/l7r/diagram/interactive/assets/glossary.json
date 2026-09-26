@@ -4777,5 +4777,12 @@
    "fire water",
    "fire-water tubs"
   ]
+ },
+ "Siberian high": {
+  "def": "The great mass of cold, heavy air that settles over Siberia in winter. Wind blows out of it over Japan from the northwest all winter; in summer the wind comes from the Pacific instead, from the southeast.",
+  "variants": [
+   "Siberian High",
+   "Siberian high"
+  ]
  }
 }

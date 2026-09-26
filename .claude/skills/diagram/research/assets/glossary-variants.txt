@@ -929,6 +929,7 @@ shuimen	water gate
 shuinchi	shuinchi
 shuku	shukuba
 shukuba	shukuba
+siberian high	Siberian high
 sigma	sigma
 siheyuan	siheyuan
 siku quanshu	Siku Quanshu
