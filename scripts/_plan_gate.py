@@ -214,7 +214,7 @@ def main(argv: list[str]) -> int:
     if argv[:1] == ["push"]:
         root = pathlib.Path(subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True,
                                            text=True).stdout.strip())
-        found = push_owed(root, argv[1] if len(argv) > 1 else "origin/main..HEAD")
+        found = push_owed(root, argv[1] if len(argv) > 1 else "origin/main...HEAD")  # the merge base: see review-gate.sh
         for feature, rule, reason in found:
             print(f"{feature}\t{rule}\t{reason}")
         return 1 if found else 0

@@ -23,9 +23,14 @@ def test_render_lists_every_item_with_its_label_band_class_and_why() -> None:
 
 def test_apply_rewrites_marked_blocks_and_names_the_tiers_without_one() -> None:
     types = bt.load_types()
-    text = "# x\n\nprose\n\n<!-- types.json:magistracies -->\nold\n<!-- /types.json:magistracies -->\n\nmore\n"
+    text = "# x\n\nprose\n\n<!-- types.json:magistracies -->\nSTALE-BLOCK\n<!-- /types.json:magistracies -->\n\nmore\n"
     new, missing = bp.apply(text, types)
-    assert "old" not in new and bp.render(types[0]) in new and new.startswith("# x\n\nprose\n\n<!-- types.json:magistracies -->\n") and new.endswith("\n<!-- /types.json:magistracies -->\n\nmore\n")
+    assert (
+        "STALE-BLOCK" not in new
+        and bp.render(types[0]) in new
+        and new.startswith("# x\n\nprose\n\n<!-- types.json:magistracies -->\n")
+        and new.endswith("\n<!-- /types.json:magistracies -->\n\nmore\n")
+    )
     assert missing == ["country-shrines"]
     both = text + "\n<!-- types.json:country-shrines -->\n\n<!-- /types.json:country-shrines -->\n"
     new, missing = bp.apply(both, types)
@@ -47,3 +52,15 @@ def test_the_real_catalog_is_current() -> None:
         text = fh.read()
     new, missing = bp.apply(text, bt.load_types())
     assert missing == [] and new == text, "buildings/programs.md is stale - run `make building-programs`"
+
+
+def test_a_kind_item_renders_its_tag_and_its_kind_s_class_and_why() -> None:
+    """Feature 262: the magistracies table says an item is found by its tag, and its class and why come from the
+    kind's registry entry - the one place they are stated."""
+    from l7r.diagram.interactive.compound_kinds import COMPOUND_CLASSES
+
+    magi = bt.by_tier("magistracies")
+    assert magi is not None
+    table = bp.render(magi)
+    granary = COMPOUND_CLASSES["granary"]
+    assert '`data-kind="granary"`' in table and f"| {granary.label} | {granary.label_note} |" in table

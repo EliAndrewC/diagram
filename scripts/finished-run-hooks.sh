@@ -89,11 +89,20 @@ live_runs() { # live_runs <clone> -> "<pid> <target>" per live make run whose cw
 import glob, os, sys
 
 clone = os.path.realpath(sys.argv[1])
+def owner(path):  # the working tree a path belongs to: its NEAREST enclosing .git, so a clone nested under the mirror is its own
+    path = os.path.realpath(path)
+    while True:
+        if os.path.exists(os.path.join(path, ".git")):
+            return path
+        up = os.path.dirname(path)
+        if up == path:
+            return ""
+        path = up
 for d in glob.glob("/proc/[0-9]*"):
     try:
         if open(f"{d}/comm").read().strip() not in ("make", "gmake"):
             continue
-        if not os.path.realpath(os.readlink(f"{d}/cwd")).startswith(clone):
+        if owner(os.readlink(f"{d}/cwd")) != clone:
             continue
         argv = open(f"{d}/cmdline").read().split("\0")
     except OSError:
@@ -114,6 +123,16 @@ judge_runs() { # judge_runs <clone> -> "<pid> <target> <status> <detail>" per RO
 import glob, os, re, sys
 
 clone, mine = os.path.realpath(sys.argv[1]), int(sys.argv[2])
+
+def owner(path):  # the working tree a path belongs to: its NEAREST enclosing .git, so a clone nested under the mirror is its own
+    path = os.path.realpath(path)
+    while True:
+        if os.path.exists(os.path.join(path, ".git")):
+            return path
+        up = os.path.dirname(path)
+        if up == path:
+            return ""
+        path = up
 
 def ppid(p):
     try:
@@ -146,7 +165,7 @@ for d in glob.glob("/proc/[0-9]*"):
     try:
         if comm(p) not in ("make", "gmake"):
             continue
-        if not os.path.realpath(os.readlink(f"{d}/cwd")).startswith(clone):
+        if owner(os.readlink(f"{d}/cwd")) != clone:
             continue
         argv = open(f"{d}/cmdline").read().split("\0")
     except OSError:
@@ -203,10 +222,21 @@ stale_waiters() { # stale_waiters -> "<pid> <file>" per waiter loop whose produc
   # THE HELPER'S PATH IS PASSED IN, not derived: this python reads from STDIN, so `__file__` is not the script
   # and `os.path.abspath` resolved it against the CWD - which made the probe look for the helper in whatever
   # directory the hook happened to run from (caught by its own first real test, 2026-09-12).
-  python3 - "$$" "$FR_HERE" <<'PY'
+  python3 - "$$" "$FR_HERE" "${1:-}" <<'PY'
 import glob, os, re, subprocess, sys
 
 mine, here = int(sys.argv[1]), sys.argv[2]
+clone = os.path.realpath(sys.argv[3]) if sys.argv[3] else ""
+
+def owner(path):  # the working tree a path belongs to: its NEAREST enclosing .git, so a clone nested under the mirror is its own
+    path = os.path.realpath(path)
+    while True:
+        if os.path.exists(os.path.join(path, ".git")):
+            return path
+        up = os.path.dirname(path)
+        if up == path:
+            return ""
+        path = up
 alive = os.path.join(here, "_writer-alive.sh")
 ancestry = set()
 pid = mine
@@ -225,6 +255,11 @@ for d in glob.glob("/proc/[0-9]*"):
     except OSError:
         continue
     if not re.search(r"\b(until|while)\b.*\bgrep\b", cmd) or "sleep" not in cmd:
+        continue
+    try:
+        if clone and owner(os.readlink(f"{d}/cwd")) != clone:
+            continue  # another session's loop: never this session's to report, still less to kill
+    except OSError:
         continue
     # the file it watches: the last path-shaped operand in the loop's condition
     paths = re.findall(r"(?:/[\w.-]+)+\.\w+", cmd)
@@ -308,28 +343,23 @@ except Exception: pass' 2>/dev/null)
           done <<< "$ROOTS"
         else
           # keyed on the UNWATCHED ROOTS, so a phase child appearing under the same run refuses nothing new
+          # GUARD_EDIT_OK: ONCE PER ROOT, as a SET (2026-09-26). The marker was compared for exact equality, so one
+          # of two told runs finishing - or a pid set changing in any way - refused the turn again over runs it had
+          # already named, breaking the "end it again" promise the refusal makes. Now a turn is refused only for a
+          # root the marker does not already hold. The text is cut to the runs that need something and the remedy
+          # (GM 2026-09-26: hook output "relatively terse"); the tracked and watched runs are not listed in it.
+          TOLD=",$(cat "$SEEN_F" 2>/dev/null),"
           PIDS=$(printf '%s\n' "$UNWATCHED" | cut -d' ' -f1 | tr '\n' ',')
-          if [ "$(cat "$SEEN_F" 2>/dev/null)" = "$PIDS" ]; then
-            exit 0   # already told for exactly these runs: never a loop, and a turn may close deliberately
-          fi
-          printf '%s' "$PIDS" > "$SEEN_F" 2>/dev/null || true
-          printf 'A MAKE RUN IS STILL GOING, NOTHING WILL WAKE THIS SESSION FOR IT, and this turn was about to end:\n' >&2
-          printf '%s\n' "$LIVE" | sed 's/^/  pid /' >&2
+          NEW=$(printf '%s\n' "$UNWATCHED" | cut -d' ' -f1 | while read -r p; do case "$TOLD" in *",$p,"*) ;; *) echo "$p" ;; esac; done)
+          [ -n "$NEW" ] || exit 0   # already told for every one of these runs: a turn may close deliberately
+          printf '%s' "${PIDS%,}" > "$SEEN_F" 2>/dev/null || true
+          printf 'A MAKE RUN THIS SESSION STARTED IS STILL GOING, DETACHED, AND NOTHING WILL WAKE THIS SESSION FOR IT:\n' >&2
           while read -r pid target status detail; do
             [ -n "$pid" ] || continue
-            case "$status" in
-              unwatched) printf '\npid %s `make %s` is DETACHED with no watcher - its output goes to %s.\n' "$pid" "$target" "$detail" >&2
-                         printf 'Wait for it: background a loop on that log (`until grep -qE "verification-state|GATE FAILED" %s; do sleep 20; done`)\n' "$detail" >&2
-                         printf 'and the no-poll guard will add the proof-of-life check for you. Then REPORT WHAT IT SAID.\n' >&2 ;;
-              tracked)   printf '\npid %s `make %s` is fine: started through the Bash tool'"'"'s background mode, the harness wakes this session at exit.\n' "$pid" "$target" >&2 ;;
-              watched)   printf '\npid %s `make %s` is fine: a waiter (pid %s) is on its log.\n' "$pid" "$target" "${detail%% *}" >&2 ;;
-            esac
-          done <<< "$ROOTS"
-          printf '\nA run started through the Bash tool'"'"'s background mode needs NO loop - the harness wakes the session\n' >&2
-          printf 'when it exits and this guard sees that. The loop is for a run detached with setsid/nohup, which nothing else watches.\n' >&2
-          printf 'Reporting a result you have not seen is the thing this prevents: on 2026-09-12 a detached gate failed 58 s\n' >&2
-          printf 'after a turn ended on "the gate is running" and sat unread for 52 minutes.\n' >&2
-          printf 'Ending the turn deliberately (the GM asked something else) is fine: end it again and this lets it through.\n' >&2
+            printf '  pid %s `make %s`, output in %s\n' "$pid" "$target" "$detail" >&2
+            printf '  wait on it in the background: until grep -qE "verification-state|GATE FAILED" %s; do sleep 20; done\n' "$detail" >&2
+          done <<< "$UNWATCHED"
+          printf 'Then REPORT WHAT IT SAID. (A run started with run_in_background needs NO loop.) Ending the turn on purpose: end it again.\n' >&2
           guard_log finished-run blocked "$LIVE" run-still-going
           exit 2
         fi
@@ -339,7 +369,7 @@ except Exception: pass' 2>/dev/null)
       # ...AND A WAITER WHOSE PRODUCER IS DEAD IS REPORTED, NEVER LEFT SPINNING (the third rule; see
       # `stale_waiters`). It REPORTS rather than blocks: the loop is harmless in itself, the session simply has
       # to know it will never end - and it is what the GM sees in their own status line, reported as running.
-      STALE=$(stale_waiters 2>/dev/null)
+      STALE=$(stale_waiters "$CLONE" 2>/dev/null)
       if [ -n "$STALE" ]; then
         printf 'A WAITER IS SPINNING ON A DEAD PRODUCER - it will never finish on its own:\n'
         printf '%s\n' "$STALE" | sed 's/^/  pid /'
@@ -356,6 +386,6 @@ except Exception: pass' 2>/dev/null)
   seen)  report "${2:?clone}" mark >/dev/null; exit 0 ;;
   live)  live_runs "${2:?clone}"; exit 0 ;;
   judge) judge_runs "${2:?clone}"; exit 0 ;;
-  stale) stale_waiters; exit 0 ;;
+  stale) stale_waiters "${2:-}"; exit 0 ;;
   *) echo "usage: $0 prompt|stop|check <clone>|seen <clone>|live <clone>" >&2; exit 2 ;;
 esac

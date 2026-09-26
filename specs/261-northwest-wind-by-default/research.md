@@ -100,10 +100,13 @@ Every candidate's drain ends as near the brook as seed 3's did (54-94 px against
 
 | map | seed | households | seat | belt clumps | belt bearing | off NW | arc |
 |---|---|---|---|---|---|---|---|
-| Inashiro | 4 | 15/15 | wind-facing, clean | 309 | 345 | 30 | 113 |
-| Kashikawa | 8 (was 3) | 20/20 | wind-facing, clean | 264 | 288 | 27 | 134 |
-| Kuwabata | 21 | 16/16 | wind-facing, clean | 111 | 297 | 18 | 87 |
-| Mizuguchi | 27 (was 23) | 12/12 | wind-facing, clean | 349 | 325 | 10 | 168 |
-| Sawada | 24 (was 6) | 19/19 | wind-facing, clean | 154 | 317 | 2 | 157 |
+| Inashiro | 4 | 15/15 | wind-facing, clean | 278 | 346 | 31 | 124 |
+| Kashikawa | 8 (was 3) | 20/20 | wind-facing, clean | 281 | 353 | 38 | 169 |
+| Kuwabata | 21 | 16/16 | wind-facing, clean | 141 | 283 | 32 | 88 |
+| Mizuguchi | 27 (was 23) | 12/12 | wind-facing, clean | 354 | 324 | 9 | 168 |
+| Sawada | 24 (was 6) | 19/19 | wind-facing, clean | 179 | 319 | 4 | 161 |
+
+Re-rolled after merging main at 19837bc2 (feature 262 and the threshing-yard tweak moved every map's detail);
+every rule still holds on every map.
 
 The final cohort (`make cohort N=48`, this engine): **38/48**, failing 2, 8, 23, 25, 28, 31, 35, 36, 40, 46 - every one also failing on the baseline (R3), all `scatter_frame_breach`; seed 37 now passes; no `households_seated` failure. No regression.

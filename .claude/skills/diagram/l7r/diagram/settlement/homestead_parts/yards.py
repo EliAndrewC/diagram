@@ -3,19 +3,20 @@
 import math
 from typing import TYPE_CHECKING, Any
 
-from .._geom import edge_dist, point_in_poly
+from .._geom import edge_dist, point_in_poly, turn_about
 
 if TYPE_CHECKING:
     from ..core import Settlement
 
 
 class ThreshingYardsMixin:
-    def _draw_threshing_yard(self: Settlement, cx: float, cy: float, w: float, h: float, poly: Any) -> None:  # type: ignore[misc]
+    def _draw_threshing_yard(self: Settlement, cx: float, cy: float, w: float, h: float, poly: Any, rot: float = 0.0) -> None:  # type: ignore[misc]
         """Draw one small tamped earthen threshing/drying yard (a straw mat + a little hazakake rack). The
-        outer footprint is a slightly-irregular quad (`poly`, absolute corner coords) - a swept work surface
-        stays NEAR-square; interior detail is laid out in the local (w,h) frame."""
+        outer footprint is a slightly-irregular quad (`poly`, absolute corner coords, UNTURNED) - a swept work
+        surface stays NEAR-square; interior detail is laid out in the local (w,h) frame, and the whole group
+        is turned by `rot`, its farmhouse's rake."""
         x0, y0 = -w / 2, -h / 2
-        g = [f'<g transform="translate({cx:.0f},{cy:.0f})">']
+        g = [f'<g transform="translate({cx:.1f},{cy:.1f}) rotate({rot:.2f})">']
         pts = " ".join(f"{px - cx:.1f},{py - cy:.1f}" for px, py in poly)
         g.append(f'<polygon points="{pts}" fill="#D2BE94" stroke="#A98E54" stroke-width="1.5"/>')  # tamped earthen floor
         g.append(f'<rect x="{x0 + 3:.0f}" y="{y0 + 3:.0f}" width="{w - 6:.0f}" height="{h - 6:.0f}" rx="1.5" fill="none" stroke="#BBA06E" stroke-width="0.7" opacity="0.6"/>')  # swept rim
@@ -146,13 +147,26 @@ class ThreshingYardsMixin:
                 return ox, oy, yw, yh
         return None
 
-    def _attach_yard(self: Settlement, hx: float, hy: float, spot: Any) -> None:  # type: ignore[misc]
+    def _attach_yard(self: Settlement, hx: float, hy: float, spot: Any, rot: float = 0.0) -> None:  # type: ignore[misc]
         """Draw a farmstead's threshing/drying yard (it is drawn BEFORE its house, so the house renders on
         top of the overlap) and record it. The work yard was UNIVERSAL, so every farmhouse gets one. Its
         footprint is a SLIGHTLY-irregular quad (a swept work surface stays near-square: small jitter),
-        inscribed in the reserved rect so it can never breach the collision the rect already cleared."""
+        inscribed in the reserved rect.
+
+        THE YARD TAKES ITS HOUSE'S RAKE (`rot`, GM 2026-09-26: the yards sat square to the map while the
+        houses were turned up to 5 degrees, *"I think that they would always be in [line] with the
+        farmhouses because that's just how they would be naturally laid out"*). The maeniwa is the ground
+        before the house's front, so its edges run with the front wall. The homestead turns as ONE piece:
+        `_rake_parts` has already carried the yard's center round the house's center, and the placer
+        cleared the ground there, so this turns the yard in place about that center. Turning it about its
+        own center alone, as first shipped, slid it up to 3 ft along the front wall."""
         ox, oy, yw, yh = spot
-        poly = self._quad(ox, oy, yw, yh, 0.10, 41.0)
+        # THE EDGE THAT FACES THE HOUSE IS LEVEL (GM 2026-09-26): north on every bundled homestead, where the yard
+        # is the south front; the legacy fallback may seat it east or west, and the facing edge follows it
+        _dx, _dy = ox - hx, oy - hy
+        _facing = ("N" if _dy >= 0 else "S") if abs(_dy) >= abs(_dx) else ("W" if _dx > 0 else "E")
+        flat = self._quad(ox, oy, yw, yh, 0.10, 41.0, level=_facing)
+        poly = turn_about(flat, ox, oy, rot)
         # A NO-RICE HAMLET DRAWS NO THRESHING FLOOR (feature 150, GM 2026-08-28: "thrashing yards on a
         # no-rice hamlet seem bad and should be eliminated"). The ground is still RECORDED, as a
         # `forecourt`: the open ground before a farmhouse is what the lane web threads around, what
@@ -162,8 +176,17 @@ class ThreshingYardsMixin:
         # `meta.work_yards` and stands aside; the interactive class `threshing yard` has no ink here.
         _fore = not getattr(self, "_work_yards", True)
         if not _fore:
-            self._draw_threshing_yard(ox, oy, yw, yh, poly)
+            self._draw_threshing_yard(ox, oy, yw, yh, flat, rot)
         self.M["threshing_yards"].append(
-            {"x": round(ox, 1), "y": round(oy, 1), "w": yw, "h": yh, "rot": 0, "of": [hx, hy], "poly": [[round(px, 1), round(py, 1)] for px, py in poly], **({"kind": "forecourt"} if _fore else {})}
+            {
+                "x": round(ox, 1),
+                "y": round(oy, 1),
+                "w": yw,
+                "h": yh,
+                "rot": round(rot, 2),
+                "of": [hx, hy],
+                "poly": [[round(px, 1), round(py, 1)] for px, py in poly],
+                **({"kind": "forecourt"} if _fore else {}),
+            }
         )
         self.placed.append((ox, oy, yw, yh))

@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+
+from ...interactive.sheet import element_kinds
 
 INTERIOR_FILL = "url(#court-earth)"
 BUILDING_FILLS: frozenset[str] = frozenset({"#DDB87A", "#C9A57A", "#E8D2A8", "#F2EFE4", "#C9876C", "#B89868", "#8C6F3E", "#6B4030"})
@@ -193,6 +195,11 @@ class ParsedPlan:
     ids: frozenset[str] = frozenset()  # every `id="..."` on the sheet - what it DECLARES (a fence group, an arch rect)
     trees: tuple[Rect, ...] = ()  # canopy circles, as their bounding rects (`fill` = TREE_FILL); never also a glyph
     fence_segs: tuple[Rect, ...] = ()  # the fence group's line segments (thin rects), for the tree-overlap check
+    # THE SHEET'S OWN TAGS (feature 262): the kind of every tagged element keyed by the byte offset of its opening
+    # tag - a label's `pos` looks its kind up here - and the set of kinds drawn. A program item that names a kind
+    # is found by these, never by a pattern over its label text.
+    label_kinds: dict[int, str] = field(default_factory=dict)
+    kinds: frozenset[str] = frozenset()
 
     def by_id(self, ident: str) -> tuple[Rect, ...]:
         """The rects the sheet marked `id="<ident>"`, in draw order."""
@@ -337,6 +344,7 @@ def parse_svg(text: str) -> ParsedPlan:
     furniture = tuple(r for r in fills if r.area_px < FURNITURE_MAX_AREA_PX)
     dark_rects = tuple(r for r in rects if r.fill in DARK_FILLS and r.area_px >= MIN_DARK_AREA_PX)
     door_rects = tuple(r for r in rects if r.fill in DARK_FILLS and r.area_px < DOOR_MAX_AREA_PX)
+    kinds = element_kinds(text)
     return ParsedPlan(
         interior,
         buildings,
@@ -356,6 +364,8 @@ def parse_svg(text: str) -> ParsedPlan:
         furniture=furniture,
         trees=trees,
         fence_segs=tuple(fence_segs),
+        label_kinds=kinds,
+        kinds=frozenset(kinds.values()),
     )
 
 

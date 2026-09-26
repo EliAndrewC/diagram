@@ -21,7 +21,10 @@
 # implementation, a manifest changed by a mechanical sweep. Using it puts the reason in the push.
 set -uo pipefail
 
-RANGE="${1:-origin/main..HEAD}"
+# GUARD_EDIT_OK: THREE DOTS, the merge base (2026-09-26). The gate runs BEFORE sync-with-main's locked pull, and a
+# two-dot `git diff origin/main..HEAD` compares TREES - so every map another session pushed since this clone last
+# synced read as this clone's change, and a tooling push was refused over five maps it never touched.
+RANGE="${1:-origin/main...HEAD}"
 ROOT="$(git rev-parse --show-toplevel)"
 cd "$ROOT" || exit 0
 

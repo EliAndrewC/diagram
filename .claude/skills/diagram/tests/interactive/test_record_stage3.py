@@ -214,7 +214,7 @@ def test_the_command_writes_checks_splits_and_refuses(record: pathlib.Path, caps
     assert record_asset.main(["--check", "--research-dir", str(record)]) == 1
     assert "STALE" in capsys.readouterr().err
     assert record_asset.main(["--research-dir", str(record)]) == 0
-    assert "wrote 1 file" in capsys.readouterr().out
+    assert "wrote 1 page" in capsys.readouterr().out
     assert record_asset.main(["--page", "ways", "--research-dir", str(record)]) == 0
     assert record_asset.main(["--split", "sources", "--research-dir", str(record)]) == 0
     assert "assembles back to the same bytes" in capsys.readouterr().out
@@ -265,6 +265,11 @@ def test_the_last_refusals_and_the_quiet_paths(record: pathlib.Path) -> None:
     drifted = record / "citations" / "ways.html"
     drifted.write_text(drifted.read_text(encoding="utf-8").replace("dredged yearly", "drifted"), encoding="utf-8")
     assert check(str(record)) == ["citations/ways.html"]
+    # ...and `make record` rewrites it: the command wrote the research page alone until 2026-09-26, so a
+    # new footnote left the citations page stale with no command that would fix it
+    assert record_asset.main(["--research-dir", str(record)]) == 0
+    assert check(str(record)) == []
+    drifted.write_text(drifted.read_text(encoding="utf-8").replace("dredged yearly", "drifted"), encoding="utf-8")
 
     # writing a page that is already what its fragments make writes nothing
     (record / "citations" / "ways.html").write_text(assemble_pages("ways.html", str(record))[1] or "", encoding="utf-8")

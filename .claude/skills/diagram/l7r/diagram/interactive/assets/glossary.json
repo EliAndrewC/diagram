@@ -2175,7 +2175,7 @@
   ]
  },
  "karo": {
-  "def": "A domain lord's senior councillors, who decided in council and lived nearest the castle.",
+  "def": "Literally \"house elder\": the senior retainer who ran a samurai household's affairs - in a domain lord's house, the senior councillors, who decided in council and lived nearest the castle.",
   "variants": [
    "karo"
   ]
@@ -4776,6 +4776,18 @@
    "fire-water",
    "fire water",
    "fire-water tubs"
+  ]
+ },
+ "morijio": {
+  "def": "Small heaps of salt set at a doorway or gate - a Japanese custom of purification and of welcoming good fortune.",
+  "variants": [
+   "morijio"
+  ]
+ },
+ "nakamon": {
+  "def": "The middle gate: the inner gate of a compound, opening from its outer court into its inner one.",
+  "variants": [
+   "nakamon"
   ]
  },
  "Siberian high": {

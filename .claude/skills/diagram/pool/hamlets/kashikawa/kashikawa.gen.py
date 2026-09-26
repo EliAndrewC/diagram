@@ -29,7 +29,7 @@ margins back onto the dry hem, the northwest ones stand in the wet toe, the rest
 map's declared flank runs along - so the seat fell back off the wind and the belt came out with no trees at all,
 the very thing the GM asked about. A seed is a roll, not a fact about the place, so the map was re-seeded with
 its fall, its sink and its brook flank kept: over seeds 1-30, five seat all twenty households on a clean
-wind-facing margin; of those, 14 drew the fullest belt but wrapped it 333 degrees round the houses, and 8 draws the next fullest (264 clumps, west-northwest, a 134-degree arc) (specs/261 research R4).
+wind-facing margin; of those, 14 drew the fullest belt but wrapped it 333 degrees round the houses, which the record rules out, and 8 was taken (specs/261 research R4, R5).
 """
 
 import os

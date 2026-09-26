@@ -138,36 +138,15 @@ case "$MODE" in
     # on the first call of any turn at one below the bar. The BLOCK keeps both tests below - a folded
     # or backgrounded command is never the right thing to refuse. The GM's words: "The fix is free ...
     # it can drop the shape test and fire on any single call once the window is one below the bar."
-    if [ "$CALLS" -eq 1 ] && [ "$N" -eq "$((REARM - 1))" ]; then
-      printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","additionalContext":"BATCHING NOTICE (one turn before this is refused): %s of the last %s turns each made a single quick read-only call. The next recon-shaped call on its own is blocked. Send the lookups you already know you need TOGETHER - parallel tool calls in one message, or one command folding several greps - and fold the ACTION you will take into the same command as the read. Nothing is refused yet."}}\n' "$N" "${#HIST}"
-      # GUARD_EDIT_OK: THE NOTICE RECORDS, which it never did (found 2026-09-13, when the GM asked
-      # whether the one-turn-early notice works and the answer had to be "the log cannot say"). The log
-      # held 700 batching entries and every one was `blocked`: feature 164 added this branch, feature
-      # 168 made every acting branch record, and this branch was written between them and missed - the
-      # block's own comment below says the rule slug "separates the block from the notice", so the
-      # record was intended and simply never called. Without it the one number that would price the
-      # notice - how often it arrives and a block does NOT follow - cannot be computed at all.
-      #
-      # The cost is one process on a branch as rare as the block itself: it fires only when the window
-      # holds exactly REARM-1 serial turns AND this call is recon-shaped, which is once per approach to
-      # the bar. The no-python rule above governs the path EVERY Read takes, and this is not it.
-      BH_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-      # shellcheck source=/dev/null
-      . "$BH_HERE/_guardlog.sh"
-      guard_log batching reminded "$N of the last ${#HIST} turns were single quick calls - one below the bar" serial-recon-notice
-    fi
     if [ "$CALLS" -eq 1 ] && [ "$BG" -eq 0 ] && [ "$N" -ge "$REARM" ] && is_recon_call; then
       REARM=$((REARM * 2))
       if [ "$REARM" -gt "$WINDOW" ]; then REARM=$WINDOW; fi   # a bar above the window could never fire
       printf '%s %s %s %s\n' "$NOW" "$CALLS" "$REARM" "" > "$STATE"   # clear the window: no deadlock
+      # GUARD_EDIT_OK: the message is cut to what a session can act on (GM 2026-09-26: the measurements and the
+      # window arithmetic "probably just burns tokens and then distracts"); their record is the header above.
       {
-        echo "BLOCKED: $N of the last ${#HIST} turns EACH made a single quick read-only call, and this call is shaped like another one - $N model round trips (~$((N * 9))s) for a few seconds of actual work. Batch instead; the playbook:"
-        echo " - Independent lookups you ALREADY know you need: send them TOGETHER, as parallel tool calls in one message or one Bash command folding several greps."
-        echo " - Dependent follow-up: fold the ACTION into the same command as the read. After a patch MISS, send anchor-grep + corrected patch + regen + check as ONE script with asserts - not grep now, patch next turn."
-        echo " - About to read a result and then act on it? Put the action in the same command (grep the anchor && apply && re-run the check)."
-        echo " - NEVER pad with no-op turns to age the window - a wasted turn costs the same round trip as recon, and only quick single reads are ever blocked (heredocs, &&/; folds, pytest/make/git-commit runs always pass), so there is nothing to game."
-        # GUARD_EDIT_OK: message pointer retargeted - the CLAUDE.md section it named moved to docs/ on 2026-09-15; no rule or verdict changed
-        echo "Then continue. The bar re-arms at $REARM serial turns of the last $WINDOW and decays back to $THRESHOLD as you batch. (docs/efficiency-tooling.md; measured 2026-08-08: 147 of 162 round trips single-call - 22.7 min of latency for 4.0 min of work; 2026-08-10: 49 of 52 blocks hit already-substantive calls, hence the shape test.)"
+        echo "BLOCKED (batching): $N of your last ${#HIST} turns were one quick call each, and this is another bare read."
+        echo "Send the lookups you already know you need TOGETHER, as parallel tool calls in one message. A folded command (a; b; c) avoids this block but still counts as a turn. After a patch MISS, send the corrected patch and its check as one command. Never pad with no-op turns."
       } >&2
       # GUARD_EDIT_OK: feature 168 - THE LOUDEST GUARD FINALLY RECORDS (GM 2026-08-30). 119 firings in
       # six days, more than every other guard combined, and not one of them written down - so nobody
@@ -178,8 +157,34 @@ case "$MODE" in
       BH_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
       # shellcheck source=/dev/null
       . "$BH_HERE/_guardlog.sh"
-      guard_log batching blocked "$N of the last ${#HIST} turns were single quick calls" serial-recon
+      guard_log batching blocked "$N of the last ${#HIST} turns were single quick calls (history $HIST, bar $REARM)" serial-recon
       exit 2
+    fi
+    # GUARD_EDIT_OK: the notice fires AT OR ABOVE one below the bar, after the block check (2026-09-26,
+    # measured from the transcripts): it spoke only at EXACTLY REARM-1, so a session that heeded it by folding
+    # stayed loaded - a folded single command is still one round trip and counts - and heard nothing more; of
+    # the 42 blocks since feature 249 that the transcripts hold, 29 came 3+ turns after the last notice and 173
+    # of the 242 turns before them were folded single commands. Placed after the block so a refused call never
+    # carries both. The text now says a folded command still counts, which is what those sessions did not know.
+    if [ "$CALLS" -eq 1 ] && [ "$N" -ge "$((REARM - 1))" ]; then
+      printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","additionalContext":"BATCHING NOTICE: %s of your last %s turns were one quick call each; a folded command (a; b; c) still counts, it is one round trip. The next bare Read/Grep/Glob or single-command Bash on its own is refused. Send calls you already know you need as PARALLEL tool calls in one message. Nothing is refused yet."}}\n' "$N" "${#HIST}"
+      # GUARD_EDIT_OK: THE NOTICE RECORDS, which it never did (found 2026-09-13, when the GM asked
+      # whether the one-turn-early notice works and the answer had to be "the log cannot say"). The log
+      # held 700 batching entries and every one was `blocked`: feature 164 added this branch, feature
+      # 168 made every acting branch record, and this branch was written between them and missed - the
+      # block's own comment below says the rule slug "separates the block from the notice", so the
+      # record was intended and simply never called. Without it the one number that would price the
+      # notice - how often it arrives and a block does NOT follow - cannot be computed at all.
+      #
+      # The cost is one process on a branch as rare as the block itself: it fires on the first call of a
+      # turn while the window is at or above one below the bar. The no-python rule above governs the path EVERY Read takes, and this is not it.
+      BH_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+      # shellcheck source=/dev/null
+      . "$BH_HERE/_guardlog.sh"
+      # GUARD_EDIT_OK: the record is written in the BACKGROUND (2026-09-26): it costs ~300 ms of python, and now that the
+      # notice speaks on every loaded turn that would sit in front of every such call; detached from stdout so the
+      # harness does not wait on it.
+      ( guard_log batching reminded "$N of the last ${#HIST} turns were single quick calls - at or above one below the bar (history $HIST, bar $REARM)" serial-recon-notice ) >/dev/null 2>&1 &
     fi
     # A NEW TURN APPENDS ITS OWN (provisional) ENTRY HERE, after the check above has read the
     # window. It cannot be left to posttool: on a batched turn the FIRST posttool already sees

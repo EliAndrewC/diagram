@@ -50,16 +50,23 @@ class Band:
 
 @dataclass(frozen=True)
 class RequiredItem:
-    """One item of a type's program: found on a sheet by `label`, held to `band`."""
+    """One item of a type's program: found on a sheet by `label` - or, for a tier whose sheets are tagged, by its
+    `kind` (feature 262) - and held to `band`.
+
+    A KIND ITEM STATES NO CLASS OR WHY OF ITS OWN (feature 262, FR-003a): the GM's constraint was that nothing be
+    changed by hand in two places, and the kind's registry entry (`interactive/compound_kinds/`) already says what
+    the thing is, how it is classified and why. `classification()` reads them from there; `cls` and `why` are empty
+    on a kind item and are only the label-regex tiers' own statement."""
 
     id: str
-    label: re.Pattern[str]
+    label: re.Pattern[str] | None
     band: Band
     cls: str
     why: str
     optional: bool = False
     forms: dict[str, Band | None] = field(default_factory=dict)  # a form's own band, or None = absent under that form
     site: str | None = None  # a SITE item (feature 257): its correspondence class; asked for only where the declared map shows that class inside the frame (always, with no declaration)
+    kind: str | None = None  # the Mode A kind the item IS (feature 262): found by the sheet's `data-kind` tags, classified by the registry
 
     def band_for(self, form: str | None) -> Band | None:
         """The band under `form` (a notes file's `**Form**:` value): the form's own, None if the item
@@ -98,26 +105,46 @@ def _band(raw: Any, where: str) -> Band:
 
 
 def _item(raw: Any, where: str) -> RequiredItem:
-    keys = {"id", "label", "band_ft", "class", "why", "optional", "forms", "site"}
-    if not isinstance(raw, dict) or not {"id", "label", "band_ft", "class", "why"} <= set(raw) or set(raw) - keys:
-        raise ValueError(f"{where}: a required item carries id, label, band_ft, class, why (and optional, forms, site), not {sorted(raw) if isinstance(raw, dict) else raw!r}")
+    keys = {"id", "label", "band_ft", "class", "why", "optional", "forms", "site", "kind"}
+    labeled = isinstance(raw, dict) and {"id", "label", "band_ft", "class", "why"} <= set(raw) and "kind" not in raw
+    kinded = isinstance(raw, dict) and {"id", "kind", "band_ft"} <= set(raw) and not {"label", "class", "why"} & set(raw)
+    if not (labeled or kinded) or set(raw) - keys:
+        raise ValueError(
+            f"{where}: a required item carries id, label, band_ft, class, why - or id, kind, band_ft, whose class and why are its kind's (feature 262) - (and optional, forms, site), not {sorted(raw) if isinstance(raw, dict) else raw!r}"
+        )
     if "site" in raw and (not isinstance(raw["site"], str) or not raw["site"]):
         raise ValueError(f"{where}/{raw['id']}: site names a correspondence class (a non-empty string), not {raw['site']!r}")
-    if raw["class"] not in CLASSES:
+    if kinded and (not isinstance(raw["kind"], str) or not raw["kind"]):
+        raise ValueError(f"{where}/{raw['id']}: kind names a Mode A kind (a non-empty string), not {raw['kind']!r}")
+    if labeled and raw["class"] not in CLASSES:
         raise ValueError(f"{where}/{raw['id']}: class must be one of {CLASSES}, not {raw['class']!r}")
     forms: dict[str, Band | None] = {}
     for form, spec in (raw.get("forms") or {}).items():
         forms[form] = None if spec is None else _band(spec, f"{where}/{raw['id']}/forms/{form}")
     return RequiredItem(
         id=str(raw["id"]),
-        label=re.compile(str(raw["label"]), re.IGNORECASE),
+        label=re.compile(str(raw["label"]), re.IGNORECASE) if labeled else None,
         band=_band(raw["band_ft"], f"{where}/{raw['id']}"),
-        cls=str(raw["class"]),
-        why=str(raw["why"]),
+        cls=str(raw.get("class", "")),
+        why=str(raw.get("why", "")),
         optional=bool(raw.get("optional", False)),
         forms=forms,
         site=str(raw["site"]) if "site" in raw else None,
+        kind=str(raw["kind"]) if kinded else None,
     )
+
+
+def classification(item: RequiredItem) -> tuple[str, str]:
+    """(class, why) for a program item: its own for a label-regex item, its KIND's label and note for a kind item
+    (feature 262 - stated once, in the registry). A kind the registry does not know is refused by name."""
+    if item.kind is None:
+        return item.cls, item.why
+    from ..interactive.compound_kinds import COMPOUND_CLASSES  # lazy: the registry imports the page stack
+
+    fc = COMPOUND_CLASSES.get(item.kind)
+    if fc is None:
+        raise ValueError(f"program item {item.id!r} names the kind {item.kind!r}, which the Mode A registry does not know")
+    return fc.label, fc.label_note
 
 
 def parse_types(data: Any) -> tuple[BuildingType, ...]:

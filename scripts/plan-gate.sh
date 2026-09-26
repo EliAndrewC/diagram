@@ -17,7 +17,8 @@
 # ESCAPE: PLAN_REVIEW_OK with a reason, recorded to the guard log and dev/bypass-log/.
 set -uo pipefail
 
-RANGE="${1:-origin/main..HEAD}"
+# GUARD_EDIT_OK: three dots, the merge base - see review-gate.sh; another session's push is not this clone's delta
+RANGE="${1:-origin/main...HEAD}"
 ROOT="$(git rev-parse --show-toplevel)"
 cd "$ROOT" || exit 0
 

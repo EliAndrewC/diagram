@@ -25,6 +25,8 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))  # <tree>/<tier>/<map>/ - one level deeper since feature 161 gave every map its own folder
 
 from l7r.diagram import compound as C  # noqa: E402
+from l7r.diagram.interactive.compound_kinds import COMPOUND_CLASSES  # noqa: E402
+from l7r.diagram.interactive.sheet import write_sheet_page  # noqa: E402
 
 # cwd-INDEPENDENT output path (fixed 2026-07-21): the old cwd-relative "pool/..." wrote a stray
 # file at the pool ROOT when run from the skill dir and crashed when run from this dir - anchor
@@ -45,24 +47,24 @@ def ochiba_program() -> C.CompoundProgram:
     b = C.BuildingSpec
     buildings = (
         # inner (residence) court
-        b("residence (W)", "lord", 90.0, 25.0, "inner", "N", order=10),
-        b("residence (E)", "lord", 93.0, 25.0, "inner", "N", order=9),
-        b("servants", "service", 73.0, 13.0, "inner", "N", order=2, rank=2),  # rear service strip
-        b("kitchen", "service", 40.0, 33.0, "inner", "W", order=5),
-        b("Inari shrine", "shrine", 37.0, 31.0, "inner", "E", order=5),
-        b("cinnabar workshop", "shrine", 37.0, 24.0, "inner", "E", order=4),
-        b("karo's house", "lord", 37.0, 23.0, "inner", "divider", order=3),
+        b("residence (W)", "lord", 90.0, 25.0, "inner", "N", order=10, feature="residence"),
+        b("residence (E)", "lord", 93.0, 25.0, "inner", "N", order=9, feature="residence"),
+        b("servants", "service", 73.0, 13.0, "inner", "N", order=2, rank=2, feature="servants' quarters"),  # rear service strip
+        b("kitchen", "service", 40.0, 33.0, "inner", "W", order=5, feature="kitchen"),
+        b("Inari shrine", "shrine", 37.0, 31.0, "inner", "E", order=5, feature="compound shrine"),
+        b("cinnabar workshop", "shrine", 37.0, 24.0, "inner", "E", order=4, feature="cinnabar workshop"),
+        b("karo's house", "lord", 37.0, 23.0, "inner", "divider", order=3, feature="karo's house"),
         # outer (administrative) court
-        b("office hall", "lord", 120.0, 28.0, "outer", "divider", order=10),
-        b("tax archive", "kura", 32.0, 28.0, "outer", "W", order=6),
-        b("senior retainers", "service", 51.0, 17.0, "outer", "W", order=4),
-        b("granary", "kura", 50.0, 26.0, "outer", "E", order=6),
-        b("barracks", "service", 31.0, 33.0, "outer", "E", order=4),
-        b("cell", "cell", 18.0, 15.0, "outer", "E", order=1),
-        b("gatehouse", "dark", 40.0, 14.0, "outer", "S", order=8),
-        b("stables", "service", 29.0, 22.0, "outer", "S", order=5),
-        b("clerks' room", "service", 28.0, 18.0, "outer", "W", order=3),  # a room of the hall on the sheet; a mass here (feature 254)
-        b("guest room", "lord", 22.0, 15.0, "inner", "E", order=2),  # a room of the residence on the sheet; a mass here (feature 254)
+        b("office hall", "lord", 120.0, 28.0, "outer", "divider", order=10, feature="office hall"),
+        b("tax archive", "kura", 32.0, 28.0, "outer", "W", order=6, feature="tax archive"),
+        b("senior retainers", "service", 51.0, 17.0, "outer", "W", order=4, feature="retainers' quarters"),
+        b("granary", "kura", 50.0, 26.0, "outer", "E", order=6, feature="granary"),
+        b("barracks", "service", 31.0, 33.0, "outer", "E", order=4, feature="barracks"),
+        b("cell", "cell", 18.0, 15.0, "outer", "E", order=1, feature="cell"),
+        b("gatehouse", "dark", 40.0, 14.0, "outer", "S", order=8, feature="gatehouse"),
+        b("stables", "service", 29.0, 22.0, "outer", "S", order=5, feature="stables"),
+        b("clerks' room", "service", 28.0, 18.0, "outer", "W", order=3, feature="clerks' room"),  # a room of the hall on the sheet; a mass here (feature 254)
+        b("guest room", "lord", 22.0, 15.0, "inner", "E", order=2, feature="guest quarters"),  # a room of the residence on the sheet; a mass here (feature 254)
     )
     return C.CompoundProgram("Ochiba County Magistracy (placer round-trip)", env, spine, buildings)
 
@@ -82,6 +84,12 @@ def main() -> int:
             ["resvg", "--width", "2400", "--serif-family", "DejaVu Serif", OUT_SVG, OUT_SVG[:-4] + ".png"],
             check=True,
         )
+    # the interactive page (feature 262): the emitter wrote each element's kind, so the page reads the draft as it
+    # reads a hand-drawn sheet
+    census = write_sheet_page(OUT_SVG, COMPOUND_CLASSES)
+    if census.unclassed or census.unregistered:
+        print(f"{os.path.basename(OUT_SVG)}: untagged ink {census.unclassed}; unknown kinds {census.unregistered}", file=sys.stderr)
+        return 1
     return 0
 
 

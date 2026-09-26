@@ -56,15 +56,13 @@ def _check(research_dir: str) -> int:
 
 
 def _write(page: str, research_dir: str) -> int:
-    """Write every file `--check` compares: the research page AND, where the page has notes, its citations page
-    and hover script (`write_pages`). It used to write the research page alone, so an edit to a `.notes.html`
-    fragment - which moves only the citations page - left `--check` STALE with nothing `make record` would
-    write (feature 261: the `kisetsufu-jawiki` gloss on vegetation's 030)."""
+    """Write each page through `write_pages` - the research page, its citations page and the hover script,
+    the files `check` compares. This wrote the research page alone until 2026-09-26, so a new footnote left
+    `citations/<page>.html` stale with no command that would rewrite it: `CHECK=1` and the gate named it,
+    and `make record` answered "wrote 0 page(s)"."""
     pages = [_page_rel(page)] if page else record_pages(research_dir)
-    written = 0
-    for page_rel in pages:
-        written += write_pages(page_rel, research_dir)
-    print(f"record: wrote {written} file(s)")
+    written = sum(write_pages(page_rel, research_dir) for page_rel in pages)
+    print(f"record: wrote {written} page(s)")
     return 0
 
 

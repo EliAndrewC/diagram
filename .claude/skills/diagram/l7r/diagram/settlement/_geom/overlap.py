@@ -163,6 +163,13 @@ def rot_rect(cx: float, cy: float, w: float, h: float, deg: float = 0.0) -> Poly
     return [(cx + dx * c - dy * sn, cy + dx * sn + dy * c) for dx, dy in ((-w / 2, -h / 2), (w / 2, -h / 2), (w / 2, h / 2), (-w / 2, h / 2))]
 
 
+def turn_about(pts: Poly, cx: float, cy: float, deg: float = 0.0) -> Poly:
+    """`pts` turned `deg` degrees about (cx, cy) - the same sense as `rot_rect` and SVG's `rotate()`."""
+    th = math.radians(deg or 0.0)
+    c, sn = math.cos(th), math.sin(th)
+    return [(cx + (px - cx) * c - (py - cy) * sn, cy + (px - cx) * sn + (py - cy) * c) for px, py in pts]
+
+
 def poly_gap(p: Poly, q: Poly) -> float:
     """The true gap in px between two convex quads - 0.0 if they overlap or touch.
 
