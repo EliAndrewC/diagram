@@ -283,12 +283,37 @@ def test_yard_and_garden_take_the_house_rake():
     s = _nuc_village()
     s._attach_yard(500, 500, (500, 530, 30, 20), 4.0)
     s._attach_garden(500, 500, [(530, 500, 12, 14)], 4.0)
-    for rec, jit, salt in ((s.M["threshing_yards"][-1], 0.10, 41.0), (s.M["gardens"][-1], 0.18, 71.0)):
+    for rec, jit, salt, level in ((s.M["threshing_yards"][-1], 0.10, 41.0, "N"), (s.M["gardens"][-1], 0.18, 71.0, None)):
         assert rec["rot"] == 4.0
-        want = turn_about(s._quad(rec["x"], rec["y"], rec["w"], rec["h"], jit, salt), rec["x"], rec["y"], 4.0)
+        want = turn_about(s._quad(rec["x"], rec["y"], rec["w"], rec["h"], jit, salt, level=level), rec["x"], rec["y"], 4.0)
         assert all(math.hypot(px - wx, py - wy) < 0.1 for (px, py), (wx, wy) in zip(rec["poly"], want, strict=True))
     s._attach_yard(600, 600, (600, 630, 30, 20))
     assert s.M["threshing_yards"][-1]["rot"] == 0.0
+
+
+def test_the_yard_edge_facing_its_house_runs_parallel_to_the_house():
+    # GM 2026-09-26: "the northern edge should be parallel with the house". Swept over positions, because each
+    # corner's pull is positional - one seat proves nothing about the next. The other edges stay irregular.
+    s = _nuc_village()
+    worst = 0.0
+    bent = 0
+    for k in range(60):
+        hx, hy = 200.0 + 37.3 * k, 300.0 + 11.9 * k
+        rot = s._house_rot(hx, hy)
+        s._attach_yard(hx, hy, (hx, hy + 30.0, 30.0, 20.0), rot)
+        p = s.M["threshing_yards"][-1]["poly"]
+        worst = max(worst, abs(math.degrees(math.atan2(p[1][1] - p[0][1], p[1][0] - p[0][0])) - rot))
+        bent += abs(math.degrees(math.atan2(p[2][1] - p[3][1], p[2][0] - p[3][0])) - rot) > 0.5
+    assert worst < 0.3, f"the north edge ran {worst:.2f} deg off its house's wall"  # the record rounds corners to 0.1 px
+    assert bent > 10, "the far edge keeps its hand-laid irregularity"
+    # the legacy fallback's side yards level the edge that faces the house, not the north one
+    s._attach_yard(500.0, 500.0, (540.0, 500.0, 20.0, 30.0), 0.0)
+    p = s.M["threshing_yards"][-1]["poly"]
+    assert p[0][0] == p[3][0], "an east-side yard levels its west edge"
+    s._attach_yard(500.0, 500.0, (460.0, 500.0, 20.0, 30.0), 0.0)
+    p = s.M["threshing_yards"][-1]["poly"]
+    assert p[1][0] == p[2][0], "a west-side yard levels its east edge"
+    assert s._quad(500.0, 500.0, 30.0, 20.0, 0.1, 41.0, level="S")[2][1] == s._quad(500.0, 500.0, 30.0, 20.0, 0.1, 41.0, level="S")[3][1]
 
 
 def test_garden_fits_rejects_a_spot_outside_the_bound():

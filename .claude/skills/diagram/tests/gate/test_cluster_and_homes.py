@@ -153,6 +153,22 @@ def test_two_farmhouses_keep_their_own_drip_lines(homes) -> None:
     assert not merged, f"{len(merged)} farmhouse pair(s) stand closer than {FARMHOUSE_EAVE_GAP_FT:.0f} ft wall to wall, at {merged[:4]}"
 
 
+def test_every_threshing_yard_fronts_its_house_square(homes) -> None:
+    """The yard's edge toward its house runs parallel to the house's wall (GM 2026-09-26: *"the northern edge
+    should be parallel with the house. Is that something that we can mandate?"*). The placer's unit test sweeps
+    positions; this holds it on the shipped reference map, where a later stage could not undo it but a new
+    producer of yards could bypass `_attach_yard`."""
+    M, _houses = homes
+    houses = {(round(h["x"], 1), round(h["y"], 1)): h for h in M["houses"]}
+    yards = [y for y in M["threshing_yards"] if y.get("poly")]
+    assert yards, "the reference map records no threshing yards, so this test cannot see one go wrong"
+    for y in yards:
+        h = houses[(round(y["of"][0], 1), round(y["of"][1], 1))]
+        (ax, ay), (bx, by) = y["poly"][0], y["poly"][1]
+        off = abs(math.degrees(math.atan2(by - ay, bx - ax)) - float(h.get("rot", 0.0)))
+        assert off < 0.3, f"the yard at ({y['x']}, {y['y']}) fronts its house {off:.2f} deg off square"
+
+
 def test_no_farmhouse_is_drawn_as_a_shed(homes) -> None:
     """`farmhouse_aspect_in_range`. A minka grew by adding bays along its ridge, so it is a long building -
     but it stayed a house. Past about 2.7:1 the footprint reads as a shed or a barn, and the settlement
