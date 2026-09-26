@@ -188,13 +188,16 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
 
 ## Phase 1g - the sixth round (GM 2026-09-26; plan D15)
 
-- [ ] T52 EDIT blocks in `quote-check` and `record-format`, and `make apply-edits` (D15.1)
+- [x] T52 EDIT blocks in `quote-check` and `record-format`, and `make apply-edits` (D15.1)
       research: rendering
-- [ ] T53 The write brief: the page's over-cap questions split in the write session, reads in one message, the
+      verify: DONE. built in 519865d6; verified: tests/tooling/test_apply_edits.py, test_source_pages.py and the brief/summary run by hand (government summary reproduces R6's rows; the fabric brief names 140 over the cap); make quick clean; plan review CLEAR
+- [x] T53 The write brief: the page's over-cap questions split in the write session, reads in one message, the
       registry shape named; `source-pages` adds to its directory (D15.2, D15.3)
       research: rendering
-- [ ] T54 `tokens.py summary`, per question checked (D15.4)
+      verify: DONE. built in 519865d6; verified: tests/tooling/test_apply_edits.py, test_source_pages.py and the brief/summary run by hand (government summary reproduces R6's rows; the fabric brief names 140 over the cap); make quick clean; plan review CLEAR
+- [x] T54 `tokens.py summary`, per question checked (D15.4)
       research: rendering
+      verify: DONE. built in 519865d6; verified: tests/tooling/test_apply_edits.py, test_source_pages.py and the brief/summary run by hand (government summary reproduces R6's rows; the fabric brief names 140 over the cap); make quick clean; plan review CLEAR
 - [ ] T55 FR-002 for `cities/fabric`, worked as the last three pages were (D15.5)
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
