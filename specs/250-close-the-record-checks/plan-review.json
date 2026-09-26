@@ -1,56 +1,44 @@
 {
  "feature": "250-close-the-record-checks",
- "plan_sha256": "daa80c6b850e29661a66b2644f838074ee09eecd78cfd8acf0ec8ca8608db24f",
+ "plan_sha256": "1749df02f5b7bcc2faa39db2d0f0a2f7d3bde3fad50d04e25ab65af51295f5e9",
  "reviewed": "2026-09-26",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "D12-1",
-   "summary": "Session floor: research tools only (Bash, Read, Edit, Write, Grep, Glob, Agent, WebFetch, WebSearch), --strict-mcp-config, --disable-slash-commands, and claudeMdExcludes of the mirror's root CLAUDE.md in a clone",
+   "id": "D13-sequence",
+   "summary": "R4 recommendation 1 (go) waits for this round's figures; recommendations 2-4 built first, then one equivalent page, then the rest",
    "class": "within",
-   "why": "R3 rec 1 as recommended. Glob beyond the rec's list widens rather than narrows; excluding the mirror's duplicate root CLAUDE.md serves the rec's stated purpose (lower the floor) and removes no content the clone's own copy does not carry."
+   "why": "The GM's words: implement two, three and four, then another round of equivalent work 'before we proceed with all remaining pages'."
   },
   {
-   "id": "D12-2",
-   "summary": "Check sessions of two questions each, planned from the handoff by a then: step; registry keys to the first group; the last group closes the page",
+   "id": "D13-2",
+   "summary": "One note-scoped re-check per question (brief step 7); a PARTIAL left after it is labeled honestly in its note - what the quote carries and does not, or the assertion narrowed to the quote - and not re-checked again",
    "class": "within",
-   "why": "R3 rec 2's body says two or three questions a session, each with bundles, checks, apply, re-check and entry-drift; the brief carries all five steps per group."
+   "why": "R4 recommendation 2 as written ('One note-scoped re-check per question; a PARTIAL left after it is labeled honestly in the note rather than re-checked again'); narrowing the assertion to the quote is one honest form of that label, not a relaxation of the bound. brief.py step 7 carries it."
   },
   {
-   "id": "D12-3",
-   "summary": "Check brief: every finding of one report applied in one message, record commands and tests once",
+   "id": "D13-3",
+   "summary": "Each of the twelve defined agents' description cut to one sentence, the full statement moved verbatim into the contract under 'When to dispatch this agent'; built-in agent types' descriptions left alone",
    "class": "within",
-   "why": "R3 rec 3 as written (brief step 6)."
+   "why": "R4 recommendation 3 names 'the long description fields of the defined agents. One sentence each, with the detail left in the contract body'. Verified on e2777cbf: all 12 old descriptions appear verbatim in the new files; totals reproduce as 8,448 -> 2,122 characters. Built-ins are not defined agents and not ours to edit, so excluding them narrows nothing asked."
   },
   {
-   "id": "D12-4",
-   "summary": "research/CLAUDE.md trimmed to its operative rules (13,290 chars, observed 2026-09-26) under the same headings; full text (45,051 chars at 37c20e57) moved verbatim to docs/research-record-rules.md",
+   "id": "D13-4",
+   "summary": "_clone_local_settings.py, run by the clone-sync prompt hook, merges claudeMdExcludes for the mirror's root CLAUDE.md into each clone's untracked .claude/settings.local.json, keeping other keys; mirror untouched",
    "class": "within",
-   "why": "Round after digest 23fee4d2, read from the diff 06eac8a2..HEAD only. Every item of the previous BLOCKED list is now in research/CLAUDE.md under its heading: (195) the CITATION link is the full-text view not a library landing page, and the original-language page not an English rendering on no page; what a read copy does NOT say is written where the claim stands, the rest labeled GUESS; settling is never obligatory; the GROUNDS sentence restores on an existing note verbatim; (190) a page named only as silent or unreadable and an unregistered summary-only or withdrawn item stay plain; a new entry records the URL and its READ date; (194) the form holds in body prose and in a SOURCES.html entry; the original is the checker anchor, never a second quote; two footnotes on a sentence resting on two sources; (209) the roster key parenthetical says what the work contributed, never when or how it was read; an absence note provenance is an HTML comment in its li; (229) no engine identifier or check in the spec visible text, and where it rests on no finding it says which: a convention, a calibration against the drawn exhibits, or a guess. The plan figures carry a one-shot label (observed 2026-09-26, len at 37c20e57 and after) and re-measure exactly: wc -m gives 45,051 for the file at 37c20e57 and 13,290 for the current file. With every rule kept and the full reasoning moved verbatim, this is R3 rec 4 as adopted (trim to the operative rules), not a narrowing of it."
+   "why": "R4 recommendation 4 ('A claudeMdExcludes for the mirror's copy in each clone's untracked .claude/settings.local.json, written when the clone is made or synced'); the prompt hook is the sync point, and it reaches every clone session, the GM's included."
   },
   {
-   "id": "D12-5",
-   "summary": "entry-drift in each check group's brief, on the modals of its own questions, with the question they were written from",
+   "id": "D13-page",
+   "summary": "The equivalent page is religion-and-death (four FR-002, one FR-006), worked exactly as cities/defenses (a write session then two-question check sessions), recorded as R5 with the table over all five rounds (T45, T46)",
    "class": "within",
-   "why": "R3 rec 5 offered two branches; D12 takes the first (in the per-page check session, the brief says so and scopes it), as the rec allowed."
+   "why": "The GM asked for 'another round of equivalent work to the others so that we can do an apples to apples comparison'; the same session shape, the same meter and a per-item table serve that. The GM named no page."
   },
   {
-   "id": "D12-flaky",
-   "summary": "Raster-mode lit-paddy/beads browser check waits for its state with the driver's bounded settles (2 s), assertions unchanged; T39 three runs green",
+   "id": "T19-rewording",
+   "summary": "T19 excludes religion-and-death as well and is cut when T46's figures are read instead of T41's",
    "class": "within",
-   "why": "Fixed, not hidden: no skip, xfail, retry or loosened expectation; the asserted tuples are unchanged and a value that never arrives within the bound still fails. A stale read equal to the wanted value could pass, but the original same-tick read passed on the same stale value, so it is no weaker than before."
-  },
-  {
-   "id": "D12-measure",
-   "summary": "cities/defenses (5 FR-002, 1 FR-006) worked and measured over every session in .git/page-sessions/index.txt against R1-R3, recorded as R4 (T40, T41)",
-   "class": "within",
-   "why": "'measure again the same way as this round': one page of the same size, measured with the same meter against the earlier rounds."
-  },
-  {
-   "id": "T19-reword",
-   "summary": "T19 excludes cities/defenses too, drops 'two sessions each', cut at T41 instead of T33",
-   "class": "within",
-   "why": "'Two sessions each' is superseded by D12's write session plus check groups, which govern phase 2 through D7/D12; the added exclusion and the later cut follow from T40/T41. Nothing is dropped from the task's scope."
+   "why": "Drops nothing: the only page removed is the one T45 now carries, and the cut point moves to the comparison the GM asked to see before the remaining pages."
   }
  ],
  "verdict": "CLEAR"

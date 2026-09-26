@@ -146,12 +146,15 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
 
 ## Phase 1e - the fourth round (GM 2026-09-26; plan D13)
 
-- [ ] T42 One re-check round per question in the check brief
+- [x] T42 One re-check round per question in the check brief
       research: rendering
-- [ ] T43 One-sentence agent descriptions, the full text kept in each contract
+      verify: DONE. DONE. The check brief's step 7 allows one note-scoped re-check per question; a PARTIAL left after it is labeled honestly in its note.
+- [x] T43 One-sentence agent descriptions, the full text kept in each contract
       research: rendering
-- [ ] T44 Every clone's local settings exclude the mirror's CLAUDE.md (`_clone_local_settings.py`, the prompt hook)
+      verify: DONE. DONE. Twelve agent descriptions one sentence each, 8,448 -> 2,122 characters; each full text moved verbatim under 'When to dispatch this agent' (the plan review compared all twelve); tier test green.
+- [x] T44 Every clone's local settings exclude the mirror's CLAUDE.md (`_clone_local_settings.py`, the prompt hook)
       research: rendering
+      verify: DONE. DONE. _clone_local_settings.py from the clone-sync prompt hook writes claudeMdExcludes for the mirror's CLAUDE.md into the clone's untracked local settings; 3 unit tests, the clone-sync suite green; a probe with the file alone loaded only the clone's CLAUDE.md and started at 19,413 tokens.
 - [ ] T45 FR-002 and FR-006 for `religion-and-death`, worked as `cities/defenses` was (D13)
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
