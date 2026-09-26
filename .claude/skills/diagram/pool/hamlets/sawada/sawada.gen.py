@@ -24,6 +24,8 @@ low foot, and at seed 6 no margin whose back faces the wind was open: the seat f
 and the belt came out 27 trees. A seed is a roll, not a fact about the place, so the map was re-seeded with its
 fall, its sink and its intake kept: over seeds 1-30 only seed 24 seats all 19 households on a wind-facing
 margin (specs/261 research).
+`lane_web="alleys"` - DECLARED, NOT ROLLED (feature 261): a knob owes one map per value on the sheet, and re-seeding this map for
+the regional wind took the pool's only exhibit of that value with it; declaring it here keeps the pool whole.
 """
 
 import os
@@ -34,5 +36,5 @@ SKILL = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))  # <tree>/<tier>
 sys.path.insert(0, SKILL)
 from l7r.diagram.hamletgen import HamletSpec, generate  # noqa: E402
 
-report = generate(HamletSpec(name="Sawada", seed=24, households=19, down_deg=225, water_sink="offmap", intake="open"), out_base=os.path.join(HERE, "sawada"))
+report = generate(HamletSpec(name="Sawada", seed=24, households=19, down_deg=225, water_sink="offmap", intake="open", lane_web="alleys"), out_base=os.path.join(HERE, "sawada"))
 print(report.line())

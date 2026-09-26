@@ -30,6 +30,8 @@ map's declared flank runs along - so the seat fell back off the wind and the bel
 the very thing the GM asked about. A seed is a roll, not a fact about the place, so the map was re-seeded with
 its fall, its sink and its brook flank kept: over seeds 1-30, five seat all twenty households on a clean
 wind-facing margin; of those, 14 drew the fullest belt but wrapped it 333 degrees round the houses, which the record rules out, and 8 was taken (specs/261 research R4, R5).
+`bamboo="both"` - DECLARED, NOT ROLLED (feature 261): a knob owes one map per value on the sheet, and re-seeding this map for
+the regional wind took the pool's only exhibit of that value with it; declaring it here keeps the pool whole.
 """
 
 import os
@@ -40,5 +42,5 @@ SKILL = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))  # <tree>/<tier>
 sys.path.insert(0, SKILL)
 from l7r.diagram.hamletgen import HamletSpec, generate  # noqa: E402
 
-report = generate(HamletSpec(name="Kashikawa", seed=8, households=20, down_deg=315, water_sink="offmap", brook_side=-1), out_base=os.path.join(HERE, "kashikawa"))
+report = generate(HamletSpec(name="Kashikawa", seed=8, households=20, down_deg=315, water_sink="offmap", brook_side=-1, bamboo="both"), out_base=os.path.join(HERE, "kashikawa"))
 print(report.line())

@@ -282,3 +282,10 @@ def test_a_brook_side_that_is_not_a_flank_is_refused() -> None:
     with pytest.raises(ValueError, match="brook_side"):
         hg.HamletSpec(name="Bad", seed=1, households=10, brook_side=0)
     assert hg.plan_site(hg.HamletSpec(name="Pinned", seed=1, households=10, brook_side=-1)).brook_side == -1
+
+
+def test_a_byre_form_is_declarable_and_a_nonsense_one_refused() -> None:
+    """Feature 261: the pool exhibits both byre forms, so a spec may pin the settlement engine's knob."""
+    assert hg.HamletSpec(name="X", seed=4, byre_form="courtyard").byre_form == "courtyard"
+    with pytest.raises(ValueError, match="byre_form"):
+        hg.HamletSpec(name="X", seed=4, byre_form="barn")

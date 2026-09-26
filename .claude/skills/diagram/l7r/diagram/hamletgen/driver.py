@@ -227,6 +227,8 @@ def build(plan: SitePlan, avoid: Sequence[tuple[float, float]] = ()) -> Settleme
     these points. See `generate`, which re-rolls a map whose finished manifest stranded a farmhouse."""
     s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
     s._avoid_seats = list(avoid)  # type: ignore[attr-defined]
+    if plan.spec.byre_form is not None:  # a declared byre form bypasses the settlement engine's roll (feature 261)
+        s.pin_knob("byre_form", plan.spec.byre_form)
 
     if not os.environ.get(STAGE_PROFILE_ENV):
         with roll_scope(plan.spec):

@@ -11,6 +11,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from l7r.diagram.settlement import knob_rng
+from l7r.diagram.settlement._knobs import KNOBS
 
 from .consts import (
     BAMBOO_FORMS,
@@ -86,6 +87,7 @@ class HamletSpec:
     manure_form: str | None = None  # the manure fixture's form, heap | pit (feature 150; `MANURE_FORMS`)
     copse_siting: str | None = None  # among_the_houses | against_the_belt (feature 152; `COPSE_SITINGS`)
     kosatsuba_siting: str | None = None  # frontage | waterside (feature 152; `KOSATSUBA_SITINGS`)
+    byre_form: str | None = None  # detached_commons | courtyard - the settlement engine's knob, pinnable so the pool can exhibit both (feature 261)
     dike_crop: str | None = None  # a dike-pond's dike planting, mulberry | sugarcane | banana | fruit (feature 150; `DIKE_CROPS`)
     leftover: str | None = None  # a dike-pond block's unconverted parcels, rice | vegetables | pond (feature 150; `LEFTOVER_FORMS`)
     plot_size: str | None = None
@@ -118,6 +120,8 @@ class HamletSpec:
             raise ValueError(f"windward {self.windward!r} is not a compass quarter: {sorted(WIND_VECTORS)}")
         if self.brook_side is not None and self.brook_side not in BROOK_FLANKS:
             raise ValueError(f"brook_side {self.brook_side!r} must be one of {sorted(BROOK_FLANKS)} - the two flanks the brook may pass the fan on")
+        if self.byre_form is not None and self.byre_form not in KNOBS["byre_form"].value_space:
+            raise ValueError(f"byre_form {self.byre_form!r} must be one of {KNOBS['byre_form'].value_space}")
         if self.water_sink is not None and self.water_sink not in ("pond", "offmap"):
             raise ValueError(f"water_sink {self.water_sink!r} must be 'pond' (a tameike below the fields) or 'offmap' (the drain brook leaves the frame)")
 

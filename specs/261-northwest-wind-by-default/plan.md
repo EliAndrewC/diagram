@@ -111,6 +111,13 @@ depth of the brook, so a brook running behind the band parallel to the margin re
 and Inashiro "divided" with every house on one bank). `brook_banks()`, lifted to module level and unit-tested,
 takes the side of the nearest brook segment for each band point instead. Found in this work; fixed in it.
 
+### D8 - The knob values the re-seeds dropped are declared back
+
+Re-seeding changes every rolled knob on a map, and the pool lost its only exhibit of four knob values (R6). A knob
+owes one map per value, so each is declared on the map that showed it before - the same mechanism as Sawada's
+`intake="open"` - and `HamletSpec` gains `byre_form`, pinned onto the settlement engine's knob, because that one had
+no spec field. No wind rule moves: the declarations are re-rolled and measured with the rest (R5).
+
 ## Phases
 
 1. Engine: D1, D2, D3 with their unit tests (plan, cluster, surface).

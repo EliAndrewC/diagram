@@ -103,10 +103,22 @@ Every candidate's drain ends as near the brook as seed 3's did (54-94 px against
 | Inashiro | 4 | 15/15 | wind-facing, clean | 278 | 346 | 31 | 124 |
 | Kashikawa | 8 (was 3) | 20/20 | wind-facing, clean | 281 | 353 | 38 | 169 |
 | Kuwabata | 21 | 16/16 | wind-facing, clean | 141 | 283 | 32 | 88 |
-| Mizuguchi | 27 (was 23) | 12/12 | wind-facing, clean | 354 | 324 | 9 | 168 |
+| Mizuguchi | 27 (was 23) | 12/12 | wind-facing, clean | 356 | 323 | 8 | 168 |
 | Sawada | 24 (was 6) | 19/19 | wind-facing, clean | 179 | 319 | 4 | 161 |
 
 Re-rolled after merging main at 19837bc2 (feature 262 and the threshing-yard tweak moved every map's detail);
 every rule still holds on every map.
 
 The final cohort (`make cohort N=48`, this engine): **38/48**, failing 2, 8, 23, 25, 28, 31, 35, 36, 40, 46 - every one also failing on the baseline (R3), all `scatter_frame_breach`; seed 37 now passes; no `households_seated` failure. No regression.
+
+## R6 - What the re-seeds took from the pool, and how it was put back
+
+The gate's coverage floor caught it before anything else did: 19 lines in four files went unreached once the pool
+re-rolled, and every one sat behind a knob VALUE no pool map showed any more. Compared against main, per knob, the
+values the five maps exhibited: bamboo `both` (was Kashikawa), byre form `courtyard` (was Mizuguchi and Sawada),
+copse `against_the_belt` (was Mizuguchi), lane web `alleys` (was Sawada) were gone. (`water_source` `head_left` also
+went, but it is derived from where gravity puts the head sluice, not a knob.) A knob owes one map per value on the
+sheet, so each value is now DECLARED on the map that showed it before - Kashikawa `bamboo="both"`, Mizuguchi
+`byre_form="courtyard"` and `copse_siting="against_the_belt"`, Sawada `lane_web="alleys"` - which needed one new spec
+field, `HamletSpec.byre_form`, pinned onto the settlement engine's knob. Re-rolled, every wind rule still holds on
+all five maps (R5).
