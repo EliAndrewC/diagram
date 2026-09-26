@@ -143,7 +143,7 @@
   "name": "copse",
   "siblings": {
    "persimmon": "The persimmon is one household's dooryard tree, planted beside the house for its fruit and its summer shade; the copse is village greenery standing in the open ground among the houses.",
-   "windbreak": "The windbreak is a planted shelter belt - the fengshui back grove - kept on the windward, high side of the cluster to break the winter monsoon, cedar-backed and dense. A copse is looser fruit-tree and broadleaf greenery in the gaps among the houses, with no sheltering purpose; the households used it for shade and fruit, not as a wall against the wind.",
+   "windbreak": "The windbreak is a planted shelter belt - the fengshui back grove - kept on the windward side of the cluster - the north and west, unless the place has a local wind - to break the winter monsoon, cedar-backed and dense. A copse is looser fruit-tree and broadleaf greenery in the gaps among the houses, with no sheltering purpose; the households used it for shade and fruit, not as a wall against the wind.",
    "woodland commons": "The copse is greenery among the houses, used for shade and fruit; the woodland commons is a managed coppice on the slope above the paddy, cut on a cycle for fuel and fertilizer under the village's own rules."
   },
   "sources": [
@@ -917,7 +917,7 @@
   "label_note": "Scale, density and placement follow the surveyed figures (forests-2020); the belt's shape follows the terrain and the cluster.",
   "name": "windbreak forest",
   "siblings": {
-   "copse": "The windbreak is a planted shelter belt - the fengshui back grove - kept on the windward, high side of the cluster to break the winter monsoon, cedar-backed and dense. A copse is looser fruit-tree and broadleaf greenery in the gaps among the houses, with no sheltering purpose; the households used it for shade and fruit, not as a wall against the wind.",
+   "copse": "The windbreak is a planted shelter belt - the fengshui back grove - kept on the windward side of the cluster - the north and west, unless the place has a local wind - to break the winter monsoon, cedar-backed and dense. A copse is looser fruit-tree and broadleaf greenery in the gaps among the houses, with no sheltering purpose; the households used it for shade and fruit, not as a wall against the wind.",
    "woodland commons": "The windbreak belongs to the settlement as shelter and was kept standing - a village would not cut its own wind wall. The woodland commons was cut: an iriai wood coppiced on a 10-30 year cycle for firewood, forage and leaf litter, under customary rules on who might cut, when, and how much."
   },
   "sources": [

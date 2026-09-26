@@ -17,7 +17,7 @@ from __future__ import annotations
 import argparse
 import sys
 
-from l7r.diagram.interactive.record.store import RecordError, check, read_page, record_pages, write_fragments
+from l7r.diagram.interactive.record.store import RecordError, check, record_pages, write_fragments, write_pages
 from l7r.diagram.interactive.sources import RESEARCH_DIR
 
 
@@ -56,17 +56,15 @@ def _check(research_dir: str) -> int:
 
 
 def _write(page: str, research_dir: str) -> int:
+    """Write every file `--check` compares: the research page AND, where the page has notes, its citations page
+    and hover script (`write_pages`). It used to write the research page alone, so an edit to a `.notes.html`
+    fragment - which moves only the citations page - left `--check` STALE with nothing `make record` would
+    write (feature 261: the `kisetsufu-jawiki` gloss on vegetation's 030)."""
     pages = [_page_rel(page)] if page else record_pages(research_dir)
     written = 0
     for page_rel in pages:
-        want = read_page(page_rel, research_dir)
-        path = f"{research_dir}/{page_rel}"
-        if _read(path) == want:
-            continue
-        with open(path, "w", encoding="utf-8") as fh:
-            fh.write(want)
-        written += 1
-    print(f"record: wrote {written} page(s)")
+        written += write_pages(page_rel, research_dir)
+    print(f"record: wrote {written} file(s)")
     return 0
 
 
@@ -75,14 +73,6 @@ def _page_rel(name: str) -> str:
     if name in ("sources", "SOURCES"):
         return "SOURCES.html"
     return name if name.endswith(".html") else f"{name}.html"
-
-
-def _read(path: str) -> str | None:
-    try:
-        with open(path, encoding="utf-8") as fh:
-            return fh.read()
-    except OSError:
-        return None
 
 
 if __name__ == "__main__":

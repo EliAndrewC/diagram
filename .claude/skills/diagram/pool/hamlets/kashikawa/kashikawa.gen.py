@@ -22,6 +22,14 @@ way a knob owes one map per value. Sawada was tried first and cannot take it at 
 at the canvas edge, so the brook has about 85 px left below the junction against the 150 the rule asks
 (specs/230 research R7). Measured here, on the view box: the junction falls 123 ft inside the view with 177 ft of the
 brook visible below it.
+
+THE SEED IS 8, NOT 3 (feature 261). The wind is the regional northwest unless a map declares one, and the
+cluster is seated with its back to it. At seed 3 no clean margin whose back faces the wind was open - the west
+margins back onto the dry hem, the northwest ones stand in the wet toe, the rest are crossed by the brook this
+map's declared flank runs along - so the seat fell back off the wind and the belt came out with no trees at all,
+the very thing the GM asked about. A seed is a roll, not a fact about the place, so the map was re-seeded with
+its fall, its sink and its brook flank kept: over seeds 1-30, five seat all twenty households on a clean
+wind-facing margin; of those, 14 drew the fullest belt but wrapped it 333 degrees round the houses, and 8 draws the next fullest (264 clumps, west-northwest, a 134-degree arc) (specs/261 research R4).
 """
 
 import os
@@ -32,5 +40,5 @@ SKILL = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))  # <tree>/<tier>
 sys.path.insert(0, SKILL)
 from l7r.diagram.hamletgen import HamletSpec, generate  # noqa: E402
 
-report = generate(HamletSpec(name="Kashikawa", seed=3, households=20, down_deg=315, water_sink="offmap", brook_side=-1), out_base=os.path.join(HERE, "kashikawa"))
+report = generate(HamletSpec(name="Kashikawa", seed=8, households=20, down_deg=315, water_sink="offmap", brook_side=-1), out_base=os.path.join(HERE, "kashikawa"))
 print(report.line())

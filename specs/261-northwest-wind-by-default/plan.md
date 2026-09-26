@@ -42,9 +42,11 @@ own perf ratchet judges it, and any band it reports is explained against R4's re
   unmodified engine in a detached worktree and on this one (R3).
 - **XIV. Fix defects where found**: the divided-margin fallback that let an off-wind divided margin win before
   the off-wind fallback was found in this work and fixed in it (D3).
-- **XVI. Build what was asked**: **PASS** - no exception: the wind is never renamed, no map declares one, and
-  the two maps that could not seat a northwest-backed cluster at their old seed were re-seeded, the path the
-  accepted spec names.
+- **XVI. Build what was asked**: **PASS** - the wind is never renamed and no map declares one. Two exceptions were
+  put to `spec-fidelity` in MODE 1 and both were REFUSED (R4): putting a wind-facing divided seat ahead of feature
+  230's strike-out, engine-wide. What stands instead is the spec's own path - re-seeding - for the three maps that
+  needed it. The off-wind last resort (D2) is recorded on the map and forbidden on the pool, and it is raised
+  with the GM in the hand-off.
 
 ## The design
 
@@ -74,14 +76,16 @@ drew northwest belts of 250-odd clumps on 29 of 30 Sawada seeds. An intermediate
 wind-facing margin ahead of the clean off-wind one; `test_a_margin_the_brook_divides_is_struck_out_and_the_strike_is_counted`
 caught it, and the order above is the fix.
 
-### D4 - Re-seeding, and only re-seeding, for the two maps that failed at their seeds
+### D4 - Re-seeding, and only re-seeding, for the three maps that failed at their seeds
 
 R1 measured Sawada (falls northwest) falling back off the wind at seed 6, and Mizuguchi seating 8 of 12 at seed
-23 because the brook divides every wind-facing margin. R2 searched seeds 1-30 for each under the map's own
-declared fall, sink and knobs: Sawada 24 is the only seed with a wind-facing seat (19/19, 154 belt clumps);
-Mizuguchi 27 seats 12/12 on an undivided wind-facing margin with a 349-clump belt at 325 degrees. Nothing in
-the spec's "When no seed works" list is done: no bar loosened, no wind declared, no rename, no declared knob
-changed, no belt in the crop. The reason is recorded in each generator's docstring.
+23; R4 measured Kashikawa falling back off the wind at seed 3 with a belt of no trees. The seed searches (R2, R4)
+kept each map's declared fall, sink and knobs: Sawada 24 (the only one of thirty with a clean wind-facing seat),
+Mizuguchi 27 (12/12, undivided, 349 clumps at 325 degrees), Kashikawa 8 (one of five clean seeds; 14 drew more trees
+but wrapped the belt 333 degrees round the houses, which the record rules out). Inashiro keeps its reference seed 4
+once the divided test is fixed (D7). Nothing in the spec's "When no seed works" list is done: no bar loosened, no
+wind declared, no rename, no declared knob changed, no belt in the crop. The reason is in each generator's
+docstring, and the pool test holds the belt's arc to 200 degrees as well as its bearing.
 
 ### D5 - The pop-up: the notes win, the default names the side and its reason
 
@@ -98,6 +102,13 @@ rewritten to the rule as built, with the GM's 2026-09-26 words; the arc figures 
 maps (`measure.py`); the `kisetsufu-jawiki` note's gloss stops calling the slope reading "this page's
 derivation". `hamletgen.md`, the hamletgen and sitegen indexes, and the five notes files' "Known open" wind lines
 are updated.
+
+### D7 - The divided test asks which bank, not which half (constitution XIV)
+
+`seat_cluster`'s divided test recorded the LATERAL half of the band for every sample point within twice the band's
+depth of the brook, so a brook running behind the band parallel to the margin read as dividing it (R4: Kashikawa
+and Inashiro "divided" with every house on one bank). `brook_banks()`, lifted to module level and unit-tested,
+takes the side of the nearest brook segment for each band point instead. Found in this work; fixed in it.
 
 ## Phases
 
