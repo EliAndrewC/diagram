@@ -3,20 +3,21 @@
 import math
 from typing import TYPE_CHECKING, Any
 
-from .._geom import edge_dist, point_in_poly
+from .._geom import edge_dist, point_in_poly, turn_about
 
 if TYPE_CHECKING:
     from ..core import Settlement
 
 
 class GardensMixin:
-    def _draw_garden(self: Settlement, cx: float, cy: float, w: float, h: float, poly: Any) -> None:  # type: ignore[misc]
+    def _draw_garden(self: Settlement, cx: float, cy: float, w: float, h: float, poly: Any, rot: float = 0.0) -> None:  # type: ignore[misc]
         """Draw one small dooryard KITCHEN GARDEN (saien): a tilled earthen bed with tidy planted rows
         of greens. Distinct from the tan threshing yard (bare swept earth) and the blue-green paddy quilt.
-        The bed's outer footprint is an irregular quad (`poly`, absolute corner coords) - a hand-worked plot
-        bent to paths and soil, not surveyed square; the rows are laid out in the local (w,h) frame."""
+        The bed's outer footprint is an irregular quad (`poly`, absolute corner coords, UNTURNED) - a
+        hand-worked plot bent to paths and soil, not surveyed square; the rows are laid out in the local
+        (w,h) frame, and the whole group is turned by `rot`, its farmhouse's rake."""
         x0, y0 = -w / 2, -h / 2
-        g = [f'<g transform="translate({cx:.0f},{cy:.0f})">']
+        g = [f'<g transform="translate({cx:.1f},{cy:.1f}) rotate({rot:.2f})">']
         pts = " ".join(f"{px - cx:.1f},{py - cy:.1f}" for px, py in poly)
         g.append(f'<polygon points="{pts}" fill="#B49A62" stroke="#6E5A30" stroke-width="1.3"/>')  # tilled bed
         nrows = 3
@@ -93,7 +94,7 @@ class GardensMixin:
                 return ox, oy, gw, gh
         return None
 
-    def _attach_garden(self: Settlement, hx: float, hy: float, beds: Any) -> None:  # type: ignore[misc]
+    def _attach_garden(self: Settlement, hx: float, hy: float, beds: Any, rot: float = 0.0) -> None:  # type: ignore[misc]
         """Draw a farmstead's dooryard kitchen garden BED(S) (before its house, so the house wins any abutment)
         and record them. The kitchen garden was a household staple, so every farmhouse gets one - but the plot
         is occasionally FRAGMENTED into two beds (`_garden_beds` decides where: flanking opposite walls, stacked,
@@ -101,10 +102,12 @@ class GardensMixin:
         geometry; all beds of one house carry the same `of` parent, so `gardens_present` counts one garden per
         house and `garden_area_within_norms` sums their areas. Each bed is drawn as a slightly-irregular hand-
         worked quad (real dooryard beds were bent to paths and soil, not surveyed square); a lone bed can be more
-        irregular than a split strip."""
+        irregular than a split strip. Each bed takes its house's rake (`rot`) about its own center, for the
+        reason `_attach_yard` gives."""
         jit = 0.18 if len(beds) == 1 else 0.13
         for i, (bx, by, bw, bh) in enumerate(beds):
-            poly = self._quad(bx, by, bw, bh, jit, 71.0 + i * 5.0)
-            self._draw_garden(bx, by, bw, bh, poly)
-            self.M["gardens"].append({"x": round(bx, 1), "y": round(by, 1), "w": bw, "h": bh, "rot": 0, "of": [hx, hy], "poly": [[round(px, 1), round(py, 1)] for px, py in poly]})
+            flat = self._quad(bx, by, bw, bh, jit, 71.0 + i * 5.0)
+            poly = turn_about(flat, bx, by, rot)
+            self._draw_garden(bx, by, bw, bh, flat, rot)
+            self.M["gardens"].append({"x": round(bx, 1), "y": round(by, 1), "w": bw, "h": bh, "rot": round(rot, 2), "of": [hx, hy], "poly": [[round(px, 1), round(py, 1)] for px, py in poly]})
             self.placed.append((bx, by, bw, bh))

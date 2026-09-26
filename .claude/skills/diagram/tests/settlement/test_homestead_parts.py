@@ -4,6 +4,7 @@ import math
 
 from l7r.diagram import overlap
 from l7r.diagram.settlement import Settlement
+from l7r.diagram.settlement._geom import turn_about
 from tests.settlement._builders import _crop_settlement, _nuc_village, _scatter_base_points, _town
 
 
@@ -274,6 +275,20 @@ def test_attach_garden_draws_and_records_two_beds():
     s._attach_garden(500, 500, [(486, 500, 10, 12), (520, 500, 10, 12)])
     beds = s.M["gardens"]
     assert len(beds) == 2 and all(b["of"] == [500, 500] and len(b["poly"]) == 4 for b in beds)
+
+
+def test_yard_and_garden_take_the_house_rake():
+    # GM 2026-09-26: a yard square to the map beside a raked house read as a bug. Each part turns by
+    # the house's rot about its OWN center, so its edges run with the house's walls.
+    s = _nuc_village()
+    s._attach_yard(500, 500, (500, 530, 30, 20), 4.0)
+    s._attach_garden(500, 500, [(530, 500, 12, 14)], 4.0)
+    for rec, jit, salt in ((s.M["threshing_yards"][-1], 0.10, 41.0), (s.M["gardens"][-1], 0.18, 71.0)):
+        assert rec["rot"] == 4.0
+        want = turn_about(s._quad(rec["x"], rec["y"], rec["w"], rec["h"], jit, salt), rec["x"], rec["y"], 4.0)
+        assert all(math.hypot(px - wx, py - wy) < 0.1 for (px, py), (wx, wy) in zip(rec["poly"], want, strict=True))
+    s._attach_yard(600, 600, (600, 630, 30, 20))
+    assert s.M["threshing_yards"][-1]["rot"] == 0.0
 
 
 def test_garden_fits_rejects_a_spot_outside_the_bound():

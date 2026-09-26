@@ -269,6 +269,12 @@ def test_a_trunk_on_a_stream_is_refused_by_the_water_arm_alone() -> None:
     s.M["streams"] = [{"poly": [[100.0, 700.0], [1300.0, 700.0]], "w": 60}]
     assert _trunk_blocked(s, 700.0, 700.0, 20.0, [], [], None, []) is True
     assert _trunk_blocked(s, 700.0, 200.0, 20.0, [], [], None, []) is False
+    # ...the PADDY arm: a trunk within 6 ft of a paddy ring, nothing else on the sheet (no pool roll reaches it
+    # since the homesteads turned as one piece on 2026-09-26, so it is held here)
+    s.M["streams"] = []
+    paddy = [(650.0, 400.0), (750.0, 400.0), (750.0, 500.0), (650.0, 500.0)]
+    assert _trunk_blocked(s, 700.0, 390.0, 10.0, [paddy], [], None, []) is True
+    assert _trunk_blocked(s, 700.0, 300.0, 10.0, [paddy], [], None, []) is False
     # ...and the DRY-PLOT arm the same way: a trunk corner standing in a dry plot, nothing else on the sheet
     s.M["streams"] = []
     s.M["dry_plots"] = [{"poly": [(650.0, 150.0), (750.0, 150.0), (750.0, 250.0), (650.0, 250.0)]}]

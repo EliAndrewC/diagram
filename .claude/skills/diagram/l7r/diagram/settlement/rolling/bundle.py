@@ -5,6 +5,8 @@ Split from settlement/rolling.py by feature 118 - see settlement/rolling/CLAUDE.
 
 from typing import TYPE_CHECKING, Any
 
+from .._geom import turn_about
+
 if TYPE_CHECKING:
     from ..core import Settlement
 
@@ -126,10 +128,10 @@ class BundleGeomMixin:
             beds = self._garden_beds(hx, hy, hw, hh, gx, gy, gw, gh, garden_side, gap)
             base["gardens"] = beds  # 1 bed normally; 2 (flanking / stacked / side-by-side) when fragmented
             base["garden"] = beds[0]  # primary bed (kept for the shading score + back-compat)
-            rects = [r for r in (base["house"], base["yard"], *beds) if r is not None]
             if shed:  # a north-wall kura, reserved so a neighbor never lands on it
                 base["shed"] = (hx, hy - 0.60 * hh, 0.46 * hw, 0.30 * hh)
-                rects.append(base["shed"])
+            self._rake_parts(base, hx, hy)
+            rects = [r for r in (base["house"], base["yard"], *base["gardens"], base.get("shed")) if r is not None]
             base["bbox"] = self._bbox_of(rects)
             return base
         # DISPERSED farmstead (the shipped ring-village behavior): the windward GROVE as an L (an N
@@ -142,5 +144,30 @@ class BundleGeomMixin:
         north = hy - hh / 2 - gap - b
         base["grove_n"] = ((west + east) / 2, north + b / 2, east - west, b)
         base["grove_w"] = (west + b / 2, (north + b + south) / 2, b, south - (north + b))
-        base["bbox"] = ((west + east) / 2, (north + south) / 2, east - west, south - north)
+        self._rake_parts(base, hx, hy)
+        base["bbox"] = self._bbox_of([((west + east) / 2, (north + south) / 2, east - west, south - north), base["yard"], base["garden"]])
         return base
+
+    def _rake_parts(self: Settlement, base: dict[str, Any], hx: float, hy: float) -> None:  # type: ignore[misc]
+        """Carry the yard, the garden bed(s) and the kura round the house center by the house's rake, in place.
+
+        THE HOMESTEAD TURNS AS ONE PIECE (GM 2026-09-26). The house is drawn raked by `_house_rot`; its parts are
+        laid out square to the house, so their CENTERS must turn about the house's center with it, and each part is
+        then drawn turned by the same rake about its own center (`_attach_yard`, `_attach_garden`). Turning a part
+        only about its own center left it where the square layout put it - a yard 29 px south of the house slid up
+        to 3 ft sideways along the front wall, the direction following the rake's sign, which the GM saw as more
+        room at one end of the yard than the other. The rake is position-seeded, so it is known here, at seat
+        time, and every fit test the placer runs reads the moved centers - the ground cleared is the ground drawn.
+        The grove arms are not moved: they are drawn unraked."""
+        rot = self._house_rot(hx, hy)
+
+        def turned(r: Any) -> Any:
+            ((x, y),) = turn_about([(r[0], r[1])], hx, hy, rot)
+            return (x, y, r[2], r[3])
+
+        if base.get("yard") is not None:
+            base["yard"] = turned(base["yard"])
+        base["gardens"] = [turned(g) for g in base["gardens"]]
+        base["garden"] = base["gardens"][0]
+        if "shed" in base:
+            base["shed"] = turned(base["shed"])

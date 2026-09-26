@@ -284,6 +284,11 @@ def test_the_last_refusals_and_the_quiet_paths(record: pathlib.Path) -> None:
     drifted = record / "citations" / "ways.html"
     drifted.write_text(drifted.read_text(encoding="utf-8").replace("dredged yearly", "drifted"), encoding="utf-8")
     assert check(str(record)) == ["citations/ways.html"]
+    # ...and `make record` rewrites it: the command wrote the research page alone until 2026-09-26, so a
+    # new footnote left the citations page stale with no command that would fix it
+    assert record_asset.main(["--research-dir", str(record)]) == 0
+    assert check(str(record)) == []
+    drifted.write_text(drifted.read_text(encoding="utf-8").replace("dredged yearly", "drifted"), encoding="utf-8")
 
     # writing a page that is already what its fragments make writes nothing
     (record / "citations" / "ways.html").write_text(assemble_pages("ways.html", str(record))[1] or "", encoding="utf-8")
