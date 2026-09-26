@@ -241,7 +241,7 @@ that."* Each built in its smallest form:
    group is a fresh session, and the last one closes the page. The registry keys go to the first group.
 3. **A report's findings in one turn.** The check brief's apply step says: every finding of one report in ONE
    message, the record commands and tests once for all of it.
-4. **`research/CLAUDE.md` holds the rules only.** Its 43,525 characters move VERBATIM to
+4. **`research/CLAUDE.md` holds the rules only.** Its 45,051 characters move VERBATIM to
    `docs/research-record-rules.md` (links rewritten), and the file keeps every rule, compactly, at 13,290 (both
    observed 2026-09-26; method: `len` of the file's text at 37c20e57 and after this change) -
    under the same headings, so the full reasoning is one lookup away. The plan review of 2026-09-26 compared the two
