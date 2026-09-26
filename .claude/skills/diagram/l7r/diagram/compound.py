@@ -295,6 +295,7 @@ ZONE_KINDS: dict[str, str] = {
 def _kind_attr(kind: str) -> str:
     return f' data-kind="{kind}"' if kind else ""
 
+
 _DEFS = (
     '<defs>'
     '<pattern id="court-earth" patternUnits="userSpaceOnUse" width="16" height="16">'
@@ -385,7 +386,9 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 7
     ]:
         parts.append(f'<line x1="{ox + x1 * FTPX:.0f}" y1="{oy + y1 * FTPX:.0f}" x2="{ox + x2 * FTPX:.0f}" y2="{oy + y2 * FTPX:.0f}"/>')
     parts.append("</g>")
-    parts.append(f'<g stroke="#3F3A30" stroke-width="6" data-kind="court divider"><line x1="{ox:.0f}" y1="{oy + env.divider_ft * FTPX:.0f}" x2="{ox + iw:.0f}" y2="{oy + env.divider_ft * FTPX:.0f}"/></g>')
+    parts.append(
+        f'<g stroke="#3F3A30" stroke-width="6" data-kind="court divider"><line x1="{ox:.0f}" y1="{oy + env.divider_ft * FTPX:.0f}" x2="{ox + iw:.0f}" y2="{oy + env.divider_ft * FTPX:.0f}"/></g>'
+    )
     parts.append("</svg>")
     return "\n".join(parts)
 

@@ -115,9 +115,8 @@ def test_every_glossary_term_is_used_by_a_modal_or_a_record_page() -> None:
     """The map's own test holds the modal half; this is the widened rule (spec FR-001): a term that no modal and no
     record page uses is dead weight, and a term the record uses in a code span only is not a tooltip anywhere."""
     from l7r.diagram.interactive.classes import CLASSES
-    from l7r.diagram.interactive.page import explanations, glossary_for
-
     from l7r.diagram.interactive.compound_kinds import COMPOUND_CLASSES
+    from l7r.diagram.interactive.page import explanations, glossary_for
 
     in_modals = {g["term"] for g in glossary_for(explanations(set(CLASSES)))} | {g["term"] for g in glossary_for(explanations(set(COMPOUND_CLASSES), registry=COMPOUND_CLASSES))}
     record = " ".join(visible_text(_COMMENT.sub(" ", re.sub(r"<code>.*?</code>", " ", p.read_text(encoding="utf-8"), flags=re.S))) for p in _all_pages()).lower()

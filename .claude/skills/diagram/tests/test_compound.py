@@ -280,4 +280,3 @@ def test_every_element_of_the_county_draft_carries_a_kind() -> None:
     assert got.unclassed == []
     assert {"inner court", "outer court", "hearing court", "garden", "practice ground", "office hall", "compound wall", "court divider", "notice board"} <= set(got.counts)
     assert svg.count('id="precinct"') == 2
-

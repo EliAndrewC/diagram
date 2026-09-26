@@ -25,7 +25,12 @@ def test_apply_rewrites_marked_blocks_and_names_the_tiers_without_one() -> None:
     types = bt.load_types()
     text = "# x\n\nprose\n\n<!-- types.json:magistracies -->\nSTALE-BLOCK\n<!-- /types.json:magistracies -->\n\nmore\n"
     new, missing = bp.apply(text, types)
-    assert "STALE-BLOCK" not in new and bp.render(types[0]) in new and new.startswith("# x\n\nprose\n\n<!-- types.json:magistracies -->\n") and new.endswith("\n<!-- /types.json:magistracies -->\n\nmore\n")
+    assert (
+        "STALE-BLOCK" not in new
+        and bp.render(types[0]) in new
+        and new.startswith("# x\n\nprose\n\n<!-- types.json:magistracies -->\n")
+        and new.endswith("\n<!-- /types.json:magistracies -->\n\nmore\n")
+    )
     assert missing == ["country-shrines"]
     both = text + "\n<!-- types.json:country-shrines -->\n\n<!-- /types.json:country-shrines -->\n"
     new, missing = bp.apply(both, types)

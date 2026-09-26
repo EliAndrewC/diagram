@@ -19,23 +19,42 @@ HEAD = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">'
 
 
 def _fc(key: str) -> FeatureClass:
-    return FeatureClass(key=key, name=key.title(), covers="-", what="What it is.", why="Why it is here.", label="accurate", label_note="Read.", sources=("not recorded",), entry="research/buildings.html (no dedicated entry - recorded as silent)")
+    return FeatureClass(
+        key=key,
+        name=key.title(),
+        covers="-",
+        what="What it is.",
+        why="Why it is here.",
+        label="accurate",
+        label_note="Read.",
+        sources=("not recorded",),
+        entry="research/buildings.html (no dedicated entry - recorded as silent)",
+    )
 
 
 REG = {k: _fc(k) for k in ("granary", "dais", "office hall", "wall")}
 
 
 def test_a_flat_sheet_is_one_fragment_per_top_level_element_in_order() -> None:
-    svg = HEAD + '\n  <!-- a note -->\n  <rect x="0" y="0" width="100" height="100" fill="#EEE" data-kind="-"/>\n  <g data-kind="granary"><rect x="1" y="1" width="5" height="5" fill="#C00"/><text x="2" y="3">granary</text></g>\n</svg>'
+    svg = (
+        HEAD
+        + '\n  <!-- a note -->\n  <rect x="0" y="0" width="100" height="100" fill="#EEE" data-kind="-"/>\n  <g data-kind="granary"><rect x="1" y="1" width="5" height="5" fill="#C00"/><text x="2" y="3">granary</text></g>\n</svg>'
+    )
     strings, tags = flatten(svg)
     assert strings[0] == HEAD and strings[-1] == "</svg>"
     assert tags[0] == NOT_HIGHLIGHTED and tags[-1] == NOT_HIGHLIGHTED
-    assert strings[1:-1] == ['<rect x="0" y="0" width="100" height="100" fill="#EEE" data-kind="-"/>', '<g data-kind="granary"><rect x="1" y="1" width="5" height="5" fill="#C00"/><text x="2" y="3">granary</text></g>']
+    assert strings[1:-1] == [
+        '<rect x="0" y="0" width="100" height="100" fill="#EEE" data-kind="-"/>',
+        '<g data-kind="granary"><rect x="1" y="1" width="5" height="5" fill="#C00"/><text x="2" y="3">granary</text></g>',
+    ]
     assert tags[1:-1] == [NOT_HIGHLIGHTED, "granary"]
 
 
 def test_a_nested_tag_wins_for_its_subtree_and_the_group_keeps_the_rest() -> None:
-    svg = HEAD + '<g data-kind="office hall" stroke="#000"><rect x="1" y="1" width="9" height="9"/><rect data-kind="dais" x="3" y="3" width="2" height="2"/><text x="1" y="1">office hall</text></g></svg>'
+    svg = (
+        HEAD
+        + '<g data-kind="office hall" stroke="#000"><rect x="1" y="1" width="9" height="9"/><rect data-kind="dais" x="3" y="3" width="2" height="2"/><text x="1" y="1">office hall</text></g></svg>'
+    )
     strings, tags = flatten(svg)
     assert tags[1:-1] == ["office hall", "dais", "office hall"]
     # each piece is re-wrapped in the group's own opening tag, so the inherited stroke still applies
