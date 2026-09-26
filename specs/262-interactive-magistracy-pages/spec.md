@@ -190,7 +190,7 @@ finding classifies them, and the kinds no research section covers - and each one
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
 | Each Mode A kind's classification | as its research section says (copied, not re-decided) | FR-005 - no new findings | each kind's docstring `Label:` / `Entry:` |
-| A kind the record does not cover is a `guess` | guess | the GM: tie into existing research only; the gap is shown, not filled | each such kind's `Note:`; listed in the closing report |
+| A kind no existing finding classifies (no research section, no folded `types.json` item) is a `guess` | guess | the GM: tie into existing research only; the gap is shown, not filled | each such kind's `Note:`; listed in the closing report |
 | A `types.json` item's class and why move into its kind | as the item already said (carried, not re-decided) | FR-003a: the classification is stated once | each kind's `Note:` / `Caveat:`; `coverage.md` |
 | Setting-specific features are `deviation` | deviation | canon (`l7r.md`, the map's notes), which needs no citation | each such kind's `Note:` |
 | A drawn label lights with the feature it names | map drawing convention | a label is the feature's ink on a labeled plan; hamlet pages do the same for the placard | `interactive/compound/` module docstring |
