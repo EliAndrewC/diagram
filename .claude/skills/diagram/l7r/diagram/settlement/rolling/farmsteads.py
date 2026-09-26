@@ -53,8 +53,8 @@ class FarmsteadFlushMixin:
         for rec in bundled:
             geom = rec["geom"]
             if geom.get("yard") is not None:
-                self._attach_yard(rec["x"], rec["y"], geom["yard"])
-            self._attach_garden(rec["x"], rec["y"], geom["gardens"])
+                self._attach_yard(rec["x"], rec["y"], geom["yard"], rec["rot"])
+            self._attach_garden(rec["x"], rec["y"], geom["gardens"], rec["rot"])
             self.house(rec["x"], rec["y"], rec["w"], rec["h"], rec["kind"], rec["rot"], shed=rec["shed"], shed_side=rec.get("shed_side", "W"))
         # The yashikirin arms DRAW LAST, after every house/shed of this pass is down (GM 2026-07-25).
         # They used to draw first, as a back layer the house painted over - which hid the overlap
@@ -194,8 +194,8 @@ class FarmsteadFlushMixin:
                 self.placed: list[Any] = Indexed(p for p in self.placed if p != fp)  # drop the un-appurtenanced farmhouse (rare); Indexed for the same reason as the lift above
                 continue
             yard_spot, garden_spot = spot
-            self._attach_garden(rec["x"], rec["y"], [garden_spot])  # legacy farms keep ONE bed (multi-bed split is nucleated)
-            self._attach_yard(rec["x"], rec["y"], yard_spot)
+            self._attach_garden(rec["x"], rec["y"], [garden_spot], rec["rot"])  # legacy farms keep ONE bed (multi-bed split is nucleated)
+            self._attach_yard(rec["x"], rec["y"], yard_spot, rec["rot"])
             survivors.append(rec)
         # SECOND PASS FOR THE HOUSES THEMSELVES, so every yard and garden on the belt is drawn and
         # recorded before the first roof goes down (2026-08-08). It buys two things and costs no
