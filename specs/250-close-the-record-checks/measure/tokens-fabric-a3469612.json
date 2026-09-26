@@ -1,0 +1,182 @@
+[
+ {
+  "window": "cities/fabric 5",
+  "main": {
+   "fresh": 7348,
+   "cached": 72266,
+   "output": 913,
+   "thinking": 0,
+   "turns": 3,
+   "peak_context": 28374
+  },
+  "agents": [
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check 143",
+    "fresh": 16804,
+    "cached": 52125,
+    "output": 5936,
+    "thinking": 3293,
+    "turns": 4,
+    "peak_context": 23517,
+    "first_turn": 7624,
+    "read_chars": 32241,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     18112,
+     13187,
+     511,
+     431
+    ]
+   },
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "record-format 143",
+    "fresh": 10547,
+    "cached": 52836,
+    "output": 6448,
+    "thinking": 3342,
+    "turns": 4,
+    "peak_context": 18758,
+    "first_turn": 9121,
+    "read_chars": 19493,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     19029,
+     360,
+     104
+    ]
+   },
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "record-format 140",
+    "fresh": 10111,
+    "cached": 51968,
+    "output": 6514,
+    "thinking": 3614,
+    "turns": 4,
+    "peak_context": 18322,
+    "first_turn": 9121,
+    "read_chars": 19590,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     18543,
+     866,
+     181
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check 140",
+    "fresh": 16368,
+    "cached": 48300,
+    "output": 6690,
+    "thinking": 3706,
+    "turns": 4,
+    "peak_context": 23081,
+    "first_turn": 7624,
+    "read_chars": 28283,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     16443,
+     10889,
+     530,
+     421
+    ]
+   }
+  ]
+ },
+ {
+  "window": "cities/fabric 6",
+  "main": {
+   "fresh": 36746,
+   "cached": 1046276,
+   "output": 9944,
+   "thinking": 3721,
+   "turns": 21,
+   "peak_context": 65076
+  },
+  "agents": []
+ },
+ {
+  "window": "cities/fabric 7",
+  "main": {
+   "fresh": 31582,
+   "cached": 988293,
+   "output": 7534,
+   "thinking": 1765,
+   "turns": 15,
+   "peak_context": 84266
+  },
+  "agents": [
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check 143 recheck",
+    "fresh": 8663,
+    "cached": 58097,
+    "output": 3100,
+    "thinking": 1377,
+    "turns": 5,
+    "peak_context": 15374,
+    "first_turn": 8565,
+    "read_chars": 12713,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     11287,
+     479,
+     369,
+     295,
+     283
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check 140 recheck",
+    "fresh": 7385,
+    "cached": 24021,
+    "output": 3700,
+    "thinking": 2165,
+    "turns": 3,
+    "peak_context": 14100,
+    "first_turn": 8514,
+    "read_chars": 11999,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     11428,
+     442,
+     129
+    ]
+   }
+  ]
+ },
+ {
+  "window": "cities/fabric 9",
+  "main": {
+   "fresh": 878,
+   "cached": 84264,
+   "output": 810,
+   "thinking": 45,
+   "turns": 1,
+   "peak_context": 85142
+  },
+  "agents": []
+ }
+]

@@ -115,7 +115,9 @@ def apply_term(root: pathlib.Path, b: dict, dry: bool) -> str:
     nums = [int(m.group(1)) for f in d.glob("*.json") if (m := re.match(r"(\d+)-", f.name))]
     name = f"{(max(nums, default=0) // 10 + 1) * 10:04d}-{slug(b['term'])}.json"
     if not dry:
-        entry = {"term": b["term"], "def": b["def"], "variants": b["variants"] or [b["term"]]}
+        # the term is always its own first variant: matching reads only `variants`, and a term given only its
+        # plural (kidoban -> "kidobans", cities/fabric 2b) never matched the bare word and failed the record test
+        entry = {"term": b["term"], "def": b["def"], "variants": [b["term"], *(v for v in b["variants"] if v != b["term"])]}
         (d / name).write_text(json.dumps(entry, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     return f"added {name}"
 

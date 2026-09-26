@@ -469,3 +469,67 @@ that now hold their text (the `entry-drift` answers stay with T23). 18 untouched
 3. **Look at the write session's read step before the next page**: 19 turns for three items here, against 5 for six
    on `cities/defenses`. Its transcript has not been read for why; that is the measurement to take first.
 4. **Report per question checked**, keeping per item for continuity: it is the unit the check work scales with.
+
+## R7 - the sixth round: a report applied by one command, the split in the write session (2026-09-26, T52 to T56, plan D15)
+
+The GM asked for all four of R6's recommendations and one more measured page. The page was `cities/fabric`: three
+FR-002 items, as `cities/government` had. The write session split question 140 (36,858 bytes) into 140, 143 and
+146 as D15.2 intended, so the check sessions took FIVE questions in three groups (040 and 050; 140 and 143; 146).
+Figures from `measure/tokens.py summary` over `measure/tokens-fabric-*.json`.
+
+| | `cities/defenses` (R4) | `religion-and-death` (R5) | `cities/government` (R6) | `cities/fabric` (R7) |
+|---|---|---|---|---|
+| items / questions checked / sessions | 6 / 4 / 3 | 5 / 4 / 3 | 3 / 4 / 3 | 3 / 5 / 4 |
+| largest context any turn | 104,000 | 92,000 | 95,000 | **137,000** |
+| main session | 5.81 M, 95 turns | 6.07 M, 104 turns | 5.30 M, 94 turns | **9.84 M, 153 turns** |
+| mean main turn | 61,000 | 58,000 | 56,000 | 64,000 |
+| agent runs | 16 (0.88 M) | 17 (1.51 M) | 16 (0.94 M) | 18 (0.97 M) |
+| mean agent run | 55,000 | 89,000 | 59,000 | **54,000** |
+| what a `quote-check` read | 22,000 chars | 34,800 | 19,400 | **14,300** |
+| what a `record-format` read | 19,200 chars | 31,300 | 15,000 | **12,900** |
+| total | 6.69 M | 7.59 M | 6.24 M | **10.81 M** |
+| **per question checked** | 1.67 M | 1.90 M | 1.56 M | **2.16 M** |
+
+(Observed 2026-09-26; method: `tokens.py summary --files <the page's records> --questions N --items N`, which sums
+fresh + cached + output over every window of every session; R6's government row is recomputed by the same command
+without its estimated tail, so it reads 1.56 M, not R6's 1.59.)
+
+**The agents kept getting cheaper; the main sessions did not.** What a check reads fell again (a `quote-check` to
+14,300 characters) and the mean agent run to 54,000. `make apply-edits` did its job where it ran: every report came
+back as blocks, and the sessions applied 21 blocks in 2b and all of 2c's with none refused. But the page cost 10.8
+million, the most of the structured rounds, and all of the growth is main-session turns.
+
+**Where it went** (observed 2026-09-26; method: each session's windows in `measure/tokens-fabric-*.json`, and the
+tool calls of its transcript, in order):
+
+1. **The write session: 3.62 million, against 2.20 on `cities/government`.** Its locate step alone was 22 turns and
+   1.50 million: two of the three items were claims about the GM's canon ("an Imperial road is Imperial property",
+   "the highest merchant share of any tier"), and the session ran about fifteen greps through `budgets.md` and
+   `l7r.md` one a turn, plus git archaeology on where a sentence came from. It also read question 140 whole (32,500
+   characters with its notes) to split it, and carried it: its context peaked at 137,000.
+2. **The split added a question and a session.** Five questions checked, not four, and a third check session with
+   its own start-up and close.
+3. **First use of the new tooling found three of my defects**, each fixed by the session that met it, with a test:
+   `apply-edits` named glossary files by a rule the loader rejects (2a), missed blocks an agent indented under a
+   numbered list (2b), and wrote a term's variants without the term itself, which failed a record test (2b's
+   `kidoban`, found by 2c). 2b also fixed a `quote-verbatim` defect (two passages sharing one translation note were
+   matched to the wrong original). The turns that touched these directly cost 0.54 million, 6% of the main total
+   (method: the main-session turns whose tool calls name `_apply_edits`, `_quote_verbatim`, their tests or
+   `kidoban`); the turns around them are not counted, so the true figure is higher. All four are fixed now.
+4. **The apply and re-check steps stayed long**: steps 6 and 7 were 11 to 21 and 6 to 15 turns a group. Part is
+   point 3; the rest is verification between commands (tests run one file a turn, a grep to confirm each hand edit)
+   and turns spent waiting on agents (`echo waiting`).
+
+### Recommendations for the next round
+
+1. **Give the write brief the canon's own index.** When an item is a claim about the setting, name `budgets.md` and
+   `l7r.md` and have the session grep them for all its terms in ONE command - it made about fifteen sequential
+   greps here.
+2. **Split before the write, as its own step, and drop the split question from the write session's context.** The
+   split was right to be in-session (it saved re-reading), but carrying 32,500 characters for the rest of the
+   session cost more than the read it saved; a split step that commits and ends, with the write session then reading
+   only the part its item falls in, keeps both savings.
+3. **Size the check groups by bytes, not by count**, so a split's small parts share a session (146 alone was a
+   whole session at 7,200 bytes).
+4. **One more page before the rest, with the tool defects fixed**, since a third of this round's growth was the
+   first use of the new tooling and the canon-heavy items; one page is not yet a trend.

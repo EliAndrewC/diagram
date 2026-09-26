@@ -61,7 +61,7 @@ def test_a_report_is_applied_block_by_block_and_refused_where_it_cannot_be_sure(
     assert "occurs 2 times" in out and "not under" in out and "occurs 0 times" in out and "4 refused" not in out
     assert "6 block(s), 3 refused" in out and "then `make glossary`" in out
     added = json.loads((tmp_path / ae.TERMS / "0030-hitoyado.json").read_text(encoding="utf-8"))
-    assert added == {"term": "hitoyado", "def": "A placement broker.", "variants": ["kuchiireya", "keian"]}
+    assert added == {"term": "hitoyado", "def": "A placement broker.", "variants": ["hitoyado", "kuchiireya", "keian"]}
     assert "already a glossary term" in out
 
 
