@@ -174,9 +174,10 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
 - [ ] T49 The splits this feature owes: `cities/government` 080 by hand; homesteads 040 and 210, vegetation 150,
       religion-and-death 200 by split sessions; each judged for lost context
       research: rendering
-- [ ] T50 FR-002 for `cities/government`, worked as the last two pages were (D14)
+- [x] T50 FR-002 for `cities/government`, worked as the last two pages were (D14)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. cities/government closed: 020/070 (2a) and 080/081 (2b) quote-checked, record-formatted and applied with one re-check round each; 4 source-applicability (2a); 3 FR-002 items cited (session 1, 080 split to 081); FR-006 worklist 13 bare items - FOOTNOTED 10, NOT-LOCATED 3 (the three sentences session 1 and 2a rewrote to what their quotes carry); 5 glossary terms in 2b + 5 in 2a; 2b's step 7-8 run by the recovery session after the crash; quote-verbatim fixed to find a passage through Wikipedia reference markers
 - [ ] T51 **The comparison the GM asked for** (D14): T50 against R1 to R5, recorded as R6 with the table over all six
       rounds
       research: rendering

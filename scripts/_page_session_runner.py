@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import json
 import os
+import pathlib
 import subprocess
 import sys
 import uuid
@@ -61,6 +62,20 @@ def plan(root: str, name: str, projects: str, extra: list[str], items: list[str]
     return queue
 
 
+def dispatcher(root: str) -> str:
+    """The session whose claim on `root` was written last - the one dispatching this queue into its own clone.
+
+    WHY (feature 250 D14, 2026-09-26): the clone guard refuses an edit in a clone a LIVE other session claims, and
+    the dispatcher is live, waiting on the queue - so a queued session was refused whenever the dispatcher's tree
+    was clean. Its id goes to each session as `L7R_DISPATCHER`, which the guard lets through and nothing else."""
+    parts = root.rstrip("/").split("/")
+    if ".clones" not in parts:
+        return ""
+    mapdir = pathlib.Path("/".join(parts[: parts.index(".clones") + 1])) / ".session-clones"
+    claims = [m for m in mapdir.glob("*") if m.is_file() and m.read_text(encoding="utf-8", errors="replace").strip() == root.rstrip("/")]
+    return max(claims, key=lambda m: m.stat().st_mtime).name if claims else ""
+
+
 def work(root: str, name: str, extra: list[str], queue: list[dict], run_log: str = os.devnull) -> None:
     """The detached loop: each session in turn; a `then` step's printed briefs join the queue where it stood.
 
@@ -71,6 +86,7 @@ def work(root: str, name: str, extra: list[str], queue: list[dict], run_log: str
     never held open) was declared dead after two minutes while the sessions ran on."""
     index = os.path.join(root, ".git", "page-sessions", "index.txt")
     runlog = open(run_log, "a", buffering=1)  # noqa: SIM115 - held open on purpose for the whole queue
+    env = {**os.environ, "L7R_DISPATCHER": dispatcher(root)}
     while queue:
         item = queue.pop(0)
         if "then" in item:
@@ -88,7 +104,7 @@ def work(root: str, name: str, extra: list[str], queue: list[dict], run_log: str
             fh.write(f"{item['sid']} {item['brief']}\n")
         runlog.write(f"started {item['sid']} {os.path.basename(item['brief'])}\n")
         with open(item["log"] + "/result.json", "w") as out, open(item["log"] + "/stderr.txt", "w") as err:
-            rc = subprocess.run(item["cmd"], cwd=root, stdin=subprocess.DEVNULL, stdout=out, stderr=err, check=False).returncode
+            rc = subprocess.run(item["cmd"], cwd=root, env=env, stdin=subprocess.DEVNULL, stdout=out, stderr=err, check=False).returncode
         runlog.write(f"ended {item['sid']} rc={rc}\n")
     runlog.write("ALL DONE\n")
     runlog.close()

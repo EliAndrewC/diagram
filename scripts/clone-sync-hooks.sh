@@ -321,6 +321,11 @@ case $MODE in
         [ -f "$m" ] || continue
         other=$(basename "$m")
         [ "$other" = "$sid" ] && continue
+        # GUARD_EDIT_OK: feature 250 D14 - a page session (scripts/_page_session_runner.py) is a child the
+        # claimant dispatched into its own clone and waits on; the runner names that claimant in
+        # L7R_DISPATCHER, and only that one live claimant is let through. Before this, a queued session
+        # was refused while its dispatcher's tree was clean and let through once it was dirty (2026-09-26).
+        [ -n "${L7R_DISPATCHER:-}" ] && [ "$other" = "$L7R_DISPATCHER" ] && continue
         [ "$(cat "$m" 2>/dev/null)" = "$clone" ] || continue
         if sid_is_live "$other"; then
           echo "BLOCKED: $clone is already occupied by another live session ($other) - two sessions must not share a working tree. Ask the GM to /rename one session distinctly and use its own clone.   (CLAUDE.md 'Session clones' - claim backstop)" >&2

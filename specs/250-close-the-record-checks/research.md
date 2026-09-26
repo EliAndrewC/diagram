@@ -404,3 +404,67 @@ stands, a page's cost follows the size of what it has to read and check.
 **For the remaining pages.** 53 FR-002 items remain over 11 pages. At the two structured pages' range, 1.09 to 1.48
 million an item, that is on the order of 58 to 78 million tokens and $65 to $100 - against 83 to 137 million at the
 first two rounds' rates for the same work.
+
+## R6 - the fifth round: per-check bundles and a size for a question (2026-09-26, T47 to T51, plan D14)
+
+The GM asked for both changes - a bundle per check and a cap on a question's size - and one more measured page. The
+page was `cities/government`, three FR-002 items, worked as the last two: a write session, then two check sessions
+of two questions (020 and 070; 080 and 081). Figures from `measure/tokens.py` (`measure/tokens-government-*.json`,
+`measure/tokens-split-*.json`).
+
+**Two things disturb the comparison, and both are stated rather than smoothed.** The page has only three items, so
+a per-item figure is the noisiest yet - and the check work scales with the QUESTIONS checked, which was four on each
+of the last three pages. And the last check session died with the GM's terminal after applying its first-round
+reports; its re-check and close (steps 7 and 8) were run by the recovery session, whose two re-check agents are
+counted below and whose own main turns are not (they were spent mostly reading the dead session's transcript). The
+dead session's missing main turns are estimated at about 0.6 million - ten more turns near its own peak of 69,000 - and the estimate
+is labeled wherever it is used.
+
+| | `cities/defenses` (R4) | `religion-and-death` (R5) | `cities/government` (R6) |
+|---|---|---|---|
+| items / questions checked | 6 / 4 | 5 / 4 | 3 / 4 |
+| first turn of a session | 21,400 | 19,300 | **19,300** |
+| largest context any turn | 104,000 | 92,000 | 95,000 |
+| main session | 5.81 M, 95 turns | 6.07 M, 104 turns | 5.30 M, 94 turns (+ about 0.6 M estimated) |
+| mean main turn | 61,000 | 58,000 | **56,000** |
+| agent runs | 16 (0.88 M) | 17 (1.51 M) | 18 (1.08 M) |
+| mean agent run | 55,000 | 89,000 | **60,000** |
+| what a `quote-check` read | 22,000 chars | 34,800 chars | **19,400 chars** |
+| what a `record-format` read | 19,200 chars | 31,300 chars | **15,000 chars** |
+| total | 6.69 M | 7.59 M | 6.38 M measured, about 7.0 M with the estimate |
+| **per question checked** | 1.67 M | 1.90 M | **1.59 M** measured, about 1.74 M with the estimate |
+| per item | 1.12 M | 1.52 M | 2.13 M measured |
+
+(Observed 2026-09-26; method: every column recomputed the same way from the stored `measure/tokens-*.json` - main
+and agents, fresh + cached + output, summed per page - which runs about 2% above R5's table on the same files; the
+first turn is each main session's first assistant turn; a check's read is the mean of its agents' `read_chars`. The
+harness cost is not given: the dead session wrote no `total_cost_usd`.)
+
+**The two changes did what they were for, where they act.** A check reads its own bundle and the question is capped,
+so what a `quote-check` read fell to 19,400 characters from 34,800 on the last page, and a `record-format` to 15,000
+from 31,300 - about half, and below `cities/defenses` too. The mean agent run fell to 60,000 from 89,000. Every
+session started at 19,300 and none passed 95,000.
+
+**The main session is now where the tokens go.** It was 83% of this page's measured total, and the agents 17%. The
+largest single cost on each of the three pages is the APPLY step of a check session - 1.41 million over 27 turns in
+this page's first group, against 1.92 and 1.66 million on the last two - each turn re-reading a context of 60,000 to
+90,000. Next is the write session's reading: 19 turns and 0.97 million here for three items, where `cities/defenses`
+read six in 0.26 million.
+
+**The splits, a one-time cost.** Four questions over the cap were split by fresh sessions for 3.20 million tokens
+and $3.70 in all, about 0.8 million a split (observed 2026-09-26; method: the four `tokens-split-*.json` and their
+`result.json` costs). Each kept its heading and id, moved every note unchanged to exactly one part, and reported what
+each part relies on from the others; no part lost a finding its decision needs. One loose end came with them: the
+map modals written from homesteads 210 and 040 still named the unsplit question, and are re-pointed to the parts
+that now hold their text (the `entry-drift` answers stay with T23). 18 untouched questions remain over the cap.
+
+### Recommendations for the next round
+
+1. **Hand the apply step ready-made edits.** Have `quote-check` and `record-format` end each finding with the exact
+   old and new text (or "no edit - label it" with the label's wording), so a report is applied in one patch and one
+   turn; the step now takes 12 to 27 turns a group, each at 60,000 to 90,000 of context.
+2. **Split a question over the cap inside its page's write session**, not in a session of its own: a standalone
+   split cost about 0.8 million, most of it reading the question the write session has already read.
+3. **Look at the write session's read step before the next page**: 19 turns for three items here, against 5 for six
+   on `cities/defenses`. Its transcript has not been read for why; that is the measurement to take first.
+4. **Report per question checked**, keeping per item for continuity: it is the unit the check work scales with.

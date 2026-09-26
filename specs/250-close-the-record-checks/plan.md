@@ -303,12 +303,14 @@ more round on one more page, and then do another set of measurements."*
    `FOR=all`. The check briefs dispatch each agent with its own.
 2. **A question has a size: 20,000 bytes, question plus notes.** The record's 90th percentile when set (288
    questions, median 6,750; observed 2026-09-26, method: `scripts/check-question-size.py --report`), about 5,000
-   tokens. Checked on what a change TOUCHES (`make quick` fails on one over it); 22 untouched questions are over it and
-   are split when their pages are worked. The rule and how to split without losing context are in
+   tokens. Checked on what a change TOUCHES (`make quick` fails on one over it); 18 questions no change touched are over it
+   (observed 2026-09-26 after the four splits below; method: `check-question-size.py --report`) and are split when
+   their pages are worked. The rule and how to split without losing context are in
    `research/CLAUDE.md` and `docs/research-record-rules.md`, "A question has a size".
 3. **The splits this feature owes.** `cities/government` 080 (38,500 bytes) was split by hand into three - the Japanese
    finding with its decision and departure (19,800), China checked second (7,000), and where the foot soldiers lived
-   (13,400) - and the review of it found two bridging sentences that restated the other parts' evidence, a claim
+   (13,400; bytes with notes, observed 2026-09-26, method: `wc -c` of each part and its notes file; session 1 of
+   the page then moved 080's hiring finding into 081, leaving 080 at 15,587) - and the review of it found two bridging sentences that restated the other parts' evidence, a claim
    without a footnote to a check reading one part alone; both now only point. The four other questions this feature
    touched and left over the cap (homesteads 040 and 210, vegetation 150, religion-and-death 200) are split by fresh
    sessions from a split brief, each reporting what every part relies on from the others, and the session that

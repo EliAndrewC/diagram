@@ -120,6 +120,8 @@ rm -f "$MAPDIR/sid-me"
 
 printf '%s' "$FMAIN/.clones/miscellaneous" > "$MAPDIR/sid-live-other"
 run pretool sid-me miscellaneous a.txt;        check "canonical clone claimed by a LIVE other session -> blocked" 2 "$RC"
+L7R_DISPATCHER=sid-live-other run pretool sid-me miscellaneous a.txt; check "a page session its LIVE claimant dispatched (L7R_DISPATCHER) -> allowed" 0 "$RC"
+L7R_DISPATCHER=sid-someone-else run pretool sid-me miscellaneous a.txt; check "a dispatcher that is NOT the live claimant -> still blocked" 2 "$RC"
 rm -f "$MAPDIR/sid-live-other"
 
 printf '%s' "$FMAIN/.clones/miscellaneous" > "$MAPDIR/sid-dead-other"

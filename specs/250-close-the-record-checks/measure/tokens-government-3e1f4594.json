@@ -1,13 +1,25 @@
 [
  {
-  "window": "X1 experiment: record-format ways 010 from copies OUTSIDE the tree",
+  "window": "cities/government 3-write",
   "main": {
-   "fresh": 81271,
-   "cached": 2277274,
-   "output": 24858,
-   "thinking": 6256,
-   "turns": 40,
-   "peak_context": 89857
+   "fresh": 12159,
+   "cached": 27986,
+   "output": 402,
+   "thinking": 30,
+   "turns": 2,
+   "peak_context": 20825
+  },
+  "agents": []
+ },
+ {
+  "window": "cities/government 5",
+  "main": {
+   "fresh": 55220,
+   "cached": 1335635,
+   "output": 17740,
+   "thinking": 5075,
+   "turns": 27,
+   "peak_context": 75987
   },
   "agents": [
    {
@@ -29,29 +41,6 @@
      8761,
      228,
      15
-    ]
-   },
-   {
-    "agent": "quote-check",
-    "class": "named",
-    "model": "claude-opus-5-5",
-    "description": "re-check government 070",
-    "fresh": 20814,
-    "cached": 47630,
-    "output": 9047,
-    "thinking": 6079,
-    "turns": 4,
-    "peak_context": 26958,
-    "first_turn": 8019,
-    "read_chars": 29462,
-    "nested_chars": 0,
-    "nested_files": 0,
-    "reads": [
-     14103,
-     12598,
-     1015,
-     882,
-     864
     ]
    },
    {
@@ -116,27 +105,6 @@
      2085,
      656,
      113
-    ]
-   },
-   {
-    "agent": "quote-check",
-    "class": "named",
-    "model": "claude-opus-5-5",
-    "description": "re-check government 020",
-    "fresh": 5314,
-    "cached": 22507,
-    "output": 3029,
-    "thinking": 1677,
-    "turns": 3,
-    "peak_context": 11460,
-    "first_turn": 7874,
-    "read_chars": 7483,
-    "nested_chars": 0,
-    "nested_files": 0,
-    "reads": [
-     6042,
-     1312,
-     129
     ]
    },
    {
@@ -228,5 +196,86 @@
     ]
    }
   ]
+ },
+ {
+  "window": "cities/government 7",
+  "main": {
+   "fresh": 11374,
+   "cached": 648306,
+   "output": 4715,
+   "thinking": 1032,
+   "turns": 8,
+   "peak_context": 87345
+  },
+  "agents": [
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "re-check government 070",
+    "fresh": 20814,
+    "cached": 47630,
+    "output": 9047,
+    "thinking": 6079,
+    "turns": 4,
+    "peak_context": 26958,
+    "first_turn": 8019,
+    "read_chars": 29462,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     14103,
+     12598,
+     1015,
+     882,
+     864
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "re-check government 020",
+    "fresh": 5314,
+    "cached": 22507,
+    "output": 3029,
+    "thinking": 1677,
+    "turns": 3,
+    "peak_context": 11460,
+    "first_turn": 7874,
+    "read_chars": 7483,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     6042,
+     1312,
+     129
+    ]
+   }
+  ]
+ },
+ {
+  "window": "cities/government 8",
+  "main": {
+   "fresh": 2109,
+   "cached": 175899,
+   "output": 827,
+   "thinking": 99,
+   "turns": 2,
+   "peak_context": 89450
+  },
+  "agents": []
+ },
+ {
+  "window": "cities/government 9",
+  "main": {
+   "fresh": 409,
+   "cached": 89448,
+   "output": 1174,
+   "thinking": 20,
+   "turns": 1,
+   "peak_context": 89857
+  },
+  "agents": []
  }
 ]

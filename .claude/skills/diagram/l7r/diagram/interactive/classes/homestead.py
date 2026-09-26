@@ -146,7 +146,7 @@ class Garden(Kind):
     Covers: `gardens`
     Label: accurate
     Sources: not recorded
-    Entry: research/homesteads.html - 'The garden's sun, and how far the windbreak shades'; 'The threshing yard's sun, and how far a farmhouse shades' (the garden rule is derived from it)
+    Entry: research/homesteads.html - 'The garden's sun, and how far the windbreak shades'; 'How much open ground does a kitchen garden keep to its south and east?'; 'The threshing yard's sun, and how far a farmhouse shades' (the garden rule is derived from it)
     """
 
     key = 'garden'
@@ -193,7 +193,7 @@ class Woodpile(Kind):
     Covers: `farm_fixtures[kind=woodpile]`
     Label: guess
     Sources: boso-no-mura-kigoya, 326woods-stack, sugiura-1973-fuzoku
-    Entry: research/homesteads.html - 'The farmstead's fixtures'
+    Entry: research/homesteads.html - 'Where was the firewood stacked, and how big was the pile?'; 'The farmstead's fixtures'
     """
 
     key = 'woodpile'
@@ -235,7 +235,7 @@ class Bathhouse(Kind):
     Covers: `farm_fixtures[kind=bath]`
     Label: guess
     Sources: mizumaki-goemonburo, sugiura-1973-fuzoku
-    Entry: research/homesteads.html - 'The farmstead's fixtures'
+    Entry: research/homesteads.html - 'Did a farmhouse have a bath shed, and where did it stand?'; 'The farmstead's fixtures'
     """
 
     key = 'bathhouse'
@@ -255,7 +255,7 @@ class HenCoop(Kind):
     Covers: `farm_fixtures[kind=coop]`
     Label: guess
     Sources: cambridge-animals-china, qimin-yaoshu-yangji, pitt-zhengzhou-coop
-    Entry: research/homesteads.html - 'The farmstead's fixtures'
+    Entry: research/homesteads.html - 'Did a farmstead keep chickens, and in what kind of coop?'; 'The farmstead's fixtures'
     """
 
     key = 'hen coop'
@@ -280,7 +280,7 @@ class HouseholdShrine(Kind):
     Covers: `farm_fixtures[kind=shrine]` - the hokora
     Label: convention
     Sources: tokushima-yashikigami, jawiki-yashikigami, kameyama-yashikigami, sugiura-1973-fuzoku
-    Entry: research/homesteads.html - 'The farmstead's fixtures'
+    Entry: research/homesteads.html - 'Which farmsteads had a household shrine, and in which corner?'; 'The farmstead's fixtures'
     """
 
     key = 'household shrine'
@@ -301,7 +301,7 @@ class Persimmon(Kind):
     Covers: `persimmons` - the dooryard persimmon tree
     Label: guess
     Sources: toyoko-kaki, uekipedia-kaki
-    Entry: research/homesteads.html - 'The farmstead's fixtures'
+    Entry: research/homesteads.html - 'Why does a persimmon stand beside so many farmhouses?'; 'The farmstead's fixtures'
     """
 
     key = 'persimmon'

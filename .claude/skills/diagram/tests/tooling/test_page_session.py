@@ -74,3 +74,27 @@ def test_a_then_step_queues_the_briefs_it_prints(tmp_path: pathlib.Path, monkeyp
     assert [ln.split()[0] for ln in lines[1:-1]] == ["started", "ended", "started", "ended"], "a line as each session starts and ends"
     index = (tmp_path / ".git" / "page-sessions" / "index.txt").read_text(encoding="utf-8").splitlines()
     assert [ln.split()[1] for ln in index] == ["/b/veg-2a.md", "/b/veg-2b.md"]
+
+
+def test_each_session_is_told_its_dispatcher_the_one_claimant_the_clone_guard_lets_through(tmp_path: pathlib.Path, monkeypatch) -> None:
+    """D14: a queued session was refused by the clone guard while its live dispatcher's tree was clean."""
+    import os
+    import time
+
+    root = tmp_path / ".clones" / "diagram-research"
+    (root / ".git" / "page-sessions").mkdir(parents=True)
+    claims = tmp_path / ".clones" / ".session-clones"
+    claims.mkdir()
+    (claims / "sid-old").write_text(str(root), encoding="utf-8")
+    os.utime(claims / "sid-old", (time.time() - 60, time.time() - 60))
+    (claims / "sid-dispatcher").write_text(str(root), encoding="utf-8")
+    (claims / "sid-elsewhere").write_text(str(tmp_path / ".clones" / "other"), encoding="utf-8")
+    assert ps.dispatcher(str(root)) == "sid-dispatcher"
+    assert ps.dispatcher(str(tmp_path / "not-a-clone")) == ""
+    assert ps.dispatcher(str(tmp_path / ".clones" / "unclaimed")) == ""
+    seen: list[str] = []
+    monkeypatch.setattr(ps.subprocess, "run", lambda cmd, **kw: (seen.append(kw["env"]["L7R_DISPATCHER"]), ps.subprocess.CompletedProcess(cmd, 0))[1])
+    log = root / ".git" / "page-sessions" / "s1"
+    log.mkdir()
+    ps.work(str(root), "n", [], [{"sid": "s1", "log": str(log), "brief": "/b/x.md", "cmd": ["claude"]}], str(tmp_path / "run.log"))
+    assert seen == ["sid-dispatcher"]

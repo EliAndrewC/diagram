@@ -1,13 +1,37 @@
 [
  {
-  "window": "X1 experiment: record-format ways 010 from copies OUTSIDE the tree",
+  "window": "(before the first mark)",
   "main": {
-   "fresh": 86534,
-   "cached": 2082375,
-   "output": 26855,
-   "thinking": 7320,
-   "turns": 36,
-   "peak_context": 95132
+   "fresh": 12731,
+   "cached": 27928,
+   "output": 407,
+   "thinking": 0,
+   "turns": 2,
+   "peak_context": 21397
+  },
+  "agents": []
+ },
+ {
+  "window": "cities/government 1-locate",
+  "main": {
+   "fresh": 6617,
+   "cached": 44650,
+   "output": 1233,
+   "thinking": 511,
+   "turns": 2,
+   "peak_context": 28010
+  },
+  "agents": []
+ },
+ {
+  "window": "cities/government 2-read",
+  "main": {
+   "fresh": 46166,
+   "cached": 906490,
+   "output": 14403,
+   "thinking": 3443,
+   "turns": 19,
+   "peak_context": 74138
   },
   "agents": [
    {
@@ -52,5 +76,17 @@
     ]
    }
   ]
+ },
+ {
+  "window": "cities/government 3-write",
+  "main": {
+   "fresh": 21020,
+   "cached": 1103307,
+   "output": 10812,
+   "thinking": 3366,
+   "turns": 13,
+   "peak_context": 95132
+  },
+  "agents": []
  }
 ]
