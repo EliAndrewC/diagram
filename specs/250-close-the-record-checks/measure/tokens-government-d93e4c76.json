@@ -1,0 +1,56 @@
+[
+ {
+  "window": "X1 experiment: record-format ways 010 from copies OUTSIDE the tree",
+  "main": {
+   "fresh": 86534,
+   "cached": 2082375,
+   "output": 26855,
+   "thinking": 7320,
+   "turns": 36,
+   "peak_context": 95132
+  },
+  "agents": [
+   {
+    "agent": "claude",
+    "class": "ad-hoc",
+    "model": "claude-haiku-4-5-20251001",
+    "description": "placeholder",
+    "fresh": 16496,
+    "cached": 0,
+    "output": 118,
+    "thinking": 111,
+    "turns": 1,
+    "peak_context": 16496,
+    "first_turn": 16496,
+    "read_chars": 0,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": []
+   },
+   {
+    "agent": "source-reader",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "Read sources for 3 government claims",
+    "fresh": 27643,
+    "cached": 95884,
+    "output": 5276,
+    "thinking": 1249,
+    "turns": 6,
+    "peak_context": 27633,
+    "first_turn": 8340,
+    "read_chars": 26097,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     7058,
+     6338,
+     2866,
+     2819,
+     2513,
+     1840
+    ]
+   }
+  ]
+ }
+]

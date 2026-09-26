@@ -28,7 +28,8 @@ A passage with an elision (`...`, `…`, `[...]`) is matched piece by piece, in 
 
 VERDICTS. Quotation: VERBATIM; DIFFERS (the closest stretch of the page, and what differs);
 NOT-ON-PAGE; UNFETCHABLE (how); NOT-CHECKED (why - a PDF, a page that would not decode). Readability:
-READABLE when the passage was found on a page fetched with no credentials; NOT-READABLE when the link
+READABLE when the passage was found on a page fetched with no credentials (a difference of the page's
+reference markers alone still reads); NOT-READABLE when the link
 is this project's own registry or the page was read and does not carry the passage; otherwise left to
 the agent (`-`). It decides nothing about support and never edits.
 
@@ -239,19 +240,43 @@ def differences(passage: str, page_stretch: str) -> list[str]:
     return [f"quoted {passage[i1:i2]!r} / page {page_stretch[j1:j2]!r}" for tag, i1, i2, j1, j2 in sm.get_opcodes() if tag != "equal"]
 
 
+def find_in_order(pieces: list[str], have: str) -> tuple[int, int] | None:
+    """(start, end) of `pieces` found in `have` one after another, or None."""
+    at, first = 0, -1
+    for piece in pieces:
+        hit = have.find(piece, at)
+        if hit < 0:
+            return None
+        first = hit if first < 0 else first
+        at = hit + len(piece)
+    return (first, at) if pieces else None
+
+
+def unmarked(have: str) -> tuple[str, list[int]]:
+    """`have` without the page's reference markers, and for each kept character its index in `have`."""
+    kept: list[int] = []
+    at = 0
+    for m in REF_MARK.finditer(have):
+        kept.extend(range(at, m.start()))
+        at = m.end()
+    kept.extend(range(at, len(have)))
+    return "".join(have[i] for i in kept), kept
+
+
 def verdict(passage: str, page: str) -> dict:
     """VERBATIM, DIFFERS (with the page's text and the differences) or NOT-ON-PAGE for one passage."""
     want, have = squeeze(passage), squeeze(page)
     pieces = [p for p in ELISION.split(want) if p]
-    at, ok = 0, bool(pieces)
-    for piece in pieces:
-        hit = have.find(piece, at)
-        if hit < 0:
-            ok = False
-            break
-        at = hit + len(piece)
-    if ok:
+    if find_in_order(pieces, have):
         return {"quotation": "VERBATIM"}
+    # WHY: a run of Wikipedia markers inside the quoted span (人宿[1][2][3]、) pulled the similarity under NEAR and
+    # reported a correct quotation NOT-ON-PAGE (feature 250, cities/government 081, 2026-09-26). The markers are
+    # still named as the difference, never forgiven - the passage is found on the page with them taken out.
+    bare, kept = unmarked(have)
+    span = find_in_order(pieces, bare)
+    if span:
+        stretch = have[kept[span[0]] : kept[span[1] - 1] + 1]
+        return {"quotation": "DIFFERS", "page_text": stretch, "differences": differences(want, stretch), "similarity": 1.0, "only_reference_markers": True}
     ratio, stretch = nearest(want, have)
     if ratio >= NEAR:
         diffs = differences(want, stretch)
@@ -337,7 +362,7 @@ def judge_note(note: dict, pages: Pages) -> dict:
         readable = "-"
     elif all(s["state"] == "OWN" for s in states):
         readable = "NOT-READABLE (the link is this project's own page)"
-    elif all(w == "VERBATIM" for w in words):
+    elif all(r["quotation"] == "VERBATIM" or r.get("only_reference_markers") for r in results):
         readable = "READABLE"
     elif fetched and any(w in ("NOT-ON-PAGE", "DIFFERS") for w in words):
         readable = "NOT-READABLE (the page was read and does not carry the passage as quoted)"

@@ -1,0 +1,232 @@
+[
+ {
+  "window": "X1 experiment: record-format ways 010 from copies OUTSIDE the tree",
+  "main": {
+   "fresh": 81271,
+   "cached": 2277274,
+   "output": 24858,
+   "thinking": 6256,
+   "turns": 40,
+   "peak_context": 89857
+  },
+  "agents": [
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "record-format government 020",
+    "fresh": 12829,
+    "cached": 33176,
+    "output": 2108,
+    "thinking": 835,
+    "turns": 4,
+    "peak_context": 12823,
+    "first_turn": 8523,
+    "read_chars": 9004,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     8761,
+     228,
+     15
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "re-check government 070",
+    "fresh": 20814,
+    "cached": 47630,
+    "output": 9047,
+    "thinking": 6079,
+    "turns": 4,
+    "peak_context": 26958,
+    "first_turn": 8019,
+    "read_chars": 29462,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     14103,
+     12598,
+     1015,
+     882,
+     864
+    ]
+   },
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "applicability kotobank-hitoyado",
+    "fresh": 4863,
+    "cached": 26285,
+    "output": 3408,
+    "thinking": 1910,
+    "turns": 4,
+    "peak_context": 10259,
+    "first_turn": 6217,
+    "read_chars": 5046,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     2682,
+     2263,
+     101
+    ]
+   },
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "applicability kotobank-degawari",
+    "fresh": 5776,
+    "cached": 26058,
+    "output": 2101,
+    "thinking": 672,
+    "turns": 4,
+    "peak_context": 11172,
+    "first_turn": 6215,
+    "read_chars": 5885,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     3813,
+     1970,
+     102
+    ]
+   },
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "applicability inari-jinja-jawiki",
+    "fresh": 16566,
+    "cached": 39104,
+    "output": 2806,
+    "thinking": 1057,
+    "turns": 5,
+    "peak_context": 18156,
+    "first_turn": 6218,
+    "read_chars": 11484,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     8630,
+     2085,
+     656,
+     113
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "re-check government 020",
+    "fresh": 5314,
+    "cached": 22507,
+    "output": 3029,
+    "thinking": 1677,
+    "turns": 3,
+    "peak_context": 11460,
+    "first_turn": 7874,
+    "read_chars": 7483,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     6042,
+     1312,
+     129
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check government 020",
+    "fresh": 12493,
+    "cached": 25541,
+    "output": 3986,
+    "thinking": 2001,
+    "turns": 4,
+    "peak_context": 12487,
+    "first_turn": 6964,
+    "read_chars": 11871,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     7613,
+     2817,
+     1312,
+     129
+    ]
+   },
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "applicability han-abolition-enwiki",
+    "fresh": 5059,
+    "cached": 26209,
+    "output": 2809,
+    "thinking": 1394,
+    "turns": 4,
+    "peak_context": 10455,
+    "first_turn": 6217,
+    "read_chars": 10340,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     8019,
+     2185,
+     136
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check government 070",
+    "fresh": 21434,
+    "cached": 75936,
+    "output": 8626,
+    "thinking": 4910,
+    "turns": 5,
+    "peak_context": 27576,
+    "first_turn": 6964,
+    "read_chars": 34176,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     18012,
+     14114,
+     1133,
+     917
+    ]
+   },
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "record-format government 070",
+    "fresh": 12122,
+    "cached": 86994,
+    "output": 7971,
+    "thinking": 4324,
+    "turns": 6,
+    "peak_context": 19822,
+    "first_turn": 8523,
+    "read_chars": 20518,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     19786,
+     409,
+     206,
+     77,
+     40
+    ]
+   }
+  ]
+ }
+]

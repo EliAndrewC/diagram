@@ -481,7 +481,9 @@ hinomi-yagura	hinomi-yagura
 hipposandal	hipposandal
 hipposandals	hipposandal
 hirokoji	hirokoji
+hitoyado	hitoyado
 hiyokechi	hiyokechi
+hiyoza	hiyoza
 hoarding	hoarding
 hoardings	hoarding
 hojo seibi	hojo seibi
@@ -583,6 +585,7 @@ kaie-ji	Kaie-ji
 kaie-ji's	Kaie-ji
 kainyo	kainyo
 kaji-ya	kaji-ya
+kakaemoto	hitoyado
 kakehi	kakehi
 kamado	kamado
 kamakura	Kamakura period
@@ -614,6 +617,7 @@ kawaya	kawaya
 kayabuki	kayabuki
 kebiishi	kebiishi
 kegare	kegare
+keian	hitoyado
 keicho	Keicho
 keicho-era	Keicho
 keidai	keidai
@@ -658,6 +662,7 @@ konya	kon-ya
 koraimon	koraimon
 kosatsu	kosatsuba
 kosatsuba	kosatsuba
+kuchiireya	hitoyado
 kumi	kumi
 kumi-yashiki	kumi-yashiki
 kumigashira	kumigashira
@@ -828,6 +833,7 @@ okaji	ōkaji
 okajiba	ōkaji
 omamori	omamori
 omoya	omoya
+onari-goten	onari-goten
 one-bay	bay
 onkura	kura
 onmyodo	onmyodo
@@ -1219,6 +1225,7 @@ votive plaques	votive plaque
 wagon inn	wagon inn
 wagon inns	wagon inn
 wagon-inn	wagon inn
+wakato	wakato
 walled ward	lifang
 wanghuolou	wanghuolou
 wanli	Wanli era
@@ -1284,6 +1291,7 @@ yicheng	yicheng
 yizhan	shukuba
 yizhong	yizhong
 yohaisui bunri	yohaisui bunri
+yoriai-seki	yoriai-seki
 yoriki	yoriki
 yoshi	Phragmites
 yoshiwara	Yoshiwara

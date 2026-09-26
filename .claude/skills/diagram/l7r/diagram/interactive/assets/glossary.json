@@ -5272,5 +5272,38 @@
    "anchor culture",
    "anchor cultures"
   ]
+ },
+ "hitoyado": {
+  "def": "A placement broker of the early modern cities, which supplied wage-earning servants from peasant and townsman households on one-year, half-year or day terms to samurai households with no connections of their own to find them. The trade grew up with the cities.",
+  "variants": [
+   "hitoyado",
+   "kuchiireya",
+   "keian",
+   "kakaemoto"
+  ]
+ },
+ "hiyoza": {
+  "def": "A channel of hire for day laborers, named beside the hitoyado placement brokers as a route by which peasants and townsmen entered wage service in samurai households.",
+  "variants": [
+   "hiyoza"
+  ]
+ },
+ "wakato": {
+  "def": "A young foot-retainer of a samurai household, the lowest of its armed attendants of samurai standing, ranked just above the chugen and, like them, wearing a single sword.",
+  "variants": [
+   "wakato"
+  ]
+ },
+ "yoriai-seki": {
+  "def": "A senior seat among a domain's retainers, held by old families with large fiefs, such as the Suganuma of Fukui.",
+  "variants": [
+   "yoriai-seki"
+  ]
+ },
+ "onari-goten": {
+  "def": "The reception hall of a great house, kept for a visit by the lord.",
+  "variants": [
+   "onari-goten"
+  ]
  }
 }

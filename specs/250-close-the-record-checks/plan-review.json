@@ -1,44 +1,51 @@
 {
  "feature": "250-close-the-record-checks",
- "plan_sha256": "1749df02f5b7bcc2faa39db2d0f0a2f7d3bde3fad50d04e25ab65af51295f5e9",
+ "plan_sha256": "57a8f3cb7463d405364a26feb09ebd4687d0d390e109c6f005d8195368596019",
  "reviewed": "2026-09-26",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "D13-sequence",
-   "summary": "R4 recommendation 1 (go) waits for this round's figures; recommendations 2-4 built first, then one equivalent page, then the rest",
+   "id": "D14.1",
+   "summary": "A bundle per check: make check-bundle FOR=quote-check|record-format|entry-drift keeps only what that check reads (question + notes always; quote report / word list + variant index / modal docstring by check; registry entries only in FOR=all); the check briefs dispatch each agent with its own.",
    "class": "within",
-   "why": "The GM's words: implement two, three and four, then another round of equivalent work 'before we proceed with all remaining pages'."
+   "why": "The GM: 'I think we should do both of them' - the first of the two is the per-check bundle. Built in scripts/_check_bundle.py (--for) and the Makefile check-bundle FOR=, and the briefs dispatch with it."
   },
   {
-   "id": "D13-2",
-   "summary": "One note-scoped re-check per question (brief step 7); a PARTIAL left after it is labeled honestly in its note - what the quote carries and does not, or the assertion narrowed to the quote - and not re-checked again",
+   "id": "D14.2",
+   "summary": "The question-size cap is 20,000 bytes (question + notes), the record's 90th percentile, chosen by the session from a labeled measurement.",
    "class": "within",
-   "why": "R4 recommendation 2 as written ('One note-scoped re-check per question; a PARTIAL left after it is labeled honestly in the note rather than re-checked again'); narrowing the assertion to the quote is one honest form of that label, not a relaxation of the bound. brief.py step 7 carries it."
+   "why": "The GM delegated the number: 'perhaps you would be able to pick something sensible, and then we can try that out'. Picked from a one-shot labeled measurement (check-question-size.py --report, 2026-09-26); the rule is written in research/CLAUDE.md and docs/research-record-rules.md."
   },
   {
-   "id": "D13-3",
-   "summary": "Each of the twelve defined agents' description cut to one sentence, the full statement moved verbatim into the contract under 'When to dispatch this agent'; built-in agent types' descriptions left alone",
-   "class": "within",
-   "why": "R4 recommendation 3 names 'the long description fields of the defined agents. One sentence each, with the detail left in the contract body'. Verified on e2777cbf: all 12 old descriptions appear verbatim in the new files; totals reproduce as 8,448 -> 2,122 characters. Built-ins are not defined agents and not ours to edit, so excluding them narrows nothing asked."
+   "id": "D14.2b",
+   "summary": "The cap is enforced on what a change TOUCHES (make quick fails on a touched question over it); untouched over-cap questions are split when their pages are worked.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Implied by the GM's own words: a 'maximum size a question should grow to' is a cap on growth, and 'if we end up splitting up some of our existing questions' makes splitting existing questions contingent, not an order to split all of them now; 'try that out' frames the cap as a trial. Purpose test: the cap exists to cut what a check reads (82,000 tokens of question files on R5's page), checks run only on pages being worked, and a worked page's over-cap question cannot land unsplit because make quick refuses it - so the purpose is reached everywhere a check reads. Nothing is carved out of the cap; it is enforced where it bites."
   },
   {
-   "id": "D13-4",
-   "summary": "_clone_local_settings.py, run by the clone-sync prompt hook, merges claudeMdExcludes for the mirror's root CLAUDE.md into each clone's untracked .claude/settings.local.json, keeping other keys; mirror untouched",
+   "id": "D14.3",
+   "summary": "cities/government 080 (38,500 bytes) split by hand into 080 (Japan, decision, departure), 082 (China) and 085 (foot soldiers); two bridging sentences that restated the other parts' evidence reduced to pointers.",
    "class": "within",
-   "why": "R4 recommendation 4 ('A claudeMdExcludes for the mirror's copy in each clone's untracked .claude/settings.local.json, written when the clone is made or synced'); the prompt hook is the sync point, and it reaches every clone session, the GM's included."
+   "why": "The GM asked the session, where questions are split, to look whether important context is lost or whether linking is enough for a human and a future checker. Verified against 8df2802e: every body sentence of the old 080 is carried into one of the three (only the headings, the Sources lines and three transitions reworded); the three notes files together are the old notes file line for line (sorted-line diff empty, 26,519 bytes both); every footnote each fragment cites resolves in its own notes file; the pointers are anchor links both ways. The 080 synthesis ('neither tradition produces') stays in 080 and links to 082's evidence, as it was unfootnoted before."
   },
   {
-   "id": "D13-page",
-   "summary": "The equivalent page is religion-and-death (four FR-002, one FR-006), worked exactly as cities/defenses (a write session then two-question check sessions), recorded as R5 with the table over all five rounds (T45, T46)",
+   "id": "D14.3b",
+   "summary": "The four other questions this feature touched and left over the cap (homesteads 040, 210; vegetation 150; religion-and-death 200) are split by fresh sessions from a split brief, each reporting what every part relies on from the others, and the dispatching session judges each for lost context before it lands.",
    "class": "within",
-   "why": "The GM asked for 'another round of equivalent work to the others so that we can do an apples to apples comparison'; the same session shape, the same meter and a per-item table serve that. The GM named no page."
+   "why": "Carries the GM's 'you should look and see whether you think there is important context being lost' onto each split; the judging stays with the session the GM addressed."
   },
   {
-   "id": "T19-rewording",
-   "summary": "T19 excludes religion-and-death as well and is cut when T46's figures are read instead of T41's",
+   "id": "D14.4",
+   "summary": "The one more measured page is cities/government (three FR-002 items), worked as the last two pages, recorded as R6 against R1-R5, with its small size disclosed as noise.",
    "class": "within",
-   "why": "Drops nothing: the only page removed is the one T45 now carries, and the cut point moves to the comparison the GM asked to see before the remaining pages."
+   "why": "The GM: 'after you've made the tooling change, go ahead and do one more round on one more page, and then do another set of measurements'. T50/T51 follow T47/T48; the page choice was left to the session."
+  },
+  {
+   "id": "T19",
+   "summary": "T19's exclusion list adds cities/government and its cut point moves from T46 to T51.",
+   "class": "within",
+   "why": "Old text excluded homesteads, vegetation, cities/defenses, religion-and-death and cut at T46; new text keeps all four, adds the page T50 works, and cuts after the newest comparison. Nothing dropped."
   }
  ],
  "verdict": "CLEAR"
