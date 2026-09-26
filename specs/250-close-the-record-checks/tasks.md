@@ -55,29 +55,54 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
       measure: `python3 specs/250-close-the-record-checks/measure/tokens.py report`
       verify: DONE. research.md R1: main session 87 percent of input over 92 turns, 13 named runs 13 percent, no ad-hoc; a check reads 2,400 to 10,600 tokens of the record and carries 28,400 of nested CLAUDE.md; experiment X1 cut a record-format run's peak from 47,700 to 14,500; the agents not measured are named.
 
-## Phase 2 - FR-002 and FR-006 (not started until the GM has read T10)
+## Phase 1b - the token work (GM 2026-09-26; plan D6 to D10)
 
-- [ ] T11 `measure/assertions.py` derives FR-002's list from the six quote-check reports (D4)
+- [ ] T11 `make quote-verbatim ... SECTION=` checks only that question's notes (the rule dropped the
+      argument), and an unmatched SECTION exits 2
       research: rendering
-- [ ] T12 FR-002 and FR-006, page by page in the order T11 prints: read, write, check per entry. One
-      task per page is cut here once T10's figures say how large a page's batch should be
+- [ ] T12 `make check-bundle` and the four contracts that read a bundle and write `REPORT.md` (D6, D8);
+      tests in `tests/tooling/test_check_bundle.py`
+      research: rendering
+- [ ] T13 `check-bundle-hooks.sh`, its suite, its settings entry and its row in the root CLAUDE.md;
+      proven to go red with its refusal removed
+      research: rendering
+- [ ] T14 `make page-session` and `measure/brief.py` (D7); `research/CLAUDE.md` says how a check and a
+      page are now run
+      research: rendering
+- [ ] T15 The seeded-fault runs, three a leg (D6), recorded as R2's first half; an agent whose bundle leg
+      loses a finding keeps reading the tree
+      research: rendering
+- [ ] T16 **The comparison the GM asked for** (D9): T18 worked in a page session, measured against R1,
+      recorded as R2 with the next recommendations
+      research: rendering
+      measure: `python3 specs/250-close-the-record-checks/measure/tokens.py report --session <child transcript> --marks <its marks>`
+
+## Phase 2 - FR-002 and FR-006, one page per session (D7)
+
+- [ ] T17 `measure/assertions.py` derives FR-002's list from the six quote-check reports (D4)
+      research: rendering
+- [ ] T18 FR-002 and FR-006 for `homesteads` - the page of the comparison (D9)
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+- [ ] T19 FR-002 and FR-006 for every other page `assertions.py` names, one task and one session per
+      page, cut when T16's figures are read
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
 
 ## Phase 3 - the cosmetic sweeps
 
-- [ ] T13 FR-003, the rest of the vocabulary findings and the two variants (`ochiba`, `fire-gap`)
+- [ ] T20 FR-003, the rest of the vocabulary findings and the two variants (`ochiba`, `fire-gap`)
       research: rendering
-- [ ] T14 FR-004, the history passages into comments
+- [ ] T21 FR-004, the history passages into comments
       research: rendering
-- [ ] T15 FR-005, the registry's citation lines carry English titles, one mechanical sweep
+- [ ] T22 FR-005, the registry's citation lines carry English titles, one mechanical sweep
       research: rendering
 
 ## Phase 4 - the close
 
-- [ ] T16 FR-007, the checks owed by what phases 2 and 3 changed; every `_entry_owed.py` pair answered
+- [ ] T23 FR-007, the checks owed by what phases 2 and 3 changed; every `_entry_owed.py` pair answered
       research: rendering
-- [ ] T17 FR-008, the download list grown at its end
+- [ ] T24 FR-008, the download list grown at its end
       research: rendering
-- [ ] T18 FR-009, the closing report; `make page-check`; the push
+- [ ] T25 FR-009, the closing report; `make page-check`; the push
       research: rendering

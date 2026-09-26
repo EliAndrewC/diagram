@@ -172,14 +172,16 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("label", nargs="?", default="")
     ap.add_argument("--session", default=str(SESSION))
     ap.add_argument("--json", default="")
+    ap.add_argument("--marks", default=str(MARKS), help="the windows file - a page session keeps its own")
     args = ap.parse_args(argv)
-    marks = json.loads(MARKS.read_text(encoding="utf-8")) if MARKS.is_file() else []
+    marks_file = pathlib.Path(args.marks)
+    marks = json.loads(marks_file.read_text(encoding="utf-8")) if marks_file.is_file() else []
     if args.verb == "mark":
         if not args.label:
             ap.error("mark needs a label")
         now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
         marks.append({"label": args.label, "ts": now})
-        MARKS.write_text(json.dumps(marks, indent=1) + "\n", encoding="utf-8")
+        marks_file.write_text(json.dumps(marks, indent=1) + "\n", encoding="utf-8")
         print(f"mark: {args.label} at {now}")
         return 0
     report = build(pathlib.Path(args.session), marks)

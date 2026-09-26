@@ -72,12 +72,24 @@ cites one work several times they are `fei-1939`, `fei-1939-2`, and so on.
 
 **Checking one entry**, which is what the split is for:
 
-    make record-prepass PAGE=water SECTION=<the question>     names the fragments to read
-    make quote-verbatim PAGE=water SECTION=<the question>     only the notes that question cites
+    make check-bundle PAGE=water SECTION=<the question>     one question, copied OUT of the repository
+    make check-bundle KEY=<registry key>                    one source, with its page saved
 
-Then dispatch `record-format` or `quote-check` with those paths. Their contracts tell them to read the
-fragment and not the page - it has to be there, because a defined agent launches without this file
-(feature 256).
+The bundle holds the fragment, its notes, the prepass (`make record-prepass`), the quote-verbatim report
+(`make quote-verbatim`), the registry entries the notes cite and the glossary's variant index, each with
+its origin in a `MANIFEST.md`. Dispatch `quote-check`, `record-format`, `source-applicability` or
+`source-reader` naming that MANIFEST and nothing under `/diagram`; `check-bundle-hooks.sh` refuses a
+dispatch that points into the repository and prints the command. **Why copies** (feature 250, research
+R1): an agent that reads a file here gets every `CLAUDE.md` above it attached - this file among them,
+about 28,400 tokens - which `omitClaudeMd` does not stop; on the measured runs that was 55-65% of a
+check's context. **The report comes back as a file**: the agent writes `REPORT.md` in the bundle and
+replies with one line of counts. Open the report when the line says there is something to apply.
+
+**One session per page** (feature 250 D7). A session's cost is its turns times its context, and every
+report, file and tool result stays in the context for every later turn: on the measured slice the main
+session was 87% of the input and ended at 324,000 tokens a turn. So a research feature is worked a page
+at a time, each page in a FRESH session started from a written brief (`make page-session BRIEF=<file>`),
+and the brief and the work list, not the context, carry the state between them.
 
 This file auto-loads when a research entry is being written or changed - which is exactly when the
 rule below applies. The entry FORMAT, the evidence classes, the citing rules and the table of which

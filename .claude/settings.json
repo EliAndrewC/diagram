@@ -220,6 +220,10 @@
           },
           {
             "type": "command",
+            "command": "/diagram/scripts/check-bundle-hooks.sh pretool  # GUARD_EDIT_OK: feature 250 - a NEW guard (the GM 2026-09-26): a record check is dispatched with a bundle outside the repository, or refused with the make check-bundle command"
+          },
+          {
+            "type": "command",
             "command": "/diagram/scripts/pair-hooks.sh pretool"
           },
           {

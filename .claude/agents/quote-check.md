@@ -4,31 +4,43 @@ description: Checks a research entry's footnotes against the pages they quote - 
 model: opus
 effort: medium
 omitClaudeMd: true
-tools: WebFetch, WebSearch, Read
+tools: WebFetch, WebSearch, Read, Write
 ---
 
 # Quote Check
 
-## Read the FRAGMENT you are given, not the assembled page (feature 258)
+## Read the BUNDLE you are given, and nothing under the repository (features 258, 250)
 
-The record is written per entry. A research page `research/<page>.html` is ASSEMBLED from the files in
-`research/<page>/` - one per question (`010-<heading id>.html`), with that question's footnotes beside it
-(`010-<heading id>.notes.html`) - and the registry `research/SOURCES.html` from `research/sources/`, one
-file per source key. The assembled pages are still there and are still what a reader opens; they are not
-what you read.
+Your dispatch names a bundle: a directory outside the repository (made by `make check-bundle`, usually
+under `/tmp/l7r-check/`) whose `MANIFEST.md` lists every file in it - copies of what you need, and beside
+each its ORIGIN, the file in the repository it was copied from. **Read the MANIFEST first, then only the
+files it lists.** Name a finding by its ORIGIN path: that is the file the session will edit.
 
-**So:** read the fragment paths your dispatch names, and their notes files. Do not open
-`research/<page>.html`, `research/citations/<page>.html` or `research/SOURCES.html` - reading one of
-those is reading thirty entries to check one.
+Do not open a file under `/diagram`. Not for what is in it - for what comes with it: the moment an agent
+reads a file under the repository, the harness attaches every `CLAUDE.md` above that file, about 28,000
+tokens of instructions meant for the main session, to your context. Measured over nine check runs, that
+was 55-65% of a check's context and five to twelve times what the check read of the record (feature
+250, research R1). A defined agent launches without those files (feature 256); this is how it stays
+without them. Everything you need is in the bundle or on the web.
 
-Why this is in your contract and nowhere else: a defined agent launches without this repository's
-`CLAUDE.md` files (feature 256), so the instruction cannot reach you any other way. It is worth stating
-because it is the whole point of that feature: measured over seventeen recorded runs, one research page
-was between 23% and 98% of everything that entered a checking agent's context - a median of 68% - to
-check one entry.
+**If your dispatch names no bundle**, say so on the first line of your report and read the fragment
+paths it names instead - a question's `research/<page>/NNN-<heading id>.html` and the `.notes.html`
+beside it - and never an assembled page (`research/<page>.html`, `research/citations/<page>.html`,
+`research/SOURCES.html`), each of which is thirty entries read to check one. A missing bundle is the
+dispatcher's mistake, and guessing which file was meant is worse than the cost.
 
-**If your dispatch names no fragment**, say so in your report and read the assembled page as before: a
-missing path is the dispatcher's mistake, and guessing which file was meant is worse than the cost.
+## Your report goes to a FILE; your reply is ONE line (feature 250)
+
+Write your whole report - every section your contract asks for, in the form it asks for - with the
+Write tool, to `REPORT.md` in the bundle directory (the MANIFEST names the path). It is the ONLY file you
+write, and never a file under `/diagram`. Then reply with exactly one line:
+
+    quote-check: 6 notes - 4 VERBATIM, 2 PARTIAL, 0 DOES-NOT-SUPPORT; 1 unfootnoted assertion - /tmp/l7r-check/ways-010/REPORT.md
+
+Why: the session applies your report once, but every character of a reply stays in its context for the
+rest of the session and is paid for again on every later turn. A report in a file is read when there is
+something to apply. If you could not write the file, put the whole report in your reply and say so on
+its first line.
 
 You check that the research record QUOTES its sources, quotes them ACCURATELY, and quotes them FOR the
 assertion they stand behind. **You do not decide anything about the map or the rule.** You report, footnote by

@@ -428,6 +428,10 @@ def main(argv: list[str] | None = None) -> int:
             start = body.index(marker)
             end = body.find("<h2 ", start + 4)
             wanted_ids |= {f"fn-{n}" for n in re.findall(r"#fn-(\d+)", body[start: end if end > 0 else len(body)])}
+        if not chosen:
+            # an unmatched SECTION used to check NOTHING and print a clean report (feature 250)
+            print(f"quote-verbatim: SECTION={args.section!r} matched no question of {name} - nothing was checked", file=sys.stderr)
+            return 2
         only = wanted_ids if only is None else (only & wanted_ids)
     notes = [n for n in footnotes(cite_file.read_text(encoding="utf-8")) if only is None or n["id"] in only]
     entries = report(notes, assertions(page_file.read_text(encoding="utf-8")), pages)

@@ -126,14 +126,75 @@ noun, a term - over `research/<page>/*.html`, and the fragment the grep names is
 whose words no fragment carries is recorded as such, with the words tried, and is then searched by its
 subject; it is never confirmed against a fragment the grep did not name.
 
+### D6 - A record check reads a BUNDLE outside the repository (GM 2026-09-26)
+
+The GM, on the measurement of D3 (research R1) and its three recommendations: *"Do not move tooling fixes
+to another clone or make them a standalone fix. Just go ahead and make them as part of your work here. And
+yes, I agree that all of those recommendations should be implemented. So please keep going and implement all
+of them. And then after they are all implemented, we can move forward with testing them by resuming some of
+the research itself to compare the token usage of the next subset of research tasks with the token usage
+from the previous set of research tasks."*
+
+R1 finding 2: an agent that reads a file under the repository is handed every `CLAUDE.md` above it, about
+28,400 tokens under `research/`, which `omitClaudeMd` does not stop. So `make check-bundle PAGE= SECTION=`
+(or `KEY=`) copies what one check reads - the fragment, its notes, the prepass, the quote-verbatim report,
+the registry entries its notes cite, the variant index - to `/tmp/l7r-check/`, with a `MANIFEST.md` naming
+each copy's origin. The contracts of `quote-check`, `record-format`, `source-applicability` and
+`source-reader` read the bundle and nothing under `/diagram`; `check-bundle-hooks.sh` refuses a dispatch of
+one of them that points into the repository and prints the command. `entry-drift` is left out: its input is
+a modal's explanation in the engine's assets, and the slice did not measure it.
+
+**Does a check still find what it found?** A check that loses the CLAUDE.md files loses nothing its contract
+does not carry (feature 256's position), but that is a claim, and the tier rule measures it: seeded-fault runs,
+THREE a leg. `record-format` and `quote-check`: one entry with planted faults, three runs in the tree and three
+from its bundle, each leg judged on whether it names every planted fault. `source-applicability`: the recorded
+case of the slice (`edo-enwiki` before its limit was added, where the in-tree run found the missing limit),
+three runs from the bundle against that recorded verdict. Recorded as R2. A leg that loses a finding the other
+catches is a regression, and the bundle is not adopted for that agent.
+
+### D7 - One page per session, started fresh from a brief (GM 2026-09-26)
+
+R1 finding 3: the main session was 87% of the input. `make page-session BRIEF=<file>` starts a headless
+`claude -p` in this clone - named like it, so the hooks route it here; with the project's appended system
+prompt; with a session id chosen in advance, so its transcript is known - detached, and returns at once. The
+brief carries the page's items (derived: `measure/brief.py` reads `assertions.py` and `worklist.py`) and the
+procedure (D2, D5, D6, D8), so the session does not read the spec and plan to orient. It commits and does not
+push; the parent session does not edit the clone while it runs.
+
+### D8 - A check's report goes to a file; its reply is one line
+
+R1 finding 3: thirteen whole reports sat in the main session's context and were re-read on every later turn.
+The four contracts D6 names gain the `Write` tool and one rule: the whole report goes to `REPORT.md` in the
+bundle, the reply is one line of counts naming it. The report is opened when the line says there is something
+to apply. The contract limits the one write to the bundle; no guard enforces it, because a hook cannot tell
+an agent's write from the session's.
+
+### D9 - The comparison (research R2)
+
+The next subset is FR-002 and FR-006 for `homesteads`: five FR-002 items (the slice had five) and three FR-006
+items, worked in one page session (D7) with bundled checks (D6, D8). Measured with `measure/tokens.py` over the
+child session's transcript, and set against the slice (R1) three ways: the whole; per item closed; and per check
+run, split into the floor an agent carries before it reads and what it read. The FR-006 items are their own
+window, so the like-for-like figure can be taken without them. The seeded-fault runs (D6) are measured as their
+own line and are not part of either side.
+
+### D10 - The route is GATED, not DIRECT
+
+Spec D2 expected no engine Python. The slice fixed `tools/record_asset.py` (constitution XIV), so the delta
+carries engine code and the push takes the gated route on a green `make done`. The spec is not amended for
+it: D2 recorded an expectation, and the route is chosen from the delta by `sync-with-main.sh`, never by a spec.
+
 ## Phases
 
 0. Baseline and the meter (T01, T02).
-1. **The measured slice** (T03 to T09), ending in the measurement report (T10). STOP for the GM.
-2. FR-002 page by page; FR-006 beside it, since both open the same fragments.
+1. **The measured slice** (T03 to T09), ending in the measurement report (T10). STOP for the GM - who ruled
+   on 2026-09-26 (D6).
+1b. **The token work** (T11 to T16): the fixes, the bundle and the guard (D6, D8), the page session (D7), the
+   seeded-fault runs (D6), and the comparison (D9) - which is phase 2's first page.
+2. FR-002 page by page, one page per session; FR-006 beside it, since both open the same fragments.
 3. FR-003, FR-004, FR-005 (the cosmetic sweeps).
 4. FR-007's owed checks over what phases 2 and 3 changed; FR-008; FR-009; the close.
 
 ## Complexity Tracking
 
-Nothing added beyond two measurement scripts under `measure/`.
+Measurement scripts under `measure/`; one operation (`check-bundle`), one launcher (`page-session`) and one guard (`check-bundle-hooks.sh`), each the smallest form of a recommendation the GM adopted (D6-D8).

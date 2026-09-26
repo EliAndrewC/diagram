@@ -1058,13 +1058,27 @@ quote-verbatim: ## [project] is every quoted passage on the page it cites, chara
 ##  OUT=<json>     write the report the quote-check agent is handed (default: the scratch file the run names)
 	@if [ -z "$(PAGE)" ]; then printf 'make quote-verbatim: PAGE=<research page name> is required - e.g. make quote-verbatim PAGE=hamlets\n' >&2; exit 2; fi
 # GUARD_EDIT_OK: feature 251 - NOTES= scopes the new quote-verbatim operation to the notes a check is about; no guard changes.
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_quote_verbatim.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" $(if $(NOTES),--notes "$(NOTES)",) $(if $(OUT),--json "$(abspath $(OUT))",)
+# GUARD_EDIT_OK: feature 250 - SECTION= is passed through: research/CLAUDE.md documented it and the rule dropped it, so both sizing runs checked all 11 notes.
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_quote_verbatim.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" $(if $(NOTES),--notes "$(NOTES)",) $(if $(SECTION),--section "$(SECTION)",) $(if $(OUT),--json "$(abspath $(OUT))",)
 
 record-prepass: ## [project] the session notes and vocabulary candidates a pattern can find on a research page - run BEFORE record-format   PAGE=hamlets
 ##  PAGE=<name>    a research page, a citations page (`citations/hamlets`) or `SOURCES`
 	@if [ -z "$(PAGE)" ]; then printf 'make record-prepass: PAGE=<research page name> is required - e.g. make record-prepass PAGE=hamlets\n' >&2; exit 2; fi
 # GUARD_EDIT_OK: feature 251 - SECTION= scopes the new record-prepass operation to one section; no guard changes.
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_record_prepass.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" $(if $(SECTION),--section "$(SECTION)",)
+
+# GUARD_EDIT_OK: feature 250 - a new operation (one page's work in a fresh headless session, started from a brief); no guard changes.
+page-session: ## [project] start ONE page's work in a FRESH headless session, detached, from a written brief - one page per session keeps the context small (feature 250 D7)   BRIEF=<file> [NAME=<session name, default this clone's>] [MODEL=<model>]
+	@if [ -z "$(BRIEF)" ]; then printf 'make page-session: BRIEF=<file> is required - e.g. make page-session BRIEF=specs/250-close-the-record-checks/briefs/homesteads.md\n' >&2; exit 2; fi
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/page-session.sh "$(abspath $(BRIEF))" "$(NAME)" "$(MODEL)"
+
+# GUARD_EDIT_OK: feature 250 - a new operation (copy what one check reads out of the repository, so the harness attaches no CLAUDE.md to the agent); no guard changes.
+check-bundle: ## [project] the files ONE check agent reads, copied out of the repository with its prepass output - dispatch quote-check, record-format, source-applicability or source-reader with the MANIFEST it prints   PAGE=ways SECTION=010 | KEY=edo-enwiki
+##  PAGE= SECTION=   one question: fragment, notes, prepass, quote-verbatim, cited registry entries, the variant index
+##  KEY=<key>        one source: its registry entry and its saved page
+##  OUT=<dir>        default /tmp/l7r-check/<page>-<section> or /tmp/l7r-check/key-<key>   EXTRA="<path> ..."   NO_QUOTES=1 skips the fetches
+	@if [ -z "$(KEY)" ] && { [ -z "$(PAGE)" ] || [ -z "$(SECTION)" ]; }; then printf 'make check-bundle: PAGE=<page> SECTION=<question> (or KEY=<registry key>) is required - e.g. make check-bundle PAGE=ways SECTION=010\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_check_bundle.py" --root "$$(git rev-parse --show-toplevel)" $(if $(KEY),--key "$(KEY)","$(PAGE)" --section "$(SECTION)") $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(EXTRA),--extra $(EXTRA),) $(if $(NO_QUOTES),--no-quotes,)
 
 # GUARD_EDIT_OK: feature 255 - a new operation (save named pages' visible text, so a page and not a fetch extract can be grepped); no guard changes. (The source-entries and review-facts operations added beside it were NOT ADOPTED on their seeded runs and are removed - specs/255 research R1 and R6. GUARD_EDIT_OK again, 2026-09-19: the header says the GM adopted source-reader's use of it; no guard changes.)
 source-pages: ## [project] save the full visible text of the named pointers, with a manifest - run BEFORE source-reader, which greps the PAGE where a fetch gives an extract   OUT=<dir> URL=<u1>  (several: URLS="<u1> <u2>")
