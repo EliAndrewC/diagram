@@ -1,12 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="140 116 600 696" font-family="Georgia, 'Times New Roman', serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="140 116 600 1236" font-family="Georgia, 'Times New Roman', serif">
   <!-- ============================================================ -->
   <!-- Hoshigaoka Country Shrine - top-down diagrammatic plan          -->
   <!-- North at top; the approach enters from the village, south.     -->
   <!-- 3 px = 1 ft. The country shrine's program: buildings/programs.md -->
   <!-- THE SHEET MATCHES THE VILLAGE MAP (feature 257): the hall's     -->
   <!-- center is map (392, 1074) of hoshigaoka.json; 6 sheet px = 1   -->
-  <!-- map px. What the map shows here is the hall, one arch 20 ft in  -->
-  <!-- front, the shrine's well 108 ft behind, and swept ground - no   -->
+  <!-- map px. What the map shows here is the hall, seven arches 30 ft -->
+  <!-- apart from 20 ft in front of it (the GM's seven-arch avenue,    -->
+  <!-- 2026-09-26), the shrine's well 108 ft behind, and swept ground - no -->
   <!-- grove, no burial ground, no lane. Nothing else is drawn.        -->
   <!-- ============================================================ -->
   <defs>
@@ -37,8 +38,8 @@
   </defs>
 
   <!-- Outer land: the parchment, then the swept clearing the map records around the shrine, to the frame's edge -->
-  <rect x="0" y="0" width="900" height="900" fill="#EFE3C2"/>
-  <rect x="140" y="116" width="600" height="696" fill="url(#swept-earth)"/>
+  <rect x="0" y="0" width="900" height="1400" fill="#EFE3C2"/>
+  <rect x="140" y="116" width="600" height="1236" fill="url(#swept-earth)"/>
 
   <!-- Title block -->
   <text x="152" y="150" text-anchor="start" font-size="26" font-weight="bold" fill="#3A2E1C">Hoshigaoka Country Shrine</text>
@@ -47,13 +48,13 @@
   <!-- Scale bar (3 px = 1 ft), bottom-left, clear of the title -->
   <g>
     <g stroke="#3A2E1C">
-      <line x1="166" y1="770" x2="256" y2="770" stroke-width="2"/>
-      <line x1="166" y1="765" x2="166" y2="775" stroke-width="2"/>
-      <line x1="256" y1="765" x2="256" y2="775" stroke-width="2"/>
-      <line x1="211" y1="767" x2="211" y2="773" stroke-width="1"/>
+      <line x1="166" y1="1310" x2="256" y2="1310" stroke-width="2"/>
+      <line x1="166" y1="1305" x2="166" y2="1315" stroke-width="2"/>
+      <line x1="256" y1="1305" x2="256" y2="1315" stroke-width="2"/>
+      <line x1="211" y1="1307" x2="211" y2="1313" stroke-width="1"/>
     </g>
-    <text x="211" y="786" text-anchor="middle" font-size="10" fill="#3A2E1C">30 ft</text>
-    <text x="211" y="797" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">(3 px = 1 ft)</text>
+    <text x="211" y="1326" text-anchor="middle" font-size="10" fill="#3A2E1C">30 ft</text>
+    <text x="211" y="1337" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">(3 px = 1 ft)</text>
   </g>
 
   <!-- THE PRECINCT: swept gravel inside the fence (140 x 99 ft), closing 15 ft behind the sanctuary as a shrine's does; the well the map
@@ -72,16 +73,59 @@
     <line x1="464" y1="632" x2="650" y2="632"/>
   </g>
 
-  <!-- The approach (sando): a 10 ft gravel way from the arch to the hall's front step - 20 ft, as the map has it -->
-  <rect x="425" y="572" width="30" height="60" fill="#D9CFB4" stroke="#C4B48E" stroke-width="0.8" id="approach"/>
+  <!-- The approach (sando): a 10 ft gravel way from the outermost of the seven arches to the hall's front step - 206 ft, through the avenue -->
+  <rect x="425" y="572" width="30" height="618" fill="#D9CFB4" stroke="#C4B48E" stroke-width="0.8" id="approach"/>
 
-  <!-- The arch (torii) over the approach where the way crosses the fence, 20 ft in front of the hall's face (the map's one torii): two posts and a lintel, 15 ft outer span -->
+  <!-- The arch (torii) over the approach where the way crosses the fence, 20 ft in front of the hall's face (the first of the map's seven torii): two posts and a lintel, 15 ft outer span -->
   <rect x="417" y="620" width="46" height="24" fill="none" id="arch"/>
   <g fill="#A03020" stroke="#6B2A18" stroke-width="0.8">
     <rect x="420" y="624" width="4" height="20"/>
     <rect x="456" y="624" width="4" height="20"/>
     <rect x="417" y="620" width="46" height="3"/>
     <rect x="421" y="627" width="38" height="2"/>
+  </g>
+  <!-- The six arches beyond it down the avenue (the GM's seven, 2026-09-26), 30 ft apart as the map marches them, the same 15 ft span -->
+  <rect x="417" y="710" width="46" height="24" fill="none" id="arch"/>
+  <g fill="#A03020" stroke="#6B2A18" stroke-width="0.8">
+    <rect x="420" y="714" width="4" height="20"/>
+    <rect x="456" y="714" width="4" height="20"/>
+    <rect x="417" y="710" width="46" height="3"/>
+    <rect x="421" y="717" width="38" height="2"/>
+  </g>
+  <rect x="417" y="800" width="46" height="24" fill="none" id="arch"/>
+  <g fill="#A03020" stroke="#6B2A18" stroke-width="0.8">
+    <rect x="420" y="804" width="4" height="20"/>
+    <rect x="456" y="804" width="4" height="20"/>
+    <rect x="417" y="800" width="46" height="3"/>
+    <rect x="421" y="807" width="38" height="2"/>
+  </g>
+  <rect x="417" y="890" width="46" height="24" fill="none" id="arch"/>
+  <g fill="#A03020" stroke="#6B2A18" stroke-width="0.8">
+    <rect x="420" y="894" width="4" height="20"/>
+    <rect x="456" y="894" width="4" height="20"/>
+    <rect x="417" y="890" width="46" height="3"/>
+    <rect x="421" y="897" width="38" height="2"/>
+  </g>
+  <rect x="417" y="980" width="46" height="24" fill="none" id="arch"/>
+  <g fill="#A03020" stroke="#6B2A18" stroke-width="0.8">
+    <rect x="420" y="984" width="4" height="20"/>
+    <rect x="456" y="984" width="4" height="20"/>
+    <rect x="417" y="980" width="46" height="3"/>
+    <rect x="421" y="987" width="38" height="2"/>
+  </g>
+  <rect x="417" y="1070" width="46" height="24" fill="none" id="arch"/>
+  <g fill="#A03020" stroke="#6B2A18" stroke-width="0.8">
+    <rect x="420" y="1074" width="4" height="20"/>
+    <rect x="456" y="1074" width="4" height="20"/>
+    <rect x="417" y="1070" width="46" height="3"/>
+    <rect x="421" y="1077" width="38" height="2"/>
+  </g>
+  <rect x="417" y="1160" width="46" height="24" fill="none" id="arch"/>
+  <g fill="#A03020" stroke="#6B2A18" stroke-width="0.8">
+    <rect x="420" y="1164" width="4" height="20"/>
+    <rect x="456" y="1164" width="4" height="20"/>
+    <rect x="417" y="1160" width="46" height="3"/>
+    <rect x="421" y="1167" width="38" height="2"/>
   </g>
 
   <!-- The shrine's well - its one water point - 108 ft behind the hall on the axis, where the village map sites it, outside the fence -->

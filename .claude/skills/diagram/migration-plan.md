@@ -90,9 +90,11 @@ of the `settlement/` package (towns, cities, the capital) are exercised by nothi
 so the coverage gate holds 100% on every module except the `settlement/` package, which carries a RATCHET
 floor in the Makefile. **Retired by feature 174 (2026-08-31)**: the wings were covered BY TESTS rather than by waiting for the conversion, so settlement/ reached 100% and the ratchet's own condition was met. The gate now holds ONE floor - 100% over the whole tree.
 A frozen map's defects against post-freeze rules are expected, not bugs; the fix is conversion.
-The frozen maps' renders (svg + png, ~195 MB) are **committed as write-once exhibits** (GM
-2026-08-16, un-ignored by name in `.gitignore`), because nothing can faithfully re-derive them
-once the engine drifts; **when a map is converted to the scripted approach, its physical renders
+The frozen maps' renders (svg + png, ~195 MB) are **write-once exhibits** (GM 2026-08-16),
+because nothing can faithfully re-derive them once the engine drifts. They were committed at the
+freeze; since feature 178 no render is tracked, so the copies on disk in the mirror ARE the exhibit
+(`render_cache` never re-runs a legacy gen and warns when one is missing), and a hand edit to an
+exhibit is made to those copies and to the tracked manifest together; **when a map is converted to the scripted approach, its physical renders
 come out of git again** (`git rm` the svg/png, delete its `!` lines in `.gitignore`) - a
 converted map's renders are derived by a live generator and return to being ignored.
 
