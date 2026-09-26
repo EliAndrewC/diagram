@@ -326,11 +326,14 @@ def test_in_raster_mode_the_lit_paddy_is_washed_and_the_lit_beads_are_not(synthe
     paddy = "() => getComputedStyle(document.querySelector('g.f[data-k=\"paddy\"] rect')).fillOpacity"
     beads = "() => getComputedStyle(document.querySelector('g.f[data-k=\"bund beans\"] circle:not(.hit)')).fillOpacity"
 
-    def lit() -> tuple[str, str]:
+    def lit(want: tuple[str, str]) -> tuple[str, str]:
+        # WAITS FOR THE STATE, BOUNDED (`settles`, feature 145): the wash lands with the page's own restyle, and a read
+        # straight after `highlight` came back "1" three gates running under a full run's load while passing alone,
+        # in the package, in page-check and under a saturated CPU (feature 261). The assertion is exactly as strict.
         synthetic.js("k => window.l7rMap.highlight(k)", "paddy")
-        p = synthetic.js(paddy)
+        p = synthetic.settles(want[0], lambda: synthetic.js(paddy))
         synthetic.js("k => window.l7rMap.highlight(k)", "bund beans")
-        b = synthetic.js(beads)
+        b = synthetic.settles(want[1], lambda: synthetic.js(beads))
         synthetic.clear()
         return p, b
 
@@ -340,12 +343,12 @@ def test_in_raster_mode_the_lit_paddy_is_washed_and_the_lit_beads_are_not(synthe
         synthetic.js("() => window.l7rMap.fit()")
         assert synthetic.js("() => window.l7rMap.rasterReady()"), "the synthetic page carries its picture and id map"
         assert synthetic.settles("raster", lambda: synthetic.js(mode)) == "raster", "fitted in a 100-unit viewport the page is below the raster switch"
-        assert lit() == ("0.45", "1"), "raster mode: the lit paddy is a wash, the lit beads are solid"
+        assert lit(("0.45", "1")) == ("0.45", "1"), "raster mode: the lit paddy is a wash, the lit beads are solid"
     finally:
         synthetic.page.set_viewport_size(was)
         synthetic.js("() => window.l7rMap.fitWidth()")
     assert synthetic.settles("vector", lambda: synthetic.js(mode)) == "vector"
-    assert lit() == ("1", "1"), "the vector page is unchanged: solid gold for both"
+    assert lit(("1", "1")) == ("1", "1"), "the vector page is unchanged: solid gold for both"
     assert synthetic.errors == [], synthetic.errors
 
 

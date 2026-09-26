@@ -1,0 +1,6 @@
+{
+  "utc": "20260926T211023Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "baseline measurement of main in a detached worktree for feature 261"
+}
