@@ -155,9 +155,10 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
 - [x] T44 Every clone's local settings exclude the mirror's CLAUDE.md (`_clone_local_settings.py`, the prompt hook)
       research: rendering
       verify: DONE. DONE. _clone_local_settings.py from the clone-sync prompt hook writes claudeMdExcludes for the mirror's CLAUDE.md into the clone's untracked local settings; 3 unit tests, the clone-sync suite green; a probe with the file alone loaded only the clone's CLAUDE.md and started at 19,413 tokens.
-- [ ] T45 FR-002 and FR-006 for `religion-and-death`, worked as `cities/defenses` was (D13)
+- [x] T45 FR-002 and FR-006 for `religion-and-death`, worked as `cities/defenses` was (D13)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. religion-and-death closed: 010/020 (2a) and 190/200 (2b) quote-checked, record-formatted and applied with one re-check round each; 13 glossary terms added in 2b+2a's 10; FR-006 worklist 33 bare items - FOOTNOTED 31, LOCATED 1, NOT-LOCATED 1 (item 14, confirmed in session 1 as an absence note); 4 PDF notes UNFETCHABLE in-container (tama-100, tanigawa, sinoss), l7r-castes canon citation left as session 1 placed it
 - [ ] T46 **The comparison the GM asked for** (D13): T45 against R1 to R4, recorded as R5 with the table over all
       five rounds
       research: rendering
