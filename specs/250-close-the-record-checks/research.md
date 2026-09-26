@@ -303,3 +303,50 @@ mean of 89,000, where homesteads' same steps ran at 64,000 to 145,000 a turn in 
 
 What the rest costs at this round's rate: 62 FR-002 items remain over 13 pages - on the order of 160 million
 tokens and $120 at vegetation's 2.58 million an item, or 97 million at homesteads' 1.56 million.
+
+## R4 - the third round against the first three (2026-09-26, T34 to T41, plan D12)
+
+The GM adopted R3's five recommendations the same day: a lower session floor, check sessions of two questions
+each, a report's findings applied in one turn, `research/CLAUDE.md` cut to its rules, and `entry-drift` in the
+check sessions. The next page was `cities/defenses` - five FR-002 items and one FR-006, the size of the last -
+in three fresh sessions: one to write, then two check groups (questions 010 and 020; 040 and 060). Figures from
+`measure/tokens.py` (`measure/tokens-defenses-*.json`); "input" is fresh plus cached input summed over turns.
+
+| | the slice (R1) | `homesteads` (R2) | `vegetation` (R3) | `cities/defenses` (R4) |
+|---|---|---|---|---|
+| items | 5 | 8 | 6 | 6 |
+| sessions | the long one | one | two | three (write, two check groups) |
+| first turn of a session | 138,000 | 40,000 | 40,000 | **21,400** |
+| main session | 7.13 million, 35 turns | 11.28 million, 70 turns | 14.04 million, 110 turns | **5.74 million, 95 turns** |
+| mean main turn | 204,000 | 161,000 | 128,000 | **60,000** |
+| agents | 7 runs, 0.86 million | 10 runs, 1.22 million | 23 runs, 1.45 million | 16 runs, 0.81 million |
+| total | 7.98 million | 12.51 million | 15.48 million | **6.56 million** |
+| per item | 1.60 million | 1.56 million | 2.58 million | **1.09 million** |
+| harness cost | - | $10.21 | $11.77 | **$7.39** ($1.75 + $2.27 + $3.37) |
+
+(Observed 2026-09-26; method: the rows of `measure/tokens-*.json`, main and agents summed per page; the mean turn
+is the main session's input over its turns; the cost is each session's `total_cost_usd`.)
+
+**This round worked.** Per item the page cost 58% less than vegetation and 30% less than homesteads or the slice
+(observed 2026-09-26; method: the per-item row). The mean turn fell by more than half against vegetation: every
+session started at 21,400 rather than 40,000, and no session grew past 104,000, where vegetation's check session
+reached 218,000. The turns per item were 16, between homesteads' 9 and vegetation's 18 - so the saving is the size
+of each turn, which is what the floor and the groups were for.
+
+Two things the comparison has to carry. `cities/defenses` owed no modal check - `_entry_owed.py` named no class
+for its questions - where vegetation ran five and rewrote five modals; and the second check group re-checked one
+question twice more (`quote-check` three times on 060), a loop the brief does not bound.
+
+### Recommendations for the next round
+
+1. **Go.** At 1.09 million tokens and about $1.25 an item, the 57 FR-002 items left over 12 pages come to on the
+   order of 62 million tokens and $70, worked a page at a time as this one was.
+2. **Bound the re-check.** One note-scoped re-check per question; a PARTIAL left after it is labeled honestly in
+   the note rather than re-checked again. The second group's 060 loop was a third of its session.
+3. **Shorten the agent descriptions.** Every session's first turn carries the agent listing - about 22,000
+   characters, most of it the long `description` fields of the defined agents. One sentence each, with the detail
+   left in the contract body the agent itself reads, lowers the floor of every session in the project, not only
+   the research ones.
+4. **Give every clone session the floor fix.** The duplicated root `CLAUDE.md` loads in every session that works
+   in a clone, the GM's own included - about 5,000 tokens a turn. A `claudeMdExcludes` for the mirror's copy in each
+   clone's untracked `.claude/settings.local.json`, written when the clone is made or synced, removes it everywhere.

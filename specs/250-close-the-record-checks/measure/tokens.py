@@ -130,7 +130,8 @@ def build(session: pathlib.Path, marks: list[dict]) -> list[dict]:
             }
         )
     out = []
-    for label in ["(before the first mark)"] + [m["label"] for m in marks]:
+    # several sessions may open windows of the same label (one marks file per page, a session per group)
+    for label in dict.fromkeys(["(before the first mark)"] + [m["label"] for m in marks]):
         if label in windows:
             w = windows[label]
             mains = w["main"]

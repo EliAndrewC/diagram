@@ -139,9 +139,10 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
       verify: DONE. cities/defenses 040 and 060 checked and applied (group 2 of 2): quote-check x3 rounds on 060, x2 on 040, record-format x1 each; 040 - one-character DIFFERS fixed (and in the xian-wall-zhwiki registry), the mamian gloss cited (ditai-zhwiki-3), gatepost figure labeled GUESS; 060 - xian-wall-zhwiki-5 DIFFERS fixed, jah-2 retranslated, first sentence reworded onto xian-wall-zhwiki-7, gate and water-gate stretches cited (panmen-zhwiki, a second absence note), tower-count tie labeled GUESS, one HISTORY sentence commented, the stale Pingyao clause cut; 5 glossary terms added, 2 mamian variants; no modal owed; FR-006 worklist 17 bare items: 15 FOOTNOTED, 1 LOCATED (010), 1 NOT-LOCATED (040, now an HTML comment); open: the two jah-song-military-cities quotes are unverified in-container (the PDF has no readable text layer here)
-- [ ] T41 **The comparison the GM asked for** (D12): T40 measured against R1 to R3, recorded as R4 with the next
+- [x] T41 **The comparison the GM asked for** (D12): T40 measured against R1 to R3, recorded as R4 with the next
       recommendations
       research: rendering
+      verify: DONE. research.md R4: cities/defenses (6 items) in three fresh sessions - 6.56 million tokens, 1.09 million an item against 2.58 (vegetation), 1.56 (homesteads) and 1.60 (slice); mean main turn 60,000; first turn 21,400; .39; four next recommendations.
 
 ## Phase 2 - FR-002 and FR-006, one page per session (D7)
 
