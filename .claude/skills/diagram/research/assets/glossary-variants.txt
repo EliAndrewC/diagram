@@ -16,6 +16,8 @@ along the ridge	ridge span
 alternate attendance	alternate attendance
 anaerobic	anaerobic
 anagama	noborigama
+anchor culture	anchor culture
+anchor cultures	anchor culture
 apron	apron
 aprons	apron
 aqueduct	aqueduct
@@ -119,6 +121,8 @@ carex	Carex
 carex lyngbyei	Carex
 carr	carr
 castanopsis	Castanopsis
+castle town	jokamachi
+castle towns	jokamachi
 catchment	catchment
 catena	catena
 causeway	causeway
@@ -136,6 +140,8 @@ chinju	chinju
 chinju no mori	chinju no mori
 chinjusan	chinju
 cho	cho
+chongzhen	Chongzhen era
+chongzhen era	Chongzhen era
 chonin	chonin
 chonin-chi	buke-chi
 chori	chori
@@ -224,6 +230,9 @@ dbh	DBH
 degawari	degawari
 delivery ditch	delivery ditch
 delivery ditches	delivery ditch
+department	department
+departmental	department
+departments	department
 design cell	design cell
 desire line	desire path
 desire path	desire path
@@ -1005,6 +1014,7 @@ shibai-goya	shibai-goya
 shichiya	shichiya
 shijin soo	four gods
 shijin-soo	four gods
+shinai	shinai
 shinden	shinden
 shinsei	Shinsei
 shirasu	oshirasu
@@ -1122,6 +1132,8 @@ tax-free plot	tax-free plot
 tedai	tedai
 teikaku	teikaku
 temizuya	temizuya
+tenpo	Tenpo era
+tenpo era	Tenpo era
 tenshu	tenshu
 tensuioke	tensuioke
 tera-machi	teramachi
@@ -1291,6 +1303,7 @@ zhang	zhang
 zhengyi	Zhengyi
 zhonggulou	gulou
 zhonglou	gulou
+zhou	department
 zicheng	zicheng
 zokibayashi	zokibayashi
 zonation	zonation

@@ -2062,7 +2062,9 @@
  "jokamachi": {
   "def": "A castle town: the settlement laid out below a lord's castle, its samurai, townspeople and temples each zoned to their own wards by rank.",
   "variants": [
-   "jokamachi"
+   "jokamachi",
+   "castle town",
+   "castle towns"
   ]
  },
  "jori": {
@@ -5233,6 +5235,42 @@
   "def": "The Edo-period holding prison at Shinagawa; more than seven hundred inmates died in it between 1691 and 1765, and their bodies were buried at a temple nearby.",
   "variants": [
    "holding jail"
+  ]
+ },
+ "Chongzhen era": {
+  "def": "The Chongzhen reign of the Ming, 1628 to 1644, the last Ming emperor's; its tenth year is 1637.",
+  "variants": [
+   "Chongzhen era",
+   "Chongzhen"
+  ]
+ },
+ "department": {
+  "def": "In Ming and Qing China, a department (zhou, 州) was an administrative unit between the prefecture and the county; a departmental school was the government school at its seat.",
+  "variants": [
+   "department",
+   "departments",
+   "departmental",
+   "zhou"
+  ]
+ },
+ "shinai": {
+  "def": "A practice sword made of bamboo. With protective equipment it made sword training safe enough to spread to commoners.",
+  "variants": [
+   "shinai"
+  ]
+ },
+ "Tenpo era": {
+  "def": "A Japanese era, 1830 to 1844, when the late-Edo boom in private sword halls began.",
+  "variants": [
+   "Tenpo era",
+   "Tenpo"
+  ]
+ },
+ "anchor culture": {
+  "def": "One of the two historical societies the setting is modeled on: Edo-period Japan and late imperial China.",
+  "variants": [
+   "anchor culture",
+   "anchor cultures"
   ]
  }
 }
