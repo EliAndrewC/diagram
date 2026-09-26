@@ -212,3 +212,11 @@ engine actually follows.
 - Round 2 (2026-09-26, `spec-fidelity`, Opus): **FAITHFUL**. Both round-1 items RESOLVED; the fall bearings of
   all three maps named were re-checked against their generators, and the requirement ids the new Edge Case
   cites point where they should. Accepted.
+- Round 3 (2026-09-26, `spec-fidelity`, Opus; the first round after the post-acceptance amendment 36dc70e2,
+  read as a verify round on the diff): **FAITHFUL**. The amendment touches only Success Criteria: each SC now
+  names the FRs it measures, SC-003 adds "a declared wind is used as declared" (FR-002, already required),
+  SC-006 measures FR-007 and SC-007 measures FR-009 with the same dated-log exception that User Story 4
+  scenario 2 carried at acceptance. No FR, story, edge case or decision changed; each SC-to-FR mapping was
+  checked against the FR text and none measures anything the request did not ask for. SC-007 measures the
+  retire-the-old-wording half of FR-009; the corrected arcs half stays carried by FR-009 itself and User
+  Story 4 scenario 1, unchanged. Accepted.
