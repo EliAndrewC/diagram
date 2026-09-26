@@ -193,7 +193,12 @@ class FarmsteadFlushMixin:
                 # effect, and Indexed IS a list subclass, so the two were never really in conflict.
                 self.placed: list[Any] = Indexed(p for p in self.placed if p != fp)  # drop the un-appurtenanced farmhouse (rare); Indexed for the same reason as the lift above
                 continue
+            # the parts turn about the house center with its rake, as `_rake_parts` does for a bundle; this
+            # legacy path fit-tested them square, so a part may stand up to ~3 px off the ground it cleared
             yard_spot, garden_spot = spot
+            parts = {"yard": yard_spot, "gardens": [garden_spot]}
+            self._rake_parts(parts, rec["x"], rec["y"])
+            yard_spot, garden_spot = parts["yard"], parts["garden"]
             self._attach_garden(rec["x"], rec["y"], [garden_spot], rec["rot"])  # legacy farms keep ONE bed (multi-bed split is nucleated)
             self._attach_yard(rec["x"], rec["y"], yard_spot, rec["rot"])
             survivors.append(rec)

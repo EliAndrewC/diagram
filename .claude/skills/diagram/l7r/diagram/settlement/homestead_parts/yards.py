@@ -156,10 +156,10 @@ class ThreshingYardsMixin:
         THE YARD TAKES ITS HOUSE'S RAKE (`rot`, GM 2026-09-26: the yards sat square to the map while the
         houses were turned up to 5 degrees, *"I think that they would always be in [line] with the
         farmhouses because that's just how they would be naturally laid out"*). The maeniwa is the ground
-        before the house's front, so its edges run with the front wall. It turns about its OWN center, not
-        the house's: the reserved rect stays where the placer cleared it and a corner moves at most
-        half-width x sin(5 deg) - the same order as the house's own rake allowance (`TILT_ALLOWANCE_PX`) -
-        where a turn about the house center would carry the whole yard up to ~4 px sideways."""
+        before the house's front, so its edges run with the front wall. The homestead turns as ONE piece:
+        `_rake_parts` has already carried the yard's center round the house's center, and the placer
+        cleared the ground there, so this turns the yard in place about that center. Turning it about its
+        own center alone, as first shipped, slid it up to 3 ft along the front wall."""
         ox, oy, yw, yh = spot
         flat = self._quad(ox, oy, yw, yh, 0.10, 41.0)
         poly = turn_about(flat, ox, oy, rot)

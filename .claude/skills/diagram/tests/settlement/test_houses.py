@@ -1,6 +1,7 @@
 """Split from test_settlement.py by feature 025 - see tests/settlement/CLAUDE.md for the index."""
 
 import json
+import math
 import random
 
 import pytest
@@ -152,6 +153,23 @@ def test_bundle_geom_nucleated_records_a_gardens_list_spanning_the_bbox():
     bx, by, bw, bh = geom["bbox"]
     for gx, _gy, gw, _gh in geom["gardens"]:  # every bed lies inside the bundle bbox
         assert bx - bw / 2 - 1 <= gx - gw / 2 and gx + gw / 2 <= bx + bw / 2 + 1
+
+
+def test_bundle_parts_turn_about_the_house_center_with_its_rake():
+    # GM 2026-09-26: a yard turned only about its own center slid up to 3 ft along the house front. The yard
+    # stays centered on the house's own axis at the gap it was laid at - in the HOUSE's frame, not the map's.
+    s = _nuc_village()
+    x, y = _pos_where(lambda x, y: abs(s._house_rot(x, y)) > 3.0)
+    geom = s._bundle_geom(x, y, 46, 28, "E", shed=True)
+    th = math.radians(s._house_rot(x, y))
+    for part, sign in ((geom["yard"], 1.0), (geom["shed"], -1.0)):
+        dx, dy = part[0] - x, part[1] - y
+        along, across = dx * math.cos(th) + dy * math.sin(th), -dx * math.sin(th) + dy * math.cos(th)
+        assert abs(along) < 1e-6 and across * sign > 0, "the part sits on the house's own axis, on its side of the house"
+    gx, gy = geom["garden"][0] - x, geom["garden"][1] - y
+    assert abs(-gx * math.sin(th) + gy * math.cos(th)) < 1e-6, "an east-wall bed stays level with the house in its frame"
+    bx, by, bw, bh = geom["bbox"]
+    assert bx - bw / 2 <= geom["yard"][0] - geom["yard"][2] / 2 and geom["yard"][1] + geom["yard"][3] / 2 <= by + bh / 2 + 1e-6
 
 
 def test_nucleated_bundle_returns_none_when_boxed_in():
