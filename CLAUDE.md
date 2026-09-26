@@ -209,6 +209,7 @@ doctrine for writing a guard: `docs/guards.md`.
 | `gate-hooks.sh` | no `-k` subset as the only run before the gate | `GATE_OK` |
 | `pair-hooks.sh` + `_review_owed.py` | the gate and the settlement-review run together when a pool map's layout moved; one map per agent | `PAIR_OK` |
 | `escalation-hooks.sh` | a review dispatch arms, an `escalation-check` dispatch disarms, before the turn ends | `ESCALATION_OK` |
+| `wakeup-hooks.sh` | a `ScheduleWakeup` outside a live `/loop` is refused (background work wakes a session by itself; a reminder the GM asks for is `CronCreate`); a turn cannot end with a stale wakeup pending, and the block names the `CronDelete` | none - cancel the wakeup |
 | `review-round-hooks.sh` | a later `spec-fidelity` round is handed the diff and routed to `spec-fidelity-verify`; refused first when the feature still carries the OLD value of something the change moved (`make stale-terms`) | `REVIEW_ROUND_OK`, `STALE_TERMS_OK` |
 | `agent-model-hooks.sh` | an ad-hoc agent dispatch (no file under `.claude/agents/`) that names no `model` is refused, with the rule for choosing one | none - name the model |
 | `check-bundle-hooks.sh` | a `quote-check`, `record-format`, `source-applicability`, `source-reader` or `entry-drift` dispatch that points into the repository instead of at a bundle is refused, with the `make check-bundle` command for the question it names | `CHECK_BUNDLE_OK` |

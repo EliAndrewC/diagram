@@ -1,0 +1,58 @@
+{
+ "feature": "263-stale-wakeup-guard",
+ "plan_sha256": "ebd2a089cca8023c49e1be8d56d764692475dda668bbb8a2acea6cfa030fa689",
+ "reviewed": "2026-09-26",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "A pending cron is a wakeup when its prompt equals a ScheduleWakeup call's prompt in the session transcript.",
+   "class": "within",
+   "why": "The spec's Wakeup entity and FR-002/FR-003 as written; research R1 measured that the Stop payload cannot tell the two tools apart. It carries the approved proposal's 'never block reminders the GM asks for'. Unchanged since the last review."
+  },
+  {
+   "id": "D2",
+   "summary": "A loop is live while the transcript's latest loop event is an invocation rather than ScheduleWakeup(stop: true); only a /loop-prompt or sentinel wakeup is exempt, and only while live.",
+   "class": "within",
+   "why": "The spec's Live loop entity and FR-001/FR-002, measured in R3. Unchanged since the last review."
+  },
+  {
+   "id": "D3",
+   "summary": "The Stop layer exits 2 naming CronDelete <id> at every turn end a stale wakeup is pending; no once-only state.",
+   "class": "within",
+   "why": "FR-002 and FR-004 as written. Unchanged."
+  },
+  {
+   "id": "D4-pretool",
+   "summary": "The ScheduleWakeup layer fails CLOSED: an unreadable payload, a missing or unparsable transcript, a crash of the decision (empty verdict, mktemp failure) or an unforeseen verdict is a refusal; stop:true still passes when the payload is readable.",
+   "class": "within",
+   "why": "This is FR-001 read literally ('MUST refuse the call unless it is a live loop's own wakeup ... or stop: true'), and the GM's 'literally impossible for them to do the wrong thing'. It resolves the previous round's NOT LEGITIMATE finding. Measured this round: suite 24/24 green; a missing transcript, a JSON-list line, and a garbage payload each exit 2 on pretool; stop:true with a missing transcript exits 0. The stop:true pass is FR-001's own exemption. An unreadable payload with stop:true is refused because stop:true cannot be read, so the exemption cannot be shown."
+  },
+  {
+   "id": "D4-pretool-other-tool",
+   "summary": "A non-ScheduleWakeup tool_name is passed before the transcript is read.",
+   "class": "within",
+   "why": "The GM approved a guard on ScheduleWakeup only. The PreToolUse matcher already limits the hook to that tool, so this branch only keeps failing closed from reaching tools the request never named. It adds no behavior beyond what was asked."
+  },
+  {
+   "id": "D4-stop",
+   "summary": "The Stop layer exits 0 when the payload or transcript cannot be read, or when the check itself fails.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Adjudicated case by case. (a) Unreadable transcript: a wakeup cannot be told from a CronCreate reminder (R1), and the proposal the GM approved names the GM's reminders as what the second layer must never block, so the exception follows from the GM's own words (FR-003). (b) Unreadable payload: there are no readable crons, so there is no CronDelete id to name, and a block could not be satisfied. (c) A crash with readable inputs: the check has not shown any cron to be a wakeup, and blocking would risk the GM's reminder on the same FR-003 ground. The purpose test also holds now that layer 1 fails closed: on the same unreadable transcript the call that creates a wakeup is refused, so the incident cannot pass through both layers the way it could when D4-pretool failed open. Measured: a crashing transcript line with a pending cron exits 0 on stop."
+  },
+  {
+   "id": "D5",
+   "summary": "The payload reaches the embedded Python through a temp file.",
+   "class": "within",
+   "why": "An implementation mechanism with no effect on scope. mktemp failure now resolves to a pretool refusal (empty verdict), consistent with D4-pretool."
+  },
+  {
+   "id": "D6",
+   "summary": "Wired as a PreToolUse matcher on ScheduleWakeup and a Stop entry, with rows in CLAUDE.md and docs/guards.md.",
+   "class": "within",
+   "why": "FR-007 and the two approved layers; both rows present."
+  }
+ ],
+ "verdict": "CLEAR"
+}

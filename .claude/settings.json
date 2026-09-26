@@ -212,6 +212,15 @@
         ]
       },
       {
+        "matcher": "ScheduleWakeup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/diagram/scripts/wakeup-hooks.sh pretool  # GUARD_EDIT_OK: feature 263 - a NEW guard (the GM 2026-09-26: 'It needs to be literally impossible for them to do the wrong thing'): a ScheduleWakeup outside a live /loop is refused"
+          }
+        ]
+      },
+      {
         "matcher": "Agent",
         "hooks": [
           {
@@ -277,6 +286,15 @@
           {
             "type": "command",
             "command": "/diagram/scripts/escalation-hooks.sh stop"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/diagram/scripts/wakeup-hooks.sh stop  # GUARD_EDIT_OK: feature 263 - a NEW guard: a turn cannot end with a stale ScheduleWakeup pending; it names the CronDelete",
+            "timeout": 10
           }
         ]
       }
