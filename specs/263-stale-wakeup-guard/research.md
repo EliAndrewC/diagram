@@ -16,7 +16,7 @@ reminder by `CronDelete`).
 
 ## R2 - The incident (2026-09-26)
 
-A fallback `ScheduleWakeup` (1500 s, observed 2026-09-26 in the session transcript) set while a prose-fix agent ran stayed pending after the agent reported and the
+A fallback `ScheduleWakeup` (1500 s, observed 2026-09-26; method: read from the session transcript) set while a prose-fix agent ran stayed pending after the agent reported and the
 work landed; `CronList` showed `43582eac - Every day at 8:51 PM (one-shot)`; the tab showed the hourglass until it was
 cancelled by hand.
 
