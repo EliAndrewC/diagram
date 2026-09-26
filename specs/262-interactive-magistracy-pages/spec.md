@@ -171,18 +171,19 @@ finding classifies them, and the kinds no research section covers - and each one
 
 ### Measurable Outcomes
 
-- **SC-001**: All five pool magistracies write a page; each page's census reports 0 unclassed elements and 0
-  unregistered kinds.
-- **SC-002**: The GM's two examples hold on the Ochiba page: the threshold stones' modal leads with "deliberate
-  deviation"; the hearing court's modal announces no liberty and lists at least one research question.
-- **SC-003**: Each hand-drawn sheet's PNG is pixel-identical before and after the feature (measured), and its pack
+- **SC-001** (FR-001, FR-006, FR-007, FR-008): All five pool magistracies write a page, the placer's two among them; each page's census reports 0 unclassed elements and 0
+  unregistered kinds, and every registered kind is drawn on at least one of them.
+- **SC-002** (FR-004, FR-005, FR-010): The GM's two examples hold on the Ochiba page: the threshold stones' modal leads with "deliberate
+  deviation"; the hearing court's modal announces no liberty and lists at least one research question; the outer and inner courts each light their own ground; and the stones'
+  modal carries Ochiba's own note on them under "On this map".
+- **SC-003** (FR-009): Each hand-drawn sheet's PNG is pixel-identical before and after the feature (measured), and its pack
   audit output is identical (measured).
-- **SC-004**: Changing one kind's write-up is one edit, and changing one element's drawing or label is one edit -
+- **SC-004** (FR-002, FR-003, FR-006): Changing one kind's write-up is one edit, and changing one element's drawing or label is one edit -
   proven by the completeness test failing on an untagged or unknown element and passing on a tagged one.
-- **SC-006**: No magistracies item in `types.json` carries a `class`, a `why` or a `label`; `programs.md` renders
+- **SC-006** (FR-003a): No magistracies item in `types.json` carries a `class`, a `why` or a `label`; `programs.md` renders
   each item's class and why from its kind, and the pack audit finds each item by its tag - with every sheet's
   audit output unchanged (SC-003).
-- **SC-005**: Every hamlet page's registry and output are unchanged (the hamlet interactive tests pass untouched
+- **SC-005** (FR-011): Every hamlet page's registry and output are unchanged (the hamlet interactive tests pass untouched
   except where they are generalized to cover both registries).
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*

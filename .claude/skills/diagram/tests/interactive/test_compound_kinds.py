@@ -18,6 +18,7 @@ import pytest
 from l7r.diagram import compound
 from l7r.diagram.interactive.classes import NOT_HIGHLIGHTED, lead_sentence
 from l7r.diagram.interactive.compound_kinds import COMPOUND_CLASSES
+from l7r.diagram.interactive.notes import read_map_notes
 from l7r.diagram.interactive.page import explanations, present_classes
 from l7r.diagram.interactive.sheet import census, flatten
 from l7r.diagram.interactive.sources import registry_keys, research_questions
@@ -122,9 +123,10 @@ def test_the_gm_s_two_examples_hold_on_the_ochiba_page() -> None:
     """SC-002: the threshold stones are the setting's and say so first; the hearing court rests on research, announces
     no liberty and lists the questions it was written from. And the two courts are two kinds, each with ground."""
     strings, tags = flatten(SHEETS["ochiba-magistracy"])
-    data = explanations(present_classes(tags), registry=COMPOUND_CLASSES)
+    notes = read_map_notes(os.path.join(MAGI, "ochiba-magistracy", "ochiba-magistracy.notes.md"))
+    data = explanations(present_classes(tags), notes, registry=COMPOUND_CLASSES)
     stones, court = data["threshold stones"], data["hearing court"]
-    assert stones["lead"].startswith("This is a deliberate deviation")
+    assert stones["lead"].startswith("This is a deliberate deviation") and stones["on_this_map"], "FR-010: the map's own note rides along"
     assert court["lead"] == "" and court["questions"]
     grounds = {t for s, t in zip(strings, tags, strict=True) if s.startswith("<rect") and 'id="precinct"' in s}
     assert grounds == {"inner court", "outer court"}
