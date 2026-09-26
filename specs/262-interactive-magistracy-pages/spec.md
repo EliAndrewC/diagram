@@ -127,12 +127,26 @@ feature's closing report to the GM, and each one's modal says so.
 - **FR-003**: What a KIND is - its name, what it is, why it stands where it does, its classification (accurate /
   deviation / convention / guess), its note, its sources and the research section it was written from - MUST live
   in one registry of Mode A kinds, in the same docstring form as the hamlet classes, shared by every magistracy.
+- **FR-003a**: The magistracies tier's `required` entries in `buildings/types.json` MUST be folded into the
+  registry, as the design the GM accepted says (*"`buildings/types.json`'s required features folded in rather than
+  kept beside it"*): each item names the Mode A kind it is, its classification and its reason are stated ONCE, in
+  that kind's registry entry, and its label-to-kind binding is the sheet's own tag. The pack audit's program and
+  size-band checks, `buildings/programs.md` and anything else that read the item's class, why or label pattern
+  derive them from the registry and the tags; no magistracy item keeps a class, a why or a label pattern in
+  `types.json`. What stays there is what only the audit needs: the item's id, its size band, its forms, whether it
+  is optional. (The country-shrine tier keeps its own entries until its page is built - out of scope.)
 - **FR-004**: The outer court and the inner court (and any further court a sheet draws, such as Ubame's border
   court) MUST each be highlightable as a region of its own ground, with its band label lighting with it.
-- **FR-005**: Every write-up MUST be written FROM the existing research record and name its section in `Entry:`;
-  no new research finding is made in this feature. A kind the record does not cover is labeled `guess`, its note
-  saying the record has no entry on it. A thing specific to the setting (the threshold stones, the salt wards, the
-  Fox border) is labeled `deviation` and written from the GM's canon (`l7r.md`) and the map's design notes.
+- **FR-005**: Every write-up MUST be written FROM the existing record and name its research section in `Entry:`
+  where one exists; no new research finding is made in this feature, and no existing finding is re-decided. A kind
+  an existing finding already classifies - a research section, or the `types.json` item folded into it (FR-003a) -
+  keeps that classification, carried with its reason into the kind's note (a size the item called a guess or a
+  convention becomes the kind's stated caveat); where no research section covers it, the kind names no question,
+  so the page's missing references show the gap. `guess` because the record is silent applies only to a kind no
+  existing finding classifies, and its note says the record has no entry on it. A thing specific to the setting
+  (the threshold stones, the salt wards, the Fox border) is labeled `deviation` and written from the GM's canon
+  (`l7r.md`) and the map's design notes. Which kinds fall in each case is MEASURED against the record before the
+  writing starts (`coverage.md`), not assumed.
 - **FR-006**: A test MUST fail, naming the element, when any drawn element of a pool magistracy carries no kind and
   is not ruled out; and naming the kind, when a kind is not in the registry.
 - **FR-007**: The registry MUST be closed over the maps: a Mode A kind no pool magistracy draws fails a test.
@@ -163,6 +177,9 @@ feature's closing report to the GM, and each one's modal says so.
   audit output is identical (measured).
 - **SC-004**: Changing one kind's write-up is one edit, and changing one element's drawing or label is one edit -
   proven by the completeness test failing on an untagged or unknown element and passing on a tagged one.
+- **SC-006**: No magistracies item in `types.json` carries a `class`, a `why` or a `label`; `programs.md` renders
+  each item's class and why from its kind, and the pack audit finds each item by its tag - with every sheet's
+  audit output unchanged (SC-003).
 - **SC-005**: Every hamlet page's registry and output are unchanged (the hamlet interactive tests pass untouched
   except where they are generalized to cover both registries).
 
@@ -172,6 +189,7 @@ feature's closing report to the GM, and each one's modal says so.
 |---|---|---|---|
 | Each Mode A kind's classification | as its research section says (copied, not re-decided) | FR-005 - no new findings | each kind's docstring `Label:` / `Entry:` |
 | A kind the record does not cover is a `guess` | guess | the GM: tie into existing research only; the gap is shown, not filled | each such kind's `Note:`; listed in the closing report |
+| A `types.json` item's class and why move into its kind | as the item already said (carried, not re-decided) | FR-003a: the classification is stated once | each kind's `Note:` / `Caveat:`; `coverage.md` |
 | Setting-specific features are `deviation` | deviation | canon (`l7r.md`, the map's notes), which needs no citation | each such kind's `Note:` |
 | A drawn label lights with the feature it names | map drawing convention | a label is the feature's ink on a labeled plan; hamlet pages do the same for the placard | `interactive/compound/` module docstring |
 | Title and scale bar are not highlighted | map drawing convention (ruling) | they are the sheet's apparatus, not a feature of the compound | the not-highlighted rulings record |
