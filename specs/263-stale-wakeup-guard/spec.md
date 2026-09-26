@@ -125,3 +125,4 @@ the transcript and no live loop; it blocks, naming the id.
   escape removed from both layers - no out-of-loop case needs one, and on the Stop layer it would let the incident
   itself through. (3) the `/loop` exemption scoped to a LIVE loop's own wakeup and measured (`research.md` R3). (4) the
   once-per-id valve removed: the Stop layer blocks at every turn end, since one `CronDelete` always satisfies it.
+- Round 2 (2026-09-26, `spec-fidelity-verify`, Opus): FAITHFUL - all four round-1 items resolved.
