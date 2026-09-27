@@ -996,6 +996,7 @@ muenzuka	muenzuka
 mugi	mugi
 mukaibansho	mukaibansho
 mukakusha	mukakusha
+mulberry plot-fish ponds	dike-pond
 mulberry-dike fishpond	dike-pond
 murabarai	murabarai
 murataka	murataka
@@ -1306,6 +1307,7 @@ sheaths	sheath
 sheer boom	boom
 shell keep	shell keep
 shell keeps	shell keep
+shen kuo	Shen Kuo
 shi	shi
 shibai-goya	shibai-goya
 shichiya	shichiya

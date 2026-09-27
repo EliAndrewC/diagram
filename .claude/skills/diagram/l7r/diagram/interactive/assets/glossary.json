@@ -1207,7 +1207,8 @@
    "dike-pond",
    "dike-ponds",
    "mulberry-dike fishpond",
-   "sangji yutang"
+   "sangji yutang",
+   "mulberry plot-fish ponds"
   ]
  },
  "discharge": {
@@ -6629,6 +6630,12 @@
   "variants": [
    "overlay",
    "overlays"
+  ]
+ },
+ "Shen Kuo": {
+  "def": "A Song dynasty scholar-official who wrote the record of the Wanchun polder, whose restoration was taken up in 1061, that the research quotes on how the polder's dike was built and planted.",
+  "variants": [
+   "Shen Kuo"
   ]
  }
 }
