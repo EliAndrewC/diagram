@@ -28,6 +28,7 @@ from __future__ import annotations
 import argparse
 import ast
 import datetime
+import json
 import pathlib
 import re
 import shutil
@@ -277,6 +278,23 @@ def print_notes(root: pathlib.Path, page: str, section: str, keys: frozenset[str
     return 0
 
 
+def quoted_passages(root: pathlib.Path, key: str) -> list[str]:
+    """Every passage the record quotes from `key` - the ORIGINAL where a quote is translated - across every notes file."""
+    import importlib.util  # noqa: PLC0415
+
+    spec = importlib.util.spec_from_file_location("_quote_verbatim", HERE / "_quote_verbatim.py")
+    assert spec and spec.loader
+    qv = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(qv)
+    li = re.compile(rf'<li data-note="{re.escape(key)}(?:-\d+)?">(.*?)</li>', re.S)
+    out: list[str] = []
+    for notes in sorted((root / ".claude/skills/diagram/research").rglob("*.notes.html")):
+        for m in li.finditer(notes.read_text(encoding="utf-8")):
+            out += [p["original"] or p["quote"] for p in qv.passages(m.group(1))]
+    # a link's href and a short gloss phrase are quoted in the note's markup, not from the source
+    return [q for q in dict.fromkeys(out) if not q.startswith(("http://", "https://")) and len(q) >= 20]
+
+
 def key_bundle(root: pathlib.Path, key: str, out: pathlib.Path) -> int:
     entry = registry_entry(root, key)
     if entry is None:
@@ -286,8 +304,12 @@ def key_bundle(root: pathlib.Path, key: str, out: pathlib.Path) -> int:
     rows = [(copy(entry, out, f"sources/{key}.html"), str(entry.relative_to(root)), f"the registry entry of `{key}`: its two write-ups")]
     url = url_of(entry.read_text(encoding="utf-8"))
     if url:
-        code, text = run_script("_source_pages.py", [str(out / "pages"), url], root)
-        rows.append(("pages/", url, "the page's full visible text, saved - grep it; MANIFEST.txt says whether it was fetched"))
+        # D19 (R10): a long page is saved as its front and a window around each passage the record quotes from this
+        # key - one book-length source cost 0.73 million tokens in one check when its whole text was copied
+        qfile = out / "quotes.json"
+        qfile.write_text(json.dumps(quoted_passages(root, key), ensure_ascii=False), encoding="utf-8")
+        code, text = run_script("_source_pages.py", [str(out / "pages"), url, "--quotes", str(qfile)], root)
+        rows.append(("pages/", url, "the page's visible text, saved - a long page as an EXCERPT (its front and a window around each passage the record quotes); grep it; MANIFEST.txt says which"))
         if code:
             print(text, file=sys.stderr)
     (out / MANIFEST).write_text(manifest(out, f"source {key}", rows), encoding="utf-8")

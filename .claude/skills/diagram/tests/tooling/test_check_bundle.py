@@ -10,6 +10,7 @@ copy's origin. The quote-verbatim half fetches, so the real-record test skips it
 from __future__ import annotations
 
 import importlib.util
+import json
 import pathlib
 
 import pytest
@@ -89,7 +90,9 @@ def test_a_source_bundle_holds_the_entry(tmp_path: pathlib.Path, monkeypatch: py
     out = tmp_path / "key"
     assert cb.main(["--key", "edo-enwiki", "--out", str(out), "--root", str(REPO)]) == 0
     assert (out / "sources" / "edo-enwiki.html").is_file()
-    assert fetched == [["_source_pages.py", str(out / "pages"), "https://en.wikipedia.org/wiki/Edo"]]
+    # D19: the bundle hands source-pages the passages the record quotes from the key, so a long page is excerpted
+    assert fetched == [["_source_pages.py", str(out / "pages"), "https://en.wikipedia.org/wiki/Edo", "--quotes", str(out / "quotes.json")]]
+    assert isinstance(json.loads((out / "quotes.json").read_text(encoding="utf-8")), list)
     assert cb.main(["--key", "no-such-key", "--out", str(tmp_path / "none"), "--root", str(REPO)]) == 2
 
 

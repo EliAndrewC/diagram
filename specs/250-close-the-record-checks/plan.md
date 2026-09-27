@@ -462,6 +462,30 @@ when researching the next page."*
    over the cap - the nearest in size of the pages left. Compared in R10 with R6 to R9, per thing checked, saying
    which changes it exercised.
 
+### D19 - The tenth round: a check reads the part of a long source it needs, then one more measured page (GM 2026-09-27)
+
+The GM, on R10: *"Mark those two things as future work so we don't forget about it, but for now I want to focus on
+getting the research process right. Go ahead and implement the 1 fix and then do 1 more round instead of proceeding
+with the rest. If our guess is correct then after the 1 recommendation you've made will be the final adjustment ...
+But if we do turn up anything else then we can keep iterating."*
+
+1. **A long source is read in part** (R10's recommendation 1). `scripts/_source_pages.py` saves a page over 20,000
+   characters as PARTS of at most 20,000 (`parts`), so a grep hit leads to one bounded read - for `source-reader`'s
+   saved pages and every other caller; and, given the passages the record quotes from a source (`--quotes`), saves a
+   page over 30,000 characters as an EXCERPT (`excerpt`): its first 6,000 characters (the front matter a source is
+   judged by) and 1,500 either side of each quoted passage found in it, with a header saying how much of the page it
+   is and how many of the passages were found, and a marker at every cut. `make check-bundle KEY=` hands it the key's
+   quoted passages (`_check_bundle.quoted_passages`: every note of the key across the record, the ORIGIN of a
+   translated quote, a link's href and a gloss under 20 characters left out). Measured on R10's book
+   (`cdlib-local-elites`, a 1,372,518-character page): its bundle is now 22,857 characters, with all five passages the
+   record quotes from it found (observed 2026-09-27; method: `make check-bundle KEY=cdlib-local-elites`). Tested
+   (`tests/tooling/test_source_pages.py`, `test_check_bundle.py`).
+2. **The two GM decisions R9 raised are future work** - `future-work/farming-communities.md`, the mulberry density
+   and the modern dike forms, each with its evidence and a sketch, per the GM's instruction.
+3. **The measured page is `water`**: two FR-002 items, as the last two pages had, and eight FR-006 items to confirm
+   (as `fields` had four), nothing over the cap. Compared in R11 with R6 to R10, per thing checked, saying whether the
+   excerpt acted (whether any source was long) and what else, if anything, the round turns up.
+
 ## Phases
 
 0. Baseline and the meter (T01, T02).

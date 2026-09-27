@@ -87,3 +87,27 @@ def test_a_second_save_adds_to_the_directory_and_never_overwrites(tmp_path: path
     assert [r["file"] for r in rows] == ["01-ok.example.txt", "-", "04-ok.example.txt"], "a saved page is kept; a failed one is retried past every old number"
     assert (out / "01-ok.example.txt").read_text(encoding="utf-8") == first
     assert "https://ok.example/c | 04-ok.example.txt | FETCHED" in (out / "MANIFEST.txt").read_text(encoding="utf-8")
+
+
+def test_a_long_page_is_saved_in_parts_and_a_quoted_one_as_an_excerpt(tmp_path: pathlib.Path) -> None:
+    """D19 (R10): a book-length saved page cost one check 200,026 characters of reading."""
+    text = "".join(f"Sentence {i} of the book says little.\n" for i in range(3000))
+    pieces = sp.parts(text, 20_000)
+    assert len(pieces) > 1 and all(len(p) <= 20_000 for p in pieces) and "".join(pieces) == text
+    assert sp.parts("x" * 45, 20) == ["x" * 20, "x" * 20, "x" * 5], "a single long line is cut where it must be"
+    assert sp.excerpt("short page", ["q"]) == "short page", "a page under the limit is kept whole"
+    quoted = "Sentence 2500 of the book says little."
+    ex = sp.excerpt(text, [quoted, "a passage the page does not carry at all"], head=500, window=200, limit=10_000)
+    assert ex.startswith("[EXCERPT of a") and "1 of 2 quoted passage(s) found" in ex
+    assert quoted in " ".join(ex.split()) and "Sentence 0 of the book" in ex and "characters not copied" in ex
+    assert len(ex) < 2_000
+
+    class _Pages:
+        @staticmethod
+        def get(_url: str) -> dict:
+            return {"state": "FETCHED", "text": text}
+
+    rows = sp.save(["https://book.example/a"], tmp_path / "o", _Pages())
+    assert "parts" in rows[0]["file"] and (tmp_path / "o" / "01-book.example.p1.txt").is_file()
+    rows = sp.save(["https://book.example/b"], tmp_path / "q", _Pages(), [quoted])
+    assert "saved as an excerpt" in rows[0]["why"]

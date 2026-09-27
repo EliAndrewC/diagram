@@ -7,6 +7,35 @@ tax-free plots, not a different kind of place, and its defects are the same defe
 This is where hamlet work goes - the paddy fabric, the lane web, homesteads and their groves, wells
 and byres, woodland and windbreaks, the notice board, and the cohort seeds that surface all of it.
 
+## OPEN 2026-09-27, A GM DECISION: the dike-pond mulberry is drawn 10 to 20 times sparser than the one figure found
+
+Found by feature 250's `archetypes` write session (research R9); the GM, 2026-09-27: *"Mark those two things as
+future work so we don't forget about it, but for now I want to focus on getting the research process right."*
+
+**THE EVIDENCE**: the map draws one mulberry bush per 10 to 20 square feet on a dike - a GUESS the GM ruled on. The
+one figure the record now carries, `pwsannong-sangji-yutang` (a modern Chinese agricultural encyclopedia on the
+Pearl River delta), gives 8,000 to 10,000 root-cut bushes a mu, about one per square foot. It is modern, undated and
+covers the whole silk district rather than the dikes alone; the record states the gap at
+`research/archetypes/140-the-64-water-to-dike-ratio-and-coppiced-mulberry.html`.
+
+**THE SKETCH**: put the two figures to the GM with their limits - keep the drawn density as a legible deviation
+(and say so in the MulberryDike modal's `Note:`), or draw nearer the source's density - and, whichever, record the
+class (accurate / deviation) at the modal and the rule.
+
+## OPEN 2026-09-27, A GM DECISION: the fruit, cane and vegetable dikes are modern forms drawn as "accurate"
+
+Found by the same round's check of `archetypes` 170 (research R9); the same ruling of the GM defers it.
+
+**THE EVIDENCE**: the county gazetteer the record now cites dates the fruit, sugarcane and vegetable dikes to the
+Pearl River delta's urbanization and industrialization - modern forms - while the dike-pond hamlet draws them as
+options (`SugarcaneDike`, `FruitDike`, `VegetableGround`, `BananaDike` in `interactive/classes/dikepond.py`) labeled
+accurate. The record says this plainly at
+`research/archetypes/173-what-else-was-planted-on-a-pond-dike-besides-mulberry.html`.
+
+**THE SKETCH**: the GM chooses - drop them from the premodern hamlet, keep them as a labeled deviation (the modals'
+label moves from accurate), or keep them for a later-era setting - and the modals, the knob that draws them and the
+record move together.
+
 ## OPEN 2026-08-24, MEASURED BY REVIEW: the web stops exactly one clearance short of the lane it should join
 
 Found by `settlement-review` on Inashiro after feature 128. **Pre-existing in kind, measurably worse
