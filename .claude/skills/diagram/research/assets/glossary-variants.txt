@@ -833,6 +833,8 @@ konya	kon-ya
 koraimon	koraimon
 kosatsu	kosatsuba
 kosatsuba	kosatsuba
+koshin tower	koshin tower
+koshin towers	koshin tower
 kotai-yoriai	kotaiyoriai
 kotaiyoriai	kotaiyoriai
 kuchiireya	hitoyado
@@ -1497,6 +1499,8 @@ trunk streets	trunk street
 tsubo	tsubo
 tsuijibei	tsuijibei
 tsuijimatsu	tsuijimatsu
+tsujido	tsujido
+tsujidos	tsujido
 tsuke-tsubo	tsuke-tsubo
 tsunaba	tsunaba
 tudi miao	tudi miao
