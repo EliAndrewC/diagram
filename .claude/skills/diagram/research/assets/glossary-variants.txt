@@ -579,6 +579,7 @@ goemon-buro	goemon-buro
 goemonburo	goemon-buro
 gogura	gogura
 gokaido	Five Highways
+gokenin	gokenin
 gokumon	gokumon
 gongxiefang	gongxiefang
 gorinto	five-ring pagoda
@@ -704,6 +705,8 @@ houlongshan	houlongshan
 hour of xu	hour of xu
 house pad	house pad
 house pads	house pad
+houseman	gokenin
+housemen	gokenin
 houzhaofang	houzhaofang
 hsien	hsien
 hucheng he	hucheng he
@@ -795,9 +798,11 @@ jingūji	jingūji
 jinja	jinja
 jinya	jin'ya
 jishinban	jishinban
+jito	jito
 jitter	jitter
 jittered	jitter
 jittering	jitter
+jitō	jito
 jizo	jizo
 jo	jo
 jobikeshi	jobikeshi
@@ -855,6 +860,7 @@ kasoba	kasoba
 kasō-dera	kaso-dera
 kata	kata
 katairo	eiro
+katemeshi	katemeshi
 kawara	kawara
 kawaramono	kawaramono
 kawata	kawata
