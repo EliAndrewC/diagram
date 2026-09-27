@@ -5660,5 +5660,26 @@
   "variants": [
    "formwork"
   ]
+ },
+ "commutation": {
+  "def": "Paying a tax owed in one thing - rice, in this record - in another, usually coin, at a reckoned rate.",
+  "variants": [
+   "commutation",
+   "commuted",
+   "commute"
+  ]
+ },
+ "kokudai-no": {
+  "def": "Paying the land tax, or a share of it, in money reckoned at the price of the rice owed; one Edo source puts it at three to four tenths of the whole tax.",
+  "variants": [
+   "kokudai-no",
+   "kokudaino"
+  ]
+ },
+ "natto": {
+  "def": "A Japanese food of soybeans fermented until sticky.",
+  "variants": [
+   "natto"
+  ]
  }
 }
