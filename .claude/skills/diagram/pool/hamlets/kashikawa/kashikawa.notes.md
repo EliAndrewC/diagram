@@ -107,6 +107,11 @@ district the track actually leads to, and Kashikawa is 樫川, "oak river" - the
 bearing is measured and so cannot move; the name can, and a broad reach downstream is what Hirose
 names.*
 
+
+### Features
+
+- **burial ground**: Kashikawa keeps its own ground, a glade of graves at the hamlet's edge beyond its last houses, below them toward the low side; its field grave among the paddy is a single family's, a separate thing.
+
 ## 2026-08-17 - re-packed by feature 121 (the placer tests the rake it draws)
 
 19 of 20 houses re-seated (median 362 ft, max 866 - a full re-seed, not a nudge); the SW outlier at

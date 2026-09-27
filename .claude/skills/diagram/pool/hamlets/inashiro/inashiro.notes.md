@@ -4,7 +4,10 @@
 
 **Subject**: a small outlying rice-farming community of ~15 households / ~75 inhabitants, belonging
 to a village district whose headman lives in the main village. Like every hamlet it has no headman
-of its own, no shrine, no tax-free plots and no burial ground.
+of its own, no shrine, no tax-free plots and no cremation ground. It keeps a burial ground of its own
+(its rolled `hamlet_burial` is own_ground, feature 273): a small common ground holding the urns brought
+home from the main village's cremation ground, in a glade of the windbreak's east arm, beside the track
+north to the main village.
 
 **Kanji triangle**: 稲 *ina* "rice plant" + 代 *shiro* "paddy" (as in 苗代 *nawashiro*, a seedbed).
 稲代 Inashiro, "the rice-field" - the plainest possible name for the plainest possible hamlet, which
@@ -27,6 +30,11 @@ is the point: this map exists to be ordinary.
 *Mizuho-no-sato (瑞穂の里, "village of ripe rice ears") is INVENTED for this map - drawn from gm-assistant's
 `place-names/pool.jsonl`, which carries its kanji and meaning, and not ruled on by the GM. The
 DIRECTION is not invented: it is the bearing of this map's own connector track where it leaves the cluster.*
+
+
+### Features
+
+- **burial ground**: Inashiro keeps its own ground: a glade of graves in the windbreak's east arm, north-east of the houses and beside the track that runs north to the main village, the way the urns come home from its cremation ground. The land falls south, but the ground below the houses is paddy, so it stands on the nearest clear ground instead.
 
 ## Why it exists
 

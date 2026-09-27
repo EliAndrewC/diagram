@@ -31,6 +31,11 @@ mistake it is here to make visible.
 `place-names/pool.jsonl`, which carries its kanji and meaning, and not ruled on by the GM. The
 DIRECTION is not invented: it is the bearing of this map's own connector track where it leaves the cluster.*
 
+
+### Features
+
+- **burial ground**: Kuwabata keeps its own ground, west of the hamlet beyond its last houses, holding the urns brought home from the main village's cremation ground.
+
 ## The declaration
 
 `HamletSpec(name="Kuwabata", seed=21, households=16, down_deg=90, field_archetype="mulberry_dike_fishpond", pond_layout="mosaic")`
@@ -189,8 +194,9 @@ household works its leaf, cocoons and nets on that ground. `meta.work_yards: fal
 
 ## What makes it a hamlet, not a village
 
-No headman of its own, no shrine, no tax-free plots, no graveyard - its dead go to the village
-district's ground. Drawn at 1 ft/px.
+No headman of its own, no shrine, no tax-free plots, no cremation ground - its dead are burned at the
+main village's. It keeps a burial ground of its own (its rolled `hamlet_burial` is own_ground, feature
+273), beyond its houses at the hamlet's edge, holding the urns brought home. Drawn at 1 ft/px.
 
 ## Known open
 

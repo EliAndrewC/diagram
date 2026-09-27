@@ -83,6 +83,11 @@ the low side where the gate requires it.
 `place-names/pool.jsonl`, which carries its kanji and meaning, and not ruled on by the GM. The
 DIRECTION is not invented: it is the bearing of this map's own connector track where it leaves the cluster.*
 
+
+### Features
+
+- **burial ground**: Sawada keeps none of its own: its dead lie in the main village's ground, by the shrine that is the setting's parish temple.
+
 ## 2026-08-17 - the fan-toe needle fix, and the tint threshold it collided with
 
 The fan-toe SUNBURST ruling (full research in `research/fields.html`, "A basin never tapers to a

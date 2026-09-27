@@ -22,7 +22,7 @@ import math
 from collections.abc import Sequence
 from typing import TYPE_CHECKING
 
-from .._geom import PointGrid, boxed_grid, boxed_ring_hit, boxed_rings, boxed_segs, seg_dist
+from .._geom import PointGrid, boxed_grid, boxed_ring_hit, boxed_rings, boxed_segs, point_in_poly, seg_dist
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -46,6 +46,28 @@ def rect_samples(cx: float, cy: float, w: float, h: float) -> list[Pt]:
     return [(cx + fx * w / 2, cy + fy * h / 2) for fx in (-1, 0, 1) for fy in (-1, 0, 1)]
 
 
+def convex_hull(pts: Sequence[Pt]) -> list[Pt]:
+    """The convex hull of `pts`, counter-clockwise (Andrew's monotone chain); fewer than three points come back as given."""
+    q = sorted(set(pts))
+    if len(q) < 3:
+        return q
+
+    def cross(o: Pt, a: Pt, b: Pt) -> float:
+        return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+
+    lo: list[Pt] = []
+    for p in q:
+        while len(lo) >= 2 and cross(lo[-2], lo[-1], p) <= 0:
+            lo.pop()
+        lo.append(p)
+    hi: list[Pt] = []
+    for p in reversed(q):
+        while len(hi) >= 2 and cross(hi[-2], hi[-1], p) <= 0:
+            hi.pop()
+        hi.append(p)
+    return lo[:-1] + hi[:-1]
+
+
 class EdgeGround:
     """What a ground at the edge must stand clear of, measured in px.
 
@@ -59,6 +81,9 @@ class EdgeGround:
         for h in s.M.get("houses", []):
             b = (h.get("geom") or {}).get("bbox")
             self.homes.append((float(b[0]), float(b[1]), float(b[2]), float(b[3])) if b else (float(h["x"]), float(h["y"]), float(h["w"]), float(h["h"])))
+        # BEYOND THE LAST HOUSE (feature 273, settlement-review on Kuwabata): the houses' hull, which no part of the
+        # ground may enter - 60 ft clear of every house is not enough in a dispersed hamlet, where an inner gap passes it
+        self.hull = convex_hull([(x + fx * w / 2, y + fy * h / 2) for x, y, w, h in self.homes for fx in (-1, 1) for fy in (-1, 1)])
         self.homes += [(float(w["x"]), float(w["y"]), 2 * float(w.get("r", 8)), 2 * float(w.get("r", 8))) for w in s.M.get("wells", [])]
         streams = [(st["poly"], float(st.get("w", 6)) / 2 + stream_px) for st in s.M.get("streams", []) if len(st.get("poly") or []) >= 2]
         # every drawn watercourse keeps the ditch margin; a stream's own entry above carries the larger set-back
@@ -74,6 +99,8 @@ class EdgeGround:
         if not (s._fits(cx, cy, w, h) and s._footprint_clear(cx, cy, w, h)):
             return False
         if any(rect_gap((cx, cy, w, h), home) < self.clear_px for home in self.homes):
+            return False
+        if len(self.hull) >= 3 and any(point_in_poly(px, py, self.hull) for px, py in rect_samples(cx, cy, w, h)):
             return False
         for px, py in rect_samples(cx, cy, w, h):
             if any(seg_dist(px, py, a, b) < half for a, b, half, *_ in self.water.near(px, py)):

@@ -37,6 +37,10 @@ BURIAL_FORMS = ("own_ground", "village_ground")  # the knob's two forms, rolled 
 GROUND_SQFT = (750.0, 2450.0)  # the record's band for a hamlet's full-body ground; it overstates an urn ground - a GUESS
 HOUSEHOLDS_AT = (5, 30)  # the households at the band's floor and top - a GUESS, linear between
 ASPECT = 1.4  # long to wide - a GUESS
+# THE DRAWN GROUND FILLS ~0.58 OF ITS BOX (feature 273, settlement-review on Kashikawa): `cemetery(organic=True)` inscribes a
+# jittered blob in its w x h footprint (radius 0.74-1.0), MEASURED on the drawn ground at 0.57 (Kashikawa, 1,013 of 1,770
+# sq ft) and 0.60 (Inashiro, 852 of 1,430). The box is sized so the ground the reader SEES has the band's area.
+BLOB_FILL = 0.58
 STREAM_SETBACK_PX = 75.0  # 180's drawn floor from a stream (225 ft on a 3 ft/px city sheet)
 FIELD_SETBACK_PX = 50.0  # 180's drawn margin from a flooded field edge (150 ft on a city sheet)
 DITCH_MARGIN_FT = 6.0  # an irrigation ditch or channel is not a stream; the ground only keeps off its bank
@@ -45,12 +49,14 @@ STEP_FT = 10.0
 
 
 def ground_size(households: int, ftpx: float) -> tuple[float, float]:
-    """The ground's drawn (w, h) in px: its area from the households within the record's band, 1.4 to 1."""
+    """The ground's box (w, h) in px: its drawn area from the households within the record's band, 1.4 to 1, the box
+    enlarged by `BLOB_FILL` so the organic ground drawn inside it has that area."""
     lo, hi = HOUSEHOLDS_AT
     t = min(1.0, max(0.0, (households - lo) / (hi - lo)))
     area = GROUND_SQFT[0] + t * (GROUND_SQFT[1] - GROUND_SQFT[0])
-    w_ft = math.sqrt(area * ASPECT)
-    return w_ft / ftpx, (area / w_ft) / ftpx
+    box = area / BLOB_FILL
+    w_ft = math.sqrt(box * ASPECT)
+    return w_ft / ftpx, (box / w_ft) / ftpx
 
 
 def seat_ground(s: Settlement, down_deg: float, w: float, h: float) -> Pt | None:

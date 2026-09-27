@@ -78,6 +78,11 @@ class FuneraryGroundsMixin:
             while xx < w / 2 - 5:
                 if blob is None or point_in_poly(xx, yy, blob):
                     mh = random.choice([6, 7, 8])
+                    # its TOP inside the blob too (feature 273, settlement-review on Kuwabata): a marker is drawn
+                    # upward from its base, and on a small ground a base just inside the rim put its top 5 ft out
+                    if blob is not None and not point_in_poly(xx, yy - mh, blob):
+                        xx += 9
+                        continue
                     g.append(f'<rect x="{xx - 1.4:.1f}" y="{yy - mh:.1f}" width="2.8" height="{mh}" rx="1" fill="#9AA1A4" stroke="#5A584F" stroke-width="0.5"/>')
                 xx += 9
             yy += 9

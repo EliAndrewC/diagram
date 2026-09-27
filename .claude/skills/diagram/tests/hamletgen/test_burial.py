@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import math
 
-from l7r.diagram.hamletgen.burial import BURIAL_FORMS, FIELD_SETBACK_PX, GROUND_SQFT, STREAM_SETBACK_PX, ground_size, stage_burial
+from l7r.diagram.hamletgen.burial import BLOB_FILL, BURIAL_FORMS, FIELD_SETBACK_PX, GROUND_SQFT, STREAM_SETBACK_PX, ground_size, stage_burial
 from l7r.diagram.settlement import Settlement, seg_dist
 from l7r.diagram.settlement._knobs import BOUNDARY_STONE_CLEAR_FT
 from l7r.diagram.settlement.civic_grounds.edge_seat import rect_gap as _rect_gap
@@ -32,10 +32,10 @@ def _ground(s: Settlement) -> dict:
 def test_the_ground_is_sized_inside_the_records_band() -> None:
     for households, want in ((3, GROUND_SQFT[0]), (5, GROUND_SQFT[0]), (30, GROUND_SQFT[1]), (80, GROUND_SQFT[1])):
         w, h = ground_size(households, 1.0)
-        assert math.isclose(w * h, want, rel_tol=1e-9)
+        assert math.isclose(w * h * BLOB_FILL, want, rel_tol=1e-9)
         assert math.isclose(w / h, 1.4, rel_tol=1e-9)
     w, h = ground_size(15, 2.0)  # at 2 ft per px the same ground is drawn half as many px each way
-    assert math.isclose(w * h * 4, GROUND_SQFT[0] + 0.4 * (GROUND_SQFT[1] - GROUND_SQFT[0]), rel_tol=1e-9)
+    assert math.isclose(w * h * 4 * BLOB_FILL, GROUND_SQFT[0] + 0.4 * (GROUND_SQFT[1] - GROUND_SQFT[0]), rel_tol=1e-9)
 
 
 def test_rect_gap() -> None:
@@ -115,3 +115,26 @@ def test_the_edge_seat_has_nothing_to_measure_from_without_houses() -> None:
     s = Settlement(W=600, H=600, seed=1)
     s.meta(name="X", scale="hamlet", ftpx=1.0)
     assert edge_seat(s, 90.0, 30.0, 20.0, EdgeGround(s, 60.0, 75.0, 6.0, 50.0), reach_px=300.0, step_px=10.0) is None
+
+
+def test_the_ground_stands_beyond_the_last_house_not_in_a_gap_among_them() -> None:
+    """Settlement-review on Kuwabata (feature 273): a dispersed hamlet's inner gap is 60 ft clear of every house, and
+    the seat took it. The ground may not enter the houses' hull."""
+    from l7r.diagram.settlement._geom import point_in_poly
+    from l7r.diagram.settlement.civic_grounds.edge_seat import convex_hull
+
+    s = Settlement(W=1600, H=1600, seed=1)
+    s.meta(name="X", scale="hamlet", ftpx=1.0)
+    s.knob_pins["hamlet_burial"] = "own_ground"
+    s.M["houses"] = [{"x": x, "y": y, "w": 46.0, "h": 28.0} for x, y in ((500, 500), (1000, 500), (500, 1000), (1000, 1000))]
+    stage_burial(s, a_plan())
+    g = _ground(s)
+    hull = convex_hull([(x + fx * 23, y + fy * 14) for x, y in ((500, 500), (1000, 500), (500, 1000), (1000, 1000)) for fx in (-1, 1) for fy in (-1, 1)])
+    assert not point_in_poly(g["x"], g["y"], hull), "outside the houses, not in the square they enclose"
+
+
+def test_convex_hull_of_few_points() -> None:
+    from l7r.diagram.settlement.civic_grounds.edge_seat import convex_hull
+
+    assert convex_hull([(0.0, 0.0), (1.0, 1.0)]) == [(0.0, 0.0), (1.0, 1.0)]
+    assert set(convex_hull([(0.0, 0.0), (2.0, 0.0), (1.0, 1.0), (1.0, 0.5), (0.0, 2.0), (2.0, 2.0)])) == {(0.0, 0.0), (2.0, 0.0), (0.0, 2.0), (2.0, 2.0)}
