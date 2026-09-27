@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-27
 
-**Status**: specified; spec-fidelity round 1 CHANGES REQUIRED (4 items) - applied, round 2 next
+**Status**: specified; spec-fidelity round 2 CHANGES REQUIRED (3 items) - applied, round 3 next
 
 **Input**: the GM's goal of 2026-09-27 and the coordination with the other sessions, in [`request.md`](request.md).
 
@@ -90,13 +90,17 @@ both.)
 - **FR-006**: New questions in 450-590 MUST answer the city temple complex's precinct and main-hall size and layout,
   and the small temple and small shrine of a temple neighborhood - sizes, contents, how many to a block, how they pack
   along the street.
+- **FR-007**: A finding that contradicts the Hoshigaoka country-shrine sheet or its village map MUST be applied to that
+  sheet and map in this feature, with the sheet's pack audit and `matches_map` green and the review agents run on it.
 - **FR-003**: Every source only a human can fetch for free MUST be appended to the END of
   `/host-l7r-repo/academic-sources/TO-DOWNLOAD.md` in the GM's format (a heading, the believed link, a Google-search
   link, what rests on it, what blocked the fetch).
 - **FR-004**: Every new or changed entry MUST pass the record's checks: `source-reader`, `quote-check`,
   `record-format`, `source-applicability` (before any source's numbers are used), and `entry-drift` on every modal
   whose entry moved.
-- **FR-005**: The work MUST stay inside its claims in `/diagram/.clones/RESEARCH-CLAIMS.md`, report its handoffs to
+- **FR-005**: The work MUST stay inside its claims in `/diagram/.clones/RESEARCH-CLAIMS.md` - the 272 line extended,
+  before that work starts, to the 010-070 notes, 210's shrine and temple parts and the Hoshigaoka sheet and map, and
+  270's line marked DONE - report its handoffs to
   "Diagram supplemental" and to 271's owner, and mark 271's State table and 269's inventory when a group lands.
 
 ### Key Entities
@@ -106,9 +110,11 @@ both.)
 
 ## Success Criteria *(mandatory)*
 
-- **SC-001** (FR-001): no absence note in 010-128 (outside 130-206) without a second, recorded search.
+- **SC-001** (FR-001): no absence note or labeled guess in 010-128 or in the shrine and temple parts of 210 without a second, recorded search.
 - **SC-005** (FR-006): the city temple complex and the temple-neighborhood temple and shrine each answered by a
   question with its sizes, or recorded silent.
+- **SC-006** (FR-007): every finding about the country shrine either applied to the sheet and map or recorded as
+  not contradicting the drawing.
 - **SC-002** (FR-002): each handed-over row answered or recorded silent, by question.
 - **SC-003** (FR-003): every human-fetchable source named in the work on the download list.
 - **SC-004** (spec-wide; FR-004, FR-005): the record's tests green, every check's findings applied, the work
@@ -126,3 +132,6 @@ both.)
   widened to 010-128 and 210's shrine and temple parts, 130-206 cited as 269 R1's; (3) "changes no map" replaced - a
   finding against the drawn country shrine is applied here; (4) FR-002 names the edits to 100-128 for A133, A135,
   D49-D56, and A144's limit.
+- Round 2 (spec-fidelity-verify, MODE 3): items 1 and 4 RESOLVED, 2 and 3 short - (1) SC-001 now names 210's parts;
+  (2) FR-007 and SC-006 carry the country-shrine map change; (3) FR-005 requires the claim extended (done
+  2026-09-27: the 272 line names 010-128, 210's parts and the Hoshigaoka sheet and map; 270's line marked DONE).
