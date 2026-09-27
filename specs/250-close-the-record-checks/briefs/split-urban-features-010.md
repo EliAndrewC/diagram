@@ -1,6 +1,6 @@
 # Brief - feature 250: split ONE research question under the size cap
 
-You are a FRESH session with one job: the question `.claude/skills/diagram/research/urban-features/010-the-notice-board-kosatsuba---siting-is-a-traffic-decision.html` is 23,717 bytes with its notes, over the 20,000-byte cap
+You are a FRESH session with one job: the question `.claude/skills/diagram/research/urban-features/010-the-notice-board-kosatsuba---siting-is-a-traffic-decision.html` is 21,404 bytes with its notes, over the 20,000-byte cap
 (`scripts/check-question-size.py`, feature 250 D14). Split it. Work in this clone (`/diagram/.clones/diagram-research-1`); its CLAUDE.md files
 apply; read the rule as written in `.claude/skills/diagram/research/CLAUDE.md`, "A question has a size", and nothing
 else to orient.
