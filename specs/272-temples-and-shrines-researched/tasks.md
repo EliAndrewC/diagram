@@ -18,7 +18,7 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D6).
 - [ ] T05 Group B37 - city temple monks, gate shops, graveyard sharing (310-330; edits 010, 050, 070 and their notes searched twice) (FR-001, FR-002)
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
-- [ ] T06 Group R3 - village temple, its precinct, wayside shrines, A144 as far as 269's R1 leaves it (500-540; the 210 note searched twice) (FR-001, FR-002)
+- [ ] T06 Group R3 - village temple, its precinct, wayside shrines, A144 as far as 269's R1 leaves it, 190 and 204, D63's tier table as 210 (500-540; the 210 note searched twice) (FR-001, FR-002)
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
 - [ ] T07 Group T - the city temple complex and the temple neighborhood (580-590), the 020 and 030 notes searched

@@ -1,6 +1,6 @@
 {
  "feature": "272-temples-and-shrines-researched",
- "plan_sha256": "529ecd016f4db75f3f13b5878460a3924e7471ee3d87da4d637a5cbb36e61477",
+ "plan_sha256": "e1ae790b56781a58b0786694b427ada1e041d019e298991a35fb159b8ac21aea",
  "reviewed": "2026-09-27",
  "declared": "spec-fidelity",
  "decisions": [
@@ -45,6 +45,18 @@
    "summary": "D50 and D51 silent after the reader's second search unless the curl retry answers",
    "class": "within",
    "why": "the outcome FR-002 allows; the round-1 wording note is applied"
+  },
+  {
+   "id": "D7",
+   "summary": "269's registry key kawazoe-2010-ryobosei cited by name for 190, never reserved here; its one registry file copied from diagram-supplemental before landing if 269 has not landed",
+   "class": "within",
+   "why": "process: avoids a second reservation of a key another clone holds; FR-004's checks still run on the citation in 190, and the copied file carries 269's own reservation"
+  },
+  {
+   "id": "handoff-190-204",
+   "summary": "religion-and-death 190 (cremation ground siting) and 204 (bone mound) handed to R3 by 269 (claims line, R3 brief in queue 2); not stated in plan.md beyond D7's parenthetical, and D2 still says 130-206 are cited only and 204 waits",
+   "class": "within",
+   "why": "a widening, not a narrowing: FR-002 already names 204 after R1 lands (R1's handoff exists); 190 sits beside A144 village cremation and came from the coordinator the GM named, FR-001's exclusion covers only sections another feature owns and FR-005's claims line now carries both. D2's sentence is stale text, not a fidelity finding"
   }
  ],
  "verdict": "CLEAR"
