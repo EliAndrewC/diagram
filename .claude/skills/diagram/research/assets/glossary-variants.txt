@@ -740,6 +740,7 @@ kurayashiki	kurayashiki
 kure-mutsu	kure-mutsu
 kuri	kuri
 kuromatsu	kuromatsu
+kuruwa	kuruwa
 kusaba	kusaba
 kuwabata	Kuwabata
 kyo-machiya	machiya
