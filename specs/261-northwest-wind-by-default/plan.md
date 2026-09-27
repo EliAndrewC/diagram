@@ -347,7 +347,7 @@ Measured before and after in research R10.
   a shrine stands in a corner of the house plot and a coop in the yard (research/homesteads.html), and Mizuguchi drew a
   coop, a woodpile and its one shrine beyond the lane behind their house. The rule's cost was measured, not assumed:
   against the commit before it, seven more fixtures went unseated on four maps (Inashiro a heap; Kashikawa two coops and
-  a bath; Sawada a second heap; Mizuguchi a coop and a woodpile) and two maps lost their only shrine. The placement was
+  a bath; Sawada a second heap; Mizuguchi a coop and a woodpile) and two maps lost their only shrine (observed 2026-09-27: `meta.farm_fixtures_unseated` and the shrine count in each pool manifest at commit 6b6031073, against 6f75efe4a's one Sawada heap). The placement was
   fixed rather than the rule relaxed:
   - a fixture every recorded seat of which is refused is offered the ring round its own house's other walls
     (`yard_ring`: the back wall at three points, each flank at three heights, the front corners), at the same outward
@@ -363,10 +363,11 @@ Measured before and after in research R10.
     reservation, not ground. Tested as a solid, a bundle offset by its gardens refused its own house's open flank and a
     neighbor's refused ground nothing stood on; Mizuguchi's farmstead at (1277, 257) seated no coop and no stack
     (spec-fidelity of round 6fefdcdf, probed seat by seat). The skip is the ring's only: taken for every seat, the
-    fixtures took the flanks first and the persimmons after them lost their ground (Inashiro drew 6 of its 12).
+    fixtures took the flanks first and the persimmons after them lost their ground (observed 2026-09-27 on a trial roll with the skip on every seat, not committed: the manifests' `persimmons` counted, Inashiro 6 where it drew 12).
   - the persimmon, which alone recorded no miss, tries its six bearings a step (10 ft) further out and records one
     when none takes it. The pool had been dropping persimmons silently: with the step, Sawada draws 17 where it drew
-    14, Mizuguchi 11 where 8, Kuwabata 13 where 12, with no miss on any map.
+    14, Mizuguchi 11 where 8, Kuwabata 13 where 12, with no miss on any map (observed 2026-09-27: `persimmons` counted with
+    `git show <rev>:<map>.json` at 818ac79b0 and at b915f256a).
   Measured after all of it (`m:pool-r15-unseated`): no fixture of any kind unseated on any of the five maps, where the
   commit before the lane rule left Sawada one heap short.
 

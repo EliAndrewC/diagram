@@ -151,7 +151,7 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
     # registered one by one besides. Tested as a solid, a bundle offset by its gardens refused its own house's open flank, and a
     # neighbor's refused ground nothing stood on: Mizuguchi's farmstead at (1277,257) seated no coop and no stack. Skipped only
     # for the yard ring (below): skipped for every seat, the fixtures took the flanks first and the persimmons after them
-    # lost their ground - Inashiro drew 6 of its 12, Kuwabata 3.
+    # lost their ground - on a trial roll of 2026-09-27, Inashiro drew 6 of its 12 persimmons (plan D19).
     bundles = frozenset(b for b in (homestead_box(s.placed, float(q["x"]), float(q["y"])) for q in houses) if b is not None)
     count = 0
     shrines_left = max(1, round(shares["shrine"] * len(houses)), mins.get("shrine", 0))  # RARE means rare: positional luck cannot exceed the share (a spec floor may)
@@ -439,7 +439,11 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                     ly = ly + (_oy if ly >= 0 else -_oy)
                     cx, cy = hx + lx * ca - ly * sa, hy + lx * sa + ly * ca
                     ext = abs(cw * ca) + abs(ch * sa), abs(cw * sa) + abs(ch * ca)  # the raked rect's bbox
-                    if _strip_blocked(s, cx, cy, ext[0], ext[1], hx, hy, fields, marsh, pond, lanes, footing, bundles if _table is not seats else frozenset()) or across_the_brook(s, (hx, hy), (cx, cy)) or across_a_lane(lanes, (hx, hy), (cx, cy)):
+                    if (
+                        _strip_blocked(s, cx, cy, ext[0], ext[1], hx, hy, fields, marsh, pond, lanes, footing, bundles if _table is not seats else frozenset())
+                        or across_the_brook(s, (hx, hy), (cx, cy))
+                        or across_a_lane(lanes, (hx, hy), (cx, cy))
+                    ):
                         continue
                     spin = 90.0 if (cw, ch) == (d, w) and w != d else 0.0  # a flank seat turns the glyph to lie ALONG the wall (review at T99: stacks stood end-on)
                     s.farm_fixture(kind, cx, cy, rot=rot + spin, of=(hx, hy), form=("pit" if kind == "manure" and plan.manure_form == "pit" else None))  # the rolled manure form (feature 150)
