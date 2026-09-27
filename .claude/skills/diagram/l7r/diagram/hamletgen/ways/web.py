@@ -25,7 +25,7 @@ from .checks import drawn_water_segs
 from .clearance import clear_runs, clip_to_clear
 from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _homestead_polys, _margin_frame, _net_segs, _pass, _pull_back_to_service
 from .geom import _trim_to_service, polyline_len, steading_footprints
-from .joints import straighten_joints
+from .joints import center_lane_ends, straighten_joints
 from .route import _route
 from .serve import _lay_web_lane, _serve_stragglers
 from .smooth import _STUB_REACH_FT, _smooth_web
@@ -299,6 +299,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.hamletgen.ways.sweeps._sweep_doubled_remnants
         l7r.diagram.hamletgen.ways.sweeps._keep_the_route_wide
         l7r.diagram.hamletgen.ways.joints.straighten_joints
+        l7r.diagram.hamletgen.ways.joints.center_lane_ends
         l7r.diagram.settlement.Settlement.trim_lane_stubs
     """
     _pass("cut")
@@ -561,6 +562,8 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # AND READ THE JOINTS AS ONE WAY (GM 2026-09-26): two records meeting end to end are one lane to the walker;
     # a fold there becomes a T and a jog is pulled straight. Last, because every pass above can lay a joint.
     straighten_joints(s, hard_built, walls, list(plan.watercourses) + drawn_water)
+    # ...AND A LANE THAT ENDS ON ANOTHER STANDS ON ITS CENTERLINE (GM 2026-09-27): an end a few feet off it shows its round cap past the far edge.
+    center_lane_ends(s)
     s.M["meta"]["lane_web"] = plan.lane_web
 
 
