@@ -29,15 +29,18 @@ the map features whose write-ups will be rewritten from what you find (by the or
 
 - B11 **Gate market size**: how many buildings and which trades make up a county town's gate market, and how far does
   it run out the road? (towns/080; the city strip is 269 B41's, cities/hinterland/040; cite it). M. P1.
+  > COORDINATION (B11): the CITY gate market is 269's cities/hinterland 040 (B41) - take the town side and point to it for cities
 - B41 **Town barns**: what are the barns of a town's hayfield (Hoshizora's five) - hay barns, ox sheds - and their
   size? (none). S. P1.
 - B132 **Edge woods**: why is a town's margin clothed and not left bare, and with what? (water/170,
   vegetation/030). S. P1.
 - B129 **Suburb along the road**: where does a town's built edge stop - does a ribbon of houses run out along the
   road past the last block (machi-hazure)? (none). S. P3.
+  > COORDINATION (B129): 269's cities/hinterland 040 (B41) covers the city strip outside a gate - take the town suburb, point to it
 - B128 C174 **Market gardens and the suburban belt**: did a town's or city's edge carry vegetable plots supplying it,
   fed by its night soil, and what else stood in a city's near hinterland (suburban villages, tile and lime works), how
   far out? (cities/hinterland/050; the retreats are 269 B41's). M. P3.
+  > COORDINATION (B128): 269's cities/hinterland 030 and 010/015 (B41) cover the city side - take the town side, point to them
 
 ## The procedure (session 1: research and write)
 
