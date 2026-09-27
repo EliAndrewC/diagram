@@ -285,3 +285,34 @@ def test_no_lane_ends_in_a_hook(gen: str) -> None:
             nu, nv = math.hypot(*u), math.hypot(*v)
             turn = math.degrees(math.acos(max(-1.0, min(1.0, (u[0] * v[0] + u[1] * v[1]) / (nu * nv))))) if nu and nv else 0.0
             assert not (nv <= _HOOK_FT and turn >= _HOOK_DEG), f"a lane ends in a {nv:.1f} ft hook turning {turn:.0f} degrees at ({c[0]:.0f}, {c[1]:.0f})"
+
+
+@pytest.mark.parametrize("gen", GENS, ids=IDS)
+def test_every_lane_crosses_a_drawn_channel_square(gen: str) -> None:
+    """A plank crosses its ditch square rather than obliquely (research ways/030) - the channels as well as the brook
+    (settlement-review of Mizuguchi, feature 261: a lane over the head-race lay 44 degrees off square)."""
+    from l7r.diagram.hamletgen.ways.checks import FORD_SQUARE_TOL_DEG
+
+    m = _manifest(gen)
+    for c in m.get("drawn_channels") or []:
+        cp = [(float(q[0]), float(q[1])) for q in c["pts"]]
+        for ln in m["lanes"]:
+            p = [(float(x), float(y)) for x, y in ln["pts"]]
+            for a, b in zip(p, p[1:], strict=False):
+                for u, v in zip(cp, cp[1:], strict=False):
+                    if segments_cross(a, b, u, v):
+                        t = math.degrees(math.atan2(b[1] - a[1], b[0] - a[0]) - math.atan2(v[1] - u[1], v[0] - u[0])) % 180.0
+                        assert abs(90.0 - t) <= FORD_SQUARE_TOL_DEG, f"a lane crosses a channel {abs(90.0 - t):.0f} degrees off square"
+
+
+@pytest.mark.parametrize("gen", GENS, ids=IDS)
+def test_the_board_caption_stands_at_the_boards_angle(gen: str) -> None:
+    """The GM (2026-08-27): "the notice board is at an angle, therefore, the notice board label should be at exactly the
+    same angle" (settlement-review of Kuwabata, feature 261: an upright fallback drew the caption level beside a board
+    at 38.7 degrees)."""
+    m = _manifest(gen)
+    labs = [lab for lab in m.get("labels", []) if "notice" in str(lab[5]).lower()]
+    assert labs and m.get("kosatsuba"), "non-vacuity: the board and its caption"
+    tilt = float(labs[0][7]) if len(labs[0]) > 7 and labs[0][7] is not None else 0.0
+    off = abs((tilt - float(m["kosatsuba"][0].get("rot") or 0.0) + 90.0) % 180.0 - 90.0)
+    assert off <= 0.5, f"the caption stands {off:.1f} degrees off its board"

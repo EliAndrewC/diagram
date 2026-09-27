@@ -373,7 +373,7 @@ def caption_room(
     lane's tread; failing every rung, it falls back to the least-bad seat, which on Kashikawa was a farmhouse roof. The
     siter's old probe asked a ring of upright seats a looser question and called that entrance seat sitable. So this
     walks the placer's ladder, coarsened (lateral in 6 ft steps, the gap in 5 ft steps: the siter asks it of every
-    candidate), at the board's tilt and then upright - the two ladders the placer walks - with the same quad `_cap_quad`
+    candidate), at the board's own tilt - the caption stands at the board's angle (GM 2026-08-27) - with the same quad `_cap_quad`
     builds (a one-line box centered `8 x 0.275` above the seat). Coarser is one-way safe for a PREFERENCE: a seat found
     here is a seat the placer's denser ladder also offers."""
     from ..._geom import linear_tilt, poly_gap, poly_seg_dist, segments_cross, tilt_caption_seat
@@ -386,11 +386,9 @@ def caption_room(
     boxes = [(min(c[0] for c in o), min(c[1] for c in o), max(c[0] for c in o), max(c[1] for c in o), o) for o in fabric]
     reach = chw + hw + 6.0
     lats = [0.0] + [v for i in range(1, int(reach // 6.0) + 1) for v in (i * 6.0, -i * 6.0)]
-    for t in dict.fromkeys((linear_tilt(rot), 0.0)):
+    for t in (linear_tilt(rot),):  # the caption's own angle only: it stands at the board's angle (GM 2026-08-27)
         ca, sa = math.cos(math.radians(t)), math.sin(math.radians(t))
-        # the upright fallback walks laterals within 12 ft only, as `_draw_board_caption`'s own upright ladder does: a seat
-        # found wider than that is one the placer never offers (Kuwabata's board was sited on an upright seat 24 ft aside)
-        for lat in lats if t or not linear_tilt(rot) else (0.0, 6.0, -6.0, 12.0, -12.0):
+        for lat in lats:
             for g in (11.0, 16.0, 21.0, 26.0, 31.0, 36.0):
                 for above in (False, True):
                     qx, qy = tilt_caption_seat(x, y, rot, t, hw, hh, g, above=above, lateral=lat)

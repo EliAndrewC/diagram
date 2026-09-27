@@ -767,4 +767,5 @@ runs through, leaving northeast. The entrance board stands on the hamlet's stem 
 farmstead's lanes to the connector, 82 ft before it meets the connector: in the open, and passed by all 12 households'
 ways out. Three north-bank farmsteads in the pocket between the brook and the head-race were joined to the web only
 through the south bank, so two of them went out over one plank and back over another; they now have a footpath north to
-the lane on their own bank, and no household's way out crosses the brook more than once.
+the lane on their own bank, and no household's way out crosses the brook more than once. The south bank's lane crosses the head-race beside the
+weir square on its plank, as every way crosses its water.

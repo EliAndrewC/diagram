@@ -287,6 +287,20 @@ def promote(stage_base: str, out_base: str | None) -> None:
     shutil.rmtree(stage, ignore_errors=True)
 
 
+def discard_on_failure(stage_base: str | None, roll: Callable[[], Any]) -> Any:
+    """Run one roll into its stage, and remove the stage if the roll raises (settlement-review of Kuwabata, feature 261: two
+    interrupted rolls left `.roll-*` directories in the pool folder, one holding a whole rejected roll, and a commit swept
+    them in - the pool showed the rejected roll `promote` exists to hide)."""
+    import shutil
+
+    try:
+        return roll()
+    except BaseException:
+        if stage_base is not None:
+            shutil.rmtree(os.path.dirname(stage_base), ignore_errors=True)
+        raise
+
+
 def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True) -> Report:
     """Build a hamlet, FINISH it, gate it, and report. Writes svg/png/json when `out_base` is given.
 
@@ -380,7 +394,7 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
     # re-roll only if the reach count got no worse.
     # EVERY ATTEMPT FINISHES INTO ITS OWN STAGE, and only the kept one is promoted onto `out_base` (`promote`).
     _stage = stage_for(out_base) if out_base is not None else None
-    _s, failures, seats, lines = _roll((), _stage)
+    _s, failures, seats, lines = discard_on_failure(_stage, lambda: _roll((), _stage))
     kept_stage = _stage
     avoid: list[tuple[float, float]] = []
     stale = False  # ...and whether the files on disk came from a later roll we then rejected
@@ -404,7 +418,7 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
         after = after + ["farmhouses_reach_a_way"]
         attempt += 1
         _stage2 = stage_for(out_base) if out_base is not None else None
-        _s2, f2, seats2, lines2 = _roll(avoid, _stage2, attempt, after)
+        _s2, f2, seats2, lines2 = discard_on_failure(_stage2, lambda _a=avoid, _o=_stage2, _n=attempt, _f=after: _roll(_a, _o, _n, _f))
         # THE ACCEPT CRITERION IS THE REACH COUNT, NOT THE GATE'S TOTAL (feature 166 T03).
         #
         # It used to be `len(f2) <= len(failures)`: keep a re-roll only if the battery's WHOLE failure

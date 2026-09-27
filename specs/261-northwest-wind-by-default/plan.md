@@ -233,7 +233,8 @@ Measured before and after in research R10.
   keeping one only as a last resort (Mizuguchi's web crossed and crossed straight back).
 - The board is sited only where the caption placer's own ladder has a clear seat: `caption_room` asks the placer's tests
   (the hug cap, the derived blockers `caption_fabric` shared with the placer, across-a-way, the page, the lane floor) at
-  the board's tilt and upright. The ring probe it replaces for a tilted board called Kashikawa's entrance seat sitable
+  the board's tilt only - the caption stands at exactly the board's angle (the GM, 2026-08-27), so an upright fallback
+  tried in the placer was removed. The ring probe it replaces for a tilted board called Kashikawa's entrance seat sitable
   while every seat the placer then tried was blocked, and the fallback put the words on a farmhouse roof.
 - A tilted caption's lane clearance is the quad it is drawn as. The placer's `_box_clearance` and the gate's
   `test_no_caption_lies_across_a_way` read the upright record box, which straddles the lane a caption turned along it
@@ -249,6 +250,10 @@ Measured before and after in research R10.
   traffic floor, one whose caption fits comes before one in the open (the GM's 2026-08-29 ruling on a board under a
   canopy), as it already did at the handover. Kuwabata's caption stood 4.9 ft off a byre and 24.6 ft off its board.
 - A lane record whose points are all one point is dropped with the husks.
+- A lane crossing any drawn channel is squared like a brook crossing (Mizuguchi's head-race plank lay 44 degrees off;
+  research ways/030: a plank "crosses its ditch square").
+- A roll that raises removes its own stage, and `.roll-*/` is ignored: two interrupted rolls left staging directories in
+  Kuwabata's pool folder and a commit took them in.
 
 ## Phases
 

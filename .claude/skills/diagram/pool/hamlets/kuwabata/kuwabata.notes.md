@@ -357,7 +357,7 @@ correct the last one - so the numbers a reader can check now come from the artif
 - copse: **34** clumps drawn
 - farmhouses: **16**
 - farmstead fixtures: bath **5**, coop **13**, pit **6**, privy **14**, shrine **1**, woodpile **14**
-- notice board at **(2049.8, 487.8)**, **8** of 16 farmhouses within 250 ft
+- notice board at **(2019.8, 486.9)**, **8** of 16 farmhouses within 250 ft
 <!-- /census -->
 
 
@@ -682,5 +682,5 @@ two in the east are gone and four stand in new seats to the south and east - mat
 least total distance, moves of 562, 450, 134 and 116 ft - so the north end is now one farmstead, 151 ft from its
 nearest neighbor. The belt is 86 crowns at 283 degrees from the houses' middle. The roll also seats a woodland commons,
 38 crowns on a 160 by 174 ft patch whose edge stands 131 ft east of the nearest farmhouse wall, on the far open ground (`stage_woodland`).
-The notice board stands on the `center` knob's ground on the ring lane, its caption beside it and clear of the byre
-behind it. The connector leaves west, compass 274 degrees, which the district direction reads.
+The notice board stands on the `center` knob's ground beside the 5 ft ring lane, where its caption, at the board's own
+angle, stands nearer the board than any other glyph. The connector leaves west, compass 274 degrees, which the district direction reads.

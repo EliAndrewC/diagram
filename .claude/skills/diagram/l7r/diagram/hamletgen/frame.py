@@ -71,8 +71,12 @@ def stage_crossings(s: Settlement, plan: SitePlan) -> None:
     """
     # EVERY WAY CROSSES THE BROOK SQUARE, and so does its deck (feature 261): the lane is squared at the crossing first,
     # its record and its ink together, because `bridges` lays the plank along the way it carries.
-    for f in (f for f in s.M.get("streams", []) if len(f.get("poly") or ()) >= 2):
-        brook, half = f["poly"], float(f.get("w", 8.0)) / 2 + s.px(6.0)
+    # ...AND EVERY DRAWN CHANNEL (settlement-review of Mizuguchi, feature 261): a lane over the head-race beside the weir lay
+    # 44 degrees off square, because only the brook was squared - and the record says a plank "crosses its ditch square
+    # rather than obliquely" (research ways/030)
+    waters = [(f["poly"], float(f.get("w", 8.0)) / 2 + s.px(6.0)) for f in s.M.get("streams", []) if len(f.get("poly") or ()) >= 2]
+    waters += [(c["pts"], float(c.get("w0", 4.0)) / 2 + s.px(6.0)) for c in s.M.get("drawn_channels", []) if len(c.get("pts") or ()) >= 2]
+    for brook, half in waters:
         for i, ln in enumerate(s.M.get("lanes", [])):
             pts = [(float(x), float(y)) for x, y in ln["pts"]]
             squared = square_crossings(pts, [(float(x), float(y)) for x, y in brook], half)

@@ -546,5 +546,35 @@
   "quantity": "the woodland commons' crowns, which the notes now record with its size and its distance from the nearest farmhouse",
   "source": "pool/hamlets/kuwabata/kuwabata.json commons[role=woodland]; kuwabata.notes.md 2026-09-27 entry",
   "command": "grep -n 'woodland commons' .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md"
+ },
+ "kuwabata-r6-caption-angle": {
+  "verifies": "F1",
+  "subject": "kuwabata",
+  "round": "c2cb1a4b",
+  "value": 0.0,
+  "unit": "deg",
+  "quantity": "the notice-board caption's angle against its board's (38.7 against 38.7), modulo 180; the upright fallback is removed from the caption placer and from the siter's caption_room, so the board is sited only where a caption AT ITS ANGLE fits - the GM's 2026-08-27 ruling",
+  "source": "pool/hamlets/kuwabata/kuwabata.json labels['notice board'][7] and kosatsuba[0].rot; test_the_board_caption_stands_at_the_boards_angle",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kuwabata-r6-stages": {
+  "verifies": "F2",
+  "subject": "kuwabata",
+  "round": "c2cb1a4b",
+  "value": 0,
+  "unit": "directories",
+  "quantity": "tracked or present `.roll-*` staging directories under pool/: both removed and untracked, `.roll-*/` ignored, and a roll that raises now removes its own stage (driver.discard_on_failure)",
+  "source": "git ls-files pool/ and the pool directories; tests/hamletgen/test_driver.py::test_a_roll_that_raises_leaves_no_stage_behind",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_driver.py"
+ },
+ "mizuguchi-r6-headrace": {
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "round": "c2cb1a4b",
+  "value": 0.0,
+  "unit": "deg",
+  "quantity": "the most any lane crosses a drawn channel off square (the head-race plank by the weir, which lay 44 degrees off); stage_crossings squares crossings of every drawn channel as well as the brook",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json lanes[] against drawn_channels[].pts; test_every_lane_crosses_a_drawn_channel_square",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
  }
 }

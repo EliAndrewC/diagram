@@ -615,25 +615,10 @@ class BoardsMixin:
                     # the least-bad choice is offered the dense ladder too, not only the coarse seats (settlement-review of
                     # Kashikawa, feature 261: three coarse seats, all on a roof, and the pick could only choose among them)
                     _seat = _rung(_tld, _floor)
-                    if _seat is None:
-                        # ...AND UPRIGHT BEFORE THE LEAST BAD (settlement-review of Kashikawa, feature 261): an entrance board
-                        # against a lane where no tilted seat clears anything put "notice board" across a farmhouse roof, while
-                        # level ground beside it was clear. The same ladder at tilt 0 is walked first; the probes read `_t`
-                        # when they are called, so setting it makes them judge the caption that will be drawn.
-                        _keep_t, _t = _t, 0.0
-                        _up = [
-                            _q
-                            for _, _q in sorted(
-                                ((abs(_lat), _g, _si), tilt_caption_seat(x, y, rot, 0.0, hw, hh, _g, above=_ab, lateral=_lat))
-                                for _lat in (0.0, 6.0, -6.0, 12.0, -12.0)
-                                for _g in [11.0 + _r for _r in range(26)]
-                                for _ab, _si in ((False, 0), (True, 1))
-                            )
-                            if not label_above or _q[1] < y
-                        ]
-                        _seat = _rung(_up, _lane_target) or _rung(_up, _floor)
-                        if _seat is None:
-                            _t = _keep_t
+                    # AN UPRIGHT FALLBACK WAS TRIED HERE AND REMOVED (feature 261). It put Kashikawa's caption on level ground
+                    # when no tilted seat cleared anything, and on Kuwabata it drew "notice board" level beside a board at
+                    # 38.7 degrees - against the GM's ruling (2026-08-27) that the caption stands at exactly the board's
+                    # angle. The fix belongs to the SITER: `caption_room` places the board only where an aligned caption fits.
                     _lx, _ly = _seat or _pick([*_tilted, *_tld])
             else:
                 # THE HALO MUST NOT NOTCH THE WAY THE BOARD STANDS ON (settlement-review on Inashiro,

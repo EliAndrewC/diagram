@@ -211,6 +211,8 @@ records `m:kashikawa-r4-caption`, `m:kuwabata-r4-tail`, `m:kuwabata-r4-caption-l
 | a doubled-tail cut that drew a hook, and necked the route out | Sawada, a 9.8 ft leg back 116 degrees; 69.7 ft of 3 ft path | no hook on any map (`m:sawada-r5-hook`); the 6 ft track runs to the hub (`m:sawada-r5-route-wide`) |
 | a way out over the brook and back | Mizuguchi, 2 of 12 households | at most 1 crossing on every route (`m:mizuguchi-r4-over-and-back`) |
 | a caption nearer another footprint than its board | Kuwabata, byre 4.9 ft and board 24.6 ft | nearest its board on every map; Kuwabata 6.8 against 11.2 (`m:kuwabata-r5-caption-pair`) |
+| a caption level beside a tilted board | Kuwabata, level beside a board at 38.7 degrees | every caption at its board's angle (`m:kuwabata-r6-caption-angle`) |
+| a lane over a drawn channel off square | Mizuguchi's head-race plank, 44 degrees | every such crossing square (`m:mizuguchi-r6-headrace`) |
 
 Kuwabata's first two rolls under the changed ways each left a farmhouse off the way network, so it keeps its third: 4
 of 16 farmsteads re-seated, the farthest 134 ft (`m:kuwabata-r4-notes`).

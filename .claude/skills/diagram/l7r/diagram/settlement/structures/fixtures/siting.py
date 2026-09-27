@@ -397,7 +397,7 @@ class FixtureSitingMixin:
             _seats = [(_x + (_hw + _chw2 + 8.0) * _dx, _y + (_hh + 11.0) * _dy) for _dx, _dy in _ring]
             if _tilt:
                 # A TILTED CAPTION IS JUDGED BY THE PLACER'S OWN TESTS (feature 261): its ladder along the board's lane, at
-                # the tilt and then upright, with the quad it will draw. Two cheaper probes came first and both lied about
+                # the board's own tilt (the GM, 2026-08-27: the caption at exactly the board's angle), with the quad it will draw. Two cheaper probes came first and both lied about
                 # Kashikawa's connector: the upright ring called the entrance seat sitable while every seat the caption
                 # placer then tried was blocked or on the lane, and the upright lane-clearance box, straddling a lane the
                 # tilted caption runs BESIDE, called the open ground further up that lane unsitable

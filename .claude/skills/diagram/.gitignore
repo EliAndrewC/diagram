@@ -6,3 +6,5 @@
 .testmondata*
 .dmypy.json
 .firing-journal/
+# a roll's staging directory beside its map (hamletgen.driver.stage_for, feature 261): promoted or removed, never tracked
+.roll-*/

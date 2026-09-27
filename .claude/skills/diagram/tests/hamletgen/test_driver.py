@@ -353,3 +353,23 @@ def test_a_staged_roll_reaches_the_map_only_when_promoted(tmp_path) -> None:  # 
     bare = stage_for(str(tmp_path / "other"))
     assert not os.path.exists(bare + ".notes.md")
     promote(bare, None)
+
+
+def test_a_roll_that_raises_leaves_no_stage_behind(tmp_path) -> None:
+    """Feature 261 (settlement-review of Kuwabata): an interrupted roll's `.roll-*` stage is removed, never left in the
+    pool folder for a commit to sweep in."""
+    import os
+
+    import pytest
+
+    from l7r.diagram.hamletgen.driver import discard_on_failure, stage_for
+
+    base = stage_for(str(tmp_path / "m"))
+
+    def boom() -> None:
+        raise RuntimeError("interrupted")
+
+    with pytest.raises(RuntimeError):
+        discard_on_failure(base, boom)
+    assert not os.path.exists(os.path.dirname(base))
+    assert discard_on_failure(None, lambda: 7) == 7
