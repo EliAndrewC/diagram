@@ -31,6 +31,7 @@ ashigaru-nagaya	ashigaru-nagaya
 assize	assize
 association	plant association
 asunaro	asunaro
+at grade	at grade
 autumn assize	assize
 aze	bund
 aze-mame	azemame
@@ -40,6 +41,8 @@ azenuri	azenuri
 azimuth	azimuth
 azolla	azolla
 azuchi	azuchi
+azuchi-momoyama	Azuchi-Momoyama period
+azuchi-momoyama period	Azuchi-Momoyama period
 backswamp	backswamp
 backswamps	backswamp
 backwall	backwall
@@ -106,6 +109,8 @@ buke-yashiki	buke-yashiki
 bund	bund
 bunded	bund
 bunds	bund
+bunka	Bunka
+bunka era	Bunka
 bunsei	Bunsei
 bunsuiguchi	bunsuiguchi
 burakumin	burakumin
@@ -184,6 +189,9 @@ combs	comb
 command area	command area
 commanderies	commandery
 commandery	commandery
+commutation	commutation
+commute	commutation
+commuted	commutation
 confluence	confluence
 confluences	confluence
 conservation headland	conservation headland
@@ -202,6 +210,10 @@ corvee	corvee
 corvée	corvee
 county seat	county seat
 county seats	county seat
+coursed	coursing
+courses	coursing
+coursing	coursing
+coursing line	coursing
 crenelated	crenellated
 crenellated	crenellated
 crib	cribbing
@@ -225,6 +237,7 @@ cun	cun
 curfew ward	lifang
 curtain	curtain
 curtain wall	curtain
+curtains	curtain
 cutbank	cutbank
 cutbanks	cutbank
 cyanobacteria	cyanobacterium
@@ -251,9 +264,12 @@ daxiangguo	Daxiangguo
 db	dBA
 dba	dBA
 dbh	DBH
+dead ground	dead ground
+dead space	dead ground
 degawari	degawari
 delivery ditch	delivery ditch
 delivery ditches	delivery ditch
+dem	DEM
 department	department
 departmental	department
 departments	department
@@ -335,10 +351,16 @@ enceinte	enceinte
 enemy platform	mamian
 enemy platforms	mamian
 enemy tower	mamian
+enfeoffed	enfeoffment
+enfeoffment	enfeoffment
+enfeoffments	enfeoffment
+engishiki	Engishiki
 enoki	enoki
 eunis	EUNIS
 eutrophic	eutrophication
 eutrophication	eutrophication
+ever-normal granaries	ever-normal granary
+ever-normal granary	ever-normal granary
 exposure burial	exposure burial
 extension	extension advice
 extension advice	extension advice
@@ -397,6 +419,7 @@ fishway	fishway
 fishways	fishway
 fit zoom	fit zoom
 fit-zoom	fit zoom
+five classics	Four Books and Five Classics
 five dynasties	Five Dynasties
 five highways	Five Highways
 five watches	night watch
@@ -417,7 +440,10 @@ footslope	footslope
 footslopes	footslope
 forest litter	forest litter
 forest litters	forest litter
+formwork	formwork
 fortune	Fortune
+four books	Four Books and Five Classics
+four books and five classics	Four Books and Five Classics
 four gods	four gods
 four-gods formulation	four gods
 frass	frass
@@ -439,6 +465,7 @@ fuse	fuse
 fusekoshi	inverted siphon
 gabion	gabion
 gabions	gabion
+galleried mining	siege mining
 gangi	gangi
 gassho	gassho
 gassho-zukuri	gassho
@@ -492,6 +519,7 @@ gōshi	gōshi
 hachure	hachure
 hachures	hachure
 haiden	haiden
+hakka	Hakka
 hakone barrier	Hakone barrier
 half-river closure	half-river closure
 half-river closures	half-river closure
@@ -524,6 +552,14 @@ headman	headman
 headmen	headman
 headworks	headworks
 heian	Heian
+heian-kyo	Heian-kyo
+heian-kyo's	Heian-kyo
+heian-kyō	Heian-kyo
+heian-kyō's	Heian-kyo
+heijo-kyo	Heijo-kyo
+heijo-kyo's	Heijo-kyo
+heijō-kyō	Heijo-kyo
+heijō-kyō's	Heijo-kyo
 heimen	heimen
 heimin	heimen
 hem	hem
@@ -536,6 +572,7 @@ hinoki	hinoki
 hinomi-yagura	hinomi-yagura
 hipposandal	hipposandal
 hipposandals	hipposandal
+hiro	hiro
 hirokoji	hirokoji
 hitoyado	hitoyado
 hiyokechi	hiyokechi
@@ -577,6 +614,7 @@ ieyasu	Ieyasu
 ieyasu's	Ieyasu
 igeta	igeta
 igune	igune
+imperial spine	Imperial spine
 important cultural landscape	Important Cultural Landscape
 important cultural landscapes	Important Cultural Landscape
 inari	Inari
@@ -617,6 +655,7 @@ japanese zelkova	keyaki
 jetties	jetty
 jetty	jetty
 jiangnan	Lower Yangzi
+jiaqing	Jiaqing
 jiegao	jiegao
 jiguchi-sen	jiguchi-sen
 jin'ya	jin'ya
@@ -730,6 +769,8 @@ koike	koike
 koji	koji
 koku	koku
 kokubunji	kokubunji
+kokudai-no	kokudai-no
+kokudaino	kokudai-no
 kokudaka	kokudaka
 kokuinchi	shuinchi
 kokumori	kokumori
@@ -757,6 +798,7 @@ kurayashiki	kurayashiki
 kure-mutsu	kure-mutsu
 kuri	kuri
 kuromatsu	kuromatsu
+kuruwa	kuruwa
 kusaba	kusaba
 kuwabata	Kuwabata
 kyo-machiya	machiya
@@ -799,6 +841,8 @@ log boom	boom
 lognormal	lognormal
 longan	longan
 longans	longan
+loophole	loophole
+loopholes	loophole
 loose-log drive	kanagashi
 loose-log driving	kanagashi
 louzeyuan	louzeyuan
@@ -844,6 +888,7 @@ micro-highs	micro-high
 middle moat	middle moat
 middle moats	middle moat
 mimizuka	ear mound
+miner's	siege mining
 ming	Ming dynasty
 ming dynasty	Ming dynasty
 ming taizu	Taizu
@@ -867,6 +912,8 @@ monk-style outlet	monk outlet
 monospecific	monospecific
 monzen	monzen
 morijio	morijio
+morisada manko	Morisada manko
+morisada mankō	Morisada manko
 moso	moso
 mozi	Mozi
 mu	mu
@@ -899,6 +946,7 @@ nanohana	rape
 nanushi	shoya
 nara period	Nara period
 nara-period	Nara period
+natto	natto
 natural levee	natural levee
 natural levees	natural levee
 natural village	natural village
@@ -1032,6 +1080,7 @@ puddled	puddling
 puddling	puddling
 qi	qi
 qiandao	qiandao
+qianlong	Qianlong
 qiaolou	gulou
 qimin yaoshu	Qimin Yaoshu
 qing	Qing dynasty
@@ -1048,6 +1097,7 @@ rakugo	rakugo
 rammed earth	rammed earth
 rampart	rampart
 ramparts	rampart
+randori	randori
 rape	rape
 rapeseed	rape
 reach	reach
@@ -1110,6 +1160,8 @@ sally gate	sally port
 sally port	sally port
 sallyport	sally port
 salvage excavation	salvage excavation
+sand junk	sand junk
+sand junks	sand junk
 sand sluice	sand sluice
 sando	sando
 sangji yutang	dike-pond
@@ -1140,6 +1192,8 @@ sengoku	Sengoku
 senmaida	senmaida
 sento	sento
 sentō	sento
+separated flow	separation zone
+separation zone	separation zone
 sericulture	sericulture
 setchin	kawaya
 settlement core	settlement core
@@ -1156,6 +1210,8 @@ shatian	shatian
 sheath	sheath
 sheaths	sheath
 sheer boom	boom
+shell keep	shell keep
+shell keeps	shell keep
 shi	shi
 shibai-goya	shibai-goya
 shichiya	shichiya
@@ -1193,6 +1249,7 @@ shuinchi	shuinchi
 shuku	shukuba
 shukuba	shukuba
 shunzhi	Shunzhi
+siege mining	siege mining
 sigma	sigma
 siheyuan	siheyuan
 siku quanshu	Siku Quanshu
@@ -1222,6 +1279,9 @@ spiraea	Spiraea
 spread footing	footing
 spring and autumn	Spring and Autumn
 spring line	spring line
+square keep	shell keep
+square keeps	shell keep
+srtm	SRTM
 staking frame	staking frame
 staking frames	staking frame
 steading	steading
@@ -1258,6 +1318,13 @@ superelevates	superelevation
 superelevation	superelevation
 superstructure	superstructure
 sus	Sus
+suzaku avenue	Suzaku-oji
+suzaku boulevard	Suzaku-oji
+suzaku oji	Suzaku-oji
+suzaku street	Suzaku-oji
+suzaku ōji	Suzaku-oji
+suzaku-oji	Suzaku-oji
+suzaku-ōji	Suzaku-oji
 sward	sward
 tagoshi kangai	tagoshi kangai
 taihu	Lower Yangzi
@@ -1343,6 +1410,8 @@ transect	transect
 transects	transect
 tread	tread
 treads	tread
+trebuchet	trebuchet
+trebuchets	trebuchet
 tributary	tributary
 true duty	water duty
 trunk streets	trunk street
@@ -1354,6 +1423,7 @@ tsunaba	tsunaba
 tudi miao	tudi miao
 tudigong	tudi miao
 tulou	tulou
+tulous	tulou
 twelve-mat	tatami
 tōhoku	Tohoku
 tōkaidō	Tokaido
@@ -1367,6 +1437,8 @@ umayado	umayado
 umayagoe	kyuhi
 umazouri	umagutsu
 umon	umon
+undersluice	undersluice
+undersluices	undersluice
 understory	understory
 ura-dana	ura-dana
 ura-nagaya	ura-nagaya
@@ -1482,9 +1554,11 @@ zhengyi	Zhengyi
 zhonggulou	gulou
 zhonglou	gulou
 zhou	department
+zhuque dajie	Suzaku-oji
 zicheng	zicheng
 zokibayashi	zokibayashi
 zonation	zonation
+zone of separated flow	separation zone
 zongjia	zongjia
 zooplankton	zooplankton
 zuku	zuku

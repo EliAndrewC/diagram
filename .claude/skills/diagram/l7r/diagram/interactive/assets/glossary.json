@@ -1079,7 +1079,8 @@
   "def": "The stretch of wall between two towers - the plain face an attacker meets, covered by the towers to either side.",
   "variants": [
    "curtain wall",
-   "curtain"
+   "curtain",
+   "curtains"
   ]
  },
  "cyanobacterium": {
@@ -3941,7 +3942,8 @@
  "tulou": {
   "def": "The round or rectangular communal fortress-houses of the Hakka of south China, a clan under one roof.",
   "variants": [
-   "tulou"
+   "tulou",
+   "tulous"
   ]
  },
  "ujiko": {
@@ -5609,10 +5611,41 @@
    "Yasuki Taka"
   ]
  },
+ "at grade": {
+  "def": "On the same level: two channels, or a channel and a road, that cross at grade meet on one surface rather than one passing over the other, so their water or traffic mixes where they cross.",
+  "variants": [
+   "at grade"
+  ]
+ },
  "omotedana": {
   "def": "A shop-house facing a main street, whose master was often landlord of the back-street tenements behind it (uradana, ura-nagaya).",
   "variants": [
    "omotedana"
+  ]
+ },
+ "Imperial spine": {
+  "def": "The Imperial highway where it runs through a city as its main street; a river city has none, since its highway passes off the map instead.",
+  "variants": [
+   "Imperial spine"
+  ]
+ },
+ "DEM": {
+  "def": "Digital elevation model: a map of ground heights laid out as a grid of cells, here 90 meters on a side.",
+  "variants": [
+   "DEM"
+  ]
+ },
+ "SRTM": {
+  "def": "Shuttle Radar Topography Mission: the radar survey flown on a space shuttle in 2000, whose height data covers most of the Earth's land.",
+  "variants": [
+   "SRTM"
+  ]
+ },
+ "sand junk": {
+  "def": "A flat-bottomed Chinese wooden cargo sailing ship (shachuan), built for the shallow, sandy waters around the Yangtze mouth and the northern coast.",
+  "variants": [
+   "sand junk",
+   "sand junks"
   ]
  },
  "dispersed settlement": {
@@ -5624,6 +5657,21 @@
    "dispersed settlements",
    "dispersed villages",
    "dispersed farmsteads"
+  ]
+ },
+ "undersluice": {
+  "def": "At a river headworks, the gated low part of the weir beside the canal's intake: the silt-laden bottom water is passed on downstream through it, so that the cleaner top water is what feeds the canal.",
+  "variants": [
+   "undersluice",
+   "undersluices"
+  ]
+ },
+ "separation zone": {
+  "def": "Where a side channel enters another, the pocket inside the junction where the flow breaks away from the bank and eddies instead of running on; the wider the junction angle, the larger it grows.",
+  "variants": [
+   "separation zone",
+   "zone of separated flow",
+   "separated flow"
   ]
  },
  "Five Highways": {
@@ -5658,6 +5706,21 @@
   "def": "Farmland handed to a lender as security for a loan; the lender held or worked it until the loan was repaid, and kept it if the loan was not.",
   "variants": [
    "pledged land"
+  ]
+ },
+ "coursing": {
+  "def": "In masonry, the laying of stone in level horizontal rows (courses); a coursing line is the joint running along between two rows.",
+  "variants": [
+   "coursing",
+   "coursing line",
+   "courses",
+   "coursed"
+  ]
+ },
+ "hiro": {
+  "def": "A Japanese length of about 1.8 m (six shaku), the span of outstretched arms; used for the lengths of boats and rope.",
+  "variants": [
+   "hiro"
   ]
  },
  "donggusup": {
@@ -5910,7 +5973,7 @@
   ]
  },
  "plinth": {
-  "def": "The block or base a pillar or post stands on, set on the ground beneath its shaft and adding to its height.",
+  "def": "The block or low stone base that a pillar, post or wall stands on, keeping the timber or earth above it off the wet ground.",
   "variants": [
    "plinth",
    "plinths"
@@ -5935,6 +5998,182 @@
    "stele",
    "steles",
    "stelae"
+  ]
+ },
+ "ever-normal granary": {
+  "def": "A Chinese state granary that bought grain when it was cheap and sold it when it was dear, to keep the price steady and hold a reserve against famine.",
+  "variants": [
+   "ever-normal granary",
+   "ever-normal granaries"
+  ]
+ },
+ "Qianlong": {
+  "def": "The reign of the Qing emperor Qianlong, 1736-1796.",
+  "variants": [
+   "Qianlong"
+  ]
+ },
+ "Jiaqing": {
+  "def": "The reign of the Qing emperor Jiaqing, 1796-1820.",
+  "variants": [
+   "Jiaqing"
+  ]
+ },
+ "Azuchi-Momoyama period": {
+  "def": "The years from about 1568 to 1600, between the Sengoku period and the Edo period, when Japan was reunified and firearms came into wide use; castle walls were thickened against bullets.",
+  "variants": [
+   "Azuchi-Momoyama period",
+   "Azuchi-Momoyama"
+  ]
+ },
+ "loophole": {
+  "def": "A narrow opening cut through a castle wall so that defenders can shoot out through it.",
+  "variants": [
+   "loophole",
+   "loopholes"
+  ]
+ },
+ "formwork": {
+  "def": "The temporary boards that hold earth or plaster in shape while a wall is rammed or set; they are taken away once the wall stands.",
+  "variants": [
+   "formwork"
+  ]
+ },
+ "commutation": {
+  "def": "Paying a tax owed in one thing - rice, in this record - in another, usually coin, at a reckoned rate.",
+  "variants": [
+   "commutation",
+   "commuted",
+   "commute"
+  ]
+ },
+ "kokudai-no": {
+  "def": "Paying the land tax, or a share of it, in money reckoned at the price of the rice owed; one Edo source puts it at three to four tenths of the whole tax.",
+  "variants": [
+   "kokudai-no",
+   "kokudaino"
+  ]
+ },
+ "natto": {
+  "def": "A Japanese food of soybeans fermented until sticky.",
+  "variants": [
+   "natto"
+  ]
+ },
+ "randori": {
+  "def": "Free practice in jujutsu and the other grappling arts: partners attack and throw each other freely rather than following a set sequence. It needs a floor that can take a fall, which is one reason practice halls came to be floored with boards or tatami.",
+  "variants": [
+   "randori"
+  ]
+ },
+ "Four Books and Five Classics": {
+  "def": "The core Confucian texts that a domain school's pupils recited, starting at age seven or eight and before they took up the martial arts. They are the Chinese canon that samurai learned their letters from.",
+  "variants": [
+   "Four Books and Five Classics",
+   "Four Books",
+   "Five Classics"
+  ]
+ },
+ "enfeoffment": {
+  "def": "A lord's grant of a domain to a vassal, who holds it in return for service - as when Ikeda Terumasa was granted Himeji in 1600 at an assessed yield of 520,000 koku.",
+  "variants": [
+   "enfeoffment",
+   "enfeoffments",
+   "enfeoffed"
+  ]
+ },
+ "kuruwa": {
+  "def": "The Japanese word for a castle's bailey: one of the walled or ditched enclosures a castle's layout divides its ground into, the innermost being the honmaru.",
+  "variants": [
+   "kuruwa"
+  ]
+ },
+ "shell keep": {
+  "def": "A castle's strongest tower is its keep, its last refuge; a shell keep is a ring wall built around the top of a castle mound in place of that tower, and a square keep is the older four-cornered tower whose corners were its weak points.",
+  "variants": [
+   "shell keep",
+   "shell keeps",
+   "square keep",
+   "square keeps"
+  ]
+ },
+ "trebuchet": {
+  "def": "A siege engine that throws stones from a pivoting beam, worked by a counterweight or by a crew hauling ropes; in Europe it came into use around the end of the 12th century.",
+  "variants": [
+   "trebuchet",
+   "trebuchets"
+  ]
+ },
+ "dead ground": {
+  "def": "Ground at the foot of a wall that its defenders cannot shoot into from the wall-top; at a square corner, the angle itself.",
+  "variants": [
+   "dead ground",
+   "dead space"
+  ]
+ },
+ "siege mining": {
+  "def": "Digging a tunnel (a gallery) under a wall, propping it with timber, then burning the props so the wall above collapses; a square corner was the miner's favorite target.",
+  "variants": [
+   "siege mining",
+   "galleried mining",
+   "miner's"
+  ]
+ },
+ "Hakka": {
+  "def": "A Han Chinese group of the hill country where Fujian, Guangdong and Jiangxi meet, whose clans built most of the Fujian tulou.",
+  "variants": [
+   "Hakka"
+  ]
+ },
+ "Suzaku-oji": {
+  "def": "The great central avenue of an ancient Chinese-model imperial capital, running south from the palace gate: 82-84 m wide at Heian-kyo and 147 m at Tang Chang'an (Zhuque Dajie).",
+  "variants": [
+   "Suzaku-oji",
+   "Suzaku Oji",
+   "Suzaku Ōji",
+   "Suzaku-ōji",
+   "Suzaku Avenue",
+   "Suzaku Boulevard",
+   "Suzaku street",
+   "Zhuque Dajie"
+  ]
+ },
+ "Heian-kyo": {
+  "def": "The ancient imperial capital at present-day Kyoto, founded in 794 and laid out as a grid on the Chinese model.",
+  "variants": [
+   "Heian-kyo",
+   "Heian-kyō",
+   "Heian-kyo's",
+   "Heian-kyō's"
+  ]
+ },
+ "Heijo-kyo": {
+  "def": "The imperial capital at Nara before Heian-kyo, also a grid on the Chinese model.",
+  "variants": [
+   "Heijo-kyo",
+   "Heijō-kyō",
+   "Heijo-kyo's",
+   "Heijō-kyō's"
+  ]
+ },
+ "Engishiki": {
+  "def": "A 10th-century collection of Japanese court procedures and regulations, completed in 927, which records the dimensions of Heian-kyo.",
+  "variants": [
+   "Engishiki"
+  ]
+ },
+ "Bunka": {
+  "def": "The Japanese era name for the years 1804-1818, in the late Edo period.",
+  "variants": [
+   "Bunka",
+   "Bunka era"
+  ]
+ },
+ "Morisada manko": {
+  "def": "A late-Edo-period survey of the customs and daily life of Edo, Kyoto and Osaka, compiled by Kitagawa Morisada.",
+  "variants": [
+   "Morisada manko",
+   "Morisada mankō"
   ]
  }
 }

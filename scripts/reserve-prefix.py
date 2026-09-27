@@ -78,6 +78,26 @@ def highest(kind: str, root: Path, mirror: Path) -> int:
     return max(held, default=0)
 
 
+def held_elsewhere(kind: str, key: str, root: Path, mirror: Path) -> str:
+    """Where ANOTHER clone already holds this key - a ledger row of its reservation, or its file in that clone's tree -
+    else "". Two queues of feature 265 each reserved `plinth` (9230 and 9320): the lock kept their PREFIXES apart and
+    nothing kept the TERM to one home, so the pull-back met two definitions and `make glossary` refused."""
+    ledger = mirror / ".specify" / LEDGER
+    if ledger.is_file():
+        for line in ledger.read_text(encoding="utf-8").splitlines():
+            try:
+                row = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if row.get("kind") == kind and row.get("key") == key and Path(str(row.get("clone", ""))).resolve() != root.resolve():
+                return f"{row.get('clone')} (reserved {row.get('prefix')}, {row.get('utc')})"
+    clones = mirror / ".clones"
+    for c in sorted(clones.iterdir()) if clones.is_dir() else []:
+        if c.resolve() != root.resolve() and (c / DIRS[kind]).is_dir() and any((c / DIRS[kind]).glob(f"*-{name_for(kind, key)}")):
+            return str(c)
+    return ""
+
+
 class Lock:
     """`flock` on the mirror's lock file, polled so a hung holder is a refusal rather than a hang."""
 
@@ -115,6 +135,9 @@ def reserve(kind: str, key: str, root: Path, mirror: Path | None = None, stub: s
     if existing:
         raise Refusal(f"{existing[0].relative_to(root)} already holds {key!r} - edit it rather than reserving another")
     with Lock(mirror / ".specify" / "prefixes.lock", timeout):
+        elsewhere = held_elsewhere(kind, key, root, mirror)
+        if elsewhere:
+            raise Refusal(f"{key!r} is already being defined in {elsewhere} - one home per {kind} key; pull that work in and edit it there")
         prefix = (highest(kind, root, mirror) // STEP + 1) * STEP
         path = d / f"{prefix:04d}-{name_for(kind, key)}"
         d.mkdir(parents=True, exist_ok=True)

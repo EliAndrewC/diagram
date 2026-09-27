@@ -70,3 +70,15 @@ def test_two_reservations_raced_in_processes_never_collide(tmp_path) -> None:
         names = pool.map(_take, [(str(a if i % 2 else b), f"term{i}") for i in range(8)])
     prefixes = [n.split("-", 1)[0] for n in names]
     assert len(set(prefixes)) == 8, names
+
+
+def test_a_key_another_clone_holds_is_refused(tmp_path, capsys) -> None:
+    """Two of feature 265's queues each reserved `plinth`: the prefixes differed, the term had two homes. A key another
+    clone has reserved (the ledger) or already has on file is refused; the clone's own earlier reservation is not."""
+    mirror, a = _world(tmp_path)
+    b = a.parent / "b"
+    rp.reserve("glossary", "plinth", b)
+    assert rp.main(["glossary", "plinth", "--root", str(a)]) == 2 and "already being defined in" in capsys.readouterr().err
+    assert rp.main(["glossary", "x150", "--root", str(a)]) == 2, "b's file, never reserved through the ledger, is refused too"
+    (b / rp.DIRS["glossary"] / next(p.name for p in (b / rp.DIRS["glossary"]).glob("*-plinth.json"))).unlink()
+    assert rp.held_elsewhere("glossary", "plinth", b, mirror) == "", "a clone's own reservation never blocks it"
