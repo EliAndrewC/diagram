@@ -63,5 +63,6 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D8). Inventory: [`inv
 - [x] T14 `future-work/compounds.md` "Research owed" rewritten to what remains (D8)
       research: rendering
       verify: DONE. future-work/compounds.md: Research owed rewritten to what remains (questions the research opened, silences filled by labeled guesses, sources to read, canon gaps for the GM, drawing and tooling questions); the placer entry closed when the placer was fixed; the Takayama route and the example's caption-view disagreement added
-- [ ] T15 `make done` green; the review ledger rows; land
+- [x] T15 `make done` green; the review ledger rows; land
       research: rendering
+      verify: DONE. make done green-local (test-full and done, engine key 033a628e) paired with settlement-review of Kashikawa: NEEDS-WORK then PASS after the corner-grave fix (F1-F3 verified, measurements.json); review ledger rows written
