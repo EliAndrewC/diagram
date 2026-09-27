@@ -1394,7 +1394,8 @@
   "def": "A Chinese land unit, a tenth of a mu: about 67 square meters.",
   "variants": [
    "fen"
-  ]
+  ],
+  "cased": true
  },
  "feng shui": {
   "def": "The Chinese practice of siting graves, houses and villages by the lie of hills, water and wind.",
@@ -3316,7 +3317,8 @@
  "sannomaru": {
   "def": "The third bailey of a Japanese castle, outermost of the three, holding the senior retainers' mansions and offices.",
   "variants": [
-   "sannomaru"
+   "sannomaru",
+   "san-no-maru"
   ]
  },
  "sanshaku-michi": {
@@ -3712,7 +3714,8 @@
    "field-to-field irrigation",
    "field-to-field",
    "field to field",
-   "tagoshi kangai"
+   "tagoshi kangai",
+   "tagoshi"
   ]
  },
  "taiping-gang": {
@@ -4319,7 +4322,8 @@
   "variants": [
    "han",
    "han's"
-  ]
+  ],
+  "cased": true
  },
  "yacheng": {
   "def": "The innermost walled ring of a Chinese prefectural seat, holding the government offices - the administrative city inside the inner city.",
@@ -6202,6 +6206,159 @@
   "variants": [
    "Important Cultural Property",
    "Important Cultural Properties"
+  ]
+ },
+ "Dading": {
+  "def": "A twelfth-century Chinese reign era (the name of an emperor's years) of the Jin dynasty in north China; its third year was 1163.",
+  "variants": [
+   "Dading",
+   "Dading era"
+  ]
+ },
+ "GM": {
+  "def": "The game master: the person running the campaign these maps are drawn for, whose questions and rulings this record answers.",
+  "variants": [
+   "GM",
+   "game master"
+  ]
+ },
+ "remand": {
+  "def": "Holding an accused person in custody until their case is judged, as opposed to confinement as a sentence; the ordinary work of an Edo-period jail.",
+  "variants": [
+   "remand",
+   "remanded"
+  ]
+ },
+ "gokumon": {
+  "def": "An Edo-period death sentence carried out by beheading, one of the three grades the Tenmachō jail article names beside shizai and geshunin.",
+  "variants": [
+   "gokumon"
+  ]
+ },
+ "geshunin": {
+  "def": "An Edo-period death sentence carried out by beheading, one of the three grades the Tenmachō jail article names beside gokumon and shizai.",
+  "variants": [
+   "geshunin"
+  ]
+ },
+ "yotsu": {
+  "def": "\"Four\": the Edo-period name for the night hour around 10 pm (the hours were counted down from nine). After it, a town block's kido were shut and anyone with business went through the wicket past the watchman.",
+  "variants": [
+   "yotsu"
+  ]
+ },
+ "bita": {
+  "def": "A worn, chipped or privately cast copper coin of the lowest grade, taken at a discount against the full-value mon.",
+  "variants": [
+   "bita",
+   "bita coin"
+  ]
+ },
+ "wallow": {
+  "def": "A mud pond or pool where water buffalo lie to keep cool in hot weather; they need one as well as a trough.",
+  "variants": [
+   "wallow",
+   "wallows"
+  ]
+ },
+ "well-house": {
+  "def": "A small roofed shelter built over the mouth of a well; on these maps, the roof square drawn over a wellhead.",
+  "variants": [
+   "well-house",
+   "well-houses"
+  ]
+ },
+ "Enokida": {
+  "def": "One of the project's sample maps: a village whose paddy is laid out as a polder, where every low plot wears the wet-paddy tint.",
+  "variants": [
+   "Enokida"
+  ]
+ },
+ "dissection": {
+  "def": "The cutting of a plateau or upland into valleys by the streams that erode it.",
+  "variants": [
+   "dissection"
+  ]
+ },
+ "unhair": {
+  "def": "In tanning, to strip the hair from a hide; in shironameshi the salted hides are first soaked in the river for several days to loosen it.",
+  "variants": [
+   "unhair",
+   "unhairs",
+   "unhaired",
+   "unhairing"
+  ]
+ },
+ "eta": {
+  "def": "The hereditary outcaste status of pre-Meiji Japan, whose members disposed of fallen cattle and horses, worked hides and leather, and served as executioners, constables and watchmen; in eastern Japan they were governed through the head Danzaemon.",
+  "variants": [
+   "eta"
+  ]
+ },
+ "buraku": {
+  "def": "An outcaste settlement; each had its own head, who guarded it and was paid by its residents.",
+  "variants": [
+   "buraku"
+  ]
+ },
+ "gross-up": {
+  "def": "The factor by which a dwelling's drawn footprint is multiplied to give the ground it costs a city: the footprint plus its share of eaves, lanes and street margins.",
+  "variants": [
+   "gross-up",
+   "gross-ups"
+  ]
+ },
+ "budget model": {
+  "def": "The project's reckoning of the ground a city's households, castle and public buildings need, from which the size and circuit of its wall are derived.",
+  "variants": [
+   "budget model"
+  ]
+ },
+ "reform and opening-up": {
+  "def": "China's turn to market economics and foreign trade from the end of the 1970s; the record uses it to date the modern commercialization that widened the Pearl delta's ponds and narrowed their dikes.",
+  "variants": [
+   "reform and opening-up",
+   "the reform and opening-up"
+  ]
+ },
+ "Shunde": {
+  "def": "A county, now a district, of the Pearl delta south of Guangzhou, at the heart of the dike-pond country; mulberry dominated its dikes from the late Ming.",
+  "variants": [
+   "Shunde"
+  ]
+ },
+ "Kanto": {
+  "def": "The plain around Edo in eastern Japan, where the shogunate held much of its own land and its intendants lived in Edo rather than in the villages they governed.",
+  "variants": [
+   "Kanto",
+   "Kantō"
+  ]
+ },
+ "house pad": {
+  "def": "A raised platform of packed earth that a house is built on, lifting it above the surrounding ground and flood water.",
+  "variants": [
+   "house pad",
+   "house pads"
+  ]
+ },
+ "tax-farming": {
+  "def": "Handing a tax's collection to agents who profit from what they gather; here, the permanent clerks' chance to enrich themselves out of the revenue that passes through their hands.",
+  "variants": [
+   "tax-farming"
+  ]
+ },
+ "Hayakawa": {
+  "def": "One of the two example county manors drawn for this project, beside Ochiba: a magistracy compound of about 247 by 200 ft, with a tally office at its river landing.",
+  "variants": [
+   "Hayakawa",
+   "Hayakawa's"
+  ]
+ },
+ "draw-basin": {
+  "def": "A basin inside the city wall where residents drew the aqueduct's water from the buried pipes - what a resident sees of the supply, beside the wells.",
+  "variants": [
+   "draw-basin",
+   "draw-basins"
   ]
  }
 }

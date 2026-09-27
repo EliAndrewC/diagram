@@ -90,6 +90,8 @@ bidens	Bidens tripartita
 bidens tripartita	Bidens tripartita
 bishamon	Bishamon
 bishamonten	Bishamon
+bita	bita
+bita coin	bita
 board feet	board foot
 board foot	board foot
 bodaiji	bodaiji
@@ -101,6 +103,7 @@ broadcast	broadcast sowing
 broadcast oilseed stand	broadcast sowing
 broadcast sowing	broadcast sowing
 bu	bu
+budget model	budget model
 bugeijo	bugeijo
 bugyosho	machi-bugyosho
 buke	bushi
@@ -113,6 +116,7 @@ bunka	Bunka
 bunka era	Bunka
 bunsei	Bunsei
 bunsuiguchi	bunsuiguchi
+buraku	buraku
 burakumin	burakumin
 burgage	burgage plot
 burgage plot	burgage plot
@@ -244,6 +248,8 @@ cyanobacteria	cyanobacterium
 cyanobacterium	cyanobacterium
 dachedian	wagon inn
 dacheng gate	Dacheng gate
+dading	Dading
+dading era	Dading
 daidokoro	daidokoro
 daihachiguruma	daihachiguruma
 daijokan	Daijokan
@@ -292,6 +298,7 @@ dispersed settlement	dispersed settlement
 dispersed settlements	dispersed settlement
 dispersed village	dispersed settlement
 dispersed villages	dispersed settlement
+dissection	dissection
 distributaries	distributary
 distributary	distributary
 ditai	mamian
@@ -314,6 +321,8 @@ dozo	kura
 dozō	kura
 drainage ditch	drainage ditch
 drainage ditches	drainage ditch
+draw-basin	draw-basin
+draw-basins	draw-basin
 drawdown	drawdown
 dressed stone	dressed stone
 drill ground	drill ground
@@ -357,6 +366,8 @@ enfeoffment	enfeoffment
 enfeoffments	enfeoffment
 engishiki	Engishiki
 enoki	enoki
+enokida	Enokida
+eta	eta
 eunis	EUNIS
 eutrophic	eutrophication
 eutrophication	eutrophication
@@ -467,6 +478,7 @@ fusekoshi	inverted siphon
 gabion	gabion
 gabions	gabion
 galleried mining	siege mining
+game master	GM
 gangi	gangi
 gassho	gassho
 gassho-zukuri	gassho
@@ -484,6 +496,7 @@ gentry	gentry
 geomancy	geomancy
 geomantic	geomancy
 geostrophic	geostrophic
+geshunin	geshunin
 geta	geta
 ghat	ghat
 ginmisho	ginmisho
@@ -495,11 +508,13 @@ glebe	glebe
 glulam	glulam
 glyph	glyph
 glyphs	glyph
+gm	GM
 go	go
 goemon-buro	goemon-buro
 goemonburo	goemon-buro
 gogura	gogura
 gokaido	Five Highways
+gokumon	gokumon
 gongxiefang	gongxiefang
 gorinto	five-ring pagoda
 goshi	gōshi
@@ -508,6 +523,8 @@ goulan	goulan
 goyoba	goyoba
 goyōba	goyoba
 green manure	green manure
+gross-up	gross-up
+gross-ups	gross-up
 grow-out	grow-out pond
 grow-out pond	grow-out pond
 grow-out ponds	grow-out pond
@@ -542,6 +559,8 @@ hata-ei	hata-ei
 hatago	hatago
 hatake	hatake
 hatamoto	hatamoto
+hayakawa	Hayakawa
+hayakawa's	Hayakawa
 hazakake	hazakake
 head race	head race
 head works	head works
@@ -596,6 +615,8 @@ hot shoeing	hot-shoeing
 hot-shoeing	hot-shoeing
 houlongshan	houlongshan
 hour of xu	hour of xu
+house pad	house pad
+house pads	house pad
 houzhaofang	houzhaofang
 hucheng he	hucheng he
 hutong	hutong
@@ -717,6 +738,8 @@ kanden	kanden
 kangxi	Kangxi
 kannon	Kannon
 kannushi	kannushi
+kanto	Kanto
+kantō	Kanto
 kaogongji	Kaogongji
 karamete	karamete-mon
 karamete-mon	karamete-mon
@@ -1116,11 +1139,14 @@ reel	reeling
 reeling	reeling
 reeling machine	reeling
 reeling shed	reeling
+reform and opening-up	reform and opening-up
 regime equation	regime equation
 regime power laws	regime equation
 regime theory	regime equation
 regulator	regulator
 regulators	regulator
+remand	remand
+remanded	remand
 renge	renge
 renkaku	renkaku
 rent bursary	rent bursary
@@ -1166,6 +1192,7 @@ sally gate	sally port
 sally port	sally port
 sallyport	sally port
 salvage excavation	salvage excavation
+san-no-maru	sannomaru
 sand junk	sand junk
 sand junks	sand junk
 sand sluice	sand sluice
@@ -1254,6 +1281,7 @@ shuimen	water gate
 shuinchi	shuinchi
 shuku	shukuba
 shukuba	shukuba
+shunde	Shunde
 shunzhi	Shunzhi
 siege mining	siege mining
 sigma	sigma
@@ -1332,6 +1360,7 @@ suzaku ōji	Suzaku-oji
 suzaku-oji	Suzaku-oji
 suzaku-ōji	Suzaku-oji
 sward	sward
+tagoshi	tagoshi kangai
 tagoshi kangai	tagoshi kangai
 taihu	Lower Yangzi
 taiping-gang	taiping-gang
@@ -1360,6 +1389,7 @@ tauchiguruma	tauchiguruma
 tawara	hyō
 tawed	shironameshi
 tawing	shironameshi
+tax-farming	tax-farming
 tax-free plot	tax-free plot
 tedai	tedai
 teikaku	teikaku
@@ -1381,6 +1411,7 @@ tertiary summary	tertiary source
 thatch field	thatch field
 thatch fields	thatch field
 the pool	the pool
+the reform and opening-up	reform and opening-up
 thousand character classic	Thousand Character Classic
 three bays	bay
 three officials	Three Officials
@@ -1446,6 +1477,10 @@ umon	umon
 undersluice	undersluice
 undersluices	undersluice
 understory	understory
+unhair	unhair
+unhaired	unhair
+unhairing	unhair
+unhairs	unhair
 ura-dana	ura-dana
 ura-nagaya	ura-nagaya
 usufruct	usufruct
@@ -1462,6 +1497,8 @@ wagon inns	wagon inn
 wagon-inn	wagon inn
 wakato	wakato
 walled ward	lifang
+wallow	wallow
+wallows	wallow
 wanghuolou	wanghuolou
 wanli	Wanli era
 wanli era	Wanli era
@@ -1491,6 +1528,8 @@ weir	weir
 weirs	weir
 weitian	weitian
 well sweep	jiegao
+well-house	well-house
+well-houses	well-house
 well-sweep	well-sweep
 weng cheng	wengcheng
 wengcheng	wengcheng
@@ -1546,6 +1585,7 @@ yoshi	Phragmites
 yoshiwara	Yoshiwara
 yoshizu	yoshizu
 yosui	yosui
+yotsu	yotsu
 youfang	aburaya
 yuan	Yuan dynasty
 yuan dynasty	Yuan dynasty

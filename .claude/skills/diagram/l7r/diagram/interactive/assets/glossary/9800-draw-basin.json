@@ -1,0 +1,8 @@
+{
+ "term": "draw-basin",
+ "def": "A basin inside the city wall where residents drew the aqueduct's water from the buried pipes - what a resident sees of the supply, beside the wells.",
+ "variants": [
+  "draw-basin",
+  "draw-basins"
+ ]
+}
