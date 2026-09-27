@@ -199,3 +199,4 @@
 - KneelingPositions (buildings SECTION=010): IN-STEP - the kneeling-stones quote still supports litigants below the raised hall
 - MagistratesDais (buildings SECTION=010): IN-STEP - its one 010 claim, a court hall over kneeling litigants, still rests on the henan-neixiang footnote
 - Byre (homesteads SECTION=060): LABELED - the owned yard stable now says it rests on one encyclopedia sentence about wealthy Shaanxi courtyard houses, with no survey behind it
+- Stream (water SECTION=010): IN-STEP - the creek's ~2 m, the moat-feeder ruling and the 0.3 m ditch's standing all still hold; 271 K7 changes (city-canal row, conghua citation) do not touch the brook
