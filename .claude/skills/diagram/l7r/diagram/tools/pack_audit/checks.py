@@ -333,6 +333,27 @@ class MisplacedBoard:
     gap_ft: float
 
 
+def _main_gate_passage(plan: ParsedPlan) -> list[tuple[float, float]]:
+    """The middle of the passage between the `main gate`'s posts. A nagaya-mon's passage runs THROUGH its gate range,
+    which stands in a wall break wider than any gap the wall-opening scan counts as a gate (feature 267: the range is
+    the wall line, research buildings 420), so a board at that gate read as adrift; the posts say where it is."""
+    posts = plan.gate_posts
+    if not posts:
+        return []
+    return [(sum(r.x + r.w / 2 for r in posts) / len(posts), sum(r.y + r.h / 2 for r in posts) / len(posts))]
+
+
+def main_gate_passage_ft(plan: ParsedPlan) -> float | None:
+    """The clear width between the `main gate`'s two posts, in feet - the ceremonial gate's passage, which a wall-gap scan
+    cannot see where it runs through a gate range standing in a wider break (feature 267). None without two posts."""
+    posts = sorted(plan.gate_posts, key=lambda r: (r.x, r.y))
+    if len(posts) != 2:
+        return None
+    a, b = posts
+    across = b.x - (a.x + a.w) if abs(a.y - b.y) < max(a.h, b.h) else b.y - (a.y + a.h)
+    return across / FTPX
+
+
 def notice_board_adrift(plan: ParsedPlan, max_ft: float = NOTICE_BOARD_MAX_FT) -> list[MisplacedBoard]:
     """A notice board (kosatsu) is read where people pass, so it must sit at a gate. Flag any notice
     board farther than max_ft from the nearest wall gate opening.
@@ -342,7 +363,7 @@ def notice_board_adrift(plan: ParsedPlan, max_ft: float = NOTICE_BOARD_MAX_FT) -
     cartographic standard - beside the board at its first free ranked position - the caption can stand a
     board's length off to one side, and a board at the gate read as adrift. The sheet tags the board
     (feature 262), so its own drawn rect is measured; an untagged sheet still falls back to the label."""
-    ops = _gate_openings(plan)
+    ops = _gate_openings(plan) + _main_gate_passage(plan)
     if not ops:
         return []
     boards = [r for r in plan.fills if plan.label_kinds.get(r.pos) == "notice board"]

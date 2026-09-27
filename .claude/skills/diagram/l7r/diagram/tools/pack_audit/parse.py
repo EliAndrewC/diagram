@@ -203,6 +203,10 @@ class ParsedPlan:
     # is found by these, never by a pattern over its label text.
     label_kinds: dict[int, str] = field(default_factory=dict)
     kinds: frozenset[str] = frozenset()
+    # the `main gate`'s post rects, whatever their fill: posts drawn in a filled group carry none of their own, so
+    # `fills` never sees them (feature 267 - a nagaya-mon's passage is found by its posts, not by a wall gap)
+    gate_posts: tuple[Rect, ...] = ()
+
 
     def by_id(self, ident: str) -> tuple[Rect, ...]:
         """The rects the sheet marked `id="<ident>"`, in draw order."""
@@ -289,18 +293,19 @@ def _wall_bands(text: str) -> list[Rect]:
     return out
 
 
-def _rects(text: str) -> list[Rect]:
-    """Every `<rect>` with x, y, width, height and a fill, whatever its attribute order, in draw order."""
+def _rects(text: str, need_fill: bool = True) -> list[Rect]:
+    """Every `<rect>` with x, y, width, height and a fill (any rect at all with `need_fill=False`, its fill ""),
+    whatever its attribute order, in draw order."""
     out: list[Rect] = []
     for m in _RECT_TAG_RE.finditer(text):
         attrs = dict(_ATTR_ANY_RE.findall(m.group(1)))
-        if not {"x", "y", "width", "height", "fill"} <= set(attrs):
+        if not {"x", "y", "width", "height"} <= set(attrs) or (need_fill and "fill" not in attrs):
             continue
         try:
             x, y, w, h = (float(attrs[k]) for k in ("x", "y", "width", "height"))
         except ValueError:
             continue
-        out.append(Rect(x, y, w, h, attrs["fill"], m.start(), attrs.get("id", "")))
+        out.append(Rect(x, y, w, h, attrs.get("fill", ""), m.start(), attrs.get("id", "")))
     return out
 
 
@@ -380,6 +385,7 @@ def parse_svg(text: str) -> ParsedPlan:
         fence_segs=tuple(fence_segs),
         label_kinds=kinds,
         kinds=frozenset(kinds.values()),
+        gate_posts=tuple(r for r in _rects(text, need_fill=False) if kinds.get(r.pos) == "main gate"),
     )
 
 

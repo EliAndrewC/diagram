@@ -7,7 +7,7 @@ import re
 import sys
 
 from ...buildings.types import BuildingType, by_tier, tiers
-from .checks import TUB_MAX_GAP_FT, aligned_gaps, fire_water_adrift, gap_tag, tubs_in_buildings, wall_openings
+from .checks import TUB_MAX_GAP_FT, aligned_gaps, fire_water_adrift, gap_tag, main_gate_passage_ft, tubs_in_buildings, wall_openings
 from .grids import FTPX, _grids, perimeter_hugging_pct, region_density, top_vacant_rects
 from .onmap import OnMap, read_on_map
 from .parse import ParsedPlan, parse_svg
@@ -71,6 +71,9 @@ def format_report(plan: ParsedPlan, cell: int = 2, text: str = "", tier: str | N
     if not openings:
         lines.append("    (no openings found in the compound wall)")
     lines += [f"    {o.ft:5.1f} ft  at svg({o.x:.0f},{o.y:.0f})   compare with the width this opening's comment claims" for o in openings]
+    passage = main_gate_passage_ft(plan)
+    if passage is not None:
+        lines.append(f"    {passage:5.1f} ft  the MAIN GATE's passage, between its posts - the widest opening of all (buildings.md checklist)")
     lines += check_lines(Context(plan, text, btype, form, on_map), tier)
     return "\n".join(lines)
 

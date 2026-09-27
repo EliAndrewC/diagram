@@ -68,6 +68,25 @@ COURT_FILL: dict[str, str] = {
     "yard": "url(#court-earth)",
     "practice ground": "url(#keiko-earth)",  # swept keiko earth (buildings.md "Practice ground")
 }
+# A court that is ROOFED is drawn with a building's solid outline (stroke, width) and posts along its open side
+# (feature 267 R22, research buildings 450 'Was the hearing court open white sand, or roofed?': a magistracy's court
+# was roofed or an indoor gravel floor - the open-air white court is the period-drama image). Every other zone keeps
+# the thin open-ground edge.
+ROOFED_ZONES: dict[str, tuple[str, float]] = {"oshirasu": ("#5A3F1E", 2.0)}
+# The posts' spacing along the roofed court's open (south) side: one bay of two ken (~12 ft) between posts. A GUESS -
+# no roofed court's measurements were found (buildings.md "Hearing court"); two ken is a common bay for an open
+# post-and-beam front. Each post is drawn 1 ft square, at true size.
+ROOF_POST_BAY_FT: float = 12.0
+ROOF_POST_FT: float = 1.0
+# The covered corridor joining the kitchen to the residence (feature 267, research buildings 360/370: the kitchen is
+# part of the HOUSE, joined as an ell or by a short covered corridor, never a freestanding cookhouse; buildings.md
+# "Kitchen + pantries"). Its width, one ken (~6 ft), is a GUESS; it is drawn only across a gap no wider than a
+# fire-gap - a longer run would be a gallery, not the short corridor the research describes.
+CORRIDOR_W_FT: float = 6.0
+# The bath (feature 267 R09, research buildings 320: a room of the residence or a small addition to it on its
+# service side, by the kitchen and its well - no bath as a building of its own was found). 15 x 12 ft is the size it
+# was already drawn at, inside the doctrine's 12-15 ft guess.
+BATH_W_FT, BATH_H_FT = 15.0, 12.0
 
 
 @dataclass(frozen=True)
@@ -117,6 +136,11 @@ class BuildingSpec:
     # refuses a building without one, naming it - a draft with an unkinded building would be a page with
     # ink nobody ruled on.
     feature: str = ""
+    # ROOMS OF THE BUILDING (feature 267): (kind, w_ft, h_ft) floors drawn INSIDE it, west to east from its NW corner,
+    # the way the hand sheets draw a room (feature 264): the building's fill, one same-color floor per room tagged
+    # with the room's kind, then the building's outline on top - so the page files the room as a part of the
+    # building. A room is never placed; it takes ground its building already holds.
+    rooms: tuple[tuple[str, float, float], ...] = ()
 
 
 @dataclass(frozen=True)
@@ -413,8 +437,19 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 7
     ]
     for z in program.spine:  # reserved open courts, drawn + named
         zk = ZONE_KINDS.get(z.name, "outer court" if z.y_ft >= env.divider_ft else "inner court")
-        parts.append(rect(z.x_ft, z.y_ft, z.w_ft, z.h_ft, COURT_FILL.get(z.name, "url(#court-earth)"), "#9C7A40", 0.8, "", zk))
+        zstroke, zsw = ROOFED_ZONES.get(z.name, ("#9C7A40", 0.8))
+        parts.append(rect(z.x_ft, z.y_ft, z.w_ft, z.h_ft, COURT_FILL.get(z.name, "url(#court-earth)"), zstroke, zsw, "", zk))
         caption("area", z.x_ft, z.y_ft, z.w_ft, z.h_ft, z.name, 11, True, "#5C4318", zk)
+        if z.name in ROOFED_ZONES:
+            # the posts carrying the roof along the open (south) side, the court's own ink (ROOFED_ZONES)
+            # its solid outline is a building's edge, so no caption crosses it (the ground inside stays free)
+            corners = [px(z.x_ft, z.y_ft), px(z.x2, z.y_ft), px(z.x2, z.y2), px(z.x_ft, z.y2)]
+            obstacles.extend(Obstacle(tuple(stroke_band(corners[i], corners[(i + 1) % 4], zsw / 2 + 1)), WEIGHT_OBSTACLE) for i in range(4))
+            parts.append(f'<g fill="{zstroke}"{_kind_attr(zk)}>')
+            for pxf, pyf in _roof_posts(z):
+                obstacles.append(Obstacle(box(pxf, pyf, ROOF_POST_FT, ROOF_POST_FT), WEIGHT_OBSTACLE))
+                parts.append(f'<rect x="{ox + pxf * FTPX:.0f}" y="{oy + pyf * FTPX:.0f}" width="{ROOF_POST_FT * FTPX:.0f}" height="{ROOF_POST_FT * FTPX:.0f}"/>')
+            parts.append("</g>")
         if z.name == "practice ground":
             # The program item's durable equipment (buildings.md "Practice ground"): a weapon
             # rack on the zone's south edge (the hand-refined map moves it flush to the
@@ -431,8 +466,24 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 7
             parts.append("</g>")
     for p in result.placed:  # buildings
         fill, stroke = KINDS.get(p.spec.kind, KINDS["service"])
-        parts.append(rect(p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, fill, stroke, 2, "", p.spec.feature))
+        if not p.spec.rooms:
+            parts.append(rect(p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, fill, stroke, 2, "", p.spec.feature))
+            caption("area", p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, p.spec.name, 10, False, "#3A2E1C", p.spec.feature)
+            continue
+        # a building with rooms (BuildingSpec.rooms): its fill, a same-color floor per room, partitions, the outline
+        # on top - all inside a group of the building's kind, the hand sheets' form (feature 264)
+        parts.append(f"<g{_kind_attr(p.spec.feature)}>")
+        parts.append(rect(p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, fill, "none", 0, "", p.spec.feature))
         caption("area", p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, p.spec.name, 10, False, "#3A2E1C", p.spec.feature)
+        rx = p.x_ft
+        for rkind, rw, rh in p.spec.rooms:
+            parts.append(rect(rx, p.y_ft, rw, rh, fill, "none", 0, "", rkind))
+            caption("area", rx, p.y_ft, rw, rh, rkind, 8, False, "#3A2E1C", rkind)
+            (x0, y0), (x1, y1) = px(rx, p.y_ft), px(rx + rw, p.y_ft + rh)
+            parts.append(f'<path d="M{x1:.0f},{y0:.0f} V{y1:.0f} H{x0:.0f}" fill="none" stroke="{stroke}" stroke-width="0.8" stroke-dasharray="4 3"/>')
+            rx += rw
+        parts.append(rect(p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, "none", stroke, 2))
+        parts.append("</g>")
     parts += _point_features(program, result, rect, caption, ox, oy)
     # the scale bar every Mode A sheet carries (buildings.md "Scale"; the registered check `scale_bar_present`)
     sx, sy = ox, oy - 12 * FTPX
@@ -490,11 +541,74 @@ def _court_face(p: Placed, env: Envelope) -> tuple[float, float, float, float]:
     return 1.0, 0.0, p.x2, p.y_ft
 
 
+def _roof_posts(z: CourtZone) -> list[tuple[float, float]]:
+    """The top-left corners (ft) of the posts along a roofed court's open south side, one per ROOF_POST_BAY_FT bay,
+    both corners included."""
+    bays = max(1, round(z.w_ft / ROOF_POST_BAY_FT))
+    step = (z.w_ft - ROOF_POST_FT) / bays
+    return [(z.x_ft + i * step, z.y2 - ROOF_POST_FT) for i in range(bays + 1)]
+
+
+Box = tuple[float, float, float, float]  # (x, y, x2, y2) in feet
+
+
+def _is_clear(env: Envelope, boxes: list[Box], x: float, y: float, w: float, h: float, margin: float = 1.0) -> bool:
+    """A w x h rect at (x, y) stands inside the envelope and at least `margin` ft off every box."""
+    if x < margin or y < margin or x + w > env.w_ft - margin or y + h > env.h_ft - margin:
+        return False
+    return all(x + w + margin <= tx or tx2 + margin <= x or y + h + margin <= ty or ty2 + margin <= y for tx, ty, tx2, ty2 in boxes)
+
+
+def _abut(env: Envelope, p: Placed, w: float, h: float, boxes: list[Box]) -> tuple[float, float] | None:
+    """The top-left of a w x h addition ABUTTING `p`'s court face - flush against it, the first clear foot along it
+    from its start - or None where the face has no clear run. `boxes` are what it must clear (never `p` itself)."""
+    nx, ny, fx, fy = _court_face(p, env)
+    if ny:
+        y = fy if ny > 0 else fy - h
+        seats = [(p.x_ft + s, y) for s in range(int(p.spec.w_ft - w) + 1)]
+    else:
+        x = fx if nx > 0 else fx - w
+        seats = [(x, p.y_ft + s) for s in range(int(p.spec.h_ft - h) + 1)]
+    return next(((x, y) for x, y in seats if _is_clear(env, boxes, x, y, w, h)), None)
+
+
+def _corridor(a: Placed, b: Placed, width: float, max_gap: float) -> Box | None:
+    """A covered corridor `width` wide across the gap between two buildings that face each other across no more than
+    `max_gap` ft (CORRIDOR_W_FT), centered on the run they share; None if they share no such run."""
+    lo, hi = max(a.x_ft, b.x_ft), min(a.x2, b.x2)
+    if hi - lo >= width:
+        top, bot = (a.y2, b.y_ft) if a.y2 <= b.y_ft else (b.y2, a.y_ft)
+        if 0 < bot - top <= max_gap:
+            mid = (lo + hi) / 2
+            return (mid - width / 2, top, mid + width / 2, bot)
+    lo, hi = max(a.y_ft, b.y_ft), min(a.y2, b.y2)
+    if hi - lo >= width:
+        left, right = (a.x2, b.x_ft) if a.x2 <= b.x_ft else (b.x2, a.x_ft)
+        if 0 < right - left <= max_gap:
+            mid = (lo + hi) / 2
+            return (left, mid - width / 2, right, mid + width / 2)
+    return None
+
+
+def _roomiest(points: list[tuple[float, float]], boxes: list[Box]) -> tuple[float, float]:
+    """The point with the most open ground around it: the farthest from its SECOND-nearest box - every tub stands against
+    the building it serves, so the nearest box says nothing - with a box holding the point (its own) not counted; the
+    first on a tie."""
+
+    def room(pt: tuple[float, float]) -> float:
+        x, y = pt
+        gaps = [((max(bx - x, 0.0, x - bx2)) ** 2 + (max(by - y, 0.0, y - by2)) ** 2) ** 0.5 for bx, by, bx2, by2 in boxes if not (bx <= x <= bx2 and by <= y <= by2)]
+        return sorted(gaps)[1] if len(gaps) > 1 else float("inf")
+
+    return max(points, key=room)
+
+
 def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callable[..., str], caption: Callable[..., str], ox: float, oy: float) -> list[str]:
     """The program's point features, seated by the composition (feature 254): fire-water tubs at every
     wooden building's court face (two at the kitchen), a well at the kitchen, the garden and the stables,
-    a privy beside the barracks, the stables and the servants' row, a bath in the garden, and the notice
-    board outside the main gate. The placer arranges the wall-ranging masses; these follow them, each
+    a privy beside the barracks, the stables and the servants' row, the notice board outside the main gate -
+    and the house's service parts (feature 267): a covered corridor joining the kitchen to the residence, and
+    the bath as a small addition abutting the kitchen's court face. The placer arranges the wall-ranging masses; these follow them, each
     seated at the first spot along its building's court face that is CLEAR of every mass and of every
     feature already seated - a draft swept by the gate carries the whole program, not the masses alone."""
     env = program.envelope
@@ -503,9 +617,7 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
     by_name = {p.spec.name: p for p in result.placed}
 
     def clear(x: float, y: float, w: float, h: float, margin: float = 1.0) -> bool:
-        if x < margin or y < margin or x + w > env.w_ft - margin or y + h > env.h_ft - margin:
-            return False
-        return all(x + w + margin <= tx or tx2 + margin <= x or y + h + margin <= ty or ty2 + margin <= y for tx, ty, tx2, ty2 in taken)
+        return _is_clear(env, taken, x, y, w, h, margin)
 
     def seat(p: Placed, size: float, fracs: tuple[float, ...], offs: tuple[float, ...]) -> tuple[float, float] | None:
         """The center of a `size`-square feature against `p`'s court face: the first clear (frac, off)."""
@@ -521,17 +633,36 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
     tubs: list[tuple[float, float]] = []
     wells: list[tuple[float, float]] = []
     privies: list[tuple[float, float]] = []
-    for name in ("kitchen", "stables"):  # wells first: they take the middle of a face
-        if name in by_name and (w := seat(by_name[name], 7.3, (0.5, 0.3, 0.7), (9.0, 12.0, 15.0))):
+    # The kitchen is part of the house: a short covered corridor joins it to the residence where they face each other
+    # across a fire-gap (CORRIDOR_W_FT), drawn as a part of the residence
+    if "kitchen" in by_name and "residence" in by_name and (cor := _corridor(by_name["kitchen"], by_name["residence"], CORRIDOR_W_FT, FIRE_GAP_FT)):
+        taken.append(cor)
+        fill, stroke = KINDS["lord"]
+        parts += [f"<g{_kind_attr('residence')}>", rect(cor[0], cor[1], cor[2] - cor[0], cor[3] - cor[1], fill, stroke, 1.2, "", "residence corridor"), "</g>"]
+    # The bath is a small addition abutting the kitchen's court face - the house's service side (BATH_W_FT); seated
+    # before the wells so the kitchen well takes what the bath leaves, and clear of every spine court, since a bath in
+    # the garden is the pavilion the research does not find
+    if "kitchen" in by_name:
+        zones = [(z.x_ft, z.y_ft, z.x2, z.y2) for z in program.spine]
+        host = by_name["kitchen"]
+        others = [t for t in taken if t != (host.x_ft, host.y_ft, host.x2, host.y2)]
+        if bath := _abut(env, host, BATH_W_FT, BATH_H_FT, others + zones):
+            bx, by = bath
+            taken.append((bx, by, bx + BATH_W_FT, by + BATH_H_FT))
+            parts.append(rect(bx, by, BATH_W_FT, BATH_H_FT, KINDS["service"][0], KINDS["service"][1], 1.5, "", "bath"))
+            caption("area", bx, by, BATH_W_FT, BATH_H_FT, "bath", 8, False, "#3A2E1C", "bath")
+    # wells next: they take the middle of a face. A kitchen well may stand as far as 20 ft out - past the bath that
+    # abuts the kitchen, serving both, as the Takayama residence's bath stood with its well and kitchen (research
+    # buildings 320); the nearer seats are tried first
+    for name in ("kitchen", "stables"):
+        if name in by_name and (w := seat(by_name[name], 7.3, (0.5, 0.3, 0.7), (9.0, 12.0, 15.0, 20.0))):
             wells.append(w)
     for z in program.spine:
         if z.name == "garden":
-            wells.append((z.x_ft + 5.0, z.y_ft + 5.0))
-            taken.append((z.x_ft + 1.35, z.y_ft + 1.35, z.x_ft + 8.65, z.y_ft + 8.65))
-            bx, by = z.x2 - 18.0, z.y_ft + max(0.0, (z.h_ft - 12.0) / 2)
-            taken.append((bx, by, bx + 15.0, by + 12.0))
-            parts.append(rect(bx, by, 15.0, 12.0, KINDS["service"][0], KINDS["service"][1], 1.5, "", "bath"))
-            caption("area", bx, by, 15.0, 12.0, "bath", 8, False, "#3A2E1C", "bath")
+            # the garden well stands at the garden's EAST end, where the bath stood before it joined the house: at the
+            # west end it stood 8 ft from the kitchen well seated past the bath, and read as its duplicate
+            wells.append((z.x2 - 5.0, z.y_ft + 5.0))
+            taken.append((z.x2 - 8.65, z.y_ft + 1.35, z.x2 - 1.35, z.y_ft + 8.65))
     for name in ("barracks", "stables", "servants"):
         if name in by_name and (v := seat(by_name[name], 5.0, (0.85, 0.15, 0.5), (4.5, 7.0))):
             privies.append(v)
@@ -553,7 +684,10 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
         parts.append("</g>")
         for tx, ty in tubs:  # every tub is drawn - and so is an obstacle to every caption
             rect(tx - 1.27, ty - 1.27, 2.54, 2.54, "none", "none", 0)  # registers the tub; its drawn circle follows
-        tx, ty = tubs[0]
+        # the group's one caption goes on the tub with the most open ground around it: the first tub can stand hemmed
+        # in (the residence's, between the wall, the kitchen and their corridor), and a caption pushed off it is
+        # drawn far from any tub it names (pack audit `orphan_group_labels`)
+        tx, ty = _roomiest(tubs, taken)
         caption("point", tx - 1.27, ty - 1.27, 2.54, 2.54, "fire-water tubs", 7, True, "#3A5060", "fire-water tubs")
     gl, _gr = _gate_interval(env)
     parts.append(rect(gl - 14.0, env.h_ft + 3.0, 6.0, 1.5, "#4A3318", "#2D2A24", 0.6, "", "notice board"))
@@ -577,7 +711,10 @@ def county_magistracy_program() -> CompoundProgram:
         # inner court, between residence and karo. Its north edge clears the N-wall row's new
         # inward face: the 36 ft residence now starts 2 ft in (clear of the wall ink), ending at
         # 38, so a garden starting at 36 would overlap it and shove it off its wall entirely.
-        CourtZone("garden", 50.0, 38.0, 165.0, 22.0),
+        # Its west edge stands at 72, clear of the bath that abuts the kitchen's court face (x 46-61, BATH_W_FT) and
+        # of the kitchen well seated past it (to ~70): the bath is an addition of the house, not a pavilion in the
+        # garden (feature 267 R09, research buildings 320). It started at 50 while the bath stood inside it.
+        CourtZone("garden", 72.0, 38.0, 143.0, 22.0),
         CourtZone("oshirasu", 68.0, 126.0, 132.0, 39.0),  # outer court, before the office-hall dais
         CourtZone("forecourt", 118.0, 166.0, 36.0, 31.0),  # just inside the main gate
         # Practice ground beside where the watch lodges (the E-wall barracks lands at x 235,
@@ -599,13 +736,18 @@ def county_magistracy_program() -> CompoundProgram:
         b("guest house", "lord", 33.0, 30.0, "inner", "E", order=3, feature="guest quarters"),
         b("karo's house", "lord", 37.0, 26.0, "inner", "divider", order=3, feature="karo's house"),
         # outer (administrative) court - office hall backs the divider (oshirasu in front)
-        b("office hall", "lord", 113.0, 34.0, "outer", "divider", order=10, feature="office hall"),
+        # The clerks' room is a ROOM of the office hall, at its west end on the rear (divider) side, 30 x 20 ft - the
+        # footprint the freestanding clerks' building had (feature 267 R20, research buildings 430: the clerks worked in
+        # rooms of the office; no page gives them a workroom building). Its size is a guess.
+        b("office hall", "lord", 113.0, 34.0, "outer", "divider", order=10, feature="office hall", rooms=(("clerks' room", 30.0, 20.0),)),
         b("tax archive", "kura", 34.0, 30.0, "outer", "W", order=6, feature="tax archive"),
         b("senior retainers", "service", 60.0, 18.0, "outer", "W", order=4, feature="retainers' quarters"),
-        b("clerks' room", "plain", 30.0, 20.0, "outer", "W", order=2, feature="clerks' room"),
         b("granary", "kura", 52.0, 28.0, "outer", "E", order=6, feature="granary"),
         b("barracks", "service", 33.0, 34.0, "outer", "E", order=4, feature="barracks"),
-        b("cell", "cell", 18.0, 16.0, "outer", "E", order=1, feature="cell"),
+        # 12 x 10 ft: the small end of the single cells read (Osaka's 6 mats, ~12 x 9 ft, to Tenmacho's 18); a county
+        # remand cell belongs there, its size a guess in the span (feature 267 R24, research buildings 460). It was
+        # 18 x 16 ft.
+        b("cell", "cell", 12.0, 10.0, "outer", "E", order=1, feature="cell"),
         b("gatehouse", "dark", 42.0, 15.0, "outer", "S", order=8, feature="gatehouse"),
         b("stables", "service", 33.0, 23.0, "outer", "S", order=5, feature="stables"),
     )

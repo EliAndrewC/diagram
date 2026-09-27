@@ -49,7 +49,7 @@
   <!-- Outer land (surrounding countryside / town outskirts) -->
   <rect x="0" y="0" width="1200" height="900" fill="#EFE3C2" data-kind="-"/>
 
-  <!-- Imperial road approaching the south gate (13.3 ft, matching the gate) -->
+  <!-- Imperial road approaching the south gate: the ROAD is 13.3 ft wide (a width of its own - the gate's passage is the ~8 ft yakuimon, feature 267 R26; the old comment said the road matched a 13.3 ft gate) -->
   <g data-kind="road">
     <path d="M 600 900 L 600 750" stroke="#B89060" stroke-width="40" stroke-linecap="butt" opacity="0.55"/>
     <path d="M 600 900 L 600 750" stroke="#9C7448" stroke-width="40" stroke-dasharray="14 12" fill="none" opacity="0.4"/>
@@ -97,13 +97,11 @@
     <line x1="200" y1="398.5" x2="200" y2="750"/>
     <!-- East -->
     <line x1="1000" y1="150" x2="1000" y2="750"/>
-    <!-- South, west of gate (broken by the service gate at x=400..428,
-         just east of the stables - muck and night-soil skip the formal gate).
-         Main gate opening 580..620 = 13.3 ft - a real carriage-gate passage
-         (the old 27 ft opening confused structure width with passage width,
-         caught by size-audit 2026-07) -->
-    <line x1="200" y1="750" x2="395.5" y2="750"/>
-    <line x1="432.5" y1="750" x2="583.5" y2="750"/>
+    <!-- South, west of gate (broken by the service gate at x=404..424 = 6.7 ft, just east of the stables - muck and
+         night-soil skip the formal gate; feature 267 pass 2 narrowed it from 9.3 ft so the ceremonial main gate is
+         the widest opening in the wall, buildings.md checklist). Wall ends pulled back 4.5 px for the square cap. -->
+    <line x1="200" y1="750" x2="399.5" y2="750"/>
+    <line x1="428.5" y1="750" x2="583.5" y2="750"/>
     <!-- South, east of gate (the main gate is a one-bay yakuimon opening 588..612 = 8 ft - feature 267 R26,
          buildings 480: 1.8-2.6 m; it was 13.3 ft) -->
     <line x1="616.5" y1="750" x2="1000" y2="750"/>
@@ -122,8 +120,8 @@
   </g>
   <!-- Service-gate posts (south wall, just east of the stables) -->
   <g fill="#2D2A24" data-kind="side gate">
-    <rect x="384" y="744" width="16" height="14"/>
-    <rect x="428" y="744" width="16" height="14"/>
+    <rect x="388" y="744" width="16" height="14"/>
+    <rect x="424" y="744" width="16" height="14"/>
   </g>
 
   <!-- Drawn ~3.3 x 4.7 ft ON PURPOSE, larger than canon's two-fist field stones: Ochiba is where the
@@ -152,14 +150,14 @@
 
   <!-- Internal divider wall between outer (south) and inner (north) courts -->
   <g stroke="#3F3A30" stroke-width="6" fill="none" stroke-dasharray="0" data-kind="court divider">
-    <line x1="200" y1="450" x2="588" y2="450"/>
-    <line x1="612" y1="450" x2="1000" y2="450"/>
+    <line x1="200" y1="450" x2="591" y2="450"/>
+    <line x1="609" y1="450" x2="1000" y2="450"/>
   </g>
-  <!-- Internal gate posts (a household door ~8 ft - a real nakamon, well
-       under the ceremonial main gate) -->
+  <!-- Internal gate posts (a household door, opening 591..609 = 6 ft - a real nakamon, under the ceremonial
+       main gate; feature 267 pass 2 narrowed it from 8 ft, which equaled the main gate) -->
   <g fill="#3F3A30" data-kind="nakamon" data-part-of="court divider">
-    <rect x="578" y="446" width="10" height="10"/>
-    <rect x="612" y="446" width="10" height="10"/>
+    <rect x="581" y="446" width="10" height="10"/>
+    <rect x="609" y="446" width="10" height="10"/>
   </g>
 
   <!-- ============================================================ -->
@@ -200,10 +198,15 @@
     <rect x="420" y="478" width="120" height="50" fill="#DDB87A" data-kind="clerks' room"/>
     <rect x="540" y="478" width="120" height="50" fill="#DDB87A" data-kind="day office"/>
     <rect x="660" y="478" width="120" height="50" fill="#DDB87A" data-kind="official study"/>
-    <!-- The genkan is on the OFFICE HALL, at its east end, where a guest of rank comes up from the forecourt: where
-         office and residence share a compound the visitors' way runs through the office (feature 267 R07,
-         buildings 300: Takayama). It was a porch on the residence's reception. 14 x 40 px = 5 x 13 ft. -->
-    <rect x="780" y="490" width="14" height="40" fill="#C9A57A" stroke="#5A3F1E" stroke-width="1.2" data-kind="genkan"/>
+    <!-- The genkan is on the OFFICE HALL, where a guest of rank comes up from the forecourt: where office and
+         residence share a compound the visitors' way runs through the office (feature 267 R07, buildings 300:
+         Takayama). Pass 2 turned it to the hall's SE corner, OPENING SOUTH onto the 13 ft lane beside the hearing
+         court that runs down to the forecourt, room there for a palanquin to be set down alongside; it faced an
+         8.7 ft alley that ended at the granary's door. 18 x 40 px = 6 x 13 ft. -->
+    <rect x="780" y="522" width="18" height="40" fill="#C9A57A" stroke="#5A3F1E" stroke-width="1.2" data-kind="genkan"/>
+    <!-- feature 267 pass 2: the hall's rear (north) door toward the nakamon - the visitors' way runs on through the
+         office to the house (buildings 300) -->
+    <rect x="590" y="472" width="20" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
     <rect x="420" y="478" width="360" height="84" fill="none" stroke="#5A3F1E" stroke-width="2.5"/>
     <line x1="420" y1="528" x2="780" y2="528" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
     <line x1="540" y1="478" x2="540" y2="528" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
@@ -237,15 +240,16 @@
       <rect x="777" y="668" width="5" height="5"/>
     </g>
     <text x="600" y="589" text-anchor="middle" font-size="14" font-weight="bold" fill="#5C4318" letter-spacing="1">HEARING COURT</text>
-    <text x="600" y="600" text-anchor="middle" font-size="8" font-style="italic" fill="#7A5C30">roofed - white gravel</text>
+    <text x="600" y="600" text-anchor="middle" font-size="8" font-style="italic" fill="#7A5C30">white gravel</text>
     <text x="600" y="613" text-anchor="middle" font-size="9" font-style="italic" fill="#7A5C30" data-kind="fox-fire lantern">Fox-Fire Lantern brought to the dais at evening</text>
+    <!-- feature 267 pass 2: the sublabel carries only this sheet's floor (every court is roofed, and the modal says so), and the mats' roster is the modal's -->
     <g data-kind="kneeling positions">
       <g fill="#C8B078" stroke="#7A5430" stroke-width="0.6">
         <rect x="591" y="622" width="18" height="9"/>
         <rect x="552" y="640" width="18" height="9"/>
         <rect x="630" y="640" width="36" height="9"/>
       </g>
-      <text x="600" y="662" text-anchor="middle" font-size="8" font-style="italic" fill="#7A5C30">straw mats - accused, plaintiff, village officials</text>
+      <text x="600" y="662" text-anchor="middle" font-size="8" font-style="italic" fill="#7A5C30">straw mats</text>
     </g>
   </g>
 
@@ -256,31 +260,31 @@
   <g data-kind="granary">
     <!-- an EARTH-WALLED kura on the ground, plastered white, no posts (feature 267 R18, buildings 410: the Edo
          intendancy's grain store at Takayama is an earth-walled dozo; a storehouse on posts is the other form, and
-         Hayakawa and Ubame take it). Its door on the west face, toward the office. -->
+         Hayakawa and Ubame take it). Its door on the SOUTH face, onto its loading apron (feature 267 pass 2: the
+         west-face door closed the alley the genkan faced). -->
     <rect x="820" y="490" width="150" height="78" fill="#F2EFE4" stroke="#4A3318" stroke-width="2.5"/>
-    <rect x="820" y="522" width="8" height="14" fill="#4A3318" data-kind="door"/>
+    <rect x="888" y="560" width="14" height="8" fill="#4A3318" data-kind="door"/>
     <text x="895" y="533" text-anchor="middle" font-size="13" font-weight="bold" fill="#3A2E1C">granary</text>
   </g>
 
   <!-- (Fire-water tubs are drawn in the TOP LAYER near the end of the file, so their rims
        sit ON TOP of the gardens/court, never buried under a fill drawn later.) -->
 
-  <!-- Holding cell (single small lattice-cage block, SE) - 18x15 ft, remand-only
-       for 1-2; trimmed so the lattice-legibility bump reads as a LINEAR ~2x on
-       one axis only, not an area license, and stays well under the barracks
-       (size-audit 2026-07) -->
+  <!-- Holding cell (single small lattice-cage block, SE) - remand-only for 1-2, well under the barracks. -->
   <g data-kind="cell">
-    <!-- 12 x 10 ft, the small end of the single cells read (feature 267 R24, buildings 460; it was 18 x 15) -->
-    <rect x="832" y="632" width="36" height="30" fill="#B89868" stroke="#5C4318" stroke-width="1.5"/>
+    <!-- 12 x 10 ft, the small end of the single cells read (feature 267 R24, buildings 460; it was 18 x 15). Pass 2
+         ABUTS it to the barracks' west face and raises it to the barracks' top line, closing the guard range under
+         the granary again (feature 007's consolidation; pass 1's shrink had reopened a gap) -->
+    <rect x="838" y="616" width="36" height="30" fill="#B89868" stroke="#5C4318" stroke-width="1.5"/>
     <!-- lattice indication -->
-    <line x1="838" y1="636" x2="838" y2="658" stroke="#3A2010" stroke-width="0.6"/>
-    <line x1="862" y1="636" x2="862" y2="658" stroke="#3A2010" stroke-width="0.6"/>
-    <text x="850" y="651" text-anchor="middle" font-size="9" font-weight="bold" fill="#FFFAE6">cell</text>
+    <line x1="844" y1="620" x2="844" y2="642" stroke="#3A2010" stroke-width="0.6"/>
+    <line x1="868" y1="620" x2="868" y2="642" stroke="#3A2010" stroke-width="0.6"/>
+    <text x="856" y="635" text-anchor="middle" font-size="9" font-weight="bold" fill="#FFFAE6">cell</text>
   </g>
 
-  <!-- Bushi / ashigaru barracks (SE) - abuts the cell to form a guard range
-       under the granary, pulled up to leave a real ~16 ft loading apron (not a
-       24 ft void) below the storehouse; packing consolidation, feature 007 -->
+  <!-- Bushi / ashigaru barracks (SE) - 31 x 33 ft; the cell abuts its west face, the two forming a guard range
+       under the granary with a real ~16 ft loading apron (not a 24 ft void) below the storehouse (packing
+       consolidation, feature 007; the cell re-abutted in feature 267 pass 2) -->
   <g data-kind="barracks">
     <rect x="874" y="616" width="92" height="100" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
     <line x1="920" y1="616" x2="920" y2="716" stroke="#6B4F2A" stroke-width="1"/>
@@ -349,10 +353,11 @@
 
   <!-- Gatehouse (guard post just inside and BESIDE the gate - never across it) -->
   <g data-kind="gatehouse">
-    <!-- a gatehouse of its own beside the gate, 18 x 14 ft - the one freestanding guardroom measured is about 18 ft
-         (feature 267 R19, buildings 420: Takayama's form; it was 40 ft long, the gate range's scale) -->
-    <rect x="656" y="700" width="54" height="42" fill="#8C6F3E" stroke="#4A3318" stroke-width="1.5"/>
-    <text x="683" y="724" text-anchor="middle" font-size="9" font-weight="bold" fill="#FFFAE6">gatehouse</text>
+    <!-- a gatehouse of its own beside the gate, 18 x 12 ft - the one freestanding guardroom measured is about 18 ft
+         (feature 267 R19, buildings 420: Takayama's form; it was 40 ft long, the gate range's scale; pass 2 took its
+         depth from 14 to 12 ft) -->
+    <rect x="656" y="706" width="54" height="36" fill="#8C6F3E" stroke="#4A3318" stroke-width="1.5"/>
+    <text x="683" y="727" text-anchor="middle" font-size="9" font-weight="bold" fill="#FFFAE6">gatehouse</text>
   </g>
 
   <!-- ============================================================ -->
@@ -363,83 +368,88 @@
        drawn here it was buried under the vegetable-garden fill; pack_audit
        BURIED finding, 2026-07-24.) -->
 
-  <!-- Residence - TWO offset blocks (gankō / flying-geese massing, as real
-       shoin residences massed; was a single bar - interior-audit fix 2026-07).
-       Family only: the karo has a separate house and the senior retainers a
-       separate quarters (both below/in the outer court) - a chief retainer or
-       senior retainer never lodged in the lord's own wing. The freed bays gave
-       room for the formal reception (zashiki). Occupant labels kept as the
-       GM's schematic convention. -->
+  <!-- Residence - family only: the karo has a separate house and the senior
+       retainers a separate quarters - a chief retainer or senior retainer never
+       lodged in the lord's own wing. Occupant labels kept as the GM's schematic
+       convention; each label is a multi-room ZONE, not one room. -->
   <g data-kind="residence">
-    <!-- (RESIDENCE band label moved to the top layer at the end of the file -
-         drawn here it grazed the vegetable-garden fill; pack_audit BURIED
-         finding, 2026-07-24.) -->
-    <!-- West block: the lord's rooms + the family's (each label is a multi-room ZONE, not one
-         room; engawa veranda along the south face). The private rooms take this block because
-         its south face looks onto the kitchen roof, not the garden (GM 2026-09-26: the reception
-         faced the garden in the research - research/buildings.html 'The shady rear is the
-         service strip' - and this sheet had it the other way round). -->
+    <!-- (RESIDENCE band label is in the top layer at the end of the file.) -->
+    <!-- The reception faces the garden (research/buildings.html 'The shady rear is the service strip'). -->
     <!-- Each room is its own floor over the block's fill, the outline on top (feature 264; as the office hall) -->
     <!-- ONE BLOCK under one roof (feature 267 R02, buildings 250: the ordinary form below a daimyo's scale; halls in
-         echelon joined by a corridor read as a house added to over generations, and Ochiba is a rotating posting).
-         It was two blocks stepped 20 px and joined by a corridor. West to east: the family, Tatsuya's rooms, the
-         guest room and the reception (zashiki) deepest at the east end - the small house's order, the reception at
-         one end (R03, buildings 260). -->
-    <rect x="240" y="212" width="560" height="76" fill="#DDB87A"/>
-    <rect x="240" y="212" width="135" height="76" fill="#DDB87A" data-kind="family quarters"/>
-    <rect x="375" y="212" width="135" height="76" fill="#DDB87A" data-kind="lord's quarters"/>
-    <rect x="510" y="212" width="140" height="76" fill="#DDB87A" data-kind="guest quarters"/>
-    <rect x="650" y="212" width="150" height="76" fill="#DDB87A" data-kind="reception room"/>
-    <rect x="240" y="212" width="560" height="76" fill="none" stroke="#5A3F1E" stroke-width="2.5"/>
-    <rect x="240" y="288" width="560" height="8" fill="#E8D2A8" stroke="#5A3F1E" stroke-width="1.5" data-kind="engawa"/>
-    <line x1="375" y1="212" x2="375" y2="288" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
-    <line x1="510" y1="212" x2="510" y2="288" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
-    <line x1="650" y1="212" x2="650" y2="288" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
-    <!-- the period gradient runs formal -> the lord -> the family deepest (omote, naka-oku, oku): the lord's
-         bay adjoins the corridor to the reception, the family's is the far west end by the kitchen -->
+         echelon joined by a corridor read as a house added to over generations, and Ochiba is a rotating posting),
+         the reception at one end (R03, buildings 260). -->
+    <!-- feature 267 pass 2 (building-review): the one block RE-MASSED from a one-room-deep bar (187 x 25 ft) into
+         a compact TWO-ROW block, 90 x 50 ft - the Kuchiba house's "six-room plan divided front and back"
+         (research buildings 250/260). South (garden) row: the guest room west, the reception (zashiki) at the EAST
+         end; north row behind it: the family's rooms west, Tatsuya's behind the reception side. Each zone keeps
+         about the 45 x 25 ft it had in the bar. The kitchen is an ELL on the block's west end (research 360/370). The house and its ell stand toward the west
+         wall, the kitchen 5 ft off it as before, so the building ring still hugs the wall (pack audit perimeter_hugging:
+         44% at a 45% floor with the kitchen 15 ft off). -->
+    <rect x="340" y="212" width="270" height="150" fill="#DDB87A"/>
+    <rect x="340" y="212" width="135" height="75" fill="#DDB87A" data-kind="family quarters"/>
+    <rect x="475" y="212" width="135" height="75" fill="#DDB87A" data-kind="lord's quarters"/>
+    <rect x="340" y="287" width="135" height="75" fill="#DDB87A" data-kind="guest quarters"/>
+    <rect x="475" y="287" width="135" height="75" fill="#DDB87A" data-kind="reception room"/>
+    <rect x="340" y="212" width="270" height="150" fill="none" stroke="#5A3F1E" stroke-width="2.5"/>
+    <!-- the engawa along the garden (south) face only (R01) -->
+    <rect x="340" y="362" width="270" height="8" fill="#E8D2A8" stroke="#5A3F1E" stroke-width="1.5" data-kind="engawa"/>
+    <line x1="340" y1="287" x2="610" y2="287" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
+    <line x1="475" y1="212" x2="475" y2="362" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
+    <!-- the period gradient runs formal (front) -> the lord -> the family deepest (omote, naka-oku, oku): the
+         lord's rooms lie behind the reception, the family's in the far corner by the kitchen -->
     <g data-kind="lord's quarters">
-      <text x="442" y="246" text-anchor="middle" font-size="11" font-weight="bold" fill="#3A2E1C">Tatsuya's quarters</text>
-      <text x="442" y="261" text-anchor="middle" font-size="10" font-style="italic" fill="#3A2E1C">private study</text>
+      <text x="542" y="246" text-anchor="middle" font-size="11" font-weight="bold" fill="#3A2E1C">Tatsuya's quarters</text>
+      <text x="542" y="261" text-anchor="middle" font-size="10" font-style="italic" fill="#3A2E1C">private study</text>
     </g>
     <g data-kind="family quarters">
-      <text x="307" y="253" text-anchor="middle" font-size="11" fill="#3A2E1C">family</text>
-      <text x="307" y="267" text-anchor="middle" font-size="11" fill="#3A2E1C">quarters</text>
+      <text x="407" y="246" text-anchor="middle" font-size="11" fill="#3A2E1C">family</text>
+      <text x="407" y="260" text-anchor="middle" font-size="11" fill="#3A2E1C">quarters</text>
     </g>
-    <!-- E1: the family's informal door (katteguchi) on the south face at the kitchen end - no sealed boxes -->
-    <rect x="292" y="296" width="24" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
-    <text x="580" y="256" text-anchor="middle" font-size="11" fill="#3A2E1C" data-kind="guest quarters">guest room</text>
+    <!-- E1: the family's informal door on the block's west face, in the notch north of the kitchen ell, where the
+         rear service strip comes in from the postern - no sealed boxes -->
+    <rect x="334" y="232" width="6" height="24" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
+    <text x="407" y="328" text-anchor="middle" font-size="11" fill="#3A2E1C" data-kind="guest quarters">guest room</text>
     <g data-kind="reception room">
-      <text x="725" y="248" text-anchor="middle" font-size="12" font-weight="bold" fill="#3A2E1C">reception</text>
-      <text x="725" y="263" text-anchor="middle" font-size="10" font-style="italic" fill="#5C4830">(zashiki)</text>
+      <text x="542" y="320" text-anchor="middle" font-size="12" font-weight="bold" fill="#3A2E1C">reception</text>
+      <text x="542" y="335" text-anchor="middle" font-size="10" font-style="italic" fill="#5C4830">(zashiki)</text>
     </g>
   </g>
 
-  <!-- Kitchen + pantries (west range) - 40x33 ft; a large institutional
-       daidokoro (it feeds household, clerks, and the watch), but kept SMALLER
-       than a residence living block - the cookhouse does not out-foot the
-       family's own quarters (size-audit 2026-07) -->
-  <g data-kind="kitchen">
-    <rect x="220" y="310" width="120" height="100" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
-    <!-- hearth indication -->
-    <!-- the hearth is a kamado range, two fire mouths, on a small doma at the kitchen's north end (feature 267 R13,
-         buildings 360: a samurai kitchen cooked on a kamado; the sunken irori it drew is the common house's) -->
+  <!-- Kitchen + pantries - 40x33 ft; a large institutional daidokoro (it feeds
+       household, clerks, and the watch), but kept SMALLER than the house's living
+       rows - the cookhouse does not out-foot the family's own quarters
+       (size-audit 2026-07). feature 267 pass 2: an ELL of the house, joined to
+       the residence block's west end (research buildings 360/370: the kitchen door
+       is the house's service door, and the Takayama residence lists its earth
+       floor, kitchen, well and bath among its own rooms); it stood apart before,
+       across a gap from the house. -->
+  <g data-kind="kitchen" data-part-of="residence">
+    <rect x="220" y="262" width="120" height="100" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
+    <!-- feature 267 pass 2: the small DOMA (earth floor), ~24 x 18 ft, the kamado standing on it (R13, buildings 360) -->
+    <rect x="226" y="268" width="72" height="54" fill="#B8A07A"/>
+    <!-- the hearth is a kamado range, two fire mouths, ~6 x 2.5 ft (feature 267 R13, buildings 360: a samurai kitchen
+         cooked on a kamado; the sunken irori it drew once is the common house's). Pass 2: it was 10 x 4.3 ft, twice a
+         two-mouth range. -->
     <g data-kind="hearth">
-      <rect x="240" y="329" width="30" height="13" fill="#6B4030" stroke="#3A2010" stroke-width="0.8"/>
-      <circle cx="249" cy="335.5" r="3.5" fill="#E68A40"/>
-      <circle cx="261" cy="335.5" r="3.5" fill="#E68A40"/>
+      <rect x="234" y="276" width="18" height="8" fill="#6B4030" stroke="#3A2010" stroke-width="0.8"/>
+      <circle cx="239" cy="280" r="2.5" fill="#E68A40"/>
+      <circle cx="247" cy="280" r="2.5" fill="#E68A40"/>
     </g>
-    <text x="278" y="362" text-anchor="middle" font-size="13" font-weight="bold" fill="#3A2E1C">kitchen</text>
-    <text x="278" y="380" text-anchor="middle" font-size="11" fill="#3A2E1C">&amp; pantries</text>
-    <!-- the kitchen door (katteguchi) on the north face, toward the house and the family's own door across the gap:
-         deliveries come in by the postern and up the strip inside the west wall, and the kitchen serves the house
-         without its trays going round by the wall; the kitchen had no drawn door until 2026-09-27 (a west-face door
-         first drawn opened onto the strip the night-soil collector uses - building review, same day) -->
-    <rect x="226" y="304" width="24" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
+    <text x="268" y="340" text-anchor="middle" font-size="13" font-weight="bold" fill="#3A2E1C">kitchen</text>
+    <text x="268" y="354" text-anchor="middle" font-size="11" fill="#3A2E1C">&amp; pantries</text>
+    <!-- the kitchen door (katteguchi) on the south face, onto the service yard by the postern: deliveries come
+         straight in from the postern, and the night-soil collector's way north up the strip inside the west wall
+         passes beside it, not across its mouth (pass 2: the north-face door stood 2 ft off that path) -->
+    <rect x="232" y="362" width="24" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
     <!-- Kitchen well (the primary, busiest well - inside the daidokoro floor) -->
-    <rect x="300" y="386" width="22" height="22" fill="#9C8C70" stroke="#5C4830" stroke-width="1.2" data-kind="well"/>
-    <circle cx="311" cy="397" r="6" fill="#2D2A24" data-kind="well"/>
-    <text x="311" y="422" text-anchor="middle" font-size="8" font-style="italic" fill="#3A2E1C" data-kind="well">well</text>
+    <rect x="312" y="332" width="22" height="22" fill="#9C8C70" stroke="#5C4830" stroke-width="1.2" data-kind="well"/>
+    <circle cx="323" cy="343" r="6" fill="#2D2A24" data-kind="well"/>
+    <text x="323" y="328" text-anchor="middle" font-size="8" font-style="italic" fill="#3A2E1C" data-kind="well">well</text>
   </g>
+  <!-- feature 267 pass 2: the ground south of the kitchen ell is named for what it is - the postern's yard, the
+       kitchen's door and the bath on it (the review found an unnamed ~47 x 25 ft patch in the inner court) -->
+  <text x="260" y="428" text-anchor="middle" font-size="9" font-style="italic" fill="#7A6A4A" data-kind="inner court">service yard</text>
 
   <!-- Shrine-approach garden arm: the inner garden wraps north along the shrine
        hall's west face, naming the strip the +60 px backing-void shift left
@@ -535,36 +545,41 @@
     <text x="935" y="364" text-anchor="middle" font-size="8" font-style="italic" fill="#FFFAE6">(colonnade)</text>
   </g>
 
-  <!-- Inner garden / open space (center of inner court) -->
+  <!-- Inner garden (feature 267 pass 2): laid out BEFORE the reception and the guest room - the whole garden
+       (south) face of the re-massed house - and on east of the house below the karo's house. Visitors come on
+       through the office's rear door and the nakamon, straight up to a stepping stone at the reception's veranda
+       (research buildings 300, Takayama). -->
   <g data-kind="garden">
-    <rect x="520" y="310" width="345" height="135" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
-    <!-- a small ornamental pond -->
-    <ellipse cx="620" cy="380" rx="42" ry="22" fill="#9CB4C8" stroke="#5C7488" stroke-width="1.2" data-kind="garden pond"/>
-    <text x="660" y="432" text-anchor="middle" font-size="10" font-style="italic" fill="#3A2E1C">inner garden</text>
+    <path d="M 346 374 H 616 V 298 H 865 V 445 H 346 Z" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
+    <!-- a small ornamental pond, moved east of the house with the re-mass (it stood where the veranda now runs) -->
+    <ellipse cx="740" cy="342" rx="38" ry="20" fill="#9CB4C8" stroke="#5C7488" stroke-width="1.2" data-kind="garden pond"/>
+    <!-- the stepping stone (kutsunugi-ishi) at the reception's veranda, on the line up from the nakamon -->
+    <rect x="594" y="373" width="12" height="8" rx="2" fill="#9C9488" stroke="#5C5448" stroke-width="0.8"/>
+    <text x="470" y="420" text-anchor="middle" font-size="10" font-style="italic" fill="#3A2E1C">inner garden</text>
   </g>
 
-  <!-- Bath: a small addition on the kitchen range's east wall, 13 x 11 ft (feature 267 R09, buildings 320: a room
+  <!-- Bath: a small addition on the kitchen range's south wall, 13 x 11 ft (feature 267 R09, buildings 320: a room
        of the residence or a small addition to it - the Takayama residence's with its well and kitchen - never a
-       building of its own; it was a pavilion west of the inner garden). The size is a guess. -->
+       building of its own). Pass 2 moved it with the kitchen ell. The size is a guess. -->
   <g data-kind="bath">
-    <rect x="340" y="340" width="40" height="33" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
+    <rect x="290" y="362" width="40" height="33" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
     <!-- small steam plume suggestion -->
-    <path d="M 356 335 q 3 -8 -2 -14 M 369 335 q 3 -8 -2 -14" stroke="#A8B4C8" stroke-width="1" fill="none" opacity="0.7"/>
-    <text x="360" y="361" text-anchor="middle" font-size="12" font-weight="bold" fill="#3A2E1C">bath</text>
+    <path d="M 302 412 q 3 -8 -2 -14 M 316 412 q 3 -8 -2 -14" stroke="#A8B4C8" stroke-width="1" fill="none" opacity="0.7"/>
+    <text x="310" y="383" text-anchor="middle" font-size="12" font-weight="bold" fill="#3A2E1C">bath</text>
   </g>
 
   <!-- Karo's house - the house elder keeps a SEPARATE dwelling in the
        residence court (a chief retainer never lodged in the lord's own wing;
-       interior-audit historical correction 2026-07) -->
+       interior-audit historical correction 2026-07). feature 267 pass 2: moved
+       from the divider (where it stood where the re-massed house's garden now
+       lies) to the ground east of the house, below the vegetable garden. -->
   <g data-kind="karo's house">
-    <rect x="400" y="372" width="110" height="70" fill="#DDB87A" stroke="#5A3F1E" stroke-width="2"/>
-    <!-- informal side entrance (a modest door, not a second genkan), kept on the SOUTH face per
-         the settled divider-alley ruling. Drawn as a door flush IN the wall, not a protruding
-         porch: the house stands 1.7 ft off the divider, so an 8 px porch reached through the
-         alley and into the divider's ink (pack_audit structures_on_walls). -->
-    <rect x="450" y="434" width="10" height="8" fill="#4A3318" data-kind="door"/>
-    <text x="455" y="402" text-anchor="middle" font-size="11" font-weight="bold" fill="#3A2E1C">karo's house</text>
-    <text x="455" y="417" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">(the house elder)</text>
+    <rect x="676" y="216" width="110" height="70" fill="#DDB87A" stroke="#5A3F1E" stroke-width="2"/>
+    <!-- informal side entrance (a modest door flush in the wall, not a second genkan) on the WEST face, onto the
+         22 ft way between it and the residence that runs down to the garden and the nakamon -->
+    <rect x="676" y="246" width="8" height="10" fill="#4A3318" data-kind="door"/>
+    <text x="731" y="246" text-anchor="middle" font-size="11" font-weight="bold" fill="#3A2E1C">karo's house</text>
+    <text x="731" y="261" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">(the house elder)</text>
   </g>
 
   <!-- Well (with stone curb) - east side of garden -->
@@ -590,20 +605,19 @@
     <rect x="332" y="196" width="26" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
     <text x="360" y="180" text-anchor="middle" font-size="9" font-weight="bold" fill="#3A2E1C">servants' quarters</text>
   </g>
-  <!-- The residence's privy, attached to the west (family) block's west face near its rear corner, pit toward
-       the west wall: a collector reaches it along the strip inside the west wall from the kitchen postern, never
-       through the inner court (research/buildings.html 'Privies attach to the house; night-soil drives their
-       placement'). It replaced the privy at the east block's rear corner on 2026-09-26: once the reception took
-       that block, its pit could be reached only across the inner garden. -->
+  <!-- The residence's privy, attached to the block's west (family) end at its rear corner, in the notch north of
+       the kitchen ell, pit toward the west wall: a collector reaches it from the kitchen postern up the strip inside
+       the west wall and along the rear service strip, never through the inner court (research/buildings.html
+       'Privies attach to the house; night-soil drives their placement'). Moved with the block in feature 267 pass 2. -->
   <g data-kind="latrine" data-part-of="residence">
-    <rect x="222" y="216" width="18" height="14" fill="#7E726A" stroke="#3A2E1C" stroke-width="0.8"/>
-    <text x="221" y="242" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">latrine</text>
+    <rect x="322" y="216" width="18" height="14" fill="#7E726A" stroke="#3A2E1C" stroke-width="0.8"/>
+    <text x="300" y="227" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">latrine</text>
   </g>
 
-  <!-- Vegetable garden filling the rest of the rear strip (behind the east
-       residence block) - a vegetable plot on the shady north/service side, the
-       band the servants' quarters did not take. Labeled for what it is: the kitchen
-       is boxed into the SW service corner with no room for an adjacent plot, so the
+  <!-- Vegetable garden filling the rest of the rear strip (behind the residence
+       and the karo's house) - a vegetable plot on the shady north/service side, the
+       band the servants' quarters did not take. Labeled for what it is:        the kitchen
+       ell has no room for an adjacent plot, so the
        compound's vegetables come from this rear plot (servant-tended) + outside via
        the kitchen postern - normal for a compact walled magistracy (GM 2026-07). -->
   <g data-kind="vegetable garden">
@@ -640,17 +654,18 @@
   <text x="576" y="174" text-anchor="middle" font-size="13" font-weight="bold" fill="#5C4830" letter-spacing="2" data-kind="inner court">INNER COURT</text>
   <text x="524" y="196" text-anchor="middle" font-size="11" font-weight="bold" fill="#5C4830" letter-spacing="2" data-kind="residence">RESIDENCE</text>
   <g fill="#8FB0C6" stroke="#3A5060" stroke-width="1" data-kind="fire-water tubs">
-    <circle cx="346" cy="318" r="3.8"/>
-    <circle cx="346" cy="402" r="3.8"/>
+    <!-- feature 267 pass 2: the kitchen pair at the ell's west corners, the residence's two at the block's east
+         corners (the re-mass moved both), the gatehouse's at its shortened NW corner -->
+    <circle cx="216" cy="266" r="3.8"/>
+    <circle cx="216" cy="358" r="3.8"/>
     <circle cx="414" cy="486" r="3.8"/>
-    <circle cx="505" cy="303" r="3.8"/>
-    <circle cx="806" cy="302" r="3.8"/>
+    <circle cx="614" cy="216" r="3.8"/>
+    <circle cx="614" cy="356" r="3.8"/>
     <circle cx="874" cy="286" r="3.8"/>
-    
     <circle cx="972" cy="664" r="3.8"/>
-    <circle cx="650" cy="706" r="3.8"/>
+    <circle cx="651" cy="710" r="3.8"/>
     <circle cx="314" cy="680" r="3.8"/>
     <circle cx="476" cy="165" r="3.8"/>
   </g>
-  <text x="353" y="313" text-anchor="start" font-size="8" font-style="italic" fill="#3A5060" data-kind="fire-water tubs">fire-water tubs</text>
+  <text x="222" y="256" text-anchor="start" font-size="8" font-style="italic" fill="#3A5060" data-kind="fire-water tubs">fire-water tubs</text>
 </svg>

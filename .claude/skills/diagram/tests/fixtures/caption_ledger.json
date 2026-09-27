@@ -4,31 +4,21 @@
   "exempt": []
  },
  "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg": {
-  "sha256": "90d4074ba012b6d9330237e3388c733cf5e014f90237bd6e470cebd4113e7e7d",
+  "sha256": "ca57b024e7644d0bafa091d6707517d0fb40848fef393ea64dc30727d1a88bbc",
   "exempt": [
    [
-    "barracks",
-    "barracks",
-    "off its standard seat"
-   ],
-   [
     "bath",
     "bath",
     "off its standard seat"
    ],
    [
     "boatmen's altar",
-    "boatmen's altar",
+    "boatmen's shrine",
     "off its standard seat"
    ],
    [
-    "cell",
-    "cell",
-    "off its standard seat"
-   ],
-   [
-    "clerks' room",
-    "clerks'",
+    "cart yard",
+    "stable & cart yard",
     "off its standard seat"
    ],
    [
@@ -52,11 +42,6 @@
     "off its standard seat"
    ],
    [
-    "fire-water tubs",
-    "fire-water tubs",
-    "off its standard seat"
-   ],
-   [
     "garden",
     "guest garden",
     "off its standard seat"
@@ -73,7 +58,7 @@
    ],
    [
     "gatehouse",
-    "gatehouse",
+    "gate range",
     "off its standard seat"
    ],
    [
@@ -97,11 +82,6 @@
     "off its standard seat"
    ],
    [
-    "inner rooms",
-    "inner rooms",
-    "off its standard seat"
-   ],
-   [
     "karo's house",
     "karo's house",
     "off its standard seat"
@@ -113,22 +93,12 @@
    ],
    [
     "kneeling positions",
-    "witness / petitioner positions",
+    "straw mats - accused, plaintiff, village officials",
     "off its standard seat"
    ],
    [
     "latrine",
-    "latrine",
-    "off its standard seat"
-   ],
-   [
-    "latrine",
-    "latrine",
-    "off its standard seat"
-   ],
-   [
-    "latrine",
-    "latrine",
+    "guest privy",
     "off its standard seat"
    ],
    [
@@ -187,11 +157,6 @@
     "off its standard seat"
    ],
    [
-    "servants' quarters",
-    "servants' quarters",
-    "off its standard seat"
-   ],
-   [
     "shrine altar",
     "(was an Ebisu shrine - one altar remains)",
     "a missing or misplaced leader"
@@ -204,11 +169,6 @@
    [
     "shrine grove",
     "shrine grove",
-    "off its standard seat"
-   ],
-   [
-    "stables",
-    "stables",
     "off its standard seat"
    ],
    [
@@ -250,16 +210,6 @@
     "well",
     "well",
     "a missing or misplaced leader"
-   ],
-   [
-    "well",
-    "well",
-    "off its standard seat"
-   ],
-   [
-    "well",
-    "well",
-    "off its standard seat"
    ],
    [
     "well",
@@ -269,7 +219,7 @@
   ]
  },
  "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg": {
-  "sha256": "a61052b15cc00baa3e20eedf353daad57df237249bba77e5dcc79dab8721b422",
+  "sha256": "1d8bfe751d2cbdbb3cb040537ec23dc8f5d300a6c7b742de9214de5f81575441",
   "exempt": [
    [
     "bath",
@@ -304,21 +254,16 @@
    [
     "fire-water tubs",
     "fire-water tubs",
+    "a missing or misplaced leader"
+   ],
+   [
+    "fire-water tubs",
+    "fire-water tubs",
     "off its standard seat"
    ],
    [
     "garden",
     "inner garden",
-    "off its standard seat"
-   ],
-   [
-    "gatehouse",
-    "gatehouse",
-    "off its standard seat"
-   ],
-   [
-    "guest quarters",
-    "guest room",
     "off its standard seat"
    ],
    [
@@ -329,6 +274,11 @@
    [
     "inner court",
     "INNER COURT",
+    "off its standard seat"
+   ],
+   [
+    "inner court",
+    "service yard",
     "off its standard seat"
    ],
    [
@@ -343,7 +293,7 @@
    ],
    [
     "kneeling positions",
-    "witness / defendant positions",
+    "straw mats",
     "off its standard seat"
    ],
    [
@@ -395,6 +345,11 @@
     "reception room",
     "reception",
     "off its standard seat"
+   ],
+   [
+    "residence",
+    "RESIDENCE",
+    "a missing or misplaced leader"
    ],
    [
     "residence",
@@ -484,7 +439,7 @@
   ]
  },
  "pool/magistracies/ubame-magistracy/ubame-magistracy.svg": {
-  "sha256": "c93cad290da315955795bc6a4044e447a44c5b431827fc23b0091f4cd43b9200",
+  "sha256": "f8736e82218da74c53867b70a71f1d0020649fad763ce8f282b28c295db762c0",
   "exempt": [
    [
     "barracks",
@@ -544,11 +499,6 @@
    [
     "fire-water tubs",
     "fire-water tubs",
-    "a missing or misplaced leader"
-   ],
-   [
-    "fire-water tubs",
-    "fire-water tubs",
     "off its standard seat"
    ],
    [
@@ -593,7 +543,7 @@
    ],
    [
     "gatehouse",
-    "gatehouse",
+    "gate range",
     "off its standard seat"
    ],
    [
@@ -618,7 +568,7 @@
    ],
    [
     "inner rooms",
-    "inner rooms &",
+    "inner rooms",
     "off its standard seat"
    ],
    [
@@ -638,7 +588,7 @@
    ],
    [
     "kneeling positions",
-    "witness / defendant positions",
+    "straw mats",
     "off its standard seat"
    ],
    [
@@ -733,7 +683,7 @@
    ],
    [
     "striking posts",
-    "striking posts",
+    "striking bundle",
     "off its standard seat"
    ],
    [
