@@ -300,5 +300,6 @@ MOVED to feature 265 (GM 2026-09-27; plan D20): T20, T21, T22 - and from Phase 2
 - [x] T23 FR-007, the checks owed by what this feature changed; every `_entry_owed.py` pair answered before the push (D20)
       research: rendering
       verify: DONE. owed-check 2026-09-27: 12 pairs named, 12 IN-STEP in owed-verdicts.md, 0 open; the rest REWRITTEN or LABELED by six owed sessions (homesteads 1-3, archetypes 1, fields 1, water 1), each pair its own bundle and verdict line (D20.2)
-- [ ] T25 FR-009, the closing report; `make page-check`; the push
+- [x] T25 FR-009, the closing report; `make page-check`; the push
       research: rendering
+      verify: DONE. research.md R12 closing report (FR-009); make done green 2026-09-27 (198 s); make page-check green (1147 passed); owed-check 12/12 IN-STEP, 0 open; the push discharges exactly those 12 by ENTRY_DRIFT_OK citing owed-verdicts.md (D20.2)
