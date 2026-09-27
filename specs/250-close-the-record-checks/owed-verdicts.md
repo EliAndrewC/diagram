@@ -35,3 +35,5 @@
 - IrrigationDitch (fields SECTION=070): IN-STEP - the comb layout, taper, paddy-to-paddy watering, the sparse-net reading and the Kishu note all still stand; the section's changes are record maintenance
 - Pond (fields SECTION=070): IN-STEP - the section's changes are in the Distribution and Layout paragraphs, and the Pond paragraph still carries every claim and the Note
 - Byre (homesteads SECTION=140): IN-STEP - the modal quotes no number from 140, and the draft animal kept close to the house (60.5% in the main house) and the separate byre as the temperate reading still stand; the 0.32 shed correction does not touch its prose
+- Well (urban-features SECTION=090): LABELED - the Note called the one-to-three count read; rewritten to say only the capacity, costly digging and the Edo aqueduct intake are read, and the re-check's remaining drift (the well-house roof on every well is unsourced) is labeled in the Note as this record's estimate
+- Well (urban-features SECTION=120): IN-STEP - the Edo aqueduct-intake aside and the households-per-well estimate still stand; the section's weakened samurai-compound claim is nowhere in the modal
