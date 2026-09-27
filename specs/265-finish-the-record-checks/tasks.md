@@ -23,9 +23,10 @@
 - [ ] T02 FR-002 and FR-006 for `buildings`, by 250's process
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
-- [ ] T03 FR-002 and FR-006 for `cities/river-cities`, by 250's process
+- [x] T03 FR-002 and FR-006 for `cities/river-cities`, by 250's process
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. cities/river-cities closed (session 2c, question 040): quote-check 13 citations + 2 absence notes, 10 PARTIAL narrowed or labeled as the page's reading, 1 DIFFERS fixed; record-format 4 VOCABULARY (2 edits, glossary coursing and hiro); one re-check on 5 notes all VERBATIM and SUPPORTS; FR-006 18 bare items, 14 footnoted, 4 reworded out
 - [ ] T04 FR-002 and FR-006 for `towns`, by 250's process
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
