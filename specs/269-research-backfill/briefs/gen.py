@@ -43,6 +43,8 @@ GROUPS = {
     "C2": ("cities/government", "cities/government 100-140, and the existing sections the items name"),
     "C3": ("cities/fabric", "cities/fabric 160-190, and the existing sections the items name"),
     "C4": ("cities/hinterland and sizing", "cities/hinterland 060-090, cities/sizing 030-050, and the existing sections the items name"),
+    "S1": ("settlements: is every household drawn", "the existing settlements 030; settlements 090-110 for a split"),
+    "X1": ("the thin sections on 265's pages", "the existing sections the items name (265 has landed; they are free)"),
 }
 
 HEAD = """# Brief - feature 269 (the research backfill), group {group}: {title}, session {what}
@@ -61,6 +63,9 @@ religion-and-death 220-260, fields 220-240. Feature 268: religion-and-death 080-
 a correction, say exactly what in the handoff; the orchestrator sends it to the owner.
 **New registry entries and glossary terms take their prefix under the host-wide lock**, never "the highest + 10" by
 eye: `python3 {reserve} registry <key> --root {clone}` (or `glossary "<term>"`) prints the stub's path; fill it in.
+**Claims first (FR-011).** Before any research, read `/diagram/.clones/RESEARCH-CLAIMS.md`. Skip any item of yours
+that another session has claimed since, and name it in the handoff. Then set 269's line there to say group {group} is
+in progress; edit only that line.
 """
 
 WRITE = HEAD + """

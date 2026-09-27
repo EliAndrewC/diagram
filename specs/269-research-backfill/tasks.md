@@ -56,6 +56,12 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D10). Inventory: [`in
 - [ ] T18 C4 cities/hinterland and sizing (B41): the write session, then its check sessions (D1)
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+- [ ] T26 S1 settlements, is every household drawn (B42): the write session, then its check sessions (D1)
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+- [ ] T27 X1 the thin sections on 265's pages (B43-B46), after 265 lands: the write session, then its check sessions (D1)
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
 - [ ] T19 `outcomes.md`: every item's outcome and section, from the handoffs (D6)
       research: rendering
 - [ ] T20 The kinds follow the outcomes: `Entry:`, label, prose; `entry-drift` on each changed kind (D7)

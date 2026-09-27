@@ -14,6 +14,9 @@ religion-and-death 220-260, fields 220-240. Feature 268: religion-and-death 080-
 a correction, say exactly what in the handoff; the orchestrator sends it to the owner.
 **New registry entries and glossary terms take their prefix under the host-wide lock**, never "the highest + 10" by
 eye: `python3 /diagram/.clones/.tools/reserve-prefix.py registry <key> --root /diagram/.clones/diagram-supplemental` (or `glossary "<term>"`) prints the stub's path; fill it in.
+**Claims first (FR-011).** Before any research, read `/diagram/.clones/RESEARCH-CLAIMS.md`. Skip any item of yours
+that another session has claimed since, and name it in the handoff. Then set 269's line there to say group W2 is
+in progress; edit only that line.
 
 ## Your items (from `specs/269-research-backfill/inventory.md`, group W2)
 
@@ -21,7 +24,7 @@ Each is a research QUESTION the record owes: never researched, labeled a guess, 
 the map features whose write-ups will be rewritten from what you find (by the orchestrating session, NOT by you).
 
 - B24 Reed economy on tameike margins, searched and not found (`water/280`). S.
-- B25 `water/090`, `water/100`, `water/160` and `fields/090`: each carries one footnote over 500+ words. M.
+- B25 `water/090`, `water/100` and `fields/090` each carry one footnote over 500+ words; `water/160` two. M.
 
 ## The procedure (session 1: research and write)
 

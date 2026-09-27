@@ -4,7 +4,7 @@
 
 ## Summary
 
-Forty-one owed items ([`inventory.md`](inventory.md), B01-B41) in eighteen groups, researched by the process feature
+Forty-six owed items ([`inventory.md`](inventory.md), B01-B46) in twenty groups, researched by the process feature
 250 landed, on feature 267's pattern: each group is a WRITE session and then CHECK sessions, each one a fresh headless
 session from a written brief (`make page-session`). The state between them is carried in the group's handoff file.
 This session orchestrates. It writes the briefs, queues the sessions, keeps the queue and the peers alive through
@@ -23,11 +23,13 @@ usage-limit resets, and once a group is checked, rewrites the kinds and the gene
   failed session waits until the reset its message names, else 15, 30, then 60 minutes, and RESUMES by `--resume`,
   up to 14 times. This session holds an hourly `CronCreate` heartbeat (at :17). It fires only while this session is
   idle, so after a limit ends one of this session's turns, the next firing after the reset resumes it. The heartbeat
-  restarts a queue whose runner process has died with work left, and nudges the peers (D4). The heartbeat lives as
+  restarts a queue whose runner process has died with work left, and checks the peers (D4). The heartbeat lives as
   long as this Claude process does, and expires after 7 days.
 - **D4 - Peers** (FR-008, spec US3): the claims live in `/diagram/.clones/RESEARCH-CLAIMS.md`. On each heartbeat,
-  `ListAgents` is read, and a peer research session that is idle while its claimed work is unfinished gets ONE message
-  to resume. A peer is never messaged while busy, or twice without activity in between. Headless queues (the peers'
+  `ListAgents` is read, and a peer research session that is idle while its claimed work is unfinished is messaged to
+  resume. The next wake confirms it resumed (busy, or new commits or run-log lines since), and a peer still idle is
+  messaged again. A busy peer is never messaged. Each check is a line in `/diagram/.clones/RESEARCH-PEER-CHECKS.log`
+  (FR-008). Each write brief re-reads the claims file first and marks its group in 269's line (FR-011). Headless queues (the peers'
   runners) resume by themselves once they run 4d13ad4f.
 - **D5 - Prefixes** (FR-005): new registry and glossary files are reserved through
   `/diagram/.clones/.tools/reserve-prefix.py`, a byte copy of 265's, under the same lock and ledger. It is kept

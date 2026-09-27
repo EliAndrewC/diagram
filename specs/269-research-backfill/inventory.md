@@ -19,9 +19,20 @@ in the section that makes the claim).
   cities/river-cities 050-080, urban-features 190-220, ways 060-090.
 - **Feature 268** (Diagram shrines): religion-and-death 080, 090, 100, 110, 120 and the new 122, 124, 126; the
   country-shrine program in `buildings/programs.md`.
-- Also out of scope: the six 265 pages' footnote-less sections (towns 020, 110, 120, 140, 150; buildings 110;
-  cities/capitals 380, 390; cities/river-cities 030; ways 050). They go to 265's owner if 265's derived list lacks them.
-- `presentation/*` and `settlements/060-080` are drawing conventions. They are not research.
+- The thin sections on 265's pages are NOT excluded. None is in 265's specs or marks files (searched 2026-09-27), and
+  265's session was asked. They form group X1 below, held until 265 lands. An item 265 confirms as its own is moved
+  back here, with the confirmation cited.
+
+## Footnote-less sections passed over, and why (every fragment with no notes, 2026-09-27)
+
+Each section with no footnotes is either an item (fields 140/150 -> B08; homesteads 170/190 -> B19; cities/fabric 070
+-> B40; cities/government 030 -> B39; settlements 030 -> B42; towns 020/110/150, buildings 110, cities/capitals
+380/390 -> X1), or is not a real-world claim:
+- `presentation/010-070`: map drawing conventions (legend, framing, captions), which are the GM's rulings.
+- `settlements/060` (the scale ladder, a GM ruling) and `settlements/080` (when a rule may break: process).
+- `buildings/200`: how layout is checked by the tooling.
+- `fields/025` (the arrowhead glyph), `vegetation/040` (the belt at the sheet edge), `vegetation/100` (scrub off drawn
+  water), `water/060` (a delivery never wider than its feed), `water/200` (drawing a junction): drawing conventions.
 
 ## F1 - fields: paddy kinds (new: fields 250-280)
 
@@ -83,7 +94,7 @@ in the section that makes the claim).
 ## W2 - water: thin sections (edits existing)
 
 - B24 Reed economy on tameike margins, searched and not found (`water/280`). S.
-- B25 `water/090`, `water/100`, `water/160` and `fields/090`: each carries one footnote over 500+ words. M.
+- B25 `water/090`, `water/100` and `fields/090` each carry one footnote over 500+ words; `water/160` two. M.
 
 ## V1 - vegetation: woods (new: vegetation 210-250)
 
@@ -148,9 +159,28 @@ in the section that makes the claim).
 - B41 Near-city retreats and how far an estate reached (`hinterland/010`, `015`); the size of the strip outside a gate
   (`040`); the moat and fields (`030`); the population split (`sizing/010`). M.
 
+## S1 - settlements (edits existing)
+
+- B42 Is every household drawn? `settlements/030` (no footnotes) asserts extended families under one roof and a
+  household of five across two or three generations. All hamlets. S.
+
+## X1 - the thin sections on 265's pages (edits existing; held until 265 lands)
+
+First, for each: a section that is a drawing convention or project decision (a "no source is owed" note or a map-convention
+label) owes no source. Say so in the handoff and leave it.
+
+
+- B43 `towns/020` (who lives in a town, and in how many houses) and `towns/150` (a town's paddy plot): no footnotes.
+  `towns/120`, `towns/140`: thin. M.
+- B44 `towns/110` (the magistrate's manor drawn as a plain walled box) and `buildings/110` (poverty texture): no
+  footnotes. S.
+- B45 `cities/capitals/380` (Scorpion vs Crane capital: canon first, by `make canon`) and `390` (which provincial
+  rules invert in a capital): no footnotes. M.
+- B46 `cities/river-cities/030` and `ways/050`: thin. S.
+
 ## Queue order
 
 New-question groups first, since they touch no fragment 265's unpushed sweeps edited. The audit's priority runs:
 H1 (five guess kinds on every live hamlet), V1 (blocks a placer fix), H2 (knob candidates with measured defects
-waiting), F1, W1. Then F2, V2, A1, R1. Then the edit-existing groups, after a sync from main: H3, F3, W2, A2, R2, C1,
-C2, C3, C4.
+waiting), F1, W1. Then F2, V2, A1, R1. Then the edit-existing groups, after a sync from main and 265's landing: H3, F3, W2,
+A2, S1, R2, C1, C2, C3, C4, X1.

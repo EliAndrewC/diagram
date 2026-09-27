@@ -13,10 +13,16 @@ when the five-hour window resets, without duplicating the other research session
 
 ## What is owed
 
-[`inventory.md`](inventory.md) numbers every item, B01-B41. They come from an audit on 2026-09-27 of the future-work
+[`inventory.md`](inventory.md) numbers every item, B01-B46. They come from an audit on 2026-09-27 of the future-work
 files, every research fragment's footnotes against its assertions, and the engine's kinds labeled guess or with no
 entry. The items fall into 20 research groups, one record page each. Every item another session owns (features 265,
-267 and 268, each confirmed by its session) is listed under "Owned elsewhere" and excluded.
+267 and 268, each confirmed by its session) is listed under "Owned elsewhere" and excluded, and every footnote-less
+section the audit passed over is listed with its reason.
+
+**A correction to the request's premise.** The GM believed the Diagram research session was backfilling the
+farming-settlement questions. That session confirmed (2026-09-27) that it works only feature 265's record checks on the
+town and city pages, which is also where its queues ran. The farming-page research (fields, homesteads, water,
+vegetation, archetypes) was unowned, and this feature takes it.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -91,27 +97,37 @@ feature owns.
 - **FR-006**: No section owned by 265, 267 or 268 (inventory, "Owned elsewhere") MAY be edited by this feature.
 - **FR-007**: The research MUST run unattended through usage-limit resets: a session the limit ends is resumed after
   the reset, not skipped, and the orchestrator re-arms a stopped queue on an hourly schedule.
-- **FR-008**: Peer research sessions MUST be checked after a reset. One sitting idle with claimed work unfinished is
-  sent one message to resume.
+- **FR-008**: Peer research sessions MUST be checked on every hourly wake, and above all after a reset. A peer idle with
+  claimed work unfinished is sent a message to resume; the next wake confirms it resumed (busy, or new commits or
+  run-log lines), and a peer still idle is messaged again. Every check (time, peer, state, action) is appended to
+  `/diagram/.clones/RESEARCH-PEER-CHECKS.log`.
+- **FR-011**: Claims MUST stay current while the run lasts. Each write session re-reads `RESEARCH-CLAIMS.md` before
+  starting, skips any item another session has claimed since (naming it in the handoff), and marks its group in 269's
+  line. No excluded item is left without an owner: each is in "Owned elsewhere" with its owner's confirmation, or in
+  the inventory's list of sections passed over, with the reason.
 - **FR-009**: The future-work items this feature answers MUST be closed or rewritten to what remains, each with why.
 - **FR-010**: What is the GM's to rule (B33, B34, and any contradiction or KNOB-versus-canon question the research
   raises) MUST go to the GM through `escalation-check`.
 
 ### Key Entities
 
-- **Item**: one owed question (B01-B41), with the kinds and maps it bears on.
+- **Item**: one owed question (B01-B46), with the kinds and maps it bears on.
 - **Group**: a research session's worth of items on one page, with a prefix range.
 - **Outcome**: ACCURATE / KNOB / SILENT / CONTRADICTION-RESOLVED, per item, in `outcomes.md`.
 
 ## Success Criteria *(mandatory)*
 
-- **SC-001** (FR-001, FR-002): every item B01-B41 has an outcome line in `outcomes.md` naming its section.
+- **SC-001** (FR-001, FR-002): every item B01-B46 has an outcome line in `outcomes.md` naming its section.
 - **SC-002** (FR-003): every kind named by an item has an `Entry:` that resolves, and an `entry-drift` verdict of
   IN-STEP.
 - **SC-003** (FR-005): every new or changed section has quote-check, record-format and (for a new key)
   source-applicability verdicts in its group's checks file.
 - **SC-004** (FR-007): the run logs show no brief skipped because of a usage-limit failure.
 - **SC-005** (FR-006): `git diff` over the feature touches no section in "Owned elsewhere".
+- **SC-007** (FR-008): `RESEARCH-PEER-CHECKS.log` shows each peer checked after each reset, and every nudge followed by
+  a check that confirms it resumed or a further nudge.
+- **SC-008** (FR-011): every item is in the inventory, in "Owned elsewhere" with an owner's confirmation, or in the
+  passed-over list with a reason, and no handoff reports an item it researched that another session had claimed.
 - **SC-006** (FR-004): every map-changing outcome has either a regenerated map or a `future-work/` entry with its measurement.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
@@ -121,4 +137,7 @@ drawing convention, or guess.
 
 ## Review history
 
-- (none yet)
+- Round 1 (spec-fidelity, 2026-09-27): CHANGES REQUIRED, four findings. (1) The 265 pages' thin sections were excluded
+  unchecked: 265 confirmed that none is its own, so they are group X1, and FR-011 leaves no item without an owner. (2) FR-008
+  now confirms a peer resumed, re-nudges, and keeps a log (SC-007). (3) Claims are re-read per group (FR-011, SC-008).
+  (4) `settlements/030` is B42, and every footnote-less section passed over is listed with its reason.
