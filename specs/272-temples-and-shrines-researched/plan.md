@@ -57,3 +57,6 @@ country shrine applied to its sheet and map.
 
 1. T01: briefs and queues. 2. T02-T07: the six groups, written and checked. 3. T08: FR-007. 4. T09: inventories,
 handoffs. 5. T10: `make done`, push.
+- **D7 - a key held by another clone** (269's kawazoe-2010-ryobosei, cited by R3 for 190): cited by name, never
+  reserved here; its single registry file is copied from diagram-supplemental before this feature lands if 269 has not
+  landed (agreed with "Diagram supplemental", 2026-09-27).
