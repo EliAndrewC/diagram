@@ -1,0 +1,8 @@
+{
+ "term": "dead ground",
+ "def": "Ground at the foot of a wall that its defenders cannot shoot into from the wall-top; at a square corner, the angle itself.",
+ "variants": [
+  "dead ground",
+  "dead space"
+ ]
+}

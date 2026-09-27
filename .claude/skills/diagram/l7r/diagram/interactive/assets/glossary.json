@@ -1077,7 +1077,8 @@
   "def": "The stretch of wall between two towers - the plain face an attacker meets, covered by the towers to either side.",
   "variants": [
    "curtain wall",
-   "curtain"
+   "curtain",
+   "curtains"
   ]
  },
  "cyanobacterium": {
@@ -3928,7 +3929,8 @@
  "tulou": {
   "def": "The round or rectangular communal fortress-houses of the Hakka of south China, a clan under one roof.",
   "variants": [
-   "tulou"
+   "tulou",
+   "tulous"
   ]
  },
  "ujiko": {
@@ -5708,6 +5710,80 @@
   "def": "The Japanese word for a castle's bailey: one of the walled or ditched enclosures a castle's layout divides its ground into, the innermost being the honmaru.",
   "variants": [
    "kuruwa"
+  ]
+ },
+ "shell keep": {
+  "def": "A castle's strongest tower is its keep, its last refuge; a shell keep is a ring wall built around the top of a castle mound in place of that tower, and a square keep is the older four-cornered tower whose corners were its weak points.",
+  "variants": [
+   "shell keep",
+   "shell keeps",
+   "square keep",
+   "square keeps"
+  ]
+ },
+ "trebuchet": {
+  "def": "A siege engine that throws stones from a pivoting beam, worked by a counterweight or by a crew hauling ropes; in Europe it came into use around the end of the 12th century.",
+  "variants": [
+   "trebuchet",
+   "trebuchets"
+  ]
+ },
+ "dead ground": {
+  "def": "Ground at the foot of a wall that its defenders cannot shoot into from the wall-top; at a square corner, the angle itself.",
+  "variants": [
+   "dead ground",
+   "dead space"
+  ]
+ },
+ "siege mining": {
+  "def": "Digging a tunnel (a gallery) under a wall, propping it with timber, then burning the props so the wall above collapses; a square corner was the miner's favorite target.",
+  "variants": [
+   "siege mining",
+   "galleried mining",
+   "miner's"
+  ]
+ },
+ "Hakka": {
+  "def": "A Han Chinese group of the hill country where Fujian, Guangdong and Jiangxi meet, whose clans built most of the Fujian tulou.",
+  "variants": [
+   "Hakka"
+  ]
+ },
+ "Suzaku-oji": {
+  "def": "The great central avenue of an ancient Chinese-model imperial capital, running south from the palace gate: 82-84 m wide at Heian-kyo and 147 m at Tang Chang'an (Zhuque Dajie).",
+  "variants": [
+   "Suzaku-oji",
+   "Suzaku Oji",
+   "Suzaku Ōji",
+   "Suzaku-ōji",
+   "Suzaku Avenue",
+   "Suzaku Boulevard",
+   "Suzaku street",
+   "Zhuque Dajie"
+  ]
+ },
+ "Heian-kyo": {
+  "def": "The ancient imperial capital at present-day Kyoto, founded in 794 and laid out as a grid on the Chinese model.",
+  "variants": [
+   "Heian-kyo",
+   "Heian-kyō",
+   "Heian-kyo's",
+   "Heian-kyō's"
+  ]
+ },
+ "Heijo-kyo": {
+  "def": "The imperial capital at Nara before Heian-kyo, also a grid on the Chinese model.",
+  "variants": [
+   "Heijo-kyo",
+   "Heijō-kyō",
+   "Heijo-kyo's",
+   "Heijō-kyō's"
+  ]
+ },
+ "Engishiki": {
+  "def": "A 10th-century collection of Japanese court procedures and regulations, completed in 927, which records the dimensions of Heian-kyo.",
+  "variants": [
+   "Engishiki"
   ]
  }
 }

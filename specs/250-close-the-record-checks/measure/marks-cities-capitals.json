@@ -46,5 +46,17 @@
  {
   "label": "cities/capitals 2b step 8",
   "ts": "2026-09-27T05:51:28.253Z"
+ },
+ {
+  "label": "cities/capitals 5-check",
+  "ts": "2026-09-27T05:51:50.522Z"
+ },
+ {
+  "label": "cities/capitals 6-apply-build",
+  "ts": "2026-09-27T05:55:59.103Z"
+ },
+ {
+  "label": "cities/capitals 7-recheck",
+  "ts": "2026-09-27T05:57:19.389Z"
  }
 ]

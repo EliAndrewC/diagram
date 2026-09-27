@@ -224,6 +224,7 @@ cun	cun
 curfew ward	lifang
 curtain	curtain
 curtain wall	curtain
+curtains	curtain
 cutbank	cutbank
 cutbanks	cutbank
 cyanobacteria	cyanobacterium
@@ -250,6 +251,8 @@ daxiangguo	Daxiangguo
 db	dBA
 dba	dBA
 dbh	DBH
+dead ground	dead ground
+dead space	dead ground
 degawari	degawari
 delivery ditch	delivery ditch
 delivery ditches	delivery ditch
@@ -330,6 +333,7 @@ enemy tower	mamian
 enfeoffed	enfeoffment
 enfeoffment	enfeoffment
 enfeoffments	enfeoffment
+engishiki	Engishiki
 enoki	enoki
 eunis	EUNIS
 eutrophic	eutrophication
@@ -431,6 +435,7 @@ fuse	fuse
 fusekoshi	inverted siphon
 gabion	gabion
 gabions	gabion
+galleried mining	siege mining
 gangi	gangi
 gassho	gassho
 gassho-zukuri	gassho
@@ -482,6 +487,7 @@ gōshi	gōshi
 hachure	hachure
 hachures	hachure
 haiden	haiden
+hakka	Hakka
 hakone barrier	Hakone barrier
 half-river closure	half-river closure
 half-river closures	half-river closure
@@ -514,6 +520,14 @@ headman	headman
 headmen	headman
 headworks	headworks
 heian	Heian
+heian-kyo	Heian-kyo
+heian-kyo's	Heian-kyo
+heian-kyō	Heian-kyo
+heian-kyō's	Heian-kyo
+heijo-kyo	Heijo-kyo
+heijo-kyo's	Heijo-kyo
+heijō-kyō	Heijo-kyo
+heijō-kyō's	Heijo-kyo
 heimen	heimen
 heimin	heimen
 hem	hem
@@ -824,6 +838,7 @@ micro-highs	micro-high
 middle moat	middle moat
 middle moats	middle moat
 mimizuka	ear mound
+miner's	siege mining
 ming	Ming dynasty
 ming dynasty	Ming dynasty
 ming taizu	Taizu
@@ -1118,6 +1133,8 @@ shatian	shatian
 sheath	sheath
 sheaths	sheath
 sheer boom	boom
+shell keep	shell keep
+shell keeps	shell keep
 shi	shi
 shibai-goya	shibai-goya
 shichiya	shichiya
@@ -1154,6 +1171,7 @@ shuinchi	shuinchi
 shuku	shukuba
 shukuba	shukuba
 shunzhi	Shunzhi
+siege mining	siege mining
 sigma	sigma
 siheyuan	siheyuan
 siku quanshu	Siku Quanshu
@@ -1183,6 +1201,8 @@ spiraea	Spiraea
 spread footing	footing
 spring and autumn	Spring and Autumn
 spring line	spring line
+square keep	shell keep
+square keeps	shell keep
 srtm	SRTM
 steading	steading
 steadings	steading
@@ -1215,6 +1235,13 @@ superelevates	superelevation
 superelevation	superelevation
 superstructure	superstructure
 sus	Sus
+suzaku avenue	Suzaku-oji
+suzaku boulevard	Suzaku-oji
+suzaku oji	Suzaku-oji
+suzaku street	Suzaku-oji
+suzaku ōji	Suzaku-oji
+suzaku-oji	Suzaku-oji
+suzaku-ōji	Suzaku-oji
 sward	sward
 tagoshi kangai	tagoshi kangai
 taihu	Lower Yangzi
@@ -1298,6 +1325,8 @@ transect	transect
 transects	transect
 tread	tread
 treads	tread
+trebuchet	trebuchet
+trebuchets	trebuchet
 tributary	tributary
 true duty	water duty
 trunk streets	trunk street
@@ -1309,6 +1338,7 @@ tsunaba	tsunaba
 tudi miao	tudi miao
 tudigong	tudi miao
 tulou	tulou
+tulous	tulou
 twelve-mat	tatami
 tōhoku	Tohoku
 tōkaidō	Tokaido
@@ -1429,6 +1459,7 @@ zhengyi	Zhengyi
 zhonggulou	gulou
 zhonglou	gulou
 zhou	department
+zhuque dajie	Suzaku-oji
 zicheng	zicheng
 zokibayashi	zokibayashi
 zonation	zonation
