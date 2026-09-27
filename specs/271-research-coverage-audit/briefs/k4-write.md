@@ -30,16 +30,22 @@ the map features whose write-ups will be rewritten from what you find (by the or
 - B07 C03 **Rampart in section**: how high and thick is a county town's and a provincial city's rampart, rammed earth,
   stone- or brick-faced or a Japanese earthwork (dorui, sōgamae), with what parapet, how many gates, and what of it
   shows from above? (towns/100; cities/capitals/150, 155; cities/defenses/060, 269 B38's - cite it). M. P1.
+  > COORDINATION (C03): new question; cite 269's cities/defenses 020-090 (B38) for the city figures
 - B08 **Town gate**: a gatehouse or a tower over the opening, its footprint and opening width, at a walled county town?
   (cities/defenses/030, 040 are the city's, 269 B38's). M. P1.
+  > COORDINATION (B08): take the TOWN side; cite 269's cities/defenses 020/040/050/080/090 (B38) for the city figures
 - C09 **Barbican**: did a provincial gate have a barbican (wengcheng) or a Japanese masugata, how large, and how
   common? (cities/defenses/050, names it). M. P1.
+  > COORDINATION (C09): new question; cite 269's cities/defenses 020 (B38)
 - C17 **Moat crossing**: fixed timber bridge, earthen causeway, stone bridge, drawbridge - how does a road cross the
   moat at a city gate, and how wide and long? (cities/capitals/240 is the castle's gates only). M. P1.
+  > COORDINATION (C17): new question; cite 269's cities/defenses 040 (moat depth, B38)
 - B09 **Town moat**: did a walled county town carry a moat or ditch, and how wide? (water/110, 120 are city moats).
   S. P3.
+  > COORDINATION (B09): town side only; cite 269's cities/defenses 020/040/050/080/090 (B38) for the city
 - B77 **Town inspection post**: did a town on a road keep a barrier or inspection post, and what did it look like?
   (urban-features/140; the city's is 269 B38's). S. P3.
+  > COORDINATION (B77): town side only; cite 269's cities/defenses 050 (B38) for the city
 
 ## The procedure (session 1: research and write)
 
