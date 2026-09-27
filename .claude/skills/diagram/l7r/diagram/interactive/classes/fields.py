@@ -13,22 +13,24 @@ class Paddy(Kind):
     """
     What: A rice basin under a shallow sheet of water behind its bunds - an inch or so for most of the season -
     one plot of the hamlet's comb field. The sheet is not constant: at midsummer the field is drained on
-    purpose until the mud cracks underfoot, and it is drained again before the harvest.
+    purpose until the mud cracks underfoot - modern practice; before modern times only in some places where
+    water was plentiful - and it is drained again before the harvest.
 
-    Why: Pre-modern paddies were fitted to land and water by piecemeal reclamation and inheritance, so the plots
-    are odd-sized and odd-shaped, meeting at T-junctions; the tidy rectangular grid is a Meiji
-    land-consolidation artifact. A flooded paddy makes its own nitrogen, which is why the same basins were
-    cropped year after year.
+    Why: Pre-modern paddies were fitted to land and water by piecemeal reclamation, so the plots are
+    odd-sized and odd-shaped; the tidy rectangular grid is a Meiji/Showa land-consolidation artifact, though
+    the alluvial plains of the west kept the far older jori grid working into the medieval period. A flooded
+    paddy makes its own nitrogen, which is why the same basins were cropped year after year.
 
     Note: Plot form and the irregular patchwork are read, and so is the scattering of a household's holding;
-    plot sizes are the map's own figures, placed inside a pre-modern band no page read gives; the field is
-    shown flooded, which is one moment of a cycle that runs from flooded to cracked and back; the depths
-    behind that choice are modern extension figures, and no pre-modern record of either the depths or the
-    drying stages was found.
+    that the bunds meet at T-junctions is a guess no page read states; drawing the patchwork on the western
+    plains, where the jori grid ran, is a deviation; plot sizes are the map's own figures, placed inside a
+    pre-modern band no page read gives; the field is shown flooded, which is one moment of a cycle that runs
+    from flooded to cracked and back; the depths behind that choice are modern extension figures, and no
+    pre-modern depth was found; the midsummer drain is read in Edo-period farm books, in some places.
 
-    Caveat: the field is shown flooded, which is one moment of a cycle that runs from flooded to cracked and back;
-    the depths behind that choice are modern extension figures, and no pre-modern record of either the
-    depths or the drying stages was found.
+    Caveat: the field is shown flooded, which is one moment of a cycle that runs from flooded to cracked and
+    back; the depths behind that choice are modern extension figures, and no pre-modern depth was found; the
+    midsummer drain is read in Edo-period farm books, in some places.
 
     Name: paddy
     Covers: the wet plots of every `fields[kind=paddy]` - the flooded basins
