@@ -389,14 +389,16 @@ class CartYard(Kind):
     ignition, so a charcoal store is set apart from the working yard across open ground; the record derives
     about 30 ft as the gap to keep, roughly one flame-height clear of a burning stack.
 
-    Note: The apron and the separation it performs follow the record. The 30 ft gap is this record's own
-    derivation, and no entry squares carts at a county compound with what the record finds on them: carts
-    confined to city streets in Japan and forbidden on its highways, and a Chinese countryside built for the
-    wheelbarrow.
+    Note: The apron and the separation it performs follow the record. The 30 ft gap rests on the record's own
+    one-flame-height rule of thumb, which no page read supports (the published rule, four flame heights, is for
+    people, not timber); the gap is this record's own derivation, and no entry squares carts at a county
+    compound with what the record finds on them: carts confined to city streets in Japan and forbidden on its
+    highways, and a Chinese countryside built for the wheelbarrow.
 
-    Caveat: The 30 ft gap is this record's own derivation, and no entry squares carts at a county compound with
-    what the record finds on them: carts confined to city streets in Japan and forbidden on its highways, and a
-    Chinese countryside built for the wheelbarrow.
+    Caveat: The 30 ft gap is this record's own derivation from its own one-flame-height rule of thumb, which no
+    page read supports, and no entry squares carts at a county compound with what the record finds on them:
+    carts confined to city streets in Japan and forbidden on its highways, and a Chinese countryside built for
+    the wheelbarrow.
 
     Name: cart yard
     Covers: the loading apron inside the cart gate

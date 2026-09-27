@@ -197,8 +197,9 @@ class FoxBorder(Kind):
 
     Why: Agreed, marked borders between domains were real: two neighboring domains settled a boundary of about
     130 km in 1642 after half a century of dispute and marked it with a line of earth mounds, and every
-    province's map drew its boundaries plainly. A border exists where two authorities have agreed it, so the
-    plan draws the agreed line itself, which nothing on the ground need stand clear of.
+    province's map made in the Genroku revision drew its district boundaries clearly. A border exists where
+    two authorities have agreed it, so the plan draws the agreed line itself, which nothing on the ground need
+    stand clear of.
 
     Note: The agreed, drawn border line is a recorded finding. The period's large border markers were earthen
     mounds, and the plan draws the line alone; a compound standing on the line is its map's story.
