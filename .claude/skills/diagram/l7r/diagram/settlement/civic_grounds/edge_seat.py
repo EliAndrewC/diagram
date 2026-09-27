@@ -100,4 +100,3 @@ def edge_seat(s: Settlement, down_deg: float, w: float, h: float, ground: EdgeGr
                 return (cx, cy)
         r += step_px
     return None
-

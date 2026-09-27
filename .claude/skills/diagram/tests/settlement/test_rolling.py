@@ -594,6 +594,7 @@ def test_a_hamlet_draws_no_cremation_ground_shrine_or_headman() -> None:
     s._roll_civic({"gateway": (800.0, 800.0)}, "hamlet", True, 0.0, 1.0)
     assert not s.M["cremation_grounds"] and not s.M["shrines"] and not s.M["torii"]
     for path in glob.glob("pool/hamlets/*/*.json"):
-        m = json.load(open(path, encoding="utf-8"))
+        with open(path, encoding="utf-8") as fh:
+            m = json.load(fh)
         assert not m.get("cremation_grounds") and not m.get("shrines") and not m.get("religious"), path
         assert not any(h.get("role") == "headman" for h in m.get("houses", [])), path
