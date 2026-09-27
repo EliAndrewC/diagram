@@ -1562,6 +1562,8 @@ umayado	umayado
 umayagoe	kyuhi
 umazouri	umagutsu
 umon	umon
+unconfined	unconfined groundwater
+unconfined groundwater	unconfined groundwater
 undersluice	undersluice
 undersluices	undersluice
 understory	understory
