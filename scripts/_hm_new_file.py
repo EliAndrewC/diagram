@@ -53,8 +53,11 @@ def verdict(payload: dict) -> str:
         cmd = str(ti.get("command") or "")
         for m in TARGET.finditer(cmd):
             raw, prefix, key, ext = m.group(1), int(m.group(2)), m.group(3), m.group(4)
-            kind = kind_of_path("/" + raw) or ("glossary" if ext == "json" else "registry")
             known = "$" not in raw
+            kind = kind_of_path("/" + (raw if raw.startswith("/") else str(cwd / raw)))
+            if not kind and known:
+                continue  # a known path outside the two directories (plan review, round 2)
+            kind = kind or ("glossary" if ext == "json" else "registry")
             targets.append((kind, (cwd / raw) if known and not raw.startswith("/") else (Path(raw) if known else None), key, prefix))
     for kind, path, key, prefix in targets:
         if path is not None and path.exists():

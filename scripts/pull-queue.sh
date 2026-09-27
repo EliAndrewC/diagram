@@ -18,7 +18,9 @@ Q="$(dirname "$ROOT")/$(basename "$ROOT")-$N"
 [ -z "$(git -C "$ROOT" status --porcelain)" ] || { echo "pull-queue: commit this clone's work first" >&2; exit 2; }
 
 # the files this feature regenerates - rebuilt below, so either side of a conflict in them will do
-GENERATED='(^|/)research/[^/]+\.html$|(^|/)research/cities/[^/]+\.html$|(^|/)research/citations/|(^|/)research/SOURCES\.html$|(^|/)assets/glossary\.(json|js)$|(^|/)research/assets/glossary|(^|/)dev/(run|bypass)-log/'
+GENERATED='(^|/)research/[^/]+\.html$|(^|/)research/cities/[^/]+\.html$|(^|/)research/citations/|(^|/)research/SOURCES\.html$|(^|/)assets/glossary\.(json|js)$|(^|/)research/assets/glossary'
+# the run and bypass logs are NOT in it: nothing rebuilds them, so taking one side would lose the other's entry
+# (plan review round 2) - a conflict in one stops for a person like any hand-written file
 if ! git -C "$ROOT" pull -q --no-rebase --no-edit "$Q" HEAD; then
   others=$(git -C "$ROOT" diff --name-only --diff-filter=U | grep -Ev "$GENERATED" || true)
   if [ -n "$others" ]; then

@@ -130,3 +130,13 @@ directory written without a reservation is refused by a guard naming the command
   2026-09-27 ("add that to 265"), and that FR-002 to FR-009 are 250's, carried verbatim. SC-011 could get the same
   note in the Success criteria heading. `plan.md` D1 ("The method is feature 250's, unchanged") has the same tension
   with D2.
+- **Amendment round 2 (2026-09-27), `spec-fidelity-verify`: FAITHFUL.** Round 1's one item is RESOLVED (commit
+  34a627e2). "What this feature is" now says FR-002 to FR-009 are 250's, carried verbatim, and FR-010 is NEW, added at
+  the GM's direction of 2026-09-27 (`request.md`). It names FR-010's parallel queues, the prefixes reserved under a
+  lock (`make reserve`, which `make apply-edits` uses) and the guard as the one change to the process, which is what
+  FR-010 says and nothing more. The Requirements heading splits FR-002 to FR-009 (250's) from FR-010 (new, the GM
+  2026-09-27). The Success criteria heading already names 250's SC-002 to SC-010 by id, so it makes no claim about
+  SC-011, which is marked (FR-010). `plan.md` D1's heading now names FR-010 as the one change. A grep of the feature
+  directory for "verbatim", "250's own", "unchanged", "nothing here changes" and "one change" finds no other passage
+  that still says every requirement is 250's or that the process is unchanged. The plan's D2 and D3 revisions in the
+  same commit are for `spec-fidelity`'s plan review and are not ruled on here.

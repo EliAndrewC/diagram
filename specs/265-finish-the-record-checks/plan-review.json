@@ -1,47 +1,45 @@
 {
  "feature": "265-finish-the-record-checks",
- "plan_sha256": "e9dc69c5dd8bb9fb2196584e5c0ec087289a40308be246dada83dfbf948c5088",
+ "plan_sha256": "aa8c3673cd09637e8e8b3c8d6af85b0abb4d8184fbd655bd3d315f848cbb7805",
  "reviewed": "2026-09-27",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "D1",
-   "summary": "Pages worked by feature 250's landed method (brief.py, page-session, check groups, apply-edits, canon); tasks closed are 265's own; tokens.py summary once per page for the closing report; FR-010 the one change.",
+   "summary": "Pages worked by feature 250's landed method; tasks closed are 265's own; FR-010's queues and reserved prefixes the one change; tokens.py summary once per page for the closing report.",
    "class": "within",
-   "why": "The spec says the method is 250's, landed, with FR-010 the one change; the per-page token summary only feeds FR-009's closing report."
+   "why": "The spec's 'What this feature is' now says the same: 250's method, FR-010 the one change the GM added on 2026-09-27. The per-page token summary only feeds FR-009's report."
   },
   {
    "id": "D2-lock",
-   "summary": "make reserve KIND=glossary|registry KEY=<key>: flock on <mirror>/.specify/prefixes.lock, next = highest + 10 over the mirror's tree, every clone under <mirror>/.clones/ and a ledger, the stub file created before release; apply_term reserves its glossary prefix; a test races two reservations in processes.",
+   "summary": "make reserve KIND=glossary|registry KEY=<key>: flock on the mirror's lock, next = highest + 10 over the mirror, every clone and a ledger, stub written before release; apply_term reserves its glossary prefix with the full entry as the stub; a race test of eight reservations across two clones in four processes.",
    "class": "within",
-   "why": "Word for word FR-010's allocator (mirror, every clone, ledger, the claim is the file created under the lock, apply-edits takes its prefix from it) and SC-011's race test."
+   "why": "This is FR-010's allocator: mirror, every clone and the ledger, the claim is the file, and apply-edits takes its prefix from it. The race test is SC-011's."
   },
   {
    "id": "D2-guard",
-   "summary": "new-file-hooks.sh (PreToolUse on Write) refuses a Write that creates a file in glossary/ or 010-works-cited/ WHOSE PREFIX THE LEDGER DOES NOT HOLD.",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-010 refuses a new file 'written without a reservation'; D2 refuses only a file whose prefix NOBODY has reserved, and that lets through the collision FR-010 exists to prevent. Session A reserves 0950, so the stub sits in A's clone and 0950 is in the ledger. Session B skips make reserve and takes 'the highest + 10' by hand in its own clone, which also gives 0950. B's Write creates 0950-<other>, the ledger holds 0950, and the guard allows it. Nothing makes the literal rule impossible. The reservation creates the file, so the reserving session's own Write never creates anything (it overwrites the stub). Refusing EVERY Write that creates a new file in either directory, or checking the reservation by full path (kind, prefix and key), both deliver FR-010. Restricting the guard to the Write tool is not ruled against: over this host's transcripts, 21 registry entries were created by Write and none by a Bash cp or redirect, and glossary files come from apply-edits, which reserves."
+   "summary": "new-file-hooks.sh (PreToolUse on Write and Bash) refuses a call that creates a prefixed file in glossary/ or 010-works-cited/ (a Write, a redirect or tee) unless the ledger holds a reservation for that kind, prefix AND key.",
+   "class": "within",
+   "why": "Last round's collision is closed. A hand-taken 0950 for another key no longer passes on a prefix another session reserved, because the key must match. Suite case 2 covers exactly this, and 12 of 12 passed on this round's own run. The reach, the two directories FR-010 names, reached by Write and by shell redirect, is FR-010's 'a new file in either directory written without a reservation is refused'. The plan's text is within. The implementation's Bash branch reaches further than the plan says; that is reported to the session as a code defect against this decision, not as a ruling on the plan."
   },
   {
    "id": "D3",
-   "summary": "make page-queue clones this clone to .clones/diagram-research-<n> and runs page-session there; pull-queue.sh pulls the commits back locally and rebuilds the regenerated files (make record/citations/glossary) ONLY where the merge conflicts in nothing but regenerated files; a conflict anywhere else stops and is resolved by hand.",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-010 says the regenerated pages are 'rebuilt there rather than merged by hand', with no condition. D3 rebuilds them only when regenerated files are the ONLY conflicts. In a mixed conflict the whole merge, regenerated files included, goes to hand resolution, which is the thing FR-010 forbids. A clean textual merge of SOURCES.html, the glossary bundles or an assembled page is committed without any rebuild; CHECK=1 on record/citations/glossary would catch that later, but FR-010 puts the rebuild at the pull. The literal rule is cheap: the three targets run in the clone at any time. Fix: pull-queue always rebuilds the regenerated files after every pull. On a conflict in one of them it takes either side and rebuilds. A conflict in another file is resolved by hand FIRST, and then the rebuild runs. The rest of D3 is within FR-010: sibling clones under .clones/diagram-research-<n>, sessions named after the clone, a local pull and never a push."
+   "summary": "page-queue.sh clones to .clones/diagram-research-<n>, generates the briefs there with that clone's own brief.py, and runs page-session there; pull-queue.sh pulls back locally and ALWAYS runs make glossary/record/citations after the merge and commits the result. A generated-file conflict takes this side; any other conflict stops for a person, and the re-run rebuilds.",
+   "class": "within",
+   "why": "Last round's condition is gone: the rebuild now runs after every pull, clean or not (pull-queue.sh lines after the merge, and test_pull_queue passed on this round's run). A hand conflict exits and names the files. Re-running once it is committed pulls nothing new and then rebuilds, so the regenerated pages are still rebuilt, not merged by hand, as FR-010 asks. The briefs are generated in the queue clone so its check step reads its own commits, and tasks are named '<feature dir>:<Tnn>' so a 265 page ticks 265's task. Both are mechanics FR-010's queues need, not a change to the process."
   },
   {
    "id": "D4",
-   "summary": "Up to three queues: A urban-features; B towns then ways; C river-cities, buildings, then capitals; this clone dispatches.",
+   "summary": "Up to three queues: A urban-features; B towns then ways; C river-cities, buildings, then capitals.",
    "class": "within",
-   "why": "FR-010's 'two or three queues' and SC-011's 'at least two at once'; all six pages the spec names are assigned."
+   "why": "FR-010's 'up to three queues' and SC-011's 'at least two at once'. All six pages the spec names are assigned."
   },
   {
    "id": "D5",
-   "summary": "FR-003 to FR-005 sweeps run here after every queue is pulled back; then FR-008, then T11 (FR-007 checks over the sweeps' changes, owed pairs, closing report, page-check, done, push).",
+   "summary": "Sweeps FR-003 to FR-005 run here after every queue is pulled back, then FR-008, then T11 (FR-007 over the sweeps, owed pairs, closing report, page-check, done, push).",
    "class": "within",
-   "why": "The order the tasks already carry; FR-007 over the pages is done inside each page's brief and over the sweeps in T11."
+   "why": "This is the order the tasks carry. It is unchanged since the last round."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

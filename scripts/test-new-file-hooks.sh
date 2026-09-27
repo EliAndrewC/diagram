@@ -49,6 +49,9 @@ call Write "{\"file_path\":\"$R/$pfx-a-different-key.html\",\"content\":\"x\"}"
 [ "$(rc)" -eq 2 ] && ok "a DIFFERENT key on a reserved prefix is refused (a number taken by hand that collides)" || no "the colliding key was allowed" "(rc=$(rc))"
 call Write "{\"file_path\":\"$C/.claude/skills/diagram/research/fields/0300-q.html\",\"content\":\"x\"}"
 [ "$(rc)" -eq 0 ] && ok "a file outside the two directories" || no "refused" "(rc=$(rc))"
+# GUARD_EDIT_OK: feature 265 FR-010 - plan review round 2: a known path outside the two directories is not guessed
+call Bash '{"command":"echo {} > .claude/skills/diagram/research/fields/0600-probe.json; echo x > /tmp/0600-foo.html"}'
+[ "$(rc)" -eq 0 ] && ok "a redirect to a known prefixed path outside the two directories" || no "refused" "(rc=$(rc))"
 call Bash '{"command":"echo done > /tmp/out.txt; ls 0400-x.json"}'
 [ "$(rc)" -eq 0 ] && ok "a command that only mentions a prefixed name" || no "refused" "(rc=$(rc))"
 
