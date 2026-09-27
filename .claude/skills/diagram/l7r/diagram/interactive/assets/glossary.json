@@ -8212,5 +8212,31 @@
   "variants": [
    "miaohui"
   ]
+ },
+ "hikiri-ichi": {
+  "def": "A Japanese periodic market held on fixed days of the month, usually three times a month. It came before the six-day market (rokusai-ichi) and was replaced by it as trade grew.",
+  "variants": [
+   "hikiri-ichi"
+  ]
+ },
+ "zaimachi": {
+  "def": "A country town of Edo-period Japan: a built-up town of merchants and craftsmen in the countryside, outside the castle towns. Around Kyoto and Osaka many six-day markets grew into one.",
+  "variants": [
+   "zaimachi"
+  ]
+ },
+ "ke": {
+  "def": "A Chinese unit of time, one hundredth of a day, about 14 and a half minutes.",
+  "variants": [
+   "ke"
+  ]
+ },
+ "Sui dynasty": {
+  "def": "The Chinese dynasty (581-618) that reunified China and built the capital the Tang took over as Chang'an.",
+  "variants": [
+   "Sui dynasty",
+   "Sui",
+   "Sui-dynasty"
+  ]
  }
 }

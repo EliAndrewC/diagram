@@ -751,6 +751,7 @@ hereditary monastery	hereditary temple
 hereditary temple	hereditary temple
 hereditary temples	hereditary temple
 hikan	hikan
+hikiri-ichi	hikiri-ichi
 hinin	hinin
 hinoki	hinoki
 hinomi-yagura	hinomi-yagura
@@ -997,6 +998,7 @@ kawaya	kawaya
 kaya	kaya
 kayaba	magusaba
 kayabuki	kayabuki
+ke	ke
 kebiishi	kebiishi
 kegare	kegare
 keian	hitoyado
@@ -1781,6 +1783,9 @@ sueki	Sue ware
 sugi	sugi
 sugoya	sugoya
 sugumagi	sugumagi
+sui	Sui dynasty
+sui dynasty	Sui dynasty
+sui-dynasty	Sui dynasty
 suid	suid
 suiden	suiden
 suids	suid
@@ -2124,6 +2129,7 @@ yuan dynasty	Yuan dynasty
 yuan rebuild	Yuan dynasty
 yui	yui
 yulin wei	yulin wei
+zaimachi	zaimachi
 zaimokuya	zaimokuya
 zaofang	zaofang
 zaojun	Zaojun
