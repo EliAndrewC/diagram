@@ -585,7 +585,7 @@ class FamilyQuarters(Kind):
 class InnerRooms(Kind):
     """
     What: A bay of the residence's private rooms, apart from the formal ones, where a lineage-held posting keeps
-    its ancestral alcove - labeled on a sheet as the inner rooms or the east rooms.
+    its ancestral alcove.
 
     Why: A samurai residence grouped its rooms by use under one roof, the private rooms apart from the formal
     ones, and the tablets a lineage keeps belong among its private rooms.

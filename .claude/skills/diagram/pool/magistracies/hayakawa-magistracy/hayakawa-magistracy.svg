@@ -262,47 +262,55 @@
        GM's schematic convention. -->
   <g data-kind="residence">
     <text x="430" y="196" text-anchor="middle" font-size="11" font-weight="bold" fill="#5C4830" letter-spacing="2">RESIDENCE</text>
-    <!-- West block: formal reception + the lord's rooms (each label is a
-         multi-room ZONE, not one room; engawa veranda along the south face) -->
+    <!-- West block: the private end - the inner rooms with the lineage's alcove, deepest, beside the kitchen,
+         and the family's rooms toward the corridor (each label is a multi-room ZONE, not one room; engawa
+         veranda along the south face). The reception moved to the east block on 2026-09-27 (GM: "fix what you
+         found"): drawn here, its genkan and its engawa faced the kitchen's flank 11 ft away, where the record
+         seats the formal garden before the reception rooms (research/buildings.html 'The shady rear is the
+         service strip', 'Guest doors feed courts, not flanks') - as Ochiba's reception moved on 2026-09-26. -->
     <!-- Each room is its own floor over the block's fill, the outline on top (feature 264) -->
     <rect x="160" y="202" width="288" height="76" fill="#DDB87A"/>
-    <rect x="160" y="202" width="144" height="76" fill="#DDB87A" data-kind="reception room"/>
-    <rect x="304" y="202" width="144" height="76" fill="#DDB87A" data-kind="lord's quarters"/>
+    <rect x="160" y="202" width="144" height="76" fill="#DDB87A" data-kind="inner rooms"/>
+    <rect x="304" y="202" width="144" height="76" fill="#DDB87A" data-kind="family quarters"/>
     <rect x="160" y="202" width="288" height="76" fill="none" stroke="#5A3F1E" stroke-width="2.5"/>
     <rect x="160" y="278" width="288" height="8" fill="#E8D2A8" stroke="#5A3F1E" stroke-width="1.5" data-kind="engawa"/>
     <line x1="304" y1="202" x2="304" y2="278" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
-    <g data-kind="reception room">
-      <text x="232" y="240" text-anchor="middle" font-size="12" font-weight="bold" fill="#3A2E1C">reception</text>
-      <text x="232" y="255" text-anchor="middle" font-size="10" font-style="italic" fill="#5C4830">(zashiki)</text>
-    </g>
-    <g data-kind="lord's quarters">
-      <text x="376" y="236" text-anchor="middle" font-size="12" font-weight="bold" fill="#3A2E1C">Hajime's quarters</text>
-      <text x="376" y="251" text-anchor="middle" font-size="10" font-style="italic" fill="#3A2E1C">private study</text>
+    <!-- the family block's informal door (katteguchi) on its south face, onto the service ground toward the kitchen:
+         the household's own way in, apart from the reception's genkan (buildings/programs.md: no sealed boxes) -->
+    <rect x="256" y="286" width="24" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
+    <text x="232" y="224" text-anchor="middle" font-size="10" fill="#3A2E1C" data-kind="inner rooms">inner rooms</text>
+    <text x="232" y="238" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830" data-kind="ancestral alcove">&amp; ancestral alcove -</text>
+    <text x="232" y="249" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830" data-kind="ancestral alcove">tablets of past</text>
+    <text x="232" y="260" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830" data-kind="ancestral alcove">magistrates, Hajime's</text>
+    <text x="232" y="271" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830" data-kind="ancestral alcove">forebears (lineage-held)</text>
+    <g data-kind="family quarters">
+      <text x="376" y="240" text-anchor="middle" font-size="11" fill="#3A2E1C">family</text>
+      <text x="376" y="254" text-anchor="middle" font-size="11" fill="#3A2E1C">quarters</text>
     </g>
     <!-- Connecting corridor -->
     <rect x="448" y="230" width="10" height="34" fill="#DDB87A" stroke="#5A3F1E" stroke-width="1.5" data-kind="residence corridor"/>
-    <!-- East block, stepped south: family + ancestral rooms (engawa along the
-         garden-facing south face) -->
+    <!-- East block, stepped south: the formal reception at the corridor and the lord's own suite beyond it, both
+         facing the inner garden across the engawa on the south face -->
     <rect x="458" y="222" width="242" height="76" fill="#DDB87A"/>
-    <rect x="458" y="222" width="120" height="76" fill="#DDB87A" data-kind="family quarters"/>
-    <rect x="578" y="222" width="122" height="76" fill="#DDB87A" data-kind="inner rooms"/>
+    <rect x="458" y="222" width="120" height="76" fill="#DDB87A" data-kind="reception room"/>
+    <rect x="578" y="222" width="122" height="76" fill="#DDB87A" data-kind="lord's quarters"/>
     <rect x="458" y="222" width="242" height="76" fill="none" stroke="#5A3F1E" stroke-width="2.5"/>
     <rect x="458" y="298" width="242" height="8" fill="#E8D2A8" stroke="#5A3F1E" stroke-width="1.5" data-kind="engawa"/>
     <line x1="578" y1="222" x2="578" y2="298" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
-    <g data-kind="family quarters">
-      <text x="517" y="260" text-anchor="middle" font-size="11" fill="#3A2E1C">family</text>
-      <text x="517" y="274" text-anchor="middle" font-size="11" fill="#3A2E1C">quarters</text>
+    <g data-kind="reception room">
+      <text x="518" y="256" text-anchor="middle" font-size="12" font-weight="bold" fill="#3A2E1C">reception</text>
+      <text x="518" y="271" text-anchor="middle" font-size="10" font-style="italic" fill="#5C4830">(zashiki)</text>
     </g>
-    <text x="640" y="244" text-anchor="middle" font-size="10" fill="#3A2E1C" data-kind="inner rooms">east rooms</text>
-    <text x="640" y="258" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830" data-kind="ancestral alcove">&amp; ancestral alcove -</text>
-    <text x="640" y="269" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830" data-kind="ancestral alcove">tablets of past</text>
-    <text x="640" y="280" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830" data-kind="ancestral alcove">magistrates, Hajime's</text>
-    <text x="640" y="291" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830" data-kind="ancestral alcove">forebears (lineage-held)</text>
+    <g data-kind="lord's quarters">
+      <text x="639" y="256" text-anchor="middle" font-size="11" font-weight="bold" fill="#3A2E1C">Hajime's quarters</text>
+      <text x="639" y="271" text-anchor="middle" font-size="10" font-style="italic" fill="#3A2E1C">private study</text>
+    </g>
   </g>
 
-  <!-- Formal entry porch (genkan) at the reception block - drawn apart, declared part of the residence (feature 264) -->
+  <!-- Formal entry porch (genkan) on the reception bay's garden face - a guest of rank comes through the nakamon,
+       crosses the inner garden and steps up here. Drawn apart, declared part of the residence (feature 264) -->
   <g data-kind="genkan" data-part-of="residence">
-    <rect x="248" y="286" width="40" height="14" fill="#C9A57A" stroke="#5A3F1E" stroke-width="1.2"/>
+    <rect x="498" y="306" width="40" height="14" fill="#C9A57A" stroke="#5A3F1E" stroke-width="1.2"/>
   </g>
 
   <!-- Kitchen + pantries (west range) - 40x33 ft; a large institutional
@@ -358,8 +366,10 @@
        lord's own wing (interior-audit historical correction 2026-07) -->
   <g data-kind="karo's house">
     <rect x="340" y="374" width="115" height="74" fill="#DDB87A" stroke="#5A3F1E" stroke-width="2"/>
-    <!-- informal side entrance (a modest door, not a second genkan) -->
-    <rect x="372" y="448" width="26" height="8" fill="#C9A57A" stroke="#5A3F1E" stroke-width="1" data-kind="door"/>
+    <!-- informal side entrance (a modest door, not a second genkan) on the WEST face, onto the service ground
+         between the kitchen and the house: on the south face it opened 0.3 ft short of the court divider's ink
+         (building review, feature 264; moved 2026-09-27) -->
+    <rect x="332" y="398" width="8" height="26" fill="#C9A57A" stroke="#5A3F1E" stroke-width="1" data-kind="door"/>
     <text x="397" y="406" text-anchor="middle" font-size="11" font-weight="bold" fill="#3A2E1C">karo's house</text>
     <text x="397" y="421" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">(the house elder)</text>
   </g>
@@ -382,11 +392,13 @@
     <line x1="224" y1="156" x2="224" y2="196" stroke="#6B4F2A" stroke-width="1"/>
     <line x1="277" y1="156" x2="277" y2="196" stroke="#6B4F2A" stroke-width="1"/>
     <line x1="330" y1="156" x2="330" y2="196" stroke="#6B4F2A" stroke-width="1"/>
-    <!-- court-facing door (informal) -->
-    <rect x="252" y="196" width="26" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
+    <!-- door (informal) on the WEST end, onto the service strip inside the west wall that runs down to the kitchen
+         postern and the kitchen: on the south face it opened into the residence's back wall 2 ft away, and on the
+         east end the way to the kitchen crossed the inner garden before the genkan (building reviews, 2026-09-27) -->
+    <rect x="166" y="168" width="6" height="16" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
     <text x="277" y="180" text-anchor="middle" font-size="9" font-weight="bold" fill="#3A2E1C">servants' quarters</text>
   </g>
-  <!-- Family privy attached to the residence's rear (north) corner -->
+  <!-- Privy attached to the residence's rear (north) corner, at the east block (reached along the rear strip) -->
   <g data-kind="latrine" data-part-of="residence">
     <rect x="462" y="208" width="18" height="14" fill="#7E726A" stroke="#3A2E1C" stroke-width="0.8"/>
     <text x="484" y="219" font-size="8" font-style="italic" fill="#5C4830">latrine</text>
@@ -651,9 +663,9 @@
     <circle cx="286" cy="404" r="3.8"/>
     <!-- office hall - west eaves corner -->
     <circle cx="334" cy="494" r="3.8"/>
-    <!-- residence west block (by the entry porch) -->
+    <!-- residence west block (south eaves) -->
     <circle cx="310" cy="296" r="3.8"/>
-    <!-- residence east block (family, garden frontage) -->
+    <!-- residence east block (reception and the lord's suite, garden frontage) -->
     <circle cx="680" cy="312" r="3.8"/>
     <!-- the two shrines (against the Fire Dragon shrine's east eaves) -->
     <circle cx="812" cy="221" r="3.8"/>
