@@ -939,7 +939,8 @@
   "def": "A settlement's own tutelary shrine, the seat of the deity that guards it.",
   "variants": [
    "chinju",
-   "Chinjusan"
+   "Chinjusan",
+   "tutelary shrine"
   ]
  },
  "chinju no mori": {
@@ -6699,6 +6700,60 @@
    "branch households",
    "branch house",
    "branch houses"
+  ]
+ },
+ "kaigisho": {
+  "def": "A village meeting hall; a name used beside kaisho for the halls the Kinki region set up from early times.",
+  "variants": [
+   "kaigisho"
+  ]
+ },
+ "nenbutsu": {
+  "def": "Chanting the Buddha's name; a nenbutsu hall was a hall for that chanting, and in older times one of the places a village meeting was held.",
+  "variants": [
+   "nenbutsu",
+   "nembutsu"
+  ]
+ },
+ "festival lodging": {
+  "def": "The house that hosted a village festival; some villages held their meeting there after the festival.",
+  "variants": [
+   "festival lodging",
+   "festival's host house",
+   "festival host house"
+  ]
+ },
+ "purlin": {
+  "def": "A roof beam running along the length of a building under the rafters; a Chinese hall's depth is counted in purlins - the rear halls at Langtou, of thirteen purlins, are 8.5 to 9 meters deep.",
+  "variants": [
+   "purlin",
+   "purlins"
+  ]
+ },
+ "three-bay two-corridor house": {
+  "def": "The common house of a Cantonese village, three bays wide, built in rows behind the village's ancestral halls.",
+  "variants": [
+   "three-bay two-corridor house",
+   "three-bay two-corridor houses"
+  ]
+ },
+ "honbyakusho": {
+  "def": "The landholding farmers of an Edo-period village, who made up most of the village meeting.",
+  "variants": [
+   "honbyakusho",
+   "hon-byakusho"
+  ]
+ },
+ "komae": {
+  "def": "The small farmers of an Edo-period village, below the officials and leading men; later in the period they came to take part in the village meeting.",
+  "variants": [
+   "komae"
+  ]
+ },
+ "hirakata": {
+  "def": "The ordinary villagers of an Edo-period village, below the officials and leading men; named with the komae as those who later joined the village meeting.",
+  "variants": [
+   "hirakata"
   ]
  }
 }

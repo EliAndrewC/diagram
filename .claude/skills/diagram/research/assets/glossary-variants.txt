@@ -422,6 +422,9 @@ fengshui grove	fengshui grove
 fengshuilin	fengshui grove
 fertilizer boat	fertilizer boat
 fertilizer boats	fertilizer boat
+festival host house	festival lodging
+festival lodging	festival lodging
+festival's host house	festival lodging
 fetch	fetch
 field comb	comb
 field combs	comb
@@ -631,6 +634,7 @@ hinomi-yagura	hinomi-yagura
 hip-and-gable	irimoya
 hipposandal	hipposandal
 hipposandals	hipposandal
+hirakata	hirakata
 hiro	hiro
 hirokoji	hirokoji
 hitoyado	hitoyado
@@ -644,6 +648,8 @@ hokaku sen	hokaku sen
 hokaku-sen	hokaku sen
 hokora	hokora
 holding jail	holding jail
+hon-byakusho	honbyakusho
+honbyakusho	honbyakusho
 honden	honden
 hongawara	hongawara
 hongawara tile	hongawara
@@ -768,6 +774,7 @@ kadoya	kadoya
 kagura	kagura
 kaie-ji	Kaie-ji
 kaie-ji's	Kaie-ji
+kaigisho	kaigisho
 kainyo	kainyo
 kaisho	kaisho
 kaji-ya	kaji-ya
@@ -855,6 +862,7 @@ kokudaino	kokudai-no
 kokudaka	kokudaka
 kokuinchi	shuinchi
 kokumori	kokumori
+komae	komae
 komainu	lion-dog
 komono	komono
 kon-ya	kon-ya
@@ -1053,6 +1061,8 @@ nawate	azemichi
 naya	naya
 near-monospecific	monospecific
 neige	neige
+nembutsu	nenbutsu
+nenbutsu	nenbutsu
 nengu	nengu
 neribei	neribei
 ni no torii	ichi-no-torii
@@ -1180,6 +1190,8 @@ public monasteries	public monastery
 public monastery	public monastery
 puddled	puddling
 puddling	puddling
+purlin	purlin
+purlins	purlin
 qi	qi
 qiandao	qiandao
 qianlong	Qianlong
@@ -1500,6 +1512,8 @@ the reform and opening-up	reform and opening-up
 thousand character classic	Thousand Character Classic
 three bays	bay
 three officials	Three Officials
+three-bay two-corridor house	three-bay two-corridor house
+three-bay two-corridor houses	three-bay two-corridor house
 threshing yard	threshing yard
 threshing yards	threshing yard
 threshing-yard	threshing yard
@@ -1547,6 +1561,7 @@ tudi miao	tudi miao
 tudigong	tudi miao
 tulou	tulou
 tulous	tulou
+tutelary shrine	chinju
 twelve-mat	tatami
 tōhoku	Tohoku
 tōkaidō	Tokaido
