@@ -214,6 +214,8 @@ coppicing	coppice
 copse	copse
 corvee	corvee
 corvée	corvee
+county magistrate	county magistrate
+county magistrates	county magistrate
 county seat	county seat
 county seats	county seat
 coursed	coursing
@@ -1443,6 +1445,8 @@ temizuya	temizuya
 tenma-cho	tenma-cho
 tenpo	Tenpo era
 tenpo era	Tenpo era
+tensho	Tensho
+tensho-era	Tensho
 tenshu	tenshu
 tensuioke	tensuioke
 tera-machi	teramachi

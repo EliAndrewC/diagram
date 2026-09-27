@@ -6606,5 +6606,19 @@
    "Imado ware",
    "Imado-yaki"
   ]
+ },
+ "county magistrate": {
+  "def": "The official who governs a county from its walled county town. Their jurisdiction covers the whole county, the town and its countryside alike, so the ground just outside the town gate is still under their rule.",
+  "variants": [
+   "county magistrate",
+   "county magistrates"
+  ]
+ },
+ "Tensho": {
+  "def": "The Japanese era name for the years 1573 to 1592; \"Tensho 20\" is 1592, the year the filling of Edo's Hibiya inlet began.",
+  "variants": [
+   "Tensho",
+   "Tensho-era"
+  ]
  }
 }
