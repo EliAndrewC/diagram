@@ -5760,22 +5760,6 @@
    "loose-cluster"
   ]
  },
- "stroke": {
-  "def": "The drawn line that stands for a watercourse or bund on the map; its width is the width the feature is drawn at.",
-  "variants": [
-   "stroke",
-   "strokes"
-  ]
- },
- "seam": {
-  "def": "The shared edge where two neighboring paddy plots meet on the map; a broken seam leaves a gap or an overlap between them.",
-  "variants": [
-   "seam",
-   "seams",
-   "paddy seams",
-   "plot seams"
-  ]
- },
  "nimosaku": {
   "def": "Double cropping: two different crops from the same ground in one year. On a paddy it is rice in summer and barley or wheat in winter, grown on the field once its water is let off.",
   "variants": [
@@ -6177,6 +6161,18 @@
    "pocket pond",
    "pocket ponds",
    "in-field pocket pond"
+  ]
+ },
+ "Lingnan": {
+  "def": "The region south of the Nanling mountains in far southern China, roughly modern Guangdong and Guangxi, with the Pearl River delta at its heart.",
+  "variants": [
+   "Lingnan"
+  ]
+ },
+ "NACA": {
+  "def": "The Network of Aquaculture Centres in Asia-Pacific, which published, with the FAO, the integrated fish-farming manual this record cites.",
+  "variants": [
+   "NACA"
   ]
  }
 }

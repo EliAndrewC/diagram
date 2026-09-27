@@ -827,6 +827,7 @@ lineage	lineage
 lineage village	lineage village
 lineage villages	lineage village
 lineages	lineage
+lingnan	Lingnan
 lion-dog	lion-dog
 lion-dogs	lion-dog
 lishe	gongxiefang
@@ -934,6 +935,7 @@ musashi province	Musashi
 mushiro	mushiro
 muster perimeter	muster perimeter
 muster perimeters	muster perimeter
+naca	NACA
 nagaya	nagaya
 nagaya-mon	nagayamon
 nagayamon	nagayamon
@@ -1012,7 +1014,6 @@ outwork	outwork
 outworks	outwork
 ox-frame	ox-frame
 ox-frames	ox-frame
-paddy seams	seam
 panicle	panicle
 panicles	panicle
 pannage	pannage
@@ -1040,7 +1041,6 @@ pig iron	pig iron
 plankton	plankton
 plant association	plant association
 planted collar	planted collar
-plot seams	seam
 pocket pond	pocket pond
 pocket ponds	pocket pond
 polder	polder
@@ -1177,8 +1177,6 @@ satoyama	satoyama
 schistosomiasis	schistosomiasis
 scour	scour
 se	se
-seam	seam
-seams	seam
 season word	season word
 season words	season word
 secondary forest	secondary forest
@@ -1300,8 +1298,6 @@ stringer	stringer
 stringers	stringer
 strip footing	strip footing
 strip footings	strip footing
-stroke	stroke
-strokes	stroke
 stupa	stupa
 stupas	stupa
 subgrade	subgrade
