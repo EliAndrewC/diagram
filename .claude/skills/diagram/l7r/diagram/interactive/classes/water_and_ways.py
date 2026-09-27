@@ -317,9 +317,13 @@ class Well(Kind):
     many times its true size, in order to make the well visible at map scale: the glyph marks where the well
     stands, not how much ground it takes. A hand-dug well's shaft is about 1 m across, big enough for a
     person to work in, under a well house that is posts and a roof and nothing more; the width of the curb
-    frame itself was not found. The one-to-three count is read (the Sphere/UNICEF capacity figure); the
-    typical two, the households-per-well ratio, and the shallow water table that makes a farmstead's own well cheap (the groundwater paper gives no depth) were searched for and not found, and stand as this
-    record's estimate.
+    frame itself was not found. The Edo aqueduct intake is read, and of the village figures only these are:
+    the capacity (Sphere/UNICEF: one open well serves about 400 people), and that digging was costly so
+    shared wells were the majority; the one-to-three count, the settled-and-boiled surface water, the
+    subscription financing, the typical two, the households-per-well ratio, and the shallow water table that
+    makes a farmstead's own well cheap (the groundwater paper gives no depth) were searched for and not
+    found, and stand as this record's estimate; so does the well-house roof on every well, since the
+    dictionaries define the well house but do not say how common it was.
 
     Name: well
     Covers: `wells` - the wellheads
