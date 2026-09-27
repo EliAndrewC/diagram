@@ -55,7 +55,7 @@ GROUPS: dict[str, tuple[str, str, list[str], str]] = {
   them). M. P1.
 - C147 D70 **Clergy housing**: who lives inside a city temple's walls and who outside? (religion-and-death/040, 1
   note). S. P1. The 040 absence note (in `readers/272-temple-absences.md`) is yours; its second search is part C of
-  `readers/272-reader-T.md`.
+  the T reader's report (named below).
 - You are the ONLY group that edits 040. You edit 210 FIRST; group R3 edits it after you, in this clone.""",
     ),
     "R4": (
@@ -81,7 +81,7 @@ GROUPS: dict[str, tuple[str, str, list[str], str]] = {
   graveyard sharing (070 - the graveyard itself is 269's burial group R1: cite it, never write it). The bone-mound
   size (204) WAITS for 269's R1 and is not yours.
 - FR-001 **Every absence note and labeled guess in 010, 050 and 070** (listed in `readers/272-temple-absences.md`;
-  their second search is part C of `readers/272-reader-T.md` - grep it by section number): cite what was found, a
+  their second search is part C of the T reader's report (named below) - grep it by section number): cite what was found, a
   TO-DOWNLOAD entry for what a human can fetch, the second search added to what stays silent. You are the ONLY
   group that edits 010, 050 and 070.""",
     ),
@@ -100,7 +100,7 @@ GROUPS: dict[str, tuple[str, str, list[str], str]] = {
 - A144 **Village cremation and ossuary**: ONLY what 269's burial group R1 (religion-and-death 160-206, new 270-300,
   in `/diagram/.clones/diagram-supplemental`) leaves open - read R1's sections first and cite them. M. P2.
 - FR-001 **The 210 absence note** (in `readers/272-temple-absences.md`; its second search is part C of
-  `readers/272-reader-T.md`). Group R2 edited 210 before you in this clone; build on its text.""",
+  the T reader's report (named below)). Group R2 edited 210 before you in this clone; build on its text.""",
     ),
     "T": (
         "the city temple complex, the temple neighborhood, and the temple sections' open notes",
@@ -112,7 +112,7 @@ GROUPS: dict[str, tuple[str, str, list[str], str]] = {
 - FR-006 **The temple neighborhood**: the SMALL temple and the SMALL shrine of a temple quarter (teramachi) - the
   plot's frontage and depth, what stands on it, how many to a block, how they pack along the street. (new, 590).
 - FR-001 **Every absence note and labeled guess in 020 and 030** (listed in `readers/272-temple-absences.md`;
-  their second search is part C of `readers/272-reader-T.md`): cite what was found, a TO-DOWNLOAD entry for what a
+  their second search is part C of the T reader's report (named below)): cite what was found, a TO-DOWNLOAD entry for what a
   human can fetch, the second search added to what stays silent. Group R4 edited 020 before you in this clone; build
   on its text. The other sections' notes are other groups' (010/050/070 B37, 040 R2, 210 R3) - never edit them.""",
     ),
