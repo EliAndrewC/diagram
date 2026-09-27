@@ -450,13 +450,6 @@
    "Thousand Character Classic"
   ]
  },
- "Three Officials": {
-  "def": "The Daoist Officials of Heaven, Earth and Water, whose temples a Chinese county gazetteer filed among Altars and Shrines rather than among the Buddhist and Daoist houses.",
-  "variants": [
-   "Three Officials",
-   "sanguan"
-  ]
- },
  "Tohoku": {
   "def": "The cold, snowy northeast of Japan's main island: the country of the igune homestead grove, where the stable often stands under the dwelling's own roof.",
   "variants": [
@@ -1704,8 +1697,6 @@
   "variants": [
    "bell-and-drum tower",
    "zhonggulou",
-   "drum tower",
-   "bell tower",
    "gulou",
    "zhonglou",
    "qiaolou"
@@ -1727,7 +1718,9 @@
  "haiden": {
   "def": "The worship hall of a Shinto shrine, where people pray before the sanctuary.",
   "variants": [
-   "haiden"
+   "haiden",
+   "worship hall",
+   "worship halls"
   ]
  },
  "half-river closure": {
@@ -4685,7 +4678,9 @@
  "honden": {
   "def": "The sanctuary of a Shinto shrine, the small closed building where the deity's object is kept; worshippers stand before it, never in it.",
   "variants": [
-   "honden"
+   "honden",
+   "sanctuary",
+   "sanctuaries"
   ]
  },
  "bettō": {
@@ -5647,7 +5642,9 @@
   "def": "The flowing-roof style of shrine sanctuary, its front roof slope carried out long over the steps; the commonest form of honden in Japan.",
   "variants": [
    "nagare-zukuri",
-   "nagarezukuri"
+   "nagarezukuri",
+   "flowing-roof style",
+   "flowing-roof"
   ]
  },
  "dashigeta": {
@@ -6482,10 +6479,11 @@
   ]
  },
  "Sōtō": {
-  "def": "A school of Zen Buddhism; the temples of the Hiki register quoted here and the Aichi training temple with its meditation hall and monks' dormitory are Sōtō.",
+  "def": "The larger of Japan's two main schools of Zen Buddhism; the temples of the Hiki register quoted here, the Aichi training temple with its meditation hall and monks' dormitory, and the Hirosaki lord's family temple are Sōtō.",
   "variants": [
    "Sōtō",
-   "Soto"
+   "Soto",
+   "Soto Zen"
   ]
  },
  "Tendai": {
@@ -6507,6 +6505,23 @@
    "jōgōe-chi",
    "kata-hōdōe-chi",
    "zuiie-chi"
+  ]
+ },
+ "hip-and-gable roof": {
+  "def": "A Chinese roof that slopes on all four sides at its lower part and ends in a small upright gable at each end of the ridge; the roof of a major hall, ranked just below the full hip roof.",
+  "variants": [
+   "hip-and-gable roof",
+   "hip-and-gable",
+   "hip-and-gable roofs"
+  ]
+ },
+ "screen wall": {
+  "def": "A freestanding wall set facing a gate, so that no one can see straight through the gateway; the first thing on a Chinese temple's or yamen's axis.",
+  "variants": [
+   "screen wall",
+   "screen walls",
+   "spirit wall",
+   "spirit walls"
   ]
  },
  "Chinese-style gate": {
@@ -6531,6 +6546,51 @@
    "initiates"
   ]
  },
+ "mokoshi": {
+  "def": "A skirt roof: a lower roof run round a building below its main roof, so that a one-story hall looks as if it had two.",
+  "variants": [
+   "mokoshi",
+   "skirt roof",
+   "skirt roofs"
+  ]
+ },
+ "Hoei": {
+  "def": "A Japanese era name, 1704-1711. A year given as \"Hoei 5\" is the fifth year of the era, 1708.",
+  "variants": [
+   "Hoei",
+   "Hōei"
+  ]
+ },
+ "Taiseiden": {
+  "def": "The \"Hall of Great Achievement\": the main hall of a Confucian temple, where the image of Confucius is enshrined. At Yushima in Edo it is the hall of the shogunate's own school.",
+  "variants": [
+   "Taiseiden"
+  ]
+ },
+ "refectory": {
+  "def": "A temple's or monastery's dining hall, where the monks eat their meals together; one of the seven halls of a full Japanese temple, and a room of an ordinary Chinese one.",
+  "variants": [
+   "refectory",
+   "refectories"
+  ]
+ },
+ "garan": {
+  "def": "A Buddhist temple's set of halls. A full one, the seven-hall garan, has seven buildings, and which seven differed by sect and era; the name was also used loosely of any great temple with many buildings.",
+  "variants": [
+   "garan",
+   "garans",
+   "seven-hall garan",
+   "shichidō garan",
+   "shichido garan"
+  ]
+ },
+ "dharma hall": {
+  "def": "In a Zen temple, the hall where the teaching is preached; one of the Zen sects' seven halls, standing where the older plan has its lecture hall.",
+  "variants": [
+   "dharma hall",
+   "dharma halls"
+  ]
+ },
  "tsujido": {
   "def": "A small open wayside hall on four corner posts under a tiled roof, with a board floor about two mats in size, built by a settlement beside a road for travelers to rest and later housing a jizo or other stone image.",
   "variants": [
@@ -6545,6 +6605,21 @@
   "variants": [
    "koshin tower",
    "koshin towers"
+  ]
+ },
+ "sutra house": {
+  "def": "The temple building that stores its scriptures, the sutras; in the Nara-period plan it stood facing the bell tower across the precinct.",
+  "variants": [
+   "sutra house",
+   "sutra houses",
+   "kyozo"
+  ]
+ },
+ "shoro": {
+  "def": "A temple's own bell tower, the building where its great bell hangs; one of the halls of the old full temple plan, and apart from a Chinese town's civic bell-and-drum tower.",
+  "variants": [
+   "shoro",
+   "temple bell tower"
   ]
  },
  "shugen": {
@@ -6648,6 +6723,99 @@
   "variants": [
    "Nehan gate",
    "Nehan"
+  ]
+ },
+ "sub-temple": {
+  "def": "A small temple inside a great temple's precinct and belonging to it, with its own walled lot and its own monks. Zojoji held forty-eight of them and Kan'ei-ji thirty-six.",
+  "variants": [
+   "sub-temple",
+   "sub-temples",
+   "sub-temple's"
+  ]
+ },
+ "cloister": {
+  "def": "A roofed corridor running round a temple's central court. It closes the court on its sides and joins the gate to the main hall.",
+  "variants": [
+   "cloister",
+   "cloisters"
+  ]
+ },
+ "hall of the Heavenly Kings": {
+  "def": "In a Chinese temple, the gate hall on the axis that holds images of the four guardian kings of the Buddhist world. At Quanzhou's Kaiyuan temple it is also the main gate.",
+  "variants": [
+   "hall of the Heavenly Kings",
+   "Heavenly Kings"
+  ]
+ },
+ "ordination platform": {
+  "def": "A raised stone terrace in a temple where monks take their vows. The Kaiyuan temple of Quanzhou sets one on its axis behind the main hall.",
+  "variants": [
+   "ordination platform",
+   "ordination platforms"
+  ]
+ },
+ "gate-land": {
+  "def": "Ground in front of a temple or shrine gate, laid out as narrow, deep house lots, so that town houses line the street and the temple stands behind them at the end of an approach (see monzen).",
+  "variants": [
+   "gate-land",
+   "gate-land lots"
+  ]
+ },
+ "Rinzai": {
+  "def": "One of Japan's two main Zen Buddhist sects, beside Soto.",
+  "variants": [
+   "Rinzai",
+   "Rinzai Zen"
+  ]
+ },
+ "Nichiren": {
+  "def": "A Japanese Buddhist sect founded in the 13th century by the monk Nichiren, centered on the Lotus Sutra.",
+  "variants": [
+   "Nichiren",
+   "Nichiren sect"
+  ]
+ },
+ "Hokke": {
+  "def": "The \"Lotus\" sect: a name for the Nichiren line of Japanese Buddhism and for some of the schools that split from it; Kanazawa's plan counts its Nichiren and Hokke temples separately.",
+  "variants": [
+   "Hokke",
+   "Hokke sect"
+  ]
+ },
+ "Tenmangu": {
+  "def": "A shrine to Tenjin, the deified courtier-scholar Sugawara no Michizane, patron of learning; \"Tenjin shrine\" and \"Tenmangu\" name the same kind of shrine.",
+  "variants": [
+   "Tenmangu",
+   "Tenjin",
+   "Tenjin shrine"
+  ]
+ },
+ "offering hall": {
+  "def": "At a Shinto shrine, the hall between the worship hall and the sanctuary where offerings to the kami are presented; often joined to both under one roof.",
+  "variants": [
+   "offering hall",
+   "heiden"
+  ]
+ },
+ "kokuso": {
+  "def": "The hereditary chief priest of the Izumo shrine in Japan, an office passed from father to son for more than eighty generations.",
+  "variants": [
+   "kokuso",
+   "kokuzo"
+  ]
+ },
+ "daoshi": {
+  "def": "A Daoist priest; the married ones who lived at home rather than in a temple were called huoju or sanju daoshi.",
+  "variants": [
+   "daoshi"
+  ]
+ },
+ "mushiko": {
+  "def": "A window of close-set, plaster-covered vertical slats in the low upper floor of a Kyoto town house.",
+  "variants": [
+   "mushiko",
+   "mushiko-mado",
+   "mushiko windows"
   ]
  }
 }
