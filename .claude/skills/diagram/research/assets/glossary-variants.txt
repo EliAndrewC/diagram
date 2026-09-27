@@ -1409,6 +1409,8 @@ taisho	Taisho
 taishō	Taisho
 taizu	Taizu
 takasebune	takasebune
+take-well	take-well
+take-wells	take-well
 take-yabu	take-yabu
 takeyabu	take-yabu
 tamagaki	tamagaki
