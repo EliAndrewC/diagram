@@ -683,7 +683,7 @@
   "round": "0ae309f0",
   "value": 380,
   "unit": "ft",
-  "quantity": "the longest run of Sawada's brook on the page with every vertex within 3.1 ft of the chord: 380 of 1,241 ft, 31% (872 ft, 70%, in the round); the other brook maps 17-23% (Kashikawa 628 of 3,154, Inashiro 473 of 2,096, Mizuguchi 332 of 1,966)",
+  "quantity": "the longest run of Sawada's brook on the page with every vertex within 3.1 ft of the chord: 380 of 1,240 ft, 31% (872 ft, 70%, in the round); the other brook maps 17-23% (Kashikawa 628 of 3,154, Inashiro 473 of 2,096, Mizuguchi 332 of 1,966)",
   "source": "pool/hamlets/sawada/sawada.json streams[0].poly, meta.view",
   "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
  },
@@ -745,6 +745,16 @@
   "unit": "clumps",
   "quantity": "of Sawada's 201 windbreak clumps, those seated inside the toe marsh and drawn as alder; no other pool map's belt reaches a marsh",
   "source": "pool/hamlets/sawada/sawada.json village_groves[role=windbreak].alder, marshes[role=toe]",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "sawada-r11-tap-axis": {
+  "verifies": "F4",
+  "subject": "sawada",
+  "round": "0ae309f0",
+  "value": 0,
+  "unit": "segments",
+  "quantity": "brook segments within 1.6 degrees of a screen axis below the tap run, on every brook map (Sawada's segment leaving its tap run drew exactly vertical, 0.1 degrees off; the leaving segment is nudged off the axis like any other now, and the approach's legs too - Inashiro's drew 1.2 degrees off)",
+  "source": "pool/hamlets/*/*.json streams[0].poly",
   "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
  }
 }

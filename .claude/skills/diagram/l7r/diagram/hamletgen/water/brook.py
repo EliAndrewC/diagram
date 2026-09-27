@@ -330,7 +330,9 @@ def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = ()
             cv = _v_within(cu, cfloor, max(cfloor, cv), (dx, dy), (px, py), box)
             cut.append((cu * dx + cv * px, cu * dy + cv * py))
     cut.append(mid[-1])
-    return unfold(_off_the_axes([*cut, *keep_tail], (px, py), hold=2), BROOK_MAX_TURN_DEG)  # the tap run: two cut points on the fall, and the segment that leaves it
+    return unfold(
+        _off_the_axes([*cut, *keep_tail], (px, py), hold=1), BROOK_MAX_TURN_DEG
+    )  # the tap run: two cut points on the fall; the segment that leaves it is nudged off an axis like any other (feature 261: Sawada's drew exactly vertical below its tap)
 
 
 def feed_brook(plan: SitePlan, sluice: Pt, crop: Sequence[Poly] = (), run: float = 420.0) -> Poly:
@@ -363,6 +365,10 @@ def feed_brook(plan: SitePlan, sluice: Pt, crop: Sequence[Poly] = (), run: float
                 qx, qy = mid[0] + (sluice[0] - mid[0]) * t, mid[1] + (sluice[1] - mid[1]) * t
                 j = wob.uniform(-16.0, 16.0)
                 legs.append((qx - math.sin(th) * j, qy + math.cos(th) * j))
+            # ...and off the screen axes, as the course below the tap is (`_off_the_axes`): Inashiro's approach drew a leg
+            # 49 ft at 1.2 degrees off vertical (feature 261, found beside Sawada's tap-leaving segment). The nudge moves a
+            # leg's far end across the approach, never the sluice, so the tap stays where the head race leaves it.
+            legs = _off_the_axes(legs, (-math.sin(th), math.cos(th)))
             return [*legs, sluice, *brook_skirt(plan, sluice, plan.brook_side, crop)]
     up = (
         sluice[0] - dx * run,

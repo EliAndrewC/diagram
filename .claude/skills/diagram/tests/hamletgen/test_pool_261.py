@@ -438,3 +438,19 @@ def test_a_belt_tree_in_the_marsh_is_alder(gen: str) -> None:
             continue
         wet = sum(1 for c in g["clumps"] if any(point_in_poly(c[0], c[1], t) for t in toes))
         assert g.get("alder", 0) == wet, f"{wet} belt clumps stand in the marsh, {g.get('alder', 0)} drawn as alder"
+
+
+@pytest.mark.parametrize("gen", GENS, ids=IDS)
+def test_no_brook_segment_lies_on_a_screen_axis_but_the_tap_run(gen: str) -> None:
+    """A drawn watercourse runs on no screen axis (the GM, 2026-08-26: a course "exactly east to west parallel to the edge
+    of the map ... makes it look like a mistake"), except the tap run, which lies on the fall by construction: the
+    approach is five vertices, the sixth is the sluice, and the two segments from it are the run the head race's offtake
+    angle is measured along. Sawada drew the segment leaving its tap run exactly vertical and Inashiro an approach leg
+    1.2 degrees off one (settlement-review round 0ae309f0, feature 261)."""
+    m = _manifest(gen)
+    for brook in _brooks(m):
+        for i, (a, b) in enumerate(zip(brook, brook[1:], strict=False)):
+            if i in (5, 6) or math.dist(a, b) <= 1.0:
+                continue
+            deg = math.degrees(math.atan2(b[1] - a[1], b[0] - a[0])) % 90.0
+            assert min(deg, 90.0 - deg) >= 1.6, f"brook segment {i} lies {min(deg, 90.0 - deg):.1f} degrees off a screen axis"

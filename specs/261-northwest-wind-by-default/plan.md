@@ -299,6 +299,9 @@ Measured before and after in research R10.
 - A woodland parcel prefers a seat not across the field from the cluster (a preference, like the cross-slope one).
   Inashiro has none: its woods must stand 80% inside the predicted frame, which begins 100 ft west of the houses, and
   every seat on the houses' side at every size falls between their keep-out and the field's set-back.
+- The segment leaving the brook's tap run is nudged off a screen axis like every other (`_off_the_axes(hold=1)`, where
+  the tap run and that segment were both exempt), and the approach's legs are too: Sawada's leaving segment drew exactly
+  vertical below its tap, Inashiro's approach a leg 1.2 degrees off vertical (on main as well).
 - A belt crown seated in a toe marsh is drawn as alder (the `alder` mix and class): the record's woody stage at a reed
   edge is alder or willow, never pine (research/vegetation.html, the marsh margin). Sawada's windward belt stands on
   its toe's reed edge (70 of 201 clumps in the marsh); holding the belt off the reeds took the windward belt away and

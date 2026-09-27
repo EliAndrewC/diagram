@@ -930,7 +930,7 @@ back to the wind. The belt is 201 clumps, 317 degrees from the houses' middle, o
 toe marsh, and its 70 clumps that stand in the marsh are alder, the wet ground's own tree, drawn a blue-gray green. The
 brook no longer doubles back where it leaves the frame, nor runs level along the top margin, nor runs ruled down the
 field's flank: its walk swings across its band at every station, and its longest straight run on the page is 380 ft of
-1,241. The entrance board stands 27 ft from where the connector meets the lanes, passed by all 19 households' ways out;
+1,240. The entrance board stands 27 ft from where the connector meets the lanes, passed by all 19 households' ways out;
 its caption lies over a crown, because no seat every departure passes offered a clear one. Its first roll left a
 farmhouse off the way network, so the map keeps its second. The water story is rewritten above to what this seed draws:
 the drain leaves by the west edge, the brook by the top. The copse keeps within 90 ft of a farmhouse (median 74 ft).
