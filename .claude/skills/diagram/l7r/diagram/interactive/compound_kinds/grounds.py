@@ -279,12 +279,15 @@ class MainGate(Kind):
     a Chinese county office took by regulation. Behind it, arrival is staged: the gate, then the forecourt,
     and only then the buildings, so no visitor steps from the road into a room.
 
-    Note: The gate and the way it faces follow the record. The staged arrival behind it - gate, then a court
-    or garden, then the formal entrance - is the record's own reading and the GM's rule for these plans; no
-    page a reader can open sets it out. The width of its opening is this project's own calibration rather
-    than a measured gate: the record finds no width for a samurai residence's gate or a county office's.
+    Note: The gate's southern fallback follows the record - a Chinese county office's regulation, not
+    Japanese practice; facing what it fronts, the town or the road, is this project's own siting, calibrated
+    against the drawn maps. The staged arrival behind it - gate, then a court or garden, then the formal
+    entrance - is the record's own reading and the GM's rule for these plans; no page a reader can open sets
+    it out. The width of its opening is this project's own calibration rather than a measured gate: the
+    record finds no width for a samurai residence's gate or a county office's.
 
-    Caveat: The staged arrival behind it - gate, then a court or garden, then the formal entrance - is the
+    Caveat: Facing what it fronts, the town or the road, is this project's own siting, calibrated against
+    the drawn maps; only the southern fallback rests on a source, and that one is Chinese. The staged arrival behind it - gate, then a court or garden, then the formal entrance - is the
     record's own reading and the GM's rule for these plans; no page a reader can open sets it out. The width
     of its opening is this project's own calibration rather than a measured gate: the record finds no width
     for a samurai residence's gate or a county office's.
@@ -362,11 +365,13 @@ class ApproachRoad(Kind):
     office, though for an ordinary county seat that axis is a guess, and in neither Japan nor China was a
     country lane a wide road.
 
-    Note: That the manor fronts its road and opens its gate onto it follows the record. The width each way is
-    drawn at is this project's own choice - the road up to the main gate as wide as the gate's opening -
-    since the record gives no width for a road up to a compound.
+    Note: That the manor stands at the edge of its town and opens its gate onto the road it fronts is this
+    project's own siting, set against the drawn maps; the record read gives only a south-facing gate for a
+    Chinese county office. The width each way is drawn at is this project's own choice - the road up to the
+    main gate as wide as the gate's opening - since the record gives no width for a road up to a compound.
 
-    Caveat: The width each way is drawn at is this project's own choice - the road up to the main gate as wide
+    Caveat: That the manor stands at the edge of its town and fronts its road is this project's own siting,
+    set against the drawn maps rather than read from a source. The width each way is drawn at is this project's own choice - the road up to the main gate as wide
     as the gate's opening - since the record gives no width for a road up to a compound.
 
     Name: road
