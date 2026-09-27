@@ -40,5 +40,6 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D6).
       handoffs reported to "Diagram supplemental" and "Diagram research" (D6)
       research: rendering
       verify: DONE. DONE. TO-DOWNLOAD.md entries 258-275 appended by this feature's sessions (the sources a human can fetch free that refused the readers); 271's State table and inventory marked by its owner (Diagram research confirmed 2026-09-27); 269's B37 outcome sent to Diagram supplemental; the RELINK 269 comments agreed with 269, which relinks them when it lands
-- [ ] T10 `make done`; `scripts/sync-with-main.sh done`
+- [x] T10 `make done`; `scripts/sync-with-main.sh done`
       research: rendering
+      verify: DONE. DONE. make done green 2026-09-27 (142 s, with PAIR_OK: the engine change redraws only the cremation-ground glyph, called by frozen legacy maps only); pushed by sync-with-main.sh done
