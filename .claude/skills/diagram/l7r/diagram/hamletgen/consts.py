@@ -679,6 +679,11 @@ FORD_BEND_DEG = 20.0
 COPSE_HOUSE_REACH_FT = 90.0
 COPSE_BELT_REACH_FT = 60.0
 
+# A NATURAL BROOK DOES NOT DOUBLE BACK (feature 261, settlement-review of Sawada): no vertex of the drawn course turns it
+# more than this. The pool's brooks turn at most 41-53 deg anywhere on their meandered courses; 100 deg is well above that
+# and well below the 113-131 deg folds the exit has produced at the frame edge. A map drawing convention.
+BROOK_MAX_TURN_DEG = 100.0
+
 WIND_VECTORS: dict[str, Pt] = {
     "N": (0.0, -1.0),
     "NE": (0.7071, -0.7071),

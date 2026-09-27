@@ -15,6 +15,7 @@ from l7r.diagram.sitegen.geom import crosses_poly, unit
 
 from ..consts import (
     BROOK_FRAME_MARGIN,
+    BROOK_MAX_TURN_DEG,
     BROOK_SKIRT,
     BROOK_TAP_RUN,
     BROOK_WANDER,
@@ -82,6 +83,29 @@ def _v_within(u: float, floor: float, want: float, d: Pt, p: Pt, box: tuple[floa
         a, b = (lo_b - base) / slope, (hi_b - base) / slope
         hi = min(hi, max(a, b))
     return max(floor, hi)
+
+
+def unfold(course: Poly, limit_deg: float) -> Poly:
+    """The course with every vertex that turns it more than `limit_deg` taken out, repeated until none does.
+
+    A NATURAL BROOK DOES NOT DOUBLE BACK (feature 261, settlement-review of Sawada): where the last stations are held
+    against the frame box and the corner-cutting pass re-clamps its points onto the same edge, the exit leaves from a
+    point behind the one before it and the course folds - 123 degrees, 51 ft inside the sheet, drawn as an acute V. The
+    exit block above already guards the heading it starts on; this holds the property itself on the finished course,
+    whatever produced the fold. Dropping the vertex keeps the ends and the order of everything else."""
+    out = list(course)
+    changed = True
+    while changed and len(out) > 2:
+        changed = False
+        for i in range(1, len(out) - 1):
+            ax, ay = out[i][0] - out[i - 1][0], out[i][1] - out[i - 1][1]
+            bx, by = out[i + 1][0] - out[i][0], out[i + 1][1] - out[i][1]
+            na, nb = math.hypot(ax, ay), math.hypot(bx, by)
+            if na and nb and math.degrees(math.acos(max(-1.0, min(1.0, (ax * bx + ay * by) / (na * nb))))) > limit_deg:
+                del out[i]
+                changed = True
+                break
+    return out
 
 
 def _off_the_axes(course: Poly, away: Pt, eps: float = 1.6, nudge: float = 11.0, hold: int = 0) -> Poly:
@@ -284,7 +308,7 @@ def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = ()
             cv = _v_within(cu, cfloor, max(cfloor, cv), (dx, dy), (px, py), box)
             cut.append((cu * dx + cv * px, cu * dy + cv * py))
     cut.append(mid[-1])
-    return _off_the_axes([*cut, *keep_tail], (px, py), hold=2)  # the tap run: two cut points on the fall, and the segment that leaves it
+    return unfold(_off_the_axes([*cut, *keep_tail], (px, py), hold=2), BROOK_MAX_TURN_DEG)  # the tap run: two cut points on the fall, and the segment that leaves it
 
 
 def feed_brook(plan: SitePlan, sluice: Pt, crop: Sequence[Poly] = (), run: float = 420.0) -> Poly:
