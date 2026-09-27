@@ -110,6 +110,10 @@ apply ONE GROUP of the questions it wrote - read only your own lines of the hand
 **Your questions:** {sections}
 **Your registry keys:** {keys}
 
+**Coordination with the other sessions** - hold your questions to these while checking; where one duplicates another
+session's section, cut it to a pointer and cite that section:
+{coordination}
+
 ## The procedure (check, apply)
 
 1. **Check, all in one message, in the background.** For each of your questions:
@@ -144,6 +148,13 @@ def inventory_items(group: str) -> str:
     return "\n".join(line for line in block.splitlines()[1:] if line.strip())
 
 
+def coordination(group: str) -> str:
+    """The group's `> COORDINATION` lines from the inventory - agreements made with the other sessions after the write
+    brief may already have been generated (feature 271, 269's check of batch 1)."""
+    block = (FEATURE / "inventory.md").read_text(encoding="utf-8").split(f"## {group} - ", 1)[1].split("\n## ", 1)[0]
+    return "\n".join(line.strip()[2:] for line in block.splitlines() if line.strip().startswith("> COORDINATION")) or "none"
+
+
 def write(group: str) -> int:
     title, pages = groups()[group]
     out = HERE / f"{group.lower()}-write.md"
@@ -167,7 +178,7 @@ def checks(group: str) -> int:
         last = n == len(pairs)
         out = HERE / f"{low}-check-{chr(96 + n)}.md"
         shown = ", ".join(f"PAGE={s.rsplit('/', 1)[0]} SECTION={s.rsplit('/', 1)[1]}" for s in pair) or "none"
-        out.write_text(CHECK.format(group=group, title=title, what=f"2{chr(96 + n)}: check and apply", clone=CLONE, slug=SLUG, low=low, sections=shown, keys=(", ".join(f"KEY={k}" for k in keys) or "none") if last else "none - the last group has them"), encoding="utf-8")
+        out.write_text(CHECK.format(group=group, title=title, what=f"2{chr(96 + n)}: check and apply", clone=CLONE, slug=SLUG, low=low, sections=shown, keys=(", ".join(f"KEY={k}" for k in keys) or "none") if last else "none - the last group has them", coordination=coordination(group)), encoding="utf-8")
         print(out)
     return 0
 

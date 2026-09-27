@@ -32,6 +32,7 @@ Also edits 015, 052, 068, 090.
   (urban-features/015, no footnotes). S. P1.
 - A132 **Notice-board form**: how big was a village or town board, and what did it look like from above (roofed,
   fenced, on a stone base)? (urban-features/010). S. P1.
+  > COORDINATION (A132): 267 R25 kept the magistracy bench's own board apart from the town's kosatsuba - cite it for the distinction
 - A51 **Rural well siting**: where does a village's communal well stand - a dooryard, a lane side, the commons (the
   Inashiro south well, fc:2063) - and was there a well house? (urban-features/090, 120; homesteads/145). M. P1.
 - B116 **Wellhead form**: what does a town's communal well look like from above - curb, frame, pulley, roof?

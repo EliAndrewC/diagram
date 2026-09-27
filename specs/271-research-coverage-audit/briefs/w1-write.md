@@ -39,6 +39,7 @@ the map features whose write-ups will be rewritten from what you find (by the or
   (ichirizuka); did rest stops stand at a town's ends? (cities/fabric/050, city). M. P2.
 - A127 B131 C168 **Ferry landings**: where a village's, town's or city's road met a river with no bridge, when was it a
   ferry, how was the landing (watashiba) laid out, and how many kept one? (water/130, a mention). M. P2.
+  > COORDINATION (A127): 267 R42 (stepped landings or a pier, gangi, on river-cities) and R40/R41 (the river guard post, the boatmen's altar) are landing features - cite them; keep A127 to the ferry crossing itself
 
 ## The procedure (session 1: research and write)
 

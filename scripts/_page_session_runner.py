@@ -53,6 +53,16 @@ def plan(root: str, name: str, projects: str, extra: list[str], items: list[str]
     """The queue: `{"sid", "log", "cmd"}` per brief (its log directory made), `{"then": script}` per late step."""
     queue: list[dict] = []
     for item in items:
+        if item.startswith("resume:"):
+            # `resume:<sid>:<brief>` - a session whose runner died with it (feature 271, 2026-09-27: the dispatching
+            # session's process ended and took five queues' runners with it, each mid-way through a write session with
+            # its work uncommitted). The same session is resumed with its own context, never started over.
+            sid, brief = item[7:].split(":", 1)
+            log = os.path.join(root, ".git", "page-sessions", sid)
+            os.makedirs(log, exist_ok=True)
+            queue.append({"sid": sid, "log": log, "brief": brief, "cmd": resume_command(command(root, name, extra, brief, sid), sid)})
+            print(f"page-session: resume {sid} ({os.path.basename(brief)})")
+            continue
         if item.startswith("then:"):
             queue.append({"then": os.path.realpath(item[5:])})
             print(f"page-session: then {os.path.basename(item[5:])} - the sessions it plans are listed in .git/page-sessions/index.txt")
