@@ -155,3 +155,5 @@
 - SluiceGate (archetypes SECTION=150): REWRITTEN - the Why now carries 150's polder finding, gates opened in drought and shut in flood (feature 265 T11)
 - Well (urban-features SECTION=090): IN-STEP - the building-plan sheet's Well (compound_kinds/household.py, household.Well): the 1 m shaft, the unmeasured curb and the estimated 3-4 ft curb all still hold; the map's Well of the same name was REWRITTEN above (feature 265 T11)
 - NoticeBoard (urban-features SECTION=010): REWRITTEN - the Note's 12 x 5 ft glyph no longer claimed as the true size; the ~16 ft roofed frame on a footing named beside it
+- household.Well (urban-features SECTION=090): REWRITTEN - the curb width is no longer "not found"; the 118 cm measured frame now carries the 3-4 ft curb
+- water_and_ways.Well (urban-features SECTION=090): REWRITTEN - the curb frame's 118 cm measure named; "often" an aqueduct intake narrowed to "could be"; UNICEF dropped, "people" -> inhabitants
