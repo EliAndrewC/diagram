@@ -158,14 +158,14 @@ class Privy(Kind):
     What: The household privy - on a farm, the urinal and the privy were one small building standing apart from
     the main house.
 
-    Why: Near-universal: the Nipponica entry calls the detached privy the norm, and the 1972 survey counted one
-    on 87 of 100 households. Its seat is rolled among three positions - by the back door, at the
-    gate, or by the stable and shed - of which only the last is on a page read; the back door and the gate
-    are this record's own reading.
+    Why: Near-universal: the Nipponica entry calls the detached privy the norm, and Sugiura's survey counted
+    privy outbuildings at 0.87 per household. Its seat is rolled among three positions - by the back door, at
+    the gate, or by the stable and shed - of which only the last is on a page read; the back door and the gate
+    are this record's own GUESS, and the page read also places it apart in the yard.
 
-    Note: Presence and the detached form are read (kotobank, sinyoken), and one seat; the other two seats are
-    this record's reading; the 6 x 6 ft footprint is a GUESS - the one
-    sizing page is dead.
+    Note: Presence and the detached form are read (kotobank, sinyoken), and two seats (by the stable under the
+    eaves, apart in the yard), of which the map rolls the first; the other two rolled seats are a GUESS, on no
+    page read; the 6 x 6 ft footprint is a GUESS - the one sizing page is dead.
 
     Caveat: the 6 x 6 ft footprint is a GUESS - the one sizing page is dead.
 
@@ -249,8 +249,9 @@ class HenCoop(Kind):
     Why: Farmers kept a pig and some chickens in the yard along with a draft animal; the Qimin Yaoshu says to
     build the roost as a ground enclosure with a perch, because birds left to the trees sicken.
 
-    Note: The coop's existence and ground form are read (Cambridge, the Qimin Yaoshu, the Zhengzhou coop); the
-    household proportion, the 5 x 5 ft size and the seat are guesses bounded by 'most regions'.
+    Note: The coop's existence and ground form are read (Cambridge, though its survey data of the 1920s-30s is
+    read back into the late imperial countryside; the Qimin Yaoshu; the Zhengzhou coop); the household proportion,
+    the 5 x 5 ft size and the seat are guesses bounded by 'most regions'.
 
     Name: hen coop
     Covers: `farm_fixtures[kind=coop]`

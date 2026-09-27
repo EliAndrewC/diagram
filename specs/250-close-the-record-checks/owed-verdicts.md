@@ -6,3 +6,9 @@
 - Well (homesteads SECTION=200): REWRITTEN - a dispersed farmstead's own well now rests on the layout, and the shallow water table is counted as the record's guess; re-check IN-STEP
 - Windbreak (homesteads SECTION=040): IN-STEP - the west-side clearance still holds; the moved height figures are ones the modal never states
 - Woodpile (homesteads SECTION=210): IN-STEP - the woodpile findings moved to their own question, and what 210 keeps agrees
+- Bathhouse (homesteads SECTION=214): IN-STEP - the shed share, the indoor-bath half and the guessed seat and size still hold; the new late-Edo GUESS is one the modal never states
+- HenCoop (homesteads SECTION=215): REWRITTEN - the Note now carries Cambridge's limit, 1920s-30s survey data read back into the late imperial countryside; re-check IN-STEP
+- HouseholdShrine (homesteads SECTION=210): IN-STEP - the shrine findings moved to their own question, and what 210 keeps (the GM's rarity ruling, the one shrine drawn) agrees
+- ManureHeap (homesteads SECTION=210): IN-STEP - the buried jar or plastered pit, the pigsty-privy cluster and the guessed place and size still hold
+- Persimmon (homesteads SECTION=210): IN-STEP - the persimmon findings moved to their own question, and 210's count and guess labels agree
+- Privy (homesteads SECTION=210): REWRITTEN - Sugiura's 0.87 is a rate per household, and two seats are read while the back door and gate are a GUESS on no page read; re-check IN-STEP
