@@ -16,7 +16,7 @@ import re
 import pytest
 
 from l7r.diagram.interactive import raster
-from l7r.diagram.interactive.raster import OFFMAP_MARGIN, PALETTE_STEP, class_keys, data_uri, drop_offmap, id_map, picture, resvg_png, viewbox_of
+from l7r.diagram.interactive.raster import OFFMAP_MARGIN, PALETTE_MAX, PALETTE_STEP, class_keys, data_uri, drop_offmap, id_map, palette_key, palette_rgb, picture, resvg_png, viewbox_of
 
 pytestmark = pytest.mark.renders  # tests OF the page's raster / the plates: they render tiny synthetic pictures on purpose (feature 213)
 
@@ -150,7 +150,29 @@ def test_the_id_map_paints_every_class_and_its_hit_geometry_flat_and_nothing_els
 
 def test_the_id_map_refuses_a_page_past_its_palette() -> None:
     with pytest.raises(ValueError, match="past the id map"):
-        id_map(TINY, [f"k{i}" for i in range(64)])
+        id_map(TINY, [f"k{i}" for i in range(PALETTE_MAX + 1)])
+
+
+def test_the_id_map_draws_text_unblended() -> None:
+    # feature 264: crispEdges does not reach glyphs; a blended label edge snapped to the class one palette step away
+    doc = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 20"><g class="f f-a" data-k="a"><text x="2" y="14" font-size="12" fill="#123456">Akami</text></g></svg>'
+    png, palette = id_map(doc, class_keys(doc))
+    assert png is not None
+    px = {p[:3] for p in _png(png).get_flattened_data() if p[3]}
+    assert px == {(PALETTE_STEP, 0, 0)}, f"a label paints only its class's color: {sorted(px)[:5]}"
+
+
+def test_past_63_classes_green_counts_the_rows_and_the_first_row_is_unchanged() -> None:
+    # feature 264: a magistracy with its parts as kinds drew 69 kinds on one page, past the red-only palette
+    assert palette_rgb(1) == (4, 0) and palette_rgb(63) == (252, 0), "the first row is the red-only palette it was"
+    assert palette_rgb(64) == (4, 4) and palette_rgb(127) == (4, 8)
+    assert palette_key(8, 0) == "8" and palette_key(8, 4) == "8,4"
+    keys = class_keys(TINY)
+    many = [f"k{i}" for i in range(70)] + keys
+    png, palette = id_map(TINY, many)
+    assert png is not None
+    assert palette[palette_key(*palette_rgb(71))] == "farmhouse"
+    assert _png(png).getpixel((5, 5))[:2] == palette_rgb(71), "a class past the first row paints its red and green"
 
 
 def test_without_resvg_the_page_carries_no_raster(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
@@ -206,14 +228,14 @@ def test_the_picture_carries_no_text_while_the_id_map_paints_it() -> None:
         '<g class="f f-place" data-k="place"><text x="4" y="30" font-size="28" font-family="serif" fill="#FF00FF">MM</text></g>'
         "</svg>"
     )
-    magenta = lambda data: any(px[:3] == (255, 0, 255) for px in _png(data).getdata())  # noqa: E731
+    magenta = lambda data: any(px[:3] == (255, 0, 255) for px in _png(data).get_flattened_data())  # noqa: E731
     with_text, no_text = picture(doc, 2.0), picture(without_text(doc), 2.0)
     assert with_text is not None and no_text is not None
     assert magenta(with_text), "resvg does draw the text when it is there (fonts-dejavu is installed)"
     assert not magenta(no_text), "the picture the page carries has none of it"
     png, palette = id_map(doc, class_keys(doc))
     assert png is not None
-    reds = {px[0] for px in _png(png).getdata()}
+    reds = {px[0] for px in _png(png).get_flattened_data()}
     assert PALETTE_STEP in reds, "the caption is painted in its class's color, so it hits as its class"
 
 

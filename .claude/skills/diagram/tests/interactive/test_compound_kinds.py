@@ -20,7 +20,7 @@ from l7r.diagram.interactive.classes import NOT_HIGHLIGHTED, lead_sentence
 from l7r.diagram.interactive.compound_kinds import COMPOUND_CLASSES
 from l7r.diagram.interactive.notes import read_map_notes
 from l7r.diagram.interactive.page import explanations, present_classes
-from l7r.diagram.interactive.sheet import census, flatten
+from l7r.diagram.interactive.sheet import census, flatten, pieces
 from l7r.diagram.interactive.sources import registry_keys, research_questions
 
 SKILL = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -65,6 +65,57 @@ def test_every_drawn_element_carries_a_kind_the_registry_knows(name: str) -> Non
     got = census(SHEETS[name], COMPOUND_CLASSES)
     assert got.unclassed == [], f"{name}: ink with no kind - tag it (data-kind) or rule it out (data-kind=\"-\"): {got.unclassed}"
     assert got.unregistered == [], f"{name}: kinds the registry does not know: {got.unregistered}"
+
+
+#: Every part a sheet draws inside a feature, and the feature it is part of (feature 264, `inventory.md`; the GM,
+#: 2026-09-27: *"individual features inside of buildings or other features to get their own individual
+#: highlighting"*). A part lights and opens as itself and lights with its parent - the reader must say both.
+PARTS: dict[str, dict[str, str]] = {
+    "ochiba-magistracy": {
+        "hearth": "kitchen", "well": "kitchen", "garden pond": "garden", "genkan": "residence", "engawa": "residence",
+        "residence corridor": "residence", "door": "residence", "lord's quarters": "residence",
+        "family quarters": "residence", "reception room": "residence", "guest quarters": "residence",
+        "shrine altar": "compound shrine", "day office": "office hall", "official study": "office hall",
+        "clerks' room": "office hall", "clerks' seats": "office hall", "kneeling positions": "hearing court",
+        "granary stilts": "granary", "striking posts": "practice ground", "weapon rack": "practice ground",
+        "drying stones and bowls": "cinnabar workshop", "nakamon": "court divider",
+    },
+    "hayakawa-magistracy": {
+        "hearth": "kitchen", "well": "kitchen", "garden pond": "garden", "stone lantern": "garden",
+        "garden pines": "garden", "genkan": "residence", "engawa": "residence", "residence corridor": "residence",
+        "lord's quarters": "residence", "family quarters": "residence", "reception room": "residence",
+        "ancestral alcove": "residence", "shrine altar": "compound shrine", "torii": "compound shrine",
+        "door": "guest quarters", "day office": "office hall", "official study": "office hall",
+        "clerks' seats": "office hall", "kneeling positions": "hearing court", "granary stilts": "granary",
+        "striking posts": "practice ground", "weapon rack": "practice ground", "revetment": "river landing",
+        "dock": "river landing", "tax barge": "river landing", "boatmen's altar": "river landing",
+        "river watch": "river landing", "nakamon": "court divider",
+    },
+    "ubame-magistracy": {
+        "hearth": "kitchen", "well": "kitchen", "garden pond": "garden", "stone lantern": "border court",
+        "genkan": "residence", "engawa": "residence", "residence corridor": "residence", "door": "parley room",
+        "lord's quarters": "residence", "family quarters": "residence", "reception room": "residence",
+        "shuttered wing": "residence", "ancestral alcove": "residence", "guest quarters": "residence",
+        "shrine altar": "compound shrine", "torii": "compound shrine", "day office": "office hall",
+        "official study": "office hall", "clerks' room": "office hall", "clerks' seats": "office hall",
+        "kneeling positions": "hearing court", "granary stilts": "granary", "striking posts": "practice ground",
+        "weapon rack": "practice ground", "balance beam": "weighing floor", "charcoal bales": "weighing floor",
+        "parley mats": "parley room", "nakamon": "court divider",
+    },
+    "county-magistracy-example": {"striking posts": "practice ground", "weapon rack": "practice ground"},
+    "ochiba-roundtrip-test": {"striking posts": "practice ground", "weapon rack": "practice ground"},
+}
+
+
+@pytest.mark.parametrize("name", sorted(PARTS))
+def test_every_part_is_its_own_kind_and_lights_with_its_parent(name: str) -> None:
+    """FR-001 and FR-003: each inventoried part is drawn with its own kind, as part of its parent; and FR-009: the
+    parent keeps ink of its own, so it is still named somewhere under the pointer and opens its own write-up."""
+    ps = pieces(SHEETS[name])
+    for part, parent in PARTS[name].items():
+        assert any(k == part and parent in within for _, k, within in ps), f"{name}: no {part!r} drawn as part of {parent!r}"
+    for parent in set(PARTS[name].values()):
+        assert any(k == parent for _, k, _ in ps), f"{name}: {parent!r} has no ink of its own left to point at"
 
 
 def test_the_registry_is_closed_over_the_maps_it_serves() -> None:

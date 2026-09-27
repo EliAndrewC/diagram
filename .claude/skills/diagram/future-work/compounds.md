@@ -94,6 +94,35 @@ re-deciding it), so the page does not announce a liberty - but a reader finds no
 - Ubame's notes call meeting on the border line "standard practice", unsourced.
 - "Chigiri-no-Chou" (Ochiba, at the Myobu altar) appears in no setting file; canon's Pact-Bowl is the chigiri-wan.
 
+### Opened by feature 264 - the parts of features as their own kinds (2026-09-27)
+
+The GM asked for every feature drawn inside a feature to highlight and open on its own; each part got a kind written
+from the existing record (`specs/264-nested-features-own-kinds/coverage.md` is the measurement). Splitting a part
+out of an accurate parent can drop it to `guess`, because the parent's sections never covered it - these are now
+visible where they were hidden inside the parent's write-up.
+
+- **Guess, record silent** (each a research question): the **garden pond** of a shoin residence garden (form, size,
+  whether a county post kept one); the **stone lantern** in a residence garden, and whether a receiving court kept one
+  (Ubame's border court); **garden pines**; the **engawa** along a shoin residence's garden face (`shoinzukuri-jawiki`
+  is the first page to read); the **residence corridor** (watari-roka) and the offset two-block massing itself;
+  the **clerks' seats** - who sat beside the magistrate at an Edo hearing, and where; a **boatmen's altar** at a river
+  landing; a **river watch** post (kawa-bansho) at a landing; storm shutters (amado), only if Ubame's **shuttered
+  wing** is to be grounded beyond its story.
+- **Accurate but thin** (disclosed in the caveats): the **hearth**'s form - the record names the kitchen's kamado
+  range, while Ochiba and Ubame draw a sunken irori; the **granary stilts** - how a grain kura's floor was raised
+  (posts or a stone base) and why away from a river, since the one reason the record gives is flood at a quay; the
+  **striking posts** and **weapon rack** as objects (form, height, count); the **balance beam**'s form (beam or
+  steelyard); a sourced statement of the **lord's quarters** beyond the private study; drawn **door** widths.
+- **Contradictions and tensions**: the one genkan the record attests (Takayama) is on the OFFICE block, where all
+  three sheets put their only genkan on the residence; the record makes stepped landings (gangi) the norm and a pier
+  the exception for a shelving bank, where Hayakawa draws a pier and no steps with no note that its bank shelves;
+  Hayakawa's one torii serves two shrines, a case the torii sections do not address; the hearing court's kneeling
+  marks are drawn on open sand where Takayama's court was stone-paved and roofed (carried from 262).
+- **For the GM (canon, not research)**: Ochiba's notes say "the setting's record" has a newly posted magistrate
+  practice strokes on river-stones at the colonnade - no passage in `l7r.md` or the other mounted setting files
+  says so (it may be on Obsidian Portal); and the two lacquer-black bowls drying in the workshop are unexplained,
+  though canon's Pact-Bowls are small lacquer bowls - are these those?
+
 ### Settled on 2026-09-26, recorded so it is not reopened
 
 - Ochiba's threshold stones are drawn ~3.3 by 4.7 ft ON PURPOSE (GM: Ochiba is where the threshold stones are

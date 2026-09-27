@@ -106,8 +106,7 @@ class BorderCourt(Kind):
 class HearingCourt(Kind):
     """
     What: The oshirasu: the court directly before the office hall's dais where the parties to a case knelt to
-    be heard and judged, the magistrate above them on the raised floor. The places where witnesses and the
-    accused kneel are marked along its far side.
+    be heard and judged, the magistrate above them on the raised floor.
 
     Why: The courtroom was a room of the office hall, not a stage of its own: at Takayama, the surviving
     intendant's office, the examination room and the shirasu were one paired feature of the office block, so
@@ -123,7 +122,7 @@ class HearingCourt(Kind):
     plans draw an open court of sand.
 
     Name: hearing court (oshirasu)
-    Covers: the sanded court before the dais, its kneeling marks and its label
+    Covers: the sanded court before the dais and its label
     Label: accurate
     Sources: takayama-jinya-jawiki, takayama-jinya-city
     Entry: research/buildings.html - 'The courtroom is a room of the office hall, not a freestanding stage', 'No interrogation room', 'Packing: a jin'ya is mostly open'
@@ -134,8 +133,8 @@ class HearingCourt(Kind):
 
 class PracticeGround(Kind):
     """
-    What: A patch of swept earth in the outer court, with a weapon rack and striking posts: the place where
-    the compound's samurai keep up their daily practice.
+    What: A patch of swept earth in the outer court, marked by the gear that stands on it: the place where the
+    compound's samurai keep up their daily practice.
 
     Why: A dojo with a resident teacher and enrolled students was an institution of cities, in Japan and
     China alike; rural samurai trained at home in an earthen yard, in a hall cleared for the purpose, or on
@@ -153,7 +152,7 @@ class PracticeGround(Kind):
     page read.
 
     Name: practice ground
-    Covers: the swept keiko patch, its weapon rack and striking posts, and its label
+    Covers: the swept keiko patch and its label
     Label: accurate
     Sources: hanko-jawiki, edo-three-dojos-jawiki, jinya-jawiki, dojo-jawiki, genbukan-jawiki, kotobank-machidojo
     Entry: research/buildings.html - 'A dojo is a city institution; county training is courtyard keiko'; research/cities/government.html - 'Martial training is an URBAN institution'
@@ -164,9 +163,8 @@ class PracticeGround(Kind):
 
 class CompoundGarden(Kind):
     """
-    What: The compound's ornamental ground - planting, with stone lanterns and sometimes a pond: the inner
-    garden at the heart of the private court and, where a plan has them, a garden around the shrine or one
-    kept for guests.
+    What: The compound's ornamental ground - planting, laid out to be looked at: the inner garden at the heart of
+    the private court and, where a plan has them, a garden around the shrine or one kept for guests.
 
     Why: A samurai house's prized formal garden lay on the sunny south side, facing the reception rooms, and
     a plan seats its inner garden there where its buildings allow. A guest of rank was received through a
@@ -183,7 +181,7 @@ class CompoundGarden(Kind):
     around a compound's shrine; one drawn there rests on the inner garden's reasoning.
 
     Name: garden
-    Covers: the inner garden, a shrine garden and a guest garden, with their lanterns, ponds and labels
+    Covers: the inner garden, a shrine garden and a guest garden, and their labels
     Label: accurate
     Sources: shoinzukuri-jawiki, kotobank-katteguchi
     Entry: research/buildings.html - 'The shady rear is the service strip', 'Guest doors feed courts, not flanks'
@@ -331,25 +329,19 @@ class SideGate(Kind):
 
 class CourtDivider(Kind):
     """
-    What: The lighter wall that splits the compound into its outer and inner courts, with one narrow
-    household door in it, the nakamon, which the plan places on the main axis directly behind the office
-    hall.
+    What: The lighter wall that splits the compound into its outer and inner courts, broken by one narrow
+    household door, the nakamon.
 
-    Why: The internal gate between the courts is the hinge between state and home. Formal visitors are
-    received in the office hall and go no deeper; the household door serves the family and its servants, and
-    the hall standing in front of it screens the private court from the public one.
+    Why: The split between the courts is the split between state and home: the office and its public business
+    in front, the household behind, with only the one door between them.
 
-    Note: The internal wall and its gate between the two courts follow the record. The door's seat on the
-    main axis directly behind the office hall is the drawing program's own placement, not a recorded custom,
-    and no source measures the household door or the divider: the door's 8 ft width and the wall's 2 ft
-    thickness are this project's own figures.
+    Note: The internal wall between the two courts follows the record. No source measures the divider: the wall's
+    2 ft thickness is this project's own figure.
 
-    Caveat: The door's seat on the main axis directly behind the office hall is the drawing program's own
-    placement, not a recorded custom, and no source measures the household door or the divider: the door's
-    8 ft width and the wall's 2 ft thickness are this project's own figures.
+    Caveat: No source measures the divider: the wall's 2 ft thickness is this project's own figure.
 
-    Name: court divider and nakamon
-    Covers: the internal wall's strokes and its household gate posts
+    Name: court divider
+    Covers: the internal wall's strokes
     Label: accurate
     Sources: neixiang-yamen-zhwiki, machi-bugyo-jawiki, yamen-enwiki
     Entry: research/buildings.html - 'Office in front, residence behind - the two-court split is universal'
@@ -414,3 +406,171 @@ class CartYard(Kind):
     """
 
     key = "cart yard"
+
+
+# ---- the parts of the grounds (feature 264: a thing drawn inside a feature is its own kind) --------------------
+
+
+class GardenPond(Kind):
+    """
+    What: A small ornamental pond in the inner garden, drawn as an open oval of water set among the planting,
+    within sight of the rooms that face the garden.
+
+    Why: The formal garden of a samurai house lay south of the reception rooms, to be looked at from them, and a
+    plan that gives the inner garden that seat gives it a pond as the garden's centerpiece.
+
+    Note: this is a guess - the research record has no entry on a pond in a residence garden, so whether a county
+    post's garden kept one, and its form and size, are the drawing's own; the garden it lies in follows the
+    record.
+
+    Name: garden pond
+    Covers: the pond in the inner garden
+    Label: guess
+    Sources: not recorded
+    Entry: research/buildings.html (no dedicated entry - recorded as silent)
+    """
+
+    key = "garden pond"
+
+
+class StoneLantern(Kind):
+    """
+    What: A stone lantern - a squat lamp-house on a short post - standing in a garden or a receiving court, drawn
+    as a small gray glyph.
+
+    Why: A lantern marks a garden as a made place meant to be walked and looked at, and at a border posting one
+    stands in the court a visiting delegation steps into, so the ground it crosses first is a kept one.
+
+    Note: this is a guess - the research record has no entry on stone lanterns in a residence garden or a
+    receiving court; the form, the count and the places are the drawing's own.
+
+    Name: stone lantern
+    Covers: each stone-lantern glyph in a garden or the border court
+    Label: guess
+    Sources: not recorded
+    Entry: research/buildings.html (no dedicated entry - recorded as silent)
+    """
+
+    key = "stone lantern"
+
+
+class GardenPines(Kind):
+    """
+    What: A cluster of old pines in the inner garden, drawn as three canopies and labeled.
+
+    Why: The garden of a long-held posting is old: generations of magistrates laid it down, and its trees are the
+    part of it that shows the years.
+
+    Note: this is a guess - the research record has no entry on pines in a residence garden; the trees are this
+    map's story of a garden kept by many magistrates in turn.
+
+    Name: garden pines
+    Covers: the old pines' canopies and their label
+    Label: guess
+    Sources: not recorded
+    Entry: research/buildings.html (no dedicated entry - recorded as silent)
+    """
+
+    key = "garden pines"
+
+
+class StrikingPosts(Kind):
+    """
+    What: Short standing posts on the practice ground (tategi), struck with a wooden sword in drill, drawn as small
+    location markers with their label.
+
+    Why: Rural samurai practice left equipment, not architecture: a county seat keeps no dojo, and what marks its
+    swept ground as a place of daily keiko is the gear that stands on it.
+
+    Note: The gear marking the practice ground follows the record. That the gear is tategi posts, and their form,
+    height and count, are not in the record; each post is drawn as a small marker of where it stands rather
+    than at its own size.
+
+    Caveat: That the gear is tategi posts, and their form, height and count, are not in the record; each post is
+    drawn as a small marker of where it stands rather than at its own size.
+
+    Name: striking posts
+    Covers: the standing posts on the practice ground and their label
+    Label: accurate
+    Sources: hanko-jawiki, edo-three-dojos-jawiki, jinya-jawiki, dojo-jawiki
+    Entry: research/buildings.html - 'A dojo is a city institution; county training is courtyard keiko'
+    """
+
+    key = "striking posts"
+
+
+class WeaponRack(Kind):
+    """
+    What: A rack for practice weapons standing at the edge of the practice ground, flush against the nearest
+    lodging's wall.
+
+    Why: Like the striking posts, the rack is the durable gear that marks open ground as the place where the
+    watch drills every day, in place of a hall built for it.
+
+    Note: The gear marking the practice ground follows the record. The rack's form and its size of about 8 by 2
+    ft are not in the record.
+
+    Caveat: The rack's form and its size of about 8 by 2 ft are not in the record.
+
+    Name: weapon rack
+    Covers: the rack at the practice ground's edge and its label
+    Label: accurate
+    Sources: hanko-jawiki, edo-three-dojos-jawiki, jinya-jawiki, dojo-jawiki
+    Entry: research/buildings.html - 'A dojo is a city institution; county training is courtyard keiko'
+    """
+
+    key = "weapon rack"
+
+
+class Nakamon(Kind):
+    """
+    What: The nakamon - the one narrow household door in the wall between the outer and inner courts, on the main
+    axis directly behind the office hall.
+
+    Why: The internal gate between the courts is the hinge between state and home. Formal visitors are received
+    in the office hall and go no deeper; this door serves the family and its servants, and the hall standing in
+    front of it screens the private court from the public one.
+
+    Note: The gate between the two courts follows the record. Its seat on the main axis directly behind the
+    office hall is the drawing program's own placement, not a recorded custom, and no source measures the
+    household door: its 8 ft width is this project's own figure.
+
+    Caveat: Its seat on the main axis directly behind the office hall is the drawing program's own placement, not
+    a recorded custom, and no source measures the household door: its 8 ft width is this project's own figure.
+
+    Name: nakamon
+    Covers: the posts of the household door in the court divider
+    Label: accurate
+    Sources: neixiang-yamen-zhwiki, machi-bugyo-jawiki, yamen-enwiki
+    Entry: research/buildings.html - 'Office in front, residence behind - the two-court split is universal'
+    """
+
+    key = "nakamon"
+
+
+class Door(Kind):
+    """
+    What: A building's everyday door, drawn as a small block flush in its wall: the family's kitchen-side door
+    (katteguchi), the doors of the lodgings and the servants' row, the karo's side door, and the heavy doors of
+    a plastered storehouse.
+
+    Why: Service traffic is the deliberate opposite of a guest's arrival: a guest crosses a court to the formal
+    entrance, while the household's own doors open straight into work space. A servants' row turns its doors
+    inward, into the compound, and a plastered storehouse keeps outer doors faced in earth and plaster so that
+    fire cannot get in.
+
+    Note: The kitchen-side door, the inward-facing doors of a servants' row and the plastered storehouse doors
+    follow the record. No source gives a drawn door's width; and the doors of Ubame's parley room and writing
+    pavilion open into rooms that the setting or the map's story made.
+
+    Caveat: No source gives a drawn door's width; and the doors of Ubame's parley room and writing pavilion open
+    into rooms that the setting or the map's story made.
+
+    Name: door
+    Covers: every small door glyph on a building's wall
+    Label: accurate
+    Sources: kotobank-katteguchi, dozo-jawiki, gogura-jawiki, nagayamon-jawiki, jta-nagayamon
+    Entry: research/buildings.html - 'Guest doors feed courts, not flanks'; research/cities/fabric.html - 'How did a dense wooden city watch for fire?'; research/cities/government.html - 'Servant housing in the samurai ward'
+    """
+
+    key = "door"

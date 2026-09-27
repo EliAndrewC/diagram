@@ -534,6 +534,18 @@ def wrap(s: str, tag: ClsTag) -> str:
     return "".join(wrap(piece, c) for c, piece in tag)
 
 
+def part_of(wrapped: str, kinds: Sequence[str]) -> str:
+    """A wrapped string that is a PART of other kinds carries them as `data-in` (feature 264, GM 2026-09-27: the
+    hearth, the well and the pond each light as themselves, and still light with the kitchen or the garden they are
+    in). `page.js` lights every group whose `data-in` names the lit key. `|` joins the keys, which hold spaces. It
+    goes AFTER `data-k`, at the end of the opening tag: the raster id map finds a group by `class` then `data-k`
+    (`raster._GROUP`), and a part whose `data-in` came between them was left out of the map and named as its parent."""
+    if not kinds or not wrapped.startswith('<g class="f '):
+        return wrapped
+    end = wrapped.index(">")
+    return wrapped[:end] + f' data-in="{html.escape("|".join(kinds), quote=True)}"' + wrapped[end:]
+
+
 def _pieces(s: str, tag: ClsTag) -> Iterator[tuple[str | None, str]]:
     """(class, text) for every separately-classed piece of one stream string - a Split counts once,
     under its fill class, because both copies are the same ink."""
@@ -816,6 +828,7 @@ def render_page(
     with_raster: bool = True,
     registry: dict[str, FeatureClass] = CLASSES,
     caveat_lead: str = CAVEAT_LEAD,
+    within: Sequence[tuple[str, ...]] | None = None,
 ) -> str:
     """The whole page as one string - `write_html` writes it; tests read it.
 
@@ -837,6 +850,8 @@ def render_page(
     if vb is not None:
         strings = [raster.drop_offmap(s, vb) if t is not None and t != NOT_HIGHLIGHTED else s for s, t in zip(strings, tags, strict=True)]
     wrapped = [wrap(s, t) for s, t in zip(strings, tags, strict=True)]
+    if within is not None:
+        wrapped = [part_of(w, ks) for w, ks in zip(wrapped, within, strict=True)]
     # the hit regions go right after the SHEET (the first "-"-tagged string), under everything drawn
     sheet = next((i for i, t in enumerate(tags) if t == NOT_HIGHLIGHTED), 0)
     regions = hit_regions(manifest, present - HIT_FROM_MARKS)
@@ -948,6 +963,7 @@ def write_html(
     with_raster: bool = True,
     registry: dict[str, FeatureClass] = CLASSES,
     caveat_lead: str = CAVEAT_LEAD,
+    within: Sequence[tuple[str, ...]] | None = None,
 ) -> None:
     """`<base>.html`, beside the map's other outputs. The map's `<base>.notes.md` is read here if it
     exists - one place, derived from the output path rather than searched for, so a stale or foreign
@@ -955,4 +971,4 @@ def write_html(
     render condition (feature 208) - see `render_page`; `registry` the vocabulary (feature 262)."""
     notes = read_map_notes(path[: -len(".html")] + ".notes.md") if path.endswith(".html") else EMPTY
     with open(path, "w", encoding="utf-8") as fh:
-        fh.write(render_page(strings, tags, name, meta, manifest, notes, with_raster=with_raster, registry=registry, caveat_lead=caveat_lead))
+        fh.write(render_page(strings, tags, name, meta, manifest, notes, with_raster=with_raster, registry=registry, caveat_lead=caveat_lead, within=within))

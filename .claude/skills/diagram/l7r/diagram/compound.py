@@ -354,12 +354,16 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 7
         if z.name == "practice ground":
             # The program item's durable equipment (buildings.md "Practice ground"): a weapon
             # rack on the zone's south edge (the hand-refined map moves it flush to the
-            # adjacent lodging's wall) and two tategi striking posts as r2 location markers.
-            parts.append(rect(z.x_ft + z.w_ft / 2 - 4, z.y2 - 2, 8, 2, "#8C6F3E", "#4A3318", 0.8, "", zk))
-            parts.append(label(z.x_ft + z.w_ft / 2, z.y_ft + 8, "striking posts", 8, True, "#5C4830", zk))
+            # adjacent lodging's wall) and two tategi striking posts as r2 location markers. Each is a
+            # PART of the ground (feature 264): its own kind, inside a group of the ground's, so it lights
+            # as itself and with the ground.
+            parts.append(f"<g{_kind_attr(zk)}>")
+            parts.append(rect(z.x_ft + z.w_ft / 2 - 4, z.y2 - 2, 8, 2, "#8C6F3E", "#4A3318", 0.8, "", "weapon rack"))
+            parts.append(label(z.x_ft + z.w_ft / 2, z.y_ft + 8, "striking posts", 8, True, "#5C4830", "striking posts"))
             for dx_ft, dy_ft in ((-5.0, 14.0), (5.0, 27.0)):
                 cx, cy = z.x_ft + z.w_ft / 2 + dx_ft, z.y_ft + dy_ft
-                parts.append(f'<circle cx="{ox + cx * FTPX:.0f}" cy="{oy + cy * FTPX:.0f}" r="2" fill="#7A5430" stroke="#4A3318" stroke-width="0.8"{_kind_attr(zk)}/>')
+                parts.append(f'<circle cx="{ox + cx * FTPX:.0f}" cy="{oy + cy * FTPX:.0f}" r="2" fill="#7A5430" stroke="#4A3318" stroke-width="0.8"{_kind_attr("striking posts")}/>')
+            parts.append("</g>")
     for p in result.placed:  # buildings
         fill, stroke = KINDS.get(p.spec.kind, KINDS["service"])
         parts.append(rect(p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, fill, stroke, 2, "", p.spec.feature))

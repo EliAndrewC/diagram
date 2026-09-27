@@ -80,7 +80,22 @@ OFFMAP_MARGIN = 24.0
 #: The id map's palette: class i (1-based) paints red = i * PALETTE_STEP; 4 admits 63 classes, and a value
 #: one off the grid (a PNG round trip through a canvas) snaps back. The page's vocabulary is 51 classes
 #: and the placard; `id_map` refuses a page past the palette rather than aliasing two classes.
+#: PAST 63, GREEN COUNTS THE ROWS (feature 264: a magistracy whose parts became kinds drew 69 on one page). Class i
+#: paints red = ((i - 1) % 63 + 1) * STEP and green = ((i - 1) // 63) * STEP, so the first 63 keep their red-only
+#: colors and their palette keys (every hamlet page unchanged), and a class past them is keyed "red,green".
 PALETTE_STEP = 4
+PALETTE_ROW = 255 // PALETTE_STEP
+PALETTE_MAX = PALETTE_ROW * (PALETTE_ROW + 1)
+
+
+def palette_rgb(i: int) -> tuple[int, int]:
+    """(red, green) of class `i`, 1-based - see PALETTE_STEP."""
+    return ((i - 1) % PALETTE_ROW + 1) * PALETTE_STEP, ((i - 1) // PALETTE_ROW) * PALETTE_STEP
+
+
+def palette_key(red: int, green: int) -> str:
+    """The palette's key for a pixel's snapped (red, green): the red alone on the first row, as it always was."""
+    return str(red) if green == 0 else f"{red},{green}"
 #: resvg names MS fonts for the generic families; 'serif' must be DejaVu Serif or every label changes face
 #: (settlement/finish.py `render_png`, where this was learned; ONE definition, both renders use it).
 RESVG_FONT_ARGS: tuple[str, ...] = ("--serif-family", "DejaVu Serif")
@@ -343,10 +358,11 @@ def id_map(svg_text: str, keys: Sequence[str]) -> tuple[bytes | None, dict[str, 
     edge is a wrong class; every opacity stripped, inside and outside the class groups, because a
     translucent wrapper moved every value off the palette (spec R4). Ink outside the class groups - the
     sheet, the scale bar - is painted none, so nothing but a class can answer."""
-    if len(keys) * PALETTE_STEP > 255:
-        raise ValueError(f"{len(keys)} classes on one page - past the id map's {255 // PALETTE_STEP}-class palette")
-    palette = {str((i + 1) * PALETTE_STEP): k for i, k in enumerate(keys)}
-    color = {k: f"#{(i + 1) * PALETTE_STEP:02X}0000" for i, k in enumerate(keys)}
+    if len(keys) > PALETTE_MAX:
+        raise ValueError(f"{len(keys)} classes on one page - past the id map's {PALETTE_MAX}-class palette")
+    rgb = [palette_rgb(i + 1) for i in range(len(keys))]
+    palette = {palette_key(r, g): k for (r, g), k in zip(rgb, keys, strict=True)}
+    color = {k: f"#{r:02X}{g:02X}00" for (r, g), k in zip(rgb, keys, strict=True)}
     out: list[str] = []
     pos = 0
     for m in _GROUP.finditer(svg_text):
@@ -367,7 +383,10 @@ def id_map(svg_text: str, keys: Sequence[str]) -> tuple[bytes | None, dict[str, 
     # THE FONT MAPPING TOO (feature 201): without it resvg finds no 'serif' and draws no text at all, so a
     # caption was unhittable in raster mode - a feature-200 defect the picture never showed, because the
     # picture passed the mapping and the id map did not
-    return resvg_png(doc, "--zoom", "1", "--shape-rendering", "crispEdges", *RESVG_FONT_ARGS), palette
+    # AND THE TEXT UNBLENDED (feature 264): crispEdges does not reach glyphs, so a label's edge pixels blended its
+    # color into the class one palette step away - the fox relics' label answered as the shrine altar beside it in
+    # the palette once the altar became a kind, 19 of its pixels where main had 278 (measured, specs/264 research.md)
+    return resvg_png(doc, "--zoom", "1", "--shape-rendering", "crispEdges", "--text-rendering", "optimizeSpeed", *RESVG_FONT_ARGS), palette
 
 
 def _unpaint(text: str) -> str:
