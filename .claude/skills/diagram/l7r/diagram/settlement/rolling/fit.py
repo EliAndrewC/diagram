@@ -147,6 +147,19 @@ class BundleFitMixin:
             self._water_obs_cache = (key, obs)
         return cast(list[Any], self._water_obs_cache[1])
 
+    def _rect_on_stream(self: Settlement, rect: Any) -> bool:  # type: ignore[misc]
+        """Does this solid rect touch a STREAM, at its half-width plus 5 px - `_rect_on_water`'s own test, streams only?"""
+        gc = self._rect_corners(rect)
+        pts = gc + [(rect[0], rect[1])]
+        for f in self.M.get("streams", []):
+            poly = f.get("poly") or []
+            hw = float(f.get("w", 9.0)) / 2 + 5
+            for k in range(len(poly) - 1):
+                a, b = poly[k], poly[k + 1]
+                if any(seg_dist(px, py, a, b) < hw for px, py in pts) or any(segments_cross(a, b, gc[e], gc[(e + 1) % 4]) for e in range(4)):
+                    return True
+        return False
+
     def _rect_on_water(self: Settlement, rect: Any) -> bool:  # type: ignore[misc]
         """Whether a SOLID bundle rect (house/yard/garden/shed) lands on an irrigation LINE - a feeder
         channel, an in-field/drain ditch, or a stream. These are dry-ground structures, so a garden or
@@ -240,6 +253,11 @@ class BundleFitMixin:
             return False
         hx, hy = geom["house"][0], geom["house"][1]
         parts = [geom["yard"], *geom.get("gardens", ()), geom.get("shed")]
+        # ...AND NO PART STANDS ON THE WATER ITSELF (settlement-review of Mizuguchi, feature 261): the envelope's nine-point
+        # ground test let a farmhouse's wall stand on the brook's centerline, its roof drawn over the water. Each solid part
+        # is held off every stream at the stream's half-width plus the corridor `_rect_on_water` keeps.
+        if any(self._rect_on_stream(r) for r in [geom["house"], *parts] if r is not None):
+            return True
         return any(segments_cross((hx, hy), (r[0], r[1]), poly[k], poly[k + 1]) for r in parts if r is not None for poly in streams for k in range(len(poly) - 1))
 
     def _rect_blocked(self: Settlement, rect: Any, fields: bool) -> bool:  # type: ignore[misc]

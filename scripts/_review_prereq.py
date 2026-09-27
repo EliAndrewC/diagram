@@ -86,22 +86,33 @@ def unverified_findings(clone: pathlib.Path, name: str, records: Iterable[dict] 
     """The ids of the findings the map's last verdict raised that nothing verifies and nothing accepted.
 
     NOT-REVIEWABLE raises no findings - it names missing prerequisites, which this same check is about to name
-    again - so only a PASS or NEEDS-WORK verdict's findings count."""
+    again - so only a PASS or NEEDS-WORK verdict's findings count. A verdict recorded NOT-REVIEWABLE only because its
+    gate was red still CONCLUDED one (`concluded`), and its findings are real: they count too."""
     verdict = latest_verdict(clone, name)
-    if not verdict or verdict["verdict"] == "NOT-REVIEWABLE":
+    # GUARD_EDIT_OK: feature 261 - a review downgraded by a red gate kept real findings that no record was ever asked for
+    # (Kashikawa's brook crossing, Sawada's level brook), because this returned nothing for any NOT-REVIEWABLE verdict.
+    if not verdict or (verdict["verdict"] == "NOT-REVIEWABLE" and verdict.get("concluded") not in ("PASS", "NEEDS-WORK")):
         return []
     recs = list(measurement_records(clone) if records is None else records)
     # GUARD_EDIT_OK: feature 240 FR-009 / SC-007 - a verifying record must say WHAT it measured and FROM WHAT: the
     # reviewer's first stage judges the `source` against the finding (the canopy: `clumps` cannot verify a finding
     # about drawn crowns), and a record with no source gives it nothing to judge, so it verifies nothing.
-    verified = {str(r.get("verifies")) for r in recs if r.get("verifies") and r.get("subject") == name and r.get("quantity") and r.get("source")}
+    # GUARD_EDIT_OK: feature 261 - every review round numbers its findings from F1 again, so a record matched by the bare id
+    # "verified" a LATER round's F1 it never measured (Kashikawa's windbreak record cleared a brook-crossing finding). A
+    # record that names its `round` - the engine key of the verdict it answers, or a prefix of it - counts only there.
+    _round = str(verdict.get("engine_key") or "")
+    verified = {
+        str(r.get("verifies"))
+        for r in recs
+        if r.get("verifies") and r.get("subject") == name and r.get("quantity") and r.get("source") and _round.startswith(str(r.get("round") or ""))
+    }
     done = verified | accepted_ids(clone, name)
     return [str(f.get("id")) for f in verdict.get("findings", []) if isinstance(f, dict) and str(f.get("id")) not in done]
 
 
 def has_findings(clone: pathlib.Path, name: str) -> bool:
     verdict = latest_verdict(clone, name)
-    return bool(verdict and verdict["verdict"] != "NOT-REVIEWABLE" and verdict.get("findings"))
+    return bool(verdict and (verdict["verdict"] != "NOT-REVIEWABLE" or verdict.get("concluded") in ("PASS", "NEEDS-WORK")) and verdict.get("findings"))  # GUARD_EDIT_OK: feature 261 - a gate-red verdict's findings are real (`unverified_findings`)
 
 
 # ---- FR-005: every map current, every artifact present -------------------------------------------------------

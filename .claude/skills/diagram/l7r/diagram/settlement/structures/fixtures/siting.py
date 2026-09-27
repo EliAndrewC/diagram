@@ -342,6 +342,10 @@ class FixtureSitingMixin:
                 _miss = {id(c): routes_missed(_routes, c[2], c[3], KOSATSUBA_HANDOVER_BAND_FT / ftpx) for c in cands}
                 _fewest = min(_miss.values())
                 cands = [c for c in cands if _miss[id(c)] == _fewest]
+                # ...and in the open where the open allows (settlement-review of Mizuguchi, feature 261): ranking the routes
+                # first put the board back inside a crown - the feature-230 pass-13 defect - so the canopy preference is
+                # applied here too, before the band narrows to the seats nearest the handover
+                cands = [c for c in cands if not c[7]] or cands
                 _near = min(math.hypot(c[2] - anchor[0], c[3] - anchor[1]) for c in cands)
                 _band = KOSATSUBA_HANDOVER_BAND_FT / ftpx
             cands = [c for c in cands if math.hypot(c[2] - anchor[0], c[3] - anchor[1]) <= _near + _band] or cands

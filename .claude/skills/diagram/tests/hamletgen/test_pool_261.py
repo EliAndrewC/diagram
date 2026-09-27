@@ -162,3 +162,18 @@ def test_no_brook_runs_ruled_along_the_frame(gen: str) -> None:
                     j += 1
                 run = sum(math.dist(brook[k], brook[k + 1]) for k in range(i, j))
                 assert run <= 150.0, f"{run:.0f} ft of brook ruled along the frame from ({brook[i][0]:.0f}, {brook[i][1]:.0f})"
+
+
+@pytest.mark.parametrize("gen", GENS, ids=IDS)
+def test_no_farmhouse_stands_on_the_brook(gen: str) -> None:
+    """FR-013: a farmstead stands whole on one bank, which begins with its house - no corner of a farmhouse within the brook's
+    half-width plus 5 ft of its course. The settlement-review found a Mizuguchi house whose wall stood on the centerline."""
+    from l7r.diagram.settlement import seg_dist
+
+    m = _manifest(gen)
+    for f in m.get("streams", []):
+        poly, hw = f["poly"], float(f.get("w", 9.0)) / 2 + 5.0
+        for h in m["houses"]:
+            corners = [(h["x"] + sx * h["w"] / 2, h["y"] + sy * h["h"] / 2) for sx in (-1, 1) for sy in (-1, 1)]
+            near = min(seg_dist(c[0], c[1], poly[k], poly[k + 1]) for c in corners for k in range(len(poly) - 1))
+            assert near >= hw - 1.0, f"the farmhouse at ({h['x']:.0f}, {h['y']:.0f}) stands {near:.1f} ft from the brook's course"

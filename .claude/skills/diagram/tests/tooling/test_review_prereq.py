@@ -72,6 +72,22 @@ def test_a_not_reviewable_verdict_raises_no_findings_and_no_verdict_means_nothin
     assert prereq.latest_verdict(clone, "inashiro") is None, "an unreadable record is no record"
 
 
+def test_a_gate_red_verdict_keeps_its_findings_and_a_record_answers_only_the_round_it_names(tmp_path: pathlib.Path) -> None:
+    """Feature 261: a review recorded NOT-REVIEWABLE only because its gate was red CONCLUDED something, and its findings
+    are owed records; and a record that names its `round` (the answered verdict's engine key, or a prefix) does not clear
+    a later round's finding that merely reuses its id."""
+    clone = _clone(tmp_path)
+    d = clone / ".git" / "review-verdicts"
+    d.mkdir(parents=True)
+    (d / "kashikawa.json").write_text(json.dumps({"map": "kashikawa", "engine_key": "abc123", "verdict": "NOT-REVIEWABLE", "concluded": "NEEDS-WORK", "findings": [{"id": "F1"}]}))
+    assert prereq.unverified_findings(clone, "kashikawa") == ["F1"] and prereq.has_findings(clone, "kashikawa")
+    rec = {"verifies": "F1", "subject": "kashikawa", "quantity": "q", "source": "s"}
+    _records(clone, **{"old": {**rec, "round": "e02347"}})
+    assert prereq.unverified_findings(clone, "kashikawa") == ["F1"], "a record for an earlier round does not clear this one's F1"
+    _records(clone, **{"old": {**rec, "round": "e02347"}, "new": {**rec, "round": "abc"}})
+    assert prereq.unverified_findings(clone, "kashikawa") == [], "the record naming this round does"
+
+
 # ---- FR-005 --------------------------------------------------------------------------------------------------
 
 

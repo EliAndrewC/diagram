@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, Any
 
 from ..._geom import (
     Pt,
+    seg_dist,
 )
 
 # The lane clearance a notice-board caption must MEET before nearness decides the seat. See the long
@@ -189,8 +190,16 @@ def kosatsuba_handover(M: Any) -> tuple[float, float] | None:
         if not ln.get("connector") or len(pts) < 2:
             continue
         inner = min((pts[0], pts[-1]), key=lambda q: min(math.hypot(q[0] - h[0], q[1] - h[1]) for h in houses))
-        if any(math.dist(inner, q) <= KOSATSUBA_HANDOVER_PX for o in _others for q in o):
+        # a way meets it at a shared vertex or anywhere along a segment - the router joins at either
+        if any(seg_dist(inner[0], inner[1], a, b) <= KOSATSUBA_HANDOVER_PX for o in _others for a, b in zip(o, o[1:], strict=False)):
             return inner
+        # ...AND A TRACK THAT RUNS THROUGH hands over where a lane's END meets it (settlement-review of Mizuguchi): both of
+        # its ends are off the sheet, so its "inner end" meets nothing; the junction nearest the houses is where the lanes
+        # reach the way out
+        cx, cy = sum(h[0] for h in houses) / len(houses), sum(h[1] for h in houses) / len(houses)
+        joins = [q for o in _others if len(o) >= 2 for q in (o[0], o[-1]) if any(seg_dist(q[0], q[1], a, b) <= KOSATSUBA_HANDOVER_PX for a, b in zip(pts, pts[1:], strict=False))]
+        if joins:
+            return min(joins, key=lambda q: math.hypot(q[0] - cx, q[1] - cy))
     return None
 
 

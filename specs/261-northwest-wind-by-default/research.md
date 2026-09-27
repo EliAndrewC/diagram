@@ -101,10 +101,10 @@ the amendment's last re-roll):
 
 | map | seed | households | seat | belt clumps | belt bearing | off NW | arc |
 |---|---|---|---|---|---|---|---|
-| Inashiro | 4 | 15/15 | wind-facing, across the brook from its rice | 186 | 329 | 14 | 104 |
+| Inashiro | 4 | 15/15 | wind-facing, across the brook from its rice | 180 | 320 | 5 | 109 |
 | Kashikawa | 3 | 20/20 | wind-facing, across the brook from its rice | 281 | 319 | 4 | 161 |
 | Kuwabata | 21 | 16/16 | wind-facing | 151 | 285 | 30 | 83 |
-| Mizuguchi | 23 | 12/12 | wind-facing, astride the brook (8 and 4) | 114 | 299 | 16 | 88 |
+| Mizuguchi | 23 | 12/12 | wind-facing, astride the brook (7 and 5) | 89 | 313 | 2 | 122 |
 | Sawada | 24 (was 6) | 19/19 | wind-facing | 179 | 319 | 4 | 161 |
 
 Every rule still holds on every map (the two pool test files).
@@ -185,6 +185,10 @@ session's reading of each crossing, spur and caption, before and after):
 | scrub inside the farmsteads' own outline | Kuwabata 138 bases (20 within 15 ft of a part) | the keep-out takes in every part |
 | board caption past the page's edge | Kashikawa, 31 ft | all five inside the view |
 | a rejected roll readable in the pool mid-sweep | Sawada's first attempt read by the census | every attempt staged, the kept one promoted |
+| a farmhouse standing on the brook (FR-013) | Mizuguchi, a wall on the centerline | every house corner at least 26 ft from the course |
+| a household whose nearest way is across the brook, undecked | Mizuguchi 1 | 0 on every map |
+| the entrance board under a drawn crown | Mizuguchi, 0.6 ft inside | 32 ft clear, every departure still passing it |
+| a through-running connector with no handover found | Mizuguchi (both ends off the sheet) | the junction where a lane's end meets it |
 
 Found on the way (constitution XIV): three sites used `seg_intersect` - which answers for the lines - as a crossing test,
 so every spur detoured to a ford and every connector bearing scored a brook violation per segment; with the test fixed the

@@ -1,0 +1,7 @@
+{
+  "utc": "2026-09-27T02:21:26Z",
+  "target": "review-accept",
+  "commit": "d8b6f698",
+  "outcome": "permitted",
+  "why": "review-accept inashiro F1: a research question, not a defect of this feature: the record names more than one position for dry fields, so it is a knob candidate, deferred with its measurement and sketch to future-work/farming-communities.md and raised with the GM"
+}

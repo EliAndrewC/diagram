@@ -2401,3 +2401,16 @@ first (3 of the 10 rejections fail it), which saves the two `_fronts` scans but 
 
 **Why it is not taken here**: it changes which paths the router finds on every hamlet, so it moves the pool and
 owes its own 48-seed cohort and its own review round. This feature has had fourteen.
+
+## Where the dry hem stands once the houses move off it (measured 2026-09-27, feature 261)
+
+MEASURED: under the regional northwest wind Inashiro's cluster seats on the far side of its brook from the rice, and the
+dry hem - drawn as a band along the paddy's outer edge - stayed with the paddy: nearest-house distance to a hem plot went
+from a median 178 ft to 827 ft (nearest 90 -> 312 ft, farthest 565 -> 1,455 ft), across the brook and the whole paddy.
+research/fields.html "WHERE dry crops go" allows canal-high ground but says dry fields sit "above all AROUND the houses";
+the only near-home dry ground on the map is now the kitchen gardens. The record names more than one position, so under
+the knob doctrine this is a KNOB, not a fix (settlement-review of Inashiro, feature 261 round 3).
+
+SKETCH: a `hem_siting` knob - `field_edge` (today's band along the paddy) or `by_the_houses` (the dry plots seated in the
+open ground around the cluster, after `stage_homesteads`, from the same acreage). Research pass first: whether a hamlet
+whose home ground is paddy-bound kept its hatake by the houses, and in what share.

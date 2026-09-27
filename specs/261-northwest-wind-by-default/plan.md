@@ -215,6 +215,10 @@ Measured before and after in research R9.
 - A board's caption is seated on the page when any seat allows (Kashikawa's was clipped past the left edge).
 - `generate` finishes every attempt into a stage beside the map and promotes only the kept one, so a concurrent reader
   never sees a rejected roll (the gate's census read Sawada's first attempt).
+- No solid part of a farmstead - the house included - stands on a stream (`_rect_on_stream` in `_parts_fit`), and the entrance
+  board prefers a seat in the open among those every departure passes (Mizuguchi: a house wall on the brook's course, a
+  board inside a crown).
+- A connector that runs through, both ends off the sheet, hands over where a lane's end meets it (`kosatsuba_handover`).
 - The web's dangling-ends sweep runs once more after `straighten_joints`: an end that reached the lane it was then joined
   to was left reaching only its own lane (Mizuguchi).
 
