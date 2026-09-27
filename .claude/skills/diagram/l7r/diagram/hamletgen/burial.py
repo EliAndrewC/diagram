@@ -2,10 +2,10 @@
 
 The GM ruled that a village district's main village alone keeps the shrine, the headman's house and the cremation
 ground, and asked where a hamlet's dead then lie - its own ground, the village's, or bones brought home - to follow
-the history where it agrees and to roll a knob where it does not. The history agrees: every form read puts the dead
-by their own settlement - a hamlet's burial ground at its edge, the ground a settlement's inhabitants hold in common,
-the two-grave system's burial grave on common land with only the visited grave at the village's temple, graves on a
-household's own land, and China's family and lineage graves - but the grave at the parish temple was half an
+the history where it agrees and to roll a knob where it does not. Most forms read put the dead by their own
+settlement - a hamlet's burial ground at its edge, the ground a settlement's inhabitants hold in common, the
+two-grave system's burial grave on common land, graves on a household's own land, China's family and lineage
+graves - but the grave at the parish temple was half an
 obligation, and most villages' households were registered with temples outside the village. The history does not
 point one way, so it is a KNOB, as the GM asked: `hamlet_burial` - "own_ground" (a burial ground at the hamlet's edge,
 holding the urns brought back from the village's cremation ground) or "village_ground" (none; its dead lie in the
@@ -14,7 +14,8 @@ research/religion-and-death.html "Where do a hamlet's dead lie?".
 
 WHAT IS MEASURED AND WHAT IS NOT. The ground's AREA is the 750-2,450 sq ft band the record reckons for a hamlet's own
 ground (research/religion-and-death.html "How much ground does a village burial ground need, and whose dead lie in
-it?") - accurate as a band; where a hamlet falls in it is set by its households, a GUESS. The 1.4 to 1 outline is a
+it?"), a band for FULL-BODY burial that overstates an urn ground - a GUESS, and where a hamlet falls in it is set by
+its households, a GUESS. The 1.4 to 1 outline is a
 GUESS. The water set-backs are the record's drawn bands (research/religion-and-death.html "How far from water does a
 burial ground lie?": about 75 px from a stream, 50 px from a flooded field edge). The 60 ft from houses and wells is
 the engine's measure of "outside the settlement" the wayside stones use (`BOUNDARY_STONE_CLEAR_FT`), a GUESS for a

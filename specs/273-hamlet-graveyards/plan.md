@@ -4,11 +4,11 @@
 
 ## Summary
 
-The record carries the GM's ruling (210, 530) and the new question 540 ("Where do a hamlet's dead lie?"): every form
-the history shows puts a hamlet's dead by the hamlet, so it is a RULE, not a knob - every hamlet draws a burial
-ground of its own at its edge. The scripted hamlet generator gains a stage that seats and draws it; the village roller
-gains its cremation ground (530); the village's burial ground (269's 280 knob and 270 siting) lands once 269's 270
-and 280 are on main.
+The record carries the GM's ruling (210, 530) and the new question 540 ("Where do a hamlet's dead lie?"): the history gives
+two answers - by the hamlet, or at the parish temple - so it is a KNOB rolled per hamlet: a burial ground of its own
+at its edge, or none, its dead in the village's. The scripted hamlet generator gains a stage that rolls it and seats
+the ground; the village roller gains its cremation ground (530); the village's burial ground (269's 280 knob and 270
+siting) is T06 - built here if 269's 270 and 280 are on main in time, otherwise a claimed follow-up feature.
 
 ## Technical context
 
@@ -26,7 +26,7 @@ and 280 are on main.
 - X: PASS - red-first tests; 100% coverage of the new stage.
 - XII: PASS - 540 researched and checked (quote-check, record-format, source-applicability applied).
 - XIII: PASS - baseline main's green gate; the five hamlets' moves are the feature's own.
-- XVI: PASS - a rule because the evidence agrees, as the GM asked; no exception.
+- XVI: PASS - a knob because the evidence splits, as the GM asked; no exception.
 
 ## Decisions
 
@@ -73,4 +73,5 @@ and 280 are on main.
 
 1. T01: the record (done: 540, 210, 530, the checks). 2. T02: the hamlet stage, red-first tests. 3. T03: the village
 cremation ground and the no-village-features roll test. 4. T04: the pool re-roll and reviews. 5. T05: `make done`,
-push. The village burial ground (D5) is a follow-up feature once 269 lands.
+push. 6. T06: the village burial ground - built here if 269's 270 and 280 are on main by then, or ticked by claiming
+the follow-up feature.
