@@ -970,6 +970,8 @@ mugi	mugi
 mukaibansho	mukaibansho
 mukakusha	mukakusha
 mulberry-dike fishpond	dike-pond
+multiple cities	multiple city
+multiple city	multiple city
 murabarai	murabarai
 murataka	murataka
 muromachi	Muromachi
@@ -1017,6 +1019,7 @@ nightsoil	night soil
 nihonbashi	Nihonbashi
 ninomaru	ninomaru
 ninsokusashi	ninsokusashi
+nipponica	Nipponica
 noborigama	noborigama
 nogyo zensho	Nogyo Zensho
 normal depth	normal depth
@@ -1478,7 +1481,10 @@ toro	Toro
 toro site	Toro
 toshiyori	toshiyori
 total length and fall	fall
+town ground	town ground
+town grounds	town ground
 town magistrates	town magistrate
+town-row ground	town ground
 towpath	towpath
 towpaths	towpath
 tozama	tozama

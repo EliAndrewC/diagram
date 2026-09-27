@@ -6548,5 +6548,26 @@
    "seed",
    "seeds"
   ]
+ },
+ "town ground": {
+  "def": "Land governed by the town magistrate as the townsmen's ground, where their houses and shops stand, as against the ground of daimyo mansions and of temples and shrines.",
+  "variants": [
+   "town ground",
+   "town-row ground",
+   "town grounds"
+  ]
+ },
+ "multiple city": {
+  "def": "A walled city made of more than one walled enclosure, as when a suburb outside the gate grew large enough to be walled in its turn.",
+  "variants": [
+   "multiple city",
+   "multiple cities"
+  ]
+ },
+ "Nipponica": {
+  "def": "The Japanese encyclopedia (Nihon Daihyakka Zensho) whose entries Kotobank carries, cited here by its entry on a word.",
+  "variants": [
+   "Nipponica"
+  ]
  }
 }
