@@ -240,6 +240,7 @@ culverting	culvert
 culverts	culvert
 cun	cun
 curfew ward	lifang
+curfew wards	lifang
 curtain	curtain
 curtain wall	curtain
 curtains	curtain
