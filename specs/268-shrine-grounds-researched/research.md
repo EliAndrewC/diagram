@@ -128,7 +128,7 @@ is not held to a map.
   either side) from the shrine well at its back edge (FR-007 allows the edge) to the outermost arch,
   about 225 ft - about 730 tsubo by this plan's arithmetic, measured on the drawn outline at T-map. That
   is inside R2's figures as found (the registers: Saitama 55-708, median 403; Tochigi 142-2,700, median
-  655; Saga's unranked 50-662, median 148): above Saitama's top, below Tochigi's upper half. The depth is
+  655; Saga's unranked 50-662, median 148): above Saitama's top, in Tochigi's upper half (between its median and its mean of 817). The depth is
   the map's (the well 108 ft behind the hall) plus the seven arches at the pitch, so a smaller precinct
   would leave bare commons inside the frame, which SC-002 forbids. The band T-program writes is R2's
   figures as found, never widened to fit the grove. (Figures observed 2026-09-27; method: this plan's

@@ -1,6 +1,6 @@
 {
  "feature": "268-shrine-grounds-researched",
- "plan_sha256": "6e6c70a5017998ab9c8507cd243f496b4b1ea8b9f2a97732d5c960f2bb22fa4c",
+ "plan_sha256": "59ee49f9be8e3848736f5c9433c9fcf7192d942b34e1f81b773a855abb8fa2c3",
  "reviewed": "2026-09-27",
  "declared": "spec-fidelity",
  "decisions": [
@@ -36,9 +36,9 @@
   },
   {
    "id": "D6a",
-   "summary": "The grove outline with the shrine well at its back edge to the outermost arch, ~120 ft wide at the hall narrowing to ~60 ft on the avenue, ~620 tsubo estimated, measured at T-map and trimmed if above 650; the band T-program writes is R2's figures as found, never widened to fit",
+   "summary": "The grove is the precinct: a near-rectangle filling the sheet's frame, about 117 ft wide from the shrine well at its back edge to the outermost arch (about 225 ft), about 730 tsubo by the plan's arithmetic, measured at T-map; the round-2 'trimmed if above 650' dropped; the band T-program writes is R2's register figures as found (Saitama 55-708, Tochigi 142-2,700, Saga unranked 50-662, with their medians), never widened to fit",
    "class": "within",
-   "why": "FR-007 (every side of hall and sanctuary; the well in the grove or at its edge; forward to the outermost arch; area inside the band FR-005 records). Round 1's condition is met: the band is R2's as found and the grove answers to it, not the reverse. If a trim is needed it must come off the width - FR-007 fixes the reach from the well to the outermost arch - which the plan does not contradict"
+   "why": "FR-007 fixes the grove's reach (every side of hall and sanctuary; back to the well; forward to the outermost arch) and requires its area inside 'the register band FR-005 records', and FR-005 says only 'restated from the register figures (accurate as a band)' - neither the spec nor the GM's words set 650 as a cap; '150-650 typical' is the session's summary line (roughly the span of the three medians), not a register figure and not a GM ruling. SC-002 (bare ground only as a border no deeper than the crop margin, over the WHOLE rectangular frame) makes a grove that narrows along the avenue fail, so a near-rectangle is the spec's own consequence, not a carve-out. Measured on the manifest (2 ft/px): well y=1020, hall center y=1074 (48 ft deep), front face y=1086; at the 12 ft pitch the outermost arch is at y=1128, so well-to-outermost-arch is 216 ft, and 117 by 216-225 ft is about 710-740 tsubo, inside Tochigi's 142-2,700 register (median 655, mean 817) - an ordinary village-shrine precinct by the research, and the grove the GM ruled for. Condition, not a narrowing: T-program must record the register figures (ranges and medians) as the band, and no text may call the grove 'typical' or 'inside 150-650'. Correction owed: research.md D6a says 730 is 'below Tochigi's upper half' - it is above Tochigi's median (655), i.e. IN its upper half, between median and mean; the ruling does not rest on that phrase, but it must not reach the record or the notes as written"
   },
   {
    "id": "D6b",
@@ -87,6 +87,18 @@
    "summary": "Subsidiary shrines, office, votive-plaque hall, portable-shrine store not drawn; the no-worship-hall form and the Chinese opera stage disclosed, not knobs",
    "class": "within",
    "why": "FR-006 carries 'the knobs the research directs'; R4 found no village-scale evidence for the first four, and the one-roof hall is the program's existing GM form, which the request does not touch"
+  },
+  {
+   "id": "D10",
+   "summary": "The sheet declares the outermost arch first, so arch_on_approach reads it against the precinct's edge; no code change",
+   "class": "within",
+   "why": "FR-007: the grove reaches 'forward to the outermost arch, where the approach enters the shrine's ground (the first arch stands at that entry, per the research)'; R3's first-torii-at-the-entry finding. Declaration order is how the sheet carries the spec's own statement to the existing check"
+  },
+  {
+   "id": "D11",
+   "summary": "The sheet's captions tagged with data-kind and seated by make seat-label, as feature 266 requires of a changed sheet; kinds reuse the magistracy registry names where one fits; no interactive shrine page built",
+   "class": "within",
+   "why": "FR-008 requires the sheet redrawn; feature 266's standing label standard applies to any changed sheet, so tagging is compliance with an existing project rule triggered by the redraw, not new behavior. The plan explicitly builds no interactive page, so no unrequested feature rides in"
   }
  ],
  "verdict": "CLEAR"
