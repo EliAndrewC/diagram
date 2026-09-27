@@ -18,18 +18,22 @@ class OuterCourt(Kind):
     gather, the office hall with its hearing court, and the working buildings of the office - stores,
     stables, the watch's lodging - set around its edges.
 
-    Why: Both traditions this setting draws on put the office in front and the residence behind: Chinese
-    regulation required it of a county office, and Japanese intendants' offices worked the same way. So
+    Why: Chinese county offices put the office in front and the residence behind, and this setting follows
+    them: Chinese regulation required it of a county office, and Japanese offices likewise kept the chief's
+    household inside the working compound, though no source read sets it behind the office. So
     whoever comes on business - a petitioner, a taxpayer, a prisoner - is dealt with here, near the gate,
     and goes no deeper. Its open ground is not wasted space: a real jin'ya left most of its site open, and
     its forecourt and hearing court were features of the plan in their own right.
 
-    Note: The two-court split and the open forecourt follow the record; no Japanese codification of the
-    split was found, and at Takayama the residence stood beside the office rather than behind it. On these
+    Note: The two-court split follows the Chinese record; no Japanese source read shows the residence behind
+    the office, no codification of the split was found, and at Takayama the residence stood beside the
+    office rather than behind it. The open forecourt follows the record, though how much of a jin'ya's site
+    stood open is this project's own estimate from plans, no source read giving the figure. On these
     plans the buildings stand somewhat further apart than in a real jin'ya, which joined its functions into
     a few long connected ranges, so that each reads as its own labeled footprint.
 
-    Caveat: On these plans the buildings stand somewhat further apart than in a real jin'ya, which joined its
+    Caveat: No Japanese source read shows the residence behind the office; how much of a jin'ya's site stood
+    open is this project's own estimate from plans, no source read giving the figure. On these plans the buildings stand somewhat further apart than in a real jin'ya, which joined its
     functions into a few long connected ranges, so that each reads as its own labeled footprint.
 
     Name: outer court
@@ -55,7 +59,9 @@ class InnerCourt(Kind):
     the reception rooms, and a plan seats it there where its buildings allow; the household's service
     economy fills the shady rear.
 
-    Note: The two-court split, the household inside the compound and the formal garden south of the
+    Note: The household inside the compound follows the record; the residence-behind-the-office order is
+    Chinese regulation (Neixiang), while the Japanese pages read show no front-and-rear order - at Takayama the
+    residence stood beside the office, to the west. The two-court split and the formal garden south of the
     reception rooms follow the record. The service strip along the shady north rear is this record's own
     reasoning from where the formal garden sat, not something a source describes.
 
@@ -83,12 +89,13 @@ class BorderCourt(Kind):
     building. So a guests' door opens into a court fit to receive them, and not onto the hearing court where
     the accused kneel.
 
-    Note: A guests' door that opens onto a court is the record's rule. The staged arrival behind it - gate,
+    Note: A guests' door that opens onto a court is the GM's rule for these plans; the one source cited defines the kitchen door, and says nothing of what a guests' door opens onto. The staged arrival behind it - gate,
     then a court or garden, then the formal entrance - is the record's own reading and the GM's rule for
     these plans; no page a reader can open sets it out. A magistracy that receives delegations from across a
     clan border, and keeps a court for them, is this setting's own, and the record has nothing on it.
 
-    Caveat: The staged arrival behind it - gate, then a court or garden, then the formal entrance - is the
+    Caveat: A guests' door that opens onto a court is the GM's rule for these plans, which no source cited
+    states. The staged arrival behind it - gate, then a court or garden, then the formal entrance - is the
     record's own reading and the GM's rule for these plans; no page a reader can open sets it out. A
     magistracy that receives delegations from across a clan border, and keeps a court for them, is this
     setting's own, and the record has nothing on it.
@@ -137,19 +144,25 @@ class PracticeGround(Kind):
     compound's samurai keep up their daily practice.
 
     Why: A dojo with a resident teacher and enrolled students was an institution of cities, in Japan and
-    China alike; rural samurai trained at home in an earthen yard, in a hall cleared for the purpose, or on
-    shrine grounds. A county seat holds about fifteen samurai - no student body and no living for a teacher -
+    China alike; rural samurai most likely trained at home in an earthen yard, in a hall cleared for the
+    purpose, or on shrine grounds. A county seat holds about fifteen samurai - no student body and no living for a teacher -
     so its magistracy trains on open ground in its own compound, and what marks that ground is the gear
     practice leaves behind, not a building. It is sized to the samurai who drill there, about 90 to 135 sq ft
     each.
 
-    Note: Courtyard keiko in place of a dojo follows the record: a dojo is a city institution. The one page
-    read on it lists a drill ground at a small domain's jin'ya, which confirms the practice ground but not
-    that a rural intendant's office kept no martial hall; that absence rests on no page read.
+    Note: Courtyard keiko in place of a dojo follows the record only in part: the famous private fencing
+    dojos read on stood in Edo, and practice before the mid-Edo period was held outdoors or on earthen floors,
+    but that domain schools stood in castle towns, that rural samurai kept training in yards, cleared halls
+    or on shrine grounds, and that the Chinese county yamen had no training hall are guesses no page read
+    confirms. The pages read on an intendant's office list its buildings without a martial hall, but none
+    says it had none, and the one martial ground they name there is a riding ground; the drill ground read on
+    stood at a small domain's jin'ya. So they confirm the practice ground, not that a rural intendant's office
+    kept no martial hall; that absence is a guess from their silence.
 
-    Caveat: The one page read on it lists a drill ground at a small domain's jin'ya, which confirms the
-    practice ground but not that a rural intendant's office kept no martial hall; that absence rests on no
-    page read.
+    Caveat: That domain schools stood in castle towns and cities, that rural samurai trained in yards,
+    cleared halls or on shrine grounds, and that a Chinese county yamen had no training hall are guesses no
+    page read confirms. That a rural intendant's office kept no martial hall is a guess from the silence of
+    the pages read on one, which list its buildings without one but never say it had none.
 
     Name: practice ground
     Covers: the swept keiko patch and its label
@@ -394,16 +407,18 @@ class CartYard(Kind):
     ignition, so a charcoal store is set apart from the working yard across open ground; the record derives
     about 30 ft as the gap to keep, roughly one flame-height clear of a burning stack.
 
-    Note: The apron and the separation it performs follow the record. The 30 ft gap rests on the record's own
+    Note: That a compound keeps the apron, and the separation it performs, follows the record; its 15 to 20 ft
+    width is this record's own calibration, which no source read states. The 30 ft gap rests on the record's own
     one-flame-height rule of thumb, which no page read supports (the published rule, four flame heights, is for
     people, not timber); the gap is this record's own derivation, and no entry squares carts at a county
     compound with what the record finds on them: carts confined to city streets in Japan and forbidden on its
     highways, and a Chinese countryside built for the wheelbarrow.
 
-    Caveat: The 30 ft gap is this record's own derivation from its own one-flame-height rule of thumb, which no
-    page read supports, and no entry squares carts at a county compound with what the record finds on them:
-    carts confined to city streets in Japan and forbidden on its highways, and a Chinese countryside built for
-    the wheelbarrow.
+    Caveat: The apron's 15 to 20 ft width is this record's own calibration, which no source read states. The
+    30 ft gap is this record's own derivation from its own one-flame-height rule of thumb, which no page read
+    supports, and no entry squares carts at a county compound with what the record finds on them: carts
+    confined to city streets in Japan and forbidden on its highways, and a Chinese countryside built for the
+    wheelbarrow.
 
     Name: cart yard
     Covers: the loading apron inside the cart gate
@@ -485,19 +500,19 @@ class StrikingPosts(Kind):
     What: Short standing posts on the practice ground (tategi), struck with a wooden sword in drill, drawn as small
     location markers with their label.
 
-    Why: Rural samurai practice left equipment, not architecture: a county seat keeps no dojo, and what marks its
-    swept ground as a place of daily keiko is the gear that stands on it.
+    Why: A county seat draws no dojo here (the offices read list no martial hall, though none says there was
+    none), and this map guesses that what marks its swept ground as a place of daily keiko is the gear that
+    stands on it.
 
-    Note: The gear marking the practice ground follows the record. That the gear is tategi posts, and their form,
-    height and count, are not in the record; each post is drawn as a small marker of where it stands rather
-    than at its own size.
-
-    Caveat: That the gear is tategi posts, and their form, height and count, are not in the record; each post is
-    drawn as a small marker of where it stands rather than at its own size.
+    Note: we have drawn the striking posts as small markers of where each stands rather than at its own size, in
+    order to mark the swept ground as a practice ground by its gear, the GM's convention for these plans
+    (2026-07-24); the posts' real form, height and count were not found. No source read speaks of rural practice or
+    its gear, that county samurai kept training on open ground is a guess, and only a small domain's jin'ya is
+    read to have kept a drill ground.
 
     Name: striking posts
     Covers: the standing posts on the practice ground and their label
-    Label: accurate
+    Label: convention
     Sources: hanko-jawiki, edo-three-dojos-jawiki, jinya-jawiki, dojo-jawiki
     Entry: research/buildings.html - 'A dojo is a city institution; county training is courtyard keiko'
     """
@@ -566,7 +581,10 @@ class Door(Kind):
     fire cannot get in.
 
     Note: The kitchen-side door, the inward-facing doors of a servants' row, the plastered storehouse doors and a
-    guest's door opening off a court follow the record. No source gives a drawn door's width, and a door of a
+    guest's door follow the record; that the guest's door opens off a court rather than against a building's flank
+    is the GM's rule, the staged arrival behind it (gate, then court or garden, then the entrance) is this
+    project's reading that no source a reader can check sets out, and that the kitchen door opens onto work space
+    is likewise the map's own. No source gives a drawn door's width, and a door of a
     room that the setting or a map's story made is as much the drawing's own as its room.
 
     Caveat: No source gives a drawn door's width, and a door of a room that the setting or a map's story made is

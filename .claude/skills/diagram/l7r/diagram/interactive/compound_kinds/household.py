@@ -27,15 +27,18 @@ class Residence(Kind):
     institution - the office is a household, and the gate between the two courts is the hinge between state
     and home. A visitor of rank crosses a court or garden and steps up at the genkan, never straight from the
     street into a room. In the record's ideal the prized garden lies on the sunny south side facing the
-    reception rooms, and a plan seats it there where its buildings allow; the shady rear carries the service
-    strip. The residence is the largest domestic building on the plan - only the office hall may out-measure
-    it.
+    reception rooms, and a plan seats it there where its buildings allow; by that same sun rule the shady rear
+    carries the service strip. The residence is the largest domestic building on the plan - only the office hall
+    may out-measure it.
 
-    Note: The household inside the working compound and the garden south of the reception rooms are recorded
-    findings, and the program classes the wing as accurate - about 180 to 200 ft long, checked against the
-    size audit, its label naming a zone. The staged arrival - gate, then a court or garden, then the formal
-    entrance - is the record's own reading and the GM's rule for these plans; no page a reader can open sets
-    it out. Each labeled room is a suite of several rooms compressed to one label, a schematic convenience.
+    Note: The household inside the working compound (its place behind the office is Chinese regulation; the
+    Japanese pages read do not give that order, and at Takayama the residence stood beside the office, not behind
+    it) and the garden south of the reception rooms are recorded findings; the service strip on the shady rear is
+    reasoned from the sun rule, with no source read for it; and the program classes the wing as accurate - about
+    180 to 200 ft long, checked against the size audit, its label naming a zone. That the residence out-measures
+    every other domestic building is this project's own reading of the compound; no page a reader can open ranks
+    the footprints. The staged arrival - gate, then a court or garden, then the formal entrance - is the record's
+    own reading and the GM's rule for these plans; no page a reader can open sets it out. Each labeled room is a suite of several rooms compressed to one label, a schematic convenience.
 
     Caveat: The staged arrival - gate, then a court or garden, then the formal entrance - is the record's own
     reading and the GM's rule for these plans; no page a reader can open sets it out. Each labeled room is a
@@ -114,13 +117,14 @@ class RetainersQuarters(Kind):
     soldiers lived as households, they lived in terraced ranges - one surviving ashigaru rowhouse holds eight
     households under one thatched roof, 143 by 24 ft - so a range, not a cluster of small houses, is the form.
 
-    Note: Staff housed on the grounds of a rural office and ranked households in terraced ranges are recorded
+    Note: Retainers' official residences laid out inside a small domain's jin'ya are recorded, but that a rural office's own staff lived on its grounds is the record's reconstruction, no source naming those staff or their housing; the city magistracy's separate constables' district and ranked households in terraced ranges rest on recorded
     findings. That the retainers' housing at a rural office took the form of a rowhouse is the record's own
     reading rather than a source's words, and the record places ranks of small household dwellings at the
     town's edge, outside an elite quarter, rather than inside its walls.
 
-    Caveat: That the retainers' housing at a rural office took the form of a rowhouse is the record's own
-    reading rather than a source's words, and the record places ranks of small household dwellings at the
+    Caveat: That a rural office's own staff lived on its grounds is the record's reconstruction, and that their
+    housing took the form of a rowhouse is the record's own reading rather than a source's words; the record
+    places ranks of small household dwellings at the
     town's edge, outside an elite quarter, rather than inside its walls.
 
     Name: retainers' quarters
@@ -202,14 +206,17 @@ class Kitchen(Kind):
     large, but smaller than a living block of the residence, and with open fire burning all day it is the
     compound's worst fire risk, so it keeps two water tubs where every other hall keeps one.
 
-    Note: The kitchen's rank below the living quarters, its fire risk and its postern into work space are
-    recorded findings, and the program classes it as accurate: an institutional daidokoro of about 40 by 33 ft,
-    smaller than a residence block, checked against the size audit. The kitchen is measured against a whole
-    mid-rank samurai house of about 67 tsubo (some 2,400 sq ft), a figure that rests on no page a reader can
-    open.
+    Note: The program classes the kitchen as accurate: an institutional daidokoro of about 40 by 33 ft,
+    smaller than a residence block, checked against the size audit. Its rank below the living quarters, its
+    weighting as the compound's worst fire risk and its postern into work space are this project's reading:
+    no readable page orders the compound's buildings by size, no page read gives the kitchen extra water or
+    sets one tub to a hall as a rule, and the dictionary cited defines only the kitchen door, not what it
+    opens onto. The kitchen is measured against a whole mid-rank samurai house of about 67 tsubo (some 2,400
+    sq ft), a figure that rests on no page a reader can open.
 
-    Caveat: The kitchen is measured against a whole mid-rank samurai house of about 67 tsubo (some 2,400 sq
-    ft), a figure that rests on no page a reader can open.
+    Caveat: The kitchen's rank below the living quarters, its two water tubs and its postern into work space
+    are this project's reading, on no page read. The kitchen is measured against a whole mid-rank samurai
+    house of about 67 tsubo (some 2,400 sq ft), a figure that rests on no page a reader can open.
 
     Name: kitchen
     Covers: the kitchen and pantries building and its label
@@ -359,13 +366,15 @@ class FireWaterTubs(Kind):
     open fire. The plastered storehouses carry none - a thick earthen kura is the one building made not to
     burn. Each tub stands against its building's wall, under the eaves, because the gutter fills it.
 
-    Note: Water kept ready at every frontage and on the roofs, and per-hall water vats in the Forbidden City, are
+    Note: Townspeople's habit of keeping water ready at the front entrance and on the roof - a custom, its
+    reach to every building being the record's reading - and per-hall water vats in the Forbidden City, are
     recorded findings, and the program classes the tubs as accurate: gutter-fed tensuioke at the wooden
     buildings. The tub's 2.5 ft size is the record's estimate on no page read, and the weighting toward the
     kitchen is the record's reasoning rather than a page's words.
 
-    Caveat: The tub's 2.5 ft size is the record's estimate on no page read, and the weighting toward the kitchen
-    is the record's reasoning rather than a page's words.
+    Caveat: A tub at every wooden building, as a rule rather than a townspeople's custom, is the record's
+    reading. The tub's 2.5 ft size is the record's estimate on no page read, and the weighting toward the
+    kitchen is the record's reasoning rather than a page's words.
 
     Name: fire-water tubs
     Covers: every fire-water tub glyph and the "fire-water tubs" label
@@ -388,9 +397,11 @@ class CompoundShrine(Kind):
     size and its dedication. It stands in the inner court with the household and stays smaller than the
     residence - a worship hall is small even at a great shrine.
 
-    Note: The shrine as standard equipment, its Inari default and the small worship hall are
-    recorded findings, and the program classes it as accurate: a modest shrine, with a hall-shrine ceiling of
-    about 36 by 30 ft subordinate to the residence. The Japanese branch office with two shrines inside its
+    Note: The Inari default comes from the Japanese office below; the shrine as standard equipment (read on a
+    Chinese yamen's three shrines) is a recorded finding, and the program classes it as accurate: a modest shrine,
+    with a hall-shrine ceiling of about 36 by 30 ft subordinate to the residence - though that ranking, and the
+    small worship hall it rests on, are the record's own reading, no page read giving a worship hall's size or
+    ranking a compound's buildings. The Japanese branch office with two shrines inside its
     walls rests on an excavation plan no reader can open, and the shrine's size ceiling of about 36 by 30 ft
     is set against worship-hall sizes that are the record's reading rather than a page's figures.
 
@@ -441,11 +452,13 @@ class Hearth(Kind):
     Why: With open fire burning from morning to night, the kitchen's fire is the compound's top ignition source,
     which is why the kitchen keeps two fire-water tubs where every other hall keeps one.
 
-    Note: The kitchen's open cooking fire, and the fire risk it carries, follow the record, which names it as a
-    kamado cooking range. A hearth drawn as a small square reads as a sunken fire-pit (irori), a form the record
-    does not name for a kitchen.
+    Note: The kitchen's open cooking fire follows the record, which names it as a kamado cooking range; ranking
+    it the compound's top fire risk, and so giving the kitchen a second tub, is this project's reasoning, on no
+    page read. A hearth drawn as a small square reads as a sunken fire-pit (irori), a form the record does not
+    name for a kitchen.
 
-    Caveat: A hearth drawn as a small square reads as a sunken fire-pit (irori), a form the record does not name
+    Caveat: Ranking the kitchen's fire the compound's top fire risk is this project's reasoning, on no page
+    read. A hearth drawn as a small square reads as a sunken fire-pit (irori), a form the record does not name
     for a kitchen.
 
     Name: hearth
