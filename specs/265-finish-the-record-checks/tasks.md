@@ -20,9 +20,10 @@
 - [ ] T01 FR-002 and FR-006 for `ways`, by 250's process
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
-- [ ] T02 FR-002 and FR-006 for `buildings`, by 250's process
+- [x] T02 FR-002 and FR-006 for `buildings`, by 250's process
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. buildings closed: question 210 (group 3 of 3) checked by quote-check and record-format, re-checked once; 9 registry write-ups judged by source-applicability (5 edited, 4 passed); 2 glossary terms (randori, Four Books and Five Classics); worklist 19 bare items, 19 FOOTNOTED
 - [x] T03 FR-002 and FR-006 for `cities/river-cities`, by 250's process
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
