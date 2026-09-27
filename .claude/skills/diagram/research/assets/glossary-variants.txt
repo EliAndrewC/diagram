@@ -389,6 +389,7 @@ fishway	fishway
 fishways	fishway
 fit zoom	fit zoom
 fit-zoom	fit zoom
+five classics	Four Books and Five Classics
 five dynasties	Five Dynasties
 five-ring pagoda	five-ring pagoda
 five-ring pagodas	five-ring pagoda
@@ -407,6 +408,8 @@ forest litter	forest litter
 forest litters	forest litter
 formwork	formwork
 fortune	Fortune
+four books	Four Books and Five Classics
+four books and five classics	Four Books and Five Classics
 four gods	four gods
 four-gods formulation	four gods
 frass	frass
@@ -1002,6 +1005,7 @@ rakugo	rakugo
 rammed earth	rammed earth
 rampart	rampart
 ramparts	rampart
+randori	randori
 rape	rape
 rapeseed	rape
 reach	reach
