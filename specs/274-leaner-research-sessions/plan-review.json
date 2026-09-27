@@ -1,0 +1,77 @@
+{
+ "feature": "274-leaner-research-sessions",
+ "plan_sha256": "2cf61e8c6d04040ae96f25d4f5d093e269537ffa3fd7bc15cf7a3486e8e79faf",
+ "reviewed": "2026-09-27",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "One counting helper scripts/_brief_load.py: exempt kind from the page-load line; counts only the assignment lists; page/NNN, backticked NNN (last-named or most-named page), page-name alias, ranges expanded against real fragments, code refs ignored, id-only lines one per id and at least one; page names derived from the record.",
+   "class": "within",
+   "why": "Implements FR-001's helper as the spec's User Story 1 describes it; every heuristic errs toward over-counting, which tightens the cap rather than loosening it."
+  },
+  {
+   "id": "D2",
+   "summary": "Runner refuses at launch (exit 2) and STOPS the queue on a then:-printed brief; WRITE_CAP_OK with a two-word reason, guard-logged.",
+   "class": "within",
+   "why": "Spec Edge Cases and FR-001 as written."
+  },
+  {
+   "id": "D3",
+   "summary": "Continuation: L7R_PAGE_SESSION / L7R_CONTINUE per session; a left continue.md queued next, counted, before the group's then: checks, appending to the same handoff.",
+   "class": "within",
+   "why": "Spec Edge Cases (keys) and FR-001; ordering before the checks is the only order in which the checks see the whole group."
+  },
+  {
+   "id": "D4",
+   "summary": "make reserve records the session on every ledger row and refuses the 11th registry key for ANY session with L7R_PAGE_SESSION set, which D3 sets on every page session - check, assertions, split and handover sessions included.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The GM's suggestion 1 caps 'a write session at about 4 questions (or 10 new registry keys)'; the spec's FR-001 opens 'A write session MUST take ... at most ten new registry keys' and its Edge Cases say 'The cap is the GM's cap on a WRITE session: a check session is not capped.' D4 extends a refusing guard to sessions the request does not cap, most visibly feature 250's assertions briefs, whose footnoting work is the kind most likely to reserve many source keys and which the spec exempts as not a group's writing. No impossibility: the runner already knows each brief's kind from D1 and can arm the key cap only for a write brief (no exempt kind) and its continuations."
+  },
+  {
+   "id": "D5",
+   "summary": "scripts/_coord.py: lines prints matching lines numbered, at most 80, then '(n of total lines shown)'; append creates the file if needed and prints only 'appended to <file>', LINE read from the environment.",
+   "class": "within",
+   "why": "FR-002 as written; the 80-line ceiling keeps an over-broad KEY from becoming a whole-file read, which serves suggestion 2. The claims file measured 18 lines (wc -l, 2026-09-27), so the ceiling does not bite on it."
+  },
+  {
+   "id": "D6",
+   "summary": "container-scripts/page-session-rules.md appended after the standing authorizations; the clone's root CLAUDE.md added to claudeMdExcludes; the research CLAUDE.md still loads; a drift test maps every bullet of the root House style and Research sections to a phrase or a stated not-for-page-sessions entry and fails on an unknown bullet count.",
+   "class": "within",
+   "why": "FR-003 and the spec's Edge Case, which scopes the drift test to 'every house-style and research rule'."
+  },
+  {
+   "id": "D7",
+   "summary": "brief.py declares assertions on page briefs, check on 2a/2b and owed-modal briefs, split on split briefs; tested.",
+   "class": "within",
+   "why": "Spec Edge Cases and FR-001 verbatim."
+  },
+  {
+   "id": "D8",
+   "summary": "Docs: the research CLAUDE.md, research-record-rules.md and the root CLAUDE.md's research bullet state 'the cap, the continuation and the line rule' with R1's figures.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-001 says the research CLAUDE.md and docs/research-record-rules.md 'MUST state both limits and the load line'. D8's list omits the page-load line and its four exempt kinds ('the line rule' is FR-002's read-by-line rule, which D8 cites FR-002 for). The declaration is how every other generator exempts a non-write brief from the cap, so leaving it undocumented narrows FR-001 with no ground in the request. The root CLAUDE.md addition is within: it tells the sessions that generate briefs, which serves FR-001 and FR-005."
+  },
+  {
+   "id": "D9",
+   "summary": "Probe: one trivial headless session under the old flags and one under the new, first-turn input tokens recorded as research.md R2; cost stated before launch.",
+   "class": "within",
+   "why": "FR-004 as written."
+  },
+  {
+   "id": "D10",
+   "summary": "The owed post-landing measurement in future-work/cross-cutting.md with measure/'s scripts and R1's baseline (1.02 M a thing, peak 246 K, 74-turn median write session).",
+   "class": "within",
+   "why": "FR-004; the figures match research.md R1."
+  },
+  {
+   "id": "D11",
+   "summary": "After the landing is on main, the session 'Diagram supplemental' sends one message to each research session saying what changed and what their generators may now hit, recorded in the peer log.",
+   "class": "within",
+   "why": "FR-005 and the request's last sentence."
+  }
+ ],
+ "verdict": "BLOCKED"
+}

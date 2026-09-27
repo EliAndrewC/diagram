@@ -42,17 +42,22 @@ Then land, and tell the research sessions.
     sessions' handoff lines. A continuation brief appends to the same handoff.
 - **D4 - The key cap in `make reserve`** (FR-001).
   - `reserve-prefix.py` records `session` (`L7R_PAGE_SESSION`) on every ledger row.
-  - With a session set, a registry reservation past the tenth for that session is refused with the continuation
-    instruction: finish the question in hand, write the unreached items to `$L7R_CONTINUE` as a brief of the same shape
+  - The cap covers WRITE sessions only (plan review round 1: FR-001 caps "a write session", and a check session is
+    not capped). The runner exports `L7R_KEY_CAP=10` only to a session whose brief declares no exempt kind, and to that
+    brief's continuations; a check, assertions, split or handover session never sees it.
+  - With `L7R_KEY_CAP` and a session set, a registry reservation past the tenth for that session is refused with the
+    continuation instruction: finish the question in hand, write the unreached items to `$L7R_CONTINUE` as a brief of the same shape
     (same header, `## Your items`, the same handoff path), commit, and stop.
   - `KEY_CAP_OK='<reason>'` passes it; the Makefile passes it through, and it is guard-logged.
   - Glossary terms are not capped.
 - **D5 - `make lines` and `make append`** (FR-002), in `scripts/_coord.py`.
-  - `lines FILE= KEY=<regex>` prints the matching lines, numbered, at most 80, then `(<n> of <total> lines shown)`.
+  - `lines FILE= KEY=<regex>` prints the matching lines, numbered, at most 80, then `(<n> of <total> lines shown)`, and
+    `(<m> more matched - narrow KEY)` when the 80 cut matches off, so a cut never passes for the whole answer.
   - `append FILE= LINE=` appends one line, creating the file if needed, and prints only `appended to <file>`. It reads
     `LINE` from the environment (make exports command-line variables to recipes), so quotes in it survive.
 - **D6 - The slim rules file** (FR-003): `container-scripts/page-session-rules.md`, from the draft this feature was given.
-  - `page-session.sh` appends it after the standing authorizations.
+  - The runner's `floor_flags` appends it after the standing authorizations, in ONE `--append-system-prompt` (moved
+    there from `page-session.sh`, so the flag the test reads is the flag a session is started with).
   - `floor_flags` adds the clone's own root `CLAUDE.md` to `claudeMdExcludes`; the mirror's was already there. The
     research record's CLAUDE.md still auto-loads.
   - A drift test maps every bullet of the root CLAUDE.md's `### House style` and `### Research` sections to a phrase in
@@ -60,8 +65,9 @@ Then land, and tell the research sessions.
 - **D7 - `brief.py` declares its kinds** (FR-001): `assertions` on its page briefs (`COMMON`/`WRITE`), `check` on its
   2a/2b and owed-modal briefs, and `split` on its split briefs. Tested.
 - **D8 - Docs** (FR-001, FR-002): the research CLAUDE.md's page-session paragraph, `docs/research-record-rules.md`'s
-  "Two sessions per page" and the root CLAUDE.md's research bullet state the cap, the continuation and the line rule,
-  with research.md R1's figures.
+  "Two sessions per page" and the root CLAUDE.md's research bullet state both limits (four questions, ten registry keys),
+  the continuation, the `<!-- page-load: kind=... -->` line with its four exempt kinds (`check`, `assertions`, `split`,
+  `handover`), and the read-by-line rule, with research.md R1's figures (plan review round 1).
 - **D9 - The probe** (FR-004): one trivial headless session under the old flags and one under the new, each answering
   one line. Their first-turn input tokens are recorded as research.md R2. That is two sessions of one turn each; the
   cost is stated before launch (about 50 K tokens).
@@ -77,3 +83,10 @@ Then land, and tell the research sessions.
 - XIII: the runner, reserve and the Makefile targets are tested; `make done` runs before the push.
 - Guards: the refusal names the compliant split and the escape, and the escape is logged with its reason.
 - XVI: every requirement is built as specified; the review rounds are in the spec.
+
+## Review history
+
+- Round 1 (spec-fidelity, 2026-09-27): BLOCKED, two findings. (1) D4 capped keys in every page session; the cap is
+  now exported only to a session whose brief declares no exempt kind, and to its continuations. (2) D8 left out the
+  `page-load` line; it now names it with its four kinds. Also taken from the asides: `make lines` says when its
+  80-line cut dropped matches. D6's append moved into the runner so the tested flags are the launched ones.
