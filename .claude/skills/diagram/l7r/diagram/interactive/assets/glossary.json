@@ -170,7 +170,9 @@
  "Jodo Shinshu": {
   "def": "The True Pure Land school of Japanese Buddhism, whose temple priests could marry and pass the temple to a son.",
   "variants": [
-   "Jodo Shinshu"
+   "Jodo Shinshu",
+   "Shin sect",
+   "Shinshu"
   ]
  },
  "Kamakura period": {
@@ -5742,6 +5744,43 @@
   "def": "A waiting room off the entrance, where visitors or attendants wait before being shown in.",
   "variants": [
    "hikae-no-ma"
+  ]
+ },
+ "taimenjo": {
+  "def": "An audience hall: the hall on the omote (front) side of a daimyo mansion where the lord received retainers and visitors in formal audience.",
+  "variants": [
+   "taimenjo"
+  ]
+ },
+ "hiroma": {
+  "def": "The great hall: the largest formal hall on the omote (front) side of a castle palace or daimyo mansion, used for audiences, events and ceremonies.",
+  "variants": [
+   "hiroma"
+  ]
+ },
+ "genkan-no-ma": {
+  "def": "The entrance room: the first room inside a house's genkan (entrance), from which the rest of the rooms are reached.",
+  "variants": [
+   "genkan-no-ma"
+  ]
+ },
+ "nageshi": {
+  "def": "A horizontal timber band fixed around a room's walls above the sliding doors; in a formal room its nail heads are hidden under decorative metal nail covers.",
+  "variants": [
+   "nageshi"
+  ]
+ },
+ "midaidokoro": {
+  "def": "The formal title of the shogun's principal wife, who presided over the women's quarters of the palace.",
+  "variants": [
+   "midaidokoro"
+  ]
+ },
+ "Osuzu corridor": {
+  "def": "The bell corridor at Edo castle: the only passage joining the shogun's own rooms to the walled-off women's quarters, a bell rung to announce the shogun's coming.",
+  "variants": [
+   "Osuzu corridor",
+   "Osuzu"
   ]
  }
 }

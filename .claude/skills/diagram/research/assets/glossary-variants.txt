@@ -428,6 +428,7 @@ gazetteers	gazetteer
 gejo	degawari
 genan	degawari
 genkan	genkan
+genkan-no-ma	genkan-no-ma
 genna	Genna
 genna era	Genna
 genroku	Genroku
@@ -517,6 +518,7 @@ hipposandal	hipposandal
 hipposandals	hipposandal
 hiroen	hiroen
 hirokoji	hirokoji
+hiroma	hiroma
 hitoyado	hitoyado
 hiyokechi	hiyokechi
 hiyoza	hiyoza
@@ -818,6 +820,7 @@ men-hai	taiping-gang
 mengxi bitan	Mengxi Bitan
 micro-high	micro-high
 micro-highs	micro-high
+midaidokoro	midaidokoro
 middle moat	middle moat
 middle moats	middle moat
 mimizuka	ear mound
@@ -865,6 +868,7 @@ muster perimeters	muster perimeter
 nagaya	nagaya
 nagaya-mon	nagayamon
 nagayamon	nagayamon
+nageshi	nageshi
 nagewatashi	nagewatashi
 naka-bori	middle moat
 naka-oku	naka-oku
@@ -931,6 +935,8 @@ onmyodo	onmyodo
 oshi	oshi
 oshirasu	oshirasu
 ossuary	ossuary
+osuzu	Osuzu corridor
+osuzu corridor	Osuzu corridor
 ote	ote-mon
 ote-mon	ote-mon
 ote-suji	ote-suji
@@ -1125,9 +1131,11 @@ shibai-goya	shibai-goya
 shichiya	shichiya
 shijin soo	four gods
 shijin-soo	four gods
+shin sect	Jodo Shinshu
 shinai	shinai
 shinden	shinden
 shinsei	Shinsei
+shinshu	Jodo Shinshu
 shirasu	oshirasu
 shirimito	shirimito
 shironameshi	shironameshi
@@ -1221,6 +1229,7 @@ sus	Sus
 sward	sward
 tagoshi kangai	tagoshi kangai
 taihu	Lower Yangzi
+taimenjo	taimenjo
 taiping-gang	taiping-gang
 taisho	Taisho
 taishō	Taisho
