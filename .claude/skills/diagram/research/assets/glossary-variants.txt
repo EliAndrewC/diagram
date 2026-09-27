@@ -218,6 +218,7 @@ chinju	chinju
 chinju no mori	chinju no mori
 chinjusan	chinju
 cho	cho
+chome	chome
 chongzhen	Chongzhen era
 chongzhen era	Chongzhen era
 chonin	chonin
@@ -1165,6 +1166,7 @@ machi-bugyōsho	machi-bugyosho
 machi-dojo	machi-dojo
 machi-kaisho	machi-kaisho
 machi-kido	kido
+machidoshiyori	town elder
 machiya	machiya
 madake	madake
 made ground	made ground
@@ -1712,6 +1714,8 @@ sill	sill
 six chambers	Six Chambers
 six fang	Six Chambers
 six ministries	Six Ministries
+six-day market	rokusai-ichi
+six-day markets	rokusai-ichi
 skimmer wall	skimmer wall
 skirt roof	mokoshi
 skirt roofs	mokoshi
@@ -1916,6 +1920,8 @@ toro	Toro
 toro site	Toro
 toshiyori	toshiyori
 total length and fall	fall
+town elder	town elder
+town elders	town elder
 town grain	town grain
 town ground	town ground
 town grounds	town ground
