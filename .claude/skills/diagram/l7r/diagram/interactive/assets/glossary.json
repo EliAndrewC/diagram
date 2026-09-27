@@ -2153,7 +2153,9 @@
  "kami-yashiki": {
   "def": "A domain lord's upper mansion in Edo, the principal compound of their household there; a small lord's ran 2,500-7,000 tsubo.",
   "variants": [
-   "kami-yashiki"
+   "kami-yashiki",
+   "upper residence",
+   "upper residences"
   ]
  },
  "kamiza": {
@@ -2460,6 +2462,7 @@
    "kura",
    "dozo",
    "onkura",
+   "okura",
    "御蔵",
    "Dozō"
   ]
@@ -2806,7 +2809,12 @@
   "def": "A gate cut through a long row building: a samurai residence's front range, with the gatekeeper's room, servants' quarters, stable and storeroom inside it.",
   "variants": [
    "nagayamon",
-   "nagaya-mon"
+   "nagaya-mon",
+   "rowhouse gate",
+   "rowhouse gates",
+   "gate rowhouse",
+   "gate rowhouses",
+   "gate-rowhouse"
   ]
  },
  "nagewatashi": {
@@ -2978,7 +2986,8 @@
   "def": "The white-gravel court where a case was heard, the litigants kneeling below the magistrate's raised floor.",
   "variants": [
    "oshirasu",
-   "shirasu"
+   "shirasu",
+   "white-sand court"
   ]
  },
  "ossuary": {
@@ -3948,7 +3957,8 @@
    "土地庙",
    "earth god",
    "earth-god",
-   "earth-god shrine"
+   "earth-god shrine",
+   "god of land"
   ]
  },
  "tulou": {
@@ -6210,7 +6220,8 @@
   "def": "The deity of a Chinese yamen's jail, enshrined in a small temple inside the jail itself; at Neixiang the statue is of the ancient judge Gao Yao.",
   "variants": [
    "jail-god",
-   "jail god"
+   "jail god",
+   "prison god"
   ]
  },
  "Dacheng gate": {
@@ -7250,7 +7261,9 @@
    "half-story",
    "half-stories",
    "tsushi nikai",
-   "zushi nikai"
+   "zushi nikai",
+   "tsushi-nikai",
+   "zushi-nikai"
   ]
  },
  "ridge-divided nagaya": {
@@ -7661,6 +7674,13 @@
    "fire beds"
   ]
  },
+ "Keio": {
+  "def": "The Japanese era name for the years 1865 to 1868, the last years of the shogunate; \"Keio 3\" is 1867.",
+  "variants": [
+   "Keio",
+   "Keio era"
+  ]
+ },
  "firebox": {
   "def": "The combustion chamber at the foot of a climbing kiln, where the wood fire is fed; the firing chambers climb the slope above it and the chimney stands at the top.",
   "variants": [
@@ -7707,6 +7727,21 @@
   "variants": [
    "Nehan gate",
    "Nehan"
+  ]
+ },
+ "levy storehouse": {
+  "def": "A storehouse in an intendant's office for what was paid in as levies other than the rice tax - the unjo charged on trades, fisheries and the like.",
+  "variants": [
+   "levy storehouse",
+   "levy storehouses",
+   "unjo-gura"
+  ]
+ },
+ "Echigo": {
+  "def": "An old province on the Sea of Japan coast of Honshu, the modern Niigata prefecture.",
+  "variants": [
+   "Echigo",
+   "Echigo province"
   ]
  },
  "sub-temple": {
@@ -7805,6 +7840,12 @@
    "metamorphosis fengshui"
   ]
  },
+ "tezuki": {
+  "def": "A junior official of a shogunate intendant's office, ranked with the tedai; the tezuki and tedai lived in the huts and rowhouses on the office grounds.",
+  "variants": [
+   "tezuki"
+  ]
+ },
  "Tenmangu": {
   "def": "A shrine to Tenjin, the deified courtier-scholar Sugawara no Michizane, patron of learning; \"Tenjin shrine\" and \"Tenmangu\" name the same kind of shrine.",
   "variants": [
@@ -7818,6 +7859,26 @@
   "variants": [
    "offering hall",
    "heiden"
+  ]
+ },
+ "tachimuba": {
+  "def": "A station that the shogunate's intendants set up at a port of call on the tax-rice shipping route. Castle-rice ships were protected there and their loads were strictly inspected.",
+  "variants": [
+   "tachimuba"
+  ]
+ },
+ "castle rice": {
+  "def": "The shogunate's own tax rice (御城米), shipped to Edo on hired vessels under official protection and inspection.",
+  "variants": [
+   "castle rice",
+   "castle-rice"
+  ]
+ },
+ "adze": {
+  "def": "A woodworker's cutting tool with its blade set crosswise to the handle, swung to shape and smooth the faces of timbers. On a storehouse frame, the marks it leaves date and grade the work.",
+  "variants": [
+   "adze",
+   "adzes"
   ]
  },
  "se-machi": {
@@ -7852,6 +7913,34 @@
    "mushiko",
    "mushiko-mado",
    "mushiko windows"
+  ]
+ },
+ "kokera": {
+  "def": "A roof of thin wooden shingles laid in overlapping courses; the Takayama jin'ya's office used it for part of its roof.",
+  "variants": [
+   "kokera",
+   "kokera shingle"
+  ]
+ },
+ "odoko": {
+  "def": "A great display alcove: the broad ceremonial alcove of a formal reception room, whose width marked the rank of the house - at Takayama Jin'ya's entrance room it is 2.5 ken wide, the mark of a 100,000-koku rank.",
+  "variants": [
+   "odoko",
+   "ōdoko"
+  ]
+ },
+ "kirizuma": {
+  "def": "A plain gable roof: two slopes meeting at one ridge, with a triangular gable wall at each end - simpler than the hip-and-gable irimoya.",
+  "variants": [
+   "kirizuma"
+  ]
+ },
+ "noshi-buki": {
+  "def": "A roof laid with wooden boards: with kokera shingle, one of the plank roofings that cover the buildings of Takayama Jin'ya, where snow wore out the tiles of the day and timber was easy to get.",
+  "variants": [
+   "noshi-buki",
+   "noshi-shingle",
+   "noshi-board"
   ]
  },
  "water teahouse": {
@@ -7908,6 +7997,85 @@
   "def": "A Song dynasty scholar-official who wrote the record of the Wanchun polder, whose restoration was taken up in 1061, that the research quotes on how the polder's dike was built and planted.",
   "variants": [
    "Shen Kuo"
+  ]
+ },
+ "Kan'ei": {
+  "def": "A Japanese era name, 1624 to 1644, early in the Edo period.",
+  "variants": [
+   "Kan'ei",
+   "Kan'ei period"
+  ]
+ },
+ "bondservant": {
+  "def": "In medieval Japan, an unfree servant (genin) bound to a warrior household, who lived in its row houses and worked the paddy and fields before its gate.",
+  "variants": [
+   "bondservant",
+   "bondservants",
+   "bondservants'"
+  ]
+ },
+ "Northern and Southern Courts": {
+  "def": "The period from 1336 to 1392, when two rival imperial courts, one at Kyoto and one at Yoshino, each claimed the throne and warriors fought for one or the other.",
+  "variants": [
+   "Northern and Southern Courts",
+   "Nanbokucho"
+  ]
+ },
+ "storehouse-built": {
+  "def": "Of a townhouse: built the way a storehouse (kura) is built, with thick earth-plastered walls against fire, and standing on the street front. It was Edo's way, the opposite of Kyoto's, where the storehouse stood at the back of the lot.",
+  "variants": [
+   "storehouse-built",
+   "storehouse-built machiya"
+  ]
+ },
+ "kamidana": {
+  "def": "A small shelf-shrine to the gods, set high on a wall. The traditional Edo-period practice hall did not have one; a Ministry of Education meeting of 1936 made one required in school halls, under State Shinto.",
+  "variants": [
+   "kamidana"
+  ]
+ },
+ "iai": {
+  "def": "The Japanese art of drawing the sword and cutting in one movement. At a large domain school it was taught in its own practice hall, apart from fencing and the spear.",
+  "variants": [
+   "iai"
+  ]
+ },
+ "jujutsu": {
+  "def": "The Japanese art of fighting unarmed or lightly armed, by throws, holds and strikes. From the mid-Edo period its practice centered on free sparring (randori), and it came indoors onto board or tatami floors.",
+  "variants": [
+   "jujutsu",
+   "ju-jutsu"
+  ]
+ },
+ "State Shinto": {
+  "def": "The Japanese state's organization of Shinto as a national observance from the Meiji era until 1945. Under it, the shrine shelf became a required fitting of school practice halls in 1936.",
+  "variants": [
+   "State Shinto"
+  ]
+ },
+ "naginata": {
+  "def": "A Japanese pole weapon with a long curved blade, rendered \"halberd\" in English. At a large domain school it was taught in the same hall as iai and jujutsu.",
+  "variants": [
+   "naginata"
+  ]
+ },
+ "kang": {
+  "def": "A long raised platform of brick or earth, heated from beneath by a flue, that served as the bed in a north-Chinese house or inn; one in a carters' inn slept twenty and more.",
+  "variants": [
+   "kang",
+   "kangs"
+  ]
+ },
+ "mise": {
+  "def": "The board-floored shop room at the street front of a townhouse, where goods were sold or trade was done; in an inn built on the townhouse plan it stood beside the earth-floored passage.",
+  "variants": [
+   "mise"
+  ]
+ },
+ "sensei": {
+  "def": "A teacher of a martial art - here the master who heads a dojo, lives by its teaching and takes enrolled students.",
+  "variants": [
+   "sensei"
   ]
  }
 }

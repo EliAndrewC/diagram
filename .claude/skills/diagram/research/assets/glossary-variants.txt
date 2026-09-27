@@ -10,6 +10,8 @@ across the beams	ridge span
 adept	adept
 adepts	adept
 adlittoral	adlittoral
+adze	adze
+adzes	adze
 ai-no-shuku	ai-no-shuku
 aisle	aisle
 aisles	aisle
@@ -124,6 +126,9 @@ boji	boji
 bojikui	bojikui
 bomori	bomori
 bon	Bon
+bondservant	bondservant
+bondservants	bondservant
+bondservants'	bondservant
 boom	boom
 booms	boom
 boundary post	bojikui
@@ -184,8 +189,10 @@ carex	Carex
 carex lyngbyei	Carex
 carr	carr
 castanopsis	Castanopsis
+castle rice	castle rice
 castle town	jokamachi
 castle towns	jokamachi
+castle-rice	castle rice
 catchment	catchment
 catena	catena
 causeway	causeway
@@ -419,6 +426,8 @@ earth-god	tudi miao
 earth-god shrine	tudi miao
 eastern han	Han dynasty
 eave soffit	soffit
+echigo	Echigo
+echigo province	Echigo
 echinochloa	Echinochloa crus-galli
 echinochloa crus-galli	Echinochloa crus-galli
 edago	hongo
@@ -601,6 +610,8 @@ gassho	gassho
 gassho-zukuri	gassho
 gasshozukuri	gassho
 gate market	gate market
+gate rowhouse	nagayamon
+gate rowhouses	nagayamon
 gate throat	gate throat
 gate town	monzen
 gate towns	monzen
@@ -608,6 +619,7 @@ gate-land	gate-land
 gate-land lots	gate-land
 gate-mound	mitsuke
 gate-mounds	mitsuke
+gate-rowhouse	nagayamon
 gate-throat	gate throat
 gate-town	monzen
 gazetteer	gazetteer
@@ -634,6 +646,7 @@ glyph	glyph
 glyphs	glyph
 gm	GM
 go	go
+god of land	tudi miao
 goemon-buro	goemon-buro
 goemonburo	goemon-buro
 gogura	gogura
@@ -803,6 +816,7 @@ hyō	hyō
 hyōjōsho	Hyōjōsho
 hōei	Hoei
 hōreki	Horeki
+iai	iai
 ichi no torii	ichi-no-torii
 ichi-no-torii	ichi-no-torii
 ichirizuka	ichirizuka
@@ -904,6 +918,8 @@ jori-sei	jori
 josui	josui
 josui ido	josui-ido
 josui-ido	josui-ido
+ju-jutsu	jujutsu
+jujutsu	jujutsu
 juku	shukuba
 junk	junk
 junks	junk
@@ -932,12 +948,17 @@ kamakura period	Kamakura period
 kame	kame
 kami	kami
 kami-yashiki	kami-yashiki
+kamidana	kamidana
 kamiza	kamiza
 kan	kan
+kan'ei	Kan'ei
+kan'ei period	Kan'ei
 kana	kana
 kanagashi	kanagashi
 kanbun	Kanbun
 kanden	kanden
+kang	kang
+kangs	kang
 kangxi	Kangxi
 kanjo-nawa	kanjo-nawa
 kanjo-tsuri	kanjo-nawa
@@ -980,6 +1001,8 @@ keidai	keidai
 keihan	bund
 keihan-cha	keihan-cha
 keiko	keiko
+keio	Keio
+keio era	Keio
 ken	ken
 kenchi-cho	kenchicho
 kenchicho	kenchicho
@@ -999,7 +1022,7 @@ king post	king post
 king posts	king post
 king-post	king post
 kirisute-gomen	kirisute-gomen
-kirizuma	gabled roof
+kirizuma	kirizuma
 kishu school	Kishu school
 kishu-school	Kishu school
 knob	knob
@@ -1014,6 +1037,8 @@ kofun	Kofun period
 kofun period	Kofun period
 koike	koike
 koji	koji
+kokera	kokera
+kokera shingle	kokera
 koku	koku
 kokubunji	kokubunji
 kokudai-no	kokudai-no
@@ -1087,6 +1112,8 @@ leat	leat
 leats	leat
 levee	levee
 levees	levee
+levy storehouse	levy storehouse
+levy storehouses	levy storehouse
 li	li
 liberties	liberty
 liberty	liberty
@@ -1179,6 +1206,7 @@ ming-qing	Qing dynasty
 minka	minka
 mino	Mino
 mire	mire
+mise	mise
 mitochigai	mitochigai
 mitsuke	mitsuke
 miyaza	miyaza
@@ -1244,11 +1272,13 @@ nagaya	nagaya
 nagaya-mon	nagayamon
 nagayamon	nagayamon
 nagewatashi	nagewatashi
+naginata	naginata
 nago	nago
 naka-bori	middle moat
 nakaboshi	nakaboshi
 nakamon	nakamon
 nakasendo	Nakasendo
+nanbokucho	Northern and Southern Courts
 nanbu	Tohoku
 nando	nando
 nanohana	rape
@@ -1290,8 +1320,12 @@ nogyo zensho	Nogyo Zensho
 noria	noria
 norias	noria
 normal depth	normal depth
+northern and southern courts	Northern and Southern Courts
 northern song	Song dynasty
 northern wei	Northern Wei
+noshi-board	noshi-buki
+noshi-buki	noshi-buki
+noshi-shingle	noshi-buki
 nrcs	NRCS
 nrcs-designed	NRCS
 nucleated	nucleated
@@ -1307,12 +1341,14 @@ oblique weirs	oblique weir
 obon	Bon
 ochiba	ochiba
 odoi	Odoi
+odoko	odoko
 offering hall	offering hall
 offtake	offtake
 offtakes	offtake
 ofuregaki	ofuregaki
 okaji	ōkaji
 okajiba	ōkaji
+okura	kura
 omamori	omamori
 omotedana	omotedana
 omoya	omoya
@@ -1405,6 +1441,7 @@ prefectural cities	prefectural city
 prefectural city	prefectural city
 prefecture	prefectural city
 prefectures	prefectural city
+prison god	jail-god
 provincial capital	provincial seat
 provincial capitals	provincial seat
 provincial seats	provincial seat
@@ -1502,6 +1539,8 @@ rokugan	Rokugan
 rokugani	Rokugan
 roson	roson
 row village	roson
+rowhouse gate	nagayamon
+rowhouse gates	nagayamon
 runners	yayi
 ryo	ryo
 ryobosei	ryobosei
@@ -1565,6 +1604,7 @@ sekisho	sekisho
 senbon torii	Senbon Torii
 sengoku	Sengoku
 senmaida	senmaida
+sensei	sensei
 sento	sento
 sentō	sento
 separated flow	separation zone
@@ -1690,6 +1730,7 @@ srtm	SRTM
 staggered shelves	staggered shelves
 staking frame	staking frame
 staking frames	staking frame
+state shinto	State Shinto
 steading	steading
 steadings	steading
 stelae	stele
@@ -1700,6 +1741,8 @@ stilling pool	stilling pool
 stoke mouth	stoke mouth
 stoke mouths	stoke mouth
 stone pitching	stone pitching
+storehouse-built	storehouse-built
+storehouse-built machiya	storehouse-built
 straw rick	rick
 straw ricks	rick
 stream order	stream order
@@ -1745,6 +1788,7 @@ sward	sward
 sōchinju	sōchinju
 sōtō	Sōtō
 tabune	field boat
+tachimuba	tachimuba
 tagoshi	tagoshi kangai
 tagoshi kangai	tagoshi kangai
 taihu	Lower Yangzi
@@ -1808,6 +1852,7 @@ tertiary	tertiary source
 tertiary source	tertiary source
 tertiary summaries	tertiary source
 tertiary summary	tertiary source
+tezuki	tezuki
 thatch field	thatch field
 thatch fields	thatch field
 the pool	the pool
@@ -1877,6 +1922,7 @@ tsunaba	tsunaba
 tsunoya	tsunoya
 tsurube	tsurube
 tsushi nikai	half-story
+tsushi-nikai	half-story
 tudi miao	tudi miao
 tudigong	tudi miao
 tulou	tulou
@@ -1909,6 +1955,9 @@ unhair	unhair
 unhaired	unhair
 unhairing	unhair
 unhairs	unhair
+unjo-gura	levy storehouse
+upper residence	kami-yashiki
+upper residences	kami-yashiki
 ura-dana	ura-dana
 ura-nagaya	ura-nagaya
 uradana	back tenement
@@ -1986,6 +2035,7 @@ wet runs	wet run
 wetted perimeter	wetted perimeter
 white charcoal	white charcoal
 white-charcoal	white charcoal
+white-sand court	oshirasu
 white-tawed	shironameshi
 wicket	wicket
 wickets	wicket
@@ -2071,7 +2121,9 @@ zooplankton	zooplankton
 zuiie-chi	jōgōe-chi
 zuku	zuku
 zushi nikai	half-story
+zushi-nikai	half-story
 ō-aza	ō-aza
+ōdoko	odoko
 ōiya	ōiya
 ōkaji	ōkaji
 ōkajiba	ōkaji
