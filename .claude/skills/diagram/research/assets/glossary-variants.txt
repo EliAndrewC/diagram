@@ -456,6 +456,8 @@ fetch	fetch
 field comb	comb
 field combs	comb
 field consolidation	kochi seiri
+field grain	field grain
+field grains	field grain
 field pit	nodame
 field pits	nodame
 field to field	tagoshi kangai
@@ -585,6 +587,7 @@ goten	goten
 goulan	goulan
 goyoba	goyoba
 goyōba	goyoba
+grain of the paddy	field grain
 grass carp	grass carp
 green manure	green manure
 groin	groyne
@@ -819,6 +822,7 @@ kagura	kagura
 kaie-ji	Kaie-ji
 kaie-ji's	Kaie-ji
 kainyo	kainyo
+kaison	kaison
 kaji-ya	kaji-ya
 kakaemoto	hitoyado
 kakehi	kakehi
@@ -1302,6 +1306,7 @@ renkaku	renkaku
 rent bursary	rent bursary
 rent-collection bursaries	rent bursary
 rent-collection bursary	rent bursary
+retsuson	retsuson
 return flow	return flow
 revetment	revetment
 revetments	revetment
@@ -1574,6 +1579,7 @@ tang-dynasty	Tang dynasty
 tang-song	Tang dynasty
 tanglao	tanglao
 tangpu	tangpu
+tani-ike	valley pond
 tatami	tatami
 tatara	tatara
 tatemachi	tatemachi
@@ -1694,6 +1700,8 @@ ushi-waku	ushi-waku
 usufruct	usufruct
 uzumimon	umon
 vaiśravaṇa	Bishamon
+valley pond	valley pond
+valley ponds	valley pond
 verge	verge
 verges	verge
 vermilion line	shubiki

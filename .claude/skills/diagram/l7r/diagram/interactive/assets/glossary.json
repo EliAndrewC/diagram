@@ -7133,5 +7133,33 @@
   "variants": [
    "Diospyros kaki"
   ]
+ },
+ "field grain": {
+  "def": "The direction a village's paddy plots and their bunds run; it may follow the compass or the fall line, or drift off both with the region or the ground.",
+  "variants": [
+   "field grain",
+   "grain of the paddy",
+   "field grains"
+  ]
+ },
+ "valley pond": {
+  "def": "A reservoir pond dammed in a valley above the plain, whose water is released down into the dish ponds on the flat and from them to the fields.",
+  "variants": [
+   "valley pond",
+   "valley ponds",
+   "tani-ike"
+  ]
+ },
+ "kaison": {
+  "def": "A lump village: a Japanese settlement whose houses are gathered irregularly in a lump, typically at a hill's foot, on a river terrace, or at a highway crossing where water can be got.",
+  "variants": [
+   "kaison"
+  ]
+ },
+ "retsuson": {
+  "def": "A line village: a Japanese village whose houses stand in a line along a natural levee or a spring line at a hill's foot.",
+  "variants": [
+   "retsuson"
+  ]
  }
 }
