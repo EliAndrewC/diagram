@@ -536,24 +536,56 @@ def ledger() -> dict[tuple[str, str, str], str]:
     return {(m.group(1), m.group(2), m.group(3)): m.group(4) for m in LEDGER_LINE.finditer(text)}
 
 
-def owed_pairs(pages: tuple[str, ...] = ("homesteads", "archetypes", "fields", "water", "vegetation")) -> list[tuple[str, str, str, int]]:
-    """Every (class, page, section, prose bytes) pair `_entry_owed.py` names - a modal owed from three questions is
-    three pairs, each checked and recorded on its own (plan review, D20.2c)."""
-    return [(cls, page, sec, prose) for page in pages for cls, prose, secs in owed_modals(page) for sec in secs]
+def owed_output() -> str:
+    return subprocess.run([sys.executable, str(CLONE / "scripts/_entry_owed.py")], cwd=CLONE, capture_output=True, text=True, check=False).stdout
 
 
-def owed_check() -> int:
-    """Before the push (D20.2, plan review): every PAIR `_entry_owed.py` names must have an IN-STEP line for exactly
-    that modal and question in `owed-verdicts.md`; any other pair - CANNOT-TELL, never dispatched, checked only
-    against another of the modal's questions, or newly created - is printed and fails, because `ENTRY_DRIFT_OK`
-    clears the whole gate and must only ever clear pairs a check found in step."""
+def all_owed(text: str) -> tuple[list[tuple[str, str, str, int]], list[str]]:
+    """(every (class, page, section, prose bytes) pair, every named line it cannot read) from `_entry_owed.py`'s
+    output - on ANY page, the pages taken from its own `read:` lines (plan review: a fixed page list skipped a pair
+    on a page it did not name, and ENTRY_DRIFT_OK would have cleared it unchecked)."""
+    import ast  # noqa: PLC0415
+    pairs: list[tuple[str, str, str, int]] = []
+    unread: list[str] = []
+    lines = text.splitlines()
+    for i, line in enumerate(lines):
+        if " - prose at " not in line:
+            continue
+        m = re.match(r"(.+?) - .* - prose at (\S+):(\d+)$", line)
+        reads = lines[i + 1] if i + 1 < len(lines) else ""
+        qs = re.findall(r"research/([\w/-]+?)/(\d{3})-", reads)
+        node = None
+        if m and (CLONE / m.group(2)).is_file():
+            src = (CLONE / m.group(2)).read_text(encoding="utf-8")
+            node = next((n for n in ast.walk(ast.parse(src)) if isinstance(n, ast.ClassDef) and n.lineno == int(m.group(3))), None)
+        if node is None or not qs:
+            unread.append(line.strip())
+            continue
+        prose = len(ast.get_docstring(node) or "")
+        pairs += [(node.name, page, sec, prose) for page, sec in dict.fromkeys(qs)]
+    return pairs, unread
+
+
+def owed_pairs(pages: tuple[str, ...] | None = None) -> list[tuple[str, str, str, int]]:
+    """The owed pairs, on the pages named (every page when none are)."""
+    pairs, _unread = all_owed(owed_output())
+    return [x for x in pairs if pages is None or x[1] in pages]
+
+
+def owed_check(text: str | None = None) -> int:
+    """Before the push (D20.2, plan review): every PAIR `_entry_owed.py` names, on any page, must have an IN-STEP line
+    for exactly that modal and question in `owed-verdicts.md`; any other pair - CANNOT-TELL, never dispatched,
+    checked only against another of the modal's questions, or newly created - and any named line this cannot read are
+    printed and fail, because `ENTRY_DRIFT_OK` clears the whole gate and must only ever clear pairs found in step."""
     rec = ledger()
-    pairs = owed_pairs()
+    pairs, unread = all_owed(owed_output() if text is None else text)
     open_ = [(c, pg, s) for c, pg, s, _b in pairs if rec.get((c, pg, s)) != "IN-STEP"]
     for c, pg, s in open_:
         print(f"owed-check: {c} ({pg} SECTION={s}) - {rec.get((c, pg, s), 'no verdict')}; answer it before the push")
-    print(f"owed-check: {len(pairs)} pair(s) named, {len(pairs) - len(open_)} with an IN-STEP verdict, {len(open_)} open")
-    return 1 if open_ else 0
+    for line in unread:
+        print(f"owed-check: cannot read a named pair - {line[:120]}")
+    print(f"owed-check: {len(pairs)} pair(s) named, {len(pairs) - len(open_)} with an IN-STEP verdict, {len(open_) + len(unread)} open")
+    return 1 if open_ or unread else 0
 
 
 def main(argv: list[str]) -> int:
