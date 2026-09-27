@@ -154,3 +154,7 @@
 - PondSluice (archetypes SECTION=150): REWRITTEN - the Why's inlet-high, outlet-low plumbing narrowed to a pond on sloping ground (feature 265 T11)
 - SluiceGate (archetypes SECTION=150): REWRITTEN - the Why now carries 150's polder finding, gates opened in drought and shut in flood (feature 265 T11)
 - Well (urban-features SECTION=090): IN-STEP - the building-plan sheet's Well (compound_kinds/household.py, household.Well): the 1 m shaft, the unmeasured curb and the estimated 3-4 ft curb all still hold; the map's Well of the same name was REWRITTEN above (feature 265 T11)
+- Bund (fields SECTION=022): REWRITTEN - the What: size now says "commonly", with no fixed size outside modern works (aze-jawiki-3); the unmodeled jori form left to the paddy-plot modal
+- FieldPond (fields SECTION=010): REWRITTEN - Why: and Note: now separate what is read (the plains pond in low ground, graves on the hills) from the page's reasoning and the rock guess
+- FieldRock (fields SECTION=010): REWRITTEN - Why:, Note: and Caveat: now say which fields host a rock is a guess and no page read speaks of rocks in a paddy; Label stays accurate (the snapshot test pins it) - the relabel is raised in the handoff
+- GraveIsland (fields SECTION=010): REWRITTEN - "corroborated in Japan" replaced by a partial Japanese parallel and no page read for the north-China half

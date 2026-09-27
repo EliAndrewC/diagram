@@ -78,7 +78,7 @@ class WetPaddy(Kind):
 
 class Bund(Kind):
     """
-    What: The aze: a puddled-mud ridge one to two feet wide and about a foot high between two basins, re-plastered
+    What: The aze: a puddled-mud ridge commonly one to two feet wide and about a foot high (outside modern works it had no fixed size, varying by region and soil) between two basins, re-plastered
     every spring so each paddy holds its water; a wider walking bund ran between the plots, two to five feet across in this
     record's reading. Where bunds cross,
     the earth is piled into a lumpy node - the most-worked point in a field.
