@@ -122,8 +122,8 @@ settlement engine only and missed every Mode A sheet; `spec-fidelity` found it (
   the rest in the town, city and capital tiers, whose coordinates the calling code computes. By function (an AST walk over
   `settlement/`): four are the label machinery itself or captions this feature converts (`captions.py` `place_labels` and
   `_draw_queued_label`, `boards.py` `_draw_board_caption`, `ground.py` `_finish_road_label`); the other 47, in 34
-  functions, are the town, city and capital tiers' (a ministry's name
-  written across its own roof, a hall caption a fixed drop below it). No live generator runs any of them; the maps
+  functions, belong to the town, city and capital tiers (a ministry's name
+  written across its own roof, a hall caption a fixed drop below it). No live generator runs any of those 47; the maps
   that used them are frozen exhibits.
 
 **Mode A, the compound composer (`compound.py`), live.** Every caption is hand-seated at a fixed offset: the zone
