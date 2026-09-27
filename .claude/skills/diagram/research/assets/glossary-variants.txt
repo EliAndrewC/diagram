@@ -317,6 +317,7 @@ daimyō	daimyo
 daimyōs	daimyo
 daizu	daizu
 dajokan	Daijokan
+dakyu	dakyu
 danka	danna-dera
 danna-ba	kusaba
 danna-dera	danna-dera
@@ -366,6 +367,7 @@ doba	dōba
 dobashi	dobashi
 dobei	neribei
 dochu bugyo	road magistrate
+dogata	dogata
 dohyo	dohyō
 dohyō	dohyō
 doi	horinouchi
@@ -1237,6 +1239,7 @@ onari-goten	onari-goten
 one-bay	bay
 onkura	kura
 onmyodo	onmyodo
+origake	origake
 oshi	oshi
 oshirasu	oshirasu
 ossuary	ossuary
@@ -1869,6 +1872,7 @@ wubei zhi	Wubei Zhi
 wujing zongyao	Wujing Zongyao
 xiang	xiang
 xiang-gan	Xiang-Gan
+yabusame	yabusame
 yacheng	yacheng
 yachida	yato
 yagura	yagura

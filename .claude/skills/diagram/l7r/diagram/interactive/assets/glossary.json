@@ -7515,5 +7515,29 @@
    "Jiajing era",
    "Jiajing"
   ]
+ },
+ "yabusame": {
+  "def": "Mounted archery run as a contest: a rider gallops straight down a long, narrow riding ground and shoots at targets from the saddle.",
+  "variants": [
+   "yabusame"
+  ]
+ },
+ "dakyu": {
+  "def": "A ball game played on horseback, one of the arts samurai practiced on a riding ground.",
+  "variants": [
+   "dakyu"
+  ]
+ },
+ "dogata": {
+  "def": "A timber copy of the long eaves of Kyoto's Sanjusangendo hall, built by some great domains to practice the long-shot archery contest; some copied only the highest stretch of the arrow's flight, some the whole length.",
+  "variants": [
+   "dogata"
+  ]
+ },
+ "origake": {
+  "def": "A cheap practice rig for the long-shot archery contest: ropes strung between pairs of bamboo poles, standing in for the roof the arrows had to pass under.",
+  "variants": [
+   "origake"
+  ]
  }
 }
