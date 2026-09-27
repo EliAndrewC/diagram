@@ -388,7 +388,8 @@
  "Showa": {
   "def": "The era from 1926; with Meiji, the modern period whose land consolidation produced the rectangular paddy grid a pre-modern map must not show.",
   "variants": [
-   "Showa"
+   "Showa",
+   "Shōwa"
   ]
  },
  "Siku Quanshu": {
@@ -940,7 +941,8 @@
   "def": "A settlement's own tutelary shrine, the seat of the deity that guards it.",
   "variants": [
    "chinju",
-   "Chinjusan"
+   "Chinjusan",
+   "tutelary shrine"
   ]
  },
  "chinju no mori": {
@@ -4392,7 +4394,8 @@
  "jo": {
   "def": "A Japanese unit of length of ten shaku, about 3 meters (10 feet); as the suffix -jo on a place name it means castle.",
   "variants": [
-   "jo"
+   "jo",
+   "jō"
   ]
  },
  "fu": {

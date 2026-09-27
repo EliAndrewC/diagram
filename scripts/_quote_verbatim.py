@@ -117,6 +117,10 @@ def decode(raw: bytes, declared: str = "") -> str | None:
     tried: list[str] = []
     for name in (declared, meta.group(1).decode("ascii", "replace") if meta else "", "utf-8", "shift_jis", "euc_jp", "gb18030", "big5"):
         name = (name or "").strip().lower()
+        # A page labeled Shift_JIS is read as Windows-31J, as a browser reads it (the WHATWG encoding standard):
+        # strict shift_jis refuses its extension characters (ranhaku's Hakusan page, 2026-09-27), and the fallback
+        # then decoded it as gb18030 and found none of its quotations.
+        name = "cp932" if name in ("shift_jis", "shift-jis", "sjis", "x-sjis", "ms_kanji", "windows-31j") else name
         if not name or name in tried:
             continue
         tried.append(name)

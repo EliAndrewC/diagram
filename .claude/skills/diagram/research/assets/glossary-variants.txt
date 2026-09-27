@@ -723,6 +723,7 @@ josui ido	josui-ido
 josui-ido	josui-ido
 junk	junk
 junks	junk
+jō	jo
 jōdo	Jodo
 jōsui ido	josui-ido
 kabata	kabata
@@ -1306,6 +1307,7 @@ shuku	shukuba
 shukuba	shukuba
 shunde	Shunde
 shunzhi	Shunzhi
+shōwa	Showa
 shōya	shoya
 siege mining	siege mining
 sigma	sigma
@@ -1486,6 +1488,7 @@ tudi miao	tudi miao
 tudigong	tudi miao
 tulou	tulou
 tulous	tulou
+tutelary shrine	chinju
 twelve-mat	tatami
 tōhoku	Tohoku
 tōkaidō	Tokaido

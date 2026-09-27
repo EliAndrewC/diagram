@@ -4,3 +4,4 @@
 - ShrineGrove (religion-and-death SECTION=100): IN-STEP - the grove as the shrine's setting and the cleared opening as a drawing decision still stand; the new siting and hall evidence does not touch the grove
 - ShrineGrove (religion-and-death SECTION=120): IN-STEP - the no-fence grove and the precinct questions it points to still stand; what moved is about the buildings
 - Torii (religion-and-death SECTION=120): IN-STEP - the arches over the approach, the first at the shrine's ground, still stand; the new sanctuary source and the belfry silence do not touch the arch
+- ShrineGrove (religion-and-death SECTION=124): IN-STEP - the fortieth-to-a-seventh built share, the unmeasured rest and the wood's share as a guess still stand; the band's limits and the 860 tsubo are figures the modal never states
