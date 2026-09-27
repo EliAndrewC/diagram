@@ -222,7 +222,9 @@
    "Lower Yangtze",
    "Jiangnan",
    "Taihu",
-   "Lake Tai"
+   "Lake Tai",
+   "Yangtze delta",
+   "Yangtze-delta"
   ]
  },
  "MAFF": {
@@ -3058,7 +3060,8 @@
  "polder": {
   "def": "Land reclaimed from marsh or lake behind an enclosing dike and drained by canals.",
   "variants": [
-   "polder"
+   "polder",
+   "polders"
   ]
  },
  "pollard": {
@@ -6135,6 +6138,37 @@
   "def": "A large pond fish that eats grass and plants; farmers swept cut grass and livestock dung into the pond to feed it, and its own dung fed the silver carp.",
   "variants": [
    "grass carp"
+  ]
+ },
+ "root-cut": {
+  "def": "Mulberry cut back to the root and grown as a small, low bush for its leaves rather than as a tree; the most densely planted form, about 8,000 to 10,000 a mu in the Pearl River delta and 800 to 1,000 to ten ares in Japan.",
+  "variants": [
+   "root-cut",
+   "root-cutting",
+   "ground mulberry"
+  ]
+ },
+ "are": {
+  "def": "A metric unit of land area, 100 square meters (about 1,076 sq ft); Japanese farm figures are given per ten ares, about 10,760 sq ft.",
+  "variants": [
+   "are",
+   "ares"
+  ]
+ },
+ "mid-trunk": {
+  "def": "Mulberry trained on a short trunk and cut back to it for its leaves, so it stands between a full tree and a root-cut bush; planted about 300 a mu in the late-Qing Yangtze delta, and 400 to 600 to ten ares in Japanese mid-cut fields.",
+  "variants": [
+   "mid-trunk",
+   "mid-cut"
+  ]
+ },
+ "fan palm": {
+  "def": "The Chinese fan palm, grown in the Pearl River delta for its broad leaves, which were made into fans and thatch; a fan-palm dike was a fishpond dike planted with it.",
+  "variants": [
+   "fan palm",
+   "fan palms",
+   "fan-palm",
+   "fan-palm-dike"
   ]
  }
 }

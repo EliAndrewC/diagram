@@ -25,6 +25,8 @@ apron	apron
 aprons	apron
 aqueduct	aqueduct
 aquifer	aquifer
+are	are
+ares	are
 arrow bamboo	yadake
 artesian	artesian
 ashigaru	ashigaru
@@ -362,7 +364,11 @@ fabric	building fabric
 fabric is later	building fabric
 fairway	fairway
 fan head	alluvial fan
+fan palm	fan palm
+fan palms	fan palm
 fan's head	alluvial fan
+fan-palm	fan palm
+fan-palm-dike	fan palm
 fang	fang
 fao	FAO
 farrier	farrier
@@ -497,6 +503,7 @@ grass carp	grass carp
 green manure	green manure
 groin	groyne
 groins	groyne
+ground mulberry	root-cut
 grow-out	grow-out pond
 grow-out pond	grow-out pond
 grow-out ponds	grow-out pond
@@ -877,6 +884,8 @@ men-hai	taiping-gang
 mengxi bitan	Mengxi Bitan
 micro-high	micro-high
 micro-highs	micro-high
+mid-cut	mid-trunk
+mid-trunk	mid-trunk
 middle moat	middle moat
 middle moats	middle moat
 mimizuka	ear mound
@@ -1032,6 +1041,7 @@ plant association	plant association
 planted collar	planted collar
 plot seams	seam
 polder	polder
+polders	polder
 pollard	pollard
 pollarded	pollard
 pollards	pollard
@@ -1131,6 +1141,8 @@ roji	roji
 roju	Roju
 rokugan	Rokugan
 rokugani	Rokugan
+root-cut	root-cut
+root-cutting	root-cut
 roson	roson
 row village	roson
 runners	yayi
@@ -1514,6 +1526,8 @@ yagura	yagura
 yaita	yaita
 yam	yam
 yamen	yamen
+yangtze delta	Lower Yangzi
+yangtze-delta	Lower Yangzi
 yashiki	yashiki
 yashikigami	yashikigami
 yashikigami-sama	yashikigami
