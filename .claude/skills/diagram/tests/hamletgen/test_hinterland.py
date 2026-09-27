@@ -565,3 +565,25 @@ def test_a_belt_stands_beyond_a_lane_running_along_its_band() -> None:
     moved = past_the_lanes(cols, lanes, 30.0)
     assert moved[0] == (0.0, 76.0 + BELT_LANE_CLEAR_FT - 36.0) and moved[1] == (100.0, 0.0)
     assert past_the_lanes(cols, lanes, 30.0, wet=lambda v, u: True) == cols
+
+
+def test_a_third_parcel_with_no_ground_off_the_row_is_not_seated(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The woodland scan's row rule: a seat in line with two placed parcels is stepped off the row, and where no ground off
+    it qualifies (`seat_off_the_row` returns None - asked of every seat, which it passes through when it is in no row) no
+    parcel is seated there. Forced here because the pool's rolls reach it
+    only by the accident of a layout, and a feature 261 re-seat moved Inashiro off it."""
+    from l7r.diagram.hamletgen.hinterland import parcels
+
+    plan = a_plan()
+
+    def _scan() -> list:
+        s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+        s.M["fields"] = []
+        plan.belt = []
+        return parcels.open_ground_patches(s, plan, count=6)
+
+    seated = _scan()
+    assert len(seated) >= 3, "non-vacuity: the open canvas seats a third parcel, so the row rule is asked"
+    asked: list = []
+    monkeypatch.setattr(parcels, "seat_off_the_row", lambda *a, **k: asked.append(1))
+    assert _scan() == [] and asked, "every seat asked, none with ground off the row, and none seated"
