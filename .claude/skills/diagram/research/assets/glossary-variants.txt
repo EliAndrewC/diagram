@@ -488,6 +488,8 @@ gassho-zukuri	gassho
 gasshozukuri	gassho
 gate market	gate market
 gate throat	gate throat
+gate-mound	mitsuke
+gate-mounds	mitsuke
 gate-throat	gate throat
 gazetteer	gazetteer
 gazetteers	gazetteer
@@ -936,6 +938,7 @@ ming-qing	Qing dynasty
 minka	minka
 mire	mire
 mitochigai	mitochigai
+mitsuke	mitsuke
 miyaza	miyaza
 mizugaki	mizugaki
 mizugashira	mizugashira
@@ -1440,6 +1443,8 @@ three officials	Three Officials
 threshing yard	threshing yard
 threshing yards	threshing yard
 threshing-yard	threshing yard
+through-passage	through-passage plan
+through-passage plan	through-passage plan
 throwing	throwing
 tian'geng	bund
 tiangeng	bund
