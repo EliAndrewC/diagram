@@ -623,6 +623,8 @@ groyne	groyne
 groynes	groyne
 gsi	GSI
 guan-xiang	guanxiang
+guangxu	Guangxu
+guangxu-era	Guangxu
 guanxiang	guanxiang
 gulou	gulou
 gundai	gundai
@@ -710,6 +712,7 @@ hokaku sen	hokaku sen
 hokaku-sen	hokaku sen
 hokora	hokora
 holding jail	holding jail
+honan	Honan
 honden	honden
 hongo	hongo
 honmaru	honmaru
@@ -907,6 +910,7 @@ kenchicho	kenchicho
 kera	kera
 keyaki	keyaki
 khitan	Khitan
+kiangsu	Kiangsu
 kichin-yado	kichin-yado
 kido	kido
 kidoban	kidoban
