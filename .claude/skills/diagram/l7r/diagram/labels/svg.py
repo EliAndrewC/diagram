@@ -32,9 +32,11 @@ def caption_svg(p: Placement, size: float, style: str, fill: str, kind: str = ""
     return f'<text x="{p.x:.1f}" y="{y0:.1f}" text-anchor="middle" font-size="{size:g}"{style} fill="{fill}"{turn}{_kind(kind)}>{body}</text>'
 
 
-def leader_svg(p: Placement, size: float, stroke: str, kind: str = "") -> str:
-    """The leader line for a placement that has one, else the empty string."""
+def leader_svg(p: Placement, size: float, stroke: str, kind: str = "", mark: bool = False) -> str:
+    """The leader line for a placement that has one, else the empty string. `mark` tags it `data-leader="1"`, which is
+    how `make seat-label` finds its own leaders on a hand-drawn sheet."""
     if p.leader is None:
         return ""
     (x1, y1), (x2, y2) = p.leader
-    return f'<line x1="{x1:.1f}" y1="{y1:.1f}" x2="{x2:.1f}" y2="{y2:.1f}" stroke="{stroke}" stroke-width="{max(0.6, 0.08 * size):.2f}" stroke-linecap="round"{_kind(kind)}/>'
+    tag = ' data-leader="1"' if mark else ""
+    return f'<line x1="{x1:.1f}" y1="{y1:.1f}" x2="{x2:.1f}" y2="{y2:.1f}" stroke="{stroke}" stroke-width="{max(0.6, 0.08 * size):.2f}" stroke-linecap="round"{_kind(kind)}{tag}/>'

@@ -1,0 +1,796 @@
+{
+ "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg": {
+  "sha256": "81f67014d221be56dffa3c191b904fc20f7187daac12d6d295001cef14972bc5",
+  "exempt": []
+ },
+ "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg": {
+  "sha256": "99891784ddf7fec89be54e3b59158ef269f2356f608c4fdee9c1820d3bceb645",
+  "exempt": [
+   [
+    "barracks",
+    "barracks",
+    "off its standard seat"
+   ],
+   [
+    "bath",
+    "bath",
+    "off its standard seat"
+   ],
+   [
+    "boatmen's altar",
+    "boatmen's altar",
+    "off its standard seat"
+   ],
+   [
+    "cell",
+    "cell",
+    "off its standard seat"
+   ],
+   [
+    "clerks' room",
+    "clerks'",
+    "off its standard seat"
+   ],
+   [
+    "clerks' seats",
+    "clerk",
+    "off its standard seat"
+   ],
+   [
+    "compound shrine",
+    "Fire Dragon shrine",
+    "off its standard seat"
+   ],
+   [
+    "compound shrine",
+    "river-kami shrine",
+    "off its standard seat"
+   ],
+   [
+    "family quarters",
+    "family",
+    "off its standard seat"
+   ],
+   [
+    "fire-water tubs",
+    "fire-water tubs",
+    "off its standard seat"
+   ],
+   [
+    "garden",
+    "guest garden",
+    "off its standard seat"
+   ],
+   [
+    "garden",
+    "inner garden",
+    "off its standard seat"
+   ],
+   [
+    "garden pines",
+    "old pines",
+    "off its standard seat"
+   ],
+   [
+    "gatehouse",
+    "gatehouse",
+    "off its standard seat"
+   ],
+   [
+    "granary",
+    "granary",
+    "off its standard seat"
+   ],
+   [
+    "guest quarters",
+    "(added by 9th magistrate)",
+    "off its standard seat"
+   ],
+   [
+    "hearing court",
+    "HEARING COURT",
+    "off its standard seat"
+   ],
+   [
+    "inner court",
+    "INNER COURT",
+    "off its standard seat"
+   ],
+   [
+    "inner rooms",
+    "east rooms",
+    "off its standard seat"
+   ],
+   [
+    "karo's house",
+    "karo's house",
+    "off its standard seat"
+   ],
+   [
+    "kitchen",
+    "kitchen",
+    "off its standard seat"
+   ],
+   [
+    "kneeling positions",
+    "witness / petitioner positions",
+    "off its standard seat"
+   ],
+   [
+    "latrine",
+    "latrine",
+    "off its standard seat"
+   ],
+   [
+    "latrine",
+    "latrine",
+    "off its standard seat"
+   ],
+   [
+    "latrine",
+    "latrine",
+    "off its standard seat"
+   ],
+   [
+    "lord's quarters",
+    "Hajime's quarters",
+    "off its standard seat"
+   ],
+   [
+    "magistrate's dais",
+    "magistrate's dais",
+    "off its standard seat"
+   ],
+   [
+    "outer court",
+    "OUTER COURT",
+    "off its standard seat"
+   ],
+   [
+    "outer court",
+    "forecourt",
+    "off its standard seat"
+   ],
+   [
+    "practice ground",
+    "practice ground",
+    "off its standard seat"
+   ],
+   [
+    "reception room",
+    "reception",
+    "off its standard seat"
+   ],
+   [
+    "residence",
+    "RESIDENCE",
+    "off its standard seat"
+   ],
+   [
+    "river",
+    "the Hayakawa (swift river)",
+    "off its standard seat"
+   ],
+   [
+    "river watch",
+    "river watch",
+    "off its standard seat"
+   ],
+   [
+    "salt wards",
+    "Salt wards",
+    "off its standard seat"
+   ],
+   [
+    "salt wards",
+    "salt wards",
+    "off its standard seat"
+   ],
+   [
+    "servants' quarters",
+    "servants' quarters",
+    "off its standard seat"
+   ],
+   [
+    "shrine altar",
+    "(was an Ebisu shrine - one altar remains)",
+    "a missing or misplaced leader"
+   ],
+   [
+    "shrine altar",
+    "(was an Ebisu shrine - one altar remains)",
+    "off its standard seat"
+   ],
+   [
+    "shrine grove",
+    "shrine grove",
+    "off its standard seat"
+   ],
+   [
+    "stables",
+    "stables",
+    "off its standard seat"
+   ],
+   [
+    "striking posts",
+    "striking posts",
+    "off its standard seat"
+   ],
+   [
+    "tally office",
+    "tally office",
+    "off its standard seat"
+   ],
+   [
+    "tax archive",
+    "tax archive",
+    "off its standard seat"
+   ],
+   [
+    "tax barge",
+    "tax barge",
+    "a missing or misplaced leader"
+   ],
+   [
+    "tax barge",
+    "tax barge",
+    "off its standard seat"
+   ],
+   [
+    "vegetable garden",
+    "vegetable garden",
+    "off its standard seat"
+   ],
+   [
+    "weapon rack",
+    "weapon rack",
+    "off its standard seat"
+   ],
+   [
+    "well",
+    "well",
+    "a missing or misplaced leader"
+   ],
+   [
+    "well",
+    "well",
+    "off its standard seat"
+   ],
+   [
+    "well",
+    "well",
+    "off its standard seat"
+   ],
+   [
+    "well",
+    "well",
+    "off its standard seat"
+   ]
+  ]
+ },
+ "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg": {
+  "sha256": "f6a743ab48b1ff0e51d1b96713f2744555b7e54e076baf8af88ad218e6fd1e73",
+  "exempt": [
+   [
+    "bath",
+    "bath",
+    "off its standard seat"
+   ],
+   [
+    "cell",
+    "cell",
+    "off its standard seat"
+   ],
+   [
+    "cinnabar workshop",
+    "Cinnabar Workshop",
+    "off its standard seat"
+   ],
+   [
+    "clerks' seats",
+    "clerk",
+    "off its standard seat"
+   ],
+   [
+    "compound shrine",
+    "INARI SHRINE",
+    "off its standard seat"
+   ],
+   [
+    "family quarters",
+    "family",
+    "off its standard seat"
+   ],
+   [
+    "fire-water tubs",
+    "fire-water tubs",
+    "off its standard seat"
+   ],
+   [
+    "garden",
+    "inner garden",
+    "off its standard seat"
+   ],
+   [
+    "gatehouse",
+    "gatehouse",
+    "off its standard seat"
+   ],
+   [
+    "guest quarters",
+    "guest room",
+    "off its standard seat"
+   ],
+   [
+    "hearing court",
+    "HEARING COURT",
+    "off its standard seat"
+   ],
+   [
+    "inner court",
+    "INNER COURT",
+    "off its standard seat"
+   ],
+   [
+    "karo's house",
+    "karo's house",
+    "off its standard seat"
+   ],
+   [
+    "kitchen",
+    "kitchen",
+    "off its standard seat"
+   ],
+   [
+    "kneeling positions",
+    "witness / defendant positions",
+    "off its standard seat"
+   ],
+   [
+    "latrine",
+    "latrine",
+    "off its standard seat"
+   ],
+   [
+    "latrine",
+    "latrine",
+    "off its standard seat"
+   ],
+   [
+    "latrine",
+    "latrine",
+    "off its standard seat"
+   ],
+   [
+    "lord's quarters",
+    "Tatsuya's quarters",
+    "off its standard seat"
+   ],
+   [
+    "magistrate's dais",
+    "magistrate's dais",
+    "off its standard seat"
+   ],
+   [
+    "notice board",
+    "notice board",
+    "off its standard seat"
+   ],
+   [
+    "outer court",
+    "OUTER COURT",
+    "off its standard seat"
+   ],
+   [
+    "outer court",
+    "forecourt",
+    "off its standard seat"
+   ],
+   [
+    "practice ground",
+    "practice ground",
+    "off its standard seat"
+   ],
+   [
+    "reception room",
+    "reception",
+    "off its standard seat"
+   ],
+   [
+    "residence",
+    "RESIDENCE",
+    "off its standard seat"
+   ],
+   [
+    "retainers' quarters",
+    "senior retainers",
+    "off its standard seat"
+   ],
+   [
+    "servants' quarters",
+    "servants' quarters",
+    "off its standard seat"
+   ],
+   [
+    "shrine altar",
+    "Myobu",
+    "a missing or misplaced leader"
+   ],
+   [
+    "shrine altar",
+    "Myobu",
+    "off its standard seat"
+   ],
+   [
+    "shrine altar",
+    "Ta-no-Kami",
+    "a missing or misplaced leader"
+   ],
+   [
+    "shrine altar",
+    "Ta-no-Kami",
+    "off its standard seat"
+   ],
+   [
+    "stables",
+    "stables",
+    "off its standard seat"
+   ],
+   [
+    "striking posts",
+    "striking posts",
+    "off its standard seat"
+   ],
+   [
+    "tax archive",
+    "tax archive",
+    "off its standard seat"
+   ],
+   [
+    "threshold stones",
+    "Vermillion threshold stones",
+    "off its standard seat"
+   ],
+   [
+    "vegetable garden",
+    "vegetable garden",
+    "off its standard seat"
+   ],
+   [
+    "weapon rack",
+    "weapon rack",
+    "off its standard seat"
+   ],
+   [
+    "well",
+    "well",
+    "a missing or misplaced leader"
+   ],
+   [
+    "well",
+    "well",
+    "off its standard seat"
+   ],
+   [
+    "well",
+    "well",
+    "off its standard seat"
+   ],
+   [
+    "well",
+    "well",
+    "off its standard seat"
+   ]
+  ]
+ },
+ "pool/magistracies/ubame-magistracy/ubame-magistracy.svg": {
+  "sha256": "d31b4b34931dd1229b713af0d4a6dc7e766368735e018fdc4e245d4c758a8e96",
+  "exempt": [
+   [
+    "barracks",
+    "barracks",
+    "off its standard seat"
+   ],
+   [
+    "bath",
+    "bath",
+    "off its standard seat"
+   ],
+   [
+    "border court",
+    "BORDER COURT",
+    "off its standard seat"
+   ],
+   [
+    "boundary stones",
+    "boundary stones",
+    "off its standard seat"
+   ],
+   [
+    "cart yard",
+    "cart yard",
+    "off its standard seat"
+   ],
+   [
+    "cell",
+    "cell",
+    "off its standard seat"
+   ],
+   [
+    "charcoal store",
+    "sealed charcoal store",
+    "off its standard seat"
+   ],
+   [
+    "clerks' room",
+    "clerks' room",
+    "off its standard seat"
+   ],
+   [
+    "clerks' seats",
+    "clerk",
+    "off its standard seat"
+   ],
+   [
+    "compound shrine",
+    "INARI SHRINE",
+    "off its standard seat"
+   ],
+   [
+    "family quarters",
+    "family quarters",
+    "off its standard seat"
+   ],
+   [
+    "fire-water tubs",
+    "fire-water tubs",
+    "a missing or misplaced leader"
+   ],
+   [
+    "fire-water tubs",
+    "fire-water tubs",
+    "off its standard seat"
+   ],
+   [
+    "fox border",
+    "Fox Clan lands",
+    "a missing or misplaced leader"
+   ],
+   [
+    "fox border",
+    "Fox Clan lands",
+    "off its standard seat"
+   ],
+   [
+    "fox border",
+    "Kitsune Mori, 15 miles east",
+    "a missing or misplaced leader"
+   ],
+   [
+    "fox border",
+    "Kitsune Mori, 15 miles east",
+    "off its standard seat"
+   ],
+   [
+    "fox border",
+    "THE FOX BORDER",
+    "a missing or misplaced leader"
+   ],
+   [
+    "fox border",
+    "THE FOX BORDER",
+    "off its standard seat"
+   ],
+   [
+    "fox border",
+    "The border",
+    "off its standard seat"
+   ],
+   [
+    "garden",
+    "inner garden",
+    "off its standard seat"
+   ],
+   [
+    "gatehouse",
+    "gatehouse",
+    "off its standard seat"
+   ],
+   [
+    "granary",
+    "granary",
+    "off its standard seat"
+   ],
+   [
+    "guest quarters",
+    "guest room",
+    "off its standard seat"
+   ],
+   [
+    "hearing court",
+    "HEARING COURT",
+    "off its standard seat"
+   ],
+   [
+    "inner court",
+    "INNER COURT",
+    "off its standard seat"
+   ],
+   [
+    "inner rooms",
+    "inner rooms &",
+    "off its standard seat"
+   ],
+   [
+    "karo's house",
+    "karo's house",
+    "off its standard seat"
+   ],
+   [
+    "kennel",
+    "kennel",
+    "off its standard seat"
+   ],
+   [
+    "kitchen",
+    "kitchen",
+    "off its standard seat"
+   ],
+   [
+    "kneeling positions",
+    "witness / defendant positions",
+    "off its standard seat"
+   ],
+   [
+    "latrine",
+    "latrine",
+    "off its standard seat"
+   ],
+   [
+    "latrine",
+    "latrine",
+    "off its standard seat"
+   ],
+   [
+    "latrine",
+    "latrine",
+    "off its standard seat"
+   ],
+   [
+    "latrine",
+    "latrine",
+    "off its standard seat"
+   ],
+   [
+    "lord's quarters",
+    "Koharu's",
+    "off its standard seat"
+   ],
+   [
+    "magistrate's dais",
+    "magistrate's dais",
+    "off its standard seat"
+   ],
+   [
+    "notice board",
+    "bounty board",
+    "a missing or misplaced leader"
+   ],
+   [
+    "notice board",
+    "bounty board",
+    "off its standard seat"
+   ],
+   [
+    "outer court",
+    "OUTER COURT",
+    "off its standard seat"
+   ],
+   [
+    "outer court",
+    "forecourt",
+    "off its standard seat"
+   ],
+   [
+    "parley room",
+    "parley room",
+    "off its standard seat"
+   ],
+   [
+    "practice ground",
+    "practice ground",
+    "off its standard seat"
+   ],
+   [
+    "reception room",
+    "reception",
+    "off its standard seat"
+   ],
+   [
+    "residence",
+    "RESIDENCE",
+    "off its standard seat"
+   ],
+   [
+    "retainers' quarters",
+    "family rowhouse",
+    "off its standard seat"
+   ],
+   [
+    "servants' quarters",
+    "servants' quarters",
+    "off its standard seat"
+   ],
+   [
+    "shuttered wing",
+    "shuttered wing",
+    "off its standard seat"
+   ],
+   [
+    "stables",
+    "stables",
+    "off its standard seat"
+   ],
+   [
+    "striking posts",
+    "striking posts",
+    "off its standard seat"
+   ],
+   [
+    "tally office",
+    "tally shed",
+    "off its standard seat"
+   ],
+   [
+    "tax archive",
+    "tax archive",
+    "off its standard seat"
+   ],
+   [
+    "vegetable garden",
+    "kitchen garden",
+    "off its standard seat"
+   ],
+   [
+    "weapon rack",
+    "weapon rack",
+    "off its standard seat"
+   ],
+   [
+    "weighing floor",
+    "weighing",
+    "off its standard seat"
+   ],
+   [
+    "well",
+    "well",
+    "a missing or misplaced leader"
+   ],
+   [
+    "well",
+    "well",
+    "off its standard seat"
+   ],
+   [
+    "well",
+    "well",
+    "off its standard seat"
+   ],
+   [
+    "well",
+    "well",
+    "off its standard seat"
+   ],
+   [
+    "wood-kami altar",
+    "wood-kami altar",
+    "off its standard seat"
+   ],
+   [
+    "writing pavilion",
+    "writing",
+    "off its standard seat"
+   ]
+  ]
+ }
+}

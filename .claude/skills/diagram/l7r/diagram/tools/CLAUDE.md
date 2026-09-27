@@ -30,6 +30,7 @@ Not `python3 tools/why_placed.py`. A package module run as a loose script puts `
 | What does the map look like after each placement stage, and why is that stage there? | `placement_stages` |
 | I lit one class on the page - which OTHER classes' pixels changed, and by how much of each? | `page_lit` (`make page-lit`; `VECTOR=1` zooms past the raster switch with the page's own key - the wheel scrolls, feature 245) |
 | Two renders of this map: how much differs, by how much, where, and on whose ink? | `picture_diff` (`make picture-diff`) |
+| Where does each caption on a hand-drawn Mode A sheet belong by the cartographic standard, and is it there? | `seat_label` (`make seat-label SHEET=<svg> [KIND=<k>] [WRITE=1]`, feature 266) |
 
 Each module's own docstring carries the WHY it exists, usually with the incident that produced it.
 Read that before extending one. The skill's [`../CLAUDE.md`](../CLAUDE.md) carries the operational

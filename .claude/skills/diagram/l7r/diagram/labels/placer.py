@@ -87,7 +87,7 @@ def _frame_of(angle: float) -> tuple[Pt, Pt]:
     return (math.cos(a), math.sin(a)), (-math.sin(a), math.cos(a))
 
 
-def _point_cands(text: str, size: float, subject: Subject) -> Iterator[_Cand]:
+def _point_cands(text: str, size: float, subject: Subject, lays: list[list[str]]) -> Iterator[_Cand]:
     ang = upright(subject.angle)
     u, v = _frame_of(ang)
     c = centroid(subject.poly)
@@ -96,7 +96,6 @@ def _point_cands(text: str, size: float, subject: Subject) -> Iterator[_Cand]:
     cu, cv = (min(pu) + max(pu)) / 2, (min(pv) + max(pv)) / 2
     c = (c[0] + cu * u[0] + cv * v[0], c[1] + cu * u[1] + cv * v[1])  # the center of the subject's box in its frame
     su, sv = (max(pu) - min(pu)) / 2, (max(pv) - min(pv)) / 2
-    lays = layouts(text)
     for ring, g in enumerate(rings(size)):
         for rank, (name, sx, sy) in enumerate(POSITIONS):
             for lines in lays:
@@ -111,7 +110,7 @@ def _point_cands(text: str, size: float, subject: Subject) -> Iterator[_Cand]:
                 yield _Cand(ring, rank, name, (c[0] + du * u[0] + dv * v[0], c[1] + du * u[1] + dv * v[1]), ang, tuple(lines), (bw, bh), size)
 
 
-def _line_cands(text: str, size: float, subject: Subject) -> Iterator[_Cand]:
+def _line_cands(text: str, size: float, subject: Subject, lays: list[list[str]]) -> Iterator[_Cand]:
     pts = list(subject.poly)
     segs = list(zip(pts, pts[1:], strict=False))
     lengths = [math.dist(a, b) for a, b in segs]
@@ -138,7 +137,6 @@ def _line_cands(text: str, size: float, subject: Subject) -> Iterator[_Cand]:
             s -= ln
         raise AssertionError("unreachable: the last segment returns")  # pragma: no cover - the loop's last pass returns
 
-    lays = layouts(text)
     for ring, g in enumerate(rings(size)):
         for j, s in enumerate(stations):
             p, bearing = at(s)
@@ -151,36 +149,38 @@ def _line_cands(text: str, size: float, subject: Subject) -> Iterator[_Cand]:
                     yield _Cand(ring, j * 2 + (side > 0), name, (p[0] + side * d * v[0], p[1] + side * d * v[1]), ang, tuple(lines), (bw, bh), size)
 
 
-def _area_cands(text: str, size: float, subject: Subject) -> Iterator[_Cand]:
+def _area_cands(text: str, size: float, subject: Subject, lays: list[list[str]]) -> Iterator[_Cand]:
     ang = upright(subject.angle)
     c = area_centroid(subject.poly)
     x0, y0, x1, y1 = bbox(subject.poly)
     grid = [(x0 + i * size, y0 + j * size) for i in range(int((x1 - x0) / size) + 1) for j in range(int((y1 - y0) / size) + 1)]
     seats = [c] + sorted((p for p in grid if inside(p[0], p[1], subject.poly)), key=lambda p: math.dist(p, c))[: AREA_SEATS - 1]
-    lays = layouts(text)
     for rank, p in enumerate(seats):
         for lines in lays:
             yield _Cand(0, rank, "inside", p, ang, tuple(lines), block_half(lines, size), size)
 
 
-def _cands(text: str, size: float, subject: Subject) -> Iterator[_Cand]:
+def _cands(text: str, size: float, subject: Subject, lines: list[str] | None = None) -> Iterator[_Cand]:
+    lays = [lines] if lines else layouts(text)
     if subject.kind == "point":
-        return _point_cands(text, size, subject)
+        return _point_cands(text, size, subject, lays)
     if subject.kind == "line":
-        return _line_cands(text, size, subject)
+        return _line_cands(text, size, subject, lays)
     if subject.kind == "area":
-        return _area_cands(text, size, subject)
+        return _area_cands(text, size, subject, lays)
     raise ValueError(f"a caption's subject is a point, a line or an area, not {subject.kind!r}")
 
 
-def place(text: str, size: float, subject: Subject, index: ObstacleIndex, frame: tuple[float, float, float, float] | None = None) -> Placement:
+def place(text: str, size: float, subject: Subject, index: ObstacleIndex, frame: tuple[float, float, float, float] | None = None, lines: list[str] | None = None) -> Placement:
     """Seat one caption by the standard (the module docstring). `frame` is the finished picture's (x0, y0, x1, y1); a
-    block that leaves it is never a candidate, because a clipped caption cannot be read. Never returns nothing."""
+    block that leaves it is never a candidate, because a clipped caption cannot be read. `lines` fixes the caption's
+    lines (a hand-drawn caption with a line of its own under it) instead of the wrap rule's layouts. Never returns
+    nothing."""
     clear = CLEAR_EM * size
     own: Poly | None = list(subject.poly) if subject.kind != "line" else None
     best: tuple[float, int, _Cand, Poly] | None = None
     first: tuple[_Cand, Poly] | None = None
-    for order, cand in enumerate(_cands(text, size, subject)):
+    for order, cand in enumerate(_cands(text, size, subject, lines)):
         block = rect(cand.center[0], cand.center[1], cand.half[0], cand.half[1], cand.angle)
         if first is None:
             first = (cand, block)
