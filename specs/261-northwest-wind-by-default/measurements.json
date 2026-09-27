@@ -641,10 +641,10 @@
   "verifies": "F1",
   "subject": "kuwabata",
   "round": "c71e1926",
-  "value": 91,
+  "value": 88,
   "unit": "ft",
-  "quantity": "the belt's median covered depth along the wind per 20 ft column, measured on the clumps' crowns (it was 67; main 104): the belt stands beyond a lane running along its band (past_the_lanes), so the ring lane no longer hollows it; 8 of 22 columns under 80 ft (was 16; main 6), the thinnest 36 ft (was 10)",
-  "source": "pool/hamlets/kuwabata/kuwabata.json village_groves[role=windbreak].clumps and clumps_offpage, r, meta.windward",
+  "quantity": "the belt's median covered depth along the NW wind per 20 ft column, measured on the DRAWN crowns (tree_crowns inside the windbreak's outline, each with its own radius): 88 ft (58 before the fix; main 93), 10 of 23 columns under 80 ft (19 before; main 8 of 22), and the crowns cover 75% of the belt's outline (53% before; main 80%) - the belt stands beyond the ring lane that ran down its middle (past_the_lanes)",
+  "source": "pool/hamlets/kuwabata/kuwabata.json tree_crowns (x, y, r) inside village_groves[role=windbreak].poly, meta.windward; the same measure on the pre-fix and main manifests",
   "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_hinterland.py"
  }
 }
