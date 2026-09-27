@@ -6591,5 +6591,18 @@
    "warichi",
    "jiwari"
   ]
+ },
+ "se-machi": {
+  "def": "An old land-register way of counting the paddies in a terraced plot: \"one tan, four se-machi\" records one tan of terrace made up of four separate paddies.",
+  "variants": [
+   "se-machi"
+  ]
+ },
+ "fault scarp": {
+  "def": "A steep face of ground left where the earth has shifted along a fault; at Sakaori, the steep west side of the valley, where the walls are highest.",
+  "variants": [
+   "fault scarp",
+   "fault scarps"
+  ]
  }
 }
