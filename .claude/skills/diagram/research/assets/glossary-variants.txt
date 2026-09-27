@@ -354,6 +354,7 @@ edo fabric	building fabric
 edo period	Edo period
 edo-period	Edo period
 eiro	eiro
+ekika	ekika
 embankment	embankment
 embankments	embankment
 emergent	emergent
@@ -1367,6 +1368,7 @@ suid	suid
 suiden	suiden
 suids	suid
 suimon	suimon
+sukego	sukego
 sun lane	sun lane
 sun lanes	sun lane
 superelevated	superelevation
@@ -1416,6 +1418,7 @@ tax-free plot	tax-free plot
 tedai	tedai
 teikaku	teikaku
 temizuya	temizuya
+tenma-cho	tenma-cho
 tenpo	Tenpo era
 tenpo era	Tenpo era
 tenshu	tenshu
@@ -1449,6 +1452,7 @@ tillering	tillering
 toe	toe
 tohoku	Tohoku
 toiya	ton'ya
+toiyaba	toiyaba
 tokaido	Tokaido
 toki no kane	toki no kane
 tokorobarai	tokorobarai
@@ -1518,6 +1522,7 @@ wagon inn	wagon inn
 wagon inns	wagon inn
 wagon-inn	wagon inn
 wakato	wakato
+waki-honjin	waki-honjin
 walled ward	lifang
 wallow	wallow
 wallows	wallow

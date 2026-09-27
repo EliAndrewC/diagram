@@ -6453,5 +6453,35 @@
    "dispersed villages",
    "dispersed farmsteads"
   ]
+ },
+ "waki-honjin": {
+  "def": "The second-rank lodging for lords at a Japanese post station: smaller than the honjin but furnished to its standard, raised audience room and all, and open to ordinary travelers whenever no lord was using it.",
+  "variants": [
+   "waki-honjin"
+  ]
+ },
+ "toiyaba": {
+  "def": "The office at a Japanese post station where the relay of porters and horses was run - sometimes part of the station headman's own house, one or two to a station, at its middle or at its ends.",
+  "variants": [
+   "toiyaba"
+  ]
+ },
+ "tenma-cho": {
+  "def": "The quarter of a Japanese castle town that carried the lord's relay horses and the labor that went with them, placed as a rule close to the castle's main gate.",
+  "variants": [
+   "tenma-cho"
+  ]
+ },
+ "sukego": {
+  "def": "The villages around a Japanese post station that sent men and horses to the station when its own were not enough for the relay.",
+  "variants": [
+   "sukego"
+  ]
+ },
+ "ekika": {
+  "def": "A relay station of Japan's ancient state highways, keeping a fixed number of post horses by the class of its road; the one excavated was a walled compound about 260 ft a side.",
+  "variants": [
+   "ekika"
+  ]
  }
 }
