@@ -708,7 +708,8 @@
  "baulk": {
   "def": "The unplowed strip of raised earth between two field plots, wide enough to walk on.",
   "variants": [
-   "baulk"
+   "baulk",
+   "baulks"
   ]
  },
  "bed shear stress": {
@@ -904,7 +905,8 @@
  "causeway": {
   "def": "A raised road carried across wet or flooded ground.",
   "variants": [
-   "causeway"
+   "causeway",
+   "causeways"
   ]
  },
  "center-pivot": {
@@ -2311,7 +2313,7 @@
   ]
  },
  "kido": {
-  "def": "A ward gate on a Japanese town street, shut at night to seal one block from the next; every tenement row and lane had its own.",
+  "def": "A ward gate, shut at night to seal one block from the next: on a Japanese town street every tenement row and lane had its own, and a Tang Chinese city's walled wards had theirs, shut at the dusk drum.",
   "variants": [
    "kido",
    "ward gate",
@@ -2885,7 +2887,9 @@
  "nucleated": {
   "def": "Of a settlement: gathered into one compact cluster of houses and plots, as against farmsteads dispersed each among its own fields.",
   "variants": [
-   "nucleated"
+   "nucleated",
+   "nucleus",
+   "nuclei"
   ]
  },
  "numajiro": {
@@ -5558,6 +5562,84 @@
   "def": "The Japanese syllabic script, in which each sign stands for one syllable; の, read \"no\", is one of its signs.",
   "variants": [
    "kana"
+  ]
+ },
+ "caoshi": {
+  "def": "A commercial district that grew up outside a Chinese city's walls, beginning in the Song dynasty. It descends from the rural periodic market of the Tang.",
+  "variants": [
+   "caoshi"
+  ]
+ },
+ "ward-and-market system": {
+  "def": "The Tang city's order in which residents lived in walled wards whose gates the street drum opened at sunrise and closed at sunset, and trade was held in designated markets.",
+  "variants": [
+   "ward-and-market system",
+   "ward-and-market"
+  ]
+ },
+ "periodic market": {
+  "def": "A market held on fixed days of a recurring cycle rather than every day - in Japan the rokusai-ichi met six times a month - to which the peasants of the surrounding countryside came in to buy and sell.",
+  "variants": [
+   "periodic market",
+   "periodic markets",
+   "periodic-market"
+  ]
+ },
+ "Manji": {
+  "def": "A Japanese era name of the early Edo period; its first year, Manji 1, is 1658.",
+  "variants": [
+   "Manji",
+   "Manji era"
+  ]
+ },
+ "Chang'an": {
+  "def": "The capital of the Tang dynasty: a walled city laid out in walled wards whose gates were shut at the dusk drum.",
+  "variants": [
+   "Chang'an"
+  ]
+ },
+ "Yasuki Taka": {
+  "def": "The first Imperial Treasurer in the setting, whose system separates the official who assesses what is owed from the one who collects it; the import tariff collected at provincial-city and capital gates follows it.",
+  "variants": [
+   "Yasuki Taka"
+  ]
+ },
+ "omotedana": {
+  "def": "A shop-house facing a main street, whose master was often landlord of the back-street tenements behind it (uradana, ura-nagaya).",
+  "variants": [
+   "omotedana"
+  ]
+ },
+ "dispersed settlement": {
+  "def": "A countryside where each farmhouse stands apart among its own fields instead of gathered in a cluster, as on Japan's Tonami Plain, where farmers built amid their rice fields to manage their water; the opposite of a nucleated settlement.",
+  "variants": [
+   "dispersed settlement",
+   "dispersed village",
+   "dispersed farmstead",
+   "dispersed settlements",
+   "dispersed villages",
+   "dispersed farmsteads"
+  ]
+ },
+ "Five Highways": {
+  "def": "The five trunk roads of Edo-period Japan, the Tokaido among them. Their ordinary width was about 3 to 4 ken (5.4 to 7.2 m), wider close to Edo, and carts were forbidden on them until the Meiji period.",
+  "variants": [
+   "Five Highways",
+   "gokaido"
+  ]
+ },
+ "post-horse system": {
+  "def": "The relay of horses kept along the highways to carry goods and travelers from one stage to the next. The shogunate banned carts from the highways so that the relay would not run short of horses.",
+  "variants": [
+   "post-horse system",
+   "post-horse"
+  ]
+ },
+ "footslope": {
+  "def": "The gentle lower slope at the foot of a hill or fan, above the wet ground. Here it is the dry ground a track can use to pass the ends of the wet toe.",
+  "variants": [
+   "footslope",
+   "footslopes"
   ]
  },
  "donggusup": {

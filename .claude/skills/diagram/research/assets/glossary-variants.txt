@@ -67,6 +67,7 @@ bastion	bastion
 bastions	bastion
 batter	batter
 baulk	baulk
+baulks	baulk
 bay	bay
 bays	bay
 beam span	ridge span
@@ -126,6 +127,7 @@ calamagrostis	Calamagrostis
 canal corridor	canal corridor
 canal corridors	canal corridor
 cangue	cangue
+caoshi	caoshi
 caravanserai	caravanserai
 caravanserais	caravanserai
 carex	Carex
@@ -137,12 +139,14 @@ castle towns	jokamachi
 catchment	catchment
 catena	catena
 causeway	causeway
+causeways	causeway
 celestial order	Celestial Order
 center-pivot	center-pivot
 cesspit	koedame
 cesspits	koedame
 chan	Chan
 chan buddhism	Chan
+chang'an	Chang'an
 chaoguan	chaoguan
 chenghuangmiao	chenghuangmiao
 chi	chi
@@ -264,6 +268,12 @@ dike-ponds	dike-pond
 discharge	discharge
 dish pond	sara-ike
 dish ponds	sara-ike
+dispersed farmstead	dispersed settlement
+dispersed farmsteads	dispersed settlement
+dispersed settlement	dispersed settlement
+dispersed settlements	dispersed settlement
+dispersed village	dispersed settlement
+dispersed villages	dispersed settlement
 distributaries	distributary
 distributary	distributary
 ditai	mamian
@@ -387,6 +397,7 @@ fishways	fishway
 fit zoom	fit zoom
 fit-zoom	fit zoom
 five dynasties	Five Dynasties
+five highways	Five Highways
 five-ring pagoda	five-ring pagoda
 five-ring pagodas	five-ring pagoda
 flood stage	river stage
@@ -400,6 +411,8 @@ footing	footing
 footings	footing
 footplank	footplank
 footplanks	footplank
+footslope	footslope
+footslopes	footslope
 forest litter	forest litter
 forest litters	forest litter
 fortune	Fortune
@@ -453,6 +466,7 @@ go	go
 goemon-buro	goemon-buro
 goemonburo	goemon-buro
 gogura	gogura
+gokaido	Five Highways
 gongxiefang	gongxiefang
 gorinto	five-ring pagoda
 goshi	gōshi
@@ -800,6 +814,8 @@ magariya	magariya
 main channel	main stem
 main stem	main stem
 mamian	mamian
+manji	Manji
+manji era	Manji
 manning	Manning
 manning's formula	Manning
 maoqu	maoqu
@@ -897,6 +913,8 @@ northern song	Song dynasty
 nrcs	NRCS
 nrcs-designed	NRCS
 nucleated	nucleated
+nuclei	nucleated
+nucleus	nucleated
 numajiro	numajiro
 nunosarashi	nunosarashi
 nuriya	nuriya
@@ -913,6 +931,7 @@ ofuregaki	ofuregaki
 okaji	ōkaji
 okajiba	ōkaji
 omamori	omamori
+omotedana	omotedana
 omoya	omoya
 onari-goten	onari-goten
 one-bay	bay
@@ -951,6 +970,9 @@ peer-reviewed flora	flora
 perched	perched river
 perched river	perched river
 perched, silt-choked river	perched river
+periodic market	periodic market
+periodic markets	periodic market
+periodic-market	periodic market
 petuntse	petuntse
 phragmites	Phragmites
 phragmites australis	Phragmites
@@ -971,6 +993,8 @@ post station	shukuba
 post stations	shukuba
 post town	shukuba
 post towns	shukuba
+post-horse	post-horse system
+post-horse system	post-horse system
 post-station	shukuba
 post-stations	shukuba
 postern	postern
@@ -1342,6 +1366,8 @@ wanshu zaji	Wanshu zaji
 waraguro	waraguro
 ward gate	kido
 ward gates	kido
+ward-and-market	ward-and-market system
+ward-and-market system	ward-and-market system
 wari-tetsu	wari-tetsu
 warren	warren
 warrens	warren
@@ -1396,6 +1422,7 @@ yashiki	yashiki
 yashikigami	yashikigami
 yashikigami-sama	yashikigami
 yashikirin	yashikirin
+yasuki taka	Yasuki Taka
 yato	yato
 yatsu	yato
 yatsuda	yato
