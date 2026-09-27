@@ -628,6 +628,7 @@ hereditary temples	hereditary temple
 hinin	hinin
 hinoki	hinoki
 hinomi-yagura	hinomi-yagura
+hip-and-gable	irimoya
 hipposandal	hipposandal
 hipposandals	hipposandal
 hiro	hiro
@@ -674,6 +675,7 @@ hyo	hyō
 hyojosho	Hyōjōsho
 hyō	hyō
 hyōjōsho	Hyōjōsho
+iai	iai
 ichi no torii	ichi-no-torii
 ichi-no-torii	ichi-no-torii
 ido	ido
@@ -766,6 +768,8 @@ jori-sei	jori
 josui	josui
 josui ido	josui-ido
 josui-ido	josui-ido
+ju-jutsu	jujutsu
+jujutsu	jujutsu
 junk	junk
 junks	junk
 jōdo	Jodo
@@ -786,6 +790,7 @@ kamakura period	Kamakura period
 kame	kame
 kami	kami
 kami-yashiki	kami-yashiki
+kamidana	kamidana
 kamiza	kamiza
 kan	kan
 kan'ei	Kan'ei
@@ -1044,6 +1049,7 @@ nagaya	nagaya
 nagaya-mon	nagayamon
 nagayamon	nagayamon
 nagewatashi	nagewatashi
+naginata	naginata
 naka-bori	middle moat
 nakaboshi	nakaboshi
 nakamon	nakamon
@@ -1430,6 +1436,7 @@ srtm	SRTM
 staggered shelves	staggered shelves
 staking frame	staking frame
 staking frames	staking frame
+state shinto	State Shinto
 steading	steading
 steadings	steading
 stelae	stele
@@ -1438,6 +1445,8 @@ steles	stele
 stem density	stem density
 stilling pool	stilling pool
 stone pitching	stone pitching
+storehouse-built	storehouse-built
+storehouse-built machiya	storehouse-built
 straw rick	rick
 straw ricks	rick
 stream order	stream order
@@ -1587,6 +1596,7 @@ tsumairi	tsumairi
 tsumairi-type	tsumairi
 tsunaba	tsunaba
 tsushi nikai	half-story
+tsushi-nikai	half-story
 tudi miao	tudi miao
 tudigong	tudi miao
 tulou	tulou
@@ -1753,6 +1763,7 @@ zongjia	zongjia
 zooplankton	zooplankton
 zuku	zuku
 zushi nikai	half-story
+zushi-nikai	half-story
 ō-aza	ō-aza
 ōdoko	odoko
 ōiya	ōiya

@@ -5645,7 +5645,8 @@
   "def": "A hip-and-gable roof: hipped on its lower slopes, with a small gable at each end of the ridge.",
   "variants": [
    "irimoya",
-   "irimoya-roofed"
+   "irimoya-roofed",
+   "hip-and-gable"
   ]
  },
  "nagare-zukuri": {
@@ -6703,7 +6704,9 @@
    "half-story",
    "half-stories",
    "tsushi nikai",
-   "zushi nikai"
+   "zushi nikai",
+   "tsushi-nikai",
+   "zushi-nikai"
   ]
  },
  "ridge-divided nagaya": {
@@ -6850,6 +6853,44 @@
   "variants": [
    "Northern and Southern Courts",
    "Nanbokucho"
+  ]
+ },
+ "storehouse-built": {
+  "def": "Of a townhouse: built the way a storehouse (kura) is built, with thick earth-plastered walls against fire, and standing on the street front. It was Edo's way, the opposite of Kyoto's, where the storehouse stood at the back of the lot.",
+  "variants": [
+   "storehouse-built",
+   "storehouse-built machiya"
+  ]
+ },
+ "kamidana": {
+  "def": "A small shelf-shrine to the gods, set high on a wall. The traditional Edo-period practice hall did not have one; a Ministry of Education meeting of 1936 made one required in school halls, under State Shinto.",
+  "variants": [
+   "kamidana"
+  ]
+ },
+ "iai": {
+  "def": "The Japanese art of drawing the sword and cutting in one movement. At a large domain school it was taught in its own practice hall, apart from fencing and the spear.",
+  "variants": [
+   "iai"
+  ]
+ },
+ "jujutsu": {
+  "def": "The Japanese art of fighting unarmed or lightly armed, by throws, holds and strikes. From the mid-Edo period its practice centered on free sparring (randori), and it came indoors onto board or tatami floors.",
+  "variants": [
+   "jujutsu",
+   "ju-jutsu"
+  ]
+ },
+ "State Shinto": {
+  "def": "The Japanese state's organization of Shinto as a national observance from the Meiji era until 1945. Under it, the shrine shelf became a required fitting of school practice halls in 1936.",
+  "variants": [
+   "State Shinto"
+  ]
+ },
+ "naginata": {
+  "def": "A Japanese pole weapon with a long curved blade, rendered \"halberd\" in English. At a large domain school it was taught in the same hall as iai and jujutsu.",
+  "variants": [
+   "naginata"
   ]
  }
 }
