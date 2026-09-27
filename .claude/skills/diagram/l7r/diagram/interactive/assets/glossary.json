@@ -125,7 +125,8 @@
    "Han dynasty",
    "Han-dynasty",
    "Han China",
-   "Eastern Han"
+   "Eastern Han",
+   "Western Han"
   ]
  },
  "Heian": {
@@ -5731,6 +5732,41 @@
   "def": "An Edo-period method of protecting a riverbank, named for kaya, the tall grass and reed used for thatch; the source that names it shows it only in a drawing.",
   "variants": [
    "kaya-haguchi"
+  ]
+ },
+ "Qin dynasty": {
+  "def": "The first dynasty to rule a unified China (221-206 BC), just before the Han dynasty.",
+  "variants": [
+   "Qin dynasty",
+   "Qin-dynasty"
+  ]
+ },
+ "Three Kingdoms": {
+  "def": "The period (220-280) after the Han dynasty when China was split among three states; Cao Wei was the northern one, ruled by the Cao family.",
+  "variants": [
+   "Three Kingdoms",
+   "Cao Wei",
+   "Three Kingdoms period"
+  ]
+ },
+ "hate-ike": {
+  "def": "The pool of a kabata that is joined to the settlement's waterways, so that water overflowing it runs out into them and on to the stream through the settlement.",
+  "variants": [
+   "hate-ike"
+  ]
+ },
+ "kundoku": {
+  "def": "The Japanese way of reading a text written in Classical Chinese, rearranging it into Japanese word order and grammar as it is read.",
+  "variants": [
+   "kundoku"
+  ]
+ },
+ "loose-cluster village": {
+  "def": "A village whose houses stand together in one group but loosely spaced, each with room around it, rather than packed tight or strung along a road.",
+  "variants": [
+   "loose-cluster village",
+   "loose-cluster villages",
+   "loose-cluster"
   ]
  }
 }

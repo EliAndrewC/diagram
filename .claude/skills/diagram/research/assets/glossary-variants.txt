@@ -122,6 +122,7 @@ calamagrostis	Calamagrostis
 canal corridor	canal corridor
 canal corridors	canal corridor
 cangue	cangue
+cao wei	Three Kingdoms
 caravanserai	caravanserai
 caravanserais	caravanserai
 carex	Carex
@@ -509,6 +510,7 @@ hata-ei	hata-ei
 hatago	hatago
 hatake	hatake
 hatamoto	hatamoto
+hate-ike	hate-ike
 hazakake	hazakake
 head race	head race
 head works	head works
@@ -739,6 +741,7 @@ kui	kui
 kumi	kumi
 kumi-yashiki	kumi-yashiki
 kumigashira	kumigashira
+kundoku	kundoku
 kunugi	kunugi
 kura	kura
 kuramai	kuramai
@@ -788,6 +791,9 @@ log boom	boom
 lognormal	lognormal
 longan	longan
 longans	longan
+loose-cluster	loose-cluster village
+loose-cluster village	loose-cluster village
+loose-cluster villages	loose-cluster village
 loose-log drive	kanagashi
 loose-log driving	kanagashi
 louzeyuan	louzeyuan
@@ -1006,6 +1012,8 @@ qi	qi
 qiandao	qiandao
 qiaolou	gulou
 qimin yaoshu	Qimin Yaoshu
+qin dynasty	Qin dynasty
+qin-dynasty	Qin dynasty
 qing	Qing dynasty
 qing dynasty	Qing dynasty
 qing-dynasty	Qing dynasty
@@ -1274,6 +1282,8 @@ thatch fields	thatch field
 the pool	the pool
 thousand character classic	Thousand Character Classic
 three bays	bay
+three kingdoms	Three Kingdoms
+three kingdoms period	Three Kingdoms
 three officials	Three Officials
 threshing yard	threshing yard
 threshing yards	threshing yard
@@ -1381,6 +1391,7 @@ well-sweep	well-sweep
 weng cheng	wengcheng
 wengcheng	wengcheng
 wenmiao	wenmiao
+western han	Han dynasty
 wet run	wet run
 wet runs	wet run
 wetted perimeter	wetted perimeter
