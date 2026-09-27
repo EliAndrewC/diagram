@@ -3764,6 +3764,7 @@
   "variants": [
    "tatami",
    "mat",
+   "mats",
    "twelve-mat"
   ]
  },
@@ -5788,6 +5789,33 @@
   "variants": [
    "branch house",
    "branch houses"
+  ]
+ },
+ "shikidai": {
+  "def": "The low board step at a formal entrance (genkan), where a guest of rank stepped up from the earthen floor and was received; the name also went to the room behind it, which at the Sayama domain's council hall was 6 mats with a closet. In the Edo period an entrance with one was what the word genkan meant.",
+  "variants": [
+   "shikidai",
+   "shiki-dai"
+  ]
+ },
+ "kyunin": {
+  "def": "A retainer of a domain who received a stipend or a small fief from the lord; at Sayama the middle-rank kyunin lived in detached houses the domain supplied.",
+  "variants": [
+   "kyunin",
+   "kyūnin",
+   "kyunins"
+  ]
+ },
+ "munamon": {
+  "def": "A simple gate with its own gabled roof resting on a single pair of posts. At the Koseki house at Shiroishi it is the gate from the street.",
+  "variants": [
+   "munamon"
+  ]
+ },
+ "seigaiha": {
+  "def": "A traditional pattern of overlapping arcs arranged like fish scales, meant to show waves of the sea. It is used on cloth, paper and walls.",
+  "variants": [
+   "seigaiha"
   ]
  }
 }

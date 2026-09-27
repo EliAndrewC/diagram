@@ -748,7 +748,10 @@ kuwabata	Kuwabata
 kyo-machiya	machiya
 kyoho	Kyoho
 kyuhi	kyuhi
+kyunin	kyunin
+kyunins	kyunin
 kyōhō	Kyoho
+kyūnin	kyunin
 lake tai	Lower Yangzi
 land consolidation	kochi seiri
 land readjustment	kochi seiri
@@ -813,6 +816,7 @@ masson pine	masson pine
 masugata	masugata
 mat	tatami
 matou	gangi
+mats	tatami
 matsu	matsu
 meander	meander
 meibutsu	meibutsu
@@ -860,6 +864,7 @@ muenbotoke	muenzuka
 muenzuka	muenzuka
 mugi	mugi
 mulberry-dike fishpond	dike-pond
+munamon	munamon
 murataka	murataka
 muromachi	Muromachi
 musashi	Musashi
@@ -1106,6 +1111,7 @@ se	se
 secondary forest	secondary forest
 secondary woodland	secondary forest
 secondary woodlands	secondary forest
+seigaiha	seigaiha
 seijoue	seijoue
 sekisho	sekisho
 senbon torii	Senbon Torii
@@ -1133,6 +1139,8 @@ shibai-goya	shibai-goya
 shichiya	shichiya
 shijin soo	four gods
 shijin-soo	four gods
+shiki-dai	shikidai
+shikidai	shikidai
 shin sect	Jodo Shinshu
 shinai	shinai
 shinden	shinden
