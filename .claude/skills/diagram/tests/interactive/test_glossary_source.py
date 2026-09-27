@@ -95,6 +95,12 @@ def test_a_directory_of_term_files_is_read_back_in_prefix_order(tmp_path: pathli
     for name, body in (("0010-a.json", {"term": "a", "variants": ["a"], "def": "first"}), ("0020-b.json", {"term": "b", "variants": ["b"], "def": "second"})):
         (tmp_path / TERMS / name).write_text(json.dumps(body, ensure_ascii=False), encoding="utf-8")
     assert [t["term"] for t in term_files(str(tmp_path))] == ["a", "b"]
+    # past 9990 a prefix takes a fifth digit, and it orders by its number: 10770 after 1080, not before
+    for name, body in (("10770-z.json", {"term": "z", "variants": ["z"], "def": "last"}), ("1080-y.json", {"term": "y", "variants": ["y"], "def": "before"})):
+        (tmp_path / TERMS / name).write_text(json.dumps(body, ensure_ascii=False), encoding="utf-8")
+    assert [t["term"] for t in term_files(str(tmp_path))] == ["a", "b", "y", "z"]
+    (tmp_path / TERMS / "10770-z.json").unlink()
+    (tmp_path / TERMS / "1080-y.json").unlink()
 
     (tmp_path / TERMS / "0020-c.json").write_text(json.dumps({"term": "c", "variants": ["c"], "def": "third"}, ensure_ascii=False), encoding="utf-8")
     with pytest.raises(GlossaryError, match="both claim prefix"):

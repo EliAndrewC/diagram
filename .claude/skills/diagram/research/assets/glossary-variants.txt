@@ -157,6 +157,7 @@ chang'an	Chang'an
 chaoguan	chaoguan
 chenghuangmiao	chenghuangmiao
 chi	chi
+chigaidana	staggered shelves
 chikaraishi	chikaraishi
 china fir	China fir
 chinju	chinju
@@ -169,8 +170,10 @@ chonin	chonin
 chonin-chi	buke-chi
 chori	chori
 choriboshi	chori
+chotsuke	chōtsuke
 chronosequence	chronosequence
 chugen	chugen
+chōtsuke	chōtsuke
 chōzuya	temizuya
 circuit	wall circuit
 circuit's length	wall circuit
@@ -211,6 +214,8 @@ coppicing	coppice
 copse	copse
 corvee	corvee
 corvée	corvee
+county magistrate	county magistrate
+county magistrates	county magistrate
 county seat	county seat
 county seats	county seat
 coursed	coursing
@@ -354,6 +359,7 @@ edo fabric	building fabric
 edo period	Edo period
 edo-period	Edo period
 eiro	eiro
+ekika	ekika
 embankment	embankment
 embankments	embankment
 emergent	emergent
@@ -581,6 +587,7 @@ heian-kyo	Heian-kyo
 heian-kyo's	Heian-kyo
 heian-kyō	Heian-kyo
 heian-kyō's	Heian-kyo
+heibonsha	Heibonsha
 heijo-kyo	Heijo-kyo
 heijo-kyo's	Heijo-kyo
 heijō-kyō	Heijo-kyo
@@ -645,6 +652,8 @@ ieyasu	Ieyasu
 ieyasu's	Ieyasu
 igeta	igeta
 igune	igune
+imado ware	Imado ware
+imado-yaki	Imado ware
 imperial spine	Imperial spine
 important cultural landscape	Important Cultural Landscape
 important cultural landscapes	Important Cultural Landscape
@@ -824,6 +833,7 @@ kosatsu	kosatsuba
 kosatsuba	kosatsuba
 kotai-yoriai	kotaiyoriai
 kotaiyoriai	kotaiyoriai
+kozashi	kozashi
 kuchiireya	hitoyado
 kui	kui
 kumi	kumi
@@ -965,6 +975,8 @@ mugi	mugi
 mukaibansho	mukaibansho
 mukakusha	mukakusha
 mulberry-dike fishpond	dike-pond
+multiple cities	multiple city
+multiple city	multiple city
 murabarai	murabarai
 murataka	murataka
 muromachi	Muromachi
@@ -983,6 +995,7 @@ nagewatashi	nagewatashi
 naka-bori	middle moat
 nakaboshi	nakaboshi
 nakamon	nakamon
+nakasendo	Nakasendo
 nanbu	Tohoku
 nando	nando
 nanohana	rape
@@ -1010,10 +1023,13 @@ night-soil	night soil
 nightsoil	night soil
 nihonbashi	Nihonbashi
 ninomaru	ninomaru
+ninsokusashi	ninsokusashi
+nipponica	Nipponica
 noborigama	noborigama
 nogyo zensho	Nogyo Zensho
 normal depth	normal depth
 northern song	Song dynasty
+northern wei	Northern Wei
 nrcs	NRCS
 nrcs-designed	NRCS
 nucleated	nucleated
@@ -1181,6 +1197,7 @@ ricks	rick
 ridge span	ridge span
 riffle	riffle
 riffles	riffle
+rin	rin
 ring dike	ring dike
 ring levee	ring dike
 ring-dike	ring dike
@@ -1200,6 +1217,7 @@ row village	roson
 runners	yayi
 ryo	ryo
 ryobosei	ryobosei
+ryobu	ryobu
 rōjū	Roju
 sae no kami	sae no kami
 sageba	ōkaji
@@ -1211,6 +1229,7 @@ sally port	sally port
 sallyport	sally port
 salvage excavation	salvage excavation
 san no torii	ichi-no-torii
+san'yodo	Sanyodo
 san-no-maru	sannomaru
 san-no-torii	ichi-no-torii
 sand junk	sand junk
@@ -1225,6 +1244,8 @@ sanmai	sanmai
 sannomaru	sannomaru
 sanshaku-michi	sanshaku-michi
 sanson	sankyoson
+sanyo-do	Sanyodo
+sanyodo	Sanyodo
 sara-ike	sara-ike
 sarae	sarae
 sasa	sasa
@@ -1236,6 +1257,8 @@ se	se
 secondary forest	secondary forest
 secondary woodland	secondary forest
 secondary woodlands	secondary forest
+seed	seed
+seeds	seed
 seijoue	seijoue
 seisatsu	kosatsuba
 seisatsuba	kosatsuba
@@ -1268,6 +1291,7 @@ shell keeps	shell keep
 shi	shi
 shibai-goya	shibai-goya
 shichiya	shichiya
+shide	shide
 shijin soo	four gods
 shijin-soo	four gods
 shimenawa	shimenawa
@@ -1338,6 +1362,7 @@ spring line	spring line
 square keep	shell keep
 square keeps	shell keep
 srtm	SRTM
+staggered shelves	staggered shelves
 staking frame	staking frame
 staking frames	staking frame
 steading	steading
@@ -1367,6 +1392,7 @@ suid	suid
 suiden	suiden
 suids	suid
 suimon	suimon
+sukego	sukego
 sun lane	sun lane
 sun lanes	sun lane
 superelevated	superelevation
@@ -1416,8 +1442,11 @@ tax-free plot	tax-free plot
 tedai	tedai
 teikaku	teikaku
 temizuya	temizuya
+tenma-cho	tenma-cho
 tenpo	Tenpo era
 tenpo era	Tenpo era
+tensho	Tensho
+tensho-era	Tensho
 tenshu	tenshu
 tensuioke	tensuioke
 tera-machi	teramachi
@@ -1449,6 +1478,7 @@ tillering	tillering
 toe	toe
 tohoku	Tohoku
 toiya	ton'ya
+toiyaba	toiyaba
 tokaido	Tokaido
 toki no kane	toki no kane
 tokorobarai	tokorobarai
@@ -1459,8 +1489,12 @@ tonya	ton'ya
 torii	torii
 toro	Toro
 toro site	Toro
+toshiyori	toshiyori
 total length and fall	fall
+town ground	town ground
+town grounds	town ground
 town magistrates	town magistrate
+town-row ground	town ground
 towpath	towpath
 towpaths	towpath
 tozama	tozama
@@ -1491,6 +1525,7 @@ ujidera	bodaiji
 ujigami	ujigami
 ujiko	ujiko
 umagutsu	umagutsu
+umasashi	umasashi
 umaya	umaya
 umayado	umayado
 umayagoe	kyuhi
@@ -1518,6 +1553,7 @@ wagon inn	wagon inn
 wagon inns	wagon inn
 wagon-inn	wagon inn
 wakato	wakato
+waki-honjin	waki-honjin
 walled ward	lifang
 wallow	wallow
 wallows	wallow
@@ -1581,6 +1617,7 @@ yachida	yato
 yagura	yagura
 yaita	yaita
 yam	yam
+yamahannoki	yamahannoki
 yamen	yamen
 yamen god	yamen-god
 yamen-god	yamen-god

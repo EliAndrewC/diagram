@@ -39,7 +39,9 @@ TERMS = os.path.join("assets", "glossary")
 #: The prefix is gapped by ten, as `research/sources/` is: inserting a term between two renames nothing.
 GAP = 10
 DIGITS = 4
-_NAMED = re.compile(r"^(\d{4})-(.+)\.json$")
+#: Four digits OR MORE: `make reserve` counts past 9990 into 10000+ (feature 271 met `10770-waki-honjin.json`
+#: refused), so the files are ordered by the prefix's number, never by the name, where `10770` would sort before `1080`.
+_NAMED = re.compile(r"^(\d{4,})-(.+)\.json$")
 #: What `json.dumps` was called with. Measured, not guessed: the committed file matches this exactly.
 _DUMP = {"ensure_ascii": False, "indent": 1}
 
@@ -59,7 +61,7 @@ def term_of(name: str) -> str:
     """The term a filename claims - for checking against the file's own content, never for the value."""
     found = _NAMED.match(name)
     if not found:
-        raise GlossaryError(f"{name}: not a term file. A term file is <prefix>-<term>.json, the prefix four digits counting by ten")
+        raise GlossaryError(f"{name}: not a term file. A term file is <prefix>-<term>.json, the prefix four digits or more counting by ten")
     return _decode(found.group(2))
 
 
@@ -132,8 +134,10 @@ def term_files(root: str | None = None) -> list[dict]:
         raise GlossaryError(f"{TERMS}/: no term files - run `make glossary SPLIT=1`")
     seen: dict[int, str] = {}
     out = []
-    for name in sorted(os.listdir(here)):
+    names = os.listdir(here)
+    for name in names:
         term_of(name)  # refuses a stray file by its name
+    for name in sorted(names, key=lambda n: (position_of(n), n)):
         at = position_of(name)
         if at in seen:
             raise GlossaryError(f"{TERMS}/: {seen[at]} and {name} both claim prefix {at:0{DIGITS}d} - the assembly will not choose between them")
