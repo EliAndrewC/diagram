@@ -414,14 +414,18 @@ done for each of our other iterations."*
    brief's step 6 names `entry-drift` among the reports it applies.
 2. **A check group is sized by everything it checks** (recommendation 2). `check_groups` packs LOAD, first fit,
    largest first: a question's bytes with its notes, plus, for each modal `_entry_owed.py` names as owed from it, the
-   modal's prose and `MODAL_WORK` = 2,000 bytes for its report and rewrite (a GUESS, labeled at the constant, which
+   modal's prose and `MODAL_WORK` = 2,000 bytes for its report and rewrite - each modal credited to the first of the
+   questions it is owed from that a check group takes, the group that runs its `entry-drift` (the first version
+   credited the first on the PAGE and lost `paddy`, owed from 110 but listed first under 020; plan review) (a GUESS, labeled at the constant, which
    this round measures); the registry keys are one more item whose load is their entries' bytes, and the group that
    takes it checks them. The budget, `GROUP_BYTES` = 28,000, is FITTED: over the six measured check sessions of R6 to
    R8, peak context = 40,881 + 2.08 x load, so a load of about 28,000 keeps a session near the 100,000 the earlier
    two-question groups peaked at (observed 2026-09-27; method: each session's questions, owed modals at the median
    modal prose of 1,225 bytes, and registry entries, against its recorded peak, least squares; loose - fabric's 2a
-   peaked at 7.5x its load while fixing tool defects). The fields session's load under this rule would have been
-   packed into three sessions, not one.
+   peaked at 7.5x its load while fixing tool defects). The fields session's load under this rule packs into three
+   sessions, not one: 070 (26,826 bytes of load) alone, 110 (13,990) alone, 160 (16,213) with the four registry keys
+   (3,878) (observed 2026-09-27; method: HEAD's `brief.py loads` and `check_groups` run on the fields handoff commit
+   61551e06 in a detached worktree, where `_entry_owed.py` names the seven modals R8 counts).
 3. **Per thing checked** (recommendation 3). `tokens.py summary --modals N --keys N` adds `per_thing` - the total over
    questions + owed modals + registry keys - with per question beside it.
 4. **The measured page is `archetypes`**: two FR-002 items (questions 100 and 140) and one FR-006 item, no question

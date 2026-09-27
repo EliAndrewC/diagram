@@ -252,30 +252,36 @@ def check_groups(handoff: str, sizes: dict[str, int] | None = None, keys_load: i
     return sorted((sorted(b) for b in bins), key=lambda b: b[0]), keys
 
 
-def owed_modals(page: str) -> dict[str, list[tuple[str, int]]]:
-    """section -> [(modal key, its docstring's bytes)] for every modal `_entry_owed.py` names as owed from a question on
-    this page (a modal read from two of its questions is counted with the first)."""
+def owed_modals(page: str) -> list[tuple[str, int, list[str]]]:
+    """[(modal key, its docstring's bytes, EVERY section of this page it is owed from)] for each modal `_entry_owed.py`
+    names. A modal can be owed from several questions; `loads` credits it to the one a check group actually takes."""
     import ast  # noqa: PLC0415
     got = subprocess.run([sys.executable, str(CLONE / "scripts/_entry_owed.py")], cwd=CLONE, capture_output=True, text=True, check=False).stdout
-    out: dict[str, list[tuple[str, int]]] = {}
+    out: list[tuple[str, int, list[str]]] = []
     lines = got.splitlines()
     for i, line in enumerate(lines):
         m = re.match(r"(.+?) - .* - prose at (\S+):(\d+)$", line)
         reads = lines[i + 1] if i + 1 < len(lines) else ""
-        hit = re.search(rf"research/{re.escape(page)}/(\d{{3}})-", reads)
-        if not (m and hit):
+        secs = list(dict.fromkeys(re.findall(rf"research/{re.escape(page)}/(\d{{3}})-", reads)))
+        if not (m and secs):
             continue
         src = (CLONE / m.group(2)).read_text(encoding="utf-8")
         node = next((n for n in ast.walk(ast.parse(src)) if isinstance(n, ast.ClassDef) and n.lineno == int(m.group(3))), None)
-        out.setdefault(hit.group(1), []).append((m.group(1), len(ast.get_docstring(node) or "") if node else 0))
+        out.append((m.group(1), len(ast.get_docstring(node) or "") if node else 0, secs))
     return out
 
 
 def loads(page: str, handoff: str) -> tuple[dict[str, int], int]:
     """(section -> its load: question and notes bytes + its owed modals' prose; the registry keys' load: their entries'
     bytes) - what `check_groups` packs."""
-    owed = owed_modals(page)
-    size = {n: b + sum(m + MODAL_WORK for _k, m in owed.get(n, [])) for n, (_t, b) in questions(page).items()}
+    checked = list(dict.fromkeys(re.findall(r"SECTION=(\d{3})", handoff)))
+    size = {n: b for n, (_t, b) in questions(page).items()}
+    for _key, prose, secs in owed_modals(page):
+        # credited to the FIRST of its sections that a check group takes - the group that will run its entry-drift
+        # (plan review, D17: crediting the first on the page lost `paddy`, owed from 110 but listed under 020)
+        home = next((s for s in checked if s in secs), None)
+        if home is not None:
+            size[home] += prose + MODAL_WORK
     works = SKILL / "research/sources/010-works-cited"
     keys = re.findall(r"KEY=([a-z0-9][a-z0-9-]*)", handoff)
     keys_load = sum(f.stat().st_size for k in dict.fromkeys(keys) for f in works.glob(f"*-{k}.html"))
