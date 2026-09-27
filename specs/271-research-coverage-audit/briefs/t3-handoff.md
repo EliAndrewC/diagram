@@ -85,7 +85,9 @@ New glossary terms: waki-honjin, toiyaba, tenma-cho, sukego, ekika (10770-10810)
 - **267 also holds `kotobank-umaya` for the same URL as this clone's `umaya-kotobank`** (kotobank 厩). One home per
   work: on the pull-back, re-point towns/350's five notes at `kotobank-umaya` and delete `11380-umaya-kotobank.html`
   (or the reverse, if 267 cites nothing from the farmhouse-stable article).
-- towns/320 now labels a county town's inn count SILENT; towns/050 (not 269's) carries that label.
+- towns/320 now labels a county town's inn count SILENT; towns/050 (not 269's) carries that label. **T1
+  (clone diagram-research-4) also claims edits to towns/050**: this clone changed only the sentence "The city tier
+  keeps several of these at its gates; a town keeps one." - merge by hand if T1 touched it.
 - The jimingyi page and a second page on the same site disagree on the station's perimeter (2,330 m vs ~2,000 m);
   only the first is cited.
 - Fixed on the way (constitution XIV), each with a test: `scripts/reserve-prefix.py` refused a key that a longer key
