@@ -6892,5 +6892,24 @@
   "variants": [
    "naginata"
   ]
+ },
+ "kang": {
+  "def": "A long raised platform of brick or earth, heated from beneath by a flue, that served as the bed in a north-Chinese house or inn; one in a carters' inn slept twenty and more.",
+  "variants": [
+   "kang",
+   "kangs"
+  ]
+ },
+ "mise": {
+  "def": "The board-floored shop room at the street front of a townhouse, where goods were sold or trade was done; in an inn built on the townhouse plan it stood beside the earth-floored passage.",
+  "variants": [
+   "mise"
+  ]
+ },
+ "sensei": {
+  "def": "A teacher of a martial art - here the master who heads a dojo, lives by its teaching and takes enrolled students.",
+  "variants": [
+   "sensei"
+  ]
  }
 }

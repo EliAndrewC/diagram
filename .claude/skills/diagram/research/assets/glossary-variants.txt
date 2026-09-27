@@ -799,6 +799,8 @@ kana	kana
 kanagashi	kanagashi
 kanbun	Kanbun
 kanden	kanden
+kang	kang
+kangs	kang
 kangxi	Kangxi
 kannon	Kannon
 kannushi	kannushi
@@ -1000,6 +1002,7 @@ ming-dynasty	Ming dynasty
 ming-qing	Qing dynasty
 minka	minka
 mire	mire
+mise	mise
 mitochigai	mitochigai
 mitsuke	mitsuke
 miyaza	miyaza
@@ -1335,6 +1338,7 @@ sekisho	sekisho
 senbon torii	Senbon Torii
 sengoku	Sengoku
 senmaida	senmaida
+sensei	sensei
 sento	sento
 sentō	sento
 separated flow	separation zone
