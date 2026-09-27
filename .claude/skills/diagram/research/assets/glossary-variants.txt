@@ -548,6 +548,8 @@ irrigation ditch	irrigation ditch
 irrigation ditches	irrigation ditch
 irrigation duty	water duty
 ishigaki	ishigaki
+ishikawa method	Ishikawa method
+ishikawa-method	Ishikawa method
 isohyet	isohyet
 isohyets	isohyet
 isotherm	isohyet
@@ -757,6 +759,8 @@ meiji	Meiji
 meireki	Meireki
 men-hai	taiping-gang
 mengxi bitan	Mengxi Bitan
+micro-high	micro-high
+micro-highs	micro-high
 mimizuka	ear mound
 ming	Ming dynasty
 ming dynasty	Ming dynasty

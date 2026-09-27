@@ -5376,5 +5376,19 @@
   "variants": [
    "fang"
   ]
+ },
+ "micro-high": {
+  "def": "A patch of ground only slightly higher than the plain around it, dry enough that paddy water cannot reach it, so it takes dry fields or houses.",
+  "variants": [
+   "micro-high",
+   "micro-highs"
+  ]
+ },
+ "Ishikawa method": {
+  "def": "A Meiji-era way of consolidating paddy land: every parcel is squared into a rectangle that abuts both a branch road and a supply-and-drainage channel.",
+  "variants": [
+   "Ishikawa method",
+   "Ishikawa-method"
+  ]
  }
 }

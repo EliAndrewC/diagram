@@ -41,12 +41,15 @@ class IrrigationDitch(Kind):
 
     Why: The comb layout - supply along the high margins, delivery ditches perpendicular down-slope, one drain on
     the lowest line - is the Edo layout attributed to the Kishu school, and it is what Chinese canal doctrine
-    codifies too. Mains taper as branches tap them; the net is SPARSE because a village digs the minimum, and
-    a ditch beside every paddy is a Meiji anachronism. What the net draws is drawn at true size, and it stops
+    codifies too. Mains taper as branches tap them. The old form passes water from paddy to paddy over the
+    bund (tagoshi) rather than down a ditch to each, and a ditch beside every paddy is a Meiji anachronism, so
+    the net is drawn SPARSE. What the net draws is drawn at true size, and it stops
     one tier above the finest: the distribution lateral at about a meter is the last thing on the sheet, and
     the field ditch that waters a single paddy is a hairline the map does not attempt.
 
-    Note: Topology and taper are read (Tabayashi, the Minuma-dai record). The widths are weaker than they look.
+    Note: Topology and taper are read (Tabayashi, the Minuma-dai record), and so is the paddy-to-paddy form
+    (Bungotakada); how few ditches that form left is this record's own reading, since the one page on it gives
+    its merit as saving water, not saving digging, and describes a village that keeps many weirs. The widths are weaker than they look.
     The third of a meter is a modern design MINIMUM rather than a measured ditch, and the Chinese doctrine is
     carried by a 2021 provincial standard for consolidated farmland, so what it gives is the doctrine and not
     a premodern layout. The national standard the record once leaned on for both is readable nowhere and is
@@ -59,7 +62,7 @@ class IrrigationDitch(Kind):
     Name: irrigation ditch
     Covers: `field_ditches` whose role is not `drain` (except on a dike-pond field, whose canals are the pond canal), and `channels` not leaving a drain - the head race, the supply canals, the delivery ditches, a source-to-field feed
     Label: accurate
-    Sources: tabayashi-1987, jsidre-minumadai, jsslkx-002-2021, nougyoudoboku-matsutan
+    Sources: tabayashi-1987, jsidre-minumadai, jsslkx-002-2021, nougyoudoboku-matsutan, bungotakada-tagoshi
     Entry: research/water.html - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'The head-race forks', 'Where does the brook stop being a brook and become the ditch'; research/fields.html - 'Where does a field's water come from, and how is it shared out?'
     """
 
@@ -133,9 +136,10 @@ class Pond(Kind):
     that has passed through the plots, because before modern consolidation that water was used again below
     rather than thrown away.
 
-    Note: Form and siting are read (Tabayashi 1987, the Kagawa tameike documents). The SINGLE outlet is this
-    record's reading of them: the Kagawa page describes the inclined intake, the bottom conduit and the
-    spillway, and does not itself say there is only one way out. And where a pond is drawn at a field's foot to
+    Note: Form and siting are read (Tabayashi 1987, the Kagawa tameike documents). The SINGLE outlet, and the
+    spillway's having no part in sharing the water out, are this record's reading of them: the Kagawa page
+    describes the inclined intake, the bottom conduit and a works that passes heavy-rain inflow safely
+    downstream, and does not itself say there is only one way out or that the spillway never serves the fields. And where a pond is drawn at a field's foot to
     gather the water leaving the fields, that siting is how the map ends its drainage, and the pond's bank and
     outlet are not drawn from a surveyed example.
 
