@@ -185,7 +185,13 @@ CHECKS: tuple[Check, ...] = (
     Check("sanctuary_on_axis", lambda ctx: s.sanctuary_on_axis(ctx.plan), False, "hoshigaoka-sanctuary-off-axis-red.svg", "set the sanctuary on the approach axis behind the hall"),
     Check("arch_on_approach", lambda ctx: s.arch_on_approach(ctx.plan), False, "hoshigaoka-arch-adrift-red.svg", "stand the arch over the approach where it crosses the fence"),
     Check("well_clear_of_arch", lambda ctx: s.well_clear_of_arch(ctx.plan), False, "hoshigaoka-well-on-approach-red.svg", "move the well beside the approach, clear of the way and the arch"),
-    Check("no_precinct_enclosure", lambda ctx: s.no_precinct_enclosure(ctx.text, ctx.plan), False, "hoshigaoka-fenced-precinct-red.svg", "take the fence or wall off the precinct: its arch and its wood mark it (a fence may ring the sanctuary alone)"),
+    Check(
+        "no_precinct_enclosure",
+        lambda ctx: s.no_precinct_enclosure(ctx.text, ctx.plan),
+        False,
+        "hoshigaoka-fenced-precinct-red.svg",
+        "take the fence or wall off the precinct: its arch and its wood mark it (a fence may ring the sanctuary alone)",
+    ),
 )
 
 

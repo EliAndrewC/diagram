@@ -351,7 +351,9 @@ def no_precinct_enclosure(text: str, plan: ParsedPlan) -> list[str]:
         fy1 = max(r.y + r.h for r in plan.fence_segs)
         h = hall[0]
         if fx0 <= h.x and fy0 <= h.y and fx1 >= h.x + h.w and fy1 >= h.y + h.h:
-            out.append("a fence rings the precinct (its extent takes in the hall) - a village shrine's ground is marked by its arch and its wood; a fence rings the sanctuary alone, and only as a richer shrine's donation")
+            out.append(
+                "a fence rings the precinct (its extent takes in the hall) - a village shrine's ground is marked by its arch and its wood; a fence rings the sanctuary alone, and only as a richer shrine's donation"
+            )
     minx, miny, maxx, maxy = plan.bounds
     tol = EDGE_TOL_FT * FTPX
     for band in plan.wall_bands:
