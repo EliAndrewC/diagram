@@ -541,6 +541,7 @@ glyph	glyph
 glyphs	glyph
 gm	GM
 go	go
+god of land	tudi miao
 goemon-buro	goemon-buro
 goemonburo	goemon-buro
 gogura	gogura
@@ -1199,6 +1200,7 @@ prefectural cities	prefectural city
 prefectural city	prefectural city
 prefecture	prefectural city
 prefectures	prefectural city
+prison god	jail-god
 provincial capital	provincial seat
 provincial capitals	provincial seat
 provincial seats	provincial seat

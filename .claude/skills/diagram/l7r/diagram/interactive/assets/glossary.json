@@ -3952,7 +3952,8 @@
    "土地庙",
    "earth god",
    "earth-god",
-   "earth-god shrine"
+   "earth-god shrine",
+   "god of land"
   ]
  },
  "tulou": {
@@ -6203,7 +6204,8 @@
   "def": "The deity of a Chinese yamen's jail, enshrined in a small temple inside the jail itself; at Neixiang the statue is of the ancient judge Gao Yao.",
   "variants": [
    "jail-god",
-   "jail god"
+   "jail god",
+   "prison god"
   ]
  },
  "Dacheng gate": {
