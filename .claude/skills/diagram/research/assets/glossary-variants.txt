@@ -235,8 +235,11 @@ coursed	coursing
 courses	coursing
 coursing	coursing
 coursing line	coursing
+crenel	crenel
 crenelated	crenellated
 crenellated	crenellated
+crenellations	crenel
+crenels	crenel
 crib	cribbing
 cribbing	cribbing
 cribs	cribbing
@@ -1439,6 +1442,8 @@ strip footing	strip footing
 strip footings	strip footing
 stupa	stupa
 stupas	stupa
+sub-prefect	sub-prefect
+sub-prefects	sub-prefect
 subgrade	subgrade
 sue ware	Sue ware
 sueki	Sue ware

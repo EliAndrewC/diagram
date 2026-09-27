@@ -5281,7 +5281,8 @@
    "departments",
    "departmental",
    "zhou"
-  ]
+  ],
+  "cased": true
  },
  "shinai": {
   "def": "A practice sword made of bamboo. With protective equipment it made sword training safe enough to spread to commoners.",
@@ -6838,6 +6839,21 @@
   "def": "A domain's own barrier post of the Edo period, set on its borders and at key points of traffic to watch travelers and goods and collect a duty - a domain's answer to the shogunate's barrier stations.",
   "variants": [
    "kuchidome bansho"
+  ]
+ },
+ "crenel": {
+  "def": "A gap in the top of a parapet, between two raised stretches of wall, through which a defender looks out and shoots; a row of them makes a crenellated parapet, which from above gives a wall-top its toothed edge.",
+  "variants": [
+   "crenel",
+   "crenels",
+   "crenellations"
+  ]
+ },
+ "sub-prefect": {
+  "def": "An official of a Chinese prefecture, second to the prefect over it (tongzhi, literally \"joint administrator\"), who could be put in charge of works such as a county town's walls.",
+  "variants": [
+   "sub-prefect",
+   "sub-prefects"
   ]
  }
 }
