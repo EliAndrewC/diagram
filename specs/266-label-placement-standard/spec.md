@@ -71,8 +71,8 @@ and why, with every rule quoted from a page they can open.
 
 ### Edge Cases
 
-- A caption much longer than its subject (the 53 ft "notice board" beside a 12 ft board): the ranked positions are
-  defined off the subject's box, so upper right means the text starts past the board's right end and above it.
+- A caption much longer than its subject (the 53 ft "notice board" beside a 12 ft board; research.md R4, observed
+  2026-09-27, method: read from the code): the ranked positions are defined off the subject's box, so upper right means the text starts past the board's right end and above it.
 - A subject rotated past 90 degrees: the text is turned to read upright, and "upper" is the upright text's up.
 - A seat past the edge of the finished frame: forbidden - a clipped caption is unreadable.
 - Two captions competing: the earlier-placed caption is an obstacle to the later one (queue order, as today).
@@ -83,9 +83,17 @@ and why, with every rule quoted from a page they can open.
 
 ### Functional Requirements
 
-- **FR-001**: The engine MUST have ONE caption placer, and every caption whose seat the engine searches for - the
-  notice board, the deferred building captions (`place_caption`), the Imperial road's caption and the field names -
-  MUST be placed by it. The board's own annulus search and `_best_label_spot`'s standoff ladder MUST be removed.
+- **FR-001**: There MUST be ONE caption placer, a module that neither Mode A nor Mode B owns, and every caption on
+  every live map MUST be seated by it (research.md R3):
+  - **Mode B**: every caption whose seat the settlement engine searches for - the notice board, the deferred
+    building captions (`place_caption`), the Imperial road's caption and the field names. The board's own annulus
+    search and `_best_label_spot`'s standoff ladder MUST be removed.
+  - **Mode A, `compound.py`**: every caption it draws - zone and building names, the point features' captions and
+    the notice board's.
+  - **Mode A, hand-authored sheets**: a caption a session writes by hand MUST be seated by the placer through a
+    tool that reads the sheet's drawn, `data-kind`-tagged geometry and gives the seat, angle, lines and any leader
+    (FR-013). The three hand-authored magistracy sheets' notice-board captions MUST be re-seated with it in this
+    feature.
 - **FR-002**: The placer MUST take a SUBJECT - a point, a box (level or rotated), a line or an area - plus the
   caption's text, size and style, and return the seat, the angle, the line breaks and an optional leader.
 - **FR-003**: For a point or box subject the placer MUST try the standard's ranked positions in the standard's order
@@ -114,7 +122,12 @@ and why, with every rule quoted from a page they can open.
 - **FR-011**: The research record MUST state the standard - the ranked positions, the offset and its maximum, the
   cost and the free-space rule, leader lines, rotation - with every rule footnoted to a public page it is quoted
   from, and every calibration this feature chose labeled as one.
-- **FR-012**: Every hamlet in the pool MUST be regenerated under the placer and pass the gate.
+- **FR-012**: Every hamlet in the pool and both `compound.py` sheets MUST be regenerated under the placer and pass
+  the gate.
+- **FR-013**: A `make seat-label` tool MUST run the placer on a hand-authored Mode A sheet: given the sheet and a
+  caption's `data-kind`, it reads the subject's drawn shapes and every other drawn shape as obstacles, and prints (or,
+  asked to, writes) the caption's standard seat. The Mode A doctrine (`buildings.md`) and the `building-review` agent's
+  contract MUST say that a hand-written caption is seated with it.
 
 ### Key Entities
 
@@ -131,6 +144,9 @@ and why, with every rule quoted from a page they can open.
   with its gap equal to the preferred offset, or - where no free seat exists at that ring - at the nearest free
   ring, with a leader past the maximum offset. Measured as in research.md R2 (method: the caption block against the
   board footprint in each manifest), before and after; the before is observed 2026-09-27.
+- **SC-006** (FR-001, FR-012, FR-013): the two `compound.py` sheets' captions are seated by the placer (a test of
+  the composer's output); `make seat-label` on each hand-authored magistracy sheet reports its notice-board caption
+  already at the standard seat after this feature; the Mode A doctrine and the review contract name the tool.
 - **SC-002** (FR-001, FR-002, FR-008, FR-009, FR-010): unit tests place captions for a point, a level box, a rotated
   box past 90 degrees, a line and an area subject through the one entry point, and a test proves the engine holds
   no other seat search (the removed functions are gone and no caption path bypasses the placer).
@@ -150,7 +166,8 @@ and why, with every rule quoted from a page they can open.
   one adopted. Not a knob: the standard's own first rule of spacing is consistency across the map.
 - **D2 - The preferred offset: MAP DRAWING CONVENTION, a calibration.** No readable source fixes a number
   (research.md R1). Half the caption's font size (0.5 em) - the air the engine's own house standoff already gave a
-  caption by eye (`LABEL_MIN_AIR`, about 0.55 em on a 9 pt caption), and inside PSU's "not too tightly packed" and
+  caption by eye (`LABEL_MIN_AIR`, 0.56 em on a 9 pt caption; research.md R4, observed 2026-09-27, method: read from
+  `_geom/labels.py`), and inside PSU's "not too tightly packed" and
   "consistent". It is the same for every caption of a size.
 - **D3 - The maximum offset is twice the preferred, and a leader past it: MAP DRAWING CONVENTION, sourced** - Esri's
   documented 200 percent maximum, and the leader both tools use for a label displaced beyond its normal offset. The
@@ -166,12 +183,16 @@ and why, with every rule quoted from a page they can open.
   *"Tilted or horizontal text is okay for small point features like the board."*
 - **D7 - The 50 percent pull toward the board (GM 2026-08-27, marked provisional in the record) is superseded** by
   the preferred offset, which is the standard's answer to the same question.
-- **D8 - SCOPE EXCEPTION, put to `spec-fidelity`**: about 50 captions in the town, city and capital tiers are
-  hand-seated by their calling code (research.md R3) - a ministry's name written across its own roof, a hall's
-  caption at a fixed drop - and no live generator runs any of them. They are not a seat SEARCH, so FR-001 does not
-  reach them; each will name its subject and go through the placer when its tier is scripted. Recorded in
-  `future-work/cities.md`. Converting them now would change code no map exercises, verified only by tests written
-  for the conversion.
+- **D8 - SCOPE EXCEPTION, put to `spec-fidelity`**: the 51 hand-seated `self.label(x, y, ...)` calls of the
+  settlement engine's town, city and capital tiers (research.md R3) are on no live map - no live generator runs any
+  of them, and the maps that used them are frozen exhibits. Each will name its subject and go through the placer
+  when its tier is scripted; recorded in `future-work/cities.md`. Converting them now would change code no map
+  exercises, verified only by tests written for the conversion.
+- **D9 - SCOPE EXCEPTION, put to `spec-fidelity`**: on the three hand-authored magistracy sheets, only the
+  notice-board captions are re-seated now; their other hand-written captions (about 200, research.md R3) are
+  re-seated with `make seat-label` when each sheet is next revised, which the doctrine and the review contract
+  (FR-013) then require. The sheets are another feature's active work (264), and re-seating two hundred captions a
+  person placed is a redesign of three sheets the GM has not asked to see redrawn.
 
 ## Assumptions
 
@@ -190,4 +211,6 @@ and why, with every rule quoted from a page they can open.
 
 ## Review history
 
-(none yet)
+- Round 0 (2026-09-27, `spec-fidelity`): NOT-REVIEWABLE - two unlabeled figures, and the label census missed
+  every Mode A sheet. Both fixed: R3 rewritten over every live map, R4 added, FR-001/FR-012 extended to Mode A,
+  FR-013 and SC-006 added, D8 narrowed and D9 added.

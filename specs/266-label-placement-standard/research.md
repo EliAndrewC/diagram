@@ -94,13 +94,39 @@ The cause, read from `structures/fixtures/boards.py`: the candidate seats are la
 hand-chosen gaps (`+11`, `+8`, then `+12` steps to `60 px`, and a twelve-bearing annulus), while the caption is drawn
 at the board's angle; the search takes the nearest seat that clears lanes and wells by `3 ft`.
 
-## R3. Every label in the engine, by how its seat is chosen (2026-09-27)
+## R3. Every label on every live map, by how its seat is chosen (observed 2026-09-27; method: grep over `l7r/` and `pool/`, `<text` counts with `grep -c`)
 
-- **Searched in the label phase**: the notice board (`_draw_board_caption`, its own annulus search), the deferred
-  building captions (`place_caption` -> `_best_label_spot`, four callers, town and city tiers), the Imperial road's
-  caption (`_finish_road_label` -> `_best_label_spot`, town and city), and the field names (`field_name_label`,
-  fixed at the field's center). Only the notice board appears on a live map: every pool hamlet's `labels` holds
-  exactly one record, "notice board".
-- **Hand-seated by their callers**: about 50 `self.label(x, y, ...)` calls in the town, city and capital tiers,
-  whose coordinates the calling code computes (a ministry's name written across its own roof, a hall caption at
-  `y + h/2 + 11`). No live generator runs any of them; the maps that used them are frozen exhibits.
+The live maps are the five scripted hamlets, the two magistracy sheets `compound.py` draws
+(`county-magistracy-example`, `ochiba-roundtrip-test`), the three hand-authored magistracy sheets (`hayakawa`,
+`ochiba`, `ubame`) and the hand-authored country shrine (`hoshigaoka-shrine`). The first census counted the
+settlement engine only and missed every Mode A sheet; `spec-fidelity` found it (review history, round 0).
+
+**Mode B, the settlement engine (`settlement/`).**
+- Searched in the label phase: the notice board (`_draw_board_caption`, its own annulus search), the deferred
+  building captions (`place_caption` -> `_best_label_spot`, called in the town tier), the Imperial road's caption
+  (`_finish_road_label` -> `_best_label_spot`, town and city) and the field names (`field_name_label`, fixed at the
+  field's center). Of these only the notice board is on a live map: every pool hamlet's `labels` holds exactly one
+  record, "notice board".
+- Hand-seated by their callers: 51 `self.label(x, y, ...)` calls, a few of them inside the label machinery itself,
+  the rest in the town, city and capital tiers, whose coordinates the calling code computes (a ministry's name
+  written across its own roof, a hall caption a fixed drop below it). No live generator runs any of them; the maps
+  that used them are frozen exhibits.
+
+**Mode A, the compound composer (`compound.py`), live.** Every caption is hand-seated at a fixed offset: the zone
+names and building names at the center of their own rectangle, "striking posts", "bath", "well", "latrine",
+"fire-water tubs", and the notice board's caption at `(gl - 11.0, env.h_ft + 9.0)` beside the board outside the
+gate. Two pool sheets are drawn by it.
+
+**Mode A, hand-authored sheets, live.** The SVG is the source and a session writes it; every caption is placed by
+hand. `<text` elements (titles and scale bars included): hayakawa 83, ochiba 65, ubame 85, hoshigaoka-shrine 16;
+the compound-drawn sheets 33 and 35. Each magistracy sheet carries a notice board and its caption; the shrine has
+none. Every drawn element carries a `data-kind` tag (feature 262), so a tool can read which shapes are which.
+The three hand-authored magistracy sheets are the active work of another feature (264) at the time of writing.
+
+## R4. Two figures the spec uses (observed 2026-09-27; method: read from the code)
+
+- The "notice board" caption is 53 ft long on a hamlet (observed 2026-09-27, method: the arithmetic below): `label()` sizes a line as characters x size x 0.55, so
+  12 characters at 8 pt is 52.8 px, 1 ft per px at hamlet scale. The board itself is 12 by 5 ft
+  (`kosatsuba`, `vw`/`vh` in every pool manifest).
+- The engine's house standoff (observed 2026-09-27, method: read from the code) `LABEL_MIN_AIR = 5.0` px (`settlement/_geom/labels.py`) is 0.56 em on a 9 pt
+  caption: 5 / 9.
