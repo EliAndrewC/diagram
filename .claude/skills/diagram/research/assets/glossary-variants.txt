@@ -267,6 +267,7 @@ dish pond	sara-ike
 dish ponds	sara-ike
 distributaries	distributary
 distributary	distributary
+district magistrate	gun-bugyo
 dituan	dituan
 division point	bunsuiguchi
 division points	bunsuiguchi
@@ -419,6 +420,8 @@ fuse	fuse
 fusekoshi	inverted siphon
 gabion	gabion
 gabions	gabion
+gable-entered	gable-entered
+gable-entry	gable-entered
 gangi	gangi
 gassho	gassho
 gassho-zukuri	gassho
@@ -469,6 +472,8 @@ gsi	GSI
 guan-xiang	guanxiang
 guanxiang	guanxiang
 gulou	gulou
+gun bugyo	gun-bugyo
+gun-bugyo	gun-bugyo
 gundai	gundai
 gyozui	gyozui
 gōshi	gōshi
@@ -518,6 +523,10 @@ hikae-no-ma	hikae-no-ma
 hinin	hinin
 hinoki	hinoki
 hinomi-yagura	hinomi-yagura
+hip roof	hip roof
+hip-roof	hip roof
+hip-roofed	hip roof
+hipped roof	hip roof
 hipposandal	hipposandal
 hipposandals	hipposandal
 hiroen	hiroen
@@ -666,6 +675,8 @@ kanden	kanden
 kangxi	Kangxi
 kannon	Kannon
 kannushi	kannushi
+kansei	Kansei
+kansei era	Kansei
 kaogongji	Kaogongji
 karamete	karamete-mon
 karamete-mon	karamete-mon
@@ -709,6 +720,8 @@ kinai	Kinai
 king post	king post
 king posts	king post
 king-post	king post
+kinki	Kinki
+kinki region	Kinki
 kirime-en	kirime-en
 kishu school	Kishu school
 kishu-school	Kishu school
@@ -1032,6 +1045,9 @@ quay	quay
 quays	quay
 quercus acutissima	kunugi
 quercus serrata	konara
+rakuchu rakugai	Rakuchu rakugai
+rakuchu rakugai screens	Rakuchu rakugai
+rakuchu rakugai zu	Rakuchu rakugai
 rakugo	rakugo
 rammed earth	rammed earth
 rampart	rampart
@@ -1341,6 +1357,7 @@ tsuijibei	tsuijibei
 tsuijimatsu	tsuijimatsu
 tsuke-shoin	tsuke-shoin
 tsuke-tsubo	tsuke-tsubo
+tsumairi	gable-entered
 tsunaba	tsunaba
 tudi miao	tudi miao
 tudigong	tudi miao
