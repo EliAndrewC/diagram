@@ -31,7 +31,10 @@ grep -q 'make check-bundle PAGE=ways SECTION=010' "$T/err" && ok "...and the ref
 grep -q 'MANIFEST.md' "$T/err" && ok "...and says to name the MANIFEST it prints" || no "the message does not say what to re-send"
 logged repo-path && ok "...recorded blocked/repo-path" || no "repo-path not recorded"
 dispatch source-applicability "Judge the entry $S against its page."
-[ "$(rc)" -eq 2 ] && grep -q 'make check-bundle KEY=edo-enwiki' "$T/err" && ok "a registry entry gets the KEY= form" || no "the key form is wrong" "$(cat "$T/err")"
+[ "$(rc)" -eq 2 ] && grep -q 'make check-bundle KEY=edo-enwiki' "$T/err" && ! grep -q 'WHOLE=1' "$T/err" && ok "a registry entry gets the KEY= form (the excerpt, for source-applicability)" || no "the key form is wrong" "$(cat "$T/err")"
+# GUARD_EDIT_OK: feature 250 D19 - a source-reader's command is the whole page in parts, never the excerpt
+dispatch source-reader "Read the entry $S and find the passage behind the claim."
+[ "$(rc)" -eq 2 ] && grep -q 'make check-bundle KEY=edo-enwiki WHOLE=1' "$T/err" && ok "a source-reader gets KEY= WHOLE=1 - the whole page, not the excerpt" || no "source-reader was not given WHOLE=1" "$(cat "$T/err")"
 dispatch quote-check "Check .claude/skills/diagram/research/cities/sizing/020-how-densely-is-a-quarter-built.notes.html"
 [ "$(rc)" -eq 2 ] && grep -q 'PAGE=cities/sizing SECTION=020' "$T/err" && ok "a cities/ page and a notes file, relative, are read off the path too" || no "the cities path was not read" "$(cat "$T/err")"
 dispatch source-reader "Read the passage quoted in .claude/skills/diagram/research/SOURCES.html"

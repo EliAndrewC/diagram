@@ -479,9 +479,10 @@ But if we do turn up anything else then we can keep iterating."*
    translated quote; a link's href, a gloss under 20 characters and anything inside an HTML comment - a session
    note - left out). THE EXCERPT IS FOR `source-applicability` ONLY (plan review): a `source-reader` looks for the
    passage behind a NEW claim, which by construction is not beside one already quoted, so its route to a registered
-   source is `make check-bundle KEY=<key> WHOLE=1` - the whole page, in parts - and the write brief says so. Measured
-   on R10's book (`cdlib-local-elites`, a 1,372,518-character page): its `source-applicability` bundle is now 22,857
-   bytes, its header reading "5 of 5 quoted passage(s) found"; its `WHOLE=1` bundle is the page in 69 parts (observed
+   source is `make check-bundle KEY=<key> WHOLE=1` - the whole page, in parts - and the write brief, the rules doc
+   (`docs/research-record-rules.md`) and `check-bundle-hooks.sh`'s command for a refused `source-reader` all say so. Measured
+   on R10's book (`cdlib-local-elites`, a 1,372,518-character page): its `source-applicability` bundle's saved page is now
+   22,857 bytes, its header reading "5 of 5 quoted passage(s) found"; its `WHOLE=1` bundle is the page in 69 parts (observed
    2026-09-27; method: `make check-bundle KEY=cdlib-local-elites`, with and without `WHOLE=1`). Both agents' contracts
    say how a long page reaches them. Tested (`tests/tooling/test_source_pages.py`, `test_check_bundle.py`).
 2. **The two GM decisions R9 raised are future work** - `future-work/farming-communities.md`, the mulberry density

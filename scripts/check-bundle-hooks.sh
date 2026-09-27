@@ -58,7 +58,9 @@ for path in paths:
     m = re.search(r"research/((?:cities/)?[a-z-]+)/(\d{3})-[^/]*\.html$", path)
     k = re.search(r"research/sources/010-works-cited/\d+-([a-z0-9-]+)\.html$", path)
     if k:
-        cmds.append(f"make check-bundle KEY={k.group(1)}")
+        # D19 (plan review): a source-reader hunts the passage behind a NEW claim, so it gets the whole page in parts;
+        # the excerpt around already-quoted passages is source-applicability's
+        cmds.append(f"make check-bundle KEY={k.group(1)}" + (" WHOLE=1" if atype == "source-reader" else ""))
     elif m:
         cmds.append(f"make check-bundle PAGE={m.group(1)} SECTION={m.group(2)}")
 cmds = list(dict.fromkeys(cmds)) or ["make check-bundle PAGE=<page> SECTION=<question>   (or KEY=<registry key>)"]

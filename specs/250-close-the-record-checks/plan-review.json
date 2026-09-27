@@ -1,6 +1,6 @@
 {
  "feature": "250-close-the-record-checks",
- "plan_sha256": "00da469689c63711ea9fdcd583604308e014efe7c6f1b9ae524ab1e0975ed18d",
+ "plan_sha256": "34c8ab24ac09cea7ae1913ad6eae0af296bc1088405b80372ea82c07555b8b02",
  "reviewed": "2026-09-27",
  "declared": "spec-fidelity",
  "decisions": [
@@ -165,14 +165,26 @@
    "id": "D19.1b",
    "summary": "make check-bundle KEY= hands _source_pages the key's quoted passages; a page over 30,000 characters is saved as an excerpt (first 6,000 + 1,500 either side of each quoted passage) with a header and cut markers - for source-applicability.",
    "class": "within",
-   "why": "R10 recommendation 1 verbatim: 'A key bundle carries the source's front matter ... and a window around each passage the record quotes from it, not the whole saved page'. Re-run 2026-09-27 (make check-bundle KEY=cdlib-local-elites OUT=/tmp/sfv-cdlib): 22,857 BYTES in two parts (the manifest gives the excerpt as 22,561 characters), every passage the record actually quotes windowed. Its header, however, reads '5 of 8 quoted passage(s) found': quoted_passages also collects three quoted strings from an HTML session comment in cities/hinterland 010's notes, which are not quotations of the source, while D19.1 reports 'all five passages the record quotes from it found'. Not a narrowing; listed as a required correction because it is what the measured round's agent will read."
+   "why": "R10 recommendation 1 verbatim: 'A key bundle carries the source's front matter ... and a window around each passage the record quotes from it, not the whole saved page'. Previous item 2 CONFIRMED: quoted_passages now strips HTML comments before collecting quotes; re-run 2026-09-27 (make check-bundle KEY=cdlib-local-elites OUT=/tmp/sfv250a) gives quotes.json with 5 entries and the header '[EXCERPT of a 1,372,518-character page: ... the 5 of 5 quoted passage(s) found in it]'. The figure is restated in bytes and reproduces: 22,857 bytes is `du -b` of the bundle's pages/ directory (p1 19,984 + p2 2,588 + MANIFEST.txt 285), not of the whole bundle (MANIFEST.md, quotes.json and the registry copy add about 10 KB) - the plan's 'its source-applicability bundle is now 22,857 bytes' should say its saved page. A wording correction, not a narrowing."
   },
   {
    "id": "D19.1c",
-   "summary": "The excerpt also reaches source-reader: the write-session brief (brief.py line 151, step 2 'Read the sources') tells the session, for a source already in the registry, to run make check-bundle KEY=<key> and name its MANIFEST to source-reader - which now holds only the front and windows around passages ALREADY quoted.",
+   "summary": "source-reader's route to a registered source is make check-bundle KEY=<key> WHOLE=1 - the whole page in parts, no excerpt; the write brief (brief.py step 2) and source-reader's contract say so.",
+   "class": "within",
+   "why": "Previous item 1's fix, CONFIRMED as far as it goes: re-run 2026-09-27 (make check-bundle KEY=cdlib-local-elites WHOLE=1 OUT=/tmp/sfv250b) saves the page in 69 parts with no quotes.json and no excerpt header; test_check_bundle.py asserts the --whole call carries no --quotes; brief.py line 151 now names WHOLE=1. This restores what R10 recommendation 1 asked for source-reader ('the same cap', parts to grep) and is inside the request."
+  },
+  {
+   "id": "D19.1d",
+   "summary": "quoted_passages leaves out anything inside an HTML comment (a session note), so the excerpt's found count counts only quotations of the source.",
+   "class": "within",
+   "why": "A correction of the excerpt's own header (previous item 2) so it states what R10 recommendation 1 describes - windows around the passages the record QUOTES. No reach beyond that."
+  },
+  {
+   "id": "D19.1e",
+   "summary": "The excerpt still reaches source-reader by two other routes the plan's 'THE EXCERPT IS FOR source-applicability ONLY' does not close: (a) check-bundle-hooks.sh, refusing a source-reader dispatch that names a registry file, prints `make check-bundle KEY=<key>` with no WHOLE=1 (probed 2026-09-27 with a source-reader prompt naming research/sources/010-works-cited/5670-cdlib-local-elites.html: the refusal's compliant command is `make check-bundle KEY=cdlib-local-elites`); (b) docs/research-record-rules.md lines 81-89, the operative doc research/CLAUDE.md sends a record session to, lists `make check-bundle KEY=<registry key>` and says to dispatch source-reader naming that MANIFEST.",
    "class": "narrowing",
    "ruling": "NOT LEGITIMATE",
-   "why": "R10 recommendation 1's purpose, in its own headline: 'A check reads the part of a long source it NEEDS'. The window-around-quotes form was stated for what source-applicability judges; source-reader in a write session needs the passage for a NEW claim, which by construction is not next to an existing quote, and any registered page over 30,000 characters (most long Wikipedia articles) is cut to 6,000 + windows. That narrows the spec's source-reader pass ('read what you cite') and invites a false NOT-FOUND and an absence note where a citation exists - against the GM's stated focus, 'getting the research process right'. Not physically required (source-reader's route can save the page whole in parts, as D19.1a does), not implied by the GM's words, word-plausible ('the same cap') but purpose-fatal."
+   "why": "The same decision as last round's D19.1c, surviving on routes the fix did not reach: a session follows a guard's printed command verbatim, and the operative doc is what it reads before dispatching. Either delivers source-reader the front plus windows around passages ALREADY quoted, when it is looking for the passage behind a NEW claim - the false NOT-FOUND the GM's 'getting the research process right' is aimed at, and a contamination of the water round that is meant to measure this fix. Not physically required (WHOLE=1 exists), not implied by the GM's words. Fix: the guard appends WHOLE=1 to the KEY= command when the refused agent is source-reader (with a line in test-check-bundle-hooks.sh), and the doc's KEY= line says WHOLE=1 for source-reader, the plain form for source-applicability."
   },
   {
    "id": "D19.2",

@@ -79,7 +79,9 @@ cites one work several times they are `fei-1939`, `fei-1939-2`, and so on.
 **Checking one entry**, which is what the split is for:
 
     make check-bundle PAGE=water SECTION=<the question>     one question, copied OUT of the repository
-    make check-bundle KEY=<registry key>                    one source, with its page saved
+    make check-bundle KEY=<registry key>                    one source, for source-applicability: a long page as an EXCERPT
+                                                            (its front and a window around each passage the record quotes)
+    make check-bundle KEY=<registry key> WHOLE=1            one source, for source-reader: the whole page, a long one in parts
 
 The bundle holds the fragment, its notes, the prepass (`make record-prepass`), the quote-verbatim report
 (`make quote-verbatim`), the registry entries the notes cite and the glossary's variant index, each written
