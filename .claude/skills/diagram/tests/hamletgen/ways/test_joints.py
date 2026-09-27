@@ -119,12 +119,13 @@ def test_an_end_on_another_lanes_tread_is_set_on_its_centerline() -> None:
     assert centered_end((50.0, 9.0), (50.0, 40.0), 3.0, through) is None, "past the touch gap is not a junction"
     assert centered_end((50.0, 2.0), (0.0, 2.0), 3.0, through) is None, "a leg running along the lane has no slide"
     assert centered_end((50.0, 2.0), (50.0, 0.0), 3.0, through) is None, "a leg starting ON the lane has no side"
-    assert centered_end((50.0, 2.0), (50.0, 40.0), 3.0, [((5.0, 5.0), (5.0, 5.0), 3.0)]) is None, "a point is not a lane"
+    assert centered_end((50.0, 2.0), (50.0, 40.0), 3.0, [((50.0, 1.0), (50.0, 1.0), 3.0)]) is None, "a point is not a lane"
     wide = centered_end((50.0, 0.5), (50.0, 40.0), 6.0, through)
     assert wide == (50.0, 1.5), "a 6 ft track stops 1.5 ft short, its cap on the 3 ft lane's far edge"
     tip = [((0.0, 0.0), (50.0, 0.0), 3.0)]
     assert centered_end((50.0, 0.0), (80.0, 30.0), 6.0, tip) is None, "end to end at the tip: sliding back would leave it"
     s = _webbed([{"pts": [[0.0, 300.0], [200.0, 300.0]], "w": 3}, {"pts": [[100.0, 402.0], [100.0, 302.5]], "w": 3}])
+    s.M["lanes"].append({"pts": [], "w": 3})  # a dropped lane's husk is passed over
     assert center_lane_ends(s) == 1
     assert s.M["lanes"][1]["pts"] == [[100.0, 402.0], [100.0, 300.0]], "the record moves, the far end stays"
     assert "100.0,300.0" in s.ground[s._lane_ink[1][0]]["bed"], "and the ink with it"
