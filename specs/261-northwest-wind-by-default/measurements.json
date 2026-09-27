@@ -756,5 +756,12 @@
   "quantity": "brook segments within 1.6 degrees of a screen axis below the tap run, on every brook map (Sawada's segment leaving its tap run drew exactly vertical, 0.1 degrees off; the leaving segment is nudged off the axis like any other now, and the approach's legs too - Inashiro's drew 1.2 degrees off)",
   "source": "pool/hamlets/*/*.json streams[0].poly",
   "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "pool-field-to-houses-arc": {
+  "value": 130,
+  "unit": "degrees",
+  "quantity": "the arc the five pool hamlets' field-to-houses bearings span (compass, from each field outline's mean vertex to the houses' middle): 249 (Sawada), 311 (Inashiro), 326 (Kashikawa), 354 (Kuwabata), 19 (Mizuguchi), from 249 through north to 19; on main 69, 74, 157, 203 and 353, round the whole compass - the pool's sameness under a wind that chooses the side, observed 2026-09-27",
+  "source": "pool/hamlets/*/*.json fields[].outline, houses; main's from the worktree at 7f283feb",
+  "command": "python3 specs/261-northwest-wind-by-default/measure.py"
  }
 }

@@ -349,9 +349,6 @@ class HousesMixin:
         rot: float | None = None,
         top: float = 88.0,
     ) -> bool:
-        # keep clear of edges + title; `top` is the caller's: a plank beside the way out needs no title band (feature 261 -
-        # the title is placed at finish, to the cropped view's corner and clear of what is drawn, and Mizuguchi's connector
-        # handed over to its lanes at y 82, where the board that stands at the handover had no seat)
         if x < 55 or x > self.W - 55 or y < top or y > self.H - 26:
             return False
         if self.bound and not point_in_poly(x, y, self.bound):  # stay inside a bounding ring (city wall)

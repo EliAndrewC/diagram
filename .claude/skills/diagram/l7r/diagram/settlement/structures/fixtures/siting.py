@@ -300,7 +300,9 @@ class FixtureSitingMixin:
                         off = _rw / 2 + h / 2 + 4
                         while off <= lim:
                             x, y = mx + ux * off * side, my + uy * off * side
-                            if off_every_bed(x, y) and self.fixture_clear_of_water(x, y, math.hypot(w, h) / 2) and self._fits(x, y, w, h, corridors=False, top=26.0):
+                            if (
+                                off_every_bed(x, y) and self.fixture_clear_of_water(x, y, math.hypot(w, h) / 2) and self._fits(x, y, w, h, corridors=False, top=26.0)
+                            ):  # the canvas top as its bottom: no title band for a plank (feature 261)
                                 # BUSY IS WHERE THE FEET ARE (feature 140's Inashiro review, 2026-08-28): counting dwellings within 260 px
                                 # could not tell the frontage (11 within 150 ft) from the exit throat (5 within 150 ft) - both had ~16-21
                                 # within 260 - and a re-roll sat the board at the throat. The near count is weighted double.

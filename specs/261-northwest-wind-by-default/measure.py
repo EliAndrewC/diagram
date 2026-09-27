@@ -42,6 +42,10 @@ def main() -> None:
             angs = sorted(compass(c[0] - cx, c[1] - cy) for c in belt)
             gap = max([b2 - b1 for b1, b2 in zip(angs, angs[1:], strict=False)] + [angs[0] + 360.0 - angs[-1]])
             line += f" belt-bearing={b:.0f} off-wind={off:.0f} arc={360.0 - gap:.0f}"
+        # the side of its field the hamlet stands on: from the field outline's mean vertex to the houses' middle
+        field = [p for f in m.get("fields") or [] for p in f.get("outline") or []]
+        if field:
+            line += f" field-to-houses={compass(cx - sum(p[0] for p in field) / len(field), cy - sum(p[1] for p in field) / len(field)):.0f}"
         print(line)
 
 
