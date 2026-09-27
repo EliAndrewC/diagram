@@ -221,30 +221,54 @@ def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt],
 
 
 _ON_LINE_FT = 0.1
-"""An end this near another lane's centerline is already on it - the rounding of a record, not a step to mend."""
+"""An end this near where it should stand is already there - the rounding of a record, not a step to mend."""
 
 
-def centered_end(q: Pt, segs: Sequence[tuple[Pt, Pt]]) -> Pt | None:
-    """Where a lane end that stops ON another lane's tread should stand: on that lane's centerline.
+def centered_end(q: Pt, back: Pt, width: float, others: Sequence[tuple[Pt, Pt, float]]) -> Pt | None:
+    """Where a lane end that stops ON another lane's tread should stand, slid along its own last leg from `back`.
 
     THE BUMP AT A T (GM 2026-09-27). Once the treads composited as one surface (`group_shared_opacity`), what
     still showed at a junction was the arriving lane's round cap: its end stood 0.5-3 ft off the other lane's
-    centerline, so half a cap of shoulder poked out past the far side of a 3 ft tread. An end within
-    `_TOUCH_GAP` of another way is a junction (the same figure `_components` joins a web by), so it is moved to
-    the foot of the perpendicular on the nearest segment - a shift of a few feet that changes which ground the
-    lane serves by nothing. Returns None when the end is not at a junction or is already on the line."""
-    best: tuple[float, tuple[Pt, Pt]] | None = None
-    for a, b in segs:
+    centerline, so half a cap poked out past the far side of a 3 ft tread. An end within `_TOUCH_GAP` of another
+    way is a junction (the figure `_components` joins a web by), and it is moved so its cap's far point lies on
+    the other lane's far edge: `(width - other) / 2` short of the centerline, on its own side. For two lanes of one
+    width that IS the centerline; for the 6 ft track arriving on a 3 ft lane it is 1.5 ft short, so the track's
+    round end touches the lane's far edge instead of bulging past it and the edge runs straight through - the
+    track widens into the junction. The end slides along its own last leg, never sideways, so no kink is made at
+    the tip. Returns None when the end is not at a junction, is already where it should be, or its leg runs along
+    the other lane (no slide along it changes the distance), or where the two meet end to end rather than at a T."""
+    best: tuple[float, Pt, Pt, float] | None = None
+    for a, b, w in others:
         d = seg_dist(q[0], q[1], a, b)
         if d <= _TOUCH_GAP and (best is None or d < best[0]):
-            best = (d, (a, b))
-    if best is None or best[0] <= _ON_LINE_FT:
+            best = (d, a, b, w)
+    if best is None:
         return None
-    return seg_closest(q[0], q[1], *best[1])
+    _d, a, b, other = best
+    ln = math.dist(a, b)
+    if ln <= 0.0:
+        return None
+
+    def side(p: Pt) -> float:  # signed distance from the other lane's centerline
+        return ((b[0] - a[0]) * (p[1] - a[1]) - (b[1] - a[1]) * (p[0] - a[0])) / ln
+
+    sb, sq = side(back), side(q)
+    if abs(sq - sb) < 1e-9 or sb == 0.0:
+        return None
+    want = math.copysign(max(0.0, (width - other) / 2.0), sb)
+    t = (want - sb) / (sq - sb)
+    to = (back[0] + (q[0] - back[0]) * t, back[1] + (q[1] - back[1]) * t)
+    if t <= 0.0 or math.dist(to, q) <= _ON_LINE_FT:
+        return None
+    # ONLY AT A T: the new end must stand beside the other lane's SIDE. Where the two meet end to end (Kashikawa's
+    # track arriving on a footpath's tip) sliding back pulls the end off that tip and splits the web.
+    if seg_dist(to[0], to[1], a, b) > abs(want) + _ON_LINE_FT:
+        return None
+    return to
 
 
 def center_lane_ends(s: Settlement) -> int:
-    """Every lane end that stops on another lane's tread is set on its centerline, record and ink together.
+    """Every lane end that stops on another lane's tread is set where `centered_end` says, record and ink together.
     Runs after `straighten_joints`, the last pass that moves a lane end. Returns the number of ends moved."""
     lanes: list[dict[str, Any]] = s.M.get("lanes") or []
     moved = 0
@@ -252,9 +276,9 @@ def center_lane_ends(s: Settlement) -> int:
         p = _pts(ln)
         if len(p) < 2:
             continue
-        others = [sg for j, o in enumerate(lanes) if j != i for sg in _segs(_pts(o))]
-        for k in (0, -1):
-            to = centered_end(p[k], others)
+        others = [(a, b, float(o.get("w", 3))) for j, o in enumerate(lanes) if j != i for a, b in _segs(_pts(o))]
+        for k, back in ((0, 1), (-1, -2)):
+            to = centered_end(p[k], p[back], float(ln.get("w", 3)), others)
             if to is not None:
                 p[k] = to
                 moved += 1
