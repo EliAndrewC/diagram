@@ -54,6 +54,7 @@ baidu baike	Baidu Baike
 bailey	bailey
 baileys	bailey
 bakufu	bakufu
+bakuhan	bakuhan
 bakumatsu	bakumatsu
 bamboo grass	sasa
 bamboo-grass	sasa
@@ -96,6 +97,7 @@ black-charcoal	black charcoal
 board feet	board foot
 board foot	board foot
 bodaiji	bodaiji
+boji	boji
 bojikui	bojikui
 bomori	bomori
 bon	Bon
@@ -950,6 +952,9 @@ meireki	Meireki
 men-hai	taiping-gang
 menbansho	menbansho
 mengxi bitan	Mengxi Bitan
+meshimori	meshimori
+meshimori women	meshimori
+meshimori-onna	meshimori
 michikiri	michikiri
 micro-high	micro-high
 micro-highs	micro-high
@@ -1350,6 +1355,8 @@ six ministries	Six Ministries
 skimmer wall	skimmer wall
 sluice	sluice
 sluices	sluice
+so village	so village
+so villages	so village
 soffit	soffit
 soffits	soffit
 sogamae	sogamae
