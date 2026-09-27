@@ -85,6 +85,7 @@ baulks	baulk
 bay	bay
 bays	bay
 beam span	ridge span
+bed load	bed load
 bed shear stress	bed shear stress
 bedload	bedload
 beishan mianshui	beishan mianshui
@@ -824,6 +825,7 @@ kabata	kabata
 kabu-ido	kabu-ido
 kachi	doshin
 kagura	kagura
+kaibori	kaibori
 kaie-ji	Kaie-ji
 kaie-ji's	Kaie-ji
 kainyo	kainyo
