@@ -71,6 +71,7 @@ bannermen	hatamoto
 bansho	bansho
 banyuetang	banyuetang
 barbican	barbican
+barbicans	barbican
 baren	baren
 basal area	basal area
 base flow	base flow
@@ -1321,6 +1322,7 @@ seeds	seed
 seijoue	seijoue
 seisatsu	kosatsuba
 seisatsuba	kosatsuba
+sekai daihyakka jiten	Sekai Daihyakka Jiten
 sekisho	sekisho
 senbon torii	Senbon Torii
 sengoku	Sengoku

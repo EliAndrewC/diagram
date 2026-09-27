@@ -679,7 +679,8 @@
  "barbican": {
   "def": "A walled outwork covering a gate. The European form's narrow neck keeps a mass of attackers from storming through, and by the same narrowness stops the defenders sallying out to meet them.",
   "variants": [
-   "barbican"
+   "barbican",
+   "barbicans"
   ]
  },
  "baren": {
@@ -6878,6 +6879,12 @@
   "def": "The reign name of the first Ming emperor, 1368-1398; \"the twenty-ninth year of Hongwu\" is 1396.",
   "variants": [
    "Hongwu"
+  ]
+ },
+ "Sekai Daihyakka Jiten": {
+  "def": "Heibonsha's World Encyclopedia, a large Japanese general encyclopedia; Kotobank carries its entries beside the smaller Mypedia and Nipponica.",
+  "variants": [
+   "Sekai Daihyakka Jiten"
   ]
  }
 }
