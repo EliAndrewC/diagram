@@ -96,6 +96,8 @@ def palette_rgb(i: int) -> tuple[int, int]:
 def palette_key(red: int, green: int) -> str:
     """The palette's key for a pixel's snapped (red, green): the red alone on the first row, as it always was."""
     return str(red) if green == 0 else f"{red},{green}"
+
+
 #: resvg names MS fonts for the generic families; 'serif' must be DejaVu Serif or every label changes face
 #: (settlement/finish.py `render_png`, where this was learned; ONE definition, both renders use it).
 RESVG_FONT_ARGS: tuple[str, ...] = ("--serif-family", "DejaVu Serif")

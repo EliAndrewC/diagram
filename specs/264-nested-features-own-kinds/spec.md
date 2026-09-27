@@ -121,7 +121,7 @@ needs research is marked as such"*), a new kind no research section covers says 
 
 ### Measurable Outcomes
 
-- **SC-001** (FR-001, FR-002): a browser probe of the five pages names each inventoried part's own kind at its drawn
+- **SC-001** (FR-001, FR-002, FR-009): a browser probe of the five pages names each inventoried part's own kind at its drawn
   position (a point inside each room's floor for a room), in vector and raster mode; zero parts name their parent.
   The same probe (FR-009) finds, for every instance of every parent kind with parts, a point that names the parent,
   and clicking it opens the parent's write-up.

@@ -8,14 +8,15 @@ each part's drawn map coordinate, `elementFromPoint` in vector mode and `l7rMap.
 
 ## R2 - A room as its own floor paints the picture the one rect did (2026-09-27)
 
-Ochiba's west residence block as a fill-only rect, two room rects of the same fill, then the outline with
+A one-shot observation, observed 2026-09-27; method: resvg renders of a scratch copy of the sheet, compared pixel by
+pixel. Ochiba's west residence block as a fill-only rect, two room rects of the same fill, then the outline with
 `fill="none"`, rendered by resvg at 2400 px against the one rect: 0 px differ. Drawing the room rects OVER the one
 filled-and-stroked rect instead covered the inner half of its stroke: 6,752 px differed. So D4's order is fill,
 rooms, outline. After the whole feature, `make picture-diff` against main's PNG: 0 px on all five sheets.
 
 ## R3 - The pack audit (2026-09-27)
 
-`make pack-audit` on the three hand sheets, main's SVG against the feature's: without `rooms_folded`, Ochiba +1
+A one-shot observation, observed 2026-09-27; method: `make pack-audit` on the three hand sheets, main's SVG against the feature's: without `rooms_folded`, Ochiba +1
 finding (13.3 ft LOOSE at svg(800,509)) and Ubame +1/-1 (17.3 ft LOOSE at svg(334,503) gained, one kura fire-gap
 line lost), each a room edge read as a gap between buildings; with it, identical output on all three, and the old
 SVGs' output unchanged by the fold (plan review re-measured all six audited sheets).
@@ -39,7 +40,7 @@ SVGs' output unchanged by the fold (plan review re-measured all six audited shee
 
 ## R5 - The probe (SC-001, SC-002, FR-009; 2026-09-27)
 
-`probe264.py` (Playwright, 1400 x 1000; device scale 1 opens at fit in raster mode, 4 in vector mode), over the five
+A one-shot observation, observed 2026-09-27; method: `probe264.py` (Playwright, 1400 x 1000; device scale 1 opens at fit in raster mode, 4 in vector mode), over the five
 pages, samples each part group's shapes - box centers, and 61 points along every path with 1.5 px nudges, because
 the page merges circles and lines into one path whose box center falls between its pieces - and asks the page
 which kind answers:
