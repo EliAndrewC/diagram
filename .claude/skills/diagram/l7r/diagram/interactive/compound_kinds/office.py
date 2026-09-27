@@ -226,8 +226,8 @@ class Barracks(Kind):
     outranks the stable in size: a stable for a few horses never out-foots the watch's quarters.
 
     Note: On-grounds housing for the staff is a reconstruction: a small domain's jin'ya kept its retainers'
-    residences inside its walls, and the Takayama intendancy kept a rowhouse for its storehouse keepers, but no source read says the rest of a rural intendant's staff lived on the grounds; for the
-    city magistracies, the separate constables' district and the magistrate's own residence inside the office are attested. That the barracks outranks the stable is
+    residences inside its walls, and the Takayama intendancy kept a rowhouse for its storehouse keepers, but no source read says the rest of a rural intendant's staff lived on the grounds; for a
+    city magistrate's office, the separate constables' district and the magistrate's own residence inside the office are attested. That the barracks outranks the stable is
     this project's own reading, since no readable source ranks a compound's buildings by footprint. The
     building's size, about 20 to 70 ft by 10 to 40 ft, is a guess taken from the plan vocabulary's range, and
     how many live in it follows how the posting houses its staff.
