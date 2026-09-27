@@ -25,7 +25,7 @@ set -uo pipefail
 ROOT=$(git rev-parse --show-toplevel)
 BRIEFS=${1:-}; NAME=${2:-$(basename "$ROOT")}; MODEL=${3:-}
 [ -n "$BRIEFS" ] || { echo "page-session: BRIEF=<file> (or several, space-separated, run one after another) is required" >&2; exit 2; }
-for b in $BRIEFS; do f=${b#then:}; [ -f "$f" ] || { echo "page-session: no brief or step at $f" >&2; exit 2; }; done
+for b in $BRIEFS; do f=${b#then:}; case $f in resume:*) f=${f#resume:*:};; esac; [ -f "$f" ] || { echo "page-session: no brief or step at $f" >&2; exit 2; }; done
 command -v claude >/dev/null || { echo "page-session: no claude on PATH" >&2; exit 2; }
 ASP="$ROOT/container-scripts/append-system-prompt.md"
 EXTRA=(); [ -r "$ASP" ] && EXTRA+=(--append-system-prompt "$(cat "$ASP")"); [ -n "$MODEL" ] && EXTRA+=(--model "$MODEL")

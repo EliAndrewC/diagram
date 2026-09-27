@@ -136,3 +136,24 @@ def test_a_sheet_modal_s_compound_kinds_file_is_writable_too(tmp_path) -> None:
     report.write_text(_report(str(m.relative_to(tmp_path)), "counts the rice.", "counts the tax rice."), encoding="utf-8")
     assert ae.main([str(report), "--root", str(tmp_path)]) == 0
     assert "tax rice" in m.read_text(encoding="utf-8")
+
+
+def test_a_term_another_clone_is_defining_is_refused_and_the_blocks_after_it_still_apply(tmp_path, capsys, monkeypatch) -> None:
+    # the reservation's refusal was a traceback that stopped the run mid-report (271 T3 check-b, `Kinki` held by 267)
+    q = _tree(tmp_path)
+    real = ae._reserve()
+
+    class Held:
+        Refusal = real.Refusal
+
+        @staticmethod
+        def reserve(*_a, **_k):  # noqa: ANN205
+            raise real.Refusal("'Kinki' is already being defined in /elsewhere")
+
+    monkeypatch.setattr(ae, "_reserve", lambda: Held)
+    report = tmp_path / "r.md"
+    report.write_text("GLOSSARY Kinki | - | A region.\n" + _report(str(q), "the gloss said stipend", "changed"), encoding="utf-8")
+    assert ae.main([str(report), "--root", str(tmp_path)]) == 1
+    out = capsys.readouterr().out
+    assert "REFUSED - 'Kinki' is already being defined" in out and "2 block(s), 1 refused" in out
+    assert "changed" in q.read_text(encoding="utf-8")

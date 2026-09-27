@@ -56,6 +56,14 @@ def name_for(kind: str, key: str) -> str:
     return (key.replace("%", "%25").replace("/", "%2F") if kind == "glossary" else key) + SUFFIX[kind]
 
 
+def holding(d: Path, kind: str, key: str) -> list[Path]:
+    """The files in `d` that hold exactly this key: a prefix, a hyphen, then the key's own file name. A bare glob on
+    `*-<name>` also caught a longer key ending in this one - `honjin-jawiki` was refused because
+    `11320-kusatsu-honjin-jawiki.html` was on file (feature 271, 2026-09-27)."""
+    name = name_for(kind, key)
+    return [f for f in d.glob(f"*-{name}") if re.fullmatch(r"\d+-", f.name[: -len(name)])] if d.is_dir() else []
+
+
 def prefixes_in(d: Path) -> list[int]:
     return [int(m.group(1)) for f in d.glob("*") if (m := re.match(r"(\d+)-", f.name))] if d.is_dir() else []
 
@@ -93,7 +101,7 @@ def held_elsewhere(kind: str, key: str, root: Path, mirror: Path) -> str:
                 return f"{row.get('clone')} (reserved {row.get('prefix')}, {row.get('utc')})"
     clones = mirror / ".clones"
     for c in sorted(clones.iterdir()) if clones.is_dir() else []:
-        if c.resolve() != root.resolve() and (c / DIRS[kind]).is_dir() and any((c / DIRS[kind]).glob(f"*-{name_for(kind, key)}")):
+        if c.resolve() != root.resolve() and holding(c / DIRS[kind], kind, key):
             return str(c)
     return ""
 
@@ -131,7 +139,7 @@ def reserve(kind: str, key: str, root: Path, mirror: Path | None = None, stub: s
         raise Refusal("KEY is required - the glossary term or the registry key")
     mirror = mirror_of(root) if mirror is None else mirror
     d = root / DIRS[kind]
-    existing = [f for f in d.glob(f"*-{name_for(kind, key)}")] if d.is_dir() else []
+    existing = holding(d, kind, key)
     if existing:
         raise Refusal(f"{existing[0].relative_to(root)} already holds {key!r} - edit it rather than reserving another")
     with Lock(mirror / ".specify" / "prefixes.lock", timeout):

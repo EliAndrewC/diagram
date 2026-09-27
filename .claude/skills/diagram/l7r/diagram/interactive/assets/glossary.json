@@ -781,7 +781,7 @@
   ]
  },
  "bu": {
-  "def": "A unit of land area the size of a tsubo, about 3.3 square meters; the cadastres give homestead lots in bu.",
+  "def": "A unit of land area the size of a tsubo, about 3.3 square meters; the cadastres give homestead lots in bu. Written after another unit, as in 57 tsubo 2 bu 5 rin, it means a tenth of that unit.",
   "variants": [
    "bu"
   ]
@@ -937,7 +937,8 @@
   "def": "A settlement's own tutelary shrine, the seat of the deity that guards it.",
   "variants": [
    "chinju",
-   "Chinjusan"
+   "Chinjusan",
+   "tutelary shrine"
   ]
  },
  "chinju no mori": {
@@ -1259,7 +1260,7 @@
   ]
  },
  "dosojin": {
-  "def": "Roadside guardian-deity stones, set most often on the lonely stretches of a highway and near mountain passes.",
+  "def": "Roadside guardian-deity stones, set most often on the lonely stretches of a highway and near mountain passes, and usually at a village's edge where a road from outside meets its houses.",
   "variants": [
    "dosojin"
   ]
@@ -2539,7 +2540,8 @@
   "variants": [
    "lifang",
    "walled ward",
-   "curfew ward"
+   "curfew ward",
+   "curfew wards"
   ]
  },
  "lijin": {
@@ -2888,7 +2890,9 @@
   "def": "The climbing kiln: a long chambered kiln built up a slope, firebox at the bottom and chimney at the top, stoked in shifts for days.",
   "variants": [
    "noborigama",
-   "anagama"
+   "anagama",
+   "climbing kiln",
+   "climbing kilns"
   ]
  },
  "nucleated": {
@@ -3175,7 +3179,7 @@
   ]
  },
  "ri": {
-  "def": "A Japanese league of about 2.4 miles, thirty-six cho.",
+  "def": "A Japanese league of about 2.4 miles, thirty-six cho. The ancient ri of the imperial highway codes was far shorter, about 530 m, so thirty of them came to about 16 km (ten miles).",
   "variants": [
    "ri"
   ]
@@ -3538,6 +3542,7 @@
  "shukuba": {
   "def": "A post town on a highway, with its transport office, inns and relay horses strung along one street.",
   "variants": [
+   "juku",
    "post station",
    "post stations",
    "post town",
@@ -3780,6 +3785,7 @@
   "variants": [
    "tatami",
    "mat",
+   "mats",
    "twelve-mat"
   ]
  },
@@ -3861,7 +3867,7 @@
   ]
  },
  "ton'ya": {
-  "def": "A wholesaler-warehouseman of the Edo economy, who stored, sold on and shipped a trade's goods.",
+  "def": "A wholesaler-warehouseman of the Edo economy, who stored, sold on and shipped a trade's goods. At a post station the same word (toiya) named the head official who ran the relay office (toiyaba).",
   "variants": [
    "ton'ya",
    "tonya",
@@ -4953,7 +4959,7 @@
   ]
  },
  "enoki": {
-  "def": "Japanese hackberry, a tall, broad-crowned deciduous tree, one of the trees of a Tonami homestead grove.",
+  "def": "Japanese hackberry, a tall, broad-crowned deciduous tree, one of the trees of a Tonami homestead grove, and the tree planted beside a village's boundary shrine and on a highway's milestone mounds.",
   "variants": [
    "enoki"
   ]
@@ -5635,7 +5641,8 @@
   "def": "A hip-and-gable roof: hipped on its lower slopes, with a small gable at each end of the ridge.",
   "variants": [
    "irimoya",
-   "irimoya-roofed"
+   "irimoya-roofed",
+   "hip-and-gable"
   ]
  },
  "nagare-zukuri": {
@@ -6457,6 +6464,308 @@
    "dispersed farmsteads"
   ]
  },
+ "sanheyuan": {
+  "def": "The Chinese three-sided courtyard house: a main range with a wing projecting forward at each end, the fourth side a wall - the courtyard house with its front row left off.",
+  "variants": [
+   "sanheyuan"
+  ]
+ },
+ "chumon-zukuri": {
+  "def": "A farmhouse of northern Japan (Yamagata, Akita, Fukushima) whose front wing, projecting from the main house, holds the entrance and often the stable - an L-shaped plan like the magariya.",
+  "variants": [
+   "chumon-zukuri"
+  ]
+ },
+ "bunto house": {
+  "def": "A farmhouse built as two roofs side by side - the living rooms under one, the earth-floored work room under the other, eaves touching and a gutter between - used inside as one house.",
+  "variants": [
+   "bunto house",
+   "bunto houses",
+   "bunto type"
+  ]
+ },
+ "waki-honjin": {
+  "def": "The second-rank lodging for lords at a Japanese post station: smaller than the honjin but furnished to its standard, raised audience room and all, and open to ordinary travelers whenever no lord was using it.",
+  "variants": [
+   "waki-honjin"
+  ]
+ },
+ "toiyaba": {
+  "def": "The office at a Japanese post station where the relay of porters and horses was run - sometimes part of the station headman's own house, one or two to a station, at its middle or at its ends.",
+  "variants": [
+   "toiyaba"
+  ]
+ },
+ "tenma-cho": {
+  "def": "The quarter of a Japanese castle town that carried the lord's relay horses and the labor that went with them, placed as a rule close to the castle's main gate.",
+  "variants": [
+   "tenma-cho"
+  ]
+ },
+ "sukego": {
+  "def": "The villages around a Japanese post station that sent men and horses to the station when its own were not enough for the relay.",
+  "variants": [
+   "sukego"
+  ]
+ },
+ "ekika": {
+  "def": "A relay station of Japan's ancient state highways, keeping a fixed number of post horses by the class of its road; the one excavated was a walled compound about 260 ft a side.",
+  "variants": [
+   "ekika"
+  ]
+ },
+ "gabled roof": {
+  "def": "A roof of two slopes meeting at a ridge that runs the whole length of the house, leaving a triangular wall (the gable) at each end; kirizuma in Japanese.",
+  "variants": [
+   "gabled roof",
+   "gabled",
+   "gable roof",
+   "kirizuma"
+  ]
+ },
+ "hongawara": {
+  "def": "The heavy full tile roof of flat pan tiles and round cover tiles laid in alternate rows, the older and costlier of the two Japanese tile roofs.",
+  "variants": [
+   "hongawara",
+   "hongawara tile"
+  ]
+ },
+ "karishiki": {
+  "def": "Green manure: grass and young shoots cut on the hills and the commons and put into the paddy before planting - the fertilizer that made a village keep grass ground more than ten times its fields.",
+  "variants": [
+   "karishiki"
+  ]
+ },
+ "magusaba": {
+  "def": "A fodder ground: grass ground where fodder, green manure and thatch were cut, most often the commons of one village or hamlet - also called kusakariba or kayaba.",
+  "variants": [
+   "magusaba",
+   "kusakariba",
+   "kayaba"
+  ]
+ },
+ "kusayama": {
+  "def": "A grass mountain: a hill whose trees were felled and kept down so that it carried only the grass a village's paddies needed as fertilizer; a small one set aside for one paddy was a tazuke kusayama.",
+  "variants": [
+   "kusayama",
+   "tazuke kusayama"
+  ]
+ },
+ "ichirizuka": {
+  "def": "A milestone mound: an earth mound about 30 ft square raised beside a main highway at every ri, in a pair either side of the road, each planted with a tree - most often an enoki.",
+  "variants": [
+   "ichirizuka"
+  ]
+ },
+ "keihan-cha": {
+  "def": "Bund tea: tea planted in a single row along the bank between fields, marking the boundary with the neighbor and breaking the wind.",
+  "variants": [
+   "keihan-cha",
+   "bund tea"
+  ]
+ },
+ "pent roof": {
+  "def": "A lean-to roof of one slope set against a wall of a house, below its main roof.",
+  "variants": [
+   "pent roof",
+   "pent roofs"
+  ]
+ },
+ "Sagami": {
+  "def": "An old province of eastern Japan, roughly the present Kanagawa prefecture, southwest of Edo.",
+  "variants": [
+   "Sagami",
+   "Sagami province"
+  ]
+ },
+ "Kawachi": {
+  "def": "An old province of central Japan, the eastern part of the present Osaka prefecture, bordering Nara.",
+  "variants": [
+   "Kawachi",
+   "Kawachi province"
+  ]
+ },
+ "gable end": {
+  "def": "The triangular end wall under the peak of a gabled roof, as opposed to a long side under the eaves; a building \"entered at its gable end\" has its door in that wall.",
+  "variants": [
+   "gable end",
+   "gable ends",
+   "gable-entry"
+  ]
+ },
+ "Sanyodo": {
+  "def": "One of the great roads of ancient Japan's highway system, along which relay stations (ekika) were set in principle one every 16 km (about ten miles), each keeping 20 horses.",
+  "variants": [
+   "Sanyodo",
+   "San'yodo",
+   "Sanyo-do"
+  ]
+ },
+ "tsunoya": {
+  "def": "A Japanese farmhouse with a separate wing joined onto the main block, making an L; the name used in western Japan for the form called magariya or chumon-zukuri in the north.",
+  "variants": [
+   "tsunoya"
+  ]
+ },
+ "sugoya": {
+  "def": "A Japanese farmhouse whose whole building stands under a single roof - the \"straight house\", as against the L-plan tsunoya or magariya.",
+  "variants": [
+   "sugoya"
+  ]
+ },
+ "rin": {
+  "def": "A hundredth of a unit, used in Japanese measures below the bu (a tenth); 57 tsubo 2 bu 5 rin is 57.25 tsubo.",
+  "variants": [
+   "rin"
+  ]
+ },
+ "Nakasendo": {
+  "def": "The inland highway of Edo-period Japan between Edo and Kyoto through the mountains, the other main route beside the coastal Tokaido; its post stations kept about half as many inns as the Tokaido's.",
+  "variants": [
+   "Nakasendo"
+  ]
+ },
+ "mitsuke": {
+  "def": "A mound or stretch of wall of stone or earth set at each end of a post town on the five great highways, marking where the town began.",
+  "variants": [
+   "mitsuke",
+   "gate-mound",
+   "gate-mounds"
+  ]
+ },
+ "through-passage plan": {
+  "def": "A townhouse plan with an earth-floored passage running from the street door to the back of the lot, the rooms beside it; the busy post towns built their inns this way.",
+  "variants": [
+   "through-passage plan",
+   "through-passage"
+  ]
+ },
+ "toshiyori": {
+  "def": "At a post station, the deputy officers who helped the headman run the relay office (toiyaba).",
+  "variants": [
+   "toshiyori"
+  ]
+ },
+ "chōtsuke": {
+  "def": "At a post station's relay office, the clerk who logged every man and horse coming in and going out.",
+  "variants": [
+   "chōtsuke",
+   "chotsuke"
+  ]
+ },
+ "umasashi": {
+  "def": "At a post station's relay office, the dispatcher who assigned loads to the relay horses.",
+  "variants": [
+   "umasashi"
+  ]
+ },
+ "ninsokusashi": {
+  "def": "At a post station's relay office, the dispatcher who assigned loads to the porters.",
+  "variants": [
+   "ninsokusashi"
+  ]
+ },
+ "kozashi": {
+  "def": "At a post station's relay office, one of the lesser staff listed after the dispatchers of horses and porters; the record does not say what a kozashi did.",
+  "variants": [
+   "kozashi"
+  ]
+ },
+ "aisle": {
+  "def": "A strip of floor added along one long side of a building, under the same roof carried further down, which widens the house a little without raising its ridge.",
+  "variants": [
+   "aisle",
+   "aisles"
+  ]
+ },
+ "four-room type": {
+  "def": "The common farmhouse plan whose raised-floor part is divided into four rooms, beside the earth-floored doma; most larger plans are this one with rooms or a stable added.",
+  "variants": [
+   "four-room type",
+   "four-room",
+   "yomadori",
+   "四間取り"
+  ]
+ },
+ "Kaei": {
+  "def": "A Japanese era name covering 1848 to early 1855, which documents use to date a year; Kaei 7 is 1854.",
+  "variants": [
+   "Kaei"
+  ]
+ },
+ "hoonoki": {
+  "def": "The Japanese bigleaf magnolia (Magnolia obovata), a tall deciduous tree with very large leaves; one of the commonest trees in the homestead groves of Isawa in the north.",
+  "variants": [
+   "hoonoki",
+   "ホオノキ"
+  ]
+ },
+ "four trees": {
+  "def": "The four tree crops of the early-modern period - tea, mulberry, lacquer and paper mulberry - grown in fields for sale and processing. The shogunate restricted where they could be planted, and from the middle of the period they were grown as local specialties.",
+  "variants": [
+   "four trees",
+   "four trees and three grasses",
+   "shiboku sanso"
+  ]
+ },
+ "staggered shelves": {
+  "def": "Shelves set at offset heights in a recess beside the tokonoma, a fixture of the formal shoin-style reception room.",
+  "variants": [
+   "staggered shelves",
+   "chigaidana"
+  ]
+ },
+ "seed": {
+  "def": "The number a map is generated from: every choice the map rolls, such as which form a town's inn takes, follows from it, so the same seed always draws the same map.",
+  "variants": [
+   "seed",
+   "seeds"
+  ]
+ },
+ "Ikko sect": {
+  "def": "The True Pure Land Buddhist sect of Japan, whose temples in the age of civil wars were defended by moats and earth banks, with a self-governing town (a temple town) growing up inside the defenses.",
+  "variants": [
+   "Ikko sect",
+   "Ikko",
+   "Ikko-shu",
+   "Ikko sect's"
+  ]
+ },
+ "guard city": {
+  "def": "A walled garrison town of Ming and Qing China, built to hold a standing military unit rather than to seat a civil government; a battalion city held a smaller unit than a guard city.",
+  "variants": [
+   "guard city",
+   "guard cities",
+   "battalion city",
+   "battalion cities"
+  ]
+ },
+ "black charcoal": {
+  "def": "Soft charcoal that catches fire easily, made by letting the kiln cool with the charcoal still inside before opening it; made in Japan from the late Muromachi into the Edo period.",
+  "variants": [
+   "black charcoal",
+   "black-charcoal"
+  ]
+ },
+ "fall line": {
+  "def": "The line straight down a slope, the way water would run off it; a thing laid along the fall line points directly uphill and downhill.",
+  "variants": [
+   "fall line"
+  ]
+ },
+ "calendar calibration": {
+  "def": "The conversion of a laboratory dating of a sample, such as charcoal from a kiln, into a range of calendar years.",
+  "variants": [
+   "calendar calibration"
+  ]
+ },
+ "white charcoal": {
+  "def": "Hard, long-burning charcoal that is slow to catch fire, made by opening the kiln wide at the end of the burn to raise the heat, then drawing the charcoal out and smothering it under ash.",
+  "variants": [
+   "white charcoal",
+   "white-charcoal"
+  ]
+ },
  "gōsha": {
   "def": "The district-shrine rank in Japan's modern shrine registers: the chief shrine of a district of about twenty villages, one step above the village shrine.",
   "variants": [
@@ -6469,6 +6778,103 @@
   "variants": [
    "sōchinju",
    "sochinju"
+  ]
+ },
+ "tateba": {
+  "def": "A rest stop on an Edo highway between two post towns, or at a pass: teahouses and stalls where travelers rested and horses or palanquins were sometimes changed, with no official lodging.",
+  "variants": [
+   "tateba",
+   "rest stop",
+   "rest stops"
+  ]
+ },
+ "watashiba": {
+  "def": "A ferry landing: the place on a riverbank where the ferry boats set out and came in.",
+  "variants": [
+   "watashiba",
+   "ferry landing",
+   "ferry landings"
+  ]
+ },
+ "bojikui": {
+  "def": "A boundary post: a tall wooden post set up beside a highway where a post town or a village ended, lettered, it seems, with the boundary and the distances.",
+  "variants": [
+   "bojikui",
+   "boundary post",
+   "boundary posts"
+  ]
+ },
+ "kanjo-nawa": {
+  "def": "A sacred rope strung across the road at a village's edge, most often at New Year, hung with charms of straw to keep sickness and evil out; commonest in and around the Kinki region.",
+  "variants": [
+   "kanjo-nawa",
+   "kanjo-tsuri"
+  ]
+ },
+ "michikiri": {
+  "def": "Cutting the road: the village custom of barring evil at the road into the village - a boundary god set there, a rope or straw serpent strung across the way, straw sandals offered.",
+  "variants": [
+   "michikiri"
+  ]
+ },
+ "ai-no-shuku": {
+  "def": "An in-between station: a rest stop between two post towns that grew into a street of shops, officially a village and in principle forbidden to lodge travelers.",
+  "variants": [
+   "ai-no-shuku"
+  ]
+ },
+ "gaison": {
+  "def": "Street village: a village packed tight along both sides of a road and living from it, with shops and lodging - the denser, trading form of the row village.",
+  "variants": [
+   "gaison",
+   "street village"
+  ]
+ },
+ "murakiri": {
+  "def": "The partition of villages at the start of the Edo period: each village made a unit of rule and tax with its own fields and a fixed boundary, drawn with an eye to its irrigation water and its rights in the common hills.",
+  "variants": [
+   "murakiri"
+  ]
+ },
+ "Chugoku": {
+  "def": "The western end of Honshu, between the Kinki region and Kyushu; with Kinki, the heart of western Japan's plow-cattle region in the 1886 count.",
+  "variants": [
+   "Chugoku"
+  ]
+ },
+ "weilongwu": {
+  "def": "An enclosed Hakka house of south China: a central hall with wings, closed at the back by a ring of rooms for kitchens, stores, privies, pigsties and hen coops, built so its household could live self-sufficient inside its own walls.",
+  "variants": [
+   "weilongwu",
+   "hall-and-wing house",
+   "hall-and-wing houses"
+  ]
+ },
+ "hsien": {
+  "def": "An older (Wade-Giles) spelling of xian, a county of imperial and Republican China, the unit governed from a county seat.",
+  "variants": [
+   "hsien"
+  ]
+ },
+ "town ground": {
+  "def": "Land governed by the town magistrate as the townsmen's ground, where their houses and shops stand, as against the ground of daimyo mansions and of temples and shrines.",
+  "variants": [
+   "town ground",
+   "town-row ground",
+   "town grounds"
+  ]
+ },
+ "multiple city": {
+  "def": "A walled city made of more than one walled enclosure, as when a suburb outside the gate grew large enough to be walled in its turn.",
+  "variants": [
+   "multiple city",
+   "multiple cities"
+  ]
+ },
+ "Nipponica": {
+  "def": "The Japanese encyclopedia (Nihon Daihyakka Zensho) whose entries Kotobank carries, cited here by its entry on a word.",
+  "variants": [
+   "Nipponica"
   ]
  },
  "preceptor": {
@@ -6499,6 +6905,75 @@
    "Martial temples"
   ]
  },
+ "kune": {
+  "def": "The Kanto name for a farmstead's windbreak grove, and also a hedge or a fence of woven bamboo along a plot's edge; the word itself means the line between two holdings.",
+  "variants": [
+   "kune",
+   "kune-gaki"
+  ]
+ },
+ "kyogen": {
+  "def": "A short comic play of the Noh theater, performed between the Noh pieces.",
+  "variants": [
+   "kyogen",
+   "kyōgen"
+  ]
+ },
+ "heping": {
+  "def": "The drying floor of packed or plastered earth in front of a south-China house, where rice was threshed and dried; at a Hakka weilongwu it lies between the half-moon pond and the house.",
+  "variants": [
+   "heping",
+   "hepings",
+   "禾坪"
+  ]
+ },
+ "Luban ruler": {
+  "def": "A Chinese builder's ruler marked in lucky and unlucky lengths, used to fix a house's dimensions; named for Lu Ban, the patron of carpenters.",
+  "variants": [
+   "Luban ruler",
+   "Luban rulers",
+   "鲁班尺"
+  ]
+ },
+ "Xiang-Gan": {
+  "def": "The building tradition of Hunan (Xiang) and Jiangxi (Gan) in south-central China, set beside the Cantonese (Guangfu) tradition.",
+  "variants": [
+   "Xiang-Gan"
+  ]
+ },
+ "Guangfu": {
+  "def": "Cantonese: the Cantonese-speaking inhabitants of Guangdong and their building tradition, whose villages usually keep their main lane at the front.",
+  "variants": [
+   "Guangfu"
+  ]
+ },
+ "road magistrate": {
+  "def": "The shogunate's officer over the highways, who assigned their upkeep to the post towns and villages along them, and to villages off the road where traffic was heavy.",
+  "variants": [
+   "road magistrate",
+   "road magistrates",
+   "dochu bugyo"
+  ]
+ },
+ "Imperial road": {
+  "def": "On these maps, a main highway of the Empire: the through road that links cities and post towns, as against a village lane or a field road. Where one runs through a city as its main street it is that city's Imperial spine.",
+  "variants": [
+   "Imperial road",
+   "Imperial roads"
+  ]
+ },
+ "Northern Wei": {
+  "def": "A dynasty that ruled north China in the fifth and sixth centuries; the farm manual Qimin yaoshu was written under it.",
+  "variants": [
+   "Northern Wei"
+  ]
+ },
+ "Heibonsha": {
+  "def": "A Japanese publisher of encyclopedias; \"the Heibonsha article\" is the entry from its encyclopedia, one of the reference works whose articles Kotobank reprints beside Nipponica.",
+  "variants": [
+   "Heibonsha"
+  ]
+ },
  "jōgōe-chi": {
   "def": "One of the ranks of a Sōtō temple, with the kata-hōdōe-chi and the zuiie-chi, at which the ninety-day training retreat was held in the Edo period and a full set of halls was required.",
   "variants": [
@@ -6507,11 +6982,50 @@
    "zuiie-chi"
   ]
  },
+ "animal unit": {
+  "def": "A count of livestock in which beasts of different sizes are weighted to one common measure, so that a large beast like a water buffalo counts for more than a pig or a goat.",
+  "variants": [
+   "animal unit",
+   "animal units"
+  ]
+ },
+ "Chubu": {
+  "def": "The central region of Honshu, between Kanto and Kinki, running from the Pacific coast across the mountains to the Sea of Japan coast; Niigata is in it.",
+  "variants": [
+   "Chubu"
+  ]
+ },
+ "meshimori": {
+  "def": "A woman kept at a post town's inn to serve travelers their meals. The name means \"rice-server\". Keeping such women marked a place as an inn for lodging, so a teahouse, which was only for resting, had to be built differently.",
+  "variants": [
+   "meshimori",
+   "meshimori women",
+   "meshimori-onna"
+  ]
+ },
+ "bakuhan": {
+  "def": "The Edo-period order of rule shared between the shogunate (bakufu) and the daimyo domains (han), which ruled land and people and fixed village boundaries.",
+  "variants": [
+   "bakuhan"
+  ]
+ },
+ "boji": {
+  "def": "An older boundary marker: it marked the limits of a temple or shrine precinct or of a medieval estate. It was usually a post of wood or stone, sometimes a rock or standing tree. The bojikui on the Edo highways carried the practice on.",
+  "variants": [
+   "boji"
+  ]
+ },
+ "so village": {
+  "def": "A self-governing village community of the medieval period. As it grew, a village's boundary with its neighbors gradually became clear, before the Edo land surveys fixed it.",
+  "variants": [
+   "so village",
+   "so villages"
+  ]
+ },
  "hip-and-gable roof": {
   "def": "A Chinese roof that slopes on all four sides at its lower part and ends in a small upright gable at each end of the ridge; the roof of a major hall, ranked just below the full hip roof.",
   "variants": [
    "hip-and-gable roof",
-   "hip-and-gable",
    "hip-and-gable roofs"
   ]
  },
@@ -6522,6 +7036,31 @@
    "screen walls",
    "spirit wall",
    "spirit walls"
+  ]
+ },
+ "ryobu": {
+  "def": "A small deciduous broadleaf tree, one of the trees of the young cut-over wood nearest a Japanese settlement, beside konara oak, hornbeam and alder.",
+  "variants": [
+   "ryobu"
+  ]
+ },
+ "shide": {
+  "def": "Japanese hornbeam, a deciduous broadleaf tree of the young cut-over wood nearest a settlement.",
+  "variants": [
+   "shide"
+  ]
+ },
+ "yamahannoki": {
+  "def": "The Japanese mountain alder, a deciduous broadleaf tree of the young cut-over wood nearest a settlement.",
+  "variants": [
+   "yamahannoki"
+  ]
+ },
+ "Imado ware": {
+  "def": "The unglazed and raku pottery fired at Imado and Hashiba on the Sumida, northeast of Asakusa in Edo: everyday wares, braziers, flowerpots, clay dolls and roof tiles.",
+  "variants": [
+   "Imado ware",
+   "Imado-yaki"
   ]
  },
  "Chinese-style gate": {
@@ -6544,6 +7083,109 @@
   "variants": [
    "initiate",
    "initiates"
+  ]
+ },
+ "Hui style": {
+  "def": "The traditional building style of Huizhou in south-east China, one of whose hallmarks is the horse-head wall: a gable wall rising well above the roof between one house and the next, to stop fire spreading.",
+  "variants": [
+   "Hui style",
+   "Hui-style",
+   "Huizhou style",
+   "Hui (Huizhou) style"
+  ]
+ },
+ "Kyoto measure": {
+  "def": "The Kyoto standard for the ken, about 6.5 ft (1.97 m), larger than the Edo ken of about 6 ft; the frontages in this record are converted at the Kyoto size.",
+  "variants": [
+   "Kyoto measure",
+   "kyoma",
+   "kyō-ma"
+  ]
+ },
+ "Shanxi merchants": {
+  "def": "The trading and banking houses of Shanxi province in northern China, among the wealthiest merchants of the Ming and Qing periods; Qixian was one of their home towns.",
+  "variants": [
+   "Shanxi merchants",
+   "Shanxi merchant houses",
+   "Jinshang"
+  ]
+ },
+ "udatsu": {
+  "def": "A small roofed wall that some Edo-period machiya raised on the roof at the boundary with the next house, to stop a fire spreading from next door.",
+  "variants": [
+   "udatsu"
+  ]
+ },
+ "river office": {
+  "def": "The office at a ferry or ford landing (kawa kaisho, 川会所) through which the crossing was run; on the Tokaido it stood on one bank only, beside the notice board and the boatmen's huts.",
+  "variants": [
+   "river office",
+   "river offices"
+  ]
+ },
+ "county magistrate": {
+  "def": "The official who governs a county from its walled county town. Their jurisdiction covers the whole county, the town and its countryside alike, so the ground just outside the town gate is still under their rule.",
+  "variants": [
+   "county magistrate",
+   "county magistrates"
+  ]
+ },
+ "tsumairi": {
+  "def": "A house built with its roof ridge at right angles to the street, so that the triangular end of the roof (the gable) faces the street. In Japanese towns it was the less common form: most machiya ran the ridge parallel to the street.",
+  "variants": [
+   "tsumairi",
+   "gable-fronted",
+   "tsumairi-type"
+  ]
+ },
+ "half-story": {
+  "def": "A low storage story over the street side of a machiya, under a low eave, rather than a full second floor. The domains held second stories down to this by ban, and in Kyoto it stayed usual except in large merchant houses.",
+  "variants": [
+   "half-story",
+   "half-stories",
+   "tsushi nikai",
+   "zushi nikai"
+  ]
+ },
+ "ridge-divided nagaya": {
+  "def": "A nagaya split along its ridge as well as across it, so its units stand back to back and each opens only on its lane side; the cheapest kind of back tenement, commonly nine shaku by two ken a unit.",
+  "variants": [
+   "ridge-divided nagaya",
+   "ridge-divided",
+   "mune-wari"
+  ]
+ },
+ "back tenement": {
+  "def": "In a Japanese city, the rented row houses (nagaya) on a narrow lane behind the street-front shops of a lot, with a well, a privy and a rubbish heap shared by the residents; the home of peddlers, craftsmen and day laborers.",
+  "variants": [
+   "back tenement",
+   "back tenements",
+   "back nagaya",
+   "uradana",
+   "back-tenement"
+  ]
+ },
+ "Tensho": {
+  "def": "The Japanese era name for the years 1573 to 1592; \"Tensho 20\" is 1592, the year the filling of Edo's Hibiya inlet began.",
+  "variants": [
+   "Tensho",
+   "Tensho-era"
+  ]
+ },
+ "tako-beya": {
+  "def": "A crowded bunkhouse where a labor boss lodged the laborers he found work for and kept them under his hand.",
+  "variants": [
+   "tako-beya"
+  ]
+ },
+ "yamori": {
+  "def": "In an Edo town, the manager who lived on a landlord's tenement lot, collected the ground rent and house rent on the owner's behalf, kept the tenants' registration, passed on the town's ordinances, and was in practice the ruler of the back tenement.",
+  "variants": [
+   "yamori",
+   "ōya",
+   "yanushi",
+   "house manager",
+   "house manager's"
   ]
  },
  "mokoshi": {
@@ -6591,6 +7233,40 @@
    "dharma halls"
   ]
  },
+ "mizunomi": {
+  "def": "A landless villager of Edo Japan: holding no assessed land, not counted a full villager and given no part in village government, living as a tenant, by labor or by a craft.",
+  "variants": [
+   "mizunomi"
+  ]
+ },
+ "kadoya": {
+  "def": "A dependent farming household of Edo Japan, named for the gate-hut on its master's plot where it lived; the huts inside a larger farm's enclosure held such households.",
+  "variants": [
+   "kadoya"
+  ]
+ },
+ "kaisho": {
+  "def": "A village's meeting hall; in the Kinki region, around Kyoto and Osaka, it often stood inside the precinct of the village's tutelary shrine.",
+  "variants": [
+   "kaisho"
+  ]
+ },
+ "gōnō": {
+  "def": "A rich farmer-landlord of Edo Japan: one of the village landlords who grew from the middle of the eighteenth century, out of older landlord families or out of trade.",
+  "variants": [
+   "gōnō",
+   "gono"
+  ]
+ },
+ "ancestral hall": {
+  "def": "A Chinese lineage's hall (citang) for its ancestors' rites, also where the lineage met and feasted; in a Cantonese village the halls stand at the front, facing the pond.",
+  "variants": [
+   "ancestral hall",
+   "ancestral halls",
+   "citang",
+   "祠堂"
+  ]
+ },
  "tsujido": {
   "def": "A small open wayside hall on four corner posts under a tiled roof, with a board floor about two mats in size, built by a settlement beside a road for travelers to rest and later housing a jizo or other stone image.",
   "variants": [
@@ -6607,6 +7283,13 @@
    "koshin towers"
   ]
  },
+ "Yoshimune": {
+  "def": "Tokugawa Yoshimune, the shogun of the Kyoho era, under whom Edo was first ordered, from 1722, to roof in tile and build in plastered, fire-resistant construction.",
+  "variants": [
+   "Yoshimune",
+   "Tokugawa Yoshimune"
+  ]
+ },
  "sutra house": {
   "def": "The temple building that stores its scriptures, the sutras; in the Nara-period plan it stood facing the bell tower across the precinct.",
   "variants": [
@@ -6620,6 +7303,33 @@
   "variants": [
    "shoro",
    "temple bell tower"
+  ]
+ },
+ "nago": {
+  "def": "A dependent farmer of Japan tied to a powerful household, who rented from it the house plot and house as well as fields, and often lived on its plot.",
+  "variants": [
+   "nago"
+  ]
+ },
+ "yashikichi": {
+  "def": "A house plot: the ground a farmhouse and its outbuildings stood on, which a domain's land survey measured and allowed to each farmer, usually a few se.",
+  "variants": [
+   "yashikichi"
+  ]
+ },
+ "curb": {
+  "def": "The low wall of stone or wood built round the mouth of a well, which keeps anyone or anything from falling in; seen from above, the ring that marks where the well is.",
+  "variants": [
+   "curb",
+   "curbs",
+   "well curb",
+   "wellhead"
+  ]
+ },
+ "town grain": {
+  "def": "The scale a town or village map is drawn at, about 1 ft of ground to a pixel, fine enough that small features such as a notice board or a well can be drawn at their true size.",
+  "variants": [
+   "town grain"
   ]
  },
  "shugen": {
@@ -6672,6 +7382,118 @@
    "visiting graves"
   ]
  },
+ "myoden": {
+  "def": "A \"named field\": land recorded under the name of the holder who answered for its tax. A myoden landlord came from one of these old landholding families of a village.",
+  "variants": [
+   "myoden",
+   "myōden",
+   "myoden landlord",
+   "myoden landlords"
+  ]
+ },
+ "sakutoku": {
+  "def": "The part of a harvest left after the lord's yearly tax. A sakutoku landlord let their land to tenants and lived on that share as rent.",
+  "variants": [
+   "sakutoku",
+   "sakutoku landlord",
+   "sakutoku landlords"
+  ]
+ },
+ "hikan": {
+  "def": "A hereditary dependent of a powerful farming household, bound to serve it. Hikan held no house plot of their own and often lived in an outbuilding or a hut on their master's plot.",
+  "variants": [
+   "hikan"
+  ]
+ },
+ "branch household": {
+  "def": "A new household split off from a family's main house and given its own house plot and land.",
+  "variants": [
+   "branch household",
+   "branch households",
+   "branch house",
+   "branch houses"
+  ]
+ },
+ "tsurube": {
+  "def": "The Japanese well bucket, and the gear that draws it: a bucket on a rope over a pulley, or on the end of a sweep's pole.",
+  "variants": [
+   "tsurube"
+  ]
+ },
+ "hanetsurube": {
+  "def": "The Japanese well sweep: a bamboo pole crossed over a post, the bucket hung at one end and a weight of stones tied to the butt, worked like a seesaw.",
+  "variants": [
+   "hanetsurube",
+   "hane-tsurube"
+  ]
+ },
+ "bargeboard": {
+  "def": "A board fixed along the sloping edge of a gabled roof, covering the ends of the roof timbers.",
+  "variants": [
+   "bargeboard",
+   "bargeboards"
+  ]
+ },
+ "Owari": {
+  "def": "The province around present-day Nagoya, and the name of the senior Tokugawa branch house that held it.",
+  "variants": [
+   "Owari"
+  ]
+ },
+ "kaigisho": {
+  "def": "A village meeting hall; a name used beside kaisho for the halls the Kinki region set up from early times.",
+  "variants": [
+   "kaigisho"
+  ]
+ },
+ "nenbutsu": {
+  "def": "Chanting the Buddha's name; a nenbutsu hall was a hall for that chanting, and in older times one of the places a village meeting was held.",
+  "variants": [
+   "nenbutsu",
+   "nembutsu"
+  ]
+ },
+ "festival lodging": {
+  "def": "The house that hosted a village festival; some villages held their meeting there after the festival.",
+  "variants": [
+   "festival lodging",
+   "festival's host house",
+   "festival host house"
+  ]
+ },
+ "purlin": {
+  "def": "A roof beam running along the length of a building under the rafters; a Chinese hall's depth is counted in purlins - the rear halls at Langtou, of thirteen purlins, are 8.5 to 9 meters deep.",
+  "variants": [
+   "purlin",
+   "purlins"
+  ]
+ },
+ "three-bay two-corridor house": {
+  "def": "The common house of a Cantonese village, three bays wide, built in rows behind the village's ancestral halls.",
+  "variants": [
+   "three-bay two-corridor house",
+   "three-bay two-corridor houses"
+  ]
+ },
+ "honbyakusho": {
+  "def": "The landholding farmers of an Edo-period village, who made up most of the village meeting.",
+  "variants": [
+   "honbyakusho",
+   "hon-byakusho"
+  ]
+ },
+ "komae": {
+  "def": "The small farmers of an Edo-period village, below the officials and leading men; later in the period they came to take part in the village meeting.",
+  "variants": [
+   "komae"
+  ]
+ },
+ "hirakata": {
+  "def": "The ordinary villagers of an Edo-period village, below the officials and leading men; named with the komae as those who later joined the village meeting.",
+  "variants": [
+   "hirakata"
+  ]
+ },
  "monto": {
   "def": "The followers of Jodo Shinshu, the Shin sect; the Aki monto were its followers in Aki, the old province around Hiroshima, where cremation was the custom.",
   "variants": [
@@ -6704,6 +7526,33 @@
    "fire beds"
   ]
  },
+ "firebox": {
+  "def": "The combustion chamber at the foot of a climbing kiln, where the wood fire is fed; the firing chambers climb the slope above it and the chimney stands at the top.",
+  "variants": [
+   "firebox",
+   "fireboxes"
+  ]
+ },
+ "stoke mouth": {
+  "def": "The opening at the foot of a kiln through which the fire is fed with wood during a firing.",
+  "variants": [
+   "stoke mouth",
+   "stoke mouths"
+  ]
+ },
+ "Mino": {
+  "def": "An old province of central Japan, in present-day southern Gifu, and one of its great pottery districts; the Motoyashiki kiln stands there.",
+  "variants": [
+   "Mino"
+  ]
+ },
+ "kiln house": {
+  "def": "A pottery business - the household and workshop that made and fired wares (窯元, kamamoto); in the porcelain villages several of them shared one great climbing kiln.",
+  "variants": [
+   "kiln house",
+   "kiln houses"
+  ]
+ },
  "country monk": {
   "def": "In this setting, the one tax-free religious figure of a village district, who tends the village's shrine; their dwelling may double as the shrine itself.",
   "variants": [
@@ -6731,6 +7580,13 @@
    "sub-temple",
    "sub-temples",
    "sub-temple's"
+  ]
+ },
+ "unconfined groundwater": {
+  "def": "Groundwater with no watertight layer sealed above it, so its top is the open water table itself - where that table lies shallow, a plain dug well reaches it.",
+  "variants": [
+   "unconfined groundwater",
+   "unconfined"
   ]
  },
  "cloister": {
@@ -6780,6 +7636,18 @@
   "variants": [
    "Hokke",
    "Hokke sect"
+  ]
+ },
+ "Taiji": {
+  "def": "In Chinese thought, the one whole that divides into yin and yang - which is why the Hakka read a half-moon pond (yin) and the mound behind the house (yang) as the two halves of one arrangement.",
+  "variants": [
+   "Taiji"
+  ]
+ },
+ "metamorphosis fengshui": {
+  "def": "The Taiwan Hakka Museum's English name for the school of fengshui its page on half-moon ponds describes: a house built lower at the front and higher at the back, so that a household's luck rises step by step, with the half-moon pond and the mound behind the house read as yin and yang.",
+  "variants": [
+   "metamorphosis fengshui"
   ]
  },
  "Tenmangu": {

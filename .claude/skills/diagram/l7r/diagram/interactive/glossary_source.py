@@ -38,9 +38,9 @@ SOURCE = os.path.join(_HERE, "assets", "glossary.json")
 TERMS = os.path.join("assets", "glossary")
 #: The prefix is gapped by ten, as `research/sources/` is: inserting a term between two renames nothing.
 GAP = 10
+#: DIGITS is the MINIMUM width: the prefixes passed 9990 on 2026-09-27 (feature 269), and a fifth digit is
+#: read, never refused - which is why the assembly sorts by the NUMBER, where `10020-` would sort before `1290-`.
 DIGITS = 4
-#: At least four digits: `make reserve` counts past 9990 across every clone's reservations (feature 272 met
-#: 11310), and the files are read in NUMERIC prefix order (`_order`), since "11310" sorts before "1410" as text.
 _NAMED = re.compile(r"^(\d{4,})-(.+)\.json$")
 #: What `json.dumps` was called with. Measured, not guessed: the committed file matches this exactly.
 _DUMP = {"ensure_ascii": False, "indent": 1}
@@ -66,7 +66,7 @@ def term_of(name: str) -> str:
 
 
 def _order(name: str) -> tuple[int, str]:
-    """A file's place in the assembly: its prefix as a NUMBER; a stray file first, where `term_of` refuses it."""
+    """By the prefix's NUMBER; a stray file sorts first so `term_of` refuses it."""
     found = _NAMED.match(name)
     return (int(found.group(1)) if found else -1, name)
 
