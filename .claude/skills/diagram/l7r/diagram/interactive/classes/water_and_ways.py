@@ -310,7 +310,7 @@ class Well(Kind):
     Why: A pre-modern rice village of about seventy households ran one to three communal wells, two being
     typical in this record's estimate - drinking water came mostly from surface water, settled and boiled,
     and a well was expensive durable capital dug by subscription only as surface quality forced. Shared wells
-    outnumbered private ones, in this record's reading: a dispersed farmstead, with no center to share a well with, carries its own; elsewhere per-household wells appear only where the water
+    outnumbered private ones, in this record's reading: a dispersed farmstead, with no center to share a well with, carries its own or draws from the channel or pond it sits beside; elsewhere per-household wells appear only where the water
     table is shallow.
 
     Note: we have drawn the wellhead about 19 ft across - a stone curb of 9.4 ft radius under a well-house roof -
@@ -323,7 +323,7 @@ class Well(Kind):
     subscription financing, the typical two, the households-per-well ratio, and the shallow water table that
     makes a farmstead's own well cheap (the groundwater paper gives no depth) were searched for and not
     found, and stand as this record's estimate; so does the well-house roof on every well, since the
-    dictionaries define the well house but do not say how common it was.
+    dictionaries define the well house but do not say how common it was. The map draws more wells than that count - a hamlet one or two, a village of 60 households six to nine, a town about sixteen - as a disclosed liberty, and the distances that keep a well among the houses and every household within reach of a well or a channel are calibrations against the drawn maps, not figures from a record.
 
     Name: well
     Covers: `wells` - the wellheads

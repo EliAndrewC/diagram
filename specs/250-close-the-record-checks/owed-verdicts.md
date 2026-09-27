@@ -148,3 +148,8 @@
 - OfficialStudy (buildings SECTION=090): IN-STEP - the section still places the study in the office wing, behind the dais (the agent noted for quote-check that no quoted passage names the study itself).
 - TaxBarge (buildings SECTION=080): REWRITTEN - Why: now says "official pennant" instead of "office's seals", and the Note splits the hired hulls read for the shogunate's sea shipments from the county downriver use as this map's reading; re-check IN-STEP (the size, owed from river-cities, was out of scope).
 - WeaponRack (buildings SECTION=210): LABELED - the re-check still found drift, so the Note now says open-ground practice is read only for before mid-Edo and one domain's drill ground, the county application is a guess on setting numbers, and the gear is a map convention; Label moved from accurate to guess.
+- Well (urban-features SECTION=090): REWRITTEN - the Note now discloses the drawn well count as a liberty and the reaches as calibrations; the dispersed farmstead may draw from the channel or pond beside it (feature 265 T11)
+- FishPond (archetypes SECTION=150): IN-STEP - re-checked after the section changed again (feature 265 T11); the sloping-ground scope and the unread Ruddle & Zhong credit still match
+- PondCanal (archetypes SECTION=150): REWRITTEN - the Note credits Ruddle & Zhong only with a pond on sloping ground, as 150 now does (feature 265 T11)
+- PondSluice (archetypes SECTION=150): REWRITTEN - the Why's inlet-high, outlet-low plumbing narrowed to a pond on sloping ground (feature 265 T11)
+- SluiceGate (archetypes SECTION=150): REWRITTEN - the Why now carries 150's polder finding, gates opened in drought and shut in flood (feature 265 T11)

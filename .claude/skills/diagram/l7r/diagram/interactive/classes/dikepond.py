@@ -101,7 +101,7 @@ class PondCanal(Kind):
     gates that open onto it - some take only feeds, some only drains, some both - and the ring drain around the block
     takes everything to the outfall.
 
-    Note: That the canals are a conveyance-and-drainage network the ponds exchange water with is documented; that each pond takes water in high and lets it out low, the whole net running in series from a high intake to a low outfall, is Ruddle & Zhong's (1988) finding, which this project has not read, as no copy is publicly readable; which pond's
+    Note: That the canals are a conveyance-and-drainage network the ponds exchange water with is documented; that a pond on sloping ground takes water in high and lets it out low, the whole net running in series from a high intake to a low outfall, is Ruddle & Zhong's (1988) finding, which this project has not read, as no copy is publicly readable; which pond's
     gate opens onto which canal follows this map's own rule - water in on each pond's high side, out on its low side - not a
     surveyed plan. The ring drain around the block is this map's own layout, borrowed from the rice polder's inner ring
     canal: no source the record cites describes a ring drain on a dike-pond.
@@ -125,7 +125,7 @@ class PondSluice(Kind):
     drain the pond at harvest - the gate through which a dike-pond exchanges water with the canal network.
 
     Why: A dike-pond is not a sealed basin: the whole system runs in series from a high intake to a low outfall,
-    each pond taking water in at its high side and letting it out at its low side. The stub drawn here is
+    a pond on sloping ground taking water in at its high side and letting it out at its low side. The stub drawn here is
     the cut in the dike; the boards themselves are a few inches wide and are not drawn at this scale.
 
     Note: The sluice's form is documented in the FAO pond-construction manual; its position on each pond follows the
@@ -367,7 +367,7 @@ class SluiceGate(Kind):
 
     Why: A polder is enclosed against the flood outside, so its dike is cut only where a gate controls the water
     - at the inlet high on the block and the outfall low on it. The gate is a protected opening closed with
-    wooden boards to set the level, and it is why the dike can be complete and the block still fed and
+    wooden boards to set the level - opened in drought to draw the river in, shut in flood to keep it out - and it is why the dike can be complete and the block still fed and
     drained.
 
     Note: The form is read from the FAO pond-construction manual; the inlet-high, outfall-low placement comes from Ruddle & Zhong (1988), which has no readable copy and is not read; the 6 x 3 ft bar is drawn at the size of a whole board set, which the record does not measure; the FAO manual caps the opening itself at 0.80 m, less than half the bar.
