@@ -1181,6 +1181,7 @@ nogyo zensho	Nogyo Zensho
 normal depth	normal depth
 northern song	Song dynasty
 northern wei	Northern Wei
+northern zhou	Zhou dynasty
 nrcs	NRCS
 nrcs-designed	NRCS
 nucleated	nucleated
@@ -1226,6 +1227,8 @@ owari	Owari
 ox-frame	ox-frame
 ox-frames	ox-frame
 oyaike	oyaike
+pagoda tree	pagoda tree
+pagoda trees	pagoda tree
 pannage	pannage
 parapet	parapet
 parish	parish
@@ -1366,6 +1369,7 @@ ring-levee	ring dike
 rinkaku	rinkaku
 riparian	riparian
 riprap	riprap
+rites of zhou	Zhouli
 river office	river office
 river offices	river office
 river stage	river stage
@@ -1799,6 +1803,7 @@ wellhead	curb
 weng cheng	wengcheng
 wengcheng	wengcheng
 wenmiao	wenmiao
+western wei	Western Wei
 wet run	wet run
 wet runs	wet run
 wetted perimeter	wetted perimeter
@@ -1876,6 +1881,9 @@ zhengyi	Zhengyi
 zhonggulou	gulou
 zhonglou	gulou
 zhou	department
+zhou dynasty	Zhou dynasty
+zhou-dynasty	Zhou dynasty
+zhouli	Zhouli
 zhuque dajie	Suzaku-oji
 zicheng	zicheng
 zokibayashi	zokibayashi

@@ -7381,5 +7381,33 @@
   "variants": [
    "kaishochi"
   ]
+ },
+ "Zhouli": {
+  "def": "The Rites of Zhou, a classical Chinese text setting out the offices and rules of the Zhou state; it required trees planted beside the roads of the suburbs and the countryside.",
+  "variants": [
+   "Zhouli",
+   "Rites of Zhou"
+  ]
+ },
+ "Zhou dynasty": {
+  "def": "The ancient Chinese dynasty under which, by its classical texts, trees were planted along both sides of official roads; the Northern Zhou was a later, short-lived northern state of the 6th century.",
+  "variants": [
+   "Zhou dynasty",
+   "Zhou-dynasty",
+   "Northern Zhou"
+  ]
+ },
+ "Western Wei": {
+  "def": "A short-lived Chinese state of the mid-6th century in the north-west, under which distance was marked by an earth mound at every li beside the road, later replaced by pagoda trees.",
+  "variants": [
+   "Western Wei"
+  ]
+ },
+ "pagoda tree": {
+  "def": "The Chinese scholar tree (huai, 槐), a broad shade tree planted along Chinese official roads - under the Western Wei in place of the earth distance mounds, and by a Yuan edict beside elm and willow.",
+  "variants": [
+   "pagoda tree",
+   "pagoda trees"
+  ]
  }
 }
