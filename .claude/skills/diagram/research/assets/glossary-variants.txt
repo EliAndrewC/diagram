@@ -806,6 +806,7 @@ hucheng he	hucheng he
 hui (huizhou) style	Hui style
 hui style	Hui style
 hui-style	Hui style
+huiguan	huiguan
 huizhou style	Hui style
 hutong	hutong
 hutongs	hutong
@@ -821,6 +822,7 @@ hōreki	Horeki
 iai	iai
 ichi no torii	ichi-no-torii
 ichi-no-torii	ichi-no-torii
+ichigami	ichigami
 ichirizuka	ichirizuka
 ido	ido
 idobata	idobata
@@ -1159,6 +1161,7 @@ machi-bugyo	town magistrate
 machi-bugyosho	machi-bugyosho
 machi-bugyōsho	machi-bugyosho
 machi-dojo	machi-dojo
+machi-kaisho	machi-kaisho
 machi-kido	kido
 machiya	machiya
 madake	madake
@@ -1197,6 +1200,7 @@ meshimori	meshimori
 meshimori women	meshimori
 meshimori-onna	meshimori
 metamorphosis fengshui	metamorphosis fengshui
+miaohui	miaohui
 michikiri	michikiri
 micro-high	micro-high
 micro-highs	micro-high
@@ -1370,6 +1374,7 @@ ordination platforms	ordination platform
 oshi	oshi
 oshirasu	oshirasu
 ossuary	ossuary
+otabisho	otabisho
 ote	ote-mon
 ote-mon	ote-mon
 ote-suji	ote-suji
@@ -1383,6 +1388,7 @@ outwork	outwork
 outworks	outwork
 overlay	overlay
 overlays	overlay
+owaiya	owaiya
 owari	Owari
 ox-frame	ox-frame
 ox-frames	ox-frame
@@ -1548,6 +1554,7 @@ roji	roji
 roju	Roju
 rokugan	Rokugan
 rokugani	Rokugan
+rokusai-ichi	rokusai-ichi
 roson	roson
 row village	roson
 rowhouse gate	nagayamon
@@ -1925,6 +1932,7 @@ tributary	tributary
 true duty	water duty
 trunk streets	trunk street
 tsubo	tsubo
+tsubo-niwa	tsubo-niwa
 tsuijibei	tsuijibei
 tsuijimatsu	tsuijimatsu
 tsujido	tsujido

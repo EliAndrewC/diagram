@@ -8164,5 +8164,53 @@
   "variants": [
    "sensei"
   ]
+ },
+ "rokusai-ichi": {
+  "def": "The Japanese periodic market held six days a month, every five days, on day pairs such as the 1st and 6th; in the Edo period it was the center of a region's trade in Tohoku and Kanto.",
+  "variants": [
+   "rokusai-ichi"
+  ]
+ },
+ "ichigami": {
+  "def": "The market god, worshipped where a market was held to keep its trade safe and fair; its body was most often a round natural stone at the roadside, at an edge of the market - a village boundary, a landing, a bridge foot or a crossroads.",
+  "variants": [
+   "ichigami"
+  ]
+ },
+ "machi-kaisho": {
+  "def": "A town ward's own office and meeting place in an Edo-period city, where the townspeople's officials passed on the magistrate's notices and drew up the residents' papers; every ward of a self-governing city like Osaka had one, while in a castle town it was the exception.",
+  "variants": [
+   "machi-kaisho"
+  ]
+ },
+ "otabisho": {
+  "def": "The place where a shrine's portable shrine rests or stays the night during its festival procession, or which the procession sets out to reach - a small shrine, a temporary altar, or the house of the parish's representative.",
+  "variants": [
+   "otabisho"
+  ]
+ },
+ "tsubo-niwa": {
+  "def": "The small garden inside a Japanese town house, about one to two tsubo (6 ft square to 6 by 12 ft), made as if a piece of the house had been cut out, to let light and air into a house hemmed in by its neighbors.",
+  "variants": [
+   "tsubo-niwa"
+  ]
+ },
+ "huiguan": {
+  "def": "A Ming and Qing Chinese association's hall, also called a gongsuo: first a place of fellowship and lodging for people from one home region, and for some later an association of the merchants of one trade.",
+  "variants": [
+   "huiguan"
+  ]
+ },
+ "owaiya": {
+  "def": "In the setting, the burakumin whose profession is handling night soil; in Japan the collectors were farmers and, later, commoner dealers.",
+  "variants": [
+   "owaiya"
+  ]
+ },
+ "miaohui": {
+  "def": "The Chinese temple fair: a gathering near a temple for offerings, contests and performances, first on its festivals and later on fixed dates, which took in market trade until it became a form of the market.",
+  "variants": [
+   "miaohui"
+  ]
  }
 }
