@@ -1,6 +1,6 @@
 {
  "feature": "272-temples-and-shrines-researched",
- "plan_sha256": "baa2f27364ebf19d70a7d32ab506ece45b6359515bf2bbc1506e4528f509853f",
+ "plan_sha256": "529ecd016f4db75f3f13b5878460a3924e7471ee3d87da4d637a5cbb36e61477",
  "reviewed": "2026-09-27",
  "declared": "spec-fidelity",
  "decisions": [
@@ -12,28 +12,27 @@
   },
   {
    "id": "D2",
-   "summary": "six groups S, R2, R4, B37, R3, T with number ranges; 130-206/270-300 cited only; 204 waits for R1",
+   "summary": "six groups with number ranges; each existing section edited by one queue (010/050/070 B37, 040 R2, 210 R2 then R3, 020 R4 then T, 030 T); 130-206/270-300 cited only; 204 waits for R1",
    "class": "within",
-   "why": "together they cover FR-001 (010-128 and 210: S takes 090-128, T takes 010-070 and 210; 080 carries no absence or guess), FR-002's rows and FR-006 (T: 580, 590); the 050 ratio guess missing from T's list is B37's own item"
+   "why": "every entry in readers/272-temple-absences.md (010, 020, 030, 040, 050, 070, 210) has exactly one owning group and 090-128 stay with S, so FR-001 is still covered in full; the split only removes concurrent edits"
   },
   {
    "id": "D3",
-   "summary": "three queue clones, pulled back and pages rebuilt",
+   "summary": "three queue clones: 1 = S, B37; 2 = R2, R3; 3 = R4, T; T's brief made from a reader report outside the clone, or the second search run by T itself if absent",
    "class": "within",
-   "why": "process; no scope effect"
+   "why": "process; sequencing in one clone serves the one-owner rule and has no scope effect"
   },
   {
    "id": "D4",
    "summary": "each blocked source retried once with curl/pdftotext before a TO-DOWNLOAD entry",
    "class": "within",
-   "why": "serves FR-003 and the GM's 'accessible without me' goal"
+   "why": "serves FR-003"
   },
   {
    "id": "D5",
-   "summary": "FR-007 contradiction check made by group S's handoff only; the orchestrator applies what S reports",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-007 and SC-006 cover ANY finding that contradicts the Hoshigaoka sheet or its VILLAGE map. R3 (whether a village kept a temple beside or instead of its shrine, village temple precinct, wayside shrines at a village's entrance, crossroads and bridge foot), T's second search of 210 (what features each settlement size carries) and R2's B101 (village rank floors 300/500/600 tsubo) can each contradict the village map or sheet; neither their briefs nor D5 asks the question. Not impossible, not implied by the request, and it guts the purpose of FR-007."
+   "summary": "FR-007: every group's handoff states finding by finding whether it contradicts the Hoshigaoka sheet or village map (paragraph in every brief's HEAD, so write and check briefs alike); the orchestrator applies or records each",
+   "class": "within",
+   "why": "round 1's narrowing to group S is gone: the paragraph sits in HEAD in briefs/gen.py, which WRITE and CHECK both extend, and T08 reads every group's handoff; this is FR-007 and SC-006 as written"
   },
   {
    "id": "D6",
@@ -43,10 +42,10 @@
   },
   {
    "id": "brief-S-D50-D51",
-   "summary": "S brief states D50 and D51 as STILL SILENT in advance, from the reader report",
+   "summary": "D50 and D51 silent after the reader's second search unless the curl retry answers",
    "class": "within",
-   "why": "the reader's second search is recorded as silent for both; the outcome FR-002 allows. Wording note only: D4's curl retry could still answer them"
+   "why": "the outcome FR-002 allows; the round-1 wording note is applied"
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
