@@ -137,6 +137,12 @@ cross the water; `stage_crossings`' `bridges()` decks every crossing, as it alre
 far-bank refusal (`far_bank`), the strike-out and the brook re-roll are deleted. Class: accurate for the form (a
 hamlet astride its own small channel, `research/water/270`); the spacing and the bend limit are a guess with an
 absence note there. Indexed: the fords are a short list per map (under 30), cut into the brook's corridor once.
+A crossing is PRICED: the route lattice charges `BROOK_CROSSING_COST_FT` (150 ft, a guess recorded in water/270) for
+entering the brook's band, and the string-pull may not take back a crossing the lattice paid to avoid - Kashikawa drew a
+lane across the brook and back to reach a house on its own bank. And every crossing is SQUARED at `stage_crossings`
+(`square_crossings`, more than 10 degrees off square), the record and the ink together, before `bridges()` lays the deck
+along it - a string-pulled way passed the 60 ft ford gap 52 degrees off square. The band is kept once per roll as brook
+sample points in a 20 px bucket grid (`set_crossing`), asked per free lattice cell.
 
 ### D10 - A farmstead stands whole on one bank (FR-013)
 
@@ -154,12 +160,16 @@ already being judged; no index is owed.
 clump, the re-seat nudge's included, is asked of one `Seats` index. The review found Kashikawa's copse spread to 393 crowns a median 167 ft from any house (R8). Class: accurate for the form ("in the gaps between the houses",
 vegetation/020); the reach is a calibration of that phrase, recorded at the constants.
 
-### D12 - The entrance board is offered the way that meets its anchor (FR-015)
+### D12 - The entrance board stands where every departure passes (FR-015)
 
-`stage_notice`'s re-seat and `place_kosatsuba` rank, beside their own lanes, any lane with a point within twice
-`KOSATSUBA_ANCHOR_BAND_FT` of the anchor; `kosatsuba_anchor` falls back to the approach's point nearest the houses
-when no run reaches within the entrance reach. The review found Sawada's board 669 ft from its anchor on a stub no
-departure passed. A defect in an existing rule (constitution XIV); no new class.
+Where a hamlet's connector hands over to its lanes (`kosatsuba_handover`), that junction is the entrance anchor: every
+household's way out passes it and no other point. `departure_routes` walks each dwelling's way out through the drawn
+lanes to the handover and on along the connector, and both placers (`place_kosatsuba`, `stage_notice`'s re-seat) keep
+first the seats the fewest of those routes miss (`routes_missed`, 20 ft), then those within `KOSATSUBA_HANDOVER_BAND_FT`
+(20 ft) of the nearest to the handover; the connector itself is offered as a way to post on. The census states, for an
+entrance board, how many households' ways out pass it, not how many farmhouses stand within 250 ft. The review measured
+1-2 households per map leaving by a lane that never came near the board; now 0 on all four entrance maps. A connector that
+meets no other way keeps the first-arrival walk. A defect in an existing rule (constitution XIV).
 
 ### D13 - A brook never doubles back (FR-017)
 
@@ -173,6 +183,36 @@ The pool test measures the belt's depth along the wind in 40 ft bins across it a
 brook and no page edge cuts to the record's 30 ft minimum (`research/vegetation/020`: shallower "reads as a row of
 blobs"). The windbreak pop-up says the belt stands "toward the northwest" rather than "on the north and west",
 because Kuwabata's belt is a west strip; the class text says "on the windward one or two sides".
+
+### D15 - The field path reaches the field across the brook (FR-012)
+
+Three defects kept a spur from the rice once crossings were honest: its origin was pushed past the furthest house onto
+the brook's far bank (`_cluster_edge_toward` now stops short of a stream it would cross); it was scored against the whole
+brook, so a crossing at a ford counted as a violation (scored against the brook gapped at the fords); and the stub trim
+read its field end as a dead end (`trim_lane_stubs` now leaves the spur, like the connector, to the sweeps that record a
+drop), while the dangling-ends sweep counted only the paddy, not the dry hem, as the field. Inashiro, Kashikawa and
+Mizuguchi each get their one way to the rice.
+
+### D16 - Three misuses of `seg_intersect` fixed (constitution XIV)
+
+`seg_intersect` answers for the LINES and is documented "call only when they cross". `ford_crossing`, `path_violations`
+(a pre-existing brook term and the twice-bridged count) and the first `square_crossings` used it as a crossing test, so
+every non-parallel segment "crossed": every spur detoured to a ford, and every connector bearing scored a brook violation
+per segment. Each now tests `segments_cross` first. The connector bearings the scorer chooses changed with it, and the
+notes' district directions were re-read from the drawn tracks.
+
+### D17 - What the reviews found beside the crossings
+
+- The brook turns off the frame where the frame box would pin it (`brook_skirt`), after half its stations: Sawada ran
+  457 ft level along the top margin (the GM's 2026-08-26 ruling); now 66 ft, held by a pool test that fires on the old
+  manifest.
+- A shape other than round is declared only past round's aspect ceiling: Inashiro's 1.97 was declared a crescent and
+  reads as a round cloud; it is recorded unhonored.
+- The scrub's settlement keep-out is the hull of the houses and the farmsteads' parts grown by 44 ft, not the bbox of the
+  house centers (Sawada's rectangular clearing; Kuwabata's fringe privy in the scrub).
+- A board's caption is seated on the page when any seat allows (Kashikawa's was clipped past the left edge).
+- `generate` finishes every attempt into a stage beside the map and promotes only the kept one, so a concurrent reader
+  never sees a rejected roll (the gate's census read Sawada's first attempt).
 
 ## Phases
 

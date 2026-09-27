@@ -199,5 +199,11 @@
   "quantity": "pool maps with a brook that roll the weir (Inashiro, Kashikawa, Mizuguchi) - the stated reason for declaring intake='open' on Sawada, now true as written",
   "source": "pool/hamlets/*/*.json meta.intake",
   "command": "grep -n 'other pool maps with a brook' .claude/skills/diagram/pool/hamlets/sawada/sawada.gen.py"
+ },
+ "sawada-brook-ruled": {
+  "value": 457,
+  "unit": "ft",
+  "quantity": "the longest stretch of Sawada's brook within 80 ft of the view's edge running level along it (within 4 ft of one line), on the manifest before the frame-exit fix (commit 3f997a00); 66 ft after it",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
  }
 }

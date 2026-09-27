@@ -101,10 +101,10 @@ the amendment's last re-roll):
 
 | map | seed | households | seat | belt clumps | belt bearing | off NW | arc |
 |---|---|---|---|---|---|---|---|
-| Inashiro | 4 | 15/15 | wind-facing | 168 | 332 | 17 | 104 |
-| Kashikawa | 3 | 20/20 | wind-facing, the brook crossed | 285 | 320 | 5 | 160 |
-| Kuwabata | 21 | 16/16 | wind-facing | 141 | 283 | 32 | 88 |
-| Mizuguchi | 23 | 12/12 | wind-facing, astride the brook (8 and 4) | 132 | 305 | 10 | 91 |
+| Inashiro | 4 | 15/15 | wind-facing, across the brook from its rice | 186 | 329 | 14 | 104 |
+| Kashikawa | 3 | 20/20 | wind-facing, across the brook from its rice | 281 | 319 | 4 | 161 |
+| Kuwabata | 21 | 16/16 | wind-facing | 151 | 285 | 30 | 83 |
+| Mizuguchi | 23 | 12/12 | wind-facing, astride the brook (8 and 4) | 114 | 299 | 16 | 88 |
 | Sawada | 24 (was 6) | 19/19 | wind-facing | 179 | 319 | 4 | 161 |
 
 Every rule still holds on every map (the two pool test files).
@@ -166,4 +166,27 @@ by `tests/hamletgen/test_pool_261.py` and `test_pool_wind.py`, run before and af
 The one-bank rule's research pass (2026-09-27, `research/homesteads/250`) found nothing that places a farmstead's own
 parts across a channel from its house or says they never stood there; it is a guess with an absence note, and the
 one on-topic paper that could not be read is on the GM's download list.
+
+## R9 - The second round of reviews, on the amended maps, and what each fix measured
+
+The five reviews of the amended maps (2026-09-27) were recorded NOT-REVIEWABLE - engine edits landed while they ran - but
+each judged its snapshot and kept its findings on the record. Every finding was answered in the engine and measured on
+the re-rolled pool (observed 2026-09-27, method: the manifest measures of `tests/hamletgen/test_pool_261.py`, and the
+session's reading of each crossing, spur and caption, before and after):
+
+| finding | before | after |
+|---|---|---|
+| households whose way out misses the entrance board (FR-015) | Inashiro 1, Kashikawa 2, Sawada 1 | 0 on all four entrance maps |
+| a lane crossing the brook and back to a house on its own bank | Kashikawa 1 | 0 (a crossing is priced) |
+| brook crossings more than 10 degrees off square | Kashikawa 1 at 52 degrees | 0 |
+| hamlets whose field lies across the brook with no way to it (FR-012) | Inashiro, Kashikawa, Mizuguchi, once crossings were honest | 0; each spur crosses at a ford |
+| brook ruled level along the frame (the GM's 2026-08-26 ruling) | Sawada 457 ft (`m:sawada-brook-ruled`) | 66 ft; no map over 150 ft |
+| cluster declared a shape its drawing does not read as | Inashiro, crescent at a drawn 1.97 | recorded unhonored |
+| scrub inside the farmsteads' own outline | Kuwabata 138 bases (20 within 15 ft of a part) | the keep-out takes in every part |
+| board caption past the page's edge | Kashikawa, 31 ft | all five inside the view |
+| a rejected roll readable in the pool mid-sweep | Sawada's first attempt read by the census | every attempt staged, the kept one promoted |
+
+Found on the way (constitution XIV): three sites used `seg_intersect` - which answers for the lines - as a crossing test,
+so every spur detoured to a ford and every connector bearing scored a brook violation per segment; with the test fixed the
+connector scorer chose different tracks on four maps, and their district directions were re-read from the drawing.
 
