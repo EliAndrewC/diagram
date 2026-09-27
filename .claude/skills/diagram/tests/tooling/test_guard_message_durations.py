@@ -99,8 +99,15 @@ def printed_text(source: str) -> list[str]:
     answers in ~60 s"*, which matches both patterns below. It is a RECORD, not a message, and a
     guard that cannot tell one from the other fires on protected history and gets switched off.
     """
+    # A SOURCE THAT CANNOT PRINT IS NOT PARSED (2026-09-27): an output call is `print(...)` or a `.write` on
+    # `stdout`/`stderr`, so its text must contain one of those three words - a substring test that is a strict
+    # superset of the AST test, which still decides. 113 of the engine's 262 modules fail it (measured
+    # 2026-09-27; the scan over all of them went 1.35 s -> 0.63 s, same output). Likewise a docstring is
+    # only ever read through `__doc__`, so the docstring walk is skipped where that word is absent.
+    if not any(w in source for w in ("print", "stdout", "stderr")):
+        return []
     tree = ast.parse(source)
-    docs = {node.name: ast.get_docstring(node) or "" for node in ast.walk(tree) if isinstance(node, (ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef))}
+    docs = {node.name: ast.get_docstring(node) or "" for node in ast.walk(tree) if isinstance(node, (ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef))} if "__doc__" in source else {}
     out: list[str] = []
     for call in (n for n in ast.walk(tree) if _is_output_call(n)):
         for arg in call.args:
