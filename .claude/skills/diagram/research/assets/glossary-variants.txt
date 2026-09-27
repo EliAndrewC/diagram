@@ -8,6 +8,8 @@ abutment	abutment
 abutments	abutment
 across the beams	ridge span
 adlittoral	adlittoral
+adze	adze
+adzes	adze
 ake-mutsu	ake-mutsu
 akiba	Akiba
 akusui	akusui
@@ -147,8 +149,10 @@ carex	Carex
 carex lyngbyei	Carex
 carr	carr
 castanopsis	Castanopsis
+castle rice	castle rice
 castle town	jokamachi
 castle towns	jokamachi
+castle-rice	castle rice
 catchment	catchment
 catena	catena
 causeway	causeway
@@ -1090,6 +1094,7 @@ offtakes	offtake
 ofuregaki	ofuregaki
 okaji	ōkaji
 okajiba	ōkaji
+okura	kura
 omamori	omamori
 omotedana	omotedana
 omoya	omoya
@@ -1454,6 +1459,7 @@ suzaku ōji	Suzaku-oji
 suzaku-oji	Suzaku-oji
 suzaku-ōji	Suzaku-oji
 sward	sward
+tachimuba	tachimuba
 tagoshi	tagoshi kangai
 tagoshi kangai	tagoshi kangai
 taihu	Lower Yangzi

@@ -156,3 +156,10 @@
 - Well (urban-features SECTION=090): IN-STEP - the building-plan sheet's Well (compound_kinds/household.py, household.Well): the 1 m shaft, the unmeasured curb and the estimated 3-4 ft curb all still hold; the map's Well of the same name was REWRITTEN above (feature 265 T11)
 - household.Stables (urban-features SECTION=080): IN-STEP - the changes label the gate cart-yard ground and cite the hitching post and caravanserai, none of which the modal states
 - ApproachRoad (towns SECTION=010): REWRITTEN - the Why now gives the capital's gate-keyed grid and the county seat's gate-linked streets as the finding and the gate-to-yamen avenue as a guess on no page read, as the section now does
+- Barracks (buildings SECTION=060): REWRITTEN - Why and Note now attest Takayama's storehouse keepers' rowhouse and the Edo magistrate's residence inside the office, the rest of the rural staff on-grounds left a reconstruction; "only the magistrate's household" dropped
+- RetainersQuarters (buildings SECTION=060): REWRITTEN - Note and Caveat now say a source names a storehouse keepers' rowhouse on a rural office's grounds; only the rest of the staff is the record's reconstruction
+- Granary (buildings SECTION=080): REWRITTEN - Note now counts the ship-on versus store split between counties as this map's reading, Takayama's holding all of Hida's rice having no readable source
+- River (buildings SECTION=080): REWRITTEN - Why gains the hired, pennanted, port-inspected hulls; Note counts the contrast with an isolated county's granary rows as the research's reading
+- RiverLanding (buildings SECTION=080): REWRITTEN - Note counts the documentary hold as the project's reading; "commoners' boats" became boats the shogunate hired directly
+- TallyOffice (buildings SECTION=080): REWRITTEN - "hired commoner boats" became boats the shogunate hired directly, the source naming no owners
+- TaxBarge (buildings SECTION=080): IN-STEP - hired hulls, pennant and owning no hulls still match; the size rests on river-cities, not checked here

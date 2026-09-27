@@ -2463,6 +2463,7 @@
    "kura",
    "dozo",
    "onkura",
+   "okura",
    "御蔵",
    "Dozō"
   ]
@@ -6777,6 +6778,26 @@
   "def": "A junior official of a shogunate intendant's office, ranked with the tedai; the tezuki and tedai lived in the huts and rowhouses on the office grounds.",
   "variants": [
    "tezuki"
+  ]
+ },
+ "tachimuba": {
+  "def": "A station that the shogunate's intendants set up at a port of call on the tax-rice shipping route. Castle-rice ships were protected there and their loads were strictly inspected.",
+  "variants": [
+   "tachimuba"
+  ]
+ },
+ "castle rice": {
+  "def": "The shogunate's own tax rice (御城米), shipped to Edo on hired vessels under official protection and inspection.",
+  "variants": [
+   "castle rice",
+   "castle-rice"
+  ]
+ },
+ "adze": {
+  "def": "A woodworker's cutting tool with its blade set crosswise to the handle, swung to shape and smooth the faces of timbers. On a storehouse frame, the marks it leaves date and grade the work.",
+  "variants": [
+   "adze",
+   "adzes"
   ]
  }
 }

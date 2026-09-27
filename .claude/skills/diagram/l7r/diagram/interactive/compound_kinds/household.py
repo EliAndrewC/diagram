@@ -119,12 +119,12 @@ class RetainersQuarters(Kind):
 
     Note: Retainers' official residences laid out inside a small domain's jin'ya are recorded, and the city
     magistracy's separate constables' district and ranked households in terraced ranges rest on recorded
-    findings. That a rural office's own staff lived on its grounds is the record's reconstruction, no source
+    findings. A source names a storehouse keepers' rowhouse on a rural office's grounds; that the rest of its staff lived there is the record's reconstruction, no source
     naming those staff or their housing, and that their housing took the form of a rowhouse is the record's
     own reading rather than a source's words; the record places ranks of small household dwellings at the
     town's edge, outside an elite quarter, rather than inside its walls.
 
-    Caveat: That a rural office's own staff lived on its grounds is the record's reconstruction, no source
+    Caveat: A source names a storehouse keepers' rowhouse on a rural office's grounds; that the rest of its staff lived there is the record's reconstruction, no source
     naming those staff or their housing, and that their housing took the form of a rowhouse is the record's
     own reading rather than a source's words; the record places ranks of small household dwellings at the
     town's edge, outside an elite quarter, rather than inside its walls.

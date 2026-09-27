@@ -132,7 +132,7 @@ class Granary(Kind):
     county, where transport costs more, keeps a row of kura instead. The lord's kura held the paddy tax as brown rice in straw
     bales, with a corner of unhulled rice kept against famine.
 
-    Note: The kura, its rice and its place inside the compound follow the record, drawn at about 43 to 50 by
+    Note: The kura, its rice and its place inside the compound follow the record; that a county with water ships its grain on while a remote one keeps it in a row of kura is this map's reading, since no source says Takayama's rows held all of Hida's rice. The kura is drawn at about 43 to 50 by
     25 to 27 ft and checked against real kura sizes. The staging - tax rice passing through the compound and
     held there in transit beside a local reserve - is this map's own reading, which no source states, and the
     famine corner of unhulled rice is a simplification: Edo kept that reserve in separate community granaries,
@@ -214,15 +214,15 @@ class Barracks(Kind):
     What: A plain long building divided into bunk rooms, where the compound's working platoon and its duty
     watch lodge.
 
-    Why: Rural intendants' offices most likely housed their staff on the grounds, though the record does not
+    Why: Rural intendants' offices most likely housed their staff on the grounds - Takayama's kept a rowhouse for its storehouse keepers - though for the rest of the staff the record does not
     say so; it was the great city magistrate's offices that lodged their constables in a district of their
-    own, keeping only the magistrate's household inside. A county posting's staff is a working platoon, mostly
+    own, while the magistrate's own residence stood inside the office. A county posting's staff is a working platoon, mostly
     without dependents, so by default it lives on the grounds. By this map's own ordering, the barracks
     outranks the stable in size: a stable for a few horses never out-foots the watch's quarters.
 
     Note: On-grounds housing for the staff is a reconstruction: a small domain's jin'ya kept its retainers'
-    residences inside its walls, but no source read says a rural intendant's staff lived on the grounds; only
-    the city magistrates' separate constables' district is attested. That the barracks outranks the stable is
+    residences inside its walls, and the Takayama intendancy kept a rowhouse for its storehouse keepers, but no source read says the rest of a rural intendant's staff lived on the grounds; for the
+    city magistracies, the separate constables' district and the magistrate's own residence inside the office are attested. That the barracks outranks the stable is
     this project's own reading, since no readable source ranks a compound's buildings by footprint. The
     building's size, about 20 to 70 ft by 10 to 40 ft, is a guess taken from the plan vocabulary's range, and
     how many live in it follows how the posting houses its staff.
@@ -274,7 +274,7 @@ class TallyOffice(Kind):
     What: A small office on the route goods take through the compound, where they are counted or weighed, the
     seal is set and the tally written: the record of goods the office supervises but does not own.
 
-    Why: The magistracy's hold on moving goods is documentary. Tax rice moved on hired commoner boats flying
+    Why: The magistracy's hold on moving goods is documentary. Tax rice moved on boats the shogunate hired directly, flying
     an official pennant and inspected at the ports of call, the office owning no hulls - and a charcoal store
     was a supervised, tallied depot, its goods sealed there and never owned. So the post that writes the tally
     stands where the goods pass, between the store and the way out.
