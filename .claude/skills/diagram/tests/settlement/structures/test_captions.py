@@ -86,3 +86,29 @@ def test_a_field_name_caption_goes_through_the_phase_too():
     assert rec[5] == "Higashi-da"
     assert rec[0] >= 300.0 and rec[2] <= 500.0 and rec[1] >= 560.0 and rec[3] <= 680.0, "an area caption: inside its field (feature 266)"
     assert any("letter-spacing" in ln and "Higashi-da" in ln for ln in s.toplabels), "the markup it always drew"
+
+
+def test_the_one_placers_index_sees_every_family_the_map_draws():
+    """Feature 266, FR-006/FR-009/FR-014: the settlement's obstacle index, built once per label phase - the wall and the
+    moat as obstacles, the road, a stream and a drawn channel as ways, a torii, the title placard, a caption already
+    drawn, and a named ministry marked civic; ground cover is not indexed at all."""
+    s = _town()
+    s.M["wall"] = [[100, 100], [300, 100], [300, 300], [100, 300]]
+    s.M["moat"] = [[80, 80], [320, 80], [320, 320], [80, 320]]
+    s.M["moat_width"] = 10
+    s.M["road"] = [[0, 400], [600, 400]]
+    s.M["streams"] = [{"poly": [[0, 450], [600, 450]], "w": 6}, {"poly": [[1, 1]]}]
+    s.M["drawn_channels"] = [{"pts": [[0, 480], [600, 480]], "w": 4}, {"pts": []}]
+    s.M["torii"] = [[500, 200, 1]]
+    s.M["title"] = {"bbox": [10, 10, 60, 30]}
+    s.M["ministries"] = [{"x": 400, "y": 150, "w": 40, "h": 30, "name": "Ministry of Works"}]
+    s.M["wells"] = [{"x": 450, "y": 250, "vr": 4}, {"x": 460, "y": 250}]
+    s.M["commons"] = [{"x": 300, "y": 300, "w": 900, "h": 900}]
+    s.M["labels"] = [[10, 40, 60, 50, 1, "old caption"]]
+    idx = s.label_obstacles()
+    assert len(idx.ways) >= 3, "the road, the stream and the drawn channel are ways"
+    assert any(o.group == "ministry" and o.named for o in idx.obstacles), "a named ministry is marked civic"
+    assert any(o.group == "torii" for o in idx.obstacles)
+    assert not any(o.poly and max(q[0] for q in o.poly) - min(q[0] for q in o.poly) > 800 for o in idx.obstacles), "ground cover is free space"
+    walls = [o for o in idx.obstacles if abs(o.poly[0][1] - o.poly[1][1]) < 1e-6 and 90 < o.poly[0][1] < 110]
+    assert walls, "the rampart's runs are obstacles"

@@ -376,7 +376,7 @@ _PRE_SPLIT_GEOM_SURFACE = (
     'BUNDLE_PITCH_FT', 'CARRIED_LANDING_FLOOR_FT', 'FLOODED_SHADES', 'GOVERNOR_CAPTION_FS', 'HALL_CAPTION_FS', 'Indexed', 'LABEL_AIR_CAP', 'LABEL_AIR_RINGS', 'LABEL_AIR_STEP', 'LABEL_MIN_AIR',
     'LAND', 'LANDING_FT', 'LANE_CROSSES_MIN_DEG', 'LANE_THROUGH_TOL', 'Manifest', 'PADDY_SHADES', 'PLANK_ABUTMENT', 'PLANK_BANK_REACH', 'PLANK_VILLAGE_REACH', 'PointGrid', 'Poly', 'Pt',
     'RICE_GREENS', 'RIPE_SHADES', 'SeatMemo', 'TORII_PITCH_FT', 'TORII_PITCH_MAX_SPANS', 'WARD_BARRED_KINDS', 'YARD_GLYPH_SLACK', '_VILLAGE_POP_DIST', '_aabb_gap', '_assert_not_main_tree',
-    '_box_hits_run', '_rect_ring', '_signed_area', '_union_area', 'box_gap', 'boxed_grid', 'boxed_hit', 'boxed_polys', 'boxed_seg_hit', 'boxed_segs', 'edge_dist', 'fillet_polyline',
+    '_box_hits_run', '_rect_ring', '_signed_area', '_union_area', 'boxed_grid', 'boxed_hit', 'boxed_polys', 'boxed_seg_hit', 'boxed_segs', 'edge_dist', 'fillet_polyline',
     'forest_frame_span', 'forest_reveal_x', 'indexed_grid', 'kido_bar_deg', 'label_aabb', 'label_quad', 'label_tilt', 'lane_runs', 'lane_through_gate', 'linear_tilt', 'linear_tilt_full',
     'organic_bbox', 'organic_poly', 'paddy_wet_rings', 'point_in_poly', 'point_quad_dist', 'poly_gap', 'quad_hits_poly', 'quad_hits_seg', 'rail_quad', 'rects_overlap', 'region_blocked',
     'ring_touches', 'rot_rect', 'sat_overlap', 'seg_closest', 'seg_dist', 'seg_in_ellipse_core', 'seg_intersect', 'segments_cross', 'smooth_closed', 'smooth_points', 'stroke_quads',

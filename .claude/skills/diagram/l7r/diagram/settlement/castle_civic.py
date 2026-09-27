@@ -14,7 +14,6 @@ from ._geom import (
     organic_bbox,
     organic_poly,
     point_in_poly,
-    sat_overlap,
     seg_closest,
     seg_dist,
     segments_cross,
@@ -514,13 +513,6 @@ class CastleCivicMixin:
         self.M["meta"]["dojo_roll"] = n
         return n
 
-    def _label_box(self: Settlement, lx: float, ly: float, text: str, size: float) -> tuple[float, float, float, float]:  # type: ignore[misc]
-        """The box a middle-anchored caption drawn at (lx, ly) will occupy - the SAME geometry
-        `_record_label` writes into the manifest, so what the placer scores is exactly what the
-        gate later measures (the dev-loop same-source rule: a second derivation drifts)."""
-        w = len(text) * size * 0.55
-        return (lx - w / 2, ly - size * 0.8, lx + w / 2, ly + size * 0.25)
-
     def place_caption(  # type: ignore[misc]
         self: Settlement,
         text: str,
@@ -548,7 +540,7 @@ class CastleCivicMixin:
         subject = Subject("point", tuple(rect(cx, cy, (x1 - x0) / 2, (y1 - y0) / 2, rot)), angle=rot)
         self._captions.append((text, subject, size, italic, weight, color))
 
-    def _label_hits(self: Settlement, lx: float, ly: float, text: str, size: float, pad: float = 4.0, linepad: float = 6.0, tilt: float = 0.0) -> int:  # type: ignore[misc]
+    def _label_hits(self: Settlement, lx: float, ly: float, text: str, size: float, pad: float = 4.0, linepad: float = 6.0) -> int:  # type: ignore[misc]
         """How many already-placed footprints (buildings/houses + homestead groves) a label at
         (lx, ly) would cover. The cheap scorer behind auto label placement: prefer a label spot
         in EMPTY ground; when every spot overlaps something, take the least (GM label doctrine,
@@ -566,42 +558,14 @@ class CastleCivicMixin:
         neighbor's edge."""
         hw, hh = len(text) * size * 0.31 + pad, size * 0.75 + pad
         corners: Poly = [(lx - hw, ly - hh), (lx + hw, ly - hh), (lx + hw, ly + hh), (lx - hw, ly + hh)]
-        quad: Poly | None = None
-        if tilt:
-            # A TILTED caption scores against its TRUE rotated quad; the rotated AABB survives only
-            # as a PREFILTER - it prunes, it never decides (this skill's CLAUDE.md, "When a check
-            # is slow, INDEX it - do not coarsen it"). Deciding on that AABB was the first cut of
-            # the linear captions and it made them look impossible: for a 97px "Imperial Road" at
-            # -26.6deg the AABB is 3.3x the text's real thickness, so the one seat a road caption
-            # wants - lying ALONG the roadway, in the lane between roadbed and shopfront setback -
-            # scored as blocked and the ladder walked out to 63px of bare ground (GM 2026-08-08).
-            _ca, _sa = math.cos(math.radians(tilt)), math.sin(math.radians(tilt))
-            quad = [(lx + (qx - lx) * _ca - (qy - ly) * _sa, ly + (qx - lx) * _sa + (qy - ly) * _ca) for qx, qy in corners]
-            corners = quad
-            hw, hh = hw * abs(_ca) + hh * abs(_sa), hw * abs(_sa) + hh * abs(_ca)
-        probes: Poly = [*corners, (lx, ly)]  # the LINE tests below sample the DRAWN corners + center
-        # ...and a ROTATED obstacle is measured on the same extent the GATE gives it:
-        # `labels_clear_of_other_buildings` boxes each victim with its rotated corners' AABB, which
-        # is wider than both the record's axis-aligned w/h and the drawn quad. A probe must measure
-        # the box the CHECK will measure (this skill's CLAUDE.md) - and this one did not, so the
-        # moment the caption's own reach became honest, Ubame's "caravan inn" seated in the corner
-        # slack of the rot=-16 stables and the gate caught what the probe had waved through. Built
-        # only for a TILTED caption, so no level caption's score moves.
-        rot_hw: dict[tuple[float, float], tuple[float, float]] = {}
-        if tilt:
-            for _b in self.M.get("buildings", []):
-                if _b.get("rot"):
-                    _bc, _bs = abs(math.cos(math.radians(_b["rot"]))), abs(math.sin(math.radians(_b["rot"])))
-                    rot_hw[(_b["x"], _b["y"])] = (_b["w"] * _bc + _b["h"] * _bs, _b["w"] * _bs + _b["h"] * _bc)
+        probes: Poly = [*corners, (lx, ly)]  # the LINE tests below sample the corners + center
+        # LEVEL ONLY SINCE FEATURE 266: the one placer (`l7r/diagram/labels/`) seats every searched caption, tilted ones
+        # included, and its own index measures their true quads; this scorer is left serving the hand-seated ministry and
+        # martial-hall side choices of the unscripted tiers (spec D8), which are level.
 
         def covers(bx: float, by: float, bw: float, bh: float) -> bool:
-            """Does the caption cover this rect? The AABB test - which IS the exact test at tilt 0,
-            so every level caption in the pool scores byte-identically - prefilters; a tilted
-            caption then decides on its real quad."""
-            bw, bh = rot_hw.get((bx, by), (bw, bh))
-            if not (abs(bx - lx) < hw + bw / 2 and abs(by - ly) < hh + bh / 2):
-                return False
-            return quad is None or sat_overlap(quad, [(bx - bw / 2, by - bh / 2), (bx + bw / 2, by - bh / 2), (bx + bw / 2, by + bh / 2), (bx - bw / 2, by + bh / 2)])
+            """Does the caption cover this rect? The AABB test - exact for a level caption."""
+            return abs(bx - lx) < hw + bw / 2 and abs(by - ly) < hh + bh / 2
 
         n = 0
         for px, py, pw, ph, *_ in self.placed:
@@ -619,7 +583,7 @@ class CastleCivicMixin:
         for _wpts, _whw in ([(list(self.M["wall"]) + [self.M["wall"][0]], 9.0)] if len(self.M.get("wall") or []) >= 3 else []) + (
             [(list(self.M["moat"]) + [self.M["moat"][0]], float(self.M.get("moat_width", 22)) / 2)] if self.M.get("moat") else []
         ):
-            _c4 = corners if quad is None else quad
+            _c4 = corners
             if any(seg_dist(_qx, _qy, _wpts[_i], _wpts[_i + 1]) < _whw for _qx, _qy in _c4 for _i in range(len(_wpts) - 1)) or any(
                 segments_cross(_c4[_e], _c4[(_e + 1) % 4], _wpts[_i], _wpts[_i + 1]) for _e in range(4) for _i in range(len(_wpts) - 1)
             ):
