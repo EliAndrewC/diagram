@@ -130,7 +130,10 @@ visible where they were hidden inside the parent's write-up.
 - **Drawing defects the reviews found outside this feature** (each a sheet edit for a later session): Hayakawa's
   reception bay, its engawa and its genkan face the kitchen's flank 11 ft away rather than the garden (B120, B230);
   Hayakawa's karo's door opens 0.3 ft short of the court divider, and its servants' door into the residence's north
-  wall 2 ft away; Ochiba's and Ubame's kitchens draw no door of their own.
+  wall 2 ft away; Ochiba's and Ubame's kitchens draw no door of their own; Ubame's wood-kami altar sits on the
+  shrine's axis 2 ft past its torii, so the arch reads as the altar's (whose write-up says it has none); Ubame's
+  balance beam is drawn 12 ft long; three of Ubame's door glyphs stand as slabs outside their walls where the
+  rendering rule says flush; Ubame's SVG comment "Granary ROW ... Two bays" is stale against its notes.
 - **Canon, settled from Obsidian Portal (2026-09-27)**: the river-stone stroke practice, the lacquer bowls drying
   in the workshop (replacement Pact-Bowls, lacquered on site) and the Chigiri-no-Chou (the Ledger of Broken Bowls)
   are all in Kitsune Tatsuya's GM-only notes - not missing canon, as this file and 262's coverage had it. Whether

@@ -53,8 +53,8 @@ class Residence(Kind):
 
 class AncestralAlcove(Kind):
     """
-    What: A bay of the residence holding the memorial tablets of the magistrates who held the post before - an
-    alcove within the family's rooms, not a hall of its own.
+    What: An alcove among the residence's private rooms holding the memorial tablets of the magistrates who held
+    the post before - a place within a room, not a room or hall of its own.
 
     Why: Such an alcove is proper only where one lineage holds the magistracy across generations, so that the
     past magistrates are the present one's own forebears and the alcove is literally ancestral. At a posting
@@ -84,7 +84,7 @@ class AncestralAlcove(Kind):
 class KarosHouse(Kind):
     """
     What: The separate house of the karo, the house elder - the magistrate's chief retainer - standing in the
-    residence court with a door of its own.
+    residence court.
 
     Why: It stands in the inner court, on the household's side of the compound, but as a dwelling of its own
     rather than a bay of the lord's wing: the plan keeps the residence for the lord's family and gives a chief
@@ -194,8 +194,8 @@ class GuestQuarters(Kind):
 
 class Kitchen(Kind):
     """
-    What: The household's kitchen - a daidokoro, a large working building with its cooking fire, pantries and a
-    well inside or beside it - that feeds the family, the staff and the watch.
+    What: The household's kitchen - a daidokoro, a large working building with pantries - that feeds the family,
+    the staff and the watch; its hearth, and a well inside or beside it, are each their own feature.
 
     Why: It stands at the edge of the inner court by a postern in the wall, because service traffic is the
     deliberate opposite of a guest's arrival: the kitchen door opens into work space, not into a court. It is
@@ -380,8 +380,8 @@ class FireWaterTubs(Kind):
 class CompoundShrine(Kind):
     """
     What: The shrine every administrative compound keeps inside its walls - a modest hall, Inari's by default,
-    with ground around it kept as garden or grove. Its altars, and the torii before a hall set in its own grove,
-    are each their own feature.
+    with ground around it kept as garden or grove. Where a plan draws its altars, or a torii before a hall set in
+    its own grove, each is its own feature.
 
     Why: Even a small Japanese branch office kept shrines within its walls, and a full Chinese yamen kept three,
     so a shrine is part of the equipment of any office, not a sign of a pious magistrate; what varies is its
@@ -584,18 +584,16 @@ class FamilyQuarters(Kind):
 
 class InnerRooms(Kind):
     """
-    What: The innermost rooms of the residence - the private end of the house, where a lineage-held posting keeps
-    its ancestral alcove - drawn as one labeled bay.
+    What: A bay of the residence's private rooms, apart from the formal ones, where a lineage-held posting keeps
+    its ancestral alcove - labeled on a sheet as the inner rooms or the east rooms.
 
     Why: A samurai residence grouped its rooms by use under one roof, the private rooms apart from the formal
-    ones; the family's most private rooms, and the tablets of its forebears, are kept furthest from the approach.
+    ones, and the tablets a lineage keeps belong among its private rooms.
 
-    Note: A residence grouping its private rooms apart under one roof follows the record. That they lie innermost
-    rests on the Chinese case, where the innermost rows house the family, and the bay's contents beyond the
-    alcove are the drawing's own.
-
-    Caveat: That they lie innermost rests on the Chinese case, where the innermost rows house the family, and the
+    Note: A residence grouping its private rooms apart from its formal ones under one roof follows the record. The
     bay's contents beyond the alcove are the drawing's own.
+
+    Caveat: The bay's contents beyond the alcove are the drawing's own.
 
     Name: inner rooms
     Covers: the innermost bay of the residence, its floor and its label
@@ -664,9 +662,9 @@ class ShrineAltar(Kind):
     differs: a priest-magistrate's hall may keep more than one altar, and a posting on a river or in an old
     household keeps altars to the powers that matter there.
 
-    Note: a shrine in every compound, Inari's by default, follows the record, but these altars serve the setting's
-    own kami - a departure made by the setting - and a hall of two altars is this project's deliberate departure,
-    justified by a priest-magistrate. Each glyph is drawn as a marker, not the altar at its size.
+    Note: a shrine in every compound, Inari's by default, follows the record; what each altar serves, and why a hall
+    keeps more than one, is the setting's or the map's own, and each map's note says which. Each glyph is drawn
+    as a marker, not the altar at its size.
 
     Name: shrine altar
     Covers: each altar glyph inside a shrine hall, with its name and sublabels
@@ -687,11 +685,7 @@ class Torii(Kind):
     by far the usual number for a shrine, and a village shrine's stands some twenty feet off its hall; long
     avenues of arches are the gifts of rich patrons at great shrines, not the rule.
 
-    Note: One arch over the approach, a short way from the hall, follows the record. Hayakawa's single arch serving
-    its two small shrines is this plan's own choice, a case the record does not address.
-
-    Caveat: Hayakawa's single arch serving its two small shrines is this plan's own choice, a case the record does
-    not address.
+    Note: One arch over the approach, a short way from the hall, follows the record.
 
     Name: torii
     Covers: the approach torii before a compound shrine

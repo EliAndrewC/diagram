@@ -104,9 +104,9 @@ class FoxRelics(Kind):
     the work of the wardings.
 
     Note: the Akami-fude is the setting's own relic - the brush that paints the fox-tracks on each threshold
-    stone, kept on its own stand at the shrine's eastern, fox altar - and the Chigiri-no-Chou is this map's
-    own name, found in no setting file. Neither has a historical counterpart, and the research record holds
-    nothing like them, so both are a departure made by the setting and this map.
+    stone, kept on its own stand at the shrine's eastern, fox altar - and the Chigiri-no-Chou is the setting's
+    too. Neither has a historical counterpart, and the research record holds nothing like them, so both are a
+    departure made by the setting.
 
     Name: fox relics
     Covers: the fox-altar sublabel and the relics annotation below the workshop
@@ -486,7 +486,8 @@ class DryingStonesAndBowls(Kind):
     What: River-stones and small lacquer-black bowls laid out to dry under a cinnabar workshop's colonnade.
 
     Why: The workshop is where the Fox Clan's threshold stones are made and painted - river-stones the size of two
-    fists, painted with cinnabar fox-tracks - beside the shrine whose priest keeps the road wardings.
+    fists, painted with cinnabar fox-tracks - beside the shrine of the priest-magistrate who keeps the road
+    wardings.
 
     Note: the threshold stones and their Pact-Bowls are the campaign's own canon, a departure made by the setting
     with no historical counterpart. Each stone and bowl is drawn as a marker, larger than a stone the size of two

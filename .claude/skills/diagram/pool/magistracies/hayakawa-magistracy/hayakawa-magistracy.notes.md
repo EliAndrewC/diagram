@@ -82,7 +82,7 @@
 
 - **compound shrine**: Hayakawa keeps two modest shrines. The Fire Dragon shrine was converted from a shrine of Ebisu; the river-kami shrine takes Magistrate Hida no Reiji Hajime's daily offerings against flood and drowning.
 - **shrine altar**: The Fire Dragon's flame and the river kami's wave are the dedications of the setting: the Fire Dragon is one of the Five Elemental Dragons, the incarnate divinities of the elements, and the river's many small kami are addressed as one, "Hayakawa-no-kami". The small square in the Fire Dragon shrine's corner is Ebisu's altar, kept from the shrine it was before.
-- **torii**: The two shrines share this one approach torii.
+- **torii**: The two shrines share this one approach torii - the plan's own choice, a case the record does not address.
 - **ancestral alcove**: Hayakawa is held by a lineage - its past magistrates are Hajime's own forebears - so the alcove in the east rooms holds their tablets. This is the case the rule was written for.
 - **bath**: Hajime enlarged the bath: at about 18 by 12 ft it is visibly larger than the 12 or 13 ft bath of an ordinary manor.
 - **guest quarters**: A rich posting, Hayakawa has a detached guest house in an annex added by the ninth magistrate. Its guests - provincial inspectors, the lineage's chancellors - outrank a county magistrate, and the setting's etiquette lodges a superior in the private depth of the household, so the house stands in the inner court. Guests arrive by their own river door into the guest garden. The annex has no privy: the household staff serve its guests of rank with chamber pots.

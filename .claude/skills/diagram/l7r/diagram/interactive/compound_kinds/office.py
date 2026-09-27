@@ -92,7 +92,7 @@ class ClerksRoom(Kind):
 
 class TaxArchive(Kind):
     """
-    What: A sealed storehouse (kura) of thick white-plastered earth with a heavy door, holding the county's
+    What: A sealed storehouse (kura) of thick white-plastered earth, holding the county's
     ledgers - its tax base on paper - and serving as the strongroom for the coin and valuables the office
     holds.
 
