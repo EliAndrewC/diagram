@@ -353,6 +353,8 @@ fetch	fetch
 field comb	comb
 field combs	comb
 field consolidation	kochi seiri
+field pit	nodame
+field pits	nodame
 field to field	tagoshi kangai
 field-to-field	tagoshi kangai
 field-to-field irrigation	tagoshi kangai
@@ -677,6 +679,7 @@ king posts	king post
 king-post	king post
 kishu school	Kishu school
 kishu-school	Kishu school
+kizuma	kizuma
 knob	knob
 knobs	knob
 kobito	kobito
@@ -864,6 +867,7 @@ nightsoil	night soil
 nihonbashi	Nihonbashi
 ninomaru	ninomaru
 noborigama	noborigama
+nodame	nodame
 nogyo zensho	Nogyo Zensho
 northern song	Song dynasty
 nrcs	NRCS
