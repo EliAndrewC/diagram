@@ -1355,7 +1355,12 @@ _reference:
 # idle run to one whose record the push honors - a failure that increases trust instead of reducing
 # it. Now the probe's failure is distinguishable from its answer, and an unreadable answer fails
 # toward `idle-done`, which is the direction that can only ever withhold authority.
-IDLE_CTX = $(shell $(SWITCH) idle 2>/dev/null || echo unreadable)
+# GUARD_EDIT_OK: fixing a defect found while working (2026-09-27) - ASKED ONCE PER MAKE, ON FIRST USE. A plain
+# `=` re-ran this python probe at EVERY reference: 13 per `make done` (~1.5 s, 6.2 s of the 11 s
+# `test_make_done_short_circuits_on_an_unchanged_gate_key`). The answer cannot change within one make: an
+# idle run writes its marker BEFORE it starts the sub-make that reads it. Still lazy - a target that never
+# names DONE_NAME never runs the probe - and the failure direction above is untouched.
+IDLE_CTX = $(eval IDLE_CTX := $(shell $(SWITCH) idle 2>/dev/null || echo unreadable))$(IDLE_CTX)
 DONE_NAME = $(if $(filter 0,$(IDLE_CTX)),done,idle-done)
 # GUARD_EDIT_OK: "scope relaxed" described a lock retired in feature 185 - there is nothing to relax.
 idle-tests:     ## [tests] {inactive: arming is disabled - the GM turned it off 2026-09-06; the target still runs by hand} what an idle session runs unattended (feature 136): the whole gate, never FULL, recorded as `idle-done`
