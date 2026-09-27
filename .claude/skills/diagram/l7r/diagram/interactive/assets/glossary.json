@@ -3782,6 +3782,7 @@
   "variants": [
    "tatami",
    "mat",
+   "mats",
    "twelve-mat"
   ]
  },
@@ -6517,6 +6518,39 @@
   "def": "A small roofed wall that some Edo-period machiya raised on the roof at the boundary with the next house, to stop a fire spreading from next door.",
   "variants": [
    "udatsu"
+  ]
+ },
+ "tsumairi": {
+  "def": "A house built with its roof ridge at right angles to the street, so that the triangular end of the roof (the gable) faces the street. In Japanese towns it was the less common form: most machiya ran the ridge parallel to the street.",
+  "variants": [
+   "tsumairi",
+   "gable-fronted",
+   "tsumairi-type"
+  ]
+ },
+ "half-story": {
+  "def": "A low storage story over the street side of a machiya, under a low eave, rather than a full second floor. The domains held second stories down to this by ban, and in Kyoto it stayed usual except in large merchant houses.",
+  "variants": [
+   "half-story",
+   "half-stories",
+   "tsushi nikai",
+   "zushi nikai"
+  ]
+ },
+ "ridge-divided nagaya": {
+  "def": "A nagaya split along its ridge as well as across it, so its units stand back to back and each opens only on its lane side; the cheapest kind of back tenement, commonly nine shaku by two ken a unit.",
+  "variants": [
+   "ridge-divided nagaya",
+   "ridge-divided"
+  ]
+ },
+ "back tenement": {
+  "def": "In a Japanese city, the rented row houses (nagaya) on a narrow lane behind the street-front shops of a lot, with a well, a privy and a rubbish heap shared by the residents; the home of peddlers, craftsmen and day laborers.",
+  "variants": [
+   "back tenement",
+   "back tenements",
+   "back nagaya",
+   "uradana"
   ]
  }
 }

@@ -43,6 +43,9 @@ azolla	azolla
 azuchi	azuchi
 azuchi-momoyama	Azuchi-Momoyama period
 azuchi-momoyama period	Azuchi-Momoyama period
+back nagaya	back tenement
+back tenement	back tenement
+back tenements	back tenement
 backswamp	backswamp
 backswamps	backswamp
 backwall	backwall
@@ -483,6 +486,7 @@ fuse	fuse
 fusekoshi	inverted siphon
 gabion	gabion
 gabions	gabion
+gable-fronted	tsumairi
 galleried mining	siege mining
 game master	GM
 gangi	gangi
@@ -553,6 +557,8 @@ hakka	Hakka
 hakone barrier	Hakone barrier
 half-river closure	half-river closure
 half-river closures	half-river closure
+half-stories	half-story
+half-story	half-story
 han	han
 han china	Han dynasty
 han dynasty	Han dynasty
@@ -933,6 +939,7 @@ masson pine	masson pine
 masugata	masugata
 mat	tatami
 matou	gangi
+mats	tatami
 matsu	matsu
 meander	meander
 meibutsu	meibutsu
@@ -1199,6 +1206,8 @@ ri	ri
 rick	rick
 ricks	rick
 ridge span	ridge span
+ridge-divided	ridge-divided nagaya
+ridge-divided nagaya	ridge-divided nagaya
 riffle	riffle
 riffles	riffle
 ring dike	ring dike
@@ -1502,7 +1511,10 @@ tsubo	tsubo
 tsuijibei	tsuijibei
 tsuijimatsu	tsuijimatsu
 tsuke-tsubo	tsuke-tsubo
+tsumairi	tsumairi
+tsumairi-type	tsumairi
 tsunaba	tsunaba
+tsushi nikai	half-story
 tudi miao	tudi miao
 tudigong	tudi miao
 tulou	tulou
@@ -1530,6 +1542,7 @@ unhairing	unhair
 unhairs	unhair
 ura-dana	ura-dana
 ura-nagaya	ura-nagaya
+uradana	back tenement
 usufruct	usufruct
 uzumimon	umon
 vaiśravaṇa	Bishamon
@@ -1657,6 +1670,7 @@ zone of separated flow	separation zone
 zongjia	zongjia
 zooplankton	zooplankton
 zuku	zuku
+zushi nikai	half-story
 ō-aza	ō-aza
 ōiya	ōiya
 ōkaji	ōkaji
