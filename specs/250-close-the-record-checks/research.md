@@ -592,3 +592,69 @@ page's check sessions took).
 2. **Size a check group by everything it checks**: question and notes bytes, each owed modal's prose, each registry
    entry - and cap it where the measured sessions stayed under about 100,000 of context. Owed modals and sources count.
 3. **Report per thing checked** (questions + modals + sources), with per question beside it for continuity.
+
+## R9 - the eighth round: modals applied by command, groups by load (2026-09-27, T63 to T67, plan D17)
+
+The GM asked for R8's three recommendations and another page of similar size. The page was `archetypes`: two FR-002
+items (questions 100 and 140) and one FR-006 item. One write session, then check groups packed by load. Figures from
+`tokens.py summary` over `measure/tokens-archetypes-*.json`.
+
+**A defect of mine put a third question into the round.** The check step read the handoff's `SECTION=` entries
+wherever they appeared, and the handoff's closing note - "- SECTION=170 is over the size cap, but none of this page's
+items falls in it, so it was not split here" - was read as a changed question. So a third check group ran on question
+170 (32,800 bytes, over the cap, untouched by this page) with the eight dike-pond modals owed from it. That work was
+owed at the push anyway (T23: every `_entry_owed.py` pair answered), so it is not wasted, but it is not this page's
+work, and it is reported apart. Fixed: the check step now DERIVES the questions and keys from what the write
+session's commits changed (`brief.py changed_since`, against a base the write brief records), not from the handoff's
+prose; replayed on both handoffs it names 100, 140 and the two keys for `archetypes`, and exactly `fields`' own list.
+
+| | `cities/government` (R6) | `cities/fabric` (R7) | `fields` (R8) | **`archetypes` (R9)** | the 170 group (R9, not the page's) |
+|---|---|---|---|---|---|
+| questions / modals / keys checked | 4 / 0 / 4 | 5 / 0 / 2 | 3 / 7 / 4 | 2 / 2 / 2 | 1 / 8 / 0 |
+| sessions | 3 | 4 | 2 (+1 split) | 3 | 1 |
+| largest context any turn | 95,000 | 137,000 | 171,000 | **102,000** | 124,000 |
+| main session | 5.30 M | 9.84 M | 9.08 M | 5.46 M, 98 turns | 6.08 M, 77 turns |
+| mean main turn | 56,000 | 64,000 | 90,000 | **56,000** | 79,000 |
+| agent runs | 16 (0.94 M) | 18 (0.97 M) | 28 (1.18 M) | 12 (0.93 M) | 19 (0.97 M) |
+| total | 6.24 M | 10.81 M | 10.26 M | **6.39 M** | 7.04 M |
+| per thing checked | 0.78 M | 1.54 M | 0.73 M | 1.07 M | 0.78 M |
+| per question checked | 1.56 M | 2.16 M | 3.42 M | 3.20 M | - |
+
+(Observed 2026-09-27; method: `tokens.py summary --files <records> --questions N --items N --modals N --keys N`; the
+page's column is its write session and check groups 2a and 2b, the 170 group is 2c. All four sessions together:
+13.43 M over 15 things, 0.90 M each.)
+
+**What each change did:**
+
+1. **Modals applied by command - worked.** The 170 group rewrote eight drifted modals and applied two more fixes after
+   its re-check with twelve `make apply-edits` runs and NO hand edit; on `fields` the same kind of work was thirteen
+   hand edits. On the page itself, group 2b's twelve hand edits were findings the agents marked `EDIT: none` (a new
+   source to add, a registry key to link) and four edits to source write-ups, whose check (`source-applicability`)
+   writes no EDIT blocks yet.
+2. **Groups by load - worked.** No session passed 124,000 (fields: 171,000), and the page's sessions peaked at 102,000
+   with a mean turn of 56,000, back to the best rounds. The 170 group was one question whose load (32,800 plus eight
+   modals) was over the budget on its own; a single question cannot be split further by packing, and it peaked at
+   124,000 - under the fit's prediction, so the fit is if anything cautious.
+3. **Per thing checked** - reported above. The page's 1.07 M a thing sits between government's 0.78 and fabric's 1.54;
+   its per-question figure is high because two questions carried three sessions' fixed start-up (a session's first
+   turns and brief cost about 0.2 to 0.4 million before any work).
+
+**The write session was the cheapest yet**: 1.68 million over 30 turns, peaking at 82,000 (government 2.20, fabric
+3.62, fields 3.39 million).
+
+**Two findings the sessions left for the GM** (recorded in the record, not decided): the map's mulberry density (one
+bush per 10 to 20 square feet, a guess) is 10 to 20 times sparser than the one figure found (8,000 to 10,000 bushes
+a mu, modern); and the county gazetteer dates the fruit, cane and vegetable dikes to the delta's industrialization,
+while the map draws them as options labeled accurate.
+
+### Recommendations for the next round
+
+1. **`source-applicability` ends with EDIT blocks** for the write-up fixes it asks for, as the other three checks do.
+2. **Pack small groups so a session is worth its start-up**: a session costs about 0.2 to 0.4 million before any
+   work, so a group with one small question (2a here: 100 alone, 1.37 million) should take the next group's work
+   when both fit the budget - the packer already does this; here it did not because 140's group was near the budget.
+   Measure whether a looser budget (the 170 group stayed at 124,000 over a 58,000 load) is safe before moving it.
+3. **Decide where owed modals from earlier work get checked** - the 170 group showed that a page's owed modals from
+   OTHER questions are real work T23 will need; checking them per page, packed by load, cost 0.78 million a thing,
+   the cheapest rate measured. Folding them into each page's round on purpose (rather than by the defect that found
+   them) would clear T23 as the pages go.

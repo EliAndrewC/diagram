@@ -230,6 +230,25 @@ MODAL_WORK = 2_000     # a GUESS, R9 to measure: an owed modal costs its report 
 #                        (a median 1,225 bytes), and counting the prose alone is how `fields` put seven in one session.
 
 
+def changed_since(base: str, page: str) -> tuple[list[str], list[str]]:
+    """(the page's questions, the registry keys) whose files changed between `base` and HEAD - what the write session
+    actually touched, DERIVED from its commits rather than read off its handoff's prose (R9)."""
+    got = subprocess.run(["git", "-C", str(CLONE), "diff", "--name-only", f"{base}..HEAD"], capture_output=True, text=True, check=False).stdout
+    rel = f".claude/skills/diagram/research/{page}/"
+    secs = sorted({pathlib.PurePosixPath(f).name[:3] for f in got.splitlines() if f.startswith(rel) and re.match(r"\d{3}-", pathlib.PurePosixPath(f).name)})
+    works = ".claude/skills/diagram/research/sources/010-works-cited/"
+    keys = sorted({m.group(1) for f in got.splitlines() if f.startswith(works) and (m := re.match(r"\d+-(.+)\.html$", pathlib.PurePosixPath(f).name))})
+    return secs, keys
+
+
+def handoff_list(field: str, handoff: str) -> list[str]:
+    """The handoff's `SECTION=` or `KEY=` LIST entries - a line that begins with one (after a list marker), never a
+    mention in a sentence. WHY (R9): the archetypes handoff said "SECTION=170 is over the size cap ... so it was not
+    split here", the old pattern matched it anywhere, and a whole check group ran on a question the page never touched."""
+    value = r"\d{3}" if field == "SECTION" else r"[a-z0-9][a-z0-9-]*"
+    return re.findall(rf"^[ \t]*(?:[-*][ \t]+)?`?{field}=({value})", handoff, re.M)
+
+
 KEYS = "KEYS"   # the registry keys, packed as one load of their own: one session checks them all
 
 
@@ -241,8 +260,8 @@ def check_groups(handoff: str, sizes: dict[str, int] | None = None, keys_load: i
     counting question bytes alone put three questions, seven owed modals and four sources into one session on
     `fields`, which grew to 171,000). A question with no size known counts as one at the cap. Each group lists its
     sections in number order, KEYS last."""
-    sections = list(dict.fromkeys(re.findall(r"SECTION=(\d{3})", handoff)))
-    keys = list(dict.fromkeys(re.findall(r"KEY=([a-z0-9][a-z0-9-]*)", handoff)))
+    sections = list(dict.fromkeys(handoff_list("SECTION", handoff)))
+    keys = list(dict.fromkeys(handoff_list("KEY", handoff)))
     size = {s: (sizes or {}).get(s, CAP) for s in sections}
     if keys:
         size[KEYS] = keys_load
@@ -276,7 +295,7 @@ def homes(page: str, handoff: str) -> dict[str, tuple[str, int]]:
     """modal class -> (the ONE checked section it is credited to, its prose bytes): the first of the questions it is
     owed from that the handoff checks. That group's load counts it and that group alone checks it (plan review, D17:
     a modal owed from two checked questions in different groups was checked twice and counted once)."""
-    checked = list(dict.fromkeys(re.findall(r"SECTION=(\d{3})", handoff)))
+    checked = list(dict.fromkeys(handoff_list("SECTION", handoff)))
     out = {}
     for cls, prose, secs in owed_modals(page):
         home = next((s for s in checked if s in secs), None)
@@ -294,7 +313,7 @@ def loads(page: str, handoff: str) -> tuple[dict[str, int], int]:
     for home, prose in homes(page, handoff).values():
         size[home] += prose + MODAL_WORK
     works = SKILL / "research/sources/010-works-cited"
-    keys = re.findall(r"KEY=([a-z0-9][a-z0-9-]*)", handoff)
+    keys = handoff_list("KEY", handoff)
     keys_load = sum(f.stat().st_size for k in dict.fromkeys(keys) for f in works.glob(f"*-{k}.html"))
     return size, keys_load
 
@@ -308,6 +327,10 @@ def checks(page: str, task: str) -> int:
         print(f"brief: no handoff at {handoff} - session 1 did not finish", file=sys.stderr)
         return 2
     text = handoff.read_text(encoding="utf-8")
+    base = briefs / f"{slug}-base.txt"
+    if base.is_file():  # the questions and keys the write session's COMMITS touched, as the list the packer reads
+        secs, ks = changed_since(base.read_text(encoding="utf-8").strip(), page)
+        text = "".join(f"- SECTION={s}\n" for s in secs) + "".join(f"- KEY={k}\n" for k in ks)
     groups, keys = check_groups(text, *loads(page, text))
     owed = homes(page, text)
     fields = _fields(page, task)
@@ -429,6 +452,8 @@ def write_brief(page: str, task: str) -> int:
         return 2
     items2, items6 = fr002(page), fr006(page)
     fields = _fields(page, task)
+    head = subprocess.run(["git", "-C", str(CLONE), "rev-parse", "HEAD"], capture_output=True, text=True, check=False).stdout.strip()
+    (FEATURE / "briefs" / f"{fields['slug']}-base.txt").write_text(head + "\n", encoding="utf-8")  # what the checks diff against
     write = FEATURE / "briefs" / f"{fields['slug']}-1.md"
     write.write_text(WRITE.format(n=1, what="locate, read and write", fr002="\n".join(items2) or "- none",
                                   fr006="\n".join(items6) or "- none", over=over_cap(page), example=newest_entry(), **fields), encoding="utf-8")
