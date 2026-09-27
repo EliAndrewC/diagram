@@ -2889,7 +2889,9 @@
   "def": "The climbing kiln: a long chambered kiln built up a slope, firebox at the bottom and chimney at the top, stoked in shifts for days.",
   "variants": [
    "noborigama",
-   "anagama"
+   "anagama",
+   "climbing kiln",
+   "climbing kilns"
   ]
  },
  "nucleated": {
@@ -6680,6 +6682,33 @@
   "def": "The province around present-day Nagoya, and the name of the senior Tokugawa branch house that held it.",
   "variants": [
    "Owari"
+  ]
+ },
+ "firebox": {
+  "def": "The combustion chamber at the foot of a climbing kiln, where the wood fire is fed; the firing chambers climb the slope above it and the chimney stands at the top.",
+  "variants": [
+   "firebox",
+   "fireboxes"
+  ]
+ },
+ "stoke mouth": {
+  "def": "The opening at the foot of a kiln through which the fire is fed with wood during a firing.",
+  "variants": [
+   "stoke mouth",
+   "stoke mouths"
+  ]
+ },
+ "Mino": {
+  "def": "An old province of central Japan, in present-day southern Gifu, and one of its great pottery districts; the Motoyashiki kiln stands there.",
+  "variants": [
+   "Mino"
+  ]
+ },
+ "kiln house": {
+  "def": "A pottery business - the household and workshop that made and fired wares (窯元, kamamoto); in the porcelain villages several of them shared one great climbing kiln.",
+  "variants": [
+   "kiln house",
+   "kiln houses"
   ]
  }
 }

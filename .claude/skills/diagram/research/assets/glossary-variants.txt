@@ -189,6 +189,8 @@ circuit's length	wall circuit
 city god	City God
 city gods	City God
 city grain	city grain
+climbing kiln	noborigama
+climbing kilns	noborigama
 coefficient of variation	coefficient of variation
 collar	planted collar
 collars	planted collar
@@ -445,6 +447,8 @@ fire-gap	fire gap
 fire-gaps	fire gap
 fire-water	fire-water
 fire-water tubs	fire-water
+firebox	firebox
+fireboxes	firebox
 fish fry	fish fry
 fish-scale polder	yulin wei
 fish-scale polders	yulin wei
@@ -820,6 +824,8 @@ kichin-yado	kichin-yado
 kido	kido
 kidoban	kidoban
 kidobans	kidoban
+kiln house	kiln house
+kiln houses	kiln house
 kimoiri	shoya
 kimon	kimon
 kinai	Kinai
@@ -975,6 +981,7 @@ ming taizu	Taizu
 ming-dynasty	Ming dynasty
 ming-qing	Qing dynasty
 minka	minka
+mino	Mino
 mire	mire
 mitochigai	mitochigai
 miyaza	miyaza
@@ -1399,6 +1406,8 @@ stele	stele
 steles	stele
 stem density	stem density
 stilling pool	stilling pool
+stoke mouth	stoke mouth
+stoke mouths	stoke mouth
 stone pitching	stone pitching
 straw rick	rick
 straw ricks	rick
