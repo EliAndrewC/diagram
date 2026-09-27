@@ -6215,5 +6215,42 @@
   "variants": [
    "Nihon Kokugo Daijiten"
   ]
+ },
+ "compound shrine": {
+  "def": "A small shrine standing inside a walled compound - a residence or an official's office - rather than on grounds of its own, so the ground in front of its hall is small.",
+  "variants": [
+   "compound shrine",
+   "compound shrines"
+  ]
+ },
+ "aidono": {
+  "def": "Enshrining two or more kami together in one shrine hall, or that hall itself; the secondary kami are often honored below the main one. An aidono-zukuri hall is two bays joined into one with two doors, or several small halls joined under a single roof.",
+  "variants": [
+   "aidono",
+   "aidono-zukuri",
+   "aiden",
+   "aidonoshin"
+  ]
+ },
+ "Kasuga-style": {
+  "def": "A small one-bay shrine hall entered at its gable end, with a roof carried forward over the entrance steps; named for the Kasuga shrine at Nara.",
+  "variants": [
+   "Kasuga-style",
+   "Kasuga-zukuri"
+  ]
+ },
+ "Nagare-style": {
+  "def": "The commonest shrine-hall style: a gabled roof whose front slope runs on forward in one long sweep to shelter the entrance steps.",
+  "variants": [
+   "Nagare-style",
+   "Nagare-zukuri"
+  ]
+ },
+ "Jingu": {
+  "def": "The Grand Shrine of Ise, the shrine of the sun goddess; a Jingu talisman is the paper talisman it issues to households, kept in the place of honor on a household altar shelf.",
+  "variants": [
+   "Jingu",
+   "Jingū"
+  ]
  }
 }
