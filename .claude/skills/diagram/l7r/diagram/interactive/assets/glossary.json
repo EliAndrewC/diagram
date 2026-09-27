@@ -6360,5 +6360,18 @@
    "draw-basin",
    "draw-basins"
   ]
+ },
+ "hokaku sen": {
+  "def": "The grid lines of the jori land system, which divide one square of farmland from the next. They generally run north-south and east-west, but in a fair number of regions the whole grid is tilted.",
+  "variants": [
+   "hokaku sen",
+   "hokaku-sen"
+  ]
+ },
+ "Dujiangyan": {
+  "def": "The ancient irrigation works on the Min River in Sichuan, whose canals fan out across the Chengdu plain below the diversion.",
+  "variants": [
+   "Dujiangyan"
+  ]
  }
 }

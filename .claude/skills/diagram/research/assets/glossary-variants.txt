@@ -330,6 +330,7 @@ drum tower	gulou
 dry run	wet run
 dry runs	wet run
 ds/m	dS/m
+dujiangyan	Dujiangyan
 duty of water	water duty
 dwarf bamboo	sasa
 dōba	dōba
@@ -601,6 +602,8 @@ hoarding	hoarding
 hoardings	hoarding
 hojo seibi	hojo seibi
 hojutsu	onmyodo
+hokaku sen	hokaku sen
+hokaku-sen	hokaku sen
 hokora	hokora
 holding jail	holding jail
 honden	honden
