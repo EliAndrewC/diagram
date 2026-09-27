@@ -89,6 +89,7 @@ bomori	bomori
 bon	Bon
 boom	boom
 booms	boom
+booting	booting
 broadcast	broadcast sowing
 broadcast oilseed stand	broadcast sowing
 broadcast sowing	broadcast sowing
@@ -599,6 +600,7 @@ isohyets	isohyet
 isotherm	isohyet
 isotherms	isohyet
 itabashi	itabashi
+ja zen-noh	Zennoh
 jagama	jagama
 japanese zelkova	keyaki
 jetties	jetty
@@ -931,6 +933,8 @@ outwork	outwork
 outworks	outwork
 ox-frame	ox-frame
 ox-frames	ox-frame
+panicle	panicle
+panicles	panicle
 pannage	pannage
 parapet	parapet
 parish	parish
@@ -1266,7 +1270,9 @@ tian'geng	bund
 tiangeng	bund
 tier	tier
 tiers	tier
+tiller	tillering
 tillering	tillering
+tillers	tillering
 toe	toe
 tohoku	Tohoku
 toiya	ton'ya
@@ -1413,6 +1419,8 @@ zaimokuya	zaimokuya
 zaofang	zaofang
 zaojun	Zaojun
 zelkova	keyaki
+zen-noh	Zennoh
+zennoh	Zennoh
 zhalan	zhalan
 zhang	zhang
 zhengyi	Zhengyi
