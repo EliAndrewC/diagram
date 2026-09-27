@@ -453,7 +453,7 @@
     <rect x="1002" y="330" width="18" height="18" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.2"/>
     <line x1="1006" y1="335" x2="1016" y2="335" stroke="#5C4830" stroke-width="1"/>
     <text x="1011" y="362" text-anchor="middle" font-size="8.5" font-style="italic" fill="#3A2E1C">wood-kami altar</text>
-    <text x="1011" y="372" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830">(personally maintained)</text>
+    <text x="1007" y="372" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830">(personally maintained)</text>
   </g>
 
   <!-- Residence: two offset blocks (gankō / flying-geese massing), family only.

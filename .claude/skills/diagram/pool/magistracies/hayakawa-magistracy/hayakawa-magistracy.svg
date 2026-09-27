@@ -275,6 +275,9 @@
     <rect x="160" y="202" width="288" height="76" fill="none" stroke="#5A3F1E" stroke-width="2.5"/>
     <rect x="160" y="278" width="288" height="8" fill="#E8D2A8" stroke="#5A3F1E" stroke-width="1.5" data-kind="engawa"/>
     <line x1="304" y1="202" x2="304" y2="278" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
+    <!-- the family block's informal door (katteguchi) on its south face, onto the service ground toward the kitchen:
+         the household's own way in, apart from the reception's genkan (buildings/programs.md: no sealed boxes) -->
+    <rect x="256" y="286" width="24" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
     <text x="232" y="224" text-anchor="middle" font-size="10" fill="#3A2E1C" data-kind="inner rooms">inner rooms</text>
     <text x="232" y="238" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830" data-kind="ancestral alcove">&amp; ancestral alcove -</text>
     <text x="232" y="249" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830" data-kind="ancestral alcove">tablets of past</text>
@@ -389,9 +392,10 @@
     <line x1="224" y1="156" x2="224" y2="196" stroke="#6B4F2A" stroke-width="1"/>
     <line x1="277" y1="156" x2="277" y2="196" stroke="#6B4F2A" stroke-width="1"/>
     <line x1="330" y1="156" x2="330" y2="196" stroke="#6B4F2A" stroke-width="1"/>
-    <!-- door (informal) on the EAST end, onto the open rear strip: on the south face it opened into the
-         residence's back wall 2 ft away (building review, feature 264; moved 2026-09-27) -->
-    <rect x="382" y="168" width="6" height="16" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
+    <!-- door (informal) on the WEST end, onto the service strip inside the west wall that runs down to the kitchen
+         postern and the kitchen: on the south face it opened into the residence's back wall 2 ft away, and on the
+         east end the way to the kitchen crossed the inner garden before the genkan (building reviews, 2026-09-27) -->
+    <rect x="166" y="168" width="6" height="16" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
     <text x="277" y="180" text-anchor="middle" font-size="9" font-weight="bold" fill="#3A2E1C">servants' quarters</text>
   </g>
   <!-- Privy attached to the residence's rear (north) corner, at the east block (reached along the rear strip) -->
