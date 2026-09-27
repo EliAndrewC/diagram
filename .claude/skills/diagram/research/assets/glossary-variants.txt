@@ -266,6 +266,7 @@ danka	danna-dera
 danna-ba	kusaba
 danna-dera	danna-dera
 danzaemon	Danzaemon
+daoshi	daoshi
 daozuofang	daozuofang
 dashigeta	dashigeta
 daxiangguo	Daxiangguo
@@ -831,6 +832,8 @@ kokudaino	kokudai-no
 kokudaka	kokudaka
 kokuinchi	shuinchi
 kokumori	kokumori
+kokuso	kokuso
+kokuzo	kokuso
 komainu	lion-dog
 komono	komono
 kon-ya	kon-ya
@@ -990,6 +993,9 @@ murataka	murataka
 muromachi	Muromachi
 musashi	Musashi
 musashi province	Musashi
+mushiko	mushiko
+mushiko windows	mushiko
+mushiko-mado	mushiko
 mushiro	mushiro
 muster perimeter	muster perimeter
 muster perimeters	muster perimeter
