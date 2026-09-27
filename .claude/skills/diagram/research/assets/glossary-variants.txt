@@ -112,6 +112,9 @@ bishamon	Bishamon
 bishamonten	Bishamon
 black charcoal	black charcoal
 black-charcoal	black charcoal
+black-seal	shuinchi
+black-seal land	shuinchi
+black-seal lands	shuinchi
 board feet	board foot
 board foot	board foot
 bodaiji	bodaiji
@@ -313,8 +316,10 @@ daikan	daikan
 daikansho	daikansho
 daikon	daikon
 daimyo	daimyo
+daimyojin	Daimyōjin
 daimyos	daimyo
 daimyō	daimyo
+daimyōjin	Daimyōjin
 daimyōs	daimyo
 daizu	daizu
 dajokan	Daijokan
@@ -393,6 +398,7 @@ dry run	wet run
 dry runs	wet run
 ds/m	dS/m
 dujiangyan	Dujiangyan
+dunhuang	Dunhuang
 duty of water	water duty
 dwarf bamboo	sasa
 dōba	dōba
@@ -530,6 +536,7 @@ forest litter	forest litter
 forest litters	forest litter
 formwork	formwork
 fortune	Fortune
+fortunes	Fortune
 four books	Four Books and Five Classics
 four books and five classics	Four Books and Five Classics
 four gods	four gods
@@ -579,11 +586,14 @@ gassho-zukuri	gassho
 gasshozukuri	gassho
 gate market	gate market
 gate throat	gate throat
+gate town	monzen
+gate towns	monzen
 gate-land	gate-land
 gate-land lots	gate-land
 gate-mound	mitsuke
 gate-mounds	mitsuke
 gate-throat	gate throat
+gate-town	monzen
 gazetteer	gazetteer
 gazetteers	gazetteer
 gejo	degawari
@@ -613,6 +623,7 @@ goemonburo	goemon-buro
 gogura	gogura
 gokaido	Five Highways
 gokumon	gokumon
+gold paper	gold paper
 gongxiefang	gongxiefang
 gono	gōnō
 gorinto	five-ring pagoda
@@ -873,6 +884,7 @@ josui-ido	josui-ido
 juku	shukuba
 junk	junk
 junks	junk
+jō	jo
 jōdo	Jodo
 jōdo shinshū	Jodo Shinshu
 jōgōe-chi	jōgōe-chi
@@ -1150,6 +1162,8 @@ mizunomi	mizunomi
 mlit	MLIT
 modern consolidation	kochi seiri
 module	module
+mogao	Mogao caves
+mogao caves	Mogao caves
 mokoshi	mokoshi
 momi	momi
 mon	mon
@@ -1479,6 +1493,7 @@ sand junk	sand junk
 sand junks	sand junk
 sand sluice	sand sluice
 sando	sando
+sandō	sando
 sangji yutang	dike-pond
 sanheyuan	sanheyuan
 sankin-kotai	alternate attendance
@@ -1586,6 +1601,8 @@ shuku	shukuba
 shukuba	shukuba
 shunde	Shunde
 shunzhi	Shunzhi
+shōwa	Showa
+shōya	shoya
 siege mining	siege mining
 sigma	sigma
 siheyuan	siheyuan
@@ -1854,6 +1871,9 @@ vaiśravaṇa	Bishamon
 verge	verge
 verges	verge
 vermilion line	shubiki
+vermilion-seal	shuinchi
+vermilion-seal land	shuinchi
+vermilion-seal lands	shuinchi
 village district	village district
 visiting grave	visiting grave
 visiting graves	visiting grave
@@ -1887,6 +1907,8 @@ water gate	water gate
 water gates	water gate
 water mouth	water-mouth
 water tail	water-mouth
+water teahouse	water teahouse
+water teahouses	water teahouse
 water-mouth	water-mouth
 water-tail	water-mouth
 wayside hall	tsujido

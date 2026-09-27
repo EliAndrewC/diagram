@@ -92,7 +92,8 @@
  "Fortune": {
   "def": "One of the setting's lesser deities. Two are a Great Clan's patrons and take its sovereign temples.",
   "variants": [
-   "Fortune"
+   "Fortune",
+   "Fortunes"
   ]
  },
  "GIS": {
@@ -392,7 +393,8 @@
  "Showa": {
   "def": "The era from 1926; with Meiji, the modern period whose land consolidation produced the rectangular paddy grid a pre-modern map must not show.",
   "variants": [
-   "Showa"
+   "Showa",
+   "Shōwa"
   ]
  },
  "Siku Quanshu": {
@@ -2752,9 +2754,12 @@
   ]
  },
  "monzen": {
-  "def": "'Before the gate': the neighborhood of shops and inns on the approach to a great temple or shrine.",
+  "def": "'Before the gate': the neighborhood of shops and inns on the approach to a temple or shrine. In Edo, a gate town was a row of lay town houses built on land belonging to the temple's own precinct, facing its approach.",
   "variants": [
-   "monzen"
+   "monzen",
+   "gate town",
+   "gate towns",
+   "gate-town"
   ]
  },
  "moso": {
@@ -3302,7 +3307,8 @@
  "sando": {
   "def": "A temple's or shrine's approach avenue, from the road to the hall, under its gates.",
   "variants": [
-   "sando"
+   "sando",
+   "sandō"
   ]
  },
  "sankyoson": {
@@ -3517,7 +3523,8 @@
   "variants": [
    "shoya",
    "nanushi",
-   "kimoiri"
+   "kimoiri",
+   "shōya"
   ]
  },
  "shubiki": {
@@ -4394,7 +4401,8 @@
  "jo": {
   "def": "A Japanese unit of length of ten shaku, about 3 meters (10 feet); as the suffix -jo on a place name it means castle.",
   "variants": [
-   "jo"
+   "jo",
+   "jō"
   ]
  },
  "fu": {
@@ -4729,7 +4737,13 @@
   "def": "Temple or shrine land confirmed by a shogunal vermilion-seal document (or a daimyo's black seal), tax-free and ranging from thousands of koku down to one.",
   "variants": [
    "shuinchi",
-   "kokuinchi"
+   "kokuinchi",
+   "vermilion-seal lands",
+   "vermilion-seal land",
+   "vermilion-seal",
+   "black-seal lands",
+   "black-seal land",
+   "black-seal"
   ]
  },
  "temizuya": {
@@ -7494,6 +7508,13 @@
    "hirakata"
   ]
  },
+ "Daimyōjin": {
+  "def": "A title of honor given to a Shinto god, \"great bright deity\", as in Hikawa Daimyōjin, the god of a Hikawa shrine. It is not the title of a lord (daimyo).",
+  "variants": [
+   "Daimyōjin",
+   "Daimyojin"
+  ]
+ },
  "monto": {
   "def": "The followers of Jodo Shinshu, the Shin sect; the Aki monto were its followers in Aki, the old province around Hiroshima, where cremation was the custom.",
   "variants": [
@@ -7684,6 +7705,32 @@
    "mushiko",
    "mushiko-mado",
    "mushiko windows"
+  ]
+ },
+ "water teahouse": {
+  "def": "In the Edo period, a teahouse where a passer-by sat to rest over tea, as twenty did in a row on Sensoji's approach; a rest stop rather than an eating house.",
+  "variants": [
+   "water teahouse",
+   "water teahouses"
+  ]
+ },
+ "Dunhuang": {
+  "def": "An oasis town in northwest China on the old overland trade road. Its Buddhist cave library kept medieval monastery papers, among them registers of what a monastery took in and paid out.",
+  "variants": [
+   "Dunhuang"
+  ]
+ },
+ "Mogao caves": {
+  "def": "The Buddhist cave temples cut into a cliff at Dunhuang, paid for by patrons over many centuries.",
+  "variants": [
+   "Mogao caves",
+   "Mogao"
+  ]
+ },
+ "gold paper": {
+  "def": "Paper, often marked with gold, that believers give to a Chinese temple to be burned as an offering.",
+  "variants": [
+   "gold paper"
   ]
  }
 }
