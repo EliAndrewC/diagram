@@ -19,21 +19,25 @@ class OfficeHall(Kind):
     magistrate's dais over the hearing court, and behind a screen its working rooms - the day office and the
     official study, each its own feature.
 
-    Why: At Takayama, the surviving intendant's office, the office wing - reception rooms, day office and
-    official study - is the dominant public building, and the hearing court is one room of that block. Daily
-    paperwork is most of a magistrate's job, and the residence's private study is on the wrong side of the
-    line between state and home for it, so the hall is deep, and it may be the largest building in the
-    compound, being the institution's working core rather than a dwelling. A wooden hall could burn, and
-    many did (the Sado magistracy was rebuilt five times, though Takayama's never burned), which is why the
-    documents and the tax grain are kept in storehouses of their own.
+    Why: At Takayama, the surviving intendant's office, the office block - entrance hall, great hall, office and
+    examination room, rebuilt together in 1816 - was built with great formality to show the office's rank, and the room where hearings were held is one part of that block. The
+    magistrate and staff need somewhere to do the daily paperwork, and the residence's private study is on
+    the wrong side of the line between state and home for it, so the hall is deep, and it may be the largest
+    building in the compound, being the institution's working core rather than a dwelling. A wooden hall
+    could burn, and many did (the Sado magistracy was rebuilt five times, though Takayama's never burned),
+    which, this project judges, is why the documents and the tax grain are kept in storehouses of their own.
 
-    Note: The hall's form and its place follow the record. That it may out-size the residence is this
-    project's reading, since no readable source ranks a compound's footprints. Its size, about 80 to 150 ft
-    long and 20 to 45 ft deep, is a guess: it is the plan vocabulary's working block, with no measured
-    office wing of a jin'ya behind it.
+    Note: The hall's form and its place follow the record. The day office and official study behind the dais
+    are this project's reading of what the block must hold, since no page read names them. That it may
+    out-size the residence is this project's reading, since no readable source ranks a compound's
+    footprints, and why the papers and grain went to storehouses is this project's guess, as no page read
+    says. Its size, about 80 to 150 ft long and 20 to 45 ft deep, is a guess: it is the plan vocabulary's
+    working block, with no measured office wing of a jin'ya behind it.
 
-    Caveat: That it may out-size the residence is this project's reading, since no readable source ranks a
-    compound's footprints. Its size, about 80 to 150 ft long and 20 to 45 ft deep, is a guess: it is the
+    Caveat: The day office and official study behind the dais are this project's reading of what the block
+    must hold, since no page read names them. That it may out-size the residence is this project's reading,
+    since no readable source ranks a compound's footprints, and why the papers and grain went to storehouses
+    is this project's guess, as no page read says. Its size, about 80 to 150 ft long and 20 to 45 ft deep, is a guess: it is the
     plan vocabulary's working block, with no measured office wing of a jin'ya behind it.
 
     Name: office hall
@@ -99,13 +103,14 @@ class TaxArchive(Kind):
     ledgers - its tax base on paper - and serving as the strongroom for the coin and valuables the office
     holds.
 
-    Why: Administrative halls were ordinary wooden buildings and burned again and again - the Sado magistracy
-    burned and was rebuilt five times - while only thick-walled earthen kura were fireproof, their walls often
-    a foot or more thick. That is why the documents got a storehouse of their own instead of a room in the
-    hall. The fire-water tubs stand at the wooden buildings and not here: this is the one building made not
-    to burn.
+    Why: Administrative halls were timber buildings and often burned - the Sado magistracy burned and was
+    rebuilt five times, though Takayama's office never did - while an earthen kura was built to keep fire
+    out, its walls often a foot or more thick. That, this project judges, is why the documents got a
+    storehouse of their own instead of a room in the hall. The fire-water tubs stand at the wooden buildings
+    and not here: this is the one building made not to burn.
 
-    Note: The fireproof document store follows the record, drawn as a sealed kura of about 32 to 36 ft, the
+    Note: The document storehouse follows the record, though why an office kept its papers there and not in
+    the hall is this map's guess, as no page read says; it is drawn as a sealed kura of about 32 to 36 ft, the
     plan vocabulary's size for a records store that doubles as the strongroom. An archive in the Chinese
     county office is not confirmed by any page read, and keeping the fire-water tubs away from it is this
     map's reasoning from its fireproofing: the pages read place tubs at the doorway and on the roof, and the
@@ -327,7 +332,7 @@ class DayOffice(Kind):
     is done - petitions received, orders written, accounts kept.
 
     Why: The dais band is the front of a deeper hall, not a stage of its own: at Takayama the office wing holds the
-    day office and the official study behind the court face. With no room built for interrogation, a questioning
+    entrance hall, examination room, office and great hall as one block, so the day office and official study belong behind the court face. With no room built for interrogation, a questioning
     happens in the day office or the hearing court like any other business.
 
     Note: The day office as a room of the office hall, behind the dais, follows the record.
@@ -345,13 +350,19 @@ class DayOffice(Kind):
 class OfficialStudy(Kind):
     """
     What: The official study, the magistrate's working room in the office hall, where papers are read and
-    judgments drafted.
+    the office's daily paperwork done.
 
     Why: The magistrate's official work belongs on the office side of the line between state and home; the private
     study in the residence is the wrong side of that line for official business, so the office hall keeps a
     study of its own behind the dais.
 
-    Note: The official study as a room of the office hall follows the record.
+    Note: The official study is this project's reading: the Takayama office block is recorded with its
+    entrance hall, examination room, office and great hall, and a study behind the dais is inferred from
+    where the office's paperwork must be done, since no page read names one.
+
+    Caveat: The official study is this project's reading: the Takayama office block is recorded with its
+    entrance hall, examination room, office and great hall, and a study behind the dais is inferred from
+    where the office's paperwork must be done, since no page read names one.
 
     Name: official study
     Covers: the official study's floor and its label

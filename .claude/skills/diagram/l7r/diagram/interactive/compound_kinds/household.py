@@ -370,7 +370,7 @@ class FireWaterTubs(Kind):
     What: Standing tubs of rainwater - tensuioke, "heaven-water tubs" - kept against fire, one at the eaves
     corner of each major wooden building and two at the kitchen, fed by the roof's runoff.
 
-    Why: The halls of an administrative compound were ordinary wooden buildings and burned again and again,
+    Why: The halls of an administrative compound were ordinary wooden buildings and often burned (the Sado magistracy five times, though Takayama's office never did),
     so standing water was kept at the point of risk: at the wooden buildings, weighted to the kitchen and its
     open fire. The plastered storehouses carry none - a thick earthen kura is the one building made not to
     burn. Each tub stands against its building's wall, under the eaves, because the gutter fills it.

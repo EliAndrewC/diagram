@@ -6799,5 +6799,33 @@
    "adze",
    "adzes"
   ]
+ },
+ "kokera": {
+  "def": "A roof of thin wooden shingles laid in overlapping courses; the Takayama jin'ya's office used it for part of its roof.",
+  "variants": [
+   "kokera",
+   "kokera shingle"
+  ]
+ },
+ "odoko": {
+  "def": "A great display alcove: the broad ceremonial alcove of a formal reception room, whose width marked the rank of the house - at Takayama Jin'ya's entrance room it is 2.5 ken wide, the mark of a 100,000-koku rank.",
+  "variants": [
+   "odoko",
+   "ōdoko"
+  ]
+ },
+ "kirizuma": {
+  "def": "A plain gable roof: two slopes meeting at one ridge, with a triangular gable wall at each end - simpler than the hip-and-gable irimoya.",
+  "variants": [
+   "kirizuma"
+  ]
+ },
+ "noshi-buki": {
+  "def": "A roof laid with wooden boards: with kokera shingle, one of the plank roofings that cover the buildings of Takayama Jin'ya, where snow wore out the tiles of the day and timber was easy to get.",
+  "variants": [
+   "noshi-buki",
+   "noshi-shingle",
+   "noshi-board"
+  ]
  }
 }

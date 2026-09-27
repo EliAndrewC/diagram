@@ -163,3 +163,14 @@
 - RiverLanding (buildings SECTION=080): REWRITTEN - Note counts the documentary hold as the project's reading; "commoners' boats" became boats the shogunate hired directly
 - TallyOffice (buildings SECTION=080): REWRITTEN - "hired commoner boats" became boats the shogunate hired directly, the source naming no owners
 - TaxBarge (buildings SECTION=080): IN-STEP - hired hulls, pennant and owning no hulls still match; the size rests on river-cities, not checked here
+- DayOffice (buildings SECTION=090): REWRITTEN - Takayama's office block now named as its four recorded parts, the day office and study placed behind the court face as a consequence
+- Genkan (buildings SECTION=090): IN-STEP - the genkan is still attested in the office block
+- HearingCourt (buildings SECTION=090): IN-STEP - the examination room in the office block and the paired, paved and roofed court still match
+- KneelingPositions (buildings SECTION=090): IN-STEP - the court and the dais facing it still match; the kneeling itself rests on another Entry section, not checked here
+- LordsQuarters (buildings SECTION=090): IN-STEP - the private study on the household side of the line still matches
+- MagistratesDais (buildings SECTION=090): IN-STEP - the dais as the front of a deeper office hall still matches
+- OfficeHall (buildings SECTION=090): REWRITTEN - "dominant public building" and the attested day office and study became the recorded four-part block built with formality; the two rooms counted as the project's reading in Note and Caveat
+- OfficialStudy (buildings SECTION=090): REWRITTEN - "judgments drafted" became the daily paperwork; Note and a new Caveat say the study is inferred, no page naming one
+- FireWaterTubs (buildings SECTION=160): REWRITTEN - "burned again and again" became often burned, Takayama's office never
+- OfficeHall (buildings SECTION=160): REWRITTEN - the storehouse reason marked this project's judgment and counted as a guess in Note and Caveat
+- TaxArchive (buildings SECTION=160): REWRITTEN - "only thick-walled kura were fireproof" and "that is why" softened to the section's words and the reason labeled a guess; the foot-thick walls clause CANNOT-TELL from 160 (it rests on dozo-jawiki, quoted at cities/fabric 143, not on the modal's Entry)

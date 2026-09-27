@@ -838,6 +838,7 @@ king post	king post
 king posts	king post
 king-post	king post
 kirisute-gomen	kirisute-gomen
+kirizuma	kirizuma
 kishu school	Kishu school
 kishu-school	Kishu school
 knob	knob
@@ -851,6 +852,8 @@ kofun	Kofun period
 kofun period	Kofun period
 koike	koike
 koji	koji
+kokera	kokera
+kokera shingle	kokera
 koku	koku
 kokubunji	kokubunji
 kokudai-no	kokudai-no
@@ -1074,6 +1077,9 @@ nogyo zensho	Nogyo Zensho
 normal depth	normal depth
 northern song	Song dynasty
 northern wei	Northern Wei
+noshi-board	noshi-buki
+noshi-buki	noshi-buki
+noshi-shingle	noshi-buki
 nrcs	NRCS
 nrcs-designed	NRCS
 nucleated	nucleated
@@ -1089,6 +1095,7 @@ oblique weirs	oblique weir
 obon	Bon
 ochiba	ochiba
 odoi	Odoi
+odoko	odoko
 offtake	offtake
 offtakes	offtake
 ofuregaki	ofuregaki
@@ -1738,6 +1745,7 @@ zooplankton	zooplankton
 zuku	zuku
 zushi nikai	half-story
 ō-aza	ō-aza
+ōdoko	odoko
 ōiya	ōiya
 ōkaji	ōkaji
 ōkajiba	ōkaji
