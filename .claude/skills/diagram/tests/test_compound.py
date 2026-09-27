@@ -12,8 +12,8 @@ def _env(w: float = 200.0, h: float = 200.0, div: float = 100.0, gate: float = 1
     return c.Envelope(w, h, div, gate)
 
 
-def _b(name: str, w: float, h: float, court: str, wall: str, order: int = 0, rank: int = 1) -> c.BuildingSpec:
-    return c.BuildingSpec(name, "service", w, h, court, wall, order, rank, feature="barracks")
+def _b(name: str, w: float, h: float, court: str, wall: str, order: int = 0, rank: int = 1, feature: str = "barracks") -> c.BuildingSpec:
+    return c.BuildingSpec(name, "service", w, h, court, wall, order, rank, feature=feature)
 
 
 def test_courtzone_and_placed_props() -> None:
@@ -226,21 +226,21 @@ def test_court_face_normal_points_into_the_court(wall: str, court: str, normal: 
 
 def test_point_features_follow_the_masses_and_skip_what_the_program_lacks() -> None:
     full = _prog(
-        _b("kitchen", 40.0, 30.0, "inner", "W", order=5),
-        _b("stables", 30.0, 20.0, "outer", "S", order=5),
+        _b("kitchen", 40.0, 30.0, "inner", "W", order=5, feature="kitchen"),
+        _b("stables", 30.0, 20.0, "outer", "S", order=5, feature="stables"),
         _b("barracks", 30.0, 30.0, "outer", "E", order=4),
-        _b("servants", 60.0, 14.0, "inner", "N", order=2),
-        _b("archive", 30.0, 26.0, "outer", "W", order=6),
+        _b("servants", 60.0, 14.0, "inner", "N", order=2, feature="servants' quarters"),
+        _b("archive", 30.0, 26.0, "outer", "W", order=6, feature="retainers' quarters"),
         spine=(c.CourtZone("garden", 60.0, 30.0, 80.0, 30.0),),
     )
     full = c.CompoundProgram(full.title, full.envelope, full.spine, (*full.buildings, c.BuildingSpec("kura", "kura", 30.0, 26.0, "outer", "W", order=1, feature="tax archive")))
     svg = c.emit_svg(full, c.place(full))
-    # two latrines: the bath abutting the kitchen (feature 267) takes the seat the servants' latrine had at their east end
-    assert svg.count(">well<") == 3 and svg.count(">latrine<") == 2 and ">bath<" in svg and ">notice board<" in svg and ">fire-water tubs<" in svg
-    # one at the kitchen, one at each other wooden building, none at the kura: every building here is kinded a barracks,
-    # so each seats its door first (feature 267) and the kitchen's face - bath, well and door - keeps room for one tub
+    # the privies are found by KIND (the servants' went unseated while matched by name, pass 4): one each at the
+    # barracks, the stables and the servants' quarters, on an end face where the court face is taken
+    assert svg.count(">well<") == 3 and svg.count(">latrine<") == 3 and ">bath<" in svg and ">notice board<" in svg and ">fire-water tubs<" in svg
+    # one at each wooden building, none at the kura; the kitchen's face - bath, well and door - keeps room for one
     assert _tub_circles(svg) == 5
-    bare = _prog(_b("hall", 40.0, 20.0, "outer", "divider", order=10))
+    bare = _prog(_b("hall", 40.0, 20.0, "outer", "divider", order=10, feature="office hall"))
     svg = c.emit_svg(bare, c.place(bare))
     assert ">well<" not in svg and ">latrine<" not in svg and ">bath<" not in svg and ">notice board<" in svg and _tub_circles(svg) == 1
 
@@ -252,8 +252,8 @@ def test_a_feature_with_no_clear_seat_is_left_out() -> None:
         _b("block", 60.0, 60.0, "inner", "W", order=8, rank=2),  # a rank-2 mass right behind the kitchen's face
     )
     result = c.place(boxed)
-    parts = c._point_features(boxed, result, lambda *a: "R", lambda *a: "L", 0.0, 0.0)
-    assert parts.count("R") <= 3  # at most the notice board and what still fits; no well squeezed into the block
+    parts = c._point_features(boxed, result, lambda *a: f"R:{a[8] if len(a) > 8 else ''}", lambda *a: "L", 0.0, 0.0)
+    assert "R:well" not in parts  # no well squeezed into the block
 
 
 def test_a_seat_that_would_leave_the_envelope_is_refused() -> None:
@@ -316,12 +316,12 @@ def test_a_roofed_court_is_drawn_with_a_solid_outline_and_posts() -> None:
     assert 'stroke="#5A3F1E" stroke-width="2.0"' in court
     posts = svg.split('<g fill="#5A3F1E" data-kind="hearing court">')[1].split("</g>")[0]
     assert posts.count("<rect") == 6
-    fore = next(ln for ln in svg.splitlines() if 'data-kind="outer court"' in ln and 'stroke="#9C7A40"' in ln)
-    assert 'stroke-width="0.8"' in fore  # an open court keeps the thin edge
+    fore = next(ln for ln in svg.splitlines() if 'data-kind="outer court"' in ln and "court-earth" in ln and "precinct" not in ln)
+    assert 'stroke="none"' in fore  # the forecourt is bare ground, unfenced (pass 4)
 
 
 def test_a_room_is_a_floor_inside_its_building() -> None:
-    hall = c.BuildingSpec("office hall", "lord", 60.0, 30.0, "outer", "divider", order=10, feature="office hall", rooms=(("clerks' room", 20.0, 15.0),))
+    hall = c.BuildingSpec("office hall", "lord", 60.0, 30.0, "outer", "divider", order=10, feature="office hall", rooms=(("clerks' room", 0.0, 0.0, 20.0, 15.0),))
     prog = _prog(hall)
     svg = c.emit_svg(prog, c.place(prog))
     from l7r.diagram.interactive.sheet import pieces
@@ -427,7 +427,7 @@ def test_the_middle_gate_opens_where_no_building_backs_the_divider() -> None:
 
 def test_wall_runs_break_for_each_gate_and_posts_stand_outside_the_passage() -> None:
     for side, at in (("W", 50.0), ("E", 60.0), ("N", 40.0)):
-        env = c.Envelope(200.0, 200.0, 100.0, 8.0, postern=(side, at, 6.0))
+        env = c.Envelope(200.0, 200.0, 100.0, 8.0, posterns=((side, at, 6.0),))
         runs = [r for r in cp._wall_runs(env) if r[0] == side]
         assert len(runs) == 2 and len(cp._wall_runs(env)) == 6
     env = c.Envelope(200.0, 200.0, 100.0, 8.0)
@@ -482,7 +482,7 @@ def test_no_roji_without_a_middle_gate_or_a_reception_veranda() -> None:
 
 def test_a_divider_building_with_a_veranda_gets_a_roji_from_the_outer_side() -> None:
     """The roji's first stone steps off the divider on the reception's own side: south of it for an outer-court host."""
-    host = c.BuildingSpec("hall", "lord", 60.0, 30.0, "outer", "S", feature="residence", rooms=(("reception room", 30.0, 25.0),), engawa_ft=5.0)
+    host = c.BuildingSpec("hall", "lord", 60.0, 30.0, "outer", "S", feature="residence", rooms=(("reception room", 0.0, 0.0, 30.0, 25.0),), engawa_ft=5.0)
     prog = _prog(host)
     parts: list[str] = []
     cp._roji_parts(prog, c.place(prog), [], lambda *a, **k: "R", parts, 0.0, 0.0)
@@ -507,7 +507,8 @@ def test_the_county_example_carries_the_program_the_outcomes_name() -> None:
     for kind in ("family quarters", "lord's quarters", "reception room", "engawa"):
         assert f'data-kind="{kind}"' in svg
     assert svg.count("<ellipse") >= 5 and ">hearing court<" in svg and ">servants' quarters<" in svg
-    assert svg.split('<g data-kind="cell">')[1].split("</g>")[0].count("<line") == 2
+    cell = next(p for p in result.placed if p.spec.kind == "cell")
+    assert svg.split('<g data-kind="cell">')[1].split("</g>")[0].count("<line") == len(cp._lattice(cell)) >= 3
     assert pa.tubs_in_buildings(plan) == [] and pa.floating_doors(plan) == []
 
 
@@ -531,3 +532,65 @@ def test_no_caption_but_its_own_stands_under_the_roofed_court() -> None:
     x1, y1 = x0 + court.w_ft * c.FTPX, y0 + court.h_ft * c.FTPX
     inside = [lb.text for lb in pa.parse_svg(svg).labels if x0 < lb.cx < x1 and y0 < lb.cy < y1]
     assert inside == ["hearing court"]
+
+
+# --- pass 4 (building-review round 3): privies by kind and zone, the dais, the lattice, the rear alley ---
+
+
+def _spec(court: str, wall: str, **kw: object) -> c.BuildingSpec:
+    return c.BuildingSpec("x", "lord", 40.0, 20.0, court, wall, feature="office hall", **kw)  # type: ignore[arg-type]
+
+
+def test_the_dais_is_centered_flush_inside_the_court_face() -> None:
+    dais = {"dais": (10.0, 4.0)}
+    assert cp._dais(c.Placed(_spec("outer", "divider", **dais), 0.0, 0.0)) == (15.0, 16.0, 25.0, 20.0)
+    assert cp._dais(c.Placed(_spec("outer", "S", **dais), 0.0, 0.0)) == (15.0, 0.0, 25.0, 4.0)
+    assert cp._dais(c.Placed(_spec("inner", "W", **dais), 0.0, 0.0)) == (36.0, 5.0, 40.0, 15.0)
+    assert cp._dais(c.Placed(_spec("inner", "E", **dais), 0.0, 0.0)) == (0.0, 5.0, 4.0, 15.0)
+
+
+def test_a_cells_lattice_bars_cross_its_court_face() -> None:
+    south = cp._lattice(c.Placed(_spec("inner", "N"), 0.0, 0.0))  # court face south, y 20, 40 ft long
+    assert len(south) == 19 and south[0] == (2.0, 20.0, 2.0, 18.5)
+    west = cp._lattice(c.Placed(_spec("outer", "E"), 0.0, 0.0))  # court face west, x 0, 20 ft long
+    assert len(west) == 9 and west[0] == (0.0, 2.0, 1.5, 2.0)
+
+
+def test_the_rear_band_is_the_ground_between_a_building_and_its_wall() -> None:
+    inset = {"inset_ft": 8.0}
+    assert cp._rear_band(c.Placed(_spec("inner", "N", **inset), 0.0, 10.0)) == (0.0, 2.0, 40.0, 8.0)
+    assert cp._rear_band(c.Placed(_spec("outer", "S", **inset), 0.0, 10.0)) == (0.0, 30.0, 40.0, 8.0)
+    assert cp._rear_band(c.Placed(_spec("inner", "W", **inset), 10.0, 0.0)) == (2.0, 0.0, 8.0, 20.0)
+    assert cp._rear_band(c.Placed(_spec("inner", "E", **inset), 10.0, 0.0)) == (50.0, 0.0, 8.0, 20.0)
+
+
+def test_an_attached_addition_starts_from_the_court_end_of_its_side() -> None:
+    env = _env()
+    home = c.Placed(_spec("inner", "N"), 50.0, 10.0)  # court south: the west side is searched from its south end
+    assert cp._attach(env, home, "W", 5.0, 5.0, []) == (45.0, 25.0)
+    assert cp._attach(env, home, "S", 5.0, 5.0, []) == (50.0, 30.0)  # a west-east side from its west end (court is not east)
+    east = c.Placed(_spec("inner", "W"), 10.0, 10.0)  # court east: a west-east side is searched from its east end
+    assert cp._attach(env, east, "N", 5.0, 5.0, []) == (45.0, 5.0)
+    assert cp._attach(env, home, "W", 5.0, 5.0, [(0.0, 0.0, 49.0, 200.0)]) is None
+
+
+def test_gap_between_boxes() -> None:
+    assert cp._gap((0.0, 0.0, 1.0, 1.0), (4.0, 5.0, 6.0, 6.0)) == 5.0
+    assert cp._gap((0.0, 0.0, 2.0, 2.0), (1.0, 1.0, 3.0, 3.0)) == 0.0
+
+
+def test_the_county_example_seats_a_privy_per_zone_clear_of_wells_courts_and_the_divider() -> None:
+    from l7r.diagram.tools import pack_audit as pa
+
+    prog, _result, svg = _county()
+    plan = pa.parse_svg(svg)
+    latrines = [r for r in plan.fills if r.fill == "#7E726A"]
+    assert len(latrines) == 4 and 'data-kind="latrine" data-part-of="residence"' in svg
+    for lat in latrines:
+        for w in plan.wells:
+            assert cp._gap((lat.x, lat.y, lat.x2, lat.y2), (w.x, w.y, w.x2, w.y2)) / c.FTPX >= cp.LATRINE_WELL_FT
+        for z in prog.spine:
+            zx, zy = 7.0 * c.FTPX + z.x_ft * c.FTPX, 15.0 * c.FTPX + z.y_ft * c.FTPX
+            assert not c._rect_overlap(lat.x, lat.y, lat.w, lat.h, zx, zy, z.w_ft * c.FTPX, z.h_ft * c.FTPX), z.name
+    assert svg.count('data-kind="side gate"') == 2 and 'data-kind="magistrate\'s dais"' in svg and 'data-kind="cart yard"' in svg
+    assert ">residence<" in svg and "senior retainers'" in svg  # the retainers' name wraps over two lines

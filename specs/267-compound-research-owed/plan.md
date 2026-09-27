@@ -38,21 +38,28 @@ kinds and the sheets its outcomes bear on, which the research sessions do not to
   sheets taking different forms where the record allows it.
 - **D7 - The GM's items go through `escalation-check`** (FR-008), with any research result the GM must rule on.
 - **D8 - `future-work/compounds.md` "Research owed" is rewritten at the end** to what remains, each with why (FR-007).
-- **D9 - The placer's hand-sheet path is fixed and the three revised sheets are seated at the standard** (2026-09-27,
+- **D9 - The placer's hand-sheet path is fixed and the revised sheets are seated at the standard** (2026-09-27,
   after spec-fidelity BLOCKED the first D9 - re-taking the three sheets into feature 266's caption ledger - as an
-  exception to 266 FR-013 that the GM's request does not support). Revising a sheet takes it off the ledger and holds
-  every caption to the one placer's standard seat, so the placer was fixed until it can: `make seat-label WRITE=1`
-  converges in one call and a second call finds 0 captions off seat on Ochiba (48), Hayakawa (64) and Ubame (61). The
-  defects fixed, each with a unit test (`tests/tools/test_seat_label.py`, `test_seat_label_hand.py`): a self-tagged
-  caption kept its `data-kind` and letter-spacing; side-by-side names in one group are separate captions (stacking by
-  shared width); a group naming several things gives each name its own shape; leaders are matched and moved; a
-  caption in a transformed group is written in its parent frame, a rotated one along its band; a face's width follows
-  caps, bold and spacing; ground drawn after a caption covers it; the rewrite loops to a fixed point; where no seat is
-  free, the caption's own seat is a candidate and kept when it costs no more (the standard's least-cost rule applied
-  to a hand sheet). The seated sheets then had to pass every `pack_audit` check, which found three reading defects
-  in the audit itself, fixed there: a wrapped caption's tspans and a quarter-turned label are read as drawn, a tagged
-  caption is paired with a structure of its own kind, and a group label is measured from its glyph's edge. The three
-  entries are removed from `tests/fixtures/caption_ledger.json`; Hoshigaoka's, unchanged, stays.
+  exception to 266 FR-013 that the GM's request does not support, and then blocked keeping a hand seat on a TIE).
+  Revising a sheet takes it off the ledger and holds every caption to the one placer's standard seat, so the placer
+  was fixed until it can. Measured 2026-09-27 on the tree (`make seat-label SHEET=<sheet>`, then `WRITE=1` twice and a
+  byte compare): Ochiba 48 captions, Hayakawa 62, Ubame 60, each 0 off seat, each second write byte-identical; every
+  `make pack-audit` check green on all three. The placer's rules, each with a unit test (`tests/tools/test_seat_label.py`,
+  `test_seat_label_hand.py`): a self-tagged caption keeps its `data-kind`, letter-spacing and parent frame; side-by-side
+  names in one group are separate captions; a group naming several things gives each name its own shape; a leader is
+  matched to the caption it reaches; a face's width follows caps, bold and spacing; the rewrite loops to a fixed
+  point. Ink is weighed as a reader meets it: ink INSIDE what a caption names is ink it avoids (`Obstacle.inner`; a
+  generated map sets none, so the settlement engine is unchanged), a ground's drawn border is ink, dark ink weighs
+  double, anything painted after a caption weighs as much as another name (it hides it), and the building that holds
+  a named room is waived for that room's name; a light name set down off its dark roof takes the dark caption ink.
+  Where no seat is free, the caption's own seat is kept ONLY when it covers strictly less than the standard's pick; a
+  tie goes to the standard's own order (266 FR-007: the nearer ring, then rank). The seated sheets then had to pass
+  every `pack_audit` check, which found reading defects in the audit, fixed there: a wrapped caption's tspans and a
+  quarter-turned label are read as drawn, a tagged caption is paired with a structure of its own kind, and a group
+  label is measured from its glyph's edge. Five captions had no seat at all and were changed by hand, each recorded
+  in its sheet: Ubame's OUTER COURT dropped (no seat clears its buildings), Hayakawa's shrine note and Ubame's
+  "(his letters)" moved to the notes and the page, two sub-lines wrapped. Hoshigaoka moved 3 px under the tie rule.
+  `tests/fixtures/caption_ledger.json` is empty.
 
 ## Constitution check
 

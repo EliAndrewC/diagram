@@ -40,6 +40,7 @@ COURT_FILL: dict[str, str] = {
     "oshirasu": "url(#oshirasu-sand)",
     "garden": "url(#garden-stipple)",
     "yard": "url(#court-earth)",
+    "cart yard": "url(#court-earth)",
     "practice ground": "url(#keiko-earth)",  # swept keiko earth (buildings.md "Practice ground")
 }
 # A court that is ROOFED is drawn with a building's solid outline (stroke, width) and posts along its open side
@@ -79,13 +80,18 @@ DOOR_W_FT, DOOR_D_FT = 6.0, 4.0 / 3.0
 # buildings 370); the residence's is the household's inner entrance, apart from the kitchen's (370 again) - the guest's
 # way is the middle gate and the roji to the reception's veranda (R07, research buildings 300), so the residence
 # carries no genkan. `BuildingSpec.door_face` sets the face a door goes on; the court face otherwise.
-DOOR_KINDS: frozenset[str] = frozenset({"residence", "kitchen", "karo's house", "guest quarters", "retainers' quarters", "barracks", "servants' quarters", "gatehouse"})
+DOOR_KINDS: frozenset[str] = frozenset({"office hall", "residence", "kitchen", "karo's house", "guest quarters", "retainers' quarters", "barracks", "servants' quarters", "gatehouse"})
 # The fracs along a face a door is tried at, the middle first: a tub or a well holds a face's ends or middle.
 DOOR_FRACS: tuple[float, ...] = (0.5, 0.3, 0.7, 0.2, 0.8, 0.1, 0.9)
 # The stepping stones of the roji from the middle gate to the reception's veranda (R07): one stone every 4.5 ft, each
 # ~2 x 1.33 ft, and the shoe stone (kutsunugi-ishi) at the veranda 4 x 1.67 ft - the spacing and sizes a GUESS, drawn
 # as Hayakawa draws its roji.
 STONE_STEP_FT: float = 4.5
+# A privy (latrine) is drawn 5 ft square, a one-seat outhouse (the size the drafts have always drawn; a GUESS). One stands
+# no nearer a well than LATRINE_WELL_FT: 15 ft is a GUESS - no separation distance was read; the hand sheets' reviews
+# moved a stable-yard privy ~27 ft off its well (Ubame, 2026-07-25), and the draft's stood 5 ft from its well.
+PRIVY_FT: float = 5.0
+LATRINE_WELL_FT: float = 15.0
 
 
 @dataclass(frozen=True)
@@ -100,9 +106,10 @@ class Envelope:
     # The middle gate (nakamon) in the divider: its passage, narrower than the main gate (buildings/programs.md "Two-court
     # zoning": a household door, ~6-8 ft; the audit's `two_court_zoning` requires one). 6 ft is Ochiba's; 0 draws none.
     middle_gate_w_ft: float = 6.0
-    # A service postern in the compound wall: (wall "N"|"E"|"W", its center along that wall in ft, its passage in ft) -
-    # the kitchen postern that keeps deliveries and night-soil off the hearing court (buildings/programs.md). None: none.
-    postern: tuple[str, float, float] | None = None
+    # The lesser gates in the compound wall: (wall "N"|"S"|"E"|"W", its center along that wall in ft, its passage in ft)
+    # each - the kitchen postern that keeps deliveries and night-soil off the hearing court, and the outer court's
+    # service gate for muck and prisoners (buildings/programs.md "Walled enclosure").
+    posterns: tuple[tuple[str, float, float], ...] = ()
 
 
 @dataclass(frozen=True)
@@ -141,11 +148,19 @@ class BuildingSpec:
     # refuses a building without one, naming it - a draft with an unkinded building would be a page with
     # ink nobody ruled on.
     feature: str = ""
-    # ROOMS OF THE BUILDING (feature 267): (kind, w_ft, h_ft) floors drawn INSIDE it, west to east from its NW corner,
-    # the way the hand sheets draw a room (feature 264): the building's fill, one same-color floor per room tagged
-    # with the room's kind, then the building's outline on top - so the page files the room as a part of the
-    # building. A room is never placed; it takes ground its building already holds.
-    rooms: tuple[tuple[str, float, float], ...] = ()
+    # ROOMS OF THE BUILDING (feature 267): (kind, x_off, y_off, w_ft, h_ft) floors drawn INSIDE it, offset from its NW
+    # corner, the way the hand sheets draw a room (feature 264): the building's fill, one same-color floor per room
+    # tagged with the room's kind, then the building's outline on top - so the page files the room as a part of the
+    # building. A room is never placed; it takes ground its building already holds. Positioned rather than run in one
+    # row since pass 4, so a house can be massed in two rows front and back (the one-room-deep bar was the review's).
+    rooms: tuple[tuple[str, float, float, float, float], ...] = ()
+    # The magistrate's DAIS (w_ft, d_ft): a band flush inside the court face, centered on the building - the office
+    # hall's front band overlooking the hearing court (buildings/programs.md "The office hall is the compound's working
+    # heart"; buildings.md "Office hall (with dais band)"). (0, 0): none.
+    dais: tuple[float, float] = (0.0, 0.0)
+    # Stand this many feet further off its wall than the wall's ink requires: the residence's rear alley (research
+    # buildings 230 'The shady rear is the service strip': the north band narrowed to a ~6-10 ft cart/servant alley).
+    inset_ft: float = 0.0
     # A VERANDA (engawa) along the building's court face, this deep, drawn inside its footprint as a part of it
     # (feature 267 R01: the veranda runs along the garden face; 3-6 ft). 0: none.
     engawa_ft: float = 0.0

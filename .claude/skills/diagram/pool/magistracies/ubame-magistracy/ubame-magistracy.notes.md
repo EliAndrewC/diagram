@@ -89,6 +89,7 @@ Ubame's wealth is charcoal and the iron smelted beside it, not rice, so the oute
 
 ## Review log
 
+- **2026-09-27 (feature 267 pass 4, building-review round 3)**: every caption re-seated by the one placer (`make seat-label`) after its hand-sheet path was fixed; `inner garden` now clear of the roji. By hand: `forecourt` given the apron between the hearing court and the gate range as its own unfilled ground; OUTER COURT dropped - no seat in the outer court clears its buildings (the band under the divider is 22 px against a 13 px name and its clearance) and the standard's least-cost seat was the hearing court's roof; the page names the court under the pointer; `fire-water tubs` grouped with the tub it stands by (self-tagged, it flipped between two tubs); the writing pavilion's `(his letters)` left the sheet for these notes (as a third line the name overran the pavilion). The two blank lines before `steelyard` removed.
 - **2026-09-27 (feature 267 pass 3, building-review round 2)**: the middle gate moved from behind the office hall (x 513-537, reached only by ~150 ft of back alley past the garrison) to the head of the east walk (x 690-714), so the guest's route is main gate - forecourt - east walk - middle gate - a short roji to the reception (the Koseki form, buildings 300); the old opening kept as a 6 ft household door; the practice ground's west edge drawn back 20 px (1,452 -> 1,283 sqft, still in the band) so the walk runs clear, and the barracks' tub moved off it to the rowhouse's south face; the roji walled in an L by a low earthen wall (buildings 300: "a walled garden path"; its form a guess); the stepping stones redrawn at a 2.2 ft stride, the shoe stone at the reception's middle; a door for the gate range's west room onto the passage; a "dry garden" caption; the kitchen corridor made an L landing on the family quarters' veranda, the bath moved south of it and the karo's house 4 ft east to keep an alley beside the bath (the steam wisps dropped - they would cross the corridor); the mats' sizes and the charcoal bales' convention recorded under point glyphs.
 
 
@@ -138,7 +139,5 @@ Ubame's wealth is charcoal and the iron smelted beside it, not rice, so the oute
 - **kitchen**: The kamado stands on a small earth floor (doma) inside the kitchen, where the service door opens; a short covered corridor joins the kitchen to the family quarters.
 - **hearing court**: White gravel under the court's roof.
 - **striking posts**: A knee-high bundle of branches laid across, not an upright post; drawing it at a period practice ground is a guess, since the bundle is attested only as a present-day practice.
-
-
 - **steelyard**: The charcoal bales are weighed on a steelyard, a 6 ft beam hung near its hook end, before the tally is written.
 - **fire-water tubs**: Nineteen tubs for about nineteen wooden buildings, two of them at the kitchen; the two plaster kura carry none.

@@ -12,6 +12,7 @@ from .compound_model import (
     BATH_H_FT,
     BATH_W_FT,
     CORRIDOR_W_FT,
+    DIVIDER_INK_FT,
     DOOR_D_FT,
     DOOR_FRACS,
     DOOR_KINDS,
@@ -20,6 +21,8 @@ from .compound_model import (
     FTPX,
     GATE_POST_W_FT,
     KINDS,
+    LATRINE_WELL_FT,
+    PRIVY_FT,
     ROOF_POST_BAY_FT,
     ROOF_POST_FT,
     ROOFED_ZONES,
@@ -88,22 +91,16 @@ def _middle_gate(env: Envelope, placed: list[Placed]) -> tuple[float, float] | N
 
 def _wall_runs(env: Envelope) -> list[tuple[str, float, float, float, float]]:
     """The compound wall as (side, x1, y1, x2, y2) runs in feet, each broken where a gate passes through it: the main gate
-    in the south wall, the postern (`Envelope.postern`) in its own."""
+    in the south wall, each postern (`Envelope.posterns`) in its own."""
     runs = {"N": (0.0, 0.0, env.w_ft, 0.0), "W": (0.0, 0.0, 0.0, env.h_ft), "E": (env.w_ft, 0.0, env.w_ft, env.h_ft), "S": (0.0, env.h_ft, env.w_ft, env.h_ft)}
-    gaps = {"S": _gate_interval(env)}
-    if env.postern:
-        side, at, w = env.postern
-        gaps[side] = (at - w / 2, at + w / 2)
+    gaps: dict[str, list[tuple[float, float]]] = {"S": [_gate_interval(env)]}
+    for side, at, w in env.posterns:
+        gaps.setdefault(side, []).append((at - w / 2, at + w / 2))
     out: list[tuple[str, float, float, float, float]] = []
     for side, (x1, y1, x2, y2) in runs.items():
-        if side not in gaps:
-            out.append((side, x1, y1, x2, y2))
-            continue
-        lo, hi = gaps[side]
-        if y1 == y2:
-            out += [(side, x1, y1, lo, y2), (side, hi, y1, x2, y2)]
-        else:
-            out += [(side, x1, y1, x2, lo), (side, x1, hi, x2, y2)]
+        cuts = [x1 if y1 == y2 else y1, *[v for gap in sorted(gaps.get(side, [])) for v in gap], x2 if y1 == y2 else y2]
+        for lo, hi in zip(cuts[::2], cuts[1::2], strict=True):
+            out.append((side, lo, y1, hi, y2) if y1 == y2 else (side, x1, lo, x2, hi))
     return out
 
 
@@ -119,6 +116,36 @@ def _engawa(p: Placed) -> Box:
     """The veranda strip along a building's court face, inside its footprint (`BuildingSpec.engawa_ft`)."""
     e = p.spec.engawa_ft
     return {"S": (p.x_ft, p.y2 - e, p.x2, p.y2), "N": (p.x_ft, p.y_ft, p.x2, p.y_ft + e), "W": (p.x_ft, p.y_ft, p.x_ft + e, p.y2), "E": (p.x2 - e, p.y_ft, p.x2, p.y2)}[_court_side(p)]
+
+
+def _dais(p: Placed) -> Box:
+    """The dais band (`BuildingSpec.dais`): flush inside the court face, centered along it."""
+    w, d = p.spec.dais
+    side = _court_side(p)
+    if side in ("N", "S"):
+        x0 = (p.x_ft + p.x2 - w) / 2
+        return (x0, p.y2 - d, x0 + w, p.y2) if side == "S" else (x0, p.y_ft, x0 + w, p.y_ft + d)
+    y0 = (p.y_ft + p.y2 - w) / 2
+    return (p.x2 - d, y0, p.x2, y0 + w) if side == "E" else (p.x_ft, y0, p.x_ft + d, y0 + w)
+
+
+def _lattice(p: Placed) -> list[Box]:
+    """A cell's lattice front as (x1, y1, x2, y2) bars: 1.5 ft long, across its court face, every 2 ft along it."""
+    nx, ny, fx, fy, length = _face(p, _court_side(p))
+    out: list[Box] = []
+    for i in range(1, int(length / 2.0)):
+        a = i * 2.0
+        if ny:
+            out.append((fx + a, fy, fx + a, fy - 1.5 * ny))
+        else:
+            out.append((fx, fy + a, fx - 1.5 * nx, fy + a))
+    return out
+
+
+def _rear_band(p: Placed) -> tuple[float, float, float, float]:
+    """The strip (x, y, w, h) between a building and the wall it stands `inset_ft` off - its rear alley."""
+    d = p.spec.inset_ft
+    return {"S": (p.x_ft, p.y_ft - d, p.spec.w_ft, d), "N": (p.x_ft, p.y2, p.spec.w_ft, d), "E": (p.x_ft - d, p.y_ft, d, p.spec.h_ft), "W": (p.x2, p.y_ft, d, p.spec.h_ft)}[_court_side(p)]
 
 
 def _door(env: Envelope, p: Placed, boxes: list[Box]) -> tuple[Box, Box] | None:
@@ -139,6 +166,28 @@ def _door(env: Envelope, p: Placed, boxes: list[Box]) -> tuple[Box, Box] | None:
         if door[0] >= p.x_ft and door[2] <= p.x2 and door[1] >= p.y_ft and door[3] <= p.y2 and _is_clear(env, boxes, ax, ay, aw, ah, 0.0):
             return door, (ax, ay, ax + aw, ay + ah)
     return None
+
+
+def _gap(a: Box, b: Box) -> float:
+    """The clear distance between two boxes (0 where they touch or overlap)."""
+    dx = max(b[0] - a[2], a[0] - b[2], 0.0)
+    dy = max(b[1] - a[3], a[1] - b[3], 0.0)
+    return (dx * dx + dy * dy) ** 0.5
+
+
+def _attach(env: Envelope, p: Placed, side: str, w: float, h: float, boxes: list[Box]) -> tuple[float, float] | None:
+    """The top-left of a w x h addition flush against `side` of `p`, the first clear foot along it from the end nearest
+    `p`'s court (an attached privy stands toward the yard its cesspit is emptied from, not the back); None where the
+    side has no clear run. `boxes` are what it must clear (never `p` itself)."""
+    nx, ny, fx, fy, length = _face(p, side)
+    run = w if ny else h
+    court = _court_side(p)
+    # the court end: the south end of a north-south side when the court lies south, the east end of a west-east side
+    # when it lies east; otherwise the side's start
+    from_far = (court == "S" and not ny) or (court == "E" and bool(ny))
+    steps = [length - run - s if from_far else s for s in range(int(length - run) + 1)]
+    seats = [(fx + s, fy if ny > 0 else fy - h) for s in steps] if ny else [(fx if nx > 0 else fx - w, fy + s) for s in steps]
+    return next(((x, y) for x, y in seats if _is_clear(env, boxes, x, y, w, h)), None)
 
 
 def _roji(start: tuple[float, float], end: tuple[float, float], boxes: list[Box]) -> list[tuple[float, float]]:
@@ -216,25 +265,27 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
     # a ROOFED court is a footprint like a building's (ROOFED_ZONES): no tub, well or privy stands under its roof - a
     # tub there is fed by no gutter (the office hall's stood inside the hearing court until feature 267's pass 3)
     taken += [(z.x_ft, z.y_ft, z.x2, z.y2) for z in program.spine if z.name in ROOFED_ZONES]
+    # the divider's ink is a wall's: nothing seated stands in it (the round-trip draft's garrison privy, seated on the
+    # barracks' north end face, reached 2 ft into it)
+    taken.append((0.0, env.divider_ft - DIVIDER_INK_FT / 2, env.w_ft, env.divider_ft + DIVIDER_INK_FT / 2))
     by_name = {p.spec.name: p for p in result.placed}
 
-    def clear(x: float, y: float, w: float, h: float, margin: float = 1.0) -> bool:
-        return _is_clear(env, taken, x, y, w, h, margin)
-
-    def seat(p: Placed, size: float, fracs: tuple[float, ...], offs: tuple[float, ...]) -> tuple[float, float] | None:
-        """The center of a `size`-square feature against `p`'s court face: the first clear (frac, off)."""
-        nx, ny, fx, fy = _court_face(p, env)
+    def seat(p: Placed, size: float, fracs: tuple[float, ...], offs: tuple[float, ...], side: str = "", avoid: tuple[Box, ...] = (), block: tuple[Box, ...] = ()) -> tuple[float, float] | None:
+        """The center of a `size`-square feature against a side of `p` (its court face unless `side` names another):
+        the first clear (frac, off) - clear of `block` too - and at least LATRINE_WELL_FT off every `avoid` box."""
+        nx, ny, fx, fy, length = _face(p, side or _court_side(p))
         for off in offs:
             for frac in fracs:
-                cx, cy = (fx + p.spec.w_ft * frac, fy + ny * off) if ny else (fx + nx * off, fy + p.spec.h_ft * frac)
-                if clear(cx - size / 2, cy - size / 2, size, size):
-                    taken.append((cx - size / 2, cy - size / 2, cx + size / 2, cy + size / 2))
+                cx, cy = (fx + length * frac, fy + ny * off) if ny else (fx + nx * off, fy + length * frac)
+                box = (cx - size / 2, cy - size / 2, cx + size / 2, cy + size / 2)
+                if _is_clear(env, taken + list(block), box[0], box[1], size, size) and all(_gap(box, a) >= LATRINE_WELL_FT for a in avoid):
+                    taken.append(box)
                     return cx, cy
         return None
 
     tubs: list[tuple[float, float]] = []
     wells: list[tuple[float, float]] = []
-    privies: list[tuple[float, float]] = []
+    privies: list[tuple[float, float, str]] = []  # center, and the building it is a part of (an attached privy)
     # The kitchen is part of the house: a short covered corridor joins it to the residence where they face each other
     # across a fire-gap (CORRIDOR_W_FT), drawn as a part of the residence
     if "kitchen" in by_name and "residence" in by_name and (cor := _corridor(by_name["kitchen"], by_name["residence"], CORRIDOR_W_FT, FIRE_GAP_FT)):
@@ -244,8 +295,8 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
     # The bath is a small addition abutting the kitchen's court face - the house's service side (BATH_W_FT); seated
     # before the wells so the kitchen well takes what the bath leaves, and clear of every spine court, since a bath in
     # the garden is the pavilion the research does not find
+    zones = [(z.x_ft, z.y_ft, z.x2, z.y2) for z in program.spine]
     if "kitchen" in by_name:
-        zones = [(z.x_ft, z.y_ft, z.x2, z.y2) for z in program.spine]
         host = by_name["kitchen"]
         others = [t for t in taken if t != (host.x_ft, host.y_ft, host.x2, host.y2)]
         if bath := _abut(env, host, BATH_W_FT, BATH_H_FT, others + zones):
@@ -256,8 +307,8 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
     # wells next: they take the middle of a face. A kitchen well may stand as far as 20 ft out - past the bath that
     # abuts the kitchen, serving both, as the Takayama residence's bath stood with its well and kitchen (research
     # buildings 320); the nearer seats are tried first
-    for name in ("kitchen", "stables"):
-        if name in by_name and (w := seat(by_name[name], 7.3, (0.5, 0.3, 0.7), (9.0, 12.0, 15.0, 20.0))):
+    for p in result.placed:
+        if p.spec.feature in ("kitchen", "stables") and (w := seat(p, 7.3, (0.5, 0.3, 0.7), (9.0, 12.0, 15.0, 20.0))):
             wells.append(w)
     for z in program.spine:
         if z.name == "garden":
@@ -265,9 +316,31 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
             # west end it stood 8 ft from the kitchen well seated past the bath, and read as its duplicate
             wells.append((z.x2 - 5.0, z.y_ft + 5.0))
             taken.append((z.x2 - 8.65, z.y_ft + 1.35, z.x2 - 1.35, z.y_ft + 8.65))
-    for name in ("barracks", "stables", "servants"):
-        if name in by_name and (v := seat(by_name[name], 5.0, (0.85, 0.15, 0.5), (4.5, 7.0))):
-            privies.append(v)
+    # THE PRIVIES (feature 267 pass 4, building-review round 3: one per zone, the family's attached to the house -
+    # research buildings 220 'Privies attach to the house; night-soil drives their placement'). The family's is an
+    # addition flush against the residence's door face at its garden end, by the inner entrance and nearest the kitchen
+    # postern the night-soil leaves by. The servants', the stables' and the garrison's stand by their buildings: on the
+    # court face, else on an end face at its wall end - never on a spine court (a latrine stood inside the practice
+    # ground) and never within LATRINE_WELL_FT of a well (the stables' stood 5 ft from theirs).
+    if "residence" in by_name:
+        home = by_name["residence"]
+        others = [t for t in taken if t != (home.x_ft, home.y_ft, home.x2, home.y2)]
+        if attached := _attach(env, home, home.spec.door_face or _court_side(home), PRIVY_FT, PRIVY_FT, others + zones):
+            ax, ay = attached
+            taken.append((ax, ay, ax + PRIVY_FT, ay + PRIVY_FT))
+            privies.append((ax + PRIVY_FT / 2, ay + PRIVY_FT / 2, "residence"))
+    well_boxes = tuple((wx - 3.65, wy - 3.65, wx + 3.65, wy + 3.65) for wx, wy in wells)
+    for p in result.placed:
+        if p.spec.feature not in ("servants' quarters", "stables", "barracks"):
+            continue
+        court = _court_side(p)
+        wall = {"N": "S", "S": "N", "E": "W", "W": "E"}[court]
+        ends = ("E", "W") if court in ("N", "S") else ("N", "S")
+        toward_wall = (0.85, 0.5, 0.15) if wall in ("S", "E") else (0.15, 0.5, 0.85)
+        for side, fracs in ((court, (0.85, 0.15, 0.5)), (ends[0], toward_wall), (ends[1], toward_wall)):
+            if v := seat(p, PRIVY_FT, fracs, (4.5, 7.0), side, well_boxes, tuple(zones)):
+                privies.append((*v, ""))
+                break
     # a door on each lodging block's face (DOOR_KINDS, `_door`), a part of its building: seated after the bath, the
     # wells and the privies and BEFORE the tubs, which have seats to spare - the kitchen's two tubs had taken every
     # run of its face a door could open on. The door and the ground before it are held clear of what follows.
@@ -287,8 +360,8 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
     for cx, cy in wells:
         parts.append(rect(cx - 3.65, cy - 3.65, 7.3, 7.3, "#9C8C70", "#5C4830", 1.2, "", "well"))
         caption("point", cx - 3.65, cy - 3.65, 7.3, 7.3, "well", 8, True, "#3A2E1C", "well")
-    for cx, cy in privies:
-        parts.append(rect(cx - 2.5, cy - 2.5, 5.0, 5.0, "#7E726A", "#4A3318", 0.8, "", "latrine"))
+    for cx, cy, whole in privies:
+        parts.append(rect(cx - 2.5, cy - 2.5, 5.0, 5.0, "#7E726A", "#4A3318", 0.8, "", "latrine", whole))
         caption("point", cx - 2.5, cy - 2.5, 5.0, 5.0, "latrine", 7, True, "#3A2E1C", "latrine")
     if tubs:
         parts.append('<g fill="#8FB0C6" stroke="#3A5060" stroke-width="1" data-kind="fire-water tubs">')
@@ -313,11 +386,10 @@ def _roji_parts(program: CompoundProgram, result: PlaceResult, taken: list[Box],
     building with a `reception room` and an engawa. The stones are a part of the garden they cross (Hayakawa's form)."""
     env = program.envelope
     mid = _middle_gate(env, result.placed)
-    host = next((p for p in result.placed if p.spec.engawa_ft and any(k == "reception room" for k, _w, _h in p.spec.rooms)), None)
+    host = next((p for p in result.placed if p.spec.engawa_ft and any(r[0] == "reception room" for r in p.spec.rooms)), None)
     if mid is None or host is None:
         return
-    rx = host.x_ft + sum(w for _k, w, _h in host.spec.rooms[: [k for k, _w, _h in host.spec.rooms].index("reception room")])
-    rw = next(w for k, w, _h in host.spec.rooms if k == "reception room")
+    rx, rw = next((host.x_ft + x, w) for k, x, _y, w, _h in host.spec.rooms if k == "reception room")
     _nx, ny, _fx, fy = _court_face(host, env)
     shoe = (rx + rw / 2 - 2.0, fy + (0.0 if ny > 0 else -1.67), 4.0, 1.67)
     gate = ((mid[0] + mid[1]) / 2, env.divider_ft + (-2.5 if host.spec.court == "inner" else 2.5))

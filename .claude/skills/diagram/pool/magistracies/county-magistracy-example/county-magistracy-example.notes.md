@@ -16,10 +16,19 @@ The forms the draft takes where the research gives more than one (feature 267 ou
 
 - **R01 veranda**: the garden face alone (the first of the two forms), 5 ft wide - an `engawa` strip inside the
   residence's south face (research buildings 240: 3-6 ft).
-- **R02 residence massing**: one block under one roof, the ordinary form; the kitchen joined to it by a short covered
-  corridor, not an echelon of halls (research buildings 250, 360/370).
-- **R03 room order**: the palace order's lesser form - the family's rooms at the kitchen (west) end, the master's
-  next, the reception room at the east END, nearest the middle gate (research buildings 260). Room widths are GUESSES.
+- **R02 residence massing**: one block under one roof, the ordinary form, massed in TWO ROWS of rooms front and back
+  (as pass 2 re-massed Ochiba's, forms.md; the Kuchiba house's two rows, research buildings 260); the kitchen joined
+  to it by a short covered corridor, not an echelon of halls (research buildings 250, 360/370).
+- **R03 room order**: the palace order's lesser form - the reception room at the east END, the full depth, nearest the
+  middle gate; the master's rooms beside it on the garden row; the family's beyond, on the garden row by the kitchen,
+  with the inner rooms behind (research buildings 260). Room sizes are GUESSES.
+- **Rear of the house**: the residence stands 8 ft off the north wall - the rear band narrowed to a cart/servant
+  alley, one of research buildings 230's two forms (the other a service strip with the servants' row and a privy);
+  the example's service side is the kitchen yard at the house's west end.
+- **Residence size**: research buildings 380 governs a house's size (49 tsubo, ~1,740 sq ft, at middle rank; 67 tsubo,
+  ~2,380 sq ft, for a 500-1,000 koku retainer). The example's 92 x 36 ft (3,312 sq ft with its veranda) is a GUESS a
+  size above both, for a county magistrate's household; the "about 180 to 200 ft" in the residence's kind entry is the
+  length of the hand sheets' two-block wings, not a figure for a house.
 - **R07 approach**: no genkan; the middle gate in the divider and a stepping-stone roji across the garden to a shoe
   stone at the reception's veranda (the Koseki form, research buildings 300). The household's own doors: the kitchen's
   one outside door on its south (yard) face and the residence's inner entrance on its west face, below the corridor
@@ -33,16 +42,32 @@ The forms the draft takes where the research gives more than one (feature 267 ou
   sand are left to the hand refinement.
 - **R34 striking posts**: two upright posts as location markers (the ~4.5 ft standing timber); the practice-weapon rack
   at the ground's edge is a GUESS.
-- **Staff housing**: option (a) - the platoon in the barracks, the senior retainers in their own quarters and the karo
-  in a house, all inside the walls (buildings/programs.md knob 5).
+- **Staff housing**: option (a) of buildings/programs.md knob 5 - everyone lives inside the walls, the platoon in the
+  barracks - WITH A DEVIATION from its letter ("everyone in the barracks and residence wing"): the senior retainers
+  have quarters of their own and the karo a house of their own, because buildings.md ("Only the lord's household lives
+  here") gives a chief retainer and senior retainers separate structures, never bays of the lord's wing. The karo's
+  house of its own is itself a GUESS (R11, below).
 - **Tenure**: a freshly appointed, standardized office - no ancestral alcove, no accreted particulars (knob 6).
+- **Compound shrine**: a modest shrine, 18 x 14 ft (a GUESS in the 40-1,150 sq ft band) - the hall-shrine ceiling of
+  ~36 x 30 ft is Ochiba's particular, not the generic post's (buildings/programs.md: "The shrine is universal
+  equipment ... Scale and dedication are the per-manor particular").
+- **Middle gate**: beside the office hall's east end, not behind it (buildings/programs.md puts it customarily on the
+  main axis behind the hall, the hall as the privacy baffle). Here the hall backs the divider at 1.5 ft with no alley
+  behind it, and it stands west of the main axis (the tax archive takes the west end), so the placer opens the gate at
+  the first stretch of divider no building backs (`compound_parts._middle_gate`); the hall still screens the house
+  from the hearing court. A deliberate DEVIATION from the customary seat, recorded.
+- **Lesser gates**: the kitchen postern in the west wall (6 ft) and the outer court's service gate in the south wall
+  by the cell (6 ft), at the head of the cart yard - muck, night-soil and prisoners skip the ceremonial gate.
 
 Guesses the draft carries beyond those: a **detached guest house** (R10, research buildings 330: guests were received
 in the main house; a guest house apart was not found) and a **karo's house of its own** inside the compound (R11,
 research buildings 340: the intendancy's staff lived in small houses or long-house bays; a chief retainer's own house
-there was not found). The kitchen postern's 6 ft and the middle gate's 6 ft (narrower than the main gate), the door
-width (a map drawing convention, research buildings 620), the roji's stone spacing, the hearing court's 80 x 36 ft
-and the garden's 172 x 42 ft are guesses too.
+there was not found). The kitchen postern's, the service gate's and the middle gate's 6 ft (narrower than the main
+gate), the door width (a map drawing convention, research buildings 620), the roji's stone spacing, the hearing
+court's 80 x 36 ft, the garden's 172 x 36 ft, the dais's 30 x 10 ft, the cart yard's 62 x 27 ft, the 5 ft privies and
+their 15 ft from any well are guesses too. The forecourt, the `outer court` ground beside the hearing court and the
+cart yard are drawn as bare ground with no edge: an outlined forecourt read as a fenced one, a GUESS the record does
+not support (research buildings 300).
 
 Purpose: demonstrate that the toolchain can get the COMPOSITION right - buildings ring the
 walls (78% perimeter-hugging, pack_audit 2026-09-27), the garden -> oshirasu -> forecourt court-spine is held open
@@ -53,8 +78,8 @@ adjacent lodging's wall), coverage lands in the jin'ya band (35%, pack_audit 202
 SCAFFOLD: a real magistracy starts from a draft like this and is hand-refined into a final
 pool SVG (particulars, relics, annotations, the scale bar, and the crop are added by hand).
 
-Not run through building-review / size-audit as a finished map (it is a placer example, not a
-finished instance); the packing/composition metrics are checked via pack_audit.
+Reviewed by building-review from pass 3 on (the Review log below); the packing/composition metrics are checked via
+pack_audit.
 
 2026-07-24 wall-ink clearance: regenerated after `compound.py` stopped seating wall-hugging
 buildings on the wall CENTERLINE. The wall is drawn at true thickness centered on the
@@ -80,7 +105,8 @@ reason and research section at the point of change):
   pavilion in the garden. To give it that face, the garden's west edge moved 50 -> 72 ft; the kitchen well now
   stands just past the bath (up to 20 ft off the kitchen, serving both), and the garden well moved to the garden's
   east end so the two wells do not read as a pair. One of the servants' latrine seats in the unit fixture is taken
-  by the bath; on this sheet all three latrines still seat.
+  by the bath. (Pass 4: the servants' latrine had in fact stopped seating - it was matched by the building's name,
+  which the pass-3 rename changed - and the sheet carried two; it now carries four, see below.)
 - **Kitchen joined to the house** (research buildings 360/370): the kitchen and residence already face each other
   across a 7 ft fire-gap, so a 6 ft covered corridor (width a GUESS) tagged `residence corridor` spans it, drawn as a
   part of the residence. No placer change was needed.
@@ -111,9 +137,33 @@ Coverage 37% after the change (pack_audit), perimeter-hugging 76%; nothing overf
 
 Coverage 35%, perimeter-hugging 78%, nothing overflows; every registered check passes (pack_audit).
 
+2026-09-27 pass 4 (building-review round 3):
+
+- **Privies**, one per zone and found by KIND: the family's attached to the residence's west end by its inner door,
+  its cesspit toward the kitchen postern (research buildings 220); the servants' by their quarters; the stables' on
+  the stables' east end toward the south wall (it stood 5 ft from the stable well - no latrine now stands within 15 ft
+  of a well); the garrison's at the barracks' south end by the cell (it stood inside the practice ground - no latrine
+  stands on a spine court, nor in the divider's ink).
+- **Service gate** in the south wall by the cell with a **cart yard** before it (the bare SE ground named).
+- **Office hall**: the magistrate's dais, 30 x 10 ft centered on its south face over the hearing court; a door on its
+  east face, by the middle gate.
+- **Shrine** shrunk 36 x 30 -> 18 x 14 ft, a modest shrine (Knob settings).
+- **Residence** massed in two rows (Knob settings), 8 ft off the north wall; its name seated in its rear alley, naming
+  the block (it sat inside the middle room under `lord's quarters`).
+- The gatehouse's name drops to 8 px where 10 would overrun its 54 px box, and its door opens on the gate passage.
+- The cell's lattice is short bars across its court face (the two end lines bracketed its name); `senior retainers`
+  -> `senior retainers' quarters`; the ~50 x 40 ft ground beside the hearing court captioned `outer court`.
+
+Coverage 33%, perimeter-hugging 73%, nothing overflows; every registered check passes (pack_audit).
+
 ## Review log
 
 - **2026-09-27 building-review of the pass-2 draft** (the pass-3 fix list): 3 delta errors (a tub and its caption under
   the roofed court; the garden off the house; the court longer than the hall and off its axis), 5 program items the
   outcomes name (the gate pair R19/R26, doors and the approach R07, the divider gate and kitchen postern, the
   residence's rooms and veranda R01/R03, these notes), 4 nitpicks. All applied in pass 3 above.
+- **2026-09-27 building-review round 3** (needs-work): 9 errors (two latrines only and none in the inner court; the
+  stable latrine by its well; the garrison latrine in the practice ground; no service gate; no dais band or hall door;
+  the hall-scale shrine; the one-room-deep residence and its caption; the staff-housing option and a stale review line;
+  the gatehouse caption overrun), 5 questionable items (the middle gate's seat, the residence's size, its rear, the
+  outlined forecourt, two unnamed grounds) and 3 nitpicks. All applied or recorded in pass 4 above.

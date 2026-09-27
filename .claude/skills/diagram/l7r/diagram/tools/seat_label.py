@@ -42,7 +42,22 @@ GROUND_KINDS = frozenset({"outer court", "inner court", "border court", "practic
 is not ground (`court divider` is a wall), and a roofed floor on posts (`weighing floor`) is built - as the hearing court
 is since feature 267 roofed it (research buildings 450), so another caption no longer takes its floor as open ground."""
 
+WEIGHT_INNER = WEIGHT_OBSTACLE / 4
+"""What the caption's own feature's inner ink drawn before it costs (feature 267): enough that a free spot between a
+shuttered wing's shutters or a range's partitions wins, light enough that a name with nowhere else goes on them rather
+than out of its building."""
+
+WEIGHT_DARK = 2 * WEIGHT_OBSTACLE
+"""What covering dark ink costs - a wall, a post, a dark roof (feature 267): black caption ink cannot be read on it,
+where on light ink it can, so a caption with no free seat takes light ink first. At one weight Hayakawa's practice
+ground's name, with no free seat in its ground, lay across the compound wall."""
+
+DARK = 0.3
+"""Ink this dark (0-1 luma) or darker is dark to a caption."""
+
 WEIGHT_TEXT = 10 * WEIGHT_OBSTACLE
+
+
 """What covering another caption costs: ten drawn obstacles (feature 267). A caption with no free seat falls back to the
 least cost, and at one weight for all ink it chose a seat on Ubame's border name over one on the parley room's own
 mats - words on words are the one overlap a reader cannot see past."""
@@ -129,6 +144,9 @@ class Shape:
     group: int = 0
     frame: Affine = IDENTITY  # a text's PARENT matrix (its groups' transforms, not its own) - the frame a rewrite writes in
     within: frozenset[int] = frozenset()  # every tagged group the element sits inside, its own included
+    edge: float = 0.0  # a closed shape's drawn outline half-width (0 when it has none)
+    filled: bool = False  # a closed shape painted with a fill (SVG's default fill is black), which hides what is under it
+    dark: bool = False  # drawn in dark ink - a line's stroke, a shape's fill - which black caption ink cannot be read on
 
 
 def _path_points(d: str) -> list[Pt]:
@@ -160,7 +178,7 @@ def read_sheet(src: str) -> tuple[list[Shape], tuple[float, float, float, float]
     view = (vb[0], vb[1], vb[0] + vb[2], vb[1] + vb[3])
     shapes: list[Shape] = []
 
-    def walk(el: ET.Element, m: Affine, kind: str, stroke_w: float, stroked: bool, group: int, within: frozenset[int] = frozenset()) -> None:
+    def walk(el: ET.Element, m: Affine, kind: str, stroke_w: float, stroked: bool, group: int, within: frozenset[int] = frozenset(), ink: tuple[str, str] = ("", "")) -> None:
         parent = m
         m = _mul(m, parse_transform(el.get("transform")))
         if el.get("data-kind") is not None:
@@ -169,6 +187,8 @@ def read_sheet(src: str) -> tuple[list[Shape], tuple[float, float, float, float]
         stroke_w = _f(el, "stroke-width", stroke_w)
         if el.get("stroke") is not None:
             stroked = el.get("stroke") != "none"
+        ink = (el.get("stroke", ink[0]), el.get("fill", ink[1]))  # (stroke, fill), inherited as SVG inherits them
+
         tag = el.tag.replace(SVG, "")
         pts: list[Pt] = []
         line = False
@@ -199,12 +219,26 @@ def read_sheet(src: str) -> tuple[list[Shape], tuple[float, float, float, float]
         if len(pts) >= 2:
             tp = [_apply(m, p) for p in pts]
             if line:
-                shapes.append(Shape(tag, kind, tp, stroke_w / 2, True, element=el, leader=el.get("data-leader") == "1", group=group, within=within))
+                shapes.append(Shape(tag, kind, tp, stroke_w / 2, True, element=el, leader=el.get("data-leader") == "1", group=group, within=within, dark=_luma(ink[0]) < DARK))
             else:
                 x0, y0, x1, y1 = bbox(tp)
-                shapes.append(Shape(tag, kind, tp if len(tp) >= 3 else [(x0, y0), (x1, y0), (x1, y1), (x0, y1)], element=el, group=group, within=within))
+                edge = stroke_w / 2 if stroked else 0.0
+
+                shapes.append(
+                    Shape(
+                        tag,
+                        kind,
+                        tp if len(tp) >= 3 else [(x0, y0), (x1, y0), (x1, y1), (x0, y1)],
+                        element=el,
+                        group=group,
+                        within=within,
+                        edge=edge,
+                        filled=ink[1] != "none",
+                        dark=_luma(ink[1]) < DARK,
+                    )
+                )
         for c in el:
-            walk(c, m, kind, stroke_w, stroked, group, within)
+            walk(c, m, kind, stroke_w, stroked, group, within, ink)
 
     for c in root:
         walk(c, IDENTITY, "", 1.0, False, 0)
@@ -233,7 +267,14 @@ def _is_background(s: Shape, view: tuple[float, float, float, float]) -> bool:
 
 
 def classify(
-    shapes: list[Shape], view: tuple[float, float, float, float], skip: set[int] = frozenset(), after: int | None = None, group: int = 0, kind: str = "", subject: Poly | None = None
+    shapes: list[Shape],
+    view: tuple[float, float, float, float],
+    skip: set[int] = frozenset(),
+    after: int | None = None,
+    group: int = 0,
+    kind: str = "",
+    subject: Poly | None = None,
+    area: bool = False,
 ) -> ObstacleIndex:  # type: ignore[assignment]
     """The sheet as the placer sees it (plan P4). `skip` holds the captions being placed, which are not obstacles to
     themselves. With `after` (a caption's own index), a GROUND shape drawn LATER in the document - outside the caption's
@@ -244,15 +285,36 @@ def classify(
     for i, s in enumerate(shapes):
         if i in skip or s.leader:
             continue
-        if kind and s.tag != "text" and s.kind == kind and subject is not None and _box_within(s.poly, subject):
-            # the caption's own feature's ink WITHIN what it names (a wing's shutters) is not what it must avoid - only
-            # within: Hayakawa's salt-wards note box is salt-wards ink too, and exempt, a gate's label sat under it
+        # ink INSIDE what the caption names is ink it must avoid (`Obstacle.inner`): the placer's standard waives a
+        # subject's own parts, and on a hand sheet those are partitions, mats, stepping stones and a court's buildings -
+        # a name was seated through a bay partition and under a mat drawn after it (feature 267). The caption's own
+        # feature's ink drawn BEFORE it weighs light (a shuttered wing's name has nowhere else to go); anything drawn
+        # after it, or of another kind, weighs in full
+        within = subject is not None and s.tag != "text" and _box_within(s.poly, subject) and not _same_box(s.poly, subject)
+        if within and not _is_background(s, view):
+            # the caption's own feature's light ink drawn before it, and ground nested in the ground it names (a garden
+            # in a court: Ubame's INNER COURT went to the kitchen garden, open ground inside the court), weigh light;
+            # a post or anything dark weighs in full
+            light = (s.kind == kind and (after is None or i < after) and not s.dark) or (s.kind in GROUND_KINDS and s.kind != kind)
+            weight = WEIGHT_INNER if light else WEIGHT_TEXT if after is not None and i > after and s.filled and not s.line else WEIGHT_OBSTACLE
+            bands = [_band(a, b, max(s.half, 0.5)) for a, b in zip(s.poly, s.poly[1:], strict=False)] if s.line else [s.poly]
+            obstacles += [Obstacle(tuple(b), weight, inner=True) for b in bands]
             continue
+        if area and subject is not None and s.tag != "text" and not s.line and _box_within(subject, s.poly) and not (after is not None and i > after and s.filled):
+            continue  # the building that holds the room an `area` caption names: the name is inside it by necessity (a guardroom's in its range)
         if s.tag == "text":
             obstacles.append(Obstacle(tuple(s.poly), WEIGHT_TEXT))
-        elif s.kind in GROUND_KINDS and after is not None and i > after and s.group != group and not _is_background(s, view):
-            obstacles.append(Obstacle(tuple(s.poly), WEIGHT_OBSTACLE))
+        elif after is not None and i > after and s.filled and not s.line and not _is_background(s, view):
+            # painted OVER the caption, which a hand sheet keeps where it stands in the document: it hides the name as
+            # surely as another name would (Hayakawa's weapon rack under the granary, feature 267)
+            obstacles.append(Obstacle(tuple(s.poly), WEIGHT_TEXT))
+
         elif s.kind in GROUND_KINDS or _is_background(s, view):
+            # a ground's drawn border is ink even where its floor is free space (Ochiba's RESIDENCE on the vegetable
+            # garden's dashed edge, feature 267); the border of the ground a caption names is its own, and waived
+            if s.edge and not _is_background(s, view) and not (subject is not None and _same_box(s.poly, subject)):
+                ring = [*s.poly, s.poly[0]]
+                obstacles += [Obstacle(tuple(_band(a, b, s.edge)), WEIGHT_OBSTACLE) for a, b in zip(ring, ring[1:], strict=False)]
             continue
         elif s.kind in WAY_KINDS:
             if s.line:
@@ -261,10 +323,15 @@ def classify(
                 obstacles.append(Obstacle(tuple(s.poly), WEIGHT_WAY))
         elif s.line:
             for a, b in zip(s.poly, s.poly[1:], strict=False):
-                obstacles.append(Obstacle(tuple(_band(a, b, max(s.half, 0.5))), WEIGHT_OBSTACLE))
+                obstacles.append(Obstacle(tuple(_band(a, b, max(s.half, 0.5))), WEIGHT_DARK if s.dark else WEIGHT_OBSTACLE))
         else:
-            obstacles.append(Obstacle(tuple(s.poly), WEIGHT_OBSTACLE))
+            obstacles.append(Obstacle(tuple(s.poly), WEIGHT_DARK if s.dark else WEIGHT_OBSTACLE))
     return ObstacleIndex(obstacles, ways)
+
+
+def _same_box(a: Poly, b: Poly, tol: float = 1.0) -> bool:
+    """Do two outlines share a box (within `tol`) - a shape that IS the subject rather than a part inside it."""
+    return all(abs(p - q) <= tol for p, q in zip(bbox(a), bbox(b), strict=True))
 
 
 def _band(a: Pt, b: Pt, half: float) -> Poly:
@@ -401,13 +468,16 @@ def seat(src: str, kinds: set[str] | None = None) -> tuple[list[Finding], list[t
     findings: list[Finding] = []
     placed: list[tuple[list[Shape], Placement]] = []
     leaders = [s for s in shapes if s.leader]
+    per_group: dict[int, int] = {}
+    for idx, _sub in pairs:
+        per_group[shapes[idx[0]].group] = per_group.get(shapes[idx[0]].group, 0) + 1
     for idx, sub in pairs:
         caps = [shapes[i] for i in idx]
         head = caps[0]
         lines = [ln for c in caps for ln in c.lines]
         # each caption's own index: the ground drawn after it is an obstacle to IT (see `classify`), and every caption
         # placed before it is one
-        index = classify(shapes, view, skip, after=idx[0], group=head.group, kind=head.kind, subject=list(sub.poly))
+        index = classify(shapes, view, skip, after=idx[0], group=head.group, kind=head.kind, subject=list(sub.poly), area=sub.kind == "area")
         for _caps, done in placed:
             index.add(Obstacle(done.block, WEIGHT_TEXT))
         p = place(" ".join(lines), head.size, sub, index, view, lines=lines if len(caps) > 1 else None, char_w=char_w_of(head.element, head.text, head.size))
@@ -421,7 +491,8 @@ def seat(src: str, kinds: set[str] | None = None) -> tuple[list[Finding], list[t
         off = any(math.dist(w, c.center) > TOLERANCE for w, c in zip(want, caps, strict=True))
         if off or abs(((head.angle - p.angle + 90) % 180) - 90) > 0.5 or (len(caps) == 1 and tuple(head.lines) != p.lines):
             findings.append(Finding(head.kind, head.text, "off its standard seat", p))
-        have = leader_of(head, leaders)
+        have = leader_of(head, leaders, alone=per_group[head.group] == 1)
+
         if p.leader is None and have is not None:
             findings.append(Finding(head.kind, head.text, "a stray leader", p))
         elif p.leader is not None and (have is None or max(math.dist(have.poly[0], p.leader[0]), math.dist(have.poly[-1], p.leader[1])) > TOLERANCE):
@@ -454,10 +525,11 @@ HAND = "hand"
 
 
 def hand_seat_if_no_better(p: Placement, caps: list[Shape], sub: Subject, index: ObstacleIndex) -> Placement:
-    """The standard's choice, unless it found no free seat and the caption's own seat costs no more: the standard takes
+    """The standard's choice, unless it found no free seat and the caption's own seat costs LESS: the standard takes
     the first free candidate, else the least cost, and on a hand sheet the seat the caption already has is a candidate
     too (feature 267). Where nothing is free - a crowded corner, a name wider than its room - the placer's fallback moved
-    a caption onto its neighbors' ink while the hand's seat covered less; kept, the caption is at its standard seat."""
+    a caption onto its neighbors' ink while the hand's seat covered less; kept, the caption is at its standard seat. A tie is not kept: the standard
+    breaks ties by ring and rank (266 FR-007), and keeping the hand's seat on one excused 26 captions the standard moves."""
     if p.cost == 0.0:
         return p
     head = caps[0]
@@ -467,8 +539,8 @@ def hand_seat_if_no_better(p: Placement, caps: list[Shape], sub: Subject, index:
     cost = index.cost(block, CLEAR_EM * head.size, own, " ".join(ln for c in caps for ln in c.lines), sub.civic)
     if sub.kind == "area" and not all(inside(q[0], q[1], sub.poly) for q in block):
         cost += WEIGHT_OBSTACLE
-    if cost > p.cost:
-        return p
+    if cost >= p.cost:
+        return p  # a tie goes to the standard's own order - the nearer ring, then rank (266 FR-007)
     anchor_y = head.center[1] + CENTER_ABOVE_BASELINE_EM * head.size - (sum(len(c.lines) for c in caps) - 1) * PITCH_EM * head.size / 2
     return replace(p, x=head.center[0], y=anchor_y, angle=head.angle, lines=tuple(ln for c in caps for ln in c.lines), block=block, cost=cost, leader=None, position=HAND)
 
@@ -478,14 +550,16 @@ def _self_tagged(head: Shape) -> bool:
     return head.element is not None and head.element.get("data-kind") is not None
 
 
-def leader_of(head: Shape, leaders: list[Shape]) -> Shape | None:
+def leader_of(head: Shape, leaders: list[Shape], alone: bool = False) -> Shape | None:
     """The leader a caption has now. A caption in a tagged group finds it in its group; a self-tagged caption is its own
     group, so its leader - written beside it, carrying its kind - is the nearest leader of its kind that reaches its
-    block (feature 267: matched by group alone it was never found, and read as missing on one pass, stray on the next)."""
-    if head.group and not _self_tagged(head):
-        return next((s for s in reversed(leaders) if s.group == head.group), None)
-    reach = max(math.dist(p, head.center) for p in head.poly) + head.size
-    near = [s for s in leaders if s.kind == head.kind and min(math.dist(p, head.center) for p in s.poly) <= reach]
+    block (feature 267: matched by group alone it was never found, and read as missing on one pass, stray on the next).
+    Either way the leader must reach THIS caption: a gate range's name, written outside with a leader, lent it to the
+    three room names in the same group, each then reported as carrying a stray one. A caption `alone` in its group owns
+    any leader in it, wherever it runs: that is its stray or misplaced one."""
+    reach = math.inf if alone and head.group and not _self_tagged(head) else max(math.dist(p, head.center) for p in head.poly) + head.size
+    mine = (lambda s: s.group == head.group) if head.group and not _self_tagged(head) else (lambda s: s.kind == head.kind)
+    near = [s for s in leaders if mine(s) and min(math.dist(p, head.center) for p in s.poly) <= reach]
     return min(near, key=lambda s: min(math.dist(p, head.center) for p in s.poly)) if near else None
 
 
@@ -525,7 +599,9 @@ SETTLE = 5
 def _rewrite_once(src: str, kinds: set[str] | None = None) -> str:
     """The sheet with every caption (of `kinds`) moved to its standard seat and its leader written, moved or removed."""
     _findings, placed = seat(src, kinds)
+    ground, _view = read_sheet(src)
     out = src
+
     for caps, p in placed:
         if p.position == HAND:
             continue  # kept where it stands (`hand_seat_if_no_better`)
@@ -548,7 +624,10 @@ def _rewrite_once(src: str, kinds: set[str] | None = None) -> str:
             sub = Placement(lx, ly + CENTER_ABOVE_BASELINE_EM * cap.size, p.angle - _angle(cap.frame), lines, p.block, p.ring, p.rank, p.position, p.cost, None)
             # a text carrying its OWN tag keeps it - such a text is its own group, and writing it untagged left untagged
             # ink the page refuses (feature 267); a text taking its tag from a group around it stays untagged
-            new = caption_svg(sub, cap.size, style, el.get("fill", fill), cap.kind if el.get("data-kind") or not head.group else "")
+            ink = el.get("fill", fill)
+            if _luma(ink) > LIGHT and not _on_dark((cx, cy), ground):
+                ink = DARK_INK  # a light name chosen for a dark roof, set down on light ground (Ochiba's `(rice)`, feature 267)
+            new = caption_svg(sub, cap.size, style, ink, cap.kind if el.get("data-kind") or not head.group else "")
             old = _element_source(out, el)
             if old:
                 out = out.replace(old, new, 1)
@@ -560,6 +639,30 @@ def _rewrite_once(src: str, kinds: set[str] | None = None) -> str:
             local = replace(p, leader=(_apply(inv, p.leader[0]), _apply(inv, p.leader[1])))
             out = out.replace(news[-1], news[-1] + "\n    " + leader_svg(local, head.size, fill, head.kind if _self_tagged(head) else "", mark=True), 1)
     return out
+
+
+LIGHT = 0.75
+"""A fill this light (0-1 luma) is a caption chosen to read on dark ink; it reads on nothing else."""
+
+DARK_INK = "#3A2E1C"
+"""The sheets' caption ink."""
+
+
+def _luma(fill: str | None) -> float:
+    """A `#rgb` or `#rrggbb` fill's luma (0 black, 1 white); anything else - none, a pattern - reads as 0.5."""
+    m = re.fullmatch(r"#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})", (fill or "").strip())
+    if not m:
+        return 0.5
+    h = m.group(1)
+    h = "".join(c * 2 for c in h) if len(h) == 3 else h
+    r, g, b = (int(h[i : i + 2], 16) / 255 for i in (0, 2, 4))
+    return 0.299 * r + 0.587 * g + 0.114 * b
+
+
+def _on_dark(pt: Pt, shapes: list[Shape]) -> bool:
+    """Is the innermost filled shape under a point dark?"""
+    under = [s for s in shapes if s.tag != "text" and not s.line and s.element is not None and s.element.get("fill") and inside(pt[0], pt[1], s.poly)]
+    return bool(under) and _luma(min(under, key=lambda s: _area(s.poly)).element.get("fill")) < 1 - LIGHT  # type: ignore[union-attr]
 
 
 def _drop_group_leader(src: str, news: list[str]) -> str:

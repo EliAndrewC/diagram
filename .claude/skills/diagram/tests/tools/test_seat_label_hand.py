@@ -8,6 +8,8 @@ from __future__ import annotations
 
 from dataclasses import replace
 
+import pytest
+
 from l7r.diagram.labels import Subject
 from l7r.diagram.tools import seat_label as sl
 
@@ -103,10 +105,10 @@ def test_an_area_hand_seat_spilling_out_of_its_area_pays_for_it() -> None:
     assert sl.hand_seat_if_no_better(p, [cap], area, sl.classify(shapes, view, {i})) == p
 
 
-def test_a_kept_caption_is_neither_reported_nor_rewritten() -> None:
+def test_a_least_cost_seat_is_written_once_and_then_stands() -> None:
     """A name wider than its room, in a room walled on every side: nothing is free, so the standard's least-cost seat
-    is written once - and from then on the caption's own seat costs no more, is kept, and the sheet is left as it is.
-    Without this the fallback's seat moved on every pass (feature 267)."""
+    is written once - and from then on it is the standard's choice again (a tie goes to the standard, 266 FR-007), is
+    reported nowhere, and the sheet is left as it is. Without the fixed point the fallback's seat moved on every pass."""
     src = _sheet(
         '  <g data-kind="store"><rect x="100" y="100" width="30" height="14" fill="#C8A878"/><text x="115" y="110" text-anchor="middle" font-size="9">store of the long name</text></g>\n',
         '  <g stroke="#000" stroke-width="30" fill="none" data-kind="compound wall"><line x1="60" y1="80" x2="170" y2="80"/>'
@@ -116,8 +118,21 @@ def test_a_kept_caption_is_neither_reported_nor_rewritten() -> None:
     assert placed[0][1].cost > 0, "nothing free"
     once = sl._rewrite_once(src)
     findings, placed = sl.seat(once)
-    assert [p.position for _c, p in placed] == [sl.HAND] and findings == []
+    assert [p.position for _c, p in placed] != [sl.HAND] and findings == []
     assert sl.rewrite(once) == once
+
+
+def test_a_hand_seat_strictly_cheaper_is_kept_and_left_alone() -> None:
+    """A well walled in on every side has no free seat beside it; its name, set by hand on open ground a little way off,
+    covers nothing - strictly less than the standard's least-cost seat - so it stands, reported nowhere and unwritten."""
+    src = _sheet(
+        '  <g data-kind="well"><rect x="100" y="100" width="10" height="10"/><text x="300" y="250" font-size="9">well</text></g>\n',
+        '  <g stroke="#000" stroke-width="60" fill="none" data-kind="compound wall"><line x1="40" y1="60" x2="170" y2="60"/>'
+        '<line x1="40" y1="150" x2="170" y2="150"/><line x1="60" y1="40" x2="60" y2="170"/><line x1="150" y1="40" x2="150" y2="170"/></g>\n',
+    )
+    findings, placed = sl.seat(src)
+    assert [p.position for _c, p in placed] == [sl.HAND] and findings == []
+    assert sl.rewrite(src) == src
 
 
 def test_each_caption_avoids_the_ones_seated_before_it() -> None:
@@ -127,3 +142,64 @@ def test_each_caption_avoids_the_ones_seated_before_it() -> None:
     fx0, fy0, fx1, fy1 = sl.bbox(list(first.block))
     sx0, sy0, sx1, sy1 = sl.bbox(list(second.block))
     assert fx1 <= sx0 or sx1 <= fx0 or fy1 <= sy0 or sy1 <= fy0
+
+
+def _weights(src: str, text: str, area: bool = False) -> dict[tuple[int, int, int, int], tuple[float, bool]]:
+    shapes, view = sl.read_sheet(src)
+    i, cap = _text(shapes, text)
+    sub = sl.subject_of(cap, shapes)
+    assert sub is not None
+    index = sl.classify(shapes, view, {i}, after=i, group=cap.group, kind=cap.kind, subject=list(sub.poly), area=area)
+    return {tuple(round(v) for v in sl.bbox(list(o.poly))): (o.weight, o.inner) for o in index.obstacles}
+
+
+def test_ink_inside_what_a_caption_names_is_ink_it_avoids() -> None:
+    """The placer's standard waives a subject's own parts; on a hand sheet those are partitions, posts, mats and the
+    gardens in a court, and a name set on them could not be read. Its own light ink drawn before it, and a garden nested
+    in the court it names, weigh light; a dark post in full; a mat painted after it as much as a name (it hides it)."""
+    src = _sheet(
+        '  <g data-kind="store"><rect x="100" y="100" width="120" height="60" fill="#C8A878"/>'
+        '<line x1="160" y1="100" x2="160" y2="160" stroke="#8C6F3E" stroke-width="1"/>'
+        '<circle cx="110" cy="110" r="3" fill="#2D2A24"/>'
+        '<text x="130" y="135" font-size="9">store</text>'
+        '<rect x="190" y="140" width="20" height="10" fill="#E8D2A8" data-kind="straw mats"/></g>\n',
+        '  <rect x="200" y="200" width="150" height="80" data-kind="inner court" fill="#D9C28E"/>\n'
+        '  <rect x="210" y="210" width="40" height="30" data-kind="garden" fill="#BFD0A0" stroke="#7A8C5C" stroke-width="1"/>\n'
+        '  <text x="300" y="260" font-size="9" data-kind="inner court">court</text>\n',
+    )
+    w = _weights(src, "store")
+    assert w[(160, 100, 160, 160)] == (sl.WEIGHT_INNER, True), "the store's own partition, drawn before its name"
+    assert w[(107, 107, 113, 113)] == (sl.WEIGHT_OBSTACLE, True), "a dark post weighs in full"
+    assert w[(190, 140, 210, 150)] == (sl.WEIGHT_TEXT, True), "a mat painted after the name hides it"
+    court = _weights(src, "court")
+    assert court[(210, 210, 250, 240)] == (sl.WEIGHT_INNER, True), "a garden in the court is ground, but not the court's"
+
+
+def test_a_room_names_itself_inside_the_building_that_holds_it() -> None:
+    """An area caption's room lies inside its building's rect, which it cannot help covering: waived for an area caption
+    (Hayakawa's guardroom was pushed onto its range's roof edge), kept for a point caption beside a thing."""
+    src = _sheet(
+        '  <rect x="100" y="100" width="200" height="50" fill="#8C6F3E"/>\n',
+        '  <g data-kind="guardroom"><rect x="150" y="100" width="60" height="50" fill="#8C6F3E"/><text x="180" y="128" font-size="8">guardroom</text></g>\n',
+    )
+    assert (100, 100, 300, 150) not in _weights(src, "guardroom", area=True)
+    assert (100, 100, 300, 150) in _weights(src, "guardroom", area=False)
+
+
+def test_a_grounds_drawn_border_is_ink_but_not_the_one_it_names() -> None:
+    src = _sheet(
+        '  <rect x="50" y="50" width="100" height="60" fill="#BFD0A0" stroke="#7A8C5C" stroke-width="2" data-kind="vegetable garden"/>\n',
+        '  <g data-kind="garden"><rect x="200" y="50" width="100" height="60" fill="#BFD0A0" stroke="#7A8C5C" stroke-width="2"/><text x="250" y="80" font-size="9">garden</text></g>\n',
+    )
+    w = _weights(src, "garden")
+    assert sum(1 for k, (wt, _i) in w.items() if k[0] >= 49 and k[2] <= 151) == 4, "the vegetable garden's four edges"
+    assert not any(k[0] >= 199 for k in w), "the garden's own border is its own"
+
+
+def test_a_light_name_set_down_off_its_dark_roof_takes_the_dark_ink() -> None:
+    """Ochiba's shrine names were cream for the dark hall; seated beside it, on court earth, they barely showed."""
+    off = _sheet('  <g data-kind="shrine altar"><rect x="100" y="100" width="20" height="12" fill="#5C1A0A"/><text x="300" y="250" font-size="8" fill="#FFFAE6">altar</text></g>\n')
+    assert 'fill="#3A2E1C"' in sl.rewrite(off) and "#FFFAE6" not in sl.rewrite(off)
+    on = _sheet('  <g data-kind="hall"><rect x="100" y="100" width="200" height="80" fill="#5C1A0A"/><text x="150" y="130" font-size="8" fill="#FFFAE6">hall</text></g>\n')
+    assert "#FFFAE6" in sl.rewrite(on), "still on its dark roof, it keeps its light ink"
+    assert sl._luma("#fff") == pytest.approx(1.0) and sl._luma("url(#p)") == 0.5
