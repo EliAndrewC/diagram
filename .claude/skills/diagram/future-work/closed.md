@@ -46,3 +46,4 @@ OPEN - one for five days, one for seven - and both were about to be put to the G
 - CORRECTED - cohort seed 10's belt hole is a SUN CORRIDOR, not a polygon pinch
 - DONE 2026-08-19: the gen-time budgets had drifted from protection into a coin toss
 - DONE 2026-08-19: coverage that depends on whether the GEN CACHE was warm
+- DONE 2026-09-27 (feature 261): one bank or both - ways cross the brook at a ford with a plank bridge, so a hamlet stands astride its own channel as the record attests at that size (research/water.html, 'Does a hamlet stand on one bank of its stream, or around it?'); not a knob, because the one-bank form belongs to a river and no hamlet map draws one

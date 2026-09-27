@@ -13,7 +13,7 @@ triangle and the review log.
 
 ONE DECLARED KNOB, and the reason it is declared (feature 230): `intake="open"` - the brook is
 tapped straight off its bank here, with nothing built across the water. The intake's form is rolled
-from the seed and the record attests both forms evenly, but all five pool seeds happened to roll the
+from the seed and the record attests both forms evenly, but the other pool maps with a brook all roll the
 weir, and a knob owes one map per VALUE on the sheet. Pinning the value on the map whose water
 already leaves by the plainest route is how the pool shows the other one. Measured 2026-09-12: the
 roll is even over a thousand seeds (477 weirs), so this is the sample's luck, not a biased draw.

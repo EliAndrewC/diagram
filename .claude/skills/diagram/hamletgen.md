@@ -280,6 +280,12 @@ jog instead of ignoring it. It found two things:
   northwest unless the spec declares a local one, and the cluster is seated only on a margin whose
   back faces within 45 degrees of it; a map that has no such margin falls back to the best other one
   and records `meta.seat_offwind`, which the pool may not carry.
+- **The brook is crossed, never routed around** (feature 261, GM 2026-09-27: *"if we find instead that our
+  placement algorithm ends up not making it possible to lay out a known-to-be-valid settlement configuration
+  then we should fix the placement algorithm instead"*). Fords stand every ~160 ft along the brook where it runs
+  straight enough to cross square; a way that meets the water crosses at one and `stage_crossings` decks it. So
+  a seat the brook runs through is only scored down, never refused, and a hamlet may stand astride its brook -
+  the form the record attests for a settlement's own channel - with each farmstead whole on one bank.
 
 ## Where it is weaker than a person
 

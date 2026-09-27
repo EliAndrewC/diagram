@@ -18,9 +18,9 @@ shows. The flank is otherwise rolled, and this seed rolls the other one, which p
 outfall and sends the drain off the frame on its own. The confluence is the third of the feature's three water
 sinks and the one the research turned on - before modern consolidation a village's drainage went back to the
 watercourse to be taken up by the district below - and an implemented sink owes one map that exhibits it, the
-way a knob owes one map per value. Sawada was tried first and cannot take it at any flank: its outfall stands
+way a knob owes one map per value. Sawada was tried first, at its seed then (6), and could not take it at any flank: its outfall stood
 at the canvas edge, so the brook has about 85 px left below the junction against the 150 the rule asks
-(specs/230 research R7). Measured here, on the view box: the junction falls 123 ft inside the view with 177 ft of the
+(specs/230 research R7). Measured here, on the view box (2026-09-27): the junction falls 476 ft inside the view with about 655 ft of the
 brook visible below it.
 
 `bamboo="both"` - DECLARED, NOT ROLLED (feature 261): a knob owes one map per value on the sheet; the value this map
