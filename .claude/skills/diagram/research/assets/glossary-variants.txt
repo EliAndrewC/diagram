@@ -286,6 +286,8 @@ desire path	desire path
 desire paths	desire path
 desire-line	desire path
 detritus	detritus
+dharma hall	dharma hall
+dharma halls	dharma hall
 diameter at breast height	DBH
 dike-pond	dike-pond
 dike-ponds	dike-pond
@@ -483,6 +485,8 @@ gabions	gabion
 galleried mining	siege mining
 game master	GM
 gangi	gangi
+garan	garan
+garans	garan
 gassho	gassho
 gassho-zukuri	gassho
 gasshozukuri	gassho
@@ -607,6 +611,7 @@ hiyokechi	hiyokechi
 hiyoza	hiyoza
 hoarding	hoarding
 hoardings	hoarding
+hoei	Hoei
 hojo seibi	hojo seibi
 hojutsu	onmyodo
 hokaku sen	hokaku sen
@@ -638,6 +643,7 @@ hyo	hyō
 hyojosho	Hyōjōsho
 hyō	hyō
 hyōjōsho	Hyōjōsho
+hōei	Hoei
 ichi no torii	ichi-no-torii
 ichi-no-torii	ichi-no-torii
 ido	ido
@@ -947,6 +953,7 @@ mizujiri	shirimito
 mlit	MLIT
 modern consolidation	kochi seiri
 module	module
+mokoshi	mokoshi
 momi	momi
 mon	mon
 mongol yam	yam
@@ -1159,6 +1166,8 @@ reel	reeling
 reeling	reeling
 reeling machine	reeling
 reeling shed	reeling
+refectories	refectory
+refectory	refectory
 reform and opening-up	reform and opening-up
 regime equation	regime equation
 regime power laws	regime equation
@@ -1258,6 +1267,7 @@ settlement core	settlement core
 settling basin	settling basin
 settling basins	settling basin
 seven autumn grasses	seven autumn grasses
+seven-hall garan	garan
 shadoof	jiegao
 shahi	shahi
 shaku	shaku
@@ -1272,6 +1282,8 @@ shell keep	shell keep
 shell keeps	shell keep
 shi	shi
 shibai-goya	shibai-goya
+shichido garan	garan
+shichidō garan	garan
 shichiya	shichiya
 shijin soo	four gods
 shijin-soo	four gods
@@ -1318,6 +1330,8 @@ six chambers	Six Chambers
 six fang	Six Chambers
 six ministries	Six Ministries
 skimmer wall	skimmer wall
+skirt roof	mokoshi
+skirt roofs	mokoshi
 sluice	sluice
 sluices	sluice
 soffit	soffit
@@ -1393,6 +1407,7 @@ tagoshi	tagoshi kangai
 tagoshi kangai	tagoshi kangai
 taihu	Lower Yangzi
 taiping-gang	taiping-gang
+taiseiden	Taiseiden
 taisho	Taisho
 taishō	Taisho
 taizu	Taizu

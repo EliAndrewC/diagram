@@ -6470,5 +6470,51 @@
    "spirit wall",
    "spirit walls"
   ]
+ },
+ "mokoshi": {
+  "def": "A skirt roof: a lower roof run round a building below its main roof, so that a one-story hall looks as if it had two.",
+  "variants": [
+   "mokoshi",
+   "skirt roof",
+   "skirt roofs"
+  ]
+ },
+ "Hoei": {
+  "def": "A Japanese era name, 1704-1711. A year given as \"Hoei 5\" is the fifth year of the era, 1708.",
+  "variants": [
+   "Hoei",
+   "Hōei"
+  ]
+ },
+ "Taiseiden": {
+  "def": "The \"Hall of Great Achievement\": the main hall of a Confucian temple, where the image of Confucius is enshrined. At Yushima in Edo it is the hall of the shogunate's own school.",
+  "variants": [
+   "Taiseiden",
+   "taiseiden"
+  ]
+ },
+ "refectory": {
+  "def": "A temple's or monastery's dining hall, where the monks eat their meals together; one of the seven halls of a full Japanese temple, and a room of an ordinary Chinese one.",
+  "variants": [
+   "refectory",
+   "refectories"
+  ]
+ },
+ "garan": {
+  "def": "A Buddhist temple's set of halls. A full one, the seven-hall garan, has seven buildings, and which seven differed by sect and era; the name was also used loosely of any great temple with many buildings.",
+  "variants": [
+   "garan",
+   "garans",
+   "seven-hall garan",
+   "shichidō garan",
+   "shichido garan"
+  ]
+ },
+ "dharma hall": {
+  "def": "In a Zen temple, the hall where the teaching is preached; one of the Zen sects' seven halls, standing where the older plan has its lecture hall.",
+  "variants": [
+   "dharma hall",
+   "dharma halls"
+  ]
  }
 }
