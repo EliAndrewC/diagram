@@ -1,6 +1,6 @@
 {
  "feature": "270-shrine-hall-sized-closed-canopy",
- "plan_sha256": "c41ca1b4b08c1dd91eba9d837a5fd4eda680f72f1880b316beea62e0db6ee351",
+ "plan_sha256": "356885086fecb0e6a60b8169a92ec641eb37246eb44569b91020c01f8ee2c183",
  "reviewed": "2026-09-27",
  "declared": "spec-fidelity",
  "decisions": [
@@ -8,37 +8,37 @@
    "id": "D1",
    "summary": "trees_overlap keeps every canopy-over-X test; its pair test reports only a duplicated tree (trunks closer than a third of the smaller crown's radius, a labeled GUESS); the test rewritten: a partly overlapping pair passes, a concentric pair is reported",
    "class": "within",
-   "why": "The GM: crowns may overlap; the rule was against trees 'overlapping in ways which didn't make sense'. FR-001 lets crowns overlap, keeps the duplicated-tree finding and requires its threshold sourced or labeled a guess; D1 labels it a guess (R2 records the absence) and it catches feature 257's concentric pair. Unchanged from round 1."
+   "why": "The GM: crowns may overlap; the rule was against trees 'overlapping in ways which didn't make sense'. FR-001 lets crowns overlap and keeps the duplicated-tree finding with its threshold labeled a guess. Unchanged since round 1."
   },
   {
    "id": "Phases-1",
-   "summary": "Phase 1 now reads 'T01: trees_overlap drops the crown-on-crown test; its pair test reports only a duplicated tree (the test rewritten red first); docs.'",
+   "summary": "Phase 1: trees_overlap drops the crown-on-crown test; its pair test reports only a duplicated tree (the test rewritten red first); docs",
    "class": "within",
-   "why": "Round 1's wording item applied: the phase line now matches D1 and FR-001 (the crown-on-crown test dropped, the duplicated-tree finding kept, the test rewritten not deleted). No implementer reading it literally would remove the duplicated-tree check."
+   "why": "Matches D1 and FR-001. Unchanged since round 2."
   },
   {
    "id": "D2",
-   "summary": "The grove's crowns overlap: placement accepts a center at least about half the two radii from every other; target a closed canopy measured on the layout and reported in the notes; degree labeled a guess",
+   "summary": "The grove's crowns overlap: placement accepts a center at least about half the two radii from every other; closed canopy measured on the layout and reported in the notes; degree labeled a guess",
    "class": "within",
-   "why": "FR-002/SC-002: the canopy covers most of the grove's ground, measured on the layout, sheet and map matching. Unchanged from round 1."
+   "why": "FR-002/SC-002. Unchanged since round 1."
   },
   {
    "id": "D3",
-   "summary": "The hall-and-dwelling 72 by 32 ft (2,304 sq ft): hall 28 by 32 centered on the approach axis, kitchen and dwelling ends 22 ft each; interior refitted",
+   "summary": "The hall-and-dwelling 66 by 32 ft (2,112 sq ft): hall 28 by 32 centered on the approach axis, kitchen end 16 ft (a farmhouse's earthen floor, per the size-audit finding), dwelling end 22 ft; interior refitted (altar bay 10 ft, worship floor 28 by 22, monk's rooms 22 by 20, writing room 18 by 12, entry 4 ft)",
    "class": "within",
-   "why": "The GM: size the shrine from the research, not the 60 by 48 ft glyph. FR-003's three bands hold on the plan's arithmetic (hall end 28/32 in 20-35 ft; 2,304 in 2,100-3,600 sq ft; 32 ft = 9.75 m in 8-13 m). Unchanged from round 1."
+   "why": "Amended to the size-audit's finding; still sized from the research, not the 60 by 48 ft glyph, as the GM asked. FR-003's three bands hold on the plan's own arithmetic, re-derived: 16+28+22 = 66 ft; 66 x 32 = 2,112 sq ft inside 2,100-3,600 (near the floor, but inside); hall end 28 ft inside 20-35; depth 32 ft inside the spec's attested 26-43 ft; ends (16+22) x 32 = 1,216 sq ft; interior 20+12 = 32 and 18+4 = 22 close. No band narrowed or widened, nothing the request asked dropped."
   },
   {
    "id": "D4",
-   "summary": "The map follows the sheet: glyph 36 by 16 map px at the same center; manifest records to it; arches one pitch off the new face; grove's far edge at the outermost arch; frozen map edited by hand as in 268",
+   "summary": "The map follows the sheet: glyph 33 by 16 map px (66 by 32 ft at 2 ft/px), its hall room on the approach axis; manifest records to it; arches one pitch off the new face; grove's far edge at the outermost arch; frozen map edited by hand as in 268",
    "class": "within",
-   "why": "FR-003 requires the map's glyph and manifest brought to the new footprint with arches, forecourt, basin, clearing and grove following. Unchanged from round 1."
+   "why": "FR-003 requires the map's glyph and manifest brought to the new footprint with arches, forecourt, basin, clearing and grove following. 33 x 16 px is 66 x 32 ft at the village's 2 ft/px. 'Same center' became 'hall room on the same axis', which follows from the unequal ends and keeps the hall on the approach; within FR-003."
   },
   {
    "id": "D5",
    "summary": "The sizing rule: a building's dimensions on a sheet come from the research unless the GM gave them, and never from a map's glyph as a measurement; where a map's glyph differs, the map is edited to the sheet",
    "class": "within",
-   "why": "Now carries FR-004's wording verbatim ('never ... from a map's glyph as a measurement'), from the GM's 'presume they are NOT a real measurement as a default'. The second half generalizes what FR-003 does for this building and is forced by feature 257's matches_map. It widens nothing the GM limited and narrows nothing asked."
+   "why": "Carries FR-004's wording from the GM's 'presume they are NOT a real measurement as a default'. Unchanged since round 2."
   }
  ],
  "verdict": "CLEAR"

@@ -5,7 +5,7 @@
 ## Summary
 
 Drop the crown-on-crown test from `trees_overlap`; redraw the Hoshigaoka grove as a closed wood; size the
-hall-and-dwelling from the record's bands (72 by 32 ft) on the sheet and the frozen village map, moving the arches,
+hall-and-dwelling from the record's bands (66 by 32 ft) on the sheet and the frozen village map, moving the arches,
 the forecourt, the basin, the clearing and the grove to the new face; write the sizing rule into `buildings.md`
 and the program.
 
@@ -61,7 +61,7 @@ this plan's arithmetic on those bands.)
 ## Phases
 
 1. T01: `trees_overlap` drops the crown-on-crown test; its pair test reports only a duplicated tree (the test rewritten red first); docs.
-2. T02: the layout re-run - the building 72 by 32, the clearing, the arches, the grove closed - the sheet and the
+2. T02: the layout re-run - the building 66 by 32, the clearing, the arches, the grove closed - the sheet and the
    map (svg, png, manifest), the notes; pack audit and `matches_map` green.
 3. T03: `buildings.md`, the program and the hall item's why (D5, D3).
 4. T04: size-audit and building-review on the sheet, settlement-review on the map region; ledger rows; findings

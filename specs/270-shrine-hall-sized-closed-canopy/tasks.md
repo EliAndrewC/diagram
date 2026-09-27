@@ -6,7 +6,7 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5).
       overlapping pair passes, a concentric pair is a duplicated tree, a canopy over a building or a caption still fires; docstring and `buildings.md`'s tree rule
       research: rendering
       verify:
-- [ ] T02 The Hoshigaoka sheet and village map redrawn from the layout (D2-D4; FR-002, FR-003): the building 72 by
+- [ ] T02 The Hoshigaoka sheet and village map redrawn from the layout (D2-D4; FR-002, FR-003): the building 66 by
       32 ft, the arches, forecourt, basin, clearing to the new face, the grove closed; the map's svg/png and
       manifest; the notes label every dimension; pack audit and `matches_map` green
       research: physical
