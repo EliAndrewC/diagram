@@ -250,6 +250,14 @@ def test_check_5_reaches_research_and_the_review_history(tmp_path: pathlib.Path)
     assert any("spec.md" in x for x in got) and any("research.md" in x for x in got)
 
 
+def test_check_5_reaches_a_level_three_functional_requirements_section(tmp_path: pathlib.Path) -> None:
+    """The template nests `### Functional Requirements` under `## Requirements` (feature 268's review found it
+    unread); a later non-operative subsection of the same parent is not read."""
+    body = "## Requirements\n\n### Functional Requirements\n\n**FR-001** It costs 144 ms.\n\n### Key Entities\n\nA 3 s thing.\n"
+    got = figs.check_measured_figures(_measured(tmp_path, body, _ENTRY))
+    assert len(got) == 1 and "144 ms" in got[0]
+
+
 def test_check_5_a_round_label_passes_in_the_review_history_only(tmp_path: pathlib.Path) -> None:
     body = "## Review history\n\nIt measured 145 ms on round 2's own run.\n"
     assert figs.check_measured_figures(_measured(tmp_path, body, _ENTRY)) == []

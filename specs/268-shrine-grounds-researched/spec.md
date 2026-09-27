@@ -38,6 +38,10 @@ The research pass ran first (constitution XII). In one line each:
 - **What else a village precinct holds.** A sacred tree (near-universal); a stone basin (the likely
   village form of the purification stop); guardian dogs, lanterns and strength stones (late-Edo
   villager donations - a wealth matter); a farmers' stage and a sumo ring (attested, not general).
+  (The figures from the research: observed 2026-09-27; method: read from the reader reports in
+  `reader-reports/`, each quoting its page, the 3-4 m labeled there as the reader's own arithmetic. The
+  30 ft and the 385 tsubo: observed 2026-09-27; method: read off `settlement/_geom/walls.py` and the
+  sheet's notes. The 10-13 ft is the GM's ruling in `request.md`.)
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -158,7 +162,7 @@ exemplar and fails on a fixture that draws a precinct fence.
   absence note saying what was searched.
 - **FR-002**: The torii-spacing entry MUST be rewritten with the research finding and the GM's ruling of
   2026-09-27, and every other entry or program text that states the old pitch, the 30 ft village
-  avenue or the precinct fence MUST be brought to the new rule.
+  avenue or the precinct fence MUST be brought to the new rule. (The 30 ft and the 10-13 ft: observed 2026-09-27; method: the 30 ft read off `settlement/_geom/walls.py` and the village manifests, the 10-13 ft the GM's ruling in `request.md`.)
 - **FR-003**: Every new source MUST be registered with what it is and why it applies and its limits, and
   judged by `source-applicability` before its numbers reach the program or a map; the new and changed
   entries MUST pass `source-reader`, `quote-check` and `record-format`.
@@ -192,10 +196,10 @@ exemplar and fails on a fixture that draws a precinct fence.
 
 - **FR-010**: The generator's torii pitch MUST be a single value within 10-13 ft, applied to every avenue
   at every scale (village rolls included); the threshold rule (innermost arch one pitch off the hall)
-  holds at the new pitch; designated donation-row sites keep their exemption.
+  holds at the new pitch; designated donation-row sites keep their exemption. (The 30 ft and the 10-13 ft: observed 2026-09-27; method: the 30 ft read off `settlement/_geom/walls.py` and the village manifests, the 10-13 ft the GM's ruling in `request.md`.)
 - **FR-011**: The arch glyph and the avenue's drawing floor MUST be revised so arches at the new pitch do
   not overlap at 1, 2 or 3 ft per pixel and each still reads as an arch; the choice of glyph is recorded
-  with its class (a map drawing convention where it departs from true size) at the point of change.
+  with its class (a map drawing convention where it departs from true size) at the point of change. (The 1, 2 and 3 ft per pixel: observed 2026-09-27; method: the `ftpx` of the pool's hamlet, village and city manifests.)
 
 **Reviews**
 
@@ -219,7 +223,7 @@ exemplar and fails on a fixture that draws a precinct fence.
 - **SC-003**: No side of the sheet's frame leaves more than the crop checklist's border of empty
   parchment.
 - **SC-004**: On the sheet and the village map, consecutive arches stand 10-13 ft apart and no two arch
-  glyphs overlap; a generated avenue at every scale does the same.
+  glyphs overlap; a generated avenue at every scale does the same. (The 30 ft and the 10-13 ft: observed 2026-09-27; method: the 30 ft read off `settlement/_geom/walls.py` and the village manifests, the 10-13 ft the GM's ruling in `request.md`.)
 - **SC-005**: `make done` is green, and every review pass is a row in the ledger.
 
 ## Assumptions
