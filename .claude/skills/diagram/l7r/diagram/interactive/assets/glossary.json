@@ -1713,7 +1713,9 @@
  "haiden": {
   "def": "The worship hall of a Shinto shrine, where people pray before the sanctuary.",
   "variants": [
-   "haiden"
+   "haiden",
+   "worship hall",
+   "worship halls"
   ]
  },
  "half-river closure": {
@@ -4670,7 +4672,9 @@
  "honden": {
   "def": "The sanctuary of a Shinto shrine, the small closed building where the deity's object is kept; worshippers stand before it, never in it.",
   "variants": [
-   "honden"
+   "honden",
+   "sanctuary",
+   "sanctuaries"
   ]
  },
  "bettō": {
@@ -5632,7 +5636,9 @@
   "def": "The flowing-roof style of shrine sanctuary, its front roof slope carried out long over the steps; the commonest form of honden in Japan.",
   "variants": [
    "nagare-zukuri",
-   "nagarezukuri"
+   "nagarezukuri",
+   "flowing-roof style",
+   "flowing-roof"
   ]
  },
  "dashigeta": {
@@ -6584,6 +6590,21 @@
   "variants": [
    "Hokke",
    "Hokke sect"
+  ]
+ },
+ "Tenmangu": {
+  "def": "A shrine to Tenjin, the deified courtier-scholar Sugawara no Michizane, patron of learning; \"Tenjin shrine\" and \"Tenmangu\" name the same kind of shrine.",
+  "variants": [
+   "Tenmangu",
+   "Tenjin",
+   "Tenjin shrine"
+  ]
+ },
+ "offering hall": {
+  "def": "At a Shinto shrine, the hall between the worship hall and the sanctuary where offerings to the kami are presented; often joined to both under one roof.",
+  "variants": [
+   "offering hall",
+   "heiden"
   ]
  }
 }

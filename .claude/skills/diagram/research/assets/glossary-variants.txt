@@ -448,6 +448,8 @@ floodways	floodway
 flophouse	kichin-yado
 flophouses	kichin-yado
 flora	flora
+flowing-roof	nagare-zukuri
+flowing-roof style	nagare-zukuri
 flume	kakehi
 footing	footing
 footings	footing
@@ -589,6 +591,7 @@ heian-kyo	Heian-kyo
 heian-kyo's	Heian-kyo
 heian-kyō	Heian-kyo
 heian-kyō's	Heian-kyo
+heiden	offering hall
 heijo-kyo	Heijo-kyo
 heijo-kyo's	Heijo-kyo
 heijō-kyō	Heijo-kyo
@@ -1048,6 +1051,7 @@ oblique weirs	oblique weir
 obon	Bon
 ochiba	ochiba
 odoi	Odoi
+offering hall	offering hall
 offtake	offtake
 offtakes	offtake
 ofuregaki	ofuregaki
@@ -1238,6 +1242,8 @@ salvage excavation	salvage excavation
 san no torii	ichi-no-torii
 san-no-maru	sannomaru
 san-no-torii	ichi-no-torii
+sanctuaries	honden
+sanctuary	honden
 sand junk	sand junk
 sand junks	sand junk
 sand sluice	sand sluice
@@ -1459,6 +1465,9 @@ tedai	tedai
 teikaku	teikaku
 temizuya	temizuya
 temple bell tower	shoro
+tenjin	Tenmangu
+tenjin shrine	Tenmangu
+tenmangu	Tenmangu
 tenpo	Tenpo era
 tenpo era	Tenpo era
 tenshu	tenshu
@@ -1614,6 +1623,8 @@ withy	withies
 wokou	wokou
 wood-fee lodging	kichin-yado
 wood-fee lodgings	kichin-yado
+worship hall	haiden
+worship halls	haiden
 wrought iron	wrought iron
 wubei zhi	Wubei Zhi
 wujing zongyao	Wujing Zongyao
