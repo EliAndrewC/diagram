@@ -356,19 +356,23 @@ Also edits 040, 210.
 
 ## G1 - buildings: the magistracy's buildings (new: buildings 700-750)
 
-Also edits buildings/060, 080, 090, 160, 180.
+Also edits buildings/060, 080, 090, 160 (NOT 180 - 267's, still open).
 
 - D04 **Building hierarchy**: do the compound's buildings rank in size (office hall, residence, barracks, stable), and
   is there a readable source for it? (buildings/180, 1 cited, 5 absence). M. P1.
+  > COORDINATION (D04): 267 edited buildings 180 (the hierarchy; Matsue's 67 tsubo for 500-1,000 koku, Matsushiro 150 koku ~49 tsubo - R15; stalls R16) and is still open - write D04 as a NEW question citing 180 and do not edit 180
 - D05 **Office hall size**: how long and deep was a county office hall (the 80-150 by 20-45 ft band is the project's
   reading)? (buildings/090, 180). M. P1.
+  > COORDINATION (D05): not answered by 267; cite its R20/R21 (the clerks' room and seats in the hall)
 - D11 **Tax archive**: how big was a records kura or strongroom at an office (the 32-36 ft is the vocabulary's)?
   (buildings/160). S. P1.
 - D13 B82 C47 **Tax-rice granary**: how big was an office's grain kura (drawn 43-50 by 25-27 ft) and how many per
   posting; where does a county seat keep its tax rice (in the compound, or a storehouse row in a rice-transit town);
   and how big is a provincial city's granary, how many buildings, and where (the governor's compound, the wharf, a
   gate)? (buildings/080, 150; towns/110; cities/capitals/090, 360). M. P1.
+  > COORDINATION (D13): 267's R18 is a KNOB on the raised grain-kura floor and silent on size - the size is ours; cite R18
 - D15 **Barracks size**: how big was the working platoon's nagaya (the band is a guess)? (buildings/060). S. P1.
+  > COORDINATION (D15): keep to the magistracy platoon's nagaya on buildings 060; the CITY servant nagaya is 269's B39 (cities/government) - do not write it
 
 ## G2 - buildings: houses and halls as buildings (new: buildings 760-810)
 
@@ -377,8 +381,10 @@ Also edits buildings/060, 080, 090, 160, 180.
   house (a knob), and its size? (buildings/010, compound interiors only). M. P1.
 - D133 **Samurai country manor**: how big is one (~1 acre), and what does it hold (house, kura, gate, grove, fields)?
   (cities/capitals/100, in passing). M. P1.
+  > COORDINATION (D133): cite 267's R15 (house size by koku), R16 (stable), R17 (vegetable garden ~1 se), R09 (bath, yudono only at upper rank) - the manor as a whole is ours
 - C141 D143 **Dojo as a building**: how big was a dojo's floor, hall and yard (raised board floor, spectator gallery,
   shrine shelf; the state drill hall), and what does it look like from above? (buildings/210, absence notes). M. P1.
+  > COORDINATION (C141): 267's R34 (striking posts and weapon rack as objects) - cite it; the building is ours
 - D110 **Merchant house as a plan**: shop front, doma passage, living rooms, rear court, kura - one or two stories?
   (towns/030, form only). M. P3.
 - D136 **Inn as a plan**: guest rooms, kitchen, bath, stable yard, Japan against China? (none). M. P3.
