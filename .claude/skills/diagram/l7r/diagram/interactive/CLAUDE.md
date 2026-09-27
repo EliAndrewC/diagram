@@ -38,6 +38,17 @@ pairs, so they are read back out of the drawing:
 | `sheet.py` | a magistracy page lights the wrong thing, or the census names ink with no kind. Every element or group carries `data-kind="<key>"` (the nearest one wins; `"-"` rules it out); the reader tokenizes the sheet (never an XML round trip - the page carries the sheet's own bytes) and re-opens a group's opening tag around each differently-tagged piece, so a transform or inherited fill still applies. `element_kinds` is what the pack audit reads to find a program item by its tag |
 | [`compound_kinds/`](compound_kinds/__init__.py) | a magistracy modal says something wrong, or a new kind is drawn. The hamlet form exactly (docstring `What:` / `Why:` / `Note:` / `Caveat:` and the data tags), a SEPARATE registry (`COMPOUND_CLASSES`, passed as `render_page(registry=)`) because a compound's well is written about a compound. Every label is CARRIED from an existing finding (`specs/262-interactive-magistracy-pages/coverage.md` is the measurement); a kind no research section covers says `(no dedicated entry - recorded as silent)` and so lists no references - the gap the GM can see. The magistracies program in `buildings/types.json` names these kinds and states no class or why of its own (`buildings.types.classification`) |
 
+**A part is its own kind and lights with its parent** (feature 264, GM 2026-09-27: *"individual features inside of
+buildings or other features to get their own individual highlighting"*). A hearth, a pond, a genkan, a labeled room,
+a door carries its own `data-kind` inside its parent's group; `sheet.pieces()` hands the page, beside each fragment's
+kind, the kinds it is part of (its tagged ancestors, plus `data-part-of="<kind>"` on a part drawn elsewhere for paint
+order), `render_page(within=)` writes them as `data-in` AFTER `data-k` (the id map's `_GROUP` pattern reads `class`
+then `data-k`), and `page.js` files the part under its parents too, so the kitchen lights its hearth and the hearth
+lights no kitchen. A room is drawn as its own floor - the building's fill, one same-color rect per room, then the
+outline with `fill="none"` (0 px changed) - and the pack audit folds such a rect into its building
+(`pack_audit/parse.py` `rooms_folded`). The id map holds past 63 kinds on one page (green counts the rows,
+`raster.palette_rgb`) and draws text unblended, so a label never answers as its neighbor in the palette.
+
 Each pool magistracy's `.gen.py` calls `write_sheet_page(svg, COMPOUND_CLASSES)` after its PNG and fails if the census
 is not clean; the placer's `emit_svg` writes the kinds itself (`BuildingSpec.feature`). A map's own facts go in its
 notes' "Map notes / Features" block keyed by kind, as for a hamlet. `tests/interactive/test_compound_kinds.py` holds
