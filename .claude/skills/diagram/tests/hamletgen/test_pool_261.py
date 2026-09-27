@@ -61,9 +61,7 @@ def test_every_way_across_the_brook_is_bridged(gen: str) -> None:
                     if not segments_cross(a, b, c, d):
                         continue
                     x, y = _crossing(a, b, c, d)
-                    assert any(math.hypot(br["x"] - x, br["y"] - y) <= float(br.get("span", 20.0)) for br in m.get("bridges", [])), (
-                        f"a way crosses the brook at ({x:.0f}, {y:.0f}) with no bridge"
-                    )
+                    assert any(math.hypot(br["x"] - x, br["y"] - y) <= float(br.get("span", 20.0)) for br in m.get("bridges", [])), f"a way crosses the brook at ({x:.0f}, {y:.0f}) with no bridge"
 
 
 @pytest.mark.parametrize("gen", GENS, ids=IDS)

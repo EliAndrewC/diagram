@@ -406,6 +406,7 @@ hata-ei	hata-ei
 hatago	hatago
 hatake	hatake
 hatamoto	hatamoto
+hate-ike	hate-ike
 hazakake	hazakake
 head race	head race
 head works	head works
@@ -590,6 +591,7 @@ kosatsuba	kosatsuba
 kumi	kumi
 kumi-yashiki	kumi-yashiki
 kumigashira	kumigashira
+kundoku	kundoku
 kunugi	kunugi
 kura	kura
 kuramai	kuramai
@@ -632,6 +634,8 @@ liuchu	liuchu
 loess	loess
 log boom	boom
 lognormal	lognormal
+loose-cluster	loose-cluster village
+loose-cluster village	loose-cluster village
 loose-log drive	kanagashi
 loose-log driving	kanagashi
 louzeyuan	louzeyuan
@@ -874,6 +878,8 @@ sara-ike	sara-ike
 sarae	sarae
 satetsu	satetsu
 satoyama	satoyama
+scattered farmstead	sankyoson
+scattered-farmstead	sankyoson
 schistosomiasis	schistosomiasis
 scour	scour
 se	se
@@ -1100,7 +1106,9 @@ warring-states	Warring States
 water duty	water duty
 water gate	water gate
 water gates	water gate
+water head	water-head
 water mouth	water-mouth
+water-head	water-head
 water-mouth	water-mouth
 wazi	goulan
 weathering	weathering

@@ -41,13 +41,13 @@ differed on three others, in both directions. The noticing is mechanical now; th
 ## The glossary is one file per word, and you do not read it whole (feature 259)
 
 VOCABULARY is judged against the glossary, and you have been reading all 144,524 bytes of
-`research/assets/glossary.js` to ask a question that needs none of its definitions. It is now one file
+`.claude/skills/diagram/research/assets/glossary.js` to ask a question that needs none of its definitions. It is now one file
 per term:
 
 | what you want | where it is | about |
 |---|---|---|
-| does this WORD have a definition, under any term? | `research/assets/glossary-variants.txt` - one tab-separated line per variant, and the term that owns it | 22 KB, one read |
-| is this word itself a TERM? | `ls l7r/diagram/interactive/assets/glossary/` - the filenames ARE the term list | 14 KB, no file opened |
+| does this WORD have a definition, under any term? | `.claude/skills/diagram/research/assets/glossary-variants.txt` - one tab-separated line per variant, and the term that owns it | 22 KB, one read |
+| is this word itself a TERM? | `ls .claude/skills/diagram/l7r/diagram/interactive/assets/glossary/` - the filenames ARE the term list | 14 KB, no file opened |
 | what does one term actually say? | that term's own file, `NNNN-<term>.json` | about 154 bytes |
 
 **Read the variant index, not the glossary.** A word in the prose is usually a variant (`towpaths` for
@@ -121,7 +121,7 @@ whether there are references to things which are past edits that should no longe
 A research page path (`.claude/skills/diagram/research/<name>.html`, or `cities/<name>.html`), or one section of
 it named by heading - or a CITATIONS PAGE (`research/citations/<name>.html`, feature 211: the page's notes, and at
 its top the works section derived from the registry's write-ups, which a reader meets like any other page) or the
-registry itself. The glossary is `l7r/diagram/interactive/assets/glossary.json` (loaded by `glossary.py` as `GLOSSARY`: term, variants,
+registry itself. The glossary is `.claude/skills/diagram/l7r/diagram/interactive/assets/glossary.json` (loaded by `glossary.py` as `GLOSSARY`: term, variants,
 definition) - every occurrence of a term in a page's visible text is a hover tooltip, so a word IN the glossary
 needs nothing from you. `SOURCES.html` is NOT under the session-note and history rules (its `READ` markers are read by the link
 classifier and its entries are the record of the search): on the registry, report VOCABULARY only. Your drafted

@@ -49,7 +49,7 @@ def test_village_grove_keeps_a_reseated_clump_within_near_reach():
     s.M["lanes"] = [{"pts": [[300, 300], [300, 600]], "w": 6}]
     points = [(300.0, float(y)) for y in range(300, 601, 2)]
     s.village_grove([(250, 300), (350, 300), (350, 600), (250, 600)], role="windbreak", near=(points, 5.0))
-    for cx, cy in (s.M["village_groves"][0]["clumps"] if s.M["village_groves"] else []):
+    for cx, cy in s.M["village_groves"][0]["clumps"] if s.M["village_groves"] else []:
         assert min(math.hypot(cx - px, cy - py) for px, py in points) <= 5.0
 
 

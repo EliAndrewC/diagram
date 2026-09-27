@@ -438,9 +438,7 @@ def across_the_brook(s: Settlement, house: Pt, seat: Pt) -> bool:
     same guess, as `Settlement._parts_across_stream` for the homestead's own parts: the line from the house to the
     seat crosses no reach of any stream. Mizuguchi drew a privy and a persimmon on the far bank of the brook that runs
     past their house's door."""
-    return any(
-        segments_cross(house, seat, poly[k], poly[k + 1]) for f in s.M.get("streams", []) for poly in (f.get("poly") or [],) for k in range(len(poly) - 1)
-    )
+    return any(segments_cross(house, seat, poly[k], poly[k + 1]) for f in s.M.get("streams", []) for poly in (f.get("poly") or [],) for k in range(len(poly) - 1))
 
 
 def _trunk_blocked(

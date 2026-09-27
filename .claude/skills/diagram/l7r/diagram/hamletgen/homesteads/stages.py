@@ -6,7 +6,7 @@ import math
 import random
 from collections.abc import Sequence
 
-from l7r.diagram.settlement import Settlement, seg_dist, seg_intersect
+from l7r.diagram.settlement import Settlement, seg_dist
 
 from ..consts import BUNDLE_PITCH, CLUSTER_DRAWN_ASPECT, MIN_WEB_GAP, SUN_CORRIDOR_FT, WEB_FABRIC_GAP, WEST_SUN_FT, Pt
 from ..plan import SitePlan

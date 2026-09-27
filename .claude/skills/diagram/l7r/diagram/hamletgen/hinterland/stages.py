@@ -243,15 +243,15 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     # copse clump stands within `COPSE_HOUSE_REACH_FT` of a house, and an against-the-belt one within
     # `COPSE_BELT_REACH_FT` of a belt crown - scattered over the belt's axis-aligned box it spread across the whole
     # cluster wherever the belt wrapped a diagonal ribbon.
-    _near: tuple[list[tuple[float, float]], float] = ([(float(x), float(y)) for x, y in zip(xs, ys, strict=False)], s.px(COPSE_HOUSE_REACH_FT))
+    _copse_near: tuple[list[tuple[float, float]], float] = ([(float(x), float(y)) for x, y in zip(xs, ys, strict=False)], s.px(COPSE_HOUSE_REACH_FT))
     if plan.copse_siting == "against_the_belt" and _dented:
         # the belt's own footprint, stood off the houses so the two stands read as one wood at its back
         _bx = [q[0] for q in _dented]
         _by = [q[1] for q in _dented]
         _box = [(min(_bx), min(_by)), (max(_bx), min(_by)), (max(_bx), max(_by)), (min(_bx), max(_by))]
         _belt = [(float(c[0]), float(c[1])) for g in s.M.get("village_groves") or [] if g.get("role") == "windbreak" for c in g.get("clumps") or []]
-        _near = (_belt, s.px(COPSE_BELT_REACH_FT))
-    s.village_grove(_box, role="copse", dense=False, reserved=title_pocket(s, plan), near=_near)  # the map's name has ground reserved; the copse honors it like the belt does
+        _copse_near = (_belt, s.px(COPSE_BELT_REACH_FT))
+    s.village_grove(_box, role="copse", dense=False, reserved=title_pocket(s, plan), near=_copse_near)  # the map's name has ground reserved; the copse honors it like the belt does
     # RECORD WHAT THE GROUND GAVE, beside what the knob asked for (settlement-review, feature 230 pass 12; the same
     # move `place_kosatsuba` makes with `kosatsuba_well_ft`, and for the same reason). `copse_siting` says
     # `among_the_houses` on four of the five pool maps, and what that produces depends entirely on whether the

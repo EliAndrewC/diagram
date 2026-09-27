@@ -240,9 +240,7 @@ class BundleFitMixin:
             return False
         hx, hy = geom["house"][0], geom["house"][1]
         parts = [geom["yard"], *geom.get("gardens", ()), geom.get("shed")]
-        return any(
-            segments_cross((hx, hy), (r[0], r[1]), poly[k], poly[k + 1]) for r in parts if r is not None for poly in streams for k in range(len(poly) - 1)
-        )
+        return any(segments_cross((hx, hy), (r[0], r[1]), poly[k], poly[k + 1]) for r in parts if r is not None for poly in streams for k in range(len(poly) - 1))
 
     def _rect_blocked(self: Settlement, rect: Any, fields: bool) -> bool:  # type: ignore[misc]
         """Whether a bundle sub-rect lands on forbidden ground: no-build blocks, lanes, hill/pond ellipses,

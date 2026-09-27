@@ -142,9 +142,7 @@ def test_belt_depths_reads_a_thin_stretch_and_a_parted_one() -> None:
     m = {
         "meta": {"windward": "N"},
         "houses": [{"x": 0.0, "y": 0.0}],
-        "village_groves": [
-            {"role": "windbreak", "r": 10.0, "clumps": [[5.0, -100.0], [5.0, -120.0], [45.0, -100.0], [85.0, -100.0], [85.0, -140.0]], "clumps_offpage": [[125.0, -100.0]]}
-        ],
+        "village_groves": [{"role": "windbreak", "r": 10.0, "clumps": [[5.0, -100.0], [5.0, -120.0], [45.0, -100.0], [85.0, -100.0], [85.0, -140.0]], "clumps_offpage": [[125.0, -100.0]]}],
         "lanes": [{"pts": [[85.0, 0.0], [85.0, -200.0]]}, {"pts": [[0.0, -80.0], [90.0, -80.0]]}],
     }
     assert belt_depths(m) == [40.0, 20.0, None, None]
