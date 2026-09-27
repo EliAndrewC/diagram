@@ -6531,5 +6531,21 @@
   "variants": [
    "sugoya"
   ]
+ },
+ "aisle": {
+  "def": "A strip of floor added along one long side of a building, under the same roof carried further down, which widens the house a little without raising its ridge.",
+  "variants": [
+   "aisle",
+   "aisles"
+  ]
+ },
+ "four-room type": {
+  "def": "The common farmhouse plan whose raised-floor part is divided into four rooms, beside the earth-floored doma; most larger plans are this one with rooms or a stable added.",
+  "variants": [
+   "four-room type",
+   "four-room",
+   "yomadori",
+   "四間取り"
+  ]
  }
 }

@@ -8,6 +8,8 @@ abutment	abutment
 abutments	abutment
 across the beams	ridge span
 adlittoral	adlittoral
+aisle	aisle
+aisles	aisle
 ake-mutsu	ake-mutsu
 akiba	Akiba
 akusui	akusui
@@ -465,6 +467,8 @@ four books	Four Books and Five Classics
 four books and five classics	Four Books and Five Classics
 four gods	four gods
 four-gods formulation	four gods
+four-room	four-room type
+four-room type	four-room type
 frass	frass
 freeboard	freeboard
 frontage	frontage
@@ -1624,6 +1628,7 @@ yizhan	shukuba
 yizhong	yizhong
 yohaisui bunri	yohaisui bunri
 yokocho	yokocho
+yomadori	four-room type
 yoriai-seki	yoriai-seki
 yoriki	yoriki
 yoshi	Phragmites
@@ -1661,6 +1666,7 @@ zuku	zuku
 ōkajiba	ōkaji
 ほ場整備	hojo seibi
 合掌造り	gassho
+四間取り	four-room type
 圃場整備	hojo seibi
 土地庙	tudi miao
 塘泺	tanglao
