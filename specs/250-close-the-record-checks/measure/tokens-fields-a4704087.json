@@ -1,0 +1,87 @@
+[
+ {
+  "window": "(before the first mark)",
+  "main": {
+   "fresh": 13969,
+   "cached": 28294,
+   "output": 271,
+   "thinking": 0,
+   "turns": 2,
+   "peak_context": 22635
+  },
+  "agents": []
+ },
+ {
+  "window": "fields 1",
+  "main": {
+   "fresh": 25174,
+   "cached": 171278,
+   "output": 4465,
+   "thinking": 1879,
+   "turns": 6,
+   "peak_context": 47797
+  },
+  "agents": []
+ },
+ {
+  "window": "fields 2",
+  "main": {
+   "fresh": 46032,
+   "cached": 2003652,
+   "output": 13987,
+   "thinking": 5392,
+   "turns": 27,
+   "peak_context": 93775
+  },
+  "agents": [
+   {
+    "agent": "source-reader",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "Read sources for fields FR-002 items",
+    "fresh": 25045,
+    "cached": 74171,
+    "output": 6885,
+    "thinking": 1119,
+    "turns": 5,
+    "peak_context": 25037,
+    "first_turn": 8906,
+    "read_chars": 17114,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     3614,
+     2342,
+     2306,
+     2298,
+     1687,
+     1003
+    ]
+   }
+  ]
+ },
+ {
+  "window": "fields 3",
+  "main": {
+   "fresh": 18321,
+   "cached": 708746,
+   "output": 7691,
+   "thinking": 1463,
+   "turns": 7,
+   "peak_context": 112082
+  },
+  "agents": []
+ },
+ {
+  "window": "fields 4",
+  "main": {
+   "fresh": 4027,
+   "cached": 340004,
+   "output": 3251,
+   "thinking": 72,
+   "turns": 3,
+   "peak_context": 116103
+  },
+  "agents": []
+ }
+]

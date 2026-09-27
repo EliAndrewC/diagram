@@ -1,0 +1,610 @@
+[
+ {
+  "window": "fields 4",
+  "main": {
+   "fresh": 14895,
+   "cached": 49897,
+   "output": 705,
+   "thinking": 191,
+   "turns": 3,
+   "peak_context": 23559
+  },
+  "agents": []
+ },
+ {
+  "window": "fields 5",
+  "main": {
+   "fresh": 51029,
+   "cached": 610211,
+   "output": 7797,
+   "thinking": 2144,
+   "turns": 15,
+   "peak_context": 74556
+  },
+  "agents": [
+   {
+    "agent": "entry-drift",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "entry-drift Barley",
+    "fresh": 6892,
+    "cached": 8272,
+    "output": 2097,
+    "thinking": 1047,
+    "turns": 2,
+    "peak_context": 9122,
+    "first_turn": 6042,
+    "read_chars": 7122,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     7122
+    ]
+   },
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "applicability bungotakada-tagoshi",
+    "fresh": 7157,
+    "cached": 36530,
+    "output": 3175,
+    "thinking": 1638,
+    "turns": 5,
+    "peak_context": 12551,
+    "first_turn": 6329,
+    "read_chars": 7575,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     3473,
+     2546,
+     1405,
+     151
+    ]
+   },
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "record-format fields 160",
+    "fresh": 4871,
+    "cached": 42577,
+    "output": 3498,
+    "thinking": 1736,
+    "turns": 4,
+    "peak_context": 13082,
+    "first_turn": 9127,
+    "read_chars": 7904,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     7566,
+     322,
+     16
+    ]
+   },
+   {
+    "agent": "entry-drift",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "entry-drift Paddy",
+    "fresh": 7015,
+    "cached": 11258,
+    "output": 1512,
+    "thinking": 615,
+    "turns": 2,
+    "peak_context": 12145,
+    "first_turn": 6128,
+    "read_chars": 13251,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     13251
+    ]
+   },
+   {
+    "agent": "entry-drift",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "entry-drift Pond",
+    "fresh": 10103,
+    "cached": 11172,
+    "output": 1421,
+    "thinking": 690,
+    "turns": 2,
+    "peak_context": 15233,
+    "first_turn": 6042,
+    "read_chars": 21658,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     21658
+    ]
+   },
+   {
+    "agent": "entry-drift",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "entry-drift Buckwheat",
+    "fresh": 4019,
+    "cached": 11178,
+    "output": 1892,
+    "thinking": 914,
+    "turns": 2,
+    "peak_context": 9149,
+    "first_turn": 6048,
+    "read_chars": 7145,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     7145
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check fields 160",
+    "fresh": 5839,
+    "cached": 24743,
+    "output": 3789,
+    "thinking": 2026,
+    "turns": 3,
+    "peak_context": 12554,
+    "first_turn": 7630,
+    "read_chars": 10820,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     6307,
+     4513
+    ]
+   },
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "record-format fields 070",
+    "fresh": 21441,
+    "cached": 68873,
+    "output": 8383,
+    "thinking": 4806,
+    "turns": 5,
+    "peak_context": 21433,
+    "first_turn": 9127,
+    "read_chars": 24665,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     22829,
+     928,
+     461,
+     327,
+     120
+    ]
+   },
+   {
+    "agent": "entry-drift",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "entry-drift IrrigationDitch",
+    "fresh": 10387,
+    "cached": 11182,
+    "output": 1462,
+    "thinking": 393,
+    "turns": 2,
+    "peak_context": 15517,
+    "first_turn": 6052,
+    "read_chars": 22396,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     22396
+    ]
+   },
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "applicability zakkoku-kotobank",
+    "fresh": 6932,
+    "cached": 26592,
+    "output": 2701,
+    "thinking": 1161,
+    "turns": 4,
+    "peak_context": 12328,
+    "first_turn": 6327,
+    "read_chars": 7112,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     4808,
+     2181,
+     123
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check fields 110",
+    "fresh": 15021,
+    "cached": 66935,
+    "output": 8192,
+    "thinking": 4216,
+    "turns": 5,
+    "peak_context": 21732,
+    "first_turn": 7630,
+    "read_chars": 23313,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     12393,
+     8900,
+     742,
+     735,
+     400,
+     143
+    ]
+   },
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "applicability zakkoku-jawiki",
+    "fresh": 12878,
+    "cached": 22744,
+    "output": 2888,
+    "thinking": 1084,
+    "turns": 4,
+    "peak_context": 14470,
+    "first_turn": 6327,
+    "read_chars": 9816,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     7567,
+     2138,
+     111
+    ]
+   },
+   {
+    "agent": "entry-drift",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "entry-drift Millet",
+    "fresh": 4093,
+    "cached": 11172,
+    "output": 1849,
+    "thinking": 775,
+    "turns": 2,
+    "peak_context": 9223,
+    "first_turn": 6042,
+    "read_chars": 7382,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     7382
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check fields 070",
+    "fresh": 27769,
+    "cached": 62731,
+    "output": 12277,
+    "thinking": 7616,
+    "turns": 5,
+    "peak_context": 27761,
+    "first_turn": 7630,
+    "read_chars": 42665,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     22684,
+     18966,
+     835,
+     143,
+     37
+    ]
+   },
+   {
+    "agent": "entry-drift",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "entry-drift Soy",
+    "fresh": 4036,
+    "cached": 11172,
+    "output": 2287,
+    "thinking": 1247,
+    "turns": 2,
+    "peak_context": 9166,
+    "first_turn": 6042,
+    "read_chars": 7226,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     7226
+    ]
+   },
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "applicability satoyama-jawiki",
+    "fresh": 12027,
+    "cached": 26488,
+    "output": 3931,
+    "thinking": 1916,
+    "turns": 4,
+    "peak_context": 17423,
+    "first_turn": 6338,
+    "read_chars": 12719,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     10522,
+     2086,
+     111
+    ]
+   },
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "record-format fields 110",
+    "fresh": 8265,
+    "cached": 48165,
+    "output": 5552,
+    "thinking": 2498,
+    "turns": 4,
+    "peak_context": 16476,
+    "first_turn": 9127,
+    "read_chars": 14356,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     13219,
+     932,
+     205
+    ]
+   }
+  ]
+ },
+ {
+  "window": "fields 6",
+  "main": {
+   "fresh": 65978,
+   "cached": 2602670,
+   "output": 26750,
+   "thinking": 9314,
+   "turns": 24,
+   "peak_context": 140482
+  },
+  "agents": []
+ },
+ {
+  "window": "fields 7",
+  "main": {
+   "fresh": 26694,
+   "cached": 1377177,
+   "output": 4725,
+   "thinking": 674,
+   "turns": 9,
+   "peak_context": 167158
+  },
+  "agents": [
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "re-check quotes fields 070",
+    "fresh": 24409,
+    "cached": 38414,
+    "output": 4501,
+    "thinking": 2669,
+    "turns": 4,
+    "peak_context": 24403,
+    "first_turn": 8635,
+    "read_chars": 33903,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     19943,
+     13668,
+     292
+    ]
+   },
+   {
+    "agent": "entry-drift",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "re-check drift Paddy",
+    "fresh": 8349,
+    "cached": 12039,
+    "output": 1987,
+    "thinking": 1098,
+    "turns": 2,
+    "peak_context": 13479,
+    "first_turn": 6909,
+    "read_chars": 14627,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     14627
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "re-check quotes fields 110",
+    "fresh": 13008,
+    "cached": 65189,
+    "output": 3942,
+    "thinking": 2063,
+    "turns": 5,
+    "peak_context": 19719,
+    "first_turn": 8578,
+    "read_chars": 19745,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     9964,
+     9021,
+     617,
+     143
+    ]
+   },
+   {
+    "agent": "entry-drift",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "re-check drift Barley",
+    "fresh": 10241,
+    "cached": 6864,
+    "output": 1161,
+    "thinking": 705,
+    "turns": 2,
+    "peak_context": 10239,
+    "first_turn": 6866,
+    "read_chars": 8066,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     8066
+    ]
+   },
+   {
+    "agent": "entry-drift",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "re-check drift Soy",
+    "fresh": 5153,
+    "cached": 11996,
+    "output": 1122,
+    "thinking": 466,
+    "turns": 2,
+    "peak_context": 10283,
+    "first_turn": 6866,
+    "read_chars": 8170,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     8170
+    ]
+   },
+   {
+    "agent": "entry-drift",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "re-check drift IrrigationDitch",
+    "fresh": 11739,
+    "cached": 12036,
+    "output": 2155,
+    "thinking": 1181,
+    "turns": 2,
+    "peak_context": 16869,
+    "first_turn": 6906,
+    "read_chars": 23692,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     23692
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "re-check quotes fields 160",
+    "fresh": 6344,
+    "cached": 26811,
+    "output": 2992,
+    "thinking": 1493,
+    "turns": 3,
+    "peak_context": 13059,
+    "first_turn": 8577,
+    "read_chars": 7091,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     6789,
+     302
+    ]
+   },
+   {
+    "agent": "entry-drift",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "re-check drift Millet",
+    "fresh": 5260,
+    "cached": 12029,
+    "output": 1261,
+    "thinking": 549,
+    "turns": 2,
+    "peak_context": 10390,
+    "first_turn": 6899,
+    "read_chars": 8370,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     8370
+    ]
+   },
+   {
+    "agent": "entry-drift",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "re-check drift Pond",
+    "fresh": 11347,
+    "cached": 11996,
+    "output": 1312,
+    "thinking": 720,
+    "turns": 2,
+    "peak_context": 16477,
+    "first_turn": 6866,
+    "read_chars": 22764,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     22764
+    ]
+   },
+   {
+    "agent": "entry-drift",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "re-check drift Buckwheat",
+    "fresh": 5136,
+    "cached": 12002,
+    "output": 1361,
+    "thinking": 583,
+    "turns": 2,
+    "peak_context": 10266,
+    "first_turn": 6872,
+    "read_chars": 8089,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     8089
+    ]
+   }
+  ]
+ },
+ {
+  "window": "fields 8",
+  "main": {
+   "fresh": 4312,
+   "cached": 845674,
+   "output": 2285,
+   "thinking": 154,
+   "turns": 5,
+   "peak_context": 171460
+  },
+  "agents": []
+ }
+]

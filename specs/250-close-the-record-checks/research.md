@@ -534,3 +534,61 @@ tool calls of its transcript, in order):
 4. **One more page before the rest, with the tool defects fixed**, since part of this round's growth was the first
    use of the new tooling (0.54 million measured directly, more around it) and part was two canon-heavy items; one
    page is not yet a trend.
+
+## R8 - the seventh round: the canon by guard, the split first, groups by bytes (2026-09-27, T57 to T62, plan D16)
+
+The GM asked for all four of R7's recommendations, mechanically enforced, and one more measured page. The page was
+`fields`: three FR-002 items and four FR-006 items. A split session divided its question 020 (56,248 bytes) into
+seven parts first; then one write session, and - because the check groups are now packed by bytes and its three
+questions came to 28,419 - ONE check session. Figures from `tokens.py summary` over `measure/tokens-fields-*.json`;
+the split session is `measure/tokens-split-df423d15.json`.
+
+| | `cities/defenses` (R4) | `religion-and-death` (R5) | `cities/government` (R6) | `cities/fabric` (R7) | `fields` (R8) |
+|---|---|---|---|---|---|
+| questions checked / sessions | 4 / 3 | 4 / 3 | 4 / 3 | 5 / 4 | 3 / 2 (+1 split) |
+| modals owed an `entry-drift` | 0 | 0 | 0 | 0 | **7** |
+| largest context any turn | 104,000 | 92,000 | 95,000 | 137,000 | **171,000** |
+| main session | 5.81 M | 6.07 M | 5.30 M | 9.84 M | 9.08 M, 101 turns |
+| mean main turn | 61,000 | 58,000 | 56,000 | 64,000 | **90,000** |
+| agent runs | 16 (0.88 M) | 17 (1.51 M) | 16 (0.94 M) | 18 (0.97 M) | 28 (1.18 M) |
+| mean agent run | 55,000 | 89,000 | 59,000 | 54,000 | **42,000** |
+| total | 6.69 M | 7.59 M | 6.24 M | 10.81 M | 10.26 M |
+| per question checked | 1.67 M | 1.90 M | 1.56 M | 2.16 M | 3.42 M |
+
+(Observed 2026-09-27; method: `tokens.py summary --files <the page's records> --questions N --items N`. Not in the
+fields row: the split session, 1.35 million over 24 turns; and a first write session stopped after nine turns when
+the plan review found the canon guard was not live, 0.28 million.)
+
+**What each recommendation did** (the plan review's item 4):
+
+1. **The canon, by guard - used, never refused.** The write session named the canon and ran `make canon` as its
+   brief says; `canon-read-hooks.sh` fired zero times in the round (method: the guard log, `canon-read` entries after
+   the restart, and the refusals in both transcripts - none). None of the three FR-002 items was a canon claim, so
+   this page is no test of the saving; the guard is proved live (a headless session in the clone, 00:13:14Z).
+2. **The split first - worked as built.** The write session never loaded question 020: its peak, 116,000, came from
+   its own sourcing, not from carrying a split question (fabric's write session carried 32,500 characters of 140 to
+   a peak of 137,000). The split itself cost 1.35 million in its own session, about what a split cost in R6.
+3. **Groups by bytes - a regression, and the main cause of this round's cost.** Counting only question bytes, the
+   packer put all three questions in one session - and with them seven map modals owed an `entry-drift` check and
+   four source write-ups owed `source-applicability`, which the byte count does not see. That one session ran 17
+   first-round agents and 10 re-checks, rewrote all seven modals, and grew to 171,000; its apply step alone was 24
+   turns and 2.70 million, its re-check 1.41 million.
+4. **The modal rewrites were by hand.** `entry-drift` ends with no EDIT blocks, and `apply-edits` writes only under
+   `research/`, so the thirteen edits to the modal class files (`interactive/classes/fields.py`, `water_and_ways.py`)
+   were thirteen hand edits - the step R6 measured as the largest cost, back again for a kind of finding the D15
+   tooling did not cover.
+
+**Per question checked no longer measures the work.** This page checked three questions but also seven modals and
+four sources; per THING checked (question, modal or source) it is 0.73 million, against 0.78 million on
+`cities/government` (four questions, four sources) and 1.54 million on `cities/fabric` (five questions, two
+sources) (observed 2026-09-27; method: the total over the count of questions, owed modals and registry keys each
+page's check sessions took).
+
+### Recommendations for the next round
+
+1. **`entry-drift` ends with EDIT blocks, and `apply-edits` writes a modal's docstring** in
+   `l7r/diagram/interactive/classes/`, under the same exactly-once rule, so a drifted modal is applied like any
+   other finding.
+2. **Size a check group by everything it checks**: question and notes bytes, each owed modal's prose, each registry
+   entry - and cap it where the measured sessions stayed under about 100,000 of context. Owed modals and sources count.
+3. **Report per thing checked** (questions + modals + sources), with per question beside it for continuity.
