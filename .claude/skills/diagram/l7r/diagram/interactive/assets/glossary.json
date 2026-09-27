@@ -5553,5 +5553,88 @@
   "variants": [
    "kana"
   ]
+ },
+ "irikawa": {
+  "def": "The inner veranda-corridor of a shoin-style house, inside the building line between the rooms and the outer veranda; by the dictionary one ken wide, though some houses made it half that.",
+  "variants": [
+   "irikawa",
+   "irikawa-en"
+  ]
+ },
+ "nure-en": {
+  "def": "The open veranda on the outer edge of a house, outside the shutters and usually a step below the floor within.",
+  "variants": [
+   "nure-en"
+  ]
+ },
+ "hiroen": {
+  "def": "A wide veranda set along the outside of the formal rooms, often facing the garden.",
+  "variants": [
+   "hiroen"
+  ]
+ },
+ "zashiki": {
+  "def": "The formal matted room of a house, with its alcove, where the master received guests.",
+  "variants": [
+   "zashiki",
+   "oku-zashiki"
+  ]
+ },
+ "tokonoma": {
+  "def": "The display alcove of a formal room, where a scroll or an arrangement stands.",
+  "variants": [
+   "tokonoma"
+  ]
+ },
+ "butsuma": {
+  "def": "The room of a house's Buddhist altar, where its Buddha images and the memorial tablets of its dead are kept.",
+  "variants": [
+   "butsuma",
+   "butsudan"
+  ]
+ },
+ "ihai": {
+  "def": "A memorial tablet of the dead, kept in the household altar; a house keeps those of its successive heads and their spouses.",
+  "variants": [
+   "ihai"
+  ]
+ },
+ "watari-roka": {
+  "def": "A covered corridor between two buildings that joins them.",
+  "variants": [
+   "watari-roka"
+  ]
+ },
+ "omote": {
+  "def": "The front, public part of a warrior's residence: the entrance, the halls and the rooms where the lord received and governed.",
+  "variants": [
+   "omote",
+   "omote-muki"
+  ]
+ },
+ "oku": {
+  "def": "The inner, private part of a warrior's residence, where the lord's family lived and coming and going was limited.",
+  "variants": [
+   "oku",
+   "oku-muki"
+  ]
+ },
+ "naka-oku": {
+  "def": "A modern name for the lord's own working room and bedroom, behind the omote and before the oku.",
+  "variants": [
+   "naka-oku"
+  ]
+ },
+ "goza-no-ma": {
+  "def": "The lord's own sitting room in a daimyo mansion, on the omote side with the great hall and the audience hall.",
+  "variants": [
+   "goza-no-ma"
+  ]
+ },
+ "oku-no-ma": {
+  "def": "The inner room of a house, deeper in than the rooms by the entrance.",
+  "variants": [
+   "oku-no-ma"
+  ]
  }
 }

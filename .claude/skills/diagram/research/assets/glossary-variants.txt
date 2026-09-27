@@ -108,6 +108,8 @@ burgage plots	burgage plot
 bursaries	rent bursary
 bursary	rent bursary
 bushi	bushi
+butsudan	butsuma
+butsuma	butsuma
 buyi	Buyi
 byre	byre
 byres	byre
@@ -449,6 +451,7 @@ goten	goten
 goulan	goulan
 goyoba	goyoba
 goyōba	goyoba
+goza-no-ma	goza-no-ma
 green manure	green manure
 grow-out	grow-out pond
 grow-out pond	grow-out pond
@@ -506,6 +509,7 @@ hinoki	hinoki
 hinomi-yagura	hinomi-yagura
 hipposandal	hipposandal
 hipposandals	hipposandal
+hiroen	hiroen
 hirokoji	hirokoji
 hitoyado	hitoyado
 hiyokechi	hiyokechi
@@ -545,6 +549,7 @@ ieyasu	Ieyasu
 ieyasu's	Ieyasu
 igeta	igeta
 igune	igune
+ihai	ihai
 important cultural landscape	Important Cultural Landscape
 important cultural landscapes	Important Cultural Landscape
 inari	Inari
@@ -565,6 +570,8 @@ intramural	intramural
 inverted siphon	inverted siphon
 inverted siphons	inverted siphon
 iriai	iriai
+irikawa	irikawa
+irikawa-en	irikawa
 iroha	iroha companies
 iroha companies	iroha companies
 iroha-gumi	iroha-gumi
@@ -840,6 +847,7 @@ nagaya-mon	nagayamon
 nagayamon	nagayamon
 nagewatashi	nagewatashi
 naka-bori	middle moat
+naka-oku	naka-oku
 nakaboshi	nakaboshi
 nakamon	nakamon
 nanbu	Tohoku
@@ -871,6 +879,7 @@ nrcs-designed	NRCS
 nucleated	nucleated
 numajiro	numajiro
 nunosarashi	nunosarashi
+nure-en	nure-en
 nuriya	nuriya
 o-aza	ō-aza
 oaza	ō-aza
@@ -884,7 +893,13 @@ offtakes	offtake
 ofuregaki	ofuregaki
 okaji	ōkaji
 okajiba	ōkaji
+oku	oku
+oku-muki	oku
+oku-no-ma	oku-no-ma
+oku-zashiki	zashiki
 omamori	omamori
+omote	omote
+omote-muki	omote
 omoya	omoya
 onari-goten	onari-goten
 one-bay	bay
@@ -1243,6 +1258,7 @@ tohoku	Tohoku
 toiya	ton'ya
 tokaido	Tokaido
 toki no kane	toki no kane
+tokonoma	tokonoma
 tokugawa	Tokugawa
 tokugawa ieyasu	Ieyasu
 ton'ya	ton'ya
@@ -1312,6 +1328,7 @@ warren	warren
 warrens	warren
 warring states	Warring States
 warring-states	Warring States
+watari-roka	watari-roka
 water duty	water duty
 water gate	water gate
 water gates	water gate
@@ -1382,6 +1399,7 @@ yulin wei	yulin wei
 zaimokuya	zaimokuya
 zaofang	zaofang
 zaojun	Zaojun
+zashiki	zashiki
 zelkova	keyaki
 zhalan	zhalan
 zhang	zhang
