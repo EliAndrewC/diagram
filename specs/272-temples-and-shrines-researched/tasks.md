@@ -2,8 +2,9 @@
 
 Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D6).
 
-- [ ] T01 Briefs and queues (D2, D3): `briefs/gen.py`, `briefs/queue.sh`; queues 1-3 started
+- [x] T01 Briefs and queues (D2, D3): `briefs/gen.py`, `briefs/queue.sh`; queues 1-3 started
       research: rendering
+      verify: DONE. queues started 2026-09-27 in .clones/diagram-shrines-1 (S, B37), -2 (R2, R3), -3 (R4, T); plan review CLEAR at round 2
 - [ ] T02 Group S - the country shrine's open questions: every absence note and guess in 090-128 searched twice,
       D50, D51, the COVERED rows confirmed; written and checked (FR-001, FR-002)
       research: physical
