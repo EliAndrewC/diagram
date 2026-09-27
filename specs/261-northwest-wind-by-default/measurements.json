@@ -1,0 +1,203 @@
+{
+ "ford-spacing": {
+  "value": 160,
+  "unit": "ft",
+  "quantity": "FORD_SPACING in hamletgen/consts.py - the along-brook distance between crossing places, 160 px at the hamlet scale of 1 ft per px; a chosen value (a guess, research/water/270), read 2026-09-27",
+  "command": "grep -n FORD_SPACING .claude/skills/diagram/l7r/diagram/hamletgen/consts.py"
+ },
+ "copse-house-reach": {
+  "value": 90,
+  "unit": "ft",
+  "quantity": "COPSE_HOUSE_REACH_FT in hamletgen/consts.py - how far a dooryard-copse crown may stand from a farmhouse; a calibration of 'in the gaps between the houses' (research/vegetation/020), read 2026-09-27",
+  "command": "grep -n COPSE_HOUSE_REACH_FT .claude/skills/diagram/l7r/diagram/hamletgen/consts.py"
+ },
+ "inashiro-F1": {
+  "verifies": "F1",
+  "subject": "inashiro",
+  "value": 102,
+  "unit": "ft",
+  "quantity": "the entrance notice board's distance from kosatsuba_anchor (was 711 ft); the board stands 69 ft from the nearest farmhouse, within the 100 ft entrance reach",
+  "source": "pool/hamlets/inashiro/inashiro.json kosatsuba[0] against kosatsuba_anchor(manifest, 'entrance') and the houses",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "inashiro-F2": {
+  "verifies": "F2",
+  "subject": "inashiro",
+  "value": 68,
+  "unit": "ft",
+  "quantity": "median distance of the drawn copse crowns (village_groves role copse, clumps) to the nearest farmhouse; 0 crowns beyond 90 ft (was 205 ft median, 71.5% beyond 90)",
+  "source": "pool/hamlets/inashiro/inashiro.json village_groves[role=copse].clumps against houses",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "inashiro-F3": {
+  "verifies": "F3",
+  "subject": "inashiro",
+  "value": 2,
+  "unit": "pieces",
+  "quantity": "windbreak belt components at a 45 px crown link (was 4); the one gap, 123 ft wide at y 165-169, is where the belt runs off the view's top edge (y 162) - the frame cuts it, no way or water parts it; every judged 40 ft bin holds at least 133 ft of depth",
+  "source": "pool/hamlets/inashiro/inashiro.json village_groves[role=windbreak].clumps and clumps_offpage, meta.view",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_wind.py"
+ },
+ "inashiro-F4": {
+  "verifies": "F4",
+  "subject": "inashiro",
+  "value": 4,
+  "unit": "parcels",
+  "quantity": "woodland commons parcels: sizes 224x250, 268x143, 197x165, 285x177 ft (no shared size) and nearest strides 347 and 492 ft (no repeated step) - by the notes' 2026-08-18 criterion not the ruled chain; 619-1184 ft from the nearest house",
+  "source": "pool/hamlets/inashiro/inashiro.json commons[role=woodland] x, y, w, h against houses",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "inashiro-F5": {
+  "verifies": "F5",
+  "subject": "inashiro",
+  "value": 1,
+  "unit": "bridges",
+  "quantity": "plank bridges on the brook carrying a way from the houses to the field; the field spur is drawn (451 ft, one spur lane); every way that crosses the brook has a bridge within its span",
+  "source": "pool/hamlets/inashiro/inashiro.json bridges, lanes[spur], streams",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "inashiro-F6": {
+  "verifies": "F6",
+  "subject": "inashiro",
+  "value": 1,
+  "unit": "entries",
+  "quantity": "dated notes entry for this map's feature-261 layout move ('2026-09-27 (feature 261): the regional northwest wind, and the layout moved')",
+  "source": "pool/hamlets/inashiro/inashiro.notes.md",
+  "command": "grep -n '^## 2026-09-27 (feature 261)' .claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md"
+ },
+ "kashikawa-F1": {
+  "verifies": "F1",
+  "subject": "kashikawa",
+  "value": 69,
+  "unit": "ft",
+  "quantity": "the windbreak's minimum depth along the wind over every 40 ft bin across it that no way, brook or page edge cuts (the record's minimum 30 ft); seed 3's belt, 285 crowns at 320 degrees",
+  "source": "pool/hamlets/kashikawa/kashikawa.json village_groves[role=windbreak] via belt_depths",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_wind.py"
+ },
+ "kashikawa-F2": {
+  "verifies": "F2",
+  "subject": "kashikawa",
+  "value": 70,
+  "unit": "ft",
+  "quantity": "median distance of the drawn copse crowns to the nearest farmhouse; 0 crowns beyond 90 ft (was 166.6 ft, 393 crowns)",
+  "source": "pool/hamlets/kashikawa/kashikawa.json village_groves[role=copse].clumps against houses",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kashikawa-F3": {
+  "verifies": "F3",
+  "subject": "kashikawa",
+  "value": 218,
+  "unit": "deg",
+  "quantity": "compass bearing of the connector where it leaves the cluster; the notes' district direction now reads southwest",
+  "source": "pool/hamlets/kashikawa/kashikawa.json lanes[connector] and kashikawa.notes.md Map notes",
+  "command": "grep -n 'district direction' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
+ },
+ "kashikawa-F4": {
+  "verifies": "F4",
+  "subject": "kashikawa",
+  "value": 476,
+  "unit": "ft",
+  "quantity": "the confluence's distance inside the view's top edge, with about 655 ft of brook visible below it; the gen docstring and the notes say so",
+  "source": "pool/hamlets/kashikawa/kashikawa.json streams, channels ending at the brook, meta.view",
+  "command": "grep -n '476 ft' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.gen.py"
+ },
+ "kuwabata-F1": {
+  "verifies": "F1",
+  "subject": "kuwabata",
+  "value": 1,
+  "unit": "sentences",
+  "quantity": "the windbreak pop-up's default sentence names the direction, 'toward the northwest of the houses', not two sides",
+  "source": "interactive/place.py windbreak_default and pool/hamlets/kuwabata/kuwabata.html",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/interactive/test_place.py"
+ },
+ "kuwabata-F2": {
+  "verifies": "F2",
+  "subject": "kuwabata",
+  "value": 1,
+  "unit": "sentences",
+  "quantity": "the windbreak class What text says 'on the windward one or two sides of the cluster, never ringing it'",
+  "source": "interactive/classes/greenery.py Windbreak docstring",
+  "command": "grep -n 'windward one or two sides' .claude/skills/diagram/l7r/diagram/interactive/classes/greenery.py"
+ },
+ "mizuguchi-F1": {
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "value": 0,
+  "unit": "crowns",
+  "quantity": "against-the-belt copse crowns farther than 60 ft from a belt crown (was 96 of 231 over the cluster)",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json village_groves[role=copse] against village_groves[role=windbreak]",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "mizuguchi-F2": {
+  "verifies": "F2",
+  "subject": "mizuguchi",
+  "value": 65,
+  "unit": "ft",
+  "quantity": "the entrance notice board's distance from kosatsuba_anchor; 75 ft from the nearest farmhouse, within the 100 ft entrance reach",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json kosatsuba[0] against kosatsuba_anchor and houses",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "mizuguchi-F3": {
+  "verifies": "F3",
+  "subject": "mizuguchi",
+  "value": 1,
+  "unit": "weirs",
+  "quantity": "weirs drawn at the intake (meta.intake 'weir') at seed 23, which the notes and the gen docstring describe",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json weirs, meta.intake",
+  "command": "grep -n 'rolled the \\*\\*weir' .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md"
+ },
+ "sawada-F1": {
+  "verifies": "F1",
+  "subject": "sawada",
+  "value": 139,
+  "unit": "ft",
+  "quantity": "the entrance notice board's distance from kosatsuba_anchor (was 669 ft), the anchor itself 30 ft outside the view's west edge; the board stands on the connector 87 ft from the nearest farmhouse",
+  "source": "pool/hamlets/sawada/sawada.json kosatsuba[0], kosatsuba_anchor, houses, meta.view",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "sawada-F2": {
+  "verifies": "F2",
+  "subject": "sawada",
+  "value": 95,
+  "unit": "deg",
+  "quantity": "the brook's sharpest turn at a vertex (was 123); the limit is BROOK_MAX_TURN_DEG, 100",
+  "source": "pool/hamlets/sawada/sawada.json streams[0].poly",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "sawada-F3": {
+  "verifies": "F3",
+  "subject": "sawada",
+  "value": 1683,
+  "unit": "ft",
+  "quantity": "distance from where the drain leaves the view (the west edge) to the nearest in-view brook, which leaves by the top edge; the notes' water story now says so",
+  "source": "pool/hamlets/sawada/sawada.json field_ditches[role=drain], channels, streams, meta.view",
+  "command": "grep -n 'leaving the frame by its west edge' .claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md"
+ },
+ "sawada-F4": {
+  "verifies": "F4",
+  "subject": "sawada",
+  "value": 0,
+  "unit": "crowns",
+  "quantity": "copse crowns within 30 ft of a windbreak crown (the copse is 48 crowns, all within 90 ft of a farmhouse; was 223 over the belt's west arm)",
+  "source": "pool/hamlets/sawada/sawada.json village_groves copse against windbreak",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "sawada-F5": {
+  "verifies": "F5",
+  "subject": "sawada",
+  "value": 0.55,
+  "unit": "ratio",
+  "quantity": "area of the settlement keep-out the scrub is handed (the hull of the houses grown by 44 ft) against the old axis-aligned bbox it replaced: 424,855 against 776,800 sq ft; the keep-out follows the diagonal ribbon",
+  "source": "settlement/land/cover.py hinterland keep-out over pool/hamlets/sawada/sawada.json houses",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/settlement/test_hinterland_cover.py"
+ },
+ "sawada-F6": {
+  "verifies": "F6",
+  "subject": "sawada",
+  "value": 3,
+  "unit": "maps",
+  "quantity": "pool maps with a brook that roll the weir (Inashiro, Kashikawa, Mizuguchi) - the stated reason for declaring intake='open' on Sawada, now true as written",
+  "source": "pool/hamlets/*/*.json meta.intake",
+  "command": "grep -n 'other pool maps with a brook' .claude/skills/diagram/pool/hamlets/sawada/sawada.gen.py"
+ }
+}

@@ -171,3 +171,16 @@ def test_roll_one_reports_a_household_shortfall_the_manifest_records(monkeypatch
     rep2.manifest = {"meta": {"roll_placed": 20}}
     monkeypatch.setattr(hg, "generate", lambda spec, out_base, render: rep2)
     assert ca.roll_one((25, 20))[1] == []
+
+
+def test_roll_one_reports_farmstead_parts_across_the_brook_and_an_offwind_seat(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 261 SC-009: a garden standing across the brook from the house it names is a cohort failure; a map whose
+    seat fell back off the wind says so in its header."""
+    brook = {"poly": [[0.0, 50.0], [200.0, 50.0]]}
+    rep = _report([])
+    rep.manifest = {"meta": {"seat_offwind": True}, "streams": [brook, {"poly": [[1.0, 1.0]]}], "gardens": [{"x": 10.0, "y": 80.0, "of": [10.0, 20.0]}, {"x": 30.0, "y": 25.0, "of": [10.0, 20.0]}], "persimmons": [{"x": 5.0, "y": 5.0}]}
+    monkeypatch.setattr(hg, "generate", lambda spec, out_base, render: rep)
+    header, failures, lines = ca.roll_one((9, 12))
+    assert failures == ["farmstead_across_brook"] and "1 farmstead part" in lines[-1] and header.endswith("seat=OFFWIND")
+    assert ca.parts_across_brook({}) == 0
+

@@ -38,9 +38,12 @@ own perf ratchet judges it, and any band it reports is explained against R4's re
 - **X. Python discipline**: **PASS** - ruff, pyrefly, 100% coverage; the new branches (the off-wind fallback, the
   divided off-wind margin, the pop-up sentence's three cases) each have a test.
 - **XII. Historical grounding**: **PASS** - the northwest default is already cited in `research/vegetation/030`
-  (the Sendai *igune*, the monsoon); no new source is used, so no source-reader or applicability run is owed; the
-  entry is rewritten to state the rule and its footnote gloss corrected, and `quote-check` and `record-format`
-  run on it.
+  (the Sendai *igune*, the monsoon); the entry is rewritten to state the rule and its footnote gloss corrected, and
+  `quote-check` and `record-format` run on it. The amendment's two physical questions (T13, T15) each had a research
+  pass: the ford spacing and a farmstead's one bank are guesses with absence notes (`research/water/270`,
+  `research/homesteads/250`); the one source newly relied on, `mizu-no-bunka-60`, was already read, and
+  `source-applicability` judged it for its new use (APPLICABLE-WITH-LIMITS, the limits written into its registry
+  entry).
 - **XIII. No known regressions**: **PASS with a measured baseline** - the 48-seed cohort was rolled on the
   unmodified engine in a detached worktree and on this one (R3, and the final engine in R5).
 - **XIV. Fix defects where found**: the divided test that read a band's halves instead of the brook's banks (D7),
@@ -75,7 +78,8 @@ constant. The pool may not carry `seat_offwind` (the pool test).
 A clean wind-facing margin first, then an off-wind one (recorded as `seat_offwind`). The brook no longer makes a
 tier: feature 230's strike-out - a margin the brook divides used only when every margin is divided - is retired by
 the GM's ruling of 2026-09-27, because the engine could not draw the crossing the record attests (R4, R7). A margin
-the brook crosses is scored down (`score -= 3.0` per crossing, at `seat_cluster`) so an uncrossed one wins when the
+the brook crosses is scored down (`score -= 3.0` times the share of the band's sample points near the brook, at
+`seat_cluster`) so an uncrossed one wins when the
 two are otherwise level; what feature 230's strike-out protected against - a byre, a well or a garden across the
 water from its house (R4) - is now a placement rule on the farmstead itself (D10), not a refusal of the seat. The
 two exception checks of R4 refused a wind-first order under the OLD engine; with crossings drawn, the order they
@@ -84,7 +88,7 @@ refused is no longer an exception to anything.
 ### D4 - The seeds: Inashiro 4, Kuwabata 21, Kashikawa 3 and Mizuguchi 23 kept; Sawada 6 -> 24
 
 The spec's Edge Case (amended 2026-09-27) measures each map at its current seed once crossings exist and returns it
-to that seed unless a research-supported refusal is recorded. Measured (R7): Kashikawa at seed 3 seats 20/20
+to that seed unless a research-supported refusal is recorded. Measured (R7, and R5 for the belt): Kashikawa at seed 3 seats 20/20
 wind-facing, the belt 285 crowns at 320 degrees; Mizuguchi at seed 23 seats 12/12 wind-facing astride its brook
 (8 and 4), its weir back. Both keep their original seeds. Sawada's seed 6 was refused by the drain and the wet toe
 - rules FR-010 keeps, supported by the record - so 24 stands (R2). Nothing in the spec's "When no seed works"
@@ -125,7 +129,7 @@ no spec field. No wind rule moves: the declarations are re-rolled and measured w
 
 ### D9 - A way crosses the brook at a ford, and every crossing is decked
 
-`brook_fords(brook, FORD_SPACING, FORD_BEND_DEG)` (ways/checks.py) marks a crossing place every 160 ft along the
+`brook_fords(brook, FORD_SPACING, FORD_BEND_DEG)` (ways/checks.py) marks a crossing place every 160 ft (`m:ford-spacing`) along the
 brook where its course bends less than 20 degrees over the crossing, so a way can cross it square;
 `gap_segments` opens the brook's no-route corridor `FORD_HALF` (30 ft) each side of each ford, so the router passes
 there and nowhere else; `ford_crossing` routes the field spur through the nearest ford when its direct line would
@@ -145,10 +149,9 @@ already being judged; no index is owed.
 
 ### D11 - The copse stands within reach of what it is named for (FR-014)
 
-`village_grove` takes `near=(points, reach)`: the dooryard copse within 90 ft of a farmhouse
+`village_grove` takes `near=(points, reach)`: the dooryard copse within 90 ft of a farmhouse (`m:copse-house-reach`)
 (`COPSE_HOUSE_REACH_FT`), the against-the-belt copse within 60 ft of a belt crown (`COPSE_BELT_REACH_FT`); every
-clump, the re-seat nudge's included, is asked of one `Seats` index. The review found Kashikawa's copse a 1,210 ft
-wood a median 167 ft from any house. Class: accurate for the form ("in the gaps between the houses",
+clump, the re-seat nudge's included, is asked of one `Seats` index. The review found Kashikawa's copse spread to 393 crowns a median 167 ft from any house (R8). Class: accurate for the form ("in the gaps between the houses",
 vegetation/020); the reach is a calibration of that phrase, recorded at the constants.
 
 ### D12 - The entrance board is offered the way that meets its anchor (FR-015)

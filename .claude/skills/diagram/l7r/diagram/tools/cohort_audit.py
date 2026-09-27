@@ -37,6 +37,24 @@ if HERE not in sys.path:
 from l7r.diagram import hamletgen as hg  # noqa: E402
 
 
+_PART_KEYS = ("gardens", "threshing_yards", "farm_fixtures", "byres", "farm_sheds", "persimmons", "bamboo_stands")
+
+
+def parts_across_brook(manifest: dict) -> int:
+    """How many farmstead parts stand across a stream from the house they belong to (feature 261 FR-013 / SC-009): a part
+    that names its house (`of`) whose straight line to it crosses a reach of any stream."""
+
+    def _cross(a: Sequence[float], b: Sequence[float], c: Sequence[float], d: Sequence[float]) -> bool:
+        def _o(p: Sequence[float], q: Sequence[float], r: Sequence[float]) -> float:
+            return (q[0] - p[0]) * (r[1] - p[1]) - (q[1] - p[1]) * (r[0] - p[0])
+
+        return _o(a, b, c) * _o(a, b, d) < 0 and _o(c, d, a) * _o(c, d, b) < 0
+
+    brooks = [s["poly"] for s in manifest.get("streams") or [] if len(s.get("poly") or ()) >= 2]
+    parts = [r for k in _PART_KEYS for r in manifest.get(k) or [] if r.get("of")]
+    return sum(1 for r in parts if any(_cross((r["x"], r["y"]), r["of"], b[i], b[i + 1]) for b in brooks for i in range(len(b) - 1)))
+
+
 def roll_one(spec: tuple[int, int]) -> tuple[str, list[str], list[str]]:
     """Roll and gate ONE audit hamlet: (header line, sorted failures, the gate's own FAIL lines).
 
@@ -65,8 +83,14 @@ def roll_one(spec: tuple[int, int]) -> tuple[str, list[str], list[str]]:
     if _placed is not None and int(_placed) < households:
         report.fail_lines.append(f"FAIL households_seated -> {int(_placed)} of {households} declared households seated")
         report.failures.append("households_seated")
+    _across = parts_across_brook(getattr(report, "manifest", None) or {})
+    if _across:
+        report.fail_lines.append(f"FAIL farmstead_across_brook -> {_across} farmstead part(s) stand across the brook from their house")
+        report.failures.append("farmstead_across_brook")
     plan = report.plan
     header = f"--- Audit-{seed:02d}  seed={seed} households={households} fall={int(plan.down_deg)} sink={plan.water_sink} shape={plan.cluster_shape} lanes={plan.lane_skeleton}"
+    if _meta.get("seat_offwind"):
+        header += " seat=OFFWIND"
     return header, report.failures, report.fail_lines
 
 

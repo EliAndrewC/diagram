@@ -33,7 +33,7 @@ from typing import TYPE_CHECKING, Any
 # AND SINCE FEATURE 223 THE BUCKET IS KEPT AS COORDINATES UNTIL `finish()`, which knows the frame: ~90% of the blades
 # lie outside the viewBox (specs/200 R2) and are culled there by the page's own `drop_offmap` rule before the merge,
 # so the file never carries them (`Settlement.flush_blade_groups`).
-from .._geom import KeepoutGrid, Poly, RingIndex
+from .._geom import KeepoutGrid, Poly, RingIndex, convex_hull
 from ..land.wet import MARSH_FEATHER_BS
 
 if TYPE_CHECKING:
@@ -373,9 +373,14 @@ class GroundCoverMixin:
         hs = self.M.get("houses", [])
         m = 44
         if hs and self.M.get("meta", {}).get("nucleated", True):
-            # NUCLEATED: the houses are one tight blob, so the bbox of their positions IS the built footprint.
-            hxs, hys = [h["x"] for h in hs], [h["y"] for h in hs]
-            avoid.append([(min(hxs) - m, min(hys) - m), (max(hxs) + m, min(hys) - m), (max(hxs) + m, max(hys) + m), (min(hxs) - m, max(hys) + m)])
+            # NUCLEATED: the houses are one blob, so the HULL of their positions, grown by the margin, is the built
+            # footprint. It was the axis-aligned BBOX, which is the same thing only for a round cluster: on a diagonal
+            # ribbon (Sawada, drawn aspect 4) the bbox took in open ground far off the houses and the scrub stopped
+            # along ruler-straight north-south and east-west lines round an empty rectangle (settlement-review,
+            # feature 261: 0 blade bases in a 50 ft band against 219 just beyond it). Each house point is grown by
+            # the margin in eight directions before the hull is taken, so the keep-out clears every house by `m`.
+            _grown = [(h["x"] + m * math.cos(math.radians(a)), h["y"] + m * math.sin(math.radians(a))) for h in hs for a in range(0, 360, 45)]
+            avoid.append(convex_hull(_grown))
         elif hs:
             # DISPERSED: the farmsteads RING the settlement, so a bbox of their positions is not their footprint
             # - it is the WHOLE MAP, and using it forbids ground cover everywhere inside the ring. That is what

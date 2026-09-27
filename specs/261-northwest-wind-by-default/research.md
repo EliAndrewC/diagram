@@ -130,7 +130,7 @@ all five maps (R5).
 The GM's ruling (2026-09-27): *"if we find instead that our placement algorithm ends up not making it possible to lay
 out a known-to-be-valid settlement configuration then we should fix the placement algorithm instead."* The record
 attests a hamlet astride its own small channel (`research/water/270`, Harie), so the refusals R4 measured were the
-engine's, not the record's. Built (plan D9): fords every 160 ft where the brook bends under 20 degrees, a 30 ft gap
+engine's, not the record's. Built (plan D9): fords every 160 ft (`m:ford-spacing`) where the brook bends under 20 degrees, a 30 ft gap
 in its no-route corridor at each, the spur routed through one when its line would cross the water, every crossing
 decked by `bridges()`; the strike-out, its re-roll and the far-bank refusal deleted.
 
@@ -157,7 +157,7 @@ by `tests/hamletgen/test_pool_261.py` and `test_pool_wind.py`, run before and af
 | finding | before | after |
 |---|---|---|
 | farmstead parts across the brook from their house (FR-013) | Inashiro 4, Mizuguchi 2 | 0 on every map |
-| copse crowns beyond reach (FR-014; 90 ft of a house, or 60 ft of the belt) | Kashikawa 393 crowns, median 167 ft from a house; after the first fix, 4 on Kashikawa and 4 on Mizuguchi through the re-seat nudge | 0 on every map; medians 63-72 ft |
+| copse crowns beyond reach (FR-014; 90 ft of a house, `m:copse-house-reach`, or 60 ft of the belt) | Kashikawa 393 crowns, median 167 ft from a house; after the first fix, 4 on Kashikawa and 4 on Mizuguchi through the re-seat nudge | 0 on every map; medians 63-72 ft |
 | entrance board distance from its anchor (FR-015) | Sawada 669 ft | 65-139 ft on the four entrance maps, each within 100 ft of a house |
 | belt depth along the wind (FR-016; 30 ft minimum per 40 ft bin not cut by a way, the brook or the page edge) | Kashikawa at seed 8: an arm 12-21 ft deep | at least 51 ft on every judged bin of every map |
 | the brook's sharpest turn (FR-017; 100 degrees) | Sawada 123 | Inashiro 41, Kashikawa 53, Mizuguchi 53, Sawada 95 |

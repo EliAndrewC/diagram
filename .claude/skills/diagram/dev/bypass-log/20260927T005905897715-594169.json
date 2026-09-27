@@ -1,0 +1,7 @@
+{
+  "utc": "2026-09-27T00:59:05Z",
+  "target": "review-accept",
+  "commit": "a60485b3",
+  "outcome": "permitted",
+  "why": "review-accept mizuguchi F4: the seed-27 lane web it measured is gone - the map is back on seed 23 with a different web - and the finding names no norm, only a route length"
+}

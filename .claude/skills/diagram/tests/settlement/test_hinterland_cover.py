@@ -89,3 +89,20 @@ def test_the_cover_does_not_hold_the_frame_open() -> None:
     after = covered.M["meta"]["view"]
 
     assert after[2] <= before[2] + 1 and after[3] <= before[3] + 1, f"the hinterland widened the frame from {before[2]:.0f}x{before[3]:.0f} to {after[2]:.0f}x{after[3]:.0f}"
+
+
+def test_the_settlement_keep_out_follows_a_diagonal_cluster_not_its_bbox() -> None:
+    """Feature 261 (settlement-review of Sawada): a nucleated cluster's keep-out is the hull of its houses grown by the
+    margin, so on a diagonal ribbon the scrub reaches the open corners of the houses' bounding box instead of stopping
+    along straight north-south and east-west lines round them - and every house still stands inside it."""
+    from l7r.diagram.settlement._geom import point_in_poly
+
+    s = _s()
+    s.M["houses"] = [{"x": 200.0 + 60.0 * i, "y": 200.0 + 60.0 * i, "w": 40, "h": 24} for i in range(5)]
+    seen: list = []
+    s.commons = lambda poly, role="commons", avoid=(), render="scrub", soft=(): seen.append(list(avoid))  # type: ignore[method-assign]
+    s.hinterland(marsh=False, commons=True, interior_fill=False)
+    assert seen and seen[0], "the scrub was handed the settlement keep-out"
+    ring = [tuple(p) for p in seen[0][0]]
+    assert all(point_in_poly(h["x"], h["y"], ring) for h in s.M["houses"])
+    assert not point_in_poly(420.0, 220.0, ring), "the bbox's empty corner is open to the scrub"
