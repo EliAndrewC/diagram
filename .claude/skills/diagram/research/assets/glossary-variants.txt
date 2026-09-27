@@ -38,6 +38,7 @@ azenuri	azenuri
 azimuth	azimuth
 azolla	azolla
 azuchi	azuchi
+azuchi-momoyama	Momoyama
 backswamp	backswamp
 backswamps	backswamp
 backwall	backwall
@@ -147,6 +148,7 @@ chinju	chinju
 chinju no mori	chinju no mori
 chinjusan	chinju
 cho	cho
+chodaigamae	nando-gamae
 chongzhen	Chongzhen era
 chongzhen era	Chongzhen era
 chonin	chonin
@@ -318,6 +320,7 @@ enceinte	enceinte
 enemy platform	mamian
 enemy platforms	mamian
 enemy tower	mamian
+engawa	engawa
 enoki	enoki
 eunis	EUNIS
 eutrophic	eutrophication
@@ -425,6 +428,8 @@ gazetteers	gazetteer
 gejo	degawari
 genan	degawari
 genkan	genkan
+genna	Genna
+genna era	Genna
 genroku	Genroku
 gentry	gentry
 geomancy	geomancy
@@ -504,6 +509,7 @@ hereditary house	hereditary temple
 hereditary monastery	hereditary temple
 hereditary temple	hereditary temple
 hereditary temples	hereditary temple
+hikae-no-ma	hikae-no-ma
 hinin	hinin
 hinoki	hinoki
 hinomi-yagura	hinomi-yagura
@@ -516,6 +522,8 @@ hiyokechi	hiyokechi
 hiyoza	hiyoza
 hoarding	hoarding
 hoardings	hoarding
+hojo	hojo
+hojo form	hojo
 hojo seibi	hojo seibi
 hojutsu	onmyodo
 hokora	hokora
@@ -541,6 +549,7 @@ hyo	hyō
 hyojosho	Hyōjōsho
 hyō	hyō
 hyōjōsho	Hyōjōsho
+ichi-no-ma	ni-no-ma
 ido	ido
 idobata	idobata
 idowaku	igeta
@@ -550,6 +559,7 @@ ieyasu's	Ieyasu
 igeta	igeta
 igune	igune
 ihai	ihai
+ima	ima
 important cultural landscape	Important Cultural Landscape
 important cultural landscapes	Important Cultural Landscape
 inari	Inari
@@ -608,6 +618,8 @@ jittering	jitter
 jizo	jizo
 jo	jo
 jochi	jochi
+jodan	jodan-no-ma
+jodan-no-ma	jodan-no-ma
 jodo	Jodo
 jodo shinshu	Jodo Shinshu
 jokamachi	jokamachi
@@ -652,6 +664,9 @@ kasoba	kasoba
 kasō-dera	kaso-dera
 kata	kata
 katairo	eiro
+katsura	Katsura
+katsura imperial villa	Katsura
+katsura rikyu	Katsura
 kawara	kawara
 kawaramono	kawaramono
 kawata	kawata
@@ -682,10 +697,12 @@ kinai	Kinai
 king post	king post
 king posts	king post
 king-post	king post
+kirime-en	kirime-en
 kishu school	Kishu school
 kishu-school	Kishu school
 knob	knob
 knobs	knob
+ko-shoin	Ko-shoin
 kobito	kobito
 kochi seiri	kochi seiri
 kochi-seiri	kochi seiri
@@ -787,6 +804,7 @@ mamian	mamian
 manning	Manning
 manning's formula	Manning
 maoqu	maoqu
+massing	massing
 masson pine	masson pine
 masugata	masugata
 mat	tatami
@@ -819,6 +837,8 @@ mlit	MLIT
 modern consolidation	kochi seiri
 module	module
 momi	momi
+momoyama	Momoyama
+momoyama period	Momoyama
 mon	mon
 mongol yam	yam
 monk outlet	monk outlet
@@ -848,10 +868,12 @@ nagayamon	nagayamon
 nagewatashi	nagewatashi
 naka-bori	middle moat
 naka-oku	naka-oku
+naka-shoin	Naka-shoin
 nakaboshi	nakaboshi
 nakamon	nakamon
 nanbu	Tohoku
 nando	nando
+nando-gamae	nando-gamae
 nanohana	rape
 nanushi	shoya
 nara period	Nara period
@@ -866,6 +888,7 @@ near-monospecific	monospecific
 neige	neige
 nengu	nengu
 neribei	neribei
+ni-no-ma	ni-no-ma
 night soil	night soil
 night-soil	night soil
 nightsoil	night soil
@@ -1054,6 +1077,7 @@ sally gate	sally port
 sally port	sally port
 sallyport	sally port
 salvage excavation	salvage excavation
+san-no-ma	ni-no-ma
 sand sluice	sand sluice
 sando	sando
 sanguan	Three Officials
@@ -1110,7 +1134,9 @@ shironameshi	shironameshi
 shiroyone senmaida	senmaida
 shitsuden	shitsuden
 shizai	shizai
+shogun	shogun
 shogunate	bakufu
+shoguns	shogun
 shoin	shoin
 shoin-zukuri	shoin
 shoinzukuri	shoin
@@ -1282,6 +1308,7 @@ trunk streets	trunk street
 tsubo	tsubo
 tsuijibei	tsuijibei
 tsuijimatsu	tsuijimatsu
+tsuke-shoin	tsuke-shoin
 tsuke-tsubo	tsuke-tsubo
 tsunaba	tsunaba
 tudi miao	tudi miao
