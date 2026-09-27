@@ -412,6 +412,7 @@ genroku	Genroku
 gentry	gentry
 geomancy	geomancy
 geomantic	geomancy
+geostrophic	geostrophic
 geta	geta
 ghat	ghat
 ginmisho	ginmisho
