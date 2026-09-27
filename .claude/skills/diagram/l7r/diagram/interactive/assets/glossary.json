@@ -6534,5 +6534,19 @@
   "variants": [
    "kozashi"
   ]
+ },
+ "staggered shelves": {
+  "def": "Shelves set at offset heights in a recess beside the tokonoma, a fixture of the formal shoin-style reception room.",
+  "variants": [
+   "staggered shelves",
+   "chigaidana"
+  ]
+ },
+ "seed": {
+  "def": "The number a map is generated from: every choice the map rolls, such as which form a town's inn takes, follows from it, so the same seed always draws the same map.",
+  "variants": [
+   "seed",
+   "seeds"
+  ]
  }
 }

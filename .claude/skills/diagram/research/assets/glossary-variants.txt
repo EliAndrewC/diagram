@@ -157,6 +157,7 @@ chang'an	Chang'an
 chaoguan	chaoguan
 chenghuangmiao	chenghuangmiao
 chi	chi
+chigaidana	staggered shelves
 chikaraishi	chikaraishi
 china fir	China fir
 chinju	chinju
@@ -1246,6 +1247,8 @@ se	se
 secondary forest	secondary forest
 secondary woodland	secondary forest
 secondary woodlands	secondary forest
+seed	seed
+seeds	seed
 seijoue	seijoue
 seisatsu	kosatsuba
 seisatsuba	kosatsuba
@@ -1348,6 +1351,7 @@ spring line	spring line
 square keep	shell keep
 square keeps	shell keep
 srtm	SRTM
+staggered shelves	staggered shelves
 staking frame	staking frame
 staking frames	staking frame
 steading	steading
