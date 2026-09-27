@@ -120,15 +120,15 @@ is not held to a map.
 - **D4 - the floor.** An avenue shortened against a wall floors at the glyph's drawn depth plus one px
   (never above the pitch), replacing the one-span floor that belonged to the elevation glyph.
 - **D5 - the sheet's arch** follows D3 at 3 px/ft: the kasagi a 15 by 1.5 ft bar, the posts 1.2 ft
-  squares 10.7 ft apart clear, over the 10 ft approach. The notes' "about 8 ft deep in plan against a
+  squares under its ends, 10.3 ft clear, over the 10 ft approach (true size; the size-audit of 2026-09-27 found the first 2 ft marks twice real). The notes' "about 8 ft deep in plan against a
   real 1.5-2 ft (a vocabulary convention)" disclosure retires with the glyph it described.
 - **D6 - the grove on the map.** (a) The grove is the precinct, a near-rectangle that fills the sheet's
-  frame (SC-002 allows bare ground only as a border no deeper than the crop margin): about 117 ft wide
-  (wide enough to ring the 60 ft hall and the kitchen garden at its west gable with a stand of trees on
-  either side) from the shrine well at its back edge (FR-007 allows the edge) to the outermost arch,
-  about 225 ft - about 730 tsubo by this plan's arithmetic, measured on the drawn outline at T-map. That
+  frame (SC-002 allows bare ground only as a border no deeper than the crop margin): about 137 ft wide
+  (wide enough to ring the 60 ft hall and the kitchen garden at its west gable with two or three crowns on
+  either side - the settlement-review of 2026-09-27 read a single file as a hedge) from the shrine well at its back edge (FR-007 allows the edge) to the outermost arch,
+  about 223 ft - about 860 tsubo by this plan's arithmetic, measured on the drawn outline at T-map. That
   is inside R2's figures as found (the registers: Saitama 55-708, median 403; Tochigi 142-2,700, median
-  655; Saga's unranked 50-662, median 148): above Saitama's top, in Tochigi's upper half (between its median and its mean of 817). The depth is
+  655; Saga's unranked 50-662, median 148): above Saitama's top and Tochigi's mean of 817, far inside Tochigi's range. The depth is
   the map's (the well 108 ft behind the hall) plus the seven arches at the pitch, so a smaller precinct
   would leave bare commons inside the frame, which SC-002 forbids. The band T-program writes is R2's
   figures as found, never widened to fit the grove. (Figures observed 2026-09-27; method: this plan's

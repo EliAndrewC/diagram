@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="232 106 388 786" font-family="Georgia, 'Times New Roman', serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="202 106 448 786" font-family="Georgia, 'Times New Roman', serif">
   <!-- ============================================================ -->
   <!-- Hoshigaoka Country Shrine - top-down diagrammatic plan          -->
   <!-- North at top; the village lies north, the approach rises from the south. -->
@@ -44,84 +44,66 @@
 
   <!-- Title block -->
   <g data-kind="-">
-    <text x="252" y="136" text-anchor="start" font-size="20" font-weight="bold" fill="#3A2E1C">Hoshigaoka Country Shrine</text>
-    <text x="252" y="156" text-anchor="start" font-size="11" font-style="italic" fill="#6B4F2A">the shrine of Hoshigaoka village district</text>
+    <text x="222" y="136" text-anchor="start" font-size="20" font-weight="bold" fill="#3A2E1C">Hoshigaoka Country Shrine</text>
+    <text x="222" y="156" text-anchor="start" font-size="11" font-style="italic" fill="#6B4F2A">the shrine of Hoshigaoka village district</text>
   </g>
 
   <!-- THE PRECINCT IS THE GROVE (research 124): 117 by 223 ft, from the shrine well at its back edge to the outermost
        arch, where the approach enters the shrine's ground (research 090). No fence, no wall (research 122). -->
-  <rect x="250" y="170" width="350" height="670" fill="url(#grove-floor)" id="precinct"/>
+  <rect x="220" y="170" width="410" height="670" fill="url(#grove-floor)" id="precinct"/>
   <!-- The swept clearing at the hall: the sanctuary, the hall and dwelling, the kitchen garden and privy at the west
        gable, and the forecourt at the hall's step where the basin stands -->
-  <rect x="288" y="356" width="272" height="244" fill="url(#keidai-gravel)"/>
+  <rect x="288" y="356" width="272" height="334" fill="url(#keidai-gravel)"/>
   <!-- The household's footpath to the well through the grove, from the clearing's north-west corner (the kitchen side),
        never across the sanctuary's ground -->
   <path d="M300,360 L426,184" fill="none" stroke="#E6DCC4" stroke-width="12" stroke-linecap="round"/>
 
   <!-- THE GROVE (chinju no mori): the shrine's own wood, the whole precinct but the clearing, the approach and the path -->
   <g id="grove" data-kind="shrine grove" fill="#7A8C5C" stroke="#56683E" stroke-width="1">
-    <circle cx="328.8" cy="791.9" r="24.9"/>
-    <circle cx="539.8" cy="792.9" r="25.2"/>
-    <circle cx="446.9" cy="292.1" r="27.4"/>
-    <circle cx="369.1" cy="326.4" r="25.4"/>
-    <circle cx="372.8" cy="752.9" r="26.7"/>
-    <circle cx="309.2" cy="657.7" r="25.4"/>
-    <circle cx="502.7" cy="200.6" r="26.0"/>
-    <circle cx="556.8" cy="312.2" r="28.6"/>
-    <circle cx="550.8" cy="218.2" r="25.0"/>
-    <circle cx="365.6" cy="200.6" r="25.1"/>
-    <circle cx="310.4" cy="714.6" r="29.8"/>
-    <circle cx="386.9" cy="692.1" r="25.6"/>
-    <circle cx="276.1" cy="813.6" r="25.7"/>
-    <circle cx="292.7" cy="288.0" r="27.0"/>
-    <circle cx="479.9" cy="248.4" r="25.7"/>
-    <circle cx="570.9" cy="629.8" r="25.7"/>
-    <circle cx="284.6" cy="220.4" r="29.9"/>
-    <circle cx="562.3" cy="733.5" r="27.5"/>
-    <circle cx="378.0" cy="812.9" r="26.9"/>
-    <circle cx="491.3" cy="753.5" r="24.1"/>
-    <circle cx="337.7" cy="243.7" r="26.0"/>
-    <circle cx="365.5" cy="644.9" r="25.2"/>
-    <circle cx="429.9" cy="242.1" r="24.7"/>
-    <circle cx="503.0" cy="304.1" r="25.5"/>
-    <circle cx="493.2" cy="627.4" r="24.5"/>
-    <circle cx="276.3" cy="758.3" r="24.7"/>
-    <circle cx="533.0" cy="264.5" r="24.0"/>
-    <circle cx="580.2" cy="265.3" r="18.5"/>
-    <circle cx="271.6" cy="684.9" r="19.0"/>
-    <circle cx="488.6" cy="807.3" r="20.0"/>
-    <circle cx="396.0" cy="285.1" r="21.3"/>
-    <circle cx="272.7" cy="617.8" r="20.2"/>
-    <circle cx="271.9" cy="334.3" r="19.7"/>
-    <circle cx="581.1" cy="818.8" r="18.6"/>
-    <circle cx="581.1" cy="580.9" r="18.8"/>
-    <circle cx="581.5" cy="778.0" r="18.2"/>
-    <circle cx="581.8" cy="427.9" r="18.1"/>
-    <circle cx="581.6" cy="517.6" r="18.3"/>
-    <circle cx="461.5" cy="204.9" r="14.6"/>
-    <circle cx="584.1" cy="376.4" r="15.2"/>
-    <circle cx="324.7" cy="189.9" r="16.0"/>
-    <circle cx="272.3" cy="426.9" r="13.7"/>
-    <circle cx="582.1" cy="470.6" r="15.3"/>
-    <circle cx="270.1" cy="471.4" r="14.7"/>
-    <circle cx="271.4" cy="555.6" r="14.1"/>
-    <circle cx="269.6" cy="400.2" r="13.1"/>
-    <circle cx="582.2" cy="195.6" r="14.0"/>
-    <circle cx="531.4" cy="635.4" r="14.0"/>
-    <circle cx="266.4" cy="511.1" r="14.3"/>
-    <circle cx="346.7" cy="688.0" r="13.6"/>
-    <circle cx="583.3" cy="347.6" r="13.0"/>
-    <circle cx="269.9" cy="583.1" r="13.5"/>
-    <circle cx="271.0" cy="651.5" r="13.7"/>
-    <circle cx="264.4" cy="720.5" r="14.2"/>
-    <circle cx="266.1" cy="370.4" r="14.6"/>
-    <circle cx="586.0" cy="232.7" r="13.5"/>
-    <circle cx="582.4" cy="549.2" r="13.3"/>
+    <circle cx="310.2" cy="791.1" r="25.8"/>
+    <circle cx="254.4" cy="420.8" r="29.6"/>
+    <circle cx="451.3" cy="292.4" r="27.9"/>
+    <circle cx="319.3" cy="242.3" r="29.7"/>
+    <circle cx="362.4" cy="752.5" r="27.2"/>
+    <circle cx="518.0" cy="201.3" r="26.7"/>
+    <circle cx="597.2" cy="675.8" r="25.1"/>
+    <circle cx="583.6" cy="312.3" r="28.8"/>
+    <circle cx="258.7" cy="697.0" r="27.8"/>
+    <circle cx="575.3" cy="219.0" r="25.9"/>
+    <circle cx="560.6" cy="806.9" r="29.2"/>
+    <circle cx="254.3" cy="520.9" r="29.0"/>
+    <circle cx="569.4" cy="723.7" r="27.8"/>
+    <circle cx="246.9" cy="812.9" r="26.4"/>
+    <circle cx="593.8" cy="382.5" r="29.4"/>
+    <circle cx="590.9" cy="493.4" r="28.7"/>
+    <circle cx="469.7" cy="227.8" r="26.6"/>
+    <circle cx="266.4" cy="288.3" r="27.5"/>
+    <circle cx="305.5" cy="732.9" r="28.0"/>
+    <circle cx="250.6" cy="633.4" r="25.9"/>
+    <circle cx="255.6" cy="220.4" r="29.9"/>
+    <circle cx="527.1" cy="306.6" r="26.9"/>
+    <circle cx="603.1" cy="556.1" r="25.8"/>
+    <circle cx="601.9" cy="617.1" r="28.0"/>
+    <circle cx="368.6" cy="812.4" r="27.4"/>
+    <circle cx="396.1" cy="302.7" r="28.2"/>
+    <circle cx="528.7" cy="253.5" r="26.6"/>
+    <circle cx="256.1" cy="758.9" r="26.2"/>
+    <circle cx="598.6" cy="440.1" r="25.2"/>
+    <circle cx="253.3" cy="343.5" r="29.7"/>
+    <circle cx="356.9" cy="196.6" r="26.3"/>
+    <circle cx="604.7" cy="258.8" r="21.1"/>
+    <circle cx="251.3" cy="471.6" r="19.9"/>
+    <circle cx="509.9" cy="818.8" r="20.8"/>
+    <circle cx="421.4" cy="254.0" r="19.9"/>
+    <circle cx="488.5" cy="715.4" r="20.2"/>
+    <circle cx="300.0" cy="192.2" r="22.1"/>
+    <circle cx="241.2" cy="586.7" r="20.3"/>
+    <circle cx="609.1" cy="790.0" r="20.5"/>
   </g>
 
   <!-- The sacred tree beside the approach, ringed by its rope (shimenawa) - research 126 -->
   <g data-kind="sacred tree" fill="#7A8C5C" stroke="#3E5230" stroke-width="1.4">
-    <circle cx="505.0" cy="686.0" r="33.0"/>
+    <circle cx="512.0" cy="764.0" r="33.0"/>
   </g>
   <!-- The approach (sando): a 10 ft gravel way from the grove's edge to the hall's front step, 88 ft, through the seven arches -->
   <g data-kind="approach">
@@ -135,44 +117,44 @@
   <g data-kind="torii">
     <rect x="417.5" y="821" width="45" height="6" fill="none" id="arch"/>
     <line x1="417.5" y1="824" x2="462.5" y2="824" stroke="#A03020" stroke-width="4.5"/>
-    <rect x="418" y="821" width="6" height="6" fill="#7A2418"/>
-    <rect x="456" y="821" width="6" height="6" fill="#7A2418"/>
+    <rect x="421" y="822.2" width="3.6" height="3.6" fill="#5A1A10"/>
+    <rect x="455.4" y="822.2" width="3.6" height="3.6" fill="#5A1A10"/>
   </g>
   <g data-kind="torii">
     <rect x="417.5" y="785" width="45" height="6" fill="none" id="arch"/>
     <line x1="417.5" y1="788" x2="462.5" y2="788" stroke="#A03020" stroke-width="4.5"/>
-    <rect x="418" y="785" width="6" height="6" fill="#7A2418"/>
-    <rect x="456" y="785" width="6" height="6" fill="#7A2418"/>
+    <rect x="421" y="786.2" width="3.6" height="3.6" fill="#5A1A10"/>
+    <rect x="455.4" y="786.2" width="3.6" height="3.6" fill="#5A1A10"/>
   </g>
   <g data-kind="torii">
     <rect x="417.5" y="749" width="45" height="6" fill="none" id="arch"/>
     <line x1="417.5" y1="752" x2="462.5" y2="752" stroke="#A03020" stroke-width="4.5"/>
-    <rect x="418" y="749" width="6" height="6" fill="#7A2418"/>
-    <rect x="456" y="749" width="6" height="6" fill="#7A2418"/>
+    <rect x="421" y="750.2" width="3.6" height="3.6" fill="#5A1A10"/>
+    <rect x="455.4" y="750.2" width="3.6" height="3.6" fill="#5A1A10"/>
   </g>
   <g data-kind="torii">
     <rect x="417.5" y="713" width="45" height="6" fill="none" id="arch"/>
     <line x1="417.5" y1="716" x2="462.5" y2="716" stroke="#A03020" stroke-width="4.5"/>
-    <rect x="418" y="713" width="6" height="6" fill="#7A2418"/>
-    <rect x="456" y="713" width="6" height="6" fill="#7A2418"/>
+    <rect x="421" y="714.2" width="3.6" height="3.6" fill="#5A1A10"/>
+    <rect x="455.4" y="714.2" width="3.6" height="3.6" fill="#5A1A10"/>
   </g>
   <g data-kind="torii">
     <rect x="417.5" y="677" width="45" height="6" fill="none" id="arch"/>
     <line x1="417.5" y1="680" x2="462.5" y2="680" stroke="#A03020" stroke-width="4.5"/>
-    <rect x="418" y="677" width="6" height="6" fill="#7A2418"/>
-    <rect x="456" y="677" width="6" height="6" fill="#7A2418"/>
+    <rect x="421" y="678.2" width="3.6" height="3.6" fill="#5A1A10"/>
+    <rect x="455.4" y="678.2" width="3.6" height="3.6" fill="#5A1A10"/>
   </g>
   <g data-kind="torii">
     <rect x="417.5" y="641" width="45" height="6" fill="none" id="arch"/>
     <line x1="417.5" y1="644" x2="462.5" y2="644" stroke="#A03020" stroke-width="4.5"/>
-    <rect x="418" y="641" width="6" height="6" fill="#7A2418"/>
-    <rect x="456" y="641" width="6" height="6" fill="#7A2418"/>
+    <rect x="421" y="642.2" width="3.6" height="3.6" fill="#5A1A10"/>
+    <rect x="455.4" y="642.2" width="3.6" height="3.6" fill="#5A1A10"/>
   </g>
   <g data-kind="torii">
     <rect x="417.5" y="605" width="45" height="6" fill="none" id="arch"/>
     <line x1="417.5" y1="608" x2="462.5" y2="608" stroke="#A03020" stroke-width="4.5"/>
-    <rect x="418" y="605" width="6" height="6" fill="#7A2418"/>
-    <rect x="456" y="605" width="6" height="6" fill="#7A2418"/>
+    <rect x="421" y="606.2" width="3.6" height="3.6" fill="#5A1A10"/>
+    <rect x="455.4" y="606.2" width="3.6" height="3.6" fill="#5A1A10"/>
   </g>
 
   <!-- The shrine's well - its one well - where the village map sites it, 108 ft behind the hall, at the grove's back edge -->
@@ -186,8 +168,7 @@
   <g data-kind="basin">
     <rect x="393.5" y="585.5" width="9" height="9" fill="#9C8C70" stroke="#5C4830" stroke-width="1" id="basin"/>
     <circle cx="398" cy="590" r="2.4" fill="#5E7F8E"/>
-    <text x="393.2" y="610.6" text-anchor="middle" font-size="7" font-style="italic" fill="#4A4640">basin</text>
-    <line x1="402.5" y1="604.0" x2="402.5" y2="595.5" stroke="#4A4640" stroke-width="0.60" stroke-linecap="round" data-leader="1"/>
+    <text x="381.4" y="581.3" text-anchor="middle" font-size="7" font-style="italic" fill="#4A4640">basin</text>
   </g>
 
   <!-- THE HALL AND DWELLING under one roof, at the footprint the village map draws (60 x 48 ft), hall and dwelling END TO END
@@ -244,8 +225,8 @@
   <!-- The privy at the west gable's FRONT corner, and the kitchen garden beside the west end -->
   <g data-kind="latrine">
     <rect x="335" y="557" width="15" height="15" fill="#7E726A" stroke="#4A3318" stroke-width="0.8"/>
-    <text x="337.7" y="609.1" text-anchor="middle" font-size="7" font-style="italic" fill="#4A4640">privy</text>
-    <line x1="347.3" y1="602.5" x2="347.3" y2="573.0" stroke="#4A4640" stroke-width="0.60" stroke-linecap="round" data-leader="1"/>
+    <text x="272.9" y="566.4" text-anchor="middle" font-size="7" font-style="italic" fill="#4A4640">privy</text>
+    <line x1="283.5" y1="560.8" x2="334.0" y2="560.8" stroke="#4A4640" stroke-width="0.60" stroke-linecap="round" data-leader="1"/>
   </g>
   <g data-kind="vegetable garden">
     <rect x="296" y="450" width="42" height="90" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="3 2" id="kitchen_garden"/>
@@ -264,20 +245,20 @@
   </g>
 
   <g data-kind="sacred tree">
-    <path d="M496.0,686.0 a9,9 0 1,0 18,0 a9,9 0 1,0 -18,0" fill="none" stroke="#EDE3B8" stroke-width="2.4" stroke-dasharray="3 2"/>
-    <text x="563.2" y="687.9" text-anchor="middle" font-size="7" font-style="italic" fill="#3A4A28">sacred tree</text>
-    <line x1="541.0" y1="686.0" x2="515.0" y2="686.0" stroke="#3A4A28" stroke-width="0.60" stroke-linecap="round" data-leader="1"/>
+    <path d="M507.0,764.0 a5,5 0 1,0 10,0 a5,5 0 1,0 -10,0" fill="none" stroke="#EDE3B8" stroke-width="2" stroke-dasharray="2 1.5"/>
+    <text x="569.7" y="765.9" text-anchor="middle" font-size="7" font-style="italic" fill="#3A4A28">sacred tree</text>
+    <line x1="547.5" y1="764.0" x2="518.0" y2="764.0" stroke="#3A4A28" stroke-width="0.60" stroke-linecap="round" data-leader="1"/>
   </g>
 
   <!-- Scale bar (3 px = 1 ft), below the grove -->
   <g data-kind="-">
     <g stroke="#3A2E1C">
-      <line x1="254" y1="858" x2="344" y2="858" stroke-width="2"/>
-      <line x1="254" y1="853" x2="254" y2="863" stroke-width="2"/>
-      <line x1="344" y1="853" x2="344" y2="863" stroke-width="2"/>
-      <line x1="299" y1="855" x2="299" y2="861" stroke-width="1"/>
+      <line x1="224" y1="858" x2="314" y2="858" stroke-width="2"/>
+      <line x1="224" y1="853" x2="224" y2="863" stroke-width="2"/>
+      <line x1="314" y1="853" x2="314" y2="863" stroke-width="2"/>
+      <line x1="269" y1="855" x2="269" y2="861" stroke-width="1"/>
     </g>
-    <text x="299" y="874" text-anchor="middle" font-size="10" fill="#3A2E1C">30 ft</text>
-    <text x="299" y="885" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">(3 px = 1 ft)</text>
+    <text x="269" y="874" text-anchor="middle" font-size="10" fill="#3A2E1C">30 ft</text>
+    <text x="269" y="885" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">(3 px = 1 ft)</text>
   </g>
 </svg>
