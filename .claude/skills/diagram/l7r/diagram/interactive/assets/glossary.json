@@ -6620,5 +6620,25 @@
    "Tensho",
    "Tensho-era"
   ]
+ },
+ "swept collar": {
+  "def": "The strip of bare, swept ground kept around a shrine hall, an arch or a grave plot by brooms, feet and the traffic of the approach; its edge falls wherever the tending gives out into the scrub.",
+  "variants": [
+   "swept collar",
+   "swept ground"
+  ]
+ },
+ "Tanabata": {
+  "def": "The festival of the seventh day of the seventh month. In many regions that day was also counted the first day of Bon (nanuka-bon), when graves and the paths to them were cleaned to prepare for welcoming the spirits.",
+  "variants": [
+   "Tanabata"
+  ]
+ },
+ "hall-and-wing house": {
+  "def": "A Hakka walled house built with an ancestral hall on its central axis and wings of rooms around it. In front of it lie a rectangular drying floor (the heping) and a half-moon fengshui pond.",
+  "variants": [
+   "hall-and-wing house",
+   "hall-and-wing houses"
+  ]
  }
 }

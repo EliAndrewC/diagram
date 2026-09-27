@@ -155,3 +155,4 @@
 - SluiceGate (archetypes SECTION=150): REWRITTEN - the Why now carries 150's polder finding, gates opened in drought and shut in flood (feature 265 T11)
 - Well (urban-features SECTION=090): IN-STEP - the building-plan sheet's Well (compound_kinds/household.py, household.Well): the 1 m shaft, the unmeasured curb and the estimated 3-4 ft curb all still hold; the map's Well of the same name was REWRITTEN above (feature 265 T11)
 - household.Stables (urban-features SECTION=080): IN-STEP - the changes label the gate cart-yard ground and cite the hitching post and caravanserai, none of which the modal states
+- ShrineGrove (religion-and-death SECTION=130): REWRITTEN - dropped the unsourced 'swept' from the Why and noted the households' cleaning and the swept surface's absence in the Note

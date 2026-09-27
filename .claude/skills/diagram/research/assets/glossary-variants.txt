@@ -552,6 +552,8 @@ hakka	Hakka
 hakone barrier	Hakone barrier
 half-river closure	half-river closure
 half-river closures	half-river closure
+hall-and-wing house	hall-and-wing house
+hall-and-wing houses	hall-and-wing house
 han	han
 han china	Han dynasty
 han dynasty	Han dynasty
@@ -1408,6 +1410,8 @@ suzaku ōji	Suzaku-oji
 suzaku-oji	Suzaku-oji
 suzaku-ōji	Suzaku-oji
 sward	sward
+swept collar	swept collar
+swept ground	swept collar
 tagoshi	tagoshi kangai
 tagoshi kangai	tagoshi kangai
 taihu	Lower Yangzi
@@ -1423,6 +1427,7 @@ tamajari	tamajari
 tameike	tameike
 tamonten	Bishamon
 tan	tan
+tanabata	Tanabata
 tanada	tanada
 tang	Tang dynasty
 tang dynasty	Tang dynasty
