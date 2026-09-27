@@ -78,3 +78,11 @@
 - Granary (buildings SECTION=150): REWRITTEN - "paddy tax arrived as" became "the lord's kura held" brown rice in bales; the famine corner is now labeled a one-granary simplification of Edo's separate community granaries.
 - GuestQuarters (buildings SECTION=120): IN-STEP - guest doors feeding a court and not a flank still match the section.
 - RetainersQuarters (buildings SECTION=060): REWRITTEN - rural on-grounds staff housing is now counted as the record's reconstruction; only the small-domain retainers' residences and the city constables' district are recorded.
+- FireWaterTubs (buildings SECTION=170): REWRITTEN - water kept ready at the front entrance and on the roof is now a townspeople's custom, its reach to every building the record's reading.
+- Hearth (buildings SECTION=170): REWRITTEN - the kamado stays read, but ranking the kitchen's fire the compound's top risk (and its second tub) is now labeled this project's reasoning.
+- InnerCourt (buildings SECTION=020): REWRITTEN - the residence-behind-the-office order is now credited to Chinese regulation only, with Takayama's side-by-side residence named.
+- InnerCourt (buildings SECTION=230): IN-STEP - the south garden as read and the north service strip as the record's own reasoning still match the section.
+- Kitchen (buildings SECTION=120): REWRITTEN - the postern opening into work space is now this project's reading, the dictionary cited defining only the kitchen door.
+- Kitchen (buildings SECTION=170): REWRITTEN - the kitchen as the worst fire risk, and so its two tubs, is now this project's reading, no page setting one tub to a hall as a rule.
+- Kitchen (buildings SECTION=180): REWRITTEN - the kitchen's rank below the living quarters is now this project's reading, no readable page ordering the compound by size.
+- PracticeGround (buildings SECTION=210): LABELED - the rural-training, castle-town-school and Chinese-yamen claims became guesses; the re-check found the martial-hall absence now rests on the silence of several intendant's-office pages (one naming a riding ground), relabeled by hand as a guess from that silence without a third check.

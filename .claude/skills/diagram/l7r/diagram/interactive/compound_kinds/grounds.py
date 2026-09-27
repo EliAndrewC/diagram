@@ -59,7 +59,9 @@ class InnerCourt(Kind):
     the reception rooms, and a plan seats it there where its buildings allow; the household's service
     economy fills the shady rear.
 
-    Note: The two-court split, the household inside the compound and the formal garden south of the
+    Note: The household inside the compound follows the record; the residence-behind-the-office order is
+    Chinese regulation (Neixiang), while the Japanese pages read show no front-and-rear order - at Takayama the
+    residence stood beside the office, to the west. The two-court split and the formal garden south of the
     reception rooms follow the record. The service strip along the shady north rear is this record's own
     reasoning from where the formal garden sat, not something a source describes.
 
@@ -142,19 +144,25 @@ class PracticeGround(Kind):
     compound's samurai keep up their daily practice.
 
     Why: A dojo with a resident teacher and enrolled students was an institution of cities, in Japan and
-    China alike; rural samurai trained at home in an earthen yard, in a hall cleared for the purpose, or on
-    shrine grounds. A county seat holds about fifteen samurai - no student body and no living for a teacher -
+    China alike; rural samurai most likely trained at home in an earthen yard, in a hall cleared for the
+    purpose, or on shrine grounds. A county seat holds about fifteen samurai - no student body and no living for a teacher -
     so its magistracy trains on open ground in its own compound, and what marks that ground is the gear
     practice leaves behind, not a building. It is sized to the samurai who drill there, about 90 to 135 sq ft
     each.
 
-    Note: Courtyard keiko in place of a dojo follows the record: a dojo is a city institution. The one page
-    read on it lists a drill ground at a small domain's jin'ya, which confirms the practice ground but not
-    that a rural intendant's office kept no martial hall; that absence rests on no page read.
+    Note: Courtyard keiko in place of a dojo follows the record only in part: the famous private fencing
+    dojos read on stood in Edo, and practice before the mid-Edo period was held outdoors or on earthen floors,
+    but that domain schools stood in castle towns, that rural samurai kept training in yards, cleared halls
+    or on shrine grounds, and that the Chinese county yamen had no training hall are guesses no page read
+    confirms. The pages read on an intendant's office list its buildings without a martial hall, but none
+    says it had none, and the one martial ground they name there is a riding ground; the drill ground read on
+    stood at a small domain's jin'ya. So they confirm the practice ground, not that a rural intendant's office
+    kept no martial hall; that absence is a guess from their silence.
 
-    Caveat: The one page read on it lists a drill ground at a small domain's jin'ya, which confirms the
-    practice ground but not that a rural intendant's office kept no martial hall; that absence rests on no
-    page read.
+    Caveat: That domain schools stood in castle towns and cities, that rural samurai trained in yards,
+    cleared halls or on shrine grounds, and that a Chinese county yamen had no training hall are guesses no
+    page read confirms. That a rural intendant's office kept no martial hall is a guess from the silence of
+    the pages read on one, which list its buildings without one but never say it had none.
 
     Name: practice ground
     Covers: the swept keiko patch and its label
