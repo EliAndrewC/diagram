@@ -2,15 +2,18 @@
 
 ## Phase 0 - the parallel runs (FR-010)
 
-- [ ] T12 `make reserve KIND=glossary|registry KEY=<key>` under a host-wide lock; `apply-edits` takes its glossary
+- [x] T12 `make reserve KIND=glossary|registry KEY=<key>` under a host-wide lock; `apply-edits` takes its glossary
       prefix from it; a test that races two allocations
       research: rendering
-- [ ] T13 A guard refuses a new glossary or registry file written without a reservation, with the command; its suite,
+      verify: DONE. make reserve under a host-wide flock; test_reserve_prefix 3/3 incl. an 8-way race across 4 processes; apply-edits reserves
+- [x] T13 A guard refuses a new glossary or registry file written without a reservation, with the command; its suite,
       proved red on a mutated copy; registered in the fallback form
       research: rendering
-- [ ] T14 The page briefs and the runner name the reservation and the queue's clone; `make page-queue` starts a queue
+      verify: DONE. new-file-hooks.sh matched by kind, prefix and key; suite 13/13; 5 of 11 red with the refusal removed; registered in the fallback form
+- [x] T14 The page briefs and the runner name the reservation and the queue's clone; `make page-queue` starts a queue
       in a sibling clone, and pulling a finished queue back rebuilds the generated pages
       research: rendering
+      verify: DONE. page-queue.sh and pull-queue.sh; test_pull_queue 2/2 on real repos; plan review round 2 CLEAR
 
 ## Phase 1 - the pages (FR-002, FR-006, FR-007; was 250's T19)
 
