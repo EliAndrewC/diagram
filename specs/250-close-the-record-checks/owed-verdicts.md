@@ -71,3 +71,10 @@
 - OfficeHall (buildings SECTION=180): REWRITTEN - the Note and Caveat now say the hall out-sizing the residence is this project's reading, no source ranking footprints.
 - OuterCourt (buildings SECTION=020): REWRITTEN - front-and-rear order now credited to the Chinese record only; no Japanese source read sets the residence behind the office.
 - OuterCourt (buildings SECTION=190): REWRITTEN - the Note and Caveat now say how much of a site stood open is this project's estimate from plans.
+- BorderCourt (buildings SECTION=120): REWRITTEN - the Note and Caveat now credit the guests'-door-onto-a-court rule to the GM, the one cited source defining only the kitchen door.
+- CartYard (buildings SECTION=190): REWRITTEN - the Note and Caveat now say the apron's 15 to 20 ft width is this record's own calibration, which no source read states.
+- FireWaterTubs (buildings SECTION=160): IN-STEP - halls burning and only earthen kura enduring are unchanged in the section.
+- Granary (buildings SECTION=080): REWRITTEN - the Note and Caveat now say the staging (rice held in transit in the compound) is this map's own reading, which no source states.
+- Granary (buildings SECTION=150): REWRITTEN - "paddy tax arrived as" became "the lord's kura held" brown rice in bales; the famine corner is now labeled a one-granary simplification of Edo's separate community granaries.
+- GuestQuarters (buildings SECTION=120): IN-STEP - guest doors feeding a court and not a flank still match the section.
+- RetainersQuarters (buildings SECTION=060): REWRITTEN - rural on-grounds staff housing is now counted as the record's reconstruction; only the small-domain retainers' residences and the city constables' district are recorded.

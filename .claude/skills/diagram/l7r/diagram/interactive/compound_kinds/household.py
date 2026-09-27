@@ -117,13 +117,14 @@ class RetainersQuarters(Kind):
     soldiers lived as households, they lived in terraced ranges - one surviving ashigaru rowhouse holds eight
     households under one thatched roof, 143 by 24 ft - so a range, not a cluster of small houses, is the form.
 
-    Note: Staff housed on the grounds of a rural office and ranked households in terraced ranges are recorded
+    Note: Retainers' official residences laid out inside a small domain's jin'ya are recorded, but that a rural office's own staff lived on its grounds is the record's reconstruction, no source naming those staff or their housing; the city magistracy's separate constables' district and ranked households in terraced ranges rest on recorded
     findings. That the retainers' housing at a rural office took the form of a rowhouse is the record's own
     reading rather than a source's words, and the record places ranks of small household dwellings at the
     town's edge, outside an elite quarter, rather than inside its walls.
 
-    Caveat: That the retainers' housing at a rural office took the form of a rowhouse is the record's own
-    reading rather than a source's words, and the record places ranks of small household dwellings at the
+    Caveat: That a rural office's own staff lived on its grounds is the record's reconstruction, and that their
+    housing took the form of a rowhouse is the record's own reading rather than a source's words; the record
+    places ranks of small household dwellings at the
     town's edge, outside an elite quarter, rather than inside its walls.
 
     Name: retainers' quarters

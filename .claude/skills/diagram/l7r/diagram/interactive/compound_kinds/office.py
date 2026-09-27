@@ -127,15 +127,19 @@ class Granary(Kind):
     Why: Tax rice flowed from the village granaries through the magistrate's compound toward central stores,
     so the office kura holds grain in transit plus a local reserve, and a county seat's granary stands inside
     the compound rather than in the town. Where water gives a county a way out, the grain moves on; a remote
-    county, where transport costs more, keeps a row of kura instead. Paddy tax arrived as brown rice in straw
+    county, where transport costs more, keeps a row of kura instead. The lord's kura held the paddy tax as brown rice in straw
     bales, with a corner of unhulled rice kept against famine.
 
-    Note: The staging kura, its contents and its place inside the compound follow the record, drawn at about
+    Note: The kura, its rice and its place inside the compound follow the record, but the famine corner of
+    unhulled rice is a simplification: Edo kept that reserve in separate community granaries, and one granary
+    is drawn instead of two. The staging - tax rice passing through the compound and held there in transit beside a local reserve - is this map's own reading, which no source states; drawn at about
     43 to 50 by 25 to 27 ft and checked against real kura sizes. That more of the dry-field tax arrives in
     kind - soybeans and barley in bales beside the rice - than it did in Edo Japan is this setting's own
     economics: Rokugan is rich in goods and poor in coin.
 
-    Caveat: That more of the dry-field tax arrives in kind - soybeans and barley in bales beside the rice -
+    Caveat: The staging - tax rice held in the compound in transit beside a local reserve - is this map's own
+    reading, which no source states, and the famine corner of unhulled rice stands in for Edo's separate
+    community granaries. That more of the dry-field tax arrives in kind - soybeans and barley in bales beside the rice -
     than it did in Edo Japan is this setting's own economics: Rokugan is rich in goods and poor in coin.
 
     Name: granary

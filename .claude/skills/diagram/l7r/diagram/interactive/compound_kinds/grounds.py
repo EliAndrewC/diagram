@@ -87,12 +87,13 @@ class BorderCourt(Kind):
     building. So a guests' door opens into a court fit to receive them, and not onto the hearing court where
     the accused kneel.
 
-    Note: A guests' door that opens onto a court is the record's rule. The staged arrival behind it - gate,
+    Note: A guests' door that opens onto a court is the GM's rule for these plans; the one source cited defines the kitchen door, and says nothing of what a guests' door opens onto. The staged arrival behind it - gate,
     then a court or garden, then the formal entrance - is the record's own reading and the GM's rule for
     these plans; no page a reader can open sets it out. A magistracy that receives delegations from across a
     clan border, and keeps a court for them, is this setting's own, and the record has nothing on it.
 
-    Caveat: The staged arrival behind it - gate, then a court or garden, then the formal entrance - is the
+    Caveat: A guests' door that opens onto a court is the GM's rule for these plans, which no source cited
+    states. The staged arrival behind it - gate, then a court or garden, then the formal entrance - is the
     record's own reading and the GM's rule for these plans; no page a reader can open sets it out. A
     magistracy that receives delegations from across a clan border, and keeps a court for them, is this
     setting's own, and the record has nothing on it.
@@ -393,13 +394,14 @@ class CartYard(Kind):
     ignition, so a charcoal store is set apart from the working yard across open ground; the record derives
     about 30 ft as the gap to keep, roughly one flame-height clear of a burning stack.
 
-    Note: The apron and the separation it performs follow the record. The 30 ft gap is this record's own
+    Note: That a compound keeps the apron, and the separation it performs, follows the record; its 15 to 20 ft width is this record's own calibration, which no source read states. The 30 ft gap is this record's own
     derivation, and no entry squares carts at a county compound with what the record finds on them: carts
     confined to city streets in Japan and forbidden on its highways, and a Chinese countryside built for the
     wheelbarrow.
 
-    Caveat: The 30 ft gap is this record's own derivation, and no entry squares carts at a county compound with
-    what the record finds on them: carts confined to city streets in Japan and forbidden on its highways, and a
+    Caveat: The apron's 15 to 20 ft width is this record's own calibration, which no source read states. The
+    30 ft gap is this record's own derivation, and no entry squares carts at a county compound with what the
+    record finds on them: carts confined to city streets in Japan and forbidden on its highways, and a
     Chinese countryside built for the wheelbarrow.
 
     Name: cart yard
