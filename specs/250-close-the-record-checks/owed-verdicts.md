@@ -34,3 +34,4 @@
 - Woodpile (homesteads SECTION=212): REWRITTEN - the guessed wall is now the kura's outer wall, as the section names it
 - IrrigationDitch (fields SECTION=070): IN-STEP - the comb layout, taper, paddy-to-paddy watering, the sparse-net reading and the Kishu note all still stand; the section's changes are record maintenance
 - Pond (fields SECTION=070): IN-STEP - the section's changes are in the Distribution and Layout paragraphs, and the Pond paragraph still carries every claim and the Note
+- Byre (homesteads SECTION=140): IN-STEP - the modal quotes no number from 140, and the draft animal kept close to the house (60.5% in the main house) and the separate byre as the temperate reading still stand; the 0.32 shed correction does not touch its prose
