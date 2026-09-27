@@ -437,3 +437,29 @@ def test_an_approach_that_stops_short_has_its_entrance_at_the_handover() -> None
     M = {"houses": [{"x": 0.0, "y": 0.0}], "lanes": [{"connector": True, "pts": [[1000.0, 0.0], [300.0, 0.0], [150.0, 0.0]]}]}
     assert kosatsuba_anchor(M, "entrance") == (150.0, 0.0)
     assert kosatsuba_anchor({"houses": [{"x": 0.0, "y": 0.0}], "lanes": [{"connector": True, "pts": [[1.0, 1.0]]}]}, "entrance") is None, "a one-point run is no approach"
+
+
+def test_the_handover_anchors_the_entrance_and_every_departure_is_walked_to_it() -> None:
+    """Feature 261 FR-015: where a hamlet's connector hands over to its lanes, that junction is the entrance anchor;
+    `departure_routes` walks each dwelling's way out through it and on along the connector, and `routes_missed` counts
+    the departures that never come near a seat. A connector meeting no other way is not a handover."""
+    from l7r.diagram.settlement.structures.fixtures import departure_routes, kosatsuba_anchor, kosatsuba_handover, routes_missed
+
+    houses = [{"x": 100.0, "y": 60.0}, {"x": 100.0, "y": -60.0}, {"x": 5000.0, "y": 5000.0}]
+    M = {
+        "houses": houses,
+        "lanes": [
+            {"connector": True, "pts": [(-400.0, 0.0), (0.0, 0.0)]},
+            {"pts": [(0.0, 0.0), (100.0, 50.0)]},
+            {"pts": [(0.0, 0.0), (100.0, -50.0)]},
+            {"pts": [(1.0, 1.0)]},
+        ],
+    }
+    assert kosatsuba_handover(M) == (0.0, 0.0) and kosatsuba_anchor(M, "entrance") == (0.0, 0.0)
+    routes = departure_routes(M)
+    assert len(routes) == 2, "the far dwelling is on no way and walks no route"
+    assert routes_missed(routes, -50.0, 5.0, 20.0) == 0, "a board on the approach is passed by every departure"
+    assert routes_missed(routes, 90.0, 45.0, 20.0) == 1, "a board on one branch is missed by the other"
+    assert kosatsuba_handover({"houses": [], "lanes": M["lanes"]}) is None
+    alone = {"houses": houses, "lanes": [{"connector": True, "pts": [(-400.0, 0.0), (0.0, 0.0)]}, {"connector": True, "pts": [(5.0, 5.0)]}]}
+    assert kosatsuba_handover(alone) is None and departure_routes(alone) == []

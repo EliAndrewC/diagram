@@ -15,7 +15,7 @@ from ..._geom import (
     way_beds,
 )
 from ..._knobs import KOSATSUBA_MARKER_MIN_PX, PUNISHMENT_SPOT_FT, resolve_knob
-from ._helpers import CAPTION_LANE_TARGET_FT, KOSATSUBA_ANCHOR_BAND_FT, KOSATSUBA_VERGE_FT, kosatsuba_affordances, kosatsuba_anchor
+from ._helpers import CAPTION_LANE_TARGET_FT, KOSATSUBA_ANCHOR_BAND_FT, KOSATSUBA_HANDOVER_BAND_FT, KOSATSUBA_VERGE_FT, departure_routes, kosatsuba_affordances, kosatsuba_anchor, kosatsuba_handover, routes_missed
 
 if TYPE_CHECKING:
     from ...core import Settlement
@@ -218,7 +218,9 @@ class FixtureSitingMixin:
                 _a0 = kosatsuba_anchor(self.M, str(resolve_knob("kosatsuba_seat", int(self.seed), kosatsuba_affordances(self.M), (self.M["meta"].get("knobs") or {}))))
                 if _a0 is not None:
                     _reach0 = 2.0 * KOSATSUBA_ANCHOR_BAND_FT / ftpx
-                    _main = _main + [ln for ln in _ways if ln not in _main and not ln.get("connector") and any(math.hypot(float(p[0]) - _a0[0], float(p[1]) - _a0[1]) <= _reach0 for p in ln["pts"])]
+                    # ...and at a HANDOVER the approach itself: the one way every departure walks (feature 261 FR-015)
+                    _hand0 = kosatsuba_handover(self.M) is not None
+                    _main = _main + [ln for ln in _ways if ln not in _main and (_hand0 or not ln.get("connector")) and any(math.hypot(float(p[0]) - _a0[0], float(p[1]) - _a0[1]) <= _reach0 for p in ln["pts"])]
             routes.extend(([(p[0], p[1]) for p in ln["pts"]], float(ln.get("w", 8))) for ln in _main)
             routes.extend(([(p[0], p[1]) for p in st["pts"]], float(st.get("w", 18))) for st in self.M.get("town_streets") or [])
         spots = [(b["x"], b["y"]) for b in self.M["houses"]] + [(b["x"], b["y"]) for b in self.M["buildings"]]
@@ -321,6 +323,15 @@ class FixtureSitingMixin:
             # already computed, which measures where people ARE rather than where the middle is.
             _near = min(math.hypot(c[2] - anchor[0], c[3] - anchor[1]) for c in cands)
             _band = KOSATSUBA_ANCHOR_BAND_FT / ftpx
+            if placement == "entrance" and kosatsuba_handover(self.M) is not None:
+                # AN ENTRANCE BOARD AT A HANDOVER STANDS WHERE EVERY DEPARTURE PASSES (feature 261 FR-015): first the seats
+                # the fewest households' ways out miss, then the tight band beside the handover among those
+                _routes = departure_routes(self.M)
+                _miss = {id(c): routes_missed(_routes, c[2], c[3], KOSATSUBA_HANDOVER_BAND_FT / ftpx) for c in cands}
+                _fewest = min(_miss.values())
+                cands = [c for c in cands if _miss[id(c)] == _fewest]
+                _near = min(math.hypot(c[2] - anchor[0], c[3] - anchor[1]) for c in cands)
+                _band = KOSATSUBA_HANDOVER_BAND_FT / ftpx
             cands = [c for c in cands if math.hypot(c[2] - anchor[0], c[3] - anchor[1]) <= _near + _band] or cands
         # ON THE TRAFFIC IS THE RULE; A FITTING CAPTION IS ONLY THE PREFERENCE WITHIN IT. Scoring the
         # caption as a flat bonus large enough to outrank traffic was tried first and re-committed the

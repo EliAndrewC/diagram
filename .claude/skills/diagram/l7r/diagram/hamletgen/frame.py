@@ -8,13 +8,25 @@ from __future__ import annotations
 import math
 
 from l7r.diagram.settlement import Settlement, nearest_way_bearing
-from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_ANCHOR_BAND_FT, KOSATSUBA_MARKER_MIN_PX, KOSATSUBA_VERGE_FT, canopy_index, kosatsuba_anchor, under_canopy
+from l7r.diagram.settlement.structures.fixtures import (
+    KOSATSUBA_ANCHOR_BAND_FT,
+    KOSATSUBA_HANDOVER_BAND_FT,
+    KOSATSUBA_MARKER_MIN_PX,
+    KOSATSUBA_VERGE_FT,
+    canopy_index,
+    departure_routes,
+    kosatsuba_anchor,
+    kosatsuba_handover,
+    routes_missed,
+    under_canopy,
+)
 
 from .consts import POLDER_ARCHETYPES
 from .hinterland import CROP_MARGIN, brook_beside_the_field, title_pocket
 from .plan import SitePlan
 from .sink import BROOK_JOIN_TRUNK
 from .water import polder_crossing_caps
+from .ways.checks import square_crossings
 
 # THE RE-SEAT PROBE MUST MEASURE THE BOARD THAT IS DRAWN (feature 134 T50, 2026-08-29). This was pinned
 # at 14 x 8 while `Settlement.kosatsuba` draws the researched 12 x 5 - not even the same aspect - and the
@@ -55,7 +67,18 @@ def stage_crossings(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.settlement.Settlement.channel_footbridges
         l7r.diagram.settlement.Settlement.dike_gates
         l7r.diagram.hamletgen.water.polder_crossing_caps
+        l7r.diagram.hamletgen.ways.checks.square_crossings
     """
+    # EVERY WAY CROSSES THE BROOK SQUARE, and so does its deck (feature 261): the lane is squared at the crossing first,
+    # its record and its ink together, because `bridges` lays the plank along the way it carries.
+    for f in (f for f in s.M.get("streams", []) if len(f.get("poly") or ()) >= 2):
+        brook, half = f["poly"], float(f.get("w", 8.0)) / 2 + s.px(6.0)
+        for i, ln in enumerate(s.M.get("lanes", [])):
+            pts = [(float(x), float(y)) for x, y in ln["pts"]]
+            squared = square_crossings(pts, [(float(x), float(y)) for x, y in brook], half)
+            if len(squared) != len(pts):
+                ln["pts"] = [[x, y] for x, y in squared]
+                s.reink_lane(i)
     s.bridges()
     if s.M.get("field_ditches"):
         if plan.field_archetype in POLDER_ARCHETYPES:
@@ -198,6 +221,8 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
             if _anchor is not None:
                 _reach = (_pxb(KOSATSUBA_ANCHOR_BAND_FT) if _pxb else KOSATSUBA_ANCHOR_BAND_FT) * 2.0
                 _ranked = _ranked + [ln for ln in _lanes if ln not in _ranked and any(math.dist((float(p[0]), float(p[1])), _anchor) <= _reach for p in ln["pts"])]
+                if _seat == "entrance" and kosatsuba_handover(s.M) is not None:
+                    _ranked = _ranked + [ln for ln in s.M.get("lanes", []) if ln.get("connector")]  # the approach every departure walks
             best: tuple[float, float, float, float] | None = None
             # ...AND A SEAT TO FALL BACK ON THAT STILL FACES ITS WAY (feature 230). Every verge candidate can be
             # refused by the 15-degree rule above - a hamlet whose web lays a straggler across every main-lane
@@ -268,7 +293,16 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
             if _seats:
                 if _anchor is not None:
                     _near = min(q[0] for q in _seats)
-                    _band = _pxb(KOSATSUBA_ANCHOR_BAND_FT) if _pxb else KOSATSUBA_ANCHOR_BAND_FT
+                    _bft = KOSATSUBA_ANCHOR_BAND_FT
+                    if _seat == "entrance" and kosatsuba_handover(s.M) is not None:
+                        # where every departure passes, then beside the handover - the rule `place_kosatsuba` applies
+                        _routes = departure_routes(s.M)
+                        _pass = _pxb(KOSATSUBA_HANDOVER_BAND_FT) if _pxb else KOSATSUBA_HANDOVER_BAND_FT
+                        _missed = [routes_missed(_routes, q[1], q[2], _pass) for q in _seats]
+                        _seats = [q for q, k in zip(_seats, _missed, strict=True) if k == min(_missed)]
+                        _near = min(q[0] for q in _seats)
+                        _bft = KOSATSUBA_HANDOVER_BAND_FT
+                    _band = _pxb(_bft) if _pxb else _bft
                     _seats = [q for q in _seats if q[0] <= _near + _band] or _seats
                 # the traffic is counted only over the seats the band kept: a count per candidate cost seed 4's notice
                 # stage 1.1 s, and the engine's own order is the band first and the traffic second

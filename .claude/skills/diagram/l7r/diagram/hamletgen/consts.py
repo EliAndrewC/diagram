@@ -684,6 +684,13 @@ COPSE_BELT_REACH_FT = 60.0
 # and well below the 113-131 deg folds the exit has produced at the frame edge. A map drawing convention.
 BROOK_MAX_TURN_DEG = 100.0
 
+# WHAT A WAY PAYS TO CROSS THE BROOK (feature 261, settlement-review of Kashikawa). Fords made the brook passable, and
+# at no cost the router took any ford that was a few feet shorter: a lane crossed the brook and came straight back to
+# reach a house on its own bank - two planks built to save a short walk. A crossing is one more thing to build and keep,
+# so the router charges it as this much extra walking; a way that has to reach the far bank still crosses. 150 ft is a
+# GUESS (no page read prices a plank against a detour), about the length of a house row, recorded in research/water/270.
+BROOK_CROSSING_COST_FT = 150.0
+
 WIND_VECTORS: dict[str, Pt] = {
     "N": (0.0, -1.0),
     "NE": (0.7071, -0.7071),

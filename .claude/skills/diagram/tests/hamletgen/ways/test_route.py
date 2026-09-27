@@ -168,3 +168,22 @@ def test_unjog_takes_the_knee_of_a_zigzag_whose_chord_is_blocked() -> None:
     out = _unjog(path, [wall], [], [], gap=0.5)  # a small explicit gap, so the fixture's geometry is the thing under test
     assert out[0] == (0.0, 0.0) and out[-1] == (110.0, 30.0)
     assert len(out) < len(path), "the two step vertices give way to one knee"
+
+
+def test_a_route_pays_to_cross_the_brook_and_goes_round_when_that_is_cheaper() -> None:
+    """Feature 261: entering the recorded brook's band costs `cost`, so a path detours round a short brook when the
+    detour is cheaper than the crossing, crosses it when it is not, and a cleared brook costs nothing."""
+    from l7r.diagram.hamletgen.ways.route import _route, in_brook_band, set_crossing
+
+    brook = [(50.0, -40.0), (50.0, 40.0)]
+    try:
+        set_crossing(brook, 20.0, 150.0)
+        assert in_brook_band((55.0, 0.0)) and not in_brook_band((0.0, 0.0))
+        round_ = _route((0.0, 0.0), (100.0, 0.0), [], [], [], cell=5.0)
+        assert round_ and max(abs(p[1]) for p in round_) > 50.0, "the detour round the brook's end is cheaper than the toll"
+        set_crossing(brook, 20.0, 20.0)
+        straight = _route((0.0, 0.0), (100.0, 0.0), [], [], [], cell=5.0)
+        assert straight and max(abs(p[1]) for p in straight) < 30.0, "a cheap crossing is taken"
+    finally:
+        set_crossing([], 0.0, 0.0)
+    assert not in_brook_band((50.0, 0.0))

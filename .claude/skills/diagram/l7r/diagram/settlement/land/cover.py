@@ -379,7 +379,17 @@ class GroundCoverMixin:
             # along ruler-straight north-south and east-west lines round an empty rectangle (settlement-review,
             # feature 261: 0 blade bases in a 50 ft band against 219 just beyond it). Each house point is grown by
             # the margin in eight directions before the hull is taken, so the keep-out clears every house by `m`.
-            _grown = [(h["x"] + m * math.cos(math.radians(a)), h["y"] + m * math.sin(math.radians(a))) for h in hs for a in range(0, 360, 45)]
+            # ...AND EVERY PART OF THE FARMSTEADS, NOT ONLY THE HOUSES (settlement-review of Kuwabata, feature 261): a hull of
+            # house centers left a fringe farmstead's privy, heap and garden outside it, with scrub on three sides of the
+            # privy - where the record puts them in the homestead's own work yard. Each part's footprint corners join the
+            # house points, grown by the same margin.
+            _pts = [(float(h["x"]), float(h["y"])) for h in hs]
+            for key in ("gardens", "threshing_yards", "farm_fixtures", "byres", "farm_sheds", "persimmons"):
+                for r in self.M.get(key) or []:
+                    if "x" in r:
+                        _hw, _hh = float(r.get("w", 0.0)) / 2, float(r.get("h", 0.0)) / 2
+                        _pts += [(float(r["x"]) + sx * _hw, float(r["y"]) + sy * _hh) for sx in (-1, 1) for sy in (-1, 1)]
+            _grown = [(x + m * math.cos(math.radians(a)), y + m * math.sin(math.radians(a))) for x, y in _pts for a in range(0, 360, 45)]
             avoid.append(convex_hull(_grown))
         elif hs:
             # DISPERSED: the farmsteads RING the settlement, so a bbox of their positions is not their footprint

@@ -497,6 +497,10 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
     lanes = s.M.get("lanes") or []
     houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])]
     rings = [[(float(a), float(b)) for a, b in (f.get("outline") or [])] for f in (s.M.get("fields") or [])] or [list(f) for f in fields]
+    # ...AND ITS DRY HEM, which is worked ground of the same field (feature 261): Mizuguchi's spur crossed the brook and
+    # stopped at the hem plots between the water and the paddy, 108 ft from the paddy's own outline, and was dropped here
+    # as an end in open ground - the hamlet's only way to its rice.
+    rings += [[(float(a), float(b)) for a, b in (d.get("poly") or [])] for d in (s.M.get("dry_plots") or [])]
     fixed, emptied = 0, []
     for i, ln in enumerate(lanes):
         if ln.get("connector"):

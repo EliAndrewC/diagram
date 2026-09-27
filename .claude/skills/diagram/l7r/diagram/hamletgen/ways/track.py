@@ -6,13 +6,15 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import cast
 
-from l7r.diagram.settlement import Settlement, edge_dist, skeleton_layout
+from l7r.diagram.settlement import Settlement, edge_dist, seg_intersect, segments_cross, skeleton_layout
 from l7r.diagram.settlement._geom import ring_offset
 from l7r.diagram.sitegen.geom import centroid, crop_polys, pull_clear, unit
 
 from ..cluster import _fork_spur, seat_cluster
 from ..consts import (
+    BROOK_CROSSING_COST_FT,
     FORD_BEND_DEG,
+    FORD_HALF,
     FORD_SPACING,
     LANE_CLEARANCE,
     POLDER_ARCHETYPES,
@@ -22,11 +24,11 @@ from ..consts import (
     Pt,
 )
 from ..plan import SitePlan
-from .checks import brook_fords, drawn_water_segs, ford_crossing, path_violations, stream_segs
+from .checks import brook_fords, drawn_water_segs, ford_crossing, gap_segments, path_violations, stream_segs
 from .clearance import _HAIRPIN_DEG, clip_to_clear, route_around
 from .fabric import _crosses_fabric, _fabric_hits, _homestead_polys
 from .geom import _turn_deg, polyline_len, push_clear_of_fabric, push_out_of
-from .route import _route
+from .route import _route, set_crossing
 
 # how near the field a spur's end must stand to have reached it - `lanes_reach_something`'s own 60 ft for a lane end
 SPUR_REACH_FT = 60.0
@@ -129,7 +131,20 @@ def _cluster_edge_toward(s: Settlement, target: Pt, fallback: Pt) -> Pt:
     ux, uy = ux / n, uy / n
     reach = max(((x - cx) * ux + (y - cy) * uy for x, y in zip(xs, ys, strict=False)), default=0.0)
     fabric = [poly for poly, _owner, _kind in _homestead_polys(s)]
-    return push_clear_of_fabric((cx, cy), (ux, uy), reach + TRACK_FABRIC_GAP + 8.0, fabric)
+    edge = push_clear_of_fabric((cx, cy), (ux, uy), reach + TRACK_FABRIC_GAP + 8.0, fabric)
+    # ...AND ON THE HOUSES' OWN BANK (feature 261). Pushed past the furthest house by the fabric gap, the origin landed
+    # across a brook that runs close by - Inashiro's by 20 ft - so the spur began on the field's side of the water, never
+    # crossed it, and was a stub too short to draw: the hamlet had no way to its rice. Where the push crosses a stream,
+    # the origin stops short of it by the router's own 14 px off water, and the spur crosses at a ford like any other way.
+    for f in s.M.get("streams") or []:
+        poly = [(float(x), float(y)) for x, y in (f.get("poly") or [])]
+        for a, b in zip(poly, poly[1:], strict=False):
+            if segments_cross((cx, cy), edge, a, b):
+                x = seg_intersect((cx, cy), edge, a, b)
+                if x is not None:
+                    back = math.dist((cx, cy), x) - 14.0 - float(f.get("w", 8.0)) / 2
+                    edge = (cx + ux * back, cy + uy * back)
+    return edge
 
 
 def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TRACK_FABRIC_GAP) -> Poly:
@@ -256,6 +271,8 @@ def stage_seat(s: Settlement, plan: SitePlan) -> None:
     # THE FORDS ARE OPENED FIRST (feature 261): every routing list below reads the brook through `stream_segs`, which
     # gaps it at these, so a way may cross the brook at a ford and nowhere else.
     s.brook_fords = brook_fords(plan.brook or [], FORD_SPACING, FORD_BEND_DEG)  # type: ignore[attr-defined]
+    # every route this roll draws pays to cross the brook, at the fords (the only free cells in its band)
+    set_crossing(plan.brook or [], FORD_HALF, s.px(BROOK_CROSSING_COST_FT))
     s.M["meta"]["brook_fords"] = [[round(x, 1), round(y, 1)] for x, y in s.brook_fords]  # type: ignore[attr-defined]
     plan.watercourses = (
         [
@@ -401,7 +418,11 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     # just outside it. The band point is kept only as the no-houses fallback.
     _band_start = to_screen((0.0, 0.0))
     cen = centroid(plan.envelope)
-    brook_segs = [(plan.sink_brook[i], plan.sink_brook[i + 1]) for i in range(len(plan.sink_brook) - 1)]
+    # ...GAPPED AT THE FORDS (feature 261): a spur that crosses at a ford crosses legally - `bridges()` decks it - so only
+    # a crossing between fords counts against it. Judged against the whole course, every spur to rice across the brook
+    # scored the same violation, the shortest won the tie, and the clip cut that straight run to a 28 ft stub that was
+    # never drawn: Inashiro and Kashikawa lost their only way to the field.
+    brook_segs = gap_segments([(plan.sink_brook[i], plan.sink_brook[i + 1]) for i in range(len(plan.sink_brook) - 1)], getattr(s, "brook_fords", ()), FORD_HALF)
 
     def spur_path(target: Pt) -> Poly:
         # THE TIP STOPS OUTSIDE THE FIELD, measured on the LOCAL edge normal (GM 2026-08-12:

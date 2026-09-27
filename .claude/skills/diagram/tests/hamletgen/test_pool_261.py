@@ -18,7 +18,7 @@ import pytest
 
 from l7r.diagram.hamletgen.consts import BROOK_MAX_TURN_DEG, COPSE_BELT_REACH_FT, COPSE_HOUSE_REACH_FT
 from l7r.diagram.settlement import segments_cross
-from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_ENTRANCE_REACH_FT, kosatsuba_anchor
+from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_ENTRANCE_REACH_FT, KOSATSUBA_HANDOVER_BAND_FT, departure_routes, kosatsuba_anchor, routes_missed
 from l7r.diagram.settlement.structures.fixtures._helpers import KOSATSUBA_ANCHOR_BAND_FT
 
 SKILL = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -88,7 +88,7 @@ def test_the_copse_stands_within_reach_of_what_it_is_named_for(gen: str) -> None
     clumps = groves["copse"]["clumps"]
     assert clumps, "non-vacuity: the copse has crowns"
     if m["meta"].get("copse_siting") == "against_the_belt":
-        near, reach = groves["windbreak"]["clumps"], COPSE_BELT_REACH_FT
+        near, reach = groves["windbreak"]["clumps"] + groves["windbreak"].get("clumps_offpage", []), COPSE_BELT_REACH_FT  # the belt runs on off the page
     else:
         near, reach = [(h["x"], h["y"]) for h in m["houses"]], COPSE_HOUSE_REACH_FT
     far = [c for c in clumps if min(math.hypot(c[0] - q[0], c[1] - q[1]) for q in near) > reach + 1.0]
@@ -97,8 +97,8 @@ def test_the_copse_stands_within_reach_of_what_it_is_named_for(gen: str) -> None
 
 @pytest.mark.parametrize("gen", GENS, ids=IDS)
 def test_an_entrance_board_stands_at_the_entrance(gen: str) -> None:
-    """FR-015 / SC-011: a board the map seats at its entrance stands where the approach arrives - within the entrance
-    reach of a farmhouse, and no further from the anchor than that reach plus the board's siting band. The
+    """FR-015 / SC-011: a board the map seats at its entrance stands where the approach arrives - no further from the
+    anchor than the entrance reach plus the board's siting band, and where every household's way out passes it. The
     settlement-review found Sawada's 669 ft from its anchor, deep among the houses, where no departure passed it."""
     m = _manifest(gen)
     seat = m["meta"].get("kosatsuba_seat")
@@ -108,7 +108,11 @@ def test_an_entrance_board_stands_at_the_entrance(gen: str) -> None:
     anchor = kosatsuba_anchor(m, seat)
     assert anchor is not None
     assert math.hypot(b["x"] - anchor[0], b["y"] - anchor[1]) <= KOSATSUBA_ENTRANCE_REACH_FT + KOSATSUBA_ANCHOR_BAND_FT
-    assert min(math.hypot(b["x"] - h["x"], b["y"] - h["y"]) for h in m["houses"]) <= KOSATSUBA_ENTRANCE_REACH_FT
+    # ...AND EVERY DEPARTURE PASSES IT (a settlement-review measured one or two households per map leaving by a lane that
+    # never came near the board): each household's drawn way out, walked through the lanes and on along the connector
+    routes = departure_routes(m)
+    assert len(routes) >= len(m["houses"]) - 1, "non-vacuity: the households walk their ways out"
+    assert routes_missed(routes, b["x"], b["y"], KOSATSUBA_HANDOVER_BAND_FT) == 0
 
 
 @pytest.mark.parametrize("gen", GENS, ids=IDS)
@@ -122,3 +126,20 @@ def test_no_brook_folds_back_on_itself(gen: str) -> None:
             if na and nb:
                 turn = math.degrees(math.acos(max(-1.0, min(1.0, (a[0] * b[0] + a[1] * b[1]) / (na * nb)))))
                 assert turn <= BROOK_MAX_TURN_DEG + 1e-6, f"the brook turns {turn:.0f} deg at ({q[0]:.0f}, {q[1]:.0f})"
+
+
+@pytest.mark.parametrize("gen", GENS, ids=IDS)
+def test_a_way_reaches_the_field(gen: str) -> None:
+    """FR-012 / SC-008: at least one of the hamlet's own ways (not the track out) comes within the 60 ft `lanes_reach_something`
+    asks of the field - its paddy or its dry hem, which is the same worked ground. Inashiro, Kashikawa and Mizuguchi, whose
+    houses stand across the brook from their rice, each lost that way at one step of this feature."""
+    from l7r.diagram.settlement import seg_dist
+
+    m = _manifest(gen)
+    if not _brooks(m):
+        pytest.skip("no brook stands between this hamlet and its field (FR-012 is about the crossing)")
+    rings = [f["outline"] for f in m.get("fields", []) if f.get("outline")] + [d["poly"] for d in m.get("dry_plots") or [] if d.get("poly")]
+    assert rings, "non-vacuity: the map has a field"
+    pts = [(float(x), float(y)) for ln in m["lanes"] if not ln.get("connector") for x, y in ln["pts"]]
+    near = min(seg_dist(p[0], p[1], r[i], r[(i + 1) % len(r)]) for p in pts for r in rings for i in range(len(r)))
+    assert near <= 60.0, f"the nearest way stops {near:.0f} ft from the field"

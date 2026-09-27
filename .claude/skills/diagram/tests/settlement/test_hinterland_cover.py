@@ -106,3 +106,8 @@ def test_the_settlement_keep_out_follows_a_diagonal_cluster_not_its_bbox() -> No
     ring = [tuple(p) for p in seen[0][0]]
     assert all(point_in_poly(h["x"], h["y"], ring) for h in s.M["houses"])
     assert not point_in_poly(420.0, 220.0, ring), "the bbox's empty corner is open to the scrub"
+    # ...and a farmstead's own parts are inside it too: a privy out on the ribbon's flank is kept clear of scrub
+    s.M["farm_fixtures"] = [{"kind": "privy", "x": 330.0, "y": 180.0, "w": 6.0, "h": 6.0}, {"kind": "heap"}]
+    seen.clear()
+    s.hinterland(marsh=False, commons=True, interior_fill=False)
+    assert point_in_poly(330.0, 180.0, [tuple(p) for p in seen[0][0]])
