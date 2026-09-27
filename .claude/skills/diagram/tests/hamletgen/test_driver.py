@@ -326,3 +326,30 @@ def test_a_re_roll_that_seats_fewer_households_is_not_kept(monkeypatch) -> None:
     _scripted_rolls(monkeypatch, {0: (14, [(1.0, 1.0), (2.0, 2.0)]), 2: (14, [])})
     rep = hg.generate(spec, out_base=None, render=False)
     assert rep.attempt == 2 and rep.failures == [], "a re-roll that seats no fewer and strands none is kept"
+
+
+def test_a_staged_roll_reaches_the_map_only_when_promoted(tmp_path) -> None:  # type: ignore[no-untyped-def]
+    """Feature 261: each attempt finishes into a stage beside the map carrying a copy of its notes; `promote` renames
+    the staged files onto the map's own paths (not the notes copy) and removes the stage, and a rejected roll's stage
+    is removed without touching the map."""
+    import os
+
+    from l7r.diagram.hamletgen.driver import promote, stage_for
+
+    out = str(tmp_path / "hamlet")
+    (tmp_path / "hamlet.notes.md").write_text("## Map notes\n")
+    (tmp_path / "hamlet.json").write_text("old")
+    kept, rejected = stage_for(out), stage_for(out)
+    assert open(kept + ".notes.md").read() == "## Map notes\n"
+    for base, word in ((kept, "kept"), (rejected, "rejected")):
+        open(base + ".json", "w").write(word)
+        open(base + ".svg", "w").write(word)
+    promote(rejected, None)
+    assert open(out + ".json").read() == "old" and not os.path.exists(os.path.dirname(rejected))
+    promote(kept, out)
+    assert open(out + ".json").read() == "kept" and open(out + ".svg").read() == "kept"
+    assert open(out + ".notes.md").read() == "## Map notes\n" and not os.path.exists(os.path.dirname(kept))
+    bare = stage_for(str(tmp_path / "other"))
+    assert not os.path.exists(bare + ".notes.md")
+    promote(bare, None)
+
