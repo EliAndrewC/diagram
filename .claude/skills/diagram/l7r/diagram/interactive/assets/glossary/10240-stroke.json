@@ -1,0 +1,8 @@
+{
+ "term": "stroke",
+ "def": "The drawn line that stands for a watercourse or bund on the map; its width is the width the feature is drawn at.",
+ "variants": [
+  "stroke",
+  "strokes"
+ ]
+}

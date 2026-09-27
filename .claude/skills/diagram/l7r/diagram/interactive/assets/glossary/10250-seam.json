@@ -1,0 +1,10 @@
+{
+ "term": "seam",
+ "def": "The shared edge where two neighboring paddy plots meet on the map; a broken seam leaves a gap or an overlap between them.",
+ "variants": [
+  "seam",
+  "seams",
+  "paddy seams",
+  "plot seams"
+ ]
+}

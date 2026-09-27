@@ -1033,6 +1033,7 @@ outwork	outwork
 outworks	outwork
 ox-frame	ox-frame
 ox-frames	ox-frame
+paddy seams	seam
 panicle	panicle
 panicles	panicle
 pannage	pannage
@@ -1060,6 +1061,7 @@ pig iron	pig iron
 plankton	plankton
 plant association	plant association
 planted collar	planted collar
+plot seams	seam
 pocket pond	pocket pond
 pocket ponds	pocket pond
 polder	polder
@@ -1196,6 +1198,8 @@ satoyama	satoyama
 schistosomiasis	schistosomiasis
 scour	scour
 se	se
+seam	seam
+seams	seam
 season word	season word
 season words	season word
 secondary forest	secondary forest
@@ -1320,6 +1324,8 @@ stringer	stringer
 stringers	stringer
 strip footing	strip footing
 strip footings	strip footing
+stroke	stroke
+strokes	stroke
 stupa	stupa
 stupas	stupa
 subgrade	subgrade
