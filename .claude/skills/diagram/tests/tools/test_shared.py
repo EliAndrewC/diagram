@@ -337,17 +337,20 @@ def test_a_tree_on_open_ground_is_fine_and_one_on_anything_else_is_named() -> No
     assert any("svg(305,57)" in f and "the label 'a label'" in f for f in findings)
 
 
-def test_two_canopies_may_touch_but_not_cover_each_other() -> None:
+def test_crowns_may_overlap_but_a_tree_is_not_drawn_on_another() -> None:
+    """Feature 270 (the GM 2026-09-27: "tree crowns may overlap, I never said they couldn't"): crowns overlapping each
+    other are a closed canopy, not a finding; one tree drawn on top of another - trunks within a third of the smaller
+    crown's radius, feature 257's "two lie on top of each other" - still is (the threshold a guess, research R2)."""
     _, plan = _plan(
         _rect(0, 0, 400, 400, "url(#court-earth)", "precinct"),
         _CANOPY.format(x=50, y=50, r=15),
-        _CANOPY.format(x=80, y=50, r=15),  # touching: 30 apart, radii sum 30
+        _CANOPY.format(x=65, y=50, r=15),  # half over the other: a closed canopy, fine
         _CANOPY.format(x=200, y=50, r=15),
-        _CANOPY.format(x=215, y=50, r=15),  # half on top of the other
+        _CANOPY.format(x=203, y=50, r=15),  # trunks 3 px apart, inside a third of 15: a duplicated tree
     )
     findings = s.trees_overlap(plan)
-    assert not [f for f in findings if "svg(50,50)" in f]
-    assert [f for f in findings if "two trees" in f and "svg(200,50)" in f] and len(findings) == 1
+    assert not [f for f in findings if "svg(50,50)" in f or "svg(65,50)" in f]
+    assert len(findings) == 1 and "drawn on top of" in findings[0] and "svg(200,50)" in findings[0]
 
 
 def test_a_tree_may_stand_on_a_garden_bed_and_over_no_glyph_or_tub() -> None:

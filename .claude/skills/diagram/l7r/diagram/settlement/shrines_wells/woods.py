@@ -180,7 +180,8 @@ class TreeStandsMixin:
 
     def _crowns(self: Settlement, trees: Sequence[tuple[float, float, float, str]]) -> list[str]:  # type: ignore[misc]
         """SVG for a set of (x, y, r, kind) canopy crowns, drawn back-to-front so the stand layers
-        with depth. One circle per tree (plus a dark apex for a conifer) - the same two-tone crown
+        with depth. One circle per tree, a conifer told by its darker fill alone (the inner "apex" disc
+        was dropped, GM 2026-09-27: it read as a trunk, which a plan view cannot show) - the same crown
         the grove clumps use, so a wood and a windbreak read as the same kind of thing. Records every
         crown it emits (M['tree_crowns'])."""
         out: list[str] = []
@@ -188,8 +189,6 @@ class TreeStandsMixin:
         for tx, ty, r, kind in sorted(trees, key=lambda t: t[1]):
             col = "#4A6733" if kind == "conifer" else ("#6E8B43" if (int(tx) + int(ty)) % 2 else "#7C9A4E")
             out.append(f'<circle cx="{tx:.1f}" cy="{ty:.1f}" r="{r:.1f}" fill="{col}" stroke="#3C5526" stroke-width="0.7"/>')
-            if kind == "conifer":
-                out.append(f'<circle cx="{tx:.1f}" cy="{ty:.1f}" r="{r * 0.4:.1f}" fill="#364D22" opacity="0.55"/>')
         return out
 
     def _fringe_blocked(self: Settlement, tx: float, ty: float, r: float) -> bool:  # type: ignore[misc]

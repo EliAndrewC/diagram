@@ -141,7 +141,7 @@ CHECKS: tuple[Check, ...] = (
         lambda ctx: s.trees_overlap(ctx.plan),
         True,
         "hoshigaoka-tree-on-fence-red.svg",
-        "move the tree onto open ground - off the building, the fence, the well, the label and the next canopy (a canopy may touch another, not cover it)",
+        "move the tree onto open ground - off the building, the fence, the well and the label; crowns may overlap each other, but a tree is not drawn on top of another",
     ),
     Check(
         "matches_map",

@@ -1,0 +1,3676 @@
+{
+ "hamlets:bamboo_stands": {
+  "maps": [
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {
+   "role=homestead": 21,
+   "role=thicket": 3
+  }
+ },
+ "hamlets:boundary_markers": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:bridges": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:buildings": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:byres": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:cemeteries": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:channels": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:comb_floors": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:commons": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {
+   "role=grazing": 64,
+   "role=woodland": 10
+  }
+ },
+ "hamlets:cremation_grounds": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:dikepond_sluices": {
+  "maps": [
+   "legacy-hand-authored-pool/honda",
+   "pool/kuwabata"
+  ],
+  "subkinds": {
+   "kind=drain": 33,
+   "kind=feed": 31
+  }
+ },
+ "hamlets:dikeponds": {
+  "maps": [
+   "legacy-hand-authored-pool/honda",
+   "pool/kuwabata"
+  ],
+  "subkinds": {
+   "kind=grow-out": 23,
+   "kind=fry": 3
+  }
+ },
+ "hamlets:dikes": {
+  "maps": [
+   "legacy-hand-authored-pool/enokida",
+   "pool/kuwabata"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:drawn_channels": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:dry_plots": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:duck_pens": {
+  "maps": [
+   "pool/kuwabata"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:execution_grounds": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:fallow_patches": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:farm_fixtures": {
+  "maps": [
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {
+   "kind=privy": 73,
+   "kind=woodpile": 65,
+   "kind=coop": 60,
+   "kind=manure": 36,
+   "kind=bath": 26,
+   "kind=shrine": 3
+  }
+ },
+ "hamlets:farm_sheds": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:field_chains": {
+  "maps": [
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:field_ditches": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {
+   "role=main": 61,
+   "role=branch": 37,
+   "role=lateral": 15,
+   "role=drain": 13
+  }
+ },
+ "hamlets:field_graves": {
+  "maps": [
+   "legacy-hand-authored-pool/shimizu",
+   "pool/kashikawa",
+   "pool/mizuguchi"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:field_ponds": {
+  "maps": [
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/tanada",
+   "pool/inashiro",
+   "pool/mizuguchi"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:field_rocks": {
+  "maps": [
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:fields": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {
+   "kind=paddy": 13
+  }
+ },
+ "hamlets:fire_towers": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:flooded_plots": {
+  "maps": [
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:flophouses": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:flower_fields": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:forest": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:forest_edge": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:forest_patches": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:gardens": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:gate": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:gates": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:governor_mansion": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:ground_bed_zmin": {
+  "maps": [
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:ground_edge_zmax": {
+  "maps": [
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:groves": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:hill": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:houses": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {
+   "kind=plain": 210
+  }
+ },
+ "hamlets:ink_classes": {
+  "maps": [
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:inspection_stations": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:kosatsuba": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:labels": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:land_use": {
+  "maps": [
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/shimizu",
+   "pool/kuwabata"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:lane": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:lanes": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {
+   "role=straggler": 42,
+   "role=skeleton": 5,
+   "role=bridge-breaks": 1,
+   "role=join-orphans": 1
+  }
+ },
+ "hamlets:manors": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:marshes": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {
+   "role=toe": 13,
+   "role=pond_fringe": 11,
+   "role=waterside": 4
+  }
+ },
+ "hamlets:mausoleums": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:meta": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:ministries": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:moat": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:moat_layer": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:ossuaries": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:pastures": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:persimmons": {
+  "maps": [
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:pig_sties": {
+  "maps": [
+   "pool/kuwabata"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:pond": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:pond_layer": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kuwabata",
+   "pool/mizuguchi"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:punishment_spots": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:quarters": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:religious": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:road": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:scalebar": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:shrine": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:shrines": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:site_boundary": {
+  "maps": [
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:sluice_gates": {
+  "maps": [
+   "pool/kuwabata"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:storehouses": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:streams": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:summit": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:taxfree": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:terrace_bunds": {
+  "maps": [
+   "legacy-hand-authored-pool/tanada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:threshing_yards": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {
+   "kind=forecourt": 16
+  }
+ },
+ "hamlets:title": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:torii": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:tree_crowns": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:unclassed_ink": {
+  "maps": [
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:unregistered_classes": {
+  "maps": [
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:village_groves": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {
+   "role=windbreak": 12,
+   "role=copse": 7
+  }
+ },
+ "hamlets:wall": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:water_bed_zmax": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:water_sheen_zmin": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:weirs": {
+  "maps": [
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/mizuguchi"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:wells": {
+  "maps": [
+   "legacy-hand-authored-pool/akagahara",
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/ikegami",
+   "legacy-hand-authored-pool/moritono",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "hamlets:wet_plots": {
+  "maps": [
+   "legacy-hand-authored-pool/enokida",
+   "legacy-hand-authored-pool/honda",
+   "legacy-hand-authored-pool/shimizu",
+   "legacy-hand-authored-pool/tanada",
+   "legacy-hand-authored-pool/yatsuda",
+   "pool/inashiro",
+   "pool/kashikawa",
+   "pool/kuwabata",
+   "pool/mizuguchi",
+   "pool/sawada"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:alleys": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:bathhouses": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:boundary_markers": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:breweries": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:bridges": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:buildings": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {
+   "kind=laborer": 607,
+   "kind=servant": 432,
+   "kind=merchant_house": 249,
+   "kind=samurai": 125,
+   "kind=burakumin": 97,
+   "kind=shop": 78,
+   "kind=laborer_large": 65,
+   "kind=monk_house": 57,
+   "kind=merchant": 47,
+   "kind=samurai_large": 14,
+   "kind=merchant_large": 10,
+   "kind=inn": 7,
+   "kind=stables": 6
+  }
+ },
+ "provincial-cities:byres": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:canals": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:cemeteries": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:channels": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:clearings": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:comb_floors": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:commons": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:cremation_grounds": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:docks": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:dojos": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:drawn_channels": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:drum_towers": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:dry_plots": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:dye_yards": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:execution_grounds": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:fallow_patches": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:farm_sheds": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:farriers": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:field_ditches": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {
+   "role=main": 94,
+   "role=branch": 32,
+   "role=drain": 23
+  }
+ },
+ "provincial-cities:fields": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {
+   "kind=paddy": 23,
+   "kind=vegetable": 1
+  }
+ },
+ "provincial-cities:fire_towers": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:flophouses": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:flower_fields": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:forest": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:forest_edge": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:forest_patches": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:gardens": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:gate": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:gate_structs": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {
+   "kind=gatepost": 12,
+   "kind=guardhouse": 6,
+   "kind=inspection": 6,
+   "kind=tower": 6
+  }
+ },
+ "provincial-cities:gates": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:governor_mansion": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:ground_bed_zmin": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:ground_edge_zmax": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:groves": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:hill": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:houses": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {
+   "kind=plain": 565
+  }
+ },
+ "provincial-cities:inspection_stations": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:jetties": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:kido": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:kilns": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:kosatsuba": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:labels": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:lane": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:log_booms": {
+  "maps": [
+   "legacy-hand-authored-pool/minami"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:lumber_yards": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:manors": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:marshes": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:martial_halls": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:mausoleums": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:merchant_estates": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:meta": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:ministries": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:moat": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:moat_flow": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:moat_layer": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:moat_width": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:oil_presses": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:ossuaries": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:pastures": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:pawnshops": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:pond": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:pond_layer": {
+  "maps": [
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:punishment_spots": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:quarters": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {
+   "kind=agricultural_district": 1
+  }
+ },
+ "provincial-cities:religious": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {
+   "kind=small_shrine": 14,
+   "kind=temple": 13
+  }
+ },
+ "provincial-cities:ring_road": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:ring_road_width": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:ring_road_z": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:river": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:road": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:road_label": {
+  "maps": [
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:road_width": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:road_z": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:roads": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:scalebar": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:shortfalls": {
+  "maps": [
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:shrine": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:shrines": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:sluice_gates": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:stable_yards": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:storehouses": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:streams": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:summit": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:tanning_yards": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:taxfree": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:theater_stage": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {
+   "kind=monzen": 3
+  }
+ },
+ "provincial-cities:threshing_yards": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:title": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:torii": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:town_streets": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:tree_crowns": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:village_groves": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:wall": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:wall_stroke": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:wall_tower_keepclears": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:wall_towers": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:wall_z": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:wards": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:water_bed_zmax": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:water_gates": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:water_sheen_zmin": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "provincial-cities:wells": {
+  "maps": [
+   "legacy-hand-authored-pool/minami",
+   "legacy-hand-authored-pool/nagahara",
+   "legacy-hand-authored-pool/tango"
+  ],
+  "subkinds": {}
+ },
+ "towns:borders": {
+  "maps": [
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:boundary_markers": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:bridges": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:buildings": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {
+   "kind=laborer": 79,
+   "kind=merchant": 59,
+   "kind=servant": 45,
+   "kind=burakumin": 37,
+   "kind=shop": 21,
+   "kind=samurai": 17,
+   "kind=merchant_large": 11,
+   "kind=laborer_large": 9,
+   "kind=samurai_large": 6,
+   "kind=barn": 5,
+   "kind=inn": 3,
+   "kind=stables": 3
+  }
+ },
+ "towns:byres": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:cemeteries": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:channels": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:charcoal_yards": {
+  "maps": [
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:clearings": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:comb_floors": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:commons": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {
+   "role=grazing": 24
+  }
+ },
+ "towns:cremation_grounds": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:drawn_channels": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:drum_towers": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki"
+  ],
+  "subkinds": {}
+ },
+ "towns:dry_plots": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:execution_grounds": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:fallow_patches": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:farm_sheds": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:farriers": {
+  "maps": [
+   "legacy-hand-authored-pool/hoshizora"
+  ],
+  "subkinds": {}
+ },
+ "towns:field_ditches": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {
+   "role=main": 40,
+   "role=drain": 9,
+   "role=branch": 8
+  }
+ },
+ "towns:fields": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {
+   "kind=paddy": 9
+  }
+ },
+ "towns:fire_towers": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:flooded_plots": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:flophouses": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:flower_fields": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {
+   "kind=chrysanthemum": 1
+  }
+ },
+ "towns:forest": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:forest_edge": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:forest_patches": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:gardens": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:gate": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:gate_structs": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki"
+  ],
+  "subkinds": {}
+ },
+ "towns:gates": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:governor_mansion": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:ground_bed_zmin": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:ground_edge_zmax": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:groves": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:hill": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:houses": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {
+   "kind=plain": 157
+  }
+ },
+ "towns:inspection_stations": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:kilns": {
+  "maps": [
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:kosatsuba": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:labels": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:lane": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:lanes": {
+  "maps": [
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:manors": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:marshes": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {
+   "role=pond_fringe": 2
+  }
+ },
+ "towns:mausoleums": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:meta": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:ministries": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:moat": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:moat_layer": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:ossuaries": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:pastures": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:pond": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:pond_layer": {
+  "maps": [
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:punishment_spots": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:quarters": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:refining_forges": {
+  "maps": [
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:religious": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {
+   "kind=monastery": 5
+  }
+ },
+ "towns:road": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:road_label": {
+  "maps": [
+   "legacy-hand-authored-pool/hoshizora"
+  ],
+  "subkinds": {}
+ },
+ "towns:road_width": {
+  "maps": [
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:road_z": {
+  "maps": [
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:roads": {
+  "maps": [
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:scalebar": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:shortfalls": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:shrine": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:shrines": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:storehouses": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:streams": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:summit": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:tanning_yards": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:taxfree": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:theater_stage": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {
+   "kind=monzen": 3
+  }
+ },
+ "towns:threshing_yards": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:title": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:torii": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:town_streets": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki"
+  ],
+  "subkinds": {}
+ },
+ "towns:tree_crowns": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:village_groves": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {
+   "role=copse": 18,
+   "role=windbreak": 7
+  }
+ },
+ "towns:wall": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:wall_stroke": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki"
+  ],
+  "subkinds": {}
+ },
+ "towns:wall_z": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki"
+  ],
+  "subkinds": {}
+ },
+ "towns:water_bed_zmax": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:water_sheen_zmin": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:wells": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "towns:wet_plots": {
+  "maps": [
+   "legacy-hand-authored-pool/hirameki",
+   "legacy-hand-authored-pool/hoshizora",
+   "legacy-hand-authored-pool/ubame"
+  ],
+  "subkinds": {}
+ },
+ "villages:boundary_markers": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:bridges": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:buildings": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:byres": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:cemeteries": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:channels": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:clearings": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:comb_floors": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:commons": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {
+   "role=grazing": 18,
+   "role=woodland": 6,
+   "role=commons": 3
+  }
+ },
+ "villages:cremation_grounds": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:crescent_ponds": {
+  "maps": [
+   "legacy-hand-authored-pool/hoshigaoka"
+  ],
+  "subkinds": {}
+ },
+ "villages:dikepond_sluices": {
+  "maps": [
+   "legacy-hand-authored-pool/kikuta"
+  ],
+  "subkinds": {
+   "kind=drain": 19,
+   "kind=feed": 6
+  }
+ },
+ "villages:dikeponds": {
+  "maps": [
+   "legacy-hand-authored-pool/kikuta"
+  ],
+  "subkinds": {}
+ },
+ "villages:drawn_channels": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:dry_plots": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:execution_grounds": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:fallow_patches": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:farm_sheds": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:field_ditches": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {
+   "role=main": 31,
+   "role=branch": 22,
+   "role=drain": 5
+  }
+ },
+ "villages:field_ponds": {
+  "maps": [
+   "legacy-hand-authored-pool/kikuta"
+  ],
+  "subkinds": {}
+ },
+ "villages:fields": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {
+   "kind=paddy": 5
+  }
+ },
+ "villages:fire_towers": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:flooded_plots": {
+  "maps": [
+   "legacy-hand-authored-pool/kikuta"
+  ],
+  "subkinds": {}
+ },
+ "villages:flophouses": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:flower_fields": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:forest": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:forest_edge": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:forest_patches": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:gardens": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:gate": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:gates": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:governor_mansion": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:groves": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:hill": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:houses": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {
+   "kind=plain": 276,
+   "role=headman": 4
+  }
+ },
+ "villages:inspection_stations": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:kosatsuba": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:labels": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:land_use": {
+  "maps": [
+   "legacy-hand-authored-pool/kikuta"
+  ],
+  "subkinds": {}
+ },
+ "villages:lane": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:lanes": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:manors": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:marshes": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {
+   "role=toe": 5,
+   "role=pond_fringe": 3
+  }
+ },
+ "villages:mausoleums": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:meta": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:ministries": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:moat": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:moat_layer": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:ossuaries": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:pastures": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:pond": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:pond_layer": {
+  "maps": [
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:punishment_spots": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:quarters": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:religious": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {
+   "kind=shrine": 5
+  }
+ },
+ "villages:road": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:scalebar": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:shrine": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:shrines": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:storehouses": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:streams": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:summit": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:taxfree": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:threshing_yards": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:title": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:torii": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:tree_crowns": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:village_groves": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {
+   "role=windbreak": 4,
+   "role=copse": 3,
+   "role=water_mouth": 2,
+   "role=shrine": 1
+  }
+ },
+ "villages:wall": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:water_bed_zmax": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:water_sheen_zmin": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:wells": {
+  "maps": [
+   "legacy-hand-authored-pool/hikari-no-sato",
+   "legacy-hand-authored-pool/hoshigaoka",
+   "legacy-hand-authored-pool/kikuta",
+   "legacy-hand-authored-pool/ueda"
+  ],
+  "subkinds": {}
+ },
+ "villages:wet_plots": {
+  "maps": [
+   "legacy-hand-authored-pool/kikuta"
+  ],
+  "subkinds": {}
+ }
+}

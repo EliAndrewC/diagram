@@ -35,7 +35,10 @@ from l7r.diagram._invocation import assert_via_make
 os.environ.setdefault("DIAGRAM_SKIP_RENDER", "1")
 
 # At import of the suite's root conftest - once, before any test runs.
-assert_via_make("the test suite", "quick   (~33 s)  or  make done   (~5.5 min, the full gate)")
+# No durations in the message (2026-09-27): it said ~33 s and ~5.5 min long after both had moved, the stale
+# figure test_guard_message_durations.py forbids - a literal handed to `assert_via_make` is printed, but
+# that check reads only direct print/write calls in engine modules, so it could not see this one.
+assert_via_make("the test suite", "quick   (lint, types, the unit tests)  or  make done   (the full gate)")
 
 pytest_plugins = ["pytester"]
 
