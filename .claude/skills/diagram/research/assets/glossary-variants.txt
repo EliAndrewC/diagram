@@ -92,6 +92,8 @@ bomori	bomori
 bon	Bon
 boom	boom
 booms	boom
+borrowed scenery	borrowed scenery
+borrowed-scenery	borrowed scenery
 branch house	branch house
 branch houses	branch house
 broadcast	broadcast sowing
@@ -614,6 +616,8 @@ irrigation ditch	irrigation ditch
 irrigation ditches	irrigation ditch
 irrigation duty	water duty
 ishidaki	ishidaki
+ishidoro	stone lantern
+ishidōrō	stone lantern
 ishigaki	ishigaki
 ishikawa method	Ishikawa method
 ishikawa-method	Ishikawa method
@@ -1249,6 +1253,7 @@ six ministries	Six Ministries
 skimmer wall	skimmer wall
 sluice	sluice
 sluices	sluice
+snow-viewing lantern	yukimi
 soffit	soffit
 soffits	soffit
 sogamae	sogamae
@@ -1273,6 +1278,8 @@ steading	steading
 steadings	steading
 stem density	stem density
 stilling pool	stilling pool
+stone lantern	stone lantern
+stone lanterns	stone lantern
 stone pitching	stone pitching
 straw rick	rick
 straw ricks	rick
@@ -1528,6 +1535,7 @@ yuan	Yuan dynasty
 yuan dynasty	Yuan dynasty
 yuan rebuild	Yuan dynasty
 yudono	yudono
+yukimi	yukimi
 yulin wei	yulin wei
 zaimokuya	zaimokuya
 zaofang	zaofang
