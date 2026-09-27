@@ -1,6 +1,6 @@
 {
  "feature": "250-close-the-record-checks",
- "plan_sha256": "e70ccbbfa334fedfd4938411a64fce1e527d5695ef7d3dda53e8eadd93f02c65",
+ "plan_sha256": "509463c9088707924c98bd819ef750c6748ad616b45989ad1d1350092b1ca6c9",
  "reviewed": "2026-09-27",
  "declared": "spec-fidelity",
  "decisions": [
@@ -79,35 +79,34 @@
   },
   {
    "id": "D16.1",
-   "summary": "make canon searches every canon file for every term at once; canon-read-hooks.sh refuses direct canon reads and a make canon within three calls unless it names every earlier term; registered in .claude/settings.json at /diagram/scripts/canon-read-hooks.sh.",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "The GM made mechanical enforcement the condition, 'especially on recommendation number one', for the round that follows. Measured 2026-09-27: /diagram/scripts/canon-read-hooks.sh and _hm_canon.py do not exist (ls), the registration points there, and feature 250 cannot land while tasks are open, so the guard is inert in every session T61 runs - and T61's queue is running now (runner pid started 00:05). Replayed through the clone's copy, the fabric write session 3cac8497's canon greps are refused, so the mechanism is right and only its reach is missing. Two further narrowings of the recommendation: (a) the REPEAT rule passes any chain of growing calls (measured: 'a', 'a|b', then 'a|b|c' passes, rc 0), so fifteen sequential searches are still allowed provided each re-names the earlier terms; 'in ONE command' is narrowed to 'each command a superset'; (b) the recommendation's first half, 'give the write brief the canon's own index ... name budgets.md and l7r.md', is not in the write brief at all (no 'canon' in brief.py), so the session learns the command only by being refused first."
+   "summary": "make canon searches every canon file for every term at once; canon-read-hooks.sh refuses direct canon reads (Read, Grep, shell read verbs, a recursive grep over the host repo, any setting/ copy under it) and a make canon within three calls unless it names every earlier term, and any third one in the window; registered in the fallback form (mirror copy, else the clone copy) with test_hooks_resolve.py failing a bare mirror path the mirror lacks; the write brief names budgets.md, l7r.md, gm-assistant/setting and the command.",
+   "class": "within",
+   "why": "Last round NOT LEGITIMATE on three counts, each now closed and verified this round. (1) Reach: /diagram/scripts/canon-read-hooks.sh and check-bundle-hooks.sh are still absent from the mirror (ls), and both registrations now fall back to $CLAUDE_PROJECT_DIR/scripts, where both exist; test_hooks_resolve.py passes (make test-file, 1 passed); make guard-log GUARD=canon-read shows the live firing 2026-09-27T00:13:14 blocked/direct from this clone on /host-l7r-repo/setting/budgets.md. (2) The growing chain: test-canon-read-hooks.sh (22 of 22 ok) now has a, a|b, a|b|c refused, and the retry after a refusal passing because a refused call is dropped from the window. (3) The brief: brief.py and the generated briefs/fields-1.md step 1 name budgets.md and l7r.md in /host-l7r-repo/setting, gm-assistant/setting/*.md and make canon TERMS=\"a|b|c\" with ONE call over every setting item, which is R7 recommendation 1 as written. The added reach (recursive host-repo grep, the webapp and clone copies of setting/) refuses only reads that reach the canon, so it enforces what the GM asked mechanically enforced and nothing beyond it; settings.json is not matched (setting\\b)."
   },
   {
    "id": "D16.2",
    "summary": "brief.py maps FR-002 and FR-006 items to their questions, queues a split session for each over-cap one, and makes the write brief by a then: step that refuses while any item question is over the cap.",
    "class": "within",
-   "why": "Carries recommendation 2 by construction. Verified at HEAD in a detached worktree: brief.py write fields T61 exits 2 naming 020; item_questions gives 110, 070, 160 and fr006_questions 020, 010, matching D16.4. An unplaced item only warns on stderr, but every fields item is placed."
+   "why": "Carries recommendation 2 by construction. Verified at HEAD in a detached worktree: brief.py write fields T61 exits 2 naming 020; item_questions gives 110, 070, 160 and fr006_questions 020, 010, matching D16.4. An unplaced item only warns on stderr, but every fields item is placed. Unchanged this round (the plan diff since the last review is D16.1 and D16.4 only)."
   },
   {
    "id": "D16.3",
    "summary": "check_groups packs questions first fit, largest first, into sessions of at most 40,000 bytes, sized at checks time.",
    "class": "within",
-   "why": "Recommendation 3 by construction; 40,000 is the old two-at-the-cap maximum, the session's calibrated liberty."
+   "why": "Recommendation 3 by construction; 40,000 is the old two-at-the-cap maximum, the session's calibrated liberty. Unchanged this round (the plan diff since the last review is D16.1 and D16.4 only)."
   },
   {
    "id": "D16.4",
-   "summary": "The next measured page is fields: 3 FR-002 items plus 4 FR-006, with a split session on 020 first; compared in R8 per question checked, the split reported beside.",
+   "summary": "The next measured page is fields: 3 FR-002 items plus 4 FR-006, with a split session on 020 first (done, commit 18566943, 020-026); compared in R8 per question checked, the split reported beside; R8 says which recommendations the page exercised and how many times the canon guard fired.",
    "class": "within",
-   "why": "An equivalent page: worked the same way, the per-question headline normalizes item counts, and prior rounds carried FR-006 (R2, R5) and splits (R6, R7). But none of its three FR-002 items is a canon claim (coarse grain in the diet, a sparse ditch network, satoyama coppice), so recommendation 1 is exercised only if the session reaches the canon; R8 must say which recommendations the page exercised for 'whether or not your recommendations have made things more efficient' to be answered."
+   "why": "An equivalent page, worked the same way, per-question headline normalizing item counts. Last round required R8 to say which recommendations the page exercised, since none of the three FR-002 items is a canon claim; plan.md D16.4 now says so, including the canon-guard firing count, so whether the recommendations made things more efficient can be answered for each. The 020 split stands; it ran before the guards were live but a split session does not read the canon or dispatch a check."
   },
   {
    "id": "D16.5",
    "summary": "tests/_sheets.py regenerates a declared generated Mode A sheet when missing or older than its generator or any engine module, under a lock; both readers use it.",
    "class": "within",
-   "why": "The GM's 'make that small fix about the mode A sheet tests'; code, with a test of the missing, fresh, stale and hand-drawn cases."
+   "why": "The GM's 'make that small fix about the mode A sheet tests'; code, with a test of the missing, fresh, stale and hand-drawn cases. Unchanged this round (the plan diff since the last review is D16.1 and D16.4 only)."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
