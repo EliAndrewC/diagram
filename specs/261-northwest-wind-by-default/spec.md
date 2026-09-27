@@ -110,6 +110,43 @@ engine actually follows.
    passage still says the wind is derived from the slope or re-read from the seat, except as history
    of what this feature retired where the notes keep a dated log.
 
+### User Story 5 - A village may stand across its brook, and the way crosses it (Priority: P1)
+
+The GM, on the seats the brook refused (request.md, 2026-09-26): *"if we find instead that our placement
+algorithm ends up not making it possible to lay out a known-to-be-valid settlement configuration then we should
+fix the placement algorithm instead."* The record puts a settlement's own small channel through the middle of the
+place (the Harie finding, feature 230), so a hamlet on the far bank from its rice, or astride its brook, is a
+valid layout; the engine refused it only because no way could cross the brook.
+
+**Why this priority**: without it Kashikawa and Inashiro cannot face the regional wind at all.
+
+**Independent Test**: a hamlet whose best wind-facing seat stands across the brook from its field is seated
+there, and a way crosses the brook squarely to the field on a drawn plank footbridge.
+
+**Acceptance Scenarios**:
+
+1. **Given** a hamlet whose houses stand on one bank and its field on the other, **When** it is generated,
+   **Then** at least one way crosses the brook to the field, squarely, and a plank footbridge is drawn at every
+   point a way crosses the brook.
+2. **Given** a seat the brook runs through, **When** it is generated, **Then** it is not refused for that
+   alone; every household reaches a way, and any way the brook divides is joined by a drawn crossing.
+3. **Given** any farmstead, **When** it is drawn, **Then** its own buildings, yard, garden and fixtures stand on
+   the same bank as its house.
+4. **Given** Kashikawa and Inashiro at their current seeds, **When** they are generated, **Then** they seat
+   facing the northwest wind with every household and a full belt.
+
+### User Story 6 - What the reviews of the re-rolled maps found is fixed (Priority: P2)
+
+The five settlement reviews of the re-rolled maps (constitution XIV: fix defects where found) found the copse
+spread from a bounding box into a wood that hides the belt, the entrance notice board re-seated away from the
+entrance, the belt thinned to one row on its windward face, the brook folding back where it leaves the frame,
+the windbreak pop-up naming a side a one-sided belt does not occupy, and notes and declarations that no longer
+match the maps.
+
+**Acceptance Scenarios**:
+
+1. **Given** any pool hamlet, **When** it is reviewed, **Then** none of those findings stands.
+
 ### Edge Cases
 
 - **A map whose fall makes a northwest-backed seat hard.** Kashikawa falls to the northeast and
@@ -117,16 +154,16 @@ engine actually follows.
   (`down_deg=225` in the engine's screen convention, 0 = east, 90 = south; `sawada.gen.py`: "land falling
   northwest"), which is the direct opposition: its uphill side is the southeast, so its northwest margin
   is the field's low foot, where the seat's hard constraints (dwellings above the drain, off the wet toe)
-  bite. Sawada is the hardest map. The seat's hard constraints still hold; the seat search must find a
-  margin whose back faces the northwest among the margins they allow. The wind is not renamed to rescue
-  a seat. If a map has no such margin at its current seed, the map is re-seeded (its seed is a roll, not
-  a fact about the place); its declared fall, water and other declared knobs are kept.
-- **When no seed works.** If no seed seats a northwest-backed cluster under a map's declared fall and
-  water, NONE of these is done: the 45-degree bar loosened for that map, a wind declared on it (FR-005),
-  the wind renamed from the seat (FR-003), a declared knob changed, or the belt planted in the crop
-  (FR-010). The case goes to the `spec-fidelity` exception check with the GM's words, and then to the GM.
-  Before relying on re-seeding, the plan measures each pool hamlet at its current seed under the new
-  rule and records which needed a new seed and what the seed search found.
+  bite. The seat's hard constraints still hold; the seat search must find a margin whose back faces the
+  northwest among the margins they allow. The wind is not renamed to rescue a seat.
+- **When the placement algorithm cannot draw a valid layout, the algorithm is fixed** (the GM, 2026-09-26/27,
+  request.md). A seed is changed only where the research itself rules a layout out, never to route around what the
+  engine cannot yet draw; where a seat is refused for an engine limitation, the limitation is removed. Before
+  relying on any re-seed, the plan measures each pool hamlet at its current seed and records why it moved.
+- **The brook.** A seat is no longer refused because the brook runs between it and its field or through it; it is
+  refused only where no crossing can be drawn. The feature-230 finding that motivated the strike-out - half a
+  homestead across the water with no way over - is prevented by keeping each farmstead's own things on its
+  house's bank and by drawing the crossing, not by refusing the seat.
 - **The belt and the cropland.** A northwest belt must still stand clear of the crop and the dry hem,
   and still pass every rule the belt obeys today (continuous within its sides, embracing the cluster).
 - **The homestead groves.** Each farmstead's own grove (the yashikirin L-belt) takes its sides from
@@ -161,6 +198,22 @@ engine actually follows.
 - **FR-010**: Every rule the belt and the seat obeyed before (clear of crop, continuous, embracing the
   cluster, dwellings above the drain, no household lost) MUST still hold on every re-rolled map.
 
+- **FR-011**: A way (lane, field path or connector) MUST be able to cross the brook where the layout needs it, and
+  crosses it squarely, with a plank footbridge drawn at every crossing of the brook by a way.
+- **FR-012**: A seat MUST NOT be refused for standing across the brook from its field or for being run through
+  by the brook when a crossing can be drawn; every household reaches a way, the ways on the two banks are joined by
+  a drawn crossing, and at least one way reaches the field.
+- **FR-013**: Every farmstead's own buildings, yard, garden and fixtures MUST stand on its house's bank.
+- **FR-014**: The dooryard copse MUST stand among the houses (within dooryard reach of a house), and the
+  against-the-belt copse at the belt's back; neither is spread over the cluster's bounding box.
+- **FR-015**: A notice board seated at the entrance MUST stand at the entrance - on the way the connector meets,
+  within the entrance band - so every departure passes it.
+- **FR-016**: The windbreak MUST keep its researched depth on its windward face (no stretch thinner than the
+  record's minimum belt depth), and its side MUST NOT be named in the pop-up as a side it does not occupy.
+- **FR-017**: The brook MUST NOT fold back on itself where it leaves the frame.
+- **FR-018**: Every pool map's notes, declarations and gen docstring MUST match what the map draws (intake form,
+  district direction, the water's story, the layout's move).
+
 ### Key Entities
 
 - **Windward side**: the compass quarter the cold wind blows from; the northwest by default, or a
@@ -182,6 +235,18 @@ engine actually follows.
 - **SC-007** (FR-009): 0 passages in the research entry, `hamletgen.md` or the five notes files still say the
   wind is derived from the slope or re-read from the seat, except as a dated closure in a notes log.
 
+- **SC-008** (FR-011, FR-012): 5 of 5 pool hamlets seat facing the northwest at their current seeds (Kashikawa 8,
+  Inashiro 4, Kuwabata 21, Mizuguchi 27, Sawada 24); every way crossing the brook has a plank footbridge; every
+  hamlet whose field is across the brook has a way that reaches it.
+- **SC-009** (FR-013): 0 farmstead parts across the brook from their house on the pool and the 48-seed cohort.
+- **SC-010** (FR-014): on every pool map, every dooryard copse clump stands within dooryard reach of a house.
+- **SC-011** (FR-015): on every pool map whose board is seated at the entrance, it stands within the entrance band.
+- **SC-012** (FR-016): 0 pool belts thinner than the minimum depth across their windward face; 0 pop-ups naming a
+  side the belt does not occupy.
+- **SC-013** (FR-017): 0 brook exits turning more than the brook's own bend limit.
+- **SC-014** (FR-018, FR-006, FR-010): a settlement-review of every pool map returns PASS, and the cohort has no
+  regression against its baseline.
+
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
 | Decision | Class (accurate / deviation / guess) | Why | Recorded at |
@@ -190,12 +255,14 @@ engine actually follows.
 | A local wind departs from the northwest only when a map declares it | the GM's ruling, 2026-09-26 ("only when declared") | a silent terrain override put Kashikawa's belt on the opposite side with no explanation | `research/vegetation/030-...`, `plan.py`, the windbreak pop-up |
 | The slope-derived wind (katabatic drainage) is retired as a default | the GM's ruling, 2026-09-26 | the katabatic finding stays in the record as the reason a map MAY declare a local wind | `research/vegetation/030-...`, `consts.py` where `WIND_TURNS` stood |
 | The seat bends to the wind, never the wind to the seat | map convention following the ruling | the belt's side is the information; a renamed wind makes it circular | comment at the seat search and at the retired re-read |
+| A way may cross the brook on a plank footbridge; the brook strike-out is retired | accurate (a settlement's own small channel runs through the middle of the place - the Harie finding, feature 230) + the GM's ruling, 2026-09-27 | the strike-out was labeled a guess forced by what the engine could draw | the brook entry in research/, the seat search, the router |
+| A farmstead's own things stand on its house's bank | guess, labeled | the record is silent on a byre across a brook from its house; the reviews read it as wrong | the placer's comment and the brook entry |
 
 ## Assumptions
 
-- A map's seed is a roll, not a fact about the place; a pool hamlet may be re-seeded if its current seed
-  cannot seat a northwest-backed cluster. Its declared fall, water sink and other declared knobs are
-  kept, since those are what the map was made to show (Kashikawa's `brook_side` confluence included).
+- A map's seed is a roll, not a fact about the place, but a seat refused for an engine limitation is fixed in the
+  engine, not re-seeded (the GM, 2026-09-27). Declared fall, water sink and other declared knobs are kept
+  (Kashikawa's `brook_side` confluence included).
 - Only the scripted hamlet generator derives a wind; the older settlement engine already defaults to the
   northwest and the legacy pool is frozen.
 
