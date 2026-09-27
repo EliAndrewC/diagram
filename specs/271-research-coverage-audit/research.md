@@ -41,3 +41,20 @@ The rest were deduplicated across the four domains and packed into 33 write grou
 | gate markets | B11, C175 | T4 (towns 380-430); the city side is 269's hinterland 040 | written and checked |
 
 The State table in `inventory.md` is where each group stands; it is updated at each hourly wake.
+
+## R2. The work resumed by itself (FR-005), 2026-09-27
+
+Two stops have happened so far, and the work resumed from each without the GM:
+- **The dispatching session's process ended (about 12:00 UTC), killing all five queue runners mid-way through
+  their write sessions.** Each session's work sat uncommitted in its queue clone. The runner gained a
+  `resume:<sid>:<brief>` item, and every queue was relaunched with its interrupted session RESUMED, not restarted.
+  Nothing was redone and nothing was lost (`t1`, `v1`, `v3`, `t3`, `v6`; the runs are logged in
+  `/home/agent/.claude/jobs/d2f6f26d/tmp/resume-q*.log`).
+- **The five-hour usage window ran out at 13:37 UTC.** Each queue logged `failed <sid> rc=1 - waiting 184 min, then
+  resuming it`. At the reset (16:41 UTC) all five resumed the same sessions and went on (the `run-*.log` of
+  queues 1-5).
+
+This session's own context is compacted when it fills, and it continues from `inventory.md`'s State table and the
+memory note `project-research-coverage-271`. An hourly scheduled wake (`CronCreate` job `13e01f26`) checks the
+queues and continues the next groups. Neither covers a crash of the whole container: the terminals crashing again
+would need the GM to resume this conversation.

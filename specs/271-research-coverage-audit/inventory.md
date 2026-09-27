@@ -523,7 +523,7 @@ Also edits 200, 333.
 - A151 D145 B88 C143 **Schools below the capital**: where were village and town children taught to read (a temple
   school, terakoya; the headman's house; a Chinese county school, sishu), how many did a city hold, and were they
   distinct buildings? (none; cities/capitals/190 is the domain school). M. P2.
-  > COORDINATION (A151): schools often at a temple touch 272's village temple (R3) - cite its precinct question
+  > COORDINATION (A151): schools often at a temple touch 272's village temple (R3) - cite religion-and-death 510 (the village temple's precinct) and 500 (how common a village temple was), in diagram-shrines-2 until 272 lands
 - A152 **Village fire watch**: a fire bell on a ladder (hanshō), a watch hut, a fire-water pond - did a village keep
   them, and where? (towns/070, the town's tower). S. P2.
 - A153 **Village watch**: did a village keep a watch hut (bansho) or a night watch, and where? (none). S. P2.
