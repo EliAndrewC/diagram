@@ -6102,5 +6102,36 @@
   "variants": [
    "uchigenkan"
   ]
+ },
+ "palanquin": {
+  "def": "A covered litter carried on poles by bearers, in which a person of rank rode; at a samurai residence it was set down against the step of the genkan, so its rider went straight into the building without touching the ground.",
+  "variants": [
+   "palanquin",
+   "palanquins"
+  ]
+ },
+ "yamen-god": {
+  "def": "The guardian god of a Chinese government office, worshiped at a small temple inside the yamen's own walls.",
+  "variants": [
+   "yamen-god",
+   "yamen-god temple",
+   "God of Government Office"
+  ]
+ },
+ "jail-god": {
+  "def": "The god of a Chinese yamen's jail, worshiped at a temple inside the jail itself. At Neixiang the jail god is Gao Yao, whose statue is enshrined there.",
+  "variants": [
+   "jail-god",
+   "jail god",
+   "jail-god temple"
+  ]
+ },
+ "three-squads courtyard": {
+  "def": "The courtyard in a Chinese county yamen that housed its three squads of runners: the guards, the constables and the arresting officers.",
+  "variants": [
+   "three-squads courtyard",
+   "three-squads",
+   "sanban yuan"
+  ]
  }
 }

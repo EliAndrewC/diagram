@@ -456,6 +456,7 @@ glulam	glulam
 glyph	glyph
 glyphs	glyph
 go	go
+god of government office	yamen-god
 goemon-buro	goemon-buro
 goemonburo	goemon-buro
 gongxiefang	gongxiefang
@@ -621,6 +622,9 @@ isotherm	isohyet
 isotherms	isohyet
 itabashi	itabashi
 jagama	jagama
+jail god	jail-god
+jail-god	jail-god
+jail-god temple	jail-god
 japanese zelkova	keyaki
 jetties	jetty
 jetty	jetty
@@ -994,6 +998,8 @@ outwork	outwork
 outworks	outwork
 ox-frame	ox-frame
 ox-frames	ox-frame
+palanquin	palanquin
+palanquins	palanquin
 pannage	pannage
 pantile	pantile
 pantiles	pantile
@@ -1141,6 +1147,7 @@ sally port	sally port
 sallyport	sally port
 salvage excavation	salvage excavation
 san-no-ma	ni-no-ma
+sanban yuan	three-squads courtyard
 sand sluice	sand sluice
 sando	sando
 sanguan	Three Officials
@@ -1352,6 +1359,8 @@ the pool	the pool
 thousand character classic	Thousand Character Classic
 three bays	bay
 three officials	Three Officials
+three-squads	three-squads courtyard
+three-squads courtyard	three-squads courtyard
 threshing yard	threshing yard
 threshing yards	threshing yard
 threshing-yard	threshing yard
@@ -1485,6 +1494,8 @@ yaita	yaita
 yakuimon	yakuimon
 yam	yam
 yamen	yamen
+yamen-god	yamen-god
+yamen-god temple	yamen-god
 yashiki	yashiki
 yashikigami	yashikigami
 yashikigami-sama	yashikigami
