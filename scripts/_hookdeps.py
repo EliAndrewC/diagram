@@ -32,6 +32,7 @@ the disappointment.
 from __future__ import annotations
 
 import ast
+import functools
 import hashlib
 import pathlib
 import re
@@ -118,7 +119,15 @@ def _code(name: str) -> str:
     go; the risk of stripping a `#` inside a string is over-running one suite, which is the safe
     direction here and the same trade the rest of this module makes.
     """
-    raw = _text(name)
+    return _strip(name, _text(name))
+
+
+# GUARD_EDIT_OK: fixing a slow derivation found while working (2026-09-27) - MEMOIZED ON THE CONTENT, not the
+# name. `deps_for` over the 28 guards re-parsed the same ~40 files 253 times and ran 6,720 regex scans of
+# (file, helper) pairs it had already answered: 1.8 s. Keyed on the TEXT, so an edited file - on disk, or
+# the `_text` a test substitutes - is a new key and is derived afresh; nothing is answered from a stale read.
+@functools.lru_cache(maxsize=None)
+def _strip(name: str, raw: str) -> str:
     if name.endswith(".py"):
         # DOCSTRINGS GO TOO, and only docstrings. Every leaf of the feature-172 split opens with
         # "Split out of `_hookmatch.py`", which is a triple-quoted string rather than a `#` comment -
@@ -157,18 +166,31 @@ def closure(seeds: set[str]) -> set[str]:
             continue
         seen.add(name)
         body = _code(name)   # CODE, not text: a filename in a comment is a mention, not a dependency
-        for helper in _SHARED:
-            if helper == name or helper in seen:
-                continue
-            # A PYTHON IMPORT NEVER WRITES THE EXTENSION. `from _hm_shape import _strip_quotes` is a
-            # real dependency that a filename match cannot see, and this feature's own split created
-            # exactly that edge - caught by `test_a_dependency_reached_only_through_another_helper`,
-            # which is the assertion FR-004 exists for. Matching the bare stem as a word covers the
-            # import forms without matching a longer name that merely contains it.
-            stem = helper[:-3] if helper.endswith(".py") else helper
-            if helper in body or (helper.endswith(".py") and re.search(rf"\b{re.escape(stem)}\b", body)):
-                stack.append(helper)
+        stack.extend(h for h in _refs(name, body, _SHARED) if h not in seen)
     return seen
+
+
+@functools.lru_cache(maxsize=None)
+def _refs(name: str, body: str, shared: tuple[str, ...]) -> frozenset[str]:
+    """The shared helpers `body` references, itself excluded - memoized on the content (see `_strip`)."""
+    # A PYTHON IMPORT NEVER WRITES THE EXTENSION. `from _hm_shape import _strip_quotes` is a
+    # real dependency that a filename match cannot see, and this feature's own split created
+    # exactly that edge - caught by `test_a_dependency_reached_only_through_another_helper`,
+    # which is the assertion FR-004 exists for. Matching the bare stem as a word covers the
+    # import forms without matching a longer name that merely contains it. ONE pass over the body for
+    # every stem (2026-09-27): a match is a whole word, and a word equals at most one stem, so the words
+    # found are exactly the stems a per-stem `\bstem\b` search would have found.
+    words = set(_stems_pattern(shared).findall(body))
+    return frozenset(
+        h for h in shared
+        if h != name and (h in body or (h.endswith(".py") and h[:-3] in words))
+    )
+
+
+@functools.lru_cache(maxsize=None)
+def _stems_pattern(shared: tuple[str, ...]) -> re.Pattern[str]:
+    stems = sorted((h[:-3] for h in shared if h.endswith(".py")), key=len, reverse=True)
+    return re.compile(r"\b(" + "|".join(re.escape(s) for s in stems) + r")\b")
 
 
 def deps_for(guard: str) -> list[str]:
