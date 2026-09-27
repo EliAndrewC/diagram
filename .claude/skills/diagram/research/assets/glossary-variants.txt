@@ -449,6 +449,7 @@ eiro	eiro
 ekika	ekika
 embankment	embankment
 embankments	embankment
+emerald charter	Emerald Charter
 emergent	emergent
 emergent plant	emergent
 emergent plants	emergent
@@ -688,6 +689,7 @@ gō	go
 gōnō	gōnō
 gōsha	gōsha
 gōshi	gōshi
+ha	hectare
 hachijuhachiya	eighty-eighth night
 hachiman	Hachiman
 hachure	hachure
@@ -736,6 +738,8 @@ headman	headman
 headmen	headman
 headworks	headworks
 heavenly kings	hall of the Heavenly Kings
+hectare	hectare
+hectares	hectare
 heian	Heian
 heian-kyo	Heian-kyo
 heian-kyo's	Heian-kyo
@@ -845,6 +849,9 @@ ikkō	Jodo Shinshu
 ikkō-shū	Jodo Shinshu
 imado ware	Imado ware
 imado-yaki	Imado ware
+imperial magistrate	Imperial Magistrate
+imperial magistrate's	Imperial Magistrate
+imperial magistrates	Imperial Magistrate
 imperial road	Imperial road
 imperial roads	Imperial road
 imperial spine	Imperial spine
