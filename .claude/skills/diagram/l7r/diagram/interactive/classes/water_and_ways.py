@@ -48,8 +48,10 @@ class IrrigationDitch(Kind):
     the field ditch that waters a single paddy is a hairline the map does not attempt.
 
     Note: Topology and taper are read (Tabayashi, the Minuma-dai record), and so is the paddy-to-paddy form
-    (Bungotakada); how few ditches that form left is this record's own reading, since the one page on it gives
-    its merit as saving water, not saving digging, and describes a village that keeps many weirs. The widths are weaker than they look.
+    (Bungotakada); how few ditches that form left is this record's own reading, since no page read counts
+    ditches: the pages on it describe water passing from paddy to paddy, the one village page giving its merit
+    as saving water, not saving digging, and keeping many weirs; prefectural and ministry papers a search
+    showed saying such districts have hardly any channels could not be read. The widths are weaker than they look.
     The third of a meter is a modern design MINIMUM rather than a measured ditch, and the Chinese doctrine is
     carried by a 2021 provincial standard for consolidated farmland, so what it gives is the doctrine and not
     a premodern layout. The national standard the record once leaned on for both is readable nowhere and is
