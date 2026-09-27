@@ -87,7 +87,7 @@ class Bund(Kind):
     at T-junctions - never two parallel ridges with idle ground between. Farmers walked the bunds to reach
     the plots; the footplanks over the ditches serve that walking.
 
-    Note: Construction, the field bund's width and the shared-wall finding are read; the walking bund's width
+    Note: Construction and the field bund's width are read, and the shared-wall finding is this record's derivation from how the bund is built and kept; the walking bund's width
     is this record's reading; the drawn stroke is at true size.
 
     Name: bund

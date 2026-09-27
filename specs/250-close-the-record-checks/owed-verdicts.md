@@ -20,3 +20,6 @@
 - Bund (fields SECTION=022): IN-STEP - the section adds no new aze finding and the modal never claims the no-jog rule
 - BundBeans (fields SECTION=021): IN-STEP - the modal takes only the shared bund from 021, whose changes were footnote and translation maintenance
 - WetPaddy (fields SECTION=190): IN-STEP - every claim still supported; the only new material is water-depth standing, and the modal gives no depth
+- Bund (fields SECTION=021): REWRITTEN - the Note called the shared-wall finding read; 021 derives it from construction and upkeep, so the Note now says derivation; re-check IN-STEP
+- BundBeans (fields SECTION=020): IN-STEP - nothing the modal says rests on 020's plot layout and bund widths (the bead is about 3x the 30 cm bund top, and the Note already says it is drawn oversize)
+- BundBeans (fields SECTION=200): IN-STEP - 200 still supports every What: and Note: claim; the Why: rests on the other Entry: sections
