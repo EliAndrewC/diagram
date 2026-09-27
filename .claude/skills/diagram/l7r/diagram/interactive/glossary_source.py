@@ -39,7 +39,9 @@ TERMS = os.path.join("assets", "glossary")
 #: The prefix is gapped by ten, as `research/sources/` is: inserting a term between two renames nothing.
 GAP = 10
 DIGITS = 4
-_NAMED = re.compile(r"^(\d{4})-(.+)\.json$")
+#: At least four digits: `make reserve` counts past 9990 across every clone's reservations (feature 272 met
+#: 11310), and the files are read in NUMERIC prefix order (`_order`), since "11310" sorts before "1410" as text.
+_NAMED = re.compile(r"^(\d{4,})-(.+)\.json$")
 #: What `json.dumps` was called with. Measured, not guessed: the committed file matches this exactly.
 _DUMP = {"ensure_ascii": False, "indent": 1}
 
@@ -59,8 +61,14 @@ def term_of(name: str) -> str:
     """The term a filename claims - for checking against the file's own content, never for the value."""
     found = _NAMED.match(name)
     if not found:
-        raise GlossaryError(f"{name}: not a term file. A term file is <prefix>-<term>.json, the prefix four digits counting by ten")
+        raise GlossaryError(f"{name}: not a term file. A term file is <prefix>-<term>.json, the prefix four or more digits counting by ten")
     return _decode(found.group(2))
+
+
+def _order(name: str) -> tuple[int, str]:
+    """A file's place in the assembly: its prefix as a NUMBER; a stray file first, where `term_of` refuses it."""
+    found = _NAMED.match(name)
+    return (int(found.group(1)) if found else -1, name)
 
 
 def position_of(name: str) -> int:
@@ -132,7 +140,7 @@ def term_files(root: str | None = None) -> list[dict]:
         raise GlossaryError(f"{TERMS}/: no term files - run `make glossary SPLIT=1`")
     seen: dict[int, str] = {}
     out = []
-    for name in sorted(os.listdir(here)):
+    for name in sorted(os.listdir(here), key=_order):
         term_of(name)  # refuses a stray file by its name
         at = position_of(name)
         if at in seen:

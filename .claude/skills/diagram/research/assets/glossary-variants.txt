@@ -520,6 +520,7 @@ gokaido	Five Highways
 gokumon	gokumon
 gongxiefang	gongxiefang
 gorinto	five-ring pagoda
+gosha	gōsha
 goshi	gōshi
 goten	goten
 goulan	goulan
@@ -537,6 +538,7 @@ guanxiang	guanxiang
 gulou	gulou
 gundai	gundai
 gō	go
+gōsha	gōsha
 gōshi	gōshi
 hachiman	Hachiman
 hachure	hachure
@@ -1315,6 +1317,7 @@ six ministries	Six Ministries
 skimmer wall	skimmer wall
 sluice	sluice
 sluices	sluice
+sochinju	sōchinju
 soffit	soffit
 soffits	soffit
 sogamae	sogamae
@@ -1382,6 +1385,7 @@ suzaku ōji	Suzaku-oji
 suzaku-oji	Suzaku-oji
 suzaku-ōji	Suzaku-oji
 sward	sward
+sōchinju	sōchinju
 tagoshi	tagoshi kangai
 tagoshi kangai	tagoshi kangai
 taihu	Lower Yangzi

@@ -6453,5 +6453,19 @@
    "dispersed villages",
    "dispersed farmsteads"
   ]
+ },
+ "gōsha": {
+  "def": "The district-shrine rank in Japan's modern shrine registers: the chief shrine of a district of about twenty villages, one step above the village shrine.",
+  "variants": [
+   "gōsha",
+   "gosha"
+  ]
+ },
+ "sōchinju": {
+  "def": "A castle town's principal tutelary shrine, guarding the whole town rather than one quarter or village; Edo's was the Sannō shrine.",
+  "variants": [
+   "sōchinju",
+   "sochinju"
+  ]
  }
 }
