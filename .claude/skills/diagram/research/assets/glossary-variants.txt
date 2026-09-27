@@ -176,6 +176,9 @@ combs	comb
 command area	command area
 commanderies	commandery
 commandery	commandery
+commutation	commutation
+commute	commutation
+commuted	commutation
 confluence	confluence
 confluences	confluence
 conservation headland	conservation headland
@@ -703,6 +706,8 @@ kofun period	Kofun period
 koji	koji
 koku	koku
 kokubunji	kokubunji
+kokudai-no	kokudai-no
+kokudaino	kokudai-no
 kokudaka	kokudaka
 kokuinchi	shuinchi
 kokumori	kokumori
@@ -864,6 +869,7 @@ nanohana	rape
 nanushi	shoya
 nara period	Nara period
 nara-period	Nara period
+natto	natto
 natural levee	natural levee
 natural levees	natural levee
 natural village	natural village
