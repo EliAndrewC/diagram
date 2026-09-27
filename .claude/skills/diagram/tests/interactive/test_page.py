@@ -988,3 +988,21 @@ def test_merge_primitives_returns_a_string_with_under_two_elements_untouched_wit
     assert merge_primitives(one) is one and merge_primitives("") == "" and merge_primitives("<g></g>") == "<g></g>"
     two_uses = '<use href="#a"/><use href="#b"/>'  # two self-closing elements, neither a primitive: past the count, nothing to merge
     assert merge_primitives(two_uses) is two_uses
+
+
+def test_a_woods_outline_lies_above_the_scrubs_grown_cells() -> None:
+    """GM 2026-09-27: a gap between two trees inside the windbreak stopped lighting the windbreak, because the scrub's
+    grown mark cells were stacked above the belt's own outline. The recorded footprints now ride above the marks'
+    regions, so inside the belt the pointer finds the belt."""
+    blades = '<g stroke="#A7A860" stroke-width="0.8"><line x1="50" y1="50" x2="51" y2="52"/></g>'
+    crown = '<circle cx="60" cy="60" r="5" fill="#4E7A3A"/>'
+    strings = ['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">', '<rect width="200" height="200" fill="#EFE3C2"/>', blades, crown, "</svg>"]
+    tags = [None, "-", "scrub and rough grazing", "windbreak", None]
+    manifest = {
+        "commons": [{"role": "grazing", "poly": [[0, 0], [200, 0], [200, 200], [0, 200]]}],
+        "village_groves": [{"role": "windbreak", "poly": [[40, 40], [120, 40], [120, 120], [40, 120]]}],
+    }
+    page = render_page(strings, tags, "T", {"ftpx": 1.0}, manifest)
+    scrub = page.index('data-k="scrub and rough grazing"><g class="hit"')
+    belt = page.index('data-k="windbreak"><polygon class="hit"')
+    assert scrub < belt, "the belt's outline is drawn after - so above - the scrub's cells"
