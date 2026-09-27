@@ -926,7 +926,7 @@ the shortest edge - and recorded PASS (`.git/review-verdicts/`).
 
 The wind is the region's northwest now. At seed 6 no margin with its back to that wind was open on this land, so the
 map is seed 24 (the generator says why); every farmstead moved (median 675 ft) and all 19 seat facing the wind. The
-belt is 179 crowns at 319 degrees over a 161-degree arc. The brook no longer doubles back where it leaves the frame, nor
+belt is 179 clumps, 319 degrees from the houses' middle, over a 161-degree arc. The brook no longer doubles back where it leaves the frame, nor
 runs level along the top margin: it turns off the sheet where the frame would have pinned it. The entrance board stands
 where the connector meets the lanes, passed by all 19 households' ways out. The 3 ft path that ran into that junction
 side by side with the 6 ft track is cut where it came alongside, so the track keeps its full width to the connector. The water story is rewritten above to what

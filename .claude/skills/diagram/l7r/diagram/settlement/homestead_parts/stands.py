@@ -11,6 +11,26 @@ if TYPE_CHECKING:
     from ..core import Settlement
 
 
+class BankNear:
+    """`near`'s index when the points have a BANK (feature 261, settlement-review of Kashikawa): a clump is near a point
+    only within `reach` of it AND on its side of `barriers` - three dooryard-copse clumps stood 79-86 ft from a house as
+    the crow flies, across the brook from every farmhouse, where the copse is the trees "in the gaps between the houses".
+    Asked per clump like `Seats.too_near`."""
+
+    def __init__(self, points: Any, reach: float, barriers: Any) -> None:
+        from .._geom import PointGrid
+
+        self.reach = reach
+        self.points = PointGrid(max(reach, 1.0))
+        self.points.extend([((float(p[0]), float(p[1])), float(p[0]), float(p[1]), float(p[0]), float(p[1])) for p in points])
+        self.barriers = [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for a, b in barriers]
+
+    def too_near(self, x: float, y: float) -> bool:
+        from .._geom import segments_cross
+
+        return any(math.dist((x, y), it[0]) <= self.reach and not any(segments_cross((x, y), it[0], a, b) for a, b in self.barriers) for it in self.points.near(x, y, self.reach))
+
+
 class StandsMixin:
     def bamboo_stand(self: Settlement, poly: Any, role: str = "homestead") -> int:  # type: ignore[misc]
         """A BAMBOO STAND - a take-yabu: a clonal thicket with a hard edge, drawn as a STAND-LEVEL glyph
@@ -81,7 +101,7 @@ class StandsMixin:
         within: tuple[float, float, float, float] | None = None,
         face_margin: float | None = None,
         reserved: tuple[float, float, float, float] | None = None,
-        near: tuple[Any, float] | None = None,
+        near: tuple[Any, ...] | None = None,
     ) -> int:
         """A COMMUNAL village grove - the Chinese *fengshui* forest (风水林). Unlike the per-house *yashikirin*,
         a NUCLEATED village shelters behind ONE village-scale grove, in three roles (see research/vegetation.html 'What are the village's three groves' 'Village
@@ -260,8 +280,10 @@ class StandsMixin:
         near_clumps, near_seats = Seats(step * 0.55), Seats(clump * 0.5)
         # `near`: (points, reach) - a clump stands only within `reach` of one of the points (feature 261: the dooryard
         # copse within a dooryard of a house, the against-the-belt copse at the belt's back). One index, asked per clump.
-        _near = None
-        if near is not None:
+        _near: Seats | BankNear | None = None
+        if near is not None and len(near) > 2:
+            _near = BankNear(near[0], near[1], near[2])  # type: ignore[misc]
+        elif near is not None:
             _near = Seats(near[1])
             for _p in near[0]:
                 _near.add(float(_p[0]), float(_p[1]))

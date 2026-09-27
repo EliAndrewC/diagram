@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import math
-from typing import cast
+from typing import Any, cast
 
 from l7r.diagram.settlement import Settlement
 
@@ -243,14 +243,17 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     # copse clump stands within `COPSE_HOUSE_REACH_FT` of a house, and an against-the-belt one within
     # `COPSE_BELT_REACH_FT` of a belt crown - scattered over the belt's axis-aligned box it spread across the whole
     # cluster wherever the belt wrapped a diagonal ribbon.
-    _copse_near: tuple[list[tuple[float, float]], float] = ([(float(x), float(y)) for x, y in zip(xs, ys, strict=False)], s.px(COPSE_HOUSE_REACH_FT))
+    # ...AND ON ITS OWN BANK: a clump near a house across the brook is not among the houses (settlement-review of Kashikawa,
+    # feature 261: three clumps stood across the water from every farmhouse, within reach only as the crow flies)
+    _brook = [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for f in s.M.get("streams") or [] for a, b in zip(f.get("poly") or [], (f.get("poly") or [])[1:], strict=False)]
+    _copse_near: tuple[Any, ...] = ([(float(x), float(y)) for x, y in zip(xs, ys, strict=False)], s.px(COPSE_HOUSE_REACH_FT), _brook)
     if plan.copse_siting == "against_the_belt" and _dented:
         # the belt's own footprint, stood off the houses so the two stands read as one wood at its back
         _bx = [q[0] for q in _dented]
         _by = [q[1] for q in _dented]
         _box = [(min(_bx), min(_by)), (max(_bx), min(_by)), (max(_bx), max(_by)), (min(_bx), max(_by))]
         _belt = [(float(c[0]), float(c[1])) for g in s.M.get("village_groves") or [] if g.get("role") == "windbreak" for c in g.get("clumps") or []]
-        _copse_near = (_belt, s.px(COPSE_BELT_REACH_FT))
+        _copse_near = (_belt, s.px(COPSE_BELT_REACH_FT), _brook)
     s.village_grove(_box, role="copse", dense=False, reserved=title_pocket(s, plan), near=_copse_near)  # the map's name has ground reserved; the copse honors it like the belt does
     # RECORD WHAT THE GROUND GAVE, beside what the knob asked for (settlement-review, feature 230 pass 12; the same
     # move `place_kosatsuba` makes with `kosatsuba_well_ft`, and for the same reason). `copse_siting` says

@@ -357,3 +357,18 @@ def test_the_board_caption_notches_no_crown(gen: str) -> None:
     labs = [lab for lab in m.get("labels", []) if "notice" in str(lab[5]).lower()]
     assert labs, "non-vacuity: the board has its caption"
     assert not quad_on_canopy(label_quad(labs[0]), canopy_index(m).near), "the caption lies on a crown"
+
+
+@pytest.mark.parametrize("gen", GENS, ids=IDS)
+def test_every_copse_clump_stands_on_its_nearest_houses_bank(gen: str) -> None:
+    """The dooryard copse is the trees in the gaps between the houses, so no clump stands across the brook from the
+    house nearest it (settlement-review of Kashikawa, feature 261: three clumps within reach only as the crow flies)."""
+    m = _manifest(gen)
+    copse = [c for g in m.get("village_groves") or [] if g.get("role") == "copse" for c in g.get("clumps") or []]
+    assert copse and m["houses"], "non-vacuity: a copse and its houses"
+    for brook in _brooks(m):
+        for c in copse:
+            h = min(m["houses"], key=lambda h: math.dist((h["x"], h["y"]), (c[0], c[1])))
+            assert not any(segments_cross((float(c[0]), float(c[1])), (h["x"], h["y"]), a, b) for a, b in zip(brook, brook[1:], strict=False)), (
+                f"a copse clump at ({c[0]:.0f}, {c[1]:.0f}) stands across the brook"
+            )

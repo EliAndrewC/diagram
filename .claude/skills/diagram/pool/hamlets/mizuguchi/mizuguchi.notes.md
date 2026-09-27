@@ -761,7 +761,7 @@ the brook, so the hamlet stands astride it - seven farmsteads on one bank and fi
 crossing square on planks - and the weir at the intake it is named for is drawn again. Each farmstead stands whole on its
 own bank, and no farmhouse stands on the water: a house whose wall stood on the brook's course is now seated at least
 26 ft from it. The field path crosses to the dry hem between the brook and the paddy, which is the field's own worked
-ground. The farmsteads moved (median 524 ft); the belt is 89 crowns at 313 degrees, standing against the page's west
+ground. The farmsteads moved (median 524 ft); the belt is 89 clumps, 313 degrees from the houses' middle, standing against the page's west
 edge, which takes its depth; the copse is the against-the-belt form, every crown within 60 ft of the belt. The connector
 runs through, leaving northeast. The entrance board stands on the hamlet's stem lane, the 6 ft way that carries every
 farmstead's lanes to the connector, 82 ft before it meets the connector: in the open, and passed by all 12 households'

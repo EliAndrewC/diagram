@@ -606,5 +606,25 @@
   "quantity": "copse clumps based inside the toe marsh's outline (they were 6, 3-21 ft in); the copse keeps off the marsh as the woodland parcels do",
   "source": "pool/hamlets/kashikawa/kashikawa.json village_groves[role=copse].clumps against marshes[].poly; test_no_copse_clump_is_based_in_the_marsh",
   "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kashikawa-r8-copse-bank": {
+  "verifies": "F1",
+  "subject": "kashikawa",
+  "round": "1bff4100",
+  "value": 0,
+  "unit": "clumps",
+  "quantity": "copse clumps standing across the brook from the farmhouse nearest them (they were 3, 8 drawn crowns); the copse's reach to a house is now asked on the clump's own bank (BankNear)",
+  "source": "pool/hamlets/kashikawa/kashikawa.json village_groves[role=copse].clumps, houses[], streams[0].poly; test_every_copse_clump_stands_on_its_nearest_houses_bank",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kashikawa-r8-notes-clumps": {
+  "verifies": "F3",
+  "subject": "kashikawa",
+  "round": "1bff4100",
+  "value": 281,
+  "unit": "clumps",
+  "quantity": "the belt's recorded clumps, which the notes now call clumps rather than crowns (and on the other four maps too)",
+  "source": "pool/hamlets/kashikawa/kashikawa.json village_groves[role=windbreak].clumps; kashikawa.notes.md 2026-09-27 entry",
+  "command": "grep -n 'The belt is 281 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
  }
 }

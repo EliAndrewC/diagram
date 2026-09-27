@@ -542,3 +542,13 @@ def test_a_seat_in_the_row_is_stepped_off_it_or_refused() -> None:
     stepped = seat_off_the_row((1000.0, 5.0), placed, lambda q: True)
     assert stepped is not None and not in_a_ruled_line(stepped, placed)
     assert seat_off_the_row((1000.0, 5.0), placed, lambda q: False) is None
+
+
+def test_a_bank_aware_reach_stops_at_the_brook() -> None:
+    """Feature 261: within reach of a house AND on its side of the brook."""
+    from l7r.diagram.settlement.homestead_parts.stands import BankNear
+
+    near = BankNear([(0.0, 0.0)], 90.0, [((-500.0, 50.0), (500.0, 50.0))])
+    assert near.too_near(0.0, 40.0)
+    assert not near.too_near(0.0, 60.0), "across the brook"
+    assert not near.too_near(200.0, 0.0), "beyond the reach"

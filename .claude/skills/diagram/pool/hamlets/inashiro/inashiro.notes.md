@@ -1758,7 +1758,7 @@ the shortest edge - and recorded PASS (`.git/review-verdicts/`).
 The wind is no longer read off the slope: every map takes the region's northwest winter wind unless it declares a
 local one, and this one declares none. The main manifest recorded a north wind; the cluster now seats with its back
 to the northwest, so all 15 farmsteads moved (median 1,225 ft, each house to the nearest house on main's map) and the belt stands at 320 degrees from the houses,
-180 crowns over a 109-degree arc. The houses stand on the brook's west bank and the rice on its east, so the field path
+180 clumps over a 109-degree arc. The houses stand on the brook's west bank and the rice on its east, so the field path
 crosses the brook square on a plank at a ford - the hamlet's one way to its rice. Each farmstead stands whole on its
 own bank, the dooryard copse keeps within 90 ft of a farmhouse (median 70 ft), and the entrance board stands where the
 track out meets the lanes, passed by all 15 households' ways out. The track itself now leaves southwest, so the district

@@ -264,6 +264,14 @@ Measured before and after in research R10.
   keep-out is the copse's alone: applied to every grove it took Sawada's windward belt from 179 crowns to 104, and 20-34
   of the 68 refused crowns stood on ground drawn dry - the toe marsh's recorded outline runs under the settlement's
   cleared ground there. Recorded in `future-work/farming-communities.md` with the measurement and a sketch.
+- A copse clump is near a house only on the house's own bank (`BankNear`): Kashikawa's copse had three clumps across the
+  brook from every farmhouse, within the 90 ft reach only as the crow flies.
+- NOT DONE, put to the GM: Sawada's windward belt stands on the toe marsh's reed edge (seed 24 backs the hamlet onto the
+  marsh). Holding the belt's clump bases off the DRAWN reeds was built and measured: 179 clumps to 124 with the bases a
+  crown's radius off (5 of 652 drawn crowns still over a reed), 135 at a 12 ft reed spacing (14 over), and in both the
+  windward belt was gone and FR-016's depth test failed. The record's answer for woody cover at a reed edge is the
+  alder-willow carr (research/vegetation, the marsh margin), a second form the engine does not draw - a new glyph and a
+  knob, so the choice is the GM's: the carr, a belt that stops where the marsh begins, or the belt as it stands.
 
 ## Phases
 
