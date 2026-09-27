@@ -3837,7 +3837,9 @@
  "tillering": {
   "def": "The stage after rooting when a rice plant throws up side shoots; shallow warm water encourages it.",
   "variants": [
-   "tillering"
+   "tillering",
+   "tiller",
+   "tillers"
   ]
  },
  "toe": {
@@ -5652,6 +5654,27 @@
   "def": "Holding the paddy's water deeper than usual, a cold-region practice that keeps the rice warm through cold nights, above all while the young ear is forming; the bunds are built taller to hold it.",
   "variants": [
    "deep-water irrigation"
+  ]
+ },
+ "panicle": {
+  "def": "The branched head of a rice plant that carries the grains. It forms inside the stem before heading and is easily damaged by cold while young, which is why the modern guidance deepens the water to protect it.",
+  "variants": [
+   "panicle",
+   "panicles"
+  ]
+ },
+ "booting": {
+  "def": "The rice plant's stage just before heading, when the young panicle swells inside the stem's sheath of leaves. If cold threatens, the modern guidance holds 20 cm of water at this stage.",
+  "variants": [
+   "booting"
+  ]
+ },
+ "Zennoh": {
+  "def": "Japan's National Federation of Agricultural Cooperatives, the farmers' cooperative body whose modern rice-growing guidance is one of the sources for water depth.",
+  "variants": [
+   "Zennoh",
+   "Zen-Noh",
+   "JA Zen-Noh"
   ]
  }
 }
