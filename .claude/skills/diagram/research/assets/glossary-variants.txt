@@ -329,6 +329,8 @@ doshin	doshin
 dosojin	dosojin
 dozo	kura
 dozō	kura
+dragon-bone water wheel	chain pump
+dragon-bone water wheels	chain pump
 dragon-bone wheel	chain pump
 dragon-bone wheels	chain pump
 drainage ditch	drainage ditch
@@ -419,6 +421,8 @@ fengshuilin	fengshui grove
 fertilizer boat	fertilizer boat
 fertilizer boats	fertilizer boat
 fetch	fetch
+field boat	field boat
+field boats	field boat
 field comb	comb
 field combs	comb
 field consolidation	kochi seiri
@@ -1087,6 +1091,8 @@ oute	ote-mon
 outfall	outfall
 outwork	outwork
 outworks	outwork
+overlay	overlay
+overlays	overlay
 ox-frame	ox-frame
 ox-frames	ox-frame
 oyaike	oyaike
@@ -1417,6 +1423,7 @@ suzaku ōji	Suzaku-oji
 suzaku-oji	Suzaku-oji
 suzaku-ōji	Suzaku-oji
 sward	sward
+tabune	field boat
 tagoshi	tagoshi kangai
 tagoshi kangai	tagoshi kangai
 taihu	Lower Yangzi

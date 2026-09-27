@@ -6481,7 +6481,9 @@
    "chain pump",
    "chain pumps",
    "dragon-bone wheel",
-   "dragon-bone wheels"
+   "dragon-bone wheels",
+   "dragon-bone water wheel",
+   "dragon-bone water wheels"
   ]
  },
  "noria": {
@@ -6612,6 +6614,21 @@
    "open-ended dikes",
    "kasumi dike",
    "kasumi dikes"
+  ]
+ },
+ "field boat": {
+  "def": "A small, flat-bottomed boat for moving through waterlogged paddies and along the channels dug between horita strips, carrying people, seedlings and harvest.",
+  "variants": [
+   "field boat",
+   "field boats",
+   "tabune"
+  ]
+ },
+ "overlay": {
+  "def": "A cash crop drawn over part of a village's rice field on the ground that suits it - a fishpond with mulberry on its dikes or a lotus bed on the lowest, wettest plots, or a tea garden on the lower hillside.",
+  "variants": [
+   "overlay",
+   "overlays"
   ]
  }
 }
