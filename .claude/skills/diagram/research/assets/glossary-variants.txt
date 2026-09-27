@@ -469,6 +469,7 @@ guan-xiang	guanxiang
 guanxiang	guanxiang
 gulou	gulou
 gundai	gundai
+gyozui	gyozui
 gōshi	gōshi
 hachure	hachure
 hachures	hachure
@@ -534,6 +535,8 @@ hokora	hokora
 holding jail	holding jail
 honden	honden
 hongo	hongo
+honjin	honjin
+honjins	honjin
 honmaru	honmaru
 honmune-zukuri	honmune-zukuri
 horinouchi	horinouchi
@@ -1309,6 +1312,7 @@ tokugawa ieyasu	Ieyasu
 ton'ya	ton'ya
 tonya	ton'ya
 torii	torii
+toritsugi	yoritsuki
 toro	Toro
 toro site	Toro
 total length and fall	fall
@@ -1431,8 +1435,12 @@ yicheng	yicheng
 yizhan	shukuba
 yizhong	yizhong
 yohaisui bunri	yohaisui bunri
+yonin	yonin
 yoriai-seki	yoriai-seki
 yoriki	yoriki
+yoritsuki	yoritsuki
+yosemune	yosemune-zukuri
+yosemune-zukuri	yosemune-zukuri
 yoshi	Phragmites
 yoshiwara	Yoshiwara
 yoshizu	yoshizu
@@ -1441,6 +1449,7 @@ youfang	aburaya
 yuan	Yuan dynasty
 yuan dynasty	Yuan dynasty
 yuan rebuild	Yuan dynasty
+yudono	yudono
 yulin wei	yulin wei
 zaimokuya	zaimokuya
 zaofang	zaofang

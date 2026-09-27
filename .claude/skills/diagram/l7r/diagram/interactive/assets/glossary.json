@@ -5817,5 +5817,44 @@
   "variants": [
    "seigaiha"
   ]
+ },
+ "yudono": {
+  "def": "A bath room in a house, found in the Edo period only in the residences of upper-rank samurai; a posting's residence listed it among its rooms, and a house plan names it beside the privy.",
+  "variants": [
+   "yudono"
+  ]
+ },
+ "yonin": {
+  "def": "A steward in an official's household, who with the maids looked after the official and their family and had rooms of their own in the residence.",
+  "variants": [
+   "yonin"
+  ]
+ },
+ "gyozui": {
+  "def": "Washing oneself with water from a tub instead of bathing; how middle and lower samurai and ordinary people who had no bath of their own got clean when they did not go to the public bath.",
+  "variants": [
+   "gyozui"
+  ]
+ },
+ "yoritsuki": {
+  "def": "The anteroom inside the entrance of a samurai house, between the shikidai entrance and the zashiki, where a visitor waited and was announced before being shown into the guest room.",
+  "variants": [
+   "yoritsuki",
+   "toritsugi"
+  ]
+ },
+ "yosemune-zukuri": {
+  "def": "A hipped roof: four sloping faces, the two long faces meeting at the ridge and the two short ends sloping down to the eaves, with no gable.",
+  "variants": [
+   "yosemune-zukuri",
+   "yosemune"
+  ]
+ },
+ "honjin": {
+  "def": "The inn of a post town kept for traveling daimyo, hatamoto and shogunal officials, allowed what an ordinary inn was not: a front gate, a genkan with a shikidai, and a jodan-no-ma, the raised room of honor.",
+  "variants": [
+   "honjin",
+   "honjins"
+  ]
  }
 }
