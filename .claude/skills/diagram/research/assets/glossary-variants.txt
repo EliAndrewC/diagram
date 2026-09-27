@@ -503,9 +503,12 @@ gassho	gassho
 gassho-zukuri	gassho
 gasshozukuri	gassho
 gate market	gate market
+gate rowhouse	nagayamon
+gate rowhouses	nagayamon
 gate throat	gate throat
 gate-mound	mitsuke
 gate-mounds	mitsuke
+gate-rowhouse	nagayamon
 gate-throat	gate throat
 gazetteer	gazetteer
 gazetteers	gazetteer
@@ -1253,6 +1256,8 @@ rokugan	Rokugan
 rokugani	Rokugan
 roson	roson
 row village	roson
+rowhouse gate	nagayamon
+rowhouse gates	nagayamon
 runners	yayi
 ryo	ryo
 ryobosei	ryobosei
@@ -1501,6 +1506,7 @@ tertiary	tertiary source
 tertiary source	tertiary source
 tertiary summaries	tertiary source
 tertiary summary	tertiary source
+tezuki	tezuki
 thatch field	thatch field
 thatch fields	thatch field
 the pool	the pool
