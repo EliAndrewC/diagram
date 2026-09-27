@@ -256,6 +256,7 @@ detritus	detritus
 diameter at breast height	DBH
 dike-pond	dike-pond
 dike-ponds	dike-pond
+diospyros kaki	Diospyros kaki
 discharge	discharge
 dish pond	sara-ike
 dish ponds	sara-ike
@@ -414,6 +415,8 @@ fung shui woods	fengshui grove
 furigana	furigana
 fuse	fuse
 fusekoshi	inverted siphon
+fuyu	Fuyu
+fuyu persimmon	Fuyu
 gabion	gabion
 gabions	gabion
 gangi	gangi
