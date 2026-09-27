@@ -17,19 +17,22 @@
 - [ ] T05 FR-002 and FR-006 for `urban-features`, by 250's process
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+- [ ] T06 FR-006 for `cities/capitals`, by 250's process
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
 
 ## Phase 2 - the sweeps (was 250's T20-T22)
 
-- [ ] T06 FR-003, the rest of the vocabulary findings and the two variants (`ochiba`, `fire-gap`)
+- [ ] T07 FR-003, the rest of the vocabulary findings and the two variants (`ochiba`, `fire-gap`)
       research: rendering
-- [ ] T07 FR-004, the history passages into comments
+- [ ] T08 FR-004, the history passages into comments
       research: rendering
-- [ ] T08 FR-005, the registry's citation lines carry English titles, one mechanical sweep
+- [ ] T09 FR-005, the registry's citation lines carry English titles, one mechanical sweep
       research: rendering
 
 ## Phase 3 - the close (was 250's T24, and 265's own)
 
-- [ ] T09 FR-008, the download list grown at its end
+- [ ] T10 FR-008, the download list grown at its end
       research: rendering
-- [ ] T10 FR-007's owed pairs answered; FR-009, the closing report; `make page-check`; the push
+- [ ] T11 FR-007, the checks owed by what phases 1 and 2 changed (`quote-check` and `record-format` over the sections the sweeps changed, `source-applicability` over new keys); every `_entry_owed.py` pair answered; FR-009, the closing report; `make page-check`; the push
       research: rendering

@@ -12,9 +12,12 @@ measure/brief.py` - a split session for any item question over the cap, a write 
 load - with the tooling 250 built (`make check-bundle`, `make apply-edits`, `make canon`, the size cap, the guards).
 Nothing here changes that process; a change to it is a feature of its own.
 
-**The pages left** (250's T19, re-derived 2026-09-27 by `brief.fr002` / `fr006` / `over_cap_items`): `towns` (10
-FR-002 items), `cities/river-cities` (8), `buildings` (7), `urban-features` (12, and 6 FR-006; four of its item
-questions over the cap - split first), `ways` (1).
+**The pages left** (250's T19, and the FR-006 work 250's T19 did not name; re-derived 2026-09-27 by `brief.fr002` /
+`fr006` / `over_cap_items` over every page): `towns` (10 FR-002 items), `cities/river-cities` (8), `buildings` (7),
+`urban-features` (12, and 6 FR-006 items; five of its item questions over the cap - 010, 020, 030 and 060 with FR-002
+items, 050 with an FR-006 item - split first), `ways` (1), and `cities/capitals` (0 FR-002 items, 7 FR-006 items -
+242's R12 items 43 to 46 and 84 to 86, which 250's T19 missed because its list was built from the pages with FR-002
+items).
 
 ## Requirements (feature 250's, carried verbatim)
 
@@ -62,8 +65,32 @@ list, in the GM's format, appended at the END").
 **FR-009 - the closing report** states, per class above, what closed and what did not, and per unclosed
 item whether it was searched and failed or never searched.
 
-## Success criteria
+## Success criteria (feature 250's SC-002 to SC-010, carried verbatim; SC-002 and SC-006 limited to the pages above)
 
-- Every page above worked to 250's standard: FR-002 items in one of the three forms, FR-006 items confirmed or worked,
-  its checks run and applied, its owed modals answered.
-- The sweeps (FR-003 to FR-005) done; the download list grown (FR-008); the closing report (FR-009).
+- **SC-002** (FR-002) - every assertion listed at the end of the six quote-check reports carries one of
+  the three forms (an assertion for which no readable source is found carries an ABSENCE note; one that
+  is not a real-world assertion carries a GROUNDS note); FR-009's residue is never a way past this.
+- **SC-003** (FR-003) - no term the record-format reports named is without a glossary entry or a
+  rewritten sentence; `make glossary` is green.
+- **SC-004** (FR-004) - a `record-format` pass over the changed pages reports no HISTORY item.
+- **SC-005** (FR-005) - no registry citation line's title is given only in Japanese or Chinese.
+- **SC-006** (FR-006) - every item 242's `worklist.py` reported NOT-LOCATED, TOO-SHORT or AMBIGUOUS at
+  242's close (its `research.md` R12) is confirmed or worked.
+- **SC-007** (FR-007) - the verdicts are recorded in the task; `scripts/_entry_owed.py` names no
+  unanswered pair at push.
+- **SC-008** (FR-008) - Part 4 of the download list has grown only at its end, every entry with both links.
+- **SC-009** (FR-009) - the closing report distinguishes searched-and-failed from never-searched.
+- **SC-010** (spec-wide) - `make page-check` green and the push clean.
+
+## Review history
+
+- **Round 1 (2026-09-27), `spec-fidelity`: CHANGES REQUIRED**, three items. (1) `cities/capitals` is missing from
+  the pages left: `brief.fr006('cities/capitals')` gives 7 items (6 NOT-LOCATED, 1 TOO-SHORT), the same 7 as
+  242's R12 table, which 250's SC-006 names, and no task in 250 or 265 works them. Add it as an FR-006-only page
+  with its own task. (2) `urban-features` has five questions over the cap, not four: `over_cap_items` gives 010,
+  020, 030 and 060 (FR-002 items) and 050 (an FR-006 item). (3) T10 cuts FR-007 down to the owed pairs, and the
+  success criteria drop 250's SC-003, SC-004, SC-005, SC-008 and SC-009. FR-007 needs `quote-check` and
+  `record-format` over the sections the sweeps T06 to T08 change, plus `source-applicability` over new keys, and
+  250's criteria should be carried verbatim for the requirements carried here.
+  Applied (2026-09-27): all three - `cities/capitals` added as an FR-006-only page (T06); `urban-features`' five
+  over-cap questions named; T11 carries FR-007 whole, and the success criteria are 250's SC-002 to SC-010 verbatim.
