@@ -26,9 +26,10 @@
 - [ ] T03 FR-002 and FR-006 for `cities/river-cities`, by 250's process
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
-- [ ] T04 FR-002 and FR-006 for `towns`, by 250's process
+- [x] T04 FR-002 and FR-006 for `towns`, by 250's process
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. towns closed: quote-check and record-format on 040, 080, 090, 100, 130 (two groups), source-applicability APPLICABLE-WITH-LIMITS (honest) on thepaper-night-gates; group 2b: 090 3 PARTIAL narrowed to the quotes (1 more narrowed on re-check, then SUPPORTS), 130 1 PARTIAL resolved by labeling the no-per-farm-groves rule a guess with an absence statement, 2 glossary terms added (omotedana, dispersed settlement) and nucleus/nuclei made variants of nucleated; FR-006 14 items: 12 FOOTNOTED, 1 NOT-LOCATED (the 090 sentence rewritten this round, now footnoted), 1 LOCATED (070 hinomi-yagura sentence, outside the changed questions)
 - [ ] T05 FR-002 and FR-006 for `urban-features`, by 250's process
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
