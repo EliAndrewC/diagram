@@ -3392,7 +3392,9 @@
  "sekisho": {
   "def": "A barrier station on a highway, where travelers and their goods were inspected.",
   "variants": [
-   "sekisho"
+   "sekisho",
+   "barrier station",
+   "barrier stations"
   ]
  },
  "senmaida": {
@@ -6480,7 +6482,8 @@
  "sukego": {
   "def": "The villages around a Japanese post station that sent men and horses to the station when its own were not enough for the relay.",
   "variants": [
-   "sukego"
+   "sukego",
+   "auxiliary post duty"
   ]
  },
  "ekika": {
@@ -6885,6 +6888,14 @@
   "def": "Heibonsha's World Encyclopedia, a large Japanese general encyclopedia; Kotobank carries its entries beside the smaller Mypedia and Nipponica.",
   "variants": [
    "Sekai Daihyakka Jiten"
+  ]
+ },
+ "lower mansion": {
+  "def": "A ruling house's secondary residence, set toward the edge of the castle town - at Kanazawa outside the outer sogamae, beside the temple quarter and the artisans' town - rather than in the inner quarters.",
+  "variants": [
+   "lower mansion",
+   "lower mansions",
+   "shimo-yashiki"
   ]
  }
 }

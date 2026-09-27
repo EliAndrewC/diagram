@@ -37,6 +37,7 @@ association	plant association
 asunaro	asunaro
 at grade	at grade
 autumn assize	assize
+auxiliary post duty	sukego
 aze	bund
 aze-mame	azemame
 azemame	azemame
@@ -73,6 +74,8 @@ banyuetang	banyuetang
 barbican	barbican
 barbicans	barbican
 baren	baren
+barrier station	sekisho
+barrier stations	sekisho
 basal area	basal area
 base flow	base flow
 bastion	bastion
@@ -949,6 +952,8 @@ loose-log drive	kanagashi
 loose-log driving	kanagashi
 louzeyuan	louzeyuan
 low stage	river stage
+lower mansion	lower mansion
+lower mansions	lower mansion
 lower yangtze	Lower Yangzi
 lower yangzi	Lower Yangzi
 lulu	lulu
@@ -1358,6 +1363,7 @@ shide	shide
 shijin soo	four gods
 shijin-soo	four gods
 shimenawa	shimenawa
+shimo-yashiki	lower mansion
 shinai	shinai
 shinden	shinden
 shinsei	Shinsei
