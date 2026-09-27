@@ -708,7 +708,8 @@
  "baulk": {
   "def": "The unplowed strip of raised earth between two field plots, wide enough to walk on.",
   "variants": [
-   "baulk"
+   "baulk",
+   "baulks"
   ]
  },
  "bed shear stress": {
@@ -904,7 +905,8 @@
  "causeway": {
   "def": "A raised road carried across wet or flooded ground.",
   "variants": [
-   "causeway"
+   "causeway",
+   "causeways"
   ]
  },
  "center-pivot": {
@@ -5611,6 +5613,27 @@
    "dispersed settlements",
    "dispersed villages",
    "dispersed farmsteads"
+  ]
+ },
+ "Five Highways": {
+  "def": "The five trunk roads of Edo-period Japan, the Tokaido among them. Their ordinary width was about 3 to 4 ken (5.4 to 7.2 m), wider close to Edo, and carts were forbidden on them until the Meiji period.",
+  "variants": [
+   "Five Highways",
+   "gokaido"
+  ]
+ },
+ "post-horse system": {
+  "def": "The relay of horses kept along the highways to carry goods and travelers from one stage to the next. The shogunate banned carts from the highways so that the relay would not run short of horses.",
+  "variants": [
+   "post-horse system",
+   "post-horse"
+  ]
+ },
+ "footslope": {
+  "def": "The gentle lower slope at the foot of a hill or fan, above the wet ground. Here it is the dry ground a track can use to pass the ends of the wet toe.",
+  "variants": [
+   "footslope",
+   "footslopes"
   ]
  }
 }

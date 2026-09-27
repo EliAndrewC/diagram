@@ -62,6 +62,7 @@ basal area	basal area
 base flow	base flow
 batter	batter
 baulk	baulk
+baulks	baulk
 bay	bay
 bays	bay
 beam span	ridge span
@@ -132,6 +133,7 @@ castle towns	jokamachi
 catchment	catchment
 catena	catena
 causeway	causeway
+causeways	causeway
 celestial order	Celestial Order
 center-pivot	center-pivot
 cesspit	koedame
@@ -385,6 +387,7 @@ fishways	fishway
 fit zoom	fit zoom
 fit-zoom	fit zoom
 five dynasties	Five Dynasties
+five highways	Five Highways
 five-ring pagoda	five-ring pagoda
 five-ring pagodas	five-ring pagoda
 flood stage	river stage
@@ -398,6 +401,8 @@ footing	footing
 footings	footing
 footplank	footplank
 footplanks	footplank
+footslope	footslope
+footslopes	footslope
 forest litter	forest litter
 forest litters	forest litter
 fortune	Fortune
@@ -450,6 +455,7 @@ glyphs	glyph
 go	go
 goemon-buro	goemon-buro
 goemonburo	goemon-buro
+gokaido	Five Highways
 gongxiefang	gongxiefang
 gorinto	five-ring pagoda
 goshi	gōshi
@@ -958,6 +964,8 @@ post station	shukuba
 post stations	shukuba
 post town	shukuba
 post towns	shukuba
+post-horse	post-horse system
+post-horse system	post-horse system
 post-station	shukuba
 post-stations	shukuba
 postern	postern
