@@ -230,15 +230,19 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
 
 ## Phase 1i - the eighth round (GM 2026-09-27; plan D17)
 
-- [ ] T63 `entry-drift` EDIT blocks, and `apply-edits` on a modal's class file (D17.1)
+- [x] T63 `entry-drift` EDIT blocks, and `apply-edits` on a modal's class file (D17.1)
       research: rendering
-- [ ] T64 Check groups packed by load - questions, owed modals, registry keys (D17.2)
+      verify: DONE. built and verified (tests/tooling/test_apply_edits.py; brief.py replayed on the fields handoff 61551e06: 3 groups, 7 modals each in one group; tokens.py summary per_thing reproduces R8's 0.73 M); plan review CLEAR
+- [x] T64 Check groups packed by load - questions, owed modals, registry keys (D17.2)
       research: rendering
-- [ ] T65 `tokens.py summary` per thing checked (D17.3)
+      verify: DONE. built and verified (tests/tooling/test_apply_edits.py; brief.py replayed on the fields handoff 61551e06: 3 groups, 7 modals each in one group; tokens.py summary per_thing reproduces R8's 0.73 M); plan review CLEAR
+- [x] T65 `tokens.py summary` per thing checked (D17.3)
       research: rendering
-- [ ] T66 FR-002 and FR-006 for `archetypes`, worked as the last pages were (D17.4)
+      verify: DONE. built and verified (tests/tooling/test_apply_edits.py; brief.py replayed on the fields handoff 61551e06: 3 groups, 7 modals each in one group; tokens.py summary per_thing reproduces R8's 0.73 M); plan review CLEAR
+- [x] T66 FR-002 and FR-006 for `archetypes`, worked as the last pages were (D17.4)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. archetypes session 2c: question 170 checked and applied - quote-check 33 notes (24 SUPPORTS, 5 PARTIAL, 1 DOES-NOT-SUPPORT, all acted on; the gazetteer succession and abandoned-rice passages read and cited, Fei 1936/Lake Tai/yu cited, OCR restored), record-format 6 VOCABULARY + 1 SESSION NOTE + 2 HISTORY applied (6 glossary terms), 8 modals DRIFTED and rewritten, re-check: 12 notes VERBATIM/SUPPORTS, 6 modals IN-STEP, 2 edited once more; FR-006 26 bare items, FOOTNOTED 24, NOT-LOCATED 2
 - [ ] T67 **The comparison the GM asked for** (D17): T66 against R4 to R8, recorded as R9
       research: rendering
 
