@@ -89,6 +89,7 @@ bettō	bettō
 bettō-ji	bettō
 bidens	Bidens tripartita
 bidens tripartita	Bidens tripartita
+big door	ōdo
 bishamon	Bishamon
 bishamonten	Bishamon
 bituminous coke	coke
@@ -312,6 +313,8 @@ duty of water	water duty
 dwarf bamboo	sasa
 dōba	dōba
 ear mound	ear mound
+earth floor	doma
+earth floors	doma
 earth god	tudi miao
 earth-god	tudi miao
 earth-god shrine	tudi miao
@@ -438,6 +441,7 @@ fung shui woods	fengshui grove
 furigana	furigana
 fuse	fuse
 fusekoshi	inverted siphon
+fusuma	fusuma
 gabion	gabion
 gabions	gabion
 gable-entered	gable-entered
@@ -1007,6 +1011,7 @@ oblique weir	oblique weir
 oblique weirs	oblique weir
 obon	Bon
 ochiba	ochiba
+odo	ōdo
 odoi	Odoi
 offtake	offtake
 offtakes	offtake
@@ -1465,6 +1470,8 @@ tsukubo	tsukubo
 tsukubō	tsukubo
 tsumairi	gable-entered
 tsunaba	tsunaba
+tsushima	Tsushima
+tsushima's	Tsushima
 tudi miao	tudi miao
 tudigong	tudi miao
 tulou	tulou
@@ -1488,6 +1495,9 @@ umon	umon
 understory	understory
 ura-dana	ura-dana
 ura-nagaya	ura-nagaya
+urajiro	urajiro
+urajiro door	urajiro
+urajirodo	urajiro
 usufruct	usufruct
 uzumimon	umon
 vaiśravaṇa	Bishamon
@@ -1614,6 +1624,7 @@ zongjia	zongjia
 zooplankton	zooplankton
 zuku	zuku
 ō-aza	ō-aza
+ōdo	ōdo
 ōkaji	ōkaji
 ōkajiba	ōkaji
 ほ場整備	hojo seibi
