@@ -73,12 +73,13 @@ class Byre(Kind):
     Why: Most farmsteads kept a draft animal or two, and the vernacular put the animal far closer to the house
     than a European barn would. Where the team is OWNED, the household houses it in its own homestead; where a
     team is shared or hired it stands out among the homesteads, on the common ground, so that the borrowing
-    household can walk to it. Both are attested and neither dominates, so this map rolls between them per
-    settlement - which is also what lets two hamlets differ honestly.
+    household can walk to it. The owned stable is read; the shared one on the common ground is this record's
+    own reading, and the commoner of the two, so this map rolls between them per settlement - which is also what lets two hamlets differ honestly.
 
     Note: The separate byre is the temperate reading of the record; the attached stable wing (magariya) belongs
     to Tohoku's horse-breeding districts, its stable warmed from the kitchen hearth, and is deliberately not
-    drawn - that the cold made the form is this record's own reading. The animal's nearness to the HOUSE is
+    drawn - that the cold made the form is this record's own reading, and the magariya was the house of the
+    better-off, its hearth-warmed stable read as a sign of what the horses were worth. The animal's nearness to the HOUSE is
     read; its nearness to the wellhead is not on any page read, and neither is the commons siting itself.
 
     Caveat: the attached stable wing (magariya) belongs to Tohoku's horse-breeding districts, its stable warmed
@@ -131,9 +132,9 @@ class Garden(Kind):
     What: The household's kitchen garden: a tilled bed in planted rows of daikon and greens, beside the house.
 
     Why: A dooryard garden fed the household and, like the yard, wants light - beds are kept out of a neighbor's
-    shadow to the south and clear of the windbreak's afternoon shade to the west.
+    shadow to the south, clear of the windbreak's afternoon shade to the west, and, where open ground allows, nudged south out of a neighbor's grove that would take their morning sun from the east.
 
-    Note: Presence is read; the sun rule is DERIVED from the geometry - its season rests on daikon standing in
+    Note: Presence is read; the sun rule is DERIVED from the geometry, and its east half is the GM's call, since the record finds no readable source for a bed's need of morning light - its season rests on daikon standing in
     the bed through autumn (the other autumn greens are this record's reading), and its west lane is sized to
     a working belt of about 10 m, the low end of a surveyed band whose measured trees reach 22 m; the record
     fixes the bed's AREA and that it is hand-worked and irregular, but gives no proportion or row count, so

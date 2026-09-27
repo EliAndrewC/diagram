@@ -1,0 +1,8 @@
+- Byre (homesteads SECTION=060): REWRITTEN - the shared byre on common ground is now the record's own reading and the commoner form, not "attested"; the magariya's better-off limit added (the cold clause kept, section 140 still carries it); re-check IN-STEP
+- Farmhouse (homesteads SECTION=100): IN-STEP - the bund-width guess, the unsourced eave and the 10-13 ft draw all still hold
+- Garden (homesteads SECTION=043): REWRITTEN - the east-side nudge out of a neighbor's grove added to the Why, and its morning-light need labeled the GM's call with no readable source; re-check IN-STEP
+- StorageShed (homesteads SECTION=140): IN-STEP - the livestock-shed correction does not reach it; the mean-count upper bound was already in the Note
+- VillageLane (homesteads SECTION=090): IN-STEP - the end-to-end T rule is a drawing rule under "never back on itself", and the fewest-turns point is now better sourced
+- Well (homesteads SECTION=200): REWRITTEN - a dispersed farmstead's own well now rests on the layout, and the shallow water table is counted as the record's guess; re-check IN-STEP
+- Windbreak (homesteads SECTION=040): IN-STEP - the west-side clearance still holds; the moved height figures are ones the modal never states
+- Woodpile (homesteads SECTION=210): IN-STEP - the woodpile findings moved to their own question, and what 210 keeps agrees

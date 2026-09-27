@@ -307,7 +307,7 @@ class Well(Kind):
     Why: A pre-modern rice village of about seventy households ran one to three communal wells, two being
     typical in this record's estimate - drinking water came mostly from surface water, settled and boiled,
     and a well was expensive durable capital dug by subscription only as surface quality forced. Shared wells
-    outnumbered private ones, in this record's reading: per-household wells appear only where the water
+    outnumbered private ones, in this record's reading: a dispersed farmstead, with no center to share a well with, carries its own; elsewhere per-household wells appear only where the water
     table is shallow.
 
     Note: we have drawn the wellhead about 19 ft across - a stone curb of 9.4 ft radius under a well-house roof -
@@ -315,7 +315,7 @@ class Well(Kind):
     stands, not how much ground it takes. A hand-dug well's shaft is about 1 m across, big enough for a
     person to work in, under a well house that is posts and a roof and nothing more; the width of the curb
     frame itself was not found. The one-to-three count is read (the Sphere/UNICEF capacity figure); the
-    typical two, and the households-per-well ratio, were searched for and not found, and stand as this
+    typical two, the households-per-well ratio, and the shallow water table that makes a farmstead's own well cheap (the groundwater paper gives no depth) were searched for and not found, and stand as this
     record's estimate.
 
     Name: well
