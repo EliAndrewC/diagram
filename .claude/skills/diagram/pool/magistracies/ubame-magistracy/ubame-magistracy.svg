@@ -153,9 +153,10 @@
     <text x="260" y="517" text-anchor="middle" font-size="13" font-weight="bold" fill="#3A2E1C">tax archive</text>
   </g>
 
-  <!-- Granary ROW (raised, vented) - Ubame is a TERMINAL store, not a staging node:
-       an upland forest county with no water carriage, so the tax sits here until the
-       overland carts run. Two bays; contents are grain plus in-kind forest goods. -->
+  <!-- Granary (raised, vented) - Ubame is a TERMINAL store, not a staging node: an upland forest county with no
+       water carriage, so the tax sits here until the overland carts run. A single kura, deliberately modest -
+       this county's tax is largely charcoal, iron and forest goods, so the terminal store shows in the sealed
+       charcoal store, not a grain row (notes, knob 3). Contents are grain plus in-kind forest goods. -->
   <g data-kind="granary">
     <rect x="212" y="578" width="140" height="78" fill="url(#granary-slats)" stroke="#5A3F1E" stroke-width="2"/>
     <line x1="282" y1="578" x2="282" y2="656" stroke="#5A3F1E" stroke-width="1.5"/>
@@ -328,7 +329,8 @@
     <circle cx="908" cy="630" r="3" fill="#3A2810"/>
     <!-- balance beam and stacked bales -->
     <g data-kind="balance beam">
-      <line x1="890" y1="612" x2="926" y2="612" stroke="#4A3318" stroke-width="1.6"/>
+      <!-- a 6 ft beam (it was 12 ft, feature 264 review) -->
+      <line x1="899" y1="612" x2="917" y2="612" stroke="#4A3318" stroke-width="1.6"/>
       <line x1="908" y1="606" x2="908" y2="616" stroke="#4A3318" stroke-width="1.6"/>
     </g>
     <g data-kind="charcoal bales">
@@ -445,11 +447,13 @@
        Ministry of Rites neither approves nor disapproves, because it has never been asked.
        "Personally maintained", not "private": the altar is open, the upkeep is one man's.
        The reason the rest of the domain says the Kurogi have gone native. -->
+  <!-- Set BESIDE the shrine's approach, off its axis (2026-09-27, feature 264 review): standing 2 ft past the
+       torii on the hall's axis, the arch read as the altar's own, and the altar has no torii. -->
   <g data-kind="wood-kami altar">
-    <rect x="974" y="318" width="18" height="18" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.2"/>
-    <line x1="978" y1="323" x2="988" y2="323" stroke="#5C4830" stroke-width="1"/>
-    <text x="983" y="352" text-anchor="middle" font-size="8.5" font-style="italic" fill="#3A2E1C">wood-kami altar</text>
-    <text x="983" y="362" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830">(personally maintained)</text>
+    <rect x="1002" y="330" width="18" height="18" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.2"/>
+    <line x1="1006" y1="335" x2="1016" y2="335" stroke="#5C4830" stroke-width="1"/>
+    <text x="1011" y="362" text-anchor="middle" font-size="8.5" font-style="italic" fill="#3A2E1C">wood-kami altar</text>
+    <text x="1011" y="372" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830">(personally maintained)</text>
   </g>
 
   <!-- Residence: two offset blocks (gankō / flying-geese massing), family only.
@@ -521,6 +525,9 @@
   <!-- Kitchen + pantries (west range) -->
   <g data-kind="kitchen">
     <rect x="214" y="330" width="120" height="100" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
+    <!-- the kitchen door (katteguchi) on the north face, into the service alley the postern opens onto; the
+         kitchen had no drawn door until 2026-09-27 (feature 264 review) -->
+    <rect x="296" y="324" width="24" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
     <g data-kind="hearth">
       <rect x="242" y="349" width="14" height="14" fill="#6B4030" stroke="#3A2010" stroke-width="0.8"/>
       <circle cx="249" cy="356" r="4" fill="#E68A40"/>
