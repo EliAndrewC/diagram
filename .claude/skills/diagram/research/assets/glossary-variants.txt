@@ -340,6 +340,7 @@ desire line	desire path
 desire path	desire path
 desire paths	desire path
 desire-line	desire path
+detached village grain	village grain
 detritus	detritus
 diameter at breast height	DBH
 dike-pond	dike-pond
@@ -1762,6 +1763,7 @@ verge	verge
 verges	verge
 vermilion line	shubiki
 village district	village district
+village grain	village grain
 votive plaque	votive plaque
 votive plaques	votive plaque
 wagon inn	wagon inn
