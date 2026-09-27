@@ -19,7 +19,10 @@ class Stream(Kind):
 
     Note: we have drawn the stream's width by its RANK in the water hierarchy rather than by its real width, in
     order to keep brook, head race and ditch readable at every zoom - so junctions do not conserve width
-    (the GM's ruling). The stream's type and place are read. The 2 m is not: no page read gives a village
+    (the GM's ruling of 2026-08-16). The two rulings behind this modal do not quite agree, and the record
+    has not reconciled them: the width ladder (the GM's ruling of 2026-07-21) draws a stream feeding a moat
+    as wide as the moat, because the water that enters has to be carried, while the later ruling sizes
+    every stroke by its own rank with no coordination across a junction. The stream's type and place are read. The 2 m is not: no page read gives a village
     creek a width, and the 0.3 m it is measured against is a modern design MINIMUM - the narrowest a canal of
     any grade may be built to - rather than a ditch anyone measured.
 

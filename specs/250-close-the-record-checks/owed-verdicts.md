@@ -23,3 +23,5 @@
 - Bund (fields SECTION=021): REWRITTEN - the Note called the shared-wall finding read; 021 derives it from construction and upkeep, so the Note now says derivation; re-check IN-STEP
 - BundBeans (fields SECTION=020): IN-STEP - nothing the modal says rests on 020's plot layout and bund widths (the bead is about 3x the 30 cm bund top, and the Note already says it is drawn oversize)
 - BundBeans (fields SECTION=200): IN-STEP - 200 still supports every What: and Note: claim; the Why: rests on the other Entry: sections
+- Stream (water SECTION=010): REWRITTEN - the Note said width is never conserved at a junction; 010's 2026-07-21 ruling draws a stream feeding a moat as wide as the moat, so the Note now carries it; re-check IN-STEP
+- Stream (water SECTION=230): LABELED - IN-STEP at first, but the 010 rewrite brought in the moat-feeder exception, which 230's 2026-08-16 no-coordination ruling contradicts; the Note now names both rulings as unreconciled (the record needs the GM to reconcile 010's ladder with 230)
