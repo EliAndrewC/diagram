@@ -7,7 +7,7 @@ above all (it auto-loads when you read a research file).
 
 **Read narrowly.** For a few notes of a question use `make notes PAGE=<page> SECTION=<NNN> KEYS=<key,key>` (in
 `.claude/skills/diagram`). Grep with `-o` and a short context. Send the lookups you know you need in one message.
-**Do not edit these sections - other sessions own them:** religion-and-death 130-206 and new 270-300 (feature 269's
+**Do not edit these sections - other sessions own them:** religion-and-death 130-206 (EXCEPT 190 and 204, yours - see A144) and new 270-300 (feature 269's
 burial group R1, in `/diagram/.clones/diagram-supplemental`); religion-and-death 220-260 (feature 267); every page
 other than religion-and-death. Where a finding OWES one of those a correction, say exactly what in the handoff; the
 orchestrator sends it to the owner. Other groups of THIS feature run beside you in sibling clones: stay inside your
@@ -35,8 +35,27 @@ stub's path; fill it in. It refuses a key another clone already holds - then use
   note). M. P2.
 - A144 **Village cremation and ossuary**: ONLY what 269's burial group R1 (religion-and-death 160-206, new 270-300,
   in `/diagram/.clones/diagram-supplemental`) leaves open - read R1's sections first and cite them. M. P2.
+  If `/diagram/.clones/diagram-supplemental/specs/269-research-backfill/briefs/r1-handoff.md` does NOT exist yet when you
+  start, write only the crematory's own questions, and leave pointers to religion-and-death 160, 170, 180, 206 and
+  270-300 for your check pass (agreed with "Diagram supplemental", 2026-09-27).
+  UPDATE 13:22 UTC: 269's R1 handoff IS written (`/diagram/.clones/diagram-supplemental/specs/269-research-backfill/briefs/r1-handoff.md`);
+  read religion-and-death 160, 170, 180, 206, 270, 280 in THAT clone (their checks may still be running) and cite them.
+  Its points for you: 280 is a KNOB - a village's one burial ground lies in the shrine or temple yard or apart from
+  it (a hilltop shrine always apart); 270 - a ground apart lies downstream and beyond the last house, within ~650 ft.
+  Build A138/A139's village-temple graveyard on 280.
+- A144 **religion-and-death 190 (the cremation ground's siting) and 204 (the bone mound) are now YOURS to edit**
+  (handed over by 269, 2026-09-27; R1 edited neither). R1's lead for 190: in a cremating village the sanmai takes the
+  two-grave burial ground's place at the settlement edge, downstream, ~370 m on average (registry key
+  `kawazoe-2010-ryobosei`, in diagram-supplemental - cite it BY NAME and do NOT reserve or write it; its registry
+  file is copied from that clone before this feature lands. Record it in the handoff as `NEEDS-KEY: kawazoe-2010-ryobosei`).
 - FR-001 **The 210 absence note** (in `readers/272-temple-absences.md`; its second search is part C of
   the T reader's report (named below)). Group R2 edited 210 before you in this clone; build on its text.
+- D63 **The tier program** (handed over by 271, 2026-09-27): what religious and funerary features does each size
+  of settlement carry - hamlet, village, town, city? Religion-and-death 210 IS that table: make it one, row by row
+  (shrine, parish temple, wayside shrines, burial ground, cremation ground, bone mound, town monastery, town shrine,
+  city temples, state cult), each cell cited to the section that answers it (R2's 450-470, R4's 550-570, 269's burial
+  sections, your own) or labeled a guess. The GM's canon governs the setting's cells (`make canon`); history beside
+  it. 271 cites your table and writes none.
 
 ## What was already read
 
