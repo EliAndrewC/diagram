@@ -684,6 +684,13 @@ COPSE_BELT_REACH_FT = 60.0
 # and well below the 113-131 deg folds the exit has produced at the frame edge. A map drawing convention.
 BROOK_MAX_TURN_DEG = 100.0
 
+# A BROOK TURNS ON A CURVE (feature 261, settlement-review of Sawada): every corner of the drawn course is filleted at this
+# many widths of its drawn bed, the ratio the ditches have been drawn at since 2026-07-25 (`fillet_polyline`,
+# research/water.html "Why does every ditch turn on a curve?": sharp corners belong to stone-lined channels, and nothing
+# on these maps shows one) - Sawada's brook drew mitred corners of 27-47 degrees. Rounded LATE, at the crossings stage,
+# and held at the tap the head race leaves from (`round_the_brooks`). A map drawing convention on an accurate rule.
+BROOK_BEND_WIDTHS = 2.5
+
 # WHAT A WAY PAYS TO CROSS THE BROOK (feature 261, settlement-review of Kashikawa). Fords made the brook passable, and
 # at no cost the router took any ford that was a few feet shorter: a lane crossed the brook and came straight back to
 # reach a house on its own bank - two planks built to save a short walk. A crossing is one more thing to build and keep,

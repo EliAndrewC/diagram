@@ -331,3 +331,25 @@ def test_stage_notice_squares_an_entrance_board_to_the_approach_not_a_straggler_
     assert len(s.reseated) == 1
     _bx, _by, rot = s.reseated[0]
     assert min(abs(rot - 90.0) % 180.0, 180.0 - abs(rot - 90.0) % 180.0) <= 15.0, f"squared to the connector (bearing 90), not the straggler: {rot}"
+
+
+def test_the_brooks_are_rounded_with_the_tap_held() -> None:
+    """`round_the_brooks` (settlement-review of Sawada, feature 261): each brook is rounded at `BROOK_BEND_WIDTHS` of its width,
+    holding the vertex the head race leaves from; a two-point course has no corner to round."""
+    from l7r.diagram.hamletgen.consts import BROOK_BEND_WIDTHS
+    from l7r.diagram.hamletgen.frame import round_the_brooks
+
+    class _S:
+        def __init__(self) -> None:
+            self.M = {
+                "streams": [{"poly": [[0, 0], [100, 0], [200, 50], [300, 50]], "w": 8}, {"poly": [[0, 0], [9, 9]]}],
+                "channels": [{"poly": [[100.0, 0.0], [100.0, 60.0]], "frm": {"kind": "stream"}}, {"poly": [[5, 5]], "frm": {"kind": "pond"}}],
+            }
+            self.calls: list[tuple[float, set[int]]] = []
+
+        def round_stream(self, rec, radius, hold=()):  # type: ignore[no-untyped-def]
+            self.calls.append((radius, set(hold)))
+
+    s = _S()
+    round_the_brooks(s)  # type: ignore[arg-type]
+    assert s.calls == [(BROOK_BEND_WIDTHS * 8.0, {1})], "the tap at (100, 0) held; the two-point course skipped"

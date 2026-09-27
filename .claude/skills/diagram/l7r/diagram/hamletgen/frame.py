@@ -22,7 +22,7 @@ from l7r.diagram.settlement.structures.fixtures import (
     under_canopy,
 )
 
-from .consts import POLDER_ARCHETYPES
+from .consts import BROOK_BEND_WIDTHS, POLDER_ARCHETYPES
 from .hinterland import CROP_MARGIN, brook_beside_the_field, title_pocket
 from .plan import SitePlan
 from .sink import BROOK_JOIN_TRUNK
@@ -52,6 +52,20 @@ def _board_footprint(s: Settlement) -> tuple[float, float]:
 # ---- STAGE 8: crossings, the board, and the frame ------------------------------------------------
 
 
+def round_the_brooks(s: Settlement) -> None:
+    """Every brook's bends rounded at `BROOK_BEND_WIDTHS` of its drawn width, once the ways that were routed against it are
+    laid and before the crossings are squared and decked against it (settlement-review of Sawada, feature 261: corners of
+    27-47 degrees on a natural brook). The tap - the vertex the head race leaves from - is held, so the race still leaves
+    the course where the offtake angle is measured."""
+    heads = [(float(c["poly"][0][0]), float(c["poly"][0][1])) for c in s.M.get("channels") or [] if (c.get("frm") or {}).get("kind") == "stream" and c.get("poly")]
+    for rec in s.M.get("streams") or []:
+        pts = [(float(x), float(y)) for x, y in rec.get("poly") or []]
+        if len(pts) < 3:
+            continue
+        taps = {min(range(len(pts)), key=lambda k, h=h: math.dist(pts[k], h)) for h in heads if min(math.dist(p, h) for p in pts) <= 1.0}
+        s.round_stream(rec, BROOK_BEND_WIDTHS * float(rec.get("w") or 7.0), hold=taps)
+
+
 def stage_crossings(s: Settlement, plan: SitePlan) -> None:
     """Planks and decks.
 
@@ -64,12 +78,14 @@ def stage_crossings(s: Settlement, plan: SitePlan) -> None:
     the engine's own `bridges()` docstring says so and the `roads_bridge_water` check enforces it.
 
     Steps:
+        l7r.diagram.hamletgen.frame.round_the_brooks
         l7r.diagram.settlement.Settlement.bridges
         l7r.diagram.settlement.Settlement.channel_footbridges
         l7r.diagram.settlement.Settlement.dike_gates
         l7r.diagram.hamletgen.water.polder_crossing_caps
         l7r.diagram.hamletgen.ways.checks.square_crossings
     """
+    round_the_brooks(s)
     # EVERY WAY CROSSES THE BROOK SQUARE, and so does its deck (feature 261): the lane is squared at the crossing first,
     # its record and its ink together, because `bridges` lays the plank along the way it carries.
     # ...AND EVERY DRAWN CHANNEL (settlement-review of Mizuguchi, feature 261): a lane over the head-race beside the weir lay

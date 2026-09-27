@@ -16,7 +16,7 @@ import os
 
 import pytest
 
-from l7r.diagram.hamletgen.consts import BROOK_MAX_TURN_DEG, COPSE_BELT_REACH_FT, COPSE_HOUSE_REACH_FT
+from l7r.diagram.hamletgen.consts import BROOK_MAX_TURN_DEG, BROOK_WANDER_STEP, COPSE_BELT_REACH_FT, COPSE_HOUSE_REACH_FT
 from l7r.diagram.hamletgen.homesteads.fields import GRAIN_BOUGHT_IN
 from l7r.diagram.settlement import segments_cross
 from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_ENTRANCE_REACH_FT, KOSATSUBA_HANDOVER_BAND_FT, departure_routes, kosatsuba_anchor, routes_missed
@@ -448,13 +448,18 @@ def test_a_belt_tree_in_the_marsh_is_alder(gen: str) -> None:
 def test_no_brook_segment_lies_on_a_screen_axis_but_the_tap_run(gen: str) -> None:
     """A drawn watercourse runs on no screen axis (the GM, 2026-08-26: a course "exactly east to west parallel to the edge
     of the map ... makes it look like a mistake"), except the tap run, which lies on the fall by construction: the
-    approach is five vertices, the sixth is the sluice, and the two segments from it are the run the head race's offtake
+    approach ends at the sluice, the vertex the head race leaves from, and the two segments from it are the run the head race's offtake
     angle is measured along. Sawada drew the segment leaving its tap run exactly vertical and Inashiro an approach leg
     1.2 degrees off one (settlement-review round 0ae309f0, feature 261)."""
     m = _manifest(gen)
+    heads = [(float(c["poly"][0][0]), float(c["poly"][0][1])) for c in m.get("channels") or [] if (c.get("frm") or {}).get("kind") == "stream"]
     for brook in _brooks(m):
+        # the tap is the vertex the head race leaves from - found by position, since the approach's bends are rounded
+        tap = min(range(len(brook)), key=lambda k: min((math.dist(brook[k], h) for h in heads), default=0.0))
         for i, (a, b) in enumerate(zip(brook, brook[1:], strict=False)):
-            if i in (5, 6) or math.dist(a, b) <= 1.0:
+            # a chord of a rounded bend (`BROOK_BEND_FT`) is not a run: a curve that turns through an axis has one chord on
+            # it, and the GM's objection is to a course that runs along one - so only runs of a wander stride or more count
+            if i in (tap, tap + 1) or math.dist(a, b) < BROOK_WANDER_STEP:
                 continue
             deg = math.degrees(math.atan2(b[1] - a[1], b[0] - a[0])) % 90.0
             assert min(deg, 90.0 - deg) >= 1.6, f"brook segment {i} lies {min(deg, 90.0 - deg):.1f} degrees off a screen axis"

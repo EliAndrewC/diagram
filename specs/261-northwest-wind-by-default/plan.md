@@ -347,7 +347,7 @@ Measured before and after in research R10.
   a shrine stands in a corner of the house plot and a coop in the yard (research/homesteads.html), and Mizuguchi drew a
   coop, a woodpile and its one shrine beyond the lane behind their house. The rule's cost was measured, not assumed:
   against the commit before it, seven more fixtures went unseated on four maps (Inashiro a heap; Kashikawa two coops and
-  a bath; Sawada a second heap; Mizuguchi a coop and a woodpile) and two maps lost their only shrine (observed 2026-09-27: `meta.farm_fixtures_unseated` and the shrine count in each pool manifest at commit 6b6031073, against 6f75efe4a's one Sawada heap). The placement was
+  a bath; Sawada a second heap; Mizuguchi a coop and a woodpile - observed 2026-09-27: `meta.farm_fixtures_unseated` in each pool manifest at commit 6b6031073, against 6f75efe4a's one Sawada heap) and two maps lost their only shrine (observed 2026-09-27 on a roll with the lane rule and without the shrine pass, not committed: Kashikawa and Mizuguchi). The placement was
   fixed rather than the rule relaxed:
   - a fixture every recorded seat of which is refused is offered the ring round its own house's other walls
     (`yard_ring`: the back wall at three points, each flank at three heights, the front corners), at the same outward
@@ -370,6 +370,31 @@ Measured before and after in research R10.
     `git show <rev>:<map>.json` at 818ac79b0 and at b915f256a).
   Measured after all of it (`m:pool-r15-unseated`): no fixture of any kind unseated on any of the five maps, where the
   commit before the lane rule left Sawada one heap short.
+
+
+### D20 - The belt keeps its depth across itself, and the brook turns on curves (round 97c20bc9)
+
+- The belt's far face is the fringe grown by a DISC of the belt's depth (`far_face`, `BELT_DEPTH_FT` 110): a neighbor `d`
+  across the wind counts by `depth * sqrt(1 - (d / depth)^2)` of its lead. The far face used to be the near face moved
+  along the wind, which is the belt's depth only where the fringe lies square to it; where the fringe runs along the wind
+  the band thinned to a sliver, and Kashikawa's westernmost steading's garden and sun lane emptied it - a hole in the
+  windward face (settlement-review, round 97c20bc9; research/vegetation.html: a belt "reads as a wall of trees only at"
+  80-120 ft of depth, and a windbreak with a hole funnels the wind). The band is now at least 84 ft across itself on
+  every pool map where no page edge cuts it (`m:belt-r16-depth`). A square window (a neighbor's whole lead) was tried
+  first and thickened belts for bumps of a few tens of feet (observed 2026-09-27 on a roll not committed: Sawada 559
+  clumps where it drew 201); the disc leaves a square or gently bumped fringe unchanged. The belts that turn grow:
+  Sawada's to 539 clumps, Kashikawa's to 504 (the census blocks).
+- A brook turns on a curve: its corners are filleted at `BROOK_BEND_WIDTHS` (2.5) of its drawn width, the ratio the
+  ditches are drawn at (research/water.html "Why does every ditch turn on a curve?"), and the tap the head race leaves
+  from is held (`round_the_brooks`, `Settlement.round_stream`). Sawada drew corners of 27-47 degrees
+  (`m:brook-r16-turn`). It is done LATE, at the start of the crossings stage, rounding the drawn course and its record in
+  place. Rounding it where the brook is first drawn was tried and reverted (observed 2026-09-27 on rolls not committed):
+  every way routed against the brook's corners moved, Mizuguchi's re-rolled web left its field path's head off the lanes
+  and a way out crossing the brook twice, and the next re-roll would find another; the ways were right, and it is the
+  drawing that was wrong. The planks are squared and decked against the rounded course.
+- The pool test that keeps the brook off the screen axes judges runs of a wander stride (`BROOK_WANDER_STEP`, 10 ft) or
+  more: a curve that turns through an axis has one short chord on it, and the GM's objection is to a course running
+  along one.
 
 ## Phases
 

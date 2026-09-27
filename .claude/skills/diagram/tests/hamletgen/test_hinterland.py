@@ -603,3 +603,19 @@ def test_a_bamboo_thicket_is_not_seated_on_the_water() -> None:
     s.M["streams"] = [{"poly": [list(p) for p in brook], "w": 7}]
     seats = hg.hinterland.bamboo_seats(s, plan)
     assert all(seg_dist(q[0], q[1], brook[0], brook[1]) > 3.5 + 3.0 for poly in seats for q in poly), "a stand on the water"
+
+
+def test_the_belts_far_face_keeps_its_depth_across_a_steep_fringe() -> None:
+    """`far_face` (settlement-review of Kashikawa, feature 261): the fringe grown by a disc of the belt's depth. A square
+    fringe, or one that bumps by less than the disc, is unchanged; where the fringe falls back steeply across the wind,
+    the far face stands behind the neighbor's lead, so the band is the depth across itself and not a sliver."""
+    from l7r.diagram.hamletgen.hinterland.belt import BELT_DEPTH_FT, far_face
+
+    flat = [(-180.0, 0.0), (-90.0, 0.0), (0.0, 0.0), (90.0, 0.0)]
+    assert far_face(flat) == flat
+    bumpy = [(-90.0, 0.0), (0.0, 20.0), (90.0, 0.0)]
+    assert far_face(bumpy) == bumpy, "a 20 ft bump is less than the disc gives a neighbor 90 ft across"
+    steep = [(-90.0, 0.0), (0.0, 150.0), (90.0, 300.0)]
+    grown = far_face(steep)
+    lead = 150.0 + BELT_DEPTH_FT * (1.0 - (90.0 / BELT_DEPTH_FT) ** 2) ** 0.5 - BELT_DEPTH_FT
+    assert grown[2] == (90.0, 300.0) and abs(grown[1][1] - (150.0 + lead)) < 1e-9 and grown[1][1] > 150.0

@@ -1,9 +1,12 @@
 """Split from settlement/water_ways.py by feature 173 - see this package's CLAUDE.md for the index."""
 
 import math
+import re
+from collections.abc import Collection
 from typing import TYPE_CHECKING, Any
 
 from .._geom import (
+    fillet_polyline,
     winding,
 )
 
@@ -121,6 +124,33 @@ class WaterBodiesMixin:
             bed_t.format(dd=dd), rec, sheen=sheen_t.format(dd=dd), clip=clip, cls=cls
         )
         self.corridors.append(([(x, y) for x, y in pts], max(30, width / 2 + 20)))  # no-build: keep houses off the stream
+
+    def round_stream(self: Settlement, rec: dict[str, Any], radius: float, hold: Collection[int] = ()) -> None:  # type: ignore[misc]
+        """Round the corners of a stream ALREADY drawn - its record and its deferred ink together - at `radius`, keeping the
+        vertices in `hold` where they are (settlement-review of Sawada, feature 261).
+
+        A stream turns on a curve like every earthen channel (`fillet_polyline`, research/water.html "Why does every ditch
+        turn on a curve?"), and a generator whose ways are routed against the course as first drawn rounds it once they are
+        laid: rounding it at `stream` moved every way the brook's corners had shaped, and each re-rolled web found a new
+        way to fail. The water block is not emitted until `finish`, so the bed and sheen are redrawn from the rounded course
+        here and nothing already on the map has to move. A held vertex splits the course: each stretch is rounded between
+        its own ends, so a tap the head race leaves from stays on the course."""
+        pts = [(float(x), float(y)) for x, y in rec["poly"]]
+        out: list[tuple[float, float]] = []
+        start = 0
+        for k in [*sorted(k for k in set(hold) if 0 < k < len(pts) - 1), len(pts) - 1]:
+            part = fillet_polyline(pts[start : k + 1], radius)
+            out += part[1:] if out else part
+            start = k
+        rec["poly"] = [[x, y] for x, y in out]
+        dd = "M" + " L".join(f"{x},{y}" for x, y in out)
+        for entry in [*self.water, *self.late_water]:
+            if entry["rec"] is rec:
+                entry["bed"] = re.sub(r' d="[^"]*"', f' d="{dd}"', entry["bed"], count=1)
+                if entry.get("sheen"):
+                    entry["sheen"] = re.sub(r' d="[^"]*"', f' d="{dd}"', entry["sheen"], count=1)
+                if entry.get("clip"):
+                    entry["clip"]["pts"] = out
 
     def river(self: Settlement, pts: Any, width: float | None = None, flow: str = "forward") -> float:  # type: ignore[misc]
         """A RIVER - the trunk waterway a river-bank city sits on (most provincial cities do;

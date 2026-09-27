@@ -77,6 +77,27 @@ def past_the_lanes(cols: Sequence[tuple[float, float]], lanes: Sequence[tuple[fl
     return out
 
 
+BELT_DEPTH_FT = 110.0  # the band's depth, near face to far (36 to 146 ft behind the fringe)
+
+
+def far_face(cols: Sequence[tuple[float, float]], depth: float = BELT_DEPTH_FT) -> list[tuple[float, float]]:
+    """The (v, u) fringe the band's FAR face is laid behind: in each column, the most windward fringe within `depth`
+    across the wind (settlement-review of Kashikawa, feature 261).
+
+    The far face used to be the near face moved `depth` along the wind, which is a band `depth` deep only where the fringe
+    lies square to the wind. Where the fringe runs steeply along the wind - Kashikawa's southwest arm, where the cluster's
+    flank falls back 440 ft over 290 - the two faces are nearly parallel to the wind and the band between them was 33 ft
+    across, a sliver its westernmost steading's garden and sun lane emptied of trees: a 100 ft hole in the windward face,
+    which funnels the wind rather than lifting it.
+
+    So the far face is the fringe grown by a DISC of the belt's depth, returned as the fringe it lies `depth` behind: a
+    neighbor `d` across the wind counts only by `depth * sqrt(1 - (d / depth)^2)` of its lead. The band is then `depth`
+    across itself wherever the fringe turns, and a fringe that lies square, or bumps by less than the disc, is unchanged.
+    A square window (the neighbor's whole lead) was tried first and thickened every belt in the pool - Sawada's from 201
+    clumps to 559 - for bumps of a few tens of feet."""
+    return [(v, max(u2 + depth * (1.0 - ((v2 - v) / depth) ** 2) ** 0.5 for v2, u2 in cols if abs(v2 - v) <= depth) - depth) for v, _u in cols]
+
+
 def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
     """The windbreak belt's footprint - a band FOLLOWING the cluster's windward fringe.
 
@@ -198,7 +219,7 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
         # The 36..146 px band is the belt's 80-120 ft depth (research/vegetation.html "What are the
         # village's three groves" - a belt reads as a wall of trees only at that depth).
         near = [rag((ccx + wx * (u + 36.0 + _sun_off + back) + px * v, ccy + wy * (u + 36.0 + _sun_off + back) + py * v)) for v, u in cols]
-        far = [rag((ccx + wx * (u + 146.0 + _sun_off + back) + px * v, ccy + wy * (u + 146.0 + _sun_off + back) + py * v)) for v, u in reversed(cols)]
+        far = [rag((ccx + wx * (u + 146.0 + _sun_off + back) + px * v, ccy + wy * (u + 146.0 + _sun_off + back) + py * v)) for v, u in reversed(far_face(cols))]
         return near + far
 
     def fouled(poly: Poly) -> bool:
