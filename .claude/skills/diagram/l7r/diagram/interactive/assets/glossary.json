@@ -1145,7 +1145,8 @@
    "daimyo",
    "daimyō",
    "daimyos",
-   "daimyōs"
+   "daimyōs",
+   "daimyô"
   ]
  },
  "daizu": {
@@ -3999,12 +4000,6 @@
   "def": "The shrubs and young trees growing below a wood's canopy.",
   "variants": [
    "understory"
-  ]
- },
- "ura-dana": {
-  "def": "The back shop: a row house behind the street frontage, its one door opening on the back lane.",
-  "variants": [
-   "ura-dana"
   ]
  },
  "ura-nagaya": {

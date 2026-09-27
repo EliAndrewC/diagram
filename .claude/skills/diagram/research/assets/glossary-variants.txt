@@ -334,6 +334,7 @@ daikon	daikon
 daimyo	daimyo
 daimyojin	Daimyōjin
 daimyos	daimyo
+daimyô	daimyo
 daimyō	daimyo
 daimyōjin	Daimyōjin
 daimyōs	daimyo
@@ -1998,7 +1999,6 @@ unhairs	unhair
 unjo-gura	levy storehouse
 upper residence	kami-yashiki
 upper residences	kami-yashiki
-ura-dana	ura-dana
 ura-nagaya	ura-nagaya
 uradana	back tenement
 usufruct	usufruct
