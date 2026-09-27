@@ -5936,5 +5936,25 @@
    "Kinki",
    "Kinki region"
   ]
+ },
+ "nezumi-gaeshi": {
+  "def": "A rat-guard: a flared board or collar fixed around each post of a storehouse built on posts, so a rat climbing the post cannot get past it to the raised floor and the grain.",
+  "variants": [
+   "nezumi-gaeshi",
+   "rat-guard",
+   "rat-guards"
+  ]
+ },
+ "takakura": {
+  "def": "A storehouse raised on posts, its floor built high to keep rats from the grain and to let air through against damp. In Japan it was still built on Amami Oshima, on Hachijojima and among the Ainu of Hokkaido into modern times.",
+  "variants": [
+   "takakura"
+  ]
+ },
+ "Ainu": {
+  "def": "The indigenous inhabitants of Hokkaido, the northern island of Japan, among whom storehouses on posts were still built into modern times.",
+  "variants": [
+   "Ainu"
+  ]
  }
 }

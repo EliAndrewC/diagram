@@ -7,6 +7,7 @@ aburaya	aburaya
 abutment	abutment
 abutments	abutment
 across the beams	ridge span
+ainu	Ainu
 ake-mutsu	ake-mutsu
 akiba	Akiba
 akusui	akusui
@@ -920,6 +921,7 @@ near-monospecific	monospecific
 neige	neige
 nengu	nengu
 neribei	neribei
+nezumi-gaeshi	nezumi-gaeshi
 ni-no-ma	ni-no-ma
 night soil	night soil
 night-soil	night soil
@@ -1054,6 +1056,8 @@ rampart	rampart
 ramparts	rampart
 rape	rape
 rapeseed	rape
+rat-guard	nezumi-gaeshi
+rat-guards	nezumi-gaeshi
 reach	reach
 reaches	reach
 recharge	recharge
@@ -1268,6 +1272,7 @@ taiping-gang	taiping-gang
 taisho	Taisho
 taishō	Taisho
 taizu	Taizu
+takakura	takakura
 takasebune	takasebune
 take-yabu	take-yabu
 takeyabu	take-yabu
