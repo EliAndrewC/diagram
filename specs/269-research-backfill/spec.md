@@ -128,6 +128,8 @@ feature owns.
   a check that confirms it resumed or a further nudge.
 - **SC-008** (FR-011): every item is in the inventory, in "Owned elsewhere" with an owner's confirmation, or in the
   passed-over list with a reason, and no handoff reports an item it researched that another session had claimed.
+- **SC-009** (FR-009): every future-work item an inventory line cites is in `closed.md` or rewritten to what remains.
+- **SC-010** (FR-010): B33, B34 and every contradiction a handoff raises reach the GM after an `escalation-check` verdict.
 - **SC-006** (FR-004): every map-changing outcome has either a regenerated map or a `future-work/` entry with its measurement.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
