@@ -210,7 +210,7 @@ Also edits 140, 210.
 - C157 **Pauper ground**: one per seat, and its size (the 10-30 ft is a guess)? (cities/capitals/333). S. P1.
 - D63 **The tier program**: what religious and funerary features does each size of settlement carry?
   (religion-and-death/210, 1 note, 1 absence). M. P1.
-  > COORDINATION (D63): the tier table of religious features is 272's (Diagram shrines) to own, by agreement - cite it; do not write a tier table here
+  > COORDINATION (D63): TAKEN by 272 (Diagram shrines): religion-and-death 210 becomes the tier table (hamlet, village, town, city columns) - R1 cites 210 and writes no tier table
 
 ## T1 - towns: the town as a whole (new: towns 200-250)
 
