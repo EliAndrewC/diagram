@@ -6605,5 +6605,32 @@
    "Imperial road",
    "Imperial roads"
   ]
+ },
+ "meshimori": {
+  "def": "A woman kept at a post town's inn to serve travelers their meals. The name means \"rice-server\". Keeping such women marked a place as an inn for lodging, so a teahouse, which was only for resting, had to be built differently.",
+  "variants": [
+   "meshimori",
+   "meshimori women",
+   "meshimori-onna"
+  ]
+ },
+ "bakuhan": {
+  "def": "The Edo-period order of rule shared between the shogunate (bakufu) and the daimyo domains (han), which ruled land and people and fixed village boundaries.",
+  "variants": [
+   "bakuhan"
+  ]
+ },
+ "boji": {
+  "def": "An older boundary marker: it marked the limits of a temple or shrine precinct or of a medieval estate. It was usually a post of wood or stone, sometimes a rock or standing tree. The bojikui on the Edo highways carried the practice on.",
+  "variants": [
+   "boji"
+  ]
+ },
+ "so village": {
+  "def": "A self-governing village community of the medieval period. As it grew, a village's boundary with its neighbors gradually became clear, before the Edo land surveys fixed it.",
+  "variants": [
+   "so village",
+   "so villages"
+  ]
  }
 }
