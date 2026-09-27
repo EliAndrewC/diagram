@@ -134,6 +134,12 @@ Each section with no footnotes is either an item (fields 140/150 -> B08; homeste
   (`religion-and-death/160`, `170`, `180`, `206`: "no source found" or the project's own arithmetic). The 2% graves
   figure rests on an unread Buck survey. M.
 
+**B36's GENERATOR part HANDED to feature 273** (Diagram shrines, hamlet-graveyards; confirmed 2026-09-27: "269's
+burial generator change is mine"): 280's knob (shrine/temple yard or a ground apart), 270's siting (downstream,
+beyond the last house, within ~650 ft) and the GM's new hamlet question, as one design in `civic_grounds/funerary.py`,
+reshaped by the GM's ruling that only the village has the shrine and the cremation ground. 273 lands the 280/270 parts
+once 269's 270 and 280 are on main. The RECORD part (160-206, 270, 280) stays 269's and is done.
+
 ## R2 - religion-and-death: city temples (edits existing; new 310-330) - HANDED to feature 272
 
 Handed to "Diagram shrines" (feature 272) on 2026-09-27, which the GM had just given city temple complexes. It confirmed: "B37 is mine." Its outcome is recorded in 272.
