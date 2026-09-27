@@ -10,6 +10,8 @@ across the beams	ridge span
 adlittoral	adlittoral
 admonition arch	admonition arch
 admonition arches	admonition arch
+admonition pavilion	admonition pavilion
+admonition pavilions	admonition pavilion
 ake-mutsu	ake-mutsu
 akiba	Akiba
 akusui	akusui
@@ -156,7 +158,10 @@ catena	catena
 causeway	causeway
 causeways	causeway
 celestial order	Celestial Order
+censorate	Censorate
 center-pivot	center-pivot
+ceremonial gate	ceremonial gate
+ceremonial gates	ceremonial gate
 cesspit	koedame
 cesspits	koedame
 chan	Chan
@@ -280,6 +285,8 @@ danna-ba	kusaba
 danna-dera	danna-dera
 danzaemon	Danzaemon
 daozuofang	daozuofang
+daqing gate	Daqing gate
+daqingmen	Daqing gate
 dashigeta	dashigeta
 daxiangguo	Daxiangguo
 db	dBA
@@ -966,6 +973,8 @@ meander	meander
 meibutsu	meibutsu
 meiji	Meiji
 meireki	Meireki
+memorial arch	memorial arch
+memorial arches	memorial arch
 men-hai	taiping-gang
 menbansho	menbansho
 mengxi bitan	Mengxi Bitan
@@ -1664,6 +1673,7 @@ wrought iron	wrought iron
 wubei zhi	Wubei Zhi
 wujing zongyao	Wujing Zongyao
 xiang	xiang
+xuanhua arch	memorial arch
 yacheng	yacheng
 yachida	yato
 yagura	yagura
