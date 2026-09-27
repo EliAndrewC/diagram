@@ -360,6 +360,7 @@ edo	Edo
 edo fabric	building fabric
 edo period	Edo period
 edo-period	Edo period
+eighty-eighth night	eighty-eighth night
 eiro	eiro
 embankment	embankment
 embankments	embankment
@@ -546,6 +547,7 @@ gulou	gulou
 gundai	gundai
 gō	go
 gōshi	gōshi
+hachijuhachiya	eighty-eighth night
 hachiman	Hachiman
 hachure	hachure
 hachures	hachure
@@ -622,6 +624,7 @@ honden	honden
 hongo	hongo
 honmaru	honmaru
 honmune-zukuri	honmune-zukuri
+horeki	Horeki
 horinouchi	horinouchi
 horinouchi's	horinouchi
 horse-face	mamian
@@ -643,6 +646,7 @@ hyo	hyō
 hyojosho	Hyōjōsho
 hyō	hyō
 hyōjōsho	Hyōjōsho
+hōreki	Horeki
 ichi no torii	ichi-no-torii
 ichi-no-torii	ichi-no-torii
 ido	ido
@@ -1022,6 +1026,7 @@ nightsoil	night soil
 nihonbashi	Nihonbashi
 ninomaru	ninomaru
 noborigama	noborigama
+nogu benriron	Nogu benriron
 nogyo zensho	Nogyo Zensho
 noria	noria
 norias	noria
@@ -1265,6 +1270,7 @@ setchin	kawaya
 settlement core	settlement core
 settling basin	settling basin
 settling basins	settling basin
+settsu	Settsu
 seven autumn grasses	seven autumn grasses
 shadoof	jiegao
 shahi	shahi
@@ -1456,6 +1462,7 @@ threshing-yard	threshing yard
 throwing	throwing
 tian'geng	bund
 tiangeng	bund
+tiangong kaiwu	Tiangong kaiwu
 tier	tier
 tiers	tier
 tillering	tillering
