@@ -64,7 +64,9 @@ TRANSLATED = re.compile(r"^\s*\((?:title\s+)?translated from ([^;()]*(?:\([^()]*
 # Between two quotations of one run - `「Q1」 and 「Q2」 (translated ...; original: 「O1」 and original: 「O2」)` -
 # and between two originals of one parenthetical. Without the run, Q2 was paired with O1 and O2 never checked:
 # cities/fabric 143 (feature 250 T55) had two notes reported NOT-READABLE that were verbatim on their pages.
-JOINER = re.compile(r"^\s*(?:and|/|,)?\s*(?:original:)?\s*$")
+# `;` is the record's commonest joiner (`「Q1」; 「Q2」 (...; original: 「O1」; original: 「O2」)`), and without it
+# religion-and-death 550 (feature 272) had four notes reported NOT-READABLE that were verbatim on their pages.
+JOINER = re.compile(r"^\s*(?:and|/|,|;)?\s*(?:original:)?\s*$")
 ELISION = re.compile(r"\s*(?:\[\s*(?:\.\.\.|…)\s*\]|\.\.\.|…)\s*")
 REF_MARK = re.compile(r"\s*\[(?:\d{1,3}|注\s*\d+|note\s*\d+|citation needed|要出典)\]")
 
