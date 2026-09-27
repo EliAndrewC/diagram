@@ -1,0 +1,6 @@
+{
+  "utc": "2026-09-27T04:02:05Z",
+  "target": "entry-gate",
+  "commit": "e49c5ec9",
+  "why": "12 pairs dispatched, entry-drift IN-STEP for each, per specs/250-close-the-record-checks/owed-verdicts.md; brief.py owed-check 12 of 12, 0 open"
+}
