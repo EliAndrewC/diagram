@@ -484,7 +484,10 @@ fuse	fuse
 fusekoshi	inverted siphon
 gabion	gabion
 gabions	gabion
+gable end	gable end
+gable ends	gable end
 gable roof	gabled roof
+gable-entry	gable end
 gabled	gabled roof
 gabled roof	gabled roof
 galleried mining	siege mining
@@ -1380,6 +1383,7 @@ subgrade	subgrade
 sue ware	Sue ware
 sueki	Sue ware
 sugi	sugi
+sugoya	sugoya
 sugumagi	sugumagi
 suid	suid
 suiden	suiden
@@ -1497,6 +1501,7 @@ tsuijibei	tsuijibei
 tsuijimatsu	tsuijimatsu
 tsuke-tsubo	tsuke-tsubo
 tsunaba	tsunaba
+tsunoya	tsunoya
 tudi miao	tudi miao
 tudigong	tudi miao
 tulou	tulou

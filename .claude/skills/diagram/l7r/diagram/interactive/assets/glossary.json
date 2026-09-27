@@ -6511,5 +6511,25 @@
    "Kawachi",
    "Kawachi province"
   ]
+ },
+ "gable end": {
+  "def": "The triangular end wall under the peak of a gabled roof, as opposed to a long side under the eaves; a building \"entered at its gable end\" has its door in that wall.",
+  "variants": [
+   "gable end",
+   "gable ends",
+   "gable-entry"
+  ]
+ },
+ "tsunoya": {
+  "def": "A Japanese farmhouse with a separate wing joined onto the main block, making an L; the name used in western Japan for the form called magariya or chumon-zukuri in the north.",
+  "variants": [
+   "tsunoya"
+  ]
+ },
+ "sugoya": {
+  "def": "A Japanese farmhouse whose whole building stands under a single roof - the \"straight house\", as against the L-plan tsunoya or magariya.",
+  "variants": [
+   "sugoya"
+  ]
  }
 }
