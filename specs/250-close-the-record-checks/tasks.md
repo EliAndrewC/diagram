@@ -268,13 +268,16 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
 
 ## Phase 1k - the tenth round (GM 2026-09-27; plan D19)
 
-- [ ] T73 A long saved page in parts, and a key bundle's long page as an excerpt around its quoted passages (D19.1)
+- [x] T73 A long saved page in parts, and a key bundle's long page as an excerpt around its quoted passages (D19.1)
       research: rendering
-- [ ] T74 The two GM decisions recorded as future work (D19.2)
+      verify: DONE. built and verified (see D19: the book's source-applicability page 1.37M chars -> 22,857 bytes, 5 of 5 passages; WHOLE=1 for source-reader via the brief, the guard and the rules doc; suites green; plan review CLEAR)
+- [x] T74 The two GM decisions recorded as future work (D19.2)
       research: rendering
-- [ ] T75 FR-002 and FR-006 for `water`, worked as the last pages were (D19.3)
+      verify: DONE. built and verified (see D19: the book's source-applicability page 1.37M chars -> 22,857 bytes, 5 of 5 passages; WHOLE=1 for source-reader via the brief, the guard and the rules doc; suites green; plan review CLEAR)
+- [x] T75 FR-002 and FR-006 for `water`, worked as the last pages were (D19.3)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. water closed: group 2c entry-drift on DrainageDitch (260) and Weir (250) - both DRIFTED, 5 edits applied by apply-edits (0 refused), the DrainageDitch Caveat rewritten by hand as a verbatim slice of its Note; re-check: DrainageDitch IN-STEP, Weir one further sentence (the slant's reason ranked as the source ranks it) applied; FR-006 worklist 42 bare items, FOOTNOTED 34, NOT-LOCATED 3, TOO-SHORT 5; four record tests + test_classes 505 passed
 - [ ] T76 **The comparison the GM asked for** (D19): T75 against R6 to R10, recorded as R11
       research: rendering
 

@@ -77,7 +77,7 @@ class DrainageDitch(Kind):
     gathering what runs out of the basins, and its run onward - into the pond at the field's foot, into the
     passing brook, or off the edge of the map.
 
-    Why: Supply and drainage are kept apart on the ground, the supply along the high margins and the one
+    Why: Supply and drainage are kept apart on the ground, as modern field consolidation lays them out, the supply along the high margins and the one
     collector on the lowest line, so that every plot can be filled and emptied on its own; before modern
     consolidation the water that left a village's paddies went on down to the river, or to the next field, to
     be used again below. On a comb field the collector widens as it goes - a thread where it starts
@@ -85,10 +85,12 @@ class DrainageDitch(Kind):
     plot's drawdown to what it is already carrying; a polder's ring drain instead carries the whole basin at one
     rank from the start, and is drawn at one width.
 
-    Note: The collector's form and its separation from the supply net are read; whether it widens along its run
-    follows the field it drains, and the sink its run reaches is the map's declared water sink.
+    Note: The collector's form and its separation from the supply net are read, as the layout of modern
+    consolidation; whether it widens along its run follows the field it drains; it is drawn for every hamlet,
+    a deliberate trade over the older field-to-field and combined forms the record also holds, so a reader
+    has a ditch between the plots to hover, and the sink its run reaches is the map's declared water sink.
 
-    Caveat: the sink its run reaches is the map's declared water sink
+    Caveat: it is drawn for every hamlet, a deliberate trade over the older field-to-field and combined forms the record also holds, so a reader has a ditch between the plots to hover, and the sink its run reaches is the map's declared water sink
 
     Name: drainage ditch
     Covers: `field_ditches` whose role is `drain`, and `channels` leaving a drain - the collector and its run to the pond, the brook or the frame
@@ -107,14 +109,14 @@ class Weir(Kind):
 
     Why: A weir does not take the brook - it raises its surface a little, so that water enters the canal
     at the height the field needs, and the rest goes on over the crest and down the valley. The slant is
-    the old builders' answer to floods: it dams the shallow riffle, keeps the bar out of the fastest
-    water, and spreads the overflow along a longer crest so less of it breaks. Not every hamlet has one -
+    the old builders' way of leading water to the intake: it dams the shallow riffle, and it also keeps the bar out of the fastest
+    water, where a flood is least able to break it. Not every hamlet has one -
     where the brook ran high enough the water was simply led off the bank, and this map's roll decided.
 
     Note: we have drawn the weir closing the brook bank to bank, in order to make it visible on the map at
     this scale; half-river closures were the common old form, and across a brook 7 ft wide a half-bar would
-    be a line a pixel or two long. Its materials and its slant are read; the 5 ft thickness it is drawn at
-    is a guess, the engineering histories giving cross-sections only for weirs on real rivers.
+    be a line a pixel or two long. Its materials and its slant are read in the modern engineering histories, no period drawing of a village weir having been read; the 5 ft thickness it is drawn at
+    is a guess, no source read giving the thickness of a village weir.
 
     Name: weir
     Covers: `weirs` - the bar across the brook at a weir hamlet's intake
