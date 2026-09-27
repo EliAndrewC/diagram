@@ -1253,6 +1253,7 @@ shironameshi	shironameshi
 shiroyone senmaida	senmaida
 shitsuden	shitsuden
 shizai	shizai
+sho	sho
 shogun	shogun
 shogunate	bakufu
 shoguns	shogun
@@ -1311,6 +1312,8 @@ spring and autumn	Spring and Autumn
 spring line	spring line
 steading	steading
 steadings	steading
+steelyard	steelyard
+steelyards	steelyard
 stem density	stem density
 stilling pool	stilling pool
 stone lantern	stone lantern
@@ -1414,6 +1417,7 @@ tiangeng	bund
 tier	tier
 tiers	tier
 tillering	tillering
+to	to
 tobukuro	tobukuro
 toe	toe
 tohoku	Tohoku
