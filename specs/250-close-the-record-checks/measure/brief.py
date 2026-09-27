@@ -62,8 +62,13 @@ def questions(page: str) -> dict[str, tuple[str, int]]:
 
 
 def _text_of(page: str, section: str) -> str:
+    """A question's whole text, tags out, lower-cased, one space between words - what an item's words are searched in."""
     q = next(p for p in (SKILL / "research" / page).glob(f"{section}-*.html") if not p.name.endswith(".notes.html"))
-    return q.read_text(encoding="utf-8").replace("\n", " ")
+    return _words(q.read_text(encoding="utf-8"))
+
+
+def _words(text: str) -> str:
+    return " ".join(re.sub(r"[^a-z0-9 ]+", " ", re.sub(r"<[^>]+>|&[a-z]+;", " ", text.lower())).split())
 
 
 def item_questions(page: str) -> list[str]:
@@ -74,7 +79,7 @@ def item_questions(page: str) -> list[str]:
         want = " ".join(_norm(sec).split())[:40]
         hit = next((n for n, (title, _size) in qs.items() if want and (title.startswith(want) or want.startswith(title[:40]))), None)
         if hit is None and want:  # some reports label an item by its quoted text, not its question's heading
-            hit = next((n for n in qs if want[:30] in " ".join(_norm(_text_of(page, n)).split())), None)
+            hit = next((n for n in qs if _words(sec)[:30] in _text_of(page, n)), None)
         if hit is None:
             # loud, never silent: an item the mapping cannot place is one the split-first rule cannot see
             print(f"brief: no question on {page} is headed '{sec}' - check its size by hand", file=sys.stderr)
@@ -320,10 +325,27 @@ def split_brief(page: str, section: str) -> int:
     return 0
 
 
-def over_cap_items(page: str) -> list[str]:
-    """The sections an item falls in that are over the cap - each is split, in a session of its own, before the write."""
+def fr006_questions(page: str) -> list[str]:
+    """The sections the page's FR-006 items fall in: each item's quoted text searched in every question (D16 - the
+    fields page's FR-006 items sit in its 56,248-byte question 020, which an FR-002-only mapping never saw)."""
     qs = questions(page)
-    return [s for s in item_questions(page) if qs[s][1] > CAP]
+    found = []
+    for line in fr006(page):
+        probe = _words(line.rsplit("|", 1)[-1])[:30]
+        hit = next((n for n in qs if probe and probe in _text_of(page, n)), None)
+        label = re.search(r'h3 "([^"]+)"', line)
+        if hit is None and label:  # the item was rewritten (NOT-LOCATED); the report's sub-heading still places it
+            hit = next((n for n in qs if _words(label.group(1)) in _text_of(page, n)), None)
+        if hit and hit not in found:
+            found.append(hit)
+    return found
+
+
+def over_cap_items(page: str) -> list[str]:
+    """The sections an FR-002 or FR-006 item falls in that are over the cap - each is split, in a session of its own,
+    before the write."""
+    qs = questions(page)
+    return [s for s in dict.fromkeys(item_questions(page) + fr006_questions(page)) if qs[s][1] > CAP]
 
 
 def write_brief(page: str, task: str) -> int:

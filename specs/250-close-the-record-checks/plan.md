@@ -369,7 +369,8 @@ current.
    `.claude/settings.json` and in the root CLAUDE.md's guard table.
 2. **The split, its own session, before the write - by construction** (recommendation 2). `brief.py <page> <task>`
    maps each FR-002 item to its question (the heading the report names, else the question containing the item's
-   quoted text; an item it cannot place is named loudly, never skipped) and, for each such question over the cap,
+   quoted text) and each FR-006 item by its quoted text or its report sub-heading; an item it cannot place is named
+   loudly, never skipped and, for each such question over the cap,
    queues a split session first. The write brief is made by a `then:` step after the splits, and `brief.py write`
    REFUSES while any item's question is still over the cap - so the write session never loads an unsplit question.
    `brief.py` prints the one `make page-session` line to run.
@@ -377,10 +378,12 @@ current.
    fit, largest first, into sessions of at most 40,000 bytes (two questions at the cap, the most the old two-question
    groups ever held), each question sized with its notes as the write session left it.
 4. **One more page** (recommendation 4): `fields` - three FR-002 items, as the last two pages had, plus four FR-006
-   items, as the homesteads and religion rounds had some. Its item questions are all under the cap (070 at 17,064
-   bytes, 110 at 8,845, 160 at 2,510; observed 2026-09-27, method: `brief.py questions`), so recommendation 2's
-   split step will not run on this page; recommendations 1 and 3 will act where its content calls for them. Compared
-   in R8 with R4 to R7 by `tokens.py summary`, per question checked.
+   items, as the homesteads and religion rounds had some. Its FR-002 items fall in 070, 110 and 160, all under the
+   cap; three of its FR-006 items fall in 020, at 56,248 bytes the largest question in the record (observed
+   2026-09-27, method: `brief.py questions` and `fr006_questions`), so the page exercises recommendation 2 - a split
+   session on 020 runs before the write. The FR-006 mapping is part of D16.2: the first version mapped FR-002 items
+   only and would have handed the write session 020 whole. Compared in R8 with R4 to R7 by `tokens.py summary`, per
+   question checked, with the split session reported beside the page, as R6 reported its splits.
 5. **The Mode A sheet is current before a test reads it.** `tests/_sheets.py`: a declared generated exception's svg
    is regenerated when missing OR older than its generator or any engine module, under a lock so two workers never
    read one the other is writing; both readers (`test_mode_a_sheets.py`, `tools/test_registry.py`) go through it.
