@@ -142,3 +142,14 @@ needs research is marked as such"*), a new kind no research section covers says 
 | Fabric (outlines, dividers, stall lines, lattice, edging, colonnade posts, flow chevrons, steam mark) stays the parent's | map drawing convention | they are how the parent is drawn, not things in it | this spec; `inventory.md` |
 | A room is drawn as its own fill in the building's color over the building's fill | map drawing convention | the only way a room's floor can light; the picture is unchanged | the sheet's comment at the first room |
 | A lit parent lights its parts | map drawing convention | a building includes what is in it; taking parts out must not hollow it | `interactive/sheet.py`, `page.js` |
+
+## Review history
+
+- Round 1 (2026-09-27, `spec-fidelity`, Opus): CHANGES REQUIRED, two items, both applied. (1) The inventory missed the
+  nakamon, because its sweep read only inherited kinds: FR-001 now makes the definition decide, the sweep covers
+  explicitly tagged parts, and the nakamon is a part. (2) Nothing kept the parent's own pop-up reachable: FR-009 and
+  its SC-001 check added. It ruled the part/fabric line, the rooms (FR-002) and FR-003 legitimate.
+- Round 2 (2026-09-27, `spec-fidelity`, Opus): FAITHFUL - both items resolved.
+- After acceptance, spec-lint only: SC-001 names FR-009 in its FR list (the text already carried the check).
+- Plan review (`spec-fidelity` MODE 4): CLEAR on D1-D9; BLOCKED on D11 while the id map's unblended text reached
+  hamlet pages (FR-008); CLEAR once it was scoped to sheet pages.
