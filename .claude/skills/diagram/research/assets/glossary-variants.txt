@@ -247,6 +247,8 @@ culverted	culvert
 culverting	culvert
 culverts	culvert
 cun	cun
+curb	curb
+curbs	curb
 curfew ward	lifang
 curtain	curtain
 curtain wall	curtain
@@ -741,6 +743,7 @@ jori-sei	jori
 josui	josui
 josui ido	josui-ido
 josui-ido	josui-ido
+juku	shukuba
 junk	junk
 junks	junk
 jōdo	Jodo
@@ -1507,6 +1510,7 @@ torii	torii
 toro	Toro
 toro site	Toro
 total length and fall	fall
+town grain	town grain
 town magistrates	town magistrate
 towpath	towpath
 towpaths	towpath
@@ -1597,10 +1601,12 @@ weineihe	weineihe
 weir	weir
 weirs	weir
 weitian	weitian
+well curb	curb
 well sweep	jiegao
 well-house	well-house
 well-houses	well-house
 well-sweep	well-sweep
+wellhead	curb
 weng cheng	wengcheng
 wengcheng	wengcheng
 wenmiao	wenmiao
