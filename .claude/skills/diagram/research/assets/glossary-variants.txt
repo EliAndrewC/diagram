@@ -39,6 +39,9 @@ azenuri	azenuri
 azimuth	azimuth
 azolla	azolla
 azuchi	azuchi
+back crop	back crop
+back crops	back crop
+back-crop	back crop
 backswamp	backswamp
 backswamps	backswamp
 backwall	backwall
@@ -465,6 +468,7 @@ glebe	glebe
 glulam	glulam
 glyph	glyph
 glyphs	glyph
+gm	GM
 go	go
 goemon-buro	goemon-buro
 goemonburo	goemon-buro
@@ -669,6 +673,8 @@ kanden	kanden
 kangxi	Kangxi
 kannon	Kannon
 kannushi	kannushi
+kanto	Kanto
+kanto plain	Kanto
 kaogongji	Kaogongji
 karamete	karamete-mon
 karamete-mon	karamete-mon
@@ -915,6 +921,7 @@ ninomaru	ninomaru
 noborigama	noborigama
 nodame	nodame
 nogyo zensho	Nogyo Zensho
+northern kanto	Kanto
 northern song	Song dynasty
 nrcs	NRCS
 nrcs-designed	NRCS
@@ -1148,6 +1155,7 @@ shijin-soo	four gods
 shijing	Book of Songs
 shinai	shinai
 shinden	shinden
+shinpen tsuika	Shinpen Tsuika
 shinsei	Shinsei
 shirasu	oshirasu
 shirimito	shirimito
@@ -1274,6 +1282,7 @@ tax-free plot	tax-free plot
 tedai	tedai
 teikaku	teikaku
 temizuya	temizuya
+ten-volume wamyosho	Wamyosho
 tenon	mortise and tenon
 tenpo	Tenpo era
 tenpo era	Tenpo era
@@ -1374,6 +1383,9 @@ wagon-inn	wagon inn
 wakato	wakato
 waku	waku
 walled ward	lifang
+wamyo ruijusho	Wamyosho
+wamyosho	Wamyosho
+wamyōshō	Wamyosho
 wanghuolou	wanghuolou
 wanli	Wanli era
 wanli era	Wanli era

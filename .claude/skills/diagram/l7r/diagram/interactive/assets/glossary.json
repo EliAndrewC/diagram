@@ -5811,5 +5811,42 @@
    "Book of Songs",
    "Shijing"
   ]
+ },
+ "Wamyosho": {
+  "def": "A Japanese dictionary of about 934 that gives words for things with their Japanese readings. Its entries are the earliest written evidence for many farming words, among them nawate, the path between paddies.",
+  "variants": [
+   "Wamyosho",
+   "Wamyōshō",
+   "Wamyo Ruijusho",
+   "Ten-volume Wamyosho"
+  ]
+ },
+ "GM": {
+  "def": "The game master: the person running the campaign these maps are drawn for, who rules on what the maps show and what waits for later.",
+  "variants": [
+   "GM"
+  ]
+ },
+ "Kanto": {
+  "def": "The region of eastern Honshu around the great plain where Edo stood; before the Second World War its northern edge marked the limit of the rice-and-barley year.",
+  "variants": [
+   "Kanto",
+   "Kanto plain",
+   "northern Kanto"
+  ]
+ },
+ "back crop": {
+  "def": "A crop sown on a paddy after the rice is reaped and grown through the winter on the drained field - barley or wheat above all, also Chinese milk vetch, rapeseed, broad beans and peas.",
+  "variants": [
+   "back crop",
+   "back crops",
+   "back-crop"
+  ]
+ },
+ "Shinpen Tsuika": {
+  "def": "A compilation of laws of the Kamakura shogunate; the 1264 order forbidding the provinces to tax back-crop barley is recorded in it.",
+  "variants": [
+   "Shinpen Tsuika"
+  ]
  }
 }
