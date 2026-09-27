@@ -192,8 +192,12 @@ rule quoted from a page they can open.
 
 - **D1 - The ranked positions and their order: MAP DRAWING CONVENTION, sourced** (research.md R1, QGIS citing
   Krygier and Wood 2011; the eight-position ranking in Christensen, Marks and Shieber 1995 after Yoeli 1972). PSU
-  notes authorities differ slightly on the order; QGIS's is the one written down in full and readable, so it is the
-  one adopted. Not a knob: the standard's own first rule of spacing is consistency across the map.
+  notes authorities differ slightly on the order - `source-applicability` found the Ordnance Survey's guide to
+  cartography, after Imhof, ranking lower right second and straight right or left last - and QGIS's is the one written
+  down in full with its source named, so it is the one adopted. Not a knob: the standard's own first rule of spacing is
+  consistency across the map, and every map in the pool carries the same convention. The ranking assumes left-to-right
+  Latin text, which our English captions are; period Chinese and Japanese maps often set names in vertical columns, a
+  period look these maps do not imitate (a MAP DRAWING CONVENTION, recorded in the source write-ups).
 - **D2 - The preferred offset: MAP DRAWING CONVENTION, a calibration.** No readable source fixes a number
   (research.md R1). Half the caption's font size (0.5 em) - the air the engine's own house standoff already gave a
   caption by eye (`LABEL_MIN_AIR`, 0.56 em on a 9 pt caption; research.md R4, observed 2026-09-27, method: read from
@@ -269,6 +273,8 @@ rule quoted from a page they can open.
   town and city rule of what a caption may lie on, without a record; D8's function count was 34 for 33; one QGIS
   sentence was attributed to the wrong polygon mode. Applied: the rule restored as FR-014 and cited from SC-002, the
   count corrected, R1's attribution corrected.
+- Amendment 1 (2026-09-27, after acceptance): D1 records the Ordnance Survey's alternative order and the Latin-text
+  basis of the ranking, both found by `source-applicability` on the new registry entries. No requirement changed.
 - Round 3 (2026-09-27, `spec-fidelity-verify`): CHANGES REQUIRED - FR-014 as restored let a named civic caption lie on a
   sibling civic building, which answer 070's city rule forbids. Applied: the civic exception added to FR-014 and a
   sibling-ministry case to SC-002; T03 cites FR-014; the plan's figures labeled.
