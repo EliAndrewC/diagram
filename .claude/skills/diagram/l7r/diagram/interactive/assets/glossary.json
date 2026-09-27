@@ -7169,5 +7169,26 @@
    "roll",
    "rolls"
   ]
+ },
+ "jito": {
+  "def": "In medieval Japan, a steward the warrior government set over a piece of land; in the Edo period, the name for a retainer who held villages as a fief, and who was still bound to live in the castle town.",
+  "variants": [
+   "jito",
+   "jitō"
+  ]
+ },
+ "gokenin": {
+  "def": "A direct retainer of the Tokugawa shogunate ranking below a bannerman (hatamoto), holding a smaller stipend and without the right of audience with the shogun.",
+  "variants": [
+   "gokenin",
+   "houseman",
+   "housemen"
+  ]
+ },
+ "katemeshi": {
+  "def": "Rice cooked together with coarse grain such as barley or millet, and with tubers, radish or greens, to make it go further - the everyday meal of Edo-period farm villages, even in paddy districts.",
+  "variants": [
+   "katemeshi"
+  ]
  }
 }
