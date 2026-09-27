@@ -1,6 +1,6 @@
 # Tasks - feature 266, labels placed by the cartographic standard
 
-Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (P1-P5). Research: [`research.md`](research.md) (R1-R4).
+Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (P1-P6). Research: [`research.md`](research.md) (R1-R4).
 
 **No task here is `research: physical`.** Label placement is a map drawing convention: nothing is asserted about the
 world, and the sources are cartographic practice (research.md R1).
@@ -27,7 +27,7 @@ world, and the sources are cartographic practice (research.md R1).
       SC-006)
       research: rendering
 - [ ] T07 The caption ledger and its gate test, leaders included; shown red on a changed sheet, on a new off-seat
-      caption and on a missing leader (FR-013, SC-006)
+      caption, on a missing leader and on an untagged caption in a changed sheet (FR-013, SC-006)
       research: rendering
 - [ ] T08 Doctrine: `buildings.md`, `.claude/agents/building-review.md`, `future-work/cities.md` (D8), `dev/placement.md`
       and the captions index (FR-013)

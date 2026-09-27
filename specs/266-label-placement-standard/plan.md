@@ -83,10 +83,11 @@ caption: 8 positions x 3 layouts x (1 + rings) with rings up to the reach - a fe
   recorded in `M["caption_leaders"]`).
 - FR-014: `label_obstacles` tags each built record with its caption group (the overlap taxonomy's `_LABEL_GROUP`, and a
   `buildings` record's own `kind` word) and marks a civic record carrying a name of its own `named`. The index is asked
-  with the caption's text: an obstacle whose group word the caption names weighs 0 for it, EXCEPT that when the caption
-  itself names a civic building (its text names a civic group - ministry, governor, temple), every other NAMED civic
-  building keeps its full weight. A caption that names no civic building - a district's - may still lie on a named
-  temple of its own group, as answer 070 allows (spec FR-014).
+  with the caption's text: an obstacle whose group word the caption names weighs 0 for it, EXCEPT that when the
+  caption's SUBJECT is itself a named civic building (`Subject(civic=True)`, set by the caller that names a ministry,
+  the governor's yamen or a temple by name), every other NAMED civic building keeps its full weight. The test is the
+  subject, not the wording: a "temple neighborhood" caption names a district, not a civic building, and may lie on its
+  district's named temples, as answer 070 allows (spec FR-014).
 - `label()` gains `lines=` and `angle=` (the placer's choice, bypassing the wrap probe and the rotation fold); the
   recorded referent is the subject's box.
 - Callers: `_draw_board_caption` (a rotated-box point subject) shrinks to building the subject; `place_caption`
@@ -111,9 +112,11 @@ Reads the SVG with `xml.etree`, applying `translate`/`rotate`/`matrix` transform
 `ellipse`, `polygon`, `polyline`, `line`, `path` (its coordinates; a STROKED line or path is a band of its own stroke
 width, so a 40 px road is 40 px wide) and `text` (its block from the shared metrics). EVERY SHAPE IS CLASSIFIED BY ITS
 `data-kind` TAG (feature 262 tags every drawn element; research.md R3): a way kind (`road`, `river`, `revetment`) is a
-Way at `WEIGHT_WAY`; a ground kind - one whose name is `-` or names a court, a garden, a ground, a yard, a grove or
-pines (`outer court`, `practice ground`, `cart yard`, `garden pines`, ...) - is free space; every other kind is an
-obstacle. A caption is a `<text>` inside a `data-kind` group (or carrying the tag); its subject is the non-text shapes
+Way at `WEIGHT_WAY`; a GROUND kind, from an explicit list of the sheets' ground tags (`-`, `outer court`, `inner
+court`, `hearing court`, `border court`, `practice ground`, `garden`, `vegetable garden`, `garden pines`, `cart yard`,
+`shrine grove`, `river landing`, `weighing floor`), is free space; every other kind is an obstacle - `court divider`,
+a wall, among them. EVERY `<text>` IS AN OBSTACLE whatever its tag: another caption, a court's name, the title and the
+scale-bar text all weigh 1,000. A caption is a `<text>` inside a `data-kind` group (or carrying the tag); its subject is the non-text shapes
 of that kind. `--check` lists every caption not at its standard seat (1 px tolerance) and every leader that is missing,
 stray or misplaced; `WRITE=1` rewrites those `<text>` positions (and transforms) in place, tagging an untagged board
 caption, and writes, moves or removes the caption's leader - a `<line>` beside it tagged with the caption's kind.
@@ -127,7 +130,10 @@ caption, and writes, moves or removes the caption's leader - a `<line>` beside i
   planted `self.label` call each fail it (SC-002).
 - `tests/gate/test_hand_sheet_captions.py` + `tests/fixtures/caption_ledger.json` (each hand-drawn sheet's sha256 and
   its captions as they stood when this feature landed): a caption off its standard seat, or missing the leader its seat
-  requires, fails unless the ledger holds it AND the sheet's hash is unchanged (SC-006).
+  requires, fails unless the ledger holds it AND the sheet's hash is unchanged (SC-006). A sheet whose hash has changed
+  must carry a `data-kind` on every `<text>` (a caption's kind, or `-` for the title and scale bar): the country shrine
+  has no tags yet (observed 2026-09-27, method: grep), so an untagged caption would be invisible to the tool - the gate
+  refuses one instead, and tagging comes with the shrine's next revision.
 
 ### Record and doctrine
 
@@ -147,7 +153,7 @@ caption, and writes, moves or removes the caption's leader - a `<line>` beside i
   sources name the position, not the amount).
 - **P4 - A hand-drawn sheet's shapes are classified by their `data-kind` tag**: ways `road`, `river`, `revetment`
   (observed 2026-09-27, method: the tag census of the six sheets - roads are stroked `<path>`s 18 to 40 px wide); free
-  ground `-` and every kind naming a court, garden, ground, yard, grove or pines; every other kind an obstacle. A
+  ground the explicit list above; every other kind an obstacle, and every `<text>` an obstacle whatever its tag. A
   classification of this project's own tags, recorded; it replaces a first draft's stroke-width rule, which the plan
   review showed would have read a 40 px road as a hairline and a building's 1 px outline as a way.
 - **P5 - A stroked line or path is a band of its own stroke width** - drawn geometry, not a calibration.

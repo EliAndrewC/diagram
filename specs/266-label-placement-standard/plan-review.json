@@ -1,140 +1,156 @@
 {
  "feature": "266-label-placement-standard",
- "plan_sha256": "cdf128e0af5e14fd538308a7a8d0d8e39e31d6340d2310f496ba411a2c7471b3",
+ "plan_sha256": "358c95224aabd640e7cb128d7d7e6da8370abd09f778b726fad76b0d20a0ef54",
  "reviewed": "2026-09-27",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "design-package",
-   "summary": "One mode-neutral package l7r/diagram/labels/ (standard, geom, layout, obstacles, placer) with three adaptors",
+   "summary": "One mode-neutral package l7r/diagram/labels/ with three adaptors",
    "class": "within",
-   "why": "FR-001, FR-002: one placer neither mode owns"
+   "why": "FR-001, FR-002"
   },
   {
    "id": "design-positions",
-   "summary": "POSITIONS: the eight ranked positions in the QGIS order, in the subject's upright frame",
+   "summary": "The eight ranked positions in the QGIS order, in the subject's upright frame",
    "class": "within",
    "why": "FR-003 verbatim"
   },
   {
    "id": "P3",
-   "summary": "'Slightly' = a quarter of the block's width off center",
+   "summary": "'Slightly' = a quarter of the block's width; recorded in spec D4a",
    "class": "within",
    "why": "FR-003 names the positions, not the amount; labeled calibration"
   },
   {
    "id": "design-offset-rings",
-   "summary": "PREFERRED_OFFSET_EM 0.5 (D2); RING_STEP_EM 0.5; rings ring by ring, every position and layout within a ring before the next",
+   "summary": "PREFERRED_OFFSET_EM 0.5 (D2); RING_STEP_EM 0.5 (now in D4a); ring by ring",
    "class": "within",
-   "why": "FR-004, FR-005; the ring step is unfixed by the spec (a calibration, but not labeled as one in P1-P5)"
+   "why": "FR-004, FR-005"
   },
   {
    "id": "P2",
-   "summary": "Reach 8 em, least-cost seat within reach past it",
+   "summary": "Reach 8 em, least-cost seat within reach past it; recorded in D4a",
    "class": "within",
-   "why": "FR-005 asks for a reach limit, FR-007 for the least-cost seat; 64 px sits inside the gate's hug cap"
+   "why": "FR-005 reach limit, FR-007"
   },
   {
    "id": "design-weights",
-   "summary": "1000 / 500 / 0 weights; way cost per distinct way within half-width + notch; free first, then ring, rank, layout",
+   "summary": "1000 / 500 / 0 weights; free first, then ring, rank, layout",
    "class": "within",
-   "why": "FR-006, FR-007, D4, and the Assumptions' notch clause"
+   "why": "FR-006, FR-007, D4"
   },
   {
    "id": "P1",
-   "summary": "CLEAR_EM: an obstacle other than the subject within 0.5 em of the block counts as covered",
+   "summary": "CLEAR_EM: an obstacle other than the subject within 0.5 em counts as covered; recorded in D4a, reported at landing (T12)",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Narrows FR-006's 'free' (weight 0 by coverage) to exclude seats flush against a neighbor. Literal FR-006 would let a caption touch a neighboring house at 0 gap while standing 0.5 em off its board, which reads as the house's caption - defeating the request's purpose (a board caption that plainly labels its board) and the standard's own primary factor, PSU's 'association' (research.md R1). Must be carried into the spec's Decisions Recorded and the record as a calibration and raised with the GM at landing."
+   "why": "Unchanged from round 1: literal FR-006 would let a caption sit flush on a neighbor, defeating the request's purpose (a caption that plainly labels its feature) and PSU's association rule. Now in spec D4a and T12's report."
+  },
+  {
+   "id": "P6",
+   "summary": "Clearance comparison strict with a 1e-6 tolerance",
+   "class": "within",
+   "why": "Numerical hygiene so a first-ring seat is not charged by rounding; decides nothing FR-004/FR-006 leave open"
   },
   {
    "id": "design-upright-layouts",
-   "summary": "upright() into (-90, 90]; one line, then the best two- and three-line cuts; cut() lifted from finish._caption_lines",
+   "summary": "upright() into (-90, 90]; one, two, three lines",
    "class": "within",
-   "why": "FR-008, the spec's wrap edge case"
+   "why": "FR-008, the wrap edge case"
   },
   {
    "id": "design-line-area",
-   "summary": "Line subject along the line near its hint, above then below; area subject at the centroid then interior seats by distance",
+   "summary": "Line subject along the line near its hint; area subject centroid then interior",
    "class": "within",
    "why": "FR-008"
   },
   {
    "id": "design-leader-settlement",
-   "summary": "Leader for a point or line caption beyond the first ring, nearest point to nearest point, drawn as a <line> in the label layer",
+   "summary": "Leader beyond the first ring, nearest point to nearest point, trimmed 1 px (in D4a)",
    "class": "within",
    "why": "FR-005"
   },
   {
    "id": "design-index",
-   "summary": "A uniform grid built once per label phase (or per render / tool run), add() per placed caption",
+   "summary": "A uniform grid built once per phase or tool run",
    "class": "within",
    "why": "FR-009"
   },
   {
    "id": "design-fr014",
-   "summary": "A NAMED civic building (Obstacle(named=True)) is waived by no other caption's wording",
+   "summary": "A caption is treated as a named civic building's caption when its TEXT names a civic group word (ministry, governor, temple); then every other named civic building keeps full weight",
    "class": "narrowing",
    "ruling": "NOT LEGITIMATE",
-   "why": "FR-014 and answer 070 withhold the waiver only from a caption that itself names a civic building ('a named civic building's caption ... additionally may not touch any other named civic building'). The plan withholds it from EVERY caption, so a district caption may not lie on a named temple of its own district, nor a temple-group caption on a named temple - both of which the GM's standing rule permits. Nothing makes the literal rule impossible: the caption's subject can carry whether it names a civic building."
+   "why": "The rule as stated now matches FR-014, but its detection does not: answer 070 withholds the waiver only from 'a named civic building's caption - a ministry by name, the governor's yamen, a temple by name', and grants a district caption 'any building of that district'. Keying on a civic group WORD in the text classes a district caption such as 'temple neighborhood' (a caption 070 itself names) or an unnamed temple's generic 'temple' caption as a named civic building's caption, so it may not lie on the named temples of its own district - the case the plan's next sentence says it allows. Nothing prevents keying on the caption's SUBJECT being a named civic record (the Obstacle already carries named=True)."
   },
   {
    "id": "design-settlement-callers",
-   "summary": "Board, place_caption, road caption, field names through seat_caption; hint/slides, annulus, _best_label_spot, pull_caption_toward, label_above/label_xy deleted",
+   "summary": "Board, place_caption, road caption, field names through seat_caption; old searches deleted",
    "class": "within",
-   "why": "FR-001 and D7"
+   "why": "FR-001, D7"
   },
   {
    "id": "design-modeA-leader",
-   "summary": "compound.py seats every caption through the placer but the plan draws no leader there",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-005: a caption seated beyond the preferred offset MUST be joined by a leader, in either mode. The Mode A adaptor names no leader, so a compound caption pushed to ring 2 would stand unjoined. Nothing prevents drawing one."
+   "summary": "compound.py draws the placer's leader, a <line> tagged with the caption's kind",
+   "class": "within",
+   "why": "FR-005 in both modes; round-1 item resolved"
   },
   {
    "id": "design-tool-leader",
-   "summary": "make seat-label rewrites <text> positions only; writes no leader and --check does not check one",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-005 and FR-013 ('run the placer on a hand-drawn sheet ... writes each caption's standard seat'): the standard seat beyond ring 1 includes its leader. A re-seated hand-sheet caption at ring 2 would be unjoined and --check would pass it."
+   "summary": "seat-label writes, moves or removes leaders; --check and the ledger test check them",
+   "class": "within",
+   "why": "FR-005, FR-013; round-1 item resolved"
   },
   {
-   "id": "P4-and-path-hull",
-   "summary": "Hand-sheet shapes classed by geometry: a line of stroke >= 4 a wall, thinner a way; a path as its coordinates' hull",
+   "id": "P4",
+   "summary": "Hand-sheet shapes classified by data-kind: road/river/revetment ways; '-' and any kind 'naming a court, garden, ground, yard, grove or pines' free; the rest obstacles - text elements included",
    "class": "narrowing",
    "ruling": "NOT LEGITIMATE",
-   "why": "Its premise was read from compound.py, not from the sheets it runs on. Measured 2026-09-27 on hayakawa-magistracy.svg and ubame-magistracy.svg: the roads are <path> elements of stroke-width 18-40 in <g data-kind=\"road\"> (Hayakawa's main road, x 490-530, stands 30 px from the board the feature re-seats), and the thin lines are building parts (office hall, residence, barracks at 0.8-1). The path-hull rule reduces the 40 px road to a zero-width segment, so a caption lies on it at no cost, contrary to FR-006's 500 per way; the stroke rule makes building lines ways. Every element carries data-kind (R3), so the family can be read from the tag and the stroked width."
+   "why": "Classifying by tag is right (round-1 item 3), but the rule as written makes two FR-006 obstacles free. (a) 'court divider' names a court by the plan's word test, and it is a wall: <g stroke-width=6 data-kind=\"court divider\"> on hayakawa (line 241), ochiba (152), ubame (135) and county-magistracy-example (93), measured 2026-09-27 by grep; FR-006 weighs a wall 1,000. (b) The plan classes EVERY shape by its tag, text included, so another caption tagged with a ground kind is free space: county-magistracy-example line 9 <text data-kind=\"garden\">garden</text>, ubame line 554 'inner garden' inside <g data-kind=\"garden\">, and every court's caption; so is the '-' title and scale-bar text. FR-006 weighs another caption 1,000, and the settlement adaptor already treats the title placard as an obstacle. Nothing makes the literal rule impossible."
   },
   {
    "id": "P5",
-   "summary": "Ground = a containing shape at least 20x the caption block",
+   "summary": "A stroked line or path is a band of its own stroke width",
    "class": "within",
-   "why": "FR-006 says area fills weigh 0; the heuristic is labeled"
+   "why": "Drawn geometry; resolves round-1 item 3's path-hull finding"
+  },
+  {
+   "id": "design-caption-discovery",
+   "summary": "The tool and the ledger gate find a hand sheet's captions only as <text> inside or carrying a data-kind tag",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-013: the gate test MUST hold EVERY hand-drawn sheet, and D9 names the country shrine as re-seated when next revised. hoshigaoka-shrine.svg carries ZERO data-kind attributes (grep -c, 2026-09-27) and 16 <text> elements, so under this rule the tool finds no captions on it and the gate, once the shrine is revised and its ledger exemption lapses, passes it with every caption off-seat. The plan's premise (research.md R3: 'Every drawn element carries a data-kind tag (feature 262)') is true of the magistracy sheets, not the shrine. Tagging the shrine before the ledger is taken, or failing the gate on an untagged non-title <text> of a changed sheet, reaches it."
   },
   {
    "id": "design-static-test",
-   "summary": "AST walk of settlement/ for self.label calls outside D8; compound.py <text literals outside title/note/scale bar",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-012's first clause covers 'any caption drawn outside the placer'. settlement/ has emitted captions as raw <text> f-strings before (fields/paddy.py records two such paths), and a new one would pass this test. Adding the <text literal walk to settlement/ (allowed only in finish.label and the field-name markup the placer drives) is cheap."
+   "summary": "AST walk of settlement/ for self.label outside D8 and <text literals outside label() and the field-name markup; compound.py <text only in the placer-fed drawer and title/note/scale bar",
+   "class": "within",
+   "why": "FR-012; round-1 item 5 resolved. Note: finish.py lines 396 and 418-419 (title placard, scale bar) also emit raw <text and are not captions (FR-001); the allow-list must name them or the test is red on the tree"
   },
   {
    "id": "design-ledger",
-   "summary": "caption_ledger.json with each hand sheet's sha256; off-seat caption fails unless ledgered and hash unchanged",
+   "summary": "caption_ledger.json with sheet hashes; off-seat caption or missing leader fails unless ledgered and unchanged",
    "class": "within",
    "why": "FR-013, D9"
   },
   {
    "id": "design-record-doctrine",
-   "summary": "040/050 rewritten, registry entries, buildings.md, building-review.md, future-work/cities.md, dev/placement.md",
+   "summary": "040/050 rewritten with D2, D3, D4, D4a labeled; registry entries; doctrine files",
    "class": "within",
    "why": "FR-010, FR-013, D8"
+  },
+  {
+   "id": "T09-T12",
+   "summary": "T09 measures both composed sheets (SC-001); T12 reports D7, D8, D9 and P1 at landing",
+   "class": "within",
+   "why": "SC-001; the spec's 'to raise with the GM at landing'; round-1 item 6 resolved"
   },
   {
    "id": "T13",
    "summary": "Fix the review-round hook counting a NOT-REVIEWABLE pass as a round",
    "class": "within",
-   "why": "Constitution XIV, a defect found in this feature's own review"
+   "why": "Constitution XIV"
   }
  ],
  "verdict": "BLOCKED"
