@@ -157,7 +157,7 @@ The three hand-authored magistracy sheets are the active work of another feature
 | county-magistracy-example (7 pt, 3 px/ft) | - | 4.2 px | none |
 | ochiba-roundtrip-test (7 pt, 3 px/ft) | - | 3.6 px | none |
 
-Every board caption now stands at the preferred offset (0.5 em: 4 ft on an 8 pt hamlet caption, 3.5 px on a 7 pt
+Every board caption now stands (observed 2026-09-27, method: the table above) at the preferred offset (0.5 em: 4 ft on an 8 pt hamlet caption, 3.5 px on a 7 pt
 draft caption, the draft's rects rounded to whole pixels), at the board's own angle, with no leader - a free ranked seat
 existed beside every board. The three hand-drawn magistracy sheets' board captions were re-seated with
 `make seat-label WRITE=1` and check clean.
