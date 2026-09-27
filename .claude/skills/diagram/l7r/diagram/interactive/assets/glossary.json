@@ -5482,5 +5482,32 @@
    "commandery",
    "commanderies"
   ]
+ },
+ "stream order": {
+  "def": "A stream's rank in its river network: the smallest headwater streams are first order, and where two streams of the same order meet, the stream below them is one order higher.",
+  "variants": [
+   "stream order",
+   "stream orders"
+  ]
+ },
+ "kaya": {
+  "def": "Thatching grass: the tall grasses a village cut every year from its kayaba, a stretch of grassland near the settlement that was burned each year to keep forest from taking hold.",
+  "variants": [
+   "kaya"
+  ]
+ },
+ "Kinai": {
+  "def": "The capital region of old Japan around Kyoto and Nara, including Osaka and the Yodo river basin; the home provinces.",
+  "variants": [
+   "Kinai"
+  ]
+ },
+ "Ieyasu": {
+  "def": "Tokugawa Ieyasu, the first Tokugawa shogun, who made Edo his seat; his son Hidetada was the second shogun.",
+  "variants": [
+   "Ieyasu",
+   "Tokugawa Ieyasu",
+   "Ieyasu's"
+  ]
  }
 }

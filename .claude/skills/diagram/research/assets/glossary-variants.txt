@@ -533,6 +533,8 @@ ido	ido
 idobata	idobata
 idowaku	igeta
 idoyakata	idoyakata
+ieyasu	Ieyasu
+ieyasu's	Ieyasu
 igeta	igeta
 igune	igune
 important cultural landscape	Important Cultural Landscape
@@ -638,6 +640,7 @@ kawara	kawara
 kawaramono	kawaramono
 kawata	kawata
 kawaya	kawaya
+kaya	kaya
 kayabuki	kayabuki
 kebiishi	kebiishi
 kegare	kegare
@@ -659,6 +662,7 @@ kidoban	kidoban
 kidobans	kidoban
 kimoiri	shoya
 kimon	kimon
+kinai	Kinai
 king post	king post
 king posts	king post
 king-post	king post
@@ -1135,6 +1139,8 @@ stilling pool	stilling pool
 stone pitching	stone pitching
 straw rick	rick
 straw ricks	rick
+stream order	stream order
+stream orders	stream order
 stringer	stringer
 stringers	stringer
 strip footing	strip footing
@@ -1224,6 +1230,7 @@ toiya	ton'ya
 tokaido	Tokaido
 toki no kane	toki no kane
 tokugawa	Tokugawa
+tokugawa ieyasu	Ieyasu
 ton'ya	ton'ya
 tonya	ton'ya
 torii	torii
