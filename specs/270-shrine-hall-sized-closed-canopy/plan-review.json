@@ -1,6 +1,6 @@
 {
  "feature": "270-shrine-hall-sized-closed-canopy",
- "plan_sha256": "356885086fecb0e6a60b8169a92ec641eb37246eb44569b91020c01f8ee2c183",
+ "plan_sha256": "e3994ca82bda5bf01549e422f50dcce7de500c6c5bc861339d99c01b11f910b9",
  "reviewed": "2026-09-27",
  "declared": "spec-fidelity",
  "decisions": [
@@ -14,7 +14,7 @@
    "id": "Phases-1",
    "summary": "Phase 1: trees_overlap drops the crown-on-crown test; its pair test reports only a duplicated tree (the test rewritten red first); docs",
    "class": "within",
-   "why": "Matches D1 and FR-001. Unchanged since round 2."
+   "why": "Matches D1 and FR-001. Unchanged since round 2. Round 4: the Phases T02 line now reads 66 by 32, agreeing with D3/D4 (was the stale 72 by 32 named at round 3); no decision changed."
   },
   {
    "id": "D2",

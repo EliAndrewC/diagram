@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-27
 
-**Status**: specified; spec-fidelity round 1 CHANGES REQUIRED (keep the duplicated-tree test) - applied, round 2 next
+**Status**: done - FAITHFUL at round 2; plan CLEAR at round 4; all tasks ticked
 
 **Input**: the GM's two answers of 2026-09-27, verbatim in [`request.md`](request.md).
 
