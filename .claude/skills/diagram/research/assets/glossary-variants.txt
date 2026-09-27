@@ -338,6 +338,7 @@ dry run	wet run
 dry runs	wet run
 ds/m	dS/m
 dujiangyan	Dujiangyan
+dunhuang	Dunhuang
 duty of water	water duty
 dwarf bamboo	sasa
 dōba	dōba
@@ -527,6 +528,7 @@ goemonburo	goemon-buro
 gogura	gogura
 gokaido	Five Highways
 gokumon	gokumon
+gold paper	gold paper
 gongxiefang	gongxiefang
 gorinto	five-ring pagoda
 goshi	gōshi
@@ -954,6 +956,8 @@ mizujiri	shirimito
 mlit	MLIT
 modern consolidation	kochi seiri
 module	module
+mogao	Mogao caves
+mogao caves	Mogao caves
 momi	momi
 mon	mon
 mongol yam	yam

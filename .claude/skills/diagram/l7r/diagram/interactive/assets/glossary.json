@@ -6482,5 +6482,24 @@
    "water teahouse",
    "water teahouses"
   ]
+ },
+ "Dunhuang": {
+  "def": "An oasis town in northwest China on the old overland trade road. Its Buddhist cave library kept medieval monastery papers, among them registers of what a monastery took in and paid out.",
+  "variants": [
+   "Dunhuang"
+  ]
+ },
+ "Mogao caves": {
+  "def": "The Buddhist cave temples cut into a cliff at Dunhuang, paid for by patrons over many centuries.",
+  "variants": [
+   "Mogao caves",
+   "Mogao"
+  ]
+ },
+ "gold paper": {
+  "def": "Paper, often marked with gold, that believers give to a Chinese temple to be burned as an offering.",
+  "variants": [
+   "gold paper"
+  ]
  }
 }
