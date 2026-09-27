@@ -1390,6 +1390,8 @@ ox-frames	ox-frame
 oyaike	oyaike
 pagoda tree	pagoda tree
 pagoda trees	pagoda tree
+palisade	palisade
+palisades	palisade
 pannage	pannage
 parapet	parapet
 parish	parish
