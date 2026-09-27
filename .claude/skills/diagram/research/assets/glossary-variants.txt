@@ -1375,6 +1375,7 @@ sageba	ōkaji
 saien	saien
 sakagura	sakagura
 sakaki	sakaki
+sakoda	sakoda
 sally gate	sally port
 sally port	sally port
 sallyport	sally port
@@ -1524,6 +1525,8 @@ sphere	Sphere
 spillway	spillway
 spillways	spillway
 spiraea	Spiraea
+spoil bank	spoil bank
+spoil banks	spoil bank
 spread footing	footing
 spring and autumn	Spring and Autumn
 spring line	spring line
@@ -1821,6 +1824,7 @@ yadake	yadake
 yagura	yagura
 yaita	yaita
 yam	yam
+yamada	yamada
 yamen	yamen
 yamen god	yamen-god
 yamen-god	yamen-god
@@ -1832,6 +1836,7 @@ yashikigami-sama	yashikigami
 yashikirin	yashikirin
 yasuki taka	Yasuki Taka
 yato	yato
+yatoda	yato
 yatsu	yato
 yatsuda	yato
 yayi	yayi

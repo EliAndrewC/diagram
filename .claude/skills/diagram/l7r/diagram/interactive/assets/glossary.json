@@ -4176,7 +4176,8 @@
    "yatsuda",
    "yachida",
    "yato",
-   "yatsu"
+   "yatsu",
+   "yatoda"
   ]
  },
  "yayi": {
@@ -7263,6 +7264,25 @@
    "cascade column",
    "cascade columns",
    "cascade fan"
+  ]
+ },
+ "yamada": {
+  "def": "Literally \"mountain paddy\": the name used around the old capital, in the Kinki region, for a paddy opened in a small valley among the hills.",
+  "variants": [
+   "yamada"
+  ]
+ },
+ "sakoda": {
+  "def": "The name used in the Chugoku region of western Japan for a paddy opened along a narrow valley floor.",
+  "variants": [
+   "sakoda"
+  ]
+ },
+ "spoil bank": {
+  "def": "The earth dug out of a ditch, heaped in a low bank along its side; a ditch's two spoil banks widen the strip of ground it takes up.",
+  "variants": [
+   "spoil bank",
+   "spoil banks"
   ]
  }
 }
