@@ -59,14 +59,17 @@ def brook_fords(brook: Sequence[Pt], spacing: float, bend_deg: float) -> list[Pt
     total = sum(n for _a, _b, n in legs)
 
     def at(d: float) -> tuple[Pt, Pt]:
+        # the loop below only asks inside the course (d + FORD_HALF < total); the LAST leg answers whatever falls past
+        # the legs before it, float rounding past the end included, clamped to its far point
         run = 0.0
-        for a, b, n in legs:
+        for a, b, n in legs[:-1]:
             if run + n >= d:
                 t = (d - run) / n
                 return (a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t), ((b[0] - a[0]) / n, (b[1] - a[1]) / n)
             run += n
         a, b, n = legs[-1]
-        return b, ((b[0] - a[0]) / n, (b[1] - a[1]) / n)
+        t = min(1.0, (d - run) / n)
+        return (a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t), ((b[0] - a[0]) / n, (b[1] - a[1]) / n)
 
     d = spacing / 2.0
     while legs and d + FORD_HALF < total and d - FORD_HALF > 0.0:
