@@ -1,6 +1,6 @@
 {
  "feature": "266-label-placement-standard",
- "plan_sha256": "358c95224aabd640e7cb128d7d7e6da8370abd09f778b726fad76b0d20a0ef54",
+ "plan_sha256": "c406e061a6c26458d54200c365ca51baee8ab3f5ea5bf0501dcfe9d1f95b261f",
  "reviewed": "2026-09-27",
  "declared": "spec-fidelity",
  "decisions": [
@@ -24,13 +24,13 @@
   },
   {
    "id": "design-offset-rings",
-   "summary": "PREFERRED_OFFSET_EM 0.5 (D2); RING_STEP_EM 0.5 (now in D4a); ring by ring",
+   "summary": "PREFERRED_OFFSET_EM 0.5 (D2); RING_STEP_EM 0.5; ring by ring",
    "class": "within",
    "why": "FR-004, FR-005"
   },
   {
    "id": "P2",
-   "summary": "Reach 8 em, least-cost seat within reach past it; recorded in D4a",
+   "summary": "Reach 8 em, least-cost seat within reach past it",
    "class": "within",
    "why": "FR-005 reach limit, FR-007"
   },
@@ -42,16 +42,16 @@
   },
   {
    "id": "P1",
-   "summary": "CLEAR_EM: an obstacle other than the subject within 0.5 em counts as covered; recorded in D4a, reported at landing (T12)",
+   "summary": "CLEAR_EM: an obstacle other than the subject within 0.5 em counts as covered; reported at landing (T12)",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Unchanged from round 1: literal FR-006 would let a caption sit flush on a neighbor, defeating the request's purpose (a caption that plainly labels its feature) and PSU's association rule. Now in spec D4a and T12's report."
+   "why": "Unchanged since round 1: literal FR-006 would let a caption sit flush on a neighbor, defeating the request's purpose (a caption plainly beside its own feature). Recorded in spec D4a and raised at landing."
   },
   {
    "id": "P6",
    "summary": "Clearance comparison strict with a 1e-6 tolerance",
    "class": "within",
-   "why": "Numerical hygiene so a first-ring seat is not charged by rounding; decides nothing FR-004/FR-006 leave open"
+   "why": "Numerical hygiene; decides nothing FR-004/FR-006 leave open"
   },
   {
    "id": "design-upright-layouts",
@@ -67,7 +67,7 @@
   },
   {
    "id": "design-leader-settlement",
-   "summary": "Leader beyond the first ring, nearest point to nearest point, trimmed 1 px (in D4a)",
+   "summary": "Leader beyond the first ring, nearest point to nearest point, trimmed 1 px",
    "class": "within",
    "why": "FR-005"
   },
@@ -79,10 +79,9 @@
   },
   {
    "id": "design-fr014",
-   "summary": "A caption is treated as a named civic building's caption when its TEXT names a civic group word (ministry, governor, temple); then every other named civic building keeps full weight",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "The rule as stated now matches FR-014, but its detection does not: answer 070 withholds the waiver only from 'a named civic building's caption - a ministry by name, the governor's yamen, a temple by name', and grants a district caption 'any building of that district'. Keying on a civic group WORD in the text classes a district caption such as 'temple neighborhood' (a caption 070 itself names) or an unnamed temple's generic 'temple' caption as a named civic building's caption, so it may not lie on the named temples of its own district - the case the plan's next sentence says it allows. Nothing prevents keying on the caption's SUBJECT being a named civic record (the Obstacle already carries named=True)."
+   "summary": "Group-word waiver; when the caption's SUBJECT is a named civic building (Subject(civic=True), set by the caller naming a ministry, the governor's yamen or a temple by name) every other named civic building keeps full weight",
+   "class": "within",
+   "why": "Round-2 item resolved: keyed on the subject, not the wording, which is FR-014 and answer 070 as written (a district caption such as 'temple neighborhood' keeps its waiver). Note for the implementer: placer.py's Subject field list (plan line 64) does not yet name civic."
   },
   {
    "id": "design-settlement-callers",
@@ -94,39 +93,39 @@
    "id": "design-modeA-leader",
    "summary": "compound.py draws the placer's leader, a <line> tagged with the caption's kind",
    "class": "within",
-   "why": "FR-005 in both modes; round-1 item resolved"
+   "why": "FR-005 in both modes"
   },
   {
    "id": "design-tool-leader",
    "summary": "seat-label writes, moves or removes leaders; --check and the ledger test check them",
    "class": "within",
-   "why": "FR-005, FR-013; round-1 item resolved"
+   "why": "FR-005, FR-013"
   },
   {
    "id": "P4",
-   "summary": "Hand-sheet shapes classified by data-kind: road/river/revetment ways; '-' and any kind 'naming a court, garden, ground, yard, grove or pines' free; the rest obstacles - text elements included",
+   "summary": "Hand-sheet shapes classified by data-kind: road/river/revetment ways; an explicit ground list free; everything else, court divider included, an obstacle; every <text> an obstacle",
    "class": "narrowing",
    "ruling": "NOT LEGITIMATE",
-   "why": "Classifying by tag is right (round-1 item 3), but the rule as written makes two FR-006 obstacles free. (a) 'court divider' names a court by the plan's word test, and it is a wall: <g stroke-width=6 data-kind=\"court divider\"> on hayakawa (line 241), ochiba (152), ubame (135) and county-magistracy-example (93), measured 2026-09-27 by grep; FR-006 weighs a wall 1,000. (b) The plan classes EVERY shape by its tag, text included, so another caption tagged with a ground kind is free space: county-magistracy-example line 9 <text data-kind=\"garden\">garden</text>, ubame line 554 'inner garden' inside <g data-kind=\"garden\">, and every court's caption; so is the '-' title and scale-bar text. FR-006 weighs another caption 1,000, and the settlement adaptor already treats the title placard as an obstacle. Nothing makes the literal rule impossible."
+   "why": "Round-2 items resolved: court divider is now an obstacle and every <text> weighs 1,000. But the new explicit list classes one built feature as free ground: `weighing floor` (ubame-magistracy.svg line 321) is a roofed post structure - a colonnade-hatched 80x80 px rect with six post circles, described in the sheet's own comment and notes.md line 52 as 'open covered work space' under 'one range' with the tally shed, with posts added by size-audit. FR-006 weighs a built feature 1,000; as listed, its roof and posts (untagged children inheriting the group's tag) are free for every other caption. Nothing makes the literal weight impossible. Fix: drop `weighing floor` from the ground list (it then falls to 'every other kind is an obstacle'). The rest of the list was checked against the tag census of the five tagged sheets (2026-09-27, grep): courts, gardens, practice ground, cart yard, groves/pines (ground cover), river landing (whose dock, revetment, barge, altar and watch post carry their own tags) and '-' are ground or area fills."
   },
   {
    "id": "P5",
    "summary": "A stroked line or path is a band of its own stroke width",
    "class": "within",
-   "why": "Drawn geometry; resolves round-1 item 3's path-hull finding"
+   "why": "Drawn geometry"
   },
   {
    "id": "design-caption-discovery",
-   "summary": "The tool and the ledger gate find a hand sheet's captions only as <text> inside or carrying a data-kind tag",
+   "summary": "Captions found as <text> in or carrying a data-kind tag; a sheet whose hash has changed must carry a data-kind on every <text>, else the gate refuses it",
    "class": "narrowing",
    "ruling": "NOT LEGITIMATE",
-   "why": "FR-013: the gate test MUST hold EVERY hand-drawn sheet, and D9 names the country shrine as re-seated when next revised. hoshigaoka-shrine.svg carries ZERO data-kind attributes (grep -c, 2026-09-27) and 16 <text> elements, so under this rule the tool finds no captions on it and the gate, once the shrine is revised and its ledger exemption lapses, passes it with every caption off-seat. The plan's premise (research.md R3: 'Every drawn element carries a data-kind tag (feature 262)') is true of the magistracy sheets, not the shrine. Tagging the shrine before the ledger is taken, or failing the gate on an untagged non-title <text> of a changed sheet, reaches it."
+   "why": "Round-2 item largely resolved: a revised country shrine (16 <text>, 0 data-kind, grep 2026-09-27) can no longer pass the gate untagged. One reach gap remains against FR-013's 'hold every hand-drawn sheet': the refusal is worded for 'a sheet whose hash has changed', and a NEW hand-drawn sheet has no ledger hash to change, so an untagged new sheet's captions stay invisible and pass. Fix: apply the rule to every sheet not held by the ledger at its recorded hash (changed OR absent from the ledger). Also say that a <text> 'carries' a data-kind when it has the attribute or sits inside a tagged group - the plan's own caption definition - or the rule refuses today's tagged sheets, whose captions mostly inherit their group's tag (e.g. ubame 'cart yard', line 356)."
   },
   {
    "id": "design-static-test",
-   "summary": "AST walk of settlement/ for self.label outside D8 and <text literals outside label() and the field-name markup; compound.py <text only in the placer-fed drawer and title/note/scale bar",
+   "summary": "AST walk of settlement/ and compound.py for captions outside the placer and the D8 list",
    "class": "within",
-   "why": "FR-012; round-1 item 5 resolved. Note: finish.py lines 396 and 418-419 (title placard, scale bar) also emit raw <text and are not captions (FR-001); the allow-list must name them or the test is red on the tree"
+   "why": "FR-012; the allow-list must name finish.py's title placard and scale-bar <text> (lines 396, 418-419), which are not captions (FR-001)"
   },
   {
    "id": "design-ledger",
@@ -136,7 +135,7 @@
   },
   {
    "id": "design-record-doctrine",
-   "summary": "040/050 rewritten with D2, D3, D4, D4a labeled; registry entries; doctrine files",
+   "summary": "040/050 rewritten with the calibrations labeled; registry entries; doctrine files",
    "class": "within",
    "why": "FR-010, FR-013, D8"
   },
@@ -144,7 +143,7 @@
    "id": "T09-T12",
    "summary": "T09 measures both composed sheets (SC-001); T12 reports D7, D8, D9 and P1 at landing",
    "class": "within",
-   "why": "SC-001; the spec's 'to raise with the GM at landing'; round-1 item 6 resolved"
+   "why": "SC-001; the spec's 'to raise with the GM at landing'"
   },
   {
    "id": "T13",

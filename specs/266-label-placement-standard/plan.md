@@ -61,8 +61,8 @@ caption: 8 positions x 3 layouts x (1 + rings) with rings up to the reach - a fe
   once; `cost(block, ignore)` returns the summed weight of every obstacle within `CLEAR_EM` of the block (excluding
   `ignore`, the subject's own id for an area caption) plus `WEIGHT_WAY` per distinct way the block comes within
   half-width + notch of; `add()` for each placed caption.
-- `placer.py` - `Subject` (`kind` point | line | area, the drawn polygon or polyline, `angle`, `oid`, optional
-  `hint`), `Placement` (anchor x, y as `label()` takes it, angle, lines, block quad, ring, rank, cost, leader), and
+- `placer.py` - `Subject` (`kind` point | line | area, the drawn polygon or polyline, `angle`, `half_width` for a line,
+  optional `hint`, and `civic` for a subject that is a named civic building), `Placement` (anchor x, y as `label()` takes it, angle, lines, block quad, ring, rank, cost, leader), and
   `place(text, size, subject, index, frame)`:
   - point: candidates ring by ring from the preferred offset outward, all positions and layouts within a ring, block
     placed so its nearest edge stands the ring's distance off the subject's box in the subject's (upright) frame;
@@ -112,10 +112,11 @@ Reads the SVG with `xml.etree`, applying `translate`/`rotate`/`matrix` transform
 `ellipse`, `polygon`, `polyline`, `line`, `path` (its coordinates; a STROKED line or path is a band of its own stroke
 width, so a 40 px road is 40 px wide) and `text` (its block from the shared metrics). EVERY SHAPE IS CLASSIFIED BY ITS
 `data-kind` TAG (feature 262 tags every drawn element; research.md R3): a way kind (`road`, `river`, `revetment`) is a
-Way at `WEIGHT_WAY`; a GROUND kind, from an explicit list of the sheets' ground tags (`-`, `outer court`, `inner
-court`, `hearing court`, `border court`, `practice ground`, `garden`, `vegetable garden`, `garden pines`, `cart yard`,
-`shrine grove`, `river landing`, `weighing floor`), is free space; every other kind is an obstacle - `court divider`,
-a wall, among them. EVERY `<text>` IS AN OBSTACLE whatever its tag: another caption, a court's name, the title and the
+Way at `WEIGHT_WAY`; a GROUND kind, from an explicit list of the sheets' ground tags (`outer court`, `inner court`,
+`hearing court`, `border court`, `practice ground`, `garden`, `vegetable garden`, `garden pines`, `cart yard`,
+`shrine grove`, `river landing`), is free space, and so is the one `-` shape that is the sheet's background (a rect
+covering the whole view); every other kind is an obstacle - `court divider` (a wall), `weighing floor` (a roofed
+structure on posts) and every other `-` shape (the scale bar) among them. EVERY `<text>` IS AN OBSTACLE whatever its tag: another caption, a court's name, the title and the
 scale-bar text all weigh 1,000. A caption is a `<text>` inside a `data-kind` group (or carrying the tag); its subject is the non-text shapes
 of that kind. `--check` lists every caption not at its standard seat (1 px tolerance) and every leader that is missing,
 stray or misplaced; `WRITE=1` rewrites those `<text>` positions (and transforms) in place, tagging an untagged board
@@ -130,10 +131,11 @@ caption, and writes, moves or removes the caption's leader - a `<line>` beside i
   planted `self.label` call each fail it (SC-002).
 - `tests/gate/test_hand_sheet_captions.py` + `tests/fixtures/caption_ledger.json` (each hand-drawn sheet's sha256 and
   its captions as they stood when this feature landed): a caption off its standard seat, or missing the leader its seat
-  requires, fails unless the ledger holds it AND the sheet's hash is unchanged (SC-006). A sheet whose hash has changed
-  must carry a `data-kind` on every `<text>` (a caption's kind, or `-` for the title and scale bar): the country shrine
-  has no tags yet (observed 2026-09-27, method: grep), so an untagged caption would be invisible to the tool - the gate
-  refuses one instead, and tagging comes with the shrine's next revision.
+  requires, fails unless the ledger holds it AND the sheet's hash is unchanged (SC-006). Every sheet the ledger does
+  not hold at its recorded hash - a changed sheet or a new one - must carry a `data-kind` on every `<text>`, on the
+  element itself or on a group it sits inside (a caption's kind, or `-` for the title and scale bar): the country
+  shrine has no tags yet (observed 2026-09-27, method: grep), so an untagged caption would be invisible to the tool -
+  the gate refuses one instead, and tagging comes with the shrine's next revision.
 
 ### Record and doctrine
 
