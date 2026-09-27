@@ -338,8 +338,8 @@ class NoticeBoard(Kind):
 
     Why: Every Edo town AND village kept one, and its siting was a traffic decision: it is the state talking at
     all who pass, so the board stands where the settlement's one lane carries everyone. The circulars
-    reached the farmers through exactly this board, read aloud where needed - one reader per settlement
-    makes it work. The record names SEVERAL such places rather than one, so which of them a settlement uses
+    reached the farmers through the headman, who copied and relayed them, and the weightiest were posted on
+    this board - one reader per settlement makes it work. The record names SEVERAL such places rather than one, so which of them a settlement uses
     is rolled from its own seed: the village center, the entrance where the track arrives, or the frontage of
     the village official's gate (that the center was where villagers assembled, and that a shrine precinct
     served, are this record's own ranking of the likely spots rather than attested sites). One more the
@@ -347,10 +347,12 @@ class NoticeBoard(Kind):
     deliberately not offered at a hamlet, whose crossings are 10 ft ditch planks and whose only shrine is a
     household hokora in someone's dooryard.
 
-    Note: Presence is read, and so is the siting at the center, the entrance, the official's gate and a
-    bridgehead; the assembly place and the shrine precinct are this record's inference. The placement is
-    chosen from the attested set the map can actually site, never from one preferred reading; at hamlet grain
-    the glyph is drawn at its true size, about 12 x 5 ft in this record's reading of the frame.
+    Note: Presence is read (a board at a key point in each of one district's 17 villages, and the shogunate's
+    order to post them; that EVERY town and village kept one is this record's reading), and so is the siting
+    at the center, the entrance, the official's gate and a bridgehead; the assembly place and the shrine precinct are this record's inference, and no page read says
+    the notices were read aloud. The placement is chosen from the attested set the map can actually site, never
+    from one preferred reading; at hamlet grain the glyph is drawn at its true size, a frame of about 12 x 5 ft
+    around a 7 by 3 ft face - both this record's own figures, not read on any page.
 
     Name: notice board
     Covers: `kosatsuba`, with its label

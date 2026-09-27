@@ -2421,7 +2421,11 @@
   "def": "The notice board: a small roofed frame where the authorities posted the standing law, rate tables and ban lists, sited where everyone passes.",
   "variants": [
    "kosatsuba",
-   "kosatsu"
+   "kosatsu",
+   "seisatsuba",
+   "seisatsu",
+   "kōsatsu-ba",
+   "kōsatsu"
   ]
  },
  "kumi": {
@@ -2934,7 +2938,8 @@
  "ofuregaki": {
   "def": "The shogunate's circulars, passed down to the villages, copied by the headman and posted on the notice board.",
   "variants": [
-   "ofuregaki"
+   "ofuregaki",
+   "furegaki"
   ]
  },
  "omamori": {
@@ -5642,6 +5647,19 @@
    "footslopes"
   ]
  },
+ "fudoki": {
+  "def": "A gazetteer - an official record of a province's villages, roads and landmarks; the Shinpen Musashi fudoki ko, compiled in 1830, is the one for Musashi province.",
+  "variants": [
+   "fudoki",
+   "fudoki ko"
+  ]
+ },
+ "pledged land": {
+  "def": "Farmland handed to a lender as security for a loan; the lender held or worked it until the loan was repaid, and kept it if the loan was not.",
+  "variants": [
+   "pledged land"
+  ]
+ },
  "donggusup": {
   "def": "A Korean village-entrance grove: the stand of trees kept at the mouth of a village, the Korean counterpart of the Chinese water-mouth grove.",
   "variants": [
@@ -5843,6 +5861,80 @@
   "def": "The depth at which water in a channel flows steadily and evenly, the level a river settles back to some way upstream of a gate or weir.",
   "variants": [
    "normal depth"
+  ]
+ },
+ "笞": {
+  "def": "The light bamboo cane, the lightest of the Five Punishments of the Chinese legal code: a beating on the buttocks, given in court by the yamen's runners.",
+  "variants": [
+   "笞"
+  ]
+ },
+ "杖": {
+  "def": "The heavy stick, the second of the Five Punishments of the Chinese legal code: a beating with a large stick on the back, buttocks or legs, given in court by the yamen's runners.",
+  "variants": [
+   "杖"
+  ]
+ },
+ "pit rank": {
+  "def": "The row of soaking pits in a tanning yard, where hides lie in the tanning liquor. It runs along the yard's edge of water, and the number of pits sets the yard's size.",
+  "variants": [
+   "pit rank",
+   "pit ranks"
+  ]
+ },
+ "staking frame": {
+  "def": "A frame set in the shallows at a tanning yard's bank, where salted hides are held in the river to steep for several days before the hair is scraped off.",
+  "variants": [
+   "staking frame",
+   "staking frames"
+  ]
+ },
+ "settlement core": {
+  "def": "The middle of a settlement's dwellings, the point from which a direction out of town is measured.",
+  "variants": [
+   "settlement core"
+  ]
+ },
+ "night watch": {
+  "def": "One of the five periods the night was divided into, from dusk to dawn. The drum and bell tower sounded each one, and watchmen carried it through the streets with clappers and gongs.",
+  "variants": [
+   "night watch",
+   "night watches",
+   "five watches"
+  ]
+ },
+ "hour of xu": {
+  "def": "The eleventh of the twelve two-hour periods of the traditional Chinese day, about 7 to 9 in the evening. The drum and bell towers struck it to open the night.",
+  "variants": [
+   "hour of xu"
+  ]
+ },
+ "plinth": {
+  "def": "The block or base a pillar or post stands on, set on the ground beneath its shaft and adding to its height.",
+  "variants": [
+   "plinth",
+   "plinths"
+  ]
+ },
+ "city grain": {
+  "def": "The scale a city map is drawn at, about 3 ft of ground to a pixel, where a mark must be about 6 ft across to be seen at all.",
+  "variants": [
+   "city grain"
+  ]
+ },
+ "picket line": {
+  "def": "A rope stretched between stakes or posts, with several animals tied along it in a row.",
+  "variants": [
+   "picket line",
+   "picket lines"
+  ]
+ },
+ "stele": {
+  "def": "An upright stone slab or post, often carved or inscribed; the Chinese hitching post counts as one.",
+  "variants": [
+   "stele",
+   "steles",
+   "stelae"
   ]
  }
 }

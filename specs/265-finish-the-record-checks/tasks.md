@@ -31,9 +31,10 @@
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
       verify: DONE. towns closed: quote-check and record-format on 040, 080, 090, 100, 130 (two groups), source-applicability APPLICABLE-WITH-LIMITS (honest) on thepaper-night-gates; group 2b: 090 3 PARTIAL narrowed to the quotes (1 more narrowed on re-check, then SUPPORTS), 130 1 PARTIAL resolved by labeling the no-per-farm-groves rule a guess with an absence statement, 2 glossary terms added (omotedana, dispersed settlement) and nucleus/nuclei made variants of nucleated; FR-006 14 items: 12 FOOTNOTED, 1 NOT-LOCATED (the 090 sentence rewritten this round, now footnoted), 1 LOCATED (070 hinomi-yagura sentence, outside the changed questions)
-- [ ] T05 FR-002 and FR-006 for `urban-features`, by 250's process
+- [x] T05 FR-002 and FR-006 for `urban-features`, by 250's process
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. urban-features closed: group 2d checked 080 and 170 (4 checks + 1 re-check); 080 re-check 4/4 SUPPORTS, 0 unfootnoted; 170 4 SUPPORTS 1 PARTIAL fixed, 2 Mukoyama notes UNFETCHABLE publicly (read from the GM's copy); 4 glossary terms added; FR-006: 87 bare items, 79 FOOTNOTED, 2 LOCATED, 4 NOT-LOCATED, 1 AMBIGUOUS, 1 TOO-SHORT
 - [ ] T06 FR-006 for `cities/capitals`, by 250's process
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed

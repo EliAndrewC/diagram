@@ -1,0 +1,7 @@
+{
+ "term": "city grain",
+ "def": "The scale a city map is drawn at, about 3 ft of ground to a pixel, where a mark must be about 6 ft across to be seen at all.",
+ "variants": [
+  "city grain"
+ ]
+}

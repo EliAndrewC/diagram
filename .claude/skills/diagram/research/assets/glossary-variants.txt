@@ -168,6 +168,7 @@ circuit	wall circuit
 circuit's length	wall circuit
 city god	City God
 city gods	City God
+city grain	city grain
 coefficient of variation	coefficient of variation
 collar	planted collar
 collars	planted collar
@@ -398,6 +399,7 @@ fit zoom	fit zoom
 fit-zoom	fit zoom
 five dynasties	Five Dynasties
 five highways	Five Highways
+five watches	night watch
 five-ring pagoda	five-ring pagoda
 five-ring pagodas	five-ring pagoda
 flood stage	river stage
@@ -423,12 +425,15 @@ freeboard	freeboard
 frontage	frontage
 fu	fu
 fudasashi	fudasashi
+fudoki	fudoki
+fudoki ko	fudoki
 fukada	fukada
 fukugi	fukugi
 funairi-bori	funairi-bori
 fung shui	fengshui grove
 fung shui wood	fengshui grove
 fung shui woods	fengshui grove
+furegaki	ofuregaki
 furigana	furigana
 fuse	fuse
 fusekoshi	inverted siphon
@@ -552,6 +557,7 @@ horse-faces	mamian
 hot shoeing	hot-shoeing
 hot-shoeing	hot-shoeing
 houlongshan	houlongshan
+hour of xu	hour of xu
 houzhaofang	houzhaofang
 hucheng he	hucheng he
 hutong	hutong
@@ -757,6 +763,8 @@ kyo-machiya	machiya
 kyoho	Kyoho
 kyuhi	kyuhi
 kyōhō	Kyoho
+kōsatsu	kosatsuba
+kōsatsu-ba	kosatsuba
 lake tai	Lower Yangzi
 land consolidation	kochi seiri
 land readjustment	kochi seiri
@@ -902,6 +910,8 @@ neige	neige
 nengu	nengu
 neribei	neribei
 night soil	night soil
+night watch	night watch
+night watches	night watch
 night-soil	night soil
 nightsoil	night soil
 nihonbashi	Nihonbashi
@@ -977,10 +987,17 @@ petuntse	petuntse
 phragmites	Phragmites
 phragmites australis	Phragmites
 phytoplankton	phytoplankton
+picket line	picket line
+picket lines	picket line
 pig iron	pig iron
+pit rank	pit rank
+pit ranks	pit rank
 plankton	plankton
 plant association	plant association
 planted collar	planted collar
+pledged land	pledged land
+plinth	plinth
+plinths	plinth
 polder	polder
 pollard	pollard
 pollarded	pollard
@@ -1115,6 +1132,8 @@ secondary forest	secondary forest
 secondary woodland	secondary forest
 secondary woodlands	secondary forest
 seijoue	seijoue
+seisatsu	kosatsuba
+seisatsuba	kosatsuba
 sekisho	sekisho
 senbon torii	Senbon Torii
 sengoku	Sengoku
@@ -1123,6 +1142,7 @@ sento	sento
 sentō	sento
 sericulture	sericulture
 setchin	kawaya
+settlement core	settlement core
 settling basin	settling basin
 settling basins	settling basin
 seven autumn grasses	seven autumn grasses
@@ -1202,8 +1222,13 @@ spiraea	Spiraea
 spread footing	footing
 spring and autumn	Spring and Autumn
 spring line	spring line
+staking frame	staking frame
+staking frames	staking frame
 steading	steading
 steadings	steading
+stelae	stele
+stele	stele
+steles	stele
 stem density	stem density
 stilling pool	stilling pool
 stone pitching	stone pitching
@@ -1473,6 +1498,7 @@ zuku	zuku
 塘泺	tanglao
 屋敷林	yashikirin
 御蔵	kura
+杖	杖
 枝打ち	edauchi
 梁間	hari-ma
 水口林	water-mouth
@@ -1480,6 +1506,7 @@ zuku	zuku
 田打車	tauchiguruma
 畑永法	hata-ei
 百姓伝記	Hyakusho Denki
+笞	笞
 築地松	tsuijimatsu
 纤道	qiandao
 背山面水	beishan mianshui
