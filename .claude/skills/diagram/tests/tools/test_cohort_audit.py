@@ -178,9 +178,13 @@ def test_roll_one_reports_farmstead_parts_across_the_brook_and_an_offwind_seat(m
     seat fell back off the wind says so in its header."""
     brook = {"poly": [[0.0, 50.0], [200.0, 50.0]]}
     rep = _report([])
-    rep.manifest = {"meta": {"seat_offwind": True}, "streams": [brook, {"poly": [[1.0, 1.0]]}], "gardens": [{"x": 10.0, "y": 80.0, "of": [10.0, 20.0]}, {"x": 30.0, "y": 25.0, "of": [10.0, 20.0]}], "persimmons": [{"x": 5.0, "y": 5.0}]}
+    rep.manifest = {
+        "meta": {"seat_offwind": True},
+        "streams": [brook, {"poly": [[1.0, 1.0]]}],
+        "gardens": [{"x": 10.0, "y": 80.0, "of": [10.0, 20.0]}, {"x": 30.0, "y": 25.0, "of": [10.0, 20.0]}],
+        "persimmons": [{"x": 5.0, "y": 5.0}],
+    }
     monkeypatch.setattr(hg, "generate", lambda spec, out_base, render: rep)
     header, failures, lines = ca.roll_one((9, 12))
     assert failures == ["farmstead_across_brook"] and "1 farmstead part" in lines[-1] and header.endswith("seat=OFFWIND")
     assert ca.parts_across_brook({}) == 0
-

@@ -36,7 +36,6 @@ if HERE not in sys.path:
 
 from l7r.diagram import hamletgen as hg  # noqa: E402
 
-
 _PART_KEYS = ("gardens", "threshing_yards", "farm_fixtures", "byres", "farm_sheds", "persimmons", "bamboo_stands")
 
 

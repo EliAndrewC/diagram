@@ -330,10 +330,11 @@ def test_in_raster_mode_the_lit_paddy_is_washed_and_the_lit_beads_are_not(synthe
         # WAITS FOR THE STATE, BOUNDED (`settles`, feature 145): the wash lands with the page's own restyle, and a read
         # straight after `highlight` came back "1" three gates running under a full run's load while passing alone,
         # in the package, in page-check and under a saturated CPU (feature 261). The assertion is exactly as strict.
-        synthetic.js("k => window.l7rMap.highlight(k)", "paddy")
-        p = synthetic.settles(want[0], lambda: synthetic.js(paddy))
-        synthetic.js("k => window.l7rMap.highlight(k)", "bund beans")
-        b = synthetic.settles(want[1], lambda: synthetic.js(beads))
+        # ...AND RE-ASKS THE HIGHLIGHT EACH POLL: under a full gate's load the wash still read "1" after the whole 2 s
+        # bound (2026-09-27), the one highlight having landed before the page's own restyle settled; asking again is
+        # what a hovering reader does, and the value must still reach exactly 0.45.
+        p = synthetic.settles(want[0], lambda: synthetic.js("k => (window.l7rMap.highlight(k), 0)", "paddy") or synthetic.js(paddy))
+        b = synthetic.settles(want[1], lambda: synthetic.js("k => (window.l7rMap.highlight(k), 0)", "bund beans") or synthetic.js(beads))
         synthetic.clear()
         return p, b
 
