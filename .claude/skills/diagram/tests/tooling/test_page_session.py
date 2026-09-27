@@ -104,3 +104,43 @@ def test_a_queued_session_does_not_inherit_the_dispatcher_s_tmux_pane() -> None:
     """2026-09-27: a headless session carrying TMUX registered itself in the GM's pane and retitled the GM's tab."""
     env = ps.headless_env({"TMUX": "/tmp/tmux-1000/default,10,0", "TMUX_PANE": "%0", "HOME": "/h"}, "sid-d")
     assert env == {"HOME": "/h", "L7R_DISPATCHER": "sid-d"}
+
+
+def test_a_session_the_usage_limit_ends_is_resumed_after_the_wait_not_skipped(tmp_path: pathlib.Path, monkeypatch) -> None:
+    """The GM, 2026-09-27: overnight, a spent five-hour window must not burn the rest of the queue - the failed session
+    waits for the reset and RESUMES, and the next brief starts only after it succeeds."""
+    queue = ps.plan(str(tmp_path), "n", "/p", [], [str(tmp_path / "a.md"), str(tmp_path / "b.md")])
+    (tmp_path / "a.md").write_text("x", encoding="utf-8")
+    calls: list[list[str]] = []
+    outcomes = iter([(1, '{"is_error": true, "result": "Claude AI usage limit reached|1900000000"}'), (0, '{"subtype": "success", "is_error": false}'), (0, '{"subtype": "success"}')])
+
+    def fake_run(cmd, **kw):  # noqa: ANN001, ANN003, ANN202
+        calls.append(cmd)
+        rc, out = next(outcomes)
+        kw["stdout"].write(out)
+        return ps.subprocess.CompletedProcess(cmd, rc)
+
+    slept: list[float] = []
+    monkeypatch.setattr(ps.subprocess, "run", fake_run)
+    monkeypatch.setattr(ps.time, "sleep", slept.append)
+    monkeypatch.setattr(ps.time, "time", lambda: 1_900_000_000 - 3600)
+    run_log = tmp_path / "run.log"
+    first = queue[0]["sid"]  # `work` consumes the queue
+    ps.work(str(tmp_path), "n", [], queue, str(run_log))
+    assert len(calls) == 3, "a, a resumed, then b"
+    assert calls[1][calls[1].index("--resume") + 1] == first and "--session-id" not in calls[1]
+    assert calls[1][calls[1].index("-p") + 1] == ps.RESUME and "--session-id" in calls[2], "the next brief is a fresh session"
+    assert slept == [3600 + 120], "until two minutes past the reset the message names"
+    kinds = [ln.split()[0] for ln in run_log.read_text(encoding="utf-8").splitlines()]
+    assert kinds == ["started", "failed", "ended", "started", "ended", "ALL"], kinds
+
+
+def test_the_wait_reads_the_reset_or_backs_off() -> None:
+    now = 1_900_000_000.0  # 2030-03-17 17:46:40 UTC
+    assert ps.wait_for("limit reached|1900000600", 0, now) == 600 + 120
+    assert ps.wait_for("5-hour limit reached - resets 7pm", 0, now) == (19 * 3600) - (17 * 3600 + 46 * 60 + 40) + 120
+    assert ps.wait_for("resets 3am", 0, now) <= 6 * 3600, "never over six hours"
+    assert [ps.wait_for("overloaded", n, now) for n in (0, 1, 2, 9)] == [900, 1800, 3600, 3600]
+    assert ps.failed(0, '{"is_error": false, "subtype": "success"}') is False
+    assert ps.failed(0, '{"subtype": "error_during_execution"}') and ps.failed(1, "") and not ps.failed(0, "not json")
+    assert ps.first_line("\n  hello\nworld") == "hello" and ps.first_line("") == "no output"
