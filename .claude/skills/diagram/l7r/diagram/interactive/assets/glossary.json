@@ -6502,5 +6502,27 @@
    "kata-hōdōe-chi",
    "zuiie-chi"
   ]
+ },
+ "Chinese-style gate": {
+  "def": "A Japanese gate type named for its Chinese-style roof (a curved, cusped gable), not a gate built in China. It marked a shrine or temple of some standing; Sano's district shrine Asahimori had one.",
+  "variants": [
+   "Chinese-style gate",
+   "Chinese-style gates",
+   "karamon"
+  ]
+ },
+ "adept": {
+  "def": "In this setting, a monk of the rank that may marry and raise children. A married adept's family lives in an ordinary home near the temple.",
+  "variants": [
+   "adept",
+   "adepts"
+  ]
+ },
+ "initiate": {
+  "def": "In this setting, a lay person studying religion under a temple while working an ordinary job. A temple has about twice as many initiates as monks, and only a few of them sleep inside its walls.",
+  "variants": [
+   "initiate",
+   "initiates"
+  ]
  }
 }

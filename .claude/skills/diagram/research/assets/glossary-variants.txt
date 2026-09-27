@@ -7,6 +7,8 @@ aburaya	aburaya
 abutment	abutment
 abutments	abutment
 across the beams	ridge span
+adept	adept
+adepts	adept
 adlittoral	adlittoral
 ake-mutsu	ake-mutsu
 akiba	Akiba
@@ -159,6 +161,8 @@ chenghuangmiao	chenghuangmiao
 chi	chi
 chikaraishi	chikaraishi
 china fir	China fir
+chinese-style gate	Chinese-style gate
+chinese-style gates	Chinese-style gate
 chinju	chinju
 chinju no mori	chinju no mori
 chinjusan	chinju
@@ -654,6 +658,8 @@ important cultural properties	Important Cultural Property
 important cultural property	Important Cultural Property
 inari	Inari
 inashiro	Inashiro
+initiate	initiate
+initiates	initiate
 inkyo	inkyo
 intake	intake
 intake mouth	intake
@@ -757,6 +763,7 @@ kantō	Kanto
 kaogongji	Kaogongji
 karamete	karamete-mon
 karamete-mon	karamete-mon
+karamon	Chinese-style gate
 karo	karo
 kashi	kashi
 kaso-dera	kaso-dera
