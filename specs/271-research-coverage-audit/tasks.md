@@ -64,5 +64,12 @@
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
 
-- [ ] T19 batch 1 lands: groups pulled back, `owed-check`, `make page-check`, `make done`, the push; State updated
+- [ ] T19 group K2 - cities/government: the governor, the ministries and the urban magistracies: research, write, check (FR-003, FR-004)
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+- [ ] T20 group K4 - cities/defenses: town walls, crossings and barbicans: research, write, check (FR-003, FR-004)
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+
+- [ ] T21 batch 1 lands: groups pulled back, `owed-check`, `make page-check`, `make done`, the push; State updated
       research: rendering
