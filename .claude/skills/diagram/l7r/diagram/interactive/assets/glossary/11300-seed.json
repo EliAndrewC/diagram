@@ -1,0 +1,9 @@
+{
+ "term": "seed",
+ "def": "The number a map is drawn from: the same seed always draws the same settlement, and it settles each choice a real place could have made either way.",
+ "variants": [
+  "seed",
+  "seeds",
+  "seed's"
+ ]
+}
