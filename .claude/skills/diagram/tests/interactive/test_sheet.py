@@ -156,3 +156,16 @@ def test_a_mode_a_caveat_opens_with_the_research_lead_not_the_drawing_lead(tmp_p
     with open(path[:-4] + ".html", encoding="utf-8") as fh:
         page = fh.read()
     assert CAVEAT_LEAD + "The size is unmeasured." in page and "On the drawing: " not in page and CAVEAT_LEAD.startswith("Where this rests")
+
+
+def test_a_sheet_page_marks_its_map_so_lit_labels_keep_their_ink(tmp_path: pytest.TempPathFactory) -> None:
+    """GM 2026-09-27: a lit magistracy label was gold on its own gold fill. The sheet's page marks its map and the
+    stylesheet keeps a lit sheet's text in the map's ink; a hamlet page carries no mark, so its captions keep their gold."""
+    path = os.path.join(str(tmp_path), "m.svg")
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write(HEAD + '<g data-kind="granary"><rect x="1" y="1" width="5" height="5" fill="#C00"/><text x="2" y="3">granary</text></g></svg>')
+    write_sheet_page(path, REG, with_raster=False)
+    with open(path[:-4] + ".html", encoding="utf-8") as fh:
+        page = fh.read()
+    assert '<svg id="map" data-sheet="mode-a" ' in page
+    assert "svg#map[data-sheet] g.f.on text" in page and "fill: var(--ink) !important" in page

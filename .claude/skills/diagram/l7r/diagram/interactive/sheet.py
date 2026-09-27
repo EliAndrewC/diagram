@@ -213,6 +213,11 @@ def write_sheet_page(svg_path: str, registry: dict[str, FeatureClass], with_rast
     with open(svg_path, encoding="utf-8") as fh:
         svg = fh.read()
     strings, tags = flatten(svg)
+    # THE SHEET MARKS ITSELF (GM 2026-09-27: highlighted text became unreadable). On a Mode A sheet nearly every
+    # label sits ON its own feature's fill - the building's name on the building - so the highlight painting the
+    # label gold with its fill hid it. `data-sheet` lets the stylesheet keep a sheet's lit text in the map's ink
+    # (page.css); a hamlet's captions sit beside their features and keep their gold.
+    strings[0] = strings[0].replace("<svg ", '<svg data-sheet="mode-a" ', 1)
     write_html(svg_path[: -len(".svg")] + ".html", strings, tags, name=title_of(svg_path), with_raster=with_raster, registry=registry, caveat_lead=CAVEAT_LEAD)
     counts, unclassed = ink_census(strings, tags)
     return Census(counts, unclassed, unregistered_classes(counts, registry))
