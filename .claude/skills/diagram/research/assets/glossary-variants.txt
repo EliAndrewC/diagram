@@ -602,6 +602,7 @@ gorinto	five-ring pagoda
 goshi	gōshi
 goten	goten
 goulan	goulan
+goyo shonin	purveyor merchant
 goyoba	goyoba
 goyōba	goyoba
 green manure	green manure
@@ -888,6 +889,7 @@ kasoba	kasoba
 kasō-dera	kaso-dera
 kata	kata
 katairo	eiro
+katanagari	sword hunt
 kawachi	Kawachi
 kawachi province	Kawachi
 kawara	kawara
@@ -1043,6 +1045,7 @@ machi-bugyo	town magistrate
 machi-bugyosho	machi-bugyosho
 machi-bugyōsho	machi-bugyosho
 machi-dojo	machi-dojo
+machi-doshiyori	toshiyori
 machi-kido	kido
 machiya	machiya
 madake	madake
@@ -1204,6 +1207,8 @@ odoi	Odoi
 offtake	offtake
 offtakes	offtake
 ofuregaki	ofuregaki
+ogashoya	ogashoya
+ojoya	ogashoya
 okaji	ōkaji
 okajiba	ōkaji
 omamori	omamori
@@ -1301,6 +1306,8 @@ puddled	puddling
 puddling	puddling
 purlin	purlin
 purlins	purlin
+purveyor merchant	purveyor merchant
+purveyor merchants	purveyor merchant
 qi	qi
 qiandao	qiandao
 qianlong	Qianlong
@@ -1597,6 +1604,8 @@ suzaku ōji	Suzaku-oji
 suzaku-oji	Suzaku-oji
 suzaku-ōji	Suzaku-oji
 sward	sward
+sword hunt	sword hunt
+sword hunts	sword hunt
 tagoshi	tagoshi kangai
 tagoshi kangai	tagoshi kangai
 taiho	Taiho code
@@ -1693,6 +1702,8 @@ toro	Toro
 toro site	Toro
 toshiyori	toshiyori
 total length and fall	fall
+town elder	toshiyori
+town elders	toshiyori
 town grain	town grain
 town ground	town ground
 town grounds	town ground
@@ -1896,6 +1907,7 @@ zooplankton	zooplankton
 zuku	zuku
 zushi nikai	half-story
 ō-aza	ō-aza
+ōgashoya	ogashoya
 ōiya	ōiya
 ōkaji	ōkaji
 ōkajiba	ōkaji

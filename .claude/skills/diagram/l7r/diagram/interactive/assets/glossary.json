@@ -6638,9 +6638,12 @@
   ]
  },
  "toshiyori": {
-  "def": "At a post station, the deputy officers who helped the headman run the relay office (toiyaba).",
+  "def": "An elder: at a post station, the deputy officers who helped the headman run the relay office (toiyaba); in a castle town, the town elder (machi-doshiyori), the leading townsman who ran the town's commoner affairs for the lord.",
   "variants": [
-   "toshiyori"
+   "toshiyori",
+   "machi-doshiyori",
+   "town elder",
+   "town elders"
   ]
  },
  "chōtsuke": {
@@ -7391,6 +7394,30 @@
   "variants": [
    "back-to-back drain",
    "back-to-back drains"
+  ]
+ },
+ "ogashoya": {
+  "def": "A senior headman set over a group of villages, above the ordinary shoya - one of the commoner offices that did the auxiliary work of rule, and so could be granted a warrior's privileges.",
+  "variants": [
+   "ogashoya",
+   "ōgashoya",
+   "ojoya"
+  ]
+ },
+ "sword hunt": {
+  "def": "The state policy that took weapons from farmers, after which carrying a sword became in principle a privilege of the warrior status alone.",
+  "variants": [
+   "sword hunt",
+   "sword hunts",
+   "katanagari"
+  ]
+ },
+ "purveyor merchant": {
+  "def": "A merchant house licensed to supply a daimyo or the shogunate - one of the commoner groups that could be granted the surname and the sword.",
+  "variants": [
+   "purveyor merchant",
+   "purveyor merchants",
+   "goyo shonin"
   ]
  }
 }
