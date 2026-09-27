@@ -603,7 +603,8 @@
  "azemichi": {
   "def": "A walking bund: the wider paddy bund, two to five feet across, that carries a path, as against the ordinary foot-wide dividing bund.",
   "variants": [
-   "azemichi"
+   "azemichi",
+   "nawate"
   ]
  },
  "azenuri": {
@@ -6174,6 +6175,33 @@
   "variants": [
    "Morisada manko",
    "Morisada mankō"
+  ]
+ },
+ "yamen-god": {
+  "def": "The god of the government office itself, whose small temple a Chinese county yamen kept inside its walls beside the earth-god shrine.",
+  "variants": [
+   "yamen-god",
+   "yamen god"
+  ]
+ },
+ "jail-god": {
+  "def": "The deity of a Chinese yamen's jail, enshrined in a small temple inside the jail itself; at Neixiang the statue is of the ancient judge Gao Yao.",
+  "variants": [
+   "jail-god",
+   "jail god"
+  ]
+ },
+ "Dacheng gate": {
+  "def": "The gate before the main hall of a Chinese Confucian temple; the shrines to meritorious local officials and to local worthies stood outside it, one on each side.",
+  "variants": [
+   "Dacheng gate"
+  ]
+ },
+ "Important Cultural Property": {
+  "def": "Japan's national designation for a single building or object protected for its historic value; Shibata's foot-soldier row house is one.",
+  "variants": [
+   "Important Cultural Property",
+   "Important Cultural Properties"
   ]
  }
 }

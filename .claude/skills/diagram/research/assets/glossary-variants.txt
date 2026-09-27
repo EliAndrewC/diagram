@@ -243,6 +243,7 @@ cutbanks	cutbank
 cyanobacteria	cyanobacterium
 cyanobacterium	cyanobacterium
 dachedian	wagon inn
+dacheng gate	Dacheng gate
 daidokoro	daidokoro
 daihachiguruma	daihachiguruma
 daijokan	Daijokan
@@ -617,6 +618,8 @@ igune	igune
 imperial spine	Imperial spine
 important cultural landscape	Important Cultural Landscape
 important cultural landscapes	Important Cultural Landscape
+important cultural properties	Important Cultural Property
+important cultural property	Important Cultural Property
 inari	Inari
 inashiro	Inashiro
 inkyo	inkyo
@@ -651,6 +654,8 @@ isotherm	isohyet
 isotherms	isohyet
 itabashi	itabashi
 jagama	jagama
+jail god	jail-god
+jail-god	jail-god
 japanese zelkova	keyaki
 jetties	jetty
 jetty	jetty
@@ -952,6 +957,7 @@ natural levees	natural levee
 natural village	natural village
 natural villages	natural village
 nawabari	nawabari
+nawate	azemichi
 naya	naya
 near-monospecific	monospecific
 neige	neige
@@ -1515,6 +1521,8 @@ yagura	yagura
 yaita	yaita
 yam	yam
 yamen	yamen
+yamen god	yamen-god
+yamen-god	yamen-god
 yashiki	yashiki
 yashikigami	yashikigami
 yashikigami-sama	yashikigami
