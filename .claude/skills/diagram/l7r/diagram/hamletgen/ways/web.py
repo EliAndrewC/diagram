@@ -561,6 +561,10 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # AND READ THE JOINTS AS ONE WAY (GM 2026-09-26): two records meeting end to end are one lane to the walker;
     # a fold there becomes a T and a jog is pulled straight. Last, because every pass above can lay a joint.
     straighten_joints(s, hard_built, walls, list(plan.watercourses) + drawn_water)
+    # ...AND THE ENDS ARE ASKED ONCE MORE, after the joints are read as one way (feature 261). An end that reached the lane it
+    # was about to be joined to passed the sweep above and was left, after the join, reaching only its own lane: Mizuguchi's
+    # (558, 1096) stood 56 ft from lane 2's end until the two became one lane, and then 104 ft from anything.
+    _sweep_dangling_ends(s)
     s.M["meta"]["lane_web"] = plan.lane_web
 
 

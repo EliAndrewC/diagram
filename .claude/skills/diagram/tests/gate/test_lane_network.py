@@ -77,7 +77,9 @@ def lanes(rolled):
 
 
 def _field_rings(M) -> list:
-    return [[(float(a), float(b)) for a, b in (f.get("outline") or [])] for f in (M.get("fields") or [])]
+    from l7r.diagram.hamletgen.ways.sweeps import worked_ground_rings
+
+    return worked_ground_rings(M)  # the sweep's own field, dry hem included (feature 261)
 
 
 def _dangling_ends(M, ways) -> list:

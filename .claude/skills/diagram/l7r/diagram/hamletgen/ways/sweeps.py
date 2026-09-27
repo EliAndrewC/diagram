@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 import math
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
+from typing import Any
 
 from l7r.diagram.settlement import Settlement, edge_dist, seg_closest, seg_dist
 
@@ -484,6 +485,15 @@ def _keep_the_route_wide(s: Settlement, hard: list[Poly], walls: Sequence[Poly],
     return closed
 
 
+def worked_ground_rings(M: Mapping[str, Any]) -> list[list[Pt]]:
+    """The field a way may END at: the paddy's outlines AND its dry hem, which is worked ground of the same field (feature
+    261: Mizuguchi's spur crossed the brook and stopped at the hem plots between the water and the paddy, 108 ft from the
+    paddy's own outline, and was dropped as an end in open ground - the hamlet's only way to its rice). One definition,
+    read by the sweep that trims ends and by the gate that checks them."""
+    rings = [[(float(a), float(b)) for a, b in (f.get("outline") or [])] for f in (M.get("fields") or [])]
+    return rings + [[(float(a), float(b)) for a, b in (d.get("poly") or [])] for d in (M.get("dry_plots") or []) if d.get("poly")]
+
+
 def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
     """Pull back any lane end that reaches NOTHING, and empty what is left if pulling back cannot save it.
 
@@ -496,11 +506,7 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
     `_sweep_debris`'s rule to finish. A connector is exempt: it leaves the map by design."""
     lanes = s.M.get("lanes") or []
     houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])]
-    rings = [[(float(a), float(b)) for a, b in (f.get("outline") or [])] for f in (s.M.get("fields") or [])] or [list(f) for f in fields]
-    # ...AND ITS DRY HEM, which is worked ground of the same field (feature 261): Mizuguchi's spur crossed the brook and
-    # stopped at the hem plots between the water and the paddy, 108 ft from the paddy's own outline, and was dropped here
-    # as an end in open ground - the hamlet's only way to its rice.
-    rings += [[(float(a), float(b)) for a, b in (d.get("poly") or [])] for d in (s.M.get("dry_plots") or [])]
+    rings = worked_ground_rings(s.M) or [list(f) for f in fields]
     fixed, emptied = 0, []
     for i, ln in enumerate(lanes):
         if ln.get("connector"):

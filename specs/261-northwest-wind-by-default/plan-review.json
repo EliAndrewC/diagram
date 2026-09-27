@@ -1,6 +1,6 @@
 {
  "feature": "261-northwest-wind-by-default",
- "plan_sha256": "6f46d97c87a744dc927cca67b0b4a37a474edfe1d1dd1c2d27ea39d6d22035e0",
+ "plan_sha256": "282ba120b8dd01a40b6e86916e80d40ee68f3d3273255fe29b4e826bed2db64c",
  "reviewed": "2026-09-27",
  "declared": "spec-fidelity",
  "decisions": [
@@ -8,135 +8,183 @@
    "id": "D1-default-constant-declaration-only-override",
    "summary": "plan_site takes spec.windward or DEFAULT_WINDWARD ('NW'); windward_for and WIND_TURNS deleted; HamletSpec.windward is the declaration; the manifest records wind_source = declared | regional.",
    "class": "within",
-   "why": "Unchanged by the amendment. FR-001, FR-002, FR-003, FR-007 and the request's first two proposal bullets ('only when declared as the default')."
+   "why": "Unchanged. FR-001, FR-002, FR-003, FR-007 and the request ('only when declared as the default')."
   },
   {
    "id": "D2-45-degree-bar",
-   "summary": "seat_cluster refuses a margin whose outward normal is more than 45 degrees off the wind (WIND_BACK_MIN_DOT = cos 45), recorded at the constant as a map convention.",
+   "summary": "seat_cluster refuses a margin whose outward normal is more than 45 degrees off the wind (WIND_BACK_MIN_DOT = cos 45).",
    "class": "within",
    "why": "Unchanged. FR-004 states the 45-degree bar itself."
   },
   {
    "id": "D2-offwind-last-fallback",
-   "summary": "A margin under the bar is kept in an offwind list used only when no wind-facing margin exists; recorded as meta.seat_offwind; the pool test fails any pool map that carries it.",
+   "summary": "A margin under the bar is used only when no wind-facing margin exists; recorded as meta.seat_offwind; forbidden on every pool map by the pool test.",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Re-examined against the GM's 2026-09-27 ruling ('fix the placement algorithm instead'), and the earlier ruling stands. With the brook strike-out retired (D3), what is left to refuse a wind-facing margin is the seat's hard constraints (dwellings above the drain, off the wet toe), which FR-010 keeps and the record supports (R2, R7). Where they rule out every wind-facing margin the literal rule is physically impossible, and the only alternatives are no map or renaming the wind, which is the behavior the GM asked to end. The fallback never renames the wind, is recorded on the map, and is forbidden on every pool map, so FR-004's pool clause holds. One debt for the hand-off: the fallback's reach outside the pool (22 of 48 cohort seeds) is R4's measurement under the RETIRED strike-out order. The GM should get the count on the amended engine, not that one."
+   "why": "Unchanged ruling. With the strike-out retired, the only things left that refuse every wind-facing margin are the seat's hard constraints (drain, wet toe), which FR-010 keeps and the record supports. Where they refuse every such margin, the literal rule is physically impossible, and the only alternative, renaming the wind, is the behavior the GM asked to end. The fallback never renames the wind, is recorded on the map, and is forbidden on the pool, so FR-004's pool clause holds. The debt from the previous review is paid: T21 records the count on the amended engine, 3 of 48 cohort seeds off-wind. The GM gets that number in the hand-off."
   },
   {
    "id": "D3-brook-scored-never-a-tier",
-   "summary": "Seat order is clean wind-facing, then off-wind; feature 230's strike-out (a divided margin used only when every margin is divided) is retired; a margin the brook crosses is scored down (score -= 3.0 x the fraction of band sample points within 30 ft of the brook) so an uncrossed one wins ties; the byre/well/garden-across-the-water failure moves to a farmstead rule (D10).",
+   "summary": "Order is clean wind-facing, then off-wind; feature 230's strike-out retired; a margin the brook crosses is scored down by 3.0 x the share of band points near the brook; the across-the-water failure moves to D10.",
    "class": "within",
-   "why": "This carries the GM's 2026-09-27 ruling and FR-012 ('A seat MUST NOT be refused ... when a crossing can be drawn'). A penalty is a preference and never a refusal: Kashikawa seats across the brook from its field (0 / 20) and Mizuguchi seats astride it (4 / 8) at their original seeds (R7). The spec's Decisions Recorded row names this penalty ('seat_cluster's penalty comment'). Checked in cluster.py: the strike-out is gone, the penalty is 3.0 x a crossed fraction, and the off-wind list is the only remaining tier. Wording nit: the plan says 'per crossing' where the code scales by a fraction of sample points. The MODE 1 refusals the plan cites were of a wind-first order ahead of the strike-out. With the strike-out retired by the GM, nothing is left for that order to be an exception to."
+   "why": "The GM's 2026-09-27 ruling and FR-012 (no refusal when a crossing can be drawn). A penalty is a preference, not a refusal. The previous wording nit ('per crossing') is fixed and now matches the code."
   },
   {
    "id": "D4-seeds-original-kept-sawada-24",
-   "summary": "Inashiro 4, Kuwabata 21, Kashikawa 3 and Mizuguchi 23 kept (the two re-seeds 8 and 27 undone); Sawada 6 -> 24 kept, seed 6 refused by the drain and the wet toe; nothing from the 'When no seed works' list done; the pool test holds the belt's bearing and a 200-degree arc.",
+   "summary": "Inashiro 4, Kuwabata 21, Kashikawa 3, Mizuguchi 23 kept; Sawada 6 -> 24 on the drain and wet toe; the pool test holds bearing and a 200-degree arc.",
    "class": "within",
-   "why": "This is exactly the amended Edge Case, which the spec round asked for: measure Kashikawa at 3 and Mizuguchi at 23 once crossings exist, and return each to it unless a research-supported refusal is recorded. Sawada's 24 stands on FR-010. It also matches the GM's ruling, since no seed is changed to route around the engine. Verified in the generators: kashikawa.gen.py seed=3 (households 20, down_deg 315, offmap, brook_side -1 kept), mizuguchi.gen.py seed=23, sawada.gen.py seed=24. R7 records 20/20 and 12/12 at the originals. The 200-degree arc assertion fails only when the belt is not on the north and west, so it enforces the request and is not scope. Citation nit: D4 attributes '285 crowns at 320 degrees' to R7, but that row is R5's table."
+   "why": "Exactly the amended Edge Case and SC-008. No seed is moved to route around the engine. The citation nit (R5 for the belt) is fixed."
   },
   {
    "id": "D5-popup",
-   "summary": "place.windbreak_default(meta) states the belt's side and whether the wind is regional or declared; a manifest without wind_source gets nothing added; the class What drops 'high side'; Entry names vegetation/030.",
+   "summary": "windbreak_default(meta) states the belt's side and whether the wind is regional or declared; class What drops 'high side'; Entry names vegetation/030.",
    "class": "within",
-   "why": "Unchanged. FR-008, US3 and the request's pop-up bullet. The frozen legacy pool is out of scope in the spec."
+   "why": "Unchanged. FR-008, US3."
   },
   {
    "id": "D6-record-and-docs",
-   "summary": "research/vegetation/030's false 'northwest by default' paragraph rewritten to the rule as built with re-measured arcs; the kisetsufu-jawiki gloss corrected; hamletgen.md, indexes and the five notes files updated.",
+   "summary": "vegetation/030 rewritten to the rule as built with re-measured arcs; gloss corrected; hamletgen.md, indexes, five notes files.",
    "class": "within",
-   "why": "Unchanged. FR-009, US4 and the request's fourth proposal bullet."
+   "why": "Unchanged. FR-009, US4."
   },
   {
    "id": "D7-divided-test-fixed-then-retired",
-   "summary": "brook_banks() fixed the divided test (XIV), then was retired with the strike-out; bank_of() in homesteads/stages.py remains the engine's one side test.",
+   "summary": "brook_banks() fixed the divided test, then was retired with the strike-out; bank_of() remains.",
    "class": "within",
-   "why": "A consequence of D3. It removes a test whose only consumer the GM's ruling retired, and it narrows nothing that was asked."
+   "why": "Unchanged. A consequence of D3 that narrows nothing."
   },
   {
    "id": "D8-knob-exhibits-declared-and-stay-declared",
-   "summary": "Kashikawa bamboo=both, Mizuguchi byre_form=courtyard and copse_siting=against_the_belt, Sawada lane_web=alleys stay declared although two maps are back on their original seeds; HamletSpec.byre_form pinned onto the settlement engine's knob.",
+   "summary": "Kashikawa bamboo=both, Mizuguchi byre_form=courtyard and copse_siting=against_the_belt, Sawada lane_web=alleys stay declared; HamletSpec.byre_form added.",
    "class": "within",
-   "why": "The request's only 'declared' constraint is the wind, and no wind is declared. The spec keeps a map's declared knobs. These declarations pin the value each map showed on main, so they do not move a map away from itself, and they keep each knob value exhibited somewhere in the pool (FR-006's full gate: the coverage floor failed without them, R6). Verified in the generators: the four declarations are present and no windward field appears. They change nothing about the wind or the seat."
+   "why": "Unchanged. The request's only 'declared' constraint is the wind, which stays undeclared. These declarations pin values the maps showed before and touch neither the wind nor the seat."
   },
   {
    "id": "D9-fords-and-plank-crossings",
-   "summary": "brook_fords marks a crossing place every 160 ft where the brook bends under 20 degrees; the no-route corridor opens 30 ft each side of each ford; the field spur routes through the nearest ford when its line would cross the water; bridges() decks every crossing; far_bank, the strike-out and the brook re-roll deleted.",
+   "summary": "brook_fords every 160 ft where the brook bends under 20 degrees; a 30 ft corridor gap each side of each ford; the spur routed through a ford; bridges() decks every crossing; far_bank, the strike-out and the brook re-roll deleted.",
    "class": "within",
-   "why": "This is what the GM approved on 2026-09-27: 'let ways cross the brook with a plank footbridge'. It also carries FR-011 (crosses squarely, a plank at every crossing) and FR-012. Limiting crossings to straight reaches is how 'squarely' is met, and the 160 ft spacing is a calibration. The spec's Decisions Recorded labels both as a guess with an absence note. R7 measures 19-28 fords per map, and the maps that need a crossing have one. The restriction to fords does not reintroduce a seat refusal, because the seat never consults the brook except through D3's penalty."
+   "why": "Unchanged. This is what the GM approved ('let ways cross the brook with a plank footbridge'), with FR-011 and FR-012. The spacing and bend limit are the guess the spec's Decisions row records (m:ford-spacing re-measured at 160)."
+  },
+  {
+   "id": "D9b-crossing-priced",
+   "summary": "The route lattice charges BROOK_CROSSING_COST_FT (150 ft, a guess recorded in water/270) for entering the brook's band, and the string-pull may not undo a crossing the lattice avoided (Kashikawa's lane crossed and recrossed to reach a house on its own bank). The band is kept as brook points in a 20 px bucket grid.",
+   "class": "within",
+   "why": "FR-011 says a way MUST be able to cross 'where the layout needs it'. A price keeps crossings available and takes away only the needless ones, like R9's cross-and-back lane. Nothing is refused: a way that has to cross still crosses when every other route costs more. No household, field path or seat loses anything FR-012 guarantees. It is a defect fix on the maps this feature re-rolled (US6, constitution XIV). The 150 ft is a guess, and the plan says so."
+  },
+  {
+   "id": "D9c-every-crossing-squared",
+   "summary": "stage_crossings squares every crossing more than 10 degrees off square (square_crossings), in the record and the ink together, before bridges() lays the deck.",
+   "class": "within",
+   "why": "FR-011 requires every way to cross the brook 'squarely'. R9 records a crossing 52 degrees off square before the fix and 0 after, so the decision enforces the requirement itself. The 10-degree tolerance is calibration of 'squarely', not a carve-out."
   },
   {
    "id": "D10-farmstead-whole-on-one-bank",
-   "summary": "Settlement._parts_fit refuses a homestead configuration whose house-to-part line (yard, garden bed, kura) crosses a stream; farmstead_fixtures refuses a fixture or persimmon seat on the same test; labeled a guess with an absence note in research/homesteads/250.",
+   "summary": "_parts_across_stream and across_the_brook refuse a part or fixture across a stream from its house; labeled a guess with an absence note in homesteads/250.",
    "class": "within",
-   "why": "This implements FR-013 as written, which the amendment round judged to serve the ruling: it replaces the strike-out's purpose with a placement rule rather than a seat refusal. The GM's ruling forbids routing around configurations known to be valid. The record is silent on a farmstead split by its channel (the research pass of 2026-09-27), so this configuration is not known to be valid, and the rule is honestly labeled a guess, as the spec's Decisions row requires. Verified at fit.py _parts_across_stream and fixtures.py across_the_brook."
+   "why": "Unchanged. FR-013 as written, and a placement rule rather than a seat refusal."
   },
   {
    "id": "D11-copse-within-reach",
-   "summary": "village_grove takes near=(points, reach): the dooryard copse within 90 ft of a farmhouse, the against-the-belt copse within 60 ft of a belt crown, every clump (the re-seat nudge's included) asked of one Seats index.",
+   "summary": "The dooryard copse within 90 ft of a farmhouse, the against-the-belt copse within 60 ft of a belt crown, the re-seat nudge included.",
    "class": "within",
-   "why": "This is FR-014 and SC-010, a constitution XIV fix of a review finding on the maps this feature re-rolled. The reaches are the calibration the spec's Decisions row records. Figure nit: '1,210 ft wood' in D11 carries no pointer or one-shot label and does not appear in R8, which records 393 crowns at a median of 167 ft."
+   "why": "FR-014 and SC-010. The figure nit is fixed: the plan now says 393 crowns at a median of 167 ft (R8), and m:copse-house-reach re-measured at 90."
   },
   {
-   "id": "D12-entrance-board",
-   "summary": "stage_notice's re-seat and place_kosatsuba rank any lane with a point within twice KOSATSUBA_ANCHOR_BAND_FT of the anchor; kosatsuba_anchor falls back to the approach's point nearest the houses when no run reaches the entrance reach.",
+   "id": "D12-board-where-every-departure-passes",
+   "summary": "Where the connector hands over to the lanes, that junction is the entrance anchor. departure_routes walks every dwelling's way out through the lanes to the handover and out along the connector. Both placers keep first the seats the fewest routes miss (routes_missed, 20 ft), then those within KOSATSUBA_HANDOVER_BAND_FT (20 ft) of the handover, and the connector is offered as a way to post on. The census counts ways out that pass an entrance board. A connector that meets no other way keeps the first-arrival walk.",
    "class": "within",
-   "why": "FR-015 and SC-011, a constitution XIV fix. The anchor fallback still puts the board on the approach where it meets the houses, so it keeps the board at the entrance rather than narrowing FR-015."
+   "why": "FR-015 says, word for word, 'on the way the connector meets, within the entrance band - so every departure passes it'. The handover is the one point every departure passes, so this decision puts FR-015's own purpose into code rather than a proxy for it. 'Fewest missed' ranks the seats. It does not excuse a board that some routes miss: test_pool_261 asserts routes_missed == 0 on every entrance map. I checked the one possible silent exclusion, departure_routes skipping a dwelling more than 150 px from any lane. It routes every household on all five maps (15/15, 20/20, 16/16, 12/12, 19/19). The first-arrival case is a connector with no other way to meet: there the connector is the only way, so FR-015's anchor clause has no junction to name. The census change serves FR-018, since the notes now state what the board is sited for."
   },
   {
    "id": "D13-brook-unfold",
-   "summary": "unfold(course, BROOK_MAX_TURN_DEG) deletes a brook vertex that turns more than 100 degrees.",
+   "summary": "unfold deletes a brook vertex turning more than 100 degrees.",
    "class": "within",
-   "why": "FR-017 and SC-013. The mechanism applies to any vertex, not only at the frame, so it is broader than FR-017's words. It is a drawing-defect fix (constitution XIV) that narrows nothing the GM or the spec asked for. On the pool only Sawada's exit (123 degrees) exceeded the limit, and every map's sharpest turn is 41-95 afterwards (R8)."
+   "why": "Unchanged. FR-017, SC-013."
   },
   {
    "id": "D14a-belt-depth-test-and-its-unjudged-bins",
-   "summary": "The pool test measures belt depth along the wind in 40 ft bins and holds every bin to 30 ft, except bins a way or the brook runs THROUGH (inside the belt's thickness) and bins the page edge cuts.",
+   "summary": "The pool test holds every 40 ft bin to 30 ft of depth except bins a way or the brook runs through and bins the page edge cuts.",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "FR-016 says 'no stretch thinner', and the test leaves three kinds of bin unjudged, so each is ruled separately. (1) Page edge: the frame, not the belt, truncates the drawn depth, and the belt is unmeasurable beyond it. (2) The brook: trees cannot stand in the water, and the GM's ruling puts the brook through the place. (3) A way through the belt: a crossing lane must part it, and the test does NOT exempt a lane along the belt's inner face. The spec's own Decisions row states the same carve-out ('wherever no way, brook or page edge cuts it'), and depth is not in the GM's words but is a constitution XIV finding. I measured whether the carve-out hides a thin stretch, re-running belt_depths on the five shipped manifests with lanes and streams removed. Every bin exempted only for a way or the brook reads at least 43 ft (Inashiro 102, 72; Kuwabata 83-144; Mizuguchi 73, 57; Sawada 43) or 0 crowns (Kashikawa, a parting, not a thin row). So the carve-out hides nothing that FR-016 is for. A way running lengthwise inside the belt would be exempted too; none does on the pool."
+   "why": "Unchanged ruling, each case judged on its own: the page edge truncates what can be measured; trees cannot stand in the brook, which the GM's ruling puts through the place; a way crossing the belt has to part it. The spec's own Decisions row carries the same carve-out, and the earlier measurement found nothing thin hidden in the exempted bins."
   },
   {
    "id": "D14b-popup-names-a-direction",
-   "summary": "The windbreak pop-up says the belt stands 'toward the northwest' of the houses (or toward a declared quarter) rather than 'on the north and west'; the class text says 'on the windward one or two sides'.",
+   "summary": "The pop-up says the belt stands 'toward the northwest'; the class text says 'on the windward one or two sides'.",
    "class": "within",
-   "why": "FR-008 (the side and why) and FR-016's second clause (never name a side the belt does not occupy, which Kuwabata's west strip did) together. It still gives the GM's complaint its answer: a direction and a reason on every map, and a declared local wind named as departing from the regional northwest. Verified at place.py windbreak_default, lines 290-292. It reads as US3 scenario 1 in meaning, reconciled with the later FR-016."
+   "why": "Unchanged. FR-008 read together with FR-016's second clause."
+  },
+  {
+   "id": "D15-field-path-reaches-the-field",
+   "summary": "The spur's origin stops on the houses' bank, short of a stream it would cross; the spur is scored against the brook gapped at the fords; trim_lane_stubs leaves the spur to the sweeps that record a drop; the dangling-ends sweep counts the dry hem, as well as the paddy, as the field.",
+   "class": "within",
+   "why": "FR-012 ('at least one way reaches the field') and SC-008 ('every hamlet whose field is across the brook has a way that reaches it'). Each of the three fixes removes something that stopped the engine from drawing the crossing the GM's ruling asks for: fix the algorithm, not the seat. On the dry hem: the hem plots are worked ground of the same field (the spec's Edge Case names them as cropland beside 'the crop'), and a path ending at the field's cultivated hem has reached the field on a plain reading. test_pool_261 test_a_way_reaches_the_field holds a way within 60 ft of the paddy or the hem on every map whose field lies across the brook. Wording nit: the plan says each of the three maps gets 'its one way to the rice', but Mizuguchi's spur stops at the hem, which the code comment puts 108 ft from the paddy outline. 'To the field' is the accurate phrase."
+  },
+  {
+   "id": "D16-seg-intersect-misuses",
+   "summary": "ford_crossing, path_violations (the brook term and the twice-bridged count) and the first square_crossings used seg_intersect (a line test) as a segment-crossing test; each now tests segments_cross first; the connector bearings changed on four maps, and the notes' district directions were re-read from the drawn tracks.",
+   "class": "within",
+   "why": "A constitution XIV defect fix found in this work. It narrows nothing: it removes false crossings that pushed every spur to a ford and scored violations on connectors. The re-read district directions serve FR-018."
+  },
+  {
+   "id": "D17a-brook-turns-off-the-frame",
+   "summary": "brook_skirt turns the brook off the frame where the frame box would pin it, after half its stations; Sawada's 457 ft ruled along the top margin is now 66 ft, held by a pool test that fires on the old manifest.",
+   "class": "within",
+   "why": "A settlement-review finding on a map this feature re-rolled (US6, SC-014), measured against the GM's own standing 2026-08-26 ruling. m:sawada-brook-ruled re-measured at 457 (the old manifest's value, which the test fires on). The test only fails when the ruled run is present, so it enforces the request rather than adding scope."
+  },
+  {
+   "id": "D17b-shape-declared-only-past-rounds-ceiling",
+   "summary": "A non-round cluster shape is recorded as honored only past round's aspect ceiling (2.0). Inashiro's rolled crescent, drawn at 1.97, is now recorded meta.cluster_shape_unhonored.",
+   "class": "within",
+   "why": "FR-018: declarations must match what the map draws. Inashiro's manifest claimed a crescent that the map draws as a round cloud, and the recording mechanism for an unhonored rolled shape already existed (Kashikawa since 2026-08-16). The decision closes the 1.9-2.0 overlap that let a round drawing claim to be a crescent. It is not the route-around the GM forbade: no seed, seat or declaration was changed to dodge the engine, and the shape is a rolled knob that the spec never required a map to honor. Hand-off point for the GM, not a block: before this feature Inashiro, the reference hamlet, drew its crescent honored (notes: drawn aspect 2.49-3.25). At the new wind-facing seat it draws a round cloud, and the pool now honors a non-round shape on no map (manifests: Inashiro, Kashikawa, Mizuguchi and Sawada unhonored, Kuwabata round). Whether the placer should be made to draw the rolled shape at a wind-facing seat is the GM's 'fix the placement algorithm' question, and they should see it."
+  },
+  {
+   "id": "D17c-scrub-keepout-hull",
+   "summary": "The scrub's settlement keep-out is the hull of the houses and farmstead parts grown by 44 ft, not the bbox of the house centers.",
+   "class": "within",
+   "why": "Review findings on re-rolled maps (Sawada's rectangular clearing, Kuwabata's privy in the scrub): US6, SC-014, constitution XIV."
+  },
+  {
+   "id": "D17d-board-caption-on-page",
+   "summary": "A board's caption is seated on the page when any seat allows.",
+   "class": "within",
+   "why": "A review finding (Kashikawa's caption clipped off the page): US6, SC-014."
+  },
+  {
+   "id": "D17e-rolls-staged-then-promoted",
+   "summary": "generate finishes each attempt into a stage beside the map and promotes only the kept one.",
+   "class": "within",
+   "why": "A constitution XIV defect in the tooling: the gate's census read a rejected Sawada attempt, which made FR-006's 'pass the full gate' unreliable. It changes no map and narrows nothing."
   },
   {
    "id": "CC-XII-sources",
-   "summary": "The XII row says no new source is used and no source-reader or applicability run is owed.",
+   "summary": "The XII row now records T13 and T15's research passes, the two guesses with absence notes, and mizu-no-bunka-60 judged APPLICABLE-WITH-LIMITS.",
    "class": "within",
-   "why": "It narrows nothing, but it is stale: tasks T13 and T15 (research/water/270, research/homesteads/250) are research: physical with source-reader and applicability boxes. The row should say so. That is a record fix, not a narrowing."
+   "why": "The stale row the previous review flagged is fixed, and it matches T13 and T15's ticked boxes."
   },
   {
    "id": "CC-XIII-cohort-baseline",
-   "summary": "48-seed cohort baseline 37/48 (R3) and final 38/48 (R5), every final failure also failing on the baseline; T21 re-runs it on the amended engine.",
+   "summary": "Baseline 37/48 (R3), amended engine 38/48 (R5, T21), every failure also failing on the baseline; 0 farmstead parts across the brook on the cohort.",
    "class": "within",
-   "why": "The spec's cohort Edge Case and constitution XIII. SC-009 also asks for 0 parts across the brook on the cohort, and T21 is where that count belongs."
+   "why": "The spec's cohort Edge Case and SC-009."
   },
   {
-   "id": "CC-XIV-defects-fixed",
-   "summary": "The divided test (D7) and make record's notes-only edit fixed; the amendment's D10-D14 are review findings fixed in this work.",
+   "id": "CC-XIV-XVI-record",
+   "summary": "Defects fixed in the work (D7, make record, D10-D17); the wind never renamed; the two MODE 1 refusals and the GM's ruling recorded; the off-wind last resort raised with the GM.",
    "class": "within",
-   "why": "Constitution XIV fixes. None narrows the request."
-  },
-  {
-   "id": "CC-XVI-record",
-   "summary": "The wind is never renamed and no map declares one; the two MODE 1 refusals are recorded; the GM's 2026-09-27 ruling made the brook crossable and undid two re-seeds; the off-wind last resort is recorded, forbidden on the pool and raised with the GM.",
-   "class": "within",
-   "why": "A record of the rulings and the D2 fallback's routing to the GM, consistent with D2, D3 and D4 as reviewed above."
+   "why": "Consistent with D2-D4 and D9-D17 as reviewed above."
   },
   {
    "id": "Perf-and-index",
-   "summary": "One dot product per margin; the fords are a short per-map list cut into the brook corridor once; D10 is one segment test per part per configuration; stage-time moves judged by make done's ratchet.",
+   "summary": "One dot product per margin; fords a short list cut into the corridor once; the crossing band kept once per roll in a 20 px bucket grid asked per lattice cell; D10 one segment test per part.",
    "class": "within",
-   "why": "No overlap check is added that owes an index. R7 records 19-28 fords per map."
+   "why": "The new crossing price states how it is indexed (the bucket grid), as the project rule asks. It narrows nothing."
   },
   {
    "id": "Phases-1-6",
-   "summary": "Engine (D1-D3, D9-D14), measurement (R1-R6), pool, page, record, acceptance (make done, one settlement-review per map, the cohort).",
+   "summary": "Engine (D1-D3, D9-D14), measurement, pool, page, record, acceptance.",
    "class": "within",
-   "why": "Each phase carries requirements of the accepted spec or the standing acceptance rules; only the five scripted hamlets are re-rolled or reviewed."
+   "why": "Each phase carries a spec requirement or a standing acceptance rule. Record nit: phase 1 still lists 'D9-D14' although D15-D17 are engine work, and tasks.md's header (D1-D6, R0-R4) and T17's verify note describe the superseded D12. T24 carries the new work, so this is bookkeeping, not fidelity."
   }
  ],
  "verdict": "CLEAR"

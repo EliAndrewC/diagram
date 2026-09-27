@@ -1,6 +1,6 @@
 # Tasks - feature 261, the wind is northwest unless a map declares otherwise
 
-Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D6). Research: [`research.md`](research.md) (R0-R4).
+Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D17). Research: [`research.md`](research.md) (R0-R9).
 American spellings, hyphens only.
 
 **No task here is `research: physical`.** The northwest default and the katabatic reading are already cited in
@@ -87,7 +87,7 @@ entry (T10).
       verify: DONE. DONE. village_grove near=(points, reach), the re-seat nudge included; copse within 90 ft of a house (m:copse-house-reach) or 60 ft of the belt; test_pool_261 holds it on all five maps (medians 63-72 ft), test_homestead_parts the nudge.
 - [x] T17 The entrance board offered the way that meets its anchor (D12)
       research: rendering
-      verify: DONE. DONE. stage_notice and place_kosatsuba rank lanes meeting the anchor; kosatsuba_anchor falls back to the approach point nearest the houses; entrance boards 65-139 ft from their anchors, each within 100 ft of a house (test_pool_261); Sawada was 669 ft.
+      verify: DONE. DONE. stage_notice and place_kosatsuba rank lanes meeting the anchor; kosatsuba_anchor falls back to the approach point nearest the houses (Sawada was 669 ft from its anchor). Superseded in T24 by the handover anchor and the routes every departure walks (plan D12).
 - [x] T18 The brook never doubles back (D13)
       research: rendering
       verify: DONE. DONE. unfold(course, BROOK_MAX_TURN_DEG=100) in water/brook.py; test_water unit test; sharpest turns Inashiro 41, Kashikawa 53, Mizuguchi 53, Sawada 95 (was 123); test_pool_261 holds it.

@@ -191,7 +191,7 @@ the brook's far bank (`_cluster_edge_toward` now stops short of a stream it woul
 brook, so a crossing at a ford counted as a violation (scored against the brook gapped at the fords); and the stub trim
 read its field end as a dead end (`trim_lane_stubs` now leaves the spur, like the connector, to the sweeps that record a
 drop), while the dangling-ends sweep counted only the paddy, not the dry hem, as the field. Inashiro, Kashikawa and
-Mizuguchi each get their one way to the rice.
+Mizuguchi each get their one way to the field.
 
 ### D16 - Three misuses of `seg_intersect` fixed (constitution XIV)
 
@@ -203,8 +203,10 @@ notes' district directions were re-read from the drawn tracks.
 
 ### D17 - What the reviews found beside the crossings
 
+Measured before and after in research R9.
+
 - The brook turns off the frame where the frame box would pin it (`brook_skirt`), after half its stations: Sawada ran
-  457 ft level along the top margin (the GM's 2026-08-26 ruling); now 66 ft, held by a pool test that fires on the old
+  457 ft level along the top margin (`m:sawada-brook-ruled`; the GM's 2026-08-26 ruling); now 66 ft, held by a pool test that fires on the old
   manifest.
 - A shape other than round is declared only past round's aspect ceiling: Inashiro's 1.97 was declared a crescent and
   reads as a round cloud; it is recorded unhonored.
@@ -213,10 +215,12 @@ notes' district directions were re-read from the drawn tracks.
 - A board's caption is seated on the page when any seat allows (Kashikawa's was clipped past the left edge).
 - `generate` finishes every attempt into a stage beside the map and promotes only the kept one, so a concurrent reader
   never sees a rejected roll (the gate's census read Sawada's first attempt).
+- The web's dangling-ends sweep runs once more after `straighten_joints`: an end that reached the lane it was then joined
+  to was left reaching only its own lane (Mizuguchi).
 
 ## Phases
 
-1. Engine: D1, D2, D3 with their unit tests (plan, cluster, surface); the amendment's D9-D14 with theirs.
+1. Engine: D1, D2, D3 with their unit tests (plan, cluster, surface); the amendment's D9-D17 with theirs.
 2. Measurement: R1-R6 (trial, seed searches, cohort both ways, the shipped maps, the knob values).
 3. Pool: D4, the five re-rolls, the pool test, R4.
 4. Page: D5 with its tests.
