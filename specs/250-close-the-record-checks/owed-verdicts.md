@@ -17,3 +17,6 @@
 - PondCanal (archetypes SECTION=150): LABELED - the Note credits the in-series plumbing to Ruddle & Zhong, unread; the re-check found the ring drain unsupported by 150 or 110 (110 is the rice polder's), now labeled in the Note as this map's own layout
 - PondSluice (archetypes SECTION=150): REWRITTEN - the Note and Caveat say the high-in, low-out rule comes from Ruddle & Zhong, unread; re-check IN-STEP (it flags "a few inches wide" boards as an unsupported, unchanged number)
 - SluiceGate (archetypes SECTION=150): REWRITTEN - the Note credits the placement to Ruddle & Zhong, unread (160 has no source of its own for it), and discloses FAO's 0.80 m opening cap against the 6 ft bar; re-check IN-STEP
+- Bund (fields SECTION=022): IN-STEP - the section adds no new aze finding and the modal never claims the no-jog rule
+- BundBeans (fields SECTION=021): IN-STEP - the modal takes only the shared bund from 021, whose changes were footnote and translation maintenance
+- WetPaddy (fields SECTION=190): IN-STEP - every claim still supported; the only new material is water-depth standing, and the modal gives no depth
