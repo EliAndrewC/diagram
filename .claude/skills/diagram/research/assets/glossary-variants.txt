@@ -494,7 +494,10 @@ gassho-zukuri	gassho
 gasshozukuri	gassho
 gate market	gate market
 gate throat	gate throat
+gate town	monzen
+gate towns	monzen
 gate-throat	gate throat
+gate-town	monzen
 gazetteer	gazetteer
 gazetteers	gazetteer
 gejo	degawari
