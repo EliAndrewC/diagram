@@ -134,7 +134,12 @@ visible where they were hidden inside the parent's write-up.
 - **Canon, settled from Obsidian Portal (2026-09-27)**: the river-stone stroke practice, the lacquer bowls drying
   in the workshop (replacement Pact-Bowls, lacquered on site) and the Chigiri-no-Chou (the Ledger of Broken Bowls)
   are all in Kitsune Tatsuya's GM-only notes - not missing canon, as this file and 262's coverage had it. Whether
-  a magistracy page may carry GM-only notes is the GM's call.
+  a magistracy page may carry GM-only notes is the GM's call; until they rule, the stroke-practice line (262's,
+  under the cinnabar workshop) is OFF Ochiba's page (removed 2026-09-27), and the other Ochiba notes that may rest
+  on the same GM-only source (the fox-fire lantern's story, the Chigiri-no-Chou) are left as 262 shipped them.
+- **Hamlet labels in the zoomed-out hit map (unmeasured)**: a small label's blended glyph edges can answer as the
+  kind one palette step away, or as none. Fixed for magistracy pages only (`raster.id_map(crisp_text=)`); the hamlet
+  pages were held unchanged by feature 264's FR-008. Measure a hamlet page's small captions before changing it.
 
 ### Settled on 2026-09-26, recorded so it is not reopened
 
