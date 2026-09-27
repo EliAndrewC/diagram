@@ -39,6 +39,8 @@ azenuri	azenuri
 azimuth	azimuth
 azolla	azolla
 azuchi	azuchi
+azuchi-momoyama	Azuchi-Momoyama period
+azuchi-momoyama period	Azuchi-Momoyama period
 backswamp	backswamp
 backswamps	backswamp
 backwall	backwall
@@ -326,6 +328,8 @@ enoki	enoki
 eunis	EUNIS
 eutrophic	eutrophication
 eutrophication	eutrophication
+ever-normal granaries	ever-normal granary
+ever-normal granary	ever-normal granary
 exposure burial	exposure burial
 extension	extension advice
 extension advice	extension advice
@@ -398,6 +402,7 @@ footplank	footplank
 footplanks	footplank
 forest litter	forest litter
 forest litters	forest litter
+formwork	formwork
 fortune	Fortune
 four gods	four gods
 four-gods formulation	four gods
@@ -593,6 +598,7 @@ japanese zelkova	keyaki
 jetties	jetty
 jetty	jetty
 jiangnan	Lower Yangzi
+jiaqing	Jiaqing
 jiegao	jiegao
 jiguchi-sen	jiguchi-sen
 jin'ya	jin'ya
@@ -763,6 +769,8 @@ log boom	boom
 lognormal	lognormal
 longan	longan
 longans	longan
+loophole	loophole
+loopholes	loophole
 loose-log drive	kanagashi
 loose-log driving	kanagashi
 louzeyuan	louzeyuan
@@ -938,6 +946,8 @@ pig iron	pig iron
 plankton	plankton
 plant association	plant association
 planted collar	planted collar
+plinth	plinth
+plinths	plinth
 polder	polder
 pollard	pollard
 pollarded	pollard
@@ -970,6 +980,7 @@ puddled	puddling
 puddling	puddling
 qi	qi
 qiandao	qiandao
+qianlong	Qianlong
 qiaolou	gulou
 qimin yaoshu	Qimin Yaoshu
 qing	Qing dynasty
