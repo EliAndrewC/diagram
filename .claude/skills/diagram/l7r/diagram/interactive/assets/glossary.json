@@ -6541,7 +6541,8 @@
   "def": "A nagaya split along its ridge as well as across it, so its units stand back to back and each opens only on its lane side; the cheapest kind of back tenement, commonly nine shaku by two ken a unit.",
   "variants": [
    "ridge-divided nagaya",
-   "ridge-divided"
+   "ridge-divided",
+   "mune-wari"
   ]
  },
  "back tenement": {
@@ -6568,6 +6569,13 @@
    "yanushi",
    "house manager",
    "house manager's"
+  ]
+ },
+ "Yoshimune": {
+  "def": "Tokugawa Yoshimune, the shogun of the Kyoho era, under whom Edo was first ordered, from 1722, to roof in tile and build in plastered, fire-resistant construction.",
+  "variants": [
+   "Yoshimune",
+   "Tokugawa Yoshimune"
   ]
  }
 }

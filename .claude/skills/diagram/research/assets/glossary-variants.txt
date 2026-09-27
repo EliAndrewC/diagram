@@ -995,6 +995,7 @@ mugi	mugi
 mukaibansho	mukaibansho
 mukakusha	mukakusha
 mulberry-dike fishpond	dike-pond
+mune-wari	ridge-divided nagaya
 murabarai	murabarai
 murataka	murataka
 muromachi	Muromachi
@@ -1491,6 +1492,7 @@ toki no kane	toki no kane
 tokorobarai	tokorobarai
 tokugawa	Tokugawa
 tokugawa ieyasu	Ieyasu
+tokugawa yoshimune	Yoshimune
 ton'ya	ton'ya
 tonya	ton'ya
 torii	torii
@@ -1648,6 +1650,7 @@ yokocho	yokocho
 yoriai-seki	yoriai-seki
 yoriki	yoriki
 yoshi	Phragmites
+yoshimune	Yoshimune
 yoshiwara	Yoshiwara
 yoshizu	yoshizu
 yosui	yosui
