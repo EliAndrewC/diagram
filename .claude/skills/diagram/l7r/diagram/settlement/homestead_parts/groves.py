@@ -165,7 +165,7 @@ class GrovesMixin:
 
     def _draw_grove(self: Settlement, cx: float, cy: float, w: float, h: float, face: Any, mix: str = "windbreak", cls: str | None = None) -> None:  # type: ignore[misc]
         """Draw one windbreak/grove clump as a DENSE MIXED STAND - overlapping canopies packed into a real
-        grove (not a few scattered trees), of three species: tall EVERGREEN conifer (dark, dense apex - the
+        grove (not a few scattered trees), of three species: tall EVERGREEN conifer (darker, larger crown - the
         windbreak backbone, cedar/pine), DECIDUOUS broadleaf (mid green - timber and fruit, zelkova/persimmon),
         and (nominally) a BAMBOO clump - see the note at the item loop: `b_th` is 0.0 in both mixes, so no
         clump has ever drawn one. `mix` picks the species blend: 'windbreak' is
@@ -243,9 +243,11 @@ class GrovesMixin:
                 if not self._crown_seat_clear(cx + px, cy + py - 3 * bs, rr, _near) or not self._crown_seat_clear(cx + px, cy + py - 3 * bs, rr, drawn):
                     continue  # a crown centered under an already-drawn crown is an understory stem, not canopy (GM 2026-08-28; woods._crown_seat_clear)
                 drawn.append((cx + px, cy + py - 3 * bs, rr))
+                # ONE DISC PER CROWN, conifer included (GM 2026-09-27). A conifer used to carry a second, darker
+                # disc at 40% of its radius (a "dense dark apex"); the GM read it as a trunk, which a plan view
+                # cannot show, and it was an unrecorded map convention. The darker fill and the 15% larger
+                # crown already tell a conifer from a broadleaf.
                 g.append(f'<circle cx="{px:.1f}" cy="{py - 3 * bs:.1f}" r="{rr:.1f}" fill="{col}" stroke="#3C5526" stroke-width="0.8"/>')
-                if kind == "conifer":
-                    g.append(f'<circle cx="{px:.1f}" cy="{py - 3 * bs:.1f}" r="{rr * 0.4:.1f}" fill="#364D22" opacity="0.55"/>')  # dense dark apex
             g.append('</g>')
             self.add(''.join(g), cls=cls)
             self._record_crowns(drawn)
