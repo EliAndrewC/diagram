@@ -9,18 +9,20 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D6).
       D50, D51, the COVERED rows confirmed; written and checked (FR-001, FR-002)
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
-- [ ] T03 Group R2 - town monasteries, town and city shrines, clergy housing (450-490; edits 040 and its note, 210) (FR-001, FR-002)
+- [x] T03 Group R2 - town monasteries, town and city shrines, clergy housing (450-490; edits 040 and its note, 210) (FR-001, FR-002)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. DONE. religion-and-death 450, 460, 470 new, 040 corrected and its note searched twice, 210 pointers; checks a-c: quote-check, record-format, source-applicability on 15 keys applied; the corrections the key checks owed 040, 450, 460 applied by the orchestrator (re-check of the added Eijuji passage owed at T09)
 - [ ] T04 Group R4 - state cult, academies, temple plans, bell tower and pagoda (550-570) (FR-002)
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
 - [ ] T05 Group B37 - city temple monks, gate shops, graveyard sharing (310-330; edits 010, 050, 070 and their notes searched twice) (FR-001, FR-002)
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
-- [ ] T06 Group R3 - village temple, its precinct, wayside shrines, A144 as far as 269's R1 leaves it, 190 and 204, D63's tier table as 210 (500-540; the 210 note searched twice) (FR-001, FR-002)
+- [x] T06 Group R3 - village temple, its precinct, wayside shrines, A144 as far as 269's R1 leaves it, 190 and 204, D63's tier table as 210 (500-540; the 210 note searched twice) (FR-001, FR-002)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. DONE. religion-and-death 500, 510, 520, 530 new; 210 the tier table (D63); 190 a village clause; checks a-c applied; 520's upland wording corrected by the orchestrator; FR-007: wayside stones and the village cremation ground applied to Hoshigaoka (T08)
 - [ ] T07 Group T - the city temple complex and the temple neighborhood (580-590), the 020 and 030 notes searched
       twice (FR-001, FR-006)
       research: physical
