@@ -484,6 +484,9 @@ fuse	fuse
 fusekoshi	inverted siphon
 gabion	gabion
 gabions	gabion
+gable roof	gabled roof
+gabled	gabled roof
+gabled roof	gabled roof
 galleried mining	siege mining
 game master	GM
 gangi	gangi
@@ -599,6 +602,7 @@ hereditary temples	hereditary temple
 hinin	hinin
 hinoki	hinoki
 hinomi-yagura	hinomi-yagura
+hip-and-gable	irimoya
 hipposandal	hipposandal
 hipposandals	hipposandal
 hiro	hiro
@@ -615,6 +619,8 @@ hokaku-sen	hokaku sen
 hokora	hokora
 holding jail	holding jail
 honden	honden
+hongawara	hongawara
+hongawara tile	hongawara
 hongo	hongo
 honmaru	honmaru
 honmune-zukuri	honmune-zukuri
@@ -765,6 +771,8 @@ kasoba	kasoba
 kasō-dera	kaso-dera
 kata	kata
 katairo	eiro
+kawachi	Kawachi
+kawachi province	Kawachi
 kawara	kawara
 kawaramono	kawaramono
 kawata	kawata
@@ -797,6 +805,7 @@ king post	king post
 king posts	king post
 king-post	king post
 kirisute-gomen	kirisute-gomen
+kirizuma	gabled roof
 kishu school	Kishu school
 kishu-school	Kishu school
 knob	knob
@@ -1075,6 +1084,8 @@ pearl delta	Pearl delta
 pearl river delta	Pearl delta
 pearl-delta	Pearl delta
 peer-reviewed flora	flora
+pent roof	pent roof
+pent roofs	pent roof
 perched	perched river
 perched river	perched river
 perched, silt-choked river	perched river
@@ -1206,6 +1217,8 @@ ryo	ryo
 ryobosei	ryobosei
 rōjū	Roju
 sae no kami	sae no kami
+sagami	Sagami
+sagami province	Sagami
 sageba	ōkaji
 saien	saien
 sakagura	sakagura
