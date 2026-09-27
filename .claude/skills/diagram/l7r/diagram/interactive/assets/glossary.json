@@ -6016,5 +6016,29 @@
    "komo",
    "komo matting"
   ]
+ },
+ "magistracy": {
+  "def": "A magistrate's office (bugyosho) - the compound where a magistrate did their work and held their court, hearing suits and judging crimes.",
+  "variants": [
+   "magistracy",
+   "magistracies",
+   "magistracies'"
+  ]
+ },
+ "agariya": {
+  "def": "A range of cells in an Edo-period jail, set apart from its great common cell. At Edo's Tenmacho jail there were two ranges, a front one (kuchi-agariya) and an inner one (oku-agariya), of three rooms each, 15 and 18 mats, each with a privy.",
+  "variants": [
+   "agariya",
+   "kuchi-agariya",
+   "oku-agariya"
+  ]
+ },
+ "Tenmacho": {
+  "def": "Edo's great jail compound (the Tenmacho royashiki), where the shogunate held prisoners in a 30-mat common cell and in smaller agariya rooms.",
+  "variants": [
+   "Tenmacho",
+   "Tenmacho's",
+   "Tenmacho jail"
+  ]
  }
 }

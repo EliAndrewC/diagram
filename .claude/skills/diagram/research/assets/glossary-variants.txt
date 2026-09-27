@@ -7,6 +7,7 @@ aburaya	aburaya
 abutment	abutment
 abutments	abutment
 across the beams	ridge span
+agariya	agariya
 ainu	Ainu
 ake-mutsu	ake-mutsu
 akiba	Akiba
@@ -757,6 +758,7 @@ kosatsu	kosatsuba
 kosatsuba	kosatsuba
 kotai-yoriai	kotaiyoriai
 kotaiyoriai	kotaiyoriai
+kuchi-agariya	agariya
 kuchiireya	hitoyado
 kui	kui
 kumi	kumi
@@ -834,6 +836,9 @@ madake	madake
 made ground	made ground
 maff	MAFF
 magariya	magariya
+magistracies	magistracy
+magistracies'	magistracy
+magistracy	magistracy
 main channel	main stem
 main stem	main stem
 mamian	mamian
@@ -958,6 +963,7 @@ ofuregaki	ofuregaki
 okaji	ōkaji
 okajiba	ōkaji
 oku	oku
+oku-agariya	agariya
 oku-muki	oku
 oku-no-ma	oku-no-ma
 oku-zashiki	zashiki
@@ -1313,6 +1319,9 @@ tax-free plot	tax-free plot
 tedai	tedai
 teikaku	teikaku
 temizuya	temizuya
+tenmacho	Tenmacho
+tenmacho jail	Tenmacho
+tenmacho's	Tenmacho
 tenpo	Tenpo era
 tenpo era	Tenpo era
 tenshu	tenshu
