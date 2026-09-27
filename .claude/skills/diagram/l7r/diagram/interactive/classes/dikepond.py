@@ -51,8 +51,8 @@ class MulberryDike(Kind):
 
     Why: The dike is the silk side of the loop: mulberry leaf feeds the silkworms, the silkworm waste feeds the
     fish, the dredged pond mud re-fertilizes the dike. The prescription was six parts water to four parts
-    dike (three-to-seven to four-to-six in the gazetteers) because too much water starves the worms and too
-    much dike starves the fish. A bare dike of heaped mud gullies and slumps, so every dike was planted; in
+    dike (three-to-seven to four-to-six in the gazetteers) because the dike's mulberry had to yield enough
+    feed and fertilizer for the fish in the water beside it. A bare dike of heaped mud gullies and slumps, so every dike was planted; in
     sericulture districts that planting was mulberry.
 
     Note: The ratio and the planting are read. The WIDTH is where the drawing parts company with the record: the
@@ -60,20 +60,24 @@ class MulberryDike(Kind):
     ground from one pond's water to the next is thirteen meters, but a canal runs down the middle of it, so it
     is not one bank. The traditional figure also reaches us only at second hand. The ratio's ORDER is
     contested - the classic prescription survives as six parts dike to four parts pond as well as the reverse,
-    and some districts kept seven to three - so the water-heavy reading drawn here is a regional one, disclosed
+    and seven to three is recorded where the fish had feed from beyond the dike - so the water-heavy reading drawn here is a regional one, disclosed
     rather than the only one; measured on the map that draws them, water is 80% of the parcel ground and the
     planted bank 20%, and about half the block once the canal corridors between the parcels count. The crowns
-    are drawn THINNER than the record's own guess - one bush per twenty-three square feet against a guessed one
+    are drawn THINNER than this page's own guess - one bush per twenty-three square feet against a guessed one
     per ten to twenty - because at the honest step the crowns fuse into a solid green band and stop reading as
-    bushes at all; the crown SIZES are drawn true, and only the density is a map drawing convention. And the
+    bushes at all; that guess is itself sparse, since the one density read is 8,000 to 10,000 root-cut bushes
+    a mu, about one bush to a square foot, and no page read gives a crown's width, so the four and a half to
+    seven feet drawn is this project's own figure; only the density is a map drawing convention. And the
     dike is drawn as a RING, the band between the parcel's outer edge and the water's own outline, so hovering
     a dike lights its bank and not the pond inside it. So: the collar drawn around each pond is about two
     meters where the traditional figure is a dike of six to ten, and the crowns stand at one bush per
-    twenty-three square feet where the record's own guess is one per ten to twenty.
+    twenty-three square feet where this page's own guess is one per ten to twenty, and the one density read
+    is about one to a square foot.
 
     Caveat: the collar drawn around each pond is about two
     meters where the traditional figure is a dike of six to ten, and the crowns stand at one bush per
-    twenty-three square feet where the record's own guess is one per ten to twenty.
+    twenty-three square feet where this page's own guess is one per ten to twenty, and the one density read
+    is about one to a square foot.
 
     Name: mulberry dike
     Covers: the bank ring of every `dikeponds[]` parcel and the coppiced crowns planted along it
