@@ -115,8 +115,10 @@ class HearingCourt(Kind):
     Rokugan, where torture is unusual, a magistracy keeps no room built for interrogation, so questioning
     happens here or in the day office like any other business.
 
-    Note: The oshirasu before the dais follows the record. At Takayama the examination room and the shirasu
-    are paved with stone and roofed, where these plans draw an open court of sand.
+    Note: The oshirasu before the dais follows the record; that a jin'ya was laid out around it and the
+    forecourt as open features is this project's reading of plans, which no readable source measures. At
+    Takayama the examination room and the shirasu are paved with stone and roofed, where these plans draw
+    an open court of sand.
 
     Caveat: At Takayama the examination room and the shirasu are paved with stone and roofed, where these
     plans draw an open court of sand.
@@ -311,8 +313,11 @@ class SideGate(Kind):
     so the pits sit toward a service wall or gate a cart can reach. A door meant for guests, by contrast,
     opens into a court or garden.
 
-    Note: The service doors and the cart access they give follow the record. That a night-soil collector
-    never has to cross the inner court is this record's own rule rather than a finding.
+    Note: The service doors and the cart access they give follow the record, though the dictionary names
+    only the kitchen door and that it opens into work space is this record's reading. That a guests' door
+    opens into a court or garden is the GM's rule: no readable source sets out the staged arrival behind
+    it. That a night-soil collector never has to cross the inner court is this record's own rule rather
+    than a finding.
 
     Caveat: That a night-soil collector never has to cross the inner court is this record's own rule rather
     than a finding.

@@ -156,12 +156,13 @@ class Cell(Kind):
     two for remand and no prison block - and in Rokugan, where torture is unusual, no room built for
     interrogation either.
 
-    Note: Small remand cells follow the record, a real remand cage running about 10 by 12 ft. That a cell may
-    stand anywhere in the compound is this setting's own: Chinese regulation put the county jail in the
-    southwest corner, and Rokugan keeps no such rule.
+    Note: Small remand cells follow the record (though no page read names exile or fines as sentences, or
+    says light offenders were sent home), a real remand cage running about 10 by 12 ft. That a cell may
+    stand anywhere in the compound is this setting's own: Chinese regulation put the county jail on the
+    south side (Neixiang's stood in its southwest), and Rokugan keeps no such rule.
 
     Caveat: That a cell may stand anywhere in the compound is this setting's own: Chinese regulation put the
-    county jail in the southwest corner, and Rokugan keeps no such rule.
+    county jail on the south side (Neixiang's stood in its southwest), and Rokugan keeps no such rule.
 
     Name: cell
     Covers: the barred holding cell and its label
