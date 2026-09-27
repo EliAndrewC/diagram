@@ -49,6 +49,13 @@ g.f.on.planted:not([fill="none"]), g.f.on.planted *:not([fill="none"]) { fill: v
    contrast ratio, well past the 4.5:1 WCAG AA bar for body text. Placed after the fill rules so it
    wins; scoped to the placard because that is the one lit class whose text sits on its own fill. */
 g.f.on.f-place text { fill: var(--ink) !important; }
+/* ...AND ON A MODE A SHEET, EVERY LABEL (GM 2026-09-27: "when I move my mouse over different map features on the
+   magistracy diagrams ... it ends up being highlighted in a way where I can no longer read the text"). On a
+   compound plan the placard's case is the rule, not the exception: a building's name sits on the building, so
+   the fill rule above painted the name gold on its own gold fill. The sheet's page marks its map `data-sheet`
+   (interactive/sheet.py) and a lit sheet's text keeps the map's ink - the same 9.2:1 on the highlight as the
+   placard, and the white labels drawn on dark buildings (#FFFAE6 on the gatehouse) become dark ink on gold. */
+svg#map[data-sheet] g.f.on text, svg#map[data-sheet] g.f.on tspan { fill: var(--ink) !important; }
 /* RASTER MODE (feature 200, GM 2026-09-07: "all of the above feel slow"): below the switch the map is one
    image of the whole picture and every class group is hidden except the lit one, which is drawn as vector
    above it; above the switch the image is hidden and the page is the vector page. The image never takes
