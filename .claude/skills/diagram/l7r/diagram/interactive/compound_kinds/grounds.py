@@ -125,10 +125,12 @@ class HearingCourt(Kind):
 
     Note: What covers the floor is one of two attested forms, white gravel or cobbles from the local riverbed
     where white sand is scarce, and each sheet takes one. That a jin'ya was laid out around the hearing court and
-    the forecourt as open features is this project's reading of plans, which no readable source measures.
+    the forecourt as open features is this project's reading of plans, which no readable source measures. No
+    roofed court's size was found, so the size each sheet draws is a guess.
 
     Caveat: That a jin'ya was laid out around the hearing court and the forecourt as open features is this
-    project's reading of plans, which no readable source measures.
+    project's reading of plans, which no readable source measures. No roofed court's size was found, so the size
+    each sheet draws is a guess.
 
     Name: hearing court (oshirasu)
     Covers: the roofed court before the dais and its label
@@ -459,11 +461,13 @@ class CartYard(Kind):
 
 class GardenPond(Kind):
     """
-    What: A small ornamental pond in the inner garden, drawn as an open oval of water set among the planting,
-    within sight of the rooms that face the garden.
+    What: The garden's centerpiece, within sight of the rooms that face it: a small ornamental pond, an open oval
+    of water set among the planting - or, where a sheet takes the other form, a dry garden of raked white gravel
+    and set stones standing for water. Each map's note says which it draws.
 
     Why: The formal garden of a samurai house lay beside its reception rooms, to be looked at from them, and
-    water is one of the things such a garden was made to hold for the eye.
+    water - real, or stones and gravel standing for it - is one of the things such a garden was made to hold for
+    the eye.
 
     Note: A residence garden was either a pond garden or a dry garden of stones and white gravel standing for
     water, both attested beside samurai rooms, and each sheet takes one. The two offices whose gardens can be read
@@ -478,7 +482,7 @@ class GardenPond(Kind):
     line from the middle gate to the entrance rests on nothing found and is a guess.
 
     Name: garden pond
-    Covers: the pond in the inner garden
+    Covers: the pond, or the dry garden, in the inner garden
     Label: accurate
     Sources: kotobank-teien, oniwa-takayama-jinya, okutono-jinya-garden, chiran-bukeyashiki-gardens, shiroishi-koseki
     Entry: research/buildings.html - 'Did a residence garden have a pond, and did a county post keep one?', 'Where is the formal entrance, and how does a guest reach it?'

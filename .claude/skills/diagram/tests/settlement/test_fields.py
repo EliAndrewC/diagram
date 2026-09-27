@@ -281,7 +281,15 @@ def test_the_field_grave_takes_either_attested_form_and_a_corner_grave_stays_in_
     assert forms == {"island", "corner"}, forms
     assert grave_form(7) == grave_form(7), "the form is the seed's, not the draw order's"
     square = [(0.0, 0.0), (60.0, 0.0), (60.0, 30.0), (0.0, 30.0)]
-    assert corner_seat(square, 0) == (10.0, 5.0), "a third of the way from the corner to the middle"
+    assert corner_seat(square, 0) == pytest.approx((10.0, 5.0)), "a third of the way to the middle on a small plot"
+    big = [(0.0, 0.0), (300.0, 0.0), (300.0, 300.0), (0.0, 300.0)]
+    assert math.dist(corner_seat(big, 0), (0.0, 0.0)) == pytest.approx(16.0), "16 px into the corner of a large one"
+    assert corner_seat([(5.0, 5.0)], 0) == (5.0, 5.0), "a degenerate plot keeps its one point"
+    from l7r.diagram.settlement.fields.features import turning_corners
+
+    notched = [(0.0, 0.0), (30.0, 0.0), (60.0, 0.0), (60.0, 30.0), (0.0, 30.0)]
+    assert turning_corners(notched) == [0, 2, 3, 4], "the collinear side vertex is no corner"
+    assert turning_corners([(0.0, 0.0), (1.0, 0.0), (2.0, 0.0)], 181.0) == [0, 1, 2], "every vertex when none turns"
     assert corner_seat(square, 6) == corner_seat(square, 2), "the vertex index wraps"
     net = {"plots": [{"poly": square, "low": False, "fill": "#A6C398"}]}
     found = {}

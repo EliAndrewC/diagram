@@ -32,12 +32,31 @@ def grave_form(seed: int) -> str:
     return "island" if random.Random((seed ^ _GRAVE_FORM_SALT) & 0xFFFFFFFF).random() < 0.5 else "corner"
 
 
+def turning_corners(poly: Sequence[Pt], min_deg: float = 45.0) -> list[int]:
+    """The vertices of `poly` where its outline turns through more than `min_deg` - its real corners. A comb plot
+    carries extra vertices ALONG its sides where a neighbor's bund meets it, and a grave seated at one of those stood
+    mid-edge beside a ditch, reading as no corner at all (Kashikawa, 2026-09-27). Every vertex if none turns."""
+    n = len(poly)
+    out = []
+    for i in range(n):
+        ax, ay = poly[i][0] - poly[i - 1][0], poly[i][1] - poly[i - 1][1]
+        bx, by = poly[(i + 1) % n][0] - poly[i][0], poly[(i + 1) % n][1] - poly[i][1]
+        la, lb = math.hypot(ax, ay), math.hypot(bx, by)
+        if la and lb and math.degrees(math.acos(max(-1.0, min(1.0, (ax * bx + ay * by) / (la * lb))))) > min_deg:
+            out.append(i)
+    return out or list(range(n))
+
+
 def corner_seat(poly: Sequence[Pt], at: int) -> tuple[float, float]:
-    """Where a corner grave stands in `poly`: a third of the way from vertex `at` toward the plot's centroid - in the
-    corner, against its two bunds, and inside the plot, clear of whatever runs along the plot's edge."""
+    """Where a corner grave stands in `poly`: 16 px in from vertex `at` toward the plot's centroid (a third of the way
+    on a small plot) - in the corner, against its two bunds, and inside the plot, clear of whatever runs along the
+    plot's edge. 16 px sets a 6.5 px mound ~5 px off each bund of a right-angled corner (14 grazed the bund's beads); a fixed third of the way put
+    the grave mid-plot on a large one (Kashikawa, 2026-09-27), where it no longer read as a corner grave."""
     cx, cy = _centroid(poly)
     vx, vy = poly[at % len(poly)]
-    return vx + (cx - vx) / 3.0, vy + (cy - vy) / 3.0
+    dist = math.hypot(cx - vx, cy - vy)
+    step = min(16.0, dist / 3.0) / dist if dist else 0.0
+    return vx + (cx - vx) * step, vy + (cy - vy) * step
 
 
 class FieldFeaturesMixin:
@@ -220,12 +239,14 @@ class FieldFeaturesMixin:
         field", and beside the bunds). Set a third of the way from the corner toward the plot's middle so it stays
         inside the plot, clear of the ditch or lane that may run along its edge. Recorded in M['field_graves'] with
         its form. The grave is the last draw on `rng` in the pass, so its one extra draw shifts nothing after it."""
-        cx, cy = corner_seat(plot["poly"], rng.randrange(len(plot["poly"])))
+        cx, cy = corner_seat(plot["poly"], rng.choice(turning_corners(plot["poly"])))
         self.add(f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="6.5" ry="4.5" fill="#CFC6B4" stroke="#8C8470" stroke-width="1.1"/>', cls="grave island")
         markers = ""
+        # the second stone stands IN FRONT of the first, lower and to one side - two stones abreast read as a pair of
+        # eyes (the island's rule, feature 230 pass 11)
         for i in range(rng.randint(1, 2)):
-            h = (6.5, 4.5)[i]
-            markers += f'<rect x="{cx - 2.8 + i * 4.0:.1f}" y="{cy - 1.5 - i * 2.5 - h:.1f}" width="2.4" height="{h:.1f}" rx="1" fill="#9AA1A4" stroke="#5A584F" stroke-width="0.5"/>'
+            sx, base, h = ((-2.2, -1.0, 6.5), (1.6, 2.2, 3.5))[i]
+            markers += f'<rect x="{cx + sx:.1f}" y="{cy + base - h:.1f}" width="2.4" height="{h:.1f}" rx="1" fill="#9AA1A4" stroke="#5A584F" stroke-width="0.5"/>'
         self.add(f'<g>{markers}</g>', cls="grave island")
         self.M.setdefault("field_graves", []).append({"x": round(cx, 1), "y": round(cy, 1), "form": "corner"})
 

@@ -11,11 +11,11 @@ choice is recorded in each sheet's notes ("Knob settings") and its modal text ("
 | item | knob | O | H | U | why this spread |
 |---|---|---|---|---|---|
 | R01 | veranda faces | garden face | garden face | garden face | as drawn; the extra faces the record allows are not added (a redraw with no finding asking it) |
-| R02 | one block / echelon | ONE BLOCK (redrawn) | echelon, read as accretion | echelon, read as accretion | O is an ordinary rotating posting - echelon has no ground there; H's lineage has held the seat and added to it (its guest house "added by the 9th magistrate"); U's house is layered by successive lineage households (its notes) |
+| R02 | one block / echelon | ONE BLOCK, two rows of rooms front and back with the kitchen as an ell (redrawn; pass 2 re-massed the one-room-deep bar pass 1 left) | echelon, read as accretion | echelon, read as accretion | O is an ordinary rotating posting - echelon has no ground there; H's lineage has held the seat and added to it (its guest house "added by the 9th magistrate"); U's house is layered by successive lineage households (its notes) |
 | R03 | room order | guest room, reception, master, family | reception at the east END, then master, then family and inner rooms (redrawn) | guest room, reception at the east end, master, then family (redrawn) | the reception at one end in both attested orders |
 | R05 | alcove | - | with the reception, at the formal end (moved) | with the reception, at the formal end (moved) | never among the private rooms |
-| R07 | approach | genkan on the office hall (moved) | no genkan: the middle gate and a garden path (roji) to the zashiki veranda, a stepping stone at the veranda | genkan on the office hall (moved) | the residence's own genkan is in neither attested form |
-| R13 | kamado seat | on a small doma | on the board floor | on a small doma | the hearth is a kamado range on all three (O and U redrawn from a square fire) |
+| R07 | approach | genkan on the office hall, opening toward the forecourt, the way on through the office to the house (moved) | no genkan: the middle gate and a garden path (roji) to the zashiki veranda, a stepping stone at the veranda | no genkan: the roji, as Hayakawa (pass 2 - no face of Ubame's office hall fronts open ground reached from the forecourt: the granary closes its west strip, the barracks its east) | the residence's own genkan is in neither attested form |
+| R13 | kamado seat | on a small doma | on the board floor | on a small doma | the hearth is a kamado range, ~6 x 2.5 ft with two fire mouths, on all three (O and U redrawn from a square fire); the doma drawn where it is the form |
 | R18 | granary | earth-walled kura, no posts (redrawn) | on posts | on posts | H is a river county; posts answer rats and damp, which hold away from a river too |
 | R19 | guardroom | a gatehouse of its own beside the gate, shortened to ~18 by 14 ft (the one measured) | in the gate range, extended to the gate | in the gate range (already abutting the gate) | |
 | R22 | court floor | white gravel, roofed | river cobbles, roofed | white gravel, roofed | the court is ROOFED on all three (redrawn); H is a river county |
@@ -28,6 +28,15 @@ choice is recorded in each sheet's notes ("Knob settings") and its modal text ("
 | R17 | vegetable garden | north of the house, as drawn (a GUESS: the one sided case is west) | same | same | |
 
 ## Redraws a finding requires on every sheet it names
+
+- The KITCHEN is part of the house on every sheet (research 360/370: the kitchen door is the house's service door;
+  the Takayama residence lists its kitchen, well and bath among its own rooms) - joined to the residence as an ell or
+  by a short covered corridor (building-review, pass 2).
+- The CEREMONIAL MAIN GATE is the widest opening in each wall (buildings.md checklist): the lesser gates narrowed where
+  R26's new widths had tied or passed them (pass 2).
+- A guardroom in the GATE RANGE is drawn as a nagaya-mon: the range is the wall line, the wall broken along it, the
+  passage through it (research 420; pass 2, Hayakawa and Ubame).
+
 
 - R09 bath: a small addition to the kitchen range (the Takayama residence's bath stood with its well and kitchen), not
   a freestanding pavilion - O H U.
