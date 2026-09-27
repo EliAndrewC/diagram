@@ -33,6 +33,11 @@ HOMESTEAD_FIELD_LEN_FT = (50.0, 120.0)  # the side's length, clamped to this
 HOMESTEAD_FIELD_GAP_FT = 4.0  # between the steading's box and the plot: a bund's width
 HOMESTEAD_FIELD_LANE_GAP_FT = 4.0  # past a lane's drawn tread
 HOMESTEAD_FIELD_WINDWARD_DOT = 0.5  # a side facing the wind closer than 60 degrees is the belt's ground
+# AN ARCHETYPE THAT BUYS ITS GRAIN IN LAYS NO GRAIN PLOT (settlement-review of Kuwabata, feature 261). The mulberry
+# dike-fishpond district 「abandoned rice to plant mulberry」 and so buys its grain in (research/archetypes.html, "What
+# stands on a dike-pond hamlet that a paddy hamlet lacks"; Kuwabata's GM-confirmed economy, 2026-07-24), and its comb
+# draws no dry plot by archetype - so every crop in `DRY_CROPS` (barley, millet, buckwheat) contradicts it here.
+GRAIN_BOUGHT_IN = ("mulberry_dike_fishpond",)
 
 
 def homestead_box(placed: Sequence[Any], x: float, y: float) -> tuple[float, float, float, float] | None:
@@ -94,6 +99,9 @@ def stage_homestead_fields(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.hamletgen.homesteads.fields.homestead_field_fits
         l7r.diagram.hamletgen.homesteads.fields.draw_homestead_field
     """
+    if plan.field_archetype in GRAIN_BOUGHT_IN:
+        s.M["meta"]["homestead_fields"] = 0
+        return
     rng = knob_rng(plan.spec.seed, "homestead_fields")
     lanes = [([(float(p[0]), float(p[1])) for p in ln["pts"]], float(ln.get("w") or 6) / 2 + HOMESTEAD_FIELD_LANE_GAP_FT) for ln in s.M.get("lanes") or [] if len(ln.get("pts") or []) >= 2]
     streams = [[(float(p[0]), float(p[1])) for p in st["poly"]] for st in s.M.get("streams") or [] if len(st.get("poly") or []) >= 2]

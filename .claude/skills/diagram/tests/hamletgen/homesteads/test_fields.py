@@ -35,6 +35,7 @@ class _Plan:
         seed = 7
 
     wind = (0.0, -1.0)  # from the north
+    field_archetype = "valley_paddy"
 
 
 def test_the_steading_is_the_largest_box_holding_the_house() -> None:
@@ -113,6 +114,17 @@ def test_each_house_gets_one_plot_where_one_fits_and_the_count_is_recorded() -> 
     s2.blocked = True
     fields.stage_homestead_fields(s2, _Plan())  # type: ignore[arg-type]
     assert s2.M["meta"]["homestead_fields"] == 0 and "dry_plots" not in s2.M
+
+
+def test_an_archetype_that_buys_its_grain_in_lays_no_grain_plot() -> None:
+    """`stage_homestead_fields` on a dike-pond plan (settlement-review of Kuwabata): no plot, the count recorded as 0."""
+
+    class _DikePond(_Plan):
+        field_archetype = "mulberry_dike_fishpond"
+
+    s = _S()
+    fields.stage_homestead_fields(s, _DikePond())  # type: ignore[arg-type]
+    assert s.M["meta"]["homestead_fields"] == 0 and "dry_plots" not in s.M and not s.drawn
 
 
 def test_a_front_seat_is_pushed_across_a_brook_by_the_waters_reach() -> None:

@@ -1762,7 +1762,7 @@ on main's map) and the belt stands at 340 degrees from the houses, 241 clumps ov
 every clump within 100 ft of a farmhouse on the page. The brook runs between the houses and the rice, and the front
 row stands on its far bank, fronting the field across the water; the field path crosses the brook square on a plank
 at a ford - the hamlet's one way to its rice. Each farmstead stands whole on its own bank, the dooryard copse keeps
-within 90 ft of a farmhouse (median 70 ft), and the entrance board stands 17 ft from where the track out meets the lanes,
+within 90 ft of a farmhouse (median 70 ft), and the entrance board stands on the track itself, squared to it, 16 ft from where the track out meets the lanes,
 passed by all 15 households' ways out. The track leaves southwest (219 degrees), so the district direction reads
 southwest. The rolled crescent is drawn, at an aspect of 2.0. Ten of the fifteen homesteads carry their own dry plot
 against a lee or flank side, so a house's nearest dry ground lies a median 72 ft away; the hem along the supply canal

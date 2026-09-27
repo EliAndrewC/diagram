@@ -214,6 +214,7 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
             _seat = str((s.M.get("meta") or {}).get("kosatsuba_seat") or "center")
             _anchor = kosatsuba_anchor(s.M, _seat)
             _seats: list[tuple[float, float, float, float]] = []  # (distance to the anchor, x, y, rot); the traffic is counted after the band narrows
+            _on_approach: set[tuple[float, float, float, float]] = set()  # the seats on the connector itself (below)
             _pxb = getattr(s, "px", None)
             _canopy = canopy_index(s.M)  # once for the whole re-seat probe, not per verge
             _lanes = [ln for ln in s.M.get("lanes", []) if not ln.get("connector")]
@@ -283,6 +284,8 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
                                     loose = (_rank, cx2, cy2)  # kept only for the fallback, and turned to its own nearest way
                                 continue
                             _seats.append((_rank, cx2, cy2, rot))
+                            if lane.get("connector"):
+                                _on_approach.add(_seats[-1])
             # AN ANCHORED PLACEMENT CHOOSES THE GROUND, THE TRAFFIC CHOOSES THE SEAT ON IT - the rule
             # `place_kosatsuba` states and applies, read here from the same constant rather than restated
             # (settlement-review, feature 227). This loop ranked an anchored seat by its distance to the anchor
@@ -305,6 +308,12 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
                         _pass = _pxb(KOSATSUBA_HANDOVER_BAND_FT) if _pxb else KOSATSUBA_HANDOVER_BAND_FT
                         _missed = [routes_missed(_routes, q[1], q[2], _pass) for q in _seats]
                         _seats = [q for q, k in zip(_seats, _missed, strict=True) if k == min(_missed)]
+                        # ...ON THE APPROACH ITSELF where it offers one (settlement-review of Inashiro, feature 261): the board
+                        # is squared to the way it stands on, and the kosatsuba stands broadside to the one way out
+                        # (research/urban-features.html). A web lane passing the anchor was offered for the lane the approach
+                        # meets the settlement by, but where the outermost join is a one-farmstead straggler its verge won,
+                        # and Inashiro's board stood 87.7 degrees off the track every household walks out by.
+                        _seats = [q for q in _seats if q in _on_approach] or _seats
                         _near = min(q[0] for q in _seats)
                         _bft = KOSATSUBA_HANDOVER_BAND_FT
                     # ...AND WHERE ITS CAPTION FITS, before the band, as the siter ranks it (feature 261: Sawada's re-seated board put

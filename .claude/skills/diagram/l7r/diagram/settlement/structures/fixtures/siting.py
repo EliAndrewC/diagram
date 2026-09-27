@@ -289,6 +289,8 @@ class FixtureSitingMixin:
         _wells = [(float(_w["x"]), float(_w["y"])) for _w in (self.M.get("wells") or []) if "x" in _w]
         _canopy = canopy_index(self.M)  # built ONCE for the whole probe, not per seat - see `canopy_index`
         cands: list[tuple[int, float, float, float, float, int | None, float, bool]] = []  # (busy, score, x, y, rot, label_above|None, gap from tread edge to board edge, under the trees)
+        _approach_ways = [[(p[0], p[1]) for p in ln["pts"]] for ln in self.M.get("lanes") or [] if ln.get("connector")]
+        _on_approach: set[int] = set()  # id() of the candidates standing on the approach itself (the entrance rule below)
         for pts, _rw in routes:
             for i in range(len(pts) - 1):
                 (ax, ay), (bx, by) = pts[i], pts[i + 1]
@@ -335,6 +337,8 @@ class FixtureSitingMixin:
                                 cands.append(
                                     (busy, busy * 10 - off / 3, x, y, rot, lab, off - _rw / 2 - h / 2, under_canopy(_canopy, x, y, math.hypot(w, h) / 2))
                                 )  # last two: the gap from tread edge to board edge, and whether trees stand over it
+                                if pts in _approach_ways:
+                                    _on_approach.add(id(cands[-1]))
                             off += 5.0
         if not cands:
             return None
@@ -380,6 +384,11 @@ class FixtureSitingMixin:
                 _miss = {id(c): routes_missed(_routes, c[2], c[3], KOSATSUBA_HANDOVER_BAND_FT / ftpx) for c in cands}
                 _fewest = min(_miss.values())
                 cands = [c for c in cands if _miss[id(c)] == _fewest]
+                # ...ON THE APPROACH ITSELF where it offers one (settlement-review of Inashiro, feature 261): a board is squared to
+                # the way it stands on, and the kosatsuba stands broadside to the one way out (research/urban-features.html). The
+                # web lane at the outermost join was offered for the lane the approach meets the settlement by, but Inashiro's
+                # is a one-farmstead straggler, and its verge put the board 87.7 degrees off the track every household walks.
+                cands = [c for c in cands if id(c) in _on_approach] or cands
                 _hand = anchor  # the handover band is applied below, once `_sitable` can say whose caption fits
             else:
                 cands = [c for c in cands if math.hypot(c[2] - anchor[0], c[3] - anchor[1]) <= _near + _band] or cands

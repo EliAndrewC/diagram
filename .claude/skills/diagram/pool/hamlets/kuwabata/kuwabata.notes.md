@@ -323,7 +323,7 @@ last on-page belt ground at u ~ 1350. So about **20 ft** of visible belt carries
 (settlement-review, 2026-08-29). The check now clips its columns to the view, so it asks for canopy
 exactly where a reader can look for it.
 
-**Counts:** in the Census block below. Knobs rolled {'copse_siting': 'among_the_houses', 'kosatsuba_siting': 'frontage'}.
+**Counts:** in the Census block below. Knobs rolled at that roll {'copse_siting': 'among_the_houses', 'kosatsuba_siting': 'frontage'}; the board's seat is `meta.kosatsuba_seat` now.
 
 
 ## Census - the counts this map ships with
@@ -344,7 +344,7 @@ its own pocket and the belt is whole.
 and draws no stream, and this manifest recorded `intake: weir` and `brook_side: -1` beside `streams: []`. The knob still
 rolls - it is part of the seed stream - but a map with no brook writes neither down.
 
-**What the copse records now**: 3 clumps at a median 62.6 ft from the nearest farmhouse. A single row on a dike head has
+**What the copse recorded at that roll**: 3 clumps at a median 62.6 ft from the nearest farmhouse. A single row on a dike head has
 no interior for a copse to fill, and `copse_siting: among_the_houses` cannot say that by itself.
 
 Derived, never typed. `make notes-census` rewrites the block below from the manifest and
@@ -682,4 +682,4 @@ round the houses. Under the feature's changed ways the first three rolls each le
 degrees from the houses' middle, standing beyond the ring lane that runs along the windward row. This roll leaves no open
 ground the woodland scan takes, so the map draws no woodland commons. The notice board stands on the `center` knob's ground beside the ring lane, where its caption, at the board's own
 angle, fits clear of every crown. The connector leaves west, compass 274 degrees on its first leg, which the district direction reads.
-Six homesteads carry their own dry plot against a lee or flank side.
+No homestead carries a dry plot of its own: the homestead field is a grain plot, and a dike-pond hamlet buys its grain in (the economy above; `GRAIN_BOUGHT_IN` in `homesteads/fields.py`), so the stage lays none here.

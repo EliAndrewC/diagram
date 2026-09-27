@@ -328,3 +328,25 @@ def test_the_entrance_is_the_last_join_on_the_way_out_and_every_route_walks_to_t
     assert len(routes) == 2 and all(r[-1][1] >= 1990.0 for r in routes), "every route ends at the outer end"
     assert routes_missed(routes, 0.0, 100.0, 20.0) == 1 and routes_missed(routes, *hand, 20.0) == 0
     assert outermost_join([(0.0, 0.0), (0.0, 50.0)], [[(500.0, 500.0), (600.0, 500.0)]]) is None
+
+
+def test_an_entrance_board_stands_on_the_approach_and_not_on_a_straggler_at_its_join():
+    # feature 261 (settlement-review of Inashiro): the outermost join is a one-farmstead web lane, whose verge passes every
+    # departure as well as the track's does - but a board is squared to the way it stands on, so on the straggler it
+    # stood side-on to the track. Among the seats every departure passes, the approach's own win.
+    import math
+
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    s.M["meta"]["knobs"] = {"kosatsuba_seat": "entrance"}
+    s.M["houses"] = [{"x": 300.0, "y": 280.0, "w": 30.0, "h": 24.0, "rot": 0.0}, {"x": 700.0, "y": 280.0, "w": 30.0, "h": 24.0, "rot": 0.0}, {"x": 820.0, "y": 560.0, "w": 30.0, "h": 24.0, "rot": 0.0}]
+    s.M["lanes"] = [
+        {"pts": [[300.0, 300.0], [700.0, 300.0]], "w": 5},
+        {"pts": [[500.0, 300.0], [500.0, 500.0]], "w": 5},
+        {"pts": [[800.0, 560.0], [500.0, 620.0]], "w": 3, "web": True},
+        {"pts": [[500.0, 500.0], [500.0, 990.0]], "w": 6, "connector": True},
+    ]
+    assert s.place_kosatsuba() is not None
+    rot = float(s.M["kosatsuba"][-1]["rot"])
+    assert min(abs(rot - 90.0) % 180.0, 180.0 - abs(rot - 90.0) % 180.0) <= 15.0, f"squared to the track (bearing 90), not the straggler: {rot}"
+    assert math.dist((s.M["kosatsuba"][-1]["x"], s.M["kosatsuba"][-1]["y"]), (500.0, 620.0)) <= 120.0

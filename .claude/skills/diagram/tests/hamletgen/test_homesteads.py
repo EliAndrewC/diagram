@@ -295,6 +295,17 @@ def test_a_fixture_across_the_brook_from_its_house_is_across() -> None:
     assert across_the_brook(s, (700.0, 600.0), (760.0, 640.0)) is False
 
 
+def test_a_fixture_beyond_a_lane_from_its_house_is_across() -> None:
+    """Settlement-review of Mizuguchi (feature 261): a lane between the house and the seat puts the seat outside the
+    plot; a seat on the house's side of every lane is not across."""
+    from l7r.diagram.hamletgen.homesteads.fixtures import across_a_lane
+
+    lane = ([(100.0, 700.0), (500.0, 700.0), (1300.0, 700.0)], 4.5)
+    assert across_a_lane([lane], (700.0, 600.0), (700.0, 720.0)) is True
+    assert across_a_lane([lane], (700.0, 600.0), (740.0, 660.0)) is False
+    assert across_a_lane([], (700.0, 600.0), (700.0, 720.0)) is False
+
+
 def test_the_shrine_budget_refuses_a_second_house_that_rolls_one(monkeypatch) -> None:  # type: ignore[no-untyped-def]
     """`farmstead_fixtures`: the shrine share is a CEILING - "very rare, but notable" - so once the budget the share
     allows is spent, a later house that rolls a shrine gets none, whatever its roll says."""
@@ -315,6 +326,39 @@ def test_the_shrine_budget_refuses_a_second_house_that_rolls_one(monkeypatch) ->
     fx.farmstead_fixtures(s, a_plan(), houses)
     shrines = [r for r in s.M["farm_fixtures"] if r["kind"] == "shrine"]
     assert len(shrines) == 2, "the share allows two of four; the third house that rolled one is refused"
+
+
+def test_a_shrine_with_no_seat_passes_to_the_next_house_with_room(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """`farmstead_fixtures` (settlement-review of Mizuguchi, feature 261): the one house that rolled the map's shrine has
+    every seat beyond a lane, so the shrine goes to the next house with room rather than off the map - and where no house
+    has room, the miss is recorded once."""
+    from l7r.diagram.hamletgen.homesteads import fixtures as fx
+    from l7r.diagram.settlement import Settlement
+
+    monkeypatch.setitem(fx.FIXTURE_BANDS, "shrine", (0.5, 0.5))
+    probe = Settlement(W=1200, H=700, seed=7)
+    spots = [(float(x), y) for x in range(150, 1100, 110) for y in (250.0, 400.0)]
+    rolls = next(p for p in spots if probe._hjit(p[0], p[1], fx._SALT["shrine"]) < 0.5)
+    other = next(p for p in spots if probe._hjit(p[0], p[1], fx._SALT["shrine"]) >= 0.5 and abs(p[0] - rolls[0]) > 200)
+
+    def run(boxed):  # type: ignore[no-untyped-def]
+        s = Settlement(W=1200, H=700, seed=7)
+        s.meta(name="T", scale="hamlet", ftpx=1)
+        houses = [{"x": x, "y": y, "w": 46.0, "h": 28.0, "rot": 0.0, "shed_side": "N"} for x, y in (rolls, other)]
+        for h in houses:
+            s.M["houses"].append(dict(h))
+            s.placed.append((h["x"], h["y"], h["w"], h["h"]))
+        monkeypatch.setattr(fx, "across_a_lane", lambda lanes, house, seat: house in boxed)
+        fx.farmstead_fixtures(s, a_plan(), houses)
+        return s
+
+    s = run({rolls})
+    shrines = [r for r in s.M["farm_fixtures"] if r["kind"] == "shrine"]
+    assert [tuple(r["of"]) for r in shrines] == [(round(other[0], 1), round(other[1], 1))], "passed to the house with room"
+    assert "shrine" not in (s.M["meta"].get("farm_fixtures_unseated") or {})
+    s = run({rolls, other})
+    assert not [r for r in s.M["farm_fixtures"] if r["kind"] == "shrine"]
+    assert s.M["meta"]["farm_fixtures_unseated"]["shrine"] == 1, "no house had room: one miss"
 
 
 def _toy_hamlet(households: int, seed: int = 3):  # type: ignore[no-untyped-def]

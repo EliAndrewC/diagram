@@ -283,3 +283,51 @@ def test_stage_notice_reseats_an_entrance_board_where_every_departure_passes(mon
     bx, by, _rot = s.reseated[0]
     assert routes_missed(departure_routes(s.M), bx, by, 20.0) == 0, "both households' ways out pass the board"
     assert math.dist((bx, by), (300.0, 330.0)) <= 60.0, "beside the handover, not down a branch"
+
+
+def test_stage_notice_squares_an_entrance_board_to_the_approach_not_a_straggler_at_its_join(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Settlement-review of Inashiro (feature 261): where the outermost join is a one-farmstead web straggler, a verge of
+    that straggler passes every departure as well as the connector's does - and the board is squared to the way it
+    stands on, so it went side-on to the track. Among the seats every departure passes, the approach's own wins."""
+
+    class _StubS:
+        def __init__(self) -> None:
+            self.M = {
+                "meta": {"kosatsuba_seat": "entrance", "view": [0.0, 0.0, 820.0, 820.0]},
+                "houses": [{"x": 200.0, "y": 280.0}, {"x": 600.0, "y": 280.0}, {"x": 720.0, "y": 560.0}, {"x": 660.0, "y": 540.0}],  # the last house tips the traffic count to the straggler
+                "kosatsuba": [{"x": 1000.0, "y": 1000.0, "z": 2}],
+                "labels": [],
+                "lanes": [
+                    {"pts": [(200.0, 300.0), (600.0, 300.0)], "w": 5},
+                    {"pts": [(400.0, 300.0), (400.0, 500.0)], "w": 5},
+                    {"web": True, "pts": [(700.0, 560.0), (400.0, 620.0)], "w": 3},
+                    {"connector": True, "pts": [(400.0, 500.0), (400.0, 810.0)], "w": 6},
+                ],
+            }
+            self.top = ["", "", "the first board's glyph"]
+            self.TOPZ = 0
+            self.reseated: list[tuple[float, float, float]] = []
+
+        def place_kosatsuba(self):  # type: ignore[no-untyped-def]
+            return (1000.0, 1000.0)
+
+        def discard_queued_label(self, kind):  # type: ignore[no-untyped-def]
+            pass
+
+        def place_labels(self):  # type: ignore[no-untyped-def]
+            pass
+
+        def _fits(self, x, y, w, h, corridors=False):  # type: ignore[no-untyped-def]
+            return True
+
+        def fixture_clear_of_water(self, x, y, half):  # type: ignore[no-untyped-def]
+            return True
+
+        def kosatsuba(self, x, y, rot=0.0):  # type: ignore[no-untyped-def]
+            self.reseated.append((x, y, rot))
+
+    s = _StubS()
+    hg.stage_notice(s, None)  # type: ignore[arg-type]
+    assert len(s.reseated) == 1
+    _bx, _by, rot = s.reseated[0]
+    assert min(abs(rot - 90.0) % 180.0, 180.0 - abs(rot - 90.0) % 180.0) <= 15.0, f"squared to the connector (bearing 90), not the straggler: {rot}"

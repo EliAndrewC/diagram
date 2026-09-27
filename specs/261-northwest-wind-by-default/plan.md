@@ -334,6 +334,21 @@ Measured before and after in research R10.
   failed its depth test, and a belt that stops at the marsh does the same. The carr along the rest of the toe - the
   second form the record names for it - is not built.
 
+### D19 - The board on the approach, grain by archetype, and the plot's corner (round 6fefdcdf)
+
+- An `entrance` board at a handover stands on the approach itself where a seat there passes every departure: among the
+  seats every way out passes, the connector's win, in the siter and the frame stage's re-seat alike. A board is squared
+  to the way it stands on, and Inashiro's outermost join is a one-farmstead web straggler whose verge won, so the board
+  stood 87.7 degrees off the track every household walks (research/urban-features.html: broadside to the one way out).
+- The homestead field is a grain plot, so an archetype that buys its grain in lays none (`GRAIN_BOUGHT_IN`: the
+  mulberry dike-fishpond, which 「abandoned rice to plant mulberry」 - research/archetypes.html; Kuwabata's GM-confirmed
+  economy). Kuwabata had drawn six barley, millet and buckwheat plots.
+- A farmstead fixture is refused a seat whose line to its house crosses a lane (`across_a_lane`, the brook's line test):
+  a shrine stands in a corner of the house plot and a coop in the yard (research/homesteads.html), and Mizuguchi drew a
+  coop, a woodpile and its one shrine beyond the lane behind their house. A shrine with no seat passes to the next
+  house with room, and the miss is recorded only if none takes it - the share is how many households keep one, not
+  which; without the pass Kashikawa and Mizuguchi each lost their only shrine.
+
 ## Phases
 
 1. Engine: D1, D2, D3 with their unit tests (plan, cluster, surface); the amendment's D9-D17 with theirs.

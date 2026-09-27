@@ -759,9 +759,9 @@ the shortest edge - and recorded PASS (`.git/review-verdicts/`).
 The wind is the region's northwest now, and the map keeps seed 23. Every margin whose back faces that wind has the brook
 across its band but one, and that one ran the belt off the canvas's west edge, holed where the westernmost farmsteads
 stood in it - so it is only a fallback now. The hamlet stands north of the brook, all 12 farmsteads on one bank and the
-rice across the water to the south, with the belt west of the houses on open ground: 189 clumps, 300 degrees from the
+rice across the water to the south, with the belt west of the houses on open ground: 237 clumps, 300 degrees from the
 houses' middle, over a 98-degree arc. The farmsteads moved (median 1,398 ft). The rolled round shape is drawn, at an
 aspect of 1.93. The copse is the against-the-belt form, every crown within 60 ft of the belt, and the weir at the
 intake the map is named for is drawn. The connector leaves northeast (59 degrees on its first long leg) from the canvas's top, and the
 entrance board stands 144 ft out along it from where it meets the lanes - the nearest seat every way out passes whose caption stands clear, the crowns of the belt's horn crowding the junction itself -, passed by all 12 households' ways out. Six homesteads carry
-their own dry plot against a lee or flank side.
+their own dry plot against a lee or flank side. No household fixture stands across a lane from its house; the shrine the house at 1277,257 rolled had no seat on its own side of the lane behind it, so it passed to the next house with room, at 1466.6,119.4.
