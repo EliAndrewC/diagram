@@ -295,3 +295,11 @@ def test_a_board_whose_caption_cannot_fit_is_not_sitable():
     s.M["road"] = [[20, 200], [380, 200]]
     s.M["houses"] = [{"x": float(x), "y": float(y), "w": 30.0, "h": 30.0, "rot": 0.0} for x in range(40, 380, 34) for y in (170, 230)]
     assert s.place_kosatsuba() is not None
+
+
+def test_a_hamlet_with_no_houses_or_no_handover_has_no_ways_out():
+    # feature 261: the handover needs dwellings, and the routes need a handover
+    from l7r.diagram.settlement.structures.fixtures._helpers import departure_routes, kosatsuba_handover
+
+    assert kosatsuba_handover({"lanes": [{"pts": [[0, 0], [100, 0]], "connector": True}]}) is None
+    assert departure_routes({"houses": [{"x": 50.0, "y": 50.0}], "lanes": []}) == []
