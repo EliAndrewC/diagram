@@ -139,7 +139,11 @@ fragment the grep did not name.
 ## The procedure (session 1: locate, read, write)
 
 1. **Locate.** Grep each item's words over `.claude/skills/diagram/research/{page}/`; note the fragment and
-   sentence.
+   sentence. An item that is a claim about the SETTING is checked against the GM's canon - `budgets.md` and `l7r.md`
+   in `/host-l7r-repo/setting/`, and `/host-l7r-repo/gm-assistant/setting/*.md` - with ONE call naming every term of
+   every such item: `make canon TERMS="<term>|<term>|<term>"` (in `.claude/skills/diagram`). A direct read of a canon
+   file is refused, and so is a second call that does not fold the first's terms (`canon-read-hooks.sh`; R7: fifteen
+   sequential greps on the last page).
 2. **Read the sources.** Save candidate pages with `make source-pages OUT=/tmp/l7r-check/{slug}-pages URLS="<u1>
    <u2>"`, grep them yourself, then dispatch ONE `source-reader` over every item at once, handing it the saved
    directory and each claim's text in the prompt - never a path under `/diagram` (`check-bundle-hooks.sh`

@@ -367,6 +367,16 @@ current.
    rule lets the retry after a refusal pass). A mention is not a read. Escape `CANON_OK="<reason>"` for a read the
    search cannot give (a whole section in order). Its companion suite drives the real hook; it is registered in
    `.claude/settings.json` and in the root CLAUDE.md's guard table.
+   **It runs where the measured round runs** (plan review, item 1): hooks run the MIRROR's copy of a guard, and a
+   guard added in a feature is not in the mirror until the feature lands - so `check-bundle-hooks.sh` (D8) had never
+   run (zero guard-log entries) and this one would not have either. Both are now registered in a fallback form that
+   runs the mirror's copy when it exists and the session's own clone copy until then, and
+   `tests/tooling/test_hooks_resolve.py` fails on any hook registered by a mirror path the mirror does not have (proved
+   red on the bare form). Proved LIVE: a headless session in this clone told to Read `budgets.md` was refused with
+   the `make canon` message and the guard log recorded `canon-read blocked direct` (2026-09-27T00:13:14Z). A third
+   `make canon` in the window is refused however it is worded (item 2: `a`, `a|b`, `a|b|c` had passed), a refused
+   call does not count toward the window, and a recursive grep over the host repository or a read of any `setting/`
+   under it (the webapp's copy too) is a canon read. The write brief names the canon files and the command (item 3).
 2. **The split, its own session, before the write - by construction** (recommendation 2). `brief.py <page> <task>`
    maps each FR-002 item to its question (the heading the report names, else the question containing the item's
    quoted text) and each FR-006 item by its quoted text or its report sub-heading; an item it cannot place is named
@@ -383,7 +393,9 @@ current.
    2026-09-27, method: `brief.py questions` and `fr006_questions`), so the page exercises recommendation 2 - a split
    session on 020 runs before the write. The FR-006 mapping is part of D16.2: the first version mapped FR-002 items
    only and would have handed the write session 020 whole. Compared in R8 with R4 to R7 by `tokens.py summary`, per
-   question checked, with the split session reported beside the page, as R6 reported its splits.
+   question checked, with the split session reported beside the page, as R6 reported its splits. R8 says which recommendations the page
+   exercised and how many times the canon guard fired (item 4): none of the three FR-002 items is a canon claim, so
+   recommendation 1 is measured only if the session reaches the canon.
 5. **The Mode A sheet is current before a test reads it.** `tests/_sheets.py`: a declared generated exception's svg
    is regenerated when missing OR older than its generator or any engine module, under a lock so two workers never
    read one the other is writing; both readers (`test_mode_a_sheets.py`, `tools/test_registry.py`) go through it.

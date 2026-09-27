@@ -62,6 +62,30 @@ call Bash '{"command":"make canon TERMS=\"Imperial road|merchant|artisan\""}'
 earlier 'make canon TERMS="road"' 'ls' 'ls' 'ls'
 call Bash '{"command":"make canon TERMS=\"artisan\""}'
 [ "$(rc)" -eq 0 ] && ok "a call three or more tool calls later passes" || no "refused outside the window" "(rc=$(rc))"
+# GUARD_EDIT_OK: feature 250 D16 - the plan review's item 2: a growing chain is not one search, and a refused call did not run
+earlier 'make canon TERMS="a"' 'make canon TERMS="a|b"'
+call Bash '{"command":"make canon TERMS=\"a|b|c\""}'
+[ "$(rc)" -eq 2 ] && ok "a third call in the window is refused even when it folds (a, a|b, a|b|c)" || no "the chain passed" "(rc=$(rc))"
+: > "$T/transcript.jsonl"
+python3 - "$T/transcript.jsonl" <<'PY'
+import json, sys
+rows = [
+    {"type": "assistant", "message": {"content": [{"type": "tool_use", "id": "t1", "input": {"command": 'make canon TERMS="road"'}}]}},
+    {"type": "assistant", "message": {"content": [{"type": "tool_use", "id": "t2", "input": {"command": 'make canon TERMS="artisan"'}}]}},
+    {"type": "user", "message": {"content": [{"type": "tool_result", "tool_use_id": "t2", "is_error": True, "content": "PreToolUse:Bash hook error: BLOCKED: fold these terms"}]}},
+]
+open(sys.argv[1], "w").write("\n".join(json.dumps(r) for r in rows) + "\n")
+PY
+call Bash '{"command":"make canon TERMS=\"road|artisan\""}'
+[ "$(rc)" -eq 0 ] && ok "the retry after a refusal passes - the refused call did not run" || no "the retry was refused" "(rc=$(rc))"
+
+echo "3b. reads that reach the canon without naming a setting file"
+call Bash '{"command":"grep -rn \"imperial road\" /host-l7r-repo/ | head"}'
+[ "$(rc)" -eq 2 ] && ok "a recursive grep over the whole host repository" || no "allowed" "(rc=$(rc))"
+call Bash '{"command":"grep -n road /host-l7r-repo/gm-assistant/webapp/setting/budgets.md"}'
+[ "$(rc)" -eq 2 ] && ok "the webapp's copy of a setting file" || no "allowed" "(rc=$(rc))"
+call Bash '{"command":"grep -n foo /host-l7r-repo/academic-sources/TO-DOWNLOAD.md"}'
+[ "$(rc)" -eq 0 ] && ok "a non-recursive read of another host file is not a canon read" || no "refused" "(rc=$(rc))"
 
 echo "4. the escape, and the record"
 call Bash '{"command":"sed -n 250,280p /host-l7r-repo/setting/budgets.md  # CANON_OK: the whole road-upkeep section in order"}'
