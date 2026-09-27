@@ -165,7 +165,9 @@ def test_emit_svg_draws_the_practice_ground_and_its_equipment() -> None:
 def test_county_magistracy_places_without_overflow() -> None:
     res = c.place(c.county_magistracy_program())
     assert res.overflow == []
-    assert len(res.placed) == 15  # the clerks' room is a room of the office hall (feature 267); the grooms' row joined in pass 5
+    # the clerks' room is a room of the office hall (feature 267); the grooms' row joined in pass 5; the karo lodges in a
+    # bay of the retainers' long-house since pass 6
+    assert len(res.placed) == 14
 
 
 def test_county_magistracy_buildings_clear_the_spine() -> None:
@@ -238,8 +240,9 @@ def test_point_features_follow_the_masses_and_skip_what_the_program_lacks() -> N
     # the privies are found by KIND (the servants' went unseated while matched by name, pass 4): one each at the
     # barracks, the stables and the servants' quarters, on an end face where the court face is taken
     assert svg.count(">well<") == 3 and svg.count(">latrine<") == 3 and ">bath<" in svg and ">notice board<" in svg and ">fire-water tubs<" in svg
-    # one at each wooden building, none at the kura; the kitchen's face - bath, well and door - keeps room for one
-    assert _tub_circles(svg) == 5
+    # two at the kitchen (an end face takes what its crowded yard face cannot, pass 6), one at the bath, one at each
+    # other wooden building, none at the kura
+    assert _tub_circles(svg) == 7
     bare = _prog(_b("hall", 40.0, 20.0, "outer", "divider", order=10, feature="office hall"))
     svg = c.emit_svg(bare, c.place(bare))
     assert ">well<" not in svg and ">latrine<" not in svg and ">bath<" not in svg and ">notice board<" in svg and _tub_circles(svg) == 1
@@ -258,11 +261,14 @@ def test_a_feature_with_no_clear_seat_is_left_out() -> None:
 
 def test_a_seat_that_would_leave_the_envelope_is_refused() -> None:
     """A stable hugging the south wall of a 20 ft deep envelope has no room in front of it for a well
-    (9 ft out) or even a tub (2.5 ft out): every candidate falls past the envelope's edge and nothing is seated."""
+    (9 ft out) or a tub (2.5 ft out): every court-face candidate falls past the envelope's edge. Its tub finds an end
+    face instead (pass 6), inside the envelope."""
     env = _env(200.0, 20.0, 10.0, 13.0)
-    prog = c.CompoundProgram("t", env, (), (_b("stables", 30.0, 15.0, "outer", "S", order=5),))
-    parts = c._point_features(prog, c.place(prog), lambda *a: "R", lambda *a: "L", 0.0, 0.0)
-    assert ">well<" not in "".join(parts) and "<circle" not in "".join(parts)
+    prog = c.CompoundProgram("t", env, (), (_b("stables", 30.0, 15.0, "outer", "S", order=5, feature="stables"),))
+    parts = "".join(c._point_features(prog, c.place(prog), lambda *a: "R", lambda *a: "L", 0.0, 0.0))
+    assert ">well<" not in parts and parts.count("<circle") == 1
+    cy = float(parts.split('<circle cx="')[1].split('cy="')[1].split('"')[0])
+    assert 0.0 < cy < 20.0
 
 
 def test_emit_refuses_a_building_that_declares_no_kind() -> None:
@@ -503,7 +509,7 @@ def test_the_county_example_carries_the_program_the_outcomes_name() -> None:
     gate = next(p for p in result.placed if p.spec.name == "gatehouse")
     assert (gate.spec.w_ft, gate.spec.h_ft) == (18.0, 12.0) and c._gate_interval(prog.envelope)[0] - gate.x2 < 2.0
     doors = {k for _s, k, within in pieces(svg) if k == "door" for k in within}
-    assert {"residence", "kitchen", "karo's house", "guest quarters", "retainers' quarters", "barracks", "servants' quarters"} <= doors
+    assert {"residence", "kitchen", "guest quarters", "retainers' quarters", "barracks", "servants' quarters"} <= doors
     for kind in ("family quarters", "lord's quarters", "reception room", "engawa"):
         assert f'data-kind="{kind}"' in svg
     assert svg.count("<ellipse") >= 5 and ">hearing" in svg and ">servants' quarters<" in svg
@@ -520,10 +526,10 @@ def test_the_county_example_sets_the_garden_before_the_house_and_the_court_on_th
     assert garden.x_ft <= res.x_ft and garden.x2 >= res.x2 and garden.y_ft == res.y2  # the whole south face looks onto it
     assert court.w_ft <= hall.spec.w_ft and abs((court.x_ft + court.x2) / 2 - (hall.x_ft + hall.x2) / 2) < 1.0
     kitchen = by["kitchen"]
-    assert kitchen.x2 <= res.x_ft and (kitchen.spec.w_ft, kitchen.spec.h_ft) == (24.0, 20.0)  # the ell at the west end
-    # the whole house - residence, kitchen, bath - at research buildings 380's ~2,400 sq ft (pass 5)
+    assert kitchen.x2 <= res.x_ft and (kitchen.spec.w_ft, kitchen.spec.h_ft) == (20.0, 18.0)  # the ell at the west end
+    # the whole house - residence, kitchen, bath - at research buildings 380's 49-tsubo house, ~1,740 sq ft (pass 6)
     house = res.spec.w_ft * res.spec.h_ft + kitchen.spec.w_ft * kitchen.spec.h_ft + cp.BATH_W_FT * cp.BATH_H_FT
-    assert 2_200 <= house <= 2_700
+    assert 1_650 <= house <= 1_850
 
 
 def test_no_caption_but_its_own_stands_under_the_roofed_court() -> None:
@@ -629,3 +635,59 @@ def test_the_hearing_court_carries_its_mats_and_the_hall_its_band() -> None:
     for kind in ("day office", "official study", "clerks' seats", "kneeling positions"):
         assert f'data-kind="{kind}"' in svg
     assert svg.count('fill="#4A3318" stroke="none" stroke-width="0" data-kind="latrine"') >= 2  # the wall hatches
+
+
+# --- pass 6 (building-review round 5): the privies by the walls, the guests' privy, the karo's bay ---
+
+
+def _home(court: str, wall: str, **kw: object) -> c.Placed:
+    spec = c.BuildingSpec("residence", "lord", 40.0, 20.0, court, wall, feature="residence", inset_ft=10.0, rooms=(("reception room", 30.0, 0.0, 10.0, 16.0),), **kw)  # type: ignore[arg-type]
+    return c.Placed(spec, 50.0, 50.0)
+
+
+def test_the_family_privy_stands_flush_to_the_rear_wall() -> None:
+    env = _env(200.0, 200.0, 100.0)
+    face = c.WALL_INK_FT / 2 + 0.5
+    assert cp._rear_privy(env, _home("inner", "N"), [], ()) == (50.0, face, 55.0, face + 5.0)
+    assert cp._rear_privy(env, _home("outer", "S"), [], ()) == (50.0, 200.0 - face - 5.0, 55.0, 200.0 - face)
+    assert cp._rear_privy(env, _home("inner", "W"), [], ()) == (face, 50.0, face + 5.0, 55.0)
+    assert cp._rear_privy(env, _home("inner", "E"), [], ()) == (200.0 - face - 5.0, 50.0, 200.0 - face, 55.0)
+    assert cp._rear_privy(env, _home("inner", "N"), [(0.0, 0.0, 200.0, 20.0)], ()) is None  # the alley taken
+    backed = c.Placed(c.BuildingSpec("r", "lord", 40.0, 20.0, "inner", "N", feature="residence"), 50.0, 2.0)
+    assert cp._rear_privy(env, backed, [], ()) is None  # a house backing its wall has no alley
+
+
+def test_the_guests_privy_stands_behind_the_reception() -> None:
+    env = _env(200.0, 200.0, 100.0)
+    assert cp._guest_privy(env, _home("inner", "N"), []) == (82.5, 45.0, 87.5, 50.0)
+    assert cp._guest_privy(env, _home("outer", "S"), []) == (82.5, 70.0, 87.5, 75.0)
+    assert cp._guest_privy(env, _home("inner", "W"), []) == (45.0, 55.5, 50.0, 60.5)
+    assert cp._guest_privy(env, _home("inner", "E"), []) == (90.0, 55.5, 95.0, 60.5)
+    assert cp._guest_privy(env, _home("inner", "N"), [(80.0, 40.0, 90.0, 50.0)]) is None
+    plain = c.Placed(c.BuildingSpec("r", "lord", 40.0, 20.0, "inner", "N", feature="residence"), 50.0, 50.0)
+    assert cp._guest_privy(env, plain, []) is None  # no reception room
+
+
+def test_a_privy_flush_to_the_side_wall_by_a_building() -> None:
+    env = _env(200.0, 200.0, 100.0)
+    face = c.WALL_INK_FT / 2 + 0.5
+    west = c.Placed(_b("row", 40.0, 16.0, "outer", "S"), 3.0, 182.0)  # court north: the privy north of it, on the west wall
+    assert cp._flush_privy(env, west, [], ()) == (face, 175.0, face + 5.0, 180.0)
+    east = c.Placed(_b("row", 40.0, 16.0, "inner", "N"), 157.0, 2.0)  # court south, by the east wall
+    assert cp._flush_privy(env, east, [], ()) == (200.0 - face - 5.0, 20.0, 200.0 - face, 25.0)
+    north = c.Placed(_b("col", 16.0, 40.0, "inner", "W"), 2.0, 3.0)  # court east, by the north wall
+    assert cp._flush_privy(env, north, [], ()) == (20.0, face, 25.0, face + 5.0)
+    south = c.Placed(_b("col", 16.0, 40.0, "outer", "E"), 182.0, 157.0)  # court west, by the south wall
+    assert cp._flush_privy(env, south, [], ()) == (175.0, 200.0 - face - 5.0, 180.0, 200.0 - face)
+    assert cp._flush_privy(env, c.Placed(_b("mid", 40.0, 16.0, "outer", "S"), 80.0, 182.0), [], ()) is None  # by no side wall
+    assert cp._flush_privy(env, west, [], ((0.0, 160.0, 10.0, 170.0),)) is None  # a well too near
+
+
+def test_the_county_example_keeps_the_karo_in_a_bay_of_the_staff_long_house() -> None:
+    _prog_, result, svg = _county()
+    names = {p.spec.name for p in result.placed}
+    assert "karo's house" not in names
+    assert 'data-kind="karo\'s house"' in svg  # the bay, a room of the retainers' quarters
+    kitchen = next(p for p in result.placed if p.spec.name == "kitchen")
+    servants = next(p for p in result.placed if p.spec.feature == "servants' quarters" and p.spec.court == "inner")
+    assert servants.x2 < kitchen.x_ft  # the servants' row beside the kitchen yard (pass 6)

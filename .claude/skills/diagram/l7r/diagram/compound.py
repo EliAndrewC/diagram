@@ -202,14 +202,16 @@ ZONE_KINDS: dict[str, str] = {
     "garden": "garden",
     "yard": "outer court",
     "cart yard": "cart yard",
+    "vegetable garden": "vegetable garden",
+    "inner yard": "inner court",
     "practice ground": "practice ground",
 }
 #: Zones drawn as bare ground, with no edge: an outlined sub-rectangle of court reads as a FENCED court, and a fenced
 #: forecourt is a GUESS the record does not support (research buildings 300; building-review round 3).
-UNFENCED_ZONES: frozenset[str] = frozenset({"forecourt", "yard", "cart yard"})
+UNFENCED_ZONES: frozenset[str] = frozenset({"forecourt", "yard", "cart yard", "inner yard"})
 #: A zone's caption where its program name is not the reader's word: the hearing court is `oshirasu` in the program (and
 #: in its fill pattern) but the sheets caption it in English (the other drafts and the hand sheets say `hearing court`).
-ZONE_CAPTIONS: dict[str, str] = {"oshirasu": "hearing court", "yard": "outer court"}
+ZONE_CAPTIONS: dict[str, str] = {"oshirasu": "hearing court", "yard": "outer court", "inner yard": "inner court"}
 
 
 _GROUND_KINDS = frozenset({*ZONE_KINDS.values(), "inner court", "outer court", "practice ground", "garden", "-"})
@@ -224,6 +226,10 @@ def stroke_band(a: tuple[float, float], b: tuple[float, float], half: float) -> 
     nx, ny = -dy / n * half, dx / n * half
     return [(a[0] + nx, a[1] + ny), (b[0] + nx, b[1] + ny), (b[0] - nx, b[1] - ny), (a[0] - nx, a[1] - ny)]
 
+
+BOLD_CHAR_W_EM = 0.60
+"""A bold mixed-case name's advance per character, in ems - the width the pack audit measured by rendering the pool's
+bold building names (`tools/pack_audit/parse.py` CHAR_W_BOLD_MIXED, 2026-07-25)."""
 
 CAPTION_ROOM = 40.0
 """How far below the drawn canvas a draft's caption may stand, in px (feature 266): room for one caption line beside
@@ -265,7 +271,10 @@ _DEFS = (
     '<circle cx="10" cy="9" r="0.8" fill="#7A8C5C"/></pattern>'
     '<pattern id="keiko-earth" patternUnits="userSpaceOnUse" width="16" height="16">'
     '<rect width="16" height="16" fill="#E2CE9E"/><line x1="0" y1="5" x2="16" y2="5" stroke="#C2A46C" stroke-width="0.5"/>'
-    '<line x1="0" y1="13" x2="16" y2="13" stroke="#C2A46C" stroke-width="0.5"/></pattern></defs>'
+    '<line x1="0" y1="13" x2="16" y2="13" stroke="#C2A46C" stroke-width="0.5"/></pattern>'
+    # the vegetable garden's planted rows (pass 6): dark soil ridges across a lighter bed
+    '<pattern id="veg-rows" patternUnits="userSpaceOnUse" width="12" height="9">'
+    '<rect width="12" height="9" fill="#C9B98A"/><line x1="0" y1="4.5" x2="12" y2="4.5" stroke="#7A8C5C" stroke-width="2"/></pattern></defs>'
 )
 
 
@@ -373,8 +382,10 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 7
             parts.append("</g>")
     for p in result.placed:  # buildings
         fill, stroke = KINDS.get(p.spec.kind, KINDS["service"])
-        # a name that runs wider than its building at 10 px is written at 8 (the gatehouse's overran its 54 px box)
-        size = 10 if len(p.spec.name) * 10 * CHAR_W_EM <= p.spec.w_ft * FTPX - 6 else 8
+        # a name that runs wider than its building at 10 px is written at 8 (the gatehouse's overran its 54 px box), measured
+        # at BOLD_CHAR_W_EM - a building's name is bold, and bold mixed case runs wider than the standard's em (pass 6: the
+        # retainers' 26-letter name, judged to fit, ran over the wall's ink)
+        size = 10 if len(p.spec.name) * 10 * BOLD_CHAR_W_EM <= p.spec.w_ft * FTPX - 6 else 8
         if p.spec.kind == "cell":
             # a cell reads by its lattice front: short bars across its court face, clear of its name (the two end lines
             # it had bracketed the caption)
@@ -495,21 +506,25 @@ def county_magistracy_program() -> CompoundProgram:
     # the head of the cart yard; its 6 ft passage is a GUESS, narrower than the main gate.
     env = Envelope(w_ft=270.0, h_ft=200.0, divider_ft=90.0, gate_w_ft=8.0, posterns=(("W", 50.0, 6.0), ("S", 244.0, 6.0)))
     spine = (
-        # THE GARDEN LIES BEFORE THE HOUSE (feature 267 pass 3, building-review: only 23 ft of the residence's 92 ft
-        # south face looked onto it while the kitchen, bath, well and karo's house took the rest; research buildings
-        # 230 'The shady rear is the service strip' - the garden faces the reception rooms). It starts at the
-        # residence's west end (x 50: the kitchen takes the corner, so the residence lands at 50-142) and runs to the
-        # guest house (x ~233) less its tub; it abuts the residence's south face (y 46, the house standing 8 ft off the
-        # north wall since pass 4) and runs 36 ft deep to y 82, into the void that stood below it, leaving an 8 ft walk
-        # along the divider to the middle gate. Its size is a GUESS.
-        CourtZone("garden", 34.0, 40.0, 188.0, 42.0),
+        # THE GARDEN LIES BEFORE THE HOUSE (research buildings 230 'The shady rear is the service strip': the garden faces
+        # the reception rooms). Pass 6 (building-review round 5: the garden ran 188 ft against a 66 ft house, a bare
+        # strip beside it) sizes it to the house: from the kitchen's corridor to the middle gate's line, x 104-172, and
+        # from the house's veranda (y 36) 46 ft deep to y 82, an 8 ft walk along the divider. Its size is a GUESS.
+        CourtZone("garden", 104.0, 36.0, 68.0, 46.0),
+        # The vegetable garden WEST of the house, in the kitchen yard (research buildings 400: the one plot whose side is
+        # given lay west of the house - the Takei house's soup-greens field of about 1,070 sq ft; its size a knob between
+        # that plot and a field over half the grounds). The example takes the plot: 36 x 30 ft = 1,080 sq ft.
+        CourtZone("vegetable garden", 24.0, 46.0, 36.0, 30.0),
+        # The inner court's open ground east of the garden, before the guest house (pass 6): named, not fenced. Its
+        # bounds are a drawing convention.
+        CourtZone("inner yard", 176.0, 24.0, 54.0, 62.0),
         # The hearing court is centered on the office hall (x 43-156 as placed: the tax archive's 34 ft and a
         # fire-gap west of it) and no longer than it - R22, research buildings 450: under the office hall's roof or its
         # own, before the dais. 80 ft leaves each end of the hall's south face out from under the roof, where its tub
         # stands; 32 ft deep (36 until pass 5) keeps the cart slot to the stables and room for the stable well before
         # them (buildings.md "Hearing court"). It was 132 x 39 ft, longer than the hall and 34 ft off its center. Its
         # size is a GUESS - no roofed court's size was found.
-        CourtZone("oshirasu", 59.5, 126.0, 80.0, 32.0),
+        CourtZone("oshirasu", 59.5, 130.0, 80.0, 32.0),  # y 130 since pass 6: the office hall is 38 ft deep
         # just inside the main gate (131-139), east of the gatehouse that stands beside it, and 55 ft wide (it was 36)
         # to take the ground east of the gate the hearing court gave up when it shrank to the hall's length; a
         # marshalling apron's width is a GUESS
@@ -525,7 +540,7 @@ def county_magistracy_program() -> CompoundProgram:
         # The outer court's open ground between the hearing court and the practice ground (pass 4, building-review round
         # 3: ~50 x 40 ft unnamed): the way from the forecourt to the middle gate and the hall's east door, named, not
         # fenced (UNFENCED_ZONES). Its bounds are a drawing convention.
-        CourtZone("yard", 141.0, 126.0, 47.0, 38.0),
+        CourtZone("yard", 141.0, 131.0, 47.0, 33.0),  # y 131 since pass 6: the office hall is 38 ft deep
         # The cart yard before the service gate (pass 4: the ~71 x 30 ft of bare ground in the SE outer court) - the
         # carts, the stable muck and the prisoners' way out; the kind the hand sheets draw (a DEVIATION from canon on
         # H and U, forms.md). Its size is a GUESS.
@@ -535,57 +550,54 @@ def county_magistracy_program() -> CompoundProgram:
     buildings = (
         # inner (residence) court - buildings ring N/E/W walls + back the divider
         # The residence: one block under one roof (R02's ordinary form, research buildings 250), MASSED IN TWO ROWS front
-        # and back (pass 4, building-review round 3: the one-room-deep bar; forms.md R02, as pass 2 re-massed Ochiba's; the
-        # Kuchiba house's rooms "stand in two rows, front and back", research buildings 260). Its rooms take the palace
-        # order's lesser form - the reception at the east END nearest the middle gate, the full depth; the master's rooms
-        # beside it on the garden row; the family's beyond, on the garden row by the kitchen and the inner rooms behind
-        # (R03, research buildings 260: the reception at one end, the master's rooms adjoining it and the family's). The
-        # veranda runs along the garden face alone, 5 ft (R01's first form, research buildings 240: 3-6 ft). The room
-        # sizes are GUESSES. Its inner entrance opens on its west face, onto the slot below the kitchen's corridor
-        # (research buildings 370), its family privy attached there. It stands 8 ft off the north wall: the rear band
-        # narrowed to a cart/servant alley, one of research buildings 230's two forms (the other a service strip).
-        # 92 x 36 ft (3,312 sq ft with its veranda) is ABOVE the houses research buildings 380 measures (49 tsubo, ~1,740
-        # sq ft, at middle rank; 67 tsubo, ~2,380 sq ft, for a 500-1,000 koku retainer) - that entry governs a house's
-        # size, and this one is a GUESS a size above it for a county magistrate's household; the "about 180 to 200 ft"
-        # in the residence's kind entry is the length of the hand sheets' two-block wings, not a house.
+        # and back (forms.md R02; the Kuchiba house's rooms "stand in two rows, front and back", research buildings 260).
+        # Its rooms take the palace order's lesser form - the reception at the east END, the full depth, nearest the
+        # middle gate; the master's rooms beside it on the garden row; the family's beyond, with the inner rooms behind
+        # (R03, research buildings 260). The veranda runs along the garden face alone, 4 ft (R01's first form, research
+        # buildings 240: 3-6 ft). Its inner entrance opens on its west face, toward the kitchen (research buildings 370).
+        # It stands 10 ft off the north wall: the rear band narrowed to a cart/servant alley (research buildings 230),
+        # the family privy flush to the wall in it.
+        # THE HOUSE'S SIZE is research buildings 380's: the Yokota house of a 150-koku district magistrate (gun-bugyo, the
+        # county post itself) had a main house of about 49 tsubo, ~1,740 sq ft. Pass 6 takes that house, not the 67-tsubo
+        # house of a 500-1,000 koku retainer: the district magistrate is this posting's own rank. The residence 56 x 24 ft
+        # (1,344 sq ft with its veranda), the kitchen 20 x 18 (360) and the bath 10 x 8 (80) make ~1,784 sq ft, ~50
+        # tsubo. The room sizes are GUESSES.
         b(
             "residence",
             "lord",
-            66.0,
-            30.0,
+            56.0,
+            24.0,
             "inner",
             "N",
             order=10,
             feature="residence",
             rooms=(
-                ("inner rooms", 0.0, 0.0, 44.0, 12.5),
-                ("family quarters", 0.0, 12.5, 22.0, 12.5),
-                ("lord's quarters", 22.0, 12.5, 22.0, 12.5),
-                ("reception room", 44.0, 0.0, 22.0, 25.0),
+                ("inner rooms", 0.0, 0.0, 36.0, 10.0),
+                ("family quarters", 0.0, 10.0, 18.0, 10.0),
+                ("lord's quarters", 18.0, 10.0, 18.0, 10.0),
+                ("reception room", 36.0, 0.0, 20.0, 20.0),
             ),
-            engawa_ft=5.0,
+            engawa_ft=4.0,
             door_face="W",
-            inset_ft=8.0,
+            inset_ft=10.0,
         ),
-        # 72 x 18 ft (it was 66 x 15): a nagaya two rooms deep less its eaves, for the ~10 household servants; pass 5 gave the
-        # compound's mass back to its lodgings when the house came down to research buildings 380's size. A GUESS.
-        b("servants' quarters", "service", 72.0, 18.0, "inner", "N", order=2, feature="servants' quarters"),
-        # The kitchen takes the NW corner on the north wall (order above the residence's), joined to the residence's
-        # west end by the short corridor across the fire-gap (research buildings 360/370), so the residence's whole
-        # south face is left to the garden and the kitchen's own south face - the bath, the well, its door - opens on
-        # a service yard of its own with the postern. It was 44 x 36 ft on the west wall, about 31% of the house; 40 x
-        # 30 ft is the reviewer's figure for a house of this size, a GUESS inside the kitchen band (20-52 x 16-46).
-        b("kitchen", "service", 24.0, 20.0, "inner", "N", order=11, feature="kitchen"),
+        # THE SERVANTS' ROW TAKES THE NW CORNER, the kitchen yard before it (pass 6, building-review round 5: east of the
+        # house the servants were cut off from the kitchen - the corridor closes the kitchen-residence gap - and ~190 ft
+        # round from the postern). It is placed first (order 12) so the kitchen and the house follow it east. 72 x 22 ft,
+        # a nagaya two rooms deep for the ~10 household servants, a GUESS.
+        b("servants' quarters", "service", 72.0, 22.0, "inner", "N", order=12, feature="servants' quarters"),
+        # The kitchen stands between the servants' row and the house, joined to the residence's west end by the short
+        # corridor (research buildings 360/370), its yard - the bath, the well, its one door, the postern - to the south
+        # and west. 20 x 18 ft, part of the house's 49 tsubo (above); the kitchen's own size is a GUESS (research 380:
+        # "How much of either house was kitchen is not given").
+        b("kitchen", "service", 20.0, 18.0, "inner", "N", order=11, feature="kitchen"),
         # A MODEST shrine, 18 x 14 ft (pass 4, building-review round 3: it was 36 x 30 ft, the hall-shrine ceiling, which
         # is Ochiba's particular - buildings/programs.md: the shrine is universal equipment, its scale the per-manor
         # particular; buildings.md "Modest shrine"). The size is a GUESS inside the shrine band (40-1,150 sq ft).
         b("shrine", "shrine", 18.0, 14.0, "inner", "E", order=4, feature="compound shrine"),
         # A detached guest house is a GUESS (R10, research buildings 330: guests were received in the main house, and a
         # guest house apart at a samurai house was not found); kept as the example's draft of the item.
-        b("guest house", "lord", 33.0, 30.0, "inner", "E", order=3, feature="guest quarters"),
-        # A karo's house of its own inside the compound is a GUESS (R11, research buildings 340: the intendancy's staff
-        # lived in small houses or long-house bays inside it; a chief retainer's own house there was not found).
-        b("karo's house", "lord", 37.0, 26.0, "inner", "divider", order=3, feature="karo's house"),
+        b("guest house", "lord", 33.0, 32.0, "inner", "E", order=3, feature="guest quarters"),  # 33 x 32 (was 33 x 30; pass 6, the house's mass returned)
         # outer (administrative) court - office hall backs the divider (oshirasu in front)
         # The clerks' room is a ROOM of the office hall, at its west end on the rear (divider) side, 30 x 20 ft - the
         # footprint the freestanding clerks' building had (feature 267 R20, research buildings 430: the clerks worked in
@@ -597,7 +609,7 @@ def county_magistracy_program() -> CompoundProgram:
             "office hall",
             "lord",
             113.0,
-            34.0,
+            38.0,
             "outer",
             "divider",
             order=10,
@@ -605,13 +617,33 @@ def county_magistracy_program() -> CompoundProgram:
             rooms=(("clerks' room", 0.0, 0.0, 30.0, 20.0), ("day office", 30.0, 0.0, 42.0, 20.0), ("official study", 72.0, 0.0, 41.0, 20.0)),
             dais=(30.0, 10.0),
             door_face="E",
+            # its doors open on the FRONT room (0.8 of the end faces), east by the middle gate and west to the archive
+            # and the retainers (pass 6, building-review round 5: the front room and the west end had none)
+            extra_doors=("W",),
+            door_fracs=(0.8, 0.7),
         ),
-        b("tax archive", "kura", 34.0, 30.0, "outer", "W", order=6, feature="tax archive"),
+        # 34 x 34 ft (it was 34 x 30; pass 6, returning the house's mass - a GUESS in the band 20-48 x 10-36)
+        b("tax archive", "kura", 34.0, 34.0, "outer", "W", order=6, feature="tax archive"),
         # 50 ft long (it was 60): the hearing court, now centered on the hall, starts at x 59.5, and the retainers'
         # east face must keep a 7 ft run in front of it for its tub and door
-        # 24 ft deep (it was 18): two rooms deep for the senior retainers' households - pass 5, the mass the house gave
-        # up; a GUESS
-        b("senior retainers' quarters", "service", 50.0, 24.0, "outer", "W", order=4, feature="retainers' quarters"),
+        # The staff long-house (pass 6): the senior retainers' quarters, 50 x 36 ft, with the KARO'S BAY at its north end,
+        # 14 ft of it with its own door - R11's attested form (research buildings 340: at an intendancy the staff lived
+        # inside the compound in small houses or long-houses; a chief retainer's house inside the lord's own compound was
+        # not found, and "a small house of their own rather than a bay of the staff long-house is a GUESS"). The karo's
+        # house of its own in the inner court (pass 5) is gone. The sizes are GUESSES.
+        b(
+            "senior retainers' quarters",
+            "service",
+            50.0,
+            36.0,
+            "outer",
+            "W",
+            order=4,
+            feature="retainers' quarters",
+            rooms=(("karo's house", 0.0, 0.0, 50.0, 14.0),),
+            extra_doors=("E",),
+            door_fracs=(0.2, 0.7, 0.5),
+        ),
         # 60 x 30 ft (it was 52 x 28), the top of the granary band (30-60 x 14-36): pass 5 returned the ~2,000 sq ft the
         # house gave up (research buildings 380) to the compound's working stores and lodgings, holding coverage in the
         # jin'ya band (33-42%) without shrinking the envelope (buildings.md). A GUESS in the band.
@@ -628,13 +660,14 @@ def county_magistracy_program() -> CompoundProgram:
         # corner, 83 ft from the gate; ~40 ft is the gate range's scale.
         # Its door opens on the gate passage (east), where the gatekeepers watch - not on the court.
         b("gatehouse", "dark", 18.0, 12.0, "outer", "S", order=8, feature="gatehouse", beside_gate=True, door_face="E"),
-        # 36 x 24 ft (it was 33 x 23; pass 5, the same return of mass), still under the barracks as buildings.md asks
-        b("stables", "service", 36.0, 24.0, "outer", "S", order=5, feature="stables"),
+        # 42 x 24 ft (it was 33 x 23; passes 5 and 6, the same return of mass), still under the barracks as buildings.md
+        # asks. Its grooms' privy is the grooms' row's, on the west wall.
+        b("stables", "service", 42.0, 24.0, "outer", "S", order=5, feature="stables"),
         # The grooms' and bearers' row (pass 5, building-review round 4: the bare SW ground by the stables while the
         # grooms lodged in the inner court): a servants' nagaya in the SW corner beside the stables it serves
         # (research: the domestic servants - cooks, grooms, cleaners - lived in a nagaya; a second row by the stables is
-        # a GUESS), 44 x 16 ft. It takes the corner (order above the stables') so the stables' privy keeps its end face.
-        b("grooms' row", "service", 44.0, 16.0, "outer", "S", order=6, feature="servants' quarters"),
+        # a GUESS), 44 x 18 ft. It takes the corner (order above the stables') so the stables' privy keeps its end face.
+        b("grooms' row", "service", 44.0, 18.0, "outer", "S", order=6, feature="servants' quarters"),
     )
     return CompoundProgram("County Magistracy (example)", env, spine, buildings)
 

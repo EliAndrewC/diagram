@@ -28,6 +28,7 @@ from .compound_model import (
     ROOFED_ZONES,
     STONE_STEP_FT,
     WALL_INK_FT,
+    BuildingSpec,
     CompoundProgram,
     CourtZone,
     Envelope,
@@ -188,12 +189,75 @@ def _mats(z: CourtZone) -> list[Box]:
     return [(cx - 3.0, fy, cx + 3.0, fy + 3.0), (cx - 16.0, fy + 6.0, cx - 10.0, fy + 9.0), (cx + 10.0, fy + 6.0, cx + 22.0, fy + 9.0)]
 
 
-def _door(env: Envelope, p: Placed, boxes: list[Box]) -> tuple[Box, Box] | None:
+def _rear_privy(env: Envelope, home: Placed, boxes: list[Box], avoid: tuple[Box, ...]) -> Box | None:
+    """A privy flush to the compound wall behind a house that stands off it (`inset_ft`): in the rear alley, clear of
+    the wall's ink, the first clear foot from the alley's west (or north) end - None where the house backs its wall."""
+    court = _court_side(home)
+    if home.spec.inset_ft < PRIVY_FT + 2.0:
+        return None
+    face = WALL_INK_FT / 2 + 0.5  # the wall's inner face and a hair (compound_model.OUTLINE_CLEAR_FT)
+    run = int((home.spec.w_ft if court in ("N", "S") else home.spec.h_ft) - PRIVY_FT) + 1
+    for s in range(run):
+        if court == "S":
+            box = (home.x_ft + s, face, home.x_ft + s + PRIVY_FT, face + PRIVY_FT)
+        elif court == "N":
+            box = (home.x_ft + s, env.h_ft - face - PRIVY_FT, home.x_ft + s + PRIVY_FT, env.h_ft - face)
+        elif court == "E":
+            box = (face, home.y_ft + s, face + PRIVY_FT, home.y_ft + s + PRIVY_FT)
+        else:
+            box = (env.w_ft - face - PRIVY_FT, home.y_ft + s, env.w_ft - face, home.y_ft + s + PRIVY_FT)
+        if _is_clear(env, boxes, box[0], box[1], PRIVY_FT, PRIVY_FT) and all(_gap(box, a) >= LATRINE_WELL_FT for a in avoid):
+            return box
+    return None
+
+
+def _guest_privy(env: Envelope, home: Placed, boxes: list[Box]) -> Box | None:
+    """A privy attached to the house's rear face behind its reception room, centered on the room (research buildings
+    220: "at the rear of the guest parlor"); None without a reception room or where the ground there is taken."""
+    room = next((r for r in home.spec.rooms if r[0] == "reception room"), None)
+    if room is None:
+        return None
+    court = _court_side(home)
+    if court in ("N", "S"):
+        x = home.x_ft + room[1] + room[3] / 2 - PRIVY_FT / 2
+        y = home.y_ft - PRIVY_FT if court == "S" else home.y2
+    else:
+        y = home.y_ft + room[2] + room[4] / 2 - PRIVY_FT / 2
+        x = home.x_ft - PRIVY_FT if court == "E" else home.x2
+    others = [b for b in boxes if b != (home.x_ft, home.y_ft, home.x2, home.y2)]
+    return (x, y, x + PRIVY_FT, y + PRIVY_FT) if _is_clear(env, others, x, y, PRIVY_FT, PRIVY_FT) else None
+
+
+def _flush_privy(env: Envelope, p: Placed, boxes: list[Box], avoid: tuple[Box, ...]) -> Box | None:
+    """A privy flush against the compound side wall a building's end stands by, just beyond the building on its court
+    side - the service wall its pit is emptied through; None where the building stands by no side wall or the ground
+    is taken."""
+    court = _court_side(p)
+    face = WALL_INK_FT / 2 + 0.5
+    reach = 5.0  # a building this near a side wall stands by it
+    cands: list[Box] = []
+    if court in ("N", "S"):
+        y = p.y2 + 2.0 if court == "S" else p.y_ft - 2.0 - PRIVY_FT
+        if p.x_ft <= reach:
+            cands.append((face, y, face + PRIVY_FT, y + PRIVY_FT))
+        if env.w_ft - p.x2 <= reach:
+            cands.append((env.w_ft - face - PRIVY_FT, y, env.w_ft - face, y + PRIVY_FT))
+    else:
+        x = p.x2 + 2.0 if court == "E" else p.x_ft - 2.0 - PRIVY_FT
+        if p.y_ft <= reach:
+            cands.append((x, face, x + PRIVY_FT, face + PRIVY_FT))
+        if env.h_ft - p.y2 <= reach:
+            cands.append((x, env.h_ft - face - PRIVY_FT, x + PRIVY_FT, env.h_ft - face))
+    others = [b for b in boxes if b != (p.x_ft, p.y_ft, p.x2, p.y2)]
+    return next((b for b in cands if _is_clear(env, others, b[0], b[1], PRIVY_FT, PRIVY_FT, 0.5) and all(_gap(b, a) >= LATRINE_WELL_FT for a in avoid)), None)
+
+
+def _door(env: Envelope, p: Placed, boxes: list[Box], side: str = "") -> tuple[Box, Box] | None:
     """A door flush inside `p`'s door face (DOOR_W_FT x DOOR_D_FT), at the first DOOR_FRACS spot whose approach - the
     door's width plus a foot each side, 3 ft out - is clear of every box (never `p` itself): the door and its approach,
     or None where no spot is clear."""
-    nx, ny, fx, fy, length = _face(p, p.spec.door_face or _court_side(p))
-    for frac in DOOR_FRACS:
+    nx, ny, fx, fy, length = _face(p, side or p.spec.door_face or _court_side(p))
+    for frac in p.spec.door_fracs or DOOR_FRACS:
         mid = frac * length
         if ny:
             x0 = fx + mid - DOOR_W_FT / 2
@@ -336,6 +400,7 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
     # before the wells so the kitchen well takes what the bath leaves, and clear of every spine court, since a bath in
     # the garden is the pavilion the research does not find
     zones = [(z.x_ft, z.y_ft, z.x2, z.y2) for z in program.spine]
+    bath: tuple[float, float] | None = None
     if "kitchen" in by_name:
         host = by_name["kitchen"]
         others = [t for t in taken if t != (host.x_ft, host.y_ft, host.x2, host.y2)]
@@ -344,11 +409,12 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
             taken.append((bx, by, bx + BATH_W_FT, by + BATH_H_FT))
             parts.append(rect(bx, by, BATH_W_FT, BATH_H_FT, KINDS["service"][0], KINDS["service"][1], 1.5, "", "bath"))
             caption("area", bx, by, BATH_W_FT, BATH_H_FT, "bath", 8, False, "#3A2E1C", "bath")
-    # wells next: they take the middle of a face. A kitchen well may stand as far as 20 ft out - past the bath that
-    # abuts the kitchen, serving both, as the Takayama residence's bath stood with its well and kitchen (research
-    # buildings 320); the nearer seats are tried first
+    # wells next. A well stands BESIDE a door, never before it (pass 6, building-review round 5: the stables' well stood
+    # 5 ft in front of the stable door and wider than it) - the fracs off the middle first, the middle last - and 9 ft
+    # out before 6: a kitchen well may stand as far as 20 ft out, past the bath that abuts the kitchen, serving both,
+    # as the Takayama residence's bath stood with its well and kitchen (research buildings 320)
     for p in result.placed:
-        if p.spec.feature in ("kitchen", "stables") and (w := seat(p, 7.3, (0.5, 0.3, 0.7), (9.0, 12.0, 15.0, 20.0))):
+        if p.spec.feature in ("kitchen", "stables") and (w := seat(p, 7.3, (0.2, 0.8, 0.3, 0.7, 0.5), (9.0, 12.0, 15.0, 20.0, 6.0))):
             wells.append(w)
     for z in program.spine:
         if z.name == "garden":
@@ -356,53 +422,76 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
             # west end it stood 8 ft from the kitchen well seated past the bath, and read as its duplicate
             wells.append((z.x2 - 5.0, z.y_ft + 5.0))
             taken.append((z.x2 - 8.65, z.y_ft + 1.35, z.x2 - 1.35, z.y_ft + 8.65))
-    # THE PRIVIES (feature 267 pass 4, building-review round 3: one per zone, the family's attached to the house -
-    # research buildings 220 'Privies attach to the house; night-soil drives their placement'). The family's is an
-    # addition flush against the residence's door face at its garden end, by the inner entrance and nearest the kitchen
-    # postern the night-soil leaves by. The servants', the stables' and the garrison's stand by their buildings: on the
-    # court face, else on an end face at its wall end - never on a spine court (a latrine stood inside the practice
-    # ground) and never within LATRINE_WELL_FT of a well (the stables' stood 5 ft from theirs).
+    # THE PRIVIES (feature 267, research buildings 220 'Privies attach to the house; night-soil drives their placement':
+    # "privy count scales with occupancy (~1 per functional zone, ~3-4 at a county manor), the residence privy attaches
+    # to the house with its cesspit to the rear/service wall, and servants'/outer privies line service walls near a
+    # gate"; a well-appointed house had a guests' privy at the rear of the guest parlor besides). Never on a spine
+    # court, never within LATRINE_WELL_FT of a well; one against a compound wall is emptied through a hatch in it
+    # (`_hatch`, drawn below).
     well_boxes = tuple((wx - 3.65, wy - 3.65, wx + 3.65, wy + 3.65) for wx, wy in wells)
     if "residence" in by_name:
-        # the family's privy attaches at the house's REAR, its cesspit toward the rear wall (research buildings 220:
-        # "the residence privy attaches to the house with its cesspit to the rear/service wall"); pass 5 - on the
-        # inner door's face it stood 5.7 ft from the kitchen well
         home = by_name["residence"]
         others = [t for t in taken if t != (home.x_ft, home.y_ft, home.x2, home.y2)]
-        rear = {"N": "S", "S": "N", "E": "W", "W": "E"}[_court_side(home)]
-        if attached := _attach(env, home, rear, PRIVY_FT, PRIVY_FT, others + zones, well_boxes):
-            ax, ay = attached
-            taken.append((ax, ay, ax + PRIVY_FT, ay + PRIVY_FT))
-            privies.append((ax + PRIVY_FT / 2, ay + PRIVY_FT / 2, "residence"))
+        # the family's: FLUSH TO THE REAR WALL in the house's rear alley, with its hatch (pass 6: attached to the house
+        # it had no hatch and narrowed the alley's west end to 3.5 ft)
+        if fam := _rear_privy(env, home, others + zones, well_boxes):
+            taken.append(fam)
+            privies.append(((fam[0] + fam[2]) / 2, (fam[1] + fam[3]) / 2, "residence"))
+        # the guests': attached to the house behind the reception room (pass 6; research 220's "at the rear of the guest
+        # parlor")
+        if guest := _guest_privy(env, home, taken + zones):
+            taken.append(guest)
+            privies.append(((guest[0] + guest[2]) / 2, (guest[1] + guest[3]) / 2, "residence"))
+    # the grooms lodge by the stables where a servants' row stands in the stables' court: their one privy serves both
+    # (pass 6: the stables' and the grooms' stood ~49 ft apart, the stables' hatch by the main gate)
+    grooms = {p.spec.court for p in result.placed if p.spec.feature == "servants' quarters"}
     for p in result.placed:
-        if p.spec.feature not in ("servants' quarters", "stables", "barracks"):
+        if p.spec.feature not in ("servants' quarters", "stables", "barracks") or (p.spec.feature == "stables" and p.spec.court in grooms):
+            continue
+        # FLUSH AGAINST THE SIDE WALL beside the building first, the service wall its carter empties it through (pass 6:
+        # the servants' stood ~20 ft out in the court), then an end face at its wall end, the court face last
+        if flush := _flush_privy(env, p, taken + zones, well_boxes):
+            taken.append(flush)
+            privies.append(((flush[0] + flush[2]) / 2, (flush[1] + flush[3]) / 2, ""))
             continue
         court = _court_side(p)
         wall = {"N": "S", "S": "N", "E": "W", "W": "E"}[court]
         ends = ("E", "W") if court in ("N", "S") else ("N", "S")
         toward_wall = (0.85, 0.5, 0.15) if wall in ("S", "E") else (0.15, 0.5, 0.85)
-        # the end faces at their wall end FIRST (pass 5, building-review round 4: the servants' privy stood ~20 ft out in
-        # the open inner court, ~160 ft from the only way out): research buildings 220 lines the servants' and outer
-        # privies along service walls, their pits emptied by carters from outside - so a privy against a compound wall
-        # is emptied through a hatch in it (`_hatch`); the court face is the last resort
         for side, fracs in ((ends[0], toward_wall), (ends[1], toward_wall), (court, (0.85, 0.15, 0.5))):
             if v := seat(p, PRIVY_FT, fracs, (4.5, 7.0), side, well_boxes, tuple(zones)):
                 privies.append((*v, ""))
                 break
     # a door on each lodging block's face (DOOR_KINDS, `_door`), a part of its building: seated after the bath, the
-    # wells and the privies and BEFORE the tubs, which have seats to spare - the kitchen's two tubs had taken every
-    # run of its face a door could open on. The door and the ground before it are held clear of what follows.
+    # wells and the privies and BEFORE the tubs, which have seats to spare. The door and the ground before it are held
+    # clear of what follows. A building may carry more than one (`BuildingSpec.extra_doors`).
     for p in result.placed:
-        if p.spec.feature in DOOR_KINDS and (found := _door(env, p, [t for t in taken if t != (p.x_ft, p.y_ft, p.x2, p.y2)])):
-            (dx, dy, dx2, dy2), approach = found
-            taken += [(dx, dy, dx2, dy2), approach]
-            parts.append(rect(dx, dy, dx2 - dx, dy2 - dy, "#4A3318", "none", 0, "", "door", p.spec.feature))
-    for p in result.placed:
+        if p.spec.feature not in DOOR_KINDS:
+            continue
+        for side in (p.spec.door_face or _court_side(p), *p.spec.extra_doors):
+            if found := _door(env, p, [t for t in taken if t != (p.x_ft, p.y_ft, p.x2, p.y2)], side):
+                (dx, dy, dx2, dy2), approach = found
+                taken += [(dx, dy, dx2, dy2), approach]
+                parts.append(rect(dx, dy, dx2 - dx, dy2 - dy, "#4A3318", "none", 0, "", "door", p.spec.feature))
+    hosts = list(result.placed)
+    if "kitchen" in by_name and bath:
+        # the bath is fire-prone too: a tub at its yard face (pass 6; programs.md "Fire-water tubs")
+        hosts.append(Placed(BuildingSpec("bath", "service", BATH_W_FT, BATH_H_FT, by_name["kitchen"].spec.court, by_name["kitchen"].spec.wall), *bath))
+    for p in hosts:
         if p.spec.kind == "kura":
             continue  # a plaster storehouse carries no tub (buildings.md, "Fire-water tubs")
-        for _ in range(2 if p.spec.name.startswith("kitchen") else 1):
-            # the ends of the face last (0.05, 0.95): where a roofed court covers the rest of it, the uncovered end
-            if tub := seat(p, 2.6, (0.15, 0.85, 0.4, 0.6, 0.05, 0.95), (2.5,)):
+        court = _court_side(p)
+        ends = ("E", "W") if court in ("N", "S") else ("N", "S")
+        toward_court = (0.85, 0.5, 0.15) if court in ("S", "E") else (0.15, 0.5, 0.85)
+        for _ in range(2 if p.spec.feature == "kitchen" else 1):
+            # the court face first, its ends last (0.05, 0.95: where a roofed court covers the rest of it); then an end
+            # face at its court end (pass 6: the kitchen's yard face, crowded by the bath, the well and the door, kept
+            # neither of its two tubs)
+            tub = seat(p, 2.6, (0.15, 0.85, 0.4, 0.6, 0.05, 0.95, 0.03, 0.97), (2.5,))
+            # (the west or north end before the east or south: the example's kitchen's east end faces the closed slot
+            # north of its corridor to the house, its west end the servants' yard)
+            tub = tub or seat(p, 2.6, toward_court, (2.5,), ends[1]) or seat(p, 2.6, toward_court, (2.5,), ends[0])
+            if tub:
                 tubs.append(tub)
     _roji_parts(program, result, taken, rect, parts, ox, oy)
     for cx, cy in wells:

@@ -1,6 +1,6 @@
 {
  "feature": "267-compound-research-owed",
- "plan_sha256": "100a0b0185a9b10302862e1ec348a4b32c85a52ad51361074ce9831d8694108d",
+ "plan_sha256": "3dcc02b57fb9e96c6a87f3221212f95e8885b84f90c36b3b56879ddfae70ffc0",
  "reviewed": "2026-09-27",
  "declared": "spec-fidelity",
  "decisions": [
@@ -38,7 +38,7 @@
    "id": "D6",
    "summary": "Kinds and sheets follow per group; sheets redrawn, measured, building-review run.",
    "class": "within",
-   "why": "Unchanged. FR-003, FR-004."
+   "why": "Unchanged. FR-003, FR-004. The program example's pass 5 (house brought to research buildings 380's size, privies, office-hall rooms, doors) is this decision carried out."
   },
   {
    "id": "D7",
@@ -60,49 +60,54 @@
   },
   {
    "id": "D9",
-   "summary": "Placer hand-sheet path fixed, Ochiba/Hayakawa/Ubame (and Hoshigaoka) seated at the standard, caption ledger emptied, pack_audit reading fixes.",
+   "summary": "Placer hand-sheet path fixed; Ochiba/Hayakawa/Ubame (and Hoshigaoka) seated at the standard; caption ledger empty; pack_audit reading fixes.",
    "class": "within",
-   "why": "Verified on the tree 2026-09-27: make seat-label reports 48/62/60/9 captions, 0 off seat on Ochiba/Hayakawa/Ubame/Hoshigaoka; WRITE=1 on scratch copies leaves all four byte-identical; make pack-audit on the three magistracies: every check OK (matches_map skipped, no On map line); tests/gate/test_hand_sheet_captions.py 5 passed; caption_ledger.json is {}. D9's figures carry a dated method label. Re-seating Hoshigaoka is enforcement of 266 FR-013 under the corrected tie rule, not scope."
+   "why": "Re-verified on the tree 2026-09-27 (this round's own run): make seat-label reports 48/62/61/9 captions, 0 not at the standard seat, on Ochiba/Hayakawa/Ubame/Hoshigaoka; WRITE=1 on scratch copies leaves all four byte-identical; make pack-audit on the three magistracies: every check OK (matches_map skipped, no On map line); tests/gate/test_hand_sheet_captions.py 5 passed; caption_ledger.json is {}. The wording the last round asked corrected ('five captions had no seat at all') is gone; D9 now states every caption is at its seat, the least-cost one where none is free."
   },
   {
    "id": "D9-hand-cheaper",
    "summary": "Where no seat is free, the hand seat is kept only when it covers strictly less than the standard's least-cost pick.",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Unchanged from the last round; implied by 266 FR-006/FR-007 (least total weight is drawn)."
+   "why": "Unchanged; implied by 266 FR-006/FR-007 (least total weight is drawn)."
   },
   {
    "id": "D9-tie",
-   "summary": "A tie goes to the standard's order (cost >= p.cost returns the standard's pick).",
+   "summary": "A tie goes to the standard's order.",
    "class": "within",
-   "why": "The previous round's remedy, carried out: hand_seat_if_no_better now returns the standard's pick on a tie, which is 266 FR-007's own tie-break. The NOT LEGITIMATE tie branch no longer exists."
+   "why": "Unchanged; 266 FR-007's own tie-break."
   },
   {
    "id": "D9-weights",
-   "summary": "Hand-sheet obstacle rules: ink inside the subject weighs 250 (Obstacle.inner), a ground's drawn border is ink, dark ink weighs 2000, a fill painted after a caption weighs as text (10000), the building holding a named room is waived for that room's area caption; a light caption set off a dark roof takes dark ink.",
+   "summary": "Hand-sheet obstacle rules: inner ink avoided, a ground's border is ink, dark ink heavier, a fill painted after a caption weighs as text, a room's containing building waived for that room's area caption; round 4: a caption's own partitions now weigh in full, and an area caption keeps off the drawn outline of its area and of the building holding it.",
    "class": "within",
-   "why": "Each is stricter than before except one: inner ink, borders, dark ink and painted-over fills all ADD weight where the seat was cheaper or free before; FR-006's rule that a free seat beats any covered one is untouched; generated maps set no inner obstacle and the other weights live in seat_label.py alone, so the settlement engine is unchanged. The one loosening, the room's containing building at 0 for the room's caption, is physically forced: 266 FR-008 puts an area caption inside its area, and a room lies inside its building. The ink recolor changes no seat and serves legibility. None cuts a GM request."
+   "why": "The round-4 rules each ADD weight where a seat was cheaper before (the outline bands are obstacles; the partitions went from light to full), so neither can drop or loosen a caption; FR-006's free-beats-covered rule and FR-007's never-drop rule are untouched, and seat-label reports 0 off seat under them. The one loosening, the containing building waived, stays physically forced by 266 FR-008 (an area caption lies inside its area)."
   },
   {
-   "id": "D9-hand-wraps-renames",
-   "summary": "Two sub-lines wrapped; Hayakawa guardroom name at 7.5 px; bale carts' waiting ground renamed; service yard and forecourt given their own unfilled ground; fire-water tubs grouped with their tub.",
+   "id": "D9-subline-measure",
+   "summary": "A caption's sub-lines are measured at their own size and face, not the head's.",
    "class": "within",
-   "why": "Every caption is still drawn; wrapping is one of the standard's line layouts (FR-006 'then fewer lines'), and giving a ground caption its ground is sheet editing under D6."
+   "why": "A measurement correction: 266 FR-002 gives the placer the caption's text and size, and a block measured at the wrong size is the wrong subject. Unit-tested (test_a_sub_line_is_measured_at_its_own_size)."
+  },
+  {
+   "id": "D9-hand-edits",
+   "summary": "By hand, recorded in each sheet's notes: three sub-lines wrapped; captions set a size smaller to fit (Hayakawa guest house 12->11, Ochiba gatehouse 9->8; Myobu 10->8 to match the Ta-no-Kami); the guests' veranda made its own part; the guest house's note reworded; service yard and forecourt given their own ground; glyphs rearranged (drying stones, steam, tub, weapon rack).",
+   "class": "within",
+   "why": "Every caption is still drawn: a text-set diff of each sheet between c007ae342 and HEAD shows only re-wrapped lines and OUTER COURT added, nothing removed. Size, wrap and glyph placement are sheet editing under D6; 266 takes the caption's size as an input and rules nothing on it."
   },
   {
    "id": "D9-hand-sublines",
-   "summary": "Hayakawa's river-kami shrine gloss ('offerings against flood & drowning' / '(Hajime attends daily)') and Ubame's '(his letters)' removed from the sheet; the text lives in the modals.",
+   "summary": "Hayakawa's river-kami shrine gloss and Ubame's '(his letters)' removed from the sheet; the text lives in the modals.",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Adjudicated apart from OUTER COURT because it is a different class. The GM's ruling (266 D5, 2026-09-27) is 'labels as mandatory when the thing is marked as needing a label': the THING here, the river-kami shrine and the writing pavilion, keeps its label on the sheet, and the removed text is a gloss about it, not a thing's name. The gloss is not lost: Hayakawa's compound-shrine modal carries 'daily offerings against flood and drowning' (notes.md line 102) and Ubame's writing-pavilion modal 'his letters to the Daika capital' (line 127). No GM request puts those glosses on the sheet (the GM's rededication ruling names the Fire Dragon's retrofit annotation, which stays). Raise at landing with the others, since the reason given was fit."
+   "why": "Unchanged from the last round: the thing keeps its label; the removed text is a gloss about it, carried by the modals, and no GM request puts it on the sheet. Raise at landing, as D9 says."
   },
   {
-   "id": "D9-hand-outer-court",
-   "summary": "Ubame's OUTER COURT caption dropped because no free seat clears its buildings and the least-cost seat is the hearing court's roof; the page names the court on hover.",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "This drops a thing's label, which the GM ruled against in so many words on 2026-09-27 (266 D5: 'for the time being we'll treat labels as mandatory when the thing is marked as needing a label'; Esri's leave-unplaced option deliberately not implemented), and which 266 FR-007 ('A caption MUST never be dropped: when no candidate in reach is free, the one covering the least total weight is drawn') and SC-003 ('a sheet with no free seat still draws the caption at the least-weight seat') decide for exactly this case. The outer court is a thing the sheet marked for a label and the GM named in 262's request ('the outer courtyard versus the inner courtyard'); INNER COURT keeps its caption, OUTER COURT does not. Hover naming is the page, not a label. It is not impossible: the standard's answer exists (the least-cost seat, with its leader), and so does a sheet edit that opens a free seat. Remedy: restore OUTER COURT at the placer's least-cost seat, or redraw the ground so a free seat exists, then re-run seat-label (0 off seat, WRITE=1 identical) and pack-audit, and correct D9's wording ('five captions had no seat at all' - under the standard every caption has a seat). If the least-cost seat is judged unreadable, that is a question for the GM, not a drop."
+   "id": "D9-outer-court",
+   "summary": "Ubame's OUTER COURT caption restored at the standard's least-cost seat (the hearing court's roof).",
+   "class": "within",
+   "why": "The last round's remedy carried out: the caption is drawn (tspans OUTER/COURT at 642,602 with data-kind outer court) and seat-label reports it at the standard seat, which is 266 FR-007 verbatim - never dropped, least total weight drawn. The NOT LEGITIMATE drop no longer exists."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

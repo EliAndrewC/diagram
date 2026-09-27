@@ -41,6 +41,8 @@ COURT_FILL: dict[str, str] = {
     "garden": "url(#garden-stipple)",
     "yard": "url(#court-earth)",
     "cart yard": "url(#court-earth)",
+    "vegetable garden": "url(#veg-rows)",
+    "inner yard": "url(#court-earth)",
     "practice ground": "url(#keiko-earth)",  # swept keiko earth (buildings.md "Practice ground")
 }
 # A court that is ROOFED is drawn with a building's solid outline (stroke, width) and posts along its open side
@@ -59,10 +61,10 @@ ROOF_POST_FT: float = 1.0
 # fire-gap - a longer run would be a gallery, not the short corridor the research describes.
 CORRIDOR_W_FT: float = 6.0
 # The bath (feature 267 R09, research buildings 320: a room of the residence or a small addition to it on its
-# service side, by the kitchen and its well - no bath as a building of its own was found). 12 x 10 ft, the small end of
-# the doctrine's 12-15 ft guess (pass 5: the whole house, kitchen and bath included, is held to research buildings 380's
-# ~2,400 sq ft; it was 15 x 12).
-BATH_W_FT, BATH_H_FT = 12.0, 10.0
+# service side, by the kitchen and its well - no bath as a building of its own was found). 10 x 8 ft (pass 6: the whole
+# house is held to research buildings 380's 49-tsubo house, ~1,740 sq ft; it was 15 x 12, then 12 x 10) - below the
+# doctrine's 12-15 ft guess, a GUESS.
+BATH_W_FT, BATH_H_FT = 10.0, 8.0
 # The gates' posts (feature 267 R26, research buildings 480 'How wide was the main gate?'). Each post is drawn over the
 # cut end of the wall it closes, so the wall's opening IS the passage the audit measures between the posts
 # (`pack_audit.main_gate_passage_ft`). 4 x 14 px (1.33 x 4.67 ft) is a MAP DRAWING CONVENTION: the post block stands
@@ -188,6 +190,10 @@ class BuildingSpec:
     # The face its door goes on ("N"|"S"|"E"|"W"), when not the court face: the residence's inner entrance opens on the
     # kitchen side, off the garden its veranda faces (research buildings 370).
     door_face: str = ""
+    # More doors, on these faces (pass 6: the office hall's front room and its west end had none), and the fracs along
+    # a face a door is tried at when not DOOR_FRACS
+    extra_doors: tuple[str, ...] = ()
+    door_fracs: tuple[float, ...] = ()
 
 
 @dataclass(frozen=True)

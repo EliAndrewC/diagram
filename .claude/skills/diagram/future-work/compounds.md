@@ -73,6 +73,7 @@ the Fuchu Joge pamphlet's drawing labels, which sit only in its PDF's images and
 
 ### Drawing and tooling questions left open
 
+- **The program example's captions and `seat_label` disagree on 9** (feature 267, 2026-09-27: striking posts, residence, well, gatehouse, practice ground, both clerks, straw mats' seat and leader). `compound.py` seats through the one placer but with its own view: a caption's subject is one chosen shape (the rear alley, one seat, one mat) where `seat_label` takes every drawn shape of the kind; it counts invisible stand-ins for tubs and stones and blocks the roofed court only after the court's own captions; and it measures every caption at the standard's character width where `seat_label` measures bold, capitals and spacing (feature 267's rules). The reasons are read from the code, not measured. The fix is one view: `compound.py` builds its obstacle index with `seat_label.classify` over the sheet it is drawing, or `seat_label` gains the composer's subjects; measure first which disagreements each removes.
 - Door glyphs drawn as slabs outside their walls where the rendering rule says flush (every sheet's informal doors -
   a convention question).
 - The torii drawn as an elevation silhouette on Mode A sheets while `buildings.md` (feature 268) says a Mode A arch

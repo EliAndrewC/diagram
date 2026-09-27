@@ -11,6 +11,12 @@ The classification (spec plan P4): the way kinds are ways (500 a way crossed), t
 one `-` shape covering the whole view is the background (free), and everything else - every other `-` shape, every
 `<text>` whatever its tag, `court divider`, `weighing floor` - is an obstacle (1,000).
 
+Feature 267 weighed ink as a reader meets it (`classify`): another caption 10,000, dark ink 2,000, anything painted
+after a caption as much as a caption (it hides it), ink inside what a caption names in full (`Obstacle.inner`) - except
+ground nested in the ground it names and ink the sheet marks `data-texture="1"` (a feature's surface, a wing's shutter
+marks), both light (250) - a ground's drawn border, and an area's own outline; the building holding a named room is
+waived. A caption's own seat is kept only where it covers strictly less than the standard's pick.
+
     make seat-label SHEET=pool/<tier>/<map>/<map>.svg
 """
 
@@ -144,6 +150,7 @@ class Shape:
     frame: Affine = IDENTITY  # a text's PARENT matrix (its groups' transforms, not its own) - the frame a rewrite writes in
     within: frozenset[int] = frozenset()  # every tagged group the element sits inside, its own included
     edge: float = 0.0  # a closed shape's drawn outline half-width (0 when it has none)
+    texture: bool = False  # marked `data-texture` on the sheet: ink that is a feature's surface (a wing's shutter marks), not its parts
     filled: bool = False  # a closed shape painted with a fill (SVG's default fill is black), which hides what is under it
     dark: bool = False  # drawn in dark ink - a line's stroke, a shape's fill - which black caption ink cannot be read on
 
@@ -177,7 +184,7 @@ def read_sheet(src: str) -> tuple[list[Shape], tuple[float, float, float, float]
     view = (vb[0], vb[1], vb[0] + vb[2], vb[1] + vb[3])
     shapes: list[Shape] = []
 
-    def walk(el: ET.Element, m: Affine, kind: str, stroke_w: float, stroked: bool, group: int, within: frozenset[int] = frozenset(), ink: tuple[str, str] = ("", "")) -> None:
+    def walk(el: ET.Element, m: Affine, kind: str, stroke_w: float, stroked: bool, group: int, within: frozenset[int] = frozenset(), ink: tuple[str, str] = ("", ""), texture: bool = False) -> None:
         parent = m
         m = _mul(m, parse_transform(el.get("transform")))
         if el.get("data-kind") is not None:
@@ -187,6 +194,7 @@ def read_sheet(src: str) -> tuple[list[Shape], tuple[float, float, float, float]
         if el.get("stroke") is not None:
             stroked = el.get("stroke") != "none"
         ink = (el.get("stroke", ink[0]), el.get("fill", ink[1]))  # (stroke, fill), inherited as SVG inherits them
+        texture = texture or el.get("data-texture") == "1"
 
         tag = el.tag.replace(SVG, "")
         pts: list[Pt] = []
@@ -218,7 +226,7 @@ def read_sheet(src: str) -> tuple[list[Shape], tuple[float, float, float, float]
         if len(pts) >= 2:
             tp = [_apply(m, p) for p in pts]
             if line:
-                shapes.append(Shape(tag, kind, tp, stroke_w / 2, True, element=el, leader=el.get("data-leader") == "1", group=group, within=within, dark=_luma(ink[0]) < DARK))
+                shapes.append(Shape(tag, kind, tp, stroke_w / 2, True, element=el, leader=el.get("data-leader") == "1", group=group, within=within, dark=_luma(ink[0]) < DARK, texture=texture))
             else:
                 x0, y0, x1, y1 = bbox(tp)
                 edge = stroke_w / 2 if stroked else 0.0
@@ -234,10 +242,11 @@ def read_sheet(src: str) -> tuple[list[Shape], tuple[float, float, float, float]
                         edge=edge,
                         filled=ink[1] != "none",
                         dark=_luma(ink[1]) < DARK,
+                        texture=texture,
                     )
                 )
         for c in el:
-            walk(c, m, kind, stroke_w, stroked, group, within, ink)
+            walk(c, m, kind, stroke_w, stroked, group, within, ink, texture)
 
     for c in root:
         walk(c, IDENTITY, "", 1.0, False, 0)
@@ -292,10 +301,11 @@ def classify(
         within = subject is not None and s.tag != "text" and _box_within(s.poly, subject) and not _same_box(s.poly, subject)
         if within and not _is_background(s, view):
             # ground nested in the ground it names weighs light (a garden in a court: Ubame's INNER COURT went to the
-            # kitchen garden, open ground inside the court); everything else in full - the caption's own partitions too,
-            # which at a light weight lost to its building's outline and put Ubame's servants' quarters on one (round 4)
-
-            light = s.kind in GROUND_KINDS and s.kind != kind
+            # kitchen garden, open ground inside the court), and so does ink the sheet marks `data-texture` - a
+            # feature's surface, a wing's shutter marks, which a name may lie on; everything else in full - the caption's
+            # own partitions too, which at a light weight lost to its building's outline and put Ubame's servants'
+            # quarters on one (round 4)
+            light = (s.kind in GROUND_KINDS and s.kind != kind) or s.texture
 
             weight = WEIGHT_INNER if light else WEIGHT_TEXT if after is not None and i > after and s.filled and not s.line else WEIGHT_OBSTACLE
             bands = [_band(a, b, max(s.half, 0.5)) for a, b in zip(s.poly, s.poly[1:], strict=False)] if s.line else [s.poly]

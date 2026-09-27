@@ -233,3 +233,17 @@ def test_a_sub_line_is_measured_at_its_own_size() -> None:
     note, _h = sl.block_half([caps[1].text], 8, sl.char_w_of(caps[1].element, caps[1].text, 8))
     assert x1 - x0 == pytest.approx(2 * max(name, note), rel=0.1), "as wide as its widest line at that line's own size"
     assert x1 - x0 < 2 * sl.block_half([caps[1].text], 12, head_w)[0], "not the note measured at the name's face"
+
+
+def test_ink_marked_as_texture_weighs_light() -> None:
+    """A wing's shutter marks are its surface, not its parts: marked `data-texture`, they weigh light and a name may lie
+    on them, where unmarked they pushed Ubame's shuttered wing name across its wall (round 5)."""
+    wing = (
+        '  <g data-kind="wing"><rect x="100" y="100" width="90" height="70" fill="#C9B489"/>'
+        '<g stroke="#8C7448" stroke-width="1.2"{mark}><line x1="120" y1="104" x2="120" y2="166"/></g>'
+        '<text x="145" y="138" font-size="9">wing</text></g>\n'
+    )
+    marked = _weights(_sheet(wing.format(mark=' data-texture="1"')), "wing")
+    plain = _weights(_sheet(wing.format(mark="")), "wing")
+    assert marked[(119, 104, 121, 166)] == (sl.WEIGHT_INNER, True)
+    assert plain[(119, 104, 121, 166)] == (sl.WEIGHT_OBSTACLE, True)
