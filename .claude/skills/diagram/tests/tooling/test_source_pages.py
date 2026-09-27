@@ -92,6 +92,18 @@ def test_a_second_save_adds_to_the_directory_and_never_overwrites(tmp_path: path
     assert "https://ok.example/c | 04-ok.example.txt" in (out / "MANIFEST.txt").read_text(encoding="utf-8")
 
 
+def test_a_third_save_after_a_retry_never_overwrites(tmp_path: pathlib.Path) -> None:
+    """271 W2: a retried failure's row is dropped and re-added, so the row count fell behind the numbers on disk
+    and the third save wrote over the second's pages."""
+    out = tmp_path / "out"
+    sp.save(["https://refuses.example/b", "https://refuses.example/d", "https://ok.example/a"], out, sp.qv.Pages(opener=_opener))
+    sp.save(["https://refuses.example/b", "https://ok.example/c"], out, sp.qv.Pages(opener=_opener))
+    second = (out / "05-ok.example.txt").read_text(encoding="utf-8")
+    rows = sp.save(["https://ok.example/e"], out, sp.qv.Pages(opener=_opener))
+    assert rows[-1]["file"] == "06-ok.example.txt", "numbered past the highest file on disk, not past the row count"
+    assert (out / "05-ok.example.txt").read_text(encoding="utf-8") == second
+
+
 def test_a_long_page_is_saved_in_parts_and_a_quoted_one_as_an_excerpt(tmp_path: pathlib.Path) -> None:
     """D19 (R10): a book-length saved page cost one check 200,026 characters of reading."""
     text = "".join(f"Sentence {i} of the book says little.\n" for i in range(3000))

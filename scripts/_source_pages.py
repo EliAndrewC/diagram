@@ -128,13 +128,20 @@ def saved_rows(out: pathlib.Path) -> list[dict]:
     return rows
 
 
+def next_number(out: pathlib.Path) -> int:
+    """One past the highest number a page file in `out` already carries.
+
+    WHY (feature 271 W2, 2026-09-27): the count of the manifest's rows was used, but a retried failure's row is
+    dropped and re-added, so after one retry the count falls behind the numbers on disk; a third save then wrote
+    its pages over two of the first batch's (27 and 28, the stone-bridge and earth-bridge pages)."""
+    numbers = [int(m.group(1)) for p in out.iterdir() if (m := re.match(r"(\d+)-", p.name))]
+    return max(numbers, default=0) + 1
+
+
 def save(urls: list[str], out: pathlib.Path, pages, quotes: list[str] | None = None) -> list[dict]:  # noqa: ANN001
     out.mkdir(parents=True, exist_ok=True)
     rows = saved_rows(out)
-    # past every earlier file, so a new page never takes an old one's number. WHY the highest number and not the
-    # row count (feature 271 V4): a retried failure's old row is dropped below, so after a retry the count fell
-    # behind the numbers in use and a third save wrote over a page the second had saved.
-    start = max([len(rows)] + [int(r["file"][:2]) for r in rows if r["file"][:2].isdigit()]) + 1
+    start = max(len(rows) + 1, next_number(out))  # past every earlier row and file, so a new page never takes an old one's number
     have = {r["pointer"] for r in rows if r["state"] == "FETCHED"}
     rows = [r for r in rows if r["pointer"] in have or r["pointer"] not in urls]
     for index, url in enumerate((u for u in dict.fromkeys(urls) if u not in have), start):
