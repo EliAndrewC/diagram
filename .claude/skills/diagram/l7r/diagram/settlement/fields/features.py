@@ -47,15 +47,24 @@ def turning_corners(poly: Sequence[Pt], min_deg: float = 45.0) -> list[int]:
     return out or list(range(n))
 
 
+CORNER_MAX = 16.0
+"""A corner grave's step in from its vertex, px - see `corner_seat`."""
+CORNER_MIN = 12.0
+"""The least step: the mound's reach, the stone's rise and a clearance off a right-angled corner's bunds."""
+
+
 def corner_seat(poly: Sequence[Pt], at: int) -> tuple[float, float]:
-    """Where a corner grave stands in `poly`: 16 px in from vertex `at` toward the plot's centroid (a third of the way
-    on a small plot) - in the corner, against its two bunds, and inside the plot, clear of whatever runs along the
-    plot's edge. 16 px sets a 6.5 px mound ~5 px off each bund of a right-angled corner (14 grazed the bund's beads); a fixed third of the way put
-    the grave mid-plot on a large one (Kashikawa, 2026-09-27), where it no longer read as a corner grave."""
+    """Where a corner grave stands in `poly`: 16 px in from vertex `at` toward the plot's centroid, never less than
+    12 px (and never past half-way on a tiny plot) - in the corner, against its two bunds, and inside the plot, clear of
+    whatever runs along the plot's edge. 16 px sets a 6.5 px mound ~5 px off each bund of a right-angled corner (14
+    grazed the bund's beads); a fixed third of the way put the grave mid-plot on a large one (Kashikawa, 2026-09-27),
+    where it no longer read as a corner grave; and a third on Kashikawa's typical 25 px plot was 8.7 px, which stood
+    the tall stone on the bund's corner junction (settlement-review, 2026-09-27). 12 px is the mound's reach plus the
+    stone's rise plus a clearance at a right-angled corner."""
     cx, cy = _centroid(poly)
     vx, vy = poly[at % len(poly)]
     dist = math.hypot(cx - vx, cy - vy)
-    step = min(16.0, dist / 3.0) / dist if dist else 0.0
+    step = min(CORNER_MAX, max(CORNER_MIN, dist / 3.0), dist / 2.0) / dist if dist else 0.0
     return vx + (cx - vx) * step, vy + (cy - vy) * step
 
 

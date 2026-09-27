@@ -281,7 +281,9 @@ def test_the_field_grave_takes_either_attested_form_and_a_corner_grave_stays_in_
     assert forms == {"island", "corner"}, forms
     assert grave_form(7) == grave_form(7), "the form is the seed's, not the draw order's"
     square = [(0.0, 0.0), (60.0, 0.0), (60.0, 30.0), (0.0, 30.0)]
-    assert corner_seat(square, 0) == pytest.approx((10.0, 5.0)), "a third of the way to the middle on a small plot"
+    assert math.dist(corner_seat(square, 0), (0.0, 0.0)) == pytest.approx(12.0), "never less than 12 px in, clear of the bunds (a third was 11.2 here)"
+    tiny = [(0.0, 0.0), (12.0, 0.0), (12.0, 16.0), (0.0, 16.0)]
+    assert math.dist(corner_seat(tiny, 0), (0.0, 0.0)) == pytest.approx(5.0), "never past half-way on a tiny plot"
     big = [(0.0, 0.0), (300.0, 0.0), (300.0, 300.0), (0.0, 300.0)]
     assert math.dist(corner_seat(big, 0), (0.0, 0.0)) == pytest.approx(16.0), "16 px into the corner of a large one"
     assert corner_seat([(5.0, 5.0)], 0) == (5.0, 5.0), "a degenerate plot keeps its one point"

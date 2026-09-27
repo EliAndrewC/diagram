@@ -107,6 +107,19 @@ district the track actually leads to, and Kashikawa is 樫川, "oak river" - the
 bearing is measured and so cannot move; the name can, and a broad reach downstream is what Hirose
 names.*
 
+### Features
+
+- **grave island**: Kashikawa's field grave takes the Japanese form: a small mound with its stones in the corner of a rice plot, against its bunds, not an island in the plot's middle (each hamlet takes one form).
+
+## 2026-09-27 - feature 267: the field grave is the corner form
+
+The field grave became a knob (research/fields 220): the Chinese island inside a plot or the Japanese grave in a
+plot's corner, rolled per hamlet on its own stream (`features.grave_form`). This map rolls the corner: a 6.5 x 4.5 px
+mound with two staggered stones, seated at a true turning corner of a 31 x 40 ft plot (`turning_corners`) and stepped
+12 px in from the vertex (`corner_seat`, floored after settlement-review found a third of the way - 8.7 px on this
+map's typical plot - stood the tall stone on the bund's corner junction). The island mound and its "0 paddy-green px
+inside the mound" measurements below are the old form's. The page's feature note says which form this map draws.
+
 ## 2026-08-17 - re-packed by feature 121 (the placer tests the rake it draws)
 
 19 of 20 houses re-seated (median 362 ft, max 866 - a full re-seed, not a nudge); the SW outlier at
