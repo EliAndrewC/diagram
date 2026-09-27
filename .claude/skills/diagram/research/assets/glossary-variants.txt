@@ -305,6 +305,8 @@ edo	Edo
 edo fabric	building fabric
 edo period	Edo period
 edo-period	Edo period
+egune	igune
+egune's	igune
 eiro	eiro
 embankment	embankment
 embankments	embankment
