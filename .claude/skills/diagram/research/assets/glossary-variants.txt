@@ -845,6 +845,7 @@ kokubunji	kokubunji
 kokudai-no	kokudai-no
 kokudaino	kokudai-no
 kokudaka	kokudaka
+kokuga	kokuga
 kokuinchi	shuinchi
 kokumori	kokumori
 komainu	lion-dog
