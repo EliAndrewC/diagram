@@ -6668,5 +6668,37 @@
   "variants": [
    "yashikichi"
   ]
+ },
+ "myoden": {
+  "def": "A \"named field\": land recorded under the name of the holder who answered for its tax. A myoden landlord came from one of these old landholding families of a village.",
+  "variants": [
+   "myoden",
+   "myōden",
+   "myoden landlord",
+   "myoden landlords"
+  ]
+ },
+ "sakutoku": {
+  "def": "The part of a harvest left after the lord's yearly tax. A sakutoku landlord let their land to tenants and lived on that share as rent.",
+  "variants": [
+   "sakutoku",
+   "sakutoku landlord",
+   "sakutoku landlords"
+  ]
+ },
+ "hikan": {
+  "def": "A hereditary dependent of a powerful farming household, bound to serve it. Hikan held no house plot of their own and often lived in an outbuilding or a hut on their master's plot.",
+  "variants": [
+   "hikan"
+  ]
+ },
+ "branch household": {
+  "def": "A new household split off from a family's main house and given its own house plot and land.",
+  "variants": [
+   "branch household",
+   "branch households",
+   "branch house",
+   "branch houses"
+  ]
  }
 }

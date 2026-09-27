@@ -103,6 +103,10 @@ bomori	bomori
 bon	Bon
 boom	boom
 booms	boom
+branch house	branch household
+branch household	branch household
+branch households	branch household
+branch houses	branch household
 broadcast	broadcast sowing
 broadcast oilseed stand	broadcast sowing
 broadcast sowing	broadcast sowing
@@ -620,6 +624,7 @@ hereditary house	hereditary temple
 hereditary monastery	hereditary temple
 hereditary temple	hereditary temple
 hereditary temples	hereditary temple
+hikan	hikan
 hinin	hinin
 hinoki	hinoki
 hinomi-yagura	hinomi-yagura
@@ -1017,7 +1022,11 @@ musashi province	Musashi
 mushiro	mushiro
 muster perimeter	muster perimeter
 muster perimeters	muster perimeter
+myoden	myoden
+myoden landlord	myoden
+myoden landlords	myoden
 myoji-taito	myoji-taito
+myōden	myoden
 nagare-zukuri	nagare-zukuri
 nagarezukuri	nagare-zukuri
 nagaya	nagaya
@@ -1255,6 +1264,9 @@ sageba	ōkaji
 saien	saien
 sakagura	sakagura
 sakaki	sakaki
+sakutoku	sakutoku
+sakutoku landlord	sakutoku
+sakutoku landlords	sakutoku
 sally gate	sally port
 sally port	sally port
 sallyport	sally port
