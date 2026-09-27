@@ -171,6 +171,8 @@ comb maps	comb
 comb net	comb
 combs	comb
 command area	command area
+commanderies	commandery
+commandery	commandery
 confluence	confluence
 conservation headland	conservation headland
 conservation headlands	conservation headland
@@ -689,6 +691,7 @@ kosatsuba	kosatsuba
 kotai-yoriai	kotaiyoriai
 kotaiyoriai	kotaiyoriai
 kuchiireya	hitoyado
+kui	kui
 kumi	kumi
 kumi-yashiki	kumi-yashiki
 kumigashira	kumigashira
