@@ -70,6 +70,7 @@ bamboo grass	sasa
 bamboo-grass	sasa
 ban-hinin	banta
 banfang	banfang
+bangi	clapper-board
 bannerman	hatamoto
 bannerman's	hatamoto
 bannermen	hatamoto
@@ -112,6 +113,7 @@ black charcoal	black charcoal
 black-charcoal	black charcoal
 board feet	board foot
 board foot	board foot
+board-clapper	clapper-board
 bodaiji	bodaiji
 boji	boji
 bojikui	bojikui
@@ -218,6 +220,8 @@ citang	ancestral hall
 city god	City God
 city gods	City God
 city grain	city grain
+clapper-board	clapper-board
+clapper-boards	clapper-board
 climbing kiln	noborigama
 climbing kilns	noborigama
 coefficient of variation	coefficient of variation
@@ -568,6 +572,8 @@ gazetteer	gazetteer
 gazetteers	gazetteer
 gejo	degawari
 genan	degawari
+genba	genba
+genba-oke	genba
 genkan	genkan
 genroku	Genroku
 gentry	gentry
@@ -1057,6 +1063,7 @@ maoqu	maoqu
 masson pine	masson pine
 masugata	masugata
 mat	tatami
+matoi	matoi
 matou	gangi
 mats	tatami
 matsu	matsu
@@ -1383,6 +1390,7 @@ runners	yayi
 ryo	ryo
 ryobosei	ryobosei
 ryobu	ryobu
+ryudosui	ryudosui
 rōjū	Roju
 sae no kami	sae no kami
 sagami	Sagami
@@ -1663,6 +1671,7 @@ tiangeng	bund
 tier	tier
 tiers	tier
 tillering	tillering
+tobiguchi	tobiguchi
 toe	toe
 tohoku	Tohoku
 toiya	ton'ya

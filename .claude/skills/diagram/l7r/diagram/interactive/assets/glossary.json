@@ -7351,5 +7351,39 @@
    "machi-hanare",
    "cho-hanare"
   ]
+ },
+ "matoi": {
+  "def": "The standard of an Edo-period fire company, carried to a fire and held up on the roofs by its bearer. It was kept with the rest of the fire gear in a ward's watch house.",
+  "variants": [
+   "matoi"
+  ]
+ },
+ "tobiguchi": {
+  "def": "An Edo-period fire hook, used to pull down the houses downwind of a fire so that it could not spread. It was kept with the fire gear in a ward's watch house.",
+  "variants": [
+   "tobiguchi"
+  ]
+ },
+ "ryudosui": {
+  "def": "The hand pump of an Edo-period fire company. Since fires were fought by pulling houses down, it was mostly used to spray the men on the roofs and shield them from sparks.",
+  "variants": [
+   "ryudosui"
+  ]
+ },
+ "genba": {
+  "def": "A carrying bucket, one of the pieces of fire gear an Edo-period ward kept in its watch house.",
+  "variants": [
+   "genba",
+   "genba-oke"
+  ]
+ },
+ "clapper-board": {
+  "def": "A wooden board hung up at a watch post or fire tower and struck with a mallet to raise an alarm or give a signal; the Japanese bangi.",
+  "variants": [
+   "clapper-board",
+   "clapper-boards",
+   "board-clapper",
+   "bangi"
+  ]
  }
 }
