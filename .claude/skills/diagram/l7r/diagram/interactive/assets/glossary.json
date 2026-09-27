@@ -5889,5 +5889,52 @@
    "joruri",
    "jōruri"
   ]
+ },
+ "gun-bugyo": {
+  "def": "A domain official in charge of the rural districts outside the castle town, their villages and their taxes; the countryside counterpart of the town magistrate.",
+  "variants": [
+   "gun-bugyo",
+   "gun bugyo",
+   "district magistrate"
+  ]
+ },
+ "hip roof": {
+  "def": "A roof that slopes down to the eaves on all four sides, with no gable end.",
+  "variants": [
+   "hip roof",
+   "hip-roofed",
+   "hipped roof",
+   "hip-roof"
+  ]
+ },
+ "Kansei": {
+  "def": "A Japanese era name, 1789 to 1801; \"Kansei 6\" is 1794.",
+  "variants": [
+   "Kansei",
+   "Kansei era"
+  ]
+ },
+ "Rakuchu rakugai": {
+  "def": "Painted folding screens showing scenes \"in and outside the capital,\" a panorama of Kyoto and its outskirts, made from the sixteenth century on. Builders' historians use them as a record of the buildings of the time.",
+  "variants": [
+   "Rakuchu rakugai",
+   "Rakuchu rakugai screens",
+   "Rakuchu rakugai zu"
+  ]
+ },
+ "gable-entered": {
+  "def": "Entered through the gable end, the short triangular end wall under the ridge, instead of through one of the long sides (tsumairi).",
+  "variants": [
+   "gable-entered",
+   "gable-entry",
+   "tsumairi"
+  ]
+ },
+ "Kinki": {
+  "def": "The region of central Japan around Kyoto, Osaka and Nara. It takes in the old home provinces, the Kinai.",
+  "variants": [
+   "Kinki",
+   "Kinki region"
+  ]
  }
 }
