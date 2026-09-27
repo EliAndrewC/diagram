@@ -17,9 +17,10 @@
 
 ## Phase 1 - the pages (FR-002, FR-006, FR-007; was 250's T19)
 
-- [ ] T01 FR-002 and FR-006 for `ways`, by 250's process
+- [x] T01 FR-002 and FR-006 for `ways`, by 250's process
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. ways closed: 020 checked (16 notes; 1 DIFFERS and 6 PARTIAL fixed, 3 PARTIAL narrowed on the one re-check; 2 unfootnoted assertions answered - one absence note added, one sentence narrowed), 8 record-format findings applied (3 glossary terms, 2 variants), aze-jawiki limits rewritten, thepaper-night-gates HONEST; 020 split at the 20,000-byte cap into 020 and 025; FR-006 worklist 5 items, all FOOTNOTED
 - [ ] T02 FR-002 and FR-006 for `buildings`, by 250's process
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
