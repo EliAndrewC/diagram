@@ -5313,7 +5313,8 @@
    "kuchiireya",
    "keian",
    "kakaemoto"
-  ]
+  ],
+  "cased": true
  },
  "hiyoza": {
   "def": "A channel of hire for day laborers, named beside the hitoyado placement brokers as a route by which peasants and townsmen entered wage service in samurai households.",
@@ -7342,6 +7343,13 @@
   "def": "A guard box at a street crossing, above all in the samurai quarter of a castle town: in Edo a hut about 12 by 9 ft cut into a mansion wall, manned day and night.",
   "variants": [
    "tsujiban"
+  ]
+ },
+ "machi-hanare": {
+  "def": "The name used in Shinano and at Tsuruoka and Sakata for an outcaste quarter placed at a castle town's entrance or edge. It is written 町離, which this record reads as \"apart from town\".",
+  "variants": [
+   "machi-hanare",
+   "cho-hanare"
   ]
  }
 }
