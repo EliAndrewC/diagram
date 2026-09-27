@@ -354,6 +354,8 @@ earth-god	tudi miao
 earth-god shrine	tudi miao
 eastern han	Han dynasty
 eave soffit	soffit
+echigo	Echigo
+echigo province	Echigo
 echinochloa	Echinochloa crus-galli
 echinochloa crus-galli	Echinochloa crus-galli
 edago	hongo
@@ -899,6 +901,8 @@ leat	leat
 leats	leat
 levee	levee
 levees	levee
+levy storehouse	levy storehouse
+levy storehouses	levy storehouse
 li	li
 liberties	liberty
 liberty	liberty
@@ -1583,6 +1587,7 @@ unhair	unhair
 unhaired	unhair
 unhairing	unhair
 unhairs	unhair
+unjo-gura	levy storehouse
 ura-dana	ura-dana
 ura-nagaya	ura-nagaya
 uradana	back tenement
@@ -1641,6 +1646,7 @@ wenmiao	wenmiao
 wet run	wet run
 wet runs	wet run
 wetted perimeter	wetted perimeter
+white-sand court	oshirasu
 white-tawed	shironameshi
 wicket	wicket
 wickets	wicket
