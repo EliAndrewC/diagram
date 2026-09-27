@@ -18,8 +18,8 @@ from ..._geom import (
 )
 from ..._knobs import KOSATSUBA_MARKER_MIN_PX
 from ..captions import CAPTION_FEATURE_GAP as _CAP_FEATURE_GAP  # one figure for the caption's reading distance
-from ._helpers import CAPTION_LANE_FLOOR_FT, CAPTION_LANE_TARGET_FT, first_clear_seat, pick_caption_seat
-from .siting import canopy_index, under_canopy
+from ._helpers import CAPTION_LANE_FLOOR_FT, CAPTION_LANE_TARGET_FT, first_clear_seat, pick_caption_seat, quad_on_canopy
+from .siting import canopy_index
 
 if TYPE_CHECKING:
     from ...core import Settlement
@@ -421,7 +421,7 @@ class BoardsMixin:
                 so the tree read as damaged). A preference rather than a constraint, and at the rung rather than
                 at the end of it, because the ladder's first answer is the one that ships."""
                 _seats = [_s for _s in _seats if _on_the_page(_s)]  # a rung with no seat on the page yields none (feature 261)
-                _shaded = [_s for _s in _seats if not under_canopy(_canopy, _s[0], _s[1], max(_chw, 8.0))]
+                _shaded = [_s for _s in _seats if not quad_on_canopy(_cap_quad(_s), _canopy.near)]  # the drawn caption and its halo, not a disc round its center (feature 261)
                 return first_clear_seat(_shaded, _hug, _hug_cap, _blocked, _box_clearance, _want) or first_clear_seat(_seats, _hug, _hug_cap, _blocked, _box_clearance, _want)
 
             def _across_a_way(_q: Pt) -> bool:
@@ -469,7 +469,7 @@ class BoardsMixin:
                 # canopy across its whole width, so the tree read as damaged. A PREFERENCE rather than a constraint, in
                 # the same shape and the same place as the board's own: a seat clear of canopy wins where one exists, and
                 # a caption whose every candidate stands under trees is still seated.
-                _clear = [_s for _s in (_near or _seats) if not under_canopy(_canopy, _s[0], _s[1], max(_chw, 8.0))]
+                _clear = [_s for _s in (_near or _seats) if not quad_on_canopy(_cap_quad(_s), _canopy.near)]
                 # AND WHEN EVERY SEAT IS BLOCKED, THE LEAST BAD ONE (feature 227). The two preferences above narrow the
                 # field; `_feature_gap` decides among what is left, so a caption that must sit near solid ink sits as
                 # far from it as the ladder allows instead of falling through to pure lane clearance.

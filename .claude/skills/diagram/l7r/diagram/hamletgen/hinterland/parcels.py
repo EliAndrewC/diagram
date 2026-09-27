@@ -99,6 +99,40 @@ def fit_square_parcel(half: float, floor_half: float, fits: Any) -> float | None
     return None
 
 
+_CHAIN_OFF = 0.2  # a third parcel within this fraction of the span off the line through two others stands in their row
+
+
+def in_a_ruled_line(p: tuple[float, float], centers: Sequence[tuple[float, ...]], frac: float = _CHAIN_OFF) -> bool:
+    """Would a parcel at `p` stand in a ruled line with two parcels already placed - off the line through them by less
+    than `frac` of the three's span (settlement-review of Inashiro, feature 261)? Varying the stride did not break the
+    CHAIN the 2026-08-18 reviews recorded: the monotone score still seats each parcel on the first legal ground along the
+    crop's keep-out edge, and Inashiro's three stood 5 ft off one line over 1,104 ft, Kashikawa's in a column."""
+    for i in range(len(centers)):
+        for j in range(i + 1, len(centers)):
+            a, b = (float(centers[i][0]), float(centers[i][1])), (float(centers[j][0]), float(centers[j][1]))
+            span = max(math.dist(a, b), math.dist(a, p), math.dist(b, p))
+            ab = math.dist(a, b)
+            if span and ab and abs((b[0] - a[0]) * (a[1] - p[1]) - (a[0] - p[0]) * (b[1] - a[1])) / ab < frac * span:
+                return True
+    return False
+
+
+def off_the_row(p: tuple[float, float], centers: Sequence[tuple[float, ...]], frac: float = _CHAIN_OFF) -> list[tuple[float, float]]:
+    """Seats stepped sideways off the row `p` would stand in, nearest first: along the normal of the first row it joins,
+    by 1, 1.5 and 2 times the off-line distance `in_a_ruled_line` asks for, each side (settlement-review of Inashiro,
+    feature 261: the open ground there is a narrow band along the field's keep-out, every qualifying seat in the row)."""
+    for i in range(len(centers)):
+        for j in range(i + 1, len(centers)):
+            a, b = (float(centers[i][0]), float(centers[i][1])), (float(centers[j][0]), float(centers[j][1]))
+            if not in_a_ruled_line(p, [a, b], frac):
+                continue
+            ab = math.dist(a, b)
+            nx, ny = -(b[1] - a[1]) / ab, (b[0] - a[0]) / ab
+            span = max(ab, math.dist(a, p), math.dist(b, p))
+            return [(p[0] + sgn * k * frac * span * nx, p[1] + sgn * k * frac * span * ny) for k in (1.05, 1.5, 2.0) for sgn in (1.0, -1.0)]
+    return []
+
+
 def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float = 250.0) -> list[Poly]:
     """Find `count` patches of ground still open enough for a managed woodland - by SCANNING.
 
@@ -360,11 +394,23 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
             _cross_seats = [t for t in scored if abs((t[1] - ccx) * -dy + (t[2] - ccy) * dx) >= ((t[1] - ccx) * dx + (t[2] - ccy) * dy)]
             if _cross_seats:
                 scored = _cross_seats
+            # ...NOT IN A ROW: a seat in line with two placed parcels is stepped sideways off the row where the ground allows,
+            # and refused where it does not - the count is a target the scan already meets only where there is open ground
+            # (a map with one parcel is common), and a ruled chain is the defect two reviews recorded (Inashiro's band lies
+            # between the field's keep-out and the frame's corner: its third parcel had nowhere off the line)
             for _, x, y in sorted(scored, reverse=True):
                 if len(chosen) >= count:
                     break
                 if any(math.hypot(x - cx0, y - cy0) < _ex0 for cx0, cy0, _ex0 in centers):
                     continue
+                if in_a_ruled_line((x, y), centers):
+                    _off = next(
+                        (q for q in off_the_row((x, y), centers) if _ok(*q) and not in_a_ruled_line(q, centers) and not any(math.hypot(q[0] - cx0, q[1] - cy0) < _ex0 for cx0, cy0, _ex0 in centers)),
+                        None,
+                    )
+                    if _off is None:
+                        continue  # the stride varied and the line did not; with no ground off the row, no parcel here
+                    x, y = _off
                 # OFF THE LATTICE, AND NOT ALL ONE SIZE (settlement-review, Mizuguchi 2026-08-18).
                 # The scan samples a uniform 90 px lattice, scores every seat by one monotone
                 # function (near the cluster, leaning upslope) and then takes the best remaining seat

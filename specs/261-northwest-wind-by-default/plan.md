@@ -254,6 +254,16 @@ Measured before and after in research R10.
   research ways/030: a plank "crosses its ditch square").
 - A roll that raises removes its own stage, and `.roll-*/` is ignored: two interrupted rolls left staging directories in
   Kuwabata's pool folder and a commit took them in.
+- A caption whose halo would notch a tree crown is refused where a clear one exists: the siter ranks a board whose aligned
+  caption clears the canopy above one that merely fits, and the placer's shaded test reads the drawn quad and halo
+  (`quad_on_canopy`), not a disc round the caption's center (Kuwabata's caption stood in the windbreak).
+- No third woodland parcel stands in a ruled row with two others: an in-row seat is stepped sideways where the ground
+  allows and refused where it does not - the count is a target the scan meets only where there is ground (Inashiro keeps
+  two). A preference that fell back to the row was tried first and kept the chain.
+- No copse clump is based in the marsh (research/vegetation.html: woody cover "stands on the dry ground above it"). The
+  keep-out is the copse's alone: applied to every grove it took Sawada's windward belt from 179 crowns to 104, and 20-34
+  of the 68 refused crowns stood on ground drawn dry - the toe marsh's recorded outline runs under the settlement's
+  cleared ground there. Recorded in `future-work/farming-communities.md` with the measurement and a sketch.
 
 ## Phases
 

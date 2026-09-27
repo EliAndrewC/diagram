@@ -469,7 +469,7 @@ def _room(**kw):
     """`caption_room` for a board at (100, 100) turned 80 degrees along a north-south lane at x = 90, with a 20 px caption."""
     args = {"fabric": [], "lanes": [{"pts": [[90, 0], [90, 200]], "w": 3}], "view": [0, 0, 200, 200], "hug_cap": 24.0, "feature_gap": 4.0, "lane_floor": 2.0}
     args.update(kw)
-    return caption_room(100.0, 100.0, 80.0, 6.0, 2.5, 20.0, args["fabric"], args["lanes"], args["view"], args["hug_cap"], args["feature_gap"], args["lane_floor"])
+    return caption_room(100.0, 100.0, 80.0, 6.0, 2.5, 20.0, args["fabric"], args["lanes"], args["view"], args["hug_cap"], args["feature_gap"], args["lane_floor"], canopy=args.get("canopy"))
 
 
 def test_caption_room_finds_the_seat_beside_the_lane_the_caption_runs_along():
@@ -504,3 +504,15 @@ def test_a_level_board_whose_caption_ring_is_off_the_page_is_not_sitable():
     s.M["road"] = [[100, 300], [900, 300]]
     s.M["meta"]["view"] = [0, 0, 5, 5]
     assert s.place_kosatsuba() is not None
+
+
+def test_a_caption_on_a_crown_is_on_the_canopy_and_caption_room_can_refuse_it():
+    """Feature 261 (settlement-review of Kuwabata): the caption's drawn quad and halo, not a disc round its center."""
+    from l7r.diagram.settlement.structures.fixtures._helpers import quad_on_canopy
+
+    quad = [(0.0, 0.0), (50.0, 0.0), (50.0, 8.0), (0.0, 8.0)]
+    assert quad_on_canopy(quad, lambda x, y, pad: [(25.0, 4.0, 5.0)]), "a crown under the words"
+    assert quad_on_canopy(quad, lambda x, y, pad: [(48.0, 14.0, 5.0)]), "a crown the halo reaches at one end"
+    assert not quad_on_canopy(quad, lambda x, y, pad: [(25.0, 40.0, 5.0)])
+    everywhere = lambda x, y, pad: [(x, y, 500.0)]  # noqa: E731 - a canopy over the whole map
+    assert not _room(canopy=everywhere) and _room(canopy=lambda x, y, pad: [])

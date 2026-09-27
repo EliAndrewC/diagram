@@ -357,7 +357,7 @@ correct the last one - so the numbers a reader can check now come from the artif
 - copse: **34** clumps drawn
 - farmhouses: **16**
 - farmstead fixtures: bath **5**, coop **13**, pit **6**, privy **14**, shrine **1**, woodpile **14**
-- notice board at **(2019.8, 486.9)**, **8** of 16 farmhouses within 250 ft
+- notice board at **(2001.0, 471.9)**, **7** of 16 farmhouses within 250 ft
 <!-- /census -->
 
 

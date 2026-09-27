@@ -351,6 +351,25 @@ def routes_missed(routes: Sequence[Sequence[tuple[float, float]]], x: float, y: 
     return sum(1 for r in routes if not any(math.hypot(q[0] - x, q[1] - y) <= near for q in r))
 
 
+CAPTION_HALO_FT = 1.5  # the caption's background halo, drawn past its box (`label()`'s stroke) - what notches a crown
+
+
+def quad_on_canopy(quad: Sequence[tuple[float, float]], near: Callable[[float, float, float], Any]) -> bool:
+    """Does a caption DRAWN as `quad` - with its halo - lie on any tree crown? `near(x, y, pad)` returns the crowns (x, y,
+    r, ...) whose boxes come within `pad` of a point (a `canopy_index` grid's `near`). The drawn shape against the drawn
+    crowns (feature 261, settlement-review of Kuwabata): the old test asked whether the caption's CENTER stood within a
+    radius of a crown, a stand-in for a 53 ft caption whose ends can lie in trees while its middle is clear."""
+    from ..._geom import point_in_poly, seg_dist
+
+    cx, cy = sum(p[0] for p in quad) / len(quad), sum(p[1] for p in quad) / len(quad)
+    reach = max(math.dist((cx, cy), p) for p in quad) + CAPTION_HALO_FT
+    for it in near(cx, cy, reach):
+        x, y, r = float(it[0]), float(it[1]), float(it[2])
+        if point_in_poly(x, y, list(quad)) or min(seg_dist(x, y, a, b) for a, b in zip(quad, [*quad[1:], quad[0]], strict=False)) < r + CAPTION_HALO_FT:
+            return True
+    return False
+
+
 def caption_room(
     x: float,
     y: float,
@@ -364,6 +383,7 @@ def caption_room(
     hug_cap: float,
     feature_gap: float,
     lane_floor: float,
+    canopy: Callable[[float, float, float], Any] | None = None,
 ) -> bool:
     """Is there a seat where the notice board's caption can be DRAWN - the placer's own tests, asked by the siter
     (feature 261)?
@@ -406,5 +426,7 @@ def caption_room(
                         continue
                     if any(segments_cross((x, y), (qx, qy), a, b) or poly_seg_dist(quad, a, b) - half < lane_floor for a, b, half in segs):
                         continue
+                    if canopy is not None and quad_on_canopy(quad, canopy):
+                        continue  # asked with a canopy: a caption whose halo would notch a crown is no seat
                     return True
     return False

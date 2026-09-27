@@ -316,3 +316,44 @@ def test_the_board_caption_stands_at_the_boards_angle(gen: str) -> None:
     tilt = float(labs[0][7]) if len(labs[0]) > 7 and labs[0][7] is not None else 0.0
     off = abs((tilt - float(m["kosatsuba"][0].get("rot") or 0.0) + 90.0) % 180.0 - 90.0)
     assert off <= 0.5, f"the caption stands {off:.1f} degrees off its board"
+
+
+@pytest.mark.parametrize("gen", GENS, ids=IDS)
+def test_no_three_woodland_parcels_stand_in_a_ruled_row(gen: str) -> None:
+    """The coppice lots are not three stamps marching down one line (settlement-reviews of 2026-08-18, and of Inashiro in
+    feature 261: 5 ft off one line over 1,104 ft)."""
+    from l7r.diagram.hamletgen.hinterland.parcels import in_a_ruled_line
+
+    m = _manifest(gen)
+    w = [(float(o["x"]), float(o["y"])) for o in m.get("commons") or [] if o.get("role") == "woodland"]
+    assert w, "non-vacuity: the map has a woodland commons"
+    assert not any(in_a_ruled_line(w[k], w[:k]) for k in range(2, len(w))), f"woodland parcels in a row: {w}"
+
+
+@pytest.mark.parametrize("gen", GENS, ids=IDS)
+def test_no_copse_clump_is_based_in_the_marsh(gen: str) -> None:
+    """Woody cover stands on the dry ground above the marsh (research/vegetation.html; settlement-review of Kashikawa,
+    feature 261: copse crowns 3-21 ft inside the toe marsh)."""
+    from l7r.diagram.settlement._geom import point_in_poly
+
+    m = _manifest(gen)
+    copse = [c for g in m.get("village_groves") or [] if g.get("role") == "copse" for c in g.get("clumps") or []]
+    assert copse, "non-vacuity: the map has a copse"
+    for mk in m.get("marshes") or []:
+        ring = [(float(q[0]), float(q[1])) for q in mk.get("poly") or []]
+        if len(ring) >= 3:
+            assert not any(point_in_poly(float(c[0]), float(c[1]), ring) for c in copse), "a copse clump stands in the marsh"
+
+
+@pytest.mark.parametrize("gen", GENS, ids=IDS)
+def test_the_board_caption_notches_no_crown(gen: str) -> None:
+    """The caption's halo does not cut a notch out of a tree crown (settlement-review of Kuwabata, feature 230 pass 13 and
+    again in feature 261, once the caption stood at its board's angle in the windbreak)."""
+    from l7r.diagram.settlement._geom import label_quad
+    from l7r.diagram.settlement.structures.fixtures._helpers import quad_on_canopy
+    from l7r.diagram.settlement.structures.fixtures.siting import canopy_index
+
+    m = _manifest(gen)
+    labs = [lab for lab in m.get("labels", []) if "notice" in str(lab[5]).lower()]
+    assert labs, "non-vacuity: the board has its caption"
+    assert not quad_on_canopy(label_quad(labs[0]), canopy_index(m).near), "the caption lies on a crown"

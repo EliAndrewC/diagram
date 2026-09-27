@@ -517,3 +517,16 @@ def test_a_belt_column_with_no_house_leans_on_its_neighbor_not_on_the_far_end_of
 
     # ...and with no houses anywhere, every column is the floor rather than an error
     assert [u for _v, u in fringe_profile([], 3, 100.0, 0.0, 12.0, 1.0)] == [12.0, 12.0, 12.0, 12.0]
+
+
+def test_a_parcel_in_line_with_two_others_is_in_a_ruled_row() -> None:
+    """Feature 261 (settlement-review of Inashiro): three parcels 5 ft off one line over 1,104 ft read as a chain."""
+    from l7r.diagram.hamletgen.hinterland.parcels import in_a_ruled_line, off_the_row
+
+    placed = [(0.0, 0.0), (500.0, 0.0)]
+    assert in_a_ruled_line((1000.0, 5.0), placed)
+    assert not in_a_ruled_line((1000.0, 400.0), placed)
+    assert not in_a_ruled_line((1000.0, 5.0), placed[:1]), "two parcels make no row"
+    steps = off_the_row((1000.0, 5.0), placed)
+    assert steps and all(not in_a_ruled_line(q, placed) for q in steps)
+    assert off_the_row((1000.0, 400.0), placed) == []

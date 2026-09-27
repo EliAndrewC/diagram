@@ -576,5 +576,35 @@
   "quantity": "the most any lane crosses a drawn channel off square (the head-race plank by the weir, which lay 44 degrees off); stage_crossings squares crossings of every drawn channel as well as the brook",
   "source": "pool/hamlets/mizuguchi/mizuguchi.json lanes[] against drawn_channels[].pts; test_every_lane_crosses_a_drawn_channel_square",
   "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kuwabata-r7-caption-canopy": {
+  "verifies": "F1",
+  "subject": "kuwabata",
+  "round": "4329d494",
+  "value": 0,
+  "unit": "crowns",
+  "quantity": "drawn tree crowns the notice-board caption's quad and 1.5 ft halo touches (quad_on_canopy against tree_crowns); the siter ranks a board whose aligned caption clears the canopy above one that merely fits, and the placer's shaded test reads the drawn quad, not a disc round the center",
+  "source": "pool/hamlets/kuwabata/kuwabata.json labels['notice board'] via label_quad against tree_crowns; test_the_board_caption_notches_no_crown",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "inashiro-r7-parcel-row": {
+  "verifies": "F1",
+  "subject": "inashiro",
+  "round": "4329d494",
+  "value": 2,
+  "unit": "parcels",
+  "quantity": "woodland parcels drawn, none in a ruled row with two others (in_a_ruled_line, 20% of the span): the third seat stood 5 ft off the line through the first two over 1,104 ft and had no ground off the row, so it is refused",
+  "source": "pool/hamlets/inashiro/inashiro.json commons[role=woodland]; test_no_three_woodland_parcels_stand_in_a_ruled_row",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kashikawa-r7-copse-marsh": {
+  "verifies": "F1",
+  "subject": "kashikawa",
+  "round": "4329d494",
+  "value": 0,
+  "unit": "clumps",
+  "quantity": "copse clumps based inside the toe marsh's outline (they were 6, 3-21 ft in); the copse keeps off the marsh as the woodland parcels do",
+  "source": "pool/hamlets/kashikawa/kashikawa.json village_groves[role=copse].clumps against marshes[].poly; test_no_copse_clump_is_based_in_the_marsh",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
  }
 }

@@ -228,7 +228,16 @@ class StandsMixin:
             crop_pad=12 + cr,
             dry=self.dry_polys,
             dry_pad=12,
-            dikes=[dk["outline"] for dk in self.M.get("dikes", [])],
+            # ...AND THE MARSH, INSIDE ONLY, as a dike bank is: woody cover "stands on the dry ground above it"
+            # (research/vegetation.html, the marsh margin), so no clump is BASED in the marsh - a Kashikawa copse clump
+            # stood 3-21 ft inside the toe (settlement-review, feature 261) - while a crown may reach over its edge.
+            # The COPSE only: applied to every grove it took Sawada's windward belt from 179 crowns to 104, and 20-34 of the
+            # 68 crowns it refused stood on ground DRAWN dry - the toe marsh's recorded outline runs under the settlement's
+            # cleared ground there, so the outline is not the drawn marsh. The crops' padded keep-out was tried before that
+            # and was worse still. The copse is the grove the review measured, and the parcels' own marsh keep-out is the
+            # precedent it asked for.
+            dikes=[dk["outline"] for dk in self.M.get("dikes", [])]
+            + ([[(float(q[0]), float(q[1])) for q in mk["poly"]] for mk in self.M.get("marshes") or [] if len(mk.get("poly") or []) >= 3] if role == "copse" else []),
             water=[(wl, whw + cr) for wl, whw in water_lines],
             corridors=corr,
             circles=occ,

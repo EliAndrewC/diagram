@@ -2414,3 +2414,13 @@ the knob doctrine this is a KNOB, not a fix (settlement-review of Inashiro, feat
 SKETCH: a `hem_siting` knob - `field_edge` (today's band along the paddy) or `by_the_houses` (the dry plots seated in the
 open ground around the cluster, after `stage_homesteads`, from the same acreage). Research pass first: whether a hamlet
 whose home ground is paddy-bound kept its hatake by the houses, and in what share.
+
+## The toe marsh's recorded outline is not the drawn marsh (measured 2026-09-27, feature 261)
+
+MEASURED: on Sawada 68 of the windbreak's 179 crown bases lie inside `marshes[0].poly` (the toe), and sampled on the
+render with the belt removed, 20-34 of those 68 positions are ground drawn dry (the settlement's cleared ground, cream
+239,227,194 and 227,221,191) and the rest the marsh tint. So the outline runs under ground the marsh ink does not reach,
+and a keep-out read from it refuses dry ground - which is why feature 261 keeps the COPSE off the marsh outline and not
+the belt. MECHANISM: the marsh is drawn clipped by the settlement's clearing while its record keeps the unclipped ring.
+SKETCH: record the drawn extent (the ring after the clearing's cut) beside `poly`, as `drawn_poly`, and have every grove
+and the parcels test against it; then the belt gets the same keep-out as the copse.

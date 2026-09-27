@@ -213,6 +213,9 @@ records `m:kashikawa-r4-caption`, `m:kuwabata-r4-tail`, `m:kuwabata-r4-caption-l
 | a caption nearer another footprint than its board | Kuwabata, byre 4.9 ft and board 24.6 ft | nearest its board on every map; Kuwabata 6.8 against 11.2 (`m:kuwabata-r5-caption-pair`) |
 | a caption level beside a tilted board | Kuwabata, level beside a board at 38.7 degrees | every caption at its board's angle (`m:kuwabata-r6-caption-angle`) |
 | a lane over a drawn channel off square | Mizuguchi's head-race plank, 44 degrees | every such crossing square (`m:mizuguchi-r6-headrace`) |
+| a caption's halo notching crowns | Kuwabata, 3 crowns, 24% of the caption box on canopy | no caption on a crown on any map (`m:kuwabata-r7-caption-canopy`) |
+| woodland parcels in a ruled row | Inashiro, 5 ft off one line over 1,104 ft | no row on any map; Inashiro keeps 2 parcels (`m:inashiro-r7-parcel-row`) |
+| copse clumps in the marsh | Kashikawa, 6 clumps 3-21 ft in | none on any map (`m:kashikawa-r7-copse-marsh`) |
 
 Kuwabata's first two rolls under the changed ways each left a farmhouse off the way network, so it keeps its third: 4
 of 16 farmsteads re-seated, the farthest 134 ft (`m:kuwabata-r4-notes`).

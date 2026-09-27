@@ -1764,3 +1764,6 @@ own bank, the dooryard copse keeps within 90 ft of a farmhouse (median 70 ft), a
 track out meets the lanes, passed by all 15 households' ways out. The track itself now leaves southwest, so the district
 direction reads southwest. The rolled crescent is not what this seat draws - the houses gather as a round cloud, a
 drawn aspect of 1.62, inside the round form's ceiling of 2 - and the manifest records it as unhonored rather than claiming it.
+The woodland commons are two stands, not three: the third seat the scan found stood in a ruled row with the other two
+(5 ft off their line over 1,104 ft), the chain the 2026-08-18 reviews recorded, and the open ground there - a band
+between the field's keep-out and the frame's corner - had no seat off the line.
