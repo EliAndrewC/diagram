@@ -1,0 +1,53 @@
+{
+ "feature": "273-hamlet-graveyards",
+ "plan_sha256": "8c79d418b3286218efd6b079f5bf48ba23c099deb8d8ba13397e4e3a755b905f",
+ "reviewed": "2026-09-27",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "A rule, not a knob: every hamlet draws a burial ground of its own",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The GM allowed a rule only if 'everything points in one direction'; otherwise a per-hamlet knob where some hamlets have their own graveyard and some do not. The record's own evidence does not point one way. 540 quotes danka-jawiki (a grave at one's parish temple was 'half made an obligation') and dismisses it only for two-grave country, which its own kotobank quote centers on Kansai and says is hardly found in Kyushu, so elsewhere the bones lay at the parish temple. 500 finds the commonest arrangement was a village's households registered to temples OUTSIDE it. 170 (the setting's rule) has the graves lie by the monk-run building everywhere, the shrine being the setting's parish temple, and the hamlet is served by the village's shrine (500, 210). 160 still says a hamlet draws none and its dead go to the district's ground. Together that is the GM's first option ('go into the village to visit your ancestors where they are interred'), and 540's 'no page read sends a hamlet's dead to a ground kept by a larger village' is contradicted by 500 read with the danka quote. So the premise for a rule is not established. Choosing a rule drops the hamlet-without-a-graveyard form the GM named. The fix is a knob (own ground at the edge, or none with the dead in the village shrine's yard) with odds sourced or labeled a guess, or research that actually closes the parish-temple form, with 160 and 170 reconciled."
+  },
+  {
+   "id": "D2",
+   "summary": "Size 750-2,450 sq ft by households, about 1.4:1",
+   "class": "within",
+   "why": "Sizing is not settled by the spec, and a guessed value is labeled. But 160's band is for full-body burial ('less for urns'), and 540's ground holds urns, so 'accurate as a band' is the wrong label: it is a guess or a deviation, or it is derived for urns."
+  },
+  {
+   "id": "D3",
+   "summary": "Seat beyond the last house, down the fall line first, 60 ft from houses and wells, 180's water set-backs, nearest that passes",
+   "class": "within",
+   "why": "It is inside FR-003's 'seated by the researched siting', with guesses labeled. 540 says the seat keeps 'the clearance the village's ground keeps'; the plan uses the boundary stone's 60 ft, whose own comment says it is a marker's figure and not the 120 ft pollution rule. The two should agree, one way or the other."
+  },
+  {
+   "id": "D3-fallback",
+   "summary": "No passing seat -> nearest seat clearing houses and stream, flagged meta.burial_ground_fallback",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "The researched siting is physically impossible when no seat passes; the fallback keeps the house and stream clearances and records itself in the manifest. It stays legitimate only while it is the exception: if it fires on a pool hamlet, it is the rule and must be reported."
+  },
+  {
+   "id": "D4",
+   "summary": "The village's cremation ground in _roll_civic, beside the burial ground or on its own downstream at even odds, 120 ft from houses; roll test that no hamlet draws a cremation ground, shrine or headman's house",
+   "class": "within",
+   "why": "FR-003 asks for 530's rule. D4 carries the seat knob but not the rest of 530's rule: the six stone jizo, the fire bed off the shrine approach, and the ~650 ft reach for a ground on its own. cremation_ground() draws no jizo today. It must carry all of 530 or say where each part already holds. The no-hamlet test must cover hamletgen's hamlets, which are the pool, and not only roll.py's tier."
+  },
+  {
+   "id": "D5",
+   "summary": "The village's burial ground lands after 269's R1 is on main; a follow-up feature if 269 is still hours off",
+   "class": "within",
+   "why": "The spec's Edge Case carries this condition, and D5 states it. But tasks.md and Phases make it unconditional (no task, 'is a follow-up feature'). If 269's 270 and 280 reach main before T04, nothing implements it here. A conditional task or note should decide it at that point, as the spec says."
+  },
+  {
+   "id": "D6",
+   "summary": "Five pool hamlets re-roll; one settlement-review per moved map",
+   "class": "within",
+   "why": "This is FR-005 as written."
+  }
+ ],
+ "verdict": "BLOCKED"
+}
