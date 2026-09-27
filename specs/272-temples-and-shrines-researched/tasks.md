@@ -17,9 +17,10 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D6).
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
       verify: DONE. DONE. religion-and-death 550, 560, 570 new, pointer in 020; checks a-c applied (quote-check, record-format, source-applicability); two note keys shared with R2 renamed at the pull-back; the owed 550/560 readings checked and hold (Shanghai's site given as an 1855 rebuild; Zhihua's 278.8 m as the page's present length)
-- [ ] T05 Group B37 - city temple monks, gate shops, graveyard sharing (310-330; edits 010, 050, 070 and their notes searched twice) (FR-001, FR-002)
+- [x] T05 Group B37 - city temple monks, gate shops, graveyard sharing (310-330; edits 010, 050, 070 and their notes searched twice) (FR-001, FR-002)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. DONE. religion-and-death 310, 320, 330 new; 010, 050, 070 edited and their absence notes searched twice; checks a-c applied (quote-check, record-format, source-applicability on twelve write-ups); FR-007: none
 - [x] T06 Group R3 - village temple, its precinct, wayside shrines, A144 as far as 269's R1 leaves it, 190 and 204, D63's tier table as 210 (500-540; the 210 note searched twice) (FR-001, FR-002)
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
