@@ -45,3 +45,10 @@
 - SugarcaneDike (archetypes SECTION=170): IN-STEP - 170 only lists cane among the rolled dike crops, as the modal's one-type-per-hamlet says
 - SugarcaneDike (archetypes SECTION=173): IN-STEP - the split moved no finding; the Why:'s "late 1980s" is not in 173 but nothing there contradicts it
 - VegetableGround (archetypes SECTION=170): IN-STEP - Fei's vegetables by the houses and under the mulberry, and the converted block as the map's archetype, still stand
+- BananaDike (archetypes SECTION=170): IN-STEP - 170 only lists banana among the rolled dike crops and points to 173; its changes are upkeep on the silk-house and shrine items
+- BananaDike (archetypes SECTION=173): IN-STEP - the split under the size cap moved no finding; bananas first in the succession, one crop per hamlet and the modern type still stand
+- FruitDike (archetypes SECTION=170): IN-STEP - 170's "rolled per hamlet and drawn" matches the modal's one-type-per-hamlet
+- FruitDike (archetypes SECTION=173): IN-STEP - the split moved no finding; the succession, "chiefly banana and citrus" and the modern type still stand
+- ManurePit (archetypes SECTION=170): IN-STEP - the half-buried earthenware pits behind the house (Fei 1939) and the unmeasured size still stand
+- SluiceGate (archetypes SECTION=160): IN-STEP - full enclosure with water crossing only at gated sluices still stands; the agent flagged (outside its remit) that its Sources tag still names `shen-kuo` though 160 now marks the Shen Kuo enclosure quote unsourced; left for a source-attribution check, since Sources is a snapshot data field (test_classes_docstrings)
+- VegetableGround (archetypes SECTION=173): IN-STEP - 173's new modern-succession sentence matches the Note's "a later stage, not a leftover parcel"
