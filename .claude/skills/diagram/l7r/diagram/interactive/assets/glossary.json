@@ -7379,5 +7379,18 @@
    "shigyo-hachimon",
    "shigyo-hachimon system"
   ]
+ },
+ "Genji": {
+  "def": "A Japanese era name, 1864-1865. The great fire of Genji burned much of Kyoto in the summer of 1864.",
+  "variants": [
+   "Genji"
+  ]
+ },
+ "back-to-back drain": {
+  "def": "The open drain running down the middle of a block, where the back lots of the houses facing two parallel streets meet; in a castle town it often also marks the boundary between wards.",
+  "variants": [
+   "back-to-back drain",
+   "back-to-back drains"
+  ]
  }
 }

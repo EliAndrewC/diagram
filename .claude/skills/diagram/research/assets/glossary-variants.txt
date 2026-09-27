@@ -54,6 +54,8 @@ back nagaya	back tenement
 back tenement	back tenement
 back tenements	back tenement
 back-tenement	back tenement
+back-to-back drain	back-to-back drain
+back-to-back drains	back-to-back drain
 backswamp	backswamp
 backswamps	backswamp
 backwall	backwall
@@ -568,6 +570,7 @@ gazetteer	gazetteer
 gazetteers	gazetteer
 gejo	degawari
 genan	degawari
+genji	Genji
 genkan	genkan
 genroku	Genroku
 gentry	gentry
