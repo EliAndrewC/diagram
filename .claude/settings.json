@@ -229,6 +229,10 @@
           },
           {
             "type": "command",
+            "command": "h=/diagram/scripts/check-bundle-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/check-bundle-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 250 - a NEW guard (the GM 2026-09-26): a record check is dispatched with a bundle outside the repository, or refused with the make check-bundle command"
+          },
+          {
+            "type": "command",
             "command": "/diagram/scripts/pair-hooks.sh pretool"
           },
           {
@@ -238,6 +242,15 @@
           {
             "type": "command",
             "command": "/diagram/scripts/review-round-hooks.sh pretool"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash|Read|Grep",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "h=/diagram/scripts/canon-read-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/canon-read-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 250 D16 - a NEW guard: the setting canon is read with make canon, every term of a claim at once"
           }
         ]
       }

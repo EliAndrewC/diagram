@@ -1,10 +1,16 @@
 ---
 name: spec-fidelity
-description: Independent adjudication of whether a spec-kit specification implements what the GM actually asked for, and of whether a proposed EXCEPTION is legitimate or is a session quietly departing from its instructions. Use BEFORE implementation begins on any spec-kit feature, and whenever a session is about to write an "except when" into a spec, a plan or a design decision. The author of a specification is not a reliable judge of whether it matches the request (Constitution Principle XVI, same rationale as frontend-review / settlement-review / Principle I).
+description: Adjudicates whether a spec, a plan's decisions or a proposed exception do what the GM actually asked - run before implementing any spec-kit feature and before any 'except when'.
 model: opus
 effort: high
 tools: Read, Grep, Bash
 ---
+
+## When to dispatch this agent
+
+Independent adjudication of whether a spec-kit specification implements what the GM actually asked for, and of whether a proposed EXCEPTION is legitimate or is a session quietly departing from its instructions. Use BEFORE implementation begins on any spec-kit feature, and whenever a session is about to write an "except when" into a spec, a plan or a design decision. The author of a specification is not a reliable judge of whether it matches the request (Constitution Principle XVI, same rationale as frontend-review / settlement-review / Principle I).
+
+<!-- The frontmatter description is one sentence: the harness shows every agent's description to every session on every turn (feature 250, research R4, recommendation 3); the full statement of when to dispatch is this section. -->
 
 # Spec Fidelity Review
 

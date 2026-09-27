@@ -36,7 +36,9 @@
       span.className = "gl";
       span.textContent = m[0];
       span.setAttribute("data-def", glossaryDef[m[0].toLowerCase()] || "");
-      span.addEventListener("mouseenter", function () { showTip(span); });
+      // `this`, never `span`: `var` is shared by every pass of this loop, so a handler that named `span` showed the
+      // LAST term's definition for every term in the paragraph (found by feature 250's tooltip test, 2026-09-27)
+      span.addEventListener("mouseenter", function () { showTip(this); });
       span.addEventListener("mouseleave", hideTip);
       el.appendChild(span);
       last = m.index + m[0].length;

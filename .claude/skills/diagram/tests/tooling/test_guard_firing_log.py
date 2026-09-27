@@ -58,6 +58,14 @@ CASES = [
     ("review-round", _payload(_tool="Agent", subagent_type="spec-fidelity", prompt="MODE 3 of specs/999-nowhere REVIEW_ROUND_OK"), "blocked", "REVIEW_ROUND_OK-no-reason"),
     # feature 252 (GM 2026-09-19): an ad-hoc agent dispatch names its model, or is refused
     ("agent-model", _payload(_tool="Agent", subagent_type="general-purpose", prompt="read three pages"), "blocked", "no-model"),
+    ("check-bundle", _payload(_tool="Agent", subagent_type="record-format", prompt="check .claude/skills/diagram/research/ways/010-x.html"), "blocked", "repo-path"),
+    ("check-bundle", _payload(_tool="Agent", subagent_type="record-format", prompt="read /tmp/l7r-check/ways-010/MANIFEST.md"), "permitted", "bundle-named"),
+    (
+        "check-bundle",
+        _payload(_tool="Agent", subagent_type="record-format", prompt='read .claude/skills/diagram/research/ways/010-x.html CHECK_BUNDLE_OK="the term file itself is under review"'),
+        "escaped",
+        "check-bundle-ok",
+    ),
     ("agent-model", _payload(_tool="Agent", subagent_type="general-purpose", model="sonnet", prompt="read three pages"), "permitted", "model-named"),
     ("agent-model", _payload(_tool="Agent", subagent_type="fork", prompt="carry on"), "permitted", "fork-inherits"),
     ("make-only", _payload(command="make -f /tmp/other.mk all"), "blocked", "foreign-makefile"),
@@ -316,6 +324,13 @@ _ESCAPES = {
         "matched in an agent PROMPT only (`case \"$prompt\"`), the same stated exclusion as PAIR_OK's "
         "agent branch - a dispatch prompt is prose with no command grammar, and the GM's own "
         "ESCALATION_OK=\"reason\" form would not survive having its quoted regions blanked",
+    ),
+    "CANON_OK": ("command", "matched in the Bash command by canon-read-hooks.sh through _guardlog.sh escape_or_refuse, which routes through _hm_escape.py (feature 250 D16)"),
+    "CHECK_BUNDLE_OK": (
+        "command",
+        "matched in a record-check dispatch PROMPT only (`CHECK_BUNDLE_OK=\"...\"` read off the prompt's own text in "
+        "check-bundle-hooks.sh, feature 250), the same stated exclusion as PAIR_OK's, ESCALATION_OK's and "
+        "REVIEW_ROUND_OK's agent branches - a prompt is prose with no command grammar; its reason goes through _hm_escape.py reason-ok",
     ),
     "REVIEW_ROUND_OK": (
         "command",

@@ -2,7 +2,7 @@
 
 **Load this file when:** You are about to touch a pool map, convert one to scripted generation, work on `hamletgen/`, or you found a rule violation on a hand-authored map.
 
-Split out of [`../CLAUDE.md`](../CLAUDE.md) so it is not in every diagram session's
+Split out of [`../CLAUDE.md`](../l7r/diagram/CLAUDE.md) so it is not in every diagram session's
 context. The text is verbatim; the short always-on version of each rule stays in the index.
 
 ## TWO TREES, AND WHICH ONE A MAP GOES IN (feature 161, 2026-08-30)

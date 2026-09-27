@@ -1,0 +1,9 @@
+{
+ "term": "jitter",
+ "def": "Varied at random within a set range, so that repeated features such as tree crowns are not all drawn at one size or spacing.",
+ "variants": [
+  "jitter",
+  "jittered",
+  "jittering"
+ ]
+}

@@ -1,0 +1,87 @@
+[
+ {
+  "window": "(before the first mark)",
+  "main": {
+   "fresh": 13163,
+   "cached": 28007,
+   "output": 390,
+   "thinking": 11,
+   "turns": 2,
+   "peak_context": 21829
+  },
+  "agents": []
+ },
+ {
+  "window": "cities/fabric 1-locate",
+  "main": {
+   "fresh": 70286,
+   "cached": 1417561,
+   "output": 15794,
+   "thinking": 7903,
+   "turns": 22,
+   "peak_context": 92071
+  },
+  "agents": []
+ },
+ {
+  "window": "cities/fabric 2-read",
+  "main": {
+   "fresh": 33874,
+   "cached": 823251,
+   "output": 23982,
+   "thinking": 9658,
+   "turns": 8,
+   "peak_context": 125929
+  },
+  "agents": [
+   {
+    "agent": "source-reader",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "Read sources for cities/fabric items",
+    "fresh": 37463,
+    "cached": 110653,
+    "output": 5323,
+    "thinking": 1532,
+    "turns": 6,
+    "peak_context": 37453,
+    "first_turn": 8806,
+    "read_chars": 65470,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     18863,
+     18406,
+     10548,
+     6290,
+     4287,
+     3883
+    ]
+   }
+  ]
+ },
+ {
+  "window": "cities/fabric 3-write",
+  "main": {
+   "fresh": 7478,
+   "cached": 775970,
+   "output": 3553,
+   "thinking": 499,
+   "turns": 6,
+   "peak_context": 133395
+  },
+  "agents": []
+ },
+ {
+  "window": "cities/fabric 4-handoff",
+  "main": {
+   "fresh": 3197,
+   "cached": 403564,
+   "output": 1666,
+   "thinking": 260,
+   "turns": 3,
+   "peak_context": 136586
+  },
+  "agents": []
+ }
+]

@@ -1,0 +1,87 @@
+[
+ {
+  "window": "(before the first mark)",
+  "main": {
+   "fresh": 14868,
+   "cached": 30083,
+   "output": 548,
+   "thinking": 0,
+   "turns": 2,
+   "peak_context": 23534
+  },
+  "agents": []
+ },
+ {
+  "window": "cities/defenses 1-locate",
+  "main": {
+   "fresh": 18725,
+   "cached": 172457,
+   "output": 4456,
+   "thinking": 2521,
+   "turns": 6,
+   "peak_context": 42247
+  },
+  "agents": []
+ },
+ {
+  "window": "cities/defenses 2-read",
+  "main": {
+   "fresh": 13892,
+   "cached": 237892,
+   "output": 3919,
+   "thinking": 1381,
+   "turns": 5,
+   "peak_context": 56129
+  },
+  "agents": [
+   {
+    "agent": "source-reader",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "Read sources for cities/defenses items",
+    "fresh": 26067,
+    "cached": 39944,
+    "output": 4444,
+    "thinking": 235,
+    "turns": 4,
+    "peak_context": 26061,
+    "first_turn": 8490,
+    "read_chars": 23071,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     6214,
+     3528,
+     2790,
+     2776,
+     2233,
+     1935
+    ]
+   }
+  ]
+ },
+ {
+  "window": "cities/defenses 3-write",
+  "main": {
+   "fresh": 31151,
+   "cached": 509024,
+   "output": 7944,
+   "thinking": 2674,
+   "turns": 7,
+   "peak_context": 87266
+  },
+  "agents": []
+ },
+ {
+  "window": "cities/defenses 4-handoff",
+  "main": {
+   "fresh": 4742,
+   "cached": 357136,
+   "output": 3670,
+   "thinking": 275,
+   "turns": 4,
+   "peak_context": 92000
+  },
+  "agents": []
+ }
+]

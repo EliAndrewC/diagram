@@ -113,6 +113,9 @@ P=$(printf '%s' "$out" | prompt_of 2>/dev/null)
 case "$P" in "MODE 3 (VERIFY) - round 1 of feature 301-fixture"*) ok "the round restarts at 1 after a FAITHFUL" ;; *) no "the round did not restart" "(${P:0:70})";; esac
 printf '%s' "$P" | grep -q 'NEW PASS' && ok "...and the preamble says it is a new pass" || no "no new-pass line"
 printf '%s' "$P" | grep -q 'Aside: none' && ok "...with the FAITHFUL verdict verbatim (the last verdict word decides)" || no "the FAITHFUL transcript was not the one recovered"
+# GUARD_EDIT_OK: feature 250 D20 - the explicit verdict line wins over a later mention of another verdict word
+V=$(python3 -c 'import sys; sys.path.insert(0, sys.argv[1]); import _hm_review_round as r; print(r.verdict_of("**Verdict: CHANGES REQUIRED.** Three items.\n\nThat line does not contain \"FAITHFUL\", so the gate refuses."))' "$HERE")
+[ "$V" = "CHANGES REQUIRED" ] && ok "an explicit Verdict line wins over a later mention of FAITHFUL" || no "the verdict was misread" "(got $V)"
 
 echo "6. no transcript answers: the Review history is the fallback, marked as the session's summary"
 agent spec-fidelity "MODE 2 review of specs/302-history" "$T/other.jsonl" >/dev/null   # first sight, with history

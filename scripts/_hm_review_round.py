@@ -112,7 +112,14 @@ def verdict_of(text: str) -> str:
     A CHANGES REQUIRED report can say "ruled FAITHFUL" about one item in its prose (round 1 of this
     feature did), and a FAITHFUL report can name "CHANGES REQUIRED" while confirming the previous
     round's items; the verdict line is written last, so the last occurrence is the verdict.
+
+    AN EXPLICIT VERDICT LINE WINS (feature 250, 2026-09-27): a report that opens "**Verdict: CHANGES REQUIRED.**" and
+    later says a history line "does not contain FAITHFUL" was read as FAITHFUL, and the next round was announced as a
+    new pass. So a "Verdict: <word>" line, where there is one, is the verdict; the last word is the fallback.
     """
+    stated = re.search(r"[Vv]erdict\W{0,6}(" + "|".join(_VERDICTS) + ")", text)
+    if stated:
+        return stated.group(1)
     best, best_at = "", -1
     for v in _VERDICTS:
         at = text.rfind(v)

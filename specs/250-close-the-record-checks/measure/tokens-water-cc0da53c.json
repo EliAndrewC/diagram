@@ -1,0 +1,87 @@
+[
+ {
+  "window": "(before the first mark)",
+  "main": {
+   "fresh": 13949,
+   "cached": 28218,
+   "output": 476,
+   "thinking": 29,
+   "turns": 2,
+   "peak_context": 22615
+  },
+  "agents": []
+ },
+ {
+  "window": "water 1",
+  "main": {
+   "fresh": 22096,
+   "cached": 551585,
+   "output": 8525,
+   "thinking": 4639,
+   "turns": 16,
+   "peak_context": 44679
+  },
+  "agents": []
+ },
+ {
+  "window": "water 2",
+  "main": {
+   "fresh": 51038,
+   "cached": 882912,
+   "output": 10250,
+   "thinking": 5868,
+   "turns": 13,
+   "peak_context": 95691
+  },
+  "agents": [
+   {
+    "agent": "source-reader",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "Read water page sources",
+    "fresh": 23898,
+    "cached": 58016,
+    "output": 4995,
+    "thinking": 557,
+    "turns": 5,
+    "peak_context": 23890,
+    "first_turn": 8736,
+    "read_chars": 17780,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     5423,
+     2296,
+     1973,
+     1873,
+     1434,
+     1362
+    ]
+   }
+  ]
+ },
+ {
+  "window": "water 3",
+  "main": {
+   "fresh": 13606,
+   "cached": 509675,
+   "output": 8395,
+   "thinking": 229,
+   "turns": 5,
+   "peak_context": 109285
+  },
+  "agents": []
+ },
+ {
+  "window": "water 4",
+  "main": {
+   "fresh": 1489,
+   "cached": 219479,
+   "output": 1113,
+   "thinking": 0,
+   "turns": 2,
+   "peak_context": 110770
+  },
+  "agents": []
+ }
+]

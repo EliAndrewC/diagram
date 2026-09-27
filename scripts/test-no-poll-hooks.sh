@@ -214,8 +214,20 @@ untouched() { # label, command, background(1|0) - permitted with NO rewrite at a
 }
 bgrewritten "a backgrounded log watch gains the liveness clause" \
   'until grep -qE "^wrote |Error|Traceback" /tmp/stages.log; do sleep 15; done; tail -5 /tmp/stages.log' 1 '_writer-alive.sh "/tmp/stages.log"'
-bgrewritten "...an UNTIL loop gets it negated, so the wait ends when the writer is gone" \
-  'until grep -q DONE /tmp/a.log; do sleep 5; done' 1 '|| ! '
+bgrewritten "...an UNTIL loop gets it ORed as a false that exits 3, so the wait ends when the writer is gone" \
+  'until grep -q DONE /tmp/a.log; do sleep 5; done' 1 '|| { '
+# feature 250, 2026-09-26: a gone writer used to end only the LOOP, and `...; done; echo ticked` then printed a
+# success for a wait that had not succeeded. It must end the whole command, non-zero, so nothing after runs.
+NP_DEAD=$(mktemp); touch -d "2 hours ago" "$NP_DEAD"
+for np_shape in "until grep -q DONE $NP_DEAD; do sleep 1; done; echo FALSE-SUCCESS" "while [ ! -s $NP_DEAD ]; do sleep 1; done; echo FALSE-SUCCESS"; do
+  np_cmd=$(bgrun "$np_shape" 1 2>/dev/null | python3 -c 'import json,sys
+try: print(json.load(sys.stdin)["hookSpecificOutput"]["updatedInput"]["command"])
+except Exception: pass' 2>/dev/null)
+  np_out=$(timeout 20 bash -c "$np_cmd" 2>/dev/null); np_rc=$?
+  if [ "$np_rc" -eq 3 ] && ! printf '%s' "$np_out" | grep -q FALSE-SUCCESS; then echo "  ok      a dead writer ends the whole wait with status 3 - nothing after the loop runs (${np_shape%% *})"; PASS=$((PASS+1));
+  else echo "  FAIL    a dead writer let the command go on (${np_shape%% *}: rc=$np_rc, out='$np_out', cmd='$np_cmd')"; FAIL=$((FAIL+1)); fi
+done
+rm -f "$NP_DEAD"
 bgrewritten "...a WHILE loop gets it ANDed, for the same reason in the other direction" \
   'while [ ! -s /tmp/a.log ]; do sleep 5; done' 1 '&& '
 bgrewritten "the variable form names the variable, which expands when the loop runs" \

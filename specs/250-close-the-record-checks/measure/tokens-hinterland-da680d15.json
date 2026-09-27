@@ -1,0 +1,228 @@
+[
+ {
+  "window": "cities/hinterland 4",
+  "main": {
+   "fresh": 12948,
+   "cached": 28347,
+   "output": 493,
+   "thinking": 69,
+   "turns": 2,
+   "peak_context": 21614
+  },
+  "agents": []
+ },
+ {
+  "window": "cities/hinterland 5",
+  "main": {
+   "fresh": 6787,
+   "cached": 69214,
+   "output": 1854,
+   "thinking": 0,
+   "turns": 3,
+   "peak_context": 28395
+  },
+  "agents": [
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "record-format cities/hinterland 010",
+    "fresh": 20302,
+    "cached": 47275,
+    "output": 6726,
+    "thinking": 3739,
+    "turns": 4,
+    "peak_context": 20296,
+    "first_turn": 9198,
+    "read_chars": 24273,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     22777,
+     1100,
+     396
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check cities/hinterland 010",
+    "fresh": 23450,
+    "cached": 24207,
+    "output": 12055,
+    "thinking": 8015,
+    "turns": 3,
+    "peak_context": 23446,
+    "first_turn": 7775,
+    "read_chars": 21582,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     20956,
+     572,
+     54
+    ]
+   },
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "source-applicability chinese-units-enwiki",
+    "fresh": 21129,
+    "cached": 80036,
+    "output": 4172,
+    "thinking": 2146,
+    "turns": 6,
+    "peak_context": 26981,
+    "first_turn": 6832,
+    "read_chars": 39838,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     35650,
+     2397,
+     975,
+     678,
+     138
+    ]
+   },
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "source-applicability walled-village-enwiki",
+    "fresh": 3787,
+    "cached": 28577,
+    "output": 2425,
+    "thinking": 1162,
+    "turns": 4,
+    "peak_context": 9643,
+    "first_turn": 6831,
+    "read_chars": 6541,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     4047,
+     2371,
+     123
+    ]
+   },
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "source-applicability heino-bunri-jawiki",
+    "fresh": 11437,
+    "cached": 28859,
+    "output": 2556,
+    "thinking": 1075,
+    "turns": 4,
+    "peak_context": 17293,
+    "first_turn": 6833,
+    "read_chars": 12047,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     9277,
+     2657,
+     113
+    ]
+   },
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "source-applicability cdlib-local-elites",
+    "fresh": 74940,
+    "cached": 648516,
+    "output": 9132,
+    "thinking": 4590,
+    "turns": 16,
+    "peak_context": 76508,
+    "first_turn": 6831,
+    "read_chars": 200026,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     43483,
+     36731,
+     25380,
+     23710,
+     20460,
+     20349
+    ]
+   }
+  ]
+ },
+ {
+  "window": "cities/hinterland 6",
+  "main": {
+   "fresh": 46801,
+   "cached": 1430046,
+   "output": 13723,
+   "thinking": 4848,
+   "turns": 27,
+   "peak_context": 75140
+  },
+  "agents": []
+ },
+ {
+  "window": "cities/hinterland 7",
+  "main": {
+   "fresh": 23009,
+   "cached": 1131615,
+   "output": 8508,
+   "thinking": 2520,
+   "turns": 13,
+   "peak_context": 98123
+  },
+  "agents": [
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check re-check 010 moved notes",
+    "fresh": 11480,
+    "cached": 47499,
+    "output": 5403,
+    "thinking": 3194,
+    "turns": 4,
+    "peak_context": 18193,
+    "first_turn": 8731,
+    "read_chars": 14536,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     13817,
+     474,
+     245
+    ]
+   }
+  ]
+ },
+ {
+  "window": "cities/hinterland 8",
+  "main": {
+   "fresh": 2057,
+   "cached": 197699,
+   "output": 590,
+   "thinking": 29,
+   "turns": 2,
+   "peak_context": 100176
+  },
+  "agents": []
+ },
+ {
+  "window": "cities/hinterland 9",
+  "main": {
+   "fresh": 253,
+   "cached": 100174,
+   "output": 1030,
+   "thinking": 0,
+   "turns": 1,
+   "peak_context": 100427
+  },
+  "agents": []
+ }
+]

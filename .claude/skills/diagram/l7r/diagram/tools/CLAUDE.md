@@ -32,7 +32,7 @@ Not `python3 tools/why_placed.py`. A package module run as a loose script puts `
 | Two renders of this map: how much differs, by how much, where, and on whose ink? | `picture_diff` (`make picture-diff`) |
 
 Each module's own docstring carries the WHY it exists, usually with the incident that produced it.
-Read that before extending one. The skill's [`../CLAUDE.md`](../../../CLAUDE.md) carries the operational
+Read that before extending one. The skill's [`../CLAUDE.md`](../CLAUDE.md) carries the operational
 guidance for the two that change how you debug: "Ask the GEN who placed it" (`why_placed`) and
 "Siting a feature with interacting rules" (`site_justice`).
 

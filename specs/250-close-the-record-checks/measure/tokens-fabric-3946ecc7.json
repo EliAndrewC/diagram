@@ -1,0 +1,220 @@
+[
+ {
+  "window": "cities/fabric 4-handoff",
+  "main": {
+   "fresh": 12405,
+   "cached": 28111,
+   "output": 309,
+   "thinking": 0,
+   "turns": 2,
+   "peak_context": 21071
+  },
+  "agents": []
+ },
+ {
+  "window": "cities/fabric 5",
+  "main": {
+   "fresh": 61096,
+   "cached": 813340,
+   "output": 9373,
+   "thinking": 2685,
+   "turns": 17,
+   "peak_context": 82129
+  },
+  "agents": [
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check 040",
+    "fresh": 12865,
+    "cached": 41309,
+    "output": 3011,
+    "thinking": 1022,
+    "turns": 5,
+    "peak_context": 12857,
+    "first_turn": 7658,
+    "read_chars": 11005,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     7314,
+     2653,
+     895,
+     143
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check 050",
+    "fresh": 3847,
+    "cached": 14375,
+    "output": 3530,
+    "thinking": 1731,
+    "turns": 2,
+    "peak_context": 10564,
+    "first_turn": 7658,
+    "read_chars": 6697,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     6697
+    ]
+   },
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "source-applicability xiancheng",
+    "fresh": 8441,
+    "cached": 38598,
+    "output": 3014,
+    "thinking": 1240,
+    "turns": 5,
+    "peak_context": 13835,
+    "first_turn": 6343,
+    "read_chars": 8606,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     4225,
+     2347,
+     1923,
+     111
+    ]
+   },
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "record-format 040",
+    "fresh": 13025,
+    "cached": 34144,
+    "output": 1943,
+    "thinking": 581,
+    "turns": 4,
+    "peak_context": 13019,
+    "first_turn": 9155,
+    "read_chars": 7771,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     7674,
+     81,
+     16
+    ]
+   },
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "record-format 050",
+    "fresh": 4728,
+    "cached": 29662,
+    "output": 1955,
+    "thinking": 684,
+    "turns": 3,
+    "peak_context": 12941,
+    "first_turn": 9155,
+    "read_chars": 7764,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     7447,
+     317
+    ]
+   },
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "source-applicability l7r-budgets",
+    "fresh": 5815,
+    "cached": 7931,
+    "output": 990,
+    "thinking": 339,
+    "turns": 2,
+    "peak_context": 7411,
+    "first_turn": 6335,
+    "read_chars": 2596,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     2596
+    ]
+   }
+  ]
+ },
+ {
+  "window": "cities/fabric 6",
+  "main": {
+   "fresh": 17532,
+   "cached": 963068,
+   "output": 4046,
+   "thinking": 926,
+   "turns": 11,
+   "peak_context": 99639
+  },
+  "agents": []
+ },
+ {
+  "window": "cities/fabric 7",
+  "main": {
+   "fresh": 7377,
+   "cached": 618392,
+   "output": 2484,
+   "thinking": 227,
+   "turns": 6,
+   "peak_context": 107004
+  },
+  "agents": [
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check 040 re-check",
+    "fresh": 6176,
+    "cached": 57434,
+    "output": 2343,
+    "thinking": 696,
+    "turns": 6,
+    "peak_context": 12885,
+    "first_turn": 8351,
+    "read_chars": 8460,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     4236,
+     2472,
+     1074,
+     442,
+     143,
+     93
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check 050 re-check",
+    "fresh": 7009,
+    "cached": 26073,
+    "output": 2051,
+    "thinking": 816,
+    "turns": 3,
+    "peak_context": 13724,
+    "first_turn": 8401,
+    "read_chars": 12106,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     6094,
+     4141,
+     1871
+    ]
+   }
+  ]
+ }
+]

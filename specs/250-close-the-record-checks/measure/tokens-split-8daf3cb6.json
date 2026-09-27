@@ -1,0 +1,14 @@
+[
+ {
+  "window": "X1 experiment: record-format ways 010 from copies OUTSIDE the tree",
+  "main": {
+   "fresh": 56143,
+   "cached": 857402,
+   "output": 17008,
+   "thinking": 4793,
+   "turns": 20,
+   "peak_context": 64773
+  },
+  "agents": []
+ }
+]

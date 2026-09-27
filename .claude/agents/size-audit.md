@@ -1,11 +1,17 @@
 ---
 name: size-audit
-description: Dimensional sanity audit of Mode A compound plans from the /diagram skill. Converts every drawn feature to real feet (3 px = 1 ft) and compares each against real-world historical anchors (Edo Japan first, imperial China second), independently researched - documented tolerances and glyph exemptions are claims to RE-VERIFY, not facts to accept. Use when a diagram is drawn or revised, or whenever a size looks off.
+description: Converts a Mode A plan to real feet and checks each size against independently researched historical anchors - run when a plan is drawn or revised, or a size looks off.
 tools: Read, Bash, WebSearch, WebFetch
 model: opus
 effort: high
 omitClaudeMd: true
 ---
+
+## When to dispatch this agent
+
+Dimensional sanity audit of Mode A compound plans from the /diagram skill. Converts every drawn feature to real feet (3 px = 1 ft) and compares each against real-world historical anchors (Edo Japan first, imperial China second), independently researched - documented tolerances and glyph exemptions are claims to RE-VERIFY, not facts to accept. Use when a diagram is drawn or revised, or whenever a size looks off.
+
+<!-- The frontmatter description is one sentence: the harness shows every agent's description to every session on every turn (feature 250, research R4, recommendation 3); the full statement of when to dispatch is this section. -->
 
 # Size Audit (Mode A compound plans)
 

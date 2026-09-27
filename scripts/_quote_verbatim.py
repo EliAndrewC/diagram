@@ -28,7 +28,8 @@ A passage with an elision (`...`, `…`, `[...]`) is matched piece by piece, in 
 
 VERDICTS. Quotation: VERBATIM; DIFFERS (the closest stretch of the page, and what differs);
 NOT-ON-PAGE; UNFETCHABLE (how); NOT-CHECKED (why - a PDF, a page that would not decode). Readability:
-READABLE when the passage was found on a page fetched with no credentials; NOT-READABLE when the link
+READABLE when the passage was found on a page fetched with no credentials (a difference of the page's
+reference markers alone still reads); NOT-READABLE when the link
 is this project's own registry or the page was read and does not carry the passage; otherwise left to
 the agent (`-`). It decides nothing about support and never edits.
 
@@ -59,6 +60,10 @@ UA = "Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0"
 BLOCK = {"p", "div", "br", "li", "ul", "ol", "tr", "td", "th", "table", "h1", "h2", "h3", "h4", "h5", "h6", "section", "article", "blockquote", "dd", "dt", "pre", "figcaption"}
 PAIRS = {"「": "」", "“": "”", '"': '"', "『": "』"}
 TRANSLATED = re.compile(r"^\s*\((?:title\s+)?translated from ([^;()]*(?:\([^()]*\))?[^;()]*?) by this project;\s*original:\s*$")
+# Between two quotations of one run - `「Q1」 and 「Q2」 (translated ...; original: 「O1」 and original: 「O2」)` -
+# and between two originals of one parenthetical. Without the run, Q2 was paired with O1 and O2 never checked:
+# cities/fabric 143 (feature 250 T55) had two notes reported NOT-READABLE that were verbatim on their pages.
+JOINER = re.compile(r"^\s*(?:and|/|,)?\s*(?:original:)?\s*$")
 ELISION = re.compile(r"\s*(?:\[\s*(?:\.\.\.|…)\s*\]|\.\.\.|…)\s*")
 REF_MARK = re.compile(r"\s*\[(?:\d{1,3}|注\s*\d+|note\s*\d+|citation needed|要出典)\]")
 
@@ -147,6 +152,26 @@ def top_level_quotes(text: str) -> list[tuple[int, int]]:
     return spans
 
 
+def translated_run(note_text: str, spans: list[tuple[int, int]], k: int) -> list[dict]:
+    """Two or more quotations from span `k` that share ONE translation parenthetical holding as many originals,
+    paired in order; empty when the spans do not have that shape (the one-quote case is `passages`' own)."""
+    gap = lambda a, b: note_text[spans[a][1] : spans[b][0]]  # noqa: E731
+    m = k
+    while m + 1 < len(spans) and "(" not in gap(m, m + 1) and JOINER.match(gap(m, m + 1)):
+        m += 1
+    n = m - k + 1
+
+    if n < 2 or m + n >= len(spans) or not (between := TRANSLATED.match(gap(m, m + 1))):
+        return []
+    if not all(JOINER.match(gap(j, j + 1)) for j in range(m + 1, m + n)):
+        return []
+    language = squeeze(between.group(1))
+    return [
+        {"quote": note_text[spans[k + i][0] + 1 : spans[k + i][1] - 1], "original": note_text[spans[m + 1 + i][0] + 1 : spans[m + 1 + i][1] - 1], "language": language}
+        for i in range(n)
+    ]
+
+
 def passages(note_text: str) -> list[dict]:
     """The quoted passages of one note: each `{quote, original, language}`; `original` is what is matched."""
     spans = top_level_quotes(note_text)
@@ -159,6 +184,11 @@ def passages(note_text: str) -> list[dict]:
         # also sits in parentheses, but it is consumed with its translation below and never reaches this test.
         if note_text.count("(", 0, start) > note_text.count(")", 0, start):
             k += 1
+            continue
+        run = translated_run(note_text, spans, k)
+        if run:
+            found += run
+            k += 2 * len(run)
             continue
         quote = note_text[start + 1 : end - 1]
         entry = {"quote": quote, "original": "", "language": ""}
@@ -239,19 +269,43 @@ def differences(passage: str, page_stretch: str) -> list[str]:
     return [f"quoted {passage[i1:i2]!r} / page {page_stretch[j1:j2]!r}" for tag, i1, i2, j1, j2 in sm.get_opcodes() if tag != "equal"]
 
 
+def find_in_order(pieces: list[str], have: str) -> tuple[int, int] | None:
+    """(start, end) of `pieces` found in `have` one after another, or None."""
+    at, first = 0, -1
+    for piece in pieces:
+        hit = have.find(piece, at)
+        if hit < 0:
+            return None
+        first = hit if first < 0 else first
+        at = hit + len(piece)
+    return (first, at) if pieces else None
+
+
+def unmarked(have: str) -> tuple[str, list[int]]:
+    """`have` without the page's reference markers, and for each kept character its index in `have`."""
+    kept: list[int] = []
+    at = 0
+    for m in REF_MARK.finditer(have):
+        kept.extend(range(at, m.start()))
+        at = m.end()
+    kept.extend(range(at, len(have)))
+    return "".join(have[i] for i in kept), kept
+
+
 def verdict(passage: str, page: str) -> dict:
     """VERBATIM, DIFFERS (with the page's text and the differences) or NOT-ON-PAGE for one passage."""
     want, have = squeeze(passage), squeeze(page)
     pieces = [p for p in ELISION.split(want) if p]
-    at, ok = 0, bool(pieces)
-    for piece in pieces:
-        hit = have.find(piece, at)
-        if hit < 0:
-            ok = False
-            break
-        at = hit + len(piece)
-    if ok:
+    if find_in_order(pieces, have):
         return {"quotation": "VERBATIM"}
+    # WHY: a run of Wikipedia markers inside the quoted span (人宿[1][2][3]、) pulled the similarity under NEAR and
+    # reported a correct quotation NOT-ON-PAGE (feature 250, cities/government 081, 2026-09-26). The markers are
+    # still named as the difference, never forgiven - the passage is found on the page with them taken out.
+    bare, kept = unmarked(have)
+    span = find_in_order(pieces, bare)
+    if span:
+        stretch = have[kept[span[0]] : kept[span[1] - 1] + 1]
+        return {"quotation": "DIFFERS", "page_text": stretch, "differences": differences(want, stretch), "similarity": 1.0, "only_reference_markers": True}
     ratio, stretch = nearest(want, have)
     if ratio >= NEAR:
         diffs = differences(want, stretch)
@@ -337,7 +391,7 @@ def judge_note(note: dict, pages: Pages) -> dict:
         readable = "-"
     elif all(s["state"] == "OWN" for s in states):
         readable = "NOT-READABLE (the link is this project's own page)"
-    elif all(w == "VERBATIM" for w in words):
+    elif all(r["quotation"] == "VERBATIM" or r.get("only_reference_markers") for r in results):
         readable = "READABLE"
     elif fetched and any(w in ("NOT-ON-PAGE", "DIFFERS") for w in words):
         readable = "NOT-READABLE (the page was read and does not carry the passage as quoted)"
@@ -428,6 +482,10 @@ def main(argv: list[str] | None = None) -> int:
             start = body.index(marker)
             end = body.find("<h2 ", start + 4)
             wanted_ids |= {f"fn-{n}" for n in re.findall(r"#fn-(\d+)", body[start: end if end > 0 else len(body)])}
+        if not chosen:
+            # an unmatched SECTION used to check NOTHING and print a clean report (feature 250)
+            print(f"quote-verbatim: SECTION={args.section!r} matched no question of {name} - nothing was checked", file=sys.stderr)
+            return 2
         only = wanted_ids if only is None else (only & wanted_ids)
     notes = [n for n in footnotes(cite_file.read_text(encoding="utf-8")) if only is None or n["id"] in only]
     entries = report(notes, assertions(page_file.read_text(encoding="utf-8")), pages)

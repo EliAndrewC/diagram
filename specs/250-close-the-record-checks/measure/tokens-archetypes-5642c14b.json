@@ -1,0 +1,220 @@
+[
+ {
+  "window": "archetypes 8",
+  "main": {
+   "fresh": 12914,
+   "cached": 28558,
+   "output": 293,
+   "thinking": 0,
+   "turns": 2,
+   "peak_context": 21580
+  },
+  "agents": []
+ },
+ {
+  "window": "archetypes 2b-5",
+  "main": {
+   "fresh": 72451,
+   "cached": 1489813,
+   "output": 12135,
+   "thinking": 3538,
+   "turns": 26,
+   "peak_context": 93975
+  },
+  "agents": [
+   {
+    "agent": "entry-drift",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "entry-drift FishPond",
+    "fresh": 13203,
+    "cached": 8998,
+    "output": 1541,
+    "thinking": 775,
+    "turns": 2,
+    "peak_context": 15433,
+    "first_turn": 6768,
+    "read_chars": 20191,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     20191
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check archetypes 140",
+    "fresh": 27063,
+    "cached": 213004,
+    "output": 13404,
+    "thinking": 7303,
+    "turns": 10,
+    "peak_context": 33764,
+    "first_turn": 7854,
+    "read_chars": 37838,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     18731,
+     12256,
+     2307,
+     1577,
+     999,
+     846
+    ]
+   },
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "record-format archetypes 140",
+    "fresh": 14147,
+    "cached": 55563,
+    "output": 6362,
+    "thinking": 3652,
+    "turns": 4,
+    "peak_context": 22358,
+    "first_turn": 9351,
+    "read_chars": 22198,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     21450,
+     609,
+     139
+    ]
+   },
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "source-applicability pwsannong",
+    "fresh": 7055,
+    "cached": 49080,
+    "output": 3877,
+    "thinking": 1766,
+    "turns": 6,
+    "peak_context": 12447,
+    "first_turn": 6541,
+    "read_chars": 6849,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     2706,
+     1861,
+     1426,
+     725,
+     131
+    ]
+   },
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "source-applicability wind-gradient",
+    "fresh": 19581,
+    "cached": 23419,
+    "output": 3288,
+    "thinking": 1990,
+    "turns": 4,
+    "peak_context": 21173,
+    "first_turn": 6539,
+    "read_chars": 34421,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     32032,
+     2266,
+     123
+    ]
+   },
+   {
+    "agent": "entry-drift",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "entry-drift MulberryDike",
+    "fresh": 10118,
+    "cached": 12399,
+    "output": 1907,
+    "thinking": 939,
+    "turns": 2,
+    "peak_context": 15740,
+    "first_turn": 6777,
+    "read_chars": 21114,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     21114
+    ]
+   }
+  ]
+ },
+ {
+  "window": "archetypes 2b-7",
+  "main": {
+   "fresh": 6911,
+   "cached": 578949,
+   "output": 1471,
+   "thinking": 233,
+   "turns": 6,
+   "peak_context": 100874
+  },
+  "agents": [
+   {
+    "agent": "entry-drift",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "entry-drift re-check MulberryDike",
+    "fresh": 11006,
+    "cached": 12729,
+    "output": 1362,
+    "thinking": 970,
+    "turns": 2,
+    "peak_context": 16628,
+    "first_turn": 7107,
+    "read_chars": 22399,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     22399
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check re-check 140",
+    "fresh": 15404,
+    "cached": 69632,
+    "output": 4468,
+    "thinking": 2468,
+    "turns": 5,
+    "peak_context": 22115,
+    "first_turn": 8265,
+    "read_chars": 25620,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     12779,
+     11192,
+     1101,
+     548
+    ]
+   }
+  ]
+ },
+ {
+  "window": "archetypes 2b-8",
+  "main": {
+   "fresh": 1521,
+   "cached": 202583,
+   "output": 1644,
+   "thinking": 105,
+   "turns": 2,
+   "peak_context": 102391
+  },
+  "agents": []
+ }
+]

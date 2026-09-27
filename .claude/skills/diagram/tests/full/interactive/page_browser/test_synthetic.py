@@ -326,11 +326,15 @@ def test_in_raster_mode_the_lit_paddy_is_washed_and_the_lit_beads_are_not(synthe
     paddy = "() => getComputedStyle(document.querySelector('g.f[data-k=\"paddy\"] rect')).fillOpacity"
     beads = "() => getComputedStyle(document.querySelector('g.f[data-k=\"bund beans\"] circle:not(.hit)')).fillOpacity"
 
-    def lit() -> tuple[str, str]:
+    def lit(want: tuple[str, str]) -> tuple[str, str]:
+        # Each read waits for its STATE, bounded (the driver's `settles`, feature 145), not for nothing: it read
+        # the computed opacity in the same tick as the highlight, and under a loaded gate the style had not
+        # been recomputed yet - `('1', '1')` against `('0.45', '1')` once in a FULL run, green alone twice
+        # (feature 250, 2026-09-26). The assertion is exactly as strict: a value that never arrives still fails.
         synthetic.js("k => window.l7rMap.highlight(k)", "paddy")
-        p = synthetic.js(paddy)
+        p = synthetic.settles(want[0], lambda: synthetic.js(paddy))
         synthetic.js("k => window.l7rMap.highlight(k)", "bund beans")
-        b = synthetic.js(beads)
+        b = synthetic.settles(want[1], lambda: synthetic.js(beads))
         synthetic.clear()
         return p, b
 
@@ -340,12 +344,12 @@ def test_in_raster_mode_the_lit_paddy_is_washed_and_the_lit_beads_are_not(synthe
         synthetic.js("() => window.l7rMap.fit()")
         assert synthetic.js("() => window.l7rMap.rasterReady()"), "the synthetic page carries its picture and id map"
         assert synthetic.settles("raster", lambda: synthetic.js(mode)) == "raster", "fitted in a 100-unit viewport the page is below the raster switch"
-        assert lit() == ("0.45", "1"), "raster mode: the lit paddy is a wash, the lit beads are solid"
+        assert lit(("0.45", "1")) == ("0.45", "1"), "raster mode: the lit paddy is a wash, the lit beads are solid"
     finally:
         synthetic.page.set_viewport_size(was)
         synthetic.js("() => window.l7rMap.fitWidth()")
     assert synthetic.settles("vector", lambda: synthetic.js(mode)) == "vector"
-    assert lit() == ("1", "1"), "the vector page is unchanged: solid gold for both"
+    assert lit(("1", "1")) == ("1", "1"), "the vector page is unchanged: solid gold for both"
     assert synthetic.errors == [], synthetic.errors
 
 
@@ -356,16 +360,23 @@ def test_a_glossary_tooltip_escapes_the_modal_and_stays_on_the_page(synthetic: P
     the window's edge, so the clamp is exercised rather than assumed; the viewport is restored after. The
     word is the rightmost defined term that is ON SCREEN: a modal taller than this viewport (the bund's,
     since feature 242 lengthened its explanation) centers with its top above the window, and a term up
-    there cannot be hovered at all - which is the harness, not the clamp under test."""
+    there cannot be hovered at all - which is the harness, not the clamp under test. The word is one whose center is
+    on it (`elementFromPoint`), and the pointer starts off every word. THE TEXT IS THE HOVERED WORD'S OWN DEFINITION:
+    when the bund's rightmost on-screen term stopped being its paragraph's last (feature 250 added `reach` and
+    `footplanks`), this caught `page.js` giving every term in a paragraph the last term's definition."""
     was = synthetic.page.viewport_size
     synthetic.page.set_viewport_size({"width": 420, "height": 640})
     try:
         synthetic.js("() => window.l7rMap.fit()")
         synthetic.open("bund")
         word = synthetic.js(
-            "() => { let best = null; for (const s of document.querySelectorAll('#explain .gl')) { const r = s.getBoundingClientRect(); if (r.width && r.top >= 0 && r.bottom <= window.innerHeight && (!best || r.left > best.left)) best = { left: r.left, x: r.left + r.width / 2, y: r.top + r.height / 2, def: s.getAttribute('data-def') }; } return best; }"
+            "() => { let best = null; for (const s of document.querySelectorAll('#explain .gl')) { const r = s.getBoundingClientRect(); const x = r.left + r.width / 2, y = r.top + r.height / 2; if (r.width && r.top >= 0 && r.bottom <= window.innerHeight && document.elementFromPoint(x, y) === s && (!best || r.left > best.left)) best = { left: r.left, x, y, def: s.getAttribute('data-def') }; } return best; }"
         )
         assert word and word["def"], "the bund's explanation carries a defined term"
+        # the pointer starts OFF every word, so the box shown is the hover's and not one left from the modal opening
+        synthetic.page.mouse.move(2, 2)
+        synthetic.page.wait_for_timeout(30)
+        assert synthetic.js("() => document.getElementById('tip').hidden"), "no box is showing before the hover"
         synthetic.page.mouse.move(word["x"], word["y"])
         synthetic.page.wait_for_timeout(50)
         got = synthetic.js(

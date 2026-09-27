@@ -1,0 +1,203 @@
+[
+ {
+  "window": "cities/defenses 5",
+  "main": {
+   "fresh": 6184,
+   "cached": 100035,
+   "output": 1365,
+   "thinking": 0,
+   "turns": 4,
+   "peak_context": 29123
+  },
+  "agents": [
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "record-format 040",
+    "fresh": 7678,
+    "cached": 41104,
+    "output": 3841,
+    "thinking": 1830,
+    "turns": 4,
+    "peak_context": 14983,
+    "first_turn": 8124,
+    "read_chars": 10281,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     9735,
+     339,
+     191,
+     16
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check 040",
+    "fresh": 6772,
+    "cached": 23174,
+    "output": 3182,
+    "thinking": 1570,
+    "turns": 3,
+    "peak_context": 12527,
+    "first_turn": 6577,
+    "read_chars": 12653,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     9735,
+     2918
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check 060",
+    "fresh": 15683,
+    "cached": 79571,
+    "output": 7754,
+    "thinking": 4235,
+    "turns": 6,
+    "peak_context": 21432,
+    "first_turn": 6632,
+    "read_chars": 29316,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     25826,
+     1312,
+     824,
+     711,
+     227,
+     143
+    ]
+   },
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "record-format 060",
+    "fresh": 21553,
+    "cached": 69194,
+    "output": 6742,
+    "thinking": 3299,
+    "turns": 5,
+    "peak_context": 21545,
+    "first_turn": 8124,
+    "read_chars": 27257,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     25826,
+     577,
+     294,
+     287,
+     273
+    ]
+   }
+  ]
+ },
+ {
+  "window": "cities/defenses 7",
+  "main": {
+   "fresh": 8332,
+   "cached": 553039,
+   "output": 3121,
+   "thinking": 459,
+   "turns": 6,
+   "peak_context": 96921
+  },
+  "agents": [
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check 060 recheck",
+    "fresh": 16162,
+    "cached": 50263,
+    "output": 6214,
+    "thinking": 3981,
+    "turns": 4,
+    "peak_context": 21915,
+    "first_turn": 6903,
+    "read_chars": 32877,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     20894,
+     10842,
+     998,
+     143
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check 040 recheck",
+    "fresh": 13326,
+    "cached": 17925,
+    "output": 2585,
+    "thinking": 1469,
+    "turns": 3,
+    "peak_context": 13322,
+    "first_turn": 6712,
+    "read_chars": 13787,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     10125,
+     3662
+    ]
+   }
+  ]
+ },
+ {
+  "window": "cities/defenses 8",
+  "main": {
+   "fresh": 21410,
+   "cached": 633712,
+   "output": 2979,
+   "thinking": 171,
+   "turns": 8,
+   "peak_context": 104038
+  },
+  "agents": [
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check 060 round 3",
+    "fresh": 8299,
+    "cached": 12699,
+    "output": 3475,
+    "thinking": 2122,
+    "turns": 2,
+    "peak_context": 14056,
+    "first_turn": 6942,
+    "read_chars": 16540,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     16540
+    ]
+   }
+  ]
+ },
+ {
+  "window": "cities/defenses 6",
+  "main": {
+   "fresh": 59530,
+   "cached": 1574308,
+   "output": 24053,
+   "thinking": 10518,
+   "turns": 25,
+   "peak_context": 88601
+  },
+  "agents": []
+ }
+]
