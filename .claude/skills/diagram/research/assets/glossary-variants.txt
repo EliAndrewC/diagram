@@ -121,6 +121,7 @@ black-seal land	shuinchi
 black-seal lands	shuinchi
 board feet	board foot
 board foot	board foot
+bobana	bobana
 bodaiji	bodaiji
 boji	boji
 bojikui	bojikui
@@ -1018,6 +1019,8 @@ kenchicho	kenchicho
 kera	kera
 keyaki	keyaki
 khitan	Khitan
+kichin	kichin
+kichin charge	kichin
 kichin-yado	kichin-yado
 kido	kido
 kidoban	kidoban
@@ -1273,6 +1276,7 @@ mushiko	mushiko
 mushiko windows	mushiko
 mushiko-mado	mushiko
 mushiro	mushiro
+mushukunin	mushukunin
 muster perimeter	muster perimeter
 muster perimeters	muster perimeter
 myoden	myoden

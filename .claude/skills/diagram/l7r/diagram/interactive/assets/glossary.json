@@ -8267,5 +8267,24 @@
   "variants": [
    "senzai"
   ]
+ },
+ "kichin": {
+  "def": "The firewood fee (木賃, \"wood price\") an inn charged for cooking the food its guest had brought - the fee that gave the kichin-yado its name.",
+  "variants": [
+   "kichin",
+   "kichin charge"
+  ]
+ },
+ "mushukunin": {
+  "def": "A person off the population register (無宿人, \"without a lodging\") - with day laborers, the typical lodger packed into a kichin-yado's shared room.",
+  "variants": [
+   "mushukunin"
+  ]
+ },
+ "bobana": {
+  "def": "The spot at the edge of an Edo-period post town, on the highway (棒鼻), where the lowest-grade inns stood.",
+  "variants": [
+   "bobana"
+  ]
  }
 }
