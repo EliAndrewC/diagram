@@ -6,11 +6,13 @@ land on main, and other sessions can research other things with it.
 
 ## What this feature is
 
-The WORK feature 250 left: the requirements below are 250's own, carried verbatim (250's `spec.md`), for the pages
-and sweeps 250 did not reach. The METHOD is 250's, landed: each page worked by `specs/250-close-the-record-checks/
+The WORK feature 250 left: FR-002 to FR-009 below are 250's own, carried verbatim (250's `spec.md`), for the pages
+and sweeps 250 did not reach - and FR-010, which is NEW, added at the GM's direction of 2026-09-27 (`request.md`). The METHOD is 250's, landed: each page worked by `specs/250-close-the-record-checks/
 measure/brief.py` - a split session for any item question over the cap, a write session, then check groups packed by
 load - with the tooling 250 built (`make check-bundle`, `make apply-edits`, `make canon`, the size cap, the guards).
-Nothing here changes that process; a change to it is a feature of its own.
+The one change to that process is FR-010's: pages worked by up to three queues at once, the hand-allocated prefixes
+reserved under a lock (`make reserve`, which `make apply-edits` then uses) and a guard on new prefixed files - the
+GM's own addition; nothing else here changes the process.
 
 **The pages left** (250's T19, and the FR-006 work 250's T19 did not name; re-derived 2026-09-27 by `brief.fr002` /
 `fr006` / `over_cap_items` over every page): `towns` (10 FR-002 items), `cities/river-cities` (8), `buildings` (7),
@@ -19,7 +21,7 @@ items, 050 with an FR-006 item - split first), `ways` (1), and `cities/capitals`
 242's R12 items 43 to 46 and 84 to 86, which 250's T19 missed because its list was built from the pages with FR-002
 items).
 
-## Requirements (feature 250's, carried verbatim)
+## Requirements (FR-002 to FR-009 feature 250's, carried verbatim; FR-010 new, the GM 2026-09-27)
 
 **FR-002 - the additional bare assertions the quote-checks named are footnoted.** Each quote-check report
 ends with the real-world assertions it found carrying no footnote, per section; these were never on
@@ -116,3 +118,15 @@ directory written without a reservation is refused by a guard naming the command
   (T06 to T11) leave no dangling reference: the old ids appear only in round 1's record, which describes the
   earlier numbering. On round 2's own run, `brief.fr002` / `fr006` / `over_cap_items` gave the same counts as the
   pages paragraph: capitals 0 and 7, with no question over the cap.
+- **Amendment round 1 (2026-09-27), `spec-fidelity-verify`: CHANGES REQUIRED**, one item. It covers the FR-010
+  amendment (HEAD 96927eaa: FR-010, SC-011, T12 to T14, `plan.md`). FR-010, SC-011 and T12 to T14 match what the GM
+  agreed to on 2026-09-27 (`request.md`): two or three pages' queues at once, with glossary and registry prefixes
+  allocated under a lock. Nothing is missing and nothing is added. The guard (T13) only refuses the two file kinds the
+  lock allocates, so it enforces the request. (1) The amendment left two statements that FR-010 now makes false. "What
+  this feature is" says "the requirements below are 250's own, carried verbatim" and "Nothing here changes that
+  process; a change to it is a feature of its own". The Requirements heading says "(feature 250's, carried verbatim)".
+  FR-010 is new, it is not 250's, and it changes the process: parallel queues, `make apply-edits` taking its prefix
+  from `make reserve`, and a new guard. Both passages should say that FR-010 is the exception the GM directed on
+  2026-09-27 ("add that to 265"), and that FR-002 to FR-009 are 250's, carried verbatim. SC-011 could get the same
+  note in the Success criteria heading. `plan.md` D1 ("The method is feature 250's, unchanged") has the same tension
+  with D2.

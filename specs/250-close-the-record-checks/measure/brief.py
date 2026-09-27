@@ -152,9 +152,11 @@ fragment the grep did not name.
 3. **Write the notes.** First `Read` every fragment and notes file you will change, ALL IN ONE MESSAGE (parallel
    `Read` calls): `Edit` needs the read, and a file a turn re-reads your whole context each time (feature 250 R6:
    the write step took 19 turns for three items). In the fragment `<sup class="fn" data-note="<key>"></sup>`; in its
-   `.notes.html` `<li data-note="<key>">...</li>` (no numbers). A new key needs both write-ups in a new
-   `research/sources/010-works-cited/NNNN-<key>.html`, shaped as `{example}` is - copy its shape rather than
-   studying others. `Edit` a file you have read; never script it. Then in
+   `.notes.html` `<li data-note="<key>">...</li>` (no numbers). A new key needs both write-ups in a new registry entry:
+   `make reserve KIND=registry KEY=<key>` (in `.claude/skills/diagram`) reserves its prefix under a host-wide lock and
+   writes the empty file - fill it, shaped as `{example}` is (copy its shape rather than studying others). A new file
+   there written any other way is refused (`new-file-hooks.sh`: queues run in parallel, and a hand-taken prefix
+   collides). `Edit` a file you have read; never script it. Then in
    `.claude/skills/diagram`: `make record && make citations && make test-file FILE="tests/interactive/test_footnotes.py
    tests/interactive/test_citations.py tests/interactive/test_sources.py tests/interactive/test_record_format.py"`.
 3b. **Keep every question you touched under the size cap** - 20,000 bytes, question plus notes
@@ -210,7 +212,7 @@ recommendation 2). Read only your own lines of the handoff.
 
 CLOSE_LAST = """8. **Close the page.** `python3 specs/242-cite-the-unfootnoted-assertions/measure/worklist.py {page}.html` (from
    `.claude/skills/diagram`) for the FR-006 figure; commit; tick with
-   `make tick F=250-close-the-record-checks T={task} BOXES=1 NOTE="<what closed on the page, with the counts>"`.
+   `make tick F={feature} T={task} BOXES=1 NOTE="<what closed on the page, with the counts>"`.
    Do NOT run `scripts/sync-with-main.sh done`.
 9. **Report.** One paragraph: what your group closed, the agents run, anything left open and why. A finding that
    needs the GM (the record contradicts itself, a rule would change) is not decided: leave the text and say so.
@@ -379,9 +381,12 @@ def newest_entry() -> str:
 
 
 def _fields(page: str, task: str) -> dict:
+    """The fields every brief template reads. `task` is `T19`, ticked in THIS feature, or `<feature dir>:T01` for a
+    task of another feature that works a page by this process (feature 265)."""
     slug = page.replace("/", "-")
     briefs = FEATURE / "briefs"
-    return dict(page=page, task=task, clone=CLONE, marks=(HERE / f"marks-{slug}.json").relative_to(CLONE), slug=slug,
+    feature, _, tid = task.rpartition(":")
+    return dict(page=page, task=tid, feature=feature or FEATURE.name, clone=CLONE, marks=(HERE / f"marks-{slug}.json").relative_to(CLONE), slug=slug,
                 handoff=(briefs / f"{slug}-handoff.md").relative_to(CLONE))
 
 

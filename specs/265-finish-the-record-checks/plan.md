@@ -2,7 +2,7 @@
 
 ## Decisions
 
-### D1 - The method is feature 250's, unchanged
+### D1 - The method is feature 250's, with FR-010's parallel queues and reserved prefixes (D2, D3) its one change
 
 Every page is worked by `specs/250-close-the-record-checks/measure/brief.py <page> <task>` and the `make
 page-session` line it prints: a split session for each item question over the cap, a write session, check groups
@@ -18,21 +18,25 @@ for the closing report.
 every clone under `<mirror>/.clones/`, and the ledger `<mirror>/.specify/prefixes.jsonl` (the ledger covers a number
 reserved and not yet visible); the file is created - a stub the caller then fills - before the lock is released, so
 the next caller's scan sees it; it prints the path. `_apply_edits.apply_term` reserves its glossary prefix the same
-way. `new-file-hooks.sh` (PreToolUse on Write) refuses a Write that CREATES a file in the glossary directory or the
-registry's `010-works-cited/` whose prefix the ledger does not hold, printing the `make reserve` command; registered
-in the fallback form, its suite proved red on a mutated copy. A test runs two reservations at once in processes and
-asserts different prefixes.
+way, writing the full entry as the stub. `new-file-hooks.sh` (PreToolUse on Write and Bash; the decision in
+`_hm_new_file.py`) refuses a call that CREATES a prefixed file in the glossary directory or the registry's
+`010-works-cited/` - a Write, or a shell redirect or `tee` naming such a file - unless the ledger holds a reservation
+for THAT kind, prefix AND key (plan review: prefix alone let a number taken by hand through when another session had
+reserved it for a different key), printing the `make reserve` command; registered in the fallback form, its suite
+proved red on a mutated copy (5 of 11 failing with the refusal removed, 2026-09-27). A test races eight reservations
+across two clones in four processes and asserts eight different prefixes.
 
 ### D3 - Queues in sibling clones (FR-010, T14)
 
-`make page-queue N=<n> BRIEF="..."` clones this clone to `.clones/diagram-research-<n>` (or reuses it, fast-forwarded
-from this clone), and starts `make page-session` there - its sessions named after that clone, so the clone guard
-routes them. When the queue ends, `scripts/pull-queue.sh <n>` pulls the sibling's commits back here (a local `git
-pull`, never a push), and where the merge conflicts only in regenerated files (the assembled research and citations
-pages, `SOURCES.html`, the glossary bundles) it rebuilds them with `make record`, `make citations` and `make glossary`
-and commits; a conflict anywhere else stops and is resolved by hand. The briefs are written in THIS clone and name
-their files by absolute path, so a queue's sessions read them from here; their `SECTION`/`KEY` derivation reads the
-queue clone's own commits (`changed_since`).
+`scripts/page-queue.sh <n> <page> <task> [...]` clones this clone to `.clones/diagram-research-<n>` (or fast-forwards
+it to this clone's HEAD), generates the pages' briefs THERE with its own `brief.py` - so a queue's check step derives
+its questions from that clone's commits - commits them, and starts `scripts/page-session.sh` there, its sessions named
+after that clone, so the clone guard routes them. A task is named `<feature dir>:<Tnn>`, so a 265 page's close ticks
+265's task. When the queue ends, `scripts/pull-queue.sh <n>` pulls the sibling's commits back here (a local `git
+pull`, never a push) and ALWAYS rebuilds what is generated (plan review): a conflict in a generated file (the assembled
+research and citations pages, `SOURCES.html`, the glossary bundles, the run and bypass logs) takes this side; a
+conflict anywhere else stops for a person; and after the merge, clean or not, `make glossary`, `make record` and `make
+citations` run and their changes are committed. Tested on real repositories (`tests/tooling/test_pull_queue.py`).
 
 ### D4 - Three queues
 

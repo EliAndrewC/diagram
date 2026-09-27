@@ -1076,6 +1076,11 @@ notes: ## [project] print the named notes of ONE question and only the blocks of
 	@if [ -z "$(PAGE)" ] || [ -z "$(SECTION)" ] || [ -z "$(KEYS)" ]; then printf 'make notes: PAGE=<page> SECTION=<question> KEYS=<key,key> are required\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_check_bundle.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" --section "$(SECTION)" --notes "$(KEYS)" --print-notes
 
+# GUARD_EDIT_OK: feature 265 FR-010 - a new operation (reserve a glossary or registry prefix under a host-wide lock); new-file-hooks.sh makes it the way in.
+reserve: ## [project] reserve the next glossary or registry-entry prefix under a host-wide lock and write the file's stub - prints its path; fill it in (feature 265 FR-010: parallel queues never collide)   KIND=glossary|registry KEY=<term or key>
+	@if [ -z "$(KIND)" ] || [ -z "$(KEY)" ]; then printf 'make reserve: KIND=glossary|registry KEY=<term or key> are required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/reserve-prefix.py" "$(KIND)" "$(KEY)"
+
 # GUARD_EDIT_OK: feature 250 D16 - a new operation (search the setting canon for every term of a claim at once); no guard changes here - canon-read-hooks.sh makes it the only way in.
 canon: ## [project] search the GM's setting canon for EVERY term of a claim in one call - each hit with its file, line and heading (feature 250 D16; a direct read of a canon file is refused)   TERMS="imperial road|merchant share|artisan"
 	@if [ -z "$(TERMS)" ]; then printf 'make canon: TERMS="<a>|<b>|<c>" is required - every term of the claim at once\n' >&2; exit 2; fi
