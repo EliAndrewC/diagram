@@ -514,7 +514,7 @@ tool calls of its transcript, in order):
    numbered list (2b), and wrote a term's variants without the term itself, which failed a record test (2b's
    `kidoban`, found by 2c). 2b also fixed a `quote-verbatim` defect (two passages sharing one translation note were
    matched to the wrong original). The turns that touched these directly cost 0.54 million, 6% of the main total
-   (method: the main-session turns whose tool calls name `_apply_edits`, `_quote_verbatim`, their tests or
+   (observed 2026-09-26; method: the main-session turns whose tool calls name `_apply_edits`, `_quote_verbatim`, their tests or
    `kidoban`); the turns around them are not counted, so the true figure is higher. All four are fixed now.
 4. **The apply and re-check steps stayed long**: steps 6 and 7 were 11 to 21 and 6 to 15 turns a group. Part is
    point 3; the rest is verification between commands (tests run one file a turn, a grep to confirm each hand edit)
@@ -746,3 +746,40 @@ report is applied, how large a session grows, what a long source costs - and the
 at 0.7 to 1.1 million on ordinary pages, moving with the page's own work (how hard its claims are to source), not
 with the tooling. So, per the GM's instruction of 2026-09-27, the remaining research tasks move to a new feature and
 this one closes, so the process lands on main and other sessions can research other things with it.
+
+## R12 - the closing report (FR-009, T25; plan D20)
+
+**What closed here.**
+
+- **FR-001** - `cities/sizing` footnoted (T03 to T07).
+- **FR-002 and FR-006** - ten pages worked to the standard, each by a write session and check sessions:
+  `homesteads`, `vegetation`, `cities/defenses`, `religion-and-death`, `cities/government`, `cities/fabric`,
+  `fields`, `archetypes`, `cities/hinterland`, `water` - every listed assertion on them in one of the three forms,
+  every FR-006 item on them confirmed or worked (the per-page counts are in each task's verify line).
+- **FR-007** - every page's changed questions quote-checked and record-formatted with one re-check round, every new
+  registry key through `source-applicability`, and every `entry-drift` pair `_entry_owed.py` named answered: the
+  owed pairs rewritten or labeled where they had drifted, and the 12 left named at the close each recorded IN-STEP
+  in `owed-verdicts.md` (`brief.py owed-check`: 12 pairs, 12 IN-STEP, 0 open, 2026-09-27).
+
+**What moved to feature 265** (the GM, 2026-09-27; plan D20): FR-002 and FR-006 for `towns`, `cities/river-cities`,
+`buildings`, `urban-features` and `ways`, and FR-006 for `cities/capitals` - NEVER SEARCHED here, not searched and
+failed; FR-003 to FR-005 (the sweeps) and FR-008 (the download list) - not begun here.
+
+**What did not close, searched and failed** - each labeled in its note, and owed to the download list under 265's
+FR-008: the Tabayashi 1987 paper (`water`, main canals narrowing) and Chang's model plans (`cities/fabric` 040,
+`cities/fabric` 030 citing the same), both scanned PDFs no tool in the container can read; and the four
+`religion-and-death` PDF notes T45's verify line records as unfetchable in the container.
+
+**Two decisions for the GM**, recorded as future work at their request (D19.2): the dike-pond mulberry density and
+the modern dike forms (`future-work/farming-communities.md`).
+
+**What lands with this feature - the research process** (research R1 to R11, plans D1 to D20): a page worked from
+briefs (`measure/brief.py`: split sessions first for any over-cap item question, a write session, check groups
+packed by load, owed modals folded in) run headless by `make page-session`; checks that read bundles outside the
+repository (`make check-bundle`, per check, a long source as an excerpt for `source-applicability` and in parts for
+`source-reader`), reports applied by command (`make apply-edits` - `quote-check`, `record-format`, `entry-drift`,
+`source-applicability`); `make canon` and `canon-read-hooks.sh`; the question size cap; `tokens.py` to measure it.
+Across the rounds a page's cost came to 0.7 to 1.1 million tokens per thing checked on ordinary pages (R8 to R11);
+the first three rounds, measured per item rather than per thing, ran 1.56 to 2.58 million an item (R3). Found and fixed in the closing work: the glossary tooltip showed every
+term in a paragraph the paragraph's last definition (`page.js`), and the review-round hook read a report's later
+mention of FAITHFUL as its verdict.
