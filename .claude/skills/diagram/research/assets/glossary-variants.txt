@@ -796,6 +796,7 @@ masugata	masugata
 mat	tatami
 matou	gangi
 matsu	matsu
+mayasaki	mayasaki
 meander	meander
 meibutsu	meibutsu
 meiji	Meiji
