@@ -43,9 +43,8 @@ is not ground (`court divider` is a wall), and a roofed floor on posts (`weighin
 is since feature 267 roofed it (research buildings 450), so another caption no longer takes its floor as open ground."""
 
 WEIGHT_INNER = WEIGHT_OBSTACLE / 4
-"""What the caption's own feature's inner ink drawn before it costs (feature 267): enough that a free spot between a
-shuttered wing's shutters or a range's partitions wins, light enough that a name with nowhere else goes on them rather
-than out of its building."""
+"""What ground nested inside the ground a caption names costs (feature 267): a court's name takes the court's own open
+earth before a garden inside it, and a garden before a building."""
 
 WEIGHT_DARK = 2 * WEIGHT_OBSTACLE
 """What covering dark ink costs - a wall, a post, a dark roof (feature 267): black caption ink cannot be read on it,
@@ -292,16 +291,25 @@ def classify(
         # after it, or of another kind, weighs in full
         within = subject is not None and s.tag != "text" and _box_within(s.poly, subject) and not _same_box(s.poly, subject)
         if within and not _is_background(s, view):
-            # the caption's own feature's light ink drawn before it, and ground nested in the ground it names (a garden
-            # in a court: Ubame's INNER COURT went to the kitchen garden, open ground inside the court), weigh light;
-            # a post or anything dark weighs in full
-            light = (s.kind == kind and (after is None or i < after) and not s.dark) or (s.kind in GROUND_KINDS and s.kind != kind)
+            # ground nested in the ground it names weighs light (a garden in a court: Ubame's INNER COURT went to the
+            # kitchen garden, open ground inside the court); everything else in full - the caption's own partitions too,
+            # which at a light weight lost to its building's outline and put Ubame's servants' quarters on one (round 4)
+
+            light = s.kind in GROUND_KINDS and s.kind != kind
+
             weight = WEIGHT_INNER if light else WEIGHT_TEXT if after is not None and i > after and s.filled and not s.line else WEIGHT_OBSTACLE
             bands = [_band(a, b, max(s.half, 0.5)) for a, b in zip(s.poly, s.poly[1:], strict=False)] if s.line else [s.poly]
             obstacles += [Obstacle(tuple(b), weight, inner=True) for b in bands]
             continue
         if area and subject is not None and s.tag != "text" and not s.line and _box_within(subject, s.poly) and not (after is not None and i > after and s.filled):
-            continue  # the building that holds the room an `area` caption names: the name is inside it by necessity (a guardroom's in its range)
+            # the area itself, or the building that holds the room an `area` caption names: the name is inside it by
+            # necessity (a guardroom's in its range) - but not on its drawn outline, which a name set against it runs
+            # into (Hayakawa's HEARING COURT and Hajime's quarters against their walls, feature 267 round 4)
+            if s.edge:
+                ring = [*s.poly, s.poly[0]]
+                obstacles += [Obstacle(tuple(_band(a, b, s.edge)), WEIGHT_OBSTACLE, inner=True) for a, b in zip(ring, ring[1:], strict=False)]
+            continue
+
         if s.tag == "text":
             obstacles.append(Obstacle(tuple(s.poly), WEIGHT_TEXT))
         elif after is not None and i > after and s.filled and not s.line and not _is_background(s, view):
@@ -480,7 +488,8 @@ def seat(src: str, kinds: set[str] | None = None) -> tuple[list[Finding], list[t
         index = classify(shapes, view, skip, after=idx[0], group=head.group, kind=head.kind, subject=list(sub.poly), area=sub.kind == "area")
         for _caps, done in placed:
             index.add(Obstacle(done.block, WEIGHT_TEXT))
-        p = place(" ".join(lines), head.size, sub, index, view, lines=lines if len(caps) > 1 else None, char_w=char_w_of(head.element, head.text, head.size))
+        cw = char_w_of(head.element, head.text, head.size)
+        p = place(" ".join(lines), head.size, sub, index, view, lines=_as_head(caps, cw) if len(caps) > 1 else None, char_w=cw)
         p = hand_seat_if_no_better(p, caps, sub, index)
         if p.position == HAND:
             placed.append((caps, p))
@@ -506,6 +515,14 @@ def seat(src: str, kinds: set[str] | None = None) -> tuple[list[Finding], list[t
 #: shrine's bold, spaced name was seated a third too narrow, its first letter under the karo's house.
 CAPS_W_EM = 0.70
 BOLD_W_EM = 0.04
+
+
+def _as_head(caps: list[Shape], cw: float) -> list[str]:
+    """A caption's lines as the placer measures them - all at the head's size and face - each line standing in for its
+    own width: a sub-line in 8 px italic under a 12 px bold name is that much narrower. Measured at the head's face, a
+    guest house's note ran 156 px for a 90 px house and its name was seated across the wall (feature 267 round 4)."""
+    head = caps[0]
+    return [ln if c is head else "x" * max(1, round(len(ln) * c.size * char_w_of(c.element, ln, c.size) / (head.size * cw))) for c in caps for ln in c.lines]
 
 
 def char_w_of(el: ET.Element | None, text: str, size: float) -> float:

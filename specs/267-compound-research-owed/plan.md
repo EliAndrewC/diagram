@@ -43,7 +43,7 @@ kinds and the sheets its outcomes bear on, which the research sessions do not to
   exception to 266 FR-013 that the GM's request does not support, and then blocked keeping a hand seat on a TIE).
   Revising a sheet takes it off the ledger and holds every caption to the one placer's standard seat, so the placer
   was fixed until it can. Measured 2026-09-27 on the tree (`make seat-label SHEET=<sheet>`, then `WRITE=1` twice and a
-  byte compare): Ochiba 48 captions, Hayakawa 62, Ubame 60, each 0 off seat, each second write byte-identical; every
+  byte compare): Ochiba 48 captions, Hayakawa 62, Ubame 61, each 0 off seat, each second write byte-identical; every
   `make pack-audit` check green on all three. The placer's rules, each with a unit test (`tests/tools/test_seat_label.py`,
   `test_seat_label_hand.py`): a self-tagged caption keeps its `data-kind`, letter-spacing and parent frame; side-by-side
   names in one group are separate captions; a group naming several things gives each name its own shape; a leader is
@@ -56,10 +56,7 @@ kinds and the sheets its outcomes bear on, which the research sessions do not to
   tie goes to the standard's own order (266 FR-007: the nearer ring, then rank). The seated sheets then had to pass
   every `pack_audit` check, which found reading defects in the audit, fixed there: a wrapped caption's tspans and a
   quarter-turned label are read as drawn, a tagged caption is paired with a structure of its own kind, and a group
-  label is measured from its glyph's edge. Five captions had no seat at all and were changed by hand, each recorded
-  in its sheet: Ubame's OUTER COURT dropped (no seat clears its buildings), Hayakawa's shrine note and Ubame's
-  "(his letters)" moved to the notes and the page, two sub-lines wrapped. Hoshigaoka moved 3 px under the tie rule.
-  `tests/fixtures/caption_ledger.json` is empty.
+  label is measured from its glyph's edge. By round 4 two more placer rules stood - an area caption keeps off the drawn outline of its area and of the building holding it, and a caption's sub-lines are measured at their own size - and every caption is at its seat, the least-cost one where none is free (266 FR-007; Ubame's OUTER COURT on the hearing court's roof, the only seat the outer court has - its band under the divider is too narrow for the name and its clearance). By hand, each recorded in its sheet's notes: Hayakawa's shrine note and Ubame's "(his letters)" moved to the notes and the page (ruled legitimate by spec-fidelity, to be raised with the GM at landing), three sub-lines wrapped, two captions set a size smaller to fit their rooms, and grounds given their own outline where a caption named a part of a court (Ochiba's service yard, Ubame's forecourt). Hoshigaoka moved 3 px under the tie rule. `tests/fixtures/caption_ledger.json` is empty.
 
 ## Constitution check
 

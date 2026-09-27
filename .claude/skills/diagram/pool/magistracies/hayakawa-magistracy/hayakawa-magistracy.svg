@@ -436,8 +436,8 @@
          between the kitchen and the house: on the south face it opened 0.3 ft short of the court divider's ink
          (building review, feature 264; moved 2026-09-27) -->
     <rect x="332" y="398" width="8" height="26" fill="#C9A57A" stroke="#5A3F1E" stroke-width="1" data-kind="door"/>
-    <text x="397" y="406" text-anchor="middle" font-size="11" font-weight="bold" fill="#3A2E1C">karo's house</text>
-    <text x="397" y="421" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">(the house elder)</text>
+    <text x="397.5" y="409.4" text-anchor="middle" font-size="11" font-weight="bold" fill="#3A2E1C">karo's house</text>
+    <text x="397.5" y="419.5" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">(the house elder)</text>
   </g>
 
   <!-- Garden well -->
@@ -499,10 +499,14 @@
        along a board veranda on the reception's north face, and the FAMILY's apart, at the corridor end toward the
        living rooms - neither a yard building. -->
   <!-- (feature 267 pass 2: the guest privy's board veranda is 3 ft wide, 9 px - it was 1.7 ft) -->
-  <g data-kind="latrine" data-part-of="residence">
+  <!-- the board veranda to the guests' privy is its own part (feature 267 round 4): drawn in the privy's group, the
+       privy's name named the pair and was seated by the veranda's far end, halfway to the family's privy -->
+  <g data-kind="engawa" data-part-of="residence">
     <rect x="600" y="225" width="72" height="9" fill="#E8D2A8" stroke="#5A3F1E" stroke-width="0.8"/>
+  </g>
+  <g data-kind="latrine" data-part-of="residence">
     <rect x="672" y="220" width="18" height="14" fill="#7E726A" stroke="#3A2E1C" stroke-width="0.8"/>
-    <text x="574.7" y="215.5" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830">guest privy</text>
+    <text x="646.7" y="215.5" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830">guest privy</text>
   </g>
   <g data-kind="latrine" data-part-of="residence">
     <rect x="462" y="220" width="18" height="14" fill="#7E726A" stroke="#3A2E1C" stroke-width="0.8"/>
@@ -585,8 +589,8 @@
     <!-- entry from the guest garden (guests arrive via the river door into the
          garden, then the guest house - a court-fed entrance, not a sealed box) -->
     <rect x="925" y="300" width="30" height="8" fill="#C9A57A" stroke="#5A3F1E" stroke-width="1" data-kind="door"/>
-    <text x="940.0" y="253.3" text-anchor="middle" font-size="12" font-weight="bold" fill="#3A2E1C">guest house</text>
-    <text x="940.0" y="266.5" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830"><tspan x="940.0" dy="0.0">(the wing added by</tspan><tspan x="940.0" dy="9.2">the 9th magistrate)</tspan></text>
+    <text x="940.0" y="239.2" text-anchor="middle" font-size="11" font-weight="bold" fill="#3A2E1C">guest house</text>
+    <text x="940.0" y="249.3" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830"><tspan x="940.0" dy="0.0">(in the annex</tspan><tspan x="940.0" dy="9.2">added by the</tspan><tspan x="940.0" dy="9.2">9th magistrate)</tspan></text>
   </g>
   <g data-kind="garden">
     <rect x="895" y="315" width="101" height="70" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
@@ -649,10 +653,10 @@
       <rect x="589" y="665" width="5" height="5"/>
       <rect x="676" y="665" width="5" height="5"/>
     </g>
-    <text x="606.0" y="604.2" text-anchor="middle" font-size="14" font-weight="bold" letter-spacing="1" fill="#5C4318">HEARING COURT</text>
+    <text x="520.0" y="598.0" text-anchor="middle" font-size="14" font-weight="bold" letter-spacing="1" fill="#5C4318">HEARING COURT</text>
     <!-- feature 267 pass 3: the sublabel carries only this sheet's floor ("roofed" is true of every sheet; the modal
          says it), and the mats' label is just "straw mats" (the roster is the modal's) -->
-    <text x="606.0" y="615.2" text-anchor="middle" font-size="8" font-style="italic" fill="#7A5C30">river cobbles</text>
+    <text x="520.0" y="609.0" text-anchor="middle" font-size="8" font-style="italic" fill="#7A5C30">river cobbles</text>
     <g data-kind="kneeling positions">
       <g fill="#C8B078" stroke="#7A5430" stroke-width="0.6">
         <rect x="501" y="620" width="18" height="9"/>
@@ -711,11 +715,13 @@
 
   <!-- Tally office (west of the postern forecourt, on the granary-to-landing
        bale route - kept clear of the postern opening itself) -->
+  <!-- the tally office stands 10 ft off the granary (feature 267 round 4): the gap between them is the bale carts' way
+       from their waiting ground into the bale yard, where they load at the granary's north door; it was 6.7 ft -->
   <g data-kind="tally office">
-    <rect x="700" y="470" width="80" height="60" fill="#E8D2A8" stroke="#6B4F2A" stroke-width="1.5"/>
-    <text x="740" y="495" text-anchor="middle" font-size="11" font-weight="bold" fill="#3A2E1C">tally office</text>
-    <text x="740" y="509" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">barge manifests</text>
-    <text x="740" y="520" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">&amp; seals</text>
+    <rect x="700" y="464" width="80" height="56" fill="#E8D2A8" stroke="#6B4F2A" stroke-width="1.5"/>
+    <text x="740.0" y="485.8" text-anchor="middle" font-size="11" font-weight="bold" fill="#3A2E1C">tally office</text>
+    <text x="740.0" y="495.9" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">barge manifests</text>
+    <text x="740.0" y="505.1" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">&amp; seals</text>
   </g>
 
   <!-- Practice ground (postern yard): the duty watch's daily keiko happens on
@@ -739,8 +745,13 @@
     </g>
     <!-- weapon rack flush against the granary's north face -->
     <g data-kind="weapon rack">
-      <rect x="798" y="544" width="24" height="6" fill="#8C6F3E" stroke="#4A3318" stroke-width="0.8"/>
-      <text x="774.4" y="539.8" text-anchor="middle" font-size="7" font-style="italic" fill="#5C4830">weapon rack</text>
+      <!-- a free-standing rack on the bale yard's north edge (feature 267 round 4): flush on the granary's north face it
+           read as a second door and narrowed the carts' way; drawn as a rail on two posts, unlike a door -->
+      <rect x="840" y="472" width="24" height="2" fill="#6B4F2A"/>
+      <rect x="841" y="470" width="2" height="6" fill="#4A3318"/>
+      <rect x="861" y="470" width="2" height="6" fill="#4A3318"/>
+      <text x="909.7" y="474.9" text-anchor="middle" font-size="7" font-style="italic" fill="#5C4830">weapon rack</text>
+    <line x1="887.5" y1="470.0" x2="865.0" y2="470.0" stroke="#5C4830" stroke-width="0.60" stroke-linecap="round" data-leader="1"/>
     </g>
   </g>
 
@@ -759,8 +770,8 @@
       <rect x="862" y="620" width="8" height="8" fill="#4A3318"/>
     </g>
     <rect x="834" y="544" width="24" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
-    <text x="805" y="582" text-anchor="middle" font-size="13" font-weight="bold" fill="#3A2E1C">granary</text>
-    <text x="805" y="598" text-anchor="middle" font-size="9" font-style="italic" fill="#5C4830">staging store - tax grain</text>
+    <text x="805.0" y="587.4" text-anchor="middle" font-size="13" font-weight="bold" fill="#3A2E1C">granary</text>
+    <text x="805.0" y="599.0" text-anchor="middle" font-size="9" font-style="italic" fill="#5C4830">staging store - tax grain</text>
   </g>
 
   <!-- Holding cell (east of the gate - placement is free; the gate guards
@@ -884,11 +895,11 @@
   <!-- ============================================================ -->
   <g transform="translate(140, 762)" data-kind="salt wards">
     <rect x="0" y="0" width="310" height="96" fill="#F7EFD8" stroke="#6B4F2A" stroke-width="1.2"/>
-    <text x="155" y="20" text-anchor="middle" font-size="13" font-weight="bold" fill="#3A2E1C">Salt wards</text>
-    <text x="10" y="40" font-size="10" fill="#3A2E1C">Yasuki sea salt at every door - never salt that has</text>
-    <text x="10" y="54" font-size="10" fill="#3A2E1C">touched the river. Hajime sets them with his own hand,</text>
-    <text x="10" y="68" font-size="10" fill="#3A2E1C">renewing them after every rain, main gate last. A ward</text>
-    <text x="10" y="82" font-size="10" fill="#3A2E1C">found scattered on a dry day is the worst kind of omen.</text>
+    <text x="155.0" y="28.6" text-anchor="middle" font-size="13" font-weight="bold" fill="#3A2E1C">Salt wards</text>
+    <text x="155.0" y="41.0" text-anchor="middle" font-size="10" fill="#3A2E1C">Yasuki sea salt at every door - never salt that has</text>
+    <text x="155.0" y="52.5" text-anchor="middle" font-size="10" fill="#3A2E1C">touched the river. Hajime sets them with his own hand,</text>
+    <text x="155.0" y="64.0" text-anchor="middle" font-size="10" fill="#3A2E1C">renewing them after every rain, main gate last. A ward</text>
+    <text x="155.0" y="75.5" text-anchor="middle" font-size="10" fill="#3A2E1C">found scattered on a dry day is the worst kind of omen.</text>
     
   </g>
 

@@ -155,8 +155,8 @@ def _weights(src: str, text: str, area: bool = False) -> dict[tuple[int, int, in
 
 def test_ink_inside_what_a_caption_names_is_ink_it_avoids() -> None:
     """The placer's standard waives a subject's own parts; on a hand sheet those are partitions, posts, mats and the
-    gardens in a court, and a name set on them could not be read. Its own light ink drawn before it, and a garden nested
-    in the court it names, weigh light; a dark post in full; a mat painted after it as much as a name (it hides it)."""
+    gardens in a court, and a name set on them could not be read. A garden nested in the court it names weighs light; a
+    partition or a dark post in full; a mat painted after it as much as a name (it hides it)."""
     src = _sheet(
         '  <g data-kind="store"><rect x="100" y="100" width="120" height="60" fill="#C8A878"/>'
         '<line x1="160" y1="100" x2="160" y2="160" stroke="#8C6F3E" stroke-width="1"/>'
@@ -168,7 +168,7 @@ def test_ink_inside_what_a_caption_names_is_ink_it_avoids() -> None:
         '  <text x="300" y="260" font-size="9" data-kind="inner court">court</text>\n',
     )
     w = _weights(src, "store")
-    assert w[(160, 100, 160, 160)] == (sl.WEIGHT_INNER, True), "the store's own partition, drawn before its name"
+    assert w[(160, 100, 160, 160)] == (sl.WEIGHT_OBSTACLE, True), "the store's own partition weighs in full (round 4)"
     assert w[(107, 107, 113, 113)] == (sl.WEIGHT_OBSTACLE, True), "a dark post weighs in full"
     assert w[(190, 140, 210, 150)] == (sl.WEIGHT_TEXT, True), "a mat painted after the name hides it"
     court = _weights(src, "court")
@@ -203,3 +203,33 @@ def test_a_light_name_set_down_off_its_dark_roof_takes_the_dark_ink() -> None:
     on = _sheet('  <g data-kind="hall"><rect x="100" y="100" width="200" height="80" fill="#5C1A0A"/><text x="150" y="130" font-size="8" fill="#FFFAE6">hall</text></g>\n')
     assert "#FFFAE6" in sl.rewrite(on), "still on its dark roof, it keeps its light ink"
     assert sl._luma("#fff") == pytest.approx(1.0) and sl._luma("url(#p)") == 0.5
+
+
+def test_an_area_name_keeps_off_its_own_outline_and_its_buildings() -> None:
+    """Inside its area by necessity, an area caption still keeps off the drawn outline of the area and of the building
+    holding it: Hayakawa's HEARING COURT and Hajime's quarters were seated against their walls (round 4)."""
+    src = _sheet(
+        '  <rect x="100" y="100" width="200" height="50" fill="#8C6F3E" stroke="#4A3318" stroke-width="2"/>\n',
+        '  <g data-kind="guardroom"><rect x="150" y="100" width="60" height="50" fill="#8C6F3E" stroke="#4A3318" stroke-width="1"/><text x="180" y="128" font-size="8">guardroom</text></g>\n',
+    )
+    w = _weights(src, "guardroom", area=True)
+    assert (100, 100, 300, 150) not in w and sum(1 for k, (wt, inner) in w.items() if inner and wt == sl.WEIGHT_OBSTACLE) == 8, "four edges each"
+
+
+def test_a_sub_line_is_measured_at_its_own_size() -> None:
+    """A guest house's 8 px italic note under its 12 px bold name ran 156 px wide measured at the name's face, and the
+    name was seated across the house's wall; each line stands in for its own width."""
+    src = _sheet(
+        '  <g data-kind="guest house"><rect x="100" y="100" width="90" height="100" fill="#E0B878"/><text x="145" y="140" font-size="12" font-weight="bold">guest house</text><text x="145" y="152" font-size="8" font-style="italic">(in the annex added by)</text></g>\n'
+    )
+    shapes, _view = sl.read_sheet(src)
+    caps = [s for s in shapes if s.tag == "text"]
+    head_w = sl.char_w_of(caps[0].element, caps[0].text, caps[0].size)
+    lines = sl._as_head(caps, head_w)
+    assert lines[0] == "guest house" and len(lines[1]) < len("(in the annex added by)") * 8 / 12 + 1
+    (_caps, p) = sl.seat(src)[1][0]
+    x0, _y0, x1, _y1 = sl.bbox(list(p.block))
+    name, _h = sl.block_half(["guest house"], 12, head_w)
+    note, _h = sl.block_half([caps[1].text], 8, sl.char_w_of(caps[1].element, caps[1].text, 8))
+    assert x1 - x0 == pytest.approx(2 * max(name, note), rel=0.1), "as wide as its widest line at that line's own size"
+    assert x1 - x0 < 2 * sl.block_half([caps[1].text], 12, head_w)[0], "not the note measured at the name's face"
