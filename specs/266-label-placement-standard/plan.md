@@ -83,8 +83,9 @@ caption: 8 positions x 3 layouts x (1 + rings) with rings up to the reach - a fe
   recorded in `M["caption_leaders"]`).
 - FR-014: `label_obstacles` tags each built record with its caption group (the overlap taxonomy's `_LABEL_GROUP`, and a
   `buildings` record's own `kind` word), and the index is asked with the caption's text: an obstacle whose group word the
-  caption names weighs 0 for it - unless the group is civic (ministry, governor, temple), where only the caption's own
-  subject is waived.
+  caption names weighs 0 for it - except a NAMED civic building (a ministry, the governor's yamen, a temple by name:
+  `Obstacle(named=True)`), which no other caption's wording waives; an unnamed building of a civic group is waived like
+  any other group (spec FR-014).
 - `label()` gains `lines=` and `angle=` (the placer's choice, bypassing the wrap probe and the rotation fold); the
   recorded referent is the subject's box.
 - Callers: `_draw_board_caption` (a rotated-box point subject) shrinks to building the subject; `place_caption`
