@@ -548,6 +548,7 @@ grow-out pond	grow-out pond
 grow-out ponds	grow-out pond
 gsi	GSI
 guan-xiang	guanxiang
+guangfu	Guangfu
 guanxiang	guanxiang
 gulou	gulou
 gundai	gundai
@@ -605,6 +606,8 @@ heijō-kyō's	Heijo-kyo
 heimen	heimen
 heimin	heimen
 hem	hem
+heping	heping
+hepings	heping
 hereditary house	hereditary temple
 hereditary monastery	hereditary temple
 hereditary temple	hereditary temple
@@ -854,6 +857,8 @@ kumi	kumi
 kumi-chi	kumi-chi
 kumi-yashiki	kumi-yashiki
 kumigashira	kumigashira
+kune	kune
+kune-gaki	kune
 kunugi	kunugi
 kura	kura
 kuramai	kuramai
@@ -865,8 +870,10 @@ kuruwa	kuruwa
 kusaba	kusaba
 kuwabata	Kuwabata
 kyo-machiya	machiya
+kyogen	kyogen
 kyoho	Kyoho
 kyuhi	kyuhi
+kyōgen	kyogen
 kyōhō	Kyoho
 kōsatsu	kosatsuba
 kōsatsu-ba	kosatsuba
@@ -912,6 +919,8 @@ louzeyuan	louzeyuan
 low stage	river stage
 lower yangtze	Lower Yangzi
 lower yangzi	Lower Yangzi
+luban ruler	Luban ruler
+luban rulers	Luban ruler
 lulu	lulu
 luocheng	luocheng
 machi	machi
@@ -1608,6 +1617,7 @@ wrought iron	wrought iron
 wubei zhi	Wubei Zhi
 wujing zongyao	Wujing Zongyao
 xiang	xiang
+xiang-gan	Xiang-Gan
 yacheng	yacheng
 yachida	yato
 yagura	yagura
@@ -1685,6 +1695,7 @@ zuku	zuku
 田打車	tauchiguruma
 畑永法	hata-ei
 百姓伝記	Hyakusho Denki
+禾坪	heping
 笞	笞
 築地松	tsuijimatsu
 纤道	qiandao
@@ -1693,4 +1704,5 @@ zuku	zuku
 鈔關	chaoguan
 雑木林	zokibayashi
 馬宿	umayado
+鲁班尺	Luban ruler
 동구숲	donggusup

@@ -6567,5 +6567,47 @@
   "variants": [
    "hsien"
   ]
+ },
+ "kune": {
+  "def": "The Kanto name for a farmstead's windbreak grove, and also a hedge or a fence of woven bamboo along a plot's edge; the word itself means the line between two holdings.",
+  "variants": [
+   "kune",
+   "kune-gaki"
+  ]
+ },
+ "kyogen": {
+  "def": "A short comic play of the Noh theater, performed between the Noh pieces.",
+  "variants": [
+   "kyogen",
+   "kyōgen"
+  ]
+ },
+ "heping": {
+  "def": "The drying floor of packed or plastered earth in front of a south-China house, where rice was threshed and dried; at a Hakka weilongwu it lies between the half-moon pond and the house.",
+  "variants": [
+   "heping",
+   "hepings",
+   "禾坪"
+  ]
+ },
+ "Luban ruler": {
+  "def": "A Chinese builder's ruler marked in lucky and unlucky lengths, used to fix a house's dimensions; named for Lu Ban, the patron of carpenters.",
+  "variants": [
+   "Luban ruler",
+   "Luban rulers",
+   "鲁班尺"
+  ]
+ },
+ "Xiang-Gan": {
+  "def": "The building tradition of Hunan (Xiang) and Jiangxi (Gan) in south-central China, set beside the Cantonese (Guangfu) tradition.",
+  "variants": [
+   "Xiang-Gan"
+  ]
+ },
+ "Guangfu": {
+  "def": "Cantonese: the Cantonese-speaking inhabitants of Guangdong and their building tradition, whose villages keep their main lane at the front.",
+  "variants": [
+   "Guangfu"
+  ]
  }
 }
