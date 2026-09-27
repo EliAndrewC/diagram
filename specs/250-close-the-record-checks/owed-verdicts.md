@@ -81,3 +81,12 @@
 - FamilyQuarters (buildings SECTION=020): REWRITTEN - Note now counts only living inside the compound as read, behind the office by Chinese regulation, beside it at Takayama, no Japanese rule found; re-check IN-STEP
 - Latrine (buildings SECTION=230): REWRITTEN - Note now says the family privy's north-rear seat is reasoning from the sun rule, not a read source; re-check IN-STEP
 - Nakamon (buildings SECTION=020): REWRITTEN - Note now says the gate follows the Chinese record (Neixiang's inner residence gate), no Japanese page gives the front-and-rear order, and who passes it and the screening hall are the project's reading; re-check IN-STEP
+- CompoundWall (buildings SECTION=070): REWRITTEN - Note now says the thickness figures are castle-wall figures and the eaves-near-the-wall arrangement is our own reasoning; Why says "stop missiles" (section: shot) so firearms are not asserted in the setting; re-check IN-STEP
+- DayOffice (buildings SECTION=090): IN-STEP - the day office as a room of the office hall behind the dais still attested; section changes are upkeep only
+- DayOffice (buildings SECTION=100): IN-STEP - questioning in the day office or hearing court with no interrogation room still the section's decision
+- MagistratesDais (buildings SECTION=010): IN-STEP - court hall over kneeling litigants still cited; the section's new guess labels touch nothing the modal claims
+- MagistratesDais (buildings SECTION=090): IN-STEP - dais as the front of a deeper office hall still attested; changes are translated footnotes
+- ReceptionRoom (buildings SECTION=230): IN-STEP - south formal garden facing the reception rooms still attested
+- River (buildings SECTION=080): REWRITTEN - Note now says the office granary as a staging node is the research's own reading, only the village granary's shipment role being recorded; re-check IN-STEP
+- RiverLanding (buildings SECTION=080): REWRITTEN - "under the office's seals" replaced by the recorded official pennant and inspection at ports of call; Note says the compound's own landing is this project's reading; re-check IN-STEP
+- ShrineAltar (buildings SECTION=030): REWRITTEN - Note now says Inari as the default rests on a Japanese plan not re-found, the shrine-in-every-compound rule on the read yamen shrines; re-check IN-STEP

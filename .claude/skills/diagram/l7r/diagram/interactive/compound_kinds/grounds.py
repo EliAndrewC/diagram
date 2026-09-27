@@ -251,14 +251,16 @@ class CompoundWall(Kind):
     tiled coping, broken only at the gates. Buildings back onto it, but none stands in it.
 
     Why: A walled enclosure is the grammar every administrative compound shares, Japanese or Chinese. A wall
-    of this class is a building in its own right - thick enough to stop a determined man and to carry the
+    of this class is a building in its own right - thick enough to stop missiles and to carry the
     tiles that keep its earth core dry - so the ground under it is occupied, and the buildings ringing a
     court back onto it with their eaves nearly touching, a foot or two off so that the wall stays reachable
     for patching.
 
     Note: we have drawn the compound wall 3 ft thick, thicker than the typical wall, in order to make its
     stroke read on the plan; the real form it resembles is the rammed-earth tsuijibei, up to about 1 m (3.3
-    ft) thick, while the ordinary plastered neribei was about 1 shaku, some 30 cm.
+    ft) thick, while the ordinary plastered neribei was about 1 shaku, some 30 cm - figures read for castle
+    walls, since a county compound's own wall thickness is unsourced. How near the buildings stand to the
+    wall, eaves nearly touching and a foot or two off, is our own reasoning; no source we found describes it.
 
     Name: compound wall
     Covers: the outer wall's strokes

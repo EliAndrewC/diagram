@@ -664,7 +664,9 @@ class ShrineAltar(Kind):
     differs: a priest-magistrate's hall may keep more than one altar, and a posting on a river or in an old
     household keeps altars to the powers that matter there.
 
-    Note: a shrine in every compound, Inari's by default, follows the record; what each altar serves, and why a hall
+    Note: a shrine in every compound follows the record (a Chinese yamen's three shrines, read); Inari's as
+    the default rests on a Japanese branch office's plan that could not be found again; what each altar
+    serves, and why a hall
     keeps more than one, is the setting's or the map's own, and each map's note says which. Each glyph is drawn
     as a marker, not the altar at its size.
 
