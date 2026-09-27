@@ -17,11 +17,14 @@ page session fell from 40,280 tokens to 21,267; every turn carries that floor.
 
 from __future__ import annotations
 
+import calendar
 import json
 import os
 import pathlib
+import re
 import subprocess
 import sys
+import time
 import uuid
 
 PROMPT = ("You are a fresh session started to do the work ONE brief describes. Read {brief} first, and do what it says, "
@@ -112,11 +115,79 @@ def work(root: str, name: str, extra: list[str], queue: list[dict], run_log: str
         with open(index, "a") as fh:
             fh.write(f"{item['sid']} {item['brief']}\n")
         runlog.write(f"started {item['sid']} {os.path.basename(item['brief'])}\n")
-        with open(item["log"] + "/result.json", "w") as out, open(item["log"] + "/stderr.txt", "w") as err:
-            rc = subprocess.run(item["cmd"], cwd=root, env=env, stdin=subprocess.DEVNULL, stdout=out, stderr=err, check=False).returncode
+        cmd = item["cmd"]
+        for attempt in range(RETRIES + 1):
+            with open(item["log"] + "/result.json", "w") as out, open(item["log"] + "/stderr.txt", "w") as err:
+                rc = subprocess.run(cmd, cwd=root, env=env, stdin=subprocess.DEVNULL, stdout=out, stderr=err, check=False).returncode
+            text = _read(item["log"] + "/result.json") + _read(item["log"] + "/stderr.txt")
+            if not failed(rc, text) or attempt == RETRIES:
+                break
+            wait = wait_for(text, attempt, time.time())
+            runlog.write(f"failed {item['sid']} rc={rc} - waiting {wait // 60} min, then resuming it ({first_line(text)})\n")
+            time.sleep(wait)
+            cmd = resume_command(item["cmd"], item["sid"])
         runlog.write(f"ended {item['sid']} rc={rc}\n")
     runlog.write("ALL DONE\n")
     runlog.close()
+
+
+# THE USAGE LIMIT (2026-09-27, the GM: "if that happens, then we automatically resume once the window refreshes ... it's
+# really important to me that we try to get this done without just kind of stopping for hours and hours"). A session
+# that fails - the plan's five-hour window spent, an overloaded API, a crash - used to be logged and the NEXT brief
+# started, which fails the same way at once, so one spent window burned the whole rest of the queue. Now a failed
+# session is RESUMED (`--resume <id>`, so it carries on with its own context) after a wait: until the reset time the
+# message names when it names one, else a backoff of 15, 30, then 60 minutes, for up to RETRIES attempts (~11 hours).
+RETRIES = 14
+BACKOFF = (15 * 60, 30 * 60, 60 * 60)
+RESUME = "Continue the work of the brief you were given, from where you stopped - an error or the usage limit ended your last turn."
+
+
+def _read(path: str) -> str:
+    try:
+        return pathlib.Path(path).read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return ""
+
+
+def failed(rc: int, text: str) -> bool:
+    """Whether a session ended in failure: a non-zero exit, or the JSON result says it was an error."""
+    if rc != 0:
+        return True
+    try:
+        got = json.loads(text[: text.rfind("}") + 1] or "{}")
+    except ValueError:
+        return False
+    return bool(got.get("is_error")) or got.get("subtype") not in (None, "success")
+
+
+def wait_for(text: str, attempt: int, now: float) -> int:
+    """Seconds to wait before resuming: two minutes past the reset the message names (an epoch after a `|`, or `resets
+    <h>am|pm` in UTC), else the backoff for this attempt. Never under a minute, never over six hours."""
+    m = re.search(r"\|(\d{10})\b", text)
+    if m:
+        return int(min(max(int(m.group(1)) - now + 120, 60), 6 * 3600))
+    m = re.search(r"resets?\s+(?:at\s+)?(\d{1,2})(?::(\d{2}))?\s*([ap]m)", text, re.I)
+    if m:
+        t = time.gmtime(now)
+        hour = int(m.group(1)) % 12 + (12 if m.group(3).lower() == "pm" else 0)
+        target = calendar.timegm((t.tm_year, t.tm_mon, t.tm_mday, hour, int(m.group(2) or 0), 0))
+        if target <= now:
+            target += 86400
+        return int(min(max(target - now + 120, 60), 6 * 3600))
+    return BACKOFF[min(attempt, len(BACKOFF) - 1)]
+
+
+def resume_command(cmd: list[str], sid: str) -> list[str]:
+    """The same session's command, resumed: `--session-id <sid>` becomes `--resume <sid>`, the prompt a continue."""
+    out = list(cmd)
+    i = out.index("--session-id")
+    out[i : i + 2] = ["--resume", sid]
+    out[out.index("-p") + 1] = RESUME
+    return out
+
+
+def first_line(text: str) -> str:
+    return next((ln.strip()[:160] for ln in text.splitlines() if ln.strip()), "no output")
 
 
 def main(argv: list[str]) -> int:
