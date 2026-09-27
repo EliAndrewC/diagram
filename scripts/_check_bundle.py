@@ -290,12 +290,13 @@ def quoted_passages(root: pathlib.Path, key: str) -> list[str]:
     out: list[str] = []
     for notes in sorted((root / ".claude/skills/diagram/research").rglob("*.notes.html")):
         for m in li.finditer(notes.read_text(encoding="utf-8")):
-            out += [p["original"] or p["quote"] for p in qv.passages(m.group(1))]
+            # a session note in an HTML comment quotes the record's own reading, never the source (plan review, D19)
+            out += [p["original"] or p["quote"] for p in qv.passages(re.sub(r"<!--.*?-->", "", m.group(1), flags=re.S))]
     # a link's href and a short gloss phrase are quoted in the note's markup, not from the source
     return [q for q in dict.fromkeys(out) if not q.startswith(("http://", "https://")) and len(q) >= 20]
 
 
-def key_bundle(root: pathlib.Path, key: str, out: pathlib.Path) -> int:
+def key_bundle(root: pathlib.Path, key: str, out: pathlib.Path, whole: bool = False) -> int:
     entry = registry_entry(root, key)
     if entry is None:
         print(f"check-bundle: no registry entry for {key!r}", file=sys.stderr)
@@ -306,10 +307,16 @@ def key_bundle(root: pathlib.Path, key: str, out: pathlib.Path) -> int:
     if url:
         # D19 (R10): a long page is saved as its front and a window around each passage the record quotes from this
         # key - one book-length source cost 0.73 million tokens in one check when its whole text was copied
-        qfile = out / "quotes.json"
-        qfile.write_text(json.dumps(quoted_passages(root, key), ensure_ascii=False), encoding="utf-8")
-        code, text = run_script("_source_pages.py", [str(out / "pages"), url, "--quotes", str(qfile)], root)
-        rows.append(("pages/", url, "the page's visible text, saved - a long page as an EXCERPT (its front and a window around each passage the record quotes); grep it; MANIFEST.txt says which"))
+        # WHOLE (plan review, D19): a source-reader looks for the passage behind a NEW claim, which by construction
+        # is not beside a passage already quoted - it gets the whole page, saved in parts, never the excerpt
+        if whole:
+            code, text = run_script("_source_pages.py", [str(out / "pages"), url], root)
+            rows.append(("pages/", url, "the page's whole visible text, saved - a long page in PARTS; grep them all, read the part a hit is in"))
+        else:
+            qfile = out / "quotes.json"
+            qfile.write_text(json.dumps(quoted_passages(root, key), ensure_ascii=False), encoding="utf-8")
+            code, text = run_script("_source_pages.py", [str(out / "pages"), url, "--quotes", str(qfile)], root)
+            rows.append(("pages/", url, "the page's visible text, saved - a long page as an EXCERPT (its front and a window around each passage the record quotes); grep it; MANIFEST.txt says which"))
         if code:
             print(text, file=sys.stderr)
     (out / MANIFEST).write_text(manifest(out, f"source {key}", rows), encoding="utf-8")
@@ -322,6 +329,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("page", nargs="?", default="", help="a research page: ways, cities/sizing")
     ap.add_argument("--section", default="", help="one question: its prefix (010) or part of its heading id")
     ap.add_argument("--key", default="", help="one registry key, for a source bundle")
+    ap.add_argument("--whole", action="store_true", help="with --key: the whole page in parts, not the excerpt - for source-reader (D19)")
     ap.add_argument("--out", default="", help=f"the bundle directory (default under {DEFAULT_ROOT})")
     ap.add_argument("--extra", nargs="*", default=[], help="further files to copy in, relative to the root")
     ap.add_argument("--notes", default="", help="re-check only these note keys, comma-separated: the notes file and the fragment are cut to them")
@@ -333,7 +341,7 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
     root = pathlib.Path(args.root).resolve()
     if args.key:
-        return key_bundle(root, args.key, pathlib.Path(args.out or DEFAULT_ROOT / f"key-{args.key}"))
+        return key_bundle(root, args.key, pathlib.Path(args.out or DEFAULT_ROOT / f"key-{args.key}{'-whole' if args.whole else ''}"), args.whole)
     if not args.page or not args.section:
         ap.error("PAGE and --section, or --key")
     wanted = frozenset(k.strip() for k in args.notes.split(",") if k.strip())

@@ -20,7 +20,7 @@ Judges whether a SOURCE is applicable to the setting these maps depict - a premo
 Your dispatch names a bundle: a directory outside the repository (made by `make check-bundle`, usually
 under `/tmp/l7r-check/`) whose `MANIFEST.md` lists every file in it - copies of what you need, and beside
 each its ORIGIN, the file in the repository it was copied from. **Read the MANIFEST once: it holds every copy INLINE, each under its origin, so one read is
-the whole of your input.** The variant index and any saved pages sit beside it as files to grep, never to read whole. Name a finding by its ORIGIN path: that is the file the session will edit.
+the whole of your input.** The variant index and any saved pages sit beside it as files to grep, never to read whole. A long page is saved as an EXCERPT (feature 250 D19): its front matter - what the work IS - and a window around each passage the record quotes from it, with a header saying how much of the page it is; judge the work from those, and say so if a limit could only be judged from the rest. Name a finding by its ORIGIN path: that is the file the session will edit.
 
 Do not open a file under `/diagram`. Not for what is in it - for what comes with it: the moment an agent
 reads a file under the repository, the harness attaches every `CLAUDE.md` above that file, about 28,000

@@ -93,6 +93,11 @@ def test_a_source_bundle_holds_the_entry(tmp_path: pathlib.Path, monkeypatch: py
     # D19: the bundle hands source-pages the passages the record quotes from the key, so a long page is excerpted
     assert fetched == [["_source_pages.py", str(out / "pages"), "https://en.wikipedia.org/wiki/Edo", "--quotes", str(out / "quotes.json")]]
     assert isinstance(json.loads((out / "quotes.json").read_text(encoding="utf-8")), list)
+    fetched.clear()
+    whole = tmp_path / "whole"
+    assert cb.main(["--key", "edo-enwiki", "--whole", "--out", str(whole), "--root", str(REPO)]) == 0
+    assert fetched == [["_source_pages.py", str(whole / "pages"), "https://en.wikipedia.org/wiki/Edo"]], "source-reader's form: the whole page, no excerpt"
+    assert not (whole / "quotes.json").exists()
     assert cb.main(["--key", "no-such-key", "--out", str(tmp_path / "none"), "--root", str(REPO)]) == 2
 
 

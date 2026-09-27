@@ -79,7 +79,8 @@ A list of items, each: **the claim as written in the entry** (verbatim), **the s
 0. **Grep the saved pages first (feature 255, adopted by the GM 2026-09-19).** The session runs
    `make source-pages OUT=<dir> URL=<u>` (several: `URLS="<u1> <u2>"`) before it dispatches you and puts the
    manifest in your prompt: `pointer | file | state`, one line per pointer, each FETCHED page saved under `<dir>`
-   as its full visible text, one sentence to a line. A fetch hands you a small model's extract of a page and never
+   as its full visible text, one sentence to a line - a page over 20,000 characters as PARTS (`NN-host.p1.txt`, `.p2` ...):
+   grep them all, and read only the part a hit is in (feature 250 D19). A fetch hands you a small model's extract of a page and never
    the page; the saved file IS the page - on the recorded cases this step turned a false CONTRADICTED (a clause
    the extract had dropped) back into READ, and found a passage every fetch-only run had missed
    (`specs/255-cheaper-checks-by-tooling/research.md` R4). So for a pointer the manifest marks FETCHED: `Grep` its

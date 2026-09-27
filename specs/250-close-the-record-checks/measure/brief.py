@@ -148,7 +148,7 @@ fragment the grep did not name.
    <u2>"`, grep them yourself, then dispatch ONE `source-reader` over every item at once, handing it the saved
    directory and each claim's text in the prompt - never a path under `/diagram` (`check-bundle-hooks.sh`
    refuses that). Keep ONE directory for the page: a second `make source-pages` into it ADDS pages, it never
-   overwrites the first batch. A source already in the registry: `make check-bundle KEY=<key>` and name its MANIFEST.md.
+   overwrites the first batch. A source already in the registry: `make check-bundle KEY=<key> WHOLE=1` (the whole page, in parts) and name its MANIFEST.md.
 3. **Write the notes.** First `Read` every fragment and notes file you will change, ALL IN ONE MESSAGE (parallel
    `Read` calls): `Edit` needs the read, and a file a turn re-reads your whole context each time (feature 250 R6:
    the write step took 19 turns for three items). In the fragment `<sup class="fn" data-note="<key>"></sup>`; in its
