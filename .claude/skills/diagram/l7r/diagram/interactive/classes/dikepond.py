@@ -395,7 +395,7 @@ class PerimeterDike(Kind):
     heaped and packed, breached and repaired for centuries, so it reads as a mottled vegetated band of
     varying width rather than a ruled line; the dead-straight rectangle is a post-1949 industrial shape.
 
-    Note: Full enclosure, the organic outline and the planting are read; the drawn width band (14-40 ft) is a
+    Note: Full enclosure, the organic outline and the planting are read, though that any gap re-floods the block is this project's reasoning from the general polder; the drawn width band (14-40 ft) is a
     drawing calibration inside the attested 6-10 m dike widths.
 
     Caveat: the drawn width band (14-40 ft) is a drawing calibration inside the attested 6-10 m dike widths.

@@ -166,3 +166,4 @@
 - PondCanal (archetypes SECTION=150): REWRITTEN - the pond-to-canal link moved from "documented" into the Ruddle and Zhong clause
 - PondSluice (archetypes SECTION=150): REWRITTEN - drained two or three times a year, not at harvest; the gate's 0.80 m cap replaces the unsourced board width; the canal link and the dou reading labeled
 - SluiceGate (archetypes SECTION=150): REWRITTEN - the Note credits the Jiangnan polder account for drought and flood working and labels the dou reading a guess; its Sources tag still lacks cssn-jiangnan-weitian (a pinned snapshot field, left open)
+- PerimeterDike (archetypes SECTION=160): REWRITTEN - its Note now says that any gap re-flooding the block is this project's reasoning from the general polder page, not read
