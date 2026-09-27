@@ -170,7 +170,12 @@
  "Jodo Shinshu": {
   "def": "The True Pure Land school of Japanese Buddhism, whose temple priests could marry and pass the temple to a son.",
   "variants": [
-   "Jodo Shinshu"
+   "Jodo Shinshu",
+   "Jōdo Shinshū",
+   "Shinshū",
+   "Shin sect",
+   "Ikkō-shū",
+   "Ikkō"
   ]
  },
  "Kamakura period": {
@@ -2072,7 +2077,8 @@
  "jizo": {
   "def": "A roadside stone figure of the bodhisattva who protects travelers and the spirits of dead children, standing at passes and in villages.",
   "variants": [
-   "jizo"
+   "jizo",
+   "jizō"
   ]
  },
  "jokamachi": {
@@ -6452,6 +6458,196 @@
    "dispersed settlements",
    "dispersed villages",
    "dispersed farmsteads"
+  ]
+ },
+ "gōsha": {
+  "def": "The district-shrine rank in Japan's modern shrine registers: the chief shrine of a district of about twenty villages, one step above the village shrine.",
+  "variants": [
+   "gōsha",
+   "gosha"
+  ]
+ },
+ "sōchinju": {
+  "def": "A castle town's principal tutelary shrine, guarding the whole town rather than one quarter or village; Edo's was the Sannō shrine.",
+  "variants": [
+   "sōchinju",
+   "sochinju"
+  ]
+ },
+ "preceptor": {
+  "def": "A cleric of one of the setting's Orders; every town has one preceptor per Order, and a town preceptor serves in a town monastery, where the Order's monks live under them.",
+  "variants": [
+   "preceptor",
+   "preceptors"
+  ]
+ },
+ "Sōtō": {
+  "def": "A school of Zen Buddhism; the temples of the Hiki register quoted here and the Aichi training temple with its meditation hall and monks' dormitory are Sōtō.",
+  "variants": [
+   "Sōtō",
+   "Soto"
+  ]
+ },
+ "Tendai": {
+  "def": "A school of Japanese Buddhism; several of the Hiki district temples quoted in the record, Anyōji among them, are Tendai.",
+  "variants": [
+   "Tendai"
+  ]
+ },
+ "Martial temple": {
+  "def": "In a Chinese walled city, the temple to the god of war, set opposite the Confucian temple across the main street, as at Pingyao.",
+  "variants": [
+   "Martial temple",
+   "Martial temples"
+  ]
+ },
+ "jōgōe-chi": {
+  "def": "One of the ranks of a Sōtō temple, with the kata-hōdōe-chi and the zuiie-chi, at which the ninety-day training retreat was held in the Edo period and a full set of halls was required.",
+  "variants": [
+   "jōgōe-chi",
+   "kata-hōdōe-chi",
+   "zuiie-chi"
+  ]
+ },
+ "Chinese-style gate": {
+  "def": "A Japanese gate type named for its Chinese-style roof (a curved, cusped gable), not a gate built in China. It marked a shrine or temple of some standing; Sano's district shrine Asahimori had one.",
+  "variants": [
+   "Chinese-style gate",
+   "Chinese-style gates",
+   "karamon"
+  ]
+ },
+ "adept": {
+  "def": "In this setting, a monk of the rank that may marry and raise children. A married adept's family lives in an ordinary home near the temple.",
+  "variants": [
+   "adept",
+   "adepts"
+  ]
+ },
+ "initiate": {
+  "def": "In this setting, a lay person studying religion under a temple while working an ordinary job. A temple has about twice as many initiates as monks, and only a few of them sleep inside its walls.",
+  "variants": [
+   "initiate",
+   "initiates"
+  ]
+ },
+ "tsujido": {
+  "def": "A small open wayside hall on four corner posts under a tiled roof, with a board floor about two mats in size, built by a settlement beside a road for travelers to rest and later housing a jizo or other stone image.",
+  "variants": [
+   "tsujido",
+   "tsujidos",
+   "wayside hall",
+   "wayside halls"
+  ]
+ },
+ "koshin tower": {
+  "def": "A roadside stone of the koshin cult, one of the stones that stand together at the entrance to a village beside its dosojin.",
+  "variants": [
+   "koshin tower",
+   "koshin towers"
+  ]
+ },
+ "shugen": {
+  "def": "the mountain-ascetic order of Japan, mixing Buddhism with the worship of mountain gods; its practitioners are the shugenja",
+  "variants": [
+   "shugen",
+   "Shugendō"
+  ]
+ },
+ "Kōshin": {
+  "def": "a folk cult that keeps watch through the night of the Kōshin day, which comes once in every sixty days; a Kōshin hall is its small place of worship",
+  "variants": [
+   "Kōshin",
+   "Koshin"
+  ]
+ },
+ "Yakushi": {
+  "def": "the Medicine Buddha, prayed to for healing; a Yakushi hall houses his image",
+  "variants": [
+   "Yakushi"
+  ]
+ },
+ "Amida": {
+  "def": "The Buddha of Infinite Light, whose Pure Land the Jodo and Jodo Shinshu sects pray to be reborn in; halls to Amida stood in many villages before they became temples.",
+  "variants": [
+   "Amida",
+   "Amida Buddha"
+  ]
+ },
+ "Shakyamuni": {
+  "def": "The historical Buddha, Siddhartha Gautama, founder of Buddhism.",
+  "variants": [
+   "Shakyamuni",
+   "Shakyamuni Buddha"
+  ]
+ },
+ "Fudo": {
+  "def": "A fierce guardian deity of esoteric Buddhism, shown holding a sword and a rope against a background of flames.",
+  "variants": [
+   "Fudo",
+   "Fudō",
+   "Fudo Myoo",
+   "Fudō Myōō"
+  ]
+ },
+ "visiting grave": {
+  "def": "In the two-grave system, the grave a family visits and worships at, often in a temple's grounds, set apart from the sanmai where the body is buried.",
+  "variants": [
+   "visiting grave",
+   "visiting graves"
+  ]
+ },
+ "monto": {
+  "def": "The followers of Jodo Shinshu, the Shin sect; the Aki monto were its followers in Aki, the old province around Hiroshima, where cremation was the custom.",
+  "variants": [
+   "monto",
+   "Aki monto"
+  ]
+ },
+ "kō": {
+  "def": "A lay devotional society of a settlement's households, which could own a shared facility such as a cremation ground its members built themselves.",
+  "variants": [
+   "kō",
+   "kō group",
+   "ko"
+  ]
+ },
+ "two-grave": {
+  "def": "A custom in which the dead are buried at one grave, the burial grave, set apart from the houses, while a second grave nearer home or at the temple, the visiting grave, is the one the family visits.",
+  "variants": [
+   "two-grave",
+   "two-grave villages",
+   "two-grave settlements",
+   "burial grave",
+   "burial graves"
+  ]
+ },
+ "fire bed": {
+  "def": "The spot at a cremation ground where the pyre of wood or straw was laid and the body burned.",
+  "variants": [
+   "fire bed",
+   "fire beds"
+  ]
+ },
+ "country monk": {
+  "def": "In this setting, the one tax-free religious figure of a village district, who tends the village's shrine; their dwelling may double as the shrine itself.",
+  "variants": [
+   "country monk",
+   "country monks"
+  ]
+ },
+ "Meiwa": {
+  "def": "The Japanese era name for the years 1764 to 1772; a date written \"Meiwa 2\" is 1765.",
+  "variants": [
+   "Meiwa",
+   "Meiwa era"
+  ]
+ },
+ "Nehan gate": {
+  "def": "A gate of a temple or mausoleum named for nehan, the Japanese word for nirvana: the Buddha's final release from rebirth.",
+  "variants": [
+   "Nehan gate",
+   "Nehan"
   ]
  }
 }

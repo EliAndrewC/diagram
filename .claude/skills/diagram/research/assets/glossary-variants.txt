@@ -7,14 +7,19 @@ aburaya	aburaya
 abutment	abutment
 abutments	abutment
 across the beams	ridge span
+adept	adept
+adepts	adept
 adlittoral	adlittoral
 ake-mutsu	ake-mutsu
+aki monto	monto
 akiba	Akiba
 akusui	akusui
 alluvial fan	alluvial fan
 alluvial fans	alluvial fan
 along the ridge	ridge span
 alternate attendance	alternate attendance
+amida	Amida
+amida buddha	Amida
 an'ei	An'ei
 anaerobic	anaerobic
 anagama	noborigama
@@ -119,6 +124,8 @@ burakumin	burakumin
 burgage	burgage plot
 burgage plot	burgage plot
 burgage plots	burgage plot
+burial grave	two-grave
+burial graves	two-grave
 bursaries	rent bursary
 bursary	rent bursary
 bushi	bushi
@@ -159,6 +166,8 @@ chenghuangmiao	chenghuangmiao
 chi	chi
 chikaraishi	chikaraishi
 china fir	China fir
+chinese-style gate	Chinese-style gate
+chinese-style gates	Chinese-style gate
 chinju	chinju
 chinju no mori	chinju no mori
 chinjusan	chinju
@@ -211,6 +220,8 @@ coppicing	coppice
 copse	copse
 corvee	corvee
 corvée	corvee
+country monk	country monk
+country monks	country monk
 county seat	county seat
 county seats	county seat
 coursed	coursing
@@ -420,6 +431,8 @@ fines	fines
 fingerling	fingerling
 fingerlings	fingerling
 fining	fining
+fire bed	fire bed
+fire beds	fire bed
 fire gap	fire gap
 fire gaps	fire gap
 fire water	fire-water
@@ -466,8 +479,12 @@ freeboard	freeboard
 frontage	frontage
 fu	fu
 fudasashi	fudasashi
+fudo	Fudo
+fudo myoo	Fudo
 fudoki	fudoki
 fudoki ko	fudoki
+fudō	Fudo
+fudō myōō	Fudo
 fukada	fukada
 fukugi	fukugi
 funairi-bori	funairi-bori
@@ -520,6 +537,7 @@ gokaido	Five Highways
 gokumon	gokumon
 gongxiefang	gongxiefang
 gorinto	five-ring pagoda
+gosha	gōsha
 goshi	gōshi
 goten	goten
 goulan	goulan
@@ -537,6 +555,7 @@ guanxiang	guanxiang
 gulou	gulou
 gundai	gundai
 gō	go
+gōsha	gōsha
 gōshi	gōshi
 hachiman	Hachiman
 hachure	hachure
@@ -645,6 +664,8 @@ ieyasu	Ieyasu
 ieyasu's	Ieyasu
 igeta	igeta
 igune	igune
+ikkō	Jodo Shinshu
+ikkō-shū	Jodo Shinshu
 imperial spine	Imperial spine
 important cultural landscape	Important Cultural Landscape
 important cultural landscapes	Important Cultural Landscape
@@ -652,6 +673,8 @@ important cultural properties	Important Cultural Property
 important cultural property	Important Cultural Property
 inari	Inari
 inashiro	Inashiro
+initiate	initiate
+initiates	initiate
 inkyo	inkyo
 intake	intake
 intake mouth	intake
@@ -708,6 +731,7 @@ jitter	jitter
 jittered	jitter
 jittering	jitter
 jizo	jizo
+jizō	jizo
 jo	jo
 jobikeshi	jobikeshi
 jochi	jochi
@@ -723,6 +747,8 @@ josui-ido	josui-ido
 junk	junk
 junks	junk
 jōdo	Jodo
+jōdo shinshū	Jodo Shinshu
+jōgōe-chi	jōgōe-chi
 jōsui ido	josui-ido
 kabata	kabata
 kabu-ido	kabu-ido
@@ -754,12 +780,14 @@ kantō	Kanto
 kaogongji	Kaogongji
 karamete	karamete-mon
 karamete-mon	karamete-mon
+karamon	Chinese-style gate
 karo	karo
 kashi	kashi
 kaso-dera	kaso-dera
 kasoba	kasoba
 kasō-dera	kaso-dera
 kata	kata
+kata-hōdōe-chi	jōgōe-chi
 katairo	eiro
 kawara	kawara
 kawaramono	kawaramono
@@ -797,6 +825,7 @@ kishu school	Kishu school
 kishu-school	Kishu school
 knob	knob
 knobs	knob
+ko	kō
 kobito	kobito
 kochi seiri	kochi seiri
 kochi-seiri	kochi seiri
@@ -822,6 +851,9 @@ konya	kon-ya
 koraimon	koraimon
 kosatsu	kosatsuba
 kosatsuba	kosatsuba
+koshin	Kōshin
+koshin tower	koshin tower
+koshin towers	koshin tower
 kotai-yoriai	kotaiyoriai
 kotaiyoriai	kotaiyoriai
 kuchiireya	hitoyado
@@ -844,8 +876,11 @@ kyo-machiya	machiya
 kyoho	Kyoho
 kyuhi	kyuhi
 kyōhō	Kyoho
+kō	kō
+kō group	kō
 kōsatsu	kosatsuba
 kōsatsu-ba	kosatsuba
+kōshin	Kōshin
 lake tai	Lower Yangzi
 land consolidation	kochi seiri
 land readjustment	kochi seiri
@@ -910,6 +945,8 @@ manji era	Manji
 manning	Manning
 manning's formula	Manning
 maoqu	maoqu
+martial temple	Martial temple
+martial temples	Martial temple
 masson pine	masson pine
 masugata	masugata
 mat	tatami
@@ -919,6 +956,8 @@ meander	meander
 meibutsu	meibutsu
 meiji	Meiji
 meireki	Meireki
+meiwa	Meiwa
+meiwa era	Meiwa
 men-hai	taiping-gang
 menbansho	menbansho
 mengxi bitan	Mengxi Bitan
@@ -950,6 +989,7 @@ mongol yam	yam
 monk outlet	monk outlet
 monk-style outlet	monk outlet
 monospecific	monospecific
+monto	monto
 monzen	monzen
 morijio	morijio
 morisada manko	Morisada manko
@@ -998,6 +1038,8 @@ nawabari	nawabari
 nawate	azemichi
 naya	naya
 near-monospecific	monospecific
+nehan	Nehan gate
+nehan gate	Nehan gate
 neige	neige
 nengu	nengu
 neribei	neribei
@@ -1109,6 +1151,8 @@ post-horse system	post-horse system
 post-station	shukuba
 post-stations	shukuba
 postern	postern
+preceptor	preceptor
+preceptors	preceptor
 precinct	precinct
 precincts	precinct
 prefectural cities	prefectural city
@@ -1257,6 +1301,8 @@ shadoof	jiegao
 shahi	shahi
 shaku	shaku
 shakuhachi	shakuhachi
+shakyamuni	Shakyamuni
+shakyamuni buddha	Shakyamuni
 shaso	shasō
 shasō	shasō
 shatian	shatian
@@ -1271,9 +1317,11 @@ shichiya	shichiya
 shijin soo	four gods
 shijin-soo	four gods
 shimenawa	shimenawa
+shin sect	Jodo Shinshu
 shinai	shinai
 shinden	shinden
 shinsei	Shinsei
+shinshū	Jodo Shinshu
 shirasu	oshirasu
 shirimito	shirimito
 shironameshi	shironameshi
@@ -1296,6 +1344,8 @@ shoulder month	shoulder month
 showa	Showa
 shoya	shoya
 shubiki	shubiki
+shugen	shugen
+shugendō	shugen
 shugenja	shugenja
 shuikou	shuikou
 shuimen	water gate
@@ -1315,6 +1365,7 @@ six ministries	Six Ministries
 skimmer wall	skimmer wall
 sluice	sluice
 sluices	sluice
+sochinju	sōchinju
 soffit	soffit
 soffits	soffit
 sogamae	sogamae
@@ -1324,6 +1375,7 @@ song dynasty	Song dynasty
 song yingxing	Song Yingxing
 song-dynasty	Song dynasty
 sonsha	sonsha
+soto	Sōtō
 sotobori	sotobori
 south town magistrate	town magistrate
 southern song	Song dynasty
@@ -1382,6 +1434,8 @@ suzaku ōji	Suzaku-oji
 suzaku-oji	Suzaku-oji
 suzaku-ōji	Suzaku-oji
 sward	sward
+sōchinju	sōchinju
+sōtō	Sōtō
 tagoshi	tagoshi kangai
 tagoshi kangai	tagoshi kangai
 taihu	Lower Yangzi
@@ -1416,6 +1470,7 @@ tax-free plot	tax-free plot
 tedai	tedai
 teikaku	teikaku
 temizuya	temizuya
+tendai	Tendai
 tenpo	Tenpo era
 tenpo era	Tenpo era
 tenshu	tenshu
@@ -1477,6 +1532,8 @@ trunk streets	trunk street
 tsubo	tsubo
 tsuijibei	tsuijibei
 tsuijimatsu	tsuijimatsu
+tsujido	tsujido
+tsujidos	tsujido
 tsuke-tsubo	tsuke-tsubo
 tsunaba	tsunaba
 tudi miao	tudi miao
@@ -1484,6 +1541,9 @@ tudigong	tudi miao
 tulou	tulou
 tulous	tulou
 twelve-mat	tatami
+two-grave	two-grave
+two-grave settlements	two-grave
+two-grave villages	two-grave
 tōhoku	Tohoku
 tōkaidō	Tokaido
 tōya	miyaza
@@ -1512,6 +1572,8 @@ verge	verge
 verges	verge
 vermilion line	shubiki
 village district	village district
+visiting grave	visiting grave
+visiting graves	visiting grave
 votive plaque	votive plaque
 votive plaques	votive plaque
 wagon inn	wagon inn
@@ -1542,6 +1604,8 @@ water mouth	water-mouth
 water tail	water-mouth
 water-mouth	water-mouth
 water-tail	water-mouth
+wayside hall	tsujido
+wayside halls	tsujido
 wazi	goulan
 weathering	weathering
 wei-tian	weitian
@@ -1580,6 +1644,7 @@ yacheng	yacheng
 yachida	yato
 yagura	yagura
 yaita	yaita
+yakushi	Yakushi
 yam	yam
 yamen	yamen
 yamen god	yamen-god
@@ -1631,6 +1696,7 @@ zonation	zonation
 zone of separated flow	separation zone
 zongjia	zongjia
 zooplankton	zooplankton
+zuiie-chi	jōgōe-chi
 zuku	zuku
 ō-aza	ō-aza
 ōiya	ōiya
