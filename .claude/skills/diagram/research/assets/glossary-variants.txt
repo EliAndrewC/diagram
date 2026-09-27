@@ -585,6 +585,7 @@ heian-kyo	Heian-kyo
 heian-kyo's	Heian-kyo
 heian-kyō	Heian-kyo
 heian-kyō's	Heian-kyo
+heibonsha	Heibonsha
 heijo-kyo	Heijo-kyo
 heijo-kyo's	Heijo-kyo
 heijō-kyō	Heijo-kyo
@@ -1024,6 +1025,7 @@ noborigama	noborigama
 nogyo zensho	Nogyo Zensho
 normal depth	normal depth
 northern song	Song dynasty
+northern wei	Northern Wei
 nrcs	NRCS
 nrcs-designed	NRCS
 nucleated	nucleated
