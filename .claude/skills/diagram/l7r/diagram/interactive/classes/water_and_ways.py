@@ -202,12 +202,9 @@ class FieldRock(Kind):
     gets one to three - enough that the reader meets the obstacle the terrace was cut around, few enough
     that the field still reads as worked ground.
 
-    Caveat: no source counts how many, so a terraced field gets one to three - enough that the reader meets the
-    obstacle the terrace was cut around, few enough that the field still reads as worked ground.
-
     Name: field rock
     Covers: `field_rocks` - a bedrock outcrop inside a plot
-    Label: accurate
+    Label: guess
     Sources: not recorded
     Entry: research/fields.html - 'In-field features - flat flooded paddy hosts obstacles least'
     """

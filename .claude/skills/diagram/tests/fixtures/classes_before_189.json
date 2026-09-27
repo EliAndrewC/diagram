@@ -253,7 +253,7 @@
     "covers": "`field_rocks` - a bedrock outcrop inside a plot",
     "entry": "research/fields.html - 'In-field features - flat flooded paddy hosts obstacles least'",
     "key": "field rock",
-    "label": "accurate",
+    "label": "guess",
     "label_note": "Which archetypes host an outcrop is read (corroborated); no source counts how many, so a terraced field gets one to three - enough that the reader meets the obstacle the terrace was cut around, few enough that the field still reads as worked ground.",
     "name": "field rock",
     "siblings": {
