@@ -34,9 +34,10 @@
 - [ ] T05 FR-002 and FR-006 for `urban-features`, by 250's process
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
-- [ ] T06 FR-006 for `cities/capitals`, by 250's process
+- [x] T06 FR-006 for `cities/capitals`, by 250's process
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. cities/capitals group 4 of 4 (session 2d): questions 330 and 336 checked (quote-check x2, record-format x2), 21 EDIT blocks applied, 3 skipped (bracket glosses inside verbatim quotes), 2 labeled by hand; one re-check round (quote-check x2): 330 one clause narrowed, 336 clean; 2 glossary terms (Bunka, Morisada manko); re-check bundle's quote-verbatim cut fixed and tested; FR-006 worklist 92 bare items: 82 FOOTNOTED, 9 NOT-LOCATED, 1 TOO-SHORT
 
 ## Phase 2 - the sweeps (was 250's T20-T22)
 
