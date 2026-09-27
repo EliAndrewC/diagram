@@ -32,3 +32,9 @@
 - Persimmon (homesteads SECTION=218): REWRITTEN - IN-STEP on first check, but the Why: now keeps the source's hedge on Miyazaki ("is said to have urged")
 - VillageLane (homesteads SECTION=080): IN-STEP - every read/unread split in the Note: still matches 080
 - Woodpile (homesteads SECTION=212): REWRITTEN - the guessed wall is now the kura's outer wall, as the section names it
+- DuckPen (archetypes SECTION=170): IN-STEP - 170's one duck line still points to the pigs-and-ducks question, and nothing the modal's Note counts depends on 170.
+- FishPond (archetypes SECTION=140): IN-STEP - the ratio in both orders, the GM's water-heavy ruling and the 0.4-0.6 ha band still stand; what moved in 140 is mulberry and bank detail the modal does not claim.
+- MulberryDike (archetypes SECTION=140): IN-STEP - ratio, loop, planting density and the unsourced crown width all still match; the Sources line's chi-2024-dike-pond-commons (dikes eroded 20 m to under 4 m) is not in the body and would need a source-reader pass before the width comparison could use it.
+- PigSty (archetypes SECTION=170): IN-STEP - 170 only asserts pigs on the dikes and defers the detail to 171.
+- PigSty (archetypes SECTION=171): IN-STEP - 171 is 170's split-out, and every modal claim and Note label still holds.
+- PigSty (archetypes SECTION=180): REWRITTEN - Why: gained 180's manure-rate and dead-patch paragraph (too many pigs, airless water under the shed, spread by buckets and channels, not drawn); Sources gained fao-ac257e and fao-x6708e; re-check IN-STEP.
