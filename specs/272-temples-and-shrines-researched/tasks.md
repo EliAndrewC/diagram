@@ -5,10 +5,11 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D6).
 - [x] T01 Briefs and queues (D2, D3): `briefs/gen.py`, `briefs/queue.sh`; queues 1-3 started
       research: rendering
       verify: DONE. queues started 2026-09-27 in .clones/diagram-shrines-1 (S, B37), -2 (R2, R3), -3 (R4, T); plan review CLEAR at round 2
-- [ ] T02 Group S - the country shrine's open questions: every absence note and guess in 090-128 searched twice,
+- [x] T02 Group S - the country shrine's open questions: every absence note and guess in 090-128 searched twice,
       D50, D51, the COVERED rows confirmed; written and checked (FR-001, FR-002)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. DONE. Every absence note and guess in 090-128 searched a second time (reader S, then the write session's curl retries): answered where a page read (100's village shrine siting, 120's two measured village halls, 120's one-bay sanctuary share, 126's sacred tree, 1799 lantern, 128's tax-exempt shrine land), new question 121 (the country monk's dwelling), the rest silent with both searches named; D50, D51 silent after two searches; A133, A135, D49, D52-D56 confirmed; checks a-g applied; the corrections the key checks owed 090 and 110 applied and re-checked (VERBATIM). FR-007: none
 - [x] T03 Group R2 - town monasteries, town and city shrines, clergy housing (450-490; edits 040 and its note, 210) (FR-001, FR-002)
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
