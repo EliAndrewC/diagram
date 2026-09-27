@@ -79,7 +79,7 @@ live pool rolls no torii, so a changed roll is a regression to diagnose, not an 
 D1-D7 are in [`research.md`](research.md), "Design decisions": the pitch 12 ft (a guess inside the
 GM's band, two ken); every avenue at the pitch; the arch drawn in plan, true size, with the stroke floor
 as convention; the wall-shortening floor at the glyph's drawn depth plus one px; the sheet's arch in
-plan; the grove's outline on the map (about 667 tsubo, measured at T-map); the enclosure check. Two
+plan; the grove's outline on the map (about 620 tsubo, inside the typical band, measured at T-map), the sacred tree and the basin beside the approach; the enclosure check. Two
 more:
 
 - **D8 - the hand edit's artifacts.** The frozen map's manifest is tracked; its svg and png are

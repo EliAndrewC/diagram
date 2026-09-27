@@ -1,0 +1,88 @@
+{
+ "feature": "268-shrine-grounds-researched",
+ "plan_sha256": "118a0050063481e7ffcbdfdb5ea89758a5aa7d38f5eb0ea72735fb079380e9fa",
+ "reviewed": "2026-09-27",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "The torii pitch is 12 ft (two ken), a guess inside the GM's 10-13 ft band",
+   "class": "within",
+   "why": "FR-010 asks for a single value within 10-13 ft; 12 is one; labeled a guess inside a GM ruling"
+  },
+  {
+   "id": "D2",
+   "summary": "Every avenue laid at the pitch; the cap-and-band rule and the ~30 ft village exception retired; the village roll uses the same stride and threshold",
+   "class": "within",
+   "why": "FR-010 and US3 scenarios 1-2 ('every avenue at every scale', town/city re-laid). D2 is silent on the designated donation-row exemption, which FR-010 keeps: it must survive in the rewritten rule and record entry 090, not be swept away by 'everywhere'"
+  },
+  {
+   "id": "D3",
+   "summary": "The arch glyph drawn in plan at true size (kasagi bar plus two post squares), stroke floor as convention",
+   "class": "within",
+   "why": "FR-011 asks for a glyph that does not overlap at 1/2/3 ft/px and still reads as an arch, its class recorded at the point of change; the GM asked that 'the drawing floor needs a look'"
+  },
+  {
+   "id": "D4",
+   "summary": "The wall-shortening floor at the glyph's drawn depth plus one px, never above the pitch",
+   "class": "within",
+   "why": "FR-011 (the avenue's drawing floor revised)"
+  },
+  {
+   "id": "D5",
+   "summary": "The sheet's arch in plan per D3; the elevation-depth disclosure retires with the glyph",
+   "class": "within",
+   "why": "FR-008 (arches at the new pitch) and FR-011"
+  },
+  {
+   "id": "D6a",
+   "summary": "The grove outline on the village map from 20 ft behind the well to the outermost arch, ~120 ft wide at the hall narrowing to ~60 ft on the avenue, ~667 tsubo measured at T-map",
+   "class": "within",
+   "why": "FR-007's reach (every side of hall and sanctuary, past the well, to the outermost arch). Condition: FR-007 also requires the area inside the register band FR-005 records. 667 tsubo is above the 150-650 'typical' band R2 heads with and the session reported to the GM, and is not 'the Tochigi median' (R2 gives 655). The band written at T-program must be R2's figures as found, not widened to fit the grove; if it is the typical band, the outline is trimmed (the well may stand at the grove's edge per FR-007)"
+  },
+  {
+   "id": "D6b",
+   "summary": "The sacred tree seated north-east of the sanctuary",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The GM chose 'a grove around the shrine, plus the sacred tree and a stone basin by the approach'; the accepted spec writes 'a sacred tree and a stone basin beside the approach' (FR-007, and US2 lists them as one item). The words are ambiguous as to whether 'by the approach' governs the tree, but a tree beside the approach satisfies every reading and a tree behind the sanctuary satisfies only one. No impossibility (the grove runs 84 ft along the approach), no GM words elsewhere place it behind the hall, and R4 records nothing on the tree's position. Choosing the one-reading placement unflagged is completing the GM's thought. Fix: seat the tree beside the approach inside the grove, or put the placement to the GM"
+  },
+  {
+   "id": "D6c",
+   "summary": "The stone basin beside the approach at the innermost arch",
+   "class": "within",
+   "why": "FR-006, FR-007: 'a stone basin beside the approach'"
+  },
+  {
+   "id": "D6d",
+   "summary": "Manifest entries: village_groves role shrine, tree_crowns the sacred tree, wells the basin flagged basin, torii the seven at the pitch",
+   "class": "within",
+   "why": "FR-007: the drawing and the manifest edited together, so matches_map holds the sheet to them (US2 scenario 2)"
+  },
+  {
+   "id": "D7",
+   "summary": "no_precinct_enclosure replaces fence_not_wall: a fence, wall or hedge enclosing the hall fails; a sanctuary-only fence passes",
+   "class": "within",
+   "why": "FR-004 (a sheet that draws a precinct enclosure fails the program check) and the spec's edge case keeping a sanctuary-only fence as a wealth item; enforcement of the request"
+  },
+  {
+   "id": "D8",
+   "summary": "The hand edit: the mirror's gitignored svg edited in place and the png re-rasterized with the gen's resvg call; manifest and notes carry the edit in git; the gen's SHRINE_TORII stride brought to the pitch",
+   "class": "within",
+   "why": "FR-007 (drawing and manifest together, notes record the edit, not regenerated); aligning the gen's stride keeps a future conversion on the edited avenue. Where the edit is made is process, not fidelity"
+  },
+  {
+   "id": "D9",
+   "summary": "The crop check's viewbox_cropped row stops excusing on-map sheets; frame_is_the_maps removed; buildings.md revised; matches_map still holds every map feature inside the frame",
+   "class": "within",
+   "why": "FR-009 verbatim"
+  },
+  {
+   "id": "R4-not-drawn",
+   "summary": "Subsidiary shrines, office, votive-plaque hall, portable-shrine store not drawn; the no-worship-hall form and the Chinese opera stage disclosed, not knobs",
+   "class": "within",
+   "why": "FR-006 carries 'the knobs the research directs'; R4 found no village-scale evidence for the first four, and the one-roof hall is the program's existing GM form, which the request does not touch"
+  }
+ ],
+ "verdict": "BLOCKED"
+}

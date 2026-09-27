@@ -39,7 +39,7 @@ The research pass ran first (constitution XII). In one line each:
   village form of the purification stop); guardian dogs, lanterns and strength stones (late-Edo
   villager donations - a wealth matter); a farmers' stage and a sumo ring (attested, not general).
   (The figures from the research: observed 2026-09-27; method: read from the reader reports in
-  `reader-reports/`, each quoting its page, the 3-4 m labeled there as the reader's own arithmetic. The
+  `reader-reports/` and summarized in `research.md` R1-R4, each quoting its page, the 3-4 m labeled there as the reader's own arithmetic. The
   30 ft and the 385 tsubo: observed 2026-09-27; method: read off `settlement/_geom/walls.py` and the
   sheet's notes. The 10-13 ft is the GM's ruling in `request.md`.)
 
@@ -221,19 +221,19 @@ exemplar and fails on a fixture that draws a precinct fence.
 
 ## Success Criteria *(mandatory)*
 
-- **SC-001**: The GM's four questions each have an answer on the record with at least one verbatim-quoted,
+- **SC-001** (FR-001, FR-002, FR-003): The GM's four questions each have an answer on the record with at least one verbatim-quoted,
   readable source (or an absence note where none exists), all checks confirmed.
-- **SC-002**: The shrine sheet draws no enclosure around its precinct. Measured over the sheet's WHOLE
+- **SC-002** (FR-004, FR-005, FR-006, FR-007, FR-008): The shrine sheet draws no enclosure around its precinct. Measured over the sheet's WHOLE
   frame, every piece of ground is one of: a building or its fixtures, the swept clearing at the hall and
   sanctuary, the approach, a map feature (the well, the basin, the sacred tree), or grove; bare ground
   that is none of these exists only outside the grove's edge and the approach's foot, as a border no
   deeper than the crop checklist's margin. Built and swept ground together is a small share of the
   precinct, the rest grove.
-- **SC-003**: No side of the sheet's frame leaves more than the crop checklist's border of empty
+- **SC-003** (FR-009): No side of the sheet's frame leaves more than the crop checklist's border of empty
   parchment.
-- **SC-004**: On the sheet and the village map, consecutive arches stand 10-13 ft apart and no two arch
+- **SC-004** (FR-007, FR-008, FR-010, FR-011; research.md R3): On the sheet and the village map, consecutive arches stand 10-13 ft apart and no two arch
   glyphs overlap; a generated avenue at every scale does the same. (The 30 ft and the 10-13 ft: observed 2026-09-27; method: the 30 ft read off `settlement/_geom/walls.py` and the village manifests, the 10-13 ft the GM's ruling in `request.md`.)
-- **SC-005**: `make done` is green, and every review pass is a row in the ledger.
+- **SC-005** (spec-wide; FR-012): `make done` is green, and every review pass is a row in the ledger.
 
 ## Assumptions
 

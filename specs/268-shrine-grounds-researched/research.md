@@ -105,7 +105,10 @@ is not held to a map.
   arches) and 13 ft (no reason to prefer the band's top).
 - **D2 - every avenue is laid at the pitch.** The cap-and-band rule ("within the band the gen's spacing
   stands; village avenues at ~30 ft deliberately left alone") goes: the stride is the pitch, everywhere,
-  and the village roll lays its arches through the same stride and threshold.
+  and the village roll lays its arches through the same stride and threshold. The designated
+  donation-row sites (the GM's ruling of 2026-07-25: Shinden Togashi, the Temple of Amaterasu, the Ki Rin
+  Shrine and their like) keep their exemption: they are denser than the pitch, drawn as explicit
+  outliers, and the rewritten rule and entry 090 say so.
 - **D3 - the arch is drawn in PLAN, true size.** The elevation glyph (posts drawn standing, ~10 ft deep on
   paper at a 16 ft span) cannot stand at a 12 ft pitch - neighbors would touch. A torii seen from above
   is its top beam (kasagi, about 1.4 ft wide) with its two posts beneath: the glyph becomes that beam as a
@@ -119,11 +122,14 @@ is not held to a map.
 - **D5 - the sheet's arch** follows D3 at 3 px/ft: the kasagi a 15 by 1.5 ft bar, the posts 1.2 ft
   squares 10.7 ft apart clear, over the 10 ft approach. The notes' "about 8 ft deep in plan against a
   real 1.5-2 ft (a vocabulary convention)" disclosure retires with the glyph it described.
-- **D6 - the grove on the map.** A grove outline from 20 ft behind the shrine well to the outermost arch:
-  about 120 ft wide behind and around the hall, narrowing to about 60 ft along the avenue - about 667
-  tsubo (the Tochigi median, inside the Saitama range's top), measured on the drawn outline at T-map. The
-  sacred tree stands north-east of the sanctuary; the basin beside the approach at the innermost arch.
-  The map's `village_groves` gains an entry of role `shrine`, `tree_crowns` the sacred tree, `wells` the
-  basin (flagged `basin`), `torii` the seven at the pitch.
+- **D6 - the grove on the map.** (a) A grove outline with the shrine well at its back edge (FR-007
+  allows the edge) to the outermost arch: about 120 ft wide behind and around the hall, narrowing to about
+  60 ft along the avenue - about 620 tsubo by this plan's arithmetic, inside the typical 150-650 band R2
+  opens with, measured on the drawn outline at T-map and trimmed if it comes out above 650. The band
+  T-program writes is R2's figures as found, never widened to fit the grove. (b) The sacred tree stands
+  BESIDE THE APPROACH, inside the grove - the GM's "the sacred tree and a stone basin by the approach";
+  (c) the basin beside the approach at the innermost arch, on the other side. (d) The map's
+  `village_groves` gains an entry of role `shrine`, `tree_crowns` the sacred tree, `wells` the basin
+  (flagged `basin`), `torii` the seven at the pitch.
 - **D7 - the precinct check.** `fence_not_wall` becomes `no_precinct_enclosure`: a fence, wall or hedge
   group whose bounds enclose the hall fails; a fence around the sanctuary alone does not. (Figures observed 2026-09-27; method: read from the reader report this section names, or, for the project's own values, off the engine and the sheet.)
