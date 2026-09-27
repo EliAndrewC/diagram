@@ -16,7 +16,8 @@ Q="$(dirname "$ROOT")/$(basename "$ROOT")-$N"
 [ -d "$Q/.git" ] || { echo "pull-queue: no queue clone at $Q" >&2; exit 2; }
 # the check briefs a queue's write session generates are left untracked by the sessions that run them (queue 2 of
 # feature 265, the first pull-back); they are the queue's record, so a finished queue's are committed here
-if [ -n "$(git -C "$Q" status --porcelain)" ] && [ -z "$(git -C "$Q" status --porcelain | grep -v '^?? specs/[^/]*/briefs/')" ]; then
+# (-uall: without it a new untracked directory is listed as `?? specs/`, never as the brief inside it)
+if [ -n "$(git -C "$Q" status --porcelain)" ] && [ -z "$(git -C "$Q" status --porcelain -uall | grep -v '^?? specs/[^/]*/briefs/')" ]; then
   git -C "$Q" add specs && git -C "$Q" commit -q -m "queue $N: the check briefs its sessions ran"
 fi
 [ -z "$(git -C "$Q" status --porcelain)" ] || { echo "pull-queue: $Q has uncommitted work - its queue is still running" >&2; exit 2; }
