@@ -24,6 +24,7 @@ apron	apron
 aprons	apron
 aqueduct	aqueduct
 aquifer	aquifer
+araiba	kawado
 artesian	artesian
 ashigaru	ashigaru
 ashigaru nagaya	ashigaru-nagaya
@@ -61,6 +62,7 @@ bannerman	hatamoto
 bannerman's	hatamoto
 bannermen	hatamoto
 bansho	bansho
+bansui	bansui
 banyuetang	banyuetang
 barbican	barbican
 baren	baren
@@ -107,6 +109,7 @@ bugyosho	machi-bugyosho
 buke	bushi
 buke-chi	buke-chi
 buke-yashiki	buke-yashiki
+bunboku	bunboku
 bund	bund
 bunded	bund
 bunds	bund
@@ -151,6 +154,8 @@ celestial order	Celestial Order
 center-pivot	center-pivot
 cesspit	koedame
 cesspits	koedame
+chain pump	chain pump
+chain pumps	chain pump
 chan	Chan
 chan buddhism	Chan
 chang'an	Chang'an
@@ -321,6 +326,8 @@ doshin	doshin
 dosojin	dosojin
 dozo	kura
 dozō	kura
+dragon-bone wheel	chain pump
+dragon-bone wheels	chain pump
 drainage ditch	drainage ditch
 drainage ditches	drainage ditch
 draw-basin	draw-basin
@@ -470,6 +477,7 @@ fudoki	fudoki
 fudoki ko	fudoki
 fukada	fukada
 fukugi	fukugi
+fumiguruma	treadle wheel
 funairi-bori	funairi-bori
 fung shui	fengshui grove
 fung shui wood	fengshui grove
@@ -761,6 +769,7 @@ kasoba	kasoba
 kasō-dera	kaso-dera
 kata	kata
 katairo	eiro
+kawado	kawado
 kawara	kawara
 kawaramono	kawaramono
 kawata	kawata
@@ -941,6 +950,8 @@ mizugaki	mizugaki
 mizugashira	mizugashira
 mizuguchi	mizuguchi
 mizujiri	shirimito
+mizuka	mizuya
+mizuya	mizuya
 mlit	MLIT
 modern consolidation	kochi seiri
 module	module
@@ -1012,6 +1023,8 @@ nihonbashi	Nihonbashi
 ninomaru	ninomaru
 noborigama	noborigama
 nogyo zensho	Nogyo Zensho
+noria	noria
+norias	noria
 normal depth	normal depth
 northern song	Song dynasty
 nrcs	NRCS
@@ -1468,6 +1481,8 @@ tozama daimyo	tozama
 transect	transect
 transects	transect
 tread	tread
+treadle wheel	treadle wheel
+treadle wheels	treadle wheel
 treads	tread
 trebuchet	trebuchet
 trebuchets	trebuchet
@@ -1517,6 +1532,7 @@ votive plaques	votive plaque
 wagon inn	wagon inn
 wagon inns	wagon inn
 wagon-inn	wagon inn
+waju	waju
 wakato	wakato
 walled ward	lifang
 wallow	wallow
@@ -1539,6 +1555,8 @@ water duty	water duty
 water gate	water gate
 water gates	water gate
 water mouth	water-mouth
+water pestle	water pestle
+water pestles	water pestle
 water tail	water-mouth
 water-mouth	water-mouth
 water-tail	water-mouth

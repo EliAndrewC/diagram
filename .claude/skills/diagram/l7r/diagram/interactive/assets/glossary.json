@@ -6453,5 +6453,68 @@
    "dispersed villages",
    "dispersed farmsteads"
   ]
+ },
+ "bansui": {
+  "def": "Rotation of irrigation water: which villages or fields may take water, how wide their channels may be and when their gates may open, fixed by rule, most strictly in a dry season.",
+  "variants": [
+   "bansui"
+  ]
+ },
+ "bunboku": {
+  "def": "A graduated stake set at the point where one ditch is split between two areas or villages, by whose marks the split is set.",
+  "variants": [
+   "bunboku"
+  ]
+ },
+ "treadle wheel": {
+  "def": "A small paddle wheel, about five feet across, that one person turned by treading its blades to lift ditch water about a yard up into a paddy; light enough to carry to wherever it was needed.",
+  "variants": [
+   "treadle wheel",
+   "treadle wheels",
+   "fumiguruma"
+  ]
+ },
+ "chain pump": {
+  "def": "The Chinese square-pallet pump (the dragon-bone wheel): an endless chain of boards drawn up a wooden trough, trodden by people or turned by an ox, lifting water a yard or two from a river or canal onto fields.",
+  "variants": [
+   "chain pump",
+   "chain pumps",
+   "dragon-bone wheel",
+   "dragon-bone wheels"
+  ]
+ },
+ "noria": {
+  "def": "A large water wheel set in a river, turned by the current, with tubes or buckets on its rim that lift water and tip it into a trough leading to the fields.",
+  "variants": [
+   "noria",
+   "norias"
+  ]
+ },
+ "mizuya": {
+  "def": "A flood refuge on a farmstead: a storehouse, sometimes fit to live in, built on a stone-faced mound higher than the house, stocked with food and bedding for the days a flood lasted.",
+  "variants": [
+   "mizuya",
+   "mizuka"
+  ]
+ },
+ "kawado": {
+  "def": "A shared washing place on a river or ditch bank: a footing or steps down to the water where vegetables and clothes were washed.",
+  "variants": [
+   "kawado",
+   "araiba"
+  ]
+ },
+ "water pestle": {
+  "def": "A water mill that pounds grain: a stream turns a wheel whose axle lifts and drops a row of pestles into mortars, to polish rice or crush grain.",
+  "variants": [
+   "water pestle",
+   "water pestles"
+  ]
+ },
+ "waju": {
+  "def": "A ring-diked community of the low river plains: villages and their fields enclosed by one continuous levee and bound together to defend it.",
+  "variants": [
+   "waju"
+  ]
  }
 }
