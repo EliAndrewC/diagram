@@ -1536,12 +1536,6 @@
    "funairi-bori"
   ]
  },
- "furigana": {
-  "def": "The small kana printed beside a Chinese character in Japanese text to give its reading.",
-  "variants": [
-   "furigana"
-  ]
- },
  "gabion": {
   "def": "A basket of woven bamboo or wicker packed with stones, used to build a weir or armor a bank.",
   "variants": [
@@ -6554,6 +6548,13 @@
   "variants": [
    "take-well",
    "take-wells"
+  ]
+ },
+ "contour canal": {
+  "def": "A canal dug along a contour line, so it stays nearly level across a slope instead of running down it; it can water only the ground below it.",
+  "variants": [
+   "contour canal",
+   "contour canals"
   ]
  }
 }

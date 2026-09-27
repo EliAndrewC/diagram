@@ -206,6 +206,8 @@ conservation headland	conservation headland
 conservation headlands	conservation headland
 consolidated paddies	kochi seiri
 consolidated paddy	kochi seiri
+contour canal	contour canal
+contour canals	contour canal
 cooper	cooper
 cooperage	cooper
 coopers	cooper
@@ -484,7 +486,6 @@ fung shui	fengshui grove
 fung shui wood	fengshui grove
 fung shui woods	fengshui grove
 furegaki	ofuregaki
-furigana	furigana
 fuse	fuse
 fusekoshi	inverted siphon
 gabion	gabion

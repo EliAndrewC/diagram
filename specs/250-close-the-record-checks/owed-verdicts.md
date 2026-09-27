@@ -159,3 +159,4 @@
 - FieldRock (fields SECTION=010): REWRITTEN - Why:, Note: and Caveat: now say which fields host a rock is a guess and no page read speaks of rocks in a paddy; Label stays accurate (the snapshot test pins it) - the relabel is raised in the handoff
 - GraveIsland (fields SECTION=010): REWRITTEN - "corroborated in Japan" replaced by a partial Japanese parallel and no page read for the north-China half
 - Millet (fields SECTION=050): LABELED - the Note now says the ridged rows are a guess (no page describes pre-modern dry-field sowing); Label: accurate kept for the catena placement it rests on
+- IrrigationDitch (water SECTION=240): IN-STEP - the fork along both margins, the tapering mains and the uncited fork distance all still stand; the new pointer to water/400 adds no finding the modal owes
