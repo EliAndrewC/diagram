@@ -200,3 +200,6 @@
 - MagistratesDais (buildings SECTION=010): IN-STEP - its one 010 claim, a court hall over kneeling litigants, still rests on the henan-neixiang footnote
 - Byre (homesteads SECTION=060): LABELED - the owned yard stable now says it rests on one encyclopedia sentence about wealthy Shaanxi courtyard houses, with no survey behind it
 - Stream (water SECTION=010): IN-STEP - the creek's ~2 m, the moat-feeder ruling and the 0.3 m ditch's standing all still hold; 271 K7 changes (city-canal row, conghua citation) do not touch the brook
+- particulars.River (ways SECTION=040): REWRITTEN - Note and Caveat now say the tax rice's going by water is recorded (kashi-jawiki) and only heavy freight in general rests on general reading; kashi-jawiki added to Sources
+- particulars.RiverLanding (ways SECTION=040): IN-STEP - the narrowed tax-rice claim and the kashi sentence touch nothing the modal says
+- particulars.Dock (ways SECTION=040): IN-STEP - the modal's Why (freight by boat on navigable water) is the section's rule unchanged

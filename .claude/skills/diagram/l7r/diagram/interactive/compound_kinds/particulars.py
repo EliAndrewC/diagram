@@ -153,16 +153,17 @@ class River(Kind):
 
     Note: Freight by water is a recorded finding, and the village granary is recorded as a temporary store for
     shipment, but that a well-watered county's office granary is a staging node its tax rice passes through is
-    the research's own reading, and so is the contrast with an isolated county's rows of granaries, whose one example (Takayama holding rice for all of Hida) has no readable source; the rule that only the Lion build canals is the setting's canon. That Japan's heavy freight also went by water rests on
-    general reading rather than a page a reader can open.
+    the research's own reading, and so is the contrast with an isolated county's rows of granaries, whose one example (Takayama holding rice for all of Hida) has no readable source; the rule that only the Lion build canals is the setting's canon. Edo-period river landings were set up
+    to carry the tax rice to Edo and Osaka. That Japan's tax rice went by water is recorded, but that its heavy
+    freight in general did rests on general reading rather than a page a reader can open.
 
-    Caveat: That Japan's heavy freight also went by water rests on general reading rather than a page a reader
-    can open.
+    Caveat: That Japan's tax rice went by water is recorded, but that its heavy freight in general did rests on
+    general reading rather than a page a reader can open.
 
     Name: river
     Covers: the river band and its labels
     Label: accurate
-    Sources: gokura-jawiki, nishimawari-koro-jawiki, takayama-jinya-city, takayama-jinya-jawiki, chinaknowledge-caoyun, daba-jawiki, chuma-jawiki
+    Sources: gokura-jawiki, nishimawari-koro-jawiki, takayama-jinya-city, takayama-jinya-jawiki, chinaknowledge-caoyun, daba-jawiki, chuma-jawiki, kashi-jawiki
     Entry: research/buildings.html - 'The granary is a staging node, not the terminal store'; research/ways.html - "Where does a village's freight go?"
     """
 

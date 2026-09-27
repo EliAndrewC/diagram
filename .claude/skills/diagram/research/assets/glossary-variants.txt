@@ -231,6 +231,7 @@ chronosequence	chronosequence
 chubu	Chubu
 chugen	chugen
 chugoku	Chugoku
+chuma	chuma
 chumon-zukuri	chumon-zukuri
 chōtsuke	chōtsuke
 chōzuya	temizuya
