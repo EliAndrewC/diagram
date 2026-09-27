@@ -71,3 +71,6 @@
 - WeighingFloor (urban-features SECTION=150): REWRITTEN - the Note now says the floor follows the record's reasoning but its premise (no standard bale weight) rests on no source read; re-check IN-STEP. `Label: accurate` left for the close
 - MainGate (towns SECTION=120): REWRITTEN - Note and Caveat now call facing what the manor fronts the project's own siting (the section's Evidence: liberty), only the southern fallback sourced, and Chinese; re-check IN-STEP, Label: accurate kept since the modal spans two other entries and the Caveat carries the siting
 - ApproachRoad (towns SECTION=120): REWRITTEN - Note and Caveat now call edge siting and the gate opening onto the fronted road the project's own, set against the drawn maps; re-check IN-STEP, Label: accurate kept as for MainGate
+- Dock (ways SECTION=040): IN-STEP - the modal takes only "freight on navigable water goes by boat" from 040, which the section still says; the changes were footnote and citation upkeep
+- River (ways SECTION=040): IN-STEP - water as the main freight route and canals only by the Lion still hold; the "general reading" label moved into a footnote with no change to the claim
+- RiverLanding (ways SECTION=040): IN-STEP - a posting on navigable natural water still gets its own landing under the section's rule; the changes were footnote and citation upkeep
