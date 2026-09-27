@@ -59,6 +59,7 @@ from pathlib import Path
 SKILL = ".claude/skills/diagram"
 RESEARCH = f"{SKILL}/research"
 CLASSES = f"{SKILL}/l7r/diagram/interactive/classes"
+COMPOUND_KINDS = f"{SKILL}/l7r/diagram/interactive/compound_kinds"  # the Mode A modals (feature 262), a registry of their own
 
 
 def _git(root: Path, *args: str) -> str | None:
@@ -173,21 +174,27 @@ def owed(root: Path) -> tuple[str, list[str]]:
     moved = moved_anchors(root, base, sources)
     if not moved:
         return desc, []
-    now: dict[str, str] = {}
-    was: dict[str, str] = {}
-    at: dict[str, str] = {}
-    for path in sorted((root / CLASSES).glob("*.py")):
-        rel = os.path.relpath(path, root)
-        here: dict[str, int] = {}
-        now |= classes_in(path.read_text(encoding="utf-8"), _base, here)
-        at |= {k: f"{rel}:{n}" for k, n in here.items()}
-        old_text = _git(root, "show", f"{base}:{rel}")
-        if old_text is not None:
-            was |= classes_in(old_text, _base)
     from l7r.diagram.interactive.classes import CLASSES as REGISTRY
+    from l7r.diagram.interactive.compound_kinds import COMPOUND_CLASSES
 
-    anchors = {key: {q["url"].rsplit("/", 1)[-1] for q in sources.research_questions(fc.entry)} for key, fc in REGISTRY.items()}
-    return desc, named_pairs(moved, anchors, now, was, at)
+    pairs: list[str] = []
+    # Each registry against its own directory: a compound's `well` and a hamlet's `well` are separate modals under
+    # one key, so the two are never merged into one dict (feature 268: the compound kinds had never been scanned).
+    for directory, registry in ((CLASSES, REGISTRY), (COMPOUND_KINDS, COMPOUND_CLASSES)):
+        now: dict[str, str] = {}
+        was: dict[str, str] = {}
+        at: dict[str, str] = {}
+        for path in sorted((root / directory).glob("*.py")):
+            rel = os.path.relpath(path, root)
+            here: dict[str, int] = {}
+            now |= classes_in(path.read_text(encoding="utf-8"), _base, here)
+            at |= {k: f"{rel}:{n}" for k, n in here.items()}
+            old_text = _git(root, "show", f"{base}:{rel}")
+            if old_text is not None:
+                was |= classes_in(old_text, _base)
+        anchors = {key: {q["url"].rsplit("/", 1)[-1] for q in sources.research_questions(fc.entry)} for key, fc in registry.items()}
+        pairs += named_pairs(moved, anchors, now, was, at)
+    return desc, pairs
 
 
 def _fragments_line(hit: Sequence[str]) -> str:

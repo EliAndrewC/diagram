@@ -44,6 +44,7 @@ def test_the_keys_a_question_cites_are_read_off_its_links() -> None:
         ('<p>en.wikipedia "Edo" (https://en.wikipedia.org/wiki/Edo)</p>', "https://en.wikipedia.org/wiki/Edo"),
         ("<p>kotobank (https://ja.wikipedia.org/wiki/町屋_(商家))</p>", "https://ja.wikipedia.org/wiki/町屋_(商家)"),
         ("<p>a book, no pointer</p>", ""),
+        ('<p>NDL (https://crd.ndl.go.jp/reference/entry/index.php?page=ref_view&amp;id=1000130073)</p>', "https://crd.ndl.go.jp/reference/entry/index.php?page=ref_view&id=1000130073"),
     ],
 )
 def test_a_registry_pointer_keeps_its_own_parenthesis_and_drops_the_wrapping_one(entry: str, want: str) -> None:
@@ -125,6 +126,22 @@ def test_a_recheck_excerpt_keeps_a_block_whose_close_tag_is_implicit() -> None:
     assert "Last." in cut and "One." not in cut, "an unclosed last paragraph is still a block"
 
 
+def test_a_recheck_verbatim_report_keeps_the_notes_the_excerpt_quotes(tmp_path: pathlib.Path) -> None:
+    # passages are dicts and the excerpt wraps its lines: the cut used to keep nothing (feature 250, 2d)
+    (tmp_path / "q.notes.html").write_text('<li data-note="a">「Zuihoden, in Otamayashita, Aoba-ku,\n  Sendai, is a mausoleum.」</li>\n', encoding="utf-8")
+    (tmp_path / "q.html").write_text("<p>The daimyo pattern is an ancestral\n  mortuary precinct at Sendai.</p>\n", encoding="utf-8")
+    entries = [
+        {"id": "fn-1", "key": "a", "readability": "READABLE", "passages": [{"quote": "Zuihoden, in Otamayashita, Aoba-ku, Sendai, is a mausoleum.", "original": "x"}]},
+        {"id": "fn-2", "key": "b", "readability": "READABLE", "passages": [], "assertion": "The daimyo pattern is an ancestral mortuary precinct at Sendai."},
+        {"id": "fn-3", "key": "c", "readability": "READABLE", "passages": [{"quote": "Nothing in this bundle quotes this line at all."}], "assertion": "Elsewhere."},
+    ]
+    (tmp_path / "quote-verbatim.json").write_text(json.dumps({"footnotes": entries}), encoding="utf-8")
+    text = cb.scoped_verbatim(tmp_path, "quote-verbatim: q\n  fn-1 a - READABLE\n")
+    kept = json.loads((tmp_path / "quote-verbatim.json").read_text(encoding="utf-8"))["footnotes"]
+    assert [e["id"] for e in kept] == ["fn-1", "fn-2"], "a quoted passage and a wrapped assertion both keep their note"
+    assert "fn-3" not in text
+
+
 def test_make_notes_prints_the_named_notes_and_refuses_without_keys(capsys: pytest.CaptureFixture[str]) -> None:
     assert cb.main(["ways", "--section", "010", "--notes", "ritter-timber-bridges", "--print-notes", "--root", str(REPO)]) == 0
     out = capsys.readouterr().out
@@ -144,3 +161,18 @@ def test_each_check_gets_only_its_own_parts(tmp_path: pathlib.Path) -> None:
     names = {p.relative_to(qc).as_posix() for p in qc.rglob("*") if p.is_file()}
     assert "prepass.txt" not in names and "glossary-variants.txt" not in names and not any(n.startswith("sources/") for n in names)
     assert "010-how-far-past-the-bank-does-a-bridge-land.notes.html" in names
+
+
+def test_a_mode_a_compound_kind_is_a_modal_the_drift_bundle_can_find() -> None:
+    """Feature 268: the compound kinds (feature 262) are modals too, and entry-drift could not be pointed at one."""
+    found = cb.kind_docstring(REPO, "ShrineGrove")
+    assert found is not None and "compound_kinds/grounds.py" in found[0]
+
+
+def test_a_shared_modal_name_is_qualified_by_its_module() -> None:
+    """Feature 265: the map's `Well` (classes/water_and_ways.py) and the sheet's (compound_kinds/household.py) share a
+    name, and the bare name only ever reached the first; `household.Well` reaches the sheet's."""
+    bare = cb.kind_docstring(REPO, "Well")
+    sheet = cb.kind_docstring(REPO, "household.Well")
+    assert bare and sheet and "classes/water_and_ways.py" in bare[0] and "compound_kinds/household.py" in sheet[0]
+    assert cb.kind_docstring(REPO, "nosuchmodule.Well") is None

@@ -44,7 +44,10 @@ GLOSSARY = re.compile(r"^[ \t]*GLOSSARY[ \t]+(?P<term>[^|\n]+?)[ \t]*\|[ \t]*(?P
 RECORD = ".claude/skills/diagram/research/"
 # D17 (R8, recommendation 1): a drifted modal's prose is its Kind class's docstring - thirteen hand edits on `fields`
 MODALS = ".claude/skills/diagram/l7r/diagram/interactive/classes/"
-ROOTS = (RECORD, MODALS)
+# feature 262's building-plan sheets keep their modal prose in compound_kinds/, which entry-drift checks the same way
+# (feature 265: 58 owed pairs there, and every EDIT for them was refused until this)
+SHEET_MODALS = ".claude/skills/diagram/l7r/diagram/interactive/compound_kinds/"
+ROOTS = (RECORD, MODALS, SHEET_MODALS)
 TERMS = ".claude/skills/diagram/l7r/diagram/interactive/assets/glossary/"
 
 
@@ -91,7 +94,7 @@ def resolve(root: pathlib.Path, path: str) -> pathlib.Path | None:
 def apply_edit(root: pathlib.Path, b: dict, dry: bool) -> str:
     target = resolve(root, b["path"])
     if target is None:
-        return f"REFUSED - {b['path']} is not under {RECORD} or {MODALS}"
+        return f"REFUSED - {b['path']} is not under {RECORD}, {MODALS} or {SHEET_MODALS}"
     if not target.is_file():
         return f"REFUSED - no file {b['path']}"
     text = target.read_text(encoding="utf-8")
@@ -115,14 +118,25 @@ def apply_term(root: pathlib.Path, b: dict, dry: bool) -> str:
     have = {json.loads(f.read_text(encoding="utf-8")).get("term", "").lower() for f in d.glob("*.json")}
     if b["term"].lower() in have:
         return f"skipped - '{b['term']}' is already a glossary term"
-    nums = [int(m.group(1)) for f in d.glob("*.json") if (m := re.match(r"(\d+)-", f.name))]
-    name = f"{(max(nums, default=0) // 10 + 1) * 10:04d}-{slug(b['term'])}.json"
-    if not dry:
-        # the term is always its own first variant: matching reads only `variants`, and a term given only its
-        # plural (kidoban -> "kidobans", cities/fabric 2b) never matched the bare word and failed the record test
-        entry = {"term": b["term"], "def": b["def"], "variants": [b["term"], *(v for v in b["variants"] if v != b["term"])]}
-        (d / name).write_text(json.dumps(entry, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
-    return f"added {name}"
+    # the term is always its own first variant: matching reads only `variants`, and a term given only its
+    # plural (kidoban -> "kidobans", cities/fabric 2b) never matched the bare word and failed the record test
+    entry = {"term": b["term"], "def": b["def"], "variants": [b["term"], *(v for v in b["variants"] if v != b["term"])]}
+    if dry:
+        return f"would add a file for {b['term']!r}"
+    # the prefix is RESERVED under the host-wide lock (feature 265 FR-010): two queues adding terms at once never
+    # take the same one; the reservation writes the file, here with its full text as the stub
+    path = _reserve().reserve("glossary", b["term"], root, stub=json.dumps(entry, ensure_ascii=False, indent=1) + "\n")
+    return f"added {path.name}"
+
+
+def _reserve():  # noqa: ANN202
+    import importlib.util  # noqa: PLC0415
+
+    spec = importlib.util.spec_from_file_location("reserve_prefix", pathlib.Path(__file__).resolve().parent / "reserve-prefix.py")
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
 
 
 def main(argv: list[str] | None = None) -> int:

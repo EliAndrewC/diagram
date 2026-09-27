@@ -49,4 +49,4 @@ def test_the_declared_shrine_marks_its_grove_and_burial_ground_as_site_items() -
     shrine = bt.by_tier("country-shrines")
     assert shrine is not None
     sites = {i.id: i.site for i in shrine.required if i.site}
-    assert sites == {"grove": "tree", "burial_ground": "burial_ground"}
+    assert sites == {"grove": "tree", "sacred_tree": "tree", "burial_ground": "burial_ground"}  # the sacred tree (feature 268) is one too

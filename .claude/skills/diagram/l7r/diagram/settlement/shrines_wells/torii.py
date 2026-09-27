@@ -8,9 +8,9 @@ from typing import TYPE_CHECKING, Any, cast
 
 from .._geom import (
     TORII_PITCH_FT,
-    TORII_PITCH_MAX_SPANS,
     Pt,
     segments_cross,
+    torii_glyph_dims,
     torii_seat_on_wall,
     torii_wall_conflicts,
     wall_runs,
@@ -37,6 +37,18 @@ def avenue_along(seats: list[Pt], gaps: list[float], dist: float) -> Pt:
     return seats[-1]
 
 
+def torii_plan_svg(tx: float, ty: float, ftpx: float, span_ft: float = 16.0) -> str:
+    """The plan-view arch at (tx, ty): the beam as a bar across the approach, the two posts as squares on
+    it (`torii_glyph_dims`). A module function so the wayside shrine's small arch draws the same thing."""
+    s2, beam, post, p2 = torii_glyph_dims(ftpx, span_ft)
+    return (
+        f'<g transform="translate({tx:.0f},{ty:.0f})">'
+        f'<line x1="{-s2:.1f}" y1="0" x2="{s2:.1f}" y2="0" stroke="#A03020" stroke-width="{beam:.2f}"/>'
+        f'<rect x="{-p2 - post / 2:.2f}" y="{-post / 2:.2f}" width="{post:.2f}" height="{post:.2f}" fill="#7A2418"/>'
+        f'<rect x="{p2 - post / 2:.2f}" y="{-post / 2:.2f}" width="{post:.2f}" height="{post:.2f}" fill="#7A2418"/></g>'
+    )
+
+
 class ToriiAvenueMixin:
     def _assert_walls_clear_of_torii(self: Settlement, what: str) -> None:  # type: ignore[misc]
         """Re-ask the torii/wall question the moment a WALL is on the page. A wall drawn AFTER an
@@ -53,19 +65,15 @@ class ToriiAvenueMixin:
             )
 
     def _avenue_pitch(self: Settlement, seats: list[Pt]) -> list[Pt]:  # type: ignore[misc]
-        """Hold a torii avenue to the house PITCH (see TORII_PITCH_FT / TORII_PITCH_MAX_SPANS). The gen
-        authors the avenue's LINE; the engine owns its stride, the same division of labor as the COUNT
-        (rolled, not authored). An avenue whose arches stand more than the cap apart is re-laid at the
-        standard ~20 ft, resampled by arc length ALONG the authored line - so it keeps its direction and
-        its curve, and its innermost arch keeps the seat the gen chose at the hall's threshold; only the
-        stride changes. Within the band the gen's own spacing stands untouched (the village avenues at
-        ~30 ft are deliberate), so this fires only on the over-wide city/town runs."""
+        """Lay a torii avenue at the PITCH (see TORII_PITCH_FT). The gen authors the avenue's LINE; the
+        engine owns its stride, the same division of labor as the COUNT (rolled, not authored). EVERY
+        avenue is re-laid at the pitch (feature 268, GM 2026-09-27: "All maps, ~10-13 ft"), resampled by
+        arc length ALONG the authored line - so it keeps its direction and its curve, and its innermost
+        arch keeps the seat the gen chose at the hall's threshold; only the stride changes. The old
+        cap-and-band rule, which left an avenue inside the band alone, is retired with the band."""
         if len(seats) < 2:
             return seats
         gaps = [math.hypot(seats[i + 1][0] - seats[i][0], seats[i + 1][1] - seats[i][1]) for i in range(len(seats) - 1)]
-        if max(gaps) <= self.px(16.0) * TORII_PITCH_MAX_SPANS:
-            return seats
-
         step = self.px(TORII_PITCH_FT)
         return [avenue_along(seats, gaps, step * i) for i in range(len(seats))]
 
@@ -131,11 +139,10 @@ class ToriiAvenueMixin:
         if whole is not None:
             return whole
         span = math.hypot(seats[-1][0] - seats[0][0], seats[-1][1] - seats[0][1])
-        # The stride may tighten to just over ONE rail-span - the same floor torii_spread_out enforces,
-        # so placement and check agree. (Measure it on the true 16 ft span, NOT torii_halfbox: that box
-        # carries a 2 px stroke pad, which at 3 ft/px is nearly as wide as the arch itself and left a
-        # 30 ft-pitch city avenue with almost no room to shorten.)
-        floor_f = self.px(16.0) * 1.02 * (len(seats) - 1) / span if span else 1.0
+        # The stride may tighten to the arch's drawn DEPTH plus one px (feature 268, D4) - the plan-view
+        # glyph's post side - and never past it, so neighbors never touch. (The old floor was one rail-span,
+        # which belonged to the elevation glyph; a floor above the 12 ft pitch would forbid any shortening.)
+        floor_f = (torii_glyph_dims(self.ftpx)[2] + 1.0) * (len(seats) - 1) / span if span else 1.0
         f = 1.0
         while f - 0.02 > floor_f:
             f -= 0.02
@@ -148,13 +155,14 @@ class ToriiAvenueMixin:
         )
 
     def _torii(self: Settlement, tx: float, ty: float, span_ft: float = 16.0) -> int:  # type: ignore[misc]
-        """Draw ONE torii arch TRUE SCALE (GM 2026-07-21) and record it in M['torii']; returns the
-        z-handle. `span_ft` is the TOP-RAIL span in real feet: a standard shrine/approach torii runs
-        ~10-16 ft between its rail ends (grand landmark torii reach 30-50 ft, but none of our maps
-        draws one). The old glyph was FIXED-PIXEL (38 px rail) - honest at 1 ft/px but 76 ft at
-        village scale and 114 ft at city scale. Proportions keep the authored glyph's 38:24 rail:height
-        ratio; STROKES keep a legibility floor (stroke convention - see SKILL.md "to scale"), never a
-        footprint license."""
+        """Draw ONE torii arch TRUE SCALE (GM 2026-07-21), IN PLAN (feature 268, D3), and record it in
+        M['torii']; returns the z-handle. `span_ft` is the TOP-BEAM span in real feet: a standard
+        shrine/approach torii runs ~10-16 ft between its beam ends (grand landmark torii reach 30-50 ft,
+        but none of our maps draws one). Seen from above an arch is its top beam across the approach with
+        its two posts under it - `torii_glyph_dims` gives the sizes, the posts marked just proud of the
+        beam (a drawing convention; real posts hide under it). The elevation glyph it replaces stood
+        about 10 ft deep on paper and could not stand at the 12 ft pitch. STROKES keep a legibility floor
+        (stroke convention - see SKILL.md "to scale"), never a footprint license."""
         wall = torii_seat_on_wall(self.M, tx, ty, self.ftpx)  # an arch never stands IN a barrier - see the wall_runs block
         if wall:
             raise ValueError(
@@ -162,18 +170,7 @@ class ToriiAvenueMixin:
                 f"ground, never set into a barrier (a way through a wall is a GATE). Move the arch clear; a shrine_hall "
                 f"avenue shortens itself to fit, so a hand-placed arch is what lands here."
             )
-        s2 = self.px(span_ft) / 2  # half the top-rail span; the glyph was authored at s2=19px
-        c2, p2 = s2 * 16 / 19, s2 * 12 / 19  # crossbar half-span, post offset
-        hz, hd = s2 * 7 / 19, s2 * 17 / 19  # rail rise above / post drop below the crossbar
-        swr = max(self.px(1.4), 1.9)  # rail stroke (~1.4 ft beam, floored)
-        swp = max(self.px(1.2), 1.6)  # post stroke (~1.2 ft post, floored)
-        tz = self.add_top(
-            f'<g transform="translate({tx:.0f},{ty:.0f})">'  # over any street it crosses
-            f'<line x1="{-c2:.1f}" y1="0" x2="{c2:.1f}" y2="0" stroke="#A03020" stroke-width="{swr:.2f}"/>'
-            f'<line x1="{-s2:.1f}" y1="{-hz:.1f}" x2="{s2:.1f}" y2="{-hz:.1f}" stroke="#A03020" stroke-width="{swr * 0.85:.2f}"/>'
-            f'<line x1="{-p2:.1f}" y1="{-hz:.1f}" x2="{-p2:.1f}" y2="{hd:.1f}" stroke="#A03020" stroke-width="{swp:.2f}"/>'
-            f'<line x1="{p2:.1f}" y1="{-hz:.1f}" x2="{p2:.1f}" y2="{hd:.1f}" stroke="#A03020" stroke-width="{swp:.2f}"/></g>'
-        )
+        tz = self.add_top(torii_plan_svg(tx, ty, self.ftpx, span_ft))  # over any street it crosses
         self.M["torii"].append([round(tx, 1), round(ty, 1), tz])
         return tz
 

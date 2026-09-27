@@ -101,7 +101,7 @@ class PondCanal(Kind):
     gates that open onto it - some take only feeds, some only drains, some both - and the ring drain around the block
     takes everything to the outfall.
 
-    Note: That the canals are a conveyance-and-drainage network the ponds exchange water with is documented; that each pond takes water in high and lets it out low, the whole net running in series from a high intake to a low outfall, is Ruddle & Zhong's (1988) finding, which this project has not read, as no copy is publicly readable; which pond's
+    Note: That the canals are a conveyance-and-drainage network the ponds exchange water with is documented; that a pond on sloping ground takes water in high and lets it out low, the whole net running in series from a high intake to a low outfall, is Ruddle & Zhong's (1988) finding, which this project has not read, as no copy is publicly readable; which pond's
     gate opens onto which canal follows this map's own rule - water in on each pond's high side, out on its low side - not a
     surveyed plan. The ring drain around the block is this map's own layout, borrowed from the rice polder's inner ring
     canal: no source the record cites describes a ring drain on a dike-pond.
@@ -125,7 +125,7 @@ class PondSluice(Kind):
     drain the pond at harvest - the gate through which a dike-pond exchanges water with the canal network.
 
     Why: A dike-pond is not a sealed basin: the whole system runs in series from a high intake to a low outfall,
-    each pond taking water in at its high side and letting it out at its low side. The stub drawn here is
+    a pond on sloping ground taking water in at its high side and letting it out at its low side. The stub drawn here is
     the cut in the dike; the boards themselves are a few inches wide and are not drawn at this scale.
 
     Note: The sluice's form is documented in the FAO pond-construction manual; its position on each pond follows the
@@ -254,7 +254,7 @@ class PigSty(Kind):
 
     Why: The shed is at the water on purpose - that is the whole arrangement, not an accident of crowding. A pig
     shed is built on a pond dike so the excrement is flushed directly into the pond, where it feeds the water
-    rather than fouling it: the manure raises the plankton the fish eat. So the pigs are part of what feeds the
+    rather than fouling it: the manure raises the plankton the fish eat. It does so only in measure: too many pigs at one spot and the fish come up gasping, and the water right under the shed goes airless unless the manure is spread across the pond - a thing handled with buckets and channels rather than by moving the shed, and not drawn. So the pigs are part of what feeds the
     fish the household cultivates. What the shed keeps clear of is the sluice itself - nobody builds over the
     opening they have to reach in order to lift its boards, and that is a matter of getting at the gate rather
     than of keeping the water clean. A pig penned on a pond DIKE is a Chinese form. Japan kept pigs - their
@@ -274,7 +274,7 @@ class PigSty(Kind):
     Name: pig sty
     Covers: every `pig_sties[]` record - a shed with its railed pen on a pond dike
     Label: guess
-    Sources: fao-ac264e, fao-ac264e-ch9, fao-y1187e, qimin-yaoshu-yangzhu, isis-dykepond, ruddle-zhong-1988
+    Sources: fao-ac264e, fao-ac264e-ch9, fao-y1187e, qimin-yaoshu-yangzhu, fao-ac257e, fao-x6708e, isis-dykepond, ruddle-zhong-1988
     Entry: research/archetypes.html - "Does a pig sty have to stand back from the water, or from the pond's sluice?", 'Does a dike-pond hamlet keep pigs and ducks on its pond dikes?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'
     """
 
@@ -288,7 +288,7 @@ class DuckPen(Kind):
     the water stand clear of the pond's own culvert.
 
     Why: Fish-cum-duck ponds fence part of the dike as a dry run and part of the water as a wet run; ducks were
-    among the stock the dike-pond loop kept to manure its ponds, and the droppings feed the water the same way a
+    among the stock the Pearl-delta dike-pond loop kept to manure its ponds - a Chinese form, as the whole dike-pond hamlet is - and the droppings feed the water the same way a
     pig shed's do. The dry run stands on the same planted collar a pig shed does - two to five meters, where a
     modern manual asks five to ten of a dike carrying an animal shed, a ceiling it sets by the pigsties, piping
     and traffic the dike must bear (dike-borne traffic, on this project's reading, came with commercialization), and where a Shunde
@@ -367,7 +367,7 @@ class SluiceGate(Kind):
 
     Why: A polder is enclosed against the flood outside, so its dike is cut only where a gate controls the water
     - at the inlet high on the block and the outfall low on it. The gate is a protected opening closed with
-    wooden boards to set the level, and it is why the dike can be complete and the block still fed and
+    wooden boards to set the level - opened in drought to draw the river in, shut in flood to keep it out - and it is why the dike can be complete and the block still fed and
     drained.
 
     Note: The form is read from the FAO pond-construction manual; the inlet-high, outfall-low placement comes from Ruddle & Zhong (1988), which has no readable copy and is not read; the 6 x 3 ft bar is drawn at the size of a whole board set, which the record does not measure; the FAO manual caps the opening itself at 0.80 m, less than half the bar.

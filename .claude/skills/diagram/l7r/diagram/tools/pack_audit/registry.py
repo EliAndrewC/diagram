@@ -132,14 +132,10 @@ CHECKS: tuple[Check, ...] = (
         "gate_widths", lambda ctx: s.gate_widths(ctx.plan), True, "ochiba-capped-gates-red.svg", "draw the opening at passage width from the INK (pull each flanking endpoint back by half a stroke)"
     ),
     Check("scale_bar_present", lambda ctx: s.scale_bar_present(ctx.plan), True, "ochiba-no-scale-red.svg", "add the 90 px scale bar with its `30 ft` and `(3 px = 1 ft)` labels"),
-    Check(
-        "viewbox_cropped",
-        lambda ctx: [] if ctx.on_map else s.viewbox_cropped(ctx.text, ctx.plan),
-        True,
-        "ochiba-wide-viewbox-red.svg",
-        "crop the viewBox to ~15-25 px of parchment around the ink",
-        skipped=lambda ctx: mm.frame_is_the_maps(ctx.on_map),
-    ),
+    # Every sheet, on a map or not (feature 268, the GM 2026-09-27: "whatever kind of cropping we are doing
+    # is not working very well on this map"): a sheet on a map is cropped to its ink like any other, and
+    # `matches_map` still holds every map feature inside that frame.
+    Check("viewbox_cropped", lambda ctx: s.viewbox_cropped(ctx.text, ctx.plan), True, "ochiba-wide-viewbox-red.svg", "crop the viewBox to ~15-25 px of parchment around the ink"),
     Check(
         "trees_overlap",
         lambda ctx: s.trees_overlap(ctx.plan),
@@ -189,7 +185,13 @@ CHECKS: tuple[Check, ...] = (
     Check("sanctuary_on_axis", lambda ctx: s.sanctuary_on_axis(ctx.plan), False, "hoshigaoka-sanctuary-off-axis-red.svg", "set the sanctuary on the approach axis behind the hall"),
     Check("arch_on_approach", lambda ctx: s.arch_on_approach(ctx.plan), False, "hoshigaoka-arch-adrift-red.svg", "stand the arch over the approach where it crosses the fence"),
     Check("well_clear_of_arch", lambda ctx: s.well_clear_of_arch(ctx.plan), False, "hoshigaoka-well-on-approach-red.svg", "move the well beside the approach, clear of the way and the arch"),
-    Check("fence_not_wall", lambda ctx: s.fence_not_wall(ctx.text, ctx.plan), False, "hoshigaoka-walled-red.svg", "bound the precinct with a fence or hedge group, not a compound wall stroke"),
+    Check(
+        "no_precinct_enclosure",
+        lambda ctx: s.no_precinct_enclosure(ctx.text, ctx.plan),
+        False,
+        "hoshigaoka-fenced-precinct-red.svg",
+        "take the fence or wall off the precinct: its arch and its wood mark it (a fence may ring the sanctuary alone)",
+    ),
 )
 
 

@@ -19,7 +19,7 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any
 
-from .._geom import BUNDLE_PITCH_FT, Pt
+from .._geom import BUNDLE_PITCH_FT, TORII_PITCH_FT, Pt
 from .._knobs import knob_rng, roll_torii_count, skeleton_layout
 
 if TYPE_CHECKING:
@@ -383,6 +383,10 @@ class RollVillageMixin:
             _tn = self.knob_pins.get("torii_count")
             if _tn is None:
                 _tn = roll_torii_count(scale, random.Random(self.seed * 977 + 13))
-            for _ti in range(int(_tn)):
-                self._torii(sx_ - dx * (34 + 30 * _ti), sy_ - dy * (34 + 30 * _ti))
+            # At the PITCH, the innermost one pitch off the hall's face (feature 268: the old fixed
+            # 34 + 30 px stride is retired with the ~30 ft village avenue it drew).
+            _step = self.px(TORII_PITCH_FT)
+            _line = [(sx_ - dx * _step * (_ti + 1), sy_ - dy * _step * (_ti + 1)) for _ti in range(int(_tn))]
+            for _tx, _ty in self._avenue_at_threshold(sx_, sy_, self.px(62), self.px(42), _line):
+                self._torii(_tx, _ty)
             self.M["meta"]["torii_count"] = int(_tn)

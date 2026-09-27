@@ -603,7 +603,8 @@
  "azemichi": {
   "def": "A walking bund: the wider paddy bund, two to five feet across, that carries a path, as against the ordinary foot-wide dividing bund.",
   "variants": [
-   "azemichi"
+   "azemichi",
+   "nawate"
   ]
  },
  "azenuri": {
@@ -708,7 +709,8 @@
  "baulk": {
   "def": "The unplowed strip of raised earth between two field plots, wide enough to walk on.",
   "variants": [
-   "baulk"
+   "baulk",
+   "baulks"
   ]
  },
  "bed shear stress": {
@@ -904,7 +906,8 @@
  "causeway": {
   "def": "A raised road carried across wet or flooded ground.",
   "variants": [
-   "causeway"
+   "causeway",
+   "causeways"
   ]
  },
  "center-pivot": {
@@ -1077,7 +1080,8 @@
   "def": "The stretch of wall between two towers - the plain face an attacker meets, covered by the towers to either side.",
   "variants": [
    "curtain wall",
-   "curtain"
+   "curtain",
+   "curtains"
   ]
  },
  "cyanobacterium": {
@@ -1202,7 +1206,8 @@
   "variants": [
    "dike-pond",
    "dike-ponds",
-   "mulberry-dike fishpond"
+   "mulberry-dike fishpond",
+   "sangji yutang"
   ]
  },
  "discharge": {
@@ -1389,7 +1394,8 @@
   "def": "A Chinese land unit, a tenth of a mu: about 67 square meters.",
   "variants": [
    "fen"
-  ]
+  ],
+  "cased": true
  },
  "feng shui": {
   "def": "The Chinese practice of siting graves, houses and villages by the lie of hills, water and wind.",
@@ -1629,7 +1635,8 @@
  "go": {
   "def": "A tenth of a tsubo, about a third of a square meter - the fraction a surveyed site area is given to.",
   "variants": [
-   "go"
+   "go",
+   "gō"
   ]
  },
  "goemon-buro": {
@@ -2261,7 +2268,7 @@
   ]
  },
  "keidai": {
-  "def": "A shrine's or temple's precinct: the enclosed ground of approach, gate and halls.",
+  "def": "A shrine's or temple's precinct: the ground of its approach, gate and halls - at a village shrine unfenced, marked by its arch and its wood.",
   "variants": [
    "keidai"
   ]
@@ -2310,11 +2317,12 @@
   ]
  },
  "kido": {
-  "def": "A ward gate on a Japanese town street, shut at night to seal one block from the next; every tenement row and lane had its own.",
+  "def": "A ward gate, shut at night to seal one block from the next: on a Japanese town street every tenement row and lane had its own, and a Tang Chinese city's walled wards had theirs, shut at the dusk drum.",
   "variants": [
    "kido",
    "ward gate",
-   "ward gates"
+   "ward gates",
+   "machi-kido"
   ]
  },
  "kimon": {
@@ -2417,7 +2425,11 @@
   "def": "The notice board: a small roofed frame where the authorities posted the standing law, rate tables and ban lists, sited where everyone passes.",
   "variants": [
    "kosatsuba",
-   "kosatsu"
+   "kosatsu",
+   "seisatsuba",
+   "seisatsu",
+   "kōsatsu-ba",
+   "kōsatsu"
   ]
  },
  "kumi": {
@@ -2649,7 +2661,8 @@
    "enemy platform",
    "enemy tower",
    "horse-face",
-   "horse-faces"
+   "horse-faces",
+   "ditai"
   ]
  },
  "maoqu": {
@@ -2882,7 +2895,9 @@
  "nucleated": {
   "def": "Of a settlement: gathered into one compact cluster of houses and plots, as against farmsteads dispersed each among its own fields.",
   "variants": [
-   "nucleated"
+   "nucleated",
+   "nucleus",
+   "nuclei"
   ]
  },
  "numajiro": {
@@ -2914,7 +2929,8 @@
   "def": "Fallen leaves: the forest litter raked off a coppice wood's floor and carried to the paddies as fertilizer.",
   "variants": [
    "ochiba"
-  ]
+  ],
+  "cased": true
  },
  "offtake": {
   "def": "The point where a smaller channel leaves its parent, at an acute angle pointing downstream.",
@@ -2926,7 +2942,8 @@
  "ofuregaki": {
   "def": "The shogunate's circulars, passed down to the villages, copied by the headman and posted on the notice board.",
   "variants": [
-   "ofuregaki"
+   "ofuregaki",
+   "furegaki"
   ]
  },
  "omamori": {
@@ -3303,7 +3320,8 @@
  "sannomaru": {
   "def": "The third bailey of a Japanese castle, outermost of the three, holding the senior retainers' mansions and offices.",
   "variants": [
-   "sannomaru"
+   "sannomaru",
+   "san-no-maru"
   ]
  },
  "sanshaku-michi": {
@@ -3699,7 +3717,8 @@
    "field-to-field irrigation",
    "field-to-field",
    "field to field",
-   "tagoshi kangai"
+   "tagoshi kangai",
+   "tagoshi"
   ]
  },
  "taiping-gang": {
@@ -3930,7 +3949,8 @@
  "tulou": {
   "def": "The round or rectangular communal fortress-houses of the Hakka of south China, a clan under one roof.",
   "variants": [
-   "tulou"
+   "tulou",
+   "tulous"
   ]
  },
  "ujiko": {
@@ -4305,7 +4325,8 @@
   "variants": [
    "han",
    "han's"
-  ]
+  ],
+  "cased": true
  },
  "yacheng": {
   "def": "The innermost walled ring of a Chinese prefectural seat, holding the government offices - the administrative city inside the inner city.",
@@ -4437,7 +4458,9 @@
   "def": "The clear ground kept between a fire and what would burn: about 6 ft at an attended forge, 30 ft around an unattended charcoal stack, 60 ft around a kiln body.",
   "variants": [
    "fire gap",
-   "fire gaps"
+   "fire gaps",
+   "fire-gap",
+   "fire-gaps"
   ]
  },
  "hoarding": {
@@ -4712,7 +4735,7 @@
   ]
  },
  "tamagaki": {
-  "def": "The low fence that bounds a shrine's precinct.",
+  "def": "A shrine's fence - at an ordinary shrine a low fence around the sanctuary alone, often a later donation; at a great shrine, rings of them.",
   "variants": [
    "tamagaki"
   ]
@@ -5556,10 +5579,887 @@
    "kana"
   ]
  },
+ "mizugaki": {
+  "def": "Another name for the tamagaki, a shrine's fence; at a great shrine with several rings, the innermost.",
+  "variants": [
+   "mizugaki"
+  ]
+ },
+ "shimenawa": {
+  "def": "The twisted straw rope hung to mark something sacred, such as a shrine's sacred tree.",
+  "variants": [
+   "shimenawa"
+  ]
+ },
+ "ōiya": {
+  "def": "A covering building put over a small shrine sanctuary to shelter it from wind and rain.",
+  "variants": [
+   "ōiya"
+  ]
+ },
+ "chikaraishi": {
+  "def": "A strength stone: a heavy river stone kept beside a shrine's approach and lifted by young men in trials of strength.",
+  "variants": [
+   "chikaraishi"
+  ]
+ },
+ "sonsha": {
+  "def": "The village-shrine rank in Japan's modern shrine registers: a village's own tutelary shrine, one step above the unranked.",
+  "variants": [
+   "sonsha"
+  ]
+ },
+ "mukakusha": {
+  "def": "An unranked shrine in Japan's modern shrine registers, often a single hamlet's, one step below a village shrine.",
+  "variants": [
+   "mukakusha"
+  ]
+ },
+ "ichi-no-torii": {
+  "def": "The first torii of a shrine's approach, usually its largest, standing where the approach enters the grounds; the second and third (ni-no-torii, san-no-torii) stand farther in, toward the hall.",
+  "variants": [
+   "ichi-no-torii",
+   "ichi no torii",
+   "ni-no-torii",
+   "ni no torii",
+   "san-no-torii",
+   "san no torii"
+  ]
+ },
+ "Hachiman": {
+  "def": "A Shinto god of war and archery, patron of warriors, whose shrines are among the commonest in Japan.",
+  "variants": [
+   "Hachiman"
+  ]
+ },
+ "irimoya": {
+  "def": "A hip-and-gable roof: hipped on its lower slopes, with a small gable at each end of the ridge.",
+  "variants": [
+   "irimoya",
+   "irimoya-roofed"
+  ]
+ },
+ "nagare-zukuri": {
+  "def": "The flowing-roof style of shrine sanctuary, its front roof slope carried out long over the steps; the commonest form of honden in Japan.",
+  "variants": [
+   "nagare-zukuri",
+   "nagarezukuri"
+  ]
+ },
+ "dashigeta": {
+  "def": "An eave construction in which a beam carried on projecting joist-ends, set out past the wall face, supports the rafters so the eave reaches farther.",
+  "variants": [
+   "dashigeta"
+  ]
+ },
+ "sakaki": {
+  "def": "An evergreen shrub of the tea family whose leafy branches are offered at Shinto shrines, and which is planted in precincts as a sacred tree.",
+  "variants": [
+   "sakaki"
+  ]
+ },
+ "dohyō": {
+  "def": "The ring sumo is wrestled in: a raised square platform of packed clay with a circle of straw bales on top, consecrated by a rite before the bouts.",
+  "variants": [
+   "dohyō",
+   "dohyo"
+  ]
+ },
  "Siberian high": {
   "def": "The great mass of cold, heavy air that settles over Siberia in winter. Wind blows out of it over Japan from the northwest all winter; in summer the wind comes from the Pacific instead, from the southeast.",
   "variants": [
    "Siberian high"
+  ]
+ },
+ "undersluice": {
+  "def": "At a river headworks, the gated low part of the weir beside the canal's intake: the silt-laden bottom water is passed on downstream through it, so that the cleaner top water is what feeds the canal.",
+  "variants": [
+   "undersluice",
+   "undersluices"
+  ]
+ },
+ "separation zone": {
+  "def": "Where a side channel enters another, the pocket inside the junction where the flow breaks away from the bank and eddies instead of running on; the wider the junction angle, the larger it grows.",
+  "variants": [
+   "separation zone",
+   "zone of separated flow",
+   "separated flow"
+  ]
+ },
+ "Five Highways": {
+  "def": "The five trunk roads of Edo-period Japan, the Tokaido among them. Their ordinary width was about 3 to 4 ken (5.4 to 7.2 m), wider close to Edo, and carts were forbidden on them until the Meiji period.",
+  "variants": [
+   "Five Highways",
+   "gokaido"
+  ]
+ },
+ "post-horse system": {
+  "def": "The relay of horses kept along the highways to carry goods and travelers from one stage to the next. The shogunate banned carts from the highways so that the relay would not run short of horses.",
+  "variants": [
+   "post-horse system",
+   "post-horse"
+  ]
+ },
+ "footslope": {
+  "def": "The gentle lower slope at the foot of a hill or fan, above the wet ground. Here it is the dry ground a track can use to pass the ends of the wet toe.",
+  "variants": [
+   "footslope",
+   "footslopes"
+  ]
+ },
+ "fudoki": {
+  "def": "A gazetteer - an official record of a province's villages, roads and landmarks; the Shinpen Musashi fudoki ko, compiled in 1830, is the one for Musashi province.",
+  "variants": [
+   "fudoki",
+   "fudoki ko"
+  ]
+ },
+ "pledged land": {
+  "def": "Farmland handed to a lender as security for a loan; the lender held or worked it until the loan was repaid, and kept it if the loan was not.",
+  "variants": [
+   "pledged land"
+  ]
+ },
+ "coursing": {
+  "def": "In masonry, the laying of stone in level horizontal rows (courses); a coursing line is the joint running along between two rows.",
+  "variants": [
+   "coursing",
+   "coursing line",
+   "courses",
+   "coursed"
+  ]
+ },
+ "hiro": {
+  "def": "A Japanese length of about 1.8 m (six shaku), the span of outstretched arms; used for the lengths of boats and rope.",
+  "variants": [
+   "hiro"
+  ]
+ },
+ "donggusup": {
+  "def": "A Korean village-entrance grove: the stand of trees kept at the mouth of a village, the Korean counterpart of the Chinese water-mouth grove.",
+  "variants": [
+   "donggusup",
+   "동구숲"
+  ]
+ },
+ "hydrosere": {
+  "def": "The zonation from open water to dry land that every lowland wetland shows: open water, then the shallows, then reed swamp, then a sedge and wet-meadow zone, then dry ground.",
+  "variants": [
+   "hydrosere"
+  ]
+ },
+ "Baidu Baike": {
+  "def": "A Chinese online encyclopedia whose entries anyone may edit; the record cites it only as an encyclopedia summary, not as a primary text.",
+  "variants": [
+   "Baidu Baike"
+  ]
+ },
+ "bastion": {
+  "def": "A spur of masonry projecting from the outer face of a city wall, from which archers can shoot along the wall to either side; on a Chinese wall, the mamian.",
+  "variants": [
+   "bastion",
+   "bastions"
+  ]
+ },
+ "menbansho": {
+  "def": "The main guard house of a Japanese barrier station, holding the upper guard office, a rest room and a bath.",
+  "variants": [
+   "menbansho"
+  ]
+ },
+ "mukaibansho": {
+  "def": "The second guard house of a Japanese barrier station, standing across from the main one, with the station's jail.",
+  "variants": [
+   "mukaibansho"
+  ]
+ },
+ "gogura": {
+  "def": "The village store for the tax rice in Edo-period Japan: one to a village or to several, holding the rice on its way out under strict guard.",
+  "variants": [
+   "gogura"
+  ]
+ },
+ "myoji-taito": {
+  "def": "The privilege of bearing a surname and wearing a sword: a warrior privilege that the domains at times granted to commoners too, such as country samurai, headmen of special pedigree and town elders.",
+  "variants": [
+   "myoji-taito"
+  ]
+ },
+ "Wanshu zaji": {
+  "def": "A Ming-dynasty record of Wanping county, the county town in Beijing, quoted in the record for the town's fire-and-theft wards and watch posts.",
+  "variants": [
+   "Wanshu zaji"
+  ]
+ },
+ "yokocho": {
+  "def": "A side street off a main street: narrower than the main street but wider and more public than a roji back lane.",
+  "variants": [
+   "yokocho"
+  ]
+ },
+ "kirisute-gomen": {
+  "def": "A warrior's privilege in Edo-period Japan, named beside myoji-taito: the license to cut down a commoner who gave offense.",
+  "variants": [
+   "kirisute-gomen"
+  ]
+ },
+ "keibodan": {
+  "def": "Japan's wartime civil-defense guard, a modern body; the record names it only to show that the night fire round it walked is not dated to the Edo period.",
+  "variants": [
+   "keibodan"
+  ]
+ },
+ "shobodan": {
+  "def": "Japan's volunteer fire brigade, a modern local body that still walks the night fire round.",
+  "variants": [
+   "shobodan"
+  ]
+ },
+ "jobikeshi": {
+  "def": "The shogunate's own standing fire watch of Edo, organized after the Meireki fire of 1657, with fire-brigade mansions and fire towers at several places in the castle town.",
+  "variants": [
+   "jobikeshi"
+  ]
+ },
+ "jinaicho": {
+  "def": "A Japanese temple town ringed by a moat and rampart, the closed counterpart of the open gate-front town.",
+  "variants": [
+   "jinaicho"
+  ]
+ },
+ "tauchiguruma": {
+  "def": "A hand-pushed weeder run between the rows of a paddy, promoted with rope-and-ruler row planting in Meiji-era Japan.",
+  "variants": [
+   "tauchiguruma",
+   "田打車"
+  ]
+ },
+ "yui": {
+  "def": "Exchanged labor between farm households, lending one another hands at transplanting; it works because the households' planting dates differ.",
+  "variants": [
+   "yui"
+  ]
+ },
+ "oyaike": {
+  "def": "Parent pond: the chief pond of a Japanese parent-child system of irrigation ponds, with smaller child ponds (koike) grouped under it.",
+  "variants": [
+   "oyaike"
+  ]
+ },
+ "koike": {
+  "def": "Child pond: one of the smaller irrigation ponds grouped under a parent pond (oyaike) in a Japanese parent-child pond system.",
+  "variants": [
+   "koike"
+  ]
+ },
+ "weineihe": {
+  "def": "The inner ring canal of a Chinese polder, running just inside the dike and feeding the field ditches.",
+  "variants": [
+   "weineihe"
+  ]
+ },
+ "adlittoral": {
+  "def": "Of a water plant, grown in the shallows at the water's edge; adlittoral lotus varieties stand in 10 to 20 cm of water.",
+  "variants": [
+   "adlittoral"
+  ]
+ },
+ "kumi-chi": {
+  "def": "Ground assigned to one unit of foot soldiers, where the men of that unit lived together.",
+  "variants": [
+   "kumi-chi"
+  ]
+ },
+ "An'ei": {
+  "def": "A Japanese era name: the years 1772 to 1781.",
+  "variants": [
+   "An'ei"
+  ]
+ },
+ "Bunsei": {
+  "def": "The Japanese era 1818 to 1830, when the three great sword schools of Edo were opened.",
+  "variants": [
+   "Bunsei"
+  ]
+ },
+ "Kanbun": {
+  "def": "A Japanese era name: the years 1661 to 1673.",
+  "variants": [
+   "Kanbun"
+  ]
+ },
+ "Jokyo": {
+  "def": "The Japanese era 1684 to 1688, of the halving of retainers' fiefs the record quotes.",
+  "variants": [
+   "Jokyo"
+  ]
+ },
+ "wicket": {
+  "def": "A small door set in a larger gate, let open for one person at a time while the gate itself stays shut.",
+  "variants": [
+   "wicket",
+   "wickets"
+  ]
+ },
+ "junk": {
+  "def": "The Chinese cargo sailing boat that carried bulk goods on river and canal.",
+  "variants": [
+   "junk",
+   "junks"
+  ]
+ },
+ "raku": {
+  "def": "A low-fired, hand-formed Japanese pottery, taken from the kiln hot and simply glazed.",
+  "variants": [
+   "raku"
+  ]
+ },
+ "murabarai": {
+  "def": "Banishment from the village: the heaviest punishment a village could put on one of its own.",
+  "variants": [
+   "murabarai"
+  ]
+ },
+ "tokorobarai": {
+  "def": "Banishment from one's place of residence, the punishment the record names beside murabarai.",
+  "variants": [
+   "tokorobarai"
+  ]
+ },
+ "Wubei Zhi": {
+  "def": "A great Ming-dynasty military treatise (1621), quoted in the record for what a wall's bastions were for.",
+  "variants": [
+   "Wubei Zhi"
+  ]
+ },
+ "normal depth": {
+  "def": "The depth at which water in a channel flows steadily and evenly, the level a river settles back to some way upstream of a gate or weir.",
+  "variants": [
+   "normal depth"
+  ]
+ },
+ "笞": {
+  "def": "The light bamboo cane, the lightest of the Five Punishments of the Chinese legal code: a beating on the buttocks, given in court by the yamen's runners.",
+  "variants": [
+   "笞"
+  ]
+ },
+ "杖": {
+  "def": "The heavy stick, the second of the Five Punishments of the Chinese legal code: a beating with a large stick on the back, buttocks or legs, given in court by the yamen's runners.",
+  "variants": [
+   "杖"
+  ]
+ },
+ "pit rank": {
+  "def": "The row of soaking pits in a tanning yard, where hides lie in the tanning liquor. It runs along the yard's edge of water, and the number of pits sets the yard's size.",
+  "variants": [
+   "pit rank",
+   "pit ranks"
+  ]
+ },
+ "staking frame": {
+  "def": "A frame set in the shallows at a tanning yard's bank, where salted hides are held in the river to steep for several days before the hair is scraped off.",
+  "variants": [
+   "staking frame",
+   "staking frames"
+  ]
+ },
+ "settlement core": {
+  "def": "The middle of a settlement's dwellings, the point from which a direction out of town is measured.",
+  "variants": [
+   "settlement core"
+  ]
+ },
+ "night watch": {
+  "def": "One of the five periods the night was divided into, from dusk to dawn. The drum and bell tower sounded each one, and watchmen carried it through the streets with clappers and gongs.",
+  "variants": [
+   "night watch",
+   "night watches",
+   "five watches"
+  ]
+ },
+ "hour of xu": {
+  "def": "The eleventh of the twelve two-hour periods of the traditional Chinese day, about 7 to 9 in the evening. The drum and bell towers struck it to open the night.",
+  "variants": [
+   "hour of xu"
+  ]
+ },
+ "plinth": {
+  "def": "The block or low stone base that a pillar, post or wall stands on, keeping the timber or earth above it off the wet ground.",
+  "variants": [
+   "plinth",
+   "plinths"
+  ]
+ },
+ "city grain": {
+  "def": "The scale a city map is drawn at, about 3 ft of ground to a pixel, where a mark must be about 6 ft across to be seen at all.",
+  "variants": [
+   "city grain"
+  ]
+ },
+ "picket line": {
+  "def": "A rope stretched between stakes or posts, with several animals tied along it in a row.",
+  "variants": [
+   "picket line",
+   "picket lines"
+  ]
+ },
+ "stele": {
+  "def": "An upright stone slab or post, often carved or inscribed; the Chinese hitching post counts as one.",
+  "variants": [
+   "stele",
+   "steles",
+   "stelae"
+  ]
+ },
+ "ever-normal granary": {
+  "def": "A Chinese state granary that bought grain when it was cheap and sold it when it was dear, to keep the price steady and hold a reserve against famine.",
+  "variants": [
+   "ever-normal granary",
+   "ever-normal granaries"
+  ]
+ },
+ "Qianlong": {
+  "def": "The reign of the Qing emperor Qianlong, 1736-1796.",
+  "variants": [
+   "Qianlong"
+  ]
+ },
+ "Jiaqing": {
+  "def": "The reign of the Qing emperor Jiaqing, 1796-1820.",
+  "variants": [
+   "Jiaqing"
+  ]
+ },
+ "Azuchi-Momoyama period": {
+  "def": "The years from about 1568 to 1600, between the Sengoku period and the Edo period, when Japan was reunified and firearms came into wide use; castle walls were thickened against bullets.",
+  "variants": [
+   "Azuchi-Momoyama period",
+   "Azuchi-Momoyama"
+  ]
+ },
+ "loophole": {
+  "def": "A narrow opening cut through a castle wall so that defenders can shoot out through it.",
+  "variants": [
+   "loophole",
+   "loopholes"
+  ]
+ },
+ "formwork": {
+  "def": "The temporary boards that hold earth or plaster in shape while a wall is rammed or set; they are taken away once the wall stands.",
+  "variants": [
+   "formwork"
+  ]
+ },
+ "commutation": {
+  "def": "Paying a tax owed in one thing - rice, in this record - in another, usually coin, at a reckoned rate.",
+  "variants": [
+   "commutation",
+   "commuted",
+   "commute"
+  ]
+ },
+ "kokudai-no": {
+  "def": "Paying the land tax, or a share of it, in money reckoned at the price of the rice owed; one Edo source puts it at three to four tenths of the whole tax.",
+  "variants": [
+   "kokudai-no",
+   "kokudaino"
+  ]
+ },
+ "natto": {
+  "def": "A Japanese food of soybeans fermented until sticky.",
+  "variants": [
+   "natto"
+  ]
+ },
+ "randori": {
+  "def": "Free practice in jujutsu and the other grappling arts: partners attack and throw each other freely rather than following a set sequence. It needs a floor that can take a fall, which is one reason practice halls came to be floored with boards or tatami.",
+  "variants": [
+   "randori"
+  ]
+ },
+ "Four Books and Five Classics": {
+  "def": "The core Confucian texts that a domain school's pupils recited, starting at age seven or eight and before they took up the martial arts. They are the Chinese canon that samurai learned their letters from.",
+  "variants": [
+   "Four Books and Five Classics",
+   "Four Books",
+   "Five Classics"
+  ]
+ },
+ "enfeoffment": {
+  "def": "A lord's grant of a domain to a vassal, who holds it in return for service - as when Ikeda Terumasa was granted Himeji in 1600 at an assessed yield of 520,000 koku.",
+  "variants": [
+   "enfeoffment",
+   "enfeoffments",
+   "enfeoffed"
+  ]
+ },
+ "kuruwa": {
+  "def": "The Japanese word for a castle's bailey: one of the walled or ditched enclosures a castle's layout divides its ground into, the innermost being the honmaru.",
+  "variants": [
+   "kuruwa"
+  ]
+ },
+ "shell keep": {
+  "def": "A castle's strongest tower is its keep, its last refuge; a shell keep is a ring wall built around the top of a castle mound in place of that tower, and a square keep is the older four-cornered tower whose corners were its weak points.",
+  "variants": [
+   "shell keep",
+   "shell keeps",
+   "square keep",
+   "square keeps"
+  ]
+ },
+ "trebuchet": {
+  "def": "A siege engine that throws stones from a pivoting beam, worked by a counterweight or by a crew hauling ropes; in Europe it came into use around the end of the 12th century.",
+  "variants": [
+   "trebuchet",
+   "trebuchets"
+  ]
+ },
+ "dead ground": {
+  "def": "Ground at the foot of a wall that its defenders cannot shoot into from the wall-top; at a square corner, the angle itself.",
+  "variants": [
+   "dead ground",
+   "dead space"
+  ]
+ },
+ "siege mining": {
+  "def": "Digging a tunnel (a gallery) under a wall, propping it with timber, then burning the props so the wall above collapses; a square corner was the miner's favorite target.",
+  "variants": [
+   "siege mining",
+   "galleried mining",
+   "miner's"
+  ]
+ },
+ "Hakka": {
+  "def": "A Han Chinese group of the hill country where Fujian, Guangdong and Jiangxi meet, whose clans built most of the Fujian tulou.",
+  "variants": [
+   "Hakka"
+  ]
+ },
+ "Suzaku-oji": {
+  "def": "The great central avenue of an ancient Chinese-model imperial capital, running south from the palace gate: 82-84 m wide at Heian-kyo and 147 m at Tang Chang'an (Zhuque Dajie).",
+  "variants": [
+   "Suzaku-oji",
+   "Suzaku Oji",
+   "Suzaku Ōji",
+   "Suzaku-ōji",
+   "Suzaku Avenue",
+   "Suzaku Boulevard",
+   "Suzaku street",
+   "Zhuque Dajie"
+  ]
+ },
+ "Heian-kyo": {
+  "def": "The ancient imperial capital at present-day Kyoto, founded in 794 and laid out as a grid on the Chinese model.",
+  "variants": [
+   "Heian-kyo",
+   "Heian-kyō",
+   "Heian-kyo's",
+   "Heian-kyō's"
+  ]
+ },
+ "Heijo-kyo": {
+  "def": "The imperial capital at Nara before Heian-kyo, also a grid on the Chinese model.",
+  "variants": [
+   "Heijo-kyo",
+   "Heijō-kyō",
+   "Heijo-kyo's",
+   "Heijō-kyō's"
+  ]
+ },
+ "Engishiki": {
+  "def": "A 10th-century collection of Japanese court procedures and regulations, completed in 927, which records the dimensions of Heian-kyo.",
+  "variants": [
+   "Engishiki"
+  ]
+ },
+ "Bunka": {
+  "def": "The Japanese era name for the years 1804-1818, in the late Edo period.",
+  "variants": [
+   "Bunka",
+   "Bunka era"
+  ]
+ },
+ "Morisada manko": {
+  "def": "A late-Edo-period survey of the customs and daily life of Edo, Kyoto and Osaka, compiled by Kitagawa Morisada.",
+  "variants": [
+   "Morisada manko",
+   "Morisada mankō"
+  ]
+ },
+ "yamen-god": {
+  "def": "The god of the government office itself, whose small temple a Chinese county yamen kept inside its walls beside the earth-god shrine.",
+  "variants": [
+   "yamen-god",
+   "yamen god"
+  ]
+ },
+ "jail-god": {
+  "def": "The deity of a Chinese yamen's jail, enshrined in a small temple inside the jail itself; at Neixiang the statue is of the ancient judge Gao Yao.",
+  "variants": [
+   "jail-god",
+   "jail god"
+  ]
+ },
+ "Dacheng gate": {
+  "def": "The gate before the main hall of a Chinese Confucian temple; the shrines to meritorious local officials and to local worthies stood outside it, one on each side.",
+  "variants": [
+   "Dacheng gate"
+  ]
+ },
+ "Important Cultural Property": {
+  "def": "Japan's national designation for a single building or object protected for its historic value; Shibata's foot-soldier row house is one.",
+  "variants": [
+   "Important Cultural Property",
+   "Important Cultural Properties"
+  ]
+ },
+ "Dading": {
+  "def": "A twelfth-century Chinese reign era (the name of an emperor's years) of the Jin dynasty in north China; its third year was 1163.",
+  "variants": [
+   "Dading",
+   "Dading era"
+  ]
+ },
+ "GM": {
+  "def": "The game master: the person running the campaign these maps are drawn for, whose questions and rulings this record answers.",
+  "variants": [
+   "GM",
+   "game master"
+  ]
+ },
+ "remand": {
+  "def": "Holding an accused person in custody until their case is judged, as opposed to confinement as a sentence; the ordinary work of an Edo-period jail.",
+  "variants": [
+   "remand",
+   "remanded"
+  ]
+ },
+ "gokumon": {
+  "def": "An Edo-period death sentence carried out by beheading, one of the three grades the Tenmachō jail article names beside shizai and geshunin.",
+  "variants": [
+   "gokumon"
+  ]
+ },
+ "geshunin": {
+  "def": "An Edo-period death sentence carried out by beheading, one of the three grades the Tenmachō jail article names beside gokumon and shizai.",
+  "variants": [
+   "geshunin"
+  ]
+ },
+ "yotsu": {
+  "def": "\"Four\": the Edo-period name for the night hour around 10 pm (the hours were counted down from nine). After it, a town block's kido were shut and anyone with business went through the wicket past the watchman.",
+  "variants": [
+   "yotsu"
+  ]
+ },
+ "wallow": {
+  "def": "A mud pond or pool where water buffalo lie to keep cool in hot weather; they need one as well as a trough.",
+  "variants": [
+   "wallow",
+   "wallows"
+  ]
+ },
+ "well-house": {
+  "def": "A small roofed shelter built over the mouth of a well; on these maps, the roof square drawn over a wellhead.",
+  "variants": [
+   "well-house",
+   "well-houses"
+  ]
+ },
+ "Enokida": {
+  "def": "One of the project's sample maps: a village whose paddy is laid out as a polder, where every low plot wears the wet-paddy tint.",
+  "variants": [
+   "Enokida"
+  ]
+ },
+ "dissection": {
+  "def": "The cutting of a plateau or upland into valleys by the streams that erode it.",
+  "variants": [
+   "dissection"
+  ]
+ },
+ "unhair": {
+  "def": "In tanning, to strip the hair from a hide; in shironameshi the salted hides are first soaked in the river for several days to loosen it.",
+  "variants": [
+   "unhair",
+   "unhairs",
+   "unhaired",
+   "unhairing"
+  ]
+ },
+ "eta": {
+  "def": "The hereditary outcaste status of pre-Meiji Japan, whose members disposed of fallen cattle and horses, worked hides and leather, and served as executioners, constables and watchmen; in eastern Japan they were governed through the head Danzaemon.",
+  "variants": [
+   "eta"
+  ]
+ },
+ "buraku": {
+  "def": "An outcaste settlement; each had its own head, who guarded it and was paid by its residents.",
+  "variants": [
+   "buraku"
+  ]
+ },
+ "gross-up": {
+  "def": "The factor by which a dwelling's drawn footprint is multiplied to give the ground it costs a city: the footprint plus its share of eaves, lanes and street margins.",
+  "variants": [
+   "gross-up",
+   "gross-ups"
+  ]
+ },
+ "budget model": {
+  "def": "The project's reckoning of the ground a city's households, castle and public buildings need, from which the size and circuit of its wall are derived.",
+  "variants": [
+   "budget model"
+  ]
+ },
+ "reform and opening-up": {
+  "def": "China's turn to market economics and foreign trade from the end of the 1970s; the record uses it to date the modern commercialization that widened the Pearl delta's ponds and narrowed their dikes.",
+  "variants": [
+   "reform and opening-up",
+   "the reform and opening-up"
+  ]
+ },
+ "Shunde": {
+  "def": "A county, now a district, of the Pearl delta south of Guangzhou, at the heart of the dike-pond country; mulberry dominated its dikes from the late Ming.",
+  "variants": [
+   "Shunde"
+  ]
+ },
+ "Kanto": {
+  "def": "The plain around Edo in eastern Japan, where the shogunate held much of its own land and its intendants lived in Edo rather than in the villages they governed.",
+  "variants": [
+   "Kanto",
+   "Kantō"
+  ]
+ },
+ "house pad": {
+  "def": "A raised platform of packed earth that a house is built on, lifting it above the surrounding ground and flood water.",
+  "variants": [
+   "house pad",
+   "house pads"
+  ]
+ },
+ "tax-farming": {
+  "def": "Handing a tax's collection to agents who profit from what they gather; here, the permanent clerks' chance to enrich themselves out of the revenue that passes through their hands.",
+  "variants": [
+   "tax-farming"
+  ]
+ },
+ "Hayakawa": {
+  "def": "One of the two example county manors drawn for this project, beside Ochiba: a magistracy compound of about 247 by 200 ft, with a tally office at its river landing.",
+  "variants": [
+   "Hayakawa",
+   "Hayakawa's"
+  ]
+ },
+ "draw-basin": {
+  "def": "A basin inside the city wall where residents drew the aqueduct's water from the buried pipes - what a resident sees of the supply, beside the wells.",
+  "variants": [
+   "draw-basin",
+   "draw-basins"
+  ]
+ },
+ "hokaku sen": {
+  "def": "The grid lines of the jori land system, which divide one square of farmland from the next. They generally run north-south and east-west, but in a fair number of regions the whole grid is tilted.",
+  "variants": [
+   "hokaku sen",
+   "hokaku-sen"
+  ]
+ },
+ "Dujiangyan": {
+  "def": "The ancient irrigation works on the Min River in Sichuan, whose canals fan out across the Chengdu plain below the diversion.",
+  "variants": [
+   "Dujiangyan"
+  ]
+ },
+ "caoshi": {
+  "def": "A commercial district that grew up outside a Chinese city's walls, beginning in the Song dynasty. It descends from the rural periodic market of the Tang.",
+  "variants": [
+   "caoshi"
+  ]
+ },
+ "ward-and-market system": {
+  "def": "The Tang city's order in which residents lived in walled wards whose gates the street drum opened at sunrise and closed at sunset, and trade was held in designated markets.",
+  "variants": [
+   "ward-and-market system",
+   "ward-and-market"
+  ]
+ },
+ "periodic market": {
+  "def": "A market held on fixed days of a recurring cycle rather than every day - in Japan the rokusai-ichi met six times a month - to which the peasants of the surrounding countryside came in to buy and sell.",
+  "variants": [
+   "periodic market",
+   "periodic markets",
+   "periodic-market"
+  ]
+ },
+ "Manji": {
+  "def": "A Japanese era name of the early Edo period; its first year, Manji 1, is 1658.",
+  "variants": [
+   "Manji",
+   "Manji era"
+  ]
+ },
+ "Chang'an": {
+  "def": "The capital of the Tang dynasty: a walled city laid out in walled wards whose gates were shut at the dusk drum.",
+  "variants": [
+   "Chang'an"
+  ]
+ },
+ "Yasuki Taka": {
+  "def": "The first Imperial Treasurer in the setting, whose system separates the official who assesses what is owed from the one who collects it; the import tariff collected at provincial-city and capital gates follows it.",
+  "variants": [
+   "Yasuki Taka"
+  ]
+ },
+ "at grade": {
+  "def": "On the same level: two channels, or a channel and a road, that cross at grade meet on one surface rather than one passing over the other, so their water or traffic mixes where they cross.",
+  "variants": [
+   "at grade"
+  ]
+ },
+ "omotedana": {
+  "def": "A shop-house facing a main street, whose master was often landlord of the back-street tenements behind it (uradana, ura-nagaya).",
+  "variants": [
+   "omotedana"
+  ]
+ },
+ "Imperial spine": {
+  "def": "The Imperial highway where it runs through a city as its main street; a river city has none, since its highway passes off the map instead.",
+  "variants": [
+   "Imperial spine"
+  ]
+ },
+ "DEM": {
+  "def": "Digital elevation model: a map of ground heights laid out as a grid of cells, here 90 meters on a side.",
+  "variants": [
+   "DEM"
+  ]
+ },
+ "SRTM": {
+  "def": "Shuttle Radar Topography Mission: the radar survey flown on a space shuttle in 2000, whose height data covers most of the Earth's land.",
+  "variants": [
+   "SRTM"
+  ]
+ },
+ "sand junk": {
+  "def": "A flat-bottomed Chinese wooden cargo sailing ship (shachuan), built for the shallow, sandy waters around the Yangtze mouth and the northern coast.",
+  "variants": [
+   "sand junk",
+   "sand junks"
+  ]
+ },
+ "dispersed settlement": {
+  "def": "A countryside where each farmhouse stands apart among its own fields instead of gathered in a cluster, as on Japan's Tonami Plain, where farmers built amid their rice fields to manage their water; the opposite of a nucleated settlement.",
+  "variants": [
+   "dispersed settlement",
+   "dispersed village",
+   "dispersed farmstead",
+   "dispersed settlements",
+   "dispersed villages",
+   "dispersed farmsteads"
   ]
  },
  "hate-ike": {

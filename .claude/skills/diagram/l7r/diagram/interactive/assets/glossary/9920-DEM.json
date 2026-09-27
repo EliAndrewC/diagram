@@ -1,0 +1,7 @@
+{
+ "term": "DEM",
+ "def": "Digital elevation model: a map of ground heights laid out as a grid of cells, here 90 meters on a side.",
+ "variants": [
+  "DEM"
+ ]
+}

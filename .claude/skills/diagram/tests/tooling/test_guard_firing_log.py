@@ -325,6 +325,7 @@ _ESCAPES = {
         "agent branch - a dispatch prompt is prose with no command grammar, and the GM's own "
         "ESCALATION_OK=\"reason\" form would not survive having its quoted regions blanked",
     ),
+    "RESERVE_OK": ("command", "matched in the Bash command by new-file-hooks.sh through _guardlog.sh escape_or_refuse, which routes through _hm_escape.py (feature 265 FR-010)"),
     "CANON_OK": ("command", "matched in the Bash command by canon-read-hooks.sh through _guardlog.sh escape_or_refuse, which routes through _hm_escape.py (feature 250 D16)"),
     "CHECK_BUNDLE_OK": (
         "command",

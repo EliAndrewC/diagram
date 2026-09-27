@@ -39,7 +39,7 @@ The research pass ran first (constitution XII). In one line each:
   village form of the purification stop); guardian dogs, lanterns and strength stones (late-Edo
   villager donations - a wealth matter); a farmers' stage and a sumo ring (attested, not general).
   (The figures from the research: observed 2026-09-27; method: read from the reader reports in
-  `reader-reports/`, each quoting its page, the 3-4 m labeled there as the reader's own arithmetic. The
+  `reader-reports/` and summarized in `research.md` R1-R4, each quoting its page, the 3-4 m labeled there as the reader's own arithmetic. The
   30 ft and the 385 tsubo: observed 2026-09-27; method: read off `settlement/_geom/walls.py` and the
   sheet's notes. The 10-13 ft is the GM's ruling in `request.md`.)
 
@@ -221,19 +221,19 @@ exemplar and fails on a fixture that draws a precinct fence.
 
 ## Success Criteria *(mandatory)*
 
-- **SC-001**: The GM's four questions each have an answer on the record with at least one verbatim-quoted,
+- **SC-001** (FR-001, FR-002, FR-003): The GM's four questions each have an answer on the record with at least one verbatim-quoted,
   readable source (or an absence note where none exists), all checks confirmed.
-- **SC-002**: The shrine sheet draws no enclosure around its precinct. Measured over the sheet's WHOLE
+- **SC-002** (FR-004, FR-005, FR-006, FR-007, FR-008): The shrine sheet draws no enclosure around its precinct. Measured over the sheet's WHOLE
   frame, every piece of ground is one of: a building or its fixtures, the swept clearing at the hall and
   sanctuary, the approach, a map feature (the well, the basin, the sacred tree), or grove; bare ground
   that is none of these exists only outside the grove's edge and the approach's foot, as a border no
   deeper than the crop checklist's margin. Built and swept ground together is a small share of the
   precinct, the rest grove.
-- **SC-003**: No side of the sheet's frame leaves more than the crop checklist's border of empty
+- **SC-003** (FR-009): No side of the sheet's frame leaves more than the crop checklist's border of empty
   parchment.
-- **SC-004**: On the sheet and the village map, consecutive arches stand 10-13 ft apart and no two arch
+- **SC-004** (FR-007, FR-008, FR-010, FR-011; research.md R3): On the sheet and the village map, consecutive arches stand 10-13 ft apart and no two arch
   glyphs overlap; a generated avenue at every scale does the same. (The 30 ft and the 10-13 ft: observed 2026-09-27; method: the 30 ft read off `settlement/_geom/walls.py` and the village manifests, the 10-13 ft the GM's ruling in `request.md`.)
-- **SC-005**: `make done` is green, and every review pass is a row in the ledger.
+- **SC-005** (spec-wide; FR-012): `make done` is green, and every review pass is a row in the ledger.
 
 ## Assumptions
 
@@ -257,3 +257,20 @@ exemplar and fails on a fixture that draws a precinct fence.
 - Round 2 (spec-fidelity-verify, MODE 3, 2026-09-27): FAITHFUL - round 1's item resolved; the grove's
   reach to the outermost arch confirmed as sizing the grove the GM asked for, on the research's own
   first-arch and grove passages.
+
+## Decisions Recorded
+
+| decision | class | where recorded |
+|---|---|---|
+| No fence, wall or hedge round a village shrine's precinct; a sanctuary-only fence is a richer shrine's donation (wealth knob) | accurate | research 122; programs.md; `no_precinct_enclosure` |
+| The precinct is the grove, sized from the registers as found (Hoshigaoka about 858 tsubo); that the wood fills most of the unbuilt ground | band accurate; place in band and wood's share a guess | research 124; programs.md; the sheet's notes |
+| The torii pitch 12 ft on every map, the innermost arch one pitch off the hall | guess inside the GM's ruled band | research 090; `TORII_PITCH_FT` in `_geom/walls.py` |
+| The arch drawn in plan (beam and post marks), true size on a sheet; post marks proud of the beam on a village map | accurate; map drawing convention for the marks | research.md D3/D5; `torii_glyph_dims`; buildings.md |
+| A plain stone basin beside the approach, not a roofed pavilion | form a guess | research 126; programs.md |
+| A roped sacred tree beside the approach (the GM's option) | accurate in kind; prevalence a guess | research 126; programs.md |
+| Guardian figures, lanterns, strength stones on the wealth knob; a farmers' stage and a sumo ring as knobs, absent by default | accurate (attested, not general) | research 126; programs.md knobs 5-7 |
+| A 37 ft forecourt before the hall, the clearing a ragged patch | guess from the use | research.md D12; research 140 (ragged edge); the sheet's notes |
+| The basin drawn at 6 ft on the village map | map drawing convention | the map's notes |
+| The hall in the building's center, kitchen and dwelling flanking it | deliberate deviation from Kaie-ji (the map's axis) | the sheet's notes |
+| The crop check runs on sheets drawn to a map | rendering | buildings.md; `registry.py` |
+(Figures observed 2026-09-27; method: read off the engine constant, the layout script and the record.)
