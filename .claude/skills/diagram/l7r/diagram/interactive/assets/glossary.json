@@ -5956,5 +5956,26 @@
   "variants": [
    "Ainu"
   ]
+ },
+ "loose box": {
+  "def": "A stable stall big enough for a horse to move about in untied, as against a narrow stall where it stands tethered.",
+  "variants": [
+   "loose box",
+   "loose-box",
+   "loose-boxes"
+  ]
+ },
+ "karahafu": {
+  "def": "A curved gable that rises in a bow at its center and sweeps down and outward at each end, set over the gates and entrances of high-ranking buildings.",
+  "variants": [
+   "karahafu",
+   "kara-hafu"
+  ]
+ },
+ "sanmon": {
+  "def": "The main gate of a Buddhist temple.",
+  "variants": [
+   "sanmon"
+  ]
  }
 }

@@ -679,6 +679,8 @@ kannushi	kannushi
 kansei	Kansei
 kansei era	Kansei
 kaogongji	Kaogongji
+kara-hafu	karahafu
+karahafu	karahafu
 karamete	karamete-mon
 karamete-mon	karamete-mon
 karo	karo
@@ -808,6 +810,9 @@ log boom	boom
 lognormal	lognormal
 longan	longan
 longans	longan
+loose box	loose box
+loose-box	loose box
+loose-boxes	loose box
 loose-log drive	kanagashi
 loose-log driving	kanagashi
 louzeyuan	louzeyuan
@@ -1125,6 +1130,7 @@ sanguan	Three Officials
 sankin-kotai	alternate attendance
 sankyoson	sankyoson
 sanmai	sanmai
+sanmon	sanmon
 sannomaru	sannomaru
 sanshaku-michi	sanshaku-michi
 sanson	sankyoson
