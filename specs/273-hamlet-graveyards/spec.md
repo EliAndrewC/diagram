@@ -63,8 +63,8 @@ cremation ground and no shrine.
 ### Edge Cases
 
 - 269's sections 270 and 280 are not yet on main: the village burial ground's seat (US3's second half) lands once they
-  are; if 269 is still hours away when the rest is ready, the hamlet part lands first and the village part is a later
-  task of this feature.
+  are; if 269 is still hours away when the rest is ready, the hamlet part lands first and the village part is a
+  follow-up feature carrying this design (a feature with an open task cannot land).
 - The GM's canon governs the setting; the history is reported against it.
 - The field graves two hamlets carry today (Kashikawa, Mizuguchi) are a separate feature (the in-field grave island);
   this feature says whether the new rule changes them.
