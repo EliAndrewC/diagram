@@ -4,9 +4,11 @@ import math
 from typing import TYPE_CHECKING
 
 from ..._geom import (
+    LABEL_AIR_CAP,
     Manifest,
     PointGrid,
     Pt,
+    linear_tilt,
     nearest_way_bearing,
     point_in_poly,
     seg_dist,
@@ -15,11 +17,14 @@ from ..._geom import (
     way_beds,
 )
 from ..._knobs import KOSATSUBA_MARKER_MIN_PX, PUNISHMENT_SPOT_FT, resolve_knob
+from ..captions import CAPTION_FEATURE_GAP
 from ._helpers import (
+    CAPTION_LANE_FLOOR_FT,
     CAPTION_LANE_TARGET_FT,
     KOSATSUBA_ANCHOR_BAND_FT,
     KOSATSUBA_HANDOVER_BAND_FT,
     KOSATSUBA_VERGE_FT,
+    caption_room,
     departure_routes,
     kosatsuba_affordances,
     kosatsuba_anchor,
@@ -249,6 +254,7 @@ class FixtureSitingMixin:
             return all(seg_dist(x, y, bp[k], bp[k + 1]) >= bhw + h / 2 + 3 for bp, bhw in beds for k in range(len(bp) - 1))
 
         tw_lab = self.label_caption_hw(label, 8.0) if label else 0.0  # the caption half-width the seat must also hold, as RECORDED
+        _fabric = self.caption_fabric() if label else []  # the caption placer's blockers, derived once for every candidate
         kb_boxes = self.label_blockers("kosatsuba")  # built once: the probe tests many seats against the same map
         _siting = str((self.M.get("meta") or {}).get("kosatsuba_siting") or "frontage")
         _wells = [(float(_w["x"]), float(_w["y"])) for _w in (self.M.get("wells") or []) if "x" in _w]
@@ -329,6 +335,7 @@ class FixtureSitingMixin:
             placement = str(resolve_knob("kosatsuba_seat", int(self.seed), kosatsuba_affordances(self.M), (self.M["meta"].get("knobs") or {})))
         self.M["meta"]["kosatsuba_seat"] = placement
         anchor = kosatsuba_anchor(self.M, placement)
+        _hand: tuple[float, float] | None = None
         if anchor is not None:
             # AN ANCHORED PLACEMENT CHOOSES THE GROUND; the preferences below then choose among the
             # seats on it. `center` returns no anchor on purpose - its objective IS the traffic count
@@ -342,13 +349,9 @@ class FixtureSitingMixin:
                 _miss = {id(c): routes_missed(_routes, c[2], c[3], KOSATSUBA_HANDOVER_BAND_FT / ftpx) for c in cands}
                 _fewest = min(_miss.values())
                 cands = [c for c in cands if _miss[id(c)] == _fewest]
-                # ...and in the open where the open allows (settlement-review of Mizuguchi, feature 261): ranking the routes
-                # first put the board back inside a crown - the feature-230 pass-13 defect - so the canopy preference is
-                # applied here too, before the band narrows to the seats nearest the handover
-                cands = [c for c in cands if not c[7]] or cands
-                _near = min(math.hypot(c[2] - anchor[0], c[3] - anchor[1]) for c in cands)
-                _band = KOSATSUBA_HANDOVER_BAND_FT / ftpx
-            cands = [c for c in cands if math.hypot(c[2] - anchor[0], c[3] - anchor[1]) <= _near + _band] or cands
+                _hand = anchor  # the handover band is applied below, once `_sitable` can say whose caption fits
+            else:
+                cands = [c for c in cands if math.hypot(c[2] - anchor[0], c[3] - anchor[1]) <= _near + _band] or cands
         # ON THE TRAFFIC IS THE RULE; A FITTING CAPTION IS ONLY THE PREFERENCE WITHIN IT. Scoring the
         # caption as a flat bonus large enough to outrank traffic was tried first and re-committed the
         # original sin at one remove: where no seat on a tight village frontage has a clear caption,
@@ -378,7 +381,7 @@ class FixtureSitingMixin:
         # PREFERENCE needs. It is 8 probes per board position against the 2 already spent, and it
         # cannot promise a seat where the ring finds none - it only stops the siter preferring a
         # position that demonstrably has one over a position that demonstrably does not.
-        def _sitable(_x: float, _y: float, _hw: float, _hh: float) -> bool:
+        def _sitable(_x: float, _y: float, _hw: float, _hh: float, _rot: float = 0.0) -> bool:
             _chw2 = max(10.0, len(label) * 8 * 0.28) if label else 0.0
             if not label:
                 return True
@@ -389,9 +392,21 @@ class FixtureSitingMixin:
             # the twelve zero-standoff members of `_cands`: four axes plus those eight bearings.
             _ring = [(0.0, 1.0), (0.0, -1.0), (1.0, 0.0), (-1.0, 0.0)]
             _ring += [(math.cos(math.radians(_a)), math.sin(math.radians(_a))) for _a in (30, 60, 120, 150, 210, 240, 300, 330)]
-            for _dx, _dy in _ring:
-                _qx = _x + (_hw + _chw2 + 8.0) * _dx
-                _qy = _y + (_hh + 11.0) * _dy
+            _view = (self.M.get("meta") or {}).get("view")
+            _tilt = linear_tilt(_rot)
+            _seats = [(_x + (_hw + _chw2 + 8.0) * _dx, _y + (_hh + 11.0) * _dy) for _dx, _dy in _ring]
+            if _tilt:
+                # A TILTED CAPTION IS JUDGED BY THE PLACER'S OWN TESTS (feature 261): its ladder along the board's lane, at
+                # the tilt and then upright, with the quad it will draw. Two cheaper probes came first and both lied about
+                # Kashikawa's connector: the upright ring called the entrance seat sitable while every seat the caption
+                # placer then tried was blocked or on the lane, and the upright lane-clearance box, straddling a lane the
+                # tilted caption runs BESIDE, called the open ground further up that lane unsitable
+                return caption_room(_x, _y, _rot, _hw, _hh, tw_lab, _fabric, self.M.get("lanes") or [], _view, LABEL_AIR_CAP * 8.0, CAPTION_FEATURE_GAP, self.px(CAPTION_LANE_FLOOR_FT))
+            for _qx, _qy in _seats:
+                # ...AND ON THE PAGE (settlement-review of Kashikawa, feature 261): a seat whose only clear caption ground
+                # lies past the sheet's edge is not sitable - the caption then either clips or falls back onto a roof
+                if _view and not (_view[0] + _chw2 <= _qx <= _view[0] + _view[2] - _chw2 and _view[1] + 8.0 <= _qy <= _view[1] + _view[3] - 8.0):
+                    continue
                 if self.label_seat_clear(_qx, _qy, tw_lab, 8.0, kb_boxes) and self.caption_lane_clearance(_qx, _qy, _chw2) >= CAPTION_LANE_TARGET_FT:
                     return True
             return False
@@ -419,9 +434,27 @@ class FixtureSitingMixin:
         # method sits, and what keeps the anchored case honest (`floor` is 0.0 there on purpose). What it costs is
         # recorded on the map itself: the census block states the board's own count, and `kosatsuba_seat` says
         # which knob chose the ground.
+        if _hand is not None:
+            # ...THEN THE SEATS WHOSE CAPTION FITS, and only then the band beside the handover (settlement-review of Kashikawa,
+            # feature 261): every seat within the band had nowhere for its caption but a farmhouse roof, and the band ranked
+            # first chose one of them. Every seat here is already one every departure passes.
+            cands = [c for c in cands if _sitable(c[2], c[3], w / 2, h / 2, c[4])] or cands
+            # ...then in the open where the open allows (settlement-review of Mizuguchi: ranking the routes first put the
+            # board inside a crown). Below the caption, not above it: the GM's ruling (2026-08-29) is that a board under a
+            # canopy is fine "as long as there is a label attached to it and the label is visible" - so a caption that
+            # fits outranks open ground, and open ground outranks the band.
+            cands = [c for c in cands if not c[7]] or cands
+            _hnear = min(math.hypot(c[2] - _hand[0], c[3] - _hand[1]) for c in cands)
+            cands = [c for c in cands if math.hypot(c[2] - _hand[0], c[3] - _hand[1]) <= _hnear + KOSATSUBA_HANDOVER_BAND_FT / ftpx]
         _above_floor = [c for c in cands if c[0] >= floor]
-        _in_the_open = [c for c in _above_floor if not c[7]] or _above_floor
-        _b, _s, x, y, rot, lab, _gap, _shaded = max(_in_the_open, key=lambda c: (_sitable(c[2], c[3], w / 2, h / 2), c[5] is not None, c[1]))
+        # ...THE CAPTION THAT FITS BEFORE THE OPEN GROUND, here as at the handover (settlement-review of Kuwabata, feature
+        # 261): open ground was filtered first, every seat with room for its caption stood under a crown, and the board
+        # went up where its caption could only name the byre beside it. The GM's ruling (2026-08-29) is that a board under
+        # a canopy is fine "as long as there is a label attached to it and the label is visible".
+        _fits = {id(c): _sitable(c[2], c[3], w / 2, h / 2, c[4]) for c in _above_floor}
+        _fitting = [c for c in _above_floor if _fits[id(c)]] or _above_floor
+        _in_the_open = [c for c in _fitting if not c[7]] or _fitting
+        _b, _s, x, y, rot, lab, _gap, _shaded = max(_in_the_open, key=lambda c: (_fits[id(c)], c[5] is not None, c[1]))
         # THE BOARD FACES THE WAY A READER SEES IT BY, which is the NEAREST one (`kosatsuba_faces_the_road`, the
         # gate's own measure). `rot` above is the bearing of the lane the seat was scored against, and at a
         # junction - or where a later pass lays a footpath across the verge - another way can end up nearer:

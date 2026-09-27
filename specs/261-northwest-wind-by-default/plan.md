@@ -222,6 +222,34 @@ Measured before and after in research R9.
 - The web's dangling-ends sweep runs once more after `straighten_joints`: an end that reached the lane it was then joined
   to was left reaching only its own lane (Mizuguchi).
 
+### D18 - The ways and the caption, as the next reviews drew them
+
+Measured before and after in research R10.
+
+- A lane that runs back along another for 30 ft or more within 14 ft is cut where the doubling starts (`along_tail`,
+  `_sweep_doubled_tails`, before the last dangling-ends sweep); a lane record left with fewer than two points is dropped.
+  Kuwabata's join lane ran 122 ft back along its connector; three maps carried empty straggler records.
+- An orphan join is routed with the brook as an obstacle and refuses a link that crosses it an even number of times,
+  keeping one only as a last resort (Mizuguchi's web crossed and crossed straight back).
+- The board is sited only where the caption placer's own ladder has a clear seat: `caption_room` asks the placer's tests
+  (the hug cap, the derived blockers `caption_fabric` shared with the placer, across-a-way, the page, the lane floor) at
+  the board's tilt and upright. The ring probe it replaces for a tilted board called Kashikawa's entrance seat sitable
+  while every seat the placer then tried was blocked, and the fallback put the words on a farmhouse roof.
+- A tilted caption's lane clearance is the quad it is drawn as. The placer's `_box_clearance` and the gate's
+  `test_no_caption_lies_across_a_way` read the upright record box, which straddles the lane a caption turned along it
+  runs beside, and misses one it crosses at an angle (Kuwabata's caption across a web lane at -1.5 ft).
+- Of two tails doubled into one junction the narrower is cut, never the wider, and a tail that crossed the way before it
+  came alongside ends at that crossing: the cut drew Sawada a hook and necked its 6 ft route out to a 3 ft path.
+- A household whose way out crosses the brook and back is served again by the straggler pass to a way on its own bank
+  that reaches the connector dry-shod (`_link_home_bank`, before the passes that read the finished joints). Mizuguchi's
+  pocket between the brook and the head-race reached its own bank's lane over two planks.
+- A caption stands nearer its own board, as drawn, than any other footprint - in the placer's blockers, the siter's
+  `caption_room` and the pull toward the board - and the blocker prefilter is grown by that reach (it compared bare
+  boxes, so the fixed margin was only measured on features the caption already overlapped). Among the seats above the
+  traffic floor, one whose caption fits comes before one in the open (the GM's 2026-08-29 ruling on a board under a
+  canopy), as it already did at the handover. Kuwabata's caption stood 4.9 ft off a byre and 24.6 ft off its board.
+- A lane record whose points are all one point is dropped with the husks.
+
 ## Phases
 
 1. Engine: D1, D2, D3 with their unit tests (plan, cluster, surface); the amendment's D9-D17 with theirs.

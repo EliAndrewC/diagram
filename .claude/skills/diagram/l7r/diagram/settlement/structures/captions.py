@@ -156,7 +156,11 @@ class CaptionProbesMixin:
         # that brought the words to 0.02 px off a byre was accepted and the caption read as naming the byre.
         # The subject keeps the overlap test, because the pull is TOWARD it by construction and closing the
         # last half-foot onto the thing being named is the point of the pull.
-        if rects_overlap(after, subject) or any(_gap(after, q) <= CAPTION_FEATURE_GAP for q in blockers):
+        # ...AND THE SUBJECT STAYS THE NEAREST (settlement-review of Kuwabata, feature 261): the reader pairs the words with
+        # the nearest glyph, so a pull that ends nearer another footprint than the thing named names the wrong thing -
+        # Kashikawa's pulled caption stood 5.0 ft off a woodpile and 6.2 ft off its board
+        _to_subject = _gap(after, subject)
+        if rects_overlap(after, subject) or any(_gap(after, q) <= max(CAPTION_FEATURE_GAP, _to_subject) for q in blockers):
             return seat
         # ...AND NOT ONTO A WAY (T48): `captions_clear_the_ways_they_stand_on` wants the caption's box
         # clear of every tread by its halo; a pull that lands it on a lane is refused like a footprint.

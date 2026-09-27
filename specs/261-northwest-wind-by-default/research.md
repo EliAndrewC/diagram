@@ -194,3 +194,23 @@ Found on the way (constitution XIV): three sites used `seg_intersect` - which an
 so every spur detoured to a ford and every connector bearing scored a brook violation per segment; with the test fixed the
 connector scorer chose different tracks on four maps, and their district directions were re-read from the drawing.
 
+## R10 - The next review round, and what each fix measured
+
+The reviews of engine 4d1f0170 (2026-09-27) found the caption and the ways still wrong in places; each fix was measured
+on the re-rolled pool (observed 2026-09-27, method: the manifest measures of `tests/hamletgen/test_pool_261.py` and the
+records `m:kashikawa-r4-caption`, `m:kuwabata-r4-tail`, `m:kuwabata-r4-caption-lane`, `m:mizuguchi-r4-over-and-back`):
+
+| finding | before | after |
+|---|---|---|
+| the board caption drawn on a farmhouse roof | Kashikawa, its center inside the roof | 11.2 ft clear (`m:kashikawa-r4-caption`); no caption within 0 ft of a roof on any map |
+| a board caption across a lane's tread, on the drawn quad | Kuwabata, -1.5 ft | every map at least 2 ft (Kuwabata 3.4) |
+| a lane running back along another | Kuwabata, 122 ft beside its connector | 0 on every map |
+| a lane crossing the brook and straight back | Mizuguchi, two planks 35 ft apart | 0; every crossing within 45 ft of a ford |
+| lane records that draw nothing | Kashikawa 3, Kuwabata 2 | 0 |
+| a farmhouse 402 ft from its nearest neighbor | Kuwabata | not on the kept roll; the farthest is 151 ft |
+| a doubled-tail cut that drew a hook, and necked the route out | Sawada, a 9.8 ft leg back 116 degrees; 69.7 ft of 3 ft path | no hook on any map (`m:sawada-r5-hook`); the 6 ft track runs to the hub (`m:sawada-r5-route-wide`) |
+| a way out over the brook and back | Mizuguchi, 2 of 12 households | at most 1 crossing on every route (`m:mizuguchi-r4-over-and-back`) |
+| a caption nearer another footprint than its board | Kuwabata, byre 4.9 ft and board 24.6 ft | nearest its board on every map; Kuwabata 6.8 against 11.2 (`m:kuwabata-r5-caption-pair`) |
+
+Kuwabata's first two rolls under the changed ways each left a farmhouse off the way network, so it keeps its third: 4
+of 16 farmsteads re-seated, the farthest 134 ft (`m:kuwabata-r4-notes`).

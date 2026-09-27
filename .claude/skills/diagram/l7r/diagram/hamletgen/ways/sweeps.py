@@ -6,7 +6,7 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, edge_dist, seg_closest, seg_dist
+from l7r.diagram.settlement import PointGrid, Settlement, edge_dist, seg_closest, seg_dist, seg_intersect, segments_cross
 
 from ..consts import (
     WEB_FABRIC_GAP,
@@ -14,6 +14,7 @@ from ..consts import (
     Poly,
     Pt,
 )
+from .checks import stream_segs
 from .clearance import _bends_badly, _clear_touch, drop_end_nubs, existing_walk, may_write
 from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _draw_web, _hits_a_steading
 from .geom import _TOUCH_GAP, _aim_off, _components, _net_reach, _reach, polyline_len, shadow_share, shadowing_lane
@@ -203,6 +204,15 @@ def _bridge_collinear_breaks(s: Settlement, hard: list[Poly], walls: Sequence[Po
     return made  # pragma: no cover - twelve bridges is far more than any hamlet needs
 
 
+def brook_crossings(pts: Sequence[Pt], s: Settlement) -> int:
+    """How many times the polyline `pts` crosses the drawn brook's course."""
+    n = 0
+    for f in s.M.get("streams") or []:
+        br = [(float(x), float(y)) for x, y in (f.get("poly") or [])]
+        n += sum(1 for a, b in zip(pts, pts[1:], strict=False) for c, d in zip(br, br[1:], strict=False) if segments_cross(a, b, c, d))
+    return n
+
+
 def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> int:
     """Link any way that is not part of the settlement's one network - INCLUDING the skeleton's own.
 
@@ -246,6 +256,7 @@ def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
             key=lambda c: c[0],
         )
         link, best = None, None
+        fallback: tuple[Poly, Any] | None = None
         for cand in cands[:40]:
             # A LINK MAY GO THE LONG WAY ROUND, AND MAY BE PLANKED. Joining the network is worth a
             # detour that a footpath to a door would not be: these two halves of one hamlet are
@@ -257,7 +268,10 @@ def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
             # leaves about a foot between a 3 ft half-tread and a wall, and a farmhouse ends up
             # standing on the lane (cohort seed 11). Only the true single-file footpath gets the
             # footpath clearance; a street, a bridge and a link are all drawn wider than one.
-            _try = _route(cand[1], cand[2], hard, walls, [], gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=14.0)
+            # ...ACROSS THE BROOK ONLY AT A FORD (settlement-review of Mizuguchi, feature 261): planned against no water at all,
+            # a link crossed the brook 60 ft from any ford and came straight back to its own bank. The brook, gapped at its
+            # fords, is the one water it is held to - a ditch it may still cross, and `bridges()` decks it.
+            _try = _route(cand[1], cand[2], hard, walls, stream_segs(s), gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=14.0)
             # A TIGHT-SQUEEZE FALLBACK WAS TRIED HERE AND REVERTED (feature 126). When an orphan
             # could not be linked at the open clearance, a second attempt planned at 45% of
             # `WEB_FABRIC_GAP`, on the reasoning that the sources describe this very lane as
@@ -268,8 +282,17 @@ def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
             # on the reference hamlet. Do not re-add it: an orphan across a field is honestly
             # unlinkable, and the fix for those houses is the straggler pass, not a narrower lane.
             if _try and polyline_len(_try) <= _LINK_DIRECTNESS * max(cand[0], 1.0):
+                # ...AND NOT OVER THE BROOK AND BACK when another candidate will do (settlement-review of Mizuguchi, feature
+                # 261): a link from one bank to the same bank that crosses twice - out at one ford, home at the next - reads
+                # as two planks for nothing. It is kept only as the last resort, when no other candidate links the orphan.
+                if brook_crossings(_try, s) and brook_crossings(_try, s) % 2 == 0:
+                    if fallback is None:
+                        fallback = (_try, cand)
+                    continue
                 link, best = _try, cand
                 break
+        if (link is None or best is None) and fallback is not None:
+            link, best = fallback
         if link is None or best is None:
             return made
         # NOT trimmed to service (T31, GM 2026-08-27): `_trim_to_service` pulled the link's ends back to
@@ -288,6 +311,51 @@ def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
         _draw_web(s, link, int(_w))
         made += 1
     return made  # pragma: no cover - six links is far more than any hamlet needs
+
+
+_HOME_BANK_JOIN_FT = 10.0  # ft: a way's sample this near a crossing-free route counts as on it (routes are sampled every 10 ft)
+
+
+def _link_home_bank(s: Settlement, plan: Any, hard: list[Poly], fabric: list[tuple[Poly, Pt | None, str]], water: list[tuple[Pt, Pt]]) -> int:
+    """A household whose way out crosses the brook and comes back to its own bank gets a way on that bank.
+
+    Settlement-review of Mizuguchi (feature 261): two north-bank farmsteads were joined to the web only through the
+    south bank, so their way out crossed the brook on one plank and back on another - 1,010 ft along the lanes to reach
+    a lane 284 ft away on their own side. Counting crossings per lane record could not see it; a WAY is what the walker
+    takes, so the question is asked of each household's route (`departure_routes`). Such a house is served again by the
+    straggler pass - its door, its router, its clipping - counting as its network only the ways on its own bank that
+    reach the connector without crossing the brook (every route's run after its last crossing), with the whole brook as
+    water. Routing from a point of the way before the plank was tried first and failed: that stub stood hemmed between
+    two steadings and a garden hard by the brook, and the door is where there is room to start."""
+    from l7r.diagram.settlement.structures.fixtures._helpers import departure_routes
+
+    from .serve import _serve_stragglers
+
+    brook = [[(float(x), float(y)) for x, y in (f.get("poly") or [])] for f in s.M.get("streams") or []]
+    segs = [(c, d) for br in brook for c, d in zip(br, br[1:], strict=False)]
+    if not segs:
+        return 0
+    houses = [h for h in s.M.get("houses") or [] if isinstance(h, dict)]
+    good: list[Pt] = []
+    excursions: list[Mapping[str, Any]] = []
+    for r in departure_routes(s.M):
+        hits = [m for m in range(len(r) - 1) if any(segments_cross(r[m], r[m + 1], c, d) for c, d in segs)]
+        good += r[hits[-1] + 1 :] if hits else r
+        if len(hits) >= 2 and houses:
+            excursions.append(min(houses, key=lambda h: math.dist((float(h["x"]), float(h["y"])), r[0])))
+    if not excursions:
+        return 0
+    before = len(s.M.get("lanes") or [])
+    grid = PointGrid(_HOME_BANK_JOIN_FT)
+    grid.extend([(q, q[0], q[1], q[0], q[1]) for q in good])
+
+    def home(c: Pt, g: tuple[Pt, Pt]) -> bool:
+        mid = ((g[0][0] + g[1][0]) / 2, (g[0][1] + g[1][1]) / 2)
+        on_way = any(math.dist(mid, it[0]) <= _HOME_BANK_JOIN_FT for it in grid.near(mid[0], mid[1], _HOME_BANK_JOIN_FT))
+        return on_way and sum(1 for a, b in segs if segments_cross(c, mid, a, b)) % 2 == 0
+
+    _serve_stragglers(s, plan, hard, fabric, [*water, *segs], only=excursions, seg_ok=home)
+    return len(s.M.get("lanes") or []) - before
 
 
 def _sweep_doubled_remnants(s: Settlement) -> int:
@@ -664,3 +732,108 @@ _DOUBLED_GAP_FT = 8.0  # ft: two treads nearer than this read as one smudged ban
 _DOUBLED_SHARE = 0.5  # ...and a lane running that close for half its own length is the doubled ink, whatever its ends do
 _REACH_FT = 60.0  # ft: `lanes_reach_something`'s own figure for an end - a way, a house or the field within this
 _SERVE_FT = 100.0  # ft: a way serves a house within this - `farmhouses_reach_a_way`'s own figure, so a dropped fragment never strands one
+
+
+_ALONG_FT = 14.0  # ft: two centerlines this close read as one tread doubled - a 6 ft way's width plus its soft shoulders
+_ALONG_MIN_FT = 30.0  # ft: shorter than this, running beside a way is just the approach to the junction
+_ALONG_DEG = 25.0  # deg: nearer to parallel than this, the lane is running WITH the way, not meeting it
+_DOUBLED_DEG = 15.0  # deg: a finished tail this near parallel is one tread doubled (Kuwabata's ran at ~3, Sawada's at 9.5); between
+# this and `_ALONG_DEG` the sweep still cuts it, to the crossing it overran, which then stands as a shallow Y - a junction, not a
+# doubling (Inashiro's straggler meets its join lane at 21.6 degrees)
+_CROSS_BACK_FT = 40.0  # ft: a crossing this close before the cut is the junction the doubled tail overran (Sawada's was 24)
+
+
+def along_tail(pts: Sequence[Pt], other: Sequence[Pt], step: float = 4.0, deg: float = _ALONG_DEG) -> int | None:
+    """The index in `pts`' samples where its END starts running alongside `other` - within `_ALONG_FT` of it, nearly
+    parallel (within `deg`), for at least `_ALONG_MIN_FT` - or None. Samples every `step` along `pts` from its end inward."""
+    samples: list[Pt] = []
+    for a, b in zip(pts, pts[1:], strict=False):
+        n = max(1, int(math.dist(a, b) // step))
+        samples += [(a[0] + (b[0] - a[0]) * i / n, a[1] + (b[1] - a[1]) * i / n) for i in range(n)]
+    samples.append(pts[-1])
+    segs = list(zip(other, other[1:], strict=False))
+    if not segs:
+        return None
+    k = len(samples) - 1
+    while k > 0:
+        q = samples[k]
+        a, b = min(segs, key=lambda ab: seg_dist(q[0], q[1], ab[0], ab[1]))
+        if seg_dist(q[0], q[1], a, b) > _ALONG_FT:
+            break
+        u = (samples[k][0] - samples[k - 1][0], samples[k][1] - samples[k - 1][1])
+        v = (b[0] - a[0], b[1] - a[1])
+        nu, nv = math.hypot(*u), math.hypot(*v)
+        if nu and nv and math.degrees(math.acos(min(1.0, abs(u[0] * v[0] + u[1] * v[1]) / (nu * nv)))) > deg:
+            break
+        k -= 1
+    if polyline_len(samples[k:]) < _ALONG_MIN_FT:
+        return None
+    return k
+
+
+def cut_at_tail(pts: Sequence[Pt], k: int, other: Sequence[Pt], step: float = 4.0) -> list[Pt]:
+    """`pts` cut at its `k`th sample (the `along_tail` index) and ended on its snap onto `other`: the vertices before the
+    cut, the cut point, and the nearest point of `other` to it."""
+    samples: list[Pt] = []
+    for a, b in zip(pts, pts[1:], strict=False):
+        n = max(1, int(math.dist(a, b) // step))
+        samples += [(a[0] + (b[0] - a[0]) * t / n, a[1] + (b[1] - a[1]) * t / n) for t in range(n)]
+    samples.append(pts[-1])
+    cut = samples[k]
+    cut_at = polyline_len(samples[: k + 1])
+    out, acc = [pts[0]], 0.0
+    for a, b in zip(pts, pts[1:], strict=False):
+        acc += math.dist(a, b)
+        if acc >= cut_at:
+            break
+        out.append(b)
+    # ...UNLESS IT HAS ALREADY CROSSED THE WAY on its last run in (settlement-review of Sawada, feature 261): the snap then
+    # lies behind the crossing, and the cut lane ran 24 ft past the way it met and bent back 116 degrees onto it - a hook.
+    # A crossing within `_CROSS_BACK_FT` of the cut is where the lane met the way, and it ends there.
+    kept = [*out, cut]
+    walked = 0.0
+    for m in range(len(kept) - 1, 0, -1):
+        u, v = kept[m - 1], kept[m]
+        hit = next((seg_intersect(u, v, c, d) for c, d in zip(other, other[1:], strict=False) if segments_cross(u, v, c, d)), None)
+        if hit is not None:
+            return [*kept[:m], (float(hit[0]), float(hit[1]))]
+        walked += math.dist(u, v)
+        if walked > _CROSS_BACK_FT:
+            break
+    a, b = min(zip(other, other[1:], strict=False), key=lambda ab: seg_dist(cut[0], cut[1], ab[0], ab[1]))
+    snap = seg_closest(cut[0], cut[1], a, b)
+    return [*kept, (float(snap[0]), float(snap[1]))]
+
+
+def _sweep_doubled_tails(s: Settlement) -> int:
+    """A lane whose end runs ALONGSIDE another way has met that way where it first came alongside, and ends there
+    (settlement-review of Kuwabata, feature 261: a join lane ran back 122 ft beside the connector, 12.7 ft apart and
+    merging to one stroke, past the corner where it met it - a doubled road and a dead end). The tail is cut at its first
+    sample alongside and the end snapped onto the way, so the two meet in one junction. Each end is asked in turn."""
+    lanes = s.M.get("lanes") or []
+    fixed = 0
+    # THE NARROWER TAIL IS CUT, NEVER THE WIDER (settlement-review of Sawada, feature 261): a 6 ft track and a 3 ft
+    # straggler ran into the hub side by side, the track was cut, and the route out necked to 69.7 ft of footpath -
+    # the thing `_keep_the_route_wide` exists to prevent, arriving after it ran. Narrow lanes are asked first, and a lane
+    # is never cut back along a narrower one.
+    for i in sorted(range(len(lanes)), key=lambda k: float(lanes[k].get("w") or 3)):
+        ln = lanes[i]
+        if ln.get("connector") or ln.get("spur") or len(ln.get("pts") or []) < 2:
+            continue
+        pts = [(float(x), float(y)) for x, y in ln["pts"]]
+        changed = False
+        for _end in range(2):
+            for j, o in enumerate(lanes):
+                op = [(float(x), float(y)) for x, y in (o.get("pts") or [])]
+                if j == i or len(op) < 2 or float(o.get("w") or 3) < float(ln.get("w") or 3):
+                    continue
+                k = along_tail(pts, op)
+                if k is not None:
+                    pts, changed = cut_at_tail(pts, k, op), True
+                    fixed += 1
+                    break
+            pts.reverse()
+        if changed:
+            ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in pts]
+            s.reink_lane(i)
+    return fixed

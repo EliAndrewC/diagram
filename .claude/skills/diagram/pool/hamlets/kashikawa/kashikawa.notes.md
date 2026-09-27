@@ -943,5 +943,8 @@ rather than re-seed around that, the field path crosses the brook square on a pl
 on one bank (median move 1,660 ft); a lane that crossed the brook and back to reach a house on its own bank is gone,
 because a way now pays to cross. The belt is 281 crowns at 319 degrees over a 161-degree arc. The connector now leaves
 north, so the district direction reads north; the confluence falls 476 ft inside the top edge of the view. The copse
-keeps within 90 ft of a farmhouse (median 71 ft), and the entrance board stands at the handover, passed by all 20
-households' ways out.
+keeps within 90 ft of a farmhouse (median 71 ft). The entrance board stands on the connector 49 ft out from where it
+meets the lanes - the nearest seat whose caption has clear ground, where the handover's own seats had room for it only on
+a farmhouse roof - and is passed by all 20 households' ways out. The rolled `elongated` shape is not what this seat
+draws - the houses gather as a round cloud, a drawn aspect of 1.03 - and the manifest records it as unhonored rather
+than claiming it.

@@ -357,3 +357,17 @@ def test_a_footpath_end_may_front_the_field_it_serves() -> None:
     crop = [(500.0, 0.0), (700.0, 0.0), (700.0, 200.0), (500.0, 200.0)]
     path = [(10.0, 0.0), (300.0, 0.0), (480.0, 0.0)]  # starts on the way, ends 20 ft off the crop's edge
     assert _ends_worth_walking_to(_StubSettlement(), path, (9000.0, 9000.0), segs, [crop])
+
+
+def test_a_house_whose_admitted_ways_are_none_is_left_alone() -> None:
+    """Feature 261: `seg_ok` narrows what counts as the house's network (`_link_home_bank` admits only the ways on its own
+    bank that reach the connector dry-shod); a house none of whose ways is admitted has nothing to be served to here."""
+
+    class _Plan:
+        envelope = [(0.0, 0.0), (10.0, 0.0), (10.0, 10.0)]
+        watercourses: list = []
+
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 200.0)]], houses=[(300.0, 100.0)])
+    before = len(s.M["lanes"])
+    hg.ways._serve_stragglers(s, _Plan(), [], [], [], only=s.M["houses"], seg_ok=lambda c, g: False)
+    assert len(s.M["lanes"]) == before

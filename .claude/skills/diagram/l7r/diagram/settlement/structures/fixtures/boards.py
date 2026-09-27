@@ -11,6 +11,7 @@ from ..._geom import (
     label_tilt,
     linear_tilt,
     poly_gap,
+    poly_seg_dist,
     seg_dist,
     segments_cross,
     tilt_caption_seat,
@@ -109,6 +110,20 @@ class BoardsMixin:
             # run when the map is finished, not when the plank goes in.
             self._label_queue.append(("kosatsuba", (x, y, rot, vw, vh, label, label_above, label_xy)))
         return z
+
+    def caption_fabric(self: Settlement) -> list[Poly]:  # type: ignore[misc]
+        """The solid features a notice board's caption must clear, as quads: `label_blocker_quads`' derived roster plus the
+        RADIUS features it cannot read (a wellhead, a persimmon carry `r`, not `w`/`h`). One body for the caption placer
+        and for the siter's `caption_room` probe (feature 261), so the siter cannot call a seat clear that the placer
+        will refuse."""
+        fabric: list[Poly] = self.label_blocker_quads("kosatsuba")
+        for fam in ("wells", "persimmons"):
+            for o in self.M.get(fam) or []:
+                r = float(o.get("vr") or o.get("r") or 0) if isinstance(o, dict) else 0.0
+                if r:
+                    ox, oy = float(o["x"]), float(o["y"])
+                    fabric.append([(ox - r, oy - r), (ox + r, oy - r), (ox + r, oy + r), (ox - r, oy + r)])
+        return fabric
 
     def _draw_board_caption(self: Settlement, x: float, y: float, rot: float, vw: float, vh: float, label: str, label_above: bool, label_xy: Pt | None) -> None:  # type: ignore[misc]
         """Seat and draw one notice board's caption, in the LABEL PHASE (feature 157).
@@ -212,12 +227,20 @@ class BoardsMixin:
                 _bh = (8.0 * 1.05 + (_n - 1) * _lh) / 2.0
                 _cy = _q[1] - 8.0 * 0.275
                 _box = ((_q[0] - _bw, _cy - _bh), (_q[0] + _bw, _cy - _bh), (_q[0] - _bw, _cy + _bh), (_q[0] + _bw, _cy + _bh), (_q[0], _cy))
+                # ...AND THE QUAD IT WILL DRAW, tilted (settlement-review of Kuwabata, feature 261): a board past 45 degrees
+                # reaches this ladder tilted since `linear_tilt`'s clamp was retired, and the upright box above passed a
+                # caption drawn across a lane's whole tread. `poly_seg_dist` reads 0 where a lane crosses or enters it.
+                _quad = _cap_quad(_q)
                 for _lane in self.M.get("lanes") or []:
                     _pts = _lane.get("pts") or []
                     _lhalf = float(_lane.get("w") or 3) / 2.0
                     for _i in range(len(_pts) - 1):
-                        for _cx, _cy in _box:
+                        # ...the upright box only for an upright caption: a tilted one is drawn as the quad, and its upright
+                        # record box straddled the very lane a caption turned along it runs BESIDE (feature 261, Kashikawa's
+                        # connector: every seat beside the lane scored as on it, and the fallback put the words on a roof)
+                        for _cx, _cy in _box if not _t else ():
                             _best = min(_best, seg_dist(_cx, _cy, _pts[_i], _pts[_i + 1]) - _lhalf)
+                        _best = min(_best, poly_seg_dist(_quad, (float(_pts[_i][0]), float(_pts[_i][1])), (float(_pts[_i + 1][0]), float(_pts[_i + 1][1]))) - _lhalf)
                 # ...AND THE WELLHEAD, which this measured against nothing at all until a review found
                 # the caption drawn ON one (Mizuguchi, 2026-08-24: "notice board" overlapping well #1
                 # by 14.5 x 8.4 ft, its white halo biting a notch out of the blue disc). The objective
@@ -269,6 +292,11 @@ class BoardsMixin:
             _hug_cap = LABEL_AIR_CAP * 8.0  # 8 pt caption; segment 262's own lab_size for this family
             _board_box = (x - hw, y - hh, x + hw, y + hh)
             _board_quad: Poly = [(x - hw, y - hh), (x + hw, y - hh), (x + hw, y + hh), (x - hw, y + hh)]
+            # ...and the board AS DRAWN, turned to its lane, for the one question the upright record box answers wrongly: is
+            # the caption nearer its own board than anything else (feature 261 - Kashikawa's caption measured 2.4 ft to the
+            # upright box and stood 6.2 ft from the board drawn at -76 degrees, nearer a woodpile at 5.0)
+            _ca0, _sa0 = math.cos(math.radians(rot)), math.sin(math.radians(rot))
+            _board_drawn: Poly = [(x + _dx * _ca0 - _dy * _sa0, y + _dx * _sa0 + _dy * _ca0) for _dx, _dy in ((-hw, -hh), (hw, -hh), (hw, hh), (-hw, hh))]
 
             def _cap_quad(_q: Pt) -> Poly:
                 """The quad `label()` will DRAW at this seat - ONE body for all three probes below.
@@ -312,18 +340,7 @@ class BoardsMixin:
             # cannot make: a RADIUS feature (a wellhead, a persimmon) carries `r`, not `w`/`h`, so those
             # stay explicit; and the captions already drawn in this phase, which the demoted
             # `label_seat_clear` used to be what saw.
-            _fabric: list[Poly] = self.label_blocker_quads("kosatsuba")
-            _fabric += [
-                [
-                    (float(_o["x"]) - float(_o.get("vr") or _o.get("r") or 0), float(_o["y"]) - float(_o.get("vr") or _o.get("r") or 0)),
-                    (float(_o["x"]) + float(_o.get("vr") or _o.get("r") or 0), float(_o["y"]) - float(_o.get("vr") or _o.get("r") or 0)),
-                    (float(_o["x"]) + float(_o.get("vr") or _o.get("r") or 0), float(_o["y"]) + float(_o.get("vr") or _o.get("r") or 0)),
-                    (float(_o["x"]) - float(_o.get("vr") or _o.get("r") or 0), float(_o["y"]) + float(_o.get("vr") or _o.get("r") or 0)),
-                ]
-                for _fam in ("wells", "persimmons")
-                for _o in (self.M.get(_fam) or [])
-                if isinstance(_o, dict) and (_o.get("vr") or _o.get("r"))
-            ]
+            _fabric: list[Poly] = self.caption_fabric()
             _fabric += [label_quad(_lb) for _lb in self.M["labels"] if len(_lb) > 3]
 
             def _hug(_q: Pt) -> float:
@@ -367,14 +384,21 @@ class BoardsMixin:
                 # AXIS-ALIGNED box against its referent, so a caption swung 76 degrees out of that box is
                 # invisible to it, and `labels_clear_of_other_buildings` was deleted in feature 141.
                 _quad = _cap_quad(_q)
-                _qx0, _qx1 = min(_c[0] for _c in _quad), max(_c[0] for _c in _quad)
-                _qy0, _qy1 = min(_c[1] for _c in _quad), max(_c[1] for _c in _quad)
+                # ...AND NEARER ITS OWN BOARD THAN ANY OTHER FEATURE (settlement-review of Kuwabata, feature 261): a
+                # caption 4.9 ft off a byre and 24.6 ft off its board cleared the margin and still named the byre - the
+                # reader pairs words with the nearest glyph. So the margin a feature is owed is the larger of the fixed gap
+                # and the caption's own distance to its board.
+                _reach = max(_CAP_FEATURE_GAP, poly_gap(_quad, _board_drawn))
+                # the prefilter is GROWN BY THAT REACH: it compared bare boxes, so the margin was only ever measured on
+                # a feature the caption's box already overlapped, and a caption 2 ft off a roof passed unasked
+                _qx0, _qx1 = min(_c[0] for _c in _quad) - _reach, max(_c[0] for _c in _quad) + _reach
+                _qy0, _qy1 = min(_c[1] for _c in _quad) - _reach, max(_c[1] for _c in _quad) + _reach
                 for _o in _fabric:
                     _ox0, _ox1 = min(_c[0] for _c in _o), max(_c[0] for _c in _o)
                     _oy0, _oy1 = min(_c[1] for _c in _o), max(_c[1] for _c in _o)
                     if _qx1 < _ox0 or _ox1 < _qx0 or _qy1 < _oy0 or _oy1 < _qy0:
                         continue  # the prefilter: the caption's quad cannot possibly reach this one
-                    if poly_gap(_quad, _o) <= _CAP_FEATURE_GAP:
+                    if poly_gap(_quad, _o) <= _reach:
                         return True
                 # ...AND NOT ACROSS A WAY FROM ITS SUBJECT: if the straight line from the board to the
                 # caption crosses a drawn lane, the reader has a way between the words and the thing.
@@ -588,7 +612,29 @@ class BoardsMixin:
                     # the floor is a narrow band of clearance that eight map geometries failed to
                     # hit, and the rung itself is unit-tested on the lifted function instead.
                     _floor = self.px(CAPTION_LANE_FLOOR_FT)
-                    _lx, _ly = _rung(_tld, _floor) or _pick(_tilted)
+                    # the least-bad choice is offered the dense ladder too, not only the coarse seats (settlement-review of
+                    # Kashikawa, feature 261: three coarse seats, all on a roof, and the pick could only choose among them)
+                    _seat = _rung(_tld, _floor)
+                    if _seat is None:
+                        # ...AND UPRIGHT BEFORE THE LEAST BAD (settlement-review of Kashikawa, feature 261): an entrance board
+                        # against a lane where no tilted seat clears anything put "notice board" across a farmhouse roof, while
+                        # level ground beside it was clear. The same ladder at tilt 0 is walked first; the probes read `_t`
+                        # when they are called, so setting it makes them judge the caption that will be drawn.
+                        _keep_t, _t = _t, 0.0
+                        _up = [
+                            _q
+                            for _, _q in sorted(
+                                ((abs(_lat), _g, _si), tilt_caption_seat(x, y, rot, 0.0, hw, hh, _g, above=_ab, lateral=_lat))
+                                for _lat in (0.0, 6.0, -6.0, 12.0, -12.0)
+                                for _g in [11.0 + _r for _r in range(26)]
+                                for _ab, _si in ((False, 0), (True, 1))
+                            )
+                            if not label_above or _q[1] < y
+                        ]
+                        _seat = _rung(_up, _lane_target) or _rung(_up, _floor)
+                        if _seat is None:
+                            _t = _keep_t
+                    _lx, _ly = _seat or _pick([*_tilted, *_tld])
             else:
                 # THE HALO MUST NOT NOTCH THE WAY THE BOARD STANDS ON (settlement-review on Inashiro,
                 # 2026-08-19). The caption is drawn with a 3 px background halo
@@ -663,7 +709,10 @@ class BoardsMixin:
                     _seat = _rung(_lvl, _floor)
                 # ...and the same chain on this branch (feature 174): the rung, then the coarse
                 # search, then the plain default below or above the board.
-                _lx, _ly = _seat or (_pick(_ok) if _ok else ((x, y - hh - 11) if label_above else (x, y + hh + 11)))
+                # ...and where no coarse seat is clear either, the least bad of the whole pool - on the page, off a roof -
+                # before the plain default below the board, which knows nothing of either (settlement-review of Kashikawa,
+                # feature 261: the default put "notice board" across a farmhouse roof)
+                _lx, _ly = _seat or (_pick(_ok) if _ok else (_pick(_pool) if _pool else ((x, y - hh - 11) if label_above else (x, y + hh + 11))))
             # OUTSIDE the branch chain - all three seats (hand, tilted, chosen) draw their caption here.
             # It sat one level deeper for one revision and a TILTED board silently lost its label
             # entirely: Kashikawa's rot=145.7 takes the `elif _t` branch, never reached the call, and

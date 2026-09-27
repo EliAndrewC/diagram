@@ -27,6 +27,7 @@ import math
 
 import pytest
 
+from l7r.diagram.settlement._geom import label_quad, poly_seg_dist
 from tests import rolls
 from tests.gate import _pool
 
@@ -153,10 +154,18 @@ def test_no_caption_lies_across_a_way(labels) -> None:
     for lab in L:
         x0, y0, x1, y1 = (float(lab[0]), float(lab[1]), float(lab[2]), float(lab[3]))
         corners = ((x0, y0), (x1, y0), (x0, y1), (x1, y1), ((x0 + x1) / 2, (y0 + y1) / 2))
+        # a TILTED caption is judged by the quad it is drawn as (feature 261): its upright record box straddles the lane
+        # a caption turned along it runs beside, and misses one it crosses at an angle
+        quad = label_quad(lab) if len(lab) > 7 and lab[7] else None
         for ln in M.get("lanes") or []:
             pts = [(float(a), float(b)) for a, b in (ln.get("pts") or [])]
             half = float(ln.get("w") or 3) / 2.0
             if len(pts) < 2:
+                continue
+            if quad is not None:
+                if any(poly_seg_dist(quad, pts[i], pts[i + 1]) - half < NOTCH_CLEARANCE for i in range(len(pts) - 1)):
+                    notched.append((lab[5], round(x0), round(y0)))
+                    break
                 continue
             if any(_seg_dist(cx, cy, pts[i], pts[i + 1]) - half < NOTCH_CLEARANCE for cx, cy in corners for i in range(len(pts) - 1)):
                 notched.append((lab[5], round(x0), round(y0)))

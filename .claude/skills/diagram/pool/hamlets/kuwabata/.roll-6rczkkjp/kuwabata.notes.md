@@ -357,7 +357,7 @@ correct the last one - so the numbers a reader can check now come from the artif
 - copse: **34** clumps drawn
 - farmhouses: **16**
 - farmstead fixtures: bath **5**, coop **13**, pit **6**, privy **14**, shrine **1**, woodpile **14**
-- notice board at **(2049.8, 487.8)**, **8** of 16 farmhouses within 250 ft
+- notice board at **(2040.4, 480.3)**, **9** of 16 farmhouses within 250 ft
 <!-- /census -->
 
 
@@ -676,11 +676,7 @@ before it was an eight-pixel stream: the same thing wearing two labels on two ma
 This map already stood against the northwest. The windbreak pop-up names the northwest and why, instead of naming two
 sides the straight west strip does not occupy; the dooryard copse keeps within 90 ft of a farmhouse (34 crowns, median
 58 ft, the farthest 86 ft); and the scrub stops at the farmsteads' own outline instead of a rectangle round the houses or
-short of a fringe farmstead's privy. Under the feature's changed ways the first two rolls each left a farmhouse off the
-way network (the manifest's `roll_after` records it), so the map keeps its third: the two northernmost farmsteads and
-two in the east are gone and four stand in new seats to the south and east - matched vacated seat to new seat at the
-least total distance, moves of 562, 450, 134 and 116 ft - so the north end is now one farmstead, 151 ft from its
-nearest neighbor. The belt is 86 crowns at 283 degrees from the houses' middle. The roll also seats a woodland commons,
-38 crowns on a 160 by 174 ft patch whose edge stands 131 ft east of the nearest farmhouse wall, on the far open ground (`stage_woodland`).
-The notice board stands on the `center` knob's ground on the ring lane, its caption beside it and clear of the byre
-behind it. The connector leaves west, compass 274 degrees, which the district direction reads.
+short of a fringe farmstead's privy. Under the feature's changed ways the first two rolls each left a farmhouse off the way network
+(the manifest's `roll_after` records it), so the map keeps its third: four of the sixteen farmsteads are re-seated (the farthest 134 ft from where it stood), and the belt is 86
+crowns at 283 degrees from the houses' middle. The notice board stands on the `center` knob's ground, where the most
+households pass. The connector leaves west, compass 274 degrees, which the district direction reads.

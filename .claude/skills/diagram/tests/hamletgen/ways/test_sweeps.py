@@ -493,3 +493,106 @@ def test_an_end_that_reaches_nothing_is_carried_to_nine_tenths_of_the_reach_of_t
     for q in (pts[0], pts[-1]):
         d = math.dist((q[0], q[1]), (500.0, 500.0))
         assert abs(d - 0.9 * WAY_END_REACH_FT) < 1.0, f"an end stands {d:.1f} ft from the house, not nine tenths of the reach"
+
+
+def test_a_tail_run_alongside_another_way_is_cut_where_it_came_alongside() -> None:
+    """Feature 261: `along_tail` finds where a lane's end starts running beside another way (within 14 ft, nearly parallel,
+    30 ft or more); `cut_at_tail` ends it there, on its snap onto that way. A short approach or a crossing is no tail."""
+    from l7r.diagram.hamletgen.ways.sweeps import along_tail, cut_at_tail
+
+    way = [(0.0, 0.0), (300.0, 0.0)]
+    lane = [(100.0, 200.0), (100.0, 10.0), (220.0, 10.0)]  # comes down to the way, then runs 120 ft beside it
+    k = along_tail(lane, way)
+    assert k is not None
+    cut = cut_at_tail(lane, k, way)
+    assert cut[0] == lane[0] and abs(cut[-1][1]) < 1e-9 and cut[-1][0] <= 112.0, "ends on the way where it came alongside"
+    assert along_tail([(100.0, 200.0), (100.0, 10.0)], way) is None, "an approach that meets the way square is no tail"
+    assert along_tail([(0.0, 50.0), (300.0, 50.0)], way) is None, "a lane 50 ft off is not alongside"
+    assert along_tail(lane, [(5.0, 5.0)]) is None
+
+
+def test_brook_crossings_counts_a_polyline_over_the_drawn_course() -> None:
+    from l7r.diagram.hamletgen.ways.sweeps import brook_crossings
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(400, 400, seed=1)
+    s.M["streams"] = [{"poly": [[200.0, 0.0], [200.0, 400.0]]}]
+    assert brook_crossings([(100.0, 100.0), (300.0, 100.0), (100.0, 150.0)], s) == 2
+    assert brook_crossings([(100.0, 100.0), (150.0, 300.0)], s) == 0
+
+
+def test_join_orphan_ways_keeps_an_over_and_back_link_only_as_the_last_resort(monkeypatch) -> None:
+    """Feature 261: a link that crosses the brook out and home again is refused while another candidate will do - and
+    when none will, it is still drawn, because an orphan left unjoined is worse than two planks."""
+    from l7r.diagram.hamletgen.ways import sweeps
+
+    monkeypatch.setattr(sweeps, "brook_crossings", lambda pts, s: 2)
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 200.0)], [(120.0, 0.0), (120.0, 200.0)]])
+    assert hg.ways._join_orphan_ways(s, [], [], []) == 1
+    assert len(s.M["lanes"]) == 3
+
+
+def test_a_doubled_tail_that_overran_the_way_ends_at_the_crossing() -> None:
+    """Feature 261 (settlement-review of Sawada): a tail that crossed the way and ran on beside it is ended AT the
+    crossing, not snapped back onto the way behind it - the snap drew a hook."""
+    from l7r.diagram.hamletgen.ways.sweeps import along_tail, cut_at_tail
+
+    other = [(0.0, 0.0), (200.0, 0.0)]
+    lane = [(100.0, -60.0), (100.0, 6.0), (60.0, 6.0)]  # crosses at (100, 0), then runs back 40 ft beside it
+    k = along_tail(lane, other)
+    assert k is not None
+    assert cut_at_tail(lane, k, other)[-1] == (100.0, 0.0)
+
+
+def test_a_wider_lane_is_never_cut_back_along_a_narrower() -> None:
+    """Feature 261 (settlement-review of Sawada): of two tails doubled into one junction the narrower is cut, so a cart
+    track keeps its run and the route out does not neck to a footpath."""
+    from l7r.diagram.hamletgen.ways.sweeps import _sweep_doubled_tails
+
+    s = _StubSettlement(lanes=[[(0.0, -300.0), (0.0, 300.0)], [(-100.0, 200.0), (-6.0, 150.0), (-6.0, 60.0)], [(100.0, 200.0), (6.0, 150.0), (6.0, 60.0)]])
+    s.M["lanes"][0]["connector"] = False
+    s.M["lanes"][1]["w"] = 6
+    s.M["lanes"][0]["w"] = 3
+    s.M["lanes"][2]["w"] = 3
+    wide = [list(q) for q in s.M["lanes"][1]["pts"]]
+    assert _sweep_doubled_tails(s) >= 1
+    assert s.M["lanes"][1]["pts"] == wide, "the 6 ft lane keeps its run"
+    assert s.M["lanes"][2]["pts"] != [[100.0, 200.0], [6.0, 150.0], [6.0, 60.0]], "the 3 ft lane beside a 3 ft way is cut"
+
+
+def test_link_home_bank_needs_a_brook_and_an_excursion(monkeypatch) -> None:
+    """Feature 261: no brook, or no way out that crosses it twice, is nothing to link."""
+    from l7r.diagram.hamletgen.ways import sweeps
+    from l7r.diagram.settlement.structures.fixtures import _helpers
+
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 200.0)]], houses=[(40.0, 100.0)])
+    assert sweeps._link_home_bank(s, None, [], [], []) == 0
+    s.M["streams"] = [{"poly": [[-500.0, 300.0], [500.0, 300.0]]}]
+    monkeypatch.setattr(_helpers, "departure_routes", lambda M: [[(0.0, 100.0), (0.0, 0.0)]])
+    assert sweeps._link_home_bank(s, None, [], [], []) == 0
+
+
+def test_link_home_bank_serves_the_house_to_a_dry_shod_way_on_its_own_bank(monkeypatch) -> None:
+    """Feature 261 (settlement-review of Mizuguchi): a way out over the brook and back is served again, counting as the
+    house's network only the ways on its own bank that reach the connector without crossing."""
+    from l7r.diagram.hamletgen.ways import serve, sweeps
+    from l7r.diagram.settlement.structures.fixtures import _helpers
+
+    brook_y = 300.0
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 250.0)], [(200.0, 250.0), (200.0, 400.0)]], houses=[(200.0, 200.0)])
+    s.M["streams"] = [{"poly": [[-500.0, brook_y], [500.0, brook_y]]}]
+    out_and_back = [(200.0, 250.0), (200.0, 350.0), (100.0, 350.0), (100.0, 250.0), (0.0, 250.0), (0.0, 0.0)]
+    monkeypatch.setattr(_helpers, "departure_routes", lambda M: [out_and_back, [(0.0, 100.0), (0.0, 0.0)]])
+    asked: dict = {}
+
+    def fake(s_, plan, hard, fabric, water, only=None, seg_ok=None):
+        asked["only"], asked["ok"] = only, seg_ok
+        s_.lane([(200.0, 200.0), (0.0, 200.0)])
+
+    monkeypatch.setattr(serve, "_serve_stragglers", fake)
+    assert sweeps._link_home_bank(s, None, [], [], []) == 1
+    assert asked["only"] == [s.M["houses"][0]]
+    ok = asked["ok"]
+    assert ok((200.0, 200.0), ((0.0, 100.0), (0.0, 120.0))), "the connector's own bank, reached dry-shod"
+    assert not ok((200.0, 200.0), ((200.0, 360.0), (200.0, 380.0))), "across the brook"
+    assert not ok((200.0, 200.0), ((600.0, 100.0), (600.0, 120.0))), "on no dry-shod way out"

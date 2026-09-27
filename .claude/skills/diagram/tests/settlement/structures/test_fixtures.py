@@ -4,7 +4,7 @@ directory's CLAUDE.md for the index. Tests for `settlement/structures/fixtures.p
 import pytest
 
 from l7r.diagram.settlement import Settlement
-from l7r.diagram.settlement.structures.fixtures._helpers import first_clear_seat, kosatsuba_anchor
+from l7r.diagram.settlement.structures.fixtures._helpers import caption_room, first_clear_seat, kosatsuba_anchor
 from tests.settlement._builders import _crop_settlement, _town
 
 
@@ -463,3 +463,44 @@ def test_the_handover_anchors_the_entrance_and_every_departure_is_walked_to_it()
     assert kosatsuba_handover({"houses": [], "lanes": M["lanes"]}) is None
     alone = {"houses": houses, "lanes": [{"connector": True, "pts": [(-400.0, 0.0), (0.0, 0.0)]}, {"connector": True, "pts": [(5.0, 5.0)]}]}
     assert kosatsuba_handover(alone) is None and departure_routes(alone) == []
+
+
+def _room(**kw):
+    """`caption_room` for a board at (100, 100) turned 80 degrees along a north-south lane at x = 90, with a 20 px caption."""
+    args = {"fabric": [], "lanes": [{"pts": [[90, 0], [90, 200]], "w": 3}], "view": [0, 0, 200, 200], "hug_cap": 24.0, "feature_gap": 4.0, "lane_floor": 2.0}
+    args.update(kw)
+    return caption_room(100.0, 100.0, 80.0, 6.0, 2.5, 20.0, args["fabric"], args["lanes"], args["view"], args["hug_cap"], args["feature_gap"], args["lane_floor"])
+
+
+def test_caption_room_finds_the_seat_beside_the_lane_the_caption_runs_along():
+    # feature 261: the tilted caption runs BESIDE its lane - the siter must see what the placer will draw
+    assert _room()
+
+
+def test_caption_room_refuses_what_the_placer_refuses():
+    # off the page, too far from the board to name it, on a roof, across the way from the board, or on the tread
+    assert not _room(view=[0, 0, 10, 10])
+    assert not _room(hug_cap=-1.0)
+    assert not _room(fabric=[[(0.0, 0.0), (200.0, 0.0), (200.0, 200.0), (0.0, 200.0)]])
+    assert not _room(lanes=[{"pts": [[80, 0], [80, 200]]}, {"pts": [[112, 0], [112, 200]], "w": 30}])
+    assert not _room(lane_floor=1e9)
+    assert _room(view=None, fabric=[[(500.0, 500.0), (510.0, 500.0), (510.0, 510.0), (500.0, 510.0)]])  # a far roof is pruned, not tested
+
+
+def test_a_level_caption_is_judged_by_its_upright_box_against_the_lanes():
+    # feature 261: only a TILTED caption skips the upright record box; a level one is still measured by it
+    s = _town()
+    s.M["lanes"] = [{"pts": [[440, 470], [560, 470]], "w": 3}]
+    s.kosatsuba(500, 500, rot=0)
+    s.place_labels()
+    lab = s.M["labels"][-1]
+    assert lab[5] == "notice board" and not (len(lab) > 7 and lab[7])
+
+
+def test_a_level_board_whose_caption_ring_is_off_the_page_is_not_sitable():
+    # feature 261: a seat whose caption would clip past the sheet's edge does not make the board sitable
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    s.M["road"] = [[100, 300], [900, 300]]
+    s.M["meta"]["view"] = [0, 0, 5, 5]
+    assert s.place_kosatsuba() is not None

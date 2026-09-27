@@ -349,3 +349,64 @@ def departure_routes(M: Any, step: float = 10.0, join: float = 7.0, reach: float
 def routes_missed(routes: Sequence[Sequence[tuple[float, float]]], x: float, y: float, near: float) -> int:
     """How many of `routes` never come within `near` of (x, y) - the departures that do not pass a board there."""
     return sum(1 for r in routes if not any(math.hypot(q[0] - x, q[1] - y) <= near for q in r))
+
+
+def caption_room(
+    x: float,
+    y: float,
+    rot: float,
+    hw: float,
+    hh: float,
+    chw: float,
+    fabric: Sequence[list[tuple[float, float]]],
+    lanes: Sequence[Any],
+    view: Sequence[float] | None,
+    hug_cap: float,
+    feature_gap: float,
+    lane_floor: float,
+) -> bool:
+    """Is there a seat where the notice board's caption can be DRAWN - the placer's own tests, asked by the siter
+    (feature 261)?
+
+    `_draw_board_caption` accepts a seat only if its drawn quad hugs the board (`hug_cap`), clears every solid feature
+    by more than `feature_gap`, is not across a way from the board, stands on the page, and keeps `lane_floor` off every
+    lane's tread; failing every rung, it falls back to the least-bad seat, which on Kashikawa was a farmhouse roof. The
+    siter's old probe asked a ring of upright seats a looser question and called that entrance seat sitable. So this
+    walks the placer's ladder, coarsened (lateral in 6 ft steps, the gap in 5 ft steps: the siter asks it of every
+    candidate), at the board's tilt and then upright - the two ladders the placer walks - with the same quad `_cap_quad`
+    builds (a one-line box centered `8 x 0.275` above the seat). Coarser is one-way safe for a PREFERENCE: a seat found
+    here is a seat the placer's denser ladder also offers."""
+    from ..._geom import linear_tilt, poly_gap, poly_seg_dist, segments_cross, tilt_caption_seat
+
+    chh = 8.0 * 1.05 / 2.0
+    board = [(x - hw, y - hh), (x + hw, y - hh), (x + hw, y + hh), (x - hw, y + hh)]
+    ca0, sa0 = math.cos(math.radians(rot)), math.sin(math.radians(rot))
+    drawn = [(x + dx * ca0 - dy * sa0, y + dx * sa0 + dy * ca0) for dx, dy in ((-hw, -hh), (hw, -hh), (hw, hh), (-hw, hh))]  # the board as drawn, turned
+    segs = [((float(a[0]), float(a[1])), (float(b[0]), float(b[1])), float(ln.get("w") or 3) / 2.0) for ln in lanes for a, b in zip(ln.get("pts") or [], (ln.get("pts") or [])[1:], strict=False)]
+    boxes = [(min(c[0] for c in o), min(c[1] for c in o), max(c[0] for c in o), max(c[1] for c in o), o) for o in fabric]
+    reach = chw + hw + 6.0
+    lats = [0.0] + [v for i in range(1, int(reach // 6.0) + 1) for v in (i * 6.0, -i * 6.0)]
+    for t in dict.fromkeys((linear_tilt(rot), 0.0)):
+        ca, sa = math.cos(math.radians(t)), math.sin(math.radians(t))
+        # the upright fallback walks laterals within 12 ft only, as `_draw_board_caption`'s own upright ladder does: a seat
+        # found wider than that is one the placer never offers (Kuwabata's board was sited on an upright seat 24 ft aside)
+        for lat in lats if t or not linear_tilt(rot) else (0.0, 6.0, -6.0, 12.0, -12.0):
+            for g in (11.0, 16.0, 21.0, 26.0, 31.0, 36.0):
+                for above in (False, True):
+                    qx, qy = tilt_caption_seat(x, y, rot, t, hw, hh, g, above=above, lateral=lat)
+                    cy = qy - 8.0 * 0.275
+                    quad = [(qx + dx * ca - dy * sa, cy + dx * sa + dy * ca) for dx, dy in ((-chw, -chh), (chw, -chh), (chw, chh), (-chw, chh))]
+                    if view and not all(view[0] + 2.0 <= px <= view[0] + view[2] - 2.0 and view[1] + 2.0 <= py <= view[1] + view[3] - 2.0 for px, py in quad):
+                        continue
+                    hug = poly_gap(quad, board)
+                    if hug > hug_cap:
+                        continue
+                    reach = max(feature_gap, poly_gap(quad, drawn))  # nearer its own board AS DRAWN than any other feature, as the placer asks
+                    x0, x1 = min(c[0] for c in quad) - reach, max(c[0] for c in quad) + reach
+                    y0, y1 = min(c[1] for c in quad) - reach, max(c[1] for c in quad) + reach
+                    if any(not (bx1 < x0 or x1 < bx0 or by1 < y0 or y1 < by0) and poly_gap(quad, o) <= reach for bx0, by0, bx1, by1, o in boxes):
+                        continue
+                    if any(segments_cross((x, y), (qx, qy), a, b) or poly_seg_dist(quad, a, b) - half < lane_floor for a, b, half in segs):
+                        continue
+                    return True
+    return False

@@ -101,10 +101,11 @@ entry (T10).
 - [x] T21 The 48-seed cohort against R3's baseline
       research: rendering
       verify: DONE. DONE. make cohort N=48 on engine 9eba368c: 38/48, failing 2, 8, 23, 25, 28, 31, 35, 36, 40, 46 - each also failing on the R3 baseline, all scatter_frame_breach; seed 37 fixed; 0 farmstead_across_brook (SC-009); 3 of 48 seats off-wind (22 under the retired order).
-- [ ] T24 The second review round's findings (plan D12, D15-D17): the board where every departure passes, the priced and
+- [ ] T24 The second review round's findings (plan D12, D15-D18): the board where every departure passes, the priced and
       squared crossing, the spur that reaches the field, the `seg_intersect` misuses, the frame exit, the shape
-      declaration, the scrub hull, the caption on the page, the staged rolls; notes, record and measurement records
-      re-measured (research R9)
+      declaration, the scrub hull, the caption on the page, the staged rolls; then the next round's doubled tails,
+      empty records, over-and-back joins and the caption judged by the placer's own ladder; notes, record and
+      measurement records re-measured (research R9, R10)
       research: rendering
 - [ ] T22 `make done` green on the amendment
       research: rendering

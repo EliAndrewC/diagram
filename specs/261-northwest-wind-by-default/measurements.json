@@ -336,5 +336,215 @@
   "quantity": "the board's distance from the handover - where a lane's end meets the through-running connector, found at (25, 914), inside the page - and the notes now say the board stands on the track beside the lanes' junction",
   "source": "pool/hamlets/mizuguchi/mizuguchi.json lanes[connector], lanes, kosatsuba[0] via kosatsuba_handover",
   "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kashikawa-r4-caption": {
+  "verifies": "F1",
+  "subject": "kashikawa",
+  "round": "4d1f0170",
+  "value": 11.2,
+  "unit": "ft",
+  "quantity": "the entrance board caption's least gap to any farmhouse roof, measured on the drawn (rotated) caption quad; it was 0 with the caption's center inside the roof. The board is sited only where the caption placer's own ladder has a clear seat (caption_room), and the placer judges a tilted caption by its drawn quad",
+  "source": "pool/hamlets/kashikawa/kashikawa.json labels['notice board'] via label_quad against houses[] rectangles",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kashikawa-r4-shape": {
+  "verifies": "F2",
+  "subject": "kashikawa",
+  "round": "4d1f0170",
+  "value": 1.03,
+  "unit": "aspect",
+  "quantity": "meta.cluster_aspect_drawn; the 2026-09-27 notes entry now says the rolled elongated shape draws as a round cloud and is recorded unhonored",
+  "source": "pool/hamlets/kashikawa/kashikawa.json meta.cluster_aspect_drawn and meta.cluster_shape_unhonored; kashikawa.notes.md 2026-09-27 entry",
+  "command": "grep -n 'drawn aspect of 1.03' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
+ },
+ "kashikawa-r4-empties": {
+  "verifies": "F3",
+  "subject": "kashikawa",
+  "round": "4d1f0170",
+  "value": 0,
+  "unit": "records",
+  "quantity": "lane records with fewer than two points (the web drops every husk after its last sweep)",
+  "source": "pool/hamlets/kashikawa/kashikawa.json lanes[].pts",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "inashiro-r4-notes": {
+  "verifies": "F1",
+  "subject": "inashiro",
+  "round": "4d1f0170",
+  "value": 1.62,
+  "unit": "aspect",
+  "quantity": "meta.cluster_aspect_drawn, which the notes' 2026-09-27 entry now states (with the copse median 70 ft, meta.copse_house_ft 69.7)",
+  "source": "pool/hamlets/inashiro/inashiro.json meta.cluster_aspect_drawn, meta.copse_house_ft; inashiro.notes.md 2026-09-27 entry",
+  "command": "grep -n 'drawn aspect of 1.62' .claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md"
+ },
+ "inashiro-r4-caption-crowns": {
+  "verifies": "F2",
+  "subject": "inashiro",
+  "round": "4d1f0170",
+  "value": 0,
+  "unit": "crowns",
+  "quantity": "drawn tree crowns the notice-board caption's rotated quad touches or contains (the board re-sited to (605,379))",
+  "source": "pool/hamlets/inashiro/inashiro.json labels['notice board'] via label_quad against tree_crowns (x, y, r)",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kuwabata-r4-tail": {
+  "verifies": "F1",
+  "subject": "kuwabata",
+  "round": "4d1f0170",
+  "value": 0,
+  "unit": "tails",
+  "quantity": "lane pairs where one runs back along the other for 30 ft or more within 14 ft (along_tail, cut by _sweep_doubled_tails)",
+  "source": "pool/hamlets/kuwabata/kuwabata.json lanes[].pts via hamletgen.ways.sweeps.along_tail",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kuwabata-r4-caption-lane": {
+  "verifies": "F2",
+  "subject": "kuwabata",
+  "round": "4d1f0170",
+  "value": 3.4,
+  "unit": "ft",
+  "quantity": "the notice-board caption's least clearance to any lane's tread edge, measured on the drawn rotated quad (the gate test test_no_caption_lies_across_a_way now reads the quad for a tilted caption, and the placer's _box_clearance skips the upright box for one)",
+  "source": "pool/hamlets/kuwabata/kuwabata.json labels['notice board'] via label_quad against lanes[] with w/2",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kuwabata-r4-notes": {
+  "verifies": "F3",
+  "subject": "kuwabata",
+  "round": "4d1f0170",
+  "value": 4,
+  "unit": "farmsteads",
+  "quantity": "farmsteads re-seated against main (the farthest 134 ft), which the rewritten 2026-09-27 entry now states with roll_attempt 3 and roll_after farmhouses_reach_a_way",
+  "source": "pool/hamlets/kuwabata/kuwabata.json houses[] against main's manifest; meta.roll_attempt, meta.roll_after; kuwabata.notes.md 2026-09-27 entry",
+  "command": "grep -n 'four of the sixteen farmsteads are re-seated' .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md"
+ },
+ "kuwabata-r4-outlier": {
+  "verifies": "F4",
+  "subject": "kuwabata",
+  "round": "4d1f0170",
+  "value": 151,
+  "unit": "ft",
+  "quantity": "the largest distance from any farmhouse to its nearest neighbor; the 402 ft outlier beyond the reservoir is not on the kept roll",
+  "source": "pool/hamlets/kuwabata/kuwabata.json houses[] x, y",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kuwabata-r4-empties": {
+  "verifies": "F6",
+  "subject": "kuwabata",
+  "round": "4d1f0170",
+  "value": 0,
+  "unit": "records",
+  "quantity": "lane records with fewer than two points",
+  "source": "pool/hamlets/kuwabata/kuwabata.json lanes[].pts",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kuwabata-r4-shrine": {
+  "verifies": "F7",
+  "subject": "kuwabata",
+  "round": "4d1f0170",
+  "value": 274,
+  "unit": "ft",
+  "quantity": "distance from the re-sited notice board (2040,480) to the nearest vermilion household shrine, now at (2312,520) on the re-seated roll; no shrine stands near the caption",
+  "source": "pool/hamlets/kuwabata/kuwabata.json kosatsuba[0] and farm_fixtures[kind=shrine]",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "mizuguchi-r4-over-and-back": {
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "round": "4d1f0170",
+  "value": 1,
+  "unit": "crossings",
+  "quantity": "the most brook crossings on any household's way out - its route through the drawn lanes and on along the connector (departure_routes), counted against the brook's course - so no way out crosses and comes back; per ROUTE, not per lane record (the per-lane count this record first carried could not see a way assembled from several lanes). The two north-bank farmsteads that crossed twice now have a footpath north on their own bank (_link_home_bank)",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json lanes[], houses[], streams[0].poly via departure_routes; test_every_way_out_crosses_the_brook_at_most_once",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "mizuguchi-r4-banks": {
+  "verifies": "F2",
+  "subject": "mizuguchi",
+  "round": "4d1f0170",
+  "value": 7,
+  "unit": "farmsteads",
+  "quantity": "farmhouses on the brook's larger bank (5 on the other), which line 23 of the notes now says",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json houses[] sided against streams[0].poly; mizuguchi.notes.md line 23",
+  "command": "grep -n 'seven farmsteads on one bank, five on the other' .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md"
+ },
+ "mizuguchi-r4-board-words": {
+  "verifies": "F3",
+  "subject": "mizuguchi",
+  "round": "4d1f0170",
+  "value": 82,
+  "unit": "ft",
+  "quantity": "the board's distance from the handover at (25,914); the notes now say it stands on the hamlet's stem lane, 82 ft before it meets the connector",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json kosatsuba[0] via kosatsuba_handover; mizuguchi.notes.md 2026-09-27 entry",
+  "command": "grep -n '82 ft before it meets the connector' .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md"
+ },
+ "inashiro-r5-straggler-end": {
+  "verifies": "F1",
+  "subject": "inashiro",
+  "round": "775ea4b5",
+  "value": 5,
+  "unit": "deg",
+  "quantity": "the largest turn along the straggler lanes[5]: it now runs straight to where it crosses the join lane and ends there (a shallow Y at 21.6 degrees), with no elbow before the junction - the doubled tail is cut at the crossing it overran",
+  "source": "pool/hamlets/inashiro/inashiro.json lanes[5].pts",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "inashiro-r5-median": {
+  "verifies": "F2",
+  "subject": "inashiro",
+  "round": "775ea4b5",
+  "value": 1225,
+  "unit": "ft",
+  "quantity": "the median distance from each of the 15 farmhouses to the nearest farmhouse on main's manifest, which the notes now state with that method",
+  "source": "pool/hamlets/inashiro/inashiro.json houses[] against .git/review-snapshot/inashiro/main/inashiro.json houses[]; inashiro.notes.md 2026-09-27 entry",
+  "command": "grep -n 'each house to the nearest house on main' .claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md"
+ },
+ "sawada-r5-hook": {
+  "verifies": "F1",
+  "subject": "sawada",
+  "round": "775ea4b5",
+  "value": 0,
+  "unit": "hooks",
+  "quantity": "lane ends whose last leg is 12 ft or less turning back 90 degrees or more (joints._HOOK_FT, _HOOK_DEG); a doubled tail that overran the way is now ended at the crossing (cut_at_tail)",
+  "source": "pool/hamlets/sawada/sawada.json lanes[].pts; test_no_lane_ends_in_a_hook",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "sawada-r5-route-wide": {
+  "verifies": "F2",
+  "subject": "sawada",
+  "round": "775ea4b5",
+  "value": 6,
+  "unit": "ft",
+  "quantity": "the width of the join-orphans track lanes[2], which runs unbroken from (669,2144) to the hub at (248,1772) where the connector leaves; the doubled-tails sweep cuts the narrower of two doubled tails, never the wider",
+  "source": "pool/hamlets/sawada/sawada.json lanes[2]",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kuwabata-r5-caption-pair": {
+  "verifies": "F1",
+  "subject": "kuwabata",
+  "round": "775ea4b5",
+  "value": 6.8,
+  "unit": "ft",
+  "quantity": "the notice-board caption's gap to its own board as drawn (turned 38.7 degrees), against 11.2 ft to the nearest other built footprint (the byre); the caption placer and the siter now refuse a seat nearer any other footprint than the board",
+  "source": "pool/hamlets/kuwabata/kuwabata.json labels['notice board'] via label_quad against kosatsuba[0] and every non-ground w/h record; test_the_board_caption_stands_nearest_its_own_board",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kuwabata-r5-moves": {
+  "verifies": "F2",
+  "subject": "kuwabata",
+  "round": "775ea4b5",
+  "value": 562,
+  "unit": "ft",
+  "quantity": "the largest move of the four re-seated farmsteads, matching vacated seats to new ones at the least total distance (562, 450, 134, 116 ft), which the notes now state",
+  "source": "pool/hamlets/kuwabata/kuwabata.json houses[] against .git/review-snapshot/kuwabata/main/kuwabata.json houses[]; kuwabata.notes.md 2026-09-27 entry",
+  "command": "grep -n 'moves of 562, 450, 134 and 116 ft' .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md"
+ },
+ "kuwabata-r5-woodland": {
+  "verifies": "F3",
+  "subject": "kuwabata",
+  "round": "775ea4b5",
+  "value": 38,
+  "unit": "crowns",
+  "quantity": "the woodland commons' crowns, which the notes now record with its size and its distance from the nearest farmhouse",
+  "source": "pool/hamlets/kuwabata/kuwabata.json commons[role=woodland]; kuwabata.notes.md 2026-09-27 entry",
+  "command": "grep -n 'woodland commons' .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md"
  }
 }

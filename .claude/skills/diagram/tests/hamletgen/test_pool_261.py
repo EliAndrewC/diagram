@@ -177,3 +177,111 @@ def test_no_farmhouse_stands_on_the_brook(gen: str) -> None:
             corners = [(h["x"] + sx * h["w"] / 2, h["y"] + sy * h["h"] / 2) for sx in (-1, 1) for sy in (-1, 1)]
             near = min(seg_dist(c[0], c[1], poly[k], poly[k + 1]) for c in corners for k in range(len(poly) - 1))
             assert near >= hw - 1.0, f"the farmhouse at ({h['x']:.0f}, {h['y']:.0f}) stands {near:.1f} ft from the brook's course"
+
+
+@pytest.mark.parametrize("gen", GENS, ids=IDS)
+def test_the_ways_cross_the_brook_only_at_fords_and_never_over_and_back(gen: str) -> None:
+    """FR-011 (settlement-reviews of Kashikawa and Mizuguchi, feature 261): every crossing of the brook by a way stands at a
+    ford, and no way crosses it an even number of times - out at one crossing and home at the next is two planks for
+    nothing; and no lane record is an empty husk or a tail doubled along another way."""
+    from l7r.diagram.hamletgen.ways.sweeps import _DOUBLED_DEG, along_tail
+    from l7r.diagram.settlement import seg_intersect
+
+    m = _manifest(gen)
+    lanes = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in m["lanes"]]
+    assert all(len(p) >= 2 and sum(math.dist(a, b) for a, b in zip(p, p[1:], strict=False)) >= 1.0 for p in lanes), "a lane record that draws nothing"
+    for i, p in enumerate(lanes):
+        if m["lanes"][i].get("connector"):
+            continue
+        assert not any(j != i and len(o) >= 2 and along_tail(p, o, deg=_DOUBLED_DEG) is not None for j, o in enumerate(lanes)), f"lane {i}'s end runs on beside another way"
+    fords = m["meta"].get("brook_fords") or []
+    for brook in _brooks(m):
+        for p in lanes:
+            hits = [seg_intersect(a, b, c, d) for a, b in zip(p, p[1:], strict=False) for c, d in zip(brook, brook[1:], strict=False) if segments_cross(a, b, c, d)]
+            assert len(hits) < 2, f"a way crosses the brook {len(hits)} times"
+            for x in hits:
+                assert x is not None and min(math.dist(x, f) for f in fords) <= 45.0, f"a crossing at ({x[0]:.0f}, {x[1]:.0f}) stands off every ford"
+
+
+@pytest.mark.parametrize("gen", GENS, ids=IDS)
+def test_the_board_caption_names_the_board_only(gen: str) -> None:
+    """The notice board's caption, as DRAWN (the tilted quad), stands on no farmhouse roof and across no lane (settlement-
+    reviews of Kashikawa and Kuwabata, feature 261: a caption across a roof named the farmhouse; one across a lane's
+    tread cut the lane at "notice")."""
+    from l7r.diagram.settlement._geom import label_quad, point_in_poly, poly_gap, poly_seg_dist
+
+    m = _manifest(gen)
+    labs = [lab for lab in m.get("labels", []) if "notice" in str(lab[5]).lower()]
+    assert labs, "non-vacuity: the board has its caption"
+    q = label_quad(labs[0])
+    for h in m["houses"]:
+        roof = [(h["x"] + sx * h["w"] / 2, h["y"] + sy * h["h"] / 2) for sx, sy in ((-1, -1), (1, -1), (1, 1), (-1, 1))]
+        assert poly_gap(q, roof) > 0.0 and not point_in_poly(h["x"], h["y"], q), f"the caption lies on the roof at ({h['x']:.0f}, {h['y']:.0f})"
+    for ln in m["lanes"]:
+        p = ln["pts"]
+        for a, b in zip(p, p[1:], strict=False):
+            assert poly_seg_dist(q, tuple(a), tuple(b)) - float(ln.get("w", 3)) / 2 >= 2.0, "the caption lies across a lane's tread"
+
+
+@pytest.mark.parametrize("gen", GENS, ids=IDS)
+def test_the_board_caption_stands_nearest_its_own_board(gen: str) -> None:
+    """The reader pairs a caption with the nearest glyph, so the notice board's caption stands nearer the board AS DRAWN
+    than any other built footprint (settlement-review of Kuwabata, feature 261: 4.9 ft off a byre and 24.6 ft off its
+    board, the words named the byre)."""
+    from l7r.diagram.settlement._geom import label_quad, poly_gap
+    from l7r.diagram.settlement.structures.captions import LABEL_GROUND_KEYS
+
+    def quad(o: dict) -> list[tuple[float, float]]:
+        a = math.radians(float(o.get("rot") or 0))
+        ca, sa, hw, hh = math.cos(a), math.sin(a), float(o["w"]) / 2, float(o["h"]) / 2
+        return [(o["x"] + dx * ca - dy * sa, o["y"] + dx * sa + dy * ca) for dx, dy in ((-hw, -hh), (hw, -hh), (hw, hh), (-hw, hh))]
+
+    m = _manifest(gen)
+    labs = [lab for lab in m.get("labels", []) if "notice" in str(lab[5]).lower()]
+    assert labs and m.get("kosatsuba"), "non-vacuity: the board and its caption"
+    q = label_quad(labs[0])
+    own = poly_gap(q, quad(m["kosatsuba"][0]))
+    others = [
+        (poly_gap(q, quad(o)), key)
+        for key, recs in m.items()
+        if key not in LABEL_GROUND_KEYS and key != "kosatsuba" and isinstance(recs, list)
+        for o in recs
+        if isinstance(o, dict) and all(isinstance(o.get(f), (int, float)) for f in ("x", "y", "w", "h"))
+    ]
+    assert others, "non-vacuity: built footprints to compare against"
+    nearest = min(others)
+    assert nearest[0] > own, f"the caption stands {nearest[0]:.1f} ft from a {nearest[1]} record and {own:.1f} ft from its board"
+
+
+@pytest.mark.parametrize("gen", GENS, ids=IDS)
+def test_every_way_out_crosses_the_brook_at_most_once(gen: str) -> None:
+    """A household's way OUT - its route through the lanes and along the connector - crosses the brook at most once: out
+    over a plank and home over the next is two planks for nothing (settlement-review of Mizuguchi, feature 261: two
+    north-bank farmsteads reached their own bank's lane 284 ft away by 1,010 ft over two planks). Asked per route, not per
+    lane record: no single lane crossed twice."""
+    from l7r.diagram.settlement.structures.fixtures._helpers import departure_routes
+
+    m = _manifest(gen)
+    routes = departure_routes(m)
+    assert routes, "non-vacuity: the map has ways out"
+    for brook in _brooks(m):
+        for r in routes:
+            n = sum(1 for a, b in zip(r, r[1:], strict=False) for c, d in zip(brook, brook[1:], strict=False) if segments_cross(a, b, c, d))
+            assert n <= 1, f"the way out from ({r[0][0]:.0f}, {r[0][1]:.0f}) crosses the brook {n} times"
+
+
+@pytest.mark.parametrize("gen", GENS, ids=IDS)
+def test_no_lane_ends_in_a_hook(gen: str) -> None:
+    """No lane ends in a hook - a last leg of `_HOOK_FT` or less turning back `_HOOK_DEG` or more (the GM, 2026-09-26; the
+    settlement-review of Sawada, feature 261, found one drawn by the doubled-tail cut, after the pass that takes them off)."""
+    from l7r.diagram.hamletgen.ways.joints import _HOOK_DEG, _HOOK_FT
+
+    m = _manifest(gen)
+    assert m["lanes"], "non-vacuity: the map has lanes"
+    for ln in m["lanes"]:
+        p = [(float(x), float(y)) for x, y in ln["pts"]]
+        for a, b, c in ((p[-3], p[-2], p[-1]), (p[2], p[1], p[0])) if len(p) >= 3 else ():
+            u, v = (b[0] - a[0], b[1] - a[1]), (c[0] - b[0], c[1] - b[1])
+            nu, nv = math.hypot(*u), math.hypot(*v)
+            turn = math.degrees(math.acos(max(-1.0, min(1.0, (u[0] * v[0] + u[1] * v[1]) / (nu * nv))))) if nu and nv else 0.0
+            assert not (nv <= _HOOK_FT and turn >= _HOOK_DEG), f"a lane ends in a {nv:.1f} ft hook turning {turn:.0f} degrees at ({c[0]:.0f}, {c[1]:.0f})"

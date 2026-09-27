@@ -29,7 +29,18 @@ from .joints import straighten_joints
 from .route import _route
 from .serve import _lay_web_lane, _serve_stragglers
 from .smooth import _STUB_REACH_FT, _smooth_web
-from .sweeps import _bridge_collinear_breaks, _drop_end_nubs, _join_orphan_ways, _keep_the_route_wide, _sweep_dangling_ends, _sweep_debris, _sweep_doubled_remnants, _sweep_steading_fouls
+from .sweeps import (
+    _bridge_collinear_breaks,
+    _drop_end_nubs,
+    _join_orphan_ways,
+    _keep_the_route_wide,
+    _link_home_bank,
+    _sweep_dangling_ends,
+    _sweep_debris,
+    _sweep_doubled_remnants,
+    _sweep_doubled_tails,
+    _sweep_steading_fouls,
+)
 from .touch import _touch_junctions
 
 
@@ -557,6 +568,10 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     _sweep_doubled_remnants(s)  # ...and a bridge can itself be doubled ink
     _sweep_dangling_ends(s)  # LAST: an end the passes above left in open ground is pulled back to something, or dropped
     _sweep_debris(s)  # a fragment the passes above whittled below the floor and left standing alone
+    # A WAY OUT THAT CROSSES THE BROOK AND BACK GETS A WAY ON ITS OWN BANK (feature 261) - before the passes that read the
+    # finished joints, so the path it draws is straightened, de-hooked and cut back like every other
+    _pass("home-bank")
+    _link_home_bank(s, plan, hard, fabric, list(plan.watercourses) + drawn_water)
     _keep_the_route_wide(s, hard_built, walls, list(plan.watercourses) + drawn_water)  # ...and a cart route may not neck to a footpath
     # AND READ THE JOINTS AS ONE WAY (GM 2026-09-26): two records meeting end to end are one lane to the walker;
     # a fold there becomes a T and a jog is pulled straight. Last, because every pass above can lay a joint.
@@ -564,7 +579,13 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # ...AND THE ENDS ARE ASKED ONCE MORE, after the joints are read as one way (feature 261). An end that reached the lane it
     # was about to be joined to passed the sweep above and was left, after the join, reaching only its own lane: Mizuguchi's
     # (558, 1096) stood 56 ft from lane 2's end until the two became one lane, and then 104 ft from anything.
+    _sweep_doubled_tails(s)  # a lane that runs on beside the way it met ends where it met it (feature 261)
     _sweep_dangling_ends(s)
+    # ...and a record the joins emptied is not a lane: a husk with no points declares a way nothing draws (a review
+    # counted three on Kashikawa and two on Kuwabata) - dropped with its ink slot, the one way lanes leave
+    # ...and a record whose points are all one point is a husk too (Mizuguchi, feature 261: seven three-point records at a
+    # single spot, left by the passes that re-cut the home-bank footpath)
+    s.drop_lanes([i for i, ln in enumerate(s.M.get("lanes") or []) if len(ln.get("pts") or []) < 2 or polyline_len([(float(x), float(y)) for x, y in ln["pts"]]) < 1.0])
     s.M["meta"]["lane_web"] = plan.lane_web
 
 

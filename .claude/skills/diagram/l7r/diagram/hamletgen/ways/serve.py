@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 import math
-from collections.abc import Sequence
+from collections.abc import Callable, Mapping, Sequence
+from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_closest, seg_dist
 from l7r.diagram.sitegen.geom import crop_polys, unit
@@ -199,7 +200,15 @@ def _ends_worth_walking_to(s: Settlement, path: Poly, house: Pt, segs: Sequence[
     return joined and _fronts(path[0]) and _fronts(path[-1])
 
 
-def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: list[tuple[Poly, Pt | None, str]], water: list[tuple[Pt, Pt]]) -> None:
+def _serve_stragglers(
+    s: Settlement,
+    plan: SitePlan,
+    hard: list[Poly],
+    fabric: list[tuple[Poly, Pt | None, str]],
+    water: list[tuple[Pt, Pt]],
+    only: Sequence[Mapping[str, Any]] | None = None,
+    seg_ok: Callable[[Pt, tuple[Pt, Pt]], bool] | None = None,
+) -> None:
     """A FOOTPATH TO THE OUTLYING STEADING, for the few houses the web's regular cuts cannot reach.
 
     The web covers the cluster by construction, but its lanes are then clipped out of the crop, off
@@ -237,14 +246,18 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
         lanes = [[(float(x), float(y)) for x, y in ln["pts"]] for ln in s.M.get("lanes", [])]
         segs = [(a, b) for ln in lanes for a, b in zip(ln, ln[1:], strict=False)]
         added = 0
-        for h in list(s.M.get("houses", [])):
+        # `only` and `seg_ok` (feature 261, `_link_home_bank`): serve THESE houses, counting as their network only the ways
+        # `seg_ok` admits - a household whose way out crosses the brook and back is served to a way on its own bank
+        for h in list(s.M.get("houses", []) if only is None else only):
             c = (float(h["x"]), float(h["y"]))
             # THE LIVE NETWORK, NOT A SNAPSHOT. `segs` was read once per pass, so a house already
             # brought within reach by a path drawn two houses earlier IN THIS PASS still looked
             # stranded and got a second path of its own - Kashikawa's 29 ft lane 12, drawn for a
             # house that a previous lane had already taken from 100.7 ft to 38.9, and which the new
             # lane then left at 70.5. A way exists because feet use it.
-            segs = _net_segs(s)
+            segs = [g for g in _net_segs(s) if seg_ok is None or seg_ok(c, g)]
+            if not segs:
+                continue
             # SERVE WITH MARGIN, NOT TO THE MILLIMETER. Triggering at exactly the reach means a
             # house at 99.7 ft is not a straggler and gets nothing, while one at 100.3 has a whole
             # path drawn for four inches of violation - the same bug at both ends. A review caught
