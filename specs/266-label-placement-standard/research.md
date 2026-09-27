@@ -77,10 +77,10 @@ locate and read."
 
 ## R2. The shipped notice-board captions, measured (2026-09-27)
 
-From each pool hamlet's manifest (`kosatsuba[0]` and its `labels` record), the gap between the caption's drawn,
+Observed 2026-09-27; method: from each pool hamlet's manifest (`kosatsuba[0]` and its `labels` record), the gap between the caption's drawn,
 rotated block and the board's rotated footprint, and the caption's center in the board's own frame:
 
-| hamlet | board rot | gap | text block height | center along the board | center across |
+| hamlet (observed 2026-09-27, method: manifest geometry) | board rot | gap | text block height | center along the board | center across |
 |---|---|---|---|---|---|
 | Inashiro | 47.3 | 12.3 ft | 8.4 ft | -16.6 ft | 19.0 ft |
 | Kashikawa | 126.3 | 14.0 ft | 8.4 ft | 28.2 ft | 20.7 ft |
@@ -88,10 +88,11 @@ rotated block and the board's rotated footprint, and the caption's center in the
 | Mizuguchi | 80.4 | 17.5 ft | 8.4 ft | -2.3 ft | 24.2 ft |
 | Sawada | 99.2 | 20.1 ft | 8.4 ft | -2.1 ft | 26.8 ft |
 
-So the gap runs 1.5x to 2.4x the text's own height, and two captions are also slid well along the board.
+So the gap runs 1.5x to 2.4x the text's own height, and two captions are also slid well along the board (observed
+2026-09-27, method: the table above).
 The cause, read from `structures/fixtures/boards.py`: the candidate seats are laid out on the PAGE's axes from
-hand-chosen gaps (`+11`, `+8`, then `+12` steps to 60 px, and a twelve-bearing annulus), while the caption is drawn
-at the board's angle; the search takes the nearest seat that clears lanes and wells by 3 ft.
+hand-chosen gaps (`+11`, `+8`, then `+12` steps to `60 px`, and a twelve-bearing annulus), while the caption is drawn
+at the board's angle; the search takes the nearest seat that clears lanes and wells by `3 ft`.
 
 ## R3. Every label in the engine, by how its seat is chosen (2026-09-27)
 

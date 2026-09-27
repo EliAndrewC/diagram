@@ -15,7 +15,8 @@ be able to do so as well."*
 ## Summary
 
 Every hamlet's notice-board caption stands 12 to 20 ft off its board (1.5x to 2.4x its own text height) and two of
-five are also slid along the board (research.md R2), because its seat search was hand-built on the page's axes. The
+five are also slid along the board (research.md R2; observed 2026-09-27, method: the rotated caption block against
+the rotated board footprint, read from each pool manifest), because its seat search was hand-built on the page's axes. The
 cartographic standard for placing a label is well documented and readable (research.md R1): ranked candidate
 positions around the feature starting at upper right, a small consistent gap measured from the feature's drawn
 edge, a cost that prefers free space and otherwise the least important thing to cover, a maximum offset past which
@@ -128,7 +129,8 @@ and why, with every rule quoted from a page they can open.
 
 - **SC-001** (FR-003, FR-004, FR-006, FR-012): on every pool hamlet the board caption stands at a ranked position
   with its gap equal to the preferred offset, or - where no free seat exists at that ring - at the nearest free
-  ring, with a leader past the maximum offset. Measured as in research.md R2, before and after.
+  ring, with a leader past the maximum offset. Measured as in research.md R2 (method: the caption block against the
+  board footprint in each manifest), before and after; the before is observed 2026-09-27.
 - **SC-002** (FR-001, FR-002, FR-008, FR-009, FR-010): unit tests place captions for a point, a level box, a rotated
   box past 90 degrees, a line and an area subject through the one entry point, and a test proves the engine holds
   no other seat search (the removed functions are gone and no caption path bypasses the placer).
