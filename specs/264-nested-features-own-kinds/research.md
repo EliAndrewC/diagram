@@ -48,9 +48,14 @@ which kind answers:
 
 | page | parts | parts that answer as themselves (raster / vector) | parents | parents pointable and opening their write-up | parent lit, a part unlit | part lit, a parent lit |
 |---|---|---|---|---|---|---|
-| Ochiba | 25 | 25 / 25 | 15 | 15 / 15 | 0 | 0 |
-| Hayakawa | 29 | 29 / 29 | 15 | 15 / 15 | 0 | 0 |
-| Ubame | 30 | 30 / 30 | 20 | 20 / 20 | 0 | 0 |
+| Ochiba | 26 | 26 / 26 | 15 | 15 / 15 | 0 | 0 |
+| Hayakawa | 31 | 31 / 31 | 15 | 15 / 15 | 0 | 0 |
+| Ubame | 31 | 30 / 31 | 20 | 20 / 20 | 0 | 0 |
+
+Re-run after the building reviews' fixes (the inner rooms, the attached privies and the garden wells added). Ubame's
+one raster miss is a sampling artifact, not the page: its ancestral alcove is now a label alone, the probe samples a
+label only at its box center, which falls between glyphs, and a pixel sweep of the label's box finds it answering
+on 227 pixels, against 223 on main.
 | county example | 2 | 2 / 2 | 1 | 1 / 1 | 0 | 0 |
 | Ochiba round trip | 2 | 2 / 2 | 1 | 1 / 1 | 0 | 0 |
 
