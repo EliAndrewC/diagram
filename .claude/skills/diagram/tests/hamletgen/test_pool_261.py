@@ -143,3 +143,22 @@ def test_a_way_reaches_the_field(gen: str) -> None:
     pts = [(float(x), float(y)) for ln in m["lanes"] if not ln.get("connector") for x, y in ln["pts"]]
     near = min(seg_dist(p[0], p[1], r[i], r[(i + 1) % len(r)]) for p in pts for r in rings for i in range(len(r)))
     assert near <= 60.0, f"the nearest way stops {near:.0f} ft from the field"
+
+
+@pytest.mark.parametrize("gen", GENS, ids=IDS)
+def test_no_brook_runs_ruled_along_the_frame(gen: str) -> None:
+    """FR-017: no stretch of brook within 80 ft of the view's edge runs level along that edge for more than 150 ft - the GM's
+    ruling on Sawada (2026-08-26): a course that "appears to run exactly east to west parallel to the edge of the map ...
+    makes it look like a mistake". The settlement-review measured 457 ft of it pinned against the frame box."""
+    m = _manifest(gen)
+    x0, y0, w, h = m["meta"]["view"]
+    for brook in _brooks(m):
+        for i in range(len(brook)):
+            for axis, lo, hi in ((0, x0, x0 + w), (1, y0, y0 + h)):
+                if min(abs(brook[i][axis] - lo), abs(brook[i][axis] - hi)) > 80.0:
+                    continue
+                j = i
+                while j + 1 < len(brook) and abs(brook[j + 1][axis] - brook[i][axis]) <= 4.0:
+                    j += 1
+                run = sum(math.dist(brook[k], brook[k + 1]) for k in range(i, j))
+                assert run <= 150.0, f"{run:.0f} ft of brook ruled along the frame from ({brook[i][0]:.0f}, {brook[i][1]:.0f})"

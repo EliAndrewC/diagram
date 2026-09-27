@@ -228,6 +228,12 @@ def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = ()
         # than the amplitude: where the crop's floor binds, the walk is not what decides the offset at all, so a
         # wider walk only moves the few stations where the field's own edge is already crooked.
         v = _v_within(u, floor, floor + stray, (dx, dy), (px, py), box)
+        # THE COURSE LEAVES WHERE THE FRAME WOULD PIN IT (settlement-review of Sawada, feature 261). A station the box
+        # holds below its walk is laid flat against the box, and a run of them drew the brook dead level along the sheet's
+        # top margin for 457 ft - the ruled line parallel to the edge the GM called out as a mistake (2026-08-26). Once
+        # the course has run half its stations, the first one the box binds is where it turns off the frame instead.
+        if i > steps // 2 and _v_within(u, float("-inf"), floor + stray, (dx, dy), (px, py), box) < floor + stray - 1.0:
+            break
         out.append((u * dx + v * px, u * dy + v * py))
     # ...and off the frame from the last station, still wandering, the run measured along the fall from there.
     # THE FIRST EXIT LEG KEEPS THE COURSE'S OWN HEADING and only then turns onto the fall: driving it straight
