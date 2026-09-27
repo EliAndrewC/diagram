@@ -153,7 +153,7 @@ class SugarcaneDike(Kind):
     the delta urbanized and industrialized, and by the late 1980s cane dikes covered more of the district than mulberry. One hamlet
     is one type, so a cane hamlet rolls cane on every dike.
 
-    Note: The type is read, and so is the loop as written above - the young leaves fed to fish and pigs, the old
+    Note: The type is read, though as a modern one - the gazetteer puts the cane dike after the mulberry dike gave way, and nothing read attests it earlier - and so is the loop as written above - the young leaves fed to fish and pigs, the old
     ones shading the vegetable ground, the refinery waste returned to the pond. The often-repeated version of
     that loop, in which the pressed cane's bagasse goes to the pigs, is on no page read, and the row pitch is
     a drawing calibration from the plant's habit, not a Ming or Qing figure.
@@ -267,7 +267,7 @@ class PigSty(Kind):
     how many households kept a sty in Ming or Qing - the per-hamlet share band is the generator's. The few feet
     of clearance at the sluice is a guess too: the record gives dike widths and no spacing along a dike at all.
     And the widths it does give, the drawn bank does not meet - the planted collar under these sheds is two to
-    five meters, short of the five-meter floor a modern manual sets for a shed-carrying dike (its ten-meter ceiling answers to pigsties, piping and traffic together, and the traffic at least is later than this map), while a Shunde village's dikes
+    five meters, short of the five-meter floor a modern manual sets for a shed-carrying dike (its ten-meter ceiling answers to pigsties, piping and traffic together, and the traffic at least, if it ran on the dikes as this page infers, is later than this map), while a Shunde village's dikes
     ran twenty meters before commercial fish farming eroded them, a width later than this map and so no measure of it;
     a reader measuring the collar should know it is snug by a modern standard and that no older standard was found to judge it by.
 
