@@ -11,6 +11,7 @@ adept	adept
 adepts	adept
 adlittoral	adlittoral
 ake-mutsu	ake-mutsu
+aki monto	monto
 akiba	Akiba
 akusui	akusui
 alluvial fan	alluvial fan
@@ -123,6 +124,8 @@ burakumin	burakumin
 burgage	burgage plot
 burgage plot	burgage plot
 burgage plots	burgage plot
+burial grave	two-grave
+burial graves	two-grave
 bursaries	rent bursary
 bursary	rent bursary
 bushi	bushi
@@ -426,6 +429,8 @@ fines	fines
 fingerling	fingerling
 fingerlings	fingerling
 fining	fining
+fire bed	fire bed
+fire beds	fire bed
 fire gap	fire gap
 fire gaps	fire gap
 fire water	fire-water
@@ -657,6 +662,8 @@ ieyasu	Ieyasu
 ieyasu's	Ieyasu
 igeta	igeta
 igune	igune
+ikkō	Jodo Shinshu
+ikkō-shū	Jodo Shinshu
 imperial spine	Imperial spine
 important cultural landscape	Important Cultural Landscape
 important cultural landscapes	Important Cultural Landscape
@@ -722,6 +729,7 @@ jitter	jitter
 jittered	jitter
 jittering	jitter
 jizo	jizo
+jizō	jizo
 jo	jo
 jobikeshi	jobikeshi
 jochi	jochi
@@ -737,6 +745,7 @@ josui-ido	josui-ido
 junk	junk
 junks	junk
 jōdo	Jodo
+jōdo shinshū	Jodo Shinshu
 jōgōe-chi	jōgōe-chi
 jōsui ido	josui-ido
 kabata	kabata
@@ -814,6 +823,7 @@ kishu school	Kishu school
 kishu-school	Kishu school
 knob	knob
 knobs	knob
+ko	kō
 kobito	kobito
 kochi seiri	kochi seiri
 kochi-seiri	kochi seiri
@@ -864,6 +874,8 @@ kyo-machiya	machiya
 kyoho	Kyoho
 kyuhi	kyuhi
 kyōhō	Kyoho
+kō	kō
+kō group	kō
 kōsatsu	kosatsuba
 kōsatsu-ba	kosatsuba
 kōshin	Kōshin
@@ -973,6 +985,7 @@ mongol yam	yam
 monk outlet	monk outlet
 monk-style outlet	monk outlet
 monospecific	monospecific
+monto	monto
 monzen	monzen
 morijio	morijio
 morisada manko	Morisada manko
@@ -1298,9 +1311,11 @@ shichiya	shichiya
 shijin soo	four gods
 shijin-soo	four gods
 shimenawa	shimenawa
+shin sect	Jodo Shinshu
 shinai	shinai
 shinden	shinden
 shinsei	Shinsei
+shinshū	Jodo Shinshu
 shirasu	oshirasu
 shirimito	shirimito
 shironameshi	shironameshi
@@ -1520,6 +1535,9 @@ tudigong	tudi miao
 tulou	tulou
 tulous	tulou
 twelve-mat	tatami
+two-grave	two-grave
+two-grave settlements	two-grave
+two-grave villages	two-grave
 tōhoku	Tohoku
 tōkaidō	Tokaido
 tōya	miyaza

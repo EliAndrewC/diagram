@@ -170,7 +170,12 @@
  "Jodo Shinshu": {
   "def": "The True Pure Land school of Japanese Buddhism, whose temple priests could marry and pass the temple to a son.",
   "variants": [
-   "Jodo Shinshu"
+   "Jodo Shinshu",
+   "Jōdo Shinshū",
+   "Shinshū",
+   "Shin sect",
+   "Ikkō-shū",
+   "Ikkō"
   ]
  },
  "Kamakura period": {
@@ -2072,7 +2077,8 @@
  "jizo": {
   "def": "A roadside stone figure of the bodhisattva who protects travelers and the spirits of dead children, standing at passes and in villages.",
   "variants": [
-   "jizo"
+   "jizo",
+   "jizō"
   ]
  },
  "jokamachi": {
@@ -6587,6 +6593,38 @@
   "variants": [
    "visiting grave",
    "visiting graves"
+  ]
+ },
+ "monto": {
+  "def": "The followers of Jodo Shinshu, the Shin sect; the Aki monto were its followers in Aki, the old province around Hiroshima, where cremation was the custom.",
+  "variants": [
+   "monto",
+   "Aki monto"
+  ]
+ },
+ "kō": {
+  "def": "A lay devotional society of a settlement's households, which could own a shared facility such as a cremation ground its members built themselves.",
+  "variants": [
+   "kō",
+   "kō group",
+   "ko"
+  ]
+ },
+ "two-grave": {
+  "def": "A custom in which the dead are buried at one grave, the burial grave, set apart from the houses, while a second grave nearer home or at the temple, the visiting grave, is the one the family visits.",
+  "variants": [
+   "two-grave",
+   "two-grave villages",
+   "two-grave settlements",
+   "burial grave",
+   "burial graves"
+  ]
+ },
+ "fire bed": {
+  "def": "The spot at a cremation ground where the pyre of wood or straw was laid and the body burned.",
+  "variants": [
+   "fire bed",
+   "fire beds"
   ]
  }
 }
