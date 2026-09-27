@@ -1071,6 +1071,8 @@ sengoku	Sengoku
 senmaida	senmaida
 sento	sento
 sentō	sento
+separated flow	separation zone
+separation zone	separation zone
 sericulture	sericulture
 setchin	kawaya
 settling basin	settling basin
@@ -1290,6 +1292,8 @@ umayado	umayado
 umayagoe	kyuhi
 umazouri	umagutsu
 umon	umon
+undersluice	undersluice
+undersluices	undersluice
 understory	understory
 ura-dana	ura-dana
 ura-nagaya	ura-nagaya
@@ -1398,6 +1402,7 @@ zhou	department
 zicheng	zicheng
 zokibayashi	zokibayashi
 zonation	zonation
+zone of separated flow	separation zone
 zongjia	zongjia
 zooplankton	zooplankton
 zuku	zuku
