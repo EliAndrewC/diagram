@@ -52,5 +52,6 @@ The groups still inside queues 2, 4, 5 and 6 (V3, V4, V5, G1, G2, R1, W2, K2, K4
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
       verify: DONE. group T4: 9 questions written or edited and 12 registry keys, researched through source-reader; quote-check, record-format and source-applicability applied with one re-check round and the owed modals answered (briefs/t4-checks.md)
 
-- [ ] T12 batch 1 lands: `owed-check`, `make page-check`, `make done`, the push; State updated
+- [x] T12 batch 1 lands: `owed-check`, `make page-check`, `make done`, the push; State updated
       research: rendering
+      verify: DONE. owed-check 2 of 2 IN-STEP (after _entry_owed learned to ignore footnote renumbering), make page-check 1149 passed, make done green; State updated

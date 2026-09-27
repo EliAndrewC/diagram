@@ -612,20 +612,20 @@ rows EDIT an existing section syncs from main first, since 269's and 267's edits
 
 | group | rows | state |
 |---|---|---|
-| V1 | 5 | checked (queue 1) |
-| V2 | 5 | checked (queue 1) |
+| V1 | 5 | landed (batch 1) |
+| V2 | 5 | landed (batch 1) |
 | V3 | 5 | checked (queue 2) |
 | V4 | 5 | checked (queue 2) |
 | V5 | 5 | writing (queue 2) |
-| V6 | 4 | checked (queue 3) |
-| V7 | 6 | checking (queue 1) |
-| W1 | 5 | checked (queue 3) |
-| U1 | 6 | checking (queue 3) |
+| V6 | 4 | landed (batch 1) |
+| V7 | 6 | landed (batch 1) |
+| W1 | 5 | landed (batch 1) |
+| U1 | 6 | landed (batch 1) |
 | R1 | 4 | checking (queue 5) |
-| T1 | 6 | checked, pulled back |
-| T2 | 6 | checked, pulled back |
-| T3 | 5 | checked, pulled back |
-| T4 | 5 | checked, pulled back |
+| T1 | 6 | landed (batch 1) |
+| T2 | 6 | landed (batch 1) |
+| T3 | 5 | landed (batch 1) |
+| T4 | 5 | landed (batch 1) |
 | W2 | 7 | queued (queue 5) |
 | U2 | 6 | todo |
 | U3 | 5 | todo |
