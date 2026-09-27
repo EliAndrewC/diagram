@@ -1,0 +1,9 @@
+{
+ "term": "wet-tint haze",
+ "def": "The hazy blue tint the map lays over wet ground to mark it as marsh or waterlogged.",
+ "variants": [
+  "wet-tint haze",
+  "wet tint",
+  "wet-tint"
+ ]
+}

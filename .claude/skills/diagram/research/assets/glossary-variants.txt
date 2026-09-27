@@ -53,6 +53,10 @@ azuchi-momoyama	Azuchi-Momoyama period
 azuchi-momoyama period	Azuchi-Momoyama period
 back crop	back crop
 back crops	back crop
+back marsh	back marsh
+back marshes	back marsh
+back swamp	back marsh
+back swamps	back marsh
 back-crop	back crop
 backswamp	backswamp
 backswamps	backswamp
@@ -309,6 +313,7 @@ dba	dBA
 dbh	DBH
 dead ground	dead ground
 dead space	dead ground
+declared fall	declared fall
 deep-water irrigation	deep-water irrigation
 degawari	degawari
 delivery ditch	delivery ditch
@@ -821,6 +826,7 @@ jori-sei	jori
 josui	josui
 josui ido	josui-ido
 josui-ido	josui-ido
+jsidre	JSIDRE
 junk	junk
 junks	junk
 jōdo	Jodo
@@ -1516,6 +1522,8 @@ spiraea	Spiraea
 spread footing	footing
 spring and autumn	Spring and Autumn
 spring line	spring line
+spur	spur
+spurs	spur
 square keep	shell keep
 square keeps	shell keep
 srtm	SRTM
@@ -1781,6 +1789,9 @@ wenmiao	wenmiao
 western han	Han dynasty
 wet run	wet run
 wet runs	wet run
+wet tint	wet-tint haze
+wet-tint	wet-tint haze
+wet-tint haze	wet-tint haze
 wetted perimeter	wetted perimeter
 white-tawed	shironameshi
 wicket	wicket

@@ -1,0 +1,7 @@
+{
+ "term": "declared fall",
+ "def": "The direction a map's ground is set to slope downhill; every point's height is reckoned by how far along it the point lies.",
+ "variants": [
+  "declared fall"
+ ]
+}

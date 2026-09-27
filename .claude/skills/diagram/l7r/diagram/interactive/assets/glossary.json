@@ -7218,5 +7218,41 @@
    "contours",
    "along the contour"
   ]
+ },
+ "wet-tint haze": {
+  "def": "The hazy blue tint the map lays over wet ground to mark it as marsh or waterlogged.",
+  "variants": [
+   "wet-tint haze",
+   "wet tint",
+   "wet-tint"
+  ]
+ },
+ "JSIDRE": {
+  "def": "The Japanese Society of Irrigation, Drainage and Rural Engineering, whose journal publishes research on farm water, reservoirs and rural land.",
+  "variants": [
+   "JSIDRE"
+  ]
+ },
+ "back marsh": {
+  "def": "The low, poorly drained ground behind a river's natural levees, often holding ponds and old ox-bow lakes; in Japan it was traditionally cleared and used as paddy.",
+  "variants": [
+   "back marsh",
+   "back marshes",
+   "back swamp",
+   "back swamps"
+  ]
+ },
+ "spur": {
+  "def": "A tongue of higher ground running out from a hillside or ridge; standing above the ground on either side, it drains and stays dry.",
+  "variants": [
+   "spur",
+   "spurs"
+  ]
+ },
+ "declared fall": {
+  "def": "The direction a map's ground is set to slope downhill; every point's height is reckoned by how far along it the point lies.",
+  "variants": [
+   "declared fall"
+  ]
  }
 }
