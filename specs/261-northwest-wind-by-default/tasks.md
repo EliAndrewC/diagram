@@ -69,27 +69,35 @@ entry (T10).
 
 ## Phase 7 - the amendment of 2026-09-27: the brook crossed, and the reviews' findings (D9-D14)
 
-- [ ] T13 Fords and crossings (D9): `brook_fords`, `gap_segments`, `ford_crossing`; the strike-out, its re-roll and
+- [x] T13 Fords and crossings (D9): `brook_fords`, `gap_segments`, `ford_crossing`; the strike-out, its re-roll and
       the far-bank refusal deleted; `research/water/270` rewritten to the rule as built with the spacing's absence note
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-- [ ] T14 The seeds (D4): Kashikawa 3 and Mizuguchi 23 measured at their originals and kept; Sawada 24 kept
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. DONE. brook_fords every 160 ft (m:ford-spacing) where the brook bends under 20 degrees, gap_segments opens its corridor 30 ft each side, ford_crossing routes the spur through one, bridges() decks every crossing; far_bank, the strike-out and the brook re-roll deleted. Research pass 2026-09-27 found no source for spacing or form: absence note on research/water/270, whose question and rule paragraphs now state the rule as built; quote-check READABLE/VERBATIM on the Harie notes, its three unlabeled clauses labeled; no new source relied on here; tests: ways/test_checks ford tests, test_pool_261 every brook crossing bridged on all five maps.
+- [x] T14 The seeds (D4): Kashikawa 3 and Mizuguchi 23 measured at their originals and kept; Sawada 24 kept
       research: rendering
-- [ ] T15 A farmstead whole on one bank (D10): `_parts_across_stream`, `across_the_brook`; `research/homesteads/250`
+      verify: DONE. DONE. Measured at the original seeds once crossings existed (research R7): Kashikawa 3 seats 20/20 wind-facing, belt 285 crowns at 320 deg; Mizuguchi 23 seats 12/12 wind-facing astride its brook (4 and 8), the weir back. Both kept; Sawada 24 kept (seed 6 refused by drain and wet toe). Reasons in each generator's docstring and notes.
+- [x] T15 A farmstead whole on one bank (D10): `_parts_across_stream`, `across_the_brook`; `research/homesteads/250`
       with its absence note; the unread paper on the GM's download list
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-- [ ] T16 The copse within reach (D11), the re-seat nudge included
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. DONE. Settlement._parts_across_stream refuses a configuration whose house-to-part line crosses a stream; across_the_brook refuses a fixture or persimmon seat the same way; unit tests in settlement/test_rolling and hamletgen/test_homesteads; pool 0 across (was Inashiro 4, Mizuguchi 2). Research pass 2026-09-27 (sonnet reader): nothing places parts across or forbids it; research/homesteads/250 a guess with an absence note, mizu-no-bunka-60 quoted VERBATIM (quote-check), source-applicability APPLICABLE-WITH-LIMITS and the limits written into its registry entry; the Asuka paper appended to the GM's download list.
+- [x] T16 The copse within reach (D11), the re-seat nudge included
       research: rendering
-- [ ] T17 The entrance board offered the way that meets its anchor (D12)
+      verify: DONE. DONE. village_grove near=(points, reach), the re-seat nudge included; copse within 90 ft of a house (m:copse-house-reach) or 60 ft of the belt; test_pool_261 holds it on all five maps (medians 63-72 ft), test_homestead_parts the nudge.
+- [x] T17 The entrance board offered the way that meets its anchor (D12)
       research: rendering
-- [ ] T18 The brook never doubles back (D13)
+      verify: DONE. DONE. stage_notice and place_kosatsuba rank lanes meeting the anchor; kosatsuba_anchor falls back to the approach point nearest the houses; entrance boards 65-139 ft from their anchors, each within 100 ft of a house (test_pool_261); Sawada was 669 ft.
+- [x] T18 The brook never doubles back (D13)
       research: rendering
-- [ ] T19 The belt's depth held by the pool test, the pop-up naming a direction (D14)
+      verify: DONE. DONE. unfold(course, BROOK_MAX_TURN_DEG=100) in water/brook.py; test_water unit test; sharpest turns Inashiro 41, Kashikawa 53, Mizuguchi 53, Sawada 95 (was 123); test_pool_261 holds it.
+- [x] T19 The belt's depth held by the pool test, the pop-up naming a direction (D14)
       research: rendering
-- [ ] T20 The notes, gen docstrings, docs and record say what the maps draw (FR-009, FR-018); `make notes-census`;
+      verify: DONE. DONE. test_pool_wind belt_depths: every 40 ft bin no way, brook or page edge cuts holds 30 ft (minimums 51-133 ft); the pop-up says toward the northwest; the class text says one or two windward sides.
+- [x] T20 The notes, gen docstrings, docs and record say what the maps draw (FR-009, FR-018); `make notes-census`;
       the future-work item closed
       research: rendering
+      verify: DONE. DONE. Notes: Kashikawa district southwest (218 deg), Kuwabata northeast (28 deg), the confluence 476/655 ft, Sawada's water story at seed 24, the kept seeds, a dated feature-261 entry per map; make notes-census; hamletgen.md, the hamletgen CLAUDE.md driver row, the future-work item closed to closed.md; the record's arcs re-measured; the scrub keep-out follows the cluster hull (Sawada F5).
 - [ ] T21 The 48-seed cohort against R3's baseline
       research: rendering
 - [ ] T22 `make done` green on the amendment
