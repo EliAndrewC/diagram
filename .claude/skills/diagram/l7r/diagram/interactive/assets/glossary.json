@@ -6040,5 +6040,29 @@
    "Tenmacho's",
    "Tenmacho jail"
   ]
+ },
+ "tsukubo": {
+  "def": "A long pole with a T-shaped, barbed head, used by Edo officers to pin and hold a suspect at a distance. It was one of the three restraining tools set out at a guard post or court.",
+  "variants": [
+   "tsukubo"
+  ]
+ },
+ "sasumata": {
+  "def": "A long pole ending in a U-shaped fork, used to pin a suspect by the neck or body against a wall or the ground without closing in.",
+  "variants": [
+   "sasumata"
+  ]
+ },
+ "ishidaki": {
+  "def": "\"Stone-holding\": an Edo torture in which the accused knelt on a ridged wooden board while heavy stone slabs were stacked on the thighs.",
+  "variants": [
+   "ishidaki"
+  ]
+ },
+ "soroban": {
+  "def": "Here, the board with triangular ridges that the accused knelt on in the ishidaki torture. It is named after the abacus, whose rods it resembles.",
+  "variants": [
+   "soroban"
+  ]
  }
 }

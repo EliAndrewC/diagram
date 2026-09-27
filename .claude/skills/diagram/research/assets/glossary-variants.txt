@@ -610,6 +610,7 @@ irri	IRRI
 irrigation ditch	irrigation ditch
 irrigation ditches	irrigation ditch
 irrigation duty	water duty
+ishidaki	ishidaki
 ishigaki	ishigaki
 ishikawa method	Ishikawa method
 ishikawa-method	Ishikawa method
@@ -1150,6 +1151,7 @@ sanson	sankyoson
 sara-ike	sara-ike
 sarae	sarae
 sasa	sasa
+sasumata	sasumata
 satetsu	satetsu
 satoyama	satoyama
 schistosomiasis	schistosomiasis
@@ -1243,6 +1245,7 @@ solidity	solidity
 song dynasty	Song dynasty
 song yingxing	Song Yingxing
 song-dynasty	Song dynasty
+soroban	soroban
 sotobori	sotobori
 south town magistrate	town magistrate
 southern song	Song dynasty
@@ -1386,6 +1389,7 @@ tsuijibei	tsuijibei
 tsuijimatsu	tsuijimatsu
 tsuke-shoin	tsuke-shoin
 tsuke-tsubo	tsuke-tsubo
+tsukubo	tsukubo
 tsumairi	gable-entered
 tsunaba	tsunaba
 tudi miao	tudi miao
