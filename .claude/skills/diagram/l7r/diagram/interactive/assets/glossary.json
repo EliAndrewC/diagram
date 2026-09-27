@@ -2679,7 +2679,7 @@
   ]
  },
  "masugata": {
-  "def": "A castle gate court: a square enclosure between two gates set at right angles, so that whoever comes through the first must turn under fire before the second.",
+  "def": "A castle gate court: a square enclosure between two gates set at right angles, so that whoever comes through the first must turn under fire before the second. At the ends of a post town, the name for the place where the highway is bent twice at right angles to the same end.",
   "variants": [
    "masugata"
   ]
@@ -6661,5 +6661,11 @@
    "Ou"
   ],
   "cased": true
+ },
+ "dobu": {
+  "def": "A small open ditch carrying rain and waste water - before a house front, or under the boards down the middle of a back alley - narrow enough to step over.",
+  "variants": [
+   "dobu"
+  ]
  }
 }
