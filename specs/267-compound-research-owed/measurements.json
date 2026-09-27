@@ -1,0 +1,29 @@
+{
+ "kashikawa-corner-grave-step": {
+  "value": 11.98,
+  "unit": "map px",
+  "subject": "kashikawa",
+  "verifies": "F1",
+  "quantity": "the corner grave's distance in from its plot's corner vertex (1767.1, 1593.6): the grave at (1768.5, 1605.5), form corner, after corner_seat was floored at 12 px (it was 8.7 px, which stood the tall stone on the bund junction); a 4x crop of the regenerated PNG shows the mound and both stones inside the plot, clear of both bunds and the ditch; 2026-09-27",
+  "source": "pool/hamlets/kashikawa/kashikawa.json field_graves[0] after make map GEN=pool/hamlets/kashikawa/kashikawa.gen.py at b5a501206",
+  "command": "python3 -c \"import json,math; g=json.load(open('pool/hamlets/kashikawa/kashikawa.json'))['field_graves'][0]; print(g, math.dist((g['x'],g['y']),(1767.1,1593.6)))\""
+ },
+ "kashikawa-grave-feature-note": {
+  "value": 1,
+  "unit": "feature note",
+  "subject": "kashikawa",
+  "verifies": "F2",
+  "quantity": "the page's on_this_map text for the grave island class on Kashikawa, read by the page's own notes reader: \"Kashikawa's field grave takes the Japanese form: a small mound with its stones in the corner of a rice plot...\" - the map says which form it draws (the class key stays, as the page tests pin it); 2026-09-27",
+  "source": "l7r.diagram.interactive.notes.read_map_notes('pool/hamlets/kashikawa/kashikawa.notes.md').features['grave island']",
+  "command": "python3 -c \"from l7r.diagram.interactive import notes; print(notes.read_map_notes('pool/hamlets/kashikawa/kashikawa.notes.md').features['grave island'])\""
+ },
+ "kashikawa-notes-grave-entry": {
+  "value": 1,
+  "unit": "notes entry",
+  "subject": "kashikawa",
+  "verifies": "F3",
+  "quantity": "the Kashikawa notes carry a dated entry for the island-to-corner change, saying the older island measurements are the old form's; 2026-09-27",
+  "source": "pool/hamlets/kashikawa/kashikawa.notes.md, heading '2026-09-27 - feature 267: the field grave is the corner form'",
+  "command": "grep -c '2026-09-27 - feature 267: the field grave is the corner form' pool/hamlets/kashikawa/kashikawa.notes.md"
+ }
+}
