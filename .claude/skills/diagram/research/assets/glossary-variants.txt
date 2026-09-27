@@ -650,6 +650,8 @@ ieyasu	Ieyasu
 ieyasu's	Ieyasu
 igeta	igeta
 igune	igune
+imado ware	Imado ware
+imado-yaki	Imado ware
 imperial spine	Imperial spine
 important cultural landscape	Important Cultural Landscape
 important cultural landscapes	Important Cultural Landscape
@@ -1213,6 +1215,7 @@ row village	roson
 runners	yayi
 ryo	ryo
 ryobosei	ryobosei
+ryobu	ryobu
 rōjū	Roju
 sae no kami	sae no kami
 sageba	ōkaji
@@ -1286,6 +1289,7 @@ shell keeps	shell keep
 shi	shi
 shibai-goya	shibai-goya
 shichiya	shichiya
+shide	shide
 shijin soo	four gods
 shijin-soo	four gods
 shimenawa	shimenawa
@@ -1609,6 +1613,7 @@ yachida	yato
 yagura	yagura
 yaita	yaita
 yam	yam
+yamahannoki	yamahannoki
 yamen	yamen
 yamen god	yamen-god
 yamen-god	yamen-god

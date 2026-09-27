@@ -6581,5 +6581,30 @@
   "variants": [
    "Heibonsha"
   ]
+ },
+ "ryobu": {
+  "def": "A small deciduous broadleaf tree, one of the trees of the young cut-over wood nearest a Japanese settlement, beside konara oak, hornbeam and alder.",
+  "variants": [
+   "ryobu"
+  ]
+ },
+ "shide": {
+  "def": "Japanese hornbeam, a deciduous broadleaf tree of the young cut-over wood nearest a settlement.",
+  "variants": [
+   "shide"
+  ]
+ },
+ "yamahannoki": {
+  "def": "The Japanese mountain alder, a deciduous broadleaf tree of the young cut-over wood nearest a settlement.",
+  "variants": [
+   "yamahannoki"
+  ]
+ },
+ "Imado ware": {
+  "def": "The unglazed and raku pottery fired at Imado and Hashiba on the Sumida, northeast of Asakusa in Edo: everyday wares, braziers, flowerpots, clay dolls and roof tiles.",
+  "variants": [
+   "Imado ware",
+   "Imado-yaki"
+  ]
  }
 }
