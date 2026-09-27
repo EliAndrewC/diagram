@@ -5848,5 +5848,33 @@
   "variants": [
    "Shinpen Tsuika"
   ]
+ },
+ "warazuka": {
+  "def": "The Japanese word for a straw rick: the threshed rice straw, in bundles, stacked into a cylinder on the reaped paddy or on its bunds after the harvest. Wara-nio is another name for it.",
+  "variants": [
+   "warazuka",
+   "wara-nio",
+   "warazukas"
+  ]
+ },
+ "season word": {
+  "def": "A word that Japanese verse conventionally ties to one season, so using it names that season; the straw rick is a season word of autumn.",
+  "variants": [
+   "season word",
+   "season words"
+  ]
+ },
+ "Digital Daijisen": {
+  "def": "A Japanese dictionary, one of the dictionaries whose entries kotobank serves.",
+  "variants": [
+   "Digital Daijisen",
+   "Daijisen"
+  ]
+ },
+ "ridge culture": {
+  "def": "Growing crops on raised ridges of soil with furrows between them, the ridges laid out and shaped to suit the ground - raised higher, with deeper furrows, where the land is wet and low.",
+  "variants": [
+   "ridge culture"
+  ]
  }
 }

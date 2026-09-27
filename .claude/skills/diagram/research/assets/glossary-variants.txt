@@ -234,6 +234,7 @@ cyanobacterium	cyanobacterium
 dachedian	wagon inn
 daidokoro	daidokoro
 daihachiguruma	daihachiguruma
+daijisen	Digital Daijisen
 daijokan	Daijokan
 daikan	daikan
 daikansho	daikansho
@@ -267,6 +268,7 @@ desire paths	desire path
 desire-line	desire path
 detritus	detritus
 diameter at breast height	DBH
+digital daijisen	Digital Daijisen
 dike-pond	dike-pond
 dike-ponds	dike-pond
 diospyros kaki	Diospyros kaki
@@ -1072,6 +1074,7 @@ rhizomes	rhizome
 ri	ri
 rick	rick
 ricks	rick
+ridge culture	ridge culture
 ridge span	ridge span
 riffle	riffle
 riffles	riffle
@@ -1122,6 +1125,8 @@ scour	scour
 se	se
 seam	seam
 seams	seam
+season word	season word
+season words	season word
 secondary forest	secondary forest
 secondary woodland	secondary forest
 secondary woodlands	secondary forest
@@ -1389,7 +1394,10 @@ wamyōshō	Wamyosho
 wanghuolou	wanghuolou
 wanli	Wanli era
 wanli era	Wanli era
+wara-nio	warazuka
 waraguro	waraguro
+warazuka	warazuka
+warazukas	warazuka
 ward gate	kido
 ward gates	kido
 wari-tetsu	wari-tetsu
