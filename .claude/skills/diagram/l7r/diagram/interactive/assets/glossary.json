@@ -3238,7 +3238,10 @@
  "ryobosei": {
   "def": "The two-grave system: the body buried in a local patch, a separate venerated stone raised at the central temple.",
   "variants": [
-   "ryobosei"
+   "ryobosei",
+   "two-grave",
+   "burial grave",
+   "visiting grave"
   ]
  },
  "sae no kami": {
@@ -4747,7 +4750,8 @@
   "def": "The Edo-period requirement that every household be certified by a Buddhist temple, which issued the papers a person needed to travel or move.",
   "variants": [
    "terauke",
-   "terauke seido"
+   "terauke seido",
+   "temple-certification system"
   ]
  },
  "fuse": {
@@ -6173,6 +6177,63 @@
   "def": "The Network of Aquaculture Centres in Asia-Pacific, which published, with the FAO, the integrated fish-farming manual this record cites.",
   "variants": [
    "NACA"
+  ]
+ },
+ "Kinki": {
+  "def": "The region of central Japan around Kyoto, Osaka and Nara, taking in Shiga, Nara, Kyoto and Hyogo prefectures among others - where the two-grave custom was most common.",
+  "variants": [
+   "Kinki",
+   "Kinki region"
+  ]
+ },
+ "barrel coffin": {
+  "def": "A round wooden tub, like a small barrel, in which a commoner's body was buried sitting up - the usual coffin of Edo-period townspeople, cheaper than a long box coffin.",
+  "variants": [
+   "barrel coffin",
+   "barrel coffins",
+   "hayaoke"
+  ]
+ },
+ "hsien": {
+  "def": "County - the older (Wade-Giles) spelling of the Chinese xian, the administrative unit below a prefecture.",
+  "variants": [
+   "hsien",
+   "Hsien"
+  ]
+ },
+ "seed": {
+  "def": "The number a map is drawn from: the same seed always draws the same settlement, and it settles each choice a real place could have made either way.",
+  "variants": [
+   "seed",
+   "seeds",
+   "seed's"
+  ]
+ },
+ "inter": {
+  "def": "To bury; here, to place the ashes left by cremation in a grave, as in the Japanese practice of cremating the dead and then burying a household's urns together in one family plot.",
+  "variants": [
+   "inter",
+   "interred",
+   "interment",
+   "inters"
+  ]
+ },
+ "charity graveyard": {
+  "def": "In Qing China, a burial ground bought and endowed by a donor for the dead no family would bury - the unclaimed, the poor, the drowned of a flood - and packed with coffins. Those in Jiangnan ranged from 3 fen to 10 mu.",
+  "variants": [
+   "charity graveyard",
+   "charity graveyards",
+   "charity ground",
+   "charity grounds"
+  ]
+ },
+ "crypt precinct": {
+  "def": "A walled compound of built tombs or vaults, set apart from the open plots where the dead are buried in the earth.",
+  "variants": [
+   "crypt precinct",
+   "crypt precincts",
+   "crypt compound",
+   "crypt compounds"
   ]
  }
 }

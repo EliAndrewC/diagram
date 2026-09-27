@@ -67,6 +67,8 @@ bansho	bansho
 banyuetang	banyuetang
 barbican	barbican
 baren	baren
+barrel coffin	barrel coffin
+barrel coffins	barrel coffin
 basal area	basal area
 base flow	base flow
 batter	batter
@@ -116,6 +118,7 @@ burakumin	burakumin
 burgage	burgage plot
 burgage plot	burgage plot
 burgage plots	burgage plot
+burial grave	ryobosei
 bursaries	rent bursary
 bursary	rent bursary
 bushi	bushi
@@ -153,6 +156,10 @@ cesspits	koedame
 chan	Chan
 chan buddhism	Chan
 chaoguan	chaoguan
+charity graveyard	charity graveyard
+charity graveyards	charity graveyard
+charity ground	charity graveyard
+charity grounds	charity graveyard
 chenghuangmiao	chenghuangmiao
 chi	chi
 chinju	chinju
@@ -219,6 +226,10 @@ crossref	Crossref
 crown	crown
 crown shyness	crown shyness
 crowns	crown
+crypt compound	crypt precinct
+crypt compounds	crypt precinct
+crypt precinct	crypt precinct
+crypt precincts	crypt precinct
 cryptomeria	sugi
 cryptomeria japonica	sugi
 culm	culm
@@ -542,6 +553,7 @@ hatago	hatago
 hatake	hatake
 hatamoto	hatamoto
 hate-ike	hate-ike
+hayaoke	barrel coffin
 hazakake	hazakake
 head race	head race
 head works	head works
@@ -594,6 +606,7 @@ hot shoeing	hot-shoeing
 hot-shoeing	hot-shoeing
 houlongshan	houlongshan
 houzhaofang	houzhaofang
+hsien	hsien
 hucheng he	hucheng he
 huizhou	Huizhou
 hutong	hutong
@@ -627,11 +640,15 @@ intakes	intake
 intendancy	daikan
 intendant	daikan
 intendants	daikan
+inter	inter
 interceptor	interceptor
 interceptor channel	interceptor
 interlinear commentary	interlinear commentary
+interment	inter
 internode	internode
 internodes	internode
+interred	inter
+inters	inter
 intramural	intramural
 inverted siphon	inverted siphon
 inverted siphons	inverted siphon
@@ -752,6 +769,8 @@ kinai	Kinai
 king post	king post
 king posts	king post
 king-post	king post
+kinki	Kinki
+kinki region	Kinki
 kishu school	Kishu school
 kishu-school	Kishu school
 kizuma	kizuma
@@ -1182,6 +1201,9 @@ season words	season word
 secondary forest	secondary forest
 secondary woodland	secondary forest
 secondary woodlands	secondary forest
+seed	seed
+seed's	seed
+seeds	seed
 seijoue	seijoue
 sekisho	sekisho
 senbon torii	Senbon Torii
@@ -1355,6 +1377,7 @@ tax-free plot	tax-free plot
 tedai	tedai
 teikaku	teikaku
 temizuya	temizuya
+temple-certification system	terauke
 ten-volume wamyosho	Wamyosho
 tenna	Tenna
 tenon	mortise and tenon
@@ -1429,6 +1452,7 @@ tudi miao	tudi miao
 tudigong	tudi miao
 tulou	tulou
 twelve-mat	tatami
+two-grave	ryobosei
 tōhoku	Tohoku
 tōkaidō	Tokaido
 tōya	miyaza
@@ -1455,6 +1479,7 @@ verges	verge
 vermilion line	shubiki
 vff	VFF
 village district	village district
+visiting grave	ryobosei
 votive plaque	votive plaque
 votive plaques	votive plaque
 wagon inn	wagon inn
