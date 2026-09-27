@@ -156,3 +156,6 @@
 - Well (urban-features SECTION=090): IN-STEP - the building-plan sheet's Well (compound_kinds/household.py, household.Well): the 1 m shaft, the unmeasured curb and the estimated 3-4 ft curb all still hold; the map's Well of the same name was REWRITTEN above (feature 265 T11)
 - household.Stables (urban-features SECTION=080): IN-STEP - the changes label the gate cart-yard ground and cite the hitching post and caravanserai, none of which the modal states
 - ApproachRoad (towns SECTION=010): REWRITTEN - the Why now gives the capital's gate-keyed grid and the county seat's gate-linked streets as the finding and the gate-to-yamen avenue as a guess on no page read, as the section now does
+- NoticeBoard (urban-features SECTION=010): REWRITTEN - the Note's 12 x 5 ft glyph no longer claimed as the true size; the ~16 ft roofed frame on a footing named beside it
+- household.Well (urban-features SECTION=090): REWRITTEN - the curb width is no longer "not found"; the 118 cm measured frame now carries the 3-4 ft curb
+- water_and_ways.Well (urban-features SECTION=090): REWRITTEN - the curb frame's 118 cm measure named; "often" an aqueduct intake narrowed to "could be"; UNICEF dropped, "people" -> inhabitants
