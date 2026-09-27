@@ -66,3 +66,34 @@ entry (T10).
 - [x] T12 `settlement-review`, one agent per re-rolled map, findings through `escalation-check`; ledger rows
       research: rendering
       verify: DONE. make verify ruled NO SETTLEMENT-REVIEW OWED (rendering-only feature, feature 248); the one earlier dispatch round came back NOT-REVIEWABLE on a red gate and held no map findings. The five maps are handed to the GM to look at, per their standing rule.
+
+## Phase 7 - the amendment of 2026-09-27: the brook crossed, and the reviews' findings (D9-D14)
+
+- [ ] T13 Fords and crossings (D9): `brook_fords`, `gap_segments`, `ford_crossing`; the strike-out, its re-roll and
+      the far-bank refusal deleted; `research/water/270` rewritten to the rule as built with the spacing's absence note
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
+- [ ] T14 The seeds (D4): Kashikawa 3 and Mizuguchi 23 measured at their originals and kept; Sawada 24 kept
+      research: rendering
+- [ ] T15 A farmstead whole on one bank (D10): `_parts_across_stream`, `across_the_brook`; `research/homesteads/250`
+      with its absence note; the unread paper on the GM's download list
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
+- [ ] T16 The copse within reach (D11), the re-seat nudge included
+      research: rendering
+- [ ] T17 The entrance board offered the way that meets its anchor (D12)
+      research: rendering
+- [ ] T18 The brook never doubles back (D13)
+      research: rendering
+- [ ] T19 The belt's depth held by the pool test, the pop-up naming a direction (D14)
+      research: rendering
+- [ ] T20 The notes, gen docstrings, docs and record say what the maps draw (FR-009, FR-018); `make notes-census`;
+      the future-work item closed
+      research: rendering
+- [ ] T21 The 48-seed cohort against R3's baseline
+      research: rendering
+- [ ] T22 `make done` green on the amendment
+      research: rendering
+- [ ] T23 `settlement-review`, one agent per map, on the amended maps; findings through `escalation-check`; ledger
+      rows (T12's "no review owed" was wrong: the maps' layout moved, and the reviews were owed and run)
+      research: rendering

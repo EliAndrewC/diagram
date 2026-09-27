@@ -1,7 +1,7 @@
 # Implementation Plan: The wind is northwest unless a map declares otherwise
 
 **Feature**: `261-northwest-wind-by-default` | **Date**: 2026-09-26 | **Spec**: [`spec.md`](spec.md) |
-**Research**: [`research.md`](research.md) (R1-R4) | **Measurements**: [`measure.py`](measure.py)
+**Research**: [`research.md`](research.md) (R0-R8) | **Measurements**: [`measure.py`](measure.py)
 
 ## Summary
 
@@ -9,8 +9,11 @@ The scripted hamlet generator's wind becomes the regional northwest on every map
 slope-derived wind (`windward_for`, `WIND_TURNS`) and the seat re-read in `stage_ways` are retired; the seat
 search refuses a margin whose back is more than 45 degrees off the wind except as a recorded last fallback;
 the manifest records the wind's source; the windbreak's pop-up says the belt's side and why; the record, the
-docs and the notes say the new rule; and the five pool hamlets are re-rolled - three of them re-seeded, as the
-spec's Edge Cases allow, because R1 and R4 measured them failing at their old seeds.
+docs and the notes say the new rule; and the five pool hamlets are re-rolled. The amendment of 2026-09-27 (the GM:
+fix the placement algorithm rather than route around it) makes the brook crossable - ways cross it at fords decked
+by a plank bridge, and the brook's strike-out, its re-roll and the far-bank refusal are retired - so Kashikawa and
+Mizuguchi return to their original seeds 3 and 23; Sawada keeps 24, its seed 6 refused by the drain and the wet toe.
+It also fixes what the settlement-reviews found on the re-rolled maps (D10-D14).
 
 ## Technical Context
 
@@ -44,8 +47,9 @@ own perf ratchet judges it, and any band it reports is explained against R4's re
   and `make record` leaving a notes-only edit unwritable, were found in this work and fixed in it.
 - **XVI. Build what was asked**: **PASS** - the wind is never renamed and no map declares one. Two exceptions were
   put to `spec-fidelity` in MODE 1 and both were REFUSED (R4): putting a wind-facing divided seat ahead of feature
-  230's strike-out, engine-wide. What stands instead is the spec's own path - re-seeding - for the three maps that
-  needed it. The off-wind last resort (D2) is recorded on the map and forbidden on the pool, and it is raised
+  230's strike-out, engine-wide, under the engine as it was. The GM then ruled (2026-09-27) that an engine that
+  cannot lay out a valid configuration is fixed rather than routed around: the brook became crossable (D9) and the
+  strike-out was retired, so two of the three re-seeds were undone (D4). The off-wind last resort (D2) is recorded on the map and forbidden on the pool, and it is raised
   with the GM in the hand-off.
 
 ## The design
@@ -66,27 +70,26 @@ wind. 45 degrees is half the compass-quarter spacing, so the back faces the wind
 spec-fidelity round judged it calibration, not a loophole. The bar is a map convention and says so at the
 constant. The pool may not carry `seat_offwind` (the pool test).
 
-### D3 - The fallback order: wind-facing clean, off-wind clean, divided (wind-facing first)
+### D3 - The fallback order: wind-facing, then off-wind; the brook is scored, never a tier
 
-Feature 230's rule stands: a margin the brook divides is used only when EVERY margin is divided. So the order is
-a clean wind-facing margin, then a clean off-wind one (recorded as `seat_offwind`), then the best divided margin
-with a wind-facing one first. Putting a wind-facing divided margin ahead of a clean off-wind one was measured and
-put to the exception check twice, and refused (R4): over the 48 cohort specs that order took 12 divided seats, and
-in 3 of them a byre, a well, a garden or farm fixtures stood across the brook from their houses - feature 230's
-own failure - where this order produced none. What this order costs instead is off-wind seats outside the pool
-(22 of the 48, 10 with belts under 50 clumps, 4 with none; R4), which is why a pool map that falls back is
-re-seeded (D4) and why the fallback is raised with the GM.
+A clean wind-facing margin first, then an off-wind one (recorded as `seat_offwind`). The brook no longer makes a
+tier: feature 230's strike-out - a margin the brook divides used only when every margin is divided - is retired by
+the GM's ruling of 2026-09-27, because the engine could not draw the crossing the record attests (R4, R7). A margin
+the brook crosses is scored down (`score -= 3.0` per crossing, at `seat_cluster`) so an uncrossed one wins when the
+two are otherwise level; what feature 230's strike-out protected against - a byre, a well or a garden across the
+water from its house (R4) - is now a placement rule on the farmstead itself (D10), not a refusal of the seat. The
+two exception checks of R4 refused a wind-first order under the OLD engine; with crossings drawn, the order they
+refused is no longer an exception to anything.
 
-### D4 - Re-seeding, and only re-seeding, for the three maps that failed at their seeds
+### D4 - The seeds: Inashiro 4, Kuwabata 21, Kashikawa 3 and Mizuguchi 23 kept; Sawada 6 -> 24
 
-R1 measured Sawada (falls northwest) falling back off the wind at seed 6, and Mizuguchi seating 8 of 12 at seed
-23; R4 measured Kashikawa falling back off the wind at seed 3 with a belt of no trees. The seed searches (R2, R4)
-kept each map's declared fall, sink and knobs: Sawada 24 (the only one of thirty with a clean wind-facing seat),
-Mizuguchi 27 (12/12, undivided, 349 clumps at 325 degrees), Kashikawa 8 (one of five clean seeds; 14 drew more trees
-but wrapped the belt 333 degrees round the houses, which the record rules out). Inashiro keeps its reference seed 4
-once the divided test is fixed (D7). Nothing in the spec's "When no seed works" list is done: no bar loosened, no
-wind declared, no rename, no declared knob changed, no belt in the crop. The reason is in each generator's
-docstring, and the pool test holds the belt's arc to 200 degrees as well as its bearing.
+The spec's Edge Case (amended 2026-09-27) measures each map at its current seed once crossings exist and returns it
+to that seed unless a research-supported refusal is recorded. Measured (R7): Kashikawa at seed 3 seats 20/20
+wind-facing, the belt 285 crowns at 320 degrees; Mizuguchi at seed 23 seats 12/12 wind-facing astride its brook
+(8 and 4), its weir back. Both keep their original seeds. Sawada's seed 6 was refused by the drain and the wet toe
+- rules FR-010 keeps, supported by the record - so 24 stands (R2). Nothing in the spec's "When no seed works"
+list is done. The reason is in each generator's docstring, and the pool test holds the belt's arc to 200 degrees
+as well as its bearing.
 
 ### D5 - The pop-up: the notes win, the default names the side and its reason
 
@@ -104,28 +107,78 @@ maps (`measure.py`); the `kisetsufu-jawiki` note's gloss stops calling the slope
 derivation". `hamletgen.md`, the hamletgen and sitegen indexes, and the five notes files' "Known open" wind lines
 are updated.
 
-### D7 - The divided test asks which bank, not which half (constitution XIV)
+### D7 - The divided test asked which half, not which bank - fixed, then retired with the strike-out
 
-`seat_cluster`'s divided test recorded the LATERAL half of the band for every sample point within twice the band's
-depth of the brook, so a brook running behind the band parallel to the margin read as dividing it (R4: Kashikawa
-and Inashiro "divided" with every house on one bank). `brook_banks()`, lifted to module level and unit-tested,
-takes the side of the nearest brook segment for each band point instead. Found in this work; fixed in it.
+`seat_cluster`'s divided test recorded the LATERAL half of the band for every sample point near the brook, so a
+brook running behind the band read as dividing it (R4). `brook_banks()` fixed it (constitution XIV); the amendment
+then retired the divided test altogether (D3), and `brook_banks()` with it. `bank_of()` in
+`homesteads/stages.py` stays as the one side test the engine keeps.
 
-### D8 - The knob values the re-seeds dropped are declared back
+### D8 - The knob values the re-seeds dropped are declared back, and stay declared
 
-Re-seeding changes every rolled knob on a map, and the pool lost its only exhibit of four knob values (R6). A knob
+Re-seeding changes every rolled knob on a map, and the pool lost its only exhibit of four knob values (R6). Two of
+those maps are back on their original seeds, and the declarations stay: a declared value holds the exhibit whatever
+a later engine change does to the roll. A knob
 owes one map per value, so each is declared on the map that showed it before - the same mechanism as Sawada's
 `intake="open"` - and `HamletSpec` gains `byre_form`, pinned onto the settlement engine's knob, because that one had
 no spec field. No wind rule moves: the declarations are re-rolled and measured with the rest (R5).
 
+### D9 - A way crosses the brook at a ford, and every crossing is decked
+
+`brook_fords(brook, FORD_SPACING, FORD_BEND_DEG)` (ways/checks.py) marks a crossing place every 160 ft along the
+brook where its course bends less than 20 degrees over the crossing, so a way can cross it square;
+`gap_segments` opens the brook's no-route corridor `FORD_HALF` (30 ft) each side of each ford, so the router passes
+there and nowhere else; `ford_crossing` routes the field spur through the nearest ford when its direct line would
+cross the water; `stage_crossings`' `bridges()` decks every crossing, as it already did for any way over water. The
+far-bank refusal (`far_bank`), the strike-out and the brook re-roll are deleted. Class: accurate for the form (a
+hamlet astride its own small channel, `research/water/270`); the spacing and the bend limit are a guess with an
+absence note there. Indexed: the fords are a short list per map (under 30), cut into the brook's corridor once.
+
+### D10 - A farmstead stands whole on one bank (FR-013)
+
+`Settlement._parts_fit` refuses a homestead configuration when the line from the house's center to any part's
+(yard, garden bed, kura) crosses a stream (`_parts_across_stream`), and `farmstead_fixtures` refuses a fixture or
+persimmon seat on the same test (`across_the_brook`). Measured before (R8): Inashiro 4 parts across, Mizuguchi 2.
+Class: guess, recorded with its absence note (`research/homesteads/250`; the one unread on-topic paper is on the
+GM's download list). Cost: one segment test per part against a course of about fifty points, per configuration
+already being judged; no index is owed.
+
+### D11 - The copse stands within reach of what it is named for (FR-014)
+
+`village_grove` takes `near=(points, reach)`: the dooryard copse within 90 ft of a farmhouse
+(`COPSE_HOUSE_REACH_FT`), the against-the-belt copse within 60 ft of a belt crown (`COPSE_BELT_REACH_FT`); every
+clump, the re-seat nudge's included, is asked of one `Seats` index. The review found Kashikawa's copse a 1,210 ft
+wood a median 167 ft from any house. Class: accurate for the form ("in the gaps between the houses",
+vegetation/020); the reach is a calibration of that phrase, recorded at the constants.
+
+### D12 - The entrance board is offered the way that meets its anchor (FR-015)
+
+`stage_notice`'s re-seat and `place_kosatsuba` rank, beside their own lanes, any lane with a point within twice
+`KOSATSUBA_ANCHOR_BAND_FT` of the anchor; `kosatsuba_anchor` falls back to the approach's point nearest the houses
+when no run reaches within the entrance reach. The review found Sawada's board 669 ft from its anchor on a stub no
+departure passed. A defect in an existing rule (constitution XIV); no new class.
+
+### D13 - A brook never doubles back (FR-017)
+
+`unfold(course, BROOK_MAX_TURN_DEG)` in `water/brook.py` deletes a vertex that turns the course more than 100
+degrees; Sawada's brook folded 123 degrees where its stations clamped at the frame. A drawing defect fixed; the
+limit is a calibration (a stream's own meander turns well under it), recorded at the constant.
+
+### D14 - The belt keeps its depth, and its pop-up names a direction, not two sides (FR-016)
+
+The pool test measures the belt's depth along the wind in 40 ft bins across it and holds every bin that no way, no
+brook and no page edge cuts to the record's 30 ft minimum (`research/vegetation/020`: shallower "reads as a row of
+blobs"). The windbreak pop-up says the belt stands "toward the northwest" rather than "on the north and west",
+because Kuwabata's belt is a west strip; the class text says "on the windward one or two sides".
+
 ## Phases
 
-1. Engine: D1, D2, D3 with their unit tests (plan, cluster, surface).
+1. Engine: D1, D2, D3 with their unit tests (plan, cluster, surface); the amendment's D9-D14 with theirs.
 2. Measurement: R1-R6 (trial, seed searches, cohort both ways, the shipped maps, the knob values).
 3. Pool: D4, the five re-rolls, the pool test, R4.
 4. Page: D5 with its tests.
 5. Record and docs: D6; `quote-check` and `record-format` on the entry; `entry-drift` on the windbreak class.
-6. Acceptance: `make done`, `settlement-review` one agent per map, ledger rows.
+6. Acceptance: `make done`, `settlement-review` one agent per map, ledger rows; the 48-seed cohort against R3's baseline.
 
 ## Complexity Tracking
 

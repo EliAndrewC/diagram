@@ -96,20 +96,22 @@ Every candidate's drain ends as near the brook as seed 3's did (54-94 px against
 
 ## R5 - The shipped maps, and the final cohort
 
-`measure.py` on the shipped manifests:
+`measure.py` on the shipped manifests (observed 2026-09-27, method: `measure.py` over the five pool manifests after
+the amendment's last re-roll):
 
 | map | seed | households | seat | belt clumps | belt bearing | off NW | arc |
 |---|---|---|---|---|---|---|---|
-| Inashiro | 4 | 15/15 | wind-facing, clean | 279 | 346 | 31 | 124 |
-| Kashikawa | 8 (was 3) | 20/20 | wind-facing, clean | 281 | 353 | 38 | 169 |
-| Kuwabata | 21 | 16/16 | wind-facing, clean | 141 | 283 | 32 | 88 |
-| Mizuguchi | 27 (was 23) | 12/12 | wind-facing, clean | 356 | 323 | 8 | 168 |
-| Sawada | 24 (was 6) | 19/19 | wind-facing, clean | 179 | 319 | 4 | 161 |
+| Inashiro | 4 | 15/15 | wind-facing | 168 | 332 | 17 | 104 |
+| Kashikawa | 3 | 20/20 | wind-facing, the brook crossed | 285 | 320 | 5 | 160 |
+| Kuwabata | 21 | 16/16 | wind-facing | 141 | 283 | 32 | 88 |
+| Mizuguchi | 23 | 12/12 | wind-facing, astride the brook (8 and 4) | 132 | 305 | 10 | 91 |
+| Sawada | 24 (was 6) | 19/19 | wind-facing | 179 | 319 | 4 | 161 |
 
-Re-rolled after merging main at 19837bc2 (feature 262 and the threshing-yard tweak moved every map's detail);
-every rule still holds on every map.
+Every rule still holds on every map (the two pool test files).
 
-The final cohort (`make cohort N=48`, this engine): **38/48**, failing 2, 8, 23, 25, 28, 31, 35, 36, 40, 46 - every one also failing on the baseline (R3), all `scatter_frame_breach`; seed 37 now passes; no `households_seated` failure. No regression.
+The final cohort (observed 2026-09-27, method: `make cohort N=48` on this engine, merged with main at 2e6f46e6):
+**38/48**, failing 2, 8, 23, 25, 28, 31, 35, 36, 40, 46 - every one also failing on the baseline (R3), all
+`scatter_frame_breach`; seed 37 now passes; no `households_seated` failure. No regression.
 
 ## R6 - What the re-seeds took from the pool, and how it was put back
 
@@ -122,3 +124,46 @@ sheet, so each value is now DECLARED on the map that showed it before - Kashikaw
 `byre_form="courtyard"` and `copse_siting="against_the_belt"`, Sawada `lane_web="alleys"` - which needed one new spec
 field, `HamletSpec.byre_form`, pinned onto the settlement engine's knob. Re-rolled, every wind rule still holds on
 all five maps (R5).
+
+## R7 - The brook made crossable, and the seeds it gave back
+
+The GM's ruling (2026-09-27): *"if we find instead that our placement algorithm ends up not making it possible to lay
+out a known-to-be-valid settlement configuration then we should fix the placement algorithm instead."* The record
+attests a hamlet astride its own small channel (`research/water/270`, Harie), so the refusals R4 measured were the
+engine's, not the record's. Built (plan D9): fords every 160 ft where the brook bends under 20 degrees, a 30 ft gap
+in its no-route corridor at each, the spur routed through one when its line would cross the water, every crossing
+decked by `bridges()`; the strike-out, its re-roll and the far-bank refusal deleted.
+
+Measured at the original seeds (observed 2026-09-27, method: `make map` on each generator, then the session's
+manifest reader for households per bank and bridges within their span of a brook crossing):
+
+| map | seed | households | per bank | bridges on the brook | fords |
+|---|---|---|---|---|---|
+| Inashiro | 4 | 15/15 | 15 / 0 | 1 | 19 |
+| Kashikawa | 3 | 20/20 | 0 / 20 | 3 | 28 |
+| Mizuguchi | 23 | 12/12 | 4 / 8 | 2 | 19 |
+| Sawada | 24 | 19/19 | 0 / 19 | 0 | 20 |
+
+Kashikawa and Mizuguchi therefore return to seeds 3 and 23 (the spec's Edge Case: no research-supported refusal was
+recorded at either). Sawada's seed 6 stays refused: its refusal was the drain and the wet toe, which the record
+supports (R2).
+
+## R8 - What the settlement-reviews found, and what each fix measured
+
+Five reviews on the re-rolled maps (the ledger rows of 2026-09-27) returned NEEDS-WORK. Each finding became an FR
+(FR-013 - FR-018) and each fix was measured on the pool (observed 2026-09-27, method: the manifest measures now held
+by `tests/hamletgen/test_pool_261.py` and `test_pool_wind.py`, run before and after each fix):
+
+| finding | before | after |
+|---|---|---|
+| farmstead parts across the brook from their house (FR-013) | Inashiro 4, Mizuguchi 2 | 0 on every map |
+| copse crowns beyond reach (FR-014; 90 ft of a house, or 60 ft of the belt) | Kashikawa 393 crowns, median 167 ft from a house; after the first fix, 4 on Kashikawa and 4 on Mizuguchi through the re-seat nudge | 0 on every map; medians 63-72 ft |
+| entrance board distance from its anchor (FR-015) | Sawada 669 ft | 65-139 ft on the four entrance maps, each within 100 ft of a house |
+| belt depth along the wind (FR-016; 30 ft minimum per 40 ft bin not cut by a way, the brook or the page edge) | Kashikawa at seed 8: an arm 12-21 ft deep | at least 51 ft on every judged bin of every map |
+| the brook's sharpest turn (FR-017; 100 degrees) | Sawada 123 | Inashiro 41, Kashikawa 53, Mizuguchi 53, Sawada 95 |
+| pop-up naming a side the belt does not occupy | Kuwabata ("north and west" on a west strip) | the pop-up names the northwest as the wind's direction |
+
+The one-bank rule's research pass (2026-09-27, `research/homesteads/250`) found nothing that places a farmstead's own
+parts across a channel from its house or says they never stood there; it is a guess with an absence note, and the
+one on-topic paper that could not be read is on the GM's download list.
+
