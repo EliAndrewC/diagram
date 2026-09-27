@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-27
 
-**Status**: specified; awaiting spec-fidelity
+**Status**: specified; spec-fidelity round 1 CHANGES REQUIRED (the grove's extent and bare ground inside the frame) - applied, round 2 next
 
 **Input**: the GM's message of 2026-09-27 and their two rulings on the research pass, verbatim in
 [`request.md`](request.md); the four readers' reports in [`reader-reports/`](reader-reports/).
@@ -183,7 +183,12 @@ exemplar and fails on a fixture that draws a precinct fence.
 
 - **FR-007**: The frozen Hoshigaoka village map MUST be edited by hand - its drawing and its manifest
   together - to add a grove around the shrine, a sacred tree and a stone basin beside the approach, and
-  to move the seven arches to the new pitch; its notes record the edit and the GM's ruling.
+  to move the seven arches to the new pitch; its notes record the edit and the GM's ruling. The grove IS
+  the precinct's wood: it surrounds the hall and sanctuary on every side, reaches back past the map's
+  shrine well so that the well stands in it or at its edge, and forward to the outermost arch, where the
+  approach enters the shrine's ground (the first arch stands at that entry, per the research); its area
+  lies inside the register band FR-005 records for a village precinct, and no band of bare commons is
+  left between the grove and the well.
 - **FR-008**: The Hoshigaoka shrine sheet MUST be redrawn: no precinct fence; a small swept clearing at
   the hall and sanctuary inside the grove; the sacred tree and the basin; the seven arches at the new
   pitch with the innermost one pitch off the hall; the map's well kept where the map has it; and the
@@ -218,8 +223,12 @@ exemplar and fails on a fixture that draws a precinct fence.
 
 - **SC-001**: The GM's four questions each have an answer on the record with at least one verbatim-quoted,
   readable source (or an absence note where none exists), all checks confirmed.
-- **SC-002**: The shrine sheet draws no enclosure around its precinct; built and swept ground together is
-  a small share of the drawn grounds, the rest grove.
+- **SC-002**: The shrine sheet draws no enclosure around its precinct. Measured over the sheet's WHOLE
+  frame, every piece of ground is one of: a building or its fixtures, the swept clearing at the hall and
+  sanctuary, the approach, a map feature (the well, the basin, the sacred tree), or grove; bare ground
+  that is none of these exists only outside the grove's edge and the approach's foot, as a border no
+  deeper than the crop checklist's margin. Built and swept ground together is a small share of the
+  precinct, the rest grove.
 - **SC-003**: No side of the sheet's frame leaves more than the crop checklist's border of empty
   parchment.
 - **SC-004**: On the sheet and the village map, consecutive arches stand 10-13 ft apart and no two arch
@@ -235,3 +244,13 @@ exemplar and fails on a fixture that draws a precinct fence.
 - A sanctuary-only fence is not drawn at average wealth; it is recorded, not required.
 - The GM's rule that the sheet shows what the map shows (2026-09-20) stands; the grove, tree and basin
   reach the sheet by being put on the map first.
+
+## Review history
+
+- Round 1 (spec-fidelity, MODE 2, 2026-09-27; an earlier dispatch returned NOT-REVIEWABLE on unlabeled
+  figures, which were labeled): CHANGES REQUIRED, one item - the crop requirement alone could not reach
+  the GM's "empty space above" complaint, since a small grove, a band of bare commons and a frame cropped
+  to the well would pass it. Applied: FR-007 makes the grove the precinct's wood from the well to the
+  outermost arch, inside the register band, with no bare band before the well; SC-002 measures bare
+  ground over the whole frame. Aside carried for the GM once the work lands: the nine other frozen maps
+  with avenues (Kikuta among them, seven arches at the old pitch) keep their arches until converted.
