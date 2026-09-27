@@ -68,6 +68,8 @@ basal area	basal area
 base flow	base flow
 bastion	bastion
 bastions	bastion
+battalion cities	guard city
+battalion city	guard city
 batter	batter
 baulk	baulk
 baulks	baulk
@@ -536,6 +538,8 @@ grow-out ponds	grow-out pond
 gsi	GSI
 guan-xiang	guanxiang
 guanxiang	guanxiang
+guard cities	guard city
+guard city	guard city
 gulou	gulou
 gundai	gundai
 gō	go
@@ -647,6 +651,10 @@ ieyasu	Ieyasu
 ieyasu's	Ieyasu
 igeta	igeta
 igune	igune
+ikko	Ikko sect
+ikko sect	Ikko sect
+ikko sect's	Ikko sect
+ikko-shu	Ikko sect
 imperial spine	Imperial spine
 important cultural landscape	Important Cultural Landscape
 important cultural landscapes	Important Cultural Landscape

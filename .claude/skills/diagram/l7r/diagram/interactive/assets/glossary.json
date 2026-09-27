@@ -6468,5 +6468,23 @@
    "through-passage plan",
    "through-passage"
   ]
+ },
+ "Ikko sect": {
+  "def": "The True Pure Land Buddhist sect of Japan, whose temples in the age of civil wars were defended by moats and earth banks, with a self-governing town (a temple town) growing up inside the defenses.",
+  "variants": [
+   "Ikko sect",
+   "Ikko",
+   "Ikko-shu",
+   "Ikko sect's"
+  ]
+ },
+ "guard city": {
+  "def": "A walled garrison town of Ming and Qing China, built to hold a standing military unit rather than to seat a civil government; a battalion city held a smaller unit than a guard city.",
+  "variants": [
+   "guard city",
+   "guard cities",
+   "battalion city",
+   "battalion cities"
+  ]
  }
 }
