@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-27
 
-**Status**: specified; spec-fidelity round 2 CHANGES REQUIRED (3 items) - applied, round 3 next
+**Status**: specified; spec-fidelity FAITHFUL at round 3; plan next
 
 **Input**: the GM's goal of 2026-09-27 and the coordination with the other sessions, in [`request.md`](request.md).
 
@@ -135,3 +135,4 @@ both.)
 - Round 2 (spec-fidelity-verify, MODE 3): items 1 and 4 RESOLVED, 2 and 3 short - (1) SC-001 now names 210's parts;
   (2) FR-007 and SC-006 carry the country-shrine map change; (3) FR-005 requires the claim extended (done
   2026-09-27: the 272 line names 010-128, 210's parts and the Hoshigaoka sheet and map; 270's line marked DONE).
+- Round 3 (spec-fidelity-verify, MODE 3): FAITHFUL - all three round-2 items resolved.
