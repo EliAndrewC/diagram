@@ -593,7 +593,11 @@ def county_magistracy_program() -> CompoundProgram:
         # "How much of either house was kitchen is not given").
         # Its one outside door opens WEST, onto the way between it and the servants' row that runs to the yard (pass 7,
         # building-review round 6: on its yard face it opened into a ~5 ft pocket between the bath, the well and the house).
-        b("kitchen", "service", 20.0, 18.0, "inner", "N", order=11, feature="kitchen", door_face="W", door_fracs=(0.5, 0.3, 0.7)),
+        # It stands 10 ft off the north wall, as the house does (pass 8, building-review round 7): the house's rear alley
+        # then runs on behind the kitchen to the way between it and the servants' row, and down it to the kitchen yard
+        # and the postern - the night-soil carter's service route to the house's privies. Flush to the wall, the
+        # kitchen and the corridor closed the alley's west end, and the privies were ~400 ft round from any service edge.
+        b("kitchen", "service", 20.0, 18.0, "inner", "N", order=11, feature="kitchen", door_face="W", door_fracs=(0.5, 0.3, 0.7), inset_ft=10.0),
         # A MODEST shrine, 18 x 14 ft (pass 4, building-review round 3: it was 36 x 30 ft, the hall-shrine ceiling, which
         # is Ochiba's particular - buildings/programs.md: the shrine is universal equipment, its scale the per-manor
         # particular; buildings.md "Modest shrine"). The size is a GUESS inside the shrine band (40-1,150 sq ft).

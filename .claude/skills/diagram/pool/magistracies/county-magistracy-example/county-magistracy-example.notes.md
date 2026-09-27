@@ -28,7 +28,11 @@ The forms the draft takes where the research gives more than one (feature 267 ou
   came to be built in a corner of the corridor"; a guests' privy at the rear of the guest parlor): the family's at
   the rear corner by the family's rooms, the guests' behind the reception room, each leaving a 5 ft way along the
   alley. (Pass 6 had stood the family's flush to the wall for a hatch, ~140 ft outdoors round the house from the inner
-  entrance; the hatch was a guess and is dropped for it.) The alley opens east onto the inner court; at its
+  entrance; the hatch was a guess and is dropped for it.) THE CARTER'S ROUTE to both (pass 8): in by the kitchen
+  postern in the west wall, north along the wall past the vegetable ground, up the 7 ft way between the servants' row
+  and the kitchen, and east along the rear alley, which since pass 8 runs on behind the kitchen - the kitchen stands
+  10 ft off the north wall as the house does, so the corridor between them no longer closes the alley's west end.
+  Never through the ceremonial middle gate or the lord's garden. The alley opens east onto the inner court; at its
   west end the kitchen's corridor to the house closes it (the slot north of the corridor is closed on all sides - the
   pass-5 notes' "opens west into the slot" was wrong). The servants reach the kitchen by the kitchen yard instead:
   since pass 6 their row stands in the NW corner beside the kitchen, its door and privy on the yard with the postern.
@@ -72,7 +76,7 @@ The forms the draft takes where the research gives more than one (feature 267 ou
 - **Vegetable garden**: WEST of the house, filling the kitchen yard (research buildings 400: the one plot whose side
   is given lay west; its size runs from the Takei house's ~1,070 sq ft plot to a field over about half the Yokota
   house's grounds). Pass 7 takes the field form, as large as the yard holds - 64 x 48 ft, 3,072 sq ft, its size a
-  GUESS - leaving a 7 ft way from the postern along the west wall (pass 6's 36 x 30 plot left ~100 x 60 ft of the
+  GUESS - leaving a ~12 ft way from the postern along the west wall (7 ft past the servants' privy, which stands flush to it) (pass 6's 36 x 30 plot left ~100 x 60 ft of the
   yard bare). It is drawn in the garden stipple, as the hand sheets draw theirs.
 - **Garden**: 122 x 46 ft, from the kitchen's corridor to the guest house (pass 7): the one garden faces the
   reception and the guest house both, guests being received in the garden-facing rooms (research buildings 330).
@@ -244,6 +248,15 @@ Coverage 33%, perimeter-hugging 72%, nothing overflows; every registered check p
 
 Coverage 33%, perimeter-hugging 72%, nothing overflows; every registered check passes (pack_audit).
 
+2026-09-27 pass 8 (building-review round 7):
+
+- **The rear alley opened at its west end**: the kitchen stands 10 ft off the north wall, so the alley runs on behind
+  it to the way by the servants' row and the kitchen yard - the carter's service route to the house's two privies
+  (Knob settings, "Rear of the house"). No hatch is restored.
+- **Notes**: the vegetable ground leaves a ~12 ft way along the west wall, 7 ft past the servants' privy.
+
+Coverage 33%, perimeter-hugging 71%, nothing overflows; every registered check passes (pack_audit).
+
 ## Review log
 
 - **2026-09-27 building-review of the pass-2 draft** (the pass-3 fix list): 3 delta errors (a tub and its caption under
@@ -267,3 +280,5 @@ Coverage 33%, perimeter-hugging 72%, nothing overflows; every registered check p
 - **2026-09-27 building-review round 6** (needs-work): the family privy apart from the house; the kitchen door into a
   ~5 ft pocket; two bare patches (east of the garden, the kitchen yard); the veranda's width and the karo's bay's
   label in the notes. All applied in pass 7 above.
+- **2026-09-27 building-review round 7**: pass 7's five items confirmed; the rear alley closed at its west end (the
+  house's privies ~400 ft from a service edge) and the vegetable ground's way misstated. Applied in pass 8 above.

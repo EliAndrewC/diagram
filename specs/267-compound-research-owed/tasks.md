@@ -54,11 +54,14 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D8). Inventory: [`inv
 - [x] T11 The kinds follow the outcomes: `Entry:`, label, prose; `entry-drift` on each changed kind (D6)
       research: rendering
       verify: DONE. the kinds follow the outcomes: compound_kinds rewritten with Entry/label/prose; entry-drift on the 58 rewritten kinds (20 drifted, fixed) and on the Residence kind after the example's pass 5 (2 edits applied)
-- [ ] T12 The sheets follow the outcomes: redraws and knobs, measured, `building-review` (D6)
+- [x] T12 The sheets follow the outcomes: redraws and knobs, measured, `building-review` (D6)
       research: rendering
-- [ ] T13 The GM's items through `escalation-check` (D7)
+      verify: DONE. the three sheets and the program example follow the outcomes (forms.md knobs); building-review rounds 1-7 applied (ledger rows); every hand sheet at the one placer's standard seats (0 off seat, WRITE=1 byte-identical) and every pack-audit check green; the example's pass 8 opened the house privies' service route
+- [x] T13 The GM's items through `escalation-check` (D7)
       research: rendering
-- [ ] T14 `future-work/compounds.md` "Research owed" rewritten to what remains (D8)
+      verify: DONE. the GM's items through escalation-check (2026-09-27: 2 keep, 3 rewrite, 1 cut); the session-owed Ubame citations fixed; the landing text is the check's rewrite
+- [x] T14 `future-work/compounds.md` "Research owed" rewritten to what remains (D8)
       research: rendering
+      verify: DONE. future-work/compounds.md: Research owed rewritten to what remains (questions the research opened, silences filled by labeled guesses, sources to read, canon gaps for the GM, drawing and tooling questions); the placer entry closed when the placer was fixed; the Takayama route and the example's caption-view disagreement added
 - [ ] T15 `make done` green; the review ledger rows; land
       research: rendering

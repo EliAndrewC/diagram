@@ -694,3 +694,13 @@ def test_the_county_example_keeps_the_karo_in_a_bay_of_the_staff_long_house() ->
     kitchen = next(p for p in result.placed if p.spec.name == "kitchen")
     servants = next(p for p in result.placed if p.spec.feature == "servants' quarters" and p.spec.court == "inner")
     assert servants.x2 < kitchen.x_ft  # the servants' row beside the kitchen yard (pass 6)
+
+
+def test_the_rear_alley_runs_on_behind_the_kitchen_to_the_yard() -> None:
+    """Pass 8 (building-review round 7): the kitchen stands off the north wall as the house does, so the rear alley that
+    serves the house's privies runs on behind it to the way by the servants' row - the carter's route from the postern."""
+    _prog_, result, _svg = _county()
+    by = {p.spec.name: p for p in result.placed}
+    kitchen, home, servants = by["kitchen"], by["residence"], by["servants' quarters"]
+    assert kitchen.y_ft == home.y_ft >= 10.0  # the alley's full depth behind both
+    assert kitchen.x_ft - servants.x2 >= c.FIRE_GAP_FT  # and the way down to the yard
