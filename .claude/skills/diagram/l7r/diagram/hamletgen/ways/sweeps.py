@@ -358,6 +358,33 @@ def _link_home_bank(s: Settlement, plan: Any, hard: list[Poly], fabric: list[tup
     return len(s.M.get("lanes") or []) - before
 
 
+_FREE_STUB_FT = 20.0  # ft: a free end's last leg this short, past a kink, is a stub the lane does not need
+_KINK_DEG = 50.0  # the `lanes_bend_like_paths` turn: two of them within ...
+_KINK_RUN_FT = 40.0  # ... this run of lane read as a kink, not a bend
+
+
+def trim_free_stub(pts: list[Pt], others: Sequence[tuple[Pt, Pt]], touch: float = 6.0) -> list[Pt]:
+    """`pts` without a short stub at a FREE end - an end on no other lane - where the stub's corner is the second of two
+    sharp turns inside `_KINK_RUN_FT` (feature 261). Kuwabata's ring lane threaded a threshing yard and a garden to a
+    door and ended 19 ft past a jog, two turns of 84 and 72 degrees inside 40 ft; the router's jog cure could not take
+    the chord through the fabric, and the lane serves the door as well from the corner. Each end is asked in turn."""
+
+    def turn(a: Pt, b: Pt, c: Pt) -> float:
+        u, v = (b[0] - a[0], b[1] - a[1]), (c[0] - b[0], c[1] - b[1])
+        nu, nv = math.hypot(*u), math.hypot(*v)
+        return math.degrees(math.acos(max(-1.0, min(1.0, (u[0] * v[0] + u[1] * v[1]) / (nu * nv))))) if nu and nv else 0.0
+
+    out = list(pts)
+    for _end in range(2):
+        if len(out) >= 4:
+            a, b, c, d = out[-4], out[-3], out[-2], out[-1]
+            free = min((seg_dist(d[0], d[1], p, q) for p, q in others), default=1e9) > touch
+            if free and math.dist(c, d) <= _FREE_STUB_FT and turn(a, b, c) >= _KINK_DEG and turn(b, c, d) >= _KINK_DEG and math.dist(b, c) <= _KINK_RUN_FT:
+                out = out[:-1]
+        out.reverse()
+    return out
+
+
 def _sweep_doubled_remnants(s: Settlement) -> int:
     """Drop a lane that leaves one way and returns to it, serving nobody it does not already serve.
 

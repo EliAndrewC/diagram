@@ -596,3 +596,15 @@ def test_link_home_bank_serves_the_house_to_a_dry_shod_way_on_its_own_bank(monke
     assert ok((200.0, 200.0), ((0.0, 100.0), (0.0, 120.0))), "the connector's own bank, reached dry-shod"
     assert not ok((200.0, 200.0), ((200.0, 360.0), (200.0, 380.0))), "across the brook"
     assert not ok((200.0, 200.0), ((600.0, 100.0), (600.0, 120.0))), "on no dry-shod way out"
+
+
+def test_a_free_ends_stub_past_a_kink_is_taken_off() -> None:
+    """Feature 261: a free end's short last leg that makes the second of two sharp turns inside 40 ft is dropped; the
+    same end on another lane, or a long last leg, stays."""
+    from l7r.diagram.hamletgen.ways.sweeps import trim_free_stub
+
+    lane = [(0.0, 0.0), (100.0, 0.0), (100.0, -20.0), (118.0, -26.0)]
+    assert trim_free_stub(lane, []) == lane[:-1]
+    assert trim_free_stub(lane, [((118.0, -40.0), (118.0, 40.0))]) == lane, "the end stands on a way: a junction, not a stub"
+    long = [(0.0, 0.0), (100.0, 0.0), (100.0, -20.0), (160.0, -40.0)]
+    assert trim_free_stub(long, []) == long

@@ -246,6 +246,10 @@ Measured before and after in research R10.
   that reaches the connector dry-shod (`_link_home_bank`, before the passes that read the finished joints). Mizuguchi's
   pocket between the brook and the head-race reached its own bank's lane over two planks.
 - A lane record whose points are all one point is dropped with the husks.
+- A free end's short stub past a kink is taken off (`trim_free_stub`): on Kuwabata's fourth roll, after the merge with
+  main, the ring lane threaded a threshing yard and a garden to a door and ended 19 ft past a jog - two turns of 84 and
+  72 degrees inside 40 ft, which the cohort's lane-rules test refuses; straightening the joints again, the router's
+  `_unjog` and keeping channel crossings unsquared were each tried and none reached it (the jog was the web's own).
 - A lane crossing any drawn channel is squared like a brook crossing (Mizuguchi's head-race plank lay 44 degrees off;
   research ways/030: a plank "crosses its ditch square").
 - A roll that raises removes its own stage, and `.roll-*/` is ignored: two interrupted rolls left staging directories in

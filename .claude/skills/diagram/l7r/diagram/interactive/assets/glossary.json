@@ -3289,7 +3289,9 @@
   "def": "Dispersed settlement: the form in which each farmstead stands alone among its own fields, with no village street; the Tonami plain is the canonical case.",
   "variants": [
    "sankyoson",
-   "sanson"
+   "sanson",
+   "scattered farmstead",
+   "scattered-farmstead"
   ]
  },
  "sanmai": {
@@ -5552,6 +5554,38 @@
   "def": "The Japanese syllabic script, in which each sign stands for one syllable; の, read \"no\", is one of its signs.",
   "variants": [
    "kana"
+  ]
+ },
+ "Siberian high": {
+  "def": "The great mass of cold, heavy air that settles over Siberia in winter. Wind blows out of it over Japan from the northwest all winter; in summer the wind comes from the Pacific instead, from the southeast.",
+  "variants": [
+   "Siberian high"
+  ]
+ },
+ "hate-ike": {
+  "def": "The last and outermost basin of a Harie kabata, joined to the settlement's waterways; the water overflowing from it runs out into them.",
+  "variants": [
+   "hate-ike"
+  ]
+ },
+ "kundoku": {
+  "def": "The traditional Japanese way of reading a classical Chinese text, rearranged into Japanese word order and grammar.",
+  "variants": [
+   "kundoku"
+  ]
+ },
+ "loose-cluster village": {
+  "def": "A village whose houses stand together as one group but spaced apart, with gardens and plots between them - neither a tight cluster nor farmsteads scattered among their own fields.",
+  "variants": [
+   "loose-cluster village",
+   "loose-cluster"
+  ]
+ },
+ "water-head": {
+  "def": "The upstream point where a village's stream enters its valley, and the grove planted there - the counterpart of the water-mouth grove downstream.",
+  "variants": [
+   "water-head",
+   "water head"
   ]
  }
 }

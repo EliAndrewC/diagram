@@ -40,6 +40,7 @@ from .sweeps import (
     _sweep_doubled_remnants,
     _sweep_doubled_tails,
     _sweep_steading_fouls,
+    trim_free_stub,
 )
 from .touch import _touch_junctions
 
@@ -584,6 +585,16 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     _sweep_dangling_ends(s)
     # ...AND A LANE THAT ENDS ON ANOTHER STANDS ON ITS CENTERLINE (GM 2026-09-27): an end a few feet off it shows its round cap past the far edge.
     center_lane_ends(s)
+    # ...and a free end's stub past a kink is taken off (feature 261: Kuwabata's ring lane, `trim_free_stub`)
+    for _i, _ln in enumerate(s.M.get("lanes") or []):
+        _p = [(float(x), float(y)) for x, y in _ln.get("pts") or []]
+        _others = [
+            (a, b) for _j, _o in enumerate(s.M.get("lanes") or []) if _j != _i for a, b in zip([tuple(q) for q in _o.get("pts") or []], [tuple(q) for q in (_o.get("pts") or [])[1:]], strict=False)
+        ]
+        _q = trim_free_stub(_p, _others) if not _ln.get("connector") else _p
+        if len(_q) < len(_p):
+            _ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in _q]
+            s.reink_lane(_i)
     # ...and a record the joins emptied is not a lane: a husk with no points declares a way nothing draws (a review
     # counted three on Kashikawa and two on Kuwabata) - dropped with its ink slot, the one way lanes leave
     # ...and a record whose points are all one point is a husk too (Mizuguchi, feature 261: seven three-point records at a
