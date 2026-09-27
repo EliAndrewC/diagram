@@ -46,6 +46,7 @@ azuchi-momoyama period	Azuchi-Momoyama period
 back nagaya	back tenement
 back tenement	back tenement
 back tenements	back tenement
+back-tenement	back tenement
 backswamp	backswamp
 backswamps	backswamp
 backwall	backwall
@@ -635,6 +636,8 @@ hot shoeing	hot-shoeing
 hot-shoeing	hot-shoeing
 houlongshan	houlongshan
 hour of xu	hour of xu
+house manager	yamori
+house manager's	yamori
 house pad	house pad
 house pads	house pad
 houzhaofang	houzhaofang
@@ -1423,6 +1426,7 @@ taizu	Taizu
 takasebune	takasebune
 take-yabu	take-yabu
 takeyabu	take-yabu
+tako-beya	tako-beya
 tamagaki	tamagaki
 tamajari	tamajari
 tameike	tameike
@@ -1622,6 +1626,8 @@ yam	yam
 yamen	yamen
 yamen god	yamen-god
 yamen-god	yamen-god
+yamori	yamori
+yanushi	yamori
 yashiki	yashiki
 yashikigami	yashikigami
 yashikigami-sama	yashikigami
@@ -1675,6 +1681,7 @@ zushi nikai	half-story
 ōiya	ōiya
 ōkaji	ōkaji
 ōkajiba	ōkaji
+ōya	yamori
 ほ場整備	hojo seibi
 合掌造り	gassho
 圃場整備	hojo seibi
