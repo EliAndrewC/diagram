@@ -19,6 +19,17 @@ if TYPE_CHECKING:
     from ..core import Settlement
 
 
+def cremation_outline(cx: float, cy: float, rx: float, ry: float, n: int, jitter: float, rnd: random.Random) -> str:
+    """An SVG points string for a worn, ragged oval: n vertices round (cx, cy), each radius scaled by a factor
+    drawn from 1 +/- jitter - the cremation ground's cleared edge, its burned ground and its ash bed (feature 272)."""
+    pts = []
+    for k in range(n):
+        a = 2 * math.pi * k / n
+        f = 1 + rnd.uniform(-jitter, jitter)
+        pts.append(f"{cx + rx * f * math.cos(a):.1f},{cy + ry * f * math.sin(a):.1f}")
+    return " ".join(pts)
+
+
 class FuneraryGroundsMixin:
     def cemetery(  # type: ignore[misc]
         self: Settlement,
@@ -183,14 +194,22 @@ class FuneraryGroundsMixin:
         # glyph was FIXED-PIXEL (116x80px) and silently tripled at city scale.
         across = 130.0 if self.M["meta"].get("scale") in CITY_TIER_SCALES else 75.0
         crx, cry = max(self.px(across) / 2, 14.0), max(self.px(across * 0.7) / 2, 10.0)
-        self.add(f'<ellipse cx="{cx}" cy="{cy}" rx="{crx:.1f}" ry="{cry:.1f}" fill="#C9BCA0" stroke="#8C7A56" stroke-width="1.5" opacity="0.85"/>')  # cleared scorched ground
-        self.add(f'<ellipse cx="{cx}" cy="{cy}" rx="{crx * 0.58:.1f}" ry="{cry * 0.55:.1f}" fill="#9A8A6A" opacity="0.5"/>')  # the burned center
+        # A WORN, RAGGED ground with its fire bed OFF CENTER (feature 272, settlement-review 2026-09-27 on
+        # Hoshigaoka): a ruled ellipse with a centered dark ellipse and a centered dark block read as an eye or a
+        # pit at fit zoom, and it was the only ruled ground on maps whose clearings are drawn ragged. The jitter
+        # is seeded from the seat, so a map redraws the same ground every time.
+        rnd = random.Random(f"cremation:{cx:.1f},{cy:.1f}")
+        self.add(
+            f'<polygon points="{cremation_outline(cx, cy, crx, cry, 22, 0.09, rnd)}" fill="#C9BCA0" stroke="#8C7A56" stroke-width="1.5" stroke-linejoin="round" opacity="0.85"/>'
+        )  # cleared scorched ground
+        fx = cx + crx * 0.08  # the fire bed a little east of center; the shelter keeps the east rim
+        self.add(f'<polygon points="{cremation_outline(fx + crx * 0.05, cy + cry * 0.07, crx * 0.52, cry * 0.5, 14, 0.2, rnd)}" fill="#9A8A6A" opacity="0.5"/>')  # the burned ground
         ppw, pph = max(self.px(15), 7.0), max(self.px(10), 5.0)
         self.add(
-            f'<rect x="{cx - ppw / 2:.1f}" y="{cy - pph / 2:.1f}" width="{ppw:.1f}" height="{pph:.1f}" rx="1.5" fill="#8C8470" stroke="#4A463C" stroke-width="1.2"/>'
+            f'<rect x="{fx - ppw / 2:.1f}" y="{cy - pph / 2:.1f}" width="{ppw:.1f}" height="{pph:.1f}" rx="1.5" fill="#8C8470" stroke="#4A463C" stroke-width="1.2"/>'
         )  # stone pyre platform (~15x10 ft)
         abw, abh = max(self.px(12), 5.0), max(self.px(8), 3.6)  # the ash bed ON the platform (~12x8 ft burn area)
-        self.add(f'<rect x="{cx - abw / 2:.1f}" y="{cy - abh / 2:.1f}" width="{abw:.1f}" height="{abh:.1f}" fill="#5A463A"/>')  # the ash bed
+        self.add(f'<polygon points="{cremation_outline(fx, cy, abw / 2, abh / 2, 9, 0.25, rnd)}" fill="#5A463A"/>')  # the ash bed, irregular
         shw, shh = max(self.px(14), 7.0), max(self.px(10), 5.0)  # the officiants' shelter (~14x10 ft hut)
         shx = cx + crx * 0.52
         self.add(f'<rect x="{shx:.1f}" y="{cy - shh / 2:.1f}" width="{shw:.1f}" height="{shh:.1f}" rx="1.5" fill="#CDB890" stroke="#5A4326" stroke-width="1.2"/>')

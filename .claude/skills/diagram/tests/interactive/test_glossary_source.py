@@ -117,6 +117,22 @@ def test_a_directory_of_term_files_is_read_back_in_prefix_order(tmp_path: pathli
     assert [t["term"] for t in term_files(str(tmp_path))] == ["a", "b", "e"]
     (tmp_path / TERMS / "10000-e.json").unlink()
 
+    # A five-digit prefix (make reserve counts past 9990) is a term file, read after the four-digit ones by NUMBER,
+    # though "11310" sorts before "1410" as text.
+    (tmp_path / TERMS / "1410-z.json").write_text(json.dumps({"term": "z", "variants": ["z"], "def": "fourth"}, ensure_ascii=False), encoding="utf-8")
+    (tmp_path / TERMS / "11310-y.json").write_text(json.dumps({"term": "y", "variants": ["y"], "def": "fifth"}, ensure_ascii=False), encoding="utf-8")
+    assert [t["term"] for t in term_files(str(tmp_path))] == ["a", "b", "z", "y"]
+    (tmp_path / TERMS / "1410-z.json").unlink()
+    (tmp_path / TERMS / "11310-y.json").unlink()
+
+    # A five-digit prefix (make reserve counts past 9990) is a term file, read after the four-digit ones by NUMBER,
+    # though "11310" sorts before "1410" as text.
+    (tmp_path / TERMS / "1410-z.json").write_text(json.dumps({"term": "z", "variants": ["z"], "def": "fourth"}, ensure_ascii=False), encoding="utf-8")
+    (tmp_path / TERMS / "11310-y.json").write_text(json.dumps({"term": "y", "variants": ["y"], "def": "fifth"}, ensure_ascii=False), encoding="utf-8")
+    assert [t["term"] for t in term_files(str(tmp_path))] == ["a", "b", "z", "y"]
+    (tmp_path / TERMS / "1410-z.json").unlink()
+    (tmp_path / TERMS / "11310-y.json").unlink()
+
     (tmp_path / TERMS / "0020-c.json").write_text(json.dumps({"term": "c", "variants": ["c"], "def": "third"}, ensure_ascii=False), encoding="utf-8")
     with pytest.raises(GlossaryError, match="both claim prefix"):
         term_files(str(tmp_path))

@@ -91,6 +91,12 @@ def test_decode_honors_the_declared_charset_then_the_meta_then_falls_back():
     assert qv.decode(b"plain", "no-such-charset") == "plain"
 
 
+def test_a_shift_jis_page_with_a_windows_extension_character_is_read_as_windows_31j():
+    page = "<meta charset='Shift_JIS'><p>白山比咩神社 ① 境内　五十五坪</p>".encode("cp932")
+    got = qv.decode(page) or ""
+    assert "① 境内　五十五坪" in got, "strict shift_jis refuses the circled digit and gb18030 garbles the rest"
+
+
 def test_a_nested_japanese_quote_is_one_passage():
     text = "title 「世界農業遺産「能登の里山里海」を代表する棚田」 and “curly one” and \"straight\" and 「unclosed"
     got = [text[a:b] for a, b in qv.top_level_quotes(text)]
@@ -273,6 +279,8 @@ def test_a_run_of_translated_quotes_is_paired_with_the_run_of_originals_in_its_p
     short = "「Kept.」 / 「Two.」 (translated from the Japanese by this project; original: 「二」)"
     assert qv.passages(short) == [{"quote": "Kept.", "original": "", "language": ""}, {"quote": "Two.", "original": "二", "language": "the Japanese"}]
     assert qv.passages("「A.」 and 「B.」 (translated from the Japanese by this project; original: 「一」) then 「C」")[1]["original"] == "一"
+    semi = "「One.」; 「Two.」 (translated from the Chinese by this project; original: 「一」; original: 「二」)"
+    assert [(p["quote"], p["original"]) for p in qv.passages(semi)] == [("One.", "一"), ("Two.", "二")]
 
 
 def test_a_cjk_compatibility_ideograph_on_the_page_is_the_same_character_as_the_quote_s() -> None:

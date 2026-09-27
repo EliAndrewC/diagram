@@ -715,7 +715,7 @@ class Torii(Kind):
     Covers: the approach torii before a compound shrine
     Label: accurate
     Sources: torii-enwiki, fushimi-inari-jawiki, fushimi-inari-senbon, hokora-jawiki, nara-nagao-jinja, jinja-jawiki
-    Entry: research/religion-and-death.html - 'Torii are VOTIVE DONATIONS', 'Torii spacing', 'How big is a country shrine, and what stands in its precinct?'
+    Entry: research/religion-and-death.html - 'Torii are VOTIVE DONATIONS', 'Torii spacing', 'Where do the first and the innermost arches stand, and where does the hall's label go?', 'How big is a country shrine, and what stands in its precinct?'
     """
 
     key = "torii"

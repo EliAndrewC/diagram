@@ -64,7 +64,9 @@ TRANSLATED = re.compile(r"^\s*\((?:title\s+)?translated from ([^;()]*(?:\([^()]*
 # Between two quotations of one run - `「Q1」 and 「Q2」 (translated ...; original: 「O1」 and original: 「O2」)` -
 # and between two originals of one parenthetical. Without the run, Q2 was paired with O1 and O2 never checked:
 # cities/fabric 143 (feature 250 T55) had two notes reported NOT-READABLE that were verbatim on their pages.
-JOINER = re.compile(r"^\s*(?:and|/|,)?\s*(?:original:)?\s*$")
+# `;` is the record's commonest joiner (`「Q1」; 「Q2」 (...; original: 「O1」; original: 「O2」)`), and without it
+# religion-and-death 550 (feature 272) had four notes reported NOT-READABLE that were verbatim on their pages.
+JOINER = re.compile(r"^\s*(?:and|/|,|;)?\s*(?:original:)?\s*$")
 ELISION = re.compile(r"\s*(?:\[\s*(?:\.\.\.|…)\s*\]|\.\.\.|…)\s*")
 REF_MARK = re.compile(r"\s*\[(?:\d{1,3}|注\s*\d+|note\s*\d+|citation needed|要出典)\]")
 
@@ -117,6 +119,10 @@ def decode(raw: bytes, declared: str = "") -> str | None:
     tried: list[str] = []
     for name in (declared, meta.group(1).decode("ascii", "replace") if meta else "", "utf-8", "shift_jis", "euc_jp", "gb18030", "big5"):
         name = (name or "").strip().lower()
+        # A page labeled Shift_JIS is read as Windows-31J, as a browser reads it (the WHATWG encoding standard):
+        # strict shift_jis refuses its extension characters (ranhaku's Hakusan page, 2026-09-27), and the fallback
+        # then decoded it as gb18030 and found none of its quotations.
+        name = "cp932" if name in ("shift_jis", "shift-jis", "sjis", "x-sjis", "ms_kanji", "windows-31j") else name
         if not name or name in tried:
             continue
         tried.append(name)
