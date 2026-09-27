@@ -346,9 +346,7 @@ def notice_board_adrift(plan: ParsedPlan, max_ft: float = NOTICE_BOARD_MAX_FT) -
     if not ops:
         return []
     boards = [r for r in plan.fills if plan.label_kinds.get(r.pos) == "notice board"]
-    marks = [(r, r.x + r.w / 2, r.y + r.h / 2) for r in boards] or [
-        (Rect(lab.x, lab.y, lab.w, lab.h), lab.cx, lab.cy) for lab in plan.labels if "notice board" in lab.text.lower()
-    ]
+    marks = [(r, r.x + r.w / 2, r.y + r.h / 2) for r in boards] or [(Rect(lab.x, lab.y, lab.w, lab.h), lab.cx, lab.cy) for lab in plan.labels if "notice board" in lab.text.lower()]
     out: list[MisplacedBoard] = []
     for rect, cx, cy in marks:
         d = min(_point_rect_dist(ox, oy, rect) for ox, oy in ops) / FTPX  # nearest edge of the board

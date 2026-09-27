@@ -163,7 +163,7 @@ def test_no_caption_lies_across_a_way(labels) -> None:
             if len(pts) < 2:
                 continue
             if any(_seg_dist(cx, cy, pts[i], pts[i + 1]) - half < NOTCH_CLEARANCE for cx, cy in corners for i in range(len(pts) - 1)):
-                notched.append((lab[5], round(x0), round(y0)))
+                notched.append((lab[5], round(quad[0][0]), round(quad[0][1])))
                 break
     assert not notched, f"caption(s) lie across a lane: {notched[:4]}"
 
