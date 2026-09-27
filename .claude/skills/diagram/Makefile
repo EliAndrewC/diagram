@@ -718,7 +718,10 @@ print()"
 # the escape rate is the number that matters: a guard escaped more often than it is obeyed is costing
 # a round trip to prevent nothing, which is what retired the quick+done refusal.
 	@python3 -c "import json,glob,os,collections; \
-rows=[json.load(open(f)) for f in glob.glob(os.path.expanduser(os.environ.get('GUARD_LOG_DIR','~/.claude/guard-log')+'/*.json'))]; \
+'GUARD_EDIT_OK: fixing a defect found while working (2026-09-27) - two ZERO-BYTE entries from 2026-09-26 made'; \
+'the whole audit die on a JSONDecodeError. The writer now renames a finished file into place, so no new one'; \
+'can be empty; an empty file left from before is skipped here, as scripts/guard-log.py already does.'; \
+rows=[json.load(open(f)) for f in glob.glob(os.path.expanduser(os.environ.get('GUARD_LOG_DIR','~/.claude/guard-log')+'/*.json')) if os.path.getsize(f)]; \
 print('\033[1mGuard firings\033[0m (~/.claude/guard-log/) - what each guard did: blocked, rewrote, reminded, escaped'); \
 by=collections.defaultdict(collections.Counter); \
 [by[r['guard']].update([r['event']]) for r in rows]; \

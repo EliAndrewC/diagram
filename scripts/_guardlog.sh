@@ -127,12 +127,18 @@ try:
     ctx = json.loads(context) if context else None
 except Exception:
     ctx = context or None
-json.dump({"utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "guard": guard,
-           "event": event, "rule": rule or event, "session": sid, "session_name": name or sid,
-           "cwd": payload.get("cwd") or "", "tool": payload.get("tool_name") or "",
-           "transcript": payload.get("transcript_path") or "", "detail": detail[:200],
-           "command": ti.get("command") or ti.get("file_path") or "", "context": ctx},
-          open(path, "w"), indent=2)
+# GUARD_EDIT_OK: fixing a defect found while working (2026-09-27) - `open(path, "w")` created the file
+# BEFORE the entry was serialized, so a hook killed mid-write left a zero-byte entry (two on 2026-09-26)
+# and `make audit` died reading it. Serialize first, write a temp beside it, rename into place.
+import os
+text = json.dumps({"utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "guard": guard,
+                   "event": event, "rule": rule or event, "session": sid, "session_name": name or sid,
+                   "cwd": payload.get("cwd") or "", "tool": payload.get("tool_name") or "",
+                   "transcript": payload.get("transcript_path") or "", "detail": detail[:200],
+                   "command": ti.get("command") or ti.get("file_path") or "", "context": ctx}, indent=2)
+with open(path + ".tmp", "w") as fh:
+    fh.write(text)
+os.replace(path + ".tmp", path)
 PY
     rm -f "$GL_IN"
   } >/dev/null 2>&1 || true
