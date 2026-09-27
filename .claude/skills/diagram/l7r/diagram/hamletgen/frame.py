@@ -355,10 +355,20 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
                 best = (loose[0], loose[1], loose[2], _lb if _lb is not None else 0.0)
             if best is not None:
                 s.kosatsuba(best[1], best[2], rot=best[3])
+                record_board_well(s.M, best[1], best[2])  # the board drawn, not the engine's first seat
             else:
                 s.M["kosatsuba"].append(
                     board
                 )  # pragma: no cover - no verge inside the cloud takes a board; keep the engine's seat rather than none [174: KEPT, not deletable - an else branch that binds the seat this method returns]
+
+
+def record_board_well(M: dict[str, Any], x: float, y: float) -> None:
+    """`meta.kosatsuba_well_ft` for the board where it is DRAWN (settlement-review of Sawada, feature 261): `place_kosatsuba`
+    records it for its own seat, and a board this stage re-seats kept the first seat's figure - Sawada's said 353.5 ft of a
+    board 173.3 ft from its nearest well. The field exists to record what was drawn (`siting.py`), so it follows the board."""
+    wells = [(float(w["x"]), float(w["y"])) for w in M.get("wells") or [] if "x" in w]
+    if wells:
+        M.setdefault("meta", {})["kosatsuba_well_ft"] = round(min(math.hypot(x - wx, y - wy) for wx, wy in wells) * float(M.get("meta", {}).get("ftpx") or 1), 1)
 
 
 def _caption_levels(s: Settlement, seats: list[tuple[float, float, float, float]], label: str, frame: Any, fw: float, fh: float, canopy: Any) -> dict[tuple[float, float, float, float], int]:

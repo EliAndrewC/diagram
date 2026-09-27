@@ -927,7 +927,7 @@ the shortest edge - and recorded PASS (`.git/review-verdicts/`).
 The wind is the region's northwest now. At seed 6 no margin with its back to that wind was open on this land, so the
 map is seed 24 (the generator says why); every farmstead moved (median 675 ft) and all 19 stand on a margin with its
 back to the wind. The belt is 539 clumps, 317 degrees from the houses' middle, over a 158-degree arc; it backs onto the
-toe marsh, and its 70 clumps that stand in the marsh are alder, the wet ground's own tree, drawn a blue-gray green. The
+toe marsh, and its 262 clumps that stand in the marsh are alder, the wet ground's own tree, drawn a blue-gray green. The
 brook no longer doubles back where it leaves the frame, nor runs level along the top margin, nor runs ruled down the
 field's flank: its walk swings across its band at every station, and its longest straight run on the page is 380 ft of
 1,240. The entrance board stands 27 ft from where the connector meets the lanes, passed by all 19 households' ways out;

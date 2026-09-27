@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+from collections.abc import Sequence
 from typing import Any, cast
 
 from l7r.diagram.settlement import Settlement
@@ -16,6 +17,26 @@ from .frame import scatter_frame, title_pocket
 from .parcels import CROP_MARGIN, open_ground_patches
 
 # ---- STAGE 7: the ground between everything ------------------------------------------------------
+
+
+LEE_BAND_FT = 40.0  # ft: the width across the wind of one band of the belt, about a crown and a half
+LEE_DEPTH_FT = 30.0  # ft: a crown's depth, the lee face's thickness in each band
+
+
+def lee_face(clumps: Sequence[tuple[float, float]], wind: tuple[float, float]) -> list[tuple[float, float]]:
+    """The belt crowns on its LEE face - in each `LEE_BAND_FT` band across the wind, those within `LEE_DEPTH_FT` of the
+    band's most leeward crown (settlement-review of Mizuguchi, feature 261).
+
+    The against-the-belt copse is "tucked against the back grove" (`COPSE_SITINGS`): the fruit and bamboo a household
+    keeps stand in the belt's shelter, on the houses' side. Anchored on every belt crown, it could stand anywhere within
+    reach of one, and once the belt kept its depth where its fringe turns, 31 of Mizuguchi's 75 copse crowns stood beyond
+    its windward face, farther from every house than the belt beside them - one wood 250 ft deep. `wind` points toward
+    where the wind comes from."""
+    wx, wy = wind
+    bands: dict[int, list[tuple[float, tuple[float, float]]]] = {}
+    for c in clumps:
+        bands.setdefault(int((c[0] * -wy + c[1] * wx) // LEE_BAND_FT), []).append((c[0] * wx + c[1] * wy, c))
+    return [c for band in bands.values() for u, c in band if u <= min(v for v, _ in band) + LEE_DEPTH_FT]
 
 
 def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
@@ -256,7 +277,7 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
         _by = [q[1] for q in _dented]
         _box = [(min(_bx), min(_by)), (max(_bx), min(_by)), (max(_bx), max(_by)), (min(_bx), max(_by))]
         _belt = [(float(c[0]), float(c[1])) for g in s.M.get("village_groves") or [] if g.get("role") == "windbreak" for c in g.get("clumps") or []]
-        _copse_near = (_belt, s.px(COPSE_BELT_REACH_FT), _brook)
+        _copse_near = (lee_face(_belt, plan.wind), s.px(COPSE_BELT_REACH_FT), _brook)
     s.village_grove(_box, role="copse", dense=False, reserved=title_pocket(s, plan), near=_copse_near)  # the map's name has ground reserved; the copse honors it like the belt does
     # RECORD WHAT THE GROUND GAVE, beside what the knob asked for (settlement-review, feature 230 pass 12; the same
     # move `place_kosatsuba` makes with `kosatsuba_well_ft`, and for the same reason). `copse_siting` says

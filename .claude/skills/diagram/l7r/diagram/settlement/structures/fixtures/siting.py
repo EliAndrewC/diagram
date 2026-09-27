@@ -516,7 +516,7 @@ class FixtureSitingMixin:
         # overwritten; a reader can see what was asked for and what the ground allowed.
         # A MEASUREMENT, NOT A SECOND LABEL. Recording a drawn "waterside"/"frontage" was tried and
         # discarded in the same breath: a board that happens to land 60 ft from a well did not choose
-        # the drawing-water place, and labelling it `waterside` would assert an intent the seat never
+        # the drawing-water place, and labeling it `waterside` would assert an intent the seat never
         # had - the same overstatement this field exists to catch. The distance claims nothing and
         # settles the question either way: on the five scripted hamlets the rolled siting and the
         # ground disagree on four, which is what says the two knobs are not composing.

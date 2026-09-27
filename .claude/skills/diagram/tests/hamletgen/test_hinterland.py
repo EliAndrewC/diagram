@@ -619,3 +619,15 @@ def test_the_belts_far_face_keeps_its_depth_across_a_steep_fringe() -> None:
     grown = far_face(steep)
     lead = 150.0 + BELT_DEPTH_FT * (1.0 - (90.0 / BELT_DEPTH_FT) ** 2) ** 0.5 - BELT_DEPTH_FT
     assert grown[2] == (90.0, 300.0) and abs(grown[1][1] - (150.0 + lead)) < 1e-9 and grown[1][1] > 150.0
+
+
+def test_the_copse_against_the_belt_anchors_on_its_lee_face() -> None:
+    """`lee_face` (settlement-review of Mizuguchi, feature 261): in each band across the wind, only the crowns within a crown's
+    depth of the most leeward - so the copse gathers on the houses' side of the belt, not beyond its windward face."""
+    from l7r.diagram.hamletgen.hinterland.stages import LEE_DEPTH_FT, lee_face
+
+    north = (0.0, -1.0)  # the wind from the north: windward is -y
+    belt = [(0.0, -100.0), (0.0, -120.0), (0.0, -200.0), (100.0, -150.0), (100.0, -250.0)]
+    lee = lee_face(belt, north)
+    assert set(lee) == {(0.0, -100.0), (0.0, -120.0), (100.0, -150.0)}
+    assert LEE_DEPTH_FT < 50.0

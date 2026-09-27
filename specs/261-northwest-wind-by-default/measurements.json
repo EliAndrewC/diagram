@@ -1022,5 +1022,55 @@
   "quantity": "the dooryard copse the feature-261 notes entry states (29 in the round), median 55 ft from a farmhouse, matching meta.copse_clumps and meta.copse_house_ft",
   "source": ".claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md; kuwabata.json meta",
   "command": "grep -n '35 clumps, median 55 ft' .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md"
+ },
+ "kashikawa-r16-belt-pieces": {
+  "verifies": "F1",
+  "subject": "kashikawa",
+  "round": "97c20bc9",
+  "value": 1,
+  "unit": "pieces",
+  "quantity": "the pieces the DRAWN windbreak is in: tree_crowns within 20 ft of the belt's outline, linked within 30 ft edge to edge - 1 piece of 1160 crowns (4 pieces of 705 at commit 881679390, the round's hole); every pool belt is 1 piece",
+  "source": ".claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.json tree_crowns, village_groves windbreak poly",
+  "command": "python3 specs/261-northwest-wind-by-default/measure/belt_pieces.py inashiro kashikawa kuwabata mizuguchi sawada"
+ },
+ "sawada-r17-well": {
+  "verifies": "F1",
+  "subject": "sawada",
+  "round": "31ef113b",
+  "value": 173.3,
+  "unit": "ft",
+  "quantity": "meta.kosatsuba_well_ft, now the drawn board's distance to its nearest well (353.5 recorded in the round for the engine's first seat); every pool map's recorded figure equals its drawn one",
+  "source": ".claude/skills/diagram/pool/hamlets/sawada/sawada.json meta.kosatsuba_well_ft, kosatsuba, wells",
+  "command": "python3 specs/261-northwest-wind-by-default/measure/board_well.py sawada kashikawa inashiro mizuguchi"
+ },
+ "sawada-r17-alder": {
+  "verifies": "F2",
+  "subject": "sawada",
+  "round": "31ef113b",
+  "value": 262,
+  "unit": "clumps",
+  "quantity": "the alder the notes' feature-261 entry states (70 in the round), matching the windbreak's recorded alder",
+  "source": ".claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md; sawada.json village_groves alder",
+  "command": "grep -n 'its 262 clumps that stand in the marsh are alder' .claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md"
+ },
+ "sawada-r17-spelling": {
+  "verifies": "F3",
+  "subject": "sawada",
+  "round": "31ef113b",
+  "value": 1,
+  "unit": "lines",
+  "quantity": "the siting comment spelled in American (the British spelling in the round)",
+  "source": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py",
+  "command": "grep -n 'and labeling it' .claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py"
+ },
+ "mizuguchi-r17-copse": {
+  "verifies": "F2",
+  "subject": "mizuguchi",
+  "round": "31ef113b",
+  "value": 0,
+  "unit": "crowns",
+  "quantity": "against-the-belt copse crowns more than 5 ft windward of their nearest belt crown (31 of 75 in the round); 43 crowns, all on the belt's lee face",
+  "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.json village_groves",
+  "command": "python3 specs/261-northwest-wind-by-default/measure/copse_side.py mizuguchi"
  }
 }

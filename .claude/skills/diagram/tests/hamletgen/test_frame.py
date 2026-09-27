@@ -358,3 +358,16 @@ def test_the_brooks_are_rounded_with_the_tap_held() -> None:
     s = _S()
     round_the_brooks(s)  # type: ignore[arg-type]
     assert s.calls == [(BROOK_BEND_WIDTHS * 8.0, {1})], "the tap at (100, 0) held; the two-point course skipped"
+
+
+def test_the_board_records_its_well_distance_where_it_is_drawn() -> None:
+    """`record_board_well` (settlement-review of Sawada, feature 261): the distance to the nearest well from the board as
+    drawn, at the map's scale; no wells, no figure."""
+    from l7r.diagram.hamletgen.frame import record_board_well
+
+    M: dict = {"meta": {"ftpx": 2.0, "kosatsuba_well_ft": 353.5}, "wells": [{"x": 30.0, "y": 40.0}, {"x": 500.0, "y": 0.0}]}
+    record_board_well(M, 0.0, 0.0)
+    assert M["meta"]["kosatsuba_well_ft"] == 100.0
+    bare: dict = {"meta": {}}
+    record_board_well(bare, 0.0, 0.0)
+    assert "kosatsuba_well_ft" not in bare["meta"]

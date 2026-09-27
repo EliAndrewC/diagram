@@ -398,6 +398,20 @@ Measured before and after in research R10.
   more: a curve that turns through an axis has a short chord or two on it, and the GM's objection is to a course running
   along one.
 
+
+### D21 - The copse at the belt's lee face, and the board's well distance where it is drawn (round 31ef113b)
+
+- The against-the-belt copse anchors on the belt's LEE FACE (`lee_face`: in each 40 ft band across the wind, the crowns
+  within a crown's 30 ft depth of the most leeward), so it stands in the belt's shelter on the houses' side, "tucked
+  against the back grove" (`COPSE_SITINGS`). Anchored on every belt crown, and once D20 gave the belt its depth where it
+  turns, 31 of Mizuguchi's 75 copse crowns stood beyond the belt's windward face (settlement-review, round 31ef113b); none
+  does now (`m:mizuguchi-r17-copse`, 0 crowns). The band and depth are a map drawing convention, calibrated to a crown.
+- `meta.kosatsuba_well_ft` is recorded for the board as drawn: the frame stage's re-seat records it too
+  (`record_board_well`). Sawada's said 353.5 ft of a board 173.3 ft from its nearest well, the first seat's figure; every
+  pool map's recorded figure is now its drawn one (`m:sawada-r17-well`, 173.3 ft).
+- The drawn belt is measured as one piece in crowns, not in its outline (`m:kashikawa-r16-belt-pieces`, 1 piece): the
+  depth record reads the polygon, and the review's hole was between crowns inside an unbroken outline.
+
 ## Phases
 
 1. Engine: D1, D2, D3 with their unit tests (plan, cluster, surface); the amendment's D9-D17 with theirs.
