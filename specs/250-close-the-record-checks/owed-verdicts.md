@@ -160,3 +160,12 @@
 - household.Well (urban-features SECTION=090): REWRITTEN - the curb width is no longer "not found"; the 118 cm measured frame now carries the 3-4 ft curb
 - water_and_ways.Well (urban-features SECTION=090): REWRITTEN - the curb frame's 118 cm measure named; "often" an aqueduct intake narrowed to "could be"; UNICEF dropped, "people" -> inhabitants
 - BenchNoticeBoard (urban-features SECTION=010): REWRITTEN - the Note's 'at no government office' narrowed to the silence 010 records: no page read puts a post town's board at its transport office (feature 271, batch 1)
+- water_and_ways.Well (urban-features SECTION=120): IN-STEP - the aqueduct wells and the unsourced households-per-well ratio still read as the modal says
+- household.Well (urban-features SECTION=120): REWRITTEN - the Note now names the Kakunodate houses (Aoyagi, Iwahashi) where the private samurai well is read; their keys added to Sources
+- household.Well (buildings SECTION=180): IN-STEP - the size hierarchy never mentions wells
+- Barracks (buildings SECTION=180): IN-STEP - the stable-under-barracks order is still this project's reading
+- CompoundShrine (buildings SECTION=180): IN-STEP - the shrine's small size and the unranked footprints stand as worded
+- Kitchen (buildings SECTION=180): REWRITTEN - the 67-tsubo anchor is now Matsue's cited main house, not an unread figure; matsue-bukeyashiki-about added to Sources
+- OfficeHall (buildings SECTION=180): IN-STEP - the office-hall-largest departure is still labeled this project's reading
+- Residence (buildings SECTION=180): IN-STEP - only the office hall may out-measure it, still a reading
+- Stables (buildings SECTION=180): IN-STEP - the 2-4 horse stable and its stall figure are unchanged

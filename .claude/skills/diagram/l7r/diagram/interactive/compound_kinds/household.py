@@ -213,20 +213,21 @@ class Kitchen(Kind):
     quarters, its weighting as the compound's worst fire risk, with a second water tub, and its postern into
     work space are this project's reading: no readable page orders the compound's buildings by size, no page
     read gives the kitchen extra water or sets one tub to a hall as a rule, and the dictionary cited defines
-    only the kitchen door, not what it opens onto. The kitchen is measured against a whole mid-rank samurai
-    house of about 67 tsubo (some 2,400 sq ft), a figure that rests on no page a reader can open.
+    only the kitchen door, not what it opens onto. The kitchen is measured against the main house of a
+    retainer of 500 to 1,000 koku at Matsue, about 67 tsubo (some 2,400 sq ft), the figure that residence's own
+    page gives.
 
     Caveat: The kitchen's rank below the living quarters, its weighting as the compound's worst fire risk,
     with a second water tub, and its postern into work space are this project's reading: no readable page
     orders the compound's buildings by size, no page read gives the kitchen extra water or sets one tub to a
     hall as a rule, and the dictionary cited defines only the kitchen door, not what it opens onto. The
-    kitchen is measured against a whole mid-rank samurai house of about 67 tsubo (some 2,400 sq ft), a figure
-    that rests on no page a reader can open.
+    kitchen is measured against the main house of a retainer of 500 to 1,000 koku at Matsue, about 67 tsubo
+    (some 2,400 sq ft), the figure that residence's own page gives.
 
     Name: kitchen
     Covers: the kitchen and pantries building and its label
     Label: accurate
-    Sources: tfd-hongou-fire-history, thepaper-taipinggang, edo-no-kaji-jawiki, machibikeshi-jawiki, kotobank-katteguchi
+    Sources: tfd-hongou-fire-history, thepaper-taipinggang, edo-no-kaji-jawiki, machibikeshi-jawiki, kotobank-katteguchi, matsue-bukeyashiki-about
     Entry: research/buildings.html - 'The compound has a size HIERARCHY', 'Fire-water is distributed to the halls', 'Guest doors feed courts, not flanks'
     """
 
@@ -271,13 +272,14 @@ class Well(Kind):
     Note: we have drawn each well as a stone-curb marker about 7 ft square, larger than the curb itself, in
     order to mark where the well stands without claiming that its pixels are the well's size. A hand-dug
     well's shaft is about 1 m across; the one curb frame found measured, a bucket well recorded for a book of old
-    implements, is 118 cm (about 4 ft) square, and the 3 to 4 ft curb rests on it. That official households drew from wells inside their own walls is the record's
-    reading.
+    implements, is 118 cm (about 4 ft) square, and the 3 to 4 ft curb rests on it. That official households drew from wells inside their
+    own walls is read at two surviving samurai houses in Kakunodate, the Aoyagi house's roofed well inside its
+    gate and the Iwahashi house's sweep well; the general rule is the record's reading.
 
     Name: well
     Covers: every well curb glyph and its label
     Label: convention
-    Sources: kanda-josui-jawiki, nagaya-jawiki, saijo-mizu-rekishikan, kotobank-idoyakata, ido-jawiki, shoinzukuri-jawiki
+    Sources: kanda-josui-jawiki, nagaya-jawiki, saijo-mizu-rekishikan, kotobank-idoyakata, ido-jawiki, shoinzukuri-jawiki, jta-aoyagi-kakunodate, semboku-bukeyashiki
     Entry: research/urban-features.html - 'Communal wells and the samurai exception', 'Wells - the research, and the deliberate liberty'; research/buildings.html - 'The shady rear is the service strip'
     """
 
