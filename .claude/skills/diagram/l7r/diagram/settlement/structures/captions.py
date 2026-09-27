@@ -8,15 +8,20 @@ from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
 from l7r.diagram.interactive.tags import ClsTag
+from l7r.diagram.overlap.taxonomy import _LABEL_GROUP
 
+from ...labels import CIVIC_GROUPS, Obstacle, ObstacleIndex, Placement, Subject, Way, place
+from ...labels.geom import bbox as _bbox
+from ...labels.geom import rect, seg_closest
+from ...labels.standard import WEIGHT_OBSTACLE
 from .._geom import (
     LAND,
     Poly,
     Pt,
     label_aabb,
     label_quad,
-    rects_overlap,
     seg_dist,
+    torii_halfbox,
 )
 
 # Ground cover and land parcels a caption may stand on - not blockers (see `label_blocker_quads`).
@@ -59,6 +64,37 @@ LABEL_GROUND_KEYS = frozenset(
         "taxfree",
     }
 )
+
+
+def stroke_quad(a: Pt, b: Pt, half: float) -> Poly:
+    """The drawn band of a stroke from `a` to `b` of half-width `half`, as a quad (a wall or moat run)."""
+    dx, dy = b[0] - a[0], b[1] - a[1]
+    n = math.hypot(dx, dy) or 1.0
+    nx, ny = -dy / n * half, dx / n * half
+    return [(a[0] + nx, a[1] + ny), (b[0] + nx, b[1] + ny), (b[0] - nx, b[1] - ny), (a[0] - nx, a[1] - ny)]
+
+
+def subject_ref(subject: Subject, p: Placement) -> tuple[float, float, float, float]:
+    """The referent box a caption records (element [6]): the subject's box, or for a LINE subject the drawn road across
+    from where the caption landed - the box `label_hugs_its_referent` measures the gap against."""
+    if subject.kind == "point":
+        # the subject's UNROTATED box - its extents in its own frame, about its center - the record's standing
+        # convention (`_record_label`'s note: it keeps `label_hugs_its_referent` conservative)
+        a = math.radians(subject.angle)
+        u, v = (math.cos(a), math.sin(a)), (-math.sin(a), math.cos(a))
+        c = (sum(q[0] for q in subject.poly) / len(subject.poly), sum(q[1] for q in subject.poly) / len(subject.poly))
+        su = max(abs((q[0] - c[0]) * u[0] + (q[1] - c[1]) * u[1]) for q in subject.poly)
+        sv = max(abs((q[0] - c[0]) * v[0] + (q[1] - c[1]) * v[1]) for q in subject.poly)
+        return (c[0] - su, c[1] - sv, c[0] + su, c[1] + sv)
+    if subject.kind == "area":
+        return _bbox(subject.poly)
+    cx = sum(q[0] for q in p.block) / len(p.block)
+    cy = sum(q[1] for q in p.block) / len(p.block)
+    pts = list(subject.poly)
+    q = min((seg_closest((cx, cy), a, b) for a, b in zip(pts, pts[1:], strict=False)), key=lambda c: math.dist(c, (cx, cy)))
+    h = subject.half_width
+    return (q[0] - h, q[1] - h, q[0] + h, q[1] + h)
+
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -110,65 +146,6 @@ class CaptionProbesMixin:
                 quads.append([(o["x"] + dx * ca - dy * sa, o["y"] + dx * sa + dy * ca) for dx, dy in cs])
         return quads
 
-    def pull_caption_toward(self: Settlement, seat: Pt, text: str, size: float, anchor: str, tilt: float, subject: Poly, frac: float = 0.5) -> Pt:  # type: ignore[misc]
-        """Move a caption's seat `frac` of the way across the empty air between its block and the
-        subject's footprint (feature 133 T40, GM 2026-08-27: *"half of the empty space between the
-        notice board and the label could be eliminated ... move the label fifty percent of the way
-        toward the thing that it is labeling"*). The block is the one `label()` will draw at this
-        seat - wrapped or not (`_caption_lines`), tilted about its center - and the gap is measured
-        quad to quad, so a caption beside a tilted board closes on the board and not on its bounding
-        box. The pull is refused (the seat returned unchanged) when the pulled block would touch the
-        subject or any other blocker, so this can only ever tighten a clear seat."""
-        lines = self._caption_lines(text, seat[0], seat[1], size, anchor, tilt)
-        n = len(lines)
-        w_ = max(len(ln) for ln in lines) * size * 0.55
-        h_ = size * 1.05 + (n - 1) * size * 1.15
-
-        def _block(sx: float, sy: float) -> Poly:
-            x0 = sx - w_ / 2 if anchor == "middle" else (sx - w_ if anchor == "end" else sx)
-            cy = sy - size * 0.275
-            return label_quad([x0, cy - h_ / 2, x0 + w_, cy + h_ / 2, 0, text, None, tilt])
-
-        def _gap(p: Poly, q: Poly) -> float:
-            return min(min(seg_dist(a[0], a[1], q[i], q[(i + 1) % len(q)]) for a in p for i in range(len(q))), min(seg_dist(b[0], b[1], p[i], p[(i + 1) % len(p)]) for b in q for i in range(len(p))))
-
-        before = _block(*seat)
-        if rects_overlap(before, subject):
-            return seat
-        gap = _gap(before, subject)
-        if gap <= 0.5:
-            return seat
-        bc = (sum(p[0] for p in before) / len(before), sum(p[1] for p in before) / len(before))
-        sc = (sum(p[0] for p in subject) / len(subject), sum(p[1] for p in subject) / len(subject))
-        # A `if d < 1e-6: return seat` guard stood here and was DEAD (removed with its proof, feature 146).
-        # `bc` is the mean of the caption block's four corners and `sc` the mean of the subject's vertices,
-        # so `d == 0` puts the block's center on the subject's own centroid - which lies inside the
-        # subject's convex hull by construction, and `rects_overlap` above (a separating-axis test, so a
-        # hull test) has already returned the seat unchanged in that case. There is no geometry that
-        # reaches here with the two centers on top of each other.
-        d = math.dist(bc, sc)
-        ux, uy = (sc[0] - bc[0]) / d, (sc[1] - bc[1]) / d
-        pulled = (seat[0] + ux * gap * frac, seat[1] + uy * gap * frac)
-        after = _block(*pulled)
-        blockers = [q for q in self.label_blocker_quads() if q != subject] + [label_quad(lb) for lb in self.M["labels"] if len(lb) > 3]
-        # A MARGIN, NOT MERELY NON-OVERLAP (settlement-review of Kuwabata, 2026-09-12 - see
-        # `CAPTION_FEATURE_GAP`). This refused the pull only where the moved block LAPPED something, so a pull
-        # that brought the words to 0.02 px off a byre was accepted and the caption read as naming the byre.
-        # The subject keeps the overlap test, because the pull is TOWARD it by construction and closing the
-        # last half-foot onto the thing being named is the point of the pull.
-        if rects_overlap(after, subject) or any(_gap(after, q) <= CAPTION_FEATURE_GAP for q in blockers):
-            return seat
-        # ...AND NOT ONTO A WAY (T48): `captions_clear_the_ways_they_stand_on` wants the caption's box
-        # clear of every tread by its halo; a pull that lands it on a lane is refused like a footprint.
-        ac = (sum(p[0] for p in after) / len(after), sum(p[1] for p in after) / len(after))
-        reach = max(math.dist(ac, p) for p in after)
-        for ln in self.M.get("lanes", []):
-            pts = ln.get("pts") or []
-            half = float(ln.get("w", 5)) / 2 + 3.0 + 2.0
-            if any(seg_dist(ac[0], ac[1], (float(pts[k][0]), float(pts[k][1])), (float(pts[k + 1][0]), float(pts[k + 1][1]))) < half + reach for k in range(len(pts) - 1)):
-                return seat
-        return pulled
-
     def place_labels(self: Settlement) -> None:  # type: ignore[misc]
         """THE LABEL PHASE - the last phase of a settlement's generation (feature 157, GM 2026-08-29).
 
@@ -177,10 +154,10 @@ class CaptionProbesMixin:
         board, there is a final phase in which we add labels for whatever map features get labels. This
         is because how we place labels will always depend on what else is on the map."*
 
-        Nothing draws a caption before this runs: `label()` queues, and this drains. TWO KINDS are in
-        the queue - a `text` request (a caption whose seat its feature already computed) and a
-        `kosatsuba` request (a caption whose SEAT is searched here, because the search must see the
-        finished map). A new labeled feature adds a row to `_PLACERS`, not a branch here.
+        Nothing draws a caption before this runs: `label()` queues, and this drains. A `text` request is a
+        caption whose seat its feature already computed (the unscripted tiers' hand seats, feature 266 D8);
+        every other kind is SEATED here by the one placer (`l7r.diagram.labels`, feature 266), because the
+        seat must see the finished map. A new labeled feature adds a row to `_PLACERS`, not a branch here.
 
         THE DRAIN ORDER is the queue's own call order, then the deferred `place_caption` seats, then
         the road caption - which is today's relative order preserved exactly, and it keeps the rule
@@ -199,12 +176,12 @@ class CaptionProbesMixin:
         if not self._labels_pending:
             return
         self._labels_pending = False  # ...so `label()` below reaches its body instead of re-queuing
+        self._label_index: ObstacleIndex | None = None  # built on the first seated caption, from the map as it then stands
         queued, self._label_queue = self._label_queue, []
         for kind, payload in queued:
             getattr(self, self._PLACERS[kind])(*payload)
-        for _tx, _bx, _sz, _it, _wt, _co, _hi, _sl, _ro in self._captions:
-            _lx, _ly = self._best_label_spot(_bx, _tx, _sz, hint=_hi, slides=_sl, tilt=_ro)
-            self.label(_lx, _ly, _tx, _sz, italic=_it, weight=_wt, color=_co, ref=_bx, rot=_ro)
+        for _tx, _subject, _sz, _it, _wt, _co in self._captions:
+            self._draw_seated_caption(_tx, _subject, _sz, _it, _wt, _co, None)
         self._captions = []
         if getattr(self, "_road_label", None):
             self._finish_road_label()  # feature 145: the Imperial-road caption, a town/city feature, lives in structures/ground.py
@@ -215,7 +192,96 @@ class CaptionProbesMixin:
     # `text` caption's was fixed by its feature - which no introspection could recover.
     _PLACERS = {"text": "_draw_queued_label", "kosatsuba": "_draw_board_caption", "field_name": "_draw_field_name_label"}
 
-    def field_name_label(self: Settlement, label: str, lx: float, ly: float) -> None:  # type: ignore[misc]
+    def _draw_seated_caption(  # type: ignore[misc]
+        self: Settlement, text: str, subject: Subject, size: float, italic: bool, weight: str, color: str, cls: ClsTag, markup: bool = False
+    ) -> Placement:
+        """Seat one caption by the ONE placer (feature 266) and draw it, with its leader if it has one.
+
+        The obstacle index is built once per phase, on the first seated caption, and each caption drawn is added to
+        it so the next one keeps off it (FR-009). `markup` draws the field-name form (letter-spaced, a heavier halo)
+        in place of `label()`'s; it is placed exactly the same way."""
+        if self._label_index is None:
+            self._label_index = self.label_obstacles()
+        view = self.M["meta"].get("view")
+        frame = (view[0], view[1], view[0] + view[2], view[1] + view[3]) if view else None
+        p = place(text, size, subject, self._label_index, frame)
+        ref = subject_ref(subject, p)
+        if markup:
+            z = self.add_label(
+                f'<text x="{p.x:.0f}" y="{p.y:.0f}" text-anchor="middle" font-size="{size:g}" font-weight="bold" fill="#33301E" letter-spacing="1.5" paint-order="stroke" stroke="{LAND}" stroke-width="3.5">{text}</text>'
+            )
+            self._record_label(p.x, p.y, text, size, "middle", z, ref)
+        else:
+            self.label(p.x, p.y, text, size, italic=italic, weight=weight, color=color, ref=ref, cls=cls, lines=p.lines, angle=p.angle)
+        if p.leader is not None:
+            (x1, y1), (x2, y2) = p.leader
+            self.add_label(f'<line x1="{x1:.1f}" y1="{y1:.1f}" x2="{x2:.1f}" y2="{y2:.1f}" stroke="{color}" stroke-width="{max(0.6, 0.08 * size):.2f}" stroke-linecap="round"/>', cls=cls)
+            self.M.setdefault("caption_leaders", []).append([round(x1, 1), round(y1, 1), round(x2, 1), round(y2, 1), text])
+        self._label_index.add(Obstacle(p.block, WEIGHT_OBSTACLE))
+        return p
+
+    def label_obstacles(self: Settlement) -> ObstacleIndex:  # type: ignore[misc]
+        """Everything on the finished map a caption is scored against (feature 266, FR-006, FR-014), indexed once.
+
+        OBSTACLES (1,000): every built record (any manifest list of dicts with x, y, w, h - DERIVED, never hand-listed,
+        for the reason `label_blockers` gives - ground excepted), every radius fixture (a well, a persimmon), every torii
+        arch, the wall and the moat, every caption already drawn and the title placard. Each built record carries its
+        caption group (the overlap taxonomy's `_LABEL_GROUP`; a `buildings` record its own `kind` word) so a caption
+        naming that group may lie on it, and a civic record with a name of its own is marked `named` (FR-014). WAYS
+        (500 each): the lanes, the road, the streams and the drawn channels, at their drawn half-widths. Ground cover,
+        fields and land parcels are free space and are not indexed at all."""
+        obstacles: list[Obstacle] = []
+        for key, recs in self.M.items():
+            if key in LABEL_GROUND_KEYS or key == "labels" or not isinstance(recs, list):
+                continue
+            for o in recs:
+                if not isinstance(o, dict) or not all(isinstance(o.get(f), (int, float)) for f in ("x", "y")):
+                    continue
+                if all(isinstance(o.get(f), (int, float)) for f in ("w", "h")):
+                    w, h = float(o.get("vw") or o["w"]), float(o.get("vh") or o["h"])
+                    poly = rect(float(o["x"]), float(o["y"]), w / 2, h / 2, float(o.get("rot") or 0.0))
+                elif isinstance(o.get("vr") or o.get("r"), (int, float)):
+                    r = float(o.get("vr") or o.get("r") or 0.0)
+                    poly = rect(float(o["x"]), float(o["y"]), r, r)
+                else:
+                    continue
+                group = _LABEL_GROUP.get(key) or (str(o.get("kind") or "").split("_")[0] or None if key == "buildings" else None)
+                named = group in CIVIC_GROUPS and bool(o.get("name") or o.get("label"))
+                obstacles.append(Obstacle(tuple(poly), WEIGHT_OBSTACLE, group, named))
+        txh, tyu, tyd = torii_halfbox(self.ftpx)
+        for t in self.M.get("torii") or []:
+            obstacles.append(Obstacle(tuple(rect(float(t[0]), float(t[1]) + (tyd - tyu) / 2, txh, (tyu + tyd) / 2)), WEIGHT_OBSTACLE, "torii"))
+        for ring_pts, half in self._defense_lines():
+            for a, b in zip(ring_pts, ring_pts[1:], strict=False):
+                obstacles.append(Obstacle(tuple(stroke_quad(a, b, half)), WEIGHT_OBSTACLE))
+        obstacles += [Obstacle(tuple(label_quad(lb)), WEIGHT_OBSTACLE) for lb in self.M["labels"] if len(lb) > 3]
+        if self.M.get("title"):
+            x0, y0, x1, y1 = self.M["title"]["bbox"]
+            obstacles.append(Obstacle(((x0, y0), (x1, y0), (x1, y1), (x0, y1)), WEIGHT_OBSTACLE))
+        ways = [Way(tuple((float(a), float(b)) for a, b in ln["pts"]), float(ln.get("w") or 3) / 2) for ln in self.M.get("lanes") or [] if len(ln.get("pts") or []) >= 2]
+        if len(self.M.get("road") or []) >= 2:
+            ways.append(Way(tuple((float(p[0]), float(p[1])) for p in self.M["road"]), float(self.M.get("road_width") or 26) / 2))
+        for st in self.M.get("streams") or []:
+            if len(st.get("poly") or []) >= 2:
+                ways.append(Way(tuple((float(p[0]), float(p[1])) for p in st["poly"]), float(st.get("w") or 9) / 2))
+        for ch in self.M.get("drawn_channels") or []:
+            if len(ch.get("pts") or []) >= 2:
+                ways.append(Way(tuple((float(p[0]), float(p[1])) for p in ch["pts"]), float(ch.get("w") or 3) / 2))
+        return ObstacleIndex(obstacles, ways)
+
+    def _defense_lines(self: Settlement) -> list[tuple[list[Pt], float]]:  # type: ignore[misc]
+        """The rampart and the moat as closed polylines with their drawn half-widths - obstacles a caption must not lie
+        across (GM 2026-08-10: a caption on the wall reads as naming the defenses)."""
+        out: list[tuple[list[Pt], float]] = []
+        wall = self.M.get("wall") or []
+        if len(wall) >= 3:
+            out.append(([(float(p[0]), float(p[1])) for p in wall] + [(float(wall[0][0]), float(wall[0][1]))], 4.5))
+        moat = self.M.get("moat") or []
+        if len(moat) >= 3:
+            out.append(([(float(p[0]), float(p[1])) for p in moat] + [(float(moat[0][0]), float(moat[0][1]))], float(self.M.get("moat_width", 22)) / 2))
+        return out
+
+    def field_name_label(self: Settlement, label: str, box: tuple[float, float, float, float]) -> None:  # type: ignore[misc]
         """Queue a FIELD-NAME caption - the big letter-spaced name a `paddy_field` or `water_field`
         lays across its own body (feature 157).
 
@@ -224,15 +290,14 @@ class CaptionProbesMixin:
         primitive has no parameters for, and inventing them to route two dormant call sites through it
         would be changing the primitive to suit a caller. Queuing the exact markup instead keeps the
         phase's coverage STRUCTURAL - no caption is drawn outside it - without touching how these two
-        would look if a map ever asked for them."""
-        self._label_queue.append(("field_name", (label, lx, ly)))
+        would look if a map ever asked for them. The field is an AREA subject (feature 266): its name lies inside it,
+        over its middle when that is free, placed by the one placer."""
+        self._label_queue.append(("field_name", (label, box)))
 
-    def _draw_field_name_label(self: Settlement, label: str, lx: float, ly: float) -> None:  # type: ignore[misc]
-        """Draw one queued field-name caption - the markup `paddy_field` used to emit inline."""
-        z = self.add_label(
-            f'<text x="{lx:.0f}" y="{ly:.0f}" text-anchor="middle" font-size="15" font-weight="bold" fill="#33301E" letter-spacing="1.5" paint-order="stroke" stroke="{LAND}" stroke-width="3.5">{label}</text>'
-        )
-        self._record_label(lx, ly, label, 15, "middle", z)
+    def _draw_field_name_label(self: Settlement, label: str, box: tuple[float, float, float, float]) -> None:  # type: ignore[misc]
+        """Draw one queued field-name caption - the markup `paddy_field` used to emit inline, seated by the placer."""
+        x0, y0, x1, y1 = box
+        self._draw_seated_caption(label, Subject("area", ((x0, y0), (x1, y0), (x1, y1), (x0, y1))), 15, False, "bold", "#33301E", None, markup=True)
 
     def _draw_queued_label(  # type: ignore[misc]
         self: Settlement,
@@ -250,9 +315,13 @@ class CaptionProbesMixin:
         full_tilt: bool,
         wrap: bool,
         cls: ClsTag,
+        lines: Sequence[str] | None = None,
+        angle: float | None = None,
     ) -> None:
-        """Draw one queued `text` caption - `label()`'s own arguments, replayed with the phase open."""
-        self.label(x, y, text, size, anchor, italic, weight, color, ref, rot, linear, full_tilt, wrap, cls)
+        """Draw one queued `text` caption - `label()`'s own arguments, replayed with the phase open. A hand-seated
+        caption changes the map under the placer's index, so the index is rebuilt at the next seated caption."""
+        self._label_index: ObstacleIndex | None = None
+        self.label(x, y, text, size, anchor, italic, weight, color, ref, rot, linear, full_tilt, wrap, cls, lines, angle)
 
     def discard_queued_label(self: Settlement, kind: str) -> None:  # type: ignore[misc]
         """Drop the most recent queued caption of `kind` - the UNDO for a feature that was placed and

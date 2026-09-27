@@ -1,7 +1,6 @@
 """Split from the 1,152-line `tests/settlement/test_structures.py` by feature 174 - see this
 directory's CLAUDE.md for the index. Tests for `settlement/structures/captions.py`."""
 
-from l7r.diagram.settlement import Settlement
 from tests.settlement._builders import _town
 
 
@@ -38,18 +37,6 @@ def test_label_seat_clear_probes_the_tilted_reach():
     tw = s.label_caption_hw("a long caption here", 9)
     assert s.label_seat_clear(300, 300, tw, 9)  # the level box clears under the house
     assert not s.label_seat_clear(300, 300, tw, 9, tilt=-30.0)  # the tilted reach swings up into it
-
-
-def test_pull_caption_toward_leaves_a_seat_that_already_sits_on_its_subject_center():
-    """The pull runs along the line from the caption's block to the subject's; when the two centers
-    coincide there is no line to run along, so the seat is handed back. A concave subject is how that
-    happens on a map - the caption sits in the notch of a C-shaped footprint, clear of every arm of it
-    while sharing its center."""
-    s = Settlement(1000, 1000, seed=1)
-    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
-    c_shape = [(0.0, 0.0), (200.0, 0.0), (200.0, 40.0), (60.0, 40.0), (60.0, 160.0), (200.0, 160.0), (200.0, 200.0), (0.0, 200.0)]
-    seat = (115.0, 100.0 + 9 * 0.275)  # the block's own center lands exactly on the subject's
-    assert s.pull_caption_toward(seat, "Kura", 9, "middle", 0.0, c_shape) == seat
 
 
 def test_the_label_phase_defers_every_caption_and_drains_once():
@@ -91,10 +78,37 @@ def test_a_field_name_caption_goes_through_the_phase_too():
     which is why the caption is queued as-is rather than the primitive being changed to suit it."""
     s = _town()
     n_before = len(s.M["labels"])
-    s.field_name_label("Higashi-da", 400.0, 620.0)
+    s.field_name_label("Higashi-da", (300.0, 560.0, 500.0, 680.0))
     assert len(s.M["labels"]) == n_before, "not drawn before the phase"
-    assert s._label_queue[-1] == ("field_name", ("Higashi-da", 400.0, 620.0))
+    assert s._label_queue[-1] == ("field_name", ("Higashi-da", (300.0, 560.0, 500.0, 680.0)))
     s.place_labels()
     rec = s.M["labels"][-1]
     assert rec[5] == "Higashi-da"
+    assert rec[0] >= 300.0 and rec[2] <= 500.0 and rec[1] >= 560.0 and rec[3] <= 680.0, "an area caption: inside its field (feature 266)"
     assert any("letter-spacing" in ln and "Higashi-da" in ln for ln in s.toplabels), "the markup it always drew"
+
+
+def test_the_one_placers_index_sees_every_family_the_map_draws():
+    """Feature 266, FR-006/FR-009/FR-014: the settlement's obstacle index, built once per label phase - the wall and the
+    moat as obstacles, the road, a stream and a drawn channel as ways, a torii, the title placard, a caption already
+    drawn, and a named ministry marked civic; ground cover is not indexed at all."""
+    s = _town()
+    s.M["wall"] = [[100, 100], [300, 100], [300, 300], [100, 300]]
+    s.M["moat"] = [[80, 80], [320, 80], [320, 320], [80, 320]]
+    s.M["moat_width"] = 10
+    s.M["road"] = [[0, 400], [600, 400]]
+    s.M["streams"] = [{"poly": [[0, 450], [600, 450]], "w": 6}, {"poly": [[1, 1]]}]
+    s.M["drawn_channels"] = [{"pts": [[0, 480], [600, 480]], "w": 4}, {"pts": []}]
+    s.M["torii"] = [[500, 200, 1]]
+    s.M["title"] = {"bbox": [10, 10, 60, 30]}
+    s.M["ministries"] = [{"x": 400, "y": 150, "w": 40, "h": 30, "name": "Ministry of Works"}]
+    s.M["wells"] = [{"x": 450, "y": 250, "vr": 4}, {"x": 460, "y": 250}]
+    s.M["commons"] = [{"x": 300, "y": 300, "w": 900, "h": 900}]
+    s.M["labels"] = [[10, 40, 60, 50, 1, "old caption"]]
+    idx = s.label_obstacles()
+    assert len(idx.ways) >= 3, "the road, the stream and the drawn channel are ways"
+    assert any(o.group == "ministry" and o.named for o in idx.obstacles), "a named ministry is marked civic"
+    assert any(o.group == "torii" for o in idx.obstacles)
+    assert not any(o.poly and max(q[0] for q in o.poly) - min(q[0] for q in o.poly) > 800 for o in idx.obstacles), "ground cover is free space"
+    walls = [o for o in idx.obstacles if abs(o.poly[0][1] - o.poly[1][1]) < 1e-6 and 90 < o.poly[0][1] < 110]
+    assert walls, "the rampart's runs are obstacles"

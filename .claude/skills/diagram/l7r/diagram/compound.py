@@ -26,6 +26,10 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 
 from .buildings.types import load_types
+from .labels import Obstacle, ObstacleIndex, Subject
+from .labels import place as place_caption
+from .labels.standard import CHAR_W_EM, WEIGHT_OBSTACLE
+from .labels.svg import caption_svg, leader_svg
 
 FTPX: float = 3.0  # 3 px = 1 ft (emit-time only)
 # The built-in example's pool tier: the type that declares the example as its generated exception
@@ -296,6 +300,40 @@ def _kind_attr(kind: str) -> str:
     return f' data-kind="{kind}"' if kind else ""
 
 
+_GROUND_KINDS = frozenset({*ZONE_KINDS.values(), "inner court", "outer court", "practice ground", "garden", "-"})
+"""The kinds a draft draws as open ground - the courts and the zones - which are free space to a caption (feature 266,
+FR-006: ground weighs 0). Everything else it draws is an obstacle."""
+
+
+def stroke_band(a: tuple[float, float], b: tuple[float, float], half: float) -> list[tuple[float, float]]:
+    """A stroked line's drawn band as a quad - a 9 px wall is 9 px wide to a caption, not a hairline."""
+    dx, dy = b[0] - a[0], b[1] - a[1]
+    n = (dx * dx + dy * dy) ** 0.5 or 1.0
+    nx, ny = -dy / n * half, dx / n * half
+    return [(a[0] + nx, a[1] + ny), (b[0] + nx, b[1] + ny), (b[0] - nx, b[1] - ny), (a[0] - nx, a[1] - ny)]
+
+
+CAPTION_ROOM = 40.0
+"""How far below the drawn canvas a draft's caption may stand, in px (feature 266): room for one caption line beside
+the notice board outside the gate. The canvas grows to hug whatever is placed there."""
+
+
+def _seat_captions(requests: list[tuple[str, Subject, float, bool, str, str]], obstacles: list[Obstacle], frame: tuple[float, float, float, float]) -> tuple[list[str], float]:
+    """Place every requested caption by the ONE placer (feature 266), in order, each an obstacle to the next, and write
+    it - with its leader when the standard gives it one (FR-005). Returns the strings and the lowest point drawn."""
+    index = ObstacleIndex(obstacles)
+    out: list[str] = []
+    foot = 0.0
+    for text, subject, size, italic, fill, kind in requests:
+        p = place_caption(text, size, subject, index, frame)
+        out.append(caption_svg(p, size, ' font-style="italic"' if italic else ' font-weight="bold"', fill, kind))
+        if p.leader is not None:
+            out.append(leader_svg(p, size, fill, kind))
+        index.add(Obstacle(p.block, WEIGHT_OBSTACLE))
+        foot = max(foot, *(q[1] for q in p.block))
+    return out, foot
+
+
 _DEFS = (
     '<defs>'
     '<pattern id="court-earth" patternUnits="userSpaceOnUse" width="16" height="16">'
@@ -324,13 +362,39 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 7
     iw, ih = env.w_ft * FTPX, env.h_ft * FTPX
     cw, ch = iw + 2 * ox, ih + oy + margin_ft * FTPX
 
+    # EVERY CAPTION IS SEATED BY THE ONE PLACER (feature 266), after everything it could land on is drawn: `rect` records
+    # each drawn feature as an obstacle (the courts are free ground), `caption` records a request by SUBJECT, and the
+    # requests are placed and written last, in order, each an obstacle to the next.
+    obstacles: list[Obstacle] = []
+    requests: list[tuple[str, Subject, float, bool, str, str]] = []
+
+    def px(x: float, y: float) -> tuple[float, float]:
+        return ox + x * FTPX, oy + y * FTPX
+
+    def box(x: float, y: float, w: float, h: float) -> tuple[tuple[float, float], ...]:
+        (x0, y0), (x1, y1) = px(x, y), px(x + w, y + h)
+        return ((x0, y0), (x1, y0), (x1, y1), (x0, y1))
+
     def rect(x: float, y: float, w: float, h: float, fill: str, stroke: str, sw: float, ident: str = "", kind: str = "") -> str:
         tag = f' id="{ident}"' if ident else ""
+        if kind not in _GROUND_KINDS:
+            obstacles.append(Obstacle(box(x, y, w, h), WEIGHT_OBSTACLE))
         return f'<rect x="{ox + x * FTPX:.0f}" y="{oy + y * FTPX:.0f}" width="{w * FTPX:.0f}" height="{h * FTPX:.0f}" fill="{fill}"{tag} stroke="{stroke}" stroke-width="{sw}"{_kind_attr(kind)}/>'
 
-    def label(cx: float, cy: float, s: str, size: int, italic: bool, fill: str, kind: str = "") -> str:
+    def caption(where: str, x: float, y: float, w: float, h: float, s: str, size: int, italic: bool, fill: str, kind: str = "") -> str:
+        """Ask the placer for a caption naming the feature at (x, y, w, h) in feet - `where` "area" (the name lies
+        inside it) or "point" (the name stands beside it). Drawn at the end; returns nothing to splice now."""
+        requests.append((s, Subject(where, box(x, y, w, h)), float(size), italic, fill, kind))
+        return ""
+
+    def plain(cx: float, cy: float, s: str, size: int, italic: bool, fill: str) -> str:
+        """The title and the draft note: no feature to name, so not captions (FR-001) - written where they stand,
+        and obstacles to every caption."""
         st = ' font-style="italic"' if italic else ' font-weight="bold"'
-        return f'<text x="{ox + cx * FTPX:.0f}" y="{oy + cy * FTPX:.0f}" text-anchor="middle" font-size="{size}"{st} fill="{fill}"{_kind_attr(kind)}>{s}</text>'
+        hw = len(s) * size * CHAR_W_EM / 2
+        x, y = px(cx, cy)
+        obstacles.append(Obstacle(((x - hw, y - size * 0.8), (x + hw, y - size * 0.8), (x + hw, y + size * 0.25), (x - hw, y + size * 0.25)), WEIGHT_OBSTACLE))
+        return f'<text x="{x:.0f}" y="{y:.0f}" text-anchor="middle" font-size="{size}"{st} fill="{fill}" data-kind="-">{s}</text>'
 
     for p in result.placed:
         if not p.spec.feature:
@@ -344,13 +408,13 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 7
         # (feature 262); both keep the id, and they abut at the divider - which renders as the one rect did
         rect(0, 0, env.w_ft, env.divider_ft, "url(#court-earth)", "none", 0, "precinct", "inner court"),
         rect(0, env.divider_ft, env.w_ft, env.h_ft - env.divider_ft, "url(#court-earth)", "none", 0, "precinct", "outer court"),
-        label(env.w_ft / 2, -9, program.title, 20, False, "#3A2E1C", "-"),
-        label(env.w_ft / 2, -3, "(perimeter-first composed draft - refine by hand)", 10, True, "#6B4F2A", "-"),
+        plain(env.w_ft / 2, -9, program.title, 20, False, "#3A2E1C"),
+        plain(env.w_ft / 2, -3, "(perimeter-first composed draft - refine by hand)", 10, True, "#6B4F2A"),
     ]
     for z in program.spine:  # reserved open courts, drawn + named
         zk = ZONE_KINDS.get(z.name, "outer court" if z.y_ft >= env.divider_ft else "inner court")
         parts.append(rect(z.x_ft, z.y_ft, z.w_ft, z.h_ft, COURT_FILL.get(z.name, "url(#court-earth)"), "#9C7A40", 0.8, "", zk))
-        parts.append(label(z.x_ft + z.w_ft / 2, z.y_ft + z.h_ft / 2, z.name, 11, True, "#5C4318", zk))
+        caption("area", z.x_ft, z.y_ft, z.w_ft, z.h_ft, z.name, 11, True, "#5C4318", zk)
         if z.name == "practice ground":
             # The program item's durable equipment (buildings.md "Practice ground"): a weapon
             # rack on the zone's south edge (the hand-refined map moves it flush to the
@@ -359,16 +423,17 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 7
             # as itself and with the ground.
             parts.append(f"<g{_kind_attr(zk)}>")
             parts.append(rect(z.x_ft + z.w_ft / 2 - 4, z.y2 - 2, 8, 2, "#8C6F3E", "#4A3318", 0.8, "", "weapon rack"))
-            parts.append(label(z.x_ft + z.w_ft / 2, z.y_ft + 8, "striking posts", 8, True, "#5C4830", "striking posts"))
+            caption("point", z.x_ft + z.w_ft / 2 - 5.7, z.y_ft + 13.3, 11.4, 14.4, "striking posts", 8, True, "#5C4830", "striking posts")
             for dx_ft, dy_ft in ((-5.0, 14.0), (5.0, 27.0)):
                 cx, cy = z.x_ft + z.w_ft / 2 + dx_ft, z.y_ft + dy_ft
+                obstacles.append(Obstacle(box(cx - 0.7, cy - 0.7, 1.4, 1.4), WEIGHT_OBSTACLE))
                 parts.append(f'<circle cx="{ox + cx * FTPX:.0f}" cy="{oy + cy * FTPX:.0f}" r="2" fill="#7A5430" stroke="#4A3318" stroke-width="0.8"{_kind_attr("striking posts")}/>')
             parts.append("</g>")
     for p in result.placed:  # buildings
         fill, stroke = KINDS.get(p.spec.kind, KINDS["service"])
         parts.append(rect(p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, fill, stroke, 2, "", p.spec.feature))
-        parts.append(label(p.x_ft + p.spec.w_ft / 2, p.y_ft + p.spec.h_ft / 2 + 1, p.spec.name, 10, False, "#3A2E1C", p.spec.feature))
-    parts += _point_features(program, result, rect, label, ox, oy)
+        caption("area", p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, p.spec.name, 10, False, "#3A2E1C", p.spec.feature)
+    parts += _point_features(program, result, rect, caption, ox, oy)
     # the scale bar every Mode A sheet carries (buildings.md "Scale"; the registered check `scale_bar_present`)
     sx, sy = ox, oy - 12 * FTPX
     parts.append(
@@ -376,6 +441,7 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 7
     )
     parts.append(f'<text x="{sx + 45:.0f}" y="{sy + 16:.0f}" text-anchor="middle" font-size="10" fill="#3A2E1C" data-kind="-">30 ft</text>')
     parts.append(f'<text x="{sx + 45:.0f}" y="{sy + 27:.0f}" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830" data-kind="-">(3 px = 1 ft)</text>')
+    obstacles.append(Obstacle(((sx - 2, sy - 6), (sx + 92, sy - 6), (sx + 92, sy + 30), (sx - 2, sy + 30)), WEIGHT_OBSTACLE))  # the scale bar
     # compound wall (4 segments; S wall broken by the gate) + divider - each in a `<g stroke=...>` group,
     # the authoring form the audit's gate-opening and divider readers parse (feature 254: the drafts are
     # swept by the gate like the hand-drawn sheets, so they are drawn the way the checks read)
@@ -389,10 +455,22 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 7
         (gr, env.h_ft, env.w_ft, env.h_ft),
     ]:
         parts.append(f'<line x1="{ox + x1 * FTPX:.0f}" y1="{oy + y1 * FTPX:.0f}" x2="{ox + x2 * FTPX:.0f}" y2="{oy + y2 * FTPX:.0f}"/>')
+        obstacles.append(Obstacle(tuple(stroke_band(px(x1, y1), px(x2, y2), 4.5)), WEIGHT_OBSTACLE))  # the wall, 9 px drawn
     parts.append("</g>")
     parts.append(
         f'<g stroke="#3F3A30" stroke-width="6" data-kind="court divider"><line x1="{ox:.0f}" y1="{oy + env.divider_ft * FTPX:.0f}" x2="{ox + iw:.0f}" y2="{oy + env.divider_ft * FTPX:.0f}"/></g>'
     )
+    obstacles.append(Obstacle(tuple(stroke_band(px(0, env.divider_ft), px(env.w_ft, env.divider_ft), 3.0)), WEIGHT_OBSTACLE))
+    # A CAPTION MAY HOLD THE SHEET'S EDGE (the review checklist: every edge "held by real content"): the notice board
+    # stands outside the gate, 21 px from the canvas's foot, where no caption fits beside it - the old draft's caption
+    # hung past the edge and was clipped. So the placer is given room below, and the canvas then grows to hug what it
+    # placed there.
+    seated, foot = _seat_captions(requests, obstacles, (0.0, 0.0, cw, ch + CAPTION_ROOM))
+    parts += seated
+    if foot + margin_ft * FTPX > ch:
+        grown = foot + margin_ft * FTPX
+        parts[0] = parts[0].replace(f'viewBox="0 0 {cw:.0f} {ch:.0f}"', f'viewBox="0 0 {cw:.0f} {grown:.0f}"')
+        parts[2] = parts[2].replace(f'height="{ch:.0f}"', f'height="{grown:.0f}"')
     parts.append("</svg>")
     return "\n".join(parts)
 
@@ -412,7 +490,7 @@ def _court_face(p: Placed, env: Envelope) -> tuple[float, float, float, float]:
     return 1.0, 0.0, p.x2, p.y_ft
 
 
-def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callable[..., str], label: Callable[..., str], ox: float, oy: float) -> list[str]:
+def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callable[..., str], caption: Callable[..., str], ox: float, oy: float) -> list[str]:
     """The program's point features, seated by the composition (feature 254): fire-water tubs at every
     wooden building's court face (two at the kitchen), a well at the kitchen, the garden and the stables,
     a privy beside the barracks, the stables and the servants' row, a bath in the garden, and the notice
@@ -453,7 +531,7 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
             bx, by = z.x2 - 18.0, z.y_ft + max(0.0, (z.h_ft - 12.0) / 2)
             taken.append((bx, by, bx + 15.0, by + 12.0))
             parts.append(rect(bx, by, 15.0, 12.0, KINDS["service"][0], KINDS["service"][1], 1.5, "", "bath"))
-            parts.append(label(bx + 7.5, by + 7.0, "bath", 8, False, "#3A2E1C", "bath"))
+            caption("area", bx, by, 15.0, 12.0, "bath", 8, False, "#3A2E1C", "bath")
     for name in ("barracks", "stables", "servants"):
         if name in by_name and (v := seat(by_name[name], 5.0, (0.85, 0.15, 0.5), (4.5, 7.0))):
             privies.append(v)
@@ -465,19 +543,21 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
                 tubs.append(tub)
     for cx, cy in wells:
         parts.append(rect(cx - 3.65, cy - 3.65, 7.3, 7.3, "#9C8C70", "#5C4830", 1.2, "", "well"))
-        parts.append(label(cx, cy + 9.0, "well", 8, True, "#3A2E1C", "well"))
+        caption("point", cx - 3.65, cy - 3.65, 7.3, 7.3, "well", 8, True, "#3A2E1C", "well")
     for cx, cy in privies:
         parts.append(rect(cx - 2.5, cy - 2.5, 5.0, 5.0, "#7E726A", "#4A3318", 0.8, "", "latrine"))
-        parts.append(label(cx, cy + 7.0, "latrine", 7, True, "#3A2E1C", "latrine"))
+        caption("point", cx - 2.5, cy - 2.5, 5.0, 5.0, "latrine", 7, True, "#3A2E1C", "latrine")
     if tubs:
         parts.append('<g fill="#8FB0C6" stroke="#3A5060" stroke-width="1" data-kind="fire-water tubs">')
         parts += [f'<circle cx="{ox + cx * FTPX:.0f}" cy="{oy + cy * FTPX:.0f}" r="3.8"/>' for cx, cy in tubs]
         parts.append("</g>")
+        for tx, ty in tubs:  # every tub is drawn - and so is an obstacle to every caption
+            rect(tx - 1.27, ty - 1.27, 2.54, 2.54, "none", "none", 0)  # registers the tub; its drawn circle follows
         tx, ty = tubs[0]
-        parts.append(label(tx + 9.0, ty + 1.0, "fire-water tubs", 7, True, "#3A5060", "fire-water tubs"))
+        caption("point", tx - 1.27, ty - 1.27, 2.54, 2.54, "fire-water tubs", 7, True, "#3A5060", "fire-water tubs")
     gl, _gr = _gate_interval(env)
     parts.append(rect(gl - 14.0, env.h_ft + 3.0, 6.0, 1.5, "#4A3318", "#2D2A24", 0.6, "", "notice board"))
-    parts.append(label(gl - 11.0, env.h_ft + 9.0, "notice board", 7, True, "#3A2E1C", "notice board"))
+    caption("point", gl - 14.0, env.h_ft + 3.0, 6.0, 1.5, "notice board", 7, True, "#3A2E1C", "notice board")
     return parts
 
 

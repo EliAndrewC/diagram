@@ -124,6 +124,11 @@ follow-ups, either of which closes it:
 
 ## Restore `labels_clear_of_other_buildings` - and give the hamlet tier a caption check at all (feature 146, 2026-08-28)
 
+**Feature 266 (2026-09-27): the placement half is done.** The one caption placer weighs every built feature 1,000 (an
+obstacle) unless the caption's own group word names it, and takes free space first - so a caption covers something it
+does not name only when no free seat exists in reach, and then the least of it. What remains open below is the CHECK:
+a gate test over finished maps asserting no caption lies on a foreign building.
+
 Feature 141's cut retired `labels_clear_of_other_buildings`, and with it the only consumer of the
 `_LABEL_GROUP` / `_LABEL_EXEMPT` registry in `check_village/common_01_geometry.py` - a registry still
 maintained in comments to this day, now enforcing nothing. Restore it (the body is recoverable at
@@ -137,3 +142,17 @@ whether a caption covers something it does not name**. Feature 145 moved `byres`
 the `farmhouse` group so the registry says the right thing; nothing reads it yet at that tier. Whether the
 hamlet tier wants the same check is the open question - one caption on the sheet, in a dense cluster, and
 the board must stay on the traffic.
+
+## The town, city and capital tiers' hand-seated captions go through the one placer when their tier is scripted (feature 266, spec D8)
+
+Feature 266 built ONE caption placer (`l7r/diagram/labels/`, the cartographic standard: ranked positions, a
+consistent gap, free space first, leaders) and routed every caption a live map draws through it. The unscripted tiers
+still carry 47 hand-seated `self.label(x, y, ...)` calls in 33 functions - a ministry's name written across its roof,
+a hall caption a fixed drop below it - which no live generator runs; the maps that used them are frozen exhibits.
+`tests/labels/test_caption_paths.py` lists them by file and function (`D8_HAND_SEATS`) and fails on any NEW hand
+seat. **When a tier is scripted**, each of its captions names its SUBJECT instead: `self._captions.append(...)` via
+`place_caption(text, box, rot=...)` for a feature beside which it stands, an area subject for a name that lies on its
+building or district (`Subject("area", ...)` through `_draw_seated_caption`), and a civic building's own caption with
+`Subject(civic=True)` so it keeps off the other named civic buildings (spec FR-014). Delete the row from
+`D8_HAND_SEATS` as each goes. The town and city cover rule (research/presentation 070) is already in the weights.
+

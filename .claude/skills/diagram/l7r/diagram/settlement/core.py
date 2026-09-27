@@ -107,6 +107,7 @@ class Settlement(
         self.frontage_box: tuple[float, float, float, float] | None = None  # extent of the LAST frontage() row,
         #                           for place_caption (see frontage's note)
         self._captions: list[tuple[Any, ...]] = []  # deferred place_caption() seats - flushed in finish()
+        self._label_index: Any = None  # the one placer's obstacle index, built once per label phase (feature 266, FR-009)
         # ---- THE LABEL PHASE (feature 157, GM 2026-08-29) ------------------------------------
         # *"add a phase at the very end of every settlement creation process, which is putting down
         # the labels for things ... after the final map feature is added ... a final phase in which

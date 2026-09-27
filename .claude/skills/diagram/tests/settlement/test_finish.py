@@ -163,19 +163,6 @@ def test_label_wraps_onto_two_lines_only_when_that_clears_the_sheet():
     assert "<tspan" not in s.toplabels[-1], "when no layout clears, the one-liner is drawn"
 
 
-def test_pull_caption_toward_closes_half_the_air_and_refuses_a_collision():
-    """Feature 133 T40 (GM 2026-08-27: "move the label fifty percent of the way toward the thing that
-    it is labeling"): a level caption 20 px below a 40x20 board is pulled ~10 px up; a caption whose
-    pulled block would land on another footprint keeps its seat."""
-    s = Settlement(W=1000, H=1000, seed=1)
-    board = [(480.0, 490.0), (520.0, 490.0), (520.0, 510.0), (480.0, 510.0)]
-    seat = (500.0, 510.0 + 20.0 + 8 * 0.8)  # the one-line box's top edge 20 px under the board's bottom
-    pulled = s.pull_caption_toward(seat, "notice board", 8, "middle", 0.0, board)
-    assert abs(pulled[0] - 500.0) < 1e-6 and abs((seat[1] - pulled[1]) - 10.0) < 0.5
-    s.M["houses"].append({"x": 500, "y": 525, "w": 60, "h": 6, "rot": 0})  # a sliver across the pulled block's path
-    assert s.pull_caption_toward(seat, "notice board", 8, "middle", 0.0, board) == seat
-
-
 def test_label_never_leaves_a_short_word_on_its_own_line():
     s = Settlement(W=1000, H=1000, seed=1)  # a bare sheet: nothing near the seat but what the test puts there
     s.M["houses"].append({"x": 452, "y": 497, "w": 20, "h": 30, "rot": 0})  # blocks the 16-char one-liner's left end
@@ -198,17 +185,6 @@ def test_label_rot_emits_a_center_rotation_and_appends_the_tilt():
     assert len(s.M["labels"][-1]) == 6
 
 
-def test_pull_caption_toward_keeps_its_seat_when_the_block_already_touches_or_overlaps_its_subject() -> None:
-    """Feature 145: the two early returns - the caption's block already ON the subject, and a gap under
-    half a pixel (there is nothing to close, and a pull would only jitter the seat)."""
-    s = Settlement(W=1000, H=1000, seed=1)
-    board = [(480.0, 490.0), (520.0, 490.0), (520.0, 510.0), (480.0, 510.0)]
-    on_it = (500.0, 505.0)  # the block lands ON the board
-    assert s.pull_caption_toward(on_it, "notice board", 8, "middle", 0.0, board) == on_it
-    touching = (500.0, 510.0 + 8 * 0.8 + 0.2)  # the block's top edge a fifth of a pixel under the board
-    assert s.pull_caption_toward(touching, "notice board", 8, "middle", 0.0, board) == touching
-
-
 def test_title_obstacles_gather_the_long_lines_a_placard_must_miss() -> None:
     """Feature 146: the title's obstacle set includes the map's long POLYLINES - the wall, the moat, the ring
     road and the road - not only its rectangles and polygons."""
@@ -217,15 +193,6 @@ def test_title_obstacles_gather_the_long_lines_a_placard_must_miss() -> None:
     s.M["moat"] = [[100, 100], [900, 100]]
     obs = s._title_obstacles()
     assert obs.grid.n >= 2, obs.grid.n  # the index files every polyline segment (feature 222); two one-segment lines here
-
-
-def test_pull_caption_toward_keeps_its_seat_when_the_two_centres_coincide() -> None:
-    """Feature 146: the degenerate arm - the caption's block and its subject share a centre, so there is no
-    direction to pull along and the seat stands."""
-    s = Settlement(W=1000, H=1000, seed=1)
-    subject = [(400.0, 400.0), (600.0, 400.0), (600.0, 600.0), (400.0, 600.0)]
-    seat = (500.0, 500.0 + 8 * 0.275)  # the block's own centre lands on the subject's
-    assert s.pull_caption_toward(seat, "notice board", 8, "middle", 0.0, subject) == seat
 
 
 def test_finish_steps_over_a_field_too_small_to_carry_keepout_chords_and_inks_the_road_caption(tmp_path):

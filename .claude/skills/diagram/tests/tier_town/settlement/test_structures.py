@@ -36,20 +36,6 @@ def test_place_kosatsuba_samples_only_the_main_way_when_one_is_declared():
 
 
 @pytest.mark.tiers("town")
-def test_kosatsuba_label_xy_hand_seats_the_caption():
-    # both caption bands can be taken at a junction seat (Nagahara's market bend: drum tower
-    # in the below band, the ward gate's glyph + caption stack in the above band) - label_xy
-    # is the explicit hand seat, the same escape the punishment ground carries
-    s = Settlement(1000, 1000, seed=1)
-    s.meta(name="T", scale="town", ftpx=1)
-    s.kosatsuba(500, 500, rot=0, label_xy=(560, 488))
-    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
-    lab = s.M["labels"][-1]
-    assert lab[5] == "notice board"
-    assert abs((lab[0] + lab[2]) / 2 - 560) < 2  # seated at the hand x, not the default below-seat
-
-
-@pytest.mark.tiers("town")
 def test_commons_keeps_scrub_off_the_road_bed():
     # the old skip knew only LANES, so scrub drew on the Imperial Road bed (Hoshizora); the
     # corridor set now covers lanes + town streets + the road
