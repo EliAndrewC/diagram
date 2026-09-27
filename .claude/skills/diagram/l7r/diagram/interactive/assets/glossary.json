@@ -6655,5 +6655,31 @@
   "variants": [
    "town grain"
   ]
+ },
+ "tsurube": {
+  "def": "The Japanese well bucket, and the gear that draws it: a bucket on a rope over a pulley, or on the end of a sweep's pole.",
+  "variants": [
+   "tsurube"
+  ]
+ },
+ "hanetsurube": {
+  "def": "The Japanese well sweep: a bamboo pole crossed over a post, the bucket hung at one end and a weight of stones tied to the butt, worked like a seesaw.",
+  "variants": [
+   "hanetsurube",
+   "hane-tsurube"
+  ]
+ },
+ "bargeboard": {
+  "def": "A board fixed along the sloping edge of a gabled roof, covering the ends of the roof timbers.",
+  "variants": [
+   "bargeboard",
+   "bargeboards"
+  ]
+ },
+ "Owari": {
+  "def": "The province around present-day Nagoya, and the name of the senior Tokugawa branch house that held it.",
+  "variants": [
+   "Owari"
+  ]
  }
 }

@@ -355,8 +355,9 @@ class NoticeBoard(Kind):
     order to post them; that EVERY town and village kept one is this record's reading), and so is the siting
     at the center, the entrance, the official's gate and a bridgehead; the assembly place and the shrine precinct are this record's inference, and no page read says
     the notices were read aloud. The placement is chosen from the attested set the map can actually site, never
-    from one preferred reading; at hamlet grain the glyph is drawn at its true size, a frame of about 12 x 5 ft
-    around a 7 by 3 ft face - both this record's own figures, not read on any page.
+    from one preferred reading; at hamlet grain the glyph is a frame of about 12 x 5 ft around a 7 by 3 ft face,
+    both this record's own figures - shorter than the boards the record measured, roofed frames about 16 ft along
+    the way on a stone footing, fenced; no village board was measured.
 
     Name: notice board
     Covers: `kosatsuba`, with its label

@@ -66,6 +66,8 @@ bansho	bansho
 banyuetang	banyuetang
 barbican	barbican
 baren	baren
+bargeboard	bargeboard
+bargeboards	bargeboard
 basal area	basal area
 base flow	base flow
 bastion	bastion
@@ -571,6 +573,8 @@ han dynasty	Han dynasty
 han's	han
 han-dynasty	Han dynasty
 hanchiku	rammed earth
+hane-tsurube	hanetsurube
+hanetsurube	hanetsurube
 hangtu	rammed earth
 hanko	hanko
 hansho	hansho
@@ -1092,6 +1096,7 @@ oute	ote-mon
 outfall	outfall
 outwork	outwork
 outworks	outwork
+owari	Owari
 ox-frame	ox-frame
 ox-frames	ox-frame
 oyaike	oyaike
@@ -1530,6 +1535,7 @@ tsuijibei	tsuijibei
 tsuijimatsu	tsuijimatsu
 tsuke-tsubo	tsuke-tsubo
 tsunaba	tsunaba
+tsurube	tsurube
 tudi miao	tudi miao
 tudigong	tudi miao
 tulou	tulou
