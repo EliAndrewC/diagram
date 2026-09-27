@@ -964,6 +964,7 @@ ofuregaki	ofuregaki
 okaji	ōkaji
 okajiba	ōkaji
 omamori	omamori
+omi	Omi
 omoya	omoya
 onari-goten	onari-goten
 one-bay	bay
@@ -1104,6 +1105,8 @@ ring-levee	ring dike
 rinkaku	rinkaku
 riparian	riparian
 riprap	riprap
+riser	terrace riser
+risers	terrace riser
 river stage	river stage
 river terrace	river terrace
 river terraces	river terrace
@@ -1175,6 +1178,7 @@ shasō	shasō
 shatian	shatian
 sheath	sheath
 sheaths	sheath
+shed people	shed people
 sheer boom	boom
 shelter belt	shelter belt
 shelter belts	shelter belt
@@ -1333,6 +1337,8 @@ teramachi	teramachi
 terauke	terauke
 terauke seido	terauke
 terrace of	row house
+terrace riser	terrace riser
+terrace risers	terrace riser
 terraced form	row house
 tertiary	tertiary source
 tertiary source	tertiary source
@@ -1534,6 +1540,7 @@ zuo zhuan	Zuo Zhuan
 ō-aza	ō-aza
 ōkaji	ōkaji
 ōkajiba	ōkaji
+ōmi	Omi
 ほ場整備	hojo seibi
 合掌造り	gassho
 圃場整備	hojo seibi
