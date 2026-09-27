@@ -4,8 +4,8 @@
   <g stroke="#3A2E1C"><line x1="20" y1="30" x2="110" y2="30" stroke-width="2"/></g>
   <text x="65" y="44" text-anchor="middle" font-size="10">30 ft</text><text x="65" y="54" text-anchor="middle" font-size="8">(3 px = 1 ft)</text>
   <rect x="40" y="70" width="320" height="400" fill="url(#keidai-gravel)" id="precinct"/>
-  <g id="fence" stroke="#7A6A4A" stroke-width="2" fill="none"><line x1="40" y1="70" x2="360" y2="70"/><line x1="40" y1="70" x2="40" y2="470"/><line x1="360" y1="70" x2="360" y2="470"/><line x1="40" y1="470" x2="170" y2="470"/><line x1="230" y1="470" x2="360" y2="470"/></g>
-  <text x="330" y="66" text-anchor="middle" font-size="8">fence</text>
+  <g id="fence" stroke="#7A6A4A" stroke-width="2" fill="none"><line x1="184" y1="94" x2="216" y2="94"/><line x1="184" y1="94" x2="184" y2="126"/><line x1="216" y1="94" x2="216" y2="126"/><line x1="184" y1="126" x2="216" y2="126"/></g>
+  <text x="200" y="90" text-anchor="middle" font-size="8">fence</text>
   <text x="60" y="66" text-anchor="middle" font-size="8">grove</text>
   <rect x="185" y="270" width="30" height="200" fill="none" id="approach"/>
   <text x="200" y="440" text-anchor="middle" font-size="8">approach</text>

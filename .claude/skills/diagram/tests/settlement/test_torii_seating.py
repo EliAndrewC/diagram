@@ -22,7 +22,7 @@ def test_the_arch_box_follows_the_drawn_glyph_at_true_scale() -> None:
     hx, up, down = torii_halfbox(1.0, span_ft=16.0)
     assert 6.0 < hx < 12.0, f"half-width {hx:.1f} - the legacy fixed box was 19"
     assert up > 0 and down > 0
-    assert down > up, "the posts drop further than the rail rises, as the glyph draws it"
+    assert down == up, "the plan-view arch (feature 268) is centered on its seat"
 
 
 def test_the_box_scales_with_the_map_grain() -> None:

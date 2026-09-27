@@ -159,6 +159,7 @@ chang'an	Chang'an
 chaoguan	chaoguan
 chenghuangmiao	chenghuangmiao
 chi	chi
+chikaraishi	chikaraishi
 china fir	China fir
 chinju	chinju
 chinju no mori	chinju no mori
@@ -267,6 +268,7 @@ danna-ba	kusaba
 danna-dera	danna-dera
 danzaemon	Danzaemon
 daozuofang	daozuofang
+dashigeta	dashigeta
 daxiangguo	Daxiangguo
 db	dBA
 dba	dBA
@@ -309,6 +311,8 @@ division works	bunsuiguchi
 doba	dōba
 dobashi	dobashi
 dobei	neribei
+dohyo	dohyō
+dohyō	dohyō
 doi	horinouchi
 dojo	dojo
 doma	doma
@@ -534,7 +538,9 @@ guan-xiang	guanxiang
 guanxiang	guanxiang
 gulou	gulou
 gundai	gundai
+gō	go
 gōshi	gōshi
+hachiman	Hachiman
 hachure	hachure
 hachures	hachure
 haiden	haiden
@@ -631,6 +637,8 @@ hyo	hyō
 hyojosho	Hyōjōsho
 hyō	hyō
 hyōjōsho	Hyōjōsho
+ichi no torii	ichi-no-torii
+ichi-no-torii	ichi-no-torii
 ido	ido
 idobata	idobata
 idowaku	igeta
@@ -662,6 +670,8 @@ intramural	intramural
 inverted siphon	inverted siphon
 inverted siphons	inverted siphon
 iriai	iriai
+irimoya	irimoya
+irimoya-roofed	irimoya
 iroha	iroha companies
 iroha companies	iroha companies
 iroha-gumi	iroha-gumi
@@ -929,6 +939,7 @@ minka	minka
 mire	mire
 mitochigai	mitochigai
 miyaza	miyaza
+mizugaki	mizugaki
 mizugashira	mizugashira
 mizuguchi	mizuguchi
 mizujiri	shirimito
@@ -954,6 +965,7 @@ muenbotoke	muenzuka
 muenzuka	muenzuka
 mugi	mugi
 mukaibansho	mukaibansho
+mukakusha	mukakusha
 mulberry-dike fishpond	dike-pond
 murabarai	murabarai
 murataka	murataka
@@ -964,6 +976,8 @@ mushiro	mushiro
 muster perimeter	muster perimeter
 muster perimeters	muster perimeter
 myoji-taito	myoji-taito
+nagare-zukuri	nagare-zukuri
+nagarezukuri	nagare-zukuri
 nagaya	nagaya
 nagaya-mon	nagayamon
 nagayamon	nagayamon
@@ -989,6 +1003,8 @@ near-monospecific	monospecific
 neige	neige
 nengu	nengu
 neribei	neribei
+ni no torii	ichi-no-torii
+ni-no-torii	ichi-no-torii
 night soil	night soil
 night watch	night watch
 night watches	night watch
@@ -1191,11 +1207,14 @@ sae no kami	sae no kami
 sageba	ōkaji
 saien	saien
 sakagura	sakagura
+sakaki	sakaki
 sally gate	sally port
 sally port	sally port
 sallyport	sally port
 salvage excavation	salvage excavation
+san no torii	ichi-no-torii
 san-no-maru	sannomaru
+san-no-torii	ichi-no-torii
 sand junk	sand junk
 sand junks	sand junk
 sand sluice	sand sluice
@@ -1253,6 +1272,7 @@ shibai-goya	shibai-goya
 shichiya	shichiya
 shijin soo	four gods
 shijin-soo	four gods
+shimenawa	shimenawa
 shinai	shinai
 shinden	shinden
 shinsei	Shinsei
@@ -1305,6 +1325,7 @@ solidity	solidity
 song dynasty	Song dynasty
 song yingxing	Song Yingxing
 song-dynasty	Song dynasty
+sonsha	sonsha
 sotobori	sotobori
 south town magistrate	town magistrate
 southern song	Song dynasty
@@ -1614,6 +1635,7 @@ zongjia	zongjia
 zooplankton	zooplankton
 zuku	zuku
 ō-aza	ō-aza
+ōiya	ōiya
 ōkaji	ōkaji
 ōkajiba	ōkaji
 ほ場整備	hojo seibi

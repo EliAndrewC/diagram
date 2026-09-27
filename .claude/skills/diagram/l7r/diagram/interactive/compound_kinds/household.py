@@ -682,10 +682,10 @@ class Torii(Kind):
     hall.
 
     Why: The arch marks the sacred ground: it stands where the approach enters the shrine's precinct. One arch is
-    by far the usual number for a shrine, and a village shrine's stands some twenty feet off its hall; long
-    avenues of arches are the gifts of rich patrons at great shrines, not the rule.
+    by far the usual number for a shrine, and where the map draws several it lays them one pitch apart, the innermost one pitch
+    (12 ft) off its hall; long avenues of arches are the gifts of rich patrons at great shrines, not the rule.
 
-    Note: One arch over the approach, a short way from the hall, follows the record.
+    Note: One arch over the approach, standing where the approach enters the shrine's ground, follows the record; no page gives how far a village shrine's innermost arch stood from its hall, and the 12 ft pitch, with the innermost arch one pitch off the hall, is a guess inside the GM's ruling, bounded by one remote mountain shrine's estimated row.
 
     Name: torii
     Covers: the approach torii before a compound shrine

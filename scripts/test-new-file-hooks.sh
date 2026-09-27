@@ -55,6 +55,9 @@ call Bash '{"command":"echo {} > .claude/skills/diagram/research/fields/0600-pro
 call Bash '{"command":"echo done > /tmp/out.txt; ls 0400-x.json"}'
 [ "$(rc)" -eq 0 ] && ok "a command that only mentions a prefixed name" || no "refused" "(rc=$(rc))"
 
+# GUARD_EDIT_OK: feature 265 - a five-digit registry prefix (they passed 9990) is read whole, not as its last four
+call Bash "{\"command\":\"echo x > $R/10990-five-digit-key.html\"}"
+[ "$(rc)" -eq 2 ] && grep -q 'KEY="five-digit-key"' "$T/err" && ok "a five-digit prefix, unreserved, is refused by its own key" || no "five-digit" "(rc=$(rc)) $(cat "$T/err")"
 echo "3. the escape, and the record"
 call Bash '{"command":"cat > \"$G/0500-x.json\" <<EOF\n{}\nEOF\n# RESERVE_OK: restoring a file deleted in a merge"}'
 [ "$(rc)" -eq 0 ] && ok "RESERVE_OK with a reason passes" || no "the escape was refused" "(rc=$(rc))"

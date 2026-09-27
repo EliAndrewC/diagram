@@ -28,6 +28,7 @@ from __future__ import annotations
 import argparse
 import ast
 import datetime
+import html
 import json
 import pathlib
 import re
@@ -40,6 +41,8 @@ RECORD = pathlib.Path(".claude/skills/diagram/research")
 REGISTRY = RECORD / "sources" / "010-works-cited"
 VARIANTS = RECORD / "assets" / "glossary-variants.txt"
 CLASSES = pathlib.Path(".claude/skills/diagram/l7r/diagram/interactive/classes")
+# Mode A sheets carry modals too (feature 262): a compound kind is a modal class as much as a settlement one
+COMPOUND_KINDS = pathlib.Path(".claude/skills/diagram/l7r/diagram/interactive/compound_kinds")
 DEFAULT_ROOT = pathlib.Path("/tmp/l7r-check")
 MANIFEST = "MANIFEST.md"
 _CITED = re.compile(r'<a href="[^"]*">\s*<code>([a-z0-9][a-z0-9-]*)</code>\s*</a>')
@@ -57,7 +60,7 @@ def url_of(entry_html: str) -> str:
     found = _URL.search(entry_html)
     if not found:
         return ""
-    url = found.group(0)
+    url = html.unescape(found.group(0))  # the entry is HTML: `&amp;` in a query string is `&` (feature 268: the NDL records fetched as the home page)
     while url.endswith(")") and url.count(")") > url.count("("):
         url = url[:-1]
     return url.rstrip(".,;")
@@ -73,7 +76,7 @@ def registry_entry(root: pathlib.Path, key: str) -> pathlib.Path | None:
 def kind_docstring(root: pathlib.Path, name: str) -> tuple[str, str] | None:
     """(origin `file:line`, docstring) of one modal class - what `entry-drift` compares with its section.
     The class, not its file: a classes module holds a dozen modals, and the check is about one."""
-    for path in sorted((root / CLASSES).glob("*.py")):
+    for path in [*sorted((root / CLASSES).glob("*.py")), *sorted((root / COMPOUND_KINDS).glob("*.py"))]:
         tree = ast.parse(path.read_text(encoding="utf-8"))
         for node in ast.walk(tree):
             if isinstance(node, ast.ClassDef) and node.name == name:
@@ -198,7 +201,7 @@ def entry_bundle(root: pathlib.Path, page: str, section: str, out: pathlib.Path,
         return 2
     found_kind = kind_docstring(root, kind) if kind else None
     if kind and found_kind is None:
-        print(f"check-bundle: no modal class {kind!r} under {CLASSES}", file=sys.stderr)
+        print(f"check-bundle: no modal class {kind!r} under {CLASSES} or {COMPOUND_KINDS}", file=sys.stderr)
         return 2
     fresh(out)
     rows: list[tuple[str, str, str]] = []

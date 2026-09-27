@@ -16,31 +16,42 @@ from .base import Manifest, Poly, Pt
 from .overlap import _rect_ring
 from .primitives import seg_dist, segments_cross
 
-# TORII AVENUE PITCH (GM 2026-07-25, after a research pass - see research/religion-and-death.html 'Torii are votive donations - the count records patronage'). Rokugan's
-# sando is the 1/3/7 SET of formal gateways, NOT a Fushimi-style donation row: donation rows are a
-# designated-site special case here (Shinden Togashi, the Temple of Amaterasu, the Ki Rin Shrine and
-# their like), so NEITHER real-world spacing regime is the model. The research found only two: a
-# donation row's arches nearly touch (~0.5-1 m in the dense tunnel, "several yards" where it loosens),
-# and ranked ichi/ni/san gates stand 200 m - 1.3 km apart (off the map at every settlement scale).
-# Our avenues fall between, so the spacing is a house rule rather than a copied fact: arches stand
-# ~20 ft apart center-to-center, and NEVER more than two rail-spans (32 ft), past which a sando reads
-# as a line of isolated gates rather than one approach. The floor is the existing one arch-span
-# (torii_spread_out) so they never overlap into a blob. Village avenues sit at the top of the band
-# (~30 ft) by GM preference and are deliberately left alone - the cap, not the target, is the rule.
-TORII_PITCH_FT = 20.0  # the usual stride: what the engine lays when it sets an avenue's pitch
-TORII_PITCH_MAX_SPANS = 2.0  # the ceiling, in torii rail-spans (32 ft for a standard 16 ft arch)
+# TORII AVENUE PITCH (GM 2026-09-27, feature 268: "All maps, ~10-13 ft", after a research pass - see
+# research/religion-and-death.html 'Torii spacing'). Donated arches stand close: a donation row's arches
+# stand about 10 cm apart, and the one small rural row whose pitch can be estimated works out at about
+# 3-4 m (this project's arithmetic on a walking time, on no page). Nothing supports the old ~20-30 ft.
+# 12 ft is the middle of the GM's band and two ken, the building module the record already uses - a
+# GUESS inside the ruled band. EVERY avenue is laid at it, at every scale (the old cap-and-band rule,
+# which left the ~30 ft village avenues alone, is retired); the designated donation-row sites (the GM
+# 2026-07-25: Shinden Togashi, the Temple of Amaterasu, the Ki Rin Shrine and their like) stay the
+# explicit outliers they are, denser than the pitch. The threshold rule (the innermost arch one pitch
+# off its hall, GM 2026-07-27) holds at the new pitch.
+TORII_PITCH_FT = 12.0  # the stride of every avenue, and the gap from the innermost arch to its hall
+
+
+def torii_glyph_dims(ftpx: float, span_ft: float = 16.0) -> tuple[float, float, float, float]:
+    """The PLAN-VIEW arch's drawn sizes in px at `ftpx`: (half span, beam depth, post side, post offset).
+
+    A torii seen from above is its top beam (the kasagi, about 1.4 ft wide) with its two posts beneath it
+    (feature 268, D3). The beam is drawn true size with the stroke floor (the SKILL's stroke convention);
+    the posts are MARKED as squares standing just proud of the beam, a map drawing convention - real posts
+    (about 1.2 ft) sit hidden under it - so the bar reads as an arch and not a plank. The drawn depth is
+    the post side: at 1, 2 and 3 ft/px that is 2.6 px beside a pitch of 12, 6 and 4 px, so neighbors at the
+    pitch never touch (the elevation glyph it replaces was about 10 ft deep on paper and could not stand at
+    a 12 ft pitch)."""
+    s2 = (span_ft / ftpx) / 2
+    beam = max(1.4 / ftpx, 1.9)
+    post = beam * 1.35
+    return s2, beam, post, s2 * 12.0 / 19.0
 
 
 def torii_halfbox(ftpx: float, span_ft: float = 16.0) -> tuple[float, float, float]:
     """True drawn half-extents (x half-width, y-up, y-down) of a `_torii` glyph at scale `ftpx`, plus a small
-    stroke pad - used to FRAME torii (crop_to_content) and to verify they sit within the frame (check_village
-    mirrors this function; keep the two in sync). Follows _torii's geometry: s2 = (span_ft/ftpx)/2, rail ends at
-    +/-s2, rail rise s2*7/19, post drop s2*17/19. Replaces the legacy fixed x+/-19 / y-10..+18 box - the
-    pre-true-scale 38px glyph (GM 2026-07-21), which over-reserved ~5x the arch's real footprint of frame margin
-    (a village torii is ~8px/16ft wide, not 38px), pushing the crop out around the end of an approach avenue."""
-    s2 = (span_ft / ftpx) / 2
-    pad = 2.0  # rail/post stroke half-width + a hair, so the frame never clips the vermilion
-    return s2 + pad, s2 * 7.0 / 19.0 + pad, s2 * 17.0 / 19.0 + pad
+    stroke pad - used to FRAME torii (crop_to_content) and to keep captions and neighbors off them. Follows
+    `torii_glyph_dims`: the beam spans +/-s2 and the glyph's depth is its post side, centered on the seat."""
+    s2, _beam, post, _p2 = torii_glyph_dims(ftpx, span_ft)
+    pad = 2.0  # stroke half-width + a hair, so the frame never clips the vermilion
+    return s2 + pad, post / 2 + pad, post / 2 + pad
 
 
 # Urban building kinds a SAMURAI WARD refuses (Settlement.ward / Settlement.building): the commoner

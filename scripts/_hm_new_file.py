@@ -22,7 +22,9 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 KIND_OF = {"assets/glossary": "glossary", "sources/010-works-cited": "registry"}
-TARGET = re.compile(r"(?:>>?|\btee\s+(?:-a\s+)?)\s*[\"']?([^\s\"'<>|;&]*?(\d{4})-([^\s\"'<>|;&/]+?)\.(json|html))[\"']?(?=[\s;|&)]|$)")
+# GUARD_EDIT_OK: feature 265 - registry prefixes passed 9990 on 2026-09-27 (10040 and up), so a prefix is four OR five
+# digits; `(?<!\d)` keeps a five-digit name from being read as its last four
+TARGET = re.compile(r"(?:>>?|\btee\s+(?:-a\s+)?)\s*[\"']?([^\s\"'<>|;&]*?(?<!\d)(\d{4,5})-([^\s\"'<>|;&/]+?)\.(json|html))[\"']?(?=[\s;|&)]|$)")
 
 
 def _rp():  # noqa: ANN202

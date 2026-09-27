@@ -4,7 +4,8 @@ import math
 
 import pytest
 
-from l7r.diagram.settlement import Settlement
+from l7r.diagram.settlement import TORII_PITCH_FT, Settlement, torii_halfbox
+from l7r.diagram.settlement._geom import torii_glyph_dims
 from tests.settlement._builders import _byre_village, _crop_settlement, _nuc_village, _scatter_base_points, _town, _village, _walled_city
 
 
@@ -417,30 +418,65 @@ def test_a_fringe_tree_is_refused_ground_already_spoken_for():
 # neither half of that division of labor had an assertion on it.
 
 
-def test_an_over_wide_avenue_is_RE_LAID_at_the_standard_pitch_keeping_its_line() -> None:
-    """ "the gen authors the avenue's LINE; the engine owns its stride". An avenue whose arches stand
-    more than the cap apart is resampled by arc length ALONG the authored line - so it keeps its
-    direction and its curve, and the innermost arch keeps the seat the gen chose at the threshold.
+def test_an_over_wide_avenue_is_RE_LAID_at_the_pitch_keeping_its_line() -> None:
+    """ "the gen authors the avenue's LINE; the engine owns its stride". An avenue is resampled by arc
+    length ALONG the authored line - so it keeps its direction and its curve, and the innermost arch
+    keeps the seat the gen chose at the threshold.
 
-    Asserted on all three: the stride closes, the first arch does not move, and the run stays on the
-    authored line.
+    Asserted on all three: the stride is the pitch, the first arch does not move, and the run stays on
+    the authored line.
     """
     s = Settlement(2000, 2000, seed=3)
-    wide = [(100.0, 100.0), (400.0, 100.0), (700.0, 100.0)]  # 300 px apart, far over the cap
+    wide = [(100.0, 100.0), (400.0, 100.0), (700.0, 100.0)]  # 300 px apart
     fitted = s._avenue_pitch(wide)
     assert fitted[0] == wide[0], "the innermost arch keeps the gen's own seat"
     new_gap = math.hypot(fitted[1][0] - fitted[0][0], fitted[1][1] - fitted[0][1])
-    assert new_gap < 300.0, f"the stride closes to the standard pitch ({new_gap:.0f} px)"
+    assert new_gap == pytest.approx(s.px(TORII_PITCH_FT)), f"the stride is the pitch ({new_gap:.1f} px)"
     assert all(abs(p[1] - 100.0) < 1e-6 for p in fitted), "and every arch stays on the authored line"
 
 
-def test_an_avenue_INSIDE_the_pitch_band_is_left_exactly_as_the_gen_authored_it() -> None:
-    """ "the village avenues at ~30 ft are deliberate", so this fires only on the over-wide runs. A
-    test of the correction alone would pass with the guard removed and every avenue re-laid."""
+def test_EVERY_avenue_is_laid_at_the_pitch_the_old_30_ft_village_one_included() -> None:
+    """Feature 268 (GM 2026-09-27: "All maps, ~10-13 ft"): the cap-and-band rule that left an avenue
+    inside the band alone is retired, so a 30 ft run closes to the pitch like any other. The pitch is
+    inside the GM's band."""
+    assert 10.0 <= TORII_PITCH_FT <= 13.0
     s = Settlement(2000, 2000, seed=3)
-    ok = [(100.0, 100.0), (130.0, 100.0), (160.0, 100.0)]
-    assert s._avenue_pitch(ok) == ok, "within the band, the gen's own spacing stands untouched"
+    village = [(100.0, 100.0), (130.0, 100.0), (160.0, 100.0)]  # 30 ft apart at 1 ft/px
+    fitted = s._avenue_pitch(village)
+    assert [round(x - 100.0, 6) for x, _y in fitted] == [0.0, s.px(TORII_PITCH_FT), 2 * s.px(TORII_PITCH_FT)]
     assert s._avenue_pitch([(5.0, 5.0)]) == [(5.0, 5.0)], "and one arch is no avenue to re-lay"
+
+
+@pytest.mark.parametrize("ftpx", [1.0, 2.0, 3.0])
+def test_plan_view_arches_at_the_pitch_never_touch(ftpx: float) -> None:
+    """D3: the arch is drawn in plan (a beam and two post marks), so its drawn depth - the post side -
+    leaves a gap to its neighbor at the pitch at every map scale; the box that frames it is centered."""
+    _s2, beam, post, p2 = torii_glyph_dims(ftpx)
+    pitch_px = TORII_PITCH_FT / ftpx
+    assert post < pitch_px - 1.0, f"at {ftpx} ft/px the post side {post:.1f} px leaves a gap under the {pitch_px:.1f} px pitch"
+    assert beam >= 1.9 and post > beam and 0 < p2 < _s2
+    _hw, up, down = torii_halfbox(ftpx)
+    assert up == down
+
+
+def test_a_village_hall_lays_its_avenue_at_the_pitch_one_pitch_off_its_face() -> None:
+    """The threshold rule (GM 2026-07-27) holds at the new pitch: at 2 ft/px, 6 px between arches and
+    6 px from the hall's face to the innermost - whatever stride the gen authored."""
+    s = Settlement(1400, 1400, seed=9)
+    s.meta(name="V", scale="village", ftpx=2, toscale=True)
+    s.shrine_hall(700.0, 400.0, "", w=30, h=24, kind="shrine", torii=[(700.0, 422.0 + 15 * i) for i in range(3)], torii_count=3, graveyard=False)
+    ys = [t[1] for t in s.M["torii"]]
+    assert ys == pytest.approx([418.0, 424.0, 430.0], abs=0.11), ys
+
+
+def test_the_wayside_shrine_draws_its_small_arch_in_plan() -> None:
+    """One map, one arch vocabulary (D3): the wayside shrine's 9 ft arch is the plan-view glyph."""
+    from l7r.diagram.settlement.shrines_wells.torii import torii_plan_svg
+
+    s = Settlement(800, 800, seed=1)
+    s.meta(name="T", scale="town", ftpx=1, toscale=True)
+    s.small_shrine(400.0, 400.0)
+    assert torii_plan_svg(400.0, 400.0 + 12 + 8, 1.0, 9.0) in s.out
 
 
 def test_an_avenue_is_pulled_BACK_whole_rather_than_having_one_arch_shoved_aside() -> None:
@@ -473,13 +509,9 @@ def test_an_avenue_with_no_walls_drawn_yet_is_left_exactly_as_it_was() -> None:
 
 
 def test_an_avenue_that_CANNOT_be_shortened_clear_of_a_wall_RAISES() -> None:
-    """The search floors out "once the stride would close to one rail-span, since arches that touch
-    are no avenue at all" - and then it refuses rather than drawing arches inside a wall.
-
-    Measured on the TRUE 16 ft span, not `torii_halfbox`: that box carries a 2 px stroke pad which
-    at 3 ft/px is nearly as wide as the arch itself, and using it left a 30 ft-pitch city avenue
-    with almost no room to shorten.
-    """
+    """The search floors out once the stride would close to the arch's drawn depth plus one px
+    (feature 268, D4), since arches that touch are no avenue at all - and then it refuses rather than
+    drawing arches inside a wall."""
     s = Settlement(1400, 1400, seed=9)
     s.meta(name="C", scale="city")
     s.manor(700.0, 700.0, 600.0, 600.0, "a manor")  # its walls run x,y = 400..1000

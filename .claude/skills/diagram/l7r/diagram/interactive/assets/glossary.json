@@ -1635,7 +1635,8 @@
  "go": {
   "def": "A tenth of a tsubo, about a third of a square meter - the fraction a surveyed site area is given to.",
   "variants": [
-   "go"
+   "go",
+   "gō"
   ]
  },
  "goemon-buro": {
@@ -2267,7 +2268,7 @@
   ]
  },
  "keidai": {
-  "def": "A shrine's or temple's precinct: the enclosed ground of approach, gate and halls.",
+  "def": "A shrine's or temple's precinct: the ground of its approach, gate and halls - at a village shrine unfenced, marked by its arch and its wood.",
   "variants": [
    "keidai"
   ]
@@ -4732,7 +4733,7 @@
   ]
  },
  "tamagaki": {
-  "def": "The low fence that bounds a shrine's precinct.",
+  "def": "A shrine's fence - at an ordinary shrine a low fence around the sanctuary alone, often a later donation; at a great shrine, rings of them.",
   "variants": [
    "tamagaki"
   ]
@@ -5576,92 +5577,90 @@
    "kana"
   ]
  },
- "caoshi": {
-  "def": "A commercial district that grew up outside a Chinese city's walls, beginning in the Song dynasty. It descends from the rural periodic market of the Tang.",
+ "mizugaki": {
+  "def": "Another name for the tamagaki, a shrine's fence; at a great shrine with several rings, the innermost.",
   "variants": [
-   "caoshi"
+   "mizugaki"
   ]
  },
- "ward-and-market system": {
-  "def": "The Tang city's order in which residents lived in walled wards whose gates the street drum opened at sunrise and closed at sunset, and trade was held in designated markets.",
+ "shimenawa": {
+  "def": "The twisted straw rope hung to mark something sacred, such as a shrine's sacred tree.",
   "variants": [
-   "ward-and-market system",
-   "ward-and-market"
+   "shimenawa"
   ]
  },
- "periodic market": {
-  "def": "A market held on fixed days of a recurring cycle rather than every day - in Japan the rokusai-ichi met six times a month - to which the peasants of the surrounding countryside came in to buy and sell.",
+ "ōiya": {
+  "def": "A covering building put over a small shrine sanctuary to shelter it from wind and rain.",
   "variants": [
-   "periodic market",
-   "periodic markets",
-   "periodic-market"
+   "ōiya"
   ]
  },
- "Manji": {
-  "def": "A Japanese era name of the early Edo period; its first year, Manji 1, is 1658.",
+ "chikaraishi": {
+  "def": "A strength stone: a heavy river stone kept beside a shrine's approach and lifted by young men in trials of strength.",
   "variants": [
-   "Manji",
-   "Manji era"
+   "chikaraishi"
   ]
  },
- "Chang'an": {
-  "def": "The capital of the Tang dynasty: a walled city laid out in walled wards whose gates were shut at the dusk drum.",
+ "sonsha": {
+  "def": "The village-shrine rank in Japan's modern shrine registers: a village's own tutelary shrine, one step above the unranked.",
   "variants": [
-   "Chang'an"
+   "sonsha"
   ]
  },
- "Yasuki Taka": {
-  "def": "The first Imperial Treasurer in the setting, whose system separates the official who assesses what is owed from the one who collects it; the import tariff collected at provincial-city and capital gates follows it.",
+ "mukakusha": {
+  "def": "An unranked shrine in Japan's modern shrine registers, often a single hamlet's, one step below a village shrine.",
   "variants": [
-   "Yasuki Taka"
+   "mukakusha"
   ]
  },
- "at grade": {
-  "def": "On the same level: two channels, or a channel and a road, that cross at grade meet on one surface rather than one passing over the other, so their water or traffic mixes where they cross.",
+ "ichi-no-torii": {
+  "def": "The first torii of a shrine's approach, usually its largest, standing where the approach enters the grounds; the second and third (ni-no-torii, san-no-torii) stand farther in, toward the hall.",
   "variants": [
-   "at grade"
+   "ichi-no-torii",
+   "ichi no torii",
+   "ni-no-torii",
+   "ni no torii",
+   "san-no-torii",
+   "san no torii"
   ]
  },
- "omotedana": {
-  "def": "A shop-house facing a main street, whose master was often landlord of the back-street tenements behind it (uradana, ura-nagaya).",
+ "Hachiman": {
+  "def": "A Shinto god of war and archery, patron of warriors, whose shrines are among the commonest in Japan.",
   "variants": [
-   "omotedana"
+   "Hachiman"
   ]
  },
- "Imperial spine": {
-  "def": "The Imperial highway where it runs through a city as its main street; a river city has none, since its highway passes off the map instead.",
+ "irimoya": {
+  "def": "A hip-and-gable roof: hipped on its lower slopes, with a small gable at each end of the ridge.",
   "variants": [
-   "Imperial spine"
+   "irimoya",
+   "irimoya-roofed"
   ]
  },
- "DEM": {
-  "def": "Digital elevation model: a map of ground heights laid out as a grid of cells, here 90 meters on a side.",
+ "nagare-zukuri": {
+  "def": "The flowing-roof style of shrine sanctuary, its front roof slope carried out long over the steps; the commonest form of honden in Japan.",
   "variants": [
-   "DEM"
+   "nagare-zukuri",
+   "nagarezukuri"
   ]
  },
- "SRTM": {
-  "def": "Shuttle Radar Topography Mission: the radar survey flown on a space shuttle in 2000, whose height data covers most of the Earth's land.",
+ "dashigeta": {
+  "def": "An eave construction in which a beam carried on projecting joist-ends, set out past the wall face, supports the rafters so the eave reaches farther.",
   "variants": [
-   "SRTM"
+   "dashigeta"
   ]
  },
- "sand junk": {
-  "def": "A flat-bottomed Chinese wooden cargo sailing ship (shachuan), built for the shallow, sandy waters around the Yangtze mouth and the northern coast.",
+ "sakaki": {
+  "def": "An evergreen shrub of the tea family whose leafy branches are offered at Shinto shrines, and which is planted in precincts as a sacred tree.",
   "variants": [
-   "sand junk",
-   "sand junks"
+   "sakaki"
   ]
  },
- "dispersed settlement": {
-  "def": "A countryside where each farmhouse stands apart among its own fields instead of gathered in a cluster, as on Japan's Tonami Plain, where farmers built amid their rice fields to manage their water; the opposite of a nucleated settlement.",
+ "dohyō": {
+  "def": "The ring sumo is wrestled in: a raised square platform of packed clay with a circle of straw bales on top, consecrated by a rite before the bouts.",
   "variants": [
-   "dispersed settlement",
-   "dispersed village",
-   "dispersed farmstead",
-   "dispersed settlements",
-   "dispersed villages",
-   "dispersed farmsteads"
+   "dohyō",
+   "dohyo"
   ]
  },
  "undersluice": {
@@ -6372,6 +6371,94 @@
   "def": "The ancient irrigation works on the Min River in Sichuan, whose canals fan out across the Chengdu plain below the diversion.",
   "variants": [
    "Dujiangyan"
+  ]
+ },
+ "caoshi": {
+  "def": "A commercial district that grew up outside a Chinese city's walls, beginning in the Song dynasty. It descends from the rural periodic market of the Tang.",
+  "variants": [
+   "caoshi"
+  ]
+ },
+ "ward-and-market system": {
+  "def": "The Tang city's order in which residents lived in walled wards whose gates the street drum opened at sunrise and closed at sunset, and trade was held in designated markets.",
+  "variants": [
+   "ward-and-market system",
+   "ward-and-market"
+  ]
+ },
+ "periodic market": {
+  "def": "A market held on fixed days of a recurring cycle rather than every day - in Japan the rokusai-ichi met six times a month - to which the peasants of the surrounding countryside came in to buy and sell.",
+  "variants": [
+   "periodic market",
+   "periodic markets",
+   "periodic-market"
+  ]
+ },
+ "Manji": {
+  "def": "A Japanese era name of the early Edo period; its first year, Manji 1, is 1658.",
+  "variants": [
+   "Manji",
+   "Manji era"
+  ]
+ },
+ "Chang'an": {
+  "def": "The capital of the Tang dynasty: a walled city laid out in walled wards whose gates were shut at the dusk drum.",
+  "variants": [
+   "Chang'an"
+  ]
+ },
+ "Yasuki Taka": {
+  "def": "The first Imperial Treasurer in the setting, whose system separates the official who assesses what is owed from the one who collects it; the import tariff collected at provincial-city and capital gates follows it.",
+  "variants": [
+   "Yasuki Taka"
+  ]
+ },
+ "at grade": {
+  "def": "On the same level: two channels, or a channel and a road, that cross at grade meet on one surface rather than one passing over the other, so their water or traffic mixes where they cross.",
+  "variants": [
+   "at grade"
+  ]
+ },
+ "omotedana": {
+  "def": "A shop-house facing a main street, whose master was often landlord of the back-street tenements behind it (uradana, ura-nagaya).",
+  "variants": [
+   "omotedana"
+  ]
+ },
+ "Imperial spine": {
+  "def": "The Imperial highway where it runs through a city as its main street; a river city has none, since its highway passes off the map instead.",
+  "variants": [
+   "Imperial spine"
+  ]
+ },
+ "DEM": {
+  "def": "Digital elevation model: a map of ground heights laid out as a grid of cells, here 90 meters on a side.",
+  "variants": [
+   "DEM"
+  ]
+ },
+ "SRTM": {
+  "def": "Shuttle Radar Topography Mission: the radar survey flown on a space shuttle in 2000, whose height data covers most of the Earth's land.",
+  "variants": [
+   "SRTM"
+  ]
+ },
+ "sand junk": {
+  "def": "A flat-bottomed Chinese wooden cargo sailing ship (shachuan), built for the shallow, sandy waters around the Yangtze mouth and the northern coast.",
+  "variants": [
+   "sand junk",
+   "sand junks"
+  ]
+ },
+ "dispersed settlement": {
+  "def": "A countryside where each farmhouse stands apart among its own fields instead of gathered in a cluster, as on Japan's Tonami Plain, where farmers built amid their rice fields to manage their water; the opposite of a nucleated settlement.",
+  "variants": [
+   "dispersed settlement",
+   "dispersed village",
+   "dispersed farmstead",
+   "dispersed settlements",
+   "dispersed villages",
+   "dispersed farmsteads"
   ]
  }
 }
