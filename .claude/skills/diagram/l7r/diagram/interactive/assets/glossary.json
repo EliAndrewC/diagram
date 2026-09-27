@@ -6295,5 +6295,30 @@
   "variants": [
    "funadama"
   ]
+ },
+ "to": {
+  "def": "A Japanese measure of volume, a tenth of a koku. An Edo-period rice bale held about 2 to 5 to, and the later standard bale held 4 to.",
+  "variants": [
+   "to"
+  ]
+ },
+ "sho": {
+  "def": "A Japanese measure of volume, a tenth of a to. The shogunate's rice bale held 3 to and 5 sho.",
+  "variants": [
+   "sho"
+  ]
+ },
+ "steelyard": {
+  "def": "A hand-held weighing beam with the load hung from its short arm and a counterweight slid along its long, marked arm until it balances.",
+  "variants": [
+   "steelyard",
+   "steelyards"
+  ]
+ },
+ "dozo-zukuri": {
+  "def": "Plastered-storehouse construction: thick earth-and-plaster walls and plaster-faced doors, used for storehouses and, in Edo after the Kyoho era, spread by order to townhouses for fire prevention.",
+  "variants": [
+   "dozo-zukuri"
+  ]
  }
 }

@@ -295,6 +295,7 @@ dooryard	dooryard
 doshin	doshin
 dosojin	dosojin
 dozo	kura
+dozo-zukuri	dozo-zukuri
 dozō	kura
 drainage ditch	drainage ditch
 drainage ditches	drainage ditch
