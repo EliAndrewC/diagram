@@ -36,8 +36,9 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D6).
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
       verify: DONE. DONE. All six handoffs read. Applied: R3's 520 (wayside stones at the south lane's entry) and 530 (the village cremation ground with six jizo, seat rolled apart, downstream) - drawn on the frozen Hoshigaoka map (svg/png in the mirror, manifest, notes row); settlement-review round 1 NEEDS-WORK (2 warnings applied: ragged ground, 136 ft from the wells), round 2 PASS; the village generator's owed work in future-work/farming-communities.md; the engine glyph drawn ragged too. Not contradicting: S (the roped tree is already drawn), R2 and R3 500 (the historical village temple, the canon's country monk governs), R4, T (595's small shrines size a worship hall, not the hall-and-dwelling), B37. Boxes: research 520/530 source-reader, quote-check and source-applicability in R3's checks
-- [ ] T09 FR-003, FR-005: every blocked source on TO-DOWNLOAD.md; 271's State table and 269's inventory marked; the
+- [x] T09 FR-003, FR-005: every blocked source on TO-DOWNLOAD.md; 271's State table and 269's inventory marked; the
       handoffs reported to "Diagram supplemental" and "Diagram research" (D6)
       research: rendering
+      verify: DONE. DONE. TO-DOWNLOAD.md entries 258-275 appended by this feature's sessions (the sources a human can fetch free that refused the readers); 271's State table and inventory marked by its owner (Diagram research confirmed 2026-09-27); 269's B37 outcome sent to Diagram supplemental; the RELINK 269 comments agreed with 269, which relinks them when it lands
 - [ ] T10 `make done`; `scripts/sync-with-main.sh done`
       research: rendering
