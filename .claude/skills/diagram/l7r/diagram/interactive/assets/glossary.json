@@ -5695,5 +5695,13 @@
    "Four Books",
    "Five Classics"
   ]
+ },
+ "enfeoffment": {
+  "def": "A lord's grant of a domain to a vassal, who holds it in return for service - as when Ikeda Terumasa was granted Himeji in 1600 at an assessed yield of 520,000 koku.",
+  "variants": [
+   "enfeoffment",
+   "enfeoffments",
+   "enfeoffed"
+  ]
  }
 }

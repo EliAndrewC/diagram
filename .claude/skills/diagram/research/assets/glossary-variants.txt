@@ -327,6 +327,9 @@ enceinte	enceinte
 enemy platform	mamian
 enemy platforms	mamian
 enemy tower	mamian
+enfeoffed	enfeoffment
+enfeoffment	enfeoffment
+enfeoffments	enfeoffment
 enoki	enoki
 eunis	EUNIS
 eutrophic	eutrophication
