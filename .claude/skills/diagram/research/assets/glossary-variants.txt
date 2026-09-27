@@ -68,11 +68,13 @@ bakuhan	bakuhan
 bakumatsu	bakumatsu
 bamboo grass	sasa
 bamboo-grass	sasa
+ban-hinin	banta
 banfang	banfang
 bannerman	hatamoto
 bannerman's	hatamoto
 bannermen	hatamoto
 bansho	bansho
+banta	banta
 banyuetang	banyuetang
 barbican	barbican
 baren	baren
@@ -1697,6 +1699,7 @@ trunk streets	trunk street
 tsubo	tsubo
 tsuijibei	tsuijibei
 tsuijimatsu	tsuijimatsu
+tsujiban	tsujiban
 tsuke-tsubo	tsuke-tsubo
 tsumairi	tsumairi
 tsumairi-type	tsumairi

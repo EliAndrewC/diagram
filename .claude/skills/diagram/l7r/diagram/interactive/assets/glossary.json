@@ -7330,5 +7330,18 @@
    "eel's-bed",
    "eel's-bed plot"
   ]
+ },
+ "banta": {
+  "def": "A watchman hired by an Edo-period town or village for the night watch and the fire watch, often living in a hut beside a ward gate; outside Edo most were of hinin status.",
+  "variants": [
+   "banta",
+   "ban-hinin"
+  ]
+ },
+ "tsujiban": {
+  "def": "A guard box at a street crossing, above all in the samurai quarter of a castle town: in Edo a hut about 12 by 9 ft cut into a mansion wall, manned day and night.",
+  "variants": [
+   "tsujiban"
+  ]
  }
 }
