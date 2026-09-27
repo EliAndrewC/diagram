@@ -596,7 +596,7 @@ rows EDIT an existing section syncs from main first, since 269's and 267's edits
 | W2 | 7 | todo |
 | U2 | 6 | todo |
 | U3 | 5 | todo |
-| R2 | 4 | todo |
+| R2 | 4 | taken by Diagram shrines (2026-09-27, by agreement) |
 | G1 | 5 | todo |
 | G2 | 5 | todo |
 | K1 | 5 | todo |
@@ -607,8 +607,8 @@ rows EDIT an existing section syncs from main first, since 269's and 267's edits
 | K6 | 4 | todo |
 | K7 | 4 | todo |
 | U4 | 6 | todo |
-| R3 | 4 | todo |
+| R3 | 4 | taken by Diagram shrines (2026-09-27, by agreement) |
 | T5 | 6 | todo |
 | U5 | 7 | todo |
-| R4 | 4 | todo |
+| R4 | 4 | taken by Diagram shrines (2026-09-27, by agreement) |
 | U6 | 4 | todo |
