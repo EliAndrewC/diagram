@@ -81,7 +81,10 @@ def kind_docstring(root: pathlib.Path, name: str) -> tuple[str, str] | None:
     return None
 
 
-_BLOCK = re.compile(r"<(p|li|blockquote|td|dd)\b[^>]*>.*?</\1>", re.S)
+# A block ends at its close tag, or - HTML's implicit close - at the next block or the end of the fragment: a
+# fragment split off an assembled page can end in a `<p>` the next heading used to close, and matching only the
+# close tag emptied a whole re-check bundle without a word (water 170, feature 250 T75).
+_BLOCK = re.compile(r"<(p|li|blockquote|td|dd)\b[^>]*>.*?(?:</\1>|(?=<(?:p|li|blockquote|td|dd)\b)|\Z)", re.S)
 _NOTE_LI = re.compile(r'<li data-note="([^"]+)">.*?</li>\n?', re.S)
 
 

@@ -119,6 +119,12 @@ def test_a_recheck_bundle_carries_only_the_named_notes_and_their_blocks() -> Non
     assert cb.notes_subset(notes, {"a-2"}) == '<li data-note="a-2">A2</li>\n'
 
 
+def test_a_recheck_excerpt_keeps_a_block_whose_close_tag_is_implicit() -> None:
+    fragment = '<h2 id="q">Q</h2>\n<p>One.<sup class="fn" data-note="b"></sup>\n<p>Last.<sup class="fn" data-note="a"></sup>\n'
+    cut = cb.excerpt(fragment, {"a"})
+    assert "Last." in cut and "One." not in cut, "an unclosed last paragraph is still a block"
+
+
 def test_make_notes_prints_the_named_notes_and_refuses_without_keys(capsys: pytest.CaptureFixture[str]) -> None:
     assert cb.main(["ways", "--section", "010", "--notes", "ritter-timber-bridges", "--print-notes", "--root", str(REPO)]) == 0
     out = capsys.readouterr().out
