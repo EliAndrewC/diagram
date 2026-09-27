@@ -168,7 +168,8 @@ class Cell(Kind):
 
     Why: Edo jails held the accused pending judgment; the sentences were exile, flogging, fines or death -
     not, in the ordinary case, time in prison - and light offenders were sent home to their villages.
-    Purpose-built prisons were separate compounds in the great cities. So a county magistracy keeps a cell or
+    Only the largest jail, Edo's Tenmachō, was a moated compound of its own; the others stood inside
+    magistrates' and daikan offices. So a county magistracy keeps a cell or
     two for remand and no prison block - and in Rokugan, where torture is unusual, no room built for
     interrogation either.
 

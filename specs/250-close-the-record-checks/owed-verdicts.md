@@ -199,3 +199,4 @@
 - KneelingPositions (buildings SECTION=010): IN-STEP - the kneeling-stones quote still supports litigants below the raised hall
 - MagistratesDais (buildings SECTION=010): IN-STEP - its one 010 claim, a court hall over kneeling litigants, still rests on the henan-neixiang footnote
 - Byre (homesteads SECTION=060): LABELED - the owned yard stable now says it rests on one encyclopedia sentence about wealthy Shaanxi courtyard houses, with no survey behind it
+- Cell (buildings SECTION=040): REWRITTEN - the Why: premise that great cities had separate prison compounds narrowed to Edo's Tenmacho alone, the others inside magistrates' and daikan offices
