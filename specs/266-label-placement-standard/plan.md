@@ -32,7 +32,8 @@ caption: 8 positions x 3 layouts x (1 + rings) with rings up to the reach - a fe
 - **XVI (literal)**: scope exceptions D8 and D9 were put to `spec-fidelity` and ruled legitimate; both are enforced
   by tests (FR-012, FR-013).
 - **X clause 15 (index once)**: FR-009.
-- 1,000-line bar: the new package is split by concern (below); `boards.py` shrinks by about 560 lines.
+- 1,000-line bar: the new package is split by concern (below); `boards.py` loses the board caption's own search
+  (`_draw_board_caption`, lines 113-677 of the file as it stood, observed 2026-09-27, method: read from the code).
 
 ## Design
 
@@ -43,7 +44,8 @@ caption: 8 positions x 3 layouts x (1 + rings) with rings up to the reach - a fe
     subject's frame, `sx` in {-1, 0, +1} (left, center, right), `sy` in {-1, 0, +1} (above, level, below), plus the
     two "slightly" positions as fractional `sx` (+0.25 above, -0.25 below: our reading of "slightly", a calibration).
   - `PREFERRED_OFFSET_EM = 0.5` (D2), `RING_STEP_EM = 0.5`, `REACH_EM = 8.0` (calibration: 64 ft for the board's
-    8 pt caption - past the old ladder's 53 px reach and inside the gate's 120 px hug cap).
+    8 pt caption - past the old ladder's reach (`LABEL_MIN_AIR` + 8 x `LABEL_AIR_STEP` = 53 px) and inside the gate's
+    hug cap (`HUG_PX = 120` in `tests/gate/test_captions_and_boards.py`); observed 2026-09-27, method: read from the code).
   - `WEIGHT_OBSTACLE = 1000`, `WEIGHT_WAY = 500`, `WEIGHT_FREE = 0` (D4).
   - `CLEAR_EM = 0.5`: a block nearer than the preferred offset to an obstacle other than its own subject counts as
     covering it - a caption as close to a neighbor as to its subject is not plainly its subject's (PSU's
@@ -81,7 +83,8 @@ caption: 8 positions x 3 layouts x (1 + rings) with rings up to the reach - a fe
   recorded in `M["caption_leaders"]`).
 - FR-014: `label_obstacles` tags each built record with its caption group (the overlap taxonomy's `_LABEL_GROUP`, and a
   `buildings` record's own `kind` word), and the index is asked with the caption's text: an obstacle whose group word the
-  caption names weighs 0 for it.
+  caption names weighs 0 for it - unless the group is civic (ministry, governor, temple), where only the caption's own
+  subject is waived.
 - `label()` gains `lines=` and `angle=` (the placer's choice, bypassing the wrap probe and the rotation fold); the
   recorded referent is the subject's box.
 - Callers: `_draw_board_caption` (a rotated-box point subject) shrinks to building the subject; `place_caption`
@@ -135,7 +138,8 @@ transforms) in place, tagging an untagged board caption.
 - **P3 - "Slightly" = a quarter of the block's width** off center for the last two positions. Calibration (the
   sources name the position, not the amount).
 - **P4 - A wall stroke 4 px or wider is an obstacle on a hand-drawn sheet, a thinner line a way.** Calibration from
-  the sheets (compound walls 9 px, dividers 6 px; lanes and paths drawn thinner).
+  the sheets (observed 2026-09-27, method: read from `compound.py`: compound walls stroke-width 9, the court divider 6;
+  lanes and paths are drawn thinner).
 - **P5 - Ground on a hand-drawn sheet = a shape that contains the subject and is at least 20 times the caption's
   block.** The sheets draw courts and grounds as large rects under their contents; a heuristic, recorded.
 

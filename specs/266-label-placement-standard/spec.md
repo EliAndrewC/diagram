@@ -148,7 +148,10 @@ rule quoted from a page they can open.
   "What does a town or a city map label, and what may a label cover?") MUST be kept in the weights: a caption's own
   subject weighs 0 for it, and so does every built feature of a group the caption's own wording names - the group
   word of the overlap taxonomy's caption registry (a "temple" caption may lie on a temple, a flophouse caption on a
-  flophouse), which is how that rule has always been keyed.
+  flophouse), which is how that rule has always been keyed in code - except that a caption naming one civic building (a
+  ministry, the governor's yamen or a temple by name) gives every OTHER named civic building the full obstacle weight
+  (research/presentation 070, the city rule: the group rule alone "would permit one ministry's name to sit on the next
+  ministry").
 
 ### Key Entities
 
@@ -169,7 +172,8 @@ rule quoted from a page they can open.
   the board footprint in each manifest or sheet), before and after; the before is observed 2026-09-27.
 - **SC-002** (FR-001, FR-002, FR-008, FR-009, FR-012, FR-014): unit tests place captions for a point, a rotated point
   past 90 degrees, a line and an area subject through the one entry point, and a caption naming a group seated over a
-  building of that group while one naming another group is kept off it; the static test of FR-012 passes on the tree
+  building of that group while one naming another group is kept off it, and a named ministry's caption kept off a
+  sibling ministry; the static test of FR-012 passes on the tree
   and fails on a planted hand-seated call.
 - **SC-003** (FR-005, FR-006, FR-007): unit tests prove, on synthetic sheets: a blocked upper right falls to upper
   left; every preferred-offset seat is tried before any further one; a free far seat beats a covered near one;
@@ -258,3 +262,6 @@ rule quoted from a page they can open.
   town and city rule of what a caption may lie on, without a record; D8's function count was 34 for 33; one QGIS
   sentence was attributed to the wrong polygon mode. Applied: the rule restored as FR-014 and cited from SC-002, the
   count corrected, R1's attribution corrected.
+- Round 3 (2026-09-27, `spec-fidelity-verify`): CHANGES REQUIRED - FR-014 as restored let a named civic caption lie on a
+  sibling civic building, which answer 070's city rule forbids. Applied: the civic exception added to FR-014 and a
+  sibling-ministry case to SC-002; T03 cites FR-014; the plan's figures labeled.

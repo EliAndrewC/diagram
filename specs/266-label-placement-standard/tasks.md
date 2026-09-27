@@ -12,7 +12,8 @@ world, and the sources are cartographic practice (research.md R1).
       the frame, the index built once (SC-002, SC-003)
       research: rendering
 - [ ] T03 Settlement adaptor: `seat_caption`, `label_obstacles`, the leader, `label(lines=, angle=)`; the board, `place_caption`,
-      the road caption and the field names through it; the old searches deleted (FR-001)
+      the road caption and the field names through it; the town and city cover rule with its civic exception; the old
+      searches deleted (FR-001, FR-014)
       research: rendering
 - [ ] T04 `compound.py`: every caption through the placer; the two composed sheets regenerated (FR-001, FR-011)
       research: rendering
