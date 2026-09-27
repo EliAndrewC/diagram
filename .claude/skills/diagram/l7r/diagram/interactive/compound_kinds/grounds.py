@@ -158,20 +158,21 @@ class PracticeGround(Kind):
     dojos read on stood in Edo, and practice before the mid-Edo period was held outdoors or on earthen floors.
     The one martial ground the pages read on an intendant's office name there is a riding ground, and the
     drill ground read on stood at a small domain's jin'ya, so they confirm the practice ground. That domain
-    schools stood in castle towns and cities, that rural samurai trained in yards, cleared halls or on shrine
-    grounds, and that a Chinese county yamen had no training hall are guesses no page read confirms. That a
+    schools stood in castle towns and cities as a rule (the two read, Hagi's and Mito's, stood inside their
+    castles), that rural samurai trained in yards, cleared halls or on shrine grounds, and that a Chinese
+    county yamen had no training hall are guesses no page read confirms. That a
     rural intendant's office kept no martial hall is a guess from the silence of the pages read on one, which
     list its buildings without one but never say it had none.
 
-    Caveat: That domain schools stood in castle towns and cities, that rural samurai trained in yards,
-    cleared halls or on shrine grounds, and that a Chinese county yamen had no training hall are guesses no
-    page read confirms. That a rural intendant's office kept no martial hall is a guess from the silence of
+    Caveat: That domain schools stood in castle towns and cities as a rule (the two read, Hagi's and Mito's,
+    stood inside their castles), that rural samurai trained in yards, cleared halls or on shrine grounds, and
+    that a Chinese county yamen had no training hall are guesses no page read confirms. That a rural intendant's office kept no martial hall is a guess from the silence of
     the pages read on one, which list its buildings without one but never say it had none.
 
     Name: practice ground
     Covers: the swept keiko patch and its label
     Label: accurate
-    Sources: hanko-jawiki, edo-three-dojos-jawiki, jinya-jawiki, dojo-jawiki, genbukan-jawiki, kotobank-machidojo
+    Sources: hanko-jawiki, hagi-meirinkan-guide, kodokan-mito-jawiki, edo-three-dojos-jawiki, jinya-jawiki, dojo-jawiki, genbukan-jawiki, kotobank-machidojo
     Entry: research/buildings.html - 'A dojo is a city institution; county training is courtyard keiko'; research/cities/government.html - 'Martial training is an URBAN institution'
     """
 
@@ -240,11 +241,11 @@ class ShrineGrove(Kind):
     them: the shrine's own sacred wood.
 
     Why: A Japanese shrine's setting was a deliberately preserved grove, the chinju no mori - a wood kept and
-    tended around the sanctuary, the approach and the place of worship, so that the swept precinct sits inside
+    tended around the sanctuary, the approach and the place of worship, so that the precinct sits inside
     kept trees rather than in cleared ground. This map draws a village shrine's precinct as its grove, with the hall in a small
     swept clearing inside it and no fence around it.
 
-    Note: The grove as the setting of a shrine follows the record; that the wood fills most of a precinct's unbuilt ground is a guess, since no source measures what covered the ground beyond buildings that took a fortieth to a seventh of it. Everything the record holds is about a
+    Note: The grove as the setting of a shrine follows the record, as does the village's own households answering for the shrine's cleaning; that its clearing was a swept surface is general reading with no page found; that the wood fills most of a precinct's unbuilt ground is a guess, since no source measures what covered the ground beyond buildings that took a fortieth to a seventh of it. Everything the record holds is about a
     village shrine standing in its own wood; nothing covers a grove kept inside a compound wall.
 
     Caveat: Everything the record holds is about a village shrine standing in its own wood; nothing covers a

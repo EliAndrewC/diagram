@@ -119,12 +119,12 @@ class RetainersQuarters(Kind):
 
     Note: Retainers' official residences laid out inside a small domain's jin'ya are recorded, and the city
     magistracy's separate constables' district and ranked households in terraced ranges rest on recorded
-    findings. That a rural office's own staff lived on its grounds is the record's reconstruction, no source
+    findings. A source names a storehouse keepers' rowhouse on a rural office's grounds; that the rest of its staff lived there is the record's reconstruction, no source
     naming those staff or their housing, and that their housing took the form of a rowhouse is the record's
     own reading rather than a source's words; the record places ranks of small household dwellings at the
     town's edge, outside an elite quarter, rather than inside its walls.
 
-    Caveat: That a rural office's own staff lived on its grounds is the record's reconstruction, no source
+    Caveat: A source names a storehouse keepers' rowhouse on a rural office's grounds; that the rest of its staff lived there is the record's reconstruction, no source
     naming those staff or their housing, and that their housing took the form of a rowhouse is the record's
     own reading rather than a source's words; the record places ranks of small household dwellings at the
     town's edge, outside an elite quarter, rather than inside its walls.
@@ -370,7 +370,7 @@ class FireWaterTubs(Kind):
     What: Standing tubs of rainwater - tensuioke, "heaven-water tubs" - kept against fire, one at the eaves
     corner of each major wooden building and two at the kitchen, fed by the roof's runoff.
 
-    Why: The halls of an administrative compound were ordinary wooden buildings and burned again and again,
+    Why: The halls of an administrative compound were ordinary wooden buildings and often burned (the Sado magistracy five times, though Takayama's office never did),
     so standing water was kept at the point of risk: at the wooden buildings, weighted to the kitchen and its
     open fire. The plastered storehouses carry none - a thick earthen kura is the one building made not to
     burn. Each tub stands against its building's wall, under the eaves, because the gutter fills it.

@@ -123,15 +123,19 @@ def classes_in(text: str, _base, lines: dict[str, int] | None = None) -> dict[st
     return out
 
 
-_FN = re.compile(r'<sup class="fn"><a id="fnref-\d+" href="([^"#]*)#fn-\d+">\d+</a></sup>')
+_FN = re.compile(r'<sup class="fn"><a id="fnref-\d+(?:-\d+)?" href="([^"#]*)#fn-\d+">\d+</a></sup>')
+#: the page's closing pointer to its citations page, which the assembly appends to whichever section is LAST: a question
+#: added after it made the old last section look moved (feature 271 batch 2, water 280)
+_TRAILER = re.compile(r'\s*<section class="citations">.*\Z', re.S)
 
 
 def unnumbered(body: str | None) -> str | None:
     """A section's body with its footnote NUMBERS taken out. The assembly numbers a page's notes in order, so a note
     added to an earlier question renumbers every later section and made each look moved: feature 271's first batch
     named fourteen modals whose sections nobody had touched (homesteads 210-218, urban-features 150 and 170). A note's
-    text lives on the citations page and was never in this body; what the number carried was only its order."""
-    return None if body is None else _FN.sub(r'<sup class="fn"><a href="\1"></a></sup>', body)
+    text lives on the citations page and was never in this body; what the number carried was only its order. A note cited twice is numbered `fnref-84-2` the second time, and the
+    page's closing citations pointer rides on its last section; neither is the section's content either."""
+    return None if body is None else _TRAILER.sub("", _FN.sub(r'<sup class="fn"><a href="\1"></a></sup>', body))
 
 
 def moved_anchors(root: Path, base: str, sources) -> set[str]:  # noqa: ANN001
