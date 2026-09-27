@@ -17,12 +17,12 @@ class FishPond(Kind):
 
     Why: A dike-pond is dug where the ground was low and flood-prone: the digging drains the hollow and the spoil
     raises the dike, so the landscape was made cell by cell by the households that farmed it, over
-    centuries. Each pond is fed and drained through a sluice in its dike, plumbed inlet-high and outlet-low,
+    centuries. Each pond is fed and drained through a sluice in its dike, plumbed inlet-high and outlet-low where the ground slopes,
     and is drained two or three times a year to dredge the mud onto the dikes. The ponds here are about 4 mu of water each - a
     little over a quarter of a hectare, SMALLER than the 0.4 to 0.6 hectares the surveys of the traditional
     landscape report, because this is a hamlet and a hamlet's ponds are small.
 
-    Note: The form and the loop are read. The pond sizes drawn here are a hamlet's own, deliberately below the
+    Note: The form and the loop are read, save the inlet-high, outlet-low plumbing, which rests on a monograph with no publicly readable copy. The pond sizes drawn here are a hamlet's own, deliberately below the
     band those surveys report - and that band is 20th-century rather than Ming or Qing, and reaches this
     record only at second hand, through a summary of a monograph with no publicly readable copy. The ratio
     behind the split is contested in its ORDER too: the classic prescription survives as six parts dike to
@@ -101,9 +101,10 @@ class PondCanal(Kind):
     gates that open onto it - some take only feeds, some only drains, some both - and the ring drain around the block
     takes everything to the outfall.
 
-    Note: That the canals are a conveyance-and-drainage network the ponds exchange water with is documented; which pond's
+    Note: That the canals are a conveyance-and-drainage network the ponds exchange water with is documented; that each pond takes water in high and lets it out low, the whole net running in series from a high intake to a low outfall, is Ruddle & Zhong's (1988) finding, which this project has not read, as no copy is publicly readable; which pond's
     gate opens onto which canal follows this map's own rule - water in on each pond's high side, out on its low side - not a
-    surveyed plan.
+    surveyed plan. The ring drain around the block is this map's own layout, borrowed from the rice polder's inner ring
+    canal: no source the record cites describes a ring drain on a dike-pond.
 
     Caveat: which pond's gate opens onto which canal follows this map's own rule - water in on each pond's high side, out on its
     low side - not a surveyed plan.
@@ -128,10 +129,9 @@ class PondSluice(Kind):
     the cut in the dike; the boards themselves are a few inches wide and are not drawn at this scale.
 
     Note: The sluice's form is documented in the FAO pond-construction manual; its position on each pond follows the
-    record's rule - water in on the pond's high side, out on its low side - not a surveyed plan.
+    record's rule - water in on the pond's high side, out on its low side - which the record takes from Ruddle & Zhong (1988), a book with no readable copy that this project has not read; it is not a surveyed plan.
 
-    Caveat: its position on each pond follows the record's rule - water in on the pond's high side, out on its low side - not a
-    surveyed plan.
+    Caveat: its position on each pond follows the record's rule - water in on the pond's high side, out on its low side - which the record takes from Ruddle & Zhong (1988), a book with no readable copy that this project has not read; it is not a surveyed plan.
 
     Name: pond sluice
     Covers: the short channel stubs of `dikepond_sluices` - where each pond's dike is cut to the canal
@@ -370,10 +370,9 @@ class SluiceGate(Kind):
     wooden boards to set the level, and it is why the dike can be complete and the block still fed and
     drained.
 
-    Note: The form is read from the FAO pond-construction manual; the 6 x 3 ft bar is drawn at the size of a board
-    set, a glyph the record does not measure.
+    Note: The form is read from the FAO pond-construction manual; the inlet-high, outfall-low placement comes from Ruddle & Zhong (1988), which has no readable copy and is not read; the 6 x 3 ft bar is drawn at the size of a whole board set, which the record does not measure; the FAO manual caps the opening itself at 0.80 m, less than half the bar.
 
-    Caveat: the 6 x 3 ft bar is drawn at the size of a board set, a glyph the record does not measure.
+    Caveat: the 6 x 3 ft bar is drawn at the size of a whole board set, which the record does not measure; the FAO manual caps the opening itself at 0.80 m, less than half the bar.
 
     Name: sluice gate
     Covers: the board bar of every `sluice_gates[]` record - the gate in each cut of the perimeter dike

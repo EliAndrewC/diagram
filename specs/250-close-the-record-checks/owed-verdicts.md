@@ -12,3 +12,8 @@
 - ManureHeap (homesteads SECTION=210): IN-STEP - the buried jar or plastered pit, the pigsty-privy cluster and the guessed place and size still hold
 - Persimmon (homesteads SECTION=210): IN-STEP - the persimmon findings moved to their own question, and 210's count and guess labels agree
 - Privy (homesteads SECTION=210): REWRITTEN - Sugiura's 0.87 is a rate per household, and two seats are read while the back door and gate are a GUESS on no page read; re-check IN-STEP
+- FishPond (archetypes SECTION=150): REWRITTEN - inlet-high, outlet-low plumbing narrowed to sloping ground and the Note says it rests on Ruddle & Zhong, unread; re-check IN-STEP
+- PerimeterDike (archetypes SECTION=160): IN-STEP - full enclosure and the flood-stage floor still hold; the `shen-kuo` Sources tag (160 now calls that quotation unsourced) is a registry question left for the close
+- PondCanal (archetypes SECTION=150): LABELED - the Note credits the in-series plumbing to Ruddle & Zhong, unread; the re-check found the ring drain unsupported by 150 or 110 (110 is the rice polder's), now labeled in the Note as this map's own layout
+- PondSluice (archetypes SECTION=150): REWRITTEN - the Note and Caveat say the high-in, low-out rule comes from Ruddle & Zhong, unread; re-check IN-STEP (it flags "a few inches wide" boards as an unsupported, unchanged number)
+- SluiceGate (archetypes SECTION=150): REWRITTEN - the Note credits the placement to Ruddle & Zhong, unread (160 has no source of its own for it), and discloses FAO's 0.80 m opening cap against the 6 ft bar; re-check IN-STEP
