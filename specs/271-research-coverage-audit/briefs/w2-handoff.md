@@ -31,9 +31,8 @@ No record checks were run (quote-check, record-format, source-applicability are 
 - KEY=nikko-suginamiki-jawiki
 - KEY=thepaper-road-trees
 - KEY=yidao-zhwiki
-- KEY=mlit-gokaido-seibi
 
-Existing keys newly cited on these pages: shukuba-jawiki, jokamachi-jawiki, roji-jawiki, dobashi-jawiki, l7r-budgets (canon).
+Existing keys newly cited on these pages: mlit-kinsei-michi-gokaido (W1's entry for the same MLIT page, notes -4 to -7; the duplicate key I first reserved, mlit-gokaido-seibi, was deleted at the sync-in merge), shukuba-jawiki, jokamachi-jawiki, roji-jawiki, dobashi-jawiki, l7r-budgets (canon).
 Glossary: new term `dobu` (13340); `masugata` (3980) widened to cover the post town's crank as well as the castle gate court.
 
 ## Items
@@ -48,7 +47,7 @@ Glossary: new term `dobu` (13340); `masugata` (3980) widened to cover the post t
 
 ## Open, and owed to others
 
-- **Held keys and terms in other clones (not on main when written):** `jarimichi-jawiki` and `ichirizuka-jawiki` (and glossary `ichirizuka`) are reserved in diagram-research-3 (W1); glossary `mitsuke` in diagram-research-4; glossary `honjin` and a different MLIT page `mlit-kinsei-michi` in diagram-buildings. I did not cite the held keys, to keep this clone's record green; `honjin` and `mitsuke` are used in the prose and will take their tooltips when those land. Once W1 lands: ways/170's surface paragraph should point at W1's ways/100 (lane surface; `jarimichi-jawiki` says roads were trodden earth and gravel was for main roads), and ways/210 may cite `ichirizuka-jawiki` for the mound's size and tree (note its 1 jo = "about 1.7 m" is wrong; 1 jo is about 3 m, as the zh page says).
+- **Keys and terms from other groups:** `jarimichi-jawiki` and `ichirizuka-jawiki` (W1) were held in another clone while I wrote; batch 1 has since landed and was merged into this clone at a sync-in (the derived pages regenerated; specs/250 owed-verdicts.md union-resolved), so they and the glossary terms `ichirizuka` and `mitsuke` are here now; `honjin` is still held in diagram-buildings and will tooltip when it lands. I did not cite the two W1 keys. For the check session: ways/170's surface paragraph should point at W1's ways/100 (lane surface; `jarimichi-jawiki` says roads were trodden earth and gravel was for main roads), and ways/210 may cite `ichirizuka-jawiki` for the mound's size and tree (note its 1 jo = "about 1.7 m" is wrong; 1 jo is about 3 m, as the zh page says).
 - **To 269 (cities/fabric 080, B40):** its "unpaved gravel or plank rests on general reading" for the city alleys can now cite `roji-jawiki` (boards over a 6-7 sun ditch down a 3-6 shaku alley) - the same notes as urban-features/110. Nothing else owed: fabric 030/070/080 and hinterland 040 are linked, not edited.
 - **Source cautions for source-applicability:** `netease-city-street-widths` is self-published and unsourced (hedged in prose); `dobashi-jawiki` and `yidao-zhwiki` carry unsourced-article tags; the MLIT page dates the milestone order 1605 where the ichirizuka article says 1604.
 - **Tooling:** `scripts/_source_pages.py` numbered a third save past the manifest's row count, which falls behind the files on disk after a retried failure, and overwrote two saved pages; fixed to number past the highest file on disk, with a test (committed separately, `271 W2: make source-pages ...`).

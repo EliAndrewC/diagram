@@ -385,9 +385,9 @@ class ApproachRoad(Kind):
     Why: A magistrate's manor stands at the edge of the settlement it administers, and its gate faces what it
     fronts - the town, or the road it sits beside - opening onto the roadbed; where a manor fronts a road at
     an angle, the whole compound turns so its front wall runs parallel to the way. So a road always arrives at
-    the main gate. In a planned Chinese town a main avenue ran from the principal gate to the government
-    office, though for an ordinary county seat that axis is a guess, and in neither Japan nor China was a
-    country lane a wide road.
+    the main gate. A planned Chinese capital was a grid of avenues keyed to its gates, and a county seat's
+    streets linked its gates, but a main avenue running from the principal gate to the government office is a
+    guess, found on no page read, and in neither Japan nor China was a country lane a wide road.
 
     Note: The record read gives only a south-facing gate for a Chinese county office. That the manor stands at
     the edge of its town and opens its gate onto the road it fronts is this project's own siting, set against

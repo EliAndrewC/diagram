@@ -2,7 +2,7 @@
 
 You are a FRESH session for one part of feature 271. This brief is the whole of what you need; do not read the
 feature's spec or plan to orient - everything you read stays in your context and is paid for again on every later
-turn. Work in this clone (`/diagram/.clones/diagram-research`); the project's CLAUDE.md files apply to you, the research record's
+turn. Work in this clone (`/diagram/.clones/diagram-research-1`); the project's CLAUDE.md files apply to you, the research record's
 `CLAUDE.md` above all (it auto-loads when you read a research file).
 
 **Read narrowly.** For a few notes of a question use `make notes PAGE=<page> SECTION=<NNN> KEYS=<key,key>` (in

@@ -356,19 +356,23 @@ Also edits 040, 210.
 
 ## G1 - buildings: the magistracy's buildings (new: buildings 700-750)
 
-Also edits buildings/060, 080, 090, 160, 180.
+Also edits buildings/060, 080, 090, 160 (NOT 180 - 267's, still open).
 
 - D04 **Building hierarchy**: do the compound's buildings rank in size (office hall, residence, barracks, stable), and
   is there a readable source for it? (buildings/180, 1 cited, 5 absence). M. P1.
+  > COORDINATION (D04): 267 edited buildings 180 (the hierarchy; Matsue's 67 tsubo for 500-1,000 koku, Matsushiro 150 koku ~49 tsubo - R15; stalls R16) and is still open - write D04 as a NEW question citing 180 and do not edit 180
 - D05 **Office hall size**: how long and deep was a county office hall (the 80-150 by 20-45 ft band is the project's
   reading)? (buildings/090, 180). M. P1.
+  > COORDINATION (D05): not answered by 267; cite its R20/R21 (the clerks' room and seats in the hall)
 - D11 **Tax archive**: how big was a records kura or strongroom at an office (the 32-36 ft is the vocabulary's)?
   (buildings/160). S. P1.
 - D13 B82 C47 **Tax-rice granary**: how big was an office's grain kura (drawn 43-50 by 25-27 ft) and how many per
   posting; where does a county seat keep its tax rice (in the compound, or a storehouse row in a rice-transit town);
   and how big is a provincial city's granary, how many buildings, and where (the governor's compound, the wharf, a
   gate)? (buildings/080, 150; towns/110; cities/capitals/090, 360). M. P1.
+  > COORDINATION (D13): 267's R18 is a KNOB on the raised grain-kura floor and silent on size - the size is ours; cite R18
 - D15 **Barracks size**: how big was the working platoon's nagaya (the band is a guess)? (buildings/060). S. P1.
+  > COORDINATION (D15): keep to the magistracy platoon's nagaya on buildings 060; the CITY servant nagaya is 269's B39 (cities/government) - do not write it
 
 ## G2 - buildings: houses and halls as buildings (new: buildings 760-810)
 
@@ -377,8 +381,10 @@ Also edits buildings/060, 080, 090, 160, 180.
   house (a knob), and its size? (buildings/010, compound interiors only). M. P1.
 - D133 **Samurai country manor**: how big is one (~1 acre), and what does it hold (house, kura, gate, grove, fields)?
   (cities/capitals/100, in passing). M. P1.
+  > COORDINATION (D133): cite 267's R15 (house size by koku), R16 (stable), R17 (vegetable garden ~1 se), R09 (bath, yudono only at upper rank) - the manor as a whole is ours
 - C141 D143 **Dojo as a building**: how big was a dojo's floor, hall and yard (raised board floor, spectator gallery,
   shrine shelf; the state drill hall), and what does it look like from above? (buildings/210, absence notes). M. P1.
+  > COORDINATION (C141): 267's R34 (striking posts and weapon rack as objects) - cite it; the building is ours
 - D110 **Merchant house as a plan**: shop front, doma passage, living rooms, rear court, kura - one or two stories?
   (towns/030, form only). M. P3.
 - D136 **Inn as a plan**: guest rooms, kitchen, bath, stable yard, Japan against China? (none). M. P3.
@@ -388,8 +394,10 @@ Also edits buildings/060, 080, 090, 160, 180.
 Also edits cities/fabric/100, 130.
 
 - C91 **Block size**: how big is a city block (chō, the Chinese fang), and how many lots does it hold? (none). M. P1.
+  > COORDINATION (C91): cite 269's cities/fabric 070 street grid (B40), once written
 - C102 **Wards**: what is a ward as a unit - its size, its headman, its gate - and how many does a city have?
   (cities/capitals/060, the gates only). M. P1.
+  > COORDINATION (C102): take the ward as a unit; cite 269's cities/government 085 (B39) for the ward gates, once written
 - B28 D117 D118 **Merchant estates**: how big is a rich merchant's house or walled compound in a town and a city, how
   many kura and what gate, as a footprint and a plan, how many per town of 1,200, and where may its wall stand?
   (cities/fabric/090, 100, 1 note, 1 absence). M. P1.
@@ -398,12 +406,14 @@ Also edits cities/fabric/100, 130.
   urban-features/030; 267's urban-features/210). M. P1.
 - C172 **In-wall farmers**: who works the fields inside a city's wall, and where do they live, given a city has no
   farmer households? (cities/hinterland/050, settlements/090). S. P1.
+  > COORDINATION (C172): keep to who farms inside the wall and where they live; cite 269's cities/hinterland 030 and cities/sizing 010 (B41), once written
 
 ## K2 - cities/government: the governor, the ministries and the urban magistracies (new: cities/government 200-270)
 
 - C27 D125 **Governor's compound size**: how big is a provincial governor's compound in absolute terms (acres,
   frontage, depth; "a whole city block" is the page's reading) - a Chinese prefectural yamen against a domain jin'ya
   or castle-town office? (cities/government/010). M. P1.
+  > COORDINATION (C27): cite 267's R19 (gatehouse), R20/R21 (clerks' room and seats), R22 (hearing-court surface), R26 (main gate width); the governor's compound as a city institution is ours
 - C28 D126 **Inside the governor's compound**: gate, office halls, courtroom, residence, treasury, granary, jail,
   shrine - in what order and at what sizes, and how does it scale from the county magistracy? (buildings/010-230, a
   county compound). L. P1.
@@ -414,6 +424,7 @@ Also edits cities/fabric/100, 130.
 - C38 **The gate watch**: where does it stand? (cities/government/060, 1 note). S. P1.
 - C33 **City jail**: inside the governor's compound or a separate prison, how big and where? (buildings/040,
   cities/government/010). M. P4.
+  > COORDINATION (C33): cite 267's R24 (cell size)
 - C34 D45 **Urban magistracies**: did a city keep a separate town magistrate's office (machi-bugyōsho) and constables'
   quarters, and how do the capital-stationed Imperial, Clan and Family magistrates' urban compounds differ from a
   county one (yoriki rooms, staff living out) in size and program? (none; programs.md knob 1). M. P4.
@@ -424,13 +435,17 @@ Also edits cities/fabric/100, 130.
   and a city (tsubo granted per stipend, frontage, house size; the senior staff officer's, yoriki-rank, house), fenced
   or walled, and where against the manor? (cities/capitals/100, buildings/180; 267's buildings/380 is the 67-tsubo
   house, and 269 B39's government/030 the count - cite both). M. P1.
+  > COORDINATION (B36): ours: the house by rank; where the samurai quarter sits and the samurai count are 269's cities/government 030/080 (B39) - cite them once written
 - C75 **Samurai house from above**: the long-house gate (nagayamon), hedge or plastered wall, garden, kitchen yard?
   (none). M. P1.
+  > COORDINATION (C75): cite 267's R26 and R19
 - C76 **Samurai house well**: did a samurai house have its own well? (urban-features/120; the bath is 267's R09). S. P1.
 - C43 **Garrison**: where does a provincial city's garrison live and muster, and is there a barracks or armory
   outside the castle? (cities/government/085 is 269 B39's; cities/capitals/360). M. P1.
+  > COORDINATION (C43): ours: the garrison barracks and armory as places; ashigaru plots and training as a practice are 269's cities/government 050/070 (B39) - cite them
 - C44 **Drill ground**: how large was a city's drill or muster ground, and where? (cities/sizing/020, a calibration).
   S. P1.
+  > COORDINATION (C44): ours: the drill, archery and riding grounds as places; training as a practice is 269's cities/government 050/070 - cite them
 - C142 **Archery and riding grounds**: did a castle town keep an archery range or a riding ground (baba), how long, and
   where? (none). M. P4.
 
@@ -439,16 +454,22 @@ Also edits cities/fabric/100, 130.
 - B07 C03 **Rampart in section**: how high and thick is a county town's and a provincial city's rampart, rammed earth,
   stone- or brick-faced or a Japanese earthwork (dorui, sōgamae), with what parapet, how many gates, and what of it
   shows from above? (towns/100; cities/capitals/150, 155; cities/defenses/060, 269 B38's - cite it). M. P1.
+  > COORDINATION (C03): new question; cite 269's cities/defenses 020-090 (B38) for the city figures
 - B08 **Town gate**: a gatehouse or a tower over the opening, its footprint and opening width, at a walled county town?
   (cities/defenses/030, 040 are the city's, 269 B38's). M. P1.
+  > COORDINATION (B08): take the TOWN side; cite 269's cities/defenses 020/040/050/080/090 (B38) for the city figures
 - C09 **Barbican**: did a provincial gate have a barbican (wengcheng) or a Japanese masugata, how large, and how
   common? (cities/defenses/050, names it). M. P1.
+  > COORDINATION (C09): new question; cite 269's cities/defenses 020 (B38)
 - C17 **Moat crossing**: fixed timber bridge, earthen causeway, stone bridge, drawbridge - how does a road cross the
   moat at a city gate, and how wide and long? (cities/capitals/240 is the castle's gates only). M. P1.
+  > COORDINATION (C17): new question; cite 269's cities/defenses 040 (moat depth, B38)
 - B09 **Town moat**: did a walled county town carry a moat or ditch, and how wide? (water/110, 120 are city moats).
   S. P3.
+  > COORDINATION (B09): town side only; cite 269's cities/defenses 020/040/050/080/090 (B38) for the city
 - B77 **Town inspection post**: did a town on a road keep a barrier or inspection post, and what did it look like?
   (urban-features/140; the city's is 269 B38's). S. P3.
+  > COORDINATION (B77): town side only; cite 269's cities/defenses 050 (B38) for the city
 
 ## K5 - cities/capitals: granaries, brokers, the castle and the lineages (new: cities/capitals 400-450)
 
@@ -485,6 +506,7 @@ Also edits 200, 333.
   P1.
 - B130 **Town landing**: does a town on a river keep a landing, and in what form? (cities/river-cities/040, city;
   ways/040). S. P3.
+  > COORDINATION (B130): cite 267's R40-R42 (river guard post, boatmen's altar, gangi landings on river-cities 050-080)
 - C107 **Fish and produce market at the landing**: did a city keep one, and what did it look like? (none). S. P4.
 
 ## U4 - urban-features: the village's trades and public buildings (new: urban-features 430-490)
@@ -497,9 +519,11 @@ Also edits 200, 333.
 - A145 D104 **Village granary**: the tax-rice gokura, the relief granaries (gisō, shasō), China's charity granary -
   did a village keep a communal granary, how many, how big, and where? (cities/fabric/143, buildings/080, in passing).
   M. P2.
+  > COORDINATION (A145): cite 267's R18 (the raised grain-kura floor)
 - A151 D145 B88 C143 **Schools below the capital**: where were village and town children taught to read (a temple
   school, terakoya; the headman's house; a Chinese county school, sishu), how many did a city hold, and were they
   distinct buildings? (none; cities/capitals/190 is the domain school). M. P2.
+  > COORDINATION (A151): schools often at a temple touch 272's village temple (R3) - cite religion-and-death 510 (the village temple's precinct) and 500 (how common a village temple was), in diagram-shrines-2 until 272 lands
 - A152 **Village fire watch**: a fire bell on a ladder (hanshō), a watch hut, a fire-water pond - did a village keep
   them, and where? (towns/070, the town's tower). S. P2.
 - A153 **Village watch**: did a village keep a watch hut (bansho) or a night watch, and where? (none). S. P2.
@@ -529,6 +553,7 @@ Also edits 200, 333.
   hall), and where? (none). M. P3.
 - B40 C100 B64 **Privies and night soil**: where are a town house's and a city tenement's privy and cesspit, who
   collected the night soil (owaiya), and does it mark the map? (buildings/220, cities/fabric/110). M. P3.
+  > COORDINATION (B40): the farmstead privy is 269's B10 (homesteads 210-218) - cite it; the town and city privy is ours
 - B39 **Town house gardens**: did a town house keep a garden (tsubo-niwa, a rear plot, Chinese courtyard planting),
   and how big? (none). S. P3.
 
@@ -587,30 +612,30 @@ rows EDIT an existing section syncs from main first, since 269's and 267's edits
 
 | group | rows | state |
 |---|---|---|
-| V1 | 5 | checked (queue 1) |
-| V2 | 5 | checking (queue 1) |
+| V1 | 5 | landed (batch 1) |
+| V2 | 5 | landed (batch 1) |
 | V3 | 5 | checked (queue 2) |
-| V4 | 5 | writing, resumed (queue 2) |
-| V5 | 5 | queued (queue 2) |
-| V6 | 4 | checked (queue 3) |
-| V7 | 6 | queued (queue 1) |
-| W1 | 5 | checking (queue 3) |
-| U1 | 6 | queued (queue 3) |
-| R1 | 4 | todo |
-| T1 | 6 | checked (queue 4) |
-| T2 | 6 | checking (queue 4) |
-| T3 | 5 | checked (queue 5) |
-| T4 | 5 | checking (queue 5) |
-| W2 | 7 | todo |
+| V4 | 5 | checked (queue 2) |
+| V5 | 5 | writing (queue 2) |
+| V6 | 4 | landed (batch 1) |
+| V7 | 6 | landed (batch 1) |
+| W1 | 5 | landed (batch 1) |
+| U1 | 6 | landed (batch 1) |
+| R1 | 4 | checking (queue 5) |
+| T1 | 6 | landed (batch 1) |
+| T2 | 6 | landed (batch 1) |
+| T3 | 5 | landed (batch 1) |
+| T4 | 5 | landed (batch 1) |
+| W2 | 7 | queued (queue 5) |
 | U2 | 6 | todo |
 | U3 | 5 | todo |
 | R2 | 4 | taken by Diagram shrines (2026-09-27, by agreement) |
-| G1 | 5 | todo |
-| G2 | 5 | todo |
+| G1 | 5 | checking (queue 4) |
+| G2 | 5 | queued (queue 4) |
 | K1 | 5 | todo |
-| K2 | 7 | todo |
+| K2 | 7 | writing (queue 6) |
 | K3 | 6 | todo |
-| K4 | 6 | todo |
+| K4 | 6 | queued (queue 6) |
 | K5 | 5 | todo |
 | K6 | 4 | todo |
 | K7 | 4 | todo |

@@ -1,0 +1,8 @@
+{
+ "term": "unconfined groundwater",
+ "def": "Groundwater with no watertight layer sealed above it, so its top is the open water table itself - where that table lies shallow, a plain dug well reaches it.",
+ "variants": [
+  "unconfined groundwater",
+  "unconfined"
+ ]
+}
