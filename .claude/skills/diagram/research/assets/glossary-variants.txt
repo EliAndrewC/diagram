@@ -192,6 +192,10 @@ corvee	corvee
 corvée	corvee
 county seat	county seat
 county seats	county seat
+coursed	coursing
+courses	coursing
+coursing	coursing
+coursing line	coursing
 crenelated	crenellated
 crenellated	crenellated
 crib	cribbing
@@ -508,6 +512,7 @@ hinoki	hinoki
 hinomi-yagura	hinomi-yagura
 hipposandal	hipposandal
 hipposandals	hipposandal
+hiro	hiro
 hirokoji	hirokoji
 hitoyado	hitoyado
 hiyokechi	hiyokechi

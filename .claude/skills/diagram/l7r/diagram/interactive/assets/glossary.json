@@ -5599,5 +5599,20 @@
    "zone of separated flow",
    "separated flow"
   ]
+ },
+ "coursing": {
+  "def": "In masonry, the laying of stone in level horizontal rows (courses); a coursing line is the joint running along between two rows.",
+  "variants": [
+   "coursing",
+   "coursing line",
+   "courses",
+   "coursed"
+  ]
+ },
+ "hiro": {
+  "def": "A Japanese length of about 1.8 m (six shaku), the span of outstretched arms; used for the lengths of boats and rope.",
+  "variants": [
+   "hiro"
+  ]
  }
 }
