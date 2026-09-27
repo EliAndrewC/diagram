@@ -461,6 +461,8 @@ fortune	Fortune
 four books	Four Books and Five Classics
 four books and five classics	Four Books and Five Classics
 four gods	four gods
+four trees	four trees
+four trees and three grasses	four trees
 four-gods formulation	four gods
 frass	frass
 freeboard	freeboard
@@ -615,6 +617,7 @@ honden	honden
 hongo	hongo
 honmaru	honmaru
 honmune-zukuri	honmune-zukuri
+hoonoki	hoonoki
 horinouchi	horinouchi
 horinouchi's	horinouchi
 horse-face	mamian
@@ -729,6 +732,7 @@ jōsui ido	josui-ido
 kabata	kabata
 kabu-ido	kabu-ido
 kachi	doshin
+kaei	Kaei
 kagura	kagura
 kaie-ji	Kaie-ji
 kaie-ji's	Kaie-ji
@@ -1275,6 +1279,7 @@ shell keep	shell keep
 shell keeps	shell keep
 shi	shi
 shibai-goya	shibai-goya
+shiboku sanso	four trees
 shichiya	shichiya
 shijin soo	four gods
 shijin-soo	four gods
@@ -1646,6 +1651,7 @@ zuku	zuku
 ōkaji	ōkaji
 ōkajiba	ōkaji
 ほ場整備	hojo seibi
+ホオノキ	hoonoki
 合掌造り	gassho
 圃場整備	hojo seibi
 土地庙	tudi miao

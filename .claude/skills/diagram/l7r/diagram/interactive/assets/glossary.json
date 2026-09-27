@@ -6487,5 +6487,26 @@
    "keihan-cha",
    "bund tea"
   ]
+ },
+ "Kaei": {
+  "def": "A Japanese era name covering 1848 to early 1855, which documents use to date a year; Kaei 7 is 1854.",
+  "variants": [
+   "Kaei"
+  ]
+ },
+ "hoonoki": {
+  "def": "The Japanese bigleaf magnolia (Magnolia obovata), a tall deciduous tree with very large leaves; one of the commonest trees in the homestead groves of Isawa in the north.",
+  "variants": [
+   "hoonoki",
+   "ホオノキ"
+  ]
+ },
+ "four trees": {
+  "def": "The four tree crops of the early-modern period - tea, mulberry, lacquer and paper mulberry - grown in fields for sale and processing. The shogunate restricted where they could be planted, and from the middle of the period they were grown as local specialties.",
+  "variants": [
+   "four trees",
+   "four trees and three grasses",
+   "shiboku sanso"
+  ]
  }
 }
