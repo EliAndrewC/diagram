@@ -491,6 +491,29 @@ But if we do turn up anything else then we can keep iterating."*
    (as `fields` had four), nothing over the cap. Compared in R11 with R6 to R10, per thing checked, saying whether the
    excerpt acted (whether any source was long) and what else, if anything, the round turns up.
 
+### D20 - The close: the remaining research moves to feature 265, and this feature lands (GM 2026-09-27)
+
+The GM: *"If there are no other suggested changes after this round, then go ahead and move the remaining research
+tasks into a new feature so that we can close this feature out. I want other sessions to be able to do research on
+different things ... So for that to work I want our research process improvements to land on main."* R11 recommended
+no further process change.
+
+1. **Moved to feature 265** (`specs/265-finish-the-record-checks/`, its requirements 250's own, carried verbatim):
+   T19 (FR-002 and FR-006 for the pages not yet worked - `towns`, `cities/river-cities`, `buildings`,
+   `urban-features`, `ways`), T20 to T22 (the sweeps, FR-003 to FR-005) and T24 (the download list, FR-008).
+2. **Stays here, because it lands with this push**: T23 - every `_entry_owed.py` pair the record changes of THIS
+   feature created is answered before the push, since `entry-gate.sh` judges the delta being pushed. The 23 owed
+   modals (homesteads 14, archetypes 5, fields 3, water 1; observed 2026-09-27, method: `brief.py owed_modals`) are
+   checked by five modal-only sessions (`brief.py owed`, packed by load under `GROUP_BYTES`): `entry-drift` per
+   modal, fixes by `make apply-edits`, one re-check round, each verdict appended to `owed-verdicts.md`. A modal
+   REWRITTEN leaves the list by itself; one found IN-STEP stays on it (only a rewrite clears a pair), and the push
+   discharges exactly those with one `ENTRY_DRIFT_OK` whose reason cites `owed-verdicts.md` - the gate's documented
+   use (a recorded reason covering pairs in which no finding moved).
+3. **T17** is verified and ticked rather than moved: `measure/assertions.py` exists and `brief.py` has derived every
+   page's FR-002 list from it since D7.
+4. **T25, the close**: the closing report, `make page-check` (one session reported two or three browser tests
+   failing - answered before the push, measured against main), `make done`, and `scripts/sync-with-main.sh done`.
+
 ## Phases
 
 0. Baseline and the meter (T01, T02).

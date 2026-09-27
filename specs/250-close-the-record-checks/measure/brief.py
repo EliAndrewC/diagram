@@ -477,6 +477,51 @@ def _then(briefs: pathlib.Path, name: str, verb: str, page: str, task: str, why:
     return step
 
 
+OWED = """# Brief - feature 250, T23: the map modals still owed an `entry-drift` on `{page}`, group {n} of {of}
+
+You are a FRESH session with one job: check the map modals below against the research questions they were written
+from, and bring each back in step. Work in this clone (`{clone}`); the project's CLAUDE.md files still apply to you.
+Read narrowly - you need no question's whole text; the agents read the bundles.
+
+**Measure.** Before each numbered step: `python3 specs/250-close-the-record-checks/measure/tokens.py mark "owed {page} {n} <step>" --marks {marks}`
+
+**Your modals:** {modals}
+
+1. **Check, all in one message, in the background.** For each modal:
+   `make check-bundle PAGE={page} SECTION=<its NNN> NO_QUOTES=1 FOR=entry-drift KIND=<its class>` (in
+   `.claude/skills/diagram`) and one `entry-drift` naming its MANIFEST.
+2. **Apply each report with ONE command**: `make apply-edits FROM=<the output_file its dispatch printed>`; the refused
+   blocks and any `EDIT: none` finding by hand, all in ONE message of parallel `Edit` calls.
+3. **Re-check ONCE, only what moved**: one `entry-drift` on each rewritten modal's bundle again; a drift left after it
+   is labeled honestly in the modal's `Note:`, not checked a third time.
+4. **Record the verdicts.** Append one line per modal to `specs/250-close-the-record-checks/owed-verdicts.md`:
+   `- <class> (<page> SECTION=<NNN>): IN-STEP | REWRITTEN | LABELED - <one clause>`. A modal found IN-STEP stays on
+   `_entry_owed.py`'s list (only a rewrite clears it), and the push discharges exactly those lines.
+5. In `.claude/skills/diagram`: `make test-file FILE="tests/interactive/test_classes.py tests/interactive/test_classes_docstrings.py"`;
+   commit naming your modals. Do NOT tick, do NOT push. Report in one paragraph: each modal's verdict.
+"""
+
+
+def owed_briefs(page: str, task: str) -> int:
+    """T23 (D20): the page's owed modals, packed by load into groups, each a brief; printed one path a line."""
+    slug = page.replace("/", "-")
+    load = {cls: prose + MODAL_WORK for cls, prose, _secs in owed_modals(page)}
+    home = {cls: secs[0] for cls, _p, secs in owed_modals(page)}
+    if not load:
+        print(f"brief: nothing is owed on {page}", file=sys.stderr)
+        return 2
+    bins: list[list[str]] = []
+    for cls in sorted(load, key=lambda c: (-load[c], c)):
+        b = next((b for b in bins if sum(load[x] for x in b) + load[cls] <= GROUP_BYTES), None)
+        (b.append(cls) if b is not None else bins.append([cls]))
+    for n, group in enumerate(bins, 1):
+        out = FEATURE / "briefs" / f"owed-{slug}-{n}.md"
+        out.write_text(OWED.format(page=page, n=n, of=len(bins), clone=CLONE, marks=(HERE / f"marks-owed-{slug}.json").relative_to(CLONE),
+                                   modals=", ".join(f"KIND={c} (SECTION={home[c]})" for c in sorted(group))), encoding="utf-8")
+        print(out)
+    return 0
+
+
 def main(argv: list[str]) -> int:
     if len(argv) == 3 and argv[0] == "split":
         return split_brief(argv[1], argv[2])
@@ -484,6 +529,8 @@ def main(argv: list[str]) -> int:
         return checks(argv[1], argv[2])
     if len(argv) == 3 and argv[0] == "write":
         return write_brief(argv[1], argv[2])
+    if len(argv) == 3 and argv[0] == "owed":
+        return owed_briefs(argv[1], argv[2])
     if len(argv) != 2:
         print("usage: brief.py <page> <task>  |  brief.py write|checks <page> <task>  |  brief.py split <page> <NNN>", file=sys.stderr)
         return 2

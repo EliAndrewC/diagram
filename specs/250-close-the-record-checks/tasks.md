@@ -278,8 +278,9 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
       verify: DONE. water closed: group 2c entry-drift on DrainageDitch (260) and Weir (250) - both DRIFTED, 5 edits applied by apply-edits (0 refused), the DrainageDitch Caveat rewritten by hand as a verbatim slice of its Note; re-check: DrainageDitch IN-STEP, Weir one further sentence (the slant's reason ranked as the source ranks it) applied; FR-006 worklist 42 bare items, FOOTNOTED 34, NOT-LOCATED 3, TOO-SHORT 5; four record tests + test_classes 505 passed
-- [ ] T76 **The comparison the GM asked for** (D19): T75 against R6 to R10, recorded as R11
+- [x] T76 **The comparison the GM asked for** (D19): T75 against R6 to R10, recorded as R11
       research: rendering
+      verify: DONE. research.md R11: water 10.55 M over 10 things (1.06 M each); parts cut source-reader's read to 17,780 chars; folded owed modals checked in their own group, all fixes by command; no further process change recommended - the remaining research moves to a new feature
 
 ## Phase 2 - FR-002 and FR-006, one page per session (D7)
 
@@ -289,26 +290,13 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
       verify: DONE. homesteads: FR-002 5 items - 3 now CITATION (kyuhi-jawiki; tonami-yashikirin-haichi for the Tonami grove sides and winds; the 040 height band on kashima-kainyo-1987 + minami-2022), 2 stay ABSENCE re-searched 2026-09-26 (060 in-house well, 080 interconnected-lanes quotation) plus the 030 6-7 m ridge ABSENCE confirmed; the Tonami model-homestead remainder re-dated ABSENCE; 0 GROUNDS. FR-006 3 of 3 confirmed by grep (22 -> the-gardens-sun...-4 citation, 23 -> kikanchiiki-igune citation + -3 absence, 24 -> yashikirin-jawiki-5 citation); worklist: 45 items, 40 FOOTNOTED, 2 LOCATED (080 items 11-12, outside this brief), 3 NOT-LOCATED (22-24). New keys kyuhi-jawiki, tonami-yashikirin-haichi, kikanchiiki-igune. Agents: 1 source-reader, 3 source-applicability, 4 quote-check (2 rounds), 2 record-format; all findings applied bar the scanned PDFs (6 added to TO-DOWNLOAD 233-238) and the Kameyama NW roll (for the GM); 8 glossary terms, 6 variants.
-- [ ] T19 FR-002 and FR-006 for every other page `assertions.py` names (not `homesteads`, `vegetation`,
-      `cities/defenses`, `religion-and-death`,
-      `cities/government`, `cities/fabric`, `fields`, `archetypes`, `cities/hinterland` or `water`), one task per page, cut when T51's figures are read
-      research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
-
 ## Phase 3 - the cosmetic sweeps
 
-- [ ] T20 FR-003, the rest of the vocabulary findings and the two variants (`ochiba`, `fire-gap`)
-      research: rendering
-- [ ] T21 FR-004, the history passages into comments
-      research: rendering
-- [ ] T22 FR-005, the registry's citation lines carry English titles, one mechanical sweep
-      research: rendering
+MOVED to feature 265 (GM 2026-09-27; plan D20): T20, T21, T22 - and from Phase 2, T19; from Phase 4, T24.
 
 ## Phase 4 - the close
 
-- [ ] T23 FR-007, the checks owed by what phases 2 and 3 changed; every `_entry_owed.py` pair answered
-      research: rendering
-- [ ] T24 FR-008, the download list grown at its end
+- [ ] T23 FR-007, the checks owed by what this feature changed; every `_entry_owed.py` pair answered before the push (D20)
       research: rendering
 - [ ] T25 FR-009, the closing report; `make page-check`; the push
       research: rendering
