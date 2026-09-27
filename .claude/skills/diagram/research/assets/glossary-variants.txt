@@ -78,7 +78,6 @@ bed shear stress	bed shear stress
 bedload	bedload
 beishan mianshui	beishan mianshui
 beitang	beitang
-bell tower	gulou
 bell-and-drum tower	gulou
 benjo	kawaya
 berm	berm
@@ -330,7 +329,6 @@ draw-basins	draw-basin
 drawdown	drawdown
 dressed stone	dressed stone
 drill ground	drill ground
-drum tower	gulou
 dry run	wet run
 dry runs	wet run
 ds/m	dS/m
@@ -851,6 +849,7 @@ kusaba	kusaba
 kuwabata	Kuwabata
 kyo-machiya	machiya
 kyoho	Kyoho
+kyozo	sutra house
 kyuhi	kyuhi
 kyōhō	Kyoho
 kōsatsu	kosatsuba
@@ -1308,6 +1307,7 @@ shokuho period	Shokuho period
 shop-house	machiya
 shophouse	machiya
 shophouses	machiya
+shoro	shoro
 shoucheng lu	Shoucheng Lu
 shoulder month	shoulder month
 showa	Showa
@@ -1395,6 +1395,8 @@ superelevates	superelevation
 superelevation	superelevation
 superstructure	superstructure
 sus	Sus
+sutra house	sutra house
+sutra houses	sutra house
 suzaku avenue	Suzaku-oji
 suzaku boulevard	Suzaku-oji
 suzaku oji	Suzaku-oji
@@ -1438,6 +1440,7 @@ tax-free plot	tax-free plot
 tedai	tedai
 teikaku	teikaku
 temizuya	temizuya
+temple bell tower	shoro
 tenpo	Tenpo era
 tenpo era	Tenpo era
 tenshu	tenshu

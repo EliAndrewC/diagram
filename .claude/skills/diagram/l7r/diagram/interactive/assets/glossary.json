@@ -1699,8 +1699,6 @@
   "variants": [
    "bell-and-drum tower",
    "zhonggulou",
-   "drum tower",
-   "bell tower",
    "gulou",
    "zhonglou",
    "qiaolou"
@@ -6515,6 +6513,21 @@
   "variants": [
    "dharma hall",
    "dharma halls"
+  ]
+ },
+ "sutra house": {
+  "def": "The temple building that stores its scriptures, the sutras; in the Nara-period plan it stood facing the bell tower across the precinct.",
+  "variants": [
+   "sutra house",
+   "sutra houses",
+   "kyozo"
+  ]
+ },
+ "shoro": {
+  "def": "A temple's own bell tower, the building where its great bell hangs; one of the halls of the old full temple plan, and apart from a Chinese town's civic bell-and-drum tower.",
+  "variants": [
+   "shoro",
+   "temple bell tower"
   ]
  }
 }
