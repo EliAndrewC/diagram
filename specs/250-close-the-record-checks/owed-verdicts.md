@@ -38,3 +38,10 @@
 - PigSty (archetypes SECTION=170): IN-STEP - 170 only asserts pigs on the dikes and defers the detail to 171.
 - PigSty (archetypes SECTION=171): IN-STEP - 171 is 170's split-out, and every modal claim and Note label still holds.
 - PigSty (archetypes SECTION=180): REWRITTEN - Why: gained 180's manure-rate and dead-patch paragraph (too many pigs, airless water under the shed, spread by buckets and channels, not drawn); Sources gained fao-ac257e and fao-x6708e; re-check IN-STEP.
+- DuckPen (archetypes SECTION=171): REWRITTEN - the Why: now names the loop as the Pearl-delta, Chinese form the section says the map should state; re-check IN-STEP
+- DuckPen (archetypes SECTION=180): IN-STEP - manure-as-feed, the culvert clearance as a working reason and its guess label all still stand
+- FryPond (archetypes SECTION=170): IN-STEP - 170 only points to the fry question; its stale "a candidate, not drawn" pointer was corrected in the section to "attested and drawn"
+- FryPond (archetypes SECTION=172): IN-STEP - the split under the size cap moved no finding; the trade, Jiujiang, the unread century and the manual's shares still stand
+- SugarcaneDike (archetypes SECTION=170): IN-STEP - 170 only lists cane among the rolled dike crops, as the modal's one-type-per-hamlet says
+- SugarcaneDike (archetypes SECTION=173): IN-STEP - the split moved no finding; the Why:'s "late 1980s" is not in 173 but nothing there contradicts it
+- VegetableGround (archetypes SECTION=170): IN-STEP - Fei's vegetables by the houses and under the mulberry, and the converted block as the map's archetype, still stand

@@ -288,7 +288,7 @@ class DuckPen(Kind):
     the water stand clear of the pond's own culvert.
 
     Why: Fish-cum-duck ponds fence part of the dike as a dry run and part of the water as a wet run; ducks were
-    among the stock the dike-pond loop kept to manure its ponds, and the droppings feed the water the same way a
+    among the stock the Pearl-delta dike-pond loop kept to manure its ponds - a Chinese form, as the whole dike-pond hamlet is - and the droppings feed the water the same way a
     pig shed's do. The dry run stands on the same planted collar a pig shed does - two to five meters, where a
     modern manual asks five to ten of a dike carrying an animal shed, a ceiling it sets by the pigsties, piping
     and traffic the dike must bear (dike-borne traffic, on this project's reading, came with commercialization), and where a Shunde
