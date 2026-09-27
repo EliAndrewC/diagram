@@ -6453,5 +6453,25 @@
    "dispersed villages",
    "dispersed farmsteads"
   ]
+ },
+ "sanheyuan": {
+  "def": "The Chinese three-sided courtyard house: a main range with a wing projecting forward at each end, the fourth side a wall - the courtyard house with its front row left off.",
+  "variants": [
+   "sanheyuan"
+  ]
+ },
+ "chumon-zukuri": {
+  "def": "A farmhouse of northern Japan (Yamagata, Akita, Fukushima) whose front wing, projecting from the main house, holds the entrance and often the stable - an L-shaped plan like the magariya.",
+  "variants": [
+   "chumon-zukuri"
+  ]
+ },
+ "bunto house": {
+  "def": "A farmhouse built as two roofs side by side - the living rooms under one, the earth-floored work room under the other, eaves touching and a gutter between - used inside as one house.",
+  "variants": [
+   "bunto house",
+   "bunto houses",
+   "bunto type"
+  ]
  }
 }

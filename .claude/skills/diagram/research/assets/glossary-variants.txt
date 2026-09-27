@@ -114,6 +114,9 @@ bunka	Bunka
 bunka era	Bunka
 bunsei	Bunsei
 bunsuiguchi	bunsuiguchi
+bunto house	bunto house
+bunto houses	bunto house
+bunto type	bunto house
 buraku	buraku
 burakumin	burakumin
 burgage	burgage plot
@@ -171,6 +174,7 @@ chori	chori
 choriboshi	chori
 chronosequence	chronosequence
 chugen	chugen
+chumon-zukuri	chumon-zukuri
 chōzuya	temizuya
 circuit	wall circuit
 circuit's length	wall circuit
@@ -1219,6 +1223,7 @@ sand sluice	sand sluice
 sando	sando
 sangji yutang	dike-pond
 sanguan	Three Officials
+sanheyuan	sanheyuan
 sankin-kotai	alternate attendance
 sankyoson	sankyoson
 sanmai	sanmai
