@@ -377,6 +377,7 @@ fishways	fishway
 fit zoom	fit zoom
 fit-zoom	fit zoom
 five dynasties	Five Dynasties
+five watches	night watch
 five-ring pagoda	five-ring pagoda
 five-ring pagodas	five-ring pagoda
 flood stage	river stage
@@ -530,6 +531,7 @@ horse-faces	mamian
 hot shoeing	hot-shoeing
 hot-shoeing	hot-shoeing
 houlongshan	houlongshan
+hour of xu	hour of xu
 houzhaofang	houzhaofang
 hucheng he	hucheng he
 hutong	hutong
@@ -864,6 +866,8 @@ neige	neige
 nengu	nengu
 neribei	neribei
 night soil	night soil
+night watch	night watch
+night watches	night watch
 night-soil	night soil
 nightsoil	night soil
 nihonbashi	Nihonbashi
@@ -1078,6 +1082,7 @@ sento	sento
 sentō	sento
 sericulture	sericulture
 setchin	kawaya
+settlement core	settlement core
 settling basin	settling basin
 settling basins	settling basin
 seven autumn grasses	seven autumn grasses

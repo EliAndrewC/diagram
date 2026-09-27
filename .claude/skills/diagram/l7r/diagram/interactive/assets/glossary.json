@@ -5597,5 +5597,25 @@
    "staking frame",
    "staking frames"
   ]
+ },
+ "settlement core": {
+  "def": "The middle of a settlement's dwellings, the point from which a direction out of town is measured.",
+  "variants": [
+   "settlement core"
+  ]
+ },
+ "night watch": {
+  "def": "One of the five periods the night was divided into, from dusk to dawn. The drum and bell tower sounded each one, and watchmen carried it through the streets with clappers and gongs.",
+  "variants": [
+   "night watch",
+   "night watches",
+   "five watches"
+  ]
+ },
+ "hour of xu": {
+  "def": "The eleventh of the twelve two-hour periods of the traditional Chinese day, about 7 to 9 in the evening. The drum and bell towers struck it to open the night.",
+  "variants": [
+   "hour of xu"
+  ]
  }
 }
