@@ -932,6 +932,8 @@ phragmites	Phragmites
 phragmites australis	Phragmites
 phytoplankton	phytoplankton
 pig iron	pig iron
+pit rank	pit rank
+pit ranks	pit rank
 plankton	plankton
 plant association	plant association
 planted collar	planted collar
@@ -1154,6 +1156,8 @@ spiraea	Spiraea
 spread footing	footing
 spring and autumn	Spring and Autumn
 spring line	spring line
+staking frame	staking frame
+staking frames	staking frame
 steading	steading
 steadings	steading
 stem density	stem density
@@ -1413,12 +1417,14 @@ zuku	zuku
 塘泺	tanglao
 屋敷林	yashikirin
 御蔵	kura
+杖	杖
 枝打ち	edauchi
 梁間	hari-ma
 水口林	water-mouth
 清明上河図	Qingming Shanghe Tu
 畑永法	hata-ei
 百姓伝記	Hyakusho Denki
+笞	笞
 築地松	tsuijimatsu
 纤道	qiandao
 背山面水	beishan mianshui

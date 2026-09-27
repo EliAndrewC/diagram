@@ -5571,5 +5571,31 @@
   "variants": [
    "pledged land"
   ]
+ },
+ "笞": {
+  "def": "The light bamboo cane, the lightest of the Five Punishments of the Chinese legal code: a beating on the buttocks, given in court by the yamen's runners.",
+  "variants": [
+   "笞"
+  ]
+ },
+ "杖": {
+  "def": "The heavy stick, the second of the Five Punishments of the Chinese legal code: a beating with a large stick on the back, buttocks or legs, given in court by the yamen's runners.",
+  "variants": [
+   "杖"
+  ]
+ },
+ "pit rank": {
+  "def": "The row of soaking pits in a tanning yard, where hides lie in the tanning liquor. It runs along the yard's edge of water, and the number of pits sets the yard's size.",
+  "variants": [
+   "pit rank",
+   "pit ranks"
+  ]
+ },
+ "staking frame": {
+  "def": "A frame set in the shallows at a tanning yard's bank, where salted hides are held in the river to steep for several days before the hair is scraped off.",
+  "variants": [
+   "staking frame",
+   "staking frames"
+  ]
  }
 }
