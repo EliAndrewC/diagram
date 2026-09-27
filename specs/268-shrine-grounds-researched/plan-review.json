@@ -1,6 +1,6 @@
 {
  "feature": "268-shrine-grounds-researched",
- "plan_sha256": "59ee49f9be8e3848736f5c9433c9fcf7192d942b34e1f81b773a855abb8fa2c3",
+ "plan_sha256": "0e69b12c2d0bf52ca82cd612663092e6a2695b1a3fa9a0285b0054ba26d8ff2d",
  "reviewed": "2026-09-27",
  "declared": "spec-fidelity",
  "decisions": [
@@ -30,15 +30,15 @@
   },
   {
    "id": "D5",
-   "summary": "The sheet's arch in plan per D3; the elevation-depth disclosure retires with the glyph",
+   "summary": "The sheet's arch in plan per D3 at true size: kasagi 15 by 1.5 ft, posts 1.2 ft squares under its ends, 10.3 ft clear over the 10 ft approach; the elevation-depth disclosure retires with the glyph",
    "class": "within",
-   "why": "FR-008 (arches at the new pitch) and FR-011"
+   "why": "FR-008 (arches at the new pitch) and FR-011 (the glyph reads as an arch, its class recorded; true size needs no convention label). Round 4: the posts brought from the first draw (2 ft marks, 10.7 ft clear) to true size on the size-audit, which moves the sheet closer to D3's accurate-in-plan class, not away from any clause. Verified on the sheet: posts 3.6 px (1.2 ft), clear 30.8 px (10.3 ft); arches 36 px (12 ft) apart, innermost 36 px off the hall's face (y 572 to 608). Condition: the sheet's own comment (hoshigaoka-shrine.svg lines 113-116) still says the posts are marked just proud of the beam as a convention, 10.7 ft clear - bring it to the notes and buildings.md, which already say true size, 10.3 ft"
   },
   {
    "id": "D6a",
-   "summary": "The grove is the precinct: a near-rectangle filling the sheet's frame, about 117 ft wide from the shrine well at its back edge to the outermost arch (about 225 ft), about 730 tsubo by the plan's arithmetic, measured at T-map; the round-2 'trimmed if above 650' dropped; the band T-program writes is R2's register figures as found (Saitama 55-708, Tochigi 142-2,700, Saga unranked 50-662, with their medians), never widened to fit",
+   "summary": "The grove is the precinct: a near-rectangle filling the sheet's frame, widened from about 117 to about 137 ft so each side of the clearing carries two or three crowns (settlement-review read a single file of trees as a hedge), from the shrine well at its back edge to the outermost arch (about 223 ft), about 860 tsubo; the band T-program writes is R2's register figures as found, never widened to fit",
    "class": "within",
-   "why": "FR-007 fixes the grove's reach (every side of hall and sanctuary; back to the well; forward to the outermost arch) and requires its area inside 'the register band FR-005 records', and FR-005 says only 'restated from the register figures (accurate as a band)' - neither the spec nor the GM's words set 650 as a cap; '150-650 typical' is the session's summary line (roughly the span of the three medians), not a register figure and not a GM ruling. SC-002 (bare ground only as a border no deeper than the crop margin, over the WHOLE rectangular frame) makes a grove that narrows along the avenue fail, so a near-rectangle is the spec's own consequence, not a carve-out. Measured on the manifest (2 ft/px): well y=1020, hall center y=1074 (48 ft deep), front face y=1086; at the 12 ft pitch the outermost arch is at y=1128, so well-to-outermost-arch is 216 ft, and 117 by 216-225 ft is about 710-740 tsubo, inside Tochigi's 142-2,700 register (median 655, mean 817) - an ordinary village-shrine precinct by the research, and the grove the GM ruled for. Condition, not a narrowing: T-program must record the register figures (ranges and medians) as the band, and no text may call the grove 'typical' or 'inside 150-650'. Correction owed: research.md D6a says 730 is 'below Tochigi's upper half' - it is above Tochigi's median (655), i.e. IN its upper half, between median and mean; the ruling does not rest on that phrase, but it must not reach the record or the notes as written"
+   "why": "FR-007 fixes the grove's reach and requires its area inside the register band FR-005 records; programs.md line 84 records that band as the registers as found (Saitama 55-708, Tochigi 142-2,700, Saga 50-662, with medians), not widened. Measured this round on the map manifest (village_groves role shrine, 2 ft/px): w 68.3 px, h 111.7 px = 136.6 by 223.4 ft = about 858 tsubo; on the sheet the precinct rect is 410 by 670 px at 3 px/ft = 136.7 by 223.3 ft. 858 is inside Tochigi's 142-2,700 register, so FR-007 holds. The widening serves the request rather than departing from it: the spec forbids a precinct hedge (FR-004, the GM's question what purpose a wall serves) and a one-tree file on each side read as exactly that, so a wood deep enough to read as wood is the grove the GM ruled for ('a grove around the shrine'), not a carve-out. research.md's arithmetic phrase ('above Saitama's top and Tochigi's mean of 817, far inside Tochigi's range') is correct. Condition (stale figure already in the record): research/religion-and-death/124-how-large-was-a-village-shrines-precinct-and-how-much-of-it-was-built-on.html line 9 still says 'about 730 tsubo ... above Tochigi's median of 655' (and carries a doubled comma, 'as found,,'), and its notes fragment note 4's comment says 730; bring both to about 858 and 'above Tochigi's mean of 817', and the sheet's svg comment line 51 from '117 by 223 ft' to 137, before the push. Not a narrowing; the ruling does not rest on them"
   },
   {
    "id": "D6b",
@@ -99,6 +99,12 @@
    "summary": "The sheet's captions tagged with data-kind and seated by make seat-label, as feature 266 requires of a changed sheet; kinds reuse the magistracy registry names where one fits; no interactive shrine page built",
    "class": "within",
    "why": "FR-008 requires the sheet redrawn; feature 266's standing label standard applies to any changed sheet, so tagging is compliance with an existing project rule triggered by the redraw, not new behavior. The plan explicitly builds no interactive page, so no unrequested feature rides in"
+  },
+  {
+   "id": "forecourt-37ft (found in the amendment's artifacts, not in plan.md or research.md)",
+   "summary": "A 37 ft forecourt before the hall holding the three innermost arches; the swept clearing grows from 272 by 244 to 272 by 334 px (about 91 by 111 ft), 28% to 33% of the precinct, hall included",
+   "class": "within",
+   "why": "FR-008 and the GM's ruling ask for 'a small swept clearing at the hall' and SC-002 for built and swept ground a small share, the rest grove; 'small' is a degree the request leaves unquantified (calibrated liberty), the grove still holds two thirds of the precinct, the innermost arch still stands one pitch off the hall (FR-008, US2 scenario 4), and no enclosure returns. It does not narrow anything asked. It is, however, a design decision that moves SC-002's share and is recorded only in the sheet's notes (as a guess from use); condition: record it in research.md's Design decisions beside D6 with its class and the share, so a later reader of the plan sees it. Aside for the GM: at about 280 tsubo the clearing alone exceeds Saga's median whole precinct; whether a third of the precinct is 'small' is theirs to say once they see the sheet"
   }
  ],
  "verdict": "CLEAR"

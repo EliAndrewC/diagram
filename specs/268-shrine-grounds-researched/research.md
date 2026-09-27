@@ -146,5 +146,11 @@ is not held to a map.
   fits (torii, shrine grove, well, kitchen, vegetable garden, latrine, fire-water tubs) and name the rest
   plainly (hall and dwelling, sanctuary, sacred tree, basin, approach). No interactive page is built for
   the shrine in this feature.
+- **D12 - the forecourt** (from the size-audit of 2026-09-27): the swept clearing runs 37 ft before the hall's
+  step, so the villagers gather in open ground and the three innermost arches stand in it; the clearing is then
+  about 91 by 111 ft, about 280 tsubo, 33% of the precinct (the hall 9%, the grove the other two thirds).
+  Class: guess from the use - no source splits a precinct's open ground from its wood (research 124). The
+  seven-foot forecourt it replaced inverted the clearing's order (24 ft of swept ground behind the hall, 7 ft
+  before it). (Figures observed 2026-09-27; method: measured on the layout script's output.)
 - **D7 - the precinct check.** `fence_not_wall` becomes `no_precinct_enclosure`: a fence, wall or hedge
   group whose bounds enclose the hall fails; a fence around the sanctuary alone does not. (Figures observed 2026-09-27; method: read from the reader report this section names, or, for the project's own values, off the engine and the sheet.)
