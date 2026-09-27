@@ -342,7 +342,7 @@ class CourtDivider(Kind):
     Why: The split between the courts is the split between state and home: the office and its public business
     in front, the household behind, with only the one door between them.
 
-    Note: The internal wall between the two courts follows the record. No source measures the divider: the wall's
+    Note: The internal wall between the two courts follows the Chinese record, where regulation put the office in front and the residence behind an inner residence gate; for Japanese compounds that front-and-rear order is on no page read, and at Takayama the residence stood beside the office rather than behind it. No source measures the divider: the wall's
     2 ft thickness is this project's own figure.
 
     Caveat: No source measures the divider: the wall's 2 ft thickness is this project's own figure.
@@ -513,14 +513,14 @@ class WeaponRack(Kind):
     Why: Like the striking posts, the rack is the durable gear that marks open ground as the place where the
     compound's samurai drill every day, in place of a hall built for it.
 
-    Note: The gear marking the practice ground follows the record. The rack's form and its size of about 8 by 2
+    Note: Practice on open ground rather than in a hall is read only for the time before the mid-Edo period and in a small domain's drill ground; that a county magistracy's samurai still drilled that way is our guess, resting on the setting's own numbers; marking it with gear such as this rack is the map's own convention, since no source read describes rural practice gear. The rack's form and its size of about 8 by 2
     ft are not in the record.
 
     Caveat: The rack's form and its size of about 8 by 2 ft are not in the record.
 
     Name: weapon rack
     Covers: the rack at the practice ground's edge and its label
-    Label: accurate
+    Label: guess
     Sources: hanko-jawiki, edo-three-dojos-jawiki, jinya-jawiki, dojo-jawiki
     Entry: research/buildings.html - 'A dojo is a city institution; county training is courtyard keiko'
     """

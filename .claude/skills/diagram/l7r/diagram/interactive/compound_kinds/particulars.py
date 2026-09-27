@@ -367,10 +367,10 @@ class TaxBarge(Kind):
     """
     What: A river barge moored alongside Hayakawa's dock with bales of tax grain aboard, drawn at about 47 by 7 ft.
 
-    Why: Tax grain moves down the river to the city on hired boats sailing under the office's seals; the
+    Why: Tax grain moves down the river to the city on hired boats flying an official pennant; the
     magistracy owns no hulls, and the barge at its dock is one taken on for the run.
 
-    Note: Tax grain carried on hired river boats, and the barge's size, inside the record's range for such a boat,
+    Note: The barge's size, inside the record's range for such a boat, and the hiring of hulls for tax rice (read for the shogunate's sea shipments; a county's grain going downriver on them is this map's reading),
     follow the record.
 
     Name: tax barge
