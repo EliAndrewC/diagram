@@ -778,6 +778,8 @@ karo	karo
 kashi	kashi
 kaso-dera	kaso-dera
 kasoba	kasoba
+kasumi dike	open-ended dike
+kasumi dikes	open-ended dike
 kasō-dera	kaso-dera
 kata	kata
 katairo	eiro
@@ -1070,6 +1072,8 @@ onari-goten	onari-goten
 one-bay	bay
 onkura	kura
 onmyodo	onmyodo
+open-ended dike	open-ended dike
+open-ended dikes	open-ended dike
 oshi	oshi
 oshirasu	oshirasu
 ossuary	ossuary
