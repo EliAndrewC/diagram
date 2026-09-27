@@ -1554,6 +1554,8 @@ water gate	water gate
 water gates	water gate
 water mouth	water-mouth
 water tail	water-mouth
+water teahouse	water teahouse
+water teahouses	water teahouse
 water-mouth	water-mouth
 water-tail	water-mouth
 wazi	goulan
