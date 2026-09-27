@@ -56,6 +56,10 @@ def test_a_key_already_on_file_is_refused(tmp_path, capsys) -> None:
     _mirror, a = _world(tmp_path)
     assert rp.main(["glossary", "x120", "--root", str(a)]) == 2 and "already holds" in capsys.readouterr().err
     assert rp.main(["glossary", " ", "--root", str(a)]) == 2
+    (a / rp.DIRS["glossary"] / "0130-kuji-x.json").write_text("{}", encoding="utf-8")
+    (a.parent / "b" / rp.DIRS["glossary"] / "0160-long-y.json").write_text("{}", encoding="utf-8")
+    assert rp.main(["glossary", "x", "--root", str(a)]) == 0, "`0130-kuji-x.json` holds kuji-x, not a key it merely ends in"
+    assert rp.main(["glossary", "y", "--root", str(a)]) == 0, "nor does another clone's `0160-long-y.json` hold `y`"
 
 
 def _take(args: tuple[str, str]) -> str:
