@@ -27,15 +27,18 @@ class Residence(Kind):
     institution - the office is a household, and the gate between the two courts is the hinge between state
     and home. A visitor of rank crosses a court or garden and steps up at the genkan, never straight from the
     street into a room. In the record's ideal the prized garden lies on the sunny south side facing the
-    reception rooms, and a plan seats it there where its buildings allow; the shady rear carries the service
-    strip. The residence is the largest domestic building on the plan - only the office hall may out-measure
-    it.
+    reception rooms, and a plan seats it there where its buildings allow; by that same sun rule the shady rear
+    carries the service strip. The residence is the largest domestic building on the plan - only the office hall
+    may out-measure it.
 
-    Note: The household inside the working compound and the garden south of the reception rooms are recorded
-    findings, and the program classes the wing as accurate - about 180 to 200 ft long, checked against the
-    size audit, its label naming a zone. The staged arrival - gate, then a court or garden, then the formal
-    entrance - is the record's own reading and the GM's rule for these plans; no page a reader can open sets
-    it out. Each labeled room is a suite of several rooms compressed to one label, a schematic convenience.
+    Note: The household inside the working compound (its place behind the office is Chinese regulation; the
+    Japanese pages read do not give that order, and at Takayama the residence stood beside the office, not behind
+    it) and the garden south of the reception rooms are recorded findings; the service strip on the shady rear is
+    reasoned from the sun rule, with no source read for it; and the program classes the wing as accurate - about
+    180 to 200 ft long, checked against the size audit, its label naming a zone. That the residence out-measures
+    every other domestic building is this project's own reading of the compound; no page a reader can open ranks
+    the footprints. The staged arrival - gate, then a court or garden, then the formal entrance - is the record's
+    own reading and the GM's rule for these plans; no page a reader can open sets it out. Each labeled room is a suite of several rooms compressed to one label, a schematic convenience.
 
     Caveat: The staged arrival - gate, then a court or garden, then the formal entrance - is the record's own
     reading and the GM's rule for these plans; no page a reader can open sets it out. Each labeled room is a
@@ -388,9 +391,11 @@ class CompoundShrine(Kind):
     size and its dedication. It stands in the inner court with the household and stays smaller than the
     residence - a worship hall is small even at a great shrine.
 
-    Note: The shrine as standard equipment, its Inari default and the small worship hall are
-    recorded findings, and the program classes it as accurate: a modest shrine, with a hall-shrine ceiling of
-    about 36 by 30 ft subordinate to the residence. The Japanese branch office with two shrines inside its
+    Note: The Inari default comes from the Japanese office below; the shrine as standard equipment (read on a
+    Chinese yamen's three shrines) is a recorded finding, and the program classes it as accurate: a modest shrine,
+    with a hall-shrine ceiling of about 36 by 30 ft subordinate to the residence - though that ranking, and the
+    small worship hall it rests on, are the record's own reading, no page read giving a worship hall's size or
+    ranking a compound's buildings. The Japanese branch office with two shrines inside its
     walls rests on an excavation plan no reader can open, and the shrine's size ceiling of about 36 by 30 ft
     is set against worship-hall sizes that are the record's reading rather than a page's figures.
 

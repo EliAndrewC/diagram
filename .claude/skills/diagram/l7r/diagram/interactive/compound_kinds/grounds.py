@@ -478,19 +478,19 @@ class StrikingPosts(Kind):
     What: Short standing posts on the practice ground (tategi), struck with a wooden sword in drill, drawn as small
     location markers with their label.
 
-    Why: Rural samurai practice left equipment, not architecture: a county seat keeps no dojo, and what marks its
-    swept ground as a place of daily keiko is the gear that stands on it.
+    Why: A county seat draws no dojo here (the offices read list no martial hall, though none says there was
+    none), and this map guesses that what marks its swept ground as a place of daily keiko is the gear that
+    stands on it.
 
-    Note: The gear marking the practice ground follows the record. That the gear is tategi posts, and their form,
-    height and count, are not in the record; each post is drawn as a small marker of where it stands rather
-    than at its own size.
-
-    Caveat: That the gear is tategi posts, and their form, height and count, are not in the record; each post is
-    drawn as a small marker of where it stands rather than at its own size.
+    Note: we have drawn the striking posts as small markers of where each stands rather than at its own size, in
+    order to mark the swept ground as a practice ground by its gear, the GM's convention for these plans
+    (2026-07-24); the posts' real form, height and count were not found. No source read speaks of rural practice or
+    its gear, that county samurai kept training on open ground is a guess, and only a small domain's jin'ya is
+    read to have kept a drill ground.
 
     Name: striking posts
     Covers: the standing posts on the practice ground and their label
-    Label: accurate
+    Label: convention
     Sources: hanko-jawiki, edo-three-dojos-jawiki, jinya-jawiki, dojo-jawiki
     Entry: research/buildings.html - 'A dojo is a city institution; county training is courtyard keiko'
     """
