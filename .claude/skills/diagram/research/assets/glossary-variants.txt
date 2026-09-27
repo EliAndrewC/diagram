@@ -90,8 +90,6 @@ bidens	Bidens tripartita
 bidens tripartita	Bidens tripartita
 bishamon	Bishamon
 bishamonten	Bishamon
-bita	bita
-bita coin	bita
 board feet	board foot
 board foot	board foot
 bodaiji	bodaiji

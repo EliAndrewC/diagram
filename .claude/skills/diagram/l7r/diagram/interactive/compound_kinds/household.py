@@ -117,14 +117,16 @@ class RetainersQuarters(Kind):
     soldiers lived as households, they lived in terraced ranges - one surviving ashigaru rowhouse holds eight
     households under one thatched roof, 143 by 24 ft - so a range, not a cluster of small houses, is the form.
 
-    Note: Retainers' official residences laid out inside a small domain's jin'ya are recorded, but that a rural office's own staff lived on its grounds is the record's reconstruction, no source naming those staff or their housing; the city magistracy's separate constables' district and ranked households in terraced ranges rest on recorded
-    findings. That the retainers' housing at a rural office took the form of a rowhouse is the record's own
-    reading rather than a source's words, and the record places ranks of small household dwellings at the
+    Note: Retainers' official residences laid out inside a small domain's jin'ya are recorded, and the city
+    magistracy's separate constables' district and ranked households in terraced ranges rest on recorded
+    findings. That a rural office's own staff lived on its grounds is the record's reconstruction, no source
+    naming those staff or their housing, and that their housing took the form of a rowhouse is the record's
+    own reading rather than a source's words; the record places ranks of small household dwellings at the
     town's edge, outside an elite quarter, rather than inside its walls.
 
-    Caveat: That a rural office's own staff lived on its grounds is the record's reconstruction, and that their
-    housing took the form of a rowhouse is the record's own reading rather than a source's words; the record
-    places ranks of small household dwellings at the
+    Caveat: That a rural office's own staff lived on its grounds is the record's reconstruction, no source
+    naming those staff or their housing, and that their housing took the form of a rowhouse is the record's
+    own reading rather than a source's words; the record places ranks of small household dwellings at the
     town's edge, outside an elite quarter, rather than inside its walls.
 
     Name: retainers' quarters
@@ -207,16 +209,19 @@ class Kitchen(Kind):
     compound's worst fire risk, so it keeps two water tubs where every other hall keeps one.
 
     Note: The program classes the kitchen as accurate: an institutional daidokoro of about 40 by 33 ft,
-    smaller than a residence block, checked against the size audit. Its rank below the living quarters, its
-    weighting as the compound's worst fire risk and its postern into work space are this project's reading:
-    no readable page orders the compound's buildings by size, no page read gives the kitchen extra water or
-    sets one tub to a hall as a rule, and the dictionary cited defines only the kitchen door, not what it
-    opens onto. The kitchen is measured against a whole mid-rank samurai house of about 67 tsubo (some 2,400
-    sq ft), a figure that rests on no page a reader can open.
-
-    Caveat: The kitchen's rank below the living quarters, its two water tubs and its postern into work space
-    are this project's reading, on no page read. The kitchen is measured against a whole mid-rank samurai
+    smaller than a residence block, checked against the size audit. The kitchen's rank below the living
+    quarters, its weighting as the compound's worst fire risk, with a second water tub, and its postern into
+    work space are this project's reading: no readable page orders the compound's buildings by size, no page
+    read gives the kitchen extra water or sets one tub to a hall as a rule, and the dictionary cited defines
+    only the kitchen door, not what it opens onto. The kitchen is measured against a whole mid-rank samurai
     house of about 67 tsubo (some 2,400 sq ft), a figure that rests on no page a reader can open.
+
+    Caveat: The kitchen's rank below the living quarters, its weighting as the compound's worst fire risk,
+    with a second water tub, and its postern into work space are this project's reading: no readable page
+    orders the compound's buildings by size, no page read gives the kitchen extra water or sets one tub to a
+    hall as a rule, and the dictionary cited defines only the kitchen door, not what it opens onto. The
+    kitchen is measured against a whole mid-rank samurai house of about 67 tsubo (some 2,400 sq ft), a figure
+    that rests on no page a reader can open.
 
     Name: kitchen
     Covers: the kitchen and pantries building and its label
@@ -316,14 +321,16 @@ class Stables(Kind):
     in and out without crossing the ceremonial ground, and the animals are led to water at a well rather than
     watered where they stand.
 
-    Note: The stable's rank below the barracks is the record's own reading - no readable source ranks a
-    compound's footprints - while the watering at a well is a recorded finding, and the program classes it as
-    accurate: a few-horse umaya drawn smaller than the barracks, checked against the size audit.
-    The count of a few horses is the record's own reading too, since no page read gives a county office's
-    horses; the stall figure of about 55 to 70 sq ft to a horse is the record's own estimate, and its watering
-    finding was written for city stable yards.
+    Note: The watering at a well is a recorded finding, and the program classes the stable as accurate: a
+    few-horse umaya drawn smaller than the barracks, checked against the size audit. The stable's rank below
+    the barracks is the record's own reading - no readable source ranks a compound's footprints - and so is
+    the count of a few horses, since no page read gives a county office's horses; the stall figure of about 55
+    to 70 sq ft to a horse is the record's own estimate, and its watering finding was written for city stable
+    yards.
 
-    Caveat: The stall figure of about 55 to 70 sq ft to a horse is the record's own estimate, and its watering
+    Caveat: The stable's rank below the barracks is the record's own reading - no readable source ranks a
+    compound's footprints - and so is the count of a few horses, since no page read gives a county office's
+    horses; the stall figure of about 55 to 70 sq ft to a horse is the record's own estimate, and its watering
     finding was written for city stable yards.
 
     Name: stables
@@ -368,11 +375,11 @@ class FireWaterTubs(Kind):
     open fire. The plastered storehouses carry none - a thick earthen kura is the one building made not to
     burn. Each tub stands against its building's wall, under the eaves, because the gutter fills it.
 
-    Note: Townspeople's habit of keeping water ready at the front entrance and on the roof - a custom, its
-    reach to every building being the record's reading - and per-hall water vats in the Forbidden City, are
-    recorded findings, and the program classes the tubs as accurate: gutter-fed tensuioke at the wooden
-    buildings. The tub's 2.5 ft size is the record's estimate on no page read, and the weighting toward the
-    kitchen is the record's reasoning rather than a page's words.
+    Note: Townspeople's habit of keeping water ready at the front entrance and on the roof, and per-hall water
+    vats in the Forbidden City, are recorded findings, and the program classes the tubs as accurate:
+    gutter-fed tensuioke at the wooden buildings. A tub at every wooden building, as a rule rather than a
+    townspeople's custom, is the record's reading. The tub's 2.5 ft size is the record's estimate on no page
+    read, and the weighting toward the kitchen is the record's reasoning rather than a page's words.
 
     Caveat: A tub at every wooden building, as a rule rather than a townspeople's custom, is the record's
     reading. The tub's 2.5 ft size is the record's estimate on no page read, and the weighting toward the
@@ -454,14 +461,14 @@ class Hearth(Kind):
     Why: With open fire burning from morning to night, the kitchen's fire is the compound's top ignition source,
     which is why the kitchen keeps two fire-water tubs where every other hall keeps one.
 
-    Note: The kitchen's open cooking fire follows the record, which names it as a kamado cooking range; ranking
-    it the compound's top fire risk, and so giving the kitchen a second tub, is this project's reasoning, on no
-    page read. A hearth drawn as a small square reads as a sunken fire-pit (irori), a form the record does not
-    name for a kitchen.
+    Note: The kitchen's open cooking fire follows the record, which names it as a kamado cooking range. Ranking
+    the kitchen's fire the compound's top fire risk, and so giving the kitchen a second tub, is this project's
+    reasoning, on no page read. A hearth drawn as a small square reads as a sunken fire-pit (irori), a form the
+    record does not name for a kitchen.
 
-    Caveat: Ranking the kitchen's fire the compound's top fire risk is this project's reasoning, on no page
-    read. A hearth drawn as a small square reads as a sunken fire-pit (irori), a form the record does not name
-    for a kitchen.
+    Caveat: Ranking the kitchen's fire the compound's top fire risk, and so giving the kitchen a second tub, is
+    this project's reasoning, on no page read. A hearth drawn as a small square reads as a sunken fire-pit
+    (irori), a form the record does not name for a kitchen.
 
     Name: hearth
     Covers: the fire glyph in each kitchen

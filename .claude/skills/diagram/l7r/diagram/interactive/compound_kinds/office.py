@@ -27,7 +27,7 @@ class OfficeHall(Kind):
     many did (the Sado magistracy was rebuilt five times, though Takayama's never burned), which is why the
     documents and the tax grain are kept in storehouses of their own.
 
-    Note: The hall's form and its place follow the record; that it may out-size the residence is this
+    Note: The hall's form and its place follow the record. That it may out-size the residence is this
     project's reading, since no readable source ranks a compound's footprints. Its size, about 80 to 150 ft
     long and 20 to 45 ft deep, is a guess: it is the plan vocabulary's working block, with no measured
     office wing of a jin'ya behind it.
@@ -132,17 +132,19 @@ class Granary(Kind):
     county, where transport costs more, keeps a row of kura instead. The lord's kura held the paddy tax as brown rice in straw
     bales, with a corner of unhulled rice kept against famine.
 
-    Note: The kura, its rice and its place inside the compound follow the record, but the famine corner of
-    unhulled rice is a simplification: Edo kept that reserve in separate community granaries, and one granary
-    is drawn instead of two. The staging - tax rice passing through the compound and held there in transit beside a local reserve - is this map's own reading, which no source states; drawn at about
-    43 to 50 by 25 to 27 ft and checked against real kura sizes. That more of the dry-field tax arrives in
-    kind - soybeans and barley in bales beside the rice - than it did in Edo Japan is this setting's own
-    economics: Rokugan is rich in goods and poor in coin.
+    Note: The kura, its rice and its place inside the compound follow the record, drawn at about 43 to 50 by
+    25 to 27 ft and checked against real kura sizes. The staging - tax rice passing through the compound and
+    held there in transit beside a local reserve - is this map's own reading, which no source states, and the
+    famine corner of unhulled rice is a simplification: Edo kept that reserve in separate community granaries,
+    and one granary is drawn instead of two. That more of the dry-field tax arrives in kind - soybeans and
+    barley in bales beside the rice - than it did in Edo Japan is this setting's own economics: Rokugan is
+    rich in goods and poor in coin.
 
-    Caveat: The staging - tax rice held in the compound in transit beside a local reserve - is this map's own
-    reading, which no source states, and the famine corner of unhulled rice stands in for Edo's separate
-    community granaries. That more of the dry-field tax arrives in kind - soybeans and barley in bales beside the rice -
-    than it did in Edo Japan is this setting's own economics: Rokugan is rich in goods and poor in coin.
+    Caveat: The staging - tax rice passing through the compound and held there in transit beside a local
+    reserve - is this map's own reading, which no source states, and the famine corner of unhulled rice is a
+    simplification: Edo kept that reserve in separate community granaries, and one granary is drawn instead of
+    two. That more of the dry-field tax arrives in kind - soybeans and barley in bales beside the rice - than
+    it did in Edo Japan is this setting's own economics: Rokugan is rich in goods and poor in coin.
 
     Name: granary
     Covers: the vented granary kura and its label

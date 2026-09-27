@@ -25,16 +25,17 @@ class OuterCourt(Kind):
     and goes no deeper. Its open ground is not wasted space: a real jin'ya left most of its site open, and
     its forecourt and hearing court were features of the plan in their own right.
 
-    Note: The two-court split follows the Chinese record; no Japanese source read shows the residence behind
-    the office, no codification of the split was found, and at Takayama the residence stood beside the
-    office rather than behind it. The open forecourt follows the record, though how much of a jin'ya's site
-    stood open is this project's own estimate from plans, no source read giving the figure. On these
-    plans the buildings stand somewhat further apart than in a real jin'ya, which joined its functions into
-    a few long connected ranges, so that each reads as its own labeled footprint.
+    Note: The two-court split follows the Chinese record, and the open forecourt follows the record; no
+    codification of the split was found, and at Takayama the residence stood beside the office rather than
+    behind it. No Japanese source read shows the residence behind the office; how much of a jin'ya's site stood
+    open is this project's own estimate from plans, no source read giving the figure. On these plans the
+    buildings stand somewhat further apart than in a real jin'ya, which joined its functions into a few long
+    connected ranges, so that each reads as its own labeled footprint.
 
     Caveat: No Japanese source read shows the residence behind the office; how much of a jin'ya's site stood
-    open is this project's own estimate from plans, no source read giving the figure. On these plans the buildings stand somewhat further apart than in a real jin'ya, which joined its
-    functions into a few long connected ranges, so that each reads as its own labeled footprint.
+    open is this project's own estimate from plans, no source read giving the figure. On these plans the
+    buildings stand somewhat further apart than in a real jin'ya, which joined its functions into a few long
+    connected ranges, so that each reads as its own labeled footprint.
 
     Name: outer court
     Covers: the outer court's ground and its labels, the forecourt among them
@@ -89,16 +90,17 @@ class BorderCourt(Kind):
     building. So a guests' door opens into a court fit to receive them, and not onto the hearing court where
     the accused kneel.
 
-    Note: A guests' door that opens onto a court is the GM's rule for these plans; the one source cited defines the kitchen door, and says nothing of what a guests' door opens onto. The staged arrival behind it - gate,
+    Note: A guests' door that opens onto a court is the GM's rule for these plans; the one source cited defines
+    the kitchen door, and says nothing of what a guests' door opens onto. The staged arrival behind it - gate,
     then a court or garden, then the formal entrance - is the record's own reading and the GM's rule for
     these plans; no page a reader can open sets it out. A magistracy that receives delegations from across a
     clan border, and keeps a court for them, is this setting's own, and the record has nothing on it.
 
-    Caveat: A guests' door that opens onto a court is the GM's rule for these plans, which no source cited
-    states. The staged arrival behind it - gate, then a court or garden, then the formal entrance - is the
-    record's own reading and the GM's rule for these plans; no page a reader can open sets it out. A
-    magistracy that receives delegations from across a clan border, and keeps a court for them, is this
-    setting's own, and the record has nothing on it.
+    Caveat: A guests' door that opens onto a court is the GM's rule for these plans; the one source cited
+    defines the kitchen door, and says nothing of what a guests' door opens onto. The staged arrival behind
+    it - gate, then a court or garden, then the formal entrance - is the record's own reading and the GM's rule
+    for these plans; no page a reader can open sets it out. A magistracy that receives delegations from across
+    a clan border, and keeps a court for them, is this setting's own, and the record has nothing on it.
 
     Name: border court
     Covers: the receiving court behind a border posting's parley door, and its label
@@ -153,13 +155,13 @@ class PracticeGround(Kind):
     each.
 
     Note: Courtyard keiko in place of a dojo follows the record only in part: the famous private fencing
-    dojos read on stood in Edo, and practice before the mid-Edo period was held outdoors or on earthen floors,
-    but that domain schools stood in castle towns, that rural samurai kept training in yards, cleared halls
-    or on shrine grounds, and that the Chinese county yamen had no training hall are guesses no page read
-    confirms. The pages read on an intendant's office list its buildings without a martial hall, but none
-    says it had none, and the one martial ground they name there is a riding ground; the drill ground read on
-    stood at a small domain's jin'ya. So they confirm the practice ground, not that a rural intendant's office
-    kept no martial hall; that absence is a guess from their silence.
+    dojos read on stood in Edo, and practice before the mid-Edo period was held outdoors or on earthen floors.
+    The one martial ground the pages read on an intendant's office name there is a riding ground, and the
+    drill ground read on stood at a small domain's jin'ya, so they confirm the practice ground. That domain
+    schools stood in castle towns and cities, that rural samurai trained in yards, cleared halls or on shrine
+    grounds, and that a Chinese county yamen had no training hall are guesses no page read confirms. That a
+    rural intendant's office kept no martial hall is a guess from the silence of the pages read on one, which
+    list its buildings without one but never say it had none.
 
     Caveat: That domain schools stood in castle towns and cities, that rural samurai trained in yards,
     cleared halls or on shrine grounds, and that a Chinese county yamen had no training hall are guesses no
@@ -297,17 +299,19 @@ class MainGate(Kind):
     and only then the buildings, so no visitor steps from the road into a room.
 
     Note: The gate's southern fallback follows the record - a Chinese county office's regulation, not
-    Japanese practice; facing what it fronts, the town or the road, is this project's own siting, calibrated
-    against the drawn maps. The staged arrival behind it - gate, then a court or garden, then the formal
-    entrance - is the record's own reading and the GM's rule for these plans; no page a reader can open sets
-    it out. The width of its opening is this project's own calibration rather than a measured gate: the
-    record finds no width for a samurai residence's gate or a county office's.
+    Japanese practice. Facing what it fronts, the town or the road, is this project's own siting, calibrated
+    against the drawn maps; only the southern fallback rests on a source, and that one is Chinese. The staged
+    arrival behind it - gate, then a court or garden, then the formal entrance - is the record's own reading
+    and the GM's rule for these plans; no page a reader can open sets it out. The width of its opening is this
+    project's own calibration rather than a measured gate: the record finds no width for a samurai
+    residence's gate or a county office's.
 
     Caveat: Facing what it fronts, the town or the road, is this project's own siting, calibrated against
-    the drawn maps; only the southern fallback rests on a source, and that one is Chinese. The staged arrival behind it - gate, then a court or garden, then the formal entrance - is the
-    record's own reading and the GM's rule for these plans; no page a reader can open sets it out. The width
-    of its opening is this project's own calibration rather than a measured gate: the record finds no width
-    for a samurai residence's gate or a county office's.
+    the drawn maps; only the southern fallback rests on a source, and that one is Chinese. The staged arrival
+    behind it - gate, then a court or garden, then the formal entrance - is the record's own reading and the
+    GM's rule for these plans; no page a reader can open sets it out. The width of its opening is this
+    project's own calibration rather than a measured gate: the record finds no width for a samurai
+    residence's gate or a county office's.
 
     Name: main gate
     Covers: the posts flanking the main opening
@@ -385,14 +389,16 @@ class ApproachRoad(Kind):
     office, though for an ordinary county seat that axis is a guess, and in neither Japan nor China was a
     country lane a wide road.
 
-    Note: That the manor stands at the edge of its town and opens its gate onto the road it fronts is this
-    project's own siting, set against the drawn maps; the record read gives only a south-facing gate for a
-    Chinese county office. The width each way is drawn at is this project's own choice - the road up to the
-    main gate as wide as the gate's opening - since the record gives no width for a road up to a compound.
+    Note: The record read gives only a south-facing gate for a Chinese county office. That the manor stands at
+    the edge of its town and opens its gate onto the road it fronts is this project's own siting, set against
+    the drawn maps rather than read from a source. The width each way is drawn at is this project's own
+    choice - the road up to the main gate as wide as the gate's opening - since the record gives no width for
+    a road up to a compound.
 
-    Caveat: That the manor stands at the edge of its town and fronts its road is this project's own siting,
-    set against the drawn maps rather than read from a source. The width each way is drawn at is this project's own choice - the road up to the main gate as wide
-    as the gate's opening - since the record gives no width for a road up to a compound.
+    Caveat: That the manor stands at the edge of its town and opens its gate onto the road it fronts is this
+    project's own siting, set against the drawn maps rather than read from a source. The width each way is
+    drawn at is this project's own choice - the road up to the main gate as wide as the gate's opening - since
+    the record gives no width for a road up to a compound.
 
     Name: road
     Covers: the approach road or town street, the lanes to the lesser doors, and a road across a border
@@ -414,18 +420,18 @@ class CartYard(Kind):
     ignition, so a charcoal store is set apart from the working yard across open ground; the record derives
     about 30 ft as the gap to keep, roughly one flame-height clear of a burning stack.
 
-    Note: That a compound keeps the apron, and the separation it performs, follows the record; its 15 to 20 ft
-    width is this record's own calibration, which no source read states. The 30 ft gap rests on the record's own
-    one-flame-height rule of thumb, which no page read supports (the published rule, four flame heights, is for
-    people, not timber); the gap is this record's own derivation, and no entry squares carts at a county
+    Note: That a compound keeps the apron, and the separation it performs, follows the record. The apron's 15
+    to 20 ft width is this record's own calibration, which no source read states. The 30 ft gap is this
+    record's own derivation from its own one-flame-height rule of thumb, which no page read supports (the
+    published rule, four flame heights, is for people, not timber), and no entry squares carts at a county
     compound with what the record finds on them: carts confined to city streets in Japan and forbidden on its
     highways, and a Chinese countryside built for the wheelbarrow.
 
     Caveat: The apron's 15 to 20 ft width is this record's own calibration, which no source read states. The
     30 ft gap is this record's own derivation from its own one-flame-height rule of thumb, which no page read
-    supports, and no entry squares carts at a county compound with what the record finds on them: carts
-    confined to city streets in Japan and forbidden on its highways, and a Chinese countryside built for the
-    wheelbarrow.
+    supports (the published rule, four flame heights, is for people, not timber), and no entry squares carts
+    at a county compound with what the record finds on them: carts confined to city streets in Japan and
+    forbidden on its highways, and a Chinese countryside built for the wheelbarrow.
 
     Name: cart yard
     Covers: the loading apron inside the cart gate
@@ -535,10 +541,11 @@ class WeaponRack(Kind):
     Why: Like the striking posts, the rack is the durable gear that marks open ground as the place where the
     compound's samurai drill every day, in place of a hall built for it.
 
-    Note: Practice on open ground rather than in a hall is read only for the time before the mid-Edo period and in a small domain's drill ground; that a county magistracy's samurai still drilled that way is our guess, resting on the setting's own numbers; marking it with gear such as this rack is the map's own convention, since no source read describes rural practice gear. The rack's form and its size of about 8 by 2
-    ft are not in the record.
-
-    Caveat: The rack's form and its size of about 8 by 2 ft are not in the record.
+    Note: Practice on open ground rather than in a hall is read only for the time before the mid-Edo period and
+    in a small domain's drill ground; that a county magistracy's samurai still drilled that way is our guess,
+    resting on the setting's own numbers; marking it with gear such as this rack is the map's own convention,
+    since no source read describes rural practice gear. The rack's form and its size of about 8 by 2 ft are
+    not in the record.
 
     Name: weapon rack
     Covers: the rack at the practice ground's edge and its label

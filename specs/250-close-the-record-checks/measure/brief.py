@@ -503,7 +503,9 @@ Read narrowly - you need no question's whole text; the agents read the bundles.
    `- <class> (<page> SECTION=<NNN>): IN-STEP | REWRITTEN | LABELED | CANNOT-TELL - <one clause>`. A modal found
    IN-STEP stays on `_entry_owed.py`'s list (only a rewrite clears it), and the push discharges exactly those lines;
    a CANNOT-TELL is NOT discharged - say what the agent needed, and the closing session answers it before the push.
-5. In `.claude/skills/diagram`: `make test-file FILE="tests/interactive/test_classes.py tests/interactive/test_classes_docstrings.py"`;
+5. In `.claude/skills/diagram`: `make test-file FILE="tests/interactive/test_classes.py tests/interactive/test_classes_docstrings.py
+   tests/interactive/test_compound_kinds.py"` (the last is the building-plan sheets' modals - feature 265: owed sessions
+   that skipped it left twelve Caveats that were no longer half of their Notes);
    commit naming your modals. Do NOT tick, do NOT push. Report in one paragraph: each modal's verdict.
 """
 
