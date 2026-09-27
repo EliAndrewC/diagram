@@ -388,6 +388,8 @@ division works	bunsuiguchi
 doba	dōba
 dobashi	dobashi
 dobei	neribei
+dobu	dobu
+dobuita	dobuita
 dochu bugyo	road magistrate
 dohyo	dohyō
 dohyō	dohyō
@@ -693,8 +695,8 @@ half-river closures	half-river closure
 half-stories	half-story
 half-story	half-story
 hall of the heavenly kings	hall of the Heavenly Kings
-hall-and-wing house	weilongwu
-hall-and-wing houses	weilongwu
+hall-and-wing house	hall-and-wing house
+hall-and-wing houses	hall-and-wing house
 han	han
 han china	Han dynasty
 han dynasty	Han dynasty
@@ -939,6 +941,7 @@ kaie-ji's	Kaie-ji
 kaigisho	kaigisho
 kainyo	kainyo
 kaisho	kaisho
+kaishochi	kaishochi
 kaji-ya	kaji-ya
 kakaemoto	hitoyado
 kakehi	kakehi
@@ -964,6 +967,7 @@ kanjo-nawa	kanjo-nawa
 kanjo-tsuri	kanjo-nawa
 kannon	Kannon
 kannushi	kannushi
+kansai	Kansai
 kanto	Kanto
 kantō	Kanto
 kaogongji	Kaogongji
@@ -1028,6 +1032,8 @@ kishu-school	Kishu school
 knob	knob
 knobs	knob
 ko	kō
+ko-aza	koaza
+koaza	koaza
 kobito	kobito
 kochi seiri	kochi seiri
 kochi-seiri	kochi seiri
@@ -1323,6 +1329,7 @@ normal depth	normal depth
 northern and southern courts	Northern and Southern Courts
 northern song	Song dynasty
 northern wei	Northern Wei
+northern zhou	Zhou dynasty
 noshi-board	noshi-buki
 noshi-buki	noshi-buki
 noshi-shingle	noshi-buki
@@ -1369,6 +1376,7 @@ ote-suji	ote-suji
 otedori	ote-suji
 otemon	ote-mon
 otesuji	ote-suji
+ou	Ou
 oute	ote-mon
 outfall	outfall
 outwork	outwork
@@ -1379,6 +1387,8 @@ owari	Owari
 ox-frame	ox-frame
 ox-frames	ox-frame
 oyaike	oyaike
+pagoda tree	pagoda tree
+pagoda trees	pagoda tree
 pannage	pannage
 parapet	parapet
 parish	parish
@@ -1526,6 +1536,7 @@ rinzai	Rinzai
 rinzai zen	Rinzai
 riparian	riparian
 riprap	riprap
+rites of zhou	Zhouli
 river office	river office
 river offices	river office
 river stage	river stage
@@ -1785,6 +1796,8 @@ suzaku ōji	Suzaku-oji
 suzaku-oji	Suzaku-oji
 suzaku-ōji	Suzaku-oji
 sward	sward
+swept collar	swept collar
+swept ground	swept collar
 sōchinju	sōchinju
 sōtō	Sōtō
 tabune	field boat
@@ -1809,6 +1822,7 @@ tamajari	tamajari
 tameike	tameike
 tamonten	Bishamon
 tan	tan
+tanabata	Tanabata
 tanada	tanada
 tang	Tang dynasty
 tang dynasty	Tang dynasty
@@ -2030,6 +2044,7 @@ wellhead	curb
 weng cheng	wengcheng
 wengcheng	wengcheng
 wenmiao	wenmiao
+western wei	Western Wei
 wet run	wet run
 wet runs	wet run
 wetted perimeter	wetted perimeter
@@ -2111,6 +2126,9 @@ zhengyi	Zhengyi
 zhonggulou	gulou
 zhonglou	gulou
 zhou	department
+zhou dynasty	Zhou dynasty
+zhou-dynasty	Zhou dynasty
+zhouli	Zhouli
 zhuque dajie	Suzaku-oji
 zicheng	zicheng
 zokibayashi	zokibayashi

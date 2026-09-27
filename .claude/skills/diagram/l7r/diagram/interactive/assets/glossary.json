@@ -342,7 +342,8 @@
    "Qing-dynasty",
    "Ming-Qing",
    "Qing"
-  ]
+  ],
+  "cased": true
  },
  "Qingming": {
   "def": "The Chinese tomb-sweeping festival, at which families clear and tend their ancestors' graves.",
@@ -2679,7 +2680,7 @@
   ]
  },
  "masugata": {
-  "def": "A castle gate court: a square enclosure between two gates set at right angles, so that whoever comes through the first must turn under fire before the second.",
+  "def": "A castle gate court: a square enclosure between two gates set at right angles, so that whoever comes through the first must turn under fire before the second. At the ends of a post town, the name for the place where the highway is bent twice at right angles to the same end.",
   "variants": [
    "masugata"
   ]
@@ -7681,6 +7682,26 @@
    "Keio era"
   ]
  },
+ "swept collar": {
+  "def": "The strip of bare, swept ground kept around a shrine hall, an arch or a grave plot by brooms, feet and the traffic of the approach; its edge falls wherever the tending gives out into the scrub.",
+  "variants": [
+   "swept collar",
+   "swept ground"
+  ]
+ },
+ "Tanabata": {
+  "def": "The festival of the seventh day of the seventh month. In many regions that day was also counted the first day of Bon (nanuka-bon), when graves and the paths to them were cleaned to prepare for welcoming the spirits.",
+  "variants": [
+   "Tanabata"
+  ]
+ },
+ "hall-and-wing house": {
+  "def": "A Hakka walled house built with an ancestral hall on its central axis and wings of rooms around it. In front of it lie a rectangular drying floor (the heping) and a half-moon fengshui pond.",
+  "variants": [
+   "hall-and-wing house",
+   "hall-and-wing houses"
+  ]
+ },
  "firebox": {
   "def": "The combustion chamber at the foot of a climbing kiln, where the wood fire is fed; the firing chambers climb the slope above it and the chimney stands at the top.",
   "variants": [
@@ -7707,6 +7728,26 @@
    "kiln house",
    "kiln houses"
   ]
+ },
+ "koaza": {
+  "def": "A small named section of land within an ō-aza, the district of a village; the smallest named division of a village's ground.",
+  "variants": [
+   "koaza",
+   "ko-aza"
+  ]
+ },
+ "Kansai": {
+  "def": "The region of west-central Honshu around Kyoto, Osaka and Nara, the old capital region; the Kinai lies at its heart.",
+  "variants": [
+   "Kansai"
+  ]
+ },
+ "Ou": {
+  "def": "The old name for the northeast of Honshu, the two provinces of Mutsu and Dewa, which Yanagita counts among the regions where household graves were many.",
+  "variants": [
+   "Ou"
+  ],
+  "cased": true
  },
  "country monk": {
   "def": "In this setting, the one tax-free religious figure of a village district, who tends the village's shrine; their dwelling may double as the shrine itself.",
@@ -7959,6 +8000,12 @@
    "kasumi dikes"
   ]
  },
+ "dobu": {
+  "def": "A small open ditch carrying rain and waste water - before a house front, or under the boards down the middle of a back alley - narrow enough to step over.",
+  "variants": [
+   "dobu"
+  ]
+ },
  "field boat": {
   "def": "A small, flat-bottomed boat for moving through waterlogged paddies and along the channels dug between horita strips, carrying people, seedlings and harvest.",
   "variants": [
@@ -7999,6 +8046,18 @@
    "Shen Kuo"
   ]
  },
+ "dobuita": {
+  "def": "The ditch boards laid end to end down the middle of a back alley, covering its dobu and making the path people walk on.",
+  "variants": [
+   "dobuita"
+  ]
+ },
+ "kaishochi": {
+  "def": "The open lot left in the middle of each 60-ken (about 120 m) square block of Edo's commoner land, behind the town lots that lined the streets.",
+  "variants": [
+   "kaishochi"
+  ]
+ },
  "Kan'ei": {
   "def": "A Japanese era name, 1624 to 1644, early in the Edo period.",
   "variants": [
@@ -8019,6 +8078,34 @@
   "variants": [
    "Northern and Southern Courts",
    "Nanbokucho"
+  ]
+ },
+ "Zhouli": {
+  "def": "The Rites of Zhou, a classical Chinese text setting out the offices and rules of the Zhou state; it required trees planted beside the roads of the suburbs and the countryside.",
+  "variants": [
+   "Zhouli",
+   "Rites of Zhou"
+  ]
+ },
+ "Zhou dynasty": {
+  "def": "The ancient Chinese dynasty under which, by its classical texts, trees were planted along both sides of official roads; the Northern Zhou was a later, short-lived northern state of the 6th century.",
+  "variants": [
+   "Zhou dynasty",
+   "Zhou-dynasty",
+   "Northern Zhou"
+  ]
+ },
+ "Western Wei": {
+  "def": "A short-lived Chinese state of the mid-6th century in the north-west, under which distance was marked by an earth mound at every li beside the road, later replaced by pagoda trees.",
+  "variants": [
+   "Western Wei"
+  ]
+ },
+ "pagoda tree": {
+  "def": "The Chinese scholar tree (huai, 槐), a broad shade tree planted along Chinese official roads - under the Western Wei in place of the earth distance mounds, and by a Yuan edict beside elm and willow.",
+  "variants": [
+   "pagoda tree",
+   "pagoda trees"
   ]
  },
  "storehouse-built": {
