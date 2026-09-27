@@ -245,6 +245,7 @@ daxiangguo	Daxiangguo
 db	dBA
 dba	dBA
 dbh	DBH
+deep-water irrigation	deep-water irrigation
 degawari	degawari
 delivery ditch	delivery ditch
 delivery ditches	delivery ditch
@@ -280,6 +281,7 @@ dongjing meng hua lu	Dongjing Meng Hua Lu
 dooryard	dooryard
 doshin	doshin
 dosojin	dosojin
+doyo	doyo
 doyoboshi	nakaboshi
 dozo	kura
 dozō	kura
@@ -411,6 +413,8 @@ four-gods formulation	four gods
 frass	frass
 freeboard	freeboard
 frontage	frontage
+frost heave	frost heave
+frost-heave	frost heave
 fu	fu
 fudasashi	fudasashi
 fukada	fukada
@@ -1117,6 +1121,7 @@ shironameshi	shironameshi
 shiroyone senmaida	senmaida
 shitsuden	shitsuden
 shizai	shizai
+shizuoka method	Shizuoka method
 shogunate	bakufu
 shoin	shoin
 shoin-zukuri	shoin

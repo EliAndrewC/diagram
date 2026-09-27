@@ -5628,5 +5628,30 @@
    "early modern period",
    "early modern"
   ]
+ },
+ "doyo": {
+  "def": "A season of the old calendar, the days just before each season turns; the summer doyo, the one usually meant, falls in the hottest weeks of midsummer, late July into early August.",
+  "variants": [
+   "doyo"
+  ]
+ },
+ "frost heave": {
+  "def": "The ground swelling upward as the water in it freezes, which can crack and slump an earth bank; bunds in cold regions are built larger to stand it.",
+  "variants": [
+   "frost heave",
+   "frost-heave"
+  ]
+ },
+ "Shizuoka method": {
+  "def": "An early Meiji way of consolidating paddies, first carried out in 1872 in Shizuoka prefecture, that laid roads and channels out exactly north-south and east-west and squared the parcels for row planting.",
+  "variants": [
+   "Shizuoka method"
+  ]
+ },
+ "deep-water irrigation": {
+  "def": "Holding the paddy's water deeper than usual, a cold-region practice that keeps the rice warm through cold nights, above all while the young ear is forming; the bunds are built taller to hold it.",
+  "variants": [
+   "deep-water irrigation"
+  ]
  }
 }
