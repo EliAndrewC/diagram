@@ -651,6 +651,7 @@ hokora	hokora
 holding jail	holding jail
 honden	honden
 hongo	hongo
+hongwu	Hongwu
 honmaru	honmaru
 honmune-zukuri	honmune-zukuri
 horinouchi	horinouchi
@@ -856,6 +857,7 @@ koebune	fertilizer boat
 koedame	koedame
 kofun	Kofun period
 kofun period	Kofun period
+koguchi	koguchi
 koike	koike
 koji	koji
 koku	koku
@@ -1726,6 +1728,7 @@ youfang	aburaya
 yuan	Yuan dynasty
 yuan dynasty	Yuan dynasty
 yuan rebuild	Yuan dynasty
+yuecheng	yuecheng
 yui	yui
 yulin wei	yulin wei
 zaimokuya	zaimokuya
@@ -1733,6 +1736,7 @@ zaofang	zaofang
 zaojun	Zaojun
 zelkova	keyaki
 zhalan	zhalan
+zhalou	zhalou
 zhang	zhang
 zhengyi	Zhengyi
 zhonggulou	gulou

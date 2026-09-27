@@ -6855,5 +6855,29 @@
    "sub-prefect",
    "sub-prefects"
   ]
+ },
+ "yuecheng": {
+  "def": "The walled outer enclosure in front of a Chinese city gate, a kind of barbican; at Xi'an it was the outermost of a gate's works, and its front gate opened onto the drawbridge over the moat.",
+  "variants": [
+   "yuecheng"
+  ]
+ },
+ "zhalou": {
+  "def": "The tower over the front gate of a Chinese city gate's outer enclosure. It is named for the drawbridge it controlled: its soldiers raised the bridge with iron chains and ropes when an enemy came.",
+  "variants": [
+   "zhalou"
+  ]
+ },
+ "koguchi": {
+  "def": "A Japanese castle's gateway: a fortified entrance through its line of walls or earthworks, such as the main gate or the back gate. Some were built so the garrison could sally out, and others so they could be sealed off completely.",
+  "variants": [
+   "koguchi"
+  ]
+ },
+ "Hongwu": {
+  "def": "The reign name of the first Ming emperor, 1368-1398; \"the twenty-ninth year of Hongwu\" is 1396.",
+  "variants": [
+   "Hongwu"
+  ]
  }
 }
