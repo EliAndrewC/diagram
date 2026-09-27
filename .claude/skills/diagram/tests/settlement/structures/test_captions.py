@@ -1,7 +1,6 @@
 """Split from the 1,152-line `tests/settlement/test_structures.py` by feature 174 - see this
 directory's CLAUDE.md for the index. Tests for `settlement/structures/captions.py`."""
 
-from l7r.diagram.settlement import Settlement
 from tests.settlement._builders import _town
 
 
@@ -38,18 +37,6 @@ def test_label_seat_clear_probes_the_tilted_reach():
     tw = s.label_caption_hw("a long caption here", 9)
     assert s.label_seat_clear(300, 300, tw, 9)  # the level box clears under the house
     assert not s.label_seat_clear(300, 300, tw, 9, tilt=-30.0)  # the tilted reach swings up into it
-
-
-def test_pull_caption_toward_leaves_a_seat_that_already_sits_on_its_subject_center():
-    """The pull runs along the line from the caption's block to the subject's; when the two centers
-    coincide there is no line to run along, so the seat is handed back. A concave subject is how that
-    happens on a map - the caption sits in the notch of a C-shaped footprint, clear of every arm of it
-    while sharing its center."""
-    s = Settlement(1000, 1000, seed=1)
-    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
-    c_shape = [(0.0, 0.0), (200.0, 0.0), (200.0, 40.0), (60.0, 40.0), (60.0, 160.0), (200.0, 160.0), (200.0, 200.0), (0.0, 200.0)]
-    seat = (115.0, 100.0 + 9 * 0.275)  # the block's own center lands exactly on the subject's
-    assert s.pull_caption_toward(seat, "Kura", 9, "middle", 0.0, c_shape) == seat
 
 
 def test_the_label_phase_defers_every_caption_and_drains_once():
@@ -91,10 +78,11 @@ def test_a_field_name_caption_goes_through_the_phase_too():
     which is why the caption is queued as-is rather than the primitive being changed to suit it."""
     s = _town()
     n_before = len(s.M["labels"])
-    s.field_name_label("Higashi-da", 400.0, 620.0)
+    s.field_name_label("Higashi-da", (300.0, 560.0, 500.0, 680.0))
     assert len(s.M["labels"]) == n_before, "not drawn before the phase"
-    assert s._label_queue[-1] == ("field_name", ("Higashi-da", 400.0, 620.0))
+    assert s._label_queue[-1] == ("field_name", ("Higashi-da", (300.0, 560.0, 500.0, 680.0)))
     s.place_labels()
     rec = s.M["labels"][-1]
     assert rec[5] == "Higashi-da"
+    assert rec[0] >= 300.0 and rec[2] <= 500.0 and rec[1] >= 560.0 and rec[3] <= 680.0, "an area caption: inside its field (feature 266)"
     assert any("letter-spacing" in ln and "Higashi-da" in ln for ln in s.toplabels), "the markup it always drew"

@@ -12,7 +12,7 @@ from l7r.diagram import settlement
 from l7r.diagram.settlement import Settlement, seg_dist
 from l7r.diagram.settlement._geom.primitives import convex_hull, edge_dist, point_in_poly
 from l7r.diagram.settlement._geom.walls import _box_hits_run, torii_wall_conflicts, wall_runs
-from tests.settlement._builders import _IDX_POLY, _cap020, _ladder_map, _max_turn_deg, _memo_city, _ward_city_with_samurai
+from tests.settlement._builders import _IDX_POLY, _cap020, _max_turn_deg, _memo_city, _ward_city_with_samurai
 
 
 def test_stroke_quads_makes_one_quad_per_segment():
@@ -262,19 +262,6 @@ def test_linear_tilt_is_the_same_rule_as_label_tilt():
     assert settlement.linear_tilt(45.1) == 45.1
     assert settlement.linear_tilt(180.02) == 0.0  # float noise snaps level
     assert settlement.linear_tilt(72) == settlement.label_tilt(72) == settlement.aligned_tilt(72)
-
-
-def test_label_ladder_seats_a_tilted_caption_by_its_THICKNESS_not_its_rotated_aabb():
-    # The defect this pins (GM 2026-08-08): probing the rotated AABB made a diagonal caption reach
-    # by most of its own LENGTH in the one direction it does not extend, so "Imperial Road" seated
-    # 64px off a clear roadbed. The support is exact in every direction, so a tilted caption tucks
-    # in at the same LABEL_MIN_AIR a level one gets.
-    s = _ladder_map()
-    box = (400.0, 480.0, 600.0, 520.0)
-    seat = s._best_label_spot(box, "Imperial Road", 12, tilt=-26.6)
-    quad = settlement.label_quad([*s._label_box(*seat, "Imperial Road", 12), 0, "Imperial Road", None, -26.6])
-    corners = [(box[0], box[1]), (box[2], box[1]), (box[2], box[3]), (box[0], box[3])]
-    assert settlement.poly_gap(quad, corners) < settlement.LABEL_MIN_AIR + 1
 
 
 def test_label_quad_and_aabb_rotate_the_record_about_its_center():

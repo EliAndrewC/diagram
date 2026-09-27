@@ -5,21 +5,15 @@ import random
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any, cast
 
+from ..labels import Subject
+from ..labels.geom import rect
 from ._geom import (
     GOVERNOR_CAPTION_FS,
-    LABEL_AIR_RINGS,
-    LABEL_AIR_STEP,
-    LABEL_MIN_AIR,
     Poly,
     Pt,
-    box_gap,
-    label_aabb,
-    label_quad,
-    label_tilt,
     organic_bbox,
     organic_poly,
     point_in_poly,
-    poly_gap,
     sat_overlap,
     seg_closest,
     seg_dist,
@@ -527,113 +521,6 @@ class CastleCivicMixin:
         w = len(text) * size * 0.55
         return (lx - w / 2, ly - size * 0.8, lx + w / 2, ly + size * 0.25)
 
-    def _best_label_spot(self: Settlement, box: Sequence[float], text: str, size: float, hint: Pt | None = None, slides: Sequence[float] = (0.0,), axis: Pt | None = None, tilt: float = 0.0) -> Pt:  # type: ignore[misc]
-        """The NEAREST seat for a caption naming the feature that occupies `box` which covers
-        nothing - walking the standoff ladder (see LABEL_MIN_AIR above) outward from the subject,
-        nearest clear seat wins. When nothing is clear inside the ladder's reach, the least-covered
-        seat wins (the old "empty ground wins" fallback).
-
-        `hint` is an ADVISORY anchor - typically an authored `label_xy`. It orders the candidates
-        within a rung so the author still chooses the side and the along-axis position, but it can
-        no longer dictate the DISTANCE, which was the defect: the road label inherited its anchor's
-        perpendicular offset verbatim and only ever mirrored or slid it, so it could never come in
-        closer than the hand guess.
-
-        `slides` shifts candidates ALONG the subject, never across it: sliding across walks the
-        caption diagonally away while its nominal standoff still reads as small (the first cut did
-        exactly that - the road caption slid 90px sideways past the roadway's end scored as 5px of
-        air and measured 43). For a box subject that means along its LONG side.
-
-        `axis` is for a subject that is not axis-aligned - a diagonal road. Without it the search
-        runs in the four cardinal directions off the box, which silently assumes the box IS the
-        subject; for Hoshizora's diagonal Imperial road the segment's bounding box is a 486x256
-        square whose left edge is ~280px from the actual roadway, so a caption seated 5px off that
-        box sat nowhere near the road. Given `axis` (a unit vector along the subject) the ladder
-        searches PERPENDICULAR to it and slides ALONG it, so the geometry is right at any angle.
-
-        Two hard constraints, both cheaper to honor here than to fail in the gate:
-        - OTHER PLACED LABELS count as obstacles alongside footprints. `_label_hits` does not count
-          them and must not start to (the ministry auto-side decisions are calibrated on its current
-          answers, so every pool map would reflow); without it, pulling a caption in toward its
-          subject just trades a floating label for a `no_label_overlaps` failure.
-        - Candidates outside the cropped view are DISCARDED, not merely penalized - a label that
-          leaves the frame is clipped and unreadable (`labels_within_image`)."""
-        x0, y0, x1, y1 = box[0], box[1], box[2], box[3]
-        cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
-        hw, hh = len(text) * size * 0.55 / 2, size * 0.525  # the drawn box's half-extents (see _label_box)
-        # How far the caption reaches in the direction it is being pushed - its SUPPORT along that
-        # direction, taken in the caption's own frame. At tilt 0 this is exactly the old
-        # `abs(dx) * hw + abs(dy) * hh`, so every level caption in the pool seats byte-identically.
-        # For a tilted one it is the distance that matters and nothing more: a road caption pushed
-        # PERPENDICULAR to a road it runs along reaches by its 9px half-THICKNESS, where the
-        # rotated AABB this replaces claimed ~30px - most of the caption's own length, measured in
-        # the one direction the caption does not extend. That inflated standoff (plus the same
-        # AABB in `_label_hits`) is what held "Imperial Road" 64px off Hoshizora's roadbed with
-        # bare ground between; the quad is exact in every direction (GM 2026-08-08).
-        _tca, _tsa = math.cos(math.radians(tilt)), math.sin(math.radians(tilt))
-
-        def support(dx: float, dy: float) -> float:
-            return hw * abs(dx * _tca + dy * _tsa) + hh * abs(-dx * _tsa + dy * _tca)
-
-        sl = list(dict.fromkeys([0.0, *slides]))
-        if axis is not None:  # perpendicular to the subject, sliding along it
-            dirs = [((-axis[1], axis[0]), axis), ((axis[1], -axis[0]), axis)]
-        else:  # the four cardinals off the box, sliding along its LONG side (below, above, then the ends)
-            tall = (y1 - y0) > (x1 - x0)
-            ends: list[tuple[Pt, Pt]] = [((0.0, 1.0), (0.0, 0.0)), ((0.0, -1.0), (0.0, 0.0))] if tall else [((1.0, 0.0), (0.0, 0.0)), ((-1.0, 0.0), (0.0, 0.0))]
-            dirs = ([((1.0, 0.0), (0.0, 1.0)), ((-1.0, 0.0), (0.0, 1.0))] if tall else [((0.0, 1.0), (1.0, 0.0)), ((0.0, -1.0), (1.0, 0.0))]) + ends
-        placed_labels = [label_aabb(lb) for lb in self.M["labels"] if len(lb) > 3]
-        if self.M.get("title"):  # the title placard is a label too, and captions now seat AFTER it
-            placed_labels.append(tuple(self.M["title"]["bbox"]))
-        # A TILTED candidate measures its neighbors and its SUBJECT on the true quads, for the same
-        # reason `_label_hits` does: an AABB standoff to a diagonal subject is the caption's own
-        # length, not its thickness, so the ladder reads a seat lying snugly along the roadway as
-        # tens of px adrift and climbs the rungs away from it. Level candidates keep the exact box
-        # arithmetic they have always used, so no shipped caption reflows for this.
-        neighbor_quads: list[Poly] = [[(o[0], o[1]), (o[2], o[1]), (o[2], o[3]), (o[0], o[3])] for o in placed_labels] if tilt else []
-        subject_quad: Poly = [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
-        view = self.M["meta"].get("view")  # set by the crop; absent until then (and on uncropped maps)
-        best: tuple[tuple[int, float], Pt] | None = None
-        for ring in range(LABEL_AIR_RINGS):
-            air = LABEL_MIN_AIR + ring * LABEL_AIR_STEP
-            cands: list[Pt] = []
-            for s in sl:
-                for (dx, dy), (ux, uy) in dirs:
-                    if s and not (ux or uy):
-                        continue  # an END direction is only ever taken unslid
-                    reach = abs(dx) * (x1 - x0) / 2 + abs(dy) * (y1 - y0) / 2 + air + support(dx, dy)
-                    # ...and the baseline sits 0.275*size below the box center it just computed
-                    cands.append((cx + ux * s + dx * reach, cy + uy * s + dy * reach + size * 0.275))
-            clear: list[tuple[float, float, float, int, Pt]] = []
-            for i, (lx, ly) in enumerate(cands):
-                lb = self._label_box(lx, ly, text, size)
-                lq: Poly = label_quad([*lb, 0, text, None, tilt])  # the DRAWN glyph run (== lb's corners at tilt 0)
-                if tilt:
-                    lb = label_aabb([*lb, 0, text, None, tilt])  # containment (the frame) is still an AABB question
-                if view and (lb[0] < view[0] or lb[1] < view[1] or lb[2] > view[0] + view[2] or lb[3] > view[1] + view[3]):
-                    continue
-                hits = self._label_hits(lx, ly, text, size, pad=0.0, linepad=0.0, tilt=tilt) + (
-                    sum(1 for o in neighbor_quads if poly_gap(lq, o) < 3) if tilt else sum(1 for o in placed_labels if box_gap(lb, o) < 3)
-                )
-                gap = poly_gap(lq, subject_quad) if tilt else box_gap(lb, box)
-                if not hits:
-                    # NEAREST wins within the rung; ties go to the LEAST CROWDED seat, then the
-                    # hint, then declaration order. The crowding term is what keeps a caption
-                    # unambiguous: two seats equally tight against the subject are not equally
-                    # good if one of them is also up against a NEIGHBOR's caption. Tango's north
-                    # "gate market" has clear ground on both flanks of its stall row at the same
-                    # standoff, and the east one lands beside "execution ground" - which is how
-                    # the caption read as naming the execution ground in the first place. Capped
-                    # at 150px so a far-from-everything seat does not out-vote the hint.
-                    crowd = min((poly_gap(lq, o) for o in neighbor_quads), default=150.0) if tilt else min((box_gap(lb, o) for o in placed_labels), default=150.0)
-                    clear.append((gap, -min(crowd, 150.0), math.hypot(lx - hint[0], ly - hint[1]) if hint else 0.0, i, (lx, ly)))
-                elif best is None or (hits, gap) < best[0]:
-                    best = ((hits, gap), (lx, ly))
-            if clear:
-                return min(clear)[4]
-        assert best is not None  # LABEL_AIR_RINGS >= 1, so at least four candidates were scored
-        return best[1]
-
     def place_caption(  # type: ignore[misc]
         self: Settlement,
         text: str,
@@ -642,39 +529,24 @@ class CastleCivicMixin:
         italic: bool = True,
         weight: str = "normal",
         color: str = "#5A4326",
-        hint: Pt | None = None,
-        slides: Sequence[float] | None = None,
         rot: float = 0.0,
     ) -> None:
-        """Caption the feature occupying `box`, seated by the standoff ladder - use this instead of
-        a hand-picked `s.label(x, y, ...)` whenever the caption names a specific feature (a market
-        row, a works, a road) rather than a whole district. Records the subject box on the label so
-        `label_hugs_its_referent` can measure the finished gap.
+        """Caption the feature occupying `box` - seated in the label phase by the ONE placer (feature 266) as a POINT
+        subject: the feature's box turned by `rot`, the caption beside it at the standard's first free ranked position.
+        Use this instead of a hand-picked `s.label(x, y, ...)` whenever the caption names a specific feature. Records the
+        subject box on the label so `label_hugs_its_referent` can measure the finished gap.
 
-        `box` accepts None so `s.frontage_box` can be passed straight through; a None means the row
-        placed nothing, and captioning an empty row is a gen-script bug, not something to draw.
+        `box` accepts None so `s.frontage_box` can be passed straight through; a None means the row placed nothing, and
+        captioning an empty row is a gen-script bug, not something to draw.
 
-        DEFERRED to `finish()`, for the same reason the road caption is (DRAW ORDER, in this skill's
-        CLAUDE.md: "must not be drawn ON something? run AFTER it"). Seating a caption at call time
-        judges it against half a map: Tango places its gate markets before the execution ground
-        exists, so the north market's caption took the flank that later filled with the execution
-        ground and its caption, landing on the compound and reading as a second line of ITS label -
-        the very confusion this feature set out to fix. Deferring costs nothing but means a caption
-        does not anchor the crop; the ladder's frame constraint keeps it inside the window instead."""
+        DEFERRED to the label phase: seating a caption at call time judges it against half a map (Tango's north gate
+        market caption took the flank that later filled with the execution ground)."""
         if box is None:
             raise ValueError(f"place_caption({text!r}) got no subject box - the feature it names placed nothing")
-        if slides is None:
-            # A caption may sit ANYWHERE along its subject, so a long subject gets that freedom by
-            # default - quarter and 40% steps each way along its long side. Without it the ladder
-            # has one seat per flank per rung and gives up the flank entirely when a neighbor's
-            # caption holds that latitude, which is how Tango's north market caption ended up on
-            # the far side of the road on top of the execution ground: the only thing blocking the
-            # near flank was the road caption, 30px further up the same stall row.
-            span = max(box[2] - box[0], box[3] - box[1])
-            slides = (0.0, span * 0.25, -span * 0.25, span * 0.4, -span * 0.4)
-        # `rot` is the SUBJECT's rotation: a caption naming a diagonal feature tilts with it
-        # (label_tilt; GM 2026-08-02, angled-building labels), seated by its rotated AABB.
-        self._captions.append((text, tuple(float(v) for v in box), size, italic, weight, color, hint, tuple(slides), label_tilt(rot)))
+        x0, y0, x1, y1 = (float(v) for v in box)
+        cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
+        subject = Subject("point", tuple(rect(cx, cy, (x1 - x0) / 2, (y1 - y0) / 2, rot)), angle=rot)
+        self._captions.append((text, subject, size, italic, weight, color))
 
     def _label_hits(self: Settlement, lx: float, ly: float, text: str, size: float, pad: float = 4.0, linepad: float = 6.0, tilt: float = 0.0) -> int:  # type: ignore[misc]
         """How many already-placed footprints (buildings/houses + homestead groves) a label at
