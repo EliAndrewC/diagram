@@ -5876,5 +5876,18 @@
   "variants": [
    "tobukuro"
   ]
+ },
+ "irori": {
+  "def": "The sunken hearth of a Japanese common house, cut into the floor of a room near the doma or the kitchen - most often at the center of the floored part - and sometimes set in the doma itself.",
+  "variants": [
+   "irori"
+  ]
+ },
+ "joruri": {
+  "def": "A chanted narrative drama of the Edo period, sung to the shamisen and performed by puppets, the form later known as bunraku.",
+  "variants": [
+   "joruri",
+   "jōruri"
+  ]
  }
 }

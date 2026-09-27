@@ -594,6 +594,7 @@ irikawa-en	irikawa
 iroha	iroha companies
 iroha companies	iroha companies
 iroha-gumi	iroha-gumi
+irori	irori
 irri	IRRI
 irrigation ditch	irrigation ditch
 irrigation ditches	irrigation ditch
@@ -634,10 +635,12 @@ jodo shinshu	Jodo Shinshu
 jokamachi	jokamachi
 jori	jori
 jori-sei	jori
+joruri	joruri
 josui	josui
 josui ido	josui-ido
 josui-ido	josui-ido
 jōdo	Jodo
+jōruri	joruri
 jōsui ido	josui-ido
 kabata	kabata
 kabu-ido	kabu-ido
