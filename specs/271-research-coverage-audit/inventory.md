@@ -629,7 +629,7 @@ rows EDIT an existing section syncs from main first, since 269's and 267's edits
 | W2 | 7 | queued (queue 5) |
 | U2 | 6 | todo |
 | U3 | 5 | todo |
-| R2 | 4 | taken by Diagram shrines (2026-09-27, by agreement) |
+| R2 | 4 | done by Diagram shrines (272): religion-and-death 450, 460, 470, 040 (272) |
 | G1 | 5 | checking (queue 4) |
 | G2 | 5 | queued (queue 4) |
 | K1 | 5 | todo |
@@ -640,8 +640,18 @@ rows EDIT an existing section syncs from main first, since 269's and 267's edits
 | K6 | 4 | todo |
 | K7 | 4 | todo |
 | U4 | 6 | todo |
-| R3 | 4 | taken by Diagram shrines (2026-09-27, by agreement) |
+| R3 | 4 | done by Diagram shrines (272): religion-and-death 500, 510, 520, 530, 190 (272) |
 | T5 | 6 | todo |
 | U5 | 7 | todo |
-| R4 | 4 | taken by Diagram shrines (2026-09-27, by agreement) |
+| R4 | 4 | done by Diagram shrines (272): religion-and-death 550, 560, 570, 580, 590 (272) |
 | U6 | 4 | todo |
+
+## Outcomes of the rows handed to feature 272 (Diagram shrines, 2026-09-27), all on religion-and-death
+
+- R2: B96/D66 -> 450; B97/B98/D65 -> 460; B101/C152 -> 470; C147/D70 -> 040 (corrected).
+- R3: A138/D64 -> 500; A139 -> 510; A140/D61/B103 -> 520; A144 -> 530 and 190.
+- R4: B91/D78 -> 550; C144 -> 570; D75 -> 560; D76/D77 -> 560/570; the city temple complex and temple neighborhood
+  -> 580 and 590.
+- Shrine rows: A133, A135, D49, D52-D56 confirmed in 100-128; 121 is new (the country monk's dwelling). D50 (a small
+  kuri) and D51 (a village bell tower) are SILENT after two searches, each with an absence note naming both.
+- D63: 210 is the tier table.
