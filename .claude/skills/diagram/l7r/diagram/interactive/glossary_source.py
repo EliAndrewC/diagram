@@ -38,8 +38,11 @@ SOURCE = os.path.join(_HERE, "assets", "glossary.json")
 TERMS = os.path.join("assets", "glossary")
 #: The prefix is gapped by ten, as `research/sources/` is: inserting a term between two renames nothing.
 GAP = 10
+#: The prefix's MINIMUM width. Four digits ran out at 9990 (feature 272: `make reserve` hands out 10020 and on),
+#: so a wider prefix is read too, and the files are ordered by the number, never by the name - "11790" sorts
+#: before "1180" as text.
 DIGITS = 4
-_NAMED = re.compile(r"^(\d{4})-(.+)\.json$")
+_NAMED = re.compile(r"^(\d{4,})-(.+)\.json$")
 #: What `json.dumps` was called with. Measured, not guessed: the committed file matches this exactly.
 _DUMP = {"ensure_ascii": False, "indent": 1}
 
@@ -132,8 +135,9 @@ def term_files(root: str | None = None) -> list[dict]:
         raise GlossaryError(f"{TERMS}/: no term files - run `make glossary SPLIT=1`")
     seen: dict[int, str] = {}
     out = []
-    for name in sorted(os.listdir(here)):
+    for name in os.listdir(here):
         term_of(name)  # refuses a stray file by its name
+    for name in sorted(os.listdir(here), key=lambda n: (position_of(n), n)):
         at = position_of(name)
         if at in seen:
             raise GlossaryError(f"{TERMS}/: {seen[at]} and {name} both claim prefix {at:0{DIGITS}d} - the assembly will not choose between them")

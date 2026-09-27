@@ -96,6 +96,13 @@ def test_a_directory_of_term_files_is_read_back_in_prefix_order(tmp_path: pathli
         (tmp_path / TERMS / name).write_text(json.dumps(body, ensure_ascii=False), encoding="utf-8")
     assert [t["term"] for t in term_files(str(tmp_path))] == ["a", "b"]
 
+    # a five-digit prefix is read, and ordered by its number: "10030" sorts before "1040" as text
+    for name, body in (("10030-e.json", {"term": "e", "variants": ["e"], "def": "fifth"}), ("1040-f.json", {"term": "f", "variants": ["f"], "def": "sixth"})):
+        (tmp_path / TERMS / name).write_text(json.dumps(body, ensure_ascii=False), encoding="utf-8")
+    assert [t["term"] for t in term_files(str(tmp_path))] == ["a", "b", "f", "e"]
+    (tmp_path / TERMS / "10030-e.json").unlink()
+    (tmp_path / TERMS / "1040-f.json").unlink()
+
     (tmp_path / TERMS / "0020-c.json").write_text(json.dumps({"term": "c", "variants": ["c"], "def": "third"}, ensure_ascii=False), encoding="utf-8")
     with pytest.raises(GlossaryError, match="both claim prefix"):
         term_files(str(tmp_path))
