@@ -22,8 +22,8 @@ for equal files would have to cut a cluster that no task cuts.
 | `urban.py` | the generic urban BUILDING: the `URBAN` palette (fill/edge/footprint by caste and role), `building` itself - the one seat every pack, frontage and top-up funnels through, and where the samurai-ward refusal lives - plus the per-building seating helpers `_dims`, `try_building`, `_face_street_rot`, `open_face_rot` |
 | `servants.py` | the SERVANT RANGE (nagaya) pass: `servant_ranges` and the four probes that exist to serve it (`_solid_records`, `_blocks_any_door`, `_door_is_clear`, `_office_records`), plus `SERVANT_RANGE_DEPTH_FT` and `_OFFICE_STANDOFF` |
 | `packing.py` | the two multi-building placement ENGINES - `rowpack` (city row housing: terraces, back-to-back pairs, roji and courts) and `pack` (grid-scan district fill, footpaths, street-facing) - and `_shortfall`, the authored-vs-landed bookkeeping both use (and `houses.py`'s `frontage` too) |
-| `captions.py` | **the LABEL PHASE** (`place_labels`, feature 157 - the last phase of every settlement's generation, its drain order, its one-row dispatch table, and `discard_queued_label` for a feature that is placed and then withdrawn), and the caption PROBES underneath it: what boxes a caption must miss (`label_blockers`), how wide it is AS RECORDED (`label_caption_hw`), whether a seat is clear (`label_seat_clear`), the outward-walking search (`clear_label_seat`), and the inverse test - would a FOOTPRINT land under a caption already placed (`_under_a_caption`) |
-| `fixtures/` | public street furniture and civic fixtures - a PACKAGE with its own [`CLAUDE.md`](fixtures/CLAUDE.md) index since feature 173. Read that first, then load one of: `_helpers.py` (`pick_caption_seat`, `kosatsuba_affordances`, `kosatsuba_anchor`), `boards.py` (`fire_tower`, `kosatsuba` and its caption engine), `siting.py` (the water/lane clearance probes and the two placement passes) |
+| `captions.py` | **the LABEL PHASE** (`place_labels`, feature 157 - the last phase of every settlement's generation, its drain order, its one-row dispatch table, and `discard_queued_label` for a feature that is placed and then withdrawn), the ONE placer's settlement adaptor (`_draw_seated_caption`, `label_obstacles`, feature 266), and the SITING probes underneath it: what boxes a caption must miss (`label_blockers`), how wide it is AS RECORDED (`label_caption_hw`), whether a seat is clear (`label_seat_clear`), the outward-walking search (`clear_label_seat`), and the inverse test - would a FOOTPRINT land under a caption already placed (`_under_a_caption`) |
+| `fixtures/` | public street furniture and civic fixtures - a PACKAGE with its own [`CLAUDE.md`](fixtures/CLAUDE.md) index since feature 173. Read that first, then load one of: `_helpers.py` (`kosatsuba_affordances`, `kosatsuba_anchor`), `boards.py` (`fire_tower`, `kosatsuba` - its caption a point subject for the one placer, feature 266), `siting.py` (the water/lane clearance probes and the two placement passes) |
 
 ## Composition, and why it is in `__init__.py`
 
@@ -85,83 +85,12 @@ They are also less general than they look: `_blocks_any_door` and `_door_is_clea
 are tied to a specific check, not to `building` in the abstract. If a second consumer appears,
 promote them to `urban.py`; it is a move of four small methods.
 
-### `captions.py` here vs `place_caption` in `castle_civic.py` - an OPEN question
+### `captions.py` and `place_caption` - DECIDED by feature 266
 
-`castle_civic.py` holds `place_caption`, the standoff-ladder seat engine used at draw time; this
-package holds the primitives underneath it. Whether they should eventually live together is
-**undecided**, not settled. The argument for folding: one caption subsystem. The argument against:
-three of the five are consumed by `place_kosatsuba` and `place_punishment_spot`, which live here.
-
-**Implementation sketch for whoever decides it** (per the skill CLAUDE.md's "an OPEN DECISION
-carries an implementation sketch" rule): the change is to move the five members into
-`castle_civic.py`'s `CastleCivicMixin`, delete `captions.py` and its base from `__init__.py`, and
-drop its row from this table. Nothing else moves - every consumer reaches them through `self.`, so
-no call site changes. What holds it is `tests/settlement/test_structures.py`'s composed-surface
-guard: the five names must move OUT of `_STRUCTURES_SURFACE` in the same commit, or assertion 1
-fails naming them, which is the guard working. The deliberate exclusion is `_under_a_caption` - it
-is the INVERSE test (a footprint under someone else's caption) and its only consumer is
-`place_punishment_spot`, so by the R1b rule above it stays here even if the other four go.
-
-## Two thresholds, so the next session does not decide them under pressure
-
-- **`fixtures.py` IS PAST BOTH ITS THRESHOLDS, and this entry said 407 lines while the file held
-  1,020** (measured 2026-08-29, feature 157 - the number had gone stale by 2.5x, so the rule it
-  states had quietly stopped applying). Today it is **1,083 lines**, past the package rule's ~500 and
-  past constitution X clause 13's ~1,000; `_draw_board_caption` is **387** and `place_kosatsuba`
-  **262**, both far past the ~150 member bar. The size rule PROMPTS A QUESTION rather than forbidding
-  a size (`make audit` reports it, nothing gates it), so here is the answer, written down rather than
-  rediscovered:
-
-  **DEFERRED, deliberately, with the seam and the sketch** (Principle XIV allows deferring only an
-  architectural change, and only as a deliverable). Feature 157 added 63 lines here and split one
-  340-line member into a 53-line `kosatsuba` and a 387-line `_draw_board_caption`; doing the package
-  split in the same feature would move four hundred lines of code that three review agents were about
-  to read, inside a feature about where a caption sits.
-
-  **The seam has changed since this entry was written.** It was glyph-drawers versus auto-siters, and
-  that is still one cut - but `_draw_board_caption` is now neither: it is a LABEL-PHASE placer,
-  dispatched from `captions.py`'s `_PLACERS` table and running in the phase, not when the board is
-  drawn. So the cheaper first cut is to move it (and `pick_caption_seat`, `CAPTION_LANE_TARGET_FT`)
-  into `captions.py`, which is where the caption subsystem already lives and where its only caller
-  is - that alone takes this file to ~700 lines and each remaining member under 300, with no call
-  site changed because everything is reached through `self.`. The glyph/siter split is then the
-  second cut, if it is still wanted.
-- **`tests/settlement/test_structures.py` stays ONE file** at its current ~690 lines. When it
-  crosses ~1,000 it becomes `tests/settlement/test_structures/`, mirroring this package. Clause 13
-  gives tests no exemption; this file is simply not over the bar yet.
-
-## Monkeypatching
-
-Each submodule binds shared helper names at import (`from .._geom import point_in_poly`), so
-patching `settlement.structures.point_in_poly` reaches nothing. Patch the DEFINING module
-(`settlement._geom.point_in_poly`) or, for anything reached through `self.`, patch
-`settlement.Settlement` - class-level patching is unaffected by the split. As of feature 114 no test
-in the suite patches a module-level name in this package.
-
-## The guard, and what it is for
-
-`tests/settlement/test_structures.py` holds the 33 pre-split members as a SUBSET of what the
-composed class exposes, and a second test holds that no two sub-mixins define the same name. All
-three breakage classes were proven to fire before the guard was trusted (feature 114 T006/T017/T018).
-
-Three things about its shape:
-
-- **Subset, not equality** - so adding a member here needs no bookkeeping. The direction that HIDES
-  is a member going missing: an addition is visible in review, while a subtraction surfaces only
-  when whichever generator happens to call it runs.
-- **The census admits ATTRIBUTES, not just callables.** `URBAN`, `SERVANT_RANGE_DEPTH_FT` and
-  `_OFFICE_STANDOFF` are class-body members and move as deliberately as the methods. Feature 112's
-  guard counted callables only and needed a separate test for its `_PADDY_*_KINDS` matrices; this
-  one covers all 33 in one assertion.
-- **The collision half is the one that is easy to under-rate**: a member defined by two sub-mixins
-  produces a working import, a clean `mypy --strict`, and one silently dead implementation, because
-  MRO just picks the first base.
-
-## Function scale
-
-Nothing here was decomposed, and that is a measurement rather than an omission. The largest members
-are `rowpack` (130 raw lines), `servant_ranges` (128), `pack` (115) and `place_kosatsuba` (110) -
-all under the ~150-line bar features 112 and 113 converged on, and nothing resembling `city_wall`'s
-339. The decomposition that IS coming has a better owner: the placer's rotated-footprint fix (the
-skill `CLAUDE.md`'s CENTER vs FOOTPRINT item 3, then item 2's `sat_overlap` swap) rewrites the
-inside of `pack`/`rowpack`/`_fits` and will re-partition them for its own reasons.
+There is ONE caption placer, `l7r/diagram/labels/`, owned by neither mode (the GM, 2026-09-27: *"one placer for all
+labels"*). `captions.py` is its settlement ADAPTOR - `_draw_seated_caption` places and draws, `label_obstacles` builds
+the index once per phase - and `place_caption` in `castle_civic.py` is only a subject request that queues into it. The
+standoff ladder that used to live in `castle_civic.py` is gone, so the old question of where the seat engine belongs
+no longer has two answers. The probes that stay here (`label_blockers`, `label_seat_clear`, `clear_label_seat`,
+`_under_a_caption`) serve SITING - is there room for a caption beside this candidate board or punishment ground - not
+the caption's own seat.

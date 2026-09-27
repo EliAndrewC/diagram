@@ -1,6 +1,5 @@
 """Split from settlement.py by feature 025 - see settlement/CLAUDE.md for the index."""
 
-import itertools
 import json
 import os
 import re
@@ -16,6 +15,7 @@ from l7r.diagram.interactive.page import ink_census, merge_lines, unregistered_c
 from l7r.diagram.interactive.raster import OFFMAP_MARGIN, RESVG_FONT_ARGS
 from l7r.diagram.interactive.tags import ClsTag
 
+from ..labels import cut
 from ._geom import LAND, BoxObstacles, Poly, Pt, label_quad, label_tilt, linear_tilt, linear_tilt_full, rects_overlap
 
 if TYPE_CHECKING:
@@ -172,6 +172,8 @@ class FinishMixin:
         full_tilt: bool = False,
         wrap: bool = True,
         cls: ClsTag = None,
+        lines: Sequence[str] | None = None,
+        angle: float | None = None,
     ) -> None:
         # NOTHING IS DRAWN UNTIL THE LABEL PHASE (feature 157, GM 2026-08-29). Every caption queues
         # here and is drawn by `place_labels()` after the last map feature is placed, because *"how
@@ -180,7 +182,7 @@ class FinishMixin:
         # now also see every feature drawn after their own. `place_labels` clears the flag while it
         # drains, which is what makes the replay below reach the body.
         if self._labels_pending:
-            self._label_queue.append(("text", (x, y, text, size, anchor, italic, weight, color, ref, rot, linear, full_tilt, wrap, cls)))
+            self._label_queue.append(("text", (x, y, text, size, anchor, italic, weight, color, ref, rot, linear, full_tilt, wrap, cls, lines, angle)))
             return
         # `cls` is the class of the FEATURE the caption names (feature 134 FR-006): the label and its
         # subject share one class, so hovering either highlights both and a click on either opens the
@@ -199,6 +201,8 @@ class FinishMixin:
         # `full_tilt=True` (linear subjects only) takes linear_tilt_full's unclamped angle - the
         # GM's 2026-08-09 extension for along-row captions like the wharf granary rows
         tilt = (linear_tilt_full(rot) if full_tilt else linear_tilt(rot)) if linear else label_tilt(rot)
+        if angle is not None:  # the ONE placer's choice (feature 266): its angle and its lines are drawn exactly
+            tilt = angle
         # A CAPTION WRAPS WHEN THAT IS WHAT CLEARS IT (GM 2026-08-27, feature 133 T39): *"if the label
         # was split across multiple lines, and that caused it to not overlap with anything, then we
         # should do that. If running the label on one line caused it to not overlap with anything,
@@ -206,7 +210,7 @@ class FinishMixin:
         # can just pick one."* One line first; then two, then three, each tested as its rotated block
         # against every footprint and every caption already on the sheet; the first clear layout is
         # drawn, and when none is clear the one-liner is. See `_caption_lines` for how a label is cut.
-        lines = self._caption_lines(text, x, y, size, anchor, tilt) if wrap else [text]
+        lines = list(lines) if lines is not None else (self._caption_lines(text, x, y, size, anchor, tilt) if wrap else [text])
         n = len(lines)
         lh = size * 1.15  # line pitch: the one-line box is 1.05 em tall, and a hair of lead between lines
         w_ = max(len(ln) for ln in lines) * size * 0.55
@@ -260,16 +264,7 @@ class FinishMixin:
             return not any(rects_overlap(quad, b) for b in blockers)
 
         def _cut(n: int) -> list[str] | None:
-            best: tuple[tuple[int, int], list[str]] | None = None
-            for cuts in itertools.combinations(range(1, len(words)), n - 1):
-                bounds = (0, *cuts, len(words))
-                lines = [" ".join(words[a:b]) for a, b in zip(bounds, bounds[1:], strict=False)]
-                if len(words) > n and any(len(ln) <= 3 for ln in lines):
-                    continue  # a short word never stands alone
-                score = (max(len(ln) for ln in lines), max(len(ln) for ln in lines) - min(len(ln) for ln in lines))
-                if best is None or score < best[0]:
-                    best = (score, lines)
-            return best[1] if best else None
+            return cut(words, n)  # the ONE cutting rule, lifted into the placer's package (feature 266)
 
         if _clear([text]):
             return [text]

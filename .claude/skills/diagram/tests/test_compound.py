@@ -280,3 +280,15 @@ def test_every_element_of_the_county_draft_carries_a_kind() -> None:
     assert got.unclassed == []
     assert {"inner court", "outer court", "hearing court", "garden", "practice ground", "office hall", "compound wall", "court divider", "notice board"} <= set(got.counts)
     assert svg.count('id="precinct"') == 2
+
+
+def test_a_hemmed_in_draft_caption_is_tied_back_by_a_leader() -> None:
+    """Feature 266, FR-005 in Mode A: a caption the placer cannot seat beside its feature is drawn with its leader."""
+    from l7r.diagram.compound import _seat_captions
+    from l7r.diagram.labels import Obstacle, Subject
+    from l7r.diagram.labels.geom import rect
+
+    board = Subject("point", tuple(rect(200.0, 200.0, 9.0, 2.25)))
+    ring = [Obstacle(tuple(q), 1000.0) for q in (rect(200.0, 180.0, 80.0, 8.0), rect(200.0, 220.0, 80.0, 8.0), rect(160.0, 200.0, 8.0, 30.0), rect(240.0, 200.0, 8.0, 30.0))]
+    out, foot = _seat_captions([("notice board", board, 7.0, True, "#333", "notice board")], ring, (0.0, 0.0, 400.0, 400.0))
+    assert len(out) == 2 and out[1].startswith("<line") and foot > 0.0
