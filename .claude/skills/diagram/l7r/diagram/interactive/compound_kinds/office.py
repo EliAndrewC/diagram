@@ -235,9 +235,11 @@ class BenchNoticeBoard(Kind):
     the village officials' houses. A magistracy's board stands at its own gate, on the way everyone who has
     business with the court must come.
 
-    Note: The board and its seat at an officials' gate follow the record. That the bench keeps a board of its
-    own, apart from the kosatsuba where the town posts the state's standing law, is this project's own
-    division; the record finds only the settlement's board.
+    Note: The board and its roadside seat follow the record, which sets it before the gate of village
+    officials' houses but at no government office; that every town and village kept one is a reading of the
+    sources, not their words. That the bench keeps a board of its own, apart from the kosatsuba where the town
+    posts the state's standing law, is this project's own division; the record finds only the settlement's
+    board.
 
     Caveat: That the bench keeps a board of its own, apart from the kosatsuba where the town posts the state's
     standing law, is this project's own division; the record finds only the settlement's board.
@@ -288,7 +290,7 @@ class WeighingFloor(Kind):
     is what the weighing floor is for, and it is also why the office's hold on the trade is a written record
     rather than ownership.
 
-    Note: The weighing floor and the reason for it follow the record.
+    Note: The weighing floor follows the record's reasoning, but its premise - that the charcoal bale had no standard weight - rests on no source read: the page it had been cited to says nothing about charcoal, and no other was found.
 
     Name: weighing floor
     Covers: the covered weighing floor, its posts and its label
