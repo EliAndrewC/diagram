@@ -283,7 +283,7 @@ class Latrine(Kind):
 
     Note: The privy built into the samurai house, the more than one privy of a well-appointed house and the
     carted night-soil trade are recorded findings, and the program classes the privies as accurate - one per
-    functional zone, about three or four. That no collector should have to cross the inner court is this
+    functional zone, about three or four. That the family's privy sits at the shady north rear is reasoning from the sun rule, not a read source. That no collector should have to cross the inner court is this
     record's own rule rather than a finding.
 
     Caveat: That no collector should have to cross the inner court is this record's own rule rather than a
@@ -567,7 +567,7 @@ class FamilyQuarters(Kind):
     rooms lie away from the formal approach. A samurai residence grouped its rooms by use under one roof, the
     family's among them.
 
-    Note: The household living behind the office, and a residence grouping its family's rooms under one roof,
+    Note: The household living inside the working compound (behind the office by Chinese regulation; at Takayama the residence stood beside it, and no Japanese rule was found), and a residence grouping its family's rooms under one roof,
     follow the record. That the family's rooms lie toward the private end rests on the Chinese case, where the
     innermost rows house the family; and naming the bay by its occupants is the GM's convention for these plans.
 

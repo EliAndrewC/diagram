@@ -73,3 +73,11 @@
 - TaxArchive (buildings SECTION=010): IN-STEP - the Chinese county archive is still unconfirmed, as the Note says
 - TaxArchive (buildings SECTION=160): IN-STEP - halls burn, kura endure, Sado's five rebuildings all still in the section
 - TaxArchive (buildings SECTION=170): LABELED - tubs-away-from-the-kura labeled the map's reasoning; the re-check found "no placement rule" too broad, so the Note now names the read doorway/roof and courtyard placements and says none gives a priority
+- CompoundWall (buildings SECTION=010): IN-STEP - the section's changes (granary/archive now guesses, jail scale and axis resting on silence) touch nothing the modal says; its Note rests on other sources
+- KneelingPositions (buildings SECTION=010): IN-STEP - the court hall over kneeling litigants still rests on henan-neixiang; the section's changes concern the granary, archive, jail scale and axis
+- KneelingPositions (buildings SECTION=090): IN-STEP - the paired examination room and court and the stone-paved roofed Takayama court still stand; the section's new material does not touch this feature
+- VegetableGarden (buildings SECTION=230): IN-STEP - the Note already calls the north-rear seat the record's own reasoning from the sun rule, which is what the section now says
+- ClerksRoom (buildings SECTION=050): REWRITTEN - Note now says the three-or-four count is this project's scaling from a Chinese county population with no source; re-check IN-STEP
+- FamilyQuarters (buildings SECTION=020): REWRITTEN - Note now counts only living inside the compound as read, behind the office by Chinese regulation, beside it at Takayama, no Japanese rule found; re-check IN-STEP
+- Latrine (buildings SECTION=230): REWRITTEN - Note now says the family privy's north-rear seat is reasoning from the sun rule, not a read source; re-check IN-STEP
+- Nakamon (buildings SECTION=020): REWRITTEN - Note now says the gate follows the Chinese record (Neixiang's inner residence gate), no Japanese page gives the front-and-rear order, and who passes it and the screening hall are the project's reading; re-check IN-STEP

@@ -535,7 +535,10 @@ class Nakamon(Kind):
     office hall; the family, its servants and the household's own guests of rank pass this door into the private
     court, and the hall standing in front of it screens that court from the public one.
 
-    Note: The gate between the two courts follows the record. Its seat on the main axis directly behind the
+    Note: The gate between the two courts follows the Chinese record, where the inner residence gate is one
+    of Neixiang's five; no Japanese page read gives the front-and-rear order, and at Takayama the residence
+    stood beside the office, not behind it. Who passes the gate, and the hall screening the private court,
+    are this project's own reading; no page read says either. Its seat on the main axis directly behind the
     office hall is the drawing program's own placement, not a recorded custom, and no source measures the
     household door: its 8 ft width is this project's own figure.
 

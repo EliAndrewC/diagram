@@ -76,7 +76,7 @@ class ClerksRoom(Kind):
     the manor each day - and who, as permanent locals, are the office's memory under one magistrate after
     another.
 
-    Note: the record finds the clerks but says nothing of their room, and the program's workroom of about 28
+    Note: the record finds the clerks, though their number of three or four is this project's scaling from a Chinese county population it gives no source for, and it says nothing of their room, and the program's workroom of about 28
     by 18 ft for three or four clerks is a guess with no measured example behind it, whether it is drawn as a
     room of the office hall or as a building of its own.
 
