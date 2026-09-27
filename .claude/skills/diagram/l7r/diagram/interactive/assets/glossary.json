@@ -6170,5 +6170,13 @@
    "fan-palm",
    "fan-palm-dike"
   ]
+ },
+ "pocket pond": {
+  "def": "A small pond among a hamlet's paddy plots - one of the small in-field features a hamlet's fields carry, with a rock or a grave island, and a town's do not.",
+  "variants": [
+   "pocket pond",
+   "pocket ponds",
+   "in-field pocket pond"
+  ]
  }
 }

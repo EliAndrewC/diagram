@@ -617,6 +617,7 @@ igeta	igeta
 igune	igune
 important cultural landscape	Important Cultural Landscape
 important cultural landscapes	Important Cultural Landscape
+in-field pocket pond	pocket pond
 inari	Inari
 inashiro	Inashiro
 inkyo	inkyo
@@ -1040,6 +1041,8 @@ plankton	plankton
 plant association	plant association
 planted collar	planted collar
 plot seams	seam
+pocket pond	pocket pond
+pocket ponds	pocket pond
 polder	polder
 polders	polder
 pollard	pollard
