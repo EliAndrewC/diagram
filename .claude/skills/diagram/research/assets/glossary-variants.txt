@@ -881,6 +881,7 @@ isohyet	isohyet
 isohyets	isohyet
 isotherm	isohyet
 isotherms	isohyet
+ita-bune	ita-bune
 itabashi	itabashi
 jagama	jagama
 jail god	jail-god
