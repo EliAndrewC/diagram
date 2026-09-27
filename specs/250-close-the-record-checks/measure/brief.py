@@ -193,7 +193,7 @@ recommendation 2). Read only your own lines of the handoff.
    modals, no others (each is checked once, by the group whose load counts it): for each,
    `make check-bundle PAGE={page} SECTION=<its NNN> NO_QUOTES=1 FOR=entry-drift KIND=<its class>` and `entry-drift` naming its
    MANIFEST (a drifted modal is owed at the push, so it is checked here, with the question it was written from).
-6. **Apply each report with ONE command.** `quote-check`, `record-format` and `entry-drift` end every finding with an
+6. **Apply each report with ONE command.** `quote-check`, `record-format`, `entry-drift` and `source-applicability` end every finding with an
    `EDIT` block (or `EDIT: none - <why>`) - a drifted modal's block edits its class file and every glossary term with a `GLOSSARY` line. When a report arrives, read its
    findings, and run `make apply-edits FROM=<the output_file its dispatch printed>` (in `.claude/skills/diagram`),
    with `SKIP=<n,n>` for any block you disagree with. Then do BY HAND only what it lists as REFUSED, what you
@@ -226,6 +226,8 @@ GROUP_BYTES = 28_000   # the LOAD one check session takes (D17, R8 recommendatio
 #                        2026-09-27; method: each session's questions + owed modals + registry entries against its
 #                        recorded peak_context, least squares). The fit is loose - fabric's 2a peaked at 7.5x its
 #                        load while fixing tool defects - and R9 measures it again.
+#                        R9 did (D18.2): refitted over nine sessions, peak = 52,184 + 1.41 x load; a session's start-up
+#                        is a median 117,693 tokens, about 5% of a session, so the budget stays - merging saves little.
 MODAL_WORK = 2_000     # a GUESS, R9 to measure: an owed modal costs its report and its rewrite on top of its prose
 #                        (a median 1,225 bytes), and counting the prose alone is how `fields` put seven in one session.
 
@@ -263,6 +265,8 @@ def check_groups(handoff: str, sizes: dict[str, int] | None = None, keys_load: i
     sections = list(dict.fromkeys(handoff_list("SECTION", handoff)))
     keys = list(dict.fromkeys(handoff_list("KEY", handoff)))
     size = {s: (sizes or {}).get(s, CAP) for s in sections}
+    # a question in the round only for its owed modals (D18) is an item too, sized by those modals alone
+    size.update({s: b for s, b in (sizes or {}).items() if s not in size and b > 0})
     if keys:
         size[KEYS] = keys_load
     bins: list[list[str]] = []
@@ -298,16 +302,20 @@ def homes(page: str, handoff: str) -> dict[str, tuple[str, int]]:
     checked = list(dict.fromkeys(handoff_list("SECTION", handoff)))
     out = {}
     for cls, prose, secs in owed_modals(page):
-        home = next((s for s in checked if s in secs), None)
-        if home is not None:
-            out[cls] = (home, prose)
+        # a modal owed from a question this round did not change is taken too (D18, R9 rec. 3): it is owed at the push
+        # anyway (T23), and a page's round packed by load checked such modals at the cheapest rate measured
+        out[cls] = (next((s for s in checked if s in secs), secs[0]), prose)
     return out
 
 
 def loads(page: str, handoff: str) -> tuple[dict[str, int], int]:
     """(section -> its load: question and notes bytes + its owed modals' prose; the registry keys' load: their entries'
     bytes) - what `check_groups` packs."""
-    size = {n: b for n, (_t, b) in questions(page).items()}
+    checked = set(handoff_list("SECTION", handoff))
+    qs = questions(page)
+    # a checked question's load is its bytes; a question in the round ONLY for its owed modals carries none of its own
+    # (the session applies no finding to it - its entry-drift bundles are read by the agents, outside the session)
+    size = {n: (b if n in checked else 0) for n, (_t, b) in qs.items()}
     # credited to the FIRST of its sections that a check group takes - the group that runs its entry-drift (plan
     # review, D17: crediting the first on the PAGE lost `paddy`, owed from 110 but listed under 020)
     for home, prose in homes(page, handoff).values():
@@ -333,12 +341,13 @@ def checks(page: str, task: str) -> int:
         text = "".join(f"- SECTION={s}\n" for s in secs) + "".join(f"- KEY={k}\n" for k in ks)
     groups, keys = check_groups(text, *loads(page, text))
     owed = homes(page, text)
+    changed = set(handoff_list("SECTION", text))
     fields = _fields(page, task)
     for n, group in enumerate(groups, 1):
         last = n == len(groups)
         out = briefs / f"{slug}-2{chr(96 + n)}.md"
         mine = KEYS in group
-        out.write_text(CHECK.format(n=f"2{chr(96 + n)}", what=f"check and apply, group {n} of {len(groups)}", sections=", ".join(f"SECTION={s}" for s in group if s != KEYS) or "none - this group checks the registry keys",
+        out.write_text(CHECK.format(n=f"2{chr(96 + n)}", what=f"check and apply, group {n} of {len(groups)}", sections=", ".join(f"SECTION={s}" for s in group if s != KEYS and s in changed) or "none - this group checks only the modals and keys named below",
                                     keys=", ".join(f"KEY={k}" for k in keys) if mine else "none - another group has them" if keys else "none",
                                     modals=", ".join(f"KIND={c} (SECTION={h})" for c, (h, _b) in sorted(owed.items()) if h in group) or "none",
                                     closing=" and close the page" if last else "", close=(CLOSE_LAST if last else CLOSE_GROUP).format(**fields), **fields), encoding="utf-8")

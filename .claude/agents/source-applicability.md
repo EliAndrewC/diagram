@@ -48,6 +48,27 @@ later turn. So:
 - An item that passed is ONE line (its id and its verdict) - never its quotation again, never the reasoning
   that it passed. The session does not act on a pass.
 
+## End each write-up fix with its EDIT (feature 250 D18)
+
+The session applies your report with ONE command, `make apply-edits`, which reads blocks of exactly this shape from
+your reply (measured, research R9: every other check's findings were applied by command, and a page's source
+write-up fixes were the hand edits left - four on one page):
+
+    EDIT <the registry entry's ORIGIN path, as the MANIFEST gives it - `.claude/skills/diagram/research/sources/010-works-cited/NNNN-<key>.html`>
+    <<<
+    the exact text now in the write-up
+    ===
+    the text that should replace it
+    >>>
+
+- Copy the old text CHARACTER FOR CHARACTER from the bundle's copy of the entry, just long enough to occur ONCE in
+  the file (a clause or a sentence of `What it is:` or `Why it applies, and its limits:`). The script applies a
+  block only where its old text occurs exactly once; the session does a refused one by hand.
+- The new text states the limit plainly, in the write-up's register: what the source is, and what it cannot carry
+  for this setting (a modern figure, another region, a tertiary summary, another scale of place).
+- A source judged NOT-APPLICABLE, or one whose fix is not a rewording (the citation must go, or a different source is
+  needed), ends with `EDIT: none - <why>`; the session works it.
+
 ## Why you exist, in the GM's words (2026-09-07, feature 211)
 
 *"We should also have a subagent check which runs anytime one of these new sources is being added. We can run this

@@ -433,6 +433,35 @@ done for each of our other iterations."*
    the others were and compared in R9 with R4 to R8, per thing checked, saying which of the three changes the page
    exercised (whether any modal was owed, how the groups packed).
 
+### D18 - The ninth round: R9's three recommendations, then another measured page (GM 2026-09-27)
+
+The GM, on R9: *"Yes, please implement those recommendations and then do another round of testing and measurements
+when researching the next page."*
+
+1. **`source-applicability` ends each write-up fix with an EDIT block** (recommendation 1) on the registry entry -
+   the old text copied from the bundle's copy, occurring once; `EDIT: none - <why>` for a source judged
+   NOT-APPLICABLE or a fix that is not a rewording. `apply-edits` already writes under `research/`, where the registry
+   lives. The check brief's step 6 names it among the reports it applies.
+2. **Measure a session's start-up, then decide the budget** (recommendation 2). MEASURED: a check session spends a
+   median 117,693 tokens (mean 129,268; 3 to 10 turns) before its first check dispatch, over the nine check sessions
+   of R6 to R9 (observed 2026-09-27; method: each session's main-thread usage summed up to and including the message
+   that first calls `Agent`). That is about 5% of a typical session, so merging small groups would save little, while
+   a larger budget raises every later turn's context. The fit, refitted over the same nine sessions, is peak =
+   52,184 + 1.41 x load (a load of 28,000 predicts 91,639; a load of 33,934 predicts 100,000). DECISION: the budget
+   stays at 28,000 - the start-up it would save is small, and the refit leaves headroom under 100,000.
+3. **A page's round also takes the modals still owed from its other questions** (recommendation 3). `homes` credits
+   an owed modal to the first of its questions the round changed, else to its own first question on the page; such a
+   question enters the packing as an item whose load is its modals alone (its own findings are not re-checked), and
+   its group's brief names the modals with `Your questions: none - this group checks only the modals and keys named
+   below` when that is all it holds. Replayed at the archetypes write session's commit (7f0d8e4c): the round would
+   have taken 100 and 140 plus every owed modal on the page - four folded into 100's group, eight dike-pond modals in a
+   modal-only group - each checked once (observed 2026-09-27; method: `brief.py checks` in a detached worktree).
+   None of the pages left has an owed modal today (`_entry_owed.py`: homesteads 24, archetypes 7, fields 6,
+   vegetation 1 - all pages already worked), so the next page will not exercise this; those four stay with T23.
+4. **The measured page is `cities/hinterland`**: two FR-002 items (questions 010 and 050), no FR-006 item, nothing
+   over the cap - the nearest in size of the pages left. Compared in R10 with R6 to R9, per thing checked, saying
+   which changes it exercised.
+
 ## Phases
 
 0. Baseline and the meter (T01, T02).
