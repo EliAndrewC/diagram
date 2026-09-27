@@ -31,7 +31,9 @@ from what you find (by the orchestrating session, NOT by you); O, H, U are the O
 2. **Find and save the pages.** Search (Japanese sources first for Edo buildings - jawiki, kotobank, a prefecture's
    or city's page on a surviving jin'ya, bukeyashiki or honjin; Chinese for yamen). Save every candidate with
    `make source-pages OUT=/tmp/l7r-check/g3-pages URLS="<u1> <u2> ..."` (one directory for the group; a second
-   call adds to it) and grep them yourself. A source already in the registry: `make check-bundle KEY=<key>`.
+   call adds to it) and grep them yourself - a page over 20,000 characters is saved in PARTS, so a grep hit leads to
+   one bounded read. A source already in the registry reaches `source-reader` as `make check-bundle KEY=<key> WHOLE=1`
+   (the whole page, in parts; the plain `KEY=` bundle is an excerpt for `source-applicability` only - 250 D19).
 3. **Read through `source-reader`.** Dispatch ONE `source-reader` over every claim at once, handing it the saved
    directory and each claim verbatim in the prompt - never a path under `/diagram` (`check-bundle-hooks.sh`
    refuses that). Write only from what it returns READ with a quote.

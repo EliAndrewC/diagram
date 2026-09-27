@@ -46,7 +46,7 @@ G5 on `religion-and-death/`, G6 on `cities/river-cities/`, `urban-features/` and
 ## G3B - the compound's gate and walls, and two unreadable sources (research/buildings)
 
 - R26 **the main gate's width** - between a samurai residence gate (9-12 ft) and a yamen gatehouse (18-24 ft). `main gate`. O H U P.
-- R27 **wall thickness** - 1.5-2 ft (religion-and-death gates entry) vs 3 ft (buildings 070, the scale entry). `compound wall`. Written as its own question linking 070 (FR-006).
+- R27 **wall thickness** - 1.5-2 ft (religion-and-death gates entry) vs 3 ft (buildings 070, the scale entry). `compound wall`. Researched in its own question; the correction to buildings 070 is made in T17 (FR-006).
 - R28 **the staged arrival** - gate, court or garden, genkan: a readable source ('Guest doors feed courts', 120). `genkan`, `residence`, `garden`.
 - R29 **the branch office with two shrines** - a readable source for the excavation plan. `compound shrine`.
 

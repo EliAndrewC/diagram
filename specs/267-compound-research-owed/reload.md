@@ -2,7 +2,9 @@
 
 Read in this clone after `sync-in` at main `51515eb6` (2026-09-27), which carries feature 250's landing, and found by
 search rather than memory (`grep -rln "page-session\|check-bundle\|quote-check\|research pass" CLAUDE.md docs
-.claude/skills/diagram/research/CLAUDE.md scripts specs/250-*`):
+.claude/skills/diagram/research/CLAUDE.md .claude/agents scripts specs/250-*`). Every hit that states a research
+procedure is below; the rest are the guards and scripts that enforce these (their messages name the same commands)
+and 250's measurement files, which state no procedure of their own.
 
 | file | what it sets |
 |---|---|
@@ -12,7 +14,10 @@ search rather than memory (`grep -rln "page-session\|check-bundle\|quote-check\|
 | `docs/research-record-rules.md` | the why of each rule, above all the size cap and how to split (D14) |
 | `scripts/page-session.sh`, `scripts/_page_session_runner.py` | fresh headless sessions from briefs, one after another, detached; `then:` steps queue briefs; the sessions commit and do not push; do not edit the clone while they run |
 | `specs/250-close-the-record-checks/briefs/*` and `measure/brief.py` | the brief shape this feature's `briefs/gen.py` follows: the write session (canon once, `source-pages`, ONE `source-reader`, read every file in one message, write, test, the cap, a handoff) and the check sessions (bundles, `apply-edits`, one re-check, a report) |
-| `.claude/agents/{source-reader,quote-check,record-format,source-applicability,entry-drift}.md` | the check contracts the sessions dispatch; each reads only its bundle's MANIFEST (`check-bundle-hooks.sh`) |
+| `specs/250-close-the-record-checks/plan.md` D6-D20 | a check reads a BUNDLE outside the repository (D6); a page in fresh sessions from briefs, write then check groups packed by load (D7, D17); compact reports and `apply-edits` in one turn (D15); canon through `make canon` (D16); a long source read in PARTS, and a registered source reaches `source-reader` as `make check-bundle KEY=<key> WHOLE=1` - the plain `KEY=` excerpt is for `source-applicability` only (D19). The briefs said the plain form until this reading; corrected |
+| `docs/efficiency-tooling.md` | `make source-pages` runs BEFORE `source-reader`, which greps the saved pages; the batching line (send the reads you know you need in one message) |
+| `docs/spec-kit-and-reviews.md` | a physical task carries the five research boxes, ticked before the task (`tasks.md` T01-T09, T16, T17) |
+| `.claude/agents/{source-reader,quote-check,record-format,source-applicability,entry-drift}.md` | the check contracts the sessions dispatch; each reads only its bundle's MANIFEST (`check-bundle-hooks.sh`), and each says how a long page reaches it |
 
 What changed against what this session remembered from before 250 landed: the checks read bundles outside the
 repository; the research runs in page sessions, not in the orchestrating session; canon is read only through

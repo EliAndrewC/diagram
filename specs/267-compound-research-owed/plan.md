@@ -20,8 +20,10 @@ kinds and the sheets its outcomes bear on, which the research sessions do not to
   write session reads every source it cites; the groups run ONE AFTER ANOTHER in this clone (the runner's rule: do not
   edit the clone while they run), so no two sessions write at once.
 - **D3 - Each group owns a prefix range on its page** (`gen.py GROUPS`), so questions never collide across groups.
-- **D4 - Feature 265's five buildings sections are not edited** (FR-006; the briefs say so): an item belonging there
-  (R27, the wall thickness, in 070) is written as its own question linking it.
+- **D4 - No section on 265's derived list is edited while 265's task for its page is open** (FR-006; the list is the
+  spec's Edge Cases, and every brief carries it). The research sessions write their findings in their own questions
+  and name any edit a finding owes such a section in the handoff; the edit itself - R27 in buildings 070, R42 in
+  river-cities 040, R46 in ways 020, and any a handoff names - is made in T17 once 265's task for that page is ticked.
 - **D5 - An item's outcome is one of four**, recorded in the handoff line `R<nn> <OUTCOME> - ... - ...` and gathered
   into `outcomes.md`: ACCURATE, KNOB, SILENT (an absence note, dated search), CONTRADICTION-RESOLVED (FR-001).
 - **D6 - The kinds and the sheets follow in this session, per group, after its checks** (FR-003, FR-004): each kind's

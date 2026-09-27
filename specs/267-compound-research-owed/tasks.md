@@ -3,7 +3,7 @@
 Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D8). Inventory: [`inventory.md`](inventory.md). Outcomes:
 [`outcomes.md`](outcomes.md). Briefs and handoffs: [`briefs/`](briefs/).
 
-- [ ] T01 G1, the residence's rooms (R01-R06): write session, then its check sessions (D1)
+- [ ] T01 G1, the residence's rooms (R01-R06, R53): write session, then its check sessions (D1)
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
 - [ ] T02 G1B, the residence's entry and outbuildings (R07-R12)

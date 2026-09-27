@@ -18,7 +18,7 @@ Each is a research QUESTION the record owes. The kinds named are the map feature
 from what you find (by the orchestrating session, NOT by you); O, H, U are the Ochiba, Hayakawa and Ubame sheets.
 
 - R26 **the main gate's width** - between a samurai residence gate (9-12 ft) and a yamen gatehouse (18-24 ft). `main gate`. O H U P.
-- R27 **wall thickness** - 1.5-2 ft (religion-and-death gates entry) vs 3 ft (buildings 070, the scale entry). `compound wall`. Written as its own question linking 070 (FR-006).
+- R27 **wall thickness** - 1.5-2 ft (religion-and-death gates entry) vs 3 ft (buildings 070, the scale entry). `compound wall`. Researched in its own question; the correction to buildings 070 is made in T17 (FR-006).
 - R28 **the staged arrival** - gate, court or garden, genkan: a readable source ('Guest doors feed courts', 120). `genkan`, `residence`, `garden`.
 - R29 **the branch office with two shrines** - a readable source for the excavation plan. `compound shrine`.
 
@@ -29,7 +29,9 @@ from what you find (by the orchestrating session, NOT by you); O, H, U are the O
 2. **Find and save the pages.** Search (Japanese sources first for Edo buildings - jawiki, kotobank, a prefecture's
    or city's page on a surviving jin'ya, bukeyashiki or honjin; Chinese for yamen). Save every candidate with
    `make source-pages OUT=/tmp/l7r-check/g3b-pages URLS="<u1> <u2> ..."` (one directory for the group; a second
-   call adds to it) and grep them yourself. A source already in the registry: `make check-bundle KEY=<key>`.
+   call adds to it) and grep them yourself - a page over 20,000 characters is saved in PARTS, so a grep hit leads to
+   one bounded read. A source already in the registry reaches `source-reader` as `make check-bundle KEY=<key> WHOLE=1`
+   (the whole page, in parts; the plain `KEY=` bundle is an excerpt for `source-applicability` only - 250 D19).
 3. **Read through `source-reader`.** Dispatch ONE `source-reader` over every claim at once, handing it the saved
    directory and each claim verbatim in the prompt - never a path under `/diagram` (`check-bundle-hooks.sh`
    refuses that). Write only from what it returns READ with a quote.
