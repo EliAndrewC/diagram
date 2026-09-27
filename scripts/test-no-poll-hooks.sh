@@ -168,6 +168,17 @@ echo "4. the escape hatch works for genuine external waits"
 check "POLL_OK allows a real port wait" ok '# POLL_OK: waiting for the dev server port to open
 until curl -s localhost:8080 >/dev/null; do sleep 2; done'
 check "POLL_OK allows a bare sleep bypass" ok 'command sleep 5  # POLL_OK: external deploy settling'
+# GUARD_EDIT_OK: a check for the 2026-09-27 prefilter in _guardlog.sh's escape_or_refuse, which skips the
+# python when the token is not in the raw payload. A JSON encoder MAY write the token's letters as \u escapes;
+# the prefilter must then fall through to the full check, which decodes them and still honors the escape.
+# The payload is built with chr(92) for the backslash so no layer between here and the hook can decode the
+# escape early (a first draft typed it literally and an upstream JSON decode turned it back into `_`).
+U_PAYLOAD=$(python3 -c 'import json; print(json.dumps({"session_id": "t1", "tool_name": "Bash", "tool_input": {"command": "until nc -z localhost 8080; do sleep 2; done  # POLL_OK: waiting for the dev server port"}}).replace("POLL_OK", "POLL" + chr(92) + "u005fOK"))')
+case "$U_PAYLOAD" in *POLL_OK*) echo "  FAIL    the fixture lost its \\u escape"; FAIL=$((FAIL+1)) ;; esac
+printf '%s' "$U_PAYLOAD" \
+  | "$HOOK" pretool >/dev/null 2>"$HOOK_ERR" \
+  && { echo "  ok      an escape spelled with a \\u escape in the JSON is still honored"; PASS=$((PASS+1)); } \
+  || { echo "  FAIL    the prefilter dropped an escape whose token the payload \\u-encoded"; FAIL=$((FAIL+1)); }
 
 # GUARD_EDIT_OK: GM 2026-09-08 - THE ESCAPE DOES NOT SKIP THE SELF-MATCH CORRECTION. The real one: a
 # waiter on a detached `make page-check`, escaped with POLL_OK because it read the run's log, whose

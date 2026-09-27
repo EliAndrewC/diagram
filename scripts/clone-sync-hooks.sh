@@ -37,7 +37,34 @@ SESSIONS_DIR=${CLONE_SESSIONS_DIR:-${HOME:-/home/agent}/.claude/sessions}  # CLO
 MODE=${1:-}
 INPUT=$(cat 2>/dev/null || true)
 
+# GUARD_EDIT_OK: a performance fix found while working (2026-09-27), no rule changed - THE PAYLOAD IS PARSED
+# ONCE. Every `$(field x)` used to start its own python to re-read the same JSON: two per `pretool` (every tool
+# call, every session), four per `resolve` (every guard firing, via _guardlog.sh). `derive_main` below reads
+# `cwd` on every run, so this one python replaces a spawn that was always paid. Each value is exactly what
+# `field` printed - a string or '' (non-string, missing, unparsable), with a NUL dropped as bash drops one
+# from a command substitution; a path not in the list still takes the old per-call route.
+declare -A _FIELD=()
+_FIELD_PATHS=(cwd session_id transcript_path tool_name tool_input.command tool_input.file_path)
+if [ -n "$INPUT" ]; then
+  while IFS= read -r -d '' _k && IFS= read -r -d '' _v; do _FIELD[$_k]=$_v; done < <(printf '%s' "$INPUT" | python3 -c "
+import json, sys
+paths = sys.argv[1:]
+try:
+    doc = json.load(sys.stdin)
+except Exception:
+    doc = None
+for p in paths:
+    d = doc
+    for k in p.split('.'):
+        d = d.get(k, {}) if isinstance(d, dict) else {}
+    v = d if isinstance(d, str) else ''
+    sys.stdout.write(p + '\0' + v.replace('\0', '') + '\0')" "${_FIELD_PATHS[@]}")
+else
+  for _k in "${_FIELD_PATHS[@]}"; do _FIELD[$_k]=''; done
+fi
+
 field() { # field <dotted.path> - pull a string field out of the hook's stdin JSON
+  if [[ -v _FIELD[$1] ]]; then printf '%s\n' "${_FIELD[$1]}"; return 0; fi
   printf '%s' "$INPUT" | python3 -c "
 import json, sys
 try:

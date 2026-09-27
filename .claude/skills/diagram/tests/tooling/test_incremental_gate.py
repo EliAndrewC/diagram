@@ -122,7 +122,13 @@ def project(tmp_path: Path) -> tuple[Path, Path]:
 def _baselined_snapshot(tmp_path_factory: pytest.TempPathFactory) -> tuple[Path, Path, Path]:
     """ONE project baselined ONCE per worker, and a copy of it as it stood (2026-09-27). Ten tests began with the
     same two lines - a fresh project, then `baseline()` - and the baseline is a whole gate run (a `pytest -n 2`
-    subprocess, ~1.5 s), so the file paid for the identical baseline ten times over."""
+    subprocess, ~1.5 s), so the file paid for the identical baseline ten times over.
+
+    It saves only where tests share a worker: spread over ten, each worker still builds its own. TRIED AND
+    REVERTED (2026-09-27): an `xdist_group` on the ten, which the gate's `--dist loadgroup` honors - one
+    baseline, but the ten then run in series on one worker, and the file went from ~6.7 s to 21.8 s of wall
+    time (measured under loadgroup, -n 10). An incremental gate that selects only these tests would wait that
+    long, so the CPU it saves is not worth it."""
     base = tmp_path_factory.mktemp("incremental")
     root, skill = new_project(base)
     baseline(root, skill)
