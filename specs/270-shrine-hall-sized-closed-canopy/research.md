@@ -11,7 +11,7 @@ Kaie-ji's 200 to 330 sq m, its depth 8.0 to 13.0 m (26 to 43 ft) - one attested 
 dwelling, where it stands apart, a farmhouse of 46 by 28 ft (form accurate, size a guess). The 60 by 48 ft the 268
 sheet drew came from the village map's glyph, not from the record or the GM (the GM, 2026-09-27). What determines
 the size in reality: the parish's means and the building module (the ken); nothing read sets a country shrine's
-size more closely than these bands, so the value chosen inside them is a guess (plan D3).
+size more closely than these bands, so the value chosen inside them is a guess (plan D3). (observed 2026-09-27; method: read from the record and the 268 notes.)
 
 ## R2. How close may two trees stand? (the duplicated-tree threshold)
 
@@ -23,4 +23,4 @@ top of each other" - and nothing a wood would grow.
 
 Record question 124: the unbuilt remainder of a precinct was largely wood (a guess from the registers' praise of
 old, dense trees and the chinju no mori definition); no source measures a grove's canopy cover. The 268 grove drew
-at 42% because crowns could not overlap; plan D2's target, a closed canopy, is a guess in degree.
+at 42% because crowns could not overlap; plan D2's target, a closed canopy, is a guess in degree. (observed 2026-09-27; method: read from the record and the 268 notes.)
