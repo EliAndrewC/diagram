@@ -425,13 +425,18 @@ footplanks	footplank
 forest litter	forest litter
 forest litters	forest litter
 fortune	Fortune
+four carps	four domestic carps
+four domestic carps	four domestic carps
 four gods	four gods
+four major carps	four domestic carps
 four-gods formulation	four gods
 frass	frass
 freeboard	freeboard
 frontage	frontage
 frost heave	frost heave
 frost-heave	frost heave
+fry pond	nursery pond
+fry ponds	nursery pond
 fsw	FSW
 fsws	FSW
 fu	fu
@@ -488,6 +493,7 @@ goten	goten
 goulan	goulan
 goyoba	goyoba
 goyōba	goyoba
+grass carp	grass carp
 green manure	green manure
 groin	groyne
 groins	groyne
@@ -863,6 +869,10 @@ meander	meander
 meibutsu	meibutsu
 meiji	Meiji
 meireki	Meireki
+memorial	memorial
+memorialize	memorial
+memorialized	memorial
+memorials	memorial
 men-hai	taiping-gang
 mengxi bitan	Mengxi Bitan
 micro-high	micro-high
@@ -956,6 +966,8 @@ nucleation	nucleated
 numajiro	numajiro
 nunosarashi	nunosarashi
 nuriya	nuriya
+nursery pond	nursery pond
+nursery ponds	nursery pond
 o-aza	ō-aza
 oaza	ō-aza
 oblique weir	oblique weir
@@ -1233,6 +1245,7 @@ sigma	sigma
 siheyuan	siheyuan
 siku quanshu	Siku Quanshu
 sill	sill
+silver carp	silver carp
 simpson index	SI
 six chambers	Six Chambers
 six fang	Six Chambers

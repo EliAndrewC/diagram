@@ -6098,5 +6098,43 @@
   "variants": [
    "shifting cultivation"
   ]
+ },
+ "silver carp": {
+  "def": "A pond fish that feeds on the fine matter in the water; it was fed on dung, whether the livestock's or the grass carp's, so it shared a pond with the grass carp.",
+  "variants": [
+   "silver carp"
+  ]
+ },
+ "nursery pond": {
+  "def": "A pond where fish fry are raised until they are big enough to stock a grow-out pond. In the Pearl River delta only the fry households of Jiujiang kept them; there they took seven parts in ten of the pond water, and a modern manual gives them a quarter to three tenths of a self-stocking farm's pond area.",
+  "variants": [
+   "nursery pond",
+   "nursery ponds",
+   "fry pond",
+   "fry ponds"
+  ]
+ },
+ "memorial": {
+  "def": "A written petition an official sent to the emperor to ask for a ruling or an action. To memorialize was to submit one; Liu Daxia's memorial of the Hongzhi reign asked that the West River fry landings be granted to the people of Jiujiang.",
+  "variants": [
+   "memorial",
+   "memorials",
+   "memorialized",
+   "memorialize"
+  ]
+ },
+ "four domestic carps": {
+  "def": "The four carps that Chinese pond farmers raised together, each feeding at its own depth: black carp, grass carp, silver carp and bighead carp. From the mid-Ming on, their fry for the delta's ponds came from the West River by way of Jiujiang.",
+  "variants": [
+   "four domestic carps",
+   "four carps",
+   "four major carps"
+  ]
+ },
+ "grass carp": {
+  "def": "A large pond fish that eats grass and plants; farmers swept cut grass and livestock dung into the pond to feed it, and its own dung fed the silver carp.",
+  "variants": [
+   "grass carp"
+  ]
  }
 }
