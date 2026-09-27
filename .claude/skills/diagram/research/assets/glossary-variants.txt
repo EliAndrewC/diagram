@@ -747,6 +747,7 @@ kosatsu	kosatsuba
 kosatsuba	kosatsuba
 kotai-yoriai	kotaiyoriai
 kotaiyoriai	kotaiyoriai
+kotobank	kotobank
 kuchiireya	hitoyado
 kui	kui
 kumi	kumi
@@ -1288,6 +1289,7 @@ tedai	tedai
 teikaku	teikaku
 temizuya	temizuya
 ten-volume wamyosho	Wamyosho
+tenna	Tenna
 tenon	mortise and tenon
 tenpo	Tenpo era
 tenpo era	Tenpo era

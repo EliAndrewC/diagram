@@ -5876,5 +5876,17 @@
   "variants": [
    "ridge culture"
   ]
+ },
+ "Tenna": {
+  "def": "A Japanese era name. \"Tenna 1\" is its first year, 1681, the year the Hyakusho Denki is dated.",
+  "variants": [
+   "Tenna"
+  ]
+ },
+ "kotobank": {
+  "def": "A Japanese online reference site that brings entries from several dictionaries and encyclopedias, among them the Nipponica encyclopedia, under one search.",
+  "variants": [
+   "kotobank"
+  ]
  }
 }
