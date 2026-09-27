@@ -7382,5 +7382,23 @@
   "variants": [
    "Honan"
   ]
+ },
+ "stem family": {
+  "def": "A household of parents living with one married heir and the heir's children, the other children marrying out or leaving; the ordinary farm household of the later Edo period.",
+  "variants": [
+   "stem family"
+  ]
+ },
+ "joint household": {
+  "def": "A household holding two or more married couples of the same generation - brothers and their wives, say - under one head.",
+  "variants": [
+   "joint household"
+  ]
+ },
+ "shumon aratame cho": {
+  "def": "The yearly religious-investigation register of an Edo-period village, listing every household and its members with their ages and relations; historians read household sizes from it.",
+  "variants": [
+   "shumon aratame cho"
+  ]
  }
 }

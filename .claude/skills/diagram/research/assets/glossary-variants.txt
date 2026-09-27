@@ -834,6 +834,7 @@ jobikeshi	jobikeshi
 jochi	jochi
 jodo	Jodo
 jodo shinshu	Jodo Shinshu
+joint household	joint household
 jokamachi	jokamachi
 jokyo	Jokyo
 jori	jori
@@ -1509,6 +1510,7 @@ shuimen	water gate
 shuinchi	shuinchi
 shuku	shukuba
 shukuba	shukuba
+shumon aratame cho	shumon aratame cho
 shunde	Shunde
 shunzhi	Shunzhi
 si	SI
@@ -1560,6 +1562,7 @@ stelae	stele
 stele	stele
 steles	stele
 stem density	stem density
+stem family	stem family
 stilling pool	stilling pool
 stone pitching	stone pitching
 straw rick	rick
