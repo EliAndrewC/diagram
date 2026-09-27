@@ -181,6 +181,7 @@ recommendation 2). Read only your own lines of the handoff.
 
 **Your questions:** {sections}
 **Your registry keys:** {keys}
+**Your modals** (each owed an `entry-drift`, each checked by this group and no other): {modals}
 
 ## The procedure (check, apply{closing})
 
@@ -188,9 +189,9 @@ recommendation 2). Read only your own lines of the handoff.
    `make check-bundle PAGE={page} SECTION=<NNN> FOR=quote-check` for `quote-check`, and `... FOR=record-format`
    for `record-format` - each bundle holds only what that check reads - each agent naming its own MANIFEST.md and
    nothing else. For each of your keys:
-   `make check-bundle KEY=<key>` and `source-applicability`. And the map's modals: run
-   `python3 scripts/_entry_owed.py` from the clone root; for each class it names whose entry is one of YOUR
-   questions, `make check-bundle PAGE={page} SECTION=<NNN> NO_QUOTES=1 FOR=entry-drift KIND=<class>` and `entry-drift` naming its
+   `make check-bundle KEY=<key>` and `source-applicability`. And the map's modals - EXACTLY those named under Your
+   modals, no others (each is checked once, by the group whose load counts it): for each,
+   `make check-bundle PAGE={page} SECTION=<its NNN> NO_QUOTES=1 FOR=entry-drift KIND=<its class>` and `entry-drift` naming its
    MANIFEST (a drifted modal is owed at the push, so it is checked here, with the question it was written from).
 6. **Apply each report with ONE command.** `quote-check`, `record-format` and `entry-drift` end every finding with an
    `EDIT` block (or `EDIT: none - <why>`) - a drifted modal's block edits its class file and every glossary term with a `GLOSSARY` line. When a report arrives, read its
@@ -253,8 +254,8 @@ def check_groups(handoff: str, sizes: dict[str, int] | None = None, keys_load: i
 
 
 def owed_modals(page: str) -> list[tuple[str, int, list[str]]]:
-    """[(modal key, its docstring's bytes, EVERY section of this page it is owed from)] for each modal `_entry_owed.py`
-    names. A modal can be owed from several questions; `loads` credits it to the one a check group actually takes."""
+    """[(modal class name, its docstring's bytes, EVERY section of this page it is owed from)] for each modal
+    `_entry_owed.py` names. A modal can be owed from several questions; `homes` credits it to ONE a check group takes."""
     import ast  # noqa: PLC0415
     got = subprocess.run([sys.executable, str(CLONE / "scripts/_entry_owed.py")], cwd=CLONE, capture_output=True, text=True, check=False).stdout
     out: list[tuple[str, int, list[str]]] = []
@@ -267,21 +268,31 @@ def owed_modals(page: str) -> list[tuple[str, int, list[str]]]:
             continue
         src = (CLONE / m.group(2)).read_text(encoding="utf-8")
         node = next((n for n in ast.walk(ast.parse(src)) if isinstance(n, ast.ClassDef) and n.lineno == int(m.group(3))), None)
-        out.append((m.group(1), len(ast.get_docstring(node) or "") if node else 0, secs))
+        out.append((node.name if node else m.group(1), len(ast.get_docstring(node) or "") if node else 0, secs))
+    return out
+
+
+def homes(page: str, handoff: str) -> dict[str, tuple[str, int]]:
+    """modal class -> (the ONE checked section it is credited to, its prose bytes): the first of the questions it is
+    owed from that the handoff checks. That group's load counts it and that group alone checks it (plan review, D17:
+    a modal owed from two checked questions in different groups was checked twice and counted once)."""
+    checked = list(dict.fromkeys(re.findall(r"SECTION=(\d{3})", handoff)))
+    out = {}
+    for cls, prose, secs in owed_modals(page):
+        home = next((s for s in checked if s in secs), None)
+        if home is not None:
+            out[cls] = (home, prose)
     return out
 
 
 def loads(page: str, handoff: str) -> tuple[dict[str, int], int]:
     """(section -> its load: question and notes bytes + its owed modals' prose; the registry keys' load: their entries'
     bytes) - what `check_groups` packs."""
-    checked = list(dict.fromkeys(re.findall(r"SECTION=(\d{3})", handoff)))
     size = {n: b for n, (_t, b) in questions(page).items()}
-    for _key, prose, secs in owed_modals(page):
-        # credited to the FIRST of its sections that a check group takes - the group that will run its entry-drift
-        # (plan review, D17: crediting the first on the page lost `paddy`, owed from 110 but listed under 020)
-        home = next((s for s in checked if s in secs), None)
-        if home is not None:
-            size[home] += prose + MODAL_WORK
+    # credited to the FIRST of its sections that a check group takes - the group that runs its entry-drift (plan
+    # review, D17: crediting the first on the PAGE lost `paddy`, owed from 110 but listed under 020)
+    for home, prose in homes(page, handoff).values():
+        size[home] += prose + MODAL_WORK
     works = SKILL / "research/sources/010-works-cited"
     keys = re.findall(r"KEY=([a-z0-9][a-z0-9-]*)", handoff)
     keys_load = sum(f.stat().st_size for k in dict.fromkeys(keys) for f in works.glob(f"*-{k}.html"))
@@ -298,6 +309,7 @@ def checks(page: str, task: str) -> int:
         return 2
     text = handoff.read_text(encoding="utf-8")
     groups, keys = check_groups(text, *loads(page, text))
+    owed = homes(page, text)
     fields = _fields(page, task)
     for n, group in enumerate(groups, 1):
         last = n == len(groups)
@@ -305,6 +317,7 @@ def checks(page: str, task: str) -> int:
         mine = KEYS in group
         out.write_text(CHECK.format(n=f"2{chr(96 + n)}", what=f"check and apply, group {n} of {len(groups)}", sections=", ".join(f"SECTION={s}" for s in group if s != KEYS) or "none - this group checks the registry keys",
                                     keys=", ".join(f"KEY={k}" for k in keys) if mine else "none - another group has them" if keys else "none",
+                                    modals=", ".join(f"KIND={c} (SECTION={h})" for c, (h, _b) in sorted(owed.items()) if h in group) or "none",
                                     closing=" and close the page" if last else "", close=(CLOSE_LAST if last else CLOSE_GROUP).format(**fields), **fields), encoding="utf-8")
         print(out)
     return 0

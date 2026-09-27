@@ -1,6 +1,6 @@
 {
  "feature": "250-close-the-record-checks",
- "plan_sha256": "cc734da0e9055f1d4a1ca4c37d4d7fdec7ba4e8477249123f46ccdfa1059f25f",
+ "plan_sha256": "2c06feb6f2899b79b436eb359b00a72e2d27aef41172816dcb9c981c96d773aa",
  "reviewed": "2026-09-27",
  "declared": "spec-fidelity",
  "decisions": [
@@ -8,130 +8,129 @@
    "id": "D14.1",
    "summary": "A bundle per check: make check-bundle FOR=quote-check|record-format|entry-drift keeps only what that check reads; registry entries only in FOR=all; the check briefs dispatch each agent with its own.",
    "class": "within",
-   "why": "The GM: 'I think we should do both of them' - the first of the two is the per-check bundle. Unchanged since the last CLEAR. Unchanged this round (the plan diff since the last CLEAR is D16 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only)."
+   "why": "The GM: 'I think we should do both of them' - the first of the two is the per-check bundle. Unchanged since the last CLEAR. Unchanged this round (the plan diff since the last CLEAR is D16 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only). Unchanged this round (the plan diff since the last review, 2a6e0596..aecd2f47, is D17.2 only)."
   },
   {
    "id": "D14.2",
    "summary": "The question-size cap is 20,000 bytes (question + notes), the record's 90th percentile, picked by the session from a labeled measurement; 18 untouched questions over it (labeled, observed 2026-09-26 after the four splits).",
    "class": "within",
-   "why": "The GM delegated the number: 'perhaps you would be able to pick something sensible, and then we can try that out'. The corrected count re-run this round (make question-sizes): 18 questions over 20,000 bytes, matching the plan. Unchanged this round (the plan diff since the last CLEAR is D16 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only)."
+   "why": "The GM delegated the number: 'perhaps you would be able to pick something sensible, and then we can try that out'. The corrected count re-run this round (make question-sizes): 18 questions over 20,000 bytes, matching the plan. Unchanged this round (the plan diff since the last CLEAR is D16 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only). Unchanged this round (the plan diff since the last review, 2a6e0596..aecd2f47, is D17.2 only)."
   },
   {
    "id": "D14.2b",
    "summary": "The cap is enforced on what a change TOUCHES; untouched over-cap questions are split when their pages are worked.",
    "class": "narrowing",
-   "why": "Implied by the GM's own words: 'the maximum size a question should grow to' is a cap on growth, 'if we end up splitting up some of our existing questions' makes splitting existing ones contingent, and 'try that out' frames a trial. Purpose (cut what a check reads) is reached wherever a check runs, since checks run only on worked pages and make quick refuses a touched over-cap question. Unchanged since the last CLEAR. Unchanged this round (the plan diff since the last CLEAR is D16 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only).",
-   "ruling": "LEGITIMATE"
+   "ruling": "LEGITIMATE",
+   "why": "Implied by the GM's own words: 'the maximum size a question should grow to' is a cap on growth, 'if we end up splitting up some of our existing questions' makes splitting existing ones contingent, and 'try that out' frames a trial. Purpose (cut what a check reads) is reached wherever a check runs, since checks run only on worked pages and make quick refuses a touched over-cap question. Unchanged since the last CLEAR. Unchanged this round (the plan diff since the last CLEAR is D16 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only). Unchanged this round (the plan diff since the last review, 2a6e0596..aecd2f47, is D17.2 only)."
   },
   {
    "id": "D14.3",
    "summary": "cities/government 080 split by hand into 080, 082, 085; bridging sentences reduced to pointers; session 1 then moved 080's hiring finding into 081 (080 at 15,587 bytes after session 1, a labeled one-shot figure).",
    "class": "within",
-   "why": "The GM asked the session to judge splits for lost context. The added clause records a later move, labeled with date and method; 080 and 081 link each other both ways (verified). 080 now measures 16,522 bytes after the check sessions applied their findings - still under the cap and consistent with the figure being stated as after session 1. Unchanged this round (the plan diff since the last CLEAR is D16 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only)."
+   "why": "The GM asked the session to judge splits for lost context. The added clause records a later move, labeled with date and method; 080 and 081 link each other both ways (verified). 080 now measures 16,522 bytes after the check sessions applied their findings - still under the cap and consistent with the figure being stated as after session 1. Unchanged this round (the plan diff since the last CLEAR is D16 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only). Unchanged this round (the plan diff since the last review, 2a6e0596..aecd2f47, is D17.2 only)."
   },
   {
    "id": "D14.3b",
    "summary": "Homesteads 040 and 210, vegetation 150, religion-and-death 200 split by fresh sessions from a split brief reporting what each part relies on from the others; the dispatching session judges each for lost context before it lands.",
    "class": "within",
-   "why": "Carries 'you should look and see whether you think there is important context being lost or if those questions linking to each other is good enough for a human without depriving necessary context from a future reviewer'. Verified this round: every split parent links to each part and each part back (040/043/046, 210/212-218, 150/152/154, 200/202-206); R6 records the judgment, and the one loss it found - six map modals whose Entry still named only the unsplit question, which would have deprived the entry-drift reviewer of the text the modal was written from - was repaired by re-pointing each Entry to the part that holds it. That repair serves the GM's 'future reviewer' clause directly; it is not new scope. Unchanged this round (the plan diff since the last CLEAR is D16 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only)."
+   "why": "Carries 'you should look and see whether you think there is important context being lost or if those questions linking to each other is good enough for a human without depriving necessary context from a future reviewer'. Verified this round: every split parent links to each part and each part back (040/043/046, 210/212-218, 150/152/154, 200/202-206); R6 records the judgment, and the one loss it found - six map modals whose Entry still named only the unsplit question, which would have deprived the entry-drift reviewer of the text the modal was written from - was repaired by re-pointing each Entry to the part that holds it. That repair serves the GM's 'future reviewer' clause directly; it is not new scope. Unchanged this round (the plan diff since the last CLEAR is D16 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only). Unchanged this round (the plan diff since the last review, 2a6e0596..aecd2f47, is D17.2 only)."
   },
   {
    "id": "D14.4",
    "summary": "The one more measured page is cities/government, recorded as R6 against R1-R5, its small size disclosed as noise.",
    "class": "within",
-   "why": "The GM: 'go ahead and do one more round on one more page, and then do another set of measurements'. R6 does that: it adds a per-question-checked row beside per-item (kept for continuity), states the crashed session's missing turns as a labeled estimate rather than smoothing them, and discloses the three-item noise as D14.4 promised. Its four recommendations are proposals for the GM to rule on, as R2-R5's were, not decisions taken. Unchanged this round (the plan diff since the last CLEAR is D16 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only)."
+   "why": "The GM: 'go ahead and do one more round on one more page, and then do another set of measurements'. R6 does that: it adds a per-question-checked row beside per-item (kept for continuity), states the crashed session's missing turns as a labeled estimate rather than smoothing them, and discloses the three-item noise as D14.4 promised. Its four recommendations are proposals for the GM to rule on, as R2-R5's were, not decisions taken. Unchanged this round (the plan diff since the last CLEAR is D16 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only). Unchanged this round (the plan diff since the last review, 2a6e0596..aecd2f47, is D17.2 only)."
   },
   {
    "id": "T19",
    "summary": "T19's exclusion list adds cities/government and its cut point moves to T51.",
    "class": "within",
-   "why": "Nothing dropped; unchanged since the last CLEAR. Unchanged this round (the plan diff since the last CLEAR is D16 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only)."
+   "why": "Nothing dropped; unchanged since the last CLEAR. Unchanged this round (the plan diff since the last CLEAR is D16 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only). Unchanged this round (the plan diff since the last review, 2a6e0596..aecd2f47, is D17.2 only)."
   },
   {
    "id": "D15.1",
    "summary": "A report is applied with one command: quote-check and record-format end each finding with an EDIT block (or EDIT: none - why), make apply-edits applies a block only where its old text occurs exactly once under research/, SKIP= for disagreement; agents still never edit.",
    "class": "within",
-   "why": "The GM on R6: 'Implement all of your recommendations and then do another measured page for comparison.' This is R6 recommendation 1 as proposed; the session still reads and applies, so nothing the earlier decisions required is dropped. Unchanged this round (the plan diff since the last CLEAR is D16 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only)."
+   "why": "The GM on R6: 'Implement all of your recommendations and then do another measured page for comparison.' This is R6 recommendation 1 as proposed; the session still reads and applies, so nothing the earlier decisions required is dropped. Unchanged this round (the plan diff since the last CLEAR is D16 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only). Unchanged this round (the plan diff since the last review, 2a6e0596..aecd2f47, is D17.2 only)."
   },
   {
    "id": "D15.2",
    "summary": "A split happens in the write session (brief.py over_cap names over-cap questions; step 3b splits one an item falls in); the standalone split brief stays for questions no page's items touch.",
    "class": "within",
-   "why": "The GM on R6: 'Implement all of your recommendations and then do another measured page for comparison.' R6 recommendation 2; keeps D14.3b's split brief rather than narrowing it. Unchanged this round (the plan diff since the last CLEAR is D16 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only)."
+   "why": "The GM on R6: 'Implement all of your recommendations and then do another measured page for comparison.' R6 recommendation 2; keeps D14.3b's split brief rather than narrowing it. Unchanged this round (the plan diff since the last CLEAR is D16 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only). Unchanged this round (the plan diff since the last review, 2a6e0596..aecd2f47, is D17.2 only)."
   },
   {
    "id": "D15.3",
    "summary": "The write session's read step, measured first (labeled, transcript d93e4c76): source-pages adds to an existing directory, the brief asks for one message of parallel reads and names the newest registry entry as the shape.",
    "class": "within",
-   "why": "The GM on R6: 'Implement all of your recommendations and then do another measured page for comparison.' R6 recommendation 3, which asked for the measurement first; the figure is labeled with date and method. Unchanged this round (the plan diff since the last CLEAR is D16 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only)."
+   "why": "The GM on R6: 'Implement all of your recommendations and then do another measured page for comparison.' R6 recommendation 3, which asked for the measurement first; the figure is labeled with date and method. Unchanged this round (the plan diff since the last CLEAR is D16 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only). Unchanged this round (the plan diff since the last review, 2a6e0596..aecd2f47, is D17.2 only)."
   },
   {
    "id": "D15.4",
    "summary": "tokens.py summary gives per question checked as the headline and per item beside it.",
    "class": "within",
-   "why": "The GM on R6: 'Implement all of your recommendations and then do another measured page for comparison.' R6 recommendation 4; per item is kept, nothing dropped. Unchanged this round (the plan diff since the last CLEAR is D16 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only)."
+   "why": "The GM on R6: 'Implement all of your recommendations and then do another measured page for comparison.' R6 recommendation 4; per item is kept, nothing dropped. Unchanged this round (the plan diff since the last CLEAR is D16 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only). Unchanged this round (the plan diff since the last review, 2a6e0596..aecd2f47, is D17.2 only)."
   },
   {
    "id": "D15.5",
    "summary": "The next measured page is cities/fabric (three FR-002 items, no FR-006, one item in question 140 at 36,858 bytes with notes, labeled 2026-09-26 wc -c), worked as the last three and compared in R7 with R4-R6.",
    "class": "within",
-   "why": "The GM on R6: 'Implement all of your recommendations and then do another measured page for comparison.' 'another measured page for comparison'. The previous round's one item (the unlabeled 36,858) is resolved by commit 15a76fbe; re-measured this round: 36,858 bytes for 140 and its notes. research.md R6's 83% now carries its method (5.30 of 6.38 million = 83.1%, reproduced). Unchanged this round (the plan diff since the last CLEAR is D16 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only)."
+   "why": "The GM on R6: 'Implement all of your recommendations and then do another measured page for comparison.' 'another measured page for comparison'. The previous round's one item (the unlabeled 36,858) is resolved by commit 15a76fbe; re-measured this round: 36,858 bytes for 140 and its notes. research.md R6's 83% now carries its method (5.30 of 6.38 million = 83.1%, reproduced). Unchanged this round (the plan diff since the last CLEAR is D16 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only). Unchanged this round (the plan diff since the last review, 2a6e0596..aecd2f47, is D17.2 only)."
   },
   {
    "id": "D16.1",
    "summary": "make canon searches every canon file for every term at once; canon-read-hooks.sh refuses direct canon reads (Read, Grep, shell read verbs, a recursive grep over the host repo, any setting/ copy under it) and a make canon within three calls unless it names every earlier term, and any third one in the window; registered in the fallback form (mirror copy, else the clone copy) with test_hooks_resolve.py failing a bare mirror path the mirror lacks; the write brief names budgets.md, l7r.md, gm-assistant/setting and the command.",
    "class": "within",
-   "why": "Last round NOT LEGITIMATE on three counts, each now closed and verified this round. (1) Reach: /diagram/scripts/canon-read-hooks.sh and check-bundle-hooks.sh are still absent from the mirror (ls), and both registrations now fall back to $CLAUDE_PROJECT_DIR/scripts, where both exist; test_hooks_resolve.py passes (make test-file, 1 passed); make guard-log GUARD=canon-read shows the live firing 2026-09-27T00:13:14 blocked/direct from this clone on /host-l7r-repo/setting/budgets.md. (2) The growing chain: test-canon-read-hooks.sh (22 of 22 ok) now has a, a|b, a|b|c refused, and the retry after a refusal passing because a refused call is dropped from the window. (3) The brief: brief.py and the generated briefs/fields-1.md step 1 name budgets.md and l7r.md in /host-l7r-repo/setting, gm-assistant/setting/*.md and make canon TERMS=\"a|b|c\" with ONE call over every setting item, which is R7 recommendation 1 as written. The added reach (recursive host-repo grep, the webapp and clone copies of setting/) refuses only reads that reach the canon, so it enforces what the GM asked mechanically enforced and nothing beyond it; settings.json is not matched (setting\\b). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only)."
+   "why": "Last round NOT LEGITIMATE on three counts, each now closed and verified this round. (1) Reach: /diagram/scripts/canon-read-hooks.sh and check-bundle-hooks.sh are still absent from the mirror (ls), and both registrations now fall back to $CLAUDE_PROJECT_DIR/scripts, where both exist; test_hooks_resolve.py passes (make test-file, 1 passed); make guard-log GUARD=canon-read shows the live firing 2026-09-27T00:13:14 blocked/direct from this clone on /host-l7r-repo/setting/budgets.md. (2) The growing chain: test-canon-read-hooks.sh (22 of 22 ok) now has a, a|b, a|b|c refused, and the retry after a refusal passing because a refused call is dropped from the window. (3) The brief: brief.py and the generated briefs/fields-1.md step 1 name budgets.md and l7r.md in /host-l7r-repo/setting, gm-assistant/setting/*.md and make canon TERMS=\"a|b|c\" with ONE call over every setting item, which is R7 recommendation 1 as written. The added reach (recursive host-repo grep, the webapp and clone copies of setting/) refuses only reads that reach the canon, so it enforces what the GM asked mechanically enforced and nothing beyond it; settings.json is not matched (setting\\b). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only). Unchanged this round (the plan diff since the last review, 2a6e0596..aecd2f47, is D17.2 only)."
   },
   {
    "id": "D16.2",
    "summary": "brief.py maps FR-002 and FR-006 items to their questions, queues a split session for each over-cap one, and makes the write brief by a then: step that refuses while any item question is over the cap.",
    "class": "within",
-   "why": "Carries recommendation 2 by construction. Verified at HEAD in a detached worktree: brief.py write fields T61 exits 2 naming 020; item_questions gives 110, 070, 160 and fr006_questions 020, 010, matching D16.4. An unplaced item only warns on stderr, but every fields item is placed. Unchanged this round (the plan diff since the last review is D16.1 and D16.4 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only)."
+   "why": "Carries recommendation 2 by construction. Verified at HEAD in a detached worktree: brief.py write fields T61 exits 2 naming 020; item_questions gives 110, 070, 160 and fr006_questions 020, 010, matching D16.4. An unplaced item only warns on stderr, but every fields item is placed. Unchanged this round (the plan diff since the last review is D16.1 and D16.4 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only). Unchanged this round (the plan diff since the last review, 2a6e0596..aecd2f47, is D17.2 only)."
   },
   {
    "id": "D16.3",
    "summary": "check_groups packs questions first fit, largest first, into sessions of at most 40,000 bytes, sized at checks time.",
    "class": "within",
-   "why": "Recommendation 3 by construction; 40,000 is the old two-at-the-cap maximum, the session's calibrated liberty. Unchanged this round (the plan diff since the last review is D16.1 and D16.4 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only)."
+   "why": "Recommendation 3 by construction; 40,000 is the old two-at-the-cap maximum, the session's calibrated liberty. Unchanged this round (the plan diff since the last review is D16.1 and D16.4 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only). Unchanged this round (the plan diff since the last review, 2a6e0596..aecd2f47, is D17.2 only)."
   },
   {
    "id": "D16.4",
    "summary": "The next measured page is fields: 3 FR-002 items plus 4 FR-006, with a split session on 020 first (done, commit 18566943, 020-026); compared in R8 per question checked, the split reported beside; R8 says which recommendations the page exercised and how many times the canon guard fired.",
    "class": "within",
-   "why": "An equivalent page, worked the same way, per-question headline normalizing item counts. Last round required R8 to say which recommendations the page exercised, since none of the three FR-002 items is a canon claim; plan.md D16.4 now says so, including the canon-guard firing count, so whether the recommendations made things more efficient can be answered for each. The 020 split stands; it ran before the guards were live but a split session does not read the canon or dispatch a check. Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only)."
+   "why": "An equivalent page, worked the same way, per-question headline normalizing item counts. Last round required R8 to say which recommendations the page exercised, since none of the three FR-002 items is a canon claim; plan.md D16.4 now says so, including the canon-guard firing count, so whether the recommendations made things more efficient can be answered for each. The 020 split stands; it ran before the guards were live but a split session does not read the canon or dispatch a check. Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only). Unchanged this round (the plan diff since the last review, 2a6e0596..aecd2f47, is D17.2 only)."
   },
   {
    "id": "D16.5",
    "summary": "tests/_sheets.py regenerates a declared generated Mode A sheet when missing or older than its generator or any engine module, under a lock; both readers use it.",
    "class": "within",
-   "why": "The GM's 'make that small fix about the mode A sheet tests'; code, with a test of the missing, fresh, stale and hand-drawn cases. Unchanged this round (the plan diff since the last review is D16.1 and D16.4 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only)."
+   "why": "The GM's 'make that small fix about the mode A sheet tests'; code, with a test of the missing, fresh, stale and hand-drawn cases. Unchanged this round (the plan diff since the last review is D16.1 and D16.4 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only). Unchanged this round (the plan diff since the last review, 2a6e0596..aecd2f47, is D17.2 only)."
   },
   {
    "id": "D17.1",
    "summary": "entry-drift ends each DRIFTED finding with an EDIT block on the modal's class file (or EDIT: none - why); apply-edits accepts interactive/classes/ as a second root under the exactly-once rule; the check brief's step 6 names entry-drift.",
    "class": "within",
-   "why": "R8 recommendation 1 as written, which the GM told the session to implement ('Go ahead and implement those suggestions'). Verified: _apply_edits.py ROOTS adds MODALS, the new test applies a class file and refuses a file elsewhere in the engine; brief.py step 6 names entry-drift. Live in the round: make apply-edits runs the clone's own script (git rev-parse --show-toplevel), and page sessions start claude -p in the clone, whose .claude/agents/ is what they load - shown by R7/R8, where quote-check's D15 EDIT contract, absent from the mirror's quote-check.md (grep: no EDIT), produced the blocks make apply-edits applied (T61: 26 edits). The one-line limit on old text is a shape for the exactly-once rule, not a narrowing: a refused block is still done by hand as in D15. The GM's D16 enforcement words were said of R7's recommendations and are not restated for R8; recommendations 2 and 3 are code, recommendation 1's apply path is code, and the agent's output shape is its contract exactly as quote-check's and record-format's have been since D15."
+   "why": "R8 recommendation 1 as written, which the GM told the session to implement ('Go ahead and implement those suggestions'). Verified: _apply_edits.py ROOTS adds MODALS, the new test applies a class file and refuses a file elsewhere in the engine; brief.py step 6 names entry-drift. Live in the round: make apply-edits runs the clone's own script (git rev-parse --show-toplevel), and page sessions start claude -p in the clone, whose .claude/agents/ is what they load - shown by R7/R8, where quote-check's D15 EDIT contract, absent from the mirror's quote-check.md (grep: no EDIT), produced the blocks make apply-edits applied (T61: 26 edits). The one-line limit on old text is a shape for the exactly-once rule, not a narrowing: a refused block is still done by hand as in D15. The GM's D16 enforcement words were said of R7's recommendations and are not restated for R8; recommendations 2 and 3 are code, recommendation 1's apply path is code, and the agent's output shape is its contract exactly as quote-check's and record-format's have been since D15. Unchanged this round (the plan diff since the last review, 2a6e0596..aecd2f47, is D17.2 only)."
   },
   {
    "id": "D17.2",
-   "summary": "check_groups packs LOAD, first fit, largest first: question + notes bytes, plus each owed modal's prose + MODAL_WORK (2,000, a labeled guess); registry keys one item at their entries' bytes; GROUP_BYTES = 28,000 fitted to keep a session near 100,000 context; claims fields would have packed into three sessions.",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "R8 recommendation 2 says a group is sized by everything it checks, and 'Owed modals and sources count.' The mechanism counts an owed modal only against the FIRST of its moved anchors on the page (owed_modals: re.search on the read line; _entry_owed sorts hits by anchor), so a modal owed from a handoff question whose first moved anchor is a question outside the handoff is dropped from the load of the group that checks it (brief step 5 checks every class 'whose entry is one of YOUR questions'). Measured on the motivating page, at the fields handoff commit 61551e06 in a detached worktree with HEAD's brief.py: _entry_owed names seven modals owed from 070/110/160 - the seven R8 counts - but owed_modals credits six; 'paddy' (owed from 110) is credited to 020, which is not in the handoff. Packing gives [070], [110,160], [KEYS] - the plan's 'three sessions' - but with paddy counted (1,518 + 2,000) 110 + 160 is 30,203 > 28,000 and the rule as the plan states it gives four. Not physically impossible, not implied by the GM's words, and it drops exactly the kind of load recommendation 2 exists to count. The rest of D17.2 (keys as one item, the fitted budget with its labeled method, MODAL_WORK labeled a guess) is within."
+   "summary": "check_groups packs LOAD, first fit, largest first: question + notes bytes, plus each owed modal's prose + MODAL_WORK (2,000, a labeled guess), each modal credited to the first of the questions it is owed from that the handoff checks; registry keys one item at their entries' bytes; GROUP_BYTES = 28,000 fitted to keep a session near 100,000 context; fields replayed at three sessions.",
+   "class": "within",
+   "why": "R8 recommendation 2 as written ('a group is sized by everything it checks ... Owed modals and sources count'). The previous round's NOT LEGITIMATE (paddy, owed from 110, credited to 020 and dropped from every group's load) is fixed in aecd2f47: owed_modals returns every section of the page a modal is owed from and loads credits it to the first one the handoff's SECTION= list names. Re-run this round at 61551e06 in a detached worktree with HEAD's brief.py: owed from 070/110/160 are barley, buckwheat, millet, soy (160), irrigation ditch, pond (070), paddy (020, 110) - seven, all credited; loads 070 = 26,826, 110 = 13,990, 160 = 16,213, keys = 3,878; check_groups gives [070], [110], [160, KEYS] - three sessions, matching the plan's figures, now labeled (observed 2026-09-27 with method). The previous round's 'four' assumed KEYS a group of its own; first fit puts it beside 160 (20,091 <= 28,000). The keys as one item, the fitted budget with its labeled method and MODAL_WORK labeled a guess are within, as ruled before."
   },
   {
    "id": "D17.3",
    "summary": "tokens.py summary --modals N --keys N adds per_thing (total over questions + owed modals + registry keys), per question kept beside it.",
    "class": "within",
-   "why": "R8 recommendation 3 as written, per question kept for continuity as the recommendation asks. Verified in the diff."
+   "why": "R8 recommendation 3 as written, per question kept for continuity as the recommendation asks. Verified in the diff. Unchanged this round (the plan diff since the last review, 2a6e0596..aecd2f47, is D17.2 only)."
   },
   {
    "id": "D17.4",
    "summary": "The measured page is archetypes: two FR-002 items (100, 140) and one FR-006 item, no item question over the cap; compared in R9 with R4-R8 per thing checked, saying which of the three changes the page exercised.",
    "class": "within",
-   "why": "The GM: 'another research pass of a similar size as the others ... the same type of testing'. Re-measured (brief.py over the pages assertions.py lists): pages left by FR-002 items are archetypes 2+1, cities/hinterland 2+0, water 2+8, buildings 7, river-cities 8, towns 10, urban-features 12+6, ways 1; archetypes' three items equal R6's and R7's three, so it is a page of similar size. It will exercise recommendations 1 and 2: dikepond.py's modals name 140 in their Entry (two of them), so a changed 140 owes entry-drift checks; nothing on archetypes has moved in the delta yet (git diff merge-base..HEAD over research/archetypes: empty). R9 saying what the page exercised carries D16.4's standing requirement."
+   "why": "The GM: 'another research pass of a similar size as the others ... the same type of testing'. Re-measured (brief.py over the pages assertions.py lists): pages left by FR-002 items are archetypes 2+1, cities/hinterland 2+0, water 2+8, buildings 7, river-cities 8, towns 10, urban-features 12+6, ways 1; archetypes' three items equal R6's and R7's three, so it is a page of similar size. It will exercise recommendations 1 and 2: dikepond.py's modals name 140 in their Entry (two of them), so a changed 140 owes entry-drift checks; nothing on archetypes has moved in the delta yet (git diff merge-base..HEAD over research/archetypes: empty). R9 saying what the page exercised carries D16.4's standing requirement. Unchanged this round (the plan diff since the last review, 2a6e0596..aecd2f47, is D17.2 only)."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
