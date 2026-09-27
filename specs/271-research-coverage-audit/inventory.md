@@ -207,6 +207,7 @@ Also edits 140, 210.
 - A143 **Hamlet burials**: where does a hamlet bury its dead - household plots beside the farmstead (yashiki-baka), a
   shared hillside, the district's ground? (religion-and-death/210; field graves are 267's R52). M. P1.
   > COORDINATION (A143): keep to the household plot (yashiki-baka) itself - its frequency and its seat on the plot; 269's religion-and-death 160/170/180/206/270/280 (280 is a KNOB of graveyard forms) are in diagram-supplemental - read and cite them
+  > COORDINATION (A143): whether a HAMLET keeps its own graveyard (or its dead and bones go to the main village's) is feature 273's (Diagram shrines), a new question in 272's range; the GM ruled on 2026-09-27 that only the main village has the shrine, the headman's house and the cremation ground. Keep 400 to the household grave's form and point to 273's question once numbered
 - C157 **Pauper ground**: one per seat, and its size (the 10-30 ft is a guess)? (cities/capitals/333). S. P1.
 - D63 **The tier program**: what religious and funerary features does each size of settlement carry?
   (religion-and-death/210, 1 note, 1 absence). M. P1.
