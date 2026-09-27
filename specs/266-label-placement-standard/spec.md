@@ -273,8 +273,12 @@ rule quoted from a page they can open.
   town and city rule of what a caption may lie on, without a record; D8's function count was 34 for 33; one QGIS
   sentence was attributed to the wrong polygon mode. Applied: the rule restored as FR-014 and cited from SC-002, the
   count corrected, R1's attribution corrected.
-- Amendment 1 (2026-09-27, after acceptance): D1 records the Ordnance Survey's alternative order and the Latin-text
-  basis of the ranking, both found by `source-applicability` on the new registry entries. No requirement changed.
 - Round 3 (2026-09-27, `spec-fidelity-verify`): CHANGES REQUIRED - FR-014 as restored let a named civic caption lie on a
   sibling civic building, which answer 070's city rule forbids. Applied: the civic exception added to FR-014 and a
   sibling-ministry case to SC-002; T03 cites FR-014; the plan's figures labeled.
+- Round 4 (2026-09-27, `spec-fidelity-verify`): FAITHFUL - the civic exception resolved; accepted.
+- Plan review rounds 1-4 (2026-09-27, `spec-fidelity`): BLOCKED, BLOCKED, BLOCKED, CLEAR. D4a (the search's other
+  calibrations, plan P1-P6) was added to the Decisions in plan round 1, at the reviewer's request; no requirement changed.
+- Amendment 1 (2026-09-27, after acceptance): D1 records the Ordnance Survey's alternative order and the Latin-text
+  basis of the ranking, both found by `source-applicability` on the new registry entries. No requirement changed.
+  `spec-fidelity-verify`: FAITHFUL.
