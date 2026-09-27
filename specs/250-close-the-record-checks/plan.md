@@ -350,6 +350,41 @@ The GM, on R6: *"Implement all of your recommendations and then do another measu
    were - a write session, then check sessions of two questions - and compared in R7 with R4 to R6, computed the same
    way.
 
+### D16 - The seventh round: R7's four recommendations, mechanically enforced, then another measured page (GM 2026-09-27)
+
+The GM, on R7: *"Please implement all of your recommendations and then do another round of tests ... However, make
+sure that what you are doing is mechanically enforced, especially on recommendation number one, because simply saying
+that we should do a certain thing is probably not enough to make it happen. That is why we use hooks and such."* And,
+separately, the small fix R7's report raised: the Mode A sheet tests read a generated sheet without checking it was
+current.
+
+1. **The canon, searched in one call - by guard** (recommendation 1). `make canon TERMS="a|b|c"` (`scripts/_canon.py`)
+   searches every canon file under `/host-l7r-repo/setting` and `/host-l7r-repo/gm-assistant/setting` for every term
+   at once and names each hit's heading. `canon-read-hooks.sh` (PreToolUse on Bash, Read and Grep; the decision in
+   `scripts/_hm_canon.py`) makes it the only way in: a direct read of a canon file - a Read or Grep on it, or a shell
+   read verb naming it, absolutely or after a `cd` into the host repository - is refused with the command, and a
+   `make canon` within three tool calls of another is refused unless it names every earlier term (the fold; the same
+   rule lets the retry after a refusal pass). A mention is not a read. Escape `CANON_OK="<reason>"` for a read the
+   search cannot give (a whole section in order). Its companion suite drives the real hook; it is registered in
+   `.claude/settings.json` and in the root CLAUDE.md's guard table.
+2. **The split, its own session, before the write - by construction** (recommendation 2). `brief.py <page> <task>`
+   maps each FR-002 item to its question (the heading the report names, else the question containing the item's
+   quoted text; an item it cannot place is named loudly, never skipped) and, for each such question over the cap,
+   queues a split session first. The write brief is made by a `then:` step after the splits, and `brief.py write`
+   REFUSES while any item's question is still over the cap - so the write session never loads an unsplit question.
+   `brief.py` prints the one `make page-session` line to run.
+3. **Check groups by bytes - by construction** (recommendation 3). `check_groups` packs the handoff's questions first
+   fit, largest first, into sessions of at most 40,000 bytes (two questions at the cap, the most the old two-question
+   groups ever held), each question sized with its notes as the write session left it.
+4. **One more page** (recommendation 4): `fields` - three FR-002 items, as the last two pages had, plus four FR-006
+   items, as the homesteads and religion rounds had some. Its item questions are all under the cap (070 at 17,064
+   bytes, 110 at 8,845, 160 at 2,510; observed 2026-09-27, method: `brief.py questions`), so recommendation 2's
+   split step will not run on this page; recommendations 1 and 3 will act where its content calls for them. Compared
+   in R8 with R4 to R7 by `tokens.py summary`, per question checked.
+5. **The Mode A sheet is current before a test reads it.** `tests/_sheets.py`: a declared generated exception's svg
+   is regenerated when missing OR older than its generator or any engine module, under a lock so two workers never
+   read one the other is writing; both readers (`test_mode_a_sheets.py`, `tools/test_registry.py`) go through it.
+
 ## Phases
 
 0. Baseline and the meter (T01, T02).

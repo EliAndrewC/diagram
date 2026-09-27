@@ -16,6 +16,7 @@ from l7r.diagram.buildings import types as bt
 from l7r.diagram.pipeline import poolmaps
 from l7r.diagram.tools import pack_audit as pa
 from l7r.diagram.tools.pack_audit import registry as R
+from tests import _sheets
 
 SKILL = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 FIX = os.path.join(SKILL, "tests", "fixtures")
@@ -43,8 +44,10 @@ def test_every_check_fires_on_its_red_fixture(check: R.Check) -> None:
 def _pool_sheets() -> list[tuple[str, str]]:
     out = []
     for b in poolmaps.bundles(trees=(poolmaps.LIVE_TREE,), kinds={"compound"}, skill_dir=SKILL):
-        if os.path.isfile(b.path(".svg")):
-            out.append((b.tier, b.path(".svg")))
+        btype = bt.by_tier(b.tier)
+        svg = _sheets.fresh(b.path(".svg"), b.gen, btype is not None and b.stem in btype.generated_exceptions)
+        if os.path.isfile(svg):
+            out.append((b.tier, svg))
     return out
 
 

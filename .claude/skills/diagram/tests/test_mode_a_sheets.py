@@ -16,8 +16,6 @@ classifier's ratchet in `test_villages.py` refuses it as `unknown` first.
 from __future__ import annotations
 
 import os
-import subprocess
-import sys
 
 import pytest
 
@@ -25,18 +23,16 @@ from l7r.diagram.buildings import types as bt
 from l7r.diagram.pipeline import poolmaps
 from l7r.diagram.tools import pack_audit as pa
 from l7r.diagram.tools.pack_audit import registry as R
+from tests import _sheets
 
 SKILL = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def _sheet(b: poolmaps.MapBundle) -> str:
-    """The bundle's svg, generating a declared generated exception's when it is absent (a fresh
-    checkout has none: a draft's svg is gitignored, and its gen writes it in a fraction of a second)."""
-    svg = b.path(".svg")
+    """The bundle's svg, a declared generated exception's regenerated when it is absent OR stale (`tests/_sheets.py`:
+    a draft's svg is gitignored, and a copy older than the engine once failed here as if it were a regression)."""
     btype = bt.by_tier(b.tier)
-    if not os.path.isfile(svg) and btype is not None and b.stem in btype.generated_exceptions:
-        subprocess.run([sys.executable, b.gen], check=True, env={**os.environ, "DIAGRAM_SKIP_RENDER": "1"}, cwd=SKILL)
-    return svg
+    return _sheets.fresh(b.path(".svg"), b.gen, btype is not None and b.stem in btype.generated_exceptions)
 
 
 def _bundles() -> list[poolmaps.MapBundle]:
@@ -62,3 +58,25 @@ def test_the_sweep_covers_every_declared_tier_that_has_a_sheet() -> None:
         if os.path.isdir(os.path.join(live, tier)):
             assert tier in swept, f"{tier} has a pool folder but no bundle reached the sweep"
     assert "magistracies" in swept
+
+
+def test_a_generated_sheet_is_regenerated_when_missing_or_stale_and_a_hand_drawn_one_never(tmp_path) -> None:
+    """The stale-copy failure of 2026-09-26: a sheet older than its generator or the engine is written again."""
+    svg, gen = tmp_path / "a.svg", tmp_path / "a.gen.py"
+    gen.write_text("", encoding="utf-8")
+    ran: list[list[str]] = []
+
+    def run(cmd: list[str], **_kw: object) -> None:
+        ran.append(cmd)
+        svg.write_text("<svg/>", encoding="utf-8")
+
+    assert _sheets.fresh(str(svg), str(gen), False, 0.0, run) == str(svg) and ran == [], "hand-drawn: never run"
+    _sheets.fresh(str(svg), str(gen), True, 0.0, run)
+    assert len(ran) == 1 and ran[0][-1] == str(gen), "missing: generated"
+    _sheets.fresh(str(svg), str(gen), True, 0.0, run)
+    assert len(ran) == 1, "fresh: left alone"
+    os.utime(svg, (1, 1))
+    _sheets.fresh(str(svg), str(gen), True, 0.0, run)
+    assert len(ran) == 2, "older than its generator: generated again"
+    assert _sheets.is_stale(str(svg), str(gen), os.path.getmtime(svg) + 10), "older than the engine is stale"
+    assert _sheets.newest_engine_mtime() > 0

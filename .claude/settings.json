@@ -244,6 +244,15 @@
             "command": "/diagram/scripts/review-round-hooks.sh pretool"
           }
         ]
+      },
+      {
+        "matcher": "Bash|Read|Grep",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/diagram/scripts/canon-read-hooks.sh pretool  # GUARD_EDIT_OK: feature 250 D16 - a NEW guard: the setting canon is read with make canon, every term of a claim at once"
+          }
+        ]
       }
     ],
     "PostToolUse": [

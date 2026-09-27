@@ -27,7 +27,8 @@ SKILL = CLONE / ".claude/skills/diagram"
 WORKLIST = CLONE / "specs/242-cite-the-unfootnoted-assertions/measure/worklist.py"
 
 
-def fr002(page: str) -> list[str]:
+def fr002_items(page: str) -> list[tuple[str, str, str]]:
+    """(the question the report names, the item's text, the report) for each FR-002 item on the page."""
     sys.path.insert(0, str(HERE))
     import assertions  # noqa: PLC0415
 
@@ -36,8 +37,50 @@ def fr002(page: str) -> list[str]:
         lines = (assertions.REPORTS / name).read_text(encoding="utf-8").splitlines()
         for item in assertions.items_of(lines):
             if (item["page"] or assertions._ONE_PAGE.get(name, "")) == page.split("/")[-1]:
-                out.append(f"- **{section_of(item['section'])}** - {item['text']}  _(from `{name}`)_")
+                out.append((section_of(item["section"]), item["text"], name))
     return out
+
+
+def fr002(page: str) -> list[str]:
+    return [f"- **{sec}** - {text}  _(from `{name}`)_" for sec, text, name in fr002_items(page)]
+
+
+def _norm(text: str) -> str:
+    return re.sub(r"[^a-z0-9 ]+", "", re.sub(r"<[^>]+>|&[a-z]+;", " ", text.lower())).split("  ")[0].strip()
+
+
+def questions(page: str) -> dict[str, tuple[str, int]]:
+    """section number -> (its heading's words, its size in bytes with its notes)."""
+    out = {}
+    for q in sorted((SKILL / "research" / page).glob("[0-9][0-9][0-9]-*.html")):
+        if q.name.endswith(".notes.html"):
+            continue
+        n = q.with_name(q.name[:-5] + ".notes.html")
+        title = re.search(r"<h2[^>]*>(.*?)</h2>", q.read_text(encoding="utf-8"), re.S)
+        out[q.name[:3]] = (" ".join(_norm(title.group(1) if title else "").split()), q.stat().st_size + (n.stat().st_size if n.exists() else 0))
+    return out
+
+
+def _text_of(page: str, section: str) -> str:
+    q = next(p for p in (SKILL / "research" / page).glob(f"{section}-*.html") if not p.name.endswith(".notes.html"))
+    return q.read_text(encoding="utf-8").replace("\n", " ")
+
+
+def item_questions(page: str) -> list[str]:
+    """The sections the page's FR-002 items fall in, read off the heading each report names."""
+    qs = questions(page)
+    found = []
+    for sec, _text, _name in fr002_items(page):
+        want = " ".join(_norm(sec).split())[:40]
+        hit = next((n for n, (title, _size) in qs.items() if want and (title.startswith(want) or want.startswith(title[:40]))), None)
+        if hit is None and want:  # some reports label an item by its quoted text, not its question's heading
+            hit = next((n for n in qs if want[:30] in " ".join(_norm(_text_of(page, n)).split())), None)
+        if hit is None:
+            # loud, never silent: an item the mapping cannot place is one the split-first rule cannot see
+            print(f"brief: no question on {page} is headed '{sec}' - check its size by hand", file=sys.stderr)
+        elif hit not in found:
+            found.append(hit)
+    return found
 
 
 def section_of(label: str) -> str:
@@ -167,14 +210,23 @@ CLOSE_GROUP = """8. **Commit** with a message naming your questions; do NOT tick
 9. **Report.** One paragraph: what your group closed, the agents run, anything left open and why.
 """
 
-GROUP = 2   # questions a check session takes: R3 measured one session growing to 218,000 over five
+GROUP_BYTES = 40_000   # what one check session takes: two questions at the cap - the most GROUP = 2 ever put in one,
+#                        after R3 measured a session growing to 218,000 over five. By BYTES since D16 (R7 rec. 3): a
+#                        split's 7,200-byte part took a whole session of its own when groups were counted.
 
 
-def check_groups(handoff: str) -> tuple[list[list[str]], list[str]]:
-    """(the handoff's questions in groups of GROUP, its keys) - read off its `SECTION=NNN` and `KEY=k` lines."""
+def check_groups(handoff: str, sizes: dict[str, int] | None = None) -> tuple[list[list[str]], list[str]]:
+    """(the handoff's questions packed into sessions of at most GROUP_BYTES, first fit by size, largest first; its keys).
+
+    A question with no size known counts as a full one at the cap. Each group lists its sections in number order."""
     sections = list(dict.fromkeys(re.findall(r"SECTION=(\d{3})", handoff)))
     keys = list(dict.fromkeys(re.findall(r"KEY=([a-z0-9][a-z0-9-]*)", handoff)))
-    return [sections[i:i + GROUP] for i in range(0, len(sections), GROUP)], keys
+    size = {s: (sizes or {}).get(s, CAP) for s in sections}
+    bins: list[list[str]] = []
+    for s in sorted(sections, key=lambda x: (-size[x], x)):
+        home = next((b for b in bins if sum(size[x] for x in b) + size[s] <= GROUP_BYTES), None)
+        (home.append(s) if home is not None else bins.append([s]))
+    return sorted((sorted(b) for b in bins), key=lambda b: b[0]), keys
 
 
 def checks(page: str, task: str) -> int:
@@ -185,7 +237,7 @@ def checks(page: str, task: str) -> int:
     if not handoff.is_file():
         print(f"brief: no handoff at {handoff} - session 1 did not finish", file=sys.stderr)
         return 2
-    groups, keys = check_groups(handoff.read_text(encoding="utf-8"))
+    groups, keys = check_groups(handoff.read_text(encoding="utf-8"), {n: size for n, (_t, size) in questions(page).items()})
     fields = _fields(page, task)
     for n, group in enumerate(groups, 1):
         last = n == len(groups)
@@ -268,30 +320,72 @@ def split_brief(page: str, section: str) -> int:
     return 0
 
 
+def over_cap_items(page: str) -> list[str]:
+    """The sections an item falls in that are over the cap - each is split, in a session of its own, before the write."""
+    qs = questions(page)
+    return [s for s in item_questions(page) if qs[s][1] > CAP]
+
+
+def write_brief(page: str, task: str) -> int:
+    """The write session's brief - REFUSED while a question one of its items falls in is over the cap (D16).
+
+    WHY (R7, recommendation 2): the fabric write session split question 140 itself and then carried its 32,500
+    characters to the end, peaking at 137,000 tokens. The split now runs first, as its own session, and this is what
+    makes that order the only one: there is no write brief to start from until every such question is split."""
+    owed = over_cap_items(page)
+    if owed:
+        print(f"brief: {page} still has item questions over the cap ({', '.join(owed)}) - the split sessions run first", file=sys.stderr)
+        return 2
+    items2, items6 = fr002(page), fr006(page)
+    fields = _fields(page, task)
+    write = FEATURE / "briefs" / f"{fields['slug']}-1.md"
+    write.write_text(WRITE.format(n=1, what="locate, read and write", fr002="\n".join(items2) or "- none",
+                                  fr006="\n".join(items6) or "- none", over=over_cap(page), example=newest_entry(), **fields), encoding="utf-8")
+    print(write)
+    return 0
+
+
+def _then(briefs: pathlib.Path, name: str, verb: str, page: str, task: str, why: str) -> pathlib.Path:
+    step = briefs / name
+    step.write_text(f"#!/bin/sh\n# {why}\nexec python3 {HERE / 'brief.py'} {verb} {page} {task}\n", encoding="utf-8")
+    step.chmod(0o755)
+    return step
+
+
 def main(argv: list[str]) -> int:
     if len(argv) == 3 and argv[0] == "split":
         return split_brief(argv[1], argv[2])
     if len(argv) == 3 and argv[0] == "checks":
         return checks(argv[1], argv[2])
+    if len(argv) == 3 and argv[0] == "write":
+        return write_brief(argv[1], argv[2])
     if len(argv) != 2:
-        print("usage: brief.py <page> <task>  |  brief.py checks <page> <task>", file=sys.stderr)
+        print("usage: brief.py <page> <task>  |  brief.py write|checks <page> <task>  |  brief.py split <page> <NNN>", file=sys.stderr)
         return 2
     page, task = argv
-    items2, items6 = fr002(page), fr006(page)
-    if not items2 and not items6:
+    if not (SKILL / "research" / page).is_dir():
+        print(f"brief: no research page {page} (a page under cities/ is named cities/<page>)", file=sys.stderr)
+        return 2
+    if not fr002(page) and not fr006(page):
         print(f"brief: {page} owes nothing under FR-002 or FR-006", file=sys.stderr)
         return 2
-    fields = _fields(page, task)
+    slug = page.replace("/", "-")
     briefs = FEATURE / "briefs"
     briefs.mkdir(exist_ok=True)
-    write = briefs / f"{fields['slug']}-1.md"
-    write.write_text(WRITE.format(n=1, what="locate, read and write", fr002="\n".join(items2) or "- none",
-                                  fr006="\n".join(items6) or "- none", over=over_cap(page), example=newest_entry(), **fields), encoding="utf-8")
-    then = briefs / f"{fields['slug']}-checks.sh"
-    then.write_text(f"#!/bin/sh\n# the check briefs, made from session 1's handoff when it ends (feature 250 R3, recommendation 2)\n"
-                    f"exec python3 {HERE / 'brief.py'} checks {page} {task}\n", encoding="utf-8")
-    then.chmod(0o755)
-    print(f"brief: {len(items2)} FR-002 and {len(items6)} FR-006 item(s) -> {write}, then the check groups: then:{then}")
+    checks_step = _then(briefs, f"{slug}-checks.sh", "checks", page, task, "the check briefs, made from session 1's handoff when it ends (feature 250 R3, recommendation 2)")
+    owed = over_cap_items(page)
+    queue: list[str] = []
+    for section in owed:
+        split_brief(page, section)
+        queue.append(str(briefs / f"split-{slug}-{section}.md"))
+    if owed:
+        queue.append("then:" + str(_then(briefs, f"{slug}-write.sh", "write", page, task, "the write brief, made once the splits have run (feature 250 D16)")))
+    else:
+        if write_brief(page, task):
+            return 2
+        queue.append(str(briefs / f"{slug}-1.md"))
+    queue.append(f"then:{checks_step}")
+    print(f'brief: {len(fr002(page))} FR-002 and {len(fr006(page))} FR-006 item(s); {len(owed)} split(s) first. Run:\n    make page-session BRIEF="{" ".join(queue)}"')
     return 0
 
 
