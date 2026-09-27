@@ -21,16 +21,19 @@ of a headless session carries the clone's root CLAUDE.md (about 5.2 K tokens), m
 
 ### User Story 1 - A large research group is written in short sessions (Priority: P1)
 
-A feature queues a group of nine questions. Before the runner starts any session it counts the questions the brief asks
-for, with one shared, tested helper (`scripts/_brief_load.py`), whatever generator wrote it. The helper counts each
-section a brief names (`page/NNN` and a backticked `NNN` under that page), expands a range (`090-128`) against the page's
-actual fragments, and counts each item id that names no section as one new question. The runner refuses a brief that
+A feature queues a group of nine questions. Before the runner starts any session it counts the questions the brief
+ASSIGNS, with one shared, tested helper (`scripts/_brief_load.py`), whatever generator wrote it. The helper reads only
+the brief's assignment lists (`## Your items`, `**Your questions:**`, `**Your pairs**`), never a "do not edit"
+paragraph or any other section a brief names as someone else's. In those lists it counts each section named
+(`page/NNN`, and a backticked `NNN` under that page), expands a range (`090-128`) against the page's actual fragments,
+and counts each item id that names no section as one new question. The runner refuses a brief that
 counts more than four, naming the split (`<g>a-write.md`, `<g>b-write.md`, each with its own handoff). While a write
 session runs, `make reserve` counts the registry keys it reserves; the eleventh is refused, and the session writes the
 items it has not reached into a continuation brief and stops, which the runner queues next.
 
 **Independent Test**: the helper counts a 272-S-shaped brief (a range and an id list) and a V2-shaped one above four,
-and a one-line item spanning six sections as six; the runner refuses them and runs a two-question check brief. `make
+and a one-line item spanning six sections as six; the runner refuses them, and runs a real two-question check brief
+(271's `g1-check-a.md`, with its do-not-edit list) and a real owed-modal brief of six sections declared `check`. `make
 reserve` refuses a page session's 11th registry key. The runner queues a continuation brief a session leaves.
 
 ### User Story 2 - A session reads only its own coordination lines (Priority: P1)
@@ -55,14 +58,18 @@ session's first turn is measured before and after.
 
 - **Every brief is counted, whatever its generator.** The cap is enforced by the count, not by a declaration, so the
   other features' generators keep working unchanged (the GM asked that the sessions use this at once): their check
-  briefs name two questions and pass; a write brief of more than four is refused, which is the cap working. The runner
+  briefs assign two questions and pass, however many sections their do-not-edit paragraphs name; a write brief
+  assigning more than four is refused, which is the cap working. The cap is the GM's cap on a WRITE session: a check
+  session is not capped. The runner
   counts the briefs listed at launch (a refusal stops the launch before anything starts) and the ones a `then:` step
   prints later (a refusal STOPS the queue with a `STOPPED` line in the run log, rather than being skipped).
 - **A brief that is not a group's writing may declare an exempt kind** in one line, `<!-- page-load: kind=<kind> -->`.
-  There are three kinds: `assertions` (feature 250's FR-002 briefs, which footnote many assertions inside existing
-  questions), `split` (splitting an over-cap question) and `handover` (a group handed to another feature). Feature 250's
-  `brief.py` writes the line on those briefs, and its owed-modal briefs are check briefs, which count as such. A brief
-  that counts NOTHING and declares no kind is refused: the count never fails open.
+  There are four kinds: `check` (a check-and-apply session, which the cap does not cover), `assertions` (feature 250's
+  FR-002 briefs, which footnote many assertions inside existing questions), `split` (splitting an over-cap question) and
+  `handover` (a group handed to another feature). Feature 250's `brief.py` writes the line on every brief it makes: its
+  2a/2b check briefs and owed-modal briefs are `check` (they are sized by bytes and may assign more than four), its
+  page briefs are `assertions`, and its split briefs are `split`. A brief that assigns NOTHING countable and declares no
+  kind is refused: the count never fails open.
 - **Generators may split with the same helper.** 269 updates its own generator in 269, splitting its unstarted groups
   and reading coordination files by line. The other features are told what changed (FR-005).
 - **Keys are not known before writing**, so they are capped during the session, not at launch. The runner exports the
@@ -84,15 +91,16 @@ session's first turn is measured before and after.
 
 - **FR-001 (suggestion 1)**: A write session MUST take at most four questions AND at most ten new registry keys.
   The page-session runner MUST count every brief's questions with one shared, tested helper, and MUST refuse a brief
-  counting more than four, or counting none without an exempt kind, naming the split and the escape. Only three named
-  kinds are exempt, and feature 250's `brief.py` MUST declare them on the briefs that are those kinds. `make reserve` MUST refuse a page
+  counting more than four, or counting none without an exempt kind, naming the split and the escape. The helper MUST count only what a brief assigns.
+  Only four named kinds are exempt (`check`, `assertions`, `split`, `handover`), and feature 250's `brief.py` MUST declare
+  the kind on every brief it makes. `make reserve` MUST refuse a page
   session's eleventh registry key with the continuation instructions, and the runner MUST queue a continuation brief a
   session leaves. The research CLAUDE.md and `docs/research-record-rules.md` MUST state both limits and the
   load line, with the measurement behind them (research.md R1).
 - **FR-002 (suggestion 2)**: `make lines FILE=<f> KEY=<regex>` MUST print only a coordination file's matching lines
   (numbered, with a count of the rest), and `make append FILE=<f> LINE=<text>` MUST append one line without printing
   the file. The research CLAUDE.md MUST say a session reads a claims file, a handoff or a checks report ONLY this way.
-  269's brief generator MUST use them for its unstarted groups.
+  269 updates its own generator in 269 to use them; that change is 269's, not this feature's.
 - **FR-003 (suggestion 3)**: A headless page session MUST start without the clone's root CLAUDE.md, carrying instead a
   slim file (`container-scripts/page-session-rules.md`) with the rules a research session acts on. A test MUST hold the
   slim file to the root CLAUDE.md's research-relevant rules, so neither drifts silently.
@@ -113,10 +121,10 @@ session's first turn is measured before and after.
 ## Success Criteria *(mandatory)*
 
 - **SC-001** (FR-001): tested: the helper counts a one-line item spanning six sections as 6, a 272-S-shaped brief (a
-  range and an id list) and a V2-shaped brief above four, and a two-question check brief as 2; the runner refuses a
-  brief counting over four or counting none without a kind (at launch, and one a `then:` step prints, which stops the
-  queue), and runs a check brief and one brief of each exempt kind; `brief.py` declares the kind on its assertions and
-  split briefs; `make reserve` refuses a page session's 11th registry key; the runner queues a continuation brief.
+  range and an id list) and a V2-shaped brief above four, and a real two-question check brief with a do-not-edit list
+  (271's `g1-check-a.md`) as 2; the runner refuses a brief counting over four or counting none without a kind (at
+  launch, and one a `then:` step prints, which stops the queue), and runs that check brief, a real owed-modal brief of
+  six sections declared `check`, and one brief of each exempt kind; `brief.py` declares a kind on every brief it makes; `make reserve` refuses a page session's 11th registry key; the runner queues a continuation brief.
 - **SC-002** (FR-002): `make lines` and `make append` are tested, and the research CLAUDE.md names them.
 - **SC-003** (FR-003): the runner's flags exclude the root CLAUDE.md and append the slim file (tested), and the probe
   shows the first-turn floor fall.
@@ -139,5 +147,9 @@ None: nothing a map draws or states changes. This is process tooling.
   carries the load line, only four named kinds are exempt, and a `then:`-planned brief is checked too.
 - Round 3 (spec-fidelity-verify, 2026-09-27): CHANGES REQUIRED. `brief.py` makes no write briefs, and a required
   declaration would break the active sessions' generators until each changed. The cap now rests on a count the runner
-  makes itself with one tested helper, for any generator. Declarations are only for three exempt kinds, and 269's
+  makes itself with one tested helper, for any generator. Declarations are only for exempt kinds, and 269's
   generator changes are 269's, stated so in FR-002, SC-002 and the Edge Cases.
+- Round 4 (spec-fidelity-verify, 2026-09-27): CHANGES REQUIRED. Round 3's finding 1 was resolved, and finding 2 only partly:
+  FR-002 still named 269's generator. Now fixed. The cap is again on WRITE sessions only, with `check` an exempt kind that
+  `brief.py` declares; the helper counts only what a brief assigns, never its do-not-edit sections; SC-001 runs real
+  briefs (271's `g1-check-a.md`, a six-section owed-modal brief).
