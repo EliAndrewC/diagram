@@ -445,3 +445,18 @@ target's recorded median duration times two (`scripts/_gatecost.py` has the medi
 the first thing to establish is how the notification was lost, because a hook cannot schedule a wakeup
 today (`ScheduleWakeup` is the session's tool), so the mechanism would need the harness's own support or
 a `Monitor` the guard starts.
+
+## MEASURE feature 274's write cap and line reads on the groups that run after it landed (owed by 274 FR-004)
+
+Feature 274 capped a research WRITE session at four questions and ten new registry keys (the runner and
+`make reserve`), and moved coordination files to `make lines` / `make append`. Neither can be measured before
+groups run under it, so the measurement is owed here. **Method**: `specs/274-leaner-research-sessions/measure/`
+- `collect.py` (edit its `CLONES` list and the cut-off time to the landing commit's time) writes `sessions.json` from
+the transcripts, folded per message id as 250's `tokens.py` folds them; `analyze.py` prints the per-group table in
+the shape of `groups-table.txt`; `decomp.py` splits the main context into floor, reads and tool results. Take every
+complete group started after the landing. **The figures to beat** (274's research R1, 282 sessions in 65 groups
+before it): per thing checked a median of 1.02 M (IQR 0.86-1.20); the largest context of any turn 246 K; write
+sessions a median of 74 turns (mean turn 147 K, peak 237 K); about 60 M carried by whole reads of coordination
+files. **Expected**: write sessions under ~40 turns, the peak back inside 250's 102-171 K band, per-thing cost
+10-20% lower, and coordination reads near zero - and `grep continued .git/page-sessions/run-*.log` says how often the
+key cap split a session. Close this entry with the table and the verdict in 274's research.md as R3.
