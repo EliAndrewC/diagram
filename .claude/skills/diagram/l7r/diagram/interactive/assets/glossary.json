@@ -4728,7 +4728,13 @@
   "def": "Temple or shrine land confirmed by a shogunal vermilion-seal document (or a daimyo's black seal), tax-free and ranging from thousands of koku down to one.",
   "variants": [
    "shuinchi",
-   "kokuinchi"
+   "kokuinchi",
+   "vermilion-seal lands",
+   "vermilion-seal land",
+   "vermilion-seal",
+   "black-seal lands",
+   "black-seal land",
+   "black-seal"
   ]
  },
  "temizuya": {
@@ -6458,6 +6464,13 @@
    "dispersed settlements",
    "dispersed villages",
    "dispersed farmsteads"
+  ]
+ },
+ "Daimyōjin": {
+  "def": "A title of honor given to a Shinto god, \"great bright deity\", as in Hikawa Daimyōjin, the god of a Hikawa shrine. It is not the title of a lord (daimyo).",
+  "variants": [
+   "Daimyōjin",
+   "Daimyojin"
   ]
  }
 }

@@ -90,6 +90,9 @@ bidens	Bidens tripartita
 bidens tripartita	Bidens tripartita
 bishamon	Bishamon
 bishamonten	Bishamon
+black-seal	shuinchi
+black-seal land	shuinchi
+black-seal lands	shuinchi
 board feet	board foot
 board foot	board foot
 bodaiji	bodaiji
@@ -256,8 +259,10 @@ daikan	daikan
 daikansho	daikansho
 daikon	daikon
 daimyo	daimyo
+daimyojin	Daimyōjin
 daimyos	daimyo
 daimyō	daimyo
+daimyōjin	Daimyōjin
 daimyōs	daimyo
 daizu	daizu
 dajokan	Daijokan
@@ -1517,6 +1522,9 @@ vaiśravaṇa	Bishamon
 verge	verge
 verges	verge
 vermilion line	shubiki
+vermilion-seal	shuinchi
+vermilion-seal land	shuinchi
+vermilion-seal lands	shuinchi
 village district	village district
 votive plaque	votive plaque
 votive plaques	votive plaque
