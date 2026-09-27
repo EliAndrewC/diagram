@@ -7,8 +7,10 @@ turn. Work in this clone (`/diagram/.clones/diagram-buildings`); the project's C
 
 **Read narrowly.** For a few notes of a question use `make notes PAGE=<page> SECTION=<NNN> KEYS=<key,key>` (in
 `.claude/skills/diagram`). Grep with `-o` and a short context. Send the lookups you know you need in one message.
-**Do not edit** `research/buildings/` sections 010, 070, 150, 170 or 210: feature 265, in another session, is working
-them. An item that belongs in one of them is written as a question of its own that links to it.
+**Do not edit these sections** - feature 265, in another session, is working them: buildings 010, 070, 150, 170, 210;
+cities/river-cities 010, 020, 030, 040; urban-features 010, 020, 030, 050, 060, 070, 080, 160; ways 020; towns 040,
+080, 090, 100, 130; cities/capitals 040. Write the finding in a question of your own; where it OWES one of those
+sections a correction, say exactly what in the handoff (the orchestrator makes it once 265 is done with the page).
 
 ## Your items (from `specs/267-compound-research-owed/inventory.md`, group G2)
 

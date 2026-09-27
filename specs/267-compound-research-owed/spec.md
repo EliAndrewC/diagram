@@ -11,11 +11,12 @@ been putting off"*, by the research procedures that landed on main (feature 250)
 
 ## What is owed
 
-`future-work/compounds.md` "Research owed" holds every research question features 262 and 264 recorded instead of
-researching, on the GM's 2026-09-26 hold: kinds shown accurate with no section behind them, kinds labeled guess
+Two future-work files hold what the GM put off on 2026-09-26: `future-work/farming-communities.md`'s in-field grave
+island, and `future-work/compounds.md` "Research owed" - every research question features 262 and 264 recorded instead
+of researching: kinds shown accurate with no section behind them, kinds labeled guess
 because the record is silent, parts the research does not reach, sections resting on a source no reader can open,
 contradictions between the record and the sheets or within the record, and the questions the building reviews raised.
-[`inventory.md`](inventory.md) numbers every item (R01-R51), groups them into research sessions by the record page
+[`inventory.md`](inventory.md) numbers every item (R01-R53), groups them into research sessions by the record page
 they belong on, and separates the three that are canon or rulings for the GM, not research.
 
 ## User Scenarios & Testing *(mandatory)*
@@ -51,9 +52,12 @@ bundles (`make check-bundle`) and whose findings are applied with `make apply-ed
 
 ## Edge Cases
 
-- **Feature 265 is open on the same pages.** It edits `research/buildings/` sections 010, 070, 150, 170 and 210 (and
-  other pages' existing sections). This feature adds new question files and does not edit those five sections while
-  265 is open; an item that belongs in one of them is written as its own question that links to it.
+- **Feature 265 is open on the same pages.** Its sections, derived by its own method (`brief.py` `item_questions` and
+  `fr006_questions` over each of its six pages, 2026-09-27): buildings 010, 070, 150, 170, 210; cities/river-cities
+  010-040; urban-features 010, 020, 030, 050, 060, 070, 080, 160; ways 020; towns 040, 080, 090, 100, 130;
+  cities/capitals 040. This feature's research writes its findings in its own questions; an edit a finding OWES one of
+  those sections (R27 in buildings 070, R42 in river-cities 040, R46 in ways 020) waits until 265's task for that page is
+  ticked and is then MADE here, as its own task - a link alone does not resolve a contradiction.
 - An item that is a question of the SETTING (canon) is for the GM, not research (inventory, "For the GM").
 - A finding that changes what a sheet draws is a drawing change: the sheet is redrawn, measured (picture and pack
   audit) and reviewed (`building-review`), as any sheet edit.
@@ -75,7 +79,11 @@ bundles (`make check-bundle`) and whose findings are applied with `make apply-ed
   where they can honestly differ, and each sheet's notes record which form it takes.
 - **FR-005**: The work MUST follow the procedure that landed on main: page sessions from briefs, checks on bundles,
   reports applied with `make apply-edits`, the canon searched with `make canon`, the size cap held.
-- **FR-006**: No section feature 265 edits (buildings 010, 070, 150, 170, 210) MAY be edited while 265 is open.
+- **FR-006**: No section on feature 265's derived list (Edge Cases) MAY be edited while 265's task for its page is open;
+  every edit a finding owes such a section MUST be made once that task is ticked, in this feature.
+- **FR-009**: Before any research starts, the session MUST re-read from main every file that states the research
+  procedure, found by search, and record the list and the main commit ([`reload.md`](reload.md)); the briefs MUST be
+  written from that reading.
 - **FR-007**: `future-work/compounds.md` "Research owed" MUST end holding only what is still owed, each with why.
 - **FR-008**: The items that are the GM's to rule (inventory, "For the GM") MUST be put to the GM, through
   `escalation-check`, saying what the record holds.
@@ -87,7 +95,7 @@ bundles (`make check-bundle`) and whose findings are applied with `make apply-ed
 
 ## Success Criteria *(mandatory)*
 
-- **SC-001** (FR-001, FR-002, FR-007): `outcomes.md` gives every item R01-R51 an outcome and the question(s) it
+- **SC-001** (FR-001, FR-002, FR-007): `outcomes.md` gives every item R01-R53 an outcome and the question(s) it
   landed in; `future-work/compounds.md` "Research owed" lists only what remains, each with why.
 - **SC-002** (FR-003): every kind an item bears on names a resolving `Entry:` or a dated absence; `entry-drift` IN-STEP
   on each changed kind.
@@ -95,7 +103,9 @@ bundles (`make check-bundle`) and whose findings are applied with `make apply-ed
   knob recorded in each sheet's notes.
 - **SC-004** (FR-005): each changed question passes `quote-check`, `record-format` and (for each new key)
   `source-applicability` on its bundle; `make done` green.
-- **SC-005** (FR-006): no commit of this feature touches 265's five sections while 265 is open (git log).
+- **SC-005** (FR-006): no commit of this feature touches a section on 265's derived list before 265's task for that
+  page is ticked (git log against 265's tasks.md); every owed edit to such a section is made and checked.
+- **SC-007** (FR-009): `reload.md` names the files and the main commit, and every brief's procedure matches it.
 - **SC-006** (FR-008): the GM items reach the GM through `escalation-check`.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*

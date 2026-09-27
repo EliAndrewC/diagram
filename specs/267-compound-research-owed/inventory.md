@@ -12,6 +12,7 @@ G5 on `religion-and-death/`, G6 on `cities/river-cities/`, `urban-features/` and
 - R03 **room order** - omote, naka-oku, oku: does the master's room adjoin the family's, the reception at the formal end? `lord's quarters`, `family quarters`, `reception room`, `inner rooms`. O H U (H sets the reception between them).
 - R04 **the lord's own rooms** beyond the private study - a sourced statement of the master's suite (okami, shoin). `lord's quarters`.
 - R05 **the butsuma** - by the zashiki or among the private rooms. `ancestral alcove`, `inner rooms`. H U.
+- R53 **predecessor tablets when an office passes to a collateral line** - was an alcove of the office's past holders kept when a post passed cousin to cousin, not father to son ('An ancestral alcove ... lineage-held posting', B130, states the father-to-son case)? `ancestral alcove`. U. (Whether Ubame's line did pass so is canon - for the GM.)
 - R06 **a small garden for the private rooms** of an ordinary posting. `garden`. O.
 
 ## G1B - the residence: its entry and its outbuildings (research/buildings)
@@ -83,10 +84,15 @@ G5 on `religion-and-death/`, G6 on `cities/river-cities/`, `urban-features/` and
 - R50 **a parley room** on a border - anything beyond the analogy to 'Drawing a clan border'. `parley room`, `parley mats`. U.
 - R51 **door widths** - a drawn door's width against a real doorway. `door`. O H U.
 
+## G8 - the in-field grave island (research/fields; `future-work/farming-communities.md`)
+
+- R52 **the in-field grave island** - did Japanese or rice-south Chinese villages put graves among the working paddy, and how often? The one quote cited (`ryobosei-jawiki`) puts burials beside the bunds; the 0.3 rate (`settlement/fields/features.py` `_paddy_features`) was a session's choice; the GM kept the island and its deviation label on 2026-09-26 pending this pass. If attested: the label moves to accurate and the rate is set from the finding; if not, the island stays a disclosed deviation with a sourced statement of what the record puts in its place. `GraveIsland` (hamlet kind), `research/fields/010-*`. Hamlet maps.
+
 ## For the GM (canon or a ruling, not research)
 
 - Ubame, Hayakawa, the Kurogi, Moriguchi and Nagahara absent from the mounted `l7r.md`; Ubame's notes' line-832 citation.
-- Ubame's cousin-to-cousin tenure (the ancestral alcove's case) and "meeting on the border line is standard practice".
+- Ubame's cousin-to-cousin tenure as a FACT of the setting (its history half is R53), and "meeting on the border line is
+  standard practice" (the historical side of meeting on a border, if any, is R50's to name).
 - Whether a magistracy page may carry GM-only Obsidian Portal notes (the stroke-practice line is off Ochiba's page).
 
 ## Not research (convention or engineering)

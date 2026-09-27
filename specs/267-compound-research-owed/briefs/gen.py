@@ -33,6 +33,7 @@ GROUPS = {
     "G5": ("the shrine", "religion-and-death 220-260"),
     "G6": ("river, trade and roads", "cities/river-cities 050-080, urban-features 190-220, ways 060-090"),
     "G7": ("the map-story kinds", "buildings 590-640"),
+    "G8": ("the in-field grave island", "fields 220-240, or the existing fields question 010 on in-field features"),
 }
 
 HEAD = """# Brief - feature 267 (the compound research owed), group {group}: {title}, session {what}
@@ -44,8 +45,10 @@ turn. Work in this clone (`{clone}`); the project's CLAUDE.md files apply to you
 
 **Read narrowly.** For a few notes of a question use `make notes PAGE=<page> SECTION=<NNN> KEYS=<key,key>` (in
 `.claude/skills/diagram`). Grep with `-o` and a short context. Send the lookups you know you need in one message.
-**Do not edit** `research/buildings/` sections 010, 070, 150, 170 or 210: feature 265, in another session, is working
-them. An item that belongs in one of them is written as a question of its own that links to it.
+**Do not edit these sections** - feature 265, in another session, is working them: buildings 010, 070, 150, 170, 210;
+cities/river-cities 010, 020, 030, 040; urban-features 010, 020, 030, 050, 060, 070, 080, 160; ways 020; towns 040,
+080, 090, 100, 130; cities/capitals 040. Write the finding in a question of your own; where it OWES one of those
+sections a correction, say exactly what in the handoff (the orchestrator makes it once 265 is done with the page).
 """
 
 WRITE = HEAD + """

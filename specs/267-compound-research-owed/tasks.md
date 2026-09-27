@@ -30,6 +30,13 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D8). Inventory: [`inv
 - [ ] T09 G7, the map-story kinds (R48-R51)
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+- [ ] T16 G8, the in-field grave island (R52): the record, then `GraveIsland` and the rate follow the finding
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+- [ ] T17 The edits owed to feature 265's sections (R27 buildings 070, R42 river-cities 040, R46 ways 020, and any a
+      handoff names), made once 265's task for each page is ticked, and checked (FR-006)
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
 - [ ] T10 `outcomes.md`: every item's outcome and question, from the handoffs (D5)
       research: rendering
 - [ ] T11 The kinds follow the outcomes: `Entry:`, label, prose; `entry-drift` on each changed kind (D6)
