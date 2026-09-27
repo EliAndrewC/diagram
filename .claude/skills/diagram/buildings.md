@@ -115,7 +115,7 @@ A **rear service strip** organizes all of this: the residence's formal garden si
 - **Fence and hedge** - a country shrine's precinct is NEITHER walled NOR fenced (feature 268): its arch and its wood mark it. A `<g id="fence">` ringing the precinct (taking in the hall) is the defect `no_precinct_enclosure` names; a fence around the sanctuary alone is the wealth knob's.
 - **Swept gravel (`keidai-gravel`)** - the precinct's ground: a pale pattern (`#E6DCC4` with faint rake lines), lighter than court-earth. The precinct rect carries `id="precinct"` as every Mode A sheet's does.
 - **Grave markers** - the burial ground beside the precinct: rows of small gray rects (~2 by 1 ft, `#8A8478`) on bare ground outside the fence, labeled `burial ground` once.
-- **Grove** - the sacred wood that IS the shrine's precinct: canopy circles (`#7A8C5C`, stroke `#56683E`, crowns 13-20 ft across, true size) filling the precinct outside a small swept clearing at the hall, in a group marked `id="grove"`; a sacred tree beside the approach with its rope drawn as a pale dashed ring. Canopies touch and never overlap, and none stands on a building, a way, a well or a caption.
+- **Grove** - the sacred wood that IS the shrine's precinct: canopy circles (`#7A8C5C`, stroke `#56683E`, crowns 13-20 ft across, true size) filling the precinct outside a small swept clearing at the hall, in a group marked `id="grove"`; a sacred tree beside the approach with its rope drawn as a pale dashed ring. Crowns may overlap each other, so a grove reads as a closed wood (feature 270, the GM 2026-09-27: "tree crowns may overlap"); none stands on a building, a way, a well or a caption, and no tree is drawn on top of another (`trees_overlap`).
 
 ### Approaches and surroundings
 
