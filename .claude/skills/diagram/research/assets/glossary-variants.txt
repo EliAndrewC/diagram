@@ -176,6 +176,7 @@ chori	chori
 choriboshi	chori
 chronosequence	chronosequence
 chugen	chugen
+chugoku	Chugoku
 chumon-zukuri	chumon-zukuri
 chōzuya	temizuya
 circuit	wall circuit
@@ -560,6 +561,8 @@ hakka	Hakka
 hakone barrier	Hakone barrier
 half-river closure	half-river closure
 half-river closures	half-river closure
+hall-and-wing house	weilongwu
+hall-and-wing houses	weilongwu
 han	han
 han china	Han dynasty
 han dynasty	Han dynasty
@@ -642,6 +645,7 @@ hour of xu	hour of xu
 house pad	house pad
 house pads	house pad
 houzhaofang	houzhaofang
+hsien	hsien
 hucheng he	hucheng he
 hutong	hutong
 hutongs	hutong
@@ -1572,6 +1576,7 @@ water-tail	water-mouth
 wazi	goulan
 weathering	weathering
 wei-tian	weitian
+weilongwu	weilongwu
 weineihe	weineihe
 weir	weir
 weirs	weir

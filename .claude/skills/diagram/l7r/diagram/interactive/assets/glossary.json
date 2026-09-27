@@ -6547,5 +6547,25 @@
    "yomadori",
    "四間取り"
   ]
+ },
+ "Chugoku": {
+  "def": "The western end of Honshu, between the Kinki region and Kyushu; with Kinki, the heart of western Japan's plow-cattle region in the 1886 count.",
+  "variants": [
+   "Chugoku"
+  ]
+ },
+ "weilongwu": {
+  "def": "An enclosed Hakka house of south China: a central hall with wings, closed at the back by a ring of rooms for kitchens, stores, privies, pigsties and hen coops, built so its household could live self-sufficient inside its own walls.",
+  "variants": [
+   "weilongwu",
+   "hall-and-wing house",
+   "hall-and-wing houses"
+  ]
+ },
+ "hsien": {
+  "def": "An older (Wade-Giles) spelling of xian, a county of imperial and Republican China, the unit governed from a county seat.",
+  "variants": [
+   "hsien"
+  ]
  }
 }
