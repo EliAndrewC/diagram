@@ -199,3 +199,5 @@
 - KneelingPositions (buildings SECTION=010): IN-STEP - the kneeling-stones quote still supports litigants below the raised hall
 - MagistratesDais (buildings SECTION=010): IN-STEP - its one 010 claim, a court hall over kneeling litigants, still rests on the henan-neixiang footnote
 - Byre (homesteads SECTION=060): LABELED - the owned yard stable now says it rests on one encyclopedia sentence about wealthy Shaanxi courtyard houses, with no survey behind it
+- Latrine (buildings SECTION=220): IN-STEP - the section's changes (sand box unsourced, the guest/family pair dated to after Meiji, the trade's reach) touch nothing the modal claims
+- SideGate (buildings SECTION=220): IN-STEP - the night-soil commodity, the outside carters and the back wicket gate for collection all still stand in the section and its notes
