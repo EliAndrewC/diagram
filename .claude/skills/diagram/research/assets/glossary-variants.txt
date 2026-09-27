@@ -278,6 +278,7 @@ dongjing meng hua lu	Dongjing Meng Hua Lu
 dooryard	dooryard
 doshin	doshin
 dosojin	dosojin
+doyoboshi	nakaboshi
 dozo	kura
 dozō	kura
 drainage ditch	drainage ditch

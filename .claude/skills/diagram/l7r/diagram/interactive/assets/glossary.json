@@ -601,7 +601,7 @@
   ]
  },
  "azemichi": {
-  "def": "A walking bund: the wider paddy bund, two to five feet across, that carries a path, as against the ordinary foot-wide dividing bund.",
+  "def": "A walking bund: a paddy bund wide enough to carry a path, as against the ordinary dividing bund of one to two feet; the two to five feet the map allows it is a guess.",
   "variants": [
    "azemichi"
   ]
@@ -2804,9 +2804,10 @@
   ]
  },
  "nakaboshi": {
-  "def": "The mid-season drain: about a month after transplanting the paddy is emptied and dried until the surface cracks, then flooded again.",
+  "def": "The mid-season drain: in midsummer the paddy is emptied and dried until the surface cracks, then flooded again. Before modern times, as doyoboshi, it was done only in some places, where water was plentiful.",
   "variants": [
-   "nakaboshi"
+   "nakaboshi",
+   "doyoboshi"
   ]
  },
  "nando": {
