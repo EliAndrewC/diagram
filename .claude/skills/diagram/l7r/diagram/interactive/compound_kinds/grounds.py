@@ -573,7 +573,10 @@ class Door(Kind):
     fire cannot get in.
 
     Note: The kitchen-side door, the inward-facing doors of a servants' row, the plastered storehouse doors and a
-    guest's door opening off a court follow the record. No source gives a drawn door's width, and a door of a
+    guest's door follow the record; that the guest's door opens off a court rather than against a building's flank
+    is the GM's rule, the staged arrival behind it (gate, then court or garden, then the entrance) is this
+    project's reading that no source a reader can check sets out, and that the kitchen door opens onto work space
+    is likewise the map's own. No source gives a drawn door's width, and a door of a
     room that the setting or a map's story made is as much the drawing's own as its room.
 
     Caveat: No source gives a drawn door's width, and a door of a room that the setting or a map's story made is

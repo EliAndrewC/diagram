@@ -86,3 +86,11 @@
 - Kitchen (buildings SECTION=170): REWRITTEN - the kitchen as the worst fire risk, and so its two tubs, is now this project's reading, no page setting one tub to a hall as a rule.
 - Kitchen (buildings SECTION=180): REWRITTEN - the kitchen's rank below the living quarters is now this project's reading, no readable page ordering the compound by size.
 - PracticeGround (buildings SECTION=210): LABELED - the rural-training, castle-town-school and Chinese-yamen claims became guesses; the re-check found the martial-hall absence now rests on the silence of several intendant's-office pages (one naming a riding ground), relabeled by hand as a guess from that silence without a third check.
+- AncestralAlcove (buildings SECTION=130): IN-STEP - the lineage-held-posting rule, the office-hall alternative and the unsourced Chinese predecessor practice still match the section.
+- CompoundGarden (buildings SECTION=120): IN-STEP - the staged arrival as the record's reading and the GM's rule, with no readable page setting it out, still matches the section.
+- CompoundGarden (buildings SECTION=230): IN-STEP - the sunny south formal garden is still attested by the section's translated quotation.
+- Door (buildings SECTION=120): REWRITTEN - the guest door's court-facing is now the GM's rule, the staged arrival this project's unsourced reading and the kitchen door onto work space the map's own; the re-check found it in step.
+- Genkan (buildings SECTION=090): IN-STEP - the one attested genkan still belongs to the Takayama intendant's office block.
+- Genkan (buildings SECTION=120): IN-STEP - the genkan as formal entrance and the staged arrival labeled as reading and GM rule still match the section.
+- LordsQuarters (buildings SECTION=090): IN-STEP - the private study on the home side of the state/home line still follows the section.
+- ServantsQuarters (buildings SECTION=230): IN-STEP - the north-rear service strip reasoned from the sun, about ten servants and the boundary range still match the section.
