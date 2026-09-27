@@ -5614,5 +5614,51 @@
   "variants": [
    "hiro"
   ]
+ },
+ "ever-normal granary": {
+  "def": "A Chinese state granary that bought grain when it was cheap and sold it when it was dear, to keep the price steady and hold a reserve against famine.",
+  "variants": [
+   "ever-normal granary",
+   "ever-normal granaries"
+  ]
+ },
+ "Qianlong": {
+  "def": "The reign of the Qing emperor Qianlong, 1736-1796.",
+  "variants": [
+   "Qianlong"
+  ]
+ },
+ "Jiaqing": {
+  "def": "The reign of the Qing emperor Jiaqing, 1796-1820.",
+  "variants": [
+   "Jiaqing"
+  ]
+ },
+ "Azuchi-Momoyama period": {
+  "def": "The years from about 1568 to 1600, between the Sengoku period and the Edo period, when Japan was reunified and firearms came into wide use; castle walls were thickened against bullets.",
+  "variants": [
+   "Azuchi-Momoyama period",
+   "Azuchi-Momoyama"
+  ]
+ },
+ "loophole": {
+  "def": "A narrow opening cut through a castle wall so that defenders can shoot out through it.",
+  "variants": [
+   "loophole",
+   "loopholes"
+  ]
+ },
+ "plinth": {
+  "def": "The low stone base that a wall or post stands on, keeping the earth or timber above it off the wet ground.",
+  "variants": [
+   "plinth",
+   "plinths"
+  ]
+ },
+ "formwork": {
+  "def": "The temporary boards that hold earth or plaster in shape while a wall is rammed or set; they are taken away once the wall stands.",
+  "variants": [
+   "formwork"
+  ]
  }
 }
