@@ -550,7 +550,7 @@ BROOK_SKIRT = 34.0
 # The course's variety comes from the field's own outline, which it now follows at this distance, and the walk
 # only keeps it off a ruled line.
 BROOK_WANDER = 10.0
-BROOK_WANDER_STEP = 4.0
+BROOK_WANDER_STEP = 10.0
 # HOW FAR PAST THE FIELD's own bounds a station may sit, px - the belt to the skirt's braces, and sized to the
 # crop margin (`CROP_MARGIN`, 48) so that a station inside this box is inside the picture. On a map whose land
 # falls on a diagonal the first cut bounded the offset in the FALL's frame, which is not the frame the sheet is

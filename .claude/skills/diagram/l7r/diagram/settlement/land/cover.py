@@ -47,6 +47,31 @@ if TYPE_CHECKING:
     from ..core import Settlement
 
 
+FARMSTEAD_NEIGHBOR_FT = 140.0  # ft: two farmsteads this near share the ground between them - a lane, a gap a copse fills
+
+
+def farmstead_keepouts(M: Any, margin: float) -> list[Any]:
+    """The settlement's scrub keep-out as rings: each farmstead's own outline - its house and the parts nearest it -
+    grown by `margin`, and the outline of each pair of farmsteads within `FARMSTEAD_NEIGHBOR_FT` (feature 261)."""
+    hs = [(float(h["x"]), float(h["y"])) for h in M.get("houses") or [] if "x" in h]
+    if not hs:
+        return []
+    groups: list[list[tuple[float, float]]] = [[h] for h in hs]
+    for key in ("gardens", "threshing_yards", "farm_fixtures", "byres", "farm_sheds", "persimmons"):
+        for r in M.get(key) or []:
+            if "x" in r:
+                hw, hh = float(r.get("w", 0.0)) / 2, float(r.get("h", 0.0)) / 2
+                k = min(range(len(hs)), key=lambda i: math.dist(hs[i], (float(r["x"]), float(r["y"]))))
+                groups[k] += [(float(r["x"]) + sx * hw, float(r["y"]) + sy * hh) for sx in (-1, 1) for sy in (-1, 1)]
+
+    def grown(pts: list[tuple[float, float]]) -> Any:
+        return convex_hull([(x + margin * math.cos(math.radians(a)), y + margin * math.sin(math.radians(a))) for x, y in pts for a in range(0, 360, 45)])
+
+    rings = [grown(g) for g in groups]
+    rings += [grown(groups[i] + groups[j]) for i in range(len(hs)) for j in range(i + 1, len(hs)) if math.dist(hs[i], hs[j]) <= FARMSTEAD_NEIGHBOR_FT]
+    return rings
+
+
 class GroundCoverMixin:
     def commons(self: Settlement, poly: Any, role: str = "commons", avoid: Any = (), render: str = "scrub", soft: Any = (), woods: Any = ()) -> None:  # type: ignore[misc]
         """FUEL-AND-FODDER COMMONS - the degraded open grazing/scrub on the far (upslope / windward) side,
@@ -391,14 +416,12 @@ class GroundCoverMixin:
             # house centers left a fringe farmstead's privy, heap and garden outside it, with scrub on three sides of the
             # privy - where the record puts them in the homestead's own work yard. Each part's footprint corners join the
             # house points, grown by the same margin.
-            _pts = [(float(h["x"]), float(h["y"])) for h in hs]
-            for key in ("gardens", "threshing_yards", "farm_fixtures", "byres", "farm_sheds", "persimmons"):
-                for r in self.M.get(key) or []:
-                    if "x" in r:
-                        _hw, _hh = float(r.get("w", 0.0)) / 2, float(r.get("h", 0.0)) / 2
-                        _pts += [(float(r["x"]) + sx * _hw, float(r["y"]) + sy * _hh) for sx in (-1, 1) for sy in (-1, 1)]
-            _grown = [(x + m * math.cos(math.radians(a)), y + m * math.sin(math.radians(a))) for x, y in _pts for a in range(0, 360, 45)]
-            avoid.append(convex_hull(_grown))
+            # ...AND NOT ONE HULL ROUND THEM ALL (settlement-review of Kuwabata, feature 261): a single convex hull took in open
+            # ground more than a dooryard from any house, where the copse may not stand either, and left a bare wedge 240 x
+            # 270 ft with a straight 430 ft edge inside the cluster. Each farmstead's own grown outline is kept clear, and so
+            # is the ground between two farmsteads near enough to share it (`FARMSTEAD_NEIGHBOR_FT`); wider open ground
+            # carries the scrub the rest of the map does.
+            avoid += farmstead_keepouts(self.M, m)
         elif hs:
             # DISPERSED: the farmsteads RING the settlement, so a bbox of their positions is not their footprint
             # - it is the WHOLE MAP, and using it forbids ground cover everywhere inside the ring. That is what

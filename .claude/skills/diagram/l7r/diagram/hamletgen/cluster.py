@@ -52,6 +52,11 @@ def back_fouled(anchor: Pt, out: Pt, dep: float, dry_plots: Sequence[Poly], reac
     return hit / total
 
 
+BELT_ROOM_MAX_OFF = 0.2  # share of the belt band that may fall off the canvas before a seat is only a fallback - three of
+# its fifteen sample points, the near corners a band square to a diagonal wind clips on a seat with room (a drawing
+# judgment: the seat's belt room is geometry, not a researched figure)
+
+
 def belt_off_canvas(center: Pt, along: Pt, out: Pt, lat: float, dep: float, wind: Pt, W: float, H: float) -> float:
     """The share of the windbreak's band that would fall off the canvas behind a cluster seated at `center` (feature 261).
     The band is sampled where `belt_polygon` draws it: 36, 90 and 146 ft upwind of the cluster's windward fringe, across
@@ -112,6 +117,7 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
 
     best: tuple[float, Pt, Pt] | None = None
     offwind: list[tuple[float, Pt, Pt]] = []  # margins whose back is more than 45 deg off the wind, kept only as the last fallback
+    cramped: list[tuple[float, Pt, Pt]] = []  # wind-facing margins whose belt would fall off the canvas, the fallback before those
     n = len(env)
     for i in range(n):
         ax, ay = env[i]
@@ -209,17 +215,26 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
             _bp = [(mid[0] + nx * d - ny * lat * t, mid[1] + ny * d + nx * lat * t) for d in (dep * 0.5, dep + 34.0, dep * 2.0) for t in (-0.9, -0.45, 0.0, 0.45, 0.9)]
             crossed = sum(1 for q in _bp if min((seg_dist(q[0], q[1], a, b) for a, b in zip(brook, brook[1:], strict=False)), default=1e9) < 30.0) / len(_bp)
             score -= 3.0 * crossed
-        # ...AND MINUS A BELT WITH NO GROUND TO STAND ON (settlement-review of Mizuguchi, feature 261). The windbreak stands
-        # 36-146 ft upwind of the houses' windward fringe (`belt_polygon`); a seat whose band runs that belt off the canvas
-        # left the belt a strip beside the westernmost farmsteads, holed where they stood in it. Scored like the wet
-        # ground: the share of the belt band's sample points that fall off the canvas.
-        score -= 2.5 * belt_off_canvas((mid[0] + nx * (dep + 12.0), mid[1] + ny * (dep + 12.0)), (-ny, nx), (nx, ny), lat, dep, (wx, wy), plan.W, plan.H)
+        # ...AND A BELT WITH GROUND TO STAND ON (settlement-review of Mizuguchi, feature 261, two rounds). The windbreak
+        # stands 36-146 ft upwind of the houses' windward fringe (`belt_polygon`); a seat whose band runs that belt off the
+        # canvas left the belt a strip beside the westernmost farmsteads, holed where they stood in it. Scored alone (-2.5
+        # x the share off the canvas) the seat still won, because every other wind-facing margin had the brook across its
+        # band - so the share still scores, and past `BELT_ROOM_MAX_OFF` the seat is only a fallback, below every
+        # wind-facing seat with room and above the off-wind ones, as the off-wind margins are below all of these.
+        off = belt_off_canvas((mid[0] + nx * (dep + 12.0), mid[1] + ny * (dep + 12.0)), (-ny, nx), (nx, ny), lat, dep, (wx, wy), plan.W, plan.H)
+        score -= 2.5 * off
         if nx * wx + ny * wy < WIND_BACK_MIN_DOT:
             offwind.append((score, mid, (nx, ny)))
             continue
+        if off > BELT_ROOM_MAX_OFF:
+            cramped.append((score, mid, (nx, ny)))
+            continue
         if best is None or score > best[0]:
             best = (score, mid, (nx, ny))
-    # THE LAST FALLBACK (feature 261): a margin facing off the wind, recorded on the map as `seat_offwind`.
+    # THE FALLBACKS (feature 261): a wind-facing margin with no room for its belt, then one facing off the wind,
+    # recorded on the map as `seat_offwind`.
+    if best is None and cramped:
+        best = max(cramped, key=lambda t: t[0])
     if best is None and offwind:
         best = max(offwind, key=lambda t: t[0])
     if best is None:

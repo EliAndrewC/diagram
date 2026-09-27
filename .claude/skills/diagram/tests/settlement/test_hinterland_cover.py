@@ -92,8 +92,8 @@ def test_the_cover_does_not_hold_the_frame_open() -> None:
 
 
 def test_the_settlement_keep_out_follows_a_diagonal_cluster_not_its_bbox() -> None:
-    """Feature 261 (settlement-review of Sawada): a nucleated cluster's keep-out is the hull of its houses grown by the
-    margin, so on a diagonal ribbon the scrub reaches the open corners of the houses' bounding box instead of stopping
+    """Feature 261 (settlement-review of Sawada): a nucleated cluster's keep-out follows its farmsteads (grown outlines,
+    `farmstead_keepouts`) rather than their bounding box, so on a diagonal ribbon the scrub reaches the open corners of the houses' bounding box instead of stopping
     along straight north-south and east-west lines round them - and every house still stands inside it."""
     from l7r.diagram.settlement._geom import point_in_poly
 
@@ -103,11 +103,31 @@ def test_the_settlement_keep_out_follows_a_diagonal_cluster_not_its_bbox() -> No
     s.commons = lambda poly, role="commons", avoid=(), render="scrub", soft=(), woods=(): seen.append(list(avoid))  # type: ignore[method-assign]
     s.hinterland(marsh=False, commons=True, interior_fill=False)
     assert seen and seen[0], "the scrub was handed the settlement keep-out"
-    ring = [tuple(p) for p in seen[0][0]]
-    assert all(point_in_poly(h["x"], h["y"], ring) for h in s.M["houses"])
-    assert not point_in_poly(420.0, 220.0, ring), "the bbox's empty corner is open to the scrub"
+
+    def kept(x: float, y: float) -> bool:
+        return any(point_in_poly(x, y, [tuple(p) for p in r]) for r in seen[0])
+
+    assert all(kept(h["x"], h["y"]) for h in s.M["houses"])
+    assert not kept(420.0, 220.0), "the bbox's empty corner is open to the scrub"
     # ...and a farmstead's own parts are inside it too: a privy out on the ribbon's flank is kept clear of scrub
     s.M["farm_fixtures"] = [{"kind": "privy", "x": 330.0, "y": 180.0, "w": 6.0, "h": 6.0}, {"kind": "heap"}]
     seen.clear()
     s.hinterland(marsh=False, commons=True, interior_fill=False)
-    assert point_in_poly(330.0, 180.0, [tuple(p) for p in seen[0][0]])
+    assert kept(330.0, 180.0)
+
+
+def test_the_scrub_keeps_off_each_farmstead_and_the_ground_between_near_neighbors_only() -> None:
+    """`farmstead_keepouts` (feature 261, settlement-review of Kuwabata): one grown outline per farmstead holding its own
+    parts, plus one per pair within `FARMSTEAD_NEIGHBOR_FT` - so the ground inside a far-flung cluster's hull, which no
+    farmstead reaches, is left to the scrub rather than drawn bare."""
+    from l7r.diagram.settlement import point_in_poly
+    from l7r.diagram.settlement.land.cover import FARMSTEAD_NEIGHBOR_FT, farmstead_keepouts
+
+    assert farmstead_keepouts({"houses": []}, 10.0) == []
+    near = FARMSTEAD_NEIGHBOR_FT - 20.0
+    m = {"houses": [{"x": 0.0, "y": 0.0}, {"x": near, "y": 0.0}, {"x": 0.0, "y": 400.0}], "gardens": [{"x": 0.0, "y": 380.0, "w": 20.0, "h": 20.0}]}
+    rings = farmstead_keepouts(m, 10.0)
+    assert len(rings) == 4  # three farmsteads, one near pair
+    assert any(point_in_poly(near / 2, 0.0, r) for r in rings)  # between the near pair
+    assert any(point_in_poly(0.0, 385.0, r) for r in rings)  # the garden, on its own farmstead's outline
+    assert not any(point_in_poly(0.0, 200.0, r) for r in rings)  # the far farmstead is its own island

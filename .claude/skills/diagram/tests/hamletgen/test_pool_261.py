@@ -376,3 +376,32 @@ def test_every_copse_clump_stands_on_its_nearest_houses_bank(gen: str) -> None:
             assert not any(segments_cross((float(c[0]), float(c[1])), (h["x"], h["y"]), a, b) for a, b in zip(brook, brook[1:], strict=False)), (
                 f"a copse clump at ({c[0]:.0f}, {c[1]:.0f}) stands across the brook"
             )
+
+
+def _straightest(pts: list[tuple[float, float]], tol: float) -> float:
+    """The longest chord between two vertices of `pts` with every vertex between within `tol` ft of it."""
+    best = 0.0
+    for i in range(len(pts)):
+        for j in range(i + 2, len(pts)):
+            a, b = pts[i], pts[j]
+            span = math.dist(a, b)
+            if span > best and all(abs((b[0] - a[0]) * (a[1] - q[1]) - (a[0] - q[0]) * (b[1] - a[1])) / span <= tol for q in pts[i : j + 1]):
+                best = span
+    return best
+
+
+@pytest.mark.parametrize("gen", GENS, ids=IDS)
+def test_no_brook_runs_ruled_for_most_of_its_course_on_the_page(gen: str) -> None:
+    """A natural brook does not run straight for most of the page (settlement-review of Sawada, round 0ae309f0: 872 ft
+    within 3.1 ft of a line, 70% of the course on the page). No straight run - every vertex within 3.1 ft of the chord -
+    covers more than 40% of the brook's length inside the view; the pool measured 17-31% once the walk swung across its
+    band (specs/261 measurements)."""
+    m = _manifest(gen)
+    x0, y0, w, h = m["meta"]["view"]
+    for brook in _brooks(m):
+        on = [p for p in brook if x0 <= p[0] <= x0 + w and y0 <= p[1] <= y0 + h]
+        length = sum(math.dist(a, b) for a, b in zip(on, on[1:], strict=False))
+        if length < 300.0:
+            continue
+        run = _straightest(on, 3.1)
+        assert run <= 0.4 * length, f"{run:.0f} of {length:.0f} ft of brook on the page runs straight"

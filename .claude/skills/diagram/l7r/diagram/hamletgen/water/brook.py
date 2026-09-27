@@ -29,6 +29,16 @@ from ..consts import (
 )
 from ..plan import SitePlan
 
+EXIT_BEND_FRAC = 0.12  # an exit leg's midpoint bend, as a share of the leg ...
+EXIT_BEND_MAX_FT = 60.0  # ... at most this far aside
+
+
+def exit_bend(start: tuple[float, float], heading: tuple[float, float], leg: float, side: float) -> tuple[float, float]:
+    """The midpoint of an exit leg from `start` along `heading` for `leg` ft, set aside by `EXIT_BEND_FRAC` of the leg
+    (at most `EXIT_BEND_MAX_FT`) on `side` (+1 or -1) - one gentle bend in a leg the page still shows (feature 261)."""
+    off = side * min(EXIT_BEND_MAX_FT, EXIT_BEND_FRAC * leg)
+    return (start[0] + heading[0] * leg / 2 - heading[1] * off, start[1] + heading[1] * leg / 2 + heading[0] * off)
+
 
 def _wander(rng: random.Random, stray: float, swing: int) -> tuple[float, int]:
     """One step of the brook's lateral walk: (how far outside the skirt floor, which way it is going).
@@ -256,8 +266,14 @@ def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = ()
     # NO WANDER IN THE EXIT, and the turn onto the fall spread over four legs. A lateral term on a leg
     # hundreds of feet long folded the course back on itself (129 degrees on one map, 113 on another, both in
     # the last four vertices), and the part that leaves the sheet is the one place a straight run costs nothing.
-    for f, blend in ((0.22, 0.3), (0.26, 0.6), (0.26, 0.85), (0.26, 1.0)):
+    for k, (f, blend) in enumerate(((0.22, 0.3), (0.26, 0.6), (0.26, 0.85), (0.26, 1.0))):
         hx, hy = unit(heading[0] * (1.0 - blend) + dx * blend, heading[1] * (1.0 - blend) + dy * blend)
+        # ...BUT A LEG STILL ON THE PAGE BENDS AT ITS MIDDLE (settlement-review of Sawada, feature 261): the exit starts
+        # where the frame would pin the course, and on a map where that is 940 ft inside the sheet the straight legs drew
+        # 70% of the brook as a ruled line. One gentle bend per leg that starts in frame, alternating side, sized to the
+        # leg (`exit_bend`) - a turn of about 27 degrees, where the long lateral terms that folded the course were 113-129
+        if 0.0 <= px_ <= plan.W and 0.0 <= py_ <= plan.H:
+            out.append(exit_bend((px_, py_), (hx, hy), span * f, 1.0 if k % 2 == 0 else -1.0))
         px_, py_ = px_ + hx * span * f, py_ + hy * span * f
         out.append((px_, py_))
 

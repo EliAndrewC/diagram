@@ -470,3 +470,12 @@ def test_a_brook_that_doubles_back_is_unfolded() -> None:
     gentle = [(0.0, 0.0), (100.0, 0.0), (180.0, 40.0)]
     assert unfold(gentle, 100.0) == gentle
     assert unfold([(0.0, 0.0), (0.0, 0.0), (5.0, 5.0)], 100.0) == [(0.0, 0.0), (0.0, 0.0), (5.0, 5.0)], "a zero leg has no turn"
+
+
+def test_an_exit_bend_sits_at_the_legs_middle_to_one_side_and_is_capped() -> None:
+    """`exit_bend`: the midpoint of the leg, set aside by 12% of the leg on the given side, never more than 60 ft."""
+    from l7r.diagram.hamletgen.water.brook import EXIT_BEND_MAX_FT, exit_bend
+
+    assert exit_bend((0.0, 0.0), (1.0, 0.0), 100.0, 1.0) == pytest.approx((50.0, 12.0))
+    assert exit_bend((0.0, 0.0), (1.0, 0.0), 100.0, -1.0) == pytest.approx((50.0, -12.0))
+    assert exit_bend((0.0, 0.0), (0.0, 1.0), 1000.0, 1.0) == pytest.approx((-EXIT_BEND_MAX_FT, 500.0))
