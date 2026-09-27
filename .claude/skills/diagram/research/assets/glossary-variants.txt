@@ -163,6 +163,11 @@ caravanserais	caravanserai
 carex	Carex
 carex lyngbyei	Carex
 carr	carr
+cascade	cascade
+cascade column	cascade
+cascade columns	cascade
+cascade fan	cascade
+cascades	cascade
 case-hill	case-hill
 case-hills	case-hill
 castanopsis	Castanopsis

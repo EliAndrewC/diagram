@@ -7254,5 +7254,15 @@
   "variants": [
    "declared fall"
   ]
+ },
+ "cascade": {
+  "def": "Paddies stepped one below another down a slope, so that water spills from each field into the next one down. A cascade column is one line of them running downhill; a cascade fan is many columns spread across a fan-shaped slope.",
+  "variants": [
+   "cascade",
+   "cascades",
+   "cascade column",
+   "cascade columns",
+   "cascade fan"
+  ]
  }
 }
