@@ -122,14 +122,29 @@ is not held to a map.
 - **D5 - the sheet's arch** follows D3 at 3 px/ft: the kasagi a 15 by 1.5 ft bar, the posts 1.2 ft
   squares 10.7 ft apart clear, over the 10 ft approach. The notes' "about 8 ft deep in plan against a
   real 1.5-2 ft (a vocabulary convention)" disclosure retires with the glyph it described.
-- **D6 - the grove on the map.** (a) A grove outline with the shrine well at its back edge (FR-007
-  allows the edge) to the outermost arch: about 120 ft wide behind and around the hall, narrowing to about
-  60 ft along the avenue - about 620 tsubo by this plan's arithmetic, inside the typical 150-650 band R2
-  opens with, measured on the drawn outline at T-map and trimmed if it comes out above 650. The band
-  T-program writes is R2's figures as found, never widened to fit the grove. (b) The sacred tree stands
+- **D6 - the grove on the map.** (a) The grove is the precinct, a near-rectangle that fills the sheet's
+  frame (SC-002 allows bare ground only as a border no deeper than the crop margin): about 117 ft wide
+  (wide enough to ring the 60 ft hall and the kitchen garden at its west gable with a stand of trees on
+  either side) from the shrine well at its back edge (FR-007 allows the edge) to the outermost arch,
+  about 225 ft - about 730 tsubo by this plan's arithmetic, measured on the drawn outline at T-map. That
+  is inside R2's figures as found (the registers: Saitama 55-708, median 403; Tochigi 142-2,700, median
+  655; Saga's unranked 50-662, median 148): above Saitama's top, below Tochigi's upper half. The depth is
+  the map's (the well 108 ft behind the hall) plus the seven arches at the pitch, so a smaller precinct
+  would leave bare commons inside the frame, which SC-002 forbids. The band T-program writes is R2's
+  figures as found, never widened to fit the grove. (Figures observed 2026-09-27; method: this plan's
+  arithmetic on the map's positions and R2's register figures.) (b) The sacred tree stands
   BESIDE THE APPROACH, inside the grove - the GM's "the sacred tree and a stone basin by the approach";
   (c) the basin beside the approach at the innermost arch, on the other side. (d) The map's
   `village_groves` gains an entry of role `shrine`, `tree_crowns` the sacred tree, `wells` the basin
   (flagged `basin`), `torii` the seven at the pitch.
+- **D10 - the arch the edge check reads is the OUTERMOST.** The research puts the first torii where the
+  approach enters the shrine's ground; with the precinct now the grove, that arch is the outermost, at
+  the grove's edge. `arch_on_approach` reads a sheet's first-declared arch against the precinct's edge,
+  so the sheet declares the outermost arch first. No code change.
+- **D11 - the sheet's captions are tagged** (`data-kind`, `-` for the title) and seated by `make seat-label`,
+  as feature 266 requires of a changed sheet; the kinds reuse the magistracy registry's names where one
+  fits (torii, shrine grove, well, kitchen, vegetable garden, latrine, fire-water tubs) and name the rest
+  plainly (hall and dwelling, sanctuary, sacred tree, basin, approach). No interactive page is built for
+  the shrine in this feature.
 - **D7 - the precinct check.** `fence_not_wall` becomes `no_precinct_enclosure`: a fence, wall or hedge
   group whose bounds enclose the hall fails; a fence around the sanctuary alone does not. (Figures observed 2026-09-27; method: read from the reader report this section names, or, for the project's own values, off the engine and the sheet.)
