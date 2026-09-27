@@ -198,6 +198,7 @@ Also edits 015, 052, 068, 090.
   (urban-features/068). S. P1.
 
 ## R1 - religion-and-death: swept ground, graves and the tier program (new: religion-and-death 400-440)
+> COORDINATION (R1): religion-and-death 210's shrine and temple parts, 190 and 204 are 272's (Diagram shrines) - do not edit them; any correction they owe goes in the handoff for 272
 
 Also edits 140, 210.
 
@@ -205,9 +206,11 @@ Also edits 140, 210.
   (religion-and-death/140, no footnotes). S. P1.
 - A143 **Hamlet burials**: where does a hamlet bury its dead - household plots beside the farmstead (yashiki-baka), a
   shared hillside, the district's ground? (religion-and-death/210; field graves are 267's R52). M. P1.
+  > COORDINATION (A143): keep to the household plot (yashiki-baka) itself - its frequency and its seat on the plot; 269's religion-and-death 160/170/180/206/270/280 (280 is a KNOB of graveyard forms) are in diagram-supplemental - read and cite them
 - C157 **Pauper ground**: one per seat, and its size (the 10-30 ft is a guess)? (cities/capitals/333). S. P1.
 - D63 **The tier program**: what religious and funerary features does each size of settlement carry?
   (religion-and-death/210, 1 note, 1 absence). M. P1.
+  > COORDINATION (D63): the tier table of religious features is 272's (Diagram shrines) to own, by agreement - cite it; do not write a tier table here
 
 ## T1 - towns: the town as a whole (new: towns 200-250)
 
@@ -282,9 +285,12 @@ Also edits 140, 210.
 
 - B14 C89 **Street widths**: how wide is a town's and a provincial city's main street, side street and lane, and the
   Imperial or trunk road where it runs through? (ways/020 village; cities/capitals/210 capital; towns/090). M. P1.
+  > COORDINATION (C89): town street widths only; city street widths are 269's cities/fabric 030/070 (B40) - cite them
 - B15 C101 **Street surface and drains**: beaten earth, gravel or stone (China), and did town and city streets carry
   drains or gutters (dobu), how wide? (cities/fabric/080 says unpaved on general reading; 269 B40 owns 080 - cite it).
   M. P1.
+  > COORDINATION (B15): take the TOWN side; cite 269's cities/fabric 030/070/080 (B40) for the city side
+  > COORDINATION (C101): town side only; the city street surface is 269's cities/fabric 080 (B40) - cite it
 - B16 **Cross streets**: how many cross streets does a town have, in what pattern - T junctions, a defensive crank
   (masugata) at the town's ends? (none). M. P1.
 - B18 C86 **Back paths**: how is a packed commoner quarter crossed - trodden footpaths or alleys, how wide, and why is
@@ -294,6 +300,7 @@ Also edits 140, 210.
   type (plank, earth-decked, arched timber, stone), how wide and how long? (ways/010, 030, village). M. P1.
 - C175 **Approach roads**: how wide are the roads into a city, and what lines them past the gate market (a tree
   avenue, milestones, shrines)? (ways/020; 267's R47 is a compound's gate). M. P1.
+  > COORDINATION (C175): town approach roads only; the city strip outside a gate is 269's cities/hinterland 040 (B41) - cite it
 
 ## U2 - urban-features: shops, counts and premises (new: urban-features 310-360)
 
@@ -330,6 +337,7 @@ Also edits cities/fabric/060, towns/070.
 - B114 C35 **Night watch, guard boxes and kido**: did a town bar its streets at night, and did a city keep ward guard
   boxes (jishinban, tsujiban) or Chinese patrol stations (xunpu), how many? (urban-features/130, cities/capitals/330).
   M. P3.
+  > COORDINATION (C35): take the town night watch; cite 269's cities/government 085 (B39, ward gates) and cities/defenses guard stations (B38) for the city
 
 ## R2 - religion-and-death: town monasteries and town and city shrines (new: religion-and-death 450-490)
 
