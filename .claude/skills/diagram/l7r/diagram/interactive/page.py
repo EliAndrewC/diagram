@@ -858,7 +858,13 @@ def render_page(
         wrapped = [part_of(w, ks) for w, ks in zip(wrapped, within, strict=True)]
     # the hit regions go right after the SHEET (the first "-"-tagged string), under everything drawn
     sheet = next((i for i, t in enumerate(tags) if t == NOT_HIGHLIGHTED), 0)
-    regions = hit_regions(manifest, present - HIT_FROM_MARKS)
+    # THE MARKS' REGIONS GO FIRST, the recorded footprints ABOVE them (GM 2026-09-27: over the windbreak "if I hit a
+    # tiny gap between two trees in the interior of the forest, then the forest stops lighting up"). The scrub's region
+    # is its marks' cells grown by one, and its grass runs a few feet in under a wood's edge (feature 266's fringe), so
+    # the grown cells reached into the belt - 36% of Inashiro's belt lay under a scrub cell stacked over the belt's own
+    # polygon, and a gap between crowns lit the scrub instead. A feature with an outline of its own owns that outline;
+    # the scrub fills the ground round it.
+    regions = ""
     for key in sorted(HIT_FROM_MARKS & present):
         polys = [
             rec["poly"]
@@ -869,6 +875,7 @@ def render_page(
         rects = marks_region([s for s, t in zip(strings, tags, strict=True) if t == key], within=polys)
         if rects:
             regions += _open(key) + f'<g class="hit" fill="none" style="pointer-events: fill">{rects}</g></g>'
+    regions += hit_regions(manifest, present - HIT_FROM_MARKS)
     wrapped.insert(sheet + 1, regions)
     # the widened boxes ride ABOVE the ink, in one layer of their own - see `hit_layer`
     close = next((i for i in range(len(wrapped) - 1, -1, -1) if "</svg>" in wrapped[i]), len(wrapped))
