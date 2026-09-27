@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-27
 
-**Status**: specified; awaiting spec-fidelity
+**Status**: specified; spec-fidelity round 1 CHANGES REQUIRED (keep the duplicated-tree test) - applied, round 2 next
 
 **Input**: the GM's two answers of 2026-09-27, verbatim in [`request.md`](request.md).
 
@@ -24,15 +24,17 @@ record's question 120 and the pack audit's report on the 268 sheet.)
 
 ### User Story 1 - Tree crowns may overlap one another (Priority: P1)
 
-A sheet's canopies may overlap each other freely; the audit still reports a crown over a building, a way, a
-well, a wall or fence, furniture, a glyph, a tub or a caption.
+A sheet's canopies may overlap each other; the audit still reports a tree drawn on top of another (a duplicated
+tree - the case the GM's 2026-09-20 rule was written against, feature 257's "two lie on top of each other") and a
+crown over a building, a way, a well, a wall or fence, furniture, a glyph, a tub or a caption.
 
-**Independent Test**: the audit on a sheet whose crowns overlap each other and nothing else reports nothing; the
-same sheet with a crown over a building or a caption is reported.
+**Independent Test**: the audit on a sheet whose crowns partly overlap each other and nothing else reports
+nothing; a concentric pair is reported as a duplicated tree; a crown over a building or a caption is reported.
 
 **Acceptance Scenarios**:
 
-1. **Given** two overlapping canopies on open ground, **When** the pack audit runs, **Then** it reports nothing.
+1. **Given** two partly overlapping canopies on open ground, **When** the pack audit runs, **Then** it reports
+   nothing; **Given** two trees whose trunks stand closer than trees can grow, **Then** it reports a duplicated tree.
 2. **Given** a canopy over a building or a caption, **When** the audit runs, **Then** it is reported as before.
 
 ### User Story 2 - The shrine's grove is a closed wood (Priority: P1)
@@ -70,8 +72,9 @@ it, never from a map glyph; the notes say what set each dimension and label it.
 
 ### Functional Requirements
 
-- **FR-001**: `trees_overlap` MUST NOT report two canopies that overlap each other, and MUST still report a
-  canopy over anything else it covered; its test and docs say so.
+- **FR-001**: `trees_overlap` MUST NOT report canopies that merely overlap each other; it MUST still report a
+  duplicated tree (two trunks closer than trees can grow - the threshold taken from the record or labeled a guess,
+  never left unsourced) and a canopy over anything else it covered; its test (rewritten, not deleted) and docs say so.
 - **FR-002**: The Hoshigaoka grove MUST be redrawn with overlapping crowns so the canopy covers most of the
   grove's ground outside the clearing, the approach, the path and the well, on the sheet and the village map,
   matching tree for tree.
@@ -81,7 +84,7 @@ it, never from a map glyph; the notes say what set each dimension and label it.
   be brought to it, with the arches, the forecourt, the basin, the clearing and the grove following. (Figures
   observed 2026-09-27; method: read off the sheet's notes and the map manifest.)
 - **FR-004**: `buildings.md` and the program MUST say that a building's dimensions on a sheet come from the
-  research unless the GM gave them, and are never taken from a map's glyph; the sheet's notes label each
+  research unless the GM gave them, and are never taken from a map's glyph as a measurement; the sheet's notes label each
   dimension with what set it.
 - **FR-005**: The redrawn sheet MUST pass the pack audit, `size-audit` and `building-review`, and the map's edited
   region `settlement-review`, each ledgered.
@@ -92,8 +95,8 @@ it, never from a map glyph; the notes say what set each dimension and label it.
 
 ## Success Criteria *(mandatory)*
 
-- **SC-001** (FR-001): no finding for crown-on-crown overlap on any pool sheet; every other `trees_overlap`
-  finding kind still fires on its fixture.
+- **SC-001** (FR-001): no finding for crowns that overlap without duplicating a tree on any pool sheet; a
+  duplicated tree and every other `trees_overlap` finding kind still fire.
 - **SC-002** (FR-002): the grove's canopy covers most of the ground it is allowed to cover, measured on the layout.
 - **SC-003** (FR-003, FR-004): the hall's footprint, hall end and depth each inside the record's bands, stated
   with their source in the notes.
@@ -104,3 +107,11 @@ it, never from a map glyph; the notes say what set each dimension and label it.
 - "Size the shrine based on our actual research" covers the hall-and-dwelling building (the sanctuary is already
   at its measured 6 ft); the precinct's size stays as feature 268 set it except where the new face moves the
   forecourt and the arches.
+
+## Review history
+
+- Round 1 (spec-fidelity, MODE 2, 2026-09-27): CHANGES REQUIRED, one item - FR-001 dropped the one tree-on-tree
+  case the GM's 2026-09-20 rule was written against (feature 257: "two lie on top of each other"). Applied: FR-001,
+  SC-001 and User Story 1 keep a duplicated-tree finding (two trunks closer than trees can grow, the threshold
+  sourced or labeled a guess) while letting crowns overlap; the test is rewritten, not deleted. Also taken: FR-004
+  "never taken from a map's glyph as a measurement".
