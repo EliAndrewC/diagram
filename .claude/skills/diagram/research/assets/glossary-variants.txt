@@ -158,6 +158,7 @@ circuit	wall circuit
 circuit's length	wall circuit
 city god	City God
 city gods	City God
+city grain	city grain
 coefficient of variation	coefficient of variation
 collar	planted collar
 collars	planted collar
@@ -935,6 +936,8 @@ petuntse	petuntse
 phragmites	Phragmites
 phragmites australis	Phragmites
 phytoplankton	phytoplankton
+picket line	picket line
+picket lines	picket line
 pig iron	pig iron
 pit rank	pit rank
 pit ranks	pit rank
@@ -942,6 +945,8 @@ plankton	plankton
 plant association	plant association
 planted collar	planted collar
 pledged land	pledged land
+plinth	plinth
+plinths	plinth
 polder	polder
 pollard	pollard
 pollarded	pollard
@@ -1165,6 +1170,9 @@ staking frame	staking frame
 staking frames	staking frame
 steading	steading
 steadings	steading
+stelae	stele
+stele	stele
+steles	stele
 stem density	stem density
 stilling pool	stilling pool
 stone pitching	stone pitching

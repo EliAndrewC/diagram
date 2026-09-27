@@ -5617,5 +5617,33 @@
   "variants": [
    "hour of xu"
   ]
+ },
+ "plinth": {
+  "def": "The block or base a pillar or post stands on, set on the ground beneath its shaft and adding to its height.",
+  "variants": [
+   "plinth",
+   "plinths"
+  ]
+ },
+ "city grain": {
+  "def": "The scale a city map is drawn at, about 3 ft of ground to a pixel, where a mark must be about 6 ft across to be seen at all.",
+  "variants": [
+   "city grain"
+  ]
+ },
+ "picket line": {
+  "def": "A rope stretched between stakes or posts, with several animals tied along it in a row.",
+  "variants": [
+   "picket line",
+   "picket lines"
+  ]
+ },
+ "stele": {
+  "def": "An upright stone slab or post, often carved or inscribed; the Chinese hitching post counts as one.",
+  "variants": [
+   "stele",
+   "steles",
+   "stelae"
+  ]
  }
 }
