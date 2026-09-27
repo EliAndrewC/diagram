@@ -7,6 +7,7 @@ aburaya	aburaya
 abutment	abutment
 abutments	abutment
 across the beams	ridge span
+adlittoral	adlittoral
 ake-mutsu	ake-mutsu
 akiba	Akiba
 akusui	akusui
@@ -14,6 +15,7 @@ alluvial fan	alluvial fan
 alluvial fans	alluvial fan
 along the ridge	ridge span
 alternate attendance	alternate attendance
+an'ei	An'ei
 anaerobic	anaerobic
 anagama	noborigama
 anchor culture	anchor culture
@@ -44,6 +46,7 @@ backwall	backwall
 backwalls	backwall
 backwater	backwater
 backwaters	backwater
+baidu baike	Baidu Baike
 bailey	bailey
 baileys	bailey
 bakufu	bakufu
@@ -60,6 +63,8 @@ barbican	barbican
 baren	baren
 basal area	basal area
 base flow	base flow
+bastion	bastion
+bastions	bastion
 batter	batter
 baulk	baulk
 bay	bay
@@ -100,6 +105,7 @@ buke-yashiki	buke-yashiki
 bund	bund
 bunded	bund
 bunds	bund
+bunsei	Bunsei
 bunsuiguchi	bunsuiguchi
 burakumin	burakumin
 burgage	burgage plot
@@ -260,6 +266,7 @@ dish pond	sara-ike
 dish ponds	sara-ike
 distributaries	distributary
 distributary	distributary
+ditai	mamian
 dituan	dituan
 division point	bunsuiguchi
 division points	bunsuiguchi
@@ -270,6 +277,7 @@ dobei	neribei
 doi	horinouchi
 dojo	dojo
 doma	doma
+donggusup	donggusup
 dongjing meng hua lu	Dongjing Meng Hua Lu
 dooryard	dooryard
 doshin	doshin
@@ -444,6 +452,7 @@ glyphs	glyph
 go	go
 goemon-buro	goemon-buro
 goemonburo	goemon-buro
+gogura	gogura
 gongxiefang	gongxiefang
 gorinto	five-ring pagoda
 goshi	gōshi
@@ -535,6 +544,7 @@ hutong	hutong
 hutongs	hutong
 hyakusho denki	Hyakusho Denki
 hydrophilic	hydrophilic
+hydrosere	hydrosere
 hyo	hyō
 hyojosho	Hyōjōsho
 hyō	hyō
@@ -590,6 +600,7 @@ jiangnan	Lower Yangzi
 jiegao	jiegao
 jiguchi-sen	jiguchi-sen
 jin'ya	jin'ya
+jinaicho	jinaicho
 jingtian	jingtian
 jinguji	jingūji
 jingū-ji	jingūji
@@ -602,15 +613,19 @@ jittered	jitter
 jittering	jitter
 jizo	jizo
 jo	jo
+jobikeshi	jobikeshi
 jochi	jochi
 jodo	Jodo
 jodo shinshu	Jodo Shinshu
 jokamachi	jokamachi
+jokyo	Jokyo
 jori	jori
 jori-sei	jori
 josui	josui
 josui ido	josui-ido
 josui-ido	josui-ido
+junk	junk
+junks	junk
 jōdo	Jodo
 jōsui ido	josui-ido
 kabata	kabata
@@ -633,6 +648,7 @@ kamiza	kamiza
 kan	kan
 kana	kana
 kanagashi	kanagashi
+kanbun	Kanbun
 kanden	kanden
 kangxi	Kangxi
 kannon	Kannon
@@ -656,6 +672,7 @@ kayabuki	kayabuki
 kebiishi	kebiishi
 kegare	kegare
 keian	hitoyado
+keibodan	keibodan
 keicho	Keicho
 keicho-era	Keicho
 keidai	keidai
@@ -677,6 +694,7 @@ kinai	Kinai
 king post	king post
 king posts	king post
 king-post	king post
+kirisute-gomen	kirisute-gomen
 kishu school	Kishu school
 kishu-school	Kishu school
 knob	knob
@@ -688,6 +706,7 @@ koebune	fertilizer boat
 koedame	koedame
 kofun	Kofun period
 kofun period	Kofun period
+koike	koike
 koji	koji
 koku	koku
 kokubunji	kokubunji
@@ -708,6 +727,7 @@ kotaiyoriai	kotaiyoriai
 kuchiireya	hitoyado
 kui	kui
 kumi	kumi
+kumi-chi	kumi-chi
 kumi-yashiki	kumi-yashiki
 kumigashira	kumigashira
 kunugi	kunugi
@@ -771,6 +791,7 @@ machi-bugyo	town magistrate
 machi-bugyosho	machi-bugyosho
 machi-bugyōsho	machi-bugyosho
 machi-dojo	machi-dojo
+machi-kido	kido
 machiya	machiya
 madake	madake
 made ground	made ground
@@ -792,6 +813,7 @@ meibutsu	meibutsu
 meiji	Meiji
 meireki	Meireki
 men-hai	taiping-gang
+menbansho	menbansho
 mengxi bitan	Mengxi Bitan
 micro-high	micro-high
 micro-highs	micro-high
@@ -829,7 +851,9 @@ muen-zuka	muenzuka
 muenbotoke	muenzuka
 muenzuka	muenzuka
 mugi	mugi
+mukaibansho	mukaibansho
 mulberry-dike fishpond	dike-pond
+murabarai	murabarai
 murataka	murataka
 muromachi	Muromachi
 musashi	Musashi
@@ -837,6 +861,7 @@ musashi province	Musashi
 mushiro	mushiro
 muster perimeter	muster perimeter
 muster perimeters	muster perimeter
+myoji-taito	myoji-taito
 nagaya	nagaya
 nagaya-mon	nagayamon
 nagayamon	nagayamon
@@ -867,6 +892,7 @@ nihonbashi	Nihonbashi
 ninomaru	ninomaru
 noborigama	noborigama
 nogyo zensho	Nogyo Zensho
+normal depth	normal depth
 northern song	Song dynasty
 nrcs	NRCS
 nrcs-designed	NRCS
@@ -907,6 +933,7 @@ outwork	outwork
 outworks	outwork
 ox-frame	ox-frame
 ox-frames	ox-frame
+oyaike	oyaike
 pannage	pannage
 parapet	parapet
 parish	parish
@@ -975,6 +1002,7 @@ quay	quay
 quays	quay
 quercus acutissima	kunugi
 quercus serrata	konara
+raku	raku
 rakugo	rakugo
 rammed earth	rammed earth
 rampart	rampart
@@ -1043,6 +1071,7 @@ sallyport	sally port
 salvage excavation	salvage excavation
 sand sluice	sand sluice
 sando	sando
+sangji yutang	dike-pond
 sanguan	Three Officials
 sankin-kotai	alternate attendance
 sankyoson	sankyoson
@@ -1097,6 +1126,7 @@ shironameshi	shironameshi
 shiroyone senmaida	senmaida
 shitsuden	shitsuden
 shizai	shizai
+shobodan	shobodan
 shogunate	bakufu
 shoin	shoin
 shoin-zukuri	shoin
@@ -1204,6 +1234,7 @@ tangpu	tangpu
 tatami	tatami
 tatara	tatara
 tatemachi	tatemachi
+tauchiguruma	tauchiguruma
 tawara	hyō
 tawed	shironameshi
 tawing	shironameshi
@@ -1245,6 +1276,7 @@ tohoku	Tohoku
 toiya	ton'ya
 tokaido	Tokaido
 toki no kane	toki no kane
+tokorobarai	tokorobarai
 tokugawa	Tokugawa
 tokugawa ieyasu	Ieyasu
 ton'ya	ton'ya
@@ -1306,6 +1338,7 @@ walled ward	lifang
 wanghuolou	wanghuolou
 wanli	Wanli era
 wanli era	Wanli era
+wanshu zaji	Wanshu zaji
 waraguro	waraguro
 ward gate	kido
 ward gates	kido
@@ -1324,6 +1357,7 @@ water-tail	water-mouth
 wazi	goulan
 weathering	weathering
 wei-tian	weitian
+weineihe	weineihe
 weir	weir
 weirs	weir
 weitian	weitian
@@ -1336,6 +1370,8 @@ wet run	wet run
 wet runs	wet run
 wetted perimeter	wetted perimeter
 white-tawed	shironameshi
+wicket	wicket
+wickets	wicket
 willow association	plant association
 willow palisade	Willow Palisade
 windlass	windlass
@@ -1347,6 +1383,7 @@ wokou	wokou
 wood-fee lodging	kichin-yado
 wood-fee lodgings	kichin-yado
 wrought iron	wrought iron
+wubei zhi	Wubei Zhi
 wujing zongyao	Wujing Zongyao
 xiang	xiang
 yacheng	yacheng
@@ -1370,6 +1407,7 @@ yicheng	yicheng
 yizhan	shukuba
 yizhong	yizhong
 yohaisui bunri	yohaisui bunri
+yokocho	yokocho
 yoriai-seki	yoriai-seki
 yoriki	yoriki
 yoshi	Phragmites
@@ -1380,6 +1418,7 @@ youfang	aburaya
 yuan	Yuan dynasty
 yuan dynasty	Yuan dynasty
 yuan rebuild	Yuan dynasty
+yui	yui
 yulin wei	yulin wei
 zaimokuya	zaimokuya
 zaofang	zaofang
@@ -1411,6 +1450,7 @@ zuku	zuku
 梁間	hari-ma
 水口林	water-mouth
 清明上河図	Qingming Shanghe Tu
+田打車	tauchiguruma
 畑永法	hata-ei
 百姓伝記	Hyakusho Denki
 築地松	tsuijimatsu
@@ -1420,3 +1460,4 @@ zuku	zuku
 鈔關	chaoguan
 雑木林	zokibayashi
 馬宿	umayado
+동구숲	donggusup

@@ -1202,7 +1202,8 @@
   "variants": [
    "dike-pond",
    "dike-ponds",
-   "mulberry-dike fishpond"
+   "mulberry-dike fishpond",
+   "sangji yutang"
   ]
  },
  "discharge": {
@@ -2314,7 +2315,8 @@
   "variants": [
    "kido",
    "ward gate",
-   "ward gates"
+   "ward gates",
+   "machi-kido"
   ]
  },
  "kimon": {
@@ -2649,7 +2651,8 @@
    "enemy platform",
    "enemy tower",
    "horse-face",
-   "horse-faces"
+   "horse-faces",
+   "ditai"
   ]
  },
  "maoqu": {
@@ -5555,6 +5558,209 @@
   "def": "The Japanese syllabic script, in which each sign stands for one syllable; の, read \"no\", is one of its signs.",
   "variants": [
    "kana"
+  ]
+ },
+ "donggusup": {
+  "def": "A Korean village-entrance grove: the stand of trees kept at the mouth of a village, the Korean counterpart of the Chinese water-mouth grove.",
+  "variants": [
+   "donggusup",
+   "동구숲"
+  ]
+ },
+ "hydrosere": {
+  "def": "The zonation from open water to dry land that every lowland wetland shows: open water, then the shallows, then reed swamp, then a sedge and wet-meadow zone, then dry ground.",
+  "variants": [
+   "hydrosere"
+  ]
+ },
+ "Baidu Baike": {
+  "def": "A Chinese online encyclopedia whose entries anyone may edit; the record cites it only as an encyclopedia summary, not as a primary text.",
+  "variants": [
+   "Baidu Baike"
+  ]
+ },
+ "bastion": {
+  "def": "A spur of masonry projecting from the outer face of a city wall, from which archers can shoot along the wall to either side; on a Chinese wall, the mamian.",
+  "variants": [
+   "bastion",
+   "bastions"
+  ]
+ },
+ "menbansho": {
+  "def": "The main guard house of a Japanese barrier station, holding the upper guard office, a rest room and a bath.",
+  "variants": [
+   "menbansho"
+  ]
+ },
+ "mukaibansho": {
+  "def": "The second guard house of a Japanese barrier station, standing across from the main one, with the station's jail.",
+  "variants": [
+   "mukaibansho"
+  ]
+ },
+ "gogura": {
+  "def": "The village store for the tax rice in Edo-period Japan: one to a village or to several, holding the rice on its way out under strict guard.",
+  "variants": [
+   "gogura"
+  ]
+ },
+ "myoji-taito": {
+  "def": "The privilege of bearing a surname and wearing a sword: a warrior privilege that the domains at times granted to commoners too, such as country samurai, headmen of special pedigree and town elders.",
+  "variants": [
+   "myoji-taito"
+  ]
+ },
+ "Wanshu zaji": {
+  "def": "A Ming-dynasty record of Wanping county, the county town in Beijing, quoted in the record for the town's fire-and-theft wards and watch posts.",
+  "variants": [
+   "Wanshu zaji"
+  ]
+ },
+ "yokocho": {
+  "def": "A side street off a main street: narrower than the main street but wider and more public than a roji back lane.",
+  "variants": [
+   "yokocho"
+  ]
+ },
+ "kirisute-gomen": {
+  "def": "A warrior's privilege in Edo-period Japan, named beside myoji-taito: the license to cut down a commoner who gave offense.",
+  "variants": [
+   "kirisute-gomen"
+  ]
+ },
+ "keibodan": {
+  "def": "Japan's wartime civil-defense guard, a modern body; the record names it only to show that the night fire round it walked is not dated to the Edo period.",
+  "variants": [
+   "keibodan"
+  ]
+ },
+ "shobodan": {
+  "def": "Japan's volunteer fire brigade, a modern local body that still walks the night fire round.",
+  "variants": [
+   "shobodan"
+  ]
+ },
+ "jobikeshi": {
+  "def": "The shogunate's own standing fire watch of Edo, organized after the Meireki fire of 1657, with fire-brigade mansions and fire towers at several places in the castle town.",
+  "variants": [
+   "jobikeshi"
+  ]
+ },
+ "jinaicho": {
+  "def": "A Japanese temple town ringed by a moat and rampart, the closed counterpart of the open gate-front town.",
+  "variants": [
+   "jinaicho"
+  ]
+ },
+ "tauchiguruma": {
+  "def": "A hand-pushed weeder run between the rows of a paddy, promoted with rope-and-ruler row planting in Meiji-era Japan.",
+  "variants": [
+   "tauchiguruma",
+   "田打車"
+  ]
+ },
+ "yui": {
+  "def": "Exchanged labor between farm households, lending one another hands at transplanting; it works because the households' planting dates differ.",
+  "variants": [
+   "yui"
+  ]
+ },
+ "oyaike": {
+  "def": "Parent pond: the chief pond of a Japanese parent-child system of irrigation ponds, with smaller child ponds (koike) grouped under it.",
+  "variants": [
+   "oyaike"
+  ]
+ },
+ "koike": {
+  "def": "Child pond: one of the smaller irrigation ponds grouped under a parent pond (oyaike) in a Japanese parent-child pond system.",
+  "variants": [
+   "koike"
+  ]
+ },
+ "weineihe": {
+  "def": "The inner ring canal of a Chinese polder, running just inside the dike and feeding the field ditches.",
+  "variants": [
+   "weineihe"
+  ]
+ },
+ "adlittoral": {
+  "def": "Of a water plant, grown in the shallows at the water's edge; adlittoral lotus varieties stand in 10 to 20 cm of water.",
+  "variants": [
+   "adlittoral"
+  ]
+ },
+ "kumi-chi": {
+  "def": "Ground assigned to one unit of foot soldiers, where the men of that unit lived together.",
+  "variants": [
+   "kumi-chi"
+  ]
+ },
+ "An'ei": {
+  "def": "A Japanese era name: the years 1772 to 1781.",
+  "variants": [
+   "An'ei"
+  ]
+ },
+ "Bunsei": {
+  "def": "The Japanese era 1818 to 1830, when the three great sword schools of Edo were opened.",
+  "variants": [
+   "Bunsei"
+  ]
+ },
+ "Kanbun": {
+  "def": "A Japanese era name: the years 1661 to 1673.",
+  "variants": [
+   "Kanbun"
+  ]
+ },
+ "Jokyo": {
+  "def": "The Japanese era 1684 to 1688, of the halving of retainers' fiefs the record quotes.",
+  "variants": [
+   "Jokyo"
+  ]
+ },
+ "wicket": {
+  "def": "A small door set in a larger gate, let open for one person at a time while the gate itself stays shut.",
+  "variants": [
+   "wicket",
+   "wickets"
+  ]
+ },
+ "junk": {
+  "def": "The Chinese cargo sailing boat that carried bulk goods on river and canal.",
+  "variants": [
+   "junk",
+   "junks"
+  ]
+ },
+ "raku": {
+  "def": "A low-fired, hand-formed Japanese pottery, taken from the kiln hot and simply glazed.",
+  "variants": [
+   "raku"
+  ]
+ },
+ "murabarai": {
+  "def": "Banishment from the village: the heaviest punishment a village could put on one of its own.",
+  "variants": [
+   "murabarai"
+  ]
+ },
+ "tokorobarai": {
+  "def": "Banishment from one's place of residence, the punishment the record names beside murabarai.",
+  "variants": [
+   "tokorobarai"
+  ]
+ },
+ "Wubei Zhi": {
+  "def": "A great Ming-dynasty military treatise (1621), quoted in the record for what a wall's bastions were for.",
+  "variants": [
+   "Wubei Zhi"
+  ]
+ },
+ "normal depth": {
+  "def": "The depth at which water in a channel flows steadily and evenly, the level a river settles back to some way upstream of a gate or weir.",
+  "variants": [
+   "normal depth"
   ]
  }
 }

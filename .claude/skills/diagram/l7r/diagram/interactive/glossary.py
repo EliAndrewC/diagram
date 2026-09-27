@@ -35,8 +35,7 @@ def record_glossary_js() -> str:
     in sync. `record.js` wraps every occurrence of a term in a page's visible text the way `page.js` wraps a
     modal's. Variants longest first, as `glossary_for` orders them, so "head race" wins over "head"."""
     entries = [
-        {"term": term, "variants": sorted(variants, key=len, reverse=True), "def": definition, **({"cased": True} if term in CASED else {})}
-        for term, (variants, definition) in GLOSSARY.items()
+        {"term": term, "variants": sorted(variants, key=len, reverse=True), "def": definition, **({"cased": True} if term in CASED else {})} for term, (variants, definition) in GLOSSARY.items()
     ]
     return (
         "// DERIVED FILE - written by `make glossary` from l7r/diagram/interactive/assets/glossary.json (features 207 and 209). Never\n"
