@@ -97,8 +97,7 @@ def test_a_settlement_with_no_boundary_runs_the_old_fit_path() -> None:
 
 
 def test_front_row_from_the_chains_stands_off_the_whole_blob_at_the_pitch() -> None:
-    from l7r.diagram.hamletgen.consts import BUNDLE_PITCH
-    from l7r.diagram.hamletgen.homesteads.seats import front_row
+    from l7r.diagram.hamletgen.homesteads.seats import FRONT_ROW_STEP, front_row
 
     s = _site()
     chains, _corr, _outline = site_boundary(s, (500.0, 150.0))
@@ -107,7 +106,7 @@ def test_front_row_from_the_chains_stands_off_the_whole_blob_at_the_pitch() -> N
     front = [(x, y) for x, y in row if 300.0 <= x <= 700.0 and y < 300.0]
     assert front and all(y <= 300.0 - 46.0 + 4.0 for _x, y in front), "every seat fronting the paddy stands the standoff north of its chords (the hem is the others' outline, which the pre-test asks)"
     xs = sorted(x for x, _y in front)
-    assert all(b - a >= BUNDLE_PITCH - 1.0 for a, b in zip(xs, xs[1:], strict=False)), "one bundle pitch apart along the front"
+    assert all(b - a >= FRONT_ROW_STEP - 1.0 for a, b in zip(xs, xs[1:], strict=False)), "one front-row step apart along the front"
     assert row[0] == min(row, key=lambda q: math.hypot(q[0] - 500.0, q[1] - 150.0)), "ordered center-out"
 
 
@@ -128,7 +127,7 @@ def test_the_ground_between_two_ponds_is_buildable_because_the_others_outline_ke
 
 def test_the_chain_walk_skips_a_zero_length_chord_and_caps_the_row_at_64() -> None:
     """Two edges of the walk the pool never reaches: a chord whose ends coincide (a facing chain can carry one at a
-    corner) is stepped over, and a very long chain - here 9,000 px, 91 seats at the pitch - is thinned to 64 so a huge
+    corner) is stepped over, and a very long chain - here 9,000 px, 121 seats at the front-row step - is thinned to 64 so a huge
     fan cannot make the row unbounded (the old envelope walk's own cap, kept)."""
     from l7r.diagram.hamletgen.consts import BUNDLE_PITCH
     from l7r.diagram.hamletgen.homesteads.seats import front_row

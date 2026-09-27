@@ -160,11 +160,12 @@ class SiteCorridors:
     its holes, or a ring vertex inside the rectangle (the `_rect_hits` arms); `hit_center` asks the REGISTERED set
     at one point (the center, as `_near_corridor`)."""
 
-    __slots__ = ("center", "full", "holes", "rings", "ring_pts")
+    __slots__ = ("center", "full", "holes", "rings", "ring_pts", "water")
 
     def __init__(self, corridors: tuple[list[Seg], list[Seg]], outline: tuple[list[list[tuple[float, float]]], list[list[tuple[float, float]]]] | None = None, cell: float = 128.0) -> None:
         self.ring_pts: list[list[tuple[float, float]]] = [list(r) for r in (outline[0] if outline else [])]  # the rings as points, for the front row's ground push (feature 227)
         water, registered = corridors
+        self.water = list(water)  # the water courses as segments with their clearance, for the front row's push across a brook (feature 261)
         rings, holes = outline if outline is not None else ([], [])
         self.full = PointGrid(cell)
         self.full.extend([(a, b, clr, min(a[0], b[0]) - clr, min(a[1], b[1]) - clr, max(a[0], b[0]) + clr, max(a[1], b[1]) + clr) for a, b, clr in water])

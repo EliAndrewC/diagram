@@ -26,7 +26,7 @@ from l7r.diagram.sitegen.jobs import default_jobs as default_jobs  # noqa: PLC04
 from .consts import FIELD_ARCHETYPES, REF_HOUSEHOLDS
 from .frame import stage_crossings, stage_frame, stage_labels, stage_notice
 from .hinterland import stage_bamboo, stage_hinterland, stage_windbreak, stage_woodland
-from .homesteads import stage_appurtenances, stage_homesteads
+from .homesteads import stage_appurtenances, stage_homestead_fields, stage_homesteads
 from .plan import HamletSpec, SitePlan, plan_site
 from .pondstock import stage_pond_stock
 from .sink import stage_sink
@@ -101,6 +101,7 @@ STAGES = (
     # lane, and after this reorder it does, because the byre is simply part of the fabric the web
     # threads around.
     stage_web,
+    stage_homestead_fields,  # each household's own dry plot against its steading, fitted to the lanes (feature 261)
     stage_hinterland,
     stage_woodland,
     stage_windbreak,

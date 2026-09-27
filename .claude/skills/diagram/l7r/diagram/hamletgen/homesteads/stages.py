@@ -27,6 +27,25 @@ time lost, nothing bought. A wider search bound only permits sprawl the feature 
 so the honest value is no override at all."""
 
 
+def water_push(water: Sequence[tuple[Pt, Pt, float]], center: Pt, n: Pt, half_lat: float, near: float, far: float) -> float:
+    """How far a box must move along `n` so that no water course (`(a, b, clearance)` segments) lies within its clearance
+    of the box: the box spans `near`-`far` along `n` and `half_lat` either side of `center` across it. Zero when clear.
+    Each segment is sampled every 8 ft, which is finer than any clearance the courses carry (half-width + 5)."""
+    lx, ly = -n[1], n[0]
+    push = 0.0
+    for a, b, clr in water:
+        if seg_dist(center[0], center[1], a, b) > half_lat + (far - near) + clr:
+            continue
+        k = max(1, int(math.dist(a, b) / 8.0))
+        for j in range(k + 1):
+            x, y = a[0] + (b[0] - a[0]) * j / k, a[1] + (b[1] - a[1]) * j / k
+            if abs((x - center[0]) * lx + (y - center[1]) * ly) <= half_lat + clr:
+                d = x * n[0] + y * n[1]
+                if near - clr <= d <= far + clr:
+                    push = max(push, d + clr - near)
+    return push
+
+
 def bank_of(x: float, y: float, brook: Sequence[Pt]) -> int:
     """Which side of the brook a point stands on: the sign of its offset from the NEAREST reach of the course.
 
@@ -277,6 +296,12 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
                     d = x * n_[0] + y * n_[1]
                     if near <= d <= far:
                         push = max(push, d - near)
+        # ...AND ACROSS A BROOK THAT RUNS BETWEEN THE ROW AND ITS FIELD (feature 261, Inashiro's rolled crescent). The
+        # brook skirts the fan 34-44 ft outside its margin, so on a seat facing the wind down that flank every front seat
+        # lay in the water's corridor and was refused; the displaced households were seated by the cloud behind, and a
+        # crescent that drew 4.07:1 on main drew 1.62:1. The row stands on the brook's far bank instead, fronting its field
+        # across the water - the push is the course's reach past the box's near edge, by its own clearance.
+        push = max(push, water_push(s_._site_corridors.water, (_bx[0], _bx[1]), n_, half_lat, near, far))
         if push <= 0.0:
             return seat_
         # ...cleared by a FOOTPATH's room, not a hair: a homestead pushed to two pixels off a dike's bank left no way a

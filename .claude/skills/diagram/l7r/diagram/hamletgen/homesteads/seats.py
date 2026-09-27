@@ -14,6 +14,13 @@ from ..consts import BUNDLE_PITCH, CLUSTER_ROW_SPAN, CLUSTER_SPAN_FACTOR, LANE_F
 from ..plan import SitePlan
 
 STANDOFF_SLACK_PX = 3.0  # the +/-5 degree rake's reach past the axis-aligned box (2 px on the long side) and a pixel of margin
+# A FRONT SEAT EVERY THREE QUARTERS OF A PITCH, not every pitch (feature 261). A seat is pushed across a brook or past the
+# ground by its OWN measured reach (`_ground_push`, `water_push`), so seats sampled one pitch apart along the chord land
+# nearer than a pitch once pushed, and every other one collided with its neighbor: Inashiro's rolled crescent seated 5 of
+# 10 in its front row and drew 1.95:1 (main: 4.07). Offered more often, the placer packs the row itself - measured on
+# the pool: 3/4 honors Inashiro's crescent (2.19) and Kuwabata's round (1.99) and newly honors Mizuguchi's (1.05); half a
+# pitch pushed Kuwabata's round to 2.02, over its ceiling.
+FRONT_ROW_STEP = BUNDLE_PITCH * 0.75
 DEFAULT_HOUSE = (46.0 * 1.35, 28.0 * 1.10)  # the LARGEST nucleated house `_try_place_bundle` rolls, in px at 1 px = 1 ft; the stage passes the map's own
 
 # ---- STAGE 5: the homesteads --------------------------------------------------------------------
@@ -53,7 +60,7 @@ def _front_row_from_chains(
     the right distance from the paddy by construction; the hem, the marsh and the pond are refused at the PRE-TEST
     (`_site_blocks_rect` against the containment outline), where the paddy-envelope walk this replaces landed a
     seat on the hem one time in two and left the placer to discover it.
-    Sampled at one bundle pitch along the chains (the honest spacing, as `front_row` argues), confined to the
+    Sampled every `FRONT_ROW_STEP` along the chains (three quarters of the honest spacing, as `front_row` argues), confined to the
     stretch the cluster fronts (the rolled shape's wrap, as there), ordered center-out (as there), at most 64."""
     seat = plan.seat
     ax, ay = seat["along"]
@@ -88,7 +95,7 @@ def _front_row_from_chains(
                 px, py = a[0] + (b[0] - a[0]) * t / seg, a[1] + (b[1] - a[1]) * t / seg
                 if abs((px - seat["anchor"][0]) * ax + (py - seat["anchor"][1]) * ay) <= reach:
                     out.append(((px + n[0] * off, py + n[1] * off), (float(n[0]), float(n[1]))))
-                t += BUNDLE_PITCH
+                t += FRONT_ROW_STEP
             carry = t - seg
     if len(out) > 64:
         step = len(out) / 64.0

@@ -395,7 +395,9 @@ class GroundCoverMixin:
             return
         xs = [p[0] for poly in polys for p in poly]
         ys = [p[1] for poly in polys for p in poly]
-        for dp in self.M.get("dry_plots", []):  # the CULTIVATED extent includes the dry hatake plots
+        for dp in (
+            d for d in self.M.get("dry_plots", []) if not d.get("homestead")
+        ):  # the CULTIVATED extent includes the dry hatake plots - the field's, not a homestead field among the houses (feature 261)
             xs += [p[0] for p in dp["poly"]]
             ys += [p[1] for p in dp["poly"]]
         fx0, fx1, fy0, fy1 = min(xs), max(xs), min(ys), max(ys)

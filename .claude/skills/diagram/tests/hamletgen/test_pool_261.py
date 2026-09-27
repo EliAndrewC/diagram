@@ -364,18 +364,22 @@ def test_the_board_caption_notches_no_crown(gen: str) -> None:
 
 
 @pytest.mark.parametrize("gen", GENS, ids=IDS)
-def test_every_copse_clump_stands_on_its_nearest_houses_bank(gen: str) -> None:
-    """The dooryard copse is the trees in the gaps between the houses, so no clump stands across the brook from the
-    house nearest it (settlement-review of Kashikawa, feature 261: three clumps within reach only as the crow flies)."""
+def test_every_copse_clump_stands_on_the_bank_of_a_house_within_reach(gen: str) -> None:
+    """The dooryard copse is the trees in the gaps between the houses, so every clump has a house within the copse's reach
+    on its own side of the brook (settlement-review of Kashikawa, feature 261: three clumps within reach only as the crow
+    flies). Asked of a house within reach, not of the nearest: with houses on both banks a clump in the gap by its own
+    house can stand a few feet nearer one across the water (Kashikawa, 81 against 77 ft)."""
     m = _manifest(gen)
+    if m["meta"].get("copse_siting") == "against_the_belt":
+        pytest.skip("the copse stands at the belt's back, named for the belt rather than a house")
     copse = [c for g in m.get("village_groves") or [] if g.get("role") == "copse" for c in g.get("clumps") or []]
     assert copse and m["houses"], "non-vacuity: a copse and its houses"
     for brook in _brooks(m):
+        segs = list(zip(brook, brook[1:], strict=False))
         for c in copse:
-            h = min(m["houses"], key=lambda h: math.dist((h["x"], h["y"]), (c[0], c[1])))
-            assert not any(segments_cross((float(c[0]), float(c[1])), (h["x"], h["y"]), a, b) for a, b in zip(brook, brook[1:], strict=False)), (
-                f"a copse clump at ({c[0]:.0f}, {c[1]:.0f}) stands across the brook"
-            )
+            p = (float(c[0]), float(c[1]))
+            mine = [h for h in m["houses"] if math.dist((h["x"], h["y"]), p) <= COPSE_HOUSE_REACH_FT and not any(segments_cross(p, (h["x"], h["y"]), a, b) for a, b in segs)]
+            assert mine, f"a copse clump at ({p[0]:.0f}, {p[1]:.0f}) has no house within reach on its own bank"
 
 
 def _straightest(pts: list[tuple[float, float]], tol: float) -> float:
@@ -405,3 +409,16 @@ def test_no_brook_runs_ruled_for_most_of_its_course_on_the_page(gen: str) -> Non
             continue
         run = _straightest(on, 3.1)
         assert run <= 0.4 * length, f"{run:.0f} of {length:.0f} ft of brook on the page runs straight"
+
+
+@pytest.mark.parametrize("gen", GENS, ids=IDS)
+def test_a_households_dry_ground_lies_by_its_house(gen: str) -> None:
+    """A household's dry field lay first of all on the raised ground its house stood on (research/fields.html, "Where dry
+    (hatake) crops go"; settlement-review of Inashiro, round 0ae309f0: every dry plot across the rice, a median walk of
+    658 ft). The pool draws a homestead field against some steadings, and the median house stands within 150 ft of a dry
+    plot - measured at 70-111 ft once the homestead fields were laid (specs/261 measurements)."""
+    m = _manifest(gen)
+    assert m["meta"].get("homestead_fields", 0) > 0, "no homestead field was laid"
+    plots = [[(float(p[0]), float(p[1])) for p in d["poly"]] for d in m.get("dry_plots") or []]
+    near = sorted(min(math.dist((h["x"], h["y"]), (sum(p[0] for p in q) / len(q), sum(p[1] for p in q) / len(q))) for q in plots) for h in m["houses"])
+    assert near[len(near) // 2] <= 150.0, f"the median house stands {near[len(near) // 2]:.0f} ft from its nearest dry plot"
