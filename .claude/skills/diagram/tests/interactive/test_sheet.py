@@ -169,4 +169,3 @@ def test_a_sheet_page_marks_its_map_so_lit_labels_keep_their_ink(tmp_path: pytes
         page = fh.read()
     assert '<svg id="map" data-sheet="mode-a" ' in page
     assert "svg#map[data-sheet] g.f.on text" in page and "fill: var(--ink) !important" in page
-
