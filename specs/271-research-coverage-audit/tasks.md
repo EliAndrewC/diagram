@@ -7,7 +7,7 @@
 - [ ] T01 FR-001 the audit: census, four domain audits, the merged `inventory.md` (33 groups, 172 rows owned by 271) with its State table
       research: rendering
 
-## Batch 1 - the P1 groups on the farming pages, ways and urban fixtures (queues 1-3)
+## Batch 1 - the P1 groups on the farming pages, ways, urban fixtures (queues 1-3) and towns (queues 4-5)
 
 - [ ] T02 group V1 - homesteads: the farmhouse: research, write, check (FR-003, FR-004)
       research: physical
@@ -37,5 +37,18 @@
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
 
-- [ ] T11 batch 1 lands: groups pulled back, `owed-check`, `make page-check`, `make done`, the push; State updated
+- [ ] T11 group T1 - towns: the town as a whole: research, write, check (FR-003, FR-004)
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+- [ ] T12 group T2 - towns: houses on the street: research, write, check (FR-003, FR-004)
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+- [ ] T13 group T3 - towns: inns and the post station: research, write, check (FR-003, FR-004)
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+- [ ] T14 group T4 - towns: the town's edge: research, write, check (FR-003, FR-004)
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+
+- [ ] T15 batch 1 lands: groups pulled back, `owed-check`, `make page-check`, `make done`, the push; State updated
       research: rendering
