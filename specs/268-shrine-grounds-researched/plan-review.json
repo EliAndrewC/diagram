@@ -1,6 +1,6 @@
 {
  "feature": "268-shrine-grounds-researched",
- "plan_sha256": "118a0050063481e7ffcbdfdb5ea89758a5aa7d38f5eb0ea72735fb079380e9fa",
+ "plan_sha256": "6e6c70a5017998ab9c8507cd243f496b4b1ea8b9f2a97732d5c960f2bb22fa4c",
  "reviewed": "2026-09-27",
  "declared": "spec-fidelity",
  "decisions": [
@@ -12,15 +12,15 @@
   },
   {
    "id": "D2",
-   "summary": "Every avenue laid at the pitch; the cap-and-band rule and the ~30 ft village exception retired; the village roll uses the same stride and threshold",
+   "summary": "Every avenue laid at the pitch; the cap-and-band rule and the ~30 ft village exception retired; the village roll uses the same stride and threshold; the designated donation-row sites keep their exemption, stated in the rewritten rule and entry 090",
    "class": "within",
-   "why": "FR-010 and US3 scenarios 1-2 ('every avenue at every scale', town/city re-laid). D2 is silent on the designated donation-row exemption, which FR-010 keeps: it must survive in the rewritten rule and record entry 090, not be swept away by 'everywhere'"
+   "why": "FR-010 and US3 scenarios 1-2 ('every avenue at every scale', town/city re-laid, 'designated donation-row sites keep their exemption'). Round 1's gap (D2 silent on the exemption) is closed: the exemption is now carried explicitly and is the spec's own, not a new carve-out"
   },
   {
    "id": "D3",
    "summary": "The arch glyph drawn in plan at true size (kasagi bar plus two post squares), stroke floor as convention",
    "class": "within",
-   "why": "FR-011 asks for a glyph that does not overlap at 1/2/3 ft/px and still reads as an arch, its class recorded at the point of change; the GM asked that 'the drawing floor needs a look'"
+   "why": "FR-011: a glyph that does not overlap at 1/2/3 ft/px and still reads as an arch, its class recorded at the point of change; the GM's 'the drawing floor needs a look'"
   },
   {
    "id": "D4",
@@ -36,22 +36,21 @@
   },
   {
    "id": "D6a",
-   "summary": "The grove outline on the village map from 20 ft behind the well to the outermost arch, ~120 ft wide at the hall narrowing to ~60 ft on the avenue, ~667 tsubo measured at T-map",
+   "summary": "The grove outline with the shrine well at its back edge to the outermost arch, ~120 ft wide at the hall narrowing to ~60 ft on the avenue, ~620 tsubo estimated, measured at T-map and trimmed if above 650; the band T-program writes is R2's figures as found, never widened to fit",
    "class": "within",
-   "why": "FR-007's reach (every side of hall and sanctuary, past the well, to the outermost arch). Condition: FR-007 also requires the area inside the register band FR-005 records. 667 tsubo is above the 150-650 'typical' band R2 heads with and the session reported to the GM, and is not 'the Tochigi median' (R2 gives 655). The band written at T-program must be R2's figures as found, not widened to fit the grove; if it is the typical band, the outline is trimmed (the well may stand at the grove's edge per FR-007)"
+   "why": "FR-007 (every side of hall and sanctuary; the well in the grove or at its edge; forward to the outermost arch; area inside the band FR-005 records). Round 1's condition is met: the band is R2's as found and the grove answers to it, not the reverse. If a trim is needed it must come off the width - FR-007 fixes the reach from the well to the outermost arch - which the plan does not contradict"
   },
   {
    "id": "D6b",
-   "summary": "The sacred tree seated north-east of the sanctuary",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "The GM chose 'a grove around the shrine, plus the sacred tree and a stone basin by the approach'; the accepted spec writes 'a sacred tree and a stone basin beside the approach' (FR-007, and US2 lists them as one item). The words are ambiguous as to whether 'by the approach' governs the tree, but a tree beside the approach satisfies every reading and a tree behind the sanctuary satisfies only one. No impossibility (the grove runs 84 ft along the approach), no GM words elsewhere place it behind the hall, and R4 records nothing on the tree's position. Choosing the one-reading placement unflagged is completing the GM's thought. Fix: seat the tree beside the approach inside the grove, or put the placement to the GM"
+   "summary": "The sacred tree stands beside the approach, inside the grove",
+   "class": "within",
+   "why": "Round 1 ruled the north-east-of-the-sanctuary seat NOT LEGITIMATE. The revision seats it by the GM's own words ('the sacred tree and a stone basin by the approach') and FR-007/US2 ('a sacred tree and a stone basin beside the approach'), a placement every reading of the ruling accepts. No longer a narrowing"
   },
   {
    "id": "D6c",
-   "summary": "The stone basin beside the approach at the innermost arch",
+   "summary": "The stone basin beside the approach at the innermost arch, on the side opposite the tree",
    "class": "within",
-   "why": "FR-006, FR-007: 'a stone basin beside the approach'"
+   "why": "FR-006, FR-007: 'a stone basin beside the approach'; which side is not addressed by the request"
   },
   {
    "id": "D6d",
@@ -78,11 +77,17 @@
    "why": "FR-009 verbatim"
   },
   {
+   "id": "T03-sanctuary-fence-knob",
+   "summary": "tasks.md T03 lists a sanctuary fence among the wealth-knob items, none at average",
+   "class": "within",
+   "why": "The spec's edge case: 'Whether a richer shrine may draw one is recorded as a wealth-knob item, not a precinct boundary'; D7 lets it pass the enclosure check"
+  },
+  {
    "id": "R4-not-drawn",
    "summary": "Subsidiary shrines, office, votive-plaque hall, portable-shrine store not drawn; the no-worship-hall form and the Chinese opera stage disclosed, not knobs",
    "class": "within",
    "why": "FR-006 carries 'the knobs the research directs'; R4 found no village-scale evidence for the first four, and the one-roof hall is the program's existing GM form, which the request does not touch"
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
