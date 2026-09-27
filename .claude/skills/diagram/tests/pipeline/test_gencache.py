@@ -142,6 +142,36 @@ def test_a_data_file_the_run_read_is_part_of_the_key(tmp_path, monkeypatch):
     assert gencache.compute_key(str(gen), deps) != before
 
 
+def test_a_read_only_sheet_is_an_input_and_the_run_s_own_outputs_and_scratch_are_not(tmp_path, monkeypatch):
+    """Feature 264 follow-up: a Mode A gen READS its hand-drawn `<map>.svg` and writes only the png and page, and the
+    old suffix filter dropped the sheet, so an edit to it alone left the map CACHED with a stale render. A file the
+    run only read is an input whatever its suffix; one it also wrote is its output; one gone at the end was scratch."""
+    eng, gen, out = _fixture(tmp_path)
+    sheet, page, scratch = tmp_path / "m.svg", tmp_path / "m.html", tmp_path / "r.png"
+    sheet.write_text("<svg/>")
+    scratch.write_text("x")
+    body = f"open({str(sheet)!r}).read(); open({str(page)!r}, 'w').write('p'); open({str(page)!r}).read(); open({str(scratch)!r}).read(); __import__('os').remove({str(scratch)!r})\n"
+    gen.write_text(gen.read_text() + body)
+    _with_engine(monkeypatch, tmp_path, eng)
+    deps = gencache.run_and_record(str(gen))
+    assert str(sheet) in deps["files"], "a sheet the run only read is an input"
+    assert str(page) not in deps["files"], "a file the run wrote is its own output"
+    assert str(scratch) not in deps["files"], "a file gone when the run ends was scratch"
+    before = gencache.compute_key(str(gen), deps)
+    sheet.write_text("<svg><rect/></svg>")
+    assert gencache.compute_key(str(gen), deps) != before
+
+
+def test_a_read_only_sheet_named_like_an_output_is_never_filed_or_restored(tmp_path):
+    """The same follow-up, the costlier half: the cache counted `<map>.svg` as an OUTPUT, so a hit copied the cached
+    sheet over the hand-edited source (two door moves were lost that way on 2026-09-27). An input is neither."""
+    gen = str(tmp_path / "m.gen.py")
+    sheet = str(tmp_path / "m.svg")
+    assert sheet in gencache._outputs(gen), "a Mode B map's svg is its output"
+    assert sheet not in gencache._outputs(gen, {"files": [sheet]}), "a sheet the run read is its input"
+    assert str(tmp_path / "m.png") in gencache._outputs(gen, {"files": [sheet]})
+
+
 def test_round_trip_restores_byte_identical_outputs(tmp_path, monkeypatch):
     eng, gen, out = _fixture(tmp_path)
     _with_engine(monkeypatch, tmp_path, eng)
