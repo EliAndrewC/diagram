@@ -26,11 +26,11 @@ class Paddy(Kind):
     plains, where the jori grid ran, is a deviation; plot sizes are the map's own figures, placed inside a
     pre-modern band no page read gives; the field is shown flooded, which is one moment of a cycle that runs
     from flooded to cracked and back; the depths behind that choice are modern extension figures, and no
-    pre-modern depth was found; the midsummer drain is read in Edo-period farm books, in some places.
+    pre-modern depth was found; the midsummer drain appears in Edo-period farm books, in some places.
 
     Caveat: the field is shown flooded, which is one moment of a cycle that runs from flooded to cracked and
     back; the depths behind that choice are modern extension figures, and no pre-modern depth was found; the
-    midsummer drain is read in Edo-period farm books, in some places.
+    midsummer drain appears in Edo-period farm books, in some places.
 
     Name: paddy
     Covers: the wet plots of every `fields[kind=paddy]` - the flooded basins

@@ -21,7 +21,8 @@ class Farmhouse(Kind):
     this map rolls between the two forms per settlement and guarantees only that every farmhouse is served.
 
     Note: Placement follows the read record; that every house in a nucleated cluster is reached by a lane, and the alleys-off-the-spine form, are paraphrased from a morphology literature no public page carries, and the back lane is read only for planned English villages. The setback from the paddy is stated in feet by no source:
-    it is built from a bund width that is a GUESS, an eave overhang that is unsourced and one part that is
+    it is built from a bund width that is sourced (one to two shaku), a levee path and an eave overhang that
+    are both unsourced GUESSES, and one part that is
     read for a house facing a watercourse and extended to the paddy by this record, so the 6 ft floor beneath
     it is a soft threshold rather than a measured minimum - and the map draws 10 to 13 ft, well clear of it,
     close enough that the household works its own ground.
