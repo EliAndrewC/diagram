@@ -19,7 +19,7 @@ THE BLOCKS, as the two contracts write them:
     GLOSSARY <term> | <variant>, <variant> | <definition>
 
 A block is applied only when its old text occurs EXACTLY ONCE in its file - never a guess at which occurrence was
-meant - and only under the record (`research/`); anything else is REFUSED with the reason, and the session applies
+meant - and only under the record (`research/`) or a modal's class file (`interactive/classes/`, D17); anything else is REFUSED with the reason, and the session applies
 it by hand. A glossary term already on file is skipped. `--skip 2,5` leaves those blocks alone (the session
 disagrees with them); `--dry-run` reports without writing. The input is the agent's reply saved as text, or its
 transcript (`.jsonl`, or the `.output` link the dispatch names), whose last reply is read.
@@ -42,6 +42,9 @@ EDIT = re.compile(
 )
 GLOSSARY = re.compile(r"^[ \t]*GLOSSARY[ \t]+(?P<term>[^|\n]+?)[ \t]*\|[ \t]*(?P<variants>[^|\n]*?)[ \t]*\|[ \t]*(?P<def>[^\n]+?)[ \t]*$", re.M)
 RECORD = ".claude/skills/diagram/research/"
+# D17 (R8, recommendation 1): a drifted modal's prose is its Kind class's docstring - thirteen hand edits on `fields`
+MODALS = ".claude/skills/diagram/l7r/diagram/interactive/classes/"
+ROOTS = (RECORD, MODALS)
 TERMS = ".claude/skills/diagram/l7r/diagram/interactive/assets/glossary/"
 
 
@@ -82,13 +85,13 @@ def resolve(root: pathlib.Path, path: str) -> pathlib.Path | None:
     """The origin file, if it lies under the record; a path elsewhere is not this script's to write."""
     p = pathlib.Path(path)
     p = (p if p.is_absolute() else root / p).resolve()
-    return p if p.is_relative_to(root / RECORD) else None
+    return p if any(p.is_relative_to(root / r) for r in ROOTS) else None
 
 
 def apply_edit(root: pathlib.Path, b: dict, dry: bool) -> str:
     target = resolve(root, b["path"])
     if target is None:
-        return f"REFUSED - {b['path']} is not under {RECORD}"
+        return f"REFUSED - {b['path']} is not under {RECORD} or {MODALS}"
     if not target.is_file():
         return f"REFUSED - no file {b['path']}"
     text = target.read_text(encoding="utf-8")

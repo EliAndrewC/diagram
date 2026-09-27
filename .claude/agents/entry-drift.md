@@ -46,6 +46,27 @@ later turn. So:
 - An item that passed is ONE line (its id and its verdict) - never its quotation again, never the reasoning
   that it passed. The session does not act on a pass.
 
+## End each DRIFTED finding with its EDIT (feature 250 D17)
+
+The session applies your report with ONE command, `make apply-edits`, which reads blocks of exactly this shape from
+your reply (measured, research R8: seven drifted modals on one page were thirteen hand edits, each a turn re-reading
+a context of up to 171,000 tokens):
+
+    EDIT <the modal's class file, as kind.txt names it - `.claude/skills/diagram/l7r/diagram/interactive/classes/<file>.py`>
+    <<<
+    the exact text now in the docstring
+    ===
+    the text that should replace it
+    >>>
+
+- The old text is copied CHARACTER FOR CHARACTER from `kind.txt`, and kept WITHIN ONE LINE of the docstring (a
+  clause or a sentence, never across a line break - the copy in `kind.txt` may not carry the file's indentation). It
+  must occur ONCE in the file; the script applies nothing else, and the session does a refused block by hand.
+- The new text is one line too, in the modal's own voice - the same register as the `What:`/`Why:`/`Note:` it sits
+  in. Change only the prose; never a data tag (`Name:`, `Covers:`, `Label:`, `Sources:`, `Entry:`).
+- A drift whose fix is not a rewording - the modal's accuracy label must move, or the map itself would be wrong -
+  ends with `EDIT: none - <why>`, and the session works it.
+
 You are given one PAIR: a feature class whose explanation a reader meets as a modal on the map, and the
 research section that explanation was written from. The section's body changed and the explanation's
 prose did not. Your job is to say whether that matters.

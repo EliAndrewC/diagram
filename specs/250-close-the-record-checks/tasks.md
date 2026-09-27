@@ -224,7 +224,22 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
       verify: DONE. fields closed for 070, 110, 160 (session 2a): quote-check, record-format x3, source-applicability x4 (all APPLICABLE-WITH-LIMITS, limits added), entry-drift x7 (all DRIFTED, rewritten; 6 IN-STEP on re-check, IrrigationDitch fixed after); 26 edits applied by make apply-edits, 2 refused and done by hand; FR-006 worklist 37 bare items: 31 FOOTNOTED, 1 LOCATED, 4 NOT-LOCATED, 1 TOO-SHORT; open: the 160 contrary reading of ja.wikipedia 散村 is stated without a quote (needs a sanson-jawiki entry), Tabayashi 1987 PDF quotes unverifiable here (no text layer)
-- [ ] T62 **The comparison the GM asked for** (D16): T61 against R4 to R7, recorded as R8
+- [x] T62 **The comparison the GM asked for** (D16): T61 against R4 to R7, recorded as R8
+      research: rendering
+      verify: DONE. research.md R8: fields 10.26 M over 3 questions (3.42 M a question) but 14 things checked (0.73 M each); the canon guard used, 0 refusals; the split first worked (write session never loaded 020; split 1.35 M); groups-by-bytes put 3 questions + 7 owed modals + 4 sources in one session (peak 171,000) - a regression; modal rewrites were 13 hand edits; three recommendations
+
+## Phase 1i - the eighth round (GM 2026-09-27; plan D17)
+
+- [ ] T63 `entry-drift` EDIT blocks, and `apply-edits` on a modal's class file (D17.1)
+      research: rendering
+- [ ] T64 Check groups packed by load - questions, owed modals, registry keys (D17.2)
+      research: rendering
+- [ ] T65 `tokens.py summary` per thing checked (D17.3)
+      research: rendering
+- [ ] T66 FR-002 and FR-006 for `archetypes`, worked as the last pages were (D17.4)
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+- [ ] T67 **The comparison the GM asked for** (D17): T66 against R4 to R8, recorded as R9
       research: rendering
 
 ## Phase 2 - FR-002 and FR-006, one page per session (D7)
@@ -237,7 +252,7 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
       verify: DONE. homesteads: FR-002 5 items - 3 now CITATION (kyuhi-jawiki; tonami-yashikirin-haichi for the Tonami grove sides and winds; the 040 height band on kashima-kainyo-1987 + minami-2022), 2 stay ABSENCE re-searched 2026-09-26 (060 in-house well, 080 interconnected-lanes quotation) plus the 030 6-7 m ridge ABSENCE confirmed; the Tonami model-homestead remainder re-dated ABSENCE; 0 GROUNDS. FR-006 3 of 3 confirmed by grep (22 -> the-gardens-sun...-4 citation, 23 -> kikanchiiki-igune citation + -3 absence, 24 -> yashikirin-jawiki-5 citation); worklist: 45 items, 40 FOOTNOTED, 2 LOCATED (080 items 11-12, outside this brief), 3 NOT-LOCATED (22-24). New keys kyuhi-jawiki, tonami-yashikirin-haichi, kikanchiiki-igune. Agents: 1 source-reader, 3 source-applicability, 4 quote-check (2 rounds), 2 record-format; all findings applied bar the scanned PDFs (6 added to TO-DOWNLOAD 233-238) and the Kameyama NW roll (for the GM); 8 glossary terms, 6 variants.
 - [ ] T19 FR-002 and FR-006 for every other page `assertions.py` names (not `homesteads`, `vegetation`,
       `cities/defenses`, `religion-and-death`,
-      `cities/government`, `cities/fabric` or `fields`), one task per page, cut when T51's figures are read
+      `cities/government`, `cities/fabric`, `fields` or `archetypes`), one task per page, cut when T51's figures are read
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
 

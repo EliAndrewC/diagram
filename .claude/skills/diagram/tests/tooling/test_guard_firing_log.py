@@ -326,11 +326,6 @@ _ESCAPES = {
         "ESCALATION_OK=\"reason\" form would not survive having its quoted regions blanked",
     ),
     "CANON_OK": ("command", "matched in the Bash command by canon-read-hooks.sh through _guardlog.sh escape_or_refuse, which routes through _hm_escape.py (feature 250 D16)"),
-    "WAKEUP_OK": (
-        "not-an-escape",
-        "wakeup-hooks.sh has NO escape (feature 263): the token appears only in its header's reasoning and in the suite's "
-        "case proving that a WAKEUP_OK changes nothing",
-    ),
     "CHECK_BUNDLE_OK": (
         "command",
         "matched in a record-check dispatch PROMPT only (`CHECK_BUNDLE_OK=\"...\"` read off the prompt's own text in "

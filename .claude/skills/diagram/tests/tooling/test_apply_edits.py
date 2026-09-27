@@ -109,3 +109,19 @@ def test_a_block_indented_under_a_numbered_finding_is_applied_without_its_indent
     assert ae.main([str(report), "--root", str(tmp_path)]) == 0
     assert "the gloss said\nassessed yield</li>" in q.read_text(encoding="utf-8")
     assert list((tmp_path / ae.TERMS).glob("*-heimin.json"))
+
+
+def test_a_modal_s_class_file_is_writable_too(tmp_path, capsys) -> None:
+    """D17: a drifted modal's prose is its class docstring, under interactive/classes/."""
+    m = tmp_path / ae.MODALS / "fields.py"
+    m.parent.mkdir(parents=True)
+    m.write_text('class Bund(Kind):\n    """What: A bund is a low earthen ridge.\n    """\n', encoding="utf-8")
+    report = tmp_path / "r.md"
+    report.write_text(_report(str(m.relative_to(tmp_path)), "A bund is a low earthen ridge.", "A bund is a low ridge of puddled earth."), encoding="utf-8")
+    assert ae.main([str(report), "--root", str(tmp_path)]) == 0
+    assert "puddled earth" in m.read_text(encoding="utf-8")
+    other = tmp_path / ".claude/skills/diagram/l7r/diagram/settlement/x.py"
+    other.parent.mkdir(parents=True)
+    other.write_text("A bund", encoding="utf-8")
+    report.write_text(_report(str(other.relative_to(tmp_path)), "A bund", "B"), encoding="utf-8")
+    assert ae.main([str(report), "--root", str(tmp_path)]) == 1 and "not under" in capsys.readouterr().out

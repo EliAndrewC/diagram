@@ -192,8 +192,8 @@ recommendation 2). Read only your own lines of the handoff.
    `python3 scripts/_entry_owed.py` from the clone root; for each class it names whose entry is one of YOUR
    questions, `make check-bundle PAGE={page} SECTION=<NNN> NO_QUOTES=1 FOR=entry-drift KIND=<class>` and `entry-drift` naming its
    MANIFEST (a drifted modal is owed at the push, so it is checked here, with the question it was written from).
-6. **Apply each report with ONE command.** `quote-check` and `record-format` end every finding with an `EDIT`
-   block (or `EDIT: none - <why>`) and every glossary term with a `GLOSSARY` line. When a report arrives, read its
+6. **Apply each report with ONE command.** `quote-check`, `record-format` and `entry-drift` end every finding with an
+   `EDIT` block (or `EDIT: none - <why>`) - a drifted modal's block edits its class file and every glossary term with a `GLOSSARY` line. When a report arrives, read its
    findings, and run `make apply-edits FROM=<the output_file its dispatch printed>` (in `.claude/skills/diagram`),
    with `SKIP=<n,n>` for any block you disagree with. Then do BY HAND only what it lists as REFUSED, what you
    skipped, and the `EDIT: none` findings - all of them in ONE message of parallel `Edit` calls, never one a turn
@@ -219,23 +219,67 @@ CLOSE_GROUP = """8. **Commit** with a message naming your questions; do NOT tick
 9. **Report.** One paragraph: what your group closed, the agents run, anything left open and why.
 """
 
-GROUP_BYTES = 40_000   # what one check session takes: two questions at the cap - the most GROUP = 2 ever put in one,
-#                        after R3 measured a session growing to 218,000 over five. By BYTES since D16 (R7 rec. 3): a
-#                        split's 7,200-byte part took a whole session of its own when groups were counted.
+GROUP_BYTES = 28_000   # the LOAD one check session takes (D17, R8 recommendation 2). Fitted over the six measured check
+#                        sessions of R6 to R8: peak context = 40,881 + 2.08 x load, so a session stays near the
+#                        ~100,000 the earlier two-question groups peaked at when its load is ~28,000 bytes (observed
+#                        2026-09-27; method: each session's questions + owed modals + registry entries against its
+#                        recorded peak_context, least squares). The fit is loose - fabric's 2a peaked at 7.5x its
+#                        load while fixing tool defects - and R9 measures it again.
+MODAL_WORK = 2_000     # a GUESS, R9 to measure: an owed modal costs its report and its rewrite on top of its prose
+#                        (a median 1,225 bytes), and counting the prose alone is how `fields` put seven in one session.
 
 
-def check_groups(handoff: str, sizes: dict[str, int] | None = None) -> tuple[list[list[str]], list[str]]:
-    """(the handoff's questions packed into sessions of at most GROUP_BYTES, first fit by size, largest first; its keys).
+KEYS = "KEYS"   # the registry keys, packed as one load of their own: one session checks them all
 
-    A question with no size known counts as a full one at the cap. Each group lists its sections in number order."""
+
+def check_groups(handoff: str, sizes: dict[str, int] | None = None, keys_load: int = 0) -> tuple[list[list[str]], list[str]]:
+    """(the handoff's questions - and, as the item KEYS, its registry keys - packed into sessions of at most
+    GROUP_BYTES of LOAD, first fit, largest first; its keys).
+
+    A question's load is its bytes with its notes AND the prose of every modal owed an `entry-drift` from it (D17:
+    counting question bytes alone put three questions, seven owed modals and four sources into one session on
+    `fields`, which grew to 171,000). A question with no size known counts as one at the cap. Each group lists its
+    sections in number order, KEYS last."""
     sections = list(dict.fromkeys(re.findall(r"SECTION=(\d{3})", handoff)))
     keys = list(dict.fromkeys(re.findall(r"KEY=([a-z0-9][a-z0-9-]*)", handoff)))
     size = {s: (sizes or {}).get(s, CAP) for s in sections}
+    if keys:
+        size[KEYS] = keys_load
     bins: list[list[str]] = []
-    for s in sorted(sections, key=lambda x: (-size[x], x)):
+    for s in sorted(size, key=lambda x: (-size[x], x)):
         home = next((b for b in bins if sum(size[x] for x in b) + size[s] <= GROUP_BYTES), None)
         (home.append(s) if home is not None else bins.append([s]))
     return sorted((sorted(b) for b in bins), key=lambda b: b[0]), keys
+
+
+def owed_modals(page: str) -> dict[str, list[tuple[str, int]]]:
+    """section -> [(modal key, its docstring's bytes)] for every modal `_entry_owed.py` names as owed from a question on
+    this page (a modal read from two of its questions is counted with the first)."""
+    import ast  # noqa: PLC0415
+    got = subprocess.run([sys.executable, str(CLONE / "scripts/_entry_owed.py")], cwd=CLONE, capture_output=True, text=True, check=False).stdout
+    out: dict[str, list[tuple[str, int]]] = {}
+    lines = got.splitlines()
+    for i, line in enumerate(lines):
+        m = re.match(r"(.+?) - .* - prose at (\S+):(\d+)$", line)
+        reads = lines[i + 1] if i + 1 < len(lines) else ""
+        hit = re.search(rf"research/{re.escape(page)}/(\d{{3}})-", reads)
+        if not (m and hit):
+            continue
+        src = (CLONE / m.group(2)).read_text(encoding="utf-8")
+        node = next((n for n in ast.walk(ast.parse(src)) if isinstance(n, ast.ClassDef) and n.lineno == int(m.group(3))), None)
+        out.setdefault(hit.group(1), []).append((m.group(1), len(ast.get_docstring(node) or "") if node else 0))
+    return out
+
+
+def loads(page: str, handoff: str) -> tuple[dict[str, int], int]:
+    """(section -> its load: question and notes bytes + its owed modals' prose; the registry keys' load: their entries'
+    bytes) - what `check_groups` packs."""
+    owed = owed_modals(page)
+    size = {n: b + sum(m + MODAL_WORK for _k, m in owed.get(n, [])) for n, (_t, b) in questions(page).items()}
+    works = SKILL / "research/sources/010-works-cited"
+    keys = re.findall(r"KEY=([a-z0-9][a-z0-9-]*)", handoff)
+    keys_load = sum(f.stat().st_size for k in dict.fromkeys(keys) for f in works.glob(f"*-{k}.html"))
+    return size, keys_load
 
 
 def checks(page: str, task: str) -> int:
@@ -246,13 +290,15 @@ def checks(page: str, task: str) -> int:
     if not handoff.is_file():
         print(f"brief: no handoff at {handoff} - session 1 did not finish", file=sys.stderr)
         return 2
-    groups, keys = check_groups(handoff.read_text(encoding="utf-8"), {n: size for n, (_t, size) in questions(page).items()})
+    text = handoff.read_text(encoding="utf-8")
+    groups, keys = check_groups(text, *loads(page, text))
     fields = _fields(page, task)
     for n, group in enumerate(groups, 1):
         last = n == len(groups)
         out = briefs / f"{slug}-2{chr(96 + n)}.md"
-        out.write_text(CHECK.format(n=f"2{chr(96 + n)}", what=f"check and apply, group {n} of {len(groups)}", sections=", ".join(f"SECTION={s}" for s in group),
-                                    keys=", ".join(f"KEY={k}" for k in keys) if n == 1 and keys else "none - another group has them" if keys else "none",
+        mine = KEYS in group
+        out.write_text(CHECK.format(n=f"2{chr(96 + n)}", what=f"check and apply, group {n} of {len(groups)}", sections=", ".join(f"SECTION={s}" for s in group if s != KEYS) or "none - this group checks the registry keys",
+                                    keys=", ".join(f"KEY={k}" for k in keys) if mine else "none - another group has them" if keys else "none",
                                     closing=" and close the page" if last else "", close=(CLOSE_LAST if last else CLOSE_GROUP).format(**fields), **fields), encoding="utf-8")
         print(out)
     return 0

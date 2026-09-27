@@ -400,6 +400,35 @@ current.
    is regenerated when missing OR older than its generator or any engine module, under a lock so two workers never
    read one the other is writing; both readers (`test_mode_a_sheets.py`, `tools/test_registry.py`) go through it.
 
+### D17 - The eighth round: R8's three recommendations, then another measured page (GM 2026-09-27)
+
+The GM, on R8: *"Go ahead and implement those suggestions and then do another research pass of a similar size as the
+others to see how that affects our token usage and such. Basically just, you know, the same type of testing we've
+done for each of our other iterations."*
+
+1. **A drifted modal is applied by command** (recommendation 1). `entry-drift` ends each DRIFTED finding with an
+   `EDIT` block on the modal's class file - old text copied from `kind.txt` and kept within one docstring line, the
+   new text one line in the modal's own register, data tags never touched - or `EDIT: none - <why>` when the fix is
+   not a rewording. `apply-edits` accepts `.claude/skills/diagram/l7r/diagram/interactive/classes/` as a second root
+   under the same exactly-once rule (tested: a class file applied, a file elsewhere in the engine refused). The check
+   brief's step 6 names `entry-drift` among the reports it applies.
+2. **A check group is sized by everything it checks** (recommendation 2). `check_groups` packs LOAD, first fit,
+   largest first: a question's bytes with its notes, plus, for each modal `_entry_owed.py` names as owed from it, the
+   modal's prose and `MODAL_WORK` = 2,000 bytes for its report and rewrite (a GUESS, labeled at the constant, which
+   this round measures); the registry keys are one more item whose load is their entries' bytes, and the group that
+   takes it checks them. The budget, `GROUP_BYTES` = 28,000, is FITTED: over the six measured check sessions of R6 to
+   R8, peak context = 40,881 + 2.08 x load, so a load of about 28,000 keeps a session near the 100,000 the earlier
+   two-question groups peaked at (observed 2026-09-27; method: each session's questions, owed modals at the median
+   modal prose of 1,225 bytes, and registry entries, against its recorded peak, least squares; loose - fabric's 2a
+   peaked at 7.5x its load while fixing tool defects). The fields session's load under this rule would have been
+   packed into three sessions, not one.
+3. **Per thing checked** (recommendation 3). `tokens.py summary --modals N --keys N` adds `per_thing` - the total over
+   questions + owed modals + registry keys - with per question beside it.
+4. **The measured page is `archetypes`**: two FR-002 items (questions 100 and 140) and one FR-006 item, no question
+   over the cap - the nearest in size of the pages left (`cities/hinterland` has two items and no FR-006). Worked as
+   the others were and compared in R9 with R4 to R8, per thing checked, saying which of the three changes the page
+   exercised (whether any modal was owed, how the groups packed).
+
 ## Phases
 
 0. Baseline and the meter (T01, T02).

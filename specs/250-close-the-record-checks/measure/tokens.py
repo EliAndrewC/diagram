@@ -167,7 +167,7 @@ def render(report: list[dict]) -> str:
     return "\n".join(lines)
 
 
-def summary(files: list[pathlib.Path], questions: int, items: int) -> dict:
+def summary(files: list[pathlib.Path], questions: int, items: int, modals: int = 0, keys: int = 0) -> dict:
     """One page's figures from its sessions' `--json` records - the row R6 and later compare (feature 250 D15).
 
     PER QUESTION CHECKED is the headline (R6, recommendation 4): the check work scales with the questions a page's
@@ -192,6 +192,9 @@ def summary(files: list[pathlib.Path], questions: int, items: int) -> dict:
     return {"sessions": len(files), "main": main_t, "turns": turns, "mean_turn": main_t // max(turns, 1), "peak": peak,
             "agent_runs": runs, "agents": agent_t, "mean_agent": agent_t // max(runs, 1), "total": total,
             "per_question": total // max(questions, 1), "per_item": total // max(items, 1),
+            # D17 (R8 rec. 3): per THING checked - a question, an owed modal or a registry key - since `fields` checked
+            # three questions but also seven modals and four sources, and per question read that as the dearest page
+            "things": questions + modals + keys, "per_thing": total // max(questions + modals + keys, 1),
             "by_kind": {k: {"runs": v[0], "tokens": v[1], "mean_read_chars": v[2] // v[0]} for k, v in sorted(agents.items())}}
 
 
@@ -205,9 +208,11 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--files", nargs="*", default=[], help="summary: the page's sessions' --json records")
     ap.add_argument("--questions", type=int, default=0, help="summary: the questions the check sessions took")
     ap.add_argument("--items", type=int, default=0, help="summary: the page's FR-002 and FR-006 items")
+    ap.add_argument("--modals", type=int, default=0, help="summary: the modals owed an entry-drift the check sessions took")
+    ap.add_argument("--keys", type=int, default=0, help="summary: the registry keys the check sessions took")
     args = ap.parse_args(argv)
     if args.verb == "summary":
-        print(json.dumps(summary([pathlib.Path(f) for f in args.files], args.questions, args.items), indent=1))
+        print(json.dumps(summary([pathlib.Path(f) for f in args.files], args.questions, args.items, args.modals, args.keys), indent=1))
         return 0
     marks_file = pathlib.Path(args.marks)
     marks = json.loads(marks_file.read_text(encoding="utf-8")) if marks_file.is_file() else []
