@@ -146,6 +146,8 @@ chinju	chinju
 chinju no mori	chinju no mori
 chinjusan	chinju
 cho	cho
+cho-bu	cho
+chobu	cho
 chongzhen	Chongzhen era
 chongzhen era	Chongzhen era
 chonin	chonin
@@ -294,6 +296,8 @@ duty of water	water duty
 dwarf bamboo	sasa
 dōba	dōba
 ear mound	ear mound
+early modern	early modern period
+early modern period	early modern period
 earth god	tudi miao
 earth-god	tudi miao
 earth-god shrine	tudi miao
@@ -736,6 +740,8 @@ kyōhō	Kyoho
 lake tai	Lower Yangzi
 land consolidation	kochi seiri
 land readjustment	kochi seiri
+land survey	cadastre
+land surveys	cadastre
 land-readjustment	kochi seiri
 landrace	landrace
 landraces	landrace
@@ -884,6 +890,7 @@ northern song	Song dynasty
 nrcs	NRCS
 nrcs-designed	NRCS
 nucleated	nucleated
+nucleation	nucleated
 numajiro	numajiro
 nunosarashi	nunosarashi
 nuriya	nuriya
@@ -1207,7 +1214,9 @@ tamajari	tamajari
 tameike	tameike
 tamonten	Bishamon
 tan	tan
+tan-bu	tan
 tanada	tanada
+tanbu	tan
 tang	Tang dynasty
 tang dynasty	Tang dynasty
 tang-dynasty	Tang dynasty

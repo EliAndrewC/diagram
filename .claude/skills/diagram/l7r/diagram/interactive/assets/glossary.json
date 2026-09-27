@@ -860,7 +860,9 @@
    "cadastres",
    "cadastre",
    "cadastral survey",
-   "cadastral register"
+   "cadastral register",
+   "land survey",
+   "land surveys"
   ]
  },
  "canal corridor": {
@@ -948,7 +950,9 @@
  "cho": {
   "def": "About one hectare (10 tan), the unit a holding or a village's fields were reckoned in; also a town block of that size.",
   "variants": [
-   "cho"
+   "cho",
+   "chobu",
+   "cho-bu"
   ]
  },
  "chonin": {
@@ -2885,7 +2889,8 @@
  "nucleated": {
   "def": "Of a settlement: gathered into one compact cluster of houses and plots, as against farmsteads dispersed each among its own fields.",
   "variants": [
-   "nucleated"
+   "nucleated",
+   "nucleation"
   ]
  },
  "numajiro": {
@@ -3738,7 +3743,9 @@
  "tan": {
   "def": "A tenth of a cho, about 992 square meters: the strip a paddy was reckoned in.",
   "variants": [
-   "tan"
+   "tan",
+   "tanbu",
+   "tan-bu"
   ]
  },
  "tanada": {
@@ -5613,6 +5620,13 @@
   "def": "A beast a large cattle owner placed with a tenant or dependent household to keep and work, the owner keeping title; also the household it was placed with.",
   "variants": [
    "mayasaki"
+  ]
+ },
+ "early modern period": {
+  "def": "The historians' name for the age that followed the medieval period in Japan, beginning with the lords' land surveys that taxed paddy by its area - roughly the Edo period.",
+  "variants": [
+   "early modern period",
+   "early modern"
   ]
  }
 }

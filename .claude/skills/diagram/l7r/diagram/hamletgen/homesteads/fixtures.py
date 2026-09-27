@@ -188,7 +188,7 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                 # OWED (269 B14): the record (research/homesteads/218) attests the dooryard in front and the
                 # ground behind the house, never the flank these first two seats try, and a crown up to ~23 ft
                 # against PERSIMMON_CROWN_FT's 18 ft; the flank-first order is a GUESS until this is re-seated
-                tseats =[(reach, hh * 0.1), (-reach, hh * 0.1), (reach * 0.75, -reach * 0.75), (-reach * 0.75, -reach * 0.75), (reach * 0.75, reach * 0.75), (-reach * 0.75, reach * 0.75)]
+                tseats = [(reach, hh * 0.1), (-reach, hh * 0.1), (reach * 0.75, -reach * 0.75), (-reach * 0.75, -reach * 0.75), (reach * 0.75, reach * 0.75), (-reach * 0.75, reach * 0.75)]
                 if u < 0.5:
                     tseats[0], tseats[1] = tseats[1], tseats[0]
                 for lx, ly in tseats:
