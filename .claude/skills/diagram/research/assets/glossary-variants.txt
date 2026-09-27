@@ -105,6 +105,8 @@ burakumin	burakumin
 burgage	burgage plot
 burgage plot	burgage plot
 burgage plots	burgage plot
+bursaries	rent bursary
+bursary	rent bursary
 bushi	bushi
 buyi	Buyi
 byre	byre
@@ -257,6 +259,7 @@ division works	bunsuiguchi
 doba	dōba
 dobashi	dobashi
 dobei	neribei
+doi	horinouchi
 dojo	dojo
 doma	doma
 dongjing meng hua lu	Dongjing Meng Hua Lu
@@ -431,6 +434,7 @@ goemon-buro	goemon-buro
 goemonburo	goemon-buro
 gongxiefang	gongxiefang
 gorinto	five-ring pagoda
+goshi	gōshi
 goten	goten
 goulan	goulan
 goyoba	goyoba
@@ -444,6 +448,7 @@ guan-xiang	guanxiang
 guanxiang	guanxiang
 gulou	gulou
 gundai	gundai
+gōshi	gōshi
 hachure	hachure
 hachures	hachure
 haiden	haiden
@@ -505,6 +510,8 @@ honden	honden
 hongo	hongo
 honmaru	honmaru
 honmune-zukuri	honmune-zukuri
+horinouchi	horinouchi
+horinouchi's	horinouchi
 horse-face	mamian
 horse-faces	mamian
 hot shoeing	hot-shoeing
@@ -768,6 +775,8 @@ men-hai	taiping-gang
 mengxi bitan	Mengxi Bitan
 micro-high	micro-high
 micro-highs	micro-high
+middle moat	middle moat
+middle moats	middle moat
 mimizuka	ear mound
 ming	Ming dynasty
 ming dynasty	Ming dynasty
@@ -812,6 +821,7 @@ nagaya	nagaya
 nagaya-mon	nagayamon
 nagayamon	nagayamon
 nagewatashi	nagewatashi
+naka-bori	middle moat
 nakaboshi	nakaboshi
 nakamon	nakamon
 nanbu	Tohoku
@@ -965,6 +975,9 @@ regulator	regulator
 regulators	regulator
 renge	renge
 renkaku	renkaku
+rent bursary	rent bursary
+rent-collection bursaries	rent bursary
+rent-collection bursary	rent bursary
 return flow	return flow
 revetment	revetment
 revetments	revetment
@@ -1314,7 +1327,6 @@ yacheng	yacheng
 yachida	yato
 yagura	yagura
 yaita	yaita
-yakata	yakata
 yam	yam
 yamen	yamen
 yashiki	yashiki

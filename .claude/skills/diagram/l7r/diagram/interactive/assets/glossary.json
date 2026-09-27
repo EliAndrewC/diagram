@@ -4105,12 +4105,6 @@
    "yaita"
   ]
  },
- "yakata": {
-  "def": "The fortified rural residence of a warrior family of the age of civil wars, before castle towns.",
-  "variants": [
-   "yakata"
-  ]
- },
  "yam": {
   "def": "The Mongol empire's horse-relay post system, by which a rider changed mounts and rode on.",
   "variants": [
@@ -5441,6 +5435,39 @@
   "def": "The project's example rice (paddy) hamlet, the one the dike-pond hamlet is measured against.",
   "variants": [
    "Inashiro"
+  ]
+ },
+ "rent bursary": {
+  "def": "An office through which Lower Yangzi landlords living in town collected rent from their tenant villages, often backed by the county government.",
+  "variants": [
+   "rent bursary",
+   "rent-collection bursaries",
+   "rent-collection bursary",
+   "bursaries",
+   "bursary"
+  ]
+ },
+ "horinouchi": {
+  "def": "The seat of a medieval Japanese resident lord, named for the moat (hori) and the bank of piled earth (doi) that usually ran around it; it stood on its own fields, with storehouses, stables and servants' huts inside.",
+  "variants": [
+   "horinouchi",
+   "doi",
+   "horinouchi's"
+  ]
+ },
+ "gōshi": {
+  "def": "A rural samurai of the Edo period who kept living on and farming their own land instead of moving to the castle town; Kōchi domain's are the best known.",
+  "variants": [
+   "gōshi",
+   "goshi"
+  ]
+ },
+ "middle moat": {
+  "def": "In a castle town, the ring of moat between the castle's own moat and the outer edge of the town; upper samurai built their residences inside it, and lower samurai lived around its outer edge.",
+  "variants": [
+   "middle moat",
+   "middle moats",
+   "naka-bori"
   ]
  }
 }

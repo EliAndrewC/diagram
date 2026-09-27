@@ -50,3 +50,9 @@ Evidence comment moved the bed size from guess to attested; 050's "The area, lik
 
 Saved pages: `/tmp/l7r-check/cities-hinterland-pages` (MANIFEST.txt). Files 18 (cdlib full text), 01, 04, 06 hold
 the quoted passages.
+
+## From session 2a (010 and its four keys)
+
+- For 050 (group 2b): source-applicability on `chinese-units-enwiki` found the Wei-Sui foot (25.5 cm) is probably short for
+  the Qimin yaoshu's 540s - zh.wikipedia 中国度量衡 (itself unsourced by dynasty) gives the northern foot as about 29.6 cm - so
+  050's "about 4 by 8 ft or 5 by 10 ft" bed may be some 14% small. The registry write-up now says so; 050's prose does not.
