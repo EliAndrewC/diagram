@@ -1005,7 +1005,8 @@
  "confluence": {
   "def": "The point where two watercourses join and run on as one.",
   "variants": [
-   "confluence"
+   "confluence",
+   "confluences"
   ]
  },
  "coping": {
@@ -1060,7 +1061,10 @@
  "culvert": {
   "def": "A covered drain carrying water beneath a road, a wall or an embankment.",
   "variants": [
-   "culvert"
+   "culvert",
+   "culverts",
+   "culverting",
+   "culverted"
   ]
  },
  "cun": {
@@ -5508,6 +5512,46 @@
    "Ieyasu",
    "Tokugawa Ieyasu",
    "Ieyasu's"
+  ]
+ },
+ "reach": {
+  "def": "A stretch of a river between two points, such as two bends, bridges or confluences. Pre-modern river names often belonged to one reach rather than to the whole river.",
+  "variants": [
+   "reach",
+   "reaches"
+  ]
+ },
+ "main stem": {
+  "def": "The principal channel of a river system, the one its tributaries and branches flow into.",
+  "variants": [
+   "main stem",
+   "main channel"
+  ]
+ },
+ "floodway": {
+  "def": "A channel dug to carry a river's flood water around a city or low ground, as the Arakawa floodway takes the Arakawa's floods away from Edo's old channel.",
+  "variants": [
+   "floodway",
+   "floodways"
+  ]
+ },
+ "Daijokan": {
+  "def": "The Council of State, the highest administrative body of the classical Japanese court, whose edicts carried the court's orders.",
+  "variants": [
+   "Daijokan",
+   "Dajokan"
+  ]
+ },
+ "rakugo": {
+  "def": "Japanese comic storytelling: one seated performer tells a long story, playing every character.",
+  "variants": [
+   "rakugo"
+  ]
+ },
+ "kana": {
+  "def": "The Japanese syllabic script, in which each sign stands for one syllable; の, read \"no\", is one of its signs.",
+  "variants": [
+   "kana"
   ]
  }
 }

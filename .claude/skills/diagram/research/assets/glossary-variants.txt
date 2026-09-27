@@ -174,6 +174,7 @@ command area	command area
 commanderies	commandery
 commandery	commandery
 confluence	confluence
+confluences	confluence
 conservation headland	conservation headland
 conservation headlands	conservation headland
 consolidated paddies	kochi seiri
@@ -206,6 +207,9 @@ culms	culm
 cultivar	landrace
 cultivars	landrace
 culvert	culvert
+culverted	culvert
+culverting	culvert
+culverts	culvert
 cun	cun
 curfew ward	lifang
 curtain	curtain
@@ -217,6 +221,7 @@ cyanobacterium	cyanobacterium
 dachedian	wagon inn
 daidokoro	daidokoro
 daihachiguruma	daihachiguruma
+daijokan	Daijokan
 daikan	daikan
 daikansho	daikansho
 daikon	daikon
@@ -225,6 +230,7 @@ daimyos	daimyo
 daimyō	daimyo
 daimyōs	daimyo
 daizu	daizu
+dajokan	Daijokan
 danka	danna-dera
 danna-ba	kusaba
 danna-dera	danna-dera
@@ -374,6 +380,8 @@ five dynasties	Five Dynasties
 five-ring pagoda	five-ring pagoda
 five-ring pagodas	five-ring pagoda
 flood stage	river stage
+floodway	floodway
+floodways	floodway
 flophouse	kichin-yado
 flophouses	kichin-yado
 flora	flora
@@ -621,6 +629,7 @@ kami	kami
 kami-yashiki	kami-yashiki
 kamiza	kamiza
 kan	kan
+kana	kana
 kanagashi	kanagashi
 kanden	kanden
 kangxi	Kangxi
@@ -765,6 +774,8 @@ madake	madake
 made ground	made ground
 maff	MAFF
 magariya	magariya
+main channel	main stem
+main stem	main stem
 mamian	mamian
 manning	Manning
 manning's formula	Manning
@@ -962,11 +973,14 @@ quay	quay
 quays	quay
 quercus acutissima	kunugi
 quercus serrata	konara
+rakugo	rakugo
 rammed earth	rammed earth
 rampart	rampart
 ramparts	rampart
 rape	rape
 rapeseed	rape
+reach	reach
+reaches	reach
 recharge	recharge
 recharges	recharge
 reducing atmosphere	reducing firing

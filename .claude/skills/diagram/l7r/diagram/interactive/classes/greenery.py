@@ -179,7 +179,7 @@ class Marsh(Kind):
     its silt dredged, its water drawn down each season - would have a margin kept clear, and the record
     contradicts that. A Kagawa Prefecture study found a statistically significant POSITIVE correlation
     between the number of emergent-plant species (the reed and cattail belt) and the practice of dredging
-    silt and cutting algae, and it is the ponds whose water use has STOPPED that lose the fringe. The reeds
+    silt and cutting algae, and it is the small ponds where water use has STOPPED and bank mowing has declined that are losing their plant diversity. The reeds
     are a sign of a pond in use. The EMBANKMENT is the other half of the same finding and is different
     ground: it is mown and burned and may not be cultivated, to keep the bank strong, and what grows on it
     is dry-grassland herbs. So reeds stand in the shallows and stop at the foot of the bank - which is why
