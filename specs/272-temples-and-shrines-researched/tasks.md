@@ -8,23 +8,23 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D6).
       D50, D51, the COVERED rows confirmed; written and checked (FR-001, FR-002)
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
-- [ ] T03 Group R2 - town monasteries, town and city shrines, clergy housing (450-490; edits 040, 210) (FR-002)
+- [ ] T03 Group R2 - town monasteries, town and city shrines, clergy housing (450-490; edits 040 and its note, 210) (FR-001, FR-002)
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
 - [ ] T04 Group R4 - state cult, academies, temple plans, bell tower and pagoda (550-570) (FR-002)
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
-- [ ] T05 Group B37 - city temple monks, gate shops, graveyard sharing (310-330; edits 010, 050, 070) (FR-002)
+- [ ] T05 Group B37 - city temple monks, gate shops, graveyard sharing (310-330; edits 010, 050, 070 and their notes searched twice) (FR-001, FR-002)
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
-- [ ] T06 Group R3 - village temple, its precinct, wayside shrines, A144 as far as 269's R1 leaves it (500-540) (FR-002)
+- [ ] T06 Group R3 - village temple, its precinct, wayside shrines, A144 as far as 269's R1 leaves it (500-540; the 210 note searched twice) (FR-001, FR-002)
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
-- [ ] T07 Group T - the city temple complex and the temple neighborhood (580-590), the 010-070 and 210 notes
-      searched twice (FR-001, FR-006)
+- [ ] T07 Group T - the city temple complex and the temple neighborhood (580-590), the 020 and 030 notes searched
+      twice (FR-001, FR-006)
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
-- [ ] T08 FR-007: each finding about the country shrine applied to the Hoshigaoka sheet and map, or recorded here as
+- [ ] T08 FR-007: every group's handoff read; each finding that contradicts the country shrine applied to the Hoshigaoka sheet and map, or recorded here as
       not contradicting the drawing (D5)
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed

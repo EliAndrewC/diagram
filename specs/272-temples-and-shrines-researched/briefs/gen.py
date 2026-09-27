@@ -21,6 +21,8 @@ FEATURE = HERE.parent
 CLONE = FEATURE.parents[1]
 SLUG = FEATURE.name
 READERS = FEATURE / "readers"
+# the one reader still running when the queues start (plan D3): its report is read where it lands, not from readers/
+LATE = {"272-reader-T.md": "/tmp/claude-1000/-diagram/3a0d2088-0d32-4036-b1e4-c40dbdc9e61d/scratchpad/272-reader-T.md"}
 
 # group -> (title, where its questions go, reader reports, items)
 GROUPS: dict[str, tuple[str, str, list[str], str]] = {
@@ -32,18 +34,16 @@ GROUPS: dict[str, tuple[str, str, list[str], str]] = {
   second search has run (`readers/272-reader-S.md`, by item label - GREP it by label, it is 100 KB; never read it
   whole). For each: ANSWERED -> cite it (through source-reader); HUMAN-FETCHABLE -> a TO-DOWNLOAD entry; STILL
   SILENT -> the absence note gains the second search (what, where, 2026-09-27) beside the first.
-- D50 **A small kuri's size** (120): STILL SILENT after the second search - the note says so.
-- D51 **A village shrine-temple's bell tower** (120): STILL SILENT after the second search - the note says so.
+- D50 **A small kuri's size** (120): silent after the reader's second search unless the curl retry of its blocked
+  sources answers - the note says which.
+- D51 **A village shrine-temple's bell tower** (120): as D50.
 - A133 A135 D49 D52-D56 (100-128, COVERED by 268): confirm only; change nothing that the second search leaves as it is.
-- FR-007: for EVERY finding, say in the handoff whether it contradicts the Hoshigaoka country-shrine sheet or its
-  village map (the sheet: `pool/country-shrines/hoshigaoka-shrine/`; the precinct is an open grove, torii 12 ft apart,
-  a 66 by 32 ft one-roof hall-and-dwelling, a basin and a sacred tree by the approach). Do NOT edit the sheet or the
-  map; the orchestrating session applies what contradicts them.""",
+""",
     ),
     "R2": (
         "town monasteries and town and city shrines",
         "religion-and-death 450-490 (new), and edits to 040 and 210",
-        ["272-reader-R2a.md", "272-reader-R2b.md"],
+        ["272-reader-R2a.md", "272-reader-R2b.md", "272-reader-T.md", "272-temple-absences.md"],
         """- B96 D66 **Town monastery count**: how many monasteries does a county seat keep (canon: one per patron Fortune -
   `make canon`), against real county towns, and who lives in one? (religion-and-death/210, 020). M. P1.
 - B97 B98 D65 **Town monastery size and layout**: how big is a town monastery's precinct and hall, walled or fenced,
@@ -54,7 +54,9 @@ GROUPS: dict[str, tuple[str, str, list[str], str]] = {
   sōchinju; the Chinese city-god temple, chenghuang miao), how big and where? (100-126 are the village's - cite
   them). M. P1.
 - C147 D70 **Clergy housing**: who lives inside a city temple's walls and who outside? (religion-and-death/040, 1
-  note). S. P1.""",
+  note). S. P1. The 040 absence note (in `readers/272-temple-absences.md`) is yours; its second search is part C of
+  `readers/272-reader-T.md`.
+- You are the ONLY group that edits 040. You edit 210 FIRST; group R3 edits it after you, in this clone.""",
     ),
     "R4": (
         "the state cult and temple plans",
@@ -62,7 +64,8 @@ GROUPS: dict[str, tuple[str, str, list[str], str]] = {
         ["272-reader-R4.md"],
         """- B91 D78 **State cult buildings**: does a county seat or a city carry the Chinese state cult's buildings (the
   Confucian temple, wen miao; the City God temple; the altars of soil and grain), their setting analogue, where and
-  how big? (urban-features/070 is not ours: say in the handoff what it owes; religion-and-death/020). M. P3.
+  how big? (urban-features/070 is not ours: say in the handoff what it owes; religion-and-death/020 - you edit 020
+  FIRST, group T after you in this clone). M. P3.
 - C144 **Provincial academies**: did a provincial city keep a Confucian academy or school-temple (shuyuan, wenmiao,
   a domain school), and how big? M. P4.
 - D75 **Temple as a building plan**: what does a temple precinct hold - main hall, gate (sanmon), bell tower,
@@ -73,15 +76,19 @@ GROUPS: dict[str, tuple[str, str, list[str], str]] = {
     "B37": (
         "city temples (269's B37, handed over)",
         "religion-and-death 310-330 (new), and edits to 010, 050 and 070",
-        ["272-reader-B37.md"],
+        ["272-reader-B37.md", "272-reader-T.md", "272-temple-absences.md"],
         """- B37 **City temples**: monk counts "on no page read" (010); the temple-gate shop ratio and meibutsu (050);
   graveyard sharing (070 - the graveyard itself is 269's burial group R1: cite it, never write it). The bone-mound
-  size (204) WAITS for 269's R1 and is not yours.""",
+  size (204) WAITS for 269's R1 and is not yours.
+- FR-001 **Every absence note and labeled guess in 010, 050 and 070** (listed in `readers/272-temple-absences.md`;
+  their second search is part C of `readers/272-reader-T.md` - grep it by section number): cite what was found, a
+  TO-DOWNLOAD entry for what a human can fetch, the second search added to what stays silent. You are the ONLY
+  group that edits 010, 050 and 070.""",
     ),
     "R3": (
         "the village temple and wayside shrines",
         "religion-and-death 500-540 (new), and edits to 210",
-        ["272-reader-R3.md"],
+        ["272-reader-R3.md", "272-reader-T.md", "272-temple-absences.md"],
         """- A138 D64 **Village temple**: did a village of 40-100 households keep a parish temple (danna-dera) of its own,
   beside or instead of its shrine, and how many villages shared one? Research FOR the GM's ruling - the canon gives a
   village a country monk (`make canon`). (religion-and-death/210). M. P2.
@@ -91,20 +98,23 @@ GROUPS: dict[str, tuple[str, str, list[str], str]] = {
   town's streets carry, how big, at which thresholds (entrance, crossroads, bridge foot)? (religion-and-death/210, 1
   note). M. P2.
 - A144 **Village cremation and ossuary**: ONLY what 269's burial group R1 (religion-and-death 160-206, new 270-300,
-  in `/diagram/.clones/diagram-supplemental`) leaves open - read R1's sections first and cite them. M. P2.""",
+  in `/diagram/.clones/diagram-supplemental`) leaves open - read R1's sections first and cite them. M. P2.
+- FR-001 **The 210 absence note** (in `readers/272-temple-absences.md`; its second search is part C of
+  `readers/272-reader-T.md`). Group R2 edited 210 before you in this clone; build on its text.""",
     ),
     "T": (
         "the city temple complex, the temple neighborhood, and the temple sections' open notes",
-        "religion-and-death 580-590 (new), and edits to 010, 020, 030, 040, 050, 060, 070, 210",
+        "religion-and-death 580-590 (new), and edits to 020 and 030 only",
         ["272-reader-T.md", "272-temple-absences.md"],
         """- FR-006 **The city temple complex**: how big is a major city temple's precinct and main hall, and how is it
   laid out building by building (gate, main hall, lecture hall, bell tower, pagoda, abbot's quarters, sub-temples,
   cemetery)? Japan and China. (new, 580).
 - FR-006 **The temple neighborhood**: the SMALL temple and the SMALL shrine of a temple quarter (teramachi) - the
   plot's frontage and depth, what stands on it, how many to a block, how they pack along the street. (new, 590).
-- FR-001 **Every absence note and labeled guess in 010-070 and 210** (listed in `readers/272-temple-absences.md`;
+- FR-001 **Every absence note and labeled guess in 020 and 030** (listed in `readers/272-temple-absences.md`;
   their second search is part C of `readers/272-reader-T.md`): cite what was found, a TO-DOWNLOAD entry for what a
-  human can fetch, the second search added to what stays silent. 130-206 are 269's - never edit them.""",
+  human can fetch, the second search added to what stays silent. Group R4 edited 020 before you in this clone; build
+  on its text. The other sections' notes are other groups' (010/050/070 B37, 040 R2, 210 R3) - never edit them.""",
     ),
 }
 
@@ -122,6 +132,13 @@ burial group R1, in `/diagram/.clones/diagram-supplemental`); religion-and-death
 other than religion-and-death. Where a finding OWES one of those a correction, say exactly what in the handoff; the
 orchestrator sends it to the owner. Other groups of THIS feature run beside you in sibling clones: stay inside your
 own sections and range.
+**FR-007 - the drawn country shrine.** For EVERY finding, say in the handoff whether it contradicts the Hoshigaoka
+country-shrine sheet or its village map: the sheet (`pool/country-shrines/hoshigaoka-shrine/`) draws an open grove
+with no fence or wall round the precinct, torii 12 ft apart on the approach, a 66 by 32 ft one-roof building (the
+villagers' hall with the country monk's kitchen and dwelling at its ends), a stone basin and a sacred tree by the
+approach; the village (`legacy-hand-authored-pool/villages/hoshigaoka/`) carries that shrine and no temple of its own.
+A line per contradicting finding, `FR-007: <finding> - contradicts <what is drawn>`, or `FR-007: none`. Do NOT edit
+the sheet or the map; the orchestrating session applies what contradicts them.
 **New registry entries and glossary terms take their prefix under the host-wide lock**, never "the highest + 10" by
 eye: `make reserve KIND=registry KEY=<key>` (or `KIND=glossary KEY="<term>"`, in `.claude/skills/diagram`) prints the
 stub's path; fill it in. It refuses a key another clone already holds - then use or cite that one.
@@ -214,12 +231,12 @@ apply ONE GROUP of the questions it wrote - read only your own lines of the hand
 
 def write(group: str) -> int:
     title, pages, readers, items = GROUPS[group]
-    missing = [r for r in readers if not (READERS / r).is_file()]
+    missing = [r for r in readers if not (READERS / r).is_file() and r not in LATE]
     if missing:
         print(f"gen: reader reports not yet in readers/: {', '.join(missing)}", file=sys.stderr)
         return 2
     out = HERE / f"{group.lower()}-write.md"
-    shown = " and ".join(f"`{r}`" for r in readers)
+    shown = " and ".join(f"`{r}`" if (READERS / r).is_file() else f"`{LATE[r]}` (outside the clone; if it is not there when you start, run that second search yourself)" for r in readers)
     out.write_text(WRITE.format(group=group, title=title, what="1: research and write", clone=CLONE, slug=SLUG, low=group.lower(), pages=pages, readers=shown, items=items), encoding="utf-8")
     print(out)
     return 0

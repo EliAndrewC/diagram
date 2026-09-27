@@ -38,14 +38,16 @@ country shrine applied to its sheet and map.
   in `readers/`. They are LEADS: a writer cites only what `source-reader` returns READ. Class: process.
 - **D2 - six groups**, each a write session then check sessions (two questions each), fresh contexts, from briefs:
   S (the 090-128 gaps, D50, D51, the COVERED rows confirmed), R2 (450-490), R4 (550-570), B37 (310-330 and edits to
-  010, 050, 070), R3 (500-540), T (580-590 and the 010-070 and 210 notes). The number ranges keep the groups apart on
-  one page; 130-206 and 270-300 are 269's and are cited only; 204 waits for 269's R1.
+  010, 050, 070 and their notes), R3 (500-540 and the 210 note), T (580-590 and the 020 and 030 notes); R2 takes the
+  040 note. Every existing section is edited by ONE queue: the new ranges keep the new questions apart, and where two
+  groups touch one section (210: R2 then R3; 020: R4 then T) they run one after the other in one clone (plan review
+  round 1). 130-206 and 270-300 are 269's and are cited only; 204 waits for 269's R1.
 - **D3 - three queue clones** (`.clones/diagram-shrines-1..3`), so three groups run at once without sharing a git
-  index: queue 1 runs S then B37, queue 2 runs R2 then R4, queue 3 runs R3 then T (it starts when their readers
-  return). `scripts/pull-queue.sh <n>` brings each back; the assembled pages are rebuilt, never merged by hand.
+  index: queue 1 runs S then B37, queue 2 runs R2 then R3, queue 3 runs R4 then T (T's brief is made when its
+  reader returns; the queue starts with R4). `scripts/pull-queue.sh <n>` brings each back; the assembled pages are rebuilt, never merged by hand.
 - **D4 - blocked sources**: each writer retries its reader's blocked list once with `curl` (a PDF through
   `pdftotext`) before it becomes a TO-DOWNLOAD entry - three readers reported PDFs their fetch tool could not open.
-- **D5 - FR-007**: group S's handoff states, finding by finding, whether it contradicts the Hoshigaoka sheet or map;
+- **D5 - FR-007**: EVERY group's handoff states, finding by finding (the FR-007 paragraph is in every brief's head), whether it contradicts the Hoshigaoka sheet or map;
   this session applies what does (the 268 layout scripts, the pack audit, `matches_map`, size-audit and
   building-review) or records each as not contradicting in tasks.md.
 - **D6 - FR-005**: each group's outcome is written into 271's State table (R2, R3, R4, the D rows) and 269's
