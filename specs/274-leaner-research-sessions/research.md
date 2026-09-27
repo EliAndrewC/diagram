@@ -50,3 +50,8 @@ research CLAUDE.md about 3.5 K.
 3. A slim instructions file for headless sessions: about 5 K a turn over about 12,500 turns, 60 M raw, about 2% by price.
 4. Batch source-applicability keys: about 3% by price, but a "fewer, bigger checks" change that would need seeded-fault
    runs. Not requested.
+
+## R2 - the probe: a page session's first turn under the old and the new flags (FR-004, SC-003)
+
+<!-- The probe's size, stated before launch (plan D9): two headless sessions of one turn each, each answering one
+line, about 50 K tokens in all. Run by `measure/probe.sh`. -->
