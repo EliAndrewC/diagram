@@ -75,11 +75,15 @@ def registry_entry(root: pathlib.Path, key: str) -> pathlib.Path | None:
 
 def kind_docstring(root: pathlib.Path, name: str) -> tuple[str, str] | None:
     """(origin `file:line`, docstring) of one modal class - what `entry-drift` compares with its section.
-    The class, not its file: a classes module holds a dozen modals, and the check is about one."""
+    The class, not its file: a classes module holds a dozen modals, and the check is about one. A name two modules
+    share (the map's `Well` and the sheet's, feature 265) is qualified by its module: `household.Well`."""
+    module, _, cls = name.rpartition(".")
     for path in [*sorted((root / CLASSES).glob("*.py")), *sorted((root / COMPOUND_KINDS).glob("*.py"))]:
+        if module and path.stem != module:
+            continue
         tree = ast.parse(path.read_text(encoding="utf-8"))
         for node in ast.walk(tree):
-            if isinstance(node, ast.ClassDef) and node.name == name:
+            if isinstance(node, ast.ClassDef) and node.name == cls:
                 return f"{path.relative_to(root)}:{node.lineno}", ast.get_docstring(node) or ""
     return None
 

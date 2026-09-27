@@ -167,3 +167,12 @@ def test_a_mode_a_compound_kind_is_a_modal_the_drift_bundle_can_find() -> None:
     """Feature 268: the compound kinds (feature 262) are modals too, and entry-drift could not be pointed at one."""
     found = cb.kind_docstring(REPO, "ShrineGrove")
     assert found is not None and "compound_kinds/grounds.py" in found[0]
+
+
+def test_a_shared_modal_name_is_qualified_by_its_module() -> None:
+    """Feature 265: the map's `Well` (classes/water_and_ways.py) and the sheet's (compound_kinds/household.py) share a
+    name, and the bare name only ever reached the first; `household.Well` reaches the sheet's."""
+    bare = cb.kind_docstring(REPO, "Well")
+    sheet = cb.kind_docstring(REPO, "household.Well")
+    assert bare and sheet and "classes/water_and_ways.py" in bare[0] and "compound_kinds/household.py" in sheet[0]
+    assert cb.kind_docstring(REPO, "nosuchmodule.Well") is None
