@@ -28,6 +28,7 @@ from __future__ import annotations
 import argparse
 import ast
 import datetime
+import html
 import json
 import pathlib
 import re
@@ -57,7 +58,7 @@ def url_of(entry_html: str) -> str:
     found = _URL.search(entry_html)
     if not found:
         return ""
-    url = found.group(0)
+    url = html.unescape(found.group(0))  # the entry is HTML: `&amp;` in a query string is `&` (feature 268: the NDL records fetched as the home page)
     while url.endswith(")") and url.count(")") > url.count("("):
         url = url[:-1]
     return url.rstrip(".,;")

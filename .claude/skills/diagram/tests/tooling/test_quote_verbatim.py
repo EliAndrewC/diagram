@@ -273,3 +273,9 @@ def test_a_run_of_translated_quotes_is_paired_with_the_run_of_originals_in_its_p
     short = "「Kept.」 / 「Two.」 (translated from the Japanese by this project; original: 「二」)"
     assert qv.passages(short) == [{"quote": "Kept.", "original": "", "language": ""}, {"quote": "Two.", "original": "二", "language": "the Japanese"}]
     assert qv.passages("「A.」 and 「B.」 (translated from the Japanese by this project; original: 「一」) then 「C」")[1]["original"] == "一"
+
+
+def test_a_cjk_compatibility_ideograph_on_the_page_is_the_same_character_as_the_quote_s() -> None:
+    """Feature 268: the Sano gazetteer writes 社 as U+FA4C; a quote in the unified form is still VERBATIM."""
+    page = "<p>郡内には別格官幣" + chr(0xFA4C) + "一" + chr(0xFA4C) + "郷" + chr(0xFA4C) + "五" + chr(0xFA4C) + "</p>"
+    assert qv.verdict("郡内には別格官幣社一社郷社五社", qv.visible_text(page))["quotation"] == "VERBATIM"
