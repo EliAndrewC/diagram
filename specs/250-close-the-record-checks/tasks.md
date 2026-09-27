@@ -255,9 +255,10 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
       research: rendering
 - [ ] T70 A page's round takes the modals still owed from its other questions (D18.3)
       research: rendering
-- [ ] T71 FR-002 for `cities/hinterland`, worked as the last pages were (D18.4)
+- [x] T71 FR-002 for `cities/hinterland`, worked as the last pages were (D18.4)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. cities/hinterland closed: 010 and 050 checked and applied in two groups; 050 by quote-check (8 notes, 2 DIFFERS fixed, 2 PARTIAL fixed, 2 unfootnoted closed - one footnoted, one labeled a guess with an absence note), record-format (6 vocabulary findings, 2 glossary terms, 2 wording fixes) and one re-check (3 PARTIAL applied); no modals owed; FR-006 6 of 6 footnoted, 0 bare
 - [ ] T72 **The comparison the GM asked for** (D18): T71 against R6 to R9, recorded as R10
       research: rendering
 
