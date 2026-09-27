@@ -5876,5 +5876,52 @@
   "variants": [
    "kotobank"
   ]
+ },
+ "hachiku": {
+  "def": "A tall running bamboo (Phyllostachys nigra var. henonis), close to madake in size, whose shoots are eaten; the Tonami account lists it among the bamboo stands once common in the farmstead groves.",
+  "variants": [
+   "hachiku"
+  ]
+ },
+ "yadake": {
+  "def": "A small, thin bamboo (Pseudosasa japonica) whose straight culms were made into arrow shafts; the Tonami account lists it among the bamboo stands once common in the farmstead groves.",
+  "variants": [
+   "yadake",
+   "arrow bamboo"
+  ]
+ },
+ "summer-green": {
+  "def": "Of forest whose broadleaf trees drop their leaves for the winter - the deciduous forest zone of northern and central Japan, set against the evergreen broadleaf forest of the warm south-west.",
+  "variants": [
+   "summer-green",
+   "summer-green forest",
+   "summer-green broadleaf forest"
+  ]
+ },
+ "mochinoki": {
+  "def": "Japanese holly (Ilex integra), an evergreen broadleaf tree of warm coastal Japan; one of the three commonest trees in the clipped pine grove of the Izumo plain.",
+  "variants": [
+   "mochinoki"
+  ]
+ },
+ "matebajii": {
+  "def": "Japanese stone oak (Lithocarpus edulis), an evergreen broadleaf tree of the beech family with edible acorns, often planted for shelter; one of the three commonest trees in the Izumo grove.",
+  "variants": [
+   "matebajii"
+  ]
+ },
+ "SWI": {
+  "def": "The Shannon-Wiener index: a measure of a forest's species diversity that rises with both the number of kinds of tree and how evenly the trees are shared among them.",
+  "variants": [
+   "SWI",
+   "Shannon-Wiener index"
+  ]
+ },
+ "SI": {
+  "def": "The Simpson index: a measure of species diversity from 0 to 1, near 1 when two trees picked at random are unlikely to be of the same kind.",
+  "variants": [
+   "SI",
+   "Simpson index"
+  ]
  }
 }

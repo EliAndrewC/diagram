@@ -1,0 +1,8 @@
+{
+ "term": "SI",
+ "def": "The Simpson index: a measure of species diversity from 0 to 1, near 1 when two trees picked at random are unlikely to be of the same kind.",
+ "variants": [
+  "SI",
+  "Simpson index"
+ ]
+}

@@ -23,6 +23,7 @@ apron	apron
 aprons	apron
 aqueduct	aqueduct
 aquifer	aquifer
+arrow bamboo	yadake
 artesian	artesian
 ashigaru	ashigaru
 ashigaru nagaya	ashigaru-nagaya
@@ -494,6 +495,7 @@ guanxiang	guanxiang
 gulou	gulou
 gundai	gundai
 gōshi	gōshi
+hachiku	hachiku
 hachure	hachure
 hachures	hachure
 haiden	haiden
@@ -832,6 +834,7 @@ manning's formula	Manning
 maoqu	maoqu
 masugata	masugata
 mat	tatami
+matebajii	matebajii
 matou	gangi
 matsu	matsu
 mayasaki	mayasaki
@@ -859,6 +862,7 @@ mizugashira	mizugashira
 mizuguchi	mizuguchi
 mizujiri	shirimito
 mlit	MLIT
+mochinoki	mochinoki
 modern consolidation	kochi seiri
 module	module
 momi	momi
@@ -1145,6 +1149,7 @@ shadoof	jiegao
 shahi	shahi
 shaku	shaku
 shakuhachi	shakuhachi
+shannon-wiener index	SWI
 shaso	shasō
 shasō	shasō
 shatian	shatian
@@ -1190,10 +1195,12 @@ shuinchi	shuinchi
 shuku	shukuba
 shukuba	shukuba
 shunzhi	Shunzhi
+si	SI
 sigma	sigma
 siheyuan	siheyuan
 siku quanshu	Siku Quanshu
 sill	sill
+simpson index	SI
 six chambers	Six Chambers
 six fang	Six Chambers
 six ministries	Six Ministries
@@ -1245,6 +1252,9 @@ suid	suid
 suiden	suiden
 suids	suid
 suimon	suimon
+summer-green	summer-green
+summer-green broadleaf forest	summer-green
+summer-green forest	summer-green
 sun lane	sun lane
 sun lanes	sun lane
 superelevated	superelevation
@@ -1253,6 +1263,7 @@ superelevation	superelevation
 superstructure	superstructure
 sus	Sus
 sward	sward
+swi	SWI
 tagoshi kangai	tagoshi kangai
 taihu	Lower Yangzi
 taiping-gang	taiping-gang
@@ -1443,6 +1454,7 @@ wujing zongyao	Wujing Zongyao
 xiang	xiang
 yacheng	yacheng
 yachida	yato
+yadake	yadake
 yagura	yagura
 yaita	yaita
 yam	yam
