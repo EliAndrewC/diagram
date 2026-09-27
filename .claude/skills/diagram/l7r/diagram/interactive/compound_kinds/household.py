@@ -69,8 +69,8 @@ class AncestralAlcove(Kind):
 
     Why: A house kept its Buddha images and the tablets of its dead in the butsuma, set either beside the alcove
     of the zashiki or in a small room behind the zashiki or the inner room - in both, at the formal end of the
-    house, never among the family's private rooms. A Japanese house keeps the tablets of its successive heads
-    along its line of inheritance, so the alcove follows the house, not the post: where one lineage holds the
+    house; no source read puts it among the family's private rooms. One of the two kinds of Japanese tablet veneration keeps, in principle, the tablets of a house's successive heads
+    along its line of inheritance, so - this project's guess from that - the alcove follows the house, not the post: where one lineage holds the
     magistracy across generations, the past magistrates are the present one's own forebears and the alcove is
     literally ancestral, and at a posting filled by appointment it holds only the family's own tablets.
 
@@ -257,11 +257,11 @@ class Bath(Kind):
     What: The residence's bath, the yudono: a small room added on to the house on its service side, by the kitchen
     and its well, drawn with a curl of steam rising above it.
 
-    Why: A bath of one's own was a mark of rank. In the Edo period a bath room was built in the shoin-style
+    Why: A bath of one's own was a mark of rank. In the Edo period a bath room was built in the few shoin-style
     residences of upper-rank samurai, while middle and lower samurai washed from a tub or went to the public
     bath; around 1600 a warrior family's bath was a one-person tub in a corner of the doma, the earth-floored part
     of the house. At a posting the bath went with the residence: the Takayama residence had its earth floor and
-    kitchen, a well and a bath, and a middle-rank house had its bath added on.
+    kitchen, a well and a bath, and a middle-rank house's bath was meant to be added on.
 
     Note: The bath as a room of the residence or a small addition to it is a recorded finding; a bath standing as
     a building of its own was not found, and a house of middle rank or below may have none. Placing it on the
@@ -315,7 +315,7 @@ class Latrine(Kind):
     stable yard and the gate, about one to each part of the compound.
 
     Why: In a samurai house the privy was built into the house, not set out in the yard, and a well-appointed
-    house kept more than one. Where a house had a guest parlor, a privy stood at its rear, and an official hall
+    house kept more than one. Where a townhouse or farmhouse had a guest parlor, a privy stood at its rear, and an official hall
     with a formal entrance and a zashiki had upper privies with board verandas. Night soil was a valuable,
     contracted commodity carted away by outside collectors, so the pits sit toward a service wall or gate where a
     collector's cart reaches them.
@@ -350,7 +350,7 @@ class Stables(Kind):
 
     Why: A warrior's stable was a freestanding building three, five or seven bays long, the most formal of them
     three bays and entered at the gable end, with separate stalls one bay wide on board floors, a matted room for
-    the attendants and an earth-floored room for fodder; a lord's could be far larger. A county office kept only
+    the attendants and an earth-floored room for fodder; a lord's could be far larger. A county office is taken to keep only
     a handful of horses, so its stable is small - a fraction of the watch's barracks, never larger. It stands in
     the outer court by a service gate, so the horses and their muck go in and out without crossing the
     ceremonial ground, and the animals are led to water at a well rather than watered where they stand.
@@ -565,7 +565,7 @@ class Engawa(Kind):
     block's edge.
 
     Why: In a shoin-style house a wide veranda stood between the main room and the garden, serving as part of
-    that room: the rooms open onto it, and the garden is seen from it. It came in two layers, the irikawa inside
+    that room - a secondary space of the main room. It came in two layers, the irikawa inside
     the building line and the nure-en on the outer edge a step below. How many faces it wrapped went with the
     size of the house - the garden face, or two or three faces late in the period, and all four only in the
     great mansions - and its width ran from half a ken to one ken, about 3 to 6 ft, changing from face to face.
@@ -627,12 +627,12 @@ class LordsQuarters(Kind):
     Why: A lord's palace ran from front to back: the omote in front, with the entrance and the halls where the
     lord met retainers and envoys; behind it the lord's own rooms, a room for work by day and a bedroom; and
     beyond them the oku, the family's private rooms. So the master's rooms stand between the reception and the
-    family, adjoining both, on the home side of the line between state and household - which is why official
+    family, adjoining both, though Edo-period drawings count the lord's office and bedroom as part of the omote - and official
     business is done in the office hall and not here.
 
     Note: The lord's rooms as a working room and a bedroom, behind the reception and before the family, follow
     the record, as does the private study on the far side of the line between office and home. Two room orders
-    are attested: this palace order, and a small house's, with the formal zashiki deepest in and the living rooms
+    are attested: this palace order, and a small house's (one house, as this project reads its plan), with the formal zashiki deepest in and the living rooms
     between it and the entrance; in both the reception sits at one end, and these plans follow the palace order.
     The suite's naming by its occupant is the GM's convention for these plans, and the name the lord's rooms go
     by today, the naka-oku, is a modern one.
@@ -709,12 +709,12 @@ class ReceptionRoom(Kind):
 
     Why: In a lord's palace the reception rooms stood at the front, the omote, with the lord's own rooms behind
     them and the family's beyond; a smaller house could set its formal zashiki deepest in instead, past the
-    living rooms. In both orders the reception sits at one end of the house, never between the master's rooms
+    living rooms. In both orders the reception sits at one end of the house, and no source found sets it between the master's rooms
     and the family's. In the record's ideal a samurai house's prized formal garden lay on the sunny south side,
     facing its reception rooms.
 
     Note: Reception as a group of rooms of its own at one end of the house, and the ideal of the formal garden
-    before it, follow the record; both room orders are attested, and these plans follow the palace order, the
+    before it, follow the record; both room orders are attested, the small house's on one house as this project reads its plan, and these plans follow the palace order, the
     reception at the end nearest the approach. Where a plan's buildings allow, the reception faces the garden;
     where they do not, it faces the court or the service ground before its block, short of the ideal.
 
@@ -763,16 +763,18 @@ class ShrineAltar(Kind):
     Why: A compound keeps a shrine as standard equipment, and the kami it serves is where a magistracy's shrine
     differs. A shrine keeping several kami was the ordinary case, with a name of its own, aidono, and one form
     gave each kami a bay of the hall side by side, as a two-bay hall with two doors or small halls joined under
-    one roof, the main kami in the middle or on the right as you face it. The others kept the lesser kami behind
+    one roof, the main kami in the middle as on a household's three-shrine shelf. Some kept the lesser kami (for a hall, a guess from the household shelf) behind
     the main one's altar, or gave a kami a small shrine of its own inside the precinct.
 
     Note: Several kami in one hall, and their altars side by side, a bay to each, are recorded findings; which of
-    the three attested forms a compound takes is rolled per map, and each map's note says which. What the pages
+    the three forms a compound takes is rolled per map, and each map's note says which. The single altar with the
+    others behind it is attested for a household shelf only, so for a hall it is a guess. What the pages
     attest is a hall of two bays or small halls joined under one roof, not separate altars inside one undivided
     hall, so drawing them in one undivided hall is a guess. What each altar serves is the setting's or the map's
     own, and each glyph is drawn as a marker, not the altar at its size.
 
-    Caveat: What the pages attest is a hall of two bays or small halls joined under one roof, not separate altars
+    Caveat: The single altar with the others behind it is attested for a household shelf only, so for a hall it is
+    a guess. What the pages attest is a hall of two bays or small halls joined under one roof, not separate altars
     inside one undivided hall, so drawing them in one undivided hall is a guess. What each altar serves is the
     setting's or the map's own, and each glyph is drawn as a marker, not the altar at its size.
 

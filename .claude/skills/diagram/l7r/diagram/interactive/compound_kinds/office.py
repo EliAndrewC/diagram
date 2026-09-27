@@ -49,7 +49,7 @@ class OfficeHall(Kind):
 class MagistratesDais(Kind):
     """
     What: The raised tatami band along the office hall's front, overlooking the hearing court: the
-    magistrate's seat at its center, between the clerks' seats.
+    magistrate's seat at its center, with the clerks' seats beside it on these sheets.
 
     Why: A raised hall over kneeling litigants is common to both traditions this setting draws on, Japanese
     and Chinese. At the Edo town magistracy the court was a hall in tiers: the top tier a tatami room where
@@ -58,7 +58,12 @@ class MagistratesDais(Kind):
     where the parties knelt. So the dais is not a pavilion of its own but the front of a deeper office hall,
     and the magistrate hears cases in the same building where the day's paperwork is done.
 
-    Note: The raised seat over the court, and its place at the front of the office hall, follow the record.
+    Note: The raised seat over the court, and its place at the front of the office hall, follow the record. The
+    clerks sat in the tier between the magistrate's room and the court; these sheets set their seats beside the
+    dais instead, and how large their place was is not recorded, so the size drawn is a guess.
+
+    Caveat: The clerks sat in the tier between the magistrate's room and the court; these sheets set their seats
+    beside the dais instead, and how large their place was is not recorded, so the size drawn is a guess.
 
     Name: magistrate's dais
     Covers: the dais band on the office hall's court face, and its label
@@ -80,7 +85,7 @@ class ClerksRoom(Kind):
     worked, and a room used only for writing, where the documents sent to the shogunate were drawn up, had a
     binding room beside it. At the Edo town magistracy, too, the duty rooms of two of its record sections
     stood in the quarter of the compound that held its court. What stood apart as buildings of their own were
-    the staff's houses, never their workrooms. In both traditions the paperwork was run by locally hired
+    the staff's houses; no page read gives the clerks a building of their own to work in. In both traditions the paperwork was run by locally hired
     commoners under a tiny elite staff; in Japan the tedai were drawn from the peasants and townsmen who knew
     the district. Scaled to a county of this setting, that is three or four clerks, scribes by caste
     (heimen), who live in town and come in to the manor each day - and who, as permanent locals, are the
@@ -400,7 +405,7 @@ class ClerksSeats(Kind):
     above the court, where a hearing's proceedings are written down.
 
     Why: A hearing is a matter of record: what the parties say and what the magistrate rules is taken down on the
-    spot by the few clerks the office keeps. At the Edo town magistracy the court was a hall in tiers, and the
+    spot by the office's clerks. At the Edo town magistracy the court was a hall in tiers, and the
     clerk sat with the examining officer in the room between the magistrate's innermost room and the court;
     some magistrates' courts set an upper tier apart for the examiners and the scribes. The clerks sit in the hall,
     never on the court itself.
@@ -461,7 +466,7 @@ class GranaryStilts(Kind):
     raised floor answered flood besides. Such storehouses were still built in Japan on Amami Oshima, on
     Hachijojima and among the Ainu into modern times.
 
-    Note: The floor raised on posts follows the record, as one of a granary's two forms; the other, an
+    Note: The floor raised on posts follows the record as one of a granary's two forms, though it is attested for the southern islands and the Ainu north, not for an intendancy's store; the other, an
     earth-walled kura like the Takayama intendancy's rice store, is drawn with no posts. That rats and damp
     hold away from a river is this project's reading of the reasons given, and how an earth-walled kura's
     floor was raised was not found, so posts under one would be a guess.

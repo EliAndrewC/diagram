@@ -125,7 +125,7 @@ def test_a_guess_says_so_in_its_note(key: str) -> None:
 def test_the_gm_s_line_between_deviation_and_convention() -> None:
     """Feature 183 (GM 2026-09-05): a deviation is the SETTING differing from history; a map drawing
     convention is a glyph scaled or colored for the eye. Six of the seven old deviations were the second."""
-    assert sorted(k for k, fc in CLASSES.items() if fc.label == "deviation") == ["grave island"]
+    assert sorted(k for k, fc in CLASSES.items() if fc.label == "deviation") == []  # the grave island became accurate as the Chinese form (feature 267)
     # `weir` joined them on 2026-09-12 (feature 230): the bar is drawn closing the brook bank to bank
     # because a half-river closure - the common old form - is a pixel or two at a 7 ft brook.
     assert sorted(k for k, fc in CLASSES.items() if fc.label == "convention") == ["bund beans", "homestead bamboo", "household shrine", "shared bamboo grove", "stream", "weir", "well"]

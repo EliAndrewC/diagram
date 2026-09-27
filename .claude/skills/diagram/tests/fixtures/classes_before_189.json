@@ -356,10 +356,10 @@
   },
   "grave island": {
     "caveat": "",
-    "covers": "`field_graves` - the rare in-field grave mound",
-    "entry": "research/fields.html - 'In-field features - flat flooded paddy hosts obstacles least' (the CALIBRATED LIBERTY paragraph, GM 2026-07-20)",
+    "covers": "`field_graves` - a grave mound inside a paddy plot or in its corner",
+    "entry": "research/fields.html - 'Are there really graves out in the middle of the fields?', 'In-field features - flat flooded paddy hosts obstacles least'",
     "key": "grave island",
-    "label": "deviation",
+    "label": "accurate",
     "label_note": "A calibrated liberty, disclosed: the in-field grave is drawn where the rice-south record would put the dead on the slope, at a rate the GM approved.",
     "name": "grave island",
     "siblings": {
@@ -367,7 +367,10 @@
       "paddy": "The paddy is the flooded basin; the grave island is a small raised earthen mound with a few stone markers standing in it, the paddy tiling around. Graves in the wet middle are the north-China and Japanese look; in the rice south the dead went to the slope - so this one is drawn rarely, on purpose."
     },
     "sources": [
-      "not recorded"
+      "henriot-shanghai-graves",
+      "henan-grave-removal-enwiki",
+      "ryobosei-jawiki",
+      "yashikibaka-ibaraki-blog"
     ],
     "what": "A small raised earthen mound with two or three stone markers standing inside a paddy plot, the flat paddy tiling around it.",
     "why": "Graves among the paddy are a north-China dry-plain signature, corroborated in Japan - NOT the rice-south default, where feng-shui puts the dead on the slope with a backing hill and a downslope water view. The GM approved both looks, so the island is drawn rarely (about three valley, terrace or ribbon maps in ten) as a deliberate departure."

@@ -185,7 +185,7 @@ class CompoundGarden(Kind):
     Why: A samurai house's prized formal garden lay on the sunny south side, facing the reception rooms. At
     Takayama, the one intendant's office whose buildings survive, a single garden is seen both from the great
     hall of the office and from the room where the intendant lived, with stepping stones into it from each, so
-    the private rooms look onto the far part of the one garden rather than a garden of their own. A garden was
+    the private rooms look onto the one garden rather than a garden of their own. A garden was
     one of two kinds beside samurai rooms: a pond garden built around real water, or a dry garden of stones and
     white gravel standing for water. A guest reached the house in one of two ways: by a formal entrance on the
     office, as at Takayama, or, at a middle-rank house with no such entrance, through a middle gate in a wall
@@ -194,14 +194,16 @@ class CompoundGarden(Kind):
 
     Note: The pond garden and the dry garden are both attested beside samurai rooms, and each sheet takes one;
     so are the two ways a guest reached the house. A separate small garden for the private rooms was found at no
-    posting, and sharing the one garden is read from Takayama, grander than most postings. A garden where a court
+    posting, and sharing the one garden is read from Takayama, grander than most postings. The pond's form and
+    size are a guess: no page read gives the size of a residence garden's pond. A garden where a court
     would stand between gate and entrance, as where a guests' door opens into a guest garden, is a guess: the
     ground a guest crossed was an open court, and no page read says it was ever a garden. A fenced forecourt
     before the entrance rests on nothing found and is a guess. The shrine in a corner and a tree beside it are
     attested, but an ornamental garden planted around a compound's shrine is described on no page read and is a
     guess.
 
-    Caveat: A garden where a court would stand between gate and entrance, as where a guests' door opens into a
+    Caveat: The pond's form and size are a guess: no page read gives the size of a residence garden's pond. A
+    garden where a court would stand between gate and entrance, as where a guests' door opens into a
     guest garden, is a guess: the ground a guest crossed was an open court, and no page read says it was ever a
     garden. A fenced forecourt before the entrance rests on nothing found and is a guess. The shrine in a corner
     and a tree beside it are attested, but an ornamental garden planted around a compound's shrine is described
@@ -273,7 +275,7 @@ class ShrineGrove(Kind):
 
 class CompoundWall(Kind):
     """
-    What: The heavy wall around the whole compound: earth over a post core on a stone footing, under its own
+    What: The heavy wall around the whole compound: earth rammed or laid up thick, under its own
     tiled coping, broken only at the gates. Buildings back onto it, but none stands in it.
 
     Why: A walled enclosure is the grammar every administrative compound shares, Japanese or Chinese. A wall
@@ -460,7 +462,7 @@ class GardenPond(Kind):
     What: A small ornamental pond in the inner garden, drawn as an open oval of water set among the planting,
     within sight of the rooms that face the garden.
 
-    Why: The formal garden of a samurai house lay south of the reception rooms, to be looked at from them, and
+    Why: The formal garden of a samurai house lay beside its reception rooms, to be looked at from them, and
     water is one of the things such a garden was made to hold for the eye.
 
     Note: A residence garden was either a pond garden or a dry garden of stones and white gravel standing for
@@ -586,7 +588,7 @@ class WeaponRack(Kind):
     compound's samurai drill every day, in place of a hall built for it. Two real racks lie behind it: the sword
     rack, which holds swords lying level on forked supports, usually in two tiers, and was kept in a guardroom;
     and the long arrest weapons kept at checkpoints and guard posts, which a painting shows stood in a row in the
-    open as symbols of order.
+    open beside a theater's entrance, probably as symbols of order and authority.
 
     Note: A rack for practice weapons at the edge of a practice ground is described on no page read; it is a
     guess joined from the guardroom's sword rack and the guard post's long weapons, and its size of about 8 by 2
@@ -640,7 +642,7 @@ class Door(Kind):
 
     Why: Every building has a way in. A samurai house had three: the formal entrance for guests, an inner
     entrance for the family and the household to come and go by, and the kitchen door, the one way in from
-    outside to the kitchen, by its earth floor, where those of lower status came and went. A guest's arrival
+    outside to the kitchen, by its earth floor, where, on a plan drawn for a fictional house of the period, those of lower status came and went. A guest's arrival
     comes across open ground to its door; a servants' row turns its doors inward, into the compound; and a
     plastered storehouse keeps outer doors faced in earth and plaster so that fire cannot get in.
 

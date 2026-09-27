@@ -132,7 +132,7 @@ class SaltWards(Kind):
     Note: The form follows the present-day custom, since no page read gives an Edo-period shape: a small cone,
     a pair outside each warded opening. No page read puts salt at the gates of a samurai residence or an
     official's compound, so its use here is a guess, and each heap is drawn as a marker far larger than a
-    real cone of salt a few inches across.
+    real cone of salt, which the record calls only small.
 
     Name: salt wards
     Covers: every salt-ward marker at the doors, the "salt wards" label and the salt-wards note box
@@ -183,7 +183,7 @@ class RiverLanding(Kind):
     a navigable river keeps a landing of its own where the grain is loaded.
 
     Note: That the tax grain went on hired boats under an official pennant, inspected at the ports of call,
-    follows the record; that it passed through the compound, and so was loaded at the compound's own landing,
+    follows the record of the shogunate's rice shipped to Edo, and carrying it to a county is this project's own; that it passed through the compound, and so was loaded at the compound's own landing,
     is this project's reading.
 
     Name: river landing
@@ -279,9 +279,9 @@ class CharcoalStore(Kind):
     What: A sealed storehouse for charcoal - a kura with thick plastered earthen walls - where the charcoal a
     county takes in is held under the office's seal, standing at the ordinary spacing of the buildings around it.
 
-    Why: Charcoal was an industrial fuel moved at state scale, and a store of it was a supervised, tallied depot
+    Why: Charcoal was an industrial fuel moved at state scale, and this map keeps a store of it as a supervised, tallied depot
     rather than a back room. A plastered storehouse was built to protect what it held against fire, damp and
-    theft - its walls often a foot thick, its outer doors faced with earth and plaster, and gunpowder among what
+    theft - its walls often a foot thick, its outer doors sometimes faced with earth and plaster, and gunpowder among what
     such stores kept - so its own wall does for the charcoal what 30 ft of open ground does for an open stack in
     a charcoal yard. Fresh charcoal heats itself to ignition when packed, so it goes in only once it has cooled.
 
@@ -355,15 +355,18 @@ class Dock(Kind):
     Why: A river's level rises and falls through the year, so the usual landing is steps cut into a faced bank,
     which meet a moored hull at whatever height the water stands; a pier is the exception, for a bank that
     shelves too gently. Where samurai residences stood on a river, as on Hiroshima's, they were built back from
-    the revetment and walled, and no gated landing opened from them onto the steps - a back gate straight onto
-    the steps was the merchants' form - so the compound reaches its steps from a gate in its wall, across the
+    the revetment and walled, and it is thought no gated landing opened from them onto the steps - a back gate straight onto
+    the steps is the merchants' form on the landings that survive, built from the Meiji period on - so the compound reaches its steps from a gate in its wall, across the
     street.
 
     Note: The steps across the bank street, reached from a gate in the compound's wall rather than a back gate
-    onto the steps, follow the record. No page read describes an official's compound with a landing of its own,
-    so that these steps are the compound's own rather than a public landing is a guess.
+    onto the steps, follow the record of samurai residences built back from the bank and walled, thought to have
+    had no gated landing. That the back gate was already the merchants' form in the Edo period is this map's
+    reading of landings built from the Meiji period on. No page read describes an official's compound with a
+    landing of its own, so that these steps are the compound's own rather than a public landing is a guess.
 
-    Caveat: No page read describes an official's compound with a landing of its own, so that these steps are the
+    Caveat: That the back gate was already the merchants' form in the Edo period is this map's reading of landings
+    built from the Meiji period on. No page read describes an official's compound with a landing of its own, so that these steps are the
     compound's own rather than a public landing is a guess.
 
     Name: dock
@@ -384,10 +387,10 @@ class TaxBarge(Kind):
     magistracy owns no hulls, and the barge at its dock is one taken on for the run.
 
     Note: The barge's size, inside the record's range for such a boat, and the hiring of hulls for tax rice (read for the shogunate's sea shipments; a county's grain going downriver on them is this map's reading),
-    follow the record. The bales aboard are drawn about 4 ft long so that they read, where a rice bale is about
+    follow the record. The bales aboard are drawn about 4 ft long so that they read, where a rice bale of today's 60 kg size is about
     2.5 ft long and 1.5 ft across, varying with what it held.
 
-    Caveat: The bales aboard are drawn about 4 ft long so that they read, where a rice bale is about 2.5 ft long
+    Caveat: The bales aboard are drawn about 4 ft long so that they read, where a rice bale of today's 60 kg size is about 2.5 ft long
     and 1.5 ft across, varying with what it held.
 
     Name: tax barge
@@ -461,8 +464,8 @@ class Steelyard(Kind):
     wooden beam with a hook at one end for the bale and a weight on the other, slid along the beam until it balances.
 
     Why: Charcoal was packed by grade rather than to one weight, so a bale is weighed at the point of sale, and
-    bulk and everyday goods were weighed on the steelyard - the two-pan balance served valuables. Japan used
-    steelyards from the Edo period, in sizes up to a load of four good charcoal bales, and China's was its
+    one account, naming no country or period, has the steelyard weighing food and everyday goods and the two-pan balance serving valuables. Japan used
+    steelyards from the Edo period, in sizes that included one for a load of four of the best charcoal bales, and China's was its
     traditional market scale, built for heavy loads too.
 
     Note: The frame or post the steelyard hangs from at the weighing floor is a guess.

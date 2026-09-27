@@ -72,7 +72,14 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
 
     Feature 250 (T23) moved `pig sty`'s once more, the 233 direction: its `Why:` was rewritten from the
     sluice question's paragraph on manure rate and the dead patch under the shed, and gained the two keys
-    that paragraph and the "lift its boards" wording rest on (`fao-ac257e`, `fao-x6708e`)."""
+    that paragraph and the "lift its boards" wording rest on (`fao-ac257e`, `fao-x6708e`).
+
+    Feature 267 moved `grave island`'s `label` and `covers` - the first research finding to move a label, and under
+    the same bar: the class was a DEVIATION because nothing read attested a grave in a working field, and the record
+    now reads graves "in every field" around Shanghai (the island, accurate as the Chinese form) and graves at the
+    bund edge or a field's corner in Japan, which the engine now draws as the knob's second form - so `covers` names
+    both. A label that research overturns is miscited exactly as a stale `sources` is; what a PROSE edit alone may
+    never do is still move any of the three."""
     before = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
     added = {s for succ in SINCE_189.values() for s in succ} | set(ADDED_SINCE_189)
     assert set(SINCE_189) <= set(before) and not (added & set(before)), "the tables name snapshot keys and NEW keys only"

@@ -20,6 +20,26 @@ if TYPE_CHECKING:
     from ..core import Settlement
 
 
+#: The salt of the field grave's FORM substream (feature 267): its own stream, so the roll of the form draws nothing
+#: from the flourish stream and a hamlet that keeps the island draws it exactly as before.
+_GRAVE_FORM_SALT = 0x6A5E
+
+
+def grave_form(seed: int) -> str:
+    """The field grave's form on this hamlet - the knob research/fields.html 'Are there really graves out in the
+    middle of the fields?' records: "island" (inside a plot, the Chinese form) or "corner" (in a plot's corner
+    against its bunds, the Japanese form), even odds, since no source weighs one against the other."""
+    return "island" if random.Random((seed ^ _GRAVE_FORM_SALT) & 0xFFFFFFFF).random() < 0.5 else "corner"
+
+
+def corner_seat(poly: Sequence[Pt], at: int) -> tuple[float, float]:
+    """Where a corner grave stands in `poly`: a third of the way from vertex `at` toward the plot's centroid - in the
+    corner, against its two bunds, and inside the plot, clear of whatever runs along the plot's edge."""
+    cx, cy = _centroid(poly)
+    vx, vy = poly[at % len(poly)]
+    return vx + (cx - vx) / 3.0, vy + (cy - vy) / 3.0
+
+
 class FieldFeaturesMixin:
     def pond(self: Settlement, cx: float, cy: float, rx: float, ry: float, stream_curve: Any = None) -> None:  # type: ignore[misc]
         """A pond / irrigation reservoir. Routed through the WATER block (not drawn inline) so a stream or
@@ -110,11 +130,18 @@ class FieldFeaturesMixin:
         if arch == "contour_terraces" or (arch == "ribbon_valley" and rng.random() < 0.5):
             for _ in range(rng.randint(1, 3)):
                 self._plot_rock(rng.choice(plots), rng)
-        # GRAVE ISLAND: calibrated liberty (GM 2026-07-20: both placements acceptable), RARE - the "graves among the
-        # paddy" look. The 0.3 is feature 012's own choice, not the GM's and not from a source; research owed
-        # (future-work/farming-communities.md "Is the in-field grave island attested?").
+        # A GRAVE IN THE FIELD (research/fields.html 'Are there really graves out in the middle of the fields?', feature
+        # 267): graves inside working fields are attested in China ("graves were in every field"), and every Japanese
+        # placement read is BESIDE the plot - at the bund edge or in a field's corner. Two placements of one thing, so
+        # the FORM is a knob rolled per hamlet: an island inside a plot, or a grave in a plot's corner against its
+        # bunds. The 0.3 is how often a map draws one at all - a degree chosen for the maps (calibrated liberty), since
+        # no source gives a rate and the record argues they were common where the custom held, not rare. The form
+        # comes from its OWN substream, so a map keeping the island draws it exactly as before.
         if arch in self._PADDY_GRAVE_KINDS and rng.random() < 0.3:
-            self._plot_grave_island(rng.choice(plots), rng)
+            if grave_form(self.seed) == "island":
+                self._plot_grave_island(rng.choice(plots), rng)
+            else:
+                self._plot_corner_grave(rng.choice(plots), rng)
 
     @staticmethod
     def _plot_center_span(poly: Sequence[Pt]) -> tuple[float, float, float, float]:
@@ -187,9 +214,24 @@ class FieldFeaturesMixin:
         self.add(f'<g>{boulders}</g>', cls="field rock")  # feature 134
         self.M.setdefault("field_rocks", []).append({"x": round(cx, 1), "y": round(cy, 1)})
 
+    def _plot_corner_grave(self: Settlement, plot: dict[str, Any], rng: random.Random) -> None:  # type: ignore[misc]
+        """The Japanese form of the field grave: a small mound with one or two stones in a plot's CORNER, against its
+        bunds (research/fields.html 'Are there really graves out in the middle of the fields?': "in a corner of a
+        field", and beside the bunds). Set a third of the way from the corner toward the plot's middle so it stays
+        inside the plot, clear of the ditch or lane that may run along its edge. Recorded in M['field_graves'] with
+        its form. The grave is the last draw on `rng` in the pass, so its one extra draw shifts nothing after it."""
+        cx, cy = corner_seat(plot["poly"], rng.randrange(len(plot["poly"])))
+        self.add(f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="6.5" ry="4.5" fill="#CFC6B4" stroke="#8C8470" stroke-width="1.1"/>', cls="grave island")
+        markers = ""
+        for i in range(rng.randint(1, 2)):
+            h = (6.5, 4.5)[i]
+            markers += f'<rect x="{cx - 2.8 + i * 4.0:.1f}" y="{cy - 1.5 - i * 2.5 - h:.1f}" width="2.4" height="{h:.1f}" rx="1" fill="#9AA1A4" stroke="#5A584F" stroke-width="0.5"/>'
+        self.add(f'<g>{markers}</g>', cls="grave island")
+        self.M.setdefault("field_graves", []).append({"x": round(cx, 1), "y": round(cy, 1), "form": "corner"})
+
     def _plot_grave_island(self: Settlement, plot: dict[str, Any], rng: random.Random) -> None:  # type: ignore[misc]
-        """A RARE in-field grave island (calibrated liberty) - a small raised earthen mound with a couple of
-        stone markers. Recorded in M['field_graves'].
+        """An in-field grave island, the Chinese form of the field grave - a small raised earthen mound with a couple
+        of stone markers. Recorded in M['field_graves'].
 
         DRAWN OVER THE LATTICE, NOT CARVED OUT OF IT - a recorded map drawing convention (settlement-review, Kashikawa,
         feature 145). The registry entry said "the flat paddy tiling around it" and the plots are NOT carved:
