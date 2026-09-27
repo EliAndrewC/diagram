@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-27
 
-**Status**: Draft
+**Status**: FAITHFUL at round 2; implementing
 
 **Input**: the GM's request, verbatim in [`request.md`](request.md): backfill *"all of the research questions that we
 either had not done in the past at all, or ones that we did but have identified as being spotty, or ones that ... are
@@ -141,3 +141,6 @@ drawing convention, or guess.
   unchecked: 265 confirmed that none is its own, so they are group X1, and FR-011 leaves no item without an owner. (2) FR-008
   now confirms a peer resumed, re-nudges, and keeps a log (SC-007). (3) Claims are re-read per group (FR-011, SC-008).
   (4) `settlements/030` is B42, and every footnote-less section passed over is listed with its reason.
+- Round 2 (spec-fidelity, 2026-09-27): FAITHFUL. All four findings were confirmed fixed. Notes applied: 269's claims line
+  names B01-B46 and X1; the inventory cites 265's confirmation; an X1 section reported as a convention moves to the
+  passed-over list and `outcomes.md`.

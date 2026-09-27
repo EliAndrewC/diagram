@@ -20,8 +20,9 @@ in the section that makes the claim).
 - **Feature 268** (Diagram shrines): religion-and-death 080, 090, 100, 110, 120 and the new 122, 124, 126; the
   country-shrine program in `buildings/programs.md`.
 - The thin sections on 265's pages are NOT excluded. None is in 265's specs or marks files (searched 2026-09-27), and
-  265's session was asked. They form group X1 below, held until 265 lands. An item 265 confirms as its own is moved
-  back here, with the confirmation cited.
+  265's session confirmed it, 2026-09-27: "None of those sections are 265's, so take them into 269's last group." They
+  form group X1 below, held until 265 lands. A section X1's handoff reports as a drawing convention or project decision
+  is moved to the passed-over list below, with its reason, and recorded in `outcomes.md`.
 
 ## Footnote-less sections passed over, and why (every fragment with no notes, 2026-09-27)
 
