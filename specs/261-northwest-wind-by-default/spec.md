@@ -304,3 +304,12 @@ match the maps.
   and ships the route-around. It must require, once crossings exist, measuring Kashikawa at seed 3 and Mizuguchi at
   seed 23, returning each to its original seed unless that measurement records a refusal the research supports, and
   SC-008 and User Story 5 scenario 4 must name the seeds that measurement settles on.
+- Round 2 of the amendment (2026-09-27, `spec-fidelity-verify`, Opus; read as a verify round on the diff of
+  fec93fdc): **FAITHFUL**. Item 1 RESOLVED: the Edge Case now requires, once crossings exist, measuring Kashikawa at
+  its original seed 3 and Mizuguchi at its original seed 23, returning each to it unless the measurement records a
+  refusal the research supports, the reason recorded either way; Sawada's 6 -> 24 stands on the drain and wet toe
+  (FR-010). SC-008 no longer pins 8 and 27 but names the seeds that measurement settles on; User Story 5 scenario 4
+  names Inashiro 4 and the originals 3 and 23 with the same research-supported exception. The changed passages add
+  no figure with a unit (seeds are identifiers), nothing unrequested, and contradict no FR, SC or Assumption (the
+  Assumptions' "an engine limitation is fixed in the engine, not re-seeded" agrees). plan.md D4 and
+  plan-review.json D4 still describe the 8/27 re-seeds; that is for the plan's next review, not a spec finding.
