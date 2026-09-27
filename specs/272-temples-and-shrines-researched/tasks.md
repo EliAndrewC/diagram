@@ -29,10 +29,11 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D6).
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
       verify: DONE. DONE. religion-and-death 580 (city temple complex) and 590 (temple neighborhood) new, 020 and 030 notes searched twice; checks a-c applied; 020's count corrected at the pull-back; matsukura-2008-taito keeps its key with the authors corrected in the registry (Kitaoka and Miyawaki) - renaming a key only moves its label; FR-007: 595's small shrines size a worship hall, not the sheet's hall-and-dwelling - not a contradiction
-- [ ] T08 FR-007: every group's handoff read; each finding that contradicts the country shrine applied to the Hoshigaoka sheet and map, or recorded here as
+- [x] T08 FR-007: every group's handoff read; each finding that contradicts the country shrine applied to the Hoshigaoka sheet and map, or recorded here as
       not contradicting the drawing (D5)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. DONE. All six handoffs read. Applied: R3's 520 (wayside stones at the south lane's entry) and 530 (the village cremation ground with six jizo, seat rolled apart, downstream) - drawn on the frozen Hoshigaoka map (svg/png in the mirror, manifest, notes row); settlement-review round 1 NEEDS-WORK (2 warnings applied: ragged ground, 136 ft from the wells), round 2 PASS; the village generator's owed work in future-work/farming-communities.md; the engine glyph drawn ragged too. Not contradicting: S (the roped tree is already drawn), R2 and R3 500 (the historical village temple, the canon's country monk governs), R4, T (595's small shrines size a worship hall, not the hall-and-dwelling), B37. Boxes: research 520/530 source-reader, quote-check and source-applicability in R3's checks
 - [ ] T09 FR-003, FR-005: every blocked source on TO-DOWNLOAD.md; 271's State table and 269's inventory marked; the
       handoffs reported to "Diagram supplemental" and "Diagram research" (D6)
       research: rendering
