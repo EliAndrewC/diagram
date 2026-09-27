@@ -1262,7 +1262,7 @@
   ]
  },
  "dosojin": {
-  "def": "Roadside guardian-deity stones, set most often on the lonely stretches of a highway and near mountain passes.",
+  "def": "Roadside guardian-deity stones, set most often on the lonely stretches of a highway and near mountain passes, and usually at a village's edge where a road from outside meets its houses.",
   "variants": [
    "dosojin"
   ]
@@ -2891,7 +2891,9 @@
   "def": "The climbing kiln: a long chambered kiln built up a slope, firebox at the bottom and chimney at the top, stoked in shifts for days.",
   "variants": [
    "noborigama",
-   "anagama"
+   "anagama",
+   "climbing kiln",
+   "climbing kilns"
   ]
  },
  "nucleated": {
@@ -3541,6 +3543,7 @@
  "shukuba": {
   "def": "A post town on a highway, with its transport office, inns and relay horses strung along one street.",
   "variants": [
+   "juku",
    "post station",
    "post stations",
    "post town",
@@ -4955,7 +4958,7 @@
   ]
  },
  "enoki": {
-  "def": "Japanese hackberry, a tall, broad-crowned deciduous tree, one of the trees of a Tonami homestead grove.",
+  "def": "Japanese hackberry, a tall, broad-crowned deciduous tree, one of the trees of a Tonami homestead grove, and the tree planted beside a village's boundary shrine and on a highway's milestone mounds.",
   "variants": [
    "enoki"
   ]
@@ -6524,6 +6527,40 @@
    "hongawara tile"
   ]
  },
+ "karishiki": {
+  "def": "Green manure: grass and young shoots cut on the hills and the commons and put into the paddy before planting - the fertilizer that made a village keep grass ground more than ten times its fields.",
+  "variants": [
+   "karishiki"
+  ]
+ },
+ "magusaba": {
+  "def": "A fodder ground: grass ground where fodder, green manure and thatch were cut, most often the commons of one village or hamlet - also called kusakariba or kayaba.",
+  "variants": [
+   "magusaba",
+   "kusakariba",
+   "kayaba"
+  ]
+ },
+ "kusayama": {
+  "def": "A grass mountain: a hill whose trees were felled and kept down so that it carried only the grass a village's paddies needed as fertilizer; a small one set aside for one paddy was a tazuke kusayama.",
+  "variants": [
+   "kusayama",
+   "tazuke kusayama"
+  ]
+ },
+ "ichirizuka": {
+  "def": "A milestone mound: an earth mound about 30 ft square raised beside a main highway at every ri, in a pair either side of the road, each planted with a tree - most often an enoki.",
+  "variants": [
+   "ichirizuka"
+  ]
+ },
+ "keihan-cha": {
+  "def": "Bund tea: tea planted in a single row along the bank between fields, marking the boundary with the neighbor and breaking the wind.",
+  "variants": [
+   "keihan-cha",
+   "bund tea"
+  ]
+ },
  "pent roof": {
   "def": "A lean-to roof of one slope set against a wall of a house, below its main roof.",
   "variants": [
@@ -6647,6 +6684,27 @@
    "四間取り"
   ]
  },
+ "Kaei": {
+  "def": "A Japanese era name covering 1848 to early 1855, which documents use to date a year; Kaei 7 is 1854.",
+  "variants": [
+   "Kaei"
+  ]
+ },
+ "hoonoki": {
+  "def": "The Japanese bigleaf magnolia (Magnolia obovata), a tall deciduous tree with very large leaves; one of the commonest trees in the homestead groves of Isawa in the north.",
+  "variants": [
+   "hoonoki",
+   "ホオノキ"
+  ]
+ },
+ "four trees": {
+  "def": "The four tree crops of the early-modern period - tea, mulberry, lacquer and paper mulberry - grown in fields for sale and processing. The shogunate restricted where they could be planted, and from the middle of the period they were grown as local specialties.",
+  "variants": [
+   "four trees",
+   "four trees and three grasses",
+   "shiboku sanso"
+  ]
+ },
  "staggered shelves": {
   "def": "Shelves set at offset heights in a recess beside the tokonoma, a fixture of the formal shoin-style reception room.",
   "variants": [
@@ -6677,6 +6735,88 @@
    "guard cities",
    "battalion city",
    "battalion cities"
+  ]
+ },
+ "black charcoal": {
+  "def": "Soft charcoal that catches fire easily, made by letting the kiln cool with the charcoal still inside before opening it; made in Japan from the late Muromachi into the Edo period.",
+  "variants": [
+   "black charcoal",
+   "black-charcoal"
+  ]
+ },
+ "fall line": {
+  "def": "The line straight down a slope, the way water would run off it; a thing laid along the fall line points directly uphill and downhill.",
+  "variants": [
+   "fall line"
+  ]
+ },
+ "calendar calibration": {
+  "def": "The conversion of a laboratory dating of a sample, such as charcoal from a kiln, into a range of calendar years.",
+  "variants": [
+   "calendar calibration"
+  ]
+ },
+ "white charcoal": {
+  "def": "Hard, long-burning charcoal that is slow to catch fire, made by opening the kiln wide at the end of the burn to raise the heat, then drawing the charcoal out and smothering it under ash.",
+  "variants": [
+   "white charcoal",
+   "white-charcoal"
+  ]
+ },
+ "tateba": {
+  "def": "A rest stop on an Edo highway between two post towns, or at a pass: teahouses and stalls where travelers rested and horses or palanquins were sometimes changed, with no official lodging.",
+  "variants": [
+   "tateba",
+   "rest stop",
+   "rest stops"
+  ]
+ },
+ "watashiba": {
+  "def": "A ferry landing: the place on a riverbank where the ferry boats set out and came in.",
+  "variants": [
+   "watashiba",
+   "ferry landing",
+   "ferry landings"
+  ]
+ },
+ "bojikui": {
+  "def": "A boundary post: a tall wooden post set up beside a highway where a post town or a village ended, lettered, it seems, with the boundary and the distances.",
+  "variants": [
+   "bojikui",
+   "boundary post",
+   "boundary posts"
+  ]
+ },
+ "kanjo-nawa": {
+  "def": "A sacred rope strung across the road at a village's edge, most often at New Year, hung with charms of straw to keep sickness and evil out; commonest in and around the Kinki region.",
+  "variants": [
+   "kanjo-nawa",
+   "kanjo-tsuri"
+  ]
+ },
+ "michikiri": {
+  "def": "Cutting the road: the village custom of barring evil at the road into the village - a boundary god set there, a rope or straw serpent strung across the way, straw sandals offered.",
+  "variants": [
+   "michikiri"
+  ]
+ },
+ "ai-no-shuku": {
+  "def": "An in-between station: a rest stop between two post towns that grew into a street of shops, officially a village and in principle forbidden to lodge travelers.",
+  "variants": [
+   "ai-no-shuku"
+  ]
+ },
+ "gaison": {
+  "def": "Street village: a village packed tight along both sides of a road and living from it, with shops and lodging - the denser, trading form of the row village.",
+  "variants": [
+   "gaison",
+   "street village"
+  ]
+ },
+ "murakiri": {
+  "def": "The partition of villages at the start of the Edo period: each village made a unit of rule and tax with its own fields and a fixed boundary, drawn with an eye to its irrigation water and its rights in the common hills.",
+  "variants": [
+   "murakiri"
   ]
  },
  "Chugoku": {
@@ -6762,6 +6902,21 @@
    "Guangfu"
   ]
  },
+ "road magistrate": {
+  "def": "The shogunate's officer over the highways, who assigned their upkeep to the post towns and villages along them, and to villages off the road where traffic was heavy.",
+  "variants": [
+   "road magistrate",
+   "road magistrates",
+   "dochu bugyo"
+  ]
+ },
+ "Imperial road": {
+  "def": "On these maps, a main highway of the Empire: the through road that links cities and post towns, as against a village lane or a field road. Where one runs through a city as its main street it is that city's Imperial spine.",
+  "variants": [
+   "Imperial road",
+   "Imperial roads"
+  ]
+ },
  "Northern Wei": {
   "def": "A dynasty that ruled north China in the fifth and sixth centuries; the farm manual Qimin yaoshu was written under it.",
   "variants": [
@@ -6785,6 +6940,33 @@
   "def": "The central region of Honshu, between Kanto and Kinki, running from the Pacific coast across the mountains to the Sea of Japan coast; Niigata is in it.",
   "variants": [
    "Chubu"
+  ]
+ },
+ "meshimori": {
+  "def": "A woman kept at a post town's inn to serve travelers their meals. The name means \"rice-server\". Keeping such women marked a place as an inn for lodging, so a teahouse, which was only for resting, had to be built differently.",
+  "variants": [
+   "meshimori",
+   "meshimori women",
+   "meshimori-onna"
+  ]
+ },
+ "bakuhan": {
+  "def": "The Edo-period order of rule shared between the shogunate (bakufu) and the daimyo domains (han), which ruled land and people and fixed village boundaries.",
+  "variants": [
+   "bakuhan"
+  ]
+ },
+ "boji": {
+  "def": "An older boundary marker: it marked the limits of a temple or shrine precinct or of a medieval estate. It was usually a post of wood or stone, sometimes a rock or standing tree. The bojikui on the Edo highways carried the practice on.",
+  "variants": [
+   "boji"
+  ]
+ },
+ "so village": {
+  "def": "A self-governing village community of the medieval period. As it grew, a village's boundary with its neighbors gradually became clear, before the Edo land surveys fixed it.",
+  "variants": [
+   "so village",
+   "so villages"
   ]
  },
  "ryobu": {
@@ -6841,6 +7023,13 @@
   "def": "A small roofed wall that some Edo-period machiya raised on the roof at the boundary with the next house, to stop a fire spreading from next door.",
   "variants": [
    "udatsu"
+  ]
+ },
+ "river office": {
+  "def": "The office at a ferry or ford landing (kawa kaisho, 川会所) through which the crossing was run; on the Tokaido it stood on one bank only, beside the notice board and the boatmen's huts.",
+  "variants": [
+   "river office",
+   "river offices"
   ]
  },
  "county magistrate": {
@@ -6961,6 +7150,21 @@
    "yashikichi"
   ]
  },
+ "curb": {
+  "def": "The low wall of stone or wood built round the mouth of a well, which keeps anyone or anything from falling in; seen from above, the ring that marks where the well is.",
+  "variants": [
+   "curb",
+   "curbs",
+   "well curb",
+   "wellhead"
+  ]
+ },
+ "town grain": {
+  "def": "The scale a town or village map is drawn at, about 1 ft of ground to a pixel, fine enough that small features such as a notice board or a well can be drawn at their true size.",
+  "variants": [
+   "town grain"
+  ]
+ },
  "myoden": {
   "def": "A \"named field\": land recorded under the name of the holder who answered for its tax. A myoden landlord came from one of these old landholding families of a village.",
   "variants": [
@@ -6991,6 +7195,32 @@
    "branch households",
    "branch house",
    "branch houses"
+  ]
+ },
+ "tsurube": {
+  "def": "The Japanese well bucket, and the gear that draws it: a bucket on a rope over a pulley, or on the end of a sweep's pole.",
+  "variants": [
+   "tsurube"
+  ]
+ },
+ "hanetsurube": {
+  "def": "The Japanese well sweep: a bamboo pole crossed over a post, the bucket hung at one end and a weight of stones tied to the butt, worked like a seesaw.",
+  "variants": [
+   "hanetsurube",
+   "hane-tsurube"
+  ]
+ },
+ "bargeboard": {
+  "def": "A board fixed along the sloping edge of a gabled roof, covering the ends of the roof timbers.",
+  "variants": [
+   "bargeboard",
+   "bargeboards"
+  ]
+ },
+ "Owari": {
+  "def": "The province around present-day Nagoya, and the name of the senior Tokugawa branch house that held it.",
+  "variants": [
+   "Owari"
   ]
  },
  "kaigisho": {
@@ -7045,6 +7275,40 @@
   "def": "The ordinary villagers of an Edo-period village, below the officials and leading men; named with the komae as those who later joined the village meeting.",
   "variants": [
    "hirakata"
+  ]
+ },
+ "firebox": {
+  "def": "The combustion chamber at the foot of a climbing kiln, where the wood fire is fed; the firing chambers climb the slope above it and the chimney stands at the top.",
+  "variants": [
+   "firebox",
+   "fireboxes"
+  ]
+ },
+ "stoke mouth": {
+  "def": "The opening at the foot of a kiln through which the fire is fed with wood during a firing.",
+  "variants": [
+   "stoke mouth",
+   "stoke mouths"
+  ]
+ },
+ "Mino": {
+  "def": "An old province of central Japan, in present-day southern Gifu, and one of its great pottery districts; the Motoyashiki kiln stands there.",
+  "variants": [
+   "Mino"
+  ]
+ },
+ "kiln house": {
+  "def": "A pottery business - the household and workshop that made and fired wares (窯元, kamamoto); in the porcelain villages several of them shared one great climbing kiln.",
+  "variants": [
+   "kiln house",
+   "kiln houses"
+  ]
+ },
+ "unconfined groundwater": {
+  "def": "Groundwater with no watertight layer sealed above it, so its top is the open water table itself - where that table lies shallow, a plain dug well reaches it.",
+  "variants": [
+   "unconfined groundwater",
+   "unconfined"
   ]
  },
  "Taiji": {
