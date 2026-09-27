@@ -333,6 +333,7 @@ def test_a_staged_roll_reaches_the_map_only_when_promoted(tmp_path) -> None:  # 
     the staged files onto the map's own paths (not the notes copy) and removes the stage, and a rejected roll's stage
     is removed without touching the map."""
     import os
+    import pathlib
 
     from l7r.diagram.hamletgen.driver import promote, stage_for
 
@@ -340,16 +341,15 @@ def test_a_staged_roll_reaches_the_map_only_when_promoted(tmp_path) -> None:  # 
     (tmp_path / "hamlet.notes.md").write_text("## Map notes\n")
     (tmp_path / "hamlet.json").write_text("old")
     kept, rejected = stage_for(out), stage_for(out)
-    assert open(kept + ".notes.md").read() == "## Map notes\n"
+    assert pathlib.Path(kept + ".notes.md").read_text() == "## Map notes\n"
     for base, word in ((kept, "kept"), (rejected, "rejected")):
-        open(base + ".json", "w").write(word)
-        open(base + ".svg", "w").write(word)
+        pathlib.Path(base + ".json").write_text(word)
+        pathlib.Path(base + ".svg").write_text(word)
     promote(rejected, None)
-    assert open(out + ".json").read() == "old" and not os.path.exists(os.path.dirname(rejected))
+    assert pathlib.Path(out + ".json").read_text() == "old" and not os.path.exists(os.path.dirname(rejected))
     promote(kept, out)
-    assert open(out + ".json").read() == "kept" and open(out + ".svg").read() == "kept"
-    assert open(out + ".notes.md").read() == "## Map notes\n" and not os.path.exists(os.path.dirname(kept))
+    assert pathlib.Path(out + ".json").read_text() == "kept" and pathlib.Path(out + ".svg").read_text() == "kept"
+    assert pathlib.Path(out + ".notes.md").read_text() == "## Map notes\n" and not os.path.exists(os.path.dirname(kept))
     bare = stage_for(str(tmp_path / "other"))
     assert not os.path.exists(bare + ".notes.md")
     promote(bare, None)
-
