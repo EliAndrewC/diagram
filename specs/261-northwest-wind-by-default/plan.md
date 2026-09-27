@@ -266,6 +266,14 @@ Measured before and after in research R10.
   cleared ground there. Recorded in `future-work/farming-communities.md` with the measurement and a sketch.
 - A copse clump is near a house only on the house's own bank (`BankNear`): Kashikawa's copse had three clumps across the
   brook from every farmhouse, within the 90 ft reach only as the crow flies.
+- A diagonal wind wraps the belt round two sides, so its seating window opens on both axes the wind has a share of (on a
+  northwest wind's tie only the x axis opened, and Inashiro's north arm stood 28 ft deep behind its northernmost house);
+  each arm of the belt has its own inner face (`windbreak_faces`), and the frame holds every belt clump within 100 ft of
+  a farmhouse on the page - that house's shelter - since the face is the belt's TYPICAL front.
+- A seat whose windbreak band would fall off the canvas scores down (`belt_off_canvas`), as the brook and the dry hem do.
+- NOT DONE, put to the GM: Mizuguchi's only wind-facing seat keeps its houses 34 ft from the canvas's west edge, so the
+  belt stands in the strip the westernmost farmsteads stand in, holed where they are; the seat term above scores it down
+  and it still wins (40-67% of its belt band off the canvas). A re-seed, a wider canvas, or the belt as drawn.
 - NOT DONE, put to the GM: Sawada's windward belt stands on the toe marsh's reed edge (seed 24 backs the hamlet onto the
   marsh). Holding the belt's clump bases off the DRAWN reeds was built and measured: 179 clumps to 124 with the bases a
   crown's radius off (5 of 652 drawn crowns still over a reed), 135 at a 12 ft reed spacing (14 over), and in both the

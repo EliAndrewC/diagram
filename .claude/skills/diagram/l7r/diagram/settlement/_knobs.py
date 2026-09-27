@@ -720,6 +720,36 @@ def windbreak_face(clumps: Sequence[Sequence[float]], r: float, houses: Sequence
     return (axis, sign, inner + sign * r)
 
 
+WINDBREAK_HOUSE_REACH_FT = 100.0  # ft: a belt clump this near a farmhouse is that house's shelter, and the frame keeps it
+WINDBREAK_ARM_MIN = 6  # clumps: fewer than this on one side of the houses is a belt's tip, not an arm with a face of its own
+
+
+def windbreak_faces(clumps: Sequence[Sequence[float]], r: float, houses: Sequence[Mapping[str, Any]]) -> list[tuple[tuple[int, int, float], list[Sequence[float]]]]:
+    """The belt's inner face PER ARM, each with the clumps of that arm (settlement-review of Inashiro, feature 261).
+
+    `windbreak_face` finds one face on one axis, which is the whole belt when the wind blows square to a side. Under the
+    regional northwest wind the belt wraps the houses' north AND west as an L, and its one face was the west arm's: the
+    north arm had no face to set the frame, and the frame cut its front row away behind the northernmost farmhouse - a
+    97 ft opening in the house's own windbreak on the page. So the clumps are split by which axis their offset from the
+    houses' middle runs along, and each arm with `WINDBREAK_ARM_MIN` clumps or more gets its own face."""
+    if not clumps or not houses:
+        return []
+    hx = sum(h["x"] for h in houses) / len(houses)
+    hy = sum(h["y"] for h in houses) / len(houses)
+    arms: dict[int, list[Sequence[float]]] = {0: [], 1: []}
+    for c in clumps:
+        arms[0 if abs(c[0] - hx) >= abs(c[1] - hy) else 1].append(c)
+    out: list[tuple[tuple[int, int, float], list[Sequence[float]]]] = []
+    for axis, arm in arms.items():
+        face = windbreak_face(arm, r, houses) if len(arm) >= WINDBREAK_ARM_MIN else None
+        if face is not None and face[0] == axis:
+            out.append((face, arm))
+    if not out:
+        whole = windbreak_face(clumps, r, houses)
+        out = [(whole, list(clumps))] if whole is not None else []
+    return out
+
+
 def crop_boxes(M: Any, city: bool, ftpx: float, W: float, H: float) -> list[tuple[float, float, float, float, str]]:
     """Every feature that SETS the render frame, as labeled boxes (x0, x1, y0, y1, what).
 
@@ -808,15 +838,23 @@ def crop_boxes(M: Any, city: bool, ftpx: float, W: float, H: float) -> list[tupl
         if g.get("role") != "windbreak" or not _hx:
             continue
         _r = float(g.get("r") or 0.0)
-        _face = windbreak_face(g.get("clumps") or [], _r, M.get("houses", []))
-        if _face is None:
-            continue
-        _axis, _sign, _inner = _face
-        _cl = g["clumps"]
-        if _axis == 0:
-            out.append((_inner, _inner, max(min(c[1] for c in _cl) - _r, min(_hy)), min(max(c[1] for c in _cl) + _r, max(_hy)), f"village_groves[{i}] windbreak face"))
-        else:
-            out.append((max(min(c[0] for c in _cl) - _r, min(_hx)), min(max(c[0] for c in _cl) + _r, max(_hx)), _inner, _inner, f"village_groves[{i}] windbreak face"))
+        # ...AND THE BELT ROUND EVERY HOUSE (settlement-review of Inashiro, feature 261): the face is the belt's TYPICAL
+        # front, and where the belt stands farther out behind one farmhouse than its median, the frame cut that house's own
+        # windbreak away - a 97 ft opening behind the northernmost house on the page. Every belt clump within
+        # `WINDBREAK_HOUSE_REACH_FT` of a farmhouse is that house's shelter, and it is held on the page like the face. (The
+        # clump NEAREST each house was tried first: behind that house it stood to the west-southwest, and the row to its
+        # north stayed cut.)
+        _all = list(g.get("clumps") or []) + list(g.get("clumps_offpage") or [])
+        _reach = WINDBREAK_HOUSE_REACH_FT / ftpx
+        for _c in _all:
+            if any((float(_c[0]) - float(_h["x"])) ** 2 + (float(_c[1]) - float(_h["y"])) ** 2 <= _reach**2 for _h in M.get("houses", [])):
+                out.append((float(_c[0]), float(_c[0]), float(_c[1]), float(_c[1]), f"village_groves[{i}] shelter of a house"))
+        # ONE FACE PER ARM (feature 261): an L-shaped belt round a diagonal wind has two, and each is preserved
+        for (_axis, _sign, _inner), _cl in windbreak_faces(g.get("clumps") or [], _r, M.get("houses", [])):
+            if _axis == 0:
+                out.append((_inner, _inner, max(min(c[1] for c in _cl) - _r, min(_hy)), min(max(c[1] for c in _cl) + _r, max(_hy)), f"village_groves[{i}] windbreak face"))
+            else:
+                out.append((max(min(c[0] for c in _cl) - _r, min(_hx)), min(max(c[0] for c in _cl) + _r, max(_hx)), _inner, _inner, f"village_groves[{i}] windbreak face"))
     if M.get("forest"):  # a big EDGE feature: revealed a band deep on the axis it FACES, and not
         fpts = M["forest"]  # frame-setting at all on the axis it RUNS ALONG (see forest_frame_span)
         fxs = forest_reveal_x(fpts, M.get("forest_edge"), Settlement.FOREST_REVEAL_FT / ftpx, W)

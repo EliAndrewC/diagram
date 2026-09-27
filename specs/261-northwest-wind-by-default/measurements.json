@@ -626,5 +626,15 @@
   "quantity": "the belt's recorded clumps, which the notes now call clumps rather than crowns (and on the other four maps too)",
   "source": "pool/hamlets/kashikawa/kashikawa.json village_groves[role=windbreak].clumps; kashikawa.notes.md 2026-09-27 entry",
   "command": "grep -n 'The belt is 281 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
+ },
+ "inashiro-r9-belt-frame": {
+  "verifies": "F1",
+  "subject": "inashiro",
+  "round": "159e0244",
+  "value": 38,
+  "unit": "ft",
+  "quantity": "the view's top edge (was 121): the belt's seating window opens on both axes a diagonal wind has a share of, and the frame holds every belt clump within 100 ft of a farmhouse on the page, so the north arm wraps the northernmost house (belt 180 to 239 clumps, 28 to 17 off the page)",
+  "source": "pool/hamlets/inashiro/inashiro.json meta.view, village_groves[role=windbreak].clumps and clumps_offpage; test_pool_wind belt depths",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_wind.py"
  }
 }

@@ -150,3 +150,13 @@ def test_a_brook_across_every_margin_still_seats_the_hamlet_facing_the_wind() ->
     seat = hg.seat_cluster(plan, brook=brook)
     assert not hg.point_in_poly(seat["cx"], seat["cy"], SQUARE), "outside the field"
     assert seat["offwind"] is False
+
+
+def test_a_seat_whose_belt_would_fall_off_the_canvas_is_measured() -> None:
+    """Feature 261 (settlement-review of Mizuguchi): the share of the windbreak's band behind a seat that the canvas
+    cannot hold."""
+    from l7r.diagram.hamletgen.cluster import belt_off_canvas
+
+    inside = belt_off_canvas((1300.0, 1300.0), (0.0, 1.0), (-1.0, 0.0), 300.0, 150.0, (-1.0, 0.0), 2600.0, 2600.0)
+    at_edge = belt_off_canvas((120.0, 1300.0), (0.0, 1.0), (-1.0, 0.0), 300.0, 150.0, (-1.0, 0.0), 2600.0, 2600.0)
+    assert inside == 0.0 and at_edge == 1.0

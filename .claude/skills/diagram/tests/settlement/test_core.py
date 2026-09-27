@@ -813,3 +813,18 @@ def test_crop_to_content_takes_reserved_ground_as_content():
     assert y0 > 300
     s.crop_to_content(margin=10, extra=[(400.0, 200.0, 600.0, 300.0)])
     assert s.view[1] <= 190 and s.view[0] <= 390
+
+
+def test_an_l_shaped_belt_has_a_face_on_each_arm():
+    """Feature 261 (settlement-review of Inashiro): a belt wrapped round the north and west of the houses has two inner
+    faces, one per arm; a belt on one side has one, and a belt too small to split falls back to the whole."""
+    from l7r.diagram.settlement._knobs import windbreak_faces
+
+    houses = [{"x": 500.0, "y": 500.0}, {"x": 540.0, "y": 540.0}]
+    west = [[300.0, 400.0 + 20 * k] for k in range(8)]
+    north = [[400.0 + 20 * k, 300.0] for k in range(8)]
+    faces = windbreak_faces(west + north, 14.0, houses)
+    assert sorted(f[0][0] for f in faces) == [0, 1]
+    assert [f[0][0] for f in windbreak_faces(west, 14.0, houses)] == [0]
+    assert len(windbreak_faces(west[:3], 14.0, houses)) == 1, "an arm too small for a face of its own: the whole belt's"
+    assert windbreak_faces([], 14.0, houses) == []

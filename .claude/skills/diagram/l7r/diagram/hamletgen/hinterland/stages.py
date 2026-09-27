@@ -199,9 +199,12 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     _bxs = [q[0] for q in _dented]
     _bys = [q[1] for q in _dented]
     _wx, _wy = plan.wind
-    if abs(_wx) >= abs(_wy):
+    # ...ON EVERY AXIS THE WIND HAS A SHARE OF (settlement-review of Inashiro, feature 261): a diagonal wind wraps the belt
+    # round two sides, and opening only the dominant axis - the x axis, on the tie a northwest wind makes - left the north
+    # arm clamped to the frame the houses set, 28 ft deep behind the northernmost farmhouse
+    if abs(_wx) > 1e-6:
         _fx0, _fx1 = (min(_fx0, min(_bxs) - 30.0), _fx1) if _wx < 0 else (_fx0, max(_fx1, max(_bxs) + 30.0))
-    else:
+    if abs(_wy) > 1e-6:
         _fy0, _fy1 = (min(_fy0, min(_bys) - 30.0), _fy1) if _wy < 0 else (_fy0, max(_fy1, max(_bys) + 30.0))
     s.village_grove(_dented, role="windbreak", within=(_fx0, _fy0, _fx1, _fy1), face_margin=CROP_MARGIN, reserved=_tp)
     # The COPSE fills the leafy gaps AMONG the homes, over the house cloud. That is only reasonable

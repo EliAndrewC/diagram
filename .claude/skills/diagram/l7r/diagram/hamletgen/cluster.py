@@ -52,6 +52,18 @@ def back_fouled(anchor: Pt, out: Pt, dep: float, dry_plots: Sequence[Poly], reac
     return hit / total
 
 
+def belt_off_canvas(center: Pt, along: Pt, out: Pt, lat: float, dep: float, wind: Pt, W: float, H: float) -> float:
+    """The share of the windbreak's band that would fall off the canvas behind a cluster seated at `center` (feature 261).
+    The band is sampled where `belt_polygon` draws it: 36, 90 and 146 ft upwind of the cluster's windward fringe, across
+    the cluster's width square to the wind."""
+    wx, wy = unit(*wind)
+    px, py = -wy, wx
+    reach = abs(wx * along[0] + wy * along[1]) * lat + abs(wx * out[0] + wy * out[1]) * dep  # the fringe, upwind of the middle
+    span = abs(px * along[0] + py * along[1]) * lat + abs(px * out[0] + py * out[1]) * dep  # half the width across the wind
+    pts = [(center[0] + wx * (reach + d) + px * span * t, center[1] + wy * (reach + d) + py * span * t) for d in (36.0, 90.0, 146.0) for t in (-0.9, -0.45, 0.0, 0.45, 0.9)]
+    return sum(1 for x, y in pts if not (0.0 <= x <= W and 0.0 <= y <= H)) / len(pts)
+
+
 def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | None = None, toe: Poly | None = None, wet: Sequence[Poly] = (), brook: Sequence[Pt] = ()) -> dict[str, Any]:
     """WHERE THE HOUSES GO - the one derivation that decides how the whole map reads.
 
@@ -197,6 +209,11 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
             _bp = [(mid[0] + nx * d - ny * lat * t, mid[1] + ny * d + nx * lat * t) for d in (dep * 0.5, dep + 34.0, dep * 2.0) for t in (-0.9, -0.45, 0.0, 0.45, 0.9)]
             crossed = sum(1 for q in _bp if min((seg_dist(q[0], q[1], a, b) for a, b in zip(brook, brook[1:], strict=False)), default=1e9) < 30.0) / len(_bp)
             score -= 3.0 * crossed
+        # ...AND MINUS A BELT WITH NO GROUND TO STAND ON (settlement-review of Mizuguchi, feature 261). The windbreak stands
+        # 36-146 ft upwind of the houses' windward fringe (`belt_polygon`); a seat whose band runs that belt off the canvas
+        # left the belt a strip beside the westernmost farmsteads, holed where they stood in it. Scored like the wet
+        # ground: the share of the belt band's sample points that fall off the canvas.
+        score -= 2.5 * belt_off_canvas((mid[0] + nx * (dep + 12.0), mid[1] + ny * (dep + 12.0)), (-ny, nx), (nx, ny), lat, dep, (wx, wy), plan.W, plan.H)
         if nx * wx + ny * wy < WIND_BACK_MIN_DOT:
             offwind.append((score, mid, (nx, ny)))
             continue
