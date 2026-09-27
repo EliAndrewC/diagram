@@ -218,3 +218,47 @@ def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt],
             commit_lane(lanes, j, [], hard, walls, water, s.reink_lane)
             return True
     return False
+
+
+_ON_LINE_FT = 0.1
+"""An end this near another lane's centerline is already on it - the rounding of a record, not a step to mend."""
+
+
+def centered_end(q: Pt, segs: Sequence[tuple[Pt, Pt]]) -> Pt | None:
+    """Where a lane end that stops ON another lane's tread should stand: on that lane's centerline.
+
+    THE BUMP AT A T (GM 2026-09-27). Once the treads composited as one surface (`group_shared_opacity`), what
+    still showed at a junction was the arriving lane's round cap: its end stood 0.5-3 ft off the other lane's
+    centerline, so half a cap of shoulder poked out past the far side of a 3 ft tread. An end within
+    `_TOUCH_GAP` of another way is a junction (the same figure `_components` joins a web by), so it is moved to
+    the foot of the perpendicular on the nearest segment - a shift of a few feet that changes which ground the
+    lane serves by nothing. Returns None when the end is not at a junction or is already on the line."""
+    best: tuple[float, tuple[Pt, Pt]] | None = None
+    for a, b in segs:
+        d = seg_dist(q[0], q[1], a, b)
+        if d <= _TOUCH_GAP and (best is None or d < best[0]):
+            best = (d, (a, b))
+    if best is None or best[0] <= _ON_LINE_FT:
+        return None
+    return seg_closest(q[0], q[1], *best[1])
+
+
+def center_lane_ends(s: Settlement) -> int:
+    """Every lane end that stops on another lane's tread is set on its centerline, record and ink together.
+    Runs after `straighten_joints`, the last pass that moves a lane end. Returns the number of ends moved."""
+    lanes: list[dict[str, Any]] = s.M.get("lanes") or []
+    moved = 0
+    for i, ln in enumerate(lanes):
+        p = _pts(ln)
+        if len(p) < 2:
+            continue
+        others = [sg for j, o in enumerate(lanes) if j != i for sg in _segs(_pts(o))]
+        for k in (0, -1):
+            to = centered_end(p[k], others)
+            if to is not None:
+                p[k] = to
+                moved += 1
+        if p != _pts(ln):
+            ln["pts"] = _rounded(p)
+            s.reink_lane(i)
+    return moved
