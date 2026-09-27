@@ -745,6 +745,8 @@ kokudaka	kokudaka
 kokuinchi	shuinchi
 kokumori	kokumori
 komainu	lion-dog
+komo	komo
+komo matting	komo
 komono	komono
 kon-ya	kon-ya
 konara	konara
@@ -1078,6 +1080,7 @@ regime power laws	regime equation
 regime theory	regime equation
 regulator	regulator
 regulators	regulator
+reikurikata	reikurikata
 renge	renge
 renkaku	renkaku
 rent bursary	rent bursary
@@ -1109,15 +1112,19 @@ roji	roji
 roju	Roju
 rokugan	Rokugan
 rokugani	Rokugan
+ronin	ronin
+ronins	ronin
 roson	roson
 row village	roson
 runners	yayi
 ryo	ryo
 ryobosei	ryobosei
 rōjū	Roju
+rōnin	ronin
 sae no kami	sae no kami
 sageba	ōkaji
 saien	saien
+saikyosho	saikyosho
 sakagura	sakagura
 sally gate	sally port
 sally port	sally port
@@ -1149,6 +1156,7 @@ seigaiha	seigaiha
 seijoue	seijoue
 sekisho	sekisho
 senbon torii	Senbon Torii
+sengisho	sengisho
 sengoku	Sengoku
 senmaida	senmaida
 sento	sento
@@ -1158,6 +1166,7 @@ setchin	kawaya
 settling basin	settling basin
 settling basins	settling basin
 seven autumn grasses	seven autumn grasses
+shacho-sen'yokata	shacho-sen'yokata
 shadoof	jiegao
 shahi	shahi
 shaku	shaku

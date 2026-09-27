@@ -5977,5 +5977,44 @@
   "variants": [
    "sanmon"
   ]
+ },
+ "saikyosho": {
+  "def": "In the Edo town magistracy, the room where the magistrate handed down the ruling in a suit.",
+  "variants": [
+   "saikyosho"
+  ]
+ },
+ "sengisho": {
+  "def": "In the Edo town magistracy, a room where the parties to a suit or an accused person were examined; the inner sengisho was a second such room further inside the compound.",
+  "variants": [
+   "sengisho"
+  ]
+ },
+ "shacho-sen'yokata": {
+  "def": "A section of the Edo town magistracy that kept the register of pardons and compiled the magistracy's collected records of its rulings.",
+  "variants": [
+   "shacho-sen'yokata"
+  ]
+ },
+ "reikurikata": {
+  "def": "A section of the Edo town magistracy that searched earlier cases for precedents to set a sentence by, and kept the record of them.",
+  "variants": [
+   "reikurikata"
+  ]
+ },
+ "ronin": {
+  "def": "A samurai with no lord, and so no stipend: a masterless samurai. At a magistracy's court most ronin sat with the commoners on the gravel, and only those of good lineage sat on the lower veranda.",
+  "variants": [
+   "ronin",
+   "ronins",
+   "rōnin"
+  ]
+ },
+ "komo": {
+  "def": "Coarse matting woven of straw or rush, rougher than a mushiro. At a magistracy's court the town officials, headmen and landlords knelt on it behind the accused.",
+  "variants": [
+   "komo",
+   "komo matting"
+  ]
  }
 }
