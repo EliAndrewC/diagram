@@ -939,7 +939,8 @@
   "def": "A settlement's own tutelary shrine, the seat of the deity that guards it.",
   "variants": [
    "chinju",
-   "Chinjusan"
+   "Chinjusan",
+   "tutelary shrine"
   ]
  },
  "chinju no mori": {
@@ -5636,7 +5637,8 @@
   "def": "A hip-and-gable roof: hipped on its lower slopes, with a small gable at each end of the ridge.",
   "variants": [
    "irimoya",
-   "irimoya-roofed"
+   "irimoya-roofed",
+   "hip-and-gable"
   ]
  },
  "nagare-zukuri": {
@@ -6456,6 +6458,26 @@
    "dispersed farmsteads"
   ]
  },
+ "sanheyuan": {
+  "def": "The Chinese three-sided courtyard house: a main range with a wing projecting forward at each end, the fourth side a wall - the courtyard house with its front row left off.",
+  "variants": [
+   "sanheyuan"
+  ]
+ },
+ "chumon-zukuri": {
+  "def": "A farmhouse of northern Japan (Yamagata, Akita, Fukushima) whose front wing, projecting from the main house, holds the entrance and often the stable - an L-shaped plan like the magariya.",
+  "variants": [
+   "chumon-zukuri"
+  ]
+ },
+ "bunto house": {
+  "def": "A farmhouse built as two roofs side by side - the living rooms under one, the earth-floored work room under the other, eaves touching and a gutter between - used inside as one house.",
+  "variants": [
+   "bunto house",
+   "bunto houses",
+   "bunto type"
+  ]
+ },
  "waki-honjin": {
   "def": "The second-rank lodging for lords at a Japanese post station: smaller than the honjin but furnished to its standard, raised audience room and all, and open to ordinary travelers whenever no lord was using it.",
   "variants": [
@@ -6486,12 +6508,69 @@
    "ekika"
   ]
  },
+ "gabled roof": {
+  "def": "A roof of two slopes meeting at a ridge that runs the whole length of the house, leaving a triangular wall (the gable) at each end; kirizuma in Japanese.",
+  "variants": [
+   "gabled roof",
+   "gabled",
+   "gable roof",
+   "kirizuma"
+  ]
+ },
+ "hongawara": {
+  "def": "The heavy full tile roof of flat pan tiles and round cover tiles laid in alternate rows, the older and costlier of the two Japanese tile roofs.",
+  "variants": [
+   "hongawara",
+   "hongawara tile"
+  ]
+ },
+ "pent roof": {
+  "def": "A lean-to roof of one slope set against a wall of a house, below its main roof.",
+  "variants": [
+   "pent roof",
+   "pent roofs"
+  ]
+ },
+ "Sagami": {
+  "def": "An old province of eastern Japan, roughly the present Kanagawa prefecture, southwest of Edo.",
+  "variants": [
+   "Sagami",
+   "Sagami province"
+  ]
+ },
+ "Kawachi": {
+  "def": "An old province of central Japan, the eastern part of the present Osaka prefecture, bordering Nara.",
+  "variants": [
+   "Kawachi",
+   "Kawachi province"
+  ]
+ },
+ "gable end": {
+  "def": "The triangular end wall under the peak of a gabled roof, as opposed to a long side under the eaves; a building \"entered at its gable end\" has its door in that wall.",
+  "variants": [
+   "gable end",
+   "gable ends",
+   "gable-entry"
+  ]
+ },
  "Sanyodo": {
   "def": "One of the great roads of ancient Japan's highway system, along which relay stations (ekika) were set in principle one every 16 km (about ten miles), each keeping 20 horses.",
   "variants": [
    "Sanyodo",
    "San'yodo",
    "Sanyo-do"
+  ]
+ },
+ "tsunoya": {
+  "def": "A Japanese farmhouse with a separate wing joined onto the main block, making an L; the name used in western Japan for the form called magariya or chumon-zukuri in the north.",
+  "variants": [
+   "tsunoya"
+  ]
+ },
+ "sugoya": {
+  "def": "A Japanese farmhouse whose whole building stands under a single roof - the \"straight house\", as against the L-plan tsunoya or magariya.",
+  "variants": [
+   "sugoya"
   ]
  },
  "rin": {
@@ -6552,6 +6631,22 @@
    "kozashi"
   ]
  },
+ "aisle": {
+  "def": "A strip of floor added along one long side of a building, under the same roof carried further down, which widens the house a little without raising its ridge.",
+  "variants": [
+   "aisle",
+   "aisles"
+  ]
+ },
+ "four-room type": {
+  "def": "The common farmhouse plan whose raised-floor part is divided into four rooms, beside the earth-floored doma; most larger plans are this one with rooms or a stable added.",
+  "variants": [
+   "four-room type",
+   "four-room",
+   "yomadori",
+   "四間取り"
+  ]
+ },
  "staggered shelves": {
   "def": "Shelves set at offset heights in a recess beside the tokonoma, a fixture of the formal shoin-style reception room.",
   "variants": [
@@ -6584,6 +6679,26 @@
    "battalion cities"
   ]
  },
+ "Chugoku": {
+  "def": "The western end of Honshu, between the Kinki region and Kyushu; with Kinki, the heart of western Japan's plow-cattle region in the 1886 count.",
+  "variants": [
+   "Chugoku"
+  ]
+ },
+ "weilongwu": {
+  "def": "An enclosed Hakka house of south China: a central hall with wings, closed at the back by a ring of rooms for kitchens, stores, privies, pigsties and hen coops, built so its household could live self-sufficient inside its own walls.",
+  "variants": [
+   "weilongwu",
+   "hall-and-wing house",
+   "hall-and-wing houses"
+  ]
+ },
+ "hsien": {
+  "def": "An older (Wade-Giles) spelling of xian, a county of imperial and Republican China, the unit governed from a county seat.",
+  "variants": [
+   "hsien"
+  ]
+ },
  "town ground": {
   "def": "Land governed by the town magistrate as the townsmen's ground, where their houses and shops stand, as against the ground of daimyo mansions and of temples and shrines.",
   "variants": [
@@ -6605,6 +6720,48 @@
    "Nipponica"
   ]
  },
+ "kune": {
+  "def": "The Kanto name for a farmstead's windbreak grove, and also a hedge or a fence of woven bamboo along a plot's edge; the word itself means the line between two holdings.",
+  "variants": [
+   "kune",
+   "kune-gaki"
+  ]
+ },
+ "kyogen": {
+  "def": "A short comic play of the Noh theater, performed between the Noh pieces.",
+  "variants": [
+   "kyogen",
+   "kyōgen"
+  ]
+ },
+ "heping": {
+  "def": "The drying floor of packed or plastered earth in front of a south-China house, where rice was threshed and dried; at a Hakka weilongwu it lies between the half-moon pond and the house.",
+  "variants": [
+   "heping",
+   "hepings",
+   "禾坪"
+  ]
+ },
+ "Luban ruler": {
+  "def": "A Chinese builder's ruler marked in lucky and unlucky lengths, used to fix a house's dimensions; named for Lu Ban, the patron of carpenters.",
+  "variants": [
+   "Luban ruler",
+   "Luban rulers",
+   "鲁班尺"
+  ]
+ },
+ "Xiang-Gan": {
+  "def": "The building tradition of Hunan (Xiang) and Jiangxi (Gan) in south-central China, set beside the Cantonese (Guangfu) tradition.",
+  "variants": [
+   "Xiang-Gan"
+  ]
+ },
+ "Guangfu": {
+  "def": "Cantonese: the Cantonese-speaking inhabitants of Guangdong and their building tradition, whose villages usually keep their main lane at the front.",
+  "variants": [
+   "Guangfu"
+  ]
+ },
  "Northern Wei": {
   "def": "A dynasty that ruled north China in the fifth and sixth centuries; the farm manual Qimin yaoshu was written under it.",
   "variants": [
@@ -6615,6 +6772,19 @@
   "def": "A Japanese publisher of encyclopedias; \"the Heibonsha article\" is the entry from its encyclopedia, one of the reference works whose articles Kotobank reprints beside Nipponica.",
   "variants": [
    "Heibonsha"
+  ]
+ },
+ "animal unit": {
+  "def": "A count of livestock in which beasts of different sizes are weighted to one common measure, so that a large beast like a water buffalo counts for more than a pig or a goat.",
+  "variants": [
+   "animal unit",
+   "animal units"
+  ]
+ },
+ "Chubu": {
+  "def": "The central region of Honshu, between Kanto and Kinki, running from the Pacific coast across the mountains to the Sea of Japan coast; Niigata is in it.",
+  "variants": [
+   "Chubu"
   ]
  },
  "ryobu": {
@@ -6738,11 +6908,155 @@
    "house manager's"
   ]
  },
+ "mizunomi": {
+  "def": "A landless villager of Edo Japan: holding no assessed land, not counted a full villager and given no part in village government, living as a tenant, by labor or by a craft.",
+  "variants": [
+   "mizunomi"
+  ]
+ },
+ "kadoya": {
+  "def": "A dependent farming household of Edo Japan, named for the gate-hut on its master's plot where it lived; the huts inside a larger farm's enclosure held such households.",
+  "variants": [
+   "kadoya"
+  ]
+ },
+ "kaisho": {
+  "def": "A village's meeting hall; in the Kinki region, around Kyoto and Osaka, it often stood inside the precinct of the village's tutelary shrine.",
+  "variants": [
+   "kaisho"
+  ]
+ },
+ "gōnō": {
+  "def": "A rich farmer-landlord of Edo Japan: one of the village landlords who grew from the middle of the eighteenth century, out of older landlord families or out of trade.",
+  "variants": [
+   "gōnō",
+   "gono"
+  ]
+ },
+ "ancestral hall": {
+  "def": "A Chinese lineage's hall (citang) for its ancestors' rites, also where the lineage met and feasted; in a Cantonese village the halls stand at the front, facing the pond.",
+  "variants": [
+   "ancestral hall",
+   "ancestral halls",
+   "citang",
+   "祠堂"
+  ]
+ },
  "Yoshimune": {
   "def": "Tokugawa Yoshimune, the shogun of the Kyoho era, under whom Edo was first ordered, from 1722, to roof in tile and build in plastered, fire-resistant construction.",
   "variants": [
    "Yoshimune",
    "Tokugawa Yoshimune"
+  ]
+ },
+ "nago": {
+  "def": "A dependent farmer of Japan tied to a powerful household, who rented from it the house plot and house as well as fields, and often lived on its plot.",
+  "variants": [
+   "nago"
+  ]
+ },
+ "yashikichi": {
+  "def": "A house plot: the ground a farmhouse and its outbuildings stood on, which a domain's land survey measured and allowed to each farmer, usually a few se.",
+  "variants": [
+   "yashikichi"
+  ]
+ },
+ "myoden": {
+  "def": "A \"named field\": land recorded under the name of the holder who answered for its tax. A myoden landlord came from one of these old landholding families of a village.",
+  "variants": [
+   "myoden",
+   "myōden",
+   "myoden landlord",
+   "myoden landlords"
+  ]
+ },
+ "sakutoku": {
+  "def": "The part of a harvest left after the lord's yearly tax. A sakutoku landlord let their land to tenants and lived on that share as rent.",
+  "variants": [
+   "sakutoku",
+   "sakutoku landlord",
+   "sakutoku landlords"
+  ]
+ },
+ "hikan": {
+  "def": "A hereditary dependent of a powerful farming household, bound to serve it. Hikan held no house plot of their own and often lived in an outbuilding or a hut on their master's plot.",
+  "variants": [
+   "hikan"
+  ]
+ },
+ "branch household": {
+  "def": "A new household split off from a family's main house and given its own house plot and land.",
+  "variants": [
+   "branch household",
+   "branch households",
+   "branch house",
+   "branch houses"
+  ]
+ },
+ "kaigisho": {
+  "def": "A village meeting hall; a name used beside kaisho for the halls the Kinki region set up from early times.",
+  "variants": [
+   "kaigisho"
+  ]
+ },
+ "nenbutsu": {
+  "def": "Chanting the Buddha's name; a nenbutsu hall was a hall for that chanting, and in older times one of the places a village meeting was held.",
+  "variants": [
+   "nenbutsu",
+   "nembutsu"
+  ]
+ },
+ "festival lodging": {
+  "def": "The house that hosted a village festival; some villages held their meeting there after the festival.",
+  "variants": [
+   "festival lodging",
+   "festival's host house",
+   "festival host house"
+  ]
+ },
+ "purlin": {
+  "def": "A roof beam running along the length of a building under the rafters; a Chinese hall's depth is counted in purlins - the rear halls at Langtou, of thirteen purlins, are 8.5 to 9 meters deep.",
+  "variants": [
+   "purlin",
+   "purlins"
+  ]
+ },
+ "three-bay two-corridor house": {
+  "def": "The common house of a Cantonese village, three bays wide, built in rows behind the village's ancestral halls.",
+  "variants": [
+   "three-bay two-corridor house",
+   "three-bay two-corridor houses"
+  ]
+ },
+ "honbyakusho": {
+  "def": "The landholding farmers of an Edo-period village, who made up most of the village meeting.",
+  "variants": [
+   "honbyakusho",
+   "hon-byakusho"
+  ]
+ },
+ "komae": {
+  "def": "The small farmers of an Edo-period village, below the officials and leading men; later in the period they came to take part in the village meeting.",
+  "variants": [
+   "komae"
+  ]
+ },
+ "hirakata": {
+  "def": "The ordinary villagers of an Edo-period village, below the officials and leading men; named with the komae as those who later joined the village meeting.",
+  "variants": [
+   "hirakata"
+  ]
+ },
+ "Taiji": {
+  "def": "In Chinese thought, the one whole that divides into yin and yang - which is why the Hakka read a half-moon pond (yin) and the mound behind the house (yang) as the two halves of one arrangement.",
+  "variants": [
+   "Taiji"
+  ]
+ },
+ "metamorphosis fengshui": {
+  "def": "The Taiwan Hakka Museum's English name for the school of fengshui its page on half-moon ponds describes: a house built lower at the front and higher at the back, so that a household's luck rises step by step, with the half-moon pond and the mound behind the house read as yin and yang.",
+  "variants": [
+   "metamorphosis fengshui"
   ]
  }
 }
