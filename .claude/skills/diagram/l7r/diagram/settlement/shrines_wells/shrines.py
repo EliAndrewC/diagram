@@ -15,6 +15,7 @@ from .._geom import (
 )
 from .._knobs import roll_torii_count
 from ..finish import caption_record_box
+from .torii import torii_plan_svg
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -79,13 +80,9 @@ class ShrineHallsMixin:
         self.add(f'<rect x="{x0:.0f}" y="{y0:.0f}" width="{w}" height="{h}" rx="2" fill="#C9876C" stroke="#6B2A18" stroke-width="1.4"/>')
         self.add(f'<rect x="{x0:.0f}" y="{y0:.0f}" width="{w}" height="5" fill="#A03020"/>')  # vermilion roof ridge
         ty = y + h / 2 + max(self.px(8), 3)  # a little torii just in front (south)
-        m2 = self.px(9.0) / 2  # TRUE SCALE: a wayside-shrine torii spans ~9 ft (vs the shed's ~32 ft)
-        self.add(
-            f'<g transform="translate({x:.0f},{ty:.0f})"><line x1="{-m2 * 0.87:.1f}" y1="0" x2="{m2 * 0.87:.1f}" y2="0" stroke="#A03020" stroke-width="{max(self.px(1.2), 1.4):.2f}"/>'
-            f'<line x1="{-m2:.1f}" y1="{-m2 * 0.5:.1f}" x2="{m2:.1f}" y2="{-m2 * 0.5:.1f}" stroke="#A03020" stroke-width="{max(self.px(1.0), 1.2):.2f}"/>'
-            f'<line x1="{-m2 * 0.62:.1f}" y1="{-m2 * 0.5:.1f}" x2="{-m2 * 0.62:.1f}" y2="{m2 * 0.75:.1f}" stroke="#A03020" stroke-width="{max(self.px(1.0), 1.2):.2f}"/>'
-            f'<line x1="{m2 * 0.62:.1f}" y1="{-m2 * 0.5:.1f}" x2="{m2 * 0.62:.1f}" y2="{m2 * 0.75:.1f}" stroke="#A03020" stroke-width="{max(self.px(1.0), 1.2):.2f}"/></g>'
-        )
+        # TRUE SCALE: a wayside-shrine torii spans ~9 ft (vs the shed's ~32 ft), drawn IN PLAN like every
+        # arch (feature 268, D3) so one map carries one arch vocabulary.
+        self.add(torii_plan_svg(x, ty, self.ftpx, 9.0))
         self.M["religious"].append({"kind": "small_shrine", "x": x, "y": y, "w": w, "h": h, "rot": 0})
         self.placed.append((x, y, w, h))
         bm = 16

@@ -266,8 +266,6 @@ def two_court_zoning(plan: ParsedPlan) -> list[str]:
 
 AXIS_TOL_FT: float = 3.0  # the sanctuary's center may stray this far from the approach axis
 EDGE_TOL_FT: float = 2.0  # the arch stands AT the precinct edge: within this of it
-FENCE_ID = "fence"
-_FENCE_RE = re.compile(r'<g\b[^>]*\bid="fence"')
 
 
 def _one(plan: ParsedPlan, ident: str) -> Rect | None:
@@ -336,11 +334,24 @@ def well_clear_of_arch(plan: ParsedPlan) -> list[str]:
     return out
 
 
-def fence_not_wall(text: str, plan: ParsedPlan) -> list[str]:
-    """The precinct is bounded by a fence or hedge (a group marked id=\"fence\"), never by a compound wall."""
+def no_precinct_enclosure(text: str, plan: ParsedPlan) -> list[str]:
+    """A village shrine's precinct is NOT enclosed (feature 268; research/religion-and-death.html 'Was a
+    village shrine walled or fenced?'): its ground is marked by its arch and its wood. Every dated fence
+    the research found rings the sanctuary alone (a Taisho/Showa donation) or lines the approach, and a
+    wall is a temple's rank mark. So a fence group whose extent takes in the hall - a precinct fence - is
+    reported, as is a compound wall stroke at the sheet's edge; a fence around the sanctuary alone (a
+    richer shrine's donation, on the wealth knob) passes. `text` is kept for the registry's signature."""
+    del text
     out: list[str] = []
-    if not _FENCE_RE.search(text):
-        out.append('no fence or hedge bounds the precinct (a `<g id="fence">` of fence strokes)')
+    hall = plan.by_id("hall")
+    if plan.fence_segs and hall:
+        fx0 = min(r.x for r in plan.fence_segs)
+        fy0 = min(r.y for r in plan.fence_segs)
+        fx1 = max(r.x + r.w for r in plan.fence_segs)
+        fy1 = max(r.y + r.h for r in plan.fence_segs)
+        h = hall[0]
+        if fx0 <= h.x and fy0 <= h.y and fx1 >= h.x + h.w and fy1 >= h.y + h.h:
+            out.append("a fence rings the precinct (its extent takes in the hall) - a village shrine's ground is marked by its arch and its wood; a fence rings the sanctuary alone, and only as a richer shrine's donation")
     minx, miny, maxx, maxy = plan.bounds
     tol = EDGE_TOL_FT * FTPX
     for band in plan.wall_bands:
@@ -348,7 +359,7 @@ def fence_not_wall(text: str, plan: ParsedPlan) -> list[str]:
             continue
         cx, cy = _center(band)
         if min(abs(cx - minx), abs(cx - maxx), abs(cy - miny), abs(cy - maxy)) <= tol + max(band.w, band.h):
-            out.append(f"a compound wall stroke at svg({band.x:.0f},{band.y:.0f}) bounds the precinct - a shrine is fenced, a compound is walled")
+            out.append(f"a compound wall stroke at svg({band.x:.0f},{band.y:.0f}) bounds the precinct - a village shrine is neither walled nor fenced")
             break
     return out
 

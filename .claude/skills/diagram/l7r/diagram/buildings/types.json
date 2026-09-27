@@ -230,7 +230,7 @@
       "sanctuary_on_axis",
       "arch_on_approach",
       "well_clear_of_arch",
-      "fence_not_wall",
+      "no_precinct_enclosure",
       "fire_water_adrift",
       "tubs_in_buildings",
       "tubs_on_wells"
