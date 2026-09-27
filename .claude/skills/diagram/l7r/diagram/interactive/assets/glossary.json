@@ -6296,12 +6296,6 @@
    "funadama"
   ]
  },
- "to": {
-  "def": "A Japanese measure of volume, a tenth of a koku. An Edo-period rice bale held about 2 to 5 to, and the later standard bale held 4 to.",
-  "variants": [
-   "to"
-  ]
- },
  "sho": {
   "def": "A Japanese measure of volume, a tenth of a to. The shogunate's rice bale held 3 to and 5 sho.",
   "variants": [
@@ -6319,6 +6313,35 @@
   "def": "Plastered-storehouse construction: thick earth-and-plaster walls and plaster-faced doors, used for storehouses and, in Edo after the Kyoho era, spread by order to townhouses for fire prevention.",
   "variants": [
    "dozo-zukuri"
+  ]
+ },
+ "volatiles": {
+  "def": "The gases and tars still held in charcoal that was not fully charred; charcoal high in them heats itself most readily and is the most prone to catching fire on its own.",
+  "variants": [
+   "volatiles",
+   "volatile",
+   "high-volatile"
+  ]
+ },
+ "coke": {
+  "def": "A fuel made by baking soft (bituminous) coal free of its gases; by the end of the 11th century it replaced charcoal in much of north China's iron smelting.",
+  "variants": [
+   "coke",
+   "bituminous coke"
+  ]
+ },
+ "fully-involved": {
+  "def": "Of a fire: burning across the whole of its fuel at once, rather than at one spot.",
+  "variants": [
+   "fully-involved",
+   "fully involved"
+  ]
+ },
+ "piloted ignition": {
+  "def": "The catching fire of a material, such as timber, heated by a nearby fire when a flame or spark is there to light it; the heat reaching it (the heat flux) at which wood so ignites is what a separation rule for timber rests on.",
+  "variants": [
+   "piloted ignition",
+   "piloted-ignition"
   ]
  }
 }
