@@ -11,7 +11,9 @@ re-checked against those saved files by the session with grep. They are VERBATIM
 of primary importance: (1) legibility, and (2) association." And: "your labels should be shifted up or down from
 their associated point feature." On the gap: "how closely your labels and points are placed will depend on the
 size, shape, and density of your labels, points, and map. Most important is maintaining consistency throughout
-your map design." On lines: "(1) follow the feature, but not at the expense of legibility, (2) place labels above
+your map design." The same paragraph: "map elements that appear too tightly packed are generally undesirable". On
+leaders: "Leader lines can be used to connect features with labels that do not fit on or directly adjacent to their
+respective feature on the map." and "use leader lines sparingly." On lines: "(1) follow the feature, but not at the expense of legibility, (2) place labels above
 lines rather than below, (3) don't write upside down." It lists Imhof 1975 as reading and notes that authorities
 differ slightly on the exact ranking ("cartographers do not always agree on this specific order").
 
@@ -22,8 +24,14 @@ and the order in which the positions are tested. The default order, based on gui
 (2011) and other cartographic textbooks, is as follows: top right top left bottom right bottom left middle right
 middle left top, slightly right bottom, slightly left." And, for its Cartographic mode: "The placement priority is
 clockwise from the "top right"." The distance: "Labels can be placed: at a set Distance in supported units, either
-from the point feature itself or from the bounds of the symbol used to represent the feature". The cap: "The label
-only moves to other positions if there's no room within the maximum distance at your preferred position."
+from the point feature itself or from the bounds of the symbol used to represent the feature". Two options decide
+between nearness and position, and the DEFAULT is nearness: "There are two options: Prefer closer labels: By
+default, labels are kept close to the feature." The other is the non-default "Prefer position ordering: The label
+will try to stay in a specific position (like top left or top right), even if it's a bit farther away from the
+feature. The label only moves to other positions if there's no room within the maximum distance at your preferred
+position." For an area: "Around Centroid: places the label within a preset distance around the centroid, with a
+preference for the placement directly over the centroid" and "The preferred placement is further from the edges of
+the polygon."
 
 **The cost formulation.** Christensen, Marks & Shieber, "An Empirical Study of Algorithms for Point-Feature Label
 Placement", ACM Transactions on Graphics 14(3), 1995 (public PDF on the author's site,
@@ -54,8 +62,11 @@ they only cross one road instead of several."
 
 **Leader lines.** QGIS, same manual, Callouts: "A common practice when placing labels on a crowded map is to use
 callouts - labels which are placed outside (or displaced from) their associated feature are identified with a
-dynamic line connecting the label and the feature." With the Esri note above, a leader is what licenses a label
-beyond its normal offset.
+dynamic line connecting the label and the feature." Esri adds the leader "to remove ambiguity and place the labels up
+to the maximum offset" - that is, in the band beyond the preferred offset - and PSU (above) connects "labels that do
+not fit on or directly adjacent to their respective feature" and says to use them "sparingly". All three tie the
+leader to a label no longer directly adjacent at its preferred offset. Esri's default maximum offset is 100 percent
+of the preferred (a label does not leave its preferred offset at all); 200 percent is its worked example.
 
 **A rotated feature's label.** Esri ArcGIS Pro, "Set point label rotation"
 (https://pro.arcgis.com/en/pro-app/latest/help/mapping/text/set-label-rotation-using-a-numeric-field.htm): "The
@@ -108,7 +119,10 @@ settlement engine only and missed every Mode A sheet; `spec-fidelity` found it (
   field's center). Of these only the notice board is on a live map: every pool hamlet's `labels` holds exactly one
   record, "notice board".
 - Hand-seated by their callers: 51 `self.label(x, y, ...)` calls, a few of them inside the label machinery itself,
-  the rest in the town, city and capital tiers, whose coordinates the calling code computes (a ministry's name
+  the rest in the town, city and capital tiers, whose coordinates the calling code computes. By function (an AST walk over
+  `settlement/`): four are the label machinery itself or captions this feature converts (`captions.py` `place_labels` and
+  `_draw_queued_label`, `boards.py` `_draw_board_caption`, `ground.py` `_finish_road_label`); the other 47, in 34
+  functions, are the town, city and capital tiers' (a ministry's name
   written across its own roof, a hall caption a fixed drop below it). No live generator runs any of them; the maps
   that used them are frozen exhibits.
 
