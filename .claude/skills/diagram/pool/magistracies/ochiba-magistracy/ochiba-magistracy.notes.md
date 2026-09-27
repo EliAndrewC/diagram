@@ -14,6 +14,17 @@
 6. **Tenure character**: office-continuity hybrid. The relics and warding duties pass with the OFFICE (every County Magistrate of Ochiba since the Year of the Long Cutting), but the posting is not lineage-held - hence NO ancestral alcove with predecessor tablets (see the grounding rule).
 7. **Resident particulars** (the "Ochiba slot"): Tatsuya is a senior priest of Inari, so the shrine is a full two-altar HALL (Ta-no-Kami west / Myobu east) - the documented L5R divergence, justified by the priest-magistrate, not the generic norm. The Akami-fude and Chigiri-no-Chou live at the Myobu altar; the Fox-Fire Lantern is kept at the Ta-no-Kami altar by day (its on-sheet sublabel) and goes to the dais at evening hearings. The cinnabar workshop colonnade adjoins the shrine (threshold-stone painting). A PAIR of vermillion threshold stones flank the main-gate passage (one each side, not blocking it; the service gate has none), with the **Pact-Bowl buried beneath** them - the senior checkpoint of the Fox road-warding system (see l7r.md). On-sheet they carry the label `Vermillion threshold stones` + sublabel `(and buried Pact-Bowl)`; the fuller "senior Pact-Bowl checkpoint" framing lives here in the notes, not on the sheet.
 8. **Justice-front furniture**: single hearing court; notice board outside the gate; the Fox-Fire Lantern is the evening-court particular.
+9. **The forms the research leaves open** (feature 267; `specs/267-compound-research-owed/forms.md` holds all three sheets side by side):
+   - residence: ONE BLOCK under one roof - an ordinary rotating posting has no ground for halls in echelon (R02); west to east the family, Tatsuya's rooms, the guest room and the reception deepest at the east end (R03).
+   - approach: the GENKAN on the office hall's east end, up from the forecourt (R07) - the porch on the reception is gone.
+   - kitchen hearth: a kamado range on a small doma (R13); the bath a small addition on the kitchen range (R09).
+   - granary: an EARTH-WALLED kura, plastered, no posts (R18).
+   - guardroom: a gatehouse of its own beside the gate, ~18 by 14 ft (R19); the main gate a one-bay yakuimon, ~8 ft (R26).
+   - wall: ~3 ft, the heavier rammed-earth form, as the GM's ruling drew it (R27).
+   - hearing court: ROOFED, white gravel (R22); straw mats for the accused, the plaintiff and the village officials (R23); the cell 12 by 10 ft (R24).
+   - garden: a pond garden (R30); the striking posts upright (R34).
+   - shrine: several kami in one hall, each at its own altar - an attested form (R36).
+
 
 ## Deliberate choices and tolerated stretches
 
@@ -71,15 +82,17 @@
 
 ### Features
 
-- **compound shrine**: Ochiba's shrine is a full hall with two altars - Ta-no-Kami (rice) to the west, the Myobu (fox) to the east - rather than the modest shrine a magistracy usually keeps. That is a deliberate departure: Magistrate Kitsune Tatsuya is a senior priest of Inari. Even so, the hall stays smaller than the residence.
+- **compound shrine**: Ochiba's shrine is a full hall with two altars - Ta-no-Kami (rice) to the west, the Myobu (fox) to the east. Several kami kept in one hall, each at an altar of its own, is an ordinary form; a hall this large, rather than the modest shrine a magistracy usually keeps, is a deliberate departure: Magistrate Kitsune Tatsuya is a senior priest of Inari. Even so, the hall stays smaller than the residence.
 - **threshold stones**: Drawn larger than the canon's two-fist field stones on purpose: Ochiba is where the threshold stones are made and painted. This map frames the pair as the senior checkpoint of the Fox road wardings - the sheet's own framing, since the canon makes the County Magistrate of Ochiba, a Fox priest, the keeper of all the wardings along the road rather than of one checkpoint above the others. The service gate has none.
 - **fox-fire lantern**: The setting's record describes the lantern: a squat hexagonal lantern of pale gray granite from the hills above Ochiba village, carved by the stonemason Kitsune Goro after his acquittal on a false charge of shorting his village's tax grain, and lit only for grain-tax hearings held in the evening, where its flame is said to flicker blue when a witness conceals the truth about a harvest. On this sheet it rests at the Ta-no-Kami altar of the Inari hall by day, and Tatsuya carries it to the dais himself for an evening hearing.
 - **fox relics**: The Akami-fude is the brush that paints the fox-tracks on each new threshold stone, and it rests on its own stand at the Myobu altar, as the setting's record has it, as does the Chigiri-no-Chou. Both pass with the office, not the family: every County Magistrate of Ochiba since the Year of the Long Cutting has kept them.
 - **cinnabar workshop**: The colonnade adjoins the Inari hall.
 - **residence**: There is no ancestral alcove - Ochiba is not held by one lineage, and what passes down here passes with the office.
-- **garden**: The inner garden lies before the reception room and the guest room, across their veranda; a guest of rank crosses it from the household gate to the formal entrance on the reception bay.
-- **guest quarters**: Ochiba keeps no guest house; the guest room is a bay of the residence's east block.
+- **garden**: The inner garden lies before the house, across its veranda.
+- **genkan**: A guest of rank comes up from the forecourt to the genkan at the office hall's east end, and is taken through to the house.
+- **residence**: One house under one roof: the family's rooms at the west end, then Tatsuya's, then the guest room and the reception at the east end.
+- **guest quarters**: Ochiba keeps no guest house; the guest room is a room of the residence beside the reception.
 - **retainers' quarters**: The whole working platoon lives on the grounds: the senior retainers in these quarters by the stables, the junior samurai and the standing ashigaru in the barracks.
 - **practice ground**: The practice ground lies west of the office hall, beside the senior retainers' quarters, where part of the platoon lodges; the barracks stands well away from it, in the southeast of the outer court.
-- **granary**: Ochiba has no river and no landing: it is a land county on the Imperial road, and its tax grain is staged by cart along the road toward Nagahara, so it keeps a single staging kura rather than a row of granaries.
-- **fire-water tubs**: Eleven tubs, two of them at the kitchen - inside the program's band of about eight to twelve, weighted to the institutional, fire-prone buildings. Ochiba's deliberate exceptions: the plaster tax archive carries none, because a kura is built not to burn, and neither do the karo's house and the senior retainers' quarters. The wooden, vented granary does carry one.
+- **granary**: Ochiba has no river and no landing: it is a land county on the Imperial road, and its tax grain is staged by cart along the road toward Nagahara, so it keeps a single staging kura rather than a row of granaries - an earth-walled one, plastered white, on the ground.
+- **fire-water tubs**: Ten tubs, two of them at the kitchen - inside the program's band of about eight to twelve, weighted to the institutional, fire-prone buildings. Ochiba's deliberate exceptions: the plaster tax archive and the plaster granary carry none, because a kura is built not to burn, and neither do the karo's house and the senior retainers' quarters.

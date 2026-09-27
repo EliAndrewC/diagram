@@ -159,7 +159,7 @@ def test_two_court_zoning_wants_a_divider_a_court_and_a_gate_on_the_same_side() 
     _, plan = _plan(_wall((180, 220)), SAND_SOUTH)
     assert "no court divider" in s.two_court_zoning(plan)[0]
     _, plan = _plan(_wall((180, 220)), DIVIDER)
-    assert "no sanded hearing court" in s.two_court_zoning(plan)[0]
+    assert "no hearing court" in s.two_court_zoning(plan)[0]
     _, plan = _plan(DIVIDER, SAND_SOUTH)
     assert "no gate opening" in s.two_court_zoning(plan)[0]
     vertical = '<g stroke="#3F3A30" stroke-width="6"><line x1="200" y1="20" x2="200" y2="380"/></g>'

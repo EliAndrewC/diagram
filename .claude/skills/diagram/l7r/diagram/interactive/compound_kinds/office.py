@@ -52,16 +52,19 @@ class MagistratesDais(Kind):
     magistrate's seat at its center, between the clerks' seats.
 
     Why: A raised hall over kneeling litigants is common to both traditions this setting draws on, Japanese
-    and Chinese. The dais is not a pavilion of its own but the front of a deeper office hall, so the
-    magistrate hears cases in the same building where the day's paperwork is done.
+    and Chinese. At the Edo town magistracy the court was a hall in tiers: the top tier a tatami room where
+    the magistrate and the other officials sat, the magistrate in its innermost room, the examining officer
+    and the clerk in the room between, and a narrow board veranda at its very front; below it lay the floor
+    where the parties knelt. So the dais is not a pavilion of its own but the front of a deeper office hall,
+    and the magistrate hears cases in the same building where the day's paperwork is done.
 
     Note: The raised seat over the court, and its place at the front of the office hall, follow the record.
 
     Name: magistrate's dais
     Covers: the dais band on the office hall's court face, and its label
     Label: accurate
-    Sources: takayama-jinya-jawiki, takayama-jinya-city, neixiang-yamen-zhwiki
-    Entry: research/buildings.html - 'The courtroom is a room of the office hall, not a freestanding stage', 'Administrative culture is JAPAN-first for compound interiors'
+    Sources: oshirasu-jawiki, shirasu-kotobank, takayama-jinya-jawiki, takayama-jinya-city, neixiang-yamen-zhwiki
+    Entry: research/buildings.html - 'Who sat where at a hearing, and on what?', 'The courtroom is a room of the office hall, not a freestanding stage', 'Administrative culture is JAPAN-first for compound interiors'
     """
 
     key = "magistrate's dais"
@@ -69,25 +72,33 @@ class MagistratesDais(Kind):
 
 class ClerksRoom(Kind):
     """
-    What: The workroom of the county's few hired clerks, where the tax rolls and case papers are copied and
-    kept in order: a room of the office hall on some plans, a small building of its own beside it on others.
-    It is a place of work, never lodging.
+    What: The workroom of the county's few hired clerks, a room of the office hall beside the day office,
+    where the tax rolls and case papers are copied and kept in order. It is a place of work, never lodging.
 
-    Why: In both traditions the paperwork was run by locally hired commoners under a tiny elite staff; in
-    Japan the tedai were drawn from the peasants and townsmen who knew the district. Scaled to a county of
-    this setting, that is three or four clerks, scribes by caste (heimen), who live in town and come in to
-    the manor each day - and who, as permanent locals, are the office's memory under one magistrate after
-    another.
+    Why: At the Takayama intendant's office the clerks worked in rooms of the office: the workroom of the
+    officials hired from the district was partitioned off beside the room where the shogunate's own officials
+    worked, and a room used only for writing, where the documents sent to the shogunate were drawn up, had a
+    binding room beside it. At the Edo town magistracy, too, the duty rooms of two of its record sections
+    stood in the quarter of the compound that held its court. What stood apart as buildings of their own were
+    the staff's houses, never their workrooms. In both traditions the paperwork was run by locally hired
+    commoners under a tiny elite staff; in Japan the tedai were drawn from the peasants and townsmen who knew
+    the district. Scaled to a county of this setting, that is three or four clerks, scribes by caste
+    (heimen), who live in town and come in to the manor each day - and who, as permanent locals, are the
+    office's memory under one magistrate after another.
 
-    Note: the record finds the clerks, though their number of three or four is this project's scaling from a Chinese county population it gives no source for, and it says nothing of their room, and the program's workroom of about 28
-    by 18 ft for three or four clerks is a guess with no measured example behind it, whether it is drawn as a
-    room of the office hall or as a building of its own.
+    Note: The clerks' room as a room of the office hall follows the record. Their number of three or four is
+    this project's scaling from a Chinese county population the record gives no source for, and the room's
+    size, about 28 by 18 ft for three or four clerks, is a guess with no measured example behind it.
+
+    Caveat: Their number of three or four is this project's scaling from a Chinese county population the
+    record gives no source for, and the room's size, about 28 by 18 ft for three or four clerks, is a guess
+    with no measured example behind it.
 
     Name: clerks' room
-    Covers: the clerks' room inside the office hall, its floor and its label, or the clerks' own small building beside it
-    Label: guess
-    Sources: tedai-jawiki, xuli-zhwiki
-    Entry: research/buildings.html - 'Clerks are few, local, and heimen'
+    Covers: the clerks' room inside the office hall, its floor and its label
+    Label: accurate
+    Sources: mapple-takayama-jinya, edo-ashigaru-bugyosho, jinya-kotobank, tedai-jawiki, xuli-zhwiki
+    Entry: research/buildings.html - 'Where did the clerks work - in a room of the office hall, or a building of their own?', 'Clerks are few, local, and heimen'
     """
 
     key = "clerks' room"
@@ -123,34 +134,41 @@ class TaxArchive(Kind):
 
 class Granary(Kind):
     """
-    What: A raised storehouse with slatted vents, where the tax paid in grain waits
-    on its way to the governor: rice in straw bales above all, with a share of other grain beside it.
+    What: A vented storehouse where the tax paid in grain waits on its way to the governor: rice in straw
+    bales above all, with a share of other grain beside it. It takes one of two forms - a timber storehouse
+    raised on posts, or an earth-walled kura set with gaps for ventilation.
 
-    Why: Tax rice flowed from the village granaries through the magistrate's compound toward central stores,
+    Why: Both forms are attested. The storehouse on posts, the takakura, kept its floor high against rats and
+    damp; the rice storehouse of the Takayama intendancy is an earth-walled kura, its walls set with gaps for
+    ventilation, and a kura guarded its grain against fire, damp and theft. Tax rice flowed from the village granaries through the magistrate's compound toward central stores,
     so the office kura holds grain in transit plus a local reserve, and a county seat's granary stands inside
     the compound rather than in the town. Where water gives a county a way out, the grain moves on; a remote
     county, where transport costs more, keeps a row of kura instead. The lord's kura held the paddy tax as brown rice in straw
     bales, with a corner of unhulled rice kept against famine.
 
     Note: The kura, its rice and its place inside the compound follow the record, drawn at about 43 to 50 by
-    25 to 27 ft and checked against real kura sizes. The staging - tax rice passing through the compound and
+    25 to 27 ft and checked against real kura sizes, and so do its two forms, each sheet taking one. The
+    storehouse on posts is attested in Japan for the southern islands and the Ainu north rather than for an
+    intendant's office, whose grain store on the Takayama model is the earth-walled kura. The staging - tax rice passing through the compound and
     held there in transit beside a local reserve - is this map's own reading, which no source states, and the
     famine corner of unhulled rice is a simplification: Edo kept that reserve in separate community granaries,
     and one granary is drawn instead of two. That more of the dry-field tax arrives in kind - soybeans and
     barley in bales beside the rice - than it did in Edo Japan is this setting's own economics: Rokugan is
     rich in goods and poor in coin.
 
-    Caveat: The staging - tax rice passing through the compound and held there in transit beside a local
-    reserve - is this map's own reading, which no source states, and the famine corner of unhulled rice is a
+    Caveat: The storehouse on posts is attested in Japan for the southern islands and the Ainu north rather
+    than for an intendant's office, whose grain store on the Takayama model is the earth-walled kura. The
+    staging - tax rice passing through the compound and held there in transit beside a local reserve - is
+    this map's own reading, which no source states, and the famine corner of unhulled rice is a
     simplification: Edo kept that reserve in separate community granaries, and one granary is drawn instead of
     two. That more of the dry-field tax arrives in kind - soybeans and barley in bales beside the rice - than
     it did in Edo Japan is this setting's own economics: Rokugan is rich in goods and poor in coin.
 
     Name: granary
-    Covers: the vented granary kura and its label
+    Covers: the granary, on posts or earth-walled, and its label
     Label: accurate
-    Sources: takayama-jinya-city, takayama-jinya-jawiki, nishimawari-koro-jawiki, gokura-jawiki, hatakata-men-jawiki, kuramai-jawiki, kakoimai-jawiki
-    Entry: research/buildings.html - 'The granary is a staging node, not the terminal store', 'The granary holds grain, not just rice'; research/towns.html - 'Why is the magistrate's manor drawn as a plain walled box?'
+    Sources: takayukashiki-jawiki, takayama-onkura-heritage, dozo-jawiki, takayama-jinya-city, takayama-jinya-jawiki, nishimawari-koro-jawiki, gokura-jawiki, hatakata-men-jawiki, kuramai-jawiki, kakoimai-jawiki
+    Entry: research/buildings.html - 'Did a granary stand on posts, and why raise its floor away from a river?', 'The granary is a staging node, not the terminal store', 'The granary holds grain, not just rice'; research/towns.html - 'Why is the magistrate's manor drawn as a plain walled box?'
     """
 
     key = "granary"
@@ -163,23 +181,30 @@ class Cell(Kind):
 
     Why: Edo jails held the accused pending judgment; the sentences were exile, flogging, fines or death -
     not, in the ordinary case, time in prison - and light offenders were sent home to their villages.
-    Purpose-built prisons were separate compounds in the great cities. So a county magistracy keeps a cell or
-    two for remand and no prison block - and in Rokugan, where torture is unusual, no room built for
-    interrogation either.
+    Purpose-built prisons were separate compounds in the great cities, while a magistracy that judged cases
+    kept a temporary cell inside its own compound for those called before its court. So a county magistracy
+    keeps a cell or two for remand and no prison block - and in Rokugan, where torture is unusual, no room
+    built for interrogation either.
 
     Note: Small remand cells follow the record (though no page read names exile or fines as sentences, or
-    says light offenders were sent home), a real remand cage running about 10 by 12 ft. That a cell may
+    says light offenders were sent home), and so does a temporary cell inside the office's own compound. The
+    size of such a cell was not found, so the drawn size is a guess within the span of the single cell rooms
+    read, from Osaka's 6-mat cell (about 12 by 9 ft) to Tenmacho's 18-mat room (about 18 by 18 ft): about 12
+    by 10 ft, at the small end, because a county cell holds only a few until their hearing. That a cell may
     stand anywhere in the compound is this setting's own: Chinese regulation put the county jail on the
     south side (Neixiang's stood in its southwest), and Rokugan keeps no such rule.
 
-    Caveat: That a cell may stand anywhere in the compound is this setting's own: Chinese regulation put the
-    county jail on the south side (Neixiang's stood in its southwest), and Rokugan keeps no such rule.
+    Caveat: The size of such a cell was not found, so the drawn size is a guess within the span of the single
+    cell rooms read, from Osaka's 6-mat cell (about 12 by 9 ft) to Tenmacho's 18-mat room (about 18 by 18
+    ft): about 12 by 10 ft, at the small end, because a county cell holds only a few until their hearing.
+    That a cell may stand anywhere in the compound is this setting's own: Chinese regulation put the county
+    jail on the south side (Neixiang's stood in its southwest), and Rokugan keeps no such rule.
 
     Name: cell
     Covers: the barred holding cell and its label
     Label: accurate
-    Sources: tenmacho-jawiki, chuo-royashiki, neixiang-yamen-zhwiki, henan-neixiang, takayama-jinya-city
-    Entry: research/buildings.html - 'Cells are remand, not punishment', 'No interrogation room'
+    Sources: agariya-jawiki, roya-kotobank, edo-ashigaru-bugyosho, tenmacho-jawiki, chuo-royashiki, neixiang-yamen-zhwiki, henan-neixiang, takayama-jinya-city
+    Entry: research/buildings.html - 'How big was a holding cell?', 'Cells are remand, not punishment', 'No interrogation room'
     """
 
     key = "cell"
@@ -187,23 +212,31 @@ class Cell(Kind):
 
 class Gatehouse(Kind):
     """
-    What: A small guard post just inside the main gate and beside it - never across the opening - where the
-    watch keeps the door.
+    What: The watch's guardroom at the main gate, where the door is kept: either a small gatehouse of its own
+    just inside the gate and to one side, or a room of the long gate range the gate passes through - never
+    across the opening.
 
     Why: The main gate is the compound's one door for visitors on business, and a guard lodged beside it
-    controls it without closing the way; standing inside the wall and to one side, the post leaves the
-    passage clear into the forecourt.
+    controls it without closing the way. Both forms are attested. At the Kashiwara domain's seat the
+    guardroom, with an earth floor beside it, is a room of the gate range, a long building of about 81 by 12
+    ft with the gate through its middle, and at Matsue the gate range housed the gatekeepers. At Takayama the
+    gate and the gatekeepers' house were both built in 1832, the house a building of its own, and Edo castle's
+    gates had their guardrooms too.
 
-    Note: The program classes the gatehouse as accurate, a gate guard's post beside the opening of about 40 by
-    14 ft; the record holds no entry on a compound's gatehouse, and the size is the program's own.
+    Note: Both forms follow the record, and each sheet takes one; a depth of about 12 ft is attested for
+    both. The size of Takayama's gatehouse was not found: the one freestanding guardroom measured is about 18
+    by 12 ft, and a freestanding gatehouse drawn much longer, around 40 ft, is a guess at the gate range's
+    scale.
 
-    Caveat: the record holds no entry on a compound's gatehouse, and the size is the program's own.
+    Caveat: The size of Takayama's gatehouse was not found: the one freestanding guardroom measured is about
+    18 by 12 ft, and a freestanding gatehouse drawn much longer, around 40 ft, is a guess at the gate range's
+    scale.
 
     Name: gatehouse
-    Covers: the guard post beside the main gate and its label
+    Covers: the guard post beside the main gate, or the guardroom in the gate range, and its label
     Label: accurate
-    Sources: not recorded
-    Entry: research/buildings.html (no dedicated entry - recorded as silent)
+    Sources: tamba-kashiwara-jinya, matsue-bukeyashiki, takayama-jinya-city, takayama-jinya-jawiki, bansho-jawiki, kitain-bansho
+    Entry: research/buildings.html - 'Where did the gatekeepers sit - in the gate range, or a gatehouse beside it?'
     """
 
     key = "gatehouse"
@@ -245,25 +278,23 @@ class BenchNoticeBoard(Kind):
     What: The bench's own board, just outside the main gate, where the court posts what it produces -
     verdicts, edicts and bounties - for those who come to it.
 
-    Why: Every Edo town and village kept an official edict board, the kosatsuba, and set it where traffic
-    passed: at checkpoints and bridgeheads, at the entrance or center of a settlement, and before the gate of
-    the village officials' houses. A magistracy's board stands at its own gate, on the way everyone who has
-    business with the court must come.
+    Why: Every Edo town and village kept an official edict board, the kosatsuba, hung high where traffic
+    was heavy: at crossroads in a town's center, at its entrances, at bridge ends, barriers and ports, and
+    before the gate of the village officials' houses. That board, where the town posts the state's standing
+    law, is the attested one. Laws came to be posted at the gates of courts and offices only after the boards
+    were abolished, in the Meiji period, and the likely counterpart of a court's own board, the posting walls
+    at a Chinese county office's gate, could not be read. A magistracy's board stands at its own gate, on the
+    way everyone who has business with the court must come.
 
-    Note: The board and its roadside seat follow the record, which sets it before the gate of village
-    officials' houses but at no government office; that every town and village kept one is a reading of the
-    sources, not their words. That the bench keeps a board of its own, apart from the kosatsuba where the town
-    posts the state's standing law, is this project's own division; the record finds only the settlement's
-    board.
-
-    Caveat: That the bench keeps a board of its own, apart from the kosatsuba where the town posts the state's
-    standing law, is this project's own division; the record finds only the settlement's board.
+    Note: The bench keeping a board of its own at its gate, apart from the town's kosatsuba, is a guess: it is
+    this project's own division, and no page read puts a board at the gate of an intendant's office or a
+    magistracy. The town's board, sited where the traffic runs, follows the record.
 
     Name: notice board
     Covers: the board outside the main gate and its label
-    Label: accurate
-    Sources: ogose-kosatsuba, kosatsu-jawiki, adachi-kosatsu, kosatsu-enwiki, shoya-jawiki
-    Entry: research/urban-features.html - 'The notice board (kosatsuba) - siting is a TRAFFIC decision'
+    Label: guess
+    Sources: kosatsu-jawiki, ogose-kosatsuba, adachi-kosatsu, kosatsu-enwiki, shoya-jawiki
+    Entry: research/buildings.html - 'Did the magistrate post notices at the office's own gate, or on the town's notice board?'; research/urban-features.html - 'The notice board (kosatsuba) - siting is a TRAFFIC decision'
     """
 
     key = "notice board"
@@ -365,20 +396,27 @@ class OfficialStudy(Kind):
 
 class ClerksSeats(Kind):
     """
-    What: The clerks' places on the dais band, one to either side of the magistrate's seat, where a hearing's
-    proceedings would be written down.
+    What: The clerks' places in the office hall's front band, one to either side of the magistrate's seat and
+    above the court, where a hearing's proceedings are written down.
 
     Why: A hearing is a matter of record: what the parties say and what the magistrate rules is taken down on the
-    spot by the few clerks the office keeps.
+    spot by the few clerks the office keeps. At the Edo town magistracy the court was a hall in tiers, and the
+    clerk sat with the examining officer in the room between the magistrate's innermost room and the court;
+    some magistrates' courts set an upper tier apart for the examiners and the scribes. The clerks sit in the hall,
+    never on the court itself.
 
-    Note: the research record covers the clerks themselves, a few local commoners, but has no entry on who sat
-    beside the magistrate at a hearing or where, so the two seats flanking the dais, and their size, are a guess.
+    Note: The clerks' place in the hall, between the magistrate and the court and never on the court, follows
+    the record. How large that place was is not recorded, so the seats' size is a guess, and the plans set the
+    clerks to either side of the dais in one band rather than in a room of their own below it.
+
+    Caveat: How large that place was is not recorded, so the seats' size is a guess, and the plans set the
+    clerks to either side of the dais in one band rather than in a room of their own below it.
 
     Name: clerks' seats
     Covers: the two seats flanking the dais and their labels
-    Label: guess
-    Sources: not recorded
-    Entry: research/buildings.html (no dedicated entry - recorded as silent)
+    Label: accurate
+    Sources: oshirasu-jawiki, shirasu-kotobank
+    Entry: research/buildings.html - 'Who sat where at a hearing, and on what?'
     """
 
     key = "clerks' seats"
@@ -386,25 +424,27 @@ class ClerksSeats(Kind):
 
 class KneelingPositions(Kind):
     """
-    What: The marked places on the hearing court's sand where the parties to a case kneel before the dais -
-    witnesses, petitioners, the accused - each about the size of half a tatami mat.
+    What: The straw mats on the hearing court's floor where the parties to a case kneel before the dais: the
+    accused at the center, the plaintiff behind to one side, the village officials behind to the other.
 
     Why: A raised hall over kneeling litigants is common to both traditions this setting draws on: the magistrate
-    sits above on the dais, the parties kneel below in the court, and the examination room and the court were
-    one paired feature of the office block.
+    sits above on the dais, the parties kneel below in the court. At the Edo town magistracy peasants,
+    townsmen and lesser ronin knelt on straw mats spread on the court's gravel, while samurai, priests and
+    monks sat on the hall's verandas; the accused sat at the center, roped, with the town officials, headmen
+    and landlords behind on one side and the plaintiff behind on the other.
 
-    Note: Kneeling litigants below the raised hall follow the record. The marks' size is this project's own
-    figure; and at Takayama the court they kneel in was paved with stone and roofed, where these plans draw open
-    sand.
+    Note: Commoners kneeling on straw mats below the raised hall follow the record. The arrangement of the
+    mats is attested only at Edo, so carrying it to a county court is a guess, and the mats' size is this
+    project's own figure.
 
-    Caveat: The marks' size is this project's own figure; and at Takayama the court they kneel in was paved with
-    stone and roofed, where these plans draw open sand.
+    Caveat: The arrangement of the mats is attested only at Edo, so carrying it to a county court is a guess,
+    and the mats' size is this project's own figure.
 
     Name: kneeling positions
-    Covers: the kneeling marks on the hearing court and their label
+    Covers: the straw mats on the hearing court and their label
     Label: accurate
-    Sources: henan-neixiang, neixiang-yamen-zhwiki, takayama-jinya-jawiki, takayama-jinya-city
-    Entry: research/buildings.html - 'Administrative culture is JAPAN-first for compound interiors', 'The courtroom is a room of the office hall, not a freestanding stage'
+    Sources: oshirasu-jawiki, shirasu-kotobank, shirasu-imidas, henan-neixiang, neixiang-yamen-zhwiki
+    Entry: research/buildings.html - 'Who sat where at a hearing, and on what?', 'Administrative culture is JAPAN-first for compound interiors', 'The courtroom is a room of the office hall, not a freestanding stage'
     """
 
     key = "kneeling positions"
@@ -412,24 +452,28 @@ class KneelingPositions(Kind):
 
 class GranaryStilts(Kind):
     """
-    What: The posts that raise the granary's floor off the ground, drawn as small dark blocks at its foot.
+    What: The posts that raise the granary's floor off the ground, drawn as small dark blocks at its foot, where
+    the granary is a storehouse on posts.
 
-    Why: A grain storehouse keeps its floor raised: at the great rice stores on the river at Edo, the answer to
-    flood was the storehouse's own raised floor and a stone revetment, not distance from the water.
+    Why: The storehouse on posts, the takakura, kept its floor high to keep rats from the grain, with guards
+    against them, and to let the air through against damp. Neither reason is a river's, so both hold for a
+    granary away from the water as well as for one beside it; at the great rice stores on the river at Edo, a
+    raised floor answered flood besides. Such storehouses were still built in Japan on Amami Oshima, on
+    Hachijojima and among the Ainu into modern times.
 
-    Note: A storehouse's raised floor follows the record. How the floor was raised - on posts, as drawn, or on a
-    stone base - is not in the record, and the one reason it gives, flood at a river quay, fits only a granary by
-    the water; why one away from a river keeps its floor raised is not recorded.
+    Note: The floor raised on posts follows the record, as one of a granary's two forms; the other, an
+    earth-walled kura like the Takayama intendancy's rice store, is drawn with no posts. That rats and damp
+    hold away from a river is this project's reading of the reasons given, and how an earth-walled kura's
+    floor was raised was not found, so posts under one would be a guess.
 
-    Caveat: How the floor was raised - on posts, as drawn, or on a stone base - is not in the record, and the one
-    reason it gives, flood at a river quay, fits only a granary by the water; why one away from a river keeps its
-    floor raised is not recorded.
+    Caveat: That rats and damp hold away from a river is this project's reading of the reasons given, and how
+    an earth-walled kura's floor was raised was not found, so posts under one would be a guess.
 
     Name: granary stilts
     Covers: the posts at the granary's foot
     Label: accurate
-    Sources: kuramae-jawiki, wheatbaku-asakusa-okura
-    Entry: research/cities/capitals.html - "The sluice's lifting frame"
+    Sources: takayukashiki-jawiki, takayama-onkura-heritage, kuramae-jawiki, wheatbaku-asakusa-okura
+    Entry: research/buildings.html - 'Did a granary stand on posts, and why raise its floor away from a river?'; research/cities/capitals.html - "The sluice's lifting frame"
     """
 
     key = "granary stilts"

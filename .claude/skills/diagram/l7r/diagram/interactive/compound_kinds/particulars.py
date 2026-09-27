@@ -5,7 +5,7 @@ workshop, the fox relics), Hayakawa's river, landing and salt wards, and Ubame's
 boundary stones, charcoal store and wood-kami altar. A kind the SETTING makes - with no historical counterpart
 the record covers - is `deviation`, written from the GM's canon (`/host-l7r-repo/setting/l7r.md`, which needs no
 citation, so `Sources: not recorded`) and the map's design notes. A kind the record DOES cover (the river, the
-landing, the drawn border line, the charcoal store) keeps the record's classification, and what its one map
+landing, the drawn border line) keeps the record's classification, and what its one map
 adds is in that map's `.notes.md` "Map notes" block. A kind neither the record nor the canon covers (the salt
 wards) is a `guess`. The measurement behind every label is `specs/262-interactive-magistracy-pages/coverage.md`.
 """
@@ -120,22 +120,25 @@ class FoxRelics(Kind):
 
 class SaltWards(Kind):
     """
-    What: Small heaps of salt set in a pair outside a door of the compound, one on each side of the opening,
-    to keep ill fortune from crossing the threshold.
+    What: Small cones of salt set in a pair outside a door of the compound, one on each side of the opening,
+    set out for good fortune at the threshold.
 
-    Why: A ward works from outside, so the pair flanks each opening on its outer face rather than standing
-    inside the wall, and every door so warded carries its own pair - the gates, the posterns and the river
-    door alike.
+    Why: A small heap of salt at a doorway, morijio, is recorded in the late Edo period at the doors of the
+    trades that wanted customers - restaurants, assignation houses and variety halls - set out for good
+    fortune. Today the salt is pressed into a cone or a three-sided pyramid, and at an entrance it commonly
+    stands outside, one heap on each side, so the pair flanks each opening on its outer face, and every door
+    so warded carries its own pair - the gates, the posterns and the river door alike.
 
-    Note: the small cone of salt set out at a doorway has a Japanese name, morijio, but the research record
-    has no entry on salt wards, so the form, the pairing at each door and the placement outside are a guess,
-    and each heap is drawn as a marker far larger than a real cone of salt a few inches across.
+    Note: The form follows the present-day custom, since no page read gives an Edo-period shape: a small cone,
+    a pair outside each warded opening. No page read puts salt at the gates of a samurai residence or an
+    official's compound, so its use here is a guess, and each heap is drawn as a marker far larger than a
+    real cone of salt a few inches across.
 
     Name: salt wards
     Covers: every salt-ward marker at the doors, the "salt wards" label and the salt-wards note box
     Label: guess
-    Sources: not recorded
-    Entry: research/buildings.html (no dedicated entry - recorded as silent)
+    Sources: kotobank-morijio, jawiki-morijio, ise-miyachu-morijio
+    Entry: research/religion-and-death.html - "Were cones of salt set at the doors of an official's compound?"
     """
 
     key = "salt wards"
@@ -171,7 +174,7 @@ class River(Kind):
 
 class RiverLanding(Kind):
     """
-    What: The compound's landing on the river: a dock springing from a stone-faced bank, the tax barge moored
+    What: The compound's landing on the river: steps cut into a stone-faced bank, the tax barge moored
     alongside it, a watch post over the water and a small altar for the boatmen - each its own feature, lit with
     the landing.
 
@@ -229,15 +232,19 @@ class ParleyRoom(Kind):
     stepping onto the other's ground. Its inner door opens into a receiving court, never into the court where
     the accused kneel, because the room receives guests.
 
-    Note: a room built across a clan border is part of its map's story, a departure made by the map's design
-    with no historical evidence for one in the record. The drawn border line it stands on is the
-    attested part; the record calls the room the architectural counterpart of that line, by analogy only.
+    Note: a room built across a clan border is part of its map's story, made by the GM's ruling that the door
+    which receives the Kitsune is the border - a departure with no historical room behind it, since no page
+    read describes a room built across a border or two parties meeting on the line itself. Where two powers
+    dealt regularly across a border, each kept its own ground: a post on each side of the line, facing each
+    other across it, as Russia and Qing China built at Kyakhta, or a compound one side set aside for the
+    other's officers with a reception hall beside it, as at the Japan House at Choryang, where Tsushima traded
+    with Korea. The drawn border line the room stands on is the attested part.
 
     Name: parley room
     Covers: the room in the border wall and its label
     Label: deviation
-    Sources: not recorded
-    Entry: research/urban-features.html - 'Drawing a clan border'
+    Sources: kyakhta-trade-enwiki, wakan-kotobank
+    Entry: research/buildings.html - 'Did two sides ever meet in a room built across their border?'; research/urban-features.html - 'Drawing a clan border'
     """
 
     key = "parley room"
@@ -269,25 +276,24 @@ class BoundaryStones(Kind):
 
 class CharcoalStore(Kind):
     """
-    What: A sealed storehouse for charcoal - a kura with thick plastered earthen walls - set apart from the
-    working yard, where the charcoal a county takes in is held under the office's seal.
+    What: A sealed storehouse for charcoal - a kura with thick plastered earthen walls - where the charcoal a
+    county takes in is held under the office's seal, standing at the ordinary spacing of the buildings around it.
 
     Why: Charcoal was an industrial fuel moved at state scale, and a store of it was a supervised, tallied depot
-    rather than a back room. Fire-resistant stores had thick plastered walls because timber cities burned, and
-    fresh charcoal heats itself to ignition when packed, so the store stands apart from the yard and the other
-    buildings with open ground between.
+    rather than a back room. A plastered storehouse was built to protect what it held against fire, damp and
+    theft - its walls often a foot thick, its outer doors faced with earth and plaster, and gunpowder among what
+    such stores kept - so its own wall does for the charcoal what 30 ft of open ground does for an open stack in
+    a charcoal yard. Fresh charcoal heats itself to ignition when packed, so it goes in only once it has cooled.
 
-    Note: The supervised, tallied depot, the plastered fire-resistant store and the self-heating of fresh
-    charcoal are recorded findings. How far the store should stand apart is this record's own derivation rather
-    than a read figure.
-
-    Caveat: How far the store should stand apart is this record's own derivation rather than a read figure.
+    Note: No page read says charcoal was kept in a plastered storehouse, or gives a spacing between a storehouse
+    and its neighbors, so keeping it in one, at ordinary spacing with no fire gap, is a guess resting on the
+    storehouse's recorded purpose.
 
     Name: charcoal store
     Covers: the sealed charcoal kura and its labels
-    Label: accurate
-    Sources: wagner-ming-iron, fao-charcoal-safety, tonya-enwiki, fires-in-edo-enwiki, economy-song-enwiki
-    Entry: research/urban-features.html - 'Charcoal yards: a tallied depot'
+    Label: guess
+    Sources: dozo-jawiki, kotobank-dozozukuri, wagner-ming-iron, fao-charcoal-safety
+    Entry: research/urban-features.html - "Does the charcoal yard's 30 ft fire gap apply to charcoal kept in a plastered storehouse?", 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'
     """
 
     key = "charcoal store"
@@ -321,19 +327,21 @@ class WoodKamiAltar(Kind):
 
 class Revetment(Kind):
     """
-    What: The stone facing of the riverbank at Hayakawa's landing, drawn as a gray band along the water's edge.
+    What: The stone facing of the riverbank at Hayakawa's landing, drawn as a gray band along the water's edge,
+    with the landing's steps cut into it across the bank street from the compound's wall.
 
     Why: A river's level moves by many feet through the year, so a working bank is faced with stone or timber
     cribbing to hold it; at the great rice stores on the river at Edo, the stone revetment was part of the answer
-    to flood.
+    to flood. Where samurai residences stood on a river, as on Hiroshima's, they were built back from the
+    revetment and walled, which is why the compound's wall stands back behind the bank street.
 
-    Note: A faced bank at a river landing follows the record.
+    Note: A faced bank at a river landing, and a residence's wall standing back from it, follow the record.
 
     Name: revetment
     Covers: the stone facing along the landing's bank
     Label: accurate
-    Sources: kashi-jawiki, gangi-kowan-jawiki, kuramae-jawiki
-    Entry: research/cities/river-cities.html - "The wharf's working face"; research/cities/capitals.html - "The sluice's lifting frame"
+    Sources: gangi-hiroshima-jawiki, kashi-jawiki, gangi-kowan-jawiki, kuramae-jawiki
+    Entry: research/cities/river-cities.html - "Does an official's compound have its own stepped landing, or a pier?", "The wharf's working face"; research/cities/capitals.html - "The sluice's lifting frame"
     """
 
     key = "revetment"
@@ -341,24 +349,28 @@ class Revetment(Kind):
 
 class Dock(Kind):
     """
-    What: The dock at Hayakawa's landing: a timber pier running out from the faced bank, where barges lie
-    alongside to load.
+    What: The dock at Hayakawa's landing: a flight of steps cut into the faced bank across the bank street from
+    the compound's wall, reached from a gate in that wall, where barges come alongside to load.
 
-    Why: A settlement on navigable water sends its freight by boat, and a pier gives a loaded hull the reach it
-    needs where the bank shelves too gently to come alongside.
+    Why: A river's level rises and falls through the year, so the usual landing is steps cut into a faced bank,
+    which meet a moored hull at whatever height the water stands; a pier is the exception, for a bank that
+    shelves too gently. Where samurai residences stood on a river, as on Hiroshima's, they were built back from
+    the revetment and walled, and no gated landing opened from them onto the steps - a back gate straight onto
+    the steps was the merchants' form - so the compound reaches its steps from a gate in its wall, across the
+    street.
 
-    Note: A pier at a river landing follows the record. The record makes steps cut into the faced bank the usual
-    landing and the pier the exception for a shelving bank; Hayakawa draws a pier and no steps, and nothing
-    records its bank as shelving.
+    Note: The steps across the bank street, reached from a gate in the compound's wall rather than a back gate
+    onto the steps, follow the record. No page read describes an official's compound with a landing of its own,
+    so that these steps are the compound's own rather than a public landing is a guess.
 
-    Caveat: The record makes steps cut into the faced bank the usual landing and the pier the exception for a
-    shelving bank; Hayakawa draws a pier and no steps, and nothing records its bank as shelving.
+    Caveat: No page read describes an official's compound with a landing of its own, so that these steps are the
+    compound's own rather than a public landing is a guess.
 
     Name: dock
-    Covers: the pier and its plank lines
+    Covers: the landing steps in the faced bank
     Label: accurate
-    Sources: pier-enwiki, gangi-kowan-jawiki, gangi-hiroshima-jawiki, kuramae-jawiki, chinaknowledge-caoyun
-    Entry: research/cities/river-cities.html - "The wharf's working face"; research/cities/capitals.html - "The sluice's lifting frame"; research/ways.html - "Where does a village's freight go?"
+    Sources: gangi-hiroshima-jawiki, gangi-kowan-jawiki, pier-enwiki, matou-zhwiki
+    Entry: research/cities/river-cities.html - "Does an official's compound have its own stepped landing, or a pier?", "The wharf's working face"
     """
 
     key = "dock"
@@ -372,13 +384,17 @@ class TaxBarge(Kind):
     magistracy owns no hulls, and the barge at its dock is one taken on for the run.
 
     Note: The barge's size, inside the record's range for such a boat, and the hiring of hulls for tax rice (read for the shogunate's sea shipments; a county's grain going downriver on them is this map's reading),
-    follow the record.
+    follow the record. The bales aboard are drawn about 4 ft long so that they read, where a rice bale is about
+    2.5 ft long and 1.5 ft across, varying with what it held.
+
+    Caveat: The bales aboard are drawn about 4 ft long so that they read, where a rice bale is about 2.5 ft long
+    and 1.5 ft across, varying with what it held.
 
     Name: tax barge
     Covers: the moored barge, its lines, its bales and its label
     Label: accurate
-    Sources: takasebune-jawiki, kotobank-takasebune, gokura-jawiki, takayama-jinya-city
-    Entry: research/buildings.html - 'The granary is a staging node, not the terminal store'; research/cities/river-cities.html - "The wharf's working face"
+    Sources: takasebune-jawiki, kotobank-takasebune, gokura-jawiki, takayama-jinya-city, tawara-unit-jawiki, nisira-komedawara
+    Entry: research/urban-features.html - 'How big is a bale of rice or charcoal?'; research/buildings.html - 'The granary is a staging node, not the terminal store'; research/cities/river-cities.html - "The wharf's working face"
     """
 
     key = "tax barge"
@@ -386,18 +402,25 @@ class TaxBarge(Kind):
 
 class BoatmensAltar(Kind):
     """
-    What: A small altar on the bank beside the dock, kept by the boatmen who work the landing.
+    What: A small shrine at the head of the landing, kept by the boatmen who work the river.
 
-    Why: Those who work a river keep an altar where they set out, for safe passage.
+    Why: A boat's own guardian, the funadama, lives aboard, at the foot of the mast, and is only sometimes given
+    a shrine on land; what river boatmen are recorded keeping ashore is a water god. In Katsushika, now a ward of
+    Tokyo, the boatmen of the night-soil boats kept a water-god shrine, a Suitengu, that once stood on a river
+    bank, and on its festival day they moored their boats near the bank and spent the day in its precinct.
 
-    Note: the research record has no entry on an altar at a river landing; it is this map's own story, and its form
-    and place are a guess.
+    Note: Both forms are attested - a shrine on land to the boats' guardian, and a water-god shrine kept by the
+    boatmen - and a landing keeps one of them, named in the map's notes. Neither is recorded standing at a
+    landing itself, or with a size, so the shrine's place at the head of the landing and its size are a guess.
+
+    Caveat: Neither is recorded standing at a landing itself, or with a size, so the shrine's place at the head
+    of the landing and its size are a guess.
 
     Name: boatmen's altar
     Covers: the altar on the bank and its label
-    Label: guess
-    Sources: not recorded
-    Entry: research/buildings.html (no dedicated entry - recorded as silent)
+    Label: accurate
+    Sources: funadama-jawiki, kotobank-funadama, katsushika-suijin
+    Entry: research/cities/river-cities.html - 'Did the boatmen keep a shrine at the landing?'
     """
 
     key = "boatmen's altar"
@@ -405,60 +428,75 @@ class BoatmensAltar(Kind):
 
 class RiverWatch(Kind):
     """
-    What: A small guard post at the landing, from which the watch keeps an eye on the river traffic.
+    What: A small watch hut at the head of the landing, manned from the office, from which the watch keeps an eye
+    on the boats that come to it.
 
-    Why: A landing where the county's tax grain is loaded is worth watching, and the river's traffic is watched from
-    the bank beside it.
+    Why: In the Edo period, domains set boat watch posts at the landings of busy boat routes to inspect passing
+    boats. The best recorded, the shogunate's Nakagawa post of 1661, was a fenced compound of about 155 by 100 ft
+    guarding the approach to the shogun's city, with ten spears and a watch hut at the river's edge, manned by the
+    retainers of the officer who held the duty; a landing like this one keeps only the hut. The domains' posts
+    also collected taxes, but this setting taxes goods where they are sold, not where they pass through, so the
+    watch here inspects and records who and what comes to the landing and takes no toll.
 
-    Note: the research record has no entry on a guard post at a river landing; the post is this map's own story,
-    and its form and place are a guess.
+    Note: The watch hut at the river's edge follows the record, and taking no toll is the setting's own rule. No
+    page read describes a watch at a local office's own landing, so the hut's size and its place at the office's
+    landing are a guess.
+
+    Caveat: No page read describes a watch at a local office's own landing, so the hut's size and its place at the
+    office's landing are a guess.
 
     Name: river watch
     Covers: the guard post at the landing and its label
-    Label: guess
-    Sources: not recorded
-    Entry: research/buildings.html (no dedicated entry - recorded as silent)
+    Label: accurate
+    Sources: funabansho-jawiki, koto-nakagawa-funabansho, l7r-tariffs
+    Entry: research/cities/river-cities.html - 'Who kept watch on the river at an official's landing, and what did the watch post look like?'
     """
 
     key = "river watch"
 
 
-class BalanceBeam(Kind):
+class Steelyard(Kind):
     """
-    What: The balance on Ubame's weighing floor where bales of charcoal are weighed before the tally is written.
+    What: The steelyard on Ubame's weighing floor where bales of charcoal are weighed before the tally is written: a
+    wooden beam with a hook at one end for the bale and a weight on the other, slid along the beam until it balances.
 
-    Why: A bale of charcoal had no standard weight, so charcoal had to be weighed at the point of sale, and the
-    weighing floor exists for that.
+    Why: Charcoal was packed by grade rather than to one weight, so a bale is weighed at the point of sale, and
+    bulk and everyday goods were weighed on the steelyard - the two-pan balance served valuables. Japan used
+    steelyards from the Edo period, in sizes up to a load of four good charcoal bales, and China's was its
+    traditional market scale, built for heavy loads too.
 
-    Note: Weighing charcoal at the point of sale is reasoned from the charcoal bale having no standard weight, which the record states but for which no readable source was found. The instrument's form, a beam balance rather
-    than a steelyard, is not in the record.
+    Note: The frame or post the steelyard hangs from at the weighing floor is a guess.
 
-    Caveat: The instrument's form, a beam balance rather than a steelyard, is not in the record.
+    Caveat: The frame or post the steelyard hangs from at the weighing floor is a guess.
 
-    Name: balance beam
-    Covers: the balance on the weighing floor
+    Name: steelyard
+    Covers: the steelyard on the weighing floor
     Label: accurate
-    Sources: economy-song-enwiki, tonya-enwiki
-    Entry: research/urban-features.html - 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'
+    Sources: zhwiki-ganchen, zjnews-cixi-steelyard, osaka-keiryo-history, kanazawa-saobakari
+    Entry: research/urban-features.html - 'Was bulk charcoal weighed on a balance beam or a steelyard?', 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'
     """
 
-    key = "balance beam"
+    key = "steelyard"
 
 
 class CharcoalBales(Kind):
     """
     What: Bales of charcoal stacked on Ubame's weighing floor, waiting to be weighed.
 
-    Why: Charcoal traveled in straw bales of no standard weight, which is why every bale is weighed before it is
-    tallied.
+    Why: Charcoal traveled in straw bales, woven into a cylinder like the rice bale, and a bale had no standard
+    size before the modern period - not even for rice, whose bale held anything from 2 to 5 to by time and place.
+    Charcoal was packed at a weight set by its grade: in one charcoal district, 4 kan for the best and 8 or 10 for
+    the lower grades. A bale of no standard size cannot be traded by count, which is why every bale is weighed
+    before it is tallied.
 
-    Note: The charcoal bale of no standard weight is the record's finding, but no readable page for it has been traced: the page it had been attributed to says nothing about charcoal.
+    Note: we have drawn each bale about 4 ft long, in order to make it read on the plan; a charcoal bale is about
+    2 by 1.3 ft, as a mid-20th-century one in a museum measures, and no page read measures one of the Edo period.
 
     Name: charcoal bales
     Covers: the stacked bales on the weighing floor
-    Label: accurate
-    Sources: economy-song-enwiki, tonya-enwiki
-    Entry: research/urban-features.html - 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'
+    Label: convention
+    Sources: tawara-jawiki, tawara-unit-jawiki, edo-tokyo-sumidawara
+    Entry: research/urban-features.html - 'How big is a bale of rice or charcoal?', 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'
     """
 
     key = "charcoal bales"
@@ -472,14 +510,16 @@ class ParleyMats(Kind):
     Why: A delegation from across the border is received without either party stepping off its own soil: each side
     kneels on its own ground, the line between them.
 
-    Note: the room and its mats are the map's own design, a departure with no historical room behind it - the
-    building counterpart of the drawn border line - and the mats' 3 ft size is this project's own figure.
+    Note: the mats belong to the same departure as the parley room, the map's own design: no page read seats two
+    parties across a border line in one room, and where two powers dealt regularly across a border each kept its
+    own ground, in a post on each side of the line or in a compound one side set aside for the other's officers.
+    The mats' 3 ft size is this project's own figure.
 
     Name: parley mats
     Covers: the four kneeling mats in the parley room
     Label: deviation
-    Sources: not recorded
-    Entry: research/urban-features.html - 'Drawing a clan border'
+    Sources: kyakhta-trade-enwiki, wakan-kotobank
+    Entry: research/buildings.html - 'Did two sides ever meet in a room built across their border?'; research/urban-features.html - 'Drawing a clan border'
     """
 
     key = "parley mats"

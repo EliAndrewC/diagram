@@ -160,6 +160,26 @@ def already_in_base(root: pathlib.Path, line: str) -> bool:
     return found.returncode == 0
 
 
+_CAPITALIZED = re.compile(r"[A-Z][\w'-]*")
+
+
+def inside_a_name(text: str, start: int, end: int) -> bool:
+    """Is the hit a capitalized word with a capitalized word on EACH side - the middle of a proper name?
+
+    GUARD_EDIT_OK: feature 267, a proper name written for the first time. A source write-up naming its
+    compiler, "Mary Neighbour Parent", was reported as a British spelling of ours: Americanizing it would
+    misname a real person, and `already_in_base` cannot help the first time a name is written. Both
+    neighbors are required, so a sentence opening on a British word, or a capitalized word beside one
+    other, is still reported; an organization's name the rule misses ("... Aquaculture Centres in") is
+    what `already_in_base` covers once it is in the tree.
+    """
+    if not text[start:end][:1].isupper():
+        return False
+    before = text[:start].rstrip(" ").rsplit(" ", 1)[-1] if text[:start].endswith(" ") else ""
+    after = text[end:].lstrip(" ").split(" ", 1)[0] if text[end:].startswith(" ") else ""
+    return bool(_CAPITALIZED.fullmatch(before) and _CAPITALIZED.match(after))
+
+
 def findings(root: pathlib.Path) -> list[str]:
     """Every British spelling this change WROTE, as `path:line: word`."""
     words = brit_words()
@@ -189,6 +209,8 @@ def findings(root: pathlib.Path) -> list[str]:
                     continue                  # a code span names the word; a quotation is someone else's
                 if already_in_base(root, text):
                     continue                  # COPIED: the line already stood in the tree this began from
+                if inside_a_name(text, hit.start(), hit.end()):
+                    continue                  # a NAME: "Mary Neighbour Parent" is her name, not our spelling
                 out.append(f"{path}:{n}: {hit.group(0)!r} - CLAUDE.md: American spellings, project-wide")
     return out
 

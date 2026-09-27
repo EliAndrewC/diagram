@@ -15,7 +15,7 @@ import xml.etree.ElementTree as ET
 
 from .checks import WALL_OVERLAP_MIN_PX, wall_openings
 from .grids import FTPX, coverage, perimeter_hugging_pct
-from .parse import WALL_STROKE, ParsedPlan, Rect
+from .parse import COURT_FLOORS, WALL_STROKE, ParsedPlan, Rect
 
 # A structure may CONTAIN another (an engawa strip on a residence, a door, a room) and two blocks of
 # one building may join by a corridor that laps a few px into each - those are compositions, not
@@ -245,9 +245,9 @@ def two_court_zoning(plan: ParsedPlan) -> list[str]:
     """A divider wall splits the compound, and the sanded hearing court lies on the gate's side of it."""
     if not plan.dividers:
         return ["no court divider - a magistracy is an outer (public) court at the gate and an inner (private) court behind a divider"]
-    sand = [r for r in plan.open_features if r.fill == "url(#oshirasu-sand)"]
+    sand = [r for r in plan.open_features if r.fill in COURT_FLOORS]
     if not sand:
-        return ["no sanded hearing court (oshirasu) - the bench overlooks it from the office hall's dais"]
+        return ["no hearing court (oshirasu) - the bench overlooks it from the office hall's dais"]
     gates = [o for o in wall_openings(plan) if o.ft <= GATE_MAX_FT]
     if not gates:
         return ["no gate opening in the compound wall"]
