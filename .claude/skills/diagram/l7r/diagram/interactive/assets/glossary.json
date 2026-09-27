@@ -6467,5 +6467,40 @@
    "sōchinju",
    "sochinju"
   ]
+ },
+ "preceptor": {
+  "def": "A cleric of one of the setting's Orders; every town has one preceptor per Order, and a town preceptor serves in a town monastery, where the Order's monks live under them.",
+  "variants": [
+   "preceptor",
+   "preceptors"
+  ]
+ },
+ "Sōtō": {
+  "def": "A school of Zen Buddhism; the temples of the Hiki register quoted here and the Aichi training temple with its meditation hall and monks' dormitory are Sōtō.",
+  "variants": [
+   "Sōtō",
+   "Soto"
+  ]
+ },
+ "Tendai": {
+  "def": "A school of Japanese Buddhism; several of the Hiki district temples quoted in the record, Anyōji among them, are Tendai.",
+  "variants": [
+   "Tendai"
+  ]
+ },
+ "Martial temple": {
+  "def": "In a Chinese walled city, the temple to the god of war, set opposite the Confucian temple across the main street, as at Pingyao.",
+  "variants": [
+   "Martial temple",
+   "Martial temples"
+  ]
+ },
+ "jōgōe-chi": {
+  "def": "One of the ranks of a Sōtō temple, with the kata-hōdōe-chi and the zuiie-chi, at which the ninety-day training retreat was held in the Edo period and a full set of halls was required.",
+  "variants": [
+   "jōgōe-chi",
+   "kata-hōdōe-chi",
+   "zuiie-chi"
+  ]
  }
 }

@@ -725,6 +725,7 @@ josui-ido	josui-ido
 junk	junk
 junks	junk
 jōdo	Jodo
+jōgōe-chi	jōgōe-chi
 jōsui ido	josui-ido
 kabata	kabata
 kabu-ido	kabu-ido
@@ -762,6 +763,7 @@ kaso-dera	kaso-dera
 kasoba	kasoba
 kasō-dera	kaso-dera
 kata	kata
+kata-hōdōe-chi	jōgōe-chi
 katairo	eiro
 kawara	kawara
 kawaramono	kawaramono
@@ -912,6 +914,8 @@ manji era	Manji
 manning	Manning
 manning's formula	Manning
 maoqu	maoqu
+martial temple	Martial temple
+martial temples	Martial temple
 masson pine	masson pine
 masugata	masugata
 mat	tatami
@@ -1111,6 +1115,8 @@ post-horse system	post-horse system
 post-station	shukuba
 post-stations	shukuba
 postern	postern
+preceptor	preceptor
+preceptors	preceptor
 precinct	precinct
 precincts	precinct
 prefectural cities	prefectural city
@@ -1327,6 +1333,7 @@ song dynasty	Song dynasty
 song yingxing	Song Yingxing
 song-dynasty	Song dynasty
 sonsha	sonsha
+soto	Sōtō
 sotobori	sotobori
 south town magistrate	town magistrate
 southern song	Song dynasty
@@ -1386,6 +1393,7 @@ suzaku-oji	Suzaku-oji
 suzaku-ōji	Suzaku-oji
 sward	sward
 sōchinju	sōchinju
+sōtō	Sōtō
 tagoshi	tagoshi kangai
 tagoshi kangai	tagoshi kangai
 taihu	Lower Yangzi
@@ -1420,6 +1428,7 @@ tax-free plot	tax-free plot
 tedai	tedai
 teikaku	teikaku
 temizuya	temizuya
+tendai	Tendai
 tenpo	Tenpo era
 tenpo era	Tenpo era
 tenshu	tenshu
@@ -1635,6 +1644,7 @@ zonation	zonation
 zone of separated flow	separation zone
 zongjia	zongjia
 zooplankton	zooplankton
+zuiie-chi	jōgōe-chi
 zuku	zuku
 ō-aza	ō-aza
 ōiya	ōiya
