@@ -978,6 +978,7 @@ meireki	Meireki
 men-hai	taiping-gang
 menbansho	menbansho
 mengxi bitan	Mengxi Bitan
+metamorphosis fengshui	metamorphosis fengshui
 micro-high	micro-high
 micro-highs	micro-high
 middle moat	middle moat
@@ -1460,6 +1461,7 @@ sward	sward
 tagoshi	tagoshi kangai
 tagoshi kangai	tagoshi kangai
 taihu	Lower Yangzi
+taiji	Taiji
 taiping-gang	taiping-gang
 taisho	Taisho
 taishō	Taisho
