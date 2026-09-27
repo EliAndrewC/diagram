@@ -59,5 +59,6 @@
 - [x] T10 FR-008, the download list grown at its end
       research: rendering
       verify: DONE. The download list grew at its end only, both links on each entry: 244 Tanigawa 1992, 245 Chang's scanned chapter, 249 the Nagaokakyo leaflet, 251 Yannopoulos 2015, 252 Endo 2013; Tabayashi (226), Sugiura, Northampton, Feng (228) and the Tama study (124) were already listed; Mukoyama and Abele are in the GM's folder
-- [ ] T11 FR-007, the checks owed by what phases 1 and 2 changed (`quote-check` and `record-format` over the sections the sweeps changed, `source-applicability` over new keys); every `_entry_owed.py` pair answered; FR-009, the closing report; `make page-check`; the push
+- [x] T11 FR-007, the checks owed by what phases 1 and 2 changed (`quote-check` and `record-format` over the sections the sweeps changed, `source-applicability` over new keys); every `_entry_owed.py` pair answered; FR-009, the closing report; `make page-check`; the push
       research: rendering
+      verify: DONE. FR-007: 30 changed questions checked by 12 quote-check and 12 record-format agents, a re-check round over the 43 cited notes the first changed, fields 075 checked whole; four more questions split under the cap on the way; SC-006: the 17 unplaced items 11 FOOTNOTED, 5 GONE, 1 LABELED; every owed pair answered (owed-check 46 of 46 IN-STEP); the closing report is research.md R1; make page-check and make done green
