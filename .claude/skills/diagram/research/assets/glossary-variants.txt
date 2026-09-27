@@ -89,6 +89,8 @@ bomori	bomori
 bon	Bon
 boom	boom
 booms	boom
+branch house	branch house
+branch houses	branch house
 broadcast	broadcast sowing
 broadcast oilseed stand	broadcast sowing
 broadcast sowing	broadcast sowing
