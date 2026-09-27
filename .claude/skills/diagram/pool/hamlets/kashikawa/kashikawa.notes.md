@@ -914,7 +914,7 @@ drain sink, the CONFLUENCE: before modern consolidation a village's drainage ret
 taken up by the ground below, and a sink the engine implements owes one map that shows it. Kashikawa's seed rolls
 the brook onto the flank away from the drain's outfall, where the drain would leave the frame on its own, so the
 generator pins `brook_side=-1`: the brook passes the outfall's side, the collector (a drainage ditch, widening
-toward its mouth) runs to it, and the two join 476 ft inside the top edge of the view with about 655 ft of the brook
+toward its mouth) runs to it, and the two join 584 ft inside the top edge of the view with about 778 ft of the brook
 visible below the junction (measured 2026-09-27). Sawada was tried first, at its seed then (6), and could not take it at either flank - its outfall stood at the
 canvas edge, with about 85 px of brook left below a junction against the 150 the rule asks. Every household still
 seats on the first roll.
@@ -942,7 +942,7 @@ the region's northwest now, and the map keeps seed 3: its wind-facing seat lies 
 rather than re-seed around that, the field path crosses the brook square on a plank at a ford. Nineteen farmsteads
 stand on the seat's bank and one across the brook, each whole on its own bank (median move 1,641 ft); no household's
 way out crosses the brook more than once, because a way now pays to cross. The belt is 277 clumps, 313 degrees from the
-houses' middle, over a 157-degree arc. The connector leaves north (11 degrees), so the district direction reads north.
+houses' middle, over a 157-degree arc. The connector leaves north (14 degrees), so the district direction reads north.
 The copse keeps within 90 ft of a farmhouse (median 71.3 ft), and no clump of it stands in the marsh or has no house in
 reach on its own bank. The entrance board stands 9 ft from where the connector meets the lanes, its caption on clear
 ground, passed by all 20 households' ways out. The rolled `elongated` shape is not what this seat draws - the houses

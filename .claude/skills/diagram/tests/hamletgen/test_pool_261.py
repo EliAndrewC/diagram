@@ -454,3 +454,21 @@ def test_no_brook_segment_lies_on_a_screen_axis_but_the_tap_run(gen: str) -> Non
                 continue
             deg = math.degrees(math.atan2(b[1] - a[1], b[0] - a[0])) % 90.0
             assert min(deg, 90.0 - deg) >= 1.6, f"brook segment {i} lies {min(deg, 90.0 - deg):.1f} degrees off a screen axis"
+
+
+@pytest.mark.parametrize("gen", GENS, ids=IDS)
+def test_every_lane_crosses_the_brook_square(gen: str) -> None:
+    """Every lane crosses the brook square, within `FORD_SQUARE_TOL_DEG` (settlement-review of Kashikawa, round 03cf6a84:
+    a lane bent 3 ft inside the water and its plank lay 44 degrees off square; the channel test above did not read the
+    streams)."""
+    from l7r.diagram.hamletgen.ways.checks import FORD_SQUARE_TOL_DEG
+
+    m = _manifest(gen)
+    for brook in _brooks(m):
+        for ln in m["lanes"]:
+            p = [(float(x), float(y)) for x, y in ln["pts"]]
+            for a, b in zip(p, p[1:], strict=False):
+                for u, v in zip(brook, brook[1:], strict=False):
+                    if segments_cross(a, b, u, v):
+                        t = math.degrees(math.atan2(b[1] - a[1], b[0] - a[0]) - math.atan2(v[1] - u[1], v[0] - u[0])) % 180.0
+                        assert abs(90.0 - t) <= FORD_SQUARE_TOL_DEG, f"a lane crosses the brook {abs(90.0 - t):.0f} degrees off square"

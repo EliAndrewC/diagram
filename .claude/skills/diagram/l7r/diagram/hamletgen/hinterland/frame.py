@@ -67,6 +67,9 @@ SCATTER_PAD = 40.0
 TITLE_BAND_ALLOWANCE = 140.0
 
 
+TITLE_POCKET_RISE = 30 * 1.2 + 46 + 24 + 12 + 8 + 48  # ft: the pocket's height (`title_pocket`'s placard) with its 8 ft gap and 48 ft of step-out
+
+
 def scatter_frame(s: Settlement, plan: SitePlan) -> tuple[float, float, float, float]:
     """The frame the scatter predicts and throws within (feature 224, GM 2026-09-11: "the scatter still throws its
     off-map blades"): the crop's own frame-setting boxes at this moment (`_crop_boxes`, the source `crop_to_content`
@@ -87,9 +90,23 @@ def scatter_frame(s: Settlement, plan: SitePlan) -> tuple[float, float, float, f
     if plan.title_pocket is not None:
         xs += [plan.title_pocket[0], plan.title_pocket[2]]
         ys += [plan.title_pocket[1], plan.title_pocket[3]]
+    elif ys and min(ys) - TITLE_POCKET_RISE < 0.0:
+        # ...AND, BEFORE THE POCKET IS RESERVED, WHERE IT WILL GO (feature 261, cohort seed 45): the pocket tries above the
+        # content first and goes below it when every seat above is off the canvas, and the first scatter is thrown before
+        # it is reserved - so the prediction takes in the band below the content in that case, as `TITLE_BAND_ALLOWANCE`
+        # takes in the one above. Seed 45's houses stood at the canvas top, its pocket went under the field, and the view
+        # reached 41 px past the prediction.
+        ys.append(max(ys) + TITLE_POCKET_RISE)
     for b in brook_beside_the_field(s):  # the frame reserves it, so the prediction must too
         xs += [b[0], b[2]]
         ys += [b[1], b[3]]
+    if plan.confluence is not None:  # ...and the confluence with its trunk, which the frame reserves too (feature 261: cohort
+        # seed 45's moved with the brook's walk and the view reached 41 px past a prediction that did not know it)
+        from ..sink import BROOK_JOIN_TRUNK  # noqa: PLC0415 - kept beside its one use
+
+        _t = BROOK_JOIN_TRUNK * 0.5
+        xs += [plan.confluence[0] - _t, plan.confluence[0] + _t]
+        ys += [plan.confluence[1] - _t, plan.confluence[1] + _t]
     if not xs:
         return (0.0, 0.0, float(s.W), float(s.H))  # pragma: no cover - a hamlet has its field and houses by now [224: the empty case keeps the throw whole]
     grow = CROP_MARGIN + SCATTER_PAD

@@ -309,7 +309,8 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
                         _bft = KOSATSUBA_HANDOVER_BAND_FT
                     # ...AND WHERE ITS CAPTION FITS, before the band, as the siter ranks it (feature 261: Sawada's re-seated board put
                     # its caption on a crown, the band having left only seats whose caption lay on one) - the placer's own
-                    # answer, best level first, before the traffic decides among them
+                    # answer, best level first, before the traffic decides among them. Where no seat the departures pass
+                    # offers a clear caption (Sawada still), the best level wins and `kosatsuba_caption_level` records it
                     _lv = _caption_levels(s, _seats, str(board.get("label") or ""), (hx0, hy0, hx1, hy1) if _view else None, _fw, _fh, _canopy)
                     _seats = [q for q in _seats if _lv[q] == max(_lv.values())]
                     _near = min(q[0] for q in _seats)

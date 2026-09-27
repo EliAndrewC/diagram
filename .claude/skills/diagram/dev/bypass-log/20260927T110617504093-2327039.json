@@ -1,0 +1,7 @@
+{
+  "utc": "2026-09-27T11:06:17Z",
+  "target": "review-accept",
+  "commit": "63f8cdeed",
+  "outcome": "permitted",
+  "why": "review-accept inashiro F3: the field path stops SPUR_SETBACK (17 ft) short of the paddy by design: consts.py calibrates the spur-tip setback against the cohort so a path ends at the field's edge, not on its bund"
+}

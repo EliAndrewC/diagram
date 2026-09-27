@@ -104,11 +104,11 @@
  "kashikawa-F4": {
   "verifies": "F4",
   "subject": "kashikawa",
-  "value": 476,
+  "value": 584,
   "unit": "ft",
   "quantity": "the confluence's distance inside the view's top edge, with about 655 ft of brook visible below it; the gen docstring and the notes say so",
   "source": "pool/hamlets/kashikawa/kashikawa.json streams, channels ending at the brook, meta.view",
-  "command": "grep -n '476 ft' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.gen.py",
+  "command": "grep -n '584 ft' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.gen.py",
   "round": "e0234725"
  },
  "kuwabata-F1": {
@@ -351,11 +351,11 @@
   "verifies": "F2",
   "subject": "kashikawa",
   "round": "4d1f0170",
-  "value": 1.03,
+  "value": 1.72,
   "unit": "aspect",
   "quantity": "meta.cluster_aspect_drawn; the 2026-09-27 notes entry now says the rolled elongated shape draws as a round cloud and is recorded unhonored",
   "source": "pool/hamlets/kashikawa/kashikawa.json meta.cluster_aspect_drawn and meta.cluster_shape_unhonored; kashikawa.notes.md 2026-09-27 entry",
-  "command": "grep -n 'drawn aspect of 1.03' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
+  "command": "grep -n 'drawn aspect of 1.72' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
  },
  "kashikawa-r4-empties": {
   "verifies": "F3",
@@ -621,11 +621,11 @@
   "verifies": "F3",
   "subject": "kashikawa",
   "round": "1bff4100",
-  "value": 360,
+  "value": 277,
   "unit": "clumps",
   "quantity": "the belt's recorded clumps, which the notes call clumps rather than crowns (and on the other four maps too); 360 on the kept roll",
   "source": "pool/hamlets/kashikawa/kashikawa.json village_groves[role=windbreak].clumps; kashikawa.notes.md 2026-09-27 entry",
-  "command": "grep -n 'The belt is 360 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
+  "command": "grep -n 'The belt is 277 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
  },
  "inashiro-r9-belt-frame": {
   "verifies": "F1",
@@ -651,9 +651,9 @@
   "verifies": "F1",
   "subject": "kashikawa",
   "round": "0ae309f0",
-  "value": 3,
+  "value": 2,
   "unit": "woodland stands",
-  "quantity": "the woodland stands upslope of the houses' middle along the map's fall (all three, 755-1,059 ft up), where the notes' name sentence now puts the oaks, with the fengshui belt on the windward north and west rather than on high ground",
+  "quantity": "the woodland stands upslope of the houses' middle along the map's fall (both, 755-1,059 ft up), where the notes' name sentence now puts the oaks, with the fengshui belt on the windward north and west rather than on high ground",
   "source": "pool/hamlets/kashikawa/kashikawa.json commons[role=woodland], meta.down_deg, village_groves[role=windbreak]; kashikawa.notes.md name sentence",
   "command": "grep -n 'dry ground upslope of the hamlet' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
  },
@@ -661,21 +661,21 @@
   "verifies": "F2",
   "subject": "kashikawa",
   "round": "0ae309f0",
-  "value": 360,
+  "value": 277,
   "unit": "clumps",
   "quantity": "the record kashikawa-r8-notes-clumps now states and greps the kept roll's 360 belt clumps",
   "source": "specs/261-northwest-wind-by-default/measurements.json kashikawa-r8-notes-clumps; kashikawa.notes.md",
-  "command": "grep -n 'The belt is 360 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
+  "command": "grep -n 'The belt is 277 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
  },
  "kuwabata-r11-wedge": {
   "verifies": "F1",
   "subject": "kuwabata",
   "round": "0ae309f0",
-  "value": 18448,
-  "unit": "sq ft",
-  "quantity": "ground inside the houses' hull grown by the scrub's 44 ft margin that the scrub may now take - every farmstead's own grown outline and each pair's within 140 ft stay kept out (farmstead_keepouts), where the whole grown hull (253,665 sq ft) was before and a 240 x 270 ft wedge of it drew bare; on the render the scrub scatters through the gaps between the farmsteads, no bare wedge",
-  "source": "pool/hamlets/kuwabata/kuwabata.json houses; l7r/diagram/settlement/land/cover.py farmstead_keepouts",
-  "command": "make -C .claude/skills/diagram test-file FILE=tests/settlement/test_hinterland_cover.py"
+  "value": 29.4,
+  "unit": "ft",
+  "quantity": "inside the old wedge's box (2276,248)-(2514,522), the radius of the largest disc with nothing drawn in it - scatter bases (1,569 blades, 70 scrub dots, 7 pines, 15 crowns), structures, dry plots, the field and the lanes - 72 ft in the round; the ground more than 20 ft from any mark is 2,000 sq ft, 24,600 in the round. The scrub now keeps off each farmstead's own grown outline and each near pair's, not the whole cluster's hull",
+  "source": "pool/hamlets/kuwabata/kuwabata.svg scatter bases (tools/scatter_audit.parse_bases) with kuwabata.json houses, yards, gardens, byres, sheds, fixtures, wells, persimmons, dry_plots, fields, lanes; sampled on a 4 ft grid",
+  "command": "make -C .claude/skills/diagram scatter-bases MAP=pool/hamlets/kuwabata BOX=2276,248,2514,522"
  },
  "sawada-r11-brook-straight": {
   "verifies": "F1",
@@ -763,5 +763,55 @@
   "quantity": "the arc the five pool hamlets' field-to-houses bearings span (compass, from each field outline's mean vertex to the houses' middle): 249 (Sawada), 314 (Inashiro), 325 (Kashikawa), 354 (Kuwabata), 16 (Mizuguchi), from 249 through north to 16; on main 69, 74, 157, 203 and 353, round the whole compass - the pool's sameness under a wind that chooses the side, observed 2026-09-27",
   "source": "pool/hamlets/*/*.json fields[].outline, houses; main's from the worktree at 7f283feb",
   "command": "python3 specs/261-northwest-wind-by-default/measure.py"
+ },
+ "mizuguchi-r11-wells": {
+  "verifies": "F2",
+  "subject": "mizuguchi",
+  "round": "0ae309f0",
+  "value": 2,
+  "unit": "wells",
+  "quantity": "wells on the bank the houses stand on: both, with all 12 farmhouses - the hamlet stands north of the brook now, so no bank is left without a well",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json wells, houses, streams[0].poly (hamletgen.homesteads.stages.bank_of)",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kashikawa-r12-plank": {
+  "verifies": "F1",
+  "subject": "kashikawa",
+  "round": "03cf6a84",
+  "value": 1.0,
+  "unit": "degrees",
+  "quantity": "the largest angle off square at which a lane crosses the brook (44 in the round, lane 13's plank at (1454,1610)): an elbow within the water's half-width is dropped before a crossing is squared, and the pool test now reads the streams as well as the drawn channels",
+  "source": "pool/hamlets/kashikawa/kashikawa.json lanes, streams",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kashikawa-r12-bearing": {
+  "verifies": "F2",
+  "subject": "kashikawa",
+  "round": "03cf6a84",
+  "value": 14,
+  "unit": "degrees",
+  "quantity": "the connector's first leg bears 13.8 degrees, which the notes' 2026-09-27 entry now states as 14 (it said 11)",
+  "source": ".claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.json lanes[connector]; kashikawa.notes.md",
+  "command": "grep -n 'leaves north (14 degrees)' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
+ },
+ "kashikawa-r12-junction": {
+  "verifies": "F3",
+  "subject": "kashikawa",
+  "round": "03cf6a84",
+  "value": 584,
+  "unit": "ft",
+  "quantity": "the drain joins the brook 584 ft inside the view's top edge, with 778 ft of brook visible below the junction to the edge (the notes and the gen docstring said 476 and about 655)",
+  "source": ".claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.json streams[0].poly, meta.view; the junction (1950,1252)",
+  "command": "grep -n '584 ft inside' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.gen.py"
+ },
+ "kashikawa-r12-records": {
+  "verifies": "F4",
+  "subject": "kashikawa",
+  "round": "03cf6a84",
+  "value": 277,
+  "unit": "clumps",
+  "quantity": "the four stale records re-measured on the kept roll: the belt 277 clumps (kashikawa-r8-notes-clumps, kashikawa-r11-record), the drawn aspect 1.72 (kashikawa-r4-shape), 2 woodland stands upslope (kashikawa-r11-name), and the junction 584 ft (kashikawa-F4)",
+  "source": ".claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.json village_groves, meta.cluster_aspect_drawn, commons; kashikawa.notes.md",
+  "command": "grep -n 'The belt is 277 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
  }
 }

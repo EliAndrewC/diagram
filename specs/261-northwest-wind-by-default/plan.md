@@ -307,6 +307,14 @@ Measured before and after in research R10.
 - The segment leaving the brook's tap run is nudged off a screen axis like every other (`_off_the_axes(hold=1)`, where
   the tap run and that segment were both exempt), and the approach's legs are too: Sawada's leaving segment drew exactly
   vertical below its tap, Inashiro's approach a leg 1.2 degrees off vertical (on main as well).
+- A lane's elbow inside the brook's half-width is dropped before its crossing is squared (`square_crossings`): Kashikawa's
+  lane bent 3 ft inside the water, its crossing segment was too short to square, and its plank lay 44 degrees off.
+- The scatter frame's prediction takes in the title pocket's band below the content when every seat above it is off the
+  canvas (`TITLE_POCKET_RISE`), and the confluence the frame reserves: cohort seed 45's pocket went below, past the
+  prediction.
+- A review acceptance carries the round it answered and counts only there, and a NOT-REVIEWABLE verdict keeps the verdict
+  it was written over (`scripts/_review_prereq.py`): four reviews found this round's findings cleared by earlier rounds'
+  acceptances of other findings with the same number, and a NOT-REVIEWABLE record had wiped them.
 - A belt crown seated in a toe marsh is drawn as alder (the `alder` mix and class): the record's woody stage at a reed
   edge is alder or willow, never pine (research/vegetation.html, the marsh margin). Sawada's windward belt stands on
   its toe's reed edge (70 of 201 clumps in the marsh); holding the belt off the reeds took the windward belt away and

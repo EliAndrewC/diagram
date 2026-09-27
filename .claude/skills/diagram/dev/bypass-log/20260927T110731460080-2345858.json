@@ -1,0 +1,7 @@
+{
+  "utc": "2026-09-27T11:07:31Z",
+  "target": "review-accept",
+  "commit": "63f8cdeed",
+  "outcome": "permitted",
+  "why": "review-accept sawada F3: the GM's 2026-08-29 ruling allows a caption over a canopy while it stays legible, which the reviewer confirms; no seat every departure passes offers a clear caption on this map, the notes' 2026-09-27 entry now says so, and the frame.py comment no longer claims this case fixed"
+}
