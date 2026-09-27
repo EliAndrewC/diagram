@@ -162,3 +162,7 @@
 - IrrigationDitch (water SECTION=240): IN-STEP - the fork along both margins, the tapering mains and the uncited fork distance all still stand; the new pointer to water/400 adds no finding the modal owes
 - IrrigationDitch (fields SECTION=070): LABELED - the Meiji dating of a ditch beside every paddy is now named in the Note as the record's reading
 - Pond (fields SECTION=070): IN-STEP - the changes are in the Distribution bullet and its notes; nothing touches the pond
+- FishPond (archetypes SECTION=150): IN-STEP - its Note already says the inlet-high plumbing rests on the unread Ruddle and Zhong
+- PondCanal (archetypes SECTION=150): REWRITTEN - the pond-to-canal link moved from "documented" into the Ruddle and Zhong clause
+- PondSluice (archetypes SECTION=150): REWRITTEN - drained two or three times a year, not at harvest; the gate's 0.80 m cap replaces the unsourced board width; the canal link and the dou reading labeled
+- SluiceGate (archetypes SECTION=150): REWRITTEN - the Note credits the Jiangnan polder account for drought and flood working and labels the dou reading a guess; its Sources tag still lacks cssn-jiangnan-weitian (a pinned snapshot field, left open)

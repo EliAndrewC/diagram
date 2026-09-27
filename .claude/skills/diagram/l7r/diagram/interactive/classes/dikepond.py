@@ -101,7 +101,7 @@ class PondCanal(Kind):
     gates that open onto it - some take only feeds, some only drains, some both - and the ring drain around the block
     takes everything to the outfall.
 
-    Note: That the canals are a conveyance-and-drainage network the ponds exchange water with is documented; that a pond on sloping ground takes water in high and lets it out low, the whole net running in series from a high intake to a low outfall, is Ruddle & Zhong's (1988) finding, which this project has not read, as no copy is publicly readable; which pond's
+    Note: That a pond's dike carries a board sluice, opened and shut to set its water level, is documented; that each pond's sluice opens onto the canal network, so the canals are the conveyance-and-drainage network the ponds exchange water with, and that a pond on sloping ground takes water in high and lets it out low, the whole net running in series from a high intake to a low outfall, are Ruddle & Zhong's (1988) findings, which this project has not read, as no copy is publicly readable; which pond's
     gate opens onto which canal follows this map's own rule - water in on each pond's high side, out on its low side - not a
     surveyed plan. The ring drain around the block is this map's own layout, borrowed from the rice polder's inner ring
     canal: no source the record cites describes a ring drain on a dike-pond.
@@ -122,13 +122,13 @@ class PondCanal(Kind):
 class PondSluice(Kind):
     """
     What: A protected opening in a pond's dike, closed with wooden boards to set the water level and pulled to
-    drain the pond at harvest - the gate through which a dike-pond exchanges water with the canal network.
+    drain the pond two or three times a year - the gate through which a dike-pond exchanges water with the canal network.
 
     Why: A dike-pond is not a sealed basin: the whole system runs in series from a high intake to a low outfall,
     a pond on sloping ground taking water in at its high side and letting it out at its low side. The stub drawn here is
-    the cut in the dike; the boards themselves are a few inches wide and are not drawn at this scale.
+    the cut in the dike; the gate itself is at most 0.80 m wide inside and is not drawn at this scale.
 
-    Note: The sluice's form is documented in the FAO pond-construction manual; its position on each pond follows the
+    Note: The sluice's form is documented in the FAO pond-construction manual; that it opens onto the canal network also comes only from Ruddle & Zhong, with no public page read saying so, and reading the Minle proverb's 窦 (dou) as a sluice is this project's guess; its position on each pond follows the
     record's rule - water in on the pond's high side, out on its low side - which the record takes from Ruddle & Zhong (1988), a book with no readable copy that this project has not read; it is not a surveyed plan.
 
     Caveat: its position on each pond follows the record's rule - water in on the pond's high side, out on its low side - which the record takes from Ruddle & Zhong (1988), a book with no readable copy that this project has not read; it is not a surveyed plan.
@@ -370,7 +370,7 @@ class SluiceGate(Kind):
     wooden boards to set the level - opened in drought to draw the river in, shut in flood to keep it out - and it is why the dike can be complete and the block still fed and
     drained.
 
-    Note: The form is read from the FAO pond-construction manual; the inlet-high, outfall-low placement comes from Ruddle & Zhong (1988), which has no readable copy and is not read; the 6 x 3 ft bar is drawn at the size of a whole board set, which the record does not measure; the FAO manual caps the opening itself at 0.80 m, less than half the bar.
+    Note: The form is read from the FAO pond-construction manual, and its opening in drought and shutting in flood from a Chinese account of the Jiangnan polders; the dou a Minle proverb names is taken for this sluice only by this project's guess, since no source read defines the word; the inlet-high, outfall-low placement comes from Ruddle & Zhong (1988), which has no readable copy and is not read; the 6 x 3 ft bar is drawn at the size of a whole board set, which the record does not measure; the FAO manual caps the opening itself at 0.80 m, less than half the bar.
 
     Caveat: the 6 x 3 ft bar is drawn at the size of a whole board set, which the record does not measure; the FAO manual caps the opening itself at 0.80 m, less than half the bar.
 
