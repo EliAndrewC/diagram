@@ -253,9 +253,17 @@ def scoped_verbatim(out: pathlib.Path, full_text: str) -> str:
     import json  # noqa: PLC0415
 
     data = json.loads((out / "quote-verbatim.json").read_text(encoding="utf-8"))
-    kept_text = "".join(p.read_text(encoding="utf-8") for p in out.glob("*.html"))
-    kept = [e for e in data["footnotes"] if any(str(p)[:40] in kept_text for p in e.get("passages") or [])
-            or (e.get("assertion") and str(e["assertion"])[:40] in re.sub(r"<[^>]+>", "", kept_text))]
+    # A passage is a dict (`quote`, `original`) and the excerpt wraps its lines, so both sides are compared
+    # as whitespace-collapsed text: `str(passage)` never occurred in a file, and every re-check report came
+    # back empty (feature 250, cities/capitals session 2d).
+    def flat(text: str) -> str:
+        return " ".join(text.split())
+
+    kept_text = flat("".join(p.read_text(encoding="utf-8") for p in out.glob("*.html")))
+    plain = flat(re.sub(r"<[^>]+>", "", kept_text))
+    kept = [e for e in data["footnotes"] if any(flat(str(p.get(k) or ""))[:40] in kept_text
+                                                for p in e.get("passages") or [] for k in ("quote", "original") if p.get(k))
+            or (e.get("assertion") and flat(str(e["assertion"]))[:40] in plain)]
     data["footnotes"] = kept
     (out / "quote-verbatim.json").write_text(json.dumps(data, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     lines = [ln for ln in full_text.splitlines() if not re.match(r"\s+fn-\d+ ", ln)]

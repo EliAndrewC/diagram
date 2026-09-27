@@ -21,12 +21,14 @@
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
       verify: DONE. ways closed: 020 checked (16 notes; 1 DIFFERS and 6 PARTIAL fixed, 3 PARTIAL narrowed on the one re-check; 2 unfootnoted assertions answered - one absence note added, one sentence narrowed), 8 record-format findings applied (3 glossary terms, 2 variants), aze-jawiki limits rewritten, thepaper-night-gates HONEST; 020 split at the 20,000-byte cap into 020 and 025; FR-006 worklist 5 items, all FOOTNOTED
-- [ ] T02 FR-002 and FR-006 for `buildings`, by 250's process
+- [x] T02 FR-002 and FR-006 for `buildings`, by 250's process
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
-- [ ] T03 FR-002 and FR-006 for `cities/river-cities`, by 250's process
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. buildings closed: question 210 (group 3 of 3) checked by quote-check and record-format, re-checked once; 9 registry write-ups judged by source-applicability (5 edited, 4 passed); 2 glossary terms (randori, Four Books and Five Classics); worklist 19 bare items, 19 FOOTNOTED
+- [x] T03 FR-002 and FR-006 for `cities/river-cities`, by 250's process
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. cities/river-cities closed (session 2c, question 040): quote-check 13 citations + 2 absence notes, 10 PARTIAL narrowed or labeled as the page's reading, 1 DIFFERS fixed; record-format 4 VOCABULARY (2 edits, glossary coursing and hiro); one re-check on 5 notes all VERBATIM and SUPPORTS; FR-006 18 bare items, 14 footnoted, 4 reworded out
 - [x] T04 FR-002 and FR-006 for `towns`, by 250's process
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
@@ -35,9 +37,10 @@
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
       verify: DONE. urban-features closed: group 2d checked 080 and 170 (4 checks + 1 re-check); 080 re-check 4/4 SUPPORTS, 0 unfootnoted; 170 4 SUPPORTS 1 PARTIAL fixed, 2 Mukoyama notes UNFETCHABLE publicly (read from the GM's copy); 4 glossary terms added; FR-006: 87 bare items, 79 FOOTNOTED, 2 LOCATED, 4 NOT-LOCATED, 1 AMBIGUOUS, 1 TOO-SHORT
-- [ ] T06 FR-006 for `cities/capitals`, by 250's process
+- [x] T06 FR-006 for `cities/capitals`, by 250's process
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. cities/capitals group 4 of 4 (session 2d): questions 330 and 336 checked (quote-check x2, record-format x2), 21 EDIT blocks applied, 3 skipped (bracket glosses inside verbatim quotes), 2 labeled by hand; one re-check round (quote-check x2): 330 one clause narrowed, 336 clean; 2 glossary terms (Bunka, Morisada manko); re-check bundle's quote-verbatim cut fixed and tested; FR-006 worklist 92 bare items: 82 FOOTNOTED, 9 NOT-LOCATED, 1 TOO-SHORT
 
 ## Phase 2 - the sweeps (was 250's T20-T22)
 

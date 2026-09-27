@@ -1,0 +1,82 @@
+[
+ {
+  "label": "cities/capitals 1",
+  "ts": "2026-09-27T05:29:29.558Z"
+ },
+ {
+  "label": "cities/capitals 2",
+  "ts": "2026-09-27T05:30:36.010Z"
+ },
+ {
+  "label": "cities/capitals 3",
+  "ts": "2026-09-27T05:34:52.916Z"
+ },
+ {
+  "label": "cities/capitals 4",
+  "ts": "2026-09-27T05:35:03.989Z"
+ },
+ {
+  "label": "cities/capitals 2a-5",
+  "ts": "2026-09-27T05:35:47.521Z"
+ },
+ {
+  "label": "cities/capitals 2a-7",
+  "ts": "2026-09-27T05:39:21.113Z"
+ },
+ {
+  "label": "cities/capitals 2a-8",
+  "ts": "2026-09-27T05:40:55.548Z"
+ },
+ {
+  "label": "cities/capitals 2b step 5",
+  "ts": "2026-09-27T05:41:14.987Z"
+ },
+ {
+  "label": "cities/capitals 2b step 6",
+  "ts": "2026-09-27T05:41:40.742Z"
+ },
+ {
+  "label": "cities/capitals 2b step 6b record",
+  "ts": "2026-09-27T05:47:11.744Z"
+ },
+ {
+  "label": "cities/capitals 2b step 7",
+  "ts": "2026-09-27T05:48:09.095Z"
+ },
+ {
+  "label": "cities/capitals 2b step 8",
+  "ts": "2026-09-27T05:51:28.253Z"
+ },
+ {
+  "label": "cities/capitals 5-check",
+  "ts": "2026-09-27T05:51:50.522Z"
+ },
+ {
+  "label": "cities/capitals 6-apply-build",
+  "ts": "2026-09-27T05:55:59.103Z"
+ },
+ {
+  "label": "cities/capitals 7-recheck",
+  "ts": "2026-09-27T05:57:19.389Z"
+ },
+ {
+  "label": "cities/capitals 7-apply",
+  "ts": "2026-09-27T05:58:27.665Z"
+ },
+ {
+  "label": "cities/capitals 8-commit",
+  "ts": "2026-09-27T05:58:51.890Z"
+ },
+ {
+  "label": "cities/capitals 5",
+  "ts": "2026-09-27T05:59:08.746Z"
+ },
+ {
+  "label": "cities/capitals 7",
+  "ts": "2026-09-27T06:02:00.116Z"
+ },
+ {
+  "label": "cities/capitals 8",
+  "ts": "2026-09-27T06:06:00.080Z"
+ }
+]
