@@ -321,6 +321,11 @@ case $MODE in
         [ -f "$m" ] || continue
         other=$(basename "$m")
         [ "$other" = "$sid" ] && continue
+        # GUARD_EDIT_OK: feature 250 D14 - a page session (scripts/_page_session_runner.py) is a child the
+        # claimant dispatched into its own clone and waits on; the runner names that claimant in
+        # L7R_DISPATCHER, and only that one live claimant is let through. Before this, a queued session
+        # was refused while its dispatcher's tree was clean and let through once it was dirty (2026-09-26).
+        [ -n "${L7R_DISPATCHER:-}" ] && [ "$other" = "$L7R_DISPATCHER" ] && continue
         [ "$(cat "$m" 2>/dev/null)" = "$clone" ] || continue
         if sid_is_live "$other"; then
           echo "BLOCKED: $clone is already occupied by another live session ($other) - two sessions must not share a working tree. Ask the GM to /rename one session distinctly and use its own clone.   (CLAUDE.md 'Session clones' - claim backstop)" >&2
@@ -416,6 +421,11 @@ case $MODE in
     fi
     clone=$(cat "$MAPDIR/$sid")
     [ -d "$clone/.git" ] || exit 0
+
+    # GUARD_EDIT_OK: feature 250 (research R4, recommendation 4, the GM 2026-09-26) - the clone's untracked local
+    # settings exclude the MIRROR's root CLAUDE.md, which every session in a clone otherwise loads beside the
+    # clone's own copy. Idempotent and silent once done; it never blocks.
+    python3 "$(dirname "${BASH_SOURCE[0]}")/_clone_local_settings.py" "$clone" 2>/dev/null || true
 
     # RE-TRACK GUARD (2026-08-16): .specify/feature.json is spec-kit's ACTIVE-FEATURE pointer and
     # must stay gitignored. It is per-workspace state, and tracking it is not a cosmetic mistake -

@@ -20,7 +20,7 @@ class Farmhouse(Kind):
     having made its own way to the road, and a laid-out back lane serving a regular row are both attested, so
     this map rolls between the two forms per settlement and guarantees only that every farmhouse is served.
 
-    Note: Placement and form follow the read record. The setback from the paddy is stated in feet by no source:
+    Note: Placement follows the read record; that every house in a nucleated cluster is reached by a lane, and the alleys-off-the-spine form, are paraphrased from a morphology literature no public page carries, and the back lane is read only for planned English villages. The setback from the paddy is stated in feet by no source:
     it is built from a bund width that is a GUESS, an eave overhang that is unsourced and one part that is
     read for a house facing a watercourse and extended to the paddy by this record, so the 6 ft floor beneath
     it is a soft threshold rather than a measured minimum - and the map draws 10 to 13 ft, well clear of it,
@@ -73,12 +73,13 @@ class Byre(Kind):
     Why: Most farmsteads kept a draft animal or two, and the vernacular put the animal far closer to the house
     than a European barn would. Where the team is OWNED, the household houses it in its own homestead; where a
     team is shared or hired it stands out among the homesteads, on the common ground, so that the borrowing
-    household can walk to it. Both are attested and neither dominates, so this map rolls between them per
-    settlement - which is also what lets two hamlets differ honestly.
+    household can walk to it. The owned stable is read; the shared one on the common ground is this record's
+    own reading, and the commoner of the two, so this map rolls between them per settlement - which is also what lets two hamlets differ honestly.
 
     Note: The separate byre is the temperate reading of the record; the attached stable wing (magariya) belongs
     to Tohoku's horse-breeding districts, its stable warmed from the kitchen hearth, and is deliberately not
-    drawn - that the cold made the form is this record's own reading. The animal's nearness to the HOUSE is
+    drawn - that the cold made the form is this record's own reading, and the magariya was the house of the
+    better-off, its hearth-warmed stable read as a sign of what the horses were worth. The animal's nearness to the HOUSE is
     read; its nearness to the wellhead is not on any page read, and neither is the commons siting itself.
 
     Caveat: the attached stable wing (magariya) belongs to Tohoku's horse-breeding districts, its stable warmed
@@ -131,9 +132,9 @@ class Garden(Kind):
     What: The household's kitchen garden: a tilled bed in planted rows of daikon and greens, beside the house.
 
     Why: A dooryard garden fed the household and, like the yard, wants light - beds are kept out of a neighbor's
-    shadow to the south and clear of the windbreak's afternoon shade to the west.
+    shadow to the south, clear of the windbreak's afternoon shade to the west, and, where open ground allows, nudged south out of a neighbor's grove that would take their morning sun from the east.
 
-    Note: Presence is read; the sun rule is DERIVED from the geometry - its season rests on daikon standing in
+    Note: Presence is read; the sun rule is DERIVED from the geometry, and its east half is the GM's call, since the record finds no readable source for a bed's need of morning light - its season rests on daikon standing in
     the bed through autumn (the other autumn greens are this record's reading), and its west lane is sized to
     a working belt of about 10 m, the low end of a surveyed band whose measured trees reach 22 m; the record
     fixes the bed's AREA and that it is hand-worked and irregular, but gives no proportion or row count, so
@@ -146,7 +147,7 @@ class Garden(Kind):
     Covers: `gardens`
     Label: accurate
     Sources: not recorded
-    Entry: research/homesteads.html - 'The garden's sun, and how far the windbreak shades'; 'The threshing yard's sun, and how far a farmhouse shades' (the garden rule is derived from it)
+    Entry: research/homesteads.html - 'The garden's sun, and how far the windbreak shades'; 'How much open ground does a kitchen garden keep to its south and east?'; 'The threshing yard's sun, and how far a farmhouse shades' (the garden rule is derived from it)
     """
 
     key = 'garden'
@@ -157,14 +158,14 @@ class Privy(Kind):
     What: The household privy - on a farm, the urinal and the privy were one small building standing apart from
     the main house.
 
-    Why: Near-universal: the Nipponica entry calls the detached privy the norm, and the 1972 survey counted one
-    on 87 of 100 households. Its seat is rolled among three positions - by the back door, at the
-    gate, or by the stable and shed - of which only the last is on a page read; the back door and the gate
-    are this record's own reading.
+    Why: Near-universal: the Nipponica entry calls the detached privy the norm, and Sugiura's survey counted
+    privy outbuildings at 0.87 per household. Its seat is rolled among three positions - by the back door, at
+    the gate, or by the stable and shed - of which only the last is on a page read; the back door and the gate
+    are this record's own GUESS, and the page read also places it apart in the yard.
 
-    Note: Presence and the detached form are read (kotobank, sinyoken), and one seat; the other two seats are
-    this record's reading; the 6 x 6 ft footprint is a GUESS - the one
-    sizing page is dead.
+    Note: Presence and the detached form are read (kotobank, sinyoken), and two seats (by the stable under the
+    eaves, apart in the yard), of which the map rolls the first; the other two rolled seats are a GUESS, on no
+    page read; the 6 x 6 ft footprint is a GUESS - the one sizing page is dead.
 
     Caveat: the 6 x 6 ft footprint is a GUESS - the one sizing page is dead.
 
@@ -187,13 +188,13 @@ class Woodpile(Kind):
 
     Note: The firewood SHED is read (Boso-no-Mura); that the open stack is the cheaper and older form is this
     record's own reading, on no page read; where the STACK stood relative to the house was found nowhere -
-    the back wall or the shed's outer wall is a guess, and the stack's height is modern practice.
+    the back wall or the kura's outer wall is a guess, and the stack's height is modern practice.
 
     Name: woodpile
     Covers: `farm_fixtures[kind=woodpile]`
     Label: guess
     Sources: boso-no-mura-kigoya, 326woods-stack, sugiura-1973-fuzoku
-    Entry: research/homesteads.html - 'The farmstead's fixtures'
+    Entry: research/homesteads.html - 'Where was the firewood stacked, and how big was the pile?'; 'The farmstead's fixtures'
     """
 
     key = 'woodpile'
@@ -235,7 +236,7 @@ class Bathhouse(Kind):
     Covers: `farm_fixtures[kind=bath]`
     Label: guess
     Sources: mizumaki-goemonburo, sugiura-1973-fuzoku
-    Entry: research/homesteads.html - 'The farmstead's fixtures'
+    Entry: research/homesteads.html - 'Did a farmhouse have a bath shed, and where did it stand?'; 'The farmstead's fixtures'
     """
 
     key = 'bathhouse'
@@ -248,14 +249,15 @@ class HenCoop(Kind):
     Why: Farmers kept a pig and some chickens in the yard along with a draft animal; the Qimin Yaoshu says to
     build the roost as a ground enclosure with a perch, because birds left to the trees sicken.
 
-    Note: The coop's existence and ground form are read (Cambridge, the Qimin Yaoshu, the Zhengzhou coop); the
-    household proportion, the 5 x 5 ft size and the seat are guesses bounded by 'most regions'.
+    Note: The coop's existence and ground form are read (Cambridge, though its survey data of the 1920s-30s is
+    read back into the late imperial countryside; the Qimin Yaoshu; the Zhengzhou coop); the household proportion,
+    the 5 x 5 ft size and the seat are guesses bounded by 'most regions'.
 
     Name: hen coop
     Covers: `farm_fixtures[kind=coop]`
     Label: guess
     Sources: cambridge-animals-china, qimin-yaoshu-yangji, pitt-zhengzhou-coop
-    Entry: research/homesteads.html - 'The farmstead's fixtures'
+    Entry: research/homesteads.html - 'Did a farmstead keep chickens, and in what kind of coop?'; 'The farmstead's fixtures'
     """
 
     key = 'hen coop'
@@ -267,20 +269,20 @@ class HouseholdShrine(Kind):
     a torii before its door.
 
     Why: In some regions every house had one, in others only certain old families; the GM ruled for the
-    old-families pattern here - rare, and notable when it appears - so the count is capped at about three
+    old-families pattern here - rare, and notable when it appears - so the count is capped at three to eight
     households in a hundred. It stands in the plot's northwest, northeast or southwest corner, all three
     attested.
 
     Note: we have drawn the household shrine at 6 x 6 ft - the small-shed module - in vermilion with a torii
     before it, in order to make it visible on the map at this scale. The one measured stone hokora is about
     40 cm (1.3 ft) on a side, a stone or wooden shrine that at true size would be a single pixel. Presence,
-    rarity and corner are read.
+    rarity and the three corners are read; how often each corner is drawn is a guess, from a survey count we could not read.
 
     Name: household shrine
     Covers: `farm_fixtures[kind=shrine]` - the hokora
     Label: convention
     Sources: tokushima-yashikigami, jawiki-yashikigami, kameyama-yashikigami, sugiura-1973-fuzoku
-    Entry: research/homesteads.html - 'The farmstead's fixtures'
+    Entry: research/homesteads.html - 'Which farmsteads had a household shrine, and in which corner?'; 'The farmstead's fixtures'
     """
 
     key = 'household shrine'
@@ -291,7 +293,7 @@ class Persimmon(Kind):
     What: The household's persimmon tree beside the house, drawn a yellower green than the groves with four fruit
     dots - the map's convention for naming the tree, not a season.
 
-    Why: A persimmon stood in every dooryard: the Edo agronomist Miyazaki Yasusada urged planting them around the
+    Why: A persimmon stood in every dooryard: the Edo agronomist Miyazaki Yasusada is said to have urged planting them around the
     homestead, and the tree shades the house in summer, so it stands beside it.
 
     Note: Presence and the beside-the-house placement are read (toyoko, uekipedia); WHICH side and the 18 ft crown
@@ -301,7 +303,7 @@ class Persimmon(Kind):
     Covers: `persimmons` - the dooryard persimmon tree
     Label: guess
     Sources: toyoko-kaki, uekipedia-kaki
-    Entry: research/homesteads.html - 'The farmstead's fixtures'
+    Entry: research/homesteads.html - 'Why does a persimmon stand beside so many farmhouses?'; 'The farmstead's fixtures'
     """
 
     key = 'persimmon'

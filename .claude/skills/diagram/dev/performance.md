@@ -2,7 +2,7 @@
 
 **Load this file when:** A gen or a check got slow (or "hangs"), you are about to optimize one, or a GEN_TIME_BUDGETS entry tripped.
 
-Split out of [`../CLAUDE.md`](../CLAUDE.md) so it is not in every diagram session's
+Split out of [`../CLAUDE.md`](../l7r/diagram/CLAUDE.md) so it is not in every diagram session's
 context. The text is verbatim; the short always-on version of each rule stays in the index.
 
 ## Shape one: a per-candidate scan of geometry that does not change during the scan

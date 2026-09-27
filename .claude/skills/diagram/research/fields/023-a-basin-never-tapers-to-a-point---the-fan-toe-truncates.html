@@ -1,0 +1,33 @@
+<h2 id="a-basin-never-tapers-to-a-point---the-fan-toe-truncates">A basin never tapers to a point - the fan toe truncates</h2>
+<p><em>GM ruling 2026-08-17 on the fan toe.<!-- the backlog entry is now in future-work/closed.md --> The question was posed honestly - "a real cascade fan does narrow to its outfall, and the
+honest question is whether this narrows too tidily" - and the GM's standard was simply realism.</em></p>
+<p><strong>The shape is authentic; the angles were not.</strong> Two things had to be separated before anything
+could be fixed, because a rule that got them backwards would have destroyed something real:</p>
+<ul>
+<li><strong>Radial convergence at the outfall is real</strong> and is not a defect. A cascade fan as this page draws it
+  narrows toward its collector, and the bunds of the basins on it converge with it - the drawn form, not the alluvial landform, which fans outward from its apex.<sup class="fn" data-note="alluvial-fan-enwiki"></sup> Any
+  rule that flattened that would be making the map <em>less</em> faithful.</li>
+<li><strong>Narrowness is real too.</strong> The basins at Shiroyone Senmaida are genuinely tiny - about 18 square meters each, the smallest half a meter square - though a terrace BED is usually two to six meters wide, so narrow is not the same as a few feet across.<!-- "worked by hand" and the Philippine Cordilleras are on no fetched page --><sup class="fn" data-note="senmaida"></sup> So the rule is deliberately <strong>NOT</strong> a minimum
+  plot width - that would have been the obvious rule and it would have been wrong.</li>
+<li><strong>What no real basin does is taper to ZERO.</strong> A paddy is a <em>level, bunded, puddled</em> unit holding
+  standing water at an even depth. The arithmetic is the whole argument: at a 7.5 degree apex a
+  plot is <strong>5 ft wide 40 ft back from its point and 2.6 ft at 20 ft</strong>, while an aze is ~1.5 ft of
+  puddled mud<sup class="fn" data-note="nougyoudoboku-keihan-4"></sup> on <strong>each</strong> side.<!-- the 1.5 ft is AZE_FT --> The last yards are therefore two bunds with no floor
+  between them - it cannot be leveled, cannot hold a depth, and cannot be transplanted. At 25
+  degrees the same wedge is 17 ft wide 40 ft back, which is a workable bunded strip.</li>
+</ul>
+<p><strong>What a real fan toe does instead</strong> is what <a href="#bunds-are-shared-and-the-fabric-is-continuous">Bunds are shared</a> says a real
+fan did with any awkward ground: the point is truncated into a headland along the collector, or the
+odd corner is simply left unpaddied - <em>"the odd unplantable scrap was simply taken into the basin
+beside it rather than walled off on its own."</em><sup class="fn" data-note="paddy-plots---irregular-patchwork-and-why-the-grid-is-anachronistic-5"></sup> </p>
+<!-- Why it slipped through, which is the transferable part. The toe pass already dropped unbundable slivers, but its test was an inradius proxy (2*Area/Perimeter) - a THICKNESS. A needle that is LONG passes a thickness test on the strength of its middle while its point is still unworkable, and Inashiro's were 130-254 ft long. A thickness test cannot see a taper. The apex angle is the measure that can, and a pointedness measure was already in the engine carrying a pool-measured calibration (seam wedges 7-23 degrees, honest hem strips 45+), so the rule reuses both ends of it rather than inventing a third number: the placer refuses at 25 degrees, the gate check fires at 15 - placer stricter than gate, as everywhere else. (the pointedness measure is pointed_ring; the gate check is paddy_plots_are_workable_basins) -->
+<!-- Three places had to refuse a needle, and finding that took provenance data rather than guessing. Fixing only the carve took Inashiro 17 to 8; also fixing the planting step took it to 6; and the survivors turned out (by instrumenting the seam-closing pass and classifying every needle by origin) to be entirely carved basins that had grown - good basins that welding a scrap into them had drawn out to a point. (the planting step is _plant, the pass is close_seams, the provenance class is carved_grown)
+(a) The fan's toe-and-hem pass - drops needle apexes as well as thin slivers, and runs after the hem is fitted to the bank so it judges the ring that is actually recorded rather than one a later pass rewrites.
+(b) The seam-closing pass - re-judges what the planting step hands back and routes needles to the scrap path.
+(c) The absorb step - declines a weld that would needle the absorbing basin, in the same rejection ladder that already declines a split, holed or bow-tie union.
+waterfields/comb.py::_comb_toe_and_hem (after hem_to_bank); waterfields/seams.py::close_seams (re-judging _plant's output); waterfields/seams.py::_absorb (the ladder declines MultiPolygon, holed and bow-tie unions) -->
+<p><strong>The deliberate residue:</strong> a strip that needles every basin it touches stays bare, and that is the
+honest answer rather than a failure - the fan's base floor draws under it, so it
+reads as the toe's own ground.<!-- the base floor is comb_base_fill --> This is the same treatment the slivers dropped for thinness have
+always had.</p>
+<p><strong>Sources:</strong> <a href="https://en.wikipedia.org/wiki/Alluvial_fan"><code>alluvial-fan-enwiki</code></a>, <a href="https://wajima-senmaida.jp/about/"><code>senmaida</code></a>, <a href="https://nougyoudoboku.com/a-ridge-between-rice-fields/"><code>nougyoudoboku-keihan</code></a></p>

@@ -1058,13 +1058,46 @@ quote-verbatim: ## [project] is every quoted passage on the page it cites, chara
 ##  OUT=<json>     write the report the quote-check agent is handed (default: the scratch file the run names)
 	@if [ -z "$(PAGE)" ]; then printf 'make quote-verbatim: PAGE=<research page name> is required - e.g. make quote-verbatim PAGE=hamlets\n' >&2; exit 2; fi
 # GUARD_EDIT_OK: feature 251 - NOTES= scopes the new quote-verbatim operation to the notes a check is about; no guard changes.
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_quote_verbatim.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" $(if $(NOTES),--notes "$(NOTES)",) $(if $(OUT),--json "$(abspath $(OUT))",)
+# GUARD_EDIT_OK: feature 250 - SECTION= is passed through: research/CLAUDE.md documented it and the rule dropped it, so both sizing runs checked all 11 notes.
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_quote_verbatim.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" $(if $(NOTES),--notes "$(NOTES)",) $(if $(SECTION),--section "$(SECTION)",) $(if $(OUT),--json "$(abspath $(OUT))",)
 
 record-prepass: ## [project] the session notes and vocabulary candidates a pattern can find on a research page - run BEFORE record-format   PAGE=hamlets
 ##  PAGE=<name>    a research page, a citations page (`citations/hamlets`) or `SOURCES`
 	@if [ -z "$(PAGE)" ]; then printf 'make record-prepass: PAGE=<research page name> is required - e.g. make record-prepass PAGE=hamlets\n' >&2; exit 2; fi
 # GUARD_EDIT_OK: feature 251 - SECTION= scopes the new record-prepass operation to one section; no guard changes.
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_record_prepass.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" $(if $(SECTION),--section "$(SECTION)",)
+
+# GUARD_EDIT_OK: feature 250 D14 - a new operation (report every research question over the size cap); no guard changes.
+question-sizes: ## [project] every research question over the size cap (question + notes, feature 250 D14), largest first - make quick fails on one a change touched
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/check-question-size.py" --report
+
+# GUARD_EDIT_OK: feature 250 - a new operation (print the named notes of one question, not the whole file); no guard changes.
+notes: ## [project] print the named notes of ONE question and only the blocks of its fragment that carry them - for editing a few notes without reading the whole file (feature 250)   PAGE=homesteads SECTION=040 KEYS=kyuhi-jawiki,kyuhi-jawiki-2
+	@if [ -z "$(PAGE)" ] || [ -z "$(SECTION)" ] || [ -z "$(KEYS)" ]; then printf 'make notes: PAGE=<page> SECTION=<question> KEYS=<key,key> are required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_check_bundle.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" --section "$(SECTION)" --notes "$(KEYS)" --print-notes
+
+# GUARD_EDIT_OK: feature 250 D16 - a new operation (search the setting canon for every term of a claim at once); no guard changes here - canon-read-hooks.sh makes it the only way in.
+canon: ## [project] search the GM's setting canon for EVERY term of a claim in one call - each hit with its file, line and heading (feature 250 D16; a direct read of a canon file is refused)   TERMS="imperial road|merchant share|artisan"
+	@if [ -z "$(TERMS)" ]; then printf 'make canon: TERMS="<a>|<b>|<c>" is required - every term of the claim at once\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_canon.py" "$(TERMS)"
+
+# GUARD_EDIT_OK: feature 250 D15 - a new operation (apply the EDIT and GLOSSARY blocks a check report ends with); no guard changes.
+apply-edits: ## [project] apply a quote-check or record-format report's EDIT and GLOSSARY blocks in one command - each only where its old text occurs once in a record file; the rest are listed REFUSED for you (feature 250 D15)   FROM=<the agent's output_file or a saved reply> [SKIP=2,5] [DRY=1]
+	@if [ -z "$(FROM)" ]; then printf 'make apply-edits: FROM=<the output_file the agent dispatch named> is required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_apply_edits.py" "$(FROM)" --root "$$(git rev-parse --show-toplevel)" $(if $(SKIP),--skip "$(SKIP)",) $(if $(DRY),--dry-run,)
+
+# GUARD_EDIT_OK: feature 250 - a new operation (one page's work in a fresh headless session, started from a brief); no guard changes.
+page-session: ## [project] start ONE page's work in a FRESH headless session, detached, from written briefs, one after another - absolute paths; a then:<script> step queues the briefs it prints (feature 250 D7, R3)   BRIEF="<file> then:<script>" [NAME=<session name, default this clone's>] [MODEL=<model>]
+	@if [ -z "$(BRIEF)" ]; then printf 'make page-session: BRIEF=<file> is required - e.g. make page-session BRIEF=specs/250-close-the-record-checks/briefs/homesteads.md\n' >&2; exit 2; fi
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/page-session.sh "$(BRIEF)" "$(NAME)" "$(MODEL)"
+
+# GUARD_EDIT_OK: feature 250 - a new operation (copy what one check reads out of the repository, so the harness attaches no CLAUDE.md to the agent); no guard changes.
+check-bundle: ## [project] the files ONE check agent reads, copied out of the repository with its prepass output - dispatch quote-check, record-format, source-applicability or source-reader with the MANIFEST it prints   PAGE=ways SECTION=010 | KEY=edo-enwiki
+##  PAGE= SECTION=   one question: fragment, notes, prepass, quote-verbatim, cited registry entries, the variant index
+##  KEY=<key>        one source: its registry entry and its saved page
+##  OUT=<dir>        default /tmp/l7r-check/<page>-<section> or /tmp/l7r-check/key-<key>   EXTRA="<path> ..."   NO_QUOTES=1 skips the fetches   KIND=<modal class> adds its docstring, for entry-drift   NOTES=<key,key> a RE-check of those notes only   FOR=quote-check|record-format|entry-drift only that check's parts   WHOLE=1 with KEY= the whole page in parts, for source-reader (D19)
+	@if [ -z "$(KEY)" ] && { [ -z "$(PAGE)" ] || [ -z "$(SECTION)" ]; }; then printf 'make check-bundle: PAGE=<page> SECTION=<question> (or KEY=<registry key>) is required - e.g. make check-bundle PAGE=ways SECTION=010\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_check_bundle.py" --root "$$(git rev-parse --show-toplevel)" $(if $(KEY),--key "$(KEY)","$(PAGE)" --section "$(SECTION)") $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(EXTRA),--extra $(EXTRA),) $(if $(NO_QUOTES),--no-quotes,) $(if $(KIND),--kind "$(KIND)",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(FOR),--for "$(FOR)",) $(if $(WHOLE),--whole,)
 
 # GUARD_EDIT_OK: feature 255 - a new operation (save named pages' visible text, so a page and not a fetch extract can be grepped); no guard changes. (The source-entries and review-facts operations added beside it were NOT ADOPTED on their seeded runs and are removed - specs/255 research R1 and R6. GUARD_EDIT_OK again, 2026-09-19: the header says the GM adopted source-reader's use of it; no guard changes.)
 source-pages: ## [project] save the full visible text of the named pointers, with a manifest - run BEFORE source-reader, which greps the PAGE where a fetch gives an extract   OUT=<dir> URL=<u1>  (several: URLS="<u1> <u2>")
@@ -1192,6 +1225,8 @@ quick:           ## [tests] tier 2: lint, types and every test that rolls no map
 	: " named @python3, which is what the first version of this phase did.)"
 	@python3 ../../../scripts/check-house-style-delta.py --selftest >/dev/null
 	@python3 ../../../scripts/check-house-style-delta.py ../../..
+	@: "(GUARD_EDIT_OK: feature 250 D14 - a research question this change touched stays under the size cap)"
+	@python3 ../../../scripts/check-question-size.py
 	@: "(GUARD_EDIT_OK: feature 171 - capture whether testmon was warm BEFORE the run, so the ratchet below judges like with like)"; \
 	warm=$$([ -f .testmondata ] && echo yes || echo no); start=$$(date +%s); $(EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(TESTMON) -q --no-cov -x --ff -m "not rolls_map" $(TIER_SELECT) $(QUICK_TREE); ec=$$?; \
 	  el=$$(( $$(date +%s) - start )); \

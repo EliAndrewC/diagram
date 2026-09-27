@@ -1,0 +1,40 @@
+<h2 id="bunds-are-shared-and-the-fabric-is-continuous">Bunds are SHARED, and the fabric is continuous</h2>
+<!-- Grounds: paddy_plot_seams_shared; waterfields/seams.py::close_seams -->
+<!-- Evidence: follows from the aze's construction and maintenance, in 'Paddy plots - irregular patchwork' -->
+<p><em>What the research found.</em> The <em>aze</em> (what it is and how it is kept: <a href="#paddy-plots---irregular-patchwork-and-why-the-grid-is-anachronistic">Paddy plots - irregular patchwork</a>) is the wall BETWEEN two basins, and it is built once. Three
+things make a second, parallel ridge with a strip of ground between it and the first impossible in
+practice. It doubles the <em>azenuri</em> - the spring re-plastering,<sup class="fn" data-note="nougyoudoboku-keihan-3"></sup> the single largest maintenance job
+the bund network carries<sup class="fn" data-note="paddy-plots---irregular-patchwork-and-why-the-grid-is-anachronistic"></sup> - for no gain. It holds no water: neither basin's rim is improved by a
+wall standing off in the middle of a strip. And the strip itself is idle land inside an irrigated
+command area, which is the most valuable ground on the map - the same land hunger that keeps field
+margins down to one scythe swath (the field-margin entry in <a href="vegetation.html">vegetation</a>) does not tolerate a few feet of bare
+mud between two paddies.<sup class="fn" data-note="tabayashi-1987-2"></sup> What real paddy fabric looks like is therefore ONE connected bund network
+whose lines meet at <strong>T-junctions</strong>; a free-standing four-sided ring inside it is not a paddy at
+all. The odd, piecemeal parcels that fabric produces are the honest look - and note that the
+detached, individually-walled rectangle is exactly the <em>kochi seiri</em> read that <a href="#paddy-plots---irregular-patchwork-and-why-the-grid-is-anachronistic">Paddy plots - irregular patchwork</a>
+flags as anachronistic, arrived at from the other direction.</p>
+<p><em>The decision it drove (GM 2026-08-17, on Inashiro:</em> "a tiny little standalone rectangle of earthen
+walls is just smack dab in the middle of where the field should be ... it should basically always
+be the case that two adjacent rice paddies share a single earthen wall rather than two different
+earthen walls"<em>).</em></p>
+<!-- Two halves. Generation: a seam-closing pass replaced the wedge filler. It takes the bare ground exactly as the carve left it - the command area, minus everything planted, minus the drawn channels and their banks - then PLANTS every pocket wide enough to hold a basin (so the new basin's outline IS the surrounding bunds) and ABSORBS every pocket too thin to plant into the neighbor it shares the most bund with (so the two walls become one). Its postcondition is that no square foot inside the command area is bare. Checking: a shared-seam check fails a plot that runs a bund alongside a neighbor's across dry floor, or that draws a whole ring inside a neighboring basin. Generation: waterfields/seams.py::close_seams; Checking: paddy_plot_seams_shared -->
+<p><em>Disclosed departures.</em> (1) A <strong>shallow lap</strong> is left alone, in both halves: a plot drawn over part
+of its neighbor paints out the bund it covers, so the pair still reads as one shared wall. Only
+near-containment is a fault. (2) The rule's upper bound is 24 real ft of gap - wider than that the
+ground between two basins is bare floor.<!-- which is the gapless-fan rule's business, and stating it twice at two tolerances is how checks start disagreeing --> (3) A pocket <strong>too thin to bund</strong> is absorbed
+rather than planted, matching the fan toe's existing thickness rule - a
+needle basin cannot be leveled or bunded at any sane cost.</p>
+<!-- (2) is paddy_fan_gapless's rule; (3) the thickness rule is _TOE_MIN_THICKNESS -->
+<!-- What the lap costs when the drawn basins are added up (GM 2026-08-17). The shallow lap has a
+consequence worth stating, because it decides how the drawn field may be measured. A basin that
+paints over part of its neighbor paints out the bund it covers, so the list of basin outlines a map
+records is a paint-order STACK rather than a partition: the outlines overlap, and simply adding them
+up double-counts the lapped ground by 0.4-2.5% (measured across the scripted hamlets and a
+48-seed cohort). The outlines are plot_rings, recorded in draw order; the contract is in
+settlement/fields/comb.py::_comb_record_field. The decision is to keep the record honest about the INK and to dissolve it -
+the later outline winning - before anything computes acreage, per-field yield or basin-to-basin
+adjacency, with the over-count held under 4% so it cannot grow unnoticed. Two alternatives were
+declined: trimming each outline back to the part of it that stays visible, which would make the
+record disagree with what is actually drawn, and recording both a drawn outline and a true one,
+which doubles the record for a figure nothing on the map reads. -->
+<p><strong>Sources:</strong> <a href="https://nougyoudoboku.com/a-ridge-between-rice-fields/"><code>nougyoudoboku-keihan</code></a>, <a href="https://www.jstage.jst.go.jp/article/grj1984b/60/1/60_1_41/_pdf"><code>tabayashi-1987</code></a>, <a href="https://ja.wikipedia.org/wiki/%E7%9F%B3%E7%9B%9B"><code>kokumori-jawiki</code></a></p>

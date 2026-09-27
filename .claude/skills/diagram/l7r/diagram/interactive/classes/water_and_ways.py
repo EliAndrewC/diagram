@@ -19,7 +19,10 @@ class Stream(Kind):
 
     Note: we have drawn the stream's width by its RANK in the water hierarchy rather than by its real width, in
     order to keep brook, head race and ditch readable at every zoom - so junctions do not conserve width
-    (the GM's ruling). The stream's type and place are read. The 2 m is not: no page read gives a village
+    (the GM's ruling of 2026-08-16). The two rulings behind this modal do not quite agree, and the record
+    has not reconciled them: the width ladder (the GM's ruling of 2026-07-21) draws a stream feeding a moat
+    as wide as the moat, because the water that enters has to be carried, while the later ruling sizes
+    every stroke by its own rank with no coordination across a junction. The stream's type and place are read. The 2 m is not: no page read gives a village
     creek a width, and the 0.3 m it is measured against is a modern design MINIMUM - the narrowest a canal of
     any grade may be built to - rather than a ditch anyone measured.
 
@@ -41,12 +44,17 @@ class IrrigationDitch(Kind):
 
     Why: The comb layout - supply along the high margins, delivery ditches perpendicular down-slope, one drain on
     the lowest line - is the Edo layout attributed to the Kishu school, and it is what Chinese canal doctrine
-    codifies too. Mains taper as branches tap them; the net is SPARSE because a village digs the minimum, and
-    a ditch beside every paddy is a Meiji anachronism. What the net draws is drawn at true size, and it stops
+    codifies too. Mains taper as branches tap them. The old form passes water from paddy to paddy over the
+    bund (tagoshi) rather than down a ditch to each, and a ditch beside every paddy is a Meiji anachronism, so
+    the net is drawn SPARSE. What the net draws is drawn at true size, and it stops
     one tier above the finest: the distribution lateral at about a meter is the last thing on the sheet, and
     the field ditch that waters a single paddy is a hairline the map does not attempt.
 
-    Note: Topology and taper are read (Tabayashi, the Minuma-dai record). The widths are weaker than they look.
+    Note: Topology and taper are read (Tabayashi, the Minuma-dai record), and so is the paddy-to-paddy form
+    (Bungotakada); how few ditches that form left is this record's own reading, since no page read counts
+    ditches: the pages on it describe water passing from paddy to paddy, the one village page giving its merit
+    as saving water, not saving digging, and keeping many weirs; prefectural and ministry papers a search
+    showed saying such districts have hardly any channels could not be read. The widths are weaker than they look.
     The third of a meter is a modern design MINIMUM rather than a measured ditch, and the Chinese doctrine is
     carried by a 2021 provincial standard for consolidated farmland, so what it gives is the doctrine and not
     a premodern layout. The national standard the record once leaned on for both is readable nowhere and is
@@ -59,7 +67,7 @@ class IrrigationDitch(Kind):
     Name: irrigation ditch
     Covers: `field_ditches` whose role is not `drain` (except on a dike-pond field, whose canals are the pond canal), and `channels` not leaving a drain - the head race, the supply canals, the delivery ditches, a source-to-field feed
     Label: accurate
-    Sources: tabayashi-1987, jsidre-minumadai, jsslkx-002-2021, nougyoudoboku-matsutan
+    Sources: tabayashi-1987, jsidre-minumadai, jsslkx-002-2021, nougyoudoboku-matsutan, bungotakada-tagoshi
     Entry: research/water.html - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'The head-race forks', 'Where does the brook stop being a brook and become the ditch'; research/fields.html - 'Where does a field's water come from, and how is it shared out?'
     """
 
@@ -72,7 +80,7 @@ class DrainageDitch(Kind):
     gathering what runs out of the basins, and its run onward - into the pond at the field's foot, into the
     passing brook, or off the edge of the map.
 
-    Why: Supply and drainage are kept apart on the ground, the supply along the high margins and the one
+    Why: Supply and drainage are kept apart on the ground, as modern field consolidation lays them out, the supply along the high margins and the one
     collector on the lowest line, so that every plot can be filled and emptied on its own; before modern
     consolidation the water that left a village's paddies went on down to the river, or to the next field, to
     be used again below. On a comb field the collector widens as it goes - a thread where it starts
@@ -80,10 +88,12 @@ class DrainageDitch(Kind):
     plot's drawdown to what it is already carrying; a polder's ring drain instead carries the whole basin at one
     rank from the start, and is drawn at one width.
 
-    Note: The collector's form and its separation from the supply net are read; whether it widens along its run
-    follows the field it drains, and the sink its run reaches is the map's declared water sink.
+    Note: The collector's form and its separation from the supply net are read, as the layout of modern
+    consolidation; whether it widens along its run follows the field it drains; it is drawn for every hamlet,
+    a deliberate trade over the older field-to-field and combined forms the record also holds, so a reader
+    has a ditch between the plots to hover, and the sink its run reaches is the map's declared water sink.
 
-    Caveat: the sink its run reaches is the map's declared water sink
+    Caveat: it is drawn for every hamlet, a deliberate trade over the older field-to-field and combined forms the record also holds, so a reader has a ditch between the plots to hover, and the sink its run reaches is the map's declared water sink
 
     Name: drainage ditch
     Covers: `field_ditches` whose role is `drain`, and `channels` leaving a drain - the collector and its run to the pond, the brook or the frame
@@ -102,14 +112,14 @@ class Weir(Kind):
 
     Why: A weir does not take the brook - it raises its surface a little, so that water enters the canal
     at the height the field needs, and the rest goes on over the crest and down the valley. The slant is
-    the old builders' answer to floods: it dams the shallow riffle, keeps the bar out of the fastest
-    water, and spreads the overflow along a longer crest so less of it breaks. Not every hamlet has one -
+    the old builders' way of leading water to the intake: it dams the shallow riffle, and it also keeps the bar out of the fastest
+    water, where a flood is least able to break it. Not every hamlet has one -
     where the brook ran high enough the water was simply led off the bank, and this map's roll decided.
 
     Note: we have drawn the weir closing the brook bank to bank, in order to make it visible on the map at
     this scale; half-river closures were the common old form, and across a brook 7 ft wide a half-bar would
-    be a line a pixel or two long. Its materials and its slant are read; the 5 ft thickness it is drawn at
-    is a guess, the engineering histories giving cross-sections only for weirs on real rivers.
+    be a line a pixel or two long. Its materials and its slant are read in the modern engineering histories, no period drawing of a village weir having been read; the 5 ft thickness it is drawn at
+    is a guess, no source read giving the thickness of a village weir.
 
     Name: weir
     Covers: `weirs` - the bar across the brook at a weir hamlet's intake
@@ -133,9 +143,10 @@ class Pond(Kind):
     that has passed through the plots, because before modern consolidation that water was used again below
     rather than thrown away.
 
-    Note: Form and siting are read (Tabayashi 1987, the Kagawa tameike documents). The SINGLE outlet is this
-    record's reading of them: the Kagawa page describes the inclined intake, the bottom conduit and the
-    spillway, and does not itself say there is only one way out. And where a pond is drawn at a field's foot to
+    Note: Form and siting are read (Tabayashi 1987, the Kagawa tameike documents). The SINGLE outlet, and the
+    spillway's having no part in sharing the water out, are this record's reading of them: the Kagawa page
+    describes the inclined intake, the bottom conduit and a works that passes heavy-rain inflow safely
+    downstream, and does not itself say there is only one way out or that the spillway never serves the fields. And where a pond is drawn at a field's foot to
     gather the water leaving the fields, that siting is how the map ends its drainage, and the pond's bank and
     outlet are not drawn from a surveyed example.
 
@@ -299,7 +310,7 @@ class Well(Kind):
     Why: A pre-modern rice village of about seventy households ran one to three communal wells, two being
     typical in this record's estimate - drinking water came mostly from surface water, settled and boiled,
     and a well was expensive durable capital dug by subscription only as surface quality forced. Shared wells
-    outnumbered private ones, in this record's reading: per-household wells appear only where the water
+    outnumbered private ones, in this record's reading: a dispersed farmstead, with no center to share a well with, carries its own; elsewhere per-household wells appear only where the water
     table is shallow.
 
     Note: we have drawn the wellhead about 19 ft across - a stone curb of 9.4 ft radius under a well-house roof -
@@ -307,7 +318,7 @@ class Well(Kind):
     stands, not how much ground it takes. A hand-dug well's shaft is about 1 m across, big enough for a
     person to work in, under a well house that is posts and a roof and nothing more; the width of the curb
     frame itself was not found. The one-to-three count is read (the Sphere/UNICEF capacity figure); the
-    typical two, and the households-per-well ratio, were searched for and not found, and stand as this
+    typical two, the households-per-well ratio, and the shallow water table that makes a farmstead's own well cheap (the groundwater paper gives no depth) were searched for and not found, and stand as this
     record's estimate.
 
     Name: well

@@ -13,7 +13,7 @@ import os
 import pytest
 
 from l7r.diagram.interactive.classes import NOT_HIGHLIGHTED, FeatureClass
-from l7r.diagram.interactive.sheet import census, element_kinds, flatten, parse, title_of, write_sheet_page
+from l7r.diagram.interactive.sheet import census, element_kinds, flatten, parse, pieces, title_of, write_sheet_page
 
 HEAD = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">'
 
@@ -79,6 +79,33 @@ def test_defs_are_ruled_out_and_whitespace_and_comments_vanish() -> None:
     strings, tags = flatten(svg)
     assert strings[1:-1] == ['<defs><pattern id="p"><rect width="2" height="2" fill="#000"/></pattern></defs>']
     assert tags[1:-1] == [NOT_HIGHLIGHTED]
+
+
+def test_a_part_knows_the_kinds_it_is_part_of() -> None:
+    # feature 264: a piece with its own kind inside a group of another kind is a PART of it; the group's own ink is
+    # part of nothing, and a part drawn elsewhere for paint order says what it is part of with data-part-of
+    svg = (
+        HEAD
+        + '<g data-kind="office hall"><rect x="1" y="1" width="9" height="9"/><g data-kind="dais"><rect data-kind="wall" x="3" y="3" width="2" height="2"/></g></g>'
+        + '<g data-kind="granary" data-part-of="office hall"><rect x="0" y="0" width="1" height="1"/></g>'
+        + '<g data-kind="-"><rect data-kind="wall" x="0" y="0" width="1" height="1"/></g></svg>'
+    )
+    got = [(p[1], p[2]) for p in pieces(svg)[1:-1]]
+    assert got == [("office hall", ()), ("wall", ("office hall", "dais")), ("granary", ("office hall",)), ("wall", ())]
+
+
+def test_the_page_lights_a_part_with_what_it_is_part_of(tmp_path: pytest.TempPathFactory) -> None:
+    svg = HEAD + '<g data-kind="office hall"><rect x="1" y="1" width="9" height="9" fill="#C00"/><rect data-kind="dais" x="3" y="3" width="2" height="2" fill="#0C0"/></g></svg>'
+    path = os.path.join(str(tmp_path), "m.svg")
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write(svg)
+    write_sheet_page(path, REG, with_raster=False)
+    with open(path[:-4] + ".html", encoding="utf-8") as fh:
+        page = fh.read()
+    # after data-k: the raster id map finds a group by class then data-k (raster._GROUP), and one out of order was lost
+    assert 'data-k="dais" data-in="office hall">' in page
+    assert 'data-in="dais"' not in page  # the part lights no parent
+    assert 'ins.split("|")' in page  # the script indexes the part under what it is part of
 
 
 def test_loose_text_inherits_the_enclosing_kind() -> None:

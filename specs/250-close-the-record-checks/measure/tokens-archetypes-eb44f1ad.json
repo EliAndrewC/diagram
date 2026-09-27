@@ -1,0 +1,87 @@
+[
+ {
+  "window": "(before the first mark)",
+  "main": {
+   "fresh": 13651,
+   "cached": 28266,
+   "output": 420,
+   "thinking": 47,
+   "turns": 2,
+   "peak_context": 22317
+  },
+  "agents": []
+ },
+ {
+  "window": "archetypes 1",
+  "main": {
+   "fresh": 17675,
+   "cached": 70941,
+   "output": 2360,
+   "thinking": 1428,
+   "turns": 3,
+   "peak_context": 39986
+  },
+  "agents": []
+ },
+ {
+  "window": "archetypes 2",
+  "main": {
+   "fresh": 25539,
+   "cached": 836501,
+   "output": 9482,
+   "thinking": 3878,
+   "turns": 16,
+   "peak_context": 65493
+  },
+  "agents": [
+   {
+    "agent": "source-reader",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "Read sources for archetypes items",
+    "fresh": 31679,
+    "cached": 186039,
+    "output": 9647,
+    "thinking": 3022,
+    "turns": 9,
+    "peak_context": 31663,
+    "first_turn": 9000,
+    "read_chars": 32963,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     5374,
+     3767,
+     2595,
+     2526,
+     2508,
+     2457
+    ]
+   }
+  ]
+ },
+ {
+  "window": "archetypes 3",
+  "main": {
+   "fresh": 15919,
+   "cached": 574274,
+   "output": 7175,
+   "thinking": 1477,
+   "turns": 8,
+   "peak_context": 81396
+  },
+  "agents": []
+ },
+ {
+  "window": "archetypes 4",
+  "main": {
+   "fresh": 475,
+   "cached": 81394,
+   "output": 754,
+   "thinking": 37,
+   "turns": 1,
+   "peak_context": 81869
+  },
+  "agents": []
+ }
+]

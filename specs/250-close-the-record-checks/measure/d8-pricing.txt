@@ -1,0 +1,16 @@
+first-turn context, headless check (the seeded bundle runs, n=15): mean 22,311, range 21,238-23,663
+first-turn context, subagent check (the page session, n=10): mean 7,235, range 6,152-8,659
+ratio 3.1x; difference 15,076 tokens a turn
+a check's turns in the page session: mean 5.8
+extra a headless check costs: 15,076 x 5.8 turns = 87,439 tokens
+  report  1,119 tokens, re-read on  38 later main turns =    42,522 tokens
+  report  1,842 tokens, re-read on  33 later main turns =    60,786 tokens
+  report  2,391 tokens, re-read on  33 later main turns =    78,903 tokens
+  report  1,861 tokens, re-read on  32 later main turns =    59,552 tokens
+  report  1,142 tokens, re-read on  38 later main turns =    43,396 tokens
+  report  2,208 tokens, re-read on  46 later main turns =   101,568 tokens
+  report  1,445 tokens, re-read on  36 later main turns =    52,020 tokens
+  report  1,106 tokens, re-read on   5 later main turns =     5,530 tokens
+  report  1,903 tokens, re-read on  30 later main turns =    57,090 tokens
+  report  1,287 tokens, re-read on   6 later main turns =     7,722 tokens
+inline reports: mean 1,630 tokens, re-read on a mean 30 later turns = mean 50,909 tokens a report

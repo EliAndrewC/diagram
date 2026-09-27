@@ -160,6 +160,23 @@ def test_a_scoped_prepass_lists_one_section(tmp_path, capsys):
     assert "1 sections" in text and "Grounds:" in text and "tameike" not in text
 
 
+def test_a_section_named_by_its_file_is_found_whatever_its_heading_punctuates(tmp_path, capsys):
+    """`SECTION=010` on a heading with an apostrophe matched nothing and said nothing (feature 250).
+
+    The record's id for "a city's wall" is `a-citys-wall`; a slug re-derived from the heading says
+    `a-city-s-wall`. The wanted headings are read from the fragment, and its `<h3>` comes with it.
+    """
+    research = tmp_path / rp.RESEARCH
+    (research / "lanes").mkdir(parents=True)
+    body = '<h2 id="a-citys-wall">A city\'s wall</h2>\n<p>Ordinary words.</p>\n<h3 id="and-under-it">And under it</h3>\n<p>More.</p>\n'
+    (research / "lanes.html").write_text(PAGE + body, encoding="utf-8")
+    (research / "lanes" / "010-a-citys-wall.html").write_text(body, encoding="utf-8")
+    assert rp.main(["lanes", "--root", str(tmp_path), "--section", "010"]) == 0
+    assert "2 sections" in capsys.readouterr().out
+    assert rp.main(["lanes", "--root", str(tmp_path), "--section", "no such question"]) == 2
+    assert "matched no section" in capsys.readouterr().err
+
+
 # --------------------------------------------------------------- feature 260: the candidate words
 
 
@@ -201,11 +218,17 @@ def test_the_candidate_list_over_the_real_entry() -> None:
             + (record / "ways" / "010-how-far-past-the-bank-does-a-bridge-land.notes.html").read_text(encoding="utf-8")
         )
     )
-    got = rp.rare_words(text, rp.defined_words(str(record)), rp.corpus_frequency(str(record)), keys=rp.registry_keys(str(record)))
-    words = [w for w, _n in got]
-    assert 20 <= len(words) <= 50, f"{len(words)} candidates - tens, not hundreds (R1, R2)"
+    # Against an EMPTY glossary, so the test does not go red the day the glossary does its job: feature 250
+    # defined `girder` and `stringers`, which is what the list exists to cause, and the assertion that they
+    # are raised failed for it. What the glossary then removes is asserted separately, by its own content.
+    frequency, keys = rp.corpus_frequency(str(record)), rp.registry_keys(str(record))
+    words = [w for w, _n in rp.rare_words(text, set(), frequency, keys=keys)]
+    assert 20 <= len(words) <= 60, f"{len(words)} candidates - tens, not hundreds (R1, R2)"
     assert "girder" in words and "obliquity" in words and "stringers" in words
     assert "and" not in words and "the" not in words
+    defined = rp.defined_words(str(record))
+    kept = [w for w, _n in rp.rare_words(text, defined, frequency, keys=keys)]
+    assert set(kept) <= set(words) and not set(kept) & defined, "a defined word is never raised"
 
 
 def test_a_corpus_that_has_never_seen_the_words_raises_nothing() -> None:

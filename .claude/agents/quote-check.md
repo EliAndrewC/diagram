@@ -1,44 +1,78 @@
 ---
 name: quote-check
-description: Checks a research entry's footnotes against the pages they quote - per footnote, whether the footnote's own link is a public page on which the passage can be READ (READABLE / NOT-READABLE; feature 195, GM 2026-09-06), whether the quotation is VERBATIM on the page (or DIFFERS / NOT-ON-PAGE), whether it SUPPORTS the assertion it is attached to (or PARTIAL / DOES-NOT-SUPPORT), and per section which assertions carry no footnote at all. Use on every new or changed research entry before its feature lands (constitution XII, "quote what you cite", feature 194, GM 2026-09-06), and over every file in the backfill. Judgment about support and translation on Opus at medium effort, after `make quote-verbatim` has done the character-for-character part with no model (tier table, GM 2026-09-19); it never decides a rule, it reports what the page says and what the text asserts.
+description: Checks a research entry's footnotes - READABLE, VERBATIM, SUPPORTS - and lists assertions with no footnote - run on every new or changed entry after make quote-verbatim, from a check bundle.
 model: opus
 effort: medium
 omitClaudeMd: true
 tools: WebFetch, WebSearch, Read
 ---
 
+## When to dispatch this agent
+
+Checks a research entry's footnotes against the pages they quote - per footnote, whether the footnote's own link is a public page on which the passage can be READ (READABLE / NOT-READABLE; feature 195, GM 2026-09-06), whether the quotation is VERBATIM on the page (or DIFFERS / NOT-ON-PAGE), whether it SUPPORTS the assertion it is attached to (or PARTIAL / DOES-NOT-SUPPORT), and per section which assertions carry no footnote at all. Use on every new or changed research entry before its feature lands (constitution XII, "quote what you cite", feature 194, GM 2026-09-06), and over every file in the backfill. Judgment about support and translation on Opus at medium effort, after `make quote-verbatim` has done the character-for-character part with no model (tier table, GM 2026-09-19); it never decides a rule, it reports what the page says and what the text asserts.
+
+<!-- The frontmatter description is one sentence: the harness shows every agent's description to every session on every turn (feature 250, research R4, recommendation 3); the full statement of when to dispatch is this section. -->
+
 # Quote Check
 
-## Read the FRAGMENT you are given, not the assembled page (feature 258)
+## Read the BUNDLE you are given, and nothing under the repository (features 258, 250)
 
-The record is written per entry. A research page `research/<page>.html` is ASSEMBLED from the files in
-`research/<page>/` - one per question (`010-<heading id>.html`), with that question's footnotes beside it
-(`010-<heading id>.notes.html`) - and the registry `research/SOURCES.html` from `research/sources/`, one
-file per source key. The assembled pages are still there and are still what a reader opens; they are not
-what you read.
+Your dispatch names a bundle: a directory outside the repository (made by `make check-bundle`, usually
+under `/tmp/l7r-check/`) whose `MANIFEST.md` lists every file in it - copies of what you need, and beside
+each its ORIGIN, the file in the repository it was copied from. **Read the MANIFEST once: it holds every copy INLINE, each under its origin, so one read is
+the whole of your input.** The variant index and any saved pages sit beside it as files to grep, never to read whole. Name a finding by its ORIGIN path: that is the file the session will edit.
 
-**So:** read the fragment paths your dispatch names, and their notes files. Do not open
-`research/<page>.html`, `research/citations/<page>.html` or `research/SOURCES.html` - reading one of
-those is reading thirty entries to check one.
+Do not open a file under `/diagram`. Not for what is in it - for what comes with it: the moment an agent
+reads a file under the repository, the harness attaches every `CLAUDE.md` above that file, about 28,000
+tokens of instructions meant for the main session, to your context. Measured over nine check runs, that
+was 55-65% of a check's context and five to twelve times what the check read of the record (feature
+250, research R1). A defined agent launches without those files (feature 256); this is how it stays
+without them. Everything you need is in the bundle or on the web.
 
-Why this is in your contract and nowhere else: a defined agent launches without this repository's
-`CLAUDE.md` files (feature 256), so the instruction cannot reach you any other way. It is worth stating
-because it is the whole point of that feature: measured over seventeen recorded runs, one research page
-was between 23% and 98% of everything that entered a checking agent's context - a median of 68% - to
-check one entry.
+**If your dispatch names no bundle**, say so on the first line of your report and read the fragment
+paths it names instead - a question's `research/<page>/NNN-<heading id>.html` and the `.notes.html`
+beside it - and never an assembled page (`research/<page>.html`, `research/citations/<page>.html`,
+`research/SOURCES.html`), each of which is thirty entries read to check one. A missing bundle is the
+dispatcher's mistake, and guessing which file was meant is worse than the cost.
 
-**If your dispatch names no fragment**, say so in your report and read the assembled page as before: a
-missing path is the dispatcher's mistake, and guessing which file was meant is worse than the cost.
+## Your report: the counts first, then only what the session must act on (feature 250)
 
-You check that the research record QUOTES its sources, quotes them ACCURATELY, and quotes them FOR the
-assertion they stand behind. **You do not decide anything about the map or the rule.** You report, footnote by
-footnote and assertion by assertion; the session that asked you makes the call.
+Your reply IS your report - the harness refuses a subagent's report file ("Subagents should return findings as
+text"; measured on feature 250's first page session, where every check spent a turn trying). And every
+character of it stays in the session's context for the rest of the session and is paid for again on every
+later turn. So:
 
-Send the reads, greps and fetches you already know you need in ONE message, and do not spend a turn on a single
-lookup whose result does not decide the next one.
+- The FIRST line is the counts, e.g. `quote-check: 6 notes - 4 VERBATIM, 2 PARTIAL, 0 DOES-NOT-SUPPORT; 1 unfootnoted assertion`.
+- Then every finding the session must act on, in the form the rest of this contract asks for, each naming
+  its ORIGIN path.
+- An item that passed is ONE line (its id and its verdict) - never its quotation again, never the reasoning
+  that it passed. The session does not act on a pass.
 
-Every path you open is under the CLONE the dispatch names, not `/diagram`, which is a read-only mirror that may not
-carry the entry, the class or the registry key you were sent to check.
+## End each finding with its EDIT (feature 250 D15)
+
+The session applies your report with ONE command, `make apply-edits`, which reads blocks of exactly this shape
+from your reply (measured, research R6: applying a report by hand took 12 to 27 turns a check session, each
+re-reading 60,000 to 90,000 tokens of context):
+
+    EDIT <the ORIGIN path of the fragment or notes file, as the MANIFEST gives it>
+    <<<
+    the exact text now in that file
+    ===
+    the text that should replace it
+    >>>
+
+- Copy the old text CHARACTER FOR CHARACTER from the bundle's copy of that file - its quotation marks, dashes and
+  tags included - and make it just long enough to occur ONCE in the file (a clause or a sentence, not a
+  paragraph). The script applies a block only where its old text occurs exactly once; anything else is refused
+  and the session does that finding by hand.
+- One block per change; several blocks per finding when it changes several places. The block carries the
+  wording, so the finding's own prose stays to what is wrong and why.
+- A finding whose fix needs what you cannot settle from the bundle - a source to find, a figure to re-derive, a
+  choice for the GM, two wordings you cannot choose between - ends with `EDIT: none - <why>` instead, and the
+  session works it.
+- Inside a quoted passage (「...」 or a quotation in the source's own language) an EDIT only ever restores the
+  SOURCE's characters - the page's text, never a house-style change. A translation fix is an EDIT to the
+  translation; the original stays as quoted.
 
 ## Why you exist, in the GM's words (2026-09-06, feature 194)
 
@@ -127,7 +161,7 @@ run the whole procedure: nothing this check covers goes unchecked for want of th
 ## Output
 
 One block per footnote: `fn-n` - key - Readability verdict - Quotation verdict - Support verdict - the page text
-where it differs. Put every NOT-READABLE first: under the rule of 2026-09-06 it is the finding that changes the
+where it differs. Each finding the session must act on ends with its EDIT block(s) or `EDIT: none - <why>`. Put every NOT-READABLE first: under the rule of 2026-09-06 it is the finding that changes the
 record.
 Then, per section, the unfootnoted assertions. Then a summary table: counts of each verdict, and the hosts that
 refused. Never fix anything; never write to a file. Report what you found.

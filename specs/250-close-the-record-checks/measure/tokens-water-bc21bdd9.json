@@ -1,0 +1,140 @@
+[
+ {
+  "window": "water 5",
+  "main": {
+   "fresh": 3464,
+   "cached": 67845,
+   "output": 629,
+   "thinking": 28,
+   "turns": 3,
+   "peak_context": 25216
+  },
+  "agents": [
+   {
+    "agent": "entry-drift",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "entry-drift Weir",
+    "fresh": 17785,
+    "cached": 12413,
+    "output": 2635,
+    "thinking": 1523,
+    "turns": 2,
+    "peak_context": 23407,
+    "first_turn": 6791,
+    "read_chars": 39488,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     39488
+    ]
+   },
+   {
+    "agent": "entry-drift",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "entry-drift DrainageDitch",
+    "fresh": 7532,
+    "cached": 12417,
+    "output": 2916,
+    "thinking": 1637,
+    "turns": 2,
+    "peak_context": 13154,
+    "first_turn": 6795,
+    "read_chars": 15234,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     15234
+    ]
+   }
+  ]
+ },
+ {
+  "window": "water 6",
+  "main": {
+   "fresh": 12635,
+   "cached": 377480,
+   "output": 3822,
+   "thinking": 900,
+   "turns": 12,
+   "peak_context": 37825
+  },
+  "agents": []
+ },
+ {
+  "window": "water 7",
+  "main": {
+   "fresh": 32555,
+   "cached": 511790,
+   "output": 2438,
+   "thinking": 345,
+   "turns": 8,
+   "peak_context": 70364
+  },
+  "agents": [
+   {
+    "agent": "entry-drift",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "entry-drift DrainageDitch recheck",
+    "fresh": 7762,
+    "cached": 12505,
+    "output": 1805,
+    "thinking": 843,
+    "turns": 2,
+    "peak_context": 13384,
+    "first_turn": 6883,
+    "read_chars": 15674,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     15674
+    ]
+   },
+   {
+    "agent": "entry-drift",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "entry-drift Weir recheck",
+    "fresh": 17871,
+    "cached": 12496,
+    "output": 2254,
+    "thinking": 1483,
+    "turns": 2,
+    "peak_context": 23493,
+    "first_turn": 6874,
+    "read_chars": 39527,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     39527
+    ]
+   }
+  ]
+ },
+ {
+  "window": "water 8",
+  "main": {
+   "fresh": 3348,
+   "cached": 286578,
+   "output": 2157,
+   "thinking": 394,
+   "turns": 4,
+   "peak_context": 73704
+  },
+  "agents": []
+ },
+ {
+  "window": "water 2b-8",
+  "main": {
+   "fresh": 13092,
+   "cached": 28579,
+   "output": 427,
+   "thinking": 21,
+   "turns": 2,
+   "peak_context": 21758
+  },
+  "agents": []
+ }
+]

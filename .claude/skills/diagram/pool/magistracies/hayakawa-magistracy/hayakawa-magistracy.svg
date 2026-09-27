@@ -77,27 +77,35 @@
   <!-- River landing: dock, moored tax barge, river-watch post -->
   <g data-kind="river landing">
     <!-- stone revetment along the bank (a swift river with a flood history) -->
-    <rect x="1064" y="470" width="8" height="96" fill="#9C9484" stroke="#5C544C" stroke-width="0.6"/>
-    <rect x="1040" y="492" width="56" height="46" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
-    <line x1="1054" y1="492" x2="1054" y2="538" stroke="#6B4F2A" stroke-width="0.8"/>
-    <line x1="1068" y1="492" x2="1068" y2="538" stroke="#6B4F2A" stroke-width="0.8"/>
-    <line x1="1082" y1="492" x2="1082" y2="538" stroke="#6B4F2A" stroke-width="0.8"/>
+    <rect x="1064" y="470" width="8" height="96" fill="#9C9484" stroke="#5C544C" stroke-width="0.6" data-kind="revetment"/>
+    <g data-kind="dock">
+      <rect x="1040" y="492" width="56" height="46" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
+      <line x1="1054" y1="492" x2="1054" y2="538" stroke="#6B4F2A" stroke-width="0.8"/>
+      <line x1="1068" y1="492" x2="1068" y2="538" stroke="#6B4F2A" stroke-width="0.8"/>
+      <line x1="1082" y1="492" x2="1082" y2="538" stroke="#6B4F2A" stroke-width="0.8"/>
+    </g>
     <text x="1068" y="482" text-anchor="end" font-size="11" font-weight="bold" fill="#3A2E1C">river landing</text>
     <!-- moored tax barge (takasebune proportions: ~47 x 7 ft at 3 px/ft),
          lying parallel to the bank -->
-    <line x1="1096" y1="505" x2="1102" y2="505" stroke="#4A3318" stroke-width="1.5"/>
-    <line x1="1096" y1="528" x2="1102" y2="528" stroke="#4A3318" stroke-width="1.5"/>
-    <rect x="1102" y="445" width="22" height="140" rx="8" fill="#8C6F3E" stroke="#4A3318" stroke-width="1.2"/>
-    <circle cx="1113" cy="480" r="6" fill="#D9B47A" stroke="#7A5430" stroke-width="0.8"/>
-    <circle cx="1113" cy="515" r="6" fill="#D9B47A" stroke="#7A5430" stroke-width="0.8"/>
-    <circle cx="1113" cy="550" r="6" fill="#D9B47A" stroke="#7A5430" stroke-width="0.8"/>
-    <text x="1113" y="601" text-anchor="middle" font-size="8" font-style="italic" fill="#16303F">tax barge</text>
+    <g data-kind="tax barge">
+      <line x1="1096" y1="505" x2="1102" y2="505" stroke="#4A3318" stroke-width="1.5"/>
+      <line x1="1096" y1="528" x2="1102" y2="528" stroke="#4A3318" stroke-width="1.5"/>
+      <rect x="1102" y="445" width="22" height="140" rx="8" fill="#8C6F3E" stroke="#4A3318" stroke-width="1.2"/>
+      <circle cx="1113" cy="480" r="6" fill="#D9B47A" stroke="#7A5430" stroke-width="0.8"/>
+      <circle cx="1113" cy="515" r="6" fill="#D9B47A" stroke="#7A5430" stroke-width="0.8"/>
+      <circle cx="1113" cy="550" r="6" fill="#D9B47A" stroke="#7A5430" stroke-width="0.8"/>
+      <text x="1113" y="601" text-anchor="middle" font-size="8" font-style="italic" fill="#16303F">tax barge</text>
+    </g>
     <!-- boatmen's altar on the bank south of the dock -->
-    <rect x="1048" y="546" width="10" height="14" fill="#A03020" stroke="#5C0A04" stroke-width="0.8"/>
-    <text x="1066" y="586" text-anchor="end" font-size="7.5" font-style="italic" fill="#5C4830">boatmen's altar</text>
+    <g data-kind="boatmen's altar">
+      <rect x="1048" y="546" width="10" height="14" fill="#A03020" stroke="#5C0A04" stroke-width="0.8"/>
+      <text x="1066" y="586" text-anchor="end" font-size="7.5" font-style="italic" fill="#5C4830">boatmen's altar</text>
+    </g>
     <!-- river-watch post -->
-    <rect x="1000" y="528" width="36" height="30" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
-    <text x="1018" y="572" text-anchor="middle" font-size="9" font-style="italic" fill="#3A2E1C">river watch</text>
+    <g data-kind="river watch">
+      <rect x="1000" y="528" width="36" height="30" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
+      <text x="1018" y="572" text-anchor="middle" font-size="9" font-style="italic" fill="#3A2E1C">river watch</text>
+    </g>
   </g>
 
   <!-- Title block (just above the compound; no redundant summary line - the
@@ -236,7 +244,7 @@
   </g>
   <!-- Internal gate posts (a household door ~8 ft - a real nakamon, well
        under the ceremonial main gate) -->
-  <g fill="#3F3A30" data-kind="court divider">
+  <g fill="#3F3A30" data-kind="nakamon" data-part-of="court divider">
     <rect x="488" y="456" width="10" height="10"/>
     <rect x="522" y="456" width="10" height="10"/>
   </g>
@@ -256,31 +264,44 @@
     <text x="430" y="196" text-anchor="middle" font-size="11" font-weight="bold" fill="#5C4830" letter-spacing="2">RESIDENCE</text>
     <!-- West block: formal reception + the lord's rooms (each label is a
          multi-room ZONE, not one room; engawa veranda along the south face) -->
-    <rect x="160" y="202" width="288" height="76" fill="#DDB87A" stroke="#5A3F1E" stroke-width="2.5"/>
-    <rect x="160" y="278" width="288" height="8" fill="#E8D2A8" stroke="#5A3F1E" stroke-width="1.5"/>
+    <!-- Each room is its own floor over the block's fill, the outline on top (feature 264) -->
+    <rect x="160" y="202" width="288" height="76" fill="#DDB87A"/>
+    <rect x="160" y="202" width="144" height="76" fill="#DDB87A" data-kind="reception room"/>
+    <rect x="304" y="202" width="144" height="76" fill="#DDB87A" data-kind="lord's quarters"/>
+    <rect x="160" y="202" width="288" height="76" fill="none" stroke="#5A3F1E" stroke-width="2.5"/>
+    <rect x="160" y="278" width="288" height="8" fill="#E8D2A8" stroke="#5A3F1E" stroke-width="1.5" data-kind="engawa"/>
     <line x1="304" y1="202" x2="304" y2="278" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
-    <text x="232" y="240" text-anchor="middle" font-size="12" font-weight="bold" fill="#3A2E1C">reception</text>
-    <text x="232" y="255" text-anchor="middle" font-size="10" font-style="italic" fill="#5C4830">(zashiki)</text>
-    <text x="376" y="236" text-anchor="middle" font-size="12" font-weight="bold" fill="#3A2E1C">Hajime's quarters</text>
-    <text x="376" y="251" text-anchor="middle" font-size="10" font-style="italic" fill="#3A2E1C">private study</text>
+    <g data-kind="reception room">
+      <text x="232" y="240" text-anchor="middle" font-size="12" font-weight="bold" fill="#3A2E1C">reception</text>
+      <text x="232" y="255" text-anchor="middle" font-size="10" font-style="italic" fill="#5C4830">(zashiki)</text>
+    </g>
+    <g data-kind="lord's quarters">
+      <text x="376" y="236" text-anchor="middle" font-size="12" font-weight="bold" fill="#3A2E1C">Hajime's quarters</text>
+      <text x="376" y="251" text-anchor="middle" font-size="10" font-style="italic" fill="#3A2E1C">private study</text>
+    </g>
     <!-- Connecting corridor -->
-    <rect x="448" y="230" width="10" height="34" fill="#DDB87A" stroke="#5A3F1E" stroke-width="1.5"/>
+    <rect x="448" y="230" width="10" height="34" fill="#DDB87A" stroke="#5A3F1E" stroke-width="1.5" data-kind="residence corridor"/>
     <!-- East block, stepped south: family + ancestral rooms (engawa along the
          garden-facing south face) -->
-    <rect x="458" y="222" width="242" height="76" fill="#DDB87A" stroke="#5A3F1E" stroke-width="2.5"/>
-    <rect x="458" y="298" width="242" height="8" fill="#E8D2A8" stroke="#5A3F1E" stroke-width="1.5"/>
+    <rect x="458" y="222" width="242" height="76" fill="#DDB87A"/>
+    <rect x="458" y="222" width="120" height="76" fill="#DDB87A" data-kind="family quarters"/>
+    <rect x="578" y="222" width="122" height="76" fill="#DDB87A" data-kind="inner rooms"/>
+    <rect x="458" y="222" width="242" height="76" fill="none" stroke="#5A3F1E" stroke-width="2.5"/>
+    <rect x="458" y="298" width="242" height="8" fill="#E8D2A8" stroke="#5A3F1E" stroke-width="1.5" data-kind="engawa"/>
     <line x1="578" y1="222" x2="578" y2="298" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
-    <text x="517" y="260" text-anchor="middle" font-size="11" fill="#3A2E1C">family</text>
-    <text x="517" y="274" text-anchor="middle" font-size="11" fill="#3A2E1C">quarters</text>
-    <text x="640" y="244" text-anchor="middle" font-size="10" fill="#3A2E1C">east rooms</text>
+    <g data-kind="family quarters">
+      <text x="517" y="260" text-anchor="middle" font-size="11" fill="#3A2E1C">family</text>
+      <text x="517" y="274" text-anchor="middle" font-size="11" fill="#3A2E1C">quarters</text>
+    </g>
+    <text x="640" y="244" text-anchor="middle" font-size="10" fill="#3A2E1C" data-kind="inner rooms">east rooms</text>
     <text x="640" y="258" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830" data-kind="ancestral alcove">&amp; ancestral alcove -</text>
     <text x="640" y="269" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830" data-kind="ancestral alcove">tablets of past</text>
     <text x="640" y="280" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830" data-kind="ancestral alcove">magistrates, Hajime's</text>
     <text x="640" y="291" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830" data-kind="ancestral alcove">forebears (lineage-held)</text>
   </g>
 
-  <!-- Formal entry porch (genkan) at the reception block -->
-  <g data-kind="residence">
+  <!-- Formal entry porch (genkan) at the reception block - drawn apart, declared part of the residence (feature 264) -->
+  <g data-kind="genkan" data-part-of="residence">
     <rect x="248" y="286" width="40" height="14" fill="#C9A57A" stroke="#5A3F1E" stroke-width="1.2"/>
   </g>
 
@@ -290,8 +311,10 @@
        (size-audit 2026-07) -->
   <g data-kind="kitchen">
     <rect x="160" y="320" width="120" height="100" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
-    <rect x="175" y="337.5" width="30" height="13" fill="#6B4030" stroke="#3A2010" stroke-width="0.8"/>
-    <circle cx="190" cy="344" r="4" fill="#E68A40"/>
+    <g data-kind="hearth">
+      <rect x="175" y="337.5" width="30" height="13" fill="#6B4030" stroke="#3A2010" stroke-width="0.8"/>
+      <circle cx="190" cy="344" r="4" fill="#E68A40"/>
+    </g>
     <text x="222" y="370" text-anchor="middle" font-size="13" font-weight="bold" fill="#3A2E1C">kitchen</text>
     <text x="222" y="388" text-anchor="middle" font-size="11" fill="#3A2E1C">&amp; pantries</text>
     <!-- Kitchen well -->
@@ -303,14 +326,16 @@
   <!-- Inner garden (mature - laid down by generations of magistrates) -->
   <g data-kind="garden">
     <rect x="460" y="322" width="240" height="128" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
-    <ellipse cx="530" cy="390" rx="55" ry="26" fill="#9CB4C8" stroke="#5C7488" stroke-width="1.2"/>
+    <ellipse cx="530" cy="390" rx="55" ry="26" fill="#9CB4C8" stroke="#5C7488" stroke-width="1.2" data-kind="garden pond"/>
     <!-- old pines -->
-    <circle cx="620" cy="348" r="9" fill="#5C7050" stroke="#3A4E38" stroke-width="0.8"/>
-    <circle cx="641" cy="362" r="7" fill="#5C7050" stroke="#3A4E38" stroke-width="0.8"/>
-    <circle cx="606" cy="364" r="6" fill="#5C7050" stroke="#3A4E38" stroke-width="0.8"/>
-    <text x="625" y="384" text-anchor="middle" font-size="8" font-style="italic" fill="#3A4E38">old pines</text>
+    <g data-kind="garden pines">
+      <circle cx="620" cy="348" r="9" fill="#5C7050" stroke="#3A4E38" stroke-width="0.8"/>
+      <circle cx="641" cy="362" r="7" fill="#5C7050" stroke="#3A4E38" stroke-width="0.8"/>
+      <circle cx="606" cy="364" r="6" fill="#5C7050" stroke="#3A4E38" stroke-width="0.8"/>
+      <text x="625" y="384" text-anchor="middle" font-size="8" font-style="italic" fill="#3A4E38">old pines</text>
+    </g>
     <!-- stone lanterns -->
-    <g fill="#9C8C70" stroke="#5C4830" stroke-width="0.8">
+    <g fill="#9C8C70" stroke="#5C4830" stroke-width="0.8" data-kind="stone lantern">
       <rect x="468" y="410" width="4" height="7"/>
       <circle cx="470" cy="407" r="3.5"/>
       <rect x="596" y="424" width="4" height="7"/>
@@ -334,13 +359,13 @@
   <g data-kind="karo's house">
     <rect x="340" y="374" width="115" height="74" fill="#DDB87A" stroke="#5A3F1E" stroke-width="2"/>
     <!-- informal side entrance (a modest door, not a second genkan) -->
-    <rect x="372" y="448" width="26" height="8" fill="#C9A57A" stroke="#5A3F1E" stroke-width="1"/>
+    <rect x="372" y="448" width="26" height="8" fill="#C9A57A" stroke="#5A3F1E" stroke-width="1" data-kind="door"/>
     <text x="397" y="406" text-anchor="middle" font-size="11" font-weight="bold" fill="#3A2E1C">karo's house</text>
     <text x="397" y="421" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">(the house elder)</text>
   </g>
 
   <!-- Garden well -->
-  <g data-kind="well">
+  <g data-kind="well" data-part-of="garden">
     <rect x="645" y="398" width="24" height="24" fill="#9C8C70" stroke="#5C4830" stroke-width="1.2"/>
     <circle cx="657" cy="410" r="7" fill="#2D2A24"/>
     <text x="657" y="438" text-anchor="middle" font-size="9" font-style="italic" fill="#3A2E1C">well</text>
@@ -358,11 +383,11 @@
     <line x1="277" y1="156" x2="277" y2="196" stroke="#6B4F2A" stroke-width="1"/>
     <line x1="330" y1="156" x2="330" y2="196" stroke="#6B4F2A" stroke-width="1"/>
     <!-- court-facing door (informal) -->
-    <rect x="252" y="196" width="26" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8"/>
+    <rect x="252" y="196" width="26" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
     <text x="277" y="180" text-anchor="middle" font-size="9" font-weight="bold" fill="#3A2E1C">servants' quarters</text>
   </g>
   <!-- Family privy attached to the residence's rear (north) corner -->
-  <g data-kind="latrine">
+  <g data-kind="latrine" data-part-of="residence">
     <rect x="462" y="208" width="18" height="14" fill="#7E726A" stroke="#3A2E1C" stroke-width="0.8"/>
     <text x="484" y="219" font-size="8" font-style="italic" fill="#5C4830">latrine</text>
   </g>
@@ -400,12 +425,14 @@
     <rect x="773.5" y="210.5" width="33" height="3" fill="#A03020"/>
     <rect x="773.5" y="228.5" width="33" height="3" fill="#A03020"/>
     <!-- flame glyph inside -->
-    <path d="M 785 226 L 787 218 L 789.5 223 L 792 216 L 794.5 222 L 796 226" stroke="#FFFAE6" stroke-width="1.4" fill="none"/>
+    <path d="M 785 226 L 787 218 L 789.5 223 L 792 216 L 794.5 222 L 796 226" stroke="#FFFAE6" stroke-width="1.4" fill="none" data-kind="shrine altar"/>
     <!-- the surviving Ebisu altar in the corner -->
-    <rect x="776" y="219" width="9" height="9" fill="none" stroke="#FFFAE6" stroke-width="1.2"/>
-    <text x="795" y="246" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">(was an Ebisu shrine - one altar remains)</text>
+    <g data-kind="shrine altar">
+      <rect x="776" y="219" width="9" height="9" fill="none" stroke="#FFFAE6" stroke-width="1.2"/>
+      <text x="795" y="246" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">(was an Ebisu shrine - one altar remains)</text>
+    </g>
     <!-- approach torii south of the shrine -->
-    <g transform="translate(790, 274)" stroke="#A03020" stroke-width="2.5">
+    <g transform="translate(790, 274)" stroke="#A03020" stroke-width="2.5" data-kind="torii">
       <line x1="-13" y1="0" x2="13" y2="0"/>
       <line x1="-15" y1="6" x2="15" y2="6"/>
       <line x1="-11" y1="6" x2="-11" y2="24"/>
@@ -420,7 +447,7 @@
     <rect x="773.5" y="322.5" width="33" height="3" fill="#A03020"/>
     <rect x="773.5" y="340.5" width="33" height="3" fill="#A03020"/>
     <!-- wave glyph inside -->
-    <path d="M 781 334 q 3 -5 6 0 q 3 5 6 0 q 3 -5 6 0" stroke="#FFFAE6" stroke-width="1.4" fill="none"/>
+    <path d="M 781 334 q 3 -5 6 0 q 3 5 6 0 q 3 -5 6 0" stroke="#FFFAE6" stroke-width="1.4" fill="none" data-kind="shrine altar"/>
     <text x="790" y="378" text-anchor="middle" font-size="8.5" font-style="italic" fill="#5C4830">offerings against flood &amp; drowning</text>
     <text x="790" y="390" text-anchor="middle" font-size="8.5" font-style="italic" fill="#5C4830">(Hajime attends daily)</text>
   </g>
@@ -433,12 +460,12 @@
     <rect x="895" y="200" width="90" height="100" fill="#DDB87A" stroke="#5A3F1E" stroke-width="2.5"/>
     <!-- entry from the guest garden (guests arrive via the river door into the
          garden, then the guest house - a court-fed entrance, not a sealed box) -->
-    <rect x="925" y="300" width="30" height="8" fill="#C9A57A" stroke="#5A3F1E" stroke-width="1"/>
+    <rect x="925" y="300" width="30" height="8" fill="#C9A57A" stroke="#5A3F1E" stroke-width="1" data-kind="door"/>
     <text x="940" y="254" text-anchor="middle" font-size="12" font-weight="bold" fill="#3A2E1C">guest house</text>
   </g>
   <g data-kind="garden">
     <rect x="895" y="315" width="101" height="70" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
-    <g fill="#9C8C70" stroke="#5C4830" stroke-width="0.8">
+    <g fill="#9C8C70" stroke="#5C4830" stroke-width="0.8" data-kind="stone lantern">
       <rect x="936" y="348" width="4" height="7"/>
       <circle cx="938" cy="345" r="3.5"/>
     </g>
@@ -455,37 +482,45 @@
        study), front dais band overlooking the sand - the courtroom is a room
        OF the office hall, not a freestanding stage. -->
   <g data-kind="office hall">
-    <rect x="340" y="488" width="340" height="84" fill="#DDB87A" stroke="#5A3F1E" stroke-width="2.5"/>
+    <!-- Each room is its own floor over the hall's fill, the outline on top (feature 264; Ochiba's office hall) -->
+    <rect x="340" y="488" width="340" height="84" fill="#DDB87A"/>
+    <rect x="340" y="488" width="175" height="50" fill="#DDB87A" data-kind="day office"/>
+    <rect x="515" y="488" width="165" height="50" fill="#DDB87A" data-kind="official study"/>
+    <rect x="340" y="488" width="340" height="84" fill="none" stroke="#5A3F1E" stroke-width="2.5"/>
     <line x1="340" y1="538" x2="680" y2="538" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
     <line x1="515" y1="488" x2="515" y2="538" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
-    <text x="427" y="516" text-anchor="middle" font-size="11" font-weight="bold" fill="#3A2E1C">day office</text>
-    <text x="597" y="516" text-anchor="middle" font-size="11" font-weight="bold" fill="#3A2E1C">official study</text>
+    <text x="427" y="516" text-anchor="middle" font-size="11" font-weight="bold" fill="#3A2E1C" data-kind="day office">day office</text>
+    <text x="597" y="516" text-anchor="middle" font-size="11" font-weight="bold" fill="#3A2E1C" data-kind="official study">official study</text>
     <rect x="465" y="540" width="90" height="30" fill="#8C6F3E" stroke="#4A3318" stroke-width="1" data-kind="magistrate's dais"/>
     <text x="510" y="559" text-anchor="middle" font-size="10" fill="#FFFAE6" font-weight="bold" data-kind="magistrate's dais">magistrate's dais</text>
-    <rect x="370" y="543" width="80" height="21" fill="#B89868" stroke="#5C4830" stroke-width="0.5"/>
-    <text x="410" y="557" text-anchor="middle" font-size="9" fill="#3A2E1C">clerk</text>
-    <rect x="570" y="543" width="80" height="21" fill="#B89868" stroke="#5C4830" stroke-width="0.5"/>
-    <text x="610" y="557" text-anchor="middle" font-size="9" fill="#3A2E1C">clerk</text>
+    <g data-kind="clerks' seats">
+      <rect x="370" y="543" width="80" height="21" fill="#B89868" stroke="#5C4830" stroke-width="0.5"/>
+      <text x="410" y="557" text-anchor="middle" font-size="9" fill="#3A2E1C">clerk</text>
+      <rect x="570" y="543" width="80" height="21" fill="#B89868" stroke="#5C4830" stroke-width="0.5"/>
+      <text x="610" y="557" text-anchor="middle" font-size="9" fill="#3A2E1C">clerk</text>
+    </g>
   </g>
 
   <!-- Hearing court (white sand) -->
   <g data-kind="hearing court">
     <rect x="340" y="577" width="340" height="92" fill="url(#oshirasu-sand)" stroke="#9C7A40" stroke-width="1.2" stroke-dasharray="2 2"/>
     <text x="510" y="602" text-anchor="middle" font-size="14" font-weight="bold" fill="#5C4318" letter-spacing="1">HEARING COURT</text>
-    <g fill="#A88454" stroke="#7A5430" stroke-width="0.5" opacity="0.85">
-      <rect x="445.5" y="642.5" width="9" height="9"/>
-      <rect x="485.5" y="642.5" width="9" height="9"/>
-      <rect x="525.5" y="642.5" width="9" height="9"/>
-      <rect x="565.5" y="642.5" width="9" height="9"/>
+    <g data-kind="kneeling positions">
+      <g fill="#A88454" stroke="#7A5430" stroke-width="0.5" opacity="0.85">
+        <rect x="445.5" y="642.5" width="9" height="9"/>
+        <rect x="485.5" y="642.5" width="9" height="9"/>
+        <rect x="525.5" y="642.5" width="9" height="9"/>
+        <rect x="565.5" y="642.5" width="9" height="9"/>
+      </g>
+      <text x="510" y="660" text-anchor="middle" font-size="8" font-style="italic" fill="#7A5C30">witness / petitioner positions</text>
     </g>
-    <text x="510" y="660" text-anchor="middle" font-size="8" font-style="italic" fill="#7A5C30">witness / petitioner positions</text>
   </g>
 
   <!-- Tax archive (W side, upper) - sealed plaster kura: the ledgers are
        the county's tax base, so they get fireproof walls -->
   <g data-kind="tax archive">
     <rect x="160" y="480" width="96" height="78" fill="#F2EFE4" stroke="#4A3318" stroke-width="2.5"/>
-    <rect x="248" y="512" width="8" height="14" fill="#4A3318"/>
+    <rect x="248" y="512" width="8" height="14" fill="#4A3318" data-kind="door"/>
     <text x="208" y="524" text-anchor="middle" font-size="13" font-weight="bold" fill="#3A2E1C">tax archive</text>
   </g>
 
@@ -546,12 +581,16 @@
     <text x="830" y="486" text-anchor="middle" font-size="9" font-style="italic" fill="#3A2E1C">practice ground</text>
     <text x="830" y="498" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830">(doubles as bale yard)</text>
     <!-- tategi striking posts (~1 ft standing posts - r2 location markers) -->
-    <text x="816" y="510" text-anchor="middle" font-size="7" font-style="italic" fill="#5C4830">striking posts</text>
-    <circle cx="800" cy="518" r="2" fill="#7A5430" stroke="#4A3318" stroke-width="0.8"/>
-    <circle cx="814" cy="530" r="2" fill="#7A5430" stroke="#4A3318" stroke-width="0.8"/>
+    <g data-kind="striking posts">
+      <text x="816" y="510" text-anchor="middle" font-size="7" font-style="italic" fill="#5C4830">striking posts</text>
+      <circle cx="800" cy="518" r="2" fill="#7A5430" stroke="#4A3318" stroke-width="0.8"/>
+      <circle cx="814" cy="530" r="2" fill="#7A5430" stroke="#4A3318" stroke-width="0.8"/>
+    </g>
     <!-- weapon rack flush against the granary's north face -->
-    <rect x="798" y="544" width="24" height="6" fill="#8C6F3E" stroke="#4A3318" stroke-width="0.8"/>
-    <text x="794" y="547" text-anchor="end" font-size="7" font-style="italic" fill="#5C4830">weapon rack</text>
+    <g data-kind="weapon rack">
+      <rect x="798" y="544" width="24" height="6" fill="#8C6F3E" stroke="#4A3318" stroke-width="0.8"/>
+      <text x="794" y="547" text-anchor="end" font-size="7" font-style="italic" fill="#5C4830">weapon rack</text>
+    </g>
   </g>
 
   <!-- Granary (raised kura, E side - a staging store). 43x26 ft, a single
@@ -559,9 +598,11 @@
        footprint, kept under a residence block (size-audit 2026-07) -->
   <g data-kind="granary">
     <rect x="740" y="550" width="130" height="78" fill="url(#granary-slats)" stroke="#5A3F1E" stroke-width="2"/>
-    <rect x="742" y="620" width="10" height="8" fill="#4A3318"/>
-    <rect x="800" y="620" width="10" height="8" fill="#4A3318"/>
-    <rect x="858" y="620" width="10" height="8" fill="#4A3318"/>
+    <g data-kind="granary stilts">
+      <rect x="742" y="620" width="10" height="8" fill="#4A3318"/>
+      <rect x="800" y="620" width="10" height="8" fill="#4A3318"/>
+      <rect x="858" y="620" width="10" height="8" fill="#4A3318"/>
+    </g>
     <text x="805" y="576" text-anchor="middle" font-size="13" font-weight="bold" fill="#3A2E1C">granary</text>
     <text x="805" y="592" text-anchor="middle" font-size="9" font-style="italic" fill="#5C4830">staging store - tax grain</text>
     <text x="805" y="604" text-anchor="middle" font-size="9" font-style="italic" fill="#5C4830">barges down to Nagahara</text>
@@ -588,7 +629,7 @@
     <!-- court-facing door (informal) - every lodging block gets a drawn way in
          (building-review entrance sweep, 2026-07-24; Ochiba's barracks already
          had one) -->
-    <rect x="694" y="692" width="24" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8"/>
+    <rect x="694" y="692" width="24" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
     <text x="707" y="716" text-anchor="middle" font-size="11" font-weight="bold" fill="#3A2E1C">barracks</text>
     <text x="707" y="729" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">duty watch only</text>
   </g>

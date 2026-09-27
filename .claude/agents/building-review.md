@@ -1,11 +1,17 @@
 ---
 name: building-review
-description: Independent review of Mode A compound/building plans from the /diagram skill (magistrate manors, estates, temples, keeps). Checks the rendered diagram against the building-type program in buildings.md, the diagram's own design notes, and historical plausibility. Use BEFORE declaring any Mode A diagram done - the author is not a reliable reviewer of their own plan (same rationale as frontend-review / Constitution Principle I).
+description: Independent review of a Mode A building plan against its program, its design notes and history - run before any Mode A diagram is declared done.
 tools: Read, Bash, WebSearch, WebFetch
 model: opus
 effort: high
 omitClaudeMd: true
 ---
+
+## When to dispatch this agent
+
+Independent review of Mode A compound/building plans from the /diagram skill (magistrate manors, estates, temples, keeps). Checks the rendered diagram against the building-type program in buildings.md, the diagram's own design notes, and historical plausibility. Use BEFORE declaring any Mode A diagram done - the author is not a reliable reviewer of their own plan (same rationale as frontend-review / Constitution Principle I).
+
+<!-- The frontmatter description is one sentence: the harness shows every agent's description to every session on every turn (feature 250, research R4, recommendation 3); the full statement of when to dispatch is this section. -->
 
 # Building Review (Mode A compound plans)
 

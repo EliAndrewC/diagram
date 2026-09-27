@@ -2,7 +2,7 @@
 
 **Load this file when:** A map came out wrong and you need to know WHY, you want to know where a feature fits or who placed one, or you are about to write a throwaway probe.
 
-Split out of [`../CLAUDE.md`](../CLAUDE.md) so it is not in every diagram session's
+Split out of [`../CLAUDE.md`](../l7r/diagram/CLAUDE.md) so it is not in every diagram session's
 context. The text is verbatim; the short always-on version of each rule stays in the index.
 
 ## Ask the ENGINE where a feature fits - do not guess coordinates

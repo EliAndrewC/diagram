@@ -301,13 +301,24 @@ def _rects(text: str) -> list[Rect]:
     return out
 
 
+def rooms_folded(buildings: tuple[Rect, ...]) -> tuple[Rect, ...]:
+    """The buildings less their ROOMS: a rect of a building's own fill drawn wholly inside an earlier one is a room's
+    floor (feature 264 draws each labeled room as its own fill so the page can light it), not a second building -
+    counted as one, every room edge would read as a gap between buildings."""
+    out: list[Rect] = []
+    for r in buildings:
+        if not any(o.fill == r.fill and o.x <= r.x and o.y <= r.y and r.x + r.w <= o.x + o.w and r.y + r.h <= o.y + o.h for o in out):
+            out.append(r)
+    return tuple(out)
+
+
 def parse_svg(text: str) -> ParsedPlan:
     """Parse an SVG into interior / building / open-feature / point-glyph rects + labels + walls."""
     rects = _rects(text)
     interior = tuple(r for r in rects if r.precinct)
     if not interior:
         raise ValueError(f'no rect marked id="{PRECINCT_ID}" in the SVG - a Mode A sheet declares its precinct on the rect(s) bounding the ground the checks reason over (feature 254)')
-    buildings = tuple(r for r in rects if (r.fill in BUILDING_FILLS or r.fill in BUILDING_PATTERNS) and r.area_px >= MIN_BLDG_AREA_PX)
+    buildings = rooms_folded(tuple(r for r in rects if (r.fill in BUILDING_FILLS or r.fill in BUILDING_PATTERNS) and r.area_px >= MIN_BLDG_AREA_PX))
     open_features = tuple(r for r in rects if r.fill in OPEN_PATTERNS)
     trees = _trees(text)
     tree_pos = {t.pos for t in trees}

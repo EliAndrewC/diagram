@@ -19,8 +19,9 @@ from ..classes import Kind
 class Residence(Kind):
     """
     What: The magistrate's own house: the lord's family, their rooms and a formal reception room, drawn as two
-    or three offset blocks joined by a corridor, with a veranda along each block's garden face and one
-    formal entrance porch (genkan) on the reception block. The band label names the whole wing.
+    or three offset blocks. Its rooms, the veranda along each block's south face, the corridor between the blocks and
+    the formal entrance porch (genkan) are each their own feature, and light with the house. The band label
+    names the whole wing.
 
     Why: The household living inside the working compound, behind the office, is the point of the
     institution - the office is a household, and the gate between the two courts is the hinge between state
@@ -34,18 +35,14 @@ class Residence(Kind):
     findings, and the program classes the wing as accurate - about 180 to 200 ft long, checked against the
     size audit, its label naming a zone. The staged arrival - gate, then a court or garden, then the formal
     entrance - is the record's own reading and the GM's rule for these plans; no page a reader can open sets
-    it out. Each labeled room is a suite of several rooms compressed to one label and named by who lives in
-    it rather than by its historical room name, a schematic convenience; the veranda along each garden face
-    has no entry of its own in the record.
+    it out. Each labeled room is a suite of several rooms compressed to one label, a schematic convenience.
 
     Caveat: The staged arrival - gate, then a court or garden, then the formal entrance - is the record's own
     reading and the GM's rule for these plans; no page a reader can open sets it out. Each labeled room is a
-    suite of several rooms compressed to one label and named by who lives in it rather than by its historical
-    room name, a schematic convenience; the veranda along each garden face has no entry of its own in the
-    record.
+    suite of several rooms compressed to one label, a schematic convenience.
 
     Name: residence
-    Covers: the lord's residence blocks, their veranda strips, the genkan porch, the reception and room labels, and the RESIDENCE band label
+    Covers: the lord's residence blocks' fill and outlines, their room dividers, and the RESIDENCE band label
     Label: accurate
     Sources: neixiang-yamen-zhwiki, takayama-jinya-city, takayama-jinya-jawiki, machi-bugyo-jawiki, jinya-jawiki, yamen-enwiki, neixiang-xianya-zhwiki, kotobank-katteguchi, shoinzukuri-jawiki
     Entry: research/buildings.html - 'Office in front, residence behind', 'Guest doors feed courts, not flanks', 'The shady rear is the service strip', 'The compound has a size HIERARCHY'
@@ -56,8 +53,8 @@ class Residence(Kind):
 
 class AncestralAlcove(Kind):
     """
-    What: A bay of the residence holding the memorial tablets of the magistrates who held the post before - an
-    alcove within the family's rooms, not a hall of its own.
+    What: An alcove among the residence's private rooms holding the memorial tablets of the magistrates who held
+    the post before - a place within a room, not a room or hall of its own.
 
     Why: Such an alcove is proper only where one lineage holds the magistracy across generations, so that the
     past magistrates are the present one's own forebears and the alcove is literally ancestral. At a posting
@@ -75,7 +72,7 @@ class AncestralAlcove(Kind):
     office.
 
     Name: ancestral alcove
-    Covers: the alcove bay of the residence and its tablets label (a lineage alcove where the tablets are a lineage's)
+    Covers: the alcove's tablets label in the residence's inner rooms (a lineage alcove where the tablets are a lineage's)
     Label: accurate
     Sources: mingguanci-zhwiki
     Entry: research/buildings.html - 'An ancestral alcove holding office-predecessor tablets'
@@ -87,7 +84,7 @@ class AncestralAlcove(Kind):
 class KarosHouse(Kind):
     """
     What: The separate house of the karo, the house elder - the magistrate's chief retainer - standing in the
-    residence court with a door of its own.
+    residence court.
 
     Why: It stands in the inner court, on the household's side of the compound, but as a dwelling of its own
     rather than a bay of the lord's wing: the plan keeps the residence for the lord's family and gives a chief
@@ -98,7 +95,7 @@ class KarosHouse(Kind):
     magistrate's compound - so the house's form, size and seat are a guess.
 
     Name: karo's house
-    Covers: the karo's house, its informal door and its label with the "house elder" gloss
+    Covers: the karo's house and its label with the "house elder" gloss
     Label: guess
     Sources: not recorded
     Entry: research/buildings.html (no dedicated entry - recorded as silent)
@@ -127,7 +124,7 @@ class RetainersQuarters(Kind):
     town's edge, outside an elite quarter, rather than inside its walls.
 
     Name: retainers' quarters
-    Covers: the senior retainers' quarters, a family rowhouse for married retainers, and their doors and labels
+    Covers: the senior retainers' quarters, a family rowhouse for married retainers, and their labels
     Label: accurate
     Sources: hatchobori-jawiki, jinya-jawiki, takayama-jinya-jawiki, shibata-ashigaru-nagaya, hikone-ashigaru
     Entry: research/buildings.html - 'Staff housing spans a real spectrum'; research/cities/government.html - 'Servant housing in the samurai ward'
@@ -155,7 +152,7 @@ class ServantsQuarters(Kind):
     read.
 
     Name: servants' quarters
-    Covers: the servants' nagaya, its door and its label
+    Covers: the servants' nagaya and its label
     Label: accurate
     Sources: jta-nagayamon, fukui-bushi-jutaku, aizu-bukeyashiki-jawiki, kotobank-degawari, nagayamon-jawiki, nando-jawiki, daozuofang, shoinzukuri-jawiki
     Entry: research/cities/government.html - 'Servant housing in the samurai ward'; research/buildings.html - 'The shady rear is the service strip'
@@ -186,7 +183,7 @@ class GuestQuarters(Kind):
     the GM's rule for these plans; no page a reader can open sets it out.
 
     Name: guest quarters
-    Covers: the guest room of the residence, or a detached guest house with its door and label
+    Covers: the guest room of the residence with its floor and label, or a detached guest house and its label
     Label: accurate
     Sources: kotobank-katteguchi
     Entry: research/buildings.html - 'Guest doors feed courts, not flanks'
@@ -197,8 +194,8 @@ class GuestQuarters(Kind):
 
 class Kitchen(Kind):
     """
-    What: The household's kitchen - a daidokoro, a large working building with its kamado range, pantries and a
-    well inside or beside it - that feeds the family, the staff and the watch.
+    What: The household's kitchen - a daidokoro, a large working building with pantries - that feeds the family,
+    the staff and the watch; its hearth, and a well inside or beside it, are each their own feature.
 
     Why: It stands at the edge of the inner court by a postern in the wall, because service traffic is the
     deliberate opposite of a guest's arrival: the kitchen door opens into work space, not into a court. It is
@@ -215,7 +212,7 @@ class Kitchen(Kind):
     ft), a figure that rests on no page a reader can open.
 
     Name: kitchen
-    Covers: the kitchen and pantries building, its hearth and its label
+    Covers: the kitchen and pantries building and its label
     Label: accurate
     Sources: tfd-hongou-fire-history, thepaper-taipinggang, edo-no-kaji-jawiki, machibikeshi-jawiki, kotobank-katteguchi
     Entry: research/buildings.html - 'The compound has a size HIERARCHY', 'Fire-water is distributed to the halls', 'Guest doors feed courts, not flanks'
@@ -383,17 +380,15 @@ class FireWaterTubs(Kind):
 class CompoundShrine(Kind):
     """
     What: The shrine every administrative compound keeps inside its walls - a modest hall, Inari's by default,
-    with ground around it kept as garden or grove. Where the shrine stands in a grove of its own, a torii
-    stands before the hall.
+    with ground around it kept as garden or grove. Where a plan draws its altars, or a torii before a hall set in
+    its own grove, each is its own feature.
 
     Why: Even a small Japanese branch office kept shrines within its walls, and a full Chinese yamen kept three,
     so a shrine is part of the equipment of any office, not a sign of a pious magistrate; what varies is its
     size and its dedication. It stands in the inner court with the household and stays smaller than the
-    residence - a worship hall is small even at a great shrine. Where it stands in its own grove it takes a
-    single arch, the overwhelming form, set about 20 ft before its hall as at a village shrine; a shrine set
-    in a garden may be drawn with no arch at all.
+    residence - a worship hall is small even at a great shrine.
 
-    Note: The shrine as standard equipment, its Inari default, the small worship hall and the single torii are
+    Note: The shrine as standard equipment, its Inari default and the small worship hall are
     recorded findings, and the program classes it as accurate: a modest shrine, with a hall-shrine ceiling of
     about 36 by 30 ft subordinate to the residence. The Japanese branch office with two shrines inside its
     walls rests on an excavation plan no reader can open, and the shrine's size ceiling of about 36 by 30 ft
@@ -404,7 +399,7 @@ class CompoundShrine(Kind):
     the record's reading rather than a page's figures.
 
     Name: compound shrine
-    Covers: the shrine hall or halls, their altars and inner glyphs, the approach torii where one is drawn, and the shrine labels
+    Covers: the shrine hall or halls, their edging and dividing rail, and the shrine labels
     Label: accurate
     Sources: neixiang-yamen-zhwiki, henan-neixiang, fushimi-inari-senbon, fushimi-inari-jawiki, torii-enwiki, hokora-jawiki, meiji-jingu-access, nara-nagao-jinja
     Entry: research/buildings.html - 'Every administrative compound keeps a shrine', 'The compound has a size HIERARCHY'; research/religion-and-death.html - 'Torii are VOTIVE DONATIONS', 'Torii spacing'
@@ -415,7 +410,7 @@ class CompoundShrine(Kind):
 
 class WritingPavilion(Kind):
     """
-    What: A small detached study standing apart in the inner garden, a room with a veranda where the magistrate
+    What: A small detached study standing apart in the inner garden, a room where the magistrate
     does their own writing, away from both the office and the house.
 
     Why: The office hall is where the county's business is done and the residence is the family's; a pavilion
@@ -433,3 +428,270 @@ class WritingPavilion(Kind):
     """
 
     key = "writing pavilion"
+
+
+# ---- the parts of the household's buildings (feature 264: a thing drawn inside a feature is its own kind) -------
+
+
+class Hearth(Kind):
+    """
+    What: The kitchen's cooking fire - a fire-pit or cooking range, drawn as a dark block with a spot of flame -
+    where the household's meals are cooked all day.
+
+    Why: With open fire burning from morning to night, the kitchen's fire is the compound's top ignition source,
+    which is why the kitchen keeps two fire-water tubs where every other hall keeps one.
+
+    Note: The kitchen's open cooking fire, and the fire risk it carries, follow the record, which names it as a
+    kamado cooking range. A hearth drawn as a small square reads as a sunken fire-pit (irori), a form the record
+    does not name for a kitchen.
+
+    Caveat: A hearth drawn as a small square reads as a sunken fire-pit (irori), a form the record does not name
+    for a kitchen.
+
+    Name: hearth
+    Covers: the fire glyph in each kitchen
+    Label: accurate
+    Sources: tfd-hongou-fire-history, edo-no-kaji-jawiki, machibikeshi-jawiki, thepaper-taipinggang
+    Entry: research/buildings.html - 'Fire-water is distributed to the halls, not the kura'
+    """
+
+    key = "hearth"
+
+
+class Genkan(Kind):
+    """
+    What: The genkan, the formal entry porch of the residence: a stepped-up entrance on the reception bay, where a
+    guest of rank leaves the court or garden before it and enters the house.
+
+    Why: Arrival of rank was staged - through the gate, across a court or garden, then up the formal entrance -
+    so that a visitor never stepped from the street into a room. The genkan is the last of those stages, and it
+    stands on the reception bay because the reception room is where such a guest is received.
+
+    Note: The genkan as the formal entrance follows the record. The staged arrival that leads to it is the
+    record's own reading and the GM's rule for these plans; no page a reader can open sets it out. And the one
+    genkan the record attests, at the Takayama intendant's office, belonged to the office block, where these
+    plans put theirs on the residence.
+
+    Caveat: The staged arrival that leads to it is the record's own reading and the GM's rule for these plans; no
+    page a reader can open sets it out. And the one genkan the record attests, at the Takayama intendant's
+    office, belonged to the office block, where these plans put theirs on the residence.
+
+    Name: genkan
+    Covers: the entry porch on the residence's reception bay
+    Label: accurate
+    Sources: kotobank-katteguchi, takayama-jinya-jawiki, takayama-jinya-city
+    Entry: research/buildings.html - 'Guest doors feed courts, not flanks', 'The courtroom is a room of the office hall, not a freestanding stage'
+    """
+
+    key = "genkan"
+
+
+class Engawa(Kind):
+    """
+    What: The engawa, the narrow roofed veranda that runs along each residence block's south face, drawn as a pale
+    strip at the block's edge.
+
+    Why: It joins the rooms along that face and is where the house meets the ground in front of it: the rooms open
+    onto it, and where the block fronts the garden, the garden is seen from it.
+
+    Note: the research record has no entry of its own on the veranda of a residence, so its run along each block
+    and its width are a guess.
+
+    Name: engawa
+    Covers: the veranda strip along each residence block's south face
+    Label: guess
+    Sources: not recorded
+    Entry: research/buildings.html (no dedicated entry - recorded as silent)
+    """
+
+    key = "engawa"
+
+
+class ResidenceCorridor(Kind):
+    """
+    What: The short roofed corridor that joins the residence's two offset blocks, so the household passes from
+    one to the other under cover.
+
+    Why: The residence is drawn as two blocks stepped against each other rather than one long bar, and a corridor
+    between them keeps the house one dwelling.
+
+    Note: the research record has no entry on the offset massing of a residence or on the corridor joining its
+    blocks; both are the GM's ruling for these plans, and the corridor's form is a guess.
+
+    Name: residence corridor
+    Covers: the corridor between the residence blocks
+    Label: guess
+    Sources: not recorded
+    Entry: research/buildings.html (no dedicated entry - recorded as silent)
+    """
+
+    key = "residence corridor"
+
+
+class LordsQuarters(Kind):
+    """
+    What: The magistrate's own rooms in the residence: several rooms under one label, named on the plan for the
+    magistrate who holds the posting, and usually holding a private study.
+
+    Why: A samurai residence grouped its rooms by use under one roof, and the lord's own rooms stand on the home
+    side of the line between state and household - which is why official business is done in the office hall and
+    not here.
+
+    Note: That the residence holds the lord's private study, on the far side of the line between office and home,
+    follows the record, as does a samurai residence's grouping of rooms by use under one roof. The suite's
+    naming by its occupant is the GM's convention for these plans; the record says little of the lord's own
+    rooms beyond the study; and the order these plans follow, from the formal rooms to the lord's to the
+    family's, is the drawing program's.
+
+    Caveat: The suite's naming by its occupant is the GM's convention for these plans; the record says little of
+    the lord's own rooms beyond the study; and the order these plans follow, from the formal rooms to the lord's
+    to the family's, is the drawing program's.
+
+    Name: lord's quarters
+    Covers: the lord's suite in the residence, its floor and its labels
+    Label: accurate
+    Sources: takayama-jinya-jawiki, takayama-jinya-city, aizu-bukeyashiki-jawiki
+    Entry: research/buildings.html - 'The courtroom is a room of the office hall, not a freestanding stage'; research/cities/government.html - 'Servant housing in the samurai ward'
+    """
+
+    key = "lord's quarters"
+
+
+class FamilyQuarters(Kind):
+    """
+    What: The rooms of the magistrate's family, drawn as one labeled bay toward the private end of the residence.
+
+    Why: The household lives inside the working compound, behind the office, and within the house the family's
+    rooms lie away from the formal approach. A samurai residence grouped its rooms by use under one roof, the
+    family's among them.
+
+    Note: The household living behind the office, and a residence grouping its family's rooms under one roof,
+    follow the record. That the family's rooms lie toward the private end rests on the Chinese case, where the
+    innermost rows house the family; and naming the bay by its occupants is the GM's convention for these plans.
+
+    Caveat: That the family's rooms lie toward the private end rests on the Chinese case, where the innermost rows
+    house the family; and naming the bay by its occupants is the GM's convention for these plans.
+
+    Name: family quarters
+    Covers: the family's bay of the residence, its floor and its labels
+    Label: accurate
+    Sources: aizu-bukeyashiki-jawiki, siheyuan-zhwiki, jinya-jawiki, takayama-jinya-jawiki
+    Entry: research/cities/government.html - 'Servant housing in the samurai ward'; research/buildings.html - 'Office in front, residence behind'
+    """
+
+    key = "family quarters"
+
+
+class InnerRooms(Kind):
+    """
+    What: A bay of the residence's private rooms, apart from the formal ones, where a lineage-held posting keeps
+    its ancestral alcove - labeled on a sheet as the inner rooms or the east rooms.
+
+    Why: A samurai residence grouped its rooms by use under one roof, the private rooms apart from the formal
+    ones, and the tablets a lineage keeps belong among its private rooms.
+
+    Note: A residence grouping its private rooms apart from its formal ones under one roof follows the record. The
+    bay's contents beyond the alcove are the drawing's own.
+
+    Caveat: The bay's contents beyond the alcove are the drawing's own.
+
+    Name: inner rooms
+    Covers: the innermost bay of the residence, its floor and its label
+    Label: accurate
+    Sources: aizu-bukeyashiki-jawiki, siheyuan-zhwiki
+    Entry: research/cities/government.html - 'Servant housing in the samurai ward'
+    """
+
+    key = "inner rooms"
+
+
+class ReceptionRoom(Kind):
+    """
+    What: The zashiki, the residence's formal reception room, where the magistrate receives guests of rank, with
+    the genkan at its door.
+
+    Why: Reception was one of the room groups a residence kept apart from the family's and the servants', and in
+    the record's ideal a samurai house's prized formal garden lay on the sunny south side, facing its reception
+    rooms.
+
+    Note: Reception as a group of rooms of its own, and the ideal of the formal garden before it, follow the
+    record. Where a plan's buildings allow, the reception faces the garden; where they do not, it faces the court
+    or the service ground before its block, short of the ideal.
+
+    Caveat: Where a plan's buildings allow, the reception faces the garden; where they do not, it faces the court
+    or the service ground before its block, short of the ideal.
+
+    Name: reception room (zashiki)
+    Covers: the reception bay of the residence, its floor and its labels
+    Label: accurate
+    Sources: shoinzukuri-jawiki, aizu-bukeyashiki-jawiki
+    Entry: research/buildings.html - 'The shady rear is the service strip'; research/cities/government.html - 'Servant housing in the samurai ward'
+    """
+
+    key = "reception room"
+
+
+class ShutteredWing(Kind):
+    """
+    What: A bay of the residence closed behind its storm shutters - rooms no longer lived in, drawn darker with the
+    shutters across them.
+
+    Why: A household one of whose members has gone may keep those rooms closed rather than give them to another
+    use; whose they were is the map's own story.
+
+    Note: the research record has no entry on shuttered rooms or storm shutters; the wing is the map's own story,
+    closed shutters on an unused room have a plain historical counterpart, and their drawn form is a guess.
+
+    Name: shuttered wing
+    Covers: the shuttered bay, its shutters and its labels
+    Label: guess
+    Sources: not recorded
+    Entry: research/buildings.html (no dedicated entry - recorded as silent)
+    """
+
+    key = "shuttered wing"
+
+
+class ShrineAltar(Kind):
+    """
+    What: An altar inside a compound shrine's hall to one of the setting's own kami, drawn as a small glyph
+    standing for the kami it serves - a rice-straw figure, a fox's torii, a flame, a wave - with its name where
+    the plan gives one.
+
+    Why: A compound keeps a shrine as standard equipment, and the kami it serves is where a magistracy's shrine
+    differs: a priest-magistrate's hall may keep more than one altar, and a posting on a river or in an old
+    household keeps altars to the powers that matter there.
+
+    Note: a shrine in every compound, Inari's by default, follows the record; what each altar serves, and why a hall
+    keeps more than one, is the setting's or the map's own, and each map's note says which. Each glyph is drawn
+    as a marker, not the altar at its size.
+
+    Name: shrine altar
+    Covers: each altar glyph inside a shrine hall, with its name and sublabels
+    Label: deviation
+    Sources: not recorded
+    Entry: research/buildings.html - 'Every administrative compound keeps a shrine'
+    """
+
+    key = "shrine altar"
+
+
+class Torii(Kind):
+    """
+    What: A torii, the gateway arch over the approach to a compound shrine, standing a short way in front of the
+    hall.
+
+    Why: The arch marks the sacred ground: it stands where the approach enters the shrine's precinct. One arch is
+    by far the usual number for a shrine, and a village shrine's stands some twenty feet off its hall; long
+    avenues of arches are the gifts of rich patrons at great shrines, not the rule.
+
+    Note: One arch over the approach, a short way from the hall, follows the record.
+
+    Name: torii
+    Covers: the approach torii before a compound shrine
+    Label: accurate
+    Sources: torii-enwiki, fushimi-inari-jawiki, fushimi-inari-senbon, hokora-jawiki, nara-nagao-jinja, jinja-jawiki
+    Entry: research/religion-and-death.html - 'Torii are VOTIVE DONATIONS', 'Torii spacing', 'How big is a country shrine, and what stands in its precinct?'
+    """
+
+    key = "torii"

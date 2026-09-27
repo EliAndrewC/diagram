@@ -74,7 +74,7 @@ class FoxFireLantern(Kind):
 class CinnabarWorkshop(Kind):
     """
     What: An open-sided covered colonnade against the shrine where the threshold stones are painted with their
-    cinnabar fox-tracks, with river-stones laid out in it.
+    cinnabar fox-tracks.
 
     Why: The stones of the Fox road wardings are painted with cinnabar, and the painting is sacred work: the
     setting's record has the magistrate paint each newly dressed stone by their own hand, in daylight, at the
@@ -85,7 +85,7 @@ class CinnabarWorkshop(Kind):
     canon and record, a departure made by the setting with no historical counterpart in the research record.
 
     Name: cinnabar workshop
-    Covers: the hatched colonnade, its posts, the drying river-stones and its label
+    Covers: the hatched colonnade, its posts and its label
     Label: deviation
     Sources: not recorded
     Entry: research/buildings.html (no dedicated entry - recorded as silent)
@@ -104,9 +104,9 @@ class FoxRelics(Kind):
     the work of the wardings.
 
     Note: the Akami-fude is the setting's own relic - the brush that paints the fox-tracks on each threshold
-    stone, kept on its own stand at the shrine's eastern, fox altar - and the Chigiri-no-Chou is this map's
-    own name, found in no setting file. Neither has a historical counterpart, and the research record holds
-    nothing like them, so both are a departure made by the setting and this map.
+    stone, kept on its own stand at the shrine's eastern, fox altar - and the Chigiri-no-Chou is the setting's
+    too. Neither has a historical counterpart, and the research record holds nothing like them, so both are a
+    departure made by the setting.
 
     Name: fox relics
     Covers: the fox-altar sublabel and the relics annotation below the workshop
@@ -171,21 +171,17 @@ class River(Kind):
 class RiverLanding(Kind):
     """
     What: The compound's landing on the river: a dock springing from a stone-faced bank, the tax barge moored
-    alongside it, a watch post over the water and a small altar for the boatmen.
+    alongside it, a watch post over the water and a small altar for the boatmen - each its own feature, lit with
+    the landing.
 
     Why: Tax grain went downstream on hired commoners' boats under the office's seals - the magistracy owned no
-    hulls, and its hold on the cargo was documentary. A river's level moves by many feet through the year, so
-    a working bank was faced with stone and a landing stage ran out from it about a boat-length, to reach
-    water deep enough for a loaded hull; a river barge of the period ran from about 30 to 73 ft.
+    hulls, and its hold on the cargo was documentary - so a posting on a navigable river keeps a landing of its
+    own where the grain is loaded.
 
-    Note: The hired barge under seal, the stone-faced bank, the boat-length landing stage and the barge's size
-    are recorded findings. The river watch and the boatmen's altar are this map's own story, with no entry in
-    the record.
-
-    Caveat: The river watch and the boatmen's altar are this map's own story, with no entry in the record.
+    Note: A river landing where hired boats load the tax grain under seal follows the record.
 
     Name: river landing
-    Covers: the dock, the revetment, the moored tax barge, the river-watch post, the boatmen's altar and the landing label
+    Covers: the landing label - its dock, revetment, barge, watch post and altar are each their own kind
     Label: accurate
     Sources: nishimawari-koro-jawiki, kashi-jawiki, gangi-kowan-jawiki, takasebune-jawiki, kotobank-takasebune, matou-zhwiki, kuramae-jawiki, chinaknowledge-caoyun
     Entry: research/buildings.html - 'The granary is a staging node, not the terminal store'; research/cities/river-cities.html - "The wharf's working face"; research/cities/capitals.html - "The sluice's lifting frame"; research/ways.html - "Where does a village's freight go?"
@@ -222,8 +218,8 @@ class FoxBorder(Kind):
 
 class ParleyRoom(Kind):
     """
-    What: A room built into the compound's border wall with a door on each face, the border running across its
-    floor, and two pairs of kneeling mats facing each other across the line.
+    What: A room built into the compound's border wall, the border running across its floor; its doors and its
+    kneeling mats are each their own feature.
 
     Why: Each party kneels on its own soil, so the two sides can meet and settle their business without either
     stepping onto the other's ground. Its inner door opens into a receiving court, never into the court where
@@ -234,7 +230,7 @@ class ParleyRoom(Kind):
     attested part; the record calls the room the architectural counterpart of that line, by analogy only.
 
     Name: parley room
-    Covers: the room in the border wall, its doors, its kneeling mats and its label
+    Covers: the room in the border wall and its label
     Label: deviation
     Sources: not recorded
     Entry: research/urban-features.html - 'Drawing a clan border'
@@ -314,3 +310,194 @@ class WoodKamiAltar(Kind):
     """
 
     key = "wood-kami altar"
+
+
+# ---- the parts of the particulars (feature 264: a thing drawn inside a feature is its own kind) ----------------
+
+
+class Revetment(Kind):
+    """
+    What: The stone facing of the riverbank at Hayakawa's landing, drawn as a gray band along the water's edge.
+
+    Why: A river's level moves by many feet through the year, so a working bank is faced with stone or timber
+    cribbing to hold it; at the great rice stores on the river at Edo, the stone revetment was part of the answer
+    to flood.
+
+    Note: A faced bank at a river landing follows the record.
+
+    Name: revetment
+    Covers: the stone facing along the landing's bank
+    Label: accurate
+    Sources: kashi-jawiki, gangi-kowan-jawiki, kuramae-jawiki
+    Entry: research/cities/river-cities.html - "The wharf's working face"; research/cities/capitals.html - "The sluice's lifting frame"
+    """
+
+    key = "revetment"
+
+
+class Dock(Kind):
+    """
+    What: The dock at Hayakawa's landing: a timber pier running out from the faced bank, where barges lie
+    alongside to load.
+
+    Why: A settlement on navigable water sends its freight by boat, and a pier gives a loaded hull the reach it
+    needs where the bank shelves too gently to come alongside.
+
+    Note: A pier at a river landing follows the record. The record makes steps cut into the faced bank the usual
+    landing and the pier the exception for a shelving bank; Hayakawa draws a pier and no steps, and nothing
+    records its bank as shelving.
+
+    Caveat: The record makes steps cut into the faced bank the usual landing and the pier the exception for a
+    shelving bank; Hayakawa draws a pier and no steps, and nothing records its bank as shelving.
+
+    Name: dock
+    Covers: the pier and its plank lines
+    Label: accurate
+    Sources: pier-enwiki, gangi-kowan-jawiki, gangi-hiroshima-jawiki, kuramae-jawiki, chinaknowledge-caoyun
+    Entry: research/cities/river-cities.html - "The wharf's working face"; research/cities/capitals.html - "The sluice's lifting frame"; research/ways.html - "Where does a village's freight go?"
+    """
+
+    key = "dock"
+
+
+class TaxBarge(Kind):
+    """
+    What: A river barge moored alongside Hayakawa's dock with bales of tax grain aboard, drawn at about 47 by 7 ft.
+
+    Why: Tax grain moves down the river to the city on hired boats sailing under the office's seals; the
+    magistracy owns no hulls, and the barge at its dock is one taken on for the run.
+
+    Note: Tax grain carried on hired river boats, and the barge's size, inside the record's range for such a boat,
+    follow the record.
+
+    Name: tax barge
+    Covers: the moored barge, its lines, its bales and its label
+    Label: accurate
+    Sources: takasebune-jawiki, kotobank-takasebune, gokura-jawiki, takayama-jinya-city
+    Entry: research/buildings.html - 'The granary is a staging node, not the terminal store'; research/cities/river-cities.html - "The wharf's working face"
+    """
+
+    key = "tax barge"
+
+
+class BoatmensAltar(Kind):
+    """
+    What: A small altar on the bank beside the dock, kept by the boatmen who work the landing.
+
+    Why: Those who work a river keep an altar where they set out, for safe passage.
+
+    Note: the research record has no entry on an altar at a river landing; it is this map's own story, and its form
+    and place are a guess.
+
+    Name: boatmen's altar
+    Covers: the altar on the bank and its label
+    Label: guess
+    Sources: not recorded
+    Entry: research/buildings.html (no dedicated entry - recorded as silent)
+    """
+
+    key = "boatmen's altar"
+
+
+class RiverWatch(Kind):
+    """
+    What: A small guard post at the landing, from which the watch keeps an eye on the river traffic.
+
+    Why: A landing where the county's tax grain is loaded is worth watching, and the river's traffic is watched from
+    the bank beside it.
+
+    Note: the research record has no entry on a guard post at a river landing; the post is this map's own story,
+    and its form and place are a guess.
+
+    Name: river watch
+    Covers: the guard post at the landing and its label
+    Label: guess
+    Sources: not recorded
+    Entry: research/buildings.html (no dedicated entry - recorded as silent)
+    """
+
+    key = "river watch"
+
+
+class BalanceBeam(Kind):
+    """
+    What: The balance on Ubame's weighing floor where bales of charcoal are weighed before the tally is written.
+
+    Why: A bale of charcoal had no standard weight, so charcoal had to be weighed at the point of sale, and the
+    weighing floor exists for that.
+
+    Note: Weighing charcoal at the point of sale follows the record. The instrument's form, a beam balance rather
+    than a steelyard, is not in the record.
+
+    Caveat: The instrument's form, a beam balance rather than a steelyard, is not in the record.
+
+    Name: balance beam
+    Covers: the balance on the weighing floor
+    Label: accurate
+    Sources: economy-song-enwiki, tonya-enwiki
+    Entry: research/urban-features.html - 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'
+    """
+
+    key = "balance beam"
+
+
+class CharcoalBales(Kind):
+    """
+    What: Bales of charcoal stacked on Ubame's weighing floor, waiting to be weighed.
+
+    Why: Charcoal traveled in straw bales of no standard weight, which is why every bale is weighed before it is
+    tallied.
+
+    Note: The charcoal bale of no standard weight follows the record.
+
+    Name: charcoal bales
+    Covers: the stacked bales on the weighing floor
+    Label: accurate
+    Sources: economy-song-enwiki, tonya-enwiki
+    Entry: research/urban-features.html - 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'
+    """
+
+    key = "charcoal bales"
+
+
+class ParleyMats(Kind):
+    """
+    What: The kneeling mats in a parley room, two on each side of the border that runs across its floor, facing
+    each other across the line.
+
+    Why: A delegation from across the border is received without either party stepping off its own soil: each side
+    kneels on its own ground, the line between them.
+
+    Note: the room and its mats are the map's own design, a departure with no historical room behind it - the
+    building counterpart of the drawn border line - and the mats' 3 ft size is this project's own figure.
+
+    Name: parley mats
+    Covers: the four kneeling mats in the parley room
+    Label: deviation
+    Sources: not recorded
+    Entry: research/urban-features.html - 'Drawing a clan border'
+    """
+
+    key = "parley mats"
+
+
+class DryingStonesAndBowls(Kind):
+    """
+    What: River-stones and small lacquer-black bowls laid out to dry under a cinnabar workshop's colonnade.
+
+    Why: The workshop is where the Fox Clan's threshold stones are made and painted - river-stones the size of two
+    fists, painted with cinnabar fox-tracks - beside the shrine of the priest-magistrate who keeps the road
+    wardings.
+
+    Note: the threshold stones and their Pact-Bowls are the campaign's own canon, a departure made by the setting
+    with no historical counterpart. Each stone and bowl is drawn as a marker, larger than a stone the size of two
+    fists or a small bowl would be.
+
+    Name: drying stones and bowls
+    Covers: the drying river-stones and lacquer bowls in the workshop
+    Label: deviation
+    Sources: not recorded
+    Entry: research/buildings.html (no dedicated entry - recorded as silent)
+    """
+
+    key = "drying stones and bowls"
