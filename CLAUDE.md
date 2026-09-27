@@ -84,6 +84,11 @@ is `.claude/skills/diagram/research/CLAUDE.md`, which auto-loads when a session 
   agent reading a file here is handed every `CLAUDE.md` above it, ~28,000 tokens (feature 250). The agent's
   reply is compact: counts first, then only what to act on. A research page is worked in two fresh sessions, write then
   check-and-apply, from briefs (`make page-session BRIEF="<1> <2>"`); `make notes` prints only the notes you name.
+  A write session takes at most four questions and ten new registry keys (feature 274: its cost grows with the square
+  of its length); the runner refuses a larger brief unless it declares `<!-- page-load: kind=check|assertions|split|handover -->`,
+  and `make reserve`'s eleventh key sends the rest to a continuation brief. Coordination files are read by line
+  (`make lines`) and written without reading (`make append`); a page session loads `container-scripts/page-session-rules.md`
+  in place of this file.
 
 ## Development workflow
 

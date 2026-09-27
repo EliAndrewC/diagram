@@ -36,6 +36,18 @@ prints a few notes and the paragraphs carrying them. **A page is worked in fresh
 with briefs: write, then check-and-apply in groups of two questions), and a report's findings are applied in
 ONE turn - every turn re-reads the whole context.
 
+**A write session takes at most four questions and ten new registry keys** (feature 274). Measured over 282
+sessions (its research R1): a write session's cost follows its turn count (r = 0.92) and grows roughly with the square
+of its length - median 74 turns, peak context 246 K against 250's 102-171 K, one of 109 turns cost 24.5 M. The runner
+counts every brief's assigned questions (`scripts/_brief_load.py`: `## Your items`, `**Your questions:**`,
+`**Your pairs**`) and refuses a brief over four, naming the split (`<g>a-write.md`, `<g>b-write.md`, each with its
+own handoff); a brief that is not a group's writing declares `<!-- page-load: kind=check|assertions|split|handover -->`
+and is not capped. `make reserve` refuses a write session's eleventh registry key: finish the question in hand,
+write the unreached items to `$L7R_CONTINUE` as a brief of the same shape, commit and stop - the runner starts it
+next. Escapes, logged: `WRITE_CAP_OK='<reason>'`, `KEY_CAP_OK='<reason>'`. **Coordination files are read by line,
+never whole**: the claims file, a handoff and a checks report ONLY through `make lines FILE=<f> KEY=<regex>`, and a
+line is added with `make append FILE=<f> LINE="<text>"` - whole-file re-reads were about 60 M tokens (R1).
+
 **A cheaper check is proved** by every candidate the prepass raised being ruled on (feature 260) - not by "the
 same findings"; a TIER downgrade is proved by seeded runs on known findings, three a leg.
 
