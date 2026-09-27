@@ -64,3 +64,10 @@
 - Residence (buildings SECTION=180): REWRITTEN - the Note says the residence out-measuring every domestic building is the project's own reading, no page ranking the footprints; re-check IN-STEP
 - Residence (buildings SECTION=230): REWRITTEN - the Why and Note say the rear service strip is reasoned from the sun rule with no source read, only the south garden being read; re-check IN-STEP
 - StrikingPosts (buildings SECTION=210): REWRITTEN - the Why and Note called no-dojo and gear-marking read; now the marking is the GM's 2026-07-24 convention and rural open-ground training a guess, and on the re-check's finding the Label moved accurate -> convention with the Note in the convention form (the Caveat folded into it)
+- MainGate (buildings SECTION=120): IN-STEP - the staged arrival and its GM-rule standing still match the section.
+- OfficeHall (buildings SECTION=010): IN-STEP - the section's moved sources touch nothing the modal claims; Takayama as the Japan-first model stands.
+- OfficeHall (buildings SECTION=090): IN-STEP - the hearing court as a room of the office wing is unchanged; only the notes' translations moved.
+- OfficeHall (buildings SECTION=160): REWRITTEN - "every wooden hall burned" softened to "could burn, and many did", naming Sado's five rebuilds and Takayama's none.
+- OfficeHall (buildings SECTION=180): REWRITTEN - the Note and Caveat now say the hall out-sizing the residence is this project's reading, no source ranking footprints.
+- OuterCourt (buildings SECTION=020): REWRITTEN - front-and-rear order now credited to the Chinese record only; no Japanese source read sets the residence behind the office.
+- OuterCourt (buildings SECTION=190): REWRITTEN - the Note and Caveat now say how much of a site stood open is this project's estimate from plans.

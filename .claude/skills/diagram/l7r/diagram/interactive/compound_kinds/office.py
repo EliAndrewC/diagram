@@ -23,15 +23,18 @@ class OfficeHall(Kind):
     official study - is the dominant public building, and the hearing court is one room of that block. Daily
     paperwork is most of a magistrate's job, and the residence's private study is on the wrong side of the
     line between state and home for it, so the hall is deep, and it may be the largest building in the
-    compound, being the institution's working core rather than a dwelling. Like every wooden hall it burned,
-    which is why the documents and the tax grain are kept in storehouses of their own.
+    compound, being the institution's working core rather than a dwelling. A wooden hall could burn, and
+    many did (the Sado magistracy was rebuilt five times, though Takayama's never burned), which is why the
+    documents and the tax grain are kept in storehouses of their own.
 
-    Note: The hall's form and its place follow the record. Its size, about 80 to 150 ft long and 20 to 45 ft
-    deep, is a guess: it is the plan vocabulary's working block, with no measured office wing of a jin'ya
-    behind it.
+    Note: The hall's form and its place follow the record; that it may out-size the residence is this
+    project's reading, since no readable source ranks a compound's footprints. Its size, about 80 to 150 ft
+    long and 20 to 45 ft deep, is a guess: it is the plan vocabulary's working block, with no measured
+    office wing of a jin'ya behind it.
 
-    Caveat: Its size, about 80 to 150 ft long and 20 to 45 ft deep, is a guess: it is the plan vocabulary's
-    working block, with no measured office wing of a jin'ya behind it.
+    Caveat: That it may out-size the residence is this project's reading, since no readable source ranks a
+    compound's footprints. Its size, about 80 to 150 ft long and 20 to 45 ft deep, is a guess: it is the
+    plan vocabulary's working block, with no measured office wing of a jin'ya behind it.
 
     Name: office hall
     Covers: the office hall's block, its outline and its front band

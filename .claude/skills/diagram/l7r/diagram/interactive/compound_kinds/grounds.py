@@ -18,18 +18,22 @@ class OuterCourt(Kind):
     gather, the office hall with its hearing court, and the working buildings of the office - stores,
     stables, the watch's lodging - set around its edges.
 
-    Why: Both traditions this setting draws on put the office in front and the residence behind: Chinese
-    regulation required it of a county office, and Japanese intendants' offices worked the same way. So
+    Why: Chinese county offices put the office in front and the residence behind, and this setting follows
+    them: Chinese regulation required it of a county office, and Japanese offices likewise kept the chief's
+    household inside the working compound, though no source read sets it behind the office. So
     whoever comes on business - a petitioner, a taxpayer, a prisoner - is dealt with here, near the gate,
     and goes no deeper. Its open ground is not wasted space: a real jin'ya left most of its site open, and
     its forecourt and hearing court were features of the plan in their own right.
 
-    Note: The two-court split and the open forecourt follow the record; no Japanese codification of the
-    split was found, and at Takayama the residence stood beside the office rather than behind it. On these
+    Note: The two-court split follows the Chinese record; no Japanese source read shows the residence behind
+    the office, no codification of the split was found, and at Takayama the residence stood beside the
+    office rather than behind it. The open forecourt follows the record, though how much of a jin'ya's site
+    stood open is this project's own estimate from plans, no source read giving the figure. On these
     plans the buildings stand somewhat further apart than in a real jin'ya, which joined its functions into
     a few long connected ranges, so that each reads as its own labeled footprint.
 
-    Caveat: On these plans the buildings stand somewhat further apart than in a real jin'ya, which joined its
+    Caveat: No Japanese source read shows the residence behind the office; how much of a jin'ya's site stood
+    open is this project's own estimate from plans, no source read giving the figure. On these plans the buildings stand somewhat further apart than in a real jin'ya, which joined its
     functions into a few long connected ranges, so that each reads as its own labeled footprint.
 
     Name: outer court
