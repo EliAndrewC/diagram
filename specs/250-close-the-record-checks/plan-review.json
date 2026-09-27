@@ -1,6 +1,6 @@
 {
  "feature": "250-close-the-record-checks",
- "plan_sha256": "34c8ab24ac09cea7ae1913ad6eae0af296bc1088405b80372ea82c07555b8b02",
+ "plan_sha256": "6fa2f9f8e67756d045ac67b3f64651aa8ee68e112546b211f4439c373c438b19",
  "reviewed": "2026-09-27",
  "declared": "spec-fidelity",
  "decisions": [
@@ -20,8 +20,8 @@
    "id": "D14.2b",
    "summary": "The cap is enforced on what a change TOUCHES; untouched over-cap questions are split when their pages are worked.",
    "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "Implied by the GM's own words: 'the maximum size a question should grow to' is a cap on growth, 'if we end up splitting up some of our existing questions' makes splitting existing ones contingent, and 'try that out' frames a trial. Purpose (cut what a check reads) is reached wherever a check runs, since checks run only on worked pages and make quick refuses a touched over-cap question. Unchanged since the last CLEAR. Unchanged this round (the plan diff since the last CLEAR is D16 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only). Unchanged this round (the plan diff since the last review, 2a6e0596..aecd2f47, is D17.2 only). Unchanged this round (the plan diff since the last CLEAR, ce53be59..0ddfc9f6, is D18 only). Unchanged this round (the plan diff since the last CLEAR, 821bd9da..d70c45b2, is D19 only)."
+   "why": "Implied by the GM's own words: 'the maximum size a question should grow to' is a cap on growth, 'if we end up splitting up some of our existing questions' makes splitting existing ones contingent, and 'try that out' frames a trial. Purpose (cut what a check reads) is reached wherever a check runs, since checks run only on worked pages and make quick refuses a touched over-cap question. Unchanged since the last CLEAR. Unchanged this round (the plan diff since the last CLEAR is D16 only). Unchanged this round (the plan diff since the last CLEAR, 33fc1874..2a6e0596, is D17 only). Unchanged this round (the plan diff since the last review, 2a6e0596..aecd2f47, is D17.2 only). Unchanged this round (the plan diff since the last CLEAR, ce53be59..0ddfc9f6, is D18 only). Unchanged this round (the plan diff since the last CLEAR, 821bd9da..d70c45b2, is D19 only).",
+   "ruling": "LEGITIMATE"
   },
   {
    "id": "D14.3",
@@ -165,7 +165,7 @@
    "id": "D19.1b",
    "summary": "make check-bundle KEY= hands _source_pages the key's quoted passages; a page over 30,000 characters is saved as an excerpt (first 6,000 + 1,500 either side of each quoted passage) with a header and cut markers - for source-applicability.",
    "class": "within",
-   "why": "R10 recommendation 1 verbatim: 'A key bundle carries the source's front matter ... and a window around each passage the record quotes from it, not the whole saved page'. Previous item 2 CONFIRMED: quoted_passages now strips HTML comments before collecting quotes; re-run 2026-09-27 (make check-bundle KEY=cdlib-local-elites OUT=/tmp/sfv250a) gives quotes.json with 5 entries and the header '[EXCERPT of a 1,372,518-character page: ... the 5 of 5 quoted passage(s) found in it]'. The figure is restated in bytes and reproduces: 22,857 bytes is `du -b` of the bundle's pages/ directory (p1 19,984 + p2 2,588 + MANIFEST.txt 285), not of the whole bundle (MANIFEST.md, quotes.json and the registry copy add about 10 KB) - the plan's 'its source-applicability bundle is now 22,857 bytes' should say its saved page. A wording correction, not a narrowing."
+   "why": "R10 recommendation 1 verbatim: 'A key bundle carries the source's front matter ... and a window around each passage the record quotes from it, not the whole saved page'. Previous round's wording item CONFIRMED: D19.1 now reads 'its source-applicability bundle's saved page is now 22,857 bytes', which is what the round-before re-run measured (du -b of the bundle's pages/ directory: p1 19,984 + p2 2,588 + MANIFEST.txt 285; header '5 of 5 quoted passage(s) found'). Commits 721174e8 and 9fa95d2f touch only the guard, its test and the rules doc, none of which the figure depends on. Within the request."
   },
   {
    "id": "D19.1c",
@@ -181,10 +181,9 @@
   },
   {
    "id": "D19.1e",
-   "summary": "The excerpt still reaches source-reader by two other routes the plan's 'THE EXCERPT IS FOR source-applicability ONLY' does not close: (a) check-bundle-hooks.sh, refusing a source-reader dispatch that names a registry file, prints `make check-bundle KEY=<key>` with no WHOLE=1 (probed 2026-09-27 with a source-reader prompt naming research/sources/010-works-cited/5670-cdlib-local-elites.html: the refusal's compliant command is `make check-bundle KEY=cdlib-local-elites`); (b) docs/research-record-rules.md lines 81-89, the operative doc research/CLAUDE.md sends a record session to, lists `make check-bundle KEY=<registry key>` and says to dispatch source-reader naming that MANIFEST.",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "The same decision as last round's D19.1c, surviving on routes the fix did not reach: a session follows a guard's printed command verbatim, and the operative doc is what it reads before dispatching. Either delivers source-reader the front plus windows around passages ALREADY quoted, when it is looking for the passage behind a NEW claim - the false NOT-FOUND the GM's 'getting the research process right' is aimed at, and a contamination of the water round that is meant to measure this fix. Not physically required (WHOLE=1 exists), not implied by the GM's words. Fix: the guard appends WHOLE=1 to the KEY= command when the refused agent is source-reader (with a line in test-check-bundle-hooks.sh), and the doc's KEY= line says WHOLE=1 for source-reader, the plain form for source-applicability."
+   "summary": "source-reader reaches a registered source only by make check-bundle KEY=<key> WHOLE=1 on every route a session follows: the write brief (measure/brief.py line 151), docs/research-record-rules.md (both KEY= forms listed, each with the agent it is for), and check-bundle-hooks.sh's printed command for a refused source-reader (plain KEY= for source-applicability).",
+   "class": "within",
+   "why": "Last round's NOT LEGITIMATE item, CLOSED. Probed 2026-09-27: a source-reader dispatch naming research/sources/010-works-cited/5670-cdlib-local-elites.html is refused (rc 2) with 'make check-bundle KEY=cdlib-local-elites WHOLE=1'; scripts/test-check-bundle-hooks.sh 23 passed, 0 failed, including the new case (source-reader gets WHOLE=1) and the source-applicability case now asserting WHOLE=1 is ABSENT. docs/research-record-rules.md lines 81-84 name the excerpt form for source-applicability and the WHOLE=1 form for source-reader. source-reader.md line 82-83 says a long page arrives as parts to grep; source-applicability.md line 23 says a long page is an excerpt. The excerpt is now confined to what R10 recommendation 1 stated it for, so source-reader keeps the whole page ('read what you cite'). Within the request."
   },
   {
    "id": "D19.2",
@@ -199,5 +198,5 @@
    "why": "The GM: 'do 1 more round instead of proceeding with the rest ... if we do turn up anything else then we can keep iterating'. Re-derived 2026-09-27 (brief.fr002/fr006/over_cap_items): water 2 FR-002, 8 FR-006, over_cap_items []; the GM named no page, and per-thing normalization makes the comparison hold. One round, then R11 - not the remaining pages."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
