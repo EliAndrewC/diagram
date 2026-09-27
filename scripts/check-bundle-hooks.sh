@@ -59,7 +59,7 @@ for path in paths:
     k = re.search(r"research/sources/010-works-cited/\d+-([a-z0-9-]+)\.html$", path)
     if k:
         # D19 (plan review): a source-reader hunts the passage behind a NEW claim, so it gets the whole page in parts;
-        # the excerpt around already-quoted passages is source-applicability's
+        # the excerpt around already-quoted passages is for source-applicability (no apostrophe: this is single-quoted)
         cmds.append(f"make check-bundle KEY={k.group(1)}" + (" WHOLE=1" if atype == "source-reader" else ""))
     elif m:
         cmds.append(f"make check-bundle PAGE={m.group(1)} SECTION={m.group(2)}")
