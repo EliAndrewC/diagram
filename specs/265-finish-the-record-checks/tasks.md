@@ -46,18 +46,18 @@
 
 - [x] T07 FR-003, the rest of the vocabulary findings and the two variants (`ochiba`, `fire-gap`)
       research: rendering
-      verify: DONE. 178 carried VOCABULARY findings answered: 70 already defined, 29 gone from the text, 39 new glossary terms and 5 variants, 21 plain rewrites, 18 judged no-action; ochiba (and han, fen) made cased terms so a proper name is not glossed; fire-gap a variant; the T11 record-format passes over every changed question added 25 more terms; make glossary green
+      verify: DONE. The 178 carried VOCABULARY findings (177 distinct): those already defined or no longer in the text were closed by measurement; 51 on pages outside the queues answered (33 glossary terms, 3 variants, 8 plain rewrites, 7 no-action) and 27 on the queue pages (4 terms, 1 variant, 11 rewrites, 11 no-action); ochiba made a cased term (and han and fen, for the Han and Fen rivers), fire-gap a variant of fire gap; the T11 record-format passes over every changed question added further terms by apply-edits; make glossary green
 - [x] T08 FR-004, the history passages into comments
       research: rendering
-      verify: DONE. 72 carried HISTORY findings: 59 already gone, 13 moved into comments or rewritten; the T11 record-format passes found and fixed 24 more (leftover split pointers, stale no-source glosses, the narrated first draw)
+      verify: DONE. The 72 carried HISTORY findings: 59 no longer in the text; of the 13 still visible, 7 on pages outside the queues (2 rewritten, 5 already resolved) and 4 of the 6 on queue pages (2 rewritten, 2 into comments); the T11 record-format passes reported and fixed the further HISTORY items they found
 - [x] T09 FR-005, the registry's citation lines carry English titles, one mechanical sweep
       research: rendering
-      verify: DONE. 542 registry citation lines carry an English rendering of their Japanese or Chinese titles, marked as this project's translation (two passes: 360 then 182, plus 5 new entries); the residue a detector still flags is author names and titles whose English precedes them, spot-checked
+      verify: DONE. 542 registry citation lines carry an English rendering of their Japanese or Chinese titles, marked as this project's translation (360 in the first pass, 182 in the second, plus 5 new entries); the lines a detector still flags were spot-checked and are author names, place names used as names, or titles whose English precedes them
 
 ## Phase 3 - the close (was 250's T24, and 265's own)
 
 - [x] T10 FR-008, the download list grown at its end
       research: rendering
-      verify: DONE. 542 registry citation lines carry an English rendering of their Japanese or Chinese titles, marked as this project's translation (360 in the first pass, 182 in the second, plus 5 new entries); the lines a detector still flags were spot-checked and are author names, place names used as names, or titles whose English precedes them
+      verify: DONE. The download list grew at its end only, both links on each entry: 244 Tanigawa 1992, 245 Chang's scanned chapter, 249 the Nagaokakyo leaflet, 251 Yannopoulos 2015, 252 Endo 2013; Tabayashi (226), Sugiura, Northampton, Feng (228) and the Tama study (124) were already listed; Mukoyama and Abele are in the GM's folder
 - [ ] T11 FR-007, the checks owed by what phases 1 and 2 changed (`quote-check` and `record-format` over the sections the sweeps changed, `source-applicability` over new keys); every `_entry_owed.py` pair answered; FR-009, the closing report; `make page-check`; the push
       research: rendering
