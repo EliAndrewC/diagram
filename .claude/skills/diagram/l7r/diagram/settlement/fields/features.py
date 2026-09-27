@@ -50,7 +50,9 @@ def turning_corners(poly: Sequence[Pt], min_deg: float = 45.0) -> list[int]:
 CORNER_MAX = 16.0
 """A corner grave's step in from its vertex, px - see `corner_seat`."""
 CORNER_MIN = 12.0
-"""The least step: the mound's reach, the stone's rise and a clearance off a right-angled corner's bunds."""
+"""The least step: the mound's reach and the stone's rise off a right-angled corner. The step points at the plot's
+centroid, not the corner's bisector, so on an oblong plot the mound can stand hard against one bund - which the
+research's "against its bunds" allows (settlement-review, Kashikawa 2026-09-27: 0.3 px off the SE bund, nothing crossed)."""
 
 
 def corner_seat(poly: Sequence[Pt], at: int) -> tuple[float, float]:
@@ -245,8 +247,8 @@ class FieldFeaturesMixin:
     def _plot_corner_grave(self: Settlement, plot: dict[str, Any], rng: random.Random) -> None:  # type: ignore[misc]
         """The Japanese form of the field grave: a small mound with one or two stones in a plot's CORNER, against its
         bunds (research/fields.html 'Are there really graves out in the middle of the fields?': "in a corner of a
-        field", and beside the bunds). Set a third of the way from the corner toward the plot's middle so it stays
-        inside the plot, clear of the ditch or lane that may run along its edge. Recorded in M['field_graves'] with
+        field", and beside the bunds). Set 12-16 px in from the corner toward the plot's middle (`corner_seat`) so it
+        stays inside the plot, clear of the ditch or lane that may run along its edge. Recorded in M['field_graves'] with
         its form. The grave is the last draw on `rng` in the pass, so its one extra draw shifts nothing after it."""
         cx, cy = corner_seat(plot["poly"], rng.choice(turning_corners(plot["poly"])))
         self.add(f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="6.5" ry="4.5" fill="#CFC6B4" stroke="#8C8470" stroke-width="1.1"/>', cls="grave island")
