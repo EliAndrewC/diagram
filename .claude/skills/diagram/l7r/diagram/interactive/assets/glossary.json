@@ -3539,6 +3539,7 @@
  "shukuba": {
   "def": "A post town on a highway, with its transport office, inns and relay horses strung along one street.",
   "variants": [
+   "juku",
    "post station",
    "post stations",
    "post town",
@@ -6638,6 +6639,21 @@
   "variants": [
    "river office",
    "river offices"
+  ]
+ },
+ "curb": {
+  "def": "The low wall of stone or wood built round the mouth of a well, which keeps anyone or anything from falling in; seen from above, the ring that marks where the well is.",
+  "variants": [
+   "curb",
+   "curbs",
+   "well curb",
+   "wellhead"
+  ]
+ },
+ "town grain": {
+  "def": "The scale a town or village map is drawn at, about 1 ft of ground to a pixel, fine enough that small features such as a notice board or a well can be drawn at their true size.",
+  "variants": [
+   "town grain"
   ]
  }
 }
