@@ -124,6 +124,7 @@ cadastre	cadastre
 cadastres	cadastre
 caishen	Caishen
 calamagrostis	Calamagrostis
+calibrated liberty	calibrated liberty
 canal corridor	canal corridor
 canal corridors	canal corridor
 cangue	cangue
@@ -210,6 +211,7 @@ cribs	cribbing
 crop margin	crop margin
 crop margins	crop margin
 crop-margin	crop margin
+crossref	Crossref
 crown	crown
 crown shyness	crown shyness
 crowns	crown
@@ -343,6 +345,7 @@ enemy platforms	mamian
 enemy tower	mamian
 enoki	enoki
 eunis	EUNIS
+europe pmc	Europe PMC
 eutrophic	eutrophication
 eutrophication	eutrophication
 exposure burial	exposure burial
@@ -495,6 +498,7 @@ guanxiang	guanxiang
 gulou	gulou
 gundai	gundai
 gōshi	gōshi
+ha	ha
 hachiku	hachiku
 hachure	hachure
 hachures	hachure
@@ -531,6 +535,8 @@ header reservoirs	header reservoir
 headman	headman
 headmen	headman
 headworks	headworks
+hectare	ha
+hectares	ha
 heian	Heian
 heimen	heimen
 heimin	heimen
@@ -569,6 +575,7 @@ hot-shoeing	hot-shoeing
 houlongshan	houlongshan
 houzhaofang	houzhaofang
 hucheng he	hucheng he
+huizhou	Huizhou
 hutong	hutong
 hutongs	hutong
 hyakusho denki	Hyakusho Denki
@@ -682,6 +689,7 @@ kaogongji	Kaogongji
 karamete	karamete-mon
 karamete-mon	karamete-mon
 karo	karo
+kasasuge	kasasuge
 kashi	kashi
 kaso-dera	kaso-dera
 kasoba	kasoba
@@ -1262,6 +1270,7 @@ superelevates	superelevation
 superelevation	superelevation
 superstructure	superstructure
 sus	Sus
+susuki	susuki
 sward	sward
 swi	SWI
 tagoshi kangai	tagoshi kangai

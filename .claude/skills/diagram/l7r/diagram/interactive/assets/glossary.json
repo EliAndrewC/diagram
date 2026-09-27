@@ -5923,5 +5923,49 @@
    "SI",
    "Simpson index"
   ]
+ },
+ "calibrated liberty": {
+  "def": "A choice the map makes by chance for each feature, within a range the record supports, rather than a setting the user chooses.",
+  "variants": [
+   "calibrated liberty"
+  ]
+ },
+ "susuki": {
+  "def": "A tall grass-family perennial, the plant most used for Japanese thatch, cut every year from thatch fields kept for it.",
+  "variants": [
+   "susuki"
+  ]
+ },
+ "kasasuge": {
+  "def": "A sedge that grows in the same beds as reed; after the winter reed cutting it was laid on the stubble, dried and used as fuel to burn it.",
+  "variants": [
+   "kasasuge"
+  ]
+ },
+ "Huizhou": {
+  "def": "A historical prefecture of southern Anhui, China, known for its old villages and for the water-mouth groves and gardens at their entrances.",
+  "variants": [
+   "Huizhou"
+  ]
+ },
+ "Europe PMC": {
+  "def": "A free online database of life-science and biomedical literature that can be searched across the full text of its papers.",
+  "variants": [
+   "Europe PMC"
+  ]
+ },
+ "Crossref": {
+  "def": "The registry that issues DOIs for scholarly papers; its index of their titles and details can be searched.",
+  "variants": [
+   "Crossref"
+  ]
+ },
+ "ha": {
+  "def": "Hectare: a unit of area of 10,000 m², about 2.5 acres.",
+  "variants": [
+   "ha",
+   "hectare",
+   "hectares"
+  ]
  }
 }
