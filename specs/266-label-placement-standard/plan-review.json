@@ -1,0 +1,141 @@
+{
+ "feature": "266-label-placement-standard",
+ "plan_sha256": "cdf128e0af5e14fd538308a7a8d0d8e39e31d6340d2310f496ba411a2c7471b3",
+ "reviewed": "2026-09-27",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "design-package",
+   "summary": "One mode-neutral package l7r/diagram/labels/ (standard, geom, layout, obstacles, placer) with three adaptors",
+   "class": "within",
+   "why": "FR-001, FR-002: one placer neither mode owns"
+  },
+  {
+   "id": "design-positions",
+   "summary": "POSITIONS: the eight ranked positions in the QGIS order, in the subject's upright frame",
+   "class": "within",
+   "why": "FR-003 verbatim"
+  },
+  {
+   "id": "P3",
+   "summary": "'Slightly' = a quarter of the block's width off center",
+   "class": "within",
+   "why": "FR-003 names the positions, not the amount; labeled calibration"
+  },
+  {
+   "id": "design-offset-rings",
+   "summary": "PREFERRED_OFFSET_EM 0.5 (D2); RING_STEP_EM 0.5; rings ring by ring, every position and layout within a ring before the next",
+   "class": "within",
+   "why": "FR-004, FR-005; the ring step is unfixed by the spec (a calibration, but not labeled as one in P1-P5)"
+  },
+  {
+   "id": "P2",
+   "summary": "Reach 8 em, least-cost seat within reach past it",
+   "class": "within",
+   "why": "FR-005 asks for a reach limit, FR-007 for the least-cost seat; 64 px sits inside the gate's hug cap"
+  },
+  {
+   "id": "design-weights",
+   "summary": "1000 / 500 / 0 weights; way cost per distinct way within half-width + notch; free first, then ring, rank, layout",
+   "class": "within",
+   "why": "FR-006, FR-007, D4, and the Assumptions' notch clause"
+  },
+  {
+   "id": "P1",
+   "summary": "CLEAR_EM: an obstacle other than the subject within 0.5 em of the block counts as covered",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Narrows FR-006's 'free' (weight 0 by coverage) to exclude seats flush against a neighbor. Literal FR-006 would let a caption touch a neighboring house at 0 gap while standing 0.5 em off its board, which reads as the house's caption - defeating the request's purpose (a board caption that plainly labels its board) and the standard's own primary factor, PSU's 'association' (research.md R1). Must be carried into the spec's Decisions Recorded and the record as a calibration and raised with the GM at landing."
+  },
+  {
+   "id": "design-upright-layouts",
+   "summary": "upright() into (-90, 90]; one line, then the best two- and three-line cuts; cut() lifted from finish._caption_lines",
+   "class": "within",
+   "why": "FR-008, the spec's wrap edge case"
+  },
+  {
+   "id": "design-line-area",
+   "summary": "Line subject along the line near its hint, above then below; area subject at the centroid then interior seats by distance",
+   "class": "within",
+   "why": "FR-008"
+  },
+  {
+   "id": "design-leader-settlement",
+   "summary": "Leader for a point or line caption beyond the first ring, nearest point to nearest point, drawn as a <line> in the label layer",
+   "class": "within",
+   "why": "FR-005"
+  },
+  {
+   "id": "design-index",
+   "summary": "A uniform grid built once per label phase (or per render / tool run), add() per placed caption",
+   "class": "within",
+   "why": "FR-009"
+  },
+  {
+   "id": "design-fr014",
+   "summary": "A NAMED civic building (Obstacle(named=True)) is waived by no other caption's wording",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-014 and answer 070 withhold the waiver only from a caption that itself names a civic building ('a named civic building's caption ... additionally may not touch any other named civic building'). The plan withholds it from EVERY caption, so a district caption may not lie on a named temple of its own district, nor a temple-group caption on a named temple - both of which the GM's standing rule permits. Nothing makes the literal rule impossible: the caption's subject can carry whether it names a civic building."
+  },
+  {
+   "id": "design-settlement-callers",
+   "summary": "Board, place_caption, road caption, field names through seat_caption; hint/slides, annulus, _best_label_spot, pull_caption_toward, label_above/label_xy deleted",
+   "class": "within",
+   "why": "FR-001 and D7"
+  },
+  {
+   "id": "design-modeA-leader",
+   "summary": "compound.py seats every caption through the placer but the plan draws no leader there",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-005: a caption seated beyond the preferred offset MUST be joined by a leader, in either mode. The Mode A adaptor names no leader, so a compound caption pushed to ring 2 would stand unjoined. Nothing prevents drawing one."
+  },
+  {
+   "id": "design-tool-leader",
+   "summary": "make seat-label rewrites <text> positions only; writes no leader and --check does not check one",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-005 and FR-013 ('run the placer on a hand-drawn sheet ... writes each caption's standard seat'): the standard seat beyond ring 1 includes its leader. A re-seated hand-sheet caption at ring 2 would be unjoined and --check would pass it."
+  },
+  {
+   "id": "P4-and-path-hull",
+   "summary": "Hand-sheet shapes classed by geometry: a line of stroke >= 4 a wall, thinner a way; a path as its coordinates' hull",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "Its premise was read from compound.py, not from the sheets it runs on. Measured 2026-09-27 on hayakawa-magistracy.svg and ubame-magistracy.svg: the roads are <path> elements of stroke-width 18-40 in <g data-kind=\"road\"> (Hayakawa's main road, x 490-530, stands 30 px from the board the feature re-seats), and the thin lines are building parts (office hall, residence, barracks at 0.8-1). The path-hull rule reduces the 40 px road to a zero-width segment, so a caption lies on it at no cost, contrary to FR-006's 500 per way; the stroke rule makes building lines ways. Every element carries data-kind (R3), so the family can be read from the tag and the stroked width."
+  },
+  {
+   "id": "P5",
+   "summary": "Ground = a containing shape at least 20x the caption block",
+   "class": "within",
+   "why": "FR-006 says area fills weigh 0; the heuristic is labeled"
+  },
+  {
+   "id": "design-static-test",
+   "summary": "AST walk of settlement/ for self.label calls outside D8; compound.py <text literals outside title/note/scale bar",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-012's first clause covers 'any caption drawn outside the placer'. settlement/ has emitted captions as raw <text> f-strings before (fields/paddy.py records two such paths), and a new one would pass this test. Adding the <text literal walk to settlement/ (allowed only in finish.label and the field-name markup the placer drives) is cheap."
+  },
+  {
+   "id": "design-ledger",
+   "summary": "caption_ledger.json with each hand sheet's sha256; off-seat caption fails unless ledgered and hash unchanged",
+   "class": "within",
+   "why": "FR-013, D9"
+  },
+  {
+   "id": "design-record-doctrine",
+   "summary": "040/050 rewritten, registry entries, buildings.md, building-review.md, future-work/cities.md, dev/placement.md",
+   "class": "within",
+   "why": "FR-010, FR-013, D8"
+  },
+  {
+   "id": "T13",
+   "summary": "Fix the review-round hook counting a NOT-REVIEWABLE pass as a round",
+   "class": "within",
+   "why": "Constitution XIV, a defect found in this feature's own review"
+  }
+ ],
+ "verdict": "BLOCKED"
+}

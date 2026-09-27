@@ -82,10 +82,11 @@ caption: 8 positions x 3 layouts x (1 + rings) with rings up to the reach - a fe
   `label(..., lines=, angle=)` and draws the leader (a `<line>` in the label layer, the caption's class and color,
   recorded in `M["caption_leaders"]`).
 - FR-014: `label_obstacles` tags each built record with its caption group (the overlap taxonomy's `_LABEL_GROUP`, and a
-  `buildings` record's own `kind` word), and the index is asked with the caption's text: an obstacle whose group word the
-  caption names weighs 0 for it - except a NAMED civic building (a ministry, the governor's yamen, a temple by name:
-  `Obstacle(named=True)`), which no other caption's wording waives; an unnamed building of a civic group is waived like
-  any other group (spec FR-014).
+  `buildings` record's own `kind` word) and marks a civic record carrying a name of its own `named`. The index is asked
+  with the caption's text: an obstacle whose group word the caption names weighs 0 for it, EXCEPT that when the caption
+  itself names a civic building (its text names a civic group - ministry, governor, temple), every other NAMED civic
+  building keeps its full weight. A caption that names no civic building - a district's - may still lie on a named
+  temple of its own group, as answer 070 allows (spec FR-014).
 - `label()` gains `lines=` and `angle=` (the placer's choice, bypassing the wrap probe and the rotation fold); the
   recorded referent is the subject's box.
 - Callers: `_draw_board_caption` (a rotated-box point subject) shrinks to building the subject; `place_caption`
@@ -100,27 +101,33 @@ caption: 8 positions x 3 layouts x (1 + rings) with rings up to the reach - a fe
 
 `_render_svg` builds an index from what it draws - building rects and point features and walls as obstacles, zone
 grounds free - and seats every caption through the placer: zone and building names and "bath" as area subjects, the
-striking posts, well, latrine, tubs and notice board as point subjects. The title, the draft note and the scale-bar
-text are not captions (spec FR-001) and stay where they are.
+striking posts, well, latrine, tubs and notice board as point subjects. A caption the placer gives a leader is drawn
+with it, a `<line>` tagged with the caption's kind (FR-005 holds in both modes). The title, the draft note and the
+scale-bar text are not captions (spec FR-001) and stay where they are.
 
 ### Hand-drawn sheets (`l7r/diagram/tools/seat_label.py`, `make seat-label SHEET=<svg> [KIND=<k>] [WRITE=1]`)
 
 Reads the SVG with `xml.etree`, applying `translate`/`rotate`/`matrix` transforms, into shapes: `rect`, `circle`,
-`ellipse`, `polygon`, `polyline`, `line` (a stroke of width 4 or more is a wall - an obstacle - a thinner one a way),
-`path` (its coordinates' hull) and `text` (its block from the shared metrics). A caption is a `<text>` inside a
-`data-kind` group (or carrying the tag); its subject is the non-text shapes of that kind; a shape containing the
-subject whose area is at least 20 times the caption block's is ground (weight 0), the rest obstacles. `--check`
-lists every caption not at its standard seat (1 px tolerance); `WRITE=1` rewrites those `<text>` positions (and
-transforms) in place, tagging an untagged board caption.
+`ellipse`, `polygon`, `polyline`, `line`, `path` (its coordinates; a STROKED line or path is a band of its own stroke
+width, so a 40 px road is 40 px wide) and `text` (its block from the shared metrics). EVERY SHAPE IS CLASSIFIED BY ITS
+`data-kind` TAG (feature 262 tags every drawn element; research.md R3): a way kind (`road`, `river`, `revetment`) is a
+Way at `WEIGHT_WAY`; a ground kind - one whose name is `-` or names a court, a garden, a ground, a yard, a grove or
+pines (`outer court`, `practice ground`, `cart yard`, `garden pines`, ...) - is free space; every other kind is an
+obstacle. A caption is a `<text>` inside a `data-kind` group (or carrying the tag); its subject is the non-text shapes
+of that kind. `--check` lists every caption not at its standard seat (1 px tolerance) and every leader that is missing,
+stray or misplaced; `WRITE=1` rewrites those `<text>` positions (and transforms) in place, tagging an untagged board
+caption, and writes, moves or removes the caption's leader - a `<line>` beside it tagged with the caption's kind.
 
 ### Enforcement (FR-012, FR-013)
 
 - `tests/labels/test_caption_paths.py`: an AST walk of `settlement/` whose `self.label(...)` calls must fall in the
-  D8 list (file, function) or the placer's own drawing call; a walk of `compound.py` whose `<text` literals must fall
-  in the title / note / scale-bar functions. A planted call fails it (SC-002).
+  D8 list (file, function) or the placer's own drawing call, and whose `<text` string literals must fall in `label()`
+  itself and the field-name markup `_draw_seated_caption` draws; a walk of `compound.py` whose `<text` literals must
+  fall in the caption drawer (fed by the placer) and the title / note / scale-bar lines. A planted raw `<text` and a
+  planted `self.label` call each fail it (SC-002).
 - `tests/gate/test_hand_sheet_captions.py` + `tests/fixtures/caption_ledger.json` (each hand-drawn sheet's sha256 and
-  its captions as they stood when this feature landed): a caption off its standard seat fails unless the ledger
-  holds it AND the sheet's hash is unchanged (SC-006).
+  its captions as they stood when this feature landed): a caption off its standard seat, or missing the leader its seat
+  requires, fails unless the ledger holds it AND the sheet's hash is unchanged (SC-006).
 
 ### Record and doctrine
 
@@ -138,11 +145,14 @@ transforms) in place, tagging an untagged board caption.
 - **P2 - Reach 8 em**: calibration; past it the least-cost seat within reach is taken (FR-007).
 - **P3 - "Slightly" = a quarter of the block's width** off center for the last two positions. Calibration (the
   sources name the position, not the amount).
-- **P4 - A wall stroke 4 px or wider is an obstacle on a hand-drawn sheet, a thinner line a way.** Calibration from
-  the sheets (observed 2026-09-27, method: read from `compound.py`: compound walls stroke-width 9, the court divider 6;
-  lanes and paths are drawn thinner).
-- **P5 - Ground on a hand-drawn sheet = a shape that contains the subject and is at least 20 times the caption's
-  block.** The sheets draw courts and grounds as large rects under their contents; a heuristic, recorded.
+- **P4 - A hand-drawn sheet's shapes are classified by their `data-kind` tag**: ways `road`, `river`, `revetment`
+  (observed 2026-09-27, method: the tag census of the six sheets - roads are stroked `<path>`s 18 to 40 px wide); free
+  ground `-` and every kind naming a court, garden, ground, yard, grove or pines; every other kind an obstacle. A
+  classification of this project's own tags, recorded; it replaces a first draft's stroke-width rule, which the plan
+  review showed would have read a 40 px road as a hairline and a building's 1 px outline as a way.
+- **P5 - A stroked line or path is a band of its own stroke width** - drawn geometry, not a calibration.
+- **P6 - The comparison at the clearance is strict with a 1e-6 tolerance**, so a first-ring seat standing exactly one
+  preferred offset from its subject is not charged for it by a rounding error.
 
 ## Project Structure
 

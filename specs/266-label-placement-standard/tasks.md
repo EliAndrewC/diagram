@@ -15,28 +15,34 @@ world, and the sources are cartographic practice (research.md R1).
       the road caption and the field names through it; the town and city cover rule with its civic exception; the old
       searches deleted (FR-001, FR-014)
       research: rendering
-- [ ] T04 `compound.py`: every caption through the placer; the two composed sheets regenerated (FR-001, FR-011)
+- [ ] T04 `compound.py`: every caption through the placer, with its leader where it has one; the two composed sheets
+      regenerated (FR-001, FR-005, FR-011)
       research: rendering
-- [ ] T05 The static path test: `self.label` only at D8's call sites, `compound.py` text only in title, note and scale
-      bar; shown red on a planted call (FR-012, SC-002)
+- [ ] T05 The static path test: `self.label` only at D8's call sites, raw `<text` in `settlement/` only in `label()` and
+      the placer-fed field-name markup, `compound.py` text only in its placer-fed caption drawer and title, note and
+      scale bar; shown red on a planted call and a planted raw `<text` (FR-012, SC-002)
       research: rendering
-- [ ] T06 `make seat-label` (`tools/seat_label.py`): read a hand-drawn sheet, check and write captions; the three
-      magistracy sheets' board captions re-seated (FR-013, SC-006)
+- [ ] T06 `make seat-label` (`tools/seat_label.py`): read a hand-drawn sheet with every shape classified by its tag,
+      check and write captions and their leaders; the three magistracy sheets' board captions re-seated (FR-005, FR-013,
+      SC-006)
       research: rendering
-- [ ] T07 The caption ledger and its gate test; shown red on a changed sheet and on a new off-seat caption (FR-013, SC-006)
+- [ ] T07 The caption ledger and its gate test, leaders included; shown red on a changed sheet, on a new off-seat
+      caption and on a missing leader (FR-013, SC-006)
       research: rendering
 - [ ] T08 Doctrine: `buildings.md`, `.claude/agents/building-review.md`, `future-work/cities.md` (D8), `dev/placement.md`
       and the captions index (FR-013)
       research: rendering
-- [ ] T09 The five pool hamlets regenerated; the board captions measured as in R2, before and after (FR-011, SC-001)
+- [ ] T09 The five pool hamlets and the two composed magistracy sheets regenerated; every board caption measured as in
+      R2, before and after (FR-011, SC-001)
       research: rendering
-- [ ] T10 The record: questions 040 and 050 on the standard, eight registry entries; `quote-check`, `record-format`,
-      `source-applicability` pass; the unreadable works on the download list (FR-010, SC-004)
+- [ ] T10 The record: questions 040 and 050 on the standard with every calibration labeled (D2, D3, D4, D4a), eight
+      registry entries; `quote-check`, `record-format`, `source-applicability` pass; the unreadable works on the download
+      list (FR-010, SC-004)
       research: rendering
 - [ ] T11 Existing tests updated for the removed parameters and searches (the board's `label_above` and `label_xy`,
       `place_caption`'s hint and slides, the pull)
       research: rendering
-- [ ] T12 `make done` green with 100% coverage, then land (SC-005)
+- [ ] T12 `make done` green with 100% coverage, then land, and report D7, D8, D9 and P1 to the GM (SC-005)
       research: rendering
 - [ ] T13 The review-round hook: a NOT-REVIEWABLE pass does not count as a round, so the next dispatch is a first
       reading (constitution XIV, found this feature)

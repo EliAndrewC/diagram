@@ -213,6 +213,13 @@ rule quoted from a page they can open.
   and which 0, and the 500 per way crossed, are this project's calibration - the classification follows the record's
   existing rule that ground cover is not an obstacle (research/presentation, the wrap question), and 500 is chosen so
   a way costs less than any obstacle but two ways cost as much as one obstacle.
+- **D4a - The search's other calibrations** (plan P1-P6), each a map drawing convention chosen by this project where the
+  standard names the rule and not the number: the preferred offset is also the least a caption may stand from any
+  obstacle but its subject (P1, the standard's "association"); rings step out half an em at a time to a reach of eight
+  ems (P2); "slightly" is a quarter of the block's width (P3); a hand-drawn sheet's shapes are classified by their tag
+  (P4); a leader is trimmed 1 px short at each end so it does not touch either outline; `make seat-label --check`
+  allows 1 px. Each is labeled at its point of change and in the record. P1 narrows what counts as free space and was
+  ruled legitimate by the plan review. To raise P1 with the GM at landing.
 - **D5 - Never dropped: the GM's ruling, 2026-09-27** - *"for the time being we'll treat labels as mandatory when the
   thing is marked as needing a label."* Esri's and QGIS's "leave unplaced" option is therefore not implemented.
 - **D6 - A rotated feature's caption follows its angle: sourced** (Esri, rotation by attribute overrides the
