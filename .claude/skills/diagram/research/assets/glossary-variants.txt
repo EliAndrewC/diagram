@@ -120,6 +120,7 @@ calamagrostis	Calamagrostis
 canal corridor	canal corridor
 canal corridors	canal corridor
 cangue	cangue
+caoshi	caoshi
 caravanserai	caravanserai
 caravanserais	caravanserai
 carex	Carex
@@ -137,6 +138,7 @@ cesspit	koedame
 cesspits	koedame
 chan	Chan
 chan buddhism	Chan
+chang'an	Chang'an
 chaoguan	chaoguan
 chenghuangmiao	chenghuangmiao
 chi	chi
@@ -777,6 +779,8 @@ magariya	magariya
 main channel	main stem
 main stem	main stem
 mamian	mamian
+manji	Manji
+manji era	Manji
 manning	Manning
 manning's formula	Manning
 maoqu	maoqu
@@ -922,6 +926,9 @@ peer-reviewed flora	flora
 perched	perched river
 perched river	perched river
 perched, silt-choked river	perched river
+periodic market	periodic market
+periodic markets	periodic market
+periodic-market	periodic market
 petuntse	petuntse
 phragmites	Phragmites
 phragmites australis	Phragmites
@@ -1307,6 +1314,8 @@ wanli era	Wanli era
 waraguro	waraguro
 ward gate	kido
 ward gates	kido
+ward-and-market	ward-and-market system
+ward-and-market system	ward-and-market system
 wari-tetsu	wari-tetsu
 warren	warren
 warrens	warren
@@ -1357,6 +1366,7 @@ yashiki	yashiki
 yashikigami	yashikigami
 yashikigami-sama	yashikigami
 yashikirin	yashikirin
+yasuki taka	Yasuki Taka
 yato	yato
 yatsu	yato
 yatsuda	yato

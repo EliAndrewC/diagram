@@ -2310,7 +2310,7 @@
   ]
  },
  "kido": {
-  "def": "A ward gate on a Japanese town street, shut at night to seal one block from the next; every tenement row and lane had its own.",
+  "def": "A ward gate, shut at night to seal one block from the next: on a Japanese town street every tenement row and lane had its own, and a Tang Chinese city's walled wards had theirs, shut at the dusk drum.",
   "variants": [
    "kido",
    "ward gate",
@@ -5552,6 +5552,46 @@
   "def": "The Japanese syllabic script, in which each sign stands for one syllable; の, read \"no\", is one of its signs.",
   "variants": [
    "kana"
+  ]
+ },
+ "caoshi": {
+  "def": "A commercial district that grew up outside a Chinese city's walls, beginning in the Song dynasty. It descends from the rural periodic market of the Tang.",
+  "variants": [
+   "caoshi"
+  ]
+ },
+ "ward-and-market system": {
+  "def": "The Tang city's order in which residents lived in walled wards whose gates the street drum opened at sunrise and closed at sunset, and trade was held in designated markets.",
+  "variants": [
+   "ward-and-market system",
+   "ward-and-market"
+  ]
+ },
+ "periodic market": {
+  "def": "A market held on fixed days of a recurring cycle rather than every day - in Japan the rokusai-ichi met six times a month - to which the peasants of the surrounding countryside came in to buy and sell.",
+  "variants": [
+   "periodic market",
+   "periodic markets",
+   "periodic-market"
+  ]
+ },
+ "Manji": {
+  "def": "A Japanese era name of the early Edo period; its first year, Manji 1, is 1658.",
+  "variants": [
+   "Manji",
+   "Manji era"
+  ]
+ },
+ "Chang'an": {
+  "def": "The capital of the Tang dynasty: a walled city laid out in walled wards whose gates were shut at the dusk drum.",
+  "variants": [
+   "Chang'an"
+  ]
+ },
+ "Yasuki Taka": {
+  "def": "The first Imperial Treasurer in the setting, whose system separates the official who assesses what is owed from the one who collects it; the import tariff collected at provincial-city and capital gates follows it.",
+  "variants": [
+   "Yasuki Taka"
   ]
  }
 }
