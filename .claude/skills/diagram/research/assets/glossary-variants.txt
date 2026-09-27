@@ -90,6 +90,8 @@ bidens	Bidens tripartita
 bidens tripartita	Bidens tripartita
 bishamon	Bishamon
 bishamonten	Bishamon
+black charcoal	black charcoal
+black-charcoal	black charcoal
 board feet	board foot
 board foot	board foot
 bodaiji	bodaiji
@@ -132,6 +134,7 @@ cadastre	cadastre
 cadastres	cadastre
 caishen	Caishen
 calamagrostis	Calamagrostis
+calendar calibration	calendar calibration
 canal corridor	canal corridor
 canal corridors	canal corridor
 cangue	cangue
@@ -388,6 +391,7 @@ extramural	extramural
 fabric	building fabric
 fabric is later	building fabric
 fairway	fairway
+fall line	fall line
 fan head	alluvial fan
 fan's head	alluvial fan
 fang	fang
@@ -1573,6 +1577,8 @@ wenmiao	wenmiao
 wet run	wet run
 wet runs	wet run
 wetted perimeter	wetted perimeter
+white charcoal	white charcoal
+white-charcoal	white charcoal
 white-tawed	shironameshi
 wicket	wicket
 wickets	wicket
