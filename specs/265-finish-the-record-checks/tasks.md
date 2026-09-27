@@ -1,5 +1,17 @@
 # Tasks - feature 265 (moved from feature 250, GM 2026-09-27)
 
+## Phase 0 - the parallel runs (FR-010)
+
+- [ ] T12 `make reserve KIND=glossary|registry KEY=<key>` under a host-wide lock; `apply-edits` takes its glossary
+      prefix from it; a test that races two allocations
+      research: rendering
+- [ ] T13 A guard refuses a new glossary or registry file written without a reservation, with the command; its suite,
+      proved red on a mutated copy; registered in the fallback form
+      research: rendering
+- [ ] T14 The page briefs and the runner name the reservation and the queue's clone; `make page-queue` starts a queue
+      in a sibling clone, and pulling a finished queue back rebuilds the generated pages
+      research: rendering
+
 ## Phase 1 - the pages (FR-002, FR-006, FR-007; was 250's T19)
 
 - [ ] T01 FR-002 and FR-006 for `ways`, by 250's process

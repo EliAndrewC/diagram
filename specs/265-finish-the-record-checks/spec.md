@@ -65,6 +65,17 @@ list, in the GM's format, appended at the END").
 **FR-009 - the closing report** states, per class above, what closed and what did not, and per unclosed
 item whether it was searched and failed or never searched.
 
+**FR-010 - two or three pages' queues run at once** (the GM, 2026-09-27, `request.md`). A page is independent of
+another page, so the pages are worked by up to three queues side by side, each in its own session clone
+(`.clones/diagram-research-<n>`, a page session named after its clone), their commits pulled back into this feature's
+clone when a queue ends, and the pages this feature regenerates (`make record`, `make citations`, `make glossary`)
+rebuilt there rather than merged by hand. The one thing two concurrent sessions can collide on is a number they
+allocate by hand: a new glossary file's prefix and a new registry entry's prefix, each "the highest + 10". Those are
+allocated under a lock (`make reserve KIND=glossary|registry KEY=<key>`, the pattern `make claim` uses for feature
+numbers: the next number derived UNDER THE LOCK from the mirror, every clone and a ledger, and the claim is the file,
+created before the lock is released); `make apply-edits` takes a glossary prefix from it; and a new file in either
+directory written without a reservation is refused by a guard naming the command.
+
 ## Success criteria (feature 250's SC-002 to SC-010, carried verbatim; SC-002 and SC-006 limited to the pages above)
 
 - **SC-002** (FR-002) - every assertion listed at the end of the six quote-check reports carries one of
@@ -81,6 +92,10 @@ item whether it was searched and failed or never searched.
 - **SC-008** (FR-008) - Part 4 of the download list has grown only at its end, every entry with both links.
 - **SC-009** (FR-009) - the closing report distinguishes searched-and-failed from never-searched.
 - **SC-010** (spec-wide) - `make page-check` green and the push clean.
+
+- **SC-011** (FR-010) - two allocations run at once never take the same prefix (a test that races them), a new
+  glossary or registry file written without a reservation is refused (the guard's suite, proved red on a mutated
+  copy), and the pages are worked by at least two queues at once with no prefix collision in the merged record.
 
 ## Review history
 
