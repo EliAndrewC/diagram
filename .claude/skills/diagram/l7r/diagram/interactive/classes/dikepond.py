@@ -254,7 +254,7 @@ class PigSty(Kind):
 
     Why: The shed is at the water on purpose - that is the whole arrangement, not an accident of crowding. A pig
     shed is built on a pond dike so the excrement is flushed directly into the pond, where it feeds the water
-    rather than fouling it: the manure raises the plankton the fish eat. So the pigs are part of what feeds the
+    rather than fouling it: the manure raises the plankton the fish eat. It does so only in measure: too many pigs at one spot and the fish come up gasping, and the water right under the shed goes airless unless the manure is spread across the pond - a thing handled with buckets and channels rather than by moving the shed, and not drawn. So the pigs are part of what feeds the
     fish the household cultivates. What the shed keeps clear of is the sluice itself - nobody builds over the
     opening they have to reach in order to lift its boards, and that is a matter of getting at the gate rather
     than of keeping the water clean. A pig penned on a pond DIKE is a Chinese form. Japan kept pigs - their
@@ -274,7 +274,7 @@ class PigSty(Kind):
     Name: pig sty
     Covers: every `pig_sties[]` record - a shed with its railed pen on a pond dike
     Label: guess
-    Sources: fao-ac264e, fao-ac264e-ch9, fao-y1187e, qimin-yaoshu-yangzhu, isis-dykepond, ruddle-zhong-1988
+    Sources: fao-ac264e, fao-ac264e-ch9, fao-y1187e, qimin-yaoshu-yangzhu, fao-ac257e, fao-x6708e, isis-dykepond, ruddle-zhong-1988
     Entry: research/archetypes.html - "Does a pig sty have to stand back from the water, or from the pond's sluice?", 'Does a dike-pond hamlet keep pigs and ducks on its pond dikes?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'
     """
 
@@ -288,7 +288,7 @@ class DuckPen(Kind):
     the water stand clear of the pond's own culvert.
 
     Why: Fish-cum-duck ponds fence part of the dike as a dry run and part of the water as a wet run; ducks were
-    among the stock the dike-pond loop kept to manure its ponds, and the droppings feed the water the same way a
+    among the stock the Pearl-delta dike-pond loop kept to manure its ponds - a Chinese form, as the whole dike-pond hamlet is - and the droppings feed the water the same way a
     pig shed's do. The dry run stands on the same planted collar a pig shed does - two to five meters, where a
     modern manual asks five to ten of a dike carrying an animal shed, a ceiling it sets by the pigsties, piping
     and traffic the dike must bear (dike-borne traffic, on this project's reading, came with commercialization), and where a Shunde
