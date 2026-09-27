@@ -7,6 +7,7 @@ aburaya	aburaya
 abutment	abutment
 abutments	abutment
 across the beams	ridge span
+aizu	Aizu
 ake-mutsu	ake-mutsu
 akiba	Akiba
 akusui	akusui
