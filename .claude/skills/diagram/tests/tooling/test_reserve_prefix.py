@@ -58,6 +58,16 @@ def test_a_key_already_on_file_is_refused(tmp_path, capsys) -> None:
     assert rp.main(["glossary", " ", "--root", str(a)]) == 2
 
 
+def test_a_key_that_ends_another_key_is_not_refused(tmp_path) -> None:
+    """`honjin-jawiki` was refused because `kusatsu-honjin-jawiki` was on file: the glob matched the longer key."""
+    mirror, a = _world(tmp_path)
+    b = a.parent / "b"
+    rp.reserve("registry", "kusatsu-honjin-jawiki", a)
+    rp.reserve("registry", "tall-honjin-jawiki", b)
+    assert rp.reserve("registry", "honjin-jawiki", a).name.endswith("0-honjin-jawiki.html")
+    assert rp.held_elsewhere("registry", "honjin-jawiki", a, mirror) == ""
+
+
 def _take(args: tuple[str, str]) -> str:
     root, key = args
     return _load().reserve("glossary", key, pathlib.Path(root)).name
