@@ -257,3 +257,20 @@ exemplar and fails on a fixture that draws a precinct fence.
 - Round 2 (spec-fidelity-verify, MODE 3, 2026-09-27): FAITHFUL - round 1's item resolved; the grove's
   reach to the outermost arch confirmed as sizing the grove the GM asked for, on the research's own
   first-arch and grove passages.
+
+## Decisions Recorded
+
+| decision | class | where recorded |
+|---|---|---|
+| No fence, wall or hedge round a village shrine's precinct; a sanctuary-only fence is a richer shrine's donation (wealth knob) | accurate | research 122; programs.md; `no_precinct_enclosure` |
+| The precinct is the grove, sized from the registers as found (Hoshigaoka about 858 tsubo); that the wood fills most of the unbuilt ground | band accurate; place in band and wood's share a guess | research 124; programs.md; the sheet's notes |
+| The torii pitch 12 ft on every map, the innermost arch one pitch off the hall | guess inside the GM's ruled band | research 090; `TORII_PITCH_FT` in `_geom/walls.py` |
+| The arch drawn in plan (beam and post marks), true size on a sheet; post marks proud of the beam on a village map | accurate; map drawing convention for the marks | research.md D3/D5; `torii_glyph_dims`; buildings.md |
+| A plain stone basin beside the approach, not a roofed pavilion | form a guess | research 126; programs.md |
+| A roped sacred tree beside the approach (the GM's option) | accurate in kind; prevalence a guess | research 126; programs.md |
+| Guardian figures, lanterns, strength stones on the wealth knob; a farmers' stage and a sumo ring as knobs, absent by default | accurate (attested, not general) | research 126; programs.md knobs 5-7 |
+| A 37 ft forecourt before the hall, the clearing a ragged patch | guess from the use | research.md D12; research 140 (ragged edge); the sheet's notes |
+| The basin drawn at 6 ft on the village map | map drawing convention | the map's notes |
+| The hall in the building's center, kitchen and dwelling flanking it | deliberate deviation from Kaie-ji (the map's axis) | the sheet's notes |
+| The crop check runs on sheets drawn to a map | rendering | buildings.md; `registry.py` |
+(Figures observed 2026-09-27; method: read off the engine constant, the layout script and the record.)
