@@ -579,20 +579,20 @@ rows EDIT an existing section syncs from main first, since 269's and 267's edits
 
 | group | rows | state |
 |---|---|---|
-| V1 | 5 | todo |
-| V2 | 5 | todo |
-| V3 | 5 | todo |
-| V4 | 5 | todo |
-| V5 | 5 | todo |
-| V6 | 4 | todo |
-| V7 | 6 | todo |
-| W1 | 5 | todo |
-| U1 | 6 | todo |
+| V1 | 5 | checked (queue 1) |
+| V2 | 5 | writing (queue 1) |
+| V3 | 5 | checked (queue 2) |
+| V4 | 5 | writing (queue 2) |
+| V5 | 5 | queued (queue 2) |
+| V6 | 4 | checked (queue 3) |
+| V7 | 6 | queued (queue 1) |
+| W1 | 5 | writing (queue 3) |
+| U1 | 6 | queued (queue 3) |
 | R1 | 4 | todo |
-| T1 | 6 | todo |
-| T2 | 6 | todo |
-| T3 | 5 | todo |
-| T4 | 5 | todo |
+| T1 | 6 | checked (queue 4) |
+| T2 | 6 | writing (queue 4) |
+| T3 | 5 | checked (queue 5) |
+| T4 | 5 | writing (queue 5) |
 | W2 | 7 | todo |
 | U2 | 6 | todo |
 | U3 | 5 | todo |
