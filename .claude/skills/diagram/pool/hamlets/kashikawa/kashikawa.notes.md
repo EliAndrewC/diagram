@@ -5,8 +5,8 @@
 [`inashiro.notes.md`](inashiro.notes.md) for the head-to-head with the authored Ikegami.*
 
 **Kanji triangle**: 樫 *kashi* "evergreen oak" + 川 *kawa* "river". Kashikawa, "oak river" - named
-for the oaks on the high ground the settlement backs onto, which the map draws as its managed
-coppice patches and its fengshui belt.
+for the oaks the map draws as its managed coppice patches on the dry ground upslope of the hamlet, and as the
+fengshui belt on its windward north and west.
 
 **Subject**: ~20 households - the ceiling of the hamlet band, above which a place needs a headman, a
 shrine and tax-free plots and is a village instead - on land falling to the northeast, its drain

@@ -621,11 +621,11 @@
   "verifies": "F3",
   "subject": "kashikawa",
   "round": "1bff4100",
-  "value": 281,
+  "value": 360,
   "unit": "clumps",
-  "quantity": "the belt's recorded clumps, which the notes now call clumps rather than crowns (and on the other four maps too)",
+  "quantity": "the belt's recorded clumps, which the notes call clumps rather than crowns (and on the other four maps too); 360 on the kept roll",
   "source": "pool/hamlets/kashikawa/kashikawa.json village_groves[role=windbreak].clumps; kashikawa.notes.md 2026-09-27 entry",
-  "command": "grep -n 'The belt is 281 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
+  "command": "grep -n 'The belt is 360 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
  },
  "inashiro-r9-belt-frame": {
   "verifies": "F1",
@@ -646,5 +646,25 @@
   "quantity": "the belt's median covered depth along the NW wind per 20 ft column, measured on the DRAWN crowns (tree_crowns inside the windbreak's outline, each with its own radius): 88 ft (58 before the fix; main 93), 10 of 23 columns under 80 ft (19 before; main 8 of 22), and the crowns cover 75% of the belt's outline (53% before; main 80%) - the belt stands beyond the ring lane that ran down its middle (past_the_lanes)",
   "source": "pool/hamlets/kuwabata/kuwabata.json tree_crowns (x, y, r) inside village_groves[role=windbreak].poly, meta.windward; the same measure on the pre-fix and main manifests",
   "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_hinterland.py"
+ },
+ "kashikawa-r11-name": {
+  "verifies": "F1",
+  "subject": "kashikawa",
+  "round": "0ae309f0",
+  "value": 3,
+  "unit": "woodland stands",
+  "quantity": "the woodland stands upslope of the houses' middle along the map's fall (all three, 755-1,059 ft up), where the notes' name sentence now puts the oaks, with the fengshui belt on the windward north and west rather than on high ground",
+  "source": "pool/hamlets/kashikawa/kashikawa.json commons[role=woodland], meta.down_deg, village_groves[role=windbreak]; kashikawa.notes.md name sentence",
+  "command": "grep -n 'dry ground upslope of the hamlet' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
+ },
+ "kashikawa-r11-record": {
+  "verifies": "F2",
+  "subject": "kashikawa",
+  "round": "0ae309f0",
+  "value": 360,
+  "unit": "clumps",
+  "quantity": "the record kashikawa-r8-notes-clumps now states and greps the kept roll's 360 belt clumps",
+  "source": "specs/261-northwest-wind-by-default/measurements.json kashikawa-r8-notes-clumps; kashikawa.notes.md",
+  "command": "grep -n 'The belt is 360 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
  }
 }
