@@ -21,15 +21,16 @@ of a headless session carries the clone's root CLAUDE.md (about 5.2 K tokens), m
 
 ### User Story 1 - A large research group is written in short sessions (Priority: P1)
 
-A feature queues a group of nine questions. Every write brief declares its load in one line,
-`<!-- write-load: questions=N -->`, counting each question to write or rework (an item spanning six existing sections is
-six). The page-session launcher refuses a write brief declaring more than four, naming the split (`<g>a-write.md`,
-`<g>b-write.md`, each with its own handoff), and refuses a write brief that declares nothing. While the session writes,
+A feature queues a group of nine questions. Every brief the page-session runner runs declares what it is in one line,
+`<!-- page-load: kind=<kind> [questions=N] -->`. A write brief (`kind=write`) counts each question it asks the session
+to write or rework (an item spanning six existing sections is six). The runner refuses a write brief declaring more than
+four, naming the split (`<g>a-write.md`, `<g>b-write.md`, each with its own handoff), and refuses any brief with no load
+line, whatever its name or headings. While the session writes,
 `make reserve` counts the registry keys it has reserved; the eleventh is refused, and the session writes the items it
 has not reached into a continuation brief and stops, which the runner queues next.
 
-**Independent Test**: the launcher refuses a write brief declaring 5 questions and one declaring none, and runs one
-declaring 4. `make reserve` refuses a page session's 11th registry key. The runner queues a continuation brief a session
+**Independent Test**: the runner refuses a write brief declaring 5 questions and any brief with no load line, and runs a
+write brief declaring 4 and a brief of each exempt kind. `make reserve` refuses a page session's 11th registry key. The runner queues a continuation brief a session
 leaves.
 
 ### User Story 2 - A session reads only its own coordination lines (Priority: P1)
@@ -52,14 +53,15 @@ session's first turn is measured before and after.
 
 ## Edge Cases
 
-- **What a write brief is.** A brief is a write brief if its file name contains `write`, or if it has a `## Your items`
-  heading. The load line is required of every write brief; a brief generator writes it, and a hand-written brief
-  carries it too.
-- **Briefs that are not a new group's writing** say so in the same line: `kind=assertions` (feature 250's `brief.py`
-  briefs, which footnote assertions inside existing questions rather than write questions) or `kind=handover` (a
-  group handed to another feature). Only those two kinds are exempt, and the exemption is tested.
-- **An item spanning several sections** counts each section it asks the session to write or rework. The declared count
-  is the generator's responsibility, and a generator counts sections, not lines.
+- **Every brief declares itself.** The runner checks the load line of every brief it plans: the ones listed at launch
+  (refused before anything starts), and the ones a `then:` step prints later (a refused one STOPS the queue with a
+  `STOPPED` line in the run log, rather than being skipped, so a missing session is never silent). The kinds are `write`
+  (capped: `questions=N`, N at most four), and four exempt kinds, each named: `check` (a check-and-apply session),
+  `split` (splitting an over-cap question), `assertions` (feature 250's FR-002 briefs, which footnote assertions inside
+  existing questions) and `handover` (a group handed to another feature). No brief is exempt by its name or its
+  headings. Feature 250's `brief.py`, the generator on main, emits the line on every brief it writes, and counts a write
+  brief's questions per section it asks to be written or reworked. That is tested. Each other feature's generator is
+  updated by its own session (FR-005 tells them); 269's is updated in 269.
 - **Keys are not known before writing**, so they are capped during the session, not at launch. The runner exports the
   session's id (`L7R_PAGE_SESSION`) and a continuation path (`L7R_CONTINUE`). `make reserve` records the session on
   each reservation and refuses a registry key past the tenth in one page session, telling it to finish the question in
@@ -78,11 +80,12 @@ session's first turn is measured before and after.
 ### Functional Requirements
 
 - **FR-001 (suggestion 1)**: A write session MUST take at most four questions AND at most ten new registry keys.
-  `scripts/page-session.sh` MUST refuse a write brief declaring more than four questions, or declaring none (only the
-  `assertions` and `handover` kinds are exempt), naming the split and the escape. `make reserve` MUST refuse a page
+  The page-session runner MUST refuse any brief without a `page-load` line, and a `kind=write` brief declaring more than
+  four questions, naming the split and the escape. Only the four named kinds are exempt. Feature 250's `brief.py` MUST
+  emit the line on every brief, counting a write brief's questions per section. `make reserve` MUST refuse a page
   session's eleventh registry key with the continuation instructions, and the runner MUST queue a continuation brief a
-  session leaves. The research CLAUDE.md and `docs/research-record-rules.md` MUST state both limits with the
-  measurement behind them (research.md R1). 269's generator MUST declare honest counts and split its unstarted groups.
+  session leaves. The research CLAUDE.md and `docs/research-record-rules.md` MUST state both limits and the
+  load line, with the measurement behind them (research.md R1).
 - **FR-002 (suggestion 2)**: `make lines FILE=<f> KEY=<regex>` MUST print only a coordination file's matching lines
   (numbered, with a count of the rest), and `make append FILE=<f> LINE=<text>` MUST append one line without printing
   the file. The research CLAUDE.md MUST say a session reads a claims file, a handoff or a checks report ONLY this way.
@@ -99,14 +102,17 @@ session's first turn is measured before and after.
 
 ### Key Entities
 
-- **Write brief**: a page session's brief for writing, with its `## Your items` list.
+- **Brief**: what a page session starts from; it declares its kind (and, if `write`, its question count) in a
+  `page-load` line.
 - **Coordination file**: the claims file, a group's handoff, a checks report.
 - **Slim rules file**: `container-scripts/page-session-rules.md`.
 
 ## Success Criteria *(mandatory)*
 
-- **SC-001** (FR-001): tested: the launcher refuses a write brief declaring 5 questions or none, exempts only the two
-  kinds, and runs one declaring 4; `make reserve` refuses a page session's 11th registry key; the runner queues a
+- **SC-001** (FR-001): tested: the runner refuses a write brief declaring 5 questions and any brief without a load line
+  (at launch, and one a `then:` step prints, which stops the queue); it runs a write brief declaring 4 and one brief of
+  each exempt kind; `brief.py` emits the line on every brief, and a write brief whose items span six sections declares
+  6; `make reserve` refuses a page session's 11th registry key; the runner queues a
   continuation brief.
 - **SC-002** (FR-002): `make lines` and `make append` are tested, and the research CLAUDE.md and 269's briefs name them.
 - **SC-003** (FR-003): the runner's flags exclude the root CLAUDE.md and append the slim file (tested), and the probe
@@ -125,3 +131,6 @@ None: nothing a map draws or states changes. This is process tooling.
   dropped: now capped during the session by `make reserve`, with a continuation brief. (2) Counting item lines missed
   both costliest groups (272 S, 269 V2): the unit is now the declared question count, counted per section. (3) A brief
   without the heading escaped the cap: now refused, with only two declared kinds exempt. The future-work path was corrected.
+- Round 2 (spec-fidelity-verify, 2026-09-27): CHANGES REQUIRED. Finding 1 resolved; 2 and 3 partly. The declared count
+  now has a tested generator behind it (`brief.py`, the one on main; 269's in 269). Every brief, whatever its name,
+  carries the load line, only four named kinds are exempt, and a `then:`-planned brief is checked too.
