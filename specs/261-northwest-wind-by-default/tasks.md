@@ -98,8 +98,9 @@ entry (T10).
       the future-work item closed
       research: rendering
       verify: DONE. DONE. Notes: Kashikawa district southwest (218 deg), Kuwabata northeast (28 deg), the confluence 476/655 ft, Sawada's water story at seed 24, the kept seeds, a dated feature-261 entry per map; make notes-census; hamletgen.md, the hamletgen CLAUDE.md driver row, the future-work item closed to closed.md; the record's arcs re-measured; the scrub keep-out follows the cluster hull (Sawada F5).
-- [ ] T21 The 48-seed cohort against R3's baseline
+- [x] T21 The 48-seed cohort against R3's baseline
       research: rendering
+      verify: DONE. DONE. make cohort N=48 on engine 9eba368c: 38/48, failing 2, 8, 23, 25, 28, 31, 35, 36, 40, 46 - each also failing on the R3 baseline, all scatter_frame_breach; seed 37 fixed; 0 farmstead_across_brook (SC-009); 3 of 48 seats off-wind (22 under the retired order).
 - [ ] T22 `make done` green on the amendment
       research: rendering
 - [ ] T23 `settlement-review`, one agent per map, on the amended maps; findings through `escalation-check`; ledger
