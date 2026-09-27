@@ -110,3 +110,11 @@ at the first row not yet done:
   diagram-supplemental clone (269's plan D3, "diagram-buildings' 4d13ad4f"), not on main. FR-005 should say that the
   runner 271's page sessions use MUST wait for the reset and resume the same session, and that this is brought into
   this clone (or landed on main) before the first page session is queued, not that it is "already on main".
+- **Round 3 (2026-09-27), `spec-fidelity-verify`: FAITHFUL.** Round 2's item is RESOLVED. FR-005's usage-limit
+  bullet now states the requirement (the runner waits for the reset and resumes the same session with `--resume
+  <sid>`, never moving to the next brief, brought into this clone before the first 271 page session is queued)
+  rather than claiming it is already on main. The mechanism is in this clone: `scripts/_page_session_runner.py` and
+  `tests/tooling/test_page_session.py` hash identical to diagram-buildings `4d13ad4f` (sha256 compared 2026-09-27),
+  the run loop retries a failed session up to `RETRIES = 14` times through `wait_for()` and `resume_command()` before
+  logging `ended`, and `make test-file FILE=tests/tooling/test_page_session.py` ran 7 passed on the reviewer's own
+  run. Passages read: FR-005, SC-005, Decisions Recorded, the Review history, and the runner's run loop.
