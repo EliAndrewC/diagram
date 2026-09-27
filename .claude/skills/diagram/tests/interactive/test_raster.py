@@ -156,10 +156,13 @@ def test_the_id_map_refuses_a_page_past_its_palette() -> None:
 def test_the_id_map_draws_text_unblended() -> None:
     # feature 264: crispEdges does not reach glyphs; a blended label edge snapped to the class one palette step away
     doc = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 20"><g class="f f-a" data-k="a"><text x="2" y="14" font-size="12" fill="#123456">Akami</text></g></svg>'
-    png, palette = id_map(doc, class_keys(doc))
+    png, palette = id_map(doc, class_keys(doc), crisp_text=True)
     assert png is not None
     px = {p[:3] for p in _png(png).get_flattened_data() if p[3]}
     assert px == {(PALETTE_STEP, 0, 0)}, f"a label paints only its class's color: {sorted(px)[:5]}"
+    # a hamlet page keeps its id map as it was (spec 264 FR-008): without the flag the glyph edges still blend
+    blended = id_map(doc, class_keys(doc))[0]
+    assert blended is not None and len({p[:3] for p in _png(blended).get_flattened_data() if p[3]}) > 1
 
 
 def test_past_63_classes_green_counts_the_rows_and_the_first_row_is_unchanged() -> None:

@@ -50,9 +50,10 @@ parts - which the reader derives from the drawing's own nesting.
   past the red-only palette's 63; green counts the rows past it, the first 63 keep their colors and keys (no hamlet
   id map changes), and `page.js` reads both channels. `data-in` rides after `data-k` so `raster._GROUP` finds a part.
   (FR-001, FR-002: a part must answer as itself zoomed out too)
-- **D11 - The id map draws text unblended** (`--text-rendering optimizeSpeed`; R4): a blended glyph edge snapped to
-  the kind one palette step away, so a label beside a new neighbor in the palette answered as it. Every label on
-  every page now answers on its whole glyphs; no picture changes. (FR-001)
+- **D11 - A sheet page's id map draws text unblended** (`--text-rendering optimizeSpeed`, passed only when
+  `render_page` is given `within=`, i.e. a Mode A sheet; R4): a blended glyph edge snapped to the kind one palette
+  step away, so a label beside a new neighbor in the palette answered as it. A magistracy page's labels now answer on
+  their whole glyphs; hamlet id maps are untouched (FR-008, plan review round 2); no picture changes. (FR-001)
 
 ## Constitution check
 

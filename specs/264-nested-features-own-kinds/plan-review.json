@@ -1,6 +1,6 @@
 {
  "feature": "264-nested-features-own-kinds",
- "plan_sha256": "003f94d8d7236d78e2164f99ada39c7d3dca648ea020030f75960ea17ca8452e",
+ "plan_sha256": "7ba794bc591fd2e92e2a412a619f6dd88b05ae35ce94d55ec5f865ac0542ee90",
  "reviewed": "2026-09-27",
  "declared": "spec-fidelity",
  "decisions": [
@@ -12,53 +12,72 @@
   },
   {
    "id": "D2",
-   "summary": "The reader derives part-of from the drawing's nesting (every distinct tagged ancestor kind); a part drawn outside its parent's group for paint order declares data-part-of, read as an enclosing group; flatten() keeps its shape.",
+   "summary": "The reader derives part-of from the drawing's nesting; a part drawn outside its parent's group for paint order declares data-part-of, read as an enclosing group; flatten() keeps its shape.",
    "class": "within",
-   "why": "FR-003 and the spec's Part-of declaration entity, which define a part as one inside its parent's group or declared part of it. Lineage is transitive, which is what US2 asks (the residence lights every room, the veranda, the corridor, the genkan). Read in sheet.py: data-part-of joins the lineage exactly as a tagged ancestor does."
+   "why": "FR-003 and the spec's Part-of declaration entity. Lineage is transitive, which is what US2 asks."
   },
   {
    "id": "D3",
    "summary": "render_page gains within= (default None); wrapped groups carry data-in; page.js files a group under every key its data-in names.",
    "class": "within",
-   "why": "FR-003 both halves: the kitchen's highlight takes the hearth; the hearth's own key is unchanged, so it lights no kitchen. The default None path leaves every hamlet caller's strings byte-identical (FR-008). One correction to the plan's wording, not a narrowing: page.js is inlined into every page (page.py _asset('page.js')), so a regenerated hamlet page's script text grows by the inert data-in branch; the hamlet pages carry no data-in, so what they draw, their census (SC-005's measure of FR-008) and their behavior are unchanged."
+   "why": "FR-003 both halves. The wording now says what the previous review asked: the inlined script gains an indexing branch that is inert where no group carries data-in, so a hamlet page draws, counts and behaves as before (FR-008). Confirmed in the plan text and in page.js (the branch reads data-in only when present)."
   },
   {
    "id": "D4",
    "summary": "A labeled room is drawn as its own fill in the building's color between the building's fill and its outline; the shuttered wing is tagged as is.",
    "class": "within",
-   "why": "FR-002 with FR-006, and the spec's Decisions Recorded row naming this as the way a room's floor can light. The PNG identity is T02's to measure per sheet (SC-004)."
+   "why": "FR-002 with FR-006 and the spec's Decisions Recorded row for rooms."
   },
   {
    "id": "D5",
    "summary": "The pack audit folds a rect of a building's own fill wholly inside an earlier building rect into that building (rooms_folded).",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "It narrows the audit's reach (a same-fill rect contained in a building is no longer audited as a building of its own), so it is ruled rather than waved through. It follows from the spec's own words: FR-002 forces the rooms as rects (D4, the spec's Decisions Recorded), and FR-006 requires the audit to report the same findings; unfolded, the room rects make the audit report gaps between a building's own rooms. Measured this review by make pack-audit, HEAD in a detached worktree against the working tree: output identical on all six precinct sheets (Ochiba, Hayakawa, Ubame, Hoshigaoka shrine, the two generated sheets); the working-tree audit run on the HEAD sheets equals the HEAD audit, so the fold changes nothing on any sheet drawn before this feature; the HEAD audit on the new sheets gains Ochiba 'LOOSE 13.3 ft at svg(800,509)' and Ubame 'LOOSE 17.3 ft at svg(334,503)' and loses one 'fire-gap OK (kura)' line, all artifacts of the room rects. It hides no finding: every audit consumer of plan.buildings (nearest-building distance, tub overlap, floating doors, the occupancy grid) reads the same union with or without a contained same-fill rect, the fold only removes spurious aligned gaps and room-edge door readings, and no check ever reported one building contained in another (occluded_foreground exempts containment explicitly). The plan's 'Ubame +2/-1' is stale against this run, which shows +1/-1; the ruling does not depend on it."
+   "why": "Ruled LEGITIMATE last round on the measured audit (identical output on all six sheets; the fold only removes artifacts of the room rects FR-002 forces; no finding hidden). The plan's figure is now Ubame +1/-1, matching that run."
   },
   {
    "id": "D6",
    "summary": "The placer draws the practice ground's rack and posts as parts inside a group of the ground's kind.",
    "class": "within",
-   "why": "The spec's edge case on the two placer-drawn sheets and FR-001/FR-003; read in compound.py."
+   "why": "The spec's edge case on the two placer-drawn sheets and FR-001/FR-003."
   },
   {
    "id": "D7",
    "summary": "New kinds in the existing family modules from coverage.md; parents' Covers and prose trimmed; court divider and nakamon split; an over-long module is split.",
    "class": "within",
-   "why": "FR-001 (the nakamon named there), FR-004, FR-005; the file split is the standing 1,000-line rule."
+   "why": "FR-001, FR-004, FR-005; the file split is the standing 1,000-line rule."
   },
   {
    "id": "D8",
    "summary": "Uncovered kinds and contradictions go to future-work/compounds.md Research owed; no research pass.",
    "class": "within",
-   "why": "FR-004 and US3 as written, the GM's 2026-09-26 instruction."
+   "why": "FR-004 and US3 as written."
   },
   {
    "id": "D9",
-   "summary": "Verification by a hand-run browser probe over the five pages (SC-001, SC-002) written into research.md; unit tests for the reader, the page and the registry; no browser test over a rolled page.",
+   "summary": "Hand-run browser probe over the five pages written into research.md; unit tests for reader, page and registry, including a standing test over sheet.pieces() of the three hand sheets holding each part's kind and parent; no browser test.",
    "class": "within",
-   "why": "The spec's SC-001 and SC-002 name a probe, not a standing browser test, so nothing the spec asked for is cut; the unit tests of T08 add enforcement and are not unrequested. The probe covers FR-009 (a point naming each parent and its modal) as SC-001 requires."
+   "why": "SC-001/SC-002 name a probe; the standing test (test_every_part_is_its_own_kind_and_lights_with_its_parent, tests/interactive/test_compound_kinds.py) enforces FR-001, FR-003 and FR-009 and is enforcement of the request, not unrequested scope. Confirmed present."
+  },
+  {
+   "id": "D10",
+   "summary": "The id map palette gains a green channel past 63 kinds (first 63 keep their red-only colors and keys); page.js reads both channels; data-in is written after data-k so raster._GROUP still finds a part's group.",
+   "class": "within",
+   "why": "Both halves are required for FR-001/SC-001 in raster mode: with data-in before data-k every part fell out of the id map and named its parent (R4), and Ubame's 69 kinds exceed the 63-entry palette so its page could not be written at all. Read in raster.py: classes 1-63 keep color #RR0000 and key str(red), so a hamlet id map (under 63 classes, green always 0) and its palette are unchanged, and page.js returns the same key for a green-0 pixel. FR-008 holds."
+  },
+  {
+   "id": "D11a",
+   "summary": "The id map renders text unblended (--text-rendering optimizeSpeed) on the magistracy pages.",
+   "class": "within",
+   "why": "FR-001/SC-001: with blended glyph edges Ubame's fox-relics label answered as the shrine altar (19 vs 688 pixels, R4), i.e. a part named another kind. The picture a reader sees is not the id map, so FR-006 is untouched."
+  },
+  {
+   "id": "D11b",
+   "summary": "The same flag applied unconditionally, so every hamlet page's embedded id map and its raster-mode label hit-testing change ('Every label on every page now answers on its whole glyphs', hamlets included).",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The accepted spec says FR-008 'The hamlet pages MUST be unchanged'; the plan and R4 say outright that hamlet pages change (page.py embeds raster.id_map output in every page, and the flag in raster.id_map is unconditional). That makes FR-008 'unchanged, except the id map's text', a carve-out the spec does not carry and the GM's request does not reach: the request is about magistracy parts and never mentions hamlets. None of the tests passes. It is not impossible to keep hamlets unchanged: the flag can be applied only where the defect bites (for example only when render_page is given within=, or only on compound pages). The GM's words do not imply it. Keeping hamlets unchanged does not defeat the request, which D11a already serves. Constitution XIV (fix a defect where you find it) does not rescue it as a plan decision. The hamlet defect is ASSERTED, not measured: R4 measures only Ochiba and Ubame, both magistracies. And a fix that breaks an accepted MUST goes through a spec amendment reviewed against the request, not a plan line. Remedy, either one: (1) scope the flag so no hamlet page's id map changes, and correct the plan's D11 sentence and R4's 'hamlets included'; or (2) measure the defect on a hamlet page, amend FR-008 and SC-005 to admit the id-map text fix as a XIV defect fix, have the amendment reviewed, then re-run this plan review."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }

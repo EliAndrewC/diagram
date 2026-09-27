@@ -47,7 +47,8 @@ then `data-k`), and `page.js` files the part under its parents too, so the kitch
 lights no kitchen. A room is drawn as its own floor - the building's fill, one same-color rect per room, then the
 outline with `fill="none"` (0 px changed) - and the pack audit folds such a rect into its building
 (`pack_audit/parse.py` `rooms_folded`). The id map holds past 63 kinds on one page (green counts the rows,
-`raster.palette_rgb`) and draws text unblended, so a label never answers as its neighbor in the palette.
+`raster.palette_rgb`), and a sheet page's id map draws text unblended (`crisp_text`, set when `within=` is given),
+so a label never answers as its neighbor in the palette; hamlet id maps are untouched.
 
 Each pool magistracy's `.gen.py` calls `write_sheet_page(svg, COMPOUND_CLASSES)` after its PNG and fails if the census
 is not clean; the placer's `emit_svg` writes the kinds itself (`BuildingSpec.feature`). A map's own facts go in its

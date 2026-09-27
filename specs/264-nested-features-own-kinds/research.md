@@ -34,9 +34,10 @@ SVGs' output unchanged by the fold (plan review re-measured all six audited shee
   was anti-aliased in the id map, and a blended edge snapped to the neighboring palette entry. On main this made
   small labels answer on few pixels or none (Ochiba's "Akami-fude": 278 of its box's pixels); once the shrine
   altar sat next to the fox relics in the palette, the label answered as the altar (19 fox-relics pixels, 688
-  shrine-altar). The id map now renders text with `--text-rendering optimizeSpeed`: 0 off-palette pixels on
-  Ochiba's id map (of 496,926 painted), and the label answers on 962. Every page's labels, hamlets included, now
-  answer on their whole glyphs in raster mode; the picture a reader sees is not the id map and is unchanged.
+  shrine-altar). A sheet page's id map now renders text with `--text-rendering optimizeSpeed`: 0 off-palette
+  pixels on Ochiba's id map (of 496,926 painted), and the label answers on 962. The flag is passed only for a Mode A
+  sheet's page; the hamlet id maps are held unchanged (FR-008), though the same blending presumably touches their
+  small labels too - not measured here, and not changed. The picture a reader sees is not the id map.
 
 ## R5 - The probe (SC-001, SC-002, FR-009; 2026-09-27)
 

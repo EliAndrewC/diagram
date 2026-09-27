@@ -355,7 +355,7 @@ def _recolor_group(text: str, c: str) -> str:
     return text.replace(">", f' fill="{c}">', 1)
 
 
-def id_map(svg_text: str, keys: Sequence[str]) -> tuple[bytes | None, dict[str, str]]:
+def id_map(svg_text: str, keys: Sequence[str], crisp_text: bool = False) -> tuple[bytes | None, dict[str, str]]:
     """(the id map as PNG at 1 px per map px, {red value: class key}). Anti-aliasing OFF, because a blended
     edge is a wrong class; every opacity stripped, inside and outside the class groups, because a
     translucent wrapper moved every value off the palette (spec R4). Ink outside the class groups - the
@@ -385,10 +385,12 @@ def id_map(svg_text: str, keys: Sequence[str]) -> tuple[bytes | None, dict[str, 
     # THE FONT MAPPING TOO (feature 201): without it resvg finds no 'serif' and draws no text at all, so a
     # caption was unhittable in raster mode - a feature-200 defect the picture never showed, because the
     # picture passed the mapping and the id map did not
-    # AND THE TEXT UNBLENDED (feature 264): crispEdges does not reach glyphs, so a label's edge pixels blended its
-    # color into the class one palette step away - the fox relics' label answered as the shrine altar beside it in
-    # the palette once the altar became a kind, 19 of its pixels where main had 278 (measured, specs/264 research.md)
-    return resvg_png(doc, "--zoom", "1", "--shape-rendering", "crispEdges", "--text-rendering", "optimizeSpeed", *RESVG_FONT_ARGS), palette
+    # AND A SHEET'S TEXT UNBLENDED (feature 264): crispEdges does not reach glyphs, so a label's edge pixels blended
+    # its color into the class one palette step away - the fox relics' label answered as the shrine altar beside it in
+    # the palette once the altar became a kind, 19 of its pixels where main had 278 (measured, specs/264 research.md).
+    # `crisp_text` is a Mode A sheet's page only: the hamlet pages are held unchanged (spec 264 FR-008, plan review).
+    text = ("--text-rendering", "optimizeSpeed") if crisp_text else ()
+    return resvg_png(doc, "--zoom", "1", "--shape-rendering", "crispEdges", *text, *RESVG_FONT_ARGS), palette
 
 
 def _unpaint(text: str) -> str:

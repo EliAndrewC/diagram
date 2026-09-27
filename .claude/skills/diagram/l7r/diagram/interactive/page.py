@@ -888,7 +888,7 @@ def render_page(
         # as the .svg is written. Same inputs, same bytes, only the waiting overlaps.
         with ThreadPoolExecutor(max_workers=2) as pool:
             f_pic = pool.submit(raster.picture, raster.without_text(svg))
-            f_id = pool.submit(raster.id_map, svg, raster.class_keys(svg))
+            f_id = pool.submit(raster.id_map, svg, raster.class_keys(svg), within is not None)
         pic = f_pic.result()
         idpng, palette = f_id.result()
     if pic is not None and vb is not None:
