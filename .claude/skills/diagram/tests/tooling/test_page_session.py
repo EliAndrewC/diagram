@@ -144,3 +144,18 @@ def test_the_wait_reads_the_reset_or_backs_off() -> None:
     assert ps.failed(0, '{"is_error": false, "subtype": "success"}') is False
     assert ps.failed(0, '{"subtype": "error_during_execution"}') and ps.failed(1, "") and not ps.failed(0, "not json")
     assert ps.first_line("\n  hello\nworld") == "hello" and ps.first_line("") == "no output"
+
+
+def test_a_resume_item_continues_the_same_session_in_its_own_log(tmp_path: pathlib.Path) -> None:
+    """Feature 271: a runner that died with its dispatcher left a session mid-brief; `resume:<sid>:<brief>` resumes
+    that very session (`--resume`, a continue prompt) in its existing log directory, and briefs after it still queue."""
+    brief = tmp_path / "v1-write.md"
+    brief.write_text("brief", encoding="utf-8")
+    sid = "f6b577d1-4b97-4962-a643-e735d51727da"
+    (tmp_path / ".git" / "page-sessions" / sid).mkdir(parents=True)
+    queue = ps.plan(str(tmp_path), "diagram-research-1", "/p", [], [f"resume:{sid}:{brief}", str(brief)])
+    first, second = queue
+    assert first["sid"] == sid and first["log"].endswith(sid)
+    assert "--resume" in first["cmd"] and first["cmd"][first["cmd"].index("--resume") + 1] == sid and "--session-id" not in first["cmd"]
+    assert first["cmd"][first["cmd"].index("-p") + 1] == ps.RESUME
+    assert second["sid"] != sid and "--session-id" in second["cmd"]
