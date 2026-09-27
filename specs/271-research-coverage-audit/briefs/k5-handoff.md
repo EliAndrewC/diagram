@@ -47,4 +47,7 @@ jokamachi-jawiki, japanese-castle-enwiki (a second note, for the sloped stone ba
 - **Engine inconsistency found in passing (not a research item):** `CAPITAL_CIVIC_PROGRAM` in `citybudget.py` still prices a "House Chancellery" line of 2,000 px^2, while 360's and 370's rules say a capital draws no chancellery compound (the council meets in the goten). Whoever next touches the capital program should reconcile the two.
 - Not searched: the Chinese side (a prefectural seat's state granary against its yamen) for C49; Japan leads at the capital tier (010), and the finding did not need it.
 - A 2,617-tsubo figure for the South magistracy, attributed by a search summary to a plan of Ooka's official residence, was not found on a readable page (wheatbaku.exblog.jp returned 403); the kazusa page's hedged 2,500-2,600 is what is cited.
+- **Merge overlap:** K3 (clone diagram-research-3, in progress) also edits cities/capitals 360. K5's 360 edit
+  rewrites the Sources roster and adds two paragraphs before "The one that matters most", and replaces the notes
+  file; the orchestrator should expect a conflict there and keep both groups' additions.
 - `religion-and-death.html` was re-assembled by `make record` from another session's committed fragment (a one-line drift); it is left unstaged for its owner.
