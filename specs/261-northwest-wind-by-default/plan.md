@@ -271,6 +271,8 @@ Measured before and after in research R10.
   each arm of the belt has its own inner face (`windbreak_faces`), and the frame holds every belt clump within 100 ft of
   a farmhouse on the page - that house's shelter - since the face is the belt's TYPICAL front.
 - A seat whose windbreak band would fall off the canvas scores down (`belt_off_canvas`), as the brook and the dry hem do.
+- A belt stands beyond a lane that runs along its band (`past_the_lanes`), unless that would put it in the marsh: Kuwabata's
+  ring lane ran lengthwise down the belt's middle and halved its drawn depth (median 67 ft against main's 104).
 - NOT DONE, put to the GM: Mizuguchi's only wind-facing seat keeps its houses 34 ft from the canvas's west edge, so the
   belt stands in the strip the westernmost farmsteads stand in, holed where they are; the seat term above scores it down
   and it still wins (40-67% of its belt band off the canvas). A re-seed, a wider canvas, or the belt as drawn.

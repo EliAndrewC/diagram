@@ -636,5 +636,15 @@
   "quantity": "the view's top edge (was 121): the belt's seating window opens on both axes a diagonal wind has a share of, and the frame holds every belt clump within 100 ft of a farmhouse on the page, so the north arm wraps the northernmost house (belt 180 to 239 clumps, 28 to 17 off the page)",
   "source": "pool/hamlets/inashiro/inashiro.json meta.view, village_groves[role=windbreak].clumps and clumps_offpage; test_pool_wind belt depths",
   "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_wind.py"
+ },
+ "kuwabata-r10-belt-depth": {
+  "verifies": "F1",
+  "subject": "kuwabata",
+  "round": "c71e1926",
+  "value": 91,
+  "unit": "ft",
+  "quantity": "the belt's median covered depth along the wind per 20 ft column, measured on the clumps' crowns (it was 67; main 104): the belt stands beyond a lane running along its band (past_the_lanes), so the ring lane no longer hollows it; 8 of 22 columns under 80 ft (was 16; main 6), the thinnest 36 ft (was 10)",
+  "source": "pool/hamlets/kuwabata/kuwabata.json village_groves[role=windbreak].clumps and clumps_offpage, r, meta.windward",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_hinterland.py"
  }
 }

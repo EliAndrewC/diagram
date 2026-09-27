@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import random
 from collections.abc import Sequence
+from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist
 from l7r.diagram.sitegen.geom import crop_polys
@@ -55,6 +56,25 @@ def fringe_profile(uv: Sequence[tuple[float, float]], cols: int, half: float, v_
     if not known:  # no column sees a house at all: the whole profile is the floor, which is the median house
         return [(v, u_floor) for v, _u in raw]
     return [(v, u if u is not None else known[min(known, key=lambda j: abs(j - k))]) for k, (v, u) in enumerate(raw)]
+
+
+BELT_LANE_CLEAR_FT = 12.0  # ft: a belt whose band a lane runs along stands this far beyond the lane's tread
+
+
+def past_the_lanes(cols: Sequence[tuple[float, float]], lanes: Sequence[tuple[float, float]], width: float, near: float = 36.0, depth: float = 146.0, wet: Any = None) -> list[tuple[float, float]]:
+    """The fringe profile `cols` ((v, u) in wind coordinates) moved upwind past any lane running inside the belt's band
+    (settlement-review of Kuwabata, feature 261). `lanes` are samples of the web's lanes in the same coordinates. A back
+    lane along the windward row of houses ran lengthwise down the middle of the band, 40 ft from its near face; the lane
+    keep-out took the clumps there and the belt drew a 63 ft wall where the record asks 80-120 (main's back lane ran
+    outside the near face). So a column whose band holds a lane stands its near face `BELT_LANE_CLEAR_FT` beyond the
+    lane, and keeps its whole depth - unless `wet(v, u)` says the moved band would stand in the marsh, where no woody cover
+    stands (Sawada's belt, pushed past its back lane, walked into the toe marsh's reeds)."""
+    out: list[tuple[float, float]] = []
+    for v, u in cols:
+        inside = [lu for lu, lv in lanes if abs(lv - v) <= width and u + near - BELT_LANE_CLEAR_FT <= lu <= u + depth]
+        moved = max(u, max(inside) + BELT_LANE_CLEAR_FT - near) if inside else u
+        out.append((v, u if moved != u and wet is not None and wet(v, moved) else moved))
+    return out
 
 
 def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
@@ -151,8 +171,25 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
     # already covers 36 of it. The filter is still the guarantee; this keeps the belt whole.
     _sun_off = max(0.0, -wx) * (float(getattr(s, "_west_sun_ft", 0.0)) + 12.0)
 
+    # the web's lanes in wind coordinates, sampled every 10 ft; the connector and the field spur cross the belt face to
+    # face, which is a way through a wind wall, so only the lanes that can run ALONG it are asked
+    _lanes = [
+        ((q[0] - ccx) * wx + (q[1] - ccy) * wy, (q[0] - ccx) * px + (q[1] - ccy) * py)
+        for ln in s.M.get("lanes") or []
+        if not ln.get("connector") and not ln.get("spur")
+        for a, b in zip(ln.get("pts") or [], (ln.get("pts") or [])[1:], strict=False)
+        for q in [(a[0] + (b[0] - a[0]) * t / 10, a[1] + (b[1] - a[1]) * t / 10) for t in range(11)]
+    ]
+
+    _marsh = [[(float(q[0]), float(q[1])) for q in mk["poly"]] for mk in s.M.get("marshes") or [] if len(mk.get("poly") or []) >= 3]
+
+    def _in_marsh(v: float, u: float) -> bool:
+        """Would the band moved to fringe `u` in column `v` stand in the marsh - its middle, 91 ft behind the fringe?"""
+        x, y = ccx + wx * (u + 91.0 + _sun_off) + px * v, ccy + wy * (u + 91.0 + _sun_off) + py * v
+        return any(point_in_poly(x, y, ring) for ring in _marsh)
+
     def band(span_f: float, back: float) -> Poly:
-        cols = profile(span_f)
+        cols = past_the_lanes(profile(span_f), _lanes, half * span_f / COLS, wet=_in_marsh)
         # 36 px, not 24. `village_grove` filters clumps against every structure and crop, and it
         # filters the near face hardest - so a belt whose POLYGON sits clearly windward can still
         # have its DRAWN clumps average back onto the cluster's own line, which is what

@@ -218,6 +218,7 @@ records `m:kashikawa-r4-caption`, `m:kuwabata-r4-tail`, `m:kuwabata-r4-caption-l
 | copse clumps in the marsh | Kashikawa, 6 clumps 3-21 ft in | none on any map (`m:kashikawa-r7-copse-marsh`) |
 | copse clumps across the brook from their houses | Kashikawa, 3 clumps | none on any map (`m:kashikawa-r8-copse-bank`) |
 | the belt's north arm cut by the frame behind a house | Inashiro, a 97 ft opening; view top 121 | the belt wraps the house; view top 38, 180 to 239 clumps (`m:inashiro-r9-belt-frame`) |
+| a lane hollowing the belt | Kuwabata, median covered depth 67 ft (main 104) | 91 ft, 8 of 22 columns under 80 (`m:kuwabata-r10-belt-depth`) |
 
 Kuwabata's first two rolls under the changed ways each left a farmhouse off the way network, so it keeps its third: 4
 of 16 farmsteads re-seated, the farthest 134 ft (`m:kuwabata-r4-notes`).

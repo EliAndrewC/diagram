@@ -552,3 +552,16 @@ def test_a_bank_aware_reach_stops_at_the_brook() -> None:
     assert near.too_near(0.0, 40.0)
     assert not near.too_near(0.0, 60.0), "across the brook"
     assert not near.too_near(200.0, 0.0), "beyond the reach"
+
+
+def test_a_belt_stands_beyond_a_lane_running_along_its_band() -> None:
+    """Feature 261 (settlement-review of Kuwabata): a lane inside the band moves that column's near face past it, keeping
+    the band's depth; a column with no lane in its band stays; and a move that would put the band in the marsh is not
+    made."""
+    from l7r.diagram.hamletgen.hinterland.belt import BELT_LANE_CLEAR_FT, past_the_lanes
+
+    cols = [(0.0, 0.0), (100.0, 0.0)]
+    lanes = [(76.0, 0.0), (500.0, 100.0)]  # one lane 40 ft into column 0's band; the other far past column 1's
+    moved = past_the_lanes(cols, lanes, 30.0)
+    assert moved[0] == (0.0, 76.0 + BELT_LANE_CLEAR_FT - 36.0) and moved[1] == (100.0, 0.0)
+    assert past_the_lanes(cols, lanes, 30.0, wet=lambda v, u: True) == cols
