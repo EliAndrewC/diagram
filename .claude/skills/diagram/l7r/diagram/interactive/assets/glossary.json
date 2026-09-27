@@ -4952,7 +4952,7 @@
   ]
  },
  "enoki": {
-  "def": "Japanese hackberry, a tall, broad-crowned deciduous tree, one of the trees of a Tonami homestead grove.",
+  "def": "Japanese hackberry, a tall, broad-crowned deciduous tree, one of the trees of a Tonami homestead grove, and the tree planted beside a village's boundary shrine and on a highway's milestone mounds.",
   "variants": [
    "enoki"
   ]
@@ -6452,6 +6452,40 @@
    "dispersed settlements",
    "dispersed villages",
    "dispersed farmsteads"
+  ]
+ },
+ "karishiki": {
+  "def": "Green manure: grass and young shoots cut on the hills and the commons and put into the paddy before planting - the fertilizer that made a village keep grass ground more than ten times its fields.",
+  "variants": [
+   "karishiki"
+  ]
+ },
+ "magusaba": {
+  "def": "A fodder ground: grass ground where fodder, green manure and thatch were cut, most often the commons of one village or hamlet - also called kusakariba or kayaba.",
+  "variants": [
+   "magusaba",
+   "kusakariba",
+   "kayaba"
+  ]
+ },
+ "kusayama": {
+  "def": "A grass mountain: a hill whose trees were felled and kept down so that it carried only the grass a village's paddies needed as fertilizer; a small one set aside for one paddy was a tazuke kusayama.",
+  "variants": [
+   "kusayama",
+   "tazuke kusayama"
+  ]
+ },
+ "ichirizuka": {
+  "def": "A milestone mound: an earth mound about 30 ft square raised beside a main highway at every ri, in a pair either side of the road, each planted with a tree - most often an enoki.",
+  "variants": [
+   "ichirizuka"
+  ]
+ },
+ "keihan-cha": {
+  "def": "Bund tea: tea planted in a single row along the bank between fields, marking the boundary with the neighbor and breaking the wind.",
+  "variants": [
+   "keihan-cha",
+   "bund tea"
   ]
  }
 }

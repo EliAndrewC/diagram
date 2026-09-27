@@ -108,6 +108,7 @@ buke	bushi
 buke-chi	buke-chi
 buke-yashiki	buke-yashiki
 bund	bund
+bund tea	keihan-cha
 bunded	bund
 bunds	bund
 bunka	Bunka
@@ -637,6 +638,7 @@ hyō	hyō
 hyōjōsho	Hyōjōsho
 ichi no torii	ichi-no-torii
 ichi-no-torii	ichi-no-torii
+ichirizuka	ichirizuka
 ido	ido
 idobata	idobata
 idowaku	igeta
@@ -754,6 +756,7 @@ kantō	Kanto
 kaogongji	Kaogongji
 karamete	karamete-mon
 karamete-mon	karamete-mon
+karishiki	karishiki
 karo	karo
 kashi	kashi
 kaso-dera	kaso-dera
@@ -766,6 +769,7 @@ kawaramono	kawaramono
 kawata	kawata
 kawaya	kawaya
 kaya	kaya
+kayaba	magusaba
 kayabuki	kayabuki
 kebiishi	kebiishi
 kegare	kegare
@@ -775,6 +779,7 @@ keicho	Keicho
 keicho-era	Keicho
 keidai	keidai
 keihan	bund
+keihan-cha	keihan-cha
 keiko	keiko
 ken	ken
 kenchi-cho	kenchicho
@@ -839,6 +844,8 @@ kuri	kuri
 kuromatsu	kuromatsu
 kuruwa	kuruwa
 kusaba	kusaba
+kusakariba	magusaba
+kusayama	kusayama
 kuwabata	Kuwabata
 kyo-machiya	machiya
 kyoho	Kyoho
@@ -902,6 +909,7 @@ madake	madake
 made ground	made ground
 maff	MAFF
 magariya	magariya
+magusaba	magusaba
 main channel	main stem
 main stem	main stem
 mamian	mamian
@@ -1413,6 +1421,7 @@ tawed	shironameshi
 tawing	shironameshi
 tax-farming	tax-farming
 tax-free plot	tax-free plot
+tazuke kusayama	kusayama
 tedai	tedai
 teikaku	teikaku
 temizuya	temizuya
