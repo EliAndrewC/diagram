@@ -72,6 +72,7 @@ bakumatsu	bakumatsu
 bamboo grass	sasa
 bamboo-grass	sasa
 banfang	banfang
+bangumi	bangumi
 bannerman	hatamoto
 bannerman's	hatamoto
 bannermen	hatamoto
@@ -687,6 +688,7 @@ hereditary monastery	hereditary temple
 hereditary temple	hereditary temple
 hereditary temples	hereditary temple
 hikan	hikan
+hill-style	tsukiyama
 hinin	hinin
 hinoki	hinoki
 hinomi-yagura	hinomi-yagura
@@ -842,6 +844,7 @@ jori-sei	jori
 josui	josui
 josui ido	josui-ido
 josui-ido	josui-ido
+jozabangai-seki	jozabangai-seki
 juku	shukuba
 junk	junk
 junks	junk
@@ -938,12 +941,14 @@ knobs	knob
 kobito	kobito
 kochi seiri	kochi seiri
 kochi-seiri	kochi seiri
+kochi-seki	kochi-seki
 koebune	fertilizer boat
 koedame	koedame
 kofun	Kofun period
 kofun period	Kofun period
 koike	koike
 koji	koji
+koke	koke
 koku	koku
 kokubunji	kokubunji
 kokudai-no	kokudai-no
@@ -1196,6 +1201,7 @@ nrcs-designed	NRCS
 nucleated	nucleated
 nuclei	nucleated
 nucleus	nucleated
+nukimon	nukimon
 numajiro	numajiro
 nunosarashi	nunosarashi
 nuriya	nuriya
@@ -1728,6 +1734,8 @@ tsubo	tsubo
 tsuijibei	tsuijibei
 tsuijimatsu	tsuijimatsu
 tsuke-tsubo	tsuke-tsubo
+tsukiyama	tsukiyama
+tsukiyama-style	tsukiyama
 tsumairi	tsumairi
 tsumairi-type	tsumairi
 tsunaba	tsunaba

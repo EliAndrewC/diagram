@@ -7431,5 +7431,43 @@
   "variants": [
    "jiaochang"
   ]
+ },
+ "bangumi": {
+  "def": "At Fukui, the ranked companies of middle samurai: company heads, commissioners and retainers of about 100 to 300 koku, each granted a house lot of fixed size by stipend.",
+  "variants": [
+   "bangumi"
+  ]
+ },
+ "kochi-seki": {
+  "def": "Fukui's highest retainer rank: 17 houses of 1,000 to 4,025 koku, from which the house elders and the castle warden came.",
+  "variants": [
+   "kochi-seki"
+  ]
+ },
+ "koke": {
+  "def": "At Fukui, a rank of two houses with small stipends but treated as a class apart from the ranks around them.",
+  "variants": [
+   "koke"
+  ]
+ },
+ "jozabangai-seki": {
+  "def": "A Fukui middle-samurai rank of about 200 to 450 koku, held by posts such as escort heads and the temple-and-shrine commissioners.",
+  "variants": [
+   "jozabangai-seki"
+  ]
+ },
+ "tsukiyama": {
+  "def": "A Japanese garden built around an artificial mound or small hill (the word means \"built mountain\"), usually with stones and plantings on and around it - the usual form of a samurai house's garden.",
+  "variants": [
+   "tsukiyama",
+   "tsukiyama-style",
+   "hill-style"
+  ]
+ },
+ "nukimon": {
+  "def": "The simplest framed gate: two posts joined by a horizontal tie-beam (*nuki*) passed through them, with no roof.",
+  "variants": [
+   "nukimon"
+  ]
  }
 }
