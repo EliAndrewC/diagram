@@ -60,7 +60,7 @@ class UrbanFixturesMixin:
             _a = math.radians(rot)
             _rx = abs(hw * math.cos(_a)) + abs(hh * math.sin(_a))
             _ry = abs(hw * math.sin(_a)) + abs(hh * math.cos(_a))
-            self.place_caption(label, (cx - _rx, cy - _ry, cx + _rx, cy + _ry), 11, italic=True, hint=(cx, cy + _ry + 16), rot=rot)
+            self.place_caption(label, (cx - _rx, cy - _ry, cx + _rx, cy + _ry), 11, italic=True, rot=rot)
 
     def drum_tower(self: Settlement, x: float, y: float, tw: float | None = None, label: str = "drum tower") -> int:  # type: ignore[misc]
         """A combined BELL-AND-DRUM TOWER (zhonggulou) - the timekeeping/curfew institution of a

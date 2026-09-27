@@ -53,6 +53,25 @@ def test_a_term_file_is_named_for_its_term_behind_a_gapped_prefix() -> None:
     assert file_name(9, "dS/m") == "0090-dS%2Fm.json", "a slash is not"
 
 
+def test_a_term_between_two_gapped_prefixes_is_read(tmp_path) -> None:  # noqa: ANN001
+    # 2026-09-27: the gap of ten is for NAMING a term between two; reading must accept the prefix it gets, or the
+    # glossary tops out at 999 terms (it overflowed at a three-feature merge)
+    from l7r.diagram.interactive.glossary_source import GlossaryError, term_files  # noqa: PLC0415
+
+    here = tmp_path / "assets" / "glossary"
+    here.mkdir(parents=True)
+    (here / "8410-dohyo.json").write_text('{"term": "dohyo", "definition": "a ring"}', encoding="utf-8")
+    (here / "8411-irikawa.json").write_text('{"term": "irikawa", "definition": "a corridor"}', encoding="utf-8")
+    assert [e["term"] for e in term_files(str(tmp_path))] == ["dohyo", "irikawa"]
+    (here / "8412-engawa.json").write_text('{"term": "veranda", "definition": "x"}', encoding="utf-8")
+    try:
+        term_files(str(tmp_path))
+    except GlossaryError as err:
+        assert "8412-engawa.json" in str(err)
+    else:
+        raise AssertionError("a filename that names another term is still refused")
+
+
 def test_the_term_is_read_from_the_file_and_never_from_its_name() -> None:
     """A filename is a convenience; `dS/m` is why it cannot always be the whole truth (R3)."""
     terms = split(GLOSSARY.read_text(encoding="utf-8"))

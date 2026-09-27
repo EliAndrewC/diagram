@@ -1,0 +1,33 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "da580b30",
+    "label": "268-start",
+    "utc": "20260927T053237Z"
+  },
+  "binding": "e66912dacf230ee6adcb44a03851c7dcce1b33e829fbcfeaec7413f501ae5c18",
+  "end": {
+    "commit": "f00e1020",
+    "label": "268-end",
+    "utc": "20260927T060320Z"
+  },
+  "environment": "local",
+  "feature": "268-shrine-grounds-researched",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "3a0d2088-0d32-4036-b1e4-c40dbdc9e61d",
+    "utc": "20260927T064122Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "seeds": {
+      "25": 1.5,
+      "39": 1.3,
+      "4": -1.6,
+      "47": -7.6
+    },
+    "total_pct": -1.8
+  },
+  "note": "reviewer counterfactual at f00e1020 (call counters on every changed torii/shrine path, detached worktrees): seeds 4/25/39/47 roll 0 shrines, 0 torii, 0 calls to _torii/_avenue_pitch/_avenue_at_threshold/small_shrine/torii_plan_svg - the only changed code reached is torii_glyph_dims via the unconditional torii_halfbox in captions/crop, 7-13 constant-time calls per seed; warm A/B start vs end in worktrees: seed 25 6.06s vs 5.97/5.97s (track 1.30 vs 1.28/1.27, hinterland 0.63 vs 0.60/0.61), seed 39 7.23s vs 7.35/7.10s (web 0.66 vs 0.71/0.64, notice 1.43 vs 1.41/1.39) - the +1.5%/+1.3% rises (+0.1s stages) do not reproduce and sit inside the 1.7% per-seed noise floor; cause is noise, as stated (only nit: 'never executed' is not literally true of torii_halfbox, at negligible cost)",
+  "verdict": "consistent"
+}

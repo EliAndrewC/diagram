@@ -253,6 +253,15 @@
             "command": "h=/diagram/scripts/canon-read-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/canon-read-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 250 D16 - a NEW guard: the setting canon is read with make canon, every term of a claim at once"
           }
         ]
+      },
+      {
+        "matcher": "Write|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "h=/diagram/scripts/new-file-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/new-file-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 265 FR-010 - a NEW guard: a new glossary or registry file takes a reserved prefix"
+          }
+        ]
       }
     ],
     "PostToolUse": [

@@ -1,0 +1,6 @@
+{
+  "utc": "2026-09-27T07:01:50Z",
+  "target": "entry-gate",
+  "commit": "6f696163",
+  "why": "entry-drift judged both IN-STEP on 2026-09-27 (CompoundShrine vs 090, MainGate vs 200); no modal is wrong"
+}

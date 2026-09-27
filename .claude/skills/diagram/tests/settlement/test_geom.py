@@ -12,7 +12,7 @@ from l7r.diagram import settlement
 from l7r.diagram.settlement import Settlement, seg_dist
 from l7r.diagram.settlement._geom.primitives import convex_hull, edge_dist, point_in_poly
 from l7r.diagram.settlement._geom.walls import _box_hits_run, torii_wall_conflicts, wall_runs
-from tests.settlement._builders import _IDX_POLY, _cap020, _ladder_map, _max_turn_deg, _memo_city, _ward_city_with_samurai
+from tests.settlement._builders import _IDX_POLY, _cap020, _max_turn_deg, _memo_city, _ward_city_with_samurai
 
 
 def test_stroke_quads_makes_one_quad_per_segment():
@@ -264,19 +264,6 @@ def test_linear_tilt_is_the_same_rule_as_label_tilt():
     assert settlement.linear_tilt(72) == settlement.label_tilt(72) == settlement.aligned_tilt(72)
 
 
-def test_label_ladder_seats_a_tilted_caption_by_its_THICKNESS_not_its_rotated_aabb():
-    # The defect this pins (GM 2026-08-08): probing the rotated AABB made a diagonal caption reach
-    # by most of its own LENGTH in the one direction it does not extend, so "Imperial Road" seated
-    # 64px off a clear roadbed. The support is exact in every direction, so a tilted caption tucks
-    # in at the same LABEL_MIN_AIR a level one gets.
-    s = _ladder_map()
-    box = (400.0, 480.0, 600.0, 520.0)
-    seat = s._best_label_spot(box, "Imperial Road", 12, tilt=-26.6)
-    quad = settlement.label_quad([*s._label_box(*seat, "Imperial Road", 12), 0, "Imperial Road", None, -26.6])
-    corners = [(box[0], box[1]), (box[2], box[1]), (box[2], box[3]), (box[0], box[3])]
-    assert settlement.poly_gap(quad, corners) < settlement.LABEL_MIN_AIR + 1
-
-
 def test_label_quad_and_aabb_rotate_the_record_about_its_center():
     lvl = [0.0, 0.0, 100.0, 10.0, 1, "x"]
     assert settlement.label_quad(lvl) == [(0.0, 0.0), (100.0, 0.0), (100.0, 10.0), (0.0, 10.0)]
@@ -384,12 +371,14 @@ def test_a_rolled_cluster_band_is_sized_in_REAL_FEET_at_the_map_s_grain():
 # were trusted - see specs/117-geom-package/tasks.md T014/T015 for the observed failure text.
 
 # The 89 module-level names of settlement/_geom.py as it stood at the split, by AST census. A
-# FROZEN literal, deliberately: its whole job is to remember a state that no longer exists.
+# FROZEN literal, deliberately: its whole job is to remember a state that no longer exists. One name
+# has since been RETIRED on purpose, not dropped: TORII_PITCH_MAX_SPANS, with the cap-and-band pitch
+# rule it bounded (feature 268, the GM's "All maps, ~10-13 ft").
 _PRE_SPLIT_GEOM_SURFACE = (
     'BUNDLE_PITCH_FT', 'CARRIED_LANDING_FLOOR_FT', 'FLOODED_SHADES', 'GOVERNOR_CAPTION_FS', 'HALL_CAPTION_FS', 'Indexed', 'LABEL_AIR_CAP', 'LABEL_AIR_RINGS', 'LABEL_AIR_STEP', 'LABEL_MIN_AIR',
     'LAND', 'LANDING_FT', 'LANE_CROSSES_MIN_DEG', 'LANE_THROUGH_TOL', 'Manifest', 'PADDY_SHADES', 'PLANK_ABUTMENT', 'PLANK_BANK_REACH', 'PLANK_VILLAGE_REACH', 'PointGrid', 'Poly', 'Pt',
-    'RICE_GREENS', 'RIPE_SHADES', 'SeatMemo', 'TORII_PITCH_FT', 'TORII_PITCH_MAX_SPANS', 'WARD_BARRED_KINDS', 'YARD_GLYPH_SLACK', '_VILLAGE_POP_DIST', '_aabb_gap', '_assert_not_main_tree',
-    '_box_hits_run', '_rect_ring', '_signed_area', '_union_area', 'box_gap', 'boxed_grid', 'boxed_hit', 'boxed_polys', 'boxed_seg_hit', 'boxed_segs', 'edge_dist', 'fillet_polyline',
+    'RICE_GREENS', 'RIPE_SHADES', 'SeatMemo', 'TORII_PITCH_FT', 'WARD_BARRED_KINDS', 'YARD_GLYPH_SLACK', '_VILLAGE_POP_DIST', '_aabb_gap', '_assert_not_main_tree',
+    '_box_hits_run', '_rect_ring', '_signed_area', '_union_area', 'boxed_grid', 'boxed_hit', 'boxed_polys', 'boxed_seg_hit', 'boxed_segs', 'edge_dist', 'fillet_polyline',
     'forest_frame_span', 'forest_reveal_x', 'indexed_grid', 'kido_bar_deg', 'label_aabb', 'label_quad', 'label_tilt', 'lane_runs', 'lane_through_gate', 'linear_tilt', 'linear_tilt_full',
     'organic_bbox', 'organic_poly', 'paddy_wet_rings', 'point_in_poly', 'point_quad_dist', 'poly_gap', 'quad_hits_poly', 'quad_hits_seg', 'rail_quad', 'rects_overlap', 'region_blocked',
     'ring_touches', 'rot_rect', 'sat_overlap', 'seg_closest', 'seg_dist', 'seg_in_ellipse_core', 'seg_intersect', 'segments_cross', 'smooth_closed', 'smooth_points', 'stroke_quads',

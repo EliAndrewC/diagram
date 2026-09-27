@@ -4,5 +4,6 @@
  "variants": [
   "han",
   "han's"
- ]
+ ],
+ "cased": true
 }

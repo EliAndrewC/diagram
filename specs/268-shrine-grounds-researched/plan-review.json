@@ -1,0 +1,111 @@
+{
+ "feature": "268-shrine-grounds-researched",
+ "plan_sha256": "0e69b12c2d0bf52ca82cd612663092e6a2695b1a3fa9a0285b0054ba26d8ff2d",
+ "reviewed": "2026-09-27",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "The torii pitch is 12 ft (two ken), a guess inside the GM's 10-13 ft band",
+   "class": "within",
+   "why": "FR-010 asks for a single value within 10-13 ft; 12 is one; labeled a guess inside a GM ruling"
+  },
+  {
+   "id": "D2",
+   "summary": "Every avenue laid at the pitch; the cap-and-band rule and the ~30 ft village exception retired; the village roll uses the same stride and threshold; the designated donation-row sites keep their exemption, stated in the rewritten rule and entry 090",
+   "class": "within",
+   "why": "FR-010 and US3 scenarios 1-2 ('every avenue at every scale', town/city re-laid, 'designated donation-row sites keep their exemption'). Round 1's gap (D2 silent on the exemption) is closed: the exemption is now carried explicitly and is the spec's own, not a new carve-out"
+  },
+  {
+   "id": "D3",
+   "summary": "The arch glyph drawn in plan at true size (kasagi bar plus two post squares), stroke floor as convention",
+   "class": "within",
+   "why": "FR-011: a glyph that does not overlap at 1/2/3 ft/px and still reads as an arch, its class recorded at the point of change; the GM's 'the drawing floor needs a look'"
+  },
+  {
+   "id": "D4",
+   "summary": "The wall-shortening floor at the glyph's drawn depth plus one px, never above the pitch",
+   "class": "within",
+   "why": "FR-011 (the avenue's drawing floor revised)"
+  },
+  {
+   "id": "D5",
+   "summary": "The sheet's arch in plan per D3 at true size: kasagi 15 by 1.5 ft, posts 1.2 ft squares under its ends, 10.3 ft clear over the 10 ft approach; the elevation-depth disclosure retires with the glyph",
+   "class": "within",
+   "why": "FR-008 (arches at the new pitch) and FR-011 (the glyph reads as an arch, its class recorded; true size needs no convention label). Round 4: the posts brought from the first draw (2 ft marks, 10.7 ft clear) to true size on the size-audit, which moves the sheet closer to D3's accurate-in-plan class, not away from any clause. Verified on the sheet: posts 3.6 px (1.2 ft), clear 30.8 px (10.3 ft); arches 36 px (12 ft) apart, innermost 36 px off the hall's face (y 572 to 608). Condition: the sheet's own comment (hoshigaoka-shrine.svg lines 113-116) still says the posts are marked just proud of the beam as a convention, 10.7 ft clear - bring it to the notes and buildings.md, which already say true size, 10.3 ft"
+  },
+  {
+   "id": "D6a",
+   "summary": "The grove is the precinct: a near-rectangle filling the sheet's frame, widened from about 117 to about 137 ft so each side of the clearing carries two or three crowns (settlement-review read a single file of trees as a hedge), from the shrine well at its back edge to the outermost arch (about 223 ft), about 860 tsubo; the band T-program writes is R2's register figures as found, never widened to fit",
+   "class": "within",
+   "why": "FR-007 fixes the grove's reach and requires its area inside the register band FR-005 records; programs.md line 84 records that band as the registers as found (Saitama 55-708, Tochigi 142-2,700, Saga 50-662, with medians), not widened. Measured this round on the map manifest (village_groves role shrine, 2 ft/px): w 68.3 px, h 111.7 px = 136.6 by 223.4 ft = about 858 tsubo; on the sheet the precinct rect is 410 by 670 px at 3 px/ft = 136.7 by 223.3 ft. 858 is inside Tochigi's 142-2,700 register, so FR-007 holds. The widening serves the request rather than departing from it: the spec forbids a precinct hedge (FR-004, the GM's question what purpose a wall serves) and a one-tree file on each side read as exactly that, so a wood deep enough to read as wood is the grove the GM ruled for ('a grove around the shrine'), not a carve-out. research.md's arithmetic phrase ('above Saitama's top and Tochigi's mean of 817, far inside Tochigi's range') is correct. Condition (stale figure already in the record): research/religion-and-death/124-how-large-was-a-village-shrines-precinct-and-how-much-of-it-was-built-on.html line 9 still says 'about 730 tsubo ... above Tochigi's median of 655' (and carries a doubled comma, 'as found,,'), and its notes fragment note 4's comment says 730; bring both to about 858 and 'above Tochigi's mean of 817', and the sheet's svg comment line 51 from '117 by 223 ft' to 137, before the push. Not a narrowing; the ruling does not rest on them"
+  },
+  {
+   "id": "D6b",
+   "summary": "The sacred tree stands beside the approach, inside the grove",
+   "class": "within",
+   "why": "Round 1 ruled the north-east-of-the-sanctuary seat NOT LEGITIMATE. The revision seats it by the GM's own words ('the sacred tree and a stone basin by the approach') and FR-007/US2 ('a sacred tree and a stone basin beside the approach'), a placement every reading of the ruling accepts. No longer a narrowing"
+  },
+  {
+   "id": "D6c",
+   "summary": "The stone basin beside the approach at the innermost arch, on the side opposite the tree",
+   "class": "within",
+   "why": "FR-006, FR-007: 'a stone basin beside the approach'; which side is not addressed by the request"
+  },
+  {
+   "id": "D6d",
+   "summary": "Manifest entries: village_groves role shrine, tree_crowns the sacred tree, wells the basin flagged basin, torii the seven at the pitch",
+   "class": "within",
+   "why": "FR-007: the drawing and the manifest edited together, so matches_map holds the sheet to them (US2 scenario 2)"
+  },
+  {
+   "id": "D7",
+   "summary": "no_precinct_enclosure replaces fence_not_wall: a fence, wall or hedge enclosing the hall fails; a sanctuary-only fence passes",
+   "class": "within",
+   "why": "FR-004 (a sheet that draws a precinct enclosure fails the program check) and the spec's edge case keeping a sanctuary-only fence as a wealth item; enforcement of the request"
+  },
+  {
+   "id": "D8",
+   "summary": "The hand edit: the mirror's gitignored svg edited in place and the png re-rasterized with the gen's resvg call; manifest and notes carry the edit in git; the gen's SHRINE_TORII stride brought to the pitch",
+   "class": "within",
+   "why": "FR-007 (drawing and manifest together, notes record the edit, not regenerated); aligning the gen's stride keeps a future conversion on the edited avenue. Where the edit is made is process, not fidelity"
+  },
+  {
+   "id": "D9",
+   "summary": "The crop check's viewbox_cropped row stops excusing on-map sheets; frame_is_the_maps removed; buildings.md revised; matches_map still holds every map feature inside the frame",
+   "class": "within",
+   "why": "FR-009 verbatim"
+  },
+  {
+   "id": "T03-sanctuary-fence-knob",
+   "summary": "tasks.md T03 lists a sanctuary fence among the wealth-knob items, none at average",
+   "class": "within",
+   "why": "The spec's edge case: 'Whether a richer shrine may draw one is recorded as a wealth-knob item, not a precinct boundary'; D7 lets it pass the enclosure check"
+  },
+  {
+   "id": "R4-not-drawn",
+   "summary": "Subsidiary shrines, office, votive-plaque hall, portable-shrine store not drawn; the no-worship-hall form and the Chinese opera stage disclosed, not knobs",
+   "class": "within",
+   "why": "FR-006 carries 'the knobs the research directs'; R4 found no village-scale evidence for the first four, and the one-roof hall is the program's existing GM form, which the request does not touch"
+  },
+  {
+   "id": "D10",
+   "summary": "The sheet declares the outermost arch first, so arch_on_approach reads it against the precinct's edge; no code change",
+   "class": "within",
+   "why": "FR-007: the grove reaches 'forward to the outermost arch, where the approach enters the shrine's ground (the first arch stands at that entry, per the research)'; R3's first-torii-at-the-entry finding. Declaration order is how the sheet carries the spec's own statement to the existing check"
+  },
+  {
+   "id": "D11",
+   "summary": "The sheet's captions tagged with data-kind and seated by make seat-label, as feature 266 requires of a changed sheet; kinds reuse the magistracy registry names where one fits; no interactive shrine page built",
+   "class": "within",
+   "why": "FR-008 requires the sheet redrawn; feature 266's standing label standard applies to any changed sheet, so tagging is compliance with an existing project rule triggered by the redraw, not new behavior. The plan explicitly builds no interactive page, so no unrequested feature rides in"
+  },
+  {
+   "id": "forecourt-37ft (found in the amendment's artifacts, not in plan.md or research.md)",
+   "summary": "A 37 ft forecourt before the hall holding the three innermost arches; the swept clearing grows from 272 by 244 to 272 by 334 px (about 91 by 111 ft), 28% to 33% of the precinct, hall included",
+   "class": "within",
+   "why": "FR-008 and the GM's ruling ask for 'a small swept clearing at the hall' and SC-002 for built and swept ground a small share, the rest grove; 'small' is a degree the request leaves unquantified (calibrated liberty), the grove still holds two thirds of the precinct, the innermost arch still stands one pitch off the hall (FR-008, US2 scenario 4), and no enclosure returns. It does not narrow anything asked. It is, however, a design decision that moves SC-002's share and is recorded only in the sheet's notes (as a guess from use); condition: record it in research.md's Design decisions beside D6 with its class and the share, so a later reader of the plan sees it. Aside for the GM: at about 280 tsubo the clearing alone exceeds Saga's median whole precinct; whether a third of the precinct is 'small' is theirs to say once they see the sheet"
+  }
+ ],
+ "verdict": "CLEAR"
+}

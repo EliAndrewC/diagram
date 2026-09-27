@@ -30,15 +30,6 @@ def stroke_quads(pts: Sequence[Any], hw: float) -> list[Poly]:
     return quads
 
 
-def box_gap(a: Sequence[float], b: Sequence[float]) -> float:
-    """Clear separation between two axis-aligned boxes (x0, y0, x1, y1) - 0 when they touch or
-    overlap. The single measure behind the label standoff ladder in labels.py AND behind the gate's
-    `label_hugs_its_referent`, so placer and checker agree by construction."""
-    dx = max(0.0, b[0] - a[2], a[0] - b[2])
-    dy = max(0.0, b[1] - a[3], a[1] - b[3])
-    return math.hypot(dx, dy)
-
-
 def _rect_ring(x: float, y: float, w: float, h: float, rot: float = 0.0) -> Poly:
     """The closed corner ring of a (possibly rotated) w x h rect centered at (x, y)."""
     c, s = math.cos(math.radians(rot)), math.sin(math.radians(rot))

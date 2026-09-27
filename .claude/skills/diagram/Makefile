@@ -508,6 +508,14 @@ scatter-bases:  ## [diagnostics] where a map's ground-cover scatter stands: base
 	@if [ -z "$(MAP)" ]; then printf 'make scatter-bases: MAP=<pool map> is required - e.g. make scatter-bases MAP=pool/hamlets/sawada BOX=600,1600,1300,2000\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_scatter_bases.py" "$(MAP)" $(if $(BOX),--box "$(BOX)",)
 
+# GUARD_EDIT_OK: feature 266 adds a new operation, `make seat-label` - the one caption placer run on a hand-drawn sheet; nothing existing is weakened (its usage hint names no building tier)
+seat-label:     ## [maps] seat a hand-drawn Mode A sheet's captions by the ONE placer (feature 266): report, or WRITE=1 to rewrite   SHEET=<svg> [KIND=<data-kind>] [WRITE=1]
+##  SHEET=<svg>         the hand-drawn sheet
+##  KIND=<data-kind>    only the captions of this kind (e.g. "notice board")
+##  WRITE=1             move every caption to its standard seat and write, move or remove its leader
+	@if [ -z "$(SHEET)" ]; then printf 'make seat-label: SHEET=<svg> is required - e.g. make seat-label SHEET=pool/<tier>/<map>/<map>.svg KIND="notice board"\n' >&2; exit 2; fi
+	@python3 -m l7r.diagram.tools.seat_label "$(SHEET)" $(if $(KIND),--kind "$(KIND)",) $(if $(WRITE),--write,)
+
 
 page-lit:       ## [diagnostics] light ONE class on a map's page and report which classes' pixels change   MAP=<page.html> CLASS="<key>" [VECTOR=1] [OUT=lit.png]
 ##  the reviewer's page measurement (feature 231): raster mode at the opening view, VECTOR=1 past the switch
@@ -1075,6 +1083,11 @@ question-sizes: ## [project] every research question over the size cap (question
 notes: ## [project] print the named notes of ONE question and only the blocks of its fragment that carry them - for editing a few notes without reading the whole file (feature 250)   PAGE=homesteads SECTION=040 KEYS=kyuhi-jawiki,kyuhi-jawiki-2
 	@if [ -z "$(PAGE)" ] || [ -z "$(SECTION)" ] || [ -z "$(KEYS)" ]; then printf 'make notes: PAGE=<page> SECTION=<question> KEYS=<key,key> are required\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_check_bundle.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" --section "$(SECTION)" --notes "$(KEYS)" --print-notes
+
+# GUARD_EDIT_OK: feature 265 FR-010 - a new operation (reserve a glossary or registry prefix under a host-wide lock); new-file-hooks.sh makes it the way in.
+reserve: ## [project] reserve the next glossary or registry-entry prefix under a host-wide lock and write the file's stub - prints its path; fill it in (feature 265 FR-010: parallel queues never collide)   KIND=glossary|registry KEY=<term or key>
+	@if [ -z "$(KIND)" ] || [ -z "$(KEY)" ]; then printf 'make reserve: KIND=glossary|registry KEY=<term or key> are required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/reserve-prefix.py" "$(KIND)" "$(KEY)"
 
 # GUARD_EDIT_OK: feature 250 D16 - a new operation (search the setting canon for every term of a claim at once); no guard changes here - canon-read-hooks.sh makes it the only way in.
 canon: ## [project] search the GM's setting canon for EVERY term of a claim in one call - each hit with its file, line and heading (feature 250 D16; a direct read of a canon file is refused)   TERMS="imperial road|merchant share|artisan"

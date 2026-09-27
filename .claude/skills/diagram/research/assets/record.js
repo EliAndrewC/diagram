@@ -51,9 +51,10 @@
   // The word boundary is written with Unicode classes rather than \b, because a term may carry a macron.
   var glossary = window.RECORD_GLOSSARY || [];
   var glossaryRe = null; var defs = {};
+  var cased = {};  // a "cased" term's variants match only as written: `ochiba` never wraps the manor Ochiba (feature 265)
   if (glossary.length) {
     var alts = [];
-    glossary.forEach(function (g) { g.variants.forEach(function (v) { alts.push(v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')); defs[v.toLowerCase()] = g.def; }); });
+    glossary.forEach(function (g) { g.variants.forEach(function (v) { if (g.cased) { cased[v.toLowerCase()] = v; } alts.push(v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')); defs[v.toLowerCase()] = g.def; }); });
     alts.sort(function (a, b) { return b.length - a.length; });
     glossaryRe = new RegExp('(?<![\\p{L}\\p{N}])(' + alts.join('|') + ')(?![\\p{L}\\p{N}])', 'giu');
   }
@@ -73,6 +74,7 @@
       var text = node.nodeValue; var last = 0; var frag = null; var m;
       glossaryRe.lastIndex = 0;
       while ((m = glossaryRe.exec(text)) !== null) {
+        if (cased[m[0].toLowerCase()] !== undefined && cased[m[0].toLowerCase()] !== m[0]) { continue; }
         if (!frag) { frag = document.createDocumentFragment(); }
         if (m.index > last) { frag.appendChild(document.createTextNode(text.slice(last, m.index))); }
         var span = document.createElement('span'); span.className = 'gl'; span.textContent = m[0];

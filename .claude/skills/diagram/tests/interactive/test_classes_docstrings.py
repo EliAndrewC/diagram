@@ -68,7 +68,11 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
     Chinese national standard GB 50288, whose text is readable on no public page, and the pass found the
     provincial standard that defers to it by number and IS served openly; `fry pond` lost the closed
     article its township and its century came from. A class whose explanation rests on a key the record
-    no longer cites is miscited in the other direction, which is why these move rather than stay pinned."""
+    no longer cites is miscited in the other direction, which is why these move rather than stay pinned.
+
+    Feature 250 (T23) moved `pig sty`'s once more, the 233 direction: its `Why:` was rewritten from the
+    sluice question's paragraph on manure rate and the dead patch under the shed, and gained the two keys
+    that paragraph and the "lift its boards" wording rest on (`fao-ac257e`, `fao-x6708e`)."""
     before = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
     added = {s for succ in SINCE_189.values() for s in succ} | set(ADDED_SINCE_189)
     assert set(SINCE_189) <= set(before) and not (added & set(before)), "the tables name snapshot keys and NEW keys only"

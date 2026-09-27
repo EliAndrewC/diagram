@@ -141,8 +141,11 @@ def term_files(root: str | None = None) -> list[dict]:
         with open(os.path.join(here, name), encoding="utf-8") as fh:
             entry = json.load(fh)
         # COMPARED IN THE ENCODE DIRECTION (the plan review, 2026-09-20): decoding a filename is not
-        # injective the moment a term contains a `%`, while encoding a term is exact forever.
-        if name != file_name(at // GAP, str(entry.get("term"))):
+        # injective the moment a term contains a `%`, while encoding a term is exact forever. ANY free
+        # four-digit prefix is read (2026-09-27): the gap of ten is how a new term is NAMED (`file_name`),
+        # so one can go between two; requiring the multiple of ten on reading capped the glossary at 999
+        # terms, and three features' terms (958 on main, some 125 more) overflowed it at a merge.
+        if name != f"{at:0{DIGITS}d}-{_encode(str(entry.get('term')))}.json":
             raise GlossaryError(f"{TERMS}/{name}: its filename says `{term_of(name)}` and its content says `{entry.get('term')}` - one of the two is wrong")
         out.append(entry)
     return out

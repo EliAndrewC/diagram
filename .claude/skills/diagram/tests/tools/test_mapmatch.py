@@ -170,4 +170,3 @@ def test_site_classes_answer_the_program_check_or_stay_out_of_it(tmp_path: objec
     assert mm.site_classes(pa.parse_svg(text3), text3, OnMap(path, "religious", 100, 100, "hall")) is None  # no frame
     got = mm.site_classes(plan, text, OnMap(path, "religious", 100, 100, "hall"))
     assert got == {"tree": False, "burial_ground": False, "water_point": True, "arch": True, "water": False, "lane": False, "building": False}
-    assert mm.frame_is_the_maps(None) is None and mm.frame_is_the_maps(OnMap(path, "religious", 100, 100, "hall"))

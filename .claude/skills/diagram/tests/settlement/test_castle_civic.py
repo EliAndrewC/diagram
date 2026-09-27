@@ -5,7 +5,6 @@ import tempfile
 
 import pytest
 
-from l7r.diagram import settlement
 from tests.settlement._builders import _cap020, _castle_map, _crop_settlement, _ladder_map, _town
 
 
@@ -35,62 +34,6 @@ def test_label_hits_counts_a_grove_under_the_label():
     assert s._label_hits(500, 500, "Ministry of Test", 12) >= 1
 
 
-def test_label_ladder_seats_a_caption_at_the_minimum_standoff_when_the_ground_is_clear():
-    s = _ladder_map()
-    box = (400.0, 400.0, 500.0, 440.0)  # wider than tall -> below/above are the primary seats
-    lx, ly = s._best_label_spot(box, "market", 10)
-    assert settlement.box_gap(s._label_box(lx, ly, "market", 10), box) == pytest.approx(settlement.LABEL_MIN_AIR)
-
-
-def test_label_ladder_steps_outward_past_an_obstacle_and_stops_at_the_first_clear_rung():
-    s = _ladder_map()
-    box = (400.0, 400.0, 500.0, 440.0)
-    clear = s._best_label_spot(box, "market", 10)
-    assert settlement.box_gap(s._label_box(*clear, "market", 10), box) == pytest.approx(settlement.LABEL_MIN_AIR)
-    for cy in range(370, 476, 7):  # ring the subject so the first rungs are blocked on every side
-        for cx in range(330, 576, 12):
-            if not (395 < cx < 505 and 395 < cy < 445):
-                s.building(cx, cy, 10, 6)
-    lx, ly = s._best_label_spot(box, "market", 10)
-    gap = settlement.box_gap(s._label_box(lx, ly, "market", 10), box)
-    assert gap > settlement.LABEL_MIN_AIR  # the near rungs were blocked...
-    assert s._label_hits(lx, ly, "market", 10, pad=0.0, linepad=0.0) == 0  # ...and it kept climbing to clear ground
-
-
-def test_label_ladder_slides_along_the_long_axis_only():
-    # A subject much taller than wide (a road segment, a stall row) is captioned BESIDE it. Sliding
-    # ACROSS such a box walks the caption diagonally away while its nominal standoff still reads as
-    # small - the first cut of this put "Imperial Road" 43px out at a nominal 5px of air.
-    s = _ladder_map()
-    tall = (500.0, 200.0, 510.0, 800.0)
-    for sl in (-200.0, 200.0):
-        seat = s._best_label_spot(tall, "road", 12, slides=(sl,))
-        # a slide runs ALONG the subject, so the seat stays tight against it however far it slides;
-        # an across-axis slide walked the caption out to 43px at a nominal 5px of air
-        assert settlement.box_gap(s._label_box(*seat, "road", 12), tall) <= settlement.LABEL_AIR_CAP * 12
-
-
-def test_label_ladder_refuses_a_seat_outside_the_cropped_view():
-    # a clipped label is unreadable (labels_within_image), so out-of-frame candidates are DISCARDED
-    s = _ladder_map()
-    box = (100.0, 100.0, 200.0, 140.0)
-    free = s._best_label_spot(box, "market", 10)
-    assert free[1] > box[3]  # unconstrained, a wide subject is captioned BELOW
-    s.M["meta"]["view"] = [60, 60, 400, 90]  # ...but the frame now ends just under the subject
-    framed = s._best_label_spot(box, "market", 10)
-    assert framed[1] < box[1]  # so the caption moves ABOVE rather than out of the picture
-
-
-def test_label_ladder_falls_back_to_the_least_covered_seat_when_nothing_is_clear():
-    s = _ladder_map()
-    box = (400.0, 400.0, 500.0, 440.0)
-    for cy in range(320, 540, 10):  # blanket every rung on every side
-        for cx in range(300, 620, 10):
-            s.building(cx, cy, 14, 8)
-    lx, ly = s._best_label_spot(box, "market", 10)
-    assert s._label_hits(lx, ly, "market", 10, pad=0.0, linepad=0.0) > 0
-
-
 def test_place_caption_defers_to_finish_and_records_its_subject_box_for_the_gate():
     # DEFERRED on purpose: a caption seated at call time is judged against half a map (see
     # place_caption's note - Tango's north market caption landed on an execution ground that did
@@ -98,7 +41,7 @@ def test_place_caption_defers_to_finish_and_records_its_subject_box_for_the_gate
     s = _ladder_map()
     box = (400.0, 400.0, 500.0, 440.0)
     s.place_caption("market", box, 10)
-    s.place_caption("ferry", (700.0, 200.0, 720.0, 600.0), 10, slides=(0.0, 40.0))  # explicit slides
+    s.place_caption("ferry", (700.0, 200.0, 720.0, 600.0), 10)
     assert not [L for L in s.M["labels"] if L[5] in ("market", "ferry")]
     with tempfile.TemporaryDirectory() as d:
         s.finish(os.path.join(d, "t"), render=False)
@@ -147,19 +90,3 @@ def test_hanko_records_into_the_martial_halls_family():
     s2.hanko(700, 700, label="Hanko")  # a one-word name keeps the single line
     s2.place_labels()  # feature 157: the LABEL PHASE
     assert any(len(L) > 5 and L[5] == "Hanko" for L in s2.M["labels"])
-
-
-def test_the_TITLE_PLACARD_is_an_obstacle_the_caption_ladder_must_clear() -> None:
-    """The title is a label like any other and captions seat AFTER it, so a caption that ignored it
-    would sit on the place name. It is recorded as `M['title']` rather than in `M['labels']`, which is
-    why it is a branch of its own - and why a map with no title never exercised it."""
-    s = _ladder_map()
-    box = (400.0, 400.0, 500.0, 440.0)
-    free = s._best_label_spot(box, "market", 10)
-
-    s.M["title"] = {"bbox": [340.0, 440.0, 560.0, 500.0]}  # squarely over the below-seat the ladder just chose
-    with_title = s._best_label_spot(box, "market", 10)
-    assert with_title != free, "the ladder steps off the placard"
-    lx, ly = with_title
-    x0, y0, x1, y1 = s._label_box(lx, ly, "market", 10)
-    assert x1 < 340.0 or x0 > 560.0 or y1 < 440.0 or y0 > 500.0, f"and the caption clears it entirely: {(x0, y0, x1, y1)}"

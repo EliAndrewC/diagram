@@ -194,6 +194,19 @@ logged mode-3-preamble-stale-ok && ok "...and the escape is recorded with its re
 out=$(agent spec-fidelity "MODE 3 of specs/301-fixture")
 [ "$(rc)" -eq 0 ] && ok "the next round, with nothing replaced since, is untouched by the search" || no "a clean round was refused" "(rc=$(rc))"
 
+# GUARD_EDIT_OK: feature 266 - a new case for the rule the guard gained (a NOT-REVIEWABLE first reading is not a round)
+echo "8. a first reading that came back NOT-REVIEWABLE: the next dispatch is a first reading, not a later round"
+mkdir -p "$FIX/specs/302-fixture"
+printf '# Feature 302\n\n**FR-001 - one requirement.**\n' > "$FIX/specs/302-fixture/spec.md"
+out=$(agent spec-fidelity "MODE 2: SPECIFICATION REVIEW of specs/302-fixture against request.md")
+[ "$(state 302-fixture)" = "round=1 snapshot=yes" ] && ok "the first dispatch took the snapshot at round 1" || no "no first snapshot" "($(state 302-fixture))"
+transcript "$SUB/agent-9.jsonl" "MODE 2 review of specs/302-fixture" "Two figures carry no label, so I read no substance.\n\n**Verdict: NOT-REVIEWABLE.**"
+printf '\n**FR-001 - one requirement, labeled.**\n' >> "$FIX/specs/302-fixture/spec.md"
+out=$(agent spec-fidelity "MODE 2: SPECIFICATION REVIEW of specs/302-fixture against request.md")
+[ "$(rc)" -eq 0 ] && [ -z "$out" ] && ok "...the next dispatch passes through untouched, a first reading" || no "it was rewritten into a later round" "(out=${out:0:60})"
+[ "$(state 302-fixture)" = "round=1 snapshot=yes" ] && ok "...still round 1" || no "a round was counted" "($(state 302-fixture))"
+logged first-reading-after-not-reviewable && ok "...recorded permitted/first-reading-after-not-reviewable" || no "the rule was not recorded"
+
 echo
 echo "test-review-round-hooks: $PASS passed, $FAIL failed"
 [ "$FAIL" -eq 0 ]

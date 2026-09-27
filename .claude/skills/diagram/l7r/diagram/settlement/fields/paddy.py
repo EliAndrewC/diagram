@@ -139,7 +139,7 @@ class PaddyMixin:
             # general deferral there does not reach it; `field_name_label` carries this exact markup
             # into the phase. Found by the round-2 spec review of feature 157 - dormant (no pool map
             # passes `label=` to either field), which is why it is a call swap and not a reflow.
-            self.field_name_label(label, *(label_xy if label_xy else ((x0 + x1) / 2, (y0 + y1) / 2)))
+            self.field_name_label(label, (x0, y0, x1, y1))
 
     @staticmethod
     def _split_convex(poly: Poly, px: float, py: float, nx: float, ny: float) -> tuple[Poly, Poly]:
@@ -450,7 +450,7 @@ class PaddyMixin:
             # general deferral there does not reach it; `field_name_label` carries this exact markup
             # into the phase. Found by the round-2 spec review of feature 157 - dormant (no pool map
             # passes `label=` to either field), which is why it is a call swap and not a reflow.
-            self.field_name_label(label, *(label_xy if label_xy else ((x0 + x1) / 2, (y0 + y1) / 2)))
+            self.field_name_label(label, (x0, y0, x1, y1))
 
     def _wf_ditch(self: Settlement, name: str, pairs: Any, w: float, role: str) -> None:  # type: ignore[misc]
         """Draw a water-first field's ditch AND record it, so the checks can validate what was drawn."""

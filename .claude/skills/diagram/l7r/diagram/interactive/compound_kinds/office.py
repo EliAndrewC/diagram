@@ -23,15 +23,18 @@ class OfficeHall(Kind):
     official study - is the dominant public building, and the hearing court is one room of that block. Daily
     paperwork is most of a magistrate's job, and the residence's private study is on the wrong side of the
     line between state and home for it, so the hall is deep, and it may be the largest building in the
-    compound, being the institution's working core rather than a dwelling. Like every wooden hall it burned,
-    which is why the documents and the tax grain are kept in storehouses of their own.
+    compound, being the institution's working core rather than a dwelling. A wooden hall could burn, and
+    many did (the Sado magistracy was rebuilt five times, though Takayama's never burned), which is why the
+    documents and the tax grain are kept in storehouses of their own.
 
-    Note: The hall's form and its place follow the record. Its size, about 80 to 150 ft long and 20 to 45 ft
-    deep, is a guess: it is the plan vocabulary's working block, with no measured office wing of a jin'ya
-    behind it.
+    Note: The hall's form and its place follow the record. That it may out-size the residence is this
+    project's reading, since no readable source ranks a compound's footprints. Its size, about 80 to 150 ft
+    long and 20 to 45 ft deep, is a guess: it is the plan vocabulary's working block, with no measured
+    office wing of a jin'ya behind it.
 
-    Caveat: Its size, about 80 to 150 ft long and 20 to 45 ft deep, is a guess: it is the plan vocabulary's
-    working block, with no measured office wing of a jin'ya behind it.
+    Caveat: That it may out-size the residence is this project's reading, since no readable source ranks a
+    compound's footprints. Its size, about 80 to 150 ft long and 20 to 45 ft deep, is a guess: it is the
+    plan vocabulary's working block, with no measured office wing of a jin'ya behind it.
 
     Name: office hall
     Covers: the office hall's block, its outline and its front band
@@ -76,7 +79,7 @@ class ClerksRoom(Kind):
     the manor each day - and who, as permanent locals, are the office's memory under one magistrate after
     another.
 
-    Note: the record finds the clerks but says nothing of their room, and the program's workroom of about 28
+    Note: the record finds the clerks, though their number of three or four is this project's scaling from a Chinese county population it gives no source for, and it says nothing of their room, and the program's workroom of about 28
     by 18 ft for three or four clerks is a guess with no measured example behind it, whether it is drawn as a
     room of the office hall or as a building of its own.
 
@@ -104,7 +107,9 @@ class TaxArchive(Kind):
 
     Note: The fireproof document store follows the record, drawn as a sealed kura of about 32 to 36 ft, the
     plan vocabulary's size for a records store that doubles as the strongroom. An archive in the Chinese
-    county office is not confirmed by any page read.
+    county office is not confirmed by any page read, and keeping the fire-water tubs away from it is this
+    map's reasoning from its fireproofing: the pages read place tubs at the doorway and on the roof, and the
+    Qing palace's vats by courtyard, but none gives a priority among buildings.
 
     Name: tax archive
     Covers: the plastered archive kura and its label
@@ -124,16 +129,22 @@ class Granary(Kind):
     Why: Tax rice flowed from the village granaries through the magistrate's compound toward central stores,
     so the office kura holds grain in transit plus a local reserve, and a county seat's granary stands inside
     the compound rather than in the town. Where water gives a county a way out, the grain moves on; a remote
-    county, where transport costs more, keeps a row of kura instead. Paddy tax arrived as brown rice in straw
+    county, where transport costs more, keeps a row of kura instead. The lord's kura held the paddy tax as brown rice in straw
     bales, with a corner of unhulled rice kept against famine.
 
-    Note: The staging kura, its contents and its place inside the compound follow the record, drawn at about
-    43 to 50 by 25 to 27 ft and checked against real kura sizes. That more of the dry-field tax arrives in
-    kind - soybeans and barley in bales beside the rice - than it did in Edo Japan is this setting's own
-    economics: Rokugan is rich in goods and poor in coin.
+    Note: The kura, its rice and its place inside the compound follow the record, drawn at about 43 to 50 by
+    25 to 27 ft and checked against real kura sizes. The staging - tax rice passing through the compound and
+    held there in transit beside a local reserve - is this map's own reading, which no source states, and the
+    famine corner of unhulled rice is a simplification: Edo kept that reserve in separate community granaries,
+    and one granary is drawn instead of two. That more of the dry-field tax arrives in kind - soybeans and
+    barley in bales beside the rice - than it did in Edo Japan is this setting's own economics: Rokugan is
+    rich in goods and poor in coin.
 
-    Caveat: That more of the dry-field tax arrives in kind - soybeans and barley in bales beside the rice -
-    than it did in Edo Japan is this setting's own economics: Rokugan is rich in goods and poor in coin.
+    Caveat: The staging - tax rice passing through the compound and held there in transit beside a local
+    reserve - is this map's own reading, which no source states, and the famine corner of unhulled rice is a
+    simplification: Edo kept that reserve in separate community granaries, and one granary is drawn instead of
+    two. That more of the dry-field tax arrives in kind - soybeans and barley in bales beside the rice - than
+    it did in Edo Japan is this setting's own economics: Rokugan is rich in goods and poor in coin.
 
     Name: granary
     Covers: the vented granary kura and its label
@@ -156,12 +167,13 @@ class Cell(Kind):
     two for remand and no prison block - and in Rokugan, where torture is unusual, no room built for
     interrogation either.
 
-    Note: Small remand cells follow the record, a real remand cage running about 10 by 12 ft. That a cell may
-    stand anywhere in the compound is this setting's own: Chinese regulation put the county jail in the
-    southwest corner, and Rokugan keeps no such rule.
+    Note: Small remand cells follow the record (though no page read names exile or fines as sentences, or
+    says light offenders were sent home), a real remand cage running about 10 by 12 ft. That a cell may
+    stand anywhere in the compound is this setting's own: Chinese regulation put the county jail on the
+    south side (Neixiang's stood in its southwest), and Rokugan keeps no such rule.
 
     Caveat: That a cell may stand anywhere in the compound is this setting's own: Chinese regulation put the
-    county jail in the southwest corner, and Rokugan keeps no such rule.
+    county jail on the south side (Neixiang's stood in its southwest), and Rokugan keeps no such rule.
 
     Name: cell
     Covers: the barred holding cell and its label
@@ -202,15 +214,18 @@ class Barracks(Kind):
     What: A plain long building divided into bunk rooms, where the compound's working platoon and its duty
     watch lodge.
 
-    Why: Rural intendants' offices housed their staff on the grounds; it was
-    the great city magistrate's offices that lodged their constables in a district of their own, keeping only the
-    magistrate's household inside. A county posting's staff is a working platoon, mostly without dependents,
-    so by default it lives on the grounds. The barracks outranks the stable in size: a stable for a few
-    horses never out-foots the watch's quarters.
+    Why: Rural intendants' offices most likely housed their staff on the grounds, though the record does not
+    say so; it was the great city magistrate's offices that lodged their constables in a district of their
+    own, keeping only the magistrate's household inside. A county posting's staff is a working platoon, mostly
+    without dependents, so by default it lives on the grounds. By this map's own ordering, the barracks
+    outranks the stable in size: a stable for a few horses never out-foots the watch's quarters.
 
-    Note: On-grounds housing for the staff follows the record. The building's size, about 20 to 70 ft by 10
-    to 40 ft, is a guess taken from the plan vocabulary's range, and how many live in it follows how the
-    posting houses its staff.
+    Note: On-grounds housing for the staff is a reconstruction: a small domain's jin'ya kept its retainers'
+    residences inside its walls, but no source read says a rural intendant's staff lived on the grounds; only
+    the city magistrates' separate constables' district is attested. That the barracks outranks the stable is
+    this project's own reading, since no readable source ranks a compound's buildings by footprint. The
+    building's size, about 20 to 70 ft by 10 to 40 ft, is a guess taken from the plan vocabulary's range, and
+    how many live in it follows how the posting houses its staff.
 
     Caveat: The building's size, about 20 to 70 ft by 10 to 40 ft, is a guess taken from the plan vocabulary's
     range, and how many live in it follows how the posting houses its staff.
@@ -235,9 +250,11 @@ class BenchNoticeBoard(Kind):
     the village officials' houses. A magistracy's board stands at its own gate, on the way everyone who has
     business with the court must come.
 
-    Note: The board and its seat at an officials' gate follow the record. That the bench keeps a board of its
-    own, apart from the kosatsuba where the town posts the state's standing law, is this project's own
-    division; the record finds only the settlement's board.
+    Note: The board and its roadside seat follow the record, which sets it before the gate of village
+    officials' houses but at no government office; that every town and village kept one is a reading of the
+    sources, not their words. That the bench keeps a board of its own, apart from the kosatsuba where the town
+    posts the state's standing law, is this project's own division; the record finds only the settlement's
+    board.
 
     Caveat: That the bench keeps a board of its own, apart from the kosatsuba where the town posts the state's
     standing law, is this project's own division; the record finds only the settlement's board.
@@ -257,12 +274,13 @@ class TallyOffice(Kind):
     What: A small office on the route goods take through the compound, where they are counted or weighed, the
     seal is set and the tally written: the record of goods the office supervises but does not own.
 
-    Why: The magistracy's hold on moving goods is documentary. Tax rice moved on hired commoner boats under the
-    office's seals - the office owned no hulls - and a charcoal store was a supervised, tallied depot, its
-    goods sealed there and never owned. So the post that writes the tally stands where the goods pass,
-    between the store and the way out.
+    Why: The magistracy's hold on moving goods is documentary. Tax rice moved on hired commoner boats flying
+    an official pennant and inspected at the ports of call, the office owning no hulls - and a charcoal store
+    was a supervised, tallied depot, its goods sealed there and never owned. So the post that writes the tally
+    stands where the goods pass, between the store and the way out.
 
-    Note: The documentary control it performs follows the record. No source describes the tally office as a
+    Note: That tax rice moved on hired hulls under an official pennant and port inspection is read; that the
+    office's hold on it was documentary is this project's reading. No source describes the tally office as a
     building of its own; the room where the seal and the tally are made is inferred from them.
 
     Caveat: No source describes the tally office as a building of its own; the room where the seal and the
@@ -288,7 +306,7 @@ class WeighingFloor(Kind):
     is what the weighing floor is for, and it is also why the office's hold on the trade is a written record
     rather than ownership.
 
-    Note: The weighing floor and the reason for it follow the record.
+    Note: The weighing floor follows the record's reasoning, but its premise - that the charcoal bale had no standard weight - rests on no source read: the page it had been cited to says nothing about charcoal, and no other was found.
 
     Name: weighing floor
     Covers: the covered weighing floor, its posts and its label

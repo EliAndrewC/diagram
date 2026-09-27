@@ -47,6 +47,7 @@ import json
 import pathlib
 import re
 import sys
+import unicodedata
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -94,7 +95,9 @@ class _Visible(HTMLParser):
 
 
 def squeeze(text: str) -> str:
-    return re.sub(r"\s+", " ", text).strip()
+    # NFC: a CJK compatibility ideograph (a page's 社 written as U+FA4C) is canonically the same character as the
+    # unified one a quote carries, so it is not a difference (feature 268, three Sano quotes flagged NOT-ON-PAGE).
+    return unicodedata.normalize("NFC", re.sub(r"\s+", " ", text)).strip()
 
 
 def visible_text(markup: str) -> str:

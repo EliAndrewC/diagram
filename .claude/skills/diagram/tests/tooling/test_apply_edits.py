@@ -125,3 +125,14 @@ def test_a_modal_s_class_file_is_writable_too(tmp_path, capsys) -> None:
     other.write_text("A bund", encoding="utf-8")
     report.write_text(_report(str(other.relative_to(tmp_path)), "A bund", "B"), encoding="utf-8")
     assert ae.main([str(report), "--root", str(tmp_path)]) == 1 and "not under" in capsys.readouterr().out
+
+
+def test_a_sheet_modal_s_compound_kinds_file_is_writable_too(tmp_path) -> None:
+    """Feature 265: the building-plan sheets' modal prose (feature 262) is under interactive/compound_kinds/."""
+    m = tmp_path / ae.SHEET_MODALS / "office.py"
+    m.parent.mkdir(parents=True)
+    m.write_text('"""What: The tally office counts the rice."""\n', encoding="utf-8")
+    report = tmp_path / "r.md"
+    report.write_text(_report(str(m.relative_to(tmp_path)), "counts the rice.", "counts the tax rice."), encoding="utf-8")
+    assert ae.main([str(report), "--root", str(tmp_path)]) == 0
+    assert "tax rice" in m.read_text(encoding="utf-8")
