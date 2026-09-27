@@ -6194,5 +6194,26 @@
   "variants": [
    "Satsuma"
   ]
+ },
+ "kuchidome": {
+  "def": "A domain's own border guard post in the Edo period, set where its roads led into a neighboring domain or the shogun's land, to watch the people and goods crossing - chiefly to stop the domain's produce leaving - and sometimes to tax the goods at a fixed rate.",
+  "variants": [
+   "kuchidome",
+   "kuchidome bansho",
+   "kuchidome guard post",
+   "kuchidome guard posts"
+  ]
+ },
+ "Nippo Jisho": {
+  "def": "A Japanese-Portuguese dictionary of 1603-04. A word found in it was already in use by then.",
+  "variants": [
+   "Nippo Jisho"
+  ]
+ },
+ "Nihon Kokugo Daijiten": {
+  "def": "The largest dictionary of the Japanese language. Each entry gives a word's meaning and its earliest recorded uses, and Kotobank reproduces its entries.",
+  "variants": [
+   "Nihon Kokugo Daijiten"
+  ]
  }
 }
