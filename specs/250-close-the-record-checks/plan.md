@@ -507,8 +507,12 @@ no further process change.
    checked by five modal-only sessions (`brief.py owed`, packed by load under `GROUP_BYTES`): `entry-drift` per
    modal, fixes by `make apply-edits`, one re-check round, each verdict appended to `owed-verdicts.md`. A modal
    REWRITTEN leaves the list by itself; one found IN-STEP stays on it (only a rewrite clears a pair), and the push
-   discharges exactly those with one `ENTRY_DRIFT_OK` whose reason cites `owed-verdicts.md` - the gate's documented
-   use (a recorded reason covering pairs in which no finding moved).
+   discharges exactly those with one `ENTRY_DRIFT_OK`. Because the escape clears the WHOLE gate (plan review), it is
+   set only after `brief.py owed-check` passes: every pair `_entry_owed.py` names at the push has an IN-STEP line in
+   `owed-verdicts.md`, and a pair without one - CANNOT-TELL (a verdict the brief records and never discharges),
+   never dispatched, or newly created - is answered first, by a re-check or a rewrite. The reason shipped gives the
+   count and says "dispatched, `entry-drift` IN-STEP, per `owed-verdicts.md`" - not "no finding moved", since some of
+   these sections did gain findings.
 3. **T17** is verified and ticked rather than moved: `measure/assertions.py` exists and `brief.py` has derived every
    page's FR-002 list from it since D7.
 4. **T25, the close**: the closing report, `make page-check` (one session reported two or three browser tests

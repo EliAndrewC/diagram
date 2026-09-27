@@ -94,3 +94,10 @@ item whether it was searched and failed or never searched.
   250's criteria should be carried verbatim for the requirements carried here.
   Applied (2026-09-27): all three - `cities/capitals` added as an FR-006-only page (T06); `urban-features`' five
   over-cap questions named; T11 carries FR-007 whole, and the success criteria are 250's SC-002 to SC-010 verbatim.
+- **Round 2 (2026-09-27), `spec-fidelity-verify`: FAITHFUL.** All three of round 1's items are RESOLVED. (1)
+  `cities/capitals` is in the pages paragraph as an FR-006-only page, and T06 is a physical task with the five
+  research boxes. (2) `urban-features`' five over-cap questions are named (010, 020, 030, 060; 050). (3) T11
+  carries FR-007 whole. The success criteria match 250's SC-002 to SC-010 word for word. The renumbered task ids
+  (T06 to T11) leave no dangling reference: the old ids appear only in round 1's record, which describes the
+  earlier numbering. On round 2's own run, `brief.fr002` / `fr006` / `over_cap_items` gave the same counts as the
+  pages paragraph: capitals 0 and 7, with no question over the cap.

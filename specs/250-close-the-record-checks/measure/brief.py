@@ -495,8 +495,9 @@ Read narrowly - you need no question's whole text; the agents read the bundles.
 3. **Re-check ONCE, only what moved**: one `entry-drift` on each rewritten modal's bundle again; a drift left after it
    is labeled honestly in the modal's `Note:`, not checked a third time.
 4. **Record the verdicts.** Append one line per modal to `specs/250-close-the-record-checks/owed-verdicts.md`:
-   `- <class> (<page> SECTION=<NNN>): IN-STEP | REWRITTEN | LABELED - <one clause>`. A modal found IN-STEP stays on
-   `_entry_owed.py`'s list (only a rewrite clears it), and the push discharges exactly those lines.
+   `- <class> (<page> SECTION=<NNN>): IN-STEP | REWRITTEN | LABELED | CANNOT-TELL - <one clause>`. A modal found
+   IN-STEP stays on `_entry_owed.py`'s list (only a rewrite clears it), and the push discharges exactly those lines;
+   a CANNOT-TELL is NOT discharged - say what the agent needed, and the closing session answers it before the push.
 5. In `.claude/skills/diagram`: `make test-file FILE="tests/interactive/test_classes.py tests/interactive/test_classes_docstrings.py"`;
    commit naming your modals. Do NOT tick, do NOT push. Report in one paragraph: each modal's verdict.
 """
@@ -522,7 +523,33 @@ def owed_briefs(page: str, task: str) -> int:
     return 0
 
 
+def owed_check() -> int:
+    """Before the push (D20.2, plan review): every pair `_entry_owed.py` names must have an IN-STEP line in
+    `owed-verdicts.md`; a pair without one - CANNOT-TELL, never dispatched, or newly created - is printed and fails,
+    because `ENTRY_DRIFT_OK` clears the whole gate and must only ever clear pairs a check found in step."""
+    got = subprocess.run([sys.executable, str(CLONE / "scripts/_entry_owed.py")], cwd=CLONE, capture_output=True, text=True, check=False).stdout
+    named = sorted({m.group(1) for line in got.splitlines() if (m := re.match(r"(.+?) - .* - prose at \S+:\d+$", line))})
+    ledger = FEATURE / "owed-verdicts.md"
+    text = ledger.read_text(encoding="utf-8") if ledger.is_file() else ""
+    in_step = set()
+    for page in ("homesteads", "archetypes", "fields", "water", "vegetation"):
+        for cls, _p, _s in owed_modals(page):
+            if re.search(rf"^- {re.escape(cls)} \(.*\): IN-STEP\b", text, re.M):
+                in_step.add(cls)
+    keys = {}
+    for f in (SKILL / "l7r/diagram/interactive/classes").glob("*.py"):
+        for m in re.finditer(r"^class (\w+)\(Kind\):.*?^    key = \"([^\"]+)\"", f.read_text(encoding="utf-8"), re.M | re.S):
+            keys[m.group(2)] = m.group(1)
+    open_ = [k for k in named if keys.get(k) not in in_step]
+    for k in open_:
+        print(f"owed-check: {k} ({keys.get(k, '?')}) has no IN-STEP verdict in {ledger.name} - answer it before the push")
+    print(f"owed-check: {len(named)} pair(s) named, {len(named) - len(open_)} with an IN-STEP verdict, {len(open_)} open")
+    return 1 if open_ else 0
+
+
 def main(argv: list[str]) -> int:
+    if argv == ["owed-check"]:
+        return owed_check()
     if len(argv) == 3 and argv[0] == "split":
         return split_brief(argv[1], argv[2])
     if len(argv) == 3 and argv[0] == "checks":
