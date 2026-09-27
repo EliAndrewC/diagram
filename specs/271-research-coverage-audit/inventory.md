@@ -65,20 +65,26 @@ Rows below are left to their owner. A 271 row that touches one of these sections
   courtyard house - which regions, and which should the maps draw? (homesteads/145, homesteads/130). M. P1.
 - A78 **Farm storehouse size and siting**: how big is a farm kura, what is it built of, and where on the plot does it
   stand? (homesteads/120, homesteads/140). S. P1.
+  > COORDINATION (A78): 267 R18 (granary stilts, the raised floor) is the magistracy granary, a different building - cite it for the raised floor if it comes up
 - A79 **Farm shed (naya) size**: how big is a farm shed, and where on the plot? (homesteads/140). S. P1.
 
 ## V2 - homesteads: the yard and its animals (new: homesteads 460-510)
 
 - A82 **Draft animals**: ox or horse, by region, and what share of households kept one? (homesteads/070,
   homesteads/145). M. P1.
+  > COORDINATION (A82): read 269 B16 (homesteads 300, in diagram-supplemental) first; if it answers the share of households, cite it and keep only ox against horse by region
 - A83 **Pigs and poultry in a paddy hamlet**: did an ordinary south-China paddy hamlet keep pigs, poultry and ducks, and
   where (the sty is drawn only on dike-pond hamlets)? (archetypes/171). M. P1.
+  > COORDINATION (A83): narrow to pigs and ducks on a PLAIN paddy hamlet; chickens are answered by 269 B13 (homesteads 250/218, Buck: 82% of farms) and dike-pond sties and pens by 269 B32 (archetypes, group A1) - cite both, read them in /diagram/.clones/diagram-supplemental
 - A95 **Farmstead boundary**: a hedge (ikegaki), a stone wall, an earth bank or nothing, and how does it show?
   (homesteads/145). M. P1.
+  > COORDINATION (A95): 269's vegetation 270 windbreak grove is the boundary planting on many farmsteads - cite it; the hedge, wall and bank question is ours
 - A148 **Communal threshing floor**: did a south-China village thresh and dry on a shared floor (a stone roller, the
   drying ground before the hall) rather than each dooryard, and how big? (homesteads/020). M. P1.
+  > COORDINATION (A148): 269 B05 (fields 290-310) covers the straw rick - cite it; the threshing floor is ours
 - A17 **Drying racks (hasa)**: where were rice-drying racks put up - along bunds, by the lane, in the yard - how long,
   and how many per household? (homesteads/145). M. P2.
+  > COORDINATION (A17): 269 B05 (fields 290-310, in diagram-supplemental) covers nimosaku and the straw rick - cite it for the rick; the racks are ours
 
 ## V3 - fields: bunds, crops and field features (new: fields 400-450)
 
@@ -98,6 +104,7 @@ Also edits fields/010, 022, 050, 100.
 
 - A37 **Division works**: how was a ditch split between users (a division weir, a notched board, bunsuiban), and what
   shows of it? (water/240, fields/070). M. P1.
+  > COORDINATION (A37): 269 B22 (water 300, 310, in diagram-supplemental) covers the village weir forms and the intake mouth - cite them; the division between users is ours
 - A46 **Water-lifting devices**: the treadle wheel (fumiguruma), swing bucket (hanetsurube) and the Chinese chain pump
   (longgu che) - did a village lift water onto its fields, with how many, and what shows on a map? (none). M. P2.
 - A47 B62 **Mills**: did a village have a water mill (suisha) for polishing rice or grinding, how many, where on the
@@ -117,6 +124,7 @@ Also edits archetypes/020, 080, 150, 160.
   fields/024). M. P1.
 - A21 **Overlay crop extent**: how much of a village a cash-crop overlay covers (mulberry fishpond, lotus, tea fringe)
   (archetypes/020, no footnotes). S. P1.
+  > COORDINATION (A21): 269 B33 (mulberry density and crown width, group A1) is density, not extent - no overlap; cite it once written
 - A24 **Plot tenure in the pattern**: scattered strips per household, warichi redistribution, tenant plots - does it
   show in the plot pattern? (archetypes/050; 269 B35 owns 050/060's edits, so this is a new question). M. P2.
 - A62 **Polder perimeter dike dimensions**: how high and wide is a polder's dike? (archetypes/080). S. P1.
@@ -127,6 +135,7 @@ Also edits archetypes/020, 080, 150, 160.
 
 - A93 **Other farmstead trees**: plum, chestnut, loquat, a mulberry or tea hedge - which stood on a farmstead, and how
   many? (none). M. P1.
+  > COORDINATION (A93): vegetation 260 (bamboo), 270 (the grove's species) and homesteads 218 (persimmon), all 269's in diagram-supplemental, already name grove trees - take only fruit and hedge trees they do not list
 - A25 A26 B123 B124 **Fodder meadow, hayfield and grazing commons**: did a village keep a cut meadow or common for
   fodder and green manure (kusakariba, magusaba), how large against its paddy, and where; where does a hayfield or
   grazing ground stand and how is it bounded (the hand-drawn towns label "hayfields & grazing"); and what grazing,
@@ -168,6 +177,7 @@ Also edits homesteads/180.
   (ichirizuka); did rest stops stand at a town's ends? (cities/fabric/050, city). M. P2.
 - A127 B131 C168 **Ferry landings**: where a village's, town's or city's road met a river with no bridge, when was it a
   ferry, how was the landing (watashiba) laid out, and how many kept one? (water/130, a mention). M. P2.
+  > COORDINATION (A127): 267 R42 (stepped landings or a pier, gangi, on river-cities) and R40/R41 (the river guard post, the boatmen's altar) are landing features - cite them; keep A127 to the ferry crossing itself
 
 ## U1 - urban-features: public fixtures and works on the map (new: urban-features 250-300)
 
@@ -177,6 +187,7 @@ Also edits 015, 052, 068, 090.
   (urban-features/015, no footnotes). S. P1.
 - A132 **Notice-board form**: how big was a village or town board, and what did it look like from above (roofed,
   fenced, on a stone base)? (urban-features/010). S. P1.
+  > COORDINATION (A132): 267 R25 kept the magistracy bench's own board apart from the town's kosatsuba - cite it for the distinction
 - A51 **Rural well siting**: where does a village's communal well stand - a dooryard, a lane side, the commons (the
   Inashiro south well, fc:2063) - and was there a well house? (urban-features/090, 120; homesteads/145). M. P1.
 - B116 **Wellhead form**: what does a town's communal well look like from above - curb, frame, pulley, roof?
@@ -206,10 +217,12 @@ Also edits 140, 210.
   acreage for ~80 non-farming households? (none). M. P1.
 - B04 **Town density**: how densely is a town's commercial core built against its farm zone (households per acre, the
   share of ground built)? (cities/sizing/020, city only). M. P1.
+  > COORDINATION (B04): keep to density per acre and the core against the farm zone; the population and household count are 269's towns/020 (B43, runs later) - leave them to it, and the check pass adds a pointer to 020
 - B05 **Town plan form**: linear road town, crossroads town or planned rectangle - which did Japanese and Chinese county
   seats take, and how often (a knob)? (towns/010). M. P1.
 - B06 **Walled or unwalled**: what share of county seats were walled (Chinese most, Japanese almost none), and what
   makes a town walled? (towns/100). M. P1.
+  > COORDINATION (B06): cite 269's cities/defenses 020-090 (B38) for the provincial-city comparison
 - B12 **Town by region**: how does a Japanese county town differ on the ground from a Chinese one (courtyard houses
   against machiya, wall or none, the yamen axis against a jin'ya at the edge)? (towns/010, cities/fabric/010). M. P1.
 
@@ -236,6 +249,8 @@ Also edits 140, 210.
 - B67 B68 C110 D135 **Inns, count and size**: how many inns did a county town, a post town (a Tōkaidō shukuba ran
   dozens of hatago) and a city keep, how big is a hatago, a wagon inn or a Chinese kezhan on the ground, with how many
   rooms and stories and what yard? (towns/050; cities/fabric/120 has the city count). M. P1.
+  > COORDINATION (B67): the CITY lodging-house count is 269's cities/fabric 120 (B40) - town and post-town inns are ours; cite 120 for the city figure
+  > COORDINATION (B68): the CITY lodging-house count is 269's cities/fabric 120 (B40) - cite it for the city; town inns are ours
 - B70 **Imperial waystation**: where does the setting's Imperial road waystation (canon: 25-30 staff, relay horses at
   a busy station) stand against a town, and what is its footprint? (none). M. P1.
 - B71 B72 D138 C45 **The post-horse office**: what did a post station keep - the toiya-ba (horse and porter office)
@@ -250,15 +265,18 @@ Also edits 140, 210.
 
 - B11 **Gate market size**: how many buildings and which trades make up a county town's gate market, and how far does
   it run out the road? (towns/080; the city strip is 269 B41's, cities/hinterland/040; cite it). M. P1.
+  > COORDINATION (B11): the CITY gate market is 269's cities/hinterland 040 (B41) - take the town side and point to it for cities
 - B41 **Town barns**: what are the barns of a town's hayfield (Hoshizora's five) - hay barns, ox sheds - and their
   size? (none). S. P1.
 - B132 **Edge woods**: why is a town's margin clothed and not left bare, and with what? (water/170,
   vegetation/030). S. P1.
 - B129 **Suburb along the road**: where does a town's built edge stop - does a ribbon of houses run out along the
   road past the last block (machi-hazure)? (none). S. P3.
+  > COORDINATION (B129): 269's cities/hinterland 040 (B41) covers the city strip outside a gate - take the town suburb, point to it
 - B128 C174 **Market gardens and the suburban belt**: did a town's or city's edge carry vegetable plots supplying it,
   fed by its night soil, and what else stood in a city's near hinterland (suburban villages, tile and lime works), how
   far out? (cities/hinterland/050; the retreats are 269 B41's). M. P3.
+  > COORDINATION (B128): 269's cities/hinterland 030 and 010/015 (B41) cover the city side - take the town side, point to them
 
 ## W2 - ways: streets, bridges and approach roads by tier (new: ways 160-230)
 

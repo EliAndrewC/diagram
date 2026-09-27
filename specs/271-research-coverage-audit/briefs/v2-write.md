@@ -29,14 +29,19 @@ the map features whose write-ups will be rewritten from what you find (by the or
 
 - A82 **Draft animals**: ox or horse, by region, and what share of households kept one? (homesteads/070,
   homesteads/145). M. P1.
+  > COORDINATION (A82): read 269 B16 (homesteads 300, in diagram-supplemental) first; if it answers the share of households, cite it and keep only ox against horse by region
 - A83 **Pigs and poultry in a paddy hamlet**: did an ordinary south-China paddy hamlet keep pigs, poultry and ducks, and
   where (the sty is drawn only on dike-pond hamlets)? (archetypes/171). M. P1.
+  > COORDINATION (A83): narrow to pigs and ducks on a PLAIN paddy hamlet; chickens are answered by 269 B13 (homesteads 250/218, Buck: 82% of farms) and dike-pond sties and pens by 269 B32 (archetypes, group A1) - cite both, read them in /diagram/.clones/diagram-supplemental
 - A95 **Farmstead boundary**: a hedge (ikegaki), a stone wall, an earth bank or nothing, and how does it show?
   (homesteads/145). M. P1.
+  > COORDINATION (A95): 269's vegetation 270 windbreak grove is the boundary planting on many farmsteads - cite it; the hedge, wall and bank question is ours
 - A148 **Communal threshing floor**: did a south-China village thresh and dry on a shared floor (a stone roller, the
   drying ground before the hall) rather than each dooryard, and how big? (homesteads/020). M. P1.
+  > COORDINATION (A148): 269 B05 (fields 290-310) covers the straw rick - cite it; the threshing floor is ours
 - A17 **Drying racks (hasa)**: where were rice-drying racks put up - along bunds, by the lane, in the yard - how long,
   and how many per household? (homesteads/145). M. P2.
+  > COORDINATION (A17): 269 B05 (fields 290-310, in diagram-supplemental) covers nimosaku and the straw rick - cite it for the rick; the racks are ours
 
 ## The procedure (session 1: research and write)
 
