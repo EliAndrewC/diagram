@@ -15,6 +15,13 @@ THE RESERVATION IS THE FILE: a stub is written at the new path before the lock i
 (source 2) sees it; the caller then fills it. The lock and the ledger sit under the mirror's `.specify/`, beside
 `make claim`'s, gitignored.
 
+THE KEY CAP (feature 274 D4; research R1: a write session's cost follows its turn count, and its keys drive its
+turns). The page-session runner tells a WRITE session `L7R_PAGE_SESSION` (its id) and `L7R_KEY_CAP` (10); a check,
+assertions, split or handover session is never told the cap. Every ledger row records the session. With both set, a
+registry reservation past the cap for that session is refused with the continuation instructions - finish the
+question in hand, write the unreached items to `$L7R_CONTINUE`, commit and stop - and the runner starts that brief
+next in a fresh session. `KEY_CAP_OK='<reason>'` passes it, logged. Glossary terms are not capped.
+
     reserve-prefix.py glossary "<term>"      -> prints the new glossary file's path
     reserve-prefix.py registry <key>         -> prints the new registry entry's path
 """
@@ -32,6 +39,9 @@ import time
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE))
+import _escape_log  # noqa: E402
+
 DIRS = {
     "glossary": ".claude/skills/diagram/l7r/diagram/interactive/assets/glossary",
     "registry": ".claude/skills/diagram/research/sources/010-works-cited",
@@ -131,6 +141,40 @@ class Lock:
         os.close(self.fd)
 
 
+def session_keys(mirror: Path, session: str) -> int:
+    """The registry keys this page session has reserved, from the ledger."""
+    ledger = mirror / ".specify" / LEDGER
+    n = 0
+    for line in ledger.read_text(encoding="utf-8").splitlines() if ledger.is_file() else []:
+        try:
+            row = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        n += row.get("kind") == "registry" and row.get("session") == session
+    return n
+
+
+def check_key_cap(kind: str, key: str, mirror: Path) -> None:
+    """Refuse a write session's registry key past its cap, unless `KEY_CAP_OK` gives a reason (feature 274 D4)."""
+    session, cap = os.environ.get("L7R_PAGE_SESSION", ""), os.environ.get("L7R_KEY_CAP", "")
+    if kind != "registry" or not session or not cap.isdigit():
+        return
+    n = session_keys(mirror, session)
+    if n < int(cap):
+        return
+    try:
+        if _escape_log.escape("KEY_CAP_OK", "reserve", "key-cap", {"key": key, "session": session, "reserved": n}):
+            return
+    except _escape_log.NoReason as e:
+        raise Refusal(str(e)) from None
+    cont = os.environ.get("L7R_CONTINUE", "$L7R_CONTINUE")
+    raise Refusal(f"this write session has reserved {n} new registry keys, its cap (feature 274: a write session takes at "
+                  f"most {cap}; its cost grows with its length). Do not reserve {key!r}. Finish the question in hand with the "
+                  f"keys you have; then write the items you have not reached to {cont} as a brief of the same shape - the "
+                  "same header, a `## Your items` list of just those items, the same handoff path - commit, and stop. "
+                  "The runner starts that brief next, in a fresh session. For a deliberate larger load: KEY_CAP_OK='<reason>'")
+
+
 def reserve(kind: str, key: str, root: Path, mirror: Path | None = None, stub: str | None = None, timeout: float = 30.0) -> Path:
     """The new file's path, its prefix reserved and a stub written before the lock is released."""
     if kind not in DIRS:
@@ -146,13 +190,14 @@ def reserve(kind: str, key: str, root: Path, mirror: Path | None = None, stub: s
         elsewhere = held_elsewhere(kind, key, root, mirror)
         if elsewhere:
             raise Refusal(f"{key!r} is already being defined in {elsewhere} - one home per {kind} key; pull that work in and edit it there")
+        check_key_cap(kind, key, mirror)
         prefix = (highest(kind, root, mirror) // STEP + 1) * STEP
         path = d / f"{prefix:04d}-{name_for(kind, key)}"
         d.mkdir(parents=True, exist_ok=True)
         if stub is None:
             stub = json.dumps({"term": key, "def": "", "variants": [key]}, ensure_ascii=False, indent=1) + "\n" if kind == "glossary" else ""
         path.write_text(stub, encoding="utf-8")
-        row = {"kind": kind, "key": key, "prefix": prefix, "clone": str(root), "utc": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")}
+        row = {"kind": kind, "key": key, "prefix": prefix, "clone": str(root), "session": os.environ.get("L7R_PAGE_SESSION", ""), "utc": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")}
         with open(mirror / ".specify" / LEDGER, "a", encoding="utf-8") as f:
             f.write(json.dumps(row, ensure_ascii=False) + "\n")
     return path

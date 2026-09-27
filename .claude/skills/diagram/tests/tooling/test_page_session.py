@@ -11,6 +11,8 @@ from __future__ import annotations
 import importlib.util
 import pathlib
 
+import pytest
+
 REPO = pathlib.Path(__file__).resolve().parents[5]
 
 
@@ -23,12 +25,13 @@ def _load():  # noqa: ANN202
 
 
 ps = _load()
+BRIEF = "# Brief\n\n## Your items\n- B1 one question\n"
 
 
 def test_each_brief_is_its_own_session_in_order(tmp_path: pathlib.Path, capsys) -> None:
     briefs = [tmp_path / "veg-1.md", tmp_path / "veg-2.md"]
     for b in briefs:
-        b.write_text("brief", encoding="utf-8")
+        b.write_text(BRIEF, encoding="utf-8")
     queue = ps.plan(str(tmp_path), "diagram-research", "/p", ["--model", "opus"], [str(b) for b in briefs])
     runs = [[q["sid"], q["log"], *q["cmd"]] for q in queue]
     assert len(runs) == 2 and runs[0][0] != runs[1][0], "two sessions, two ids"
@@ -41,21 +44,38 @@ def test_each_brief_is_its_own_session_in_order(tmp_path: pathlib.Path, capsys) 
     assert out.index("veg-1.md") < out.index("veg-2.md") and f"/p/{runs[0][0]}.jsonl" in out
 
 
-def test_a_page_session_starts_from_the_lower_floor() -> None:
+def test_a_page_session_starts_from_the_lower_floor(tmp_path: pathlib.Path) -> None:
     """R3, recommendation 1: only research's tools, no MCP servers, no skill listing - and in a clone, not the
-    mirror's root CLAUDE.md, which sits above every clone (a probe: first turn 40,280 -> 21,267 tokens)."""
+    mirror's root CLAUDE.md, which sits above every clone (a probe: first turn 40,280 -> 21,267 tokens). Feature 274
+    (SC-003): nor the clone's own root CLAUDE.md, and the slim rules file is appended after the standing authorization."""
     flags = ps.floor_flags("/diagram/.clones/diagram-research")
     assert "--disable-slash-commands" in flags and "--strict-mcp-config" in flags
     assert flags[flags.index("--tools") + 1] == "Bash,Read,Edit,Write,Grep,Glob,Agent,WebFetch,WebSearch"
-    assert '"claudeMdExcludes": ["/diagram/CLAUDE.md"]' in flags[flags.index("--settings") + 1]
-    assert "--settings" not in ps.floor_flags("/diagram"), "the mirror keeps its own CLAUDE.md"
+    assert '"claudeMdExcludes": ["/diagram/CLAUDE.md", "/diagram/.clones/diagram-research/CLAUDE.md"]' in flags[flags.index("--settings") + 1]
+    assert '"claudeMdExcludes": ["/diagram/CLAUDE.md"]' in ps.floor_flags("/diagram")[ps.floor_flags("/diagram").index("--settings") + 1]
+    assert "--append-system-prompt" not in ps.floor_flags(str(tmp_path)), "nothing to append, no flag"
+    (tmp_path / "container-scripts").mkdir()
+    for f, text in zip(ps.PROMPT_FILES, ("STANDING AUTHORIZATION", "SLIM RULES"), strict=True):
+        (tmp_path / f).write_text(text + "\n", encoding="utf-8")
+    flags = ps.floor_flags(str(tmp_path))
+    assert flags.count("--append-system-prompt") == 1 and flags[flags.index("--append-system-prompt") + 1] == "STANDING AUTHORIZATION\n\nSLIM RULES"
+    real = ps.floor_flags(str(REPO))
+    appended = real[real.index("--append-system-prompt") + 1]
+    assert "Standing authorizations" in appended and appended.index("Standing authorizations") < appended.index("Rules for a headless research page session")
+
+
+def test_the_real_rules_file_is_the_one_appended() -> None:
+    assert (REPO / ps.PROMPT_FILES[1]).is_file() and (REPO / ps.PROMPT_FILES[0]).is_file()
 
 
 def test_a_then_step_queues_the_briefs_it_prints(tmp_path: pathlib.Path, monkeypatch) -> None:
     """The check sessions are planned when the write session has ended, from its handoff (R3, recommendation 2)."""
     (tmp_path / ".git" / "page-sessions").mkdir(parents=True)
+    a, b = str(tmp_path / "veg-2a.md"), str(tmp_path / "veg-2b.md")
+    for f in (a, b):
+        pathlib.Path(f).write_text("<!-- page-load: kind=check -->\n**Your questions:** PAGE=vegetation SECTION=010\n", encoding="utf-8")
     step = tmp_path / "checks.sh"
-    step.write_text("#!/bin/sh\necho /b/veg-2a.md\necho /b/veg-2b.md\n", encoding="utf-8")
+    step.write_text("#!/bin/sh\n", encoding="utf-8")
     step.chmod(0o755)
     ran: list[str] = []
     monkeypatch.setattr(
@@ -63,17 +83,17 @@ def test_a_then_step_queues_the_briefs_it_prints(tmp_path: pathlib.Path, monkeyp
         "run",
         lambda cmd, **kw: (
             ran.append(cmd[0] if cmd[0] != "claude" else cmd[2].split("Read ")[1].split(" first")[0]),
-            ps.subprocess.CompletedProcess(cmd, 0, stdout="/b/veg-2a.md\n/b/veg-2b.md\n" if cmd[0] == str(step) else ""),
+            ps.subprocess.CompletedProcess(cmd, 0, stdout=f"{a}\n{b}\n" if cmd[0] == str(step) else ""),
         )[1],
     )
     run_log = tmp_path / "run.log"
     ps.work(str(tmp_path), "n", [], [{"then": str(step)}], str(run_log))
-    assert ran == [str(step), "/b/veg-2a.md", "/b/veg-2b.md"], ran
+    assert ran == [str(step), a, b], ran
     lines = run_log.read_text(encoding="utf-8").splitlines()
     assert lines[0].startswith("planned 2") and lines[-1] == "ALL DONE", lines
     assert [ln.split()[0] for ln in lines[1:-1]] == ["started", "ended", "started", "ended"], "a line as each session starts and ends"
     index = (tmp_path / ".git" / "page-sessions" / "index.txt").read_text(encoding="utf-8").splitlines()
-    assert [ln.split()[1] for ln in index] == ["/b/veg-2a.md", "/b/veg-2b.md"]
+    assert [ln.split()[1] for ln in index] == [a, b]
 
 
 def test_each_session_is_told_its_dispatcher_the_one_claimant_the_clone_guard_lets_through(tmp_path: pathlib.Path, monkeypatch) -> None:
@@ -109,8 +129,9 @@ def test_a_queued_session_does_not_inherit_the_dispatcher_s_tmux_pane() -> None:
 def test_a_session_the_usage_limit_ends_is_resumed_after_the_wait_not_skipped(tmp_path: pathlib.Path, monkeypatch) -> None:
     """The GM, 2026-09-27: overnight, a spent five-hour window must not burn the rest of the queue - the failed session
     waits for the reset and RESUMES, and the next brief starts only after it succeeds."""
+    for f in ("a.md", "b.md"):
+        (tmp_path / f).write_text(BRIEF, encoding="utf-8")
     queue = ps.plan(str(tmp_path), "n", "/p", [], [str(tmp_path / "a.md"), str(tmp_path / "b.md")])
-    (tmp_path / "a.md").write_text("x", encoding="utf-8")
     calls: list[list[str]] = []
     outcomes = iter([(1, '{"is_error": true, "result": "Claude AI usage limit reached|1900000000"}'), (0, '{"subtype": "success", "is_error": false}'), (0, '{"subtype": "success"}')])
 
@@ -150,7 +171,7 @@ def test_a_resume_item_continues_the_same_session_in_its_own_log(tmp_path: pathl
     """Feature 271: a runner that died with its dispatcher left a session mid-brief; `resume:<sid>:<brief>` resumes
     that very session (`--resume`, a continue prompt) in its existing log directory, and briefs after it still queue."""
     brief = tmp_path / "v1-write.md"
-    brief.write_text("brief", encoding="utf-8")
+    brief.write_text(BRIEF, encoding="utf-8")
     sid = "f6b577d1-4b97-4962-a643-e735d51727da"
     (tmp_path / ".git" / "page-sessions" / sid).mkdir(parents=True)
     queue = ps.plan(str(tmp_path), "diagram-research-1", "/p", [], [f"resume:{sid}:{brief}", str(brief)])
@@ -159,3 +180,118 @@ def test_a_resume_item_continues_the_same_session_in_its_own_log(tmp_path: pathl
     assert "--resume" in first["cmd"] and first["cmd"][first["cmd"].index("--resume") + 1] == sid and "--session-id" not in first["cmd"]
     assert first["cmd"][first["cmd"].index("-p") + 1] == ps.RESUME
     assert second["sid"] != sid and "--session-id" in second["cmd"]
+
+
+# Feature 274: the write cap (D2), the continuation (D3) and the key cap's variable (D4), SC-001.
+
+OVER = "# Brief\n\n**Do not edit:** fields 010-900\n\n## Your items\n" + "".join(f"- B{n} question {n}\n" for n in range(10, 15))
+
+
+def test_an_over_cap_brief_is_refused_at_launch_before_anything_starts(tmp_path: pathlib.Path, capsys, monkeypatch) -> None:
+    monkeypatch.delenv("WRITE_CAP_OK", raising=False)
+    ok, big, empty = tmp_path / "g1-write.md", tmp_path / "g2-write.md", tmp_path / "g3.md"
+    ok.write_text(BRIEF, encoding="utf-8")
+    big.write_text(OVER, encoding="utf-8")
+    empty.write_text("# a brief that assigns nothing\n", encoding="utf-8")
+    started: list[object] = []
+    monkeypatch.setattr(ps.subprocess, "Popen", lambda *a, **k: started.append(a))
+    assert ps.main([str(tmp_path), "n", "/p", "--", str(ok), str(big)]) == 2
+    err = capsys.readouterr().err
+    assert "REFUSED, nothing started" in err and "assigns 5 questions" in err and "g2a-write.md, g2b-write.md" in err and "WRITE_CAP_OK" in err
+    assert not started and not (tmp_path / ".git" / "page-sessions").exists(), "nothing detached, no session made"
+    assert ps.main([str(tmp_path), "n", "/p", "--", str(empty)]) == 2 and "assigns nothing" in capsys.readouterr().err
+    assert ps.main([str(tmp_path), "n", "/p", "--", str(tmp_path / "gone.md")]) == 2 and "no such brief" in capsys.readouterr().err
+
+
+def test_write_cap_ok_with_a_reason_lets_a_brief_through_and_is_logged(tmp_path: pathlib.Path, monkeypatch, capsys) -> None:
+    import json
+
+    big = tmp_path / "g2-write.md"
+    big.write_text(OVER, encoding="utf-8")
+    monkeypatch.setenv("GUARD_LOG_DIR", str(tmp_path / "log"))
+    monkeypatch.setenv("WRITE_CAP_OK", "ok")
+    with pytest.raises(ps.Refused, match="needs a REASON"):
+        ps.plan(str(tmp_path), "n", "/p", [], [str(big)])
+    monkeypatch.setenv("WRITE_CAP_OK", "one question split into five small parts")
+    (item,) = ps.plan(str(tmp_path), "n", "/p", [], [str(big)])
+    assert item["write"] is True
+    entries = [json.loads(f.read_text(encoding="utf-8")) for f in sorted((tmp_path / "log").glob("*.json"))]
+    assert [(e["guard"], e["event"], e["rule"]) for e in entries] == [("page-session", "blocked", "WRITE_CAP_OK-no-reason"), ("page-session", "escaped", "write-cap")]
+    assert entries[1]["detail"] == "one question split into five small parts" and entries[1]["context"]["brief"] == str(big)
+
+
+def test_every_exempt_kind_runs_and_only_a_write_session_is_told_the_key_cap(tmp_path: pathlib.Path, monkeypatch) -> None:
+    briefs = []
+    for kind in ps._brief_load.KINDS:
+        b = tmp_path / f"{kind}.md"
+        b.write_text(f"<!-- page-load: kind={kind} -->\n{OVER}", encoding="utf-8")
+        briefs.append(str(b))
+    (tmp_path / "w.md").write_text(BRIEF, encoding="utf-8")
+    queue = ps.plan(str(tmp_path), "n", "/p", [], [*briefs, str(tmp_path / "w.md")])
+    assert [q["write"] for q in queue] == [False, False, False, False, True]
+    envs: list[dict] = []
+    monkeypatch.setattr(ps.subprocess, "run", lambda cmd, **kw: (envs.append(kw["env"]), ps.subprocess.CompletedProcess(cmd, 0))[1])
+    monkeypatch.setenv("L7R_KEY_CAP", "99")
+    sids = [q["sid"] for q in queue]
+    ps.work(str(tmp_path), "n", [], queue, str(tmp_path / "run.log"))
+    assert [e.get("L7R_KEY_CAP") for e in envs] == [None, None, None, None, str(ps.KEY_CAP)], "a check session is not capped"
+    assert [e["L7R_PAGE_SESSION"] for e in envs] == sids
+    assert all(e["L7R_CONTINUE"] == str(tmp_path / ".git" / "page-sessions" / s / "continue.md") for e, s in zip(envs, sids, strict=True))
+
+
+def test_a_then_step_printing_an_over_cap_brief_stops_the_queue(tmp_path: pathlib.Path, monkeypatch) -> None:
+    (tmp_path / ".git" / "page-sessions").mkdir(parents=True)
+    big = tmp_path / "late-write.md"
+    big.write_text(OVER, encoding="utf-8")
+    step = tmp_path / "plan.sh"
+    ran: list[str] = []
+    monkeypatch.setattr(ps.subprocess, "run", lambda cmd, **kw: (ran.append(cmd[0]), ps.subprocess.CompletedProcess(cmd, 0, stdout=f"{big}\n"))[1])
+    monkeypatch.delenv("WRITE_CAP_OK", raising=False)
+    later = ps.new_item(str(tmp_path), "n", [], str(big), True)
+    run_log = tmp_path / "run.log"
+    ps.work(str(tmp_path), "n", [], [{"then": str(step)}, later], str(run_log))
+    lines = run_log.read_text(encoding="utf-8").splitlines()
+    assert ran == [str(step)], "nothing after the refusal runs"
+    assert lines[0].startswith("STOPPED late-write.md: it assigns 5 questions") and lines[-1] == "ALL DONE", lines
+
+
+def test_a_continuation_a_session_leaves_is_queued_next_before_the_checks(tmp_path: pathlib.Path, monkeypatch) -> None:
+    """D3: a write session that hits the key cap writes its unreached items to $L7R_CONTINUE and stops; the runner
+    queues that brief next - before the group's `then:` checks step - counted like any brief, still a write session."""
+    w = tmp_path / "g1-write.md"
+    w.write_text(BRIEF, encoding="utf-8")
+    step = tmp_path / "checks.sh"
+    (first,) = ps.plan(str(tmp_path), "n", "/p", [], [str(w)])
+    order: list[str] = []
+
+    def fake_run(cmd, **kw):  # noqa: ANN001, ANN003, ANN202
+        if cmd[0] == str(step):
+            order.append("then")
+            return ps.subprocess.CompletedProcess(cmd, 0, stdout="")
+        env = kw["env"]
+        order.append(env["L7R_PAGE_SESSION"])
+        if env["L7R_PAGE_SESSION"] == first["sid"]:
+            pathlib.Path(env["L7R_CONTINUE"]).write_text("# Brief (continued)\n\n## Your items\n- B2 the one not reached\n", encoding="utf-8")
+        assert env["L7R_KEY_CAP"] == str(ps.KEY_CAP), "a continuation of a write session is capped too"
+        return ps.subprocess.CompletedProcess(cmd, 0)
+
+    monkeypatch.setattr(ps.subprocess, "run", fake_run)
+    run_log = tmp_path / "run.log"
+    ps.work(str(tmp_path), "n", [], [first, {"then": str(step)}], str(run_log))
+    assert len(order) == 3 and order[0] == first["sid"] and order[2] == "then", order
+    log = run_log.read_text(encoding="utf-8")
+    assert f"continued {first['sid']} -> {order[1]}" in log
+    index = (tmp_path / ".git" / "page-sessions" / "index.txt").read_text(encoding="utf-8")
+    assert f"{order[1]} {tmp_path}/.git/page-sessions/{first['sid']}/continue.md" in index
+
+
+def test_a_continuation_over_the_cap_stops_the_queue(tmp_path: pathlib.Path, monkeypatch) -> None:
+    monkeypatch.delenv("WRITE_CAP_OK", raising=False)
+    w = tmp_path / "g1-write.md"
+    w.write_text(BRIEF, encoding="utf-8")
+    (first,) = ps.plan(str(tmp_path), "n", "/p", [], [str(w)])
+    monkeypatch.setattr(ps.subprocess, "run", lambda cmd, **kw: (pathlib.Path(kw["env"]["L7R_CONTINUE"]).write_text(OVER, encoding="utf-8"), ps.subprocess.CompletedProcess(cmd, 0))[1])
+    run_log = tmp_path / "run.log"
+    ps.work(str(tmp_path), "n", [], [first, {"then": "/never/run"}], str(run_log))
+    lines = run_log.read_text(encoding="utf-8").splitlines()
+    assert lines[-2].startswith("STOPPED continue.md: it assigns 5") and lines[-1] == "ALL DONE", lines

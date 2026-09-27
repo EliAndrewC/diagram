@@ -96,3 +96,37 @@ def test_a_key_another_clone_holds_is_refused(tmp_path, capsys) -> None:
     assert rp.main(["glossary", "x150", "--root", str(a)]) == 2, "b's file, never reserved through the ledger, is refused too"
     (b / rp.DIRS["glossary"] / next(p.name for p in (b / rp.DIRS["glossary"]).glob("*-plinth.json"))).unlink()
     assert rp.held_elsewhere("glossary", "plinth", b, mirror) == "", "a clone's own reservation never blocks it"
+
+
+def test_a_write_session_s_eleventh_registry_key_is_refused_with_the_continuation(tmp_path, monkeypatch, capsys) -> None:
+    """Feature 274 D4 (SC-001): the runner tells a WRITE session its id and the cap; the eleventh registry key is refused
+    with the continuation instructions, a glossary term is not, `KEY_CAP_OK` with a reason passes (logged), and a session
+    without the cap - a check session - is never refused."""
+    mirror, a = _world(tmp_path)
+    monkeypatch.setenv("GUARD_LOG_DIR", str(tmp_path / "log"))
+    monkeypatch.setenv("L7R_PAGE_SESSION", "sid-w")
+    monkeypatch.setenv("L7R_KEY_CAP", "10")
+    monkeypatch.setenv("L7R_CONTINUE", "/x/continue.md")
+    monkeypatch.delenv("KEY_CAP_OK", raising=False)
+    for n in range(10):
+        rp.reserve("registry", f"key-{n}", a)
+    rows = [json.loads(ln) for ln in (mirror / ".specify" / rp.LEDGER).read_text(encoding="utf-8").splitlines()]
+    assert {r["session"] for r in rows} == {"sid-w"} and rp.session_keys(mirror, "sid-w") == 10
+    assert rp.main(["registry", "key-10", "--root", str(a)]) == 2
+    err = capsys.readouterr().err
+    assert "reserved 10 new registry keys" in err and "/x/continue.md" in err and "## Your items" in err and "KEY_CAP_OK" in err
+    assert rp.reserve("glossary", "a term", a).name.endswith("-a term.json"), "glossary terms are not capped"
+    monkeypatch.setenv("KEY_CAP_OK", "x")
+    assert rp.main(["registry", "key-10", "--root", str(a)]) == 2 and "needs a REASON" in capsys.readouterr().err
+    monkeypatch.setenv("KEY_CAP_OK", "one source per shrine is the question")
+    assert rp.main(["registry", "key-10", "--root", str(a)]) == 0
+    logged = [json.loads(f.read_text(encoding="utf-8")) for f in sorted((tmp_path / "log").glob("*.json"))]
+    assert [(e["guard"], e["event"], e["rule"]) for e in logged][-1] == ("reserve", "escaped", "key-cap")
+    monkeypatch.delenv("KEY_CAP_OK")
+    monkeypatch.setenv("L7R_PAGE_SESSION", "sid-other")
+    assert rp.main(["registry", "key-11", "--root", str(a)]) == 0, "the cap is per session"
+    monkeypatch.setenv("L7R_PAGE_SESSION", "sid-w")
+    monkeypatch.delenv("L7R_KEY_CAP")
+    assert rp.main(["registry", "key-12", "--root", str(a)]) == 0, "a session the runner did not cap (a check session) is not refused"
+    (mirror / ".specify" / rp.LEDGER).write_text("not json\n", encoding="utf-8")
+    assert rp.session_keys(mirror, "sid-w") == 0

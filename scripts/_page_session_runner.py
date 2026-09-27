@@ -12,7 +12,18 @@ handoff its write session leaves (feature 250 R3, recommendation 2). Every sessi
 THE FLOOR (feature 250 R3, recommendation 1). A page session is launched with only the tools research uses, no
 MCP servers, no skill listing, and - in a clone - without the MIRROR's root CLAUDE.md, which sits above every
 clone and otherwise loads beside the clone's own copy. Measured on a probe, 2026-09-26: the first turn of a
-page session fell from 40,280 tokens to 21,267; every turn carries that floor.
+page session fell from 40,280 tokens to 21,267; every turn carries that floor. Feature 274 (D6) lowers it again: the
+clone's OWN root CLAUDE.md is excluded too (about 5,200 tokens a turn, most of it spec-kit, the gate and the guard
+table, which a research session never uses), and `container-scripts/page-session-rules.md` - the rules a research
+session acts on - is appended after the standing authorizations in one `--append-system-prompt`.
+
+THE WRITE CAP (feature 274 D2, D3; research R1: a write session's cost follows its turn count, r = 0.92, and grows
+roughly with the square of its length). Every brief is counted by `_brief_load.py` before its session starts - the
+ones listed at launch before anything detaches (a refusal exits 2), the ones a `then:` step prints when it runs (a
+refusal writes `STOPPED <brief>: <reason>` and ends the queue, never a silent skip). `WRITE_CAP_OK='<reason>'` lets a
+brief through, logged. A write session (a brief declaring no exempt kind) is told `L7R_KEY_CAP`, which `make reserve`
+enforces; every session is told its id (`L7R_PAGE_SESSION`) and where to leave a continuation (`L7R_CONTINUE`), and a
+brief left there is queued next - before the group's `then:` checks step, so the checks see both sessions' handoff.
 """
 
 from __future__ import annotations
@@ -27,21 +38,72 @@ import sys
 import time
 import uuid
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import _brief_load  # noqa: E402
+import _escape_log  # noqa: E402
+
 PROMPT = ("You are a fresh session started to do the work ONE brief describes. Read {brief} first, and do what it says, "
           "end to end and unattended. Commit in this clone as you finish each part; never run the stop-work push. When the "
           "brief's work is done, or it tells you to stop, write the one-paragraph summary it asks for and stop.")
 
 TOOLS = "Bash,Read,Edit,Write,Grep,Glob,Agent,WebFetch,WebSearch"
+KEY_CAP = 10  # new registry keys a write session may reserve (feature 274 FR-001; `reserve-prefix.py` enforces it)
+PROMPT_FILES = ("container-scripts/append-system-prompt.md", "container-scripts/page-session-rules.md")
+
+
+class Refused(Exception):
+    """A brief the write cap does not admit."""
 
 
 def floor_flags(root: str) -> list[str]:
     """The launch flags that lower a page session's fixed floor, and the reason for each in the docstring above."""
     flags = ["--disable-slash-commands", "--strict-mcp-config", "--tools", TOOLS]
-    parts = root.rstrip("/").split("/")
+    root = root.rstrip("/")
+    excludes = [f"{root}/CLAUDE.md"]
+    parts = root.split("/")
     if ".clones" in parts:
-        mirror = "/".join(parts[: parts.index(".clones")])
-        flags += ["--settings", json.dumps({"claudeMdExcludes": [f"{mirror}/CLAUDE.md"]})]
-    return flags
+        excludes.insert(0, "/".join(parts[: parts.index(".clones")]) + "/CLAUDE.md")
+    flags += ["--settings", json.dumps({"claudeMdExcludes": excludes})]
+    appended = "\n\n".join(t for f in PROMPT_FILES if (t := _read(os.path.join(root, f)).strip()))
+    return flags + (["--append-system-prompt", appended] if appended else [])
+
+
+def record_of(root: str) -> pathlib.Path:
+    return pathlib.Path(root) / ".claude" / "skills" / "diagram" / "research"
+
+
+def admit(root: str, brief: str) -> bool:
+    """Whether the brief is a WRITE session's (it declares no exempt kind); raises `Refused` when the cap refuses it
+    and no `WRITE_CAP_OK` with a reason lets it through."""
+    if not os.path.isfile(brief):
+        raise Refused(f"{brief}: no such brief")
+    text = _read(brief)
+    why = _brief_load.refusal(pathlib.Path(brief), text, record_of(root))
+    if why:
+        try:
+            escaped = _escape_log.escape("WRITE_CAP_OK", "page-session", "write-cap", {"brief": brief, "why": why[:300]})
+        except _escape_log.NoReason as e:
+            raise Refused(f"{os.path.basename(brief)}: {e}") from None
+        if not escaped:
+            raise Refused(f"{os.path.basename(brief)}: {why}")
+    return not _brief_load.declared(text)
+
+
+def new_item(root: str, name: str, extra: list[str], brief: str, write: bool) -> dict:
+    """A fresh session for `brief`: its id, its log directory (made), its command."""
+    sid = str(uuid.uuid4())
+    log = os.path.join(root, ".git", "page-sessions", sid)
+    os.makedirs(log)
+    return {"sid": sid, "log": log, "brief": brief, "cmd": command(root, name, extra, brief, sid), "write": write}
+
+
+def session_env(env: dict[str, str], item: dict) -> dict[str, str]:
+    """The queue's environment for one session: its id, its continuation path, and the key cap if it writes."""
+    out = {k: v for k, v in env.items() if k != "L7R_KEY_CAP"}
+    out |= {"L7R_PAGE_SESSION": item["sid"], "L7R_CONTINUE": os.path.join(item["log"], "continue.md")}
+    if item.get("write"):
+        out["L7R_KEY_CAP"] = str(KEY_CAP)
+    return out
 
 
 def command(root: str, name: str, extra: list[str], brief: str, sid: str) -> list[str]:
@@ -50,7 +112,10 @@ def command(root: str, name: str, extra: list[str], brief: str, sid: str) -> lis
 
 
 def plan(root: str, name: str, projects: str, extra: list[str], items: list[str]) -> list[dict]:
-    """The queue: `{"sid", "log", "cmd"}` per brief (its log directory made), `{"then": script}` per late step."""
+    """The queue: `{"sid", "log", "cmd", "write"}` per brief (its log directory made), `{"then": script}` per late
+    step. Every new brief is admitted first, so a refusal (`Refused`) leaves nothing made. A `resume:` is a session
+    already started, so it is not counted again."""
+    writes = {item: admit(root, item) for item in items if not item.startswith(("then:", "resume:"))}
     queue: list[dict] = []
     for item in items:
         if item.startswith("resume:"):
@@ -60,17 +125,16 @@ def plan(root: str, name: str, projects: str, extra: list[str], items: list[str]
             sid, brief = item[7:].split(":", 1)
             log = os.path.join(root, ".git", "page-sessions", sid)
             os.makedirs(log, exist_ok=True)
-            queue.append({"sid": sid, "log": log, "brief": brief, "cmd": resume_command(command(root, name, extra, brief, sid), sid)})
+            write = not _brief_load.declared(_read(brief))
+            queue.append({"sid": sid, "log": log, "brief": brief, "cmd": resume_command(command(root, name, extra, brief, sid), sid), "write": write})
             print(f"page-session: resume {sid} ({os.path.basename(brief)})")
             continue
         if item.startswith("then:"):
             queue.append({"then": os.path.realpath(item[5:])})
             print(f"page-session: then {os.path.basename(item[5:])} - the sessions it plans are listed in .git/page-sessions/index.txt")
             continue
-        sid = str(uuid.uuid4())
-        log = os.path.join(root, ".git", "page-sessions", sid)
-        os.makedirs(log)
-        queue.append({"sid": sid, "log": log, "brief": item, "cmd": command(root, name, extra, item, sid)})
+        queue.append(new_item(root, name, extra, item, writes[item]))
+        sid, log = queue[-1]["sid"], queue[-1]["log"]
         print(f"page-session: {os.path.basename(item)}\n  session:    {sid}\n  transcript: {projects}/{sid}.jsonl\n  log:        {log}")
     return queue
 
@@ -113,12 +177,13 @@ def work(root: str, name: str, extra: list[str], queue: list[dict], run_log: str
         item = queue.pop(0)
         if "then" in item:
             got = subprocess.run([item["then"]], cwd=root, capture_output=True, text=True, check=False)
-            late = []
-            for brief in (ln.strip() for ln in got.stdout.splitlines() if ln.strip()):
-                sid = str(uuid.uuid4())
-                log = os.path.join(root, ".git", "page-sessions", sid)
-                os.makedirs(log)
-                late.append({"sid": sid, "log": log, "brief": brief, "cmd": command(root, name, extra, brief, sid)})
+            briefs = [ln.strip() for ln in got.stdout.splitlines() if ln.strip()]
+            try:
+                late = [new_item(root, name, extra, b, write) for b, write in [(b, admit(root, b)) for b in briefs]]
+            except Refused as e:
+                runlog.write(f"STOPPED {e}\n")
+                queue.clear()
+                continue
             queue[:0] = late
             runlog.write(f"planned {len(late)} session(s) from {os.path.basename(item['then'])}\n")
             continue
@@ -128,7 +193,7 @@ def work(root: str, name: str, extra: list[str], queue: list[dict], run_log: str
         cmd = item["cmd"]
         for attempt in range(RETRIES + 1):
             with open(item["log"] + "/result.json", "w") as out, open(item["log"] + "/stderr.txt", "w") as err:
-                rc = subprocess.run(cmd, cwd=root, env=env, stdin=subprocess.DEVNULL, stdout=out, stderr=err, check=False).returncode
+                rc = subprocess.run(cmd, cwd=root, env=session_env(env, item), stdin=subprocess.DEVNULL, stdout=out, stderr=err, check=False).returncode
             text = _read(item["log"] + "/result.json") + _read(item["log"] + "/stderr.txt")
             if not failed(rc, text) or attempt == RETRIES:
                 break
@@ -137,6 +202,16 @@ def work(root: str, name: str, extra: list[str], queue: list[dict], run_log: str
             time.sleep(wait)
             cmd = resume_command(item["cmd"], item["sid"])
         runlog.write(f"ended {item['sid']} rc={rc}\n")
+        cont = os.path.join(item["log"], "continue.md")
+        if os.path.isfile(cont):
+            try:
+                nxt = new_item(root, name, extra, cont, admit(root, cont) or bool(item.get("write")))
+            except Refused as e:
+                runlog.write(f"STOPPED {e}\n")
+                queue.clear()
+                continue
+            queue.insert(0, nxt)
+            runlog.write(f"continued {item['sid']} -> {nxt['sid']}\n")
     runlog.write("ALL DONE\n")
     runlog.close()
 
@@ -208,7 +283,11 @@ def main(argv: list[str]) -> int:
     root, name, projects, *rest = argv
     cut = rest.index("--")
     extra, items = rest[:cut], rest[cut + 1:]
-    queue = plan(root, name, projects, extra, items)
+    try:
+        queue = plan(root, name, projects, extra, items)
+    except Refused as e:
+        print(f"page-session: REFUSED, nothing started - {e}", file=sys.stderr)
+        return 2
     run_log = os.path.join(root, ".git", "page-sessions", f"run-{uuid.uuid4().hex[:8]}.log")
     open(run_log, "w").close()  # it exists before the wait starts, so the wait never races its creation
     subprocess.Popen([sys.executable, os.path.abspath(__file__), "--work", root, name, json.dumps(extra), json.dumps(queue), run_log],

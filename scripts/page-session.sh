@@ -11,7 +11,7 @@
 #
 # WHAT IT DOES. Starts `claude -p` in this clone once per brief, in order, each named like this clone (so the
 # clone-sync hooks route it here), with the project's appended system prompt (the review agents' standing
-# authorization, as the `claude()` wrapper in ~/.bashrc adds it), and a session id chosen here so every
+# authorization, as the `claude()` wrapper in ~/.bashrc adds it, then the slim page-session rules), and a session id chosen here so every
 # transcript is known before it starts. The runner is DETACHED and this returns at once, printing each id,
 # transcript and log directory; `<log>/result.json` is written when that session ends, and the next begins.
 #
@@ -27,8 +27,9 @@ BRIEFS=${1:-}; NAME=${2:-$(basename "$ROOT")}; MODEL=${3:-}
 [ -n "$BRIEFS" ] || { echo "page-session: BRIEF=<file> (or several, space-separated, run one after another) is required" >&2; exit 2; }
 for b in $BRIEFS; do f=${b#then:}; case $f in resume:*) f=${f#resume:*:};; esac; [ -f "$f" ] || { echo "page-session: no brief or step at $f" >&2; exit 2; }; done
 command -v claude >/dev/null || { echo "page-session: no claude on PATH" >&2; exit 2; }
-ASP="$ROOT/container-scripts/append-system-prompt.md"
-EXTRA=(); [ -r "$ASP" ] && EXTRA+=(--append-system-prompt "$(cat "$ASP")"); [ -n "$MODEL" ] && EXTRA+=(--model "$MODEL")
+# The appended system prompt - the standing authorization, then the slim rules file in place of the root CLAUDE.md
+# (feature 274 D6) - is added by the runner's floor_flags, where its test reads it.
+EXTRA=(); [ -n "$MODEL" ] && EXTRA+=(--model "$MODEL")
 MANGLED=$(printf '%s' "$ROOT" | sed 's#[/.]#-#g')
 # shellcheck disable=SC2086 # BRIEFS is a space-separated list on purpose
 exec python3 "$ROOT/scripts/_page_session_runner.py" "$ROOT" "$NAME" "$HOME/.claude/projects/$MANGLED" "${EXTRA[@]}" -- $BRIEFS

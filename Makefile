@@ -22,8 +22,9 @@ help:
 # a stale forward resolves, forwards into the skill, and dies naming the WRONG file - the exact
 # second-order failure the comment above says this explicit list exists to prevent.
 # GUARD_EDIT_OK: feature 197 - `claim` forwards too; it is the specify step's first command and runs from the clone root.
+# GUARD_EDIT_OK: feature 274 D5 - `lines` and `append` forward too: a page session reads and writes its coordination files from wherever it stands.
 FORWARD := done quick maps reference hooks-test tooling durations page-check tick claim \
-           switches ci-status ci-off ci-on perf-report perf-review audit
+           switches ci-status ci-off ci-on perf-report perf-review audit lines append
 # GUARD_EDIT_OK: feature 197 - FIXING A FORWARD THAT BROKE ON CORRECT WORK (Principle XIV, found while ticking
 # this feature's own tasks). `$(MAKEOVERRIDES)` expanded to the raw `NOTE=<text>` and was pasted UNQUOTED into
 # the recipe, so `make tick NOTE="green; every case"` from the repository root ran `tick NOTE=green` and then
