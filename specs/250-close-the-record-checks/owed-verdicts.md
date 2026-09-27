@@ -32,3 +32,5 @@
 - Persimmon (homesteads SECTION=218): REWRITTEN - IN-STEP on first check, but the Why: now keeps the source's hedge on Miyazaki ("is said to have urged")
 - VillageLane (homesteads SECTION=080): IN-STEP - every read/unread split in the Note: still matches 080
 - Woodpile (homesteads SECTION=212): REWRITTEN - the guessed wall is now the kura's outer wall, as the section names it
+- IrrigationDitch (fields SECTION=070): IN-STEP - the comb layout, taper, paddy-to-paddy watering, the sparse-net reading and the Kishu note all still stand; the section's changes are record maintenance
+- Pond (fields SECTION=070): IN-STEP - the section's changes are in the Distribution and Layout paragraphs, and the Pond paragraph still carries every claim and the Note
