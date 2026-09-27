@@ -671,9 +671,9 @@
   "verifies": "F1",
   "subject": "kuwabata",
   "round": "0ae309f0",
-  "value": 12540,
+  "value": 18448,
   "unit": "sq ft",
-  "quantity": "ground inside the houses' hull grown by the scrub's 44 ft margin that the scrub may now take - every farmstead's own grown outline and each pair's within 140 ft stay kept out (farmstead_keepouts), where the whole grown hull (232,668 sq ft) was before and a 240 x 270 ft wedge of it drew bare; on the render the scrub scatters through the gaps between the farmsteads, no bare wedge",
+  "quantity": "ground inside the houses' hull grown by the scrub's 44 ft margin that the scrub may now take - every farmstead's own grown outline and each pair's within 140 ft stay kept out (farmstead_keepouts), where the whole grown hull (253,665 sq ft) was before and a 240 x 270 ft wedge of it drew bare; on the render the scrub scatters through the gaps between the farmsteads, no bare wedge",
   "source": "pool/hamlets/kuwabata/kuwabata.json houses; l7r/diagram/settlement/land/cover.py farmstead_keepouts",
   "command": "make -C .claude/skills/diagram test-file FILE=tests/settlement/test_hinterland_cover.py"
  },
@@ -691,9 +691,9 @@
   "verifies": "F1",
   "subject": "mizuguchi",
   "round": "0ae309f0",
-  "value": 1121,
+  "value": 1236,
   "unit": "ft",
-  "quantity": "the westernmost farmhouse's distance from the canvas's west edge (34-47 ft in the round): a wind-facing seat whose belt band falls more than a fifth off the canvas is only a fallback now, and the houses stand north of the brook with the belt west of them on open ground (211 clumps)",
+  "quantity": "the westernmost farmhouse's distance from the canvas's west edge (34-47 ft in the round): a wind-facing seat whose belt band falls more than a fifth off the canvas is only a fallback now, and the houses stand north of the brook with the belt west of them on open ground (189 clumps)",
   "source": "pool/hamlets/mizuguchi/mizuguchi.json houses, village_groves[role=windbreak]",
   "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
  },
@@ -703,7 +703,7 @@
   "round": "0ae309f0",
   "value": 0,
   "unit": "routes",
-  "quantity": "households' ways out that miss the notice board, which stands 15 ft from the connector's handover at the canvas top (202 ft away, missing 2, before the board could stand within 88 ft of the top edge)",
+  "quantity": "households' ways out that miss the notice board, which stands 16 ft from the connector's handover at the canvas top (202 ft away, missing 2, before the board could stand within 88 ft of the top edge)",
   "source": "pool/hamlets/mizuguchi/mizuguchi.json kosatsuba, lanes",
   "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
  },
@@ -713,7 +713,7 @@
   "round": "0ae309f0",
   "value": 72,
   "unit": "ft",
-  "quantity": "the median distance from a farmhouse to its nearest dry plot (658 ft in the round, by straight line to plot centers here): nine of fifteen homesteads carry a homestead field against their lee or flank side, and the canal hem stays across the rice",
+  "quantity": "the median distance from a farmhouse to its nearest dry plot (658 ft in the round, by straight line to plot centers here): ten of fifteen homesteads carry a homestead field against their lee or flank side, and the canal hem stays across the rice",
   "source": "pool/hamlets/inashiro/inashiro.json houses, dry_plots, meta.homestead_fields",
   "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
  },
@@ -721,9 +721,9 @@
   "verifies": "F2",
   "subject": "inashiro",
   "round": "0ae309f0",
-  "value": 3,
+  "value": 2,
   "unit": "parcels",
-  "quantity": "woodland parcels across the field from the cluster's middle, of 3: unchanged - no seat on the houses' side qualifies at any size (the predicted frame begins 100 ft west of the houses and the in-frame ground there lies between their keep-out and the field's set-back), so the new near-side preference falls back",
+  "quantity": "woodland parcels across the field from the cluster's middle, of 3 (3 of 3 in the round): no seat on the houses' side qualifies inside the predicted frame at any size, so the new near-side preference falls back; on this roll one parcel stands on the houses' side of the field",
   "source": "pool/hamlets/inashiro/inashiro.json commons[role=woodland], fields[0].outline",
   "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_hinterland.py"
  },
@@ -731,9 +731,9 @@
   "verifies": "F1",
   "subject": "inashiro",
   "round": "0ae309f0",
-  "value": 2.19,
+  "value": 2.0,
   "unit": "aspect",
-  "quantity": "Inashiro's drawn cluster aspect, its rolled crescent honored (1.62 and unhonored before the front row crossed the brook; main 4.07); Kuwabata's round 1.99 honored as on main, Mizuguchi's round 1.05 newly honored (unhonored on main), Kashikawa's and Sawada's unhonored as on main",
+  "quantity": "Inashiro's drawn cluster aspect, its rolled crescent honored (1.62 and unhonored before the front row crossed the brook; main 4.07); Kuwabata's round 1.73 honored as on main, Mizuguchi's round 1.93 newly honored (unhonored on main), Kashikawa's and Sawada's unhonored as on main",
   "source": "pool/hamlets/*/*.json meta.cluster_aspect_drawn, cluster_shape, cluster_shape_unhonored",
   "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
  },
@@ -758,9 +758,9 @@
   "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
  },
  "pool-field-to-houses-arc": {
-  "value": 130,
+  "value": 127,
   "unit": "degrees",
-  "quantity": "the arc the five pool hamlets' field-to-houses bearings span (compass, from each field outline's mean vertex to the houses' middle): 249 (Sawada), 311 (Inashiro), 326 (Kashikawa), 354 (Kuwabata), 19 (Mizuguchi), from 249 through north to 19; on main 69, 74, 157, 203 and 353, round the whole compass - the pool's sameness under a wind that chooses the side, observed 2026-09-27",
+  "quantity": "the arc the five pool hamlets' field-to-houses bearings span (compass, from each field outline's mean vertex to the houses' middle): 249 (Sawada), 314 (Inashiro), 325 (Kashikawa), 354 (Kuwabata), 16 (Mizuguchi), from 249 through north to 16; on main 69, 74, 157, 203 and 353, round the whole compass - the pool's sameness under a wind that chooses the side, observed 2026-09-27",
   "source": "pool/hamlets/*/*.json fields[].outline, houses; main's from the worktree at 7f283feb",
   "command": "python3 specs/261-northwest-wind-by-default/measure.py"
  }

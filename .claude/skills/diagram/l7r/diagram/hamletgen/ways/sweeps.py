@@ -355,7 +355,30 @@ def _link_home_bank(s: Settlement, plan: Any, hard: list[Poly], fabric: list[tup
         return on_way and sum(1 for a, b in segs if segments_cross(c, mid, a, b)) % 2 == 0
 
     _serve_stragglers(s, plan, hard, fabric, [*water, *segs], only=excursions, seg_ok=home)
-    return len(s.M.get("lanes") or []) - before
+    laid = len(s.M.get("lanes") or []) - before
+    if laid:
+        # ...AND THE PLANKS IT NO LONGER NEEDS GO (Kashikawa, feature 261): the new way on the home bank stood 39 ft from the
+        # door and so did the old lane over the brook, and the walker took the old one. A lane that ends by a re-served
+        # house and crosses the brook is dropped where every house it serves is served by the rest.
+        s.drop_lanes(excursion_lanes(s.M.get("lanes") or [], [(float(h["x"]), float(h["y"])) for h in excursions], [(float(h["x"]), float(h["y"])) for h in houses], segs))
+    return laid
+
+
+def excursion_lanes(lanes: Sequence[Mapping[str, Any]], served: Sequence[Pt], houses: Sequence[Pt], brook: Sequence[tuple[Pt, Pt]]) -> list[int]:
+    """The lanes to drop after a home-bank re-serve (`_link_home_bank`): not the connector, an end within `_REACH_FT` of a
+    re-served house, crossing the brook, and serving no house (within `_SERVE_FT`) that the other lanes do not serve."""
+    ways = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
+    drop: list[int] = []
+    for i, (ln, w) in enumerate(zip(lanes, ways, strict=True)):
+        if ln.get("connector") or len(w) < 2 or not any(math.dist(e, h) <= _REACH_FT for e in (w[0], w[-1]) for h in served):
+            continue
+        if not any(segments_cross(a, b, c, d) for a, b in zip(w, w[1:], strict=False) for c, d in brook):
+            continue
+        rest = [sg for j, o in enumerate(ways) if j != i and j not in drop for sg in zip(o, o[1:], strict=False)]
+        mine = [h for h in houses if min(seg_dist(h[0], h[1], a, b) for a, b in zip(w, w[1:], strict=False)) <= _SERVE_FT]
+        if all(min((seg_dist(h[0], h[1], a, b) for a, b in rest), default=1e9) <= _SERVE_FT for h in mine):
+            drop.append(i)
+    return drop
 
 
 _FREE_STUB_FT = 20.0  # ft: a free end's last leg this short, past a kink, is a stub the lane does not need

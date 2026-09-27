@@ -19,6 +19,7 @@ from l7r.diagram.interactive.classes import ANNOUNCED, CLASSES, NOT_HIGHLIGHTED,
 # in the spec table). A row added to the spec without an entry here fails this test; an entry here
 # the spec does not name fails it too.
 SPEC_CLASSES = [
+    "alder",  # feature 261: the belt's trees where it runs into the marsh
     "farmhouse",
     "storage shed",
     "byre",

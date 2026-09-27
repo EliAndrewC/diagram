@@ -85,7 +85,15 @@ def ring_clear_of_items(ring: Sequence[Pt], items: Sequence[tuple[float, float, 
 
 
 def stage_homestead_fields(s: Settlement, plan: SitePlan) -> None:
-    """One dry plot against each homestead that has room for one (module docstring); the count is recorded."""
+    """The homestead fields.
+
+    One dry plot against each homestead that has room for one, on its lee or flank side, fitted to the lanes already
+    drawn (module docstring); the count is recorded.
+
+    Steps:
+        l7r.diagram.hamletgen.homesteads.fields.homestead_field_fits
+        l7r.diagram.hamletgen.homesteads.fields.draw_homestead_field
+    """
     rng = knob_rng(plan.spec.seed, "homestead_fields")
     lanes = [([(float(p[0]), float(p[1])) for p in ln["pts"]], float(ln.get("w") or 6) / 2 + HOMESTEAD_FIELD_LANE_GAP_FT) for ln in s.M.get("lanes") or [] if len(ln.get("pts") or []) >= 2]
     streams = [[(float(p[0]), float(p[1])) for p in st["poly"]] for st in s.M.get("streams") or [] if len(st.get("poly") or []) >= 2]

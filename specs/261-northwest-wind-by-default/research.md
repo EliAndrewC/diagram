@@ -231,13 +231,13 @@ measures of `tests/hamletgen/test_pool_261.py` and the records named in each row
 
 | finding | before | after |
 |---|---|---|
-| Kuwabata: a bare wedge inside the cluster, straight-edged | the whole houses' hull grown 44 ft kept from the scrub (232,668 sq ft), a 240 x 270 ft wedge of it bare | the scrub keeps off each farmstead and each near pair only; 12,540 sq ft of that hull opened to it, no bare wedge on the render (`m:kuwabata-r11-wedge`) |
+| Kuwabata: a bare wedge inside the cluster, straight-edged | the whole houses' hull grown 44 ft kept from the scrub (253,665 sq ft), a 240 x 270 ft wedge of it bare | the scrub keeps off each farmstead and each near pair only; 18,448 sq ft of that hull opened to it, no bare wedge on the render (`m:kuwabata-r11-wedge`) |
 | Sawada: the brook straight for most of its course on the page | 872 ft within 3.1 ft of a line, 70% | 380 of 1,240 ft, 31%; the other brook maps 17-23% (`m:sawada-r11-brook-straight`) |
-| Mizuguchi: the belt's footprint holding the front rank, houses 34-47 ft from the west edge | the seat scored its belt room and still won | a seat without belt room is a fallback; the westernmost house 1,121 ft from the edge (`m:mizuguchi-r11-belt-room`) |
-| Mizuguchi, after the re-seat: the board 202 ft from its handover | 2 of 12 ways out missed it | 15 ft from the handover, 0 missed (`m:mizuguchi-r11-board`) |
-| Inashiro: the dry plots across the rice from every house | median 658 ft | 72 ft: a homestead field against nine of fifteen steadings, the canal hem kept (`m:inashiro-r11-dry`) |
-| Inashiro: the rolled crescent drawn as a blob after the seat moved to the brook flank (a regression against main, found by the escalation-check) | 1.62, unhonored (main 4.07) | 2.19, honored; Kuwabata 1.99 and Mizuguchi 1.05 honored, Kashikawa and Sawada unhonored as on main (`m:inashiro-r11-shape`) |
-| Inashiro (questionable): the woodland across the rice | 3 of 3 parcels across the field | unchanged, 3 of 3 - no seat on the houses' side qualifies inside the predicted frame; the preference is in place and falls back (`m:inashiro-r11-woods`) |
+| Mizuguchi: the belt's footprint holding the front rank, houses 34-47 ft from the west edge | the seat scored its belt room and still won | a seat without belt room is a fallback; the westernmost house 1,236 ft from the edge (`m:mizuguchi-r11-belt-room`) |
+| Mizuguchi, after the re-seat: the board 202 ft from its handover | 2 of 12 ways out missed it | 16 ft from the handover, 0 missed (`m:mizuguchi-r11-board`) |
+| Inashiro: the dry plots across the rice from every house | median 658 ft | 72 ft: a homestead field against ten of fifteen steadings, the canal hem kept (`m:inashiro-r11-dry`) |
+| Inashiro: the rolled crescent drawn as a blob after the seat moved to the brook flank (a regression against main, found by the escalation-check) | 1.62, unhonored (main 4.07) | 2.0, honored; Kuwabata 1.73 and Mizuguchi 1.93 honored, Kashikawa and Sawada unhonored as on main (`m:inashiro-r11-shape`) |
+| Inashiro (questionable): the woodland across the rice | 3 of 3 parcels across the field | 2 of 3 - no seat on the houses' side qualifies inside the predicted frame; the preference is in place and falls back (`m:inashiro-r11-woods`) |
 | Sawada (nitpick): an axis-aligned S-jog below the tap | the segment leaving the tap run 0.1 degrees off vertical | 0 segments within 1.6 degrees of an axis below any tap run; an approach leg on Inashiro (1.2 degrees, on main too) nudged as well (`m:sawada-r11-tap-axis`) |
 | Sawada (from the round before): the belt on the toe's reed edge | 70 of 201 belt clumps in the marsh, drawn as cedar and broadleaf | the same 70 drawn as alder, the record's woody stage at a reed edge (`m:sawada-r11-alder`) |
 

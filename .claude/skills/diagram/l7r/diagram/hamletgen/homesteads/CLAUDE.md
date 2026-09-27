@@ -13,4 +13,5 @@ Its modules are LAYERS, emitted bottom-up: every cross-module reference points b
 | `fixtures.py` (410) | what stands in a farmstead's yard - the privy/well/heap/coop pass, its weighted roll, and the two ownership and trunk probes it leans on |
 | `wells.py` (314) | the public wells - how many a settlement of this size wants, and the pass that seats them |
 | `stages.py` (334) | STAGES 5 and 6 - the homesteads themselves and what stands among them. Read this first |
+| `fields.py` | the homestead field (feature 261) - each household's own dry plot against its steading, laid after the lane web |
 | `__init__.py` | the composed surface only - the re-exports that keep every existing importer working. Never add logic here |

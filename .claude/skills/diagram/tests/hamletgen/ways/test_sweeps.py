@@ -592,6 +592,8 @@ def test_link_home_bank_serves_the_house_to_a_dry_shod_way_on_its_own_bank(monke
     monkeypatch.setattr(serve, "_serve_stragglers", fake)
     assert sweeps._link_home_bank(s, None, [], [], []) == 1
     assert asked["only"] == [s.M["houses"][0]]
+    kept = [[tuple(q) for q in ln["pts"]] for ln in s.M["lanes"]]
+    assert [(200.0, 250.0), (200.0, 400.0)] not in kept and [(0.0, 0.0), (0.0, 250.0)] in kept, "the plank it no longer needs is dropped"
     ok = asked["ok"]
     assert ok((200.0, 200.0), ((0.0, 100.0), (0.0, 120.0))), "the connector's own bank, reached dry-shod"
     assert not ok((200.0, 200.0), ((200.0, 360.0), (200.0, 380.0))), "across the brook"
@@ -608,3 +610,19 @@ def test_a_free_ends_stub_past_a_kink_is_taken_off() -> None:
     assert trim_free_stub(lane, [((118.0, -40.0), (118.0, 40.0))]) == lane, "the end stands on a way: a junction, not a stub"
     long = [(0.0, 0.0), (100.0, 0.0), (100.0, -20.0), (160.0, -40.0)]
     assert trim_free_stub(long, []) == long
+
+
+def test_an_excursion_lane_is_dropped_only_where_the_rest_still_serves_its_houses() -> None:
+    """`excursion_lanes` (feature 261, Kashikawa): a lane ending by a re-served house and crossing the brook goes when every
+    house it serves is served by the other lanes; it stays when it is some house's only way, when it does not cross the
+    brook, when it ends by no re-served house, and when it is the connector."""
+    from l7r.diagram.hamletgen.ways.sweeps import excursion_lanes
+
+    brook = [((-500.0, 300.0), (500.0, 300.0))]
+    over = {"pts": [[200.0, 250.0], [200.0, 400.0]]}
+    home = {"pts": [[200.0, 200.0], [0.0, 200.0]]}
+    assert excursion_lanes([over, home], [(200.0, 200.0)], [(200.0, 200.0)], brook) == [0]
+    assert excursion_lanes([over, home], [(200.0, 200.0)], [(200.0, 200.0), (200.0, 450.0)], brook) == [], "the far-bank house has no other way"
+    assert excursion_lanes([{"pts": [[200.0, 250.0], [200.0, 280.0]]}, home], [(200.0, 200.0)], [(200.0, 200.0)], brook) == [], "no plank"
+    assert excursion_lanes([over, home], [(900.0, 900.0)], [(200.0, 200.0)], brook) == [], "by no re-served house"
+    assert excursion_lanes([{**over, "connector": True}, home], [(200.0, 200.0)], [(200.0, 200.0)], brook) == []

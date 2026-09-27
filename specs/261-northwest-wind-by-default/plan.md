@@ -278,10 +278,15 @@ Measured before and after in research R10.
   alone, Mizuguchi's seat 34-47 ft from the west edge still won, because every other wind-facing margin had the brook
   across its band. Its houses now stand north of the brook with the belt west of them on open ground.
 - A front-row seat is pushed across a brook that runs between it and its field (`water_push`, beside `_ground_push`'s
-  outline push), and the row is offered every three quarters of a pitch (`FRONT_ROW_STEP`): with the houses seated
-  against the wind down Inashiro's brook flank, every front seat lay in the water's corridor, the cloud seated the rest,
-  and the rolled crescent drew 1.62:1 against main's 4.07. Half a pitch honored it too and pushed Kuwabata's round over
-  its ceiling (2.02); three quarters honors both and newly honors Mizuguchi's round.
+  outline push), and a seat the water moved tries a quarter pitch either way along the row when it collides: with the
+  houses seated against the wind down Inashiro's brook flank, every front seat lay in the water's corridor, the cloud
+  seated the rest, and the rolled crescent drew 1.62:1 against main's 4.07. Sampling the whole row at three quarters of
+  a pitch honored it and moved Kuwabata, which has no brook, enough to split its lane web in two (one join's route ran
+  50 ft past an unjoined crossing); the extra tries go only where the water moved the seat. Cutting that overrun back,
+  splitting lanes at loose crossings and a last orphan join were each tried first and each moved other maps' lanes.
+- A household re-served on its own bank (`_link_home_bank`) loses the lane over the brook it no longer needs, where every
+  house that lane serves is served by the rest (`excursion_lanes`): Kashikawa's new way stood 39 ft from the door, as
+  did the old lane over the plank, and the walker took the old one.
 - The notice board may stand within 26 ft of the top edge, as of the bottom (`_fits(top=)`): Mizuguchi's connector
   handed over to its lanes at y 82, inside the 88 ft a house keeps for the title band, and the board went 202 ft away
   where two households' ways out missed it. The title is placed at finish, clear of what is drawn.

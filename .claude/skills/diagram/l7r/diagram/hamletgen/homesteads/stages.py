@@ -279,12 +279,12 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # candidates per map and a cluster strung along the paddy whatever shape it rolled; a rung of one house depth
     # seated NOBODY on Kuwabata's dike heads (the yard faces the paddy there) and the cluster drifted 112 px off its
     # field. The ranks behind the front row are proposed behind the standing houses, below.
-    def _ground_push(s_: Settlement, seat_: Pt, n_: Pt, house_: tuple[float, float]) -> Pt:
+    def _ground_push(s_: Settlement, seat_: Pt, n_: Pt, house_: tuple[float, float]) -> tuple[Pt, bool]:
         """The seat moved once along `n_` by the outline's reach past the homestead's near edge - zero when the box is clear."""
         _bx = s_._bundle_envelope(seat_[0], seat_[1], house_[0], house_[1], shed=True)
         _pts = [(_bx[0] + dx * _bx[2] / 2, _bx[1] + dy * _bx[3] / 2) for dx in (-1, 0, 1) for dy in (-1, 0, 1)]
         if s_._site_corridors is None or not s_._site_corridors.hit_points(_pts):
-            return seat_
+            return seat_, False
         lx, ly = -n_[1], n_[0]  # the lateral axis
         half_lat = abs(lx) * _bx[2] / 2 + abs(ly) * _bx[3] / 2
         near = _bx[0] * n_[0] + _bx[1] * n_[1] - (abs(n_[0]) * _bx[2] / 2 + abs(n_[1]) * _bx[3] / 2)  # the box's near edge along n
@@ -301,14 +301,16 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         # lay in the water's corridor and was refused; the displaced households were seated by the cloud behind, and a
         # crescent that drew 4.07:1 on main drew 1.62:1. The row stands on the brook's far bank instead, fronting its field
         # across the water - the push is the course's reach past the box's near edge, by its own clearance.
-        push = max(push, water_push(s_._site_corridors.water, (_bx[0], _bx[1]), n_, half_lat, near, far))
+        wet = water_push(s_._site_corridors.water, (_bx[0], _bx[1]), n_, half_lat, near, far)
+        by_water = wet > push
+        push = max(push, wet)
         if push <= 0.0:
-            return seat_
+            return seat_, False
         # ...cleared by a FOOTPATH's room, not a hair: a homestead pushed to two pixels off a dike's bank left no way a
         # lane could pass between them, the web stranded it, and the re-roll then forbade the only front seats the
         # dike heads offer (Kuwabata: front 0 on the kept roll, the cluster 162 px off its polder)
         push += WEB_FABRIC_GAP * 2.0 + 6.0
-        return (seat_[0] + n_[0] * push, seat_[1] + n_[1] * push)
+        return (seat_[0] + n_[0] * push, seat_[1] + n_[1] * push), by_water
 
     # the homestead's CORE - the house, the yard south of it, the kura north - is what always faces the paddy the same
     # way; the garden's side is chosen later by the sun, so it is not in the reach (counted, it stood every front house
@@ -326,7 +328,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
             # it (Kuwabata's dike heads: every front seat refused, the cluster 112 px off its polder). Where the seat's
             # box is inside the outline, it is pushed once along the chord's normal by the outline's measured reach
             # past the box's near edge, and offered there.
-            fx, fy = _ground_push(s, (fx, fy), _n, _house_max)
+            (fx, fy), _by_water = _ground_push(s, (fx, fy), _n, _house_max)
             # NO LANE TEST HERE ANY MORE (feature 126). This used to read
             # `_row_seats < _FIELD_RING_FLOOR or _lane_dist(...) <= _FRONT_ROW_LANE_CAP`, which
             # judged a front-row seat by how near it fell to a drawn lane. The internal lanes are
@@ -336,8 +338,16 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
             # settlement's shape depend on a way that has not been decided yet, which is the exact
             # inversion this feature exists to remove: a farmhouse is sited by the FIELD it works
             # and the ground it can stand on, and the lane is worn afterwards between the houses.
-            if math.hypot(fx - seat["cx"], fy - seat["cy"]) <= bound * 1.3 and _seat_allowed(s, fx, fy) and _pretest(fx, fy) and s.try_place(fx, fy, "plain"):
-                placed += 1
+            # A SEAT PUSHED ACROSS THE BROOK TRIES A QUARTER PITCH EITHER WAY ALONG THE ROW (feature 261): each seat moves by
+            # the water's own reach at its place, so seats a pitch apart on the chord land nearer than a pitch on the far
+            # bank and every other one collided - Inashiro's crescent seated 5 of 10 in its row and drew 1.95:1. Sampling
+            # the whole row at three quarters of a pitch honored it and moved Kuwabata, which has no brook, enough to
+            # split its lane web in two; the extra tries go only where the water moved the seat.
+            _tries = [(fx, fy)] + ([(fx - _n[1] * d, fy + _n[0] * d) for d in (BUNDLE_PITCH / 4.0, -BUNDLE_PITCH / 4.0)] if _by_water else [])
+            for tx, ty in _tries:
+                if math.hypot(tx - seat["cx"], ty - seat["cy"]) <= bound * 1.3 and _seat_allowed(s, tx, ty) and _pretest(tx, ty) and s.try_place(tx, ty, "plain"):
+                    placed += 1
+                    break
     # ...then rows FLANKING the lanes, before any shape fill. A lane exists to be fronted, and a
     # cluster seeded only by its shape leaves them running across empty middle: the review of the
     # first draft measured a median house-to-lane distance of 94 ft against Ikegami's 55, with one
