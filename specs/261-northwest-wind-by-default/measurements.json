@@ -666,5 +666,85 @@
   "quantity": "the record kashikawa-r8-notes-clumps now states and greps the kept roll's 360 belt clumps",
   "source": "specs/261-northwest-wind-by-default/measurements.json kashikawa-r8-notes-clumps; kashikawa.notes.md",
   "command": "grep -n 'The belt is 360 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
+ },
+ "kuwabata-r11-wedge": {
+  "verifies": "F1",
+  "subject": "kuwabata",
+  "round": "0ae309f0",
+  "value": 12540,
+  "unit": "sq ft",
+  "quantity": "ground inside the houses' hull grown by the scrub's 44 ft margin that the scrub may now take - every farmstead's own grown outline and each pair's within 140 ft stay kept out (farmstead_keepouts), where the whole grown hull (232,668 sq ft) was before and a 240 x 270 ft wedge of it drew bare; on the render the scrub scatters through the gaps between the farmsteads, no bare wedge",
+  "source": "pool/hamlets/kuwabata/kuwabata.json houses; l7r/diagram/settlement/land/cover.py farmstead_keepouts",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/settlement/test_hinterland_cover.py"
+ },
+ "sawada-r11-brook-straight": {
+  "verifies": "F1",
+  "subject": "sawada",
+  "round": "0ae309f0",
+  "value": 380,
+  "unit": "ft",
+  "quantity": "the longest run of Sawada's brook on the page with every vertex within 3.1 ft of the chord: 380 of 1,241 ft, 31% (872 ft, 70%, in the round); the other brook maps 17-23% (Kashikawa 628 of 3,154, Inashiro 473 of 2,096, Mizuguchi 332 of 1,966)",
+  "source": "pool/hamlets/sawada/sawada.json streams[0].poly, meta.view",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "mizuguchi-r11-belt-room": {
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "round": "0ae309f0",
+  "value": 1121,
+  "unit": "ft",
+  "quantity": "the westernmost farmhouse's distance from the canvas's west edge (34-47 ft in the round): a wind-facing seat whose belt band falls more than a fifth off the canvas is only a fallback now, and the houses stand north of the brook with the belt west of them on open ground (211 clumps)",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json houses, village_groves[role=windbreak]",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "mizuguchi-r11-board": {
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "round": "0ae309f0",
+  "value": 0,
+  "unit": "routes",
+  "quantity": "households' ways out that miss the notice board, which stands 15 ft from the connector's handover at the canvas top (202 ft away, missing 2, before the board could stand within 88 ft of the top edge)",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json kosatsuba, lanes",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "inashiro-r11-dry": {
+  "verifies": "F1",
+  "subject": "inashiro",
+  "round": "0ae309f0",
+  "value": 72,
+  "unit": "ft",
+  "quantity": "the median distance from a farmhouse to its nearest dry plot (658 ft in the round, by straight line to plot centers here): nine of fifteen homesteads carry a homestead field against their lee or flank side, and the canal hem stays across the rice",
+  "source": "pool/hamlets/inashiro/inashiro.json houses, dry_plots, meta.homestead_fields",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "inashiro-r11-woods": {
+  "verifies": "F2",
+  "subject": "inashiro",
+  "round": "0ae309f0",
+  "value": 3,
+  "unit": "parcels",
+  "quantity": "woodland parcels across the field from the cluster's middle, of 3: unchanged - no seat on the houses' side qualifies at any size (the predicted frame begins 100 ft west of the houses and the in-frame ground there lies between their keep-out and the field's set-back), so the new near-side preference falls back",
+  "source": "pool/hamlets/inashiro/inashiro.json commons[role=woodland], fields[0].outline",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_hinterland.py"
+ },
+ "inashiro-r11-shape": {
+  "verifies": "F1",
+  "subject": "inashiro",
+  "round": "0ae309f0",
+  "value": 2.19,
+  "unit": "aspect",
+  "quantity": "Inashiro's drawn cluster aspect, its rolled crescent honored (1.62 and unhonored before the front row crossed the brook; main 4.07); Kuwabata's round 1.99 honored as on main, Mizuguchi's round 1.05 newly honored (unhonored on main), Kashikawa's and Sawada's unhonored as on main",
+  "source": "pool/hamlets/*/*.json meta.cluster_aspect_drawn, cluster_shape, cluster_shape_unhonored",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "sawada-r11-alder": {
+  "verifies": "F1",
+  "subject": "sawada",
+  "round": "0ae309f0",
+  "value": 70,
+  "unit": "clumps",
+  "quantity": "of Sawada's 201 windbreak clumps, those seated inside the toe marsh and drawn as alder; no other pool map's belt reaches a marsh",
+  "source": "pool/hamlets/sawada/sawada.json village_groves[role=windbreak].alder, marshes[role=toe]",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
  }
 }

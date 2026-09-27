@@ -235,3 +235,10 @@ def test_a_corpus_that_has_never_seen_the_words_raises_nothing() -> None:
     """FAILS CLOSED: with no corpus every word looks rare, which is R1's 314-of-324 failure. A
     candidate list is evidence, and a list built from no evidence is worse than none."""
     assert rp.rare_words("the girder bears on an abutment sill", set(), {}) == []
+
+
+def test_a_heading_with_an_entity_compares_equal_to_its_characters() -> None:
+    """`_bare` reads an entity as its character (feature 261): the fragment's `reed -&gt; sedge` and the assembled
+    section's `reed -> sedge` are one heading, and the marsh-margin question matched no section until they were."""
+    assert rp._bare("The marsh margin: reed -&gt; sedge") == rp._bare("The marsh margin: reed -> sedge")
+    assert rp._bare("<em>A</em> &amp; B") == rp._bare("A & B")

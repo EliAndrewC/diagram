@@ -273,15 +273,37 @@ Measured before and after in research R10.
 - A seat whose windbreak band would fall off the canvas scores down (`belt_off_canvas`), as the brook and the dry hem do.
 - A belt stands beyond a lane that runs along its band (`past_the_lanes`), unless that would put it in the marsh: Kuwabata's
   ring lane ran lengthwise down the belt's middle and halved its drawn depth (median 67 ft against main's 104).
-- NOT DONE, put to the GM: Mizuguchi's only wind-facing seat keeps its houses 34 ft from the canvas's west edge, so the
-  belt stands in the strip the westernmost farmsteads stand in, holed where they are; the seat term above scores it down
-  and it still wins (40-67% of its belt band off the canvas). A re-seed, a wider canvas, or the belt as drawn.
-- NOT DONE, put to the GM: Sawada's windward belt stands on the toe marsh's reed edge (seed 24 backs the hamlet onto the
-  marsh). Holding the belt's clump bases off the DRAWN reeds was built and measured: 179 clumps to 124 with the bases a
-  crown's radius off (5 of 652 drawn crowns still over a reed), 135 at a 12 ft reed spacing (14 over), and in both the
-  windward belt was gone and FR-016's depth test failed. The record's answer for woody cover at a reed edge is the
-  alder-willow carr (research/vegetation, the marsh margin), a second form the engine does not draw - a new glyph and a
-  knob, so the choice is the GM's: the carr, a belt that stops where the marsh begins, or the belt as it stands.
+- A wind-facing seat whose belt band falls more than a fifth off the canvas (`BELT_ROOM_MAX_OFF`, three of the band's
+  fifteen sample points) is only a fallback, below every wind-facing seat with room and above the off-wind ones: scored
+  alone, Mizuguchi's seat 34-47 ft from the west edge still won, because every other wind-facing margin had the brook
+  across its band. Its houses now stand north of the brook with the belt west of them on open ground.
+- A front-row seat is pushed across a brook that runs between it and its field (`water_push`, beside `_ground_push`'s
+  outline push), and the row is offered every three quarters of a pitch (`FRONT_ROW_STEP`): with the houses seated
+  against the wind down Inashiro's brook flank, every front seat lay in the water's corridor, the cloud seated the rest,
+  and the rolled crescent drew 1.62:1 against main's 4.07. Half a pitch honored it too and pushed Kuwabata's round over
+  its ceiling (2.02); three quarters honors both and newly honors Mizuguchi's round.
+- The notice board may stand within 26 ft of the top edge, as of the bottom (`_fits(top=)`): Mizuguchi's connector
+  handed over to its lanes at y 82, inside the 88 ft a house keeps for the title band, and the board went 202 ft away
+  where two households' ways out missed it. The title is placed at finish, clear of what is drawn.
+- The scrub keeps off each farmstead's own grown outline and the ground between two within 140 ft
+  (`farmstead_keepouts`), not the whole cluster's hull: Kuwabata's copse keeps within 90 ft of a house while the hull
+  reached further, and a 240 x 270 ft wedge inside it came out bare with a straight edge.
+- The brook's walk swings across its whole band at every station (`BROOK_WANDER_STEP` 4 -> 10, the band unchanged at
+  10 ft, so the frame and the skirt it is sized to are untouched), and an exit leg still on the page bends at its middle
+  (`exit_bend`): Sawada's middle reach ran 872 ft within 3.1 ft of a line, 70% of its course on the page.
+- A household's own dry plot is laid against its homestead (`stage_homestead_fields`, after the ways): the levee model -
+  the old settlement and its dry fields on the same raised ground, the paddy behind (research/fields.html, the catena;
+  `shizen-teibo-jawiki`, `kohai-shicchi-jawiki`) - beside the canal hem, which stays as the second position. The toe
+  band and the cover's cultivated extent leave these plots out, so neither moves after the seat and the router were
+  handed it (a homestead plot moved Sawada's toe marsh over its handover). The plot's size is a GUESS.
+- A woodland parcel prefers a seat not across the field from the cluster (a preference, like the cross-slope one).
+  Inashiro has none: its woods must stand 80% inside the predicted frame, which begins 100 ft west of the houses, and
+  every seat on the houses' side at every size falls between their keep-out and the field's set-back.
+- A belt crown seated in a toe marsh is drawn as alder (the `alder` mix and class): the record's woody stage at a reed
+  edge is alder or willow, never pine (research/vegetation.html, the marsh margin). Sawada's windward belt stands on
+  its toe's reed edge (70 of 201 clumps in the marsh); holding the belt off the reeds took the windward belt away and
+  failed its depth test, and a belt that stops at the marsh does the same. The carr along the rest of the toe - the
+  second form the record names for it - is not built.
 
 ## Phases
 

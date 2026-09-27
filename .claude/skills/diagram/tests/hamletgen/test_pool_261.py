@@ -422,3 +422,19 @@ def test_a_households_dry_ground_lies_by_its_house(gen: str) -> None:
     plots = [[(float(p[0]), float(p[1])) for p in d["poly"]] for d in m.get("dry_plots") or []]
     near = sorted(min(math.dist((h["x"], h["y"]), (sum(p[0] for p in q) / len(q), sum(p[1] for p in q) / len(q))) for q in plots) for h in m["houses"])
     assert near[len(near) // 2] <= 150.0, f"the median house stands {near[len(near) // 2]:.0f} ft from its nearest dry plot"
+
+
+@pytest.mark.parametrize("gen", GENS, ids=IDS)
+def test_a_belt_tree_in_the_marsh_is_alder(gen: str) -> None:
+    """Woody cover at a reed edge is alder or willow, never pine (research/vegetation.html, the marsh margin): every belt
+    clump seated inside a toe marsh is drawn as alder and counted so (settlement-review of Sawada, feature 261: 70 of
+    its 201 belt clumps stood in the toe marsh, drawn as the belt's cedar and broadleaf)."""
+    from l7r.diagram.settlement import point_in_poly
+
+    m = _manifest(gen)
+    toes = [[(float(a), float(b)) for a, b in mk["poly"]] for mk in m.get("marshes") or [] if mk.get("role") in ("toe", "waterside")]
+    for g in m.get("village_groves") or []:
+        if g.get("role") != "windbreak":
+            continue
+        wet = sum(1 for c in g["clumps"] if any(point_in_poly(c[0], c[1], t) for t in toes))
+        assert g.get("alder", 0) == wet, f"{wet} belt clumps stand in the marsh, {g.get('alder', 0)} drawn as alder"

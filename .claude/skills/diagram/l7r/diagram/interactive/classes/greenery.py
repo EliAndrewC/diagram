@@ -92,6 +92,35 @@ class Windbreak(Kind):
     key = 'windbreak'
 
 
+class Alder(Kind):
+    """
+    What: Alder at the reed edge - where the village's shelter belt runs down into the marsh, its trees are the wet
+    ground's own: alder, drawn a blue-gray green apart from the belt's cedar and broadleaf.
+
+    Why: A marsh grades from reed through sedge and grass to dry ground, and where trees stand at a reed edge in
+    Japan they are alder and willow, never pine; alder takes the ground as a mire dries, and standing water, not a
+    table that swings below the ground, holds it off.
+
+    Note: The zonation is read (packer-2017-phragmites from reed to alluvial forest; lou-2016-floodplain-zones and
+    hotes-wetland-diversity for the sedge and grass between), pine's absence from it is the record's reading of
+    sources that never stand pine on wet ground, and alder's place in it is read (mlit-vegetation-classes,
+    haneishi-2011-kushiro-alder); that a village's belt runs on into the marsh as alder where its ground does is
+    this map's reading of them, and the crowns' blue-gray green is a map drawing convention - the real foliage is a
+    plain dark green, tinted here so the wet stand reads apart from the belt.
+
+    Caveat: the crowns' blue-gray green is a map drawing convention - the real foliage is a plain dark green, tinted
+    here so the wet stand reads apart from the belt.
+
+    Name: alder
+    Covers: `village_groves[role=windbreak]` crowns standing in the marsh
+    Label: accurate
+    Sources: haneishi-2011-kushiro-alder
+    Entry: research/vegetation.html - 'The marsh margin: reed -> sedge/grass -> dry ground; woody at a reed edge is alder or willow, never pine - ACCURATE'
+    """
+
+    key = 'alder'
+
+
 class Copse(Kind):
     """
     What: A stand of bamboo and fruit trees in the open ground among the houses - useful trees, not shelter.

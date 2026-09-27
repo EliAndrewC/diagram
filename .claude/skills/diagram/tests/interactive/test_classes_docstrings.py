@@ -27,7 +27,8 @@ SINCE_189: dict[str, tuple[str, ...]] = {
 ADDED_SINCE_189: tuple[str, ...] = (
     "weir",
     "pond canal",
-)  # feature 230: what stands where the head race leaves the brook; and a dike-pond's two-way canals, which the irrigation ditch mislabeled (pass 10)
+    "alder",
+)  # feature 230: what stands where the head race leaves the brook; and a dike-pond's two-way canals, which the irrigation ditch mislabeled (pass 10); feature 261: the belt's trees where it runs into the marsh
 
 
 def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present() -> None:

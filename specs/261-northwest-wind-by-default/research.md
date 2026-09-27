@@ -222,3 +222,30 @@ records `m:kashikawa-r4-caption`, `m:kuwabata-r4-tail`, `m:kuwabata-r4-caption-l
 
 Kuwabata's first two rolls under the changed ways each left a farmhouse off the way network, so it keeps its third: 4
 of 16 farmsteads re-seated, the farthest 134 ft (`m:kuwabata-r4-notes`).
+
+## R11 - The round of engine 0ae309f0, and what each fix measured
+
+The reviews of engine 0ae309f0 (2026-09-27) passed Kashikawa and found one error each on the other four maps, plus a
+questionable finding on Inashiro. Each fix was measured on the re-rolled pool (observed 2026-09-27, method: the manifest
+measures of `tests/hamletgen/test_pool_261.py` and the records named in each row):
+
+| finding | before | after |
+|---|---|---|
+| Kuwabata: a bare wedge inside the cluster, straight-edged | the whole houses' hull grown 44 ft kept from the scrub (232,668 sq ft), a 240 x 270 ft wedge of it bare | the scrub keeps off each farmstead and each near pair only; 12,540 sq ft of that hull opened to it, no bare wedge on the render (`m:kuwabata-r11-wedge`) |
+| Sawada: the brook straight for most of its course on the page | 872 ft within 3.1 ft of a line, 70% | 380 of 1,241 ft, 31%; the other brook maps 17-23% (`m:sawada-r11-brook-straight`) |
+| Mizuguchi: the belt's footprint holding the front rank, houses 34-47 ft from the west edge | the seat scored its belt room and still won | a seat without belt room is a fallback; the westernmost house 1,121 ft from the edge (`m:mizuguchi-r11-belt-room`) |
+| Mizuguchi, after the re-seat: the board 202 ft from its handover | 2 of 12 ways out missed it | 15 ft from the handover, 0 missed (`m:mizuguchi-r11-board`) |
+| Inashiro: the dry plots across the rice from every house | median 658 ft | 72 ft: a homestead field against nine of fifteen steadings, the canal hem kept (`m:inashiro-r11-dry`) |
+| Inashiro: the rolled crescent drawn as a blob after the seat moved to the brook flank (a regression against main, found by the escalation-check) | 1.62, unhonored (main 4.07) | 2.19, honored; Kuwabata 1.99 and Mizuguchi 1.05 honored, Kashikawa and Sawada unhonored as on main (`m:inashiro-r11-shape`) |
+| Inashiro (questionable): the woodland across the rice | 3 of 3 parcels across the field | unchanged, 3 of 3 - no seat on the houses' side qualifies inside the predicted frame; the preference is in place and falls back (`m:inashiro-r11-woods`) |
+| Sawada (from the round before): the belt on the toe's reed edge | 70 of 201 belt clumps in the marsh, drawn as cedar and broadleaf | the same 70 drawn as alder, the record's woody stage at a reed edge (`m:sawada-r11-alder`) |
+
+The research for two of these was run first. Where dry fields lie: the old settlements of an alluvial lowland stand
+on the natural levee, which is also their dry field, with the paddy in the back marsh (`shizen-teibo-jawiki`,
+`kohai-shicchi-jawiki`, both already read for the record); the household's own-consumption plot of `kateisaien-jawiki`
+is the dooryard bed the map already draws, and that page puts it as often in odd corners by the paddy or on a riverbank.
+What stands at a reed edge: alder grows tallest at a wetland's fertile periphery (ja.wikipedia ハンノキ, read by the
+research pass, not cited); cutting the reed stops litter building soil on which willow grows (`opal-biwa-yoshi-hara`,
+new, APPLICABLE-WITH-LIMITS). No readable page says whether a village's windbreak grove ever ran onto marsh ground
+(searched 2026-09-27: ja.wikipedia 屋敷林 and 防風林, the Kushiro alder-zonation page, the Tonami dispersed-settlement
+pages).

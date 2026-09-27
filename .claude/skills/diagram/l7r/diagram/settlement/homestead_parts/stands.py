@@ -573,9 +573,18 @@ class StandsMixin:
         # render, which is the documented behavior for a communal grove - see the note at `set_view`'s
         # frame list), and the RECORD is partitioned against the actual view once there is one.
         _offpage: list[Any] = []
+        # A BELT CROWN IN THE MARSH IS ALDER (feature 261, Sawada's belt on its toe's reed edge): the record's woody stage at
+        # a reed margin is alder or willow (research/vegetation.html, the marsh margin), and alder is the tree of a
+        # wetland's fertile edge, so where the windbreak's ground runs into the recorded marsh its trees are drawn as one
+        _wet = [[(float(a), float(b)) for a, b in m["poly"]] for m in self.M.get("marshes") or [] if m.get("role") in ("toe", "waterside") and m.get("poly")] if role == "windbreak" else []
+        alder = 0
         for jx, jy in seated:
             # feature 150: the belt and the copse are two highlight classes; a water_mouth grove has no
             # class in the vocabulary yet and stays unclassed so the census reports it
+            if any(point_in_poly(jx, jy, w) for w in _wet):
+                alder += 1
+                self._draw_grove(jx, jy, clump, clump, face=(0, -1), mix="alder", cls="alder")
+                continue
             self._draw_grove(jx, jy, clump, clump, face=(0, -1), mix=mix, cls={"windbreak": "windbreak", "copse": "copse"}.get(role))
         if clumps:
             # A COPSE IS RECORDED AT THE SIZE IT WAS DRAWN, not at the size it was asked for.
@@ -612,6 +621,7 @@ class StandsMixin:
                     "r": round(clump / 2, 1),
                     "clumps": clumps,
                     "clumps_offpage": (_offpage if face_margin is not None and clumps else []),  # actual drawn clump centers + radius, for groves_clear_of_lanes
+                    "alder": alder,  # of the clumps, those standing in the marsh and drawn as alder (feature 261)
                     "poly": [[round(px, 1), round(py, 1)] for px, py in poly],
                 }
             )
