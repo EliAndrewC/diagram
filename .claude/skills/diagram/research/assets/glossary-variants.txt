@@ -1306,6 +1306,7 @@ shuku	shukuba
 shukuba	shukuba
 shunde	Shunde
 shunzhi	Shunzhi
+shōya	shoya
 siege mining	siege mining
 sigma	sigma
 siheyuan	siheyuan
