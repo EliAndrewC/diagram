@@ -243,8 +243,9 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
       verify: DONE. archetypes session 2c: question 170 checked and applied - quote-check 33 notes (24 SUPPORTS, 5 PARTIAL, 1 DOES-NOT-SUPPORT, all acted on; the gazetteer succession and abandoned-rice passages read and cited, Fei 1936/Lake Tai/yu cited, OCR restored), record-format 6 VOCABULARY + 1 SESSION NOTE + 2 HISTORY applied (6 glossary terms), 8 modals DRIFTED and rewritten, re-check: 12 notes VERBATIM/SUPPORTS, 6 modals IN-STEP, 2 edited once more; FR-006 26 bare items, FOOTNOTED 24, NOT-LOCATED 2
-- [ ] T67 **The comparison the GM asked for** (D17): T66 against R4 to R8, recorded as R9
+- [x] T67 **The comparison the GM asked for** (D17): T66 against R4 to R8, recorded as R9
       research: rendering
+      verify: DONE. research.md R9: archetypes 6.39 M over 6 things (1.07 M each), peak 102,000, mean turn 56,000; the 170 group (a parser defect, owed work) 7.04 M over 9 things; modal rewrites by command (0 hand edits on 8 modals); groups by load held every session under 124,000; the parser now derives questions from commits
 
 ## Phase 2 - FR-002 and FR-006, one page per session (D7)
 

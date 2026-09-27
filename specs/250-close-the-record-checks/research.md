@@ -636,8 +636,8 @@ page's column is its write session and check groups 2a and 2b, the 170 group is 
    modals) was over the budget on its own; a single question cannot be split further by packing, and it peaked at
    124,000 - under the fit's prediction, so the fit is if anything cautious.
 3. **Per thing checked** - reported above. The page's 1.07 M a thing sits between government's 0.78 and fabric's 1.54;
-   its per-question figure is high because two questions carried three sessions' fixed start-up (a session's first
-   turns and brief cost about 0.2 to 0.4 million before any work).
+   its per-question figure is high because two questions carried three sessions, each re-paying its brief and
+   start-up (not separately measured here).
 
 **The write session was the cheapest yet**: 1.68 million over 30 turns, peaking at 82,000 (government 2.20, fabric
 3.62, fields 3.39 million).
@@ -650,10 +650,9 @@ while the map draws them as options labeled accurate.
 ### Recommendations for the next round
 
 1. **`source-applicability` ends with EDIT blocks** for the write-up fixes it asks for, as the other three checks do.
-2. **Pack small groups so a session is worth its start-up**: a session costs about 0.2 to 0.4 million before any
-   work, so a group with one small question (2a here: 100 alone, 1.37 million) should take the next group's work
-   when both fit the budget - the packer already does this; here it did not because 140's group was near the budget.
-   Measure whether a looser budget (the 170 group stayed at 124,000 over a 58,000 load) is safe before moving it.
+2. **Measure a session's start-up, then decide the budget**: group 2a checked one small question alone (1.37 million)
+   because 140's group was near the budget. Measure what a session costs before its first check, and whether a
+   looser budget is safe (the 170 group stayed at 124,000 over a load of about 58,000), before moving it.
 3. **Decide where owed modals from earlier work get checked** - the 170 group showed that a page's owed modals from
    OTHER questions are real work T23 will need; checking them per page, packed by load, cost 0.78 million a thing,
    the cheapest rate measured. Folding them into each page's round on purpose (rather than by the defect that found
