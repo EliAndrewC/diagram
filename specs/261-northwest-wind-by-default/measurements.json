@@ -952,7 +952,7 @@
   "unit": "plots",
   "quantity": "homestead dry plots on the dike-pond hamlet (6 barley, millet and buckwheat plots in the round); meta.homestead_fields 0",
   "source": ".claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.json dry_plots, meta.homestead_fields",
-  "command": "python3 /tmp/claude-1000/-diagram/af341e10-4ba2-4068-bc4f-b49f0b239c8d/scratchpad/chk.py"
+  "command": "python3 specs/261-northwest-wind-by-default/measure/fixtures_and_board.py"
  },
  "kuwabata-r15-notes": {
   "verifies": "F3",
@@ -972,7 +972,7 @@
   "unit": "fixtures",
   "quantity": "farmstead fixtures and persimmons whose line to their house crosses a lane (4 in the round); the shrine passed to the house at 1466.6,119.4, and meta.farm_fixtures_unseated is empty - the coop and stack of the farmstead at (1277,257) seat on the yard ring past the homestead bundles",
   "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.json farm_fixtures, persimmons, lanes",
-  "command": "python3 /tmp/claude-1000/-diagram/af341e10-4ba2-4068-bc4f-b49f0b239c8d/scratchpad/chk.py"
+  "command": "python3 specs/261-northwest-wind-by-default/measure/fixtures_and_board.py"
  },
  "mizuguchi-r15-belt": {
   "verifies": "F2",
@@ -991,7 +991,7 @@
   "unit": "fixtures",
   "quantity": "farmstead fixtures and persimmons recorded in meta.farm_fixtures_unseated across the five pool hamlets after the lane rule, the yard ring past the bundles and the persimmon's outer step (the commit before the lane rule: Sawada one heap; with the lane rule alone: seven on four maps)",
   "source": ".claude/skills/diagram/pool/hamlets/*/*.json meta.farm_fixtures_unseated",
-  "command": "python3 /tmp/claude-1000/-diagram/af341e10-4ba2-4068-bc4f-b49f0b239c8d/scratchpad/chk.py"
+  "command": "python3 specs/261-northwest-wind-by-default/measure/fixtures_and_board.py"
  },
  "belt-r16-depth": {
   "verifies": "F1",
@@ -1001,7 +1001,7 @@
   "unit": "ft",
   "quantity": "the windbreak band's thinnest depth across itself on the page (each near-face vertex to the far face): 20.7 ft in the round; Inashiro 33.9 -> 83.9, Sawada 13.8 -> 88.8; Kuwabata 19.1 and Mizuguchi 64.1 unchanged where the canvas edge clamps the far face",
   "source": ".claude/skills/diagram/pool/hamlets/*/*.json village_groves windbreak poly, meta.view",
-  "command": "python3 /tmp/claude-1000/-diagram/af341e10-4ba2-4068-bc4f-b49f0b239c8d/scratchpad/belt_depth.py inashiro kashikawa kuwabata mizuguchi sawada"
+  "command": "python3 specs/261-northwest-wind-by-default/measure/belt_depth.py inashiro kashikawa kuwabata mizuguchi sawada"
  },
  "brook-r16-turn": {
   "verifies": "F1",
@@ -1011,7 +1011,7 @@
   "unit": "degrees",
   "quantity": "the sharpest turn at any vertex of Sawada's recorded brook (47 in the round, with corners of 41 and 27); across the pool 9.0-22.7, the largest at a held tap",
   "source": ".claude/skills/diagram/pool/hamlets/*/*.json streams",
-  "command": "python3 /tmp/claude-1000/-diagram/af341e10-4ba2-4068-bc4f-b49f0b239c8d/scratchpad/brook_turn.py inashiro kashikawa kuwabata mizuguchi sawada"
+  "command": "python3 specs/261-northwest-wind-by-default/measure/brook_turn.py inashiro kashikawa kuwabata mizuguchi sawada"
  },
  "kuwabata-r16-copse": {
   "verifies": "F1",
