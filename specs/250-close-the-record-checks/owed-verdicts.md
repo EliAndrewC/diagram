@@ -180,3 +180,4 @@
 - CompoundWall (buildings SECTION=010): IN-STEP - the modal's wall figures and shared-enclosure claim touch none of 010's relabeled granary, jail or axis findings
 - KneelingPositions (buildings SECTION=010): IN-STEP - the kneeling-stones quote still supports litigants below the raised hall
 - MagistratesDais (buildings SECTION=010): IN-STEP - its one 010 claim, a court hall over kneeling litigants, still rests on the henan-neixiang footnote
+- Byre (homesteads SECTION=060): LABELED - the owned yard stable now says it rests on one encyclopedia sentence about wealthy Shaanxi courtyard houses, with no survey behind it

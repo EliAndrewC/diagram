@@ -73,7 +73,7 @@ class Byre(Kind):
     Why: Most farmsteads kept a draft animal or two, and the vernacular put the animal far closer to the house
     than a European barn would. Where the team is OWNED, the household houses it in its own homestead; where a
     team is shared or hired it stands out among the homesteads, on the common ground, so that the borrowing
-    household can walk to it. The owned stable is read; the shared one on the common ground is this record's
+    household can walk to it. The owned stable is read, though the yard stable drawn here rests on one encyclopedia sentence about wealthy Shaanxi courtyard houses, with no survey behind it; the shared one on the common ground is this record's
     own reading, and the commoner of the two, so this map rolls between them per settlement - which is also what lets two hamlets differ honestly.
 
     Note: The separate byre is the temperate reading of the record; the attached stable wing (magariya) belongs
