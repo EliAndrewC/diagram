@@ -11,7 +11,7 @@ The classification (spec plan P4): the way kinds are ways (500 a way crossed), t
 one `-` shape covering the whole view is the background (free), and everything else - every other `-` shape, every
 `<text>` whatever its tag, `court divider`, `weighing floor` - is an obstacle (1,000).
 
-    python3 -m l7r.diagram.tools.seat_label pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg --check
+    make seat-label SHEET=pool/<tier>/<map>/<map>.svg
 """
 
 from __future__ import annotations

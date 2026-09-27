@@ -4,7 +4,7 @@
   "exempt": []
  },
  "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg": {
-  "sha256": "99891784ddf7fec89be54e3b59158ef269f2356f608c4fdee9c1820d3bceb645",
+  "sha256": "90d4074ba012b6d9330237e3388c733cf5e014f90237bd6e470cebd4113e7e7d",
   "exempt": [
    [
     "barracks",
@@ -98,7 +98,7 @@
    ],
    [
     "inner rooms",
-    "east rooms",
+    "inner rooms",
     "off its standard seat"
    ],
    [
@@ -269,7 +269,7 @@
   ]
  },
  "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg": {
-  "sha256": "f6a743ab48b1ff0e51d1b96713f2744555b7e54e076baf8af88ad218e6fd1e73",
+  "sha256": "a61052b15cc00baa3e20eedf353daad57df237249bba77e5dcc79dab8721b422",
   "exempt": [
    [
     "bath",
@@ -484,7 +484,7 @@
   ]
  },
  "pool/magistracies/ubame-magistracy/ubame-magistracy.svg": {
-  "sha256": "d31b4b34931dd1229b713af0d4a6dc7e766368735e018fdc4e245d4c758a8e96",
+  "sha256": "c93cad290da315955795bc6a4044e447a44c5b431827fc23b0091f4cd43b9200",
   "exempt": [
    [
     "barracks",

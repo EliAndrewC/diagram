@@ -142,10 +142,11 @@
        (a kosatsu is read where people pass, so it hugs the gate line on the approach -
        it faced the formal approach off to the east before, ~32 ft from any gate; GM 2026-07) -->
   <g data-kind="notice board">
-    <rect x="479.5" y="759.5" width="21" height="9" fill="#E8D2A8" stroke="#6B4F2A" stroke-width="1"/>
-    <circle cx="474" cy="772" r="1.5" fill="#4A3318"/>
-    <circle cx="506" cy="772" r="1.5" fill="#4A3318"/>
-    <text x="439.6" y="783.9" text-anchor="middle" font-size="9" font-style="italic" fill="#5C4830">notice board</text>
+    <!-- 3 ft nearer the main gate (feature 266): measured by its own rect, the board stood 22.1 ft from the opening, past the 20 ft a kosatsu is read at -->
+    <rect x="470.5" y="759.5" width="21" height="9" fill="#E8D2A8" stroke="#6B4F2A" stroke-width="1"/>
+    <circle cx="465" cy="772" r="1.5" fill="#4A3318"/>
+    <circle cx="497" cy="772" r="1.5" fill="#4A3318"/>
+    <text x="430.6" y="783.9" text-anchor="middle" font-size="9" font-style="italic" fill="#5C4830">notice board</text>
   </g>
 
   <!-- Internal divider wall between outer (south) and inner (north) courts -->

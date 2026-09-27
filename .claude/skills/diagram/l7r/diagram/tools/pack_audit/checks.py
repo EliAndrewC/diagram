@@ -334,18 +334,26 @@ class MisplacedBoard:
 
 
 def notice_board_adrift(plan: ParsedPlan, max_ft: float = NOTICE_BOARD_MAX_FT) -> list[MisplacedBoard]:
-    """A notice board (kosatsu) is read where people pass, so it must sit at a gate. Flag any
-    'notice board' label farther than max_ft from the nearest wall gate opening."""
+    """A notice board (kosatsu) is read where people pass, so it must sit at a gate. Flag any notice
+    board farther than max_ft from the nearest wall gate opening.
+
+    THE BOARD, NOT ITS CAPTION (feature 266). This measured the 'notice board' LABEL as a stand-in for the
+    board, which held while every caption hung just under its board; once captions are seated by the
+    cartographic standard - beside the board at its first free ranked position - the caption can stand a
+    board's length off to one side, and a board at the gate read as adrift. The sheet tags the board
+    (feature 262), so its own drawn rect is measured; an untagged sheet still falls back to the label."""
     ops = _gate_openings(plan)
     if not ops:
         return []
+    boards = [r for r in plan.fills if plan.label_kinds.get(r.pos) == "notice board"]
+    marks = [(r, r.x + r.w / 2, r.y + r.h / 2) for r in boards] or [
+        (Rect(lab.x, lab.y, lab.w, lab.h), lab.cx, lab.cy) for lab in plan.labels if "notice board" in lab.text.lower()
+    ]
     out: list[MisplacedBoard] = []
-    for lab in plan.labels:
-        if "notice board" in lab.text.lower():
-            lr = Rect(lab.x, lab.y, lab.w, lab.h)
-            d = min(_point_rect_dist(ox, oy, lr) for ox, oy in ops) / FTPX  # nearest edge of the board
-            if d > max_ft:
-                out.append(MisplacedBoard(lab.cx, lab.cy, d))
+    for rect, cx, cy in marks:
+        d = min(_point_rect_dist(ox, oy, rect) for ox, oy in ops) / FTPX  # nearest edge of the board
+        if d > max_ft:
+            out.append(MisplacedBoard(cx, cy, d))
     return out
 
 
