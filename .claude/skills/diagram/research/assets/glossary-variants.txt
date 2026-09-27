@@ -22,6 +22,8 @@ anaerobic	anaerobic
 anagama	noborigama
 anchor culture	anchor culture
 anchor cultures	anchor culture
+animal unit	animal unit
+animal units	animal unit
 apron	apron
 aprons	apron
 aqueduct	aqueduct
@@ -175,6 +177,7 @@ chonin-chi	buke-chi
 chori	chori
 choriboshi	chori
 chronosequence	chronosequence
+chubu	Chubu
 chugen	chugen
 chugoku	Chugoku
 chumon-zukuri	chumon-zukuri

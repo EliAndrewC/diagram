@@ -6609,5 +6609,18 @@
   "variants": [
    "Guangfu"
   ]
+ },
+ "animal unit": {
+  "def": "A count of livestock in which beasts of different sizes are weighted to one common measure, so that a large beast like a water buffalo counts for more than a pig or a goat.",
+  "variants": [
+   "animal unit",
+   "animal units"
+  ]
+ },
+ "Chubu": {
+  "def": "The central region of Honshu, between Kanto and Kinki, running from the Pacific coast across the mountains to the Sea of Japan coast; Niigata is in it.",
+  "variants": [
+   "Chubu"
+  ]
  }
 }
