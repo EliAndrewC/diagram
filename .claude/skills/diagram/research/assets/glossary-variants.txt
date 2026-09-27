@@ -50,6 +50,7 @@ azolla	azolla
 azuchi	azuchi
 azuchi-momoyama	Azuchi-Momoyama period
 azuchi-momoyama period	Azuchi-Momoyama period
+baba	baba
 back nagaya	back tenement
 back tenement	back tenement
 back tenements	back tenement
@@ -809,6 +810,7 @@ japanese zelkova	keyaki
 jetties	jetty
 jetty	jetty
 jiangnan	Lower Yangzi
+jiaochang	jiaochang
 jiaqing	Jiaqing
 jiegao	jiegao
 jiguchi-sen	jiguchi-sen

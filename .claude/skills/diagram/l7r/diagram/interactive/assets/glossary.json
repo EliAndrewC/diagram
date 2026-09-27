@@ -7419,5 +7419,17 @@
    "purveyor merchants",
    "goyo shonin"
   ]
+ },
+ "baba": {
+  "def": "A riding ground: a long, narrow strip of level ground, banked and fenced, where samurai trained their horses and practiced archery from the saddle.",
+  "variants": [
+   "baba"
+  ]
+ },
+ "jiaochang": {
+  "def": "A Chinese city's drill ground: a walled open field, usually outside a gate, with a reviewing hall and platform, where the garrison drilled and was reviewed.",
+  "variants": [
+   "jiaochang"
+  ]
  }
 }
