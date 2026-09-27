@@ -30,7 +30,6 @@ from l7r.diagram.interactive.place import (
     PER_HOUSEHOLD,
     PLACE_KEYS,
     WIND_NAMES,
-    WIND_SIDES,
     crop_sentence,
     dwellings_shown,
     join,
@@ -406,13 +405,13 @@ def test_the_windbreak_says_it_stands_on_the_north_and_west_for_the_regional_win
     says which side the belt is on and why."""
     assert (
         windbreak_default({"windward": "NW", "wind_source": "regional"})
-        == "Here the belt stands on the north and west of the houses: the winter wind across this region blows from the northwest, and no local wind is recorded for this place."
+        == "Here the belt stands toward the northwest of the houses, the side the winter wind across this region blows from; no local wind is recorded for this place."
     )
 
 
 def test_a_declared_local_wind_is_named_as_a_departure_from_the_regional_one() -> None:
     got = windbreak_default({"windward": "SE", "wind_source": "declared"})
-    assert got == "Here the belt stands on the south and east of the houses, because this place has a local wind from the southeast that departs from the region's northwesterly winter wind."
+    assert got == "Here the belt stands toward the southeast of the houses, because this place has a local wind from the southeast that departs from the region's northwesterly winter wind."
 
 
 @pytest.mark.parametrize("meta", [{}, {"windward": "NW"}, {"windward": "NNW", "wind_source": "regional"}, {"windward": "NW", "wind_source": "rolled"}])
@@ -421,5 +420,5 @@ def test_no_windbreak_sentence_where_the_map_does_not_record_its_wind(meta: dict
     assert windbreak_default(meta) == ""
 
 
-def test_every_quarter_has_its_sides_and_its_name() -> None:
-    assert set(WIND_SIDES) == set(WIND_NAMES) == {"N", "NE", "E", "SE", "S", "SW", "W", "NW"}
+def test_every_quarter_has_its_name() -> None:
+    assert set(WIND_NAMES) == {"N", "NE", "E", "SE", "S", "SW", "W", "NW"}

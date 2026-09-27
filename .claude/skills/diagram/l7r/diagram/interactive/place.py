@@ -270,9 +270,9 @@ def lane_default(scale: str, place: dict[str, str]) -> str:
 
 WINDBREAK = "windbreak"
 
-# The sides a belt stands on for each compass quarter the wind may blow from - one side for a cardinal wind, the
-# two it lies between for a diagonal one (research/vegetation, 'Does a shelter belt wrap the settlement?').
-WIND_SIDES = {"N": "north", "NE": "north and east", "E": "east", "SE": "south and east", "S": "south", "SW": "south and west", "W": "west", "NW": "north and west"}
+# The quarter a belt stands toward, named by where the wind blows from. It names ONE direction, never the two sides
+# of a hook (settlement-review of Kuwabata, feature 261): a belt on the west flank alone stands "toward the northwest"
+# truly, and "on the north and west" of it falsely - one or two sides are both the record's forms.
 WIND_NAMES = {"N": "north", "NE": "northeast", "E": "east", "SE": "southeast", "S": "south", "SW": "southwest", "W": "west", "NW": "northwest"}
 
 
@@ -285,14 +285,14 @@ def windbreak_default(meta: dict[str, Any]) -> str:
     manifest that does not record where its wind came from - every frozen hand-authored map - gets nothing, and
     the class's own explanation stands alone, exactly as the lane default does."""
     quarter, source = str(meta.get("windward") or ""), meta.get("wind_source")
-    if quarter not in WIND_SIDES or source not in ("regional", "declared"):
+    if quarter not in WIND_NAMES or source not in ("regional", "declared"):
         return ""
     if source == "regional":
         return (
-            f"Here the belt stands on the {WIND_SIDES[quarter]} of the houses: the winter wind across this region blows from the {WIND_NAMES[quarter]}, and no local wind is recorded for this place."
+            f"Here the belt stands toward the {WIND_NAMES[quarter]} of the houses, the side the winter wind across this region blows from; no local wind is recorded for this place."
         )
     return (
-        f"Here the belt stands on the {WIND_SIDES[quarter]} of the houses, because this place has a local wind from the {WIND_NAMES[quarter]} that departs from the region's northwesterly winter wind."
+        f"Here the belt stands toward the {WIND_NAMES[quarter]} of the houses, because this place has a local wind from the {WIND_NAMES[quarter]} that departs from the region's northwesterly winter wind."
     )
 
 

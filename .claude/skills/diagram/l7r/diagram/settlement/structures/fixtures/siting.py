@@ -210,6 +210,15 @@ class FixtureSitingMixin:
             # re-packed when its homesteads began turning as one piece, found no verge on the connector that fit a
             # board and shipped with none. The frame's re-seat already leaves the connector out; this now agrees.
             _main = [ln for ln in _ways if not ln.get("web") and not ln.get("connector")] or _ways
+            # ...BUT AN ANCHORED BOARD IS OFFERED THE WAY THAT MEETS ITS ANCHOR, web or not (feature 261, settlement-review
+            # of Inashiro, Mizuguchi and Sawada): the lane the approach meets at the settlement's mouth is often a web lane,
+            # and main-ways-only put the `entrance` board on a stub hundreds of feet inside the cluster. Resolved the way
+            # the placement is below (the knob is positional, so the second read is the same value).
+            if str((self.M.get("meta") or {}).get("scale") or "") in ("hamlet", "village"):
+                _a0 = kosatsuba_anchor(self.M, str(resolve_knob("kosatsuba_seat", int(self.seed), kosatsuba_affordances(self.M), (self.M["meta"].get("knobs") or {}))))
+                if _a0 is not None:
+                    _reach0 = 2.0 * KOSATSUBA_ANCHOR_BAND_FT / ftpx
+                    _main = _main + [ln for ln in _ways if ln not in _main and not ln.get("connector") and any(math.hypot(float(p[0]) - _a0[0], float(p[1]) - _a0[1]) <= _reach0 for p in ln["pts"])]
             routes.extend(([(p[0], p[1]) for p in ln["pts"]], float(ln.get("w", 8))) for ln in _main)
             routes.extend(([(p[0], p[1]) for p in st["pts"]], float(st.get("w", 18))) for st in self.M.get("town_streets") or [])
         spots = [(b["x"], b["y"]) for b in self.M["houses"]] + [(b["x"], b["y"]) for b in self.M["buildings"]]

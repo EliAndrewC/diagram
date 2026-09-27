@@ -670,6 +670,15 @@ FORD_HALF = 30.0
 FORD_SPACING = 160.0
 FORD_BEND_DEG = 20.0
 
+# THE COPSE STANDS AMONG WHAT IT IS NAMED FOR (feature 261). The record gives the dooryard copse as "a loose copse of
+# bamboo and fruit trees in the gaps between the houses" and no distance (research/vegetation, 'What are the village's
+# three groves'); 90 ft is the bar the feature-230 settlement-review itself used to call a copse a wood (86% of clumps
+# more than 90 ft from any house), and the pool's copses before the reseats sat at a median 77-81 ft. A map drawing
+# convention on the record's words, not a finding. The against-the-belt copse reads as one wood with the belt when its
+# crowns stand within a crown or two of the belt's: 60 ft, the same kind of convention.
+COPSE_HOUSE_REACH_FT = 90.0
+COPSE_BELT_REACH_FT = 60.0
+
 WIND_VECTORS: dict[str, Pt] = {
     "N": (0.0, -1.0),
     "NE": (0.7071, -0.7071),

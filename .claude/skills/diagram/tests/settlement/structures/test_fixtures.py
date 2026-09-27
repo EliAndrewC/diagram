@@ -429,3 +429,11 @@ def test_a_caption_seat_falls_back_to_the_LEAST_blocked_not_to_the_clearest_lane
         gap=lambda q: gaps[q],
     )
     assert picked == touching, "an unblocked seat is taken even where the blocked one stands further off"
+
+
+def test_an_approach_that_stops_short_has_its_entrance_at_the_handover() -> None:
+    """Feature 261 (settlement-review of Mizuguchi): a connector that never comes within the entrance reach of a
+    dwelling still has an entrance - its point nearest the buildings - rather than none."""
+    M = {"houses": [{"x": 0.0, "y": 0.0}], "lanes": [{"connector": True, "pts": [[1000.0, 0.0], [300.0, 0.0], [150.0, 0.0]]}]}
+    assert kosatsuba_anchor(M, "entrance") == (150.0, 0.0)
+    assert kosatsuba_anchor({"houses": [{"x": 0.0, "y": 0.0}], "lanes": [{"connector": True, "pts": [[1.0, 1.0]]}]}, "entrance") is None, "a one-point run is no approach"

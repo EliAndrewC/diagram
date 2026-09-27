@@ -221,4 +221,12 @@ def kosatsuba_anchor(M: Any, placement: str) -> tuple[float, float] | None:
             if best is not None:
                 break
             acc += seg
+    if best is None and runs:
+        # ...AND AN APPROACH THAT STOPS SHORT STILL HAS AN ENTRANCE (feature 261, settlement-review of Mizuguchi): a
+        # connector that hands over to the lanes more than `KOSATSUBA_ENTRANCE_REACH_FT` from the nearest dwelling never
+        # "arrives", and the entrance board fell back to the traffic objective and stood on a lane most departures never
+        # use. Where the approach does not reach the buildings, its entrance is its point nearest them - the handover.
+        _pts = [p for run in runs if len(run) >= 2 for p in run]
+        if _pts:
+            return min(_pts, key=lambda q: min(math.hypot(q[0] - h[0], q[1] - h[1]) for h in houses))
     return best[1] if best else None

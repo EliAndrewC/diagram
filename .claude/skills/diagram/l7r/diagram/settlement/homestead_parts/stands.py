@@ -81,6 +81,7 @@ class StandsMixin:
         within: tuple[float, float, float, float] | None = None,
         face_margin: float | None = None,
         reserved: tuple[float, float, float, float] | None = None,
+        near: tuple[Any, float] | None = None,
     ) -> int:
         """A COMMUNAL village grove - the Chinese *fengshui* forest (风水林). Unlike the per-house *yashikirin*,
         a NUCLEATED village shelters behind ONE village-scale grove, in three roles (see research/vegetation.html 'What are the village's three groves' 'Village
@@ -248,6 +249,13 @@ class StandsMixin:
         # the clumps seated so far, filed as they land: the re-seat search keeps `step * 0.55` off the
         # ROUNDED clumps and the gap fill keeps half a crown off the unrounded seats, as each always did
         near_clumps, near_seats = Seats(step * 0.55), Seats(clump * 0.5)
+        # `near`: (points, reach) - a clump stands only within `reach` of one of the points (feature 261: the dooryard
+        # copse within a dooryard of a house, the against-the-belt copse at the belt's back). One index, asked per clump.
+        _near = None
+        if near is not None:
+            _near = Seats(near[1])
+            for _p in near[0]:
+                _near.add(float(_p[0]), float(_p[1]))
 
         def _reseat(qx: float, qy: float, require_interior: bool) -> tuple[float, float] | None:
             """A DENSE belt flows around a local obstacle instead of losing the column.
@@ -398,7 +406,7 @@ class StandsMixin:
                 # separate causes have now punched holes in a wind wall here - a wellhead inside the
                 # belt, a peer session's lane crossing it, and a threshing yard's sun corridor - and
                 # each was fixed with its own ad-hoc nudge until the third made the pattern obvious.
-                if blocks.hard(jx, jy):
+                if blocks.hard(jx, jy) or (_near is not None and not _near.too_near(jx, jy)):
                     continue
                 if blocks.local(jx, jy) or blocks.lane(jx, jy):
                     _alt = _reseat(jx, jy, require_interior=not blocks.local(jx, jy))
@@ -482,7 +490,7 @@ class StandsMixin:
                         for _qx, _qy in _inside[len(_inside) // 2 :] + _inside[: len(_inside) // 2]:  # the band's middle outward
                             if within is not None and (_qx + clump * 0.9 < within[0] or _qx - clump * 0.9 > within[2] or _qy + clump * 0.9 < within[1] or _qy - clump * 0.9 > within[3]):
                                 continue
-                            if blocks.hard(_qx, _qy) or blocks.local(_qx, _qy) or blocks.lane(_qx, _qy):
+                            if blocks.hard(_qx, _qy) or blocks.local(_qx, _qy) or blocks.lane(_qx, _qy) or (_near is not None and not _near.too_near(_qx, _qy)):
                                 continue
                             # ...AND NEVER ON TOP OF A CLUMP THAT IS ALREADY THERE (settlement-review
                             # 2026-08-29, acceptance re-check). The depth search is deterministic, so a gap

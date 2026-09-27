@@ -994,6 +994,6 @@ def test_the_windbreak_pop_up_names_its_side_and_an_authored_note_beats_it() -> 
     """Feature 261: the windbreak's `on_this_map` says which side the belt is on and why, unless the notes say."""
     meta = {"scale": "hamlet", "name": "Kashikawa", "households": 20, "windward": "NW", "wind_source": "regional"}
     data = _render([PLACE, "windbreak"], meta)
-    assert data["windbreak"]["on_this_map"].startswith("Here the belt stands on the north and west of the houses")
+    assert data["windbreak"]["on_this_map"].startswith("Here the belt stands toward the northwest of the houses")
     notes = MapNotes(place={}, features={"windbreak": "This one is planted on the old dike."})
     assert _render([PLACE, "windbreak"], meta, notes)["windbreak"]["on_this_map"] == "This one is planted on the old dike."

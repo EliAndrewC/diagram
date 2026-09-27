@@ -62,8 +62,8 @@ class SharedBambooGrove(Kind):
 
 class Windbreak(Kind):
     """
-    What: The village shelter belt - the fengshui back grove: a dense, cedar-backed stand of real crowns hooked
-    round the windward side of the cluster rather than ringing it - the north and west, where the region's winter
+    What: The village shelter belt - the fengshui back grove: a dense, cedar-backed stand of real crowns on the
+    windward one or two sides of the cluster, never ringing it - toward the northwest, where the region's winter
     wind comes from, unless the place has a local wind of its own.
 
     Why: A nucleated village shelters behind one village-scale grove against the winter monsoon. Fujian villages

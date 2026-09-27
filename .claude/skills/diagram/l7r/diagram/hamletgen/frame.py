@@ -190,6 +190,14 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
             _canopy = canopy_index(s.M)  # once for the whole re-seat probe, not per verge
             _lanes = [ln for ln in s.M.get("lanes", []) if not ln.get("connector")]
             _ranked = [ln for ln in _lanes if not ln.get("web")] or _lanes
+            # ...BUT AN ANCHORED BOARD STANDS ON WHATEVER WAY MEETS ITS ANCHOR (feature 261, settlement-review of Inashiro,
+            # Mizuguchi and Sawada). The lane the approach meets at the settlement's mouth is often a web lane, so the
+            # main-ways-first ranking skipped it and the `entrance` board went to a main-lane stub 669-711 ft inside the
+            # cluster, where half the households never pass it. The side-lane rule keeps a board off a straggler in the
+            # middle of the fabric; a web lane that passes the anchor itself is the entrance, and is offered.
+            if _anchor is not None:
+                _reach = (_pxb(KOSATSUBA_ANCHOR_BAND_FT) if _pxb else KOSATSUBA_ANCHOR_BAND_FT) * 2.0
+                _ranked = _ranked + [ln for ln in _lanes if ln not in _ranked and any(math.dist((float(p[0]), float(p[1])), _anchor) <= _reach for p in ln["pts"])]
             best: tuple[float, float, float, float] | None = None
             # ...AND A SEAT TO FALL BACK ON THAT STILL FACES ITS WAY (feature 230). Every verge candidate can be
             # refused by the 15-degree rule above - a hamlet whose web lays a straggler across every main-lane
