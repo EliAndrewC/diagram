@@ -336,7 +336,8 @@
    "Qing-dynasty",
    "Ming-Qing",
    "Qing"
-  ]
+  ],
+  "cased": true
  },
  "Qingming": {
   "def": "The Chinese tomb-sweeping festival, at which families clear and tend their ancestors' graves.",
@@ -6640,5 +6641,25 @@
    "hall-and-wing house",
    "hall-and-wing houses"
   ]
+ },
+ "koaza": {
+  "def": "A small named section of land within an ō-aza, the district of a village; the smallest named division of a village's ground.",
+  "variants": [
+   "koaza",
+   "ko-aza"
+  ]
+ },
+ "Kansai": {
+  "def": "The region of west-central Honshu around Kyoto, Osaka and Nara, the old capital region; the Kinai lies at its heart.",
+  "variants": [
+   "Kansai"
+  ]
+ },
+ "Ou": {
+  "def": "The old name for the northeast of Honshu, the two provinces of Mutsu and Dewa, which Yanagita counts among the regions where household graves were many.",
+  "variants": [
+   "Ou"
+  ],
+  "cased": true
  }
 }

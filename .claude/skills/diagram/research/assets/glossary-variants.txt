@@ -760,6 +760,7 @@ kanden	kanden
 kangxi	Kangxi
 kannon	Kannon
 kannushi	kannushi
+kansai	Kansai
 kanto	Kanto
 kantō	Kanto
 kaogongji	Kaogongji
@@ -808,6 +809,8 @@ kishu school	Kishu school
 kishu-school	Kishu school
 knob	knob
 knobs	knob
+ko-aza	koaza
+koaza	koaza
 kobito	kobito
 kochi seiri	kochi seiri
 kochi-seiri	kochi seiri
@@ -1068,6 +1071,7 @@ ote-suji	ote-suji
 otedori	ote-suji
 otemon	ote-mon
 otesuji	ote-suji
+ou	Ou
 oute	ote-mon
 outfall	outfall
 outwork	outwork
