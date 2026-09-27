@@ -5600,5 +5600,12 @@
   "variants": [
    "urajirogashi"
   ]
+ },
+ "crown": {
+  "def": "The spreading top of a tree, its branches and leaves, seen from above as the round shape the map draws for each tree.",
+  "variants": [
+   "crown",
+   "crowns"
+  ]
  }
 }

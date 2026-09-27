@@ -200,7 +200,9 @@ cribs	cribbing
 crop margin	crop margin
 crop margins	crop margin
 crop-margin	crop margin
+crown	crown
 crown shyness	crown shyness
+crowns	crown
 cryptomeria	sugi
 cryptomeria japonica	sugi
 culm	culm
