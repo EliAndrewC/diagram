@@ -103,6 +103,8 @@ buke-yashiki	buke-yashiki
 bund	bund
 bunded	bund
 bunds	bund
+bunka	Bunka
+bunka era	Bunka
 bunsuiguchi	bunsuiguchi
 burakumin	burakumin
 burgage	burgage plot
@@ -862,6 +864,8 @@ monk-style outlet	monk outlet
 monospecific	monospecific
 monzen	monzen
 morijio	morijio
+morisada manko	Morisada manko
+morisada mankō	Morisada manko
 moso	moso
 mozi	Mozi
 mu	mu
