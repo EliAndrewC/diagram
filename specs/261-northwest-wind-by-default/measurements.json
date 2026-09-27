@@ -933,5 +933,55 @@
   "quantity": "lane ends that reach only the way their own far end stands on (1 in the round: lane 3's end at (1528,70), 61 ft past its house): the service trim no longer counts the way a lane left, and the lane that served nothing is dropped; house 11 stays within the connector's reach",
   "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.json lanes, houses, fields (hamletgen.ways.geom.end_serves)",
   "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "inashiro-r15-board": {
+  "verifies": "F1",
+  "subject": "inashiro",
+  "round": "6fefdcdf",
+  "value": 0.0,
+  "unit": "degrees",
+  "quantity": "the entrance board's angle off the track it stands on (rot 131.5 against the track's 131.5 bearing; 87.7 in the round, squared to the lane-7 straggler); 0 of 15 departures miss it, 16.3 ft from the handover",
+  "source": ".claude/skills/diagram/pool/hamlets/inashiro/inashiro.json kosatsuba, lanes",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/settlement/structures/test_fixtures.py"
+ },
+ "kuwabata-r15-grain": {
+  "verifies": "F1",
+  "subject": "kuwabata",
+  "round": "6fefdcdf",
+  "value": 0,
+  "unit": "plots",
+  "quantity": "homestead dry plots on the dike-pond hamlet (6 barley, millet and buckwheat plots in the round); meta.homestead_fields 0",
+  "source": ".claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.json dry_plots, meta.homestead_fields",
+  "command": "python3 /tmp/claude-1000/-diagram/af341e10-4ba2-4068-bc4f-b49f0b239c8d/scratchpad/chk.py (from .claude/skills/diagram)"
+ },
+ "kuwabata-r15-notes": {
+  "verifies": "F3",
+  "subject": "kuwabata",
+  "round": "6fefdcdf",
+  "value": 2,
+  "unit": "passages",
+  "quantity": "the two dated notes passages (the copse's 3 clumps, the frontage knob) now say 'at that roll' and point to meta.kosatsuba_seat",
+  "source": ".claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md",
+  "command": "grep -n 'at that roll' .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md"
+ },
+ "mizuguchi-r15-fixtures": {
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "round": "6fefdcdf",
+  "value": 0,
+  "unit": "fixtures",
+  "quantity": "farmstead fixtures and persimmons whose line to their house crosses a lane (4 in the round); the shrine passed to the house at 1466.6,119.4, none unseated",
+  "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.json farm_fixtures, persimmons, lanes",
+  "command": "python3 /tmp/claude-1000/-diagram/af341e10-4ba2-4068-bc4f-b49f0b239c8d/scratchpad/chk.py (from .claude/skills/diagram)"
+ },
+ "mizuguchi-r15-belt": {
+  "verifies": "F2",
+  "subject": "mizuguchi",
+  "round": "6fefdcdf",
+  "value": 237,
+  "unit": "clumps",
+  "quantity": "the belt's clump count the 2026-09-27 notes entry states, matching the census (189 in the round)",
+  "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md",
+  "command": "grep -n '237 clumps, 300' .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md"
  }
 }
