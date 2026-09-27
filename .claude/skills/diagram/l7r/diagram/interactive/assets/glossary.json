@@ -1208,7 +1208,8 @@
    "dike-pond",
    "dike-ponds",
    "mulberry-dike fishpond",
-   "sangji yutang"
+   "sangji yutang",
+   "mulberry plot-fish ponds"
   ]
  },
  "discharge": {
@@ -1535,12 +1536,6 @@
   "def": "A boat-entry canal cut into a Japanese city so that barges float in to an internal dock - still water, never a live river.",
   "variants": [
    "funairi-bori"
-  ]
- },
- "furigana": {
-  "def": "The small kana printed beside a Chinese character in Japanese text to give its reading.",
-  "variants": [
-   "furigana"
   ]
  },
  "gabion": {
@@ -6870,6 +6865,71 @@
    "hsien"
   ]
  },
+ "bansui": {
+  "def": "Rotation of irrigation water: which villages or fields may take water, how wide their channels may be and when their gates may open, fixed by rule, most strictly in a dry season.",
+  "variants": [
+   "bansui"
+  ]
+ },
+ "bungi": {
+  "def": "A graduated stake set at the point where one ditch is split between two areas or villages, by whose marks the split is set.",
+  "variants": [
+   "bungi"
+  ]
+ },
+ "treadle wheel": {
+  "def": "A small paddle wheel, about five feet across, that one person turned by treading its blades to lift ditch water about a yard up into a paddy; light enough to carry to wherever it was needed.",
+  "variants": [
+   "treadle wheel",
+   "treadle wheels",
+   "fumiguruma"
+  ]
+ },
+ "chain pump": {
+  "def": "The Chinese square-pallet pump (the dragon-bone wheel): an endless chain of boards drawn up a wooden trough, trodden by people or turned by an ox, lifting water a yard or two from a river or canal onto fields.",
+  "variants": [
+   "chain pump",
+   "chain pumps",
+   "dragon-bone wheel",
+   "dragon-bone wheels",
+   "dragon-bone water wheel",
+   "dragon-bone water wheels"
+  ]
+ },
+ "noria": {
+  "def": "A large water wheel set in a river, turned by the current, with tubes or buckets on its rim that lift water and tip it into a trough leading to the fields.",
+  "variants": [
+   "noria",
+   "norias"
+  ]
+ },
+ "mizuya": {
+  "def": "A flood refuge on a farmstead: a storehouse, sometimes fit to live in, built on a stone-faced mound higher than the house, stocked with food and bedding for the days a flood lasted.",
+  "variants": [
+   "mizuya",
+   "mizuka"
+  ]
+ },
+ "kawado": {
+  "def": "A shared washing place on a river or ditch bank: a footing or steps down to the water where vegetables and clothes were washed.",
+  "variants": [
+   "kawado",
+   "araiba"
+  ]
+ },
+ "water pestle": {
+  "def": "A water mill that pounds grain: a stream turns a wheel whose axle lifts and drops a row of pestles into mortars, to polish rice or crush grain.",
+  "variants": [
+   "water pestle",
+   "water pestles"
+  ]
+ },
+ "waju": {
+  "def": "A ring-diked community of the low river plains: villages and their fields enclosed by one continuous levee and bound together to defend it.",
+  "variants": [
+   "waju"
+  ]
+ },
  "town ground": {
   "def": "Land governed by the town magistrate as the townsmen's ground, where their houses and shops stand, as against the ground of daimyo mansions and of temples and shrines.",
   "variants": [
@@ -7137,6 +7197,38 @@
    "river offices"
   ]
  },
+ "eighty-eighth night": {
+  "def": "The eighty-eighth night counted from the first day of spring on the old calendar, about May 2 - a traditional date for starting the season's farm work.",
+  "variants": [
+   "eighty-eighth night",
+   "hachijuhachiya"
+  ]
+ },
+ "Tiangong kaiwu": {
+  "def": "Song Yingxing's illustrated Ming dynasty encyclopedia of crafts and farming (1637), whose irrigation chapter gives the daily rates of the noria, the chain pump, the well-sweep and the windlass.",
+  "variants": [
+   "Tiangong kaiwu"
+  ]
+ },
+ "Nogu benriron": {
+  "def": "Okura Nagatsune's illustrated treatise on farm tools (1822), the source for when the treadle wheel was made in Osaka and how it spread.",
+  "variants": [
+   "Nogu benriron"
+  ]
+ },
+ "Horeki": {
+  "def": "A Japanese era name, 1751-1764.",
+  "variants": [
+   "Horeki",
+   "Hōreki"
+  ]
+ },
+ "Settsu": {
+  "def": "A city in Osaka Prefecture, named for the old province of Settsu around Osaka Bay.",
+  "variants": [
+   "Settsu"
+  ]
+ },
  "county magistrate": {
   "def": "The official who governs a county from its walled county town. Their jurisdiction covers the whole county, the town and its countryside alike, so the ground just outside the town gate is still under their rule.",
   "variants": [
@@ -7202,6 +7294,13 @@
    "house manager's"
   ]
  },
+ "take-well": {
+  "def": "A household's own well in a piped town water system: filled by bamboo pipe from a parent well at the water source instead of being dug down to groundwater. Omihachiman's townspeople ran such a system themselves.",
+  "variants": [
+   "take-well",
+   "take-wells"
+  ]
+ },
  "mokoshi": {
   "def": "A skirt roof: a lower roof run round a building below its main roof, so that a one-story hall looks as if it had two.",
   "variants": [
@@ -7245,6 +7344,13 @@
   "variants": [
    "dharma hall",
    "dharma halls"
+  ]
+ },
+ "contour canal": {
+  "def": "A canal dug along a contour line, so it stays nearly level across a slope instead of running down it; it can water only the ground below it.",
+  "variants": [
+   "contour canal",
+   "contour canals"
   ]
  },
  "mizunomi": {
@@ -7310,6 +7416,14 @@
    "sutra house",
    "sutra houses",
    "kyozo"
+  ]
+ },
+ "melon-on-the-vine": {
+  "def": "A Chinese irrigation layout in which one long canal (the vine) links and fills many ponds and small reservoirs along its course (the melons), each storing water for the fields around it - a larger counterpart of Japan's parent-child ponds.",
+  "variants": [
+   "melon-on-the-vine",
+   "melon on the vine",
+   "长藤结瓜"
   ]
  },
  "shoro": {
@@ -7659,6 +7773,26 @@
    "Hokke sect"
   ]
  },
+ "horita": {
+  "def": "A raised paddy of the Japanese waju: part of a poorly drained paddy dug out and the mud piled on the rest, so the rice stands on long ridges just above the water and the dug strips between are channels for a field boat.",
+  "variants": [
+   "horita",
+   "horiage-den"
+  ]
+ },
+ "hakehi": {
+  "def": "A drain culvert through a waju's ring dike, shut while the river outside stood higher than the fields and opened when it fell, so the polder's standing water ran out by gravity.",
+  "variants": [
+   "hakehi"
+  ]
+ },
+ "warichi": {
+  "def": "The Edo-period custom of re-dividing a village's fields among its landholders by lot every so many years, so that good and bad ground, and the risk of flood, were shared out evenly.",
+  "variants": [
+   "warichi",
+   "jiwari"
+  ]
+ },
  "Taiji": {
   "def": "In Chinese thought, the one whole that divides into yin and yang - which is why the Hakka read a half-moon pond (yin) and the mound behind the house (yang) as the two halves of one arrangement.",
   "variants": [
@@ -7684,6 +7818,19 @@
   "variants": [
    "offering hall",
    "heiden"
+  ]
+ },
+ "se-machi": {
+  "def": "An old land-register way of counting the paddies in a terraced plot: \"one tan, four se-machi\" records one tan of terrace made up of four separate paddies.",
+  "variants": [
+   "se-machi"
+  ]
+ },
+ "fault scarp": {
+  "def": "A steep face of ground left where the earth has shifted along a fault; at Sakaori, the steep west side of the valley, where the walls are highest.",
+  "variants": [
+   "fault scarp",
+   "fault scarps"
   ]
  },
  "kokuso": {
@@ -7714,6 +7861,30 @@
    "water teahouses"
   ]
  },
+ "open-ended dike": {
+  "def": "A river dike built in separate lengths with gaps left between them, so that a flood spreads through the gaps over the low ground behind and loses its force - with the waju's ring dike, one of the old Japanese ways of building dikes before continuous ones.",
+  "variants": [
+   "open-ended dike",
+   "open-ended dikes",
+   "kasumi dike",
+   "kasumi dikes"
+  ]
+ },
+ "field boat": {
+  "def": "A small, flat-bottomed boat for moving through waterlogged paddies and along the channels dug between horita strips, carrying people, seedlings and harvest.",
+  "variants": [
+   "field boat",
+   "field boats",
+   "tabune"
+  ]
+ },
+ "overlay": {
+  "def": "A cash crop drawn over part of a village's rice field on the ground that suits it - a fishpond with mulberry on its dikes or a lotus bed on the lowest, wettest plots, or a tea garden on the lower hillside.",
+  "variants": [
+   "overlay",
+   "overlays"
+  ]
+ },
  "Dunhuang": {
   "def": "An oasis town in northwest China on the old overland trade road. Its Buddhist cave library kept medieval monastery papers, among them registers of what a monastery took in and paid out.",
   "variants": [
@@ -7731,6 +7902,12 @@
   "def": "Paper, often marked with gold, that believers give to a Chinese temple to be burned as an offering.",
   "variants": [
    "gold paper"
+  ]
+ },
+ "Shen Kuo": {
+  "def": "A Song dynasty scholar-official who wrote the record of the Wanchun polder, whose restoration was taken up in 1061, that the research quotes on how the polder's dike was built and planted.",
+  "variants": [
+   "Shen Kuo"
   ]
  }
 }
