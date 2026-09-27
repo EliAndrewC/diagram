@@ -2914,7 +2914,8 @@
   "def": "Fallen leaves: the forest litter raked off a coppice wood's floor and carried to the paddies as fertilizer.",
   "variants": [
    "ochiba"
-  ]
+  ],
+  "cased": true
  },
  "offtake": {
   "def": "The point where a smaller channel leaves its parent, at an acute angle pointing downstream.",
@@ -4435,7 +4436,9 @@
   "def": "The clear ground kept between a fire and what would burn: about 6 ft at an attended forge, 30 ft around an unattended charcoal stack, 60 ft around a kiln body.",
   "variants": [
    "fire gap",
-   "fire gaps"
+   "fire gaps",
+   "fire-gap",
+   "fire-gaps"
   ]
  },
  "hoarding": {

@@ -367,6 +367,8 @@ fining	fining
 fire gap	fire gap
 fire gaps	fire gap
 fire water	fire-water
+fire-gap	fire gap
+fire-gaps	fire gap
 fire-water	fire-water
 fire-water tubs	fire-water
 fish fry	fish fry
