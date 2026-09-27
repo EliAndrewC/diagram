@@ -1,6 +1,6 @@
 {
  "feature": "272-temples-and-shrines-researched",
- "plan_sha256": "e1ae790b56781a58b0786694b427ada1e041d019e298991a35fb159b8ac21aea",
+ "plan_sha256": "69b365759b69f6aaa8b20325ebfcda168780d52332be63cb0df1ba12f467356f",
  "reviewed": "2026-09-27",
  "declared": "spec-fidelity",
  "decisions": [
@@ -12,9 +12,9 @@
   },
   {
    "id": "D2",
-   "summary": "six groups with number ranges; each existing section edited by one queue (010/050/070 B37, 040 R2, 210 R2 then R3, 020 R4 then T, 030 T); 130-206/270-300 cited only; 204 waits for R1",
+   "summary": "six groups with number ranges; each existing section edited by one queue (010/050/070 B37, 040 R2, 210 R2 then R3, 020 R4 then T, 030 T); 130-206/270-300 cited only except 190 and 204, handed over by 269 when R1 landed and written by R3; R3 also makes 210 the tier table (271 D63)",
    "class": "within",
-   "why": "every entry in readers/272-temple-absences.md (010, 020, 030, 040, 050, 070, 210) has exactly one owning group and 090-128 stay with S, so FR-001 is still covered in full; the split only removes concurrent edits"
+   "why": "every entry in readers/272-temple-absences.md has exactly one owning group and 090-128 stay with S, so FR-001 is covered in full; the 190/204/D63 additions match FR-002 and T06 as amended, and 271 inventory line 213 records D63 as TAKEN by 272. A widening from the coordinators, not a narrowing"
   },
   {
    "id": "D3",
@@ -54,9 +54,9 @@
   },
   {
    "id": "handoff-190-204",
-   "summary": "religion-and-death 190 (cremation ground siting) and 204 (bone mound) handed to R3 by 269 (claims line, R3 brief in queue 2); not stated in plan.md beyond D7's parenthetical, and D2 still says 130-206 are cited only and 204 waits",
+   "summary": "190 and 204 handed to R3 by 269; D63 (the tier table as 210) handed to R3 by 271; now stated in D2, FR-002 and T06",
    "class": "within",
-   "why": "a widening, not a narrowing: FR-002 already names 204 after R1 lands (R1's handoff exists); 190 sits beside A144 village cremation and came from the coordinator the GM named, FR-001's exclusion covers only sections another feature owns and FR-005's claims line now carries both. D2's sentence is stale text, not a fidelity finding"
+   "why": "within: the GM asked this session to close shrine and temple research gaps coordinating with 269 and 271 so as not to overlap; taking rows those coordinators hand over is that coordination. The staleness noted at round 3 is fixed (D2 is the only plan change since the round-3 digest)"
   }
  ],
  "verdict": "CLEAR"

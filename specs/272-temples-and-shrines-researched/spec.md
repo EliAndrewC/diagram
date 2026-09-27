@@ -82,7 +82,7 @@ both.)
   of 210 MUST get a second search (other
   tools and queries than the first, recorded in an HTML comment) and end as a citation, a download-list entry, or an
   absence note naming both searches. Sections another feature owns (burial and swept ground, 130-206, 269's group
-  R1) are cited, not searched.
+  R1, except 190 and 204, handed to this feature) are cited, not searched.
 - **FR-002**: The audit rows handed over (R2, R3, R4, B37, A133, A135, D49-D56, D63) MUST each be answered on
   `religion-and-death` in the ranges reserved for them (450-590 new; 310-330 new for B37; edits to 010, 020, 040, 050,
   070, 210, to 100-128 for A133, A135 and D49-D56, and to 190 and 204, handed over by 269 when its R1 landed; 271's
