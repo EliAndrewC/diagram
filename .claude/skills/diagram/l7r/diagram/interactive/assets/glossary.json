@@ -8183,5 +8183,25 @@
   "variants": [
    "uogashi"
   ]
+ },
+ "dock basin": {
+  "def": "An enclosed pool of still water cut back from a waterway into a town, where boats lie out of the current to load and unload.",
+  "variants": [
+   "dock basin",
+   "dock basins"
+  ]
+ },
+ "bill of lading": {
+  "def": "A shipper's written receipt for goods taken aboard a boat, listing the cargo and where it is bound.",
+  "variants": [
+   "bill of lading",
+   "bills of lading"
+  ]
+ },
+ "mirin": {
+  "def": "A sweet rice wine brewed for cooking and seasoning.",
+  "variants": [
+   "mirin"
+  ]
  }
 }

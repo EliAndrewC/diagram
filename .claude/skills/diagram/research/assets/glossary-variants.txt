@@ -112,6 +112,8 @@ bettō	bettō
 bettō-ji	bettō
 bidens	Bidens tripartita
 bidens tripartita	Bidens tripartita
+bill of lading	bill of lading
+bills of lading	bill of lading
 bishamon	Bishamon
 bishamonten	Bishamon
 black charcoal	black charcoal
@@ -391,6 +393,8 @@ dobei	neribei
 dobu	dobu
 dobuita	dobuita
 dochu bugyo	road magistrate
+dock basin	dock basin
+dock basins	dock basin
 dohyo	dohyō
 dohyō	dohyō
 doi	horinouchi
@@ -1213,6 +1217,7 @@ ming-qing	Qing dynasty
 minka	minka
 mino	Mino
 mire	mire
+mirin	mirin
 mise	mise
 mitochigai	mitochigai
 mitsuke	mitsuke
