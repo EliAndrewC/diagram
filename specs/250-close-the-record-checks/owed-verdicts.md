@@ -174,3 +174,6 @@
 - FireWaterTubs (buildings SECTION=160): REWRITTEN - "burned again and again" became often burned, Takayama's office never
 - OfficeHall (buildings SECTION=160): REWRITTEN - the storehouse reason marked this project's judgment and counted as a guess in Note and Caveat
 - TaxArchive (buildings SECTION=160): REWRITTEN - "only thick-walled kura were fireproof" and "that is why" softened to the section's words and the reason labeled a guess; the foot-thick walls clause CANNOT-TELL from 160 (it rests on dozo-jawiki, quoted at cities/fabric 143, not on the modal's Entry)
+- PracticeGround (buildings SECTION=210): REWRITTEN - Note and Caveat now say two domain schools read (Hagi, Mito) stood inside their castles and only the general rule is a guess; Sources adds hagi-meirinkan-guide, kodokan-mito-jawiki
+- StrikingPosts (buildings SECTION=210): IN-STEP - the Nishie riding ground is not a drill ground, so the jin'ya clause holds
+- WeaponRack (buildings SECTION=210): IN-STEP - open-ground practice, the county guess and the gear convention all still as the section says
