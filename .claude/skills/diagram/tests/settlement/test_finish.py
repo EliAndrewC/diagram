@@ -401,3 +401,28 @@ def test_finish_flushes_the_scatter_marks_culled_to_the_frame_after_the_slots_ow
     s.flush_blade_groups()
     assert s.out[z] == '<circle cx="200" cy="200" r="9" fill="#6E8B4A"/><in/><reach/>'
     assert not s._mark_groups
+
+
+def test_group_shared_opacity_composites_each_run_once_and_keeps_the_order():
+    """GM 2026-09-27: lanes at a junction read "one on top of the other" because every tread carried its own 0.9 and
+    stacked where two overlapped. A run of same-opacity strokes goes in ONE group; a different or absent opacity ends it."""
+    from l7r.diagram.settlement.finish import group_shared_opacity
+
+    a, b = '<path d="M0,0 L9,0" stroke="#C9AE79" opacity="0.9"/>', '<path d="M5,0 L5,9" stroke="#C9AE79" opacity="0.9"/>'
+    c, d = '<path d="M0,5 L9,5" stroke="#CBB178" stroke-opacity="0.65" opacity="0.4"/>', '<path d="M1,1 L2,2" stroke="#000"/>'
+    block, at = group_shared_opacity([a, b, c, d])
+    assert block == [
+        '<g opacity="0.9">',
+        '<path d="M0,0 L9,0" stroke="#C9AE79"/>',
+        '<path d="M5,0 L5,9" stroke="#C9AE79"/>',
+        "</g>",
+        '<g opacity="0.4">',
+        '<path d="M0,5 L9,5" stroke="#CBB178" stroke-opacity="0.65"/>',
+        "</g>",
+        d,
+    ]
+    assert at == [1, 2, 5, 7], "each element's draw position in the block"
+    assert group_shared_opacity([a]) == (['<g opacity="0.9">', '<path d="M0,0 L9,0" stroke="#C9AE79"/>', "</g>"], [1])
+    # a dropped lane's blanked ink sat between two treads on Inashiro and split them into two groups that still stacked
+    block, at = group_shared_opacity([a, "", b])
+    assert block[0] == '<g opacity="0.9">' and block.count("</g>") == 1 and at == [1, 2, 3]
