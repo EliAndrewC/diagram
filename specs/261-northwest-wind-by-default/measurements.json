@@ -970,7 +970,7 @@
   "round": "6fefdcdf",
   "value": 0,
   "unit": "fixtures",
-  "quantity": "farmstead fixtures and persimmons whose line to their house crosses a lane (4 in the round); the shrine passed to the house at 1466.6,119.4. meta.farm_fixtures_unseated counts a coop and a woodpile, both the farmstead at (1277,257)'s: every recorded seat and every yard-ring seat out to 24 ft lies on its own shed, privy, heap, gardens, byre or threshing yard, or beyond lane 4 behind it - the limitation plan D19 accepts",
+  "quantity": "farmstead fixtures and persimmons whose line to their house crosses a lane (4 in the round); the shrine passed to the house at 1466.6,119.4, and meta.farm_fixtures_unseated is empty - the coop and stack of the farmstead at (1277,257) seat on the yard ring past the homestead bundles",
   "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.json farm_fixtures, persimmons, lanes",
   "command": "python3 /tmp/claude-1000/-diagram/af341e10-4ba2-4068-bc4f-b49f0b239c8d/scratchpad/chk.py (from .claude/skills/diagram)"
  },
@@ -983,5 +983,14 @@
   "quantity": "the belt's clump count the 2026-09-27 notes entry states, matching the census (189 in the round)",
   "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md",
   "command": "grep -n '237 clumps, 300' .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md"
+ },
+ "pool-r15-unseated": {
+  "subject": "pool",
+  "round": "6fefdcdf",
+  "value": 0,
+  "unit": "fixtures",
+  "quantity": "farmstead fixtures and persimmons recorded in meta.farm_fixtures_unseated across the five pool hamlets after the lane rule, the yard ring past the bundles and the persimmon's outer step (the commit before the lane rule: Sawada one heap; with the lane rule alone: seven on four maps)",
+  "source": ".claude/skills/diagram/pool/hamlets/*/*.json meta.farm_fixtures_unseated",
+  "command": "python3 /tmp/claude-1000/-diagram/af341e10-4ba2-4068-bc4f-b49f0b239c8d/scratchpad/chk.py (from .claude/skills/diagram)"
  }
 }

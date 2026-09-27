@@ -358,16 +358,17 @@ Measured before and after in research R10.
     record gives the shrine's COUNT (3-8% of homesteads, never exceeding the share, research/homesteads.html) and not
     its household; the engine chooses the household by a positional roll, and the pass re-rolls that choice to a house
     with room, keeping the count.
-  After both, every map is back to its earlier misses (Sawada's one heap) but one: Mizuguchi's farmstead at
-  (1277, 257) has no seat for its coop or its woodpile (`m:mizuguchi-r15-fixtures`). Its steading is closed on every
-  side: lane 4, which carries the west rows' way out, runs 25-30 ft behind the house's center, with the shed, the privy
-  and the heap in the strip between; gardens stand on the west flank, the byre on the east, the threshing yard in
-  front. ACCEPTED as a limitation, with its cost - one farmstead of twelve draws no coop and no stack, and the miss is
-  recorded in `meta.farm_fixtures_unseated` - and the alternatives priced: a seat beyond the lane (what the review
-  refused), the yard ring out to 24 ft (tried; every seat lies on the steading's own parts), and routing lane 4 off the
-  back wall (a change to the lane web for one farmstead's coop, which the way-out rules the web was fixed against
-  this feature would all have to re-prove). Chosen by the session, put to the spec-fidelity exception check with this
-  record.
+  - the ring is not refused by a homestead BUNDLE box: `_try_place_bundle` reserves a rectangle round each whole
+    steading and registers its parts - house, yard, gardens - one by one besides, so the bundle is a packing
+    reservation, not ground. Tested as a solid, a bundle offset by its gardens refused its own house's open flank and a
+    neighbor's refused ground nothing stood on; Mizuguchi's farmstead at (1277, 257) seated no coop and no stack
+    (spec-fidelity of round 6fefdcdf, probed seat by seat). The skip is the ring's only: taken for every seat, the
+    fixtures took the flanks first and the persimmons after them lost their ground (Inashiro drew 6 of its 12).
+  - the persimmon, which alone recorded no miss, tries its six bearings a step (10 ft) further out and records one
+    when none takes it. The pool had been dropping persimmons silently: with the step, Sawada draws 17 where it drew
+    14, Mizuguchi 11 where 8, Kuwabata 13 where 12, with no miss on any map.
+  Measured after all of it (`m:pool-r15-unseated`): no fixture of any kind unseated on any of the five maps, where the
+  commit before the lane rule left Sawada one heap short.
 
 ## Phases
 

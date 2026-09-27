@@ -461,3 +461,43 @@ def test_the_yard_ring_seats_a_fixture_at_every_wall_of_its_own_house() -> None:
     assert all(ly == -(10.0 + 3.0 + 2.0) and (cw, ch) == (6.0, 4.0) for _lx, ly, cw, ch in ring[:3]), "the back wall, along it"
     assert all(abs(lx) == 20.0 + 3.0 + 2.0 and (cw, ch) == (4.0, 6.0) for lx, _ly, cw, ch in ring[3:9]), "the flanks, turned"
     assert all(ly == 10.0 + 3.0 + 2.0 for _lx, ly, _cw, _ch in ring[9:]), "the front corners"
+
+
+def test_a_fixture_with_no_seat_anywhere_is_recorded_persimmons_included(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """`farmstead_fixtures` (feature 261): every seat refused - here by a lane between the house and every seat - leaves
+    each rolled kind recorded in `meta.farm_fixtures_unseated`, the persimmon too, which used to vanish unrecorded."""
+    from l7r.diagram.hamletgen.homesteads import fixtures as fx
+    from l7r.diagram.settlement import Settlement
+
+    for kind in fx.FIXTURE_BANDS:
+        monkeypatch.setitem(fx.FIXTURE_BANDS, kind, (1.0, 1.0))
+    s = Settlement(W=1200, H=700, seed=7)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    houses = [{"x": 600.0, "y": 350.0, "w": 46.0, "h": 28.0, "rot": 0.0, "shed_side": "N"}]
+    s.M["houses"].append(dict(houses[0]))
+    s.placed.append((600.0, 350.0, 46.0, 28.0))
+    monkeypatch.setattr(fx, "across_a_lane", lambda lanes, house, seat: True)
+    fx.farmstead_fixtures(s, a_plan(), houses)
+    missed = s.M["meta"]["farm_fixtures_unseated"]
+    assert missed.get("persimmon") == 1 and missed.get("privy") == 1 and missed.get("shrine") == 1
+    assert not s.M.get("persimmons") and not s.M.get("farm_fixtures")
+
+
+def test_the_yard_ring_looks_past_the_homestead_bundles(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """`farmstead_fixtures` (feature 261, spec-fidelity of round 6fefdcdf): a bundle box is a packing reservation, so the yard
+    ring is not refused by one - the house's own offset by its gardens, or a neighbor's over open ground - while the
+    recorded seats still are."""
+    from l7r.diagram.hamletgen.homesteads import fixtures as fx
+    from l7r.diagram.settlement import Settlement
+
+    monkeypatch.setitem(fx.FIXTURE_BANDS, "coop", (1.0, 1.0))
+    for kind in ("privy", "manure", "bath", "woodpile", "shrine", "persimmon"):
+        monkeypatch.setitem(fx.FIXTURE_BANDS, kind, (0.0, 0.0))
+    s = Settlement(W=1200, H=700, seed=7)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    houses = [{"x": 600.0, "y": 350.0, "w": 46.0, "h": 28.0, "rot": 0.0, "shed_side": "N"}]
+    s.M["houses"].append(dict(houses[0]))
+    s.placed += [(600.0, 350.0, 46.0, 28.0), (590.0, 360.0, 140.0, 120.0)]  # the house, and its bundle offset off-center
+    fx.farmstead_fixtures(s, a_plan(), houses)
+    coops = [r for r in s.M.get("farm_fixtures", []) if r["kind"] == "coop"]
+    assert len(coops) == 1 and not (s.M["meta"].get("farm_fixtures_unseated") or {}), "seated by the ring, through the bundle"
