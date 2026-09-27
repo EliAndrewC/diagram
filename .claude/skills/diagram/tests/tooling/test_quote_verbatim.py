@@ -273,6 +273,8 @@ def test_a_run_of_translated_quotes_is_paired_with_the_run_of_originals_in_its_p
     short = "「Kept.」 / 「Two.」 (translated from the Japanese by this project; original: 「二」)"
     assert qv.passages(short) == [{"quote": "Kept.", "original": "", "language": ""}, {"quote": "Two.", "original": "二", "language": "the Japanese"}]
     assert qv.passages("「A.」 and 「B.」 (translated from the Japanese by this project; original: 「一」) then 「C」")[1]["original"] == "一"
+    semi = "「One.」; 「Two.」 (translated from the Chinese by this project; original: 「一」; original: 「二」)"
+    assert [(p["quote"], p["original"]) for p in qv.passages(semi)] == [("One.", "一"), ("Two.", "二")]
 
 
 def test_a_cjk_compatibility_ideograph_on_the_page_is_the_same_character_as_the_quote_s() -> None:

@@ -595,6 +595,9 @@ hereditary temples	hereditary temple
 hinin	hinin
 hinoki	hinoki
 hinomi-yagura	hinomi-yagura
+hip-and-gable	hip-and-gable roof
+hip-and-gable roof	hip-and-gable roof
+hip-and-gable roofs	hip-and-gable roof
 hipposandal	hipposandal
 hipposandals	hipposandal
 hiro	hiro
@@ -1232,6 +1235,8 @@ satetsu	satetsu
 satoyama	satoyama
 schistosomiasis	schistosomiasis
 scour	scour
+screen wall	screen wall
+screen walls	screen wall
 se	se
 secondary forest	secondary forest
 secondary woodland	secondary forest
@@ -1332,6 +1337,8 @@ sphere	Sphere
 spillway	spillway
 spillways	spillway
 spiraea	Spiraea
+spirit wall	screen wall
+spirit walls	screen wall
 spread footing	footing
 spring and autumn	Spring and Autumn
 spring line	spring line
