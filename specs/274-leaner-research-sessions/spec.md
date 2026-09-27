@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-27
 
-**Status**: Draft
+**Status**: FAITHFUL at round 5; implementing
 
 **Input**: the GM's request, verbatim in [`request.md`](request.md): implement all three of the session's suggestions from the
 token measurement in [`research.md`](research.md), land them, and then tell the other research sessions so they use them
@@ -90,8 +90,9 @@ session's first turn is measured before and after.
 ### Functional Requirements
 
 - **FR-001 (suggestion 1)**: A write session MUST take at most four questions AND at most ten new registry keys.
-  The page-session runner MUST count every brief's questions with one shared, tested helper, and MUST refuse a brief
-  counting more than four, or counting none without an exempt kind, naming the split and the escape. The helper MUST count only what a brief assigns.
+  The page-session runner MUST count every brief's assigned questions with one shared, tested helper, and MUST refuse a
+  brief without an exempt kind that counts more than four or none, naming the split and the escape. The helper MUST
+  count only what a brief assigns.
   Only four named kinds are exempt (`check`, `assertions`, `split`, `handover`), and feature 250's `brief.py` MUST declare
   the kind on every brief it makes. `make reserve` MUST refuse a page
   session's eleventh registry key with the continuation instructions, and the runner MUST queue a continuation brief a
@@ -153,3 +154,4 @@ None: nothing a map draws or states changes. This is process tooling.
   FR-002 still named 269's generator. Now fixed. The cap is again on WRITE sessions only, with `check` an exempt kind that
   `brief.py` declares; the helper counts only what a brief assigns, never its do-not-edit sections; SC-001 runs real
   briefs (271's `g1-check-a.md`, a six-section owed-modal brief).
+- Round 5 (spec-fidelity-verify, 2026-09-27): FAITHFUL. All three findings resolved; FR-001 reworded as the reviewer suggested.
