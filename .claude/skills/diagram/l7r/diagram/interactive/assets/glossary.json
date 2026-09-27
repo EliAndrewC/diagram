@@ -5757,6 +5757,22 @@
    "loose-cluster"
   ]
  },
+ "stroke": {
+  "def": "The drawn line that stands for a watercourse or bund on the map; its width is the width the feature is drawn at.",
+  "variants": [
+   "stroke",
+   "strokes"
+  ]
+ },
+ "seam": {
+  "def": "The shared edge where two neighboring paddy plots meet on the map; a broken seam leaves a gap or an overlap between them.",
+  "variants": [
+   "seam",
+   "seams",
+   "paddy seams",
+   "plot seams"
+  ]
+ },
  "nimosaku": {
   "def": "Double cropping: two different crops from the same ground in one year. On a paddy it is rice in summer and barley or wheat in winter, grown on the field once its water is let off.",
   "variants": [
@@ -6062,6 +6078,25 @@
   "variants": [
    "ukiyagara",
    "ウキヤガラ"
+  ]
+ },
+ "Tonami plain": {
+  "def": "A plain in Toyama Prefecture, on the Sea of Japan side of Honshu, known for farmsteads that stand apart among their paddies, each inside its own grove.",
+  "variants": [
+   "Tonami plain",
+   "Tonami"
+  ]
+ },
+ "Honshu": {
+  "def": "Japan's largest island, the main island of the country.",
+  "variants": [
+   "Honshu"
+  ]
+ },
+ "shifting cultivation": {
+  "def": "Farming a patch cleared from woods or brush for a few seasons, then leaving it to grow back while another patch is cleared.",
+  "variants": [
+   "shifting cultivation"
   ]
  }
 }

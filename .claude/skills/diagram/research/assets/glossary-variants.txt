@@ -572,6 +572,7 @@ honden	honden
 hongo	hongo
 honmaru	honmaru
 honmune-zukuri	honmune-zukuri
+honshu	Honshu
 horinouchi	horinouchi
 horinouchi's	horinouchi
 horse-face	mamian
@@ -989,6 +990,7 @@ outwork	outwork
 outworks	outwork
 ox-frame	ox-frame
 ox-frames	ox-frame
+paddy seams	seam
 panicle	panicle
 panicles	panicle
 pannage	pannage
@@ -1016,6 +1018,7 @@ pig iron	pig iron
 plankton	plankton
 plant association	plant association
 planted collar	planted collar
+plot seams	seam
 polder	polder
 pollard	pollard
 pollarded	pollard
@@ -1147,6 +1150,8 @@ satoyama	satoyama
 schistosomiasis	schistosomiasis
 scour	scour
 se	se
+seam	seam
+seams	seam
 season word	season word
 season words	season word
 secondary forest	secondary forest
@@ -1186,6 +1191,7 @@ shelterbelt	shelter belt
 shi	shi
 shibai-goya	shibai-goya
 shichiya	shichiya
+shifting cultivation	shifting cultivation
 shijin soo	four gods
 shijin-soo	four gods
 shijing	Book of Songs
@@ -1266,6 +1272,8 @@ stringer	stringer
 stringers	stringer
 strip footing	strip footing
 strip footings	strip footing
+stroke	stroke
+strokes	stroke
 stupa	stupa
 stupas	stupa
 subgrade	subgrade
@@ -1369,6 +1377,8 @@ toki no kane	toki no kane
 tokugawa	Tokugawa
 tokugawa ieyasu	Ieyasu
 ton'ya	ton'ya
+tonami	Tonami plain
+tonami plain	Tonami plain
 tonya	ton'ya
 torii	torii
 toro	Toro
