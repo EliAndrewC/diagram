@@ -134,7 +134,10 @@ Each section with no footnotes is either an item (fields 140/150 -> B08; homeste
   (`religion-and-death/160`, `170`, `180`, `206`: "no source found" or the project's own arithmetic). The 2% graves
   figure rests on an unread Buck survey. M.
 
-## R2 - religion-and-death: city temples (edits existing; new 310-330)
+## R2 - religion-and-death: city temples (edits existing; new 310-330) - HANDED to feature 272
+
+Handed to "Diagram shrines" (feature 272) on 2026-09-27, which the GM had just given city temple complexes. It confirmed: "B37 is mine." Its outcome is recorded in 272.
+
 
 - B37 City temples: monk counts "on no page read" (`010`); the temple-gate shop ratio and meibutsu (`050`); graveyard
   sharing (`070`); the bone-mound size (`204`). M.

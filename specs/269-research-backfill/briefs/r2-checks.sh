@@ -1,3 +1,3 @@
 #!/bin/sh
-# the check briefs for group R2, made from its write session's handoff when that session ends
-exec python3 /diagram/.clones/diagram-supplemental/specs/269-research-backfill/briefs/gen.py checks R2
+# group R2 was handed to feature 272 (2026-09-27): no check sessions
+exit 0
