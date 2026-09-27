@@ -1119,6 +1119,7 @@
   "variants": [
    "daikan",
    "intendancy",
+   "intendancies",
    "intendant",
    "intendants"
   ]
@@ -5855,6 +5856,25 @@
   "variants": [
    "honjin",
    "honjins"
+  ]
+ },
+ "tetsuki": {
+  "def": "One of the two grades of an intendant's staff, beside the tedai; the tetsuki and tedai of an intendancy lived in small houses (koya) and long-houses (nagaya) inside its compound.",
+  "variants": [
+   "tetsuki",
+   "tezuki"
+  ]
+ },
+ "amado": {
+  "def": "The storm shutter: a board door set outside the openings of a Japanese building, running on a one-groove sill, closed at night and stowed by day in a box at the end of its run (the tobukuro); devised in the late sixteenth century, in its settled form from the seventeenth.",
+  "variants": [
+   "amado"
+  ]
+ },
+ "tobukuro": {
+  "def": "The box at the end of a run of storm shutters (amado) into which the shutters slide to be stored when not in use, by day.",
+  "variants": [
+   "tobukuro"
   ]
  }
 }

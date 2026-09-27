@@ -14,6 +14,7 @@ alluvial fan	alluvial fan
 alluvial fans	alluvial fan
 along the ridge	ridge span
 alternate attendance	alternate attendance
+amado	amado
 anaerobic	anaerobic
 anagama	noborigama
 anchor culture	anchor culture
@@ -575,6 +576,7 @@ inkyo	inkyo
 intake	intake
 intake mouth	intake
 intakes	intake
+intendancies	daikan
 intendancy	daikan
 intendant	daikan
 intendants	daikan
@@ -1286,6 +1288,8 @@ tertiary	tertiary source
 tertiary source	tertiary source
 tertiary summaries	tertiary source
 tertiary summary	tertiary source
+tetsuki	tetsuki
+tezuki	tetsuki
 thatch field	thatch field
 thatch fields	thatch field
 the pool	the pool
@@ -1301,6 +1305,7 @@ tiangeng	bund
 tier	tier
 tiers	tier
 tillering	tillering
+tobukuro	tobukuro
 toe	toe
 tohoku	Tohoku
 toiya	ton'ya
