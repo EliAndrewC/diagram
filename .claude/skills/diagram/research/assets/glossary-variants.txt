@@ -169,8 +169,10 @@ chonin	chonin
 chonin-chi	buke-chi
 chori	chori
 choriboshi	chori
+chotsuke	chōtsuke
 chronosequence	chronosequence
 chugen	chugen
+chōtsuke	chōtsuke
 chōzuya	temizuya
 circuit	wall circuit
 circuit's length	wall circuit
@@ -825,6 +827,7 @@ kosatsu	kosatsuba
 kosatsuba	kosatsuba
 kotai-yoriai	kotaiyoriai
 kotaiyoriai	kotaiyoriai
+kozashi	kozashi
 kuchiireya	hitoyado
 kui	kui
 kumi	kumi
@@ -1012,6 +1015,7 @@ night-soil	night soil
 nightsoil	night soil
 nihonbashi	Nihonbashi
 ninomaru	ninomaru
+ninsokusashi	ninsokusashi
 noborigama	noborigama
 nogyo zensho	Nogyo Zensho
 normal depth	normal depth
@@ -1468,6 +1472,7 @@ tonya	ton'ya
 torii	torii
 toro	Toro
 toro site	Toro
+toshiyori	toshiyori
 total length and fall	fall
 town magistrates	town magistrate
 towpath	towpath
@@ -1500,6 +1505,7 @@ ujidera	bodaiji
 ujigami	ujigami
 ujiko	ujiko
 umagutsu	umagutsu
+umasashi	umasashi
 umaya	umaya
 umayado	umayado
 umayagoe	kyuhi

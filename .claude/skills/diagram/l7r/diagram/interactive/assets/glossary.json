@@ -3862,7 +3862,7 @@
   ]
  },
  "ton'ya": {
-  "def": "A wholesaler-warehouseman of the Edo economy, who stored, sold on and shipped a trade's goods.",
+  "def": "A wholesaler-warehouseman of the Edo economy, who stored, sold on and shipped a trade's goods. At a post station the same word (toiya) named the head official who ran the relay office (toiyaba).",
   "variants": [
    "ton'ya",
    "tonya",
@@ -6502,6 +6502,37 @@
   "def": "The inland highway of Edo-period Japan between Edo and Kyoto through the mountains, the other main route beside the coastal Tokaido; its post stations kept about half as many inns as the Tokaido's.",
   "variants": [
    "Nakasendo"
+  ]
+ },
+ "toshiyori": {
+  "def": "At a post station, the deputy officers who helped the headman run the relay office (toiyaba).",
+  "variants": [
+   "toshiyori"
+  ]
+ },
+ "chōtsuke": {
+  "def": "At a post station's relay office, the clerk who logged every man and horse coming in and going out.",
+  "variants": [
+   "chōtsuke",
+   "chotsuke"
+  ]
+ },
+ "umasashi": {
+  "def": "At a post station's relay office, the dispatcher who assigned loads to the relay horses.",
+  "variants": [
+   "umasashi"
+  ]
+ },
+ "ninsokusashi": {
+  "def": "At a post station's relay office, the dispatcher who assigned loads to the porters.",
+  "variants": [
+   "ninsokusashi"
+  ]
+ },
+ "kozashi": {
+  "def": "At a post station's relay office, one of the lesser staff listed after the dispatchers of horses and porters; the record does not say what a kozashi did.",
+  "variants": [
+   "kozashi"
   ]
  }
 }
