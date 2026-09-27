@@ -17,6 +17,7 @@ import os
 import pytest
 
 from l7r.diagram.hamletgen.consts import BROOK_MAX_TURN_DEG, COPSE_BELT_REACH_FT, COPSE_HOUSE_REACH_FT
+from l7r.diagram.hamletgen.homesteads.fields import GRAIN_BOUGHT_IN
 from l7r.diagram.settlement import segments_cross
 from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_ENTRANCE_REACH_FT, KOSATSUBA_HANDOVER_BAND_FT, departure_routes, kosatsuba_anchor, routes_missed
 from l7r.diagram.settlement.structures.fixtures._helpers import KOSATSUBA_ANCHOR_BAND_FT
@@ -415,9 +416,12 @@ def test_no_brook_runs_ruled_for_most_of_its_course_on_the_page(gen: str) -> Non
 def test_a_households_dry_ground_lies_by_its_house(gen: str) -> None:
     """A household's dry field lay first of all on the raised ground its house stood on (research/fields.html, "Where dry
     (hatake) crops go"; settlement-review of Inashiro, round 0ae309f0: every dry plot across the rice, a median walk of
-    658 ft). The pool draws a homestead field against some steadings, and the median house stands within 150 ft of a dry
+    658 ft) - except where the archetype buys its grain in, which lays none (settlement-review of Kuwabata, round 6fefdcdf). The pool draws a homestead field against some steadings, and the median house stands within 150 ft of a dry
     plot - measured at 70-111 ft once the homestead fields were laid (specs/261 measurements)."""
     m = _manifest(gen)
+    if m["meta"].get("field_archetype") in GRAIN_BOUGHT_IN:
+        assert m["meta"].get("homestead_fields") == 0 and not any(d.get("homestead") for d in m.get("dry_plots") or []), "a grain plot where grain is bought in"
+        return
     assert m["meta"].get("homestead_fields", 0) > 0, "no homestead field was laid"
     plots = [[(float(p[0]), float(p[1])) for p in d["poly"]] for d in m.get("dry_plots") or []]
     near = sorted(min(math.dist((h["x"], h["y"]), (sum(p[0] for p in q) / len(q), sum(p[1] for p in q) / len(q))) for q in plots) for h in m["houses"])

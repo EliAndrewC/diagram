@@ -345,9 +345,29 @@ Measured before and after in research R10.
   economy). Kuwabata had drawn six barley, millet and buckwheat plots.
 - A farmstead fixture is refused a seat whose line to its house crosses a lane (`across_a_lane`, the brook's line test):
   a shrine stands in a corner of the house plot and a coop in the yard (research/homesteads.html), and Mizuguchi drew a
-  coop, a woodpile and its one shrine beyond the lane behind their house. A shrine with no seat passes to the next
-  house with room, and the miss is recorded only if none takes it - the share is how many households keep one, not
-  which; without the pass Kashikawa and Mizuguchi each lost their only shrine.
+  coop, a woodpile and its one shrine beyond the lane behind their house. The rule's cost was measured, not assumed:
+  against the commit before it, seven more fixtures went unseated on four maps (Inashiro a heap; Kashikawa two coops and
+  a bath; Sawada a second heap; Mizuguchi a coop and a woodpile) and two maps lost their only shrine. The placement was
+  fixed rather than the rule relaxed:
+  - a fixture every recorded seat of which is refused is offered the ring round its own house's other walls
+    (`yard_ring`: the back wall at three points, each flank at three heights, the front corners), at the same outward
+    rungs the recorded seats get, before it counts as a miss. The recorded seats keep their order and win wherever they
+    fit; the ring is a GUESS, labeled at the point of change (the record places each fixture at a wall, not at which
+    one when that one is taken).
+  - a shrine with no seat passes to the next house with room, and the miss is recorded only if none takes it. The
+    record gives the shrine's COUNT (3-8% of homesteads, never exceeding the share, research/homesteads.html) and not
+    its household; the engine chooses the household by a positional roll, and the pass re-rolls that choice to a house
+    with room, keeping the count.
+  After both, every map is back to its earlier misses (Sawada's one heap) but one: Mizuguchi's farmstead at
+  (1277, 257) has no seat for its coop or its woodpile (`m:mizuguchi-r15-fixtures`). Its steading is closed on every
+  side: lane 4, which carries the west rows' way out, runs 25-30 ft behind the house's center, with the shed, the privy
+  and the heap in the strip between; gardens stand on the west flank, the byre on the east, the threshing yard in
+  front. ACCEPTED as a limitation, with its cost - one farmstead of twelve draws no coop and no stack, and the miss is
+  recorded in `meta.farm_fixtures_unseated` - and the alternatives priced: a seat beyond the lane (what the review
+  refused), the yard ring out to 24 ft (tried; every seat lies on the steading's own parts), and routing lane 4 off the
+  back wall (a change to the lane web for one farmstead's coop, which the way-out rules the web was fixed against
+  this feature would all have to re-prove). Chosen by the session, put to the spec-fidelity exception check with this
+  record.
 
 ## Phases
 

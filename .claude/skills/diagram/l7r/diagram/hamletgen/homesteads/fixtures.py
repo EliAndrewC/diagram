@@ -404,12 +404,20 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
             # them, so no map moves except where a fixture was previously dropped. Three rungs, at the wall
             # gap again each time, which is how `clear_label_seat` and the board's own caption ladder ring
             # outward for the same reason - the crowded ground is exactly where the thing has to stand.
-            _rungs = [(0.0, 0.0)] + [(px(8.0) * _k, px(8.0) * _k) for _k in (1, 2, 3)]
+            _rungs = [(0.0, 0.0, seats)] + [(px(8.0) * _k, px(8.0) * _k, seats) for _k in (1, 2, 3)]
+            # ...THEN THE REST OF ITS OWN YARD (feature 261, spec-fidelity of round 6fefdcdf): once a seat beyond a lane is refused
+            # (`across_a_lane`), a farmstead whose lane runs close behind its back wall had no recorded seat left, and seven
+            # coops, woodpiles, baths and heaps went unseated across the pool. The recorded seats keep their order and win
+            # wherever they fit; only a fixture that fits none of them is offered the ring round the house's other walls, which is
+            # still its own plot (a GUESS, labeled: the record places each fixture at a wall, not at which one when that is taken).
+            if kind != "shrine":
+                _ring = yard_ring(hw, hh, g, w, d)
+                _rungs += [(px(8.0) * _k, px(8.0) * _k, _ring) for _k in (0, 1, 2, 3)]
             _seated = False
-            for _ox, _oy in _rungs:
+            for _ox, _oy, _table in _rungs:
                 if _seated:
                     break
-                for lx, ly, cw, ch in seats:
+                for lx, ly, cw, ch in _table:
                     lx = lx + (_ox if lx >= 0 else -_ox)
                     ly = ly + (_oy if ly >= 0 else -_oy)
                     cx, cy = hx + lx * ca - ly * sa, hy + lx * sa + ly * ca
@@ -449,6 +457,17 @@ def across_the_brook(s: Settlement, house: Pt, seat: Pt) -> bool:
     seat crosses no reach of any stream. Mizuguchi drew a privy and a persimmon on the far bank of the brook that runs
     past their house's door."""
     return any(segments_cross(house, seat, poly[k], poly[k + 1]) for f in s.M.get("streams", []) for poly in (f.get("poly") or [],) for k in range(len(poly) - 1))
+
+
+def yard_ring(hw: float, hh: float, g: float, w: float, d: float) -> list[tuple[float, float, float, float]]:
+    """The seats round a house's walls in its own frame (`lx, ly, along x, along y`), a wall gap out: the back wall at
+    its middle and ends, each flank at three heights, and the front corners - the last resort of a fixture every
+    recorded seat of which is refused (`farmstead_fixtures`). A seat on the back or front wall lies along it (`w, d`),
+    a flank seat turned to lie along its flank (`d, w`)."""
+    back, front, side = -(hh / 2 + g + d / 2), hh / 2 + g + d / 2, hw / 2 + g + d / 2
+    ring = [(0.0, back, w, d), (-hw * 0.35, back, w, d), (hw * 0.35, back, w, d)]
+    ring += [(sx * side, fy * hh, d, w) for fy in (-0.3, 0.0, 0.3) for sx in (-1.0, 1.0)]
+    return ring + [(-hw * 0.35, front, w, d), (hw * 0.35, front, w, d)]
 
 
 def across_a_lane(lanes: Sequence[tuple[Poly, float]], house: Pt, seat: Pt) -> bool:

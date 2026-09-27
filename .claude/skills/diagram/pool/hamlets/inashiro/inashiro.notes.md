@@ -1521,7 +1521,7 @@ correct the last one - so the numbers a reader can check now come from the artif
 - copse: **56** clumps drawn
 - farmhouses: **15**
 - farmstead fixtures: bath **2**, coop **12**, manure **12**, privy **12**, shrine **1**, woodpile **12**
-- notice board at the entrance, **(917.7, 743.9)**: **15** of 15 households' ways out pass it
+- notice board at the entrance, **(916.5, 740.6)**: **15** of 15 households' ways out pass it
 <!-- /census -->
 
 

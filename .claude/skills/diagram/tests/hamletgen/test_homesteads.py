@@ -449,3 +449,15 @@ def test_a_rank_round_that_seats_nothing_grows_the_cluster_along_the_field() -> 
     ss = s.M["meta"]["seat_search"]
     assert ss["rounds"] >= 1, "the ranks ran"
     assert len(s.M["houses"]) > ss["front"], "the only seats left were the ends, and the cluster took them"
+
+
+def test_the_yard_ring_seats_a_fixture_at_every_wall_of_its_own_house() -> None:
+    """`yard_ring` (feature 261): the last resort of a fixture whose recorded seats are all refused - the back wall at three
+    points, each flank at three heights turned along it, and the front corners - each a wall gap and half a depth out."""
+    from l7r.diagram.hamletgen.homesteads.fixtures import yard_ring
+
+    ring = yard_ring(40.0, 20.0, 3.0, 6.0, 4.0)
+    assert len(ring) == 11
+    assert all(ly == -(10.0 + 3.0 + 2.0) and (cw, ch) == (6.0, 4.0) for _lx, ly, cw, ch in ring[:3]), "the back wall, along it"
+    assert all(abs(lx) == 20.0 + 3.0 + 2.0 and (cw, ch) == (4.0, 6.0) for lx, _ly, cw, ch in ring[3:9]), "the flanks, turned"
+    assert all(ly == 10.0 + 3.0 + 2.0 for _lx, ly, _cw, _ch in ring[9:]), "the front corners"
