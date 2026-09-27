@@ -266,6 +266,8 @@ cyanobacteria	cyanobacterium
 cyanobacterium	cyanobacterium
 dachedian	wagon inn
 dacheng gate	Dacheng gate
+dacheng hall	Dacheng Hall
+dacheng halls	Dacheng Hall
 dading	Dading
 dading era	Dading
 daidokoro	daidokoro
