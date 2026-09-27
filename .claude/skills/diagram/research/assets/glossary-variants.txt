@@ -176,6 +176,8 @@ circuit's length	wall circuit
 city god	City God
 city gods	City God
 city grain	city grain
+cloister	cloister
+cloisters	cloister
 coefficient of variation	coefficient of variation
 collar	planted collar
 collars	planted collar
@@ -490,6 +492,8 @@ gassho-zukuri	gassho
 gasshozukuri	gassho
 gate market	gate market
 gate throat	gate throat
+gate-land	gate-land
+gate-land lots	gate-land
 gate-throat	gate throat
 gazetteer	gazetteer
 gazetteers	gazetteer
@@ -548,6 +552,7 @@ hakka	Hakka
 hakone barrier	Hakone barrier
 half-river closure	half-river closure
 half-river closures	half-river closure
+hall of the heavenly kings	hall of the Heavenly Kings
 han	han
 han china	Han dynasty
 han dynasty	Han dynasty
@@ -578,6 +583,7 @@ header reservoirs	header reservoir
 headman	headman
 headmen	headman
 headworks	headworks
+heavenly kings	hall of the Heavenly Kings
 heian	Heian
 heian-kyo	Heian-kyo
 heian-kyo's	Heian-kyo
@@ -614,6 +620,8 @@ hojo seibi	hojo seibi
 hojutsu	onmyodo
 hokaku sen	hokaku sen
 hokaku-sen	hokaku sen
+hokke	Hokke
+hokke sect	Hokke
 hokora	hokora
 holding jail	holding jail
 honden	honden
@@ -1012,6 +1020,8 @@ nengu	nengu
 neribei	neribei
 ni no torii	ichi-no-torii
 ni-no-torii	ichi-no-torii
+nichiren	Nichiren
+nichiren sect	Nichiren
 night soil	night soil
 night watch	night watch
 night watches	night watch
@@ -1050,6 +1060,8 @@ onari-goten	onari-goten
 one-bay	bay
 onkura	kura
 onmyodo	onmyodo
+ordination platform	ordination platform
+ordination platforms	ordination platform
 oshi	oshi
 oshirasu	oshirasu
 ossuary	ossuary
@@ -1197,6 +1209,8 @@ ring levee	ring dike
 ring-dike	ring dike
 ring-levee	ring dike
 rinkaku	rinkaku
+rinzai	Rinzai
+rinzai zen	Rinzai
 riparian	riparian
 riprap	riprap
 river stage	river stage
@@ -1342,6 +1356,8 @@ song dynasty	Song dynasty
 song yingxing	Song Yingxing
 song-dynasty	Song dynasty
 sonsha	sonsha
+soto	Soto
+soto zen	Soto
 sotobori	sotobori
 south town magistrate	town magistrate
 southern song	Song dynasty
@@ -1378,6 +1394,9 @@ strip footing	strip footing
 strip footings	strip footing
 stupa	stupa
 stupas	stupa
+sub-temple	sub-temple
+sub-temple's	sub-temple
+sub-temples	sub-temple
 subgrade	subgrade
 sue ware	Sue ware
 sueki	Sue ware

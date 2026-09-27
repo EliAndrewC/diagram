@@ -6480,8 +6480,7 @@
  "Taiseiden": {
   "def": "The \"Hall of Great Achievement\": the main hall of a Confucian temple, where the image of Confucius is enshrined. At Yushima in Edo it is the hall of the shogunate's own school.",
   "variants": [
-   "Taiseiden",
-   "taiseiden"
+   "Taiseiden"
   ]
  },
  "refectory": {
@@ -6521,6 +6520,70 @@
   "variants": [
    "shoro",
    "temple bell tower"
+  ]
+ },
+ "sub-temple": {
+  "def": "A small temple inside a great temple's precinct and belonging to it, with its own walled lot and its own monks. Zojoji held forty-eight of them and Kan'ei-ji thirty-six.",
+  "variants": [
+   "sub-temple",
+   "sub-temples",
+   "sub-temple's"
+  ]
+ },
+ "cloister": {
+  "def": "A roofed corridor running round a temple's central court. It closes the court on its sides and joins the gate to the main hall.",
+  "variants": [
+   "cloister",
+   "cloisters"
+  ]
+ },
+ "hall of the Heavenly Kings": {
+  "def": "In a Chinese temple, the gate hall on the axis that holds images of the four guardian kings of the Buddhist world. At Quanzhou's Kaiyuan temple it is also the main gate.",
+  "variants": [
+   "hall of the Heavenly Kings",
+   "Heavenly Kings"
+  ]
+ },
+ "ordination platform": {
+  "def": "A raised stone terrace in a temple where monks take their vows. The Kaiyuan temple of Quanzhou sets one on its axis behind the main hall.",
+  "variants": [
+   "ordination platform",
+   "ordination platforms"
+  ]
+ },
+ "gate-land": {
+  "def": "Ground in front of a temple or shrine gate, laid out as narrow, deep house lots, so that town houses line the street and the temple stands behind them at the end of an approach (see monzen).",
+  "variants": [
+   "gate-land",
+   "gate-land lots"
+  ]
+ },
+ "Soto": {
+  "def": "The larger of Japan's two main Zen Buddhist sects; at Hirosaki the lord's own family temple was Soto, and the first temple street was all Soto temples around it.",
+  "variants": [
+   "Soto",
+   "Soto Zen"
+  ]
+ },
+ "Rinzai": {
+  "def": "One of Japan's two main Zen Buddhist sects, beside Soto.",
+  "variants": [
+   "Rinzai",
+   "Rinzai Zen"
+  ]
+ },
+ "Nichiren": {
+  "def": "A Japanese Buddhist sect founded in the 13th century by the monk Nichiren, centered on the Lotus Sutra.",
+  "variants": [
+   "Nichiren",
+   "Nichiren sect"
+  ]
+ },
+ "Hokke": {
+  "def": "The \"Lotus\" sect: a name for the Nichiren line of Japanese Buddhism and for some of the schools that split from it; Kanazawa's plan counts its Nichiren and Hokke temples separately.",
+  "variants": [
+   "Hokke",
+   "Hokke sect"
   ]
  }
 }
