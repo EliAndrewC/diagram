@@ -416,12 +416,11 @@ class GardenPond(Kind):
     What: A small ornamental pond in the inner garden, drawn as an open oval of water set among the planting,
     within sight of the rooms that face the garden.
 
-    Why: The formal garden of a samurai house lay south of the reception rooms, to be looked at from them, and a
-    plan that gives the inner garden that seat gives it a pond as the garden's centerpiece.
+    Why: The formal garden of a samurai house lay south of the reception rooms, to be looked at from them, and
+    water is one of the things such a garden was made to hold for the eye.
 
-    Note: this is a guess - the research record has no entry on a pond in a residence garden, so whether a county
-    post's garden kept one, and its form and size, are the drawing's own; the garden it lies in follows the
-    record.
+    Note: the research record has no entry on a pond in a residence garden, so whether a county post's garden kept
+    one, and the pond's form and size, are a guess; the garden it lies in follows the record.
 
     Name: garden pond
     Covers: the pond in the inner garden
@@ -438,11 +437,11 @@ class StoneLantern(Kind):
     What: A stone lantern - a squat lamp-house on a short post - standing in a garden or a receiving court, drawn
     as a small gray glyph.
 
-    Why: A lantern marks a garden as a made place meant to be walked and looked at, and at a border posting one
-    stands in the court a visiting delegation steps into, so the ground it crosses first is a kept one.
+    Why: A lantern marks a garden or a court as a made place, meant to be walked and looked at rather than
+    merely crossed.
 
-    Note: this is a guess - the research record has no entry on stone lanterns in a residence garden or a
-    receiving court; the form, the count and the places are the drawing's own.
+    Note: the research record has no entry on stone lanterns in a residence garden or a receiving court, so their
+    form, their count and their places are a guess.
 
     Name: stone lantern
     Covers: each stone-lantern glyph in a garden or the border court
@@ -461,8 +460,8 @@ class GardenPines(Kind):
     Why: The garden of a long-held posting is old: generations of magistrates laid it down, and its trees are the
     part of it that shows the years.
 
-    Note: this is a guess - the research record has no entry on pines in a residence garden; the trees are this
-    map's story of a garden kept by many magistrates in turn.
+    Note: the research record has no entry on pines in a residence garden; the trees are this map's story of a
+    garden kept by many magistrates in turn, and their kind and size are a guess.
 
     Name: garden pines
     Covers: the old pines' canopies and their label
@@ -501,11 +500,11 @@ class StrikingPosts(Kind):
 
 class WeaponRack(Kind):
     """
-    What: A rack for practice weapons standing at the edge of the practice ground, flush against the nearest
-    lodging's wall.
+    What: A rack for practice weapons standing at the edge of the practice ground, flush against the wall of the
+    building beside it.
 
     Why: Like the striking posts, the rack is the durable gear that marks open ground as the place where the
-    watch drills every day, in place of a hall built for it.
+    compound's samurai drill every day, in place of a hall built for it.
 
     Note: The gear marking the practice ground follows the record. The rack's form and its size of about 8 by 2
     ft are not in the record.
@@ -527,9 +526,9 @@ class Nakamon(Kind):
     What: The nakamon - the one narrow household door in the wall between the outer and inner courts, on the main
     axis directly behind the office hall.
 
-    Why: The internal gate between the courts is the hinge between state and home. Formal visitors are received
-    in the office hall and go no deeper; this door serves the family and its servants, and the hall standing in
-    front of it screens the private court from the public one.
+    Why: The internal gate between the courts is the hinge between state and home. Official business stops at the
+    office hall; the family, its servants and the household's own guests of rank pass this door into the private
+    court, and the hall standing in front of it screens that court from the public one.
 
     Note: The gate between the two courts follows the record. Its seat on the main axis directly behind the
     office hall is the drawing program's own placement, not a recorded custom, and no source measures the
@@ -550,27 +549,27 @@ class Nakamon(Kind):
 
 class Door(Kind):
     """
-    What: A building's everyday door, drawn as a small block flush in its wall: the family's kitchen-side door
-    (katteguchi), the doors of the lodgings and the servants' row, the karo's side door, and the heavy doors of
-    a plastered storehouse.
+    What: A building's own door, drawn as a small block at its wall: the family's kitchen-side door
+    (katteguchi), the doors of the lodgings and the servants' row, the karo's side door, the heavy doors of a
+    plastered storehouse, and the entry of a guest house or a room where visitors are received.
 
-    Why: Service traffic is the deliberate opposite of a guest's arrival: a guest crosses a court to the formal
-    entrance, while the household's own doors open straight into work space. A servants' row turns its doors
-    inward, into the compound, and a plastered storehouse keeps outer doors faced in earth and plaster so that
+    Why: Every building has a way in. The household's working doors open onto work space, the deliberate opposite
+    of a guest's arrival, which comes across a court or garden to its door; a servants' row turns its doors
+    inward, into the compound; and a plastered storehouse keeps outer doors faced in earth and plaster so that
     fire cannot get in.
 
-    Note: The kitchen-side door, the inward-facing doors of a servants' row and the plastered storehouse doors
-    follow the record. No source gives a drawn door's width; and the doors of Ubame's parley room and writing
-    pavilion open into rooms that the setting or the map's story made.
+    Note: The kitchen-side door, the inward-facing doors of a servants' row, the plastered storehouse doors and a
+    guest's door opening off a court follow the record. No source gives a drawn door's width, and a door of a
+    room that the setting or a map's story made is as much the drawing's own as its room.
 
-    Caveat: No source gives a drawn door's width; and the doors of Ubame's parley room and writing pavilion open
-    into rooms that the setting or the map's story made.
+    Caveat: No source gives a drawn door's width, and a door of a room that the setting or a map's story made is
+    as much the drawing's own as its room.
 
     Name: door
     Covers: every small door glyph on a building's wall
     Label: accurate
     Sources: kotobank-katteguchi, dozo-jawiki, gogura-jawiki, nagayamon-jawiki, jta-nagayamon
-    Entry: research/buildings.html - 'Guest doors feed courts, not flanks'; research/cities/fabric.html - 'How did a dense wooden city watch for fire?'; research/cities/government.html - 'Servant housing in the samurai ward'
+    Entry: research/buildings.html - 'Guest doors feed courts, not flanks', 'Rendering / layout is checked automatically'; research/cities/fabric.html - 'How did a dense wooden city watch for fire?'; research/cities/government.html - 'Servant housing in the samurai ward'
     """
 
     key = "door"

@@ -92,7 +92,8 @@ re-deciding it), so the page does not announce a liberty - but a reader finds no
   notes cite it (and cite line 832 for the Ministry controlling shrines, where 832 has the Ministry of Rites
   deciding doctrine). Their particulars rest on each map's own notes.
 - Ubame's notes call meeting on the border line "standard practice", unsourced.
-- "Chigiri-no-Chou" (Ochiba, at the Myobu altar) appears in no setting file; canon's Pact-Bowl is the chigiri-wan.
+- "Chigiri-no-Chou" (Ochiba, at the Myobu altar) appears in no mounted setting file; it is canon on Obsidian Portal,
+  in Kitsune Tatsuya's GM-only notes (the Ledger of Broken Bowls; found 2026-09-27, feature 264).
 
 ### Opened by feature 264 - the parts of features as their own kinds (2026-09-27)
 
@@ -118,10 +119,22 @@ visible where they were hidden inside the parent's write-up.
   the exception for a shelving bank, where Hayakawa draws a pier and no steps with no note that its bank shelves;
   Hayakawa's one torii serves two shrines, a case the torii sections do not address; the hearing court's kneeling
   marks are drawn on open sand where Takayama's court was stone-paved and roofed (carried from 262).
-- **For the GM (canon, not research)**: Ochiba's notes say "the setting's record" has a newly posted magistrate
-  practice strokes on river-stones at the colonnade - no passage in `l7r.md` or the other mounted setting files
-  says so (it may be on Obsidian Portal); and the two lacquer-black bowls drying in the workshop are unexplained,
-  though canon's Pact-Bowls are small lacquer bowls - are these those?
+- **Raised by the three building reviews (2026-09-27), each a research question**: a genkan approached across the
+  formal garden, where the usual surviving form fronts a court facing the gate; the kneeling parties on mushiro
+  straw mats over the gravel rather than on marked places; whether several kami share one hall's altar; the clerks'
+  seats' size (drawn ~27 by 7 ft against a writing place of about one tatami); the garden pines' crowns (drawn 4-6
+  ft, where mature garden pines run 15-30 ft); the torii's distance from a compound hall (the record's ~20 ft is a
+  village shrine's; Ubame's stands ~5 ft off, and the wood-kami altar sits on the same axis just past it); an irori
+  on a raised floor beside a doma with kamado, a common samurai kitchen form - if attested, the hearth becomes a
+  knob; the tax barge's bales drawn ~4 ft across against a tawara of ~2.5 by 1.5 ft.
+- **Drawing defects the reviews found outside this feature** (each a sheet edit for a later session): Hayakawa's
+  reception bay, its engawa and its genkan face the kitchen's flank 11 ft away rather than the garden (B120, B230);
+  Hayakawa's karo's door opens 0.3 ft short of the court divider, and its servants' door into the residence's north
+  wall 2 ft away; Ochiba's and Ubame's kitchens draw no door of their own.
+- **Canon, settled from Obsidian Portal (2026-09-27)**: the river-stone stroke practice, the lacquer bowls drying
+  in the workshop (replacement Pact-Bowls, lacquered on site) and the Chigiri-no-Chou (the Ledger of Broken Bowls)
+  are all in Kitsune Tatsuya's GM-only notes - not missing canon, as this file and 262's coverage had it. Whether
+  a magistracy page may carry GM-only notes is the GM's call.
 
 ### Settled on 2026-09-26, recorded so it is not reopened
 

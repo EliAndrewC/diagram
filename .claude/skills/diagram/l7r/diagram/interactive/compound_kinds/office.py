@@ -16,8 +16,8 @@ from ..classes import Kind
 class OfficeHall(Kind):
     """
     What: The working heart of the compound: a long hall backing onto the internal wall, its front band the
-    magistrate's dais over the hearing court, and behind a screen its day office for tax and case business
-    and the magistrate's official study.
+    magistrate's dais over the hearing court, and behind a screen its working rooms - the day office and the
+    official study, each its own feature.
 
     Why: At Takayama, the surviving intendant's office, the office wing - reception rooms, day office and
     official study - is the dominant public building, and the hearing court is one room of that block. Daily
@@ -46,7 +46,7 @@ class OfficeHall(Kind):
 class MagistratesDais(Kind):
     """
     What: The raised tatami band along the office hall's front, overlooking the hearing court: the
-    magistrate's seat at its center, with a clerk's place to either side.
+    magistrate's seat at its center, between the clerks' seats.
 
     Why: A raised hall over kneeling litigants is common to both traditions this setting draws on, Japanese
     and Chinese. The dais is not a pavilion of its own but the front of a deeper office hall, so the
@@ -118,7 +118,7 @@ class TaxArchive(Kind):
 
 class Granary(Kind):
     """
-    What: A raised storehouse with slatted vents, standing on short stilts, where the tax paid in grain waits
+    What: A raised storehouse with slatted vents, where the tax paid in grain waits
     on its way to the governor: rice in straw bales above all, with a share of other grain beside it.
 
     Why: Tax rice flowed from the village granaries through the magistrate's compound toward central stores,
@@ -280,8 +280,8 @@ class TallyOffice(Kind):
 
 class WeighingFloor(Kind):
     """
-    What: An open, roofed work floor beside the tally office where bales are weighed on a balance beam before
-    the tally is written.
+    What: An open, roofed work floor beside the tally office where bales are weighed before the tally is written;
+    its balance and the bales on it are each their own feature.
 
     Why: The charcoal bale had no standard weight in the traditional Japanese system, unlike rice, and a
     commodity with no standard bale cannot be traded by count: it must be weighed at the point of sale. That
@@ -347,15 +347,14 @@ class OfficialStudy(Kind):
 
 class ClerksSeats(Kind):
     """
-    What: The clerks' places on the dais band, one to either side of the magistrate's seat, where the proceedings
-    of a hearing are written down as they happen.
+    What: The clerks' places on the dais band, one to either side of the magistrate's seat, where a hearing's
+    proceedings would be written down.
 
     Why: A hearing is a matter of record: what the parties say and what the magistrate rules is taken down on the
     spot by the few clerks the office keeps.
 
-    Note: this is a guess - the research record covers the clerks themselves, a few local commoners, but has no
-    entry on who sat beside the magistrate at a hearing or where; the two seats flanking the dais are the
-    drawing's own.
+    Note: the research record covers the clerks themselves, a few local commoners, but has no entry on who sat
+    beside the magistrate at a hearing or where, so the two seats flanking the dais, and their size, are a guess.
 
     Name: clerks' seats
     Covers: the two seats flanking the dais and their labels
@@ -401,11 +400,12 @@ class GranaryStilts(Kind):
     flood was the storehouse's own raised floor and a stone revetment, not distance from the water.
 
     Note: A storehouse's raised floor follows the record. How the floor was raised - on posts, as drawn, or on a
-    stone base - is not in the record, and the reason it gives, flood at a river quay, fits only a granary by
-    the water, such as Hayakawa's.
+    stone base - is not in the record, and the one reason it gives, flood at a river quay, fits only a granary by
+    the water; why one away from a river keeps its floor raised is not recorded.
 
-    Caveat: How the floor was raised - on posts, as drawn, or on a stone base - is not in the record, and the
-    reason it gives, flood at a river quay, fits only a granary by the water, such as Hayakawa's.
+    Caveat: How the floor was raised - on posts, as drawn, or on a stone base - is not in the record, and the one
+    reason it gives, flood at a river quay, fits only a granary by the water; why one away from a river keeps its
+    floor raised is not recorded.
 
     Name: granary stilts
     Covers: the posts at the granary's foot

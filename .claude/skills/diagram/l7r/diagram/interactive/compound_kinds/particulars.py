@@ -74,7 +74,7 @@ class FoxFireLantern(Kind):
 class CinnabarWorkshop(Kind):
     """
     What: An open-sided covered colonnade against the shrine where the threshold stones are painted with their
-    cinnabar fox-tracks, with river-stones laid out in it.
+    cinnabar fox-tracks.
 
     Why: The stones of the Fox road wardings are painted with cinnabar, and the painting is sacred work: the
     setting's record has the magistrate paint each newly dressed stone by their own hand, in daylight, at the
@@ -175,15 +175,10 @@ class RiverLanding(Kind):
     the landing.
 
     Why: Tax grain went downstream on hired commoners' boats under the office's seals - the magistracy owned no
-    hulls, and its hold on the cargo was documentary. A river's level moves by many feet through the year, so
-    a working bank was faced with stone and a landing stage ran out from it about a boat-length, to reach
-    water deep enough for a loaded hull; a river barge of the period ran from about 30 to 73 ft.
+    hulls, and its hold on the cargo was documentary - so a posting on a navigable river keeps a landing of its
+    own where the grain is loaded.
 
-    Note: The hired barge under seal, the stone-faced bank, the boat-length landing stage and the barge's size
-    are recorded findings. The river watch and the boatmen's altar are this map's own story, with no entry in
-    the record.
-
-    Caveat: The river watch and the boatmen's altar are this map's own story, with no entry in the record.
+    Note: A river landing where hired boats load the tax grain under seal follows the record.
 
     Name: river landing
     Covers: the landing label - its dock, revetment, barge, watch post and altar are each their own kind
@@ -223,8 +218,8 @@ class FoxBorder(Kind):
 
 class ParleyRoom(Kind):
     """
-    What: A room built into the compound's border wall with a door on each face, the border running across its
-    floor, and two pairs of kneeling mats facing each other across the line.
+    What: A room built into the compound's border wall, the border running across its floor; its doors and its
+    kneeling mats are each their own feature.
 
     Why: Each party kneels on its own soil, so the two sides can meet and settle their business without either
     stepping onto the other's ground. Its inner door opens into a receiving court, never into the court where
@@ -387,13 +382,12 @@ class TaxBarge(Kind):
 
 class BoatmensAltar(Kind):
     """
-    What: A small altar on the bank beside Hayakawa's dock, kept by the boatmen who work the landing.
+    What: A small altar on the bank beside the dock, kept by the boatmen who work the landing.
 
-    Why: The river is swift and has drowned boatmen before; those who work it keep an altar at the landing where
-    they set out.
+    Why: Those who work a river keep an altar where they set out, for safe passage.
 
-    Note: this is a guess - the research record has no entry on an altar at a river landing; it is this map's own
-    story.
+    Note: the research record has no entry on an altar at a river landing; it is this map's own story, and its form
+    and place are a guess.
 
     Name: boatmen's altar
     Covers: the altar on the bank and its label
@@ -407,13 +401,13 @@ class BoatmensAltar(Kind):
 
 class RiverWatch(Kind):
     """
-    What: A small guard post at Hayakawa's landing, from which the watch keeps an eye on the river traffic.
+    What: A small guard post at the landing, from which the watch keeps an eye on the river traffic.
 
-    Why: Boats that slip downriver past the city's tariff gates are the landing's standing worry, so the watch
-    keeps a post where it can see them.
+    Why: A landing where the county's tax grain is loaded is worth watching, and the river's traffic is watched from
+    the bank beside it.
 
-    Note: this is a guess - the research record has no entry on a guard post at a river landing; the post is this
-    map's own story.
+    Note: the research record has no entry on a guard post at a river landing; the post is this map's own story,
+    and its form and place are a guess.
 
     Name: river watch
     Covers: the guard post at the landing and its label
@@ -468,15 +462,14 @@ class CharcoalBales(Kind):
 
 class ParleyMats(Kind):
     """
-    What: The kneeling mats in Ubame's parley room, two on each side of the border that runs across its floor,
-    facing each other across the line.
+    What: The kneeling mats in a parley room, two on each side of the border that runs across its floor, facing
+    each other across the line.
 
-    Why: A delegation of the Fox is received without either party stepping off its own soil: each side kneels on
-    its own ground, the line between them.
+    Why: A delegation from across the border is received without either party stepping off its own soil: each side
+    kneels on its own ground, the line between them.
 
-    Note: the parley room and its mats are a deviation made by the setting - the room is the building counterpart
-    of the drawn border line, with no historical room behind it; the mats' 3 ft size is this project's own
-    figure.
+    Note: the room and its mats are the map's own design, a departure with no historical room behind it - the
+    building counterpart of the drawn border line - and the mats' 3 ft size is this project's own figure.
 
     Name: parley mats
     Covers: the four kneeling mats in the parley room
@@ -490,13 +483,14 @@ class ParleyMats(Kind):
 
 class DryingStonesAndBowls(Kind):
     """
-    What: River-stones and two small lacquer-black bowls laid out to dry under Ochiba's cinnabar workshop colonnade.
+    What: River-stones and small lacquer-black bowls laid out to dry under a cinnabar workshop's colonnade.
 
-    Why: Ochiba is where the Fox Clan's threshold stones are made and painted - river-stones the size of two fists,
-    painted with cinnabar fox-tracks - and the workshop beside the Inari hall is where that work is done.
+    Why: The workshop is where the Fox Clan's threshold stones are made and painted - river-stones the size of two
+    fists, painted with cinnabar fox-tracks - beside the shrine whose priest keeps the road wardings.
 
-    Note: the stones and bowls are a deviation made by the setting - the threshold stones and their Pact-Bowls are
-    the campaign's own canon, with no historical counterpart.
+    Note: the threshold stones and their Pact-Bowls are the campaign's own canon, a departure made by the setting
+    with no historical counterpart. Each stone and bowl is drawn as a marker, larger than a stone the size of two
+    fists or a small bowl would be.
 
     Name: drying stones and bowls
     Covers: the drying river-stones and lacquer bowls in the workshop

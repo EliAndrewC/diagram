@@ -70,93 +70,90 @@ def test_every_drawn_element_carries_a_kind_the_registry_knows(name: str) -> Non
 #: Every part a sheet draws inside a feature, and the feature it is part of (feature 264, `inventory.md`; the GM,
 #: 2026-09-27: *"individual features inside of buildings or other features to get their own individual
 #: highlighting"*). A part lights and opens as itself and lights with its parent - the reader must say both.
-PARTS: dict[str, dict[str, str]] = {
-    "ochiba-magistracy": {
-        "hearth": "kitchen",
-        "well": "kitchen",
-        "garden pond": "garden",
-        "genkan": "residence",
-        "engawa": "residence",
-        "residence corridor": "residence",
-        "door": "residence",
-        "lord's quarters": "residence",
-        "family quarters": "residence",
-        "reception room": "residence",
-        "guest quarters": "residence",
-        "shrine altar": "compound shrine",
-        "day office": "office hall",
-        "official study": "office hall",
-        "clerks' room": "office hall",
-        "clerks' seats": "office hall",
-        "kneeling positions": "hearing court",
-        "granary stilts": "granary",
-        "striking posts": "practice ground",
-        "weapon rack": "practice ground",
-        "drying stones and bowls": "cinnabar workshop",
-        "nakamon": "court divider",
-    },
-    "hayakawa-magistracy": {
-        "hearth": "kitchen",
-        "well": "kitchen",
-        "garden pond": "garden",
-        "stone lantern": "garden",
-        "garden pines": "garden",
-        "genkan": "residence",
-        "engawa": "residence",
-        "residence corridor": "residence",
-        "lord's quarters": "residence",
-        "family quarters": "residence",
-        "reception room": "residence",
-        "ancestral alcove": "residence",
-        "shrine altar": "compound shrine",
-        "torii": "compound shrine",
-        "door": "guest quarters",
-        "day office": "office hall",
-        "official study": "office hall",
-        "clerks' seats": "office hall",
-        "kneeling positions": "hearing court",
-        "granary stilts": "granary",
-        "striking posts": "practice ground",
-        "weapon rack": "practice ground",
-        "revetment": "river landing",
-        "dock": "river landing",
-        "tax barge": "river landing",
-        "boatmen's altar": "river landing",
-        "river watch": "river landing",
-        "nakamon": "court divider",
-    },
-    "ubame-magistracy": {
-        "hearth": "kitchen",
-        "well": "kitchen",
-        "garden pond": "garden",
-        "stone lantern": "border court",
-        "genkan": "residence",
-        "engawa": "residence",
-        "residence corridor": "residence",
-        "door": "parley room",
-        "lord's quarters": "residence",
-        "family quarters": "residence",
-        "reception room": "residence",
-        "shuttered wing": "residence",
-        "ancestral alcove": "residence",
-        "guest quarters": "residence",
-        "shrine altar": "compound shrine",
-        "torii": "compound shrine",
-        "day office": "office hall",
-        "official study": "office hall",
-        "clerks' room": "office hall",
-        "clerks' seats": "office hall",
-        "kneeling positions": "hearing court",
-        "granary stilts": "granary",
-        "striking posts": "practice ground",
-        "weapon rack": "practice ground",
-        "balance beam": "weighing floor",
-        "charcoal bales": "weighing floor",
-        "parley mats": "parley room",
-        "nakamon": "court divider",
-    },
-    "county-magistracy-example": {"striking posts": "practice ground", "weapon rack": "practice ground"},
-    "ochiba-roundtrip-test": {"striking posts": "practice ground", "weapon rack": "practice ground"},
+#: (part, parent) pairs, since one kind of part (a well) can be part of different parents on one sheet.
+_SHARED = [("hearth", "kitchen"), ("well", "kitchen"), ("well", "garden"), ("garden pond", "garden"), ("latrine", "residence")]
+PARTS: dict[str, list[tuple[str, str]]] = {
+    "ochiba-magistracy": _SHARED
+    + [
+        ("genkan", "residence"),
+        ("engawa", "residence"),
+        ("residence corridor", "residence"),
+        ("door", "residence"),
+        ("lord's quarters", "residence"),
+        ("family quarters", "residence"),
+        ("reception room", "residence"),
+        ("guest quarters", "residence"),
+        ("shrine altar", "compound shrine"),
+        ("day office", "office hall"),
+        ("official study", "office hall"),
+        ("clerks' room", "office hall"),
+        ("clerks' seats", "office hall"),
+        ("kneeling positions", "hearing court"),
+        ("granary stilts", "granary"),
+        ("striking posts", "practice ground"),
+        ("weapon rack", "practice ground"),
+        ("drying stones and bowls", "cinnabar workshop"),
+        ("nakamon", "court divider"),
+    ],
+    "hayakawa-magistracy": _SHARED
+    + [
+        ("stone lantern", "garden"),
+        ("garden pines", "garden"),
+        ("genkan", "residence"),
+        ("engawa", "residence"),
+        ("residence corridor", "residence"),
+        ("lord's quarters", "residence"),
+        ("family quarters", "residence"),
+        ("reception room", "residence"),
+        ("inner rooms", "residence"),
+        ("ancestral alcove", "residence"),
+        ("shrine altar", "compound shrine"),
+        ("torii", "compound shrine"),
+        ("door", "guest quarters"),
+        ("day office", "office hall"),
+        ("official study", "office hall"),
+        ("clerks' seats", "office hall"),
+        ("kneeling positions", "hearing court"),
+        ("granary stilts", "granary"),
+        ("striking posts", "practice ground"),
+        ("weapon rack", "practice ground"),
+        ("revetment", "river landing"),
+        ("dock", "river landing"),
+        ("tax barge", "river landing"),
+        ("boatmen's altar", "river landing"),
+        ("river watch", "river landing"),
+        ("nakamon", "court divider"),
+    ],
+    "ubame-magistracy": _SHARED
+    + [
+        ("stone lantern", "border court"),
+        ("genkan", "residence"),
+        ("engawa", "residence"),
+        ("residence corridor", "residence"),
+        ("door", "parley room"),
+        ("lord's quarters", "residence"),
+        ("family quarters", "residence"),
+        ("reception room", "residence"),
+        ("shuttered wing", "residence"),
+        ("inner rooms", "residence"),
+        ("ancestral alcove", "residence"),
+        ("guest quarters", "residence"),
+        ("torii", "compound shrine"),
+        ("day office", "office hall"),
+        ("official study", "office hall"),
+        ("clerks' room", "office hall"),
+        ("clerks' seats", "office hall"),
+        ("kneeling positions", "hearing court"),
+        ("granary stilts", "granary"),
+        ("striking posts", "practice ground"),
+        ("weapon rack", "practice ground"),
+        ("balance beam", "weighing floor"),
+        ("charcoal bales", "weighing floor"),
+        ("parley mats", "parley room"),
+        ("nakamon", "court divider"),
+    ],
+    "county-magistracy-example": [("striking posts", "practice ground"), ("weapon rack", "practice ground")],
+    "ochiba-roundtrip-test": [("striking posts", "practice ground"), ("weapon rack", "practice ground")],
 }
 
 
@@ -165,9 +162,9 @@ def test_every_part_is_its_own_kind_and_lights_with_its_parent(name: str) -> Non
     """FR-001 and FR-003: each inventoried part is drawn with its own kind, as part of its parent; and FR-009: the
     parent keeps ink of its own, so it is still named somewhere under the pointer and opens its own write-up."""
     ps = pieces(SHEETS[name])
-    for part, parent in PARTS[name].items():
+    for part, parent in PARTS[name]:
         assert any(k == part and parent in within for _, k, within in ps), f"{name}: no {part!r} drawn as part of {parent!r}"
-    for parent in set(PARTS[name].values()):
+    for parent in {parent for _, parent in PARTS[name]}:
         assert any(k == parent for _, k, _ in ps), f"{name}: {parent!r} has no ink of its own left to point at"
 
 
@@ -190,6 +187,10 @@ def test_each_label_speaks_in_its_own_form(key: str) -> None:
     """The same rules the hamlet vocabulary keeps (constitution XII, features 156 and 183)."""
     fc = COMPOUND_CLASSES[key]
     note = fc.label_note
+    # the modal's lead already says "This is a guess - " or "This is a deliberate deviation - " (feature 264, building
+    # review: nine notes that opened "this is a guess - " printed it twice)
+    assert not re.match(r"\s*(this is\b|a guess\b|a deliberate deviation\b)", note, re.I), "the lead announces the label; the note must not repeat it"
+    assert not re.match(r"\s*the [\w' ]+ (is|are) a (deliberate )?deviation", note, re.I), "the lead announces the deviation"
     if fc.label == "guess":
         assert re.search(r"\bguess", note, re.I), "a guess is labeled a guess in its own words"
     if fc.label == "deviation":

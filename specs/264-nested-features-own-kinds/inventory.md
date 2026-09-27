@@ -22,7 +22,10 @@ the fox-fire lantern, the fox relics) are unchanged, except that a room's floor 
 | family quarters | family quarters | family quarters | family quarters (and his son) | - |
 | reception room | reception (zashiki) | reception (zashiki) | reception (zashiki) | - |
 | shuttered wing | - | - | the wife's shuttered rooms, their shutters | - |
-| shrine altar | Ta-no-Kami doll + label, Myobu glyph + label | flame glyph, surviving Ebisu altar + its note, wave glyph | the altar glyph | - |
+| shrine altar | Ta-no-Kami doll + label, Myobu glyph + label | flame glyph, surviving Ebisu altar + its note, wave glyph | - (the white torii glyph in the hall is the shrine's map sign: fabric, building review) | - |
+| inner rooms | - | the "east rooms" bay's floor + label | the "inner rooms" bay's floor + label | - |
+| latrine (part of the residence) | the privy attached to the family block | the family privy at the rear corner | the two privies attached to the house | - |
+| well (part of the garden) | the garden well | the garden well | the garden well | - |
 | torii | - | Fire Dragon shrine's approach torii | the approach torii | - |
 | day office | office-hall room | office-hall room | office-hall room | - |
 | official study | office-hall room | office-hall room | office-hall room | - |
@@ -47,9 +50,9 @@ group of their own tagged `court divider`), the genkan (tagged `residence`) and 
 `compound shrine`) are the explicitly tagged parts. The `court divider and nakamon` kind becomes `court divider`, the
 wall alone.
 
-Rooms that were already kinds gain their floor: the clerks' room (Ochiba, Ubame office halls), the guest room
-(Ochiba, Ubame residences) and the ancestral alcove bay (Hayakawa's "east rooms" label joins it, as Ubame's "inner
-rooms" label already does).
+Rooms that were already kinds gain their floor: the clerks' room (Ochiba, Ubame office halls) and the guest room
+(Ochiba, Ubame residences). The bay holding the ancestral alcove is `inner rooms`; the alcove keeps its tablets
+labels (the building reviews: an alcove is a bay's part, not a 30-40 ft room).
 
 ## Fabric - stays the parent's
 
