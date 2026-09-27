@@ -11,6 +11,7 @@ from l7r.diagram.sitegen.geom import crosses_disc, crosses_poly, unit
 
 from ..clearance import pairs_within
 from ..consts import (
+    FORD_HALF,
     LANE_JOIN_FT,
     WEB_REACH_FT,
     Poly,
@@ -38,8 +39,84 @@ def stream_segs(s: Settlement) -> list[tuple[Pt, Pt]]:
     water list today ("a link may go the long way round, and may be planked"), which is exactly why
     it is the pass that can lay a way down the length of a brook (cohort seed 47).
     `_bridge_collinear_breaks` does NOT: it hands its water to `_route`, which already refuses to
-    cross a watercourse at any angle, so a veto there would be unreachable code."""
-    return [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for st in s.M.get("streams", []) if st.get("poly") for a, b in zip(st["poly"], st["poly"][1:], strict=False)]
+    cross a watercourse at any angle, so a veto there would be unreachable code.
+
+    THE BROOK HAS CROSSINGS (feature 261): where `stage_ways` has opened fords (`s.brook_fords`), the stream's
+    segments come back with a short gap at each, so the router may carry a way over the brook there - and only
+    there, and only near square, because the gap is shorter than the corridor is deep. `bridges()` reads the
+    UNgapped `M["streams"]` and decks every such crossing."""
+    segs = [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for st in s.M.get("streams", []) if st.get("poly") for a, b in zip(st["poly"], st["poly"][1:], strict=False)]
+    return gap_segments(segs, getattr(s, "brook_fords", ()), FORD_HALF)
+
+
+def brook_fords(brook: Sequence[Pt], spacing: float, bend_deg: float) -> list[Pt]:
+    """Where the brook may be crossed: points every `spacing` along its course where it runs straight for the
+    deck's length either side (the turn between the reaches `FORD_HALF` behind and ahead is under `bend_deg`),
+    so a way crossing there crosses it square and the plank lands on both banks. A bend is skipped, not moved:
+    the next site along is `spacing` further on."""
+    out: list[Pt] = []
+    legs = [(a, b, math.dist(a, b)) for a, b in zip(brook, brook[1:], strict=False) if math.dist(a, b) > 0.0]
+    total = sum(n for _a, _b, n in legs)
+
+    def at(d: float) -> tuple[Pt, Pt]:
+        run = 0.0
+        for a, b, n in legs:
+            if run + n >= d:
+                t = (d - run) / n
+                return (a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t), ((b[0] - a[0]) / n, (b[1] - a[1]) / n)
+            run += n
+        a, b, n = legs[-1]
+        return b, ((b[0] - a[0]) / n, (b[1] - a[1]) / n)
+
+    d = spacing / 2.0
+    while legs and d + FORD_HALF < total and d - FORD_HALF > 0.0:
+        c, _ = at(d)
+        _p, u0 = at(d - FORD_HALF)
+        _q, u1 = at(d + FORD_HALF)
+        if math.degrees(math.acos(max(-1.0, min(1.0, u0[0] * u1[0] + u0[1] * u1[1])))) < bend_deg:
+            out.append(c)
+        d += spacing
+    return out
+
+
+def ford_crossing(start: Pt, end: Pt, brook: Sequence[Pt], fords: Sequence[Pt], landing: float = 22.0) -> list[Pt]:
+    """The two landings of a square crossing at the ford that makes start -> ford -> end shortest, ordered from the
+    start's bank - or nothing, when the straight run from `start` to `end` does not cross the brook (or there is no
+    ford). A landing stands `landing` px off the brook square to its local reach: past the 14 px the router keeps off
+    water, and inside the ford's gap, so a path through the two lands on the deck `bridges()` puts there."""
+    legs = list(zip(brook, brook[1:], strict=False))
+    if not fords or not any(seg_intersect(start, end, a, b) is not None for a, b in legs):
+        return []
+    f = min(fords, key=lambda c: math.dist(start, c) + math.dist(c, end))
+    a, b = min(legs, key=lambda ab: seg_dist(f[0], f[1], ab[0], ab[1]))
+    ux, uy = unit(b[0] - a[0], b[1] - a[1])
+    nx, ny = -uy, ux  # square to the reach
+    p1, p2 = (f[0] + nx * landing, f[1] + ny * landing), (f[0] - nx * landing, f[1] - ny * landing)
+    return [p1, p2] if math.dist(start, p1) <= math.dist(start, p2) else [p2, p1]
+
+
+def gap_segments(segs: Sequence[tuple[Pt, Pt]], centers: Sequence[Pt], half: float) -> list[tuple[Pt, Pt]]:
+    """`segs` with every stretch within `half` of a center cut out - the pieces either side kept."""
+    out = list(segs)
+    for c in centers:
+        nxt: list[tuple[Pt, Pt]] = []
+        for a, b in out:
+            dx, dy = b[0] - a[0], b[1] - a[1]
+            n2 = dx * dx + dy * dy
+            t = ((c[0] - a[0]) * dx + (c[1] - a[1]) * dy) / n2 if n2 else 0.0
+            px, py = a[0] + dx * t, a[1] + dy * t
+            d2 = (c[0] - px) ** 2 + (c[1] - py) ** 2
+            if not n2 or d2 >= half * half:
+                nxt.append((a, b))
+                continue
+            w = math.sqrt(half * half - d2) / math.sqrt(n2)
+            t0, t1 = t - w, t + w
+            if t0 > 0.0:
+                nxt.append((a, (a[0] + dx * min(t0, 1.0), a[1] + dy * min(t0, 1.0))))
+            if t1 < 1.0:
+                nxt.append(((a[0] + dx * max(t1, 0.0), a[1] + dy * max(t1, 0.0)), b))
+        out = nxt
+    return out
 
 
 def drawn_water_segs(s: Settlement) -> list[tuple[Pt, Pt]]:

@@ -28,20 +28,12 @@ def test_lane_frontage_skips_web_lanes_and_lanes_of_the_other_kind() -> None:
     assert not any(abs(x - 2000.0) < seats.LANE_FRONTAGE_STANDOFF + 1 for x, _ in internal + along), "a web lane is never fronted"
 
 
-def test_a_homestead_is_refused_on_the_far_bank_of_the_brook() -> None:
-    """Feature 230. A hamlet stands on one bank of the stream that passes it, and `seat_cluster` keeping the BAND
-    off a divided margin is not the same as keeping every HOUSE on one bank - Kashikawa shipped a farmstead 52 ft
-    beyond the brook from the other nineteen, 133 ft from the lane web, with no bridge anywhere on the water.
-
-    The rule takes BOTH tests, and the test names why: the side of the nearest reach alone flips where the course
-    wraps the field's toe, and a crossing of the line between two houses alone is true of a brook that merely
-    bends around them."""
-    from l7r.diagram.hamletgen.homesteads.stages import bank_of, far_bank
+def test_the_two_banks_of_the_brook_read_as_two_sides() -> None:
+    """`bank_of` - which side of the brook a point stands on. Feature 261 retired the far-bank refusal it served (a
+    hamlet may stand astride its brook now that ways cross it at a ford); it stays as the test of a farmstead's parts
+    standing on their house's bank."""
+    from l7r.diagram.hamletgen.homesteads.stages import bank_of
 
     brook = [(100.0, 0.0), (100.0, 200.0), (100.0, 400.0)]  # straight down the map at x = 100
-    west, east = [(40.0, 200.0), (50.0, 250.0)], (300.0, 220.0)
-    assert bank_of(40.0, 200.0, brook) != bank_of(300.0, 220.0, brook), "the two banks read as two sides"
-    assert far_bank(east[0], east[1], brook, west), "a candidate across the water from every placed house"
-    assert not far_bank(60.0, 300.0, brook, west), "and one on the hamlet's own bank is free"
-    assert not far_bank(east[0], east[1], brook, []), "the first house is free - there is no bank yet"
-    assert not far_bank(east[0], east[1], [], west), "and a map with no brook has no far bank"
+    assert bank_of(40.0, 200.0, brook) != bank_of(300.0, 220.0, brook)
+    assert bank_of(40.0, 200.0, brook) == bank_of(60.0, 300.0, brook)

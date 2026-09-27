@@ -11,12 +11,8 @@ into a tameike (`water_sink="pond"`) - named for the sluice mouth where the broo
 field, the one piece of engineering that makes the place possible. See `mizuguchi.notes.md` for the
 kanji triangle and the review log.
 
-THE SEED IS 27, NOT 23 (feature 261). The wind is the regional northwest unless a map declares one, and the
-cluster is seated with its back to it. At seed 23 the brook divides every wind-facing margin and the map
-seated 8 of its 12 households; a seed is a roll, not a fact about the place, so the map was re-seeded with its
-fall and its pond kept. Seed 27 seats all twelve on a margin the brook does not cross (specs/261 research).
-`byre_form="courtyard"` AND `copse_siting="against_the_belt"` DECLARED, NOT ROLLED (feature 261): a knob owes one map per value on the sheet, and re-seeding this map for
-the regional wind took the pool's only exhibit of that value with it; declaring it here keeps the pool whole.
+`byre_form="courtyard"` AND `copse_siting="against_the_belt"` DECLARED, NOT ROLLED (feature 261): a knob owes one map per value on the sheet; the value this map
+exhibited is declared so the pool keeps its only exhibit of it whatever the roll.
 """
 
 import os
@@ -27,5 +23,5 @@ SKILL = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))  # <tree>/<tier>
 sys.path.insert(0, SKILL)
 from l7r.diagram.hamletgen import HamletSpec, generate  # noqa: E402
 
-report = generate(HamletSpec(name="Mizuguchi", seed=27, households=12, down_deg=0, water_sink="pond", byre_form="courtyard", copse_siting="against_the_belt"), out_base=os.path.join(HERE, "mizuguchi"))
+report = generate(HamletSpec(name="Mizuguchi", seed=23, households=12, down_deg=0, water_sink="pond", byre_form="courtyard", copse_siting="against_the_belt"), out_base=os.path.join(HERE, "mizuguchi"))
 print(report.line())

@@ -653,6 +653,23 @@ DEFAULT_WINDWARD = "NW"
 # fallback, and a map that falls back to it records `meta.seat_offwind`, which the gate refuses on the pool.
 WIND_BACK_MIN_DOT = 0.7071
 
+# THE BROOK IS CROSSED WHERE A WAY NEEDS TO CROSS IT (feature 261, the GM 2026-09-27: "fix the placement algorithm
+# instead"). The record puts a settlement's own small channel through the middle of the place (the Harie finding,
+# feature 230), and the engine refused every seat the brook ran through or ran between the houses and their rice
+# only because no way could cross it. Now the routing corridor round the brook has a gap at a ford every
+# `FORD_SPACING` along its course, on a straight reach, and `bridges()` decks whatever crosses there.
+#   FORD_HALF: half the gap, px. The router keeps 14 px off water and plans on a 10-14 px lattice, so a lane
+#     threads a gap only when its half-length clears the corridor by a cell (14 + 14); and a gap no longer than
+#     the corridor is deep lets a way through only near square - about 40 deg from square at most, the same
+#     bound `shallow_crossing` holds every other crossing to. A map drawing convention, not a finding.
+#   FORD_SPACING: px along the brook between fords. A guess: often enough that a field path never walks far to
+#     one (the record gives no spacing for field-path crossings; searched 2026-09-27, see research/ways).
+#   FORD_BEND_DEG: a site where the brook turns more than this across the gap is skipped - a deck across a bend
+#     is not square to both reaches.
+FORD_HALF = 30.0
+FORD_SPACING = 160.0
+FORD_BEND_DEG = 20.0
+
 WIND_VECTORS: dict[str, Pt] = {
     "N": (0.0, -1.0),
     "NE": (0.7071, -0.7071),

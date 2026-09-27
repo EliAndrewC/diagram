@@ -12,6 +12,8 @@ from l7r.diagram.sitegen.geom import centroid, crop_polys, pull_clear, unit
 
 from ..cluster import _fork_spur, seat_cluster
 from ..consts import (
+    FORD_BEND_DEG,
+    FORD_SPACING,
     LANE_CLEARANCE,
     POLDER_ARCHETYPES,
     SPUR_SETBACK,
@@ -20,7 +22,7 @@ from ..consts import (
     Pt,
 )
 from ..plan import SitePlan
-from .checks import drawn_water_segs, path_violations
+from .checks import brook_fords, drawn_water_segs, ford_crossing, path_violations, stream_segs
 from .clearance import _HAIRPIN_DEG, clip_to_clear, route_around
 from .fabric import _crosses_fabric, _fabric_hits, _homestead_polys
 from .geom import _turn_deg, polyline_len, push_clear_of_fabric, push_out_of
@@ -251,11 +253,19 @@ def stage_seat(s: Settlement, plan: SitePlan) -> None:
     # drawing it (`fillet_polyline`, so a mitred corner does not spike), and it is the drawn line a
     # bridge gets placed on - so routing against the recorded one can send a way across a ditch at a
     # slant the router never saw. Same rule as the connector's own bow: measure what is drawn.
-    plan.watercourses = [
-        ((float(a[0]), float(a[1])), (float(b[0]), float(b[1])))
-        for rec in list(s.M.get("field_ditches", [])) + list(s.M.get("channels", [])) + list(s.M.get("streams", []))
-        for a, b in zip(rec["poly"], rec["poly"][1:], strict=False)
-    ] + [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for rec in s.M.get("drawn_channels", []) for a, b in zip(rec["pts"], rec["pts"][1:], strict=False)]
+    # THE FORDS ARE OPENED FIRST (feature 261): every routing list below reads the brook through `stream_segs`, which
+    # gaps it at these, so a way may cross the brook at a ford and nowhere else.
+    s.brook_fords = brook_fords(plan.brook or [], FORD_SPACING, FORD_BEND_DEG)  # type: ignore[attr-defined]
+    s.M["meta"]["brook_fords"] = [[round(x, 1), round(y, 1)] for x, y in s.brook_fords]  # type: ignore[attr-defined]
+    plan.watercourses = (
+        [
+            ((float(a[0]), float(a[1])), (float(b[0]), float(b[1])))
+            for rec in list(s.M.get("field_ditches", [])) + list(s.M.get("channels", []))
+            for a, b in zip(rec["poly"], rec["poly"][1:], strict=False)
+        ]
+        + stream_segs(s)
+        + [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for rec in s.M.get("drawn_channels", []) for a, b in zip(rec["pts"], rec["pts"][1:], strict=False)]
+    )
     seat = seat_cluster(
         plan,
         dry_plots=crop_polys(s),
@@ -265,10 +275,6 @@ def stage_seat(s: Settlement, plan: SitePlan) -> None:
         brook=plan.brook,  # the stream runs past the fan since feature 230; a cluster does not straddle it
     )  # the reservoir's reed fringe: not building ground (feature 150 T50)
     plan.seat = seat
-    # WHICH SIDE OF THE BROOK RULE THIS MAP CAME DOWN ON (feature 230): true when the seat stands on a
-    # margin the brook divides, which happens only when every margin does, or when refusing them cost the
-    # map a household and `generate` rolled it again with them allowed.
-    s.M["meta"]["seat_divided"] = bool(seat.get("divided"))
     # THE SEAT BENDS TO THE WIND, NEVER THE WIND TO THE SEAT (feature 261). Until then this stage renamed the
     # wind after whatever the seat's back faced whenever the two disagreed by more than ~70 degrees, which is how
     # Kashikawa's belt came to stand on the south and east: the wind a map declares was being rewritten by where
@@ -425,6 +431,12 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         # Now: the origin faces THIS target, and the bow is the midpoint of the actual run with a
         # small lateral swing so the path reads as walked rather than ruled.
         _s = _cluster_edge_toward(s, target, _band_start)
+        # ...AND OVER THE BROOK AT A FORD (feature 261). Where the houses stand across the brook from their rice, the
+        # path crosses it square at the ford that makes the walk shortest, and `bridges()` decks the crossing - a
+        # straight run would meet the brook wherever it happened to, between fords, and the clip would cut it there.
+        _via = ford_crossing(_s, edge, plan.brook or [], getattr(s, "brook_fords", ()))
+        if _via:
+            return [_s, *_via, edge]
         _mx, _my = (_s[0] + edge[0]) / 2, (_s[1] + edge[1]) / 2
         return [_s, (_mx + ax * 14, _my + ay * 14), edge]
 

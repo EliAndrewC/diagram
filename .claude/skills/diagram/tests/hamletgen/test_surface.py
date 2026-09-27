@@ -146,7 +146,6 @@ CONSUMED_PUBLIC = [
     "polder_flanks",
     "push_out_of",
     "route_around",
-    "brook_banks",
     "seat_cluster",
     "shallow_crossing",
     "stage_notice",
