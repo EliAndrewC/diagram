@@ -98,3 +98,9 @@ def test_each_session_is_told_its_dispatcher_the_one_claimant_the_clone_guard_le
     log.mkdir()
     ps.work(str(root), "n", [], [{"sid": "s1", "log": str(log), "brief": "/b/x.md", "cmd": ["claude"]}], str(tmp_path / "run.log"))
     assert seen == ["sid-dispatcher"]
+
+
+def test_a_queued_session_does_not_inherit_the_dispatcher_s_tmux_pane() -> None:
+    """2026-09-27: a headless session carrying TMUX registered itself in the GM's pane and retitled the GM's tab."""
+    env = ps.headless_env({"TMUX": "/tmp/tmux-1000/default,10,0", "TMUX_PANE": "%0", "HOME": "/h"}, "sid-d")
+    assert env == {"HOME": "/h", "L7R_DISPATCHER": "sid-d"}

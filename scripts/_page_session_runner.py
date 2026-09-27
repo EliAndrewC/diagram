@@ -76,6 +76,15 @@ def dispatcher(root: str) -> str:
     return max(claims, key=lambda m: m.stat().st_mtime).name if claims else ""
 
 
+def headless_env(parent: "os._Environ[str] | dict[str, str]", dispatcher_id: str) -> dict[str, str]:
+    """The environment a queued session runs in: the dispatcher's, with its id added and its TMUX variables removed.
+
+    WHY (2026-09-27): a queued session is headless and has no tab, but it inherited `TMUX`/`TMUX_PANE` from the
+    session that started the queue, so it registered itself as living in THAT session's tmux pane - and the
+    tab-title hook, finding a pane, retitled the GM's tab with the queued session's name (`diagram-research`)."""
+    return {**{k: v for k, v in parent.items() if k not in ("TMUX", "TMUX_PANE")}, "L7R_DISPATCHER": dispatcher_id}
+
+
 def work(root: str, name: str, extra: list[str], queue: list[dict], run_log: str = os.devnull) -> None:
     """The detached loop: each session in turn; a `then` step's printed briefs join the queue where it stood.
 
@@ -86,7 +95,7 @@ def work(root: str, name: str, extra: list[str], queue: list[dict], run_log: str
     never held open) was declared dead after two minutes while the sessions ran on."""
     index = os.path.join(root, ".git", "page-sessions", "index.txt")
     runlog = open(run_log, "a", buffering=1)  # noqa: SIM115 - held open on purpose for the whole queue
-    env = {**os.environ, "L7R_DISPATCHER": dispatcher(root)}
+    env = headless_env(os.environ, dispatcher(root))
     while queue:
         item = queue.pop(0)
         if "then" in item:
