@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-27
 
-**Status**: specified; awaiting spec-fidelity
+**Status**: specified; spec-fidelity round 1 CHANGES REQUIRED (2) - applied, round 2 next
 
 **Input**: the GM's answer of 2026-09-27 to feature 272's item on village cremation, verbatim in [`request.md`](request.md).
 
@@ -30,8 +30,9 @@ reading.
 
 **Acceptance Scenarios**:
 
-1. **Given** religion-and-death 530 and the tier table 210, **When** read, **Then** the village's cremation ground and
-   the hamlet's lack of one are stated as the GM's ruling of 2026-09-27.
+1. **Given** religion-and-death 530 and the tier table 210, **When** read, **Then** the town's and the village's
+   cremation grounds, the hamlet's lack of one, the monk's rites in countryside and city, and the country monk's seat in
+   the main village serving its district are stated as the GM's ruling of 2026-09-27.
 
 ### User Story 2 - Where a hamlet's dead lie (Priority: P1)
 
@@ -72,28 +73,38 @@ cremation ground and no shrine.
 
 ### Functional Requirements
 
-- **FR-001**: religion-and-death 530 and 210 MUST state the GM's ruling of 2026-09-27 (a village has a cremation ground,
-  a hamlet has none; monks perform the rites; only the village keeps the shrine and the headman's house).
+- **FR-001**: religion-and-death 530 and 210 MUST state the GM's ruling of 2026-09-27 in full: monks perform the funerary
+  rites in the countryside and much of them in the cities; a town and a village each have a cremation ground and a
+  hamlet has none; the country monk lives in the main village and serves its whole district, the village and its
+  hamlets (usually about half a dozen); only the village keeps the shrine, the headman's house and the cremation ground.
 - **FR-002**: A new question in religion-and-death MUST answer where a hamlet's dead lie (its own graveyard, the
   village's, or bones brought home), in Japan and China, cited or recorded silent after the search, citing 269's 170,
   270, 280 and 271's 400 rather than restating them; it MUST end in a rule or a knob with its odds.
 - **FR-003**: The hamlet generator MUST draw a hamlet's graveyard, or none, per FR-002's rule or knob, recording which
   in the manifest; the village generator MUST draw a cremation ground (530's rule) and a burial ground seated by 280's
-  knob and 270's siting, and no hamlet MUST draw a cremation ground.
+  knob and 270's siting, and a hamlet MUST NOT draw a cremation ground, a village shrine or a headman's house.
 - **FR-004**: Every new or changed entry MUST pass the record's checks (source-reader, quote-check, record-format,
   source-applicability, entry-drift); every source only a human can fetch goes on the GM's download list.
 - **FR-005**: Every pool map whose layout moves MUST be reviewed (settlement-review) and `make done` green.
 
 ## Success Criteria *(mandatory)*
 
-- **SC-001** (FR-001): 530 and 210 carry the ruling as the GM's.
+- **SC-001** (FR-001): 530 and 210 carry the whole ruling as the GM's - towns, villages, hamlets, the monk's seat and district.
 - **SC-002** (FR-002): the new question answers the three forms with citations or absence notes, and names a rule or a
   knob with odds.
 - **SC-003** (FR-003): a roll test shows a hamlet with a graveyard and one without (a knob) or every hamlet alike (a
-  rule), a village with its cremation and burial grounds, and no hamlet with a cremation ground.
+  rule), a village with its cremation and burial grounds, and no hamlet with a cremation ground, a village shrine or a
+  headman's house.
 - **SC-004** (spec-wide; FR-004, FR-005): the record's checks applied; `make done` green; reviews ledgered.
 
 ## Assumptions
 
 - "Hamlet" and "village" are the generator's two to-scale tiers of the same names (roll.py: "a hamlet needs no
   headman/shrine/cemetery, a village adds them").
+
+## Review history
+
+- Round 1 (spec-fidelity, MODE 2, 2026-09-27): CHANGES REQUIRED - (1) FR-001, US1 and SC-001 carry the whole ruling
+  (towns, the cities' rites, the monk's seat and district); (2) FR-003 and SC-003: a hamlet MUST NOT draw a cremation
+  ground, a village shrine or a headman's house. Both applied. The reviewer's aside (the village generator may draw no
+  headman's house) is outside this request.
