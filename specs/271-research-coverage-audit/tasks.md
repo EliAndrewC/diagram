@@ -50,5 +50,12 @@
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
 
-- [ ] T15 batch 1 lands: groups pulled back, `owed-check`, `make page-check`, `make done`, the push; State updated
+- [ ] T15 group R1 - religion-and-death: swept ground, graves and the tier program: research, write, check (FR-003, FR-004)
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+- [ ] T16 group W2 - ways: streets, bridges and approach roads by tier: research, write, check (FR-003, FR-004)
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+
+- [ ] T17 batch 1 lands: groups pulled back, `owed-check`, `make page-check`, `make done`, the push; State updated
       research: rendering
