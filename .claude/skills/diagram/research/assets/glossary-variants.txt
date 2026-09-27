@@ -220,6 +220,8 @@ coppicing	coppice
 copse	copse
 corvee	corvee
 corvée	corvee
+country monk	country monk
+country monks	country monk
 county seat	county seat
 county seats	county seat
 coursed	coursing
@@ -954,6 +956,8 @@ meander	meander
 meibutsu	meibutsu
 meiji	Meiji
 meireki	Meireki
+meiwa	Meiwa
+meiwa era	Meiwa
 men-hai	taiping-gang
 menbansho	menbansho
 mengxi bitan	Mengxi Bitan
@@ -1034,6 +1038,8 @@ nawabari	nawabari
 nawate	azemichi
 naya	naya
 near-monospecific	monospecific
+nehan	Nehan gate
+nehan gate	Nehan gate
 neige	neige
 nengu	nengu
 neribei	neribei
@@ -1598,6 +1604,8 @@ water mouth	water-mouth
 water tail	water-mouth
 water-mouth	water-mouth
 water-tail	water-mouth
+wayside hall	tsujido
+wayside halls	tsujido
 wazi	goulan
 weathering	weathering
 wei-tian	weitian

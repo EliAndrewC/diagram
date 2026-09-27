@@ -6535,7 +6535,9 @@
   "def": "A small open wayside hall on four corner posts under a tiled roof, with a board floor about two mats in size, built by a settlement beside a road for travelers to rest and later housing a jizo or other stone image.",
   "variants": [
    "tsujido",
-   "tsujidos"
+   "tsujidos",
+   "wayside hall",
+   "wayside halls"
   ]
  },
  "koshin tower": {
@@ -6625,6 +6627,27 @@
   "variants": [
    "fire bed",
    "fire beds"
+  ]
+ },
+ "country monk": {
+  "def": "In this setting, the one tax-free religious figure of a village district, who tends the village's shrine; their dwelling may double as the shrine itself.",
+  "variants": [
+   "country monk",
+   "country monks"
+  ]
+ },
+ "Meiwa": {
+  "def": "The Japanese era name for the years 1764 to 1772; a date written \"Meiwa 2\" is 1765.",
+  "variants": [
+   "Meiwa",
+   "Meiwa era"
+  ]
+ },
+ "Nehan gate": {
+  "def": "A gate of a temple or mausoleum named for nehan, the Japanese word for nirvana: the Buddha's final release from rebirth.",
+  "variants": [
+   "Nehan gate",
+   "Nehan"
   ]
  }
 }
