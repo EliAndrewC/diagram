@@ -680,7 +680,8 @@
  "barbican": {
   "def": "A walled outwork covering a gate. The European form's narrow neck keeps a mass of attackers from storming through, and by the same narrowness stops the defenders sallying out to meet them.",
   "variants": [
-   "barbican"
+   "barbican",
+   "barbicans"
   ]
  },
  "baren": {
@@ -3403,7 +3404,9 @@
  "sekisho": {
   "def": "A barrier station on a highway, where travelers and their goods were inspected.",
   "variants": [
-   "sekisho"
+   "sekisho",
+   "barrier station",
+   "barrier stations"
   ]
  },
  "senmaida": {
@@ -5305,7 +5308,8 @@
    "departments",
    "departmental",
    "zhou"
-  ]
+  ],
+  "cased": true
  },
  "shinai": {
   "def": "A practice sword made of bamboo. With protective equipment it made sword training safe enough to spread to commoners.",
@@ -6527,7 +6531,8 @@
  "sukego": {
   "def": "The villages around a Japanese post station that sent men and horses to the station when its own were not enough for the relay.",
   "variants": [
-   "sukego"
+   "sukego",
+   "auxiliary post duty"
   ]
  },
  "ekika": {
@@ -7881,6 +7886,12 @@
    "tezuki"
   ]
  },
+ "kokuga": {
+  "def": "The provincial government office of Japan's ancient imperial state: the governor's halls around a south-facing court, in a walled district of their own in the provincial town.",
+  "variants": [
+   "kokuga"
+  ]
+ },
  "Tenmangu": {
   "def": "A shrine to Tenjin, the deified courtier-scholar Sugawara no Michizane, patron of learning; \"Tenjin shrine\" and \"Tenmangu\" name the same kind of shrine.",
   "variants": [
@@ -7972,6 +7983,28 @@
    "noshi-board"
   ]
  },
+ "governor-general": {
+  "def": "In Qing China, the highest provincial official, over one province or several; their yamen stood in a provincial seat, as the Zhili governor-general's did at Baoding.",
+  "variants": [
+   "governor-general",
+   "governors-general",
+   "governor-general's"
+  ]
+ },
+ "kokucho": {
+  "def": "The central government office inside an ancient Japanese kokuga (provincial office district), whose main hall was the seat of provincial rule.",
+  "variants": [
+   "kokucho",
+   "kokuchō"
+  ]
+ },
+ "admonition arch": {
+  "def": "An arch on a Qing yamen's central axis, between the ceremonial gate and the great hall; at the Zhili governor-general's yamen it was the third thing a visitor passed through after the main gate.",
+  "variants": [
+   "admonition arch",
+   "admonition arches"
+  ]
+ },
  "water teahouse": {
   "def": "In the Edo period, a teahouse where a passer-by sat to rest over tea, as twenty did in a row on Sensoji's approach; a rest stop rather than an eating house.",
   "variants": [
@@ -7986,6 +8019,41 @@
    "open-ended dikes",
    "kasumi dike",
    "kasumi dikes"
+  ]
+ },
+ "Censorate": {
+  "def": "In Ming and Qing China, the capital's office of censors, who watched over officials and reported their misconduct; at Beijing it stood west of the Daqing gate among the judicial offices.",
+  "variants": [
+   "Censorate"
+  ]
+ },
+ "Daqing gate": {
+  "def": "The gate at the head of the palace approach in Qing Beijing; the ministries and courts of the capital were ranged in compounds on either side of it.",
+  "variants": [
+   "Daqing gate",
+   "Daqingmen"
+  ]
+ },
+ "memorial arch": {
+  "def": "A freestanding ceremonial gateway, in China a yamen's outside the gate by the street, that marks the office to passersby.",
+  "variants": [
+   "memorial arch",
+   "memorial arches",
+   "xuanhua arch"
+  ]
+ },
+ "ceremonial gate": {
+  "def": "The second gate on a Chinese yamen's north-south axis, behind the main gate and before the courts of the offices.",
+  "variants": [
+   "ceremonial gate",
+   "ceremonial gates"
+  ]
+ },
+ "admonition pavilion": {
+  "def": "A small pavilion on a Chinese yamen's central axis, behind the ceremonial gate, standing where other yamens raised an admonition arch.",
+  "variants": [
+   "admonition pavilion",
+   "admonition pavilions"
   ]
  },
  "dobu": {
@@ -8032,6 +8100,13 @@
   "def": "A Song dynasty scholar-official who wrote the record of the Wanchun polder, whose restoration was taken up in 1061, that the research quotes on how the polder's dike was built and planted.",
   "variants": [
    "Shen Kuo"
+  ]
+ },
+ "Dacheng Hall": {
+  "def": "The main hall of a Confucian temple (a wenmiao), where Confucius's tablet or image is enshrined and the state sacrifices to him are offered; the name means \"Hall of Great Perfection.\"",
+  "variants": [
+   "Dacheng Hall",
+   "Dacheng Halls"
   ]
  },
  "dobuita": {
@@ -8161,6 +8236,69 @@
    "eel's-bed plot"
   ]
  },
+ "dorui": {
+  "def": "A Japanese earth bank raised as a rampart, usually from the spoil of the ditch dug beside it, about 2 to 3 m high, with a fence or wall along its flat top.",
+  "variants": [
+   "dorui"
+  ]
+ },
+ "yaguramon": {
+  "def": "A Japanese castle gate with a guard tower built over its passage; in a masugata it is the inner of the two gates.",
+  "variants": [
+   "yaguramon"
+  ]
+ },
+ "xunjiansi": {
+  "def": "A Chinese patrol and inspection post below the county, under a minor officer, set against bandits and pirates and answering to the local magistrate.",
+  "variants": [
+   "xunjiansi"
+  ]
+ },
+ "kuchidome bansho": {
+  "def": "A domain's own barrier post of the Edo period, set on its borders and at key points of traffic to watch travelers and goods and collect a duty - a domain's answer to the shogunate's barrier stations.",
+  "variants": [
+   "kuchidome bansho"
+  ]
+ },
+ "crenel": {
+  "def": "A gap in the top of a parapet, between two raised stretches of wall, through which a defender looks out and shoots; a row of them makes a crenellated parapet, which from above gives a wall-top its toothed edge.",
+  "variants": [
+   "crenel",
+   "crenels",
+   "crenellations"
+  ]
+ },
+ "sub-prefect": {
+  "def": "An official of a Chinese prefecture, second to the prefect over it (tongzhi, literally \"joint administrator\"), who could be put in charge of works such as a county town's walls.",
+  "variants": [
+   "sub-prefect",
+   "sub-prefects"
+  ]
+ },
+ "yuecheng": {
+  "def": "The walled outer enclosure in front of a Chinese city gate, a kind of barbican; at Xi'an it was the outermost of a gate's works, and its front gate opened onto the drawbridge over the moat.",
+  "variants": [
+   "yuecheng"
+  ]
+ },
+ "zhalou": {
+  "def": "The tower over the front gate of a Chinese city gate's outer enclosure. It is named for the drawbridge it controlled: its soldiers raised the bridge with iron chains and ropes when an enemy came.",
+  "variants": [
+   "zhalou"
+  ]
+ },
+ "koguchi": {
+  "def": "A Japanese castle's gateway: a fortified entrance through its line of walls or earthworks, such as the main gate or the back gate. Some were built so the garrison could sally out, and others so they could be sealed off completely.",
+  "variants": [
+   "koguchi"
+  ]
+ },
+ "Hongwu": {
+  "def": "The reign name of the first Ming emperor, 1368-1398; \"the twenty-ninth year of Hongwu\" is 1396.",
+  "variants": [
+   "Hongwu"
+  ]
+ },
  "banta": {
   "def": "A watchman hired by an Edo-period town or village for the night watch and the fire watch, often living in a hut beside a ward gate; outside Edo most were of hinin status.",
   "variants": [
@@ -8172,6 +8310,20 @@
   "def": "A guard box at a street crossing, above all in the samurai quarter of a castle town: in Edo a hut about 12 by 9 ft cut into a mansion wall, manned day and night.",
   "variants": [
    "tsujiban"
+  ]
+ },
+ "Sekai Daihyakka Jiten": {
+  "def": "Heibonsha's World Encyclopedia, a large Japanese general encyclopedia; Kotobank carries its entries beside the smaller Mypedia and Nipponica.",
+  "variants": [
+   "Sekai Daihyakka Jiten"
+  ]
+ },
+ "lower mansion": {
+  "def": "A ruling house's secondary residence, set toward the edge of the castle town - at Kanazawa outside the outer sogamae, beside the temple quarter and the artisans' town - rather than in the inner quarters.",
+  "variants": [
+   "lower mansion",
+   "lower mansions",
+   "shimo-yashiki"
   ]
  },
  "machi-hanare": {

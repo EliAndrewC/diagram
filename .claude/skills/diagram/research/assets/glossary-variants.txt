@@ -10,6 +10,10 @@ across the beams	ridge span
 adept	adept
 adepts	adept
 adlittoral	adlittoral
+admonition arch	admonition arch
+admonition arches	admonition arch
+admonition pavilion	admonition pavilion
+admonition pavilions	admonition pavilion
 adze	adze
 adzes	adze
 ai-no-shuku	ai-no-shuku
@@ -49,6 +53,7 @@ association	plant association
 asunaro	asunaro
 at grade	at grade
 autumn assize	assize
+auxiliary post duty	sukego
 aze	bund
 aze-mame	azemame
 azemame	azemame
@@ -88,9 +93,12 @@ bansui	bansui
 banta	banta
 banyuetang	banyuetang
 barbican	barbican
+barbicans	barbican
 baren	baren
 bargeboard	bargeboard
 bargeboards	bargeboard
+barrier station	sekisho
+barrier stations	sekisho
 basal area	basal area
 base flow	base flow
 bastion	bastion
@@ -205,7 +213,10 @@ catena	catena
 causeway	causeway
 causeways	causeway
 celestial order	Celestial Order
+censorate	Censorate
 center-pivot	center-pivot
+ceremonial gate	ceremonial gate
+ceremonial gates	ceremonial gate
 cesspit	koedame
 cesspits	koedame
 chain pump	chain pump
@@ -298,8 +309,11 @@ coursed	coursing
 courses	coursing
 coursing	coursing
 coursing line	coursing
+crenel	crenel
 crenelated	crenellated
 crenellated	crenellated
+crenellations	crenel
+crenels	crenel
 crib	cribbing
 cribbing	cribbing
 cribs	cribbing
@@ -331,6 +345,8 @@ cyanobacteria	cyanobacterium
 cyanobacterium	cyanobacterium
 dachedian	wagon inn
 dacheng gate	Dacheng gate
+dacheng hall	Dacheng Hall
+dacheng halls	Dacheng Hall
 dading	Dading
 dading era	Dading
 daidokoro	daidokoro
@@ -353,6 +369,8 @@ danna-dera	danna-dera
 danzaemon	Danzaemon
 daoshi	daoshi
 daozuofang	daozuofang
+daqing gate	Daqing gate
+daqingmen	Daqing gate
 dashigeta	dashigeta
 daxiangguo	Daxiangguo
 db	dBA
@@ -410,6 +428,7 @@ doma	doma
 donggusup	donggusup
 dongjing meng hua lu	Dongjing Meng Hua Lu
 dooryard	dooryard
+dorui	dorui
 doshin	doshin
 dosojin	dosojin
 dozo	kura
@@ -678,6 +697,9 @@ gosha	gōsha
 goshi	gōshi
 goten	goten
 goulan	goulan
+governor-general	governor-general
+governor-general's	governor-general
+governors-general	governor-general
 goyoba	goyoba
 goyōba	goyoba
 green manure	green manure
@@ -798,6 +820,7 @@ honden	honden
 hongawara	hongawara
 hongawara tile	hongawara
 hongo	hongo
+hongwu	Hongwu
 honmaru	honmaru
 honmune-zukuri	honmune-zukuri
 hoonoki	hoonoki
@@ -1057,15 +1080,19 @@ koebune	fertilizer boat
 koedame	koedame
 kofun	Kofun period
 kofun period	Kofun period
+koguchi	koguchi
 koike	koike
 koji	koji
 kokera	kokera
 kokera shingle	kokera
 koku	koku
 kokubunji	kokubunji
+kokucho	kokucho
+kokuchō	kokucho
 kokudai-no	kokudai-no
 kokudaino	kokudai-no
 kokudaka	kokudaka
+kokuga	kokuga
 kokuinchi	shuinchi
 kokumori	kokumori
 kokuso	kokuso
@@ -1086,6 +1113,7 @@ koshin towers	koshin tower
 kotai-yoriai	kotaiyoriai
 kotaiyoriai	kotaiyoriai
 kozashi	kozashi
+kuchidome bansho	kuchidome bansho
 kuchiireya	hitoyado
 kui	kui
 kumi	kumi
@@ -1163,6 +1191,8 @@ loose-log drive	kanagashi
 loose-log driving	kanagashi
 louzeyuan	louzeyuan
 low stage	river stage
+lower mansion	lower mansion
+lower mansions	lower mansion
 lower yangtze	Lower Yangzi
 lower yangzi	Lower Yangzi
 luban ruler	Luban ruler
@@ -1208,6 +1238,8 @@ meiwa	Meiwa
 meiwa era	Meiwa
 melon on the vine	melon-on-the-vine
 melon-on-the-vine	melon-on-the-vine
+memorial arch	memorial arch
+memorial arches	memorial arch
 men-hai	taiping-gang
 menbansho	menbansho
 mengxi bitan	Mengxi Bitan
@@ -1630,6 +1662,7 @@ seeds	seed
 seijoue	seijoue
 seisatsu	kosatsuba
 seisatsuba	kosatsuba
+sekai daihyakka jiten	Sekai Daihyakka Jiten
 sekisho	sekisho
 senbon torii	Senbon Torii
 sengoku	Sengoku
@@ -1674,6 +1707,7 @@ shide	shide
 shijin soo	four gods
 shijin-soo	four gods
 shimenawa	shimenawa
+shimo-yashiki	lower mansion
 shin sect	Jodo Shinshu
 shinai	shinai
 shinden	shinden
@@ -1784,6 +1818,8 @@ strip footing	strip footing
 strip footings	strip footing
 stupa	stupa
 stupas	stupa
+sub-prefect	sub-prefect
+sub-prefects	sub-prefect
 sub-temple	sub-temple
 sub-temple's	sub-temple
 sub-temples	sub-temple
@@ -2095,9 +2131,12 @@ wubei zhi	Wubei Zhi
 wujing zongyao	Wujing Zongyao
 xiang	xiang
 xiang-gan	Xiang-Gan
+xuanhua arch	memorial arch
+xunjiansi	xunjiansi
 yacheng	yacheng
 yachida	yato
 yagura	yagura
+yaguramon	yaguramon
 yaita	yaita
 yakushi	Yakushi
 yam	yam
@@ -2138,6 +2177,7 @@ youfang	aburaya
 yuan	Yuan dynasty
 yuan dynasty	Yuan dynasty
 yuan rebuild	Yuan dynasty
+yuecheng	yuecheng
 yui	yui
 yulin wei	yulin wei
 zaimokuya	zaimokuya
@@ -2145,6 +2185,7 @@ zaofang	zaofang
 zaojun	Zaojun
 zelkova	keyaki
 zhalan	zhalan
+zhalou	zhalou
 zhang	zhang
 zhengyi	Zhengyi
 zhonggulou	gulou
