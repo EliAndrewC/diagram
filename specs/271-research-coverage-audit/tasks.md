@@ -57,5 +57,12 @@
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
 
-- [ ] T17 batch 1 lands: groups pulled back, `owed-check`, `make page-check`, `make done`, the push; State updated
+- [ ] T17 group G1 - buildings: the magistracy's buildings: research, write, check (FR-003, FR-004)
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+- [ ] T18 group G2 - buildings: houses and halls as buildings: research, write, check (FR-003, FR-004)
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+
+- [ ] T19 batch 1 lands: groups pulled back, `owed-check`, `make page-check`, `make done`, the push; State updated
       research: rendering

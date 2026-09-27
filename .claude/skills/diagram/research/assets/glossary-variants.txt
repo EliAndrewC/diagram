@@ -43,6 +43,10 @@ azolla	azolla
 azuchi	azuchi
 azuchi-momoyama	Azuchi-Momoyama period
 azuchi-momoyama period	Azuchi-Momoyama period
+back nagaya	back tenement
+back tenement	back tenement
+back tenements	back tenement
+back-tenement	back tenement
 backswamp	backswamp
 backswamps	backswamp
 backwall	backwall
@@ -68,6 +72,8 @@ basal area	basal area
 base flow	base flow
 bastion	bastion
 bastions	bastion
+battalion cities	guard city
+battalion city	guard city
 batter	batter
 baulk	baulk
 baulks	baulk
@@ -243,6 +249,7 @@ culverting	culvert
 culverts	culvert
 cun	cun
 curfew ward	lifang
+curfew wards	lifang
 curtain	curtain
 curtain wall	curtain
 curtains	curtain
@@ -486,6 +493,7 @@ fuse	fuse
 fusekoshi	inverted siphon
 gabion	gabion
 gabions	gabion
+gable-fronted	tsumairi
 galleried mining	siege mining
 game master	GM
 gangi	gangi
@@ -494,6 +502,8 @@ gassho-zukuri	gassho
 gasshozukuri	gassho
 gate market	gate market
 gate throat	gate throat
+gate-mound	mitsuke
+gate-mounds	mitsuke
 gate-throat	gate throat
 gazetteer	gazetteer
 gazetteers	gazetteer
@@ -540,6 +550,8 @@ grow-out ponds	grow-out pond
 gsi	GSI
 guan-xiang	guanxiang
 guanxiang	guanxiang
+guard cities	guard city
+guard city	guard city
 gulou	gulou
 gundai	gundai
 gō	go
@@ -552,6 +564,8 @@ hakka	Hakka
 hakone barrier	Hakone barrier
 half-river closure	half-river closure
 half-river closures	half-river closure
+half-stories	half-story
+half-story	half-story
 han	han
 han china	Han dynasty
 han dynasty	Han dynasty
@@ -629,10 +643,16 @@ hot shoeing	hot-shoeing
 hot-shoeing	hot-shoeing
 houlongshan	houlongshan
 hour of xu	hour of xu
+house manager	yamori
+house manager's	yamori
 house pad	house pad
 house pads	house pad
 houzhaofang	houzhaofang
 hucheng he	hucheng he
+hui (huizhou) style	Hui style
+hui style	Hui style
+hui-style	Hui style
+huizhou style	Hui style
 hutong	hutong
 hutongs	hutong
 hyakusho denki	Hyakusho Denki
@@ -652,6 +672,10 @@ ieyasu	Ieyasu
 ieyasu's	Ieyasu
 igeta	igeta
 igune	igune
+ikko	Ikko sect
+ikko sect	Ikko sect
+ikko sect's	Ikko sect
+ikko-shu	Ikko sect
 imado ware	Imado ware
 imado-yaki	Imado ware
 imperial spine	Imperial spine
@@ -711,6 +735,7 @@ jinguji	jingūji
 jingū-ji	jingūji
 jingūji	jingūji
 jinja	jinja
+jinshang	Shanxi merchants
 jinya	jin'ya
 jishinban	jishinban
 jitter	jitter
@@ -852,7 +877,10 @@ kusaba	kusaba
 kuwabata	Kuwabata
 kyo-machiya	machiya
 kyoho	Kyoho
+kyoma	Kyoto measure
+kyoto measure	Kyoto measure
 kyuhi	kyuhi
+kyō-ma	Kyoto measure
 kyōhō	Kyoho
 kōsatsu	kosatsuba
 kōsatsu-ba	kosatsuba
@@ -924,6 +952,7 @@ masson pine	masson pine
 masugata	masugata
 mat	tatami
 matou	gangi
+mats	tatami
 matsu	matsu
 meander	meander
 meibutsu	meibutsu
@@ -946,6 +975,7 @@ ming-qing	Qing dynasty
 minka	minka
 mire	mire
 mitochigai	mitochigai
+mitsuke	mitsuke
 miyaza	miyaza
 mizugaki	mizugaki
 mizugashira	mizugashira
@@ -977,6 +1007,7 @@ mukakusha	mukakusha
 mulberry-dike fishpond	dike-pond
 multiple cities	multiple city
 multiple city	multiple city
+mune-wari	ridge-divided nagaya
 murabarai	murabarai
 murataka	murataka
 muromachi	Muromachi
@@ -1195,6 +1226,8 @@ ri	ri
 rick	rick
 ricks	rick
 ridge span	ridge span
+ridge-divided	ridge-divided nagaya
+ridge-divided nagaya	ridge-divided nagaya
 riffle	riffle
 riffles	riffle
 rin	rin
@@ -1280,6 +1313,8 @@ shadoof	jiegao
 shahi	shahi
 shaku	shaku
 shakuhachi	shakuhachi
+shanxi merchant houses	Shanxi merchants
+shanxi merchants	Shanxi merchants
 shaso	shasō
 shasō	shasō
 shatian	shatian
@@ -1418,6 +1453,7 @@ taizu	Taizu
 takasebune	takasebune
 take-yabu	take-yabu
 takeyabu	take-yabu
+tako-beya	tako-beya
 tamagaki	tamagaki
 tamajari	tamajari
 tameike	tameike
@@ -1469,6 +1505,8 @@ three officials	Three Officials
 threshing yard	threshing yard
 threshing yards	threshing yard
 threshing-yard	threshing yard
+through-passage	through-passage plan
+through-passage plan	through-passage plan
 throwing	throwing
 tian'geng	bund
 tiangeng	bund
@@ -1484,6 +1522,7 @@ toki no kane	toki no kane
 tokorobarai	tokorobarai
 tokugawa	Tokugawa
 tokugawa ieyasu	Ieyasu
+tokugawa yoshimune	Yoshimune
 ton'ya	ton'ya
 tonya	ton'ya
 torii	torii
@@ -1512,7 +1551,10 @@ tsubo	tsubo
 tsuijibei	tsuijibei
 tsuijimatsu	tsuijimatsu
 tsuke-tsubo	tsuke-tsubo
+tsumairi	tsumairi
+tsumairi-type	tsumairi
 tsunaba	tsunaba
+tsushi nikai	half-story
 tudi miao	tudi miao
 tudigong	tudi miao
 tulou	tulou
@@ -1521,6 +1563,7 @@ twelve-mat	tatami
 tōhoku	Tohoku
 tōkaidō	Tokaido
 tōya	miyaza
+udatsu	udatsu
 ujidera	bodaiji
 ujigami	ujigami
 ujiko	ujiko
@@ -1540,6 +1583,7 @@ unhairing	unhair
 unhairs	unhair
 ura-dana	ura-dana
 ura-nagaya	ura-nagaya
+uradana	back tenement
 usufruct	usufruct
 uzumimon	umon
 vaiśravaṇa	Bishamon
@@ -1621,6 +1665,8 @@ yamahannoki	yamahannoki
 yamen	yamen
 yamen god	yamen-god
 yamen-god	yamen-god
+yamori	yamori
+yanushi	yamori
 yashiki	yashiki
 yashikigami	yashikigami
 yashikigami-sama	yashikigami
@@ -1641,6 +1687,7 @@ yokocho	yokocho
 yoriai-seki	yoriai-seki
 yoriki	yoriki
 yoshi	Phragmites
+yoshimune	Yoshimune
 yoshiwara	Yoshiwara
 yoshizu	yoshizu
 yosui	yosui
@@ -1669,10 +1716,12 @@ zone of separated flow	separation zone
 zongjia	zongjia
 zooplankton	zooplankton
 zuku	zuku
+zushi nikai	half-story
 ō-aza	ō-aza
 ōiya	ōiya
 ōkaji	ōkaji
 ōkajiba	ōkaji
+ōya	yamori
 ほ場整備	hojo seibi
 合掌造り	gassho
 圃場整備	hojo seibi

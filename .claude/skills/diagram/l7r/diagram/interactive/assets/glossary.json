@@ -2540,7 +2540,8 @@
   "variants": [
    "lifang",
    "walled ward",
-   "curfew ward"
+   "curfew ward",
+   "curfew wards"
   ]
  },
  "lijin": {
@@ -3781,6 +3782,7 @@
   "variants": [
    "tatami",
    "mat",
+   "mats",
    "twelve-mat"
   ]
  },
@@ -6504,6 +6506,21 @@
    "Nakasendo"
   ]
  },
+ "mitsuke": {
+  "def": "A mound or stretch of wall of stone or earth set at each end of a post town on the five great highways, marking where the town began.",
+  "variants": [
+   "mitsuke",
+   "gate-mound",
+   "gate-mounds"
+  ]
+ },
+ "through-passage plan": {
+  "def": "A townhouse plan with an earth-floored passage running from the street door to the back of the lot, the rooms beside it; the busy post towns built their inns this way.",
+  "variants": [
+   "through-passage plan",
+   "through-passage"
+  ]
+ },
  "toshiyori": {
   "def": "At a post station, the deputy officers who helped the headman run the relay office (toiyaba).",
   "variants": [
@@ -6547,6 +6564,24 @@
   "variants": [
    "seed",
    "seeds"
+  ]
+ },
+ "Ikko sect": {
+  "def": "The True Pure Land Buddhist sect of Japan, whose temples in the age of civil wars were defended by moats and earth banks, with a self-governing town (a temple town) growing up inside the defenses.",
+  "variants": [
+   "Ikko sect",
+   "Ikko",
+   "Ikko-shu",
+   "Ikko sect's"
+  ]
+ },
+ "guard city": {
+  "def": "A walled garrison town of Ming and Qing China, built to hold a standing military unit rather than to seat a civil government; a battalion city held a smaller unit than a guard city.",
+  "variants": [
+   "guard city",
+   "guard cities",
+   "battalion city",
+   "battalion cities"
   ]
  },
  "town ground": {
@@ -6607,6 +6642,37 @@
    "Imado-yaki"
   ]
  },
+ "Hui style": {
+  "def": "The traditional building style of Huizhou in south-east China, one of whose hallmarks is the horse-head wall: a gable wall rising well above the roof between one house and the next, to stop fire spreading.",
+  "variants": [
+   "Hui style",
+   "Hui-style",
+   "Huizhou style",
+   "Hui (Huizhou) style"
+  ]
+ },
+ "Kyoto measure": {
+  "def": "The Kyoto standard for the ken, about 6.5 ft (1.97 m), larger than the Edo ken of about 6 ft; the frontages in this record are converted at the Kyoto size.",
+  "variants": [
+   "Kyoto measure",
+   "kyoma",
+   "kyō-ma"
+  ]
+ },
+ "Shanxi merchants": {
+  "def": "The trading and banking houses of Shanxi province in northern China, among the wealthiest merchants of the Ming and Qing periods; Qixian was one of their home towns.",
+  "variants": [
+   "Shanxi merchants",
+   "Shanxi merchant houses",
+   "Jinshang"
+  ]
+ },
+ "udatsu": {
+  "def": "A small roofed wall that some Edo-period machiya raised on the roof at the boundary with the next house, to stop a fire spreading from next door.",
+  "variants": [
+   "udatsu"
+  ]
+ },
  "county magistrate": {
   "def": "The official who governs a county from its walled county town. Their jurisdiction covers the whole county, the town and its countryside alike, so the ground just outside the town gate is still under their rule.",
   "variants": [
@@ -6614,11 +6680,69 @@
    "county magistrates"
   ]
  },
+ "tsumairi": {
+  "def": "A house built with its roof ridge at right angles to the street, so that the triangular end of the roof (the gable) faces the street. In Japanese towns it was the less common form: most machiya ran the ridge parallel to the street.",
+  "variants": [
+   "tsumairi",
+   "gable-fronted",
+   "tsumairi-type"
+  ]
+ },
+ "half-story": {
+  "def": "A low storage story over the street side of a machiya, under a low eave, rather than a full second floor. The domains held second stories down to this by ban, and in Kyoto it stayed usual except in large merchant houses.",
+  "variants": [
+   "half-story",
+   "half-stories",
+   "tsushi nikai",
+   "zushi nikai"
+  ]
+ },
+ "ridge-divided nagaya": {
+  "def": "A nagaya split along its ridge as well as across it, so its units stand back to back and each opens only on its lane side; the cheapest kind of back tenement, commonly nine shaku by two ken a unit.",
+  "variants": [
+   "ridge-divided nagaya",
+   "ridge-divided",
+   "mune-wari"
+  ]
+ },
+ "back tenement": {
+  "def": "In a Japanese city, the rented row houses (nagaya) on a narrow lane behind the street-front shops of a lot, with a well, a privy and a rubbish heap shared by the residents; the home of peddlers, craftsmen and day laborers.",
+  "variants": [
+   "back tenement",
+   "back tenements",
+   "back nagaya",
+   "uradana",
+   "back-tenement"
+  ]
+ },
  "Tensho": {
   "def": "The Japanese era name for the years 1573 to 1592; \"Tensho 20\" is 1592, the year the filling of Edo's Hibiya inlet began.",
   "variants": [
    "Tensho",
    "Tensho-era"
+  ]
+ },
+ "tako-beya": {
+  "def": "A crowded bunkhouse where a labor boss lodged the laborers he found work for and kept them under his hand.",
+  "variants": [
+   "tako-beya"
+  ]
+ },
+ "yamori": {
+  "def": "In an Edo town, the manager who lived on a landlord's tenement lot, collected the ground rent and house rent on the owner's behalf, kept the tenants' registration, passed on the town's ordinances, and was in practice the ruler of the back tenement.",
+  "variants": [
+   "yamori",
+   "ōya",
+   "yanushi",
+   "house manager",
+   "house manager's"
+  ]
+ },
+ "Yoshimune": {
+  "def": "Tokugawa Yoshimune, the shogun of the Kyoho era, under whom Edo was first ordered, from 1722, to roof in tile and build in plastered, fire-resistant construction.",
+  "variants": [
+   "Yoshimune",
+   "Tokugawa Yoshimune"
   ]
  }
 }
