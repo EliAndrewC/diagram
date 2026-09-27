@@ -103,6 +103,9 @@ board foot	board foot
 bodaiji	bodaiji
 bomori	bomori
 bon	Bon
+bondservant	bondservant
+bondservants	bondservant
+bondservants'	bondservant
 boom	boom
 booms	boom
 broadcast	broadcast sowing
@@ -785,6 +788,8 @@ kami	kami
 kami-yashiki	kami-yashiki
 kamiza	kamiza
 kan	kan
+kan'ei	Kan'ei
+kan'ei period	Kan'ei
 kana	kana
 kanagashi	kanagashi
 kanbun	Kanbun
@@ -1043,6 +1048,7 @@ naka-bori	middle moat
 nakaboshi	nakaboshi
 nakamon	nakamon
 nakasendo	Nakasendo
+nanbokucho	Northern and Southern Courts
 nanbu	Tohoku
 nando	nando
 nanohana	rape
@@ -1075,6 +1081,7 @@ nipponica	Nipponica
 noborigama	noborigama
 nogyo zensho	Nogyo Zensho
 normal depth	normal depth
+northern and southern courts	Northern and Southern Courts
 northern song	Song dynasty
 northern wei	Northern Wei
 noshi-board	noshi-buki
@@ -1607,6 +1614,8 @@ unhaired	unhair
 unhairing	unhair
 unhairs	unhair
 unjo-gura	levy storehouse
+upper residence	kami-yashiki
+upper residences	kami-yashiki
 ura-dana	ura-dana
 ura-nagaya	ura-nagaya
 uradana	back tenement

@@ -2156,7 +2156,9 @@
  "kami-yashiki": {
   "def": "A domain lord's upper mansion in Edo, the principal compound of their household there; a small lord's ran 2,500-7,000 tsubo.",
   "variants": [
-   "kami-yashiki"
+   "kami-yashiki",
+   "upper residence",
+   "upper residences"
   ]
  },
  "kamiza": {
@@ -6826,6 +6828,28 @@
    "noshi-buki",
    "noshi-shingle",
    "noshi-board"
+  ]
+ },
+ "Kan'ei": {
+  "def": "A Japanese era name, 1624 to 1644, early in the Edo period.",
+  "variants": [
+   "Kan'ei",
+   "Kan'ei period"
+  ]
+ },
+ "bondservant": {
+  "def": "In medieval Japan, an unfree servant (genin) bound to a warrior household, who lived in its row houses and worked the paddy and fields before its gate.",
+  "variants": [
+   "bondservant",
+   "bondservants",
+   "bondservants'"
+  ]
+ },
+ "Northern and Southern Courts": {
+  "def": "The period from 1336 to 1392, when two rival imperial courts, one at Kyoto and one at Yoshino, each claimed the throne and warriors fought for one or the other.",
+  "variants": [
+   "Northern and Southern Courts",
+   "Nanbokucho"
   ]
  }
 }
