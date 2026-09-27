@@ -236,7 +236,7 @@ def centered_end(q: Pt, back: Pt, width: float, others: Sequence[tuple[Pt, Pt, f
     round end touches the lane's far edge instead of bulging past it and the edge runs straight through - the
     track widens into the junction. The end slides along its own last leg, never sideways, so no kink is made at
     the tip. Returns None when the end is not at a junction, is already where it should be, or its leg runs along
-    the other lane (no slide along it changes the distance)."""
+    the other lane (no slide along it changes the distance), or where the two meet end to end rather than at a T."""
     best: tuple[float, Pt, Pt, float] | None = None
     for a, b, w in others:
         d = seg_dist(q[0], q[1], a, b)
@@ -259,6 +259,10 @@ def centered_end(q: Pt, back: Pt, width: float, others: Sequence[tuple[Pt, Pt, f
     t = (want - sb) / (sq - sb)
     to = (back[0] + (q[0] - back[0]) * t, back[1] + (q[1] - back[1]) * t)
     if t <= 0.0 or math.dist(to, q) <= _ON_LINE_FT:
+        return None
+    # ONLY AT A T: the new end must stand beside the other lane's SIDE. Where the two meet end to end (Kashikawa's
+    # track arriving on a footpath's tip) sliding back pulls the end off that tip and splits the web.
+    if seg_dist(to[0], to[1], a, b) > abs(want) + _ON_LINE_FT:
         return None
     return to
 
