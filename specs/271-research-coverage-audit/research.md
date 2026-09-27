@@ -50,7 +50,7 @@ Two stops have happened so far, and the work resumed from each without the GM:
   `resume:<sid>:<brief>` item, and every queue was relaunched with its interrupted session RESUMED, not restarted.
   Nothing was redone and nothing was lost (`t1`, `v1`, `v3`, `t3`, `v6`; the runs are logged in
   `/home/agent/.claude/jobs/d2f6f26d/tmp/resume-q*.log`).
-- **The five-hour usage window ran out at 13:37 UTC.** Each queue logged `failed <sid> rc=1 - waiting 184 min, then
+- **The five-hour usage window ran out at 13:37 UTC.** Each queue logged `failed <sid> rc=1 - waiting <n> min, then
   resuming it`. At the reset (16:41 UTC) all five resumed the same sessions and went on (the `run-*.log` of
   queues 1-5).
 
