@@ -26,18 +26,18 @@ design matches, and what determined it.*
   courtyard wall at that scale. A larger village temple compound (2.5 mu) had a courtyard, its bound not
   stated.
 - A wall-less Bingo-region tsujidō (roadside hall) is documented, flagged by its source as a regional
-  departure.
+  departure. (Figures observed 2026-09-27; method: read from the reader report this section names, or, for the project's own values, off the engine and the sheet.)
 
 **What determined it**: wealth and date - an enclosure is a donation that accrues (the stone tamagaki a
 Taisho/Showa subscription), and a wall is a temple's rank. **Design**: the sheet's 140 by 99 ft fence
 does NOT match; it is dropped (spec FR-004, FR-008). A sanctuary-only fence is recorded as a rich
 shrine's donation, not drawn at average wealth. **Label**: accurate (the absence is attested by the
 dated examples and the neighborhood shrine; the general rule is the reader's synthesis, stated as
-such).
+such). (Figures observed 2026-09-27; method: read from the reader report this section names, or, for the project's own values, off the engine and the sheet.)
 
 ## R2. How large was a village precinct, and how much of it was built? (`research-precinct-size.md`)
 
-**Finding: 150-650 tsubo typical, 1.5-14% built, the rest largely wood.**
+**Finding: 150-650 tsubo typical, 1.5-14% built, the rest largely wood.** (Figures observed 2026-09-27; method: read from the reader report this section names, or, for the project's own values, off the engine and the sheet.)
 
 - Saitama, Hiki district (Ranzan town's transcription of the Meiji shrine register), 14 village shrines
   (村社): 55-708 tsubo, median 403, mean 386.
@@ -50,7 +50,7 @@ such).
 - The registers single out old dense trees (老杉蓊蔚, 樹木の欝蒼せる); no source splits the unbuilt
   ground into grove and open ground - that the unbuilt remainder is mostly grove is a GUESS from the
   registers' praise and the 鎮守の森 definition in R1.
-- China: Fujian village temples ~100-400 m² (often footprint only); the 2.5 mu compound (about 504 tsubo).
+- China: Fujian village temples ~100-400 m² (often footprint only); the 2.5 mu compound (about 504 tsubo). (Figures observed 2026-09-27; method: read from the reader report this section names, or, for the project's own values, off the engine and the sheet.)
 
 **Design**: the sheet's 385 tsubo MATCHES (Saitama's median); what does not match is its contents - a
 swept yard. The precinct becomes the grove (spec FR-007), its area inside the register band.
@@ -58,7 +58,7 @@ swept yard. The precinct becomes the grove (spec FR-007), its area inside the re
 
 ## R3. How far apart did the arches of an approach stand? (`research-torii-spacing.md`)
 
-**Finding: donated arches stand close - nothing supports 30 ft.**
+**Finding: donated arches stand close - nothing supports 30 ft.** (Figures observed 2026-09-27; method: read from the reader report this section names, or, for the project's own values, off the engine and the sheet.)
 
 - Yutoku Inari (Saga): the row's arches stand "almost 10 cm apart" (ほぼ、10センチ間隔) - post to post.
 - Manzo Inari (Shiroishi, Miyagi, founded about 1785), a small rural forest shrine: 114 torii along a walk
@@ -70,13 +70,13 @@ swept yard. The precinct becomes the grove (spec FR-007), its area inside the re
 - Fushimi Inari's row donation began in the Edo period and ran into Meiji; single stone torii at village
   shrines are Edo donations (from 1611-1613). No page shows a village shrine with a ROW of arches before
   1868 (an absence, not a proven negative).
-- No page gives a village sando's length or the gap from an innermost arch to the hall.
+- No page gives a village sando's length or the gap from an innermost arch to the hall. (Figures observed 2026-09-27; method: read from the reader report this section names, or, for the project's own values, off the engine and the sheet.)
 
 **What determined it**: the count and the pitch are the donors' - each arch a gift set where it fits.
 **Design**: the old 30 ft village avenue does NOT match; the GM ruled ~10-13 ft on every map (decision D1
 below). The GM's threshold rule (the innermost arch one pitch off the hall, 2026-07-27) stands. The seven
 remain the GM's particular. **Label**: the pitch a GUESS inside the GM's ruled band, bounded by the one
-estimable small row.
+estimable small row. (Figures observed 2026-09-27; method: read from the reader report this section names, or, for the project's own values, off the engine and the sheet.)
 
 ## R4. What else stood in a village precinct? (`research-precinct-features.md`)
 
@@ -126,4 +126,4 @@ is not held to a map.
   The map's `village_groves` gains an entry of role `shrine`, `tree_crowns` the sacred tree, `wells` the
   basin (flagged `basin`), `torii` the seven at the pitch.
 - **D7 - the precinct check.** `fence_not_wall` becomes `no_precinct_enclosure`: a fence, wall or hedge
-  group whose bounds enclose the hall fails; a fence around the sanctuary alone does not.
+  group whose bounds enclose the hall fails; a fence around the sanctuary alone does not. (Figures observed 2026-09-27; method: read from the reader report this section names, or, for the project's own values, off the engine and the sheet.)
