@@ -5334,7 +5334,8 @@
    "kuchiireya",
    "keian",
    "kakaemoto"
-  ]
+  ],
+  "cased": true
  },
  "hiyoza": {
   "def": "A channel of hire for day laborers, named beside the hitoyado placement brokers as a route by which peasants and townsmen entered wage service in samurai households.",
@@ -8150,6 +8151,90 @@
   "def": "A teacher of a martial art - here the master who heads a dojo, lives by its teaching and takes enrolled students.",
   "variants": [
    "sensei"
+  ]
+ },
+ "eel's bed": {
+  "def": "A town lot with a narrow frontage on the street and a long depth behind it, like the Kyoto town-house lots about 3 ken wide; the phrase translates the Japanese name for such a plot.",
+  "variants": [
+   "eel's bed",
+   "eel's-bed",
+   "eel's-bed plot"
+  ]
+ },
+ "banta": {
+  "def": "A watchman hired by an Edo-period town or village for the night watch and the fire watch, often living in a hut beside a ward gate; outside Edo most were of hinin status.",
+  "variants": [
+   "banta",
+   "ban-hinin"
+  ]
+ },
+ "tsujiban": {
+  "def": "A guard box at a street crossing, above all in the samurai quarter of a castle town: in Edo a hut about 12 by 9 ft cut into a mansion wall, manned day and night.",
+  "variants": [
+   "tsujiban"
+  ]
+ },
+ "machi-hanare": {
+  "def": "The name used in Shinano and at Tsuruoka and Sakata for an outcaste quarter placed at a castle town's entrance or edge. It is written 町離, which this record reads as \"apart from town\".",
+  "variants": [
+   "machi-hanare",
+   "cho-hanare"
+  ]
+ },
+ "matoi": {
+  "def": "The standard of an Edo-period fire company, carried to a fire and held up on the roofs by its bearer. It was kept with the rest of the fire gear in a ward's watch house.",
+  "variants": [
+   "matoi"
+  ]
+ },
+ "tobiguchi": {
+  "def": "An Edo-period fire hook, used to pull down the houses downwind of a fire so that it could not spread. It was kept with the fire gear in a ward's watch house.",
+  "variants": [
+   "tobiguchi"
+  ]
+ },
+ "ryudosui": {
+  "def": "The hand pump of an Edo-period fire company. Since fires were fought by pulling houses down, it was mostly used to spray the men on the roofs and shield them from sparks.",
+  "variants": [
+   "ryudosui"
+  ]
+ },
+ "genba": {
+  "def": "A carrying bucket, one of the pieces of fire gear an Edo-period ward kept in its watch house.",
+  "variants": [
+   "genba",
+   "genba-oke"
+  ]
+ },
+ "clapper-board": {
+  "def": "A wooden board hung up at a watch post or fire tower and struck with a mallet to raise an alarm or give a signal; the Japanese bangi.",
+  "variants": [
+   "clapper-board",
+   "clapper-boards",
+   "board-clapper",
+   "bangi"
+  ]
+ },
+ "three arresting tools": {
+  "def": "The three long-handled tools a watch post kept for taking a man alive without cutting him down: a barbed sleeve-catcher, a forked pole and a T-headed push-pole.",
+  "variants": [
+   "three arresting tools",
+   "torimono mitsu dogu",
+   "arresting tools"
+  ]
+ },
+ "boubana": {
+  "def": "The marker post that stood at the entrance of a post town and showed where its precinct began, beside its mitsuke and gate.",
+  "variants": [
+   "boubana",
+   "bobana"
+  ]
+ },
+ "village grain": {
+  "def": "The loose spacing of a farming village: houses stand apart, each among its own plots, with open field between them rather than walls shared along a street.",
+  "variants": [
+   "village grain",
+   "detached village grain"
   ]
  }
 }

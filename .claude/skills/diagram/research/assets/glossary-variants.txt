@@ -39,6 +39,7 @@ aprons	apron
 aqueduct	aqueduct
 aquifer	aquifer
 araiba	kawado
+arresting tools	three arresting tools
 artesian	artesian
 ashigaru	ashigaru
 ashigaru nagaya	ashigaru-nagaya
@@ -76,12 +77,15 @@ bakuhan	bakuhan
 bakumatsu	bakumatsu
 bamboo grass	sasa
 bamboo-grass	sasa
+ban-hinin	banta
 banfang	banfang
+bangi	clapper-board
 bannerman	hatamoto
 bannerman's	hatamoto
 bannermen	hatamoto
 bansho	bansho
 bansui	bansui
+banta	banta
 banyuetang	banyuetang
 barbican	barbican
 baren	baren
@@ -121,6 +125,8 @@ black-seal land	shuinchi
 black-seal lands	shuinchi
 board feet	board foot
 board foot	board foot
+board-clapper	clapper-board
+bobana	boubana
 bodaiji	bodaiji
 boji	boji
 bojikui	bojikui
@@ -131,6 +137,7 @@ bondservants	bondservant
 bondservants'	bondservant
 boom	boom
 booms	boom
+boubana	boubana
 boundary post	bojikui
 boundary posts	bojikui
 branch house	branch household
@@ -218,6 +225,7 @@ chinju	chinju
 chinju no mori	chinju no mori
 chinjusan	chinju
 cho	cho
+cho-hanare	machi-hanare
 chongzhen	Chongzhen era
 chongzhen era	Chongzhen era
 chonin	chonin
@@ -238,6 +246,8 @@ citang	ancestral hall
 city god	City God
 city gods	City God
 city grain	city grain
+clapper-board	clapper-board
+clapper-boards	clapper-board
 climbing kiln	noborigama
 climbing kilns	noborigama
 cloister	cloister
@@ -362,6 +372,7 @@ desire line	desire path
 desire path	desire path
 desire paths	desire path
 desire-line	desire path
+detached village grain	village grain
 detritus	detritus
 dharma hall	dharma hall
 dharma halls	dharma hall
@@ -441,6 +452,9 @@ edo	Edo
 edo fabric	building fabric
 edo period	Edo period
 edo-period	Edo period
+eel's bed	eel's bed
+eel's-bed	eel's bed
+eel's-bed plot	eel's bed
 eighty-eighth night	eighty-eighth night
 eiro	eiro
 ekika	ekika
@@ -628,6 +642,8 @@ gazetteer	gazetteer
 gazetteers	gazetteer
 gejo	degawari
 genan	degawari
+genba	genba
+genba-oke	genba
 genkan	genkan
 genroku	Genroku
 gentry	gentry
@@ -1159,6 +1175,7 @@ machi-bugyo	town magistrate
 machi-bugyosho	machi-bugyosho
 machi-bugyōsho	machi-bugyosho
 machi-dojo	machi-dojo
+machi-hanare	machi-hanare
 machi-kido	kido
 machiya	machiya
 madake	madake
@@ -1179,6 +1196,7 @@ martial temples	Martial temple
 masson pine	masson pine
 masugata	masugata
 mat	tatami
+matoi	matoi
 matou	gangi
 mats	tatami
 matsu	matsu
@@ -1556,6 +1574,7 @@ runners	yayi
 ryo	ryo
 ryobosei	ryobosei
 ryobu	ryobu
+ryudosui	ryudosui
 rōjū	Roju
 sae no kami	sae no kami
 sagami	Sagami
@@ -1872,6 +1891,7 @@ thatch fields	thatch field
 the pool	the pool
 the reform and opening-up	reform and opening-up
 thousand character classic	Thousand Character Classic
+three arresting tools	three arresting tools
 three bays	bay
 three-bay two-corridor house	three-bay two-corridor house
 three-bay two-corridor houses	three-bay two-corridor house
@@ -1887,6 +1907,7 @@ tiangong kaiwu	Tiangong kaiwu
 tier	tier
 tiers	tier
 tillering	tillering
+tobiguchi	tobiguchi
 toe	toe
 tohoku	Tohoku
 toiya	ton'ya
@@ -1900,6 +1921,7 @@ tokugawa yoshimune	Yoshimune
 ton'ya	ton'ya
 tonya	ton'ya
 torii	torii
+torimono mitsu dogu	three arresting tools
 toro	Toro
 toro site	Toro
 toshiyori	toshiyori
@@ -1927,6 +1949,7 @@ trunk streets	trunk street
 tsubo	tsubo
 tsuijibei	tsuijibei
 tsuijimatsu	tsuijimatsu
+tsujiban	tsujiban
 tsujido	tsujido
 tsujidos	tsujido
 tsuke-tsubo	tsuke-tsubo
@@ -1985,6 +2008,7 @@ vermilion-seal	shuinchi
 vermilion-seal land	shuinchi
 vermilion-seal lands	shuinchi
 village district	village district
+village grain	village grain
 visiting grave	visiting grave
 visiting graves	visiting grave
 votive plaque	votive plaque
