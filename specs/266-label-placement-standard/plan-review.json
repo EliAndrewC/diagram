@@ -1,6 +1,6 @@
 {
  "feature": "266-label-placement-standard",
- "plan_sha256": "c406e061a6c26458d54200c365ca51baee8ab3f5ea5bf0501dcfe9d1f95b261f",
+ "plan_sha256": "7cae9df00dda372469cc6031da18b9832c5f7f3d92151f31ad3627084b614324",
  "reviewed": "2026-09-27",
  "declared": "spec-fidelity",
  "decisions": [
@@ -81,7 +81,7 @@
    "id": "design-fr014",
    "summary": "Group-word waiver; when the caption's SUBJECT is a named civic building (Subject(civic=True), set by the caller naming a ministry, the governor's yamen or a temple by name) every other named civic building keeps full weight",
    "class": "within",
-   "why": "Round-2 item resolved: keyed on the subject, not the wording, which is FR-014 and answer 070 as written (a district caption such as 'temple neighborhood' keeps its waiver). Note for the implementer: placer.py's Subject field list (plan line 64) does not yet name civic."
+   "why": "FR-014 and answer 070 as written, keyed on the subject (a district caption such as temple neighborhood keeps its waiver). Round-3 note resolved: placer.py Subject now names civic (plan line 64-65)."
   },
   {
    "id": "design-settlement-callers",
@@ -103,10 +103,9 @@
   },
   {
    "id": "P4",
-   "summary": "Hand-sheet shapes classified by data-kind: road/river/revetment ways; an explicit ground list free; everything else, court divider included, an obstacle; every <text> an obstacle",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "Round-2 items resolved: court divider is now an obstacle and every <text> weighs 1,000. But the new explicit list classes one built feature as free ground: `weighing floor` (ubame-magistracy.svg line 321) is a roofed post structure - a colonnade-hatched 80x80 px rect with six post circles, described in the sheet's own comment and notes.md line 52 as 'open covered work space' under 'one range' with the tally shed, with posts added by size-audit. FR-006 weighs a built feature 1,000; as listed, its roof and posts (untagged children inheriting the group's tag) are free for every other caption. Nothing makes the literal weight impossible. Fix: drop `weighing floor` from the ground list (it then falls to 'every other kind is an obstacle'). The rest of the list was checked against the tag census of the five tagged sheets (2026-09-27, grep): courts, gardens, practice ground, cart yard, groves/pines (ground cover), river landing (whose dock, revetment, barge, altar and watch post carry their own tags) and '-' are ground or area fills."
+   "summary": "Hand-sheet shapes classified by data-kind: road/river/revetment ways at 500; an explicit ground list (courts, gardens, practice ground, cart yard, pines, shrine grove, river landing) and the full-view background rect free; every other kind, court divider, weighing floor and every other - shape (the scale bar) included, an obstacle; every <text> an obstacle",
+   "class": "within",
+   "why": "Round-3 item RESOLVED: weighing floor is off the ground list and named an obstacle (plan line 118). Aside RESOLVED: only the - rect covering the whole view is free (checked 2026-09-27, grep: each tagged sheet has one 0,0 full-canvas background rect, e.g. ubame 1300x900 over viewBox 176 84 1054 744; the - group at ubame line 79 is the scale bar, now an obstacle). What remains free is ground cover and area fill, which FR-006 weighs 0, so the mapping is FR-006 literally rather than a narrowing."
   },
   {
    "id": "P5",
@@ -116,10 +115,9 @@
   },
   {
    "id": "design-caption-discovery",
-   "summary": "Captions found as <text> in or carrying a data-kind tag; a sheet whose hash has changed must carry a data-kind on every <text>, else the gate refuses it",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "Round-2 item largely resolved: a revised country shrine (16 <text>, 0 data-kind, grep 2026-09-27) can no longer pass the gate untagged. One reach gap remains against FR-013's 'hold every hand-drawn sheet': the refusal is worded for 'a sheet whose hash has changed', and a NEW hand-drawn sheet has no ledger hash to change, so an untagged new sheet's captions stay invisible and pass. Fix: apply the rule to every sheet not held by the ledger at its recorded hash (changed OR absent from the ledger). Also say that a <text> 'carries' a data-kind when it has the attribute or sits inside a tagged group - the plan's own caption definition - or the rule refuses today's tagged sheets, whose captions mostly inherit their group's tag (e.g. ubame 'cart yard', line 356)."
+   "summary": "Captions found as <text> in or carrying a data-kind tag; every sheet the ledger does not hold at its recorded hash (changed or new) must carry a data-kind on every <text>, on the element or an enclosing group, else the gate refuses it",
+   "class": "within",
+   "why": "Round-3 item RESOLVED (plan lines 134-138): the refusal now reaches new sheets as well as changed ones, and carries is defined as on the element or a group it sits inside, matching the plan own caption definition (line 120) so today tagged sheets are not refused. With that reach it enforces FR-013 hold every hand-drawn sheet and narrows nothing."
   },
   {
    "id": "design-static-test",
@@ -152,5 +150,5 @@
    "why": "Constitution XIV"
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
