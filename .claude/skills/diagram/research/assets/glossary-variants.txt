@@ -517,6 +517,7 @@ headworks	headworks
 heian	Heian
 heimen	heimen
 heimin	heimen
+heishi	heishi
 hem	hem
 hereditary house	hereditary temple
 hereditary monastery	hereditary temple
@@ -532,7 +533,7 @@ hip-roofed	hip roof
 hipped roof	hip roof
 hipposandal	hipposandal
 hipposandals	hipposandal
-hirazamurai	hirazamurai
+hirazamurai	heishi
 hiroen	hiroen
 hirokoji	hirokoji
 hiroma	hiroma
@@ -1075,6 +1076,7 @@ rakuchu rakugai screens	Rakuchu rakugai
 rakuchu rakugai zu	Rakuchu rakugai
 rakugo	rakugo
 rammed earth	rammed earth
+rammed-earth	rammed earth
 rampart	rampart
 ramparts	rampart
 rape	rape
