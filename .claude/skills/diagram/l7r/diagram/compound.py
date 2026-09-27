@@ -211,6 +211,9 @@ ZONE_KINDS: dict[str, str] = {
 UNFENCED_ZONES: frozenset[str] = frozenset({"forecourt", "yard", "cart yard", "inner yard"})
 #: A zone's caption where its program name is not the reader's word: the hearing court is `oshirasu` in the program (and
 #: in its fill pattern) but the sheets caption it in English (the other drafts and the hand sheets say `hearing court`).
+#: A room's caption where its kind's name is not what the room is: the karo lodges in a BAY of the staff long-house
+#: (research buildings 340), which the kind `karo's house` finds, but a bay is not a house (building-review round 6).
+ROOM_CAPTIONS: dict[str, str] = {"karo's house": "karo's quarters"}
 ZONE_CAPTIONS: dict[str, str] = {"oshirasu": "hearing court", "yard": "outer court", "inner yard": "inner court"}
 
 
@@ -271,10 +274,7 @@ _DEFS = (
     '<circle cx="10" cy="9" r="0.8" fill="#7A8C5C"/></pattern>'
     '<pattern id="keiko-earth" patternUnits="userSpaceOnUse" width="16" height="16">'
     '<rect width="16" height="16" fill="#E2CE9E"/><line x1="0" y1="5" x2="16" y2="5" stroke="#C2A46C" stroke-width="0.5"/>'
-    '<line x1="0" y1="13" x2="16" y2="13" stroke="#C2A46C" stroke-width="0.5"/></pattern>'
-    # the vegetable garden's planted rows (pass 6): dark soil ridges across a lighter bed
-    '<pattern id="veg-rows" patternUnits="userSpaceOnUse" width="12" height="9">'
-    '<rect width="12" height="9" fill="#C9B98A"/><line x1="0" y1="4.5" x2="12" y2="4.5" stroke="#7A8C5C" stroke-width="2"/></pattern></defs>'
+    '<line x1="0" y1="13" x2="16" y2="13" stroke="#C2A46C" stroke-width="0.5"/></pattern></defs>'
 )
 
 
@@ -404,7 +404,7 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 7
         parts.append(rect(p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, fill, "none", 0, "", p.spec.feature))
         for rkind, rx, ry, rw, rh in p.spec.rooms:
             parts.append(rect(p.x_ft + rx, p.y_ft + ry, rw, rh, fill, "none", 0, "", rkind))
-            caption("area", p.x_ft + rx, p.y_ft + ry, rw, rh, rkind, 8, False, "#3A2E1C", rkind)
+            caption("area", p.x_ft + rx, p.y_ft + ry, rw, rh, ROOM_CAPTIONS.get(rkind, rkind), 8, False, "#3A2E1C", rkind)
             (x0, y0), (x1, y1) = px(p.x_ft + rx, p.y_ft + ry), px(p.x_ft + rx + rw, p.y_ft + ry + rh)
             parts.append(f'<rect x="{x0:.0f}" y="{y0:.0f}" width="{x1 - x0:.0f}" height="{y1 - y0:.0f}" fill="none" stroke="{stroke}" stroke-width="0.8" stroke-dasharray="4 3"/>')
         if p.spec.engawa_ft:  # the veranda, a lighter strip along the court face under the building's outline (R01)
@@ -507,17 +507,18 @@ def county_magistracy_program() -> CompoundProgram:
     env = Envelope(w_ft=270.0, h_ft=200.0, divider_ft=90.0, gate_w_ft=8.0, posterns=(("W", 50.0, 6.0), ("S", 244.0, 6.0)))
     spine = (
         # THE GARDEN LIES BEFORE THE HOUSE (research buildings 230 'The shady rear is the service strip': the garden faces
-        # the reception rooms). Pass 6 (building-review round 5: the garden ran 188 ft against a 66 ft house, a bare
-        # strip beside it) sizes it to the house: from the kitchen's corridor to the middle gate's line, x 104-172, and
-        # from the house's veranda (y 36) 46 ft deep to y 82, an 8 ft walk along the divider. Its size is a GUESS.
-        CourtZone("garden", 104.0, 36.0, 68.0, 46.0),
-        # The vegetable garden WEST of the house, in the kitchen yard (research buildings 400: the one plot whose side is
-        # given lay west of the house - the Takei house's soup-greens field of about 1,070 sq ft; its size a knob between
-        # that plot and a field over half the grounds). The example takes the plot: 36 x 30 ft = 1,080 sq ft.
-        CourtZone("vegetable garden", 24.0, 46.0, 36.0, 30.0),
-        # The inner court's open ground east of the garden, before the guest house (pass 6): named, not fenced. Its
-        # bounds are a drawing convention.
-        CourtZone("inner yard", 176.0, 24.0, 54.0, 62.0),
+        # the reception rooms). Pass 7 (building-review round 6: ~62 x 66 ft of bare inner court east of a garden sized to
+        # the house alone) runs it on to the guest house, x 104-226, so the one garden faces the reception and the guest
+        # house both - guests were received in the garden-facing rooms (research buildings 330); the servants' row it once
+        # faced is on the kitchen yard since pass 6. From the house's veranda (y 36) 46 ft deep to y 82, an 8 ft walk
+        # along the divider. Its size is a GUESS.
+        CourtZone("garden", 104.0, 36.0, 122.0, 46.0),
+        # The vegetable ground WEST of the house, filling the kitchen yard (research buildings 400: the one plot whose side
+        # is given lay west of the house; a residence's vegetable ground runs from the Takei house's ~1,070 sq ft plot to
+        # a field over about half the Yokota house's grounds). Pass 7 (building-review round 6: the yard stood ~100 x 60
+        # ft bare around the 36 x 30 plot) takes the larger, field form within the yard: 64 x 48 ft = 3,072 sq ft, a
+        # GUESS in its size, leaving a 7 ft way from the postern along the west wall and the yard's north strip.
+        CourtZone("vegetable garden", 14.0, 36.0, 64.0, 48.0),
         # The hearing court is centered on the office hall (x 43-156 as placed: the tax archive's 34 ft and a
         # fire-gap west of it) and no longer than it - R22, research buildings 450: under the office hall's roof or its
         # own, before the dais. 80 ft leaves each end of the hall's south face out from under the roof, where its tub
@@ -590,7 +591,9 @@ def county_magistracy_program() -> CompoundProgram:
         # corridor (research buildings 360/370), its yard - the bath, the well, its one door, the postern - to the south
         # and west. 20 x 18 ft, part of the house's 49 tsubo (above); the kitchen's own size is a GUESS (research 380:
         # "How much of either house was kitchen is not given").
-        b("kitchen", "service", 20.0, 18.0, "inner", "N", order=11, feature="kitchen"),
+        # Its one outside door opens WEST, onto the way between it and the servants' row that runs to the yard (pass 7,
+        # building-review round 6: on its yard face it opened into a ~5 ft pocket between the bath, the well and the house).
+        b("kitchen", "service", 20.0, 18.0, "inner", "N", order=11, feature="kitchen", door_face="W", door_fracs=(0.5, 0.3, 0.7)),
         # A MODEST shrine, 18 x 14 ft (pass 4, building-review round 3: it was 36 x 30 ft, the hall-shrine ceiling, which
         # is Ochiba's particular - buildings/programs.md: the shrine is universal equipment, its scale the per-manor
         # particular; buildings.md "Modest shrine"). The size is a GUESS inside the shrine band (40-1,150 sq ft).

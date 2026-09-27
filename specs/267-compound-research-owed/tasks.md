@@ -39,18 +39,21 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D8). Inventory: [`inv
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
       verify: DONE. write session + check sessions done; every finding applied and re-checked, per briefs/g7-checks.md (open items carried to outcomes.md)
-- [ ] T16 G8, the in-field grave island (R52): the record, then `GraveIsland` and the rate follow the finding
+- [x] T16 G8, the in-field grave island (R52): the record, then `GraveIsland` and the rate follow the finding
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
-- [ ] T17 The edits owed to feature 265's sections (R27 buildings 070, R42 river-cities 040, R46 ways 020, and any a
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. G8 researched in fresh page sessions (source-reader in the write session; quote-check 8 VERBATIM plus fixes and a re-check; source-applicability on each source, limits added); fields 220 records the knob; GraveIsland and features.grave_form follow (commit 4214f9360); tests in tests/settlement/test_fields.py
+- [x] T17 The edits owed to feature 265's sections (R27 buildings 070, R42 river-cities 040, R46 ways 020, and any a
       handoff names), made once 265's task for each page is ticked, and checked (FR-006)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. buildings 070 points at 490, ways 020 the hand-cart spread (kotobank-daihachiguruma-5/-6), river-cities 040 the compound landing (commit 4214f9360); sources checked in the G6 round (quote-check, source-applicability APPLICABLE-WITH-LIMITS with limits added, source-reader in the write session); record-format applied
 - [x] T10 `outcomes.md`: every item's outcome and question, from the handoffs (D5)
       research: rendering
       verify: DONE. outcomes.md: 53 items from the handoffs verbatim, the three owed record edits, the open leads
-- [ ] T11 The kinds follow the outcomes: `Entry:`, label, prose; `entry-drift` on each changed kind (D6)
+- [x] T11 The kinds follow the outcomes: `Entry:`, label, prose; `entry-drift` on each changed kind (D6)
       research: rendering
+      verify: DONE. the kinds follow the outcomes: compound_kinds rewritten with Entry/label/prose; entry-drift on the 58 rewritten kinds (20 drifted, fixed) and on the Residence kind after the example's pass 5 (2 edits applied)
 - [ ] T12 The sheets follow the outcomes: redraws and knobs, measured, `building-review` (D6)
       research: rendering
 - [ ] T13 The GM's items through `escalation-check` (D7)

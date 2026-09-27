@@ -645,16 +645,19 @@ def _home(court: str, wall: str, **kw: object) -> c.Placed:
     return c.Placed(spec, 50.0, 50.0)
 
 
-def test_the_family_privy_stands_flush_to_the_rear_wall() -> None:
-    env = _env(200.0, 200.0, 100.0)
-    face = c.WALL_INK_FT / 2 + 0.5
-    assert cp._rear_privy(env, _home("inner", "N"), [], ()) == (50.0, face, 55.0, face + 5.0)
-    assert cp._rear_privy(env, _home("outer", "S"), [], ()) == (50.0, 200.0 - face - 5.0, 55.0, 200.0 - face)
-    assert cp._rear_privy(env, _home("inner", "W"), [], ()) == (face, 50.0, face + 5.0, 55.0)
-    assert cp._rear_privy(env, _home("inner", "E"), [], ()) == (200.0 - face - 5.0, 50.0, 200.0 - face, 55.0)
-    assert cp._rear_privy(env, _home("inner", "N"), [(0.0, 0.0, 200.0, 20.0)], ()) is None  # the alley taken
-    backed = c.Placed(c.BuildingSpec("r", "lord", 40.0, 20.0, "inner", "N", feature="residence"), 50.0, 2.0)
-    assert cp._rear_privy(env, backed, [], ()) is None  # a house backing its wall has no alley
+def test_the_family_privy_is_attached_to_the_house_at_its_rear_corner() -> None:
+    """Pass 7 (research buildings 220: "in a corner of the corridor"): the family's privy is a part of the house, at the
+    rear corner by the family's rooms - not flush to the wall across the alley, ~140 ft outdoors round the house."""
+    _prog_, result, svg = _county()
+    home = next(p for p in result.placed if p.spec.name == "residence")
+    kitchen = next(p for p in result.placed if p.spec.name == "kitchen")
+    fam = svg.split('data-kind="latrine" data-part-of="residence"')[0].rsplit("<rect ", 1)[1]
+    x = (float(fam.split('x="')[1].split('"')[0]) - 7.0 * c.FTPX) / c.FTPX
+    y = (float(fam.split('y="')[1].split('"')[0]) - 15.0 * c.FTPX) / c.FTPX
+    assert x == pytest.approx(home.x_ft, abs=0.5) and y + cp.PRIVY_FT == pytest.approx(home.y_ft, abs=0.5)  # flush to its rear
+    assert 'data-kind="door" data-part-of="kitchen"' in svg
+    door = svg.split('data-kind="door" data-part-of="kitchen"')[0].rsplit("<rect ", 1)[1]
+    assert (float(door.split('x="')[1].split('"')[0]) - 7.0 * c.FTPX) / c.FTPX == pytest.approx(kitchen.x_ft, abs=0.5)  # its west face (pass 7)
 
 
 def test_the_guests_privy_stands_behind_the_reception() -> None:

@@ -41,7 +41,7 @@ COURT_FILL: dict[str, str] = {
     "garden": "url(#garden-stipple)",
     "yard": "url(#court-earth)",
     "cart yard": "url(#court-earth)",
-    "vegetable garden": "url(#veg-rows)",
+    "vegetable garden": "url(#garden-stipple)",  # the hand sheets' fill for it, a planted open ground to the audit (pass 7)
     "inner yard": "url(#court-earth)",
     "practice ground": "url(#keiko-earth)",  # swept keiko earth (buildings.md "Practice ground")
 }

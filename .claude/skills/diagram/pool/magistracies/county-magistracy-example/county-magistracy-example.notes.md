@@ -14,7 +14,7 @@ Regenerate: `make map GEN=pool/magistracies/county-magistracy-example/county-mag
 The forms the draft takes where the research gives more than one (feature 267 outcomes; each is set in
 `county_magistracy_program()` with its reason at the point of change):
 
-- **R01 veranda**: the garden face alone (the first of the two forms), 5 ft wide - an `engawa` strip inside the
+- **R01 veranda**: the garden face alone (the first of the two forms), 4 ft wide (pass 6; 5 ft before) - an `engawa` strip inside the
   residence's south face (research buildings 240: 3-6 ft).
 - **R02 residence massing**: one block under one roof, the ordinary form, massed in TWO ROWS of rooms front and back
   (as pass 2 re-massed Ochiba's, forms.md; the Kuchiba house's two rows, research buildings 260); the kitchen joined
@@ -24,8 +24,11 @@ The forms the draft takes where the research gives more than one (feature 267 ou
   with the inner rooms behind (research buildings 260). Room sizes are GUESSES.
 - **Rear of the house**: the residence stands 10 ft off the north wall - the rear band narrowed to a cart/servant
   alley, one of research buildings 230's two forms (the other a service strip with the servants' row and a privy).
-  The family privy stands flush to the wall in it with its collection hatch, leaving a 5 ft way; the guests' privy
-  is attached behind the reception room (research buildings 220). The alley opens east onto the inner court; at its
+  Both privies of the house are attached to it at its rear (research buildings 220: "within the residence the privy
+  came to be built in a corner of the corridor"; a guests' privy at the rear of the guest parlor): the family's at
+  the rear corner by the family's rooms, the guests' behind the reception room, each leaving a 5 ft way along the
+  alley. (Pass 6 had stood the family's flush to the wall for a hatch, ~140 ft outdoors round the house from the inner
+  entrance; the hatch was a guess and is dropped for it.) The alley opens east onto the inner court; at its
   west end the kitchen's corridor to the house closes it (the slot north of the corridor is closed on all sides - the
   pass-5 notes' "opens west into the slot" was wrong). The servants reach the kitchen by the kitchen yard instead:
   since pass 6 their row stands in the NW corner beside the kitchen, its door and privy on the yard with the postern.
@@ -44,7 +47,9 @@ The forms the draft takes where the research gives more than one (feature 267 ou
   sizes is a GUESS in its band.
 - **R07 approach**: no genkan; the middle gate in the divider and a stepping-stone roji across the garden to a shoe
   stone at the reception's veranda (the Koseki form, research buildings 300). The household's own doors: the kitchen's
-  one outside door on its south (yard) face and the residence's inner entrance on its west face, below the corridor
+  one outside door on its WEST face, onto the 7 ft way between it and the servants' row that runs to the yard (pass
+  7: on its yard face it opened into a ~5 ft pocket between the bath, the well and the house), and the residence's
+  inner entrance on its west face, below the corridor
   (research buildings 370). Note 300 says of the Koseki house that the everyday door is the kitchen entrance, while
   370 gives the family an inner entrance apart from it; the draft draws both doors.
 - **R18 granary**: an earth-walled kura on the ground, no posts (the dozo form).
@@ -59,17 +64,21 @@ The forms the draft takes where the research gives more than one (feature 267 ou
   barracks - WITH A DEVIATION from its letter ("everyone in the barracks and residence wing"): the senior retainers
   keep a long-house of their own in the outer court, because buildings.md ("Only the lord's household lives here")
   gives senior retainers separate structures, never bays of the lord's wing. The KARO lodges in a bay of that staff
-  long-house, its north 14 ft with a door of its own - R11's attested form (research buildings 340: at an intendancy
+  long-house, its north 14 ft with a door of its own - R11's attested form (captioned `karo's quarters` - a bay, not a house; its kind stays `karo's house`, the registry's) (research buildings 340: at an intendancy
   the staff lived inside the compound in small houses or long-houses; a chief retainer's house inside the lord's own
   compound was not found). Pass 5's karo's house of its own in the inner court, its door on the lord's private court,
   is gone. The grooms lodge in a row of their own by the stables.
 - **Tenure**: a freshly appointed, standardized office - no ancestral alcove, no accreted particulars (knob 6).
-- **Vegetable garden**: the Takei house's soup-greens plot, ~1,080 sq ft, WEST of the house in the kitchen yard
-  (research buildings 400: the one plot whose side is given lay west; its size a knob between that plot and a field
-  over half the grounds - the example takes the plot).
-- **Garden**: sized to the house (pass 6: it ran 188 ft against a 66 ft house, leaving a bare strip before the
-  servants' row) - 68 x 46 ft, from the kitchen's corridor to the middle gate's line; the inner court's ground east of
-  it, before the guest house, is named `inner court`. Its size is a GUESS.
+- **Vegetable garden**: WEST of the house, filling the kitchen yard (research buildings 400: the one plot whose side
+  is given lay west; its size runs from the Takei house's ~1,070 sq ft plot to a field over about half the Yokota
+  house's grounds). Pass 7 takes the field form, as large as the yard holds - 64 x 48 ft, 3,072 sq ft, its size a
+  GUESS - leaving a 7 ft way from the postern along the west wall (pass 6's 36 x 30 plot left ~100 x 60 ft of the
+  yard bare). It is drawn in the garden stipple, as the hand sheets draw theirs.
+- **Garden**: 122 x 46 ft, from the kitchen's corridor to the guest house (pass 7): the one garden faces the
+  reception and the guest house both, guests being received in the garden-facing rooms (research buildings 330).
+  Pass 5's 188 ft garden ran on beside the servants' row with a bare strip; pass 6 cut it to the house's 68 ft and
+  left ~62 x 66 ft of bare inner court east of it. Its size is a GUESS. A ~69 x 36 ft band of inner court north of
+  it, east of the house (the alley's east end and the shrine's corner), stays open ground.
 - **Compound shrine**: a modest shrine, 18 x 14 ft (a GUESS in the 40-1,150 sq ft band) - the hall-shrine ceiling of
   ~36 x 30 ft is Ochiba's particular, not the generic post's (buildings/programs.md: "The shrine is universal
   equipment ... Scale and dedication are the per-manor particular").
@@ -85,7 +94,7 @@ Guesses the draft carries beyond those: a **detached guest house** (R10, researc
 in the main house; a guest house apart was not found). (The karo's house of its own, a GUESS through pass 5, is now
 a bay of the staff long-house - R11's attested form.) The kitchen postern's, the service gate's and the middle gate's 6 ft (narrower than the main
 gate), the door width (a map drawing convention, research buildings 620), the roji's stone spacing, the hearing
-court's 80 x 32 ft, the garden's 68 x 46 ft, the collection hatches, the dais's 30 x 10 ft, the cart yard's 62 x 25 ft, the 5 ft privies and
+court's 80 x 32 ft, the garden's 122 x 46 ft, the collection hatches, the dais's 30 x 10 ft, the cart yard's 62 x 25 ft, the 5 ft privies and
 their 15 ft from any well are guesses too. The forecourt, the `outer court` ground beside the hearing court and the
 cart yard are drawn as bare ground with no edge: an outlined forecourt read as a fenced one, a GUESS the record does
 not support (research buildings 300).
@@ -223,6 +232,18 @@ Coverage 33%, perimeter-hugging 75%, nothing overflows; every registered check p
 
 Coverage 33%, perimeter-hugging 72%, nothing overflows; every registered check passes (pack_audit).
 
+2026-09-27 pass 7 (building-review round 6):
+
+- **The family privy back in the house**, attached at its rear corner by the family's rooms (research 220), its
+  hatch dropped (Knob settings, "Rear of the house").
+- **The kitchen's one outside door on its west face**, onto the way to the yard (Knob settings, R07).
+- **The two bare patches used**: the garden runs on to the guest house (122 x 46 ft), and the kitchen yard holds
+  research 400's field form of the vegetable ground (64 x 48 ft, the garden stipple the hand sheets use).
+- **Notes fixed**: the veranda is 4 ft as drawn; the karo's bay is captioned `karo's quarters` (the kind
+  `karo's house` still finds it for the program's check).
+
+Coverage 33%, perimeter-hugging 72%, nothing overflows; every registered check passes (pack_audit).
+
 ## Review log
 
 - **2026-09-27 building-review of the pass-2 draft** (the pass-3 fix list): 3 delta errors (a tub and its caption under
@@ -243,3 +264,6 @@ Coverage 33%, perimeter-hugging 72%, nothing overflows; every registered check p
   grooms'; the stables' well before its door; the notes' arithmetic and buildings.md's validated-wings line), 3
   questionable items (the 49- or 67-tsubo house, the karo in the inner court, the long garden) and 2 nitpicks. All
   applied or recorded in pass 6 above; the earthen entry is left, with its reason.
+- **2026-09-27 building-review round 6** (needs-work): the family privy apart from the house; the kitchen door into a
+  ~5 ft pocket; two bare patches (east of the garden, the kitchen yard); the veranda's width and the karo's bay's
+  label in the notes. All applied in pass 7 above.

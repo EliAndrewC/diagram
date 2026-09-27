@@ -189,28 +189,6 @@ def _mats(z: CourtZone) -> list[Box]:
     return [(cx - 3.0, fy, cx + 3.0, fy + 3.0), (cx - 16.0, fy + 6.0, cx - 10.0, fy + 9.0), (cx + 10.0, fy + 6.0, cx + 22.0, fy + 9.0)]
 
 
-def _rear_privy(env: Envelope, home: Placed, boxes: list[Box], avoid: tuple[Box, ...]) -> Box | None:
-    """A privy flush to the compound wall behind a house that stands off it (`inset_ft`): in the rear alley, clear of
-    the wall's ink, the first clear foot from the alley's west (or north) end - None where the house backs its wall."""
-    court = _court_side(home)
-    if home.spec.inset_ft < PRIVY_FT + 2.0:
-        return None
-    face = WALL_INK_FT / 2 + 0.5  # the wall's inner face and a hair (compound_model.OUTLINE_CLEAR_FT)
-    run = int((home.spec.w_ft if court in ("N", "S") else home.spec.h_ft) - PRIVY_FT) + 1
-    for s in range(run):
-        if court == "S":
-            box = (home.x_ft + s, face, home.x_ft + s + PRIVY_FT, face + PRIVY_FT)
-        elif court == "N":
-            box = (home.x_ft + s, env.h_ft - face - PRIVY_FT, home.x_ft + s + PRIVY_FT, env.h_ft - face)
-        elif court == "E":
-            box = (face, home.y_ft + s, face + PRIVY_FT, home.y_ft + s + PRIVY_FT)
-        else:
-            box = (env.w_ft - face - PRIVY_FT, home.y_ft + s, env.w_ft - face, home.y_ft + s + PRIVY_FT)
-        if _is_clear(env, boxes, box[0], box[1], PRIVY_FT, PRIVY_FT) and all(_gap(box, a) >= LATRINE_WELL_FT for a in avoid):
-            return box
-    return None
-
-
 def _guest_privy(env: Envelope, home: Placed, boxes: list[Box]) -> Box | None:
     """A privy attached to the house's rear face behind its reception room, centered on the room (research buildings
     220: "at the rear of the guest parlor"); None without a reception room or where the ground there is taken."""
@@ -432,11 +410,14 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
     if "residence" in by_name:
         home = by_name["residence"]
         others = [t for t in taken if t != (home.x_ft, home.y_ft, home.x2, home.y2)]
-        # the family's: FLUSH TO THE REAR WALL in the house's rear alley, with its hatch (pass 6: attached to the house
-        # it had no hatch and narrowed the alley's west end to 3.5 ft)
-        if fam := _rear_privy(env, home, others + zones, well_boxes):
-            taken.append(fam)
-            privies.append(((fam[0] + fam[2]) / 2, (fam[1] + fam[3]) / 2, "residence"))
+        # the family's: IN THE HOUSE, attached at its rear corner by the family's rooms (research buildings 220: "within
+        # the residence the privy came to be built in a corner of the corridor"), its cesspit toward the rear wall. Pass
+        # 7 (building-review round 6): pass 6 had stood it flush to the rear wall for a hatch, ~140 ft outdoors round
+        # the house from the inner entrance; the hatch was a guess and is dropped for it - the 10 ft alley keeps 5 ft.
+        rear = {"N": "S", "S": "N", "E": "W", "W": "E"}[_court_side(home)]
+        if fam := _attach(env, home, rear, PRIVY_FT, PRIVY_FT, others + zones, well_boxes):
+            taken.append((fam[0], fam[1], fam[0] + PRIVY_FT, fam[1] + PRIVY_FT))
+            privies.append((fam[0] + PRIVY_FT / 2, fam[1] + PRIVY_FT / 2, "residence"))
         # the guests': attached to the house behind the reception room (pass 6; research 220's "at the rear of the guest
         # parlor")
         if guest := _guest_privy(env, home, taken + zones):
