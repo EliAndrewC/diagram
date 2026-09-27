@@ -1629,7 +1629,8 @@
  "go": {
   "def": "A tenth of a tsubo, about a third of a square meter - the fraction a surveyed site area is given to.",
   "variants": [
-   "go"
+   "go",
+   "gō"
   ]
  },
  "goemon-buro": {
@@ -5588,6 +5589,56 @@
   "def": "An unranked shrine in Japan's modern shrine registers, often a single hamlet's, one step below a village shrine.",
   "variants": [
    "mukakusha"
+  ]
+ },
+ "ichi-no-torii": {
+  "def": "The first torii of a shrine's approach, usually its largest, standing where the approach enters the grounds; the second and third (ni-no-torii, san-no-torii) stand farther in, toward the hall.",
+  "variants": [
+   "ichi-no-torii",
+   "ichi no torii",
+   "ni-no-torii",
+   "ni no torii",
+   "san-no-torii",
+   "san no torii"
+  ]
+ },
+ "Hachiman": {
+  "def": "A Shinto god of war and archery, patron of warriors, whose shrines are among the commonest in Japan.",
+  "variants": [
+   "Hachiman"
+  ]
+ },
+ "irimoya": {
+  "def": "A hip-and-gable roof: hipped on its lower slopes, with a small gable at each end of the ridge.",
+  "variants": [
+   "irimoya",
+   "irimoya-roofed"
+  ]
+ },
+ "nagare-zukuri": {
+  "def": "The flowing-roof style of shrine sanctuary, its front roof slope carried out long over the steps; the commonest form of honden in Japan.",
+  "variants": [
+   "nagare-zukuri",
+   "nagarezukuri"
+  ]
+ },
+ "dashigeta": {
+  "def": "An eave construction in which a beam carried on projecting joist-ends, set out past the wall face, supports the rafters so the eave reaches farther.",
+  "variants": [
+   "dashigeta"
+  ]
+ },
+ "sakaki": {
+  "def": "An evergreen shrub of the tea family whose leafy branches are offered at Shinto shrines, and which is planted in precincts as a sacred tree.",
+  "variants": [
+   "sakaki"
+  ]
+ },
+ "dohyō": {
+  "def": "The ring sumo is wrestled in: a raised square platform of packed clay with a circle of straw bales on top, consecrated by a rite before the bouts.",
+  "variants": [
+   "dohyō",
+   "dohyo"
   ]
  }
 }

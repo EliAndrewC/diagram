@@ -237,6 +237,7 @@ danna-ba	kusaba
 danna-dera	danna-dera
 danzaemon	Danzaemon
 daozuofang	daozuofang
+dashigeta	dashigeta
 daxiangguo	Daxiangguo
 db	dBA
 dba	dBA
@@ -268,6 +269,8 @@ division works	bunsuiguchi
 doba	dōba
 dobashi	dobashi
 dobei	neribei
+dohyo	dohyō
+dohyō	dohyō
 doi	horinouchi
 dojo	dojo
 doma	doma
@@ -459,7 +462,9 @@ guan-xiang	guanxiang
 guanxiang	guanxiang
 gulou	gulou
 gundai	gundai
+gō	go
 gōshi	gōshi
+hachiman	Hachiman
 hachure	hachure
 hachures	hachure
 haiden	haiden
@@ -538,6 +543,8 @@ hyo	hyō
 hyojosho	Hyōjōsho
 hyō	hyō
 hyōjōsho	Hyōjōsho
+ichi no torii	ichi-no-torii
+ichi-no-torii	ichi-no-torii
 ido	ido
 idobata	idobata
 idowaku	igeta
@@ -566,6 +573,8 @@ intramural	intramural
 inverted siphon	inverted siphon
 inverted siphons	inverted siphon
 iriai	iriai
+irimoya	irimoya
+irimoya-roofed	irimoya
 iroha	iroha companies
 iroha companies	iroha companies
 iroha-gumi	iroha-gumi
@@ -838,6 +847,8 @@ musashi province	Musashi
 mushiro	mushiro
 muster perimeter	muster perimeter
 muster perimeters	muster perimeter
+nagare-zukuri	nagare-zukuri
+nagarezukuri	nagare-zukuri
 nagaya	nagaya
 nagaya-mon	nagayamon
 nagayamon	nagayamon
@@ -861,6 +872,8 @@ near-monospecific	monospecific
 neige	neige
 nengu	nengu
 neribei	neribei
+ni no torii	ichi-no-torii
+ni-no-torii	ichi-no-torii
 night soil	night soil
 night-soil	night soil
 nightsoil	night soil
@@ -1038,10 +1051,13 @@ sae no kami	sae no kami
 sageba	ōkaji
 saien	saien
 sakagura	sakagura
+sakaki	sakaki
 sally gate	sally port
 sally port	sally port
 sallyport	sally port
 salvage excavation	salvage excavation
+san no torii	ichi-no-torii
+san-no-torii	ichi-no-torii
 sand sluice	sand sluice
 sando	sando
 sanguan	Three Officials
