@@ -530,3 +530,15 @@ def test_a_parcel_in_line_with_two_others_is_in_a_ruled_row() -> None:
     steps = off_the_row((1000.0, 5.0), placed)
     assert steps and all(not in_a_ruled_line(q, placed) for q in steps)
     assert off_the_row((1000.0, 400.0), placed) == []
+
+
+def test_a_seat_in_the_row_is_stepped_off_it_or_refused() -> None:
+    """Feature 261: a parcel is seated as found, stepped sideways off a row where the ground allows, and refused where
+    it does not."""
+    from l7r.diagram.hamletgen.hinterland.parcels import in_a_ruled_line, seat_off_the_row
+
+    placed = [(0.0, 0.0), (500.0, 0.0)]
+    assert seat_off_the_row((1000.0, 400.0), placed, lambda q: False) == (1000.0, 400.0)
+    stepped = seat_off_the_row((1000.0, 5.0), placed, lambda q: True)
+    assert stepped is not None and not in_a_ruled_line(stepped, placed)
+    assert seat_off_the_row((1000.0, 5.0), placed, lambda q: False) is None

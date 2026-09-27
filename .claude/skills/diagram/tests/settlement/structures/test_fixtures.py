@@ -516,3 +516,13 @@ def test_a_caption_on_a_crown_is_on_the_canopy_and_caption_room_can_refuse_it():
     assert not quad_on_canopy(quad, lambda x, y, pad: [(25.0, 40.0, 5.0)])
     everywhere = lambda x, y, pad: [(x, y, 500.0)]  # noqa: E731 - a canopy over the whole map
     assert not _room(canopy=everywhere) and _room(canopy=lambda x, y, pad: [])
+
+
+def test_a_level_board_under_a_canopy_still_takes_a_seat():
+    # feature 261: a level board whose caption ring clears everything but the crowns ranks below one clear of them, and
+    # is still offered - a board may stand under trees (the GM, 2026-08-29)
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    s.M["road"] = [[100, 300], [900, 300]]
+    s.M["tree_crowns"] = [500.0, 300.0, 600.0]
+    assert s.place_kosatsuba() is not None

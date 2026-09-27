@@ -133,6 +133,14 @@ def off_the_row(p: tuple[float, float], centers: Sequence[tuple[float, ...]], fr
     return []
 
 
+def seat_off_the_row(p: tuple[float, float], centers: Sequence[tuple[float, ...]], ok: Any) -> tuple[float, float] | None:
+    """`p` itself when it stands in no row with two placed parcels; otherwise the nearest sideways step off the row that
+    `ok` admits and that stands in no row either; otherwise None (feature 261)."""
+    if not in_a_ruled_line(p, centers):
+        return p
+    return next((q for q in off_the_row(p, centers) if ok(q) and not in_a_ruled_line(q, centers)), None)
+
+
 def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float = 250.0) -> list[Poly]:
     """Find `count` patches of ground still open enough for a managed woodland - by SCANNING.
 
@@ -403,14 +411,10 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                     break
                 if any(math.hypot(x - cx0, y - cy0) < _ex0 for cx0, cy0, _ex0 in centers):
                     continue
-                if in_a_ruled_line((x, y), centers):
-                    _off = next(
-                        (q for q in off_the_row((x, y), centers) if _ok(*q) and not in_a_ruled_line(q, centers) and not any(math.hypot(q[0] - cx0, q[1] - cy0) < _ex0 for cx0, cy0, _ex0 in centers)),
-                        None,
-                    )
-                    if _off is None:
-                        continue  # the stride varied and the line did not; with no ground off the row, no parcel here
-                    x, y = _off
+                _off = seat_off_the_row((x, y), centers, lambda q: _ok(*q) and not any(math.hypot(q[0] - cx0, q[1] - cy0) < _ex0 for cx0, cy0, _ex0 in centers))
+                if _off is None:
+                    continue  # the stride varied and the line did not; with no ground off the row, no parcel here
+                x, y = _off
                 # OFF THE LATTICE, AND NOT ALL ONE SIZE (settlement-review, Mizuguchi 2026-08-18).
                 # The scan samples a uniform 90 px lattice, scores every seat by one monotone
                 # function (near the cluster, leaning upslope) and then takes the best remaining seat
