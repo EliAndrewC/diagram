@@ -244,8 +244,7 @@ class ShrineGrove(Kind):
     kept trees rather than in cleared ground. This map draws a village shrine's precinct as its grove, with the hall in a small
     swept clearing inside it and no fence around it.
 
-    Note: The grove as the setting of a shrine follows the record; that the wood fills most of a precinct's unbuilt ground is a guess, since no source measures what covered the ground beyond buildings that took a fortieth to a seventh of it. Everything the record holds is about a
-    village shrine standing in its own wood; nothing covers a grove kept inside a compound wall.
+    Note: The grove as the setting of a shrine follows the record; that the wood fills most of a precinct's unbuilt ground is a guess, since no source measures what covered the ground beyond buildings that took a fortieth to a seventh of it.
 
     Caveat: Everything the record holds is about a village shrine standing in its own wood; nothing covers a
     grove kept inside a compound wall.
