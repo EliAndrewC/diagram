@@ -8254,5 +8254,18 @@
   "variants": [
    "chome"
   ]
+ },
+ "omoteya-zukuri": {
+  "def": "the grander form of the Kyoto town house: a separate shop block at the street, joined to the main house behind by an entrance block, with an open entrance court and a small court on either side of that block.",
+  "variants": [
+   "omoteya-zukuri",
+   "omoteya"
+  ]
+ },
+ "senzai": {
+  "def": "the planting of a Japanese garden - its shrubs, trees and flowers; in a Kyoto town house, the planting of the back garden behind the main rooms (the zashiki garden).",
+  "variants": [
+   "senzai"
+  ]
  }
 }

@@ -1366,6 +1366,8 @@ okajiba	ōkaji
 okura	kura
 omamori	omamori
 omotedana	omotedana
+omoteya	omoteya-zukuri
+omoteya-zukuri	omoteya-zukuri
 omoya	omoya
 onari-goten	onari-goten
 one-bay	bay
@@ -1629,6 +1631,7 @@ senmaida	senmaida
 sensei	sensei
 sento	sento
 sentō	sento
+senzai	senzai
 separated flow	separation zone
 separation zone	separation zone
 sericulture	sericulture
