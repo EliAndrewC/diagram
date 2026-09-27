@@ -1941,7 +1941,8 @@
  "idoyakata": {
   "def": "The well house: posts set beside a well with a roof laid over them and nothing more.",
   "variants": [
-   "idoyakata"
+   "idoyakata",
+   "ido-yakata"
   ]
  },
  "igeta": {
@@ -4082,7 +4083,9 @@
  "well-sweep": {
   "def": "A counterweighted pole pivoted on a post beside a well, swung down to dip the bucket and up to raise it.",
   "variants": [
-   "well-sweep"
+   "well-sweep",
+   "sweep well",
+   "sweep-type well"
   ]
  },
  "wengcheng": {
@@ -7468,6 +7471,49 @@
   "def": "The simplest framed gate: two posts joined by a horizontal tie-beam (*nuki*) passed through them, with no roof.",
   "variants": [
    "nukimon"
+  ]
+ },
+ "shitomi": {
+  "def": "A lattice-faced wooden shutter hinged at the top: it swings up and outward and is hooked open, and in bad weather it closes the opening like a wall panel.",
+  "variants": [
+   "shitomi",
+   "shitomi shutters"
+  ]
+ },
+ "Ashina": {
+  "def": "A warrior house, once lords of Aizu, that held Kakunodate under the Satake lords of Akita from 1620 until its line died out in the 1650s; the Iwahashi family were among its senior retainers.",
+  "variants": [
+   "Ashina"
+  ]
+ },
+ "banner": {
+  "def": "One of the Eight Banners, the hereditary military divisions of the Qing dynasty. Banner troops and their families were garrisoned across the country, most often in a walled quarter of their own in a corner of a provincial capital.",
+  "variants": [
+   "banner",
+   "banners",
+   "banners'",
+   "banner garrison",
+   "banner garrisons"
+  ]
+ },
+ "sakimono-gashira": {
+  "def": "The head of one of a castle town's vanguard foot-soldier companies, a high post for a middle-rank retainer. Fukui had sixteen of them, and the one who held the Kaga-guchi gate had an official residence beside it.",
+  "variants": [
+   "sakimono-gashira"
+  ]
+ },
+ "Guangxu era": {
+  "def": "The reign of the Qing emperor Guangxu, 1875-1908. Chinese records date events by the year of the reign, so its eleventh year is 1885.",
+  "variants": [
+   "Guangxu era",
+   "Guangxu"
+  ]
+ },
+ "Jiajing era": {
+  "def": "The Jiajing reign of the Ming, 1522 to 1566.",
+  "variants": [
+   "Jiajing era",
+   "Jiajing"
   ]
  }
 }
