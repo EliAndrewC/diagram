@@ -6276,5 +6276,24 @@
    "ichi-",
    "ni-"
   ]
+ },
+ "funabansho": {
+  "def": "A boat watch post: an office that Edo-period domains set up at the landings of busy boat routes and at other key points, to inspect passing boats and collect taxes.",
+  "variants": [
+   "funabansho"
+  ]
+ },
+ "yoriai": {
+  "def": "A rank of hatamoto (bannermen); the rank that held the Nakagawa river watch duty.",
+  "variants": [
+   "yoriai",
+   "yoriai-rank"
+  ]
+ },
+ "funadama": {
+  "def": "The guardian spirit of a boat, kept aboard in the hull at the foot of the mast, as dolls, coins, hair, grain or dice placed there; it is sometimes also given a shrine on land, and is chiefly worshipped by fishermen and shipwrights.",
+  "variants": [
+   "funadama"
+  ]
  }
 }

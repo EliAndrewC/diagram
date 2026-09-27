@@ -423,6 +423,8 @@ fu	fu
 fudasashi	fudasashi
 fukada	fukada
 fukugi	fukugi
+funabansho	funabansho
+funadama	funadama
 funairi-bori	funairi-bori
 fung shui	fengshui grove
 fung shui wood	fengshui grove
@@ -1558,6 +1560,8 @@ yizhan	shukuba
 yizhong	yizhong
 yohaisui bunri	yohaisui bunri
 yonin	yonin
+yoriai	yoriai
+yoriai-rank	yoriai
 yoriai-seki	yoriai-seki
 yoriki	yoriki
 yorishiro	yorishiro
