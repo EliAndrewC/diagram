@@ -14,6 +14,11 @@ from .boundary import install_site_boundary
 from .seats import _seat_allowed, cluster_aspect, front_row, lane_frontage
 from .wells import place_wells
 
+#: How far a rank seat may stand behind its exact rank, as a share of `BUNDLE_PITCH` (feature 261, settlement-review of
+#: Mizuguchi): a GUESS calibrated against main's roll of that map, whose rows spread 24 and 78 ft - a quarter pitch keeps a
+#: rank a rank while taking it off the surveyed line.
+RANK_DEPTH_JITTER = 0.25
+
 FORM_BOUND: dict[str, float] = {}
 """Per-FORM override of how far from the seat center a homestead may stand, as a multiple of the
 seat band's diagonal. EMPTY, deliberately - every form uses the 1.15 default.
@@ -492,9 +497,18 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
                 ):
                     continue  # the same guess again
                 _kept.append((_sx4, _sy4))
-                if _seat_allowed(s, _sx4, _sy4) and _pretest(_sx4, _sy4) and s.try_place(_sx4, _sy4, "plain"):
-                    placed += 1
-                    _cloud_placed += 1
+                # ...AND A RANK IS NOT A SURVEYED LINE EITHER (settlement-review of Mizuguchi, feature 261): with the depth
+                # exact, 11 of its 12 houses stood on four rows within 5 ft and three columns within 3 ft - a lattice, where
+                # the record's nucleated village is houses gathered irregularly (kaison-jawiki) and main's roll of the same
+                # map spread its rows by 24 and 78 ft. A rank seat stands up to `RANK_DEPTH_JITTER` of a pitch FURTHER from
+                # the field, from the same position hash - outward only, so the lane room between the ranks is never taken;
+                # the exact seat is offered where the jittered one is refused, so no household is lost to it.
+                _dj = s._hjit(_sx4, _sy4, 14.0) * BUNDLE_PITCH * RANK_DEPTH_JITTER if attempt < 4 and not _along_the_field else 0.0
+                for _tx, _ty in ((_sx4 + ox * _dj, _sy4 + oy * _dj), (_sx4, _sy4)) if _dj > 0.0 else ((_sx4, _sy4),):
+                    if _seat_allowed(s, _tx, _ty) and _pretest(_tx, _ty) and s.try_place(_tx, _ty, "plain"):
+                        placed += 1
+                        _cloud_placed += 1
+                        break
             if _along_the_field or not (attempt < 4 and _standing and placed == _before_round and placed < plan.spec.households):
                 break
             _offered, _along_the_field = _ends, True
