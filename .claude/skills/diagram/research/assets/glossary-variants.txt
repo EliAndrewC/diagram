@@ -43,9 +43,11 @@ at grade	at grade
 autumn assize	assize
 aze	bund
 aze-mame	azemame
+aze-zukuri	azezukuri
 azemame	azemame
 azemichi	azemichi
 azenuri	azenuri
+azezukuri	azezukuri
 azimuth	azimuth
 azolla	azolla
 azuchi	azuchi
@@ -363,9 +365,11 @@ dohyō	dohyō
 doi	horinouchi
 dojo	dojo
 doma	doma
+domain era	domain era
 donggusup	donggusup
 dongjing meng hua lu	Dongjing Meng Hua Lu
 dooryard	dooryard
+doro-aze	doro-aze
 doshin	doshin
 dosojin	dosojin
 double cropping	nimosaku
@@ -729,6 +733,8 @@ huizhou	Huizhou
 hutong	hutong
 hutongs	hutong
 hyakusho denki	Hyakusho Denki
+hyakushodai	hyakushodai
+hyakushōdai	hyakushodai
 hydrophilic	hydrophilic
 hydroseral	hydrosere
 hydrosere	hydrosere
@@ -1169,6 +1175,7 @@ nuclei	nucleated
 nucleus	nucleated
 numajiro	numajiro
 nunosarashi	nunosarashi
+nuptiality	nuptiality
 nuriya	nuriya
 nursery pond	nursery pond
 nursery ponds	nursery pond
@@ -1343,6 +1350,8 @@ ridge culture	ridge culture
 ridge span	ridge span
 riffle	riffle
 riffles	riffle
+ring canal	ring canal
+ring canals	ring canal
 ring dike	ring dike
 ring levee	ring dike
 ring-dike	ring dike
@@ -1733,6 +1742,8 @@ ushi-waku	ushi-waku
 usufruct	usufruct
 uzumimon	umon
 vaiśravaṇa	Bishamon
+valley fan	valley fan
+valley fans	valley fan
 valley pond	valley pond
 valley ponds	valley pond
 verge	verge
