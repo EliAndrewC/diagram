@@ -208,17 +208,22 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
 
 ## Phase 1h - the seventh round (GM 2026-09-27; plan D16)
 
-- [ ] T57 `make canon` and `canon-read-hooks.sh` with its suite, registered (D16.1)
+- [x] T57 `make canon` and `canon-read-hooks.sh` with its suite, registered (D16.1)
       research: rendering
-- [ ] T58 The split before the write, and the write brief refused while an item's question is over the cap (D16.2)
+      verify: DONE. built and verified: see D16 (live proof in a headless session in the clone, 00:13:14Z; suites green; plan review CLEAR)
+- [x] T58 The split before the write, and the write brief refused while an item's question is over the cap (D16.2)
       research: rendering
-- [ ] T59 Check groups packed by bytes (D16.3)
+      verify: DONE. built and verified: see D16 (live proof in a headless session in the clone, 00:13:14Z; suites green; plan review CLEAR)
+- [x] T59 Check groups packed by bytes (D16.3)
       research: rendering
-- [ ] T60 The Mode A sheet regenerated when stale (D16.5)
+      verify: DONE. built and verified: see D16 (live proof in a headless session in the clone, 00:13:14Z; suites green; plan review CLEAR)
+- [x] T60 The Mode A sheet regenerated when stale (D16.5)
       research: rendering
-- [ ] T61 FR-002 and FR-006 for `fields`, worked as the last pages were (D16.4)
+      verify: DONE. built and verified: see D16 (live proof in a headless session in the clone, 00:13:14Z; suites green; plan review CLEAR)
+- [x] T61 FR-002 and FR-006 for `fields`, worked as the last pages were (D16.4)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. fields closed for 070, 110, 160 (session 2a): quote-check, record-format x3, source-applicability x4 (all APPLICABLE-WITH-LIMITS, limits added), entry-drift x7 (all DRIFTED, rewritten; 6 IN-STEP on re-check, IrrigationDitch fixed after); 26 edits applied by make apply-edits, 2 refused and done by hand; FR-006 worklist 37 bare items: 31 FOOTNOTED, 1 LOCATED, 4 NOT-LOCATED, 1 TOO-SHORT; open: the 160 contrary reading of ja.wikipedia 散村 is stated without a quote (needs a sanson-jawiki entry), Tabayashi 1987 PDF quotes unverifiable here (no text layer)
 - [ ] T62 **The comparison the GM asked for** (D16): T61 against R4 to R7, recorded as R8
       research: rendering
 
