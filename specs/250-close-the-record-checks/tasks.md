@@ -249,12 +249,15 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
 
 ## Phase 1j - the ninth round (GM 2026-09-27; plan D18)
 
-- [ ] T68 `source-applicability` EDIT blocks (D18.1)
+- [x] T68 `source-applicability` EDIT blocks (D18.1)
       research: rendering
-- [ ] T69 The start-up measured and the budget decided (D18.2)
+      verify: DONE. built and verified (see D18; plan review CLEAR, start-up re-derived by the reviewer within 0.06%)
+- [x] T69 The start-up measured and the budget decided (D18.2)
       research: rendering
-- [ ] T70 A page's round takes the modals still owed from its other questions (D18.3)
+      verify: DONE. built and verified (see D18; plan review CLEAR, start-up re-derived by the reviewer within 0.06%)
+- [x] T70 A page's round takes the modals still owed from its other questions (D18.3)
       research: rendering
+      verify: DONE. built and verified (see D18; plan review CLEAR, start-up re-derived by the reviewer within 0.06%)
 - [x] T71 FR-002 for `cities/hinterland`, worked as the last pages were (D18.4)
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed

@@ -657,3 +657,55 @@ while the map draws them as options labeled accurate.
    OTHER questions are real work T23 will need; checking them per page, packed by load, cost 0.78 million a thing,
    the cheapest rate measured. Folding them into each page's round on purpose (rather than by the defect that found
    them) would clear T23 as the pages go.
+
+## R10 - the ninth round: source write-ups by command, the budget measured, owed modals folded in (2026-09-27, T68 to T72, plan D18)
+
+The GM asked for R9's three recommendations and another page. The page was `cities/hinterland`: two FR-002 items
+(questions 010 and 050), four new or changed registry keys, no modal owed. One write session, then two check groups:
+050 alone, and 010 with the four keys. Figures from `tokens.py summary` over `measure/tokens-hinterland-*.json`.
+Before it, a split session divided `archetypes` 170 (touched by R9's accidental group, and over the cap) into four
+questions: 0.93 million, reported apart.
+
+| | `cities/government` (R6) | `cities/fabric` (R7) | `fields` (R8) | `archetypes` (R9) | **`cities/hinterland` (R10)** |
+|---|---|---|---|---|---|
+| questions / modals / keys checked | 4 / 0 / 4 | 5 / 0 / 2 | 3 / 7 / 4 | 2 / 2 / 2 | 2 / 0 / 4 |
+| largest context any turn | 95,000 | 137,000 | 171,000 | 102,000 | **115,000** |
+| main session | 5.30 M | 9.84 M | 9.08 M | 5.46 M | 6.91 M, 116 turns |
+| mean main turn | 56,000 | 64,000 | 90,000 | 56,000 | **60,000** |
+| agent runs | 16 (0.94 M) | 18 (0.97 M) | 28 (1.18 M) | 12 (0.93 M) | 11 (**1.90 M**) |
+| total | 6.24 M | 10.81 M | 10.26 M | 6.39 M | 8.80 M |
+| per thing checked | 0.78 M | 1.54 M | 0.73 M | 1.07 M | 1.47 M |
+
+(Observed 2026-09-27; method: `tokens.py summary --files <records> --questions N --items N --modals N --keys N`.)
+
+**Where this page's cost went: one source that is a book.** `cdlib-local-elites` is *Chinese Local Elites and
+Patterns of Dominance*, whose saved page is the whole book, 1.38 MB. The `source-applicability` check of it read
+200,026 characters over 16 turns and cost 0.73 million - against 35,000 to 105,000 for each of the page's other three
+sources, and 36,000 to 60,000 a source on the last two pages; the `source-reader` that read it and two other pages
+cost 0.55 million over 83,621 characters (observed 2026-09-27; method: the agents' rows in the page's records, and
+the size of `/tmp/l7r-check/key-cdlib-local-elites`). Without that one check the page is 8.07 million, 1.35 million
+a thing. The write session was 2.43 million (its sourcing - the book among it - peaked at 115,000); group 2a, with
+the four keys, was 3.08 million, and split its own question 010 when the check's fixes pushed it over the cap.
+
+**What each change did:**
+
+1. **Source write-ups by command - worked, partly.** Three of the page's source write-up fixes were applied by
+   `make apply-edits`; three more were done by hand, among them a fix to an entry (`siheyuan-zhwiki`) that was not one
+   of the four checked keys.
+2. **The budget, measured and kept** - no session passed 115,000, and the check sessions peaked at 100,000 and 62,000.
+3. **Owed modals folded in** - built and replayed (D18.3), not exercised: this page owed no modal.
+
+**What the rounds now say.** Over R6 to R10 the tooling's own costs have come down - agents read their bundles, a
+report is applied by command, no session grows past about 115,000, a session's start-up is about 118,000 - and the
+figure per thing now moves mostly with the page's CONTENT: how hard its claims are to source, and how large its
+sources are (0.73 to 1.54 million a thing, the highest two on the pages whose sessions met first-use defects or a
+book-length source).
+
+### Recommendations for the next round
+
+1. **A check reads the part of a long source it needs, not the whole of it.** A key bundle carries the source's
+   front matter (title, author, date - what `source-applicability` judges) and a window around each passage the
+   record quotes from it, not the whole saved page; the same cap for `source-reader`'s saved pages. One book-length
+   source cost 0.73 million in one check on this page.
+2. **Then proceed with the remaining pages** rather than another tooling round: what remains between pages is mostly
+   the pages themselves.
