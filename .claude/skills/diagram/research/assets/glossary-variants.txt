@@ -87,6 +87,7 @@ board foot	board foot
 bodaiji	bodaiji
 bomori	bomori
 bon	Bon
+book of songs	Book of Songs
 boom	boom
 booms	boom
 booting	booting
@@ -285,6 +286,8 @@ dongjing meng hua lu	Dongjing Meng Hua Lu
 dooryard	dooryard
 doshin	doshin
 dosojin	dosojin
+double cropping	nimosaku
+double-cropped	nimosaku
 doyo	doyo
 doyoboshi	nakaboshi
 dozo	kura
@@ -897,6 +900,7 @@ natural levees	natural levee
 natural village	natural village
 natural villages	natural village
 nawabari	nawabari
+nawate	nawate
 naya	naya
 near-monospecific	monospecific
 neige	neige
@@ -906,6 +910,7 @@ night soil	night soil
 night-soil	night soil
 nightsoil	night soil
 nihonbashi	Nihonbashi
+nimosaku	nimosaku
 ninomaru	ninomaru
 noborigama	noborigama
 nodame	nodame
@@ -951,6 +956,7 @@ outwork	outwork
 outworks	outwork
 ox-frame	ox-frame
 ox-frames	ox-frame
+paddy seams	seam
 panicle	panicle
 panicles	panicle
 pannage	pannage
@@ -978,6 +984,7 @@ pig iron	pig iron
 plankton	plankton
 plant association	plant association
 planted collar	planted collar
+plot seams	seam
 polder	polder
 pollard	pollard
 pollarded	pollard
@@ -1106,6 +1113,8 @@ satoyama	satoyama
 schistosomiasis	schistosomiasis
 scour	scour
 se	se
+seam	seam
+seams	seam
 secondary forest	secondary forest
 secondary woodland	secondary forest
 secondary woodlands	secondary forest
@@ -1136,6 +1145,7 @@ shibai-goya	shibai-goya
 shichiya	shichiya
 shijin soo	four gods
 shijin-soo	four gods
+shijing	Book of Songs
 shinai	shinai
 shinden	shinden
 shinsei	Shinsei
@@ -1210,6 +1220,8 @@ stringer	stringer
 stringers	stringer
 strip footing	strip footing
 strip footings	strip footing
+stroke	stroke
+strokes	stroke
 stupa	stupa
 stupas	stupa
 subgrade	subgrade
@@ -1459,6 +1471,7 @@ zonation	zonation
 zongjia	zongjia
 zooplankton	zooplankton
 zuku	zuku
+zuo zhuan	Zuo Zhuan
 ō-aza	ō-aza
 ōkaji	ōkaji
 ōkajiba	ōkaji
