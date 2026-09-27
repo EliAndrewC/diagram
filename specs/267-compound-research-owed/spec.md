@@ -90,7 +90,7 @@ bundles (`make check-bundle`) and whose findings are applied with `make apply-ed
 
 ### Key Entities
 
-- **Item**: one owed question, R01-R51, with the kinds and sheets it bears on.
+- **Item**: one owed question, R01-R53, with the kinds and sheets it bears on.
 - **Outcome**: ACCURATE / KNOB / SILENT / CONTRADICTION-RESOLVED, per item, in `outcomes.md`.
 
 ## Success Criteria *(mandatory)*
