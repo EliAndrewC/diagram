@@ -709,3 +709,40 @@ book-length source).
    source cost 0.73 million in one check on this page.
 2. **Then proceed with the remaining pages** rather than another tooling round: what remains between pages is mostly
    the pages themselves.
+
+## R11 - the tenth round: a long source read in part (2026-09-27, T73 to T76, plan D19)
+
+The GM asked for R10's one fix and one more round, to see whether anything else would turn up. The page was `water`:
+two FR-002 items and eight FR-006 items. One write session, then three check groups by load: 010 and 170 with
+`suzhou-enwiki` and the Stream modal; 120, 130 and 220 with the Marsh modal; and a modal-only group for DrainageDitch
+and Weir - modals owed from `water` questions this round did not otherwise change, the first round to exercise D18's
+folding. Figures from `tokens.py summary` over `measure/tokens-water-*.json`.
+
+| | `cities/government` (R6) | `fields` (R8) | `archetypes` (R9) | `cities/hinterland` (R10) | **`water` (R11)** |
+|---|---|---|---|---|---|
+| questions / modals / keys checked | 4 / 0 / 4 | 3 / 7 / 4 | 2 / 2 / 2 | 2 / 0 / 4 | 5 / 4 / 1 |
+| largest context any turn | 95,000 | 171,000 | 102,000 | 115,000 | **111,000** |
+| mean main turn | 56,000 | 90,000 | 56,000 | 60,000 | **57,000** |
+| agent runs | 16 (0.94 M) | 28 (1.18 M) | 12 (0.93 M) | 11 (1.90 M) | 25 (1.27 M) |
+| mean agent run | 59,000 | 42,000 | 78,000 | 172,000 | **51,000** |
+| total | 6.24 M | 10.26 M | 6.39 M | 8.80 M | 10.55 M |
+| per thing checked | 0.78 M | 0.73 M | 1.07 M | 1.47 M | **1.06 M** |
+
+(Observed 2026-09-27; method: `tokens.py summary --files <records> --questions N --items N --modals N --keys N`.)
+
+**What the fix did.** Four of the page's sources were long Wikipedia articles; each was saved in parts (Suzhou's
+84,489 characters in five), and the `source-reader` that read them all read 17,780 characters, against 83,621 on the
+last page; the one `source-applicability` run read 16,238 and cost 55,141 tokens, in line with the ordinary rounds.
+The folded owed modals were checked in a group of their own and their five fixes applied by command, none refused.
+
+**What else the round turned up** - two defects, both fixed where found, neither a change to the process:
+`check-bundle`'s excerpt emptied a re-check bundle silently when a question's last paragraph was never closed in its
+HTML (the session fixed the excerpt to keep such a block, and closed the paragraph); and one session reported `make
+page-check` failing two or three browser tests - owed an answer before the push (T25), whatever its cause.
+
+**The verdict the GM asked for.** No change to the research process is recommended. Across R6 to R11 every tooling
+cost the rounds measured has been brought down and has stayed down on the next page - what a check reads, how a
+report is applied, how large a session grows, what a long source costs - and the figure per thing checked now sits
+at 0.7 to 1.1 million on ordinary pages, moving with the page's own work (how hard its claims are to source), not
+with the tooling. So, per the GM's instruction of 2026-09-27, the remaining research tasks move to a new feature and
+this one closes, so the process lands on main and other sessions can research other things with it.
