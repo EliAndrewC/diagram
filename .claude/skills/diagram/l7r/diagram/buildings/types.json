@@ -235,7 +235,7 @@
       "tubs_in_buildings",
       "tubs_on_wells"
     ],
-    "notes": "The country monk lives at the shrine: the hall is the villagers' rite-place and the monk's home in one building by default (the GM's words of 2026-09-19; attested at Kaie-ji and called rare there), or two buildings in the ordinary parish temple's form. The bands are the measured village halls, honden and kuri of the research pass (specs/254-country-shrine/research.md R3); the precinct itself is a guess bounded by what it must contain.",
+    "notes": "The country monk lives at the shrine: the hall is the villagers' rite-place and the monk's home in one building by default (the GM's words of 2026-09-19; attested at Kaie-ji and called rare there), or two buildings in the ordinary parish temple's form. The bands are the measured village halls, honden and kuri of the research pass (specs/254-country-shrine/research.md R3). The precinct is not enclosed - its arch and its wood mark it - and it is the grove, its size the village-shrine registers as found (research 'How large was a village shrine's precinct', feature 268).",
     "required": [
       {
         "id": "sanctuary",
@@ -301,36 +301,77 @@
         "label": "^arch$|torii",
         "band_ft": {},
         "class": "accurate",
-        "why": "the area within the torii is the sacred precinct; an arch fronts every shrine a way runs up to"
+        "why": "the first torii stands where the approach enters the shrine's ground, further arches deeper in, at the 12 ft pitch - research 'Torii spacing'"
       },
       {
         "id": "approach",
         "label": "^approach$",
         "band_ft": {},
         "class": "accurate",
-        "why": "the sandō from the arch to the hall"
+        "why": "the sandō from the outermost arch, at the grove's edge, to the hall"
       },
       {
         "id": "well",
         "label": "^well$|basin",
         "band_ft": {},
         "class": "accurate",
-        "why": "the temizuya beside the approach, never under the arch"
-      },
-      {
-        "id": "fence",
-        "label": "^fence$|^hedge$",
-        "band_ft": {},
-        "class": "accurate",
-        "why": "a tamagaki or hedge bounds a shrine; a wall is a compound's"
+        "why": "the shrine's water point: a well, or a plain stone basin beside the approach, never under an arch"
       },
       {
         "id": "grove",
         "label": "grove",
         "band_ft": {},
         "class": "accurate",
-        "why": "the chinju no mori the precinct stands in",
+        "why": "the chinju no mori: the precinct IS the grove, the hall and sanctuary in a swept clearing inside it - research 'How large was a village shrine's precinct'",
         "site": "tree"
+      },
+      {
+        "id": "sacred_tree",
+        "label": "^sacred tree",
+        "band_ft": {},
+        "class": "accurate",
+        "why": "a roped sacred tree: a shrine was often first built where one stood (accurate in kind; how common at village scale a guess, no source counting it) - research 'What else stood in a village shrine's precinct?'",
+        "site": "tree"
+      },
+      {
+        "id": "guardian_figures",
+        "label": "guardian|lion-dog|komainu|tiger",
+        "band_ft": {},
+        "optional": true,
+        "class": "accurate",
+        "why": "stone guardian pairs are late-Edo villager donations - the wealth knob, none at average"
+      },
+      {
+        "id": "lanterns",
+        "label": "lantern",
+        "band_ft": {},
+        "optional": true,
+        "class": "accurate",
+        "why": "stone lanterns are votive donations - the wealth knob, none at average"
+      },
+      {
+        "id": "strength_stones",
+        "label": "strength stone|chikaraishi",
+        "band_ft": {},
+        "optional": true,
+        "class": "accurate",
+        "why": "strength stones beside the approach, late Edo on - the wealth knob, none at average"
+      },
+      {
+        "id": "stage",
+        "label": "stage|kagura",
+        "band_ft": {},
+        "optional": true,
+        "class": "accurate",
+        "why": "a farmers' stage on shrine ground: real, early 1800s on, regional - a knob, absent by default"
+      },
+      {
+        "id": "sumo_ring",
+        "label": "sumo|dohyo",
+        "band_ft": {},
+        "optional": true,
+        "class": "accurate",
+        "why": "a sumo ring for the dedicatory bouts, attested at ordinary shrines - a knob, absent by default"
       },
       {
         "id": "burial_ground",
