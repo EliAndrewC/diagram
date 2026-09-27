@@ -2417,7 +2417,11 @@
   "def": "The notice board: a small roofed frame where the authorities posted the standing law, rate tables and ban lists, sited where everyone passes.",
   "variants": [
    "kosatsuba",
-   "kosatsu"
+   "kosatsu",
+   "seisatsuba",
+   "seisatsu",
+   "kōsatsu-ba",
+   "kōsatsu"
   ]
  },
  "kumi": {
@@ -2926,7 +2930,8 @@
  "ofuregaki": {
   "def": "The shogunate's circulars, passed down to the villages, copied by the headman and posted on the notice board.",
   "variants": [
-   "ofuregaki"
+   "ofuregaki",
+   "furegaki"
   ]
  },
  "omamori": {
@@ -5552,6 +5557,19 @@
   "def": "The Japanese syllabic script, in which each sign stands for one syllable; の, read \"no\", is one of its signs.",
   "variants": [
    "kana"
+  ]
+ },
+ "fudoki": {
+  "def": "A gazetteer - an official record of a province's villages, roads and landmarks; the Shinpen Musashi fudoki ko, compiled in 1830, is the one for Musashi province.",
+  "variants": [
+   "fudoki",
+   "fudoki ko"
+  ]
+ },
+ "pledged land": {
+  "def": "Farmland handed to a lender as security for a loan; the lender held or worked it until the loan was repaid, and kept it if the loan was not.",
+  "variants": [
+   "pledged land"
   ]
  }
 }

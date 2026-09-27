@@ -400,12 +400,15 @@ freeboard	freeboard
 frontage	frontage
 fu	fu
 fudasashi	fudasashi
+fudoki	fudoki
+fudoki ko	fudoki
 fukada	fukada
 fukugi	fukugi
 funairi-bori	funairi-bori
 fung shui	fengshui grove
 fung shui wood	fengshui grove
 fung shui woods	fengshui grove
+furegaki	ofuregaki
 furigana	furigana
 fuse	fuse
 fusekoshi	inverted siphon
@@ -721,6 +724,8 @@ kyo-machiya	machiya
 kyoho	Kyoho
 kyuhi	kyuhi
 kyōhō	Kyoho
+kōsatsu	kosatsuba
+kōsatsu-ba	kosatsuba
 lake tai	Lower Yangzi
 land consolidation	kochi seiri
 land readjustment	kochi seiri
@@ -930,6 +935,7 @@ pig iron	pig iron
 plankton	plankton
 plant association	plant association
 planted collar	planted collar
+pledged land	pledged land
 polder	polder
 pollard	pollard
 pollarded	pollard
@@ -1060,6 +1066,8 @@ secondary forest	secondary forest
 secondary woodland	secondary forest
 secondary woodlands	secondary forest
 seijoue	seijoue
+seisatsu	kosatsuba
+seisatsuba	kosatsuba
 sekisho	sekisho
 senbon torii	Senbon Torii
 sengoku	Sengoku
