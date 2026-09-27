@@ -13,6 +13,9 @@ G5 on `religion-and-death/`, G6 on `cities/river-cities/`, `urban-features/` and
 - R04 **the lord's own rooms** beyond the private study - a sourced statement of the master's suite (okami, shoin). `lord's quarters`.
 - R05 **the butsuma** - by the zashiki or among the private rooms. `ancestral alcove`, `inner rooms`. H U.
 - R06 **a small garden for the private rooms** of an ordinary posting. `garden`. O.
+
+## G1B - the residence: its entry and its outbuildings (research/buildings)
+
 - R07 **the genkan** - on the office block (Takayama) or the residence; approached across the viewing garden or through a forecourt fenced from it (naka-kaki, shiorido, niwa-kido); the pond on the nakamon-genkan axis. `genkan`, `garden`, `garden pond`. O H U.
 - R08 **privies** - a guest privy by the zashiki and a family privy apart? `latrine`. H.
 - R09 **the bath** - a detached pavilion of 12-18 ft at a samurai residence (the record's only bath is a farmstead's). `bath`. O H U P.
@@ -38,6 +41,9 @@ G5 on `religion-and-death/`, G6 on `cities/river-cities/`, `urban-features/` and
 - R23 **the kneeling parties** - on mushiro straw mats over the gravel, or on marked places. `kneeling positions`. O H U.
 - R24 **the cell's size** - four figures in the record and program. `cell`. O H U P.
 - R25 **the notice board** - the bench's own board kept apart from the town's kosatsuba. `notice board`. O H U P.
+
+## G3B - the compound's gate and walls, and two unreadable sources (research/buildings)
+
 - R26 **the main gate's width** - between a samurai residence gate (9-12 ft) and a yamen gatehouse (18-24 ft). `main gate`. O H U P.
 - R27 **wall thickness** - 1.5-2 ft (religion-and-death gates entry) vs 3 ft (buildings 070, the scale entry). `compound wall`. Written as its own question linking 070 (FR-006).
 - R28 **the staged arrival** - gate, court or garden, genkan: a readable source ('Guest doors feed courts', 120). `genkan`, `residence`, `garden`.
