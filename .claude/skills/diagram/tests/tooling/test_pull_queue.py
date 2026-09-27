@@ -60,8 +60,11 @@ def test_a_hand_written_conflict_stops_and_a_dirty_queue_is_refused(tmp_path) ->
     a, q = _world(tmp_path)
     _change(a, "note.txt", "note from a\n")
     _change(q, "note.txt", "note from the queue\n")
+    _change(a, "fields.html", "page from a\n")
+    _change(q, "fields.html", "page from the queue\n")
     got = _run(a)
     assert got.returncode == 1 and "research/note.txt" in got.stderr
+    assert _git(a, "diff", "--name-only", "--diff-filter=U").split() == ["research/note.txt"], "the generated side is resolved first"
     _git(a, "merge", "--abort")
     (q / "research" / "note.txt").write_text("still being written\n", encoding="utf-8")
     got = _run(a)

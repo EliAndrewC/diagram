@@ -28,13 +28,15 @@ GENERATED='(^|/)research/[^/]+\.html$|(^|/)research/cities/[^/]+\.html$|(^|/)res
 # the run and bypass logs are NOT in it: nothing rebuilds them, so taking one side would lose the other's entry
 # (plan review round 2) - a conflict in one stops for a person like any hand-written file
 if ! git -C "$ROOT" pull -q --no-rebase --no-edit "$Q" HEAD; then
-  others=$(git -C "$ROOT" diff --name-only --diff-filter=U | grep -Ev "$GENERATED" || true)
+  # the generated side first, always - so a stop below leaves only the hand-written files for a person (queue 1 of
+  # feature 265 stopped on tasks.md with the four generated files still carrying their markers)
+  git -C "$ROOT" diff --name-only --diff-filter=U | grep -E "$GENERATED" | while read -r f; do git -C "$ROOT" checkout -q --ours -- "$f"; git -C "$ROOT" add -- "$f"; done || true  # no generated conflict: grep finds nothing
+  others=$(git -C "$ROOT" diff --name-only --diff-filter=U || true)
   if [ -n "$others" ]; then
-    echo "pull-queue: conflicts outside the generated pages - resolve these by hand, then re-run the rebuild:" >&2
+    echo "pull-queue: conflicts outside the generated pages - resolve these by hand, commit, then re-run pull-queue.sh $N for the rebuild:" >&2
     printf '  %s\n' $others >&2
     exit 1
   fi
-  git -C "$ROOT" diff --name-only --diff-filter=U | while read -r f; do git -C "$ROOT" checkout -q --ours -- "$f"; git -C "$ROOT" add -- "$f"; done
   git -C "$ROOT" commit -q --no-edit
 fi
 # PULL_QUEUE_REBUILD replaces the three targets in the tests, which have no Makefile
