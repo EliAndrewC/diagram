@@ -2882,7 +2882,9 @@
  "nucleated": {
   "def": "Of a settlement: gathered into one compact cluster of houses and plots, as against farmsteads dispersed each among its own fields.",
   "variants": [
-   "nucleated"
+   "nucleated",
+   "nucleus",
+   "nuclei"
   ]
  },
  "numajiro": {
@@ -5592,6 +5594,23 @@
   "def": "The first Imperial Treasurer in the setting, whose system separates the official who assesses what is owed from the one who collects it; the import tariff collected at provincial-city and capital gates follows it.",
   "variants": [
    "Yasuki Taka"
+  ]
+ },
+ "omotedana": {
+  "def": "A shop-house facing a main street, whose master was often landlord of the back-street tenements behind it (uradana, ura-nagaya).",
+  "variants": [
+   "omotedana"
+  ]
+ },
+ "dispersed settlement": {
+  "def": "A countryside where each farmhouse stands apart among its own fields instead of gathered in a cluster, as on Japan's Tonami Plain, where farmers built amid their rice fields to manage their water; the opposite of a nucleated settlement.",
+  "variants": [
+   "dispersed settlement",
+   "dispersed village",
+   "dispersed farmstead",
+   "dispersed settlements",
+   "dispersed villages",
+   "dispersed farmsteads"
   ]
  }
 }

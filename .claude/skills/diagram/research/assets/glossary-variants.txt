@@ -260,6 +260,12 @@ dike-ponds	dike-pond
 discharge	discharge
 dish pond	sara-ike
 dish ponds	sara-ike
+dispersed farmstead	dispersed settlement
+dispersed farmsteads	dispersed settlement
+dispersed settlement	dispersed settlement
+dispersed settlements	dispersed settlement
+dispersed village	dispersed settlement
+dispersed villages	dispersed settlement
 distributaries	distributary
 distributary	distributary
 dituan	dituan
@@ -873,6 +879,8 @@ northern song	Song dynasty
 nrcs	NRCS
 nrcs-designed	NRCS
 nucleated	nucleated
+nuclei	nucleated
+nucleus	nucleated
 numajiro	numajiro
 nunosarashi	nunosarashi
 nuriya	nuriya
@@ -889,6 +897,7 @@ ofuregaki	ofuregaki
 okaji	ōkaji
 okajiba	ōkaji
 omamori	omamori
+omotedana	omotedana
 omoya	omoya
 onari-goten	onari-goten
 one-bay	bay
