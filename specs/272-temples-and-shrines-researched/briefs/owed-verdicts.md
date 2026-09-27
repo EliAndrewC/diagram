@@ -1,0 +1,3 @@
+- CompoundShrine (religion-and-death SECTION=090): IN-STEP - the modal claims nothing about arch spacing, rows or dates
+- Torii (religion-and-death SECTION=090): IN-STEP - the 12 ft pitch, the GM's ruling and the single-arch norm still stand
+- Torii (religion-and-death SECTION=092): IN-STEP - its Entry now names 092 (the innermost-arch text moved there in the split); the silence and the ruling it cites still stand

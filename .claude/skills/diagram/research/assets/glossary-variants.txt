@@ -1217,6 +1217,7 @@ sand junk	sand junk
 sand junks	sand junk
 sand sluice	sand sluice
 sando	sando
+sandō	sando
 sangji yutang	dike-pond
 sanguan	Three Officials
 sankin-kotai	alternate attendance
