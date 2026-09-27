@@ -80,6 +80,9 @@ PARTS: dict[str, list[tuple[str, str]]] = {
         ("door", "residence"),
         ("door", "granary"),
         ("door", "office hall"),
+        ("door", "gatehouse"),
+        ("latrine", "servants' quarters"),
+
         ("kitchen", "residence"),
         ("lord's quarters", "residence"),
         ("family quarters", "residence"),
@@ -111,6 +114,10 @@ PARTS: dict[str, list[tuple[str, str]]] = {
         ("torii", "compound shrine"),
         ("door", "guest quarters"),
         ("door", "gatehouse"),
+        ("door", "kitchen"),
+        ("door", "office hall"),
+        ("door", "granary"),
+
         ("clerks' room", "office hall"),
         ("day office", "office hall"),
         ("official study", "office hall"),

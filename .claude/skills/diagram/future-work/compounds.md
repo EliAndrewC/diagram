@@ -20,6 +20,12 @@ with "This is a guess", and a thin part is disclosed in its kind's caveat (`l7r/
 
 ### Questions the research opened (each needs a pass)
 
+- **Did Takayama's guest route from the office genkan to the residence run indoors?** Research buildings 370 places
+  the genkan on the office and says the visitors' route runs through the office to the residence; Ochiba draws it as
+  the office's rear door, the middle gate and the garden path to the reception's veranda stone. Whether that way ran
+  under roof (a corridor, the office's own rooms) is not recorded; a Takayama Jin'ya plan with its watari-rōka would
+  answer it.
+
 - **How big was a roofed hearing court?** The court is roofed on every sheet now (research buildings 450), but at
   the old open court's size - larger than the office hall it fronts. No measured roofed court was found (Takayama's
   two courts are described, not measured). The size each sheet draws is a guess, disclosed; if a court turns out to
@@ -66,20 +72,6 @@ the Fuchu Joge pamphlet's drawing labels, which sit only in its PDF's images and
   fox-fire lantern's story, the Chigiri-no-Chou) are left as feature 262 shipped them.
 
 ### Drawing and tooling questions left open
-
-- **The one caption placer cannot seat a hand-drawn sheet yet** (feature 267 D9; the hand-sheet half of feature 266).
-  Measured 2026-09-27 on copies of the three revised magistracy sheets: `make seat-label WRITE=1` run twice left 12,
-  20 and 14 captions off their seat (it does not converge - each pass moves the obstacles the next reads). The
-  mechanism, in `l7r/diagram/tools/seat_label.py`: `rewrite()` writes `data-kind` only for a caption outside any group,
-  and a text carrying its own tag IS its own group, so every self-tagged caption comes out untagged; `captions_of()`
-  reads all the texts of one tagged group as one caption, so an office hall's three room names and a gate range's two
-  are piled into one block; an area caption is seated at the subject's centroid even where a building stands (the
-  inner court's name over the karo's house) and a name near the sheet's edge is clipped (the Inari shrine, the
-  cinnabar workshop). The sketch: keep a text's own tag; split a group's texts into stacks (one under the next within
-  two line pitches, the fix measured here); for an area caption skip interior seats a structure's footprint covers
-  and seat inside the frame; iterate `seat()` to a fixed point before `rewrite()`. Then seat the three sheets and
-  drop their ledger entries (`tests/fixtures/caption_ledger.json`), which excuse their hand-set captions until then.
-
 
 - Door glyphs drawn as slabs outside their walls where the rendering rule says flush (every sheet's informal doors -
   a convention question).

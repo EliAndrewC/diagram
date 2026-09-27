@@ -38,18 +38,21 @@ kinds and the sheets its outcomes bear on, which the research sessions do not to
   sheets taking different forms where the record allows it.
 - **D7 - The GM's items go through `escalation-check`** (FR-008), with any research result the GM must rule on.
 - **D8 - `future-work/compounds.md` "Research owed" is rewritten at the end** to what remains, each with why (FR-007).
-- **D9 - The three revised sheets' captions are re-taken into feature 266's caption ledger, not seated** (decided
-  2026-09-27 by the session, unattended; raised with the GM at landing). Revising a sheet takes it off the ledger and
-  holds every caption to the one placer's standard seat (266 FR-013), but the placer cannot seat these sheets:
-  measured on copies, `make seat-label WRITE=1` twice left 12, 20 and 14 captions off seat (not convergent), stripped
-  `data-kind` from self-tagged captions (untagged ink - `make map` refuses the sheet), read side-by-side room names in
-  one group as one stacked caption, seated a court's name over a building and clipped names at the sheet's edge. Two
-  of those bugs were fixed and measured and the output was still unusable, so the fixes were reverted rather than
-  landed half-done (they change the findings on sheets the ledger still covers). Alternatives priced: fix the placer's
-  hand-sheet path first (an overhaul of 266's tool - interior area seats, multi-text names, convergence - hours, with
-  every sheet's captions moved); hold the feature for the GM (the sheets are otherwise done). Cost of this choice: the
-  three sheets' 42, 43 and 60 hand-set captions stay excused until the placer can seat them; reversing it is removing
-  three ledger entries. The overhaul is in `future-work/compounds.md`.
+- **D9 - The placer's hand-sheet path is fixed and the three revised sheets are seated at the standard** (2026-09-27,
+  after spec-fidelity BLOCKED the first D9 - re-taking the three sheets into feature 266's caption ledger - as an
+  exception to 266 FR-013 that the GM's request does not support). Revising a sheet takes it off the ledger and holds
+  every caption to the one placer's standard seat, so the placer was fixed until it can: `make seat-label WRITE=1`
+  converges in one call and a second call finds 0 captions off seat on Ochiba (48), Hayakawa (64) and Ubame (61). The
+  defects fixed, each with a unit test (`tests/tools/test_seat_label.py`, `test_seat_label_hand.py`): a self-tagged
+  caption kept its `data-kind` and letter-spacing; side-by-side names in one group are separate captions (stacking by
+  shared width); a group naming several things gives each name its own shape; leaders are matched and moved; a
+  caption in a transformed group is written in its parent frame, a rotated one along its band; a face's width follows
+  caps, bold and spacing; ground drawn after a caption covers it; the rewrite loops to a fixed point; where no seat is
+  free, the caption's own seat is a candidate and kept when it costs no more (the standard's least-cost rule applied
+  to a hand sheet). The seated sheets then had to pass every `pack_audit` check, which found three reading defects
+  in the audit itself, fixed there: a wrapped caption's tspans and a quarter-turned label are read as drawn, a tagged
+  caption is paired with a structure of its own kind, and a group label is measured from its glyph's edge. The three
+  entries are removed from `tests/fixtures/caption_ledger.json`; Hoshigaoka's, unchanged, stays.
 
 ## Constitution check
 

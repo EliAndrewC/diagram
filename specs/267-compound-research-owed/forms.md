@@ -57,6 +57,6 @@ Labels and prose follow the outcomes (T11): the detached guest house (H) GUESS; 
 own GUESS; the shuttered wing (U) GUESS; the kennel and writing pavilion (U) GUESS with the new entries; the stone
 lantern in a court (U) GUESS; the garden pines' crowns (H) GUESS; the torii distances GUESS; the salt wards (H) GUESS
 with its form cited; the door widths a CONVENTION ending with the real widths; the tax barge's and the charcoal
-bales' ~4 ft bale a CONVENTION (real ~2.5 ft and ~2 ft); the cart yard and road (H U) a DEVIATION from canon; the
+bales' ~4 ft bale a CONVENTION (real ~2.5 ft and ~2 ft; Ubame draws its charcoal bales 6 x 3 ft, the same convention at a legible size); the cart yard and road (H U) a DEVIATION from canon; the
 charcoal store's spacing (U) a GUESS; the border court (U) a DEVIATION built on attested ground; the parley room (U)
 a DEVIATION naming what history had instead.
