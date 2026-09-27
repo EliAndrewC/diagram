@@ -1,0 +1,41 @@
+# Feature 271 - tasks
+
+`tasks.md` carries only the batch being worked (plan D3); later batches' tasks are added after each batch lands.
+
+## The audit
+
+- [ ] T01 FR-001 the audit: census, four domain audits, the merged `inventory.md` (33 groups, 172 rows owned by 271) with its State table
+      research: rendering
+
+## Batch 1 - the P1 groups on the farming pages, ways and urban fixtures (queues 1-3)
+
+- [ ] T02 group V1 - homesteads: the farmhouse: research, write, check (FR-003, FR-004)
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+- [ ] T03 group V2 - homesteads: the yard and its animals: research, write, check (FR-003, FR-004)
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+- [ ] T04 group V7 - homesteads: the headman and the village's households: research, write, check (FR-003, FR-004)
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+- [ ] T05 group V3 - fields: bunds, crops and field features: research, write, check (FR-003, FR-004)
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+- [ ] T06 group V4 - water: village water works: research, write, check (FR-003, FR-004)
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+- [ ] T07 group V5 - archetypes: terraces, overlays and polders: research, write, check (FR-003, FR-004)
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+- [ ] T08 group V6 - vegetation: farmstead trees, landmark trees, meadows and kilns: research, write, check (FR-003, FR-004)
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+- [ ] T09 group W1 - ways: village roads, entrances and crossings: research, write, check (FR-003, FR-004)
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+- [ ] T10 group U1 - urban-features: public fixtures and works on the map: research, write, check (FR-003, FR-004)
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+
+- [ ] T11 batch 1 lands: groups pulled back, `owed-check`, `make page-check`, `make done`, the push; State updated
+      research: rendering

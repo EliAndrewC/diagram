@@ -1,0 +1,33 @@
+{
+ "feature": "271-research-coverage-audit",
+ "plan_sha256": "d87e8f18e56703cc70fbe64890236ab704168eceb0194d6971aac4cc5ca3f0cb",
+ "reviewed": "2026-09-27",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "Audit = mechanical census (every manifest kind in pool/, legacy-hand-authored-pool/, wip/ - magistracies and country shrines are under pool/; every map and sheet modal with its Entry; every question with cited and absence note counts), then four Opus domain audits that judge coverage and add next-tier questions, then one merge into inventory.md with owners and a State table.",
+   "class": "within",
+   "why": "Carries FR-001 (a)-(d) and the GM's 'every type of thing, on all of the maps ... even the hand-drawn ones' and the not-yet-scripted tiers. The census's zero-quoted-note THIN flag is a first pass only; the domain agents judge coverage, and the measured audits do flag spotty sections past it (audit-buildings D04: buildings/180 at 1 cited, 5 absence, marked THIN), so FR-001(c)'s pre-convention limb is not narrowed. Excluding pool/regressions negatives and tiny JSONs does not drop any map made."
+  },
+  {
+   "id": "D2",
+   "summary": "Backfill via 269's brief generator adapted: groups from inventory.md headings, prefixes via make reserve, other sessions' sections (267, 268, 269, 270) named off limits, an owed-modal entry-drift step plus the sheet-modal tests in each check session; queue.sh runs write-then-check per group through scripts/page-session.sh; up to three queues; each group claimed in RESEARCH-CLAIMS.md and announced to Diagram supplemental before it is queued.",
+   "class": "within",
+   "why": "Implements FR-003's process (briefs, parallel queues, reserved prefixes, check bundles, quote-check, record-format, source-applicability, one re-check, owed modals answered) and FR-002's no-duplication. Leaving the country-shrine size to 268/270 is the GM's own 'coordinate ... to avoid duplicating any work', not a carve-out. queue.sh execs page-session.sh, which execs the resuming _page_session_runner.py, so FR-005's usage-limit resume applies to every 271 page session. The three-queue cap is capacity, not scope."
+  },
+  {
+   "id": "D3",
+   "summary": "Groups run in FR-003's order (already drawn, village, town, city and capital); finished groups pulled back and committed; batches land after page-check, make done and owed-check; tasks per batch with the last task left open for rows not reached (todo in State); the runner resumes a limit-stopped session and an hourly CronCreate wake (13e01f26) restarts stopped queues.",
+   "class": "within",
+   "why": "The order is FR-003's verbatim. Rows not reached keeping todo is the spec's accepted Decision (run as far as possible across restarts); 'whatever the time did not reach' describes where work stands when it stops, it sets no stop. The runner plus hourly wake are FR-005's mechanisms for the GM's 'automatically restart and pick up the research where you left off'."
+  },
+  {
+   "id": "D4",
+   "summary": "Write sessions save pages with make source-pages, read through source-reader, and append unfetchable free sources at the END of TO-DOWNLOAD.md in the GM's format; the closing report counts them.",
+   "class": "within",
+   "why": "FR-004 and the GM's 'adding to the running list of sources that a human can potentially get' plus 'actually reading and citing sources that you are able to get to'."
+  }
+ ],
+ "verdict": "CLEAR"
+}
