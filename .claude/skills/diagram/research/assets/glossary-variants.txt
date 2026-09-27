@@ -837,6 +837,7 @@ muenbotoke	muenzuka
 muenzuka	muenzuka
 mugi	mugi
 mulberry-dike fishpond	dike-pond
+mura	mura
 murataka	murataka
 muromachi	Muromachi
 musashi	Musashi
@@ -1297,6 +1298,7 @@ umon	umon
 understory	understory
 ura-dana	ura-dana
 ura-nagaya	ura-nagaya
+urajirogashi	urajirogashi
 usufruct	usufruct
 uzumimon	umon
 vaiśravaṇa	Bishamon
