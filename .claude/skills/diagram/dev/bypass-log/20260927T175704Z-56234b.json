@@ -1,0 +1,6 @@
+{
+  "utc": "20260927T175704Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "the engine change redraws only the cremation-ground glyph, which only frozen legacy maps call and which are never regenerated; the one map edited, Hoshigaoka, passed settlement-review round 2"
+}
