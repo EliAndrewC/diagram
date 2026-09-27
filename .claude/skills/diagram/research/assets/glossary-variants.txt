@@ -399,6 +399,9 @@ edo	Edo
 edo fabric	building fabric
 edo period	Edo period
 edo-period	Edo period
+eel's bed	eel's bed
+eel's-bed	eel's bed
+eel's-bed plot	eel's bed
 eiro	eiro
 ekika	ekika
 embankment	embankment
