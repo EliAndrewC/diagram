@@ -29,9 +29,10 @@
 - [ ] T04 FR-002 and FR-006 for `towns`, by 250's process
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
-- [ ] T05 FR-002 and FR-006 for `urban-features`, by 250's process
+- [x] T05 FR-002 and FR-006 for `urban-features`, by 250's process
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. urban-features closed: group 2d checked 080 and 170 (4 checks + 1 re-check); 080 re-check 4/4 SUPPORTS, 0 unfootnoted; 170 4 SUPPORTS 1 PARTIAL fixed, 2 Mukoyama notes UNFETCHABLE publicly (read from the GM's copy); 4 glossary terms added; FR-006: 87 bare items, 79 FOOTNOTED, 2 LOCATED, 4 NOT-LOCATED, 1 AMBIGUOUS, 1 TOO-SHORT
 - [ ] T06 FR-006 for `cities/capitals`, by 250's process
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
