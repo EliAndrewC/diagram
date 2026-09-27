@@ -20,20 +20,20 @@ class OfficeHall(Kind):
     official study, each its own feature.
 
     Why: At Takayama, the surviving intendant's office, the office wing - reception rooms, day office and
-    official study - is the dominant public building, and the hearing court is one room of that block. Daily
+    official study - is the main public block, and the hearing court is one room of that block. Daily
     paperwork is most of a magistrate's job, and the residence's private study is on the wrong side of the
     line between state and home for it, so the hall is deep, and it may be the largest building in the
     compound, being the institution's working core rather than a dwelling. A wooden hall could burn, and
     many did (the Sado magistracy was rebuilt five times, though Takayama's never burned), which is why the
     documents and the tax grain are kept in storehouses of their own.
 
-    Note: The hall's form and its place follow the record. That it may out-size the residence is this
-    project's reading, since no readable source ranks a compound's footprints. Its size, about 80 to 150 ft
+    Note: The hall's form and its place follow the record. That it may out-size the residence is a guess, the
+    Takayama pages giving no floor area for any building, and no readable source ranks a compound's footprints. Its size, about 80 to 150 ft
     long and 20 to 45 ft deep, is a guess: it is the plan vocabulary's working block, with no measured
     office wing of a jin'ya behind it.
 
-    Caveat: That it may out-size the residence is this project's reading, since no readable source ranks a
-    compound's footprints. Its size, about 80 to 150 ft long and 20 to 45 ft deep, is a guess: it is the
+    Caveat: That it may out-size the residence is a guess, the
+    Takayama pages giving no floor area for any building, and no readable source ranks a compound's footprints. Its size, about 80 to 150 ft long and 20 to 45 ft deep, is a guess: it is the
     plan vocabulary's working block, with no measured office wing of a jin'ya behind it.
 
     Name: office hall
@@ -291,13 +291,18 @@ class BenchNoticeBoard(Kind):
     at a Chinese county office's gate, could not be read. A magistracy's board stands at its own gate, on the
     way everyone who has business with the court must come.
 
-    Note: The bench keeping a board of its own at its gate, apart from the town's kosatsuba, is a guess: it is
-    this project's own division, and no page read puts a board at the gate of an intendant's office or a
-    magistracy. The town's board, sited where the traffic runs, follows the record.
+    Note: The board and its roadside seat follow the record, which sets it before the gate of village
+    officials' houses, though no page read puts a post town's board at its transport office; that every town and village kept one is a reading of the
+    sources, not their words. That the bench keeps a board of its own, apart from the kosatsuba where the town
+    posts the state's standing law, is this project's own division; the record finds only the settlement's
+    board.
+
+    Caveat: That the bench keeps a board of its own, apart from the kosatsuba where the town posts the state's
+    standing law, is this project's own division; the record finds only the settlement's board.
 
     Name: notice board
     Covers: the board outside the main gate and its label
-    Label: guess
+    Label: accurate
     Sources: kosatsu-jawiki, ogose-kosatsuba, adachi-kosatsu, kosatsu-enwiki, shoya-jawiki
     Entry: research/buildings.html - 'Did the magistrate post notices at the office's own gate, or on the town's notice board?'; research/urban-features.html - 'The notice board (kosatsuba) - siting is a TRAFFIC decision'
     """
@@ -337,17 +342,20 @@ class WeighingFloor(Kind):
     What: An open, roofed work floor beside the tally office where bales are weighed before the tally is written;
     its balance and the bales on it are each their own feature.
 
-    Why: The charcoal bale had no standard weight in the traditional Japanese system, unlike rice, and a
-    commodity with no standard bale cannot be traded by count: it must be weighed at the point of sale. That
+    Why: The straw bale had no standard size in the traditional Japanese system, not even for rice, and charcoal
+    was packed at a weight set by its grade; a commodity with no standard bale cannot be traded by count: it must be weighed at the point of sale. That
     is what the weighing floor is for, and it is also why the office's hold on the trade is a written record
     rather than ownership.
 
-    Note: The weighing floor follows the record's reasoning, but its premise - that the charcoal bale had no standard weight - rests on no source read: the page it had been cited to says nothing about charcoal, and no other was found.
+    Note: The weighing floor follows the record's reasoning, and its premise is read: the Japanese reference on the
+    bale says it had no fixed standard size, even for rice, and that in one charcoal district (Hokkaido's Iburi,
+    undated) a bale's weight was set by the charcoal's grade - one district's practice, not a rule shown to hold
+    everywhere.
 
     Name: weighing floor
     Covers: the covered weighing floor, its posts and its label
     Label: accurate
-    Sources: wagner-ming-iron, tonya-enwiki, fao-charcoal-safety
+    Sources: wagner-ming-iron, tonya-enwiki, fao-charcoal-safety, tawara-unit-jawiki
     Entry: research/urban-features.html - 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'
     """
 
@@ -366,7 +374,10 @@ class DayOffice(Kind):
     day office and the official study behind the court face. With no room built for interrogation, a questioning
     happens in the day office or the hearing court like any other business.
 
-    Note: The day office as a room of the office hall, behind the dais, follows the record.
+    Note: The day office as a room of the office hall, behind the dais, follows the record. That no room is built
+    for interrogation is a setting decision (GM, 2026-07), not the record: Takayama had an examination room
+    (ginmisho) beside its roofed court, and its torture was done in the jail in the town.
+
 
     Name: day office
     Covers: the day office's floor and its label

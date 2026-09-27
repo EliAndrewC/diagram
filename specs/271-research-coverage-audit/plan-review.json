@@ -1,0 +1,33 @@
+{
+ "feature": "271-research-coverage-audit",
+ "plan_sha256": "05be4783e4907c14a89faf5d232507ea346b616ca9f268839afc60415f6ba5b1",
+ "reviewed": "2026-09-27",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "Audit = mechanical census (every manifest kind in pool/, legacy-hand-authored-pool/, wip/; every map and sheet modal with its Entry; every question with quoted and absence note counts), then four Opus domain audits that judge coverage and add next-tier questions, then one merge into inventory.md with owners and a State table.",
+   "class": "within",
+   "why": "Carries FR-001 and the GM's 'every type of thing, on all of the maps ... even the hand-drawn ones' plus the not-yet-scripted tiers. The THIN flag is a first pass; the domain agents judge spotty coverage past it. Unchanged since the previous round."
+  },
+  {
+   "id": "D2",
+   "summary": "Backfill via 269's brief generator adapted (groups from inventory.md, make reserve prefixes, other sessions' sections off limits, owed-modal entry-drift step plus sheet-modal tests); queue.sh runs write-then-check per group through page-session.sh; up to three queues; each group claimed in RESEARCH-CLAIMS.md and announced to Diagram supplemental first.",
+   "class": "within",
+   "why": "Implements FR-003's process and FR-002's no-duplication (the GM's 'coordinate ... to avoid duplicating any work'). The three-queue cap is capacity, not scope. gen.py's claims step now cites FR-002 (previous aside 2 fixed). Unchanged otherwise."
+  },
+  {
+   "id": "D3",
+   "summary": "Groups run in FR-003's order; finished groups pulled back and committed; a batch lands after page-check, make done and owed-check. tasks.md carries only the batch being worked: since sync-with-main.sh refuses a feature with an open task, a batch lands once all its tasks are ticked and the next batch's tasks are added after that push; rows not reached keep todo in the State table with no task yet. The runner resumes a limit-stopped session and an hourly CronCreate wake (13e01f26) restarts stopped queues and continues the next groups.",
+   "class": "within",
+   "why": "The new landing mechanism is the only change and it narrows nothing: it is how FR-005's 'commits made as each batch finishes' can actually reach main given the open-task refusal (sync-with-main.sh line 326), and it sets no stop - the wake still 'continues the next rows' and the spec's Decision 'runs as far as it can, in FR-003's order, across restarts ... rows not reached stay in the inventory with their status and owner' is carried by the todo State rows. The order remains FR-003's verbatim; the resume mechanisms remain FR-005's."
+  },
+  {
+   "id": "D4",
+   "summary": "Write sessions save pages with make source-pages, read through source-reader, and append unfetchable free sources at the END of TO-DOWNLOAD.md in the GM's format; the closing report counts them.",
+   "class": "within",
+   "why": "FR-004 and the GM's 'adding to the running list of sources that a human can potentially get' and 'actually reading and citing sources that you are able to get to'. Unchanged."
+  }
+ ],
+ "verdict": "CLEAR"
+}

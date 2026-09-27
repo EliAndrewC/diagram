@@ -337,8 +337,9 @@ class FieldFeaturesMixin:
         DIGS the front half. Still water gathers and holds qi/wealth where flowing water carries it away;
         the HALF shape leaves the lineage room to grow (a full circle is complete, and what is complete can
         only wane). Grove-arc behind + water-arc in front cradle the village as ONE system. It also earns
-        its keep practically - roof/yard runoff retention (hence UNCONNECTED to the irrigation network: it
-        is rain-fed by design), fire water beside thatch, fish/ducks/washing, and the flat-side bank doubles
+        its keep practically - drawn UNCONNECTED to the irrigation network, a recorded DEVIATION (the one page
+        read feeds it by a channel of field water: homesteads.html#why-is-there-a-crescent-pond-in-front-of-some-villages-and-why-is-it-labeled),
+        fire water beside thatch, fish/ducks/washing, and the flat-side bank doubles
         as the open threshing/ceremony forecourt. The shrine is where religion happens; this is just how a
         well-sited village should be shaped.
 

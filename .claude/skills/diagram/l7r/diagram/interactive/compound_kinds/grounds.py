@@ -404,10 +404,11 @@ class ApproachRoad(Kind):
     Why: A magistrate's manor stands at the edge of the settlement it administers, and its gate faces what it
     fronts - the town, or the road it sits beside - opening onto the roadbed; where a manor fronts a road at
     an angle, the whole compound turns so its front wall runs parallel to the way. So a road always arrives at
-    the main gate. In a planned Chinese town a main avenue ran from the principal gate to the government
-    office, though for an ordinary county seat that axis is a guess, and in neither Japan nor China was a
-    country lane a wide road. The road at a compound's front gate is the road the compound stands on, at that
-    road's width: the great highways ran about 18 to 24 ft wide, and one through a castle town about 15 ft.
+    the main gate. A planned Chinese capital was a grid of avenues keyed to its gates, and a county seat's
+    streets linked its gates, but a main avenue running from the principal gate to the government office is a
+    guess, found on no page read, and in neither Japan nor China was a country lane a wide road. The road at a compound's front gate is the road
+    the compound stands on, at that road's width: the great highways ran about 18 to 24 ft wide, and one through a
+    castle town about 15 ft.
 
     Note: the roads here carry carts and wagons, the setting's own departure from Edo Japan, where carts were
     kept to the towns and barred from the highways; the GM's notes put wagons and carts on the roads between

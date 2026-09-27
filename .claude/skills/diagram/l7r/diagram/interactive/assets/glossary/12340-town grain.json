@@ -1,0 +1,7 @@
+{
+ "term": "town grain",
+ "def": "The scale a town or village map is drawn at, about 1 ft of ground to a pixel, fine enough that small features such as a notice board or a well can be drawn at their true size.",
+ "variants": [
+  "town grain"
+ ]
+}

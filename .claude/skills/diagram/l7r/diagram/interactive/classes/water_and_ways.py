@@ -167,12 +167,12 @@ class FieldPond(Kind):
     What: A small pocket of open water inside one low paddy plot, reed-fringed - a low pocket where the ground
     pools, or a header pond within the field.
 
-    Why: Flat, flooded valley-bottom paddy is the archetype that hosts non-rice obstacles LEAST - graves and
-    knolls go to the slope, rock outcrops belong to terraces - and a small open-water pond is the one thing
+    Why: Flat, flooded valley-bottom paddy is taken here to be the archetype that hosts non-rice obstacles LEAST -
+    graves and knolls go to the slope, rock outcrops belong to terraces - and a small open-water pond is the one thing
     that genuinely belongs in the wet middle. It is drawn sunk into a single low plot, never across a bund.
 
-    Note: The kind of obstacle a flooded paddy hosts is read (corroborated in both traditions); no source counts
-    how often, so the rate is chosen - often enough that a reader meets the feature, rare enough that it
+    Note: That graves go to high ground and ponds to hollows and low wet ground is read; that flat paddy hosts
+    obstacles least, and outcrops belong to terraces, is this map's own reading; no source counts how often, so the rate is chosen - often enough that a reader meets the feature, rare enough that it
     does not litter the field.
 
     Caveat: no source counts how often, so the rate is chosen - often enough that a reader meets the feature, rare
@@ -193,11 +193,12 @@ class FieldRock(Kind):
     What: A cluster of gray boulders inside a field plot - a bedrock outcrop the terrace risers wrap around, too
     big to clear.
 
-    Why: Rock outcrops are a TERRACE feature, bedrock the risers wrap around, and are absent on alluvial valley,
-    polder and delta ground; where the archetype allows one it stands off-center in its plot so it reads as
+    Why: The maps treat rock outcrops as a TERRACE feature, bedrock the risers wrap around, absent on alluvial
+    valley, polder and delta ground; where the archetype allows one it stands off-center in its plot so it reads as
     a natural obstacle.
 
-    Note: Which archetypes host an outcrop is read (corroborated); no source counts how many, so a terraced field
+    Note: Which archetypes host an outcrop is this project's guess - no source found puts outcrops on terraces and
+    off valley, polder and delta ground - and no source counts how many, so a terraced field
     gets one to three - enough that the reader meets the obstacle the terrace was cut around, few enough
     that the field still reads as worked ground.
 
@@ -309,7 +310,7 @@ class Footbridge(Kind):
 class Well(Kind):
     """
     What: A communal wellhead: a stone curb and the dark water of the shaft, under a small roof. (In Edo a
-    tenement's communal "well" was often an aqueduct intake rather than a dug shaft.)
+    tenement's communal "well" could be an aqueduct intake rather than a dug shaft.)
 
     Why: A pre-modern rice village of about seventy households ran one to three communal wells, two being
     typical in this record's estimate - drinking water came mostly from surface water, settled and boiled,
@@ -321,8 +322,8 @@ class Well(Kind):
     many times its true size, in order to make the well visible at map scale: the glyph marks where the well
     stands, not how much ground it takes. A hand-dug well's shaft is about 1 m across, big enough for a
     person to work in, under a well house that is posts and a roof and nothing more; the width of the curb
-    frame itself was not found. The Edo aqueduct intake is read, and of the village figures only these are:
-    the capacity (Sphere/UNICEF: one open well serves about 400 people), and that digging was costly so
+    frame is read from one bucket well measured for a book of old implements, 118 cm square - about 4 ft. The Edo aqueduct intake is read, and of the village figures only these are:
+    the capacity (Sphere: one open well serves about 400 inhabitants), and that digging was costly so
     shared wells were the majority; the one-to-three count, the settled-and-boiled surface water, the
     subscription financing, the typical two, the households-per-well ratio, and the shallow water table that
     makes a farmstead's own well cheap (the groundwater paper gives no depth) were searched for and not
@@ -359,8 +360,9 @@ class NoticeBoard(Kind):
     order to post them; that EVERY town and village kept one is this record's reading), and so is the siting
     at the center, the entrance, the official's gate and a bridgehead; the assembly place and the shrine precinct are this record's inference, and no page read says
     the notices were read aloud. The placement is chosen from the attested set the map can actually site, never
-    from one preferred reading; at hamlet grain the glyph is drawn at its true size, a frame of about 12 x 5 ft
-    around a 7 by 3 ft face - both this record's own figures, not read on any page.
+    from one preferred reading; at hamlet grain the glyph is a frame of about 12 x 5 ft around a 7 by 3 ft face,
+    both this record's own figures - shorter than the boards the record measured, roofed frames about 16 ft along
+    the way on a stone footing, fenced; no village board was measured.
 
     Name: notice board
     Covers: `kosatsuba`, with its label

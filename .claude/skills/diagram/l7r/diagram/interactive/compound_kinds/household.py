@@ -296,8 +296,8 @@ class Well(Kind):
 
     Note: we have drawn each well as a stone-curb marker about 7 ft square, larger than the curb itself, in
     order to mark where the well stands without claiming that its pixels are the well's size. A hand-dug
-    well's shaft is about 1 m across; a measured width for the curb frame was not found, and the 3 to 4 ft
-    curb is an estimate. That official households drew from wells inside their own walls is the record's
+    well's shaft is about 1 m across; the one curb frame found measured, a bucket well recorded for a book of old
+    implements, is 118 cm (about 4 ft) square, and the 3 to 4 ft curb rests on it. That official households drew from wells inside their own walls is the record's
     reading.
 
     Name: well

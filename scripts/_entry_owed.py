@@ -50,6 +50,7 @@ from __future__ import annotations
 import argparse
 import ast
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -122,6 +123,17 @@ def classes_in(text: str, _base, lines: dict[str, int] | None = None) -> dict[st
     return out
 
 
+_FN = re.compile(r'<sup class="fn"><a id="fnref-\d+" href="([^"#]*)#fn-\d+">\d+</a></sup>')
+
+
+def unnumbered(body: str | None) -> str | None:
+    """A section's body with its footnote NUMBERS taken out. The assembly numbers a page's notes in order, so a note
+    added to an earlier question renumbers every later section and made each look moved: feature 271's first batch
+    named fourteen modals whose sections nobody had touched (homesteads 210-218, urban-features 150 and 170). A note's
+    text lives on the citations page and was never in this body; what the number carried was only its order."""
+    return None if body is None else _FN.sub(r'<sup class="fn"><a href="\1"></a></sup>', body)
+
+
 def moved_anchors(root: Path, base: str, sources) -> set[str]:  # noqa: ANN001
     """The `file#anchor` of every research section whose BODY changed against `base`."""
     moved: set[str] = set()
@@ -136,7 +148,7 @@ def moved_anchors(root: Path, base: str, sources) -> set[str]:  # noqa: ANN001
             op.write_text(old_text, encoding="utf-8")
             before = {h: b for h, b, _a in sources._parsed(str(op))}
         for head, body, anchor in sources._parsed(str(new)):
-            if before.get(head) != body:
+            if unnumbered(before.get(head)) != unnumbered(body):
                 moved.add(f"{os.path.relpath(rel, RESEARCH)}#{anchor}")
     return moved
 
