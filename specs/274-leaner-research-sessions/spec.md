@@ -21,12 +21,16 @@ of a headless session carries the clone's root CLAUDE.md (about 5.2 K tokens), m
 
 ### User Story 1 - A large research group is written in short sessions (Priority: P1)
 
-A feature queues a group of nine questions. The page-session launcher refuses a write brief listing more than four,
-naming the split (`<g>a-write.md`, `<g>b-write.md`, each with its own handoff). The group runs as three short write
-sessions, each peaking near R11's context, not one long one.
+A feature queues a group of nine questions. Every write brief declares its load in one line,
+`<!-- write-load: questions=N -->`, counting each question to write or rework (an item spanning six existing sections is
+six). The page-session launcher refuses a write brief declaring more than four, naming the split (`<g>a-write.md`,
+`<g>b-write.md`, each with its own handoff), and refuses a write brief that declares nothing. While the session writes,
+`make reserve` counts the registry keys it has reserved; the eleventh is refused, and the session writes the items it
+has not reached into a continuation brief and stops, which the runner queues next.
 
-**Independent Test**: `make page-session BRIEF=<a write brief with 5 item lines>` refuses and prints the split; the
-same brief with 4 runs.
+**Independent Test**: the launcher refuses a write brief declaring 5 questions and one declaring none, and runs one
+declaring 4. `make reserve` refuses a page session's 11th registry key. The runner queues a continuation brief a session
+leaves.
 
 ### User Story 2 - A session reads only its own coordination lines (Priority: P1)
 
@@ -48,28 +52,37 @@ session's first turn is measured before and after.
 
 ## Edge Cases
 
-- **A write brief whose items are not one line each.** The launcher counts item lines under the brief's `## Your items`
-  heading, which is the unit every generator emits (one line per question or item). A brief with no such heading is not
-  counted: feature 250's `brief.py` briefs list FR-002 assertions inside existing questions, not new questions. The rule
-  is stated in questions in the docs, and generators emit one line per question.
-- **An item that edits several existing sections** (e.g. one thin-section item across six sections) counts as one line
-  but is several questions. The docs say to count questions, and a generator should list one line per section it asks
-  a session to rework.
-- **A deliberate larger brief**: the escape is `WRITE_CAP_OK='<reason>'`, and the reason is logged. That fits the
-  guard doctrine for a refusal that only the session can decide.
+- **What a write brief is.** A brief is a write brief if its file name contains `write`, or if it has a `## Your items`
+  heading. The load line is required of every write brief; a brief generator writes it, and a hand-written brief
+  carries it too.
+- **Briefs that are not a new group's writing** say so in the same line: `kind=assertions` (feature 250's `brief.py`
+  briefs, which footnote assertions inside existing questions rather than write questions) or `kind=handover` (a
+  group handed to another feature). Only those two kinds are exempt, and the exemption is tested.
+- **An item spanning several sections** counts each section it asks the session to write or rework. The declared count
+  is the generator's responsibility, and a generator counts sections, not lines.
+- **Keys are not known before writing**, so they are capped during the session, not at launch. The runner exports the
+  session's id (`L7R_PAGE_SESSION`) and a continuation path (`L7R_CONTINUE`). `make reserve` records the session on
+  each reservation and refuses a registry key past the tenth in one page session, telling it to finish the question in
+  hand, write the unreached items to `$L7R_CONTINUE` as a brief of the same shape, commit and stop. When a session
+  ends, the runner queues a brief found at that path next. Glossary terms are not capped.
+- **A deliberate larger load**: the escape is `WRITE_CAP_OK='<reason>'` at launch or `KEY_CAP_OK='<reason>'` on
+  `make reserve`, each logged with its reason, as the guard doctrine asks.
 - **A queue already running** keeps the briefs it holds. The change applies to briefs launched after it lands, and
-  the other sessions are told (FR-005).
-- **The slim file drifts from CLAUDE.md**: a test pins that every house-style and research rule heading in the root
-  CLAUDE.md that a research session acts on is in the slim file, by named phrase. A rule added to CLAUDE.md later
-  fails the test until it is carried over or explicitly marked as not for page sessions.
+  the other sessions are told (FR-005), so they can regenerate groups they have not started.
+- **The slim file drifts from CLAUDE.md**: a test pins, by named phrase, every house-style and research rule in the
+  root CLAUDE.md that a research session acts on. A rule added to CLAUDE.md later fails the test until it is carried
+  over or explicitly marked as not for page sessions.
 
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
 
-- **FR-001 (suggestion 1)**: A write session MUST take at most four questions. `scripts/page-session.sh` MUST refuse a
-  brief whose `## Your items` section lists more than four item lines, naming the split and the escape. The research
-  CLAUDE.md and `docs/research-record-rules.md` MUST state the cap with the measurement behind it (research.md R1).
+- **FR-001 (suggestion 1)**: A write session MUST take at most four questions AND at most ten new registry keys.
+  `scripts/page-session.sh` MUST refuse a write brief declaring more than four questions, or declaring none (only the
+  `assertions` and `handover` kinds are exempt), naming the split and the escape. `make reserve` MUST refuse a page
+  session's eleventh registry key with the continuation instructions, and the runner MUST queue a continuation brief a
+  session leaves. The research CLAUDE.md and `docs/research-record-rules.md` MUST state both limits with the
+  measurement behind them (research.md R1). 269's generator MUST declare honest counts and split its unstarted groups.
 - **FR-002 (suggestion 2)**: `make lines FILE=<f> KEY=<regex>` MUST print only a coordination file's matching lines
   (numbered, with a count of the rest), and `make append FILE=<f> LINE=<text>` MUST append one line without printing
   the file. The research CLAUDE.md MUST say a session reads a claims file, a handoff or a checks report ONLY this way.
@@ -79,7 +92,7 @@ session's first turn is measured before and after.
   slim file to the root CLAUDE.md's research-relevant rules, so neither drifts silently.
 - **FR-004**: Each change MUST be measured. FR-003 is measured before landing: a probe session's first-turn tokens under
   the old and new flags (research.md R2). FR-001 and FR-002 can only be measured on groups that run after landing, so
-  that measurement is recorded as owed in `future-work/cross-cutting.md`, with the method (research.md R1's scripts in
+  that measurement is recorded as owed in `.claude/skills/diagram/future-work/cross-cutting.md`, with the method (research.md R1's scripts in
   `measure/`) and the figures to beat.
 - **FR-005**: Once this is on main, every session doing research (Diagram research [271], Diagram shrines [273],
   Diagram buildings [267], and any other with a research claim) MUST be told what changed and how to use it at once.
@@ -92,11 +105,13 @@ session's first turn is measured before and after.
 
 ## Success Criteria *(mandatory)*
 
-- **SC-001** (FR-001): the launcher refuses a 5-item write brief and runs a 4-item one (tested).
+- **SC-001** (FR-001): tested: the launcher refuses a write brief declaring 5 questions or none, exempts only the two
+  kinds, and runs one declaring 4; `make reserve` refuses a page session's 11th registry key; the runner queues a
+  continuation brief.
 - **SC-002** (FR-002): `make lines` and `make append` are tested, and the research CLAUDE.md and 269's briefs name them.
 - **SC-003** (FR-003): the runner's flags exclude the root CLAUDE.md and append the slim file (tested), and the probe
   shows the first-turn floor fall.
-- **SC-004** (FR-004): research.md R2 records the probe, and `future-work/cross-cutting.md` holds the owed post-landing
+- **SC-004** (FR-004): research.md R2 records the probe, and `.claude/skills/diagram/future-work/cross-cutting.md` holds the owed post-landing
   measurement with its method and baseline.
 - **SC-005** (FR-005): each research session was sent the change after the landing commit reached main.
 
@@ -106,4 +121,7 @@ None: nothing a map draws or states changes. This is process tooling.
 
 ## Review history
 
-- (none yet)
+- Round 1 (spec-fidelity, 2026-09-27): CHANGES REQUIRED, three findings. (1) The ten-key half of suggestion 1 was
+  dropped: now capped during the session by `make reserve`, with a continuation brief. (2) Counting item lines missed
+  both costliest groups (272 S, 269 V2): the unit is now the declared question count, counted per section. (3) A brief
+  without the heading escaped the cap: now refused, with only two declared kinds exempt. The future-work path was corrected.
