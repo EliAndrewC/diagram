@@ -115,3 +115,15 @@ bundles (`make check-bundle`) and whose findings are applied with `make apply-ed
 | Each item's label | as its research outcome | FR-001 | the record; the kind's docstring; `outcomes.md` |
 | Two attested forms become a knob | knob | constitution XII | the record; each sheet's notes |
 | A silent item stays a guess with its search | guess | constitution XII | the absence note; the kind's note |
+
+## Review history
+
+- Round 1 (2026-09-27, `spec-fidelity`, Opus): CHANGES REQUIRED, four items, all applied: the in-field grave island
+  added (R52, held under the same 2026-09-26 hold); the history half of Ubame's collateral-line alcove made research
+  (R53); FR-006 rederived by 265's own method on all six of its pages, with every owed edit made later (T17) rather than
+  replaced by a link; the reload the GM asked for made a requirement (FR-009, `reload.md`). It ruled FR-004 (redrawing
+  sheets to findings, knobs) within the request.
+- Round 2 (`spec-fidelity-verify`): CHANGES REQUIRED, three items, applied: plan D4 and R27 still carried the old
+  rule; `reload.md` omitted 250's plan and two docs its search finds (reading them corrected the briefs' route to a
+  registered source, D19 `WHOLE=1`); T01 named R53.
+- Round 3 (`spec-fidelity-verify`): FAITHFUL.

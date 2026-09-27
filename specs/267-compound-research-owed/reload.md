@@ -3,8 +3,9 @@
 Read in this clone after `sync-in` at main `51515eb6` (2026-09-27), which carries feature 250's landing, and found by
 search rather than memory (`grep -rln "page-session\|check-bundle\|quote-check\|research pass" CLAUDE.md docs
 .claude/skills/diagram/research/CLAUDE.md .claude/agents scripts specs/250-*`). Every hit that states a research
-procedure is below; the rest are the guards and scripts that enforce these (their messages name the same commands)
-and 250's measurement files, which state no procedure of their own.
+procedure is below; the rest state none of their own - the guards and scripts that enforce these (their messages name
+the same commands), 250's history and measurement files (its request, spec, tasks, research and review, settled by
+its plan), the review ledger, the generated list of make targets, and `escalation-check` asking whether a pass ran.
 
 | file | what it sets |
 |---|---|
