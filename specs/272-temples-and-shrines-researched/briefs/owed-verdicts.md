@@ -2,3 +2,5 @@
 - Torii (religion-and-death SECTION=090): IN-STEP - the 12 ft pitch, the GM's ruling and the single-arch norm still stand
 - Torii (religion-and-death SECTION=092): IN-STEP - its Entry now names 092 (the innermost-arch text moved there in the split); the silence and the ruling it cites still stand
 - ShrineGrove (religion-and-death SECTION=100): IN-STEP - the grove as the shrine's setting and the cleared opening as a drawing decision still stand; the new siting and hall evidence does not touch the grove
+- ShrineGrove (religion-and-death SECTION=120): IN-STEP - the no-fence grove and the precinct questions it points to still stand; what moved is about the buildings
+- Torii (religion-and-death SECTION=120): IN-STEP - the arches over the approach, the first at the shrine's ground, still stand; the new sanctuary source and the belfry silence do not touch the arch
