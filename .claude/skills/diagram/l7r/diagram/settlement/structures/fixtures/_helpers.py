@@ -2,23 +2,16 @@
 
 import math
 from collections.abc import Callable, Sequence
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from ..._geom import (
-    Pt,
     seg_dist,
 )
 
-# The lane clearance a notice-board caption must MEET before nearness decides the seat. See the long
-# note beside `_pick` in `kosatsuba` for why this satisfices rather than maximizes, and why 5 ft.
+# The lane clearance `place_kosatsuba` asks of the caption room beside a candidate board seat - a SITING heuristic
+# (is there room for a caption here?), not a caption seat: the caption itself is seated by the one placer
+# (feature 266), which scores a lane crossed within the gate's 2 ft notch at Esri's way weight.
 CAPTION_LANE_TARGET_FT = 3.0
-
-# THE RULE'S OWN FLOOR, as opposed to the target above it. `captions_clear_the_ways_they_stand_on`
-# (gate 0617) requires 2 ft between a caption's box and a lane's tread edge; the 3 ft target keeps one
-# foot of margin over it and no more. A board that can reach the target takes it; a board that cannot
-# gives up the margin - never the two feet the rule actually asks for, and never its position beside
-# the board it names. Feature 157: the rung between "the good seat" and the old unbounded fallback.
-CAPTION_LANE_FLOOR_FT = 2.0
 
 # THE BOARD IS ROADSIDE (GM 2026-08-26, feature 133 T13: *"I would expect it to be essentially
 # roadside ... puts it right next to one of the village lanes"*). Real feet from the tread's EDGE to
@@ -30,99 +23,6 @@ CAPTION_LANE_FLOOR_FT = 2.0
 # (the 60 ft band remains the fallback, and `kosatsuba_by_the_road` tightens to this band at those
 # tiers); towns and cities keep the 60 ft rule until their pool maps are re-rolled at unlock.
 KOSATSUBA_VERGE_FT = 6.0
-
-if TYPE_CHECKING:
-    pass
-
-
-def first_clear_seat(
-    seats: Sequence[Any],
-    hug: Callable[[Any], float],
-    hug_cap: float,
-    blocked: Callable[[Any], bool],
-    clearance: Callable[[Any], float],
-    want: float,
-) -> Any:
-    """ONE RUNG of the caption ladder: the first seat that clears the hug cap, is unblocked, and
-    keeps at least `want` of clearance from the way it stands on.
-
-    LIFTED OUT OF `_draw_board_caption` (feature 174, GM 2026-08-28: "If something is only available
-    as an inner function in a closure, then you can move it out into its own function to make it
-    more unit testable... Dropping the test is not one of the options"). The identical expression
-    appeared FOUR times in that method - the tilted branch's target and floor rungs, and the level
-    branch's two - and the rung that SUCCEEDS at the floor after failing at the target could not be
-    reached by any of eight constructed map geometries, because the discriminator is a narrow band
-    of clearance between the two thresholds. As one lifted body it is three lambdas to test.
-
-    The four call sites now differ only in their seat list and their `want`, which is the whole of
-    what the ladder is: the same question asked with a lower bar each time.
-    """
-    return next((q for q in seats if hug(q) <= hug_cap and not blocked(q) and clearance(q) >= want), None)
-
-
-def pick_caption_seat(
-    seats: Sequence[Pt],
-    at: Pt,
-    hug: Callable[[Pt], float],
-    hug_cap: float,
-    box_clearance: Callable[[Pt], float],
-    lane_target: float,
-    blocked: Callable[[Pt], bool] | None = None,
-    gap: Callable[[Pt], float] | None = None,
-) -> Pt:
-    """The board's caption seat: the NEAREST seat that clears the ways by `lane_target`, and if none does,
-    the legal seat that clears them best.
-
-    LIFTED OUT OF `place_kosatsuba` (feature 146, GM 2026-08-28 on inner functions and testability). It took
-    two closures and two numbers, all of which a test can hand it directly; reaching it through the placer
-    meant building a settlement whose every seat was blocked. The tie-break is (distance, then ORDER), which
-    is what keeps an unblocked board on its historical seat when a diagonal ties with it.
-    """
-    # `blocked` IS A THIRD LEGALITY TERM, and it degrades in the same direction as the other two
-    # (feature 152 T12). The filter scored hug and lane clearance and NOTHING ELSE, so a caption could
-    # be seated on top of a garden, or with a whole lane between it and the thing it names - Inashiro's
-    # "notice board" stood with the full 6 ft width of lane 1 between the caption and its board, and a
-    # shrine 22 ft away on the caption's own side, so the words read as naming the shrine. The comment
-    # under the satisfice rule already knew the shape ("a copse clump through the text") and chose lane
-    # clearance as the only bar anyway. If every seat is blocked the term is dropped rather than the map
-    # left captionless, which is the same "or list(seats)" fallback the hug cap has always had.
-    _hug_ok = [q for q in seats if hug(q) <= hug_cap] or list(seats)
-    legal = _hug_ok
-    # `blocked` REFINES AMONG SEATS THAT ALREADY CLEAR THE WAYS - it does not outrank the lane bar
-    # (feature 152 T12). Applied as a filter over ALL legal seats it changed which seat the ladder fell
-    # back to, and tripwire seed 33 came out with its caption standing on a way
-    # (`captions_clear_the_ways_they_stand_on`) - trading the defect this term was written for against a
-    # worse one. Lane clearance is the older and harder rule; the fabric and way-side terms pick BETWEEN
-    # the seats that already satisfy it, and drop away entirely when none of them is unblocked.
-    clear = [q for q in legal if box_clearance(q) >= lane_target]
-    _unblocked = [q for q in clear if not (blocked and blocked(q))]
-    # LEAST BAD, NOT ARBITRARY, WHEN EVERY SEAT IS BLOCKED (settlement-review of Kuwabata, 2026-09-12).
-    # Dropping the term entirely is right in that it never leaves a map captionless, and wrong in what it
-    # then chooses: Kuwabata's caption came to rest 0.02 px off a byre and 38.7 ft from the board it names,
-    # because with every seat blocked the choice fell through to pure lane clearance and a seat touching a
-    # roof scored as well as one in the open. `gap` is how far the caption's own quad stands from the
-    # nearest solid feature, so the fallback degrades along the axis the term is about.
-    clear = _unblocked or ([max(clear, key=gap)] if (gap and clear) else clear)
-    if clear:
-        ix = {id(q): i for i, q in enumerate(seats)}
-        return min(clear, key=lambda q: (round((q[0] - at[0]) ** 2 + (q[1] - at[1]) ** 2, 3), ix[id(q)]))
-    # ...AND THE FALLBACK REFINES BY IT TOO (settlement-review x3, feature 154). This returned
-    # `max(legal, key=box_clearance)` and never consulted `blocked` at all - so on a board where NO
-    # seat reaches the lane target, which is every board standing close beside a way, the whole
-    # way-side term was silently skipped and the best-clearing seat won even with the tread between
-    # the caption and its own board. Sawada shipped exactly that three passes running: board at -12.0
-    # to -7.0 off the connector's axis, tread -3.0 to +3.0, caption +6.0 to +14.5, with the board's
-    # own side measurably clear. A rule that cannot fire on the path most boards take looks exactly
-    # like a rule that passes.
-    #
-    # Same degradation as above, deliberately: prefer the unblocked seats, and drop the term entirely
-    # when none of them is - never leave the map captionless for it.
-    _legal_unblocked = [q for q in legal if not (blocked and blocked(q))]
-    if not _legal_unblocked and gap and legal:
-        # the same graceful degradation as above, on the path most boards take
-        return max(legal, key=gap)
-    return max(_legal_unblocked or legal, key=box_clearance)
-
 
 KOSATSUBA_ENTRANCE_REACH_FT = 100.0
 """How near a dwelling the approach must come before it counts as having ARRIVED at the settlement.
@@ -367,66 +267,4 @@ def quad_on_canopy(quad: Sequence[tuple[float, float]], near: Callable[[float, f
         x, y, r = float(it[0]), float(it[1]), float(it[2])
         if point_in_poly(x, y, list(quad)) or min(seg_dist(x, y, a, b) for a, b in zip(quad, [*quad[1:], quad[0]], strict=False)) < r + CAPTION_HALO_FT:
             return True
-    return False
-
-
-def caption_room(
-    x: float,
-    y: float,
-    rot: float,
-    hw: float,
-    hh: float,
-    chw: float,
-    fabric: Sequence[list[tuple[float, float]]],
-    lanes: Sequence[Any],
-    view: Sequence[float] | None,
-    hug_cap: float,
-    feature_gap: float,
-    lane_floor: float,
-    canopy: Callable[[float, float, float], Any] | None = None,
-) -> bool:
-    """Is there a seat where the notice board's caption can be DRAWN - the placer's own tests, asked by the siter
-    (feature 261)?
-
-    `_draw_board_caption` accepts a seat only if its drawn quad hugs the board (`hug_cap`), clears every solid feature
-    by more than `feature_gap`, is not across a way from the board, stands on the page, and keeps `lane_floor` off every
-    lane's tread; failing every rung, it falls back to the least-bad seat, which on Kashikawa was a farmhouse roof. The
-    siter's old probe asked a ring of upright seats a looser question and called that entrance seat sitable. So this
-    walks the placer's ladder, coarsened (lateral in 6 ft steps, the gap in 5 ft steps: the siter asks it of every
-    candidate), at the board's own tilt - the caption stands at the board's angle (GM 2026-08-27) - with the same quad `_cap_quad`
-    builds (a one-line box centered `8 x 0.275` above the seat). Coarser is one-way safe for a PREFERENCE: a seat found
-    here is a seat the placer's denser ladder also offers."""
-    from ..._geom import linear_tilt, poly_gap, poly_seg_dist, segments_cross, tilt_caption_seat
-
-    chh = 8.0 * 1.05 / 2.0
-    board = [(x - hw, y - hh), (x + hw, y - hh), (x + hw, y + hh), (x - hw, y + hh)]
-    ca0, sa0 = math.cos(math.radians(rot)), math.sin(math.radians(rot))
-    drawn = [(x + dx * ca0 - dy * sa0, y + dx * sa0 + dy * ca0) for dx, dy in ((-hw, -hh), (hw, -hh), (hw, hh), (-hw, hh))]  # the board as drawn, turned
-    segs = [((float(a[0]), float(a[1])), (float(b[0]), float(b[1])), float(ln.get("w") or 3) / 2.0) for ln in lanes for a, b in zip(ln.get("pts") or [], (ln.get("pts") or [])[1:], strict=False)]
-    boxes = [(min(c[0] for c in o), min(c[1] for c in o), max(c[0] for c in o), max(c[1] for c in o), o) for o in fabric]
-    reach = chw + hw + 6.0
-    lats = [0.0] + [v for i in range(1, int(reach // 6.0) + 1) for v in (i * 6.0, -i * 6.0)]
-    for t in (linear_tilt(rot),):  # the caption's own angle only: it stands at the board's angle (GM 2026-08-27)
-        ca, sa = math.cos(math.radians(t)), math.sin(math.radians(t))
-        for lat in lats:
-            for g in (11.0, 16.0, 21.0, 26.0, 31.0, 36.0):
-                for above in (False, True):
-                    qx, qy = tilt_caption_seat(x, y, rot, t, hw, hh, g, above=above, lateral=lat)
-                    cy = qy - 8.0 * 0.275
-                    quad = [(qx + dx * ca - dy * sa, cy + dx * sa + dy * ca) for dx, dy in ((-chw, -chh), (chw, -chh), (chw, chh), (-chw, chh))]
-                    if view and not all(view[0] + 2.0 <= px <= view[0] + view[2] - 2.0 and view[1] + 2.0 <= py <= view[1] + view[3] - 2.0 for px, py in quad):
-                        continue
-                    hug = poly_gap(quad, board)
-                    if hug > hug_cap:
-                        continue
-                    reach = max(feature_gap, poly_gap(quad, drawn))  # nearer its own board AS DRAWN than any other feature, as the placer asks
-                    x0, x1 = min(c[0] for c in quad) - reach, max(c[0] for c in quad) + reach
-                    y0, y1 = min(c[1] for c in quad) - reach, max(c[1] for c in quad) + reach
-                    if any(not (bx1 < x0 or x1 < bx0 or by1 < y0 or y1 < by0) and poly_gap(quad, o) <= reach for bx0, by0, bx1, by1, o in boxes):
-                        continue
-                    if any(segments_cross((x, y), (qx, qy), a, b) or poly_seg_dist(quad, a, b) - half < lane_floor for a, b, half in segs):
-                        continue
-                    if canopy is not None and quad_on_canopy(quad, canopy):
-                        continue  # asked with a canopy: a caption whose halo would notch a crown is no seat
-                    return True
     return False

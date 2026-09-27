@@ -1,11 +1,17 @@
 ---
 name: spec-fidelity-verify
-description: A LATER round of the spec-fidelity review (its MODE 3, VERIFY) - given the previous round's verdict and the diff of the feature directory since it, confirms each item RESOLVED / PARTLY / NOT RESOLVED and reads only the changed passages and what a grep for the ids they name turns up, ending FAITHFUL or CHANGES REQUIRED. Opus at high effort (tier table, GM 2026-09-19) - the same judgment as spec-fidelity on a narrower job with a shorter contract, and most review rounds are this one; medium effort was tried on recorded rounds and missed a finding. You do not normally dispatch it - `scripts/review-round-hooks.sh` routes a rewritten `spec-fidelity` round here; dispatch it by hand only when that hook says it holds no snapshot. A FIRST reading of a spec, an exception check and a plan review are `spec-fidelity`'s, never this agent's.
+description: A later round of spec-fidelity (MODE 3): confirms each item of the previous verdict against the diff since it - routed here by review-round-hooks.sh, not dispatched by hand.
 tools: Read, Grep, Bash
 model: opus
 effort: high
 omitClaudeMd: true
 ---
+
+## When to dispatch this agent
+
+A LATER round of the spec-fidelity review (its MODE 3, VERIFY) - given the previous round's verdict and the diff of the feature directory since it, confirms each item RESOLVED / PARTLY / NOT RESOLVED and reads only the changed passages and what a grep for the ids they name turns up, ending FAITHFUL or CHANGES REQUIRED. Opus at high effort (tier table, GM 2026-09-19) - the same judgment as spec-fidelity on a narrower job with a shorter contract, and most review rounds are this one; medium effort was tried on recorded rounds and missed a finding. You do not normally dispatch it - `scripts/review-round-hooks.sh` routes a rewritten `spec-fidelity` round here; dispatch it by hand only when that hook says it holds no snapshot. A FIRST reading of a spec, an exception check and a plan review are `spec-fidelity`'s, never this agent's.
+
+<!-- The frontmatter description is one sentence: the harness shows every agent's description to every session on every turn (feature 250, research R4, recommendation 3); the full statement of when to dispatch is this section. -->
 
 # Spec Fidelity Review - a round after the first
 

@@ -1,0 +1,123 @@
+[
+ {
+  "window": "cities/fabric 5",
+  "main": {
+   "fresh": 4912,
+   "cached": 94572,
+   "output": 973,
+   "thinking": 0,
+   "turns": 4,
+   "peak_context": 26289
+  },
+  "agents": [
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check cities/fabric 146",
+    "fresh": 7270,
+    "cached": 25864,
+    "output": 5100,
+    "thinking": 3205,
+    "turns": 3,
+    "peak_context": 13985,
+    "first_turn": 7641,
+    "read_chars": 13530,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     8459,
+     5071
+    ]
+   },
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "record-format cities/fabric 146",
+    "fresh": 14310,
+    "cached": 22445,
+    "output": 2500,
+    "thinking": 935,
+    "turns": 3,
+    "peak_context": 14306,
+    "first_turn": 9138,
+    "read_chars": 9801,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     9599,
+     202
+    ]
+   }
+  ]
+ },
+ {
+  "window": "cities/fabric 6",
+  "main": {
+   "fresh": 19503,
+   "cached": 711082,
+   "output": 7100,
+   "thinking": 2132,
+   "turns": 20,
+   "peak_context": 45748
+  },
+  "agents": []
+ },
+ {
+  "window": "cities/fabric 7",
+  "main": {
+   "fresh": 6091,
+   "cached": 290957,
+   "output": 2063,
+   "thinking": 174,
+   "turns": 6,
+   "peak_context": 51827
+  },
+  "agents": [
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check re-check fabric 146",
+    "fresh": 10193,
+    "cached": 7694,
+    "output": 2331,
+    "thinking": 1167,
+    "turns": 2,
+    "peak_context": 10191,
+    "first_turn": 7696,
+    "read_chars": 5760,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     5760
+    ]
+   }
+  ]
+ },
+ {
+  "window": "cities/fabric 8",
+  "main": {
+   "fresh": 3216,
+   "cached": 213254,
+   "output": 1676,
+   "thinking": 147,
+   "turns": 4,
+   "peak_context": 55033
+  },
+  "agents": []
+ },
+ {
+  "window": "cities/fabric 9",
+  "main": {
+   "fresh": 12719,
+   "cached": 28105,
+   "output": 377,
+   "thinking": 0,
+   "turns": 2,
+   "peak_context": 21385
+  },
+  "agents": []
+ }
+]

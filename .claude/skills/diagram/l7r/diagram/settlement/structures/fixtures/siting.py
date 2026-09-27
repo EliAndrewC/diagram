@@ -3,12 +3,12 @@
 import math
 from typing import TYPE_CHECKING
 
+from ....labels import Subject, place
+from ....labels.geom import rect as label_rect
 from ..._geom import (
-    LABEL_AIR_CAP,
     Manifest,
     PointGrid,
     Pt,
-    linear_tilt,
     nearest_way_bearing,
     point_in_poly,
     seg_dist,
@@ -17,14 +17,10 @@ from ..._geom import (
     way_beds,
 )
 from ..._knobs import KOSATSUBA_MARKER_MIN_PX, PUNISHMENT_SPOT_FT, resolve_knob
-from ..captions import CAPTION_FEATURE_GAP
 from ._helpers import (
-    CAPTION_LANE_FLOOR_FT,
-    CAPTION_LANE_TARGET_FT,
     KOSATSUBA_ANCHOR_BAND_FT,
     KOSATSUBA_HANDOVER_BAND_FT,
     KOSATSUBA_VERGE_FT,
-    caption_room,
     departure_routes,
     kosatsuba_affordances,
     kosatsuba_anchor,
@@ -255,7 +251,9 @@ class FixtureSitingMixin:
             return all(seg_dist(x, y, bp[k], bp[k + 1]) >= bhw + h / 2 + 3 for bp, bhw in beds for k in range(len(bp) - 1))
 
         tw_lab = self.label_caption_hw(label, 8.0) if label else 0.0  # the caption half-width the seat must also hold, as RECORDED
-        _fabric = self.caption_fabric() if label else []  # the caption placer's blockers, derived once for every candidate
+        _label_index = self.label_obstacles() if label else None  # the one placer's obstacles, indexed once for every candidate
+        _view0 = (self.M.get("meta") or {}).get("view")
+        _frame = (_view0[0], _view0[1], _view0[0] + _view0[2], _view0[1] + _view0[3]) if _view0 else None
         kb_boxes = self.label_blockers("kosatsuba")  # built once: the probe tests many seats against the same map
         _siting = str((self.M.get("meta") or {}).get("kosatsuba_siting") or "frontage")
         _wells = [(float(_w["x"]), float(_w["y"])) for _w in (self.M.get("wells") or []) if "x" in _w]
@@ -383,42 +381,21 @@ class FixtureSitingMixin:
         # cannot promise a seat where the ring finds none - it only stops the siter preferring a
         # position that demonstrably has one over a position that demonstrably does not.
         def _sitable(_x: float, _y: float, _hw: float, _hh: float, _rot: float = 0.0) -> int:
-            _chw2 = max(10.0, len(label) * 8 * 0.28) if label else 0.0
+            """Does the caption fit beside a board seated here - 2 when it does and stands clear of every crown, 1 when it
+            fits over a crown, 0 when it does not fit? ASKED OF THE ONE PLACER (features 261 and 266): the board is the
+            point subject the label phase will hand it, the obstacles are indexed once, and the caption FITS when the
+            placer seats it at the preferred ring with nothing under it and no leader. Every probe written here before
+            restated some older caption search, and each disagreed with it somewhere - Kashikawa's entrance seat was
+            called sitable while the caption then went onto a farmhouse roof; the placer is the one thing that knows."""
             if not label:
                 return 1
-            # THE RING MUST BE A SUBSET OF WHAT THE SEARCH ACTUALLY TRIES, or the one-way guarantee
-            # above is worthless. The first cut used 45-degree diagonals (0.7, 0.7) while the seat
-            # search's annulus runs 30/60/120/150/210/240/300/330 - so a board could be ranked
-            # sitable on a seat the search never offers, and seed 14 did not move. These are exactly
-            # the twelve zero-standoff members of `_cands`: four axes plus those eight bearings.
-            _ring = [(0.0, 1.0), (0.0, -1.0), (1.0, 0.0), (-1.0, 0.0)]
-            _ring += [(math.cos(math.radians(_a)), math.sin(math.radians(_a))) for _a in (30, 60, 120, 150, 210, 240, 300, 330)]
-            _view = (self.M.get("meta") or {}).get("view")
-            _tilt = linear_tilt(_rot)
-            _seats = [(_x + (_hw + _chw2 + 8.0) * _dx, _y + (_hh + 11.0) * _dy) for _dx, _dy in _ring]
-            if _tilt:
-                # A TILTED CAPTION IS JUDGED BY THE PLACER'S OWN TESTS (feature 261): its ladder along the board's lane, at
-                # the board's own tilt (the GM, 2026-08-27: the caption at exactly the board's angle), with the quad it will draw. Two cheaper probes came first and both lied about
-                # Kashikawa's connector: the upright ring called the entrance seat sitable while every seat the caption
-                # placer then tried was blocked or on the lane, and the upright lane-clearance box, straddling a lane the
-                # tilted caption runs BESIDE, called the open ground further up that lane unsitable
-                # ...AND CLEAR OF THE CANOPY RANKS ABOVE MERELY FITTING (settlement-review of Kuwabata, feature 261): a caption at
-                # its board's angle whose halo notches a crown is the defect feature 230 pass 13 recorded on that very map; the
-                # GM's 2026-08-29 ruling lets a BOARD stand under trees, not a caption's halo bite them
-                _room = (_x, _y, _rot, _hw, _hh, tw_lab, _fabric, self.M.get("lanes") or [], _view, LABEL_AIR_CAP * 8.0, CAPTION_FEATURE_GAP, self.px(CAPTION_LANE_FLOOR_FT))
-                return 2 if caption_room(*_room, canopy=_canopy.near) else int(caption_room(*_room))
-            _level = 0
-            for _qx, _qy in _seats:
-                # ...AND ON THE PAGE (settlement-review of Kashikawa, feature 261): a seat whose only clear caption ground
-                # lies past the sheet's edge is not sitable - the caption then either clips or falls back onto a roof
-                if _view and not (_view[0] + _chw2 <= _qx <= _view[0] + _view[2] - _chw2 and _view[1] + 8.0 <= _qy <= _view[1] + _view[3] - 8.0):
-                    continue
-                if self.label_seat_clear(_qx, _qy, tw_lab, 8.0, kb_boxes) and self.caption_lane_clearance(_qx, _qy, _chw2) >= CAPTION_LANE_TARGET_FT:
-                    _box = [(_qx - _chw2, _qy - 6.4), (_qx + _chw2, _qy - 6.4), (_qx + _chw2, _qy + 2.0), (_qx - _chw2, _qy + 2.0)]
-                    if not quad_on_canopy(_box, _canopy.near):
-                        return 2  # the level caption's box clear of the crowns too, as the tilted branch asks
-                    _level = 1
-            return _level
+            _p = place(label, 8.0, Subject("point", tuple(label_rect(_x, _y, _hw, _hh, _rot)), angle=_rot), _label_index, _frame)
+            if _p.cost > 0.0 or _p.leader is not None:
+                return 0
+            # ...AND CLEAR OF THE CANOPY RANKS ABOVE MERELY FITTING (settlement-review of Kuwabata, feature 261): a caption
+            # whose halo notches a crown is the defect feature 230 pass 13 recorded on that very map; the GM's 2026-08-29
+            # ruling lets a BOARD stand under trees, not a caption's halo bite them
+            return 1 if quad_on_canopy(_p.block, _canopy.near) else 2
 
         # ...AND IN THE OPEN, BUT ONLY AMONG SEATS THAT ALREADY STAND ON THE TRAFFIC (settlement-review, feature 230
         # passes 12 and 13). The state's notice is the one fixture on a hamlet sheet that exists to be SEEN, and two of

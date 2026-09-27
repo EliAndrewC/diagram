@@ -74,7 +74,7 @@ HERE = os.path.abspath(
     os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..")
 )  # the SKILL ROOT, not this package: every path below is relative to it. FOUR levels up since feature 119 (l7r/diagram/pipeline/), not two
 CACHE_DIR = os.path.join(HERE, ".gencache")
-FORMAT_VERSION = "2"  # bump to invalidate every entry when this file's key scheme changes
+FORMAT_VERSION = "3"  # bump to invalidate every entry when this file's key scheme changes (3: a file the run only read is an input whatever its suffix - a Mode A sheet's svg; 2026-09-27)
 # ^ 1 -> 2 (feature 167): dependency paths are recorded RELATIVE to the skill root, so a cache built
 # in one clone is usable in another. Entries written under "1" carry absolute paths and are ignored
 # rather than re-keyed under the new lookup rule - that discard is the whole point of the bump.
@@ -379,13 +379,16 @@ def record(run: Callable[[], object]) -> dict[str, Any]:
     does not, so they are normalized here to match."""
     functions: set[tuple[str, str]] = set()
     files: set[str] = set()
+    written: set[str] = set()
     engine = set(engine_files())
     real_open = builtins.open
 
     def spy_open(file: Any, mode: str = "r", *a: Any, **k: Any) -> Any:
         try:
             path = os.path.abspath(file)
-            if "r" in mode and "w" not in mode and "a" not in mode and not path.endswith(OUTPUT_SUFFIXES) and os.path.isfile(path) and not path.startswith(_KERNEL_FS):
+            if "w" in mode or "a" in mode:
+                written.add(path)
+            elif "r" in mode and os.path.isfile(path) and not path.startswith(_KERNEL_FS):
                 files.add(path)
         except TypeError:
             pass
@@ -436,7 +439,13 @@ def record(run: Callable[[], object]) -> dict[str, Any]:
     # form that lands in the entry is converted.
     return {
         "functions": sorted((_rel(path), qual) for path, qual in functions),
-        "files": sorted(_rel(p) for p in files - engine),
+        # A FILE THE RUN ONLY READ IS AN INPUT, whatever its suffix; one it also wrote is its own output
+        # (feature 264 follow-up, 2026-09-27). Reads were filtered by OUTPUT_SUFFIXES before, which dropped a
+        # hand-drawn Mode A sheet: its gen READS `<map>.svg` and writes only the png and page, so an edit to
+        # the sheet alone left the map CACHED - on main's render-sync too - with a stale png and page.
+        # And a file gone by the time the run ends was its scratch (the raster's resvg render, written by a
+        # subprocess into a temporary directory and read back), never an input.
+        "files": sorted(_rel(p) for p in files - engine - written if os.path.isfile(p)),
     }
 
 
@@ -444,9 +453,14 @@ def _entry_dir(gen: str) -> str:
     return os.path.join(CACHE_DIR, os.path.basename(gen)[: -len(".gen.py")])
 
 
-def _outputs(gen: str) -> list[str]:
+def _outputs(gen: str, deps: dict[str, Any] | None = None) -> list[str]:
+    """The files this gen PRODUCES - `<stem>` plus each output suffix, less any the run only READ. A Mode A gen reads
+    its hand-drawn `<map>.svg` and writes the png and page; counting the sheet an output made a hit RESTORE the
+    cached copy over the source, silently undoing an edit to it (found 2026-09-27: two door moves reverted, each
+    after a CACHED run, because the key did not see the sheet either)."""
     stem = gen[: -len(".gen.py")]
-    return [stem + suffix for suffix in OUTPUT_SUFFIXES]
+    inputs = {os.path.abspath(_abs(f)) for f in (deps or {}).get("files", [])}
+    return [p for p in (stem + suffix for suffix in OUTPUT_SUFFIXES) if os.path.abspath(p) not in inputs]
 
 
 def is_current(gen: str) -> bool:
@@ -468,7 +482,8 @@ def load(gen: str) -> bool:
     if not is_current(gen):
         return False
     entry = _entry_dir(gen)
-    for out in _outputs(gen):
+    meta = json.loads(Path(os.path.join(entry, "meta.json")).read_text())
+    for out in _outputs(gen, meta.get("deps")):
         cached = os.path.join(entry, os.path.basename(out))
         if os.path.isfile(cached):
             # copied beside it, then moved into place: a reader in another gate worker sees the old artifact
@@ -521,7 +536,7 @@ def store(gen: str, deps: dict[str, Any], *, gen_cpu_s: float | None = None, cov
     # their manifests were current. The entry is simply PNG-less; `load` deletes any standing PNG
     # rather than restoring one, and the next render regenerates it.
     _skip_render = bool(os.environ.get("DIAGRAM_SKIP_RENDER"))
-    for out in _outputs(gen):
+    for out in _outputs(gen, deps):
         # ...AND THE PAGE IS A RENDER TOO (feature 208): under DIAGRAM_SKIP_RENDER the page is written WITHOUT
         # its raster picture - the vector-only `"r": 0` form - so filing it would bless a degraded page as this
         # key's output and a later hit would restore it into the pool beside a current manifest, the exact

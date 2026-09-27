@@ -4,18 +4,12 @@ Split from settlement/structures.py by feature 114 - see settlement/structures/C
 """
 
 from ..._knobs import KOSATSUBA_MARKER_MIN_PX as KOSATSUBA_MARKER_MIN_PX
-from ._helpers import CAPTION_LANE_FLOOR_FT as CAPTION_LANE_FLOOR_FT
 from ._helpers import CAPTION_LANE_TARGET_FT as CAPTION_LANE_TARGET_FT
 from ._helpers import KOSATSUBA_ANCHOR_BAND_FT as KOSATSUBA_ANCHOR_BAND_FT
 from ._helpers import KOSATSUBA_ENTRANCE_REACH_FT as KOSATSUBA_ENTRANCE_REACH_FT
-from ._helpers import KOSATSUBA_HANDOVER_BAND_FT as KOSATSUBA_HANDOVER_BAND_FT
 from ._helpers import KOSATSUBA_VERGE_FT as KOSATSUBA_VERGE_FT
-from ._helpers import departure_routes as departure_routes
 from ._helpers import kosatsuba_affordances as kosatsuba_affordances
 from ._helpers import kosatsuba_anchor as kosatsuba_anchor
-from ._helpers import kosatsuba_handover as kosatsuba_handover
-from ._helpers import pick_caption_seat as pick_caption_seat
-from ._helpers import routes_missed as routes_missed
 from .boards import BoardsMixin
 from .siting import FixtureSitingMixin
 from .siting import canopy_index as canopy_index

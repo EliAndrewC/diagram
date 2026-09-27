@@ -112,7 +112,14 @@ def verdict_of(text: str) -> str:
     A CHANGES REQUIRED report can say "ruled FAITHFUL" about one item in its prose (round 1 of this
     feature did), and a FAITHFUL report can name "CHANGES REQUIRED" while confirming the previous
     round's items; the verdict line is written last, so the last occurrence is the verdict.
+
+    AN EXPLICIT VERDICT LINE WINS (feature 250, 2026-09-27): a report that opens "**Verdict: CHANGES REQUIRED.**" and
+    later says a history line "does not contain FAITHFUL" was read as FAITHFUL, and the next round was announced as a
+    new pass. So a "Verdict: <word>" line, where there is one, is the verdict; the last word is the fallback.
     """
+    stated = re.search(r"[Vv]erdict\W{0,6}(" + "|".join(_VERDICTS) + ")", text)
+    if stated:
+        return stated.group(1)
     best, best_at = "", -1
     for v in _VERDICTS:
         at = text.rfind(v)
@@ -308,6 +315,23 @@ def judge(payload: dict, clone: str) -> dict:
             )
             return {"event": "reminded", "rule": "history-without-snapshot", "detail": feature, "exit": 0, "stdout": _context(ctx), "stderr": ""}
         return {"event": "permitted", "rule": "first-round", "detail": feature, "exit": 0, "stdout": "", "stderr": ""}
+    # GUARD_EDIT_OK: feature 266 - a NOT-REVIEWABLE first reading is not a round, so the next dispatch is a first reading
+    # A FIRST READING THAT WAS NOT REVIEWABLE IS NOT A ROUND (feature 266, found by its own round 1). The reviewer that
+    # returns NOT-REVIEWABLE reads no substance, so routing the next dispatch to the later-round twin - which reads only
+    # the diff and trusts the rest was accepted - would pass the whole spec unread; the twin itself refused it and
+    # said so. While the only verdict so far is NOT-REVIEWABLE (the round state still 1), the dispatch passes through
+    # as the first reading it is, and the snapshot moves so the round after it diffs against what was read.
+    v_text, v_word = previous_verdict(str(payload.get("transcript_path") or ""), feature)
+    v_from = "transcript" if v_text else ""
+    if not v_text:
+        v_text = review_history(spec_md)
+        v_from = "history" if v_text else ""
+        v_word = verdict_of(v_text) if v_text else ""
+    prev_round = _read_round(state) or 1
+    if v_word == "NOT-REVIEWABLE" and prev_round <= 1:
+        take_snapshot(feature_dir, snap)
+        _write_state(state, 1)
+        return {"event": "permitted", "rule": "first-reading-after-not-reviewable", "detail": feature, "exit": 0, "stdout": "", "stderr": ""}
     # THE OLD VALUE IS LOOKED FOR FIRST (feature 253), before any snapshot or round state moves: a refused
     # dispatch spends nothing, not even one of the five rounds.
     stale_note = ""
@@ -321,13 +345,6 @@ def judge(payload: dict, clone: str) -> dict:
         if candidates:
             return {"event": "blocked", "rule": "stale-terms", "detail": f"{feature}: {len(candidates)} candidate(s)", "exit": 2, "stdout": "", "stderr": _stale_refusal(feature, candidates)}
     diff = diff_since(snap, feature_dir)
-    v_text, v_word = previous_verdict(str(payload.get("transcript_path") or ""), feature)
-    v_from = "transcript" if v_text else ""
-    if not v_text:
-        v_text = review_history(spec_md)
-        v_from = "history" if v_text else ""
-        v_word = verdict_of(v_text) if v_text else ""
-    prev_round = _read_round(state) or 1
     new_pass = v_word == "FAITHFUL"
     round_no = 1 if new_pass else (prev_round if v_word == "NOT-REVIEWABLE" else prev_round + 1)
     new_prompt = preamble(feature, round_no, new_pass, v_text, v_from, diff) + prompt

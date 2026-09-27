@@ -27,7 +27,7 @@ import math
 
 import pytest
 
-from l7r.diagram.settlement._geom import label_quad, poly_seg_dist
+from l7r.diagram.settlement._geom import label_quad
 from tests import rolls
 from tests.gate import _pool
 
@@ -152,23 +152,18 @@ def test_no_caption_lies_across_a_way(labels) -> None:
     assert ways, "the roll drew no way, so this rule would judge nothing"
     notched = []
     for lab in L:
-        x0, y0, x1, y1 = (float(lab[0]), float(lab[1]), float(lab[2]), float(lab[3]))
-        corners = ((x0, y0), (x1, y0), (x0, y1), (x1, y1), ((x0 + x1) / 2, (y0 + y1) / 2))
-        # a TILTED caption is judged by the quad it is drawn as (feature 261): its upright record box straddles the lane
-        # a caption turned along it runs beside, and misses one it crosses at an angle
-        quad = label_quad(lab) if len(lab) > 7 and lab[7] else None
+        # THE DRAWN BLOCK, turned as the reader sees it (feature 266): a tilted caption's record box is its UNROTATED
+        # box, and its corners stand where no ink is - measured on them, a caption lying beside a lane at the lane's
+        # own angle was reported across it. For a level caption the quad is the box, corner for corner.
+        quad = label_quad(lab)
+        corners = (*quad, (sum(q[0] for q in quad) / 4, sum(q[1] for q in quad) / 4))
         for ln in M.get("lanes") or []:
             pts = [(float(a), float(b)) for a, b in (ln.get("pts") or [])]
             half = float(ln.get("w") or 3) / 2.0
             if len(pts) < 2:
                 continue
-            if quad is not None:
-                if any(poly_seg_dist(quad, pts[i], pts[i + 1]) - half < NOTCH_CLEARANCE for i in range(len(pts) - 1)):
-                    notched.append((lab[5], round(x0), round(y0)))
-                    break
-                continue
             if any(_seg_dist(cx, cy, pts[i], pts[i + 1]) - half < NOTCH_CLEARANCE for cx, cy in corners for i in range(len(pts) - 1)):
-                notched.append((lab[5], round(x0), round(y0)))
+                notched.append((lab[5], round(quad[0][0]), round(quad[0][1])))
                 break
     assert not notched, f"caption(s) lie across a lane: {notched[:4]}"
 

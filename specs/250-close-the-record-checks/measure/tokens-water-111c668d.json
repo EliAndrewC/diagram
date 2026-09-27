@@ -1,0 +1,253 @@
+[
+ {
+  "window": "water 4",
+  "main": {
+   "fresh": 12885,
+   "cached": 28349,
+   "output": 493,
+   "thinking": 96,
+   "turns": 2,
+   "peak_context": 21551
+  },
+  "agents": []
+ },
+ {
+  "window": "water 5",
+  "main": {
+   "fresh": 5918,
+   "cached": 68703,
+   "output": 1322,
+   "thinking": 0,
+   "turns": 3,
+   "peak_context": 27463
+  },
+  "agents": [
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check water 010",
+    "fresh": 16292,
+    "cached": 34902,
+    "output": 5989,
+    "thinking": 3272,
+    "turns": 4,
+    "peak_context": 16286,
+    "first_turn": 7644,
+    "read_chars": 12488,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     12191,
+     244,
+     37,
+     16
+    ]
+   },
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "record-format water 010",
+    "fresh": 15766,
+    "cached": 39657,
+    "output": 4947,
+    "thinking": 2678,
+    "turns": 4,
+    "peak_context": 15760,
+    "first_turn": 9141,
+    "read_chars": 13394,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     13147,
+     178,
+     69
+    ]
+   },
+   {
+    "agent": "entry-drift",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "entry-drift water Stream",
+    "fresh": 10186,
+    "cached": 8780,
+    "output": 1754,
+    "thinking": 1150,
+    "turns": 2,
+    "peak_context": 12416,
+    "first_turn": 6550,
+    "read_chars": 12909,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     12909
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check water 170",
+    "fresh": 20448,
+    "cached": 50672,
+    "output": 10995,
+    "thinking": 6192,
+    "turns": 4,
+    "peak_context": 27161,
+    "first_turn": 7644,
+    "read_chars": 30562,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     15048,
+     13625,
+     658,
+     561,
+     524,
+     146
+    ]
+   },
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "source-applicability suzhou-enwiki",
+    "fresh": 13871,
+    "cached": 38452,
+    "output": 2818,
+    "thinking": 1356,
+    "turns": 5,
+    "peak_context": 15461,
+    "first_turn": 6876,
+    "read_chars": 16238,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     12920,
+     2416,
+     755,
+     147
+    ]
+   },
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "record-format water 170",
+    "fresh": 9741,
+    "cached": 50982,
+    "output": 8840,
+    "thinking": 5341,
+    "turns": 4,
+    "peak_context": 17952,
+    "first_turn": 9141,
+    "read_chars": 17082,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     15876,
+     681,
+     525
+    ]
+   }
+  ]
+ },
+ {
+  "window": "water 6",
+  "main": {
+   "fresh": 42057,
+   "cached": 1333456,
+   "output": 11755,
+   "thinking": 3753,
+   "turns": 28,
+   "peak_context": 69458
+  },
+  "agents": []
+ },
+ {
+  "window": "water 7",
+  "main": {
+   "fresh": 21020,
+   "cached": 1280087,
+   "output": 7439,
+   "thinking": 1925,
+   "turns": 16,
+   "peak_context": 90446
+  },
+  "agents": [
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "re-check quote water 170",
+    "fresh": 5866,
+    "cached": 26942,
+    "output": 206,
+    "thinking": 51,
+    "turns": 3,
+    "peak_context": 12581,
+    "first_turn": 7845,
+    "read_chars": 9616,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     9549,
+     67
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "re-check quote water 010",
+    "fresh": 4078,
+    "cached": 33505,
+    "output": 2263,
+    "thinking": 917,
+    "turns": 4,
+    "peak_context": 10791,
+    "first_turn": 7741,
+    "read_chars": 4468,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     3115,
+     887,
+     466
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "re-check quote water 170 (complete)",
+    "fresh": 7108,
+    "cached": 14893,
+    "output": 3831,
+    "thinking": 2471,
+    "turns": 2,
+    "peak_context": 13825,
+    "first_turn": 8176,
+    "read_chars": 12170,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     12170
+    ]
+   }
+  ]
+ },
+ {
+  "window": "water 8",
+  "main": {
+   "fresh": 938,
+   "cached": 90444,
+   "output": 903,
+   "thinking": 34,
+   "turns": 1,
+   "peak_context": 91382
+  },
+  "agents": []
+ }
+]

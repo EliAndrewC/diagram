@@ -4,25 +4,8 @@ directory's CLAUDE.md for the index. Tests for `settlement/structures/fixtures.p
 import pytest
 
 from l7r.diagram.settlement import Settlement
-from l7r.diagram.settlement.structures.fixtures._helpers import caption_room, first_clear_seat, kosatsuba_anchor
+from l7r.diagram.settlement.structures.fixtures._helpers import kosatsuba_anchor
 from tests.settlement._builders import _crop_settlement, _town
-
-
-def test_kosatsuba_records_a_blocking_struct():
-    # the notice board records its manifest entry at true size (~12x5 ft) and reserves its
-    # verge (a later pack must not bury the board)
-    s = _town()
-    z = s.kosatsuba(500, 500, rot=15)
-    kb = s.M["kosatsuba"][0]
-    assert (kb["x"], kb["y"], kb["w"], kb["h"], kb["rot"]) == (500, 500, 12, 5, 15) and z > 0
-    assert (kb["vw"], kb["vh"]) == (12, 5)  # at 1 ft/px the true frame already clears the marker floor
-    assert not s._fits(500, 500, 20, 20)
-    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading M["labels"]
-    assert s.M["labels"][-1][1] > 500  # default label sits BELOW the board
-    s._labels_pending = True  # the phase above drained; re-open it for the second board
-    s.kosatsuba(800, 500, label_above=True)  # gate-adjacent boards label ABOVE (clear of the gate)
-    s.place_labels()
-    assert s.M["labels"][-1][1] < 500
 
 
 def test_place_kosatsuba_reads_road_and_lane_routes_and_skips_degenerate_segments():
@@ -67,37 +50,6 @@ def test_place_punishment_spot_skips_a_degenerate_route_segment():
     assert s.place_punishment_spot() is not None
 
 
-def test_pick_caption_seat_takes_the_nearest_seat_that_clears_the_ways() -> None:
-    from l7r.diagram.settlement.structures.fixtures import pick_caption_seat
-
-    seats = [(100.0, 0.0), (20.0, 0.0), (5.0, 0.0)]
-    # every seat is legal; the two far ones clear the lane bar, the nearest one does not
-    clearance = {(100.0, 0.0): 9.0, (20.0, 0.0): 9.0, (5.0, 0.0): 0.5}
-    got = pick_caption_seat(seats, (0.0, 0.0), lambda _q: 1.0, 99.0, lambda q: clearance[q], 2.0)
-    assert got == (20.0, 0.0), "nearest of the seats that CLEAR, not nearest overall"
-
-
-def test_pick_caption_seat_falls_back_to_the_best_clearance_when_nothing_clears() -> None:
-    """The board is placed even when its caption is hemmed - `labels_clear_of_other_buildings` reports
-    that rather than the siter hiding it - so the fallback arm has to choose, and it chooses the
-    roomiest legal seat regardless of distance."""
-    from l7r.diagram.settlement.structures.fixtures import pick_caption_seat
-
-    seats = [(5.0, 0.0), (200.0, 0.0)]
-    clearance = {(5.0, 0.0): 0.4, (200.0, 0.0): 1.9}
-    got = pick_caption_seat(seats, (0.0, 0.0), lambda _q: 1.0, 99.0, lambda q: clearance[q], 2.0)
-    assert got == (200.0, 0.0), "nothing clears the 2 ft bar, so the roomiest seat wins on clearance alone"
-
-
-def test_pick_caption_seat_keeps_every_seat_when_the_hug_cap_would_leave_none() -> None:
-    """`_legal ... or _seats`: a caption that hugs nothing within the cap still needs a seat."""
-    from l7r.diagram.settlement.structures.fixtures import pick_caption_seat
-
-    seats = [(5.0, 0.0), (9.0, 0.0)]
-    got = pick_caption_seat(seats, (0.0, 0.0), lambda _q: 500.0, 10.0, lambda _q: 8.0, 2.0)
-    assert got in seats
-
-
 def test_caption_lane_clearance_reads_a_tread_through_the_caption_box():
     """Three verdicts, and only the middle one is reached by a rolled map. A lane VERTEX inside the box
     is the worst case and returns a negative clearance (the tread's own half-width); a lane CROSSING an
@@ -126,9 +78,8 @@ def test_a_notice_board_with_no_caption_is_sitable_anywhere():
 
 
 def test_a_notice_board_hemmed_on_every_side_still_gets_its_caption():
-    """A board with nowhere clear to put its caption is still placed and still labeled - the seat falls
-    back to the default below (or above, when the caller has said so), and
-    `labels_clear_of_other_buildings` reports it rather than the siter hiding the board."""
+    """A board with nowhere clear to put its caption is still placed and still labeled (feature 266, the GM: "we'll
+    treat labels as mandatory") - every seat covers a building, and the seat covering the fewest wins."""
     s = Settlement(1000, 1000, seed=1)
     s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
     for dx in range(-150, 151, 30):
@@ -141,7 +92,8 @@ def test_a_notice_board_hemmed_on_every_side_still_gets_its_caption():
     s.place_labels()  # feature 157: the LABEL PHASE seats and draws it
     seat = [frag for frag in s.toplabels if "notice board" in frag]
     assert len(seat) == 1, "the caption is drawn all the same"
-    assert 'y="514"' in seat[0], "on the default seat below the board - the fallback, since nothing cleared"
+    rec = s.M["labels"][-1]
+    assert rec[6] == [494.0, 497.5, 506.0, 502.5], "it records the board it names"
 
 
 def test_the_board_can_be_sited_on_a_manifest_that_records_runs_but_no_lane_records() -> None:
@@ -280,39 +232,6 @@ def test_the_placement_is_seeded_and_reproduces() -> None:
         resolve_knob("kosatsuba_seat", 3, {"has_approach": False, "has_headman_house": False}, {"kosatsuba_seat": "entrance"})
 
 
-def test_the_caption_fallback_still_prefers_the_board_s_own_side() -> None:
-    """THE PATH MOST BOARDS TAKE HAD NO WAY-SIDE TERM AT ALL (settlement-review x3, feature 154).
-
-    `pick_caption_seat` applies `blocked` - "does this seat sit across a way from the board it names" -
-    among the seats that clear the lane target. When NO seat clears it, which is the case for every
-    board standing close beside a way, it used to fall back to `max(legal, key=box_clearance)` and skip
-    the term entirely. Sawada shipped a caption with the full tread between it and its own board three
-    reviews running, while the board's own side was measurably clear.
-
-    The degradation is the same as everywhere else in this function: prefer unblocked, and drop the
-    term rather than leave the map captionless when nothing is."""
-    from l7r.diagram.settlement.structures.fixtures import pick_caption_seat
-
-    near, across, far = (0.0, -10.0), (0.0, 10.0), (0.0, -40.0)
-    seats = [across, near, far]
-    at = (0.0, -20.0)
-
-    # nothing reaches the lane target, so every seat takes the fallback; `across` clears best
-    def _clearance(q):
-        return {across: 9.0, near: 3.0, far: 1.0}[q]
-
-    picked = pick_caption_seat(seats, at, lambda _q: 0.0, 100.0, _clearance, 50.0, lambda q: q is across)
-    assert picked is near, "the fallback must not take the seat across the way from the board"
-
-    # ...and when EVERY seat is across, the term drops rather than the caption
-    every = pick_caption_seat(seats, at, lambda _q: 0.0, 100.0, _clearance, 50.0, lambda _q: True)
-    assert every is across, "with nothing unblocked, best clearance wins rather than no caption at all"
-
-    # the satisfied path is unchanged: a seat that clears the target still wins on nearness
-    ok = pick_caption_seat(seats, at, lambda _q: 0.0, 100.0, lambda _q: 99.0, 50.0, lambda q: q is across)
-    assert ok is near, "nearest among the seats that clear, with the blocked one refused"
-
-
 def test_kosatsuba_anchor_walks_the_imperial_road_and_ignores_a_run_too_short_to_walk() -> None:
     """Feature 174: the two unreached statements in the fixtures helpers.
 
@@ -333,196 +252,46 @@ def test_kosatsuba_anchor_walks_the_imperial_road_and_ignores_a_run_too_short_to
     assert kosatsuba_anchor({"houses": houses, "roads": [{"pts": [(500.0, 0.0)]}]}, "entrance") is None, "a one-point run alone leaves nothing to walk"
 
 
-def test_the_caption_ladders_rung_is_the_same_question_with_a_lower_bar_each_time() -> None:
-    """Feature 174, and the doctrine's own remedy (GM 2026-08-28) for a branch no constructed map
-    could reach: `first_clear_seat` was lifted out of `_draw_board_caption`, where the identical
-    expression appeared FOUR times and the rung that SUCCEEDS at the floor after failing at the
-    target sat behind a narrow band of clearance that eight map geometries failed to hit.
-
-    As a lifted function it is three lambdas. All four outcomes are asserted:
-      - a seat that passes everything is taken;
-      - one over the hug cap is skipped;
-      - one that is blocked is skipped;
-      - and the FLOOR rung finds a seat the TARGET rung refused, which is the whole point of the
-        ladder having a second rung at all.
-    """
-    seats = [("far", 90.0, False, 30.0), ("blocked", 5.0, True, 30.0), ("middling", 5.0, False, 12.0), ("good", 6.0, False, 30.0)]
-    hug = lambda q: q[1]  # noqa: E731 - three one-line probes read better inline than as defs
-    blocked = lambda q: q[2]  # noqa: E731
-    clearance = lambda q: q[3]  # noqa: E731
-
-    assert first_clear_seat(seats, hug, 20.0, blocked, clearance, 20.0)[0] == "good", "the first seat clearing every bar"
-    assert first_clear_seat(seats, hug, 20.0, blocked, clearance, 40.0) is None, "nothing clears an impossible target"
-
-    # THE SECOND RUNG: the same seats, judged at the floor instead of the target. "middling" was
-    # refused at 20 and is taken at 10 - "give up the MARGIN, never the 2 ft the rule asks".
-    assert first_clear_seat(seats, hug, 20.0, blocked, clearance, 10.0)[0] == "middling", "the floor rung finds what the target refused"
-    assert first_clear_seat([], hug, 20.0, blocked, clearance, 1.0) is None, "and no seats at all is no seat"
-
-
-def test_the_ladders_rung_SHORT_CIRCUITS_in_the_order_the_four_call_sites_relied_on() -> None:
-    """The property the lift had to preserve and the test above does not check (found by review):
-    the predicates run `hug <= cap`, then `not blocked`, then `clearance >= want`, and each is only
-    asked if the one before it passed.
-
-    It matters because `_box_clearance` is the expensive one - it calls `_caption_lines` and walks
-    every lane - so a reordering would make the caption search markedly slower on exactly the maps
-    that have the most lanes. Counted rather than asserted by outcome, because a reordering gives
-    the same ANSWER and only costs time.
-    """
-    calls: list[str] = []
-
-    def hug(q):
-        calls.append(f"hug{q}")
-        return 90.0 if q == 0 else 5.0
-
-    def blocked(q):
-        calls.append(f"blocked{q}")
-        return q == 1
-
-    def clearance(q):
-        calls.append(f"clearance{q}")
-        return 30.0
-
-    assert first_clear_seat([0, 1, 2], hug, 20.0, blocked, clearance, 20.0) == 2
-    assert calls == ["hug0", "hug1", "blocked1", "hug2", "blocked2", "clearance2"], calls
-    assert "blocked0" not in calls, "a seat over the hug cap is never asked whether it is blocked"
-    assert "clearance1" not in calls, "and a blocked seat is never measured - the expensive probe is last"
-
-
-def test_a_caption_seat_falls_back_to_the_LEAST_blocked_not_to_the_clearest_lane() -> None:
-    """When every seat is blocked the term used to be dropped entirely, and the choice fell through to pure
-    lane clearance - so a seat touching a roof scored as well as one standing clear of everything.
-
-    Kuwabata shipped exactly that: "notice board" came to rest 0.02 px off a byre and 38.7 ft from the board
-    it named, with every check in the tree green (settlement-review 2026-09-12). The fallback now degrades
-    along the axis the term is about, which is how far the caption stands from the nearest solid feature."""
-    from l7r.diagram.settlement.structures.fixtures._helpers import pick_caption_seat
-
-    at = (0.0, 0.0)
-    touching, roomy = (10.0, 0.0), (0.0, 10.0)
-    seats = [touching, roomy]
-    gaps = {touching: 0.02, roomy: 3.5}
-    # the touching seat has the BETTER lane clearance, which is what the old fallback ranked on
-    lanes = {touching: 40.0, roomy: 9.0}
-    picked = pick_caption_seat(
-        seats,
-        at,
-        hug=lambda q: 1.0,
-        hug_cap=100.0,
-        box_clearance=lambda q: lanes[q],
-        lane_target=90.0,  # unreachable, so every seat takes the fallback path
-        blocked=lambda q: True,  # ...and every seat is blocked
-        gap=lambda q: gaps[q],
-    )
-    assert picked == roomy, "with nothing unblocked, the seat furthest from a roof wins"
-
-    # and the term still yields to an UNBLOCKED seat, which is the older rule it must not outrank
-    picked = pick_caption_seat(
-        seats,
-        at,
-        hug=lambda q: 1.0,
-        hug_cap=100.0,
-        box_clearance=lambda q: lanes[q],
-        lane_target=90.0,
-        blocked=lambda q: q == roomy,
-        gap=lambda q: gaps[q],
-    )
-    assert picked == touching, "an unblocked seat is taken even where the blocked one stands further off"
-
-
-def test_an_approach_that_stops_short_has_its_entrance_at_the_handover() -> None:
-    """Feature 261 (settlement-review of Mizuguchi): a connector that never comes within the entrance reach of a
-    dwelling still has an entrance - its point nearest the buildings - rather than none."""
-    M = {"houses": [{"x": 0.0, "y": 0.0}], "lanes": [{"connector": True, "pts": [[1000.0, 0.0], [300.0, 0.0], [150.0, 0.0]]}]}
-    assert kosatsuba_anchor(M, "entrance") == (150.0, 0.0)
-    assert kosatsuba_anchor({"houses": [{"x": 0.0, "y": 0.0}], "lanes": [{"connector": True, "pts": [[1.0, 1.0]]}]}, "entrance") is None, "a one-point run is no approach"
-
-
-def test_the_handover_anchors_the_entrance_and_every_departure_is_walked_to_it() -> None:
-    """Feature 261 FR-015: where a hamlet's connector hands over to its lanes, that junction is the entrance anchor;
-    `departure_routes` walks each dwelling's way out through it and on along the connector, and `routes_missed` counts
-    the departures that never come near a seat. A connector meeting no other way is not a handover."""
-    from l7r.diagram.settlement.structures.fixtures import departure_routes, kosatsuba_anchor, kosatsuba_handover, routes_missed
-
-    houses = [{"x": 100.0, "y": 60.0}, {"x": 100.0, "y": -60.0}, {"x": 5000.0, "y": 5000.0}]
-    M = {
-        "houses": houses,
-        "lanes": [
-            {"connector": True, "pts": [(-400.0, 0.0), (0.0, 0.0)]},
-            {"pts": [(0.0, 0.0), (100.0, 50.0)]},
-            {"pts": [(0.0, 0.0), (100.0, -50.0)]},
-            {"pts": [(1.0, 1.0)]},
-        ],
-    }
-    assert kosatsuba_handover(M) == (0.0, 0.0) and kosatsuba_anchor(M, "entrance") == (0.0, 0.0)
-    routes = departure_routes(M)
-    assert len(routes) == 2, "the far dwelling is on no way and walks no route"
-    assert routes_missed(routes, -50.0, 5.0, 20.0) == 0, "a board on the approach is passed by every departure"
-    assert routes_missed(routes, 90.0, 45.0, 20.0) == 1, "a board on one branch is missed by the other"
-    assert kosatsuba_handover({"houses": [], "lanes": M["lanes"]}) is None
-    alone = {"houses": houses, "lanes": [{"connector": True, "pts": [(-400.0, 0.0), (0.0, 0.0)]}, {"connector": True, "pts": [(5.0, 5.0)]}]}
-    assert kosatsuba_handover(alone) is None and departure_routes(alone) == []
-
-
-def _room(**kw):
-    """`caption_room` for a board at (100, 100) turned 80 degrees along a north-south lane at x = 90, with a 20 px caption."""
-    args = {"fabric": [], "lanes": [{"pts": [[90, 0], [90, 200]], "w": 3}], "view": [0, 0, 200, 200], "hug_cap": 24.0, "feature_gap": 4.0, "lane_floor": 2.0}
-    args.update(kw)
-    return caption_room(100.0, 100.0, 80.0, 6.0, 2.5, 20.0, args["fabric"], args["lanes"], args["view"], args["hug_cap"], args["feature_gap"], args["lane_floor"], canopy=args.get("canopy"))
-
-
-def test_caption_room_finds_the_seat_beside_the_lane_the_caption_runs_along():
-    # feature 261: the tilted caption runs BESIDE its lane - the siter must see what the placer will draw
-    assert _room()
-
-
-def test_caption_room_refuses_what_the_placer_refuses():
-    # off the page, too far from the board to name it, on a roof, across the way from the board, or on the tread
-    assert not _room(view=[0, 0, 10, 10])
-    assert not _room(hug_cap=-1.0)
-    assert not _room(fabric=[[(0.0, 0.0), (200.0, 0.0), (200.0, 200.0), (0.0, 200.0)]])
-    assert not _room(lanes=[{"pts": [[80, 0], [80, 200]]}, {"pts": [[112, 0], [112, 200]], "w": 30}])
-    assert not _room(lane_floor=1e9)
-    assert _room(view=None, fabric=[[(500.0, 500.0), (510.0, 500.0), (510.0, 510.0), (500.0, 510.0)]])  # a far roof is pruned, not tested
-
-
-def test_a_level_caption_is_judged_by_its_upright_box_against_the_lanes():
-    # feature 261: only a TILTED caption skips the upright record box; a level one is still measured by it
+def test_kosatsuba_records_a_blocking_struct():
+    # the notice board records its manifest entry at true size (~12x5 ft) and reserves its
+    # verge (a later pack must not bury the board)
     s = _town()
-    s.M["lanes"] = [{"pts": [[440, 470], [560, 470]], "w": 3}]
-    s.kosatsuba(500, 500, rot=0)
-    s.place_labels()
-    lab = s.M["labels"][-1]
-    assert lab[5] == "notice board" and not (len(lab) > 7 and lab[7])
+    z = s.kosatsuba(500, 500, rot=15)
+    kb = s.M["kosatsuba"][0]
+    assert (kb["x"], kb["y"], kb["w"], kb["h"], kb["rot"]) == (500, 500, 12, 5, 15) and z > 0
+    assert (kb["vw"], kb["vh"]) == (12, 5)  # at 1 ft/px the true frame already clears the marker floor
+    assert not s._fits(500, 500, 20, 20)
+    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading M["labels"]
+    rec = s.M["labels"][-1]
+    # feature 266: the standard's first position - upper right in the board's own turned frame - at its angle
+    assert rec[5] == "notice board" and rec[7] == 15
 
 
-def test_a_level_board_whose_caption_ring_is_off_the_page_is_not_sitable():
-    # feature 261: a seat whose caption would clip past the sheet's edge does not make the board sitable
-    s = Settlement(1000, 1000, seed=1)
-    s.meta(name="T", scale="hamlet", ftpx=1)
-    s.M["road"] = [[100, 300], [900, 300]]
-    s.M["meta"]["view"] = [0, 0, 5, 5]
-    assert s.place_kosatsuba() is not None
-
-
-def test_a_caption_on_a_crown_is_on_the_canopy_and_caption_room_can_refuse_it():
-    """Feature 261 (settlement-review of Kuwabata): the caption's drawn quad and halo, not a disc round its center."""
+def test_a_caption_on_a_crown_is_on_the_canopy():
+    """Feature 261 (settlement-review of Kuwabata): the caption's drawn quad and its halo, not a disc round its center."""
     from l7r.diagram.settlement.structures.fixtures._helpers import quad_on_canopy
 
     quad = [(0.0, 0.0), (50.0, 0.0), (50.0, 8.0), (0.0, 8.0)]
     assert quad_on_canopy(quad, lambda x, y, pad: [(25.0, 4.0, 5.0)]), "a crown under the words"
     assert quad_on_canopy(quad, lambda x, y, pad: [(48.0, 14.0, 5.0)]), "a crown the halo reaches at one end"
     assert not quad_on_canopy(quad, lambda x, y, pad: [(25.0, 40.0, 5.0)])
-    everywhere = lambda x, y, pad: [(x, y, 500.0)]  # noqa: E731 - a canopy over the whole map
-    assert not _room(canopy=everywhere) and _room(canopy=lambda x, y, pad: [])
 
 
-def test_a_level_board_under_a_canopy_still_takes_a_seat():
-    # feature 261: a level board whose caption ring clears everything but the crowns ranks below one clear of them, and
-    # is still offered - a board may stand under trees (the GM, 2026-08-29)
+def test_a_board_under_a_canopy_still_takes_a_seat():
+    # feature 261: a board whose caption would lie on crowns ranks below one clear of them, and is still offered - a
+    # board may stand under trees (the GM, 2026-08-29)
     s = Settlement(1000, 1000, seed=1)
     s.meta(name="T", scale="hamlet", ftpx=1)
     s.M["road"] = [[100, 300], [900, 300]]
     s.M["tree_crowns"] = [500.0, 300.0, 600.0]
+    assert s.place_kosatsuba() is not None
+
+
+def test_a_board_whose_caption_cannot_fit_is_not_sitable():
+    # feature 261: the siter asks the one placer, and a caption the placer can only seat on an obstacle or at a leader's
+    # distance does not make the board's seat sitable - the board is still placed (a board is never dropped)
+    s = Settlement(400, 400, seed=1)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    s.M["road"] = [[20, 200], [380, 200]]
+    s.M["houses"] = [{"x": float(x), "y": float(y), "w": 30.0, "h": 30.0, "rot": 0.0} for x in range(40, 380, 34) for y in (170, 230)]
     assert s.place_kosatsuba() is not None

@@ -622,3 +622,20 @@ def test_a_watercourse_registers_the_corridor_the_garden_consults() -> None:
     s.channel((200.0, 300.0), (800.0, 300.0), frm={"kind": "stream"}, to={"kind": "field", "name": "f"})
     assert len(s.corridors) > before, "a drawn channel must register a no-build corridor"
     assert s._near_corridor(500.0, 300.0), "and that corridor covers the water it protects"
+
+
+def test_commons_grass_reaches_only_a_few_paces_under_a_wood():
+    # GM 2026-09-27 (Inashiro): highlighting the scrub showed broad swaths of it under the windbreak - the woods
+    # were handed the marsh's 46 ft reed feather. A WOOD gets WOOD_FRINGE_FT; a marsh keeps its wide one.
+    from l7r.diagram.settlement.land.cover import WOOD_FRINGE_FT
+
+    wood = [(300, 100), (700, 100), (700, 600), (300, 600)]
+    s = _nuc_village()
+    before = len(s.out)
+    s.commons([(60, 60), (560, 60), (560, 640), (60, 640)], role="pasture", woods=[wood])
+    s.flush_blade_groups()
+    pts = _scatter_base_points(s.out[before:])
+    assert any(gx < 300 for gx, _ in pts), "the scrub still stands outside the wood"
+    assert any(250 <= gx < 300 and 100 <= gy <= 600 for gx, gy in pts), "and runs right up to its edge"
+    deep = [(gx, gy) for gx, gy in pts if gx > 300 + s.px(WOOD_FRINGE_FT) + 0.5 and 100 <= gy <= 600]
+    assert not deep, deep[:5]

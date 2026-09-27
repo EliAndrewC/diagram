@@ -47,6 +47,20 @@ def test_parse_svg_classifies_interior_building_open_and_glyphs() -> None:
     assert len(plan.glyphs) == 2  # r=5 circle + ellipse; r=2 ignored
 
 
+def test_a_room_floor_inside_its_building_is_not_a_second_building() -> None:
+    # feature 264: each labeled room is its own fill of the building's color, drawn inside it; a same-fill rect
+    # inside a building folds into it, while a differently filled one (a dais) or one poking out stays itself
+    svg = _svg(
+        _rect(0, 0, 300, 300, COURT),
+        _rect(10, 10, 200, 90, "#DDB87A"),
+        _rect(10, 10, 100, 90, "#DDB87A"),  # a room: folded
+        _rect(110, 10, 100, 90, "#DDB87A"),  # a room: folded
+        _rect(150, 50, 100, 90, "#DDB87A"),  # pokes out: a building of its own
+        _rect(20, 20, 60, 60, "#C9A57A"),  # another fill: a building of its own
+    )
+    assert [(b.x, b.y, b.w) for b in pa.parse_svg(svg).buildings] == [(10, 10, 200), (150, 50, 100), (20, 20, 60)]
+
+
 def test_parse_svg_raises_without_a_declared_precinct() -> None:
     """Feature 254: the precinct is DECLARED with id="precinct" - a court-earth fill alone no longer makes one."""
     with pytest.raises(ValueError, match='id="precinct"'):

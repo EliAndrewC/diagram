@@ -1,0 +1,37 @@
+<h2 id="a-bund-runs-on-or-it-turns-for-a-reason---it-does-not-step-sideways-and-carry-on">A bund runs on, or it turns for a reason - it does not step sideways and carry on</h2>
+<!-- Grounds: waterfields/banks.py::jog_steps; waterfields/seams.py::_seam_cuts, _unjog -->
+<!-- Evidence: follows from the aze's construction and maintenance and the kochi seiri framing, both in 'Paddy plots - irregular patchwork' -->
+<p><strong>Sources:</strong> none that can be read - every footnote here is an absence note, and the <em>aze</em> this rests on is sourced in <a href="#paddy-plots---irregular-patchwork-and-why-the-grid-is-anachronistic">Paddy plots - irregular patchwork</a>.</p>
+<p><em>What the research found.</em> Nothing new about the <em>aze</em> - this is the <a href="#bunds-are-shared-and-the-fabric-is-continuous">shared-bund</a> finding read one
+step further, and it is worth writing down separately because the two rules pull in opposite
+directions and a reader who has only one of them will break the other. <a href="#bunds-are-shared-and-the-fabric-is-continuous">Bunds are shared</a> finds real
+paddy fabric odd-shaped and piecemeal, and <a href="#paddy-plots---irregular-patchwork-and-why-the-grid-is-anachronistic">Paddy plots - irregular patchwork</a> finds STRAIGHT rectangular plots
+the modern land-consolidation artifact: <strong>the organic waver is period-correct and must not be
+cleaned up.</strong> What that permits is a bund that BENDS, a basin that is a trapezoid, and a wall that
+runs out at a T-junction. What it does not permit, and what nothing in the record produces, is a
+wall that runs, hops a few feet SIDEWAYS, and carries on parallel to itself.</p>
+<p>Three reasons, all of them the <em>aze</em>'s own economics. The bill for a bund is its LENGTH, since
+<em>azenuri</em> is re-plastering along it every spring; a jog buys the extra run between two corners for
+nothing. Corners are the part of a puddled ridge that slumps and so the part that is re-plastered
+hardest, and a jog buys two of them.<sup class="fn" data-note="paddy-plots---irregular-patchwork-and-why-the-grid-is-anachronistic-2"></sup> And the ground the jog trades is worth nothing to either
+party: it sits at the same level, floods from the same offtake and is reachable from either basin,
+so no farmer pays a wall's maintenance to move a boundary a few feet sideways along its own line.<sup class="fn" data-note="paddy-plots---irregular-patchwork-and-why-the-grid-is-anachronistic-3"></sup>
+Where a real parcel boundary DOES step there is a thing at the corner - a ditch, a path, a rock, an
+inherited holding - and at the scale these maps are drawn we draw those things, so a step with
+nothing at its corner is not a boundary at all.<sup class="fn" data-note="paddy-plots---irregular-patchwork-and-why-the-grid-is-anachronistic-4"></sup></p>
+<p><em>The decision it drove (GM 2026-08-18, on Inashiro:</em> "the earthen wall is kind of going in a
+southward direction, and then instead of just continuing on and meeting at the four way
+intersection between the north south earthen walls and the east west earthen walls, it just goes
+sharply to the left before going down, thus making these extremely irregular shapes. This really,
+really looks like a rendering error"<em>).</em> Measured, it was one. The fabric carries single, small, isolated corners.</p>
+<!-- Measured, it was one: snapshotting the seam-closing pass's input and output gives 0 steps on the 543 carved rings and 26 on the 634 it hands back, and every frozen field from before that pass existed scores 0. (the pass is close_seams; the frozen fields are the pre-close_seams fixtures in pool/regressions/) -->
+<!-- THE MECHANISM, which is a pitch nothing else on the map uses. A thin residual strip between two carved rows is one connected scrap. The planting step gridded a pocket from the POCKET'S OWN bounding box at the design cell's width - 48 ft on a hamlet - and that is a position at which NEITHER row breaks, so every offcut it handed back landed mid-basin on both sides. The absorb step then welded them alternately into the row above and the row below, and the wall between the rows came out a staircase. (the planting step is _plant, the cell width is plot_across, the absorb step is _absorb) -->
+<!-- Generation, in three parts, and the first is the one that matters (counts are steps at the rule's own thresholds across the four scripted hamlets, 26/37/20/24 before):
+(a) The cut - cut a pocket where the fabric already breaks. A pocket's outline IS the surrounding basins' outline, so its corners are where the rows either side of it end; cutting there means an offcut lines up with the basin it will be welded into. The even spacing still governs and a neighbor's corner only wins within 0.35 of a cell of it, which is a MEASURED ceiling: at 0.40 the cut follows the neighbors far enough to move the fan's envelope, and Kashikawa's dry hem - tiled against that envelope - shifts onto a footbridge.
+(b) The absorb step's jog guard - refuse a weld that adds a step to its host, ranked in the same ladder that already refuses a needle or a lump. Alone it takes 26/37/20/24 to 23/33/17/16: it can only CHOOSE a host, and the steps that survive it are the ones where the ground had only one home.
+(c) The repair - repair what neither could avoid, by trading the corner between the two basins that share the wall so the hop becomes a bend, or by flattening a whole tab so the wall runs on straight. Its refusals are the rules it would otherwise break, each measured breaking one.
+the three parts are _seam_cuts, _absorb's jog guard and _unjog (waterfields/seams.py); _unjog's refusals are listed at the function -->
+<!-- Together: 0 / 1 / 5 / 1 steps, and - the number that answers the report - no plot ring on any of the four carries more than one step, against 6 / 9 / 4 / 7 rings that did. tools/jogs.py reported them on demand and future-work/farming-communities.md carries the residue. -->
+<p><em>Disclosed departure.</em> A long sideways offset is not judged a step at all: past a certain length the
+offset is a LIMB and the parcel is an L, which is exactly the honest odd shape <a href="#paddy-plots---irregular-patchwork-and-why-the-grid-is-anachronistic">Paddy plots - irregular patchwork</a> describes.</p>
+<!-- Disclosed departures, in full: (1) The rule is DIRECTED - it compares headings over the full circle, not modulo 180 degrees - because a plain thin rectangle is two parallel runs a short link apart, and modulo 180 every narrow basin the fabric legitimately carries fires on its own end wall (78 hits against 28 on Inashiro). (2) The hop must turn HARD at both ends, 55 degrees or more, or a gently CURVING bund sampled into segments fires all along it - Kuwabata's long curved parcels reported 57 steps on 43 rings without that clause and 0 with it, Enokida 106 on 188. (3) A hop longer than the link cap is not judged at all: past that the offset is a LIMB and the parcel is an L, which is exactly the honest odd shape 'Paddy plots - irregular patchwork' describes. -->

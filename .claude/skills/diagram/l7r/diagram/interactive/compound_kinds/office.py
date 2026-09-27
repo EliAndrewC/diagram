@@ -16,8 +16,8 @@ from ..classes import Kind
 class OfficeHall(Kind):
     """
     What: The working heart of the compound: a long hall backing onto the internal wall, its front band the
-    magistrate's dais over the hearing court, and behind a screen its day office for tax and case business
-    and the magistrate's official study.
+    magistrate's dais over the hearing court, and behind a screen its working rooms - the day office and the
+    official study, each its own feature.
 
     Why: At Takayama, the surviving intendant's office, the office wing - reception rooms, day office and
     official study - is the dominant public building, and the hearing court is one room of that block. Daily
@@ -34,7 +34,7 @@ class OfficeHall(Kind):
     working block, with no measured office wing of a jin'ya behind it.
 
     Name: office hall
-    Covers: the office hall's block, its day office and official study, and its label
+    Covers: the office hall's block, its outline and its front band
     Label: accurate
     Sources: takayama-jinya-jawiki, takayama-jinya-city, sado-bugyosho-fires
     Entry: research/buildings.html - 'The courtroom is a room of the office hall, not a freestanding stage', 'Administrative culture is JAPAN-first for compound interiors', 'The compound has a size HIERARCHY, not just individual sizes', 'Fire discipline: halls burn, kura endure'
@@ -46,7 +46,7 @@ class OfficeHall(Kind):
 class MagistratesDais(Kind):
     """
     What: The raised tatami band along the office hall's front, overlooking the hearing court: the
-    magistrate's seat at its center, with a clerk's place to either side.
+    magistrate's seat at its center, between the clerks' seats.
 
     Why: A raised hall over kneeling litigants is common to both traditions this setting draws on, Japanese
     and Chinese. The dais is not a pavilion of its own but the front of a deeper office hall, so the
@@ -81,7 +81,7 @@ class ClerksRoom(Kind):
     room of the office hall or as a building of its own.
 
     Name: clerks' room
-    Covers: the clerks' room inside the office hall, or the clerks' own small building beside it
+    Covers: the clerks' room inside the office hall, its floor and its label, or the clerks' own small building beside it
     Label: guess
     Sources: tedai-jawiki, xuli-zhwiki
     Entry: research/buildings.html - 'Clerks are few, local, and heimen'
@@ -92,7 +92,7 @@ class ClerksRoom(Kind):
 
 class TaxArchive(Kind):
     """
-    What: A sealed storehouse (kura) of thick white-plastered earth with a heavy door, holding the county's
+    What: A sealed storehouse (kura) of thick white-plastered earth, holding the county's
     ledgers - its tax base on paper - and serving as the strongroom for the coin and valuables the office
     holds.
 
@@ -118,7 +118,7 @@ class TaxArchive(Kind):
 
 class Granary(Kind):
     """
-    What: A raised storehouse with slatted vents, standing on short stilts, where the tax paid in grain waits
+    What: A raised storehouse with slatted vents, where the tax paid in grain waits
     on its way to the governor: rice in straw bales above all, with a share of other grain beside it.
 
     Why: Tax rice flowed from the village granaries through the magistrate's compound toward central stores,
@@ -280,8 +280,8 @@ class TallyOffice(Kind):
 
 class WeighingFloor(Kind):
     """
-    What: An open, roofed work floor beside the tally office where bales are weighed on a balance beam before
-    the tally is written.
+    What: An open, roofed work floor beside the tally office where bales are weighed before the tally is written;
+    its balance and the bales on it are each their own feature.
 
     Why: The charcoal bale had no standard weight in the traditional Japanese system, unlike rice, and a
     commodity with no standard bale cannot be traded by count: it must be weighed at the point of sale. That
@@ -291,10 +291,127 @@ class WeighingFloor(Kind):
     Note: The weighing floor and the reason for it follow the record.
 
     Name: weighing floor
-    Covers: the covered weighing floor, its balance beam and bales, and its label
+    Covers: the covered weighing floor, its posts and its label
     Label: accurate
     Sources: wagner-ming-iron, tonya-enwiki, fao-charcoal-safety
     Entry: research/urban-features.html - 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'
     """
 
     key = "weighing floor"
+
+
+# ---- the parts of the office (feature 264: a thing drawn inside a feature is its own kind) ----------------------
+
+
+class DayOffice(Kind):
+    """
+    What: The day office (goyoba), the room of the office hall behind the dais where the county's daily business
+    is done - petitions received, orders written, accounts kept.
+
+    Why: The dais band is the front of a deeper hall, not a stage of its own: at Takayama the office wing holds the
+    day office and the official study behind the court face. With no room built for interrogation, a questioning
+    happens in the day office or the hearing court like any other business.
+
+    Note: The day office as a room of the office hall, behind the dais, follows the record.
+
+    Name: day office
+    Covers: the day office's floor and its label
+    Label: accurate
+    Sources: takayama-jinya-jawiki, takayama-jinya-city
+    Entry: research/buildings.html - 'The courtroom is a room of the office hall, not a freestanding stage', 'No interrogation room'
+    """
+
+    key = "day office"
+
+
+class OfficialStudy(Kind):
+    """
+    What: The official study, the magistrate's working room in the office hall, where papers are read and
+    judgments drafted.
+
+    Why: The magistrate's official work belongs on the office side of the line between state and home; the private
+    study in the residence is the wrong side of that line for official business, so the office hall keeps a
+    study of its own behind the dais.
+
+    Note: The official study as a room of the office hall follows the record.
+
+    Name: official study
+    Covers: the official study's floor and its label
+    Label: accurate
+    Sources: takayama-jinya-jawiki, takayama-jinya-city
+    Entry: research/buildings.html - 'The courtroom is a room of the office hall, not a freestanding stage'
+    """
+
+    key = "official study"
+
+
+class ClerksSeats(Kind):
+    """
+    What: The clerks' places on the dais band, one to either side of the magistrate's seat, where a hearing's
+    proceedings would be written down.
+
+    Why: A hearing is a matter of record: what the parties say and what the magistrate rules is taken down on the
+    spot by the few clerks the office keeps.
+
+    Note: the research record covers the clerks themselves, a few local commoners, but has no entry on who sat
+    beside the magistrate at a hearing or where, so the two seats flanking the dais, and their size, are a guess.
+
+    Name: clerks' seats
+    Covers: the two seats flanking the dais and their labels
+    Label: guess
+    Sources: not recorded
+    Entry: research/buildings.html (no dedicated entry - recorded as silent)
+    """
+
+    key = "clerks' seats"
+
+
+class KneelingPositions(Kind):
+    """
+    What: The marked places on the hearing court's sand where the parties to a case kneel before the dais -
+    witnesses, petitioners, the accused - each about the size of half a tatami mat.
+
+    Why: A raised hall over kneeling litigants is common to both traditions this setting draws on: the magistrate
+    sits above on the dais, the parties kneel below in the court, and the examination room and the court were
+    one paired feature of the office block.
+
+    Note: Kneeling litigants below the raised hall follow the record. The marks' size is this project's own
+    figure; and at Takayama the court they kneel in was paved with stone and roofed, where these plans draw open
+    sand.
+
+    Caveat: The marks' size is this project's own figure; and at Takayama the court they kneel in was paved with
+    stone and roofed, where these plans draw open sand.
+
+    Name: kneeling positions
+    Covers: the kneeling marks on the hearing court and their label
+    Label: accurate
+    Sources: henan-neixiang, neixiang-yamen-zhwiki, takayama-jinya-jawiki, takayama-jinya-city
+    Entry: research/buildings.html - 'Administrative culture is JAPAN-first for compound interiors', 'The courtroom is a room of the office hall, not a freestanding stage'
+    """
+
+    key = "kneeling positions"
+
+
+class GranaryStilts(Kind):
+    """
+    What: The posts that raise the granary's floor off the ground, drawn as small dark blocks at its foot.
+
+    Why: A grain storehouse keeps its floor raised: at the great rice stores on the river at Edo, the answer to
+    flood was the storehouse's own raised floor and a stone revetment, not distance from the water.
+
+    Note: A storehouse's raised floor follows the record. How the floor was raised - on posts, as drawn, or on a
+    stone base - is not in the record, and the one reason it gives, flood at a river quay, fits only a granary by
+    the water; why one away from a river keeps its floor raised is not recorded.
+
+    Caveat: How the floor was raised - on posts, as drawn, or on a stone base - is not in the record, and the one
+    reason it gives, flood at a river quay, fits only a granary by the water; why one away from a river keeps its
+    floor raised is not recorded.
+
+    Name: granary stilts
+    Covers: the posts at the granary's foot
+    Label: accurate
+    Sources: kuramae-jawiki, wheatbaku-asakusa-okura
+    Entry: research/cities/capitals.html - "The sluice's lifting frame"
+    """
+
+    key = "granary stilts"

@@ -1,0 +1,154 @@
+{
+ "feature": "266-label-placement-standard",
+ "plan_sha256": "7cae9df00dda372469cc6031da18b9832c5f7f3d92151f31ad3627084b614324",
+ "reviewed": "2026-09-27",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "design-package",
+   "summary": "One mode-neutral package l7r/diagram/labels/ with three adaptors",
+   "class": "within",
+   "why": "FR-001, FR-002"
+  },
+  {
+   "id": "design-positions",
+   "summary": "The eight ranked positions in the QGIS order, in the subject's upright frame",
+   "class": "within",
+   "why": "FR-003 verbatim"
+  },
+  {
+   "id": "P3",
+   "summary": "'Slightly' = a quarter of the block's width; recorded in spec D4a",
+   "class": "within",
+   "why": "FR-003 names the positions, not the amount; labeled calibration"
+  },
+  {
+   "id": "design-offset-rings",
+   "summary": "PREFERRED_OFFSET_EM 0.5 (D2); RING_STEP_EM 0.5; ring by ring",
+   "class": "within",
+   "why": "FR-004, FR-005"
+  },
+  {
+   "id": "P2",
+   "summary": "Reach 8 em, least-cost seat within reach past it",
+   "class": "within",
+   "why": "FR-005 reach limit, FR-007"
+  },
+  {
+   "id": "design-weights",
+   "summary": "1000 / 500 / 0 weights; free first, then ring, rank, layout",
+   "class": "within",
+   "why": "FR-006, FR-007, D4"
+  },
+  {
+   "id": "P1",
+   "summary": "CLEAR_EM: an obstacle other than the subject within 0.5 em counts as covered; reported at landing (T12)",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Unchanged since round 1: literal FR-006 would let a caption sit flush on a neighbor, defeating the request's purpose (a caption plainly beside its own feature). Recorded in spec D4a and raised at landing."
+  },
+  {
+   "id": "P6",
+   "summary": "Clearance comparison strict with a 1e-6 tolerance",
+   "class": "within",
+   "why": "Numerical hygiene; decides nothing FR-004/FR-006 leave open"
+  },
+  {
+   "id": "design-upright-layouts",
+   "summary": "upright() into (-90, 90]; one, two, three lines",
+   "class": "within",
+   "why": "FR-008, the wrap edge case"
+  },
+  {
+   "id": "design-line-area",
+   "summary": "Line subject along the line near its hint; area subject centroid then interior",
+   "class": "within",
+   "why": "FR-008"
+  },
+  {
+   "id": "design-leader-settlement",
+   "summary": "Leader beyond the first ring, nearest point to nearest point, trimmed 1 px",
+   "class": "within",
+   "why": "FR-005"
+  },
+  {
+   "id": "design-index",
+   "summary": "A uniform grid built once per phase or tool run",
+   "class": "within",
+   "why": "FR-009"
+  },
+  {
+   "id": "design-fr014",
+   "summary": "Group-word waiver; when the caption's SUBJECT is a named civic building (Subject(civic=True), set by the caller naming a ministry, the governor's yamen or a temple by name) every other named civic building keeps full weight",
+   "class": "within",
+   "why": "FR-014 and answer 070 as written, keyed on the subject (a district caption such as temple neighborhood keeps its waiver). Round-3 note resolved: placer.py Subject now names civic (plan line 64-65)."
+  },
+  {
+   "id": "design-settlement-callers",
+   "summary": "Board, place_caption, road caption, field names through seat_caption; old searches deleted",
+   "class": "within",
+   "why": "FR-001, D7"
+  },
+  {
+   "id": "design-modeA-leader",
+   "summary": "compound.py draws the placer's leader, a <line> tagged with the caption's kind",
+   "class": "within",
+   "why": "FR-005 in both modes"
+  },
+  {
+   "id": "design-tool-leader",
+   "summary": "seat-label writes, moves or removes leaders; --check and the ledger test check them",
+   "class": "within",
+   "why": "FR-005, FR-013"
+  },
+  {
+   "id": "P4",
+   "summary": "Hand-sheet shapes classified by data-kind: road/river/revetment ways at 500; an explicit ground list (courts, gardens, practice ground, cart yard, pines, shrine grove, river landing) and the full-view background rect free; every other kind, court divider, weighing floor and every other - shape (the scale bar) included, an obstacle; every <text> an obstacle",
+   "class": "within",
+   "why": "Round-3 item RESOLVED: weighing floor is off the ground list and named an obstacle (plan line 118). Aside RESOLVED: only the - rect covering the whole view is free (checked 2026-09-27, grep: each tagged sheet has one 0,0 full-canvas background rect, e.g. ubame 1300x900 over viewBox 176 84 1054 744; the - group at ubame line 79 is the scale bar, now an obstacle). What remains free is ground cover and area fill, which FR-006 weighs 0, so the mapping is FR-006 literally rather than a narrowing."
+  },
+  {
+   "id": "P5",
+   "summary": "A stroked line or path is a band of its own stroke width",
+   "class": "within",
+   "why": "Drawn geometry"
+  },
+  {
+   "id": "design-caption-discovery",
+   "summary": "Captions found as <text> in or carrying a data-kind tag; every sheet the ledger does not hold at its recorded hash (changed or new) must carry a data-kind on every <text>, on the element or an enclosing group, else the gate refuses it",
+   "class": "within",
+   "why": "Round-3 item RESOLVED (plan lines 134-138): the refusal now reaches new sheets as well as changed ones, and carries is defined as on the element or a group it sits inside, matching the plan own caption definition (line 120) so today tagged sheets are not refused. With that reach it enforces FR-013 hold every hand-drawn sheet and narrows nothing."
+  },
+  {
+   "id": "design-static-test",
+   "summary": "AST walk of settlement/ and compound.py for captions outside the placer and the D8 list",
+   "class": "within",
+   "why": "FR-012; the allow-list must name finish.py's title placard and scale-bar <text> (lines 396, 418-419), which are not captions (FR-001)"
+  },
+  {
+   "id": "design-ledger",
+   "summary": "caption_ledger.json with sheet hashes; off-seat caption or missing leader fails unless ledgered and unchanged",
+   "class": "within",
+   "why": "FR-013, D9"
+  },
+  {
+   "id": "design-record-doctrine",
+   "summary": "040/050 rewritten with the calibrations labeled; registry entries; doctrine files",
+   "class": "within",
+   "why": "FR-010, FR-013, D8"
+  },
+  {
+   "id": "T09-T12",
+   "summary": "T09 measures both composed sheets (SC-001); T12 reports D7, D8, D9 and P1 at landing",
+   "class": "within",
+   "why": "SC-001; the spec's 'to raise with the GM at landing'"
+  },
+  {
+   "id": "T13",
+   "summary": "Fix the review-round hook counting a NOT-REVIEWABLE pass as a round",
+   "class": "within",
+   "why": "Constitution XIV"
+  }
+ ],
+ "verdict": "CLEAR"
+}

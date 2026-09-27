@@ -229,7 +229,7 @@ def prepass(markup: str, glossary: dict, record_dir: str | None = None) -> list[
         # THE SAME TEXT THE CHECK READS (feature 260). `record-format` is handed the question fragment
         # AND its notes, so a candidate list drawn from the question alone would leave every term that
         # appears only in a quoted passage unraised - and those are the technical ones.
-        scanned = without_code(body) + " " + notes.get(_slug(heading), "") if record_dir else ""
+        scanned = without_code(body) + " " + notes.get(_bare(heading), "") if record_dir else ""
         out.append({
             "section": heading,
             "items": session_notes(body) + vocabulary(body, known),
@@ -269,7 +269,9 @@ def notes_index(record_dir: str | None) -> dict[str, str]:
             if not name.endswith(".notes.html"):
                 continue
             with open(os.path.join(base, name), encoding="utf-8") as fh:
-                out[name.split("-", 1)[-1][: -len(".notes.html")]] = without_code(strip_comments(fh.read()))
+                # keyed by the id's letters and digits: a slug re-derived from a heading spells "city's" as
+                # `city-s` where the file says `citys`, and that question's notes were never scanned
+                out[_bare(name.split("-", 1)[-1][: -len(".notes.html")])] = without_code(strip_comments(fh.read()))
     return out
 
 
@@ -300,9 +302,9 @@ def render(page: str, listing: list[dict]) -> str:
     return "\n".join(lines)
 
 
-def _slug(heading: str) -> str:
-    """A heading's own id, as the record writes it - which is what a fragment is named for."""
-    return re.sub(r"-{2,}", "-", re.sub(r"[^a-z0-9]+", "-", re.sub(r"<[^>]+>", "", heading).lower())).strip("-")
+def _bare(heading: str) -> str:
+    """A heading reduced to its letters and digits, so two spellings of one heading compare equal."""
+    return re.sub(r"[^a-z0-9]+", "", re.sub(r"<[^>]+>", "", heading).casefold())
 
 
 def _fragments(page: str, section: str, root: str) -> list[str]:
@@ -337,10 +339,17 @@ def main(argv: list[str] | None = None) -> int:
     # ONE flag, two matchers (feature 258): `--section` names a question the way it reads ("the bund
     # runs along...") or the way its file spells it ("040"). The heading filter alone answers the first
     # and finds nothing for the second, which is the form the fragment paths are in.
-    wanted_ids = {pathlib.Path(f).name.split("-", 1)[1][: -len(".html")] for f in fragments
-                  if not f.endswith(".notes.html")}
+    # The wanted headings are READ from the fragments, never re-derived from a file name (feature 250,
+    # 2026-09-21): `_slug` writes "city's" as `city-s` where the record's id is `citys`, so SECTION=010 on
+    # cities/sizing matched no section and handed `record-format` an empty list with no complaint; and a
+    # fragment's `<h3>` subsections have no file of their own, so a name could never have found them.
+    wanted = {_bare(h) for f in fragments if not f.endswith(".notes.html")
+              for h in re.findall(r"(?s)<h[23][^>]*>(.*?)</h[23]>", (root / f).read_text(encoding="utf-8"))}
     listing = [s for s in prepass(path.read_text(encoding="utf-8"), glossary, str(root / RESEARCH))
-               if args.section.casefold() in s["section"].casefold() or _slug(s["section"]) in wanted_ids]
+               if not args.section or args.section.casefold() in s["section"].casefold() or _bare(s["section"]) in wanted]
+    if args.section and not listing:
+        print(f"record-prepass: SECTION={args.section!r} matched no section of {name} - nothing was checked", file=sys.stderr)
+        return 2
 
     print(render(name, listing))
     if fragments:

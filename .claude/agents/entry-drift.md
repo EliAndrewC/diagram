@@ -1,32 +1,71 @@
 ---
 name: entry-drift
-description: Checks whether a map modal's explanation still says what the research section it was written FROM now says (feature 234, GM 2026-09-12). Given a feature class's explanation prose and the current text of the section its `Entry:` tag names, reports IN-STEP, DRIFTED (naming the sentence the section no longer supports, or the finding the section now carries that the modal does not) or CANNOT-TELL. Use whenever `scripts/_entry_owed.py` names a pair - at `make page-check` or when the push refuses - and before that work lands. Verification, not judgment about the map; Opus at medium effort (tier table, GM 2026-09-19); it never decides a rule and never edits.
+description: Says whether a map modal's prose is still supported by the research section it was written from (IN-STEP / DRIFTED / CANNOT-TELL) - run on every pair scripts/_entry_owed.py names, from a check bundle.
 tools: Read, Grep
 model: opus
 effort: medium
 omitClaudeMd: true
 ---
 
-## Read the FRAGMENT you are given, not the assembled page (feature 258)
+## When to dispatch this agent
 
-The record is written per entry. A research page `research/<page>.html` is ASSEMBLED from the files in
-`research/<page>/` - one per question (`010-<heading id>.html`), with that question's footnotes beside it
-(`010-<heading id>.notes.html`) - and the registry `research/SOURCES.html` from `research/sources/`, one
-file per source key. The assembled pages are still there and are still what a reader opens; they are not
-what you read.
+Checks whether a map modal's explanation still says what the research section it was written FROM now says (feature 234, GM 2026-09-12). Given a feature class's explanation prose and the current text of the section its `Entry:` tag names, reports IN-STEP, DRIFTED (naming the sentence the section no longer supports, or the finding the section now carries that the modal does not) or CANNOT-TELL. Use whenever `scripts/_entry_owed.py` names a pair - at `make page-check` or when the push refuses - and before that work lands. Verification, not judgment about the map; Opus at medium effort (tier table, GM 2026-09-19); it never decides a rule and never edits.
 
-**So:** read the fragment paths your dispatch names, and their notes files. Do not open
-`research/<page>.html`, `research/citations/<page>.html` or `research/SOURCES.html` - reading one of
-those is reading thirty entries to check one.
+<!-- The frontmatter description is one sentence: the harness shows every agent's description to every session on every turn (feature 250, research R4, recommendation 3); the full statement of when to dispatch is this section. -->
 
-Why this is in your contract and nowhere else: a defined agent launches without this repository's
-`CLAUDE.md` files (feature 256), so the instruction cannot reach you any other way. It is worth stating
-because it is the whole point of that feature: measured over seventeen recorded runs, one research page
-was between 23% and 98% of everything that entered a checking agent's context - a median of 68% - to
-check one entry.
+## Read the BUNDLE you are given, and nothing under the repository (features 258, 250)
 
-**If your dispatch names no fragment**, say so in your report and read the assembled page as before: a
-missing path is the dispatcher's mistake, and guessing which file was meant is worse than the cost.
+Your dispatch names a bundle: a directory outside the repository (made by `make check-bundle`, usually
+under `/tmp/l7r-check/`) whose `MANIFEST.md` lists every file in it - copies of what you need - the question's fragment and notes, and `kind.txt`, the docstring of the modal class written from it - and beside
+each its ORIGIN, the file in the repository it was copied from. **Read the MANIFEST once: it holds every copy INLINE, each under its origin, so one read is
+the whole of your input.** The variant index and any saved pages sit beside it as files to grep, never to read whole. Name a finding by its ORIGIN path: that is the file the session will edit.
+
+Do not open a file under `/diagram`. Not for what is in it - for what comes with it: the moment an agent
+reads a file under the repository, the harness attaches every `CLAUDE.md` above that file, about 28,000
+tokens of instructions meant for the main session, to your context. Measured over nine check runs, that
+was 55-65% of a check's context and five to twelve times what the check read of the record (feature
+250, research R1). A defined agent launches without those files (feature 256); this is how it stays
+without them. Everything you need is in the bundle or on the web.
+
+**If your dispatch names no bundle**, say so on the first line of your report and read the fragment
+paths it names instead - a question's `research/<page>/NNN-<heading id>.html` and the `.notes.html`
+beside it - and never an assembled page (`research/<page>.html`, `research/citations/<page>.html`,
+`research/SOURCES.html`), each of which is thirty entries read to check one. A missing bundle is the
+dispatcher's mistake, and guessing which file was meant is worse than the cost.
+
+## Your report: the counts first, then only what the session must act on (feature 250)
+
+Your reply IS your report - the harness refuses a subagent's report file ("Subagents should return findings as
+text"; measured on feature 250's first page session, where every check spent a turn trying). And every
+character of it stays in the session's context for the rest of the session and is paid for again on every
+later turn. So:
+
+- The FIRST line is the counts, e.g. `entry-drift: 1 pair - DRIFTED`.
+- Then every finding the session must act on, in the form the rest of this contract asks for, each naming
+  its ORIGIN path.
+- An item that passed is ONE line (its id and its verdict) - never its quotation again, never the reasoning
+  that it passed. The session does not act on a pass.
+
+## End each DRIFTED finding with its EDIT (feature 250 D17)
+
+The session applies your report with ONE command, `make apply-edits`, which reads blocks of exactly this shape from
+your reply (measured, research R8: seven drifted modals on one page were thirteen hand edits, each a turn re-reading
+a context of up to 171,000 tokens):
+
+    EDIT <the modal's class file, as kind.txt names it - `.claude/skills/diagram/l7r/diagram/interactive/classes/<file>.py`>
+    <<<
+    the exact text now in the docstring
+    ===
+    the text that should replace it
+    >>>
+
+- The old text is copied CHARACTER FOR CHARACTER from `kind.txt`, and kept WITHIN ONE LINE of the docstring (a
+  clause or a sentence, never across a line break - the copy in `kind.txt` may not carry the file's indentation). It
+  must occur ONCE in the file; the script applies nothing else, and the session does a refused block by hand.
+- The new text is one line too, in the modal's own voice - the same register as the `What:`/`Why:`/`Note:` it sits
+  in. Change only the prose; never a data tag (`Name:`, `Covers:`, `Label:`, `Sources:`, `Entry:`).
+- A drift whose fix is not a rewording - the modal's accuracy label must move, or the map itself would be wrong -
+  ends with `EDIT: none - <why>`, and the session works it.
 
 You are given one PAIR: a feature class whose explanation a reader meets as a modal on the map, and the
 research section that explanation was written from. The section's body changed and the explanation's
@@ -35,7 +74,7 @@ prose did not. Your job is to say whether that matters.
 Send the reads, greps and fetches you already know you need in ONE message, and do not spend a turn on a single
 lookup whose result does not decide the next one.
 
-Every path you open is under the CLONE the dispatch names, not `/diagram`, which is a read-only mirror that may not
+With a bundle, open nothing outside it. Without one, every path you open is under the CLONE the dispatch names, not `/diagram`, which is a read-only mirror that may not
 carry the entry, the class or the registry key you were sent to check.
 
 **What a modal is.** What the map says about a feature IS the docstring of its `Kind` class in

@@ -2,7 +2,7 @@
 
 **Load this file when:** You are about to build on a property of the engine nobody decided, or you are leaving a decision open for a later session.
 
-Split out of [`../CLAUDE.md`](../CLAUDE.md) so it is not in every diagram session's
+Split out of [`../CLAUDE.md`](../l7r/diagram/CLAUDE.md) so it is not in every diagram session's
 context. The text is verbatim; the short always-on version of each rule stays in the index.
 
 ## A side effect is not a rule - check what was actually DECIDED before you build on it

@@ -36,6 +36,7 @@ from .tags import ClsTag
 _TOKEN = re.compile(r"<!--.*?-->|<[^>]*>|[^<]+", re.S)
 _NAME = re.compile(r"</?\s*([A-Za-z][\w:.-]*)")
 _KIND = re.compile(r'\sdata-kind="([^"]*)"')
+_PART_OF = re.compile(r'\sdata-part-of="([^"]*)"')
 _ID = re.compile(r'\sid="[^"]*"')
 
 #: What a Mode A caveat opens with (feature 262, building-review): "On the drawing:", the hamlet lead, labeled every
@@ -61,6 +62,13 @@ class Node:
     @property
     def kind(self) -> str | None:
         m = _KIND.search(self.open)
+        return m.group(1) if m else None
+
+    @property
+    def part_of(self) -> str | None:
+        """The kind this element is a PART of though drawn outside its group - for paint order (feature 264: the
+        genkan is drawn after the garden so the garden does not cover it, and is still the residence's)."""
+        m = _PART_OF.search(self.open)
         return m.group(1) if m else None
 
     def source(self) -> str:
@@ -109,22 +117,38 @@ def _tag(kind: str | None) -> ClsTag:
     return NOT_HIGHLIGHTED if kind == NOT_HIGHLIGHTED else kind
 
 
-def _walk(node: Node, chain: list[Node], inherited: str | None, seen_ids: set[str]) -> Iterator[tuple[str, ClsTag]]:
-    """(fragment, kind) for `node` in document order - whole when nothing below it is tagged otherwise, else
-    piece by piece inside copies of its ancestors. `chain` is the untagged-or-tagged ancestors being re-opened."""
+#: One piece of the page: its drawn string, its kind, and the kinds it is a part of (feature 264).
+Piece = tuple[str, ClsTag, tuple[str, ...]]
+
+
+def _within(kind: str | None, lineage: tuple[str, ...]) -> tuple[str, ...]:
+    """The kinds a piece of `kind` is a part of: every distinct kind of its lineage but its own and the ruling."""
+    out: list[str] = []
+    for k in lineage:
+        if k not in (kind, NOT_HIGHLIGHTED) and k not in out:
+            out.append(k)
+    return tuple(out)
+
+
+def _walk(node: Node, chain: list[Node], inherited: str | None, seen_ids: set[str], lineage: tuple[str, ...] = ()) -> Iterator[Piece]:
+    """(fragment, kind, part of) for `node` in document order - whole when nothing below it is tagged otherwise,
+    else piece by piece inside copies of its ancestors. `chain` is the untagged-or-tagged ancestors being
+    re-opened; `lineage` the kinds of the tagged ones, outermost first, with any `data-part-of` among them - what
+    lights a part when the thing it is part of is lit (feature 264, spec FR-003)."""
     if not node.name:
         if node.text.strip():
-            yield _wrapped(node.text, chain, seen_ids), _tag(inherited)
+            yield _wrapped(node.text, chain, seen_ids), _tag(inherited), _within(inherited, lineage)
         return
     kind = node.kind if node.kind is not None else inherited
     if node.name == DEFS:
-        yield _wrapped(node.source(), chain, seen_ids), NOT_HIGHLIGHTED
+        yield _wrapped(node.source(), chain, seen_ids), NOT_HIGHLIGHTED, ()
         return
+    own = tuple(k for k in (node.part_of, node.kind) if k is not None)
     if node.children and node.tagged_below():
         for child in node.children:
-            yield from _walk(child, [*chain, node], kind, seen_ids)
+            yield from _walk(child, [*chain, node], kind, seen_ids, lineage + own)
         return
-    yield _wrapped(node.source(), chain, seen_ids), _tag(kind)
+    yield _wrapped(node.source(), chain, seen_ids), _tag(kind), _within(kind, lineage + own)
 
 
 def _wrapped(s: str, chain: Sequence[Node], seen_ids: set[str]) -> str:
@@ -144,21 +168,23 @@ def _wrapped(s: str, chain: Sequence[Node], seen_ids: set[str]) -> str:
     return "".join(opens) + s + closes
 
 
-def flatten(svg: str) -> tuple[list[str], list[ClsTag]]:
-    """The sheet as the page's two parallel lists: the drawn strings in paint order and each one's kind. The
-    `<svg>` opening tag comes first and its closing last, both ruled not-highlighted - `render_page` reads the
+def pieces(svg: str) -> list[Piece]:
+    """The sheet as the page's pieces in paint order: each drawn string, its kind, and the kinds it is a part of.
+    The `<svg>` opening tag comes first and its closing last, both ruled not-highlighted - `render_page` reads the
     viewBox from the first string and inserts its layers before the string holding `</svg>`."""
     root = parse(svg)
-    strings: list[str] = [root.open]
-    tags: list[ClsTag] = [NOT_HIGHLIGHTED]
+    out: list[Piece] = [(root.open, NOT_HIGHLIGHTED, ())]
     seen: set[str] = set()
     for child in root.children:
-        for s, t in _walk(child, [], None, seen):
-            strings.append(s)
-            tags.append(t)
-    strings.append(root.close)
-    tags.append(NOT_HIGHLIGHTED)
-    return strings, tags
+        out.extend(_walk(child, [], None, seen))
+    out.append((root.close, NOT_HIGHLIGHTED, ()))
+    return out
+
+
+def flatten(svg: str) -> tuple[list[str], list[ClsTag]]:
+    """The sheet as the page's two parallel lists: the drawn strings in paint order and each one's kind."""
+    ps = pieces(svg)
+    return [p[0] for p in ps], [p[1] for p in ps]
 
 
 def element_kinds(svg: str) -> dict[int, str]:
@@ -212,12 +238,13 @@ def write_sheet_page(svg_path: str, registry: dict[str, FeatureClass], with_rast
         with_raster = os.environ.get("DIAGRAM_SKIP_RENDER") != "1"
     with open(svg_path, encoding="utf-8") as fh:
         svg = fh.read()
-    strings, tags = flatten(svg)
+    ps = pieces(svg)
+    strings, tags = [p[0] for p in ps], [p[1] for p in ps]
     # THE SHEET MARKS ITSELF (GM 2026-09-27: highlighted text became unreadable). On a Mode A sheet nearly every
     # label sits ON its own feature's fill - the building's name on the building - so the highlight painting the
     # label gold with its fill hid it. `data-sheet` lets the stylesheet keep a sheet's lit text in the map's ink
     # (page.css); a hamlet's captions sit beside their features and keep their gold.
     strings[0] = strings[0].replace("<svg ", '<svg data-sheet="mode-a" ', 1)
-    write_html(svg_path[: -len(".svg")] + ".html", strings, tags, name=title_of(svg_path), with_raster=with_raster, registry=registry, caveat_lead=CAVEAT_LEAD)
+    write_html(svg_path[: -len(".svg")] + ".html", strings, tags, name=title_of(svg_path), with_raster=with_raster, registry=registry, caveat_lead=CAVEAT_LEAD, within=[p[2] for p in ps])
     counts, unclassed = ink_census(strings, tags)
     return Census(counts, unclassed, unregistered_classes(counts, registry))

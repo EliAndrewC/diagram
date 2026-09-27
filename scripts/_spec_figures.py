@@ -94,14 +94,19 @@ def paragraphs_in_scope(spec_dir: pathlib.Path) -> list[tuple[pathlib.Path, int,
             continue
         text = path.read_text()
         kind = "research" if whole_file else ""
-        line, top = 1, ""
+        line, top, sub = 1, "", ""
         for block in re.split(r"(\n\s*\n)", text):
             head = _HEADING.search(block)
             if head and len(head.group(1)) <= 2:
-                top = head.group(2).lower()
+                top, sub = head.group(2).lower(), ""
+            elif head:
+                # A SUBSECTION CAN BE OPERATIVE: the template puts `### Functional Requirements` under
+                # `## Requirements`, so reading level-2 headings alone left every spec's requirements
+                # unchecked (found by spec-fidelity on feature 268, 2026-09-27).
+                sub = head.group(2).lower()
             if not whole_file:
                 kind = ("review" if top.startswith("review history")
-                        else "operative" if top.startswith(_OPERATIVE) else "")
+                        else "operative" if top.startswith(_OPERATIVE) or sub.startswith(_OPERATIVE) else "")
             if kind and block.strip():
                 out.append((path, line, block, kind))
             line += block.count("\n")

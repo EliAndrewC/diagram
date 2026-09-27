@@ -212,8 +212,9 @@ def proof_of_life(cmd: str, helper: str) -> str | None:
     """`cmd` with a proof-of-life clause added to every file-watching loop that lacks one, or None when
     there is nothing to add (no qualifying loop, or each already asks).
 
-    The clause is ANDed for a `while` loop and `||`-negated for an `until` one, because the two loop while
-    opposite things are true and the wait must end in both when the writer is gone."""
+    The clause is ANDed for a `while` loop and ORed (as a false that exits 3 on a dead writer) for an `until`
+    one, because the two loop while opposite things are true; in both, a gone writer ends the whole command
+    with status 3, so nothing after the loop runs as though the wait had succeeded."""
     out, shift, added = cmd, 0, False
     for m in _LOOP_HEAD.finditer(cmd):
         c = _watches_a_file(m.group("cond"))
@@ -222,7 +223,11 @@ def proof_of_life(cmd: str, helper: str) -> str | None:
         paths = _PATH_OPERAND.findall(c)
         if not paths:
             continue
-        clause = f' || ! {helper} "{paths[-1]}"' if m.group("kw") == "until" else f' && {helper} "{paths[-1]}"'
+        # A DEAD producer ends the WHOLE command with status 3, not just the loop (feature 250, 2026-09-26): the
+        # first form broke the loop and let the next command run, so `...; done; echo ticked` printed a success
+        # for a wait whose producer was gone - read as "the page is finished" when it was not.
+        check = f'{helper} "{paths[-1]}" || exit 3'
+        clause = f" || {{ {check}; false; }}" if m.group("kw") == "until" else f" && {{ {check}; }}"
         at = m.end("cond") + shift
         out, shift, added = out[:at] + clause + out[at:], shift + len(clause), True
     return out if added else None

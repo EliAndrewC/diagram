@@ -20,7 +20,8 @@ class Paddy(Kind):
     land-consolidation artifact. A flooded paddy makes its own nitrogen, which is why the same basins were
     cropped year after year.
 
-    Note: Plot form and the irregular patchwork are read; plot sizes are calibrated from the record. the field is
+    Note: Plot form and the irregular patchwork are read, and so is the scattering of a household's holding;
+    plot sizes are the map's own figures, placed inside a pre-modern band no page read gives; the field is
     shown flooded, which is one moment of a cycle that runs from flooded to cracked and back; the depths
     behind that choice are modern extension figures, and no pre-modern record of either the depths or the
     drying stages was found.
@@ -86,7 +87,7 @@ class Bund(Kind):
     at T-junctions - never two parallel ridges with idle ground between. Farmers walked the bunds to reach
     the plots; the footplanks over the ditches serve that walking.
 
-    Note: Construction, the field bund's width and the shared-wall finding are read; the walking bund's width
+    Note: Construction and the field bund's width are read, and the shared-wall finding is this record's derivation from how the bund is built and kept; the walking bund's width
     is this record's reading; the drawn stroke is at true size.
 
     Name: bund
@@ -127,12 +128,16 @@ class Millet(Kind):
     """
     What: A dry-field (hatake) plot under millet, worked in ridged rows.
 
-    Why: Wet-rice villages sort by a topographic catena: the paddy holds the flat valley bottom, dry crops take
-    the higher, well-drained ground the water cannot command - the hem above the paddy and the raised ground
-    the homesteads sit on - and coppice crowns the hills above.
+    Why: The foothill border zone holds paddy, dry fields and woods together in one mosaic, and the map reads it
+    as a catena: the paddy holds the flat valley bottom, and dry crops take the higher, well-drained ground the
+    water cannot command - not one strip but several places, terraces, levees, fan edges, lower slopes and above
+    all round the houses - with the woods on the slopes, by the early modern period mostly red pine, grass or
+    bare hill rather than coppice.
 
-    Note: The catena's elements - paddy, dry field, coppice - are read; that the dry crops take the higher ground
-    above the paddy is this record's own reading of that mosaic, which no page read orders that way; the crop MIX on any one map (how much millet against buckwheat and
+    Note: The catena's elements - paddy, dry field, woodland - are read, and one page read puts the dry fields on
+    the slopes around the settlement, for the Yoshino mountains only; that the paddy takes the flat and the dry
+    crops the higher ground, and that dry plots cluster round the houses, is this record's own reading, and one
+    source read puts paddy round houses built on slightly higher ground instead; the crop MIX on any one map (how much millet against buckwheat and
     barley) is rolled from the seed and is a GUESS at the proportions.
 
     Caveat: the crop MIX on any one map (how much millet against buckwheat and barley) is rolled from the seed and
@@ -153,10 +158,14 @@ class Buckwheat(Kind):
     What: A dry-field plot under buckwheat - the short-season crop for thin soil, sown late and taken in autumn -
     worked in ridged rows.
 
-    Why: Dry crops take the higher, well-drained hem above the paddy, where the water cannot command the ground.
+    Why: Dry crops take the higher, well-drained ground the paddy water cannot command - not one strip but
+    several places, terraces, levees, fan edges, lower slopes and above all round the houses.
 
-    Note: The catena's elements - paddy, dry field, coppice - are read; that the dry crops take the higher ground
-    above the paddy is this record's own reading of that mosaic, which no page read orders that way; the crop mix per map is rolled from the seed and is a GUESS at the
+    Note: The catena's elements - paddy, dry field, woodland - are read, and one page read puts the dry fields on
+    the slopes around the settlement, for the Yoshino mountains only; that the dry crops take the higher ground
+    above the paddy, and cluster round the houses, is this record's own reading, and one source read puts paddy
+    round houses built on slightly higher ground instead. What is said here of the crop itself is not drawn
+    from the section this entry names; the crop mix per map is rolled from the seed and is a GUESS at the
     proportions.
 
     Caveat: the crop mix per map is rolled from the seed and is a GUESS at the proportions.
@@ -176,10 +185,14 @@ class Barley(Kind):
     What: A dry-field plot under barley - the winter grain, sown in autumn and taken in early summer - worked in
     ridged rows.
 
-    Why: Dry crops take the higher, well-drained hem above the paddy, where the water cannot command the ground.
+    Why: Dry crops take the higher, well-drained ground the paddy water cannot command - not one strip but
+    several places, terraces, levees, fan edges, lower slopes and above all round the houses.
 
-    Note: The catena's elements - paddy, dry field, coppice - are read; that the dry crops take the higher ground
-    above the paddy is this record's own reading of that mosaic, which no page read orders that way; the crop mix per map is rolled from the seed and is a GUESS at the
+    Note: The catena's elements - paddy, dry field, woodland - are read, and one page read puts the dry fields on
+    the slopes around the settlement, for the Yoshino mountains only; that the dry crops take the higher ground
+    above the paddy, and cluster round the houses, is this record's own reading, and one source read puts paddy
+    round houses built on slightly higher ground instead. What is said here of the crop itself is not drawn
+    from the section this entry names; the crop mix per map is rolled from the seed and is a GUESS at the
     proportions.
 
     Caveat: the crop mix per map is rolled from the seed and is a GUESS at the proportions.
@@ -199,11 +212,15 @@ class Soy(Kind):
     What: A dry-field plot under soybean (daizu) grown as a field crop of its own, worked in ridged rows - drawn a
     soybean green against the tan and ochre grains.
 
-    Why: Dry crops take the higher, well-drained hem above the paddy, where the water cannot command the ground;
-    the bean fixes its own nitrogen, which is why it also went along the bunds.
+    Why: Dry crops take the higher, well-drained ground the paddy water cannot command - not one strip but
+    several places, terraces, levees, fan edges, lower slopes and above all round the houses; the bean fixes
+    its own nitrogen, which is why it also went along the bunds.
 
-    Note: The catena's elements - paddy, dry field, coppice - are read; that the dry crops take the higher ground
-    above the paddy is this record's own reading of that mosaic, which no page read orders that way; the crop mix per map is rolled from the seed and is a GUESS at the
+    Note: The catena's elements - paddy, dry field, woodland - are read, and one page read puts the dry fields on
+    the slopes around the settlement, for the Yoshino mountains only; that the dry crops take the higher ground
+    above the paddy, and cluster round the houses, is this record's own reading, and one source read puts paddy
+    round houses built on slightly higher ground instead. What is said here of the crop itself is not drawn
+    from the section this entry names; the crop mix per map is rolled from the seed and is a GUESS at the
     proportions.
 
     Caveat: the crop mix per map is rolled from the seed and is a GUESS at the proportions.

@@ -5,8 +5,8 @@
 This repository is the `/diagram` skill of the GM's L5R worldbuilding project: building plans
 (Mode A) and settlement maps (Mode B), deliberately one skill and one package at
 `.claude/skills/diagram/` (why one, and what would change it: `dev/skill-boundary.md`). Usage is
-`.claude/skills/diagram/SKILL.md`; the engine dev loop is `.claude/skills/diagram/CLAUDE.md`, which
-auto-loads under that tree.
+`.claude/skills/diagram/SKILL.md`; the engine dev loop is `.claude/skills/diagram/l7r/diagram/CLAUDE.md`,
+which auto-loads under the engine, `pool/` and `tests/` - not under `research/` (feature 250).
 
 The GM's setting notes that the research cites live in gm-assistant, mounted at
 `/host-l7r-repo/gm-assistant` (`setting/`, `cosmology/`, `campaigns/`; on GitHub at
@@ -79,6 +79,11 @@ is `.claude/skills/diagram/research/CLAUDE.md`, which auto-loads when a session 
   to grep, where a fetch gives an extract), `make quote-verbatim PAGE=<name> [NOTES=<ids>]` before `quote-check` (is the
   passage on the page, character for character), `make record-prepass PAGE=<name>` before
   `record-format`, `make size-table PLAN=<svg>` before `size-audit`.
+- A record check reads a BUNDLE: `make check-bundle PAGE=<p> SECTION=<q>` (or `KEY=<k>`) copies what it
+  needs, prepass output included, OUT of the repository, and the dispatch names its `MANIFEST.md` - an
+  agent reading a file here is handed every `CLAUDE.md` above it, ~28,000 tokens (feature 250). The agent's
+  reply is compact: counts first, then only what to act on. A research page is worked in two fresh sessions, write then
+  check-and-apply, from briefs (`make page-session BRIEF="<1> <2>"`); `make notes` prints only the notes you name.
 
 ## Development workflow
 
@@ -207,6 +212,8 @@ doctrine for writing a guard: `docs/guards.md`.
 | `wakeup-hooks.sh` | a `ScheduleWakeup` outside a live `/loop` is refused (background work wakes a session by itself; a reminder the GM asks for is `CronCreate`); a turn cannot end with a stale wakeup pending, and the block names the `CronDelete` | none - cancel the wakeup |
 | `review-round-hooks.sh` | a later `spec-fidelity` round is handed the diff and routed to `spec-fidelity-verify`; refused first when the feature still carries the OLD value of something the change moved (`make stale-terms`) | `REVIEW_ROUND_OK`, `STALE_TERMS_OK` |
 | `agent-model-hooks.sh` | an ad-hoc agent dispatch (no file under `.claude/agents/`) that names no `model` is refused, with the rule for choosing one | none - name the model |
+| `check-bundle-hooks.sh` | a `quote-check`, `record-format`, `source-applicability`, `source-reader` or `entry-drift` dispatch that points into the repository instead of at a bundle is refused, with the `make check-bundle` command for the question it names | `CHECK_BUNDLE_OK` |
+| `canon-read-hooks.sh` | a direct read of the GM's setting canon (grep, sed, cat, Read, Grep on `setting/`) is refused with `make canon TERMS="a\|b\|c"`, which answers every term at once; a second `make canon` within three tool calls is refused unless it folds the earlier terms | `CANON_OK` |
 | `record-edit-hooks.sh` | an Edit aimed at an assembled record page is re-aimed at the one fragment holding its text; refused where none or several hold it, and a Write always | none - the guard hands you the edit |
 | `finished-run-hooks.sh` | a finished run is reported; a live `make` is not abandoned; a waiter on a dead producer is reported - each only for the session's own working tree | - |
 | `agent-stall-hooks.sh` | a stalled background agent is reported | - |

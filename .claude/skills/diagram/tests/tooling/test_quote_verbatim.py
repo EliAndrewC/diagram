@@ -246,3 +246,30 @@ def test_a_phrase_quoted_inside_the_notes_own_gloss_is_not_a_passage():
     got = qv.passages("「Sown in autumn.」 (translated from the Japanese by this project; original: 「秋に種をまき」) (a gloss; 「our own phrase」 is this page's) and 「a second passage」")
     assert [p["quote"] for p in got] == ["Sown in autumn.", "a second passage"]
     assert got[0]["original"] == "秋に種をまき"
+
+
+def test_a_run_of_reference_markers_inside_the_passage_is_found_and_named():
+    page = "伝手などがなく人が足りない場合は、人宿[1][2][3]、抱元 (かかえもと)と呼ばれる斡旋業者から人材派遣が行われた。"
+    got = qv.verdict("伝手などがなく人が足りない場合は、人宿、抱元 (かかえもと)と呼ばれる斡旋業者から人材派遣が行われた。", page)
+    assert got["quotation"] == "DIFFERS" and got["only_reference_markers"] is True
+    assert got["page_text"].startswith("伝手") and "[1][2][3]" in got["page_text"]
+
+
+def test_a_page_differing_only_by_its_reference_markers_is_readable(tmp_path):
+    url = "https://ja.example/page"
+    _offline(tmp_path, url, "<p>人宿[1][2][3]、抱元と呼ばれる斡旋業者から人材派遣が行われた。</p>")
+    note = {"id": "fn-1", "key": "k", "links": [url], "class": "citation", "passages": [{"quote": "q", "original": "人宿、抱元と呼ばれる斡旋業者から人材派遣が行われた。", "language": "ja"}]}
+    got = qv.judge_note(note, qv.Pages(offline=tmp_path))
+    assert got["passages"][0]["quotation"] == "DIFFERS" and got["readability"] == "READABLE"
+
+
+def test_a_run_of_translated_quotes_is_paired_with_the_run_of_originals_in_its_parenthetical():
+    note = "- 「One.」 and 「Two.」 (translated from the Japanese by this project; original: 「一」 and original: 「二」) / 「Three.」"
+    assert qv.passages(note) == [
+        {"quote": "One.", "original": "一", "language": "the Japanese"},
+        {"quote": "Two.", "original": "二", "language": "the Japanese"},
+        {"quote": "Three.", "original": "", "language": ""},
+    ]
+    short = "「Kept.」 / 「Two.」 (translated from the Japanese by this project; original: 「二」)"
+    assert qv.passages(short) == [{"quote": "Kept.", "original": "", "language": ""}, {"quote": "Two.", "original": "二", "language": "the Japanese"}]
+    assert qv.passages("「A.」 and 「B.」 (translated from the Japanese by this project; original: 「一」) then 「C」")[1]["original"] == "一"

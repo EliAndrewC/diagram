@@ -1,0 +1,429 @@
+[
+ {
+  "window": "(before the first mark)",
+  "main": {
+   "fresh": 73113,
+   "cached": 700284,
+   "output": 11418,
+   "thinking": 4136,
+   "turns": 10,
+   "peak_context": 97853
+  },
+  "agents": []
+ },
+ {
+  "window": "P0 plan and tasks",
+  "main": {
+   "fresh": 24977,
+   "cached": 421288,
+   "output": 6605,
+   "thinking": 1656,
+   "turns": 4,
+   "peak_context": 122823
+  },
+  "agents": []
+ },
+ {
+  "window": "P1 plan review (spec-fidelity) + T01 baseline",
+  "main": {
+   "fresh": 13466,
+   "cached": 1159447,
+   "output": 7242,
+   "thinking": 2257,
+   "turns": 9,
+   "peak_context": 136271
+  },
+  "agents": [
+   {
+    "agent": "spec-fidelity",
+    "class": "named",
+    "model": "claude-opus-5",
+    "description": "Plan review feature 250",
+    "fresh": 82706,
+    "cached": 989917,
+    "output": 30778,
+    "thinking": 20336,
+    "turns": 17,
+    "peak_context": 83717,
+    "first_turn": 26588,
+    "read_chars": 46962,
+    "nested_chars": 38971,
+    "nested_files": 1,
+    "reads": [
+     8619,
+     6534,
+     6307,
+     4254,
+     3132,
+     2764
+    ]
+   }
+  ]
+ },
+ {
+  "window": "T03 sizing: source-reader pass",
+  "main": {
+   "fresh": 110679,
+   "cached": 164607,
+   "output": 1498,
+   "thinking": 245,
+   "turns": 2,
+   "peak_context": 138470
+  },
+  "agents": [
+   {
+    "agent": "source-reader",
+    "class": "named",
+    "model": "claude-opus-5",
+    "description": "Read sources for sizing items",
+    "fresh": 52267,
+    "cached": 101698,
+    "output": 6851,
+    "thinking": 1420,
+    "turns": 4,
+    "peak_context": 52262,
+    "first_turn": 7890,
+    "read_chars": 21454,
+    "nested_chars": 113715,
+    "nested_files": 3,
+    "reads": [
+     6968,
+     5350,
+     4039,
+     2483,
+     1711,
+     903
+    ]
+   }
+  ]
+ },
+ {
+  "window": "T04 sizing: write the notes",
+  "main": {
+   "fresh": 49693,
+   "cached": 2609560,
+   "output": 15340,
+   "thinking": 4532,
+   "turns": 16,
+   "peak_context": 186478
+  },
+  "agents": []
+ },
+ {
+  "window": "P2 plan review round 2 + record-tool fix",
+  "main": {
+   "fresh": 15283,
+   "cached": 2111073,
+   "output": 10515,
+   "thinking": 1502,
+   "turns": 11,
+   "peak_context": 201739
+  },
+  "agents": [
+   {
+    "agent": "spec-fidelity",
+    "class": "named",
+    "model": "claude-opus-5",
+    "description": "Plan review round 2, feature 250",
+    "fresh": 39305,
+    "cached": 236741,
+    "output": 13860,
+    "thinking": 7949,
+    "turns": 7,
+    "peak_context": 49975,
+    "first_turn": 26078,
+    "read_chars": 27118,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     10866,
+     4199,
+     3717,
+     3484,
+     3109,
+     846
+    ]
+   }
+  ]
+ },
+ {
+  "window": "T05-T07 sizing: the checks, one agent per entry or key",
+  "main": {
+   "fresh": 73226,
+   "cached": 4120945,
+   "output": 20436,
+   "thinking": 5219,
+   "turns": 17,
+   "peak_context": 274931
+  },
+  "agents": [
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5",
+    "description": "quote-check sizing entry 010",
+    "fresh": 49329,
+    "cached": 52223,
+    "output": 3653,
+    "thinking": 1328,
+    "turns": 3,
+    "peak_context": 49326,
+    "first_turn": 6923,
+    "read_chars": 19504,
+    "nested_chars": 113715,
+    "nested_files": 3,
+    "reads": [
+     10173,
+     5350,
+     2669,
+     1312
+    ]
+   },
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5",
+    "description": "source-applicability edo-enwiki",
+    "fresh": 50597,
+    "cached": 47331,
+    "output": 4475,
+    "thinking": 2138,
+    "turns": 3,
+    "peak_context": 50594,
+    "first_turn": 5998,
+    "read_chars": 24626,
+    "nested_chars": 113715,
+    "nested_files": 3,
+    "reads": [
+     23560,
+     932,
+     134
+    ]
+   },
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5",
+    "description": "record-format sizing entry 010",
+    "fresh": 67311,
+    "cached": 119581,
+    "output": 8867,
+    "thinking": 3444,
+    "turns": 4,
+    "peak_context": 67306,
+    "first_turn": 8428,
+    "read_chars": 42482,
+    "nested_chars": 113715,
+    "nested_files": 3,
+    "reads": [
+     27229,
+     10173,
+     2669,
+     1312,
+     623,
+     476
+    ]
+   },
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5",
+    "description": "record-format sizing entry 020",
+    "fresh": 43549,
+    "cached": 114239,
+    "output": 11703,
+    "thinking": 6476,
+    "turns": 4,
+    "peak_context": 50657,
+    "first_turn": 8455,
+    "read_chars": 14921,
+    "nested_chars": 113715,
+    "nested_files": 3,
+    "reads": [
+     9715,
+     3015,
+     1389,
+     571,
+     141,
+     90
+    ]
+   },
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5",
+    "description": "source-applicability jokamachi-wiki",
+    "fresh": 39238,
+    "cached": 10666,
+    "output": 3201,
+    "thinking": 1548,
+    "turns": 2,
+    "peak_context": 43938,
+    "first_turn": 5966,
+    "read_chars": 9164,
+    "nested_chars": 113715,
+    "nested_files": 3,
+    "reads": [
+     7587,
+     1577
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5",
+    "description": "quote-check sizing entry 020",
+    "fresh": 45688,
+    "cached": 61607,
+    "output": 6299,
+    "thinking": 2365,
+    "turns": 3,
+    "peak_context": 51213,
+    "first_turn": 7230,
+    "read_chars": 18214,
+    "nested_chars": 113715,
+    "nested_files": 3,
+    "reads": [
+     9715,
+     5350,
+     3015,
+     134
+    ]
+   }
+  ]
+ },
+ {
+  "window": "P3 plan review round 3 + T08/T09 one 242-named entry",
+  "main": {
+   "fresh": 24262,
+   "cached": 3170505,
+   "output": 8866,
+   "thinking": 1732,
+   "turns": 11,
+   "peak_context": 299171
+  },
+  "agents": [
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5",
+    "description": "record-format ways entry 010",
+    "fresh": 40553,
+    "cached": 61737,
+    "output": 6109,
+    "thinking": 2379,
+    "turns": 3,
+    "peak_context": 47663,
+    "first_turn": 8353,
+    "read_chars": 9643,
+    "nested_chars": 113715,
+    "nested_files": 3,
+    "reads": [
+     3439,
+     3171,
+     1471,
+     1312,
+     250
+    ]
+   },
+   {
+    "agent": "spec-fidelity",
+    "class": "named",
+    "model": "claude-opus-5",
+    "description": "Plan review round 3, feature 250",
+    "fresh": 44696,
+    "cached": 170715,
+    "output": 9946,
+    "thinking": 6761,
+    "turns": 5,
+    "peak_context": 52350,
+    "first_turn": 26225,
+    "read_chars": 29702,
+    "nested_chars": 38971,
+    "nested_files": 1,
+    "reads": [
+     7736,
+     6555,
+     5977,
+     3434,
+     1955,
+     1280
+    ]
+   }
+  ]
+ },
+ {
+  "window": "P4 plan review round 4 + the report",
+  "main": {
+   "fresh": 16000,
+   "cached": 2426895,
+   "output": 6310,
+   "thinking": 2315,
+   "turns": 8,
+   "peak_context": 315155
+  },
+  "agents": [
+   {
+    "agent": "spec-fidelity",
+    "class": "named",
+    "model": "claude-opus-5",
+    "description": "Plan review round 4, feature 250",
+    "fresh": 28404,
+    "cached": 185051,
+    "output": 6396,
+    "thinking": 1574,
+    "turns": 7,
+    "peak_context": 36053,
+    "first_turn": 26060,
+    "read_chars": 9843,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     7524,
+     983,
+     975,
+     260,
+     60,
+     41
+    ]
+   }
+  ]
+ },
+ {
+  "window": "X1 experiment: record-format ways 010 from copies OUTSIDE the tree",
+  "main": {
+   "fresh": 8544,
+   "cached": 1272483,
+   "output": 3246,
+   "thinking": 403,
+   "turns": 4,
+   "peak_context": 323691
+  },
+  "agents": [
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5",
+    "description": "record-format ways 010, outside tree",
+    "fresh": 7391,
+    "cached": 55227,
+    "output": 5737,
+    "thinking": 2245,
+    "turns": 5,
+    "peak_context": 14496,
+    "first_turn": 8397,
+    "read_chars": 9887,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     3440,
+     3171,
+     1349,
+     1312,
+     396,
+     219
+    ]
+   }
+  ]
+ }
+]

@@ -113,6 +113,9 @@ P=$(printf '%s' "$out" | prompt_of 2>/dev/null)
 case "$P" in "MODE 3 (VERIFY) - round 1 of feature 301-fixture"*) ok "the round restarts at 1 after a FAITHFUL" ;; *) no "the round did not restart" "(${P:0:70})";; esac
 printf '%s' "$P" | grep -q 'NEW PASS' && ok "...and the preamble says it is a new pass" || no "no new-pass line"
 printf '%s' "$P" | grep -q 'Aside: none' && ok "...with the FAITHFUL verdict verbatim (the last verdict word decides)" || no "the FAITHFUL transcript was not the one recovered"
+# GUARD_EDIT_OK: feature 250 D20 - the explicit verdict line wins over a later mention of another verdict word
+V=$(python3 -c 'import sys; sys.path.insert(0, sys.argv[1]); import _hm_review_round as r; print(r.verdict_of("**Verdict: CHANGES REQUIRED.** Three items.\n\nThat line does not contain \"FAITHFUL\", so the gate refuses."))' "$HERE")
+[ "$V" = "CHANGES REQUIRED" ] && ok "an explicit Verdict line wins over a later mention of FAITHFUL" || no "the verdict was misread" "(got $V)"
 
 echo "6. no transcript answers: the Review history is the fallback, marked as the session's summary"
 agent spec-fidelity "MODE 2 review of specs/302-history" "$T/other.jsonl" >/dev/null   # first sight, with history
@@ -190,6 +193,19 @@ out=$(agent spec-fidelity 'MODE 3 of specs/301-fixture STALE_TERMS_OK="FR-009 de
 logged mode-3-preamble-stale-ok && ok "...and the escape is recorded with its reason" || no "the escape was not recorded"
 out=$(agent spec-fidelity "MODE 3 of specs/301-fixture")
 [ "$(rc)" -eq 0 ] && ok "the next round, with nothing replaced since, is untouched by the search" || no "a clean round was refused" "(rc=$(rc))"
+
+# GUARD_EDIT_OK: feature 266 - a new case for the rule the guard gained (a NOT-REVIEWABLE first reading is not a round)
+echo "8. a first reading that came back NOT-REVIEWABLE: the next dispatch is a first reading, not a later round"
+mkdir -p "$FIX/specs/302-fixture"
+printf '# Feature 302\n\n**FR-001 - one requirement.**\n' > "$FIX/specs/302-fixture/spec.md"
+out=$(agent spec-fidelity "MODE 2: SPECIFICATION REVIEW of specs/302-fixture against request.md")
+[ "$(state 302-fixture)" = "round=1 snapshot=yes" ] && ok "the first dispatch took the snapshot at round 1" || no "no first snapshot" "($(state 302-fixture))"
+transcript "$SUB/agent-9.jsonl" "MODE 2 review of specs/302-fixture" "Two figures carry no label, so I read no substance.\n\n**Verdict: NOT-REVIEWABLE.**"
+printf '\n**FR-001 - one requirement, labeled.**\n' >> "$FIX/specs/302-fixture/spec.md"
+out=$(agent spec-fidelity "MODE 2: SPECIFICATION REVIEW of specs/302-fixture against request.md")
+[ "$(rc)" -eq 0 ] && [ -z "$out" ] && ok "...the next dispatch passes through untouched, a first reading" || no "it was rewritten into a later round" "(out=${out:0:60})"
+[ "$(state 302-fixture)" = "round=1 snapshot=yes" ] && ok "...still round 1" || no "a round was counted" "($(state 302-fixture))"
+logged first-reading-after-not-reviewable && ok "...recorded permitted/first-reading-after-not-reviewable" || no "the rule was not recorded"
 
 echo
 echo "test-review-round-hooks: $PASS passed, $FAIL failed"

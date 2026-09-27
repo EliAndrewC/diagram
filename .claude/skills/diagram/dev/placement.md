@@ -2,7 +2,7 @@
 
 **Load this file when:** You are adding a new map feature, changing where something is placed or drawn, or wondering why the placer allowed an overlap the gate then caught. Read the DRAW ORDER section before moving any placement.
 
-Split out of [`../CLAUDE.md`](../CLAUDE.md) so it is not in every diagram session's
+Split out of [`../CLAUDE.md`](../l7r/diagram/CLAUDE.md) so it is not in every diagram session's
 context. The text is verbatim; the short always-on version of each rule stays in the index.
 
 ## DRAW ORDER: read this BEFORE changing where anything is placed or drawn
@@ -57,7 +57,7 @@ sequence one-to-one. Where the two disagree, `STAGES` wins for anything under `h
 | 15 | `stage_crossings` | planks and decks over every way that crosses water; on a polder the ring-canal planks cluster on the settlement-side toe collector and skip the feeder, the far toe and the drain (`polder_crossing_caps`, feature 150) |
 | 16 | `stage_frame` | crop to content, title, scalebar |
 | 17 | `stage_notice` | the kosatsuba - **the last map FEATURE**, after even the frame (GM 2026-08-29, feature 154): *"the real humans ... look around at the things which already exist and then decide where to put the notice board"*. It reserves no ground and grows into none, so nothing is placed after it for it to displace |
-| 18 | `stage_labels` | **the LABEL PHASE** - every caption on the map, seated against the finished sheet (GM 2026-08-29, feature 157): *"after the final map feature is added ... a final phase in which we add labels for whatever map features get labels ... how we place labels will always depend on what else is on the map."* No feature draws its own caption any more; `label()` queues and `Settlement.place_labels` drains. Draws no ink but text, reserves nothing, and so can only ever be last |
+| 18 | `stage_labels` | **the LABEL PHASE** - every caption on the map, seated against the finished sheet (GM 2026-08-29, feature 157): *"after the final map feature is added ... a final phase in which we add labels for whatever map features get labels ... how we place labels will always depend on what else is on the map."* No feature draws its own caption any more; `label()` queues and `Settlement.place_labels` drains, seating every searched caption by the ONE placer (`l7r/diagram/labels/`, feature 266: the cartographic standard). Draws no ink but text, reserves nothing, and so can only ever be last |
 
 **THIS TABLE WAS STALE AND WAS REBUILT AGAINST `STAGES` (feature 157).** It still listed
 `stage_ways` at position 4 (split into `stage_seat` and `stage_track` by feature 126) and

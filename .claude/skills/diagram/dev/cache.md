@@ -2,7 +2,7 @@
 
 **Load this file when:** The cache is behaving oddly, you changed how generation is driven, a coverage floor breached for no reason you can see, or you are about to test whether an edit invalidates an entry.
 
-Split out of [`../CLAUDE.md`](../CLAUDE.md) so it is not in every diagram session's
+Split out of [`../CLAUDE.md`](../l7r/diagram/CLAUDE.md) so it is not in every diagram session's
 context. The text is verbatim; the short always-on version of each rule stays in the index.
 
 ## What the key covers, and why the gate is allowed to trust it

@@ -1,0 +1,339 @@
+[
+ {
+  "window": "(before the first mark)",
+  "main": {
+   "fresh": 33045,
+   "cached": 50516,
+   "output": 456,
+   "thinking": 13,
+   "turns": 2,
+   "peak_context": 43170
+  },
+  "agents": []
+ },
+ {
+  "window": "homesteads 1-locate",
+  "main": {
+   "fresh": 19814,
+   "cached": 353843,
+   "output": 3631,
+   "thinking": 1760,
+   "turns": 7,
+   "peak_context": 62970
+  },
+  "agents": []
+ },
+ {
+  "window": "homesteads 2-read",
+  "main": {
+   "fresh": 73061,
+   "cached": 1715943,
+   "output": 17560,
+   "thinking": 4803,
+   "turns": 18,
+   "peak_context": 135995
+  },
+  "agents": [
+   {
+    "agent": "source-reader",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "Read sources for homesteads claims",
+    "fresh": 27076,
+    "cached": 67236,
+    "output": 11624,
+    "thinking": 1226,
+    "turns": 5,
+    "peak_context": 27068,
+    "first_turn": 8659,
+    "read_chars": 11087,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     2616,
+     1705,
+     1414,
+     1312,
+     1233,
+     593
+    ]
+   }
+  ]
+ },
+ {
+  "window": "homesteads 3-write",
+  "main": {
+   "fresh": 8649,
+   "cached": 420966,
+   "output": 2858,
+   "thinking": 385,
+   "turns": 3,
+   "peak_context": 144638
+  },
+  "agents": []
+ },
+ {
+  "window": "homesteads 4-check",
+  "main": {
+   "fresh": 46058,
+   "cached": 1917318,
+   "output": 9276,
+   "thinking": 4736,
+   "turns": 12,
+   "peak_context": 190672
+  },
+  "agents": [
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "applicability tonami-yashikirin-haichi",
+    "fresh": 9945,
+    "cached": 39170,
+    "output": 5477,
+    "thinking": 1408,
+    "turns": 5,
+    "peak_context": 15274,
+    "first_turn": 6155,
+    "read_chars": 6477,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     3280,
+     1980,
+     940,
+     151,
+     126
+    ]
+   },
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "record-format homesteads 210",
+    "fresh": 44104,
+    "cached": 187975,
+    "output": 16831,
+    "thinking": 7636,
+    "turns": 7,
+    "peak_context": 51818,
+    "first_turn": 8535,
+    "read_chars": 61616,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     19891,
+     17620,
+     16975,
+     5568,
+     1021,
+     234
+    ]
+   },
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "record-format homesteads 040",
+    "fresh": 34063,
+    "cached": 116305,
+    "output": 15333,
+    "thinking": 5609,
+    "turns": 7,
+    "peak_context": 34051,
+    "first_turn": 8535,
+    "read_chars": 29935,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     13632,
+     10095,
+     3328,
+     2159,
+     473,
+     151
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check homesteads 040",
+    "fresh": 46172,
+    "cached": 116189,
+    "output": 17551,
+    "thinking": 6271,
+    "turns": 7,
+    "peak_context": 46160,
+    "first_turn": 6959,
+    "read_chars": 54280,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     18542,
+     13632,
+     10095,
+     3328,
+     1770,
+     1312
+    ]
+   },
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "applicability kyuhi-jawiki",
+    "fresh": 11428,
+    "cached": 34032,
+    "output": 4871,
+    "thinking": 1024,
+    "turns": 5,
+    "peak_context": 13254,
+    "first_turn": 6152,
+    "read_chars": 5025,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     2513,
+     1389,
+     861,
+     151,
+     111
+    ]
+   },
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "applicability kikanchiiki-igune",
+    "fresh": 10954,
+    "cached": 52606,
+    "output": 6248,
+    "thinking": 1287,
+    "turns": 6,
+    "peak_context": 16281,
+    "first_turn": 6152,
+    "read_chars": 7716,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     3199,
+     1745,
+     1615,
+     891,
+     151,
+     115
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check homesteads 210",
+    "fresh": 58977,
+    "cached": 198595,
+    "output": 21338,
+    "thinking": 8667,
+    "turns": 7,
+    "peak_context": 65119,
+    "first_turn": 6959,
+    "read_chars": 83691,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     34192,
+     19891,
+     17620,
+     5568,
+     3418,
+     1235
+    ]
+   }
+  ]
+ },
+ {
+  "window": "homesteads 5-apply",
+  "main": {
+   "fresh": 56476,
+   "cached": 3771146,
+   "output": 31250,
+   "thinking": 6530,
+   "turns": 17,
+   "peak_context": 247114
+  },
+  "agents": []
+ },
+ {
+  "window": "homesteads 5b-recheck",
+  "main": {
+   "fresh": 14846,
+   "cached": 2276135,
+   "output": 6222,
+   "thinking": 1534,
+   "turns": 9,
+   "peak_context": 261942
+  },
+  "agents": [
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "re-check quotes homesteads 210",
+    "fresh": 31484,
+    "cached": 89640,
+    "output": 8615,
+    "thinking": 4026,
+    "turns": 5,
+    "peak_context": 37630,
+    "first_turn": 7162,
+    "read_chars": 48354,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     20829,
+     18084,
+     5568,
+     2486,
+     612,
+     323
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "re-check quotes homesteads 040",
+    "fresh": 22213,
+    "cached": 25786,
+    "output": 5992,
+    "thinking": 3426,
+    "turns": 4,
+    "peak_context": 22207,
+    "first_turn": 7083,
+    "read_chars": 31264,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     14575,
+     10566,
+     3328,
+     1405,
+     1312,
+     78
+    ]
+   }
+  ]
+ },
+ {
+  "window": "homesteads 6-close",
+  "main": {
+   "fresh": 1665,
+   "cached": 525123,
+   "output": 1161,
+   "thinking": 0,
+   "turns": 2,
+   "peak_context": 263603
+  },
+  "agents": []
+ }
+]

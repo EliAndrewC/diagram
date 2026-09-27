@@ -25,7 +25,7 @@ from .checks import drawn_water_segs
 from .clearance import clear_runs, clip_to_clear
 from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _homestead_polys, _margin_frame, _net_segs, _pass, _pull_back_to_service
 from .geom import _trim_to_service, polyline_len, steading_footprints
-from .joints import straighten_joints
+from .joints import center_lane_ends, straighten_joints
 from .route import _route
 from .serve import _lay_web_lane, _serve_stragglers
 from .smooth import _STUB_REACH_FT, _smooth_web
@@ -310,6 +310,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.hamletgen.ways.sweeps._sweep_doubled_remnants
         l7r.diagram.hamletgen.ways.sweeps._keep_the_route_wide
         l7r.diagram.hamletgen.ways.joints.straighten_joints
+        l7r.diagram.hamletgen.ways.joints.center_lane_ends
         l7r.diagram.settlement.Settlement.trim_lane_stubs
     """
     _pass("cut")
@@ -581,6 +582,8 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # (558, 1096) stood 56 ft from lane 2's end until the two became one lane, and then 104 ft from anything.
     _sweep_doubled_tails(s)  # a lane that runs on beside the way it met ends where it met it (feature 261)
     _sweep_dangling_ends(s)
+    # ...AND A LANE THAT ENDS ON ANOTHER STANDS ON ITS CENTERLINE (GM 2026-09-27): an end a few feet off it shows its round cap past the far edge.
+    center_lane_ends(s)
     # ...and a record the joins emptied is not a lane: a husk with no points declares a way nothing draws (a review
     # counted three on Kashikawa and two on Kuwabata) - dropped with its ink slot, the one way lanes leave
     # ...and a record whose points are all one point is a husk too (Mizuguchi, feature 261: seven three-point records at a

@@ -1,0 +1,123 @@
+[
+ {
+  "window": "archetypes 4",
+  "main": {
+   "fresh": 12882,
+   "cached": 28426,
+   "output": 435,
+   "thinking": 0,
+   "turns": 2,
+   "peak_context": 21548
+  },
+  "agents": []
+ },
+ {
+  "window": "archetypes 5",
+  "main": {
+   "fresh": 4187,
+   "cached": 67390,
+   "output": 630,
+   "thinking": 13,
+   "turns": 3,
+   "peak_context": 25729
+  },
+  "agents": [
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check archetypes 100",
+    "fresh": 12174,
+    "cached": 7745,
+    "output": 4853,
+    "thinking": 2651,
+    "turns": 2,
+    "peak_context": 12172,
+    "first_turn": 7747,
+    "read_chars": 9592,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     9592
+    ]
+   },
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "record-format archetypes 100",
+    "fresh": 14912,
+    "cached": 37757,
+    "output": 4003,
+    "thinking": 1818,
+    "turns": 4,
+    "peak_context": 14906,
+    "first_turn": 9244,
+    "read_chars": 11045,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     10815,
+     215,
+     15
+    ]
+   }
+  ]
+ },
+ {
+  "window": "archetypes 6",
+  "main": {
+   "fresh": 29173,
+   "cached": 742422,
+   "output": 8998,
+   "thinking": 2885,
+   "turns": 19,
+   "peak_context": 54860
+  },
+  "agents": []
+ },
+ {
+  "window": "archetypes 7",
+  "main": {
+   "fresh": 4191,
+   "cached": 282657,
+   "output": 1270,
+   "thinking": 152,
+   "turns": 5,
+   "peak_context": 59041
+  },
+  "agents": [
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check re-check archetypes 100",
+    "fresh": 5465,
+    "cached": 14853,
+    "output": 3257,
+    "thinking": 1801,
+    "turns": 2,
+    "peak_context": 12182,
+    "first_turn": 8136,
+    "read_chars": 8510,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     8510
+    ]
+   }
+  ]
+ },
+ {
+  "window": "archetypes 8",
+  "main": {
+   "fresh": 2697,
+   "cached": 179674,
+   "output": 1561,
+   "thinking": 178,
+   "turns": 3,
+   "peak_context": 61732
+  },
+  "agents": []
+ }
+]

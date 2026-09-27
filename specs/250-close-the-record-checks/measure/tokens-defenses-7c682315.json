@@ -1,0 +1,267 @@
+[
+ {
+  "window": "cities/defenses 4-handoff",
+  "main": {
+   "fresh": 14192,
+   "cached": 30150,
+   "output": 377,
+   "thinking": 0,
+   "turns": 2,
+   "peak_context": 22858
+  },
+  "agents": []
+ },
+ {
+  "window": "cities/defenses 5",
+  "main": {
+   "fresh": 12377,
+   "cached": 170996,
+   "output": 2199,
+   "thinking": 183,
+   "turns": 6,
+   "peak_context": 35221
+  },
+  "agents": [
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "record-format 010",
+    "fresh": 22075,
+    "cached": 70979,
+    "output": 4748,
+    "thinking": 2199,
+    "turns": 5,
+    "peak_context": 22067,
+    "first_turn": 8137,
+    "read_chars": 30797,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     29948,
+     601,
+     195,
+     53
+    ]
+   },
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "record-format 020",
+    "fresh": 4914,
+    "cached": 38834,
+    "output": 2708,
+    "thinking": 1102,
+    "turns": 4,
+    "peak_context": 12219,
+    "first_turn": 8137,
+    "read_chars": 8560,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     8154,
+     274,
+     132
+    ]
+   },
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "applicability tang-changan-zhwiki",
+    "fresh": 14369,
+    "cached": 24429,
+    "output": 3261,
+    "thinking": 1609,
+    "turns": 4,
+    "peak_context": 19307,
+    "first_turn": 5779,
+    "read_chars": 13633,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     11438,
+     2081,
+     114
+    ]
+   },
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "applicability wengcheng-zhwiki",
+    "fresh": 8549,
+    "cached": 21374,
+    "output": 2532,
+    "thinking": 1201,
+    "turns": 4,
+    "peak_context": 10141,
+    "first_turn": 5779,
+    "read_chars": 5288,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     2776,
+     2385,
+     127
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check 010",
+    "fresh": 28210,
+    "cached": 48774,
+    "output": 7029,
+    "thinking": 4125,
+    "turns": 4,
+    "peak_context": 28204,
+    "first_turn": 6585,
+    "read_chars": 41608,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     29948,
+     10093,
+     810,
+     757
+    ]
+   },
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "applicability ditai-zhwiki",
+    "fresh": 4164,
+    "cached": 24429,
+    "output": 3069,
+    "thinking": 1442,
+    "turns": 4,
+    "peak_context": 9102,
+    "first_turn": 5775,
+    "read_chars": 4108,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     2056,
+     1936,
+     116
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check 020",
+    "fresh": 5731,
+    "cached": 22295,
+    "output": 1802,
+    "thinking": 837,
+    "turns": 3,
+    "peak_context": 11486,
+    "first_turn": 6585,
+    "read_chars": 9637,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     8154,
+     1483
+    ]
+   }
+  ]
+ },
+ {
+  "window": "cities/defenses 6 rf-020",
+  "main": {
+   "fresh": 11898,
+   "cached": 155697,
+   "output": 2502,
+   "thinking": 933,
+   "turns": 4,
+   "peak_context": 47109
+  },
+  "agents": []
+ },
+ {
+  "window": "cities/defenses 6 rf-010",
+  "main": {
+   "fresh": 7719,
+   "cached": 203183,
+   "output": 2852,
+   "thinking": 1040,
+   "turns": 4,
+   "peak_context": 54820
+  },
+  "agents": []
+ },
+ {
+  "window": "cities/defenses 6 qc-010",
+  "main": {
+   "fresh": 7359,
+   "cached": 175222,
+   "output": 3534,
+   "thinking": 1402,
+   "turns": 3,
+   "peak_context": 62173
+  },
+  "agents": []
+ },
+ {
+  "window": "cities/defenses 6 apply-build",
+  "main": {
+   "fresh": 3111,
+   "cached": 253965,
+   "output": 1649,
+   "thinking": 89,
+   "turns": 4,
+   "peak_context": 65276
+  },
+  "agents": []
+ },
+ {
+  "window": "cities/defenses 7",
+  "main": {
+   "fresh": 6802,
+   "cached": 271091,
+   "output": 1950,
+   "thinking": 279,
+   "turns": 4,
+   "peak_context": 72070
+  },
+  "agents": [
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check 010 re-check",
+    "fresh": 10091,
+    "cached": 13379,
+    "output": 4031,
+    "thinking": 2667,
+    "turns": 2,
+    "peak_context": 15848,
+    "first_turn": 7622,
+    "read_chars": 19927,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     19927
+    ]
+   }
+  ]
+ },
+ {
+  "window": "cities/defenses 8",
+  "main": {
+   "fresh": 855,
+   "cached": 72068,
+   "output": 1081,
+   "thinking": 101,
+   "turns": 1,
+   "peak_context": 72923
+  },
+  "agents": []
+ }
+]

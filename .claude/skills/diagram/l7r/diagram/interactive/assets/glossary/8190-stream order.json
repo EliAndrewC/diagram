@@ -1,0 +1,8 @@
+{
+ "term": "stream order",
+ "def": "A stream's rank in its river network: the smallest headwater streams are first order, and where two streams of the same order meet, the stream below them is one order higher.",
+ "variants": [
+  "stream order",
+  "stream orders"
+ ]
+}

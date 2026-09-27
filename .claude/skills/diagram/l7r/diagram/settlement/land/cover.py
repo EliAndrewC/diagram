@@ -36,12 +36,19 @@ from typing import TYPE_CHECKING, Any
 from .._geom import KeepoutGrid, Poly, RingIndex, convex_hull
 from ..land.wet import MARSH_FEATHER_BS
 
+WOOD_FRINGE_FT = 8.0
+"""How far grass reaches in under a wood's edge before the kept-clear floor (GM 2026-09-27, Inashiro: highlighting the
+scrub showed "broad swaths of the forest with scrubland underneath" - "a tiny bit of overlap" at the edge is fine). The
+record already said the grass fringe "thins out inside the first few paces" (research/homesteads, the woodland-edge
+mantle-and-fringe); the woods were handed the marsh's 46 ft reed feather instead, so blades ran 46 ft under the belt.
+A few paces is the record's own figure, so this is ACCURATE as a degree; 8 ft is the calibration within it."""
+
 if TYPE_CHECKING:
     from ..core import Settlement
 
 
 class GroundCoverMixin:
-    def commons(self: Settlement, poly: Any, role: str = "commons", avoid: Any = (), render: str = "scrub", soft: Any = ()) -> None:  # type: ignore[misc]
+    def commons(self: Settlement, poly: Any, role: str = "commons", avoid: Any = (), render: str = "scrub", soft: Any = (), woods: Any = ()) -> None:  # type: ignore[misc]
         """FUEL-AND-FODDER COMMONS - the degraded open grazing/scrub on the far (upslope / windward) side,
         BEYOND the fengshui back-grove: coarse grass, low brush, and a FEW scattered SCRAGGLY pines, kept
         cropped bare by constant firewood + grass gathering. Deliberately drawn OPEN and SPARSE on drier,
@@ -145,8 +152,9 @@ class GroundCoverMixin:
             keep.rects(halo_rects, closed=True)
             keep.circles(halo_circles, closed=True)
             crescents = self.M.get("crescent_ponds", [])  # read once: the per-point test below costs a registry lookup per throw otherwise
-            soft_polys = [[tuple(q) for q in sp] for sp in soft]
-            soft_feather = MARSH_FEATHER_BS * bs  # the marsh's own reed feather (wet.py), so the two ramps are complements
+            soft_polys = [[tuple(q) for q in sp] for sp in soft] + [[tuple(q) for q in wp] for wp in woods]
+            # the marsh's own reed feather (wet.py), so the two ramps are complements - and a WOOD's much narrower one
+            soft_feathers = [MARSH_FEATHER_BS * bs] * len(soft) + [WOOD_FRINGE_FT * bs] * len(woods)
             # THE RING IS INDEXED ONCE (feature 145): every throw below asked `point_in_poly` and
             # `edge_dist` to walk the whole outline - 1.3M ray tests and 156k full-ring scans per
             # reference roll, two thirds of the stage. `RingIndex` answers both from the edges near
@@ -164,10 +172,10 @@ class GroundCoverMixin:
                     or (pond and ((px - pond[0]) / pond[2]) ** 2 + ((py - pond[1]) / pond[3]) ** 2 <= 1.0)  # ... and the pond (scrub never draws over open water)
                 ):  # ... and OUT of any keep-out (the hamlet cluster stays clear of cover)
                     return True
-                for si in soft_idx:  # ...and GRASS thins INTO a soft keep-out (a marsh) over its own feather
+                for si, sf in zip(soft_idx, soft_feathers, strict=True):  # ...and GRASS thins INTO a soft keep-out (a marsh, a wood) over its own feather
                     if si.inside(px, py):
-                        sd = si.edge_within(px, py, soft_feather)
-                        return random.random() < (1.0 if sd is None else sd / soft_feather)
+                        sd = si.edge_within(px, py, sf)
+                        return random.random() < (1.0 if sd is None else sd / sf)
                 ed = ring.edge_within(px, py, feather)
                 return ed is not None and random.random() > (ed / feather) ** drop
 
@@ -464,12 +472,13 @@ class GroundCoverMixin:
         # stand under the crowns and grass thins out inside the first few paces. The belt is drawn
         # two stages later, so without this the scrub could not see it: Inashiro carried 2,688
         # blades, 158 brush dots and 11 pines inside the belt polygon.
-        soft = [*([toe_poly] if toe_poly else []), *[[tuple(q) for q in sp] for sp in soft_extra]]
+        soft = [toe_poly] if toe_poly else []
+        woods = [[tuple(q) for q in sp] for sp in soft_extra]  # every wood: grass reaches only WOOD_FRINGE_FT under its edge
         if commons:
             for p in ring(0, max(W, H)):  # the cut-over SCRUB commons: the DOMINANT denuded-hill cover
-                self.commons(p, role=scrub_role, avoid=avoid, soft=soft)  # (managed woodland is added as a FEW patches by the gen)
+                self.commons(p, role=scrub_role, avoid=avoid, soft=soft, woods=woods)  # (managed woodland is added as a FEW patches by the gen)
             if toe_poly and toe_side not in skip_sides:
-                self.commons(toe_strip(0, max(W, H)), role=scrub_role, avoid=avoid, soft=soft)
+                self.commons(toe_strip(0, max(W, H)), role=scrub_role, avoid=avoid, soft=soft, woods=woods)
             # ...and the INTERIOR. The ring lays strips only OUTSIDE the cultivated bbox, but an irregular field
             # (a comb FAN) does not fill its own bbox: it leaves open VOIDS INSIDE it that nothing else clothes
             # - the strips are outside them and the marsh is a contour band below them - so they render as BARE
@@ -479,7 +488,7 @@ class GroundCoverMixin:
             # are. Ground the crop does not use is still ground, and it is grazed. A SOLID field (a polder grid
             # fills its whole bbox, no voids) has nothing to clothe here, so `interior_fill=False` skips it.
             if interior_fill:
-                self.commons([(fx0, fy0), (fx1, fy0), (fx1, fy1), (fx0, fy1)], role=scrub_role, avoid=avoid, soft=soft)
+                self.commons([(fx0, fy0), (fx1, fy0), (fx1, fy1), (fx0, fy1)], role=scrub_role, avoid=avoid, soft=soft, woods=woods)
         if marsh:
             # The toe is a CONTOUR BAND, not an axis-aligned box. Wet ground is defined by HEIGHT, and every
             # other feature here (field, comb, drain, the marsh_on_low_ground check) resolves height by

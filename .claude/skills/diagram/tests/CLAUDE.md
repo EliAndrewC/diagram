@@ -1,5 +1,8 @@
 # `tests/` - the diagram skill's test bed
 
+<!-- the engine's dev loop applies to test work too (feature 250 moved it out of the skill's CLAUDE.md) -->
+@../l7r/diagram/CLAUDE.md
+
 ## THE DIRECTORY DECIDES WHEN A TEST RUNS (feature 135, GM 2026-08-27)
 
 *"if we have one directory for our quick tests, one directory for our done tests, and one directory
@@ -158,7 +161,7 @@ adding another hamlet that gets rolled."* So:
   written down: move the inner function to module level with its captured values as parameters, have the inner
   one delegate so there is ONE body, and test the lifted function with plain dicts and tuples. Worked examples:
   `web_pieces` / `web_rejoinable` / `commit_lane` / `bowtie_cut` / `push_clear_of_fabric` (hamletgen/ways.py),
-  `fan_rival` (settlement/water_ways.py), `pick_caption_seat` (settlement/structures/fixtures.py),
+  `fan_rival` (settlement/water_ways.py),
   `hem_on_water` (settlement/fields/comb.py), `s_on_side`
   (waterfields/polder.py), `bamboo_blocked` (hamletgen/hinterland.py). **Lifting only helps when the closure
   is CALLED and one branch inside it is not** - a closure a live roll never calls at all leaves the delegate

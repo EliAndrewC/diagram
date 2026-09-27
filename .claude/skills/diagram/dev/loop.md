@@ -2,7 +2,7 @@
 
 **Load this file when:** You are about to run the gate or a pool sweep, you want the diagram-specific timing numbers, or you are deciding how much to re-run after a change.
 
-Split out of [`../CLAUDE.md`](../CLAUDE.md) so it is not in every diagram session's
+Split out of [`../CLAUDE.md`](../l7r/diagram/CLAUDE.md) so it is not in every diagram session's
 context. The text is verbatim; the short always-on version of each rule stays in the index.
 
 ## Gate and sweep timings (the motivating-artifact loop, concretely)

@@ -16,7 +16,7 @@ Its modules are LAYERS, emitted bottom-up: every cross-module reference points b
 | `sweeps.py` (536) | the passes that REMOVE or REPAIR after the web is laid - doubled remnants, steading fouls, end nubs, necked routes, debris, collinear breaks, orphaned pieces |
 | `touch.py` (445) | how a lane end meets the network - the whole junction-touching pass and the piece-joining it falls back on |
 | `smooth.py` (341) | the smoothing pass and the connectivity accounting that decides whether a smoothed lane may be committed |
-| `joints.py` | where two lanes meet END TO END - read as one way: a fold at the joint becomes a T, a jog across it is pulled straight, a hook at a lane's end is taken off (`straighten_joints`, the last pass of `stage_web`, GM 2026-09-26) |
+| `joints.py` | where two lanes meet END TO END - read as one way: a fold at the joint becomes a T, a jog across it is pulled straight, a hook at a lane's end is taken off (`straighten_joints`, GM 2026-09-26); then an end stopping on another lane's tread is set on its centerline (`center_lane_ends`, the last pass of `stage_web`, GM 2026-09-27) |
 | `serve.py` (552) | getting a way to a house that has none - laying one web lane, and the straggler search that runs when the ordinary passes left someone unserved |
 | `web.py` (545) | STAGE: the lane web - `stage_web` and the skeleton it starts from. Read this first to see the order the passes above run in |
 | `track.py` (522) | STAGE: the track and the seat - the connector out of the frame, the cluster gateway, and the thread through the fabric |

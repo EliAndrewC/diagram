@@ -1,0 +1,87 @@
+[
+ {
+  "window": "(before the first mark)",
+  "main": {
+   "fresh": 13703,
+   "cached": 28263,
+   "output": 457,
+   "thinking": 54,
+   "turns": 2,
+   "peak_context": 22369
+  },
+  "agents": []
+ },
+ {
+  "window": "cities/hinterland 1",
+  "main": {
+   "fresh": 7522,
+   "cached": 47592,
+   "output": 1528,
+   "thinking": 851,
+   "turns": 2,
+   "peak_context": 29887
+  },
+  "agents": []
+ },
+ {
+  "window": "cities/hinterland 2",
+  "main": {
+   "fresh": 58401,
+   "cached": 955617,
+   "output": 17516,
+   "thinking": 8255,
+   "turns": 19,
+   "peak_context": 88250
+  },
+  "agents": [
+   {
+    "agent": "source-reader",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "Read sources for hinterland items",
+    "fresh": 57202,
+    "cached": 480793,
+    "output": 15968,
+    "thinking": 6078,
+    "turns": 13,
+    "peak_context": 57178,
+    "first_turn": 9316,
+    "read_chars": 83621,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     10064,
+     9277,
+     8646,
+     7750,
+     6343,
+     5212
+    ]
+   }
+  ]
+ },
+ {
+  "window": "cities/hinterland 3",
+  "main": {
+   "fresh": 23449,
+   "cached": 1035379,
+   "output": 11666,
+   "thinking": 548,
+   "turns": 10,
+   "peak_context": 111677
+  },
+  "agents": []
+ },
+ {
+  "window": "cities/hinterland 4",
+  "main": {
+   "fresh": 2903,
+   "cached": 225497,
+   "output": 1601,
+   "thinking": 116,
+   "turns": 2,
+   "peak_context": 114576
+  },
+  "agents": []
+ }
+]

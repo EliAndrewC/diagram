@@ -400,6 +400,48 @@ def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[
         out.reverse()
     if len(out) < 2 or not serves(out[0]) or not serves(out[-1]):
         return list(out[:1])
+
+    def by_house(q: Pt) -> list[Pt] | None:
+        # the houses an end is served by, or None when it has arrived at a way, the field or a steading
+        if end_serves(q, segs, (), fields, steadings):
+            return None
+        return [h for h in houses if math.dist(q, h) <= WAY_END_REACH_FT] + [h for h in keep if math.dist(q, h) <= WEB_REACH_FT]
+
+    for _ in range(2):
+        near, far = by_house(out[-1]), by_house(out[0])
+        # A TREAD COMES FROM SOMEWHERE ELSE: when the other end is served by nothing but these same houses, the
+        # run is a short way beside them, and cutting both ends toward one house would leave no way at all.
+        if near is not None and (far is None or any(h not in near for h in far)):
+            out = _stop_at_closest_approach(out, near)
+        out.reverse()
+    return out
+
+
+def _stop_at_closest_approach(run: Poly, near: Sequence[Pt]) -> Poly:
+    """An end served only by a HOUSE stops where the tread is nearest that house, not past it.
+
+    THE ROAD TO NOWHERE (GM 2026-09-27, Inashiro): the skeleton's spine passed its last farmhouse and walked on
+    another 45 ft into the windbreak, and every rule called that end served because it was still within
+    `WAY_END_REACH_FT` of the house's center. A tread goes TO a house; once it is walking away from every house
+    it could be serving, the rest is a way into the woods. So the last segment is cut at the foot of the
+    perpendicular from the house it last approaches, and a segment that moves away from all of them is dropped.
+    An end that meets a way, the field or a steading's built ground is the caller's to leave alone - it has
+    arrived somewhere. Cuts under 4 ft are left, the same grain as the walk in `_trim_to_service`."""
+    out = list(run)
+    while near and len(out) >= 2:
+        a, b = out[-2], out[-1]
+        d2 = (b[0] - a[0]) ** 2 + (b[1] - a[1]) ** 2
+        if d2 <= 0.0:
+            break
+        t = max(min(1.0, ((h[0] - a[0]) * (b[0] - a[0]) + (h[1] - a[1]) * (b[1] - a[1])) / d2) for h in near)
+        if (1.0 - t) * math.sqrt(d2) <= 4.0:
+            break
+        if t > 0.0:
+            out[-1] = (a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t)
+            break
+        if len(out) == 2:
+            break  # the whole tread walks away from the house: its OTHER end is the arrival, and that end is kept
+        out.pop()
     return out
 
 

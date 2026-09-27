@@ -1,0 +1,498 @@
+[
+ {
+  "window": "vegetation 4",
+  "main": {
+   "fresh": 31136,
+   "cached": 94907,
+   "output": 688,
+   "thinking": 142,
+   "turns": 3,
+   "peak_context": 43712
+  },
+  "agents": []
+ },
+ {
+  "window": "vegetation 5",
+  "main": {
+   "fresh": 174261,
+   "cached": 9289724,
+   "output": 51274,
+   "thinking": 16298,
+   "turns": 63,
+   "peak_context": 217845
+  },
+  "agents": [
+   {
+    "agent": "entry-drift",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "entry-drift woodland commons",
+    "fresh": 12559,
+    "cached": 24613,
+    "output": 2483,
+    "thinking": 794,
+    "turns": 4,
+    "peak_context": 17381,
+    "first_turn": 5767,
+    "read_chars": 23766,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     8807,
+     6285,
+     3295,
+     2610,
+     1889,
+     762
+    ]
+   },
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "record-format vegetation 090",
+    "fresh": 14154,
+    "cached": 55681,
+    "output": 6298,
+    "thinking": 3627,
+    "turns": 4,
+    "peak_context": 21459,
+    "first_turn": 8176,
+    "read_chars": 24446,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     23937,
+     488,
+     21
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check re-check 150",
+    "fresh": 25426,
+    "cached": 60898,
+    "output": 6117,
+    "thinking": 3492,
+    "turns": 4,
+    "peak_context": 31179,
+    "first_turn": 6798,
+    "read_chars": 46374,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     29257,
+     15554,
+     1186,
+     377
+    ]
+   },
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "record-format vegetation 150",
+    "fresh": 27005,
+    "cached": 81957,
+    "output": 8443,
+    "thinking": 4446,
+    "turns": 4,
+    "peak_context": 34310,
+    "first_turn": 8176,
+    "read_chars": 55833,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     55218,
+     479,
+     120,
+     16
+    ]
+   },
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "source-applicability meadow-enwiki",
+    "fresh": 6945,
+    "cached": 22618,
+    "output": 2450,
+    "thinking": 1132,
+    "turns": 4,
+    "peak_context": 8537,
+    "first_turn": 5821,
+    "read_chars": 3407,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     2038,
+     1253,
+     116
+    ]
+   },
+   {
+    "agent": "entry-drift",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "entry-drift homestead bamboo",
+    "fresh": 16116,
+    "cached": 24343,
+    "output": 2443,
+    "thinking": 770,
+    "turns": 4,
+    "peak_context": 20938,
+    "first_turn": 5786,
+    "read_chars": 31695,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     17113,
+     10468,
+     3684,
+     312,
+     118
+    ]
+   },
+   {
+    "agent": "entry-drift",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "entry-drift scrub",
+    "fresh": 10743,
+    "cached": 24856,
+    "output": 2013,
+    "thinking": 367,
+    "turns": 4,
+    "peak_context": 15565,
+    "first_turn": 5884,
+    "read_chars": 18786,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     5675,
+     4356,
+     3299,
+     3068,
+     1751,
+     519
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check vegetation 020",
+    "fresh": 29985,
+    "cached": 107059,
+    "output": 7506,
+    "thinking": 3555,
+    "turns": 6,
+    "peak_context": 29975,
+    "first_turn": 6624,
+    "read_chars": 50477,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     32633,
+     9854,
+     2843,
+     2535,
+     1242,
+     869
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check vegetation 110",
+    "fresh": 7958,
+    "cached": 24607,
+    "output": 3016,
+    "thinking": 1407,
+    "turns": 3,
+    "peak_context": 13713,
+    "first_turn": 6660,
+    "read_chars": 14172,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     11184,
+     2988
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check re-check 090",
+    "fresh": 14406,
+    "cached": 66239,
+    "output": 4596,
+    "thinking": 2636,
+    "turns": 5,
+    "peak_context": 20157,
+    "first_turn": 6761,
+    "read_chars": 27237,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     16928,
+     9109,
+     1057,
+     143
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check re-check 110",
+    "fresh": 5545,
+    "cached": 12469,
+    "output": 1376,
+    "thinking": 496,
+    "turns": 2,
+    "peak_context": 11302,
+    "first_turn": 6712,
+    "read_chars": 8984,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     8984
+    ]
+   },
+   {
+    "agent": "entry-drift",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "entry-drift shared bamboo",
+    "fresh": 13870,
+    "cached": 50639,
+    "output": 2508,
+    "thinking": 891,
+    "turns": 5,
+    "peak_context": 18690,
+    "first_turn": 5784,
+    "read_chars": 24739,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     17113,
+     3469,
+     2862,
+     915,
+     262,
+     118
+    ]
+   },
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "record-format vegetation 110",
+    "fresh": 6866,
+    "cached": 29191,
+    "output": 3132,
+    "thinking": 1331,
+    "turns": 3,
+    "peak_context": 14173,
+    "first_turn": 8176,
+    "read_chars": 11355,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     11184,
+     171
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check vegetation 090",
+    "fresh": 20433,
+    "cached": 76324,
+    "output": 6457,
+    "thinking": 3100,
+    "turns": 5,
+    "peak_context": 26184,
+    "first_turn": 6687,
+    "read_chars": 35554,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     23937,
+     9498,
+     1276,
+     700,
+     143
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check vegetation 150",
+    "fresh": 35821,
+    "cached": 43511,
+    "output": 10034,
+    "thinking": 6845,
+    "turns": 3,
+    "peak_context": 41576,
+    "first_turn": 6624,
+    "read_chars": 78491,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     55218,
+     23273
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check vegetation 060",
+    "fresh": 7109,
+    "cached": 24002,
+    "output": 2776,
+    "thinking": 1260,
+    "turns": 3,
+    "peak_context": 12864,
+    "first_turn": 6624,
+    "read_chars": 12300,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     9909,
+     2391
+    ]
+   },
+   {
+    "agent": "entry-drift",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "entry-drift copse",
+    "fresh": 17872,
+    "cached": 27428,
+    "output": 2226,
+    "thinking": 875,
+    "turns": 4,
+    "peak_context": 17866,
+    "first_turn": 5814,
+    "read_chars": 26800,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     10664,
+     8742,
+     6936,
+     340,
+     118
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check re-check 060",
+    "fresh": 11385,
+    "cached": 14722,
+    "output": 1711,
+    "thinking": 668,
+    "turns": 3,
+    "peak_context": 11381,
+    "first_turn": 6686,
+    "read_chars": 8389,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     6947,
+     1312,
+     130
+    ]
+   },
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "record-format vegetation 020",
+    "fresh": 23963,
+    "cached": 53662,
+    "output": 6930,
+    "thinking": 3674,
+    "turns": 4,
+    "peak_context": 23957,
+    "first_turn": 8176,
+    "read_chars": 33369,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     32633,
+     629,
+     67,
+     40
+    ]
+   },
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "record-format vegetation 060",
+    "fresh": 7772,
+    "cached": 56197,
+    "output": 3445,
+    "thinking": 1416,
+    "turns": 5,
+    "peak_context": 15075,
+    "first_turn": 8176,
+    "read_chars": 10263,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     9909,
+     322,
+     16,
+     16
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5-5",
+    "description": "quote-check re-check 020",
+    "fresh": 14483,
+    "cached": 47831,
+    "output": 5327,
+    "thinking": 3078,
+    "turns": 4,
+    "peak_context": 20236,
+    "first_turn": 6792,
+    "read_chars": 27083,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     21575,
+     4238,
+     1127,
+     143
+    ]
+   }
+  ]
+ },
+ {
+  "window": "vegetation 8",
+  "main": {
+   "fresh": 3756,
+   "cached": 878568,
+   "output": 2264,
+   "thinking": 143,
+   "turns": 4,
+   "peak_context": 221593
+  },
+  "agents": []
+ }
+]

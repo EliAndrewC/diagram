@@ -1,28 +1,28 @@
 <h2 id="plot-sizes-pond-sizing-and-acreage-from-population">Plot sizes, pond sizing and acreage from population</h2>
 <!-- Grounds: the v2 carve targets -->
 <!-- Evidence: interpolated -->
-<p><strong>Sources:</strong> <a href="https://ja.wikipedia.org/wiki/%E7%9F%B3%E9%AB%98"><code>kokudaka-jawiki</code></a> (one koku a year; real stipends ~1.8), <a href="https://kotobank.jp/word/五公五民-64520"><code>gokogomin-kotobank</code></a> (40% then 50% - the "~45%" is the midpoint), <a href="https://ja.wikipedia.org/wiki/%E7%9F%B3%E7%9B%9B"><code>kokumori-jawiki</code></a>, <a href="https://ja.wikipedia.org/wiki/%E8%80%95%E5%9C%B0%E6%95%B4%E7%90%86"><code>kochi-seiri-jawiki</code></a>, <a href="https://www.gutenberg.org/cache/epub/5350/pg5350-images.html"><code>king-forty-centuries</code></a></p>
+<p><strong>Sources:</strong> <a href="https://ja.wikipedia.org/wiki/%E7%9F%B3%E9%AB%98"><code>kokudaka-jawiki</code></a> (one koku a year; real stipends ~1.8), <a href="https://kotobank.jp/word/五公五民-64520"><code>gokogomin-kotobank</code></a> (40% then 50% - the "~45%" is the midpoint), <a href="https://ja.wikipedia.org/wiki/%E7%9F%B3%E7%9B%9B"><code>kokumori-jawiki</code></a>, <a href="https://ja.wikipedia.org/wiki/雑穀"><code>zakkoku-jawiki</code></a> and <a href="https://kotobank.jp/word/%E9%9B%91%E7%A9%80-68803"><code>zakkoku-kotobank</code></a> (coarse grain as the farmers' own food), <a href="https://ja.wikipedia.org/wiki/%E8%80%95%E5%9C%B0%E6%95%B4%E7%90%86"><code>kochi-seiri-jawiki</code></a>, <a href="https://www.gutenberg.org/cache/epub/5350/pg5350-images.html"><code>king-forty-centuries</code></a></p>
 <!-- the "~45%" was an undisclosed midpoint, now disclosed; the four unread figures - leftover -->
 <ul>
 <li>
-<p><strong>Plots</strong>: pre-modern 0.02-0.25 acre, irregular, about 9 scattered plots per household (the ~9 is unsourced) (fragmented holdings were normal).<sup class="fn" data-note="kochi-seiri-jawiki-2"></sup><sup class="fn" data-note="tabayashi-1987-12"></sup> STRAIGHT rectangular channels/plots are post-1900 consolidation (the Tedori fan's ditches were only straightened in the early 1900s)<sup class="fn" data-note="tabayashi-1987-13"></sup> - the organic waver is period-correct.<sup class="fn" data-note="king-forty-centuries"></sup><!-- do not "clean it up" --></p>
+<p><strong>Plots</strong>: fragmented holdings were normal, each household's paddy lying in scattered plots;<sup class="fn" data-note="kochi-seiri-jawiki-2"></sup><sup class="fn" data-note="tabayashi-1987-12"></sup> the size of a pre-modern plot, taken here as 0.02-0.25 acre, and the count of about 9 plots per household are this page's own figures,<sup class="fn" data-note="plot-sizes-pond-sizing-and-acreage-from-population-2"></sup> and the plots are irregular (see <a href="#paddy-plots---irregular-patchwork-and-why-the-grid-is-anachronistic">Paddy plots</a>). STRAIGHT rectangular channels/plots are post-1900 consolidation (the ditches on the Tedori River's alluvial fan were only straightened in the early 1900s)<sup class="fn" data-note="tabayashi-1987-13"></sup> - the organic waver is period-correct.<sup class="fn" data-note="king-forty-centuries"></sup><!-- do not "clean it up" --></p>
 <p><em>Which figure is which, because two different things get called a plot.</em> A leveled, diked
 CELL is one basin that has to hold water at an even depth, and that is physically small: the maps
 target about 0.05 acre for it (roughly 200 m2, a 47 ft square), derived from real feet at whatever
 scale the sheet is drawn to, so a basin is the same real size on a hamlet map and on a city
-map.<!-- PADDY_CELL_ACRES; paddy_grain(ftpx) derives the grain from the target --> The older drawing, still used by
-the maps that have not been rebuilt on the water-first engine, subdivides a field recursively to a
-PARCEL grain instead - about 0.10 acre at the finer setting the villages use, about 0.19 acre at its
-default.<!-- plot=34 -> ~435 m2; plot=46 -> ~785 m2, in settlement/fields/paddy.py --> All three figures sit inside the
-0.02-0.25 acre band above, and neither grain is a legibility inflation: the coarser one is a parcel,
-which a holding really was, and the finer one is the cell the water-first engine derives. A parcel
-subdivides into several cells on any slope, which is why the cell sits below the surveyed-parcel
-figures.</p>
+map.<!-- PADDY_CELL_ACRES; paddy_grain(ftpx) derives the grain from the target --> The older drawing, still used on some
+maps, divides a field again and again down to a
+PARCEL grain instead - about 0.10 acre on the village maps, about 0.19 acre on the
+rest.<!-- plot=34 -> ~435 m2; plot=46 -> ~785 m2, in settlement/fields/paddy.py --> All three figures sit inside the
+0.02-0.25 acre band above, and neither grain is enlarged to make the map easier to read: the coarser one is a parcel,
+one of the scattered fields a holding was made of, and the finer one is the leveled cell. On this page's
+reading, a parcel on any slope is split into several cells, because each cell must be level to hold its
+water at an even depth - which is why the cell sits below the parcel figures.</p>
 </li>
 <li>
 <p><strong>Pond sizing (the rule)</strong>: sole-storage tameike run ~2,000-2,500 m3 of storage per irrigated ha (typical depth 2-4 m); a STREAM-FED pond refilling 1-2x a season is comfortable at ~1,200-1,500 m3/ha.<sup class="fn" data-note="plot-sizes-pond-sizing-and-acreage-from-population"></sup> Hoshigaoka: 31.8 ha of paddy gives about 1.5 ha of pond surface<!-- rx=145, ry=92 px at 1px=2ft -->, roughly 47,000 m3 at about 3 m deep, or about 1,470 m3/ha, plus a feeder stream. Pond area is kept proportional to command area.<!-- The first draft's 0.84 ha pond (~790 m3/ha) was honestly undersized - keep pond area proportional to command area. --></p>
 </li>
 <li>
-<p><strong>Acreage from population (the sizing rule)</strong>: a person eats ~1 koku/yr;<sup class="fn" data-note="kokudaka-jawiki"></sup> the assessed rate for middling paddy ~1.3 koku/tan (the middle-grade kokumori, a tax rate rather than a measured yield);<sup class="fn" data-note="kokumori-jawiki"></sup> coarse grain fills part of the diet while ~45% of rice goes to tax<sup class="fn" data-note="gokogomin-kotobank"></sup> -&gt; ~0.8-1.0 tan gross paddy per person -&gt; 350 inhabitants ~ 280-350 tan = <strong>69-86 acres</strong> (+ dry margins later). Kikuta lands at ~79 acres / ~600 plots.</p>
+<p><strong>Acreage from population (the sizing rule)</strong>: a person eats ~1 koku/yr;<sup class="fn" data-note="kokudaka-jawiki"></sup> the assessed rate for middling paddy ~1.3 koku/tan (the middle-grade kokumori, a tax rate rather than a measured yield);<sup class="fn" data-note="kokumori-jawiki"></sup> coarse grain fills part of the diet<sup class="fn" data-note="zakkoku-jawiki"></sup><sup class="fn" data-note="zakkoku-kotobank"></sup> while ~45% of rice goes to tax (the midpoint of the 40% and 50% rates)<sup class="fn" data-note="gokogomin-kotobank"></sup> -&gt; ~0.8-1.0 tan gross paddy per person, which leaves coarse grain roughly a third of the diet (28-43%; rice alone would need ~1.4 tan) - that share is a GUESS, since neither coarse-grain source gives one -&gt; 350 inhabitants ~ 280-350 tan = <strong>69-86 acres</strong> (+ dry margins later). Kikuta lands at ~79 acres / ~600 plots.</p>
 </li>
 </ul>
