@@ -457,6 +457,7 @@ forest litter	forest litter
 forest litters	forest litter
 formwork	formwork
 fortune	Fortune
+fortunes	Fortune
 four books	Four Books and Five Classics
 four books and five classics	Four Books and Five Classics
 four gods	four gods

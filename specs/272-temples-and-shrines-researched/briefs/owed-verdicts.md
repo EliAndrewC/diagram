@@ -1,3 +1,4 @@
 - CompoundShrine (religion-and-death SECTION=090): IN-STEP - the modal claims nothing about arch spacing, rows or dates
 - Torii (religion-and-death SECTION=090): IN-STEP - the 12 ft pitch, the GM's ruling and the single-arch norm still stand
 - Torii (religion-and-death SECTION=092): IN-STEP - its Entry now names 092 (the innermost-arch text moved there in the split); the silence and the ruling it cites still stand
+- ShrineGrove (religion-and-death SECTION=100): IN-STEP - the grove as the shrine's setting and the cleared opening as a drawing decision still stand; the new siting and hall evidence does not touch the grove
