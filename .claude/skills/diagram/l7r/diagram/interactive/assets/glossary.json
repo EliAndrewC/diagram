@@ -528,7 +528,8 @@
  "akusui": {
   "def": "The drain: the collector ditch at a field's foot that gathers the paddies' tail water and storm runoff, wider at its end than the supply that watered the same ground.",
   "variants": [
-   "akusui"
+   "akusui",
+   "akusuiro"
   ]
  },
  "alluvial fan": {
@@ -7201,6 +7202,21 @@
   "def": "The sand and gravel a stream rolls and drags along its bottom, as against the fine silt it carries in the water.",
   "variants": [
    "bed load"
+  ]
+ },
+ "throat": {
+  "def": "The mouth of a branch channel where it leaves or joins a larger one - its first short stretch, whose heading decides whether the junction is swept with the current.",
+  "variants": [
+   "throat",
+   "throats"
+  ]
+ },
+ "contour": {
+  "def": "A line across the ground at one elevation. A drain laid along the contour runs level across the slope, so the water from the fields above falls into it along its whole length.",
+  "variants": [
+   "contour",
+   "contours",
+   "along the contour"
   ]
  }
 }

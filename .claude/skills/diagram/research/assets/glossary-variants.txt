@@ -13,9 +13,11 @@ aizu	Aizu
 ake-mutsu	ake-mutsu
 akiba	Akiba
 akusui	akusui
+akusuiro	akusui
 alluvial	alluvial
 alluvial fan	alluvial fan
 alluvial fans	alluvial fan
+along the contour	contour
 along the ridge	ridge span
 alternate attendance	alternate attendance
 an'ei	An'ei
@@ -225,6 +227,8 @@ conservation headland	conservation headland
 conservation headlands	conservation headland
 consolidated paddies	kochi seiri
 consolidated paddy	kochi seiri
+contour	contour
+contours	contour
 cooper	cooper
 cooperage	cooper
 coopers	cooper
@@ -1635,6 +1639,8 @@ three officials	Three Officials
 threshing yard	threshing yard
 threshing yards	threshing yard
 threshing-yard	threshing yard
+throat	throat
+throats	throat
 throwing	throwing
 tian'geng	bund
 tiangeng	bund
