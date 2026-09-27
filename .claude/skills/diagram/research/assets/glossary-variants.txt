@@ -110,6 +110,7 @@ buke	bushi
 buke-chi	buke-chi
 buke-yashiki	buke-yashiki
 bund	bund
+bund tea	keihan-cha
 bunded	bund
 bunds	bund
 bungi	bungi
@@ -553,6 +554,7 @@ hachiman	Hachiman
 hachure	hachure
 hachures	hachure
 haiden	haiden
+hakehi	hakehi
 hakka	Hakka
 hakone barrier	Hakone barrier
 half-river closure	half-river closure
@@ -626,8 +628,10 @@ hongo	hongo
 honmaru	honmaru
 honmune-zukuri	honmune-zukuri
 horeki	Horeki
+horiage-den	horita
 horinouchi	horinouchi
 horinouchi's	horinouchi
+horita	horita
 horse-face	mamian
 horse-faces	mamian
 hot shoeing	hot-shoeing
@@ -720,6 +724,7 @@ jishinban	jishinban
 jitter	jitter
 jittered	jitter
 jittering	jitter
+jiwari	warichi
 jizo	jizo
 jo	jo
 jobikeshi	jobikeshi
@@ -789,6 +794,7 @@ keicho	Keicho
 keicho-era	Keicho
 keidai	keidai
 keihan	bund
+keihan-cha	keihan-cha
 keiko	keiko
 ken	ken
 kenchi-cho	kenchicho
@@ -1559,6 +1565,7 @@ ward gates	kido
 ward-and-market	ward-and-market system
 ward-and-market system	ward-and-market system
 wari-tetsu	wari-tetsu
+warichi	warichi
 warren	warren
 warrens	warren
 warring states	Warring States

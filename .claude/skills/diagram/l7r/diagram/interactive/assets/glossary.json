@@ -6448,6 +6448,13 @@
    "dispersed farmsteads"
   ]
  },
+ "keihan-cha": {
+  "def": "Bund tea: tea planted in a single row along the bank between fields, marking the boundary with the neighbor and breaking the wind.",
+  "variants": [
+   "keihan-cha",
+   "bund tea"
+  ]
+ },
  "bansui": {
   "def": "Rotation of irrigation water: which villages or fields may take water, how wide their channels may be and when their gates may open, fixed by rule, most strictly in a dry season.",
   "variants": [
@@ -6563,6 +6570,26 @@
    "melon-on-the-vine",
    "melon on the vine",
    "长藤结瓜"
+  ]
+ },
+ "horita": {
+  "def": "A raised paddy of the Japanese waju: part of a poorly drained paddy dug out and the mud piled on the rest, so the rice stands on long ridges just above the water and the dug strips between are channels for a field boat.",
+  "variants": [
+   "horita",
+   "horiage-den"
+  ]
+ },
+ "hakehi": {
+  "def": "A drain culvert through a waju's ring dike, shut while the river outside stood higher than the fields and opened when it fell, so the polder's standing water ran out by gravity.",
+  "variants": [
+   "hakehi"
+  ]
+ },
+ "warichi": {
+  "def": "The Edo-period custom of re-dividing a village's fields among its landholders by lot every so many years, so that good and bad ground, and the risk of flood, were shared out evenly.",
+  "variants": [
+   "warichi",
+   "jiwari"
   ]
  }
 }
