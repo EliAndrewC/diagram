@@ -127,13 +127,18 @@ visible where they were hidden inside the parent's write-up.
   village shrine's; Ubame's stands ~5 ft off, and the wood-kami altar sits on the same axis just past it); an irori
   on a raised floor beside a doma with kamado, a common samurai kitchen form - if attested, the hearth becomes a
   knob; the tax barge's bales drawn ~4 ft across against a tawara of ~2.5 by 1.5 ft.
-- **Drawing defects the reviews found outside this feature** (each a sheet edit for a later session): Hayakawa's
-  reception bay, its engawa and its genkan face the kitchen's flank 11 ft away rather than the garden (B120, B230);
-  Hayakawa's karo's door opens 0.3 ft short of the court divider, and its servants' door into the residence's north
-  wall 2 ft away; Ochiba's and Ubame's kitchens draw no door of their own; Ubame's wood-kami altar sits on the
-  shrine's axis 2 ft past its torii, so the arch reads as the altar's (whose write-up says it has none); Ubame's
-  balance beam is drawn 12 ft long; three of Ubame's door glyphs stand as slabs outside their walls where the
-  rendering rule says flush; Ubame's SVG comment "Granary ROW ... Two bays" is stale against its notes.
+- **Drawing defects the reviews found - FIXED 2026-09-27 (GM: "fix what you found")**: Hayakawa's reception and
+  genkan now face the garden, its karo's and servants' doors open onto service ground, its family block has its own
+  door; Ochiba's and Ubame's kitchens have doors; Ubame's wood-kami altar is off the torii's axis, its balance beam
+  6 ft, its granary comment current (each sheet's review log). Still open: door glyphs drawn as slabs outside their
+  walls where the rendering rule says flush (every sheet's informal doors - a convention question); the 2 ft slot
+  between Hayakawa's nagaya and the residence (no fire gap - a re-seat for a later session).
+- **Raised by the reviews of those fixes (research questions)**: whether a buke residence's master's rooms adjoin the
+  family's with the reception at the formal end (Hayakawa now sets the reception between them); whether the entry
+  approach and the zashiki's viewing garden shared one space or were fenced apart (niwa-kido); where the butsuma
+  stood - by the zashiki or among the private rooms (Hayakawa's alcove is now 11 ft from the kitchen); a guest privy
+  by the zashiki and a family privy apart (Hayakawa's one residence privy now hangs at the reception block); one
+  kitchen entrance or a delivery door plus a serving door; a beam balance or a steelyard for bulk charcoal.
 - **Canon, settled from Obsidian Portal (2026-09-27)**: the river-stone stroke practice, the lacquer bowls drying
   in the workshop (replacement Pact-Bowls, lacquered on site) and the Chigiri-no-Chou (the Ledger of Broken Bowls)
   are all in Kitsune Tatsuya's GM-only notes - not missing canon, as this file and 262's coverage had it. Whether
