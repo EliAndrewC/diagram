@@ -3,33 +3,42 @@
 Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D8). Inventory: [`inventory.md`](inventory.md). Outcomes:
 [`outcomes.md`](outcomes.md). Briefs and handoffs: [`briefs/`](briefs/).
 
-- [ ] T01 G1, the residence's rooms (R01-R06, R53): write session, then its check sessions (D1)
+- [x] T01 G1, the residence's rooms (R01-R06, R53): write session, then its check sessions (D1)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
-- [ ] T02 G1B, the residence's entry and outbuildings (R07-R12)
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. write session + check sessions done; every finding applied and re-checked, per briefs/g1-checks.md (open items carried to outcomes.md)
+- [x] T02 G1B, the residence's entry and outbuildings (R07-R12)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
-- [ ] T03 G2, service buildings (R13-R19)
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. write session + check sessions done; every finding applied and re-checked, per briefs/g1b-checks.md (open items carried to outcomes.md)
+- [x] T03 G2, service buildings (R13-R19)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
-- [ ] T04 G3, the office and the court (R20-R25)
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. write session + check sessions done; every finding applied and re-checked, per briefs/g2-checks.md (open items carried to outcomes.md)
+- [x] T04 G3, the office and the court (R20-R25)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
-- [ ] T05 G3B, the gate, the walls and two unreadable sources (R26-R29)
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. write session + check sessions done; every finding applied and re-checked, per briefs/g3-checks.md (open items carried to outcomes.md)
+- [x] T05 G3B, the gate, the walls and two unreadable sources (R26-R29)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
-- [ ] T06 G4, the grounds (R30-R35)
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. write session + check sessions done; every finding applied and re-checked, per briefs/g3b-checks.md (open items carried to outcomes.md)
+- [x] T06 G4, the grounds (R30-R35)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
-- [ ] T07 G5, the shrine (R36-R39)
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. write session + check sessions done; every finding applied and re-checked, per briefs/g4-checks.md (open items carried to outcomes.md)
+- [x] T07 G5, the shrine (R36-R39)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
-- [ ] T08 G6, river, trade and roads (R40-R47)
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. write session + check sessions done; every finding applied and re-checked, per briefs/g5-checks.md (open items carried to outcomes.md)
+- [x] T08 G6, river, trade and roads (R40-R47)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
-- [ ] T09 G7, the map-story kinds (R48-R51)
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. write session + check sessions done; every finding applied and re-checked, per briefs/g6-checks.md (open items carried to outcomes.md)
+- [x] T09 G7, the map-story kinds (R48-R51)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. write session + check sessions done; every finding applied and re-checked, per briefs/g7-checks.md (open items carried to outcomes.md)
 - [ ] T16 G8, the in-field grave island (R52): the record, then `GraveIsland` and the rate follow the finding
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
@@ -37,8 +46,9 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D8). Inventory: [`inv
       handoff names), made once 265's task for each page is ticked, and checked (FR-006)
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
-- [ ] T10 `outcomes.md`: every item's outcome and question, from the handoffs (D5)
+- [x] T10 `outcomes.md`: every item's outcome and question, from the handoffs (D5)
       research: rendering
+      verify: DONE. outcomes.md: 53 items from the handoffs verbatim, the three owed record edits, the open leads
 - [ ] T11 The kinds follow the outcomes: `Entry:`, label, prose; `entry-drift` on each changed kind (D6)
       research: rendering
 - [ ] T12 The sheets follow the outcomes: redraws and knobs, measured, `building-review` (D6)
