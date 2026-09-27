@@ -360,16 +360,23 @@ def test_a_glossary_tooltip_escapes_the_modal_and_stays_on_the_page(synthetic: P
     the window's edge, so the clamp is exercised rather than assumed; the viewport is restored after. The
     word is the rightmost defined term that is ON SCREEN: a modal taller than this viewport (the bund's,
     since feature 242 lengthened its explanation) centers with its top above the window, and a term up
-    there cannot be hovered at all - which is the harness, not the clamp under test."""
+    there cannot be hovered at all - which is the harness, not the clamp under test. The word is one whose center is
+    on it (`elementFromPoint`), and the pointer starts off every word. THE TEXT IS THE HOVERED WORD'S OWN DEFINITION:
+    when the bund's rightmost on-screen term stopped being its paragraph's last (feature 250 added `reach` and
+    `footplanks`), this caught `page.js` giving every term in a paragraph the last term's definition."""
     was = synthetic.page.viewport_size
     synthetic.page.set_viewport_size({"width": 420, "height": 640})
     try:
         synthetic.js("() => window.l7rMap.fit()")
         synthetic.open("bund")
         word = synthetic.js(
-            "() => { let best = null; for (const s of document.querySelectorAll('#explain .gl')) { const r = s.getBoundingClientRect(); if (r.width && r.top >= 0 && r.bottom <= window.innerHeight && (!best || r.left > best.left)) best = { left: r.left, x: r.left + r.width / 2, y: r.top + r.height / 2, def: s.getAttribute('data-def') }; } return best; }"
+            "() => { let best = null; for (const s of document.querySelectorAll('#explain .gl')) { const r = s.getBoundingClientRect(); const x = r.left + r.width / 2, y = r.top + r.height / 2; if (r.width && r.top >= 0 && r.bottom <= window.innerHeight && document.elementFromPoint(x, y) === s && (!best || r.left > best.left)) best = { left: r.left, x, y, def: s.getAttribute('data-def') }; } return best; }"
         )
         assert word and word["def"], "the bund's explanation carries a defined term"
+        # the pointer starts OFF every word, so the box shown is the hover's and not one left from the modal opening
+        synthetic.page.mouse.move(2, 2)
+        synthetic.page.wait_for_timeout(30)
+        assert synthetic.js("() => document.getElementById('tip').hidden"), "no box is showing before the hover"
         synthetic.page.mouse.move(word["x"], word["y"])
         synthetic.page.wait_for_timeout(50)
         got = synthetic.js(
