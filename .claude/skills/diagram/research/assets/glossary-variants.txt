@@ -208,6 +208,10 @@ chan	Chan
 chan buddhism	Chan
 chancellery	House Chancellery
 chancellery's	House Chancellery
+chancellor	chancellor
+chancellor's	chancellor
+chancellors	chancellor
+chancellors'	chancellor
 chang'an	Chang'an
 chaoguan	chaoguan
 chenghuangmiao	chenghuangmiao
@@ -281,6 +285,9 @@ coppicing	coppice
 copse	copse
 corvee	corvee
 corvée	corvee
+cosmopolitan	cosmopolitan lineage
+cosmopolitan lineage	cosmopolitan lineage
+cosmopolitan lineages	cosmopolitan lineage
 country monk	country monk
 country monks	country monk
 county magistrate	county magistrate
@@ -447,6 +454,8 @@ edo-period	Edo period
 eighty-eighth night	eighty-eighth night
 eiro	eiro
 ekika	ekika
+elder house	karo
+elder houses	karo
 embankment	embankment
 embankments	embankment
 emerald charter	Emerald Charter
@@ -1144,6 +1153,8 @@ light bamboo	light bamboo
 lijia	lijia
 lijin	lijin
 lineage	lineage
+lineage chancellor	chancellor
+lineage chancellors	chancellor
 lineage village	lineage village
 lineage villages	lineage village
 lineages	lineage
@@ -1990,6 +2001,8 @@ unhaired	unhair
 unhairing	unhair
 unhairs	unhair
 unjo-gura	levy storehouse
+upper estate	kami-yashiki
+upper estates	kami-yashiki
 upper residence	kami-yashiki
 upper residences	kami-yashiki
 ura-dana	ura-dana

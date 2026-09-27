@@ -2157,7 +2157,9 @@
   "variants": [
    "kami-yashiki",
    "upper residence",
-   "upper residences"
+   "upper residences",
+   "upper estate",
+   "upper estates"
   ]
  },
  "kamiza": {
@@ -2202,7 +2204,9 @@
  "karo": {
   "def": "Literally \"house elder\": the senior retainer who ran a samurai household's affairs - in a domain lord's house, the senior councillors, who decided in council and lived nearest the castle.",
   "variants": [
-   "karo"
+   "karo",
+   "elder house",
+   "elder houses"
   ]
  },
  "kashi": {
@@ -8218,6 +8222,25 @@
    "hectare",
    "ha",
    "hectares"
+  ]
+ },
+ "chancellor": {
+  "def": "In the setting, the member of the domain's House Chancellery who sits for one samurai lineage; a House has about six, each of Rank 11, second only to the daimyo.",
+  "variants": [
+   "chancellor",
+   "chancellors",
+   "chancellors'",
+   "chancellor's",
+   "lineage chancellor",
+   "lineage chancellors"
+  ]
+ },
+ "cosmopolitan lineage": {
+  "def": "In the setting, a samurai lineage tied to no one province, often raised to reward service to the daimyo - unlike a provincial lineage, which is rooted in its home province and in practice holds its governorship by inheritance.",
+  "variants": [
+   "cosmopolitan lineage",
+   "cosmopolitan lineages",
+   "cosmopolitan"
   ]
  }
 }
