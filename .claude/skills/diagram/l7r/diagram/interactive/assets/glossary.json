@@ -7330,5 +7330,38 @@
   "variants": [
    "nuptiality"
   ]
+ },
+ "ubusuna": {
+  "def": "The god of the place where a person was born. By the Edo period it was treated as the same god as a village's ujigami and chinju.",
+  "variants": [
+   "ubusuna",
+   "ubusuna god",
+   "ubusunagami"
+  ]
+ },
+ "ubuko": {
+  "def": "Those born under an ubusuna god's protection, who owe it worship. It pairs with the ubusuna the way ujiko pairs with ujigami.",
+  "variants": [
+   "ubuko"
+  ]
+ },
+ "Bingo": {
+  "def": "An old province on the Inland Sea coast of western Honshu, roughly today's eastern Hiroshima prefecture.",
+  "variants": [
+   "Bingo"
+  ]
+ },
+ "Sanuki": {
+  "def": "An old province in northeastern Shikoku, facing the Inland Sea, roughly today's Kagawa prefecture; its plain is one of Japan's named regions of dispersed villages.",
+  "variants": [
+   "Sanuki",
+   "Sanuki plain"
+  ]
+ },
+ "Setouchi": {
+  "def": "The lands around the Seto Inland Sea, between western Honshu, Shikoku and northern Kyushu.",
+  "variants": [
+   "Setouchi"
+  ]
  }
 }

@@ -108,6 +108,7 @@ bettō	bettō
 bettō-ji	bettō
 bidens	Bidens tripartita
 bidens tripartita	Bidens tripartita
+bingo	Bingo
 bishamon	Bishamon
 bishamonten	Bishamon
 board feet	board foot
@@ -1404,6 +1405,8 @@ sanmai	sanmai
 sannomaru	sannomaru
 sanshaku-michi	sanshaku-michi
 sanson	sankyoson
+sanuki	Sanuki
+sanuki plain	Sanuki
 sara-ike	sara-ike
 sarae	sarae
 sasa	sasa
@@ -1439,6 +1442,7 @@ sericulture	sericulture
 ses	SES
 sess	SES
 setchin	kawaya
+setouchi	Setouchi
 settlement core	settlement core
 settling basin	settling basin
 settling basins	settling basin
@@ -1718,6 +1722,10 @@ two-grave	ryobosei
 tōhoku	Tohoku
 tōkaidō	Tokaido
 tōya	miyaza
+ubuko	ubuko
+ubusuna	ubusuna
+ubusuna god	ubusuna
+ubusunagami	ubusuna
 ujidera	bodaiji
 ujigami	ujigami
 ujiko	ujiko
