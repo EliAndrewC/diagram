@@ -985,26 +985,3 @@ def test_parse_svg_reads_the_fence_lines_as_segments() -> None:
     )
     plan = pa.parse_svg(text)
     assert [(s.x, s.y, s.w, s.h) for s in plan.fence_segs] == [(20.0, 20.0, 360.0, 2.0), (20.0, 20.0, 2.0, 360.0)]
-
-
-def test_a_board_at_a_nagaya_mon_reads_its_passage_by_the_gate_posts() -> None:
-    """Feature 267: a gate range IS the wall line, standing in a break wider than any gap counted as a gate, so the
-    passage is found by the `main gate` posts - drawn in a filled group, with no fill of their own."""
-    posts = '<g fill="#2D2A24" data-kind="main gate"><rect x="190" y="396" width="6" height="8"/><rect x="226" y="396" width="6" height="8"/></g>'
-    board = '<rect x="240" y="420" width="21" height="9" fill="#E8D2A8" data-kind="notice board"/>'
-    wide = _svg(_rect(0, 0, 400, 400, COURT), _wallgroup((0, 400, 100, 400), (300, 400, 400, 400)), posts, board)
-    plan = pa.parse_svg(wide)
-    assert len(plan.gate_posts) == 2, "the fill-less posts are read"
-    assert pa.notice_board_adrift(plan) == [], "a board 7 ft off the passage is at the gate"
-    far = wide.replace('x="240" y="420"', 'x="360" y="60"')
-    assert pa.notice_board_adrift(pa.parse_svg(far)), "and one across the compound is still adrift"
-
-
-def test_the_main_gate_passage_is_measured_between_its_posts() -> None:
-    """Feature 267: the report's gate list carries the ceremonial passage even where it runs through a gate range."""
-    posts = '<g fill="#2D2A24" data-kind="main gate"><rect x="190" y="396" width="6" height="8"/><rect x="232" y="396" width="6" height="8"/></g>'
-    plan = pa.parse_svg(_svg(_rect(0, 0, 400, 400, COURT), posts))
-    assert pa.main_gate_passage_ft(plan) == pytest.approx(12.0)
-    side = '<g data-kind="main gate"><rect x="396" y="100" width="8" height="6" fill="#2D2A24"/><rect x="396" y="142" width="8" height="6" fill="#2D2A24"/></g>'
-    assert pa.main_gate_passage_ft(pa.parse_svg(_svg(_rect(0, 0, 400, 400, COURT), side))) == pytest.approx(12.0), "a gate in a side wall"
-    assert pa.main_gate_passage_ft(pa.parse_svg(_svg(_rect(0, 0, 400, 400, COURT)))) is None

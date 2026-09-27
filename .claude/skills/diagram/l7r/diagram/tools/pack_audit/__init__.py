@@ -131,6 +131,7 @@ from .report import format_report as format_report
 from .report import main as main
 from .report import read_form as read_form
 from .shared import coverage_band as coverage_band
+from .shared import divider_gates_ft as divider_gates_ft
 from .shared import gate_widths as gate_widths
 from .shared import ink_bounds as ink_bounds
 from .shared import perimeter_hugging as perimeter_hugging

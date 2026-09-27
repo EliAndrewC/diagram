@@ -129,7 +129,6 @@ PARTS: dict[str, list[tuple[str, str]]] = {
     "ubame-magistracy": _SHARED
     + [
         ("stone lantern", "border court"),
-
         ("engawa", "residence"),
         ("residence corridor", "residence"),
         ("door", "parley room"),

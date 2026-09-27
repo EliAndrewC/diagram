@@ -76,7 +76,7 @@ def test_the_sheet_is_classified_by_its_tags() -> None:
     shapes, view = sl.read_sheet(src)
     idx = sl.classify(shapes, view)
     weights = sorted(o.weight for o in idx.obstacles)
-    assert weights == [500.0, 1000.0, 1000.0, 1000.0], "the river fill, the scale-bar-like `-` rect, the divider band, the text"
+    assert weights == [500.0, 1000.0, 1000.0, 10000.0], "the river fill, the scale-bar-like `-` rect, the divider band, the text (a text weighs ten, feature 267)"
     assert len(idx.ways) == 1 and idx.ways[0].half_width == 5.0
 
 

@@ -146,7 +146,9 @@ def test_gate_widths_on_a_vertical_wall() -> None:
 # --- two_court_zoning ---
 
 
-DIVIDER = '<g stroke="#3F3A30" stroke-width="6"><line x1="20" y1="200" x2="380" y2="200"/></g>'
+# the divider broken by its middle gate, x 191..209 (6 ft)
+DIVIDER = '<g stroke="#3F3A30" stroke-width="6"><line x1="20" y1="200" x2="191" y2="200"/><line x1="209" y1="200" x2="380" y2="200"/></g>'
+SEALED = '<g stroke="#3F3A30" stroke-width="6"><line x1="20" y1="200" x2="380" y2="200"/></g>'
 SAND_SOUTH = _rect(100, 250, 200, 60, "url(#oshirasu-sand)")
 SAND_NORTH = _rect(100, 60, 200, 60, "url(#oshirasu-sand)")
 
@@ -162,9 +164,21 @@ def test_two_court_zoning_wants_a_divider_a_court_and_a_gate_on_the_same_side() 
     assert "no hearing court" in s.two_court_zoning(plan)[0]
     _, plan = _plan(DIVIDER, SAND_SOUTH)
     assert "no gate opening" in s.two_court_zoning(plan)[0]
-    vertical = '<g stroke="#3F3A30" stroke-width="6"><line x1="200" y1="20" x2="200" y2="380"/></g>'
+    vertical = '<g stroke="#3F3A30" stroke-width="6"><line x1="200" y1="20" x2="200" y2="180"/><line x1="200" y1="200" x2="200" y2="380"/></g>'
     _, plan = _plan(_wall((180, 220)), vertical, SAND_NORTH)
     assert s.two_court_zoning(plan) == []
+
+
+def test_two_court_zoning_wants_a_gate_in_the_divider() -> None:
+    """Feature 267 pass 3: the placer's draft drew its divider unbroken, the house sealed from the office. A divider
+    needs a passage of at least GATE_MIN_FT; a hairline break is not one."""
+    _, plan = _plan(_wall((180, 220)), SEALED, SAND_SOUTH)
+    assert "no gate" in s.two_court_zoning(plan)[0]
+    narrow = '<g stroke="#3F3A30" stroke-width="6"><line x1="20" y1="200" x2="199" y2="200"/><line x1="203" y1="200" x2="380" y2="200"/></g>'
+    _, plan = _plan(_wall((180, 220)), narrow, SAND_SOUTH)
+    assert "no gate" in s.two_court_zoning(plan)[0]
+    _, plan = _plan(_wall((180, 220)), DIVIDER, SAND_SOUTH)
+    assert s.divider_gates_ft(plan) == [6.0]
 
 
 @pytest.mark.parametrize(("w", "h", "inside"), [(30, 15, True), (15, 30, True), (50, 15, False)])

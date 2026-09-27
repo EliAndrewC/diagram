@@ -241,10 +241,31 @@ def gate_widths(plan: ParsedPlan, lo_ft: float = GATE_MIN_FT, hi_ft: float = GAT
     return out
 
 
+def divider_gates_ft(plan: ParsedPlan) -> list[float]:
+    """The openings in the court divider, in feet: the gaps between consecutive runs of one divider line (its runs share
+    an axis and a line, within a pixel)."""
+    lines: dict[tuple[bool, int], list[tuple[float, float]]] = {}
+    for d in plan.dividers:
+        horiz = d.w >= d.h
+        key = (horiz, round(d.y + d.h / 2) if horiz else round(d.x + d.w / 2))
+        lines.setdefault(key, []).append((d.x, d.x2) if horiz else (d.y, d.y2))
+    out: list[float] = []
+    for runs in lines.values():
+        runs.sort()
+        out += [(b[0] - a[1]) / FTPX for a, b in zip(runs, runs[1:], strict=False)]
+    return out
+
+
 def two_court_zoning(plan: ParsedPlan) -> list[str]:
-    """A divider wall splits the compound, and the sanded hearing court lies on the gate's side of it."""
+    """A divider wall splits the compound, the divider has its own gate, and the sanded hearing court lies on the gate's
+    side of it."""
     if not plan.dividers:
         return ["no court divider - a magistracy is an outer (public) court at the gate and an inner (private) court behind a divider"]
+    # THE DIVIDER HAS A GATE (feature 267 pass 3, the building-review's catch on the placer's draft, which drew the
+    # divider unbroken): the household's middle gate, the nakamon (buildings/programs.md "Two-court zoning") - a
+    # divider with no opening seals the house from the office. A passage is at least GATE_MIN_FT, like a wall's.
+    if not any(g >= GATE_MIN_FT for g in divider_gates_ft(plan)):
+        return ["the court divider has no gate - the household's middle gate (nakamon, ~6-8 ft, narrower than the main gate) joins the courts"]
     sand = [r for r in plan.open_features if r.fill in COURT_FLOORS]
     if not sand:
         return ["no hearing court (oshirasu) - the bench overlooks it from the office hall's dais"]

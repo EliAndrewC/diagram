@@ -14,6 +14,10 @@ KURA_FILLS: frozenset[str] = frozenset({"#F2EFE4"})  # fireproof plaster kura: a
 #: The hearing court's floor, either form the record allows (feature 267 R22, research/buildings.html 'Was the
 #: hearing court open white sand, or roofed?'): white gravel, or the river cobbles Hayakawa's court is laid with.
 COURT_FLOORS: frozenset[str] = frozenset({"url(#oshirasu-sand)", "url(#court-cobbles)"})
+#: A hearing court drawn ROOFED: its floor carries a building's solid outline in this ink (feature 267 R22 - the
+#: placer's `ROOFED_ZONES` and all three hand sheets draw it so). Under that roof stands no fire-water tub: a tub is
+#: gutter-fed from the eaves, so the roofed floor is a footprint to `tubs_in_buildings`, not open ground.
+ROOF_STROKES: frozenset[str] = frozenset({"#5A3F1E"})
 OPEN_PATTERNS: frozenset[str] = frozenset({"url(#garden-stipple)", "url(#keiko-earth)"}) | COURT_FLOORS
 MIN_BLDG_AREA_PX: float = 500.0  # ~55 sqft; below this it is furniture, not a building mass. Lowered
 # from 900 (2026-07-21): the glyph-doctrine retirement shrank real buildings to TRUE size - an 11x7 ft
@@ -59,6 +63,16 @@ MIN_TREE_R_PX: float = 4.0  # the glyph floor: a canopy-green dot smaller than t
 _TEXT_RE = re.compile(r"<text\s([^>]*)>(.*?)</text>", re.DOTALL)
 _ATTR_RE = re.compile(r'([\w-]+)="([^"]*)"')
 _INNER_TAG_RE = re.compile(r"<[^>]*>")
+_TSPAN_RE = re.compile(r'<tspan\b(?=[^>]*?\bx="([\-\d.]*)"|)(?=[^>]*?\bdy="([\-\d.]*)"|)[^>]*>(.*?)</tspan>', re.DOTALL)
+_TSPAN_ALL_RE = re.compile(r"<tspan\b[^>]*>.*?</tspan>", re.DOTALL)
+_ROTATE_RE = re.compile(r"rotate\(\s*([\-\d.]+)[\s,]+([\-\d.]+)[\s,]+([\-\d.]+)\s*\)")
+
+
+def _unescape(s: str) -> str:
+    """A text's characters as drawn: the three entities the sheets write."""
+    return s.replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">")
+
+
 CHAR_W_FRAC: float = 0.55  # a serif glyph's advance width as a fraction of font-size (bbox estimate)
 CHAR_W_BOLD: float = 0.72  # bold ALL-CAPS band labels (RESIDENCE, HEARING COURT) run widest
 CHAR_W_BOLD_MIXED: float = 0.60  # ...but mixed-case bold (building names) is much narrower than caps.
@@ -206,7 +220,8 @@ class ParsedPlan:
     # the `main gate`'s post rects, whatever their fill: posts drawn in a filled group carry none of their own, so
     # `fills` never sees them (feature 267 - a nagaya-mon's passage is found by its posts, not by a wall gap)
     gate_posts: tuple[Rect, ...] = ()
-
+    # the roofed courts (ROOF_STROKES): a court floor under a roof, a footprint to the tub checks
+    roofed_courts: tuple[Rect, ...] = ()
 
     def by_id(self, ident: str) -> tuple[Rect, ...]:
         """The rects the sheet marked `id="<ident>"`, in draw order."""
@@ -233,18 +248,36 @@ def _parse_labels(text: str) -> list[Label]:
     out: list[Label] = []
     for m in _TEXT_RE.finditer(text):
         attrs = dict(_ATTR_RE.findall(m.group(1)))
-        content = _INNER_TAG_RE.sub("", m.group(2)).replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">").strip()
+        content = _unescape(_INNER_TAG_RE.sub("", m.group(2))).strip()
         if not content or "x" not in attrs or "y" not in attrs:
             continue
         x, y = float(attrs["x"]), float(attrs["y"])
         fs = float(attrs.get("font-size", "13"))
         ls = float(attrs.get("letter-spacing", "0"))
-        n = len(content)
+        # a wrapped caption is one line per <tspan dy>: its block is its widest line by its lines' height, not every
+        # line run together - `seat_label` writes wrapped captions so, and INNER COURT in two lines was measured as
+        # one 10-letter line reaching into the building beside it (feature 267)
+        spans = _TSPAN_RE.findall(m.group(2))
+        # only tspans that each set their own x are lines; an inline tspan (a styled word) continues the line it is in
+        wrapped = len(spans) > 1 and all(x for x, _dy, _t in spans) and not _TSPAN_ALL_RE.sub("", m.group(2)).strip()
+        lines = [_unescape(t).strip() for _x, _dy, t in spans] if wrapped else [content]
+        drop = sum(float(dy or 0) for _x, dy, _t in spans[1:]) if wrapped else 0.0
         frac = _bold_char_w(content) if attrs.get("font-weight") == "bold" else CHAR_W_FRAC
-        w = n * fs * frac + ls * max(n - 1, 0)
+        w = max(len(t) * fs * frac + ls * max(len(t) - 1, 0) for t in lines)
+        h = fs + drop
         anchor = attrs.get("text-anchor", "start")
         left = x - w / 2 if anchor == "middle" else (x - w if anchor == "end" else x)
-        out.append(Label(left, y - fs * 0.78, w, fs, attrs.get("fill", "#000000"), content, m.start()))
+        top = y - fs * 0.78
+        rot = _ROTATE_RE.search(attrs.get("transform", ""))
+        if rot and abs(abs(float(rot.group(1))) - 90) < 1:
+            # a quarter-turned label (a river's name along its band) stands on its end about its pivot
+            px, py = float(rot.group(2)), float(rot.group(3))
+            corners = [(left, top), (left + w, top + h)]
+            s = 1 if float(rot.group(1)) > 0 else -1
+            turned = [(px - s * (cy - py), py + s * (cx - px)) for cx, cy in corners]
+            (ax, ay), (bx, by) = turned
+            left, top, w, h = min(ax, bx), min(ay, by), abs(bx - ax), abs(by - ay)
+        out.append(Label(left, top, w, h, attrs.get("fill", "#000000"), " ".join(lines), m.start()))
     return out
 
 
@@ -386,7 +419,18 @@ def parse_svg(text: str) -> ParsedPlan:
         label_kinds=kinds,
         kinds=frozenset(kinds.values()),
         gate_posts=tuple(r for r in _rects(text, need_fill=False) if kinds.get(r.pos) == "main gate"),
+        roofed_courts=_roofed_courts(text),
     )
+
+
+def _roofed_courts(text: str) -> tuple[Rect, ...]:
+    """Every court floor (COURT_FLOORS) drawn with a roof's solid outline (ROOF_STROKES), in draw order."""
+    out: list[Rect] = []
+    for m in _RECT_TAG_RE.finditer(text):
+        attrs = dict(_ATTR_ANY_RE.findall(m.group(1)))
+        if attrs.get("fill") in COURT_FLOORS and attrs.get("stroke") in ROOF_STROKES:
+            out.append(Rect(float(attrs["x"]), float(attrs["y"]), float(attrs["width"]), float(attrs["height"]), attrs["fill"], m.start()))
+    return tuple(out)
 
 
 def _trees(text: str) -> tuple[Rect, ...]:

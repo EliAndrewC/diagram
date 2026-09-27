@@ -7,14 +7,49 @@ and buildings sized in feet with wall tags), and `place()` + `emit_svg()` compos
 
 **Program type**: magistrate's manor (county magistracy) - the generic worked example.
 
-Regenerate: `python3 pool/magistracies/county-magistracy-example/county-magistracy-example.gen.py` (from the skill dir).
+Regenerate: `make map GEN=pool/magistracies/county-magistracy-example/county-magistracy-example.gen.py` (from the skill dir).
+
+## Knob settings
+
+The forms the draft takes where the research gives more than one (feature 267 outcomes; each is set in
+`county_magistracy_program()` with its reason at the point of change):
+
+- **R01 veranda**: the garden face alone (the first of the two forms), 5 ft wide - an `engawa` strip inside the
+  residence's south face (research buildings 240: 3-6 ft).
+- **R02 residence massing**: one block under one roof, the ordinary form; the kitchen joined to it by a short covered
+  corridor, not an echelon of halls (research buildings 250, 360/370).
+- **R03 room order**: the palace order's lesser form - the family's rooms at the kitchen (west) end, the master's
+  next, the reception room at the east END, nearest the middle gate (research buildings 260). Room widths are GUESSES.
+- **R07 approach**: no genkan; the middle gate in the divider and a stepping-stone roji across the garden to a shoe
+  stone at the reception's veranda (the Koseki form, research buildings 300). The household's own doors: the kitchen's
+  one outside door on its south (yard) face and the residence's inner entrance on its west face, below the corridor
+  (research buildings 370). Note 300 says of the Koseki house that the everyday door is the kitchen entrance, while
+  370 gives the family an inner entrance apart from it; the draft draws both doors.
+- **R18 granary**: an earth-walled kura on the ground, no posts (the dozo form).
+- **R19 guardroom**: a freestanding gatehouse BESIDE the gate (Takayama's form, research buildings 420), 18 x 12 ft
+  (Kita-in's 3 x 2 ken), flush west of the gate's post.
+- **R26 main gate**: a one-bay yakuimon with an 8 ft passage between its posts (research buildings 480: 6-8.5 ft).
+- **R30 garden**: no pond drawn - the draft's garden is ground only, which reads as the dry-garden form; its stones and
+  sand are left to the hand refinement.
+- **R34 striking posts**: two upright posts as location markers (the ~4.5 ft standing timber); the practice-weapon rack
+  at the ground's edge is a GUESS.
+- **Staff housing**: option (a) - the platoon in the barracks, the senior retainers in their own quarters and the karo
+  in a house, all inside the walls (buildings/programs.md knob 5).
+- **Tenure**: a freshly appointed, standardized office - no ancestral alcove, no accreted particulars (knob 6).
+
+Guesses the draft carries beyond those: a **detached guest house** (R10, research buildings 330: guests were received
+in the main house; a guest house apart was not found) and a **karo's house of its own** inside the compound (R11,
+research buildings 340: the intendancy's staff lived in small houses or long-house bays; a chief retainer's own house
+there was not found). The kitchen postern's 6 ft and the middle gate's 6 ft (narrower than the main gate), the door
+width (a map drawing convention, research buildings 620), the roji's stone spacing, the hearing court's 80 x 36 ft
+and the garden's 172 x 42 ft are guesses too.
 
 Purpose: demonstrate that the toolchain can get the COMPOSITION right - buildings ring the
-walls (~56% perimeter-hugging), the garden -> oshirasu -> forecourt court-spine is held open
+walls (78% perimeter-hugging, pack_audit 2026-09-27), the garden -> oshirasu -> forecourt court-spine is held open
 in the center (plus the practice ground beside the barracks, per the buildings.md program
 item: a keiko-earth zone the placer reserves like any spine court, emitted with its weapon
 rack and two tategi striking-post markers; the hand-refined map moves the rack flush to the
-adjacent lodging's wall), coverage lands in the jin'ya band (38%), and nothing overflows. It is a
+adjacent lodging's wall), coverage lands in the jin'ya band (35%, pack_audit 2026-09-27), and nothing overflows. It is a
 SCAFFOLD: a real magistracy starts from a draft like this and is hand-refined into a final
 pool SVG (particulars, relics, annotations, the scale bar, and the crop are added by hand).
 
@@ -53,3 +88,32 @@ reason and research section at the point of change):
   residence's, is hemmed in by the corridor and the caption landed 13 ft from it (`orphan_group_labels`).
 
 Coverage 37% after the change (pack_audit), perimeter-hugging 76%; nothing overflows.
+
+2026-09-27 pass 3 (building-review of the pass-2 draft; `compound.py` split into `compound_model.py` and
+`compound_parts.py` past the file-size bar):
+
+- The office hall's fire-water tub stood inside the roofed hearing court: a roofed court is now a footprint to every
+  seat (`compound_parts._point_features`) and to the audit's `tubs_in_buildings` (a court floor with a roof's outline);
+  the hall's tub moved to the uncovered east end of its face. No caption but the court's own stands under its roof.
+- The garden turned its back on the house: the kitchen (now 40 x 30 ft) takes the NW corner on the north wall,
+  joined to the residence's west end by the corridor, with its bath, well, door and the postern on a yard of its own;
+  the garden runs the residence's whole south face and was deepened to y 80.
+- The hearing court is 80 x 36 ft, centered on the office hall and shorter than it (it was 132 x 39, 34 ft off the
+  hall's center); the senior retainers' quarters shortened 60 -> 50 ft to keep a run before their door; the forecourt
+  (55 x 31) and the practice ground (45 x 42, still in the 1,200-2,000 sqft band) took the ground the court gave up.
+- The gate: the R19/R26 pair above, with the posts drawn as a `main gate` group; buildings.md's main-gate and
+  gatehouse bullets rewritten to the two forms.
+- Doors on every lodging block (and the kitchen and gatehouse), the approach form (R07), a 6 ft middle gate in the
+  divider and a kitchen postern in the west wall; `two_court_zoning` now requires a gate in the divider.
+- The residence divided into its rooms with the reception at the east end and a veranda on its garden face.
+- Nitpicks: `servants` -> `servants' quarters`, the zone caption `oshirasu` -> `hearing court`, the cell's two lattice
+  lines, the regenerate line in the make form.
+
+Coverage 35%, perimeter-hugging 78%, nothing overflows; every registered check passes (pack_audit).
+
+## Review log
+
+- **2026-09-27 building-review of the pass-2 draft** (the pass-3 fix list): 3 delta errors (a tub and its caption under
+  the roofed court; the garden off the house; the court longer than the hall and off its axis), 5 program items the
+  outcomes name (the gate pair R19/R26, doors and the approach R07, the divider gate and kitchen postern, the
+  residence's rooms and veranda R01/R03, these notes), 4 nitpicks. All applied in pass 3 above.

@@ -24,7 +24,7 @@ from dataclasses import dataclass
 from .geom import Poly, Pt, area_centroid, bbox, centroid, inside, nearest_points, rect, seg_closest
 from .layout import layouts
 from .obstacles import ObstacleIndex
-from .standard import CENTER_ABOVE_BASELINE_EM, CLEAR_EM, POSITIONS, PREFERRED_OFFSET_EM, REACH_EM, RING_STEP_EM, WEIGHT_OBSTACLE, block_half, upright
+from .standard import CENTER_ABOVE_BASELINE_EM, CHAR_W_EM, CLEAR_EM, POSITIONS, PREFERRED_OFFSET_EM, REACH_EM, RING_STEP_EM, WEIGHT_OBSTACLE, block_half, upright
 
 AREA_SEATS = 400
 """How many interior seats an area caption tries, nearest the centroid first - a search bound, not a rule."""
@@ -87,7 +87,7 @@ def _frame_of(angle: float) -> tuple[Pt, Pt]:
     return (math.cos(a), math.sin(a)), (-math.sin(a), math.cos(a))
 
 
-def _point_cands(text: str, size: float, subject: Subject, lays: list[list[str]]) -> Iterator[_Cand]:
+def _point_cands(text: str, size: float, subject: Subject, lays: list[list[str]], char_w: float = CHAR_W_EM) -> Iterator[_Cand]:
     ang = upright(subject.angle)
     u, v = _frame_of(ang)
     c = centroid(subject.poly)
@@ -99,7 +99,7 @@ def _point_cands(text: str, size: float, subject: Subject, lays: list[list[str]]
     for ring, g in enumerate(rings(size)):
         for rank, (name, sx, sy) in enumerate(POSITIONS):
             for lines in lays:
-                bw, bh = block_half(lines, size)
+                bw, bh = block_half(lines, size, char_w)
                 if abs(sx) == 1.0 and sy:
                     # A CORNER: the block's near corner stands `g` from the subject's corner, along the diagonal.
                     du, dv = sx * (su + bw + g / math.sqrt(2)), sy * (sv + bh + g / math.sqrt(2))
@@ -110,7 +110,7 @@ def _point_cands(text: str, size: float, subject: Subject, lays: list[list[str]]
                 yield _Cand(ring, rank, name, (c[0] + du * u[0] + dv * v[0], c[1] + du * u[1] + dv * v[1]), ang, tuple(lines), (bw, bh), size)
 
 
-def _line_cands(text: str, size: float, subject: Subject, lays: list[list[str]]) -> Iterator[_Cand]:
+def _line_cands(text: str, size: float, subject: Subject, lays: list[list[str]], char_w: float = CHAR_W_EM) -> Iterator[_Cand]:
     pts = list(subject.poly)
     segs = list(zip(pts, pts[1:], strict=False))
     lengths = [math.dist(a, b) for a, b in segs]
@@ -144,12 +144,12 @@ def _line_cands(text: str, size: float, subject: Subject, lays: list[list[str]])
             _u, v = _frame_of(ang)
             for side, name in ((-1.0, "above"), (1.0, "below")):  # above the line before below (psu-geog486-point-labels)
                 for lines in lays:
-                    bw, bh = block_half(lines, size)
+                    bw, bh = block_half(lines, size, char_w)
                     d = subject.half_width + g + bh
                     yield _Cand(ring, j * 2 + (side > 0), name, (p[0] + side * d * v[0], p[1] + side * d * v[1]), ang, tuple(lines), (bw, bh), size)
 
 
-def _area_cands(text: str, size: float, subject: Subject, lays: list[list[str]]) -> Iterator[_Cand]:
+def _area_cands(text: str, size: float, subject: Subject, lays: list[list[str]], char_w: float = CHAR_W_EM) -> Iterator[_Cand]:
     ang = upright(subject.angle)
     c = area_centroid(subject.poly)
     x0, y0, x1, y1 = bbox(subject.poly)
@@ -157,30 +157,33 @@ def _area_cands(text: str, size: float, subject: Subject, lays: list[list[str]])
     seats = [c] + sorted((p for p in grid if inside(p[0], p[1], subject.poly)), key=lambda p: math.dist(p, c))[: AREA_SEATS - 1]
     for rank, p in enumerate(seats):
         for lines in lays:
-            yield _Cand(0, rank, "inside", p, ang, tuple(lines), block_half(lines, size), size)
+            yield _Cand(0, rank, "inside", p, ang, tuple(lines), block_half(lines, size, char_w), size)
 
 
-def _cands(text: str, size: float, subject: Subject, lines: list[str] | None = None) -> Iterator[_Cand]:
+def _cands(text: str, size: float, subject: Subject, lines: list[str] | None = None, char_w: float = CHAR_W_EM) -> Iterator[_Cand]:
     lays = [lines] if lines else layouts(text)
     if subject.kind == "point":
-        return _point_cands(text, size, subject, lays)
+        return _point_cands(text, size, subject, lays, char_w)
     if subject.kind == "line":
-        return _line_cands(text, size, subject, lays)
+        return _line_cands(text, size, subject, lays, char_w)
     if subject.kind == "area":
-        return _area_cands(text, size, subject, lays)
+        return _area_cands(text, size, subject, lays, char_w)
     raise ValueError(f"a caption's subject is a point, a line or an area, not {subject.kind!r}")
 
 
-def place(text: str, size: float, subject: Subject, index: ObstacleIndex, frame: tuple[float, float, float, float] | None = None, lines: list[str] | None = None) -> Placement:
+def place(
+    text: str, size: float, subject: Subject, index: ObstacleIndex, frame: tuple[float, float, float, float] | None = None, lines: list[str] | None = None, char_w: float = CHAR_W_EM
+) -> Placement:
     """Seat one caption by the standard (the module docstring). `frame` is the finished picture's (x0, y0, x1, y1); a
     block that leaves it is never a candidate, because a clipped caption cannot be read. `lines` fixes the caption's
     lines (a hand-drawn caption with a line of its own under it) instead of the wrap rule's layouts. Never returns
-    nothing."""
+    nothing. `char_w` is the caption's width per character in ems - the standard's for the engine's own captions; a
+    hand sheet's bold, capital or letter-spaced caption runs wider (feature 267: `tools/seat_label.py` measures it)."""
     clear = CLEAR_EM * size
     own: Poly | None = list(subject.poly) if subject.kind != "line" else None
     best: tuple[float, int, _Cand, Poly] | None = None
     first: tuple[_Cand, Poly] | None = None
-    for order, cand in enumerate(_cands(text, size, subject, lines)):
+    for order, cand in enumerate(_cands(text, size, subject, lines, char_w)):
         block = rect(cand.center[0], cand.center[1], cand.half[0], cand.half[1], cand.angle)
         if first is None:
             first = (cand, block)

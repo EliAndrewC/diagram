@@ -77,7 +77,8 @@
   <!-- ============================================================ -->
   <!-- THE COMPOUND WALL                                              -->
   <!-- Outer rectangle x=200..1000, y=150..750                        -->
-  <!-- South wall is broken by the main gate at x=560..640            -->
+  <!-- South wall: the main gate 588..612 (8 ft), the service gate    -->
+  <!-- 404..424; the west wall: the kitchen postern 374..394          -->
   <!-- ============================================================ -->
   <!-- compound interior fill (earth) -->
   <!-- The precinct as ONE RECT PER COURT (feature 262), so the page can light each court's ground on its own.
@@ -133,8 +134,8 @@
   <g data-kind="threshold stones">
     <rect x="566" y="760" width="10" height="14" fill="#A03020" stroke="#5C0A04" stroke-width="1.2"/>
     <rect x="624" y="760" width="10" height="14" fill="#A03020" stroke="#5C0A04" stroke-width="1.2"/>
-    <text x="600" y="789" text-anchor="middle" font-size="10" fill="#5C0A04" font-style="italic">Vermillion threshold stones</text>
-    <text x="600" y="801" text-anchor="middle" font-size="9" fill="#5C0A04" font-style="italic">(and buried Pact-Bowl)</text>
+    <text x="711.8" y="786.1" text-anchor="middle" font-size="10" font-style="italic" fill="#5C0A04">Vermillion threshold stones</text>
+    <text x="711.8" y="796.8" text-anchor="middle" font-size="9" font-style="italic" fill="#5C0A04">(and buried Pact-Bowl)</text>
   </g>
 
   <!-- Notice board just outside the wall, BETWEEN the main gate and the service gate
@@ -145,7 +146,7 @@
     <rect x="470.5" y="759.5" width="21" height="9" fill="#E8D2A8" stroke="#6B4F2A" stroke-width="1"/>
     <circle cx="465" cy="772" r="1.5" fill="#4A3318"/>
     <circle cx="497" cy="772" r="1.5" fill="#4A3318"/>
-    <text x="430.6" y="783.9" text-anchor="middle" font-size="9" font-style="italic" fill="#5C4830">notice board</text>
+    <text x="531.4" y="783.9" text-anchor="middle" font-size="9" font-style="italic" fill="#5C4830">notice board</text>
   </g>
 
   <!-- Internal divider wall between outer (south) and inner (north) courts -->
@@ -164,8 +165,8 @@
   <!-- OUTER COURT (south half) - public / administrative            -->
   <!-- y = 450 to y = 750                                             -->
   <!-- ============================================================ -->
-  <text x="600" y="471" text-anchor="middle" font-size="13" font-weight="bold" fill="#5C4830" letter-spacing="2" data-kind="outer court">OUTER COURT</text>
-  <text x="486" y="712" text-anchor="middle" font-size="10" font-style="italic" fill="#7A6A4A" data-kind="outer court">forecourt</text>
+  <text x="603.0" y="693.1" text-anchor="middle" font-size="13" font-weight="bold" letter-spacing="2" fill="#5C4830" data-kind="outer court"><tspan x="603.0" dy="0.0">OUTER</tspan><tspan x="603.0" dy="14.9">COURT</tspan></text>
+  <text x="540.0" y="692.8" text-anchor="middle" font-size="10" font-style="italic" fill="#7A6A4A" data-kind="outer court">forecourt</text>
 
   <!-- Stables (SW corner) - 32x22 ft, a ~3-stall umaya for the magistrate's and
        messengers' few mounts; deliberately kept SMALLER than the barracks (a
@@ -176,7 +177,7 @@
     <!-- stall divisions -->
     <line x1="249" y1="674" x2="249" y2="740" stroke="#6B4F2A" stroke-width="1"/>
     <line x1="278" y1="674" x2="278" y2="740" stroke="#6B4F2A" stroke-width="1"/>
-    <text x="264" y="712" text-anchor="middle" font-size="11" font-weight="bold" fill="#3A2E1C">stables</text>
+    <text x="264.0" y="710.0" text-anchor="middle" font-size="11" font-weight="bold" fill="#3A2E1C">stables</text>
   </g>
 
   <!-- Tax archive (W side) - sealed plaster kura: the ledgers are the
@@ -184,7 +185,7 @@
   <g data-kind="tax archive">
     <rect x="220" y="500" width="96" height="84" fill="#F2EFE4" stroke="#4A3318" stroke-width="2.5"/>
     <rect x="308" y="535" width="8" height="14" fill="#4A3318" data-kind="door"/>
-    <text x="268" y="547" text-anchor="middle" font-size="13" font-weight="bold" fill="#3A2E1C">tax archive</text>
+    <text x="268.0" y="538.1" text-anchor="middle" font-size="13" font-weight="bold" fill="#3A2E1C"><tspan x="268.0" dy="0.0">tax</tspan><tspan x="268.0" dy="14.9">archive</tspan></text>
   </g>
 
   <!-- Office hall: the working block. Rear day rooms (day office + official
@@ -200,10 +201,15 @@
     <rect x="660" y="478" width="120" height="50" fill="#DDB87A" data-kind="official study"/>
     <!-- The genkan is on the OFFICE HALL, where a guest of rank comes up from the forecourt: where office and
          residence share a compound the visitors' way runs through the office (feature 267 R07, buildings 300:
-         Takayama). Pass 2 turned it to the hall's SE corner, OPENING SOUTH onto the 13 ft lane beside the hearing
-         court that runs down to the forecourt, room there for a palanquin to be set down alongside; it faced an
-         8.7 ft alley that ended at the granary's door. 18 x 40 px = 6 x 13 ft. -->
-    <rect x="780" y="522" width="18" height="40" fill="#C9A57A" stroke="#5A3F1E" stroke-width="1.2" data-kind="genkan"/>
+         Takayama). Pass 3 seats it ON THE FORECOURT: a porch at the hall's SE corner, 10 x 6 ft (30 x 18 px),
+         opening south onto open ground the forecourt reaches (the hearing court was cut back 18 ft at its east end
+         to free it), room there for a palanquin to be set down alongside. Pass 2's porch on the hall's east face
+         opened onto the lane between the court and the granary - the tax-grain cart route, past the cell and the
+         garrison latrine. Its door mark is on the south face. -->
+    <rect x="750" y="562" width="30" height="18" fill="#C9A57A" stroke="#5A3F1E" stroke-width="1.2" data-kind="genkan"/>
+    <rect x="757" y="578" width="16" height="4" fill="#4A3318" data-kind="genkan"/>
+    <text x="795.0" y="590.7" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830" data-kind="genkan">genkan</text>
+
     <!-- feature 267 pass 2: the hall's rear (north) door toward the nakamon - the visitors' way runs on through the
          office to the house (buildings 300) -->
     <rect x="590" y="472" width="20" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
@@ -216,7 +222,7 @@
     <text x="720" y="506" text-anchor="middle" font-size="11" font-weight="bold" fill="#3A2E1C" data-kind="official study">official study</text>
     <!-- The magistrate's tatami dais (centered, on the court face) -->
     <rect x="555" y="530" width="90" height="30" fill="#8C6F3E" stroke="#4A3318" stroke-width="1" data-kind="magistrate's dais"/>
-    <text x="600" y="549" text-anchor="middle" font-size="9" fill="#FFFAE6" font-weight="bold" data-kind="magistrate's dais">magistrate's dais</text>
+    <text x="600.0" y="542.3" text-anchor="middle" font-size="9" font-weight="bold" fill="#FFFAE6" data-kind="magistrate's dais"><tspan x="600.0" dy="0.0">magistrate's</tspan><tspan x="600.0" dy="10.3">dais</tspan></text>
     <!-- Clerks' positions flanking the dais -->
     <g data-kind="clerks' seats">
       <rect x="455" y="533" width="80" height="21" fill="#B89868" stroke="#5C4830" stroke-width="0.5"/>
@@ -226,22 +232,25 @@
     </g>
   </g>
 
+  <!-- feature 267 pass 3: the court is 306 x 105 px (102 x 35 ft), cut 18 ft at its EAST end so the office hall's
+       genkan opens onto the forecourt (the court's size is a disclosed guess); its posts respaced, its labels
+       recentered on it; the mats stay before the dais. -->
   <!-- Hearing court (oshirasu): ROOFED, a white-gravel floor under the roof (feature 267 R22, buildings 450: a
        magistracy's court was roofed; the open white court is the period-drama image). The solid outline and the
        posts along its open south side draw the roof. Straw mats on the gravel (R23, buildings 440): the accused
        at the center, the plaintiff behind to one side, the village officials behind to the other. -->
   <g data-kind="hearing court">
-    <rect x="420" y="567" width="360" height="105" fill="url(#oshirasu-sand)" stroke="#5A3F1E" stroke-width="2"/>
+    <rect x="420" y="567" width="306" height="105" fill="url(#oshirasu-sand)" stroke="#5A3F1E" stroke-width="2"/>
     <g fill="#5A3F1E">
       <rect x="418" y="668" width="5" height="5"/>
-      <rect x="507" y="668" width="5" height="5"/>
-      <rect x="597" y="668" width="5" height="5"/>
-      <rect x="687" y="668" width="5" height="5"/>
-      <rect x="777" y="668" width="5" height="5"/>
+      <rect x="494" y="668" width="5" height="5"/>
+      <rect x="571" y="668" width="5" height="5"/>
+      <rect x="647" y="668" width="5" height="5"/>
+      <rect x="723" y="668" width="5" height="5"/>
     </g>
-    <text x="600" y="589" text-anchor="middle" font-size="14" font-weight="bold" fill="#5C4318" letter-spacing="1">HEARING COURT</text>
-    <text x="600" y="600" text-anchor="middle" font-size="8" font-style="italic" fill="#7A5C30">white gravel</text>
-    <text x="600" y="613" text-anchor="middle" font-size="9" font-style="italic" fill="#7A5C30" data-kind="fox-fire lantern">Fox-Fire Lantern brought to the dais at evening</text>
+    <text x="504.0" y="650.2" text-anchor="middle" letter-spacing="1" font-size="14" font-weight="bold" fill="#5C4318">HEARING COURT</text>
+    <text x="504.0" y="661.2" text-anchor="middle" font-size="8" font-style="italic" fill="#7A5C30">white gravel</text>
+    <text x="573" y="613" text-anchor="middle" font-size="9" font-style="italic" fill="#7A5C30" data-kind="fox-fire lantern">Fox-Fire Lantern brought to the dais at evening</text>
     <!-- feature 267 pass 2: the sublabel carries only this sheet's floor (every court is roofed, and the modal says so), and the mats' roster is the modal's -->
     <g data-kind="kneeling positions">
       <g fill="#C8B078" stroke="#7A5430" stroke-width="0.6">
@@ -249,7 +258,8 @@
         <rect x="552" y="640" width="18" height="9"/>
         <rect x="630" y="640" width="36" height="9"/>
       </g>
-      <text x="600" y="662" text-anchor="middle" font-size="8" font-style="italic" fill="#7A5C30">straw mats</text>
+      <text x="716.3" y="683.7" text-anchor="middle" font-size="8" font-style="italic" fill="#7A5C30">straw mats</text>
+    <line x1="693.6" y1="676.6" x2="666.7" y2="649.7" stroke="#7A5C30" stroke-width="0.64" stroke-linecap="round" data-leader="1"/>
     </g>
   </g>
 
@@ -264,7 +274,7 @@
          west-face door closed the alley the genkan faced). -->
     <rect x="820" y="490" width="150" height="78" fill="#F2EFE4" stroke="#4A3318" stroke-width="2.5"/>
     <rect x="888" y="560" width="14" height="8" fill="#4A3318" data-kind="door"/>
-    <text x="895" y="533" text-anchor="middle" font-size="13" font-weight="bold" fill="#3A2E1C">granary</text>
+    <text x="895.0" y="532.6" text-anchor="middle" font-size="13" font-weight="bold" fill="#3A2E1C">granary</text>
   </g>
 
   <!-- (Fire-water tubs are drawn in the TOP LAYER near the end of the file, so their rims
@@ -279,7 +289,7 @@
     <!-- lattice indication -->
     <line x1="844" y1="620" x2="844" y2="642" stroke="#3A2010" stroke-width="0.6"/>
     <line x1="868" y1="620" x2="868" y2="642" stroke="#3A2010" stroke-width="0.6"/>
-    <text x="856" y="635" text-anchor="middle" font-size="9" font-weight="bold" fill="#FFFAE6">cell</text>
+    <text x="856.0" y="633.5" text-anchor="middle" font-size="9" font-weight="bold" fill="#FFFAE6">cell</text>
   </g>
 
   <!-- Bushi / ashigaru barracks (SE) - 31 x 33 ft; the cell abuts its west face, the two forming a guard range
@@ -290,28 +300,31 @@
     <line x1="920" y1="616" x2="920" y2="716" stroke="#6B4F2A" stroke-width="1"/>
     <!-- apron-facing door (informal) -->
     <rect x="908" y="610" width="24" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
-    <text x="920" y="670" text-anchor="middle" font-size="11" font-weight="bold" fill="#3A2E1C">barracks</text>
+    <text x="920.0" y="669.0" text-anchor="middle" font-size="11" font-weight="bold" fill="#3A2E1C">barracks</text>
   </g>
 
-  <!-- Garrison latrine - serves the barracks and duty watch (a privy per
-       functional zone; sanitation sweep 2026-07), between cell and barracks
-       toward the south service edge -->
+  <!-- Garrison latrine - serves the barracks and duty watch (a privy per functional zone; sanitation sweep
+       2026-07). feature 267 pass 3: moved from mid-court below the cell (where it stood on the genkan's old lane)
+       to the ~10 ft strip BEHIND the barracks, against the east wall, 2.5 ft off the wall ink. No gate is near: its
+       night soil goes out by the service gate at the far west, along the south wall past the main gate's mouth
+       (recorded in the notes; an east-wall postern would be the fix if one were wanted). -->
   <g data-kind="latrine">
-    <rect x="828" y="674" width="16" height="22" fill="#7E726A" stroke="#3A2E1C" stroke-width="0.8"/>
-    <text x="840" y="710" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830">latrine</text>
+    <rect x="972" y="686" width="16" height="22" fill="#7E726A" stroke="#3A2E1C" stroke-width="0.8"/>
+    <text x="972.8" y="729.0" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830">latrine</text>
+    <line x1="987.2" y1="722.0" x2="987.2" y2="709.0" stroke="#5C4830" stroke-width="0.60" stroke-linecap="round" data-leader="1"/>
   </g>
 
   <!-- Outer-court latrine, tucked along W wall between tax archive and stables -->
   <g data-kind="latrine">
     <rect x="206" y="642" width="20" height="14" fill="#7E726A" stroke="#3A2E1C" stroke-width="0.8"/>
-    <text x="230" y="659" font-size="8" font-style="italic" fill="#5C4830">latrine</text>
+    <text x="244.2" y="665.2" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">latrine</text>
   </g>
 
   <!-- Stables well - just east of stables, in the open courtyard -->
   <g data-kind="well">
     <rect x="330" y="692" width="22" height="22" fill="#9C8C70" stroke="#5C4830" stroke-width="1.2"/>
     <circle cx="341" cy="703" r="6" fill="#2D2A24"/>
-    <text x="341" y="728" text-anchor="middle" font-size="9" font-style="italic" fill="#3A2E1C">well</text>
+    <text x="365.1" y="686.6" text-anchor="middle" font-size="9" font-style="italic" fill="#3A2E1C">well</text>
   </g>
 
   <!-- Senior retainers' quarters (a rowhouse; option (a) lodges the full
@@ -323,8 +336,8 @@
     <line x1="334" y1="598" x2="334" y2="650" stroke="#6B4F2A" stroke-width="1"/>
     <!-- court-facing door (informal) -->
     <rect x="296" y="650" width="24" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
-    <text x="308" y="620" text-anchor="middle" font-size="10" font-weight="bold" fill="#3A2E1C">senior retainers</text>
-    <text x="308" y="633" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">(quarters)</text>
+    <text x="308.0" y="622.1" text-anchor="middle" font-size="10" font-weight="bold" fill="#3A2E1C">senior retainers</text>
+    <text x="308.0" y="632.0" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">(quarters)</text>
   </g>
 
   <!-- Practice ground: the on-grounds platoon's daily keiko happens on swept
@@ -337,17 +350,17 @@
        default case, and a generic note would be annotation clutter. -->
   <g data-kind="practice ground">
     <rect x="322" y="468" width="86" height="126" fill="url(#keiko-earth)" stroke="#A8875A" stroke-width="1" stroke-dasharray="4 3"/>
-    <text x="365" y="492" text-anchor="middle" font-size="9" font-style="italic" fill="#3A2E1C">practice ground</text>
+    <text x="365.0" y="533.5" text-anchor="middle" font-size="9" font-style="italic" fill="#3A2E1C">practice ground</text>
     <!-- tategi striking posts (~1 ft standing posts - r2 location markers) -->
     <g data-kind="striking posts">
-      <text x="365" y="533" text-anchor="middle" font-size="7" font-style="italic" fill="#5C4830">striking posts</text>
+      <text x="397.9" y="567.1" text-anchor="middle" font-size="7" font-style="italic" fill="#5C4830"><tspan x="397.9" dy="0.0">striking</tspan><tspan x="397.9" dy="8.0">posts</tspan></text>
       <circle cx="350" cy="545" r="2" fill="#7A5430" stroke="#4A3318" stroke-width="0.8"/>
       <circle cx="378" cy="557" r="2" fill="#7A5430" stroke="#4A3318" stroke-width="0.8"/>
     </g>
     <!-- weapon rack flush against the senior retainers' north face -->
     <g data-kind="weapon rack">
       <rect x="334" y="592" width="24" height="6" fill="#8C6F3E" stroke="#4A3318" stroke-width="0.8"/>
-      <text x="362" y="595" text-anchor="start" font-size="7" font-style="italic" fill="#5C4830">weapon rack</text>
+      <text x="381.6" y="587.8" text-anchor="middle" font-size="7" font-style="italic" fill="#5C4830">weapon rack</text>
     </g>
   </g>
 
@@ -357,6 +370,9 @@
          (feature 267 R19, buildings 420: Takayama's form; it was 40 ft long, the gate range's scale; pass 2 took its
          depth from 14 to 12 ft) -->
     <rect x="656" y="706" width="54" height="36" fill="#8C6F3E" stroke="#4A3318" stroke-width="1.5"/>
+    <!-- feature 267 pass 3: the gatehouse's door, on its west face toward the gate passage it keeps -->
+    <rect x="650" y="718" width="6" height="14" fill="#B89868" stroke="#4A3318" stroke-width="0.8" data-kind="door"/>
+
     <text x="683" y="727" text-anchor="middle" font-size="9" font-weight="bold" fill="#FFFAE6">gatehouse</text>
   </g>
 
@@ -426,30 +442,34 @@
        across a gap from the house. -->
   <g data-kind="kitchen" data-part-of="residence">
     <rect x="220" y="262" width="120" height="100" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
-    <!-- feature 267 pass 2: the small DOMA (earth floor), ~24 x 18 ft, the kamado standing on it (R13, buildings 360) -->
-    <rect x="226" y="268" width="72" height="54" fill="#B8A07A"/>
+    <!-- the small DOMA (earth floor), ~24 x 18 ft, the kamado standing on it (R13, buildings 360). Pass 3 moved it to
+         the kitchen's SOUTH side (research 370: "one door to the outside, on its doma") so the door, the kamado and
+         the well all stand on it; the board-floored pantries lie north of it. -->
+    <rect x="226" y="306" width="72" height="54" fill="#B8A07A"/>
     <!-- the hearth is a kamado range, two fire mouths, ~6 x 2.5 ft (feature 267 R13, buildings 360: a samurai kitchen
          cooked on a kamado; the sunken irori it drew once is the common house's). Pass 2: it was 10 x 4.3 ft, twice a
          two-mouth range. -->
     <g data-kind="hearth">
-      <rect x="234" y="276" width="18" height="8" fill="#6B4030" stroke="#3A2010" stroke-width="0.8"/>
-      <circle cx="239" cy="280" r="2.5" fill="#E68A40"/>
-      <circle cx="247" cy="280" r="2.5" fill="#E68A40"/>
+      <rect x="234" y="314" width="18" height="8" fill="#6B4030" stroke="#3A2010" stroke-width="0.8"/>
+      <circle cx="239" cy="318" r="2.5" fill="#E68A40"/>
+      <circle cx="247" cy="318" r="2.5" fill="#E68A40"/>
     </g>
-    <text x="268" y="340" text-anchor="middle" font-size="13" font-weight="bold" fill="#3A2E1C">kitchen</text>
-    <text x="268" y="354" text-anchor="middle" font-size="11" fill="#3A2E1C">&amp; pantries</text>
-    <!-- the kitchen door (katteguchi) on the south face, onto the service yard by the postern: deliveries come
-         straight in from the postern, and the night-soil collector's way north up the strip inside the west wall
-         passes beside it, not across its mouth (pass 2: the north-face door stood 2 ft off that path) -->
-    <rect x="232" y="362" width="24" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
-    <!-- Kitchen well (the primary, busiest well - inside the daidokoro floor) -->
-    <rect x="312" y="332" width="22" height="22" fill="#9C8C70" stroke="#5C4830" stroke-width="1.2" data-kind="well"/>
-    <circle cx="323" cy="343" r="6" fill="#2D2A24" data-kind="well"/>
-    <text x="323" y="328" text-anchor="middle" font-size="8" font-style="italic" fill="#3A2E1C" data-kind="well">well</text>
+    <text x="285.0" y="285.2" text-anchor="middle" font-size="13" font-weight="bold" fill="#3A2E1C">kitchen</text>
+    <text x="285.0" y="298.5" text-anchor="middle" font-size="11" fill="#3A2E1C">&amp; pantries</text>
+    <!-- the kitchen door (katteguchi) on the south face, ON THE DOMA, onto the service yard by the postern: deliveries
+         come straight in from the postern, and the night-soil collector's way north up the strip inside the west wall
+         passes beside it, not across its mouth (pass 2: the north-face door stood 2 ft off that path; pass 3 set it
+         4 ft east so the SW tub stands clear of its mouth) -->
+    <rect x="244" y="362" width="24" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
+    <!-- Kitchen well (the primary, busiest well - inside the kitchen, on the doma since pass 3) -->
+    <rect x="270" y="330" width="22" height="22" fill="#9C8C70" stroke="#5C4830" stroke-width="1.2" data-kind="well"/>
+    <circle cx="281" cy="341" r="6" fill="#2D2A24" data-kind="well"/>
+    <text x="276.6" y="378.4" text-anchor="middle" font-size="8" font-style="italic" fill="#3A2E1C" data-kind="well">well</text>
+    <line x1="285.4" y1="371.0" x2="285.4" y2="353.0" stroke="#3A2E1C" stroke-width="0.64" stroke-linecap="round" data-kind="well" data-leader="1"/>
   </g>
   <!-- feature 267 pass 2: the ground south of the kitchen ell is named for what it is - the postern's yard, the
        kitchen's door and the bath on it (the review found an unnamed ~47 x 25 ft patch in the inner court) -->
-  <text x="260" y="428" text-anchor="middle" font-size="9" font-style="italic" fill="#7A6A4A" data-kind="inner court">service yard</text>
+  <text x="632.0" y="273.3" text-anchor="middle" font-size="9" font-style="italic" fill="#7A6A4A" data-kind="inner court"><tspan x="632.0" dy="0.0">service</tspan><tspan x="632.0" dy="10.3">yard</tspan></text>
 
   <!-- Shrine-approach garden arm: the inner garden wraps north along the shrine
        hall's west face, naming the strip the +60 px backing-void shift left
@@ -483,10 +503,14 @@
         <rect x="-6" y="-2" width="12" height="18" fill="#E8D2A8" stroke="#6B4F2A" stroke-width="0.8"/>
         <circle cx="0" cy="-6" r="5" fill="#E8D2A8" stroke="#6B4F2A" stroke-width="0.8"/>
       </g>
-      <text x="907" y="260" text-anchor="middle" font-size="10" font-weight="bold" fill="#FFFAE6">Ta-no-Kami</text>
-      <text x="907" y="272" text-anchor="middle" font-size="8" font-style="italic" fill="#FFFAE6">(rice)</text>
+      <!-- feature 267 pass 3: font 10 -> 8 so the name stays inside the 55 px west bay (it crossed the hall's west wall) -->
+      <text x="918.8" y="183.8" text-anchor="middle" font-size="8" font-weight="bold" fill="#FFFAE6">Ta-no-Kami</text>
+      <text x="918.8" y="193.0" text-anchor="middle" font-size="8" font-style="italic" fill="#FFFAE6">(rice)</text>
+    <line x1="901.0" y1="196.0" x2="901.0" y2="214.0" stroke="#FFFAE6" stroke-width="0.64" stroke-linecap="round" data-leader="1"/>
     </g>
-    <text x="907" y="279" text-anchor="middle" font-size="7" fill="#FFFAE6" data-kind="fox-fire lantern">Fox-Fire Lantern</text>
+    <!-- pass 3: split over two lines - on one it touched the west wall and the rail -->
+    <text x="907" y="272" text-anchor="middle" font-size="7" fill="#FFFAE6" data-kind="fox-fire lantern">Fox-Fire</text>
+    <text x="907" y="280" text-anchor="middle" font-size="7" fill="#FFFAE6" data-kind="fox-fire lantern">Lantern</text>
     <!-- E altar marker (Myobu) - torii silhouette -->
     <g data-kind="shrine altar">
       <g transform="translate(963, 218)">
@@ -495,8 +519,9 @@
         <line x1="-8" y1="5" x2="-8" y2="20" stroke="#FFFAE6" stroke-width="2"/>
         <line x1="8" y1="5" x2="8" y2="20" stroke="#FFFAE6" stroke-width="2"/>
       </g>
-      <text x="963" y="258" text-anchor="middle" font-size="10" font-weight="bold" fill="#FFFAE6">Myobu</text>
-      <text x="963" y="270" text-anchor="middle" font-size="8" font-style="italic" fill="#FFFAE6">(fox)</text>
+      <text x="970.4" y="180.2" text-anchor="middle" font-size="10" font-weight="bold" fill="#FFFAE6">Myobu</text>
+      <text x="970.4" y="189.9" text-anchor="middle" font-size="8" font-style="italic" fill="#FFFAE6">(fox)</text>
+    <line x1="955.6" y1="194.0" x2="955.6" y2="217.0" stroke="#FFFAE6" stroke-width="0.80" stroke-linecap="round" data-leader="1"/>
     </g>
     <text x="963" y="283" text-anchor="middle" font-size="7.5" fill="#FFFAE6" data-kind="fox relics">Akami-fude</text>
   </g>
@@ -511,7 +536,7 @@
   </g>
 
   <!-- Shrine hall label (above) -->
-  <text x="935" y="195" text-anchor="middle" font-size="12" font-weight="bold" fill="#5C1A0A" letter-spacing="1" data-kind="compound shrine">INARI SHRINE</text>
+  <text x="844.4" y="242.4" text-anchor="middle" font-size="12" font-weight="bold" letter-spacing="1" fill="#5C1A0A" data-kind="compound shrine"><tspan x="844.4" dy="0.0">INARI</tspan><tspan x="844.4" dy="13.8">SHRINE</tspan></text>
 
   <!-- Fox relics kept at the Myobu altar (annotation below the workshop, in the
        open court freed by the smaller hall) -->
@@ -536,13 +561,15 @@
     <g data-kind="drying stones and bowls">
       <circle cx="902" cy="322" r="4" fill="#7E726A"/>
       <circle cx="916" cy="329" r="4" fill="#7E726A"/>
-      <circle cx="902" cy="339" r="4" fill="#7E726A"/>
+      <circle cx="902" cy="336" r="4" fill="#7E726A"/>
       <!-- bowls drying (small lacquer-black circles) -->
       <circle cx="965" cy="322" r="5" fill="#1A1410" stroke="#3A2418" stroke-width="0.6"/>
-      <circle cx="972" cy="339" r="5" fill="#1A1410" stroke="#3A2418" stroke-width="0.6"/>
+      <circle cx="972" cy="334" r="5" fill="#1A1410" stroke="#3A2418" stroke-width="0.6"/>
     </g>
-    <text x="935" y="352" text-anchor="middle" font-size="10" font-weight="bold" fill="#FFFAE6">Cinnabar Workshop</text>
-    <text x="935" y="364" text-anchor="middle" font-size="8" font-style="italic" fill="#FFFAE6">(colonnade)</text>
+    <!-- feature 267 pass 3: the name at font 8.5 (at 10 it ran over the colonnade's border strokes), the lower
+         stone and bowl raised 3-5 px to clear it, the sublabel lifted off the middle south post -->
+    <text x="931.0" y="357.8" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#FFFAE6">Cinnabar Workshop</text>
+    <text x="931.0" y="366.3" text-anchor="middle" font-size="7" font-style="italic" fill="#FFFAE6">(colonnade)</text>
   </g>
 
   <!-- Inner garden (feature 267 pass 2): laid out BEFORE the reception and the guest room - the whole garden
@@ -551,11 +578,13 @@
        (research buildings 300, Takayama). -->
   <g data-kind="garden">
     <path d="M 346 374 H 616 V 298 H 865 V 445 H 346 Z" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
-    <!-- a small ornamental pond, moved east of the house with the re-mass (it stood where the veranda now runs) -->
-    <ellipse cx="740" cy="342" rx="38" ry="20" fill="#9CB4C8" stroke="#5C7488" stroke-width="1.2" data-kind="garden pond"/>
+    <!-- a small ornamental pond BEFORE THE RECEPTION (feature 267 pass 3: pass 2 had set it east of the house, where
+         the reception's veranda did not face it; research buildings 'The shady rear is the service strip' - the
+         garden faces the reception rooms). It lies west of the nakamon-to-stone line, off the guests' way. -->
+    <ellipse cx="537" cy="408" rx="40" ry="18" fill="#9CB4C8" stroke="#5C7488" stroke-width="1.2" data-kind="garden pond"/>
     <!-- the stepping stone (kutsunugi-ishi) at the reception's veranda, on the line up from the nakamon -->
     <rect x="594" y="373" width="12" height="8" rx="2" fill="#9C9488" stroke="#5C5448" stroke-width="0.8"/>
-    <text x="470" y="420" text-anchor="middle" font-size="10" font-style="italic" fill="#3A2E1C">inner garden</text>
+    <text x="606.0" y="385.0" text-anchor="middle" font-size="10" font-style="italic" fill="#3A2E1C"><tspan x="606.0" dy="0.0">inner</tspan><tspan x="606.0" dy="11.5">garden</tspan></text>
   </g>
 
   <!-- Bath: a small addition on the kitchen range's south wall, 13 x 11 ft (feature 267 R09, buildings 320: a room
@@ -565,7 +594,7 @@
     <rect x="290" y="362" width="40" height="33" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
     <!-- small steam plume suggestion -->
     <path d="M 302 412 q 3 -8 -2 -14 M 316 412 q 3 -8 -2 -14" stroke="#A8B4C8" stroke-width="1" fill="none" opacity="0.7"/>
-    <text x="310" y="383" text-anchor="middle" font-size="12" font-weight="bold" fill="#3A2E1C">bath</text>
+    <text x="310.0" y="390.3" text-anchor="middle" font-size="12" font-weight="bold" fill="#3A2E1C">bath</text>
   </g>
 
   <!-- Karo's house - the house elder keeps a SEPARATE dwelling in the
@@ -586,7 +615,7 @@
   <g data-kind="well" data-part-of="garden">
     <rect x="730" y="395" width="24" height="24" fill="#9C8C70" stroke="#5C4830" stroke-width="1.2"/>
     <circle cx="742" cy="407" r="7" fill="#2D2A24"/>
-    <text x="742" y="438" text-anchor="middle" font-size="9" font-style="italic" fill="#3A2E1C">well</text>
+    <text x="767.1" y="389.6" text-anchor="middle" font-size="9" font-style="italic" fill="#3A2E1C">well</text>
   </g>
 
   <!-- Rear service strip (north band behind the residence) - the shady rear was
@@ -603,15 +632,25 @@
     <line x1="415" y1="156" x2="415" y2="196" stroke="#6B4F2A" stroke-width="1"/>
     <!-- court-facing door (informal) -->
     <rect x="332" y="196" width="26" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
-    <text x="360" y="180" text-anchor="middle" font-size="9" font-weight="bold" fill="#3A2E1C">servants' quarters</text>
+    <text x="360.0" y="178.5" text-anchor="middle" font-size="9" font-weight="bold" fill="#3A2E1C">servants' quarters</text>
   </g>
+  <!-- feature 267 pass 3: the servants' privy, attached to the nagaya's west end by the postern strip (the inner
+       court had one privy for three households - family, karo, servants); its pit toward the west wall, where the
+       collector comes up the strip from the kitchen postern (research/buildings.html 'Privies attach to the house;
+       night-soil drives their placement'). 6 x 5 ft. -->
+  <g data-kind="latrine" data-part-of="servants' quarters">
+    <rect x="232" y="164" width="18" height="14" fill="#7E726A" stroke="#3A2E1C" stroke-width="0.8"/>
+    <text x="234.3" y="204.6" text-anchor="middle" font-size="7" font-style="italic" fill="#5C4830">latrine</text>
+    <line x1="247.7" y1="198.0" x2="247.7" y2="179.0" stroke="#5C4830" stroke-width="0.60" stroke-linecap="round" data-leader="1"/>
+  </g>
+
   <!-- The residence's privy, attached to the block's west (family) end at its rear corner, in the notch north of
        the kitchen ell, pit toward the west wall: a collector reaches it from the kitchen postern up the strip inside
        the west wall and along the rear service strip, never through the inner court (research/buildings.html
        'Privies attach to the house; night-soil drives their placement'). Moved with the block in feature 267 pass 2. -->
   <g data-kind="latrine" data-part-of="residence">
     <rect x="322" y="216" width="18" height="14" fill="#7E726A" stroke="#3A2E1C" stroke-width="0.8"/>
-    <text x="300" y="227" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">latrine</text>
+    <text x="303.8" y="211.2" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">latrine</text>
   </g>
 
   <!-- Vegetable garden filling the rest of the rear strip (behind the residence
@@ -622,7 +661,7 @@
        the kitchen postern - normal for a compact walled magistracy (GM 2026-07). -->
   <g data-kind="vegetable garden">
     <rect x="560" y="156" width="320" height="44" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
-    <text x="731" y="182" text-anchor="middle" font-size="9" font-style="italic" fill="#3A4E38">vegetable garden</text>
+    <text x="720.0" y="180.5" text-anchor="middle" font-size="9" font-style="italic" fill="#3A4E38">vegetable garden</text>
   </g>
 
   
@@ -651,13 +690,17 @@
   <!-- Court band labels (top layer: drawn in their original spots they were
        buried under / grazed by the vegetable-garden fill - pack_audit BURIED
        finding, 2026-07-24; same coordinates, painted last) -->
-  <text x="576" y="174" text-anchor="middle" font-size="13" font-weight="bold" fill="#5C4830" letter-spacing="2" data-kind="inner court">INNER COURT</text>
-  <text x="524" y="196" text-anchor="middle" font-size="11" font-weight="bold" fill="#5C4830" letter-spacing="2" data-kind="residence">RESIDENCE</text>
+  <!-- feature 267 pass 3: both nudged clear of the vegetable garden's dashed border, which they touched -->
+  <text x="655.0" y="315.1" text-anchor="middle" font-size="13" font-weight="bold" letter-spacing="2" fill="#5C4830" data-kind="inner court"><tspan x="655.0" dy="0.0">INNER</tspan><tspan x="655.0" dy="14.9">COURT</tspan></text>
+  <text x="663.4" y="201.5" text-anchor="middle" font-size="11" font-weight="bold" letter-spacing="2" fill="#5C4830" data-kind="residence">RESIDENCE</text>
+    <line x1="617.1" y1="204.9" x2="610.7" y2="211.3" stroke="#5C4830" stroke-width="0.88" stroke-linecap="round" data-kind="residence" data-leader="1"/>
   <g fill="#8FB0C6" stroke="#3A5060" stroke-width="1" data-kind="fire-water tubs">
-    <!-- feature 267 pass 2: the kitchen pair at the ell's west corners, the residence's two at the block's east
+    <!-- feature 267 pass 2: the kitchen pair at the ell's corners (see pass 3 below), the residence's two at the block's east
          corners (the re-mass moved both), the gatehouse's at its shortened NW corner -->
-    <circle cx="216" cy="266" r="3.8"/>
-    <circle cx="216" cy="358" r="3.8"/>
+    <!-- pass 3: the kitchen pair moved off the collector's strip inside the west wall (they pinched it to ~2.6 ft) to
+         the ell's SW corner under its south eaves and its NE corner in the notch -->
+    <circle cx="226" cy="366" r="3.8"/>
+    <circle cx="324" cy="258" r="3.8"/>
     <circle cx="414" cy="486" r="3.8"/>
     <circle cx="614" cy="216" r="3.8"/>
     <circle cx="614" cy="356" r="3.8"/>
@@ -667,5 +710,5 @@
     <circle cx="314" cy="680" r="3.8"/>
     <circle cx="476" cy="165" r="3.8"/>
   </g>
-  <text x="222" y="256" text-anchor="start" font-size="8" font-style="italic" fill="#3A5060" data-kind="fire-water tubs">fire-water tubs</text>
+  <text x="284.4" y="249.4" text-anchor="middle" font-size="8" font-style="italic" fill="#3A5060" data-kind="fire-water tubs">fire-water tubs</text>
 </svg>

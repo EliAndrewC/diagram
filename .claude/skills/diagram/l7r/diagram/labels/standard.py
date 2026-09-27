@@ -82,8 +82,9 @@ def upright(angle: float) -> float:
     return a
 
 
-def block_half(lines: list[str] | tuple[str, ...], size: float) -> tuple[float, float]:
-    """The half-width and half-height of a caption set on `lines` at `size` - the block `label()` records."""
-    w = max(len(ln) for ln in lines) * size * CHAR_W_EM
+def block_half(lines: list[str] | tuple[str, ...], size: float, char_w: float = CHAR_W_EM) -> tuple[float, float]:
+    """The half-width and half-height of a caption set on `lines` at `size` - the block `label()` records. `char_w` is
+    the width per character in ems, the standard's unless a caller measured its text as wider."""
+    w = max(len(ln) for ln in lines) * size * char_w
     h = size * LINE_H_EM + (len(lines) - 1) * size * PITCH_EM
     return w / 2.0, h / 2.0
