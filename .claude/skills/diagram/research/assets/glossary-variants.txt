@@ -17,6 +17,8 @@ alluvial fan	alluvial fan
 alluvial fans	alluvial fan
 along the ridge	ridge span
 alternate attendance	alternate attendance
+amida	Amida
+amida buddha	Amida
 an'ei	An'ei
 anaerobic	anaerobic
 anagama	noborigama
@@ -470,8 +472,12 @@ freeboard	freeboard
 frontage	frontage
 fu	fu
 fudasashi	fudasashi
+fudo	Fudo
+fudo myoo	Fudo
 fudoki	fudoki
 fudoki ko	fudoki
+fudō	Fudo
+fudō myōō	Fudo
 fukada	fukada
 fukugi	fukugi
 funairi-bori	funairi-bori
@@ -833,6 +839,7 @@ konya	kon-ya
 koraimon	koraimon
 kosatsu	kosatsuba
 kosatsuba	kosatsuba
+koshin	Kōshin
 koshin tower	koshin tower
 koshin towers	koshin tower
 kotai-yoriai	kotaiyoriai
@@ -859,6 +866,7 @@ kyuhi	kyuhi
 kyōhō	Kyoho
 kōsatsu	kosatsuba
 kōsatsu-ba	kosatsuba
+kōshin	Kōshin
 lake tai	Lower Yangzi
 land consolidation	kochi seiri
 land readjustment	kochi seiri
@@ -1274,6 +1282,8 @@ shadoof	jiegao
 shahi	shahi
 shaku	shaku
 shakuhachi	shakuhachi
+shakyamuni	Shakyamuni
+shakyamuni buddha	Shakyamuni
 shaso	shasō
 shasō	shasō
 shatian	shatian
@@ -1313,6 +1323,8 @@ shoulder month	shoulder month
 showa	Showa
 shoya	shoya
 shubiki	shubiki
+shugen	shugen
+shugendō	shugen
 shugenja	shugenja
 shuikou	shuikou
 shuimen	water gate
@@ -1536,6 +1548,8 @@ verge	verge
 verges	verge
 vermilion line	shubiki
 village district	village district
+visiting grave	visiting grave
+visiting graves	visiting grave
 votive plaque	votive plaque
 votive plaques	votive plaque
 wagon inn	wagon inn
@@ -1604,6 +1618,7 @@ yacheng	yacheng
 yachida	yato
 yagura	yagura
 yaita	yaita
+yakushi	Yakushi
 yam	yam
 yamen	yamen
 yamen god	yamen-god
