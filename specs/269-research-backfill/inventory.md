@@ -138,6 +138,10 @@ Each section with no footnotes is either an item (fields 140/150 -> B08; homeste
 
 Handed to "Diagram shrines" (feature 272) on 2026-09-27, which the GM had just given city temple complexes. It confirmed: "B37 is mine." Its outcome is recorded in 272.
 
+**B37 DONE by 272 (2026-09-27, pushed):** religion-and-death 310 (a city temple's monks), 320 (the shops at a
+temple's gate), 330 (graveyard sharing, citing 269's burial sections); 010, 050 and 070 edited, their absence notes
+searched twice; 190 and 204 done by 272's R3.
+
 
 - B37 City temples: monk counts "on no page read" (`010`); the temple-gate shop ratio and meibutsu (`050`); graveyard
   sharing (`070`); the bone-mound size (`204`). M.
