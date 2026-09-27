@@ -1229,7 +1229,6 @@ sand junks	sand junk
 sand sluice	sand sluice
 sando	sando
 sangji yutang	dike-pond
-sanguan	Three Officials
 sankin-kotai	alternate attendance
 sankyoson	sankyoson
 sanmai	sanmai
@@ -1461,7 +1460,6 @@ the pool	the pool
 the reform and opening-up	reform and opening-up
 thousand character classic	Thousand Character Classic
 three bays	bay
-three officials	Three Officials
 threshing yard	threshing yard
 threshing yards	threshing yard
 threshing-yard	threshing yard
