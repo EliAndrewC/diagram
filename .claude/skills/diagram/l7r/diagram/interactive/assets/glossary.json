@@ -5396,5 +5396,51 @@
   "variants": [
    "geostrophic"
   ]
+ },
+ "reeling": {
+  "def": "Unwinding the silk thread from cocoons softened in boiling water: the old machine was a furnace to boil the water, a wheel to collect the combined thread, and an axle worked by a foot treadle.",
+  "variants": [
+   "reeling",
+   "reel",
+   "reeling machine",
+   "reeling shed"
+  ]
+ },
+ "header reservoir": {
+  "def": "A storage pond at the upstream head of a water system, from which the channels below it are fed.",
+  "variants": [
+   "header reservoir",
+   "header reservoirs"
+  ]
+ },
+ "rick": {
+  "def": "A stack of straw built in the open after threshing, kept for fodder, fuel or thatch.",
+  "variants": [
+   "rick",
+   "ricks",
+   "straw rick",
+   "straw ricks"
+  ]
+ },
+ "wet run": {
+  "def": "The two fenced parts of a fish-cum-duck pond: the dry run is a fenced stretch of the pond dike, and the wet run is a corner of the water fenced off for the ducks.",
+  "variants": [
+   "wet run",
+   "dry run",
+   "wet runs",
+   "dry runs"
+  ]
+ },
+ "Kuwabata": {
+  "def": "The project's example dike-pond hamlet: a silk-and-fish hamlet whose mulberry-planted dikes ring fish ponds, with its houses on the dry flank.",
+  "variants": [
+   "Kuwabata"
+  ]
+ },
+ "Inashiro": {
+  "def": "The project's example rice (paddy) hamlet, the one the dike-pond hamlet is measured against.",
+  "variants": [
+   "Inashiro"
+  ]
  }
 }

@@ -150,7 +150,7 @@ class SugarcaneDike(Kind):
     pond as feed.
 
     Why: The dike-pond types succeeded one another across the delta: mulberry, then fruit, cane and vegetables as
-    markets changed, and by the late 1980s cane dikes covered more of the district than mulberry. One hamlet
+    the delta urbanized and industrialized, and by the late 1980s cane dikes covered more of the district than mulberry. One hamlet
     is one type, so a cane hamlet rolls cane on every dike.
 
     Note: The type is read, and so is the loop as written above - the young leaves fed to fish and pigs, the old
@@ -176,14 +176,16 @@ class BananaDike(Kind):
     sea of cane' the geographers remembered of the old delta.
 
     Why: A type of the same system, drawn as a hamlet's whole planting because the types succeeded one another
-    rather than mixing on a dike. WHY banana took a dike is on no page read; what the accounts give is the type
-    itself, and the remembered banana groves and sea of cane of the old delta.
+    rather than mixing on a dike. The gazetteer office names bananas first among the fruit that took the dikes
+    as mulberry shrank under the delta's urbanization and industrialization; the magazine remembers banana
+    groves and a sea of cane in the old delta.
 
-    Note: The type is read; the clump pitch and crown size are a drawing calibration from the plant's habit, not a
-    surveyed figure, and no page read gives the reason banana replaced another crop on a bank.
+    Note: The type is read, and by the gazetteer's account it is a modern one - no page read attests a banana
+    dike from before the mulberry dike gave way; the clump pitch and crown size are a drawing calibration from
+    the plant's habit, not a surveyed figure.
 
-    Caveat: the clump pitch and crown size are a drawing calibration from the plant's habit, not a surveyed
-    figure, and no page read gives the reason banana replaced another crop on a bank.
+    Caveat: no page read attests a banana dike from before the mulberry dike gave way; the clump pitch and
+    crown size are a drawing calibration from the plant's habit, not a surveyed figure.
 
     Name: banana dike
     Covers: the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is banana, and its clumps
@@ -200,14 +202,15 @@ class FruitDike(Kind):
     What: The raised dike around a fish pond planted with fruit trees - the 果基魚塘 type of the dike-pond system.
 
     Why: The dike-pond types succeeded one another across the delta, and the gazetteer office puts mulberry
-    first, with the fruit, cane and vegetable dikes following it as markets changed. One hamlet is one type, so
+    first, with the fruit, cane and vegetable dikes following it as the delta urbanized and industrialized. One hamlet is one type, so
     a fruit hamlet rolls fruit on every dike, and the trees stand on the band's crest at an orchard's spacing.
 
-    Note: The type is read; WHICH fruit is not - no page read names a species for a fruit dike - and the tree
-    spacing is an orchard convention, not a measured dike.
+    Note: The type is read, and by the gazetteer's account it is a modern one; the fruit is named only in bulk -
+    chiefly banana and citrus - with no species given for a single dike, and the tree spacing is an orchard
+    convention, not a measured dike.
 
-    Caveat: no page read names a species for a fruit dike - and the tree spacing is an orchard convention, not
-    a measured dike.
+    Caveat: the fruit is named only in bulk - chiefly banana and citrus - with no species given for a single
+    dike, and the tree spacing is an orchard convention, not a measured dike.
 
     Name: fruit dike
     Covers: the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is fruit, and its trees
@@ -224,11 +227,11 @@ class VegetableGround(Kind):
     What: A parcel of tilled vegetable ground in rows among the fish ponds - the one piece of the block that was
     neither dug into a pond nor left in rice.
 
-    Why: A converted district grew no rice, and Fei's silk village grew its vegetables on whatever ground the
-    mulberry left; so the residual parcel of a converted block reads as vegetable ground as honestly as
-    paddy. Three attested states, so each hamlet rolls one.
+    Why: A converted block, as this map draws it, grows no rice, and Fei's silk village grew its vegetables in small gardens by the houses and in the limited space under the
+    mulberry; so the residual parcel of a converted block reads as vegetable ground as honestly as
+    paddy. The parcel takes one of three states, rolled per hamlet; no source read says which a hamlet kept.
 
-    Note: The absence of rice and the vegetable ground are read; nothing says WHICH parcels carried them, so they
+    Note: Vegetables on a silk village's spare ground are read (Fei, under the mulberry and in house gardens); that a converted block grew no rice is this map's archetype, not a finding, no source describes a wholly converted hamlet, and the gazetteer's vegetable dike is a later stage of the dike types, not a leftover parcel; nothing says WHICH parcels carried them, so they
     take whatever the crop dikes and the ponds leave over.
 
     Caveat: nothing says WHICH parcels carried them, so they take whatever the crop dikes and the ponds leave over.
@@ -264,9 +267,9 @@ class PigSty(Kind):
     how many households kept a sty in Ming or Qing - the per-hamlet share band is the generator's. The few feet
     of clearance at the sluice is a guess too: the record gives dike widths and no spacing along a dike at all.
     And the widths it does give, the drawn bank does not meet - the planted collar under these sheds is two to
-    five meters, where a modern manual asks five to ten of a shed-carrying dike and the same district's dikes
-    ran twenty meters before commercial fish farming eroded them, a figure from before the 1980s rather than
-    a demonstrably premodern one; a reader measuring the collar should know it is snug against both.
+    five meters, short of the five-meter floor a modern manual sets for a shed-carrying dike (its ten-meter ceiling answers to pigsties, piping and traffic together, and the traffic at least is later than this map), while a Shunde village's dikes
+    ran twenty meters before commercial fish farming eroded them, a width later than this map and so no measure of it;
+    a reader measuring the collar should know it is snug by a modern standard and that no older standard was found to judge it by.
 
     Name: pig sty
     Covers: every `pig_sties[]` record - a shed with its railed pen on a pond dike
@@ -288,8 +291,8 @@ class DuckPen(Kind):
     among the stock the dike-pond loop kept to manure its ponds, and the droppings feed the water the same way a
     pig shed's do. The dry run stands on the same planted collar a pig shed does - two to five meters, where a
     modern manual asks five to ten of a dike carrying an animal shed, a ceiling it sets by the pigsties, piping
-    and traffic the dike must bear (dike-borne traffic came with commercialization), and where the same
-    district's dikes ran twenty meters wide before commercial fish farming eroded them. The fence
+    and traffic the dike must bear (dike-borne traffic, on this project's reading, came with commercialization), and where a Shunde
+    village's dikes ran twenty meters wide until commercial fish farming eroded them in the reform years - later than this map; nothing read gives a premodern dike's width. The fence
     keeps off the culvert for the plain reason that a fence across the opening a pond is filled and drained
     through would be in the way of working it.
 
@@ -316,10 +319,10 @@ class FryPond(Kind):
     trading fish fry while the women feed and tend the silkworms. A hamlet stocking its ponds each year keeps
     a few small ponds for the fry and fingerlings; the smallest parcels of the block are read as those.
 
-    Note: GUESS: the fry trade and the nursery stages are read, but the naming of one township and the century
-    the trade rose in are not - the work that carried them is not readable anywhere - and nothing read gives how
+    Note: GUESS: the fry trade and the nursery stages are read, and so is the village the trade is named in, Jiujiang in Nanhai, but the century
+    the trade rose in is not - the work that carried it is not readable anywhere - and nothing read gives how
     many nursery ponds a premodern hamlet kept or which parcels: a modern manual puts nursery water at a
-    quarter to three tenths of pond area, a design prescription rather than an observation of an old block,
+    quarter to three tenths of pond area where grass- or grain-fed fish are the main stock and 15 percent where plankton-feeders are, a design prescription rather than an observation of an old block,
     so the one-in-ten share and the choice of the smallest parcels are the generator's.
 
     Name: fry pond
@@ -334,7 +337,7 @@ class FryPond(Kind):
 
 class ManurePit(Kind):
     """
-    What: An earthenware jar sunk to its mouth in the ground behind the house, in which the household's night soil
+    What: An earthenware jar half buried in the ground behind the house, in which the household's night soil
     is kept until it goes to the fields - the manure store in its Lake Tai form.
 
     Why: The most important fertilizer on a rice-and-silk farm was human manure, and Fei's village kept it in

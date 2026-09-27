@@ -271,6 +271,8 @@ drawdown	drawdown
 dressed stone	dressed stone
 drill ground	drill ground
 drum tower	gulou
+dry run	wet run
+dry runs	wet run
 ds/m	dS/m
 duty of water	water duty
 dwarf bamboo	sasa
@@ -471,6 +473,8 @@ head race	head race
 head works	head works
 head-race	head race
 head-works	head works
+header reservoir	header reservoir
+header reservoirs	header reservoir
 headman	headman
 headmen	headman
 headworks	headworks
@@ -525,6 +529,7 @@ igune	igune
 important cultural landscape	Important Cultural Landscape
 important cultural landscapes	Important Cultural Landscape
 inari	Inari
+inashiro	Inashiro
 inkyo	inkyo
 intake	intake
 intake mouth	intake
@@ -688,6 +693,7 @@ kure-mutsu	kure-mutsu
 kuri	kuri
 kuromatsu	kuromatsu
 kusaba	kusaba
+kuwabata	Kuwabata
 kyo-machiya	machiya
 kyoho	Kyoho
 kyuhi	kyuhi
@@ -948,6 +954,10 @@ recharge	recharge
 recharges	recharge
 reducing atmosphere	reducing firing
 reducing firing	reducing firing
+reel	reeling
+reeling	reeling
+reeling machine	reeling
+reeling shed	reeling
 regime equation	regime equation
 regime power laws	regime equation
 regime theory	regime equation
@@ -962,6 +972,8 @@ revetted	revetment
 rhizome	rhizome
 rhizomes	rhizome
 ri	ri
+rick	rick
+ricks	rick
 ridge span	ridge span
 riffle	riffle
 riffles	riffle
@@ -1105,6 +1117,8 @@ steadings	steading
 stem density	stem density
 stilling pool	stilling pool
 stone pitching	stone pitching
+straw rick	rick
+straw ricks	rick
 stringer	stringer
 stringers	stringer
 strip footing	strip footing
@@ -1279,6 +1293,8 @@ well-sweep	well-sweep
 weng cheng	wengcheng
 wengcheng	wengcheng
 wenmiao	wenmiao
+wet run	wet run
+wet runs	wet run
 wetted perimeter	wetted perimeter
 white-tawed	shironameshi
 willow association	plant association
