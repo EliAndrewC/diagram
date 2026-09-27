@@ -401,6 +401,7 @@ fishways	fishway
 fit zoom	fit zoom
 fit-zoom	fit zoom
 five dynasties	Five Dynasties
+five highways	Five Highways
 five-ring pagoda	five-ring pagoda
 five-ring pagodas	five-ring pagoda
 flood stage	river stage
@@ -476,6 +477,7 @@ go	go
 god of government office	yamen-god
 goemon-buro	goemon-buro
 goemonburo	goemon-buro
+gokaido	Five Highways
 gongxiefang	gongxiefang
 gorinto	five-ring pagoda
 goshi	gōshi
@@ -620,6 +622,7 @@ interlinear commentary	interlinear commentary
 internode	internode
 internodes	internode
 intramural	intramural
+inu-bashiri	inu-bashiri
 inverted siphon	inverted siphon
 inverted siphons	inverted siphon
 iriai	iriai
