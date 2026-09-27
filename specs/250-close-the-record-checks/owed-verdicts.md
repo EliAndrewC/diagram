@@ -25,3 +25,10 @@
 - BundBeans (fields SECTION=200): IN-STEP - 200 still supports every What: and Note: claim; the Why: rests on the other Entry: sections
 - Stream (water SECTION=010): REWRITTEN - the Note said width is never conserved at a junction; 010's 2026-07-21 ruling draws a stream feeding a moat as wide as the moat, so the Note now carries it; re-check IN-STEP
 - Stream (water SECTION=230): LABELED - IN-STEP at first, but the 010 rewrite brought in the moat-feeder exception, which 230's 2026-08-16 no-coordination ruling contradicts; the Note now names both rulings as unreconciled (the record needs the GM to reconcile 010's ladder with 230)
+- Bathhouse (homesteads SECTION=210): IN-STEP - 210 now only points to the bath question, and nothing it still says contradicts the modal
+- Farmhouse (homesteads SECTION=080): REWRITTEN - Note: no longer counts lane access and the alleys form as read; back lane read only for planned English villages
+- Farmhouse (homesteads SECTION=140): IN-STEP - the modal quotes none of the inventory numbers whose standing moved
+- HouseholdShrine (homesteads SECTION=216): REWRITTEN - cap is now three to eight in a hundred, and the corner odds are labeled a guess
+- Persimmon (homesteads SECTION=218): REWRITTEN - IN-STEP on first check, but the Why: now keeps the source's hedge on Miyazaki ("is said to have urged")
+- VillageLane (homesteads SECTION=080): IN-STEP - every read/unread split in the Note: still matches 080
+- Woodpile (homesteads SECTION=212): REWRITTEN - the guessed wall is now the kura's outer wall, as the section names it

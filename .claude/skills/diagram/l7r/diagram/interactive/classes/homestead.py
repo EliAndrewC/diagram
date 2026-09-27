@@ -20,7 +20,7 @@ class Farmhouse(Kind):
     having made its own way to the road, and a laid-out back lane serving a regular row are both attested, so
     this map rolls between the two forms per settlement and guarantees only that every farmhouse is served.
 
-    Note: Placement and form follow the read record. The setback from the paddy is stated in feet by no source:
+    Note: Placement follows the read record; that every house in a nucleated cluster is reached by a lane, and the alleys-off-the-spine form, are paraphrased from a morphology literature no public page carries, and the back lane is read only for planned English villages. The setback from the paddy is stated in feet by no source:
     it is built from a bund width that is a GUESS, an eave overhang that is unsourced and one part that is
     read for a house facing a watercourse and extended to the paddy by this record, so the 6 ft floor beneath
     it is a soft threshold rather than a measured minimum - and the map draws 10 to 13 ft, well clear of it,
@@ -188,7 +188,7 @@ class Woodpile(Kind):
 
     Note: The firewood SHED is read (Boso-no-Mura); that the open stack is the cheaper and older form is this
     record's own reading, on no page read; where the STACK stood relative to the house was found nowhere -
-    the back wall or the shed's outer wall is a guess, and the stack's height is modern practice.
+    the back wall or the kura's outer wall is a guess, and the stack's height is modern practice.
 
     Name: woodpile
     Covers: `farm_fixtures[kind=woodpile]`
@@ -269,14 +269,14 @@ class HouseholdShrine(Kind):
     a torii before its door.
 
     Why: In some regions every house had one, in others only certain old families; the GM ruled for the
-    old-families pattern here - rare, and notable when it appears - so the count is capped at about three
+    old-families pattern here - rare, and notable when it appears - so the count is capped at three to eight
     households in a hundred. It stands in the plot's northwest, northeast or southwest corner, all three
     attested.
 
     Note: we have drawn the household shrine at 6 x 6 ft - the small-shed module - in vermilion with a torii
     before it, in order to make it visible on the map at this scale. The one measured stone hokora is about
     40 cm (1.3 ft) on a side, a stone or wooden shrine that at true size would be a single pixel. Presence,
-    rarity and corner are read.
+    rarity and the three corners are read; how often each corner is drawn is a guess, from a survey count we could not read.
 
     Name: household shrine
     Covers: `farm_fixtures[kind=shrine]` - the hokora
@@ -293,7 +293,7 @@ class Persimmon(Kind):
     What: The household's persimmon tree beside the house, drawn a yellower green than the groves with four fruit
     dots - the map's convention for naming the tree, not a season.
 
-    Why: A persimmon stood in every dooryard: the Edo agronomist Miyazaki Yasusada urged planting them around the
+    Why: A persimmon stood in every dooryard: the Edo agronomist Miyazaki Yasusada is said to have urged planting them around the
     homestead, and the tree shades the house in summer, so it stands beside it.
 
     Note: Presence and the beside-the-house placement are read (toyoko, uekipedia); WHICH side and the 18 ft crown
