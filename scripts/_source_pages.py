@@ -131,7 +131,10 @@ def saved_rows(out: pathlib.Path) -> list[dict]:
 def save(urls: list[str], out: pathlib.Path, pages, quotes: list[str] | None = None) -> list[dict]:  # noqa: ANN001
     out.mkdir(parents=True, exist_ok=True)
     rows = saved_rows(out)
-    start = len(rows) + 1  # past every earlier file, so a new page never takes an old one's number
+    # past every earlier file, so a new page never takes an old one's number. WHY the highest number and not the
+    # row count (feature 271 V4): a retried failure's old row is dropped below, so after a retry the count fell
+    # behind the numbers in use and a third save wrote over a page the second had saved.
+    start = max([len(rows)] + [int(r["file"][:2]) for r in rows if r["file"][:2].isdigit()]) + 1
     have = {r["pointer"] for r in rows if r["state"] == "FETCHED"}
     rows = [r for r in rows if r["pointer"] in have or r["pointer"] not in urls]
     for index, url in enumerate((u for u in dict.fromkeys(urls) if u not in have), start):

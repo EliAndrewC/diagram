@@ -160,3 +160,16 @@
 - household.Well (urban-features SECTION=090): REWRITTEN - the curb width is no longer "not found"; the 118 cm measured frame now carries the 3-4 ft curb
 - water_and_ways.Well (urban-features SECTION=090): REWRITTEN - the curb frame's 118 cm measure named; "often" an aqueduct intake narrowed to "could be"; UNICEF dropped, "people" -> inhabitants
 - BenchNoticeBoard (urban-features SECTION=010): REWRITTEN - the Note's 'at no government office' narrowed to the silence 010 records: no page read puts a post town's board at its transport office (feature 271, batch 1)
+- Bund (fields SECTION=022): REWRITTEN - the What: size now says "commonly", with no fixed size outside modern works (aze-jawiki-3); the unmodeled jori form left to the paddy-plot modal
+- FieldPond (fields SECTION=010): REWRITTEN - Why: and Note: now separate what is read (the plains pond in low ground, graves on the hills) from the page's reasoning and the rock guess
+- FieldRock (fields SECTION=010): REWRITTEN - Why:, Note: and Caveat: now say which fields host a rock is a guess and no page read speaks of rocks in a paddy; Label stays accurate (the snapshot test pins it) - the relabel is raised in the handoff
+- GraveIsland (fields SECTION=010): REWRITTEN - "corroborated in Japan" replaced by a partial Japanese parallel and no page read for the north-China half
+- Millet (fields SECTION=050): LABELED - the Note now says the ridged rows are a guess (no page describes pre-modern dry-field sowing); Label: accurate kept for the catena placement it rests on
+- IrrigationDitch (water SECTION=240): IN-STEP - the fork along both margins, the tapering mains and the uncited fork distance all still stand; the new pointer to water/400 adds no finding the modal owes
+- IrrigationDitch (fields SECTION=070): LABELED - the Meiji dating of a ditch beside every paddy is now named in the Note as the record's reading
+- Pond (fields SECTION=070): IN-STEP - the changes are in the Distribution bullet and its notes; nothing touches the pond
+- FishPond (archetypes SECTION=150): IN-STEP - its Note already says the inlet-high plumbing rests on the unread Ruddle and Zhong
+- PondCanal (archetypes SECTION=150): REWRITTEN - the pond-to-canal link moved from "documented" into the Ruddle and Zhong clause
+- PondSluice (archetypes SECTION=150): REWRITTEN - drained two or three times a year, not at harvest; the gate's 0.80 m cap replaces the unsourced board width; the canal link and the dou reading labeled
+- SluiceGate (archetypes SECTION=150): REWRITTEN - the Note credits the Jiangnan polder account for drought and flood working and labels the dou reading a guess; its Sources tag still lacks cssn-jiangnan-weitian (a pinned snapshot field, left open)
+- PerimeterDike (archetypes SECTION=160): REWRITTEN - its Note now says that any gap re-flooding the block is this project's reasoning from the general polder page, not read

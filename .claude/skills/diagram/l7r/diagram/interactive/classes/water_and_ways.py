@@ -54,7 +54,7 @@ class IrrigationDitch(Kind):
     (Bungotakada); how few ditches that form left is this record's own reading, since no page read counts
     ditches: the pages on it describe water passing from paddy to paddy, the one village page giving its merit
     as saving water, not saving digging, and keeping many weirs; prefectural and ministry papers a search
-    showed saying such districts have hardly any channels could not be read. The widths are weaker than they look.
+    showed saying such districts have hardly any channels could not be read. That a ditch beside every paddy is a Meiji anachronism is likewise the record's reading of that contrast: the Ishikawa method of 1887 put each squared parcel on a channel, and the 1899 law set out to build irrigation and drainage works, not in so many words a ditch to every paddy. The widths are weaker than they look.
     The third of a meter is a modern design MINIMUM rather than a measured ditch, and the Chinese doctrine is
     carried by a 2021 provincial standard for consolidated farmland, so what it gives is the doctrine and not
     a premodern layout. The national standard the record once leaned on for both is readable nowhere and is
@@ -167,11 +167,11 @@ class FieldPond(Kind):
     What: A small pocket of open water inside one low paddy plot, reed-fringed - a low pocket where the ground
     pools, or a header pond within the field.
 
-    Why: Flat, flooded valley-bottom paddy is the archetype that hosts non-rice obstacles LEAST - graves and
-    knolls go to the slope, rock outcrops belong to terraces - and a small open-water pond is the one thing
+    Why: Flat, flooded valley-bottom paddy, the most valuable and most worked ground, is reckoned to host non-rice obstacles LEAST - graves and
+    knolls go to the slope, rock outcrops are guessed to belong to terraces - and a small open-water pond, embanked and dug into low wet ground, is the one thing
     that genuinely belongs in the wet middle. It is drawn sunk into a single low plot, never across a bund.
 
-    Note: The kind of obstacle a flooded paddy hosts is read (corroborated in both traditions); no source counts
+    Note: That a plains pond is dug into low wet ground is read, as is feng shui setting graves on the hills; that flat paddy hosts obstacles least is this map's reasoning, and rocks as a terrace feature a guess; no source counts
     how often, so the rate is chosen - often enough that a reader meets the feature, rare enough that it
     does not litter the field.
 
@@ -190,19 +190,20 @@ class FieldPond(Kind):
 
 class FieldRock(Kind):
     """
-    What: A cluster of gray boulders inside a field plot - a bedrock outcrop the terrace risers wrap around, too
-    big to clear.
+    What: A cluster of gray boulders inside a field plot - a bedrock outcrop the terrace risers wrap around.
 
-    Why: Rock outcrops are a TERRACE feature, bedrock the risers wrap around, and are absent on alluvial valley,
+    Why: Rock outcrops are drawn as a TERRACE feature - a guess no source confirms - bedrock the risers wrap around, and are absent on alluvial valley,
     polder and delta ground; where the archetype allows one it stands off-center in its plot so it reads as
     a natural obstacle.
 
-    Note: Which archetypes host an outcrop is read (corroborated); no source counts how many, so a terraced field
+    Note: Which archetypes host an outcrop is a guess that nothing read confirms, and no page read speaks of rocks left standing in a paddy at all; no source counts how many, so a terraced field
     gets one to three - enough that the reader meets the obstacle the terrace was cut around, few enough
     that the field still reads as worked ground.
 
-    Caveat: no source counts how many, so a terraced field gets one to three - enough that the reader meets the
-    obstacle the terrace was cut around, few enough that the field still reads as worked ground.
+    Caveat: Which archetypes host an outcrop is a guess that nothing read confirms, and no page read speaks of
+    rocks left standing in a paddy at all; no source counts how many, so a terraced field gets one to three -
+    enough that the reader meets the obstacle the terrace was cut around, few enough that the field still
+    reads as worked ground.
 
     Name: field rock
     Covers: `field_rocks` - a bedrock outcrop inside a plot
@@ -219,14 +220,14 @@ class GraveIsland(Kind):
     What: A small raised earthen mound with two or three stone markers standing inside a paddy plot, the flat
     paddy tiling around it.
 
-    Why: Graves among the paddy are a north-China dry-plain signature, corroborated in Japan - NOT the rice-south
+    Why: Graves among the paddy are held to be a north-China dry-plain signature (no page read gives it), with only a partial Japanese parallel - NOT the rice-south
     default, where feng-shui puts the dead on the slope with a backing hill and a downslope water view. The
     GM accepted both looks, so the island is drawn rarely (about three valley, terrace or ribbon maps in
     ten, a rate chosen for the maps rather than read from any source) as a deliberate departure.
 
     Note: A calibrated liberty, disclosed: the in-field grave is drawn where the rice-south record would put the
     dead on the slope. How often it is drawn is the project's own choice, and the evidence for graves out
-    among the paddy is thin.
+    among the paddy is thin: the one Japanese passage puts burials beside the bunds, at a field's edge rather than out in a plot, and no page read gives the north-China half.
 
     Name: grave island
     Covers: `field_graves` - the rare in-field grave mound
