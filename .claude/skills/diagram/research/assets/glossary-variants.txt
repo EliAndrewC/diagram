@@ -12,6 +12,7 @@ aizu	Aizu
 ake-mutsu	ake-mutsu
 akiba	Akiba
 akusui	akusui
+alluvial	alluvial
 alluvial fan	alluvial fan
 alluvial fans	alluvial fan
 along the ridge	ridge span
@@ -585,6 +586,9 @@ hutong	hutong
 hutongs	hutong
 hyakusho denki	Hyakusho Denki
 hydrophilic	hydrophilic
+hydroseral	hydrosere
+hydrosere	hydrosere
+hydroseres	hydrosere
 hyo	hyō
 hyojosho	Hyōjōsho
 hyō	hyō
@@ -985,7 +989,6 @@ outwork	outwork
 outworks	outwork
 ox-frame	ox-frame
 ox-frames	ox-frame
-paddy seams	seam
 panicle	panicle
 panicles	panicle
 pannage	pannage
@@ -1013,7 +1016,6 @@ pig iron	pig iron
 plankton	plankton
 plant association	plant association
 planted collar	planted collar
-plot seams	seam
 polder	polder
 pollard	pollard
 pollarded	pollard
@@ -1145,8 +1147,6 @@ satoyama	satoyama
 schistosomiasis	schistosomiasis
 scour	scour
 se	se
-seam	seam
-seams	seam
 season word	season word
 season words	season word
 secondary forest	secondary forest
@@ -1266,8 +1266,6 @@ stringer	stringer
 stringers	stringer
 strip footing	strip footing
 strip footings	strip footing
-stroke	stroke
-strokes	stroke
 stupa	stupa
 stupas	stupa
 subgrade	subgrade
@@ -1403,6 +1401,7 @@ tōya	miyaza
 ujidera	bodaiji
 ujigami	ujigami
 ujiko	ujiko
+ukiyagara	ukiyagara
 umagutsu	umagutsu
 umaya	umaya
 umayado	umayado
@@ -1542,6 +1541,7 @@ zuo zhuan	Zuo Zhuan
 ōkajiba	ōkaji
 ōmi	Omi
 ほ場整備	hojo seibi
+ウキヤガラ	ukiyagara
 合掌造り	gassho
 圃場整備	hojo seibi
 土地庙	tudi miao

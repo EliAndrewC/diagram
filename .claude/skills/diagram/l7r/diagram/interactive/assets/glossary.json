@@ -5757,22 +5757,6 @@
    "loose-cluster"
   ]
  },
- "stroke": {
-  "def": "The drawn line that stands for a watercourse or bund on the map; its width is the width the feature is drawn at.",
-  "variants": [
-   "stroke",
-   "strokes"
-  ]
- },
- "seam": {
-  "def": "The shared edge where two neighboring paddy plots meet on the map; a broken seam leaves a gap or an overlap between them.",
-  "variants": [
-   "seam",
-   "seams",
-   "paddy seams",
-   "plot seams"
-  ]
- },
  "nimosaku": {
   "def": "Double cropping: two different crops from the same ground in one year. On a paddy it is rice in summer and barley or wheat in winter, grown on the field once its water is let off.",
   "variants": [
@@ -6057,6 +6041,27 @@
   "variants": [
    "Omi",
    "Ōmi"
+  ]
+ },
+ "hydrosere": {
+  "def": "The ladder of plant zones at a wetland's edge, from open water to dry land - open water, reed swamp, sedge and wet meadow, wet woodland, dry ground - each stage building up the ground the next one grows on.",
+  "variants": [
+   "hydrosere",
+   "hydroseres",
+   "hydroseral"
+  ]
+ },
+ "alluvial": {
+  "def": "Laid down by a river: alluvial ground is the silt and sand a river spreads over its floodplain, and alluvial woodland is the wet forest, in Japan alder and willow, that grows on it.",
+  "variants": [
+   "alluvial"
+  ]
+ },
+ "ukiyagara": {
+  "def": "A tall bulrush (Bolboschoenus) of shallow fresh water, growing with or beside wild rice (makomo) in a lowland marsh.",
+  "variants": [
+   "ukiyagara",
+   "ウキヤガラ"
   ]
  }
 }
