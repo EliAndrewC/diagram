@@ -31,6 +31,7 @@ apron	apron
 aprons	apron
 aqueduct	aqueduct
 aquifer	aquifer
+arresting tools	three arresting tools
 artesian	artesian
 ashigaru	ashigaru
 ashigaru nagaya	ashigaru-nagaya
@@ -114,6 +115,7 @@ black-charcoal	black charcoal
 board feet	board foot
 board foot	board foot
 board-clapper	clapper-board
+bobana	boubana
 bodaiji	bodaiji
 boji	boji
 bojikui	bojikui
@@ -121,6 +123,7 @@ bomori	bomori
 bon	Bon
 boom	boom
 booms	boom
+boubana	boubana
 boundary post	bojikui
 boundary posts	bojikui
 branch house	branch household
@@ -1656,6 +1659,7 @@ thatch fields	thatch field
 the pool	the pool
 the reform and opening-up	reform and opening-up
 thousand character classic	Thousand Character Classic
+three arresting tools	three arresting tools
 three bays	bay
 three officials	Three Officials
 three-bay two-corridor house	three-bay two-corridor house
@@ -1685,6 +1689,7 @@ tokugawa yoshimune	Yoshimune
 ton'ya	ton'ya
 tonya	ton'ya
 torii	torii
+torimono mitsu dogu	three arresting tools
 toro	Toro
 toro site	Toro
 toshiyori	toshiyori
