@@ -29,6 +29,7 @@ the map features whose write-ups will be rewritten from what you find (by the or
 
 - A37 **Division works**: how was a ditch split between users (a division weir, a notched board, bunsuiban), and what
   shows of it? (water/240, fields/070). M. P1.
+  > COORDINATION (A37): 269 B22 (water 300, 310, in diagram-supplemental) covers the village weir forms and the intake mouth - cite them; the division between users is ours
 - A46 **Water-lifting devices**: the treadle wheel (fumiguruma), swing bucket (hanetsurube) and the Chinese chain pump
   (longgu che) - did a village lift water onto its fields, with how many, and what shows on a map? (none). M. P2.
 - A47 B62 **Mills**: did a village have a water mill (suisha) for polishing rice or grinding, how many, where on the

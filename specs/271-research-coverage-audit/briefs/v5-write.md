@@ -32,6 +32,7 @@ Also edits archetypes/020, 080, 150, 160.
   fields/024). M. P1.
 - A21 **Overlay crop extent**: how much of a village a cash-crop overlay covers (mulberry fishpond, lotus, tea fringe)
   (archetypes/020, no footnotes). S. P1.
+  > COORDINATION (A21): 269 B33 (mulberry density and crown width, group A1) is density, not extent - no overlap; cite it once written
 - A24 **Plot tenure in the pattern**: scattered strips per household, warichi redistribution, tenant plots - does it
   show in the plot pattern? (archetypes/050; 269 B35 owns 050/060's edits, so this is a new question). M. P2.
 - A62 **Polder perimeter dike dimensions**: how high and wide is a polder's dike? (archetypes/080). S. P1.
