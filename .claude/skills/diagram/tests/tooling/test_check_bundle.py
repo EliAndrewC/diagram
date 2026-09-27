@@ -125,6 +125,22 @@ def test_a_recheck_excerpt_keeps_a_block_whose_close_tag_is_implicit() -> None:
     assert "Last." in cut and "One." not in cut, "an unclosed last paragraph is still a block"
 
 
+def test_a_recheck_verbatim_report_keeps_the_notes_the_excerpt_quotes(tmp_path: pathlib.Path) -> None:
+    # passages are dicts and the excerpt wraps its lines: the cut used to keep nothing (feature 250, 2d)
+    (tmp_path / "q.notes.html").write_text('<li data-note="a">「Zuihoden, in Otamayashita, Aoba-ku,\n  Sendai, is a mausoleum.」</li>\n', encoding="utf-8")
+    (tmp_path / "q.html").write_text("<p>The daimyo pattern is an ancestral\n  mortuary precinct at Sendai.</p>\n", encoding="utf-8")
+    entries = [
+        {"id": "fn-1", "key": "a", "readability": "READABLE", "passages": [{"quote": "Zuihoden, in Otamayashita, Aoba-ku, Sendai, is a mausoleum.", "original": "x"}]},
+        {"id": "fn-2", "key": "b", "readability": "READABLE", "passages": [], "assertion": "The daimyo pattern is an ancestral mortuary precinct at Sendai."},
+        {"id": "fn-3", "key": "c", "readability": "READABLE", "passages": [{"quote": "Nothing in this bundle quotes this line at all."}], "assertion": "Elsewhere."},
+    ]
+    (tmp_path / "quote-verbatim.json").write_text(json.dumps({"footnotes": entries}), encoding="utf-8")
+    text = cb.scoped_verbatim(tmp_path, "quote-verbatim: q\n  fn-1 a - READABLE\n")
+    kept = json.loads((tmp_path / "quote-verbatim.json").read_text(encoding="utf-8"))["footnotes"]
+    assert [e["id"] for e in kept] == ["fn-1", "fn-2"], "a quoted passage and a wrapped assertion both keep their note"
+    assert "fn-3" not in text
+
+
 def test_make_notes_prints_the_named_notes_and_refuses_without_keys(capsys: pytest.CaptureFixture[str]) -> None:
     assert cb.main(["ways", "--section", "010", "--notes", "ritter-timber-bridges", "--print-notes", "--root", str(REPO)]) == 0
     out = capsys.readouterr().out
