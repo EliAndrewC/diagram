@@ -85,6 +85,35 @@ def test_trim_to_service_trims_the_FRONT_end_too() -> None:
     assert out[-1] == (100.0, 0.0), "the end that meets a way is kept"
 
 
+def test_an_end_served_by_a_house_stops_BESIDE_it_not_past_it() -> None:
+    """THE ROAD TO NOWHERE (GM 2026-09-27): Inashiro's spine passed its last farmhouse and ran on 45 ft into the
+    windbreak, every point of the tail still inside the 60 ft bar of the house's center. The tail is cut at the
+    foot of the perpendicular from the house; an end that meets a way is left where it is."""
+    segs = [((-120.0, -20.0), (-120.0, 20.0))]
+    run = [(-120.0, 0.0), (-40.0, 0.0), (0.0, 0.0), (30.0, 0.0), (45.0, 0.0)]
+    out = _trim_to_service(run, segs, [(0.0, 35.0)])
+    assert out[-1] == (0.0, 0.0), "the two segments walking away from the house are taken off"
+    assert out[0] == (-120.0, 0.0), "the end at the way has arrived, and stays"
+    out = _trim_to_service([(-120.0, 0.0), (45.0, 0.0)], segs, [(0.0, 35.0)])
+    assert out[-1] == pytest.approx((0.0, 0.0)), "a two-point tread is cut mid-segment, at the house"
+    assert _trim_to_service([(-120.0, 0.0), (2.0, 0.0)], segs, [(0.0, 35.0)])[-1] == (2.0, 0.0), "a 2 ft overshoot is below the grain"
+    toward = [(-120.0, 0.0), (0.0, 0.0), (45.0, 0.0)]
+    assert _trim_to_service(toward, segs, [(0.0, 35.0), (70.0, 30.0)]) == toward, "still walking TO a second house: arriving there"
+    assert _trim_to_service(run, [*segs, ((45.0, -20.0), (45.0, 20.0))], [(0.0, 35.0)]) == run, "an end at a way has arrived, however it walks"
+    beside = [(-40.0, 0.0), (0.0, 0.0), (40.0, 0.0)]
+    assert _trim_to_service(beside, [], [(0.0, 35.0)]) == beside, "both ends serve only the one house: a way beside it, not past it"
+    assert _trim_to_service(run, [], [(0.0, 35.0), (-120.0, 30.0)])[-1] == (0.0, 0.0), "from ANOTHER house to this one, it stops here"
+
+
+def test_closest_approach_keeps_a_tread_that_walks_away_from_its_ONLY_house() -> None:
+    """A two-point tread whose every point moves away from the house: its other end is the arrival, and cutting
+    this one to the start would leave a lane of no length."""
+    from l7r.diagram.hamletgen.ways.geom import _stop_at_closest_approach
+
+    assert _stop_at_closest_approach([(0.0, 0.0), (50.0, 0.0)], [(-10.0, 30.0)]) == [(0.0, 0.0), (50.0, 0.0)]
+    assert _stop_at_closest_approach([(0.0, 0.0), (0.0, 0.0)], [(-10.0, 30.0)]) == [(0.0, 0.0), (0.0, 0.0)]
+
+
 def test_nearest_seg_returns_the_distance_AND_the_segment_it_belongs_to() -> None:
     """One expression, one answer - a caller must not re-derive which segment was nearest."""
     segs = [((0.0, 0.0), (100.0, 0.0)), ((0.0, 200.0), (100.0, 200.0))]
