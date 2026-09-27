@@ -6045,7 +6045,8 @@
  "tsukubo": {
   "def": "A long pole with a T-shaped, barbed head, used by Edo officers to pin and hold a suspect at a distance. It was one of the three restraining tools set out at a guard post or court.",
   "variants": [
-   "tsukubo"
+   "tsukubo",
+   "tsukubō"
   ]
  },
  "sasumata": {
@@ -6134,6 +6135,64 @@
    "three-squads courtyard",
    "three-squads",
    "sanban yuan"
+  ]
+ },
+ "stone lantern": {
+  "def": "A lantern built of stacked stone parts - from the top a jewel, a cap, a fire-box that holds the light, a middle platform, a post and a base. It came from China and Korea with Buddhism as a votive light for shrines and temples, and from the Momoyama period it was also set in tea gardens and ordinary gardens.",
+  "variants": [
+   "stone lantern",
+   "stone lanterns",
+   "ishidōrō",
+   "ishidoro"
+  ]
+ },
+ "yukimi": {
+  "def": "A snow-viewing lantern: one of the named kinds of stone lantern, told apart by its use and shape.",
+  "variants": [
+   "yukimi",
+   "snow-viewing lantern"
+  ]
+ },
+ "borrowed scenery": {
+  "def": "A garden laid out so that a view beyond its own boundary - a distant hill, a temple roof, a stand of trees - is framed as part of the garden's picture (shakkei in Japanese).",
+  "variants": [
+   "borrowed scenery",
+   "borrowed-scenery"
+  ]
+ },
+ "yorishiro": {
+  "def": "The object a god comes down to and dwells in when it is worshipped - often an old tree or a natural stone - which could serve as a household god's seat in place of a shrine.",
+  "variants": [
+   "yorishiro"
+  ]
+ },
+ "udegi gate": {
+  "def": "A simple gate whose small roof rests on arm-beams (udegi) projecting from the tops of its two posts; a common gate at a middle-rank samurai house.",
+  "variants": [
+   "udegi gate",
+   "udegi",
+   "udegimon"
+  ]
+ },
+ "kesa": {
+  "def": "a diagonal sword cut from the shoulder down across the body; a reverse-kesa cut runs on the opposite diagonal",
+  "variants": [
+   "kesa",
+   "kesa cut",
+   "kesa cuts",
+   "reverse-kesa"
+  ]
+ },
+ "sodegarami": {
+  "def": "a long-shafted arrest weapon with a head of barbs, used to catch an offender's clothing; one of the \"three tools\" kept at Edo-period checkpoints and guard posts",
+  "variants": [
+   "sodegarami"
+  ]
+ },
+ "Satsuma": {
+  "def": "a domain in the far south of Japan, ruled through the Edo period by the Shimazu house",
+  "variants": [
+   "Satsuma"
   ]
  }
 }

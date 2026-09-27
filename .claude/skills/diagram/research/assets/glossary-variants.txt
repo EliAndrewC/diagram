@@ -723,6 +723,9 @@ ken	ken
 kenchi-cho	kenchicho
 kenchicho	kenchicho
 kera	kera
+kesa	kesa
+kesa cut	kesa
+kesa cuts	kesa
 keyaki	keyaki
 khitan	Khitan
 kichin-yado	kichin-yado
@@ -1109,6 +1112,7 @@ rent bursary	rent bursary
 rent-collection bursaries	rent bursary
 rent-collection bursary	rent bursary
 return flow	return flow
+reverse-kesa	kesa
 revetment	revetment
 revetments	revetment
 revetted	revetment
@@ -1170,6 +1174,7 @@ sasa	sasa
 sasumata	sasumata
 satetsu	satetsu
 satoyama	satoyama
+satsuma	Satsuma
 schistosomiasis	schistosomiasis
 scour	scour
 se	se
@@ -1254,6 +1259,7 @@ skimmer wall	skimmer wall
 sluice	sluice
 sluices	sluice
 snow-viewing lantern	yukimi
+sodegarami	sodegarami
 soffit	soffit
 soffits	soffit
 sogamae	sogamae
@@ -1413,6 +1419,7 @@ tsuijimatsu	tsuijimatsu
 tsuke-shoin	tsuke-shoin
 tsuke-tsubo	tsuke-tsubo
 tsukubo	tsukubo
+tsukubō	tsukubo
 tsumairi	gable-entered
 tsunaba	tsunaba
 tudi miao	tudi miao
@@ -1423,6 +1430,9 @@ tōhoku	Tohoku
 tōkaidō	Tokaido
 tōya	miyaza
 uchigenkan	uchigenkan
+udegi	udegi gate
+udegi gate	udegi gate
+udegimon	udegi gate
 ujidera	bodaiji
 ujigami	ujigami
 ujiko	ujiko
@@ -1523,6 +1533,7 @@ yohaisui bunri	yohaisui bunri
 yonin	yonin
 yoriai-seki	yoriai-seki
 yoriki	yoriki
+yorishiro	yorishiro
 yoritsuki	yoritsuki
 yosemune	yosemune-zukuri
 yosemune-zukuri	yosemune-zukuri
