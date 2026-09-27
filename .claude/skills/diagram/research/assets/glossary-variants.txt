@@ -7,6 +7,7 @@ aburaya	aburaya
 abutment	abutment
 abutments	abutment
 across the beams	ridge span
+afcd	AFCD
 aizu	Aizu
 ake-mutsu	ake-mutsu
 akiba	Akiba
@@ -430,6 +431,8 @@ freeboard	freeboard
 frontage	frontage
 frost heave	frost heave
 frost-heave	frost heave
+fsw	FSW
+fsws	FSW
 fu	fu
 fudasashi	fudasashi
 fukada	fukada
@@ -556,6 +559,8 @@ hiroshige's	Hiroshige
 hitoyado	hitoyado
 hiyokechi	hiyokechi
 hiyoza	hiyoza
+hm2	hm2
+hm²	hm2
 hoarding	hoarding
 hoardings	hoarding
 hojo seibi	hojo seibi
@@ -627,6 +632,7 @@ isohyets	isohyet
 isotherm	isohyet
 isotherms	isohyet
 itabashi	itabashi
+izumo	Izumo
 ja zen-noh	Zennoh
 jagama	jagama
 japanese zelkova	keyaki
@@ -840,6 +846,8 @@ mamian	mamian
 manning	Manning
 manning's formula	Manning
 maoqu	maoqu
+master mountain	master-mountain
+master-mountain	master-mountain
 masugata	masugata
 mat	tatami
 matebajii	matebajii
@@ -1144,11 +1152,15 @@ secondary woodlands	secondary forest
 seijoue	seijoue
 sekisho	sekisho
 senbon torii	Senbon Torii
+sendai	Sendai
+sendai plain	Sendai
 sengoku	Sengoku
 senmaida	senmaida
 sento	sento
 sentō	sento
 sericulture	sericulture
+ses	SES
+sess	SES
 setchin	kawaya
 settling basin	settling basin
 settling basins	settling basin
@@ -1164,6 +1176,9 @@ shatian	shatian
 sheath	sheath
 sheaths	sheath
 sheer boom	boom
+shelter belt	shelter belt
+shelter belts	shelter belt
+shelterbelt	shelter belt
 shi	shi
 shibai-goya	shibai-goya
 shichiya	shichiya
@@ -1399,6 +1414,7 @@ vaiśravaṇa	Bishamon
 verge	verge
 verges	verge
 vermilion line	shubiki
+vff	VFF
 village district	village district
 votive plaque	votive plaque
 votive plaques	votive plaque
@@ -1428,8 +1444,10 @@ warring-states	Warring States
 water duty	water duty
 water gate	water gate
 water gates	water gate
+water head	water-head
 water mouth	water-mouth
 water tail	water-mouth
+water-head	water-head
 water-mouth	water-mouth
 water-tail	water-mouth
 wazi	goulan

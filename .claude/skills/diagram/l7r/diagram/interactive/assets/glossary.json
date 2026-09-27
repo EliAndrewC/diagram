@@ -5967,5 +5967,74 @@
    "hectare",
    "hectares"
   ]
+ },
+ "VFF": {
+  "def": "Village fengshui forest: the abbreviation Hu and colleagues' Pearl River Delta study uses for a village's fengshui grove.",
+  "variants": [
+   "VFF"
+  ]
+ },
+ "FSW": {
+  "def": "Fung shui wood: the abbreviation Hong Kong's government surveys use for a village's fengshui grove, the wood kept behind a village, typically in a crescent shape.",
+  "variants": [
+   "FSW",
+   "FSWs"
+  ]
+ },
+ "hm2": {
+  "def": "Square hectometer: a square 100 meters on a side, the same area as a hectare; Chinese journals write hectares this way.",
+  "variants": [
+   "hm2",
+   "hm²"
+  ]
+ },
+ "SES": {
+  "def": "Social-ecological system: a community of people together with the land, water and living things it depends on, studied as one system.",
+  "variants": [
+   "SES",
+   "SESs"
+  ]
+ },
+ "AFCD": {
+  "def": "Hong Kong's Agriculture, Fisheries and Conservation Department, the government department that surveyed the territory's fung shui woods.",
+  "variants": [
+   "AFCD"
+  ]
+ },
+ "master-mountain": {
+  "def": "In fengshui siting, the hill at a village's back that the settlement is set against; the grove kept on it is the back or master-mountain grove.",
+  "variants": [
+   "master-mountain",
+   "master mountain"
+  ]
+ },
+ "water-head": {
+  "def": "The point where a stream enters a village's ground, upstream of the houses; the water-head grove is planted there, as the water-mouth grove is where the stream leaves.",
+  "variants": [
+   "water-head",
+   "water head"
+  ]
+ },
+ "Sendai": {
+  "def": "A city in Miyagi Prefecture in northeastern Japan, and the coastal plain around it, where the farmstead grove is called igune.",
+  "variants": [
+   "Sendai",
+   "Sendai plain",
+   "Sendai Plain"
+  ]
+ },
+ "Izumo": {
+  "def": "A region of western Japan on the Sea of Japan coast, the east of present Shimane Prefecture, whose homestead grove is the tsuijimatsu.",
+  "variants": [
+   "Izumo"
+  ]
+ },
+ "shelter belt": {
+  "def": "A band of trees and shrubs planted across the prevailing wind to shelter the houses or fields behind it; in this record, the farmstead or village windbreak grove.",
+  "variants": [
+   "shelter belt",
+   "shelter belts",
+   "shelterbelt"
+  ]
  }
 }
