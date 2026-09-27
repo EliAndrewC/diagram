@@ -783,7 +783,7 @@
   ]
  },
  "bu": {
-  "def": "A unit of land area the size of a tsubo, about 3.3 square meters; the cadastres give homestead lots in bu.",
+  "def": "A unit of land area the size of a tsubo, about 3.3 square meters; the cadastres give homestead lots in bu. Written after another unit, as in 57 tsubo 2 bu 5 rin, it means a tenth of that unit.",
   "variants": [
    "bu"
   ]
@@ -3176,7 +3176,7 @@
   ]
  },
  "ri": {
-  "def": "A Japanese league of about 2.4 miles, thirty-six cho.",
+  "def": "A Japanese league of about 2.4 miles, thirty-six cho. The ancient ri of the imperial highway codes was far shorter, about 530 m, so thirty of them came to about 16 km (ten miles).",
   "variants": [
    "ri"
   ]
@@ -6482,6 +6482,26 @@
   "def": "A relay station of Japan's ancient state highways, keeping a fixed number of post horses by the class of its road; the one excavated was a walled compound about 260 ft a side.",
   "variants": [
    "ekika"
+  ]
+ },
+ "Sanyodo": {
+  "def": "One of the great roads of ancient Japan's highway system, along which relay stations (ekika) were set in principle one every 16 km (about ten miles), each keeping 20 horses.",
+  "variants": [
+   "Sanyodo",
+   "San'yodo",
+   "Sanyo-do"
+  ]
+ },
+ "rin": {
+  "def": "A hundredth of a unit, used in Japanese measures below the bu (a tenth); 57 tsubo 2 bu 5 rin is 57.25 tsubo.",
+  "variants": [
+   "rin"
+  ]
+ },
+ "Nakasendo": {
+  "def": "The inland highway of Edo-period Japan between Edo and Kyoto through the mountains, the other main route beside the coastal Tokaido; its post stations kept about half as many inns as the Tokaido's.",
+  "variants": [
+   "Nakasendo"
   ]
  }
 }

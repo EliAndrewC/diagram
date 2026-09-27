@@ -984,6 +984,7 @@ nagewatashi	nagewatashi
 naka-bori	middle moat
 nakaboshi	nakaboshi
 nakamon	nakamon
+nakasendo	Nakasendo
 nanbu	Tohoku
 nando	nando
 nanohana	rape
@@ -1182,6 +1183,7 @@ ricks	rick
 ridge span	ridge span
 riffle	riffle
 riffles	riffle
+rin	rin
 ring dike	ring dike
 ring levee	ring dike
 ring-dike	ring dike
@@ -1212,6 +1214,7 @@ sally port	sally port
 sallyport	sally port
 salvage excavation	salvage excavation
 san no torii	ichi-no-torii
+san'yodo	Sanyodo
 san-no-maru	sannomaru
 san-no-torii	ichi-no-torii
 sand junk	sand junk
@@ -1226,6 +1229,8 @@ sanmai	sanmai
 sannomaru	sannomaru
 sanshaku-michi	sanshaku-michi
 sanson	sankyoson
+sanyo-do	Sanyodo
+sanyodo	Sanyodo
 sara-ike	sara-ike
 sarae	sarae
 sasa	sasa
