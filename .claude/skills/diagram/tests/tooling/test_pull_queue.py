@@ -79,3 +79,12 @@ def test_a_finished_queue_s_untracked_briefs_are_committed_not_refused(tmp_path)
     got = _run(a)
     assert got.returncode == 0, got.stderr
     assert (a / "specs" / "250-x" / "briefs" / "towns-2a.md").exists() and not _git(q, "status", "--porcelain")
+
+
+def test_a_hand_written_conflict_alone_still_names_the_file(tmp_path) -> None:
+    """With no generated conflict the resolve-first step finds nothing, and must not end the script silently."""
+    a, q = _world(tmp_path)
+    _change(a, "note.txt", "note from a\n")
+    _change(q, "note.txt", "note from the queue\n")
+    got = _run(a)
+    assert got.returncode == 1 and "research/note.txt" in got.stderr
