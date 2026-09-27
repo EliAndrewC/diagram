@@ -8,6 +8,8 @@ abutment	abutment
 abutments	abutment
 across the beams	ridge span
 adlittoral	adlittoral
+admonition arch	admonition arch
+admonition arches	admonition arch
 ake-mutsu	ake-mutsu
 akiba	Akiba
 akusui	akusui
@@ -539,6 +541,9 @@ gorinto	five-ring pagoda
 goshi	gōshi
 goten	goten
 goulan	goulan
+governor-general	governor-general
+governor-general's	governor-general
+governors-general	governor-general
 goyoba	goyoba
 goyōba	goyoba
 green manure	green manure
@@ -842,6 +847,8 @@ koike	koike
 koji	koji
 koku	koku
 kokubunji	kokubunji
+kokucho	kokucho
+kokuchō	kokucho
 kokudai-no	kokudai-no
 kokudaino	kokudai-no
 kokudaka	kokudaka

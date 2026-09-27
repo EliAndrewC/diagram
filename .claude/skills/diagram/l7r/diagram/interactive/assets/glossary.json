@@ -6750,5 +6750,27 @@
   "variants": [
    "kokuga"
   ]
+ },
+ "governor-general": {
+  "def": "In Qing China, the highest provincial official, over one province or several; their yamen stood in a provincial seat, as the Zhili governor-general's did at Baoding.",
+  "variants": [
+   "governor-general",
+   "governors-general",
+   "governor-general's"
+  ]
+ },
+ "kokucho": {
+  "def": "The central government office inside an ancient Japanese kokuga (provincial office district), whose main hall was the seat of provincial rule.",
+  "variants": [
+   "kokucho",
+   "kokuchō"
+  ]
+ },
+ "admonition arch": {
+  "def": "An arch on a Qing yamen's central axis, between the ceremonial gate and the great hall; at the Zhili governor-general's yamen it was the third thing a visitor passed through after the main gate.",
+  "variants": [
+   "admonition arch",
+   "admonition arches"
+  ]
  }
 }
