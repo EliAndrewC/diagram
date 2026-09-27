@@ -5636,5 +5636,112 @@
   "variants": [
    "oku-no-ma"
   ]
+ },
+ "engawa": {
+  "def": "The veranda of a Japanese house, a floored strip along an outer face. Older dictionaries use the word for the veranda in general; in recent use it also names the irikawa, the veranda inside the building line.",
+  "variants": [
+   "engawa"
+  ]
+ },
+ "Katsura": {
+  "def": "The Katsura Imperial Villa in Kyoto, a surviving seventeenth-century shoin-style house whose halls show veranda widths changing from face to face.",
+  "variants": [
+   "Katsura",
+   "Katsura Imperial Villa",
+   "Katsura Rikyu"
+  ]
+ },
+ "Ko-shoin": {
+  "def": "The Old Shoin, the first-built hall of the Katsura villa.",
+  "variants": [
+   "Ko-shoin"
+  ]
+ },
+ "Naka-shoin": {
+  "def": "The Middle Shoin, the hall of the Katsura villa built beside the Ko-shoin.",
+  "variants": [
+   "Naka-shoin"
+  ]
+ },
+ "Genna": {
+  "def": "The Japanese era of 1615 to 1624, following Keicho.",
+  "variants": [
+   "Genna",
+   "Genna era"
+  ]
+ },
+ "ni-no-ma": {
+  "def": "The first, second and third rooms of a formal suite, numbered from the upper seat down; the ichi-no-ma is the main room.",
+  "variants": [
+   "ni-no-ma",
+   "ichi-no-ma",
+   "san-no-ma"
+  ]
+ },
+ "jodan-no-ma": {
+  "def": "A room whose floor is raised a step above the rooms before it, the upper seat of a formal suite, where the master sat.",
+  "variants": [
+   "jodan-no-ma",
+   "jodan"
+  ]
+ },
+ "tsuke-shoin": {
+  "def": "A built-in writing desk set into a window bay beside the tokonoma, one of the fixed decorations of a shoin-style main room.",
+  "variants": [
+   "tsuke-shoin"
+  ]
+ },
+ "nando-gamae": {
+  "def": "Decorative doors on the side wall of a shoin-style main room, framed like the doorway to a sleeping room or storeroom, one of the fixed decorations of the upper seat.",
+  "variants": [
+   "nando-gamae",
+   "chodaigamae"
+  ]
+ },
+ "kirime-en": {
+  "def": "An outer veranda whose boards run out from the building, so their ends face the edge of the veranda.",
+  "variants": [
+   "kirime-en"
+  ]
+ },
+ "massing": {
+  "def": "How a building's parts are arranged as masses: one block under one roof, or separate halls set apart and joined. A residence takes one form or the other.",
+  "variants": [
+   "massing"
+  ]
+ },
+ "shogun": {
+  "def": "The military ruler of Japan, head of the warrior government (the bakufu), above the daimyo. In the Edo period the Tokugawa house held the office.",
+  "variants": [
+   "shogun",
+   "shoguns"
+  ]
+ },
+ "Momoyama": {
+  "def": "The period of Japan's unification, about 1568 to 1600, just before the Edo period.",
+  "variants": [
+   "Momoyama",
+   "Momoyama period",
+   "Azuchi-Momoyama"
+  ]
+ },
+ "hojo": {
+  "def": "The abbot's quarters of a Zen temple. Its plan, rooms in two rows divided front and back, is a form the upper samurai house also took.",
+  "variants": [
+   "hojo",
+   "hojo form"
+  ]
+ },
+ "ima": {
+  "def": "The everyday living room of a Japanese house, the household's own room. In the Kuchiba house at Hagi it stands beside the kitchen.",
+  "variants": [
+   "ima"
+  ]
+ },
+ "hikae-no-ma": {
+  "def": "A waiting room off the entrance, where visitors or attendants wait before being shown in.",
+  "variants": [
+   "hikae-no-ma"
+  ]
  }
 }
