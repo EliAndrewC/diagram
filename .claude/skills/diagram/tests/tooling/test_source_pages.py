@@ -87,6 +87,9 @@ def test_a_second_save_adds_to_the_directory_and_never_overwrites(tmp_path: path
     assert [r["file"] for r in rows] == ["01-ok.example.txt", "-", "04-ok.example.txt"], "a saved page is kept; a failed one is retried past every old number"
     assert (out / "01-ok.example.txt").read_text(encoding="utf-8") == first
     assert "https://ok.example/c | 04-ok.example.txt | FETCHED" in (out / "MANIFEST.txt").read_text(encoding="utf-8")
+    third = sp.save(["https://ok.example/d"], out, sp.qv.Pages(opener=_opener))
+    assert third[-1]["file"] == "05-ok.example.txt", "a retry dropped a row, so the row count fell behind the numbers in use"
+    assert "https://ok.example/c | 04-ok.example.txt" in (out / "MANIFEST.txt").read_text(encoding="utf-8")
 
 
 def test_a_long_page_is_saved_in_parts_and_a_quoted_one_as_an_excerpt(tmp_path: pathlib.Path) -> None:
