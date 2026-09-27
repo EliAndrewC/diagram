@@ -68,6 +68,8 @@ def test_parts_across_stream_refuses_a_garden_on_the_far_bank():
     assert s._parts_fit(geom) is False
     s.M["streams"] = [{"poly": [(520, 300), (520, 500)], "w": 9}]
     assert s._parts_across_stream(geom) is False  # beyond every part
+    s.M["streams"] = [{"poly": [(450, 300), (450, 500)], "w": 9}]
+    assert s._rect_on_stream(geom["gardens"][0]) is True and s._parts_across_stream(geom) is True  # the bed stands ON the brook
 
 
 def test_rect_on_water_skips_a_degenerate_course_and_far_ones():

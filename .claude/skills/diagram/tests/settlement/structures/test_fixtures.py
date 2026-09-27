@@ -302,4 +302,7 @@ def test_a_hamlet_with_no_houses_or_no_handover_has_no_ways_out():
     from l7r.diagram.settlement.structures.fixtures._helpers import departure_routes, kosatsuba_handover
 
     assert kosatsuba_handover({"lanes": [{"pts": [[0, 0], [100, 0]], "connector": True}]}) is None
+    assert kosatsuba_handover({"houses": [{"x": 50.0, "y": 50.0}], "lanes": [{"pts": [[0, 0], [100, 0]], "connector": True}]}) is None, "a connector no lane meets"
+    through = {"houses": [{"x": 500.0, "y": 100.0}], "lanes": [{"pts": [[-900, 0], [1900, 0]], "connector": True}, {"pts": [[500, 100], [500, 1]]}, {"pts": [[800, 90], [800, 2]]}]}
+    assert kosatsuba_handover(through) == (500.0, 1.0), "a track that runs through hands over at the lane end nearest the houses"
     assert departure_routes({"houses": [{"x": 50.0, "y": 50.0}], "lanes": []}) == []
