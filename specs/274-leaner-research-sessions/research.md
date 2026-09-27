@@ -55,3 +55,20 @@ research CLAUDE.md about 3.5 K.
 
 <!-- The probe's size, stated before launch (plan D9): two headless sessions of one turn each, each answering one
 line, about 50 K tokens in all. Run by `measure/probe.sh`. -->
+
+**Method.** `measure/probe.sh`, 2026-09-27, from this clone: two headless sessions launched as the runner launches a
+page session, each asked for the single word OK (one turn, no tool). OLD is the launch before this feature (the
+standing authorization appended; only the mirror's root CLAUDE.md excluded). NEW is `floor_flags` now (the clone's own
+root CLAUDE.md excluded too; the slim rules file appended after the authorization). The first turn's input is its
+uncached tokens plus the cache write plus the cache read, from each session's JSON `usage`.
+
+| launch | session | first-turn input | uncached | cache write | cache read |
+|---|---|---|---|---|---|
+| old | `ec30b943` | 19,642 | 2 | 13,376 | 6,264 |
+| new | `909b7b3f` | 13,050 | 2 | 6,784 | 6,264 |
+
+**Result.** The floor fell by 6,592 tokens a turn (34%). That is more than R1's estimate of about 5.2 K for the root
+CLAUDE.md, because the file has grown since, and it is net of the slim file (about 1.5 K) added in its place. At
+R1's rate of about 12,500 page-session turns, it is about 82 M raw tokens, most of them cache reads.
+The research record's CLAUDE.md is not in either figure because the probe reads no research file. It still loads
+under both launches.
