@@ -5690,5 +5690,47 @@
   "variants": [
    "Mumun"
   ]
+ },
+ "Hiroshige": {
+  "def": "Utagawa Hiroshige, an Edo-period Japanese artist of woodblock prints, best known for series of landscapes and views along roads and waterways.",
+  "variants": [
+   "Hiroshige",
+   "Hiroshige's"
+  ]
+ },
+ "waku": {
+  "def": "A square frame of timber joined with mortise and tenon, not woven, set in a river and fixed in place by stones thrown in from above; Edo-period weirs and groynes were built of them.",
+  "variants": [
+   "waku"
+  ]
+ },
+ "mortise and tenon": {
+  "def": "A timber joint in which a tongue (the tenon) cut on the end of one piece fits into a hole (the mortise) cut in another, so the pieces lock together without being woven or tied.",
+  "variants": [
+   "mortise and tenon",
+   "mortise",
+   "tenon"
+  ]
+ },
+ "groyne": {
+  "def": "A low wall or frame built out from a riverbank into the stream to turn the current away from the bank and protect it.",
+  "variants": [
+   "groyne",
+   "groynes",
+   "groin",
+   "groins"
+  ]
+ },
+ "ushi-waku": {
+  "def": "A name sometimes used for the two Edo-period timber river works together: the ushi, a timber frame that came in several named types, and the waku, the square timber frame weighted with stone.",
+  "variants": [
+   "ushi-waku"
+  ]
+ },
+ "kaya-haguchi": {
+  "def": "An Edo-period method of protecting a riverbank, named for kaya, the tall grass and reed used for thatch; the source that names it shows it only in a drawing.",
+  "variants": [
+   "kaya-haguchi"
+  ]
  }
 }

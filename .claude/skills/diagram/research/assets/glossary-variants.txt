@@ -472,9 +472,13 @@ goulan	goulan
 goyoba	goyoba
 goyōba	goyoba
 green manure	green manure
+groin	groyne
+groins	groyne
 grow-out	grow-out pond
 grow-out pond	grow-out pond
 grow-out ponds	grow-out pond
+groyne	groyne
+groynes	groyne
 gsi	GSI
 guan-xiang	guanxiang
 guanxiang	guanxiang
@@ -529,6 +533,8 @@ hinomi-yagura	hinomi-yagura
 hipposandal	hipposandal
 hipposandals	hipposandal
 hirokoji	hirokoji
+hiroshige	Hiroshige
+hiroshige's	Hiroshige
 hitoyado	hitoyado
 hiyokechi	hiyokechi
 hiyoza	hiyoza
@@ -673,6 +679,7 @@ kawaramono	kawaramono
 kawata	kawata
 kawaya	kawaya
 kaya	kaya
+kaya-haguchi	kaya-haguchi
 kayabuki	kayabuki
 kebiishi	kebiishi
 kegare	kegare
@@ -846,6 +853,8 @@ monk-style outlet	monk outlet
 monospecific	monospecific
 monzen	monzen
 morijio	morijio
+mortise	mortise and tenon
+mortise and tenon	mortise and tenon
 moso	moso
 mozi	Mozi
 mu	mu
@@ -1245,6 +1254,7 @@ tax-free plot	tax-free plot
 tedai	tedai
 teikaku	teikaku
 temizuya	temizuya
+tenon	mortise and tenon
 tenpo	Tenpo era
 tenpo era	Tenpo era
 tenshu	tenshu
@@ -1326,6 +1336,7 @@ understory	understory
 ura-dana	ura-dana
 ura-nagaya	ura-nagaya
 urajirogashi	urajirogashi
+ushi-waku	ushi-waku
 usufruct	usufruct
 uzumimon	umon
 vaiśravaṇa	Bishamon
@@ -1339,6 +1350,7 @@ wagon inn	wagon inn
 wagon inns	wagon inn
 wagon-inn	wagon inn
 wakato	wakato
+waku	waku
 walled ward	lifang
 wanghuolou	wanghuolou
 wanli	Wanli era
