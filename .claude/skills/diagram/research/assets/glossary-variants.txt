@@ -94,6 +94,7 @@ bastions	bastion
 battalion cities	guard city
 battalion city	guard city
 batter	batter
+battered	batter
 baulk	baulk
 baulks	baulk
 bay	bay
@@ -205,6 +206,8 @@ chain pump	chain pump
 chain pumps	chain pump
 chan	Chan
 chan buddhism	Chan
+chancellery	House Chancellery
+chancellery's	House Chancellery
 chang'an	Chang'an
 chaoguan	chaoguan
 chenghuangmiao	chenghuangmiao
@@ -576,6 +579,9 @@ frass	frass
 freeboard	freeboard
 frontage	frontage
 fu	fu
+fudai	fudai
+fudai daimyo	fudai
+fudai domains	fudai
 fudasashi	fudasashi
 fudo	Fudo
 fudo myoo	Fudo
@@ -796,6 +802,7 @@ hot shoeing	hot-shoeing
 hot-shoeing	hot-shoeing
 houlongshan	houlongshan
 hour of xu	hour of xu
+house chancellery	House Chancellery
 house manager	yamori
 house manager's	yamori
 house pad	house pad
@@ -850,6 +857,8 @@ inashiro	Inashiro
 initiate	initiate
 initiates	initiate
 inkyo	inkyo
+inner moat	uchibori
+inner moats	uchibori
 intake	intake
 intake mouth	intake
 intakes	intake
@@ -1668,6 +1677,8 @@ shitsuden	shitsuden
 shizai	shizai
 shobodan	shobodan
 shogunate	bakufu
+shoho	Shoho
+shoho era	Shoho
 shoin	shoin
 shoin-zukuri	shoin
 shoinzukuri	shoin
@@ -1949,6 +1960,8 @@ two-grave villages	two-grave
 tōhoku	Tohoku
 tōkaidō	Tokaido
 tōya	miyaza
+uchi-bori	uchibori
+uchibori	uchibori
 udatsu	udatsu
 ujidera	bodaiji
 ujigami	ujigami

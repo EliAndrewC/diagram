@@ -704,7 +704,8 @@
  "batter": {
   "def": "The slope of a bank's face, given as its horizontal spread against its height; a 1:1 batter is a face at forty-five degrees.",
   "variants": [
-   "batter"
+   "batter",
+   "battered"
   ]
  },
  "baulk": {
@@ -8163,6 +8164,38 @@
   "def": "A teacher of a martial art - here the master who heads a dojo, lives by its teaching and takes enrolled students.",
   "variants": [
    "sensei"
+  ]
+ },
+ "uchibori": {
+  "def": "The innermost of a castle's rings of moats, the one nearest its center. At a flatland castle the outer ring is the sotobori and the ring between the two is the naka-bori.",
+  "variants": [
+   "uchibori",
+   "uchi-bori",
+   "inner moat",
+   "inner moats"
+  ]
+ },
+ "Shoho": {
+  "def": "A Japanese era name. Its first year, Shoho 1, is 1644, the year the shogun Iemitsu ordered the daimyo of the whole country to make plans of their castles.",
+  "variants": [
+   "Shoho",
+   "Shoho era"
+  ]
+ },
+ "fudai": {
+  "def": "A hereditary vassal house of the shogun; the fudai domains are the lands such houses held, set apart from the domains of the lords outside that inner circle.",
+  "variants": [
+   "fudai",
+   "fudai domains",
+   "fudai daimyo"
+  ]
+ },
+ "House Chancellery": {
+  "def": "The domain's governing council; it has no compound of its own and meets in a room of the goten, the daimyo's residence inside the castle.",
+  "variants": [
+   "House Chancellery",
+   "chancellery",
+   "chancellery's"
   ]
  }
 }
