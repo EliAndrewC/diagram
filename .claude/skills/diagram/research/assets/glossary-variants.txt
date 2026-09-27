@@ -127,6 +127,8 @@ caravanserais	caravanserai
 carex	Carex
 carex lyngbyei	Carex
 carr	carr
+case-hill	case-hill
+case-hills	case-hill
 castanopsis	Castanopsis
 castle town	jokamachi
 castle towns	jokamachi
@@ -853,6 +855,7 @@ muenbotoke	muenzuka
 muenzuka	muenzuka
 mugi	mugi
 mulberry-dike fishpond	dike-pond
+mumun	Mumun
 mura	mura
 murataka	murataka
 muromachi	Muromachi
@@ -1444,6 +1447,7 @@ zuku	zuku
 屋敷林	yashikirin
 御蔵	kura
 枝打ち	edauchi
+案山	case-hill
 梁間	hari-ma
 水口林	water-mouth
 清明上河図	Qingming Shanghe Tu

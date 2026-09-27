@@ -5676,5 +5676,19 @@
    "Zen-Noh",
    "JA Zen-Noh"
   ]
+ },
+ "case-hill": {
+  "def": "In fengshui, a low hill standing in front of a site across the water it faces, like a desk before a seat; a good one completes the favored setting.",
+  "variants": [
+   "case-hill",
+   "案山",
+   "case-hills"
+  ]
+ },
+ "Mumun": {
+  "def": "Korea's Mumun (\"plain pottery\") period, about 1500-300 BC, when farmers there first built paddy fields divided by low bunds.",
+  "variants": [
+   "Mumun"
+  ]
  }
 }
