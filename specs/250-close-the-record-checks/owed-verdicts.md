@@ -65,3 +65,11 @@
 - SideGate (buildings SECTION=120): REWRITTEN - Note now says the dictionary names only the kitchen door (where it opens is this record's reading) and the guest-door rule is the GM's own; re-check IN-STEP.
 - SideGate (buildings SECTION=220): IN-STEP - night soil as a paid commodity carted from a service gate, and the collector-avoids-the-court rule labeled as the record's own, still match.
 - Well (buildings SECTION=230): IN-STEP - the section mentions a well only in the north service strip and the modal says nothing about where one stands; the modal's Entry: does not name this section, so the pairing in _entry_owed.py looks spurious.
+- Barracks (buildings SECTION=060): REWRITTEN - rural on-grounds staff housing now labeled a reconstruction (only the jin'ya retainers and Hatchobori are read); Label: accurate kept on the jin'ya reading, re-check IN-STEP
+- Barracks (buildings SECTION=180): REWRITTEN - barracks-over-stable ordering now labeled the project's own reading (section is liberty, no source ranks footprints); re-check IN-STEP
+- Latrine (buildings SECTION=220): REWRITTEN - "one per functional zone" no longer called a finding; the read finding is more than one privy in a well-appointed house; re-check IN-STEP
+- Stables (buildings SECTION=180): LABELED - rank below the barracks labeled the record's own reading; the re-check found the few-horse count also unsourced, now labeled in the Note; Label: accurate kept for the drawn umaya
+- TallyOffice (buildings SECTION=080): REWRITTEN - "under the office's seals" became the read pennant and port inspection; documentary control labeled the project's reading; re-check IN-STEP
+- TaxArchive (buildings SECTION=010): IN-STEP - the Chinese county archive is still unconfirmed, as the Note says
+- TaxArchive (buildings SECTION=160): IN-STEP - halls burn, kura endure, Sado's five rebuildings all still in the section
+- TaxArchive (buildings SECTION=170): LABELED - tubs-away-from-the-kura labeled the map's reasoning; the re-check found "no placement rule" too broad, so the Note now names the read doorway/roof and courtyard placements and says none gives a priority

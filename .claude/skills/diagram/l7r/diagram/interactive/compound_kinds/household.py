@@ -281,8 +281,8 @@ class Latrine(Kind):
     house kept more than one. Night soil was a valuable, contracted commodity carted away by outside
     collectors, so the pits sit toward a service wall or gate where a collector's cart reaches them.
 
-    Note: The privy built into the samurai house, the count of about one to a functional zone and the carted
-    night-soil trade are recorded findings, and the program classes the privies as accurate - one per
+    Note: The privy built into the samurai house, the more than one privy of a well-appointed house and the
+    carted night-soil trade are recorded findings, and the program classes the privies as accurate - one per
     functional zone, about three or four. That no collector should have to cross the inner court is this
     record's own rule rather than a finding.
 
@@ -309,10 +309,12 @@ class Stables(Kind):
     in and out without crossing the ceremonial ground, and the animals are led to water at a well rather than
     watered where they stand.
 
-    Note: The stable's rank below the barracks and the watering at a well are recorded findings, and the program
-    classes it as accurate: a few-horse umaya drawn smaller than the barracks, checked against the size audit.
-    The stall figure of about 55 to 70 sq ft to a horse is the record's own estimate, and its watering finding
-    was written for city stable yards.
+    Note: The stable's rank below the barracks is the record's own reading - no readable source ranks a
+    compound's footprints - while the watering at a well is a recorded finding, and the program classes it as
+    accurate: a few-horse umaya drawn smaller than the barracks, checked against the size audit.
+    The count of a few horses is the record's own reading too, since no page read gives a county office's
+    horses; the stall figure of about 55 to 70 sq ft to a horse is the record's own estimate, and its watering
+    finding was written for city stable yards.
 
     Caveat: The stall figure of about 55 to 70 sq ft to a horse is the record's own estimate, and its watering
     finding was written for city stable yards.

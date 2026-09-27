@@ -104,7 +104,9 @@ class TaxArchive(Kind):
 
     Note: The fireproof document store follows the record, drawn as a sealed kura of about 32 to 36 ft, the
     plan vocabulary's size for a records store that doubles as the strongroom. An archive in the Chinese
-    county office is not confirmed by any page read.
+    county office is not confirmed by any page read, and keeping the fire-water tubs away from it is this
+    map's reasoning from its fireproofing: the pages read place tubs at the doorway and on the roof, and the
+    Qing palace's vats by courtyard, but none gives a priority among buildings.
 
     Name: tax archive
     Covers: the plastered archive kura and its label
@@ -203,15 +205,18 @@ class Barracks(Kind):
     What: A plain long building divided into bunk rooms, where the compound's working platoon and its duty
     watch lodge.
 
-    Why: Rural intendants' offices housed their staff on the grounds; it was
-    the great city magistrate's offices that lodged their constables in a district of their own, keeping only the
-    magistrate's household inside. A county posting's staff is a working platoon, mostly without dependents,
-    so by default it lives on the grounds. The barracks outranks the stable in size: a stable for a few
-    horses never out-foots the watch's quarters.
+    Why: Rural intendants' offices most likely housed their staff on the grounds, though the record does not
+    say so; it was the great city magistrate's offices that lodged their constables in a district of their
+    own, keeping only the magistrate's household inside. A county posting's staff is a working platoon, mostly
+    without dependents, so by default it lives on the grounds. By this map's own ordering, the barracks
+    outranks the stable in size: a stable for a few horses never out-foots the watch's quarters.
 
-    Note: On-grounds housing for the staff follows the record. The building's size, about 20 to 70 ft by 10
-    to 40 ft, is a guess taken from the plan vocabulary's range, and how many live in it follows how the
-    posting houses its staff.
+    Note: On-grounds housing for the staff is a reconstruction: a small domain's jin'ya kept its retainers'
+    residences inside its walls, but no source read says a rural intendant's staff lived on the grounds; only
+    the city magistrates' separate constables' district is attested. That the barracks outranks the stable is
+    this project's own reading, since no readable source ranks a compound's buildings by footprint. The
+    building's size, about 20 to 70 ft by 10 to 40 ft, is a guess taken from the plan vocabulary's range, and
+    how many live in it follows how the posting houses its staff.
 
     Caveat: The building's size, about 20 to 70 ft by 10 to 40 ft, is a guess taken from the plan vocabulary's
     range, and how many live in it follows how the posting houses its staff.
@@ -258,12 +263,13 @@ class TallyOffice(Kind):
     What: A small office on the route goods take through the compound, where they are counted or weighed, the
     seal is set and the tally written: the record of goods the office supervises but does not own.
 
-    Why: The magistracy's hold on moving goods is documentary. Tax rice moved on hired commoner boats under the
-    office's seals - the office owned no hulls - and a charcoal store was a supervised, tallied depot, its
-    goods sealed there and never owned. So the post that writes the tally stands where the goods pass,
-    between the store and the way out.
+    Why: The magistracy's hold on moving goods is documentary. Tax rice moved on hired commoner boats flying
+    an official pennant and inspected at the ports of call, the office owning no hulls - and a charcoal store
+    was a supervised, tallied depot, its goods sealed there and never owned. So the post that writes the tally
+    stands where the goods pass, between the store and the way out.
 
-    Note: The documentary control it performs follows the record. No source describes the tally office as a
+    Note: That tax rice moved on hired hulls under an official pennant and port inspection is read; that the
+    office's hold on it was documentary is this project's reading. No source describes the tally office as a
     building of its own; the room where the seal and the tally are made is inferred from them.
 
     Caveat: No source describes the tally office as a building of its own; the room where the seal and the
