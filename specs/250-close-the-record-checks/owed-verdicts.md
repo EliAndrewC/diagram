@@ -153,3 +153,4 @@
 - PondCanal (archetypes SECTION=150): REWRITTEN - the Note credits Ruddle & Zhong only with a pond on sloping ground, as 150 now does (feature 265 T11)
 - PondSluice (archetypes SECTION=150): REWRITTEN - the Why's inlet-high, outlet-low plumbing narrowed to a pond on sloping ground (feature 265 T11)
 - SluiceGate (archetypes SECTION=150): REWRITTEN - the Why now carries 150's polder finding, gates opened in drought and shut in flood (feature 265 T11)
+- Well (urban-features SECTION=090): IN-STEP - the building-plan sheet's Well (compound_kinds/household.py, household.Well): the 1 m shaft, the unmeasured curb and the estimated 3-4 ft curb all still hold; the map's Well of the same name was REWRITTEN above (feature 265 T11)
