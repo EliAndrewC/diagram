@@ -79,6 +79,9 @@ caption: 8 positions x 3 layouts x (1 + rings) with rings up to the reach - a fe
   drawn channels as ways; placed captions and the title placard as obstacles; ground keys free), places, draws with
   `label(..., lines=, angle=)` and draws the leader (a `<line>` in the label layer, the caption's class and color,
   recorded in `M["caption_leaders"]`).
+- FR-014: `label_obstacles` tags each built record with its caption group (the overlap taxonomy's `_LABEL_GROUP`, and a
+  `buildings` record's own `kind` word), and the index is asked with the caption's text: an obstacle whose group word the
+  caption names weighs 0 for it.
 - `label()` gains `lines=` and `angle=` (the placer's choice, bypassing the wrap probe and the rotation fold); the
   recorded referent is the subject's box.
 - Callers: `_draw_board_caption` (a rotated-box point subject) shrinks to building the subject; `place_caption`
