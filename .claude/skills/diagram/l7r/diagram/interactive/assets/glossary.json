@@ -3514,7 +3514,7 @@
   ]
  },
  "shoya": {
-  "def": "A village headman: the villager who answered to the domain for the village's taxes, registers and order.",
+  "def": "A village headman: the villager who answered to the domain for the village's taxes, registers and order. In a town the same title (nanushi) named a ward headman, who answered for their ward in the same way.",
   "variants": [
    "shoya",
    "nanushi",
@@ -7321,6 +7321,63 @@
   "def": "The Taiwan Hakka Museum's English name for the school of fengshui its page on half-moon ponds describes: a house built lower at the front and higher at the back, so that a household's luck rises step by step, with the half-moon pond and the mound behind the house read as yin and yang.",
   "variants": [
    "metamorphosis fengshui"
+  ]
+ },
+ "ritsuryo": {
+  "def": "The ancient Japanese state's codes of law and government, modeled on China's; under them the capitals were run ward by ward, with a head over each ward who checked its households and pressed its labor levies.",
+  "variants": [
+   "ritsuryo",
+   "ritsuryo system",
+   "ritsuryō"
+  ]
+ },
+ "time bell": {
+  "def": "A bell rung at set hours to tell a city the time; in Edo its upkeep was one of the running costs the wards paid.",
+  "variants": [
+   "time bell",
+   "time bells"
+  ]
+ },
+ "fire brigade's standard": {
+  "def": "The emblem on a pole that a town's fire brigade carried as its sign (Japanese *matoi*); in Edo the wards shared its cost.",
+  "variants": [
+   "fire brigade's standard",
+   "fire brigade's standards",
+   "fire standard"
+  ]
+ },
+ "bo": {
+  "def": "A ward of an ancient Japanese capital's grid, bounded by the main streets and cut by lanes into blocks (machi); 90 jo on a side at Fujiwara-kyo and 180 jo at Heijo-kyo.",
+  "variants": [
+   "bo"
+  ]
+ },
+ "Fujiwara-kyo": {
+  "def": "The earliest of Japan's gridded capitals, before Heijo-kyo and Heian-kyo, whose wards were 90 jo on a side, each cut into four blocks.",
+  "variants": [
+   "Fujiwara-kyo",
+   "Fujiwara"
+  ]
+ },
+ "jobo": {
+  "def": "The grid plan of the ancient Japanese capitals: east-west rows (jo) and north-south columns of wards (bo), each ward cut by lanes into blocks (machi).",
+  "variants": [
+   "jobo",
+   "jobo system"
+  ]
+ },
+ "Taiho code": {
+  "def": "An early Japanese law code from which the plan of the capital Fujiwara-kyo is inferred.",
+  "variants": [
+   "Taiho code",
+   "Taiho"
+  ]
+ },
+ "shigyo-hachimon": {
+  "def": "The Heian capital's rule for dividing a block (machi) into 32 house lots, four across by eight down, each 5 jo by 10 jo, facing the north-south streets.",
+  "variants": [
+   "shigyo-hachimon",
+   "shigyo-hachimon system"
   ]
  }
 }

@@ -108,6 +108,7 @@ bishamon	Bishamon
 bishamonten	Bishamon
 black charcoal	black charcoal
 black-charcoal	black charcoal
+bo	bo
 board feet	board foot
 board foot	board foot
 bodaiji	bodaiji
@@ -473,8 +474,11 @@ fines	fines
 fingerling	fingerling
 fingerlings	fingerling
 fining	fining
+fire brigade's standard	fire brigade's standard
+fire brigade's standards	fire brigade's standard
 fire gap	fire gap
 fire gaps	fire gap
+fire standard	fire brigade's standard
 fire water	fire-water
 fire-gap	fire gap
 fire-gaps	fire gap
@@ -527,6 +531,8 @@ fu	fu
 fudasashi	fudasashi
 fudoki	fudoki
 fudoki ko	fudoki
+fujiwara	Fujiwara-kyo
+fujiwara-kyo	Fujiwara-kyo
 fukada	fukada
 fukugi	fukugi
 funairi-bori	funairi-bori
@@ -818,6 +824,8 @@ jittering	jitter
 jizo	jizo
 jo	jo
 jobikeshi	jobikeshi
+jobo	jobo
+jobo system	jobo
 jochi	jochi
 jodo	Jodo
 jodo shinshu	Jodo Shinshu
@@ -1359,6 +1367,9 @@ ring-levee	ring dike
 rinkaku	rinkaku
 riparian	riparian
 riprap	riprap
+ritsuryo	ritsuryo
+ritsuryo system	ritsuryo
+ritsuryō	ritsuryo
 river office	river office
 river offices	river office
 river stage	river stage
@@ -1459,6 +1470,8 @@ shibai-goya	shibai-goya
 shiboku sanso	four trees
 shichiya	shichiya
 shide	shide
+shigyo-hachimon	shigyo-hachimon
+shigyo-hachimon system	shigyo-hachimon
 shijin soo	four gods
 shijin-soo	four gods
 shimenawa	shimenawa
@@ -1583,6 +1596,8 @@ suzaku-ōji	Suzaku-oji
 sward	sward
 tagoshi	tagoshi kangai
 tagoshi kangai	tagoshi kangai
+taiho	Taiho code
+taiho code	Taiho code
 taihu	Lower Yangzi
 taiji	Taiji
 taiping-gang	taiping-gang
@@ -1656,6 +1671,8 @@ tiangeng	bund
 tier	tier
 tiers	tier
 tillering	tillering
+time bell	time bell
+time bells	time bell
 toe	toe
 tohoku	Tohoku
 toiya	ton'ya
