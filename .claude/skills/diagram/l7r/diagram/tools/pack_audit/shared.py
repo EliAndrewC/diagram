@@ -368,9 +368,9 @@ def no_precinct_enclosure(text: str, plan: ParsedPlan) -> list[str]:
 
 # A TREE STANDS ON OPEN GROUND AND ON NOTHING ELSE (feature 257; the GM, 2026-09-20: "an automated check
 # to prevent trees from overlapping with other things"). The ground - the precinct's gravel, a court, a
-# garden bed - is what a canopy grows from; a building, a fence, a well, a label or another canopy under it
-# reads as a mistake, which is what the GM saw on the Hoshigaoka sheet. Two canopies may touch and no
-# more; the touching tolerance is the one the built-footprint overlap check owns, not a second number.
+# garden bed - is what a canopy grows from; a building, a fence, a well or a label under it reads as a
+# mistake, which is what the GM saw on the Hoshigaoka sheet. Crowns may overlap each other (feature 270, the GM
+# 2026-09-27); a tree drawn on top of another may not. The reach tolerance is the built-footprint check's.
 def _canopy_depth(cx: float, cy: float, r: float, rect: Rect) -> float:
     """How far a canopy of radius `r` at (cx, cy) reaches into `rect` (px); zero or less = clear of it."""
     dx = max(rect.x - cx, 0.0, cx - rect.x2)
@@ -390,8 +390,17 @@ def _things_under_a_tree(plan: ParsedPlan) -> list[tuple[str, Rect]]:
     return out
 
 
+DUPLICATE_TREE_FRACTION: float = 1 / 3  # trunks closer than this share of the smaller crown's radius are one tree drawn twice (a guess, spec 270 R2)
+
+
 def trees_overlap(plan: ParsedPlan, tol: float = WALL_OVERLAP_MIN_PX) -> list[str]:
-    """Every canopy that covers something that is not open ground, and every pair of canopies that overlap."""
+    """Every canopy that covers something that is not open ground, and every tree drawn on top of another.
+
+    Crowns may overlap each other (feature 270, the GM 2026-09-27: "tree crowns may overlap, I never said they
+    couldn't"): a kept wood's canopy is closed. What is still reported is a DUPLICATED tree - two trunks within a
+    third of the smaller crown's radius, one tree drawn on another (feature 257's "two lie on top of each other").
+    The third is a GUESS (spec 270 research R2): no source read gives how close two trees grow, and a third of a
+    crown's radius is well inside any spacing a wood's trees stand at."""
     out: list[str] = []
     things = _things_under_a_tree(plan)
     trees = [(t.x + t.w / 2, t.y + t.h / 2, t.w / 2) for t in plan.trees]
@@ -402,7 +411,7 @@ def trees_overlap(plan: ParsedPlan, tol: float = WALL_OVERLAP_MIN_PX) -> list[st
                 out.append(f"a tree at svg({cx:.0f},{cy:.0f}) ({2 * r / FTPX:.0f} ft canopy) reaches {depth / FTPX:.1f} ft into {kind} at svg({rect.x:.0f},{rect.y:.0f})")
     for i, (ax, ay, ar) in enumerate(trees):
         for bx, by, br in trees[i + 1 :]:
-            lap = ar + br - math.hypot(ax - bx, ay - by)
-            if lap > tol:
-                out.append(f"two trees at svg({ax:.0f},{ay:.0f}) and svg({bx:.0f},{by:.0f}) overlap by {lap / FTPX:.1f} ft")
+            gap = math.hypot(ax - bx, ay - by)
+            if gap < min(ar, br) * DUPLICATE_TREE_FRACTION:
+                out.append(f"a tree at svg({bx:.0f},{by:.0f}) is drawn on top of the tree at svg({ax:.0f},{ay:.0f}) - their trunks stand {gap / FTPX:.1f} ft apart")
     return out
