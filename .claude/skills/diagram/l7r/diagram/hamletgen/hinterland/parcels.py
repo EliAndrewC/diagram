@@ -6,7 +6,7 @@ import math
 from collections.abc import Sequence
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist
+from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, segments_cross
 from l7r.diagram.settlement._geom import PointGrid, RingIndex, boxed_grid
 
 from ..consts import Poly, Pt
@@ -139,6 +139,11 @@ def seat_off_the_row(p: tuple[float, float], centers: Sequence[tuple[float, ...]
     if not in_a_ruled_line(p, centers):
         return p
     return next((q for q in off_the_row(p, centers) if ok(q) and not in_a_ruled_line(q, centers)), None)
+
+
+def reached_across(field: Poly, frm: Pt, to: Pt) -> bool:
+    """Whether the straight walk `frm` -> `to` crosses the field's outline - the seat lies across the field (feature 261)."""
+    return any(segments_cross(frm, to, a, b) for a, b in zip(field, list(field[1:]) + list(field[:1]), strict=False))
 
 
 def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float = 250.0) -> list[Poly]:
@@ -402,6 +407,13 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
             _cross_seats = [t for t in scored if abs((t[1] - ccx) * -dy + (t[2] - ccy) * dx) >= ((t[1] - ccx) * dx + (t[2] - ccy) * dy)]
             if _cross_seats:
                 scored = _cross_seats
+            # ...AND ON THE HOUSES' SIDE OF THEIR FIELD (settlement-review of Inashiro, feature 261): a coppice walked to daily
+            # for fuel and fodder stands on the hillside the settlement backs onto, and with the houses seated against the
+            # wind Inashiro's parcels went up across the paddy from every house. A preference as the one above: where no seat
+            # is reached from the cluster without crossing the field, the rest are still offered.
+            _near_side = [t for t in scored if not reached_across(plan.envelope, (ccx, ccy), (t[1], t[2]))]
+            if _near_side:
+                scored = _near_side
             # ...NOT IN A ROW: a seat in line with two placed parcels is stepped sideways off the row where the ground allows,
             # and refused where it does not - the count is a target the scan already meets only where there is open ground
             # (a map with one parcel is common), and a ruled chain is the defect two reviews recorded (Inashiro's band lies
