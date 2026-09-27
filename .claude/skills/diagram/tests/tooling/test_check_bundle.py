@@ -145,3 +145,9 @@ def test_each_check_gets_only_its_own_parts(tmp_path: pathlib.Path) -> None:
     names = {p.relative_to(qc).as_posix() for p in qc.rglob("*") if p.is_file()}
     assert "prepass.txt" not in names and "glossary-variants.txt" not in names and not any(n.startswith("sources/") for n in names)
     assert "010-how-far-past-the-bank-does-a-bridge-land.notes.html" in names
+
+
+def test_a_mode_a_compound_kind_is_a_modal_the_drift_bundle_can_find() -> None:
+    """Feature 268: the compound kinds (feature 262) are modals too, and entry-drift could not be pointed at one."""
+    found = cb.kind_docstring(REPO, "ShrineGrove")
+    assert found is not None and "compound_kinds/grounds.py" in found[0]

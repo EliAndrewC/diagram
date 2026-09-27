@@ -682,8 +682,8 @@ class Torii(Kind):
     hall.
 
     Why: The arch marks the sacred ground: it stands where the approach enters the shrine's precinct. One arch is
-    by far the usual number for a shrine, and a village shrine's stands some twenty feet off its hall; long
-    avenues of arches are the gifts of rich patrons at great shrines, not the rule.
+    by far the usual number for a shrine, and where there are several they stand close, the innermost one pitch
+    (12 ft) off its hall; long avenues of arches are the gifts of rich patrons at great shrines, not the rule.
 
     Note: One arch over the approach, a short way from the hall, follows the record.
 
