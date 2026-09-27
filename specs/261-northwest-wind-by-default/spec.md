@@ -132,8 +132,9 @@ there, and a way crosses the brook squarely to the field on a drawn plank footbr
    alone; every household reaches a way, and any way the brook divides is joined by a drawn crossing.
 3. **Given** any farmstead, **When** it is drawn, **Then** its own buildings, yard, garden and fixtures stand on
    the same bank as its house.
-4. **Given** Kashikawa and Inashiro at their current seeds, **When** they are generated, **Then** they seat
-   facing the northwest wind with every household and a full belt.
+4. **Given** Inashiro at its reference seed 4 and Kashikawa and Mizuguchi at their original seeds (3 and 23), **When**
+   they are generated, **Then** they seat facing the northwest wind with every household and a full belt, unless a
+   research-supported refusal is measured and recorded.
 
 ### User Story 6 - What the reviews of the re-rolled maps found is fixed (Priority: P2)
 
@@ -158,8 +159,10 @@ match the maps.
   northwest among the margins they allow. The wind is not renamed to rescue a seat.
 - **When the placement algorithm cannot draw a valid layout, the algorithm is fixed** (the GM, 2026-09-26/27,
   request.md). A seed is changed only where the research itself rules a layout out, never to route around what the
-  engine cannot yet draw; where a seat is refused for an engine limitation, the limitation is removed. Before
-  relying on any re-seed, the plan measures each pool hamlet at its current seed and records why it moved.
+  engine cannot yet draw; where a seat is refused for an engine limitation, the limitation is removed. Once crossings exist, Kashikawa is measured at its original seed
+  3 and Mizuguchi at its original seed 23 - both were re-seeded partly to dodge the brook - and each goes back to its
+  original seed unless that measurement records a refusal the research supports, the reason recorded either way.
+  Sawada's re-seed (6 -> 24) stands: seed 6 was refused by the drain and the wet toe, rules FR-010 keeps.
 - **The brook.** A seat is no longer refused because the brook runs between it and its field or through it; it is
   refused only where no crossing can be drawn. The feature-230 finding that motivated the strike-out - half a
   homestead across the water with no way over - is prevented by keeping each farmstead's own things on its
@@ -235,8 +238,9 @@ match the maps.
 - **SC-007** (FR-009): 0 passages in the research entry, `hamletgen.md` or the five notes files still say the
   wind is derived from the slope or re-read from the seat, except as a dated closure in a notes log.
 
-- **SC-008** (FR-011, FR-012): 5 of 5 pool hamlets seat facing the northwest at their current seeds (Kashikawa 8,
-  Inashiro 4, Kuwabata 21, Mizuguchi 27, Sawada 24); every way crossing the brook has a plank footbridge; every
+- **SC-008** (FR-011, FR-012): 5 of 5 pool hamlets seat facing the northwest - Inashiro at 4, Kuwabata at 21, Sawada
+  at 24, and Kashikawa and Mizuguchi at the seeds the Edge Case's measurement settles on (their originals, 3 and 23,
+  unless a research-supported refusal is recorded); every way crossing the brook has a plank footbridge; every
   hamlet whose field is across the brook has a way that reaches it.
 - **SC-009** (FR-013): 0 farmstead parts across the brook from their house on the pool and the 48-seed cohort.
 - **SC-010** (FR-014): on every pool map, every dooryard copse clump stands within dooryard reach of a house.
@@ -287,3 +291,16 @@ match the maps.
   checked against the FR text and none measures anything the request did not ask for. SC-007 measures the
   retire-the-old-wording half of FR-009; the corrected arcs half stays carried by FR-009 itself and User
   Story 4 scenario 1, unchanged. Accepted.
+- Round 1 of the amendment e8e4cefc (2026-09-27, `spec-fidelity-verify`, Opus; the counter reset by the
+  amendment; read as a verify round on the amendment's diff, against request.md's rulings of 2026-09-26/27):
+  **CHANGES REQUIRED**. FR-013 (a farmstead's own things on its house's bank) SERVES the ruling: it replaces the
+  strike-out's purpose (R4's byre/well/garden across the water) with a placement rule, never a seat refusal, and is
+  honestly labeled a guess. US6 and FR-014..FR-018 are within the request under constitution XIV (defects the
+  reviews found in the maps this feature re-rolled), each FR mapping to a named finding. Item 1: the re-seeds made
+  to dodge the brook are kept. R4 records the brook among the refusals of Kashikawa's wind-facing margins at seed 3,
+  and R1 records Mizuguchi's seed-23 seat as divided by the brook (8/12) - the engine limitation US5 removes - while
+  Sawada's seed 6 was refused by the drain and wet toe, which FR-010 keeps. The Edge Case's "measures each pool
+  hamlet at its current seed" now reads as 8/27/24, and SC-008 pins 8 and 27, so the spec both states the GM's rule
+  and ships the route-around. It must require, once crossings exist, measuring Kashikawa at seed 3 and Mizuguchi at
+  seed 23, returning each to its original seed unless that measurement records a refusal the research supports, and
+  SC-008 and User Story 5 scenario 4 must name the seeds that measurement settles on.
