@@ -1,0 +1,333 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "da580b30",
+    "label": "268-start",
+    "utc": "20260927T053237Z"
+  },
+  "binding": "e66912dacf230ee6adcb44a03851c7dcce1b33e829fbcfeaec7413f501ae5c18",
+  "end": {
+    "commit": "f00e1020",
+    "label": "268-end",
+    "utc": "20260927T060320Z"
+  },
+  "environment": "local",
+  "explanation": "run-to-run noise: the reference hamlet draws no shrine and no torii, so feature 268's engine change is never executed on these seeds; two rises of 1.3-1.5 percent beside a 7.6 percent fall and a 1.8 percent total fall",
+  "feature": "268-shrine-grounds-researched",
+  "granted_by": {
+    "declared": "main",
+    "session_id": "3a0d2088-0d32-4036-b1e4-c40dbdc9e61d",
+    "utc": "20260927T060344Z"
+  },
+  "kind": "explanation",
+  "measurements": {
+    "seeds": {
+      "25": 1.5,
+      "39": 1.3,
+      "4": -1.6,
+      "47": -7.6
+    },
+    "total_pct": -1.8
+  },
+  "render": "perf bands [local]: 268-end vs 268-start -> band 1\n  seed   4    -1.6%\n  seed  25    +1.5%; grew: track +0.1s, hinterland +0.1s\n  seed  39    +1.3%; grew: web +0.1s, notice +0.1s\n  seed  47    -7.6%\n  TOTAL       -1.8%\n  owes: a written explanation (make perf-explain WHY=... CONTROL=<key> or UNVERIFIED=<why>) AND a perf-audit confirmation (make perf-confirm ... AS=perf-audit)",
+  "stage_delta": {
+    "25": {
+      "appurtenances": [
+        0.04,
+        0.04
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.36,
+        0.37
+      ],
+      "field": [
+        2.87,
+        2.86
+      ],
+      "frame": [
+        0.0,
+        0.0
+      ],
+      "hinterland": [
+        0.6,
+        0.7
+      ],
+      "homesteads": [
+        0.21,
+        0.13
+      ],
+      "labels": [
+        0.0,
+        0.0
+      ],
+      "notice": [
+        0.05,
+        0.05
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.11,
+        0.08
+      ],
+      "sink": [
+        0.05,
+        0.03
+      ],
+      "track": [
+        1.29,
+        1.41
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.47,
+        0.47
+      ],
+      "windbreak": [
+        0.45,
+        0.49
+      ],
+      "woodland": [
+        0.01,
+        0.01
+      ]
+    },
+    "39": {
+      "appurtenances": [
+        0.06,
+        0.07
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.41,
+        0.42
+      ],
+      "field": [
+        2.36,
+        2.3
+      ],
+      "frame": [
+        0.0,
+        0.0
+      ],
+      "hinterland": [
+        0.68,
+        0.69
+      ],
+      "homesteads": [
+        0.09,
+        0.12
+      ],
+      "labels": [
+        0.0,
+        0.0
+      ],
+      "notice": [
+        1.42,
+        1.47
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.09,
+        0.08
+      ],
+      "sink": [
+        0.01,
+        0.01
+      ],
+      "track": [
+        1.26,
+        1.22
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.64,
+        0.71
+      ],
+      "windbreak": [
+        0.48,
+        0.48
+      ],
+      "woodland": [
+        0.03,
+        0.02
+      ]
+    },
+    "4": {
+      "appurtenances": [
+        0.03,
+        0.03
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.51,
+        0.53
+      ],
+      "field": [
+        2.48,
+        2.43
+      ],
+      "frame": [
+        0.02,
+        0.02
+      ],
+      "hinterland": [
+        0.54,
+        0.54
+      ],
+      "homesteads": [
+        0.08,
+        0.08
+      ],
+      "labels": [
+        0.02,
+        0.02
+      ],
+      "notice": [
+        0.54,
+        0.5
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.06,
+        0.06
+      ],
+      "sink": [
+        0.01,
+        0.01
+      ],
+      "track": [
+        1.28,
+        1.15
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.39,
+        0.4
+      ],
+      "windbreak": [
+        0.47,
+        0.5
+      ],
+      "woodland": [
+        0.0,
+        0.0
+      ]
+    },
+    "47": {
+      "appurtenances": [
+        0.03,
+        0.03
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.45,
+        0.44
+      ],
+      "field": [
+        3.5,
+        3.01
+      ],
+      "frame": [
+        0.0,
+        0.0
+      ],
+      "hinterland": [
+        0.66,
+        0.62
+      ],
+      "homesteads": [
+        0.13,
+        0.17
+      ],
+      "labels": [
+        0.0,
+        0.0
+      ],
+      "notice": [
+        0.55,
+        0.53
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.07,
+        0.07
+      ],
+      "sink": [
+        0.04,
+        0.04
+      ],
+      "track": [
+        1.67,
+        1.68
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.46,
+        0.44
+      ],
+      "windbreak": [
+        0.31,
+        0.31
+      ],
+      "woodland": [
+        0.01,
+        0.01
+      ]
+    }
+  },
+  "unverified": "no control run: the changed code is not on the measured path, so there is no cause to remove",
+  "verdict": "pending"
+}

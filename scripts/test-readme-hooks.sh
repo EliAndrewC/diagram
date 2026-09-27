@@ -63,6 +63,11 @@ printf '%s' "$(tool_ev Write /repo/README.md)" | "$HOOK" pretool >/dev/null 2>"$
 if grep -q "CLAUDE.md in the directory it governs" "$HOOK_ERR"; then
   echo "  ok      names the alternative"; PASS=$((PASS+1))
 else echo "  FAIL    refusal does not say where knowledge belongs"; FAIL=$((FAIL+1)); fi
+# GUARD_EDIT_OK: a regression check for a defect fixed 2026-09-27 - the message's backticks were a command
+# substitution in an unquoted heredoc, so the refusal RAN `make audit` and printed its output instead.
+if grep -qF '`make audit` shows it' "$HOOK_ERR" && ! grep -q "Gate runs" "$HOOK_ERR"; then
+  echo "  ok      the message names \`make audit\` literally and does not run it"; PASS=$((PASS+1))
+else echo "  FAIL    the refusal ran \`make audit\` (or lost its name) - a backtick in an unquoted heredoc"; FAIL=$((FAIL+1)); fi
 
 echo
 echo "4. THE GM MAY DELEGATE ONE EDIT (2026-09-06): README_OK with a reason permits, a bare token does not"

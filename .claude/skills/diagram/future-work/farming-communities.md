@@ -7,6 +7,18 @@ tax-free plots, not a different kind of place, and its defects are the same defe
 This is where hamlet work goes - the paddy fabric, the lane web, homesteads and their groves, wells
 and byres, woodland and windbreaks, the notice board, and the cohort seeds that surface all of it.
 
+## OPEN 2026-09-27, OWED AT CONVERSION: the village generator draws no shrine grove, sacred tree or basin
+
+Feature 268 (the GM, 2026-09-27: "Add grove to map") put a grove, a roped sacred tree and a stone basin round
+Hoshigaoka's shrine by hand, and the country-shrine program now says a village shrine's precinct IS its grove
+(research religion-and-death 124, 126). No generator draws them: `rolling/roll.py`'s civic shrine lays the
+hall, its arches at the 12 ft pitch and its well, nothing more. So converting Hoshigaoka (or any village) drops
+them. Sketch: after `shrine_hall`, reserve a precinct outline from behind the shrine well to the outermost arch
+(the register band of research 124 as its area), carve the clearing and the approach, fill it with the grove
+scatter the windbreak already uses (a `KeepoutGrid` of the clearing, the approach and the well), then seat the
+sacred tree beside the approach and the basin at the innermost arch. Measure: the precinct's area and its
+canopy share against the hand-drawn Hoshigaoka grove (827 tsubo, 60% canopy - crowns overlapping).
+
 ## OPEN 2026-09-27, A GM DECISION: the dike-pond mulberry is drawn 10 to 20 times sparser than the one figure found
 
 Found by feature 250's `archetypes` write session (research R9); the GM, 2026-09-27: *"Mark those two things as

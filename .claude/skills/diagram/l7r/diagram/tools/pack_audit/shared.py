@@ -266,8 +266,6 @@ def two_court_zoning(plan: ParsedPlan) -> list[str]:
 
 AXIS_TOL_FT: float = 3.0  # the sanctuary's center may stray this far from the approach axis
 EDGE_TOL_FT: float = 2.0  # the arch stands AT the precinct edge: within this of it
-FENCE_ID = "fence"
-_FENCE_RE = re.compile(r'<g\b[^>]*\bid="fence"')
 
 
 def _one(plan: ParsedPlan, ident: str) -> Rect | None:
@@ -336,11 +334,26 @@ def well_clear_of_arch(plan: ParsedPlan) -> list[str]:
     return out
 
 
-def fence_not_wall(text: str, plan: ParsedPlan) -> list[str]:
-    """The precinct is bounded by a fence or hedge (a group marked id=\"fence\"), never by a compound wall."""
+def no_precinct_enclosure(text: str, plan: ParsedPlan) -> list[str]:
+    """A village shrine's precinct is NOT enclosed (feature 268; research/religion-and-death.html 'Was a
+    village shrine walled or fenced?'): its ground is marked by its arch and its wood. Every dated fence
+    the research found rings the sanctuary alone (a Taisho/Showa donation) or lines the approach, and a
+    wall is a temple's rank mark. So a fence group whose extent takes in the hall - a precinct fence - is
+    reported, as is a compound wall stroke at the sheet's edge; a fence around the sanctuary alone (a
+    richer shrine's donation, on the wealth knob) passes. `text` is kept for the registry's signature."""
+    del text
     out: list[str] = []
-    if not _FENCE_RE.search(text):
-        out.append('no fence or hedge bounds the precinct (a `<g id="fence">` of fence strokes)')
+    hall = plan.by_id("hall")
+    if plan.fence_segs and hall:
+        fx0 = min(r.x for r in plan.fence_segs)
+        fy0 = min(r.y for r in plan.fence_segs)
+        fx1 = max(r.x + r.w for r in plan.fence_segs)
+        fy1 = max(r.y + r.h for r in plan.fence_segs)
+        h = hall[0]
+        if fx0 <= h.x and fy0 <= h.y and fx1 >= h.x + h.w and fy1 >= h.y + h.h:
+            out.append(
+                "a fence rings the precinct (its extent takes in the hall) - a village shrine's ground is marked by its arch and its wood; a fence rings the sanctuary alone, and only as a richer shrine's donation"
+            )
     minx, miny, maxx, maxy = plan.bounds
     tol = EDGE_TOL_FT * FTPX
     for band in plan.wall_bands:
@@ -348,16 +361,16 @@ def fence_not_wall(text: str, plan: ParsedPlan) -> list[str]:
             continue
         cx, cy = _center(band)
         if min(abs(cx - minx), abs(cx - maxx), abs(cy - miny), abs(cy - maxy)) <= tol + max(band.w, band.h):
-            out.append(f"a compound wall stroke at svg({band.x:.0f},{band.y:.0f}) bounds the precinct - a shrine is fenced, a compound is walled")
+            out.append(f"a compound wall stroke at svg({band.x:.0f},{band.y:.0f}) bounds the precinct - a village shrine is neither walled nor fenced")
             break
     return out
 
 
 # A TREE STANDS ON OPEN GROUND AND ON NOTHING ELSE (feature 257; the GM, 2026-09-20: "an automated check
 # to prevent trees from overlapping with other things"). The ground - the precinct's gravel, a court, a
-# garden bed - is what a canopy grows from; a building, a fence, a well, a label or another canopy under it
-# reads as a mistake, which is what the GM saw on the Hoshigaoka sheet. Two canopies may touch and no
-# more; the touching tolerance is the one the built-footprint overlap check owns, not a second number.
+# garden bed - is what a canopy grows from; a building, a fence, a well or a label under it reads as a
+# mistake, which is what the GM saw on the Hoshigaoka sheet. Crowns may overlap each other (feature 270, the GM
+# 2026-09-27); a tree drawn on top of another may not. The reach tolerance is the built-footprint check's.
 def _canopy_depth(cx: float, cy: float, r: float, rect: Rect) -> float:
     """How far a canopy of radius `r` at (cx, cy) reaches into `rect` (px); zero or less = clear of it."""
     dx = max(rect.x - cx, 0.0, cx - rect.x2)
@@ -377,8 +390,17 @@ def _things_under_a_tree(plan: ParsedPlan) -> list[tuple[str, Rect]]:
     return out
 
 
+DUPLICATE_TREE_FRACTION: float = 1 / 3  # trunks closer than this share of the smaller crown's radius are one tree drawn twice (a guess, spec 270 R2)
+
+
 def trees_overlap(plan: ParsedPlan, tol: float = WALL_OVERLAP_MIN_PX) -> list[str]:
-    """Every canopy that covers something that is not open ground, and every pair of canopies that overlap."""
+    """Every canopy that covers something that is not open ground, and every tree drawn on top of another.
+
+    Crowns may overlap each other (feature 270, the GM 2026-09-27: "tree crowns may overlap, I never said they
+    couldn't"): a kept wood's canopy is closed. What is still reported is a DUPLICATED tree - two trunks within a
+    third of the smaller crown's radius, one tree drawn on another (feature 257's "two lie on top of each other").
+    The third is a GUESS (spec 270 research R2): no source read gives how close two trees grow, and a third of a
+    crown's radius is well inside any spacing a wood's trees stand at."""
     out: list[str] = []
     things = _things_under_a_tree(plan)
     trees = [(t.x + t.w / 2, t.y + t.h / 2, t.w / 2) for t in plan.trees]
@@ -389,7 +411,7 @@ def trees_overlap(plan: ParsedPlan, tol: float = WALL_OVERLAP_MIN_PX) -> list[st
                 out.append(f"a tree at svg({cx:.0f},{cy:.0f}) ({2 * r / FTPX:.0f} ft canopy) reaches {depth / FTPX:.1f} ft into {kind} at svg({rect.x:.0f},{rect.y:.0f})")
     for i, (ax, ay, ar) in enumerate(trees):
         for bx, by, br in trees[i + 1 :]:
-            lap = ar + br - math.hypot(ax - bx, ay - by)
-            if lap > tol:
-                out.append(f"two trees at svg({ax:.0f},{ay:.0f}) and svg({bx:.0f},{by:.0f}) overlap by {lap / FTPX:.1f} ft")
+            gap = math.hypot(ax - bx, ay - by)
+            if gap < min(ar, br) * DUPLICATE_TREE_FRACTION:
+                out.append(f"a tree at svg({bx:.0f},{by:.0f}) is drawn on top of the tree at svg({ax:.0f},{ay:.0f}) - their trunks stand {gap / FTPX:.1f} ft apart")
     return out

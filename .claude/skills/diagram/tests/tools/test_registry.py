@@ -89,3 +89,15 @@ def test_checks_for_and_run_checks_follow_the_types() -> None:
     fired = {ch.name for ch, found in R.run_checks(ctx, None) if found}
     assert fired == {"scale_bar_present"}
     assert R.ft(30.0) == 10.0
+
+
+def test_the_crop_check_runs_on_a_sheet_drawn_to_a_map() -> None:
+    """Feature 268 (the GM 2026-09-27: "whatever kind of cropping we are doing is not working very well on
+    this map"): a sheet on a map is no longer excused - a wide margin fails it as it fails any sheet."""
+    from l7r.diagram.tools.pack_audit.onmap import OnMap
+
+    check = next(c for c in R.CHECKS if c.name == "viewbox_cropped")
+    text = '<svg viewBox="0 0 600 300"><rect x="10" y="10" width="100" height="100" fill="url(#keidai-gravel)" id="precinct"/><rect x="20" y="20" width="60" height="60" fill="#C9A96E" stroke="#5A4630"/></svg>'
+    on_map = OnMap("legacy-hand-authored-pool/villages/hoshigaoka/hoshigaoka.json", "religious", 392.0, 1074.0, "hall")
+    assert check.run(R.Context(pa.parse_svg(text), text, None, None, on_map)), "the 490 px right margin is reported on a sheet on a map"
+    assert check.skipped(R.Context(pa.parse_svg(text), text, None, None, on_map)) is None

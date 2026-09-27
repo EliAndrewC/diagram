@@ -1,0 +1,7 @@
+{
+ "term": "SRTM",
+ "def": "Shuttle Radar Topography Mission: the radar survey flown on a space shuttle in 2000, whose height data covers most of the Earth's land.",
+ "variants": [
+  "SRTM"
+ ]
+}

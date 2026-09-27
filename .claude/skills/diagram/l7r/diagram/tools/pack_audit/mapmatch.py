@@ -280,12 +280,6 @@ def site_classes(plan: ParsedPlan, text: str, on_map: OnMap | None) -> dict[str,
     return {cls: bool(feats) for cls, feats in inventory(on_map, frame).items()}
 
 
-def frame_is_the_maps(on_map: OnMap | None) -> str | None:
-    """Why the crop check does not run on a sheet on a map: its frame shows what the map shows there, empty
-    ground included (spec FR-006), so parchment around the ink is the site, not waste."""
-    return None if on_map is None else "the frame is the map's (a sheet on a map shows what the map shows there, empty ground included)"
-
-
 def skipped(on_map: OnMap | None) -> str | None:
     """Why the check did not run: the report's line for a sheet on no map."""
     return None if on_map is not None else "on no map (no `**On map**:` line in the notes)"

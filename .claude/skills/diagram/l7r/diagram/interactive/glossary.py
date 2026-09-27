@@ -21,6 +21,9 @@ from .content import content
 
 #: term -> (variants matched in the prose, the definition)
 GLOSSARY: dict[str, tuple[tuple[str, ...], str]] = {term: (tuple(entry["variants"]), entry["def"]) for term, entry in content("glossary.json").items()}
+#: the terms whose variants match only AS WRITTEN (`"cased": true` in the term's file): `ochiba`, the fallen leaves,
+#: must not wrap Ochiba, the manor of that name (feature 265 FR-003, the record-format report's collision)
+CASED: frozenset[str] = frozenset(term for term, entry in content("glossary.json").items() if entry.get("cased"))
 
 
 def record_glossary_js() -> str:
@@ -31,7 +34,9 @@ def record_glossary_js() -> str:
     which `make glossary` writes from `assets/glossary.json` and `tests/interactive/test_record_format.py` proves is
     in sync. `record.js` wraps every occurrence of a term in a page's visible text the way `page.js` wraps a
     modal's. Variants longest first, as `glossary_for` orders them, so "head race" wins over "head"."""
-    entries = [{"term": term, "variants": sorted(variants, key=len, reverse=True), "def": definition} for term, (variants, definition) in GLOSSARY.items()]
+    entries = [
+        {"term": term, "variants": sorted(variants, key=len, reverse=True), "def": definition, **({"cased": True} if term in CASED else {})} for term, (variants, definition) in GLOSSARY.items()
+    ]
     return (
         "// DERIVED FILE - written by `make glossary` from l7r/diagram/interactive/assets/glossary.json (features 207 and 209). Never\n"
         "// edit here: add or change a term in glossary.json and run `make glossary`; the gate fails while the two differ.\n"

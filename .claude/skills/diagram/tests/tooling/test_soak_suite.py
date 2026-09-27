@@ -53,15 +53,32 @@ def test_the_pytest_defaults_survive_the_override() -> None:
     assert not missing, f"setting norecursedirs REPLACES pytest's list; these defaults were dropped: {sorted(missing)}"
 
 
-def test_an_ordinary_collection_does_not_descend_into_the_soak() -> None:
-    r = subprocess.run(
-        [sys.executable, "-m", "pytest", "--co", "-q", "--no-cov", "-p", "no:cacheprovider"],
+def _collect(*extra: str) -> subprocess.CompletedProcess[str]:
+    """A broad collection from the skill root - the real pyproject, pytest walking `testpaths` itself -
+    with every SIBLING of `tests/soak` ignored (2026-09-27). Whether the walk descends into `soak/` is
+    decided by `norecursedirs` alone, not by what sits beside it, and importing the ~4,000 sibling tests
+    only to discard them was all of this test's 5 s."""
+    siblings = [f"--ignore=tests/{p.name}" for p in sorted((SKILL / "tests").iterdir()) if p.name not in ("soak", "conftest.py", "__init__.py")]
+    return subprocess.run(
+        [sys.executable, "-m", "pytest", "--co", "-q", "--no-cov", "-p", "no:cacheprovider", *siblings, *extra],
         cwd=SKILL,
         capture_output=True,
         text=True,
         timeout=600,
     )
+
+
+def test_an_ordinary_collection_does_not_descend_into_the_soak() -> None:
+    r = _collect()
+    # Exit 5 is "collected nothing", which is what a walk that skipped soak/ leaves. Any other code is a
+    # collection that did not happen - a refusal or an import error - and the old form of this test,
+    # which never read the code, would have passed on one.
+    assert r.returncode == 5, r.stdout + r.stderr
     assert "tests/soak" not in r.stdout, "a broad run must not collect the soak suite"
+    # THE CONTROL: the same walk with pytest's defaults in place of the pyproject list DOES collect the
+    # soak suite, so the verdict above is the setting's doing and not an artifact of the ignores.
+    control = _collect("-o", "norecursedirs=" + " ".join(sorted(PYTEST_DEFAULTS)))
+    assert control.returncode == 0 and "tests/soak" in control.stdout, control.stdout + control.stderr
 
 
 def test_make_soak_refuses_rather_than_reporting_a_vacuous_green(tmp_path: Path) -> None:

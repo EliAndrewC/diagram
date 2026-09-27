@@ -115,6 +115,34 @@ def git(root: Path, *args: str) -> str:
 @pytest.fixture
 def project(tmp_path: Path) -> tuple[Path, Path]:
     """A repo shaped like this one - scripts/gate-stamp.py, the skill dir - with a tiny engine and suite."""
+    return new_project(tmp_path)
+
+
+@pytest.fixture(scope="session")
+def _baselined_snapshot(tmp_path_factory: pytest.TempPathFactory) -> tuple[Path, Path, Path]:
+    """ONE project baselined ONCE per worker, and a copy of it as it stood (2026-09-27). Ten tests began with the
+    same two lines - a fresh project, then `baseline()` - and the baseline is a whole gate run (a `pytest -n 2`
+    subprocess, ~1.5 s), so the file paid for the identical baseline ten times over."""
+    base = tmp_path_factory.mktemp("incremental")
+    root, skill = new_project(base)
+    baseline(root, skill)
+    snap = base / "snapshot"
+    shutil.copytree(root, snap, symlinks=True)
+    return root, skill, snap
+
+
+@pytest.fixture
+def baselined(_baselined_snapshot: tuple[Path, Path, Path]) -> tuple[Path, Path]:
+    """The project just after its baseline, restored from the snapshot to the SAME path - the coverage data
+    and the manifest record absolute paths, so a copy elsewhere would not be the state `baseline()` left.
+    Tests on one worker run one at a time, and each worker has its own snapshot."""
+    root, skill, snap = _baselined_snapshot
+    shutil.rmtree(root)
+    shutil.copytree(snap, root, symlinks=True)
+    return root, skill
+
+
+def new_project(tmp_path: Path) -> tuple[Path, Path]:
     root = tmp_path / "clone"
     root.mkdir()
     subprocess.run(["git", "init", "-q", "-b", "main", str(root)], check=True)
@@ -219,9 +247,8 @@ def test_the_fast_core_keeps_every_context_once_its_events_are_re_armed(project:
 # ---- the baseline itself --------------------------------------------------------------------------------
 
 
-def test_a_full_run_records_per_test_and_per_fixture_contexts_and_the_manifest(project: tuple[Path, Path]) -> None:
-    root, skill = project
-    baseline(root, skill)
+def test_a_full_run_records_per_test_and_per_fixture_contexts_and_the_manifest(baselined: tuple[Path, Path]) -> None:
+    root, skill = baselined
     bdir = incremental.baseline_dir(root)
     contexts = set(incremental.all_contexts(bdir / incremental.COVERAGE_DB))
     assert "tests/test_core.py::test_add|run" in contexts and "fixture:tests::built" in contexts, sorted(
@@ -239,9 +266,8 @@ def test_a_full_run_records_per_test_and_per_fixture_contexts_and_the_manifest(p
 # ---- (d) an unrelated edit selects only what executed it --------------------------------------------------
 
 
-def test_d_a_polder_only_edit_runs_only_the_polder_tests_and_the_merged_report_is_100(project: tuple[Path, Path]) -> None:
-    root, skill = project
-    baseline(root, skill)
+def test_d_a_polder_only_edit_runs_only_the_polder_tests_and_the_merged_report_is_100(baselined: tuple[Path, Path]) -> None:
+    root, skill = baselined
     write(skill, "eng/polder.py", POLDER.replace('return "short"', 'return "short"  # a comment inside the body'))
     mode, result, rc, out = run_gate(root, skill)
     assert mode == "incremental" and result["mode"] == "incremental"
@@ -252,9 +278,8 @@ def test_d_a_polder_only_edit_runs_only_the_polder_tests_and_the_merged_report_i
 # ---- (a) a changed function with a new uncovered line fails ------------------------------------------------
 
 
-def test_a_an_uncovered_line_in_a_changed_function_fails_the_merged_floor(project: tuple[Path, Path]) -> None:
-    root, skill = project
-    baseline(root, skill)
+def test_a_an_uncovered_line_in_a_changed_function_fails_the_merged_floor(baselined: tuple[Path, Path]) -> None:
+    root, skill = baselined
     write(skill, "eng/core.py", CORE.replace("    return a + b\n", "    if a > 100:\n        return 100\n    return a + b\n"))
     mode, result, rc, out = run_gate(root, skill)
     assert mode == "incremental"
@@ -268,9 +293,8 @@ def test_a_an_uncovered_line_in_a_changed_function_fails_the_merged_floor(projec
 # ---- (b) deleting the only test that covered a line fails ------------------------------------------------
 
 
-def test_b_deleting_the_only_covering_test_fails(project: tuple[Path, Path]) -> None:
-    root, skill = project
-    baseline(root, skill)
+def test_b_deleting_the_only_covering_test_fails(baselined: tuple[Path, Path]) -> None:
+    root, skill = baselined
     write(skill, "tests/test_polder.py", TEST_POLDER.replace("[1, 2, 3, 4]", "[3, 4]"))  # `dike` never returns "short" now
     mode, result, rc, out = run_gate(root, skill)
     assert mode == "incremental" and set(result["selected"]) == {"tests/test_polder.py::test_dike[3]", "tests/test_polder.py::test_dike[4]"}
@@ -280,9 +304,8 @@ def test_b_deleting_the_only_covering_test_fails(project: tuple[Path, Path]) -> 
 # ---- (c) an unchanged module's line made unreachable fails --------------------------------------------------
 
 
-def test_c_a_line_of_an_unchanged_module_made_unreachable_fails(project: tuple[Path, Path]) -> None:
-    root, skill = project
-    baseline(root, skill)
+def test_c_a_line_of_an_unchanged_module_made_unreachable_fails(baselined: tuple[Path, Path]) -> None:
+    root, skill = baselined
     # core no longer calls tool.deep(); tool.py is untouched, and nothing else reaches deep()
     write(skill, "eng/core.py", CORE.replace('"deep": tool.deep(3)', '"deep": 6'))
     write(skill, "tests/test_tool.py", TEST_TOOL)  # unchanged bytes - rewritten to prove that does not select it
@@ -310,16 +333,15 @@ def test_e_no_baseline_is_a_full_run(project: tuple[Path, Path]) -> None:
     ],
     ids=["conftest", "manifest", "tooling", "import-time-def-line"],
 )
-def test_e_each_fallback_shape_forces_a_full_run(project: tuple[Path, Path], rel: str, text: str, why: str) -> None:
-    root, skill = project
-    baseline(root, skill)
+def test_e_each_fallback_shape_forces_a_full_run(baselined: tuple[Path, Path], rel: str, text: str, why: str) -> None:
+    root, skill = baselined
     (skill / rel).parent.mkdir(parents=True, exist_ok=True)
     write(skill, rel, text)
     pl = incremental.plan(root)
     assert pl.mode == "full" and why in pl.reason, pl
 
 
-def test_e_over_the_fraction_the_PLANNER_runs_everything_and_keeps_the_trees(project: tuple[Path, Path], monkeypatch: pytest.MonkeyPatch) -> None:
+def test_e_over_the_fraction_the_PLANNER_runs_everything_and_keeps_the_trees(baselined: tuple[Path, Path], monkeypatch: pytest.MonkeyPatch) -> None:
     """Over the fraction, a full run - decided BEFORE the arguments are chosen (feature 237, D8).
 
     Until feature 237 the plugin made this call after collection, where the real selection is known. It
@@ -328,8 +350,7 @@ def test_e_over_the_fraction_the_PLANNER_runs_everything_and_keeps_the_trees(pro
     merge and judge the 100% floor over that subset alone. So the planner projects the same rules over the
     baseline and returns a plan with NO paths, which is what keeps the trees.
     """
-    root, skill = project
-    baseline(root, skill)
+    root, skill = baselined
     write(skill, "eng/polder.py", POLDER.replace('return "short"', 'return "short"  # edited'))
     monkeypatch.setattr(incremental, "FULL_FRACTION", 0.1)
     bdir = incremental.baseline_dir(root)
@@ -346,19 +367,17 @@ def test_e_over_the_fraction_the_PLANNER_runs_everything_and_keeps_the_trees(pro
     assert (bdir / (incremental.GRAPH + ".next")).is_file(), "and its fixture graph beside it (FR-005)"
 
 
-def test_nothing_changed_selects_nothing_and_the_run_is_green_on_the_untouched_baseline(project: tuple[Path, Path]) -> None:
+def test_nothing_changed_selects_nothing_and_the_run_is_green_on_the_untouched_baseline(baselined: tuple[Path, Path]) -> None:
     """The gate's cheapest shape after the short-circuit: the tree equals the baseline, so nothing is selected,
     pytest would say "no tests ran" (exit 5), the plugin turns that into a green run, and the merged floors judge
     the baseline as it stands."""
-    root, skill = project
-    baseline(root, skill)
+    root, skill = baselined
     mode, result, rc, out = run_gate(root, skill)
     assert mode == "incremental" and result["selected"] == [] and rc == 0, out
 
 
-def test_an_incremental_run_never_writes_the_baseline(project: tuple[Path, Path]) -> None:
-    root, skill = project
-    baseline(root, skill)
+def test_an_incremental_run_never_writes_the_baseline(baselined: tuple[Path, Path]) -> None:
+    root, skill = baselined
     bdir = incremental.baseline_dir(root)
     before = (bdir / incremental.COVERAGE_DB).read_bytes()
     write(skill, "eng/polder.py", POLDER.replace('return "short"', 'return "short"  # edited'))
@@ -377,7 +396,7 @@ def test_mode_reports_the_run_that_happened(project: tuple[Path, Path], capsys: 
     assert incremental.main(["nonsense"], root, skill) == 2
 
 
-def test_the_plans_paths_shrink_what_pytest_COLLECTS_not_just_what_it_runs(project: tuple[Path, Path]) -> None:
+def test_the_plans_paths_shrink_what_pytest_COLLECTS_not_just_what_it_runs(baselined: tuple[Path, Path]) -> None:
     """The feature's whole point, at the gate's own level (feature 237, FR-001/FR-002, SC-002).
 
     Deselection runs a few tests out of a full collection; arguments make the collection itself smaller, and
@@ -385,8 +404,7 @@ def test_the_plans_paths_shrink_what_pytest_COLLECTS_not_just_what_it_runs(proje
     COLLECTED count, which is the thing that moved, and it passes the plan's paths exactly as the Makefile
     does: read from `incremental paths` after the plan is written, as pytest's positional arguments.
     """
-    root, skill = project
-    baseline(root, skill)
+    root, skill = baselined
     write(skill, "eng/polder.py", POLDER.replace('return "short"', 'return "short"  # edited'))
     bdir = incremental.baseline_dir(root)
     assert incremental.main(["plan"], root, skill) == 0

@@ -461,7 +461,8 @@ def test_the_record_page_defines_its_terms_on_hover_in_the_footnote_box(record: 
     in our diagram HTML pages." The glossary term in the heading, the prose and the quoted footnote is wrapped;
     the one in a code span is not; hovering shows the definition in the footnote box, and leaving hides it."""
     spans = record.js("() => Array.from(document.querySelectorAll('span.gl')).map(s => s.textContent)")
-    assert spans == ["yashikirin", "kainyo", "sugi", "yashikirin"], "heading, prose (two terms), the footnote's quote - and never the code span"
+    # feature 265: `ochiba` is a CASED term, so the manor Ochiba is left alone and only the lowercase word is wrapped
+    assert spans == ["yashikirin", "kainyo", "sugi", "ochiba", "yashikirin"], "heading, prose, the footnote's quote - never the code span or Ochiba"
     assert record.js("() => document.querySelector('code span.gl')") is None
     assert record.js("() => document.getElementById('fntip').hidden") is True
     record.page.hover("h2 span.gl")

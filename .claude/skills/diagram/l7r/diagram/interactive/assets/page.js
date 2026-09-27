@@ -18,9 +18,10 @@
   // wrapped so hovering it shows the definition. Built as DOM nodes, never innerHTML of the text.
   var glossaryRe = null;
   var glossaryDef = {};
+  var cased = {};  // a "cased" term's variants match only as written: `ochiba` never wraps the manor Ochiba (feature 265)
   if (glossary.length) {
     var alts = [];
-    glossary.forEach(function (g) { g.variants.forEach(function (v) { alts.push(v.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")); glossaryDef[v.toLowerCase()] = g.def; }); });
+    glossary.forEach(function (g) { g.variants.forEach(function (v) { if (g.cased) { cased[v.toLowerCase()] = v; } alts.push(v.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")); glossaryDef[v.toLowerCase()] = g.def; }); });
     alts.sort(function (a, b) { return b.length - a.length; });
     glossaryRe = new RegExp("\\b(" + alts.join("|") + ")\\b", "gi");
   }
@@ -31,6 +32,7 @@
     var last = 0, m;
     glossaryRe.lastIndex = 0;
     while ((m = glossaryRe.exec(text)) !== null) {
+      if (cased[m[0].toLowerCase()] !== undefined && cased[m[0].toLowerCase()] !== m[0]) continue;
       if (m.index > last) el.appendChild(document.createTextNode(text.slice(last, m.index)));
       var span = document.createElement("span");
       span.className = "gl";

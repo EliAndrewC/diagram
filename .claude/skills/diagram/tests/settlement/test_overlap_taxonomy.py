@@ -218,7 +218,7 @@ def test_a_torii_halfbox_is_derived_from_the_SPAN_at_the_maps_scale() -> None:
     fine = torii_halfbox(1.0)
     coarse = torii_halfbox(2.0)
     assert fine[0] > coarse[0], "the same 16 ft arch is fewer pixels on a coarser map"
-    assert fine[2] > fine[1], "and it reaches further DOWN than up - the glyph is not centered"
+    assert fine[2] == fine[1], "the plan-view arch (feature 268) is centered on its seat"
 
 
 def test_poly_gap_is_zero_for_every_way_two_polygons_can_meet() -> None:

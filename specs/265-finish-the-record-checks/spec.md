@@ -6,11 +6,13 @@ land on main, and other sessions can research other things with it.
 
 ## What this feature is
 
-The WORK feature 250 left: the requirements below are 250's own, carried verbatim (250's `spec.md`), for the pages
-and sweeps 250 did not reach. The METHOD is 250's, landed: each page worked by `specs/250-close-the-record-checks/
+The WORK feature 250 left: FR-002 to FR-009 below are 250's own, carried verbatim (250's `spec.md`), for the pages
+and sweeps 250 did not reach - and FR-010, which is NEW, added at the GM's direction of 2026-09-27 (`request.md`). The METHOD is 250's, landed: each page worked by `specs/250-close-the-record-checks/
 measure/brief.py` - a split session for any item question over the cap, a write session, then check groups packed by
 load - with the tooling 250 built (`make check-bundle`, `make apply-edits`, `make canon`, the size cap, the guards).
-Nothing here changes that process; a change to it is a feature of its own.
+The one change to that process is FR-010's: pages worked by up to three queues at once, the hand-allocated prefixes
+reserved under a lock (`make reserve`, which `make apply-edits` then uses) and a guard on new prefixed files - the
+GM's own addition; nothing else here changes the process.
 
 **The pages left** (250's T19, and the FR-006 work 250's T19 did not name; re-derived 2026-09-27 by `brief.fr002` /
 `fr006` / `over_cap_items` over every page): `towns` (10 FR-002 items), `cities/river-cities` (8), `buildings` (7),
@@ -19,7 +21,7 @@ items, 050 with an FR-006 item - split first), `ways` (1), and `cities/capitals`
 242's R12 items 43 to 46 and 84 to 86, which 250's T19 missed because its list was built from the pages with FR-002
 items).
 
-## Requirements (feature 250's, carried verbatim)
+## Requirements (FR-002 to FR-009 feature 250's, carried verbatim; FR-010 new, the GM 2026-09-27)
 
 **FR-002 - the additional bare assertions the quote-checks named are footnoted.** Each quote-check report
 ends with the real-world assertions it found carrying no footnote, per section; these were never on
@@ -65,6 +67,17 @@ list, in the GM's format, appended at the END").
 **FR-009 - the closing report** states, per class above, what closed and what did not, and per unclosed
 item whether it was searched and failed or never searched.
 
+**FR-010 - two or three pages' queues run at once** (the GM, 2026-09-27, `request.md`). A page is independent of
+another page, so the pages are worked by up to three queues side by side, each in its own session clone
+(`.clones/diagram-research-<n>`, a page session named after its clone), their commits pulled back into this feature's
+clone when a queue ends, and the pages this feature regenerates (`make record`, `make citations`, `make glossary`)
+rebuilt there rather than merged by hand. The one thing two concurrent sessions can collide on is a number they
+allocate by hand: a new glossary file's prefix and a new registry entry's prefix, each "the highest + 10". Those are
+allocated under a lock (`make reserve KIND=glossary|registry KEY=<key>`, the pattern `make claim` uses for feature
+numbers: the next number derived UNDER THE LOCK from the mirror, every clone and a ledger, and the claim is the file,
+created before the lock is released); `make apply-edits` takes a glossary prefix from it; and a new file in either
+directory written without a reservation is refused by a guard naming the command.
+
 ## Success criteria (feature 250's SC-002 to SC-010, carried verbatim; SC-002 and SC-006 limited to the pages above)
 
 - **SC-002** (FR-002) - every assertion listed at the end of the six quote-check reports carries one of
@@ -81,6 +94,10 @@ item whether it was searched and failed or never searched.
 - **SC-008** (FR-008) - Part 4 of the download list has grown only at its end, every entry with both links.
 - **SC-009** (FR-009) - the closing report distinguishes searched-and-failed from never-searched.
 - **SC-010** (spec-wide) - `make page-check` green and the push clean.
+
+- **SC-011** (FR-010) - two allocations run at once never take the same prefix (a test that races them), a new
+  glossary or registry file written without a reservation is refused (the guard's suite, proved red on a mutated
+  copy), and the pages are worked by at least two queues at once with no prefix collision in the merged record.
 
 ## Review history
 
@@ -101,3 +118,25 @@ item whether it was searched and failed or never searched.
   (T06 to T11) leave no dangling reference: the old ids appear only in round 1's record, which describes the
   earlier numbering. On round 2's own run, `brief.fr002` / `fr006` / `over_cap_items` gave the same counts as the
   pages paragraph: capitals 0 and 7, with no question over the cap.
+- **Amendment round 1 (2026-09-27), `spec-fidelity-verify`: CHANGES REQUIRED**, one item. It covers the FR-010
+  amendment (HEAD 96927eaa: FR-010, SC-011, T12 to T14, `plan.md`). FR-010, SC-011 and T12 to T14 match what the GM
+  agreed to on 2026-09-27 (`request.md`): two or three pages' queues at once, with glossary and registry prefixes
+  allocated under a lock. Nothing is missing and nothing is added. The guard (T13) only refuses the two file kinds the
+  lock allocates, so it enforces the request. (1) The amendment left two statements that FR-010 now makes false. "What
+  this feature is" says "the requirements below are 250's own, carried verbatim" and "Nothing here changes that
+  process; a change to it is a feature of its own". The Requirements heading says "(feature 250's, carried verbatim)".
+  FR-010 is new, it is not 250's, and it changes the process: parallel queues, `make apply-edits` taking its prefix
+  from `make reserve`, and a new guard. Both passages should say that FR-010 is the exception the GM directed on
+  2026-09-27 ("add that to 265"), and that FR-002 to FR-009 are 250's, carried verbatim. SC-011 could get the same
+  note in the Success criteria heading. `plan.md` D1 ("The method is feature 250's, unchanged") has the same tension
+  with D2.
+- **Amendment round 2 (2026-09-27), `spec-fidelity-verify`: FAITHFUL.** Round 1's one item is RESOLVED (commit
+  34a627e2). "What this feature is" now says FR-002 to FR-009 are 250's, carried verbatim, and FR-010 is NEW, added at
+  the GM's direction of 2026-09-27 (`request.md`). It names FR-010's parallel queues, the prefixes reserved under a
+  lock (`make reserve`, which `make apply-edits` uses) and the guard as the one change to the process, which is what
+  FR-010 says and nothing more. The Requirements heading splits FR-002 to FR-009 (250's) from FR-010 (new, the GM
+  2026-09-27). The Success criteria heading already names 250's SC-002 to SC-010 by id, so it makes no claim about
+  SC-011, which is marked (FR-010). `plan.md` D1's heading now names FR-010 as the one change. A grep of the feature
+  directory for "verbatim", "250's own", "unchanged", "nothing here changes" and "one change" finds no other passage
+  that still says every requirement is 250's or that the process is unchanged. The plan's D2 and D3 revisions in the
+  same commit are for `spec-fidelity`'s plan review and are not ruled on here.

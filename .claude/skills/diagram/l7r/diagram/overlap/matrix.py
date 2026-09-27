@@ -5,6 +5,7 @@ from collections.abc import Mapping
 from typing import Any
 
 from l7r.diagram.settlement import sat_overlap
+from l7r.diagram.settlement import torii_halfbox as torii_halfbox  # the engine's own box, no mirror to keep in sync (feature 268)
 
 from .taxonomy import (
     _MATRIX_PARENT_FIELD,
@@ -256,15 +257,6 @@ def forest_reveal_x(forest: Poly, edge: Any, reveal: float, w: float) -> list[fl
         return [min(max(p[0], 0), w) for p in forest]
     ex = [min(max(p[0], 0), w) for p in edge]
     return ex + [min(x + reveal, w) for x in ex]
-
-
-def torii_halfbox(ftpx: float, span_ft: float = 16.0) -> tuple[float, float, float]:
-    """Mirror of settlement.torii_halfbox (keep in sync): the true drawn half-extents (x half-width, y-up,
-    y-down) of a torii glyph at scale `ftpx`, plus a small stroke pad. Replaces the legacy fixed x+/-19 /
-    y-10..+18 box (the pre-true-scale 38px glyph, ~5x oversized), used to check torii sit within the frame."""
-    s2 = (span_ft / ftpx) / 2
-    pad = 2.0
-    return s2 + pad, s2 * 7.0 / 19.0 + pad, s2 * 17.0 / 19.0 + pad
 
 
 FOREST_REVEAL_FT = 110.0  # mirrors settlement.FOREST_REVEAL_FT - how deep the crop reveals a canvas-filling wood

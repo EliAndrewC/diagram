@@ -187,7 +187,7 @@ def _shrine() -> tuple[str, pa.ParsedPlan]:
 
 def test_the_synthetic_shrine_passes_its_four_checks() -> None:
     text, plan = _shrine()
-    assert s.sanctuary_on_axis(plan) == [] and s.arch_on_approach(plan) == [] and s.well_clear_of_arch(plan) == [] and s.fence_not_wall(text, plan) == []
+    assert s.sanctuary_on_axis(plan) == [] and s.arch_on_approach(plan) == [] and s.well_clear_of_arch(plan) == [] and s.no_precinct_enclosure(text, plan) == []
     assert plan.by_id("hall")[0].ident == "hall" and not plan.by_id("hall")[0].precinct
 
 
@@ -225,9 +225,20 @@ def test_arch_inside_the_precinct_and_a_wall_on_the_boundary() -> None:
         '<g id="fence" stroke="#7A6A4A" stroke-width="2" fill="none">',
         '<g id="fence" stroke="#7A6A4A" stroke-width="2" fill="none"><g stroke="#2D2A24" stroke-width="9"><line x1="40" y1="70" x2="360" y2="70"/></g>',
     )
-    assert any("compound wall stroke" in f for f in s.fence_not_wall(walled, pa.parse_svg(walled)))
+    assert any("compound wall stroke" in f for f in s.no_precinct_enclosure(walled, pa.parse_svg(walled)))
     interior_wall = text.replace('<rect x="240" y="350"', '<g stroke="#2D2A24" stroke-width="9"><line x1="100" y1="250" x2="130" y2="250"/></g><rect x="240" y="330"')
-    assert s.fence_not_wall(interior_wall, pa.parse_svg(interior_wall)) == []  # a wall stroke away from the boundary is not the fence's business
+    assert s.no_precinct_enclosure(interior_wall, pa.parse_svg(interior_wall)) == []  # a wall stroke away from the boundary is not the precinct's edge
+
+
+def test_a_fence_ringing_the_precinct_is_reported_and_one_ringing_the_sanctuary_alone_is_not() -> None:
+    """Feature 268 (D7): a village shrine's ground is unenclosed - its arch and its wood mark it. The
+    synthetic sheet's fence rings the sanctuary alone (a richer shrine's donation) and passes; the same
+    fence carried round the whole precinct takes in the hall and is reported."""
+    text, plan = _shrine()
+    assert s.no_precinct_enclosure(text, plan) == []
+    ring = '<g id="fence" stroke="#7A6A4A" stroke-width="2" fill="none"><line x1="40" y1="70" x2="360" y2="70"/><line x1="40" y1="70" x2="40" y2="470"/><line x1="360" y1="70" x2="360" y2="470"/><line x1="40" y1="470" x2="360" y2="470"/></g>'
+    fenced = text.replace(text[text.index('<g id="fence"') : text.index("</g>", text.index('<g id="fence"')) + 4], ring)
+    assert any("a fence rings the precinct" in f for f in s.no_precinct_enclosure(fenced, pa.parse_svg(fenced)))
 
 
 def test_a_group_label_matches_whole_words_only() -> None:
@@ -286,7 +297,7 @@ def test_program_and_band_checks_over_a_tiny_declaration() -> None:
 def test_fence_check_ignores_a_court_divider_stroke() -> None:
     """A divider band is a wall band of another color; the fence check reasons only about the compound stroke."""
     text, plan = _plan('<g id="fence" stroke="#7A6A4A" stroke-width="2"><line x1="20" y1="20" x2="380" y2="20"/></g>' + DIVIDER)
-    assert s.fence_not_wall(text, plan) == []
+    assert s.no_precinct_enclosure(text, plan) == []
 
 
 # --- trees overlap nothing (feature 257) ---
@@ -312,17 +323,20 @@ def test_a_tree_on_open_ground_is_fine_and_one_on_anything_else_is_named() -> No
     assert any("svg(305,57)" in f and "the label 'a label'" in f for f in findings)
 
 
-def test_two_canopies_may_touch_but_not_cover_each_other() -> None:
+def test_crowns_may_overlap_but_a_tree_is_not_drawn_on_another() -> None:
+    """Feature 270 (the GM 2026-09-27: "tree crowns may overlap, I never said they couldn't"): crowns overlapping each
+    other are a closed canopy, not a finding; one tree drawn on top of another - trunks within a third of the smaller
+    crown's radius, feature 257's "two lie on top of each other" - still is (the threshold a guess, research R2)."""
     _, plan = _plan(
         _rect(0, 0, 400, 400, "url(#court-earth)", "precinct"),
         _CANOPY.format(x=50, y=50, r=15),
-        _CANOPY.format(x=80, y=50, r=15),  # touching: 30 apart, radii sum 30
+        _CANOPY.format(x=65, y=50, r=15),  # half over the other: a closed canopy, fine
         _CANOPY.format(x=200, y=50, r=15),
-        _CANOPY.format(x=215, y=50, r=15),  # half on top of the other
+        _CANOPY.format(x=203, y=50, r=15),  # trunks 3 px apart, inside a third of 15: a duplicated tree
     )
     findings = s.trees_overlap(plan)
-    assert not [f for f in findings if "svg(50,50)" in f]
-    assert [f for f in findings if "two trees" in f and "svg(200,50)" in f] and len(findings) == 1
+    assert not [f for f in findings if "svg(50,50)" in f or "svg(65,50)" in f]
+    assert len(findings) == 1 and "drawn on top of" in findings[0] and "svg(200,50)" in findings[0]
 
 
 def test_a_tree_may_stand_on_a_garden_bed_and_over_no_glyph_or_tub() -> None:

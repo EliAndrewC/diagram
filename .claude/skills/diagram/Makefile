@@ -718,7 +718,10 @@ print()"
 # the escape rate is the number that matters: a guard escaped more often than it is obeyed is costing
 # a round trip to prevent nothing, which is what retired the quick+done refusal.
 	@python3 -c "import json,glob,os,collections; \
-rows=[json.load(open(f)) for f in glob.glob(os.path.expanduser(os.environ.get('GUARD_LOG_DIR','~/.claude/guard-log')+'/*.json'))]; \
+'GUARD_EDIT_OK: fixing a defect found while working (2026-09-27) - two ZERO-BYTE entries from 2026-09-26 made'; \
+'the whole audit die on a JSONDecodeError. The writer now renames a finished file into place, so no new one'; \
+'can be empty; an empty file left from before is skipped here, as scripts/guard-log.py already does.'; \
+rows=[json.load(open(f)) for f in glob.glob(os.path.expanduser(os.environ.get('GUARD_LOG_DIR','~/.claude/guard-log')+'/*.json')) if os.path.getsize(f)]; \
 print('\033[1mGuard firings\033[0m (~/.claude/guard-log/) - what each guard did: blocked, rewrote, reminded, escaped'); \
 by=collections.defaultdict(collections.Counter); \
 [by[r['guard']].update([r['event']]) for r in rows]; \
@@ -1084,6 +1087,11 @@ notes: ## [project] print the named notes of ONE question and only the blocks of
 	@if [ -z "$(PAGE)" ] || [ -z "$(SECTION)" ] || [ -z "$(KEYS)" ]; then printf 'make notes: PAGE=<page> SECTION=<question> KEYS=<key,key> are required\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_check_bundle.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" --section "$(SECTION)" --notes "$(KEYS)" --print-notes
 
+# GUARD_EDIT_OK: feature 265 FR-010 - a new operation (reserve a glossary or registry prefix under a host-wide lock); new-file-hooks.sh makes it the way in.
+reserve: ## [project] reserve the next glossary or registry-entry prefix under a host-wide lock and write the file's stub - prints its path; fill it in (feature 265 FR-010: parallel queues never collide)   KIND=glossary|registry KEY=<term or key>
+	@if [ -z "$(KIND)" ] || [ -z "$(KEY)" ]; then printf 'make reserve: KIND=glossary|registry KEY=<term or key> are required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/reserve-prefix.py" "$(KIND)" "$(KEY)"
+
 # GUARD_EDIT_OK: feature 250 D16 - a new operation (search the setting canon for every term of a claim at once); no guard changes here - canon-read-hooks.sh makes it the only way in.
 canon: ## [project] search the GM's setting canon for EVERY term of a claim in one call - each hit with its file, line and heading (feature 250 D16; a direct read of a canon file is refused)   TERMS="imperial road|merchant share|artisan"
 	@if [ -z "$(TERMS)" ]; then printf 'make canon: TERMS="<a>|<b>|<c>" is required - every term of the claim at once\n' >&2; exit 2; fi
@@ -1347,7 +1355,12 @@ _reference:
 # idle run to one whose record the push honors - a failure that increases trust instead of reducing
 # it. Now the probe's failure is distinguishable from its answer, and an unreadable answer fails
 # toward `idle-done`, which is the direction that can only ever withhold authority.
-IDLE_CTX = $(shell $(SWITCH) idle 2>/dev/null || echo unreadable)
+# GUARD_EDIT_OK: fixing a defect found while working (2026-09-27) - ASKED ONCE PER MAKE, ON FIRST USE. A plain
+# `=` re-ran this python probe at EVERY reference: 13 per `make done` (~1.5 s, 6.2 s of the 11 s
+# `test_make_done_short_circuits_on_an_unchanged_gate_key`). The answer cannot change within one make: an
+# idle run writes its marker BEFORE it starts the sub-make that reads it. Still lazy - a target that never
+# names DONE_NAME never runs the probe - and the failure direction above is untouched.
+IDLE_CTX = $(eval IDLE_CTX := $(shell $(SWITCH) idle 2>/dev/null || echo unreadable))$(IDLE_CTX)
 DONE_NAME = $(if $(filter 0,$(IDLE_CTX)),done,idle-done)
 # GUARD_EDIT_OK: "scope relaxed" described a lock retired in feature 185 - there is nothing to relax.
 idle-tests:     ## [tests] {inactive: arming is disabled - the GM turned it off 2026-09-06; the target still runs by hand} what an idle session runs unattended (feature 136): the whole gate, never FULL, recorded as `idle-done`
