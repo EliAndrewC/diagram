@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-27
 
-**Status**: specified; spec-fidelity round 1 CHANGES REQUIRED (the grove's extent and bare ground inside the frame) - applied, round 2 next
+**Status**: specified; FAITHFUL at round 2 (see Review history); planning
 
 **Input**: the GM's message of 2026-09-27 and their two rulings on the research pass, verbatim in
 [`request.md`](request.md); the four readers' reports in [`reader-reports/`](reader-reports/).
@@ -254,3 +254,6 @@ exemplar and fails on a fixture that draws a precinct fence.
   outermost arch, inside the register band, with no bare band before the well; SC-002 measures bare
   ground over the whole frame. Aside carried for the GM once the work lands: the nine other frozen maps
   with avenues (Kikuta among them, seven arches at the old pitch) keep their arches until converted.
+- Round 2 (spec-fidelity-verify, MODE 3, 2026-09-27): FAITHFUL - round 1's item resolved; the grove's
+  reach to the outermost arch confirmed as sizing the grove the GM asked for, on the research's own
+  first-arch and grove passages.
