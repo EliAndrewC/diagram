@@ -27,6 +27,7 @@ from .compound_model import (
     ROOF_POST_FT,
     ROOFED_ZONES,
     STONE_STEP_FT,
+    WALL_INK_FT,
     CompoundProgram,
     CourtZone,
     Envelope,
@@ -148,6 +149,45 @@ def _rear_band(p: Placed) -> tuple[float, float, float, float]:
     return {"S": (p.x_ft, p.y_ft - d, p.spec.w_ft, d), "N": (p.x_ft, p.y2, p.spec.w_ft, d), "E": (p.x_ft - d, p.y_ft, d, p.spec.h_ft), "W": (p.x2, p.y_ft, d, p.spec.h_ft)}[_court_side(p)]
 
 
+def _hatch(env: Envelope, box: Box) -> Box | None:
+    """The collection hatch through the compound wall behind a privy standing against it (within 2.5 ft of the wall's
+    inner face): a 2 ft opening across the wall's ink, level with the privy's middle, the night-soil carter's way
+    in from outside (the kumitori-guchi form - research buildings 220 has the pits emptied by outside carters toward a
+    service wall; the hatch itself is a GUESS). None where the privy stands off every wall."""
+    x, y, x2, y2 = box
+    cx, cy, half = (x + x2) / 2, (y + y2) / 2, WALL_INK_FT / 2
+    reach = half + 2.5
+    if y <= reach:
+        return (cx - 1.0, -half, cx + 1.0, half)
+    if env.h_ft - y2 <= reach:
+        return (cx - 1.0, env.h_ft - half, cx + 1.0, env.h_ft + half)
+    if x <= reach:
+        return (-half, cy - 1.0, half, cy + 1.0)
+    if env.w_ft - x2 <= reach:
+        return (env.w_ft - half, cy - 1.0, env.w_ft + half, cy + 1.0)
+    return None
+
+
+def _clerk_seats(dais: Box, side: str) -> list[Box]:
+    """The two clerks' positions flanking a dais on the building's `side` (its court face), each 8 ft along the face
+    and 5 ft deep, flush on that face and 2 ft off the dais (buildings.md "Office hall": two clerk positions flanking
+    the dais; the size a GUESS, Ochiba's band drawn smaller)."""
+    x, y, x2, y2 = dais
+    if side in ("N", "S"):
+        top = y2 - 5.0 if side == "S" else y
+        return [(x - 10.0, top, x - 2.0, top + 5.0), (x2 + 2.0, top, x2 + 10.0, top + 5.0)]
+    left = x2 - 5.0 if side == "E" else x
+    return [(left, y - 10.0, left + 5.0, y - 2.0), (left, y2 + 2.0, left + 5.0, y2 + 10.0)]
+
+
+def _mats(z: CourtZone) -> list[Box]:
+    """The straw mats on a hearing court's floor (research buildings 440 'Who sat where at a hearing, and on what?'):
+    the accused's, ~6 x 3 ft, at the center a third of the way in from the dais; the plaintiff's behind to one side and
+    the village officials' (12 ft, several kneeling) behind to the other - spacing a GUESS, as the hand sheets draw them."""
+    cx, fy = z.x_ft + z.w_ft / 2, z.y_ft + z.h_ft / 3
+    return [(cx - 3.0, fy, cx + 3.0, fy + 3.0), (cx - 16.0, fy + 6.0, cx - 10.0, fy + 9.0), (cx + 10.0, fy + 6.0, cx + 22.0, fy + 9.0)]
+
+
 def _door(env: Envelope, p: Placed, boxes: list[Box]) -> tuple[Box, Box] | None:
     """A door flush inside `p`'s door face (DOOR_W_FT x DOOR_D_FT), at the first DOOR_FRACS spot whose approach - the
     door's width plus a foot each side, 3 ft out - is clear of every box (never `p` itself): the door and its approach,
@@ -175,10 +215,10 @@ def _gap(a: Box, b: Box) -> float:
     return (dx * dx + dy * dy) ** 0.5
 
 
-def _attach(env: Envelope, p: Placed, side: str, w: float, h: float, boxes: list[Box]) -> tuple[float, float] | None:
+def _attach(env: Envelope, p: Placed, side: str, w: float, h: float, boxes: list[Box], avoid: tuple[Box, ...] = ()) -> tuple[float, float] | None:
     """The top-left of a w x h addition flush against `side` of `p`, the first clear foot along it from the end nearest
-    `p`'s court (an attached privy stands toward the yard its cesspit is emptied from, not the back); None where the
-    side has no clear run. `boxes` are what it must clear (never `p` itself)."""
+    `p`'s court; None where the side has no clear run. `boxes` are what it must clear (never `p` itself), and it stands
+    at least LATRINE_WELL_FT off every `avoid` box."""
     nx, ny, fx, fy, length = _face(p, side)
     run = w if ny else h
     court = _court_side(p)
@@ -187,7 +227,7 @@ def _attach(env: Envelope, p: Placed, side: str, w: float, h: float, boxes: list
     from_far = (court == "S" and not ny) or (court == "E" and bool(ny))
     steps = [length - run - s if from_far else s for s in range(int(length - run) + 1)]
     seats = [(fx + s, fy if ny > 0 else fy - h) for s in steps] if ny else [(fx if nx > 0 else fx - w, fy + s) for s in steps]
-    return next(((x, y) for x, y in seats if _is_clear(env, boxes, x, y, w, h)), None)
+    return next(((x, y) for x, y in seats if _is_clear(env, boxes, x, y, w, h) and all(_gap((x, y, x + w, y + h), a) >= LATRINE_WELL_FT for a in avoid)), None)
 
 
 def _roji(start: tuple[float, float], end: tuple[float, float], boxes: list[Box]) -> list[tuple[float, float]]:
@@ -322,14 +362,18 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
     # postern the night-soil leaves by. The servants', the stables' and the garrison's stand by their buildings: on the
     # court face, else on an end face at its wall end - never on a spine court (a latrine stood inside the practice
     # ground) and never within LATRINE_WELL_FT of a well (the stables' stood 5 ft from theirs).
+    well_boxes = tuple((wx - 3.65, wy - 3.65, wx + 3.65, wy + 3.65) for wx, wy in wells)
     if "residence" in by_name:
+        # the family's privy attaches at the house's REAR, its cesspit toward the rear wall (research buildings 220:
+        # "the residence privy attaches to the house with its cesspit to the rear/service wall"); pass 5 - on the
+        # inner door's face it stood 5.7 ft from the kitchen well
         home = by_name["residence"]
         others = [t for t in taken if t != (home.x_ft, home.y_ft, home.x2, home.y2)]
-        if attached := _attach(env, home, home.spec.door_face or _court_side(home), PRIVY_FT, PRIVY_FT, others + zones):
+        rear = {"N": "S", "S": "N", "E": "W", "W": "E"}[_court_side(home)]
+        if attached := _attach(env, home, rear, PRIVY_FT, PRIVY_FT, others + zones, well_boxes):
             ax, ay = attached
             taken.append((ax, ay, ax + PRIVY_FT, ay + PRIVY_FT))
             privies.append((ax + PRIVY_FT / 2, ay + PRIVY_FT / 2, "residence"))
-    well_boxes = tuple((wx - 3.65, wy - 3.65, wx + 3.65, wy + 3.65) for wx, wy in wells)
     for p in result.placed:
         if p.spec.feature not in ("servants' quarters", "stables", "barracks"):
             continue
@@ -337,7 +381,11 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
         wall = {"N": "S", "S": "N", "E": "W", "W": "E"}[court]
         ends = ("E", "W") if court in ("N", "S") else ("N", "S")
         toward_wall = (0.85, 0.5, 0.15) if wall in ("S", "E") else (0.15, 0.5, 0.85)
-        for side, fracs in ((court, (0.85, 0.15, 0.5)), (ends[0], toward_wall), (ends[1], toward_wall)):
+        # the end faces at their wall end FIRST (pass 5, building-review round 4: the servants' privy stood ~20 ft out in
+        # the open inner court, ~160 ft from the only way out): research buildings 220 lines the servants' and outer
+        # privies along service walls, their pits emptied by carters from outside - so a privy against a compound wall
+        # is emptied through a hatch in it (`_hatch`); the court face is the last resort
+        for side, fracs in ((ends[0], toward_wall), (ends[1], toward_wall), (court, (0.85, 0.15, 0.5))):
             if v := seat(p, PRIVY_FT, fracs, (4.5, 7.0), side, well_boxes, tuple(zones)):
                 privies.append((*v, ""))
                 break
@@ -362,6 +410,9 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
         caption("point", cx - 3.65, cy - 3.65, 7.3, 7.3, "well", 8, True, "#3A2E1C", "well")
     for cx, cy, whole in privies:
         parts.append(rect(cx - 2.5, cy - 2.5, 5.0, 5.0, "#7E726A", "#4A3318", 0.8, "", "latrine", whole))
+        if hatch := _hatch(env, (cx - 2.5, cy - 2.5, cx + 2.5, cy + 2.5)):
+            hx, hy, hx2, hy2 = hatch
+            parts.append(rect(hx, hy, hx2 - hx, hy2 - hy, "#4A3318", "none", 0, "", "latrine"))
         caption("point", cx - 2.5, cy - 2.5, 5.0, 5.0, "latrine", 7, True, "#3A2E1C", "latrine")
     if tubs:
         parts.append('<g fill="#8FB0C6" stroke="#3A5060" stroke-width="1" data-kind="fire-water tubs">')

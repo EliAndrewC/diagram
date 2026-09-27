@@ -165,7 +165,7 @@ def test_emit_svg_draws_the_practice_ground_and_its_equipment() -> None:
 def test_county_magistracy_places_without_overflow() -> None:
     res = c.place(c.county_magistracy_program())
     assert res.overflow == []
-    assert len(res.placed) == 14  # the clerks' room is a room of the office hall since feature 267, not a building
+    assert len(res.placed) == 15  # the clerks' room is a room of the office hall (feature 267); the grooms' row joined in pass 5
 
 
 def test_county_magistracy_buildings_clear_the_spine() -> None:
@@ -506,7 +506,7 @@ def test_the_county_example_carries_the_program_the_outcomes_name() -> None:
     assert {"residence", "kitchen", "karo's house", "guest quarters", "retainers' quarters", "barracks", "servants' quarters"} <= doors
     for kind in ("family quarters", "lord's quarters", "reception room", "engawa"):
         assert f'data-kind="{kind}"' in svg
-    assert svg.count("<ellipse") >= 5 and ">hearing court<" in svg and ">servants' quarters<" in svg
+    assert svg.count("<ellipse") >= 5 and ">hearing" in svg and ">servants' quarters<" in svg
     cell = next(p for p in result.placed if p.spec.kind == "cell")
     assert svg.split('<g data-kind="cell">')[1].split("</g>")[0].count("<line") == len(cp._lattice(cell)) >= 3
     assert pa.tubs_in_buildings(plan) == [] and pa.floating_doors(plan) == []
@@ -520,7 +520,10 @@ def test_the_county_example_sets_the_garden_before_the_house_and_the_court_on_th
     assert garden.x_ft <= res.x_ft and garden.x2 >= res.x2 and garden.y_ft == res.y2  # the whole south face looks onto it
     assert court.w_ft <= hall.spec.w_ft and abs((court.x_ft + court.x2) / 2 - (hall.x_ft + hall.x2) / 2) < 1.0
     kitchen = by["kitchen"]
-    assert kitchen.x2 <= res.x_ft and (kitchen.spec.w_ft, kitchen.spec.h_ft) == (40.0, 30.0)  # the ell at the west end
+    assert kitchen.x2 <= res.x_ft and (kitchen.spec.w_ft, kitchen.spec.h_ft) == (24.0, 20.0)  # the ell at the west end
+    # the whole house - residence, kitchen, bath - at research buildings 380's ~2,400 sq ft (pass 5)
+    house = res.spec.w_ft * res.spec.h_ft + kitchen.spec.w_ft * kitchen.spec.h_ft + cp.BATH_W_FT * cp.BATH_H_FT
+    assert 2_200 <= house <= 2_700
 
 
 def test_no_caption_but_its_own_stands_under_the_roofed_court() -> None:
@@ -531,7 +534,7 @@ def test_no_caption_but_its_own_stands_under_the_roofed_court() -> None:
     x0, y0 = 7.0 * c.FTPX + court.x_ft * c.FTPX, 15.0 * c.FTPX + court.y_ft * c.FTPX
     x1, y1 = x0 + court.w_ft * c.FTPX, y0 + court.h_ft * c.FTPX
     inside = [lb.text for lb in pa.parse_svg(svg).labels if x0 < lb.cx < x1 and y0 < lb.cy < y1]
-    assert inside == ["hearing court"]
+    assert sorted(inside) in (["court", "hearing", "straw mats"], ["hearing court", "straw mats"])  # its name and its mats
 
 
 # --- pass 4 (building-review round 3): privies by kind and zone, the dais, the lattice, the rear alley ---
@@ -585,7 +588,7 @@ def test_the_county_example_seats_a_privy_per_zone_clear_of_wells_courts_and_the
     prog, _result, svg = _county()
     plan = pa.parse_svg(svg)
     latrines = [r for r in plan.fills if r.fill == "#7E726A"]
-    assert len(latrines) == 4 and 'data-kind="latrine" data-part-of="residence"' in svg
+    assert len(latrines) == 5 and 'data-kind="latrine" data-part-of="residence"' in svg
     for lat in latrines:
         for w in plan.wells:
             assert cp._gap((lat.x, lat.y, lat.x2, lat.y2), (w.x, w.y, w.x2, w.y2)) / c.FTPX >= cp.LATRINE_WELL_FT
@@ -594,3 +597,35 @@ def test_the_county_example_seats_a_privy_per_zone_clear_of_wells_courts_and_the
             assert not c._rect_overlap(lat.x, lat.y, lat.w, lat.h, zx, zy, z.w_ft * c.FTPX, z.h_ft * c.FTPX), z.name
     assert svg.count('data-kind="side gate"') == 2 and 'data-kind="magistrate\'s dais"' in svg and 'data-kind="cart yard"' in svg
     assert ">residence<" in svg and "senior retainers'" in svg  # the retainers' name wraps over two lines
+
+
+# --- pass 5 (building-review round 4): the house at its researched size, privies against walls, the hall's band ---
+
+
+def test_a_privy_against_a_wall_gets_a_collection_hatch_through_it() -> None:
+    env = _env(200.0, 200.0, 100.0)
+    assert cp._hatch(env, (50.0, 2.0, 55.0, 7.0)) == (51.5, -1.5, 53.5, 1.5)  # north
+    assert cp._hatch(env, (50.0, 193.0, 55.0, 198.0)) == (51.5, 198.5, 53.5, 201.5)  # south
+    assert cp._hatch(env, (2.0, 50.0, 7.0, 55.0)) == (-1.5, 51.5, 1.5, 53.5)  # west
+    assert cp._hatch(env, (193.0, 50.0, 198.0, 55.0)) == (198.5, 51.5, 201.5, 53.5)  # east
+    assert cp._hatch(env, (50.0, 50.0, 55.0, 55.0)) is None  # off every wall
+
+
+def test_clerks_flank_the_dais_on_each_face() -> None:
+    dais = (40.0, 20.0, 70.0, 30.0)
+    assert cp._clerk_seats(dais, "S") == [(30.0, 25.0, 38.0, 30.0), (72.0, 25.0, 80.0, 30.0)]
+    assert cp._clerk_seats(dais, "N") == [(30.0, 20.0, 38.0, 25.0), (72.0, 20.0, 80.0, 25.0)]
+    tall = (20.0, 40.0, 30.0, 70.0)
+    assert cp._clerk_seats(tall, "E") == [(25.0, 30.0, 30.0, 38.0), (25.0, 72.0, 30.0, 80.0)]
+    assert cp._clerk_seats(tall, "W") == [(20.0, 30.0, 25.0, 38.0), (20.0, 72.0, 25.0, 80.0)]
+
+
+def test_the_hearing_court_carries_its_mats_and_the_hall_its_band() -> None:
+    z = c.CourtZone("oshirasu", 0.0, 0.0, 60.0, 30.0)
+    accused, plaintiff, officials = cp._mats(z)
+    assert accused == (27.0, 10.0, 33.0, 13.0) and plaintiff[1] > accused[1] and officials[1] > accused[1]
+    assert plaintiff[2] < accused[0] < accused[2] < officials[0]  # behind, to either side
+    _prog_, _result, svg = _county()
+    for kind in ("day office", "official study", "clerks' seats", "kneeling positions"):
+        assert f'data-kind="{kind}"' in svg
+    assert svg.count('fill="#4A3318" stroke="none" stroke-width="0" data-kind="latrine"') >= 2  # the wall hatches

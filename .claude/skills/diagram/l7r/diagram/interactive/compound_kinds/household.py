@@ -35,8 +35,10 @@ class Residence(Kind):
     Note: The household inside the working compound (its place behind the office is Chinese regulation; the
     Japanese pages read do not give that order, and at Takayama the residence stood beside the office, not behind
     it), the garden south of the reception rooms and the staged arrival are recorded findings, and the program
-    classes the wing as accurate - about 180 to 200 ft long, checked against the size audit, its label naming a
-    zone. Both massings are attested and each sheet takes one: one block is the ordinary posting's form, and a
+    classes the wing as accurate, its label naming a zone. Its size is the record's where a sheet follows it: a
+    samurai's main house, kitchen included, ran about 49 tsubo (about 1,740 sq ft) for a 150-koku district magistrate
+    and about 67 tsubo (about 2,380 sq ft) for a retainer of 500 to 1,000 koku; the hand sheets' wings, about 180 to
+    200 ft long, are larger than either, a guess. Both massings are attested and each sheet takes one: one block is the ordinary posting's form, and a
     residence drawn in echelon reads as one its holders have added to. That a corridor joins each hall to the last
     is this project's reading; no source read says how Katsura's echelon halls are joined. The service strip on
     the shady rear is reasoned from the sun rule, with no source read for it, and that the residence out-measures
@@ -55,7 +57,7 @@ class Residence(Kind):
     Covers: the lord's residence blocks' fill and outlines, their room dividers, and the RESIDENCE band label
     Label: accurate
     Sources: watariroka-kotobank, irikawa-kotobank, katsura-rikyu-jawiki, touken-world-buke-madori, kotobank-shikidai, kominkai-genkan, fuchu-joge-pamphlet, neixiang-yamen-zhwiki, takayama-jinya-city, takayama-jinya-jawiki, machi-bugyo-jawiki, jinya-jawiki, yamen-enwiki, neixiang-xianya-zhwiki, kotobank-katteguchi, shoinzukuri-jawiki
-    Entry: research/buildings.html - 'Were a residence's wings joined by corridors and set in echelon, like geese in flight?', 'How did a guest of rank arrive, from the gate to the entrance?', 'Office in front, residence behind', 'Guest doors feed courts, not flanks', 'The shady rear is the service strip', 'The compound has a size HIERARCHY'
+    Entry: research/buildings.html - 'Were a residence's wings joined by corridors and set in echelon, like geese in flight?', 'How did a guest of rank arrive, from the gate to the entrance?', 'Office in front, residence behind', 'Guest doors feed courts, not flanks', 'The shady rear is the service strip', 'The compound has a size HIERARCHY', 'How big was a samurai's house, and what rank is a 67-tsubo house?'
     """
 
     key = "residence"

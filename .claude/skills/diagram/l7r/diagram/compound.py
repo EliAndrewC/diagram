@@ -49,7 +49,7 @@ from .compound_model import (
     _gate_interval,
     _kind_attr,
 )
-from .compound_parts import _dais, _engawa, _gate_posts, _lattice, _middle_gate, _point_features, _rear_band, _roof_posts, _wall_runs
+from .compound_parts import _clerk_seats, _court_side, _dais, _engawa, _gate_posts, _lattice, _mats, _middle_gate, _point_features, _rear_band, _roof_posts, _wall_runs
 from .labels import Obstacle, ObstacleIndex, Subject
 from .labels import place as place_caption
 from .labels.standard import CHAR_W_EM, WEIGHT_OBSTACLE
@@ -339,7 +339,14 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 7
         parts.append(rect(z.x_ft, z.y_ft, z.w_ft, z.h_ft, COURT_FILL.get(z.name, "url(#court-earth)"), zstroke, zsw, "", zk))
         caption("area", z.x_ft, z.y_ft, z.w_ft, z.h_ft, ZONE_CAPTIONS.get(z.name, z.name), 11, True, "#5C4318", zk)
         if z.name in ROOFED_ZONES:
-            # under the roof stands no caption but the court's own: its floor joins the obstacles once that is seated
+            # the straw mats the parties knelt on (`_mats`), a part of the court, then their caption - the one other
+            # caption under the roof; the court's floor joins the obstacles once both are seated
+            parts.append(f'<g{_kind_attr("kneeling positions")}><g fill="#C8B078" stroke="#7A5430" stroke-width="0.6">')
+            mats = _mats(z)
+            parts += [rect(mx, my, mx2 - mx, my2 - my, "#C8B078", "#7A5430", 0.6) for mx, my, mx2, my2 in mats]
+            parts.append("</g></g>")
+            ax, ay, ax2, ay2 = mats[-1]
+            caption("point", ax, ay, ax2 - ax, ay2 - ay, "straw mats", 8, True, "#7A5C30", "kneeling positions")
             late[len(requests) - 1] = [Obstacle(box(z.x_ft, z.y_ft, z.w_ft, z.h_ft), WEIGHT_OBSTACLE)]
             # the posts carrying the roof along the open (south) side, the court's own ink (ROOFED_ZONES)
             # its solid outline is a building's edge, so no caption crosses it (the ground inside stays free)
@@ -397,6 +404,13 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 7
             parts.append(rect(dx, dy, dx2 - dx, dy2 - dy, "#8C6F3E", "#4A3318", 1, "", "magistrate's dais"))
             caption("area", dx, dy, dx2 - dx, dy2 - dy, "magistrate's dais", 8, False, "#FFFAE6", "magistrate's dais")
         parts.append(rect(p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, "none", stroke, 2))
+        if p.spec.dais[0]:  # the clerks' positions flanking the dais, drawn over the outline so it buries neither
+            dx, dy, dx2, dy2 = _dais(p)
+            parts.append("<g" + _kind_attr("clerks' seats") + ">")
+            for sx0, sy0, sx1, sy1 in _clerk_seats((dx, dy, dx2, dy2), _court_side(p)):
+                parts.append(rect(sx0, sy0, sx1 - sx0, sy1 - sy0, "#B89868", "#5C4830", 0.5))
+                caption("area", sx0, sy0, sx1 - sx0, sy1 - sy0, "clerk", 7, False, "#3A2E1C", "clerks' seats")
+            parts.append("</g>")
         parts.append("</g>")
         # the block's own name after its rooms', and BESIDE the block where every room is named: inside, it sat within
         # one room beside that room's name and read as a room (the residence's, building-review round 3)
@@ -488,25 +502,26 @@ def county_magistracy_program() -> CompoundProgram:
         # guest house (x ~233) less its tub; it abuts the residence's south face (y 46, the house standing 8 ft off the
         # north wall since pass 4) and runs 36 ft deep to y 82, into the void that stood below it, leaving an 8 ft walk
         # along the divider to the middle gate. Its size is a GUESS.
-        CourtZone("garden", 50.0, 46.0, 172.0, 36.0),
+        CourtZone("garden", 34.0, 40.0, 188.0, 42.0),
         # The hearing court is centered on the office hall (x 43-156 as placed: the tax archive's 34 ft and a
         # fire-gap west of it) and no longer than it - R22, research buildings 450: under the office hall's roof or its
         # own, before the dais. 80 ft leaves each end of the hall's south face out from under the roof, where its tub
-        # stands; 36 ft deep keeps the cart slot to the stables (buildings.md "Hearing court"). It was 132 x 39 ft,
-        # longer than the hall and 34 ft off its center. Its size is a GUESS - no roofed court's size was found.
-        CourtZone("oshirasu", 59.5, 126.0, 80.0, 36.0),
+        # stands; 32 ft deep (36 until pass 5) keeps the cart slot to the stables and room for the stable well before
+        # them (buildings.md "Hearing court"). It was 132 x 39 ft, longer than the hall and 34 ft off its center. Its
+        # size is a GUESS - no roofed court's size was found.
+        CourtZone("oshirasu", 59.5, 126.0, 80.0, 32.0),
         # just inside the main gate (131-139), east of the gatehouse that stands beside it, and 55 ft wide (it was 36)
         # to take the ground east of the gate the hearing court gave up when it shrank to the hall's length; a
         # marshalling apron's width is a GUESS
         CourtZone("forecourt", 130.0, 166.0, 55.0, 31.0),
-        # Practice ground beside where the watch lodges (the E-wall barracks lands at x 235,
-        # y 128 under the current masses): 45 x 42 ft = 1,890 sqft, inside the 1,200-2,000
+        # Practice ground beside where the watch lodges (the E-wall barracks, 45 ft long since pass 5, lands at x 223,
+        # y 128 under the current masses): 33 x 42 ft = 1,386 sqft, inside the 1,200-2,000
         # sqft full-platoon band at ~90-135 sqft per drilling samurai (buildings.md
         # "Practice ground" + the dojo-is-a-city-institution grounding), west of the E column,
-        # whose barracks abuts the swept patch at x 235 - which is what "beside the watch's
-        # lodging" means - so the wall rows still flow past it without overflow. It was 33 ft
-        # wide; it took 12 ft of the ground the shortened hearing court left, still in the band.
-        CourtZone("practice ground", 190.0, 126.0, 45.0, 42.0),
+        # whose barracks abuts the swept patch at x 223 - which is what "beside the watch's
+        # lodging" means - so the wall rows still flow past it without overflow. Pass 4 widened it to 45 ft; pass 5
+        # gave the 12 ft back to the barracks.
+        CourtZone("practice ground", 190.0, 126.0, 33.0, 42.0),
         # The outer court's open ground between the hearing court and the practice ground (pass 4, building-review round
         # 3: ~50 x 40 ft unnamed): the way from the forecourt to the middle gate and the hall's east door, named, not
         # fenced (UNFENCED_ZONES). Its bounds are a drawing convention.
@@ -514,7 +529,7 @@ def county_magistracy_program() -> CompoundProgram:
         # The cart yard before the service gate (pass 4: the ~71 x 30 ft of bare ground in the SE outer court) - the
         # carts, the stable muck and the prisoners' way out; the kind the hand sheets draw (a DEVIATION from canon on
         # H and U, forms.md). Its size is a GUESS.
-        CourtZone("cart yard", 188.0, 170.0, 62.0, 27.0),
+        CourtZone("cart yard", 188.0, 172.0, 62.0, 25.0),  # its north edge 172 (pass 5) leaves the garrison privy its seat by the barracks
     )
     b = BuildingSpec
     buildings = (
@@ -536,29 +551,31 @@ def county_magistracy_program() -> CompoundProgram:
         b(
             "residence",
             "lord",
-            92.0,
-            36.0,
+            66.0,
+            30.0,
             "inner",
             "N",
             order=10,
             feature="residence",
             rooms=(
-                ("inner rooms", 0.0, 0.0, 60.0, 15.5),
-                ("family quarters", 0.0, 15.5, 30.0, 15.5),
-                ("lord's quarters", 30.0, 15.5, 30.0, 15.5),
-                ("reception room", 60.0, 0.0, 32.0, 31.0),
+                ("inner rooms", 0.0, 0.0, 44.0, 12.5),
+                ("family quarters", 0.0, 12.5, 22.0, 12.5),
+                ("lord's quarters", 22.0, 12.5, 22.0, 12.5),
+                ("reception room", 44.0, 0.0, 22.0, 25.0),
             ),
             engawa_ft=5.0,
             door_face="W",
             inset_ft=8.0,
         ),
-        b("servants' quarters", "service", 66.0, 15.0, "inner", "N", order=2, feature="servants' quarters"),
+        # 72 x 18 ft (it was 66 x 15): a nagaya two rooms deep less its eaves, for the ~10 household servants; pass 5 gave the
+        # compound's mass back to its lodgings when the house came down to research buildings 380's size. A GUESS.
+        b("servants' quarters", "service", 72.0, 18.0, "inner", "N", order=2, feature="servants' quarters"),
         # The kitchen takes the NW corner on the north wall (order above the residence's), joined to the residence's
         # west end by the short corridor across the fire-gap (research buildings 360/370), so the residence's whole
         # south face is left to the garden and the kitchen's own south face - the bath, the well, its door - opens on
         # a service yard of its own with the postern. It was 44 x 36 ft on the west wall, about 31% of the house; 40 x
         # 30 ft is the reviewer's figure for a house of this size, a GUESS inside the kitchen band (20-52 x 16-46).
-        b("kitchen", "service", 40.0, 30.0, "inner", "N", order=11, feature="kitchen"),
+        b("kitchen", "service", 24.0, 20.0, "inner", "N", order=11, feature="kitchen"),
         # A MODEST shrine, 18 x 14 ft (pass 4, building-review round 3: it was 36 x 30 ft, the hall-shrine ceiling, which
         # is Ochiba's particular - buildings/programs.md: the shrine is universal equipment, its scale the per-manor
         # particular; buildings.md "Modest shrine"). The size is a GUESS inside the shrine band (40-1,150 sq ft).
@@ -585,16 +602,23 @@ def county_magistracy_program() -> CompoundProgram:
             "divider",
             order=10,
             feature="office hall",
-            rooms=(("clerks' room", 0.0, 0.0, 30.0, 20.0),),
+            rooms=(("clerks' room", 0.0, 0.0, 30.0, 20.0), ("day office", 30.0, 0.0, 42.0, 20.0), ("official study", 72.0, 0.0, 41.0, 20.0)),
             dais=(30.0, 10.0),
             door_face="E",
         ),
         b("tax archive", "kura", 34.0, 30.0, "outer", "W", order=6, feature="tax archive"),
         # 50 ft long (it was 60): the hearing court, now centered on the hall, starts at x 59.5, and the retainers'
         # east face must keep a 7 ft run in front of it for its tub and door
-        b("senior retainers' quarters", "service", 50.0, 18.0, "outer", "W", order=4, feature="retainers' quarters"),
-        b("granary", "kura", 52.0, 28.0, "outer", "E", order=6, feature="granary"),
-        b("barracks", "service", 33.0, 34.0, "outer", "E", order=4, feature="barracks"),
+        # 24 ft deep (it was 18): two rooms deep for the senior retainers' households - pass 5, the mass the house gave
+        # up; a GUESS
+        b("senior retainers' quarters", "service", 50.0, 24.0, "outer", "W", order=4, feature="retainers' quarters"),
+        # 60 x 30 ft (it was 52 x 28), the top of the granary band (30-60 x 14-36): pass 5 returned the ~2,000 sq ft the
+        # house gave up (research buildings 380) to the compound's working stores and lodgings, holding coverage in the
+        # jin'ya band (33-42%) without shrinking the envelope (buildings.md). A GUESS in the band.
+        b("granary", "kura", 60.0, 30.0, "outer", "E", order=6, feature="granary"),
+        # 45 ft long (it was 33): the platoon lodged on the grounds (staff housing option (a)) is ~10-20 men, and the
+        # watch's range should out-foot the stable by a margin (buildings.md "Barracks": ~27-53 ft); pass 5. A GUESS.
+        b("barracks", "service", 45.0, 34.0, "outer", "E", order=4, feature="barracks"),
         # 12 x 10 ft: the small end of the single cells read (Osaka's 6 mats, ~12 x 9 ft, to Tenmacho's 18); a county
         # remand cell belongs there, its size a guess in the span (feature 267 R24, research buildings 460). It was
         # 18 x 16 ft.
@@ -604,7 +628,13 @@ def county_magistracy_program() -> CompoundProgram:
         # corner, 83 ft from the gate; ~40 ft is the gate range's scale.
         # Its door opens on the gate passage (east), where the gatekeepers watch - not on the court.
         b("gatehouse", "dark", 18.0, 12.0, "outer", "S", order=8, feature="gatehouse", beside_gate=True, door_face="E"),
-        b("stables", "service", 33.0, 23.0, "outer", "S", order=5, feature="stables"),
+        # 36 x 24 ft (it was 33 x 23; pass 5, the same return of mass), still under the barracks as buildings.md asks
+        b("stables", "service", 36.0, 24.0, "outer", "S", order=5, feature="stables"),
+        # The grooms' and bearers' row (pass 5, building-review round 4: the bare SW ground by the stables while the
+        # grooms lodged in the inner court): a servants' nagaya in the SW corner beside the stables it serves
+        # (research: the domestic servants - cooks, grooms, cleaners - lived in a nagaya; a second row by the stables is
+        # a GUESS), 44 x 16 ft. It takes the corner (order above the stables') so the stables' privy keeps its end face.
+        b("grooms' row", "service", 44.0, 16.0, "outer", "S", order=6, feature="servants' quarters"),
     )
     return CompoundProgram("County Magistracy (example)", env, spine, buildings)
 

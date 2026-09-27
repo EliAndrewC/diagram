@@ -59,9 +59,10 @@ ROOF_POST_FT: float = 1.0
 # fire-gap - a longer run would be a gallery, not the short corridor the research describes.
 CORRIDOR_W_FT: float = 6.0
 # The bath (feature 267 R09, research buildings 320: a room of the residence or a small addition to it on its
-# service side, by the kitchen and its well - no bath as a building of its own was found). 15 x 12 ft is the size it
-# was already drawn at, inside the doctrine's 12-15 ft guess.
-BATH_W_FT, BATH_H_FT = 15.0, 12.0
+# service side, by the kitchen and its well - no bath as a building of its own was found). 12 x 10 ft, the small end of
+# the doctrine's 12-15 ft guess (pass 5: the whole house, kitchen and bath included, is held to research buildings 380's
+# ~2,400 sq ft; it was 15 x 12).
+BATH_W_FT, BATH_H_FT = 12.0, 10.0
 # The gates' posts (feature 267 R26, research buildings 480 'How wide was the main gate?'). Each post is drawn over the
 # cut end of the wall it closes, so the wall's opening IS the passage the audit measures between the posts
 # (`pack_audit.main_gate_passage_ft`). 4 x 14 px (1.33 x 4.67 ft) is a MAP DRAWING CONVENTION: the post block stands
@@ -79,8 +80,25 @@ DOOR_W_FT, DOOR_D_FT = 6.0, 4.0 / 3.0
 # The kinds given a door. The kitchen's is its one outside door, the service entrance on its earth floor (research
 # buildings 370); the residence's is the household's inner entrance, apart from the kitchen's (370 again) - the guest's
 # way is the middle gate and the roji to the reception's veranda (R07, research buildings 300), so the residence
-# carries no genkan. `BuildingSpec.door_face` sets the face a door goes on; the court face otherwise.
-DOOR_KINDS: frozenset[str] = frozenset({"office hall", "residence", "kitchen", "karo's house", "guest quarters", "retainers' quarters", "barracks", "servants' quarters", "gatehouse"})
+# carries no genkan. The stables, the kura and the shrine carry theirs too (pass 5, building-review round 4: a building
+# with no drawn door reads as sealed). `BuildingSpec.door_face` sets the face a door goes on; the court face otherwise.
+DOOR_KINDS: frozenset[str] = frozenset(
+    {
+        "office hall",
+        "stables",
+        "granary",
+        "tax archive",
+        "compound shrine",
+        "residence",
+        "kitchen",
+        "karo's house",
+        "guest quarters",
+        "retainers' quarters",
+        "barracks",
+        "servants' quarters",
+        "gatehouse",
+    }
+)
 # The fracs along a face a door is tried at, the middle first: a tub or a well holds a face's ends or middle.
 DOOR_FRACS: tuple[float, ...] = (0.5, 0.3, 0.7, 0.2, 0.8, 0.1, 0.9)
 # The stepping stones of the roji from the middle gate to the reception's veranda (R07): one stone every 4.5 ft, each
