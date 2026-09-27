@@ -1,0 +1,76 @@
+{
+ "feature": "264-nested-features-own-kinds",
+ "plan_sha256": "f04765cba12f611444dccf57802c7fba63236071103624123381f7c1c1741b0b",
+ "reviewed": "2026-09-27",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "A part carries its own data-kind on the sheet; no side list.",
+   "class": "within",
+   "why": "FR-001 as written; 262's nearest-tag reader already yields the part's kind."
+  },
+  {
+   "id": "D2",
+   "summary": "The reader derives part-of from the drawing's nesting; a part drawn outside its parent's group for paint order declares data-part-of, read as an enclosing group; flatten() keeps its shape.",
+   "class": "within",
+   "why": "FR-003 and the spec's Part-of declaration entity."
+  },
+  {
+   "id": "D3",
+   "summary": "render_page gains within= (default None); wrapped groups carry data-in; page.js files a group under every key its data-in names; the indexing branch is inert where no group carries data-in.",
+   "class": "within",
+   "why": "FR-003 both halves; the default None and the inert branch keep hamlet pages unchanged (FR-008)."
+  },
+  {
+   "id": "D4",
+   "summary": "A labeled room is drawn as its own fill in the building's color between the building's fill and its outline; the shuttered wing is tagged as is.",
+   "class": "within",
+   "why": "FR-002 with FR-006 and the spec's Decisions Recorded row for rooms."
+  },
+  {
+   "id": "D5",
+   "summary": "The pack audit folds a rect of a building's own fill wholly inside an earlier building rect into that building (rooms_folded).",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Ruled LEGITIMATE in earlier rounds on the measured audit: the fold removes only artifacts of the room rects FR-002 forces, and FR-006 itself requires the audit to report the same findings; no finding is hidden and the old sheets' output is unchanged by the fold."
+  },
+  {
+   "id": "D6",
+   "summary": "The placer draws the practice ground's rack and posts as parts inside a group of the ground's kind.",
+   "class": "within",
+   "why": "The spec's edge case on the two placer-drawn sheets and FR-001/FR-003."
+  },
+  {
+   "id": "D7",
+   "summary": "New kinds in the existing family modules from coverage.md; parents' Covers and prose trimmed; court divider and nakamon split; an over-long module is split.",
+   "class": "within",
+   "why": "FR-001, FR-004, FR-005; the split is the standing 1,000-line rule."
+  },
+  {
+   "id": "D8",
+   "summary": "Uncovered kinds and contradictions go to future-work/compounds.md Research owed; no research pass.",
+   "class": "within",
+   "why": "FR-004 and US3 as written."
+  },
+  {
+   "id": "D9",
+   "summary": "Hand-run browser probe over the five pages written into research.md; unit tests for reader and page, and a standing test over sheet.pieces() of the three hand sheets holding each part's kind and parent; no browser test.",
+   "class": "within",
+   "why": "SC-001/SC-002 name a probe; the standing test enforces FR-001/FR-003 and is enforcement of the request, not unrequested scope."
+  },
+  {
+   "id": "D10",
+   "summary": "The id map palette gains a green channel past 63 kinds (first 63 keep their red-only colors and keys); page.js reads both channels; data-in is written after data-k so raster._GROUP finds a part's group.",
+   "class": "within",
+   "why": "Required for FR-001/SC-001 in raster mode (R4: parts fell out of the id map; Ubame's 69 kinds exceed 63). Classes 1-63 keep their colors and keys, so a hamlet id map is unchanged (FR-008)."
+  },
+  {
+   "id": "D11",
+   "summary": "A sheet page's id map renders text unblended (--text-rendering optimizeSpeed), passed only when render_page is given within=, i.e. a Mode A sheet; hamlet id maps untouched.",
+   "class": "within",
+   "why": "FR-001/SC-001: a blended glyph edge made a part's label answer as another kind (R4). Round 2's NOT LEGITIMATE D11b is resolved by remedy (1): raster.id_map(crisp_text=False) by default, page.py passes `within is not None`, and the only caller passing within= is sheet.py's write_html (grep over l7r); tests/interactive/test_raster.py asserts a call without the flag still blends. Plan D11 and research.md R4 now say hamlet id maps are held unchanged. FR-008 holds; the picture is not the id map, so FR-006 is untouched."
+  }
+ ],
+ "verdict": "CLEAR"
+}

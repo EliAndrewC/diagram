@@ -99,7 +99,8 @@ Ubame's wealth is charcoal and the iron smelted beside it, not rice, so the oute
 
 ### Features
 
-- **residence**: The westernmost bay of the west block is shuttered - Koharu's wife's rooms, closed since the estrangement, at the far end from the reception. Successive households of the lineage have moved in and out without taking their fittings, so the house reads as layered and half-furnished.
+- **residence**: Successive households of the lineage have moved in and out without taking their fittings, so the house reads as layered and half-furnished.
+- **shuttered wing**: The westernmost bay of the west block is shuttered - Koharu's wife's rooms, closed since the estrangement, at the far end from the reception.
 - **ancestral alcove**: Ubame's past magistrates are Koharu's kin but not his direct forebears - posts in this province pass from cousin to cousin within the Kurogi lineage - so the alcove holds the lineage's tablets rather than one household's, and is labeled a lineage alcove. The rule in the record states the father-to-son case only; this cousin-to-cousin one is the map's own extension.
 - **retainers' quarters**: Married sergeants keep a family rowhouse inside the walls, abutting the barracks: the Kurogi are long settled, and their sergeants marry in the county rather than rotating through it. The record puts ranks of small household dwellings at a town's edge, outside an elite quarter, so a rowhouse inside the walls rests on this map's story.
 - **guest quarters**: Ubame keeps no guest house; the guest room is a bay of the residence's east block, beside Koharu's quarters.

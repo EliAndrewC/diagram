@@ -83,6 +83,10 @@
   for (var i = 0; i < all.length; i++) {
     var k = all[i].getAttribute("data-k");
     (groups[k] || (groups[k] = [])).push(all[i]);
+    // A PART lights with what it is part of (feature 264): a sheet's hearth carries data-in="kitchen", so the
+    // kitchen's highlight takes the hearth in too, while the hearth's own lights no kitchen.
+    var ins = all[i].getAttribute("data-in");
+    if (ins) ins.split("|").forEach(function (p) { (groups[p] || (groups[p] = [])).push(all[i]); });
   }
 
   var current = null;
@@ -386,9 +390,12 @@
     var r = stage.getBoundingClientRect();
     var px = Math.floor((clientX - r.left - view.tx) / view.s), py = Math.floor((clientY - r.top - view.ty) / view.s);
     if (px < 0 || py < 0 || px >= idmap.w || py >= idmap.h) return null;
-    var v = idmap.d[(py * idmap.w + px) * 4];
-    var snapped = Math.round(v / raster.step) * raster.step;
-    return (Math.abs(v - snapped) <= 1 && raster.palette[String(snapped)]) || null;
+    // red names the class on the palette's first row; green counts the rows past it (feature 264 - raster.py
+    // PALETTE_STEP), and a first-row class keeps the red-only key it always had
+    var at = (py * idmap.w + px) * 4, v = idmap.d[at], w = idmap.d[at + 1];
+    var snapped = Math.round(v / raster.step) * raster.step, gsnap = Math.round(w / raster.step) * raster.step;
+    if (Math.abs(v - snapped) > 1 || Math.abs(w - gsnap) > 1) return null;
+    return raster.palette[gsnap === 0 ? String(snapped) : snapped + "," + gsnap] || null;
   }
   stage.addEventListener("pointermove", function (e) { if (mode() === "raster") pointAt(keyAtPoint(e.clientX, e.clientY)); });
   stage.addEventListener("click", function (e) {
