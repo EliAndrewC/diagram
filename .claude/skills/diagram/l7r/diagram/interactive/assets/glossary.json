@@ -7161,5 +7161,13 @@
   "variants": [
    "retsuson"
   ]
+ },
+ "rolled": {
+  "def": "Laid out by the map program from a random starting value rather than placed by hand; a rolled village is one whose houses the program seated.",
+  "variants": [
+   "rolled",
+   "roll",
+   "rolls"
+  ]
  }
 }

@@ -1336,6 +1336,9 @@ roji	roji
 roju	Roju
 rokugan	Rokugan
 rokugani	Rokugan
+roll	rolled
+rolled	rolled
+rolls	rolled
 root-cut	root-cut
 root-cutting	root-cut
 roson	roson
