@@ -1656,6 +1656,7 @@ wenmiao	wenmiao
 wet run	wet run
 wet runs	wet run
 wetted perimeter	wetted perimeter
+white-sand court	oshirasu
 white-tawed	shironameshi
 wicket	wicket
 wickets	wicket
