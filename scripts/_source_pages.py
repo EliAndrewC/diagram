@@ -128,10 +128,20 @@ def saved_rows(out: pathlib.Path) -> list[dict]:
     return rows
 
 
+def next_index(rows: list[dict]) -> int:
+    """The first number past every row AND every file an earlier save wrote.
+
+    WHY (feature 267, G7): counting rows alone reused numbers. A pointer that failed and is asked for again leaves
+    its old row, so a retry that saves it takes a number past the count while the count stays put - and the save
+    after that numbered from the count again and overwrote the retried page when the two shared a host."""
+    used = [int(m.group(1)) for r in rows if (m := re.match(r"(\d+)-", r["file"]))]
+    return max([len(rows), *used]) + 1
+
+
 def save(urls: list[str], out: pathlib.Path, pages, quotes: list[str] | None = None) -> list[dict]:  # noqa: ANN001
     out.mkdir(parents=True, exist_ok=True)
     rows = saved_rows(out)
-    start = len(rows) + 1  # past every earlier file, so a new page never takes an old one's number
+    start = next_index(rows)  # past every earlier file, so a new page never takes an old one's number
     have = {r["pointer"] for r in rows if r["state"] == "FETCHED"}
     rows = [r for r in rows if r["pointer"] in have or r["pointer"] not in urls]
     for index, url in enumerate((u for u in dict.fromkeys(urls) if u not in have), start):
