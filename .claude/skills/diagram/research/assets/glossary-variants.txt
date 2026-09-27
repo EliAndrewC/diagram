@@ -340,6 +340,7 @@ doma	doma
 donggusup	donggusup
 dongjing meng hua lu	Dongjing Meng Hua Lu
 dooryard	dooryard
+dorui	dorui
 doshin	doshin
 dosojin	dosojin
 dozo	kura
@@ -876,6 +877,7 @@ kosatsuba	kosatsuba
 kotai-yoriai	kotaiyoriai
 kotaiyoriai	kotaiyoriai
 kozashi	kozashi
+kuchidome bansho	kuchidome bansho
 kuchiireya	hitoyado
 kui	kui
 kumi	kumi
@@ -1677,9 +1679,11 @@ wubei zhi	Wubei Zhi
 wujing zongyao	Wujing Zongyao
 xiang	xiang
 xuanhua arch	memorial arch
+xunjiansi	xunjiansi
 yacheng	yacheng
 yachida	yato
 yagura	yagura
+yaguramon	yaguramon
 yaita	yaita
 yam	yam
 yamahannoki	yamahannoki

@@ -6815,5 +6815,29 @@
    "Dacheng Hall",
    "Dacheng Halls"
   ]
+ },
+ "dorui": {
+  "def": "A Japanese earth bank raised as a rampart, usually from the spoil of the ditch dug beside it, about 2 to 3 m high, with a fence or wall along its flat top.",
+  "variants": [
+   "dorui"
+  ]
+ },
+ "yaguramon": {
+  "def": "A Japanese castle gate with a guard tower built over its passage; in a masugata it is the inner of the two gates.",
+  "variants": [
+   "yaguramon"
+  ]
+ },
+ "xunjiansi": {
+  "def": "A Chinese patrol and inspection post below the county, under a minor officer, set against bandits and pirates and answering to the local magistrate.",
+  "variants": [
+   "xunjiansi"
+  ]
+ },
+ "kuchidome bansho": {
+  "def": "A domain's own barrier post of the Edo period, set on its borders and at key points of traffic to watch travelers and goods and collect a duty - a domain's answer to the shogunate's barrier stations.",
+  "variants": [
+   "kuchidome bansho"
+  ]
  }
 }
