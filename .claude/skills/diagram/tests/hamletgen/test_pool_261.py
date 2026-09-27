@@ -472,3 +472,30 @@ def test_every_lane_crosses_the_brook_square(gen: str) -> None:
                     if segments_cross(a, b, u, v):
                         t = math.degrees(math.atan2(b[1] - a[1], b[0] - a[0]) - math.atan2(v[1] - u[1], v[0] - u[0])) % 180.0
                         assert abs(90.0 - t) <= FORD_SQUARE_TOL_DEG, f"a lane crosses the brook {abs(90.0 - t):.0f} degrees off square"
+
+
+@pytest.mark.parametrize("gen", GENS, ids=IDS)
+def test_no_lane_end_is_served_only_by_the_way_it_left(gen: str) -> None:
+    """A lane end reaches something other than the way its own far end stands on (settlement-review of Mizuguchi, round
+    176042d3: a lane left the connector, ran 61 ft past its house and stopped in the grass, counted as arriving because it
+    was still within reach of the connector it had left). Asked of the engine's own `end_serves`."""
+    from l7r.diagram.hamletgen.ways.geom import _TOUCH_GAP, end_serves, steading_footprints
+
+    m = _manifest(gen)
+    houses = [(float(h["x"]), float(h["y"])) for h in m["houses"]]
+    fields = [[(float(a), float(b)) for a, b in f["outline"]] for f in m.get("fields") or [] if f.get("outline")]
+    steadings = steading_footprints(m)
+    lanes = [[(float(x), float(y)) for x, y in ln["pts"]] for ln in m["lanes"] if not ln.get("connector") and len(ln.get("pts") or []) >= 2]
+    allsegs = [(a, b) for ln in m["lanes"] for a, b in zip([tuple(map(float, q)) for q in ln["pts"]], [tuple(map(float, q)) for q in ln["pts"]][1:], strict=False)]
+    assert lanes, "non-vacuity: the map has lanes"
+    for p in lanes:
+        own = set(zip(p, p[1:], strict=False))
+        for end, other in ((p[-1], p[0]), (p[0], p[-1])):
+            segs = [sg for sg in allsegs if sg not in own and segments_dist(other, sg) > _TOUCH_GAP]
+            assert end_serves(end, segs, houses, fields, steadings), f"the lane end at ({end[0]:.0f}, {end[1]:.0f}) reaches only the way it left"
+
+
+def segments_dist(q: tuple[float, float], sg: tuple[tuple[float, float], tuple[float, float]]) -> float:
+    from l7r.diagram.settlement import seg_dist
+
+    return seg_dist(q[0], q[1], sg[0], sg[1])

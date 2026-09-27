@@ -431,13 +431,17 @@ def cut_past_connector(pts: list[Pt], connector: Sequence[tuple[Pt, Pt]], others
     out = list(pts)
     for _end in range(2):
         d = out[-1] if out else (0.0, 0.0)
-        if len(out) >= 2 and min((seg_dist(d[0], d[1], p, q) for p, q in others), default=1e9) > touch:
+        # ...and not an end whose lane already met the way out at its OTHER end: that lane runs from the connector to a
+        # door, and its far end is the door (settlement-review of Inashiro: a household's only lane was cut from its house
+        # end, leaving a 4 ft stub on the track)
+        joined = bool(out) and min((seg_dist(out[0][0], out[0][1], p, q) for p, q in connector), default=1e9) <= touch
+        if len(out) >= 2 and not joined and min((seg_dist(d[0], d[1], p, q) for p, q in others), default=1e9) > touch:
             run = 0.0
             for i in range(len(out) - 1, 0, -1):
                 hit = on_the_way(out[i], out[i - 1], connector, touch)
                 if hit is not None and run + math.dist(out[i], hit) <= _PAST_CONNECTOR_FT:
                     tail, kept = [hit, *out[i:]], [*out[:i], hit]
-                    rest = [*others, *connector, *zip(kept, kept[1:], strict=False)]
+                    rest = [*others, *connector]  # the kept fragment does not vouch for the houses its own cut would strand
                     mine = [h for h in houses if min(seg_dist(h[0], h[1], p, q) for p, q in zip(tail, tail[1:], strict=False)) <= _SERVE_FT]
                     if all(min((seg_dist(h[0], h[1], p, q) for p, q in rest), default=1e9) <= _SERVE_FT for h in mine):
                         out = kept

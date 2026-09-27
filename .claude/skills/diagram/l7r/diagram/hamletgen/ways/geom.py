@@ -363,7 +363,7 @@ def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[
     # gate's, not a baulk distance: this comment used to say the setback matched `SPUR_SETBACK` so that
     # "touching the envelope" meant within that, and no caller has asked for that figure since feature 227.
 
-    def serves(q: Pt) -> bool:
+    def serves(q: Pt, other: Pt | None = None) -> bool:
         # A HOUSE THIS RUN ALONE REACHES IS NOT TRADED FOR A TIDY END (feature 227 D11). `keep` carries the
         # dwellings no other way comes within `WEB_REACH_FT` of, and a point that still reaches one of them counts
         # as serving however far it is from anything else: a dangling end is a blemish on the drawing, an unreached
@@ -372,12 +372,14 @@ def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[
         # measures; arrival at a steading is the fourth clause of `end_serves`, at its own much tighter distance.
         if any(math.dist(q, h) <= WEB_REACH_FT for h in keep):
             return True
-        return end_serves(q, segs, houses, fields, steadings)
+        # ...counting no way the run's OTHER end stands on (settlement-review of Mizuguchi, feature 261): a lane that left the
+        # connector and ran 61 ft past its house counted as reaching the connector it had left
+        return end_serves(q, segs if other is None else [sg for sg in segs if seg_dist(other[0], other[1], sg[0], sg[1]) > _TOUCH_GAP], houses, fields, steadings)
 
     out = list(run)
-    while len(out) > 2 and not serves(out[-1]):
+    while len(out) > 2 and not serves(out[-1], out[0]):
         out.pop()
-    while len(out) > 2 and not serves(out[0]):
+    while len(out) > 2 and not serves(out[0], out[-1]):
         out.pop(0)
     # A TWO-POINT ARM HAS NO VERTEX TO POP, and the skeleton's arms are straight lines: popping stops at two
     # points, so both of Inashiro's arms kept ends 81-97 ft from the nearest house however hard this trimmed.
@@ -389,7 +391,7 @@ def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[
     # for every caller that asked the gate's bar and not for the private default - and once all four callers
     # asked the bar, the guard only ever read True. It is the same walk for every way on the map now.
     for _ in range(2):
-        while len(out) >= 2 and not serves(out[-1]):
+        while len(out) >= 2 and not serves(out[-1], out[0]):
             _a, _b = out[-2], out[-1]
             _d = math.dist(_a, _b)
             if _d <= 4.0:
@@ -398,17 +400,20 @@ def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[
             _t = (_d - 4.0) / _d
             out[-1] = (_a[0] + (_b[0] - _a[0]) * _t, _a[1] + (_b[1] - _a[1]) * _t)
         out.reverse()
-    if len(out) < 2 or not serves(out[0]) or not serves(out[-1]):
+    if len(out) < 2 or not serves(out[0], out[-1]) or not serves(out[-1], out[0]):
         return list(out[:1])
 
-    def by_house(q: Pt) -> list[Pt] | None:
-        # the houses an end is served by, or None when it has arrived at a way, the field or a steading
-        if end_serves(q, segs, (), fields, steadings):
+    def by_house(q: Pt, other: Pt) -> list[Pt] | None:
+        # the houses an end is served by, or None when it has arrived at a way, the field or a steading - a way OTHER than
+        # the one the run's far end already stands on (settlement-review of Mizuguchi, feature 261: a lane ran 61 ft past
+        # its house into the grass, and counted as arrived because it was still within reach of the connector it left)
+        _left = [sg for sg in segs if seg_dist(other[0], other[1], sg[0], sg[1]) > _TOUCH_GAP]
+        if end_serves(q, _left, (), fields, steadings):
             return None
         return [h for h in houses if math.dist(q, h) <= WAY_END_REACH_FT] + [h for h in keep if math.dist(q, h) <= WEB_REACH_FT]
 
     for _ in range(2):
-        near, far = by_house(out[-1]), by_house(out[0])
+        near, far = by_house(out[-1], out[0]), by_house(out[0], out[-1])
         # A TREAD COMES FROM SOMEWHERE ELSE: when the other end is served by nothing but these same houses, the
         # run is a short way beside them, and cutting both ends toward one house would leave no way at all.
         if near is not None and (far is None or any(h not in near for h in far)):

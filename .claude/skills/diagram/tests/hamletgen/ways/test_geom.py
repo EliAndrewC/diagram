@@ -51,8 +51,10 @@ def test_a_run_that_serves_NOTHING_comes_back_too_short_to_draw() -> None:
     assertion into a statement about dead code. Nothing that ships changed."""
     run = [(5000.0, 5000.0), (5100.0, 5000.0), (5200.0, 5000.0)]
     assert len(hg.ways._trim_to_service(run, [], [])) < 2, "nothing is at either end, so there is no way to draw"
-    served = hg.ways._trim_to_service(run, [((5200.0, 4990.0), (5200.0, 5010.0))], [])
-    assert len(served) >= 2, "...but a run that meets a way at one end keeps a drawable tread"
+    way = [((5200.0, 4990.0), (5200.0, 5010.0))]
+    assert len(hg.ways._trim_to_service(run, way, [])) < 2, "a run from a way to nothing is a road to nowhere (feature 261)"
+    served = hg.ways._trim_to_service(run, way, [(4990.0, 5000.0)])
+    assert len(served) >= 2, "...but a run from a way to a house keeps a drawable tread"
 
 
 def test_route_goes_around_an_obstacle_rather_than_through_it() -> None:

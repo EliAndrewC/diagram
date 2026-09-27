@@ -944,7 +944,7 @@ stand on the seat's bank and one across the brook, each whole on its own bank (m
 way out crosses the brook more than once, because a way now pays to cross. The belt is 277 clumps, 313 degrees from the
 houses' middle, over a 157-degree arc. The connector leaves north (14 degrees), so the district direction reads north.
 The copse keeps within 90 ft of a farmhouse (median 71.3 ft), and no clump of it stands in the marsh or has no house in
-reach on its own bank. The entrance board stands 9 ft from where the connector meets the lanes, its caption on clear
+reach on its own bank. The entrance board stands 11 ft from where the connector meets the lanes, its caption on clear
 ground, passed by all 20 households' ways out. The rolled `elongated` shape is not what this seat draws - the houses
 gather as a round cloud, a drawn aspect of 1.72 - and the manifest records it as unhonored rather than claiming it.
 Thirteen homesteads carry their own dry plot against a lee or flank side.

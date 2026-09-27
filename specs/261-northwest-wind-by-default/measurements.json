@@ -903,5 +903,35 @@
   "quantity": "the dated 'What pass 12 changed here' section, moved above the Census heading and pointing at the 2026-09-27 entry for the board's caption now",
   "source": ".claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md",
   "command": "grep -n 'since feature 261 its caption lies over a crown' .claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md"
+ },
+ "inashiro-r14-lane": {
+  "verifies": "F1",
+  "subject": "inashiro",
+  "round": "176042d3",
+  "value": 39.7,
+  "unit": "ft",
+  "quantity": "the farmstead at (978,808)'s distance to its nearest way (100.5 ft with only a 4 ft stub in the round): the connector cut no longer takes a lane whose other end already stands on the connector, and the kept fragment no longer vouches for the houses its own cut would strand; the pool's shortest lane is 60.9 ft",
+  "source": ".claude/skills/diagram/pool/hamlets/inashiro/inashiro.json lanes, houses",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/ways/test_sweeps.py"
+ },
+ "inashiro-r14-board": {
+  "verifies": "F2",
+  "subject": "inashiro",
+  "round": "176042d3",
+  "value": 17,
+  "unit": "ft",
+  "quantity": "the board's distance from the last join on the track - that farmstead's restored lane - which the notes now state (15 in the round, measured to a stub)",
+  "source": ".claude/skills/diagram/pool/hamlets/inashiro/inashiro.json kosatsuba, lanes; inashiro.notes.md",
+  "command": "grep -n 'board stands 17 ft' .claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md"
+ },
+ "mizuguchi-r14-nowhere": {
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "round": "176042d3",
+  "value": 0,
+  "unit": "lane ends",
+  "quantity": "lane ends that reach only the way their own far end stands on (1 in the round: lane 3's end at (1528,70), 61 ft past its house): the service trim no longer counts the way a lane left, and the lane that served nothing is dropped; house 11 stays within the connector's reach",
+  "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.json lanes, houses, fields (hamletgen.ways.geom.end_serves)",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
  }
 }

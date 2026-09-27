@@ -278,3 +278,12 @@ The round of engine 0c0ac524 (observed 2026-09-27) passed Kashikawa, Kuwabata an
 | Sawada: stale history inside the census block | 1 section | moved above it, pointing at the current caption (`m:sawada-r13-census`) |
 
 The cohort after round 03cf6a84's fixes ran 48/48 (observed 2026-09-27, method: `make cohort`), against main's 38/48.
+
+The round of engine 176042d3 (observed 2026-09-27) passed Kashikawa, Kuwabata and Sawada; both errors it found were made by
+the previous round's own lane cut and entrance rule:
+
+| finding | before | after |
+|---|---|---|
+| Inashiro: a farmstead's only lane cut to a 4 ft stub | its nearest way 100.5 ft | 39.7 ft (`m:inashiro-r14-lane`) |
+| Inashiro: the entrance sited on that stub | notes said 15 ft to a stub | 17 ft from the restored lane's join, as the notes say (`m:inashiro-r14-board`) |
+| Mizuguchi: a lane 61 ft past its house into the grass | 1 end reaching only the way it left | 0 on every map (`m:mizuguchi-r14-nowhere`) |

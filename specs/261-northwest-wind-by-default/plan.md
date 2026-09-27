@@ -323,6 +323,11 @@ Measured before and after in research R10.
 - A bamboo stand keeps off the water at its half-width and 3 ft (Mizuguchi's thicket stood on the brook), and a lane that
   runs on past the connector to a loose end is cut where it met it (`cut_past_connector`; Mizuguchi's leg ran 52 ft on
   and off the sheet), never where the tail is some house's only way.
+- The connector cut leaves a lane whose other end already stands on the connector, and a kept fragment does not vouch for
+  the houses its own cut would strand: it had cut an Inashiro farmstead's only lane from its house end, leaving a 4 ft
+  stub the entrance was then sited on. A lane end is judged against every way but the one its own far end stands on
+  (`_trim_to_service`): a Mizuguchi lane left the connector, ran 61 ft past its house and counted as arriving at the
+  connector it had left.
 - A belt crown seated in a toe marsh is drawn as alder (the `alder` mix and class): the record's woody stage at a reed
   edge is alder or willow, never pine (research/vegetation.html, the marsh margin). Sawada's windward belt stands on
   its toe's reed edge (70 of 201 clumps in the marsh); holding the belt off the reeds took the windward belt away and
