@@ -6089,5 +6089,18 @@
   "variants": [
    "Zhili"
   ]
+ },
+ "Tenjin": {
+  "def": "The deified ninth-century court scholar Sugawara no Michizane, worshiped as a god of learning; a Tenjin shrine is one dedicated to him.",
+  "variants": [
+   "Tenjin",
+   "Tenjin shrine"
+  ]
+ },
+ "uchigenkan": {
+  "def": "The inner entrance of a samurai house, used by the other members of the household and its senior staff, while the main genkan was kept for the head of the house and honored guests.",
+  "variants": [
+   "uchigenkan"
+  ]
  }
 }

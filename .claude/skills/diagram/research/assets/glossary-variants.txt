@@ -1325,6 +1325,8 @@ tax-free plot	tax-free plot
 tedai	tedai
 teikaku	teikaku
 temizuya	temizuya
+tenjin	Tenjin
+tenjin shrine	Tenjin
 tenmacho	Tenmacho
 tenmacho jail	Tenmacho
 tenmacho's	Tenmacho
@@ -1402,6 +1404,7 @@ twelve-mat	tatami
 tōhoku	Tohoku
 tōkaidō	Tokaido
 tōya	miyaza
+uchigenkan	uchigenkan
 ujidera	bodaiji
 ujigami	ujigami
 ujiko	ujiko
