@@ -20,6 +20,8 @@ alternate attendance	alternate attendance
 an'ei	An'ei
 anaerobic	anaerobic
 anagama	noborigama
+ancestral hall	ancestral hall
+ancestral halls	ancestral hall
 anchor culture	anchor culture
 anchor cultures	anchor culture
 animal unit	animal unit
@@ -184,6 +186,7 @@ chumon-zukuri	chumon-zukuri
 chōzuya	temizuya
 circuit	wall circuit
 circuit's length	wall circuit
+citang	ancestral hall
 city god	City God
 city gods	City God
 city grain	city grain
@@ -537,6 +540,7 @@ gogura	gogura
 gokaido	Five Highways
 gokumon	gokumon
 gongxiefang	gongxiefang
+gono	gōnō
 gorinto	five-ring pagoda
 goshi	gōshi
 goten	goten
@@ -556,6 +560,7 @@ guanxiang	guanxiang
 gulou	gulou
 gundai	gundai
 gō	go
+gōnō	gōnō
 gōshi	gōshi
 hachiman	Hachiman
 hachure	hachure
@@ -754,10 +759,12 @@ jōsui ido	josui-ido
 kabata	kabata
 kabu-ido	kabu-ido
 kachi	doshin
+kadoya	kadoya
 kagura	kagura
 kaie-ji	Kaie-ji
 kaie-ji's	Kaie-ji
 kainyo	kainyo
+kaisho	kaisho
 kaji-ya	kaji-ya
 kakaemoto	hitoyado
 kakehi	kakehi
@@ -977,6 +984,7 @@ mizugaki	mizugaki
 mizugashira	mizugashira
 mizuguchi	mizuguchi
 mizujiri	shirimito
+mizunomi	mizunomi
 mlit	MLIT
 modern consolidation	kochi seiri
 module	module
@@ -1016,6 +1024,7 @@ nagaya	nagaya
 nagaya-mon	nagayamon
 nagayamon	nagayamon
 nagewatashi	nagewatashi
+nago	nago
 naka-bori	middle moat
 nakaboshi	nakaboshi
 nakamon	nakamon
@@ -1698,6 +1707,7 @@ zuku	zuku
 田打車	tauchiguruma
 畑永法	hata-ei
 百姓伝記	Hyakusho Denki
+祠堂	ancestral hall
 禾坪	heping
 笞	笞
 築地松	tsuijimatsu

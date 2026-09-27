@@ -6622,5 +6622,45 @@
   "variants": [
    "Chubu"
   ]
+ },
+ "mizunomi": {
+  "def": "A landless villager of Edo Japan: holding no assessed land, not counted a full villager and given no part in village government, living as a tenant, by labor or by a craft.",
+  "variants": [
+   "mizunomi"
+  ]
+ },
+ "kadoya": {
+  "def": "A dependent farming household of Edo Japan, named for the gate-hut on its master's plot where it lived; the huts inside a larger farm's enclosure held such households.",
+  "variants": [
+   "kadoya"
+  ]
+ },
+ "kaisho": {
+  "def": "A village's meeting hall; in the Kinki region, around Kyoto and Osaka, it often stood inside the precinct of the village's tutelary shrine.",
+  "variants": [
+   "kaisho"
+  ]
+ },
+ "gōnō": {
+  "def": "A rich farmer-landlord of Edo Japan: one of the village landlords who grew from the middle of the eighteenth century, out of older landlord families or out of trade.",
+  "variants": [
+   "gōnō",
+   "gono"
+  ]
+ },
+ "ancestral hall": {
+  "def": "A Chinese lineage's hall (citang) for its ancestors' rites, also where the lineage met and feasted; in a Cantonese village the halls stand at the front, facing the pond.",
+  "variants": [
+   "ancestral hall",
+   "ancestral halls",
+   "citang",
+   "祠堂"
+  ]
+ },
+ "nago": {
+  "def": "A dependent farmer of Japan tied to a powerful household, who rented from it the house plot and house as well as fields, and often lived on its plot.",
+  "variants": [
+   "nago"
+  ]
  }
 }
