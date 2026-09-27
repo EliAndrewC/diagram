@@ -151,8 +151,9 @@ class River(Kind):
     at the office. In this setting only the Lion dig transport canals, so for any other county the river is
     the way.
 
-    Note: Freight by water and the staging granary of a well-watered county are recorded findings; the rule that
-    only the Lion build canals is the setting's canon. That Japan's heavy freight also went by water rests on
+    Note: Freight by water is a recorded finding, and the village granary is recorded as a temporary store for
+    shipment, but that a well-watered county's office granary is a staging node its tax rice passes through is
+    the research's own reading; the rule that only the Lion build canals is the setting's canon. That Japan's heavy freight also went by water rests on
     general reading rather than a page a reader can open.
 
     Caveat: That Japan's heavy freight also went by water rests on general reading rather than a page a reader
@@ -174,11 +175,13 @@ class RiverLanding(Kind):
     alongside it, a watch post over the water and a small altar for the boatmen - each its own feature, lit with
     the landing.
 
-    Why: Tax grain went downstream on hired commoners' boats under the office's seals - the magistracy owned no
-    hulls, and its hold on the cargo was documentary - so a posting on a navigable river keeps a landing of its
-    own where the grain is loaded.
+    Why: Tax grain went downstream on hired commoners' boats flying an official pennant and inspected at the
+    ports of call - the magistracy owned no hulls, and its hold on the cargo was documentary - so a posting on
+    a navigable river keeps a landing of its own where the grain is loaded.
 
-    Note: A river landing where hired boats load the tax grain under seal follows the record.
+    Note: That the tax grain went on hired boats under an official pennant, inspected at the ports of call,
+    follows the record; that it passed through the compound, and so was loaded at the compound's own landing,
+    is this project's reading.
 
     Name: river landing
     Covers: the landing label - its dock, revetment, barge, watch post and altar are each their own kind
@@ -365,10 +368,10 @@ class TaxBarge(Kind):
     """
     What: A river barge moored alongside Hayakawa's dock with bales of tax grain aboard, drawn at about 47 by 7 ft.
 
-    Why: Tax grain moves down the river to the city on hired boats sailing under the office's seals; the
+    Why: Tax grain moves down the river to the city on hired boats flying an official pennant; the
     magistracy owns no hulls, and the barge at its dock is one taken on for the run.
 
-    Note: Tax grain carried on hired river boats, and the barge's size, inside the record's range for such a boat,
+    Note: The barge's size, inside the record's range for such a boat, and the hiring of hulls for tax rice (read for the shogunate's sea shipments; a county's grain going downriver on them is this map's reading),
     follow the record.
 
     Name: tax barge

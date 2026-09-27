@@ -122,8 +122,10 @@ class HearingCourt(Kind):
     Rokugan, where torture is unusual, a magistracy keeps no room built for interrogation, so questioning
     happens here or in the day office like any other business.
 
-    Note: The oshirasu before the dais follows the record. At Takayama the examination room and the shirasu
-    are paved with stone and roofed, where these plans draw an open court of sand.
+    Note: The oshirasu before the dais follows the record; that a jin'ya was laid out around it and the
+    forecourt as open features is this project's reading of plans, which no readable source measures. At
+    Takayama the examination room and the shirasu are paved with stone and roofed, where these plans draw
+    an open court of sand.
 
     Caveat: At Takayama the examination room and the shirasu are paved with stone and roofed, where these
     plans draw an open court of sand.
@@ -262,14 +264,16 @@ class CompoundWall(Kind):
     tiled coping, broken only at the gates. Buildings back onto it, but none stands in it.
 
     Why: A walled enclosure is the grammar every administrative compound shares, Japanese or Chinese. A wall
-    of this class is a building in its own right - thick enough to stop a determined man and to carry the
+    of this class is a building in its own right - thick enough to stop missiles and to carry the
     tiles that keep its earth core dry - so the ground under it is occupied, and the buildings ringing a
     court back onto it with their eaves nearly touching, a foot or two off so that the wall stays reachable
     for patching.
 
     Note: we have drawn the compound wall 3 ft thick, thicker than the typical wall, in order to make its
     stroke read on the plan; the real form it resembles is the rammed-earth tsuijibei, up to about 1 m (3.3
-    ft) thick, while the ordinary plastered neribei was about 1 shaku, some 30 cm.
+    ft) thick, while the ordinary plastered neribei was about 1 shaku, some 30 cm - figures read for castle
+    walls, since a county compound's own wall thickness is unsourced. How near the buildings stand to the
+    wall, eaves nearly touching and a foot or two off, is our own reasoning; no source we found describes it.
 
     Name: compound wall
     Covers: the outer wall's strokes
@@ -327,8 +331,11 @@ class SideGate(Kind):
     so the pits sit toward a service wall or gate a cart can reach. A door meant for guests, by contrast,
     opens into a court or garden.
 
-    Note: The service doors and the cart access they give follow the record. That a night-soil collector
-    never has to cross the inner court is this record's own rule rather than a finding.
+    Note: The service doors and the cart access they give follow the record, though the dictionary names
+    only the kitchen door and that it opens into work space is this record's reading. That a guests' door
+    opens into a court or garden is the GM's rule: no readable source sets out the staged arrival behind
+    it. That a night-soil collector never has to cross the inner court is this record's own rule rather
+    than a finding.
 
     Caveat: That a night-soil collector never has to cross the inner court is this record's own rule rather
     than a finding.
@@ -351,7 +358,7 @@ class CourtDivider(Kind):
     Why: The split between the courts is the split between state and home: the office and its public business
     in front, the household behind, with only the one door between them.
 
-    Note: The internal wall between the two courts follows the record. No source measures the divider: the wall's
+    Note: The internal wall between the two courts follows the Chinese record, where regulation put the office in front and the residence behind an inner residence gate; for Japanese compounds that front-and-rear order is on no page read, and at Takayama the residence stood beside the office rather than behind it. No source measures the divider: the wall's
     2 ft thickness is this project's own figure.
 
     Caveat: No source measures the divider: the wall's 2 ft thickness is this project's own figure.
@@ -528,14 +535,14 @@ class WeaponRack(Kind):
     Why: Like the striking posts, the rack is the durable gear that marks open ground as the place where the
     compound's samurai drill every day, in place of a hall built for it.
 
-    Note: The gear marking the practice ground follows the record. The rack's form and its size of about 8 by 2
+    Note: Practice on open ground rather than in a hall is read only for the time before the mid-Edo period and in a small domain's drill ground; that a county magistracy's samurai still drilled that way is our guess, resting on the setting's own numbers; marking it with gear such as this rack is the map's own convention, since no source read describes rural practice gear. The rack's form and its size of about 8 by 2
     ft are not in the record.
 
     Caveat: The rack's form and its size of about 8 by 2 ft are not in the record.
 
     Name: weapon rack
     Covers: the rack at the practice ground's edge and its label
-    Label: accurate
+    Label: guess
     Sources: hanko-jawiki, edo-three-dojos-jawiki, jinya-jawiki, dojo-jawiki
     Entry: research/buildings.html - 'A dojo is a city institution; county training is courtyard keiko'
     """
@@ -552,7 +559,10 @@ class Nakamon(Kind):
     office hall; the family, its servants and the household's own guests of rank pass this door into the private
     court, and the hall standing in front of it screens that court from the public one.
 
-    Note: The gate between the two courts follows the record. Its seat on the main axis directly behind the
+    Note: The gate between the two courts follows the Chinese record, where the inner residence gate is one
+    of Neixiang's five; no Japanese page read gives the front-and-rear order, and at Takayama the residence
+    stood beside the office, not behind it. Who passes the gate, and the hall screening the private court,
+    are this project's own reading; no page read says either. Its seat on the main axis directly behind the
     office hall is the drawing program's own placement, not a recorded custom, and no source measures the
     household door: its 8 ft width is this project's own figure.
 

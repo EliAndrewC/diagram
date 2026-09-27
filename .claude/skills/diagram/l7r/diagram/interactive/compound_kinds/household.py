@@ -288,9 +288,9 @@ class Latrine(Kind):
     house kept more than one. Night soil was a valuable, contracted commodity carted away by outside
     collectors, so the pits sit toward a service wall or gate where a collector's cart reaches them.
 
-    Note: The privy built into the samurai house, the count of about one to a functional zone and the carted
-    night-soil trade are recorded findings, and the program classes the privies as accurate - one per
-    functional zone, about three or four. That no collector should have to cross the inner court is this
+    Note: The privy built into the samurai house, the more than one privy of a well-appointed house and the
+    carted night-soil trade are recorded findings, and the program classes the privies as accurate - one per
+    functional zone, about three or four. That the family's privy sits at the shady north rear is reasoning from the sun rule, not a read source. That no collector should have to cross the inner court is this
     record's own rule rather than a finding.
 
     Caveat: That no collector should have to cross the inner court is this record's own rule rather than a
@@ -316,10 +316,12 @@ class Stables(Kind):
     in and out without crossing the ceremonial ground, and the animals are led to water at a well rather than
     watered where they stand.
 
-    Note: The stable's rank below the barracks and the watering at a well are recorded findings, and the program
-    classes it as accurate: a few-horse umaya drawn smaller than the barracks, checked against the size audit.
-    The stall figure of about 55 to 70 sq ft to a horse is the record's own estimate, and its watering finding
-    was written for city stable yards.
+    Note: The stable's rank below the barracks is the record's own reading - no readable source ranks a
+    compound's footprints - while the watering at a well is a recorded finding, and the program classes it as
+    accurate: a few-horse umaya drawn smaller than the barracks, checked against the size audit.
+    The count of a few horses is the record's own reading too, since no page read gives a county office's
+    horses; the stall figure of about 55 to 70 sq ft to a horse is the record's own estimate, and its watering
+    finding was written for city stable yards.
 
     Caveat: The stall figure of about 55 to 70 sq ft to a horse is the record's own estimate, and its watering
     finding was written for city stable yards.
@@ -578,7 +580,7 @@ class FamilyQuarters(Kind):
     rooms lie away from the formal approach. A samurai residence grouped its rooms by use under one roof, the
     family's among them.
 
-    Note: The household living behind the office, and a residence grouping its family's rooms under one roof,
+    Note: The household living inside the working compound (behind the office by Chinese regulation; at Takayama the residence stood beside it, and no Japanese rule was found), and a residence grouping its family's rooms under one roof,
     follow the record. That the family's rooms lie toward the private end rests on the Chinese case, where the
     innermost rows house the family; and naming the bay by its occupants is the GM's convention for these plans.
 
@@ -675,7 +677,9 @@ class ShrineAltar(Kind):
     differs: a priest-magistrate's hall may keep more than one altar, and a posting on a river or in an old
     household keeps altars to the powers that matter there.
 
-    Note: a shrine in every compound, Inari's by default, follows the record; what each altar serves, and why a hall
+    Note: a shrine in every compound follows the record (a Chinese yamen's three shrines, read); Inari's as
+    the default rests on a Japanese branch office's plan that could not be found again; what each altar
+    serves, and why a hall
     keeps more than one, is the setting's or the map's own, and each map's note says which. Each glyph is drawn
     as a marker, not the altar at its size.
 
