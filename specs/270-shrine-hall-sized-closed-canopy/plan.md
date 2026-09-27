@@ -40,14 +40,15 @@ and the program.
   crown whose center stands at least about half the two radii from every other (the target is a closed canopy,
   measured on the layout, reported in the notes). Class: guess in degree (a kept wood's canopy is closed; its
   density is not measured by any source read).
-- **D3 - the building 72 by 32 ft**, 2,304 sq ft, from question 120: the villagers' hall at the center 28 ft wide
+- **D3 - the building 66 by 32 ft**, 2,112 sq ft, from question 120: the villagers' hall at the center 28 ft wide
   by 32 ft deep (the village-hall band, about 20 to 35 ft on a side: accurate as a band, the value a guess), the
-  kitchen end and the dwelling end 22 ft each (together 1,408 sq ft against the farmhouse's 46 by 28 ft, 1,288 sq
-  ft: form accurate, size a guess), the depth 32 ft (inside Kaie-ji's 8 to 13 m, near the farmhouse's 28 ft), the
-  whole inside the one-roof band of 2,100 to 3,600 sq ft. The hall stays centered on the map's approach axis.
-  Interior: the hall's rear 10 ft an altar bay, its worship floor 28 by 22 ft; the dwelling end the monk's rooms
-  (22 by 20 ft), the 12 ft writing room in the front corner, a 4 ft entry at the east door.
-- **D4 - the map follows the sheet**: the shrine glyph 36 by 16 map px at the same center; the manifest's
+  kitchen end 16 ft (a farmhouse's earthen floor, about a third of its 46 ft - the size-audit of 2026-09-27 found a
+  22 ft kitchen end half again that) and the dwelling end 22 ft (together 1,216 sq ft against the farmhouse's 46 by
+  28 ft, 1,288 sq ft: form accurate, size a guess), the depth 32 ft (inside Kaie-ji's 8 to 13 m, near the
+  farmhouse's 28 ft), the whole inside the one-roof band of 2,100 to 3,600 sq ft. The hall stays centered on the
+  map's approach axis. Interior: the hall's rear 10 ft an altar bay, its worship floor 28 by 22 ft; the dwelling
+  end the monk's rooms (22 by 20 ft), an 18 by 12 ft writing room along the front, a 4 ft entry at the east door.
+- **D4 - the map follows the sheet**: the shrine glyph 33 by 16 map px, its hall room on the same axis; the manifest's
   `religious` and `shrines` records to it; the arches one pitch off the new face (map y 1088 to 1124); the grove's
   far edge at the outermost arch. The frozen map's svg/png are edited in the mirror as in 268.
 - **D5 - the sizing rule**: a building's dimensions on a sheet come from the research unless the GM gave them,
