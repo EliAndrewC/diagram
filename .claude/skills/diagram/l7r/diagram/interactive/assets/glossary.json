@@ -6606,5 +6606,26 @@
    "offering hall",
    "heiden"
   ]
+ },
+ "kokuso": {
+  "def": "The hereditary chief priest of the Izumo shrine in Japan, an office passed from father to son for more than eighty generations.",
+  "variants": [
+   "kokuso",
+   "kokuzo"
+  ]
+ },
+ "daoshi": {
+  "def": "A Daoist priest; the married ones who lived at home rather than in a temple were called huoju or sanju daoshi.",
+  "variants": [
+   "daoshi"
+  ]
+ },
+ "mushiko": {
+  "def": "A window of close-set, plaster-covered vertical slats in the low upper floor of a Kyoto town house.",
+  "variants": [
+   "mushiko",
+   "mushiko-mado",
+   "mushiko windows"
+  ]
  }
 }
