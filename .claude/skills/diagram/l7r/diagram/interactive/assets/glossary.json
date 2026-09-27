@@ -1591,6 +1591,8 @@
   "def": "Siting graves, houses and villages by the lie of hills, water and wind - feng shui and its Japanese kin.",
   "variants": [
    "geomantic",
+   "geomancer",
+   "geomancers",
    "geomancy"
   ]
  },
@@ -6387,6 +6389,34 @@
    "Ōdo",
    "odo",
    "big door"
+  ]
+ },
+ "riser": {
+  "def": "The steep bank or wall between one terraced field and the next one down the slope.",
+  "variants": [
+   "riser",
+   "risers"
+  ]
+ },
+ "grave island": {
+  "def": "A grave standing inside a field plot rather than at its edge, a mound of earth left in the middle of the crop; on these maps it is the Chinese form of the field grave.",
+  "variants": [
+   "grave island",
+   "grave islands"
+  ]
+ },
+ "burial grave": {
+  "def": "Under the two-grave custom of parts of Japan, the grave where the body itself was buried, kept apart from the grave the family visited; in some districts it stood on the family's own land until the Meiji government moved it to common land.",
+  "variants": [
+   "burial grave",
+   "burial graves",
+   "umebaka"
+  ]
+ },
+ "CPC": {
+  "def": "The Communist Party of China; a provincial CPC committee secretary is the party's senior official in a province.",
+  "variants": [
+   "CPC"
   ]
  }
 }

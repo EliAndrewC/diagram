@@ -121,6 +121,8 @@ burakumin	burakumin
 burgage	burgage plot
 burgage plot	burgage plot
 burgage plots	burgage plot
+burial grave	burial grave
+burial graves	burial grave
 bursaries	rent bursary
 bursary	rent bursary
 bushi	bushi
@@ -213,6 +215,7 @@ corvee	corvee
 corvée	corvee
 county seat	county seat
 county seats	county seat
+cpc	CPC
 crenelated	crenellated
 crenellated	crenellated
 crib	cribbing
@@ -463,6 +466,8 @@ genna	Genna
 genna era	Genna
 genroku	Genroku
 gentry	gentry
+geomancer	geomancy
+geomancers	geomancy
 geomancy	geomancy
 geomantic	geomancy
 geostrophic	geostrophic
@@ -490,6 +495,8 @@ goulan	goulan
 goyoba	goyoba
 goyōba	goyoba
 goza-no-ma	goza-no-ma
+grave island	grave island
+grave islands	grave island
 green manure	green manure
 grow-out	grow-out pond
 grow-out pond	grow-out pond
@@ -1175,6 +1182,8 @@ ring-levee	ring dike
 rinkaku	rinkaku
 riparian	riparian
 riprap	riprap
+riser	riser
+risers	riser
 river stage	river stage
 river terrace	river terrace
 river terraces	river terrace
@@ -1491,6 +1500,7 @@ umaya	umaya
 umayado	umayado
 umayagoe	kyuhi
 umazouri	umagutsu
+umebaka	burial grave
 umon	umon
 understory	understory
 ura-dana	ura-dana
