@@ -1639,6 +1639,7 @@ yamen	yamen
 yamen god	yamen-god
 yamen-god	yamen-god
 yashiki	yashiki
+yashikichi	yashikichi
 yashikigami	yashikigami
 yashikigami-sama	yashikigami
 yashikirin	yashikirin
