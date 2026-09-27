@@ -144,3 +144,20 @@ The three hand-authored magistracy sheets are the active work of another feature
   (`kosatsuba`, `vw`/`vh` in every pool manifest).
 - The engine's house standoff (observed 2026-09-27, method: read from the code) `LABEL_MIN_AIR = 5.0` px (`settlement/_geom/labels.py`) is 0.56 em on a 9 pt
   caption: 5 / 9.
+
+## R5. The board captions after the placer (observed 2026-09-27; method: as R2 - the caption block against the board footprint in each regenerated manifest, and on the two composed sheets read with the seat-label reader)
+
+| map (observed 2026-09-27, method: manifest and sheet geometry) | gap before | gap after | leader |
+|---|---|---|---|
+| Inashiro | 12.3 ft | 3.9 ft | none |
+| Kashikawa | 14.0 ft | 4.0 ft | none |
+| Kuwabata | 17.0 ft | 4.0 ft | none |
+| Mizuguchi | 17.5 ft | 4.1 ft | none |
+| Sawada | 20.1 ft | 4.0 ft | none |
+| county-magistracy-example (7 pt, 3 px/ft) | - | 4.2 px | none |
+| ochiba-roundtrip-test (7 pt, 3 px/ft) | - | 3.6 px | none |
+
+Every board caption now stands at the preferred offset (0.5 em: 4 ft on an 8 pt hamlet caption, 3.5 px on a 7 pt
+draft caption, the draft's rects rounded to whole pixels), at the board's own angle, with no leader - a free ranked seat
+existed beside every board. The three hand-drawn magistracy sheets' board captions were re-seated with
+`make seat-label WRITE=1` and check clean.

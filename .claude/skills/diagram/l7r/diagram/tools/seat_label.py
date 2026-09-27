@@ -36,9 +36,7 @@ WAY_KINDS = frozenset({"road", "river", "revetment"})
 """The kinds a caption may cross at a way's weight (plan P4, observed 2026-09-27, method: the tag census of the six
 sheets - roads are stroked paths 18 to 40 px wide)."""
 
-GROUND_KINDS = frozenset(
-    {"outer court", "inner court", "hearing court", "border court", "practice ground", "garden", "vegetable garden", "garden pines", "cart yard", "shrine grove", "river landing"}
-)
+GROUND_KINDS = frozenset({"outer court", "inner court", "hearing court", "border court", "practice ground", "garden", "vegetable garden", "garden pines", "cart yard", "shrine grove", "river landing"})
 """The sheets' open ground - free space to a caption (plan P4). An explicit list: a name that merely CONTAINS "court"
 is not ground (`court divider` is a wall), and a roofed floor on posts (`weighing floor`) is built."""
 

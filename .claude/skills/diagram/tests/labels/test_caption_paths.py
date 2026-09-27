@@ -103,7 +103,7 @@ def test_no_caption_is_hand_seated_outside_the_named_exceptions() -> None:
     assert found, "the walk found no label call at all - it is looking in the wrong place"
     stray = found - D8_HAND_SEATS - PHASE_DRAWERS
     assert not stray, f"a caption seated by hand outside the placer (feature 266 FR-012) - seat it with `seat_caption`/the placer: {sorted(stray)}"
-    assert D8_HAND_SEATS <= found, f"a D8 call site is gone - take it off the list, which only shrinks: {sorted(D8_HAND_SEATS - found)}"
+    assert found >= D8_HAND_SEATS, f"a D8 call site is gone - take it off the list, which only shrinks: {sorted(D8_HAND_SEATS - found)}"
 
 
 def test_no_raw_text_is_written_outside_the_placer() -> None:

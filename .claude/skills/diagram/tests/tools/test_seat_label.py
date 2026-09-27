@@ -28,7 +28,16 @@ def test_transforms_compose() -> None:
 
 
 def test_a_path_is_read_as_its_vertices() -> None:
-    assert sl._path_points("M 10 10 L 20 10 H 30 V 40 l 5 5 h 1 v 1 C 1 1 2 2 50 50 Z") == [(10.0, 10.0), (20.0, 10.0), (30.0, 10.0), (30.0, 40.0), (35.0, 45.0), (36.0, 45.0), (36.0, 46.0), (50.0, 50.0)]
+    assert sl._path_points("M 10 10 L 20 10 H 30 V 40 l 5 5 h 1 v 1 C 1 1 2 2 50 50 Z") == [
+        (10.0, 10.0),
+        (20.0, 10.0),
+        (30.0, 10.0),
+        (30.0, 40.0),
+        (35.0, 45.0),
+        (36.0, 45.0),
+        (36.0, 46.0),
+        (50.0, 50.0),
+    ]
 
 
 def test_every_drawn_element_is_read_in_sheet_coordinates() -> None:
@@ -72,7 +81,9 @@ def test_the_sheet_is_classified_by_its_tags() -> None:
 
 
 def test_a_captions_subject_is_its_own_group() -> None:
-    src = _sheet(BOARD, '  <g data-kind="notice board"><rect x="300" y="40" width="20" height="8"/><text x="310" y="70" font-size="9">bounty board</text><text x="310" y="80" font-size="8">a bill</text></g>\n')
+    src = _sheet(
+        BOARD, '  <g data-kind="notice board"><rect x="300" y="40" width="20" height="8"/><text x="310" y="70" font-size="9">bounty board</text><text x="310" y="80" font-size="8">a bill</text></g>\n'
+    )
     shapes, _view = sl.read_sheet(src)
     caps = sl.captions_of(shapes, None)
     assert len(caps) == 2 and len(caps[1]) == 2, "two boards, the second a caption of two texts"
@@ -81,7 +92,11 @@ def test_a_captions_subject_is_its_own_group() -> None:
 
 
 def test_a_caption_tagged_on_its_own_names_the_nearest_shape_of_its_kind() -> None:
-    src = _sheet('  <rect x="50" y="50" width="100" height="60" data-kind="kitchen"/>\n', '  <text x="100" y="85" font-size="10" data-kind="kitchen">kitchen</text>\n', '  <text x="5" y="5" font-size="10" data-kind="nothing">x</text>\n')
+    src = _sheet(
+        '  <rect x="50" y="50" width="100" height="60" data-kind="kitchen"/>\n',
+        '  <text x="100" y="85" font-size="10" data-kind="kitchen">kitchen</text>\n',
+        '  <text x="5" y="5" font-size="10" data-kind="nothing">x</text>\n',
+    )
     shapes, _view = sl.read_sheet(src)
     kitchen = next(s for s in shapes if s.tag == "text" and s.text == "kitchen")
     sub = sl.subject_of(kitchen, shapes)
