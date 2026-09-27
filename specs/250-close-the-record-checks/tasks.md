@@ -284,8 +284,9 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
 
 ## Phase 2 - FR-002 and FR-006, one page per session (D7)
 
-- [ ] T17 `measure/assertions.py` derives FR-002's list from the six quote-check reports (D4)
+- [x] T17 `measure/assertions.py` derives FR-002's list from the six quote-check reports (D4)
       research: rendering
+      verify: DONE. verified: measure/assertions.py derives FR-002's list from the quote-check reports; brief.py's fr002() has read every page's items from it since D7 (D20.3)
 - [x] T18 FR-002 and FR-006 for `homesteads` - the page of the comparison (D9)
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
@@ -296,7 +297,8 @@ MOVED to feature 265 (GM 2026-09-27; plan D20): T20, T21, T22 - and from Phase 2
 
 ## Phase 4 - the close
 
-- [ ] T23 FR-007, the checks owed by what this feature changed; every `_entry_owed.py` pair answered before the push (D20)
+- [x] T23 FR-007, the checks owed by what this feature changed; every `_entry_owed.py` pair answered before the push (D20)
       research: rendering
+      verify: DONE. owed-check 2026-09-27: 12 pairs named, 12 IN-STEP in owed-verdicts.md, 0 open; the rest REWRITTEN or LABELED by six owed sessions (homesteads 1-3, archetypes 1, fields 1, water 1), each pair its own bundle and verdict line (D20.2)
 - [ ] T25 FR-009, the closing report; `make page-check`; the push
       research: rendering
