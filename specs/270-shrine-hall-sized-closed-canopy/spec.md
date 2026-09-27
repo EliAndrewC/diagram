@@ -18,7 +18,7 @@ footprint came from the village map's glyph, not from the GM, so it is presumed 
 building is sized from the record's measured bands (religion-and-death 120: a village hall about 20 to 35 ft on a
 side; the one-roof hall-and-dwelling building 2,100 to 3,600 sq ft, its depth 26 to 43 ft at the one attested
 example), on the sheet and on the village map together. (Figures observed 2026-09-27; method: read from the
-record's question 120 and the pack audit's report on the 268 sheet.)
+record's question 120 and the pack audit's report on the 268 sheet; research.md R1-R3.)
 
 ## User Scenarios & Testing *(mandatory)*
 
