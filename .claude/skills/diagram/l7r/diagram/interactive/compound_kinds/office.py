@@ -251,7 +251,7 @@ class BenchNoticeBoard(Kind):
     business with the court must come.
 
     Note: The board and its roadside seat follow the record, which sets it before the gate of village
-    officials' houses but at no government office; that every town and village kept one is a reading of the
+    officials' houses, though no page read puts a post town's board at its transport office; that every town and village kept one is a reading of the
     sources, not their words. That the bench keeps a board of its own, apart from the kosatsuba where the town
     posts the state's standing law, is this project's own division; the record finds only the settlement's
     board.
