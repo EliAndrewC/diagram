@@ -54,7 +54,7 @@ class IrrigationDitch(Kind):
     (Bungotakada); how few ditches that form left is this record's own reading, since no page read counts
     ditches: the pages on it describe water passing from paddy to paddy, the one village page giving its merit
     as saving water, not saving digging, and keeping many weirs; prefectural and ministry papers a search
-    showed saying such districts have hardly any channels could not be read. The widths are weaker than they look.
+    showed saying such districts have hardly any channels could not be read. That a ditch beside every paddy is a Meiji anachronism is likewise the record's reading of that contrast: the Ishikawa method of 1887 put each squared parcel on a channel, and the 1899 law set out to build irrigation and drainage works, not in so many words a ditch to every paddy. The widths are weaker than they look.
     The third of a meter is a modern design MINIMUM rather than a measured ditch, and the Chinese doctrine is
     carried by a 2021 provincial standard for consolidated farmland, so what it gives is the doctrine and not
     a premodern layout. The national standard the record once leaned on for both is readable nowhere and is

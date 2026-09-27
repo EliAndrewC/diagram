@@ -109,10 +109,10 @@ bugyosho	machi-bugyosho
 buke	bushi
 buke-chi	buke-chi
 buke-yashiki	buke-yashiki
-bunboku	bunboku
 bund	bund
 bunded	bund
 bunds	bund
+bungi	bungi
 bunka	Bunka
 bunka era	Bunka
 bunsei	Bunsei
@@ -933,6 +933,8 @@ meander	meander
 meibutsu	meibutsu
 meiji	Meiji
 meireki	Meireki
+melon on the vine	melon-on-the-vine
+melon-on-the-vine	melon-on-the-vine
 men-hai	taiping-gang
 menbansho	menbansho
 mengxi bitan	Mengxi Bitan
@@ -1685,6 +1687,7 @@ zuku	zuku
 背山面水	beishan mianshui
 農業全書	Nogyo Zensho
 鈔關	chaoguan
+长藤结瓜	melon-on-the-vine
 雑木林	zokibayashi
 馬宿	umayado
 동구숲	donggusup

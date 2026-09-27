@@ -160,3 +160,5 @@
 - GraveIsland (fields SECTION=010): REWRITTEN - "corroborated in Japan" replaced by a partial Japanese parallel and no page read for the north-China half
 - Millet (fields SECTION=050): LABELED - the Note now says the ridged rows are a guess (no page describes pre-modern dry-field sowing); Label: accurate kept for the catena placement it rests on
 - IrrigationDitch (water SECTION=240): IN-STEP - the fork along both margins, the tapering mains and the uncited fork distance all still stand; the new pointer to water/400 adds no finding the modal owes
+- IrrigationDitch (fields SECTION=070): LABELED - the Meiji dating of a ditch beside every paddy is now named in the Note as the record's reading
+- Pond (fields SECTION=070): IN-STEP - the changes are in the Distribution bullet and its notes; nothing touches the pond

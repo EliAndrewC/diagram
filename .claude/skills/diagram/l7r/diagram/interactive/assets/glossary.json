@@ -6454,10 +6454,10 @@
    "bansui"
   ]
  },
- "bunboku": {
+ "bungi": {
   "def": "A graduated stake set at the point where one ditch is split between two areas or villages, by whose marks the split is set.",
   "variants": [
-   "bunboku"
+   "bungi"
   ]
  },
  "treadle wheel": {
@@ -6555,6 +6555,14 @@
   "variants": [
    "contour canal",
    "contour canals"
+  ]
+ },
+ "melon-on-the-vine": {
+  "def": "A Chinese irrigation layout in which one long canal (the vine) links and fills many ponds and small reservoirs along its course (the melons), each storing water for the fields around it - a larger counterpart of Japan's parent-child ponds.",
+  "variants": [
+   "melon-on-the-vine",
+   "melon on the vine",
+   "长藤结瓜"
   ]
  }
 }
