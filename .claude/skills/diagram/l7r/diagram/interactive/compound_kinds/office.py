@@ -290,7 +290,7 @@ class WeighingFloor(Kind):
     is what the weighing floor is for, and it is also why the office's hold on the trade is a written record
     rather than ownership.
 
-    Note: The weighing floor and the reason for it follow the record.
+    Note: The weighing floor follows the record's reasoning, but its premise - that the charcoal bale had no standard weight - rests on no source read: the page it had been cited to says nothing about charcoal, and no other was found.
 
     Name: weighing floor
     Covers: the covered weighing floor, its posts and its label

@@ -427,7 +427,7 @@ class BalanceBeam(Kind):
     Why: A bale of charcoal had no standard weight, so charcoal had to be weighed at the point of sale, and the
     weighing floor exists for that.
 
-    Note: Weighing charcoal at the point of sale follows the record. The instrument's form, a beam balance rather
+    Note: Weighing charcoal at the point of sale is reasoned from the charcoal bale having no standard weight, which the record states but for which no readable source was found. The instrument's form, a beam balance rather
     than a steelyard, is not in the record.
 
     Caveat: The instrument's form, a beam balance rather than a steelyard, is not in the record.
@@ -449,7 +449,7 @@ class CharcoalBales(Kind):
     Why: Charcoal traveled in straw bales of no standard weight, which is why every bale is weighed before it is
     tallied.
 
-    Note: The charcoal bale of no standard weight follows the record.
+    Note: The charcoal bale of no standard weight is the record's finding, but no readable page for it has been traced: the page it had been attributed to says nothing about charcoal.
 
     Name: charcoal bales
     Covers: the stacked bales on the weighing floor
