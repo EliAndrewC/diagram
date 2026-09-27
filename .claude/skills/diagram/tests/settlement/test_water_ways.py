@@ -830,6 +830,7 @@ def test_a_drawn_stream_is_rounded_in_place_with_its_held_vertices_kept():
     poly = [tuple(p) for p in rec["poly"]]
     assert poly[0] == (100.0, 100.0) and poly[-1] == (700.0, 400.0) and (400.0, 400.0) in poly, "the ends and the held vertex stay"
     assert (400.0, 100.0) not in poly and len(poly) > 4, "the free corner is rounded"
+    assert rec["stations"] == [[100.0, 100.0], [400.0, 100.0], [400.0, 400.0], [700.0, 400.0]], "the course as first drawn is kept"
     entry = next(e for e in s.water if e["rec"] is rec)
     assert "400.0,100.0" not in entry["bed"] and "400.0,100.0" not in entry["sheen"], "the ink follows the record"
 

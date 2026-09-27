@@ -48,7 +48,7 @@ def brook_beside_the_field(s: Settlement) -> list[tuple[float, float, float, flo
     out: list[tuple[float, float, float, float]] = []
     for st in s.M.get("streams") or []:
         hw = float(st.get("w", 6)) / 2.0
-        for qx, qy in st.get("poly") or []:
+        for qx, qy in st.get("stations") or st.get("poly") or []:  # the stations, not a rounded course's added vertices
             if min(xs) - m <= qx <= max(xs) + m and min(ys) - m <= qy <= max(ys) + m:
                 out.append((qx - hw, qy - hw, qx + hw, qy + hw))
     return out

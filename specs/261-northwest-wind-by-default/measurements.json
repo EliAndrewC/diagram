@@ -371,11 +371,11 @@
   "verifies": "F1",
   "subject": "inashiro",
   "round": "4d1f0170",
-  "value": 1.62,
+  "value": 2.0,
   "unit": "aspect",
-  "quantity": "meta.cluster_aspect_drawn, which the notes' 2026-09-27 entry now states (with the copse median 70 ft, meta.copse_house_ft 69.7)",
+  "quantity": "meta.cluster_aspect_drawn, which the notes' 2026-09-27 entry now states (with the copse median 70 ft, meta.copse_house_ft 69.7); re-measured 2026-09-27 against the notes as a later round rewrote them: the drawn aspect is 2.0 on the kept roll",
   "source": "pool/hamlets/inashiro/inashiro.json meta.cluster_aspect_drawn, meta.copse_house_ft; inashiro.notes.md 2026-09-27 entry",
-  "command": "grep -n 'drawn aspect of 1.62' .claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md"
+  "command": "grep -n 'at an aspect of 2.0' .claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md"
  },
  "inashiro-r4-caption-crowns": {
   "verifies": "F2",
@@ -413,9 +413,9 @@
   "round": "4d1f0170",
   "value": 4,
   "unit": "farmsteads",
-  "quantity": "farmsteads re-seated against main (the farthest 134 ft), which the rewritten 2026-09-27 entry now states with roll_attempt 3 and roll_after farmhouses_reach_a_way",
+  "quantity": "farmsteads re-seated against main (the farthest 134 ft), which the rewritten 2026-09-27 entry now states with roll_attempt 3 and roll_after farmhouses_reach_a_way; re-measured 2026-09-27 against the notes as a later round rewrote them: the entry now says four farmsteads stand in new seats",
   "source": "pool/hamlets/kuwabata/kuwabata.json houses[] against main's manifest; meta.roll_attempt, meta.roll_after; kuwabata.notes.md 2026-09-27 entry",
-  "command": "grep -n 'four of the sixteen farmsteads are re-seated' .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md"
+  "command": "grep -n 'four farmsteads stand in new seats' .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md"
  },
  "kuwabata-r4-outlier": {
   "verifies": "F4",
@@ -461,21 +461,21 @@
   "verifies": "F2",
   "subject": "mizuguchi",
   "round": "4d1f0170",
-  "value": 7,
+  "value": 12,
   "unit": "farmsteads",
-  "quantity": "farmhouses on the brook's larger bank (5 on the other), which line 23 of the notes now says",
+  "quantity": "farmhouses on the brook's larger bank (5 on the other), which line 23 of the notes now says; re-measured 2026-09-27 against the notes as a later round rewrote them: every farmstead now stands on one bank (feature 261 FR-013's fix)",
   "source": "pool/hamlets/mizuguchi/mizuguchi.json houses[] sided against streams[0].poly; mizuguchi.notes.md line 23",
-  "command": "grep -n 'seven farmsteads on one bank, five on the other' .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md"
+  "command": "grep -n 'all 12 farmsteads on one bank' .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md"
  },
  "mizuguchi-r4-board-words": {
   "verifies": "F3",
   "subject": "mizuguchi",
   "round": "4d1f0170",
-  "value": 82,
+  "value": 144,
   "unit": "ft",
-  "quantity": "the board's distance from the handover at (25,914); the notes now say it stands on the hamlet's stem lane, 82 ft before it meets the connector",
+  "quantity": "the board's distance from the handover at (25,914); the notes now say it stands on the hamlet's stem lane, 82 ft before it meets the connector; re-measured 2026-09-27 against the notes as a later round rewrote them: the board now stands 144 ft out along the connector from where it meets the lanes (round 176042d3's seat; plan D18)",
   "source": "pool/hamlets/mizuguchi/mizuguchi.json kosatsuba[0] via kosatsuba_handover; mizuguchi.notes.md 2026-09-27 entry",
-  "command": "grep -n '82 ft before it meets the connector' .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md"
+  "command": "grep -n 'stands 144 ft out along it from where it meets the lanes' .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md"
  },
  "inashiro-r5-straggler-end": {
   "verifies": "F1",
@@ -491,11 +491,11 @@
   "verifies": "F2",
   "subject": "inashiro",
   "round": "775ea4b5",
-  "value": 1225,
+  "value": 990,
   "unit": "ft",
-  "quantity": "the median distance from each of the 15 farmhouses to the nearest farmhouse on main's manifest, which the notes now state with that method",
+  "quantity": "the median distance from each of the 15 farmhouses to the nearest farmhouse on main's manifest, which the notes now state with that method; re-measured 2026-09-27 against the notes as a later round rewrote them: the median is 990 ft on the kept roll",
   "source": "pool/hamlets/inashiro/inashiro.json houses[] against .git/review-snapshot/inashiro/main/inashiro.json houses[]; inashiro.notes.md 2026-09-27 entry",
-  "command": "grep -n 'each house to the nearest house on main' .claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md"
+  "command": "grep -n 'median 990 ft, each house to the nearest house' .claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md"
  },
  "sawada-r5-hook": {
   "verifies": "F1",
@@ -531,11 +531,11 @@
   "verifies": "F2",
   "subject": "kuwabata",
   "round": "775ea4b5",
-  "value": 562,
+  "value": 149,
   "unit": "ft",
-  "quantity": "the largest move of the four re-seated farmsteads, matching vacated seats to new ones at the least total distance (562, 450, 134, 116 ft), which the notes now state",
+  "quantity": "the largest move of the four re-seated farmsteads, matching vacated seats to new ones at the least total distance (562, 450, 134, 116 ft), which the notes now state; re-measured 2026-09-27 against the notes as a later round rewrote them: the entry now states each re-seated farmstead's distance to the nearest of main's seats, 67 to 149 ft, not a move",
   "source": "pool/hamlets/kuwabata/kuwabata.json houses[] against .git/review-snapshot/kuwabata/main/kuwabata.json houses[]; kuwabata.notes.md 2026-09-27 entry",
-  "command": "grep -n 'moves of 562, 450, 134 and 116 ft' .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md"
+  "command": "grep -n 'each 67 to 149 ft from the nearest of main' .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md"
  },
  "kuwabata-r5-woodland": {
   "verifies": "F3",
@@ -621,11 +621,11 @@
   "verifies": "F3",
   "subject": "kashikawa",
   "round": "1bff4100",
-  "value": 277,
+  "value": 504,
   "unit": "clumps",
-  "quantity": "the belt's recorded clumps, which the notes call clumps rather than crowns (and on the other four maps too); 360 on the kept roll",
+  "quantity": "the belt's recorded clumps, which the notes call clumps rather than crowns (and on the other four maps too); 360 on the kept roll; re-measured on round 97c20bc9's fix: 504, the belt's far face now holding its depth where the fringe turns (plan D20)",
   "source": "pool/hamlets/kashikawa/kashikawa.json village_groves[role=windbreak].clumps; kashikawa.notes.md 2026-09-27 entry",
-  "command": "grep -n 'The belt is 277 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
+  "command": "grep -n 'The belt is 504 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
  },
  "inashiro-r9-belt-frame": {
   "verifies": "F1",
@@ -661,11 +661,11 @@
   "verifies": "F2",
   "subject": "kashikawa",
   "round": "0ae309f0",
-  "value": 277,
+  "value": 504,
   "unit": "clumps",
-  "quantity": "the record kashikawa-r8-notes-clumps now states and greps the kept roll's 360 belt clumps",
+  "quantity": "the record kashikawa-r8-notes-clumps now states and greps the kept roll's 360 belt clumps; re-measured on round 97c20bc9's fix: 504, the belt's far face now holding its depth where the fringe turns (plan D20)",
   "source": "specs/261-northwest-wind-by-default/measurements.json kashikawa-r8-notes-clumps; kashikawa.notes.md",
-  "command": "grep -n 'The belt is 277 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
+  "command": "grep -n 'The belt is 504 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
  },
  "kuwabata-r11-wedge": {
   "verifies": "F1",
@@ -808,11 +808,11 @@
   "verifies": "F4",
   "subject": "kashikawa",
   "round": "03cf6a84",
-  "value": 277,
+  "value": 504,
   "unit": "clumps",
-  "quantity": "the four stale records re-measured on the kept roll: the belt 277 clumps (kashikawa-r8-notes-clumps, kashikawa-r11-record), the drawn aspect 1.72 (kashikawa-r4-shape), 2 woodland stands upslope (kashikawa-r11-name), and the junction 584 ft (kashikawa-F4)",
+  "quantity": "the four stale records re-measured on the kept roll: the belt then 277 clumps (kashikawa-r8-notes-clumps, kashikawa-r11-record), the drawn aspect 1.72 (kashikawa-r4-shape), 2 woodland stands upslope (kashikawa-r11-name), and the junction 584 ft (kashikawa-F4); re-measured on round 97c20bc9's fix: 504, the belt's far face now holding its depth where the fringe turns (plan D20)",
   "source": ".claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.json village_groves, meta.cluster_aspect_drawn, commons; kashikawa.notes.md",
-  "command": "grep -n 'The belt is 277 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
+  "command": "grep -n 'The belt is 504 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
  },
  "inashiro-r13-board": {
   "verifies": "F1",
@@ -918,11 +918,11 @@
   "verifies": "F2",
   "subject": "inashiro",
   "round": "176042d3",
-  "value": 17,
+  "value": 16,
   "unit": "ft",
-  "quantity": "the board's distance from the last join on the track - that farmstead's restored lane - which the notes now state (15 in the round, measured to a stub)",
+  "quantity": "the board's distance from the last join on the track - that farmstead's restored lane - which the notes now state (15 in the round, measured to a stub); re-measured 2026-09-27 against the notes as a later round rewrote them: the board now stands on the track itself, 16 ft from the join (round 6fefdcdf's fix, plan D19)",
   "source": ".claude/skills/diagram/pool/hamlets/inashiro/inashiro.json kosatsuba, lanes; inashiro.notes.md",
-  "command": "grep -n 'board stands 17 ft' .claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md"
+  "command": "grep -n 'squared to it, 16 ft from where the track out meets the lanes' .claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md"
  },
  "mizuguchi-r14-nowhere": {
   "verifies": "F1",
@@ -952,7 +952,7 @@
   "unit": "plots",
   "quantity": "homestead dry plots on the dike-pond hamlet (6 barley, millet and buckwheat plots in the round); meta.homestead_fields 0",
   "source": ".claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.json dry_plots, meta.homestead_fields",
-  "command": "python3 /tmp/claude-1000/-diagram/af341e10-4ba2-4068-bc4f-b49f0b239c8d/scratchpad/chk.py (from .claude/skills/diagram)"
+  "command": "python3 /tmp/claude-1000/-diagram/af341e10-4ba2-4068-bc4f-b49f0b239c8d/scratchpad/chk.py"
  },
  "kuwabata-r15-notes": {
   "verifies": "F3",
@@ -972,17 +972,17 @@
   "unit": "fixtures",
   "quantity": "farmstead fixtures and persimmons whose line to their house crosses a lane (4 in the round); the shrine passed to the house at 1466.6,119.4, and meta.farm_fixtures_unseated is empty - the coop and stack of the farmstead at (1277,257) seat on the yard ring past the homestead bundles",
   "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.json farm_fixtures, persimmons, lanes",
-  "command": "python3 /tmp/claude-1000/-diagram/af341e10-4ba2-4068-bc4f-b49f0b239c8d/scratchpad/chk.py (from .claude/skills/diagram)"
+  "command": "python3 /tmp/claude-1000/-diagram/af341e10-4ba2-4068-bc4f-b49f0b239c8d/scratchpad/chk.py"
  },
  "mizuguchi-r15-belt": {
   "verifies": "F2",
   "subject": "mizuguchi",
   "round": "6fefdcdf",
-  "value": 237,
+  "value": 252,
   "unit": "clumps",
-  "quantity": "the belt's clump count the 2026-09-27 notes entry states, matching the census (189 in the round)",
+  "quantity": "the belt's clump count the 2026-09-27 notes entry states, matching the census (189 in the round); re-measured on round 97c20bc9's fix: 252, the belt's far face now holding its depth where the fringe turns (plan D20)",
   "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md",
-  "command": "grep -n '237 clumps, 300' .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md"
+  "command": "grep -n '252 clumps, 300' .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md"
  },
  "pool-r15-unseated": {
   "subject": "pool",
@@ -991,7 +991,7 @@
   "unit": "fixtures",
   "quantity": "farmstead fixtures and persimmons recorded in meta.farm_fixtures_unseated across the five pool hamlets after the lane rule, the yard ring past the bundles and the persimmon's outer step (the commit before the lane rule: Sawada one heap; with the lane rule alone: seven on four maps)",
   "source": ".claude/skills/diagram/pool/hamlets/*/*.json meta.farm_fixtures_unseated",
-  "command": "python3 /tmp/claude-1000/-diagram/af341e10-4ba2-4068-bc4f-b49f0b239c8d/scratchpad/chk.py (from .claude/skills/diagram)"
+  "command": "python3 /tmp/claude-1000/-diagram/af341e10-4ba2-4068-bc4f-b49f0b239c8d/scratchpad/chk.py"
  },
  "belt-r16-depth": {
   "verifies": "F1",
@@ -1001,7 +1001,7 @@
   "unit": "ft",
   "quantity": "the windbreak band's thinnest depth across itself on the page (each near-face vertex to the far face): 20.7 ft in the round; Inashiro 33.9 -> 83.9, Sawada 13.8 -> 88.8; Kuwabata 19.1 and Mizuguchi 64.1 unchanged where the canvas edge clamps the far face",
   "source": ".claude/skills/diagram/pool/hamlets/*/*.json village_groves windbreak poly, meta.view",
-  "command": "python3 /tmp/claude-1000/-diagram/af341e10-4ba2-4068-bc4f-b49f0b239c8d/scratchpad/belt_depth.py inashiro kashikawa kuwabata mizuguchi sawada (from .claude/skills/diagram)"
+  "command": "python3 /tmp/claude-1000/-diagram/af341e10-4ba2-4068-bc4f-b49f0b239c8d/scratchpad/belt_depth.py inashiro kashikawa kuwabata mizuguchi sawada"
  },
  "brook-r16-turn": {
   "verifies": "F1",
@@ -1011,7 +1011,7 @@
   "unit": "degrees",
   "quantity": "the sharpest turn at any vertex of Sawada's recorded brook (47 in the round, with corners of 41 and 27); across the pool 9.0-22.7, the largest at a held tap",
   "source": ".claude/skills/diagram/pool/hamlets/*/*.json streams",
-  "command": "python3 -c (max vertex turn of each streams[].poly) from .claude/skills/diagram"
+  "command": "python3 /tmp/claude-1000/-diagram/af341e10-4ba2-4068-bc4f-b49f0b239c8d/scratchpad/brook_turn.py inashiro kashikawa kuwabata mizuguchi sawada"
  },
  "kuwabata-r16-copse": {
   "verifies": "F1",

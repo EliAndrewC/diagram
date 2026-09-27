@@ -134,7 +134,9 @@ class WaterBodiesMixin:
         laid: rounding it at `stream` moved every way the brook's corners had shaped, and each re-rolled web found a new
         way to fail. The water block is not emitted until `finish`, so the bed and sheen are redrawn from the rounded course
         here and nothing already on the map has to move. A held vertex splits the course: each stretch is rounded between
-        its own ends, so a tap the head race leaves from stays on the course."""
+        its own ends, so a tap the head race leaves from stays on the course. The course as first drawn is kept as
+        `stations`: the rounding adds vertices along its segments, and a reservation that read the vertices beside a field
+        would take in ground it had never been predicted to (Kashikawa's view reached 6 ft past its scatter frame)."""
         pts = [(float(x), float(y)) for x, y in rec["poly"]]
         out: list[tuple[float, float]] = []
         start = 0
@@ -142,6 +144,7 @@ class WaterBodiesMixin:
             part = fillet_polyline(pts[start : k + 1], radius)
             out += part[1:] if out else part
             start = k
+        rec.setdefault("stations", [[x, y] for x, y in pts])  # the course as first drawn, which a frame that reserved its stations keeps reading
         rec["poly"] = [[x, y] for x, y in out]
         dd = "M" + " L".join(f"{x},{y}" for x, y in out)
         for entry in [*self.water, *self.late_water]:

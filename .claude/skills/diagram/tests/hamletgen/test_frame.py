@@ -187,6 +187,11 @@ def test_the_brook_beside_the_field_is_reserved_and_the_reach_leaving_the_map_is
 
     assert brook_beside_the_field(_Empty()) == [], "no field, nothing to be beside"  # type: ignore[arg-type]
 
+    class _Rounded:  # a rounded brook (feature 261): the reservation reads the course as first drawn, not the added vertices
+        M = {**_M.M, "streams": [{"w": 6.0, "poly": [(60.0, 60.0), (60.0, 250.0), (70.0, 290.0), (60.0, 2000.0)], "stations": _M.M["streams"][0]["poly"]}]}
+
+    assert brook_beside_the_field(_Rounded()) == got  # type: ignore[arg-type]
+
 
 def test_stage_notice_narrows_an_anchored_board_to_the_band_then_takes_the_traffic(monkeypatch) -> None:  # type: ignore[no-untyped-def]
     """Feature 227: an ANCHORED placement chooses the ground and the passing traffic chooses the seat on it - the rule

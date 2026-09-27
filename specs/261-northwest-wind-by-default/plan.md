@@ -382,8 +382,10 @@ Measured before and after in research R10.
   80-120 ft of depth, and a windbreak with a hole funnels the wind). The band is now at least 84 ft across itself on
   every pool map where no page edge cuts it (`m:belt-r16-depth`). A square window (a neighbor's whole lead) was tried
   first and thickened belts for bumps of a few tens of feet (observed 2026-09-27 on a roll not committed: Sawada 559
-  clumps where it drew 201); the disc leaves a square or gently bumped fringe unchanged. The belts that turn grow:
-  Sawada's to 539 clumps, Kashikawa's to 504 (the census blocks).
+  clumps, Inashiro 364, Kuwabata 232, Mizuguchi 304, against the disc's 539, 312, 191 and 252); the disc leaves a square
+  or gently bumped fringe unchanged. Every belt grew, most where its fringe turns (observed 2026-09-27, the census
+  blocks at commits 881679390 and 02aa89eae): Inashiro 241 to 312 clumps, Kashikawa 277 to 504, Kuwabata 125 to 191,
+  Mizuguchi 237 to 252, Sawada 201 to 539.
 - A brook turns on a curve: its corners are filleted at `BROOK_BEND_WIDTHS` (2.5) of its drawn width, the ratio the
   ditches are drawn at (research/water.html "Why does every ditch turn on a curve?"), and the tap the head race leaves
   from is held (`round_the_brooks`, `Settlement.round_stream`). Sawada drew corners of 27-47 degrees
@@ -393,7 +395,7 @@ Measured before and after in research R10.
   and a way out crossing the brook twice, and the next re-roll would find another; the ways were right, and it is the
   drawing that was wrong. The planks are squared and decked against the rounded course.
 - The pool test that keeps the brook off the screen axes judges runs of a wander stride (`BROOK_WANDER_STEP`, 10 ft) or
-  more: a curve that turns through an axis has one short chord on it, and the GM's objection is to a course running
+  more: a curve that turns through an axis has a short chord or two on it, and the GM's objection is to a course running
   along one.
 
 ## Phases
