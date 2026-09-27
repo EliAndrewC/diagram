@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="202 106 448 748" font-family="Georgia, 'Times New Roman', serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="190 106 472 748" font-family="Georgia, 'Times New Roman', serif">
   <!-- ============================================================ -->
   <!-- Hoshigaoka Country Shrine - top-down diagrammatic plan          -->
   <!-- North at top; the village lies north, the approach rises from the south. -->
@@ -53,61 +53,67 @@
        arch, where the approach enters the shrine's ground (research 090). No fence, no wall (research 122). -->
   <rect x="220" y="170" width="410" height="670" fill="none" id="precinct"/>
   <!-- the grove's floor, its edge ragged as the map draws it: a wood is not ruled -->
-  <polygon points="220.0,173.1 261.0,163.0 302.0,164.3 343.0,169.6 384.0,168.6 425.0,161.4 466.0,173.9 507.0,163.8 548.0,168.0 589.0,167.4 633.1,170.0 631.8,211.9 625.2,253.8 634.2,295.6 634.9,337.5 633.7,379.4 628.9,421.2 622.5,463.1 630.1,505.0 637.9,546.9 630.9,588.8 630.2,630.6 631.4,672.5 623.0,714.4 626.4,756.2 629.8,798.1 630.0,831.8 589.0,844.0 548.0,843.9 507.0,845.5 466.0,843.8 425.0,831.4 384.0,831.6 343.0,838.6 302.0,836.8 261.0,839.3 225.7,840.0 219.3,798.1 219.7,756.2 222.0,714.4 224.8,672.5 224.8,630.6 215.6,588.8 214.8,546.9 217.8,505.0 216.5,463.1 219.3,421.2 219.7,379.4 212.1,337.5 227.6,295.6 222.7,253.8 215.3,211.9" fill="url(#grove-floor)"/>
+  <polygon points="223.6,173.1 261.0,163.0 302.0,164.3 343.0,169.6 384.0,168.6 425.0,161.4 466.0,173.9 507.0,163.8 548.0,168.0 589.0,167.4 620.9,170.0 622.8,211.9 620.7,253.8 631.1,295.6 646.8,337.5 620.0,379.4 628.8,421.2 609.6,463.1 640.6,505.0 636.0,546.9 624.5,588.8 617.6,630.6 625.9,672.5 622.9,714.4 610.5,756.2 636.8,798.1 618.2,831.8 589.0,844.0 548.0,843.9 507.0,845.5 466.0,843.8 425.0,831.4 384.0,831.6 343.0,838.6 302.0,836.8 261.0,839.3 217.2,840.0 213.3,798.1 204.6,756.2 221.0,714.4 224.7,672.5 230.7,630.6 221.1,588.8 200.7,546.9 205.6,505.0 207.1,463.1 224.9,421.2 219.0,379.4 208.3,337.5 223.8,295.6 234.1,253.8 199.3,211.9" fill="url(#grove-floor)"/>
   <!-- The swept clearing at the hall: the sanctuary, the hall and dwelling, the kitchen garden and privy at the west
        gable, and a 37 ft forecourt before the step, holding the basin and the three innermost arches -->
   <polygon points="407.5,367.9 472.1,371.3 470.0,401.4 541.7,411.6 543.9,469.9 545.6,542.5 550.9,601.7 523.4,637.3 503.2,686.0 382.3,690.5 360.5,641.3 325.4,597.9 292.7,577.4 288.1,521.2 290.1,445.4 315.7,440.7 345.4,409.7 404.1,406.6" fill="url(#keidai-gravel)"/>
   <!-- The household's footpath to the well through the grove, from the clearing's north-west corner (the kitchen side),
        never across the sanctuary's ground -->
-  <path d="M300,360 L426,184" fill="none" stroke="#E6DCC4" stroke-width="12" stroke-linecap="round"/>
+  <path d="M334,424 L426,184" fill="none" stroke="#E6DCC4" stroke-width="12" stroke-linecap="round"/>
 
   <!-- THE GROVE (chinju no mori): the shrine's own wood, the whole precinct but the clearing, the approach and the path -->
   <g id="grove" data-kind="shrine grove" fill="#7A8C5C" stroke="#56683E" stroke-width="1">
-    <circle cx="543.4" cy="367.4" r="29.0"/>
-    <circle cx="310.2" cy="791.1" r="25.8"/>
-    <circle cx="254.4" cy="420.8" r="29.6"/>
-    <circle cx="582.1" cy="467.5" r="27.4"/>
-    <circle cx="451.3" cy="292.4" r="27.9"/>
-    <circle cx="319.3" cy="242.3" r="29.7"/>
-    <circle cx="362.4" cy="752.5" r="27.2"/>
-    <circle cx="286.6" cy="657.3" r="26.2"/>
-    <circle cx="518.0" cy="201.3" r="26.7"/>
-    <circle cx="597.2" cy="675.8" r="25.1"/>
-    <circle cx="583.6" cy="312.3" r="28.8"/>
-    <circle cx="575.3" cy="219.0" r="25.9"/>
-    <circle cx="560.6" cy="806.9" r="29.2"/>
-    <circle cx="286.7" cy="714.6" r="29.8"/>
-    <circle cx="254.3" cy="520.9" r="29.0"/>
-    <circle cx="569.4" cy="723.7" r="27.8"/>
-    <circle cx="590.9" cy="585.4" r="30.0"/>
-    <circle cx="246.9" cy="812.9" r="26.4"/>
-    <circle cx="365.6" cy="346.9" r="28.4"/>
-    <circle cx="469.7" cy="227.8" r="26.6"/>
-    <circle cx="266.4" cy="288.3" r="27.5"/>
-    <circle cx="255.6" cy="220.4" r="29.9"/>
-    <circle cx="347.1" cy="693.9" r="27.4"/>
-    <circle cx="527.1" cy="306.6" r="26.9"/>
-    <circle cx="248.8" cy="617.1" r="27.0"/>
-    <circle cx="368.6" cy="812.4" r="27.4"/>
-    <circle cx="580.5" cy="527.7" r="27.2"/>
-    <circle cx="261.5" cy="357.9" r="25.3"/>
-    <circle cx="596.8" cy="401.1" r="29.5"/>
-    <circle cx="311.4" cy="401.2" r="28.3"/>
-    <circle cx="540.2" cy="674.0" r="25.1"/>
-    <circle cx="396.0" cy="296.4" r="27.2"/>
-    <circle cx="356.9" cy="196.6" r="26.3"/>
-    <circle cx="247.5" cy="757.6" r="25.5"/>
-    <circle cx="536.4" cy="254.9" r="25.3"/>
-    <circle cx="604.7" cy="258.8" r="21.1"/>
-    <circle cx="244.7" cy="681.8" r="21.1"/>
-    <circle cx="251.3" cy="471.6" r="19.9"/>
-    <circle cx="509.9" cy="818.8" r="20.8"/>
-    <circle cx="500.2" cy="709.1" r="19.9"/>
-    <circle cx="421.4" cy="254.0" r="19.9"/>
-    <circle cx="300.0" cy="192.2" r="22.1"/>
-    <circle cx="574.4" cy="634.8" r="20.4"/>
-    <circle cx="609.1" cy="790.0" r="20.5"/>
-    <circle cx="332.1" cy="644.4" r="19.7"/>
+    <circle cx="563.5" cy="643.1" r="28.9"/>
+    <circle cx="561.0" cy="367.4" r="29.0"/>
+    <circle cx="295.3" cy="791.1" r="25.8"/>
+    <circle cx="263.0" cy="419.5" r="27.7"/>
+    <circle cx="261.0" cy="326.9" r="28.0"/>
+    <circle cx="603.9" cy="467.5" r="27.4"/>
+    <circle cx="455.1" cy="292.4" r="27.9"/>
+    <circle cx="303.2" cy="242.3" r="29.7"/>
+    <circle cx="562.3" cy="714.5" r="27.0"/>
+    <circle cx="353.8" cy="752.5" r="27.2"/>
+    <circle cx="268.3" cy="657.3" r="26.2"/>
+    <circle cx="530.5" cy="201.3" r="26.7"/>
+    <circle cx="618.8" cy="675.8" r="25.1"/>
+    <circle cx="229.3" cy="540.4" r="27.5"/>
+    <circle cx="607.0" cy="312.3" r="28.8"/>
+    <circle cx="594.9" cy="219.0" r="25.9"/>
+    <circle cx="344.8" cy="201.4" r="25.9"/>
+    <circle cx="580.9" cy="806.9" r="29.2"/>
+    <circle cx="265.5" cy="714.6" r="29.8"/>
+    <circle cx="468.9" cy="214.9" r="26.4"/>
+    <circle cx="616.5" cy="585.4" r="30.0"/>
+    <circle cx="223.2" cy="812.9" r="26.4"/>
+    <circle cx="619.2" cy="382.5" r="29.4"/>
+    <circle cx="316.7" cy="323.0" r="27.6"/>
+    <circle cx="559.0" cy="280.0" r="27.0"/>
+    <circle cx="512.8" cy="317.2" r="28.7"/>
+    <circle cx="229.5" cy="220.4" r="29.9"/>
+    <circle cx="345.3" cy="692.8" r="29.0"/>
+    <circle cx="254.0" cy="488.6" r="27.7"/>
+    <circle cx="224.7" cy="617.1" r="27.0"/>
+    <circle cx="360.7" cy="812.4" r="27.4"/>
+    <circle cx="602.0" cy="527.7" r="27.2"/>
+    <circle cx="321.5" cy="637.7" r="25.6"/>
+    <circle cx="303.8" cy="378.3" r="26.0"/>
+    <circle cx="510.5" cy="253.5" r="26.9"/>
+    <circle cx="625.2" cy="732.7" r="28.7"/>
+    <circle cx="228.8" cy="374.6" r="26.7"/>
+    <circle cx="240.9" cy="275.7" r="25.6"/>
+    <circle cx="225.3" cy="755.4" r="26.5"/>
+    <circle cx="572.7" cy="422.6" r="25.9"/>
+    <circle cx="358.7" cy="254.9" r="25.9"/>
+    <circle cx="409.5" cy="325.4" r="20.8"/>
+    <circle cx="623.2" cy="258.8" r="21.1"/>
+    <circle cx="279.0" cy="190.9" r="20.6"/>
+    <circle cx="226.1" cy="681.8" r="21.1"/>
+    <circle cx="494.2" cy="710.2" r="21.4"/>
+    <circle cx="518.5" cy="818.8" r="20.8"/>
+    <circle cx="263.7" cy="582.6" r="24.4"/>
+    <circle cx="570.1" cy="564.2" r="20.4"/>
+    <circle cx="222.3" cy="445.9" r="20.5"/>
+    <circle cx="624.9" cy="784.3" r="19.9"/>
   </g>
 
   <!-- The sacred tree beside the approach, ringed by its rope (shimenawa) - research 126 -->

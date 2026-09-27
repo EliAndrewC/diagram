@@ -17,7 +17,7 @@ them. Sketch: after `shrine_hall`, reserve a precinct outline from behind the sh
 (the register band of research 124 as its area), carve the clearing and the approach, fill it with the grove
 scatter the windbreak already uses (a `KeepoutGrid` of the clearing, the approach and the well), then seat the
 sacred tree beside the approach and the basin at the innermost arch. Measure: the precinct's area and its
-canopy share against the hand-drawn Hoshigaoka grove (858 tsubo, 36% canopy).
+canopy share against the hand-drawn Hoshigaoka grove (858 tsubo, 42% canopy).
 
 ## OPEN 2026-09-27, A GM DECISION: the dike-pond mulberry is drawn 10 to 20 times sparser than the one figure found
 
