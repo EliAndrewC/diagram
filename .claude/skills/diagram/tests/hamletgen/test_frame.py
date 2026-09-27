@@ -232,3 +232,54 @@ def test_stage_notice_narrows_an_anchored_board_to_the_band_then_takes_the_traff
     assert len(s.reseated) == 1
     bx, _by, _rot = s.reseated[0]
     assert 560.0 <= bx <= 700.0, "inside the anchor's band and over the households, not at the band's near edge"
+
+
+def test_stage_notice_reseats_an_entrance_board_where_every_departure_passes(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 261 FR-015: an `entrance` board re-seated at a HANDOVER takes the seat every household's way out passes -
+    the connector's inner end, where the two branches meet it - offered the connector itself, and not a verge down one
+    branch, which the other branch's household never walks past."""
+    import math
+
+    from l7r.diagram.settlement.structures.fixtures import departure_routes, routes_missed
+
+    class _StubS:
+        def __init__(self) -> None:
+            self.M = {
+                "meta": {"kosatsuba_seat": "entrance", "view": [0.0, 0.0, 820.0, 820.0]},
+                "houses": [{"x": 700.0, "y": 250.0}, {"x": 700.0, "y": 410.0}],
+                "kosatsuba": [{"x": 1000.0, "y": 1000.0, "z": 2}],
+                "labels": [],
+                "lanes": [
+                    {"connector": True, "pts": [(10.0, 330.0), (300.0, 330.0)]},
+                    {"pts": [(300.0, 330.0), (700.0, 270.0)]},
+                    {"pts": [(300.0, 330.0), (700.0, 390.0)]},
+                ],
+            }
+            self.top = ["", "", "the first board's glyph"]
+            self.TOPZ = 0
+            self.reseated: list[tuple[float, float, float]] = []
+
+        def place_kosatsuba(self):  # type: ignore[no-untyped-def]
+            return (1000.0, 1000.0)
+
+        def discard_queued_label(self, kind):  # type: ignore[no-untyped-def]
+            pass
+
+        def place_labels(self):  # type: ignore[no-untyped-def]
+            pass
+
+        def _fits(self, x, y, w, h, corridors=False):  # type: ignore[no-untyped-def]
+            return True
+
+        def fixture_clear_of_water(self, x, y, half):  # type: ignore[no-untyped-def]
+            return True
+
+        def kosatsuba(self, x, y, rot=0.0):  # type: ignore[no-untyped-def]
+            self.reseated.append((x, y, rot))
+
+    s = _StubS()
+    hg.stage_notice(s, None)  # type: ignore[arg-type]
+    assert len(s.reseated) == 1
+    bx, by, _rot = s.reseated[0]
+    assert routes_missed(departure_routes(s.M), bx, by, 20.0) == 0, "both households' ways out pass the board"
+    assert math.dist((bx, by), (300.0, 330.0)) <= 60.0, "beside the handover, not down a branch"
