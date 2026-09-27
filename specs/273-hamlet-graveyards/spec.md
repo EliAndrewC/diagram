@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-27
 
-**Status**: specified; spec-fidelity round 1 CHANGES REQUIRED (2) - applied, round 2 next
+**Status**: specified; spec-fidelity round 2 CHANGES REQUIRED (1) - applied, round 3 next
 
 **Input**: the GM's answer of 2026-09-27 to feature 272's item on village cremation, verbatim in [`request.md`](request.md).
 
@@ -76,7 +76,8 @@ cremation ground and no shrine.
 - **FR-001**: religion-and-death 530 and 210 MUST state the GM's ruling of 2026-09-27 in full: monks perform the funerary
   rites in the countryside and much of them in the cities; a town and a village each have a cremation ground and a
   hamlet has none; the country monk lives in the main village and serves its whole district, the village and its
-  hamlets (usually about half a dozen); only the village keeps the shrine, the headman's house and the cremation ground.
+  hamlets (usually about half a dozen); within its district, the village alone keeps the shrine, the headman's house and the cremation ground; its
+  hamlets have none of them.
 - **FR-002**: A new question in religion-and-death MUST answer where a hamlet's dead lie (its own graveyard, the
   village's, or bones brought home), in Japan and China, cited or recorded silent after the search, citing 269's 170,
   270, 280 and 271's 400 rather than restating them; it MUST end in a rule or a knob with its odds.
@@ -108,3 +109,5 @@ cremation ground and no shrine.
   (towns, the cities' rites, the monk's seat and district); (2) FR-003 and SC-003: a hamlet MUST NOT draw a cremation
   ground, a village shrine or a headman's house. Both applied. The reviewer's aside (the village generator may draw no
   headman's house) is outside this request.
+- Round 2 (spec-fidelity-verify, MODE 3): both items RESOLVED; one contradiction the change introduced ("only the
+  village" against the town's cremation ground) - FR-001 now scopes it to the district. Applied.
