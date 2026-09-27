@@ -1,6 +1,6 @@
 {
  "feature": "273-hamlet-graveyards",
- "plan_sha256": "54e546456c1904afbe4e235e338347bbf6bc066f57660058c04a344a3e39c5fc",
+ "plan_sha256": "cc5b2f9cd26752f4e0922a3707a91fd69152db447a3f1e2fa1f8d9e6d3a45cfb",
  "reviewed": "2026-09-27",
  "declared": "spec-fidelity",
  "decisions": [
@@ -8,70 +8,63 @@
    "id": "D1",
    "summary": "hamlet_burial knob: own_ground or village_ground, even odds (a guess), pin honored, nonsense refused",
    "class": "within",
-   "why": "This is the GM's own fallback: a per-hamlet knob where some hamlets have their own graveyard and some do not. 540, 210, the class and burial.py all carry it."
-  },
-  {
-   "id": "Summary+XVI",
-   "summary": "The plan's Summary says 'a RULE, not a knob - every hamlet draws a burial ground of its own', and the Constitution Check XVI says 'a rule because the evidence agrees'",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "Stale text from round 1, and it contradicts D1. As written, the plan still states the rule round 1 ruled NOT LEGITIMATE, which drops the form the GM named ('go into the village to visit your ancestors'). A plan that states both the rule and the knob is not clear to implement from. The fix is to rewrite both lines to the knob."
+   "why": "The GM's own fallback: a per-hamlet knob, some hamlets with their own graveyard and some without. The Summary and XVI now say the same (round 2 item 1)."
   },
   {
    "id": "D2",
    "summary": "Size within 160's 750-2,450 sq ft full-body band by households, 1.4:1, labeled a guess",
    "class": "within",
-   "why": "It is relabeled as a guess in the plan, in 540 and in the class. burial.py's module docstring still says 'accurate as a band', so the point of change disagrees with the plan and must be relabeled."
+   "why": "The plan, 540 and burial.py's docstring (round 2 item 3) now all label the band a GUESS that overstates an urn ground."
   },
   {
    "id": "D3",
    "summary": "Nearest clear seat from the middle of the houses, fall line breaking ties; 60 ft from houses and wells; 180's water set-backs; _fits",
    "class": "within",
-   "why": "It agrees with 540 ('as near the houses as those allow, below them where it can'; 60 ft, a guess). Round 1's mismatch is resolved."
+   "why": "Agrees with 540's siting."
   },
   {
    "id": "D3-no-seat",
-   "summary": "An own_ground hamlet with no clear seat within the reach (700 ft in code) draws no ground; the manifest records 'no seat'",
+   "summary": "An own_ground hamlet with no clear seat within the reach draws no ground; the manifest records 'no seat'",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "The ground cannot be seated when nothing within the reach clears. The case is recorded in the manifest rather than hidden. It stays legitimate only while it is the exception: if it fires on a pool hamlet, report it, because on the map an own_ground hamlet with no ground looks like the village_ground form."
+   "why": "Physically impossible to seat, and recorded rather than hidden. It stays legitimate only while it is the exception: if it fires on a pool hamlet, report it."
   },
   {
    "id": "D4",
-   "summary": "The village cremation ground carries all of 530: the seat knob, the edge downstream, 120 ft, 30 px from water, the fire bed off the shrine approach, within ~650 ft, six jizo; jizo off by default elsewhere",
+   "summary": "The village cremation ground carries 530: seat knob, edge downstream, 120 ft, 30 px from water, off the shrine approach, within ~650 ft, six jizo; jizo off by default elsewhere",
    "class": "within",
-   "why": "It matches 530's 'rule the map follows' clause by clause. The jizo default of off touches only maps outside this request. 'Beside' falls back to 'on its own' until a burial ground exists, and the manifest records it; 530 allows both seats."
+   "why": "Matches 530 and the GM's ruling that villages have a cremation ground."
   },
   {
    "id": "D4b",
-   "summary": "The knob lives in hamletgen only; roll.py's hamlet tier is legacy; the no-village-features roll test covers both generators",
+   "summary": "Knob in hamletgen only; roll test covers both generators for no village features in a hamlet",
    "class": "within",
-   "why": "The live hamlets are hamletgen's. The test covers FR-003's MUST NOT for both generators."
+   "why": "Live hamlets are hamletgen's; the test enforces FR-003."
   },
   {
    "id": "D4c",
-   "summary": "The in-field grave island is left unchanged, as a separate liberty",
+   "summary": "In-field grave island unchanged",
    "class": "within",
-   "why": "The spec's edge case asks only that the feature say whether the rule changes the field graves. It says that it does not, and why."
+   "why": "A separate liberty; the spec asks only that the feature say so."
   },
   {
    "id": "D5",
    "summary": "T06 builds the village burial ground if 269's 270 and 280 are on main, or is ticked by claiming the follow-up feature",
    "class": "within",
-   "why": "This is the spec's edge case, now a task. The Phases line 'The village burial ground (D5) is a follow-up feature once 269 lands' is still unconditional and should read as T06 does."
+   "why": "The spec's edge case as a task. The Phases line now reads as T06 does (round 2 item 2)."
   },
   {
    "id": "D6",
    "summary": "Pool hamlets that draw a ground re-roll; one settlement-review per moved map",
    "class": "within",
-   "why": "This is FR-005."
+   "why": "FR-005."
   },
   {
    "id": "D7",
    "summary": "160's hamlet clause and village band are 269's to rewrite to the knob",
    "class": "within",
-   "why": "The agreement exists: diagram-supplemental's specs/269-research-backfill/briefs/extra/r1-amend-160.md carries the exact replacement. 160 contradicts 540 until that lands, and 269's entry-drift owns that."
+   "why": "Agreed with 269; this feature does not edit 160."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

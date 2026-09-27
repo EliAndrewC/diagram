@@ -8,9 +8,10 @@ from __future__ import annotations
 
 import math
 
-from l7r.diagram.hamletgen.burial import BURIAL_FORMS, FIELD_SETBACK_PX, GROUND_SQFT, STREAM_SETBACK_PX, _rect_gap, ground_size, stage_burial
+from l7r.diagram.hamletgen.burial import BURIAL_FORMS, FIELD_SETBACK_PX, GROUND_SQFT, STREAM_SETBACK_PX, ground_size, stage_burial
 from l7r.diagram.settlement import Settlement, seg_dist
 from l7r.diagram.settlement._knobs import BOUNDARY_STONE_CLEAR_FT
+from l7r.diagram.settlement.civic_grounds.edge_seat import rect_gap as _rect_gap
 from tests.hamletgen._builders import a_plan
 
 
@@ -106,3 +107,11 @@ def test_a_nonsense_pin_is_refused() -> None:
     s = _hamlet(form="in_the_river")
     with pytest.raises(ValueError, match="hamlet_burial"):
         stage_burial(s, a_plan())
+
+
+def test_the_edge_seat_has_nothing_to_measure_from_without_houses() -> None:
+    from l7r.diagram.settlement.civic_grounds.edge_seat import EdgeGround, edge_seat
+
+    s = Settlement(W=600, H=600, seed=1)
+    s.meta(name="X", scale="hamlet", ftpx=1.0)
+    assert edge_seat(s, 90.0, 30.0, 20.0, EdgeGround(s, 60.0, 75.0, 6.0, 50.0), reach_px=300.0, step_px=10.0) is None

@@ -23,10 +23,10 @@ from l7r.diagram._invocation import guard
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.sitegen.jobs import default_jobs as default_jobs  # noqa: PLC0414 - explicit re-export so `hamletgen.default_jobs` still resolves under --strict
 
+from .burial import stage_burial
 from .consts import FIELD_ARCHETYPES, REF_HOUSEHOLDS
 from .frame import stage_crossings, stage_frame, stage_labels, stage_notice
 from .hinterland import stage_bamboo, stage_hinterland, stage_windbreak, stage_woodland
-from .burial import stage_burial
 from .homesteads import stage_appurtenances, stage_homesteads
 from .plan import HamletSpec, SitePlan, plan_site
 from .pondstock import stage_pond_stock

@@ -20,7 +20,7 @@ from __future__ import annotations
 
 import math
 from collections.abc import Sequence
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 from .._geom import PointGrid, boxed_grid, boxed_ring_hit, boxed_rings, boxed_segs, seg_dist
 
@@ -101,10 +101,3 @@ def edge_seat(s: Settlement, down_deg: float, w: float, h: float, ground: EdgeGr
         r += step_px
     return None
 
-
-def houses_middle(s: Any) -> Pt | None:
-    """The middle of the houses, or None on a map with none."""
-    houses = s.M.get("houses") or []
-    if not houses:
-        return None
-    return (sum(float(q["x"]) for q in houses) / len(houses), sum(float(q["y"]) for q in houses) / len(houses))

@@ -21,6 +21,7 @@ from typing import TYPE_CHECKING, Any
 
 from .._geom import BUNDLE_PITCH_FT, TORII_PITCH_FT, Pt
 from .._knobs import knob_rng, roll_torii_count, skeleton_layout
+from ..civic_grounds.edge_seat import EdgeGround, edge_seat
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -117,6 +118,30 @@ class RollVillageMixin:
             "gateway": (round(sk["gateway"][0], 1), round(sk["gateway"][1], 1)),
             "field_bbox": tuple(round(v, 1) for v in fb),
         }
+
+    def _roll_cremation(self: Settlement, down_deg: float, approach: list[Pt]) -> None:  # type: ignore[misc]
+        """The village's CREMATION GROUND (research religion-and-death 530, the GM's ruling of 2026-09-27: a village
+        and a town have one, a hamlet none, and the country monk performs the rites). Its seat is 530's knob,
+        `cremation_seat` - beside the village's burial ground, or on its own at the edge - at even odds, a GUESS; a
+        pinned value is honored. The village draws no burial ground yet (feature 273 T06), so "beside" has nothing to
+        stand beside and seats as on its own, and the manifest says so. On its own it stands at the village's edge
+        through the shared edge seat: 120 ft clear of houses and wells (the engine's pollution clearance), 30 px from
+        water (180's fixed cremation margin, exempt from the field edge), its fire bed off the shrine's approach, and
+        within ~650 ft of the middle of the houses (530); six stone jizo at it (530)."""
+        form = self.knob_pins.get("cremation_seat") or ("beside_burial", "apart")[knob_rng(self.seed, "cremation_seat").randrange(2)]
+        if form not in ("beside_burial", "apart"):
+            raise ValueError(f"cremation_seat: {form!r} is not one of ('beside_burial', 'apart')")
+        self.M["meta"]["cremation_seat"] = form
+        if form == "beside_burial" and not self.M.get("cemeteries"):
+            self.M["meta"]["cremation_seat_note"] = "beside the burial ground, but the village draws none yet: seated as on its own"
+        across = 75.0  # the village sanmai's cleared core (cremation_ground)
+        w, h = self.px(across), self.px(across * 0.7)
+        ground = EdgeGround(self, clear_px=self.px(120), stream_px=30.0, ditch_px=30.0, field_px=0.0, avoid=[(approach, self.px(30))])
+        seat = edge_seat(self, down_deg, w, h, ground, reach_px=self.px(650), step_px=self.px(10))
+        if seat is None:
+            self.M["meta"]["cremation_ground"] = "no seat"
+            return
+        self.cremation_ground(seat[0], seat[1], jizo=True)
 
     def _roll_knobs(self: Settlement, down_deg: float, water_kind: str) -> dict[str, Any]:  # type: ignore[misc]
         """STAGE 1 - roll the knobs (pinned -> rolled -> default). Returns them keyed as `roll_village`
@@ -390,3 +415,4 @@ class RollVillageMixin:
             for _tx, _ty in self._avenue_at_threshold(sx_, sy_, self.px(62), self.px(42), _line):
                 self._torii(_tx, _ty)
             self.M["meta"]["torii_count"] = int(_tn)
+            self._roll_cremation(math.degrees(math.atan2(dy, dx)), [(sx_, sy_), *_line])
