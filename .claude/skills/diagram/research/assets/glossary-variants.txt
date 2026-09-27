@@ -846,6 +846,7 @@ kaie-ji's	Kaie-ji
 kaigisho	kaigisho
 kainyo	kainyo
 kaisho	kaisho
+kaishochi	kaishochi
 kaji-ya	kaji-ya
 kakaemoto	hitoyado
 kakehi	kakehi
