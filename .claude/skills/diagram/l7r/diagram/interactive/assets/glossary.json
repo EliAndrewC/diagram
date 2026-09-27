@@ -6632,5 +6632,12 @@
    "so village",
    "so villages"
   ]
+ },
+ "river office": {
+  "def": "The office at a ferry or ford landing (kawa kaisho, 川会所) through which the crossing was run; on the Tokaido it stood on one bank only, beside the notice board and the boatmen's huts.",
+  "variants": [
+   "river office",
+   "river offices"
+  ]
  }
 }

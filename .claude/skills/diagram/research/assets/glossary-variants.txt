@@ -1225,6 +1225,8 @@ ring-levee	ring dike
 rinkaku	rinkaku
 riparian	riparian
 riprap	riprap
+river office	river office
+river offices	river office
 river stage	river stage
 river terrace	river terrace
 river terraces	river terrace
