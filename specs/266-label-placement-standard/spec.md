@@ -144,6 +144,12 @@ rule quoted from a page they can open.
   - the Mode A doctrine (`buildings.md`) and the `building-review` agent's contract MUST say that every caption on a
     hand-drawn sheet is seated with the tool, and that revising a sheet re-seats all of its captions.
 
+- **FR-014**: The GM's standing rule of what a town or city caption may lie on (2026-07-21, research/presentation,
+  "What does a town or a city map label, and what may a label cover?") MUST be kept in the weights: a caption's own
+  subject weighs 0 for it, and so does every built feature of a group the caption's own wording names - the group
+  word of the overlap taxonomy's caption registry (a "temple" caption may lie on a temple, a flophouse caption on a
+  flophouse), which is how that rule has always been keyed.
+
 ### Key Entities
 
 - **Subject**: what a caption names - a point feature's footprint with its rotation, a polyline, or an area polygon
@@ -161,9 +167,10 @@ rule quoted from a page they can open.
   board caption stands at a ranked position at the preferred offset with no leader, or - where no free seat exists at
   that ring - at the nearest free seat with a leader. Measured as in research.md R2 (method: the caption block against
   the board footprint in each manifest or sheet), before and after; the before is observed 2026-09-27.
-- **SC-002** (FR-001, FR-002, FR-008, FR-009, FR-012): unit tests place captions for a point, a rotated point past 90
-  degrees, a line and an area subject through the one entry point; the static test of FR-012 passes on the tree and
-  fails on a planted hand-seated call.
+- **SC-002** (FR-001, FR-002, FR-008, FR-009, FR-012, FR-014): unit tests place captions for a point, a rotated point
+  past 90 degrees, a line and an area subject through the one entry point, and a caption naming a group seated over a
+  building of that group while one naming another group is kept off it; the static test of FR-012 passes on the tree
+  and fails on a planted hand-seated call.
 - **SC-003** (FR-005, FR-006, FR-007): unit tests prove, on synthetic sheets: a blocked upper right falls to upper
   left; every preferred-offset seat is tried before any further one; a free far seat beats a covered near one;
   crossing one way beats crossing two; a seat beyond the preferred offset draws a leader and one at it draws none; a
@@ -210,7 +217,7 @@ rule quoted from a page they can open.
 - **D7 - The 50 percent pull toward the board (GM 2026-08-27, marked provisional in the record) is superseded** by
   the preferred offset, which is the standard's answer to the same question. To raise with the GM at landing.
 - **D8 - SCOPE EXCEPTION (ruled legitimate by `spec-fidelity`, round 1)**: the hand-seated `self.label(x, y, ...)`
-  calls of the settlement engine's town, city and capital tiers - 47 calls in 34 functions (research.md R3), listed by
+  calls of the settlement engine's town, city and capital tiers - 47 calls in 33 functions (research.md R3), listed by
   file and function in the FR-012 test - are on no live map and are not converted now. The GM's scope sentence is
   *"making sure our notice boards use this standard but that other future labels will be able to do so as well"*;
   when a tier is scripted its captions are future labels and go through the placer. Recorded in
@@ -247,3 +254,7 @@ rule quoted from a page they can open.
   misattributed. All eight applied: FR-005 and D3 rewritten on the standard's leader rule, FR-001 scoped with the
   exceptions named, D8 exact with a static test (FR-012), D9 on the GM's sentence with the shrine named and the ledger
   test (FR-013), the 500 weight stated and labeled, D2 verbatim, R1 on QGIS's default. D8 and D9 ruled legitimate.
+- Round 2 (2026-09-27, `spec-fidelity-verify`): CHANGES REQUIRED - the round-1 rewrite had dropped the old FR-009, the
+  town and city rule of what a caption may lie on, without a record; D8's function count was 34 for 33; one QGIS
+  sentence was attributed to the wrong polygon mode. Applied: the rule restored as FR-014 and cited from SC-002, the
+  count corrected, R1's attribution corrected.

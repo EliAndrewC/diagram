@@ -29,9 +29,9 @@ between nearness and position, and the DEFAULT is nearness: "There are two optio
 default, labels are kept close to the feature." The other is the non-default "Prefer position ordering: The label
 will try to stay in a specific position (like top left or top right), even if it's a bit farther away from the
 feature. The label only moves to other positions if there's no room within the maximum distance at your preferred
-position." For an area: "Around Centroid: places the label within a preset distance around the centroid, with a
-preference for the placement directly over the centroid" and "The preferred placement is further from the edges of
-the polygon."
+position." For an area, its Around Centroid mode: "Around Centroid: places the label within a preset distance around
+the centroid, with a preference for the placement directly over the centroid"; and, of its Horizontal and Free
+polygon modes (not Around Centroid): "The preferred placement is further from the edges of the polygon."
 
 **The cost formulation.** Christensen, Marks & Shieber, "An Empirical Study of Algorithms for Point-Feature Label
 Placement", ACM Transactions on Graphics 14(3), 1995 (public PDF on the author's site,
@@ -121,7 +121,7 @@ settlement engine only and missed every Mode A sheet; `spec-fidelity` found it (
 - Hand-seated by their callers: 51 `self.label(x, y, ...)` calls, a few of them inside the label machinery itself,
   the rest in the town, city and capital tiers, whose coordinates the calling code computes. By function (an AST walk over
   `settlement/`): four are the label machinery itself or captions this feature converts (`captions.py` `place_labels` and
-  `_draw_queued_label`, `boards.py` `_draw_board_caption`, `ground.py` `_finish_road_label`); the other 47, in 34
+  `_draw_queued_label`, `boards.py` `_draw_board_caption`, `ground.py` `_finish_road_label`); the other 47, in 33
   functions, belong to the town, city and capital tiers (a ministry's name
   written across its own roof, a hall caption a fixed drop below it). No live generator runs any of those 47; the maps
   that used them are frozen exhibits.
