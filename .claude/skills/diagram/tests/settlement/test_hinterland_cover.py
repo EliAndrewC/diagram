@@ -100,7 +100,7 @@ def test_the_settlement_keep_out_follows_a_diagonal_cluster_not_its_bbox() -> No
     s = _s()
     s.M["houses"] = [{"x": 200.0 + 60.0 * i, "y": 200.0 + 60.0 * i, "w": 40, "h": 24} for i in range(5)]
     seen: list = []
-    s.commons = lambda poly, role="commons", avoid=(), render="scrub", soft=(): seen.append(list(avoid))  # type: ignore[method-assign]
+    s.commons = lambda poly, role="commons", avoid=(), render="scrub", soft=(), woods=(): seen.append(list(avoid))  # type: ignore[method-assign]
     s.hinterland(marsh=False, commons=True, interior_fill=False)
     assert seen and seen[0], "the scrub was handed the settlement keep-out"
     ring = [tuple(p) for p in seen[0][0]]

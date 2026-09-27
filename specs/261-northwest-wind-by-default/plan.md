@@ -231,24 +231,20 @@ Measured before and after in research R10.
   Kuwabata's join lane ran 122 ft back along its connector; three maps carried empty straggler records.
 - An orphan join is routed with the brook as an obstacle and refuses a link that crosses it an even number of times,
   keeping one only as a last resort (Mizuguchi's web crossed and crossed straight back).
-- The board is sited only where the caption placer's own ladder has a clear seat: `caption_room` asks the placer's tests
-  (the hug cap, the derived blockers `caption_fabric` shared with the placer, across-a-way, the page, the lane floor) at
-  the board's tilt only - the caption stands at exactly the board's angle (the GM, 2026-08-27), so an upright fallback
-  tried in the placer was removed. The ring probe it replaces for a tilted board called Kashikawa's entrance seat sitable
-  while every seat the placer then tried was blocked, and the fallback put the words on a farmhouse roof.
-- A tilted caption's lane clearance is the quad it is drawn as. The placer's `_box_clearance` and the gate's
-  `test_no_caption_lies_across_a_way` read the upright record box, which straddles the lane a caption turned along it
-  runs beside, and misses one it crosses at an angle (Kuwabata's caption across a web lane at -1.5 ft).
+- The board is sited where its caption fits, as THE ONE PLACER (feature 266, merged from main) answers it: the siter and
+  the frame stage's re-seat hand each candidate board to `place` at the angle the board will be drawn at, and a caption
+  fits when the placer seats it at the preferred ring with nothing under it and no leader (`board_caption_level`); one
+  clear of every crown ranks first, and the manifest records the level the chosen seat had
+  (`kosatsuba_caption_level`). Before the merge this feature built the same question against the old caption search
+  (`caption_room`, a drawn-quad lane test, a pull that keeps the board nearest, an upright fallback removed for the GM's
+  2026-08-27 ruling that the caption stands at the board's angle); feature 266 replaced that search, and those pieces
+  went with it. What they fixed stands as pool tests: no caption on a roof or a lane, at its board's angle, nearest its
+  board, and clear of the canopy unless the record says no seat offered it.
 - Of two tails doubled into one junction the narrower is cut, never the wider, and a tail that crossed the way before it
   came alongside ends at that crossing: the cut drew Sawada a hook and necked its 6 ft route out to a 3 ft path.
 - A household whose way out crosses the brook and back is served again by the straggler pass to a way on its own bank
   that reaches the connector dry-shod (`_link_home_bank`, before the passes that read the finished joints). Mizuguchi's
   pocket between the brook and the head-race reached its own bank's lane over two planks.
-- A caption stands nearer its own board, as drawn, than any other footprint - in the placer's blockers, the siter's
-  `caption_room` and the pull toward the board - and the blocker prefilter is grown by that reach (it compared bare
-  boxes, so the fixed margin was only measured on features the caption already overlapped). Among the seats above the
-  traffic floor, one whose caption fits comes before one in the open (the GM's 2026-08-29 ruling on a board under a
-  canopy), as it already did at the handover. Kuwabata's caption stood 4.9 ft off a byre and 24.6 ft off its board.
 - A lane record whose points are all one point is dropped with the husks.
 - A lane crossing any drawn channel is squared like a brook crossing (Mizuguchi's head-race plank lay 44 degrees off;
   research ways/030: a plank "crosses its ditch square").

@@ -6,6 +6,7 @@ Split from hamletgen.py by feature 111; bodies verbatim. See hamletgen/CLAUDE.md
 from __future__ import annotations
 
 import math
+from typing import Any
 
 from l7r.diagram.settlement import Settlement, nearest_way_bearing
 from l7r.diagram.settlement.structures.fixtures import (
@@ -306,11 +307,21 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
                         _seats = [q for q, k in zip(_seats, _missed, strict=True) if k == min(_missed)]
                         _near = min(q[0] for q in _seats)
                         _bft = KOSATSUBA_HANDOVER_BAND_FT
+                    # ...AND WHERE ITS CAPTION FITS, before the band, as the siter ranks it (feature 261: Sawada's re-seated board put
+                    # its caption on a crown, the band having left only seats whose caption lay on one) - the placer's own
+                    # answer, best level first, before the traffic decides among them
+                    _lv = _caption_levels(s, _seats, str(board.get("label") or ""), (hx0, hy0, hx1, hy1) if _view else None, _fw, _fh, _canopy)
+                    _seats = [q for q in _seats if _lv[q] == max(_lv.values())]
+                    _near = min(q[0] for q in _seats)
                     _band = _pxb(_bft) if _pxb else _bft
                     _seats = [q for q in _seats if q[0] <= _near + _band] or _seats
+                else:
+                    _lv = _caption_levels(s, _seats, str(board.get("label") or ""), (hx0, hy0, hx1, hy1) if _view else None, _fw, _fh, _canopy)
+                    _seats = [q for q in _seats if _lv[q] == max(_lv.values())]
                 # the traffic is counted only over the seats the band kept: a count per candidate cost seed 4's notice
                 # stage 1.1 s, and the engine's own order is the band first and the traffic second
                 _pick = max(_seats, key=lambda q: (sum(1 for h in hs if math.hypot(q[1] - h["x"], q[2] - h["y"]) < 260), -q[0]))
+                s.M.setdefault("meta", {})["kosatsuba_caption_level"] = _lv.get(_pick, 2)  # the re-seat's own answer
                 best = (0.0, _pick[1], _pick[2], _pick[3])
             # ...and a hamlet whose every verge lies under its own belt still gets a board (feature 230)
             if best is None and loose is not None:
@@ -322,6 +333,16 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
                 s.M["kosatsuba"].append(
                     board
                 )  # pragma: no cover - no verge inside the cloud takes a board; keep the engine's seat rather than none [174: KEPT, not deletable - an else branch that binds the seat this method returns]
+
+
+def _caption_levels(s: Settlement, seats: list[tuple[float, float, float, float]], label: str, frame: Any, fw: float, fh: float, canopy: Any) -> dict[tuple[float, float, float, float], int]:
+    """Each re-seat candidate's caption level (`board_caption_level`: 2 fits clear of the crowns, 1 over one, 0 not at
+    all), against the one placer's obstacles indexed once."""
+    level = getattr(s, "board_caption_level", None)  # the frame test drives this stage with a stub that places no caption
+    if level is None:
+        return dict.fromkeys(seats, 2)
+    index = s.label_obstacles() if label else None
+    return {q: level(q[1], q[2], fw / 2, fh / 2, q[3], label, index, frame, canopy) for q in seats}
 
 
 def _nearest_way_bearing(s: Settlement, x: float, y: float) -> float | None:

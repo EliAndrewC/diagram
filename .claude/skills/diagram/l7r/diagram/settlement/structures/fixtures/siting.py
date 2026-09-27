@@ -1,7 +1,7 @@
 """Split from settlement/structures/fixtures.py by feature 173 - see this package's CLAUDE.md for the index."""
 
 import math
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from ....labels import Subject, place
 from ....labels.geom import rect as label_rect
@@ -71,6 +71,30 @@ def under_canopy(grid: PointGrid, x: float, y: float, half: float) -> bool:
 
 
 class FixtureSitingMixin:
+    def board_caption_level(  # type: ignore[misc]
+        self: Settlement, x: float, y: float, hw: float, hh: float, rot: float, label: str, index: Any, frame: Any, canopy: PointGrid
+    ) -> int:
+        """Does a notice board's caption fit beside the board seated here - 2 when it does and stands clear of every crown,
+        1 when it fits over a crown, 0 when it does not fit? ASKED OF THE ONE PLACER (features 261 and 266): the board is
+        the point subject the label phase will hand it, at the angle it will be drawn at, and the caption FITS when the
+        placer seats it at the preferred ring with nothing under it and no leader. Every probe written here before
+        restated some older caption search, and each disagreed with it somewhere - Kashikawa's entrance seat was called
+        sitable while the caption then went onto a farmhouse roof; the placer is the one thing that knows. Read by the
+        siter and by the frame stage's re-seat, which moved Sawada's board to a seat whose caption lay on a crown."""
+        if not label:
+            return 1
+        # ...AT THE ANGLE THE BOARD WILL BE DRAWN AT: the seat's lane bearing is turned to the nearest way, and a half-turn
+        # flips which side the placer ranks first
+        _nb = nearest_way_bearing(self.M, x, y)
+        _rot = _nb if _nb is not None else rot
+        _p = place(label, 8.0, Subject("point", tuple(label_rect(x, y, hw, hh, _rot)), angle=_rot), index, frame)
+        if _p.cost > 0.0 or _p.leader is not None:
+            return 0
+        # ...AND CLEAR OF THE CANOPY RANKS ABOVE MERELY FITTING (settlement-review of Kuwabata, feature 261): a caption whose
+        # halo notches a crown is the defect feature 230 pass 13 recorded on that very map; the GM's 2026-08-29 ruling lets
+        # a BOARD stand under trees, not a caption's halo bite them
+        return 1 if quad_on_canopy(_p.block, canopy.near) else 2
+
     def fixture_clear_of_water(self: Settlement, x: float, y: float, half: float) -> bool:  # type: ignore[misc]
         """Does a point fixture of half-diagonal `half` stand clear of every watercourse?
 
@@ -381,21 +405,7 @@ class FixtureSitingMixin:
         # cannot promise a seat where the ring finds none - it only stops the siter preferring a
         # position that demonstrably has one over a position that demonstrably does not.
         def _sitable(_x: float, _y: float, _hw: float, _hh: float, _rot: float = 0.0) -> int:
-            """Does the caption fit beside a board seated here - 2 when it does and stands clear of every crown, 1 when it
-            fits over a crown, 0 when it does not fit? ASKED OF THE ONE PLACER (features 261 and 266): the board is the
-            point subject the label phase will hand it, the obstacles are indexed once, and the caption FITS when the
-            placer seats it at the preferred ring with nothing under it and no leader. Every probe written here before
-            restated some older caption search, and each disagreed with it somewhere - Kashikawa's entrance seat was
-            called sitable while the caption then went onto a farmhouse roof; the placer is the one thing that knows."""
-            if not label:
-                return 1
-            _p = place(label, 8.0, Subject("point", tuple(label_rect(_x, _y, _hw, _hh, _rot)), angle=_rot), _label_index, _frame)
-            if _p.cost > 0.0 or _p.leader is not None:
-                return 0
-            # ...AND CLEAR OF THE CANOPY RANKS ABOVE MERELY FITTING (settlement-review of Kuwabata, feature 261): a caption
-            # whose halo notches a crown is the defect feature 230 pass 13 recorded on that very map; the GM's 2026-08-29
-            # ruling lets a BOARD stand under trees, not a caption's halo bite them
-            return 1 if quad_on_canopy(_p.block, _canopy.near) else 2
+            return self.board_caption_level(_x, _y, _hw, _hh, _rot, label, _label_index, _frame, _canopy)
 
         # ...AND IN THE OPEN, BUT ONLY AMONG SEATS THAT ALREADY STAND ON THE TRAFFIC (settlement-review, feature 230
         # passes 12 and 13). The state's notice is the one fixture on a hamlet sheet that exists to be SEEN, and two of
@@ -457,6 +467,11 @@ class FixtureSitingMixin:
         _nb = nearest_way_bearing(self.M, x, y)
         if _nb is not None:
             rot = _nb
+        # WHAT THE CAPTION COULD HAVE, ON THE RECORD (feature 261): 2 clear of every crown, 1 only over one, 0 not beside the
+        # board at all - so a caption lying on the canopy is a ground the seat offered, not a defect nobody saw (Sawada's
+        # entrance, squeezed between the frame and the belt, has no seat every departure passes whose caption is clear)
+        if label:
+            self.M["meta"]["kosatsuba_caption_level"] = self.board_caption_level(x, y, w / 2, h / 2, rot, label, _label_index, _frame, _canopy)
         # `lab` NO LONGER DECIDES THE CAPTION'S SIDE, and that was the last thing keeping two cohort
         # seeds notched. It is computed above by testing `label_seat_clear` at the DEFAULT distance
         # only - `y +/- h/2 + 11` - so it reports "below is blocked" for a board whose below seat is
