@@ -531,6 +531,7 @@ hip-roofed	hip roof
 hipped roof	hip roof
 hipposandal	hipposandal
 hipposandals	hipposandal
+hirazamurai	hirazamurai
 hiroen	hiroen
 hirokoji	hirokoji
 hiroma	hiroma
@@ -994,6 +995,8 @@ outworks	outwork
 ox-frame	ox-frame
 ox-frames	ox-frame
 pannage	pannage
+pantile	pantile
+pantiles	pantile
 parapet	parapet
 parish	parish
 parish temple	parish
@@ -1476,6 +1479,7 @@ yacheng	yacheng
 yachida	yato
 yagura	yagura
 yaita	yaita
+yakuimon	yakuimon
 yam	yam
 yamen	yamen
 yashiki	yashiki
@@ -1517,6 +1521,7 @@ zelkova	keyaki
 zhalan	zhalan
 zhang	zhang
 zhengyi	Zhengyi
+zhili	Zhili
 zhonggulou	gulou
 zhonglou	gulou
 zhou	department

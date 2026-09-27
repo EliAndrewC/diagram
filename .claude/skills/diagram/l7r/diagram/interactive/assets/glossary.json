@@ -6064,5 +6064,30 @@
   "variants": [
    "soroban"
   ]
+ },
+ "hirazamurai": {
+  "def": "A rank of ordinary full samurai, above the foot soldiers (ashigaru). In Kanazawa's samurai quarter it was the lowest rank allowed to wall its land with earth; those below it planted hedges.",
+  "variants": [
+   "hirazamurai"
+  ]
+ },
+ "pantile": {
+  "def": "A roof tile curved in an S across its width, so that each tile's edge overlaps the next. It is the English name for the Japanese sangawara, the ordinary tile of late Edo roofs.",
+  "variants": [
+   "pantile",
+   "pantiles"
+  ]
+ },
+ "yakuimon": {
+  "def": "A Japanese roofed gate of a single bay, one of the two forms a magistrate's post's main gate took beside the nagaya-mon; registered examples measure about 1.8 to 2.6 m (6 to 8.5 ft) across their frontage.",
+  "variants": [
+   "yakuimon"
+  ]
+ },
+ "Zhili": {
+  "def": "The metropolitan province of Qing China, surrounding Beijing; its governor-general held one of the highest provincial offices of the empire.",
+  "variants": [
+   "Zhili"
+  ]
  }
 }
