@@ -5553,5 +5553,36 @@
   "variants": [
    "kana"
   ]
+ },
+ "at grade": {
+  "def": "On the same level: two channels, or a channel and a road, that cross at grade meet on one surface rather than one passing over the other, so their water or traffic mixes where they cross.",
+  "variants": [
+   "at grade"
+  ]
+ },
+ "Imperial spine": {
+  "def": "The Imperial highway where it runs through a city as its main street; a river city has none, since its highway passes off the map instead.",
+  "variants": [
+   "Imperial spine"
+  ]
+ },
+ "DEM": {
+  "def": "Digital elevation model: a map of ground heights laid out as a grid of cells, here 90 meters on a side.",
+  "variants": [
+   "DEM"
+  ]
+ },
+ "SRTM": {
+  "def": "Shuttle Radar Topography Mission: the radar survey flown on a space shuttle in 2000, whose height data covers most of the Earth's land.",
+  "variants": [
+   "SRTM"
+  ]
+ },
+ "sand junk": {
+  "def": "A flat-bottomed Chinese wooden cargo sailing ship (shachuan), built for the shallow, sandy waters around the Yangtze mouth and the northern coast.",
+  "variants": [
+   "sand junk",
+   "sand junks"
+  ]
  }
 }

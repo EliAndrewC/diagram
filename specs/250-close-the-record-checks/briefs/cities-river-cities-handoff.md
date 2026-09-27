@@ -38,3 +38,8 @@ None owed on this page.
 - 020's prose now names a flume study; record-format may want glossary tooltips for "flume" and "headworks" / "weir".
 - None of the four questions is over the 20,000-byte cap after the edits (scripts/check-question-size.py silent).
 - The saved pages are in /tmp/l7r-check/cities-river-cities-pages (PDFs: 10 idc, 12 IGNOU GM copy, 13 aceesjr, 14 scirea = ahmed-soliman-2022).
+
+## From session 2a (010, 030; 2026-09-27)
+
+- For whoever checks 020: source-applicability on `ahmed-soliman-2022` found that the paper tested only 110 to 170 degrees, so "right-angle intakes draw a large sediment share" comes from the paper's framing of earlier work, not from its own runs. SCIREA was also on Beall's list. The registry write-up now says both. 020's prose should rely on the direction of the effect, not on the 164 degree figure, and should not present the right-angle line as the flume's result.
+- Open, not fixed: the glossary tooltip matcher (`research/assets/record.js`, and `interactive/assets/page.js` for the modals) matches case-insensitively, so the capitalized proper names "Han" (50 occurrences across the record: Han River, Han dynasty) and "Fen" (9: Fen River) show the tooltips for `han` (a daimyo's domain) and `fen` (a land unit). This is a defect across the whole record, not just this page. A fix needs a per-term case flag carried through `glossary_for` in `page.py` and both matchers. That is engine code, which would put this research queue on the gated route, so it was left to a feature of its own.

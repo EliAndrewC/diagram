@@ -29,6 +29,7 @@ ashigaru-nagaya	ashigaru-nagaya
 assize	assize
 association	plant association
 asunaro	asunaro
+at grade	at grade
 autumn assize	assize
 aze	bund
 aze-mame	azemame
@@ -243,6 +244,7 @@ dbh	DBH
 degawari	degawari
 delivery ditch	delivery ditch
 delivery ditches	delivery ditch
+dem	DEM
 department	department
 departmental	department
 departments	department
@@ -545,6 +547,7 @@ ieyasu	Ieyasu
 ieyasu's	Ieyasu
 igeta	igeta
 igune	igune
+imperial spine	Imperial spine
 important cultural landscape	Important Cultural Landscape
 important cultural landscapes	Important Cultural Landscape
 inari	Inari
@@ -1039,6 +1042,8 @@ sally gate	sally port
 sally port	sally port
 sallyport	sally port
 salvage excavation	salvage excavation
+sand junk	sand junk
+sand junks	sand junk
 sand sluice	sand sluice
 sando	sando
 sanguan	Three Officials
@@ -1146,6 +1151,7 @@ spiraea	Spiraea
 spread footing	footing
 spring and autumn	Spring and Autumn
 spring line	spring line
+srtm	SRTM
 steading	steading
 steadings	steading
 stem density	stem density
