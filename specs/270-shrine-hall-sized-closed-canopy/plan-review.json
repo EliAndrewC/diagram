@@ -1,0 +1,45 @@
+{
+ "feature": "270-shrine-hall-sized-closed-canopy",
+ "plan_sha256": "0286c66327e4547e89ae314f736b7677ade79d507e9f697b668035391414db54",
+ "reviewed": "2026-09-27",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "trees_overlap keeps every canopy-over-X test; its pair test reports only a duplicated tree (trunks closer than a third of the smaller crown's radius, a labeled GUESS); the test rewritten: a partly overlapping pair passes, a concentric pair is reported",
+   "class": "within",
+   "why": "The GM: crowns may overlap; the rule was against trees 'overlapping in ways which didn't make sense'. FR-001 lets crowns overlap, keeps the duplicated-tree finding and requires its threshold sourced or labeled a guess; D1 labels it a guess (R2 records the absence) and it catches feature 257's concentric pair. The 1/3-radius threshold sits well under D2's half-the-radii spacing, so the grove D2 draws cannot trip it."
+  },
+  {
+   "id": "Phases-1",
+   "summary": "Phase 1 reads 'T01: trees_overlap drops the pair test (test red first)'",
+   "class": "within",
+   "why": "Read literally, this line would delete the duplicated-tree check that spec round 1 required be kept. D1 (the governing decision) and tasks.md T01 ('drops the crown-on-crown test ... a concentric pair is a duplicated tree') both keep it, so the plan does not decide to narrow; the phase line is stale wording. It should read 'drops the crown-on-crown test; the pair test reports only a duplicated tree' so no implementer follows it literally."
+  },
+  {
+   "id": "D2",
+   "summary": "The grove's crowns overlap: placement accepts a center at least about half the two radii from every other; target a closed canopy measured on the layout and reported in the notes; degree labeled a guess",
+   "class": "within",
+   "why": "FR-002/SC-002: the canopy covers most of the grove's ground, measured on the layout, sheet and map matching. The spacing rule is the means; the density is labeled a guess because R3 found no source that measures canopy cover."
+  },
+  {
+   "id": "D3",
+   "summary": "The hall-and-dwelling 72 by 32 ft (2,304 sq ft): hall 28 by 32 at the center, kitchen and dwelling ends 22 ft each, depth 32 ft; hall centered on the approach axis; interior refitted (altar bay 10 ft, worship floor 28 by 22, monk's rooms 22 by 20, writing room 12 ft, entry 4 ft)",
+   "class": "within",
+   "why": "The GM: size the shrine from the research, not the 60 by 48 ft glyph. FR-003's three bands all hold on the plan's own arithmetic: hall end 28 and 32 ft inside 20-35; whole 2,304 sq ft inside 2,100-3,600; depth 32 ft (9.75 m) inside Kaie-ji's 8-13 m. Each value labeled accurate-as-a-band, value a guess, as spec scenario 1 asks. One-roof form and approach axis kept per the spec's edge cases; the interior refit is the necessary consequence of the new footprint, with the parts 268 already drew (kitchen end included)."
+  },
+  {
+   "id": "D4",
+   "summary": "The map follows the sheet: the glyph 36 by 16 map px (2 ft/px) at the same center; the manifest's religious and shrines records to it; the arches one pitch off the new face; the grove's far edge at the outermost arch; the frozen map edited by hand as in 268",
+   "class": "within",
+   "why": "FR-003 requires the map's glyph and manifest brought to the new footprint with the arches, forecourt, basin, clearing and grove following. 72/2 by 32/2 = 36 by 16 at the village map's 2 ft scale. The grove ending at the outermost arch is feature 268's accepted FR-007 extent carried over, not a new limit."
+  },
+  {
+   "id": "D5",
+   "summary": "The sizing rule in buildings.md and the program: a building's dimensions on a sheet come from the research unless the GM gave them, never from a map's glyph; where a map's glyph differs, the map is edited to the sheet",
+   "class": "within",
+   "why": "FR-004 carries the first half verbatim, from the GM's 'presume they are NOT a real measurement as a default'. The second half generalizes what FR-003 does for this building; given feature 257's matches_map (a sheet on a map matches it), a research-sized sheet can only agree with its map by the map moving. It widens nothing the GM limited and narrows nothing asked."
+  }
+ ],
+ "verdict": "CLEAR"
+}

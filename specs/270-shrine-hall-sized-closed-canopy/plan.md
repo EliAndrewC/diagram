@@ -51,7 +51,7 @@ and the program.
   `religious` and `shrines` records to it; the arches one pitch off the new face (map y 1088 to 1124); the grove's
   far edge at the outermost arch. The frozen map's svg/png are edited in the mirror as in 268.
 - **D5 - the sizing rule**: a building's dimensions on a sheet come from the research unless the GM gave them,
-  and never from a map's glyph; where a map's glyph differs, the map is edited to the sheet (buildings.md, the
+  and never from a map's glyph as a measurement; where a map's glyph differs, the map is edited to the sheet (buildings.md, the
   program).
 
 (Figures observed 2026-09-27; method: read from the record's question 120 and the 268 sheet's notes; the new ones
@@ -59,7 +59,7 @@ this plan's arithmetic on those bands.)
 
 ## Phases
 
-1. T01: `trees_overlap` drops the pair test (test red first); docs.
+1. T01: `trees_overlap` drops the crown-on-crown test; its pair test reports only a duplicated tree (the test rewritten red first); docs.
 2. T02: the layout re-run - the building 72 by 32, the clearing, the arches, the grove closed - the sheet and the
    map (svg, png, manifest), the notes; pack audit and `matches_map` green.
 3. T03: `buildings.md`, the program and the hall item's why (D5, D3).
