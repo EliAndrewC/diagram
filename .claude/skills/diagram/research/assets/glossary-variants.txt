@@ -8,6 +8,7 @@ abutment	abutment
 abutments	abutment
 across the beams	ridge span
 adlittoral	adlittoral
+ai-no-shuku	ai-no-shuku
 ake-mutsu	ake-mutsu
 akiba	Akiba
 akusui	akusui
@@ -95,10 +96,13 @@ black-charcoal	black charcoal
 board feet	board foot
 board foot	board foot
 bodaiji	bodaiji
+bojikui	bojikui
 bomori	bomori
 bon	Bon
 boom	boom
 booms	boom
+boundary post	bojikui
+boundary posts	bojikui
 broadcast	broadcast sowing
 broadcast oilseed stand	broadcast sowing
 broadcast sowing	broadcast sowing
@@ -408,6 +412,8 @@ fengshui back grove	fengshui grove
 fengshui forest	fengshui grove
 fengshui grove	fengshui grove
 fengshuilin	fengshui grove
+ferry landing	watashiba
+ferry landings	watashiba
 fertilizer boat	fertilizer boat
 fertilizer boats	fertilizer boat
 fetch	fetch
@@ -487,6 +493,7 @@ fuse	fuse
 fusekoshi	inverted siphon
 gabion	gabion
 gabions	gabion
+gaison	gaison
 galleried mining	siege mining
 game master	GM
 gangi	gangi
@@ -757,6 +764,8 @@ kanagashi	kanagashi
 kanbun	Kanbun
 kanden	kanden
 kangxi	Kangxi
+kanjo-nawa	kanjo-nawa
+kanjo-tsuri	kanjo-nawa
 kannon	Kannon
 kannushi	kannushi
 kanto	Kanto
@@ -938,6 +947,7 @@ meireki	Meireki
 men-hai	taiping-gang
 menbansho	menbansho
 mengxi bitan	Mengxi Bitan
+michikiri	michikiri
 micro-high	micro-high
 micro-highs	micro-high
 middle moat	middle moat
@@ -982,6 +992,7 @@ mukaibansho	mukaibansho
 mukakusha	mukakusha
 mulberry-dike fishpond	dike-pond
 murabarai	murabarai
+murakiri	murakiri
 murataka	murataka
 muromachi	Muromachi
 musashi	Musashi
@@ -1185,6 +1196,8 @@ renkaku	renkaku
 rent bursary	rent bursary
 rent-collection bursaries	rent bursary
 rent-collection bursary	rent bursary
+rest stop	tateba
+rest stops	tateba
 return flow	return flow
 revetment	revetment
 revetments	revetment
@@ -1369,6 +1382,7 @@ straw rick	rick
 straw ricks	rick
 stream order	stream order
 stream orders	stream order
+street village	gaison
 stringer	stringer
 stringers	stringer
 strip footing	strip footing
@@ -1423,6 +1437,7 @@ tanglao	tanglao
 tangpu	tangpu
 tatami	tatami
 tatara	tatara
+tateba	tateba
 tatemachi	tatemachi
 tauchiguruma	tauchiguruma
 tawara	hyō
@@ -1553,6 +1568,7 @@ warren	warren
 warrens	warren
 warring states	Warring States
 warring-states	Warring States
+watashiba	watashiba
 water duty	water duty
 water gate	water gate
 water gates	water gate

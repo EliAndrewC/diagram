@@ -1261,7 +1261,7 @@
   ]
  },
  "dosojin": {
-  "def": "Roadside guardian-deity stones, set most often on the lonely stretches of a highway and near mountain passes.",
+  "def": "Roadside guardian-deity stones, set most often on the lonely stretches of a highway and near mountain passes, and usually at a village's edge where a road from outside meets its houses.",
   "variants": [
    "dosojin"
   ]
@@ -6533,6 +6533,62 @@
   "variants": [
    "white charcoal",
    "white-charcoal"
+  ]
+ },
+ "tateba": {
+  "def": "A rest stop on an Edo highway between two post towns, or at a pass: teahouses and stalls where travelers rested and horses or palanquins were sometimes changed, with no official lodging.",
+  "variants": [
+   "tateba",
+   "rest stop",
+   "rest stops"
+  ]
+ },
+ "watashiba": {
+  "def": "A ferry landing: the place on a riverbank where the ferry boats set out and came in.",
+  "variants": [
+   "watashiba",
+   "ferry landing",
+   "ferry landings"
+  ]
+ },
+ "bojikui": {
+  "def": "A boundary post: a tall wooden post set up beside a highway where a post town or a village ended, lettered, it seems, with the boundary and the distances.",
+  "variants": [
+   "bojikui",
+   "boundary post",
+   "boundary posts"
+  ]
+ },
+ "kanjo-nawa": {
+  "def": "A sacred rope strung across the road at a village's edge, most often at New Year, hung with charms of straw to keep sickness and evil out; commonest in and around the Kinki region.",
+  "variants": [
+   "kanjo-nawa",
+   "kanjo-tsuri"
+  ]
+ },
+ "michikiri": {
+  "def": "Cutting the road: the village custom of barring evil at the road into the village - a boundary god set there, a rope or straw serpent strung across the way, straw sandals offered.",
+  "variants": [
+   "michikiri"
+  ]
+ },
+ "ai-no-shuku": {
+  "def": "An in-between station: a rest stop between two post towns that grew into a street of shops, officially a village and in principle forbidden to lodge travelers.",
+  "variants": [
+   "ai-no-shuku"
+  ]
+ },
+ "gaison": {
+  "def": "Street village: a village packed tight along both sides of a road and living from it, with shops and lodging - the denser, trading form of the row village.",
+  "variants": [
+   "gaison",
+   "street village"
+  ]
+ },
+ "murakiri": {
+  "def": "The partition of villages at the start of the Edo period: each village made a unit of rule and tax with its own fields and a fixed boundary, drawn with an eye to its irrigation water and its rights in the common hills.",
+  "variants": [
+   "murakiri"
   ]
  }
 }
