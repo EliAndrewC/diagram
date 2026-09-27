@@ -207,6 +207,7 @@ Also edits 140, 210.
 - A143 **Hamlet burials**: where does a hamlet bury its dead - household plots beside the farmstead (yashiki-baka), a
   shared hillside, the district's ground? (religion-and-death/210; field graves are 267's R52). M. P1.
   > COORDINATION (A143): keep to the household plot (yashiki-baka) itself - its frequency and its seat on the plot; 269's religion-and-death 160/170/180/206/270/280 (280 is a KNOB of graveyard forms) are in diagram-supplemental - read and cite them
+  > COORDINATION (A143): whether a HAMLET keeps its own graveyard (or its dead and bones go to the main village's) is feature 273's (Diagram shrines), a new question in 272's range; the GM ruled on 2026-09-27 that only the main village has the shrine, the headman's house and the cremation ground. Keep 400 to the household grave's form and point to 273's question once numbered
 - C157 **Pauper ground**: one per seat, and its size (the 10-30 ft is a guess)? (cities/capitals/333). S. P1.
 - D63 **The tier program**: what religious and funerary features does each size of settlement carry?
   (religion-and-death/210, 1 note, 1 absence). M. P1.
@@ -614,24 +615,24 @@ rows EDIT an existing section syncs from main first, since 269's and 267's edits
 |---|---|---|
 | V1 | 5 | landed (batch 1) |
 | V2 | 5 | landed (batch 1) |
-| V3 | 5 | checked (queue 2) |
-| V4 | 5 | checked (queue 2) |
-| V5 | 5 | writing (queue 2) |
+| V3 | 5 | landed (batch 2) |
+| V4 | 5 | landed (batch 2) |
+| V5 | 5 | landed (batch 2) |
 | V6 | 4 | landed (batch 1) |
 | V7 | 6 | landed (batch 1) |
 | W1 | 5 | landed (batch 1) |
 | U1 | 6 | landed (batch 1) |
-| R1 | 4 | checking (queue 5) |
+| R1 | 4 | landed (batch 2) |
 | T1 | 6 | landed (batch 1) |
 | T2 | 6 | landed (batch 1) |
 | T3 | 5 | landed (batch 1) |
 | T4 | 5 | landed (batch 1) |
-| W2 | 7 | queued (queue 5) |
+| W2 | 7 | landed (batch 2) |
 | U2 | 6 | todo |
 | U3 | 5 | todo |
-| R2 | 4 | taken by Diagram shrines (2026-09-27, by agreement) |
-| G1 | 5 | checking (queue 4) |
-| G2 | 5 | queued (queue 4) |
+| R2 | 4 | done by Diagram shrines (272): religion-and-death 450, 460, 470, 040 (272) |
+| G1 | 5 | landed (batch 2) |
+| G2 | 5 | landed (batch 2) |
 | K1 | 5 | todo |
 | K2 | 7 | writing (queue 6) |
 | K3 | 6 | todo |
@@ -640,8 +641,18 @@ rows EDIT an existing section syncs from main first, since 269's and 267's edits
 | K6 | 4 | todo |
 | K7 | 4 | todo |
 | U4 | 6 | todo |
-| R3 | 4 | taken by Diagram shrines (2026-09-27, by agreement) |
+| R3 | 4 | done by Diagram shrines (272): religion-and-death 500, 510, 520, 530, 190 (272) |
 | T5 | 6 | todo |
 | U5 | 7 | todo |
-| R4 | 4 | taken by Diagram shrines (2026-09-27, by agreement) |
+| R4 | 4 | done by Diagram shrines (272): religion-and-death 550, 560, 570, 580, 590 (272) |
 | U6 | 4 | todo |
+
+## Outcomes of the rows handed to feature 272 (Diagram shrines, 2026-09-27), all on religion-and-death
+
+- R2: B96/D66 -> 450; B97/B98/D65 -> 460; B101/C152 -> 470; C147/D70 -> 040 (corrected).
+- R3: A138/D64 -> 500; A139 -> 510; A140/D61/B103 -> 520; A144 -> 530 and 190.
+- R4: B91/D78 -> 550; C144 -> 570; D75 -> 560; D76/D77 -> 560/570; the city temple complex and temple neighborhood
+  -> 580 and 590.
+- Shrine rows: A133, A135, D49, D52-D56 confirmed in 100-128; 121 is new (the country monk's dwelling). D50 (a small
+  kuri) and D51 (a village bell tower) are SILENT after two searches, each with an absence note naming both.
+- D63: 210 is the tier table.

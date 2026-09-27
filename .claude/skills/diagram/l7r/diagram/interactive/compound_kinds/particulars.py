@@ -147,13 +147,13 @@ class River(Kind):
     heavy goods.
 
     Why: Where navigable natural water exists, it is the main freight route, and a county on it is a staging
-    node: its tax grain moves on by boat toward the central stores rather than sitting in rows of granaries
+    node: its tax grain moves on by boat - hired hulls flying an official pennant, inspected at each port of call, for the office owns none - toward the central stores rather than sitting in rows of granaries
     at the office. In this setting only the Lion dig transport canals, so for any other county the river is
     the way.
 
     Note: Freight by water is a recorded finding, and the village granary is recorded as a temporary store for
     shipment, but that a well-watered county's office granary is a staging node its tax rice passes through is
-    the research's own reading; the rule that only the Lion build canals is the setting's canon. That Japan's heavy freight also went by water rests on
+    the research's own reading, and so is the contrast with an isolated county's rows of granaries, whose one example (Takayama holding rice for all of Hida) has no readable source; the rule that only the Lion build canals is the setting's canon. That Japan's heavy freight also went by water rests on
     general reading rather than a page a reader can open.
 
     Caveat: That Japan's heavy freight also went by water rests on general reading rather than a page a reader
@@ -175,12 +175,12 @@ class RiverLanding(Kind):
     alongside it, a watch post over the water and a small altar for the boatmen - each its own feature, lit with
     the landing.
 
-    Why: Tax grain went downstream on hired commoners' boats flying an official pennant and inspected at the
+    Why: Tax grain went downstream on boats the shogunate hired directly, flying an official pennant and inspected at the
     ports of call - the magistracy owned no hulls, and its hold on the cargo was documentary - so a posting on
     a navigable river keeps a landing of its own where the grain is loaded.
 
     Note: That the tax grain went on hired boats under an official pennant, inspected at the ports of call,
-    follows the record; that it passed through the compound, and so was loaded at the compound's own landing,
+    follows the record; that the magistracy's hold on it was documentary, a matter of counts and records, and that it passed through the compound and so was loaded at the compound's own landing,
     is this project's reading.
 
     Name: river landing

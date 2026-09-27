@@ -6,5 +6,6 @@
   "Qing-dynasty",
   "Ming-Qing",
   "Qing"
- ]
+ ],
+ "cased": true
 }

@@ -342,7 +342,8 @@
    "Qing-dynasty",
    "Ming-Qing",
    "Qing"
-  ]
+  ],
+  "cased": true
  },
  "Qingming": {
   "def": "The Chinese tomb-sweeping festival, at which families clear and tend their ancestors' graves.",
@@ -1208,7 +1209,8 @@
    "dike-pond",
    "dike-ponds",
    "mulberry-dike fishpond",
-   "sangji yutang"
+   "sangji yutang",
+   "mulberry plot-fish ponds"
   ]
  },
  "discharge": {
@@ -1535,12 +1537,6 @@
   "def": "A boat-entry canal cut into a Japanese city so that barges float in to an internal dock - still water, never a live river.",
   "variants": [
    "funairi-bori"
-  ]
- },
- "furigana": {
-  "def": "The small kana printed beside a Chinese character in Japanese text to give its reading.",
-  "variants": [
-   "furigana"
   ]
  },
  "gabion": {
@@ -2158,7 +2154,9 @@
  "kami-yashiki": {
   "def": "A domain lord's upper mansion in Edo, the principal compound of their household there; a small lord's ran 2,500-7,000 tsubo.",
   "variants": [
-   "kami-yashiki"
+   "kami-yashiki",
+   "upper residence",
+   "upper residences"
   ]
  },
  "kamiza": {
@@ -2465,6 +2463,7 @@
    "kura",
    "dozo",
    "onkura",
+   "okura",
    "御蔵",
    "Dozō"
   ]
@@ -2681,7 +2680,7 @@
   ]
  },
  "masugata": {
-  "def": "A castle gate court: a square enclosure between two gates set at right angles, so that whoever comes through the first must turn under fire before the second.",
+  "def": "A castle gate court: a square enclosure between two gates set at right angles, so that whoever comes through the first must turn under fire before the second. At the ends of a post town, the name for the place where the highway is bent twice at right angles to the same end.",
   "variants": [
    "masugata"
   ]
@@ -2811,7 +2810,12 @@
   "def": "A gate cut through a long row building: a samurai residence's front range, with the gatekeeper's room, servants' quarters, stable and storeroom inside it.",
   "variants": [
    "nagayamon",
-   "nagaya-mon"
+   "nagaya-mon",
+   "rowhouse gate",
+   "rowhouse gates",
+   "gate rowhouse",
+   "gate rowhouses",
+   "gate-rowhouse"
   ]
  },
  "nagewatashi": {
@@ -2983,7 +2987,8 @@
   "def": "The white-gravel court where a case was heard, the litigants kneeling below the magistrate's raised floor.",
   "variants": [
    "oshirasu",
-   "shirasu"
+   "shirasu",
+   "white-sand court"
   ]
  },
  "ossuary": {
@@ -3953,7 +3958,8 @@
    "土地庙",
    "earth god",
    "earth-god",
-   "earth-god shrine"
+   "earth-god shrine",
+   "god of land"
   ]
  },
  "tulou": {
@@ -6215,7 +6221,8 @@
   "def": "The deity of a Chinese yamen's jail, enshrined in a small temple inside the jail itself; at Neixiang the statue is of the ancient judge Gao Yao.",
   "variants": [
    "jail-god",
-   "jail god"
+   "jail god",
+   "prison god"
   ]
  },
  "Dacheng gate": {
@@ -6857,7 +6864,7 @@
   ]
  },
  "weilongwu": {
-  "def": "An enclosed Hakka house of south China: a central hall with wings, closed at the back by a ring of rooms for kitchens, stores, privies, pigsties and hen coops, built so its household could live self-sufficient inside its own walls.",
+  "def": "An enclosed Hakka house of south China: a central hall with wings, closed at the back by a ring of rooms for kitchens, stores, privies, pigsties and hen coops, built so its household could live self-sufficient inside its own walls. In front of it lie a rectangular drying floor (the heping) and a half-moon fengshui pond.",
   "variants": [
    "weilongwu",
    "hall-and-wing house",
@@ -6868,6 +6875,71 @@
   "def": "An older (Wade-Giles) spelling of xian, a county of imperial and Republican China, the unit governed from a county seat.",
   "variants": [
    "hsien"
+  ]
+ },
+ "bansui": {
+  "def": "Rotation of irrigation water: which villages or fields may take water, how wide their channels may be and when their gates may open, fixed by rule, most strictly in a dry season.",
+  "variants": [
+   "bansui"
+  ]
+ },
+ "bungi": {
+  "def": "A graduated stake set at the point where one ditch is split between two areas or villages, by whose marks the split is set.",
+  "variants": [
+   "bungi"
+  ]
+ },
+ "treadle wheel": {
+  "def": "A small paddle wheel, about five feet across, that one person turned by treading its blades to lift ditch water about a yard up into a paddy; light enough to carry to wherever it was needed.",
+  "variants": [
+   "treadle wheel",
+   "treadle wheels",
+   "fumiguruma"
+  ]
+ },
+ "chain pump": {
+  "def": "The Chinese square-pallet pump (the dragon-bone wheel): an endless chain of boards drawn up a wooden trough, trodden by people or turned by an ox, lifting water a yard or two from a river or canal onto fields.",
+  "variants": [
+   "chain pump",
+   "chain pumps",
+   "dragon-bone wheel",
+   "dragon-bone wheels",
+   "dragon-bone water wheel",
+   "dragon-bone water wheels"
+  ]
+ },
+ "noria": {
+  "def": "A large water wheel set in a river, turned by the current, with tubes or buckets on its rim that lift water and tip it into a trough leading to the fields.",
+  "variants": [
+   "noria",
+   "norias"
+  ]
+ },
+ "mizuya": {
+  "def": "A flood refuge on a farmstead: a storehouse, sometimes fit to live in, built on a stone-faced mound higher than the house, stocked with food and bedding for the days a flood lasted.",
+  "variants": [
+   "mizuya",
+   "mizuka"
+  ]
+ },
+ "kawado": {
+  "def": "A shared washing place on a river or ditch bank: a footing or steps down to the water where vegetables and clothes were washed.",
+  "variants": [
+   "kawado",
+   "araiba"
+  ]
+ },
+ "water pestle": {
+  "def": "A water mill that pounds grain: a stream turns a wheel whose axle lifts and drops a row of pestles into mortars, to polish rice or crush grain.",
+  "variants": [
+   "water pestle",
+   "water pestles"
+  ]
+ },
+ "waju": {
+  "def": "A ring-diked community of the low river plains: villages and their fields enclosed by one continuous levee and bound together to defend it.",
+  "variants": [
+   "waju"
   ]
  },
  "town ground": {
@@ -7137,6 +7209,38 @@
    "river offices"
   ]
  },
+ "eighty-eighth night": {
+  "def": "The eighty-eighth night counted from the first day of spring on the old calendar, about May 2 - a traditional date for starting the season's farm work.",
+  "variants": [
+   "eighty-eighth night",
+   "hachijuhachiya"
+  ]
+ },
+ "Tiangong kaiwu": {
+  "def": "Song Yingxing's illustrated Ming dynasty encyclopedia of crafts and farming (1637), whose irrigation chapter gives the daily rates of the noria, the chain pump, the well-sweep and the windlass.",
+  "variants": [
+   "Tiangong kaiwu"
+  ]
+ },
+ "Nogu benriron": {
+  "def": "Okura Nagatsune's illustrated treatise on farm tools (1822), the source for when the treadle wheel was made in Osaka and how it spread.",
+  "variants": [
+   "Nogu benriron"
+  ]
+ },
+ "Horeki": {
+  "def": "A Japanese era name, 1751-1764.",
+  "variants": [
+   "Horeki",
+   "Hōreki"
+  ]
+ },
+ "Settsu": {
+  "def": "A city in Osaka Prefecture, named for the old province of Settsu around Osaka Bay.",
+  "variants": [
+   "Settsu"
+  ]
+ },
  "county magistrate": {
   "def": "The official who governs a county from its walled county town. Their jurisdiction covers the whole county, the town and its countryside alike, so the ground just outside the town gate is still under their rule.",
   "variants": [
@@ -7158,7 +7262,9 @@
    "half-story",
    "half-stories",
    "tsushi nikai",
-   "zushi nikai"
+   "zushi nikai",
+   "tsushi-nikai",
+   "zushi-nikai"
   ]
  },
  "ridge-divided nagaya": {
@@ -7200,6 +7306,13 @@
    "yanushi",
    "house manager",
    "house manager's"
+  ]
+ },
+ "take-well": {
+  "def": "A household's own well in a piped town water system: filled by bamboo pipe from a parent well at the water source instead of being dug down to groundwater. Omihachiman's townspeople ran such a system themselves.",
+  "variants": [
+   "take-well",
+   "take-wells"
   ]
  },
  "mokoshi": {
@@ -7245,6 +7358,13 @@
   "variants": [
    "dharma hall",
    "dharma halls"
+  ]
+ },
+ "contour canal": {
+  "def": "A canal dug along a contour line, so it stays nearly level across a slope instead of running down it; it can water only the ground below it.",
+  "variants": [
+   "contour canal",
+   "contour canals"
   ]
  },
  "mizunomi": {
@@ -7310,6 +7430,14 @@
    "sutra house",
    "sutra houses",
    "kyozo"
+  ]
+ },
+ "melon-on-the-vine": {
+  "def": "A Chinese irrigation layout in which one long canal (the vine) links and fills many ponds and small reservoirs along its course (the melons), each storing water for the fields around it - a larger counterpart of Japan's parent-child ponds.",
+  "variants": [
+   "melon-on-the-vine",
+   "melon on the vine",
+   "长藤结瓜"
   ]
  },
  "shoro": {
@@ -7547,6 +7675,26 @@
    "fire beds"
   ]
  },
+ "Keio": {
+  "def": "The Japanese era name for the years 1865 to 1868, the last years of the shogunate; \"Keio 3\" is 1867.",
+  "variants": [
+   "Keio",
+   "Keio era"
+  ]
+ },
+ "swept collar": {
+  "def": "The strip of bare, swept ground kept around a shrine hall, an arch or a grave plot by brooms, feet and the traffic of the approach; its edge falls wherever the tending gives out into the scrub.",
+  "variants": [
+   "swept collar",
+   "swept ground"
+  ]
+ },
+ "Tanabata": {
+  "def": "The festival of the seventh day of the seventh month. In many regions that day was also counted the first day of Bon (nanuka-bon), when graves and the paths to them were cleaned to prepare for welcoming the spirits.",
+  "variants": [
+   "Tanabata"
+  ]
+ },
  "firebox": {
   "def": "The combustion chamber at the foot of a climbing kiln, where the wood fire is fed; the firing chambers climb the slope above it and the chimney stands at the top.",
   "variants": [
@@ -7574,6 +7722,26 @@
    "kiln houses"
   ]
  },
+ "koaza": {
+  "def": "A small named section of land within an ō-aza, the district of a village; the smallest named division of a village's ground.",
+  "variants": [
+   "koaza",
+   "ko-aza"
+  ]
+ },
+ "Kansai": {
+  "def": "The region of west-central Honshu around Kyoto, Osaka and Nara, the old capital region; the Kinai lies at its heart.",
+  "variants": [
+   "Kansai"
+  ]
+ },
+ "Ou": {
+  "def": "The old name for the northeast of Honshu, the two provinces of Mutsu and Dewa, which Yanagita counts among the regions where household graves were many.",
+  "variants": [
+   "Ou"
+  ],
+  "cased": true
+ },
  "country monk": {
   "def": "In this setting, the one tax-free religious figure of a village district, who tends the village's shrine; their dwelling may double as the shrine itself.",
   "variants": [
@@ -7593,6 +7761,21 @@
   "variants": [
    "Nehan gate",
    "Nehan"
+  ]
+ },
+ "levy storehouse": {
+  "def": "A storehouse in an intendant's office for what was paid in as levies other than the rice tax - the unjo charged on trades, fisheries and the like.",
+  "variants": [
+   "levy storehouse",
+   "levy storehouses",
+   "unjo-gura"
+  ]
+ },
+ "Echigo": {
+  "def": "An old province on the Sea of Japan coast of Honshu, the modern Niigata prefecture.",
+  "variants": [
+   "Echigo",
+   "Echigo province"
   ]
  },
  "sub-temple": {
@@ -7659,6 +7842,26 @@
    "Hokke sect"
   ]
  },
+ "horita": {
+  "def": "A raised paddy of the Japanese waju: part of a poorly drained paddy dug out and the mud piled on the rest, so the rice stands on long ridges just above the water and the dug strips between are channels for a field boat.",
+  "variants": [
+   "horita",
+   "horiage-den"
+  ]
+ },
+ "hakehi": {
+  "def": "A drain culvert through a waju's ring dike, shut while the river outside stood higher than the fields and opened when it fell, so the polder's standing water ran out by gravity.",
+  "variants": [
+   "hakehi"
+  ]
+ },
+ "warichi": {
+  "def": "The Edo-period custom of re-dividing a village's fields among its landholders by lot every so many years, so that good and bad ground, and the risk of flood, were shared out evenly.",
+  "variants": [
+   "warichi",
+   "jiwari"
+  ]
+ },
  "Taiji": {
   "def": "In Chinese thought, the one whole that divides into yin and yang - which is why the Hakka read a half-moon pond (yin) and the mound behind the house (yang) as the two halves of one arrangement.",
   "variants": [
@@ -7669,6 +7872,12 @@
   "def": "The Taiwan Hakka Museum's English name for the school of fengshui its page on half-moon ponds describes: a house built lower at the front and higher at the back, so that a household's luck rises step by step, with the half-moon pond and the mound behind the house read as yin and yang.",
   "variants": [
    "metamorphosis fengshui"
+  ]
+ },
+ "tezuki": {
+  "def": "A junior official of a shogunate intendant's office, ranked with the tedai; the tezuki and tedai lived in the huts and rowhouses on the office grounds.",
+  "variants": [
+   "tezuki"
   ]
  },
  "Tenmangu": {
@@ -7684,6 +7893,39 @@
   "variants": [
    "offering hall",
    "heiden"
+  ]
+ },
+ "tachimuba": {
+  "def": "A station that the shogunate's intendants set up at a port of call on the tax-rice shipping route. Castle-rice ships were protected there and their loads were strictly inspected.",
+  "variants": [
+   "tachimuba"
+  ]
+ },
+ "castle rice": {
+  "def": "The shogunate's own tax rice (御城米), shipped to Edo on hired vessels under official protection and inspection.",
+  "variants": [
+   "castle rice",
+   "castle-rice"
+  ]
+ },
+ "adze": {
+  "def": "A woodworker's cutting tool with its blade set crosswise to the handle, swung to shape and smooth the faces of timbers. On a storehouse frame, the marks it leaves date and grade the work.",
+  "variants": [
+   "adze",
+   "adzes"
+  ]
+ },
+ "se-machi": {
+  "def": "An old land-register way of counting the paddies in a terraced plot: \"one tan, four se-machi\" records one tan of terrace made up of four separate paddies.",
+  "variants": [
+   "se-machi"
+  ]
+ },
+ "fault scarp": {
+  "def": "A steep face of ground left where the earth has shifted along a fault; at Sakaori, the steep west side of the valley, where the walls are highest.",
+  "variants": [
+   "fault scarp",
+   "fault scarps"
   ]
  },
  "kokuso": {
@@ -7707,11 +7949,63 @@
    "mushiko windows"
   ]
  },
+ "kokera": {
+  "def": "A roof of thin wooden shingles laid in overlapping courses; the Takayama jin'ya's office used it for part of its roof.",
+  "variants": [
+   "kokera",
+   "kokera shingle"
+  ]
+ },
+ "odoko": {
+  "def": "A great display alcove: the broad ceremonial alcove of a formal reception room, whose width marked the rank of the house - at Takayama Jin'ya's entrance room it is 2.5 ken wide, the mark of a 100,000-koku rank.",
+  "variants": [
+   "odoko",
+   "ōdoko"
+  ]
+ },
+ "noshi-buki": {
+  "def": "A roof laid with wooden boards: with kokera shingle, one of the plank roofings that cover the buildings of Takayama Jin'ya, where snow wore out the tiles of the day and timber was easy to get.",
+  "variants": [
+   "noshi-buki",
+   "noshi-shingle",
+   "noshi-board"
+  ]
+ },
  "water teahouse": {
   "def": "In the Edo period, a teahouse where a passer-by sat to rest over tea, as twenty did in a row on Sensoji's approach; a rest stop rather than an eating house.",
   "variants": [
    "water teahouse",
    "water teahouses"
+  ]
+ },
+ "open-ended dike": {
+  "def": "A river dike built in separate lengths with gaps left between them, so that a flood spreads through the gaps over the low ground behind and loses its force - with the waju's ring dike, one of the old Japanese ways of building dikes before continuous ones.",
+  "variants": [
+   "open-ended dike",
+   "open-ended dikes",
+   "kasumi dike",
+   "kasumi dikes"
+  ]
+ },
+ "dobu": {
+  "def": "A small open ditch carrying rain and waste water - before a house front, or under the boards down the middle of a back alley - narrow enough to step over.",
+  "variants": [
+   "dobu"
+  ]
+ },
+ "field boat": {
+  "def": "A small, flat-bottomed boat for moving through waterlogged paddies and along the channels dug between horita strips, carrying people, seedlings and harvest.",
+  "variants": [
+   "field boat",
+   "field boats",
+   "tabune"
+  ]
+ },
+ "overlay": {
+  "def": "A cash crop drawn over part of a village's rice field on the ground that suits it - a fishpond with mulberry on its dikes or a lotus bed on the lowest, wettest plots, or a tea garden on the lower hillside.",
+  "variants": [
+   "overlay",
+   "overlays"
   ]
  },
  "Dunhuang": {
@@ -7731,6 +8025,131 @@
   "def": "Paper, often marked with gold, that believers give to a Chinese temple to be burned as an offering.",
   "variants": [
    "gold paper"
+  ]
+ },
+ "Shen Kuo": {
+  "def": "A Song dynasty scholar-official who wrote the record of the Wanchun polder, whose restoration was taken up in 1061, that the research quotes on how the polder's dike was built and planted.",
+  "variants": [
+   "Shen Kuo"
+  ]
+ },
+ "dobuita": {
+  "def": "The ditch boards laid end to end down the middle of a back alley, covering its dobu and making the path people walk on.",
+  "variants": [
+   "dobuita"
+  ]
+ },
+ "kaishochi": {
+  "def": "The open lot left in the middle of each 60-ken (about 120 m) square block of Edo's commoner land, behind the town lots that lined the streets.",
+  "variants": [
+   "kaishochi"
+  ]
+ },
+ "Kan'ei": {
+  "def": "A Japanese era name, 1624 to 1644, early in the Edo period.",
+  "variants": [
+   "Kan'ei",
+   "Kan'ei period"
+  ]
+ },
+ "bondservant": {
+  "def": "In medieval Japan, an unfree servant (genin) bound to a warrior household, who lived in its row houses and worked the paddy and fields before its gate.",
+  "variants": [
+   "bondservant",
+   "bondservants",
+   "bondservants'"
+  ]
+ },
+ "Northern and Southern Courts": {
+  "def": "The period from 1336 to 1392, when two rival imperial courts, one at Kyoto and one at Yoshino, each claimed the throne and warriors fought for one or the other.",
+  "variants": [
+   "Northern and Southern Courts",
+   "Nanbokucho"
+  ]
+ },
+ "Zhouli": {
+  "def": "The Rites of Zhou, a classical Chinese text setting out the offices and rules of the Zhou state; it required trees planted beside the roads of the suburbs and the countryside.",
+  "variants": [
+   "Zhouli",
+   "Rites of Zhou"
+  ]
+ },
+ "Zhou dynasty": {
+  "def": "The ancient Chinese dynasty under which, by its classical texts, trees were planted along both sides of official roads; the Northern Zhou was a later, short-lived northern state of the 6th century.",
+  "variants": [
+   "Zhou dynasty",
+   "Zhou-dynasty",
+   "Northern Zhou"
+  ]
+ },
+ "Western Wei": {
+  "def": "A short-lived Chinese state of the mid-6th century in the north-west, under which distance was marked by an earth mound at every li beside the road, later replaced by pagoda trees.",
+  "variants": [
+   "Western Wei"
+  ]
+ },
+ "pagoda tree": {
+  "def": "The Chinese scholar tree (huai, 槐), a broad shade tree planted along Chinese official roads - under the Western Wei in place of the earth distance mounds, and by a Yuan edict beside elm and willow.",
+  "variants": [
+   "pagoda tree",
+   "pagoda trees"
+  ]
+ },
+ "storehouse-built": {
+  "def": "Of a townhouse: built the way a storehouse (kura) is built, with thick earth-plastered walls against fire, and standing on the street front. It was Edo's way, the opposite of Kyoto's, where the storehouse stood at the back of the lot.",
+  "variants": [
+   "storehouse-built",
+   "storehouse-built machiya"
+  ]
+ },
+ "kamidana": {
+  "def": "A small shelf-shrine to the gods, set high on a wall. The traditional Edo-period practice hall did not have one; a Ministry of Education meeting of 1936 made one required in school halls, under State Shinto.",
+  "variants": [
+   "kamidana"
+  ]
+ },
+ "iai": {
+  "def": "The Japanese art of drawing the sword and cutting in one movement. At a large domain school it was taught in its own practice hall, apart from fencing and the spear.",
+  "variants": [
+   "iai"
+  ]
+ },
+ "jujutsu": {
+  "def": "The Japanese art of fighting unarmed or lightly armed, by throws, holds and strikes. From the mid-Edo period its practice centered on free sparring (randori), and it came indoors onto board or tatami floors.",
+  "variants": [
+   "jujutsu",
+   "ju-jutsu"
+  ]
+ },
+ "State Shinto": {
+  "def": "The Japanese state's organization of Shinto as a national observance from the Meiji era until 1945. Under it, the shrine shelf became a required fitting of school practice halls in 1936.",
+  "variants": [
+   "State Shinto"
+  ]
+ },
+ "naginata": {
+  "def": "A Japanese pole weapon with a long curved blade, rendered \"halberd\" in English. At a large domain school it was taught in the same hall as iai and jujutsu.",
+  "variants": [
+   "naginata"
+  ]
+ },
+ "kang": {
+  "def": "A long raised platform of brick or earth, heated from beneath by a flue, that served as the bed in a north-Chinese house or inn; one in a carters' inn slept twenty and more.",
+  "variants": [
+   "kang",
+   "kangs"
+  ]
+ },
+ "mise": {
+  "def": "The board-floored shop room at the street front of a townhouse, where goods were sold or trade was done; in an inn built on the townhouse plan it stood beside the earth-floored passage.",
+  "variants": [
+   "mise"
+  ]
+ },
+ "sensei": {
+  "def": "A teacher of a martial art - here the master who heads a dojo, lives by its teaching and takes enrolled students.",
+  "variants": [
+   "sensei"
   ]
  }
 }
