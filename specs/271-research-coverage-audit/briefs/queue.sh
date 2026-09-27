@@ -20,7 +20,7 @@ for G in "$@"; do
   (cd "$Q" && python3 "$REL/gen.py" write "$G" >/dev/null)
   printf '#!/bin/sh\n# the check briefs for group %s, made from its write session'"'"'s handoff when that session ends\nexec python3 %s/%s/gen.py checks %s\n' "$G" "$Q" "$REL" "$G" > "$Q/$REL/$g-checks.sh"
   chmod +x "$Q/$REL/$g-checks.sh"
-  LIST="$LIST $REL/$g-write.md $REL/$g-checks.sh"
+  LIST="$LIST $REL/$g-write.md then:$REL/$g-checks.sh"
 done
 git -C "$Q" add -A && git -C "$Q" commit -q -m "271 queue $N: the write briefs for $*" || true
 cd "$Q" && exec scripts/page-session.sh "${LIST# }"

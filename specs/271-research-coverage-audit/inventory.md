@@ -217,10 +217,12 @@ Also edits 140, 210.
   acreage for ~80 non-farming households? (none). M. P1.
 - B04 **Town density**: how densely is a town's commercial core built against its farm zone (households per acre, the
   share of ground built)? (cities/sizing/020, city only). M. P1.
+  > COORDINATION (B04): keep to density per acre and the core against the farm zone; the population and household count are 269's towns/020 (B43, runs later) - leave them to it, and the check pass adds a pointer to 020
 - B05 **Town plan form**: linear road town, crossroads town or planned rectangle - which did Japanese and Chinese county
   seats take, and how often (a knob)? (towns/010). M. P1.
 - B06 **Walled or unwalled**: what share of county seats were walled (Chinese most, Japanese almost none), and what
   makes a town walled? (towns/100). M. P1.
+  > COORDINATION (B06): cite 269's cities/defenses 020-090 (B38) for the provincial-city comparison
 - B12 **Town by region**: how does a Japanese county town differ on the ground from a Chinese one (courtyard houses
   against machiya, wall or none, the yamen axis against a jin'ya at the edge)? (towns/010, cities/fabric/010). M. P1.
 
@@ -247,6 +249,8 @@ Also edits 140, 210.
 - B67 B68 C110 D135 **Inns, count and size**: how many inns did a county town, a post town (a Tōkaidō shukuba ran
   dozens of hatago) and a city keep, how big is a hatago, a wagon inn or a Chinese kezhan on the ground, with how many
   rooms and stories and what yard? (towns/050; cities/fabric/120 has the city count). M. P1.
+  > COORDINATION (B67): the CITY lodging-house count is 269's cities/fabric 120 (B40) - town and post-town inns are ours; cite 120 for the city figure
+  > COORDINATION (B68): the CITY lodging-house count is 269's cities/fabric 120 (B40) - cite it for the city; town inns are ours
 - B70 **Imperial waystation**: where does the setting's Imperial road waystation (canon: 25-30 staff, relay horses at
   a busy station) stand against a town, and what is its footprint? (none). M. P1.
 - B71 B72 D138 C45 **The post-horse office**: what did a post station keep - the toiya-ba (horse and porter office)
@@ -261,15 +265,18 @@ Also edits 140, 210.
 
 - B11 **Gate market size**: how many buildings and which trades make up a county town's gate market, and how far does
   it run out the road? (towns/080; the city strip is 269 B41's, cities/hinterland/040; cite it). M. P1.
+  > COORDINATION (B11): the CITY gate market is 269's cities/hinterland 040 (B41) - take the town side and point to it for cities
 - B41 **Town barns**: what are the barns of a town's hayfield (Hoshizora's five) - hay barns, ox sheds - and their
   size? (none). S. P1.
 - B132 **Edge woods**: why is a town's margin clothed and not left bare, and with what? (water/170,
   vegetation/030). S. P1.
 - B129 **Suburb along the road**: where does a town's built edge stop - does a ribbon of houses run out along the
   road past the last block (machi-hazure)? (none). S. P3.
+  > COORDINATION (B129): 269's cities/hinterland 040 (B41) covers the city strip outside a gate - take the town suburb, point to it
 - B128 C174 **Market gardens and the suburban belt**: did a town's or city's edge carry vegetable plots supplying it,
   fed by its night soil, and what else stood in a city's near hinterland (suburban villages, tile and lime works), how
   far out? (cities/hinterland/050; the retreats are 269 B41's). M. P3.
+  > COORDINATION (B128): 269's cities/hinterland 030 and 010/015 (B41) cover the city side - take the town side, point to them
 
 ## W2 - ways: streets, bridges and approach roads by tier (new: ways 160-230)
 
