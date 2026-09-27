@@ -773,6 +773,10 @@ kosatsuba	kosatsuba
 kotai-yoriai	kotaiyoriai
 kotaiyoriai	kotaiyoriai
 kuchi-agariya	agariya
+kuchidome	kuchidome
+kuchidome bansho	kuchidome
+kuchidome guard post	kuchidome
+kuchidome guard posts	kuchidome
 kuchiireya	hitoyado
 kui	kui
 kumi	kumi
@@ -952,8 +956,10 @@ ni-no-ma	ni-no-ma
 night soil	night soil
 night-soil	night soil
 nightsoil	night soil
+nihon kokugo daijiten	Nihon Kokugo Daijiten
 nihonbashi	Nihonbashi
 ninomaru	ninomaru
+nippo jisho	Nippo Jisho
 noborigama	noborigama
 nogyo zensho	Nogyo Zensho
 northern song	Song dynasty
