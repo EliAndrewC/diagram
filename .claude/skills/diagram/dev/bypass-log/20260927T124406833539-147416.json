@@ -1,0 +1,7 @@
+{
+  "utc": "2026-09-27T12:44:06Z",
+  "target": "review-accept",
+  "commit": "cb8efc2d1",
+  "outcome": "permitted",
+  "why": "review-accept kashikawa F1: no rule requires a lane to reach a house's door side and the lane serves the house by end_serves; the reviewer names the vernacular record as silent, and it was searched for feature 227's arrival rule without finding one"
+}

@@ -40,6 +40,7 @@ from .sweeps import (
     _sweep_doubled_remnants,
     _sweep_doubled_tails,
     _sweep_steading_fouls,
+    cut_past_connector,
     trim_free_stub,
 )
 from .touch import _touch_junctions
@@ -591,8 +592,14 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         _others = [
             (a, b) for _j, _o in enumerate(s.M.get("lanes") or []) if _j != _i for a, b in zip([tuple(q) for q in _o.get("pts") or []], [tuple(q) for q in (_o.get("pts") or [])[1:]], strict=False)
         ]
-        _q = trim_free_stub(_p, _others) if not _ln.get("connector") else _p
-        if len(_q) < len(_p):
+        _conn = [(a, b) for _o in s.M.get("lanes") or [] if _o.get("connector") for a, b in zip([tuple(q) for q in _o.get("pts") or []], [tuple(q) for q in (_o.get("pts") or [])[1:]], strict=False)]
+        # ...and a lane that ran on past the connector to a loose end is cut where it met it (feature 261: `cut_past_connector`)
+        _q = (
+            trim_free_stub(cut_past_connector(_p, _conn, [sg for sg in _others if sg not in _conn], [(float(h["x"]), float(h["y"])) for h in s.M.get("houses") or []]), _others)
+            if not _ln.get("connector")
+            else _p
+        )
+        if _q != _p:
             _ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in _q]
             s.reink_lane(_i)
     # ...and a record the joins emptied is not a lane: a husk with no points declares a way nothing draws (a review

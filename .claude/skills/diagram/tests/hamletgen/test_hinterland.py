@@ -587,3 +587,19 @@ def test_a_third_parcel_with_no_ground_off_the_row_is_not_seated(monkeypatch: py
     asked: list = []
     monkeypatch.setattr(parcels, "seat_off_the_row", lambda *a, **k: asked.append(1))
     assert _scan() == [] and asked, "every seat asked, none with ground off the row, and none seated"
+
+
+def test_a_bamboo_thicket_is_not_seated_on_the_water() -> None:
+    """Feature 261 (settlement-review of Mizuguchi): the stand's target fell on the brook once the houses moved north of it;
+    a watercourse is refused at its half-width and 3 ft, so no seat stands on a stream the scan is given."""
+    from l7r.diagram.settlement import Settlement, seg_dist
+
+    from ._builders import a_plan
+
+    plan = a_plan()
+    s = Settlement(plan.W, plan.H, seed=plan.spec.seed)
+    s.meta(name="B", scale="hamlet", ftpx=1, down_deg=90)
+    brook = [(0.0, 1000.0), (float(plan.W), 1000.0)]
+    s.M["streams"] = [{"poly": [list(p) for p in brook], "w": 7}]
+    seats = hg.hinterland.bamboo_seats(s, plan)
+    assert all(seg_dist(q[0], q[1], brook[0], brook[1]) > 3.5 + 3.0 for poly in seats for q in poly), "a stand on the water"

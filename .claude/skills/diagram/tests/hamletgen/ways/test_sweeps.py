@@ -626,3 +626,18 @@ def test_an_excursion_lane_is_dropped_only_where_the_rest_still_serves_its_house
     assert excursion_lanes([{"pts": [[200.0, 250.0], [200.0, 280.0]]}, home], [(200.0, 200.0)], [(200.0, 200.0)], brook) == [], "no plank"
     assert excursion_lanes([over, home], [(900.0, 900.0)], [(200.0, 200.0)], brook) == [], "by no re-served house"
     assert excursion_lanes([{**over, "connector": True}, home], [(200.0, 200.0)], [(200.0, 200.0)], brook) == []
+
+
+def test_a_lane_that_runs_on_past_the_connector_to_a_loose_end_is_cut_where_it_met_it() -> None:
+    """Feature 261 (settlement-review of Mizuguchi): a leg that met the way out at its end vertex and ran 52 ft on past it
+    is cut there; a tail that is some house's only way, an end on another lane, and a run past the reach all stay."""
+    from l7r.diagram.hamletgen.ways.sweeps import cut_past_connector, on_the_way
+
+    conn = [((0.0, 100.0), (400.0, 100.0))]
+    leg = [(0.0, 300.0), (0.0, 48.0)]  # meets the connector at its end vertex (0, 100) and runs 52 ft on
+    cut = cut_past_connector(leg, conn, [])
+    assert cut[0] == (0.0, 300.0) and abs(cut[-1][1] - 100.0) <= 6.0
+    assert cut_past_connector(leg, conn, [], [(-90.0, 20.0)]) == leg, "the tail is that house's only way"
+    assert cut_past_connector(leg, conn, [((-50.0, 48.0), (50.0, 48.0))]) == leg, "the end stands on a lane"
+    assert cut_past_connector([(0.0, 300.0), (0.0, -100.0)], conn, []) == [(0.0, 300.0), (0.0, -100.0)], "past the reach"
+    assert on_the_way((0.0, 300.0), (0.0, 200.0), conn, 6.0) is None

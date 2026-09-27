@@ -263,3 +263,18 @@ one error on Kashikawa. What each fix measured:
 The same round's cohort ran 37/48 against main's 38/48 (observed 2026-09-27, method: `make cohort`): seed 45's view reached 41 ft past the predicted scatter frame (observed 2026-09-27, method: the roll's `scatter_frame_breach`),
 its title pocket placed below the content because every seat above it was off the canvas. The prediction now takes in
 that band when the content reaches the canvas top, and the seed passes (observed 2026-09-27, `make hamlet` on Audit-45).
+
+The round of engine 0c0ac524 (observed 2026-09-27) passed Kashikawa, Kuwabata and Sawada and found two maps needing work:
+
+| finding | before | after |
+|---|---|---|
+| Inashiro: the entrance board bypassed | 2 of 15 ways out missed it | 0 of 15, each walked from its door to the outer end (`m:inashiro-r13-board`) |
+| Inashiro: every route passed the board by construction | routes walked to the handover and back | a board at the old inner end misses 1 route in the test fixture (`m:inashiro-r13-routes`) |
+| Mizuguchi: the bamboo thicket on the brook | 13 culms on the water ribbon | 144 ft from the centerline (`m:mizuguchi-r13-bamboo`) |
+| Mizuguchi: the notes said the hamlet stands astride the brook | seven and five | all 12 on one bank (`m:mizuguchi-r13-notes`) |
+| Mizuguchi: a lane off the top of the map past the connector | 52 ft past the junction | 0 lane ends off the frame (`m:mizuguchi-r13-lane`) |
+| Mizuguchi, Kuwabata: two bearings for one connector | 34 and 57; 274 and 271 | 59 (`m:mizuguchi-r13-bearing`); 274 (`m:kuwabata-r13-bearing`) |
+| Kuwabata: seat distances written as moves | "67 to 149 ft from main's" | stated as distances to main's nearest seats, 4 farmsteads (`m:kuwabata-r13-moves`) |
+| Sawada: stale history inside the census block | 1 section | moved above it, pointing at the current caption (`m:sawada-r13-census`) |
+
+The cohort after round 03cf6a84's fixes ran 48/48 (observed 2026-09-27, method: `make cohort`), against main's 38/48.

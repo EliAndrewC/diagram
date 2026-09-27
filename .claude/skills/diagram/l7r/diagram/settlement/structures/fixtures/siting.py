@@ -256,8 +256,14 @@ class FixtureSitingMixin:
                     _reach0 = 2.0 * KOSATSUBA_ANCHOR_BAND_FT / ftpx
                     # ...and at a HANDOVER the approach itself: the one way every departure walks (feature 261 FR-015)
                     _hand0 = kosatsuba_handover(self.M) is not None
+                    # ...measured to the way's SEGMENTS, not its vertices: the handover is where the last way joins the approach
+                    # (feature 261), mid-leg on a connector whose nearest vertex can be hundreds of feet off (Inashiro's 700 ft leg)
                     _main = _main + [
-                        ln for ln in _ways if ln not in _main and (_hand0 or not ln.get("connector")) and any(math.hypot(float(p[0]) - _a0[0], float(p[1]) - _a0[1]) <= _reach0 for p in ln["pts"])
+                        ln
+                        for ln in _ways
+                        if ln not in _main
+                        and (_hand0 or not ln.get("connector"))
+                        and any(seg_dist(_a0[0], _a0[1], (float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) <= _reach0 for a, b in zip(ln["pts"], ln["pts"][1:], strict=False))
                     ]
             routes.extend(([(p[0], p[1]) for p in ln["pts"]], float(ln.get("w", 8))) for ln in _main)
             routes.extend(([(p[0], p[1]) for p in st["pts"]], float(st.get("w", 18))) for st in self.M.get("town_streets") or [])

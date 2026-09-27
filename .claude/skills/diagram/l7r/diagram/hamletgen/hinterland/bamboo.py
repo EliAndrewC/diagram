@@ -107,6 +107,15 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
             if all(isinstance(o.get(f), (int, float)) for f in ("x", "y", "w", "h")):
                 rects.append((float(o["x"]), float(o["y"]), float(o["w"]), float(o["h"]), px(pad)))
     lanes = [([(float(a), float(b)) for a, b in ln["pts"]], float(ln.get("w", 3)) / 2 + px(10.0)) for ln in s.M.get("lanes", []) if len(ln.get("pts") or []) >= 2]
+    # ...AND THE WATER (settlement-review of Mizuguchi, feature 261): nothing refused a watercourse, and when the houses moved
+    # north of the brook the thicket's target on the field edge fell on it - 13 culms on the 7 ft ribbon, read as reeds in
+    # the stream. A take-yabu stands on dry ground (research/vegetation.html, bamboo); the water is kept by its half-width
+    # and 3 ft, so a stand may still line the bank
+    lanes += [
+        ([(float(a), float(b)) for a, b in (st.get("poly") or st.get("pts") or [])], float(st.get("w") or 6) / 2 + px(3.0))
+        for st in [*(s.M.get("streams") or []), *(s.M.get("drawn_channels") or [])]
+        if len(st.get("poly") or st.get("pts") or []) >= 2
+    ]
     polys: list[tuple[Poly, float]] = [(list(f), px(12.0)) for f in s.field_polys]
     # A TAKE-YABU MAY NOT STAND IN THE CROP - the DRY crop included (settlement-review, Mizuguchi, feature 145).
     # `field_polys` holds the paddy; the dry hem's plots are crop too, and nothing here refused them, so seed 23's

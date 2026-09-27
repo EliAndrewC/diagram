@@ -78,6 +78,18 @@ preferences carry the board 70-100 ft off it, onto a lane two of Kashikawa's hou
 (feature 261). 20 ft is the board's own verge off the tread plus a board's length either way along it."""
 
 
+def outermost_join(track: Sequence[tuple[float, float]], others: Sequence[Sequence[tuple[float, float]]], step: float = 5.0) -> tuple[float, float] | None:
+    """The first point of `track`, walked from its first vertex, that another way comes within `KOSATSUBA_HANDOVER_PX` of -
+    where the last way out joins it - or None when none does (feature 261)."""
+    for a, b in zip(track, track[1:], strict=False):
+        n = max(1, int(math.dist(a, b) // step))
+        for i in range(n + 1):
+            q = (a[0] + (b[0] - a[0]) * i / n, a[1] + (b[1] - a[1]) * i / n)
+            if any(seg_dist(q[0], q[1], c, d) <= KOSATSUBA_HANDOVER_PX for o in others for c, d in zip(o, o[1:], strict=False)):
+                return q
+    return None
+
+
 def kosatsuba_handover(M: Any) -> tuple[float, float] | None:
     """Where a hamlet's connector hands over to its lanes - the connector's end nearest the dwellings, when another way
     meets it there - or None (no connector, no dwellings, or a connector that runs on through the houses meeting none)."""
@@ -92,7 +104,10 @@ def kosatsuba_handover(M: Any) -> tuple[float, float] | None:
         inner = min((pts[0], pts[-1]), key=lambda q: min(math.hypot(q[0] - h[0], q[1] - h[1]) for h in houses))
         # a way meets it at a shared vertex or anywhere along a segment - the router joins at either
         if any(seg_dist(inner[0], inner[1], a, b) <= KOSATSUBA_HANDOVER_PX for o in _others for a, b in zip(o, o[1:], strict=False)):
-            return inner
+            # ...AND THE ENTRANCE IS THE LAST JOIN ON THE WAY OUT, not the inner end (settlement-review of Inashiro, feature
+            # 261): a household's own short lane met the track 190 ft below the inner end, so it left without passing a board
+            # seated there. Walked in from the outer end, the first point a way meets is where every departure has joined
+            return outermost_join(pts if inner == pts[-1] else pts[::-1], _others) or inner
         # ...AND A TRACK THAT RUNS THROUGH hands over where a lane's END meets it (settlement-review of Mizuguchi): both of
         # its ends are off the sheet, so its "inner end" meets nothing; the junction nearest the houses is where the lanes
         # reach the way out
@@ -183,8 +198,10 @@ def kosatsuba_anchor(M: Any, placement: str) -> tuple[float, float] | None:
 def departure_routes(M: Any, step: float = 10.0, join: float = 7.0, reach: float = 150.0) -> list[list[tuple[float, float]]]:
     """Every household's way OUT, as the points it walks (feature 261 FR-015: an entrance board stands where every
     departure passes it). The drawn lanes are sampled every `step` into a graph whose samples within `join` of each other
-    are one junction; each dwelling's nearest sample within `reach` walks the shortest route to the connector's handover,
-    and every route then runs on out along the connector. Empty when the map has no handover."""
+    are one junction; each dwelling's nearest sample within `reach` walks the shortest route through them to the connector's
+    OUTER end (settlement-review of Inashiro: routed to the handover first and then out, a lane that met the track below the
+    handover was walked up to it and back, and every route passed a board there by construction). Empty when the map has
+    no handover."""
     import heapq
 
     hand = kosatsuba_handover(M)
@@ -216,7 +233,15 @@ def departure_routes(M: Any, step: float = 10.0, join: float = 7.0, reach: float
             if j > i and math.dist(q, nodes[j]) < join:
                 edges[i].append((j, 0.0))
                 edges[j].append((i, 0.0))
-    src = min(range(len(nodes)), key=lambda i: math.dist(nodes[i], hand))
+    houses = [(float(h["x"]), float(h["y"])) for h in M.get("houses") or [] if "x" in h]
+    ends = [
+        q
+        for ln in M.get("lanes") or []
+        if ln.get("connector") and len(ln.get("pts") or []) >= 2
+        for q in ((float(ln["pts"][0][0]), float(ln["pts"][0][1])), (float(ln["pts"][-1][0]), float(ln["pts"][-1][1])))
+    ]
+    outer = max(ends, key=lambda q: min(math.dist(q, h) for h in houses)) if ends and houses else hand
+    src = min(range(len(nodes)), key=lambda i: math.dist(nodes[i], outer))
     dist, back = {src: 0.0}, {src: -1}
     heap = [(0.0, src)]
     while heap:
@@ -227,12 +252,6 @@ def departure_routes(M: Any, step: float = 10.0, join: float = 7.0, reach: float
             if d + w < dist.get(v, math.inf):
                 dist[v], back[v] = d + w, u
                 heapq.heappush(heap, (d + w, v))
-    out_along: list[tuple[float, float]] = []  # the approach, sampled at the same step as the lanes
-    for ln in M.get("lanes") or []:
-        cp = [(float(x), float(y)) for x, y in (ln.get("pts") or [])] if ln.get("connector") else []
-        for a, b in zip(cp, cp[1:], strict=False):
-            n = max(1, int(math.dist(a, b) // step))
-            out_along += [(a[0] + (b[0] - a[0]) * i / n, a[1] + (b[1] - a[1]) * i / n) for i in range(n + 1)]
     routes: list[list[tuple[float, float]]] = []
     for h in M.get("houses") or []:
         s = min(dist, key=lambda i: math.dist(nodes[i], (float(h["x"]), float(h["y"]))))
@@ -242,7 +261,7 @@ def departure_routes(M: Any, step: float = 10.0, join: float = 7.0, reach: float
         while s != -1:
             path.append(nodes[s])
             s = back[s]
-        routes.append(path + out_along)
+        routes.append(path)
     return routes
 
 

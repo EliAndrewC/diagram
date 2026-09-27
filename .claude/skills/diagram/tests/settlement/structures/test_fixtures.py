@@ -306,3 +306,25 @@ def test_a_hamlet_with_no_houses_or_no_handover_has_no_ways_out():
     through = {"houses": [{"x": 500.0, "y": 100.0}], "lanes": [{"pts": [[-900, 0], [1900, 0]], "connector": True}, {"pts": [[500, 100], [500, 1]]}, {"pts": [[800, 90], [800, 2]]}]}
     assert kosatsuba_handover(through) == (500.0, 1.0), "a track that runs through hands over at the lane end nearest the houses"
     assert departure_routes({"houses": [{"x": 50.0, "y": 50.0}], "lanes": []}) == []
+
+
+def test_the_entrance_is_the_last_join_on_the_way_out_and_every_route_walks_to_the_outer_end():
+    # feature 261 (settlement-review of Inashiro): a household's lane met the track below its inner end, so the handover is
+    # the first point walked in from the outer end that a way meets, and each route runs from the house to the outer end -
+    # not up to the handover and back - so a board at the old inner end is missed by that household
+    from l7r.diagram.settlement.structures.fixtures._helpers import departure_routes, kosatsuba_handover, outermost_join, routes_missed
+
+    M = {
+        "houses": [{"x": 0.0, "y": 0.0}, {"x": 300.0, "y": 0.0}],
+        "lanes": [
+            {"pts": [[0, 0], [0, 100]]},  # the cluster's lane, meeting the track's inner end
+            {"pts": [[300, 0], [300, 250], [0, 250]]},  # a household's own lane, meeting the track lower down
+            {"pts": [[0, 100], [0, 400], [0, 2000]], "connector": True},
+        ],
+    }
+    hand = kosatsuba_handover(M)
+    assert hand is not None and abs(hand[1] - 250.0) <= 10.0 and hand[0] == 0.0, "the last join, walked in from the edge"
+    routes = departure_routes(M)
+    assert len(routes) == 2 and all(r[-1][1] >= 1990.0 for r in routes), "every route ends at the outer end"
+    assert routes_missed(routes, 0.0, 100.0, 20.0) == 1 and routes_missed(routes, *hand, 20.0) == 0
+    assert outermost_join([(0.0, 0.0), (0.0, 50.0)], [[(500.0, 500.0), (600.0, 500.0)]]) is None

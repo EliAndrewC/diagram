@@ -813,5 +813,95 @@
   "quantity": "the four stale records re-measured on the kept roll: the belt 277 clumps (kashikawa-r8-notes-clumps, kashikawa-r11-record), the drawn aspect 1.72 (kashikawa-r4-shape), 2 woodland stands upslope (kashikawa-r11-name), and the junction 584 ft (kashikawa-F4)",
   "source": ".claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.json village_groves, meta.cluster_aspect_drawn, commons; kashikawa.notes.md",
   "command": "grep -n 'The belt is 277 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
+ },
+ "inashiro-r13-board": {
+  "verifies": "F1",
+  "subject": "inashiro",
+  "round": "0c0ac524",
+  "value": 0,
+  "unit": "routes",
+  "quantity": "of 15 households' ways out - each walked from its door to the connector's outer end - those that miss the entrance board: 0 (2 in the round). The entrance is now the last point where a way joins the track, walked in from the map's edge, and the board stands 16 ft from it",
+  "source": ".claude/skills/diagram/pool/hamlets/inashiro/inashiro.json kosatsuba, lanes, houses (settlement/structures/fixtures/_helpers.py departure_routes, kosatsuba_handover)",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "inashiro-r13-routes": {
+  "verifies": "F2",
+  "subject": "inashiro",
+  "round": "0c0ac524",
+  "value": 1,
+  "unit": "routes",
+  "quantity": "in a test fixture where a household's lane joins the track below its inner end, the routes that miss a board at the inner end: 1 - routes run from each door to the outer end, so a board passes 'by construction' no longer (before, every route was walked up to the handover and back, and 0 missed wherever the board stood)",
+  "source": ".claude/skills/diagram/tests/settlement/structures/test_fixtures.py",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/settlement/structures/test_fixtures.py"
+ },
+ "mizuguchi-r13-bamboo": {
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "round": "0c0ac524",
+  "value": 144,
+  "unit": "ft",
+  "quantity": "the bamboo thicket's nearest culm to the brook's centerline (13 culms on the water ribbon in the round): a watercourse is refused at its half-width and 3 ft",
+  "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.json bamboo_stands, streams[0].poly",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_hinterland.py"
+ },
+ "mizuguchi-r13-notes": {
+  "verifies": "F2",
+  "subject": "mizuguchi",
+  "round": "0c0ac524",
+  "value": 12,
+  "unit": "farmsteads",
+  "quantity": "the farmsteads the notes' Known-open line now puts on one bank, as drawn (it said seven and five, astride the brook)",
+  "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md, mizuguchi.json houses",
+  "command": "grep -n 'all twelve farmsteads on one bank' .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md"
+ },
+ "mizuguchi-r13-lane": {
+  "verifies": "F3",
+  "subject": "mizuguchi",
+  "round": "0c0ac524",
+  "value": 0,
+  "unit": "lane ends",
+  "quantity": "non-connector lane ends off the frame (lane 4 ran 52 ft past the connector's junction and off the sheet in the round): a lane that runs on past the connector to a loose end is cut where it met it",
+  "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.json lanes, meta.view",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/gate/test_lane_network.py"
+ },
+ "mizuguchi-r13-bearing": {
+  "verifies": "F4",
+  "subject": "mizuguchi",
+  "round": "0c0ac524",
+  "value": 59,
+  "unit": "degrees",
+  "quantity": "the connector's bearing on its first long leg, now stated alike in the Place section and the log (34 and 57 in the round)",
+  "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.json lanes[connector]; mizuguchi.notes.md",
+  "command": "grep -n '59 deg' .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md"
+ },
+ "kuwabata-r13-moves": {
+  "verifies": "F1",
+  "subject": "kuwabata",
+  "round": "0c0ac524",
+  "value": 4,
+  "unit": "farmsteads",
+  "quantity": "farmsteads in new seats, the notes now saying their 67-149 ft is the distance to the nearest of main's seats and not a move",
+  "source": ".claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md; kuwabata.json houses against main's",
+  "command": "grep -n 'not how far any one of them moved' .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md"
+ },
+ "kuwabata-r13-bearing": {
+  "verifies": "F2",
+  "subject": "kuwabata",
+  "round": "0c0ac524",
+  "value": 274,
+  "unit": "degrees",
+  "quantity": "the connector's first-leg bearing, now stated alike in both places (274 and 271 in the round)",
+  "source": ".claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.json lanes[connector]; kuwabata.notes.md",
+  "command": "grep -n '274 deg' .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md"
+ },
+ "sawada-r13-census": {
+  "verifies": "F3",
+  "subject": "sawada",
+  "round": "0c0ac524",
+  "value": 1,
+  "unit": "sections",
+  "quantity": "the dated 'What pass 12 changed here' section, moved above the Census heading and pointing at the 2026-09-27 entry for the board's caption now",
+  "source": ".claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md",
+  "command": "grep -n 'since feature 261 its caption lies over a crown' .claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md"
  }
 }

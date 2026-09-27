@@ -315,6 +315,14 @@ Measured before and after in research R10.
 - A review acceptance carries the round it answered and counts only there, and a NOT-REVIEWABLE verdict keeps the verdict
   it was written over (`scripts/_review_prereq.py`): four reviews found this round's findings cleared by earlier rounds'
   acceptances of other findings with the same number, and a NOT-REVIEWABLE record had wiped them.
+- The entrance is the last point where a way joins the approach, walked in from the map's edge (`outermost_join`), and a
+  household's way out runs from its door to the connector's outer end (`departure_routes`): routed to the handover first
+  and then out, a lane that met Inashiro's track 190 ft below it was walked up and back, and every route passed a board
+  at the handover by construction. The board's candidate ways are those within reach of the handover by segment, not
+  vertex, since the handover now lies mid-leg.
+- A bamboo stand keeps off the water at its half-width and 3 ft (Mizuguchi's thicket stood on the brook), and a lane that
+  runs on past the connector to a loose end is cut where it met it (`cut_past_connector`; Mizuguchi's leg ran 52 ft on
+  and off the sheet), never where the tail is some house's only way.
 - A belt crown seated in a toe marsh is drawn as alder (the `alder` mix and class): the record's woody stage at a reed
   edge is alder or willow, never pine (research/vegetation.html, the marsh margin). Sawada's windward belt stands on
   its toe's reed edge (70 of 201 clumps in the marsh); holding the belt off the reeds took the windward belt away and

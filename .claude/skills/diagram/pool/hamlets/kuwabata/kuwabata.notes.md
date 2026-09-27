@@ -678,8 +678,8 @@ sides the straight west strip does not occupy; the dooryard copse keeps within 9
 54 ft, the farthest 90 ft); and the scrub keeps off each farmstead's own outline and the ground between two farmsteads
 within 140 ft of each other, so it fills the rest of the cluster's ground rather than leaving a bare wedge inside a hull
 round the houses. Under the feature's changed ways the first three rolls each left a farmhouse off the way network (the manifest's
-`roll_after` records it), so the map keeps its fourth, in which four farmsteads stand in new seats, 67 to 149 ft from main's, and the rest within 10 ft of theirs. The belt is 125 clumps, 294
+`roll_after` records it), so the map keeps its fourth, in which four farmsteads stand in new seats - each 67 to 149 ft from the nearest of main's seats, which is not how far any one of them moved - and the other twelve within 10 ft of theirs. The belt is 125 clumps, 294
 degrees from the houses' middle, standing beyond the ring lane that runs along the windward row. This roll leaves no open
 ground the woodland scan takes, so the map draws no woodland commons. The notice board stands on the `center` knob's ground beside the ring lane, where its caption, at the board's own
-angle, fits clear of every crown. The connector leaves west, compass 271 degrees, which the district direction reads.
+angle, fits clear of every crown. The connector leaves west, compass 274 degrees on its first leg, which the district direction reads.
 Six homesteads carry their own dry plot against a lee or flank side.

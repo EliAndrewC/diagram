@@ -619,8 +619,6 @@ board stands at the one lane end on this sheet that fronts nothing, and that end
 this map's own distribution.
 
 
-## Census - the counts this map ships with
-
 ## What pass 12 changed here (feature 230, 2026-09-13)
 
 **The drainage ditch is water again.** This map's supply net and its collector never touch on the page, so the drain's
@@ -629,13 +627,15 @@ gray-green boundary line beside the brown bund it runs against. It is a dark sla
 thirds of the way from the supply in value.
 
 **The notice board came out of the belt**, where a crown center stood 1.8 ft from it and 58% of the ground within 8 ft
-of the plank was canopy. It stands clear of the drawn canopy - by 0.6 ft, which is a pass with no tolerance left and the tightest seat in the pool - on the same entrance seat. The earlier figure here said 6.6 ft, which was measured against the grove's clump BASES and its one nominal radius; a clump draws several jittered crowns, and pass 13 measured their edges a median 16.3 ft past the base, so the probe now reads the drawn crowns themselves.
+of the plank was canopy. It stood clear of the drawn canopy then - by 0.6 ft, the tightest seat in the pool; since feature 261 its caption lies over a crown (the 2026-09-27 entry below) - on the same entrance seat. The earlier figure here said 6.6 ft, which was measured against the grove's clump BASES and its one nominal radius; a clump draws several jittered crowns, and pass 13 measured their edges a median 16.3 ft past the base, so the probe now reads the drawn crowns themselves.
 
 **What did not change, and why**: the brook's ruled middle reach. Widening the walk was measured a third time (wander
 10 -> 18 on a longer step, the frame margin opened to hold it) and moves the straightest 12-vertex run by under a pixel,
 because where the crop's floor binds the walk is not what decides the offset. The honest fix is a course that does not
 follow the field's margin at a fixed offset at all, and it is recorded with the other two measurements at the point of
 change.
+
+## Census - the counts this map ships with
 
 Derived, never typed. `make notes-census` rewrites the block below from the manifest and
 `tests/test_notes_census.py` fails when it disagrees with one. Three settlement-review passes running

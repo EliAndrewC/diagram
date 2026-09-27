@@ -408,6 +408,47 @@ def trim_free_stub(pts: list[Pt], others: Sequence[tuple[Pt, Pt]], touch: float 
     return out
 
 
+_PAST_CONNECTOR_FT = 80.0  # ft: a lane's loose end this far past its crossing of the connector overran the junction
+
+
+def on_the_way(a: Pt, b: Pt, way: Sequence[tuple[Pt, Pt]], touch: float, step: float = 2.0) -> Pt | None:
+    """The first point walked from `a` toward `b` that lies within `touch` of `way` - where a lane meets it, at a crossing
+    or at the way's own end vertex, which a proper-crossing test misses - or None (feature 261)."""
+    n = max(1, int(math.dist(a, b) // step))
+    for i in range(n + 1):
+        q = (a[0] + (b[0] - a[0]) * i / n, a[1] + (b[1] - a[1]) * i / n)
+        if any(seg_dist(q[0], q[1], p, r) <= touch for p, r in way):
+            return q
+    return None
+
+
+def cut_past_connector(pts: list[Pt], connector: Sequence[tuple[Pt, Pt]], others: Sequence[tuple[Pt, Pt]], houses: Sequence[Pt] = (), touch: float = 6.0) -> list[Pt]:
+    """`pts` cut back to where it crosses the connector, when it runs on past it to a LOOSE end within `_PAST_CONNECTOR_FT`
+    (settlement-review of Mizuguchi, feature 261): a skeleton leg met the way out and ran 52 ft on past it and off the
+    sheet, where the off-frame convention reads it as a second track leaving. Only the connector is asked, only a loose
+    end - one on no other way - is cut, and never a tail that is some house's only way within `_SERVE_FT` (a lane that
+    crosses the way out to reach a door beyond it), so no pass here moves another lane or strands a house."""
+    out = list(pts)
+    for _end in range(2):
+        d = out[-1] if out else (0.0, 0.0)
+        if len(out) >= 2 and min((seg_dist(d[0], d[1], p, q) for p, q in others), default=1e9) > touch:
+            run = 0.0
+            for i in range(len(out) - 1, 0, -1):
+                hit = on_the_way(out[i], out[i - 1], connector, touch)
+                if hit is not None and run + math.dist(out[i], hit) <= _PAST_CONNECTOR_FT:
+                    tail, kept = [hit, *out[i:]], [*out[:i], hit]
+                    rest = [*others, *connector, *zip(kept, kept[1:], strict=False)]
+                    mine = [h for h in houses if min(seg_dist(h[0], h[1], p, q) for p, q in zip(tail, tail[1:], strict=False)) <= _SERVE_FT]
+                    if all(min((seg_dist(h[0], h[1], p, q) for p, q in rest), default=1e9) <= _SERVE_FT for h in mine):
+                        out = kept
+                    break
+                run += math.dist(out[i], out[i - 1])
+                if run > _PAST_CONNECTOR_FT:
+                    break
+        out.reverse()
+    return out
+
+
 def _sweep_doubled_remnants(s: Settlement) -> int:
     """Drop a lane that leaves one way and returns to it, serving nobody it does not already serve.
 
