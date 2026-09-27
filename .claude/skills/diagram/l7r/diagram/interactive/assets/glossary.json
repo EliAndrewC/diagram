@@ -8151,5 +8151,24 @@
   "variants": [
    "sensei"
   ]
+ },
+ "Wakasa": {
+  "def": "An old province on the Sea of Japan coast north of Kyoto, now the southwest of Fukui prefecture.",
+  "variants": [
+   "Wakasa"
+  ]
+ },
+ "Kikaijima": {
+  "def": "A small island in the Amami group, south of Kyushu, whose settlements each kept their own customs and, after 1868, their own graveyards.",
+  "variants": [
+   "Kikaijima",
+   "Kikaijima's"
+  ]
+ },
+ "temple registration": {
+  "def": "The Edo-period system under which every household was registered with a Buddhist parish temple, which vouched that its members were not Christians and kept their funerals and graves.",
+  "variants": [
+   "temple registration"
+  ]
  }
 }
