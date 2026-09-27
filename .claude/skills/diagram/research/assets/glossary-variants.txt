@@ -317,6 +317,7 @@ division works	bunsuiguchi
 doba	dōba
 dobashi	dobashi
 dobei	neribei
+dochu bugyo	road magistrate
 dohyo	dohyō
 dohyō	dohyō
 doi	horinouchi
@@ -661,6 +662,8 @@ ieyasu	Ieyasu
 ieyasu's	Ieyasu
 igeta	igeta
 igune	igune
+imperial road	Imperial road
+imperial roads	Imperial road
 imperial spine	Imperial spine
 important cultural landscape	Important Cultural Landscape
 important cultural landscapes	Important Cultural Landscape
@@ -1220,6 +1223,8 @@ riprap	riprap
 river stage	river stage
 river terrace	river terrace
 river terraces	river terrace
+road magistrate	road magistrate
+road magistrates	road magistrate
 roji	roji
 roju	Roju
 rokugan	Rokugan

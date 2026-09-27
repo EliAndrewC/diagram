@@ -6590,5 +6590,20 @@
   "variants": [
    "murakiri"
   ]
+ },
+ "road magistrate": {
+  "def": "The shogunate's officer over the highways, who assigned their upkeep to the post towns and villages along them, and to villages off the road where traffic was heavy.",
+  "variants": [
+   "road magistrate",
+   "road magistrates",
+   "dochu bugyo"
+  ]
+ },
+ "Imperial road": {
+  "def": "On these maps, a main highway of the Empire: the through road that links cities and post towns, as against a village lane or a field road. Where one runs through a city as its main street it is that city's Imperial spine.",
+  "variants": [
+   "Imperial road",
+   "Imperial roads"
+  ]
  }
 }
