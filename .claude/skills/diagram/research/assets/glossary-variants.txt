@@ -810,6 +810,8 @@ keicho-era	Keicho
 keidai	keidai
 keihan	bund
 keiko	keiko
+keio	Keio
+keio era	Keio
 ken	ken
 kenchi-cho	kenchicho
 kenchicho	kenchicho

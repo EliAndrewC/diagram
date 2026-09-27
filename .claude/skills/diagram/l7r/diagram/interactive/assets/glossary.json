@@ -6744,5 +6744,12 @@
    "Yoshimune",
    "Tokugawa Yoshimune"
   ]
+ },
+ "Keio": {
+  "def": "The Japanese era name for the years 1865 to 1868, the last years of the shogunate; \"Keio 3\" is 1867.",
+  "variants": [
+   "Keio",
+   "Keio era"
+  ]
  }
 }
