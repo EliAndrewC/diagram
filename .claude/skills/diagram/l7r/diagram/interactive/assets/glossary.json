@@ -44,12 +44,6 @@
    "Castanopsis"
   ]
  },
- "China fir": {
-  "def": "A fast-growing southern Chinese conifer grown for timber, common in the open stands on worked-over hills.",
-  "variants": [
-   "China fir"
-  ]
- },
  "DBH": {
   "def": "Diameter at breast height: the thickness of a tree's trunk measured at chest height, the size at which a survey counts a stem.",
   "variants": [
@@ -2663,12 +2657,6 @@
   "def": "The last of China's five fixed canal grades: the small ditch that carries water into each individual plot.",
   "variants": [
    "maoqu"
-  ]
- },
- "masson pine": {
-  "def": "A hardy southern Chinese pine of poor, cut-over hillsides; the tree left standing on stripped slopes.",
-  "variants": [
-   "masson pine"
   ]
  },
  "masugata": {

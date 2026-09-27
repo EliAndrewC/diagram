@@ -149,7 +149,6 @@ chan buddhism	Chan
 chaoguan	chaoguan
 chenghuangmiao	chenghuangmiao
 chi	chi
-china fir	China fir
 chinju	chinju
 chinju no mori	chinju no mori
 chinjusan	chinju
@@ -831,7 +830,6 @@ mamian	mamian
 manning	Manning
 manning's formula	Manning
 maoqu	maoqu
-masson pine	masson pine
 masugata	masugata
 mat	tatami
 matou	gangi
