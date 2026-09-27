@@ -345,6 +345,8 @@ class StandsMixin:
                         continue
                     if near_clumps.too_near(ax, ay):
                         continue
+                    if _near is not None and not _near.too_near(ax, ay):
+                        continue  # a re-seat is a clump like any other: it stays within `near`'s reach (feature 261)
                     return (ax, ay)
             return None
 

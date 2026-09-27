@@ -57,6 +57,19 @@ def test_rect_on_water_blocks_a_solid_part_on_an_irrigation_line():
     assert s._rect_blocked((400, 400, 24, 16), fields=True) is True
 
 
+def test_parts_across_stream_refuses_a_garden_on_the_far_bank():
+    # feature 261 FR-013: a brook between the house and a part of its homestead refuses the configuration, though
+    # no part stands ON the water; the same parts with the brook beyond them all, or with no brook, are clear
+    s = _crop_settlement()
+    geom = {"house": (400, 400, 24, 16), "yard": (400, 430, 30, 20), "gardens": [(450, 400, 20, 16)], "shed": None}
+    assert s._parts_across_stream(geom) is False  # no stream on the sheet
+    s.M["streams"] = [{"poly": [(430, 300), (430, 500)], "w": 9}, {"poly": [(0, 0)], "w": 9}]
+    assert s._parts_across_stream(geom) is True  # the brook runs between the house and its garden bed
+    assert s._parts_fit(geom) is False
+    s.M["streams"] = [{"poly": [(520, 300), (520, 500)], "w": 9}]
+    assert s._parts_across_stream(geom) is False  # beyond every part
+
+
 def test_rect_on_water_skips_a_degenerate_course_and_far_ones():
     # the collision pre-filter: a degenerate (<2-point) course is dropped from _water_obstacles (it has no
     # segment and would crash the bbox min/max on an empty poly), and a course whose bbox is nowhere near

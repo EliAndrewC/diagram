@@ -282,6 +282,19 @@ def test_a_trunk_on_a_stream_is_refused_by_the_water_arm_alone() -> None:
     assert _trunk_blocked(s, 700.0, 700.0, 20.0, [], [], None, []) is False
 
 
+def test_a_fixture_across_the_brook_from_its_house_is_across() -> None:
+    """Feature 261 FR-013: the line from the house to a fixture's seat crossing a stream puts the seat on the far
+    bank; a seat on the house's own bank, or a sheet with no stream, is not."""
+    from l7r.diagram.hamletgen.homesteads.fixtures import across_the_brook
+
+    s = Settlement(1400, 1400, seed=1)
+    s.meta(name="T", scale="hamlet", ftpx=1, down_deg=90)
+    assert across_the_brook(s, (700.0, 600.0), (700.0, 800.0)) is False
+    s.M["streams"] = [{"poly": [[100.0, 700.0], [1300.0, 700.0]], "w": 9}]
+    assert across_the_brook(s, (700.0, 600.0), (700.0, 800.0)) is True
+    assert across_the_brook(s, (700.0, 600.0), (760.0, 640.0)) is False
+
+
 def test_the_shrine_budget_refuses_a_second_house_that_rolls_one(monkeypatch) -> None:  # type: ignore[no-untyped-def]
     """`farmstead_fixtures`: the shrine share is a CEILING - "very rare, but notable" - so once the budget the share
     allows is spent, a later house that rolls a shrine gets none, whatever its roll says."""

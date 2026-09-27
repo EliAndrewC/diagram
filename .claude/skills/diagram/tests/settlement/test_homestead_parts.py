@@ -42,6 +42,17 @@ def test_village_grove_skips_clumps_on_a_lane():
         assert abs(cx - 300) >= 3 + vg["r"]
 
 
+def test_village_grove_keeps_a_reseated_clump_within_near_reach():
+    """Feature 261: `near` bounds every clump, the dense grove's re-seat nudge included - a clump the lane refuses is
+    nudged off the tread, and the nudge may not carry it beyond the reach of the points the grove is named for."""
+    s = _nuc_village()
+    s.M["lanes"] = [{"pts": [[300, 300], [300, 600]], "w": 6}]
+    points = [(300.0, float(y)) for y in range(300, 601, 2)]
+    s.village_grove([(250, 300), (350, 300), (350, 600), (250, 600)], role="windbreak", near=(points, 5.0))
+    for cx, cy in (s.M["village_groves"][0]["clumps"] if s.M["village_groves"] else []):
+        assert min(math.hypot(cx - px, cy - py) for px, py in points) <= 5.0
+
+
 def test_corridor_buffers_gathers_lanes_streets_and_road():
     s = _nuc_village()
     s.M["lanes"] = [{"pts": [[0, 0], [10, 0]], "w": 6}]

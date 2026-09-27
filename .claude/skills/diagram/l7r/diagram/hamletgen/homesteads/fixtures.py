@@ -6,7 +6,7 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, seg_dist
+from l7r.diagram.settlement import Settlement, seg_dist, segments_cross
 from l7r.diagram.settlement._geom import boxed_ring_hit
 from l7r.diagram.settlement._knobs import knob_rng
 from l7r.diagram.settlement.farm_fixtures import FIXTURE_FT, PERSIMMON_CROWN_FT
@@ -192,7 +192,7 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                     cx, cy = hx + lx * ca - ly * sa, hy + lx * sa + ly * ca
                     # the TRUNK is tested against drawn footprints, not the plot reservations: a yard tree
                     # stands at a plot's edge, and in a nucleated cluster the reservations tile the ground
-                    if _trunk_blocked(s, cx, cy, px(4.0), fields, marsh, pond, lanes, footing):
+                    if _trunk_blocked(s, cx, cy, px(4.0), fields, marsh, pond, lanes, footing) or across_the_brook(s, (hx, hy), (cx, cy)):
                         continue
                     # no tree on a roof: the SAME keep-outs and the same test the grove drawer uses, so
                     # structures_clear_of_trees (which mirrors them) cannot disagree with this seat
@@ -410,7 +410,7 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                     ly = ly + (_oy if ly >= 0 else -_oy)
                     cx, cy = hx + lx * ca - ly * sa, hy + lx * sa + ly * ca
                     ext = abs(cw * ca) + abs(ch * sa), abs(cw * sa) + abs(ch * ca)  # the raked rect's bbox
-                    if _strip_blocked(s, cx, cy, ext[0], ext[1], hx, hy, fields, marsh, pond, lanes, footing):
+                    if _strip_blocked(s, cx, cy, ext[0], ext[1], hx, hy, fields, marsh, pond, lanes, footing) or across_the_brook(s, (hx, hy), (cx, cy)):
                         continue
                     spin = 90.0 if (cw, ch) == (d, w) and w != d else 0.0  # a flank seat turns the glyph to lie ALONG the wall (review at T99: stacks stood end-on)
                     s.farm_fixture(kind, cx, cy, rot=rot + spin, of=(hx, hy), form=("pit" if kind == "manure" and plan.manure_form == "pit" else None))  # the rolled manure form (feature 150)
@@ -431,6 +431,16 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                 _miss = s.M["meta"].setdefault("farm_fixtures_unseated", {})
                 _miss[kind] = int(_miss.get(kind, 0)) + 1
     return count
+
+
+def across_the_brook(s: Settlement, house: Pt, seat: Pt) -> bool:
+    """Would this fixture stand across a stream from the house it serves (feature 261 FR-013)? The same rule, and the
+    same guess, as `Settlement._parts_across_stream` for the homestead's own parts: the line from the house to the
+    seat crosses no reach of any stream. Mizuguchi drew a privy and a persimmon on the far bank of the brook that runs
+    past their house's door."""
+    return any(
+        segments_cross(house, seat, poly[k], poly[k + 1]) for f in s.M.get("streams", []) for poly in (f.get("poly") or [],) for k in range(len(poly) - 1)
+    )
 
 
 def _trunk_blocked(

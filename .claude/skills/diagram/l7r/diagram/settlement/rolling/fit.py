@@ -216,11 +216,33 @@ class BundleFitMixin:
         house = geom["house"]
         if self._wall_on_the_bund(house[0], house[1], house[2], house[3], 0.0):
             return False
+        if self._parts_across_stream(geom):
+            return False
         if self._house_on_a_tread(house) or self._house_too_near_a_neighbor(house):
             return False
         if not self._sun_corridor_ok(geom) or self._yard_sun_conflict(geom):
             return False
         return bool(self._gardens_sun_ok(geom))
+
+    def _parts_across_stream(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
+        """Does a stream run between the house and any part of its homestead - the yard, a garden bed, the kura?
+
+        A FARMSTEAD STANDS ON ONE BANK (feature 261 FR-013). A part is not on the water - `_rect_on_water` and the
+        site boundary refuse that - but the envelope is asked at nine points, and a brook narrower than their spacing
+        passes between them: Inashiro drew two garden beds across the brook from their house and Mizuguchi a privy.
+        A household crosses its own brook to reach the field, over a plank; it does not keep its vegetable beds on the
+        far bank. That the parts share the house's bank is a GUESS - no page read places a garden across a channel from
+        its house, and none says it never was (research/homesteads, the farmstead's layout) - kept because a plot
+        split by running water reads as two holdings. Exact: the straight line from the house's center to each part's
+        crosses no reach of any stream."""
+        streams = [f["poly"] for f in self.M.get("streams", []) if len(f.get("poly", ())) >= 2]
+        if not streams:
+            return False
+        hx, hy = geom["house"][0], geom["house"][1]
+        parts = [geom["yard"], *geom.get("gardens", ()), geom.get("shed")]
+        return any(
+            segments_cross((hx, hy), (r[0], r[1]), poly[k], poly[k + 1]) for r in parts if r is not None for poly in streams for k in range(len(poly) - 1)
+        )
 
     def _rect_blocked(self: Settlement, rect: Any, fields: bool) -> bool:  # type: ignore[misc]
         """Whether a bundle sub-rect lands on forbidden ground: no-build blocks, lanes, hill/pond ellipses,
