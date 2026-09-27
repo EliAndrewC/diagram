@@ -177,3 +177,6 @@
 - PracticeGround (buildings SECTION=210): REWRITTEN - Note and Caveat now say two domain schools read (Hagi, Mito) stood inside their castles and only the general rule is a guess; Sources adds hagi-meirinkan-guide, kodokan-mito-jawiki
 - StrikingPosts (buildings SECTION=210): IN-STEP - the Nishie riding ground is not a drill ground, so the jin'ya clause holds
 - WeaponRack (buildings SECTION=210): IN-STEP - open-ground practice, the county guess and the gear convention all still as the section says
+- CompoundWall (buildings SECTION=010): IN-STEP - the modal's wall figures and shared-enclosure claim touch none of 010's relabeled granary, jail or axis findings
+- KneelingPositions (buildings SECTION=010): IN-STEP - the kneeling-stones quote still supports litigants below the raised hall
+- MagistratesDais (buildings SECTION=010): IN-STEP - its one 010 claim, a court hall over kneeling litigants, still rests on the henan-neixiang footnote
