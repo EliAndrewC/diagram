@@ -185,24 +185,33 @@ def _area_files(root: Path, area_path: str, patterns: tuple[str, ...], area: str
         *(f"{area_path}/{pat}" for pat in patterns),
         cwd=root,
     )
+    excl = _area_exclusions(area_path, area)
     return sorted(
         {
             root / line
             for line in out.split("\0")
-            if line.strip() and not _excluded(line, area_path, area)
+            if line.strip() and not _excluded(line, area_path, excl=excl)
         }
     )
 
 
-def _excluded(path: str, area_path: str, area: str | None = None) -> bool:
+def _area_exclusions(area_path: str, area: str | None = None) -> tuple[str, ...]:
     # GUARD_EDIT_OK: feature 206 - the area is passed by NAME where the caller knows it. Deriving it from the
     # root alone answers "diagram" for the browser area (same root), whose tests/ exclusion would silently
     # drop the browser test package out of the browser key - the one file set a stale stamp must never miss.
     if area is None:
         area = next((a for a, (p, _pats) in AREAS.items() if p == area_path), None)
-    return any(
-        path.startswith(f"{area_path}/{sub}") for sub in exclusions(area or "")
-    )
+    return exclusions(area or "")
+
+
+def _excluded(path: str, area_path: str, area: str | None = None, excl: tuple[str, ...] | None = None) -> bool:
+    # GUARD_EDIT_OK: fixing a defect found while working (2026-09-27) - ASK ONCE PER WALK, NOT PER FILE. A
+    # caller walking many paths passes `excl` from `_area_exclusions`: `exclusions` reads pyproject.toml and
+    # spawns `git rev-parse`, and asking it per file made one browser-area walk (2,800 files) take 13 s, the
+    # slowest test in `make quick` and alone past its 11 s ratchet. The answer cannot change mid-walk.
+    if excl is None:
+        excl = _area_exclusions(area_path, area)
+    return any(path.startswith(f"{area_path}/{sub}") for sub in excl)
 
 
 def _salt(area: str) -> str:
@@ -223,11 +232,11 @@ def _salt(area: str) -> str:
     return f"playwright={version};chromium={','.join(builds) or 'none'}"
 
 
-def _matches(path: str, area_path: str, patterns: tuple[str, ...]) -> bool:
+def _matches(path: str, area_path: str, patterns: tuple[str, ...], excl: tuple[str, ...] | None = None) -> bool:
     # fnmatch on the area-relative path (feature 189): `*` crosses `/` here exactly as it does in the
     # `git ls-files` pathspec `_area_files` uses, so `*.py` still means every Python file under the area
     # and `classes/*.py` means the registry's modules and nothing else
-    if not path.startswith(area_path + "/") or _excluded(path, area_path):
+    if not path.startswith(area_path + "/") or _excluded(path, area_path, excl=excl):
         return False
     rel = path[len(area_path) + 1 :]
     return any(fnmatch.fnmatch(rel, pat) for pat in patterns)
@@ -454,7 +463,8 @@ def check(base: str, root: Path | None = None) -> int:
     for area, (area_path, patterns) in AREAS.items():
         if area in SKIP_ONLY_AREAS:
             continue  # a skip key, not an obligation (feature 206 FR-004): research and test edits owe no gate at push
-        if not any(_matches(c, area_path, patterns) for c in changed):
+        excl = _area_exclusions(area_path)  # once per area, not per changed path (GUARD_EDIT_OK: see `_excluded`)
+        if not any(_matches(c, area_path, patterns, excl) for c in changed):
             continue
         stamp = _stamp_path(root, area)
         want = _area_key(root, area)
