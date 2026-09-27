@@ -33,6 +33,8 @@ artesian	artesian
 ashigaru	ashigaru
 ashigaru nagaya	ashigaru-nagaya
 ashigaru-nagaya	ashigaru-nagaya
+assignation house	assignation house
+assignation houses	assignation house
 assize	assize
 association	plant association
 asunaro	asunaro
@@ -579,7 +581,9 @@ hyo	hyō
 hyojosho	Hyōjōsho
 hyō	hyō
 hyōjōsho	Hyōjōsho
+ichi-	ichi-no-torii
 ichi-no-ma	ni-no-ma
+ichi-no-torii	ichi-no-torii
 ido	ido
 idobata	idobata
 idowaku	igeta
@@ -964,12 +968,16 @@ neige	neige
 nengu	nengu
 neribei	neribei
 nezumi-gaeshi	nezumi-gaeshi
+ni-	ichi-no-torii
 ni-no-ma	ni-no-ma
+ni-no-torii	ichi-no-torii
 night soil	night soil
 night-soil	night soil
 nightsoil	night soil
 nihon kokugo daijiten	Nihon Kokugo Daijiten
 nihonbashi	Nihonbashi
+ninjobon	ninjōbon
+ninjōbon	ninjōbon
 ninomaru	ninomaru
 nippo jisho	Nippo Jisho
 noborigama	noborigama
@@ -1175,6 +1183,7 @@ sally port	sally port
 sallyport	sally port
 salvage excavation	salvage excavation
 san-no-ma	ni-no-ma
+san-no-torii	ichi-no-torii
 sanban yuan	three-squads courtyard
 sand sluice	sand sluice
 sando	sando
