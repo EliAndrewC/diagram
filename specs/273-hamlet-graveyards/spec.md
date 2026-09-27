@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-27
 
-**Status**: specified; spec-fidelity round 2 CHANGES REQUIRED (1) - applied, round 3 next
+**Status**: specified; spec-fidelity FAITHFUL at round 3; plan next
 
 **Input**: the GM's answer of 2026-09-27 to feature 272's item on village cremation, verbatim in [`request.md`](request.md).
 
@@ -111,3 +111,4 @@ cremation ground and no shrine.
   headman's house) is outside this request.
 - Round 2 (spec-fidelity-verify, MODE 3): both items RESOLVED; one contradiction the change introduced ("only the
   village" against the town's cremation ground) - FR-001 now scopes it to the district. Applied.
+- Round 3 (spec-fidelity-verify, MODE 3): FAITHFUL. (US1's story text was not edited; round 2 found it does not clash.)
