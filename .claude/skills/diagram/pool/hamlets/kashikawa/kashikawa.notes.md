@@ -21,7 +21,9 @@ history rather than the map's current state; the reporting machinery is unchange
 re-roll that misses will say so again.
 
 **Known open**: Inashiro's two - the bare comb floor on the fan's shoulders (inherited from
-`build_comb`), and a windward quarter derived from the slope - CLOSED by feature 261: the wind is the regional northwest and the belt stands on the north and west. The map keeps seed 3: the seat that faces the wind is crossed by the brook, and since the ways cross it at a plank and each farmstead keeps one bank, the hamlet stands astride its brook - the form the record attests for a settlement's own channel. The woodland commons are
+`build_comb`), and a windward quarter derived from the slope - CLOSED by feature 261: the wind is the regional northwest and the belt stands on the north and west. The map keeps seed 3; its field path crosses the brook at a ford (the 2026-09-27 entry below).
+
+The woodland commons are
 DERIVED, not authored - their count and sizes move with the roll (this file went stale on the
 concrete number three rounds running, so it records the mechanism now): the shrink ladder
 (250 -> 200 -> 160 -> 125 ft) and, when the generous crop set-backs would leave the oak map
@@ -93,12 +95,12 @@ beyond the frame.
 ### Place
 
 - **district**: Hirose
-- **district direction**: southwest
+- **district direction**: north
 
 *Hirose (広瀬, "broad rapids") is INVENTED for this map - drawn from gm-assistant's
 `place-names/pool.jsonl`, which carries its kanji and meaning, and not ruled on by the GM. The
 DIRECTION is not invented: it is the bearing of this map's own connector track where it leaves the
-cluster - compass 218 deg, southwest (measured 2026-09-27).*
+cluster - compass 14 deg, north (measured 2026-09-27).*
 
 *It was Kawakami (川上, "upstream") until settlement-review measured the two against each other on
 2026-08-29: this land falls to the north-east, so upstream is roughly the opposite way from the
@@ -936,9 +938,10 @@ the shortest edge - and recorded PASS (`.git/review-verdicts/`).
 ## 2026-09-27 (feature 261): the regional northwest wind, the brook crossed, and the layout moved
 
 The GM's question that opened the feature was this map's belt, standing south and east of the houses. The wind is
-the region's northwest now, and the map keeps seed 3: its wind-facing seat is crossed by the brook, and rather than
-re-seed around that, the ways cross the brook at a ford with a plank bridge (three bridges on the brook) and each
-farmstead keeps one bank. All 20 farmsteads moved (median 1,660 ft); the belt is 285 crowns at 320 degrees over a
-160-degree arc, at least 69 ft deep wherever no way parts it. The connector now leaves southwest, so the district
-direction reads southwest; the confluence falls 476 ft inside the top edge of the view. The copse keeps within 90 ft
-of a farmhouse (median 70 ft).
+the region's northwest now, and the map keeps seed 3: its wind-facing seat lies across the brook from the rice, and
+rather than re-seed around that, the field path crosses the brook square on a plank at a ford. All 20 farmsteads stand
+on one bank (median move 1,660 ft); a lane that crossed the brook and back to reach a house on its own bank is gone,
+because a way now pays to cross. The belt is 281 crowns at 319 degrees over a 161-degree arc. The connector now leaves
+north, so the district direction reads north; the confluence falls 476 ft inside the top edge of the view. The copse
+keeps within 90 ft of a farmhouse (median 71 ft), and the entrance board stands at the handover, passed by all 20
+households' ways out.

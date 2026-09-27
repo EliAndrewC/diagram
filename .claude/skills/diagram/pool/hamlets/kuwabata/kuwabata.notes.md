@@ -25,11 +25,11 @@ mistake it is here to make visible.
 ### Place
 
 - **district**: Aozawa
-- **district direction**: northeast
+- **district direction**: west
 
 *Aozawa (青沢, "green marsh stream") is INVENTED for this map - drawn from gm-assistant's
 `place-names/pool.jsonl`, which carries its kanji and meaning, and not ruled on by the GM. The
-DIRECTION is not invented: it is the bearing of this map's own connector track where it leaves the cluster - compass 28 deg, northeast (measured 2026-09-27).*
+DIRECTION is not invented: it is the bearing of this map's own connector track where it leaves the cluster - compass 274 deg, west (measured 2026-09-27).*
 
 ## The declaration
 
@@ -671,9 +671,10 @@ that takes everything to the outfall is a `drainage ditch`. And the run that car
 frame is drawn and recorded as a drainage ditch at the collector's own width, like every other map's, where
 before it was an eight-pixel stream: the same thing wearing two labels on two maps was what the GM caught.
 
-## 2026-09-27 (feature 261): the windbreak's pop-up and the copse - no house moved
+## 2026-09-27 (feature 261): the windbreak's pop-up, the copse and the scrub - no house moved
 
-This map already stood against the northwest and nothing it seats moved. What changed is what the page says and how
-far the copse reaches: the windbreak pop-up names the northwest and why, instead of naming two sides the straight
-west strip does not occupy, and the dooryard copse keeps within 90 ft of a farmhouse (92 crowns to 39, median
-63 ft). The district direction was corrected to the connector's own bearing, northeast (28 degrees); it had read west.
+This map already stood against the northwest and nothing it seats moved. The windbreak pop-up names the northwest and
+why, instead of naming two sides the straight west strip does not occupy; the dooryard copse keeps within 90 ft of a
+farmhouse (92 crowns to 42, median 63 ft); and the scrub stops at the farmsteads' own outline instead of a rectangle
+round the houses or short of a fringe farmstead's privy. The connector leaves west, compass 274 degrees, which the
+district direction reads.

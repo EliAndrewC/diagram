@@ -14,18 +14,18 @@
  "inashiro-F1": {
   "verifies": "F1",
   "subject": "inashiro",
-  "value": 102,
-  "unit": "ft",
-  "quantity": "the entrance notice board's distance from kosatsuba_anchor (was 711 ft); the board stands 69 ft from the nearest farmhouse, within the 100 ft entrance reach",
-  "source": "pool/hamlets/inashiro/inashiro.json kosatsuba[0] against kosatsuba_anchor(manifest, 'entrance') and the houses",
+  "value": 0,
+  "unit": "routes",
+  "quantity": "households' ways out (the drawn lanes walked to the connector's handover and on along it) that pass no nearer than 20 ft to the entrance board: 0 of 15 (was a board 711 ft from the connector's mouth)",
+  "source": "pool/hamlets/inashiro/inashiro.json lanes, houses and kosatsuba[0], via departure_routes / routes_missed",
   "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
  },
  "inashiro-F2": {
   "verifies": "F2",
   "subject": "inashiro",
-  "value": 68,
+  "value": 72,
   "unit": "ft",
-  "quantity": "median distance of the drawn copse crowns (village_groves role copse, clumps) to the nearest farmhouse; 0 crowns beyond 90 ft (was 205 ft median, 71.5% beyond 90)",
+  "quantity": "median distance from the copse's clump BASES (village_groves role copse, clumps) to the nearest farmhouse; the furthest base 90 ft, so no base past the 90 ft reach (was 205 ft median). Measured on bases, not drawn crowns: a drawn crown can reach a few feet beyond its base",
   "source": "pool/hamlets/inashiro/inashiro.json village_groves[role=copse].clumps against houses",
   "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
  },
@@ -34,7 +34,7 @@
   "subject": "inashiro",
   "value": 2,
   "unit": "pieces",
-  "quantity": "windbreak belt components at a 45 px crown link (was 4); the one gap, 123 ft wide at y 165-169, is where the belt runs off the view's top edge (y 162) - the frame cuts it, no way or water parts it; every judged 40 ft bin holds at least 133 ft of depth",
+  "quantity": "windbreak belt components at a 45 px crown link (was 4); the one gap is where the belt runs off the view's top edge - the frame cuts it, no way or water parts it; every judged 40 ft bin holds at least 106 ft of depth",
   "source": "pool/hamlets/inashiro/inashiro.json village_groves[role=windbreak].clumps and clumps_offpage, meta.view",
   "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_wind.py"
  },
@@ -70,25 +70,25 @@
   "subject": "kashikawa",
   "value": 69,
   "unit": "ft",
-  "quantity": "the windbreak's minimum depth along the wind over every 40 ft bin across it that no way, brook or page edge cuts (the record's minimum 30 ft); seed 3's belt, 285 crowns at 320 degrees",
+  "quantity": "the windbreak's minimum depth along the wind over every 40 ft bin across it that no way, brook or page edge cuts (the record's minimum 30 ft); 281 crowns at 319 degrees",
   "source": "pool/hamlets/kashikawa/kashikawa.json village_groves[role=windbreak] via belt_depths",
   "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_wind.py"
  },
  "kashikawa-F2": {
   "verifies": "F2",
   "subject": "kashikawa",
-  "value": 70,
+  "value": 71,
   "unit": "ft",
-  "quantity": "median distance of the drawn copse crowns to the nearest farmhouse; 0 crowns beyond 90 ft (was 166.6 ft, 393 crowns)",
+  "quantity": "median distance from the copse's clump bases to the nearest farmhouse; the furthest base 89 ft, inside the 90 ft reach (was 166.6 ft, 393 crowns)",
   "source": "pool/hamlets/kashikawa/kashikawa.json village_groves[role=copse].clumps against houses",
   "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
  },
  "kashikawa-F3": {
   "verifies": "F3",
   "subject": "kashikawa",
-  "value": 218,
+  "value": 14,
   "unit": "deg",
-  "quantity": "compass bearing of the connector where it leaves the cluster; the notes' district direction now reads southwest",
+  "quantity": "compass bearing of the connector's first leg from the handover; the notes' district direction now reads north (the connector-scoring fix of feature 261 turned the track)",
   "source": "pool/hamlets/kashikawa/kashikawa.json lanes[connector] and kashikawa.notes.md Map notes",
   "command": "grep -n 'district direction' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
  },
@@ -124,17 +124,17 @@
   "subject": "mizuguchi",
   "value": 0,
   "unit": "crowns",
-  "quantity": "against-the-belt copse crowns farther than 60 ft from a belt crown (was 96 of 231 over the cluster)",
+  "quantity": "against-the-belt copse clump bases farther than 60 ft from a belt crown, the belt's off-page crowns included (was 96 of 231 over the cluster)",
   "source": "pool/hamlets/mizuguchi/mizuguchi.json village_groves[role=copse] against village_groves[role=windbreak]",
   "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
  },
  "mizuguchi-F2": {
   "verifies": "F2",
   "subject": "mizuguchi",
-  "value": 65,
-  "unit": "ft",
-  "quantity": "the entrance notice board's distance from kosatsuba_anchor; 75 ft from the nearest farmhouse, within the 100 ft entrance reach",
-  "source": "pool/hamlets/mizuguchi/mizuguchi.json kosatsuba[0] against kosatsuba_anchor and houses",
+  "value": 0,
+  "unit": "routes",
+  "quantity": "households' ways out that pass no nearer than 20 ft to the entrance board: 0 of 12",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json lanes, houses and kosatsuba[0], via departure_routes / routes_missed",
   "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
  },
  "mizuguchi-F3": {
@@ -149,27 +149,27 @@
  "sawada-F1": {
   "verifies": "F1",
   "subject": "sawada",
-  "value": 139,
-  "unit": "ft",
-  "quantity": "the entrance notice board's distance from kosatsuba_anchor (was 669 ft), the anchor itself 30 ft outside the view's west edge; the board stands on the connector 87 ft from the nearest farmhouse",
-  "source": "pool/hamlets/sawada/sawada.json kosatsuba[0], kosatsuba_anchor, houses, meta.view",
+  "value": 0,
+  "unit": "routes",
+  "quantity": "households' ways out that pass no nearer than 20 ft to the entrance board: 0 of 19 (was a board 669 ft from its anchor on a stub)",
+  "source": "pool/hamlets/sawada/sawada.json lanes, houses and kosatsuba[0], via departure_routes / routes_missed",
   "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
  },
  "sawada-F2": {
   "verifies": "F2",
   "subject": "sawada",
-  "value": 95,
+  "value": 45,
   "unit": "deg",
-  "quantity": "the brook's sharpest turn at a vertex (was 123); the limit is BROOK_MAX_TURN_DEG, 100",
+  "quantity": "the brook's sharpest turn at a vertex (was 123); the limit is BROOK_MAX_TURN_DEG, 100; and no stretch within 80 ft of the view's edge runs level along it for more than 150 ft (was 457 ft)",
   "source": "pool/hamlets/sawada/sawada.json streams[0].poly",
   "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
  },
  "sawada-F3": {
   "verifies": "F3",
   "subject": "sawada",
-  "value": 1683,
+  "value": 2174,
   "unit": "ft",
-  "quantity": "distance from where the drain leaves the view (the west edge) to the nearest in-view brook, which leaves by the top edge; the notes' water story now says so",
+  "quantity": "distance from where the drain leaves the view (the west edge) to the nearest in-view brook, which leaves by the top edge; the notes' water story says so",
   "source": "pool/hamlets/sawada/sawada.json field_ditches[role=drain], channels, streams, meta.view",
   "command": "grep -n 'leaving the frame by its west edge' .claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md"
  },
@@ -178,7 +178,7 @@
   "subject": "sawada",
   "value": 0,
   "unit": "crowns",
-  "quantity": "copse crowns within 30 ft of a windbreak crown (the copse is 48 crowns, all within 90 ft of a farmhouse; was 223 over the belt's west arm)",
+  "quantity": "copse clump bases within 30 ft of a windbreak crown (the copse is 54 bases, all within 90 ft of a farmhouse; was 223 over the belt's west arm)",
   "source": "pool/hamlets/sawada/sawada.json village_groves copse against windbreak",
   "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
  },
@@ -187,7 +187,7 @@
   "subject": "sawada",
   "value": 0.55,
   "unit": "ratio",
-  "quantity": "area of the settlement keep-out the scrub is handed (the hull of the houses grown by 44 ft) against the old axis-aligned bbox it replaced: 424,855 against 776,800 sq ft; the keep-out follows the diagonal ribbon",
+  "quantity": "area of the settlement keep-out the scrub is handed against the old axis-aligned bbox of house centers it replaced; the keep-out is now the hull of the houses AND the farmsteads' parts grown by 44 ft, following the diagonal ribbon",
   "source": "settlement/land/cover.py hinterland keep-out over pool/hamlets/sawada/sawada.json houses",
   "command": "make -C .claude/skills/diagram test-file FILE=tests/settlement/test_hinterland_cover.py"
  },

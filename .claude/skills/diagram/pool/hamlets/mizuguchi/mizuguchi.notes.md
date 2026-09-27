@@ -97,11 +97,11 @@ intake on its bank and runs on past the field, and this map draws a weir there.
 ### Place
 
 - **district**: Kawabe
-- **district direction**: west
+- **district direction**: northeast
 
 *Kawabe (川辺, "riverside, by the river") is INVENTED for this map - drawn from gm-assistant's
 `place-names/pool.jsonl`, which carries its kanji and meaning, and not ruled on by the GM. The
-DIRECTION is not invented: it is the bearing of this map's own connector track where it leaves the cluster.*
+DIRECTION is not invented: it is the bearing of this map's own connector track where it leaves the cluster - compass 34 deg, northeast (measured 2026-09-27).*
 
 ## 2026-08-17 - re-packed twice: feature 121, then the front-row cap
 
@@ -757,8 +757,9 @@ the shortest edge - and recorded PASS (`.git/review-verdicts/`).
 ## 2026-09-27 (feature 261): the regional northwest wind, the brook crossed, and the layout moved
 
 The wind is the region's northwest now, and the map keeps seed 23. Its seat with its back to the wind is crossed by
-the brook, so the hamlet stands astride it - eight farmsteads on one bank and four on the other, two plank bridges
-over the brook - and the weir at the intake it is named for is drawn again. Each farmstead stands whole on its own
-bank: the roll before this rule drew a privy and a persimmon across the brook from their house. All 12 farmsteads
-moved (median 933 ft); the belt is 132 crowns at 305 degrees. The copse is the against-the-belt form, and every crown
-stands within 60 ft of the belt.
+the brook, so the hamlet stands astride it - eight farmsteads on one bank and four on the other, two square plank
+crossings - and the weir at the intake it is named for is drawn again. Each farmstead stands whole on its own bank: the
+roll before this rule drew a privy and a persimmon across the brook from their house. The field path crosses to the dry
+hem between the brook and the paddy, which is the field's own worked ground. All 12 farmsteads moved (median 933 ft);
+the belt is 114 crowns at 299 degrees; the copse is the against-the-belt form, every crown within 60 ft of the belt. The
+connector leaves northeast, and the entrance board at the handover is passed by all 12 households' ways out.

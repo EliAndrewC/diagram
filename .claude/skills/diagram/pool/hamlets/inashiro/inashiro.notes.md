@@ -22,11 +22,11 @@ is the point: this map exists to be ordinary.
 ### Place
 
 - **district**: Mizuho-no-sato
-- **district direction**: north
+- **district direction**: southwest
 
 *Mizuho-no-sato (瑞穂の里, "village of ripe rice ears") is INVENTED for this map - drawn from gm-assistant's
 `place-names/pool.jsonl`, which carries its kanji and meaning, and not ruled on by the GM. The
-DIRECTION is not invented: it is the bearing of this map's own connector track where it leaves the cluster.*
+DIRECTION is not invented: it is the bearing of this map's own connector track where it leaves the cluster - compass 221 deg, southwest (measured 2026-09-27).*
 
 ## Why it exists
 
@@ -1753,11 +1753,14 @@ dispatch) confirmed it from the two snapshots - every single-bead position remov
 place, run count unchanged, every new bead on the bund stroke, no pair crowding closer than the thirds of
 the shortest edge - and recorded PASS (`.git/review-verdicts/`).
 
-## 2026-09-27 (feature 261): the regional northwest wind, and the layout moved
+## 2026-09-27 (feature 261): the regional northwest wind, the brook crossed, and the layout moved
 
 The wind is no longer read off the slope: every map takes the region's northwest winter wind unless it declares a
 local one, and this one declares none. The main manifest recorded a north wind; the cluster now seats with its back
-to the northwest, so all 15 farmsteads moved (median 1,159 ft) and the belt stands at 332 degrees from the houses,
-168 crowns over a 104-degree arc. Two things beside the wind: each farmstead now stands whole on one bank of the
-brook - the roll before this one drew two garden beds, a third bed and a persimmon across it from their houses - and
-the dooryard copse keeps within 90 ft of a farmhouse (median 68 ft). One bridge carries a way over the brook.
+to the northwest, so all 15 farmsteads moved (median 1,159 ft) and the belt stands at 329 degrees from the houses,
+186 crowns over a 104-degree arc. The houses stand on the brook's west bank and the rice on its east, so the field path
+crosses the brook square on a plank at a ford - the hamlet's one way to its rice. Each farmstead stands whole on its
+own bank, the dooryard copse keeps within 90 ft of a farmhouse (median 72 ft), and the entrance board stands where the
+track out meets the lanes, passed by all 15 households' ways out. The track itself now leaves southwest, so the district
+direction reads southwest. The rolled crescent is not what this seat draws - the houses gather as a round cloud, a
+drawn aspect of 1.97 - and the manifest records it as unhonored rather than claiming it.

@@ -10,7 +10,7 @@ undrained valley toe begins.
 
 **Subject**: ~19 households, land falling to the northwest, and the largest of the four combs.
 
-**What it is here to show**: the OTHER water sink. Sawada has no pond. Its collector gathers the field's low edge and runs on past the last paddy as a dug drainage ditch, leaving the frame by its west edge; the brook it was tapped from passes the field's head and leaves by the top edge, some 1,680 ft away (measured 2026-09-27). What the map shows is the older picture - a village's drainage leaving its own way, which is what a hamlet with no pond did before modern consolidation separated supply from drain (feature 230).
+**What it is here to show**: the OTHER water sink. Sawada has no pond. Its collector gathers the field's low edge and runs on past the last paddy as a dug drainage ditch, leaving the frame by its west edge; the brook it was tapped from passes the field's head and leaves by the top edge, some 2,170 ft away (measured 2026-09-27). What the map shows is the older picture - a village's drainage leaving its own way, which is what a hamlet with no pond did before modern consolidation separated supply from drain (feature 230).
 
 Below the drain, the un-reclaimed toe is reed marsh - the `hinterland` scatter's contour band, on
 the low side where the gate requires it.
@@ -926,7 +926,8 @@ the shortest edge - and recorded PASS (`.git/review-verdicts/`).
 
 The wind is the region's northwest now. At seed 6 no margin with its back to that wind was open on this land, so the
 map is seed 24 (the generator says why); every farmstead moved (median 675 ft) and all 19 seat facing the wind. The
-belt is 179 crowns at 319 degrees over a 161-degree arc. The brook no longer doubles back where it leaves the frame -
-no turn along it is sharper than 100 degrees - and the entrance board stands on the connector where it first comes
-among the houses. The water story is rewritten above to what this seed draws: the drain leaves by the west edge, the
-brook by the top. The copse keeps within 90 ft of a farmhouse (median 72 ft).
+belt is 179 crowns at 319 degrees over a 161-degree arc. The brook no longer doubles back where it leaves the frame, nor
+runs level along the top margin: it turns off the sheet where the frame would have pinned it. The entrance board stands
+where the connector meets the lanes, passed by all 19 households' ways out. The water story is rewritten above to what
+this seed draws: the drain leaves by the west edge, the brook by the top. The copse keeps within 90 ft of a farmhouse
+(median 73 ft).
