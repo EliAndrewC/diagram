@@ -1973,6 +1973,7 @@ unhaired	unhair
 unhairing	unhair
 unhairs	unhair
 unjo-gura	levy storehouse
+uogashi	uogashi
 upper residence	kami-yashiki
 upper residences	kami-yashiki
 ura-dana	ura-dana
