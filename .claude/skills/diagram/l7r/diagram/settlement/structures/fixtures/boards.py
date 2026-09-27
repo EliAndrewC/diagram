@@ -396,6 +396,7 @@ class BoardsMixin:
                 caption on Kuwabata and the halo took the bottom 7.5 ft of a 22 ft canopy across its whole width,
                 so the tree read as damaged). A preference rather than a constraint, and at the rung rather than
                 at the end of it, because the ladder's first answer is the one that ships."""
+                _seats = [_s for _s in _seats if _on_the_page(_s)]  # a rung with no seat on the page yields none (feature 261)
                 _shaded = [_s for _s in _seats if not under_canopy(_canopy, _s[0], _s[1], max(_chw, 8.0))]
                 return first_clear_seat(_shaded, _hug, _hug_cap, _blocked, _box_clearance, _want) or first_clear_seat(_seats, _hug, _hug_cap, _blocked, _box_clearance, _want)
 
@@ -418,7 +419,18 @@ class BoardsMixin:
                 _quad = _cap_quad(_q)
                 return min((poly_gap(_quad, _o) for _o in _fabric), default=1e9)
 
+            _view = (self.M.get("meta") or {}).get("view")
+
+            def _on_the_page(_q: Pt) -> bool:
+                """Does the caption at this seat stand wholly inside the drawn view (feature 261)? Kashikawa's entrance board
+                stood 23 ft inside the sheet's left edge and its caption was seated 31 ft past it - clipped to a sliver."""
+                if not _view:
+                    return True
+                _vx, _vy, _vw, _vh = (float(c) for c in _view)
+                return all(_vx + 2.0 <= px <= _vx + _vw - 2.0 and _vy + 2.0 <= py <= _vy + _vh - 2.0 for px, py in _cap_quad(_q))
+
             def _pick(_seats: list[Pt]) -> Pt:
+                _seats = [_s for _s in _seats if _on_the_page(_s)] or _seats  # ON THE PAGE FIRST: a clipped name names nothing
                 # ACROSS THE ROAD IS NOT A LAST RESORT, IT IS A REFUSAL (settlement-review, feature 230 pass 11). `_blocked`
                 # has always answered "or sit across a way from the board it names", but it is a CONSTRAINT inside the
                 # search, and when no seat satisfied everything the fallback took the best-scoring seat regardless: the

@@ -165,7 +165,9 @@ def path_violations(path: Poly, avoid: Sequence[Poly], pond: tuple[float, float,
     # each other - which `features_do_not_overlap` reads as a ('bridges', 'bridges') pair, and which
     # is a drawing error rather than a siting one. Crossing further along, where the ditches have
     # separated, is what a track does anyway.
-    hits = [x for i in range(len(path) - 1) for p, q in waters if segments_cross(path[i], path[i + 1], p, q) and (x := seg_intersect(path[i], path[i + 1], p, q)) is not None]  # the segments must MEET: `seg_intersect` alone answers for the lines (feature 261)
+    hits = [
+        x for i in range(len(path) - 1) for p, q in waters if segments_cross(path[i], path[i + 1], p, q) and (x := seg_intersect(path[i], path[i + 1], p, q)) is not None
+    ]  # the segments must MEET: `seg_intersect` alone answers for the lines (feature 261)
     bad += pairs_within(hits, 46.0)  # the same pairs the every-pair form counted (170 million `hypot` on a polder - feature 138), by a sweep
     return bad
 

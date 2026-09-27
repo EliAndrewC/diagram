@@ -517,6 +517,12 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     _cys = [h["y"] for h in s.M.get("houses", [])] or [0.0]
     _drawn = cluster_aspect(_cxs, _cys)
     _lo, _hi = CLUSTER_DRAWN_ASPECT.get(plan.cluster_shape or "crescent", (1.9, 4.2))
+    # ...AND A DRAWING ROUND'S BAND ALSO HOLDS IS NOT DECLARED ANYTHING ELSE (settlement-review of Inashiro, feature 261):
+    # crescent's band starts at 1.9 and round's ends at 2.0, so a cluster drawn at 1.97 - a quarter-disc of houses with a
+    # 63 ft bow against 131 ft of scatter - was declared a crescent. The bands stay as they are for the front row's
+    # sizing above; a shape other than round is declared only past round's ceiling.
+    if (plan.cluster_shape or "crescent") != "round":
+        _lo = max(_lo, CLUSTER_DRAWN_ASPECT["round"][1] + 1e-9)
     if _lo <= _drawn <= _hi:
         s.M["meta"]["cluster_shape"] = plan.cluster_shape
     else:
