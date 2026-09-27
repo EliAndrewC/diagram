@@ -247,3 +247,18 @@ def test_ink_marked_as_texture_weighs_light() -> None:
     plain = _weights(_sheet(wing.format(mark="")), "wing")
     assert marked[(119, 104, 121, 166)] == (sl.WEIGHT_INNER, True)
     assert plain[(119, 104, 121, 166)] == (sl.WEIGHT_OBSTACLE, True)
+
+
+def test_a_caption_keeps_off_a_leader_placed_before_it() -> None:
+    """A caption seated with a leader lends the next ones its leader as well as its block: Ubame's INNER COURT lay
+    across the leader tying RESIDENCE to the house (round 6)."""
+    walls = "".join(f'  <rect x="{x}" y="{y}" width="30" height="30" data-kind="house"/>\n' for x in range(100, 300, 30) for y in range(80, 220, 30) if not (180 <= x <= 210 and 130 <= y <= 150))
+    board = '  <g data-kind="notice board">\n    <rect x="190" y="140" width="20" height="8"/>\n    <text x="200" y="200" text-anchor="middle" font-size="9">notice board</text>\n  </g>\n'
+    later = '  <g data-kind="well"><rect x="330" y="140" width="8" height="8"/><text x="334" y="160" font-size="9">well</text></g>\n'
+    _findings, placed = sl.seat(_sheet(walls, board, later))
+    (_b, first), (_w, second) = placed
+    assert first.leader is not None, "hemmed in, the board's name stands out with a leader"
+    band = sl._band(first.leader[0], first.leader[1], 1.0)
+    bx0, by0, bx1, by1 = sl.bbox(band)
+    sx0, sy0, sx1, sy1 = sl.bbox(list(second.block))
+    assert sx1 <= bx0 or bx1 <= sx0 or sy1 <= by0 or by1 <= sy0

@@ -743,7 +743,7 @@
       <circle cx="800" cy="518" r="2" fill="#7A5430" stroke="#4A3318" stroke-width="0.8"/>
       <circle cx="814" cy="530" r="2" fill="#7A5430" stroke="#4A3318" stroke-width="0.8"/>
     </g>
-    <!-- weapon rack on the bale yard's north-west corner -->
+    <!-- weapon rack against the bale yard's west edge -->
     <g data-kind="weapon rack">
       <!-- a free-standing rack against the bale yard's west edge (feature 267 rounds 4-5; on its north edge its name had no seat but across the divider): flush on the granary's north face it
            read as a second door and narrowed the carts' way; drawn as a rail on two posts, unlike a door -->

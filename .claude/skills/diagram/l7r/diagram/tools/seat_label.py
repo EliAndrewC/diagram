@@ -498,6 +498,10 @@ def seat(src: str, kinds: set[str] | None = None) -> tuple[list[Finding], list[t
         index = classify(shapes, view, skip, after=idx[0], group=head.group, kind=head.kind, subject=list(sub.poly), area=sub.kind == "area")
         for _caps, done in placed:
             index.add(Obstacle(done.block, WEIGHT_TEXT))
+            if done.leader is not None:
+                # and its leader: Ubame's INNER COURT, seated after RESIDENCE, lay across the leader tying it to the house
+                index.add(Obstacle(tuple(_band(done.leader[0], done.leader[1], 1.0)), WEIGHT_TEXT))
+
         cw = char_w_of(head.element, head.text, head.size)
         p = place(" ".join(lines), head.size, sub, index, view, lines=_as_head(caps, cw) if len(caps) > 1 else None, char_w=cw)
         p = hand_seat_if_no_better(p, caps, sub, index)
