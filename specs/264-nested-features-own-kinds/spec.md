@@ -89,8 +89,10 @@ needs research is marked as such"*), a new kind no research section covers says 
 ### Functional Requirements
 
 - **FR-001**: Every part (the definition above) drawn on a pool magistracy MUST carry its own kind, one registry
-  entry per kind of part, shared across the maps that draw it. `inventory.md` is the list, and every row of it is
-  either a part given a kind or fabric named as fabric.
+  entry per kind of part, shared across the maps that draw it. The DEFINITION decides; `inventory.md` records it,
+  swept over every element that names a parent's kind, inherited or explicitly tagged (a part drawn in a group of its
+  own that restates its parent's kind - the nakamon's posts tagged `court divider`, the genkan tagged `residence` -
+  counts). A part missing from the inventory is a defect of the inventory, never out of scope.
 - **FR-002**: A room labeled on a building MUST light across its floor, not only at its label.
 - **FR-003**: Highlighting a kind MUST also light every part drawn as part of an instance of it (a part inside its
   group, or declared part of it); highlighting a part's kind MUST NOT light its parents.
@@ -105,6 +107,9 @@ needs research is marked as such"*), a new kind no research section covers says 
 - **FR-007**: The completeness and closure tests of feature 262 MUST hold: no untagged ink, no unknown kind, and every
   registered kind drawn on some pool magistracy.
 - **FR-008**: The hamlet pages MUST be unchanged.
+- **FR-009**: Every parent kind that has parts MUST still be named under the pointer somewhere on each of its
+  instances - at least its label, where it has one - and clicking there MUST open the parent's own write-up; the
+  GM's "separate pop-up" means both pop-ups exist.
 
 ### Key Entities
 
@@ -118,6 +123,8 @@ needs research is marked as such"*), a new kind no research section covers says 
 
 - **SC-001** (FR-001, FR-002): a browser probe of the five pages names each inventoried part's own kind at its drawn
   position (a point inside each room's floor for a room), in vector and raster mode; zero parts name their parent.
+  The same probe (FR-009) finds, for every instance of every parent kind with parts, a point that names the parent,
+  and clicking it opens the parent's write-up.
 - **SC-002** (FR-003): the same probe, highlighting each parent kind, finds every one of its parts lit; highlighting
   each part kind finds no parent lit.
 - **SC-003** (FR-004, FR-005): every new kind's `Entry:` matches `coverage.md`; every kind `coverage.md` lists as

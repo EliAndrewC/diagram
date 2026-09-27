@@ -40,6 +40,12 @@ the fox-fire lantern, the fox relics) are unchanged, except that a room's floor 
 | charcoal bales | - | - | the two bales on the weighing floor | - |
 | parley mats | - | - | the four mats across the border | - |
 | drying stones and bowls | the cinnabar workshop's drying stones and bowls | - | - | - |
+| nakamon | the inner gate's posts in the court divider | same | same | - (the placer's divider is a bare line) |
+
+The sweep read every element that names a parent's kind, inherited or explicitly tagged: the nakamon's posts (a
+group of their own tagged `court divider`), the genkan (tagged `residence`) and Ubame's approach torii (tagged
+`compound shrine`) are the explicitly tagged parts. The `court divider and nakamon` kind becomes `court divider`, the
+wall alone.
 
 Rooms that were already kinds gain their floor: the clerks' room (Ochiba, Ubame office halls), the guest room
 (Ochiba, Ubame residences) and the ancestral alcove bay (Hayakawa's "east rooms" label joins it, as Ubame's "inner
