@@ -41,7 +41,9 @@ country shrine applied to its sheet and map.
   010, 050, 070 and their notes), R3 (500-540 and the 210 note), T (580-590 and the 020 and 030 notes); R2 takes the
   040 note. Every existing section is edited by ONE queue: the new ranges keep the new questions apart, and where two
   groups touch one section (210: R2 then R3; 020: R4 then T) they run one after the other in one clone (plan review
-  round 1). 130-206 and 270-300 are 269's and are cited only; 204 waits for 269's R1.
+  round 1). 130-206 and 270-300 are 269's and are cited only, except 190 and 204, which 269 handed over when its R1
+  landed (2026-09-27) and which R3 writes; R3 also makes 210 the tier table of religious features (271's D63, handed
+  over 2026-09-27).
 - **D3 - three queue clones** (`.clones/diagram-shrines-1..3`), so three groups run at once without sharing a git
   index: queue 1 runs S then B37, queue 2 runs R2 then R3, queue 3 runs R4 then T (T's brief is made when its
   reader returns; the queue starts with R4). `scripts/pull-queue.sh <n>` brings each back; the assembled pages are rebuilt, never merged by hand.
