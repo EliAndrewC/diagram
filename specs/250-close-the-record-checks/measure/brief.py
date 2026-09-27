@@ -485,16 +485,16 @@ Read narrowly - you need no question's whole text; the agents read the bundles.
 
 **Measure.** Before each numbered step: `python3 specs/250-close-the-record-checks/measure/tokens.py mark "owed {page} {n} <step>" --marks {marks}`
 
-**Your modals:** {modals}
+**Your pairs** (a modal and ONE question it is owed from - a modal owed from two questions is two pairs, each\nchecked and recorded on its own): {modals}
 
-1. **Check, all in one message, in the background.** For each modal:
-   `make check-bundle PAGE={page} SECTION=<its NNN> NO_QUOTES=1 FOR=entry-drift KIND=<its class>` (in
+1. **Check, all in one message, in the background.** For each PAIR:
+   `make check-bundle PAGE={page} SECTION=<its NNN> NO_QUOTES=1 FOR=entry-drift KIND=<its class> OUT=/tmp/l7r-check/owed-<class>-<NNN>` (in
    `.claude/skills/diagram`) and one `entry-drift` naming its MANIFEST.
 2. **Apply each report with ONE command**: `make apply-edits FROM=<the output_file its dispatch printed>`; the refused
    blocks and any `EDIT: none` finding by hand, all in ONE message of parallel `Edit` calls.
 3. **Re-check ONCE, only what moved**: one `entry-drift` on each rewritten modal's bundle again; a drift left after it
    is labeled honestly in the modal's `Note:`, not checked a third time.
-4. **Record the verdicts.** Append one line per modal to `specs/250-close-the-record-checks/owed-verdicts.md`:
+4. **Record the verdicts.** Append one line per PAIR to `specs/250-close-the-record-checks/owed-verdicts.md`:
    `- <class> (<page> SECTION=<NNN>): IN-STEP | REWRITTEN | LABELED | CANNOT-TELL - <one clause>`. A modal found
    IN-STEP stays on `_entry_owed.py`'s list (only a rewrite clears it), and the push discharges exactly those lines;
    a CANNOT-TELL is NOT discharged - say what the agent needed, and the closing session answers it before the push.
@@ -504,46 +504,55 @@ Read narrowly - you need no question's whole text; the agents read the bundles.
 
 
 def owed_briefs(page: str, task: str) -> int:
-    """T23 (D20): the page's owed modals, packed by load into groups, each a brief; printed one path a line."""
+    """T23 (D20): the page's owed PAIRS not yet recorded in `owed-verdicts.md`, packed by load into groups, each a
+    brief; printed one path a line. A pair is a modal and ONE question it is owed from (plan review, D20.2c)."""
     slug = page.replace("/", "-")
-    load = {cls: prose + MODAL_WORK for cls, prose, _secs in owed_modals(page)}
-    home = {cls: secs[0] for cls, _p, secs in owed_modals(page)}
-    if not load:
-        print(f"brief: nothing is owed on {page}", file=sys.stderr)
+    rec = ledger()
+    todo = [(c, s, b) for c, pg, s, b in owed_pairs((page,)) if (c, pg, s) not in rec or rec[(c, pg, s)] == "CANNOT-TELL"]
+    if not todo:
+        print(f"brief: every owed pair on {page} is recorded", file=sys.stderr)
         return 2
-    bins: list[list[str]] = []
-    for cls in sorted(load, key=lambda c: (-load[c], c)):
-        b = next((b for b in bins if sum(load[x] for x in b) + load[cls] <= GROUP_BYTES), None)
-        (b.append(cls) if b is not None else bins.append([cls]))
+    load = {(c, s): b + MODAL_WORK for c, s, b in todo}
+    bins: list[list[tuple[str, str]]] = []
+    for pair in sorted(load, key=lambda x: (-load[x], x)):
+        b = next((b for b in bins if sum(load[x] for x in b) + load[pair] <= GROUP_BYTES), None)
+        (b.append(pair) if b is not None else bins.append([pair]))
+    stamp = len(list((FEATURE / "briefs").glob(f"owed-{slug}-*.md")))
     for n, group in enumerate(bins, 1):
-        out = FEATURE / "briefs" / f"owed-{slug}-{n}.md"
-        out.write_text(OWED.format(page=page, n=n, of=len(bins), clone=CLONE, marks=(HERE / f"marks-owed-{slug}.json").relative_to(CLONE),
-                                   modals=", ".join(f"KIND={c} (SECTION={home[c]})" for c in sorted(group))), encoding="utf-8")
+        out = FEATURE / "briefs" / f"owed-{slug}-{stamp + n}.md"
+        out.write_text(OWED.format(page=page, n=stamp + n, of=stamp + len(bins), clone=CLONE, marks=(HERE / f"marks-owed-{slug}.json").relative_to(CLONE),
+                                   modals=", ".join(f"KIND={c} (SECTION={s})" for c, s in sorted(group))), encoding="utf-8")
         print(out)
     return 0
 
 
+LEDGER_LINE = re.compile(r"^- (\w+) \(([\w/-]+) SECTION=(\d{3})\): ([A-Z-]+)\b", re.M)
+
+
+def ledger() -> dict[tuple[str, str, str], str]:
+    """(class, page, section) -> the verdict `owed-verdicts.md` records for that PAIR."""
+    path = FEATURE / "owed-verdicts.md"
+    text = path.read_text(encoding="utf-8") if path.is_file() else ""
+    return {(m.group(1), m.group(2), m.group(3)): m.group(4) for m in LEDGER_LINE.finditer(text)}
+
+
+def owed_pairs(pages: tuple[str, ...] = ("homesteads", "archetypes", "fields", "water", "vegetation")) -> list[tuple[str, str, str, int]]:
+    """Every (class, page, section, prose bytes) pair `_entry_owed.py` names - a modal owed from three questions is
+    three pairs, each checked and recorded on its own (plan review, D20.2c)."""
+    return [(cls, page, sec, prose) for page in pages for cls, prose, secs in owed_modals(page) for sec in secs]
+
+
 def owed_check() -> int:
-    """Before the push (D20.2, plan review): every pair `_entry_owed.py` names must have an IN-STEP line in
-    `owed-verdicts.md`; a pair without one - CANNOT-TELL, never dispatched, or newly created - is printed and fails,
-    because `ENTRY_DRIFT_OK` clears the whole gate and must only ever clear pairs a check found in step."""
-    got = subprocess.run([sys.executable, str(CLONE / "scripts/_entry_owed.py")], cwd=CLONE, capture_output=True, text=True, check=False).stdout
-    named = sorted({m.group(1) for line in got.splitlines() if (m := re.match(r"(.+?) - .* - prose at \S+:\d+$", line))})
-    ledger = FEATURE / "owed-verdicts.md"
-    text = ledger.read_text(encoding="utf-8") if ledger.is_file() else ""
-    in_step = set()
-    for page in ("homesteads", "archetypes", "fields", "water", "vegetation"):
-        for cls, _p, _s in owed_modals(page):
-            if re.search(rf"^- {re.escape(cls)} \(.*\): IN-STEP\b", text, re.M):
-                in_step.add(cls)
-    keys = {}
-    for f in (SKILL / "l7r/diagram/interactive/classes").glob("*.py"):
-        for m in re.finditer(r"^class (\w+)\(Kind\):.*?^    key = \"([^\"]+)\"", f.read_text(encoding="utf-8"), re.M | re.S):
-            keys[m.group(2)] = m.group(1)
-    open_ = [k for k in named if keys.get(k) not in in_step]
-    for k in open_:
-        print(f"owed-check: {k} ({keys.get(k, '?')}) has no IN-STEP verdict in {ledger.name} - answer it before the push")
-    print(f"owed-check: {len(named)} pair(s) named, {len(named) - len(open_)} with an IN-STEP verdict, {len(open_)} open")
+    """Before the push (D20.2, plan review): every PAIR `_entry_owed.py` names must have an IN-STEP line for exactly
+    that modal and question in `owed-verdicts.md`; any other pair - CANNOT-TELL, never dispatched, checked only
+    against another of the modal's questions, or newly created - is printed and fails, because `ENTRY_DRIFT_OK`
+    clears the whole gate and must only ever clear pairs a check found in step."""
+    rec = ledger()
+    pairs = owed_pairs()
+    open_ = [(c, pg, s) for c, pg, s, _b in pairs if rec.get((c, pg, s)) != "IN-STEP"]
+    for c, pg, s in open_:
+        print(f"owed-check: {c} ({pg} SECTION={s}) - {rec.get((c, pg, s), 'no verdict')}; answer it before the push")
+    print(f"owed-check: {len(pairs)} pair(s) named, {len(pairs) - len(open_)} with an IN-STEP verdict, {len(open_)} open")
     return 1 if open_ else 0
 
 

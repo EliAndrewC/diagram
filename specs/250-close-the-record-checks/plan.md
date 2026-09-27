@@ -508,8 +508,12 @@ no further process change.
    modal, fixes by `make apply-edits`, one re-check round, each verdict appended to `owed-verdicts.md`. A modal
    REWRITTEN leaves the list by itself; one found IN-STEP stays on it (only a rewrite clears a pair), and the push
    discharges exactly those with one `ENTRY_DRIFT_OK`. Because the escape clears the WHOLE gate (plan review), it is
-   set only after `brief.py owed-check` passes: every pair `_entry_owed.py` names at the push has an IN-STEP line in
-   `owed-verdicts.md`, and a pair without one - CANNOT-TELL (a verdict the brief records and never discharges),
+   set only after `brief.py owed-check` passes: every PAIR `_entry_owed.py` names at the push - a modal and ONE
+   question it is owed from, so a modal owed from three questions is three pairs, each with its own bundle and its own
+   verdict line (plan review: a modal checked against one of its questions does not answer the others) - has an
+   IN-STEP line for exactly that modal and question in `owed-verdicts.md` (`LEDGER_LINE`: `- <class> (<page>
+   SECTION=<NNN>): <VERDICT>`), and `brief.py owed <page>` briefs exactly the pairs not yet recorded, so the pairs the
+   first per-modal sessions left (a modal's other questions) are checked by a follow-up session before the push; and a pair without one - CANNOT-TELL (a verdict the brief records and never discharges),
    never dispatched, or newly created - is answered first, by a re-check or a rewrite. The reason shipped gives the
    count and says "dispatched, `entry-drift` IN-STEP, per `owed-verdicts.md`" - not "no finding moved", since some of
    these sections did gain findings.
