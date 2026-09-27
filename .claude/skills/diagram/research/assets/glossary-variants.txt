@@ -140,6 +140,7 @@ chan buddhism	Chan
 chaoguan	chaoguan
 chenghuangmiao	chenghuangmiao
 chi	chi
+chikaraishi	chikaraishi
 china fir	China fir
 chinju	chinju
 chinju no mori	chinju no mori
@@ -805,6 +806,7 @@ minka	minka
 mire	mire
 mitochigai	mitochigai
 miyaza	miyaza
+mizugaki	mizugaki
 mizugashira	mizugashira
 mizuguchi	mizuguchi
 mizujiri	shirimito
@@ -827,6 +829,7 @@ muen-zuka	muenzuka
 muenbotoke	muenzuka
 muenzuka	muenzuka
 mugi	mugi
+mukakusha	mukakusha
 mulberry-dike fishpond	dike-pond
 murataka	murataka
 muromachi	Muromachi
@@ -1086,6 +1089,7 @@ shibai-goya	shibai-goya
 shichiya	shichiya
 shijin soo	four gods
 shijin-soo	four gods
+shimenawa	shimenawa
 shinai	shinai
 shinden	shinden
 shinsei	Shinsei
@@ -1135,6 +1139,7 @@ solidity	solidity
 song dynasty	Song dynasty
 song yingxing	Song Yingxing
 song-dynasty	Song dynasty
+sonsha	sonsha
 sotobori	sotobori
 south town magistrate	town magistrate
 southern song	Song dynasty
@@ -1396,6 +1401,7 @@ zongjia	zongjia
 zooplankton	zooplankton
 zuku	zuku
 ō-aza	ō-aza
+ōiya	ōiya
 ōkaji	ōkaji
 ōkajiba	ōkaji
 ほ場整備	hojo seibi

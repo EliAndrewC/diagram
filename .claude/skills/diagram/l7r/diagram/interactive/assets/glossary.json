@@ -2261,7 +2261,7 @@
   ]
  },
  "keidai": {
-  "def": "A shrine's or temple's precinct: the enclosed ground of approach, gate and halls.",
+  "def": "A shrine's or temple's precinct: the ground of its approach, gate and halls - at a village shrine unfenced, marked by its arch and its wood.",
   "variants": [
    "keidai"
   ]
@@ -4710,7 +4710,7 @@
   ]
  },
  "tamagaki": {
-  "def": "The low fence that bounds a shrine's precinct.",
+  "def": "A shrine's fence - at an ordinary shrine a low fence around the sanctuary alone, often a later donation; at a great shrine, rings of them.",
   "variants": [
    "tamagaki"
   ]
@@ -5552,6 +5552,42 @@
   "def": "The Japanese syllabic script, in which each sign stands for one syllable; の, read \"no\", is one of its signs.",
   "variants": [
    "kana"
+  ]
+ },
+ "mizugaki": {
+  "def": "Another name for the tamagaki, a shrine's fence; at a great shrine with several rings, the innermost.",
+  "variants": [
+   "mizugaki"
+  ]
+ },
+ "shimenawa": {
+  "def": "The twisted straw rope hung to mark something sacred, such as a shrine's sacred tree.",
+  "variants": [
+   "shimenawa"
+  ]
+ },
+ "ōiya": {
+  "def": "A covering building put over a small shrine sanctuary to shelter it from wind and rain.",
+  "variants": [
+   "ōiya"
+  ]
+ },
+ "chikaraishi": {
+  "def": "A strength stone: a heavy river stone kept beside a shrine's approach and lifted by young men in trials of strength.",
+  "variants": [
+   "chikaraishi"
+  ]
+ },
+ "sonsha": {
+  "def": "The village-shrine rank in Japan's modern shrine registers: a village's own tutelary shrine, one step above the unranked.",
+  "variants": [
+   "sonsha"
+  ]
+ },
+ "mukakusha": {
+  "def": "An unranked shrine in Japan's modern shrine registers, often a single hamlet's, one step below a village shrine.",
+  "variants": [
+   "mukakusha"
   ]
  }
 }
