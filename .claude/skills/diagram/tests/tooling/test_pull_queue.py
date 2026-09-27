@@ -66,3 +66,13 @@ def test_a_hand_written_conflict_stops_and_a_dirty_queue_is_refused(tmp_path) ->
     (q / "research" / "note.txt").write_text("still being written\n", encoding="utf-8")
     got = _run(a)
     assert got.returncode == 2 and "still running" in got.stderr
+
+
+def test_a_finished_queue_s_untracked_briefs_are_committed_not_refused(tmp_path) -> None:
+    """The first real pull-back (queue 2, feature 265) was refused over the check briefs its sessions left untracked."""
+    a, q = _world(tmp_path)
+    (q / "specs" / "250-x" / "briefs").mkdir(parents=True)
+    (q / "specs" / "250-x" / "briefs" / "towns-2a.md").write_text("a brief\n", encoding="utf-8")
+    got = _run(a)
+    assert got.returncode == 0, got.stderr
+    assert (a / "specs" / "250-x" / "briefs" / "towns-2a.md").exists() and not _git(q, "status", "--porcelain")
