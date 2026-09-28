@@ -81,13 +81,15 @@ def past_the_lanes(cols: Sequence[tuple[float, float]], lanes: Sequence[tuple[fl
 BELT_NEAR_FT = 36.0  # ft behind the fringe the band's near face stands
 # THE BAND'S DEPTH BEFORE THE RAG, near face to far, and the rag on each face. The near face is roughened along its length
 # and pushed only OUT of the band, 0-`BELT_NEAR_RAG_FT`; the far face moves up to `BELT_FAR_RAG_FT` either way. A band
-# laid 105 ft deep so draws 95-120 ft where the fringe lies square to the wind - inside the record's 80-120 ft
+# laid 100 ft deep so draws 90-115 ft where the fringe lies square to the wind - inside the record's 80-120 ft
 # (research/vegetation.html "What are the village's three groves"). The old rag moved both faces up to 13 ft either way
 # about a 110 ft band (84-136): the near face moving in with the far took the band to 72.7 ft at Sawada's bend. Moving
-# both faces only outward about 110 drew a median band of 118-122 ft, over half of two maps' faces past 120; 94 and 100
-# ft bands with an outward rag held the range but left Kashikawa's belt in two pieces where its westernmost garden's
-# afternoon-sun lane crosses the band (spec-fidelity rounds of 2026-09-28; measured every 5 ft along the near face).
-BELT_DEPTH_FT = 105.0
+# both faces only outward about 110 drew a median band of 118-122 ft, over half of two maps' faces past 120. A 100 ft band
+# once left Kashikawa's belt in two pieces where its westernmost garden's afternoon-sun lane crossed the band, and 105
+# was laid to cover it; the cause was the near face's chord cutting that garden, fixed at its source by
+# `round_the_houses`, and 105 then drew 17-24% of two faces past 120 where 100 draws 1-16%, at the ends and bends
+# (spec-fidelity rounds of 2026-09-28; measured every 5 ft along the near face, `m:belt-r22-depth`).
+BELT_DEPTH_FT = 100.0
 BELT_NEAR_RAG_FT = 5.0
 BELT_FAR_RAG_FT = 10.0
 
@@ -120,6 +122,38 @@ def far_envelope(cols: Sequence[tuple[float, float]], depth: float = BELT_DEPTH_
     n = max(1, int(abs(hi - lo) // step))
     vs = sorted({*(lo + (hi - lo) * k / n for k in range(n + 1)), *(v for v, _u in cols)}, reverse=hi < lo)
     return [(v, max(u2 + depth * (1.0 - ((v2 - v) / depth) ** 2) ** 0.5 for v2, u2 in pts if abs(v2 - v) <= depth) - depth) for v in vs]
+
+
+def round_the_houses(cols: Sequence[tuple[float, float]], uv: Sequence[tuple[float, float]], reach: float, step: float = BELT_PROFILE_STEP_FT) -> list[tuple[float, float]]:
+    """The fringe profile `cols` ((v, u), in order across the wind) with the near face kept `reach` from every house
+    (`uv`, (u, v) per house) all along it, not only at the columns (feature 261, once main's placer re-laid the pool).
+    A column stands its face `reach` windward of the house it leads with; between two columns the face is one chord, and
+    where the fringe falls back steeply the chord cuts the corner at the leading house - Kashikawa's ran 37 ft from its
+    westernmost farmhouse, through that house's garden, and the garden's afternoon-sun lane then took the band's trees
+    there and left the belt in two pieces. So every `step` across the wind, and every 15 degrees round each house's disc of
+    `reach`, a point is added where the disc stands windward of the chord; the columns are kept as they are. The face
+    goes round the house at the distance the column rule already gives it."""
+    if len(cols) < 2:
+        return list(cols)
+    rev = cols[-1][0] < cols[0][0]
+    lo, hi = min(cols[0][0], cols[-1][0]), max(cols[0][0], cols[-1][0])
+
+    def chord(v: float) -> float:
+        for (v0, u0), (v1, u1) in zip(cols, cols[1:], strict=False):
+            if min(v0, v1) <= v <= max(v0, v1):
+                return u0 if v1 == v0 else u0 + (u1 - u0) * (v - v0) / (v1 - v0)
+        return cols[0][1] if abs(v - cols[0][0]) < abs(v - cols[-1][0]) else cols[-1][1]  # pragma: no cover - every v asked lies in [lo, hi]
+
+    def disc(v: float) -> float:
+        return max((hu + (reach * reach - (v - hv) ** 2) ** 0.5 - reach for hu, hv in uv if abs(v - hv) <= reach), default=-math.inf)
+
+    n = max(1, int((hi - lo) // step))
+    # round each disc every 15 degrees of arc, so no chord between two points sags more than 0.7 ft into it at 79 ft
+    ends = {hv + sy * reach * math.sin(math.radians(15.0 * k)) for _hu, hv in uv for k in range(1, 7) for sy in (-1.0, 1.0)}
+    ends = {v for v in ends if lo < v < hi}
+    vs = sorted({*(lo + (hi - lo) * k / n for k in range(1, n)), *ends} - {v for v, _u in cols}, reverse=rev)
+    extra = [(v, disc(v)) for v in vs if disc(v) > chord(v) + 1.0]
+    return sorted([*cols, *extra], key=lambda q: -q[0] if rev else q[0])
 
 
 def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
@@ -243,7 +277,7 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
     _near_n = [0]  # how many of the band's vertices are its near face, recorded for the depth measure (the far face has more)
 
     def band(span_f: float, back: float) -> Poly:
-        cols = past_the_lanes(profile(span_f), _lanes, half * span_f / COLS, near=BELT_NEAR_FT, depth=BELT_NEAR_FT + BELT_DEPTH_FT, wet=_in_marsh)
+        cols = past_the_lanes(round_the_houses(profile(span_f), uv, BELT_NEAR_FT + _sun_off), _lanes, half * span_f / COLS, near=BELT_NEAR_FT, depth=BELT_NEAR_FT + BELT_DEPTH_FT, wet=_in_marsh)
         # 36 px, not 24. `village_grove` filters clumps against every structure and crop, and it
         # filters the near face hardest - so a belt whose POLYGON sits clearly windward can still
         # have its DRAWN clumps average back onto the cluster's own line, which is what

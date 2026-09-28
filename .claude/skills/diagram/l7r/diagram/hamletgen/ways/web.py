@@ -242,6 +242,12 @@ def tidy_lane_ends(s: Settlement, envelope: Poly) -> None:
         return 0.0 <= q[0] <= _W and 0.0 <= q[1] <= _H
 
     _fabric_now = [poly for poly, _owner, _kind in _homestead_polys(s)]  # what the connector's end must stay clear of, as `_thread_the_fabric` left it
+    _nowhere: list[int] = []  # lanes that serve nothing at either end - dropped after the loop, back to front
+    # THE FIELD AS DRAWN, not the plan's envelope (feature 261): an end serves the field where it reaches the paddy a reader
+    # sees - the bar the pool's lane-end test holds - and the envelope stands well out from it on a polder, so a skeleton
+    # arm into Kuwabata's scrub 481 ft from any paddy counted as reaching the field. The envelope stands in where no field
+    # outline is recorded.
+    _fields = [[(float(a), float(b)) for a, b in f["outline"]] for f in s.M.get("fields") or [] if len(f.get("outline") or []) >= 3] or [list(envelope)]
     for _i, _ln in enumerate(list(s.M.get("lanes", []))):
         # KEPT AND NOT REACHABLE TODAY, deliberately (feature 146). Every pass that can empty a lane
         # DELETES the record with the ink (feature 145's "the husk goes with the ink"), so no husk
@@ -268,13 +274,29 @@ def tidy_lane_ends(s: Settlement, envelope: Poly) -> None:
         _kept = (
             _pull_back_to_service(_pts, _others, _final_houses, _inside, _fabric_now)
             if _ln.get("connector")
-            else _trim_to_service(_pts, _others, _final_houses, [list(envelope)], keep=_keep, steadings=_final_steadings)
+            else _trim_to_service(_pts, _others, _final_houses, _fields, keep=_keep, steadings=_final_steadings)
         )
         if len(_kept) >= 2 and polyline_len(_kept) >= _WEB_MIN_FT and _kept != _pts:
             _ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in _kept]
             # AND THE INK WITH IT - see `Settlement.reink_lane`. Shortening the record alone left the
             # drawn lane longer than the checked one, which is the quietest kind of wrong there is.
             s.reink_lane(_i)
+        elif (
+            not _ln.get("connector")
+            and (
+                len(_kept) < 2
+                # trimmed to a nub too short to be a lane (Kashikawa's field spur kept 2 ft past the tread it stopped on) that is
+                # no house's only way: the nub serves nothing the tread it leaves does not
+                or (polyline_len(_kept) < _WEB_MIN_FT and not any(min(seg_dist(_h[0], _h[1], _a, _b) for _a, _b in zip(_pts, _pts[1:], strict=False)) <= WEB_REACH_FT for _h in _keep))
+            )
+        ):
+            _nowhere.append(_i)
+    # ...AND A LANE THAT SERVES NOTHING AT EITHER END GOES (feature 261, once main's placer re-laid the pool): trimmed to
+    # service it keeps a single point, and this pass used to leave such a lane whole - a skeleton arm run into the scrub on
+    # Kuwabata, and on Kashikawa a field spur whose far end another lane had joined and taken over, its head a plank over
+    # the brook to nothing. A lane that is some house's only way names that house in `keep` and never trims to a point, so
+    # nothing it serves is stranded; the planks are laid after this stage, so none is left behind.
+    s.drop_lanes(_nowhere)
 
 
 def stage_web(s: Settlement, plan: SitePlan) -> None:
@@ -607,6 +629,11 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # ...and a record whose points are all one point is a husk too (Mizuguchi, feature 261: seven three-point records at a
     # single spot, left by the passes that re-cut the home-bank footpath)
     s.drop_lanes([i for i, ln in enumerate(s.M.get("lanes") or []) if len(ln.get("pts") or []) < 2 or polyline_len([(float(x), float(y)) for x, y in ln["pts"]]) < 1.0])
+    # ...AND THE ENDS ARE TRIMMED TO SERVICE ONCE MORE, LAST (feature 261, once main's placer re-laid the pool): every pass
+    # after the first tidy can leave an end in open ground - the dangling-end sweeps, the joint straightening and the cut
+    # past the connector all reshape lanes - and Kuwabata shipped a skeleton arm into the scrub that the first tidy had
+    # seen as part of a longer lane. The same trim, with the same `keep` for a house whose only way a lane is.
+    tidy_lane_ends(s, list(plan.envelope))
     s.M["meta"]["lane_web"] = plan.lane_web
 
 

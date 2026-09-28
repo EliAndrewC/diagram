@@ -452,6 +452,46 @@ Measured before and after in research R10.
   its ranks spread 17-61 ft (`m:rank-r18-spread`). Its four seats moved 3.1-7.9 ft and its lanes shifted with them, and
   seven homesteads now carry their own dry plot where eleven did (`m:sawada-r18-moves`).
 
+### D23 - What main's re-laid pool exposed (the merge of feature 276, 2026-09-28)
+
+Main's feature 276 re-laid four of the five maps (its placer reads the house index), and the re-laid maps failed four
+of this feature's own rules. Each is fixed in the placer that made it, per the GM's ruling on this feature: *"I do not
+want to route around deficiencies in our placement algorithm... we should fix the placement algorithm instead."*
+
+- **A lane end that serves nothing** (map drawing convention: a way goes somewhere). Kuwabata shipped a skeleton arm
+  into the scrub 481 ft from any paddy, and Kashikawa a field spur whose far end another lane had joined, its head a
+  plank to nothing. `tidy_lane_ends` read the plan's envelope as the field, which stands well out from the paddy on a
+  polder; it reads the field AS DRAWN now. It left whole a lane it trimmed to a point, or to a nub shorter than a lane
+  (`_WEB_MIN_FT`); it drops both, unless the lane is some house's only way. And it runs once more as the last pass of
+  `stage_web`, since the passes after it reshape lanes (0 dangling ends on the pool, `m:lanes-r22-ends`).
+- **The belt in two pieces** (accurate: a windbreak with a hole funnels the wind, research/vegetation). Between two
+  columns the near face is one chord, and where the fringe falls back steeply the chord cut the corner at the leading
+  house: Kashikawa's ran 37.3 ft from its westernmost farmhouse, through that house's garden, whose afternoon-sun lane
+  then took the band's trees; Sawada's 33.8 ft (`m:belt-r22-near-face`). `round_the_houses` adds a point every 30 ft
+  across the wind and every 15 degrees round each house's disc wherever the disc stands windward of the chord, so the
+  face goes round the house at the distance the column rule already gives it (73-82 ft now, the 79 ft reach less the
+  near rag). A calibration of the column rule, not a new clearance. The 105 ft band of D20 was laid to cover that
+  split; with its cause fixed it drew 17-24% of two faces past 120 ft, and the band goes back to 100 ft: thinnest
+  84.1-89.8 ft, median 95.6-101.4, 1-16% of a face over 120 at the ends and bends, one piece on every map
+  (`m:belt-r22-depth`, `m:belt-r22-pieces`).
+- **Too few homestead fields on a packed cluster** (accurate for the position: a household's dry field lay on the
+  raised ground its house stood on, research/fields "Where dry (hatake) crops go"; the offset a GUESS, labeled). Main's
+  placer packed Mizuguchi's steadings closer than a plot's depth, 3 of 12 households laid a plot, and the median house
+  stood 157 ft from its nearest dry plot. Where no side has room flush, the plot is offered the nearest ground beside
+  the steading, out from each lee or flank side and along it every 15 ft to 90 ft, never upwind of the steading
+  (`beside_the_steading`): a plot there fouled the belt, and the belt's fit steps back from any crop (Sawada's belt
+  fell to 703 crowns in two pieces on the roll before that rule). Medians now 70-99 ft (`m:dry-r22-median`).
+- **A yard tree and a stack unseated** (the persimmon's ring a map drawing convention; the straight seats a GUESS,
+  labeled - the record plants persimmons "round the homestead" and a stack at "whichever wall is free"). The plot
+  laid flush took the last open ground round Mizuguchi's north-row house, a lane at its back and east wall, and its
+  woodpile and persimmon went unseated. A plot keeps clear of the ring the house's yard persimmon's trunk stands on
+  (a crown may overhang a plot, a trunk may not stand in one - `_trunk_blocked`); the fixture ring's last resort adds
+  seats straight out from each wall; the persimmon's adds seats straight behind and before the house. All appended, so
+  a fixture that seated before does not move; 0 unseated on the pool (`m:pool-r22-unseated`).
+- Tried and reverted (observed 2026-09-28 on rolls not committed): reserving the persimmon's whole crown reach round
+  every house (Mizuguchi's plots fell to 4 and its median to 157 ft again); a pure-disc near face with the columns
+  densified along the profile, which left 2 ft sags where the disc steepens (sampled every 15 degrees now).
+
 ## Phases
 
 1. Engine: D1, D2, D3 with their unit tests (plan, cluster, surface); the amendment's D9-D17 with theirs.

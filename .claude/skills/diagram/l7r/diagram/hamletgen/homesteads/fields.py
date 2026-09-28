@@ -1,4 +1,4 @@
-"""THE HOMESTEAD FIELD (feature 261) - each household's own dry plot, laid against its homestead.
+"""THE HOMESTEAD FIELD (feature 261) - each household's own dry plot, laid against its homestead or beside it.
 
 A household's dry ground lay first of all on the raised ground its house stood on: the settlement and its dry fields
 share the natural levee, and the paddy takes the back marsh (research/fields.html, "Where dry (hatake) crops go"). The
@@ -9,8 +9,9 @@ face the wind from across the rice that was all of them: Inashiro's median walk 
 
 Laid after the lanes, so a plot is fitted to the ways rather than the ways routed round a plot, and before the cover, the
 woods and the belt, which all keep off `dry_polys`. A plot runs along one side of the homestead's reserved box, never the
-windward side (the belt's ground), and is refused anywhere a homestead part would be - crop, water, a lane's tread and
-verge, another steading, a well, a fixture, the marsh - or across the brook from its house.
+windward side (the belt's ground) - or, where no side has room, on the nearest ground beside it, never upwind of it - and
+is refused anywhere a homestead part would be - crop, water, a lane's tread and verge, another steading, a well, a
+fixture, the ring a yard persimmon stands on, the marsh - or across the brook from its house.
 """
 
 from __future__ import annotations
@@ -20,6 +21,7 @@ from collections.abc import Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, knob_rng, point_in_poly, seg_dist, segments_cross
+from l7r.diagram.settlement.farm_fixtures import PERSIMMON_CROWN_FT
 from l7r.diagram.waterfields.palette import DRY_CROPS
 
 from ..consts import Pt
@@ -65,6 +67,36 @@ def side_plots(box: tuple[float, float, float, float], depth: float, wind: Pt) -
     return out
 
 
+HOMESTEAD_FIELD_STEP_FT = 15.0  # ft between the candidate seats beside the steading, out from a side and along it
+HOMESTEAD_FIELD_REACH_FT = 90.0  # ft out from the flush seat the plot may stand on its house's ground
+
+
+def beside_the_steading(box: tuple[float, float, float, float], depth: float, wind: Pt) -> list[tuple[Pt, list[Pt]]]:
+    """The candidate plots NEAR `box` when none fits flush against it: each lee or flank plot of `side_plots` moved out
+    from its side and along it, every `HOMESTEAD_FIELD_STEP_FT` out to `HOMESTEAD_FIELD_REACH_FT`, the nearest to the
+    steading first (settlement-review follow-up, feature 261: main's placer packed Mizuguchi's steadings closer than a
+    plot's depth, and 9 of its 12 households laid none). The record puts the household's dry field on the raised ground
+    its house stood on (research/fields.html, "Where dry (hatake) crops go") - near the house, not against a wall of it."""
+    cx, cy, _w, _h = box
+    step, reach = HOMESTEAD_FIELD_STEP_FT, HOMESTEAD_FIELD_REACH_FT
+    out: list[tuple[float, Pt, list[Pt]]] = []
+    for (nx, ny), ring in side_plots(box, depth, wind):
+        tx, ty = -ny, nx
+        length = max(abs(ring[1][0] - ring[0][0]), abs(ring[2][1] - ring[1][1]))
+        for k in range(int(reach // step) + 1):
+            for j in range(-int(length // step), int(length // step) + 1):
+                if k == 0 and j == 0:
+                    continue  # the flush seat, already asked
+                dx, dy = nx * k * step + tx * j * step, ny * k * step + ty * j * step
+                moved = [(x + dx, y + dy) for x, y in ring]
+                mx, my = sum(p[0] for p in moved) / 4, sum(p[1] for p in moved) / 4
+                if (mx - cx) * wind[0] + (my - cy) * wind[1] > 0.0:
+                    continue  # never upwind of the steading: that is the belt's ground, and the belt is fitted round every plot
+                out.append((math.hypot(mx - cx, my - cy), (nx, ny), moved))
+    out.sort(key=lambda t: t[0])
+    return [(n, r) for _d, n, r in out]
+
+
 def ring_clear_of_lines(ring: Sequence[Pt], lines: Sequence[tuple[Sequence[Pt], float]]) -> bool:
     """Whether no polyline (`pts`, clearance) comes within its clearance of the ring - a point of the line inside the ring,
     or a ring edge nearer a line segment than the clearance."""
@@ -92,7 +124,7 @@ def ring_clear_of_items(ring: Sequence[Pt], items: Sequence[tuple[float, float, 
 def stage_homestead_fields(s: Settlement, plan: SitePlan) -> None:
     """The homestead fields.
 
-    One dry plot against each homestead that has room for one, on its lee or flank side, fitted to the lanes already
+    One dry plot against each homestead that has room for one, on its lee or flank side (or beside it), fitted to the lanes already
     drawn (module docstring); the count is recorded.
 
     Steps:
@@ -108,6 +140,12 @@ def stage_homestead_fields(s: Settlement, plan: SitePlan) -> None:
     items = [(float(w["x"]), float(w["y"]), 12.0) for w in s.M.get("wells") or [] if "x" in w]
     for key in ("farm_fixtures", "byres", "farm_sheds", "persimmons"):
         items += [(float(r["x"]), float(r["y"]), max(float(r.get("w") or 6.0), float(r.get("h") or 6.0)) / 2 + 3.0) for r in s.M.get(key) or [] if "x" in r]
+    # THE DOORYARD'S TREE GROUND IS KEPT (feature 261, once main's placer re-laid the pool): the yard persimmon stands a
+    # house's half-diagonal and a crown out from its center (`farmstead_fixtures`), and a plot laid flush to the steading
+    # sits just there - on Mizuguchi a household's plot took the last open ground round its house, and its woodpile and
+    # persimmon went unseated. The plot stands clear of the ring the trunk is seated on (a crown may overhang a plot, a
+    # trunk may not stand in one - `_trunk_blocked`): the half-diagonal, a crown and the pad out, and the trunk's half.
+    items += [(float(h["x"]), float(h["y"]), math.hypot(float(h["w"]) / 2, float(h["h"]) / 2) + PERSIMMON_CROWN_FT + s.CANOPY_PAD + 3.0) for h in s.M.get("houses") or [] if "w" in h]
     wet = [list(p) for p in s.hard_polys] + [[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes") or [] if m.get("poly")]
     laid = 0
     for house in s.M.get("houses") or []:
@@ -116,7 +154,7 @@ def stage_homestead_fields(s: Settlement, plan: SitePlan) -> None:
             continue
         depth = rng.uniform(*HOMESTEAD_FIELD_DEPTH_FT)
         crop = rng.choice(sorted(DRY_CROPS))
-        for normal, ring in side_plots(box, depth, plan.wind):
+        for normal, ring in [*side_plots(box, depth, plan.wind), *beside_the_steading(box, depth, plan.wind)]:
             if not homestead_field_fits(s, ring, (float(house["x"]), float(house["y"])), lanes, streams, items, wet):
                 continue
             along = 0.0 if normal[0] == 0.0 else math.pi / 2

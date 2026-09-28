@@ -315,6 +315,19 @@ def test_the_late_pass_leaves_a_lane_whose_ends_both_serve() -> None:
     assert [list(q) for q in s.M["lanes"][-1]["pts"]] == before
 
 
+def test_the_late_pass_drops_a_lane_trimmed_to_a_nub() -> None:
+    """A lane that serves nothing past the tread it leaves goes (feature 261, Kashikawa's field spur): trimmed to service it
+    kept a stub shorter than a lane, and the pass used to leave such a lane whole - its head a plank to nothing."""
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]], houses=[(600.0, 600.0)])
+    s.M["lanes"].append({"pts": [[0.0, 100.0], [-12.0, 100.0], [-400.0, 100.0]], "w": 3})
+    hg.ways.tidy_lane_ends(s, [(200.0, 0.0), (600.0, 0.0), (600.0, 400.0), (200.0, 400.0)])
+    assert len(s.M["lanes"]) == 1, "the nub is dropped"
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]], houses=[(-20.0, 700.0)])
+    s.M["lanes"].append({"pts": [[0.0, 380.0], [-15.0, 395.0], [-20.0, 690.0]], "w": 3})
+    hg.ways.tidy_lane_ends(s, [(200.0, 0.0), (600.0, 0.0), (600.0, 400.0), (200.0, 400.0)])
+    assert len(s.M["lanes"]) == 2, "a lane that is some house's only way stays"
+
+
 def test_a_footpath_of_one_point_fronts_nothing() -> None:
     """`_ends_worth_walking_to` is asked of whatever the router returned, and a route that collapsed to a single
     point has no ends to judge - it is not a path, and drawing it would put a dot in a field."""

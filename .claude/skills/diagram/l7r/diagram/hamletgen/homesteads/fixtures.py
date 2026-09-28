@@ -204,6 +204,10 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                 # below seats a fixture where none stood before, and on Sawada it took the ground of a persimmon that then
                 # vanished without a record - this branch alone never said when it drew nothing.
                 tseats += [(lx * (reach + px(_st)) / reach, ly * (reach + px(_st)) / reach) for _st in (10.0, 20.0) for lx, ly in tseats]
+                # ...AND LAST, STRAIGHT BEHIND AND BEFORE THE HOUSE at the same three reaches (feature 261): the record plants
+                # them "round the homestead", and Mizuguchi's north-row house, a lane at its back and east wall and its beds
+                # at the west, had open ground only straight out past its yard. Appended, so no tree that seated moves.
+                tseats += [(0.0, sy * (reach + px(_st))) for _st in (0.0, 10.0, 20.0) for sy in (1.0, -1.0)]
                 _planted = False
                 for lx, ly in tseats:
                     cx, cy = hx + lx * ca - ly * sa, hy + lx * sa + ly * ca
@@ -430,6 +434,10 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
             if kind != "shrine":
                 _ring = yard_ring(hw, hh, g, w, d)
                 _rungs += [(px(8.0) * _k, px(8.0) * _k, _ring) for _k in (0, 1, 2, 3)]
+                # ...and each seat straight out from its own wall (feature 261): the diagonal rungs move a front seat along the
+                # wall as far as out, into the lane or the neighbor's bed at a crowded corner, while Mizuguchi's north-row
+                # house had open ground straight out past its yard and seated no woodpile.
+                _rungs += [(_o, 0.0, _ring) for _o in (px(8.0) * _k for _k in (1, 2, 3, 4))] + [(0.0, _o, _ring) for _o in (px(8.0) * _k for _k in (1, 2, 3, 4))]
             _seated = False
             for _ox, _oy, _table in _rungs:
                 if _seated:

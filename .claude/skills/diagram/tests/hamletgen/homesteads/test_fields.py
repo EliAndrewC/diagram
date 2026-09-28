@@ -19,6 +19,7 @@ class _S:
         self.dry_polys: list[Any] = []
         self.drawn: list[str] = []
         self.blocked: Any = None
+        self.CANOPY_PAD = 0.6
 
     def _envelope_blocked(self, rect: Any) -> Any:
         return self.blocked
@@ -114,6 +115,37 @@ def test_each_house_gets_one_plot_where_one_fits_and_the_count_is_recorded() -> 
     s2.blocked = True
     fields.stage_homestead_fields(s2, _Plan())  # type: ignore[arg-type]
     assert s2.M["meta"]["homestead_fields"] == 0 and "dry_plots" not in s2.M
+
+
+def test_a_plot_with_no_room_flush_stands_on_the_nearest_ground_beside_the_steading() -> None:
+    """`beside_the_steading` (feature 261, Mizuguchi's packed steadings): the lee and flank plots moved out and along their
+    side, the nearest first, never the flush seat again and never upwind of the steading."""
+    import math
+
+    box = (0.0, 0.0, 100.0, 80.0)
+    got = fields.beside_the_steading(box, 36.0, (0.0, -1.0))
+    flush = [r for _n, r in fields.side_plots(box, 36.0, (0.0, -1.0))]
+    centers = [(sum(p[0] for p in r) / 4, sum(p[1] for p in r) / 4) for _n, r in got]
+    assert got and not any(r in flush for _n, r in got)
+    assert all(cy >= 0.0 for _cx, cy in centers), "none upwind of the steading"
+    d = [math.hypot(cx, cy) for cx, cy in centers]
+    assert d == sorted(d)
+    assert max(d) <= 80.0 + 4.0 + 36.0 + fields.HOMESTEAD_FIELD_REACH_FT + 120.0
+
+
+def test_a_plot_keeps_off_the_ground_the_yard_tree_stands_on() -> None:
+    """`stage_homestead_fields` (feature 261): a plot stands clear of the ring a yard persimmon's trunk is seated on round
+    its house, so a house whose steading leaves no flush side that far out gets its plot on the ground beside it."""
+    import math
+
+    s = _S()
+    s.M["houses"] = [{"x": 0.0, "y": 0.0, "w": 100.0, "h": 60.0}]
+    fields.stage_homestead_fields(s, _Plan())  # type: ignore[arg-type]
+    assert s.M["meta"]["homestead_fields"] == 1
+    ring = s.M["dry_plots"][0]["poly"]
+    xs, ys = [p[0] for p in ring], [p[1] for p in ring]
+    near = math.hypot(max(min(xs), 0.0, -max(xs)), max(min(ys), 0.0, -max(ys)))
+    assert near >= math.hypot(50.0, 30.0) + 9.0 + 0.6 + 3.0
 
 
 def test_an_archetype_that_buys_its_grain_in_lays_no_grain_plot() -> None:

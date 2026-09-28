@@ -626,6 +626,31 @@ def test_the_profile_is_sampled_along_its_length() -> None:
     assert pts == [(0.0, 0.0), (0.0, 30.0), (0.0, 60.0), (0.0, 90.0), (10.0, 90.0)]
 
 
+def test_the_near_face_goes_round_the_house_it_leads_with() -> None:
+    """`round_the_houses` (feature 261, Kashikawa's belt in two pieces): where the fringe falls back steeply after the
+    column a house leads, the chord cut the corner 37 ft from that house; with points added where the house's disc stands
+    windward of the chord, every point of the near face stands at least `reach` from the house, the columns are kept and
+    the profile stays in order across the wind - either way round."""
+    import math
+
+    from l7r.diagram.hamletgen.hinterland.belt import along_the_profile, round_the_houses
+
+    reach = 79.0
+    cols = [(-90.0, 0.0), (0.0, 0.0), (90.0, -400.0), (180.0, -400.0)]
+    uv = [(0.0, 0.0)]  # (u, v): the house the middle column leads with
+    got = round_the_houses(cols, uv, reach)
+    assert all(c in got for c in cols) and len(got) > len(cols)
+    assert all(b[0] > a[0] for a, b in zip(got, got[1:], strict=False)), "in order across the wind"
+    for v, u in along_the_profile(got, 2.0):
+        assert math.dist((v, u + reach), (0.0, 0.0)) >= reach - 1.0, (v, u)  # within the sag of a 15 degree chord, 0.7 ft
+    before = min(math.dist((v, u + reach), (0.0, 0.0)) for v, u in along_the_profile(cols, 2.0))
+    assert before < reach - 30.0, "the chord alone cut the corner"
+    back = round_the_houses(list(reversed(cols)), uv, reach)
+    assert back == list(reversed(got))
+    assert round_the_houses(cols[:1], uv, reach) == cols[:1]
+    assert round_the_houses([(-90.0, 0.0), (90.0, 0.0)], [(-500.0, 0.0)], reach) == [(-90.0, 0.0), (90.0, 0.0)], "a house behind the face adds nothing"
+
+
 def test_the_far_face_keeps_the_depth_across_a_right_angle_between_columns() -> None:
     """`far_envelope` (spec-fidelity of round 31ef113b): where the fringe turns a right angle between two columns 90 ft
     apart across the wind, the band stays its depth across itself - every point along the steep chord stands at least the

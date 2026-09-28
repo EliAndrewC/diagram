@@ -173,7 +173,8 @@ class Buckwheat(Kind):
     from the section this entry names; the crop mix per map is rolled from the seed and is a GUESS at the
     proportions.
 
-    Caveat: the plot laid against a homestead, as long as that side and one hem row deep, is a GUESS at its size;
+    Caveat: the plot laid against a homestead (or beside it, where no side has room), as long as that side and one hem
+    row deep, is a GUESS at its size;
     the crop mix per map is rolled from the seed and is a GUESS at the proportions.
 
     Name: buckwheat
@@ -203,7 +204,8 @@ class Barley(Kind):
     from the section this entry names; the crop mix per map is rolled from the seed and is a GUESS at the
     proportions.
 
-    Caveat: the plot laid against a homestead, as long as that side and one hem row deep, is a GUESS at its size;
+    Caveat: the plot laid against a homestead (or beside it, where no side has room), as long as that side and one hem
+    row deep, is a GUESS at its size;
     the crop mix per map is rolled from the seed and is a GUESS at the proportions.
 
     Name: barley
@@ -234,7 +236,8 @@ class Soy(Kind):
     from the section this entry names; the crop mix per map is rolled from the seed and is a GUESS at the
     proportions.
 
-    Caveat: the plot laid against a homestead, as long as that side and one hem row deep, is a GUESS at its size;
+    Caveat: the plot laid against a homestead (or beside it, where no side has room), as long as that side and one hem
+    row deep, is a GUESS at its size;
     the crop mix per map is rolled from the seed and is a GUESS at the proportions.
 
     Name: soy
