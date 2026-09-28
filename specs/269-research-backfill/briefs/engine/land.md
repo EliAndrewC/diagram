@@ -1,7 +1,7 @@
 # Brief - feature 269 (research backfill): close out and land
 
 You are a FRESH headless session named `diagram-supplemental`, in `/diagram/.clones/diagram-supplemental`. Every rule of
-the root CLAUDE.md applies. You are headless: never background a command. Run the gate in the FOREGROUND (it takes a few
+the root CLAUDE.md applies. You are headless: never background a command. Never end a turn while an agent you dispatched is still running: your session ends with your turn, and its result never reaches you, so wait for every agent to return first. Run the gate in the FOREGROUND (it takes a few
 minutes; the tool limit is 10). Read coordination files only with `make lines` / `make append`.
 
 The research is done. The record-finishing queue (FX1-FX4, SP1-SP2, FIN) and the engine groups (E1-E9, K1-K5) have
