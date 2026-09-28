@@ -112,7 +112,17 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
     the commons'), scrub (090's flat-ground figure) and marsh (vegetation/280's yearly cutting, water/340's unharvested
     pond fringe). It corrected five sibling texts the engine had made false: a cedar-backed belt, a copse of loose
     greenery, a bamboo strip always on the damp north or west, a 10-30 year cycle, and a coppice on the slope above
-    the paddy."""
+    the paddy.
+
+    Feature 269 (K4) moved `footbridge`'s `label` from guess to accurate under the same bar: water/290 reads the three
+    crossings over small water (a single log or board, logs under trodden earth, a planked deck), which the engine now
+    rolls per settlement; the evenness of the roll, the 2 ft line and the spacing stay disclosed guesses and rulings.
+    Its entry gained ways/030 and its sources the keys 290 and 030 rest on. The same pass gave `village lane`
+    homesteads/310 (the run-out rule, its distances a guess) and fields/290 (the field path ends on the bund) with the
+    keys 290 cites; re-pointed the irrigation ditch (water/310, the bare intake mouth), the drainage ditch (water/090 and
+    fields/090 - where the drain lets its water go and why it runs across the fall; the retired 'Water-first v2'
+    heading dropped) and the weir (300's four forms and 310's choice); and corrected two sibling texts the engine had
+    made false: a weir always of stone-packed crib, and a ditch always crossed by a plank."""
     before = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
     added = {s for succ in SINCE_189.values() for s in succ} | set(ADDED_SINCE_189)
     assert set(SINCE_189) <= set(before) and not (added & set(before)), "the tables name snapshot keys and NEW keys only"

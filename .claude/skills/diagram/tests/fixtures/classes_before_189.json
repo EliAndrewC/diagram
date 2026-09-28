@@ -312,14 +312,20 @@
   "footbridge": {
     "caveat": "",
     "covers": "`bridges[foot]` - every plank and deck over water",
-    "entry": "research/water.html - 'When is a farm ditch worth a plank' (channel_footbridges); 'What crosses a farm ditch - a plank, a log, or earth over logs'",
+    "entry": "research/water.html - 'What crosses a farm ditch - a plank, a log, or earth over logs', 'When is a farm ditch worth a plank' (channel_footbridges); research/ways.html - 'What is a plank bridge, and what is it for?'",
     "key": "footbridge",
-    "label": "guess",
+    "label": "accurate",
     "label_note": "That ditches were planked is reasoned, not read: the record consulted says nothing about a plank over a two-foot ditch, so the plank and its spacing are a guess.",
     "name": "footbridge",
     "siblings": {},
     "sources": [
-      "not recorded"
+      "kotobank-marukibashi",
+      "kotobank-ipponbashi",
+      "zhwiki-dumuqiao",
+      "dobashi-jawiki",
+      "xinhua-jiahou-muqiao",
+      "itabashi-kotobank",
+      "aze-jawiki"
     ],
     "what": "A plank laid over a ditch, or a small timber deck where a lane crosses the stream.",
     "why": "Farmers reach the plots by walking the bunds, and the long laterals cut across that walking; a plank every so often keeps the field passable. Where a way crosses water, one deck - never two at the same point."
@@ -920,14 +926,18 @@
   "village lane": {
     "caveat": "the drawn WIDTHS (3, 5 and 6 ft) are a GUESS - no source gives a figure for an ordinary hamlet lane - laddered from a footpath to a wheelbarrow's width, with the connector kept under the 9 ft of the one cart road the record does measure.",
     "covers": "`lanes` - every lane on the map: the web, the internal skeleton, the connector to the off-map road and the field spur",
-    "entry": "research/homesteads.html - 'Is every farmhouse reached by a lane, and in what FORM?', 'How does a village lane bend?'; research/SOURCES.html re-sourcing queue (lane width)",
+    "entry": "research/homesteads.html - 'Is every farmhouse reached by a lane, and in what FORM?', 'How does a village lane bend?', 'How far does a village lane run past its last farmhouse?'; research/fields.html - 'Where does the path to the fields end?'; research/SOURCES.html re-sourcing queue (lane width)",
     "key": "village lane",
     "label": "accurate",
     "label_note": "Access and form are read; the drawn WIDTHS (3, 5 and 6 ft) are a GUESS - no source gives a figure for an ordinary hamlet lane - laddered from a footpath to a wheelbarrow's width, with the connector kept under the 9 ft of the one cart road the record does measure.",
     "name": "village lane",
     "siblings": {},
     "sources": [
-      "not recorded"
+      "kotobank-nodo",
+      "kotobank-aze-sekai-daihyakka",
+      "aze-jawiki",
+      "kotobank-keihan",
+      "kotobank-nawate"
     ],
     "what": "A trodden earth track - packed dirt with soft worn shoulders, a single narrow way, no paving and no center line.",
     "why": "Every house in a nucleated village is reached by the interconnected lanes and alleys - that is what compactness is for - and the narrow lateral lanes are colonized as semi-private space by the houses beside them, which is why they are narrow and irregular. A lane bends like a line feet wear: as few turns as the plots allow, none sharp, never back on itself. The connector to the off-map road predates the settlement; the lanes between the farmsteads were trodden by the households already living there. And the lane leads somewhere: unless this map's notes say otherwise, a village lane runs to the main village of the district the settlement belongs to."
