@@ -200,10 +200,10 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                 tseats = [(reach, hh * 0.1), (-reach, hh * 0.1), (reach * 0.75, -reach * 0.75), (-reach * 0.75, -reach * 0.75), (reach * 0.75, reach * 0.75), (-reach * 0.75, reach * 0.75)]
                 if u < 0.5:
                     tseats[0], tseats[1] = tseats[1], tseats[0]
-                # ...THEN THE SAME BEARINGS A STEP OUT, and a tree that finds no seat is RECORDED (feature 261): the yard ring
+                # ...THEN THE SAME BEARINGS A STEP OUT, AND TWO (10 and 20 ft; the second for Sawada's re-laid rank), and a tree that finds no seat is RECORDED (feature 261): the yard ring
                 # below seats a fixture where none stood before, and on Sawada it took the ground of a persimmon that then
                 # vanished without a record - this branch alone never said when it drew nothing.
-                tseats += [(lx * (reach + px(10.0)) / reach, ly * (reach + px(10.0)) / reach) for lx, ly in tseats]
+                tseats += [(lx * (reach + px(_st)) / reach, ly * (reach + px(_st)) / reach) for _st in (10.0, 20.0) for lx, ly in tseats]
                 _planted = False
                 for lx, ly in tseats:
                     cx, cy = hx + lx * ca - ly * sa, hy + lx * sa + ly * ca

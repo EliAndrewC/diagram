@@ -364,7 +364,8 @@ Measured before and after in research R10.
     neighbor's refused ground nothing stood on; Mizuguchi's farmstead at (1277, 257) seated no coop and no stack
     (spec-fidelity of round 6fefdcdf, probed seat by seat). The skip is the ring's only: taken for every seat, the
     fixtures took the flanks first and the persimmons after them lost their ground (observed 2026-09-27 on a trial roll with the skip on every seat, not committed: the manifests' `persimmons` counted, Inashiro 6 where it drew 12).
-  - the persimmon, which alone recorded no miss, tries its six bearings a step (10 ft) further out and records one
+  - the persimmon, which alone recorded no miss, tries its six bearings a step (10 ft) further out, and then a second
+    (20 ft, added in round 31ef113b when Sawada's re-laid ranks left one tree without a seat), and records a miss
     when none takes it. The pool had been dropping persimmons silently: with the step, Sawada draws 17 where it drew
     14, Mizuguchi 11 where 8, Kuwabata 13 where 12, with no miss on any map (observed 2026-09-27: `persimmons` counted with
     `git show <rev>:<map>.json` at 818ac79b0 and at b915f256a).
@@ -379,8 +380,10 @@ Measured before and after in research R10.
   along the wind, which is the belt's depth only where the fringe lies square to it; where the fringe runs along the wind
   the band thinned to a sliver, and Kashikawa's westernmost steading's garden and sun lane emptied it - a hole in the
   windward face (settlement-review, round 97c20bc9; research/vegetation.html: a belt "reads as a wall of trees only at"
-  80-120 ft of depth, and a windbreak with a hole funnels the wind). The band is now at least 84 ft across itself on
-  every pool map where no page edge cuts it (`m:belt-r16-depth`). A square window (a neighbor's whole lead) was tried
+  80-120 ft of depth, and a windbreak with a hole funnels the wind). The band's thinnest depth across itself went from 20.7 ft
+  to 93.5 on Kashikawa (`m:belt-r16-depth`); on the pool it is now at least 72.7 ft where no page edge cuts it, the
+  shortest at the bend where Sawada's west arm meets its marsh arm - under the record's 80 ft at that one vertex, and
+  recorded rather than claimed (observed 2026-09-28 on the round-31ef113b roll: `measure/belt_depth.py`). A square window (a neighbor's whole lead) was tried
   first and thickened belts for bumps of a few tens of feet (observed 2026-09-27 on a roll not committed: Sawada 559
   clumps, Inashiro 364, Kuwabata 232, Mizuguchi 304, against the disc's 539, 312, 191 and 252); the disc leaves a square
   or gently bumped fringe unchanged. Every belt grew, most where its fringe turns (observed 2026-09-27, the census
@@ -411,6 +414,26 @@ Measured before and after in research R10.
   pool map's recorded figure is now its drawn one (`m:sawada-r17-well`, 173.3 ft).
 - The drawn belt is measured as one piece in crowns, not in its outline (`m:kashikawa-r16-belt-pieces`, 1 piece): the
   depth record reads the polygon, and the review's hole was between crowns inside an unbroken outline.
+
+
+### D22 - The ranks of an accretion hamlet stand off their lines; a planned hamlet's stay regular (round 31ef113b)
+
+- The settlement-review of Mizuguchi (round 31ef113b) found its ranks a lattice: 11 of 12 houses on four rows within
+  5 ft and three columns within 3 ft. Accepting that as the planned back-lane form was ruled illegitimate by
+  spec-fidelity, because the rank proposer never read the form - Sawada, an `alleys` hamlet, went through the same
+  lattice. The proposer now reads it: a rank seat of an `alleys` hamlet stands up to an eighth of a pitch either side of
+  its exact rank (`RANK_DEPTH_JITTER` 0.25, a GUESS), from the map's position hash, the placer still holding the lane
+  room and the sun corridor and the exact seat offered where the jittered one is refused. A `back_lane` hamlet's ranks
+  stay regular, since the record reads a back lane as PLANNING with regular plots and alleys as ACCRETION with an
+  irregular result (research/homesteads "Is every farmhouse reached by a lane").
+- Jittering every form was tried first and reverted (observed 2026-09-28 on rolls not committed: RANK_DEPTH_JITTER
+  0.15, 0.18, 0.25 and 0.3 over the pool): each amplitude re-laid all five maps into a new draw, 0.15-0.25 tipped
+  Inashiro's rolled crescent under round's ceiling, and 0.3 left a persimmon unseated on two maps - a knob that moves
+  which map fails. Outward-only jitter was tried before that, and the back rank, standing against the band's outer edge,
+  was pulled back onto one line by the placer's computed move.
+- Scoped to the accretion form, the four `back_lane` maps are unchanged and Sawada's four jittered seats moved 3-8 ft;
+  its ranks spread 17-61 ft (`m:rank-r18-spread`). Its lanes shifted with them, and seven homesteads now carry their own
+  dry plot where eleven did.
 
 ## Phases
 

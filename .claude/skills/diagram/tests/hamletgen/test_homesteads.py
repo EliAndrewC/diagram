@@ -501,3 +501,20 @@ def test_the_yard_ring_looks_past_the_homestead_bundles(monkeypatch) -> None:  #
     fx.farmstead_fixtures(s, a_plan(), houses)
     coops = [r for r in s.M.get("farm_fixtures", []) if r["kind"] == "coop"]
     assert len(coops) == 1 and not (s.M["meta"].get("farm_fixtures_unseated") or {}), "seated by the ring, through the bundle"
+
+
+def test_an_accretion_hamlets_ranks_stand_off_their_lines_and_a_planned_ones_do_not() -> None:
+    """`stage_homesteads` (feature 261 D22): an `alleys` hamlet's rank seats take the depth jitter, so the ranks behind the
+    front row are not all on one line; a `back_lane` hamlet seated the same way keeps its ranks exact. Both seat every
+    household."""
+    from l7r.diagram.hamletgen.homesteads import stage_homesteads
+
+    seats = {}
+    for form in ("alleys", "back_lane"):
+        s, plan = _toy_hamlet(14)
+        plan.lane_web = form
+        stage_homesteads(s, plan)
+        assert len(s.M["houses"]) == 14
+        seats[form] = {(round(h["x"], 1), round(h["y"], 1)) for h in s.M["houses"]}
+    moved = seats["alleys"] - seats["back_lane"]
+    assert moved and len(moved) < 14, "the ranks' seats moved off their lines; the front row did not"

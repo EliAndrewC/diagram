@@ -999,7 +999,7 @@
   "round": "97c20bc9",
   "value": 93.5,
   "unit": "ft",
-  "quantity": "the windbreak band's thinnest depth across itself on the page (each near-face vertex to the far face): 20.7 ft in the round; Inashiro 33.9 -> 83.9, Sawada 13.8 -> 88.8; Kuwabata 19.1 and Mizuguchi 64.1 unchanged where the canvas edge clamps the far face",
+  "quantity": "the windbreak band's thinnest depth across itself on the page (each near-face vertex to the far face): 20.7 ft in the round; Inashiro 33.9 -> 83.9, Sawada 13.8 -> 88.8; Kuwabata 19.1 and Mizuguchi 64.1 unchanged where the canvas edge clamps the far face; re-measured 2026-09-28 on round 31ef113b's roll (D22): Sawada 72.7 at the bend of its two arms",
   "source": ".claude/skills/diagram/pool/hamlets/*/*.json village_groves windbreak poly, meta.view",
   "command": "python3 specs/261-northwest-wind-by-default/measure/belt_depth.py inashiro kashikawa kuwabata mizuguchi sawada"
  },
@@ -1047,11 +1047,11 @@
   "verifies": "F2",
   "subject": "sawada",
   "round": "31ef113b",
-  "value": 262,
+  "value": 143,
   "unit": "clumps",
-  "quantity": "the alder the notes' feature-261 entry states (70 in the round), matching the windbreak's recorded alder",
+  "quantity": "the alder the notes' feature-261 entry states (70 in the round), matching the windbreak's recorded alder; re-measured 2026-09-28 on round 31ef113b's roll (D22): 143",
   "source": ".claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md; sawada.json village_groves alder",
-  "command": "grep -n 'its 262 clumps that stand in the marsh are alder' .claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md"
+  "command": "grep -n 'its 143 clumps that stand in the marsh are alder' .claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md"
  },
  "sawada-r17-spelling": {
   "verifies": "F3",
@@ -1072,5 +1072,15 @@
   "quantity": "against-the-belt copse crowns more than 5 ft windward of their nearest belt crown (31 of 75 in the round); 43 crowns, all on the belt's lee face",
   "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.json village_groves",
   "command": "python3 specs/261-northwest-wind-by-default/measure/copse_side.py mizuguchi"
+ },
+ "rank-r18-spread": {
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "round": "31ef113b",
+  "value": 17.1,
+  "unit": "ft",
+  "quantity": "the tightest rank of three or more houses on Sawada, the pool's one alleys hamlet (ranks 37.0, 60.7 and 17.1 ft); Mizuguchi, back_lane, keeps its regular ranks (3.4-12 ft within a rank) by the record's planned form",
+  "source": ".claude/skills/diagram/pool/hamlets/sawada/sawada.json houses; .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.json houses",
+  "command": "python3 specs/261-northwest-wind-by-default/measure/row_spread.py sawada mizuguchi"
  }
 }

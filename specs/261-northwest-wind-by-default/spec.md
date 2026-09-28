@@ -208,7 +208,7 @@ match the maps.
   a drawn crossing, and at least one way reaches the field.
 - **FR-013**: Every farmstead's own buildings, yard, garden and fixtures MUST stand on its house's bank.
 - **FR-014**: The dooryard copse MUST stand among the houses (within dooryard reach of a house), and the
-  against-the-belt copse at the belt's back; neither is spread over the cluster's bounding box.
+  against-the-belt copse at the belt's lee face, on the houses' side; neither is spread over the cluster's bounding box.
 - **FR-015**: A notice board seated at the entrance MUST stand at the entrance - on the way the connector meets,
   within the entrance band - so every departure passes it.
 - **FR-016**: The windbreak MUST keep its researched depth on its windward face (no stretch thinner than the
@@ -272,6 +272,7 @@ match the maps.
 | A brook's bends are rounded at 2.5 widths, the tap held, once the ways are laid | accurate for the form (research/water.html: earthen channels turn on curves); the ratio and the late rounding a map drawing convention | Sawada's brook drew mitred corners of 27-47 degrees; its sharpest turn is now 17.4 (`m:brook-r16-turn`) | plan D20, `round_the_brooks` in `hamletgen/frame.py`, `Settlement.round_stream` |
 | The against-the-belt copse stands at the belt's lee face | accurate for the form ("tucked against the back grove", the belt's shelter); the 40 ft band and 30 ft depth a map drawing convention | 31 of Mizuguchi's 75 copse crowns stood beyond the belt's windward face; 0 now (`m:mizuguchi-r17-copse`) | plan D21, `lee_face` in `hinterland/stages.py` |
 | The board's recorded well distance follows the board as drawn | map drawing convention (a record states what was drawn, `siting.py`) | Sawada recorded 353.5 ft of a board 173.3 ft from its well; 173.3 now (`m:sawada-r17-well`) | plan D21, `record_board_well` in `hamletgen/frame.py` |
+| An accretion-form hamlet's ranks stand off their exact lines; a planned one's stay regular | accurate (research/homesteads "Is every farmhouse reached by a lane": a back lane implies planning and regular plots, alleys accretion and an irregular result); the quarter-pitch range a GUESS | Mizuguchi, a `back_lane` hamlet, drew its ranks as a lattice the proposer made whatever the form; the proposer now reads the form, and Sawada's tightest rank spreads 17.1 ft (`m:rank-r18-spread`) | plan D22, `RANK_DEPTH_JITTER` in `homesteads/stages.py` |
 
 ## Assumptions
 

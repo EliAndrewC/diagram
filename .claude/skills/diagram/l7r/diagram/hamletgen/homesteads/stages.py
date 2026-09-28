@@ -14,9 +14,9 @@ from .boundary import install_site_boundary
 from .seats import _seat_allowed, cluster_aspect, front_row, lane_frontage
 from .wells import place_wells
 
-#: How far a rank seat may stand behind its exact rank, as a share of `BUNDLE_PITCH` (feature 261, settlement-review of
-#: Mizuguchi): a GUESS calibrated against main's roll of that map, whose rows spread 24 and 78 ft - a quarter pitch keeps a
-#: rank a rank while taking it off the surveyed line.
+#: The range a rank seat may stand off its exact rank, as a share of `BUNDLE_PITCH` - half of it each way (feature 261,
+#: settlement-review of Mizuguchi): a GUESS calibrated against main's roll of that map, whose rows spread 24 and 78 ft - a
+#: quarter pitch keeps a rank a rank while taking it off the surveyed line.
 RANK_DEPTH_JITTER = 0.25
 
 FORM_BOUND: dict[str, float] = {}
@@ -500,11 +500,19 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
                 # ...AND A RANK IS NOT A SURVEYED LINE EITHER (settlement-review of Mizuguchi, feature 261): with the depth
                 # exact, 11 of its 12 houses stood on four rows within 5 ft and three columns within 3 ft - a lattice, where
                 # the record's nucleated village is houses gathered irregularly (kaison-jawiki) and main's roll of the same
-                # map spread its rows by 24 and 78 ft. A rank seat stands up to `RANK_DEPTH_JITTER` of a pitch FURTHER from
-                # the field, from the same position hash - outward only, so the lane room between the ranks is never taken;
-                # the exact seat is offered where the jittered one is refused, so no household is lost to it.
-                _dj = s._hjit(_sx4, _sy4, 14.0) * BUNDLE_PITCH * RANK_DEPTH_JITTER if attempt < 4 and not _along_the_field else 0.0
-                for _tx, _ty in ((_sx4 + ox * _dj, _sy4 + oy * _dj), (_sx4, _sy4)) if _dj > 0.0 else ((_sx4, _sy4),):
+                # map spread its rows by 24 and 78 ft. A rank seat stands up to half of `RANK_DEPTH_JITTER` of a pitch nearer
+                # to or further from the field, from the same position hash; the placer still holds the lane room and the sun
+                # corridor, and the exact seat is offered where the jittered one is refused, so no household is lost to it.
+                # (Outward only was tried first: the last rank stands against the band's outer edge, the placer's computed move
+                # pulled every jittered seat back to that one line, and Mizuguchi's back rank stood within 3 ft again.)
+                # ...ONLY WHERE THE VILLAGE GREW BY ACCRETION. The record gives two forms and rolls between them per map
+                # (research/homesteads "Is every farmhouse reached by a lane"): a back lane implies PLANNING - the framework laid
+                # out at once and the plots regular - and alleys off a spine imply ACCRETION, each household cutting its own way,
+                # the result irregular. So the ranks of a `back_lane` hamlet stay regular and an `alleys` hamlet's are taken off
+                # the line. (Jittering every form was tried first: each amplitude re-laid all five maps into a new draw, and 0.15,
+                # 0.18 and 0.25 each tipped Inashiro's rolled crescent under round's ceiling - a knob that moves which map fails.)
+                _dj = (s._hjit(_sx4, _sy4, 14.0) - 0.5) * BUNDLE_PITCH * RANK_DEPTH_JITTER if attempt < 4 and not _along_the_field and plan.lane_web == "alleys" else 0.0
+                for _tx, _ty in ((_sx4 + ox * _dj, _sy4 + oy * _dj), (_sx4, _sy4)) if _dj != 0.0 else ((_sx4, _sy4),):
                     if _seat_allowed(s, _tx, _ty) and _pretest(_tx, _ty) and s.try_place(_tx, _ty, "plain"):
                         placed += 1
                         _cloud_placed += 1
