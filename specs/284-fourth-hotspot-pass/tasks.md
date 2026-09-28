@@ -7,8 +7,9 @@ the after-profile; then the measurement and the record.
 
 ## Setup
 
-- [ ] T01 The base: `measure.py before` in `/tmp/base284` (low load, the new buckets), the `284-start` bookend there, and the committed pool confirmed to regenerate byte-identically in the base worktree
+- [x] T01 The base: `measure.py before` in `/tmp/base284` (low load, the new buckets), the `284-start` bookend there, and the committed pool confirmed to regenerate byte-identically in the base worktree
       research: rendering
+      verify: DONE. measure.py before in /tmp/base284 at 5f15c65bd (pool 32.168 s, load 3.1->7.8; every bucket incl. mats, crowns, seams, commons, flush); 284-start bookend 17.4 s (at f52ed6aa8, before the re-base: to be re-taken if the perf report needs the merged base); the base pool regenerates byte-identically in /tmp/base284; A_BASE worktree /tmp/abase284 at efec5d67d regenerating
 
 ## The exact pieces (US2, US4, US5)
 
