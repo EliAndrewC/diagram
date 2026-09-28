@@ -435,6 +435,27 @@ def leader_to_ink(p: Placement, parts: list[Shape]) -> Placement:
     return replace(p, leader=(p.leader[0], (tip.x - ux * trim, tip.y - uy * trim)))
 
 
+def place_on_blocks(text: str, head: Shape, caps: list[Shape], cw: float, sub: Subject, parts: list[Shape], index: ObstacleIndex, view: tuple[float, float, float, float], lead: ObstacleIndex) -> Placement:
+    """Place a caption, each of its lines at its own size, and - for a point subject that is a stepped building - round
+    each of its blocks, largest first, the first free seat winning (feature 286: searched round the largest block only,
+    Hayakawa's RESIDENCE had no free seat within reach while the other block had one)."""
+    lines = _as_head(caps, cw) if len(caps) > 1 else None
+    sizes = [c.size for c in caps for _ in c.lines] if len(caps) > 1 else None
+    blocks = sorted((s for s in parts if s.tag == "rect" and _area(s.poly) >= BLOCK_PX), key=lambda s: -_area(s.poly))
+    subs = [sub]
+    if sub.kind == "point" and len(blocks) >= 2 and any(list(sub.poly) == list(b.poly) for b in blocks):
+        subs = [Subject("point", tuple(b.poly), angle=sub.angle) for b in blocks]
+    best: Placement | None = None
+    for s in subs:
+        p = place(text, head.size, s, index, view, lines=lines, char_w=cw, leader_index=lead, line_sizes=sizes)
+        if p.cost == 0.0:
+            return p
+        if best is None or p.cost < best.cost:
+            best = p
+    assert best is not None
+    return best
+
+
 BLOCK_PX = 2000.0
 """A part big enough to be a block of a building (about 220 sq ft): a notice board's legs, a sanctuary's steps or a mat
 are parts of one thing, not blocks that can stand in echelon."""
@@ -566,7 +587,7 @@ def seat(src: str, kinds: set[str] | None = None) -> tuple[list[Finding], list[t
 
         cw = char_w_of(head.element, head.text, head.size)
         lead = leader_blockers(shapes, skip, placed, sub)
-        p = place(" ".join(lines), head.size, sub, index, view, lines=_as_head(caps, cw) if len(caps) > 1 else None, char_w=cw, leader_index=lead)
+        p = place_on_blocks(" ".join(lines), head, caps, cw, sub, own_parts(head, shapes), index, view, lead)
         p = hand_seat_if_no_better(p, caps, sub, index)
         if p.position == HAND:
             placed.append((caps, p))

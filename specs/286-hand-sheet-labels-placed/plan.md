@@ -47,12 +47,14 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
   renders any sheet placed, for a session or a review agent that wants to look at one.
 - **D6 - no check of the placement** (FR-004). Removed: `tests/gate/test_hand_sheet_captions.py`, the caption ledger,
   the `make seat-label` target and its report (`judge`), the four sheet-audit checks and their red fixtures and tests,
-  and `building-review`'s caption-seat step. The placer's unit tests carry correctness, and `seat_label`'s own tests
+  the label half of `trees_overlap` (a canopy over a caption is the placer's to avoid, not a check's to report - the
+  tree's checks against buildings, fences, wells, glyphs and tubs stay), and `building-review`'s caption-seat step. The placer's unit tests carry correctness, and `seat_label`'s own tests
   cover the declarations, inside-or-beside, the fallback cases above and the stripped-coordinate reading.
 - **D7 - readers use tags, not positions** (FR-005). `pack_audit/labels.py` pairs a required item with its structure
   by the sheet's `data-kind` tags, not by the nearest label; any other reader of a caption's coordinates is moved to the
   placed text or the tags.
-- **D8 - the docs** (FR-006): `SKILL.md`'s Mode A usage, `buildings.md`, and the `building-review` and `size-audit`
+- **D8 - the docs** (FR-006): `SKILL.md`'s Mode A usage, `buildings.md`, research presentation 040's note that names
+  `make seat-label`, and the `building-review` and `size-audit`
   contracts say a sheet declares a caption's text and subject and the pipeline places it; the contracts judge a label's
   wording, not its position.
 - **D9 - verification**: `make quick` while building; the one-time SC-002 measurement (each caption's cost at its

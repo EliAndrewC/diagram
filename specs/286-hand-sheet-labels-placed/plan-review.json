@@ -1,0 +1,64 @@
+{
+ "feature": "286-hand-sheet-labels-placed",
+ "plan_sha256": "71b447d2a73fe70a87017d28e270077ae31c23e6fea7499fd4800c7e40876a17",
+ "reviewed": "2026-09-28",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "A caption declares text and subject (group membership or data-names ids); its x/y and hand leader are stripped from the tracked sheet by a one-time migration that writes the ids from today's subject reading, kept tested.",
+   "class": "within",
+   "why": "This is the proposal the GM accepted in so many words ('a sheet declaring only a caption's text and what it names') and FR-002 ('nothing that decides where it stands'). Stripping the coordinates goes further than ignoring them, and that is the literal form: a coordinate left in the file invites a reader to use it again. The migration reads position once, only so that no caption changes what it names. That is a one-time preservation step. Placement does not depend on it afterwards. Editing these Mode A sheets is the subject of the request, so the 2026-09-28 'no hand-map edits in generator work' ruling (which covers frozen Mode B maps) does not apply."
+  },
+  {
+   "id": "D2",
+   "summary": "Inside or beside is the placer's call: inside seats first, then ranked beside seats; a subject too small or dark-inked inside goes beside. Done in seat_label as two place() calls; the engine's own calls are unchanged.",
+   "class": "within",
+   "why": "FR-002: the placer decides inside or beside from the drawing, and nothing is declared. Whether that seat order is the best cartographic rule is a design question, not a fidelity one."
+  },
+  {
+   "id": "D3",
+   "summary": "The extended fallback (a whole-extent inside sample, slid point positions, per-block search on stepped buildings) lives in labels/placer.py, so the generated maps take it too. It only runs when the standard search finds no free seat, and it is measured on the scripted maps.",
+   "class": "within",
+   "why": "The session proposed, and the GM accepted, 'remove the hand-seat exception and improve the placer's fallback instead'. The GM wants 'the same literal code' used for both, and the placer is shared, so improving it improves everyone's. A hand-sheet-only fallback would fork the code the request asks to reuse. The accepted spec already says so (FR-003 'improved in the placer itself'; Assumptions 'except where the placer's fallback improves for everyone ... measured on the scripted maps too'). D3 changes nothing where the standard search already finds a free seat."
+  },
+  {
+   "id": "D4",
+   "summary": "Mixed-size captions are measured and written line by line at each line's own size.",
+   "class": "within",
+   "why": "FR-003 (two of the eight measured misses have this cause), and a defect fix under XIV. If it lives in the shared code, it can move a generated caption that has smaller sub-lines, which is slightly wider than the Assumptions' word 'fallback'. D9's before-and-after comparison of the scripted maps covers that, and it narrows nothing the GM asked for."
+  },
+  {
+   "id": "D5",
+   "summary": "seat_label.placed() inside each hand sheet's gen renders the PNG and the page from the placed text; the tracked SVG holds the drawing and the declarations; make sheet-render renders any sheet placed, for sessions and review agents.",
+   "class": "within",
+   "why": "FR-001: 'as a step of the pipeline that renders the sheet ... no separate tool to run'. sheet-render is not a placement tool someone has to remember to run. It is the same pipeline, offered so that a reader can see placed captions (FR-005) once the tracked file no longer carries positions."
+  },
+  {
+   "id": "D6",
+   "summary": "Removes test_hand_sheet_captions.py, the caption ledger, make seat-label and its judge report, the four sheet-audit checks (overlapping_labels, dark_on_dark_labels, orphan_group_labels, the label half of occluded_foreground) with their red fixtures and tests, and building-review's caption-seat step.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "Every item FR-004 names is on the list, and the glyph half of occluded_foreground correctly stays. But the list leaves in place one check of where a caption stands: trees_overlap (pack_audit/shared.py:410, _things_under_a_tree) counts every label's box among the things a canopy may not cover, and reports 'a tree ... reaches N ft into the label X', with the fix 'move the tree ... off the ... label'. Once captions are placed, a label that sits under a canopy is a label the placer seated on ink. That is the same class as 'labels on dark ink' and 'labels buried under later ink', which FR-004 removes. It is not a check of something drawn by hand, because a tree against a building or a fence still covers that. D7's catch-all ('any other reader ... is moved to the placed text') would keep it alive against the placer's output. The GM ruled 'I don't think that we need the automated check anymore at all ... There is no point in having an automated check run against an automated process', and FR-004 reads 'Every automated check of caption placement on hand sheets MUST be removed, including:'. The list is not exhaustive, so this check is one it covers. Fix: add to D6 the label half of trees_overlap (drop plan.labels from _things_under_a_tree, and drop 'and the label' from the check's fix text; its red fixture is hoshigaoka-tree-on-fence, so a label case in the tests goes with it). The tree-against-building, fence, well, glyph, tub and duplicate-tree halves stay. Nothing else is found: scale_bar_present and program_complete read label text and tags, not position; notice_board_adrift's label fallback and size-table's nearest_label are FR-005 readers, which D7 covers."
+  },
+  {
+   "id": "D7",
+   "summary": "pack_audit/labels.py pairs required items with structures by data-kind tags, not the nearest label; any other reader of caption coordinates moves to the placed text or the tags.",
+   "class": "within",
+   "why": "FR-005. The clause 'moved to the placed text' is right for readers (pairing, size-table, the notice-board fallback). It must not be read as keeping a placement judgment alive, which is the D6 finding."
+  },
+  {
+   "id": "D8",
+   "summary": "SKILL.md Mode A usage, buildings.md, and the building-review and size-audit contracts say a sheet declares text and subject and the pipeline places it; the contracts judge wording, not position.",
+   "class": "within",
+   "why": "FR-006. size-audit.md line 236 relays the removed LAYER/LABEL checks, and it is named. As an aside, not a fidelity finding: the research entry presentation/040's Grounds comment still names make seat-label."
+  },
+  {
+   "id": "D9",
+   "summary": "make quick; the one-time SC-002 measurement in measurements.json; the scripted maps' captions compared before and after D3; make done; the blind test at hand-back, with the 18 legacy exhibits named as untouched.",
+   "class": "within",
+   "why": "SC-002 as a one-time measurement and not a standing check, as the spec requires. The scripted-map comparison is XIII verification of a change to shared code, not a new check. The hand-back line is the one the round-2 MODE 1 ruling required."
+  }
+ ],
+ "verdict": "BLOCKED"
+}
