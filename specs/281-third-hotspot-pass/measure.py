@@ -11,6 +11,7 @@ depend on the machine's load, so the after-run takes the base and the clone one 
 from __future__ import annotations
 
 import json
+import re
 import shutil
 import subprocess
 import sys
@@ -50,7 +51,7 @@ def run(tree: Path, out: Path) -> tuple[dict, dict]:
 def keys(prefix: str, times: dict, counts: dict, source: str, command: str) -> dict:
     out = {}
     for m, v in times.items():
-        out[f"{prefix}-{m}-roll-s"] = {"value": v["roll_s"], "unit": "s", "quantity": f"one generate() of {m}, render off, the faster of two unprofiled rolls", "source": source, "command": command}
+        out[f"{prefix}-{m}-roll-s"] = {"value": v["roll_s"], "unit": "s", "quantity": f"one generate() of {m}, render off, the fastest of three unprofiled rolls", "source": source, "command": command}
         out[f"{prefix}-{m}-full-s"] = {"value": v["full_s"], "unit": "s", "quantity": f"one generate() of {m} writing its svg and page, unprofiled", "source": source, "command": command}
         for st, t in v["stages"].items():
             out[f"{prefix}-{m}-{st.replace('_', '-')}-s"] = {"value": t, "unit": "s", "quantity": f"{st} inside that roll of {m} (summed over its builds)", "source": source, "command": command}
@@ -58,7 +59,7 @@ def keys(prefix: str, times: dict, counts: dict, source: str, command: str) -> d
             out[f"{prefix}-{m}-{k.replace('_', '-')}"] = {"value": c, "unit": "builds" if k == "builds" else "calls", "quantity": f"{k} over one full generate() of {m}, counted by cProfile (counts.py)", "source": source, "command": command}
         for bucket, calls in v.get("buckets", {}).items():
             for callee in BUCKET_CALLEES.get(bucket, ()) + ("TOTAL",):
-                out[f"{prefix}-{m}-b-{bucket.replace('_', '-')}-{callee.replace('_', '-').replace('.', '-').lower()}"] = {
+                out[f"{prefix}-{m}-b-{bucket.replace('_', '-')}-{re.sub('[^a-z0-9]+', '-', callee.lower()).strip('-')}"] = {
                     "value": int(calls.get(callee, 0)),
                     "unit": "calls",
                     "quantity": f"calls to {callee} made beneath the {bucket} entries over one roll of {m} (render off), counted by sys.monitoring (harness.py, plan C)",

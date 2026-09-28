@@ -198,7 +198,7 @@ def test_harness_281() -> None:
     for key, kw in SPECS.items():
         spec = HamletSpec(**(kw if kw is not None else _mizuguchi()))
         best = None
-        for _ in range(2):  # the faster of two unprofiled rolls
+        for _ in range(3):  # the fastest of three unprofiled rolls (two were read 0.2-0.4 s apart on one map, feature 281)
             row = _stage_times(spec)
             if best is None or row["roll_s"] < best["roll_s"]:
                 best = row

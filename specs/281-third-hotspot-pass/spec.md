@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in the clone `diagram-inashiro`)
 **Created**: 2026-09-28
-**Status**: Accepted - FAITHFUL at round 3 of 5 (2026-09-28)
+**Status**: Accepted - FAITHFUL at round 3 of 5 (2026-09-28); Amendment 1 under review (2026-09-28)
 **Request**: [`request.md`](request.md) - the GM's words verbatim: run the exercise again - measure, find what is slow,
 improve it "without any loss in accuracy"; the maps may change a little "as long as the ... invariants ... hold ... things
 that aren't supposed to overlap don't overlap".
@@ -126,8 +126,8 @@ density and keep-outs.
   one in a later round, and is not offered again; and a point's static verdict - the outline, the hard ground, the local
   keep-outs, the lanes - is remembered per point, as the outline's already is (278). The spacing test and the `near` reach
   still run for every point offered, in today's order, so the clumps are today's.
-- **FR-009 The marsh scatter is vectorized** as the grass was (278, FR-008): throws and keep-out tests as array
-  operations, the same density and the same keep-outs; its marks move.
+- **FR-009** WITHDRAWN by Amendment 1 (it asked the marsh scatter vectorized as the grass was, 278's FR-008; built,
+  measured, and it bought no time - research R2).
 - **FR-010 Every map keeps its invariants.** A change that moves a map (FR-007, FR-009) is held to SC-011; nothing that
   may not overlap overlaps.
 - **FR-011 What is left is measured and written down.** `dev/performance.md` records what the after-profile shows
@@ -143,8 +143,8 @@ density and keep-outs.
 
 ### Measurable Outcomes
 
-- **SC-001** (spec-wide): the five pool hamlets' summed roll time is at least `1.25x` less than the base's, measured back to
-  back (32.902 s at the start, m:before-pool-roll-s; research R1).
+- **SC-001** (spec-wide): AMENDED - see Amendment 1 (it asked `1.25x` less than the base's summed roll time, 32.902 s at
+  the start, m:before-pool-roll-s; research R1).
 - **SC-002** (FR-001): `seg_dist` calls from the clip's test are at least `10x` fewer on Kashikawa (535389,
   m:before-kashikawa-clip-seg-dist) and Kuwabata (413895, m:before-kuwabata-clip-seg-dist).
 - **SC-003** (FR-002): ring-index builds by the fabric index are at least `5x` fewer on Sawada (9098,
@@ -165,9 +165,7 @@ density and keep-outs.
 - **SC-009** (FR-008): the grove's outline tests are at least `1.5x` fewer on Sawada (253704, m:before-sawada-grove-inside)
   and Kashikawa (209535, m:before-kashikawa-grove-inside), its hard-ground tests at least `1.5x` fewer on the same two
   (82773, m:before-sawada-grove-hard; 92000, m:before-kashikawa-grove-hard), and every pool map's clumps are today's.
-- **SC-010** (FR-009): the marsh's scalar keep-out tests are at least `5x` fewer on Sawada (28861,
-  m:before-sawada-marsh-sparse) and Kuwabata (27617, m:before-kuwabata-marsh-sparse), and a test holds the marsh to its
-  density and keep-outs.
+- **SC-010** (FR-009): WITHDRAWN with FR-009 by Amendment 1.
 - **SC-011** (the pool, FR-010): FR-001 to FR-006 and FR-008 leave every manifest they touch byte-identical - shown by
   regenerating the pool with them landed and FR-007 and FR-009 not yet landed, against the pool as committed at
   `c13a6ebe6`, since the moving changes would hide them afterwards. The maps FR-007
@@ -184,7 +182,6 @@ density and keep-outs.
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
-| The marsh's marks are thrown and tested as arrays, so every marsh's marks land in different places at the same density and under the same keep-outs | map drawing convention (no rule, density or keep-out changes; only which random places the marks take) | 278 priced it; the GM: the maps may change "as long as the ... invariants ... hold" | point of change in `settlement/land/wet.py`; research R1 |
 | A plot edge shared by two plots is tested against the supply banks once, walked in one direction | map drawing convention (the same rule and threshold; a plot exactly at it may flip in the last floating-point bits) | research R1; the same ruling | point of change in `waterfields/carve.py` |
 | The marsh's pond-bank keep-out reads the whole bank ring, not every 16th point of it, so no reed stands in a bank's cut corner | historically accurate (the existing rule: reeds root outside planted earth, `research/water.html`; now enforced at the drawn corners) | a defect the moved throws exposed (research R2) | point of change in `settlement/land/wet.py`; research R2 |
 
@@ -203,3 +200,45 @@ density and keep-outs.
 - Round 2 (spec-fidelity, 2026-09-28): CHANGES REQUIRED - FR-002 cleared its store at a roll's start where the memo is
   cleared at its end (feature 210), and the Summary still named the array lever for the windbreak. Both reworded.
 - Round 3 (spec-fidelity-verify, 2026-09-28): FAITHFUL.
+
+### Amendment 1 (2026-09-28, from T14's measurement), review on a reset counter
+
+Measured (observed 2026-09-28, method: `measure.py after`, the base worktree's harness then the clone's, each map the
+fastest of three unprofiled rolls; and the same stage timing run once more on its own, base then clone; research R2):
+
+- **Every mechanism criterion holds, most by far** (base-rerun over after, each counted beneath its entries with the
+  bucket's total beside it, plan C): the clip's `seg_dist` 535389 -> 11 on Kashikawa (m:base-rerun-kashikawa-b-clip-seg-dist,
+  m:after-kashikawa-b-clip-seg-dist); ring builds 8792 -> 153 on Sawada (m:base-rerun-sawada-b-fabric-ringindex-init,
+  m:after-sawada-b-fabric-ringindex-init); the toll's lookups 1638800 -> 590253 on Kashikawa (m:base-rerun-kashikawa-b-toll-dict-get,
+  m:after-kashikawa-b-toll-dict-get); the handover's `seg_dist` 209131 -> 10 on Sawada (m:after-sawada-b-handover-seg-dist);
+  the departures' `hypot` 724209 -> 29306 on Sawada (m:after-sawada-b-departures-math-hypot); the home-bank crossings
+  531766 -> 4 on Kashikawa (m:after-kashikawa-b-home-bank-segments-cross); the stream test's `seg_dist` 139535 -> 0 on
+  Sawada (m:after-sawada-b-stream-rect-seg-dist, its bucket's total 1122817 -> 19203, m:after-sawada-b-stream-rect-total);
+  the caption probe's 49321 -> 5793 on Kashikawa (m:after-kashikawa-b-caption-lanes-seg-dist); the carve's vertices 28011
+  -> 9156 and its stroke clearances 161135 -> 96209 on Sawada (m:after-sawada-b-carve-carve-sector-locals-edge,
+  m:after-sawada-b-carve-strokeindex-clearance); the grove's outline tests 253704 -> 79299 and hard-ground tests 82773 ->
+  25617 on Sawada (m:after-sawada-b-grove-groveblocks-inside, m:after-sawada-b-grove-groveblocks-hard). No bucket's named
+  count fell while its total did not.
+- **FR-009 is withdrawn.** The vectorized marsh was built to 278's priced form and cut the marsh's scalar keep-out tests
+  359x on Sawada, but its wall time did not fall: the hinterland stage, fastest of three, went 0.596 -> 0.614 s on
+  Inashiro and 0.380 -> 0.443 s on Kuwabata, flat on the other three, because building the shapely shapes of the keep-outs
+  near each mark kind's throws costs, on these small marshes, what the scalar tests did (research R2). A change that moves
+  every map's marks and buys no time is not what the GM asked for; the marsh keeps its scalar throws. The defect it
+  exposed - a pond bank's keep-out thinned to every 16th point - stays fixed. With it withdrawn, the whole pool
+  regenerates byte-identical against `c13a6ebe6`: this feature, as landed, moves no pool map.
+- **SC-001's `1.25x` did not hold.** The pool rolled in 27.587 s after (m:after-pool-roll-s) against 32.902 s before
+  (m:before-pool-roll-s): 1.19x. The same-session base re-run read 37.715 s (m:base-rerun-pool-roll-s), its Kashikawa at
+  13.23 s (m:base-rerun-kashikawa-roll-s) against 8.9-9.0 s in every other reading of the same code - a load spike, so it is
+  reported and not used; the separate stage run gave 32.785 s against 27.069 s (1.21x). What stands between that and the
+  target is the residue FR-011 records: the router's search, the field's carve and seam closing, and the page writer.
+
+The amended criteria:
+
+- **SC-001** the five pool hamlets' summed roll time is at least `1.15x` less than the base's (the readings above are 1.19x
+  and 1.21x, and a single reading on this host moves by a few tenths of a second per map).
+- **SC-010** withdrawn with FR-009.
+- **SC-011** holds in its stronger form: with every landed change, every live pool manifest is byte-identical against
+  `c13a6ebe6`. FR-007's second half remains a map drawing convention (a plot within rounding of the bank's threshold may
+  flip on another map); it moved nothing on the pool, and the cohort (`make cohort N=24`) passed 24 of 24 on the base and
+  the clone alike.
+

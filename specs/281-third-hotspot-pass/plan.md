@@ -134,7 +134,7 @@ flip. Held to SC-011's moving condition; the Decisions row is in the spec. **Tes
 same read from either plot; a quad test against the old function over a carve's plots, allowing only rounding-threshold
 cases.
 
-### B2. The vectorized marsh (FR-009, `settlement/land/wet.py`)
+### B2. The vectorized marsh (FR-009, `settlement/land/wet.py`) - WITHDRAWN by the spec's Amendment 1 (built, measured, no time bought: research R2)
 
 `marsh_scatter(...)` beside `grass_scatter` (278): the tint throws and the tuft throws as numpy arrays from a generator
 seeded off the marsh's own seeded stream; the tests `_sparse` ran, point for point - the predicted frame, the outline
