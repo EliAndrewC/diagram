@@ -17,10 +17,18 @@ usage-limit resets, and once a group is checked, rewrites the kinds and the gene
   and the check briefs are queued as `then:<g>-checks.sh` steps.
 - **D2 - One queue, serial, in this clone** (the runner's rule: do not edit the clone while it runs). The order is the
   inventory's "Queue order". `then:sync.sh` between groups merges main in (a conflict is aborted and the queue goes
-  on), and `then:wait265.sh` before the first group that edits existing fragments waits until
-  265 has landed (its close carries `scripts/reserve-prefix.py` to main), with no time limit: the spec's Edge Cases
-  hold that group back until then, so a long wait is a stalled queue for the hourly heartbeat to flag, never a reason
-  to go on.
+  on), and `then:wait265.sh` before EVERY group that edits an existing fragment - A1 and R1 among them, since A1
+  edits archetypes 140 and 170-173 and R1 religion-and-death 160-206 - waits until the CLONE has 265's landing (its
+  close, 1c2797c99, an ancestor of HEAD; main carrying it is not enough, because `sync.sh` merges nothing while the tree
+  is dirty), with no time limit: the spec's Edge Cases hold such a group back until then, so a long wait is a stalled
+  queue for the hourly heartbeat to flag, never a reason to go on.
+  **As run, this was not held** (found by the plan review's round 2, 2026-09-28): the queue ran A1 (12:40) and R1
+  (13:22) as new-question groups before the wait, and the clone first had 265's close at the H3 sync-in merge
+  110004e58 (16:50), where archetypes/170 conflicted and A1's version was kept. Checked at the landing: every fragment
+  both sides edited in that merge (archetypes/170 and four registry entries - satoyama-jawiki, ohmi-yoshi,
+  nippon-com-gokaido, tonami-yashikirin-haichi) keeps main's edits - the four entries' translated titles are all
+  present, and 265's one change to 170, the fry line's "attested and drawn, as a share of the ponds", is superseded by
+  A1's fuller line saying the same; R1's fragments did not conflict. Nothing main had landed was dropped.
 - **D3 - Surviving the usage limit** (FR-007): the runner carries diagram-buildings' 4d13ad4f byte-identical. A
   failed session waits until the reset its message names, else 15, 30, then 60 minutes, and RESUMES by `--resume`,
   up to 14 times. This session holds an hourly `CronCreate` heartbeat (at :17). It fires only while this session is
