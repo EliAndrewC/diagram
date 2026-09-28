@@ -7,7 +7,7 @@ the record.
 
 ## Setup
 
-- [ ] T01 The base: `measure.py before` in the clone at `c13a6ebe6` (`measurements.json` before-keys) and the `281-start` bookend in `/tmp/base281`
+- [ ] T01 The base: `measure.py before` in the clone at `c13a6ebe6` (`measurements.json` before-keys), the `281-start` bookend in `/tmp/base281`, the harness's entry-bucket instrument (plan C), and the committed pool confirmed to regenerate byte-identically in the base worktree
       research: rendering
 
 ## US2 - the ways, the board and the captions ask indexes (P1)
@@ -39,16 +39,16 @@ the record.
 
 ## US3 / US4 - the moving pieces
 
-- [ ] T11 [US3] The shared plot edge walked once in `waterfields/carve.py`, with its symmetry and verdict tests (B1)
+- [ ] T11 [US3] The shared plot edge walked once in `waterfields/carve.py`, with its symmetry and verdict tests and the Decisions note at the point of change (B1)
       research: rendering
-- [ ] T12 [US4] The vectorized marsh in `settlement/land/wet.py`, with its compliance and density tests (B2)
+- [ ] T12 [US4] The vectorized marsh in `settlement/land/wet.py`, with its compliance and density tests and the Decisions note at the point of change (B2)
       research: rendering
 - [ ] T13 [US1] The pool regenerated under 276's FR-006 condition: `make done` green, the rescue-rounds scenario and the toys, forms and kinds, the moved maps' research entries, `make cohort N=24` against the base's (SC-011, second half)
       research: rendering
 
 ## Polish
 
-- [ ] T14 `measure.py after` back to back; SC-001 to SC-010 checked against the after-keys; `make perf LABEL=281-end` and `make perf-report AGAINST=281-start`
+- [ ] T14 `measure.py after` back to back; SC-001 to SC-010 checked on the entry buckets (plan C), base-rerun over after, each bucket's total beside its named count; `make perf LABEL=281-end` and `make perf-report AGAINST=281-start`
       research: rendering
 - [ ] T15 `dev/performance.md`: the third pass's section and its residue table, levers priced (FR-011, SC-012)
       research: rendering

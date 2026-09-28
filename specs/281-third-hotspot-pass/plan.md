@@ -61,7 +61,9 @@ sets build each distinct ring once (a spy on `RingIndex`); a ring mutated in pla
 
 ### A3. The toll's grid sized to the band (FR-003, `hamletgen/ways/route.py`)
 
-`set_crossing` files the course's 5 ft samples in cells of `max(20.0, radius)` and records the cell; `in_brook_band`
+`set_crossing` files the course's 5 ft samples in cells of `max(20.0, radius + 1.0)` and records the cell (a cell a
+little LARGER than the radius, so "at most one cell away" holds in floating point at an exact boundary, not only in exact
+arithmetic); `in_brook_band`
 reads the 3 x 3 cells around the point (k = 1: a sample within `radius` of the point lies at most one cell away when the
 cell is at least the radius) and applies the same `math.dist(p, q) <= r`. **Test**: `in_brook_band` against the old
 25-cell form over a grid of points round a synthetic course, including points exactly at the radius; the pool
@@ -83,9 +85,13 @@ byte-identical.
 - `_link_home_bank`: the brook's segments filed once in a `PointGrid` by their boxes; a route segment's crossing test
   asks the segments whose box meets its own (two segments whose boxes do not meet cannot cross), `segments_cross`
   deciding; the `home` parity counts crossings of `(c, mid)` over the segments its box meets - every segment it can cross.
-- `_rect_on_stream`: each stream segment's box, widened by `hw`, is compared with the box of the rect's five points and
-  four edges before `seg_dist` or `segments_cross` runs - a segment whose widened box misses theirs is farther than `hw`
-  from every point and crosses no edge.
+- `_rect_on_stream`: the stream segments are filed ONCE in a `PointGrid` (`(a, b, hw)` with each segment's box widened by
+  its `hw`), built and cached beside `_water_obstacles` under the same key and for the same reason - the streams are laid
+  before the homestead solve and do not change during it, and a stream added later changes the key and rebuilds it (the
+  exposure `_rect_on_water` already accepts in the same solve). A rect asks `near(center, half-diagonal)` - every segment
+  whose widened box can meet the rect's - and the old `seg_dist < hw` over its five points and `segments_cross` over its
+  four edges decide. The test itself is lifted to module level (`rect_touches_stream(gc, pts, streams)`, building a
+  one-shot index) so it can be compared with the old scan without a settlement.
 
 **Test**: both against copies of the old forms over a Kashikawa roll's routes and seats, and synthetic touching cases;
 the pool byte-identical.
@@ -140,11 +146,43 @@ generator. **Test**: a compliance test like the grass's - no mark's keep-out tes
 
 ### C. Measure and record (FR-011, SC-001, SC-011, SC-012)
 
-`measure.py after` - the base worktree then the clone, back to back - writes `base-rerun-*` and `after-*`. The order of
-landing makes SC-011 checkable: A1 to A8 land, the pool regenerates, and `git diff --quiet` over the pool manifests against
-`c13a6ebe6` must hold (the committed pool at the base: SC-011's reference); then B1 and B2 land and the pool regenerates
-under 276's FR-006 condition - `make done`, the rescue-rounds scenario and toys, the forms, the moved maps' research
-entries, `make cohort N=24` against the base's. `dev/performance.md` gets the third pass's section and residue table.
+**Counting the work where it moves.** `counts.py` credits a primitive call to its DIRECT caller, and A1, A2, A4, A5 and
+A6 move the calls to new callers (`RingIndex.edge_within` under `FabricIndex.fouled`, the ring store, `RouteReach`, the
+new indexes), so an after-count read that way would be near zero whatever the new code costs. So the SC counts are taken
+by a second instrument in `harness.py`: one more roll per map under `sys.monitoring`, with PY_START / PY_RETURN /
+PY_UNWIND set LOCALLY on each mechanism's ENTRY functions and CALL events switched on while any entry is on the stack. Every
+call made anywhere beneath an entry - Python or built-in, at any depth - is counted against that entry's BUCKET, by the
+callee's qualified name; entries nest exclusively (the innermost entry's bucket takes the count). The buckets, each with
+every function that does its work, including the new builders:
+
+| SC | bucket | entries | counted callee |
+|---|---|---|---|
+| SC-002 | clip | `clip_to_clear` | `seg_dist` |
+| SC-003 | fabric | `FabricIndex.__init__` | `RingIndex.__init__` |
+| SC-004 | toll | `in_brook_band` | `dict.get` |
+| SC-005 | handover | `outermost_join` | `seg_dist` |
+| SC-005 | departures | `routes_missed`, `RouteReach.__init__`, `RouteReach.missed` | `math.hypot` |
+| SC-006 | home bank | `_link_home_bank` (with `_serve_stragglers` and `departure_routes` as their own buckets, so their work is not counted) | `segments_cross` |
+| SC-006 | stream rect | `_rect_on_stream`, `rect_touches_stream`, the stream index's builder | `seg_dist` |
+| SC-007 | caption lanes | `label_seat_clear`, `lane_seat_index`, `clear_of_lanes` | `seg_dist` |
+| SC-008 | carve | `_carve_sector` | `edge`, `StrokeIndex.clearance` |
+| SC-009 | grove | `village_grove` | `GroveBlocks.inside`, `GroveBlocks.hard` |
+| SC-010 | marsh | `marsh`, `marsh_scatter` | `KeepoutGrid.hit` (a scalar keep-out test: once per point before, only the band's points after) |
+
+Each bucket also records its TOTAL calls, and a named count that falls while its bucket's total does not is a finding to
+fix, not a pass - so no criterion passes on work that merely moved. The same harness runs in the base worktree and in the
+clone (`measure.py after` copies it into the base), so each ratio is base-rerun over after, both counted this way; where a
+base-rerun count differs from the recorded `before-*` figure the spec cites (which `counts.py` took by direct caller), the
+difference is reported beside the ratio.
+
+**The landing order makes SC-011 checkable.** First the reference is confirmed: the committed pool at `c13a6ebe6`
+regenerates byte-identically in the base worktree (`make maps SCOPE=all` there, `git diff --quiet` over the pool). Then A1
+to A8 land, the pool regenerates in the clone, and `git diff --quiet c13a6ebe6 -- <the pool manifests>` must hold; if a
+sync-in before then brings engine or pool changes, the reference becomes the merged commit's own regenerated pool,
+confirmed the same way. Then B1 and B2 land and the pool regenerates under 276's FR-006 condition - `make done`, the
+rescue-rounds scenario and toys, the forms, the moved maps' research entries, `make cohort N=24` against the base's.
+`measure.py after` - the base worktree then the clone, back to back - writes `base-rerun-*` and `after-*`.
+`dev/performance.md` gets the third pass's section and residue table.
 
 ## Verification per piece
 

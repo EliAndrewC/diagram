@@ -1,0 +1,89 @@
+{
+ "feature": "281-third-hotspot-pass",
+ "plan_sha256": "d91027b1eb5f4f49115f629426dd596da45127cf17eb3631dbed4856c40d326f",
+ "reviewed": "2026-09-28",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "A1",
+   "summary": "clip_to_clear decides with fabric_index(obstacles, margin, (), 0.0, lines, line_margin).fouled",
+   "class": "within",
+   "why": "FR-001 verbatim: the closure is fouled_brute term for term, and FabricIndex.fouled equals fouled_brute (feature 138/145 oracle); fabric_index is the memoized path clear_runs already asks, as FR-001 names."
+  },
+  {
+   "id": "A2",
+   "summary": "a module store of RingIndex keyed by the ring's points, cleared in clearance.reset(), bounded at 4,096 and cleared whole",
+   "class": "within",
+   "why": "FR-002: content key, cleared with _MEMO in reset() at roll end; the bound only forces rebuilds, never a stale reuse."
+  },
+  {
+   "id": "A3",
+   "summary": "toll grid cells of max(20, radius), 3x3 read, same math.dist <= r",
+   "class": "within",
+   "why": "FR-003 as written; exact in real arithmetic (a sample within r <= cell is at most one cell away)."
+  },
+  {
+   "id": "A4",
+   "summary": "outermost_join asks seg_reach_index widened by reach + 1e-6; RouteReach files route points in a PointGrid; routes_missed kept as a one-shot wrapper; one RouteReach per candidate loop in siting.py and frame.py",
+   "class": "within",
+   "why": "FR-004: both indexes prune, the same closed tests decide; any/count are order-free."
+  },
+  {
+   "id": "A5-home-bank",
+   "summary": "_link_home_bank files the brook's segments once in a PointGrid by box; crossing and parity tests ask the segments whose box meets",
+   "class": "within",
+   "why": "FR-005 first half: a segment index; segments whose boxes do not meet cannot cross, so crossing counts and parity are unchanged."
+  },
+  {
+   "id": "A5-stream-rect",
+   "summary": "_rect_on_stream gets a per-segment widened-box comparison before seg_dist/segments_cross, still walking every stream segment per rect",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-005 requires the homestead fit's stream test to ASK A SEGMENT INDEX of the watercourse; US2 names the defect as re-reading static geometry per candidate. A box prefilter still walks every stream segment for every rect - the scan shape, made cheaper - and the plan's own Constitution Check wrongly counts it under 'the index built before the loop'. Not impossible: fit.py's _water_obstacles already caches per-course data because the streams are laid before the homestead solve and then static, so a cached segment index (e.g. seg_reach_index over the streams at hw, rebuilt on the same length key) is available. No GM words imply the lesser form."
+  },
+  {
+   "id": "A6",
+   "summary": "lane_seat_index filed by raw box with max half; probe asks near(cx, cy, maxhalf + boxhalf) and the same strict seg_dist test; built once in place_kosatsuba's loop and once per clear_label_seat call",
+   "class": "within",
+   "why": "FR-006: a Chebyshev-padded grid query is a superset of the Euclidean test; the lanes do not change within those probe runs."
+  },
+  {
+   "id": "A7",
+   "summary": "edge_m memo keyed (fv, j, n) used only after rspan is live; the f_hi probe keeps calling edge",
+   "class": "within",
+   "why": "FR-007 first half exactly; edge reads only fixed closure state (phase, rphase, rowamp, rspan once live, sup_idx) and pure helpers (_bnd, _clear_supply), no random draw."
+  },
+  {
+   "id": "A8",
+   "summary": "a gap (pa, pb) that took no seat is recorded and skipped in later rounds; GroveBlocks.static_clear memoized per point for the gap fill only",
+   "class": "within",
+   "why": "FR-008: GroveBlocks, within, _near and _wv are fixed through the fill; only near_seats grows, so a barren gap's identical candidates stay refused; skipping it has no side effect on other gaps; the boolean chain is preserved."
+  },
+  {
+   "id": "B1",
+   "summary": "_quad_in_supply memoizes each edge's verdict per carve under the unordered endpoint pair, walked lesser-to-greater",
+   "class": "within",
+   "why": "FR-007 second half and its accepted Decisions row; held to SC-011's moving condition."
+  },
+  {
+   "id": "B2",
+   "summary": "marsh_scatter with numpy throws and the same tests _sparse runs (frame, outline, the four-slot keep-outs, crescent ponds, pond ellipse with lateral pad, blade top, feather); compliance and density tests",
+   "class": "within",
+   "why": "FR-009 and SC-010; the listed tests match _sparse in wet.py term for term; density and keep-out tests are what SC-010 names."
+  },
+  {
+   "id": "C-order",
+   "summary": "A1-A8 land, the pool regenerates and is diffed against c13a6ebe6's committed pool; then B1-B2 land under 276's FR-006 condition",
+   "class": "within",
+   "why": "SC-011 as written; the order makes the exact changes' byte-identity visible before the moving ones hide it."
+  },
+  {
+   "id": "C-counts",
+   "summary": "SC-002 to SC-010 checked against the after-keys that counts.py writes, unchanged",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "counts.py credits each primitive to a CALLER FUNCTION of the base code (fouled.<genexpr> in ways/clearance.py, FabricIndex.__init__ for ring builds, routes_missed.<genexpr>, _link_home_bank.<genexpr>, _rect_on_stream.<genexpr>, in_brook_band.<genexpr>, outermost_join.<genexpr>). A1, A2, A4 and A5 move those calls to new callers (RingIndex.edge_within under FabricIndex.fouled, a store function, RouteReach.missed, index-driven loops), so the after-counts read near zero whatever the new paths cost: SC-002, SC-003, SC-005 and SC-006 would pass without measuring the thing they name. The SCs ask for the mechanism's primitive calls to fall, not for the old call site to vanish. The plan must say, per SC, how the after-run attributes the new path's calls (a distinct function per new path, or a counter in harness.py), and treat a count of zero whose caller key vanished as unmeasured."
+  }
+ ],
+ "verdict": "BLOCKED"
+}
