@@ -11079,5 +11079,14 @@
    "detached territories",
    "tobichi"
   ]
+ },
+ "underdrainage": {
+  "def": "Drainage laid under a field's soil, as buried pipes or covered channels, that carries off the water standing in a poorly drained field so a wet paddy can be dried between crops.",
+  "variants": [
+   "underdrainage",
+   "underdrain",
+   "underdrains",
+   "underdrained"
+  ]
  }
 }

@@ -2702,6 +2702,10 @@ umebaka	burial grave
 umon	umon
 unconfined	unconfined groundwater
 unconfined groundwater	unconfined groundwater
+underdrain	underdrainage
+underdrainage	underdrainage
+underdrained	underdrainage
+underdrains	underdrainage
 undersluice	undersluice
 undersluices	undersluice
 understory	understory
