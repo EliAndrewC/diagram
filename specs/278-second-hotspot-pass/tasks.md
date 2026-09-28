@@ -48,7 +48,7 @@ pieces; then the tooling; then the sweep, the measurement and the records.
 - [x] T11 [US4] Only the kept attempt is finished in `hamletgen/driver.py`, with the stubbed re-roll test (A9)
       research: rendering
       verify: DONE. only the kept attempt is finished; test_only_the_attempt_kept_is_finished (kept, rejected, with and without an output path)
-- [x] T12 [US4] The envelope refusal in `hamletgen/homesteads/boundary.py`, with its test; Sawada regenerated - built once, 19 households; its research entry before and after (B1)
+- [x] T12 [US4] The unreachable-seat refusal in `hamletgen/homesteads/boundary.py`, with its test; Sawada regenerated - built once, 19 households; its research entry before and after (B1)
       research: rendering
       verify: DONE. UnreachableGround refuses a seat deeper than the reach inside the web's hard ground; its unit test; Sawada attempt 1, 19 households, research R4
 
