@@ -318,6 +318,11 @@ _ESCAPES = {
         "routes through _hm_escape.py escape via escape_or_refuse in shell-check-hooks.sh; checked FIRST so the guard can be repaired through the channel it guards (feature 236)",
     ),
     "GATE_STAMP_OK": ("environment", "read as ${GATE_STAMP_OK:-} at push time; same ground as REVIEW_GATE_OK. Missed by three drafts of the spec (round 3)"),
+    "WRITE_CAP_OK": (
+        "environment",
+        "read by _page_session_runner.py through _escape_log.escape from os.environ (make exports it); reason floor via _hm_escape.reason_is_enough, logged (feature 274 D2)",
+    ),
+    "KEY_CAP_OK": ("environment", "read by reserve-prefix.py through _escape_log.escape from os.environ (make exports it); reason floor via _hm_escape.reason_is_enough, logged (feature 274 D4)"),
     "REF_OK": ("make-variable", "a make override, already anchored positionally by _hookmatch.py:116 - it must appear as REF_OK= at a command position"),
     "ESCALATION_OK": (
         "command",

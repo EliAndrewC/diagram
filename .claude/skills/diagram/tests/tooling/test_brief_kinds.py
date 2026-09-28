@@ -44,9 +44,11 @@ def test_every_template_declares_its_kind_and_the_runner_reads_it() -> None:
 
 
 def test_every_call_site_passes_the_right_kind() -> None:
-    calls = [n for n in ast.walk(ast.parse(BRIEF.read_text(encoding="utf-8")))
-             if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute) and n.func.attr == "format"
-             and isinstance(n.func.value, ast.Name) and n.func.value.id in WANT]
+    calls = [
+        n
+        for n in ast.walk(ast.parse(BRIEF.read_text(encoding="utf-8")))
+        if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute) and n.func.attr == "format" and isinstance(n.func.value, ast.Name) and n.func.value.id in WANT
+    ]
     assert {c.func.value.id for c in calls} == set(WANT), "every template is written somewhere"  # type: ignore[attr-defined]
     for c in calls:
         name = c.func.value.id  # type: ignore[attr-defined]
