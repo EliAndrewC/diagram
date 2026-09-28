@@ -213,3 +213,5 @@
 - particulars.River (ways SECTION=040): REWRITTEN - Note and Caveat now say the tax rice's going by water is recorded (kashi-jawiki) and only heavy freight in general rests on general reading; kashi-jawiki added to Sources
 - particulars.RiverLanding (ways SECTION=040): IN-STEP - the narrowed tax-rice claim and the kashi sentence touch nothing the modal says
 - particulars.Dock (ways SECTION=040): IN-STEP - the modal's Why (freight by boat on navigable water) is the section's rule unchanged
+- Latrine (buildings SECTION=220): IN-STEP - the section's changes (sand box unsourced, the guest/family pair dated to after Meiji, the trade's reach) touch nothing the modal claims
+- SideGate (buildings SECTION=220): IN-STEP - the night-soil commodity, the outside carters and the back wicket gate for collection all still stand in the section and its notes
