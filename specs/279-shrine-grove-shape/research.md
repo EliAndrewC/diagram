@@ -15,6 +15,6 @@ the px (`meta.ftpx`) - 136.6 by 215.4 ft, the precinct box of feature 268's layo
 A chosen bar, not a measurement. The smallest crown the layout throws is `19.5 sheet px` in radius, `6.5 ft` (the layout's own
 constant, not a measurement); a run of
 four edge crowns whose centers all lie within `2 ft` (a third of that radius) of one line reads as a ruled edge.
-Measured by the layout script on the tree list: the edge crowns (centers within a crown's radius plus 6 px of the
+Measured by the layout script on the tree list: the edge crowns (centers within a crown's radius plus `6 px` of the
 grove region's outline), ordered along the outline; every window of four is tested against the line through its
 first and last.
