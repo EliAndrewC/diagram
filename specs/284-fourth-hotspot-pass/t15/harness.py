@@ -34,6 +34,5 @@ def test_t15_profile() -> None:
         buf.write(f"===== {key}\n")
         st = pstats.Stats(pr, stream=buf)
         st.sort_stats("tottime").print_stats(45)
-        st.print_callees(r"siting.py.*place_kosatsuba|siting.py.*_sitable|siting.py.*board_caption_level|cover.py.*hinterland|web.py.*stage_web")
-        st.sort_stats("cumulative").print_stats(r"diagram/", 40)
+        st.sort_stats("cumulative").print_callees(r"fabric.py.*_crosses_fabric|geom.py.*_trim_to_service|geom.py.*push_clear_of_fabric|_comb_drop_drowned_beads")
     OUT.write_text(buf.getvalue())

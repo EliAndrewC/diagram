@@ -170,3 +170,26 @@ def test_the_board_sampled_verge_first_is_the_board_sampled_whole() -> None:
             lane = s.M["lanes"][0]["pts"]
             off_the_verge += min(seg_dist(want[0], want[1], a, b) for a, b in zip(lane, lane[1:], strict=False)) > 12.0
     assert seated >= 20 and off_the_verge, f"non-vacuity: boards seated {seated}, of them off the verge {off_the_verge}"
+
+
+def test_the_fabric_push_with_box_prefilters_is_the_old_walk() -> None:
+    """FR-009: `push_clear_of_fabric` lands where the walk over every polygon's ring landed - clear ground, crowded
+    ground, and a step landing exactly `gap` off a steading."""
+    from l7r.diagram.hamletgen.ways.geom import push_clear_of_fabric
+
+    def old(base, unit, edge, fabric, gap):
+        for _ in range(24):
+            gx, gy = base[0] + unit[0] * edge, base[1] + unit[1] * edge
+            if not any(edge_dist(gx, gy, poly) < gap for poly in fabric):
+                return (gx, gy)
+            edge += 6.0
+        return (base[0] + unit[0] * edge, base[1] + unit[1] * edge)
+
+    rng = random.Random(2849)
+    for _ in range(300):
+        fabric = [_box(rng) for _ in range(rng.randint(0, 12))]
+        a = rng.uniform(0, 2 * math.pi)
+        base, unit, edge, gap = (rng.uniform(100, 500), rng.uniform(100, 500)), (math.cos(a), math.sin(a)), rng.uniform(0, 30), rng.choice((4.0, 9.0))
+        assert push_clear_of_fabric(base, unit, edge, fabric, gap) == old(base, unit, edge, fabric, gap)
+    square = [(100.0, 100.0), (200.0, 100.0), (200.0, 200.0), (100.0, 200.0)]
+    assert push_clear_of_fabric((150.0, 91.0), (0.0, -1.0), 0.0, [square], 9.0) == old((150.0, 91.0), (0.0, -1.0), 0.0, [square], 9.0) == (150.0, 91.0)

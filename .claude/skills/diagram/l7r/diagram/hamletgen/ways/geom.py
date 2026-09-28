@@ -252,9 +252,12 @@ def push_clear_of_fabric(base: Pt, unit: Pt, edge: float, fabric: Sequence[Poly]
     LAST line a real branch: a cluster ringed all the way round returns a point that does not clear, and the
     caller draws from it anyway rather than returning nothing. No live hamlet is that crowded.
     """
+    # EACH POLYGON'S BOX, ONCE (feature 284, FR-009): a point farther than `gap` outside a polygon's box is farther than
+    # `gap` from its ring, so only the polygons whose widened box holds the point are asked - the same verdict.
+    boxes = [(poly, min(p[0] for p in poly) - gap, min(p[1] for p in poly) - gap, max(p[0] for p in poly) + gap, max(p[1] for p in poly) + gap) for poly in fabric if poly]
     for _ in range(24):
         gx, gy = base[0] + unit[0] * edge, base[1] + unit[1] * edge
-        if not any(ring_within(gx, gy, poly, gap, closed=False) for poly in fabric):  # `edge_dist >= gap` for every one
+        if not any(x0 <= gx <= x1 and y0 <= gy <= y1 and ring_within(gx, gy, poly, gap, closed=False) for poly, x0, y0, x1, y1 in boxes):  # `edge_dist >= gap` for every one
             return (gx, gy)
         edge += 6.0
     return (base[0] + unit[0] * edge, base[1] + unit[1] * edge)

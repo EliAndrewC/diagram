@@ -40,7 +40,16 @@ def _dijkstra(start, goal, nx, ny, is_free, in_band, toll, cell):
     return dist, prev
 
 
-def _first_roll(patch: bool) -> list[int]:
+def _base_fit():
+    import types
+
+    mod = types.ModuleType("l7r.diagram.hamletgen.water.base_fit")
+    mod.__package__ = "l7r.diagram.hamletgen.water"
+    exec(compile((Path(__file__).resolve().parents[4] / "specs/284-fourth-hotspot-pass/strand/base_fit.py.txt").read_text(), "base_fit.py", "exec"), mod.__dict__)  # noqa: S102 - the base's own fit.py
+    return mod
+
+
+def _first_roll(patch: bool, base_fit: bool = False) -> list[int]:
     from l7r.diagram.hamletgen import driver
     from l7r.diagram.hamletgen.plan import HamletSpec
     from l7r.diagram.hamletgen.ways import route
@@ -53,15 +62,20 @@ def _first_roll(patch: bool) -> list[int]:
         counts.append(len(got))
         return got
 
+    from l7r.diagram.hamletgen.water import fit
+
+    real_fit = fit._fit_at_aspect
     if patch:
         route.lattice_search = _dijkstra
+    if base_fit:
+        fit._fit_at_aspect = _base_fit()._fit_at_aspect
     driver.unreached_houses = counted
     try:
         driver.generate(HamletSpec(**KASHIKAWA), out_base=None, render=False)
     finally:
-        route.lattice_search, driver.unreached_houses = real_search, real_unreached
+        route.lattice_search, driver.unreached_houses, fit._fit_at_aspect = real_search, real_unreached, real_fit
     return counts
 
 
 def test_strand() -> None:
-    OUT.write_text(json.dumps({"clone_a_star": _first_roll(False), "clone_dijkstra": _first_roll(True)}))
+    OUT.write_text(json.dumps({"clone_a_star": _first_roll(False), "clone_dijkstra": _first_roll(True), "base_fit_a_star": _first_roll(False, True), "base_fit_dijkstra": _first_roll(True, True)}))

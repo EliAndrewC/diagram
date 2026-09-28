@@ -25,14 +25,14 @@
     "quantity": "calls to seg_dist made beneath the caption_lanes entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 8267
+    "value": 573
   },
   "after-inashiro-b-caption-lanes-total": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
     "quantity": "calls to TOTAL made beneath the caption_lanes entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 114852
+    "value": 12485
   },
   "after-inashiro-b-carve-carve-sector-locals-edge": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
@@ -265,12 +265,26 @@
     "unit": "calls",
     "value": 528222
   },
+  "after-inashiro-b-notice-captionprobesmixin-label-seat-clear": {
+    "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
+    "quantity": "calls to CaptionProbesMixin.label_seat_clear made beneath the notice entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the clone, run just after the base's",
+    "unit": "calls",
+    "value": 560
+  },
   "after-inashiro-b-notice-fits": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
     "quantity": "calls to _fits made beneath the notice entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
     "value": 0
+  },
+  "after-inashiro-b-notice-housesmixin-fits": {
+    "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
+    "quantity": "calls to HousesMixin._fits made beneath the notice entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the clone, run just after the base's",
+    "unit": "calls",
+    "value": 791
   },
   "after-inashiro-b-notice-label-seat-clear": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
@@ -291,7 +305,7 @@
     "quantity": "calls to TOTAL made beneath the notice entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 3155294
+    "value": 1984600
   },
   "after-inashiro-b-page-drop-offmap": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
@@ -449,11 +463,11 @@
   },
   "after-inashiro-full-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of inashiro writing its svg and page, unprofiled",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 4.303,
+    "value": 3.941,
     "varies": true
   },
   "after-inashiro-grove-hard": {
@@ -521,11 +535,11 @@
   },
   "after-inashiro-roll-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of inashiro, render off, the fastest of three unprofiled rolls",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 4.279,
+    "value": 4.049,
     "varies": true
   },
   "after-inashiro-routes-missed-dist": {
@@ -540,20 +554,20 @@
     "quantity": "seg_dist over one full generate() of inashiro, counted by cProfile (counts.py)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 261186
+    "value": 241887
   },
   "after-inashiro-stage-appurtenances-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_appurtenances inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.034,
+    "value": 0.035,
     "varies": true
   },
   "after-inashiro-stage-bamboo-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_bamboo inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -562,7 +576,7 @@
   },
   "after-inashiro-stage-burial-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_burial inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -571,25 +585,25 @@
   },
   "after-inashiro-stage-crossings-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_crossings inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.044,
+    "value": 0.043,
     "varies": true
   },
   "after-inashiro-stage-field-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_field inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 1.043,
+    "value": 1.057,
     "varies": true
   },
   "after-inashiro-stage-frame-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_frame inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -598,25 +612,25 @@
   },
   "after-inashiro-stage-hinterland-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_hinterland inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.574,
+    "value": 0.594,
     "varies": true
   },
   "after-inashiro-stage-homesteads-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_homesteads inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.496,
+    "value": 0.521,
     "varies": true
   },
   "after-inashiro-stage-labels-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_labels inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -625,16 +639,16 @@
   },
   "after-inashiro-stage-notice-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_notice inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.602,
+    "value": 0.288,
     "varies": true
   },
   "after-inashiro-stage-pond-stock-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_pond_stock inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -643,34 +657,34 @@
   },
   "after-inashiro-stage-seat-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_seat inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.044,
+    "value": 0.052,
     "varies": true
   },
   "after-inashiro-stage-sink-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_sink inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.008,
+    "value": 0.01,
     "varies": true
   },
   "after-inashiro-stage-track-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_track inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.07,
+    "value": 0.072,
     "varies": true
   },
   "after-inashiro-stage-water-frame-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_water_frame inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -679,7 +693,7 @@
   },
   "after-inashiro-stage-waterward-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_waterward inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -688,25 +702,25 @@
   },
   "after-inashiro-stage-web-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_web inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.368,
+    "value": 0.394,
     "varies": true
   },
   "after-inashiro-stage-windbreak-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_windbreak inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.321,
+    "value": 0.338,
     "varies": true
   },
   "after-inashiro-stage-woodland-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_woodland inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -753,21 +767,21 @@
     "quantity": "calls to TOTAL made beneath the bamboo entries over one roll of kashikawa (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 194696
+    "value": 145047
   },
   "after-kashikawa-b-caption-lanes-seg-dist": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
     "quantity": "calls to seg_dist made beneath the caption_lanes entries over one roll of kashikawa (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 11173
+    "value": 739
   },
   "after-kashikawa-b-caption-lanes-total": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
     "quantity": "calls to TOTAL made beneath the caption_lanes entries over one roll of kashikawa (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 146975
+    "value": 16480
   },
   "after-kashikawa-b-carve-carve-sector-locals-edge": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
@@ -816,7 +830,7 @@
     "quantity": "calls to TOTAL made beneath the commons entries over one roll of kashikawa (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 1203121
+    "value": 1203181
   },
   "after-kashikawa-b-departures-math-hypot": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
@@ -900,7 +914,7 @@
     "quantity": "calls to TOTAL made beneath the flush entries over one roll of kashikawa (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 1555506
+    "value": 1555596
   },
   "after-kashikawa-b-grove-draw-total": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
@@ -1000,12 +1014,26 @@
     "unit": "calls",
     "value": 1368377
   },
+  "after-kashikawa-b-notice-captionprobesmixin-label-seat-clear": {
+    "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
+    "quantity": "calls to CaptionProbesMixin.label_seat_clear made beneath the notice entries over one roll of kashikawa (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the clone, run just after the base's",
+    "unit": "calls",
+    "value": 652
+  },
   "after-kashikawa-b-notice-fits": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
     "quantity": "calls to _fits made beneath the notice entries over one roll of kashikawa (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
     "value": 0
+  },
+  "after-kashikawa-b-notice-housesmixin-fits": {
+    "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
+    "quantity": "calls to HousesMixin._fits made beneath the notice entries over one roll of kashikawa (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the clone, run just after the base's",
+    "unit": "calls",
+    "value": 1486
   },
   "after-kashikawa-b-notice-label-seat-clear": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
@@ -1026,7 +1054,7 @@
     "quantity": "calls to TOTAL made beneath the notice entries over one roll of kashikawa (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 3528229
+    "value": 1943533
   },
   "after-kashikawa-b-page-drop-offmap": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
@@ -1047,7 +1075,7 @@
     "quantity": "calls to TOTAL made beneath the page entries over one roll of kashikawa (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 2036456
+    "value": 2037029
   },
   "after-kashikawa-b-route-walk-total": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
@@ -1184,11 +1212,11 @@
   },
   "after-kashikawa-full-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of kashikawa writing its svg and page, unprofiled",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 8.732,
+    "value": 9.029,
     "varies": true
   },
   "after-kashikawa-grove-hard": {
@@ -1238,7 +1266,7 @@
     "quantity": "page_extent over one full generate() of kashikawa, counted by cProfile (counts.py)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 14767
+    "value": 14770
   },
   "after-kashikawa-quad-in-supply": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
@@ -1256,11 +1284,11 @@
   },
   "after-kashikawa-roll-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of kashikawa, render off, the fastest of three unprofiled rolls",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 10.231,
+    "value": 8.692,
     "varies": true
   },
   "after-kashikawa-routes-missed-dist": {
@@ -1275,20 +1303,20 @@
     "quantity": "seg_dist over one full generate() of kashikawa, counted by cProfile (counts.py)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 1236938
+    "value": 1200746
   },
   "after-kashikawa-stage-appurtenances-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_appurtenances inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.117,
+    "value": 0.136,
     "varies": true
   },
   "after-kashikawa-stage-bamboo-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_bamboo inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -1297,34 +1325,34 @@
   },
   "after-kashikawa-stage-burial-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_burial inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.047,
+    "value": 0.052,
     "varies": true
   },
   "after-kashikawa-stage-crossings-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_crossings inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.122,
+    "value": 0.124,
     "varies": true
   },
   "after-kashikawa-stage-field-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_field inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 3.112,
+    "value": 1.645,
     "varies": true
   },
   "after-kashikawa-stage-frame-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_frame inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -1333,43 +1361,43 @@
   },
   "after-kashikawa-stage-hinterland-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_hinterland inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 1.515,
+    "value": 1.622,
     "varies": true
   },
   "after-kashikawa-stage-homesteads-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_homesteads inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 1.379,
+    "value": 1.358,
     "varies": true
   },
   "after-kashikawa-stage-labels-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_labels inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.008,
+    "value": 0.03,
     "varies": true
   },
   "after-kashikawa-stage-notice-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_notice inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.652,
+    "value": 0.335,
     "varies": true
   },
   "after-kashikawa-stage-pond-stock-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_pond_stock inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -1378,34 +1406,34 @@
   },
   "after-kashikawa-stage-seat-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_seat inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.126,
+    "value": 0.063,
     "varies": true
   },
   "after-kashikawa-stage-sink-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_sink inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.035,
+    "value": 0.017,
     "varies": true
   },
   "after-kashikawa-stage-track-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_track inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.229,
+    "value": 0.235,
     "varies": true
   },
   "after-kashikawa-stage-water-frame-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_water_frame inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -1414,7 +1442,7 @@
   },
   "after-kashikawa-stage-waterward-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_waterward inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -1423,29 +1451,29 @@
   },
   "after-kashikawa-stage-web-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_web inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 1.456,
+    "value": 1.539,
     "varies": true
   },
   "after-kashikawa-stage-windbreak-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_windbreak inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.603,
+    "value": 0.609,
     "varies": true
   },
   "after-kashikawa-stage-woodland-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_woodland inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.039,
+    "value": 0.051,
     "varies": true
   },
   "after-kashikawa-stream-rect-cross": {
@@ -1495,14 +1523,14 @@
     "quantity": "calls to seg_dist made beneath the caption_lanes entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 1310
+    "value": 104
   },
   "after-kuwabata-b-caption-lanes-total": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
     "quantity": "calls to TOTAL made beneath the caption_lanes entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 15022
+    "value": 1985
   },
   "after-kuwabata-b-clip-seg-dist": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
@@ -1637,12 +1665,26 @@
     "unit": "calls",
     "value": 1257020
   },
+  "after-kuwabata-b-notice-captionprobesmixin-label-seat-clear": {
+    "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
+    "quantity": "calls to CaptionProbesMixin.label_seat_clear made beneath the notice entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the clone, run just after the base's",
+    "unit": "calls",
+    "value": 72
+  },
   "after-kuwabata-b-notice-fits": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
     "quantity": "calls to _fits made beneath the notice entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
     "value": 0
+  },
+  "after-kuwabata-b-notice-housesmixin-fits": {
+    "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
+    "quantity": "calls to HousesMixin._fits made beneath the notice entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the clone, run just after the base's",
+    "unit": "calls",
+    "value": 82
   },
   "after-kuwabata-b-notice-label-seat-clear": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
@@ -1663,7 +1705,7 @@
     "quantity": "calls to TOTAL made beneath the notice entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 288189
+    "value": 98197
   },
   "after-kuwabata-b-page-drop-offmap": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
@@ -1772,11 +1814,11 @@
   },
   "after-kuwabata-full-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of kuwabata writing its svg and page, unprofiled",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 3.054,
+    "value": 3.155,
     "varies": true
   },
   "after-kuwabata-grove-hard": {
@@ -1844,11 +1886,11 @@
   },
   "after-kuwabata-roll-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of kuwabata, render off, the fastest of three unprofiled rolls",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 2.981,
+    "value": 2.969,
     "varies": true
   },
   "after-kuwabata-routes-missed-dist": {
@@ -1863,20 +1905,20 @@
     "quantity": "seg_dist over one full generate() of kuwabata, counted by cProfile (counts.py)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 310764
+    "value": 308969
   },
   "after-kuwabata-stage-appurtenances-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_appurtenances inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.091,
+    "value": 0.09,
     "varies": true
   },
   "after-kuwabata-stage-bamboo-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_bamboo inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -1885,7 +1927,7 @@
   },
   "after-kuwabata-stage-burial-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_burial inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -1894,7 +1936,7 @@
   },
   "after-kuwabata-stage-crossings-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_crossings inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -1903,16 +1945,16 @@
   },
   "after-kuwabata-stage-field-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_field inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.716,
+    "value": 0.707,
     "varies": true
   },
   "after-kuwabata-stage-frame-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_frame inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -1921,52 +1963,52 @@
   },
   "after-kuwabata-stage-hinterland-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_hinterland inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.415,
+    "value": 0.396,
     "varies": true
   },
   "after-kuwabata-stage-homesteads-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_homesteads inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.281,
+    "value": 0.292,
     "varies": true
   },
   "after-kuwabata-stage-labels-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_labels inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.005,
+    "value": 0.003,
     "varies": true
   },
   "after-kuwabata-stage-notice-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_notice inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.071,
+    "value": 0.015,
     "varies": true
   },
   "after-kuwabata-stage-pond-stock-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_pond_stock inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.013,
+    "value": 0.012,
     "varies": true
   },
   "after-kuwabata-stage-seat-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_seat inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -1975,7 +2017,7 @@
   },
   "after-kuwabata-stage-sink-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_sink inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -1984,7 +2026,7 @@
   },
   "after-kuwabata-stage-track-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_track inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -1993,7 +2035,7 @@
   },
   "after-kuwabata-stage-water-frame-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_water_frame inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -2002,38 +2044,38 @@
   },
   "after-kuwabata-stage-waterward-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_waterward inside that roll of kuwabata (summed over its builds)",
-    "source": "harness.py in the clone, run just after the base's",
-    "unit": "s",
-    "value": 0.15,
-    "varies": true
-  },
-  "after-kuwabata-stage-web-s": {
-    "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
-    "quantity": "stage_web inside that roll of kuwabata (summed over its builds)",
-    "source": "harness.py in the clone, run just after the base's",
-    "unit": "s",
-    "value": 0.412,
-    "varies": true
-  },
-  "after-kuwabata-stage-windbreak-s": {
-    "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
-    "quantity": "stage_windbreak inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
     "value": 0.151,
     "varies": true
   },
+  "after-kuwabata-stage-web-s": {
+    "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
+    "quantity": "stage_web inside that roll of kuwabata (summed over its builds)",
+    "source": "harness.py in the clone, run just after the base's",
+    "unit": "s",
+    "value": 0.429,
+    "varies": true
+  },
+  "after-kuwabata-stage-windbreak-s": {
+    "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
+    "quantity": "stage_windbreak inside that roll of kuwabata (summed over its builds)",
+    "source": "harness.py in the clone, run just after the base's",
+    "unit": "s",
+    "value": 0.153,
+    "varies": true
+  },
   "after-kuwabata-stage-woodland-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_woodland inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.01,
+    "value": 0.011,
     "varies": true
   },
   "after-kuwabata-stream-rect-cross": {
@@ -2076,21 +2118,21 @@
     "quantity": "calls to TOTAL made beneath the bamboo entries over one roll of mizuguchi (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 226223
+    "value": 69309
   },
   "after-mizuguchi-b-caption-lanes-seg-dist": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
     "quantity": "calls to seg_dist made beneath the caption_lanes entries over one roll of mizuguchi (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 3775
+    "value": 258
   },
   "after-mizuguchi-b-caption-lanes-total": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
     "quantity": "calls to TOTAL made beneath the caption_lanes entries over one roll of mizuguchi (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 42223
+    "value": 5086
   },
   "after-mizuguchi-b-carve-carve-sector-locals-edge": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
@@ -2139,7 +2181,7 @@
     "quantity": "calls to TOTAL made beneath the commons entries over one roll of mizuguchi (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 377345
+    "value": 377385
   },
   "after-mizuguchi-b-departures-math-hypot": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
@@ -2223,7 +2265,7 @@
     "quantity": "calls to TOTAL made beneath the flush entries over one roll of mizuguchi (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 851041
+    "value": 850771
   },
   "after-mizuguchi-b-grove-draw-total": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
@@ -2323,12 +2365,26 @@
     "unit": "calls",
     "value": 287843
   },
+  "after-mizuguchi-b-notice-captionprobesmixin-label-seat-clear": {
+    "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
+    "quantity": "calls to CaptionProbesMixin.label_seat_clear made beneath the notice entries over one roll of mizuguchi (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the clone, run just after the base's",
+    "unit": "calls",
+    "value": 176
+  },
   "after-mizuguchi-b-notice-fits": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
     "quantity": "calls to _fits made beneath the notice entries over one roll of mizuguchi (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
     "value": 0
+  },
+  "after-mizuguchi-b-notice-housesmixin-fits": {
+    "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
+    "quantity": "calls to HousesMixin._fits made beneath the notice entries over one roll of mizuguchi (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the clone, run just after the base's",
+    "unit": "calls",
+    "value": 784
   },
   "after-mizuguchi-b-notice-label-seat-clear": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
@@ -2349,7 +2405,7 @@
     "quantity": "calls to TOTAL made beneath the notice entries over one roll of mizuguchi (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 1085782
+    "value": 401890
   },
   "after-mizuguchi-b-page-drop-offmap": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
@@ -2370,7 +2426,7 @@
     "quantity": "calls to TOTAL made beneath the page entries over one roll of mizuguchi (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 1133864
+    "value": 1135091
   },
   "after-mizuguchi-b-route-walk-total": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
@@ -2507,11 +2563,11 @@
   },
   "after-mizuguchi-full-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of mizuguchi writing its svg and page, unprofiled",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 3.38,
+    "value": 3.193,
     "varies": true
   },
   "after-mizuguchi-grove-hard": {
@@ -2561,7 +2617,7 @@
     "quantity": "page_extent over one full generate() of mizuguchi, counted by cProfile (counts.py)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 8379
+    "value": 8387
   },
   "after-mizuguchi-quad-in-supply": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
@@ -2579,11 +2635,11 @@
   },
   "after-mizuguchi-roll-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of mizuguchi, render off, the fastest of three unprofiled rolls",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 3.377,
+    "value": 3.238,
     "varies": true
   },
   "after-mizuguchi-routes-missed-dist": {
@@ -2598,20 +2654,20 @@
     "quantity": "seg_dist over one full generate() of mizuguchi, counted by cProfile (counts.py)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 283533
+    "value": 258391
   },
   "after-mizuguchi-stage-appurtenances-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_appurtenances inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.023,
+    "value": 0.022,
     "varies": true
   },
   "after-mizuguchi-stage-bamboo-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_bamboo inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -2620,7 +2676,7 @@
   },
   "after-mizuguchi-stage-burial-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_burial inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -2629,70 +2685,70 @@
   },
   "after-mizuguchi-stage-crossings-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_crossings inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.039,
+    "value": 0.038,
     "varies": true
   },
   "after-mizuguchi-stage-field-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_field inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.815,
+    "value": 0.784,
     "varies": true
   },
   "after-mizuguchi-stage-frame-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_frame inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.004,
+    "value": 0.003,
     "varies": true
   },
   "after-mizuguchi-stage-hinterland-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_hinterland inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.525,
+    "value": 0.57,
     "varies": true
   },
   "after-mizuguchi-stage-homesteads-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_homesteads inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.388,
+    "value": 0.39,
     "varies": true
   },
   "after-mizuguchi-stage-labels-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_labels inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.004,
+    "value": 0.003,
     "varies": true
   },
   "after-mizuguchi-stage-notice-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_notice inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.208,
+    "value": 0.071,
     "varies": true
   },
   "after-mizuguchi-stage-pond-stock-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_pond_stock inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -2701,16 +2757,16 @@
   },
   "after-mizuguchi-stage-seat-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_seat inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.049,
+    "value": 0.051,
     "varies": true
   },
   "after-mizuguchi-stage-sink-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_sink inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -2719,16 +2775,16 @@
   },
   "after-mizuguchi-stage-track-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_track inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.07,
+    "value": 0.072,
     "varies": true
   },
   "after-mizuguchi-stage-water-frame-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_water_frame inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -2737,7 +2793,7 @@
   },
   "after-mizuguchi-stage-waterward-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_waterward inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -2746,25 +2802,25 @@
   },
   "after-mizuguchi-stage-web-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_web inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.527,
+    "value": 0.501,
     "varies": true
   },
   "after-mizuguchi-stage-windbreak-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_windbreak inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.225,
+    "value": 0.221,
     "varies": true
   },
   "after-mizuguchi-stage-woodland-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_woodland inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -2794,11 +2850,11 @@
   },
   "after-pool-roll-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "the five pool hamlets' roll times summed",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 26.257,
+    "value": 24.15,
     "varies": true
   },
   "after-sawada-absorb": {
@@ -2827,14 +2883,14 @@
     "quantity": "calls to seg_dist made beneath the caption_lanes entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 7217
+    "value": 503
   },
   "after-sawada-b-caption-lanes-total": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
     "quantity": "calls to TOTAL made beneath the caption_lanes entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 97179
+    "value": 10271
   },
   "after-sawada-b-carve-carve-sector-locals-edge": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
@@ -3067,12 +3123,26 @@
     "unit": "calls",
     "value": 537019
   },
+  "after-sawada-b-notice-captionprobesmixin-label-seat-clear": {
+    "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
+    "quantity": "calls to CaptionProbesMixin.label_seat_clear made beneath the notice entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the clone, run just after the base's",
+    "unit": "calls",
+    "value": 462
+  },
   "after-sawada-b-notice-fits": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
     "quantity": "calls to _fits made beneath the notice entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
     "value": 0
+  },
+  "after-sawada-b-notice-housesmixin-fits": {
+    "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
+    "quantity": "calls to HousesMixin._fits made beneath the notice entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the clone, run just after the base's",
+    "unit": "calls",
+    "value": 794
   },
   "after-sawada-b-notice-label-seat-clear": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
@@ -3093,7 +3163,7 @@
     "quantity": "calls to TOTAL made beneath the notice entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 2081805
+    "value": 1121718
   },
   "after-sawada-b-page-drop-offmap": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
@@ -3251,11 +3321,11 @@
   },
   "after-sawada-full-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of sawada writing its svg and page, unprofiled",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 5.652,
+    "value": 5.39,
     "varies": true
   },
   "after-sawada-grove-hard": {
@@ -3323,11 +3393,11 @@
   },
   "after-sawada-roll-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of sawada, render off, the fastest of three unprofiled rolls",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 5.389,
+    "value": 5.202,
     "varies": true
   },
   "after-sawada-routes-missed-dist": {
@@ -3342,11 +3412,11 @@
     "quantity": "seg_dist over one full generate() of sawada, counted by cProfile (counts.py)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 313459
+    "value": 296613
   },
   "after-sawada-stage-appurtenances-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_appurtenances inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -3355,7 +3425,7 @@
   },
   "after-sawada-stage-bamboo-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_bamboo inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -3364,7 +3434,7 @@
   },
   "after-sawada-stage-burial-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_burial inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -3373,7 +3443,7 @@
   },
   "after-sawada-stage-crossings-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_crossings inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -3382,16 +3452,16 @@
   },
   "after-sawada-stage-field-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_field inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 2.177,
+    "value": 2.213,
     "varies": true
   },
   "after-sawada-stage-frame-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_frame inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -3400,25 +3470,25 @@
   },
   "after-sawada-stage-hinterland-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_hinterland inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.719,
+    "value": 0.697,
     "varies": true
   },
   "after-sawada-stage-homesteads-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_homesteads inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.689,
+    "value": 0.686,
     "varies": true
   },
   "after-sawada-stage-labels-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_labels inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -3427,16 +3497,16 @@
   },
   "after-sawada-stage-notice-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_notice inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.415,
+    "value": 0.184,
     "varies": true
   },
   "after-sawada-stage-pond-stock-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_pond_stock inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -3445,7 +3515,7 @@
   },
   "after-sawada-stage-seat-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_seat inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -3454,7 +3524,7 @@
   },
   "after-sawada-stage-sink-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_sink inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -3463,16 +3533,16 @@
   },
   "after-sawada-stage-track-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_track inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.06,
+    "value": 0.059,
     "varies": true
   },
   "after-sawada-stage-water-frame-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_water_frame inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -3481,7 +3551,7 @@
   },
   "after-sawada-stage-waterward-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_waterward inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -3490,29 +3560,29 @@
   },
   "after-sawada-stage-web-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_web inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.412,
+    "value": 0.42,
     "varies": true
   },
   "after-sawada-stage-windbreak-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_windbreak inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.204,
+    "value": 0.205,
     "varies": true
   },
   "after-sawada-stage-woodland-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "3.0 -> 3.2 (1-minute load average at the run's start and end)",
+    "load": "5.0 -> 3.8 (1-minute load average at the run's start and end)",
     "quantity": "stage_woodland inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.02,
+    "value": 0.021,
     "varies": true
   },
   "after-sawada-stream-rect-cross": {
@@ -3802,12 +3872,26 @@
     "unit": "calls",
     "value": 11519503
   },
+  "base-rerun-inashiro-b-notice-captionprobesmixin-label-seat-clear": {
+    "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
+    "quantity": "calls to CaptionProbesMixin.label_seat_clear made beneath the notice entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
+    "unit": "calls",
+    "value": 4630
+  },
   "base-rerun-inashiro-b-notice-fits": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
     "quantity": "calls to _fits made beneath the notice entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "calls",
     "value": 0
+  },
+  "base-rerun-inashiro-b-notice-housesmixin-fits": {
+    "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
+    "quantity": "calls to HousesMixin._fits made beneath the notice entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
+    "unit": "calls",
+    "value": 7547
   },
   "base-rerun-inashiro-b-notice-label-seat-clear": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
@@ -3986,11 +4070,11 @@
   },
   "base-rerun-inashiro-full-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of inashiro writing its svg and page, unprofiled",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 6.428,
+    "value": 6.272,
     "varies": true
   },
   "base-rerun-inashiro-grove-hard": {
@@ -4058,11 +4142,11 @@
   },
   "base-rerun-inashiro-roll-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of inashiro, render off, the fastest of three unprofiled rolls",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 6.385,
+    "value": 6.375,
     "varies": true
   },
   "base-rerun-inashiro-routes-missed-dist": {
@@ -4081,16 +4165,16 @@
   },
   "base-rerun-inashiro-stage-appurtenances-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_appurtenances inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.035,
+    "value": 0.034,
     "varies": true
   },
   "base-rerun-inashiro-stage-bamboo-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_bamboo inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -4099,7 +4183,7 @@
   },
   "base-rerun-inashiro-stage-burial-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_burial inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -4108,7 +4192,7 @@
   },
   "base-rerun-inashiro-stage-crossings-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_crossings inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -4117,16 +4201,16 @@
   },
   "base-rerun-inashiro-stage-field-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_field inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 1.445,
+    "value": 1.508,
     "varies": true
   },
   "base-rerun-inashiro-stage-frame-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_frame inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -4135,25 +4219,25 @@
   },
   "base-rerun-inashiro-stage-hinterland-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_hinterland inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.68,
+    "value": 0.641,
     "varies": true
   },
   "base-rerun-inashiro-stage-homesteads-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_homesteads inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 1.84,
+    "value": 1.816,
     "varies": true
   },
   "base-rerun-inashiro-stage-labels-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_labels inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -4162,16 +4246,16 @@
   },
   "base-rerun-inashiro-stage-notice-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_notice inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.541,
+    "value": 0.557,
     "varies": true
   },
   "base-rerun-inashiro-stage-pond-stock-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_pond_stock inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -4180,16 +4264,16 @@
   },
   "base-rerun-inashiro-stage-seat-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_seat inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.045,
+    "value": 0.046,
     "varies": true
   },
   "base-rerun-inashiro-stage-sink-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_sink inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -4198,16 +4282,16 @@
   },
   "base-rerun-inashiro-stage-track-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_track inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.116,
+    "value": 0.092,
     "varies": true
   },
   "base-rerun-inashiro-stage-water-frame-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_water_frame inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -4216,7 +4300,7 @@
   },
   "base-rerun-inashiro-stage-waterward-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_waterward inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -4225,29 +4309,29 @@
   },
   "base-rerun-inashiro-stage-web-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_web inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.233,
+    "value": 0.251,
     "varies": true
   },
   "base-rerun-inashiro-stage-windbreak-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_windbreak inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.415,
+    "value": 0.382,
     "varies": true
   },
   "base-rerun-inashiro-stage-woodland-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_woodland inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.022,
+    "value": 0.021,
     "varies": true
   },
   "base-rerun-inashiro-stream-rect-cross": {
@@ -4537,12 +4621,26 @@
     "unit": "calls",
     "value": 14288475
   },
+  "base-rerun-kashikawa-b-notice-captionprobesmixin-label-seat-clear": {
+    "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
+    "quantity": "calls to CaptionProbesMixin.label_seat_clear made beneath the notice entries over one roll of kashikawa (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
+    "unit": "calls",
+    "value": 3605
+  },
   "base-rerun-kashikawa-b-notice-fits": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
     "quantity": "calls to _fits made beneath the notice entries over one roll of kashikawa (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "calls",
     "value": 0
+  },
+  "base-rerun-kashikawa-b-notice-housesmixin-fits": {
+    "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
+    "quantity": "calls to HousesMixin._fits made beneath the notice entries over one roll of kashikawa (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
+    "unit": "calls",
+    "value": 8805
   },
   "base-rerun-kashikawa-b-notice-label-seat-clear": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
@@ -4721,11 +4819,11 @@
   },
   "base-rerun-kashikawa-full-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of kashikawa writing its svg and page, unprofiled",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 9.052,
+    "value": 9.034,
     "varies": true
   },
   "base-rerun-kashikawa-grove-hard": {
@@ -4793,11 +4891,11 @@
   },
   "base-rerun-kashikawa-roll-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of kashikawa, render off, the fastest of three unprofiled rolls",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 9.186,
+    "value": 9.08,
     "varies": true
   },
   "base-rerun-kashikawa-routes-missed-dist": {
@@ -4816,16 +4914,16 @@
   },
   "base-rerun-kashikawa-stage-appurtenances-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_appurtenances inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.078,
+    "value": 0.076,
     "varies": true
   },
   "base-rerun-kashikawa-stage-bamboo-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_bamboo inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -4834,61 +4932,61 @@
   },
   "base-rerun-kashikawa-stage-burial-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_burial inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.03,
+    "value": 0.029,
     "varies": true
   },
   "base-rerun-kashikawa-stage-crossings-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_crossings inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.057,
+    "value": 0.058,
     "varies": true
   },
   "base-rerun-kashikawa-stage-field-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_field inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 1.728,
+    "value": 1.644,
     "varies": true
   },
   "base-rerun-kashikawa-stage-frame-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_frame inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.009,
+    "value": 0.01,
     "varies": true
   },
   "base-rerun-kashikawa-stage-hinterland-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_hinterland inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.919,
+    "value": 0.936,
     "varies": true
   },
   "base-rerun-kashikawa-stage-homesteads-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_homesteads inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 2.412,
+    "value": 2.358,
     "varies": true
   },
   "base-rerun-kashikawa-stage-labels-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_labels inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -4897,16 +4995,16 @@
   },
   "base-rerun-kashikawa-stage-notice-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_notice inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.403,
+    "value": 0.427,
     "varies": true
   },
   "base-rerun-kashikawa-stage-pond-stock-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_pond_stock inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -4915,34 +5013,34 @@
   },
   "base-rerun-kashikawa-stage-seat-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_seat inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.069,
+    "value": 0.064,
     "varies": true
   },
   "base-rerun-kashikawa-stage-sink-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_sink inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.025,
+    "value": 0.017,
     "varies": true
   },
   "base-rerun-kashikawa-stage-track-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_track inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.157,
+    "value": 0.134,
     "varies": true
   },
   "base-rerun-kashikawa-stage-water-frame-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_water_frame inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -4951,7 +5049,7 @@
   },
   "base-rerun-kashikawa-stage-waterward-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_waterward inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -4960,25 +5058,25 @@
   },
   "base-rerun-kashikawa-stage-web-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_web inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 1.484,
+    "value": 1.449,
     "varies": true
   },
   "base-rerun-kashikawa-stage-windbreak-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_windbreak inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.708,
+    "value": 0.723,
     "varies": true
   },
   "base-rerun-kashikawa-stage-woodland-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_woodland inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -5174,12 +5272,26 @@
     "unit": "calls",
     "value": 1257020
   },
+  "base-rerun-kuwabata-b-notice-captionprobesmixin-label-seat-clear": {
+    "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
+    "quantity": "calls to CaptionProbesMixin.label_seat_clear made beneath the notice entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
+    "unit": "calls",
+    "value": 520
+  },
   "base-rerun-kuwabata-b-notice-fits": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
     "quantity": "calls to _fits made beneath the notice entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "calls",
     "value": 0
+  },
+  "base-rerun-kuwabata-b-notice-housesmixin-fits": {
+    "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
+    "quantity": "calls to HousesMixin._fits made beneath the notice entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
+    "unit": "calls",
+    "value": 949
   },
   "base-rerun-kuwabata-b-notice-label-seat-clear": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
@@ -5309,11 +5421,11 @@
   },
   "base-rerun-kuwabata-full-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of kuwabata writing its svg and page, unprofiled",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 3.391,
+    "value": 3.369,
     "varies": true
   },
   "base-rerun-kuwabata-grove-hard": {
@@ -5381,11 +5493,11 @@
   },
   "base-rerun-kuwabata-roll-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of kuwabata, render off, the fastest of three unprofiled rolls",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 3.365,
+    "value": 3.385,
     "varies": true
   },
   "base-rerun-kuwabata-routes-missed-dist": {
@@ -5404,16 +5516,16 @@
   },
   "base-rerun-kuwabata-stage-appurtenances-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_appurtenances inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.09,
+    "value": 0.092,
     "varies": true
   },
   "base-rerun-kuwabata-stage-bamboo-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_bamboo inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -5422,16 +5534,16 @@
   },
   "base-rerun-kuwabata-stage-burial-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_burial inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.019,
+    "value": 0.021,
     "varies": true
   },
   "base-rerun-kuwabata-stage-crossings-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_crossings inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -5440,16 +5552,16 @@
   },
   "base-rerun-kuwabata-stage-field-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_field inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.707,
+    "value": 0.712,
     "varies": true
   },
   "base-rerun-kuwabata-stage-frame-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_frame inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -5458,25 +5570,25 @@
   },
   "base-rerun-kuwabata-stage-hinterland-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_hinterland inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.419,
+    "value": 0.428,
     "varies": true
   },
   "base-rerun-kuwabata-stage-homesteads-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_homesteads inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.295,
+    "value": 0.322,
     "varies": true
   },
   "base-rerun-kuwabata-stage-labels-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_labels inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -5485,16 +5597,16 @@
   },
   "base-rerun-kuwabata-stage-notice-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_notice inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.179,
+    "value": 0.178,
     "varies": true
   },
   "base-rerun-kuwabata-stage-pond-stock-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_pond_stock inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -5503,7 +5615,7 @@
   },
   "base-rerun-kuwabata-stage-seat-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_seat inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -5512,7 +5624,7 @@
   },
   "base-rerun-kuwabata-stage-sink-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_sink inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -5521,7 +5633,7 @@
   },
   "base-rerun-kuwabata-stage-track-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_track inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -5530,7 +5642,7 @@
   },
   "base-rerun-kuwabata-stage-water-frame-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_water_frame inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -5539,38 +5651,38 @@
   },
   "base-rerun-kuwabata-stage-waterward-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_waterward inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.151,
+    "value": 0.152,
     "varies": true
   },
   "base-rerun-kuwabata-stage-web-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_web inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.573,
+    "value": 0.563,
     "varies": true
   },
   "base-rerun-kuwabata-stage-windbreak-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_windbreak inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.146,
+    "value": 0.147,
     "varies": true
   },
   "base-rerun-kuwabata-stage-woodland-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_woodland inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.01,
+    "value": 0.011,
     "varies": true
   },
   "base-rerun-kuwabata-stream-rect-cross": {
@@ -5860,12 +5972,26 @@
     "unit": "calls",
     "value": 5904372
   },
+  "base-rerun-mizuguchi-b-notice-captionprobesmixin-label-seat-clear": {
+    "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
+    "quantity": "calls to CaptionProbesMixin.label_seat_clear made beneath the notice entries over one roll of mizuguchi (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
+    "unit": "calls",
+    "value": 1453
+  },
   "base-rerun-mizuguchi-b-notice-fits": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
     "quantity": "calls to _fits made beneath the notice entries over one roll of mizuguchi (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "calls",
     "value": 0
+  },
+  "base-rerun-mizuguchi-b-notice-housesmixin-fits": {
+    "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
+    "quantity": "calls to HousesMixin._fits made beneath the notice entries over one roll of mizuguchi (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
+    "unit": "calls",
+    "value": 8776
   },
   "base-rerun-mizuguchi-b-notice-label-seat-clear": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
@@ -6044,11 +6170,11 @@
   },
   "base-rerun-mizuguchi-full-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of mizuguchi writing its svg and page, unprofiled",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 4.702,
+    "value": 4.415,
     "varies": true
   },
   "base-rerun-mizuguchi-grove-hard": {
@@ -6116,11 +6242,11 @@
   },
   "base-rerun-mizuguchi-roll-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of mizuguchi, render off, the fastest of three unprofiled rolls",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 4.457,
+    "value": 4.423,
     "varies": true
   },
   "base-rerun-mizuguchi-routes-missed-dist": {
@@ -6139,16 +6265,16 @@
   },
   "base-rerun-mizuguchi-stage-appurtenances-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_appurtenances inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.022,
+    "value": 0.023,
     "varies": true
   },
   "base-rerun-mizuguchi-stage-bamboo-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_bamboo inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -6157,7 +6283,7 @@
   },
   "base-rerun-mizuguchi-stage-burial-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_burial inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -6166,25 +6292,25 @@
   },
   "base-rerun-mizuguchi-stage-crossings-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_crossings inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.038,
+    "value": 0.039,
     "varies": true
   },
   "base-rerun-mizuguchi-stage-field-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_field inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.846,
+    "value": 0.812,
     "varies": true
   },
   "base-rerun-mizuguchi-stage-frame-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_frame inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -6193,25 +6319,25 @@
   },
   "base-rerun-mizuguchi-stage-hinterland-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_hinterland inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.57,
+    "value": 0.549,
     "varies": true
   },
   "base-rerun-mizuguchi-stage-homesteads-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_homesteads inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 1.054,
+    "value": 1.074,
     "varies": true
   },
   "base-rerun-mizuguchi-stage-labels-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_labels inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -6220,16 +6346,16 @@
   },
   "base-rerun-mizuguchi-stage-notice-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_notice inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.207,
+    "value": 0.206,
     "varies": true
   },
   "base-rerun-mizuguchi-stage-pond-stock-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_pond_stock inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -6238,7 +6364,7 @@
   },
   "base-rerun-mizuguchi-stage-seat-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_seat inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -6247,7 +6373,7 @@
   },
   "base-rerun-mizuguchi-stage-sink-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_sink inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -6256,16 +6382,16 @@
   },
   "base-rerun-mizuguchi-stage-track-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_track inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.087,
+    "value": 0.089,
     "varies": true
   },
   "base-rerun-mizuguchi-stage-water-frame-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_water_frame inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -6274,7 +6400,7 @@
   },
   "base-rerun-mizuguchi-stage-waterward-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_waterward inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -6283,25 +6409,25 @@
   },
   "base-rerun-mizuguchi-stage-web-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_web inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.633,
+    "value": 0.643,
     "varies": true
   },
   "base-rerun-mizuguchi-stage-windbreak-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_windbreak inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.218,
+    "value": 0.219,
     "varies": true
   },
   "base-rerun-mizuguchi-stage-woodland-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_woodland inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -6331,11 +6457,11 @@
   },
   "base-rerun-pool-roll-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "the five pool hamlets' roll times summed",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 32.783,
+    "value": 32.564,
     "varies": true
   },
   "base-rerun-sawada-absorb": {
@@ -6406,7 +6532,7 @@
     "quantity": "calls to TOTAL made beneath the clip entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "calls",
-    "value": 7390
+    "value": 7388
   },
   "base-rerun-sawada-b-commons-grass-scatter": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
@@ -6462,7 +6588,7 @@
     "quantity": "calls to TOTAL made beneath the fabric entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "calls",
-    "value": 776114
+    "value": 762573
   },
   "base-rerun-sawada-b-field-carve-comb": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
@@ -6604,12 +6730,26 @@
     "unit": "calls",
     "value": 11036434
   },
+  "base-rerun-sawada-b-notice-captionprobesmixin-label-seat-clear": {
+    "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
+    "quantity": "calls to CaptionProbesMixin.label_seat_clear made beneath the notice entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
+    "unit": "calls",
+    "value": 2617
+  },
   "base-rerun-sawada-b-notice-fits": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
     "quantity": "calls to _fits made beneath the notice entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "calls",
     "value": 0
+  },
+  "base-rerun-sawada-b-notice-housesmixin-fits": {
+    "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
+    "quantity": "calls to HousesMixin._fits made beneath the notice entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
+    "unit": "calls",
+    "value": 9326
   },
   "base-rerun-sawada-b-notice-label-seat-clear": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
@@ -6788,11 +6928,11 @@
   },
   "base-rerun-sawada-full-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of sawada writing its svg and page, unprofiled",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 9.197,
+    "value": 9.373,
     "varies": true
   },
   "base-rerun-sawada-grove-hard": {
@@ -6860,11 +7000,11 @@
   },
   "base-rerun-sawada-roll-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of sawada, render off, the fastest of three unprofiled rolls",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 9.39,
+    "value": 9.301,
     "varies": true
   },
   "base-rerun-sawada-routes-missed-dist": {
@@ -6883,16 +7023,16 @@
   },
   "base-rerun-sawada-stage-appurtenances-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_appurtenances inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.096,
+    "value": 0.097,
     "varies": true
   },
   "base-rerun-sawada-stage-bamboo-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_bamboo inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -6901,7 +7041,7 @@
   },
   "base-rerun-sawada-stage-burial-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_burial inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -6910,7 +7050,7 @@
   },
   "base-rerun-sawada-stage-crossings-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_crossings inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -6919,16 +7059,16 @@
   },
   "base-rerun-sawada-stage-field-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_field inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 2.909,
+    "value": 2.888,
     "varies": true
   },
   "base-rerun-sawada-stage-frame-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_frame inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -6937,43 +7077,43 @@
   },
   "base-rerun-sawada-stage-hinterland-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_hinterland inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.848,
+    "value": 0.837,
     "varies": true
   },
   "base-rerun-sawada-stage-homesteads-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_homesteads inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 1.923,
+    "value": 1.883,
     "varies": true
   },
   "base-rerun-sawada-stage-labels-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_labels inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.005,
+    "value": 0.009,
     "varies": true
   },
   "base-rerun-sawada-stage-notice-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_notice inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.448,
+    "value": 0.456,
     "varies": true
   },
   "base-rerun-sawada-stage-pond-stock-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_pond_stock inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -6982,16 +7122,16 @@
   },
   "base-rerun-sawada-stage-seat-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_seat inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.043,
+    "value": 0.041,
     "varies": true
   },
   "base-rerun-sawada-stage-sink-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_sink inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -7000,16 +7140,16 @@
   },
   "base-rerun-sawada-stage-track-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_track inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.083,
+    "value": 0.087,
     "varies": true
   },
   "base-rerun-sawada-stage-water-frame-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_water_frame inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -7018,7 +7158,7 @@
   },
   "base-rerun-sawada-stage-waterward-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_waterward inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
@@ -7027,29 +7167,29 @@
   },
   "base-rerun-sawada-stage-web-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_web inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 1.25,
+    "value": 1.184,
     "varies": true
   },
   "base-rerun-sawada-stage-windbreak-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_windbreak inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.581,
+    "value": 0.58,
     "varies": true
   },
   "base-rerun-sawada-stage-woodland-s": {
     "command": "python3 specs/284-fourth-hotspot-pass/measure.py after",
-    "load": "5.2 -> 3.0 (1-minute load average at the run's start and end)",
+    "load": "3.8 -> 5.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_woodland inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of 5f15c65bd, run just before the clone's",
     "unit": "s",
-    "value": 0.038,
+    "value": 0.04,
     "varies": true
   },
   "base-rerun-sawada-stream-rect-cross": {
