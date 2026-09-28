@@ -41,9 +41,9 @@ def roll_retry(monkeypatch: pytest.MonkeyPatch) -> tuple[list[str], list[list[tu
     seen: list[list[tuple[float, float]]] = []
     real_build = hg.driver.build
 
-    def spy_build(plan, avoid=()):  # type: ignore[no-untyped-def]
+    def spy_build(plan, avoid=(), snapshot=None):  # type: ignore[no-untyped-def]
         seen.append(list(avoid))
-        return real_build(plan, avoid=avoid)
+        return real_build(plan, avoid=avoid, snapshot=snapshot)
 
     monkeypatch.setattr(hg.driver, "unreached_houses", fake_unreached)
     monkeypatch.setattr(hg.driver, "build", spy_build)
@@ -199,3 +199,60 @@ def test_a_re_roll_that_does_not_help_is_not_kept(monkeypatch: pytest.MonkeyPatc
     assert fail_lines and "farmhouses_reach_a_way" in fail_lines[0]
     assert svg.count("<svg") == 1 and svg.count("</svg>") == 1  # finished exactly once...
     assert len(re.findall(r"<g[\s>]", svg)) == svg.count("</g>")  # ...so its groups balance
+
+
+def _resuming_stages(monkeypatch: pytest.MonkeyPatch) -> list[str]:
+    """Stand-in stages with a stand-in `stage_homesteads` among them, so `resume_at` finds its seam: `before` stands for
+    the stages that do not read the avoid list, `seats` reads it, `after` stands for what follows (feature 284)."""
+    ran: list[str] = []
+
+    def before(s, plan):  # noqa: ANN001, ARG001
+        ran.append("before")
+        s.M["field"] = [len(ran)]  # what the field drew - the same object must come back through every copy
+
+    def seats(s, plan):  # noqa: ANN001, ARG001
+        ran.append("seats")
+        s.M["seen_avoid"] = list(s._avoid_seats)
+        s.M["field"].append("seated")
+
+    def after(s, plan):  # noqa: ANN001, ARG001
+        ran.append("after")
+
+    monkeypatch.setattr(hg.driver, "stage_homesteads", seats)
+    monkeypatch.setattr(hg.driver, "STAGES", (before, seats, after))
+    return ran
+
+
+@pytest.mark.rolls_map
+def test_a_re_roll_resumes_at_the_seats_from_an_untouched_copy(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A stranding re-roll runs only the stages from the first that reads the avoid list, on a copy of the first roll as
+    it stood there: the stages before it run once for the whole map, the re-roll sees the forbidden ground, and what the
+    first roll's own seats did to the settlement is not in the copy (feature 284)."""
+    ran = _resuming_stages(monkeypatch)
+    calls: list[int] = []
+
+    def fake_unreached(M, reach=None):  # type: ignore[no-untyped-def]  # noqa: ARG001
+        calls.append(1)
+        return [(500, 400, 90)] if len(calls) == 1 else []
+
+    monkeypatch.setattr(hg.driver, "unreached_houses", fake_unreached)
+    rep = hg.generate(hg.HamletSpec(name="Resume", seed=4, households=10), out_base=None, render=False)
+    assert ran == ["before", "seats", "after", "seats", "after"]  # the stages before the seats ran once
+    assert rep.attempt == 2 and rep.failures == []
+    M = rep.manifest or {}
+    assert M["seen_avoid"] == [(500.0, 400.0)]  # the re-roll seated against the forbidden ground
+    assert M["field"] == [1, "seated"]  # the copy was taken before the first roll's seats touched it
+
+
+@pytest.mark.rolls_map
+def test_every_resume_starts_from_the_same_snapshot(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Two re-rolls from one snapshot do not see each other: each copies it afresh (feature 284)."""
+    _resuming_stages(monkeypatch)
+    snap: list = []
+    plan = hg.plan_site(hg.HamletSpec(name="Snap", seed=4, households=10))
+    hg.driver.build(plan, snapshot=snap)
+    one, _p1 = hg.driver.resume(snap, [(1.0, 2.0)])
+    two, _p2 = hg.driver.resume(snap, [(3.0, 4.0)])
+    assert one.M["seen_avoid"] == [(1.0, 2.0)] and two.M["seen_avoid"] == [(3.0, 4.0)]
+    assert one.M["field"] == two.M["field"] == [1, "seated"]
+    assert snap[0][0].M["field"] == [1]

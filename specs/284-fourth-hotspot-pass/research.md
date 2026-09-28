@@ -87,3 +87,88 @@ array, and two quads farther apart than the clearance need no `_quad_gap`. The m
 **The bookend.** `284-start` was first taken at `f52ed6aa8` (17.4 s, before 282's mats merged) and re-taken at the base
 `5f15c65bd`: total 23.3 s, median 5.6 s, worst 7.1 s (observed 2026-09-28, method: `make perf LABEL=284-start` in
 `/tmp/base284`, load 6.7). The re-taken one is the bookend `284-end` is judged against.
+
+## R4 - The coarser router lattice (B2, 2026-09-28)
+
+**Method** (observed 2026-09-28, method: `b2/harness.py` - the five pool hamlets and cohort seeds 1-24 rolled at each cell
+with `route.ROUTE_CELL` set, the driver's own `unreached_houses` wrapped so every attempt's count is kept, twelve forked
+workers, load 5-19; the rows are `b2/results.json`). Unreached houses summed over every attempt, re-rolls included:
+
+| cell (px) | unreached, all attempts | maps worse than the 10 px lattice | roll seconds, summed (loaded, indicative) |
+|---|---|---|---|
+| 10 (the base) | 8 | - | 334.6 |
+| 12 | 20 | cohort 03 (0 -> 1 then 2, and the map KEPT one stranded house), 08 (0 -> 2 then 8, kept 2), 23 (0 -> 2) | 295.4 |
+| 14 | 15 | cohort 08 (0 -> 7), Mizuguchi (0 -> 1) | 219.5 |
+| 16 | 13 | cohort 08 (0 -> 2 then 5, kept 2), 10 (0 -> 1) | 215.9 |
+| 18 | 13 | cohort 03 (0 -> 1 then 7, kept 1) | 197.4 |
+
+The first cell tried, 12, already strands houses the base did not - two of them through the driver's re-roll into the
+finished map - so by the plan's rule the largest cell before it is taken, and that is the base's 10: **B2 is withdrawn**.
+The summed seconds fall with the cell, but most of the fall is the maps that happened not to re-roll (a re-roll is a whole
+second build); the router itself is under half a second of a roll (`_route`, 26 calls, 0.47 profiled s on Sawada). Which
+maps strand moves chaotically with the cell, which is why the rule counts per map and seed rather than in total.
+
+**What this measurement names instead.** Eight of the base's 29 rolls strand a house on the first attempt and pay a whole
+second build to fix it - the costliest single thing in the table, and not a lattice question. Recorded for the fourth
+pass's section of `dev/performance.md`.
+
+## R5 - The carve's rows as arrays (B4, 2026-09-28)
+
+**Method** (observed 2026-09-28, method: `b4/harness.py` - one build of Sawada records every `_edge_in_supply` and
+`_clear_supply` call; an array form answers the same edge calls, each edge's 3 px samples against a stroke's segments in one
+numpy array, and both are timed fastest of three over the recorded calls; load 18.5; `b4/results.json`). After B3 the
+carve is a small part of Sawada's field stage: `_carve_sector` 0.43 of the field's 3.83 profiled seconds, the body rows 0.35,
+while the seam closing is 2.5 (observed 2026-09-28, method: a cProfile of one build of Sawada).
+
+| part | calls | scalar | arrays |
+|---|---|---|---|
+| the plot tests' edge walk (`_edge_in_supply`) | 3,310 | 0.086 s | 0.312 s, the same 3,310 verdicts |
+| the vertices' pushes (`_clear_supply`) | 3,490 | 0.024 s | not built: the scalar total is under the arrays' overhead on the walk above |
+
+A row holds a handful of columns and an edge a dozen samples, so numpy's per-call cost is paid on arrays too small to
+repay it: the array walk is 3.6 times slower. **B4 is withdrawn** under the plan's own rule (kept only if faster). No part
+was left scalar for being impossible to put in arrays; the vertices were not built because the whole of their scalar cost
+is smaller than the loss already measured on the larger part.
+
+## R7 - The other slow stages, re-profiled (T15, 2026-09-28)
+
+**Method** (observed 2026-09-28, method: `t15/harness.py`, one cProfile of a build and finish of Sawada and one of
+Kashikawa, after A1-A8, B1 and B3). What is left is spread thin:
+
+- **The seam closing** (`close_seams`, 2.5 profiled s on Sawada, 1.4 on Kashikawa): 822 pocket welds on Sawada at about
+  1.2 ms each (`_absorb`, 0.97 s), the remainder `_plant` 0.35, `_unjog` 0.29, `_shed_necks` 0.22. A weld is a handful of
+  shapely unions, buffers and a simplify on the one pocket and its ranked neighbors, already ranked in one array call and
+  read from a shared tree (feature 276); there is no scan left to index, and the shapes are the rule. No lever taken.
+- **The commons** (`commons`, 0.43 s on Sawada): the grass scatter, 0.37, already clipped to a predicted frame (feature 224).
+  No lever taken.
+- **The blade flush** (`flush_blade_groups`, 0.23 s on Sawada, 0.43 on Kashikawa): the merge of each blade group's lines
+  (`merge_lines`, 0.09 s). No lever taken.
+- **The grove fill** (`village_grove`, 0.57 s on Sawada): its tests are the grove blocks' indexed lookups (`near`, `inside`,
+  `hard`, each under 0.1 s), with the crown seat test on its grid since A6. No lever taken.
+- **The geometry primitives**: `seg_dist` is called 312,391 times on Sawada (0.54 profiled s), from about 25 callers, none
+  above 0.09 s. An index per caller would each buy under a tenth of a second.
+
+## R8 - A re-roll resumed at the seats (2026-09-28)
+
+R4's table showed the costliest thing in a roll that is not a stage: eight of the 29 base rolls strand a house on the
+first attempt and pay a whole second build. The avoid list a re-roll carries is first read at `stage_homesteads` (the seat
+loops, `homesteads/seats.py` `_seat_allowed` and `rolling/place.py`); the five stages before it - the water frame, the
+field, the sink, the seat and the waterward fringe - read nothing that differs between attempts. So the first roll keeps a
+deep copy of the settlement and plan as they stand before the seats, and each re-roll starts from a fresh copy of that
+(`driver.resume`), rather than running the field again. An exact change: the same map, sooner.
+
+**Method** (observed 2026-09-28, method: `reroll/harness.py` - on Kashikawa and cohort seeds 1, 5, 17, 18 and 19, the maps
+R4 found re-rolling at the 10 px lattice, the re-roll made both ways and each finished to a scratch svg and page; load
+4.8; `reroll/results.json`):
+
+| map | re-roll built from scratch | re-roll resumed | first roll without / with the snapshot | manifest, svg, page |
+|---|---|---|---|---|
+| Kashikawa | 5.08 s | 3.39 s | 4.98 / 4.80 s | identical |
+| cohort 01 | 3.50 s | 2.18 s | 3.43 / 3.29 s | identical |
+| cohort 05 | 4.23 s | 2.73 s | 3.88 / 3.93 s | identical |
+| cohort 17 | 3.80 s | 2.67 s | 3.81 / 3.97 s | identical |
+| cohort 18 | 3.67 s | 2.42 s | 4.16 / 4.29 s | identical |
+| cohort 19 | 2.94 s | 1.75 s | 2.65 / 2.81 s | identical |
+
+A resumed re-roll is 1.1 to 1.7 s faster (about a third); the snapshot's copy costs the first roll no more than its own
+run-to-run spread (single runs each, so within noise either way).

@@ -222,21 +222,55 @@ def roll_scope(spec: HamletSpec | None = None) -> Iterator[None]:
         _census.record("roll", spec=_census.spec_row(spec), ok=ok, dt=round(time.time() - t0, 1))
 
 
-def build(plan: SitePlan, avoid: Sequence[tuple[float, float]] = ()) -> Settlement:
+def resume_at() -> int | None:
+    """Where a re-roll may resume: the index in `STAGES` of the first stage that reads the avoid list (`stage_homesteads`,
+    whose seat loops refuse the avoided ground). Every stage before it - the water frame, the field, the sink, the seat,
+    the waterward fringe - runs the same on every attempt, because nothing it reads differs between them (feature 284: a
+    stranding re-roll used to rebuild the field, the costliest stage, to get it back unchanged). None when the stages
+    have no such stage (a test's stand-in tuple)."""
+    return STAGES.index(stage_homesteads) if stage_homesteads in STAGES else None
+
+
+def build(plan: SitePlan, avoid: Sequence[tuple[float, float]] = (), snapshot: list[Any] | None = None) -> Settlement:
     """Run every stage, in order, against a fresh `Settlement`.
 
     `avoid` is ground a previous roll proved unservable - the seat loops refuse a seat near any of
-    these points. See `generate`, which re-rolls a map whose finished manifest stranded a farmhouse."""
+    these points. See `generate`, which re-rolls a map whose finished manifest stranded a farmhouse.
+    With `snapshot` (a list), a deep copy of the settlement and the plan as they stand before `resume_at()` is appended
+    to it, for `resume`."""
     s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
     s._avoid_seats = list(avoid)  # type: ignore[attr-defined]
     if plan.spec.byre_form is not None:  # a declared byre form bypasses the settlement engine's roll (feature 261)
         s.pin_knob("byre_form", plan.spec.byre_form)
+    _run_stages(s, plan, 0, snapshot)
+    return s
 
+
+def resume(snapshot: list[Any], avoid: Sequence[tuple[float, float]]) -> tuple[Settlement, SitePlan]:
+    """A re-roll from the first roll's `snapshot`: a copy of the settlement and plan before the first stage that reads
+    `avoid`, the avoid list set, and the stages from there on - the same map `build(copy of plan, avoid)` makes, without
+    running the stages that come out the same (`resume_at`; `tests/hamletgen/test_driver.py` proves the manifests
+    equal). The copy is taken again per re-roll, so every attempt starts from the untouched snapshot."""
+    import copy
+
+    s, plan = copy.deepcopy(snapshot[0])
+    s._avoid_seats = list(avoid)  # type: ignore[attr-defined]
+    _run_stages(s, plan, resume_at() or 0, None)
+    return s, plan
+
+
+def _run_stages(s: Settlement, plan: SitePlan, start: int, snapshot: list[Any] | None) -> None:
+    """The stages from `start` on, inside the roll's scope; `snapshot` takes its copy before `resume_at()`."""
+    import copy
+
+    at = resume_at() if snapshot is not None else None
     if not os.environ.get(STAGE_PROFILE_ENV):
         with roll_scope(plan.spec):
-            for stage in STAGES:
+            for i, stage in enumerate(STAGES[start:], start):
+                if i == at:
+                    snapshot.append(copy.deepcopy((s, plan)))  # pyrefly: ignore[missing-attribute]  # `at` is set only with a snapshot
                 stage(s, plan)
-        return s
+        return
     # WHERE THE TIME WENT, in one roll (feature 151, US4). Finding the slow stage used to mean editing
     # this loop by hand, rolling, reading, and reverting - done twice in one session before this existed,
     # and the second time it found `stage_waterward` at 21.7 s of a 45 s gen. An environment variable is
@@ -245,7 +279,9 @@ def build(plan: SitePlan, avoid: Sequence[tuple[float, float]] = ()) -> Settleme
     # PRINTED - `tests/hamletgen/test_driver.py` asserts the manifest is identical with it set and unset.
     timings: list[tuple[str, float]] = []
     with roll_scope(plan.spec):
-        for stage in STAGES:
+        for i, stage in enumerate(STAGES[start:], start):
+            if i == at:
+                snapshot.append(copy.deepcopy((s, plan)))  # pyrefly: ignore[missing-attribute]  # `at` is set only with a snapshot
             t0 = time.time()
             stage(s, plan)
             timings.append((stage.__name__, time.time() - t0))
@@ -255,7 +291,6 @@ def build(plan: SitePlan, avoid: Sequence[tuple[float, float]] = ()) -> Settleme
     for name, dur in sorted(timings, key=lambda t: -t[1]):
         if dur >= 0.05:
             print(f"  {dur:6.2f}s  {100 * dur / total:4.1f}%  {name}", file=sys.stderr)
-    return s
 
 
 def stage_for(out_base: str) -> str:
@@ -327,6 +362,7 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
     plan = plan_site(spec)
     rolled: dict[str, SitePlan] = {}  # the plan the LAST roll built on - the kept attempt rolls last, so the report reads it
     rolled_m: dict[str, dict[str, Any]] = {}  # ...and its finished manifest, by the same argument (feature 213: the report carries it)
+    _snap: list[Any] = []  # the first roll before its seats, for every re-roll to resume from (`resume`)
 
     def _roll(avoid: Sequence[tuple[float, float]], attempt: int = 1, after: Sequence[str] = ()) -> tuple[Settlement, list[str], list[tuple[float, float]], list[str]]:
         """Build and gate once - UNFINISHED: only the attempt kept is finished, once, after the choice (feature 278, FR-006).
@@ -349,8 +385,13 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
         # `plan_site` derived it, which is all the report reads.
         import copy
 
-        rolled["plan"] = copy.deepcopy(plan)
-        s2 = build(rolled["plan"], avoid=avoid)
+        # A RE-ROLL RESUMES AT THE SEATS (feature 284): the first roll keeps a copy of itself before the first stage that
+        # reads `avoid` (`resume_at`), and each re-roll starts from a fresh copy of that instead of running the field again.
+        if _snap:
+            s2, rolled["plan"] = resume(_snap, avoid)
+        else:
+            rolled["plan"] = copy.deepcopy(plan)
+            s2 = build(rolled["plan"], avoid=avoid, snapshot=_snap)
         rolled_m["M"] = s2.M  # the kept attempt rolls last, so this is the report's manifest (feature 213)
         # ATTRIBUTION (T33): the manifest says which roll drew it, and why the earlier ones were
         # rejected, so a changed connector or web is never mistaken for the effect of an edit.

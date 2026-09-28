@@ -1,0 +1,9 @@
+{
+ "edge_calls": 3310,
+ "edge_mismatches": 0,
+ "scalar_edges_s": 0.08636497699990286,
+ "array_edges_s": 0.31199318899962236,
+ "clear_calls": 3490,
+ "scalar_clears_s": 0.023583318001328735,
+ "load": 18.53515625
+}
