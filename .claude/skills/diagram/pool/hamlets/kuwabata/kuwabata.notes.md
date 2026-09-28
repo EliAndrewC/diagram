@@ -699,5 +699,6 @@ connector's bed where it passes through the belt; the track still reads through.
 
 Feature 282 draws every threshing yard as a floor of straw mats and, where a map declares changeable harvest weather,
 a drying rack by each house. This hamlet threshes no rice, so it has no threshing floor (above) and neither is drawn
-here. Its manifest gains only `meta.harvest_weather: settled` - the regional default, declared on no map's behalf and
-never rolled - which draws nothing on a map with no yards.
+here. Its manifest gains `meta.harvest_weather: settled` (the regional default, which applies where a map declares no weather;
+never rolled) and its forecourts' outlines recorded to a thousandth (none moved); neither draws anything on a map that
+inks no threshing floor.

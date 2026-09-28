@@ -958,5 +958,5 @@ along each yard's south edge are gone. This map DECLARES changeable harvest weat
 changeable autumn weather (research homesteads 'Did a village put its drying racks by the houses by custom, or because
 of its weather?'), so each yard carries a rack along one side in its map-north half, out of the drying floor's sun. The
 weather is declared, never rolled, so the random stream is untouched: the manifest diff is `mats` and `rack` on each
-yard and `meta.harvest_weather`. The first settlement-review (2026-09-28) found the rack, drawn as an outlined box,
+yard, `meta.harvest_weather`, and each yard's outline recorded to a thousandth (no yard moved). The first settlement-review (2026-09-28) found the rack, drawn as an outlined box,
 read as the woodpile beside the same houses; it is now a straw-gold line with dark post dots.

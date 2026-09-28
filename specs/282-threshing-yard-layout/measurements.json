@@ -432,5 +432,49 @@
   "source": "pool/hamlets/*/*.notes.md",
   "measured": "2026-09-28",
   "method": "grep -n 'or the rack leaves' (0 hits) and grep -c 'and the map draws between' (one entry on each of the four maps that draw mats)"
+ },
+ "sr13-kuwabata-f1-notes": {
+  "value": 0,
+  "unit": "passages",
+  "quantity": "occurrences of 'declared on no map's behalf' and 'a map with no yards' in kuwabata.notes.md; the entry now reads 'the regional default, which applies where a map declares no weather; never rolled) and its forecourts' outlines recorded to a thousandth (none moved); neither draws anything on a map that inks no threshing floor'",
+  "verifies": "F1",
+  "subject": "kuwabata",
+  "answers": "12b6cd282db6",
+  "source": "pool/hamlets/kuwabata/kuwabata.notes.md",
+  "measured": "2026-09-28",
+  "method": "grep -c on each old phrase (0) and the entry read in full"
+ },
+ "sr13-kashikawa-f1-declared": {
+  "value": 0,
+  "unit": "passages",
+  "quantity": "feature-282 entries on the settled-weather maps saying both 'declares no harvest weather' and 'The weather is declared, never rolled'; the second sentence now reads 'The weather is a fact of the country, set by a map's declaration or else the regional default, and never rolled'",
+  "verifies": "F1",
+  "subject": "kashikawa",
+  "answers": "12b6cd282db6",
+  "source": "pool/hamlets/{kashikawa,inashiro,mizuguchi}/*.notes.md",
+  "measured": "2026-09-28",
+  "method": "grep -c 'The weather is declared, never rolled' (0 on the three) and the entry read"
+ },
+ "sr13-mizuguchi-f1-asides": {
+  "value": 0,
+  "unit": "passages",
+  "quantity": "threshing-yard feature notes (the modal's on_this_map source) with stacked hyphen asides; the three settled-weather maps' line now reads 'settled, the regional default, so no rack is drawn by the houses: its racks would be put up out on the paddies after the harvest, which is the seasonal map's business and not drawn here (...)', and the rendered mizuguchi.html carries it",
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "answers": "12b6cd282db6",
+  "source": "pool/hamlets/{mizuguchi,kashikawa,inashiro}/*.notes.md and the regenerated mizuguchi.html",
+  "measured": "2026-09-28",
+  "method": "grep -c 'no rack is drawn by the houses: its racks' in the notes and the page (1 each)"
+ },
+ "sr13-mizuguchi-f2-diff-list": {
+  "value": 5,
+  "unit": "maps",
+  "quantity": "pool maps whose feature-282 notes entry lists the yard outlines' re-recording to a thousandth beside `mats` (and `rack`) and `meta.harvest_weather`, saying no yard moved",
+  "verifies": "F2",
+  "subject": "mizuguchi",
+  "answers": "12b6cd282db6",
+  "source": "pool/hamlets/*/*.notes.md",
+  "measured": "2026-09-28",
+  "method": "grep -c 'recorded to a thousandth' over the five notes (one entry each)"
  }
 }
