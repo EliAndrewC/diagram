@@ -446,7 +446,8 @@
    "Tang-dynasty",
    "Tang-Song",
    "Tang"
-  ]
+  ],
+  "cased": true
  },
  "Thousand Character Classic": {
   "def": "The Chinese primer of a thousand different characters learned in a fixed order, and so used as a numbering sequence - here for a pauper cemetery's plots.",
@@ -10432,6 +10433,31 @@
   "def": "A Chinese unit of grain volume, a tenth of a dou; ten he make one sheng.",
   "variants": [
    "sheng"
+  ]
+ },
+ "Lu Guimeng": {
+  "def": "A poet whose poems describe the farm landscape around Lake Tai; reports on the region's dike-ponds still quote them.",
+  "variants": [
+   "Lu Guimeng"
+  ]
+ },
+ "Nongzheng Quanshu": {
+  "def": "The \"Complete Treatise on Agricultural Administration\", Xu Guangqi's compendium of Chinese farming and water management, compiled in the late Ming and printed in 1639.",
+  "variants": [
+   "Nongzheng Quanshu",
+   "Nongzheng quanshu"
+  ]
+ },
+ "JA": {
+  "def": "Japan Agricultural Cooperatives, Japan's national federation of farmers' cooperatives; \"JA Iwakuni\" is its local cooperative for the Iwakuni area.",
+  "variants": [
+   "JA"
+  ]
+ },
+ "Amoy": {
+  "def": "The older Western name of Xiamen, a port on the Fujian coast of southeast China.",
+  "variants": [
+   "Amoy"
   ]
  }
 }

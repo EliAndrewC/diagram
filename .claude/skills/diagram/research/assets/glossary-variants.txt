@@ -36,6 +36,7 @@ alternate attendance	alternate attendance
 amado	amado
 amida	Amida
 amida buddha	Amida
+amoy	Amoy
 an'ei	An'ei
 anaerobic	anaerobic
 anagama	noborigama
@@ -1101,6 +1102,7 @@ isotherms	isohyet
 ita-bune	ita-bune
 itabashi	itabashi
 iyo	Iyo
+ja	JA
 jagama	jagama
 jail god	jail-god
 jail-god	jail-god
@@ -1456,6 +1458,7 @@ lower mansion	lower mansion
 lower mansions	lower mansion
 lower yangtze	Lower Yangzi
 lower yangzi	Lower Yangzi
+lu guimeng	Lu Guimeng
 luban ruler	Luban ruler
 luban rulers	Luban ruler
 lulu	lulu
@@ -1677,6 +1680,7 @@ noborigama	noborigama
 nogu benriron	Nogu benriron
 nogyo zensho	Nogyo Zensho
 nokaji	nokaji
+nongzheng quanshu	Nongzheng Quanshu
 noria	noria
 norias	noria
 normal depth	normal depth
