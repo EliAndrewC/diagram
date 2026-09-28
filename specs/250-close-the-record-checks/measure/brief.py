@@ -100,7 +100,12 @@ def fr006(page: str) -> list[str]:
     return [f"- {ln}" for ln in keep]
 
 
+# THE PAGE-LOAD LINE (feature 274 D7, FR-001): the page-session runner counts the questions every brief assigns and
+# refuses a write brief over four. These briefs are not a group's writing, so each declares its exempt kind: a page
+# brief `assertions` (FR-002: many assertions inside existing questions), a 2a/2b check brief and an owed-modal brief
+# `check` (sized by bytes, and they may assign more than four), a split brief `split`.
 COMMON = """# Brief - feature 250, page `{page}` ({task}), session {n} of 2: {what}
+<!-- page-load: kind={kind} -->
 
 You are a FRESH session for one half of one page of feature 250 (close the record checks). This brief is the
 whole of what you need; do not read the feature's spec, plan or research files to orient - everything you read
@@ -349,7 +354,7 @@ def checks(page: str, task: str) -> int:
         last = n == len(groups)
         out = briefs / f"{slug}-2{chr(96 + n)}.md"
         mine = KEYS in group
-        out.write_text(CHECK.format(n=f"2{chr(96 + n)}", what=f"check and apply, group {n} of {len(groups)}", sections=", ".join(f"SECTION={s}" for s in group if s != KEYS and s in changed) or "none - this group checks only the modals and keys named below",
+        out.write_text(CHECK.format(kind="check", n=f"2{chr(96 + n)}", what=f"check and apply, group {n} of {len(groups)}", sections=", ".join(f"SECTION={s}" for s in group if s != KEYS and s in changed) or "none - this group checks only the modals and keys named below",
                                     keys=", ".join(f"KEY={k}" for k in keys) if mine else "none - another group has them" if keys else "none",
                                     modals=", ".join(f"KIND={c} (SECTION={h})" for c, (h, _b) in sorted(owed.items()) if h in group) or "none",
                                     closing=" and close the page" if last else "", close=(CLOSE_LAST if last else CLOSE_GROUP).format(**fields), **fields), encoding="utf-8")
@@ -391,6 +396,7 @@ def _fields(page: str, task: str) -> dict:
 
 
 SPLIT = """# Brief - feature 250: split ONE research question under the size cap
+<!-- page-load: kind=split -->
 
 You are a FRESH session with one job: the question `{path}` is {size:,} bytes with its notes, over the 20,000-byte cap
 (`scripts/check-question-size.py`, feature 250 D14). Split it. Work in this clone (`{clone}`); its CLAUDE.md files
@@ -469,7 +475,7 @@ def write_brief(page: str, task: str) -> int:
     head = subprocess.run(["git", "-C", str(CLONE), "rev-parse", "HEAD"], capture_output=True, text=True, check=False).stdout.strip()
     (FEATURE / "briefs" / f"{fields['slug']}-base.txt").write_text(head + "\n", encoding="utf-8")  # what the checks diff against
     write = FEATURE / "briefs" / f"{fields['slug']}-1.md"
-    write.write_text(WRITE.format(n=1, what="locate, read and write", fr002="\n".join(items2) or "- none",
+    write.write_text(WRITE.format(kind="assertions", n=1, what="locate, read and write", fr002="\n".join(items2) or "- none",
                                   fr006="\n".join(items6) or "- none", over=over_cap(page), example=newest_entry(), **fields), encoding="utf-8")
     print(write)
     return 0
@@ -483,6 +489,7 @@ def _then(briefs: pathlib.Path, name: str, verb: str, page: str, task: str, why:
 
 
 OWED = """# Brief - feature 250, T23: the map modals still owed an `entry-drift` on `{page}`, group {n} of {of}
+<!-- page-load: kind=check -->
 
 You are a FRESH session with one job: check the map modals below against the research questions they were written
 from, and bring each back in step. Work in this clone (`{clone}`); the project's CLAUDE.md files still apply to you.

@@ -628,24 +628,24 @@ rows EDIT an existing section syncs from main first, since 269's and 267's edits
 | T3 | 5 | landed (batch 1) |
 | T4 | 5 | landed (batch 1) |
 | W2 | 7 | landed (batch 2) |
-| U2 | 6 | todo |
-| U3 | 5 | todo |
+| U2 | 6 | landed (batch 3) |
+| U3 | 5 | landed (batch 3) |
 | R2 | 4 | done by Diagram shrines (272): religion-and-death 450, 460, 470, 040 (272) |
 | G1 | 5 | landed (batch 2) |
 | G2 | 5 | landed (batch 2) |
-| K1 | 5 | todo |
-| K2 | 7 | writing (queue 6) |
-| K3 | 6 | todo |
-| K4 | 6 | queued (queue 6) |
-| K5 | 5 | todo |
-| K6 | 4 | todo |
-| K7 | 4 | todo |
-| U4 | 6 | todo |
+| K1 | 5 | landed (batch 3) |
+| K2 | 7 | landed (batch 3) |
+| K3 | 6 | landed (batch 3) |
+| K4 | 6 | landed (batch 3) |
+| K5 | 5 | landed (batch 3) |
+| K6 | 4 | landed (batch 3) |
+| K7 | 4 | landed (batch 3) |
+| U4 | 6 | landed (batch 3) |
 | R3 | 4 | done by Diagram shrines (272): religion-and-death 500, 510, 520, 530, 190 (272) |
-| T5 | 6 | todo |
-| U5 | 7 | todo |
+| T5 | 6 | landed (batch 3) |
+| U5 | 7 | landed (batch 3) |
 | R4 | 4 | done by Diagram shrines (272): religion-and-death 550, 560, 570, 580, 590 (272) |
-| U6 | 4 | todo |
+| U6 | 4 | landed (batch 3) |
 
 ## Outcomes of the rows handed to feature 272 (Diagram shrines, 2026-09-27), all on religion-and-death
 
