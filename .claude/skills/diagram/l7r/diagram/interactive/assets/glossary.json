@@ -10382,5 +10382,24 @@
   "variants": [
    "Shimazu"
   ]
+ },
+ "dou": {
+  "def": "In the Pearl River delta, a sluice through a polder's dike, through which the polder's land and ponds were watered and drained.",
+  "variants": [
+   "dou"
+  ]
+ },
+ "fish-scale register": {
+  "def": "A Chinese land register of the Ming and Qing, listing every numbered parcel of a district, polder by polder, with its area and holder.",
+  "variants": [
+   "fish-scale register",
+   "fish-scale registers"
+  ]
+ },
+ "Pan Jixun": {
+  "def": "A Ming official who ran the Yellow River and Grand Canal works and wrote a manual of them, the Hefang yilan.",
+  "variants": [
+   "Pan Jixun"
+  ]
  }
 }

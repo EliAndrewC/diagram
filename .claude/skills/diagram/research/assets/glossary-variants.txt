@@ -502,6 +502,7 @@ dooryard	dooryard
 dorui	dorui
 doshin	doshin
 dosojin	dosojin
+dou	dou
 double ninth	Double Ninth
 dozo	kura
 dozo-zukuri	dozo-zukuri
@@ -656,6 +657,8 @@ fireboxes	firebox
 fish fry	fish fry
 fish-scale polder	yulin wei
 fish-scale polders	yulin wei
+fish-scale register	fish-scale register
+fish-scale registers	fish-scale register
 fishway	fishway
 fishways	fishway
 fit zoom	fit zoom
@@ -1771,6 +1774,7 @@ palanquin	palanquin
 palanquins	palanquin
 palisade	palisade
 palisades	palisade
+pan jixun	Pan Jixun
 pannage	pannage
 pantile	pantile
 pantiles	pantile
