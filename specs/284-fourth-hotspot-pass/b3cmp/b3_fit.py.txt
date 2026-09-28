@@ -193,10 +193,6 @@ def _fit_at_aspect(
         # past the target - before converging on the predicted size (research R1). A clamped fan shows itself: a larger `k`
         # whose acreage grows less than `SATURATION_GROWTH` would say. So the search carves at the predicted size first and
         # probes the top only when two carves show the fan not growing with its size; a saturating aspect is still found.
-        # MEASURED BY THE COHORT, NOT THE STAGE (specs/284 research R6): the fields it lands differ within tolerance and move
-        # the maps, which re-roll more often (five of 29 against two) - and over the pool and cohort seeds 1-24 it is still
-        # about 5% faster in all, against a run-to-run spread of about 1%. Judged once under A* and withdrawn, then kept when
-        # the review found that run had measured the router, not this.
         if probe and not probed and len(pts) >= 2 and acres < plan.target_acres and saturating(pts[-2], pts[-1]):
             probed = True
             k = hi - 1e-3  # the probe: the largest fan this aspect can draw

@@ -422,6 +422,43 @@ not a measurement on this host: one base re-run read Kashikawa at 13.2 s against
 | the brook toll | 590,253 lookups on Kashikawa | 9 cells per ask, most empty | a bitmap of cells near the band - exact, small |
 | the finish | ~1.5 s | the blade buckets' flush | out of this pass's scope (feature 223's) |
 
+## The fourth pass: every moving lever measured and withdrawn, the exact ones kept (feature 284, 2026-09-28)
+
+The GM, on 281's priced residue: *"look at what is slow and then be willing to let things of that nature change if those
+changes would allow it to be significantly faster."* The pool's five rolls went from 32.46 s to 23.89 s back to back (1.36x),
+and every pool map came out the base's map byte for byte but for one bamboo thicket's 8 px on two maps. All figures are in
+`specs/284-fourth-hotspot-pass/measurements.json` and its research record.
+
+**What paid, all exact:** the threshing yards' mats in arrays (feature 282 had made the homesteads stage 3.7-5.1 times slower;
+18x fewer calls, the same mats), the page reading the blade slots' structures instead of re-parsing their strings, the
+notice board sampling its verge band before the rest (the roadside rule throws the rest away whenever the band holds a
+seat), the bamboo walked outward from its target, the whole-ring `edge_dist` scans asked through indexes, one link index
+per route, the brook toll's near-cell set - and a stranding re-roll resuming from a copy of the first roll taken before the
+seats, the stages before them being the same on every attempt (a re-roll 1.1-1.7 s faster).
+
+**What did not, and why it matters for the next pass.** Every lever that MOVES a map was built, measured over the pool and
+cohort seeds 1-24, and withdrawn: A* in the router (26 first-roll strandings against 5), the coarser router lattice (12 px
+already stranded houses), the field search without its blind probe (slower in all, 190.7 s against 180.6 s), the carve's
+rows in arrays (3.6x slower), the board's 24 px lattice (it broke the entrance rule). The shape they share: **a moved map is
+a re-rolled map often enough that the re-roll eats the saving.** A tie resolved the other way, a field a hair different, and
+the web leaves a house off it on the first roll - the driver repairs it with a whole second build. So a moving lever is
+priced by the cohort's summed roll time and its first-roll strandings, never by its own stage's calls; the harnesses that did
+it are `specs/284-fourth-hotspot-pass/astarcmp/` and `b3cmp/`.
+
+**A defect the moved maps found.** The junction pass deleted a connector the web could not join as debris, and the reach
+check then read the network that was left and passed: cohort seed 15 shipped with no way off the map. The connector is now
+never dropped there. A check that reads "whatever is left" passes when the thing it should have failed on is deleted first.
+
+**What is left** (profiled on Sawada and Kashikawa after the pass; research R7): no lever of the allowed kind remains that
+makes any of these significantly faster.
+
+| where | cost | why nothing was taken |
+|---|---|---|
+| the seam closing (`close_seams`) | ~2.5 profiled s on Sawada | ~800 shapely welds of ~1.2 ms each, already ranked in one array call and read from a shared tree; no scan left, and the shapes are the rule |
+| the first-roll strandings | 8 of 29 rolls pay a re-roll (the resume cuts it to the stages from the seats on) | a seat-time reach test was tried three times before and failed - reachability depends on fabric that does not exist when seats are chosen |
+| the commons, the blade flush, the grove fill | 0.2-0.6 s each | sums of indexed lookups; each an index already |
+| `seg_dist` over ~25 callers | 312,391 calls on Sawada, none above 0.09 s | an index per caller buys under a tenth of a second each |
+
 ## Memory: the spike is C buffers, not Python objects, and it lands where nothing reads it (feature 208, 2026-09-07)
 
 The GM asked why a full gate costs 6.8 GiB and whether each of the eight workers really needs most of a

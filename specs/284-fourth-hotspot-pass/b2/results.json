@@ -8,19 +8,18 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 15,
-  "s": 8.936
+  "s": 6.734
  },
  {
   "cell": 10.0,
   "map": "kashikawa",
   "per_attempt": [
-   1,
    0
   ],
-  "kept_attempt": 2,
+  "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 20,
-  "s": 21.813
+  "s": 10.635
  },
  {
   "cell": 10.0,
@@ -31,7 +30,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 16,
-  "s": 6.344
+  "s": 4.627
  },
  {
   "cell": 10.0,
@@ -42,7 +41,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 19,
-  "s": 12.225
+  "s": 10.391
  },
  {
   "cell": 10.0,
@@ -53,19 +52,40 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 12,
-  "s": 7.743
+  "s": 4.534
+ },
+ {
+  "cell": 10.0,
+  "map": "toy10",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 10,
+  "s": 3.542
+ },
+ {
+  "cell": 10.0,
+  "map": "toy20",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 20,
+  "s": 5.942
  },
  {
   "cell": 10.0,
   "map": "cohort-01",
   "per_attempt": [
-   1,
    0
   ],
-  "kept_attempt": 2,
+  "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 17,
-  "s": 15.289
+  "s": 8.253
  },
  {
   "cell": 10.0,
@@ -76,18 +96,21 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 13,
-  "s": 6.809
+  "s": 4.751
  },
  {
   "cell": 10.0,
   "map": "cohort-03",
   "per_attempt": [
+   2,
+   1,
+   1,
    0
   ],
-  "kept_attempt": 1,
+  "kept_attempt": 4,
   "kept_unreached": 0,
   "placed": 20,
-  "s": 11.181
+  "s": 23.988
  },
  {
   "cell": 10.0,
@@ -98,7 +121,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 16,
-  "s": 9.515
+  "s": 6.033
  },
  {
   "cell": 10.0,
@@ -110,7 +133,7 @@
   "kept_attempt": 2,
   "kept_unreached": 0,
   "placed": 12,
-  "s": 16.423
+  "s": 10.511
  },
  {
   "cell": 10.0,
@@ -121,7 +144,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 19,
-  "s": 13.015
+  "s": 5.91
  },
  {
   "cell": 10.0,
@@ -132,7 +155,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 15,
-  "s": 8.923
+  "s": 7.615
  },
  {
   "cell": 10.0,
@@ -143,7 +166,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 11,
-  "s": 7.189
+  "s": 4.823
  },
  {
   "cell": 10.0,
@@ -154,7 +177,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 18,
-  "s": 11.51
+  "s": 7.977
  },
  {
   "cell": 10.0,
@@ -165,7 +188,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 14,
-  "s": 13.217
+  "s": 8.311
  },
  {
   "cell": 10.0,
@@ -176,7 +199,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 10,
-  "s": 12.052
+  "s": 8.338
  },
  {
   "cell": 10.0,
@@ -187,7 +210,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 17,
-  "s": 12.089
+  "s": 6.343
  },
  {
   "cell": 10.0,
@@ -198,7 +221,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 13,
-  "s": 7.229
+  "s": 5.801
  },
  {
   "cell": 10.0,
@@ -209,7 +232,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 20,
-  "s": 10.617
+  "s": 5.852
  },
  {
   "cell": 10.0,
@@ -220,7 +243,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 16,
-  "s": 11.565
+  "s": 6.171
  },
  {
   "cell": 10.0,
@@ -231,43 +254,40 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 12,
-  "s": 5.822
+  "s": 4.311
  },
  {
   "cell": 10.0,
   "map": "cohort-17",
   "per_attempt": [
-   2,
    0
   ],
-  "kept_attempt": 2,
+  "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 19,
-  "s": 20.97
+  "s": 7.036
  },
  {
   "cell": 10.0,
   "map": "cohort-18",
   "per_attempt": [
-   1,
    0
   ],
-  "kept_attempt": 2,
+  "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 15,
-  "s": 18.753
+  "s": 5.745
  },
  {
   "cell": 10.0,
   "map": "cohort-19",
   "per_attempt": [
-   2,
    0
   ],
-  "kept_attempt": 2,
+  "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 11,
-  "s": 13.013
+  "s": 4.62
  },
  {
   "cell": 10.0,
@@ -278,7 +298,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 18,
-  "s": 11.809
+  "s": 8.541
  },
  {
   "cell": 10.0,
@@ -289,7 +309,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 14,
-  "s": 9.817
+  "s": 5.451
  },
  {
   "cell": 10.0,
@@ -300,7 +320,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 10,
-  "s": 11.102
+  "s": 7.099
  },
  {
   "cell": 10.0,
@@ -311,7 +331,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 17,
-  "s": 9.794
+  "s": 5.383
  },
  {
   "cell": 10.0,
@@ -322,7 +342,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 13,
-  "s": 9.815
+  "s": 5.599
  },
  {
   "cell": 12.0,
@@ -333,7 +353,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 15,
-  "s": 9.752
+  "s": 6.359
  },
  {
   "cell": 12.0,
@@ -344,7 +364,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 20,
-  "s": 13.637
+  "s": 8.196
  },
  {
   "cell": 12.0,
@@ -355,18 +375,19 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 16,
-  "s": 6.305
+  "s": 3.938
  },
  {
   "cell": 12.0,
   "map": "sawada",
   "per_attempt": [
+   1,
    0
   ],
-  "kept_attempt": 1,
+  "kept_attempt": 2,
   "kept_unreached": 0,
   "placed": 19,
-  "s": 13.992
+  "s": 14.953
  },
  {
   "cell": 12.0,
@@ -377,19 +398,40 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 12,
-  "s": 9.153
+  "s": 4.074
+ },
+ {
+  "cell": 12.0,
+  "map": "toy10",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 10,
+  "s": 4.475
+ },
+ {
+  "cell": 12.0,
+  "map": "toy20",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 20,
+  "s": 8.155
  },
  {
   "cell": 12.0,
   "map": "cohort-01",
   "per_attempt": [
-   1,
    0
   ],
-  "kept_attempt": 2,
+  "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 17,
-  "s": 17.135
+  "s": 6.028
  },
  {
   "cell": 12.0,
@@ -400,19 +442,21 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 13,
-  "s": 8.455
+  "s": 5.232
  },
  {
   "cell": 12.0,
   "map": "cohort-03",
   "per_attempt": [
+   2,
    1,
-   2
+   1,
+   0
   ],
-  "kept_attempt": 1,
-  "kept_unreached": 1,
+  "kept_attempt": 4,
+  "kept_unreached": 0,
   "placed": 20,
-  "s": 20.088
+  "s": 22.414
  },
  {
   "cell": 12.0,
@@ -423,7 +467,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 16,
-  "s": 8.788
+  "s": 7.844
  },
  {
   "cell": 12.0,
@@ -435,7 +479,7 @@
   "kept_attempt": 2,
   "kept_unreached": 0,
   "placed": 12,
-  "s": 16.854
+  "s": 9.56
  },
  {
   "cell": 12.0,
@@ -446,7 +490,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 19,
-  "s": 13.12
+  "s": 7.969
  },
  {
   "cell": 12.0,
@@ -457,19 +501,19 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 15,
-  "s": 10.741
+  "s": 8.577
  },
  {
   "cell": 12.0,
   "map": "cohort-08",
   "per_attempt": [
    2,
-   8
+   0
   ],
-  "kept_attempt": 1,
-  "kept_unreached": 2,
+  "kept_attempt": 2,
+  "kept_unreached": 0,
   "placed": 11,
-  "s": 14.058
+  "s": 8.16
  },
  {
   "cell": 12.0,
@@ -480,7 +524,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 18,
-  "s": 11.106
+  "s": 8.737
  },
  {
   "cell": 12.0,
@@ -491,7 +535,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 14,
-  "s": 10.501
+  "s": 9.189
  },
  {
   "cell": 12.0,
@@ -502,7 +546,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 10,
-  "s": 10.602
+  "s": 9.277
  },
  {
   "cell": 12.0,
@@ -513,7 +557,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 17,
-  "s": 9.208
+  "s": 7.013
  },
  {
   "cell": 12.0,
@@ -524,7 +568,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 13,
-  "s": 6.608
+  "s": 5.445
  },
  {
   "cell": 12.0,
@@ -535,7 +579,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 20,
-  "s": 8.084
+  "s": 7.667
  },
  {
   "cell": 12.0,
@@ -546,7 +590,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 16,
-  "s": 7.799
+  "s": 6.99
  },
  {
   "cell": 12.0,
@@ -557,31 +601,29 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 12,
-  "s": 4.574
+  "s": 4.616
  },
  {
   "cell": 12.0,
   "map": "cohort-17",
   "per_attempt": [
-   2,
    0
   ],
-  "kept_attempt": 2,
+  "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 19,
-  "s": 12.317
+  "s": 8.762
  },
  {
   "cell": 12.0,
   "map": "cohort-18",
   "per_attempt": [
-   1,
    0
   ],
-  "kept_attempt": 2,
+  "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 15,
-  "s": 11.693
+  "s": 5.74
  },
  {
   "cell": 12.0,
@@ -592,7 +634,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 11,
-  "s": 4.459
+  "s": 4.764
  },
  {
   "cell": 12.0,
@@ -603,7 +645,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 18,
-  "s": 7.135
+  "s": 8.567
  },
  {
   "cell": 12.0,
@@ -614,7 +656,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 14,
-  "s": 4.998
+  "s": 6.093
  },
  {
   "cell": 12.0,
@@ -625,19 +667,18 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 10,
-  "s": 6.869
+  "s": 6.387
  },
  {
   "cell": 12.0,
   "map": "cohort-23",
   "per_attempt": [
-   2,
    0
   ],
-  "kept_attempt": 2,
+  "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 17,
-  "s": 11.216
+  "s": 4.866
  },
  {
   "cell": 12.0,
@@ -648,7 +689,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 13,
-  "s": 6.149
+  "s": 5.547
  },
  {
   "cell": 14.0,
@@ -659,19 +700,18 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 15,
-  "s": 5.406
+  "s": 7.367
  },
  {
   "cell": 14.0,
   "map": "kashikawa",
   "per_attempt": [
-   1,
    0
   ],
-  "kept_attempt": 2,
+  "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 20,
-  "s": 15.87
+  "s": 10.344
  },
  {
   "cell": 14.0,
@@ -682,7 +722,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 16,
-  "s": 4.693
+  "s": 4.285
  },
  {
   "cell": 14.0,
@@ -693,7 +733,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 19,
-  "s": 7.909
+  "s": 12.33
  },
  {
   "cell": 14.0,
@@ -705,19 +745,40 @@
   "kept_attempt": 2,
   "kept_unreached": 0,
   "placed": 12,
-  "s": 8.966
+  "s": 7.553
+ },
+ {
+  "cell": 14.0,
+  "map": "toy10",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 10,
+  "s": 3.652
+ },
+ {
+  "cell": 14.0,
+  "map": "toy20",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 20,
+  "s": 6.286
  },
  {
   "cell": 14.0,
   "map": "cohort-01",
   "per_attempt": [
-   1,
    0
   ],
-  "kept_attempt": 2,
+  "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 17,
-  "s": 10.858
+  "s": 7.54
  },
  {
   "cell": 14.0,
@@ -728,7 +789,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 13,
-  "s": 4.992
+  "s": 5.847
  },
  {
   "cell": 14.0,
@@ -739,7 +800,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 20,
-  "s": 7.16
+  "s": 9.382
  },
  {
   "cell": 14.0,
@@ -750,7 +811,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 16,
-  "s": 7.109
+  "s": 6.653
  },
  {
   "cell": 14.0,
@@ -762,7 +823,7 @@
   "kept_attempt": 2,
   "kept_unreached": 0,
   "placed": 12,
-  "s": 12.422
+  "s": 9.602
  },
  {
   "cell": 14.0,
@@ -773,7 +834,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 19,
-  "s": 6.918
+  "s": 8.258
  },
  {
   "cell": 14.0,
@@ -784,7 +845,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 15,
-  "s": 4.989
+  "s": 5.963
  },
  {
   "cell": 14.0,
@@ -796,7 +857,7 @@
   "kept_attempt": 1,
   "kept_unreached": 7,
   "placed": 11,
-  "s": 8.127
+  "s": 5.727
  },
  {
   "cell": 14.0,
@@ -807,7 +868,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 18,
-  "s": 8.257
+  "s": 7.658
  },
  {
   "cell": 14.0,
@@ -818,7 +879,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 14,
-  "s": 8.425
+  "s": 7.882
  },
  {
   "cell": 14.0,
@@ -829,7 +890,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 10,
-  "s": 7.198
+  "s": 9.061
  },
  {
   "cell": 14.0,
@@ -840,7 +901,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 17,
-  "s": 6.386
+  "s": 6.457
  },
  {
   "cell": 14.0,
@@ -851,7 +912,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 13,
-  "s": 5.237
+  "s": 5.772
  },
  {
   "cell": 14.0,
@@ -862,7 +923,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 20,
-  "s": 7.417
+  "s": 7.354
  },
  {
   "cell": 14.0,
@@ -873,7 +934,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 16,
-  "s": 6.234
+  "s": 6.62
  },
  {
   "cell": 14.0,
@@ -884,31 +945,29 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 12,
-  "s": 4.407
+  "s": 5.599
  },
  {
   "cell": 14.0,
   "map": "cohort-17",
   "per_attempt": [
-   1,
    0
   ],
-  "kept_attempt": 2,
+  "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 19,
-  "s": 10.274
+  "s": 7.229
  },
  {
   "cell": 14.0,
   "map": "cohort-18",
   "per_attempt": [
-   1,
    0
   ],
-  "kept_attempt": 2,
+  "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 15,
-  "s": 9.295
+  "s": 6.72
  },
  {
   "cell": 14.0,
@@ -920,7 +979,7 @@
   "kept_attempt": 2,
   "kept_unreached": 0,
   "placed": 11,
-  "s": 6.89
+  "s": 6.745
  },
  {
   "cell": 14.0,
@@ -931,18 +990,19 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 18,
-  "s": 7.808
+  "s": 7.74
  },
  {
   "cell": 14.0,
   "map": "cohort-21",
   "per_attempt": [
+   1,
    0
   ],
-  "kept_attempt": 1,
+  "kept_attempt": 2,
   "kept_unreached": 0,
   "placed": 14,
-  "s": 6.003
+  "s": 14.776
  },
  {
   "cell": 14.0,
@@ -953,7 +1013,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 10,
-  "s": 7.015
+  "s": 7.074
  },
  {
   "cell": 14.0,
@@ -964,7 +1024,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 17,
-  "s": 7.158
+  "s": 7.826
  },
  {
   "cell": 14.0,
@@ -975,7 +1035,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 13,
-  "s": 6.08
+  "s": 6.143
  },
  {
   "cell": 16.0,
@@ -986,7 +1046,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 15,
-  "s": 4.69
+  "s": 6.888
  },
  {
   "cell": 16.0,
@@ -997,7 +1057,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 20,
-  "s": 6.855
+  "s": 10.44
  },
  {
   "cell": 16.0,
@@ -1008,18 +1068,19 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 16,
-  "s": 3.502
+  "s": 5.188
  },
  {
   "cell": 16.0,
   "map": "sawada",
   "per_attempt": [
+   1,
    0
   ],
-  "kept_attempt": 1,
+  "kept_attempt": 2,
   "kept_unreached": 0,
   "placed": 19,
-  "s": 9.115
+  "s": 16.11
  },
  {
   "cell": 16.0,
@@ -1030,7 +1091,29 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 12,
-  "s": 5.427
+  "s": 5.366
+ },
+ {
+  "cell": 16.0,
+  "map": "toy10",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 10,
+  "s": 3.611
+ },
+ {
+  "cell": 16.0,
+  "map": "toy20",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 20,
+  "s": 6.567
  },
  {
   "cell": 16.0,
@@ -1041,7 +1124,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 17,
-  "s": 5.6
+  "s": 7.231
  },
  {
   "cell": 16.0,
@@ -1052,18 +1135,21 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 13,
-  "s": 4.438
+  "s": 6.351
  },
  {
   "cell": 16.0,
   "map": "cohort-03",
   "per_attempt": [
+   2,
+   1,
+   1,
    0
   ],
-  "kept_attempt": 1,
+  "kept_attempt": 4,
   "kept_unreached": 0,
   "placed": 20,
-  "s": 6.686
+  "s": 33.867
  },
  {
   "cell": 16.0,
@@ -1074,7 +1160,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 16,
-  "s": 6.631
+  "s": 8.0
  },
  {
   "cell": 16.0,
@@ -1086,7 +1172,7 @@
   "kept_attempt": 2,
   "kept_unreached": 0,
   "placed": 12,
-  "s": 10.673
+  "s": 9.002
  },
  {
   "cell": 16.0,
@@ -1097,7 +1183,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 19,
-  "s": 9.326
+  "s": 8.481
  },
  {
   "cell": 16.0,
@@ -1108,19 +1194,18 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 15,
-  "s": 7.342
+  "s": 6.902
  },
  {
   "cell": 16.0,
   "map": "cohort-08",
   "per_attempt": [
-   2,
-   5
+   0
   ],
   "kept_attempt": 1,
-  "kept_unreached": 2,
+  "kept_unreached": 0,
   "placed": 11,
-  "s": 10.377
+  "s": 4.781
  },
  {
   "cell": 16.0,
@@ -1131,7 +1216,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 18,
-  "s": 8.599
+  "s": 8.764
  },
  {
   "cell": 16.0,
@@ -1143,7 +1228,7 @@
   "kept_attempt": 2,
   "kept_unreached": 0,
   "placed": 14,
-  "s": 18.703
+  "s": 12.287
  },
  {
   "cell": 16.0,
@@ -1154,7 +1239,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 10,
-  "s": 7.761
+  "s": 10.791
  },
  {
   "cell": 16.0,
@@ -1165,7 +1250,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 17,
-  "s": 7.07
+  "s": 6.258
  },
  {
   "cell": 16.0,
@@ -1176,7 +1261,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 13,
-  "s": 5.531
+  "s": 5.554
  },
  {
   "cell": 16.0,
@@ -1187,7 +1272,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 20,
-  "s": 5.735
+  "s": 6.946
  },
  {
   "cell": 16.0,
@@ -1198,7 +1283,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 16,
-  "s": 7.221
+  "s": 8.013
  },
  {
   "cell": 16.0,
@@ -1209,31 +1294,29 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 12,
-  "s": 4.213
+  "s": 4.701
  },
  {
   "cell": 16.0,
   "map": "cohort-17",
   "per_attempt": [
-   1,
    0
   ],
-  "kept_attempt": 2,
+  "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 19,
-  "s": 11.6
+  "s": 9.793
  },
  {
   "cell": 16.0,
   "map": "cohort-18",
   "per_attempt": [
-   1,
    0
   ],
-  "kept_attempt": 2,
+  "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 15,
-  "s": 10.566
+  "s": 6.27
  },
  {
   "cell": 16.0,
@@ -1245,7 +1328,7 @@
   "kept_attempt": 2,
   "kept_unreached": 0,
   "placed": 11,
-  "s": 7.527
+  "s": 9.674
  },
  {
   "cell": 16.0,
@@ -1256,140 +1339,163 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 18,
-  "s": 5.924
+  "s": 13.5
  },
  {
   "cell": 16.0,
   "map": "cohort-21",
   "per_attempt": [
-   0
-  ],
-  "kept_attempt": 1,
-  "kept_unreached": 0,
-  "placed": 14,
-  "s": 6.01
- },
- {
-  "cell": 16.0,
-  "map": "cohort-22",
-  "per_attempt": [
-   0
-  ],
-  "kept_attempt": 1,
-  "kept_unreached": 0,
-  "placed": 10,
-  "s": 5.592
- },
- {
-  "cell": 16.0,
-  "map": "cohort-23",
-  "per_attempt": [
-   0
-  ],
-  "kept_attempt": 1,
-  "kept_unreached": 0,
-  "placed": 17,
-  "s": 6.485
- },
- {
-  "cell": 16.0,
-  "map": "cohort-24",
-  "per_attempt": [
-   0
-  ],
-  "kept_attempt": 1,
-  "kept_unreached": 0,
-  "placed": 13,
-  "s": 6.734
- },
- {
-  "cell": 18.0,
-  "map": "inashiro",
-  "per_attempt": [
-   0
-  ],
-  "kept_attempt": 1,
-  "kept_unreached": 0,
-  "placed": 15,
-  "s": 5.728
- },
- {
-  "cell": 18.0,
-  "map": "kashikawa",
-  "per_attempt": [
-   0
-  ],
-  "kept_attempt": 1,
-  "kept_unreached": 0,
-  "placed": 20,
-  "s": 8.236
- },
- {
-  "cell": 18.0,
-  "map": "kuwabata",
-  "per_attempt": [
-   0
-  ],
-  "kept_attempt": 1,
-  "kept_unreached": 0,
-  "placed": 16,
-  "s": 5.103
- },
- {
-  "cell": 18.0,
-  "map": "sawada",
-  "per_attempt": [
-   0
-  ],
-  "kept_attempt": 1,
-  "kept_unreached": 0,
-  "placed": 19,
-  "s": 8.204
- },
- {
-  "cell": 18.0,
-  "map": "mizuguchi",
-  "per_attempt": [
-   0
-  ],
-  "kept_attempt": 1,
-  "kept_unreached": 0,
-  "placed": 12,
-  "s": 4.445
- },
- {
-  "cell": 18.0,
-  "map": "cohort-01",
-  "per_attempt": [
-   0
-  ],
-  "kept_attempt": 1,
-  "kept_unreached": 0,
-  "placed": 17,
-  "s": 5.436
- },
- {
-  "cell": 18.0,
-  "map": "cohort-02",
-  "per_attempt": [
-   0
-  ],
-  "kept_attempt": 1,
-  "kept_unreached": 0,
-  "placed": 13,
-  "s": 4.871
- },
- {
-  "cell": 18.0,
-  "map": "cohort-03",
-  "per_attempt": [
    1,
-   7
+   3
   ],
   "kept_attempt": 1,
   "kept_unreached": 1,
+  "placed": 14,
+  "s": 21.081
+ },
+ {
+  "cell": 16.0,
+  "map": "cohort-22",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 10,
+  "s": 8.795
+ },
+ {
+  "cell": 16.0,
+  "map": "cohort-23",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 17,
+  "s": 9.325
+ },
+ {
+  "cell": 16.0,
+  "map": "cohort-24",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 13,
+  "s": 9.336
+ },
+ {
+  "cell": 18.0,
+  "map": "inashiro",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 15,
+  "s": 13.619
+ },
+ {
+  "cell": 18.0,
+  "map": "kashikawa",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
   "placed": 20,
-  "s": 13.851
+  "s": 16.24
+ },
+ {
+  "cell": 18.0,
+  "map": "kuwabata",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 16,
+  "s": 8.866
+ },
+ {
+  "cell": 18.0,
+  "map": "sawada",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 19,
+  "s": 20.848
+ },
+ {
+  "cell": 18.0,
+  "map": "mizuguchi",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 12,
+  "s": 9.239
+ },
+ {
+  "cell": 18.0,
+  "map": "toy10",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 10,
+  "s": 7.991
+ },
+ {
+  "cell": 18.0,
+  "map": "toy20",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 20,
+  "s": 13.822
+ },
+ {
+  "cell": 18.0,
+  "map": "cohort-01",
+  "per_attempt": [
+   1,
+   0
+  ],
+  "kept_attempt": 2,
+  "kept_unreached": 0,
+  "placed": 17,
+  "s": 20.097
+ },
+ {
+  "cell": 18.0,
+  "map": "cohort-02",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 13,
+  "s": 9.679
+ },
+ {
+  "cell": 18.0,
+  "map": "cohort-03",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 20,
+  "s": 16.989
  },
  {
   "cell": 18.0,
@@ -1400,7 +1506,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 16,
-  "s": 5.312
+  "s": 12.915
  },
  {
   "cell": 18.0,
@@ -1411,7 +1517,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 12,
-  "s": 4.929
+  "s": 12.71
  },
  {
   "cell": 18.0,
@@ -1422,7 +1528,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 19,
-  "s": 9.059
+  "s": 13.8
  },
  {
   "cell": 18.0,
@@ -1433,7 +1539,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 15,
-  "s": 6.329
+  "s": 13.617
  },
  {
   "cell": 18.0,
@@ -1444,7 +1550,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 11,
-  "s": 4.292
+  "s": 11.048
  },
  {
   "cell": 18.0,
@@ -1455,18 +1561,19 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 18,
-  "s": 8.33
+  "s": 11.908
  },
  {
   "cell": 18.0,
   "map": "cohort-10",
   "per_attempt": [
+   1,
    0
   ],
-  "kept_attempt": 1,
+  "kept_attempt": 2,
   "kept_unreached": 0,
   "placed": 14,
-  "s": 8.684
+  "s": 14.025
  },
  {
   "cell": 18.0,
@@ -1477,7 +1584,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 10,
-  "s": 8.766
+  "s": 20.448
  },
  {
   "cell": 18.0,
@@ -1488,7 +1595,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 17,
-  "s": 6.903
+  "s": 9.426
  },
  {
   "cell": 18.0,
@@ -1499,7 +1606,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 13,
-  "s": 4.375
+  "s": 8.837
  },
  {
   "cell": 18.0,
@@ -1510,7 +1617,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 20,
-  "s": 5.908
+  "s": 10.219
  },
  {
   "cell": 18.0,
@@ -1521,7 +1628,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 16,
-  "s": 6.452
+  "s": 11.142
  },
  {
   "cell": 18.0,
@@ -1532,31 +1639,30 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 12,
-  "s": 4.629
+  "s": 8.203
  },
  {
   "cell": 18.0,
   "map": "cohort-17",
   "per_attempt": [
-   2,
    0
   ],
-  "kept_attempt": 2,
+  "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 19,
-  "s": 10.174
+  "s": 14.084
  },
  {
   "cell": 18.0,
   "map": "cohort-18",
   "per_attempt": [
-   1,
+   11,
    0
   ],
   "kept_attempt": 2,
   "kept_unreached": 0,
   "placed": 15,
-  "s": 9.9
+  "s": 13.208
  },
  {
   "cell": 18.0,
@@ -1568,7 +1674,7 @@
   "kept_attempt": 2,
   "kept_unreached": 0,
   "placed": 11,
-  "s": 7.586
+  "s": 12.399
  },
  {
   "cell": 18.0,
@@ -1579,18 +1685,19 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 18,
-  "s": 6.303
+  "s": 11.98
  },
  {
   "cell": 18.0,
   "map": "cohort-21",
   "per_attempt": [
+   1,
    0
   ],
-  "kept_attempt": 1,
+  "kept_attempt": 2,
   "kept_unreached": 0,
   "placed": 14,
-  "s": 5.257
+  "s": 14.873
  },
  {
   "cell": 18.0,
@@ -1601,7 +1708,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 10,
-  "s": 5.836
+  "s": 7.352
  },
  {
   "cell": 18.0,
@@ -1612,7 +1719,7 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 17,
-  "s": 6.815
+  "s": 10.275
  },
  {
   "cell": 18.0,
@@ -1623,6 +1730,6 @@
   "kept_attempt": 1,
   "kept_unreached": 0,
   "placed": 13,
-  "s": 5.654
+  "s": 8.366
  }
 ]

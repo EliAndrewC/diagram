@@ -90,27 +90,25 @@ array, and two quads farther apart than the clearance need no `_quad_gap`. The m
 
 ## R4 - The coarser router lattice (B2, 2026-09-28)
 
-**Method** (observed 2026-09-28, method: `b2/harness.py` - the five pool hamlets and cohort seeds 1-24 rolled at each cell
-with `route.ROUTE_CELL` set, the driver's own `unreached_houses` wrapped so every attempt's count is kept, twelve forked
-workers, load 5-19; the rows are `b2/results.json`). Unreached houses summed over every attempt, re-rolls included:
+**Method** (observed 2026-09-28, method: `b2/harness.py` on the engine that ships - the router in cost order, the base's
+field search, the re-roll resume and the connector fix; a first run made with A* and the probe lever still in was set aside
+at the reviews of Amendment 1, because the router itself decides which maps strand. The five pool hamlets, the 10- and
+20-household toys and cohort seeds 1-24, each rolled at each cell with `route.ROUTE_CELL` set and the driver's own
+`unreached_houses` wrapped so every attempt's count is kept; a coarser cell declines the boxes the 10 px lattice declined.
+Twelve forked workers; the rows are `b2/results.json`):
 
-| cell (px) | unreached, all attempts | maps worse than the 10 px lattice | roll seconds, summed (loaded, indicative) |
-|---|---|---|---|
-| 10 (the base) | 8 | - | 334.6 |
-| 12 | 20 | cohort 03 (0 -> 1 then 2, and the map KEPT one stranded house), 08 (0 -> 2 then 8, kept 2), 23 (0 -> 2) | 295.4 |
-| 14 | 15 | cohort 08 (0 -> 7), Mizuguchi (0 -> 1) | 219.5 |
-| 16 | 13 | cohort 08 (0 -> 2 then 5, kept 2), 10 (0 -> 1) | 215.9 |
-| 18 | 13 | cohort 03 (0 -> 1 then 7, kept 1) | 197.4 |
+| cell (px) | unreached, all attempts | rolls re-rolled | stranded in the kept map | maps worse than 10 px (every attempt) | roll seconds, summed (loaded; observed 2026-09-28, method: `b2/harness.py`) |
+|---|---|---|---|---|---|
+| 10 (today's) | 5 | 2 | 0 | - | 220.9 |
+| 12 | 8 | 4 | 0 | cohort 08 [2, 0], Sawada [1, 0] | 235.6 |
+| 14 | 12 | 4 | 7 | cohort 08 [7, 0], 19, 21, Mizuguchi | 231.4 |
+| 16 | 13 | 5 | 1 | cohort 10, 19, 21 [1, 3], Sawada | 289.9 |
+| 18 | 16 | 5 | 0 | cohort 01, 10, 18 [11, 0], 19, 21 | 388.2 |
 
-The first cell tried, 12, already strands houses the base did not - two of them through the driver's re-roll into the
-finished map - so by the plan's rule the largest cell before it is taken, and that is the base's 10: **B2 is withdrawn**.
-The summed seconds fall with the cell, but most of the fall is the maps that happened not to re-roll (a re-roll is a whole
-second build); the router itself is under half a second of a roll (`_route`, 26 calls, 0.47 profiled s on Sawada). Which
-maps strand moves chaotically with the cell, which is why the rule counts per map and seed rather than in total.
-
-**What this measurement names instead.** Eight of the base's 29 rolls strand a house on the first attempt and pay a whole
-second build to fix it - the costliest single thing in the table, and not a lattice question. Recorded for the fourth
-pass's section of `dev/performance.md`.
+The first cell tried, 12, strands houses the 10 px lattice does not (two maps, each healed by a re-roll), so by the plan's
+rule the largest cell before it is today's 10: **B2 is withdrawn**. The rolls are not faster at any coarser cell either:
+the router is a small share of a roll, and every extra stranding is a whole second build of the stages from the seats on.
+The rescue-rounds scenario is a homestead-seat scenario with no ways in it, so the lattice does not reach it.
 
 ## R5 - The carve's rows as arrays (B4, 2026-09-28)
 
@@ -120,7 +118,7 @@ numpy array, and both are timed fastest of three over the recorded calls; load 1
 carve is a small part of Sawada's field stage: `_carve_sector` 0.43 of the field's 3.83 profiled seconds, the body rows 0.35,
 while the seam closing is 2.5 (observed 2026-09-28, method: a cProfile of one build of Sawada).
 
-| part | calls | scalar | arrays |
+| part | calls | scalar | arrays (observed 2026-09-28, method: `b4/harness.py`) |
 |---|---|---|---|
 | the plot tests' edge walk (`_edge_in_supply`) | 3,310 | 0.086 s | 0.312 s, the same 3,310 verdicts |
 | the vertices' pushes (`_clear_supply`) | 3,490 | 0.024 s | not built: the scalar total is under the arrays' overhead on the walk above |
@@ -135,7 +133,7 @@ is smaller than the loss already measured on the larger part.
 **Method** (observed 2026-09-28, method: `t15/harness.py`, one cProfile of a build and finish of Sawada and one of
 Kashikawa, after A1-A8, B1 and B3). What is left is spread thin:
 
-- **The seam closing** (`close_seams`, 2.5 profiled s on Sawada, 1.4 on Kashikawa): 822 pocket welds on Sawada at about
+- **The seam closing** (`close_seams`, 2.5 profiled s on Sawada, 1.4 on Kashikawa; observed 2026-09-28, method: the profile above): 822 pocket welds on Sawada at about
   1.2 ms each (`_absorb`, 0.97 s), the remainder `_plant` 0.35, `_unjog` 0.29, `_shed_necks` 0.22. A weld is a handful of
   shapely unions, buffers and a simplify on the one pocket and its ranked neighbors, already ranked in one array call and
   read from a shared tree (feature 276); there is no scan left to index, and the shapes are the rule. No lever taken.
@@ -161,7 +159,7 @@ deep copy of the settlement and plan as they stand before the seats, and each re
 R4 found re-rolling at the 10 px lattice, the re-roll made both ways and each finished to a scratch svg and page; load
 4.8; `reroll/results.json`):
 
-| map | re-roll built from scratch | re-roll resumed | first roll without / with the snapshot | manifest, svg, page |
+| map | re-roll built from scratch | re-roll resumed | first roll without / with the snapshot | manifest, svg, page (observed 2026-09-28, method: `reroll/harness.py`) |
 |---|---|---|---|---|
 | Kashikawa | 5.08 s | 3.39 s | 4.98 / 4.80 s | identical |
 | cohort 01 | 3.50 s | 2.18 s | 3.43 / 3.29 s | identical |
@@ -170,7 +168,7 @@ R4 found re-rolling at the 10 px lattice, the re-roll made both ways and each fi
 | cohort 18 | 3.67 s | 2.42 s | 4.16 / 4.29 s | identical |
 | cohort 19 | 2.94 s | 1.75 s | 2.65 / 2.81 s | identical |
 
-A resumed re-roll is 1.1 to 1.7 s faster (about a third); the snapshot's copy costs the first roll no more than its own
+A resumed re-roll is 1.1 to 1.7 s faster (about a third; observed 2026-09-28, method: the table's harness); the snapshot's copy costs the first roll no more than its own
 run-to-run spread (single runs each, so within noise either way).
 
 ## R6 - What the moving levers did to the maps (2026-09-28)
@@ -193,7 +191,7 @@ Kashikawa was one of the maps it moved into a re-roll: with the base's search it
 router (`strand/harness.py`). The lever was slower in all, so it was withdrawn and the base's search restored, with this
 measurement at the point of change in `hamletgen/water/fit.py`.
 
-**A defect the moved maps found: a connector deleted as debris.** Cohort seed 15, rolled with the lever, came out with
+**A defect the moved maps found: a connector deleted as debris** (observed 2026-09-28, method: `c15/harness.py`, spies on the connector's routing, threading and `drop_lanes`). Cohort seed 15, rolled with the lever, came out with
 no connector at all - its 4,004 px track out to the map edge planned, threaded, drawn, and then deleted by the junction
 pass (`_touch_junctions`), which drops a piece the web cannot join when it serves no house of its own. The connector is the
 one way that must not go (`trim_lane_stubs` has always exempted it), and with it gone the reach check read the network that
@@ -214,7 +212,7 @@ base orders it; `astarcmp/results.json`):
 | summed roll seconds (loaded) | 198.7 | 192.9 |
 | households seated, connectors drawn | 442, 29 | 442, 29 |
 
-A* returns a path of the same cost, but where two lattice paths tie it often takes the other, and the ways those paths make
+A* (observed 2026-09-28, method: the table's harness) returns a path of the same cost, but where two lattice paths tie it often takes the other, and the ways those paths make
 leave houses off the web on first rolls; every map is repaired by its re-roll, and the rolls were no faster in all (a 3%
 difference inside the run's noise, against a re-roll's whole second build). Withdrawn: the search is Dijkstra again, in the
 base's heap order, and the base's test that the router returns the recorded answers point for point passes again.

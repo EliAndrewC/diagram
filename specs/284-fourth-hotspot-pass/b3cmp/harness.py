@@ -1,5 +1,7 @@
-"""Feature 284: what FR-004 (the field search without its blind probe) does to a map, over the pool and cohort seeds 1-24 -
-each rolled with the clone's `_fit_at_aspect` and with the base's swapped in, everything else the clone's (research R6).
+"""Feature 284: what FR-004 (the field search without its blind probe) does to a map, over the pool and cohort seeds 1-24,
+on the engine that ships (re-run after the reviews of Amendment 1: the first run had A* in both halves). Three passes: the
+shipping search twice - the second pass is the run-to-run spread - and the lever's own `_fit_at_aspect` (`b3_fit.py.txt`,
+the file as the lever left it) swapped in, everything else the engine's (research R6).
 
     make spec-harness SPEC=specs/284-fourth-hotspot-pass/b3cmp OUT=<json>
 """
@@ -34,7 +36,7 @@ def _mizuguchi() -> dict:
 
 
 def _one(job):
-    base, key, kw = job
+    base, key, kw = job[0], job[1], job[2]
     from l7r.diagram.hamletgen import driver
     from l7r.diagram.hamletgen.plan import HamletSpec
     from l7r.diagram.hamletgen.water import fit
@@ -42,14 +44,14 @@ def _one(job):
     if base:
         mod = types.ModuleType("l7r.diagram.hamletgen.water.base_fit")
         mod.__package__ = "l7r.diagram.hamletgen.water"
-        exec(compile((HERE / "base_fit.py.txt").read_text(), "base_fit.py", "exec"), mod.__dict__)  # noqa: S102
+        exec(compile((HERE / "b3_fit.py.txt").read_text(), "base_fit.py", "exec"), mod.__dict__)  # noqa: S102
         fit._fit_at_aspect = mod._fit_at_aspect
     t = time.perf_counter()
     rep = driver.generate(HamletSpec(**kw) if isinstance(kw, dict) else kw, out_base=None, render=False)
     M = rep.manifest or {}
     roles = [b.get("role") for b in M.get("bamboo_stands", [])]
     ways = sum(sum(math.dist(a, b) for a, b in zip(ln["pts"], ln["pts"][1:], strict=False)) for ln in M.get("lanes", []))
-    return {"connectors": sum(1 for ln in M.get("lanes", []) if ln.get("connector")), "fit": "base" if base else "clone", "map": key, "attempt": rep.attempt, "placed": int(rep.plan.placed), "households": rep.plan.spec.households, "acres": round(rep.plan.acres, 2), "target": round(rep.plan.target_acres, 2), "homestead_bamboo": roles.count("homestead"), "thicket": roles.count("thicket"), "way_len": round(ways), "board": bool(M.get("kosatsuba")), "failures": rep.failures, "s": round(time.perf_counter() - t, 2)}
+    return {"connectors": sum(1 for ln in M.get("lanes", []) if ln.get("connector")), "fit": "lever" if base else "ship", "pass": job[3] if len(job) > 3 else 0, "map": key, "attempt": rep.attempt, "placed": int(rep.plan.placed), "households": rep.plan.spec.households, "acres": round(rep.plan.acres, 2), "target": round(rep.plan.target_acres, 2), "homestead_bamboo": roles.count("homestead"), "thicket": roles.count("thicket"), "way_len": round(ways), "board": bool(M.get("kosatsuba")), "failures": rep.failures, "s": round(time.perf_counter() - t, 2)}
 
 
 def test_b3cmp() -> None:
@@ -58,7 +60,7 @@ def test_b3cmp() -> None:
     specs: dict = dict(POOL, mizuguchi=_mizuguchi())
     for sp in cohort_specs(24, first_seed=1):
         specs[f"cohort-{sp.seed:02d}"] = sp
-    jobs = [(b, k, kw) for b in (False, True) for k, kw in specs.items()]
+    jobs = [(b, k, kw, p) for k, kw in specs.items() for b, p in ((False, 1), (True, 1), (False, 2))]  # interleaved by map, so load drifts over all three alike
     with mp.get_context("fork").Pool(12, maxtasksperchild=1) as pool:
         rows = pool.map(_one, jobs, chunksize=1)
     OUT.write_text(json.dumps(rows, indent=1))

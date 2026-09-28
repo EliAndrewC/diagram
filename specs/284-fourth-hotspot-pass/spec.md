@@ -180,6 +180,9 @@ removes is not predicted), and every stage figure is the fastest of three with t
   map's research entry gives its houses, paddies and ways before and after, and a material change is a finding to fix,
   not a report; and `make cohort N=24` shows no newly failing seed. The exact changes (FR-002, FR-006, FR-008, FR-009,
   FR-010, the board's lazy caption test) leave every output they touch byte-identical, shown before the moving ones land.
+- **SC-012** (FR-014, Amendment 1): a stranding re-roll resumed from the first roll's snapshot gives a manifest, svg and page
+  byte-identical to the re-roll built from scratch, on every map the harness finds re-rolling, and is faster (research R8);
+  a stand-in-stage test shows the stages before the seats run once and every resume starts from the untouched copy.
 - **Counts that move between runs of the same code** (observed 2026-09-28, method: round 1's `make figures` re-run): the
   fabric bucket by tens of thousands (Kuwabata 702611 and 731256, Sawada 776100 and 762559) and anything beneath the
   fabric index by a few calls - the router's (Kuwabata 1134922 and 1134924) and the clip's (Sawada 7390 and 7388) - with
@@ -192,7 +195,7 @@ removes is not predicted), and every stage figure is the fastest of three with t
 |---|---|---|---|
 | The router searches toward its goal; of two equally short routes it may draw the other - WITHDRAWN, Amendment 1 | map drawing convention (the same clearance rules; a tie resolved differently) | research R1; the GM's request | point of change in `hamletgen/ways/route.py` |
 | The router's drawn path may be up to `5%` longer than today's for the same request - where A* picks another lattice path of the same cost, or the coarser lattice (FR-003) draws the way differently - WITHDRAWN, Amendment 1 (the router draws today's paths) | map drawing convention (the same clearance rules; the bound tested, SC-002) | research R1 | point of change in `hamletgen/ways/route.py` |
-| The router's lattice cell is the largest that strands no house - measured: 10 px, today's (Amendment 1) | map drawing convention (measured; a stranding cell is not taken) | FR-003 | point of change in `hamletgen/ways/route.py` |
+| The router's lattice cell is the largest that strands no house - measured: 10 px, today's (Amendment 1; observed 2026-09-28, method: `b2/harness.py`) | map drawing convention (measured; a stranding cell is not taken) | FR-003 | point of change in `hamletgen/ways/route.py` |
 | The carve's rows as arrays, kept only if faster - WITHDRAWN, Amendment 1 (slower) | map drawing convention (plots within the fit's tolerance) | FR-005 | point of change in `waterfields/sector_rows.py` |
 | The field's size search probes the largest fan only on measured saturation - WITHDRAWN, Amendment 1 (slower in all) | map drawing convention (the same tolerance and target; the plots may differ) | research R1 | point of change in `hamletgen/water/fit.py` |
 | The notice board's candidates sampled every `24` px along a route, not `12`, kept only if faster - WITHDRAWN, Amendment 1 (broke the entrance rule) | map drawing convention (the same rules and ranking; the board may stand a few feet along its verge) | FR-007 | point of change in `settlement/structures/fixtures/siting.py` |
@@ -206,12 +209,13 @@ added under FR-011's own rule ("whatever the after-profile shows"). What changed
 - **FR-003 withdrawn by its own rule** (research R4): the first cell tried, 12 px, strands houses the 10 px lattice did not
   (20 unreached over every attempt against 8; cohort seed 03 kept one through its re-roll), so the largest cell before it is
   today's 10. The lattice is unchanged, the constant named (`ROUTE_CELL`) with the measurement at the point of change.
+  (Measured with A* in the router at every cell, before FR-001 was withdrawn: the cells were compared under the same router.)
 - **FR-005 withdrawn by its own rule** (research R5): the plot tests' edge walk in arrays is 3.6 times slower than the
   scalar walk over the same 3,310 calls on Sawada (0.312 s against 0.086 s), with the same verdicts; the vertices' pushes
   total 0.024 s scalar, under the loss already measured.
 - **FR-006's "parses the rest once" not taken**: with the scrub's and the marsh's structures carried to the page, the
   parsing of every other class together measured at most 0.09 s over Kashikawa and Sawada (research R2's classes); the page
-  bucket met SC-004 without it (2.75x on Sawada, 1.70x on Kashikawa, measure.py after).
+  bucket met SC-004 without it (1.76x on Sawada, 1.77x on Kashikawa, the final measure.py after).
 - **FR-007's coarser lattice withdrawn**: at 24 px the entrance board stood on a straggler at its join, the rule
   `test_an_entrance_board_stands_on_the_approach_and_not_on_a_straggler_at_its_join` enforces, so the spacing stays 12 px
   (the reason at `BOARD_ALONG_STEP_PX`). In its place an exact lever: at the lane tiers the roadside rule keeps only the
@@ -220,8 +224,8 @@ added under FR-011's own rule ("whatever the after-profile shows"). What changed
 - **FR-008's coarser sampling taken**, as the spec required when the outward walk missed SC-006 on Mizuguchi (1.23x): the
   bamboo seat lattice is 16 ft, not 8 (`BAMBOO_SEAT_STEP_FT`); the Decisions row already covers it.
 - **FR-014 (new, under FR-011): a stranding re-roll resumes at the seats.** The after-profile's costliest item that is not a
-  stage: a roll that strands a house pays a whole second build (eight of 29 base rolls; Kashikawa among the pool maps
-  after FR-004, below). The avoid list a re-roll carries is first read at `stage_homesteads`; the first roll keeps a copy of
+  stage: a roll that strands a house pays a whole second build (eight of the 29 rolls of research R4 at the 10 px
+  lattice). The avoid list a re-roll carries is first read at `stage_homesteads`; the first roll keeps a copy of
   itself before that stage and each re-roll resumes from a fresh copy. Exact: manifest, svg and page byte-identical to a
   re-roll built from scratch on six re-rolling maps, each re-roll 1.1-1.7 s faster (research R8).
 - **FR-001 withdrawn by measurement** (research R6): A*'s tie-broken paths stranded 26 houses on first rolls against 5
@@ -236,20 +240,30 @@ added under FR-011's own rule ("whatever the after-profile shows"). What changed
 - **A defect found and fixed (constitution XIV)**: a connector the web could not join was deleted as debris by the junction
   pass, and the reach check then passed on the network that was left - cohort seed 15 shipped a hamlet with no way off the
   map (research R6). The pass never drops the connector now; every one of the 58 rolls of R6 draws its connector.
-- **The floors the measurement missed** (measure.py after, back to back, loads 3.8-5.0), each with why no allowed change
-  reaches it - SC-009's and SC-010's own exit:
-  - SC-007's `3x` on the edge-scan bucket (2.23x on Kashikawa per build, 2.34x on Kuwabata): `edge_dist` itself fell from
-    42,119 calls to 308 on Kashikawa; what the bucket still counts is the ring indexes' own queries beneath the four entries
-    and the track's push (now box-prefiltered too), under 0.15 profiled s.
-  - SC-009 on the grove draw (1.33x per build on Kashikawa), the seam closing (0.87x on Sawada, whose field FR-004 moved
-    to 822 pocket welds from 727) and the commons (0.97x per build on Kashikawa): research R7 - each is a sum of indexed
-    lookups or shapely welds of about a millisecond, with no scan left to index and the shapes the rule.
-- **SC-001** reads 1.35x: the five pool hamlets' summed roll time 24.15 s against the base's 32.564 s back to back
-  (m:after-pool-roll-s, m:base-rerun-pool-roll-s).
+- **What the final measurement shows** (measure.py after, the base worktree and the clone back to back, loads 3.6-4.0;
+  every pool map the base's map, byte for byte, but for the thicket's 8 px on Kashikawa and Mizuguchi, and every one a
+  single roll). **SC-001 met**: 23.891 s against 32.46 s, 1.36x (m:after-pool-roll-s, m:base-rerun-pool-roll-s). Met: SC-004
+  (the page, 1.76x and 1.77x), SC-006 (the bamboo, 4.59x and 3.99x), SC-008 (the toll's lookups, 590,253 to 27,708 on
+  Kashikawa and to none on Sawada), the mats (18.4x, byte-identical), SC-005 on Sawada (2.74x) and SC-007 on Kashikawa (3.47x).
+  Missed, each with why no allowed change reaches it (SC-009's and SC-010's own exit):
+  - SC-002, the router (1.05x): its two call-cutting levers were withdrawn by measurement (FR-001 A*, FR-003 the coarser
+    lattice - both stranded houses the base did not); what is left is FR-002's one index per route and FR-010's bitmap, exact.
+    The web stage is 1.42 -> 1.22 s on Kashikawa.
+  - SC-003, the field (1.0x): FR-004 and FR-005 were both withdrawn by measurement (research R5, R6); the field is the base's.
+  - SC-005 on Inashiro (1.46x against 1.5x): the verge band holds its board, so the far band is never sampled, and what is
+    left is the caption test and the fit of the verge seats; the notice stage is 0.544 -> 0.315 s.
+  - SC-007 on Kuwabata (2.39x against 3x): `edge_dist` fell from 32,850 calls to 912; the bucket counts the ring indexes'
+    own queries beneath the entries.
+  - SC-009 on the grove fill and draw, the seam closing, the commons and the blade flush (1.0x, the grove draw 0.78x in calls
+    with its stage time unchanged, 0.692 -> 0.712 s): research R7 - sums of indexed lookups or shapely welds of about a
+    millisecond each, no scan left to index, the shapes the rule. The grove draw's crown grid (A6) is exact and its stage no slower;
+    it asks more, smaller calls than the scan it replaced.
+- **FR-009 carried one more scan**: the track's `push_clear_of_fabric` asked every polygon's ring at every step; it asks only
+  the polygons whose widened box holds the point (exact: tested against the old walk, and on all 72 of Sawada's calls).
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
-| The router's lattice stays 10 px | map drawing convention (measured: every coarser cell tried strands a house) | research R4 | point of change in `hamletgen/ways/route.py` (`ROUTE_CELL`) |
+| The router's lattice stays 10 px | map drawing convention (measured: every coarser cell tried strands a house; observed 2026-09-28, method: `b2/harness.py`) | research R4 | point of change in `hamletgen/ways/route.py` (`ROUTE_CELL`) |
 | The carve's rows stay scalar | map drawing convention (measured: arrays slower) | research R5 | this amendment |
 | The board's lattice stays 12 px; its verge band sampled first | map drawing convention (the same board; the coarser lattice broke the entrance rule) | this amendment | point of change in `settlement/structures/fixtures/siting.py` |
 | The field's size search keeps its probe of the bracket's top after a short first carve | map drawing convention (measured: the lever slowed the pool and cohort) | research R6 | point of change in `hamletgen/water/fit.py` |

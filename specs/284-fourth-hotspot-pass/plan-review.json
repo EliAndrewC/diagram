@@ -1,106 +1,129 @@
 {
  "feature": "284-fourth-hotspot-pass",
- "plan_sha256": "a993f82475e23c45dd4101a907c59e98f8df95f8e23f0f9f9cf4a38767bcc120",
+ "plan_sha256": "a865a341b4f670386927b5fb67759f6bb0b64b8a0aa7068eff71c78b6dd77b1a",
  "reviewed": "2026-09-28",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "A1",
-   "summary": "one link index per route, fabric_index hoisted out of the string-pull",
+   "summary": "one link index per route (landed)",
    "class": "within",
-   "why": "Carried from round 1, unchanged: FR-002 as written, the same index, exact."
+   "why": "FR-002 as written; the base's recorded-request equality test (test_route.py, restored with A*'s withdrawal) asserts the paths point for point with the index hoisted."
   },
   {
    "id": "A2",
-   "summary": "the page from the structured blade and mark buckets, every other classed string parsed once",
+   "summary": "the page from the scrub's and marsh's structured blade slots (landed)",
    "class": "within",
-   "why": "Carried from round 1, unchanged: FR-006 as written; byte identity (magistracy pages included, now stated in C/T09) is the proof."
+   "why": "FR-006 first half; exactness shown once by T09's pool byte-identity. The plan's own A2 test (a synthetic page byte-identical through both routes) has no committed test exercising blade_starts / premerged / marks_region(points=) - a test gap, reported separately."
+  },
+  {
+   "id": "A2-rest",
+   "summary": "the one parse of every other class not built",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Not one of the GM's named items (the named item, the page from the map's records, is the 83% A2 built); it served only the general clause, whose criterion is 'significantly faster'. R2 puts every other class at about 17% of 1.597 s (about 0.27 s over two maps, all four parses together), so a single parse saves less than that. But the plan's and spec's stated '0.09 s (research R2)' is not in R2 or measurements.json and must be corrected or keyed."
   },
   {
    "id": "A3",
-   "summary": "the board's lazy caption test in (lab ok, score) order, first unshaded level-2 seat taken",
+   "summary": "board_choice, the caption level asked lazily (landed)",
    "class": "within",
-   "why": "Carried from round 1, unchanged: FR-007 first half, exact."
+   "why": "FR-007 first half, exact; test_the_lazy_board_choice_is_the_full_choice."
   },
   {
    "id": "A4",
-   "summary": "the bamboo search outward in (distance, scan index) order; the coarser sampling only if SC-006's floor is missed, now as B6 after T09",
+   "summary": "the bamboo walked outward (landed)",
    "class": "within",
-   "why": "FR-008. Round 1's correction applied: the moving fallback is moved out of A into the B phase after T09 under SC-011's moving condition (plan A4, B6, T14b), exactly as FR-008 and SC-006 place it."
+   "why": "FR-008; test_the_bamboo_walk_outward_finds_the_scans_seat."
   },
   {
    "id": "A5",
-   "summary": "_crosses_fabric box prefilters; _trim_to_service and push_clear_of_fabric through RingIndex.edge_within; _dry through seg_reach_index",
+   "summary": "_crosses_fabric, _trim_to_service, push_clear_of_fabric, comb _dry through indexes (landed)",
    "class": "within",
-   "why": "FR-009, all four named. The added note (edge_within is strictly-under, so end_serves' <= asks at the limit plus a hair and re-applies <= to the returned distance) keeps the closed bound exact."
+   "why": "FR-009, all four; tests for the fabric crossing, ring_within and the push. The comb's _dry (seg_reach_index) has no equality test against its old form, which plan A5 promised - a test gap, reported separately."
   },
   {
    "id": "A6",
-   "summary": "the grove crown test through a CrownGrid, the cell fixed before filing at twice the largest radius the draw can make",
+   "summary": "the crown grid (landed)",
    "class": "within",
-   "why": "FR-011 (the grove draw). Round 1's note applied: the cell is fixed before filing and covers every query radius, so the 3x3 neighborhood holds every refusing crown. Exact."
+   "why": "FR-011; test_the_crown_grid_is_the_crown_scan."
   },
   {
    "id": "A7",
-   "summary": "the toll's bitmap of cells with a sample in their 3x3 neighborhood",
+   "summary": "the toll's near-cell set (landed)",
    "class": "within",
-   "why": "Carried from round 1, unchanged: FR-010, exact."
+   "why": "FR-010; 281's toll equality test already asks far, near and at-radius points against the old band, so it exercises the new early return."
   },
   {
    "id": "A8",
-   "summary": "the yards' mats in arrays; per gap, the offsets reaching the best count over every (nc, nr) walked in the old (nc, nr, i0, j0) order with the _off_center tie-break and strict improvement",
+   "summary": "the yards' mats in arrays (landed)",
    "class": "within",
-   "why": "FR-011 and SC-009. Checked against yards.py:113-133: found is reset per gap and updated on strict (count, -off_center) improvement, so the old result is the first maximal candidate in (nc, nr, i0, j0) order within each gap - which the revised walk reproduces. The recorded-yard equality test is the proof."
+   "why": "FR-011, SC-009; test_every_pool_yard_lays_the_mats_it_laid_before."
   },
   {
    "id": "B1",
-   "summary": "A* with an admissible, consistent Euclidean heuristic",
-   "class": "within",
-   "why": "Carried from round 1, unchanged: FR-001, tested by SC-002."
+   "summary": "A* withdrawn by measurement",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "A GM-named lever dropped, but on a measurement taken in the configuration that ships (base fit search, FR-014, the connector fix; astarcmp at 2727c1e4b): 26 first-roll strandings against 5, four re-rolls against two, 192.9 s against 198.7 s. The GM's permission is conditioned on speed ('if those changes would allow it to be significantly faster', 'I even prefer it if it gets us performance benefits'); a lever that buys none and strands houses defeats that purpose."
   },
   {
    "id": "B2",
-   "summary": "the coarser lattice: only the 10-ft call sites raised, stepping 12, 14, 16, 18 toward MIN_WEB_GAP, stopping at the first cell that strands a house and taking the largest before it; strandings counted per map and per seed against the base, re-roll-hidden ones (meta.roll_attempt / roll_after) included; counts recorded in R4",
-   "class": "within",
-   "why": "Round 1's NOT LEGITIMATE ruling resolved. FR-003 raises the cell 'from 10 toward' MIN_WEB_GAP (consts.py:193, 18 ft) and takes the largest that strands nothing, recording where it bites: the plan now steps the whole way to 18 and stops only on a measured stranding. Leaving the 5.0, 6.0, 3.0 and min(10, gap/6) lattices alone is inside FR-003, which names the cell raised 'from 10'. Per-map, per-seed judgment and the re-roll count are SC-011's 'no new or larger shortfall' and 'no newly failing seed'; the fields exist (hamletgen/driver.py:357-358). No narrowing remains."
+   "summary": "the coarser lattice withdrawn: 12 px strands houses the 10 px lattice did not",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "A GM-named lever ('on a coarser grid') dropped on a measurement of a router that does not ship. b2/results.json was committed at 05b13c871, when lattice_search was A* and the B3 lever was active and the connector defect unfixed; the amendment says so ('Measured with A* in the router at every cell'). R6 then shows the router itself decides which maps strand (Sawada 15 of 19 under A*, none in cost order) and R4 says strandings move chaotically with the cell, so an A*-controlled comparison says nothing about the cell under Dijkstra. R4's row '10 (the base)' is not the base (8 unreached; the cost-order base has 5 per R6). FR-003's rule is about the cell the shipped router runs on. Re-run b2/harness.py on the clone as it now stands (Dijkstra, base fit, FR-014, the connector fix), with the rescue-rounds scenario and the toys plan B2 names, and withdraw or take by that."
   },
   {
    "id": "B3",
-   "summary": "the field search carves at _predict_k and probes the top only when acreage grows less than SATURATION_GROWTH times the previous",
-   "class": "within",
-   "why": "FR-004 as written; the constant now carries its why beside it (a fan scales about as k**2, so sub-linear growth in k means clamping)."
+   "summary": "the field search without its blind probe withdrawn: the moved maps re-roll more, slower in all",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "A GM-named lever ('the paddy field's size found from a better first guess') dropped on a measurement taken with A* in the router: b3cmp ran at 08761a0dd (20:01), where lattice_search was still A*, withdrawn three minutes later (2727c1e4b) because it strands houses. The lever's own stage saving is measured and real (1.51 -> 1.06 s Inashiro, 2.89 -> 2.21 s Sawada); the withdrawal rests entirely on six re-rolls against four, and re-rolls are exactly what A* was shown to inflate (A* with the base search re-rolled 4, cost order 2). Kashikawa was checked under both routers, the other maps and the totals were not. Re-run b3cmp/harness.py on the shipped router before withdrawing."
   },
   {
    "id": "B4",
-   "summary": "the carve's rows as arrays: vertices, their supply-bank pushes (_clear_supply vectorized, up to the scalar six rounds, the scalar centerline tie-break) and the plot tests (spills, above, in_supply) over a row's quads; kept only if Sawada's field stage is faster; a part that cannot be vectorized comes back as an exception with its measurement",
-   "class": "within",
-   "why": "Round 1's NOT LEGITIMATE ruling resolved. FR-005 names the vertices, their pushes off the supply banks and the plot tests as numpy arrays; the plan now puts all three in arrays and routes any part that resists to a MODE 1 exception with a measurement rather than leaving it scalar. The keep-if-faster test is then applied to the form FR-005 describes. Plots may shift within fit_field's tolerance (FR-005), so a vectorized push that resolves strokes together rather than in sequence is allowed."
+   "summary": "rows as arrays withdrawn: the edge walk 3.6x slower in arrays",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "FR-005's own keep-if-faster rule. The measurement is per call (the same 3,310 verdicts, 0.312 s against 0.086 s), so it holds whatever the number of carves (R5's 'after B3' share is stale now B3 is withdrawn, but more carves only means more of the loss). The unbuilt pushes' whole scalar cost (0.024 s) is below the loss already measured."
   },
   {
    "id": "B5",
-   "summary": "the board's candidates every 24 px instead of 12, hamlets and villages, in both lattices that seat it (place_kosatsuba and stage_notice's re-seat, hamletgen/frame.py:263); kept only if the notice stage is faster",
+   "summary": "the 24 px board lattice withdrawn (broke the entrance-board rule's test)",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "The tier scope is carried from round 1 as LEGITIMATE: only the frozen legacy town maps sit outside hamlets and villages, nothing that rolls is exempted, and FR-007's own effect ('a few feet along its verge') holds only at that grain. Round 1's clarification is answered: the re-seat lattice moves to 24 too, which is inside FR-007 ('its candidate lattice along a route') and removes a partial application."
+   "why": "The GM allowed changes 'that still correspond to historical norms', not broken rules; FR-013 holds every rule. The replacement, VERGE_FIRST, is exact and tested (test_the_board_sampled_verge_first_is_the_board_sampled_whole)."
   },
   {
    "id": "B6",
-   "summary": "the bamboo's coarser sampling as a moving change after T09, only if A4 misses SC-006's floor",
+   "summary": "the bamboo seat lattice 16 ft, taken because A4 missed SC-006 on Mizuguchi",
    "class": "within",
-   "why": "FR-008's own conditional fallback, placed where SC-006 and SC-011 put it, with its spec Decisions row."
+   "why": "FR-008's own conditional fallback, the GM's named 'bamboo stands sampled more coarsely'; its Decisions row exists; a moving change held by the gate's bamboo rules."
   },
   {
-   "id": "C1",
-   "summary": "landing order: A lands, the pool (hamlets and magistracy pages) regenerates byte-identical against A_BASE, the clone's HEAD before the first A commit, regenerated in a detached worktree and re-taken after any main merge during A; then B, each moved map's houses, paddies and ways recorded in R6",
+   "id": "FR-014",
+   "summary": "a re-roll resumes from a snapshot before the seats",
    "class": "within",
-   "why": "Round 1's correction applied: the reference is no longer 5f15c65bd (which 283's merge made wrong for the magistracy pages A2 touches) but the commit A lands on; 5f15c65bd stays only the timing base. The moved maps' research entries SC-011 asks for are now planned (R6, T16). Research numbering R4-R6 follows the existing R1-R3."
+   "why": "FR-011's after-profile clause and the GM's 'look at what is slow'; exact; test_a_re_roll_resumes_at_the_seats_from_an_untouched_copy and test_every_resume_starts_from_the_same_snapshot."
   },
   {
-   "id": "C2",
-   "summary": "the grove fill, the seam closing, the commons and the flush re-profiled after A, each given its lever; the after-profile read under the same rule",
+   "id": "FR-009+",
+   "summary": "push_clear_of_fabric asks only the polygons whose widened box holds the point",
    "class": "within",
-   "why": "Carried from round 1, unchanged: FR-011 and FR-012; a moving lever here follows T15 into T16's moving condition."
+   "why": "FR-009 named the function; exact; test_the_fabric_push_with_box_prefilters_is_the_old_walk."
+  },
+  {
+   "id": "connector",
+   "summary": "_touch_junctions never drops the connector",
+   "class": "within",
+   "why": "Constitution XIV, a defect found by the work; test_touch_junctions_never_drops_the_connector and the corrected touch test."
+  },
+  {
+   "id": "C",
+   "summary": "the final measure and the pool regenerated",
+   "class": "within",
+   "why": "FR-012, SC-001; not final while B2 and B3 are re-measured."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }

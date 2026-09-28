@@ -1,9 +1,9 @@
-"""Feature 284: what FR-001 (A* in the router) does to a map, over the pool and cohort seeds 1-24 - re-run with FR-004 kept
-(the reviews of Amendment 1: no lever judged under another that has since changed). Three passes, interleaved by map: the
-shipping router (cost order) twice - the second the run-to-run spread - and A* (`astar.txt`, the heuristic search as the
-lever left it) swapped in; everything else the engine's (research R6).
+"""Feature 284: the moving levers together, as they ship (A* in the router, FR-001; the field search without its blind
+probe, FR-004) against the same engine with both off (the router in cost order, the base's field search), over the pool and
+cohort seeds 1-24 (research R6). Three passes interleaved by map - the shipping engine twice, the second the run-to-run
+spread, and the levers off between them.
 
-    make spec-harness SPEC=specs/284-fourth-hotspot-pass/astarcmp OUT=<json>
+    make spec-harness SPEC=specs/284-fourth-hotspot-pass/combined OUT=<json>
 """
 
 from __future__ import annotations
@@ -51,17 +51,24 @@ def _one(job):
 
     driver.unreached_houses = counted
     if base:
+        import importlib.util
+
+        strand = Path(__file__).resolve().parents[4] / "specs/284-fourth-hotspot-pass/strand/harness.py"
+        spec = importlib.util.spec_from_file_location("strand_h", strand)
+        h = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(h)  # type: ignore[union-attr]
+        h.__file__ = __file__  # its base-fit copy resolves from the test node's place
+        from l7r.diagram.hamletgen.water import fit
         from l7r.diagram.hamletgen.ways import route
 
-        ns: dict = {}
-        exec(compile((Path(__file__).resolve().parents[4] / "specs/284-fourth-hotspot-pass/astarcmp/astar.txt").read_text(), "astar.txt", "exec"), vars(route) | ns, ns)  # noqa: S102
-        route.lattice_search = ns["lattice_search"]
+        route.lattice_search = h._dijkstra
+        fit._fit_at_aspect = h._base_fit()._fit_at_aspect
     t = time.perf_counter()
     rep = driver.generate(HamletSpec(**kw) if isinstance(kw, dict) else kw, out_base=None, render=False)
     M = rep.manifest or {}
     roles = [b.get("role") for b in M.get("bamboo_stands", [])]
     ways = sum(sum(math.dist(a, b) for a, b in zip(ln["pts"], ln["pts"][1:], strict=False)) for ln in M.get("lanes", []))
-    return {"connectors": sum(1 for ln in M.get("lanes", []) if ln.get("connector")), "per_attempt": counts, "fit": "astar" if base else "ship", "pass": job[3] if len(job) > 3 else 0, "map": key, "attempt": rep.attempt, "placed": int(rep.plan.placed), "households": rep.plan.spec.households, "acres": round(rep.plan.acres, 2), "target": round(rep.plan.target_acres, 2), "homestead_bamboo": roles.count("homestead"), "thicket": roles.count("thicket"), "way_len": round(ways), "board": bool(M.get("kosatsuba")), "failures": rep.failures, "s": round(time.perf_counter() - t, 2)}
+    return {"connectors": sum(1 for ln in M.get("lanes", []) if ln.get("connector")), "per_attempt": counts, "fit": "off" if base else "ship", "pass": job[3] if len(job) > 3 else 0, "map": key, "attempt": rep.attempt, "placed": int(rep.plan.placed), "households": rep.plan.spec.households, "acres": round(rep.plan.acres, 2), "target": round(rep.plan.target_acres, 2), "homestead_bamboo": roles.count("homestead"), "thicket": roles.count("thicket"), "way_len": round(ways), "board": bool(M.get("kosatsuba")), "failures": rep.failures, "s": round(time.perf_counter() - t, 2)}
 
 
 def test_b3cmp() -> None:

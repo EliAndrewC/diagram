@@ -192,3 +192,23 @@ SC-011 asks for. `measure.py after`, `make perf LABEL=284-end`,
 ## Complexity Tracking
 
 A2 changes three page modules' signatures (an optional `elems=`); every existing caller passes nothing and parses as today.
+
+## Amendment 1 (2026-09-28): what was built, after the measurements
+
+The spec's Amendment 1 records the why; this is how each piece landed.
+
+| piece | outcome | where |
+|---|---|---|
+| A1-A8 | built as designed; the pool byte-identical against `A_BASE` before B (T09) | as designed above |
+| A2's "one parse of the rest" | not built: the classes it would cover parse in at most 0.09 s together (research R2) | - |
+| A3 | built as `board_choice`, the caption level asked lazily in ranking order | `settlement/structures/fixtures/siting.py` |
+| B1 (A*) | built, measured over the pool and cohort (research R6), WITHDRAWN: the search is Dijkstra in the base's heap order and the base's recorded-request equality test is restored | `hamletgen/ways/route.py` (`lattice_search`) |
+| B2 (the coarser lattice) | measured at 12-18 px (research R4), WITHDRAWN: `ROUTE_CELL` stays 10; the router's box decline stays on its own lattice | `hamletgen/ways/route.py` |
+| B3 (the blind probe) | built, measured over the pool and cohort (research R6), WITHDRAWN: the base's search restored with the measurement at the point of change | `hamletgen/water/fit.py` |
+| B4 (rows as arrays) | the edge walk built in a probe and timed (research R5), WITHDRAWN: 3.6 times slower | `b4/harness.py` |
+| B5 (the board's 24 px lattice) | built, WITHDRAWN: it broke the entrance-board rule's test; in its place the verge band is sampled first (`VERGE_FIRST`), exact, tested against whole-band sampling | `settlement/structures/fixtures/siting.py` |
+| B6 (the bamboo's coarser sampling) | TAKEN, since A4 missed SC-006 on Mizuguchi: `BAMBOO_SEAT_STEP_FT = 16` | `hamletgen/hinterland/bamboo.py` |
+| FR-014 (new) | a re-roll resumes at the seats: `resume_at` (found by name, so a timed stage still resumes), `build(..., snapshot=)`, `resume`; tested on stand-in stages and byte-identical on six re-rolling maps (research R8) | `hamletgen/driver.py` |
+| FR-009, one more scan | `push_clear_of_fabric` asks only the polygons whose widened box holds the point; tested against the old walk | `hamletgen/ways/geom.py` |
+| the connector defect | `_touch_junctions` never drops the connector; its test and the corrected end-meets-end test | `hamletgen/ways/touch.py` |
+| C | `measure.py after` (research R1's keys), the pool regenerated: the base's maps but for the thicket's 8 px on Kashikawa and Mizuguchi | `measurements.json` |

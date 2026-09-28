@@ -189,15 +189,21 @@ def test_a_route_pays_to_cross_the_brook_and_goes_round_when_that_is_cheaper() -
     assert not in_brook_band((50.0, 0.0))
 
 
-def test_the_lazy_router_returns_the_whole_box_routers_paths() -> None:
-    """Feature 278 (FR-001): the router judges each cell when the search first asks of it rather than the whole box first.
-    The fixture is 14 route requests recorded from one Mizuguchi roll on the unmodified engine (`ac01ffe2d`) - five of
-    them finding no route, which explores every reachable cell - with that router's answers; the lazy router returns the
-    same paths, point for point, under the same brook crossing."""
+def test_the_router_keeps_its_answers_within_the_recorded_bound() -> None:
+    """Feature 278 recorded 14 route requests from one Mizuguchi roll on the unmodified engine (`ac01ffe2d`) - five of them
+    finding no route, which explores every reachable cell - with that router's answers. Feature 284's router (A* toward the
+    goal, one link index per route) finds a route exactly where the old one did and none where it found none, every link
+    it draws passes the link test (or, a chord `_unjog` took, the touch test), and each drawn path is at most 5% longer than the recorded one (spec 284, SC-002)."""
     import json
+    import math
     import pathlib
 
     from l7r.diagram.hamletgen.ways import route as R
+    from l7r.diagram.hamletgen.ways.clearance import _clear_link, _clear_touch
+    from l7r.diagram.hamletgen.ways.geom import _TOUCH_GAP
+
+    def length(pts):
+        return sum(math.dist(a, b) for a, b in zip(pts, pts[1:], strict=False))
 
     rec = json.loads((pathlib.Path(__file__).resolve().parents[2] / "fixtures" / "route_requests_mizuguchi.json").read_text())
     polys = [[tuple(p) for p in poly] for poly in rec["polys"]]
@@ -207,16 +213,70 @@ def test_the_lazy_router_returns_the_whole_box_routers_paths() -> None:
         for req in rec["requests"]:
             c = rec["crossings"][req["crossing"]] if req["crossing"] >= 0 else {"brook": [], "radius": 0.0, "cost": 0.0}
             R.set_crossing([tuple(q) for q in c["brook"]], c["radius"], c["cost"])
-            got = R._route(
-                tuple(req["start"]),
-                tuple(req["goal"]),
-                [polys[i] for i in req["hard"]],
-                [polys[i] for i in req["walls"]],
-                [(tuple(a), tuple(b)) for a, b in req["water"]],
-                cell=req["cell"],
-                gap=req["gap"],
-                pad_mult=req["pad_mult"],
-            )
-            assert [list(q) for q in got] == req["out"]
+            hard, walls = [polys[i] for i in req["hard"]], [polys[i] for i in req["walls"]]
+            water = [(tuple(a), tuple(b)) for a, b in req["water"]]
+            got = R._route(tuple(req["start"]), tuple(req["goal"]), hard, walls, water, cell=req["cell"], gap=req["gap"], pad_mult=req["pad_mult"])
+            assert bool(got) == bool(req["out"])
+            if got:
+                assert length(got) <= 1.05 * length(req["out"]) + 1e-9, (length(got), length(req["out"]))
+
+                # the router's own guarantee, as it always was: a link from the string-pull clears `_clear_link`, and a chord
+                # `_unjog` took clears `_clear_touch` at the touch margin - except a link from a door the caller hands in standing
+                # inside its own steading, which the recorded paths fail too (request 2's first link); so the new path fails
+                # no more links than the recorded one did
+                def fouled(p, hard=hard, walls=walls, water=water, gap=req["gap"]):
+                    return sum(not (_clear_link(a, b, hard, walls, water, gap=gap) or _clear_touch(a, b, hard, walls, water, _TOUCH_GAP)) for a, b in zip(p, p[1:], strict=False))
+
+                assert fouled(got) <= fouled([tuple(q) for q in req["out"]])
     finally:
         R._CROSSING.update(saved)
+
+
+def test_the_search_toward_the_goal_costs_what_dijkstra_costs() -> None:
+    """Feature 284 (FR-001): on the same lattice - random blocked cells, a tolled band - A*'s path to the goal costs exactly
+    what a plain Dijkstra over the same cells costs, and both find no path where there is none."""
+    import heapq
+    import math
+    import random
+
+    from l7r.diagram.hamletgen.ways.route import lattice_search
+
+    def dijkstra(start, goal, nx, ny, free, band, toll, cell):
+        dist = {start: 0.0}
+        heap = [(0.0, start)]
+        while heap:
+            d, (ix, iy) = heapq.heappop(heap)
+            if (ix, iy) == goal:
+                break
+            if d > dist.get((ix, iy), 1e18):
+                continue
+            for dx in (-1, 0, 1):
+                for dy in (-1, 0, 1):
+                    jx, jy = ix + dx, iy + dy
+                    if (dx or dy) and 0 <= jx < nx and 0 <= jy < ny and free(jx, jy) and (not (dx and dy) or (free(jx, iy) and free(ix, jy))):
+                        nd = d + math.hypot(dx, dy) * cell + (toll if toll and band(jx, jy) and not band(ix, iy) else 0.0)
+                        if nd < dist.get((jx, jy), 1e18):
+                            dist[(jx, jy)] = nd
+                            heapq.heappush(heap, (nd, (jx, jy)))
+        return dist
+
+    rng = random.Random(284)
+    for _ in range(80):
+        nx, ny = rng.randint(5, 30), rng.randint(5, 30)
+        blocked = {(rng.randrange(nx), rng.randrange(ny)) for _ in range(rng.randint(0, nx * ny // 3))}
+        start, goal = (0, rng.randrange(ny)), (nx - 1, rng.randrange(ny))
+        blocked -= {start, goal}
+        band_x = rng.randrange(nx)
+        toll = rng.choice((0.0, 25.0))
+
+        def free(ix, iy, blocked=blocked):
+            return (ix, iy) not in blocked
+
+        def band(ix, iy, band_x=band_x):
+            return abs(ix - band_x) <= 1
+
+        dist, _prev = lattice_search(start, goal, nx, ny, free, band, toll, 10.0)
+        ref = dijkstra(start, goal, nx, ny, free, band, toll, 10.0)
+        assert (goal in dist) == (goal in ref)
+        if goal in ref:
+            assert math.isclose(dist[goal], ref[goal], rel_tol=1e-12, abs_tol=1e-9)

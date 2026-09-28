@@ -2,7 +2,9 @@
 
     make spec-harness SPEC=specs/284-fourth-hotspot-pass/b2 OUT=<json>
 
-For each cell (10, the base, then 12, 14, 16, 18) the five pool hamlets and cohort seeds 1-24 are rolled with
+Re-run on the engine that ships (the router in cost order, the base's field search, the re-roll resume, the connector fix;
+the reviews of Amendment 1 found the first run made with A* and the probe lever in). For each cell (10, today's, then 12,
+14, 16, 18) the five pool hamlets, the 10- and 20-household toys and cohort seeds 1-24 are rolled with
 `route.ROUTE_CELL` set, and per map and seed the harness records the unreached houses of EVERY attempt (the driver's own
 `unreached_houses`, wrapped, so a stranding the re-roll hid is counted), the attempt kept, the households seated and the
 roll's seconds. Rolls fan out over forked workers; the cell is set in each child before it rolls.
@@ -61,7 +63,7 @@ def _one(job: tuple) -> dict:
 def test_b2_cells() -> None:
     from l7r.diagram.hamletgen.driver import cohort_specs
 
-    specs: dict = dict(POOL, mizuguchi=_mizuguchi())
+    specs: dict = dict(POOL, mizuguchi=_mizuguchi(), toy10=dict(name="Toy10", seed=1, households=10), toy20=dict(name="Toy20", seed=2, households=20))
     for sp in cohort_specs(24, first_seed=1):
         specs[f"cohort-{sp.seed:02d}"] = sp
     jobs = [(c, k, kw) for c in CELLS for k, kw in specs.items()]

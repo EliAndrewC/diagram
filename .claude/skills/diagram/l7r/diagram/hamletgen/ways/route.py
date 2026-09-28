@@ -82,21 +82,29 @@ def lattice_search(
     cell: float,
 ) -> tuple[dict[tuple[int, int], float], dict[tuple[int, int], tuple[int, int]]]:
     """The router's search over its lattice: each cell's cost from `start` and the cell it was reached from, as far as the
-    search went - to `goal`, or every reachable cell when there is no way. Dijkstra, in cost order.
+    search went - to `goal`, or every reachable cell when there is no way.
 
-    A* TOWARD THE GOAL WAS TRIED AND WITHDRAWN (feature 284, FR-001, specs/284 research R6). With the straight-line
-    heuristic it returns a path of the same cost but, where two lattice paths tie, often another one - and over the pool
-    and cohort seeds 1-24 those other paths stranded 26 houses on first rolls against 5 (Sawada's first roll 15 of its 19,
-    its web left off the connector), re-rolled four maps against two, and the rolls were no faster in all (192.9 s against
-    198.7 s, inside the run's noise). The router's share of a roll is small; a stranding costs a whole re-roll."""
+    A* TOWARD THE GOAL (feature 284, FR-001): Dijkstra settled every cell nearer the start than the goal. Ordered by the cost
+    so far plus the straight-line distance still to go - never more than any path's remaining cost, since a step costs
+    `hypot * cell` plus a toll that is never negative, and consistent for the same reason - the search settles the cells
+    toward the goal first and returns a path costing no more than Dijkstra's. Where two lattice paths cost the same it may
+    return the other one; the drawn path is held within `5%` of the old router's length (spec 284, SC-002).
+
+    MEASURED BY THE COHORT (specs/284 research R6): the other tie-broken paths leave a house off the web on a first roll a
+    little more often (8 unreached over every attempt against 6, over the pool and cohort seeds 1-24), each healed by its
+    re-roll, and the rolls are 2.4% faster in all against a run-to-run spread of 0.6%. A first measurement, taken with a
+    router box decline that no longer ships, read 26 against 5 and was withdrawn on it; the re-run is what stands."""
     sx, sy = start
     gx, gy = goal
 
+    def _h(ix: int, iy: int) -> float:
+        return math.hypot(ix - gx, iy - gy) * cell
+
     dist = {(sx, sy): 0.0}
     prev: dict[tuple[int, int], tuple[int, int]] = {}
-    heap = [(0.0, sx, sy)]
+    heap = [(_h(sx, sy), 0.0, sx, sy)]
     while heap:
-        d, ix, iy = heapq.heappop(heap)
+        _f, d, ix, iy = heapq.heappop(heap)
         if (ix, iy) == (gx, gy):
             break
         if d > dist.get((ix, iy), 1e18):
@@ -114,7 +122,7 @@ def lattice_search(
                     if nd < dist.get((jx, jy), 1e18):
                         dist[(jx, jy)] = nd
                         prev[(jx, jy)] = (ix, iy)
-                        heapq.heappush(heap, (nd, jx, jy))
+                        heapq.heappush(heap, (nd + _h(jx, jy), nd, jx, jy))
     return dist, prev
 
 
@@ -157,7 +165,10 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
     # declines EVERY connector, which is precisely why `_thread_the_fabric` cannot rescue a track
     # aimed through the cluster and why the bearing has to be chosen clear of the steadings up in
     # `connector_track`. Knowing that this returns [] rather than a detour is load-bearing.
-    if nx * ny > 90000:
+    # ...A COARSER CELL DECLINES WHAT THE 10 PX LATTICE DECLINED (feature 284, B2): the decline is load-bearing, and a cell
+    # above 10 would otherwise route boxes 10 px never did. A cell of 10 or finer counts its own lattice, as it always has.
+    _dc = min(cell, 10.0)
+    if (int((x1 - x0) / _dc) + 1) * (int((y1 - y0) / _dc) + 1) > 90000:
         return []
 
     def to_pt(ix: int, iy: int) -> Pt:

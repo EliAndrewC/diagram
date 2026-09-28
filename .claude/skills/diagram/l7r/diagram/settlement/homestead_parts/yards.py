@@ -3,8 +3,6 @@
 import math
 from typing import TYPE_CHECKING, Any
 
-import numpy as np
-
 from .._geom import edge_dist, point_in_poly, turn_about
 
 if TYPE_CHECKING:
@@ -84,6 +82,8 @@ def mat_cells(
     one column too wide lost both outer columns to the floor's pulled-in corners and drew half what fits
     (settlement-reviews of round 7, Sawada and Kashikawa, 2026-09-28).
     `salt` is the yard's own: the nudge and the turn are drawn per yard, not repeated from one to the next."""
+    import numpy as np  # bound on first use: no heavy library at import time (feature 237)
+
     mw, mh, clear = MAT_FT[0] / ftpx, MAT_FT[1] / ftpx, MAT_EDGE_CLEAR_FT / ftpx
     floor = math.ceil((w * ftpx) * (h * ftpx) / MAT_SQ_FT / 3.0)
 
@@ -138,6 +138,7 @@ def floor_grid(xs: list[float], ys: list[float], poly: list[tuple[float, float]]
     for point (feature 284): a point inside the floor shrunk by `clear` plus a margin is surely clear, one outside it shrunk
     by `clear` minus the margin surely not, and a point between - within the margin of the line, where a buffer's chords and
     rounding could disagree with the exact test - is asked the exact test itself."""
+    import numpy as np  # bound on first use: no heavy library at import time (feature 237)
     import shapely
     from shapely.geometry import Polygon
 
@@ -161,6 +162,8 @@ def floor_grid(xs: list[float], ys: list[float], poly: list[tuple[float, float]]
 def mat_spots(inside: Any, xs: Any, ys: Any, cw: int, ch: int, mw: float, mh: float, keep_out: tuple[float, float, float, float] | None) -> Any:
     """`mat_cells`' old `spot(i, j)` for every grid point at once: the four corners of the mat whose origin is the point all
     on the floor (`inside`), and its box clear of the rack's (`keep_out`) - the same comparisons."""
+    import numpy as np  # bound on first use: no heavy library at import time (feature 237)
+
     nx, ny = inside.shape
     ok = np.zeros((nx, ny), dtype=bool)
     if nx > cw and ny > ch:
@@ -181,6 +184,8 @@ def best_lattice(ok: Any, xs: list[float], ys: list[float], px: int, py: int, mw
     kept the lexicographic best of (count, -off-center) in (cols, rows, i0, j0) order with strict improvement, so it ends on
     the first offset, in that order, holding the GLOBAL best count and the least off-center among those: only those offsets
     are walked here, with the old `_off_center`, in the old order."""
+    import numpy as np  # bound on first use: no heavy library at import time (feature 237)
+
     nx, ny = ok.shape
     mc, mr = (nx - 1) // px + 1, (ny - 1) // py + 1  # the most columns and rows the yard's span allows
     counts: list[tuple[int, int, Any]] = []
