@@ -1991,6 +1991,9 @@ phytoplankton	phytoplankton
 picket line	picket line
 picket lines	picket line
 pig iron	pig iron
+pigsty privy	pigsty-privy
+pigsty-privies	pigsty-privy
+pigsty-privy	pigsty-privy
 piloted ignition	piloted ignition
 piloted-ignition	piloted ignition
 pingjiang map	Pingjiang tu
