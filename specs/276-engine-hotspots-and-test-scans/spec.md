@@ -180,14 +180,19 @@ The track stage's path checks read the static water and crop geometry from an in
   m:before-record-tests-max), and each fails on its planted violation. The one-time build cost is recorded in
   research.
 - **SC-002** (FR-003): On the DISPERSED path (the spiral `_place_bundle`, the form `_SETTLEMENT_FORMS_WHEN_GROVES_WORK` will
-  roll), the rescue-rounds homestead stage is at least `5x` faster than 2.718 s (m:before-rescue-s) with at least `10x`
+  roll), the rescue-rounds homestead stage is at least `5x` faster than 2.718 s (m:before-rescue-s - the first run, the
+  stricter of the two recorded baselines; research R2) with at least `10x`
   fewer than its 46781 full fit tests (m:before-rescue-fits). On the NUCLEATED path (every pool hamlet's), the same
   scenario is not slower than 0.16 s (m:before-rescue-nucleated-s) and seats at least its 15 houses
   (m:before-rescue-nucleated-houses).
-- **SC-003** (FR-003): At constant density the placement primitive's cost per seated house is flat ON BOTH PATHS: from 60 to 240
-  seeds it grows by at most `1.25x` - before, nucleated 0.0009 s to 0.0017 s (m:before-dense-60-nucleated-per-house,
-  m:before-dense-240-nucleated-per-house), dispersed 0.0308 s to 0.0586 s (m:before-dense-60-per-house,
-  m:before-dense-240-per-house) - and neither path seats fewer houses than before.
+- **SC-003** (FR-003): At constant density the placement primitive's cost per seated house is flat ON BOTH PATHS: from 60
+  to 240 seeds it grows by at most `1.25x` - before, nucleated 0.0009 s to 0.0017 s (m:before-dense-60-nucleated-per-house,
+  m:before-dense-240-nucleated-per-house), which the unmodified engine fails - and neither path seats fewer houses than
+  before. The DISPERSED path is also held to a deterministic target at density, because its timings are noise-bound (the
+  first run read 0.0308 s to 0.0586 s per house, m:before-dense-60-per-house and m:before-dense-240-per-house; the re-run
+  of the same scenario 0.046 s to 0.0406 s, m:before-dense-60-dispersed-per-house-rerun and
+  m:before-dense-240-dispersed-per-house-rerun, with identical fit-test counts): 240 seeds need at least `10x` fewer than
+  their 29372 full fit tests (m:before-dense-240-dispersed-fits).
 - **SC-004** (FR-004): `close_seams` inside a comb build takes at least `2x` less than its 0.842 s to 1.018 s
   (m:before-close-seams-min, m:before-close-seams-max), and a diagonal sliver pocket's grid visits only the cells it
   touches.
@@ -201,8 +206,10 @@ The track stage's path checks read the static water and crop geometry from an in
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
-This feature changes no rule, size, glyph or density: every map is drawn by the same rules, and where a seat,
-a seam or a track lands differently it is because the same rules were asked more efficiently.
+This feature changes no rule, glyph or density, and no size distribution: every map is drawn by the same rules, a
+homestead's part sizes come from the same distributions (rolled per household, the row below), and where a seat, a seam or
+a track lands differently it is because the same rules were asked more efficiently - or, for the tracks and two cluster
+tests, because a crossing test that counted water a way never crossed now counts only real crossings (Amendment 1).
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
@@ -249,3 +256,14 @@ figures were re-taken on the unmodified engine. SC-002 now names its path (the d
 path held not slower and not seating fewer); SC-003 covers both paths; FR-007 labels each scenario's path. The plan
 review also ruled LEGITIMATE a per-household yard roll on condition that it is recorded here: a Decisions Recorded row
 is added (yard size, garden proportions and bed split per household; the rake per seat).
+
+Round 1 of this amendment (CHANGES REQUIRED): the amendment had dropped the accepted SC-003's dispersed target at density
+(240 seeds `4x` faster than 8.198 s, m:before-dense-240-s) without saying so; the re-run showed that path's per-house timings are load noise, so
+the target is restored as a deterministic one - `10x` fewer full fit tests at 240 seeds - and both dispersed baselines are
+recorded. SC-002 cites the first run, the stricter.
+
+A defect found while implementing FR-005, fixed under constitution XIV: `seg_intersect` returned the intersection of the
+two infinite LINES for any non-parallel pair, and seven callers used it as a crossing test - `path_violations`' four water
+tests (Inashiro's candidate paths scored thousands of "violations" with no real crossing), a cluster's way-crossing finder
+and spur trim, and a homestead's brook-cut test. It is now bounded on both segments (agreeing with `segments_cross` on every
+pair); `path_violations`, FR-005's oracle, is the corrected function, so tracks on maps with water may choose differently.

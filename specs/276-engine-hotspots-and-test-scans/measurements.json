@@ -262,5 +262,28 @@
     "source": "harness.py homesteads section on both placement paths (harness-before-homesteads-both-paths.json), unmodified engine, 2026-09-28 after `_toy_hamlet` was fixed to set the placer's own nucleated switch",
     "observed": "2026-09-28",
     "varies": true
+  },
+  "before-dense-60-dispersed-per-house-rerun": {
+    "value": 0.046,
+    "unit": "s",
+    "quantity": "try_place cost per seated house, 60 seeds, dispersed path - the RE-RUN of the first run's scenario (same fit-test counts, so the difference is machine load)",
+    "source": "harness.py homesteads section on both placement paths (harness-before-homesteads-both-paths.json), unmodified engine, 2026-09-28",
+    "observed": "2026-09-28",
+    "varies": true
+  },
+  "before-dense-240-dispersed-per-house-rerun": {
+    "value": 0.0406,
+    "unit": "s",
+    "quantity": "try_place cost per seated house, 240 seeds, dispersed path - the RE-RUN of the first run's scenario (same fit-test counts, so the difference is machine load)",
+    "source": "harness.py homesteads section on both placement paths (harness-before-homesteads-both-paths.json), unmodified engine, 2026-09-28",
+    "observed": "2026-09-28",
+    "varies": true
+  },
+  "before-dense-240-dispersed-fits": {
+    "value": 29372,
+    "unit": "fit tests",
+    "quantity": "full fit tests, 240 seeds at constant density, dispersed path (deterministic: identical in both runs)",
+    "source": "harness.py homesteads section on both placement paths (harness-before-homesteads-both-paths.json), unmodified engine, 2026-09-28",
+    "observed": "2026-09-28"
   }
 }
