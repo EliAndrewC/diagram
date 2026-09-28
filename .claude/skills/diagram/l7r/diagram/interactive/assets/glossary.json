@@ -10009,5 +10009,13 @@
    "evapotranspiration",
    "evapotranspiration-and-percolation"
   ]
+ },
+ "Kanto school": {
+  "def": "The older Edo practice of water management on the Kanto plain, which ran irrigation and drainage in the same channels, so that securing water downstream made drainage difficult upstream; the Kishu school, brought there in the 1720s, separated them.",
+  "variants": [
+   "Kanto school",
+   "Kanto-school",
+   "Kanto school's"
+  ]
  }
 }

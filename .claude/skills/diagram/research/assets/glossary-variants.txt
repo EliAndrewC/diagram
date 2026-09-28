@@ -1185,6 +1185,9 @@ kansai	Kansai
 kansei	Kansei
 kansei era	Kansei
 kanto	Kanto
+kanto school	Kanto school
+kanto school's	Kanto school
+kanto-school	Kanto school
 kantō	Kanto
 kaogongji	Kaogongji
 kara-hafu	karahafu
