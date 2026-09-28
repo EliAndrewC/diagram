@@ -96,7 +96,14 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
     engine draws as a rolled form; its entry and sources moved with it. The same pass re-pointed paddy (fields/270),
     bund (fields/260) and the four dry crops (fields/180, and 050 on the three that lacked it) and gave each the keys
     its rewritten prose rests on, and corrected the five fallow sibling texts, which still called fallow a patch of
-    ground resting for the season."""
+    ground resting for the season.
+
+    Feature 269 (K2) moved three more labels from guess to accurate under the same bar, each once the engine drew
+    what the record now reads: `bathhouse` (homesteads/214 - the village-by-village share and the front-yard or
+    corridor seat), `hen coop` (215 - Buck's 82% of farms) and `persimmon` (218 - the dooryard or behind the house,
+    the 23 ft crown). It re-pointed farmhouse (240, the spread of bearings), byre (300, the beast living with its
+    keeper), privy and manure heap (260, the four seats and the field pit), and corrected two sibling texts the
+    engine had made false: a byre drawn against its farmhouse, and a night-soil pit out at the fields."""
     before = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
     added = {s for succ in SINCE_189.values() for s in succ} | set(ADDED_SINCE_189)
     assert set(SINCE_189) <= set(before) and not (added & set(before)), "the tables name snapshot keys and NEW keys only"
