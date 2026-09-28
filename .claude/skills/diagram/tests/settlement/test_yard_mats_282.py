@@ -35,8 +35,8 @@ def test_the_mats_cover_the_whole_yard_at_between_a_third_and_two_thirds_of_a_fu
     w, h = depth_ft * 1.45 / ftpx, depth_ft / ftpx
     mats = mat_cells(w, h, _rect(w, h), ftpx)
     lo, hi = _band(w, h, ftpx)
-    # FR-004 as amended (2026-09-28): a third where the yard holds one at a 1 ft gap, else as many as fit there, never under 3
-    assert (lo if tsubo >= 18 else 3) <= len(mats) <= hi, f"{tsubo} tsubo at {ftpx} ft/px: {len(mats)} mats, band {lo}-{hi}"
+    # FR-004 as amended (2026-09-28): a third where the yard holds one at a 1 ft gap, else as many as fit there, never under 4
+    assert (lo if tsubo >= 18 else 4) <= len(mats) <= hi, f"{tsubo} tsubo at {ftpx} ft/px: {len(mats)} mats, band {lo}-{hi}"
     quarters = {(mx + mw / 2 > 0, my + mh / 2 > 0) for mx, my, mw, mh, _a in mats}
     assert len(quarters) == 4, f"{tsubo} tsubo: mats in only {sorted(quarters)} - the floor must read covered, every quarter"
     assert all(mw * ftpx == 6.0 and mh * ftpx == 3.0 for _x, _y, mw, mh, _a in mats), "a mat is 3 x 6 ft, drawn at its real size"
@@ -117,3 +117,42 @@ def test_two_mats_that_overlap_have_no_gap_and_two_apart_have_theirs() -> None:
     a = [(0.0, 0.0), (6.0, 0.0), (6.0, 3.0), (0.0, 3.0)]
     assert _quad_gap(a, [(5.0, 1.0), (11.0, 1.0), (11.0, 4.0), (5.0, 4.0)]) == 0.0, "a corner inside the other: they touch"
     assert abs(_quad_gap(a, [(7.0, 0.0), (13.0, 0.0), (13.0, 3.0), (7.0, 3.0)]) - 1.0) < 1e-9, "side by side, a foot apart"
+
+
+def _brute_fit(w: float, h: float, poly: list[tuple[float, float]], keep: tuple[float, float, float, float] | None) -> int:
+    """The most unturned 6 x 3 ft mats any lattice at a 1 ft gap seats in the yard - every column and row count and every
+    offset on a quarter-foot grid - with each corner 1 ft inside `poly` and clear of `keep`. The independent oracle for
+    FR-004's "cannot hold a third": it shares no search with `mat_cells`."""
+    from l7r.diagram.settlement._geom import edge_dist, point_in_poly
+
+    def ok(x: float, y: float) -> bool:
+        cs = ((x, y), (x + 6, y), (x + 6, y + 3), (x, y + 3))
+        if not all(point_in_poly(px, py, poly) and edge_dist(px, py, poly) >= 1.0 for px, py in cs):
+            return False
+        return keep is None or not (x < keep[2] and x + 6 > keep[0] and y < keep[3] and y + 3 > keep[1])
+
+    best = 0
+    for nc in range(1, int(w // 7) + 2):
+        for nr in range(1, int(h // 4) + 2):
+            sx, sy = nc * 7 - 1, nr * 4 - 1
+            for i in range(int((w - sx) * 4) + 1):
+                for j in range(int((h - sy) * 4) + 1):
+                    x0, y0 = -w / 2 + i / 4, -h / 2 + j / 4
+                    best = max(best, sum(ok(x0 + c * 7, y0 + r * 4) for r in range(nr) for c in range(nc)))
+    return best
+
+
+@pytest.mark.parametrize(
+    ("w", "h", "poly", "keep"),
+    [
+        # the pool's short yards as drawn (2026-09-28): Sawada's 20 x 14 ft with its rack on the west, Kashikawa's 22 x 15 ft
+        (20.32, 14.01, [(-9.58, -6.78), (10.04, -6.72), (9.7, 6.28), (-9.85, 6.93)], (-9.44, -5.27, -6.44, -0.46)),
+        (22.1, 15.2, [(-10.5, -7.6), (11.05, -7.6), (10.2, 7.1), (-10.9, 7.3)], None),
+        (27.0, 19.0, [(-13.1, -9.5), (13.5, -9.5), (12.7, 9.0), (-13.4, 8.8)], None),
+    ],
+)
+def test_a_yard_short_of_a_third_draws_as_many_as_any_1_ft_lattice_would_fit(w: float, h: float, poly: list[tuple[float, float]], keep: tuple[float, float, float, float] | None) -> None:
+    third = math.ceil(w * h / MAT_SQ_FT / 3)
+    drawn = len(mat_cells(w, h, poly, 1.0, keep))
+    assert drawn >= min(third, _brute_fit(w, h, poly, keep)), "a lattice the layout never tried seats more"
+    assert drawn >= 4

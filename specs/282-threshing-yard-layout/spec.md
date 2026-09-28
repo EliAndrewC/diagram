@@ -94,7 +94,7 @@ FR-002 finds (FR-005); its declaration names the research question it rests on.
   carries mats) and the drawn count is tied to the yard's area - between one third and two thirds of the count
   that would cover it, so a 60 sq m yard (about 36 mats to cover) draws 12 to 24. Each drawn mat MUST keep bare ground
   around it and room to lie askew - at least a `1 ft` gap to its neighbors on the lattice: a yard that cannot hold a
-  third at that gap draws as many as fit at it, and never fewer than three (amended 2026-09-28, after the
+  third at that gap draws as many as fit at it, and never fewer than four (amended 2026-09-28, after the
   settlement-reviews ruled edge-to-edge mats, and mats at a `0.5 ft` gap, read as paving - research.md R4). The single fixed central mat MUST go.
 - **FR-005**: The yard's rack MUST be drawn only where the settlement's rack-by-the-house knob gives one; the knob
   MUST be pinnable from the settlement's spec. Where FR-002 finds the choice followed the environment, the knob MUST
@@ -123,7 +123,7 @@ FR-002 finds (FR-005); its declaration names the research question it rests on.
 ## Success Criteria *(mandatory)*
 
 - **SC-001** (FR-004): No drawn yard carries the old central mat (`14 x 9 ft`, research.md R1); every drawn yard's mat
-  count lies between one third and two thirds of the count that would cover its area (where the yard cannot hold a third at a `1 ft` gap, as many as fit at it and at least three), and each quarter of the yard
+  count lies between one third and two thirds of the count that would cover its area (where the yard cannot hold a third at a `1 ft` gap, as many as fit at it and at least four), and each quarter of the yard
   carries at least one mat (measured by test on the regenerated pool hamlets and on the yard sizes the roll makes).
 - **SC-002** (FR-005, FR-006): No rack is drawn on a map whose knob gives none; on a map whose knob gives one, every
   yard carries a rack and no rack's footprint enters the yard's southern half or the `39 ft` corridor south of it
@@ -145,7 +145,7 @@ FR-002 finds (FR-005); its declaration names the research question it rests on.
   (40-60 mats); the drawing thins them so each reads as a mat. The band of one third to two thirds of a full cover
   is this project's decision (spec-fidelity round 1: a floor tied to area, so the impression of a covered yard holds).
   EXCEPTION (amended 2026-09-28; the first form, for yards under `400 sq ft`, ruled LEGITIMATE by spec-fidelity, then
-  broadened): a yard that cannot hold a third at a `1 ft` gap draws as many as fit at it, never fewer than three - a map
+  broadened): a yard that cannot hold a third at a `1 ft` gap draws as many as fit at it, never fewer than four - a map
   drawing convention, since mats edge to edge or at a `0.5 ft` gap read as paving (research.md R4). To go to the GM at
   hand-back, per the exception procedure.
 

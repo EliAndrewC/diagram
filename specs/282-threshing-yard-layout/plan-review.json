@@ -1,51 +1,65 @@
 {
  "feature": "282-threshing-yard-layout",
- "plan_sha256": "8b00c5ef823b1cfed47681fef336902c80c845358772e21935b075a41459e636",
+ "plan_sha256": "4425787166560b7715ab64ae7497c103f18ab0722395739c886cc5ed40037af1",
  "reviewed": "2026-09-28",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "D1",
-   "summary": "Rack-by-the-house knob is HamletSpec.harvest_weather (settled|changeable), declared on the spec, never rolled; default settled; entry 500's drying-method knob folded into it.",
+   "summary": "Rack-by-the-house knob is HamletSpec.harvest_weather (settled|changeable), declared, never rolled; default settled; entry 500's knob folded in.",
    "class": "within",
-   "why": "Unchanged. FR-005: 505 finds the environment decided, so the knob is set from a stated environment input and is one knob with 500's - the GM's worry about adjacent villages in one climate differing."
+   "why": "Unchanged since round 5. FR-005."
   },
   {
    "id": "D2",
    "summary": "Sawada declares harvest_weather=changeable as the pool's exhibit.",
    "class": "within",
-   "why": "Unchanged. Inside FR-005/FR-008."
+   "why": "Unchanged. FR-005/FR-008."
   },
   {
    "id": "D3-mats",
-   "summary": "6 x 3 ft mats in rows over the whole yard, 1 ft inset, corners 1 ft inside the drawn outline and 0.25 ft off the rack, gap 2/1.5/1/0.5 ft, each nudged up to 0.4 ft and turned up to 6 degrees by a positional draw, straw-gold with a same-hue outline, count in [ceil(full/3), floor(2 full/3)] with an even thinning; rows a GUESS, thinning and nudge a CONVENTION.",
+   "summary": "6 x 3 ft mats in rows, 1 ft inset and edge clearance, gaps 2/1.5/1 ft never below 1 ft, each nudged/turned by a positional draw and kept only where its outline stays 0.1 ft clear of every neighbor's; count in [ceil(full/3), floor(2 full/3)] with an even thinning; rows a GUESS, thinning and nudge a CONVENTION.",
    "class": "within",
-   "why": "Matches yards.py as read 2026-09-28 (MAT_GAPS_FT = (2.0, 1.5, 1.0, 0.5), MAT_JITTER_FT 0.4, MAT_JITTER_DEG 6, fill #E4CC86 stroke #C4A45E, pad 0.25 ft). The nudge keeps the rows (FR-004's labeled guess) and serves the GM's stated aim that the drawn mats read as mats; styling is not a scope question."
+   "why": "The 1 ft least gap and the hand-laid turn serve the GM's stated aim that the drawn mats read as mats ('we can't render dozens of mats and have that be legible'); settlement-reviews 4-6 read 0.5 ft as paving. Matches yards.py (MAT_GAPS_FT = (2.0, 1.5, 1.0), MAT_INK_CLEAR_FT 0.1, _lay_by_hand)."
   },
   {
-   "id": "D3-small-yard",
-   "summary": "A yard under 400 sq ft that cannot reach a third of a full cover with a gap draws as many as fit with one (never edge to edge), at least four.",
+   "id": "D3-short-yard-physical",
+   "summary": "A yard that physically cannot hold a third of a full cover at a 1 ft gap draws as many as fit at it, at any size.",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Narrows the accepted FR-004 floor, which was this project's proxy (spec-fidelity round 1), not the GM's number. The GM's purpose is legibility: 'we can't render dozens of mats and have that be legible. So our threshing yard glyphs show a smaller number to give the impression that there are many of them.' Holding the floor on these yards forced edge-to-edge mats, recorded as reading as paving, which defeats that purpose. Scope is bounded (under 400 sq ft; measured from the manifests 2026-09-28: four pool yards short by one or two, drawing 5-6), mats still spread over every quarter (SC-001), and tests enforce the full band at 400 sq ft and above. Same ruling as the MODE 1 check on FR-004."
+   "why": "Extends the round-3 ruling: the one-third floor is this project's proxy, not the GM's number, and holding it where a third cannot fit at the least legible gap defeats the GM's own purpose (legible mats giving the impression of many). The 400 sq ft bound was itself a proxy for 'cannot fit'. Measured this round: of the pool's short yards only Inashiro's 20 x 14 ft yard is in this class (4 fit, 4 drawn)."
+  },
+  {
+   "id": "D3-short-yard-test",
+   "summary": "'Cannot reach a third at 1 ft' decided by the one centered lattice mat_cells lays per gap step (the best of 2/1.5/1), with no search for a placement that fits more.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "Excuses yards that CAN hold a third at 1 ft. Measured on the working-tree SVGs 2026-09-28 with a shifted unturned 1 ft-gap lattice (corners 1 ft inside the drawn outline, off the rack): eight of nine short yards hold a third - Kashikawa 22 x 15 ft draws 3 where 6 fit, Sawada 31 x 22 ft 8 where 12, Mizuguchi 10 and 11 where 12 and 15, Sawada's others 6/7/7/3 where 7/9/8/6. The cause is the centered lattice (e.g. three 1 ft columns whose outer two fall off a 22 ft floor, where two columns fit). 'The literal reading is harder to implement' is not a ground; the exception's own words are 'cannot hold', and the mechanism must find what fits before drawing fewer than a third."
+  },
+  {
+   "id": "D3-floor-three",
+   "summary": "The short-yard floor lowered from four mats to three.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "No measured yard holds fewer than four at a 1 ft gap (the smallest, Inashiro's 20 x 14 ft, holds 4; Sawada's 20 x 14 ft with a rack holds 6). Three exists only on the two yards where the centered lattice draws half of what fits, so the floor was lowered to fit the mechanism's shortfall, not a physical limit; and three mats weakens the GM's 'render a bunch of mats over the yard'. Keep four unless a rolled yard is measured that cannot hold four."
   },
   {
    "id": "D4",
-   "summary": "Rack along a side edge inset 1 ft (in the slack beside the mat rows), preferring the half nearest the house, always off the yard's MAP-south half solved in map coordinates, 2.5 ft drawn width, whole-side fallback so every changeable-weather yard takes one.",
+   "summary": "Rack along a side edge inset 1 ft, near half preferred, off the yard's map-south half solved in map coordinates, whole-side fallback.",
    "class": "within",
-   "why": "The side inset moved 2 -> 1 ft (RACK_SIDE_INSET_FT = 1.0 in the code); nothing in FR-006 turns on it. Map-south rule, corridor and knob unchanged."
+   "why": "Unchanged. FR-006."
   },
   {
    "id": "D5",
-   "summary": "Threshing yard docstring rewritten from 025 and 505 with per-claim labels and the GM's convention wording.",
+   "summary": "Threshing yard docstring rewritten from 025 and 505 with labels and the GM's convention wording.",
    "class": "within",
-   "why": "Unchanged. FR-007."
+   "why": "Unchanged. FR-007. The '(a small or awkwardly shaped yard fewer)' wording follows whatever the corrected exception draws."
   },
   {
    "id": "D6",
    "summary": "Regenerate the five pool hamlets; the settlement-reviews the gate owes; make done.",
    "class": "within",
-   "why": "Unchanged. FR-008 and SC-005."
+   "why": "Unchanged. FR-008, SC-005."
   },
   {
    "id": "D7",
@@ -54,5 +68,5 @@
    "why": "Unchanged. Process only."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }

@@ -694,3 +694,10 @@ stopped counting as clear of the belt, and the worst walk to a well is the same 
 away a dead-end stub that ended in the old copse and served no house, and one farmstead's coop, woodpile and persimmon
 moved from its west side to its east. Known open (settlement-review, 2026-09-28): six belt crowns hang over the
 connector's bed where it passes through the belt; the track still reads through.
+
+## 2026-09-28 (feature 282): the harvest weather recorded, and nothing drawn
+
+Feature 282 draws every threshing yard as a floor of straw mats and, where a map declares changeable harvest weather,
+a drying rack by each house. This hamlet threshes no rice, so it has no threshing floor (above) and neither is drawn
+here. Its manifest gains only `meta.harvest_weather: settled` - the regional default, declared on no map's behalf and
+never rolled - which draws nothing on a map with no yards.

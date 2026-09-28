@@ -278,5 +278,93 @@
   "source": "specs/282-threshing-yard-layout/measure.py (run from .claude/skills/diagram), reading the pool map's drawn SVG ink (each yard group's floor polygon and its mats, turned as drawn), its rendered .html and its notes",
   "measured": "2026-09-28",
   "method": "per yard group of the map's SVG: mats carrying a rotate transform over all mats, the minimum over the yards; and the least corner-to-edge distance between two drawn mat quads"
+ },
+ "sr7-inashiro-f1-per-yard-draw": {
+  "value": 14,
+  "unit": "distinct openings",
+  "quantity": "the first six mat turns of each of inashiro's 14 yards holding six or more mats are now 14 distinct sequences (all 15 yards shared one before): the nudge and turn are salted by each yard's own position",
+  "verifies": "F1",
+  "subject": "inashiro",
+  "answers": "a1b8a3df5726",
+  "source": "specs/282-threshing-yard-layout/measure.py and the drawn SVGs (each yard group's mats as drawn, their rotate angles and positions), the rendered .html, the notes and the manifests; the lattice rule pinned by tests/settlement/test_yard_mats_282.py's brute-force oracle",
+  "measured": "2026-09-28",
+  "method": "the rotate angles of the first six mats in each yard group of inashiro.svg, rounded to 0.1 degree, compared across yards"
+ },
+ "sr7-inashiro-f2-full-lattice": {
+  "value": 0.67,
+  "unit": "share of a yard's mats",
+  "quantity": "the least share of turned mats in any inashiro yard, with the turn now up to 10 degrees where the neighbors leave room and drawn per yard - the full 1 ft yards no longer repeat one stamp beside each other",
+  "verifies": "F2",
+  "subject": "inashiro",
+  "answers": "a1b8a3df5726",
+  "source": "specs/282-threshing-yard-layout/measure.py and the drawn SVGs (each yard group's mats as drawn, their rotate angles and positions), the rendered .html, the notes and the manifests; the lattice rule pinned by tests/settlement/test_yard_mats_282.py's brute-force oracle",
+  "measured": "2026-09-28",
+  "method": "per yard group of inashiro.svg: mats carrying a rotate over all mats, the minimum"
+ },
+ "sr7-sawada-f1-lattice-search": {
+  "value": 5,
+  "unit": "yards short by one mat",
+  "quantity": "after the lattice search (one column and one row narrower, and shifted across the slack) sawada's short yards draw one mat under a third each (the 20 x 14 ft yard 5, the 31 x 22 ft yard 12 of 13); tests/settlement/test_yard_mats_282.py pins the 20 x 14 ft outline and its rack against a brute-force 1 ft lattice search, which seats no more",
+  "verifies": "F1",
+  "subject": "sawada",
+  "answers": "a1b8a3df5726",
+  "source": "specs/282-threshing-yard-layout/measure.py and the drawn SVGs (each yard group's mats as drawn, their rotate angles and positions), the rendered .html, the notes and the manifests; the lattice rule pinned by tests/settlement/test_yard_mats_282.py's brute-force oracle",
+  "measured": "2026-09-28",
+  "method": "sawada.json threshing_yards: mats against ceil(area/54); the oracle test's pass"
+ },
+ "sr7-sawada-f2-wording": {
+  "value": 1,
+  "unit": "occurrences",
+  "quantity": "the rendered sawada.html modal now says '(a yard whose outline or rack leaves no room for the last one, a mat fewer)' in place of 'a small or awkwardly shaped yard'",
+  "verifies": "F2",
+  "subject": "sawada",
+  "answers": "a1b8a3df5726",
+  "source": "specs/282-threshing-yard-layout/measure.py and the drawn SVGs (each yard group's mats as drawn, their rotate angles and positions), the rendered .html, the notes and the manifests; the lattice rule pinned by tests/settlement/test_yard_mats_282.py's brute-force oracle",
+  "measured": "2026-09-28",
+  "method": "string count in sawada.html"
+ },
+ "sr7-kashikawa-f1-yard7": {
+  "value": 6,
+  "unit": "mats",
+  "quantity": "kashikawa's 22 x 15 ft yard at (1227.4,1275.5) now draws 6 mats (was 3) - the lattice one column narrower - which the brute-force oracle test confirms is the most a 1 ft lattice seats on that outline",
+  "verifies": "F1",
+  "subject": "kashikawa",
+  "answers": "a1b8a3df5726",
+  "source": "specs/282-threshing-yard-layout/measure.py and the drawn SVGs (each yard group's mats as drawn, their rotate angles and positions), the rendered .html, the notes and the manifests; the lattice rule pinned by tests/settlement/test_yard_mats_282.py's brute-force oracle",
+  "measured": "2026-09-28",
+  "method": "kashikawa.json threshing_yards mats; tests/settlement/test_yard_mats_282.py"
+ },
+ "sr7-kashikawa-f2-notes": {
+  "value": 1,
+  "unit": "entries",
+  "quantity": "kashikawa.notes.md's feature-282 entry now reads '..., a mat fewer where the outline or the rack leaves no room (a drawing convention - ...)', one parenthetical",
+  "verifies": "F2",
+  "subject": "kashikawa",
+  "answers": "a1b8a3df5726",
+  "source": "specs/282-threshing-yard-layout/measure.py and the drawn SVGs (each yard group's mats as drawn, their rotate angles and positions), the rendered .html, the notes and the manifests; the lattice rule pinned by tests/settlement/test_yard_mats_282.py's brute-force oracle",
+  "measured": "2026-09-28",
+  "method": "grep of the feature-282 entry in kashikawa.notes.md"
+ },
+ "sr7-kuwabata-f1-notes": {
+  "value": 1,
+  "unit": "entries",
+  "quantity": "kuwabata.notes.md gains a feature-282 entry: the harvest weather recorded (settled, the default) and nothing drawn on a hamlet with no threshing floor",
+  "verifies": "F1",
+  "subject": "kuwabata",
+  "answers": "a1b8a3df5726",
+  "source": "specs/282-threshing-yard-layout/measure.py and the drawn SVGs (each yard group's mats as drawn, their rotate angles and positions), the rendered .html, the notes and the manifests; the lattice rule pinned by tests/settlement/test_yard_mats_282.py's brute-force oracle",
+  "measured": "2026-09-28",
+  "method": "lines of kuwabata.notes.md containing 'feature 282'"
+ },
+ "sr7-mizuguchi-f1-off-grid": {
+  "value": 0.2,
+  "unit": "ft",
+  "quantity": "the two yards named, (1237.9,638.1) and (1328.7,417.2), no longer sit on a lattice: no step below 1 ft is drawn, 12 of 12 and 16 of 18 of their mats are turned, and the mats of each row stand off one line by 0.2-0.5 ft and 0.16-0.65 ft (row by row; one row of 0.0) - nudged off the grid, not only turned",
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "answers": "7ed47895e6e1",
+  "source": "the drawn mizuguchi.svg: the rect y positions and rotate angles in those two yard groups, rows grouped by position",
+  "measured": "2026-09-28",
+  "method": "per row of each named yard group: the spread of the drawn mats' y positions, in feet (1 px = 1 ft); rotate transforms counted"
  }
 }

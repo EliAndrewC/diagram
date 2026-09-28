@@ -25,9 +25,11 @@ mats; the mat band of FR-004 is sized against that range.
 
 ## R4 - the gap, and the yards that cannot hold a third at it
 
-Observed 2026-09-28; method: the regenerated pool manifests' `threshing_yards` (`w`, `h`, `mats`) and the drawn SVGs, mats
-laid at gaps of `2`, `1.5` and `1 ft`, each corner held `1 ft` inside the drawn outline and each mat's outline `0.1 ft`
-clear of its neighbors'. The narrower steps were tried and read as paving in the settlement-reviews: edge to edge (rounds 2
-and 3), and `0.5 ft` (rounds 4 to 6 - no room there to lay a mat askew, even with the lattice thinned). At `1 ft`, eleven
-yards of the four rice maps fall short of a third of a full cover: shares from 0.18 to 0.33, the fewest drawing 3 mats
-(Sawada's `20 x 14 ft` yard, which also holds a rack).
+Observed 2026-09-28; method: the regenerated pool manifests' `threshing_yards` (`w`, `h`, `mats`, `rack`) after the lattice
+search (at each gap of `2`, `1.5` and `1 ft`, the lattice as wide as the inset allows and one column and one row narrower,
+each tried centered and pushed half and all the way to either side of its slack; each corner held `1 ft` inside the drawn
+outline and each mat's outline `0.1 ft` clear of its neighbors'). The narrower steps were tried and read as paving in the
+settlement-reviews: edge to edge (rounds 2 and 3), and `0.5 ft` (rounds 4 to 6). At `1 ft`, 9 yards of the four rice maps
+fall one or two mats short of a third of a full cover - inashiro 20 x 14 ft 4 of 6, kashikawa 22 x 15 ft 6 of 7, kashikawa 22 x 15 ft 6 of 7, kashikawa 27 x 19 ft 9 of 10, sawada 24 x 16 ft 7 of 8 (rack), sawada 31 x 22 ft 12 of 13 (rack), sawada 22 x 15 ft 6 of 7 (rack), sawada 25 x 17 ft 8 of 9 (rack), sawada 20 x 14 ft 5 of 6 (rack) -
+the pulled-in corners of their outlines, or the rack, leaving no room for the last mat at that gap. The fewest any yard
+draws is 4 (Inashiro's `20 x 14 ft`).

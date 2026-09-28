@@ -972,7 +972,7 @@ the grass 17-43 ft off the paddy, left where a later pass dropped the field spur
 
 Every threshing yard is now drawn as the harvest leaves it: straw mats of 3 by 6 ft over the whole floor, each with a
 little bare ground around it, most turned a little as if laid by hand and nudged off their rows where the gap leaves room, between a third and two thirds of those
-that covered it (a small or awkwardly shaped yard fewer) (a drawing convention - the real yard was covered, research homesteads 'What lay in the work yard at
+that covered it, a mat fewer where the outline or the rack leaves no room (a drawing convention - the real yard was covered, research homesteads 'What lay in the work yard at
 harvest?'). The old fixed center mat and the rack along each yard's south edge are gone. This map declares no harvest
 weather, so it takes the regional default, settled, and draws no rack by the houses (research homesteads 'Did a village
 put its drying racks by the houses by custom, or because of its weather?'). The weather is declared, never rolled: the

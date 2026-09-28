@@ -31,7 +31,7 @@ MAT_GAPS_FT = (2.0, 1.5, 1.0)
 MAT_JITTER_FT = 0.4
 MAT_STROKE_FT = 0.2  # half the mat outline's drawn width (0.4 at a hamlet's 1 ft to the px)
 MAT_INK_CLEAR_FT = 0.1  # bare ground left between two mats' drawn outlines, at the least
-MAT_JITTER_DEG = 6.0
+MAT_JITTER_DEG = 10.0  # up to 10 degrees where the neighbors leave room: at 6 a corner swung under half a pixel at map scale (settlement-review, Mizuguchi, round 7)
 
 
 def _mat_hash(r: int, c: int, salt: float) -> float:
@@ -61,7 +61,9 @@ RACK_CLEAR_FT = 0.25  # the rack stops this far north of the yard's midline (the
 RACK_POST_FT = 6.0  # a post every ~6 ft (a GUESS within the attested racks: posts at even spacing, kotobank-hasa-nipponica)
 
 
-def mat_cells(w: float, h: float, poly: list[tuple[float, float]], ftpx: float, keep_out: tuple[float, float, float, float] | None = None) -> list[tuple[float, float, float, float, float]]:
+def mat_cells(
+    w: float, h: float, poly: list[tuple[float, float]], ftpx: float, keep_out: tuple[float, float, float, float] | None = None, salt: float = 0.0
+) -> list[tuple[float, float, float, float, float]]:
     """The mats one yard draws, as (x, y, w, h, angle) in the yard's LOCAL, unturned frame (its center at 0,0): the
     unturned rect and the degrees it is turned about its own center.
 
@@ -73,7 +75,10 @@ def mat_cells(w: float, h: float, poly: list[tuple[float, float]], ftpx: float, 
     four corners lie at least `MAT_EDGE_CLEAR_FT` inside the yard's quad `poly` (local coords) and miss `keep_out` (the
     rack's footprint, x0, y0, x1, y1). The count is held to at least a third of the yard's full cover (area / 18 sq ft;
     spec 282 FR-004) by closing the gap (`MAT_GAPS_FT`), at the widest gap that reaches it; where none does, the gap that
-    holds the most."""
+    holds the most. At each gap the lattice is tried as wide as the inset allows and one column and one row narrower,
+    and the one that seats the most is kept - a centered lattice one column too wide lost both outer columns to the
+    floor's pulled-in corners and drew half what fits (settlement-reviews of round 7, Sawada and Kashikawa, 2026-09-28).
+    `salt` is the yard's own: the nudge and the turn are drawn per yard, not repeated from one to the next."""
     mw, mh, inset, clear = MAT_FT[0] / ftpx, MAT_FT[1] / ftpx, MAT_INSET_FT / ftpx, MAT_EDGE_CLEAR_FT / ftpx
     floor = math.ceil((w * ftpx) * (h * ftpx) / MAT_SQ_FT / 3.0)
 
@@ -87,14 +92,24 @@ def mat_cells(w: float, h: float, poly: list[tuple[float, float]], ftpx: float, 
     for gap_ft in MAT_GAPS_FT:
         g = gap_ft / ftpx
         cols, rows = int((w - 2 * inset + g) // (mw + g)), int((h - 2 * inset + g) // (mh + g))
-        gx0, gy0 = -(cols * (mw + g) - g) / 2.0, -(rows * (mh + g) - g) / 2.0
-        base = []
-        for r in range(rows):
-            for c in range(cols):
-                x, y = gx0 + c * (mw + g), gy0 + r * (mh + g)
-                if fits(_mat_corners(x, y, mw, mh, 0.0)):
-                    base.append((r, c, x, y))
-        mats = _lay_by_hand(base, mw, mh, ftpx, fits)
+        base: list[tuple[int, int, float, float]] = []
+        for nc, nr in ((cols, rows), (cols - 1, rows), (cols, rows - 1), (cols - 1, rows - 1)):
+            if nc * nr <= len(base):
+                continue  # this lattice cannot seat more than the best already found
+            span_x, span_y = nc * (mw + g) - g, nr * (mh + g) - g
+            sx, sy = max(0.0, (w - 2 * inset - span_x) / 2.0), max(0.0, (h - 2 * inset - span_y) / 2.0)
+            for ox in (0.0, -sx / 2.0, sx / 2.0, -sx, sx):  # centered, then pushed half and all the way to either side of its slack
+                for oy in (0.0, -sy / 2.0, sy / 2.0, -sy, sy):
+                    gx0, gy0 = ox - span_x / 2.0, oy - span_y / 2.0
+                    trial = [(r, c, gx0 + c * (mw + g), gy0 + r * (mh + g)) for r in range(max(0, nr)) for c in range(max(0, nc))]
+                    trial = [t for t in trial if fits(_mat_corners(t[2], t[3], mw, mh, 0.0))]
+                    if len(trial) > len(base):
+                        base = trial
+                    if len(base) == nc * nr:
+                        break  # every spot of this lattice seats: no shift can do better
+                if len(base) == nc * nr:
+                    break
+        mats = _lay_by_hand(base, mw, mh, ftpx, fits, salt)
         if len(mats) > len(best):
             best = mats
         if len(mats) >= floor:
@@ -102,7 +117,7 @@ def mat_cells(w: float, h: float, poly: list[tuple[float, float]], ftpx: float, 
     # A YARD THAT CANNOT HOLD A THIRD WITH ROOM ROUND EVERY MAT DRAWS AS MANY AS FIT AT 1 FT (spec 282 FR-004, amended
     # 2026-09-28): the narrower steps were tried and each read as paving in the settlement-reviews - edge to edge (rounds 2
     # and 3), and 0.5 ft (rounds 4 to 6: no room to lay a mat askew, even thinned). At 1 ft every mat keeps bare ground and
-    # room to lie askew; eleven yards of the pool fall short of a third there, by up to half, the fewest drawing 3.
+    # room to lie askew; research.md R4 of spec 282 counts the pool's yards that still fall short.
     return thin_evenly(best, max(1, math.floor((w * ftpx) * (h * ftpx) / MAT_SQ_FT * 2.0 / 3.0)))
 
 
@@ -114,7 +129,7 @@ def _quad_gap(a: list[tuple[float, float]], b: list[tuple[float, float]]) -> flo
     return min(min(edge_dist(px, py, b) for px, py in a), min(edge_dist(px, py, a) for px, py in b))
 
 
-def _lay_by_hand(base: list[tuple[int, int, float, float]], mw: float, mh: float, ftpx: float, fits: Any) -> list[tuple[float, float, float, float, float]]:
+def _lay_by_hand(base: list[tuple[int, int, float, float]], mw: float, mh: float, ftpx: float, fits: Any, salt: float = 0.0) -> list[tuple[float, float, float, float, float]]:
     """Set each mat of the lattice `base` (row, column, x, y) down by hand: nudged up to `MAT_JITTER_FT` and turned up to
     `MAT_JITTER_DEG` by a positional draw, and kept so only where its corners still fit the floor (`fits`) and its drawn
     outline stays `MAT_INK_CLEAR_FT` clear of every neighbor's - the mats already laid and the lattice spots still to come.
@@ -127,8 +142,8 @@ def _lay_by_hand(base: list[tuple[int, int, float, float]], mw: float, mh: float
     laid: list[tuple[float, float, float, float, float]] = []
     quads: list[list[tuple[float, float]]] = []
     for k, (r, c, x, y) in enumerate(base):
-        dx, dy = (2 * _mat_hash(r, c, 1.0) - 1) * MAT_JITTER_FT / ftpx, (2 * _mat_hash(r, c, 2.0) - 1) * MAT_JITTER_FT / ftpx
-        a = (2 * _mat_hash(r, c, 3.0) - 1) * MAT_JITTER_DEG
+        dx, dy = (2 * _mat_hash(r, c, salt + 1.0) - 1) * MAT_JITTER_FT / ftpx, (2 * _mat_hash(r, c, salt + 2.0) - 1) * MAT_JITTER_FT / ftpx
+        a = (2 * _mat_hash(r, c, salt + 3.0) - 1) * MAT_JITTER_DEG
         ahead = [_mat_corners(bx, by, mw, mh, 0.0) for _r, _c, bx, by in base[k + 1 :]]
         for jx, jy, ja in ((x + dx, y + dy, a), (x, y, a), (x, y, a / 2.0), (x, y, 0.0)):
             q = _mat_corners(jx, jy, mw, mh, ja)
@@ -197,7 +212,7 @@ class ThreshingYardsMixin:
         rack = rack_segment(w, h, rot, self.ftpx, 1 if self._hjit(cx, cy, 53.0) < 0.5 else -1) if self._house_racks else None
         pad = 0.25 / self.ftpx  # the mats keep a quarter foot off the rack - a wider margin cost the smallest yards a column
         keep = (rack[0] - rack[3] - pad, rack[1] - pad, rack[0] + rack[3] + pad, rack[2] + pad) if rack else None
-        mats = mat_cells(w, h, local, self.ftpx, keep)
+        mats = mat_cells(w, h, local, self.ftpx, keep, salt=round(self._hjit(cx, cy, 61.0) * 997.0, 3))  # the yard's own draw
         for mx, my, mw, mh, ma in mats:  # straw mats (mushiro), a third to two thirds of those that covered the floor, each laid by hand - a CONVENTION
             turn = f' transform="rotate({ma:.1f} {mx + mw / 2:.2f} {my + mh / 2:.2f})"' if ma else ""
             g.append(f'<rect x="{mx:.2f}" y="{my:.2f}" width="{mw:.2f}" height="{mh:.2f}"{turn} fill="#E4CC86" stroke="#C4A45E" stroke-width="0.4"/>')
