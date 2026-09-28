@@ -148,3 +148,16 @@ the research supports no knob; the village conversion's owed list (`future-work/
      where the sources support more than one form. SC-004 MUST read: the knob, its forms and labels, or the single
      attested form with its label and the statement that the research supports no knob - knowing there is none is
      what the GM asked to know, and an unconditional success criterion invites a manufactured knob.
+- Round 2 (spec-fidelity-verify, MODE 3, 2026-09-28): FAITHFUL - round 1's three items are resolved by a4e608f72.
+  1. RESOLVED: FR-005 now takes the outline from FR-001's findings - irregular and labeled a guess where the sources
+     are silent, a straight edge put to the GM before either form is drawn; User Story 2 (its statement, independent
+     test and acceptance 1) defers to FR-005, and SC-002 applies `STRAIGHT_RUN` only where FR-005 settles an
+     irregular outline.
+  2. RESOLVED: FR-002 and User Story 1's acceptance 2 make research 124's decision report what FR-001 found about the
+     sides and extent and point at it; the first Edge Case is conditional ("where the wood covers less than the
+     precinct") and lets the wood stand on "some or all" of it, so "wooded all round" stays open.
+  3. RESOLVED: SC-004, User Story 3's independent test and FR-008 accept the knob with its forms and labels, or the
+     single attested form with its label and the statement that the research supports no knob.
+  No changed passage adds scope or contradicts the request. Read in full: the diff; spec.md's Summary (lines 5-17),
+  the Edge Cases block and the Round 1 entry, via grep for FR-002/004/005/008, SC-002/004, `STRAIGHT_RUN`, knob,
+  irregular, "every side" and "all round"; request.md. No new figure with a unit in the diff.
