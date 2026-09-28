@@ -1,6 +1,6 @@
 # Tasks - feature 284, the fourth hotspot pass
 
-Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (A1-A7, B1-B5, C). Research: [`research.md`](research.md).
+Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (A1-A8, B1-B5, C). Research: [`research.md`](research.md).
 Order: the exact pieces first, each proved on its equality test; the pool regenerated and compared byte for byte against
 `5f15c65bd` with all of them landed; then the moving pieces under 276's FR-006 condition; then the five named stages and
 the after-profile; then the measurement and the record.

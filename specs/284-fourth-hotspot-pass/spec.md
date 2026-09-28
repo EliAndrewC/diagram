@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in the clone `diagram-performance`)
 **Created**: 2026-09-28
-**Status**: Draft
+**Status**: Accepted - FAITHFUL at round 5 of 5 (2026-09-28)
 **Request**: [`request.md`](request.md) - the GM's words verbatim: take every lever 281's report priced, and in general
 "look at what is slow and then be willing to let things of that nature change if those changes would allow it to be
 significantly faster".
@@ -226,3 +226,6 @@ removes is not predicted), and every stage figure is the fastest of three with t
   (R2 and FR-006 on the corrected share, SC-010 rewritten over the after-profile, the fallback a moving change with its Decisions row,
   SC-005's condition, the note corrected, and the whole base re-taken at `5f15c65bd` - main having merged 282, which moved
   every pool manifest - with the corrected crown callee).
+- Round 4 (spec-fidelity-verify, 2026-09-28): CHANGES REQUIRED - the slowdown range, four stages left in three places, the
+  harness base in Key Entities, R3's figures unlabeled. Addressed.
+- Round 5 (spec-fidelity-verify, 2026-09-28): FAITHFUL.
