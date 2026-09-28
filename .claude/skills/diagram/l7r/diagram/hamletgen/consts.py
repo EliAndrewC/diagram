@@ -580,13 +580,21 @@ BROOK_FAN_TRIM = 0.72
 # that the head race really does leave it at `OFFTAKE_DEG` - the record's rule is an angle off the parent's
 # DOWNSTREAM HEADING, and a brook already turning at the tap is not heading down the fall there.
 BROOK_TAP_RUN = 70.0
-# THE WEIR GLYPH at a `weir` hamlet's intake: an oblique bar of stone-packed timber crib across the brook,
-# running diagonally upstream from the intake mouth as the old ones did. Half-length and thickness in feet.
-# The full closure is a MAP DRAWING CONVENTION - half-river closures were the common old form and at a 7 ft
-# brook a half-bar is a pixel or two - and the thickness is a GUESS: no source read gives a village weir's
-# cross-section (the histories' dimensions are river weirs', hundreds of meters long).
+# THE WEIR GLYPH at a `weir` hamlet's intake: an oblique bar across the brook, running diagonally upstream from the
+# intake mouth as the old ones did. Half-length in feet. The full closure is a MAP DRAWING CONVENTION - half-river
+# closures were the common old form and at a 7 ft brook a half-bar is a pixel or two.
 WEIR_HALF_FT = 7.0
-WEIR_THICK_FT = 5.0
+# WHAT THE WEIR IS BUILT OF, AND SO HOW THICK IT IS DRAWN, in feet, by form (269 B22; research/water/300, "What was a
+# village weir built of, and how thick was it?"). The weir on small water was built of what lay to hand, and four forms
+# are read, so the form is a knob (`WEIR_FORM`, water/brook.py) rolled per weir hamlet, each at its own thickness:
+# - `fence`, stakes with reed woven between them (the grass weir): a fence is as thick as its row of stakes; 1.5 ft is
+#   WIDER than that so it can be seen at all - a MAP DRAWING CONVENTION;
+# - `gabion`, a course of stone-filled baskets: one basket "about 40-60 cm in diameter", read as about 2 ft - the
+#   basket's read size; the gabion course as a BROOK weir at all is a GUESS (the source gives gabions on rivers);
+# - `frame`, stakes and logs packed with clay (the Kodera site) and `crib`, timber frames weighted with stone: 5 ft,
+#   a GUESS - the only dimensions read are river works', and a crib at village scale is not recorded. 5 ft is the
+#   thickness the one crib glyph was drawn at before the knob.
+WEIR_THICK_FT = {"fence": 1.5, "gabion": 2.0, "frame": 5.0, "crib": 5.0}
 WEIR_SKEW_DEG = 30.0
 
 # DELIVERY-DITCH DENSITY by household count. A comb's offtakes are how many delivery ditches drop

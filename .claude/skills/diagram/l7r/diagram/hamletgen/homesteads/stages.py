@@ -177,7 +177,9 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         the rest because no way could reach it - Kashikawa shipped one 52 ft beyond the water with no bridge anywhere.
         Ways cross the brook at a ford now and `bridges()` decks the crossing, so a hamlet may stand astride its own
         small channel, as the record has it (Harie, specs/230 R6); a house the web still cannot reach is caught by the
-        reach check and re-rolled, as any stranded house is."""
+        reach check and re-rolled, as any stranded house is. Both forms are attested at a stream's size (269 B23;
+        research/water/270: Hongcun beside its stream, Xidi and Likeng on both banks), so neither bank is refused;
+        each farmstead stays whole on one bank, which the same entry records as a guess."""
         s._seat_search["candidates"] += 1
         return True
 
@@ -337,7 +339,9 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         # brook skirts the fan 34-44 ft outside its margin, so on a seat facing the wind down that flank every front seat
         # lay in the water's corridor and was refused; the displaced households were seated by the cloud behind, and a
         # crescent that drew 4.07:1 on main drew 1.62:1. The row stands on the brook's far bank instead, fronting its field
-        # across the water - the push is the course's reach past the box's near edge, by its own clearance.
+        # across the water - the push is the course's reach past the box's near edge, by its own clearance. A row across
+        # its brook from its field is one of the two forms the record gives a hamlet at a stream's size (269 B23,
+        # research/water/270), not an exception to it.
         wet = water_push(s_._site_corridors.water, (_bx[0], _bx[1]), n_, half_lat, near, far)
         by_water = wet > push
         push = max(push, wet)

@@ -8,9 +8,11 @@ from __future__ import annotations
 
 import math
 import random
+import re
 from collections.abc import Sequence
 
 from l7r.diagram.settlement import Settlement, knob_rng
+from l7r.diagram.settlement._knobs import Knob, register_knob
 from l7r.diagram.sitegen.geom import crosses_poly, unit
 
 from ..consts import (
@@ -28,6 +30,13 @@ from ..consts import (
     Pt,
 )
 from ..plan import SitePlan
+
+# THE WEIR'S FORM (269 B22; research/water/300): a fence of stakes and woven reed, a frame of stakes and logs packed
+# with clay, a crib of timber packed with stone, or a course of stone-filled baskets, each drawn at its own thickness
+# (`WEIR_THICK_FT`). "The rule the map follows: a weir hamlet's weir takes one of four forms, rolled per settlement
+# with an even chance" - the EVEN chance a GUESS, no source counting them. `crib` is the default because it is the
+# one form the glyph drew before the knob. Declared as `meta.weir_form` on a weir hamlet only.
+WEIR_FORM = register_knob(Knob("weir_form", list(WEIR_THICK_FT), default="crib"))
 
 EXIT_BEND_FRAC = 0.12  # an exit leg's midpoint bend, as a share of the leg ...
 EXIT_BEND_MAX_FT = 60.0  # ... at most this far aside
@@ -387,16 +396,18 @@ def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
 
     The record attests both and gives no proportion, so `plan.intake` is rolled per map
     (research/water.html, "Is there a weir at the intake?"). On an `open`
-    hamlet the point is marked by the junction itself: the brook runs straight on and the race leaves its
-    bank at an acute angle, which is a fork a reader can see. On a `weir` hamlet a bar of stone-packed
-    timber crib crosses the brook, set OBLIQUE - the old weirs ran diagonally upstream from the intake
-    mouth, damming the shallow riffle and standing clear of the flood's fastest water.
+    hamlet the point is marked by the junction itself: the brook runs straight on and the race opens out of its
+    bank at an acute angle (`open_race_mouth`), which is a fork a reader can see - no gate or boards, none being
+    recorded at a village intake (research/water/310). On a `weir` hamlet a bar crosses the brook, set OBLIQUE -
+    the old weirs ran diagonally upstream from the intake mouth, damming the shallow riffle and standing clear of
+    the flood's fastest water - built in one of four forms rolled per hamlet (`WEIR_FORM`, research/water/300).
 
-    Two disclosed liberties, both in the entry: the bar is drawn as a FULL closure of the brook, a map
-    drawing convention, because a half-river closure - the common old form - is a pixel or two at a 7 ft
-    brook; and its thickness is a guess, the histories giving cross-sections only for river weirs."""
+    One disclosed liberty, in the entry: the bar is drawn as a FULL closure of the brook, a map drawing convention,
+    because a half-river closure - the common old form - is a pixel or two at a 7 ft brook. Each form's thickness is
+    `WEIR_THICK_FT`'s, with its class beside it."""
     if plan.intake != "weir":
         return
+    form = s.M["meta"]["weir_form"] = s.resolve("weir_form")
     nxt = next((q for q in plan.brook[plan.brook.index(sluice) + 1 :]), None) if sluice in plan.brook else None
     hx, hy = unit(nxt[0] - sluice[0], nxt[1] - sluice[1]) if nxt else plan.fall
     # THE WEIR STANDS BELOW THE MOUTH AND SLANTS UP FROM THE INTAKE BANK (settlement-review, feature 230 pass 10). The
@@ -411,7 +422,7 @@ def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
     skew = math.tan(math.radians(WEIR_SKEW_DEG))
     ax, ay = unit(-nx - hx * skew, -ny - hy * skew)  # from the intake bank's (downstream) end toward the far bank, upstream
     ang = math.atan2(ay, ax)
-    half, half_t = WEIR_HALF_FT / plan.ftpx, WEIR_THICK_FT / plan.ftpx / 2.0
+    half, half_t = WEIR_HALF_FT / plan.ftpx, WEIR_THICK_FT[form] / plan.ftpx / 2.0
     # ...AND CLEAR OF THE MOUTH ITSELF, not merely of the junction point (settlement-review, feature 230 pass 11). The race
     # leaves at `OFFTAKE_DEG`, so its opening cuts the bank over `w / sin(offtake)` - about 10 ft at Kashikawa's 6 ft race -
     # and a bar set a pixel below the junction stood IN that opening, with a third of the mouth in the tailwater. The bar
@@ -431,20 +442,84 @@ def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
             "len": round(2 * half, 1),
             "w": round(2 * half_t, 1),
             "deg": round(math.degrees(ang) % 180.0, 1),
+            "form": form,
             "poly": [[round(x, 1), round(y, 1)] for x, y in poly],
         }
     )
-    # A WEIR IS NOT A BRIDGE, and it was drawn as one: the same brown oblique bar as the nine footbridges on
-    # the reference hamlet's own sheet, which `settlement-review` read as "the crossing" - actively misleading,
-    # since it is the only bar over the brook. So the glyph says what a weir does instead. Stone gray rather
-    # than timber brown, because the bar is crib-work packed with stone and the map's timber decks are brown;
-    # the crib's own baulks ticked across it, which a plank deck's single stripe cannot be mistaken for; and a
-    # lip along the upstream face, the one thing a weir has and a bridge cannot - it holds water back.
+    s.add(weir_glyph(form, poly, (cx, cy), (ax, ay), (hx, hy), half, half_t), cls="weir")
+
+
+def open_race_mouth(s: Settlement, sluice: Pt) -> None:
+    """The head race OPENS OUT OF THE BROOK'S BANK (269 B22; research/water/310, "What does the intake mouth look like").
+
+    The attested bare intake is an opening: "water can easily be taken just by providing an entrance for it", a
+    damless intake "opening a mouth at the concave side". So the ditch begins at the bank's edge, and nothing of it is
+    drawn on the stream. It was: `field_channel` trims a channel's end to just inside the bank and the race's bed is
+    in the late water block, painted after the brook, so its round cap printed a blob of ditch-colored water across
+    the brook at every intake - a channel laid on top of the stream rather than one leaving it. Trimming harder cannot
+    cure it: the race leaves at `OFFTAKE_DEG`, so any square or round end cuts the bank on a slant and leaves a notch
+    of bare ground on one side or a tongue in the water on the other. The mouth is cut BY THE BANK instead: the race's
+    first stroke is carried back to the tap on the brook's centerline, and the brook's bed is moved to paint after it,
+    so the brook's own edge is where the ditch begins. No gate and no boards are drawn: none is recorded at a village
+    intake, and at a two-foot opening either would be smaller than the map can show.
+
+    Beds share one opacity group (`_water`), so the brook painting over the race is a join, not a darker seam. A brook
+    with a pond `clip` is not moved (its bed is re-emitted at flush from the early list); a hamlet's brook has none."""
+    tap = (float(sluice[0]), float(sluice[1]))
+    brook = next((st for st in s.M.get("streams", []) if any(math.dist(tap, (float(q[0]), float(q[1]))) < 0.5 for q in st["poly"])), None)
+    entry = next((w for w in s.water if w["rec"] is brook and w.get("clip") is None), None) if brook is not None else None
+    if brook is None or entry is None:
+        return
+    reach = float(brook.get("w", 7)) / 2.0 + 8.0  # a race trimmed at this bank starts within this of the tap
+    for w in s.late_water:
+        pts = w["rec"].get("pts")
+        if pts and 0.05 < math.dist(tap, (float(pts[0][0]), float(pts[0][1]))) <= reach:
+            w["bed"] = re.sub(r' d="M', f' d="M{tap[0]:.1f},{tap[1]:.1f} L', w["bed"], count=1)
+            pts.insert(0, [round(tap[0], 1), round(tap[1], 1)])
+            break
+    s.water.remove(entry)
+    s.late_water.append(entry)
+
+
+def weir_glyph(form: str, poly: Sequence[Pt], c: Pt, along: Pt, down: Pt, half: float, half_t: float) -> str:
+    """The SVG of a weir bar by its FORM (269 B22, research/water/300), inside the bar's own `poly`.
+
+    A WEIR IS NOT A BRIDGE, and it was drawn as one: the same brown oblique bar as the nine footbridges on the reference
+    hamlet's own sheet, which `settlement-review` read as "the crossing" - actively misleading, since it is the only bar
+    over the brook. So every form says what a weir does: a lip along the UPSTREAM face, the one thing a weir has and a
+    bridge cannot - it holds water back - and a body that no deck on the map shares:
+
+    - `crib`, timber packed with stone: stone gray, the crib's baulks ticked across it (the glyph before the knob);
+    - `frame`, stakes and logs packed with clay: clay brown-gray, the logs drawn along it and the stakes as dots;
+    - `gabion`, stone-filled baskets: gray, the baskets' seams across it and the weave hatched on the diagonal;
+    - `fence`, stakes with reed woven between them: a thin reed-colored band with its stakes as dark dots."""
+    cx, cy = c
+    ax, ay = along
+    hx, hy = down
+
+    def at(t: float, v: float) -> Pt:  # a point `t` of the half-length along the bar and `v` of the half-thickness downstream
+        return (cx + ax * half * t + hx * half_t * v, cy + ay * half * t + hy * half_t * v)
+
+    def line(p: Pt, q: Pt, stroke: str, width: float) -> str:
+        return f'<line x1="{p[0]:.1f}" y1="{p[1]:.1f}" x2="{q[0]:.1f}" y2="{q[1]:.1f}" stroke="{stroke}" stroke-width="{width}"/>'
+
+    def dots(v: float, n: int, r: float, fill: str) -> str:  # stakes: `n` evenly along the bar at depth `v`
+        return "".join(f'<circle cx="{at(-0.9 + 1.8 * k / (n - 1), v)[0]:.1f}" cy="{at(-0.9 + 1.8 * k / (n - 1), v)[1]:.1f}" r="{r}" fill="{fill}"/>' for k in range(n))
+
+    fill, stroke = {"crib": ("#9A9A90", "#63645C"), "frame": ("#A08C72", "#5E4A34"), "gabion": ("#A3A196", "#63645C"), "fence": ("#B9A86E", "#6E5E36")}[form]
     pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in poly)
-    ticks = "".join(
-        f'<line x1="{cx + ax * half * t - hx * half_t:.1f}" y1="{cy + ay * half * t - hy * half_t:.1f}" '
-        f'x2="{cx + ax * half * t + hx * half_t:.1f}" y2="{cy + ay * half * t + hy * half_t:.1f}" stroke="#6E6A60" stroke-width="0.7"/>'
-        for t in (-0.62, -0.2, 0.2, 0.62)
-    )
-    lip = f'<line x1="{poly[3][0]:.1f}" y1="{poly[3][1]:.1f}" x2="{poly[2][0]:.1f}" y2="{poly[2][1]:.1f}" stroke="#8FA6AE" stroke-width="1.6" stroke-linecap="round"/>'
-    s.add(f'<polygon points="{pts}" fill="#9A9A90" stroke="#63645C" stroke-width="0.9" stroke-linejoin="round"/>{ticks}{lip}', cls="weir")
+    body = [f'<polygon points="{pts}" fill="{fill}" stroke="{stroke}" stroke-width="0.9" stroke-linejoin="round"/>']
+    if form == "crib":
+        body += [line(at(t, -1.0), at(t, 1.0), "#6E6A60", 0.7) for t in (-0.62, -0.2, 0.2, 0.62)]
+    elif form == "frame":
+        body += [line(at(-0.95, v), at(0.95, v), "#6B5238", 0.8) for v in (-0.45, 0.45)]  # the logs laid along the stakes
+        body.append(dots(0.0, 5, 0.7, "#4E3A26"))  # the stakes holding them
+    elif form == "gabion":
+        body += [line(at(t, -1.0), at(t, 1.0), "#6E6A60", 0.6) for t in (-0.5, 0.0, 0.5)]  # one basket to the next
+        body += [line(at(t - 0.12, -1.0), at(t + 0.12, 1.0), "#7E7A70", 0.4) for t in (-0.75, -0.25, 0.25, 0.75)]  # the weave
+    else:
+        body.append(dots(0.0, 6, 0.55, "#4E3A26"))
+    body.append(
+        f'<line x1="{poly[3][0]:.1f}" y1="{poly[3][1]:.1f}" x2="{poly[2][0]:.1f}" y2="{poly[2][1]:.1f}" stroke="#8FA6AE" stroke-width="{min(1.6, 1.2 * half_t):.1f}" stroke-linecap="round"/>'
+    )  # the lip, never wider than a thin bar's own half
+    return "".join(body)
