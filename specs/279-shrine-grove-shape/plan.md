@@ -23,7 +23,7 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 2). Request: [`request.md`](request.
   source-applicability.
 - **D2 - the knob and every text that states the grove** (FR-004, FR-007, FR-008): knob 8, `grove form` -
   `behind`, `behind and sides`, `sides`, `all around` - in the country-shrines program (`buildings/programs.md`,
-  hand prose) with the ground rule, equal weights between two candidates (a guess) and the paddy edge OPEN with
+  hand prose) with the ground rule, equal weights between two or three candidates (a guess) and the paddy edge OPEN with
   the GM; the program's composition rule ("the precinct holds the grove"), its size anchors and its `types.json`
   notes restated to it; the shared `shrine grove` kind (`compound_kinds/grounds.py`) - its Why, Note and Caveat
   (the forms; the edge and the roll as guesses) and its Entry (research 129) - which also renders the program's
@@ -54,8 +54,8 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 2). Request: [`request.md`](request.
 - **D6 - the sheet and every text that places a feature against the old grove** (FR-007): the grove floor and tree
   list rewritten from D4, and the sheet's frame widened to hold the wood's outer crowns; the subtitle's "in its wood"
   dropped; the knob written as the program declares it (`**Grove form**: behind and sides`); the precinct's open
-  ground drawn plain on the sheet where the map draws scrub, recorded as a map drawing convention; the precinct rect stays
-  (layout, `-`). Restated to the sides form, each by name - in `hoshigaoka-shrine.notes.md`: the "precinct is the
+  ground drawn plain on the sheet where the map draws scrub, recorded as a map drawing convention; the precinct rect stays (layout,
+  `-`), and the notes say the wood runs past its line, measured. Restated to the sides form, each by name - in `hoshigaoka-shrine.notes.md`: the "precinct is the
   grove" bullet (its area, crown count and canopy share re-measured from D4's layout), the arches bullet and the
   sacred tree bullet ("at the grove's edge", "the grove's biggest"), the knob list (`**Grove form**: sides`, with
   the roll's exact call), and the Map notes lines `torii`, `shrine grove` and `well` ("at the grove's back edge",
@@ -67,7 +67,8 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 2). Request: [`request.md`](request.
   `grove` hit in every file the sheet renders from, each ruled on - is `research.md` R3.
 - **D7 - verification** (SC-002, SC-003, FR-009): `STRAIGHT_RUN`, and the long-window `LONG_RUN` the
   settlement-review asked for (a 50 ft stretch of edge within a crown's radius of one line), measured on the tree
-  list by the layout script and recorded in `measurements.json`; `matches_map` (the tree-overlap check) stays green; a `settlement-review`
+  list by the layout script and recorded in `measurements.json`, with each outer side's wander from its best-fit line
+  (settlement-review round 2: the old box's long sides must not survive as the wood's outer edges); `matches_map` (the tree-overlap check) stays green; a `settlement-review`
   of the map and a `building-review` of the sheet, ledgered; the paddy-edge question and the side forms' single
   source raised with the GM at hand-back (through `escalation-check`); `make done` green.
 

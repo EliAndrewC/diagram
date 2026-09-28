@@ -4,16 +4,16 @@
   "unit": "runs",
   "measured": "2026-09-28",
   "method": "the layout script (specs/279-shrine-grove-shape/layout.py) on the tree list: edge crowns (centers within a crown's radius plus 6 sheet px of a flank's outline), ordered along it; a window of four whose middle two lie within 6 sheet px (2 ft) of the line through its first and last, spanning more than 30 px, is a run",
-  "edge_crowns": 62
+  "edge_crowns": 69
  },
  "grove-trees-hoshigaoka": {
-  "value": 129,
+  "value": 128,
   "unit": "crowns",
   "measured": "2026-09-28",
   "method": "the layout script's tree list"
  },
  "grove-canopy-share-hoshigaoka": {
-  "value": 0.894,
+  "value": 0.887,
   "unit": "share of the ground the crowns may cover",
   "measured": "2026-09-28",
   "method": "4 px grid sampling inside the wood's outline, of the points not in the clearing, approach, path, well or captions"
@@ -35,10 +35,10 @@
   "answers": "92d79f1b3c1e"
  },
  "sr1-f2-one-wood": {
-  "value": 1,
-  "unit": "region",
-  "quantity": "the wood is one irregular region behind the hall and round both flanks (form behind and sides, D3 amended), not two mirrored flanks; no side is near-plumb",
-  "source": "legacy-hand-authored-pool/villages/hoshigaoka/hoshigaoka.json village_groves role shrine (one record) - read 2026-09-28",
+  "value": 45.9,
+  "unit": "sheet px",
+  "quantity": "the drawn crowns' outer sides: per 20 px band from y 250 to 640, the outermost crown edge on each side (west crowns x < 440, east x > 440), a best-fit line through each side - west 4.3 deg off vertical with crowns wandering up to 69.7 px (23 ft) from it, east 2.1 deg and 45.9 px (15 ft); the smaller wander, over two crown radii (19.5 px each), is the value - neither side is a line, so the old box's parallel long sides do not survive",
+  "source": "the tree list in specs/279-shrine-grove-shape/layout.py's output, drawn one for one as the map's shrine-grove crowns (each crown at its tree's position, radius r/6) - measured 2026-09-28",
   "observed": "2026-09-28",
   "subject": "hoshigaoka",
   "verifies": "F2",

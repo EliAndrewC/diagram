@@ -21,10 +21,13 @@ GX0, GY0, GX1, GY1 = 220.0, 170.0, 630.0, 816.0  # the precinct (research 124) -
 # sides, sides; the roll on the map's name gave behind and sides. The wood runs from the well at its back edge down
 # both flanks to ragged tips short of the lower arches; the lower approach is open. Its edge is its crowns' own (a
 # guess): a smooth-noise outline about a base shape with real bays and spurs, never a ruled line.
-_WOOD = [(236, 236), (312, 196), (400, 182), (452, 168), (528, 184), (604, 206), (648, 268), (626, 336),
-         (664, 404), (652, 474), (682, 540), (660, 606), (628, 660), (596, 690), (566, 690), (548, 662),
-         (500, 676), (440, 684), (380, 676), (342, 688), (314, 708), (284, 722), (252, 704), (226, 660),
-         (240, 600), (204, 548), (196, 470), (220, 410), (192, 340), (208, 282)]
+_WOOD = [(236, 236), (296, 206), (350, 236), (404, 190), (452, 168), (500, 204), (560, 172), (604, 206), (648, 268), (640, 336),
+         (700, 420), (626, 482), (696, 560), (644, 612), (628, 660), (596, 690), (566, 690), (548, 662),
+         (500, 676), (440, 684), (380, 676), (342, 694), (318, 726), (290, 752), (258, 736), (230, 680),
+         (244, 612), (214, 560), (236, 506), (164, 474), (212, 410), (192, 340), (208, 282)]
+# the outer sides carry real lobes - the east a spur, a bay and a spur, the west a spur mid-flank - and the west tip
+# runs lower, so neither side is a line and the two are not a parallel pair (settlement-review round 2: the old
+# box's long sides survived as the flanks' outer edges)
 def _resample(poly, step=10.0):
     pts = []
     for (ax, ay), (bx, by) in zip(poly, poly[1:] + poly[:1]):
@@ -45,7 +48,7 @@ def _noisy(poly, seed=279):
         d = sum(a * math.sin(2 * math.pi * f * i / n + ph) for f, a, ph in waves)
         out.append((round(x + nx * d, 1), round(y + ny * d, 1)))
     return out
-REGIONS = [_noisy(_WOOD, 2795)]
+REGIONS = [_noisy(_WOOD, 2793)]
 REGION = [p for r in REGIONS for p in r]  # every outline point, for the bounding box
 
 
@@ -56,7 +59,7 @@ CLEAR = (272.0, 394.0, 566.0, 672.0)  # the clearing's bounding box (the frame o
 # the sanctuary behind the hall, the hall and its eaves, the kitchen garden and privy at the west gable, the
 # forecourt before the step - never a ruled rectangle (settlement-review round 2, 2026-09-27)
 _CLEAR_CORE = [(414, 400), (440, 390), (466, 400), (474, 432), (552, 440), (564, 500), (560, 560), (566, 610), (530, 648),
-               (510, 672), (372, 672), (350, 640), (318, 600), (276, 574), (272, 500), (276, 456), (318, 442),
+               (510, 672), (492, 684), (466, 668), (440, 680), (414, 666), (390, 678), (372, 672), (350, 640), (318, 600), (276, 574), (272, 500), (276, 456), (318, 442),
                (360, 432), (404, 430)]
 _cr = random.Random(2682)
 CLEAR_POLY = [(x + _cr.uniform(-5, 5), y + _cr.uniform(-5, 5)) for x, y in _CLEAR_CORE]          # the swept clearing: hall, sanctuary, garden, privy, forecourt
@@ -64,7 +67,7 @@ APPROACH = (410.0, 548.0, 470.0, 820.0)       # the approach corridor with the a
 SACRED = (518.0, 746.0, 45.0)                 # the sacred tree beside the approach (center, canopy r)
 WELL = (440.5, 176.5, 30.0)                   # the map's shrine well + its pad
 LABELS_OLD = [(308.0, 594.0, 348.0, 614.0), (412.0, 332.0, 514.0, 356.0), (374.0, 598.0, 412.0, 616.0), (536.0, 672.0, 596.0, 692.0)]  # seated captions: sanctuary, basin, sacred tree
-PATH = ((330.0, 440.0), (426.0, 184.0))  # from the clearing's north-west edge to the well       # the household's footpath to the well, from the clearing's NW
+PATH = ((330.0, 440.0), (434.0, 183.0))  # from the clearing's north-west edge to the well       # the household's footpath to the well, from the clearing's NW
 PATH_HALF = 11.0
 BASIN = (398.0, 570.0)
 
@@ -99,7 +102,7 @@ def clear_of(x, y, r):
         return False
     if in_poly(x, y, CLEAR_POLY) or poly_dist(x, y, CLEAR_POLY) < r + 2:
         return False
-    for (x0, y0, x1, y1) in (APPROACH, *LABELS):
+    for (x0, y0, x1, y1) in (APPROACH, *LABELS, *SHEET_TEXT):
         nx, ny = min(max(x, x0), x1), min(max(y, y0), y1)
         if math.hypot(x - nx, y - ny) < r + 2:
             return False
@@ -115,10 +118,11 @@ def clear_of(x, y, r):
 
 
 LABELS = []  # set from the seated captions after the first seat-label pass
+SHEET_TEXT = []  # the sheet moves its title and scale bar clear of the wood instead (an exclusion here ruled the wood's top edge on the map)
 import os
 if os.path.exists(OUT + '.labels'):
     LABELS = json.load(open(OUT + '.labels'))
-rng = random.Random(2796)
+rng = random.Random(2794)
 trees = []  # (x, y, r) sheet px
 # dart-throwing, big crowns first, then fill with smaller ones: canopies may touch, never overlap
 for r_lo, r_hi, tries in ((25.0, 30.0, 80000), (19.5, 25.0, 120000)):
@@ -159,15 +163,20 @@ def _pull(x, y):
         return (x, y)
     f = 0.85 * tr / d
     return (round(tx + (x - tx) * f, 1), round(ty + (y - ty) * f, 1))
-FLOORS = [[_pull(x, y) for x, y in R] for R in REGIONS]
+from shapely.geometry import Point
+from shapely.ops import unary_union
+_crowns = unary_union([Point(x, y).buffer(r, 32) for x, y, r in trees])
+_floor = _crowns.buffer(9, 16).buffer(-9, 16).intersection(_crowns.buffer(0.5, 16))
+_polys = list(_floor.geoms) if hasattr(_floor, "geoms") else [_floor]
+FLOORS = [[(round(x, 1), round(y, 1)) for x, y in list(pg.exterior.coords)[:-1]] for pg in _polys if pg.area > 50]
+FLOOR_HOLES = [[(round(x, 1), round(y, 1)) for x, y in list(h.coords)[:-1]] for pg in _polys if pg.area > 50 for h in pg.interiors]
 # ---- the village map ----
 PAL = [("#7C9A4E", "#3C5526"), ("#6E8B43", "#3C5526"), ("#496733", "#3C5526")]
 map_trees = []
 parts = ['<g id="shrine-grove">']
 # the grove's floor: a ragged outline about the precinct (the wood's edge is not ruled), then the swept clearing
 edge = list(REGIONS[0])  # the wood's floor is the region: its edge the wood's own (feature 279)
-for _ring in FLOORS:
-    parts.append('<polygon points="' + " ".join(f"{to_map(x, y)[0]:.1f},{to_map(x, y)[1]:.1f}" for x, y in _ring) + '" fill="#B9BE8A" fill-opacity="0.85"/>')
+parts.append('<path d="' + " ".join("M" + " L".join(f"{to_map(x, y)[0]:.1f},{to_map(x, y)[1]:.1f}" for x, y in _ring) + " Z" for _ring in FLOORS + FLOOR_HOLES) + '" fill="#B9BE8A" fill-opacity="0.85" fill-rule="evenodd"/>')
 FLOOR = edge
 parts.append('<polygon points="' + " ".join(f"{to_map(x, y)[0]:.1f},{to_map(x, y)[1]:.1f}" for x, y in CLEAR_POLY) + '" fill="#E6DCC4"/>')
 # the approach's 10 ft gravel under the arches, from the step to the grove's edge (as the sheet draws it)
@@ -255,8 +264,21 @@ for k, R in enumerate(REGIONS):
             break
 meas["long_runs"] = len(long_runs)
 meas["long_run_windows"] = long_runs
+def _side(sign):
+    pts = []
+    for y0 in range(250, 640, 20):
+        band = [(x + sign * r, y) for x, y, r in trees if y0 <= y < y0 + 20 and (x - 440) * sign > 0]
+        if band:
+            pts.append(max(band) if sign > 0 else min(band))
+    n = len(pts)
+    my = sum(y for _, y in pts) / n; mx = sum(x for x, _ in pts) / n
+    a = sum((y - my) * (x - mx) for x, y in pts) / sum((y - my) ** 2 for _, y in pts)
+    resid = max(abs(x - (mx + a * (y - my))) for x, y in pts)
+    return round(math.degrees(math.atan(a)), 1), round(resid, 1)
+meas["west_side_deg_resid"] = _side(-1)
+meas["east_side_deg_resid"] = _side(1)
 meas["edge_crowns"] = m_all
 meas["straight_runs"] = len(runs)
 meas["straight_run_windows"] = runs
-json.dump({"floors": FLOORS, "regions": REGIONS, "region": REGION, "floor": [[round(x, 1), round(y, 1)] for x, y in FLOOR], "clear_poly": [[round(x, 1), round(y, 1)] for x, y in CLEAR_POLY], "meas": meas, "trees": trees, "sacred": SACRED, "grove_svg": grove_svg, "torii_svg": torii_svg, "manifest_add": manifest_add}, open(OUT, "w"), indent=1)
+json.dump({"floor_holes": FLOOR_HOLES, "floors": FLOORS, "regions": REGIONS, "region": REGION, "floor": [[round(x, 1), round(y, 1)] for x, y in FLOOR], "clear_poly": [[round(x, 1), round(y, 1)] for x, y in CLEAR_POLY], "meas": meas, "trees": trees, "sacred": SACRED, "grove_svg": grove_svg, "torii_svg": torii_svg, "manifest_add": manifest_add}, open(OUT, "w"), indent=1)
 print(json.dumps(meas))
