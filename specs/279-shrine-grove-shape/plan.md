@@ -59,7 +59,8 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 2). Request: [`request.md`](request.
   the arches and the well; the shared `approach` kind (`compound_kinds/shrine.py`: What and Covers, "from the
   grove's edge") and the program's approach rule (`buildings/programs.md`: "at the grove's edge") - the way enters
   the precinct, and the outermost arch stands there; and `future-work/farming-communities.md`'s "a village shrine's
-  precinct IS its grove". The map's notes row "Shrine grounds" records feature 279's edit.
+  precinct IS its grove". The map's notes row "Shrine grounds" records feature 279's edit. The full list - every
+  `grove` hit in every file the sheet renders from, each ruled on - is `research.md` R3.
 - **D7 - verification** (SC-002, SC-003, FR-009): `STRAIGHT_RUN` measured on the tree list by the layout script
   and recorded in `measurements.json`; `matches_map` (the tree-overlap check) stays green; a `settlement-review`
   of the map and a `building-review` of the sheet, ledgered; the paddy-edge question and the side forms' single

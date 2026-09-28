@@ -62,8 +62,8 @@ does (`p272_apply.py`'s shape, recorded in the Hoshigaoka notes).
 ## OPEN 2026-09-27, OWED AT CONVERSION: the village generator draws no shrine grove, sacred tree or basin
 
 Feature 268 (the GM, 2026-09-27: "Add grove to map") put a grove, a roped sacred tree and a stone basin round
-Hoshigaoka's shrine by hand, and the country-shrine program now says a village shrine's precinct IS its grove
-(research religion-and-death 124, 126). No generator draws them: `rolling/roll.py`'s civic shrine lays the
+Hoshigaoka's shrine by hand, and the country-shrine program now says a village shrine's precinct holds its
+grove, in the form its ground gives (research religion-and-death 124, 126, 129). No generator draws them: `rolling/roll.py`'s civic shrine lays the
 hall, its arches at the 12 ft pitch and its well, nothing more. So converting Hoshigaoka (or any village) drops
 them. Sketch: after `shrine_hall`, reserve a precinct outline from behind the shrine well to the outermost arch
 (the register band of research 124 as its area), carve the clearing and the approach, then lay the WOOD in the
