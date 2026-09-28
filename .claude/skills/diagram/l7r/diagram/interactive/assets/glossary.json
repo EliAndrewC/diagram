@@ -706,7 +706,8 @@
  "batter": {
   "def": "The slope of a bank's face, given as its horizontal spread against its height; a 1:1 batter is a face at forty-five degrees.",
   "variants": [
-   "batter"
+   "batter",
+   "battered"
   ]
  },
  "baulk": {
@@ -2162,7 +2163,9 @@
   "variants": [
    "kami-yashiki",
    "upper residence",
-   "upper residences"
+   "upper residences",
+   "upper estate",
+   "upper estates"
   ]
  },
  "kamiza": {
@@ -2207,7 +2210,10 @@
  "karo": {
   "def": "Literally \"house elder\": the senior retainer who ran a samurai household's affairs - in a domain lord's house, the senior councillors, who decided in council and lived nearest the castle.",
   "variants": [
-   "karo"
+   "karo",
+   "karō",
+   "elder house",
+   "elder houses"
   ]
  },
  "kashi": {
@@ -3009,7 +3015,8 @@
    "ote-mon",
    "otemon",
    "ote",
-   "oute"
+   "oute",
+   "Ōte"
   ]
  },
  "ote-suji": {
@@ -9156,6 +9163,38 @@
    "cho-hanare"
   ]
  },
+ "uchibori": {
+  "def": "The innermost of a castle's rings of moats, the one nearest its center. At a flatland castle the outer ring is the sotobori and the ring between the two is the naka-bori.",
+  "variants": [
+   "uchibori",
+   "uchi-bori",
+   "inner moat",
+   "inner moats"
+  ]
+ },
+ "Shoho": {
+  "def": "A Japanese era name. Its first year, Shoho 1, is 1644, the year the shogun Iemitsu ordered the daimyo of the whole country to make plans of their castles.",
+  "variants": [
+   "Shoho",
+   "Shoho era"
+  ]
+ },
+ "fudai": {
+  "def": "A hereditary vassal house of the shogun; the fudai domains are the lands such houses held, set apart from the domains of the lords outside that inner circle.",
+  "variants": [
+   "fudai",
+   "fudai domains",
+   "fudai daimyo"
+  ]
+ },
+ "House Chancellery": {
+  "def": "The domain's governing council; it has no compound of its own and meets in a room of the goten, the daimyo's residence inside the castle.",
+  "variants": [
+   "House Chancellery",
+   "chancellery",
+   "chancellery's"
+  ]
+ },
  "matoi": {
   "def": "The standard of an Edo-period fire company, carried to a fire and held up on the roofs by its bearer. It was kept with the rest of the fire gear in a ward's watch house.",
   "variants": [
@@ -9190,6 +9229,28 @@
    "bangi"
   ]
  },
+ "Imperial Magistrate": {
+  "def": "The Emperor's own officer resident in a domain's capital, whose walled compound is the Emperor's ground inside the domain rather than the domain's own; the setting's budget notes fund it at 700 koku a year.",
+  "variants": [
+   "Imperial Magistrate",
+   "Imperial Magistrate's",
+   "Imperial Magistrates"
+  ]
+ },
+ "Emerald Charter": {
+  "def": "The Emperor's charter under which each domain receives an Imperial Magistrate, an Imperial samurai appointed from outside the domain and stationed at its capital with their own staff, court and budget.",
+  "variants": [
+   "Emerald Charter"
+  ]
+ },
+ "hectare": {
+  "def": "A metric unit of area: 10,000 square meters, about 107,600 square feet or 2.5 acres.",
+  "variants": [
+   "hectare",
+   "ha",
+   "hectares"
+  ]
+ },
  "three arresting tools": {
   "def": "The three long-handled tools a watch post kept for taking a man alive without cutting him down: a barbed sleeve-catcher, a forked pole and a T-headed push-pole.",
   "variants": [
@@ -9203,6 +9264,25 @@
   "variants": [
    "boubana",
    "bobana"
+  ]
+ },
+ "chancellor": {
+  "def": "In the setting, the member of the domain's House Chancellery who sits for one samurai lineage; a House has about six, each of Rank 11, second only to the daimyo.",
+  "variants": [
+   "chancellor",
+   "chancellors",
+   "chancellors'",
+   "chancellor's",
+   "lineage chancellor",
+   "lineage chancellors"
+  ]
+ },
+ "cosmopolitan lineage": {
+  "def": "In the setting, a samurai lineage tied to no one province, often raised to reward service to the daimyo - unlike a provincial lineage, which is rooted in its home province and in practice holds its governorship by inheritance.",
+  "variants": [
+   "cosmopolitan lineage",
+   "cosmopolitan lineages",
+   "cosmopolitan"
   ]
  },
  "village grain": {
@@ -9247,6 +9327,19 @@
    "juyangyuan"
   ]
  },
+ "penthouse": {
+  "def": "In a building's measurements, a smaller structure raised on its roof (Japanese 塔屋, touya) - in a keep, the upper stories set on top of the main floors, counted apart from the stories above ground.",
+  "variants": [
+   "penthouse",
+   "penthouses"
+  ]
+ },
+ "goyobeya": {
+  "def": "The room where a domain's senior councilors (karo) carried out their duties, in the castle palace and in the domain's Edo mansion alike.",
+  "variants": [
+   "goyobeya"
+  ]
+ },
  "tayu": {
   "def": "A rank of courtesan in the licensed quarters of Edo-period Japan; the record's Osaka source names the tayu first among Shinmachi's more than 800 courtesans in the 1690s and 1700s.",
   "variants": [
@@ -9259,6 +9352,13 @@
   "variants": [
    "ohaguro-dobu",
    "ohaguro dobu"
+  ]
+ },
+ "pleasure quarter": {
+  "def": "A district of a town set aside for licensed entertainment - teahouses, entertainers' houses and brothels - often near the port or at the town's edge.",
+  "variants": [
+   "pleasure quarter",
+   "pleasure quarters"
   ]
  },
  "seyakuin": {
@@ -9286,6 +9386,19 @@
   "variants": [
    "outer moat",
    "outer moats"
+  ]
+ },
+ "tairo": {
+  "def": "The great elder: the shogunate's highest office, filled only at times and ranking above the Roju, with whom its holder sat in Edo castle's goyobeya to run the government.",
+  "variants": [
+   "tairo",
+   "tairō"
+  ]
+ },
+ "wakadoshiyori": {
+  "def": "The shogunate's junior elders, ranking below the Roju, who shared the goyobeya in Edo castle with them to conduct the business of government.",
+  "variants": [
+   "wakadoshiyori"
   ]
  },
  "Enpo era": {

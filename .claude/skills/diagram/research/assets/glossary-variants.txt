@@ -116,6 +116,7 @@ bastions	bastion
 battalion cities	guard city
 battalion city	guard city
 batter	batter
+battered	batter
 baulk	baulk
 baulks	baulk
 bay	bay
@@ -239,6 +240,12 @@ chain pump	chain pump
 chain pumps	chain pump
 chan	Chan
 chan buddhism	Chan
+chancellery	House Chancellery
+chancellery's	House Chancellery
+chancellor	chancellor
+chancellor's	chancellor
+chancellors	chancellor
+chancellors'	chancellor
 chang'an	Chang'an
 chaoguan	chaoguan
 chenghuangmiao	chenghuangmiao
@@ -319,6 +326,9 @@ coppicing	coppice
 copse	copse
 corvee	corvee
 corvée	corvee
+cosmopolitan	cosmopolitan lineage
+cosmopolitan lineage	cosmopolitan lineage
+cosmopolitan lineages	cosmopolitan lineage
 country monk	country monk
 country monks	country monk
 county magistrate	county magistrate
@@ -504,8 +514,11 @@ eel's-bed plot	eel's bed
 eighty-eighth night	eighty-eighth night
 eiro	eiro
 ekika	ekika
+elder house	karo
+elder houses	karo
 embankment	embankment
 embankments	embankment
+emerald charter	Emerald Charter
 emergent	emergent
 emergent plant	emergent
 emergent plants	emergent
@@ -639,6 +652,9 @@ frass	frass
 freeboard	freeboard
 frontage	frontage
 fu	fu
+fudai	fudai
+fudai daimyo	fudai
+fudai domains	fudai
 fudasashi	fudasashi
 fudo	Fudo
 fudo myoo	Fudo
@@ -743,6 +759,7 @@ governor-general	governor-general
 governor-general's	governor-general
 governors-general	governor-general
 goyoba	goyoba
+goyobeya	goyobeya
 goyōba	goyoba
 goza-no-ma	goza-no-ma
 grave island	grave island
@@ -768,6 +785,7 @@ gō	go
 gōnō	gōnō
 gōsha	gōsha
 gōshi	gōshi
+ha	hectare
 hachijuhachiya	eighty-eighth night
 hachiman	Hachiman
 hachure	hachure
@@ -816,6 +834,8 @@ headman	headman
 headmen	headman
 headworks	headworks
 heavenly kings	hall of the Heavenly Kings
+hectare	hectare
+hectares	hectare
 heian	Heian
 heian-kyo	Heian-kyo
 heian-kyo's	Heian-kyo
@@ -898,6 +918,7 @@ hot shoeing	hot-shoeing
 hot-shoeing	hot-shoeing
 houlongshan	houlongshan
 hour of xu	hour of xu
+house chancellery	House Chancellery
 house manager	yamori
 house manager's	yamori
 house pad	house pad
@@ -944,6 +965,9 @@ ikkō-shū	Jodo Shinshu
 ima	ima
 imado ware	Imado ware
 imado-yaki	Imado ware
+imperial magistrate	Imperial Magistrate
+imperial magistrate's	Imperial Magistrate
+imperial magistrates	Imperial Magistrate
 imperial road	Imperial road
 imperial roads	Imperial road
 imperial spine	Imperial spine
@@ -956,6 +980,8 @@ inashiro	Inashiro
 initiate	initiate
 initiates	initiate
 inkyo	inkyo
+inner moat	uchibori
+inner moats	uchibori
 intake	intake
 intake mouth	intake
 intakes	intake
@@ -1103,6 +1129,7 @@ karamete-mon	karamete-mon
 karamon	Chinese-style gate
 karishiki	karishiki
 karo	karo
+karō	karo
 kashi	kashi
 kaso-dera	kaso-dera
 kasoba	kasoba
@@ -1283,6 +1310,8 @@ light bamboo	light bamboo
 lijia	lijia
 lijin	lijin
 lineage	lineage
+lineage chancellor	chancellor
+lineage chancellors	chancellor
 lineage village	lineage village
 lineage villages	lineage village
 lineages	lineage
@@ -1610,6 +1639,8 @@ pearl-delta	Pearl delta
 peer-reviewed flora	flora
 pent roof	pent roof
 pent roofs	pent roof
+penthouse	penthouse
+penthouses	penthouse
 perched	perched river
 perched river	perched river
 perched, silt-choked river	perched river
@@ -1630,6 +1661,8 @@ pit ranks	pit rank
 plankton	plankton
 plant association	plant association
 planted collar	planted collar
+pleasure quarter	pleasure quarter
+pleasure quarters	pleasure quarter
 pledged land	pledged land
 plinth	plinth
 plinths	plinth
@@ -1907,6 +1940,8 @@ shobodan	shobodan
 shogun	shogun
 shogunate	bakufu
 shoguns	shogun
+shoho	Shoho
+shoho era	Shoho
 shoin	shoin
 shoin-zukuri	shoin
 shoinzukuri	shoin
@@ -2056,6 +2091,8 @@ taihu	Lower Yangzi
 taiji	Taiji
 taimenjo	taimenjo
 taiping-gang	taiping-gang
+tairo	tairo
+tairō	tairo
 taiseiden	Taiseiden
 taisho	Taisho
 taishō	Taisho
@@ -2219,6 +2256,8 @@ two-grave villages	two-grave
 tōhoku	Tohoku
 tōkaidō	Tokaido
 tōya	miyaza
+uchi-bori	uchibori
+uchibori	uchibori
 uchigenkan	uchigenkan
 udatsu	udatsu
 udegi	udegi gate
@@ -2245,6 +2284,8 @@ unhaired	unhair
 unhairing	unhair
 unhairs	unhair
 unjo-gura	levy storehouse
+upper estate	kami-yashiki
+upper estates	kami-yashiki
 upper residence	kami-yashiki
 upper residences	kami-yashiki
 ura-dana	ura-dana
@@ -2274,6 +2315,7 @@ wagon inn	wagon inn
 wagon inns	wagon inn
 wagon-inn	wagon inn
 waju	waju
+wakadoshiyori	wakadoshiyori
 wakato	wakato
 waki-honjin	waki-honjin
 walled ward	lifang
@@ -2450,6 +2492,7 @@ zushi-nikai	half-story
 ōiya	ōiya
 ōkaji	ōkaji
 ōkajiba	ōkaji
+ōte	ote-mon
 ōya	yamori
 ほ場整備	hojo seibi
 ホオノキ	hoonoki
