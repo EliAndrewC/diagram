@@ -28,8 +28,9 @@ mats; the mat band of FR-004 is sized against that range.
 Observed 2026-09-28; method: the regenerated pool manifests' `threshing_yards` (`w`, `h`, `mats`, `rack`, the outline to a
 thousandth of a px) after the lattice search - at each gap of `2`, `1.5` and `1 ft`, the lattice as wide and as deep as the
 yard allows and one column and one row fewer, at every offset on a quarter-foot grid; and, where the `1 ft` gap still falls
-short of a third, solved exactly across (each row's feasible positions are intervals of the convex outline moved in by the
-`1 ft` clearance) and on a `0.02 ft` grid down - each corner held `1 ft` inside the drawn outline and clear of the rack.
+short of a third, solved exactly with no step anywhere: every spot's fit is a set of linear conditions on the lattice's
+origin (each corner inside the outline moved in by the `1 ft` clearance, the mat clear of the rack), the seated count is
+constant between their lines, and every crossing of two of them is tried, each region's set confirmed at its centroid.
 Checked by an oracle that shares no grid with it (every lattice origin on a `0.02 ft` grid anchored `0.01 ft` off,
 `tests/hamletgen/test_pool_282.py`), which also finds the two yards the quarter-foot search alone left short. The narrower
 steps were tried and read as paving in the settlement-reviews: edge to edge (rounds 2 and 3), and `0.5 ft` (rounds 4 to 6).

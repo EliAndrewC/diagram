@@ -218,3 +218,18 @@ FR-002 finds (FR-005); its declaration names the research question it rests on.
   test must be able to see the two yards above: run it on the exact outline (or a manifest outline recorded finely enough
   that no clearance allowance is needed; the `1.05 ft` allowance alone hides the `20 x 14 ft` yard, which fits to `1.04 ft` on the SVG outline),
   and show it fails on the current code. Plan review round 8 BLOCKED (D3's lattice search).
+- Amendment round 8 (spec-fidelity, 2026-09-28; the round-7 items, then the plan re-read whole): (2) confirmed - the pool
+  oracle's grid is anchored `0.01 ft` off the search's, runs on the outline to a thousandth with no clearance allowance, and
+  its test sees the old counts (`make test-file` on both 282 test files, 48 passed). (1) confirmed for the pool: Sawada's
+  `31.2 x 21.5` and `20.3 x 14.0 ft` yards draw 13 and 6, their thirds, and R4's six short yards reproduce against an EXACT
+  search on this round's own run (the pool rolled in memory with `mat_cells` wrapped for its exact inputs; every lattice
+  size, the origin taken at every vertex of the arrangement of each mat spot's outline and rack constraint lines): 4, 6, 6,
+  7, 6 and 8, as drawn. NOT resolved for the rule: the search is still sampled down, on a `0.02 ft` grid. On this round's own
+  run (1,000 synthetic yards of the roll's sizes, `19-48 ft` wide at the pool's `h/w`, corners pulled in within the range
+  the pool's outlines show, the rack from `rack_segment`), one yard - `25.41 x 17.52 ft` with a rack - draws 7 against a third
+  of 9 where a lattice seats 8, which `_exact_lattice` itself finds at a `0.005 ft` step and every mat of which passes
+  `mat_cells`' own fit test: the top row fits in a band under `0.02 ft` tall below the rack's end. CHANGES REQUIRED: (1) solve
+  the down direction exactly too - the candidate `y0` are the vertices of the arrangement (each row's top or bottom meeting a
+  rack limit, `k1 - mh - r ph` and `k3 - r ph`, and the pairwise crossings of the spots' outline constraint lines), each then
+  swept exactly across as now - and pin that yard on plain inputs; R4's method line then says so. Plan review round 9
+  BLOCKED (D3's search down).

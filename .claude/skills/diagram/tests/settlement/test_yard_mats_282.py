@@ -156,3 +156,11 @@ def test_a_yard_short_of_a_third_draws_as_many_as_any_1_ft_lattice_would_fit(w: 
     drawn = len(mat_cells(w, h, poly, 1.0, keep))
     assert drawn >= min(third, _brute_fit(w, h, poly, keep)), "a lattice the layout never tried seats more"
     assert drawn >= 4
+
+
+def test_a_lattice_that_fits_only_in_a_band_thinner_than_any_grid_is_found() -> None:
+    # a 25.4 x 17.5 ft yard with its rack on the east (spec-fidelity, amendment round 8, 2026-09-28): a 1 ft lattice seats 8
+    # only with its top row in a band under 0.02 ft tall just below the rack's end; the y grid of 0.02 ft drew it 7
+    poly = [(-10.916545273005731, -8.000801383130378), (12.539506545824656, -8.56225445403871), (12.554600478710167, 8.22205926909465), (-11.471217965375882, 8.56225445403871)]
+    keep = (8.952654744209827, -7.010451547730915, 11.952654744209827, 0.25)
+    assert len(mat_cells(25.405309488419654, 17.52090309546183, poly, 1.0, keep)) >= 8

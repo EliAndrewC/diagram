@@ -1,6 +1,6 @@
 {
  "feature": "282-threshing-yard-layout",
- "plan_sha256": "d6ad1c3acf5e8e20c9006d98d32ba949bb82d58fcfdc39c4b46bf7166b2c0f10",
+ "plan_sha256": "eaa9f4989b90251feca7ae2ccd4a5562736a5c828448a7646cf28990489abc8e",
  "reviewed": "2026-09-28",
  "declared": "spec-fidelity",
  "decisions": [
@@ -29,24 +29,30 @@
    "why": "Unchanged; a degree of the hand-laid convention."
   },
   {
+   "id": "D3-tie-break",
+   "summary": "Of equal counts, the lattice whose SEATED mats' box sits nearest the yard's center; an equal-count smaller lattice competes.",
+   "class": "within",
+   "why": "A placement choice among layouts that seat the same number; it changes no count and narrows nothing asked."
+  },
+  {
    "id": "D3-short-yard-physical",
    "summary": "A yard that physically cannot hold a third at a 1 ft gap draws as many as fit at it, at any size.",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "As ruled in round 5: the third is this project's proxy, and forcing it where it cannot fit at the least legible gap defeats the GM's aim that the mats read as mats. Six of the pool's short yards are genuinely fit-limited on the exact geometry mat_cells receives."
+   "why": "As ruled in round 5; on this round's own run the pool's six short yards are fit-limited against an exact search (arrangement-vertex enumeration on the exact inputs mat_cells received)."
   },
   {
    "id": "D3-short-yard-search",
-   "summary": "'Cannot reach a third at 1 ft' decided by a lattice search on a quarter-foot grid anchored at -w/2 (the per-yard fit table); SC-001's oracle searches the same quarter-foot grid.",
+   "summary": "'Cannot reach a third at 1 ft' decided by the quarter-foot search, then solved exactly across and on a 0.02 ft grid down; SC-001's pool oracle a 0.02 ft grid anchored 0.01 ft off.",
    "class": "narrowing",
    "ruling": "NOT LEGITIMATE",
-   "why": "Still excuses yards that CAN hold a third. On this round's own run - Sawada rolled in memory with mat_cells wrapped to capture its exact inputs (outline, rack keep-out with its 0.25 ft pad), then every lattice origin searched on a 0.05 ft grid at a 1 ft gap and a 1 ft clearance, at two grid anchors - Sawada's 31.2 x 21.5 ft yard seats 13 (its third) where 12 are drawn, and its 20.3 x 14.0 ft yard seats 6 (its third) where 5 are drawn. The fitting lattices lie in windows narrower than the quarter-foot step: the same failure as the Kashikawa yard of round 6, at a finer grain. The oracle cannot see it because it enumerates exactly the lattices mat_cells does (quarter-foot offsets from -w/2, pitches a whole number of quarter feet), and the pool test's 1.05 ft clearance hides the 20 x 14 yard besides (it fits to 1.04 ft on the SVG outline). The exception's words are 'cannot hold'; a discretized search that misses a fitting lattice does not establish it."
+   "why": "The across direction is now exact and the pool is right, but the down direction is still sampled at a fixed step, so the rule still lets off a yard that can hold more. On this round's own run, 1,000 synthetic yards of the roll's sizes (the pool's h/w and corner pull-ins, racks from rack_segment): a 25.41 x 17.52 ft yard with a rack draws 7 (third 9) where a 1 ft lattice seats 8 - _exact_lattice finds it at a 0.005 ft y step, and all 8 pass mat_cells' own fit test; its top row fits in a band under 0.02 ft tall below the rack's end. An exact down solve is possible and cheap (the arrangement's vertices: row edges meeting the rack's y limits k1 - mh - r*ph and k3 - r*ph, and pairwise crossings of the spots' outline constraint lines), so nothing makes the sampling necessary."
   },
   {
    "id": "D3-floor-four",
    "summary": "The short-yard floor is four mats.",
    "class": "within",
-   "why": "Bounds the exception rather than widening it; Inashiro's 20 x 14 ft yard fits 4 and draws 4 (0.05 ft grid, this round)."
+   "why": "Bounds the exception; Inashiro's 20 x 14 ft yard seats 4 on the exact search and draws 4."
   },
   {
    "id": "D4",
@@ -56,9 +62,9 @@
   },
   {
    "id": "D5",
-   "summary": "Threshing yard docstring rewritten from 025 and 505 with labels and the GM's convention wording; now 'a mat or two fewer'.",
+   "summary": "Threshing yard docstring rewritten from 025 and 505 with labels and the GM's convention wording; 'a mat or two fewer'.",
    "class": "within",
-   "why": "FR-007; the round-6 wording item is fixed."
+   "why": "FR-007."
   },
   {
    "id": "D6",

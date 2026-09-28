@@ -133,8 +133,8 @@ def mat_cells(
         if len(base) < floor and gap_ft == MAT_GAPS_FT[-1]:
             # THE LAST GAP IS SOLVED EXACTLY WHERE THE GRID FALLS SHORT (spec-fidelity, amendment round 7, 2026-09-28): a lattice
             # that fits in a window narrower than the quarter-foot grid was missed, and a yard that CAN hold a third drew one
-            # short; so before a yard is let off with fewer, the lattice is solved row by row on the floor's own outline
-            exact = _exact_lattice(poly, clear, keep_out, mw, mh, (MAT_FT[0] + gap_ft) / ftpx, (MAT_FT[1] + gap_ft) / ftpx, w, h, len(base), 0.02 / ftpx)
+            # short; so before a yard is let off with fewer, the lattice is solved exactly on the floor's own outline
+            exact = _exact_lattice(poly, clear, keep_out, mw, mh, (MAT_FT[0] + gap_ft) / ftpx, (MAT_FT[1] + gap_ft) / ftpx, w, h, len(base))
             if len(exact) > len(base):
                 base = [b for b in exact if fits(_mat_corners(b[2], b[3], mw, mh, 0.0))]
         mats = _lay_by_hand(base, mw, mh, ftpx, fits, salt)
@@ -156,56 +156,83 @@ def _off_center(seated: list[tuple[float, float]], mw: float, mh: float) -> floa
     return abs((x0 + x1) / 2.0) + abs((y0 + y1) / 2.0)
 
 
-def _row_intervals(poly: list[tuple[float, float]], clear: float, keep: tuple[float, float, float, float] | None, mw: float, mh: float, y: float) -> list[tuple[float, float]]:
-    """The x-intervals where an unturned `mw` x `mh` mat with its top edge at `y` keeps every corner `clear` inside the
-    convex `poly` and misses `keep` - exact, from the outline's edges: a corner is `clear` inside a convex polygon exactly
-    where it is inside the polygon every edge of which is moved in by `clear`."""
+def _exact_lattice(
+    poly: list[tuple[float, float]], clear: float, keep: tuple[float, float, float, float] | None, mw: float, mh: float, pw: float, ph: float, w: float, h: float, beat: int
+) -> list[tuple[int, int, float, float]]:
+    """The lattice (pitch `pw` x `ph`) seating the most unturned `mw` x `mh` mats, found EXACTLY - no step anywhere
+    (spec-fidelity, amendment round 8, 2026-09-28: a y grid of 0.02 ft missed a lattice that fits in a band thinner than
+    that, just below a rack's end). Whether a lattice spot seats is a set of linear conditions on the lattice's origin:
+    each corner stays `clear` inside the convex `poly` (a corner is `clear` inside a convex polygon exactly where it is
+    inside the polygon every edge of which is moved in by `clear`), and the mat misses `keep`. The seated count is
+    constant between those conditions' lines, so its largest value is reached at a crossing of two of them; every
+    crossing, and a hair to each side of it, is tried. Returns [] unless it seats more than `beat`; of equals, the lattice
+    whose seated mats sit nearest the yard's center."""
+    import numpy as np
+
     area = sum(poly[i][0] * poly[(i + 1) % len(poly)][1] - poly[(i + 1) % len(poly)][0] * poly[i][1] for i in range(len(poly)))
     sign = 1.0 if area > 0 else -1.0
-    lo, hi = -math.inf, math.inf
-    for yy in (y, y + mh):  # the mat's two edges; each x-bound applies to both corners on that edge
-        for i in range(len(poly)):
-            (ax, ay), (bx, by) = poly[i], poly[(i + 1) % len(poly)]
-            ln = math.hypot(bx - ax, by - ay)
-            nx, ny = sign * (by - ay) / ln, -sign * (bx - ax) / ln  # the outward normal
-            c = nx * ax + ny * ay - clear  # inside, moved in by `clear`: nx*x + ny*y <= c
-            if abs(nx) < 1e-12:
-                if ny * yy > c:
-                    return []
-            elif nx > 0:
-                hi = min(hi, (c - ny * yy) / nx - mw)  # the right-hand corners sit at x + mw
-            else:
-                lo = max(lo, (c - ny * yy) / nx)
-    lo, hi = lo + 1e-6, hi - 1e-6
-    if lo > hi:
-        return []
-    if keep is not None and y < keep[3] and y + mh > keep[1]:
-        return [iv for iv in ((lo, min(hi, keep[0] - mw)), (max(lo, keep[2]), hi)) if iv[0] <= iv[1]]
-    return [(lo, hi)]
-
-
-def _exact_lattice(
-    poly: list[tuple[float, float]], clear: float, keep: tuple[float, float, float, float] | None, mw: float, mh: float, pw: float, ph: float, w: float, h: float, beat: int, y_step: float
-) -> list[tuple[int, int, float, float]]:
-    """The lattice (pitch `pw` x `ph`) seating the most mats, found exactly across and on a `y_step` grid down: for a top
-    row at y0, each row's feasible x-intervals are solved from the outline (`_row_intervals`), and the count changes only
-    where a lattice column meets an interval's left end, so the best x is one of those. Returns [] unless it beats `beat`."""
+    edges = []
+    for i in range(len(poly)):
+        (ax, ay), (bx, by) = poly[i], poly[(i + 1) % len(poly)]
+        ln = math.hypot(bx - ax, by - ay)
+        nx, ny = sign * (by - ay) / ln, -sign * (bx - ax) / ln  # the outward normal
+        edges.append((nx, ny, nx * ax + ny * ay - clear))  # inside, moved in: nx*x + ny*y <= c
+    corners = ((0.0, 0.0), (mw, 0.0), (0.0, mh), (mw, mh))
     best: tuple[int, float, list[tuple[int, int, float, float]]] = (beat, 0.0, [])
     for nr in range(1, int(h // ph) + 2):
         for nc in range(1, int(w // pw) + 2):
             if nc * nr <= best[0]:
                 continue
-            steps = int(max(0.0, h - (nr - 1) * ph - mh) / y_step) + 1
-            for k in range(steps):
-                y0 = -h / 2.0 + k * y_step
-                rows = [_row_intervals(poly, clear, keep, mw, mh, y0 + r * ph) for r in range(nr)]
-                for x in {a - c * pw for ivs in rows for a, _b in ivs for c in range(nc)}:
-                    seated = [(r, c, x + c * pw, y0 + r * ph) for r in range(nr) for c in range(nc) if any(a <= x + c * pw <= b for a, b in rows[r])]
-                    if len(seated) < best[0] or not seated:
-                        continue
-                    off = _off_center([(sx, sy) for _r, _c, sx, sy in seated], mw, mh)
-                    if (len(seated), -off) > (best[0], -best[1]) or (len(seated) > beat and not best[2]):
-                        best = (len(seated), off, seated)
+            spots = [(r, c, c * pw, r * ph) for r in range(nr) for c in range(nc)]
+            # every condition as a line a*ox + b*oy = k on the origin (ox, oy)
+            lines = [(nx, ny, ce - nx * (tx + dx) - ny * (ty + dy)) for _r, _c, tx, ty in spots for dx, dy in corners for nx, ny, ce in edges]
+            if keep is not None:
+                for _r, _c, tx, ty in spots:
+                    lines += [(1.0, 0.0, keep[2] - tx), (1.0, 0.0, keep[0] - mw - tx), (0.0, 1.0, keep[3] - ty), (0.0, 1.0, keep[1] - mh - ty)]
+            lines += [(1.0, 0.0, -w / 2.0), (1.0, 0.0, w / 2.0), (0.0, 1.0, -h / 2.0), (0.0, 1.0, h / 2.0)]
+            A = np.array(lines)
+            a1, a2 = np.triu_indices(len(A), 1)
+            det = A[a1, 0] * A[a2, 1] - A[a1, 1] * A[a2, 0]
+            ok = np.abs(det) > 1e-12
+            a1, a2, det = a1[ok], a2[ok], det[ok]
+            ox = (A[a1, 2] * A[a2, 1] - A[a1, 1] * A[a2, 2]) / det
+            oy = (A[a1, 0] * A[a2, 2] - A[a1, 2] * A[a2, 0]) / det
+            inbox = (ox >= -w / 2.0 - 1e-9) & (ox <= w / 2.0 + 1e-9) & (oy >= -h / 2.0 - 1e-9) & (oy <= h / 2.0 + 1e-9)
+            ox, oy = ox[inbox], oy[inbox]
+
+            def seats(ox: Any, oy: Any, tol: float, spots: list[tuple[int, int, float, float]] = spots) -> Any:
+                # which spots seat at each origin; `tol` > 0 counts a spot on its boundary (closed), < 0 only well inside
+                seat = np.ones((len(spots), len(ox)), bool)
+                for k, (_r, _c, tx, ty) in enumerate(spots):
+                    for dx, dy in corners:
+                        for nx, ny, ce in edges:
+                            seat[k] &= nx * (ox + tx + dx) + ny * (oy + ty + dy) <= ce + tol
+                    if keep is not None:
+                        x, y = ox + tx, oy + ty
+                        seat[k] &= ~((x < keep[2] - tol) & (x + mw > keep[0] + tol) & (y < keep[3] - tol) & (y + mh > keep[1] + tol))
+                return seat
+
+            # each region where one set of spots seats is convex, and its corners are crossings; the crossings are grouped
+            # by the set they seat on its closed boundary, and each group's centroid - inside its region - is where the
+            # set is confirmed with every spot well inside, so a region however thin is found and none is claimed falsely
+            closed = seats(ox, oy, 1e-9)
+            live = closed.sum(axis=0) > best[0]
+            if not live.any():
+                continue
+            _sets, which = np.unique(closed[:, live].T, axis=0, return_inverse=True)
+            which = which.ravel()
+            size = np.bincount(which)
+            cx = np.bincount(which, weights=ox[live]) / size
+            cy = np.bincount(which, weights=oy[live]) / size
+            strict = seats(cx, cy, -1e-9)
+            for q in range(len(cx)):
+                n = int(strict[:, q].sum())
+                if n <= best[0] and (n < best[0] or not best[2]):
+                    continue
+                seated = [(r, c, float(cx[q]) + tx, float(cy[q]) + ty) for k, (r, c, tx, ty) in enumerate(spots) if strict[k, q]]
+                off = _off_center([(sx, sy) for _r, _c, sx, sy in seated], mw, mh)
+                if n > best[0] or not best[2] or off < best[1]:
+                    best = (n, off, seated)
     return best[2]
 
 
