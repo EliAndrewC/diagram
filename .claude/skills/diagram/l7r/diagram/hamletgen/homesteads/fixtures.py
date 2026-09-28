@@ -613,6 +613,10 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                         or across_the_brook(s, (hx, hy), (cx, cy))
                         # a field pit stands out by its fields or the road, not in the yard, so a lane may run between (269 B11)
                         or (_table is not field_table and across_a_lane(lanes, (hx, hy), (cx, cy)))
+                        # a household shrine stands in a corner of ITS OWN plot: a seat nearer another farmhouse reads as the
+                        # neighbor's (the 269 landing's round-3 review of Inashiro: 25.9 ft from the next house, 44.3 from its
+                        # own, among that yard's coop, heap and privy); the count loop passes it on to a house with room
+                        or (kind == "shrine" and nearer_own_house((lx, ly, cw, ch), hx, hy, ca, sa, [(float(q["x"]), float(q["y"])) for q in houses if q is not h])[0] == 1)
                     ):
                         continue
                     _walk: tuple[float, float, float, float, float, float] | None = None

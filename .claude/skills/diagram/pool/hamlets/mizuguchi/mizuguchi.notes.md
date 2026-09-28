@@ -820,3 +820,7 @@ harvest?'). The old fixed center mat and the rack along each yard's south edge a
 weather, so it takes the regional default, settled, and draws no rack by the houses (research homesteads 'Did a village
 put its drying racks by the houses by custom, or because of its weather?'). The weather is a fact of the country, set by a map's declaration or else the regional default, and never rolled: the
 manifest diff is `mats` on each yard, `meta.harvest_weather`, and each yard's outline recorded to a thousandth (no yard moved).
+
+## 2026-09-28 (feature 269 landing, review rounds 2-3): the spur's stub cut, the field path carried over the canal, the title moved
+
+The review rounds re-laid three things here. The field spur began on the brook bank and ran 28 ft to its junction before turning over the bridge; a free end run on past its own junction to nothing is now cut back to it (`ways/bund.py` `cut_past_the_junction`). The field path stopped on the outer bank of supply canal A with the canal between it and the bund; it is now carried square across the canal on to the bund and the crossing is bridged (`meta.field_path` run_on, a fifth deck in `bridges`). The title placard now keeps clear of the homestead's own buildings and fixtures, so it moved to the south-west corner and the woodland stand moved off its old ground. The counts typed in the landing entry above, and in any dated correction before it, describe the rolls they were written against; the census block above is the count this map draws, and the manifest keys named here are the rest.

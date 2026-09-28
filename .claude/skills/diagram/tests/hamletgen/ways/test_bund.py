@@ -164,7 +164,9 @@ def test_an_end_at_the_bund_with_water_between_is_carried_over_it() -> None:
     canal = _stub(streams=[{"poly": [[398.0, -100.0], [398.0, 400.0]], "w": 2}])
     canal.M["lanes"].append({"pts": [[200.0, 100.0], [395.0, 100.0]], "w": 3})
     assert B.a_way_onto_the_bund(canal) == "run_on"
-    assert canal.M["lanes"][1]["pts"][-1] == [400.0, 100.0] and len(canal.M["lanes"][1]["pts"]) == 3
+    assert canal.M["lanes"][1]["pts"][-1] == [398.0 + B.OVER_THE_WATER_FT, 100.0] and len(canal.M["lanes"][1]["pts"]) == 3, "square across, on the bund"
+    assert B.over_the_water((395.0, 100.0), (400.0, 90.0), []) == (400.0, 90.0), "no water crossed: the bund point"
+    assert B.over_the_water((398.0, 100.0), (400.0, 100.0), [((398.0, 50.0), (398.0, 150.0)), ((399.0, 50.0), (397.0, 150.0))])[0] > 398.0
     assert B.water_between((395.0, 100.0), (400.0, 100.0), [((398.0, -100.0), (398.0, 400.0))])
     assert not B.water_between((395.0, 100.0), (400.0, 100.0), [((300.0, -100.0), (300.0, 400.0))])
 

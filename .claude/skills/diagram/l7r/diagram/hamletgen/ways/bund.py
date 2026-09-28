@@ -196,10 +196,11 @@ def a_way_onto_the_bund(s: Settlement, blocks: RunOnBlocks | None = None) -> str
     near = [(i, e, q, paddy.nearest(q)) for i, e, q in ends if paddy.dist(q) <= BUND_REACH_FT]
     if any(p is None or not water_between(q, p, blocks.water) for _i, _e, q, p in near):
         return "joined"
-    for i, e, _q, p in near:
+    for i, e, q, p in near:
         if p is not None:
             pts = [(float(x), float(y)) for x, y in lanes[i]["pts"]]
-            pts = [*pts, p] if e == -1 else [p, *pts]
+            to = over_the_water(q, p, blocks.water)
+            pts = [*pts, to] if e == -1 else [to, *pts]
             lanes[i]["pts"] = [[round(x, 1), round(y, 1)] for x, y in pts]
             s.reink_lane(i)
             return "run_on"
@@ -224,6 +225,29 @@ def a_way_onto_the_bund(s: Settlement, blocks: RunOnBlocks | None = None) -> str
             s.lane([q, tgt], width=BRANCH_WIDTH, clearance=LANE_CLEARANCE, worn=True, spur=True)
             return "branch"
     return "none: every straight way from the lanes to the paddy crosses water, the marsh or a steading"
+
+
+# ft past the centerline of the water crossed that a carried end stops, on the bund: a supply canal is ~4.5 ft wide and its
+# outer bund stands 3-4 ft past the centerline (measured on Mizuguchi by the landing's round-3 review). A map drawing convention.
+OVER_THE_WATER_FT = 3.5
+
+
+def over_the_water(q: Pt, p: Pt, water: Sequence[tuple[Pt, Pt]]) -> Pt:
+    """Where an end at `q` carried over the water toward the bund point `p` stops: straight across the first water course
+    the step crosses - square to it, so the crossing's deck spans the water and its landings rather than a long skew (the
+    round-3 review of Mizuguchi: a 24.5 ft road deck over a 4.5 ft canal, 7 ft of it over the flooded field) - and
+    `OVER_THE_WATER_FT` past its centerline, on the bund. `p` itself where the step crosses nothing."""
+    from l7r.diagram.settlement import seg_closest
+
+    seg = next(((c, d) for c, d in water if segments_cross(q, p, c, d)), None)
+    if seg is None:
+        return p
+    cx, cy = seg_closest(q[0], q[1], seg[0], seg[1])
+    dx, dy = cx - q[0], cy - q[1]
+    n = math.hypot(dx, dy)
+    if n < 1e-6:
+        dx, dy, n = p[0] - q[0], p[1] - q[1], max(math.dist(q, p), 1e-9)
+    return (cx + dx / n * OVER_THE_WATER_FT, cy + dy / n * OVER_THE_WATER_FT)
 
 
 def water_between(q: Pt, p: Pt, water: Sequence[tuple[Pt, Pt]]) -> bool:

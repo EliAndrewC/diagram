@@ -370,3 +370,54 @@ def split_at_crossings(s: Settlement) -> int:
         lanes[-1].update({key: ln[key] for key in ("role", "web") if key in ln})
         cuts += 1  # lane i is asked again: its head may cross a second lane
     return cuts
+
+
+_SHORT_LEG_FT = 25.0  # a last leg this short, with the joint beyond it, is read as one turn (a map drawing convention)
+
+
+def hairpin_over_a_short_leg(a: Pt, b: Pt, j: Pt, c: Pt) -> bool:
+    """Do a lane's last two points `a` -> `b`, its short last leg `b` -> `j` and the other way's first leg `j` -> `c`
+    double back - more than `_HAIRPIN_DEG` of turn in total, the leg under `_SHORT_LEG_FT`? Each turn alone can stay under
+    the limit, which is how the joint pass missed one (the 269 landing's round-2 review of Kuwabata: 79 + 90 degrees
+    across a 15 ft leg, a lane and the connector running back side by side 15-40 ft apart)."""
+    if math.dist(b, j) > _SHORT_LEG_FT:
+        return False
+
+    def signed(p: Pt, q: Pt, r: Pt) -> float:
+        h1, h2 = math.atan2(q[1] - p[1], q[0] - p[0]), math.atan2(r[1] - q[1], r[0] - q[0])
+        return math.degrees((h2 - h1 + math.pi) % (2 * math.pi) - math.pi)
+
+    return abs(signed(a, b, j) + signed(b, j, c)) > _HAIRPIN_DEG
+
+
+def fold_the_connector_hairpin(s: Settlement, fabric: Sequence[Poly] = ()) -> int:
+    """Where a lane's short last leg meets the CONNECTOR's start and the two double back (`hairpin_over_a_short_leg`), the
+    connector is started at the lane's vertex before that leg instead - a T - and the leg dropped, record and ink
+    together, when the moved connector may be written (`may_write`). Returns the folds made."""
+    from .clearance import may_write
+
+    lanes: list[dict[str, Any]] = s.M.get("lanes") or []
+    conn = [(k, o) for k, o in enumerate(lanes) if o.get("connector") and len(o.get("pts") or []) >= 2]
+    folds = 0
+    for ci, co in conn:
+        cp = _pts(co)
+        for i, ln in enumerate(lanes):
+            p = _pts(ln)
+            if i == ci or ln.get("connector") or len(p) < 3:
+                continue
+            for seq, back in ((p, False), (p[::-1], True)):
+                a, b, j = seq[-3], seq[-2], seq[-1]
+                if math.dist(j, cp[0]) > 1.5 or not hairpin_over_a_short_leg(a, b, j, cp[1]):
+                    continue
+                new_c = [b, *cp[1:]]
+                if not may_write(cp, new_c, float(co.get("w") or 5.0), fabric):
+                    continue
+                kept = seq[:-1]
+                ln["pts"] = _rounded(kept[::-1] if back else kept)
+                co["pts"] = _rounded(new_c)
+                s.reink_lane(i)
+                s.reink_lane(ci)
+                folds += 1
+                cp = new_c
+                break
+    return folds

@@ -1825,3 +1825,7 @@ harvest?'). The old fixed center mat and the rack along each yard's south edge a
 weather, so it takes the regional default, settled, and draws no rack by the houses (research homesteads 'Did a village
 put its drying racks by the houses by custom, or because of its weather?'). The weather is a fact of the country, set by a map's declaration or else the regional default, and never rolled: the
 manifest diff is `mats` on each yard, `meta.harvest_weather`, and each yard's outline recorded to a thousandth (no yard moved).
+
+## 2026-09-28 (feature 269 landing, review rounds 2-3): the belt's receding tail trimmed, the shrine kept on its own plot
+
+The review rounds re-laid three things here. The windbreak now ends at the column before one that falls back more than a belt's depth downwind (`hinterland/belt.py` `trim_receding_ends`), so the south-east tail that ran with the wind is gone (`village_groves[windbreak]`). A household shrine's corner is rolled by compass name and laid out in the world, and a seat nearer another farmhouse than its own is refused, so the shrine stands on its own plot (`farm_fixtures[kind=shrine]`). The title keeps clear of the homestead's own buildings and fixtures. The counts typed in the landing entry above, and in any dated correction before it, describe the rolls they were written against; the census block above is the count this map draws, and the manifest keys named here are the rest.

@@ -986,3 +986,7 @@ of its weather?'), so each yard carries a rack along one side in its map-north h
 weather is declared, never rolled, so the random stream is untouched: the manifest diff is `mats` and `rack` on each
 yard, `meta.harvest_weather`, and each yard's outline recorded to a thousandth (no yard moved). The first settlement-review (2026-09-28) found the rack, drawn as an outlined box,
 read as the woodpile beside the same houses; it is now a straw-gold line with dark post dots.
+
+## 2026-09-28 (feature 269 landing, review rounds 2-3): the belt's south-west arm trimmed
+
+The review rounds re-laid the windbreak: its south-west end column fell back about 766 ft downwind of its neighbor, and the band followed it into an arm one row deep lying along the wind; the belt now ends at the column before (`trim_receding_ends`), and every stretch left is a belt's depth across. The homestead woods drawn fell with the arm (`meta.homestead_wood_ft2`, still inside the record's range). The household shrine stands at its house's south-west corner. The counts typed in the landing entry above, and in any dated correction before it, describe the rolls they were written against; the census block above is the count this map draws, and the manifest keys named here are the rest.

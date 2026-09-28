@@ -146,3 +146,32 @@ def test_a_lane_is_cut_where_it_crosses_another_and_each_half_ends_on_the_crossi
     assert pts[2] == [[300.0, 400.0], [300.0, 500.0]] and pts[4] == [[300.0, 500.0], [300.0, 600.0]]
     assert s.M["lanes"][4].get("role") == "skeleton", "the cut half keeps its provenance"
     assert pts[1] == [[100.0, 0.0], [100.0, 300.0]] and pts[3] == [[600.0, 400.0], [600.0, 502.0]]
+
+
+def test_a_lane_and_the_connector_doubling_back_over_a_short_leg_meet_as_a_t() -> None:
+    """`fold_the_connector_hairpin` (the 269 landing's review of Kuwabata): 79 + 90 degrees across a 15 ft leg is one
+    hairpin; the connector starts at the lane's vertex before the leg and the leg goes. A long leg is no hairpin."""
+    from l7r.diagram.hamletgen.ways.joints import fold_the_connector_hairpin, hairpin_over_a_short_leg
+
+    from ._builders import _StubSettlement
+
+    assert hairpin_over_a_short_leg((1929.1, 56.4), (2054.3, 40.0), (2055.3, 25.3), (1408.0, -20.4))
+    assert not hairpin_over_a_short_leg((1929.1, 56.4), (2054.3, 40.0), (2055.3, -25.3), (1408.0, -80.4)), "a 65 ft leg"
+    assert not hairpin_over_a_short_leg((0.0, 0.0), (100.0, 0.0), (110.0, 0.0), (200.0, 0.0)), "straight on"
+    s = _StubSettlement(lanes=[[(2055.3, 25.3), (1408.0, -20.4)], [(1929.1, 56.4), (2054.3, 40.0), (2055.3, 25.3)]])
+    assert fold_the_connector_hairpin(s) == 1
+    assert s.M["lanes"][0]["pts"][0] == [2054.3, 40.0] and s.M["lanes"][1]["pts"] == [[1929.1, 56.4], [2054.3, 40.0]]
+    rev = _StubSettlement(lanes=[[(2055.3, 25.3), (1408.0, -20.4)], [(2055.3, 25.3), (2054.3, 40.0), (1929.1, 56.4)]])
+    assert fold_the_connector_hairpin(rev) == 1 and rev.M["lanes"][1]["pts"] == [[2054.3, 40.0], [1929.1, 56.4]]
+
+
+def test_a_connector_fold_that_would_crowd_the_fabric_is_refused() -> None:
+    """`fold_the_connector_hairpin` asks `may_write`: a moved connector nearer a homestead than the old one is not written
+    (Kuwabata at the 269 landing, recorded in future-work)."""
+    from l7r.diagram.hamletgen.ways.joints import fold_the_connector_hairpin
+
+    from ._builders import _StubSettlement
+
+    s = _StubSettlement(lanes=[[(2055.3, 25.3), (1408.0, -20.4)], [(1929.1, 56.4), (2054.3, 40.0), (2055.3, 25.3)]])
+    yard = [(1990.0, 30.0), (2010.0, 30.0), (2010.0, 42.0), (1990.0, 42.0)]  # a steading just below the old connector
+    assert fold_the_connector_hairpin(s, [yard]) == 0 and s.M["lanes"][0]["pts"][0] == [2055.3, 25.3]

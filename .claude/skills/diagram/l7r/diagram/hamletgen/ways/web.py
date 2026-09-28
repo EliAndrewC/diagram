@@ -27,7 +27,7 @@ from .checks import drawn_water_segs
 from .clearance import clear_runs, clip_to_clear
 from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _homestead_polys, _margin_frame, _net_segs, _pass, _pull_back_to_service
 from .geom import _components, _trim_to_service, polyline_len, steading_footprints
-from .joints import center_lane_ends, meet_end_to_end, split_at_crossings, straighten_joints
+from .joints import center_lane_ends, fold_the_connector_hairpin, meet_end_to_end, split_at_crossings, straighten_joints
 from .route import _route
 from .serve import _lay_web_lane, _serve_stragglers
 from .smooth import _STUB_REACH_FT, _smooth_web
@@ -651,6 +651,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # AND READ THE JOINTS AS ONE WAY (GM 2026-09-26): two records meeting end to end are one lane to the walker;
     # a fold there becomes a T and a jog is pulled straight. Last, because every pass above can lay a joint.
     straighten_joints(s, hard_built, walls, list(plan.watercourses) + drawn_water)
+    fold_the_connector_hairpin(s, walls)  # ...and a lane and the connector doubling back over a short leg meet as a T (the 269 landing)
     # ...AND THE ENDS ARE ASKED ONCE MORE, after the joints are read as one way (feature 261). An end that reached the lane it
     # was about to be joined to passed the sweep above and was left, after the join, reaching only its own lane: Mizuguchi's
     # (558, 1096) stood 56 ft from lane 2's end until the two became one lane, and then 104 ft from anything.

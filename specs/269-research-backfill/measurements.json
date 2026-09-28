@@ -129,16 +129,6 @@
   "verifies": "F2",
   "answers": "b42b3ab1963b"
  },
- "sr2-kuwabata-f1-hairpin": {
-  "value": 0,
-  "unit": "hairpins",
-  "quantity": "joints on the current roll where two lanes meet end to end, or a lane turns over a leg under 25 ft, by more than 140 deg in total (the round-2 connector hairpin is gone once lanes are cut at crossings and the bearings re-laid)",
-  "source": "a scan of pool/hamlets/kuwabata/kuwabata.json lanes, read 2026-09-28 from the gated roll at commit 881af6a9b",
-  "observed": "2026-09-28",
-  "subject": "kuwabata",
-  "verifies": "F1",
-  "answers": "b42b3ab1963b"
- },
  "sr2-sawada-f1-belt-arm": {
   "value": 0,
   "unit": "clumps",
@@ -178,5 +168,65 @@
   "subject": "mizuguchi",
   "verifies": "F4",
   "answers": "b42b3ab1963b"
+ },
+ "sr3-inashiro-f1-shrine-own-plot": {
+  "value": 48.9,
+  "unit": "ft",
+  "quantity": "the household shrine's distance from its own farmhouse's center, against 69.0 ft from the nearest other farmhouse: a shrine seat nearer another farmhouse than its own is now refused (`fixtures.py`, `nearer_own_house` in the seat test)",
+  "source": "pool/hamlets/inashiro/inashiro.json farm_fixtures[kind=shrine] and houses, read 2026-09-28 from the roll regenerated after the round-3 fixes",
+  "observed": "2026-09-28",
+  "subject": "inashiro",
+  "verifies": "F1",
+  "answers": "fbf83868fa6c"
+ },
+ "sr3-inashiro-f2-notes": {
+  "value": 1,
+  "unit": "entries",
+  "quantity": "a dated round 2-3 entry saying what the rounds re-laid and that the landing entry's typed counts describe their roll, the census block the drawn count",
+  "source": "pool/hamlets/inashiro/inashiro.notes.md, read 2026-09-28 from the roll regenerated after the round-3 fixes",
+  "observed": "2026-09-28",
+  "subject": "inashiro",
+  "verifies": "F2",
+  "answers": "fbf83868fa6c"
+ },
+ "sr3-kashikawa-f1-card": {
+  "value": 0,
+  "unit": "windbreak ends named",
+  "quantity": "references to the burial ground standing at the windbreak's end in the Features entry the page prints; it now stands on open ground well east of where the windbreak ends",
+  "source": "pool/hamlets/kashikawa/kashikawa.notes.md Features, burial ground, read 2026-09-28 from the roll regenerated after the round-3 fixes",
+  "observed": "2026-09-28",
+  "subject": "kashikawa",
+  "verifies": "F1",
+  "answers": "fbf83868fa6c"
+ },
+ "sr3-kashikawa-f2-notes": {
+  "value": 1,
+  "unit": "entries",
+  "quantity": "a dated round 2-3 entry recording the belt trim, the shrine's world corner and the bamboo stand, and pointing the typed counts at the census",
+  "source": "pool/hamlets/kashikawa/kashikawa.notes.md, read 2026-09-28 from the roll regenerated after the round-3 fixes",
+  "observed": "2026-09-28",
+  "subject": "kashikawa",
+  "verifies": "F2",
+  "answers": "fbf83868fa6c"
+ },
+ "sr3-sawada-f1-notes": {
+  "value": 1,
+  "unit": "entries",
+  "quantity": "a dated round 2-3 entry recording the belt's south-west arm trimmed and pointing the typed counts at the census and manifest keys",
+  "source": "pool/hamlets/sawada/sawada.notes.md, read 2026-09-28 from the roll regenerated after the round-3 fixes",
+  "observed": "2026-09-28",
+  "subject": "sawada",
+  "verifies": "F1",
+  "answers": "fbf83868fa6c"
+ },
+ "sr3-mizuguchi-f2-notes": {
+  "value": 1,
+  "unit": "entries",
+  "quantity": "a dated round 2-3 entry recording the spur's stub cut, the field path carried over the canal (a fifth deck) and the title's move",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.notes.md, read 2026-09-28 from the roll regenerated after the round-3 fixes",
+  "observed": "2026-09-28",
+  "subject": "mizuguchi",
+  "verifies": "F2",
+  "answers": "fbf83868fa6c"
  }
 }

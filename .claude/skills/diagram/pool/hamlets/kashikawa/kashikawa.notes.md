@@ -112,8 +112,8 @@ names.*
 
 ### Features
 
-- **burial ground**: Kashikawa keeps a burial ground of its own, north-east of the houses and just past the east end of
-  the windbreak, which stands north-west of them against the prevailing wind; the grave in the paddy is one family's,
+- **burial ground**: Kashikawa keeps a burial ground of its own, north-east of the houses on open ground, well east of where
+  the windbreak ends; the windbreak stands north-west of them against the prevailing wind, and the grave in the paddy is one family's,
   a separate thing.
 
 - **threshing yard**: This map's harvest weather is settled, the regional default, so no rack is drawn by the houses: its racks would be put up out on the paddies after the harvest, which is the seasonal map's business and not drawn here (settled weather keeping the racks off the houses is our reading of the survey, which records racks gathered by the houses only on a coast of changeable weather).
@@ -1012,3 +1012,7 @@ harvest?'). The old fixed center mat and the rack along each yard's south edge a
 weather, so it takes the regional default, settled, and draws no rack by the houses (research homesteads 'Did a village
 put its drying racks by the houses by custom, or because of its weather?'). The weather is a fact of the country, set by a map's declaration or else the regional default, and never rolled: the
 manifest diff is `mats` on each yard, `meta.harvest_weather`, and each yard's outline recorded to a thousandth (no yard moved).
+
+## 2026-09-28 (feature 269 landing, review rounds 2-3): the belt's east arm trimmed, the shrine at a world corner
+
+The review rounds re-laid three things here. The windbreak's east arm, which ran on past the houses with the wind, now ends at the column before one that falls back more than a belt's depth downwind (`trim_receding_ends`), so the burial ground stands on open ground well east of where the belt ends (the Features entry above says so). The household shrine's rolled compass corner is laid out in the world, so on the quarter-turned house it stands at the world south-west corner. One homestead bamboo stand moved to the windward corner of its house. The counts typed in the landing entry above, and in any dated correction before it, describe the rolls they were written against; the census block above is the count this map draws, and the manifest keys named here are the rest.

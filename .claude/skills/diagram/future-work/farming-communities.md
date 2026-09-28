@@ -112,9 +112,9 @@ The record gives the floor the old copse entry lacked: each homestead that keeps
 it (research/vegetation 210), and 269 E6 rolls it per homestead (log-uniform, a GUESS) and fills the copse to what the
 belt leaves of the sum (`homestead_parts/groves.py` `HOMESTEAD_WOOD_FT2`, `village_grove(area=)`, the `CanopyArea`
 raster, half- and quarter-step top-up passes). **Measurement** (`meta.homestead_wood_ft2`, rolled / drawn, the pool
-regenerated after the landing's first review round, 2026-09-28): Inashiro 13,059 / 11,797, Kashikawa 11,523 / 9,645,
+regenerated after the landing's third review round, 2026-09-28): Inashiro 13,059 / 10,539, Kashikawa 11,523 / 8,658,
 Kuwabata 13,030 / 6,441 (just over the 6,000 floor; an earlier roll the same day drew 5,619, under it), Mizuguchi
-12,534 / 10,682, Sawada 13,422 / 10,952. **Mechanism**: the copse may only seat within `COPSE_HOUSE_REACH_FT` (90 ft,
+12,534 / 10,682, Sawada 13,422 / 9,879 (the belt's trimmed arm took Sawada's and Kashikawa's down). **Mechanism**: the copse may only seat within `COPSE_HOUSE_REACH_FT` (90 ft,
 feature 261's review ruling) and in the belt's lee, and where that ground is used up the top-up passes find no seat -
 on the first landing roll the quarter-step pass added only 14 clumps on Kuwabata. A reviewer also found 22% of
 Kuwabata's copse crowns with every farmhouse within 110 ft on the far side of a lane: the reach measures distance and
@@ -166,6 +166,16 @@ engine fixes; the round-2 reviews re-measure them.
   nearest lane, inside the 100 ft `WEB_REACH_FT` (a guess), with a neighbor's back yard between. Sketch: the straggler
   pass serves a house whose nearest way is past its neighbor's yard, not only one past the reach.
 - **Woodpiles off the wall** also on Kuwabata (round 2 F3): 7 of 15 stacks 10.5-22.9 ft from any building.
+- **The field path's canal deck runs onto the paddy** (Mizuguchi round 3): carried square over supply canal A on to the
+  bund, the path is bridged by `bridges()`' carried deck, whose 10 ft landing (`LANDING_FT`) puts the paddy-side end about
+  7 ft onto the flooded field, and the check's carried-way floor (6 ft past the water's half-width) forbids a shorter one.
+  Sketch: a field path crossing its own field canal takes the channel footbridge form (a short abutment each side, the
+  settlement's rolled `footbridge_form`), and `roads_bridge_water` accepts a foot deck under a footpath.
+- **A lane and the connector doubling back** (Kuwabata rounds 2-3): lane 2 runs east to (2054, 40), turns 15 ft north to
+  the connector's start, and the connector runs back west 15-40 ft from it for 126 ft - 169 degrees over the short leg.
+  `ways/joints.py` `fold_the_connector_hairpin` meets them as a T at the lane's vertex before the leg, but on Kuwabata
+  `may_write` refuses it (the moved connector stands nearer the fabric). Sketch: start the connector at the lane's
+  earlier vertex (1929, 56) and let the web serve the north row's east house, or route the moved start round the steading.
 
 ## OPEN 2026-09-28 (269 B16), A GM DECISION: the shared byre on the commons is still rolled, one map in ten
 
