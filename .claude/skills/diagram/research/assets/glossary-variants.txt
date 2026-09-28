@@ -1366,6 +1366,8 @@ kaya	kaya
 kaya-haguchi	kaya-haguchi
 kayaba	magusaba
 kayabuki	kayabuki
+kazusa	Kazusa
+kazusa province	Kazusa
 ke	ke
 kebiishi	kebiishi
 kegare	kegare
