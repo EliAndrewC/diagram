@@ -146,7 +146,7 @@ pool map, via the gate.
 
 ### C. Measure and record (FR-012, SC-001 to SC-011)
 
-The four named stages (FR-011): the grove draw is A6; the grove fill, the seam closing, the commons and the flush are
+The five named stages (FR-011): the grove draw is A6 and the yards' mats A8; the grove fill, the seam closing, the commons and the flush are
 re-profiled once A lands, and each gets its lever. Then the after-profile is read under the same rule: anything slow that a
 change of the allowed kind makes significantly faster is taken in this feature; only what cannot be is left, each with its
 measurement (FR-012). The landing order: A lands, the pool regenerates byte-identical against `5f15c65bd` (confirmed first to regenerate

@@ -42,7 +42,8 @@ rank, they do not predict):
   fabric polygon per point - m:before-kashikawa-b-edge-scan-total, m:before-kuwabata-b-edge-scan-total.
 - **The brook toll**: after 281's 3 x 3 grid, still 590,253 cell lookups on Kashikawa (m:before-kashikawa-b-toll-dict-get).
 
-- **Four more slow stages with no lever yet** (the GM's general instruction takes them in, FR-011), each bucket counted
+- **Four more slow stages with no lever yet** (the GM's general instruction takes them in, FR-011; a fifth, the threshing
+  yards' mats, arrived with the re-base - R3), each bucket counted
   apart since buckets nest exclusively: the windbreak's fill and its draw (m:before-kashikawa-b-grove-total,
   m:before-kashikawa-b-grove-draw-total - the draw's crown test walks every nearby and every drawn crown per crown, 713,438
   comparisons over the pool in the profile), the seam closing (m:before-sawada-b-seams-total - shapely unions and buffers
@@ -74,10 +75,11 @@ Main merged feature 282 (the threshing yard's mats and racks) while this work wa
 so the base was re-taken at `5f15c65bd`. The homesteads stage went from 0.357 s to 1.806 s on Inashiro (m:before-inashiro-stage-homesteads-s), 0.496 s to
 2.313 s on Kashikawa (m:before-kashikawa-stage-homesteads-s) and 0.497 s to 1.859 s on Sawada
 (m:before-sawada-stage-homesteads-s) - the first figure each from the `f52ed6aa8` run (observed 2026-09-28, method:
-`measure.py before` in that worktree). Kashikawa's mats bucket counts 14288475 calls (m:before-kashikawa-b-mats-total). The profile names it: `mat_cells` took 15 profiled seconds over the 54 yards of three
-maps, 10 million `hypot` calls - it tests every quarter-foot grid point of the yard against the floor's outline (point in
+`measure.py before` in that worktree). Kashikawa's mats bucket counts 14288475 calls (m:before-kashikawa-b-mats-total). The profile names it (observed 2026-09-28, method: R1's saved profiles in `/tmp/m284/before`): `mat_cells` took 16 profiled
+seconds over the 54 yards of Inashiro, Kashikawa and Sawada (5.01 + 6.21 + 4.82), about 4 million `hypot` calls of its own
+(987,053 `edge_dist` calls from `yards.py`, one `seg_dist` per edge of the quad) - it tests every quarter-foot grid point of the yard against the floor's outline (point in
 polygon, then the distance to each edge), and it counts, for every lattice at every offset, the seated mats one by one in
-Python; `_lay_by_hand` then tests each mat's outline against every laid and every upcoming mat's (`_quad_gap`, 34,070 calls).
+Python; `_lay_by_hand` then tests each mat's outline against every laid and every upcoming mat's (`_quad_gap`, 34,070 calls, the same profiles).
 Both are static geometry asked per candidate: the grid's test can be decided in arrays (surely inside the inset floor,
 surely outside it, the scalar test in the band between), the lattice counts are sums of shifted slices of one boolean
 array, and two quads farther apart than the clearance need no `_quad_gap`. The mats come out the same.

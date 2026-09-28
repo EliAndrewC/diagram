@@ -18,7 +18,8 @@ goal, pulls its string with one index per route and runs on the coarsest lattice
 search stops carving the largest fan blind and its rows are computed as arrays; the page is built from the structured
 primitives the engine already makes; the notice board fits only the seats that can still win, on a coarser lattice; the
 bamboo search walks outward; the whole-ring distance scans and the brook toll ask indexes; and the other slow stages the
-profile names - the windbreak, the seam closing, the commons and the blade flush - are taken too.
+profile names - the windbreak, the seam closing, the commons, the blade flush and the threshing yards' mats - are taken
+too.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -117,8 +118,8 @@ profile names - the windbreak, the seam closing, the commons and the blade flush
 - **FR-011 The other slow stages are taken too - those the before-profile names and whatever the after-profile shows.** The
   before-profile names five more (research R1, R3): the windbreak's grove (`village_grove`, its draw and its gap fill), the
   seam closing (`close_seams`), the commons' scatter, the finish's blade flush, and - arrived with main's feature 282 as this
-  work was re-based - the threshing yards' mats (`mat_cells`, `_lay_by_hand`), which made the homesteads stage 3.5 to 4.7
-  times slower. The mats are made exactly: the same mats, found by array operations and a box prefilter. For each of them, and for anything the
+  work was re-based - the threshing yards' mats (`mat_cells`, `_lay_by_hand`), which made the homesteads stage about 3.7 to 5.1 times slower on Inashiro,
+  Kashikawa and Sawada (research R3). The mats are made exactly: the same mats, found by array operations and a box prefilter. For each of them, and for anything the
   after-profile shows slow, a lever of the allowed kind is taken where one would make it significantly faster; only what
   cannot be made significantly faster without a fundamental change or a broken rule is left.
 - **FR-012 What is left is written down** in `dev/performance.md`: only what FR-011 could not take, each with the measurement
@@ -127,7 +128,7 @@ profile names - the windbreak, the seam closing, the commons and the blade flush
 
 ### Key Entities
 
-- **The harness** (`harness.py`, `counts.py`, `measure.py`): 281's, re-based at `f52ed6aa8`, with this pass's buckets.
+- **The harness** (`harness.py`, `counts.py`, `measure.py`): 281's, re-based at `5f15c65bd`, with this pass's buckets.
 
 ## Success Criteria *(mandatory)*
 
