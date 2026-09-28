@@ -11314,5 +11314,19 @@
    "concave banks",
    "concave-bank"
   ]
+ },
+ "grave goods": {
+  "def": "Objects buried with the dead for their use after death; Han-dynasty tombs held pottery models of farm buildings, such as a pigsty with a latrine built above it.",
+  "variants": [
+   "grave goods",
+   "grave good"
+  ]
+ },
+ "overflow dam": {
+  "def": "A low dam built across a river channel so that the water spills over its top while the level behind it rises high enough to flow into a canal; the Chinese name for what the record elsewhere calls a weir.",
+  "variants": [
+   "overflow dam",
+   "overflow dams"
+  ]
  }
 }

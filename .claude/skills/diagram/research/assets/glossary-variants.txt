@@ -917,6 +917,8 @@ goza-no-ma	goza-no-ma
 grain of the paddy	field grain
 grand canal	Grand Canal
 grass carp	grass carp
+grave good	grave goods
+grave goods	grave goods
 grave island	grave island
 grave islands	grave island
 green manure	green manure
@@ -1933,6 +1935,8 @@ outer towns	outer town
 outfall	outfall
 outwork	outwork
 outworks	outwork
+overflow dam	overflow dam
+overflow dams	overflow dam
 overlay	overlay
 overlays	overlay
 owaiya	owaiya
