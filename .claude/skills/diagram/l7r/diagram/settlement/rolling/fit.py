@@ -237,13 +237,20 @@ class BundleFitMixin:
         """Does this solid rect touch a STREAM, at its half-width plus 5 px - `_rect_on_water`'s own test, streams only?
 
         The stream segments are INDEXED once (feature 281, FR-005): every rect walked every segment of every stream -
-        139,535 `seg_dist` on Sawada. The index is cached beside `_water_obstacles` and on the same terms: the streams are
-        laid before the homestead solve and do not change during it, and a stream added later changes the key."""
+        139,535 `seg_dist` on Sawada. The streams are laid before the homestead solve and do not change during it, so the
+        index is kept - under a key that HOLDS the streams list, each stream record and each course it was built from and
+        compares them by identity, with each course's length and width. A length key alone (`_water_obstacles`' key) served
+        a stale index when a caller replaced the streams with a different list of the same length - the feature-261 test
+        of a brook moved between the house and its garden caught it. Holding the objects means no id can be reused while
+        the key stands; a course's points changed in place at the same length would still be served stale - nothing in the
+        engine does that (courses are built, then read), the exposure `hamletgen.clearance._MEMO` states for its own key."""
         streams = self.M.get("streams", [])
-        if self._stream_idx_cache is None or self._stream_idx_cache[0] != len(streams):
-            self._stream_idx_cache = (len(streams), stream_segment_index(streams))
+        key = [(f, f.get("poly"), len(f.get("poly") or []), f.get("w")) for f in streams]
+        got = self._stream_idx_cache
+        if got is None or got[0] is not streams or len(got[1]) != len(key) or any(a[0] is not b[0] or a[1] is not b[1] or a[2:] != b[2:] for a, b in zip(got[1], key, strict=True)):
+            self._stream_idx_cache = got = (streams, key, stream_segment_index(streams))
         gc = self._rect_corners(rect)
-        return rect_touches_stream(gc, gc + [(rect[0], rect[1])], streams, self._stream_idx_cache[1])
+        return rect_touches_stream(gc, gc + [(rect[0], rect[1])], streams, got[2])
 
     def _rect_on_water(self: Settlement, rect: Any) -> bool:  # type: ignore[misc]
         """Whether a SOLID bundle rect (house/yard/garden/shed) lands on an irrigation LINE - a feeder

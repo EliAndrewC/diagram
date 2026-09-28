@@ -742,3 +742,24 @@ def test_slide_stops_where_the_free_ground_refuses_the_next_step():
     s = _village()
     s.placed.append((240.0, 200.0, 40.0, 26.0))  # the first 2 px step comes within the 2 px margin of it
     assert s._slide(200, 200, 40, 26, lambda x, y: (400.0, 200.0), True) == (200, 200)
+
+
+def test_the_stream_index_is_rebuilt_when_the_courses_change_and_kept_while_they_do_not():
+    """Feature 281 (FR-005): `_rect_on_stream`'s cached index is reused while the same streams stand and rebuilt when the
+    list, a record, a course or a width is replaced - a different list of the SAME length included, which a length key
+    served stale."""
+    s = _crop_settlement()
+    s.M["streams"] = [{"poly": [(430, 300), (430, 500)], "w": 9}]
+    rect = (450, 400, 20, 16)
+    assert s._rect_on_stream(rect) is False
+    kept = s._stream_idx_cache
+    assert s._rect_on_stream((600, 400, 20, 16)) is False and s._stream_idx_cache is kept  # nothing changed: reused
+    s.M["streams"][0]["poly"] = [(450, 300), (450, 500)]  # the course replaced in the same record
+    assert s._rect_on_stream(rect) is True
+    s.M["streams"][0]["w"] = 9  # the same width: the key holds
+    kept = s._stream_idx_cache
+    assert s._rect_on_stream(rect) is True and s._stream_idx_cache is kept
+    s.M["streams"].append({"poly": [(0, 0), (10, 10)], "w": 4})  # a course added
+    assert s._rect_on_stream(rect) is True and s._stream_idx_cache is not kept
+    s.M["streams"] = [{"poly": [(900, 300), (900, 500)], "w": 9}, {"poly": [(0, 0), (1, 1)], "w": 4}]  # a new list, same length
+    assert s._rect_on_stream(rect) is False
