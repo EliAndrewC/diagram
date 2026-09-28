@@ -274,6 +274,7 @@ chinjusan	chinju
 cho	cho
 cho-hanare	machi-hanare
 chodaigamae	nando-gamae
+chome	chome
 chongzhen	Chongzhen era
 chongzhen era	Chongzhen era
 chonin	chonin
@@ -368,6 +369,8 @@ crop margin	crop margin
 crop margins	crop margin
 crop-margin	crop margin
 crown shyness	crown shyness
+crude drug	crude drug
+crude drugs	crude drug
 cryptomeria	sugi
 cryptomeria japonica	sugi
 culm	culm
@@ -405,6 +408,7 @@ daikon	daikon
 daimyo	daimyo
 daimyojin	Daimyōjin
 daimyos	daimyo
+daimyô	daimyo
 daimyō	daimyo
 daimyōjin	Daimyōjin
 daimyōs	daimyo
@@ -893,6 +897,7 @@ hidenin	hidenin
 high-volatile	volatiles
 hikae-no-ma	hikae-no-ma
 hikan	hikan
+hikiri-ichi	hikiri-ichi
 hill-style	tsukiyama
 hinin	hinin
 hinoki	hinoki
@@ -962,6 +967,7 @@ hucheng he	hucheng he
 hui (huizhou) style	Hui style
 hui style	Hui style
 hui-style	Hui style
+huiguan	huiguan
 huizhou style	Hui style
 hutong	hutong
 hutongs	hutong
@@ -979,6 +985,7 @@ ichi no torii	ichi-no-torii
 ichi-	ichi-no-torii
 ichi-no-ma	ni-no-ma
 ichi-no-torii	ichi-no-torii
+ichigami	ichigami
 ichirizuka	ichirizuka
 ido	ido
 ido-yakata	idoyakata
@@ -1200,6 +1207,7 @@ kawaya	kawaya
 kaya	kaya
 kayaba	magusaba
 kayabuki	kayabuki
+ke	ke
 kebiishi	kebiishi
 kegare	kegare
 keian	hitoyado
@@ -1221,6 +1229,8 @@ kesa cut	kesa
 kesa cuts	kesa
 keyaki	keyaki
 khitan	Khitan
+kichin	kichin
+kichin charge	kichin
 kichin-yado	kichin-yado
 kido	kido
 kidoban	kidoban
@@ -1277,6 +1287,7 @@ komainu	lion-dog
 komo	komo
 komo matting	komo
 komono	komono
+kon'ya	kon-ya
 kon-ya	kon-ya
 konara	konara
 kondo	kondo
@@ -1399,7 +1410,9 @@ machi-bugyōsho	machi-bugyosho
 machi-dojo	machi-dojo
 machi-doshiyori	toshiyori
 machi-hanare	machi-hanare
+machi-kaisho	machi-kaisho
 machi-kido	kido
+machidoshiyori	town elder
 machiya	machiya
 madake	madake
 made ground	made ground
@@ -1445,6 +1458,7 @@ meshimori onna	meshimori
 meshimori women	meshimori
 meshimori-onna	meshimori
 metamorphosis fengshui	metamorphosis fengshui
+miaohui	miaohui
 michikiri	michikiri
 micro-high	micro-high
 micro-highs	micro-high
@@ -1518,6 +1532,7 @@ mushiko	mushiko
 mushiko windows	mushiko
 mushiko-mado	mushiko
 mushiro	mushiro
+mushukunin	mushukunin
 muster perimeter	muster perimeter
 muster perimeters	muster perimeter
 myoden	myoden
@@ -1639,9 +1654,12 @@ omamori	omamori
 omote	omote
 omote-muki	omote
 omotedana	omotedana
+omoteya	omoteya-zukuri
+omoteya-zukuri	omoteya-zukuri
 omoya	omoya
 onari-goten	onari-goten
 one-bay	bay
+onin war	Onin war
 onkura	kura
 onmyodo	onmyodo
 open-ended dike	open-ended dike
@@ -1654,6 +1672,7 @@ oshirasu	oshirasu
 ossuary	ossuary
 osuzu	Osuzu corridor
 osuzu corridor	Osuzu corridor
+otabisho	otabisho
 ote	ote-mon
 ote-mon	ote-mon
 ote-suji	ote-suji
@@ -1669,6 +1688,7 @@ outwork	outwork
 outworks	outwork
 overlay	overlay
 overlays	overlay
+owaiya	owaiya
 owari	Owari
 ox-frame	ox-frame
 ox-frames	ox-frame
@@ -1863,6 +1883,7 @@ roji	roji
 roju	Roju
 rokugan	Rokugan
 rokugani	Rokugan
+rokusai-ichi	rokusai-ichi
 ronin	ronin
 ronins	ronin
 roson	roson
@@ -1948,6 +1969,7 @@ senmaida	senmaida
 sensei	sensei
 sento	sento
 sentō	sento
+senzai	senzai
 separated flow	separation zone
 separation zone	separation zone
 sericulture	sericulture
@@ -2051,6 +2073,8 @@ sishu	sishu
 six chambers	Six Chambers
 six fang	Six Chambers
 six ministries	Six Ministries
+six-day market	rokusai-ichi
+six-day markets	rokusai-ichi
 skimmer wall	skimmer wall
 skirt roof	mokoshi
 skirt roofs	mokoshi
@@ -2131,6 +2155,9 @@ sueki	Sue ware
 sugi	sugi
 sugoya	sugoya
 sugumagi	sugumagi
+sui	Sui dynasty
+sui dynasty	Sui dynasty
+sui-dynasty	Sui dynasty
 suid	suid
 suiden	suiden
 suids	suid
@@ -2270,6 +2297,7 @@ time bells	time bell
 tobiguchi	tobiguchi
 tobukuro	tobukuro
 toe	toe
+tofuya	tofuya
 tohoku	Tohoku
 toiya	ton'ya
 toiyaba	toiyaba
@@ -2289,8 +2317,8 @@ toro	Toro
 toro site	Toro
 toshiyori	toshiyori
 total length and fall	fall
-town elder	toshiyori
-town elders	toshiyori
+town elder	town elder
+town elders	town elder
 town grain	town grain
 town ground	town ground
 town grounds	town ground
@@ -2313,6 +2341,7 @@ tributary	tributary
 true duty	water duty
 trunk streets	trunk street
 tsubo	tsubo
+tsubo-niwa	tsubo-niwa
 tsuijibei	tsuijibei
 tsuijimatsu	tsuijimatsu
 tsujiban	tsujiban
@@ -2378,7 +2407,6 @@ upper estate	kami-yashiki
 upper estates	kami-yashiki
 upper residence	kami-yashiki
 upper residences	kami-yashiki
-ura-dana	ura-dana
 ura-nagaya	ura-nagaya
 uradana	back tenement
 urajiro	urajiro
@@ -2555,6 +2583,7 @@ yukaku	yukaku
 yukimi	yukimi
 yulin wei	yulin wei
 yūkaku	yukaku
+zaimachi	zaimachi
 zaimokuya	zaimokuya
 zaofang	zaofang
 zaojun	Zaojun
@@ -2589,6 +2618,7 @@ zushi-nikai	half-story
 ōiya	ōiya
 ōkaji	ōkaji
 ōkajiba	ōkaji
+ōnin war	Onin war
 ōte	ote-mon
 ōya	yamori
 ほ場整備	hojo seibi

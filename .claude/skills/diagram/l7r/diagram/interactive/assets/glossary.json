@@ -1149,7 +1149,8 @@
    "daimyo",
    "daimyō",
    "daimyos",
-   "daimyōs"
+   "daimyōs",
+   "daimyô"
   ]
  },
  "daizu": {
@@ -2412,7 +2413,8 @@
   "def": "A dyer's shop: the indigo works, its sunken vats and boiling hearth inside a deep shopfront, its drying poles, racks and rooftop platforms filling the ground behind.",
   "variants": [
    "kon-ya",
-   "konya"
+   "konya",
+   "kon'ya"
   ]
  },
  "konara": {
@@ -4016,12 +4018,6 @@
   "def": "The shrubs and young trees growing below a wood's canopy.",
   "variants": [
    "understory"
-  ]
- },
- "ura-dana": {
-  "def": "The back shop: a row house behind the street frontage, its one door opening on the back lane.",
-  "variants": [
-   "ura-dana"
   ]
  },
  "ura-nagaya": {
@@ -9232,6 +9228,56 @@
    "Hongwu"
   ]
  },
+ "rokusai-ichi": {
+  "def": "The Japanese periodic market held six days a month, every five days, on day pairs such as the 1st and 6th; in the Edo period it was the center of a region's trade in Tohoku and Kanto.",
+  "variants": [
+   "rokusai-ichi",
+   "six-day market",
+   "six-day markets"
+  ]
+ },
+ "ichigami": {
+  "def": "The market god, worshipped where a market was held to keep its trade safe and fair; its body was most often a round natural stone at the roadside, at an edge of the market - a village boundary, a landing, a bridge foot or a crossroads.",
+  "variants": [
+   "ichigami"
+  ]
+ },
+ "machi-kaisho": {
+  "def": "A town ward's own office and meeting place in an Edo-period city, where the townspeople's officials passed on the magistrate's notices and drew up the residents' papers; every ward of a self-governing city like Osaka had one, while in a castle town it was the exception.",
+  "variants": [
+   "machi-kaisho"
+  ]
+ },
+ "otabisho": {
+  "def": "The place where a shrine's portable shrine rests or stays the night during its festival procession, or which the procession sets out to reach - a small shrine, a temporary altar, or the house of the parish's representative.",
+  "variants": [
+   "otabisho"
+  ]
+ },
+ "tsubo-niwa": {
+  "def": "The small garden inside a Japanese town house, about one to two tsubo (6 ft square to 6 by 12 ft), made as if a piece of the house had been cut out, to let light and air into a house hemmed in by its neighbors.",
+  "variants": [
+   "tsubo-niwa"
+  ]
+ },
+ "huiguan": {
+  "def": "A Ming and Qing Chinese association's hall, also called a gongsuo: first a place of fellowship and lodging for people from one home region, and for some later an association of the merchants of one trade.",
+  "variants": [
+   "huiguan"
+  ]
+ },
+ "owaiya": {
+  "def": "In the setting, the burakumin whose profession is handling night soil; in Japan the collectors were farmers and, later, commoner dealers.",
+  "variants": [
+   "owaiya"
+  ]
+ },
+ "miaohui": {
+  "def": "The Chinese temple fair: a gathering near a temple for offerings, contests and performances, first on its festivals and later on fixed dates, which took in market trade until it became a form of the market.",
+  "variants": [
+   "miaohui"
+  ]
+ },
  "ita-bune": {
   "def": "A flat board, about 70 cm by 150 cm, on which fish were laid out and sold at Edo's fish market.",
   "variants": [
@@ -9277,11 +9323,51 @@
    "shimo-yashiki"
   ]
  },
+ "hikiri-ichi": {
+  "def": "A Japanese periodic market held on fixed days of the month, usually three times a month. It came before the six-day market (rokusai-ichi) and was replaced by it as trade grew.",
+  "variants": [
+   "hikiri-ichi"
+  ]
+ },
+ "zaimachi": {
+  "def": "A country town of Edo-period Japan: a built-up town of merchants and craftsmen in the countryside, outside the castle towns. Around Kyoto and Osaka many six-day markets grew into one.",
+  "variants": [
+   "zaimachi"
+  ]
+ },
+ "ke": {
+  "def": "A Chinese unit of time, one hundredth of a day, about 14 and a half minutes.",
+  "variants": [
+   "ke"
+  ]
+ },
+ "Sui dynasty": {
+  "def": "The Chinese dynasty (581-618) that reunified China and built the capital the Tang took over as Chang'an.",
+  "variants": [
+   "Sui dynasty",
+   "Sui",
+   "Sui-dynasty"
+  ]
+ },
  "palisade": {
   "def": "A barrier of upright wooden stakes or timbers set close together; at Suzhou's Pan Gate one stands across the water passage, front and back, beside the sluice gate, to shut boats out.",
   "variants": [
    "palisade",
    "palisades"
+  ]
+ },
+ "town elder": {
+  "def": "One of Edo's three chief commoner officials, the heads of the Naraya, Taruya and Kitamura houses, who worked from their own residences on corner lots facing Honcho street, each residence doubling as their office.",
+  "variants": [
+   "town elder",
+   "town elders",
+   "machidoshiyori"
+  ]
+ },
+ "chome": {
+  "def": "A numbered section of a Japanese street or district: Honcho 1-chome is the first section of Honcho street.",
+  "variants": [
+   "chome"
   ]
  },
  "uogashi": {
@@ -9295,6 +9381,19 @@
   "variants": [
    "machi-hanare",
    "cho-hanare"
+  ]
+ },
+ "omoteya-zukuri": {
+  "def": "the grander form of the Kyoto town house: a separate shop block at the street, joined to the main house behind by an entrance block, with an open entrance court and a small court on either side of that block.",
+  "variants": [
+   "omoteya-zukuri",
+   "omoteya"
+  ]
+ },
+ "senzai": {
+  "def": "the planting of a Japanese garden - its shrubs, trees and flowers; in a Kyoto town house, the planting of the back garden behind the main rooms (the zashiki garden).",
+  "variants": [
+   "senzai"
   ]
  },
  "dock basin": {
@@ -9410,6 +9509,25 @@
   "variants": [
    "genba",
    "genba-oke"
+  ]
+ },
+ "kichin": {
+  "def": "The firewood fee (木賃, \"wood price\") an inn charged for cooking the food its guest had brought - the fee that gave the kichin-yado its name.",
+  "variants": [
+   "kichin",
+   "kichin charge"
+  ]
+ },
+ "mushukunin": {
+  "def": "A person off the population register (無宿人, \"without a lodging\") - with day laborers, the typical lodger packed into a kichin-yado's shared room.",
+  "variants": [
+   "mushukunin"
+  ]
+ },
+ "bobana": {
+  "def": "The spot at the edge of an Edo-period post town, on the highway (棒鼻), where the lowest-grade inns stood.",
+  "variants": [
+   "bobana"
   ]
  },
  "clapper-board": {
@@ -9588,6 +9706,19 @@
    "sishu"
   ]
  },
+ "tofuya": {
+  "def": "A tofu maker, or the shop where tofu is made; from the seventeenth century it sold over its own counter and through peddlers carrying tubs.",
+  "variants": [
+   "tofuya"
+  ]
+ },
+ "crude drug": {
+  "def": "A medicinal plant, animal or mineral part, dried but otherwise unprocessed, which an apothecary compounded into medicine.",
+  "variants": [
+   "crude drug",
+   "crude drugs"
+  ]
+ },
  "yukaku": {
   "def": "A licensed pleasure quarter of Edo-period Japan: a district where the authorities gathered the licensed brothels, closed off by a wall, a ditch or a fence and entered by a gate. Besides the three great ones of Edo, Kyoto and Osaka, only twenty-odd places in the country had one.",
   "variants": [
@@ -9634,6 +9765,14 @@
   "variants": [
    "shogunal village",
    "shogunal villages"
+  ]
+ },
+ "Onin war": {
+  "def": "The war fought in and around Kyoto at the end of the Muromachi period between an eastern and a western army of lords; the western army's camp ground gave Kyoto's weaving quarter, Nishijin, its name.",
+  "variants": [
+   "Onin war",
+   "Onin War",
+   "Ōnin war"
   ]
  },
  "cotton beater": {
