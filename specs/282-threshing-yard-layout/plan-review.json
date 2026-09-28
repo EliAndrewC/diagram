@@ -1,0 +1,57 @@
+{
+ "feature": "282-threshing-yard-layout",
+ "plan_sha256": "2fece35e30717ea37f49e7f5672aa4c4d902f1df0a3d5bec313b3789bce31d36",
+ "reviewed": "2026-09-28",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "Rack-by-the-house knob is HamletSpec.harvest_weather (settled|changeable), set from the spec, never rolled; default settled; other engines draw no rack; entry 500's drying-method knob folded into it.",
+   "class": "within",
+   "why": "Unchanged from round 1. FR-005: entry 505 finds the environment decided, so the knob is set from an environment input the spec states, pinnable, one knob with 500's; the GM's worry about adjacent villages in one climate differing is what this prevents."
+  },
+  {
+   "id": "D2",
+   "summary": "Sawada declares harvest_weather=changeable as the pool's exhibit; the other four hamlets keep none.",
+   "class": "within",
+   "why": "Unchanged. An exhibit choice inside FR-005/FR-008; some settlements have racks and some do not, as the GM asked."
+  },
+  {
+   "id": "D3",
+   "summary": "Mats tiled in 6 x 3 ft cells, checkered, count held to [ceil(full/3), floor(2 full/3)], center mat and rim line dropped; rows a GUESS, thinning a CONVENTION.",
+   "class": "within",
+   "why": "Unchanged. FR-004 as written; the GM: render a bunch of mats over the yard, a smaller number to give the impression of many."
+  },
+  {
+   "id": "D4-seat",
+   "summary": "Rack along a side edge, preferring the half nearest the house, always off the yard's MAP-south half (solved in map coordinates for any rotation), 2.5 ft drawn width, side by _hjit, mats skip its footprint, manifest records it.",
+   "class": "within",
+   "why": "FR-006: off the southern half and the corridor, map south not local south, the side a labeled guess (505: sources silent). The GM: racks should not be at the south side of the yard."
+  },
+  {
+   "id": "D4-fallback",
+   "summary": "Where neither side's near-house half leaves 4 ft, the whole side edge is tried, still off the map-south half; every yard on a changeable-weather map takes a rack, asserted by a Sawada test.",
+   "class": "within",
+   "why": "Round 1's NOT LEGITIMATE item is resolved: the project's guess (the near half) now yields instead of the per-map knob, and no household on a rack map loses its rack. The GM's hard rule (never on the south side) is kept. The 'always' claim holds by arithmetic on the recorded constants (checked 2026-09-28 by reading yards.py): YARD_MIN_TSUBO 8 at YARD_ASPECT 1.45 gives a depth of about 14 ft, so the near half alone leaves 5 ft past the 2 ft inset, above RACK_MIN_FT 4, and rack_segment's clip always leaves at least h/2 - inset on the better side under any rotation. The Sawada every-yard test enforces the request and is not scope."
+  },
+  {
+   "id": "D5",
+   "summary": "Threshing yard docstring rewritten from 025 and 505 with per-claim labels, the GM's convention wording, Entry naming 020, 025, 030, 505.",
+   "class": "within",
+   "why": "Unchanged. FR-007 as written."
+  },
+  {
+   "id": "D6",
+   "summary": "Regenerate the five pool hamlets; settlement-review on Sawada paired with the gate; make done.",
+   "class": "within",
+   "why": "Unchanged. FR-008; the five hamlets are the pool maps carrying threshing yards."
+  },
+  {
+   "id": "D7",
+   "summary": "Landing order with feature 269: tell its session; merge and re-run yard tests if 269 lands first.",
+   "class": "within",
+   "why": "Unchanged. Process only."
+  }
+ ],
+ "verdict": "CLEAR"
+}

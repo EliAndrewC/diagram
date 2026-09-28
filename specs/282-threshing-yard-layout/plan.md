@@ -31,19 +31,22 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
   others keep none. Class: this project's decision.
 - **D3 - the mats** (FR-004). `_draw_threshing_yard` drops the fixed 14 x 9 ft center mat, the swept-rim line and the
   south rack. The yard's local frame is tiled in cells of 6 x 3 ft (`MAT_FT`, tobunken-mushiro: 3 x 6 shaku), long side
-  along the yard's width, inset 1 ft; cells are drawn in a checkered pattern (half of them), each only if its four
-  corners lie inside the yard's quad; the count is then held to the band [ceil(full/3), floor(2 full/3)], `full` =
-  the yard's area / 18 sq ft, by adding cells of the other parity (spread by index) or dropping from the end. The
+  along the yard's width, inset 1 ft, laid in rows with a 2 ft gap around each (45% of a full cover; the gap closes to 1.5 then 1 ft where a small or clipped yard would fall under a third - a checkered half was tried first and read as pavers), each only if its four
+  corners lie inside the yard's quad; the count lands in the band [ceil(full/3), floor(2 full/3)], `full` = the
+  yard's area / 18 sq ft - the floor by closing the gap, the ceiling by the narrowest gap's own pitch (7 x 4 ft). The
   pure layout is a module-level function `mat_cells(w, h, poly_local, ftpx, keep_out)` so it is tested with plain
-  inputs. Rows and the checkered thinning: the rows a GUESS, the thinning a CONVENTION (the GM's words), recorded on 025.
+  inputs. Rows and the gapped thinning: the rows a GUESS, the thinning a CONVENTION (the GM's words), recorded on 025.
 - **D4 - the rack** (FR-006). When `_house_racks`: a module-level `rack_segment(w, h, rot, ftpx, side_pref)` returns the
   rack's centerline in the local frame, or None. Candidates run along the yard's two side edges (the local x = +/-
   edges, inset 2 ft), from the edge facing the house (local north, inset 2 ft) toward the far edge, clipped so that
   (a) they stay in the half nearest the house (local y <= 0) and (b) every corner of the rack's footprint (2.5 ft wide,
   a CONVENTION so it reads) lies in the yard's MAP-north half after the house's rake is applied - the clip is solved
   in map coordinates, so it holds for any rotation, the quarter turns of feature 269 included. The preferred side comes
-  from `_hjit` at the yard's center; the other side is tried if the preferred one clips below 4 ft; with neither, no
-  rack is drawn (counted by test on Sawada). Drawn as today's rack glyph (rails + posts every ~6 ft + hung straw),
+  from `_hjit` at the yard's center; the other side is tried if the preferred one clips below 4 ft. The half nearest the
+  house is our guess and yields before the knob does (plan review round 1): where neither side's near half leaves 4 ft,
+  the whole side edge is tried, still held off the map-south half - under any rotation part of one side edge lies
+  map-north of the center, so every yard on a changeable-weather map takes a rack (a Sawada test asserts every yard
+  has one). Drawn as today's rack glyph (rails + posts every ~6 ft + hung straw),
   turned with the yard. The mats skip cells under the rack's footprint. The manifest's yard record gains `mats` (the
   drawn count) and, when present, `rack` (the footprint's four corners in map coordinates).
 - **D5 - the modal** (FR-007). The `threshing yard` class docstring rewritten from 025 and 505: What (a floor of mats

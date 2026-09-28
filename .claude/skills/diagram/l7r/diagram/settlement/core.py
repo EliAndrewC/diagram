@@ -70,6 +70,7 @@ class Settlement(
         # WORK YARDS: every farmstead bundle carries a threshing yard unless the generator declares the
         # settlement grows no rice (feature 150: the dike-pond hamlet; `meta.work_yards`, `_bundle_geom`).
         self._work_yards: bool = True
+        self._house_racks: bool = False  # a rack by each house's yard - changeable harvest weather (feature 282, `yards.rack_segment`)
         self.out_cls: list[ClsTag] = []
         self.top_cls: list[ClsTag] = []
         self.toplabels_cls: list[ClsTag] = []

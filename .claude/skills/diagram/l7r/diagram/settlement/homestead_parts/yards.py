@@ -8,26 +8,129 @@ from .._geom import edge_dist, point_in_poly, turn_about
 if TYPE_CHECKING:
     from ..core import Settlement
 
+# THE STRAW MAT, 3 x 6 ft (feature 282): the mushiro was woven about 3 shaku by 6 (90 x 180 cm; tobunken-mushiro), and a
+# yard at harvest was a floor of them - "mats were spread to fill the yard" (Kitamoto). Laid long side across the yard's
+# width, in rows (a GUESS: no page read says how they lay), inset 1 ft from the edge.
+MAT_FT = (6.0, 3.0)
+MAT_INSET_FT = 1.0
+MAT_SQ_FT = MAT_FT[0] * MAT_FT[1]
+# THE GAP LEFT BETWEEN DRAWN MATS, widest first (feature 282, a CONVENTION): a real yard's mats lay edge to edge, and drawn
+# so they read as a tiled floor (seen on Sawada, 2026-09-28, with a checkered half: mats meeting at their corners made
+# pavers, not mats). A 2 ft gap on every side leaves each mat on its own and draws 18 / (8 x 5) = 45% of a full cover; a
+# yard too small or too clipped (by its pulled-in corners and the rack) to reach a third of one at that gap closes it a
+# step at a time, down to edge to edge on the smallest yards, and is thinned back evenly if that overshoots two thirds.
+MAT_GAPS_FT = (2.0, 1.5, 1.0, 0.5, 0.0)
+# THE RACK BY THE HOUSE (feature 282): a line of posts and poles hung with sheaves, drawn 2.5 ft wide so it reads - a
+# map drawing CONVENTION (the real poles are inches thick) - and inset 2 ft from the yard's side and front edges.
+RACK_WIDTH_FT = 2.5
+RACK_INSET_FT = 2.0
+RACK_MIN_FT = 4.0  # shorter than this and it is not drawn: a side clipped by the map-south rule to a stub reads as litter
+RACK_CLEAR_FT = 0.25  # the rack stops this far north of the yard's midline (the manifest rounds to 0.1 px)
+RACK_POST_FT = 6.0  # a post every ~6 ft (a GUESS within the attested racks: posts at even spacing, kotobank-hasa-nipponica)
+
+
+def mat_cells(w: float, h: float, poly: list[tuple[float, float]], ftpx: float, keep_out: tuple[float, float, float, float] | None = None) -> list[tuple[float, float, float, float]]:
+    """The mats one yard draws, as (x, y, w, h) rects in the yard's LOCAL, unturned frame (its center at 0,0).
+
+    The real yard was covered edge to edge (40-60 mats), which at map scale reads as a textured floor rather than as mats,
+    so the drawing lays them in rows across the whole yard with a gap around each, about half of a full cover - the GM's
+    drawing convention (2026-09-28: "at this scale, we can't render dozens of mats and have that be legible. So our
+    threshing yard glyphs show a smaller number to give the impression that there are many of them"). The rows are
+    centered inside a 1 ft inset; a mat is kept only if its four corners lie inside the yard's quad `poly` (local coords)
+    and it misses `keep_out` (the rack's footprint, x0, y0, x1, y1). The count is held to at least a third of the yard's
+    full cover (area / 18 sq ft; spec 282 FR-004) by closing the gap (`MAT_GAPS_FT`); at the widest gap that still
+    reaches it; where the last, edge-to-edge step overshoots two thirds, it is thinned back evenly."""
+    mw, mh, inset = MAT_FT[0] / ftpx, MAT_FT[1] / ftpx, MAT_INSET_FT / ftpx
+    floor = math.ceil((w * ftpx) * (h * ftpx) / MAT_SQ_FT / 3.0)
+    mats: list[tuple[float, float, float, float]] = []
+    for gap_ft in MAT_GAPS_FT:
+        g = gap_ft / ftpx
+        cols, rows = int((w - 2 * inset + g) // (mw + g)), int((h - 2 * inset + g) // (mh + g))
+        gx0, gy0 = -(cols * (mw + g) - g) / 2.0, -(rows * (mh + g) - g) / 2.0
+        mats = []
+        for r in range(rows):
+            for c in range(cols):
+                x, y = gx0 + c * (mw + g), gy0 + r * (mh + g)
+                if not all(point_in_poly(px, py, poly) for px, py in ((x, y), (x + mw, y), (x + mw, y + mh), (x, y + mh))):
+                    continue
+                if keep_out is not None and x < keep_out[2] and x + mw > keep_out[0] and y < keep_out[3] and y + mh > keep_out[1]:
+                    continue
+                mats.append((x, y, mw, mh))
+        if len(mats) >= floor:
+            break
+    cap = max(1, math.floor((w * ftpx) * (h * ftpx) / MAT_SQ_FT * 2.0 / 3.0))
+    if len(mats) > cap:  # only edge to edge can overshoot: drop evenly across the yard, never from one end
+        step = len(mats) / cap
+        mats = [mats[int((i + 0.5) * step)] for i in range(cap)]  # centered picks: the drops fall mid-yard, not at its end
+    return mats
+
+
+def rack_segment(w: float, h: float, rot: float, ftpx: float, side: int) -> tuple[float, float, float, float] | None:
+    """The rack by the house, as (x, y0, y1, half width) in the yard's LOCAL frame, or None where no side takes one.
+
+    It runs along one of the yard's two side edges (local x = +/-), from the edge facing the house (local north) toward
+    the middle, and never past it: the half nearest the house (505's GUESS - the sources are silent on the side). It must
+    also stay out of the yard's MAP-south half, because the drying floor needs the sun from the south (entry 030) - and
+    that is solved in MAP coordinates, after the house's rake `rot`, so it holds for any turn (a quarter-turned homestead
+    included): a local point (x, y) lies map-south of the yard's center by x sin(rot) + y cos(rot), and every corner of the
+    rack's footprint must keep that at or below zero. `side` (+1 east, -1 west, in the local frame) is tried first.
+
+    THE HALF NEAREST THE HOUSE YIELDS BEFORE THE KNOB DOES (plan review, 2026-09-28): it is our guess, while the knob is
+    the research's - where the weather is changeable EVERY farmstead gathers its rack by the house - so where neither side's
+    near half leaves `RACK_MIN_FT`, the whole side is tried, still held off the map-south half. Some part of one side edge
+    always lies map-north of the center, so a yard of the sizes the roll makes always takes a rack."""
+    th = math.radians(rot)
+    s, c = math.sin(th), math.cos(th)
+    hw, inset, minlen = RACK_WIDTH_FT / 2.0 / ftpx, RACK_INSET_FT / ftpx, RACK_MIN_FT / ftpx
+    for far, sd in ((0.0, side), (0.0, -side), (h / 2.0 - inset, side), (h / 2.0 - inset, -side)):
+        x = sd * (w / 2.0 - inset - hw)
+        lo, hi = -h / 2.0 + inset, far
+        for xp in (x - hw, x + hw):  # each long edge of the footprint: y * c <= -xp * s
+            k = -xp * s - RACK_CLEAR_FT / ftpx  # a hair north of the midline, so the manifest's rounding cannot carry it over
+            if abs(c) < 1e-9:
+                if k < 0.0:
+                    hi = lo - 1.0  # this side lies map-south of the center along its whole length
+            elif c > 0.0:
+                hi = min(hi, k / c)
+            else:
+                lo = max(lo, k / c)
+        if hi - lo >= minlen:
+            return (x, lo, hi, hw)
+    return None
+
 
 class ThreshingYardsMixin:
-    def _draw_threshing_yard(self: Settlement, cx: float, cy: float, w: float, h: float, poly: Any, rot: float = 0.0) -> None:  # type: ignore[misc]
-        """Draw one small tamped earthen threshing/drying yard (a straw mat + a little hazakake rack). The
-        outer footprint is a slightly-irregular quad (`poly`, absolute corner coords, UNTURNED) - a swept work
-        surface stays NEAR-square; interior detail is laid out in the local (w,h) frame, and the whole group
-        is turned by `rot`, its farmhouse's rake."""
-        x0, y0 = -w / 2, -h / 2
+    def _draw_threshing_yard(self: Settlement, cx: float, cy: float, w: float, h: float, poly: Any, rot: float = 0.0) -> dict[str, Any]:  # type: ignore[misc]
+        """Draw one tamped earthen threshing yard as the harvest leaves it (feature 282): a floor of straw mats, and a
+        rack by the house where the settlement's harvest weather is changeable. The outer footprint is a
+        slightly-irregular quad (`poly`, absolute corner coords, UNTURNED); the interior is laid out in the local (w,h)
+        frame and the whole group turned by `rot`, its farmhouse's rake. Returns what it drew for the manifest: `mats`
+        (the count) and, with a rack, `rack` (its footprint's four corners in MAP coordinates)."""
         g = [f'<g transform="translate({cx:.1f},{cy:.1f}) rotate({rot:.2f})">']
-        pts = " ".join(f"{px - cx:.1f},{py - cy:.1f}" for px, py in poly)
+        local = [(px - cx, py - cy) for px, py in poly]
+        pts = " ".join(f"{px:.1f},{py:.1f}" for px, py in local)
         g.append(f'<polygon points="{pts}" fill="#D2BE94" stroke="#A98E54" stroke-width="1.5"/>')  # tamped earthen floor
-        g.append(f'<rect x="{x0 + 3:.0f}" y="{y0 + 3:.0f}" width="{w - 6:.0f}" height="{h - 6:.0f}" rx="1.5" fill="none" stroke="#BBA06E" stroke-width="0.7" opacity="0.6"/>')  # swept rim
-        g.append('<rect x="-7" y="-6" width="14" height="9" rx="1" fill="#E2D2A2" stroke="#A98E54" stroke-width="0.6" opacity="0.9"/>')  # a straw drying mat
-        ry = h / 2 - 3  # a little drying rack (hazakake) along the floor's lower edge
-        g.append(f'<line x1="{x0 + 4:.1f}" y1="{ry:.1f}" x2="{-x0 - 4:.1f}" y2="{ry:.1f}" stroke="#7A5A30" stroke-width="1.2"/>')
-        g.append(f'<line x1="{x0 + 4:.1f}" y1="{ry - 3:.1f}" x2="{-x0 - 4:.1f}" y2="{ry - 3:.1f}" stroke="#7A5A30" stroke-width="1.0"/>')
-        for px in (x0 + 4, 0.0, -x0 - 4):  # posts + a few hung sheaves
-            g.append(f'<line x1="{px:.1f}" y1="{ry - 5:.1f}" x2="{px:.1f}" y2="{ry + 3:.1f}" stroke="#5A3F1E" stroke-width="1.2"/>')
+        rack = rack_segment(w, h, rot, self.ftpx, 1 if self._hjit(cx, cy, 53.0) < 0.5 else -1) if self._house_racks else None
+        keep = (rack[0] - rack[3] - 0.5, rack[1] - 0.5, rack[0] + rack[3] + 0.5, rack[2] + 0.5) if rack else None
+        mats = mat_cells(w, h, local, self.ftpx, keep)
+        for mx, my, mw, mh in mats:  # straw mats (mushiro), about half of those that covered the floor, each on its own - a CONVENTION
+            g.append(f'<rect x="{mx:.2f}" y="{my:.2f}" width="{mw:.2f}" height="{mh:.2f}" fill="#EBDDAE" stroke="#9A7C45" stroke-width="0.5"/>')
+        out: dict[str, Any] = {"mats": len(mats)}
+        if rack:
+            x, y0, y1, hw = rack
+            g.append(f'<rect x="{x - hw:.2f}" y="{y0:.2f}" width="{2 * hw:.2f}" height="{y1 - y0:.2f}" fill="#C9AE62" stroke="#7A5A30" stroke-width="0.6"/>')  # hung sheaves
+            g.append(f'<line x1="{x:.2f}" y1="{y0:.2f}" x2="{x:.2f}" y2="{y1:.2f}" stroke="#7A5A30" stroke-width="0.8"/>')  # the pole
+            n = max(1, round((y1 - y0) * self.ftpx / RACK_POST_FT))
+            for i in range(n + 1):  # the posts
+                py = y0 + (y1 - y0) * i / n
+                g.append(f'<line x1="{x - hw - 0.6:.2f}" y1="{py:.2f}" x2="{x + hw + 0.6:.2f}" y2="{py:.2f}" stroke="#5A3F1E" stroke-width="1.0"/>')
+            th = math.radians(rot)
+            out["rack"] = [
+                [round(cx + px * math.cos(th) - py * math.sin(th), 2), round(cy + px * math.sin(th) + py * math.cos(th), 2)] for px, py in ((x - hw, y0), (x + hw, y0), (x + hw, y1), (x - hw, y1))
+            ]
         g.append('</g>')
         self.add(''.join(g), cls="threshing yard")
+        return out
 
     def _yard_fits(self: Settlement, x: float, y: float, w: float, h: float, hx: float, hy: float) -> bool:  # type: ignore[misc]
         """A threshing yard fits where it is in-bounds, on DRY ground (clear of paddies / blocks),
@@ -175,8 +278,7 @@ class ThreshingYardsMixin:
         # ask. Only the ink goes: no swept floor, no bordered frame. `harvest_yards_present` reads
         # `meta.work_yards` and stands aside; the interactive class `threshing yard` has no ink here.
         _fore = not getattr(self, "_work_yards", True)
-        if not _fore:
-            self._draw_threshing_yard(ox, oy, yw, yh, flat, rot)
+        drawn = {} if _fore else self._draw_threshing_yard(ox, oy, yw, yh, flat, rot)  # its mats and rack, for the manifest (feature 282)
         self.M["threshing_yards"].append(
             {
                 "x": round(ox, 1),
@@ -187,6 +289,7 @@ class ThreshingYardsMixin:
                 "of": [hx, hy],
                 "poly": [[round(px, 1), round(py, 1)] for px, py in poly],
                 **({"kind": "forecourt"} if _fore else {}),
+                **drawn,
             }
         )
         self.placed.append((ox, oy, yw, yh))
