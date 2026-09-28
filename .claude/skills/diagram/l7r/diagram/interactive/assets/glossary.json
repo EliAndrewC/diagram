@@ -10747,5 +10747,16 @@
    "raft-mat",
    "raft-mats"
   ]
+ },
+ "clay mill": {
+  "def": "A hand-turned mill for rice, brought from Qing China in the Genroku era, that stripped the husk from the grain but broke many grains as it did.",
+  "variants": [
+   "clay mill",
+   "clay mills",
+   "clay hulling mill",
+   "clay hulling mills",
+   "clay-mill",
+   "tsuchiusu"
+  ]
  }
 }

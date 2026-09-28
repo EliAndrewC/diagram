@@ -309,6 +309,11 @@ city gods	City God
 city grain	city grain
 clapper-board	clapper-board
 clapper-boards	clapper-board
+clay hulling mill	clay mill
+clay hulling mills	clay mill
+clay mill	clay mill
+clay mills	clay mill
+clay-mill	clay mill
 climbing kiln	noborigama
 climbing kilns	noborigama
 cloister	cloister
@@ -2535,6 +2540,7 @@ true duty	water duty
 trunk streets	trunk street
 tsubo	tsubo
 tsubo-niwa	tsubo-niwa
+tsuchiusu	clay mill
 tsuijibei	tsuijibei
 tsuijimatsu	tsuijimatsu
 tsujiban	tsujiban
