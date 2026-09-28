@@ -49,19 +49,32 @@ def test_every_declared_tier_is_a_pool_folder_or_about_to_be() -> None:
             assert os.path.isfile(os.path.join(live, t.tier, stem, stem + ".gen.py")), f"{t.tier}: generated exception {stem} has no gen"
 
 
+def _labeled_tier(**item: str | None) -> dict:
+    """A tier whose one item is a label-regex item - the form no declared tier uses since feature 277 folded the country
+    shrine to kinds, kept for a type whose items have no kinds yet. A None value drops that key."""
+    raw = {"id": "x", "label": "^x$", "band_ft": {}, "class": "accurate", "why": "a reason"} | item
+    return {"tier": "labeled", "title": "L", "program": "p", "hand_drawn": True, "checks": [], "required": [{k: v for k, v in raw.items() if v is not None}]}
+
+
+def test_a_labeled_item_keeps_its_own_class_and_why() -> None:
+    item = bt.parse_types([_labeled_tier()])[0].required[0]
+    assert item.kind is None and item.label is not None and item.label.search("x")
+    assert bt.classification(item) == ("accurate", "a reason")
+
+
 @pytest.mark.parametrize(
     ("mutate", "message"),
     [
         (lambda d: d[0].pop("checks"), "carries"),
         (lambda d: d[0].__setitem__("tier", "Magistracies"), "kebab"),
-        (lambda d: d[1]["required"][0].__setitem__("class", "sort of accurate"), "class must be one of"),
+        (lambda d: d.append(_labeled_tier(**{"class": "sort of accurate"})), "class must be one of"),
         (lambda d: d[0]["required"][0].__setitem__("class", "accurate"), "whose class and why are its kind's"),
         (lambda d: d[0]["required"][0].__setitem__("kind", ""), "kind names a Mode A kind"),
         (lambda d: d[0]["required"][0].__setitem__("band_ft", {"w": [30, 10]}), "min <= max"),
         (lambda d: d[0]["required"][0].__setitem__("band_ft", {"depth": [1, 2]}), "only w, h and area"),
         (lambda d: d[0]["required"].append(dict(d[0]["required"][0])), "ids repeat"),
         (lambda d: d.append(dict(d[0])), "declared twice"),
-        (lambda d: d[1]["required"][0].pop("why"), "required item carries"),
+        (lambda d: d.append(_labeled_tier(why=None)), "required item carries"),
         (lambda d: d.clear(), "non-empty list"),
     ],
 )
@@ -89,7 +102,7 @@ def test_a_form_can_change_or_remove_an_item_band() -> None:
     dwelling = next(i for i in shrine.required if i.id == "dwelling")
     assert hall.band_for(None) is hall.band and hall.band_for("one roof") is not None and hall.band_for("one roof").area == (2100.0, 3600.0)
     assert dwelling.band_for("two buildings") is dwelling.band and dwelling.band_for("one roof") is None
-    assert hall.label.search("Hall and dwelling") and not hall.label.search("village hall")
+    assert hall.kind == "hall and dwelling" and dwelling.kind == "the monk's rooms"
 
 
 # --- the census: a type name lives in the declaration and nowhere else in the engine (SC-001) ---
@@ -171,15 +184,14 @@ def test_the_magistracy_program_is_folded_into_the_registry() -> None:
     label pattern of its own; its class and why ARE the kind's registry entry, read back by `classification`."""
     from l7r.diagram.interactive.compound_kinds import COMPOUND_CLASSES
 
-    magi = bt.by_tier("magistracies")
-    assert magi is not None and magi.required
-    for item in magi.required:
-        assert item.kind in COMPOUND_CLASSES, item.id
-        assert item.label is None and item.cls == "" and item.why == "", item.id
-        fc = COMPOUND_CLASSES[item.kind]
-        assert bt.classification(item) == (fc.label, fc.label_note)
-    shrine = bt.by_tier("country-shrines")
-    assert shrine is not None and all(i.kind is None and bt.classification(i) == (i.cls, i.why) for i in shrine.required)
+    for tier in ("magistracies", "country-shrines"):  # the country shrine folded too (feature 277, FR-006)
+        declared = bt.by_tier(tier)
+        assert declared is not None and declared.required
+        for item in declared.required:
+            assert item.kind in COMPOUND_CLASSES, item.id
+            assert item.label is None and item.cls == "" and item.why == "", item.id
+            fc = COMPOUND_CLASSES[item.kind]
+            assert bt.classification(item) == (fc.label, fc.label_note)
 
 
 def test_a_kind_the_registry_does_not_know_is_refused_by_name() -> None:
