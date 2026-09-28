@@ -2255,7 +2255,7 @@ the belt. MECHANISM: the marsh is drawn clipped by the settlement's clearing whi
 SKETCH: record the drawn extent (the ring after the clearing's cut) beside `poly`, as `drawn_poly`, and have every grove
 and the parcels test against it; then the belt gets the same keep-out as the copse.
 
-### Five finished-map rules no placer guarantees (found by feature 284, 2026-09-28)
+## Five finished-map rules no placer guarantees (found by feature 284, 2026-09-28)
 
 MEASUREMENT (`specs/284-fourth-hotspot-pass/research.md` R6): two speed levers that moved the pool's maps within every
 tolerance - A* in the router and the field search without its blind probe - left the regenerated pool failing five gate
