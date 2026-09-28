@@ -11,7 +11,7 @@ placed so far, updated as each lands - for its candidates before testing any, an
 static-ground scan from an index; (D) seam closing computes each result once,
 batches per-piece work, and visits only the cells a pocket touches; (E) the track stage's path checks read an
 index built once per stage. Every index PRUNES and the existing exact test DECIDES (`dev/performance.md`), so the
-rules are unchanged; where a batched geometry call or a household-keyed yard roll (D10) moves a map, FR-006's house
+rules are unchanged; where a batched geometry call or a household-keyed yard roll (D10) or the corrected crossing test (the spec's Amendment 1) moves a map, FR-006's house
 counts and forms must hold.
 
 ## Technical Context
@@ -55,7 +55,7 @@ A decrease is the point; an increase on any seed is diagnosed under the bands li
 - **XIII No known regressions**: baseline `make cohort N=24` in a detached worktree on unmodified code (research
   R7); zero new failing seeds at merge.
 - **XIV Fix defects found**: any found in passing is fixed in this feature.
-- **XVI Build what was asked**: all five pieces. Two narrowings were put to `spec-fidelity` and ruled LEGITIMATE (D10's per-household roll, recorded in the spec's Decisions Recorded); every other decision was ruled within.
+- **XVI Build what was asked**: all five pieces. One narrowing was put to `spec-fidelity` and ruled LEGITIMATE (D10's per-household roll, recorded in the spec's Decisions Recorded); every other decision was ruled within.
 
 ## Design
 
@@ -120,12 +120,16 @@ A decrease is the point; an increase on any seed is diagnosed under the bands li
     side whose envelope was clear goes to `_parts_fit` as today, whatever its own sample points would say.
   Tests: the seats chosen with and without the index are the same on the rescue scenario and the toy on both paths,
   including a case whose whole envelope is clear while one side's sample point lies on taken ground.
-- **D9a The dispersed pre-screen** (ruled within): behind the index, `_place_bundle`'s survivors are pre-screened by
-  `_bundle_fits`'s own cheapest conjuncts (the house's and yard's ground, the eave gap, the placed-box overlap) before
-  the rest - exact because that conjunction is order-independent. **Not on the nucleated path**: its test is
-  `_envelope_blocked` then `_parts_fit`, one overlapping placed box is a computed MOVE there, not a rejection, and the
-  eave gap is judged after the move - so the nucleated loop is screened only by D9's index, on its own condition (the
-  envelope's ground), where that condition is judged.
+- **D9a The dispersed pre-screen** (ruled within; its list extended 2026-09-28): behind the index, `_place_bundle`'s
+  candidates and every slide step are pre-screened by `_bundle_fits`'s own conjuncts that the indexes answer cheaply -
+  before the bundle is built, the house rect's static ground, the house within the placed-box margin (the bbox holds the
+  house) and the eave gap (`_seat_refused`); once the bundle is moved from its template, every part's static ground (with a
+  site boundary installed `_rect_blocked` IS the nine-point test, whatever `fields` it is asked with), the bbox against the
+  canvas margin and the bounding ring, the bbox within the placed-box margin, and the three sun rules (`_bundle_refused`) -
+  exact because that conjunction is order-independent; what survives gets the whole test. **Not on the nucleated path**:
+  its test is `_envelope_blocked` then `_parts_fit`, one overlapping placed box is a computed MOVE there, not a rejection,
+  and the eave gap is judged after the move - so the nucleated loop is screened only by D9's index, on its own condition
+  (the envelope's ground), where that condition is judged.
 - **D10 The bundle template**: `_bundle_geom` builds the UNRAKED layout once per `(hw, hh, side, shed, nucleated)` and
   the household's rolled parts, translates it, and then applies the rake per candidate (`_rake_parts`, as today) - so
   the homestead still turns as one piece at every seat (GM 2026-09-26). The household's rolled parts - the yard's size,

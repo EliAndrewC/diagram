@@ -46,6 +46,7 @@ def after_entries(b: dict) -> dict[str, dict]:
         for n in (60, 120, 240):
             add(f"after-dense-{n}-{form}-per-house", h[f"dense-{n}-{form}"]["s_per_house"], "s", f"try_place cost per seated house, {n} seeds at constant density, {form} path")
             add(f"after-dense-{n}-{form}-houses", h[f"dense-{n}-{form}"]["houses"], "houses", f"houses seated from {n} seeds, {form} path", varies=False)
+            add(f"after-dense-{n}-{form}-houses-five", h[f"dense-{n}-{form}"]["houses_five_layouts"], "houses", f"houses seated from {n} seeds summed over five layouts, {form} path", varies=False)
         add(f"after-dense-240-{form}-fits", h[f"dense-240-{form}"]["fit_tests"], "fit tests", f"full fit tests, 240 seeds at constant density, {form} path", varies=False)
     s = b["seams"]
     add("after-close-seams-max", max(v["close_seams_s"] for v in s.values()), "s", "close_seams inside one build_comb, the slowest of seeds 5/11/17")

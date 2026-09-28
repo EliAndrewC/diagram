@@ -156,6 +156,23 @@ def _homesteads() -> dict:
 
                 dt, (houses, fits) = _best(dense)
                 rows[f"dense-{n}-{form}"] = {"s": round(dt, 3), "houses": houses, "fit_tests": fits, "s_per_house": round(dt / max(houses, 1), 4)}
+                # THE HOUSE COUNT OVER FIVE LAYOUTS (spec Amendment 2): one layout's count moves by a few houses with any
+                # reshuffle of the households' rolls, so "no fewer houses" is judged on the total over five jitter seeds.
+                def five(n=n, form=form):  # type: ignore[no-untyped-def]
+                    total = 0
+                    for lay in range(5):
+                        side = int((n ** 0.5) * 95) + 400
+                        s = Settlement(side, side, seed=7)
+                        s.meta(name="D", scale="hamlet", ftpx=1, toscale=True, households=15, down_deg=90, water_flow=90, nucleated=form == "nucleated")
+                        s._nucleated = form == "nucleated"
+                        rng = _r.Random(n * 1000 + lay)
+                        k = int(n ** 0.5) + 1
+                        for i in range(n):
+                            s.try_place(200 + (i % k) * 95 + rng.uniform(-20, 20), 200 + (i // k) * 95 + rng.uniform(-20, 20), "plain")
+                        total += len(s.M["houses"])
+                    return total
+
+                rows[f"dense-{n}-{form}"]["houses_five_layouts"] = five()
     finally:
         for name, real in patched:
             setattr(Settlement, name, real)

@@ -293,5 +293,47 @@
     "source": "a probe test routing PathChecker.violations back to path_violations during hg.generate (scratch; it also wrote tests/fixtures/track_candidates_inashiro_seed4.json), 2026-09-28",
     "observed": "2026-09-28",
     "varies": true
+  },
+  "before-dense-60-nucleated-houses-five": {
+    "value": 285,
+    "unit": "houses",
+    "quantity": "houses seated from 60 seeds summed over five layouts, nucleated path, the old (position-keyed) rolls",
+    "source": "a probe test (scratch) summing the placement primitive's seated houses over five jitter layouts per density, with the per-household roll switched OFF (the old position-keyed rolls; every other change of this feature is exact, so this is the old placement) - 2026-09-28",
+    "observed": "2026-09-28"
+  },
+  "before-dense-120-nucleated-houses-five": {
+    "value": 563,
+    "unit": "houses",
+    "quantity": "houses seated from 120 seeds summed over five layouts, nucleated path, the old (position-keyed) rolls",
+    "source": "a probe test (scratch) summing the placement primitive's seated houses over five jitter layouts per density, with the per-household roll switched OFF (the old position-keyed rolls; every other change of this feature is exact, so this is the old placement) - 2026-09-28",
+    "observed": "2026-09-28"
+  },
+  "before-dense-240-nucleated-houses-five": {
+    "value": 1138,
+    "unit": "houses",
+    "quantity": "houses seated from 240 seeds summed over five layouts, nucleated path, the old (position-keyed) rolls",
+    "source": "a probe test (scratch) summing the placement primitive's seated houses over five jitter layouts per density, with the per-household roll switched OFF (the old position-keyed rolls; every other change of this feature is exact, so this is the old placement) - 2026-09-28",
+    "observed": "2026-09-28"
+  },
+  "before-dense-60-dispersed-houses-five": {
+    "value": 188,
+    "unit": "houses",
+    "quantity": "houses seated from 60 seeds summed over five layouts, dispersed path, the old (position-keyed) rolls",
+    "source": "a probe test (scratch) summing the placement primitive's seated houses over five jitter layouts per density, with the per-household roll switched OFF (the old position-keyed rolls; every other change of this feature is exact, so this is the old placement) - 2026-09-28",
+    "observed": "2026-09-28"
+  },
+  "before-dense-120-dispersed-houses-five": {
+    "value": 368,
+    "unit": "houses",
+    "quantity": "houses seated from 120 seeds summed over five layouts, dispersed path, the old (position-keyed) rolls",
+    "source": "a probe test (scratch) summing the placement primitive's seated houses over five jitter layouts per density, with the per-household roll switched OFF (the old position-keyed rolls; every other change of this feature is exact, so this is the old placement) - 2026-09-28",
+    "observed": "2026-09-28"
+  },
+  "before-dense-240-dispersed-houses-five": {
+    "value": 703,
+    "unit": "houses",
+    "quantity": "houses seated from 240 seeds summed over five layouts, dispersed path, the old (position-keyed) rolls",
+    "source": "a probe test (scratch) summing the placement primitive's seated houses over five jitter layouts per density, with the per-household roll switched OFF (the old position-keyed rolls; every other change of this feature is exact, so this is the old placement) - 2026-09-28",
+    "observed": "2026-09-28"
   }
 }
