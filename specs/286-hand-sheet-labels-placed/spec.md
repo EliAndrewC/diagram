@@ -108,3 +108,6 @@ still read "MUST remain" (now "Every automated check ... MUST be removed, includ
 legacy Mode B exhibits) ruled LEGITIMATE: the request is about maps still drawn by hand; frozen exhibits are never
 re-gated or re-rendered, and editing them would be the retrofit the GM's 2026-08-16 ruling forbids. The GM is to be
 told at hand-back that the 18 legacy exhibits are untouched.
+
+**Round 3** (spec-fidelity-verify, MODE 3, 2026-09-28): FAITHFUL. The county example and the Ochiba round-trip sheet
+are composed by `compound.py` (`emit_svg`), which already places their captions at generation (the Edge Cases).
