@@ -237,6 +237,8 @@ caravanserais	caravanserai
 carex	Carex
 carex lyngbyei	Carex
 carr	carr
+carried deck	carried deck
+carried decks	carried deck
 castanopsis	Castanopsis
 castle rice	castle rice
 castle town	jokamachi
@@ -1730,6 +1732,7 @@ otedori	ote-suji
 otemon	ote-mon
 otesuji	ote-suji
 ou	Ou
+out-to-out	out-to-out
 oute	ote-mon
 outer moat	outer moat
 outer moats	outer moat
@@ -1867,6 +1870,8 @@ rat-guard	nezumi-gaeshi
 rat-guards	nezumi-gaeshi
 reach	reach
 reaches	reach
+reaction	reaction
+reactions	reaction
 readjustment	kochi seiri
 recharge	recharge
 recharges	recharge
@@ -2216,6 +2221,8 @@ sub-temple	sub-temple
 sub-temple's	sub-temple
 sub-temples	sub-temple
 subgrade	subgrade
+substructure	substructure
+substructures	substructure
 sue ware	Sue ware
 sueki	Sue ware
 sugi	sugi

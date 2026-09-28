@@ -10199,5 +10199,32 @@
   "variants": [
    "hanebashi"
   ]
+ },
+ "carried deck": {
+  "def": "a bridge deck borne on girders across the water, as against a standalone footplank whose ends simply rest on the bank; its corners must all land on dry ground, about 10 ft past the water.",
+  "variants": [
+   "carried deck",
+   "carried decks"
+  ]
+ },
+ "substructure": {
+  "def": "the part of a bridge below its deck and beams - its abutments at the ends and any piers between - that carries them down to the ground.",
+  "variants": [
+   "substructure",
+   "substructures"
+  ]
+ },
+ "reaction": {
+  "def": "in engineering, the force a support pushes back with where a beam rests on it - equal to the load the beam puts on that support, and what sizes the beam's bearing seat.",
+  "variants": [
+   "reaction",
+   "reactions"
+  ]
+ },
+ "out-to-out": {
+  "def": "of a length, measured from the outer face at one end to the outer face at the other - a beam's whole length, including the parts resting on its supports.",
+  "variants": [
+   "out-to-out"
+  ]
  }
 }
