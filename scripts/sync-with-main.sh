@@ -192,6 +192,7 @@ sync_in() {
   if [ "${1:-}" = "--mirror-only" ]; then clone_index_refresh; echo "sync-with-main: mirror refreshed from GitHub main (clone left alone - mid-task)"; return 0; fi
   git pull --no-rebase origin main
   clone_index_refresh
+  clone_page_refresh
   # No render pull-in anymore (GM 2026-07-22): its old rationale was that a clone's stale renders
   # would flow back into main via render-sync's copy - but render-sync no longer copies anything,
   # it REGENERATES main in place, so nothing flows clone -> main and the clone never needs main's
@@ -209,6 +210,17 @@ clone_index_refresh() {
   [ -f "$ROOT/$SKILL_DIR/Makefile" ] || return 0
   ( cd "$ROOT/$SKILL_DIR" && make --no-print-directory pool-index-if-stale ) \
     || echo "sync-with-main: WARNING - pool index refresh failed in the clone (run: make pool-index in $SKILL_DIR)" >&2
+}
+
+# THE CLONE'S PLACEMENT PAGE FOLLOWS THE CLASS REGISTRY (feature 278, FR-013; GUARD_EDIT_OK: a new operation, nothing
+# loosened). The page is gitignored and re-plated at landing, on main, so a clone that merged a new class kept its old
+# page and went red on `test_every_clickable_class_is_named_somewhere_on_the_committed_page` until someone re-plated
+# by hand. After a merge only (a mid-task clone merged nothing), and only when the page's class stamp differs - the
+# common sync costs one hash. Never fatal: a failed re-plate must not stop a sync, and the test still says what is wrong.
+clone_page_refresh() {
+  [ -f "$ROOT/$SKILL_DIR/Makefile" ] || return 0
+  ( cd "$ROOT/$SKILL_DIR" && make --no-print-directory placement-stages-if-classes ) \
+    || echo "sync-with-main: WARNING - placement page re-plate failed in the clone (run: make placement-stages in $SKILL_DIR)" >&2
 }
 
 push_cmd() {

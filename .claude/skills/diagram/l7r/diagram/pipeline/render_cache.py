@@ -243,7 +243,38 @@ def replate_page(skill_dir: str, fingerprint: str, allow_main: bool = True) -> b
     os.makedirs(page_dir, exist_ok=True)
     with open(stamp, "w", encoding="utf-8") as fh:
         fh.write(fingerprint + "\n")
+    with open(os.path.join(page_dir, ".classes"), "w", encoding="utf-8") as fh:
+        fh.write(classes_fingerprint() + "\n")
     return True
+
+
+def classes_fingerprint() -> str:
+    """A hash of the class names a reader can click - what `test_every_clickable_class_is_named_somewhere_on_the_committed_page`
+    reads the page against (feature 278)."""
+    import hashlib
+
+    from l7r.diagram.interactive.classes import CLASSES
+
+    return hashlib.sha256("\n".join(sorted(CLASSES)).encode()).hexdigest()
+
+
+def replate_if_classes_moved(skill_dir: str, allow_main: bool = False) -> bool:
+    """Re-plate the placement page when the class registry has changed since it was plated (feature 278, FR-013).
+
+    The page is gitignored and re-plated at landing, on main; a clone that merged a new class kept the page it had, and
+    the test that reads it went red in that clone until someone re-plated by hand - a red only a landing cleared. The
+    sync-in that brings the class runs this: the page's `.classes` stamp holds the registry it was plated from, and a
+    mismatch - or a page plated before the stamp existed - re-plates it. A clone with no page yet is left alone (the test
+    skips it). The engine-fingerprint re-plate is `replate_page`'s, which render-sync runs on main."""
+    page_dir = os.path.join(skill_dir, PAGE_DIR)
+    if not os.path.isfile(os.path.join(page_dir, "hamlet-placement.html")):
+        return False
+    stamp = os.path.join(page_dir, ".classes")
+    if os.path.isfile(stamp):
+        with open(stamp, encoding="utf-8") as fh:
+            if fh.read().strip() == classes_fingerprint():
+                return False
+    return replate_page(skill_dir, engine_fingerprint(skill_dir), allow_main=allow_main)
 
 
 def stale_flat_renders(skill_dir: str) -> list[str]:
@@ -280,7 +311,12 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--skill-dir", default=SKILL_DIR, help="skill dir holding BOTH pool trees and the engine sources")
     ap.add_argument("--jobs", type=int, default=None, help="parallelism (default: cpu count)")
     ap.add_argument("--no-allow-main", action="store_true", help="do not set GM_ASSISTANT_ALLOW_MAIN for the generators")
+    ap.add_argument("--page-if-classes", action="store_true", help="only re-plate the placement page if the class registry moved (sync-in; feature 278)")
     args = ap.parse_args(argv)
+    if args.page_if_classes:
+        replated = replate_if_classes_moved(args.skill_dir, allow_main=not args.no_allow_main)
+        print(f"render-cache: placement page {'re-plated (the class registry moved)' if replated else 'current'} ({PAGE_DIR}/hamlet-placement.html)")
+        return 0
     if args.main_repo is None:  # feature 131: no hardcoded /gm-assistant - the checkout this file lives in
         here = os.path.dirname(os.path.abspath(__file__))
         args.main_repo = subprocess.run(["git", "-C", here, "rev-parse", "--show-toplevel"], capture_output=True, text=True, check=True).stdout.strip()
