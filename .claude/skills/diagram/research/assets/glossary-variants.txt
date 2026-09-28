@@ -2719,6 +2719,7 @@ zelkova	keyaki
 zhalan	zhalan
 zhalou	zhalou
 zhang	zhang
+zhengde	Zhengde
 zhengyi	Zhengyi
 zhili	Zhili
 zhonggulou	gulou
