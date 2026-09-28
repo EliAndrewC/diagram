@@ -727,11 +727,22 @@ def segments_cross(a: Pt, b: Pt, c: Pt, d: Pt) -> bool:
 
 
 def seg_intersect(a: Pt, b: Pt, c: Pt, d: Pt) -> tuple[float, float] | None:
-    """The (x, y) where segments ab and cd cross, or None if parallel. Call only when they cross."""
+    """The (x, y) where SEGMENTS ab and cd cross, or None if they do not (parallel, or apart).
+
+    BOUNDED ON BOTH SEGMENTS (feature 276, a defect found while profiling the track stage). This returned the
+    intersection of the two infinite LINES for any non-parallel pair, under a docstring asking callers to "call
+    only when they cross" - and seven callers did not: `path_violations`' brook, double-bridge, shallow-crossing
+    and crop-landing tests counted a path segment against every non-parallel water segment on the map (Inashiro's
+    candidate paths scored 3,847 to 8,773 "violations" with no real crossing among them), a cluster's way-crossing
+    finder and its spur trim met ways that never touched, and a homestead's brook-cut test counted a brook it did not
+    cross. A caller that checked `segments_cross` first gets the same point as before."""
     den = (a[0] - b[0]) * (c[1] - d[1]) - (a[1] - b[1]) * (c[0] - d[0])
     if abs(den) < 1e-9:
         return None
     t = ((a[0] - c[0]) * (c[1] - d[1]) - (a[1] - c[1]) * (c[0] - d[0])) / den
+    u = -((a[0] - b[0]) * (a[1] - c[1]) - (a[1] - b[1]) * (a[0] - c[0])) / den
+    if not (0.0 <= t <= 1.0 and 0.0 <= u <= 1.0):
+        return None
     return (a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1]))
 
 

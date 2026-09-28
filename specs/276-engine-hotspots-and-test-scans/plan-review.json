@@ -1,0 +1,148 @@
+{
+ "feature": "276-engine-hotspots-and-test-scans",
+ "plan_sha256": "b8a6b2ced4cc9efe73e0b9fdbc60cc5f3a4cfdc5689d80b9ec56fd04dd24d88f",
+ "reviewed": "2026-09-28",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "tests/_engine_ast.py: content-keyed parse per module, PARSES counter, cached walk, engine_modules with an optional needle skip",
+   "class": "within",
+   "why": "Unchanged since the third plan review (CLEAR); its ruling carries: FR-001's shared content-keyed parse per worker."
+  },
+  {
+   "id": "D2",
+   "summary": "needles are identifiers/keywords: shapely/numpy/PIL, STAGES, bare del, diagram; scan bodies lifted to module level",
+   "class": "within",
+   "why": "Unchanged since the third plan review (CLEAR); its ruling carries: Round-1 finding resolved. Each needle is a token the property cannot be written without: test_package_surfaces checks only absolute `from l7r.diagram...` (node.level skipped, line 45), which cannot be spelled without the identifier `diagram`; bare `del` covers del(x); the heavy-library names are module-name tokens. Provable supersets, as FR-001 requires."
+  },
+  {
+   "id": "D3",
+   "summary": "test asserts one parse per distinct file across the four scans and that each flags a planted offender",
+   "class": "within",
+   "why": "Unchanged since the third plan review (CLEAR); its ruling carries: SC-001 and FR-001's planted-offender proof."
+  },
+  {
+   "id": "D4",
+   "summary": "_ids cached on content; .md-token scans skip a file with no '.md' substring",
+   "class": "within",
+   "why": "Unchanged since the third plan review (CLEAR); its ruling carries: Exact skip (the regex requires a literal .md); FR-002."
+  },
+  {
+   "id": "D5",
+   "summary": "corpus joined once; single-token variants from a word set under _bounded_in's rule, others by _bounded_in; equality test over every variant",
+   "class": "within",
+   "why": "Unchanged since the third plan review (CLEAR); its ruling carries: FR-002 with the verdict proved identical."
+  },
+  {
+   "id": "D6",
+   "summary": "planted-violation tests: broken link id, unused glossary term, converted .md token",
+   "class": "within",
+   "why": "Unchanged since the third plan review (CLEAR); its ruling carries: FR-002 / SC-001a; enforcement of what was asked."
+  },
+  {
+   "id": "D7",
+   "summary": "houses/placed as Indexed lists; every per-candidate placed-house scan asks a PointGrid extended on append; exact tests unchanged; equality test",
+   "class": "within",
+   "why": "Unchanged since the third plan review (CLEAR); its ruling carries: FR-003's 'no fit test scans every placed house'; prune-only."
+  },
+  {
+   "id": "D8",
+   "summary": "SiteCorridors vertex grid per ring and hole grid; exact tests decide; equality test",
+   "class": "within",
+   "why": "Unchanged since the third plan review (CLEAR); its ruling carries: Static ground indexed once; prune-only."
+  },
+  {
+   "id": "D9",
+   "summary": "FreeGround built once per stage: static surely-taken cells where the site boundary is installed (empty otherwise, stated) plus the placed boxes at the 2 px margin, added as each bundle lands (D7 grid); asked first for every spiral offset and every _slide step (dispersed); on the nucleated path it answers _envelope_blocked placed-box hits in list order and prunes static ground only where the loop judges ground (union envelope; a side box only when the union was refused; a moved box at its moved position); same-seat tests on both paths including the union-clear, side-sample-on-taken-ground case",
+   "class": "within",
+   "why": "Unchanged since the third plan review (CLEAR); its ruling carries: Both round-2 rulings resolved, checked against the code. (1) The index is now the one FR-003 and the approved analysis name: built once per stage (install_site_boundary runs once, stages.py 130) and updated as each bundle lands through the placed registry index, which follows the Indexed list across the _solve_homestead rebind. Dispersed drops are exact: a house-rect sample point in a surely-taken cell is refused by _site_blocks_rect (the house conjunct of _bundle_common_fits), and a placed-box overlap at the margin is _bundle_side_fits refusal (fit.py 463, strict, +2), both conjuncts of the order-independent _bundle_fits; the slides are covered, since _slide ends on a _bundle_fits NO (place.py 81) and grove_off_field does not touch either conjunct. The no-boundary case is stated: only the placed boxes answer, which is the part that grows with density (the request stated purpose, the city). (2) The nucleated branch now matches place.py 146-174: the union is asked first (a taken sample point makes _union_clear False, exactly as _rect_blocked would), a side box is judged only when the union was refused (line 152), ground-refused returns True before any placed-box move so a static drop never pre-empts a move, and a single placed overlap stays a move with list order kept. The index prunes, the exact test decides. Summary C, research R2 and the Constitution Check now say the same thing."
+  },
+  {
+   "id": "D9a",
+   "summary": "dispersed pre-screen of every spiral candidate and slide step: before the bundle is built, the house rect's static ground, the house within the placed-box margin and the eave gap (_seat_refused); once moved from its template, every part's static ground, bbox vs canvas margin and bounding ring, bbox within the placed-box margin, and the three sun rules (_bundle_refused); not on the nucleated path",
+   "class": "within",
+   "why": "The extension checked against the code, conjunct by conjunct. _seat_refused: geom['house'] is exactly (x, y, hw, hh) (template house at the origin, moved, and _rake_parts carries only yard, gardens and kura); the static test is FreeGround's surely-taken cells at the nine points _site_blocks_rect asks; the placed-box test on the house implies the side fit's refusal because the dispersed bbox (grove frame west..east, north..south, plus yard and garden) holds the house; the eave gap is _house_too_near_a_neighbor on the same rect. _bundle_refused: FreeGround exists only while _site_chains is installed (set together in install_site_boundary, cleared together at stages.py 558-560), and then _rect_blocked returns _site_blocks_rect whatever fields says, so testing the groves and the yard/shed/gardens by the same nine points is exact; the canvas margin, the bounding ring and the placed-box comparison are _bundle_side_fits' own lines; _sun_corridor_ok, _gardens_sun_ok and _yard_sun_conflict are conjuncts of _bundle_common_fits/_bundle_side_fits (the yard-is-None guard only prunes less). Every one is a conjunct of the order-independent _bundle_fits, so the pre-screen prunes and the whole test decides, as FR-003 and the approved analysis ask; the slide still stops at the first refusal. The nucleated path is untouched (no call from _place_bundle_nucleated), so round 1's D9b ruling holds. test_the_free_ground_changes_no_seat disables all three pre-screens and asserts identical seats, both forms, both scenarios - enforcement of FR-003's 'no loss of fidelity', not scope."
+  },
+  {
+   "id": "D10",
+   "summary": "unraked template per (hw, hh, side, shed, nucleated) plus the household's rolled parts, translated, rake per candidate; yard size, garden jitter and bed split rolled once per household",
+   "class": "narrowing",
+   "why": "Unchanged since the third plan review (CLEAR); its ruling carries: Round-1 D10a/D10b resolved. The rake stays per seat (_rake_parts after translation), so the homestead still turns as one piece (GM 2026-09-26). Household-keying the yard, garden jitter and bed split is implied by the GM's approved words 'the bundle shape built once per size and translated', which cannot hold while each candidate rolls a different shape; the distributions are unchanged and FR-006 guards the result. The condition is met in text: spec.md Decisions Recorded row 2 (Amendment 1), which is itself under re-review - the ruling stands on that row as written. The Summary now cites it as D10.",
+   "ruling": "LEGITIMATE"
+  },
+  {
+   "id": "D20",
+   "summary": "_toy_hamlet sets s._nucleated from its plan; the one test that needed the dispersed spiral sets it explicitly; harness scenarios run both paths, labeled",
+   "class": "within",
+   "why": "Unchanged since the third plan review (CLEAR); its ruling carries: Constitution XIV fix of the defect the round-1 review found; the dispersed test keeps what it tested, and FR-007 asks for both paths labeled."
+  },
+  {
+   "id": "D11",
+   "summary": "compute once: _plant's k.buffer(-half), the tint pass's buffer(0)",
+   "class": "within",
+   "why": "Unchanged since the third plan review (CLEAR); its ruling carries: FR-004."
+  },
+  {
+   "id": "D12",
+   "summary": "batch _plant's per-cell chain and the tint pass as shapely array calls, order kept",
+   "class": "within",
+   "why": "Unchanged since the third plan review (CLEAR); its ruling carries: FR-004."
+  },
+  {
+   "id": "D13",
+   "summary": "per row band, cut only the cells within each CONNECTED PIECE of the band's intersection; sliver and two-piece-row tests",
+   "class": "within",
+   "why": "Unchanged since the third plan review (CLEAR); its ruling carries: Round-1 finding resolved: a connected piece inside a one-row band touches every cell its x-extent spans, so the set visited is exactly the touched set, as FR-004 / SC-004 require."
+  },
+  {
+   "id": "D14",
+   "summary": "re-profile and treat the next heaviest step until SC-004 holds",
+   "class": "within",
+   "why": "Unchanged since the third plan review (CLEAR); its ruling carries: FR-004 names every step."
+  },
+  {
+   "id": "D15",
+   "summary": "PathChecker with PointGrid-boxed segments and boxed avoid polygons; path_violations stays the oracle",
+   "class": "within",
+   "why": "Unchanged since the third plan review (CLEAR); its ruling carries: FR-005, prune-only. The oracle is the corrected, both-segments-bounded seg_intersect path_violations the spec settles (Decisions Recorded row 3, Amendment 1); the plan decides nothing further about that fix, so it needs no decision of its own here."
+  },
+  {
+   "id": "D16",
+   "summary": "equality test over Inashiro's recorded candidate paths",
+   "class": "within",
+   "why": "Unchanged since the third plan review (CLEAR); its ruling carries: FR-005's proof."
+  },
+  {
+   "id": "D17",
+   "summary": "make h276 runs the harness; measurements' command names it",
+   "class": "within",
+   "why": "Unchanged since the third plan review (CLEAR); its ruling carries: The figures contract."
+  },
+  {
+   "id": "D18",
+   "summary": "make done, FR-006 counts vs pool-before.json, after-cohort vs R7, perf bookend",
+   "class": "within",
+   "why": "Unchanged since the third plan review (CLEAR); its ruling carries: FR-006 / FR-007 / SC-006."
+  },
+  {
+   "id": "D19",
+   "summary": "dev/performance.md gains the three shapes with measurements",
+   "class": "within",
+   "why": "Unchanged since the third plan review (CLEAR); its ruling carries: FR-008."
+  },
+  {
+   "id": "Summary-crossing",
+   "summary": "the Summary names the corrected crossing test (spec Amendment 1) among what can move a map, under FR-006's counts and forms",
+   "class": "within",
+   "why": "A statement of a consequence the spec already settles (Decisions Recorded row 3, Amendment 1); the plan decides nothing new about it and puts the moved maps under FR-006, which is what the spec asks."
+  },
+  {
+   "id": "ConstitutionCheck-XVI",
+   "summary": "XVI now says ONE narrowing (D10) was ruled LEGITIMATE, every other decision within",
+   "class": "within",
+   "why": "Corrects a miscount: the third review's record carries exactly one narrowing (D10, LEGITIMATE) and every other decision within, and this review finds no new narrowing."
+  }
+ ],
+ "verdict": "CLEAR"
+}

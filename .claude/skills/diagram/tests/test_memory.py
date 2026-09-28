@@ -9,6 +9,7 @@ import pathlib
 import pytest
 
 from l7r.diagram import _memory
+from tests import _engine_ast
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
@@ -52,17 +53,23 @@ def test_no_engine_module_imports_a_heavy_library_at_import_time() -> None:
     said eight sites when the code had seven, so this asks the tree: an `import shapely` outside a function
     body is the thing that must not come back.
     """
+    # ONE SHARED PARSE, AND ONLY THE FILES THAT NAME A HEAVY LIBRARY (feature 276, FR-001): an import of one is
+    # impossible without its name in the text, so a file lacking all three holds nothing this could find.
+    offenders = heavy_import_offenders(_engine_ast.engine_modules(sorted((ROOT / "l7r").rglob("*.py")), HEAVY), ROOT)
+    assert not offenders, f"a heavy library is imported at import time in {offenders} - bind it in a loader instead, as `_load_shapely` / `_load_arrays` do (feature 237)"
+
+
+def heavy_import_offenders(modules: list[tuple[pathlib.Path, str, ast.Module]], root: pathlib.Path) -> list[str]:
+    """`path:line` of every import of a HEAVY library outside a function body and outside a TYPE_CHECKING guard."""
     offenders = []
-    for path in sorted((ROOT / "l7r").rglob("*.py")):
-        tree = ast.parse(path.read_text(encoding="utf-8"))
-        inside = {id(n) for fn in ast.walk(tree) if isinstance(fn, (ast.FunctionDef, ast.AsyncFunctionDef)) for n in ast.walk(fn)}
-        for node in ast.walk(tree):
-            if id(node) in inside or not isinstance(node, (ast.Import, ast.ImportFrom)):
+    for path, _source, tree in modules:
+        for node in _engine_ast.module_level(tree):
+            if not isinstance(node, (ast.Import, ast.ImportFrom)):
                 continue
             heavy = (isinstance(node, ast.ImportFrom) and (node.module or "").startswith(HEAVY)) or (isinstance(node, ast.Import) and any(a.name.startswith(HEAVY) for a in node.names))
             if heavy and not _under_type_checking(tree, node):
-                offenders.append(f"{path.relative_to(ROOT)}:{node.lineno}")
-    assert not offenders, f"a heavy library is imported at import time in {offenders} - bind it in a loader instead, as `_load_shapely` / `_load_arrays` do (feature 237)"
+                offenders.append(f"{path.relative_to(root)}:{node.lineno}")
+    return sorted(offenders)
 
 
 def _under_type_checking(tree: ast.Module, target: ast.stmt) -> bool:

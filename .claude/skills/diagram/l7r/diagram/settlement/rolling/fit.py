@@ -6,11 +6,70 @@ Split from settlement/rolling.py by feature 118 - see settlement/rolling/CLAUDE.
 import math
 from typing import TYPE_CHECKING, Any, cast
 
-from .._geom import FARMHOUSE_EAVE_GAP_FT, Indexed, Pt, edge_dist, point_in_poly, poly_gap, rot_rect, seg_dist, segments_cross
+from .._geom import FARMHOUSE_EAVE_GAP_FT, Indexed, PointGrid, Pt, edge_dist, point_in_poly, poly_gap, rot_rect, seg_dist, segments_cross
+from .._geom.indexes import indexed_grid
 from .._geom.primitives import FIELD_KEEPOUT_EPS, chain_distance, chain_violated, facing_chains, keepout_ring
 
 if TYPE_CHECKING:
     from ..core import Settlement
+
+
+# ---- feature 276, FR-003: the placed houses, indexed ONCE and extended as each lands --------------------------------
+#
+# Every scan of the house records a candidate seat makes - the eave gap, the sun corridor both ways, the gardens' sun,
+# the yard-sun conflict - walked EVERY record per candidate, so a seat cost more with each house standing: at constant
+# density the placement primitive's per-house cost grew from 0.0009 s to 0.0017 s between 60 and 240 seeds on the
+# nucleated path (specs/276 research R2). Each of those rules asks whether some part of a record lies within a reach box
+# of the candidate, so a grid of each record's EXTENT - its house's circumscribed box and every part's box - asked for
+# that reach box returns every record the rule could flag; the rule's own comparison then decides, unchanged. An
+# `Indexed` house list carries its own version, so the grid is rebuilt on any change but an append, which extends it.
+# THE ONE IN-PLACE MOVE of a record (`_solve_homestead`) bumps that version itself; a record's `geom` is complete when it
+# is appended and never edited after.
+
+
+def house_extent(rec: Any) -> tuple[float, float, float, float]:
+    """The box holding everything of a house record the fit rules read: the house at any rake, and each part."""
+    r = math.hypot(rec["w"], rec["h"]) / 2
+    x0, y0, x1, y1 = rec["x"] - r, rec["y"] - r, rec["x"] + r, rec["y"] + r
+    g = rec.get("geom") or {}
+    for key in ("yard", "grove_n", "grove_w", "shed"):
+        part = g.get(key)
+        if part is not None:
+            x0, y0 = min(x0, part[0] - part[2] / 2), min(y0, part[1] - part[3] / 2)
+            x1, y1 = max(x1, part[0] + part[2] / 2), max(y1, part[1] + part[3] / 2)
+    for part in g.get("gardens", ()):
+        x0, y0 = min(x0, part[0] - part[2] / 2), min(y0, part[1] - part[3] / 2)
+        x1, y1 = max(x1, part[0] + part[2] / 2), max(y1, part[1] + part[3] / 2)
+    return x0 - 1.0, y0 - 1.0, x1 + 1.0, y1 + 1.0
+
+
+def _extent_boxed(recs: Any) -> list[Any]:
+    return [(rec, *house_extent(rec)) for rec in recs]
+
+
+def houses_meeting(houses: Any, box: tuple[float, float, float, float]) -> list[Any]:
+    """The records of `houses` whose extent meets `box`, each once, in list order (the order the linear scans read)."""
+
+    def build(lst: Any) -> PointGrid:
+        grid = PointGrid()
+        grid.extend(_extent_boxed(lst))
+        return grid
+
+    def add(grid: PointGrid, tail: Any) -> None:
+        grid.extend(_extent_boxed(tail))
+
+    grid = indexed_grid(houses, "house_extents", build, add)
+    x0, y0, x1, y1 = box
+    seen: set[int] = set()
+    out = []
+    for it in grid.near((x0 + x1) / 2, (y0 + y1) / 2, max(x1 - x0, y1 - y0) / 2):
+        rec, bx0, by0, bx1, by1 = it
+        if id(rec) in seen or bx0 > x1 or bx1 < x0 or by0 > y1 or by1 < y0:
+            continue
+        seen.add(id(rec))
+        out.append(rec)
+    order = {id(rec): k for k, rec in enumerate(houses)} if len(out) > 1 else {}
+    return sorted(out, key=lambda rec: order.get(id(rec), 0))
 
 
 class BundleFitMixin:
@@ -204,7 +263,14 @@ class BundleFitMixin:
             return True
         if self._rect_blocked(env, fields=True):
             return True
-        hits = [b for b in self.placed if abs(cx - b[0]) < (w + b[2]) / 2 + 2 and abs(cy - b[1]) < (h + b[3]) / 2 + 2]
+        # FROM THE PLACED INDEX (feature 276), deduplicated (an item spanning cells comes back once per cell) and in the
+        # registry's order, so "the ONE box" is the box it always was.
+        seen: set[int] = set()
+        hits = []
+        for it in self._reach_index(self.placed, "placed_reach").near(cx, cy, max(w, h) / 2 + 2):
+            if id(it) not in seen and abs(cx - it[0]) < (w + it[2]) / 2 + 2 and abs(cy - it[1]) < (h + it[3]) / 2 + 2:
+                seen.add(id(it))  # by the filed item, one per placed entry: two entries at one spot are two hits
+                hits.append((it[0], it[1], it[2], it[3]))
         if not hits:
             return None
         return (float(hits[0][0]), float(hits[0][1]), float(hits[0][2]), float(hits[0][3])) if len(hits) == 1 else True
@@ -303,7 +369,9 @@ class BundleFitMixin:
         cx, cy, w, h = rect
         quad = rot_rect(cx, cy, w, h, self._house_rot(cx, cy))
         reach = lim + math.hypot(w, h) / 2
-        for rec in self.M.get("houses", []):
+        # FROM THE INDEX (feature 276): a record the prefilter below admits has its center within `reach` plus its own
+        # half-diagonal, so its extent meets this box - the index returns every record the scan could have flagged.
+        for rec in houses_meeting(self.M.get("houses", []), (cx - reach, cy - reach, cx + reach, cy + reach)):
             if rec.get("kind") == "abandoned":
                 continue  # a derelict has no roof left to shed
             ow, oh = rec["w"], rec["h"]
@@ -362,7 +430,10 @@ class BundleFitMixin:
         # that matters (a new house shading a yard already standing), and the first version of this
         # rule cleared only about half the shaded yards because of it. Each bundle's record carries
         # its own `geom`, so the yard is there to be read.
-        for b in self.M.get("houses", []):
+        houses = self.M.get("houses", [])
+        # FROM THE INDEX (feature 276): a yard or bed this house shades lies within `side` of its width and within `reach`
+        # north of its north wall, so its record's extent meets this box.
+        for b in houses_meeting(houses, (hx - hw / 2 - side, hy - hh / 2 - reach, hx + hw / 2 + side, hy - hh / 2)):
             g = b.get("geom")
             if not g:
                 continue
@@ -382,7 +453,9 @@ class BundleFitMixin:
         if yard is None:
             return True
         yx, yy, yw, yh = yard
-        return not any(abs(b["x"] - yx) < (b["w"] + yw) / 2 + side and 0 < (b["y"] - b["h"] / 2) - (yy + yh / 2) < reach for b in self.M.get("houses", []))
+        # ...and a house that shades this yard has its north wall within `reach` south of the yard's south edge
+        near = houses_meeting(houses, (yx - yw / 2 - side, yy + yh / 2, yx + yw / 2 + side, yy + yh / 2 + reach))
+        return not any(abs(b["x"] - yx) < (b["w"] + yw) / 2 + side and 0 < (b["y"] - b["h"] / 2) - (yy + yh / 2) < reach for b in near)
 
     def _gardens_sun_ok(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """The side-DEPENDENT half of the sun corridor: this bundle's garden bed(s) must not sit in a
@@ -395,7 +468,14 @@ class BundleFitMixin:
             return True
         reach, side = self.px(ft + 2.0), self.px(2.0)
         houses = self.M.get("houses", [])
-        return all(not any(abs(b["x"] - gx) < (b["w"] + gw) / 2 + side and 0 < (b["y"] - b["h"] / 2) - (gy + gh / 2) < reach for b in houses) for gx, gy, gw, gh in geom["gardens"])
+        # FROM THE INDEX (feature 276): a house shading a bed has its north wall within `reach` south of the bed
+        return all(
+            not any(
+                abs(b["x"] - gx) < (b["w"] + gw) / 2 + side and 0 < (b["y"] - b["h"] / 2) - (gy + gh / 2) < reach
+                for b in houses_meeting(houses, (gx - gw / 2 - side, gy + gh / 2, gx + gw / 2 + side, gy + gh / 2 + reach))
+            )
+            for gx, gy, gw, gh in geom["gardens"]
+        )
 
     def sun_corridor(self: Settlement, feet: float) -> None:  # type: ignore[misc]
         """Ask the placer to keep `feet` of open ground SOUTH of every threshing yard (see
@@ -460,7 +540,10 @@ class BundleFitMixin:
             return False
         if not self._gardens_sun_ok(geom):
             return False
-        return all(not (abs(cx - px) < (W + pw) / 2 + 2 and abs(cy - py) < (H + ph) / 2 + 2) for px, py, pw, ph, *_ in self.placed)
+        # FROM THE PLACED INDEX (feature 276): a box within the 2 px margin of this bbox has its reach box meet the square
+        # queried; the comparison decides, as before.
+        near = self._reach_index(self.placed, "placed_reach").near(cx, cy, max(W, H) / 2 + 2)
+        return all(not (abs(cx - px) < (W + pw) / 2 + 2 and abs(cy - py) < (H + ph) / 2 + 2) for px, py, pw, ph, *_ in near)
 
     def _yard_sun_conflict(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """A threshing yard dries rice in the southern sun, so no grove may sit in the ~22px strip directly
@@ -474,7 +557,22 @@ class BundleFitMixin:
 
         new_groves = (geom["grove_n"], geom["grove_w"]) if "grove_n" in geom else ()
         new_yard = geom["yard"]
-        for rec in self.M["houses"]:
+        # FROM THE INDEX (feature 276): a yard a new grove shades has its south edge within 22 px north of the grove's box,
+        # and a grove shading the new yard meets the 22 px strip south of it - so each such record's extent meets one of
+        # these boxes. Read in list order, as the scan did.
+        boxes = [(gv[0] - gv[2] / 2, gv[1] - gv[3] / 2 - 22, gv[0] + gv[2] / 2, gv[1] + gv[3] / 2) for gv in new_groves]
+        if new_yard is not None:
+            boxes.append((new_yard[0] - new_yard[2] / 2, new_yard[1] + new_yard[3] / 2, new_yard[0] + new_yard[2] / 2, new_yard[1] + new_yard[3] / 2 + 22))
+        houses = self.M["houses"]
+        seen: set[int] = set()
+        near = []
+        for box in boxes:
+            for rec in houses_meeting(houses, box):
+                if id(rec) not in seen:
+                    seen.add(id(rec))
+                    near.append(rec)
+        order = {id(rec): k for k, rec in enumerate(houses)} if len(near) > 1 else {}
+        for rec in sorted(near, key=lambda r: order.get(id(r), 0)):
             g = rec.get("geom")
             if not g:
                 continue
@@ -490,7 +588,11 @@ class BundleFitMixin:
         south), so a garden sandwiched with a neighbor's house just below it gets no light. Tested against
         every placed house - the nucleated placer prefers a side with open sky to the south."""
         gx, gy, gw, gh = grect
-        for rec in self.M["houses"]:
+        # FROM THE INDEX (feature 276, found by profiling 960 seeds: the last scan of every placed house per candidate, 19%
+        # of the nucleated placer there). A house this flags overlaps the garden's width and stands in the strip from 3 px
+        # above the garden's south edge to `gh + 4` below it, so its extent meets that box.
+        south = gy + gh / 2
+        for rec in houses_meeting(self.M["houses"], (gx - gw / 2, south - 3, gx + gw / 2, south + gh + 4)):
             hx, hy, hw, hh = rec["x"], rec["y"], rec["w"], rec["h"]
             if hy > gy + gh / 2 - 3 and abs(hx - gx) < (hw + gw) / 2 and (hy - hh / 2) - (gy + gh / 2) < gh + 4:
                 return True

@@ -64,7 +64,9 @@ class FarmsteadFlushMixin:
         # (The arm rects themselves are recorded above, before _relax_gardens_south, which needs them.)
         for cx, cy, w, h, face in arms:
             self._draw_grove(cx, cy, w, h, face)
-        self.M["houses"] = [h for h in self.M["houses"] if h.get("on_dike")] + survivors  # dike-top houses (dike_top_houses) are not pending farmsteads - keep them
+        self.M["houses"] = Indexed(
+            [h for h in self.M["houses"] if h.get("on_dike")] + survivors
+        )  # dike-top houses (dike_top_houses) are not pending farmsteads - keep them; Indexed for the fit rules' index
         return len(survivors)
 
     def _east_trees(self: Settlement, gx1: float, own: Any) -> list[Any]:  # type: ignore[misc]
@@ -220,7 +222,9 @@ class FarmsteadFlushMixin:
             if rec["shed"]:
                 rec["shed_side"] = side
             self.house(rec["x"], rec["y"], rec["w"] * wf, rec["h"] * wf, rec["kind"], rec["rot"], shed=rec["shed"], shed_side=side)
-        self.M["houses"] = [h for h in self.M["houses"] if h.get("on_dike")] + survivors  # dike-top houses (dike_top_houses) are not pending farmsteads - keep them
+        self.M["houses"] = Indexed(
+            [h for h in self.M["houses"] if h.get("on_dike")] + survivors
+        )  # dike-top houses (dike_top_houses) are not pending farmsteads - keep them; Indexed for the fit rules' index
         # SECOND PASS - the windward homestead groves (yashikirin). Run AFTER every farmhouse + its yard +
         # garden is placed, so a grove (an optional flourish) can NEVER block a neighbor's MANDATORY yard/
         # garden and drop that house. Near-universal (meta.grove_prevalence), but OFF for a farm inside a

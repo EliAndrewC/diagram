@@ -31,9 +31,9 @@ from ..banks import (
 )
 from ..frame import Poly, _Frame
 from ..palette import FLOODED, RICE_GREENS
-from .geoms import GeomTree
+from .geoms import GeomTree, ring_polygons
 from .plots import _plant, _unjog
-from .pockets import MIN_PLOT_SIDE, _absorb, _despike, _outside_command, _parts, _ring, _water
+from .pockets import MIN_PLOT_SIDE, _absorb, _despike_many, _outside_command, _parts, _ring, _water
 
 _SHAPELY_LOADED = False
 
@@ -109,7 +109,7 @@ def close_seams(
     # just more bare pocket, and this pass reclaims it like any other.
     _visible_parts(plots, cell_area(plot_across, row_step), 1.25 * g)
     _repair_crossing_rings(plots)
-    keep = [Polygon(p["poly"]).buffer(0) for p in plots]
+    keep = ring_polygons([p["poly"] for p in plots])
     field = Polygon(envelope).buffer(0)
     outside = _outside_command(F, a_pts, dpts, field, g, bank)
     water = _water(channels, g)
@@ -121,12 +121,24 @@ def close_seams(
     # where a strip's only candidate refused the union until the basin beside it had grown). A
     # third round finds nothing on any pool map: the set converges because every round can only
     # shrink the bare ground.
+    # THE SECOND ROUND'S COVER IS THE FIRST'S PLUS WHAT CHANGED (feature 276, FR-004, plan D14): the union of every plot -
+    # ~700 on a pool field - was rebuilt from scratch each round, while between the two only the basins planted and the
+    # basins that took a scrap in are new. Their union with the first round's cover is the same ground up to the
+    # 0.05 px a weld's simplify can trim, far under the half-pixel `_despike` removes from what bare ground is left.
+    import shapely
+
+    covered: Any = None
+    _round_start, _grown_before = len(keep), set(grown)
     for _round in range(2):
-        bare = field.difference(unary_union(keep)).difference(water).difference(outside)
+        covered = unary_union(keep) if covered is None else unary_union([covered, *[keep[j] for j in sorted(grown - _grown_before)], *keep[_round_start:]])
+        _round_start, _grown_before = len(keep), set(grown)
+        bare = field.difference(covered).difference(water).difference(outside)
         basins: list[Polygon] = []
         scraps: list[Polygon] = []
-        for pocket in _parts(bare):
-            for piece in _parts(_despike(pocket.simplify(0.05))):
+        # EVERY POCKET SIMPLIFIED AND DESPIKED IN ONE BATCH (feature 276, FR-004): the same `_despike`, as array calls.
+        _pockets = _parts(bare)
+        for _despiked in _despike_many(list(shapely.simplify(_pockets, 0.05))) if _pockets else []:
+            for piece in _parts(_despiked):
                 if piece.buffer(-half).is_empty:
                     scraps.append(piece)
                 else:
@@ -230,11 +242,18 @@ def close_seams(
     # absorbed it up to several design cells and it kept the tint it was given as one. A basin far
     # larger than its neighbors does not read as a basin whatever its outline, so size joins the other
     # four. Measured on the FINAL ring, after absorption, which is the only place the size exists.
-    _areas = sorted(Polygon(_q["poly"]).buffer(0).area for _q in plots if len(_q.get("poly") or []) >= 3)
+    # EACH PLOT'S SHAPE ONCE, AND ITS HULL AND MINIMUM RECTANGLE IN ONE ARRAY CALL EACH (feature 276, FR-004, plan D11/D12):
+    # the median below and the tint rules each rebuilt `Polygon(poly).buffer(0)` for every plot, and each plot asked its
+    # hull and its rectangle one call at a time. The rules read the same numbers.
+    _pgs = ring_polygons([_q["poly"] for _q in plots])
+    _hull_areas = shapely.area(shapely.convex_hull(_pgs)).tolist() if _pgs else []
+    _mrrs = list(shapely.minimum_rotated_rectangle(_pgs)) if _pgs else []
+    _areas = sorted(_pg.area for _q, _pg in zip(plots, _pgs, strict=True) if len(_q.get("poly") or []) >= 3)
     _median_plot = _areas[len(_areas) // 2] if _areas else 0.0
     _keeps: list[tuple[tuple[bool, float, float], dict[str, Any]]] = []
     _collector = LineString(dpts) if len(dpts) >= 2 else None
-    for p in plots:
+    _to_collector = shapely.distance(_pgs, _collector).tolist() if _collector is not None and _pgs else []  # every plot's, in one call
+    for _k, p in enumerate(plots):
         # TWO RINGS, AND BOTH CLAUSES EARN THEIR KEEP - this is the one place a second measurement is
         # right, and the reason is that they answer to different masters. `flooded_plots_read_as_basins`
         # is the GATE for a tinted plot and it reads `dedup_ring(r, 1.0)` at 15 deg, so the first
@@ -264,8 +283,8 @@ def close_seams(
         # ambiguous, and the keep-out is one and a half plot widths of it - far enough to break the
         # fusion with the stream head, near enough to leave the rest of the closing rank tinted.
         _t_end = _TINT_END_FT * g / 2
-        _pg = Polygon(p["poly"]).buffer(0)
-        _psol = (_pg.area / (_pg.convex_hull.area or 1.0)) if isinstance(_pg, Polygon) and not _pg.is_empty else 1.0
+        _pg = _pgs[_k]
+        _psol = (_pg.area / (_hull_areas[_k] or 1.0)) if isinstance(_pg, Polygon) and not _pg.is_empty else 1.0
         _pcx = sum(_q[0] for _q in p["poly"]) / len(p["poly"])
         _pcy = sum(_q[1] for _q in p["poly"]) / len(p["poly"])
         # TO THE PLOT'S NEAREST CORNER, NOT ITS CENTROID (settlement-review, Sawada, feature 145). The
@@ -277,7 +296,7 @@ def close_seams(
         # AND A FIFTH CLAUSE, WHICH MEASURES PROPORTION - the blind spot the four above share. Apex,
         # end width, solidity and siting all pass a long parallel-sided WEDGE, and a wedge in blue
         # reads as a channel of water rather than as a basin holding it (see `_TINT_MAX_ASPECT`).
-        _mrr = _pg.minimum_rotated_rectangle if isinstance(_pg, Polygon) and not _pg.is_empty else None
+        _mrr = _mrrs[_k] if isinstance(_pg, Polygon) and not _pg.is_empty else None
         _asp = 1.0
         _fill = (_pg.area / _mrr.area) if isinstance(_mrr, Polygon) and _mrr.area > 0.0 else 1.0
         if isinstance(_mrr, Polygon):
@@ -295,7 +314,7 @@ def close_seams(
         )
         if p.get("fill") == FLOODED and _wrong:
             p["fill"] = RICE_GREENS[(int(abs(p["poly"][0][0]) * 7) + int(abs(p["poly"][0][1]) * 3)) % len(RICE_GREENS)]
-        elif not _wrong and _pg.area > 0.0 and (p.get("low") or (_collector is not None and _pg.distance(_collector) <= 0.25 * plot_across)):
+        elif not _wrong and _pg.area > 0.0 and (p.get("low") or (_collector is not None and _to_collector[_k] <= 0.25 * plot_across)):
             # ...and a plot ON the collector is low ground whatever it records: `low` is set only on the plots the carve
             # cut, so the basins this pass plants or `_comb_toe_and_hem` re-hems onto the drain's bank never carry it -
             # measured on Mizuguchi, 49 of the 64 plots on the collector, while the 15 that did were the seam wedges
@@ -355,31 +374,53 @@ def _visible_parts(plots: list[dict[str, Any]], cell: float, neck: float = 0.0) 
     # INDEXED, per constitution X clause 15: a running union of every later plot grows to the whole field and each plot
     # would be tested against all of it. The rings are indexed ONCE and each plot unions only the later rings its box meets.
     shapes: list[tuple[int, Polygon]] = []
-    for k, q in enumerate(plots):
-        ring = q.get("poly") or []
-        gk = Polygon(ring).buffer(0) if len(ring) >= 3 else None
+    for k, gk in enumerate(ring_polygons([q.get("poly") or [] for q in plots])):
         if isinstance(gk, Polygon) and not gk.is_empty:
             shapes.append((k, gk))
-    tree = STRtree([gk for _k, gk in shapes])
+    if not shapes:
+        return
+    import shapely
+
+    # EVERY PLOT AT ONCE (feature 276, FR-004, plan D14). Each plot's visible part is cut against the ORIGINAL shapes of the
+    # later plots it meets - never against one already cut here - so no plot's answer depends on another's, and the pass
+    # runs as array calls: one tree query for every intersecting pair (the `intersects` the loop asked), one difference,
+    # one opening at the neck. The per-plot bookkeeping below is the loop's, plot by plot, walking back from the last.
+    geoms = [gk for _k, gk in shapes]
+    tree = STRtree(geoms)
+    src, dst = tree.query(geoms, predicate="intersects")
+    pairs = [(a, b) for a, b in zip(src.tolist(), dst.tolist(), strict=True) if shapes[b][0] > shapes[a][0]]
+    # A NEIGHBOR THAT ONLY TOUCHES TAKES NOTHING (feature 276): plots share their bunds, so almost every later neighbor
+    # meets a plot along an edge and no more, and cutting a plot by a union of neighbors that only touch it returns the
+    # plot. So only the neighbors whose INTERIORS meet it are unioned and cut away; a plot met only along edges goes to
+    # the neck opening below as it stands, as it always did.
+    inner = shapely.relate_pattern([geoms[a] for a, _b in pairs], [geoms[b] for _a, b in pairs], "T********").tolist() if pairs else []
+    later_of: dict[int, list[int]] = {}
+    for (a, b), overlaps in zip(pairs, inner, strict=True):
+        later_of.setdefault(a, [])
+        if overlaps:
+            later_of[a].append(b)
+    order = sorted(later_of, reverse=True)
+    viss: Any = []
+    if order:
+        cut = [a for a in order if later_of[a]]
+        cut_vis = dict(zip(cut, list(shapely.difference([geoms[a] for a in cut], [shapely.union_all([geoms[b] for b in later_of[a]]) for a in cut])), strict=True)) if cut else {}
+        viss = [cut_vis.get(a, geoms[a]) for a in order]
+        if neck > 0.0:
+            # ...AND OPENED AT THE WIDTH FLOOR (settlement-review, feature 230 pass 11). Where two rings only partly
+            # overlapped, the cut leaves the earlier plot a thin tail along its neighbor - six on Kashikawa, 46 to 81 ft
+            # long and under 5 ft wide, none on main - which draws as a doubled bund. Opening at half the floor (`neck`,
+            # 2.5 ft) sheds the tail, and its ground goes back to the bare pocket like any other scrap.
+            viss = shapely.intersection(shapely.buffer(shapely.buffer(viss, -neck, join_style="mitre"), neck, join_style="mitre"), viss)
     drop: list[int] = []
-    for k, g in reversed(shapes):
-        i = k
-        later = [shapes[int(n)][1] for n in tree.query(g) if shapes[int(n)][0] > i and shapes[int(n)][1].intersects(g)]
-        if later:
-            vis = g.difference(unary_union(later))
-            if neck > 0.0:
-                # ...AND OPENED AT THE WIDTH FLOOR (settlement-review, feature 230 pass 11). Where two rings only partly
-                # overlapped, the cut leaves the earlier plot a thin tail along its neighbor - six on Kashikawa, 46 to 81 ft
-                # long and under 5 ft wide, none on main - which draws as a doubled bund. Opening at half the floor (`neck`,
-                # 2.5 ft) sheds the tail, and its ground goes back to the bare pocket like any other scrap.
-                vis = vis.buffer(-neck, join_style="mitre").buffer(neck, join_style="mitre").intersection(vis)
-            if vis.area < g.area - 1.0:
-                parts = sorted(_parts(vis), key=lambda q: -q.area)
-                best = _ring(parts[0]) if parts else []
-                if not parts or parts[0].area < _TOE_MIN_AREA * cell or len(best) < 3 or pointed_ring(best, _TOE_MIN_APEX) or pointed_ring(dedup_ring(best, 1.0), _TOE_MIN_APEX):
-                    drop.append(i)
-                else:
-                    plots[i]["poly"] = best
+    for a, vis in zip(order, list(viss), strict=True):
+        i, g = shapes[a]
+        if vis.area < g.area - 1.0:
+            parts = sorted(_parts(vis), key=lambda q: -q.area)
+            best = _ring(parts[0]) if parts else []
+            if not parts or parts[0].area < _TOE_MIN_AREA * cell or len(best) < 3 or pointed_ring(best, _TOE_MIN_APEX) or pointed_ring(dedup_ring(best, 1.0), _TOE_MIN_APEX):
+                drop.append(i)
+            else:
+                plots[i]["poly"] = best
     for i in sorted(drop, reverse=True):
         del plots[i]
 
@@ -416,12 +457,22 @@ def _shed_necks(plots: list[dict[str, Any]], neck: float, min_len: float) -> Non
             return False
         return any(_span(q) >= min_len for q in _parts(shape.difference(shape.buffer(-neck, join_style="mitre").buffer(neck, join_style="mitre"))))
 
-    shapes = [Polygon(q["poly"]).buffer(0) if len(q.get("poly") or []) >= 3 else Polygon() for q in plots]
+    shapes = [q if q is not None else Polygon() for q in ring_polygons([q.get("poly") or [] for q in plots])]
     tree = STRtree(shapes)
+    import numpy
+    import shapely
+
     for _round in range(2):  # a trade can leave the taker a tail of its own; a second look sheds it
         traded = False
+        # THE PREFILTER FOR EVERY BASIN IN TWO ARRAY CALLS (feature 276, FR-004): `_may_have_a_tail` on each shape as the
+        # round opens. A shape a trade replaces during the round is asked again, live, when the walk reaches it.
+        _open = (4.0 * shapely.area(shapes) / numpy.where(shapely.length(shapes) == 0.0, 1.0, shapely.length(shapes)) >= 14.0 * neck) & ~shapely.is_empty(shapes)
+        _open_at = set(numpy.flatnonzero(_open).tolist())
+        _swapped: set[int] = set()
         for i, g in enumerate(shapes):
             if g.is_empty:
+                continue
+            if i in _open_at and i not in _swapped:
                 continue
             if not _may_have_a_tail(g):
                 continue
@@ -452,6 +503,7 @@ def _shed_necks(plots: list[dict[str, Any]], neck: float, min_len: float) -> Non
                 plots[i]["poly"], plots[best]["poly"] = gi, gj
                 traded = True
                 shapes[i], shapes[best] = Polygon(gi).buffer(0), Polygon(gj).buffer(0)
+                _swapped.update((i, best))
                 g = shapes[i]
                 # ...AND THE INDEX IS REBUILT WITH THEM (perf-audit, feature 230 pass 14, reading this code for a
                 # different reason). `shapes` is mutated here and `tree` was built from it once, so for the rest of
@@ -471,19 +523,25 @@ def _repair_crossing_rings(plots: list[dict[str, Any]], rounded: bool = False) -
     `rounded`: judge and repair the ring as the manifest will record it (0.1 px), which is where a
     needle that is open unrounded closes on itself."""
     _load_shapely()
-    for _p in plots:
-        ring = [(round(float(a), 1), round(float(b), 1)) for a, b in _p["poly"]] if rounded else _p["poly"]
-        if len(ring) < 3 or Polygon(ring).is_valid:
+    import shapely
+
+    def as_judged(poly: Any) -> Any:
+        return [(round(float(a), 1), round(float(b), 1)) for a, b in poly] if rounded else poly
+
+    # EVERY RING'S VALIDITY IN ONE ARRAY CALL, and each ring judged once (feature 276, FR-004, plan D11/D12): the loop built
+    # a Polygon per plot to test it and the filter below built it again. A ring this pass rewrites is judged afresh.
+    rings = [as_judged(_p["poly"]) for _p in plots]
+    ok = shapely.is_valid([q if q is not None else Polygon() for q in ring_polygons(rings, clean=False)]).tolist() if rings else []
+    for k, _p in enumerate(plots):
+        ring = rings[k]
+        if len(ring) < 3 or ok[k]:
             continue
         _fixed = _parts(Polygon(ring).buffer(0))
         if not _fixed:
             continue
-        # ...and the repaired ring faces the same bar every other basin does. Noding a bow-tie can
-        # leave the surviving lobe pointed - cohort seed 20 came out as a needle and tripped
-        # `paddy_plots_are_workable_basins` - so a repair that is not a workable basin is refused and
-        # the ground returns to the bare pocket below, which is this pass's standing answer for a
-        # scrap. Judged at the GATE's own threshold, since a repair is not a placement choice.
         _cand = _ring(max(_fixed, key=lambda q: q.area))
         if len(_cand) >= 3 and not pointed_ring(_cand, _GATE_MIN_APEX) and not pointed_ring(dedup_ring(_cand, 1.0), _GATE_MIN_APEX):
             _p["poly"] = _cand
-    plots[:] = [_p for _p in plots if len(_p["poly"]) >= 3 and Polygon([(round(float(a), 1), round(float(b), 1)) for a, b in _p["poly"]] if rounded else _p["poly"]).is_valid]
+            judged = as_judged(_cand)
+            ok[k] = len(judged) >= 3 and Polygon(judged).is_valid
+    plots[:] = [_p for k, _p in enumerate(plots) if len(_p["poly"]) >= 3 and ok[k]]

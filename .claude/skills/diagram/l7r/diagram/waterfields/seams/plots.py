@@ -19,8 +19,8 @@ from ..banks import (
     pointed_ring,
 )
 from ..frame import Poly, Pt, _Frame
-from .geoms import PlotGeoms
-from .pockets import _despike, _parts, _ring
+from .geoms import PlotGeoms, _vertex_box
+from .pockets import _despike_many, _parts, _ring
 
 _SHAPELY_LOADED = False
 
@@ -103,11 +103,32 @@ def _plant(F: _Frame, pocket: Polygon, plot_across: float, row_step: tuple[float
     marks = [F.to_uf(float(q[0]), float(q[1])) for q in pocket.exterior.coords]
     us = _seam_cuts(ulo, uhi, plot_across, sorted(m[0] for m in marks))
     fs = _seam_cuts(flo, fhi, (row_step[0] + row_step[1]) / 2, sorted(m[1] for m in marks))
-    cells: list[Polygon] = []
+    import shapely
+
+    # ONLY THE CELLS THE POCKET TOUCHES (feature 276, FR-004, plan D13). Each row band is intersected with the pocket
+    # once, and a cell is cut only where a CONNECTED PIECE of that row's intersection reaches its column - so a long
+    # sliver lying diagonally across the field frame, or a U-shaped pocket whose row meets it twice, no longer cuts every
+    # cell of its bounding box (one test's map cut ~1,400 per pocket). A cell no piece reaches has an empty intersection
+    # with the pocket, so skipping it changes nothing; a cell it reaches is cut exactly as before, pocket against cell.
+    rows: list[list[tuple[float, float]]] = []
+    for fa, fb in zip(fs[:-1], fs[1:], strict=True):
+        band = Polygon([F.to_xy(ulo - 1.0, fa), F.to_xy(uhi + 1.0, fa), F.to_xy(uhi + 1.0, fb), F.to_xy(ulo - 1.0, fb)])
+        spans = []
+        for piece in getattr(pocket.intersection(band), "geoms", None) or [pocket.intersection(band)]:
+            if piece.is_empty or not hasattr(piece, "exterior"):
+                continue
+            pu = [F.to_uf(float(q[0]), float(q[1]))[0] for q in piece.exterior.coords]
+            spans.append((min(pu), max(pu)))
+        rows.append(spans)
+    cut: list[Polygon] = []
     for ua, ub in zip(us[:-1], us[1:], strict=True):
-        for fa, fb in zip(fs[:-1], fs[1:], strict=True):
-            cell = Polygon([F.to_xy(ua, fa), F.to_xy(ub, fa), F.to_xy(ub, fb), F.to_xy(ua, fb)])
-            cells += _parts(_despike(pocket.intersection(cell)))
+        for r, (fa, fb) in enumerate(zip(fs[:-1], fs[1:], strict=True)):
+            if any(pu1 >= ua and pu0 <= ub for pu0, pu1 in rows[r]):
+                cut.append(Polygon([F.to_xy(ua, fa), F.to_xy(ub, fa), F.to_xy(ub, fb), F.to_xy(ua, fb)]))
+    # EACH STEP ONCE, OVER ALL THE CELLS AT A TIME (feature 276, FR-004, plans D11 and D12): shapely 2's array calls do in
+    # one call what a Python loop did in one call per cell, and each kept piece's opening by `half` - asked twice below
+    # before, once to keep it and once to throw it back - is computed once.
+    cells: list[Polygon] = [part for g in _despike_many(list(shapely.intersection(pocket, cut)) if cut else []) for part in _parts(g)]
     # A BASIN IS ITS FAT PART; ITS ARMS GO BACK AS OFFCUTS (feature 220, settlement-review of Mizuguchi).
     # A cell piece counted as a basin if it held ONE disk of the minimum side anywhere, and kept whatever
     # hung off that disk: Mizuguchi shipped ring 475, a 17 x 23 ft lobe with a 4 ft collar wrapping three
@@ -117,16 +138,27 @@ def _plant(F: _Frame, pocket: Polygon, plot_across: float, row_step: tuple[float
     # the offcuts, which `_absorb` welds into the neighbor whose wall they lie along.
     good: list[Polygon] = []
     thin: list[Polygon] = []
-    for c in cells:
-        core = c.buffer(-half)
-        if core.is_empty:
-            thin.append(c)
-            continue
-        fat = core.buffer(half, join_style="mitre", mitre_limit=2.0).buffer(0)
-        kept = _parts(_despike(c.intersection(fat)))
-        arms = _parts(c.difference(fat).buffer(0))
-        good += [k for k in kept if not k.buffer(-half).is_empty]
-        thin += [k for k in kept if k.buffer(-half).is_empty] + arms
+    if cells:
+        cores = shapely.buffer(cells, -half)
+        solid = [i for i, e in enumerate(shapely.is_empty(cores).tolist()) if not e]
+        fats = shapely.buffer(shapely.buffer(cores[solid], half, join_style="mitre", mitre_limit=2.0), 0) if solid else []
+        kept_all = _despike_many(list(shapely.intersection([cells[i] for i in solid], fats))) if solid else []
+        arms_all = list(shapely.buffer(shapely.difference([cells[i] for i in solid], fats), 0)) if solid else []
+        fat_of = dict(zip(solid, range(len(solid)), strict=True))
+        kept_parts = [_parts(g) for g in kept_all]
+        flat = [k for ks in kept_parts for k in ks]
+        thin_k = shapely.is_empty(shapely.buffer(flat, -half)).tolist() if flat else []
+        at = 0
+        for i, c in enumerate(cells):
+            j = fat_of.get(i)
+            if j is None:
+                thin.append(c)
+                continue
+            ks = kept_parts[j]
+            flags = thin_k[at : at + len(ks)]
+            at += len(ks)
+            good += [k for k, t in zip(ks, flags, strict=True) if not t]
+            thin += [k for k, t in zip(ks, flags, strict=True) if t] + _parts(arms_all[j])
     if not good:
         return [pocket], []  # the grid cut the one thick part up; the pocket is a basin as it stands
     return good, [t for t in thin if not t.is_empty and t.area > 0.0]
@@ -186,6 +218,9 @@ def _is_a_needle(ring: Poly) -> bool:
     return pointed_ring(ring, _GATE_MIN_APEX) or pointed_ring(dedup_ring(ring, 1.0), _GATE_MIN_APEX)
 
 
+UNJOG_INCREMENTAL = True  # False re-tries every plot every round, as before feature 276 - kept as the equality test's reference
+
+
 def _unjog(plots: list[dict[str, Any]], g: float, floor: float, water: BaseGeometry, outside: BaseGeometry) -> None:
     """Straighten a wall that still steps, by TRADING the corner between the two basins that share it.
 
@@ -237,13 +272,33 @@ def _unjog(plots: list[dict[str, Any]], g: float, floor: float, water: BaseGeome
     repaired. The cap is a backstop against a repair that undoes itself, not a tuning knob - on every
     pool map the set converges in three rounds or fewer."""
     geoms = PlotGeoms(plots)  # one geometry per plot, neighbors by tree, for every trade of this pass (feature 220)
+    # A LATER ROUND RE-TRIES ONLY WHERE SOMETHING MOVED (feature 276, FR-004, plan D14). Every round used to re-scan every
+    # plot for its steps and re-try every trade. A plot whose ring and whose neighbors' rings did not change in the last
+    # round would try the same trades against the same ground and fail again, so only the plots a round changed, and
+    # those within reach of one, are re-tried. A clean plot still RECORDS its steps in `seen` (from a cache keyed on its
+    # ring), because a step two rings share is tried from whichever meets it first - skipping the record would hand it to
+    # the neighbor, and change the answer.
+    jogs: dict[int, tuple[Any, list[tuple[Pt, Pt, Pt, Pt]]]] = {}
+
+    def steps_of(i: int) -> list[tuple[Pt, Pt, Pt, Pt]]:
+        ring = plots[i]["poly"]
+        hit = jogs.get(i)
+        if hit is None or hit[0] is not ring:
+            found = [(b, c, (round(b[0], 1), round(b[1], 1)), (round(c[0], 1), round(c[1], 1))) for b, c in jog_vertices([(float(q[0]), float(q[1])) for q in ring], g)]
+            hit = (ring, found)
+            jogs[i] = hit
+        return hit[1]
+
+    dirty = set(range(len(plots)))
     for _ in range(6):
         moved = False
         seen: set[frozenset[Pt]] = set()
+        before = [q["poly"] for q in plots]
         for i in range(len(plots)):
-            for b, c in jog_vertices([(float(q[0]), float(q[1])) for q in plots[i]["poly"]], g):
-                rb = (round(b[0], 1), round(b[1], 1))
-                rc = (round(c[0], 1), round(c[1], 1))
+            if i not in dirty:
+                seen.update(frozenset((rb, rc)) for _b, _c, rb, rc in steps_of(i))
+                continue
+            for _b, _c, rb, rc in steps_of(i):
                 if frozenset((rb, rc)) in seen:
                     continue
                 seen.add(frozenset((rb, rc)))
@@ -275,6 +330,18 @@ def _unjog(plots: list[dict[str, Any]], g: float, floor: float, water: BaseGeome
                         break
         if not moved:
             return
+        changed = [j for j, q in enumerate(plots) if q["poly"] is not before[j]]
+        if not UNJOG_INCREMENTAL:  # the full re-scan every round - the test's reference for the incremental one
+            dirty = set(range(len(plots)))
+            continue
+        dirty = set(changed)
+        for j in changed:
+            if len(plots[j]["poly"]) >= 3:
+                x0, y0, x1, y1 = _vertex_box(plots[j]["poly"])
+                dirty.update(geoms.near((x0 - 4 * g, y0 - 4 * g, x1 + 4 * g, y1 + 4 * g)))
+            if len(before[j]) >= 3:
+                x0, y0, x1, y1 = _vertex_box(before[j])
+                dirty.update(geoms.near((x0 - 4 * g, y0 - 4 * g, x1 + 4 * g, y1 + 4 * g)))
 
 
 def _trade(
