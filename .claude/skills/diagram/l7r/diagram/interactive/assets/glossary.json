@@ -9401,7 +9401,8 @@
    "Sui dynasty",
    "Sui",
    "Sui-dynasty"
-  ]
+  ],
+  "cased": true
  },
  "palisade": {
   "def": "A barrier of upright wooden stakes or timbers set close together; at Suzhou's Pan Gate one stands across the water passage, front and back, beside the sluice gate, to shut boats out.",
@@ -10016,6 +10017,12 @@
    "Kanto school",
    "Kanto-school",
    "Kanto school's"
+  ]
+ },
+ "ren": {
+  "def": "A classical Chinese measure of depth or height, 7 or 8 chi by different commentators.",
+  "variants": [
+   "ren"
   ]
  }
 }

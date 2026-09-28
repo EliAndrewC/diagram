@@ -1857,6 +1857,7 @@ regulators	regulator
 reikurikata	reikurikata
 remand	remand
 remanded	remand
+ren	ren
 renge	renge
 renkaku	renkaku
 rent bursary	rent bursary
