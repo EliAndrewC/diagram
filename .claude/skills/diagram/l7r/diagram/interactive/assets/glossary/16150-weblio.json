@@ -2,7 +2,6 @@
  "term": "weblio",
  "def": "A Japanese online dictionary site that gathers entries from many published dictionaries and glossaries under one search; the record uses it, like kotobank, to check whether a Japanese term has a dictionary entry.",
  "variants": [
-  "weblio",
-  "Weblio"
+  "weblio"
  ]
 }

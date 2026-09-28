@@ -11138,7 +11138,6 @@
   "def": "A castle-town ward of dry-goods (kimono cloth) merchants, named for their trade like other castle-town wards.",
   "variants": [
    "Gofukumachi",
-   "gofukumachi",
    "Gofuku-machi"
   ]
  },
@@ -11146,7 +11145,6 @@
   "def": "A castle-town ward of lamp-oil sellers, named for their trade like other castle-town wards.",
   "variants": [
    "Aburayamachi",
-   "aburayamachi",
    "Aburaya-machi"
   ]
  },
@@ -11154,7 +11152,6 @@
   "def": "A castle-town ward of carpenters, named for their trade like other castle-town wards.",
   "variants": [
    "Daikumachi",
-   "daikumachi",
    "Daiku-machi"
   ]
  },
@@ -11162,7 +11159,6 @@
   "def": "A castle-town ward of indigo dyers, named for their trade like other castle-town wards.",
   "variants": [
    "Kon'yamachi",
-   "kon'yamachi",
    "Konyamachi",
    "Kon-yamachi"
   ]
@@ -11398,8 +11394,7 @@
  "weblio": {
   "def": "A Japanese online dictionary site that gathers entries from many published dictionaries and glossaries under one search; the record uses it, like kotobank, to check whether a Japanese term has a dictionary entry.",
   "variants": [
-   "weblio",
-   "Weblio"
+   "weblio"
   ]
  },
  "Cheng-Zhu Neo-Confucianism": {
@@ -11486,8 +11481,7 @@
   "def": "The name of Japan's imperial era from 1989 to 2019, used for dating and in the titles of national selections made during those years.",
   "variants": [
    "Heisei",
-   "Heisei era",
-   "Heisei Era"
+   "Heisei era"
   ]
  },
  "floating-leaf plant": {
