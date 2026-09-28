@@ -65,8 +65,11 @@ A decrease is the point; an increase on any seed is diagnosed under the bands li
   index. `engine_modules(root, needle=None)` lists `(path, source, tree)` for every `.py` under a root, skipping
   (without parsing) a file whose text lacks `needle` when one is given.
 - **D2** The four tests take their modules from it. Each test's needle is a literal the property cannot exist
-  without: `test_memory` - any of `shapely`/`numpy`/`PIL`; `test_driver` - `STAGES`; `test_water_ways` - `del `;
-  `test_package_surfaces` - `l7r.diagram` (it reads `from l7r.diagram... import`). Each test's scan body is lifted to
+  without, each an IDENTIFIER or KEYWORD, which Python cannot split across whitespace or a line continuation:
+  `test_memory` - any of `shapely`/`numpy`/`PIL`; `test_driver` - `STAGES`; `test_water_ways` - `del` (the bare
+  keyword: `del(x)` is legal, so `del ` with a space would not be a superset); `test_package_surfaces` - `diagram`
+  (the identifier, not `l7r.diagram`: `from l7r . diagram import x` is legal Python, and only a ruff-formatted tree
+  guarantees the dotted spelling - plan review, 2026-09-28). Each test's scan body is lifted to
   a module-level function over `(path, source, tree)` triples so a planted offender can be fed to it.
 - **D3** `tests/test_engine_ast.py`: runs the four scans in one process and asserts `PARSES` equals the number of
   distinct files read (one parse each), and that each scan flags a planted offender (a synthetic module text).
@@ -95,15 +98,30 @@ A decrease is the point; an increase on any seed is diagnosed under the bands li
 - **D8 The static ground index**: `SiteCorridors` gains a vertex grid per ring and a hole grid, so `hit_points` asks
   only the vertices inside the query box and only the holes whose box contains the point; the exact tests decide.
   A unit test compares with the linear form on synthetic rings with holes.
-- **D9 The pre-screen**: `_place_bundle` (dispersed spiral) and the nucleated seat loop test, per candidate and before
-  building the bundle, the house rect's ground (`_rect_blocked(house)`) and the eave gap; after building it, the
-  yard's and grove's ground and the placed-box overlap; only survivors reach `_bundle_fits` / `_envelope_blocked`.
-  Exact because the conjunction is order-independent (research R2); a test asserts the seat chosen with and without
-  the pre-screen is the same over the rescue scenario and the toy.
-- **D10 Bundle template**: `_bundle_geom` builds the relative rects once per `(hw, hh, side, shed, nucleated, yard
-  dims)` and translates; the yard's rolled size is keyed to the household's seed position (the attempt), not to each
-  candidate position - a map-drawing convention change (spec Decisions Recorded: the yard size is the household's,
-  drawn from the same distribution), which moves yards by a roll and is covered by FR-006.
+- **D9 The free-ground index proposes the seats** (plan review, 2026-09-28: the index must PROPOSE, not only make
+  each test cheaper). `FreeGround`, built once per homestead stage from the installed site boundary: a raster whose
+  cells are classified SURELY TAKEN only when every point of the cell is refused by the nine-point ground test - the
+  cell lies inside the forbidden union (the paddy's facing-chain strips, the outline's rings less their holes, the
+  water corridors inflated by their clearance), shrunk by a hair so a point on the boundary is never claimed. The
+  placer asks it FIRST, for all of a seat's candidates at once: every spiral offset (dispersed) and every garden side's
+  bbox (nucleated) whose sample points include one in a surely-taken cell is dropped without a test - the exact test
+  it would have received refuses that point, so the drop is exact on both paths - and only the survivors are tested
+  one at a time. A test compares the seats chosen with and without the index on the rescue scenario and the toy, on
+  both paths.
+- **D9a The dispersed pre-screen** (ruled within): behind the index, `_place_bundle`'s survivors are pre-screened by
+  `_bundle_fits`'s own cheapest conjuncts (the house's and yard's ground, the eave gap, the placed-box overlap) before
+  the rest - exact because that conjunction is order-independent. **Not on the nucleated path**: its test is
+  `_envelope_blocked` then `_parts_fit`, one overlapping placed box is a computed MOVE there, not a rejection, and the
+  eave gap is judged after the move - so the nucleated loop is screened only by D9's index, on its own condition (the
+  envelope's ground), where that condition is judged.
+- **D10 The bundle template**: `_bundle_geom` builds the UNRAKED layout once per `(hw, hh, side, shed, nucleated)` and
+  the household's rolled parts, translates it, and then applies the rake per candidate (`_rake_parts`, as today) - so
+  the homestead still turns as one piece at every seat (GM 2026-09-26). The household's rolled parts - the yard's size,
+  the garden jitter and the bed split - are rolled once per household at the seat it was sought from, not per
+  candidate (ruled LEGITIMATE on condition of the spec's Decisions Recorded row, added by amendment 1).
+- **D20 The toy is what it says** (constitution XIV, found by the plan review): `_toy_hamlet` sets the placer's own
+  switch (`s._nucleated`) from its plan as the generator does; the one test that relied on the dispersed spiral by
+  accident says so and sets it (done, 2026-09-28). Every harness scenario runs both paths and is labeled.
 
 ### D. Seam closing (FR-004)
 
@@ -112,9 +130,10 @@ A decrease is the point; an increase on any seed is diagnosed under the bands li
 - **D12 Batch**: `_plant`'s per-cell chain (intersection, despike, core, fat, kept, arms) runs as shapely array calls
   over all cells of a pocket; the tint pass's areas, convex hulls and minimum rotated rectangles run as array calls
   over all plots. Order of results is kept (the outputs are sorted the same way as today).
-- **D13 Touched cells**: `_plant` intersects the pocket with each ROW band first and cuts only the cells within that
-  band's intersection extent, so the cells visited are those the pocket touches; a test builds a diagonal sliver
-  pocket and asserts the cell count tracks its area.
+- **D13 Touched cells**: `_plant` intersects the pocket with each ROW band first and, for each CONNECTED PIECE of that
+  intersection, cuts only the cells within that piece's extent - so a U-shaped or holed pocket whose row meets it twice
+  visits no cell between the two pieces, and the cells visited are exactly those the pocket touches (plan review,
+  2026-09-28). Tests: a diagonal sliver (cell count tracks its area) and a two-piece-row pocket (no cell between).
 - **D14** Re-profile after D11-D13; the next heaviest step (`_visible_parts`, `_absorb`, `_unjog`) gets the same
   treatment until SC-004 holds.
 

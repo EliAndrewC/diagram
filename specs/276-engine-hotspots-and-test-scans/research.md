@@ -24,6 +24,15 @@ world (constitution XII's opening bookend has nothing to ground - see R8).
 
 ## R2. Why homestead placement is slow - two costs, both measured
 
+**Which path (added by amendment 1).** `_toy_hamlet` never set the placer's own switch, so every figure first taken for
+this section ran the DISPERSED spiral; fixed, both paths re-measured on the unmodified engine
+(`harness-before-homesteads-both-paths.json`). The NUCLEATED path - every pool hamlet's - is cheap at hamlet scale: the
+rescue scenario takes 0.16 s and seats 15 houses (m:before-rescue-nucleated-s, m:before-rescue-nucleated-houses), 240
+seeds 0.395 s (m:before-dense-240-nucleated-s) - but its cost per house still grows from 0.0009 s to 0.0017 s between 60
+and 240 seeds (m:before-dense-60-nucleated-per-house, m:before-dense-240-nucleated-per-house): the placed-house scans
+below, which are the city's problem. The dispersed spiral - staged for the form `_SETTLEMENT_FORMS_WHEN_GROVES_WORK`
+rolls - is the generate-and-test search the rest of this section measures.
+
 **Decision**: an exact PRE-SCREEN in front of the full fit test, and indexes for every scan of the placed houses
 and of the static ground.
 
@@ -101,8 +110,9 @@ finding to diagnose, not a report.
 ## R7. The regression baseline (constitution XIII)
 
 `make cohort N=24` on the unmodified code in a detached worktree (`scratchpad/base276`), started 2026-09-28; its
-pass count is recorded here when it finishes, and the after-cohort must not pass fewer seeds, each newly failing
-seed diagnosed.
+result: 21 of 24 seeds pass the whole gate (m:cohort-before-passed); the three that fail - Audit-02, Audit-08, Audit-23 - fail
+`scatter_frame_breach` only, the cohort's standing residue. The after-cohort must pass these same 21 or more, every
+newly failing seed diagnosed.
 
 ## R8. Historical grounding
 

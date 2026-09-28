@@ -104,8 +104,12 @@ def _homesteads() -> dict:
             patched.append((name, real))
     rows = {}
     try:
-        def rescue():
+        # EACH SCENARIO ON BOTH PATHS (feature 276's plan review): the pool's hamlets are all NUCLEATED
+        # (`_place_bundle_nucleated`, `_envelope_blocked`); the dispersed spiral (`_place_bundle`, `_bundle_fits`) is the
+        # other form. `_toy_hamlet` now sets the placer's switch from its plan; `form` overrides it per row.
+        def rescue(form):
             s, plan = _toy_hamlet(20)
+            s._nucleated = form == "nucleated"
             cx_, cy_ = float(plan.seat["cx"]), float(plan.seat["cy"])
             s.block_polys.append([(cx_ - 2000.0, cy_ - 2000.0), (cx_ + 2000.0, cy_ - 2000.0), (cx_ + 2000.0, cy_ - 260.0), (cx_ - 2000.0, cy_ - 260.0)])
             s.block_polys.append([(cx_ - 2000.0, cy_ + 260.0), (cx_ + 2000.0, cy_ + 260.0), (cx_ + 2000.0, cy_ + 2000.0), (cx_ - 2000.0, cy_ + 2000.0)])
@@ -113,8 +117,9 @@ def _homesteads() -> dict:
             stage_homesteads(s, plan)
             return len(s.M["houses"]), counted["fits"]
 
-        dt, (houses, fits) = _best(rescue)
-        rows["rescue-20"] = {"s": round(dt, 3), "houses": houses, "fit_tests": fits}
+        for form in ("nucleated", "dispersed"):
+            dt, (houses, fits) = _best(lambda form=form: rescue(form))
+            rows[f"rescue-20-{form}"] = {"s": round(dt, 3), "houses": houses, "fit_tests": fits}
         for n in (10, 20):  # the hamlet band is 10-20 households; a larger quota is a village
             def open_toy(n=n):
                 s, plan = _toy_hamlet(n)
@@ -129,25 +134,27 @@ def _homesteads() -> dict:
         # shows a flat `s_per_house`, and one that re-tests every placed house per candidate grows with N.
         import random as _r
 
-        for n in (60, 120, 240):
-            def dense(n=n):
-                side = int((n ** 0.5) * 95) + 400
-                s = Settlement(side, side, seed=7)
-                s.meta(name="D", scale="hamlet", ftpx=1, toscale=True, households=15, down_deg=90, water_flow=90, nucleated=True)
-                rng = _r.Random(n)
-                k = int(n ** 0.5) + 1
-                counted["fits"] = 0
-                seated = 0
-                for i in range(n):
-                    gx, gy = i % k, i // k
-                    x = 200 + gx * 95 + rng.uniform(-20, 20)
-                    y = 200 + gy * 95 + rng.uniform(-20, 20)
-                    if s.try_place(x, y, "plain"):
-                        seated += 1
-                return seated, counted["fits"]
+        for form in ("nucleated", "dispersed"):
+            for n in (60, 120, 240):
+                def dense(n=n, form=form):
+                    side = int((n ** 0.5) * 95) + 400
+                    s = Settlement(side, side, seed=7)
+                    s.meta(name="D", scale="hamlet", ftpx=1, toscale=True, households=15, down_deg=90, water_flow=90, nucleated=form == "nucleated")
+                    s._nucleated = form == "nucleated"
+                    rng = _r.Random(n)
+                    k = int(n ** 0.5) + 1
+                    counted["fits"] = 0
+                    seated = 0
+                    for i in range(n):
+                        gx, gy = i % k, i // k
+                        x = 200 + gx * 95 + rng.uniform(-20, 20)
+                        y = 200 + gy * 95 + rng.uniform(-20, 20)
+                        if s.try_place(x, y, "plain"):
+                            seated += 1
+                    return seated, counted["fits"]
 
-            dt, (houses, fits) = _best(dense)
-            rows[f"dense-{n}"] = {"s": round(dt, 3), "houses": houses, "fit_tests": fits, "s_per_house": round(dt / max(houses, 1), 4)}
+                dt, (houses, fits) = _best(dense)
+                rows[f"dense-{n}-{form}"] = {"s": round(dt, 3), "houses": houses, "fit_tests": fits, "s_per_house": round(dt / max(houses, 1), 4)}
     finally:
         for name, real in patched:
             setattr(Settlement, name, real)

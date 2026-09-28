@@ -34,7 +34,7 @@
   "before-rescue-s": {
     "value": 2.718,
     "unit": "s",
-    "quantity": "stage_homesteads on the rescue-rounds scenario (20 asked, 10 seated)",
+    "quantity": "stage_homesteads on the rescue-rounds scenario (20 asked, 10 seated) - the DISPERSED spiral (`_toy_hamlet` did not yet set the placer's switch)",
     "source": "specs/276-engine-hotspots-and-test-scans/harness.py, output harness-before.json (run 2026-09-28 at HEAD before any 276 engine change, the clone diagram-inashiro, best of 3 unprofiled)",
     "observed": "2026-09-28",
     "varies": true
@@ -42,14 +42,14 @@
   "before-rescue-fits": {
     "value": 46781,
     "unit": "fit tests",
-    "quantity": "full fit tests on the rescue-rounds scenario",
+    "quantity": "full fit tests on the rescue-rounds scenario - the DISPERSED spiral (`_toy_hamlet` did not yet set the placer's switch)",
     "source": "specs/276-engine-hotspots-and-test-scans/harness.py, output harness-before.json (run 2026-09-28 at HEAD before any 276 engine change, the clone diagram-inashiro, best of 3 unprofiled)",
     "observed": "2026-09-28"
   },
   "before-dense-60-per-house": {
     "value": 0.0308,
     "unit": "s",
-    "quantity": "try_place cost per seated house, 60 seeds at constant density (38 seated)",
+    "quantity": "try_place cost per seated house, 60 seeds at constant density (38 seated) - the DISPERSED spiral (`_toy_hamlet` did not yet set the placer's switch)",
     "source": "specs/276-engine-hotspots-and-test-scans/harness.py, output harness-before.json (run 2026-09-28 at HEAD before any 276 engine change, the clone diagram-inashiro, best of 3 unprofiled)",
     "observed": "2026-09-28",
     "varies": true
@@ -57,7 +57,7 @@
   "before-dense-120-per-house": {
     "value": 0.0383,
     "unit": "s",
-    "quantity": "try_place cost per seated house, 120 seeds at constant density (73 seated)",
+    "quantity": "try_place cost per seated house, 120 seeds at constant density (73 seated) - the DISPERSED spiral (`_toy_hamlet` did not yet set the placer's switch)",
     "source": "specs/276-engine-hotspots-and-test-scans/harness.py, output harness-before.json (run 2026-09-28 at HEAD before any 276 engine change, the clone diagram-inashiro, best of 3 unprofiled)",
     "observed": "2026-09-28",
     "varies": true
@@ -65,7 +65,7 @@
   "before-dense-240-per-house": {
     "value": 0.0586,
     "unit": "s",
-    "quantity": "try_place cost per seated house, 240 seeds at constant density (140 seated)",
+    "quantity": "try_place cost per seated house, 240 seeds at constant density (140 seated) - the DISPERSED spiral (`_toy_hamlet` did not yet set the placer's switch)",
     "source": "specs/276-engine-hotspots-and-test-scans/harness.py, output harness-before.json (run 2026-09-28 at HEAD before any 276 engine change, the clone diagram-inashiro, best of 3 unprofiled)",
     "observed": "2026-09-28",
     "varies": true
@@ -73,7 +73,7 @@
   "before-dense-240-s": {
     "value": 8.198,
     "unit": "s",
-    "quantity": "try_place total, 240 seeds at constant density",
+    "quantity": "try_place total, 240 seeds at constant density - the DISPERSED spiral (`_toy_hamlet` did not yet set the placer's switch)",
     "source": "specs/276-engine-hotspots-and-test-scans/harness.py, output harness-before.json (run 2026-09-28 at HEAD before any 276 engine change, the clone diagram-inashiro, best of 3 unprofiled)",
     "observed": "2026-09-28",
     "varies": true
@@ -179,6 +179,87 @@
     "unit": "s",
     "quantity": "the reference hamlet's perf snapshot, median seed",
     "source": "make perf LABEL=276-start (dev/perf-log/20260928T034653Z-276-start-diagram-inashiro.json), unmodified code",
+    "observed": "2026-09-28",
+    "varies": true
+  },
+  "cohort-before-passed": {
+    "value": 21,
+    "unit": "seeds",
+    "quantity": "make cohort N=24 seeds passing the whole gate, unmodified code (failing: Audit-02 scatter_frame_breach, Audit-08 scatter_frame_breach, Audit-23 scatter_frame_breach)",
+    "source": "make cohort N=24 in a detached worktree of a9b19c032 (scratchpad/base276), 2026-09-28",
+    "observed": "2026-09-28"
+  },
+  "before-rescue-nucleated-s": {
+    "value": 0.16,
+    "unit": "s",
+    "quantity": "stage_homesteads on the rescue scenario, NUCLEATED path (the pool's)",
+    "source": "harness.py homesteads section on both placement paths (harness-before-homesteads-both-paths.json), unmodified engine, 2026-09-28 after `_toy_hamlet` was fixed to set the placer's own nucleated switch",
+    "observed": "2026-09-28",
+    "varies": true
+  },
+  "before-rescue-nucleated-fits": {
+    "value": 1526,
+    "unit": "fit tests",
+    "quantity": "full fit tests on the rescue scenario, nucleated path",
+    "source": "harness.py homesteads section on both placement paths (harness-before-homesteads-both-paths.json), unmodified engine, 2026-09-28 after `_toy_hamlet` was fixed to set the placer's own nucleated switch",
+    "observed": "2026-09-28"
+  },
+  "before-rescue-nucleated-houses": {
+    "value": 15,
+    "unit": "houses",
+    "quantity": "houses seated on the rescue scenario, nucleated path",
+    "source": "harness.py homesteads section on both placement paths (harness-before-homesteads-both-paths.json), unmodified engine, 2026-09-28 after `_toy_hamlet` was fixed to set the placer's own nucleated switch",
+    "observed": "2026-09-28"
+  },
+  "before-dense-60-nucleated-per-house": {
+    "value": 0.0009,
+    "unit": "s",
+    "quantity": "try_place cost per seated house, 60 seeds at constant density, nucleated path",
+    "source": "harness.py homesteads section on both placement paths (harness-before-homesteads-both-paths.json), unmodified engine, 2026-09-28 after `_toy_hamlet` was fixed to set the placer's own nucleated switch",
+    "observed": "2026-09-28",
+    "varies": true
+  },
+  "before-dense-60-nucleated-houses": {
+    "value": 57,
+    "unit": "houses",
+    "quantity": "houses seated from 60 seeds, nucleated path",
+    "source": "harness.py homesteads section on both placement paths (harness-before-homesteads-both-paths.json), unmodified engine, 2026-09-28 after `_toy_hamlet` was fixed to set the placer's own nucleated switch",
+    "observed": "2026-09-28"
+  },
+  "before-dense-60-dispersed-houses": {
+    "value": 38,
+    "unit": "houses",
+    "quantity": "houses seated from 60 seeds, dispersed path",
+    "source": "harness.py homesteads section on both placement paths (harness-before-homesteads-both-paths.json), unmodified engine, 2026-09-28 after `_toy_hamlet` was fixed to set the placer's own nucleated switch",
+    "observed": "2026-09-28"
+  },
+  "before-dense-240-nucleated-per-house": {
+    "value": 0.0017,
+    "unit": "s",
+    "quantity": "try_place cost per seated house, 240 seeds at constant density, nucleated path",
+    "source": "harness.py homesteads section on both placement paths (harness-before-homesteads-both-paths.json), unmodified engine, 2026-09-28 after `_toy_hamlet` was fixed to set the placer's own nucleated switch",
+    "observed": "2026-09-28",
+    "varies": true
+  },
+  "before-dense-240-nucleated-houses": {
+    "value": 227,
+    "unit": "houses",
+    "quantity": "houses seated from 240 seeds, nucleated path",
+    "source": "harness.py homesteads section on both placement paths (harness-before-homesteads-both-paths.json), unmodified engine, 2026-09-28 after `_toy_hamlet` was fixed to set the placer's own nucleated switch",
+    "observed": "2026-09-28"
+  },
+  "before-dense-240-dispersed-houses": {
+    "value": 140,
+    "unit": "houses",
+    "quantity": "houses seated from 240 seeds, dispersed path",
+    "source": "harness.py homesteads section on both placement paths (harness-before-homesteads-both-paths.json), unmodified engine, 2026-09-28 after `_toy_hamlet` was fixed to set the placer's own nucleated switch",
+    "observed": "2026-09-28"
+  },
+  "before-dense-240-nucleated-s": {
+    "value": 0.395,
+    "unit": "s",
+    "quantity": "try_place total, 240 seeds at constant density, nucleated path",
+    "source": "harness.py homesteads section on both placement paths (harness-before-homesteads-both-paths.json), unmodified engine, 2026-09-28 after `_toy_hamlet` was fixed to set the placer's own nucleated switch",
     "observed": "2026-09-28",
     "varies": true
   }

@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in the clone `diagram-inashiro`)
 **Created**: 2026-09-28
-**Status**: Accepted - spec-fidelity FAITHFUL at round 3 of 5 (2026-09-28); rounds 1 and 2 CHANGES REQUIRED, all applied (Review history)
+**Status**: AMENDED after acceptance (2026-09-28, the plan review) - re-review owed, counter reset; was FAITHFUL at round 3 of 5
 **Request**: [`request.md`](request.md) - the GM's words verbatim, and the analysis they said yes to.
 **Predecessors**: 218 (efficient overlap checks: the index-once doctrine, `dev/performance.md`), 220 (the field
 fitted once), 222-226 (render and scatter levers), this session's quick-suite passes (gate-stamp per-file
@@ -148,7 +148,8 @@ The track stage's path checks read the static water and crop geometry from an in
   a finding to fix, not a report. Byte-identity is not required (the GM, request.md).
 - **FR-007 Measured, before and after.** The harness (`harness.py`) records, on the same machine and code path:
   each named test's time alone; the homestead stage (time, full fit tests) on the rescue-rounds scenario, the toy
-  at 10 and 20 households, and the placement primitive at constant density at 60, 120 and 240 seeds;
+  at 10 and 20 households, and the placement primitive at constant density at 60, 120 and 240 seeds - each placement
+  scenario on the NUCLEATED path (the pool's) and the DISPERSED path (the spiral) and labeled so;
   `close_seams` inside a comb build; the track stage and its path checks. Research adds each pool hamlet's stage
   profile and `make quick ALL=1` and `make done` wall time. A slowdown anywhere is reported under constitution
   VI's bands like any other.
@@ -170,26 +171,33 @@ The track stage's path checks read the static water and crop geometry from an in
 
 ### Measurable Outcomes
 
-- **SC-001**: The four AST-scanning tests, run together in one process, parse the engine ONCE (a parse count
+- **SC-001** (FR-001): The four AST-scanning tests, run together in one process, parse the engine ONCE (a parse count
   asserted by a test), and each fails on its planted offender. Their before-times alone were 1.23 s to 1.87 s
-  (m:before-ast-tests-min, m:before-ast-tests-max) - most of it the parse one of them must pay alone, so the
+  (m:before-ast-tests-min, m:before-ast-tests-max; research R1) - most of it the parse one of them must pay alone, so the
   target is the four together: at most the one shared parse plus `0.5 s`.
-- **SC-001a**: The five named record tests build their lookup tables once per process; together alone they take at
+- **SC-001a** (FR-002): The five named record tests build their lookup tables once per process; together alone they take at
   least `3x` less than their 17.22 s sum (m:before-record-tests-sum; the slowest alone was 4.47 s,
   m:before-record-tests-max), and each fails on its planted violation. The one-time build cost is recorded in
   research.
-- **SC-002**: The rescue-rounds homestead stage is at least `5x` faster than 2.718 s (m:before-rescue-s) with at least
-  `10x` fewer than its 46781 full fit tests (m:before-rescue-fits).
-- **SC-003**: At constant density the placement primitive's cost per seated house is flat: from 60 to 240 seeds it
-  grows by at most `1.25x` (before: 0.0308 s to 0.0586 s, m:before-dense-60-per-house, m:before-dense-240-per-house),
-  and 240 seeds take at least `4x` less than 8.198 s (m:before-dense-240-s).
-- **SC-004**: `close_seams` inside a comb build takes at least `2x` less than its 0.842 s to 1.018 s
+- **SC-002** (FR-003): On the DISPERSED path (the spiral `_place_bundle`, the form `_SETTLEMENT_FORMS_WHEN_GROVES_WORK` will
+  roll), the rescue-rounds homestead stage is at least `5x` faster than 2.718 s (m:before-rescue-s) with at least `10x`
+  fewer than its 46781 full fit tests (m:before-rescue-fits). On the NUCLEATED path (every pool hamlet's), the same
+  scenario is not slower than 0.16 s (m:before-rescue-nucleated-s) and seats at least its 15 houses
+  (m:before-rescue-nucleated-houses).
+- **SC-003** (FR-003): At constant density the placement primitive's cost per seated house is flat ON BOTH PATHS: from 60 to 240
+  seeds it grows by at most `1.25x` - before, nucleated 0.0009 s to 0.0017 s (m:before-dense-60-nucleated-per-house,
+  m:before-dense-240-nucleated-per-house), dispersed 0.0308 s to 0.0586 s (m:before-dense-60-per-house,
+  m:before-dense-240-per-house) - and neither path seats fewer houses than before.
+- **SC-004** (FR-004): `close_seams` inside a comb build takes at least `2x` less than its 0.842 s to 1.018 s
   (m:before-close-seams-min, m:before-close-seams-max), and a diagonal sliver pocket's grid visits only the cells it
   touches.
-- **SC-005**: The track stage's path checks take at least `2x` less than 0.966 s (m:before-track-checks-s), the stage is
+- **SC-005** (FR-005): The track stage's path checks take at least `2x` less than 0.966 s (m:before-track-checks-s), the stage is
   not slower than 1.308 s (m:before-track-stage-s), and the checks' counts equal the full scan's on every candidate.
-- **SC-006**: Every live pool map regenerates with every gate rule passing, `make done` is green at `100%`, and FR-006's
+- **SC-006** (FR-006): Every live pool map regenerates with every gate rule passing, `make done` is green at `100%`, and FR-006's
   house counts and forms hold on every pool map and placement scenario.
+- **SC-007** (FR-007, FR-008): every before- and after-figure SC-001 to SC-006 names is in `measurements.json`, the
+  after-figures carrying the command that re-runs them (`make figures`), and `dev/performance.md` holds the three shapes
+  this feature found, each with its measurement.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
@@ -199,6 +207,7 @@ a seam or a track lands differently it is because the same rules were asked more
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
 | Homestead seats are chosen by the same fit rules from a pruned candidate set, so a house may land at a different legal seat than before | map drawing convention (no rule changed; the placement order is an engine property, not a finding) | the GM: shifts are fine "as long as the underlying reality of what these settlements are generally like stays the same" | point of change in the placer; research R-section naming each moved map |
+| A homestead's yard size, garden proportions and bed split are rolled once per household (at the seat it was sought from), not per candidate seat; the rake stays per seat | map drawing convention (the sizes come from the same distributions; only which seat seeds the roll changes) | a bundle built once per size and moved (FR-003) cannot re-roll its parts at every candidate; the GM allowed shifts "as long as the underlying reality ... stays the same" | point of change in `settlement/rolling/bundle.py`; research R2 |
 | Seam closing's grid is bounded by the pocket's extent; results may differ by sub-plot amounts where batched geometry rounds differently | map drawing convention | same ruling | point of change in `waterfields/seams`; research |
 
 ## Assumptions
@@ -231,3 +240,12 @@ a seam or a track lands differently it is because the same rules were asked more
   240 seeds, per-house cost within `1.25x`). The asides: the harness docstring now names what it runs, and the timing
   entries in `measurements.json` carry `varies`.
 - **Round 3 (spec-fidelity-verify, 2026-09-28): FAITHFUL.** Both round-2 items resolved; nothing introduced. Aside kept for the plan: give the harness a make-runnable command so `make figures` can re-run the recorded figures.
+
+### Amendment 1 (2026-09-28, from the plan review), re-review on a reset counter
+
+The plan review found that `_toy_hamlet` never set the placer's own nucleated switch, so every placement scenario had
+run the DISPERSED spiral, which no pool hamlet uses. Fixed in the test; the scenarios now run both paths and the
+figures were re-taken on the unmodified engine. SC-002 now names its path (the dispersed spiral, with the nucleated
+path held not slower and not seating fewer); SC-003 covers both paths; FR-007 labels each scenario's path. The plan
+review also ruled LEGITIMATE a per-household yard roll on condition that it is recorded here: a Decisions Recorded row
+is added (yard size, garden proportions and bed split per household; the rake per seat).

@@ -38,9 +38,9 @@ def _from_imports() -> list[tuple[pathlib.Path, str, str]]:
     """(file, module, name) for every `from l7r.diagram... import name` with an absolute module."""
     out: list[tuple[pathlib.Path, str, str]] = []
     files = [p for p in sorted(SKILL.rglob("*.py")) if not SKIP.intersection(p.relative_to(SKILL).parts)]
-    # ONE SHARED PARSE, AND ONLY THE FILES THAT NAME `l7r.diagram` (feature 276, FR-001): an absolute
-    # `from l7r.diagram... import` cannot be written without it. A gen script mid-edit is not this test's business.
-    for p, _source, tree in _engine_ast.engine_modules(files, ("l7r.diagram",), skip_broken=True):
+    # ONE SHARED PARSE, AND ONLY THE FILES THAT NAME `diagram` (feature 276, FR-001): an absolute
+    # `from l7r.diagram... import` cannot be written without the identifier (`l7r . diagram` is legal too). A gen script mid-edit is not this test's business.
+    for p, _source, tree in _engine_ast.engine_modules(files, ("diagram",), skip_broken=True):
         for node in _engine_ast.walked(tree):
             if not isinstance(node, ast.ImportFrom) or node.level or not node.module:
                 continue

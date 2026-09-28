@@ -1,0 +1,147 @@
+{
+ "feature": "276-engine-hotspots-and-test-scans",
+ "plan_sha256": "31c296965ccbd80d79fab211b20811b035b8789e080b6a106d4bae58939f933e",
+ "reviewed": "2026-09-28",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "tests/_engine_ast.py: one content-keyed parse per module, a PARSES counter, one cached walk per tree, engine_modules with an optional needle skip",
+   "class": "within",
+   "why": "FR-001's shared content-keyed parse per worker, as written."
+  },
+  {
+   "id": "D2",
+   "summary": "per-test needles: shapely/numpy/PIL, STAGES, 'del ' (with a space), l7r.diagram; scan bodies lifted to module level",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-001 allows the skip only where it is PROVABLY a superset test. 'del ' is not: del(x), del<tab>x and del<newline-continuation> are legal Python and match ast.Delete without the space, so the test would check less than today. The working tree already uses the bare word ('del', test_water_ways.py line 795, its comment says why) - the plan must say the same. Also state the proof for 'l7r.diagram': whitespace is legal inside a dotted import name (from l7r . diagram import x), so it is a superset only on a ruff-formatted tree; either say that and why every scanned file is formatted, or use a needle that cannot be split (the identifier 'diagram'). shapely/numpy/PIL and STAGES are provable (an identifier token cannot be split)."
+  },
+  {
+   "id": "D3",
+   "summary": "tests/test_engine_ast.py asserts one parse per distinct file across the four scans and that each scan flags a planted offender",
+   "class": "within",
+   "why": "SC-001's parse count and FR-001's planted-offender proof."
+  },
+  {
+   "id": "D4",
+   "summary": "_ids(path) cached on content; the .md-token scans skip a file with no '.md' substring",
+   "class": "within",
+   "why": "_MD_TOKEN requires a literal \\.md, so the substring skip is exact; FR-002."
+  },
+  {
+   "id": "D5",
+   "summary": "corpus joined once; single-token glossary variants answered from a word set under _bounded_in's boundary rule, others by _bounded_in; an equality test over every variant on the real corpus",
+   "class": "within",
+   "why": "FR-002, with the verdict proved identical rather than assumed."
+  },
+  {
+   "id": "D6",
+   "summary": "planted-violation tests for a broken link id, an unused glossary term, a converted .md token",
+   "class": "within",
+   "why": "FR-002 / SC-001a's each-still-fails requirement; enforcement of what was asked."
+  },
+  {
+   "id": "D7",
+   "summary": "M['houses'] and placed as Indexed lists; every per-candidate placed-house scan asks a PointGrid for records within the rule's reach box; exact comparisons unchanged; list order kept for _envelope_blocked's ONE box; equality test vs the linear scans",
+   "class": "within",
+   "why": "FR-003's 'no fit test scans every placed house'; prune-only, the exact test decides."
+  },
+  {
+   "id": "D8",
+   "summary": "SiteCorridors gains a vertex grid per ring and a hole grid; exact tests decide; equality test vs the linear form",
+   "class": "within",
+   "why": "Static ground indexed once (FR-003, dev/performance.md); prune-only."
+  },
+  {
+   "id": "D9a",
+   "summary": "pre-screen in the DISPERSED spiral (_place_bundle, _slide): house ground and eave gap before building the bundle, yard/grove ground and placed-box overlap after, survivors to _bundle_fits",
+   "class": "within",
+   "why": "Exact as claimed: every screened rule is a conjunct of _bundle_fits (common half: house/yard/shed/grove ground, wall, tread, eave gap, sun; side half: bbox, gardens, placed boxes), the predicates are pure apart from the _seat_search diagnostic counters, so a NO from any conjunct is the whole test's NO."
+  },
+  {
+   "id": "D9b",
+   "summary": "the same pre-screen applied to the NUCLEATED seat loop, in front of _envelope_blocked",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The order-independence argument (research R2) is about _bundle_fits, which the nucleated loop never calls. Its verdict is _envelope_blocked (the envelope's nine points against the boundary, plus the placed boxes) then _parts_fit (wall, tread, eave gap, sun) - and (1) it has NO house-rect or yard ground test: _site_blocks_rect is a nine-point test, so a house's nine points can be refused where the enclosing envelope's nine points are clear (a water corridor or a ring edge passing between the envelope's points); (2) an overlap with exactly ONE placed box is not a refusal but the trigger of the computed move (place.py 155-168), so screening on placed-box overlap drops every seat the move would have rescued; (3) the eave gap is judged after the move, not at the pre-move point. The pre-screen would therefore DECIDE seats the full test accepts, against FR-003 ('the index prunes, it never decides') and the spec's Decisions Recorded ('the same fit rules'), on the path every pool hamlet uses (R1: all nucleated). The same-seat test cannot catch it: the rescue scenario and the toy (_toy_hamlet) never set s._nucleated - meta(nucleated=True) does not - so they run the DISPERSED spiral (the probe's 2,270 grove-ground rejections are grove parts only a dispersed bundle has). Fix: in the nucleated loop screen only by conjuncts of ITS verdict at the position they are judged (e.g. the envelope's own ground, parts rules after the move), and run the same-seat test on a nucleated scenario (a settlement with s._nucleated = True, e.g. Inashiro's roll) as well as the toy."
+  },
+  {
+   "id": "D9c",
+   "summary": "the placement design as a whole (Summary C, D9, research R2): seats still come from the 157-offset spiral tried one after another, each pre-screened; the free-ground index 'asked for seats near a target' is priced and rejected (R2 'Alternatives priced')",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The GM approved 'a free-space index updated as houses land, answering the nearest fitting seat directly'; the accepted spec says 'Homestead seats come from the free ground' (FR-003 title), placement asks the index 'for candidate seats', User Story 2 says houses are placed 'by asking what ground is free, not by trying spiral offsets one after another', and the Key Entity is a free-ground index 'asked for seats near a target'. The plan keeps exactly the generate-and-test shape, making each test cheaper, and its D7 index answers 'which placed records are near this candidate', not 'which seats are free'. R2's reason for rejecting the free-ground index - the fit rules are not a property of a cell, so it 'could only prune' - is not a MODE 1 ground: FR-003 already requires the index to prune and the full test to decide, so 'it can only prune' describes what was asked. Nothing makes the literal form impossible, and it is not implied by the GM's words. The narrowing is also unlabeled (the constitution check says 'no exception is planned'), the feature-239 pattern. Fix: an index of the ground already taken (placed bundle boxes, and the static site ground), kept current as bundles land, that PROPOSES the candidate seats near the target (e.g. returns the spiral's offsets in order with those on taken ground already removed, so a taken offset is never generated and tested one at a time), with the full fit test deciding each survivor; the pre-screen may stay behind it for the non-ground rules. For the nucleated path, the proposer (the front row / lattice) draws from the same index."
+  },
+  {
+   "id": "D10a",
+   "summary": "the yard's rolled size keyed to the household's seed position (the attempt) instead of each candidate position",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "It departs from the accepted spec's statement that the feature 'changes no rule, size, glyph or density', so it is ruled rather than waved through. Legitimate because it is implied by the GM's own approved words - 'the bundle shape built once per size and translated' - which cannot hold while the yard is a continuous lognormal of the candidate's coordinates (every candidate is a different shape); the distribution is unchanged, per household, and FR-006's counts and forms guard the result. CONDITION: the plan says this is covered by 'spec Decisions Recorded: the yard size is the household's'; the spec has no such row (it lists only the pruned-candidate-set seat and the seam grid). Add the row to the spec (class: map drawing convention, with the why and the point of change) - an amendment to the accepted spec, re-reviewed on a reset counter."
+  },
+  {
+   "id": "D10b",
+   "summary": "the template key (hw, hh, side, shed, nucleated, yard dims) omits the bundle's other position-seeded parts: the nucleated garden size jitter (_hjit salts 3, 4), the garden bed split (salts 8, 9, 10) and the rake (_house_rot, salt 11) that _rake_parts turns the yard, gardens and kura about",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "As keyed, a translated template carries the garden size, bed split and rake of the position it was first built at. A frozen rake puts the yard, gardens and kura where a different rake would turn them while the house is drawn at _house_rot of its own seat - the drift the GM ruled out on 2026-09-26 ('the homestead turns as one piece'; 'the ground cleared is the ground drawn', bundle.py _rake_parts) - so a rule the spec says still holds (FR-006) would not. Freezing or household-keying the garden jitter and the bed split is a further map-drawing convention change the spec does not record. Fix: state in D10 that the template is the UNRAKED relative layout and _rake_parts runs per candidate after translation; and either key the template on the garden jitter and split too (then say what it saves) or key them to the household like the yard and record that in the spec's Decisions Recorded with D10a."
+  },
+  {
+   "id": "D11",
+   "summary": "compute once: _plant's k.buffer(-half) and the tint pass's Polygon(...).buffer(0) once per piece/plot, other repeats found by the profile",
+   "class": "within",
+   "why": "FR-004 'compute each geometric result once'."
+  },
+  {
+   "id": "D12",
+   "summary": "batch _plant's per-cell chain and the tint pass's areas/hulls/rectangles as shapely array calls, result order kept",
+   "class": "within",
+   "why": "FR-004 'run per-piece operations over arrays'."
+  },
+  {
+   "id": "D13",
+   "summary": "_plant intersects the pocket with each row band and cuts only the cells within that band's intersection EXTENT; a diagonal-sliver test asserts the cell count tracks area",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-004 / SC-004 require the grid to visit ONLY the cells the pocket touches. A row band's intersection with a pocket can be several pieces (a U-shaped or holed pocket, two arms in one row); its overall extent spans the untouched cells between them, so the plan's claim 'so the cells visited are those the pocket touches' is false for any non-convex pocket, and the work grows with a per-row bounding box - the thing round 1 of the spec review removed. Fix: cut the cells within the extent of each connected PART of the band's intersection (a connected part inside a one-cell band touches every cell its x-extent spans, so that is exactly the touched set), and give the test a pocket whose row intersection has two parts as well as the diagonal sliver."
+  },
+  {
+   "id": "D14",
+   "summary": "re-profile after D11-D13 and give the next heaviest step the same treatment until SC-004 holds",
+   "class": "within",
+   "why": "FR-004 names every step; SC-004's target."
+  },
+  {
+   "id": "D15",
+   "summary": "PathChecker(avoid, pond, brook, waters) with PointGrid-boxed segments and boxed avoid polygons, the same per-segment tests on near items, the pairs_within count as today; path_violations stays as the oracle",
+   "class": "within",
+   "why": "FR-005: index once per stage, prune-only, exact test decides."
+  },
+  {
+   "id": "D16",
+   "summary": "equality test over Inashiro's candidate paths recorded through the track stage on a real roll",
+   "class": "within",
+   "why": "FR-005's proof, as specified."
+  },
+  {
+   "id": "D17",
+   "summary": "make h276 runs the harness; measurements' command field names it so make figures re-runs them",
+   "class": "within",
+   "why": "Round 3's aside; the figures contract."
+  },
+  {
+   "id": "D18",
+   "summary": "after C-E: make done, FR-006 counts against pool-before.json, the after-cohort against R7, perf bookend and perf-report",
+   "class": "within",
+   "why": "FR-006 / FR-007 / SC-006."
+  },
+  {
+   "id": "D19",
+   "summary": "dev/performance.md gains the three shapes with their measurements",
+   "class": "within",
+   "why": "FR-008."
+  }
+ ],
+ "verdict": "BLOCKED"
+}

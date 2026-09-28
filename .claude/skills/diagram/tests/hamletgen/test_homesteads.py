@@ -311,6 +311,10 @@ def _toy_hamlet(households: int, seed: int = 3):  # type: ignore[no-untyped-def]
     plan.settlement_form = "nucleated"
     s = Settlement(1400, 1400, seed=seed)
     s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=households, down_deg=90, water_flow=90, nucleated=True)
+    # THE PLACER'S OWN SWITCH, as the generator sets it (`hamletgen/water/skeleton.py`): `meta(nucleated=True)` only
+    # RECORDS the form, and without this the toy's homesteads ran the DISPERSED spiral - a path no pool hamlet uses
+    # (found by feature 276's plan review: the rescue scenario's grove rejections could only come from a dispersed bundle).
+    s._nucleated = plan.settlement_form == "nucleated"
     s.field_polys.append(list(plan.envelope))
     cx_, cy_ = float(plan.seat["cx"]), float(plan.seat["cy"])
     s.M["lanes"] = [{"pts": [[cx_ - 400, cy_], [cx_ + 400, cy_]], "w": 6, "connector": True}]
@@ -357,6 +361,10 @@ def test_a_cluster_standing_off_its_field_gets_the_spur_to_it() -> None:
     from l7r.diagram.hamletgen.ways import stage_track
 
     s, plan = _toy_hamlet(10)
+    # A DISPERSED cluster, said so (feature 276): the seats three hundred feet back fall off the toy's canvas, and it
+    # was the dispersed spiral - which the toy ran by accident until `_toy_hamlet` set the placer's own switch -
+    # that found room within reach of them. The spur is a property of the track, whatever form stands back there.
+    s._nucleated = False
     cx_, cy_ = float(plan.seat["cx"]), float(plan.seat["cy"])
     ox, oy = plan.seat["out"]
     n = 0

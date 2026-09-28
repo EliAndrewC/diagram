@@ -1,0 +1,62 @@
+{
+  "homesteads": {
+    "rescue-20-nucleated": {
+      "s": 0.16,
+      "houses": 15,
+      "fit_tests": 1526
+    },
+    "rescue-20-dispersed": {
+      "s": 4.495,
+      "houses": 10,
+      "fit_tests": 46781
+    },
+    "open-10": {
+      "s": 0.013,
+      "houses": 10,
+      "fit_tests": 49,
+      "s_per_house": 0.0013
+    },
+    "open-20": {
+      "s": 0.038,
+      "houses": 20,
+      "fit_tests": 230,
+      "s_per_house": 0.0019
+    },
+    "dense-60-nucleated": {
+      "s": 0.053,
+      "houses": 57,
+      "fit_tests": 295,
+      "s_per_house": 0.0009
+    },
+    "dense-120-nucleated": {
+      "s": 0.139,
+      "houses": 112,
+      "fit_tests": 589,
+      "s_per_house": 0.0012
+    },
+    "dense-240-nucleated": {
+      "s": 0.395,
+      "houses": 227,
+      "fit_tests": 1267,
+      "s_per_house": 0.0017
+    },
+    "dense-60-dispersed": {
+      "s": 1.748,
+      "houses": 38,
+      "fit_tests": 7204,
+      "s_per_house": 0.046
+    },
+    "dense-120-dispersed": {
+      "s": 3.369,
+      "houses": 73,
+      "fit_tests": 14325,
+      "s_per_house": 0.0462
+    },
+    "dense-240-dispersed": {
+      "s": 5.69,
+      "houses": 140,
+      "fit_tests": 29372,
+      "s_per_house": 0.0406
+    }
+  }
+}

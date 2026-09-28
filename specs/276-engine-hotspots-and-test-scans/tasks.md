@@ -15,9 +15,9 @@ Order: F's harness target first (so every after-figure is taken the same way), t
       research: rendering
 - [ ] T03 [US1] The four AST tests read from it, each scan lifted to a function, each with its needle (D2): `tests/test_memory.py`, `tests/hamletgen/test_driver.py`, `tests/test_package_surfaces.py`, `tests/settlement/test_water_ways.py`
       research: rendering
-- [ ] T04 [US1] `tests/test_engine_ast.py`: one parse per file across the four; each scan flags a planted offender (D3); SC-001 by `make h276`
+- [ ] T04 [US1] `tests/test_engine_ast.py`: one parse per file across the four; each scan flags a planted offender (D3); SC-001 by the harness (`measure.py`)
       research: rendering
-- [ ] T05 [P] [US1] Record tests: the cached id table, the `.md` prefilter (D4) in `tests/interactive/test_record.py`; the joined corpus and the word-set lookup with its equality test (D5) in `tests/interactive/test_record_format.py`; planted-violation tests (D6); SC-001a by `make h276`
+- [ ] T05 [P] [US1] Record tests: the cached id table, the `.md` prefilter (D4) in `tests/interactive/test_record.py`; the joined corpus and the word-set lookup with its equality test (D5) in `tests/interactive/test_record_format.py`; planted-violation tests (D6); SC-001a by the harness (`measure.py`)
       research: rendering
 
 ## US2 - a house is seated without testing a hundred wrong places first (P1)
@@ -26,9 +26,11 @@ Order: F's harness target first (so every after-figure is taken the same way), t
       research: rendering
 - [ ] T07 [US2] The static ground index: `SiteCorridors` vertex and hole grids in `hamletgen/homesteads/boundary.py`; the equality test (D8)
       research: rendering
-- [ ] T08 [US2] The pre-screen in `settlement/rolling/place.py` (spiral and nucleated seat loop); the same-seat test on the rescue scenario and the toy (D9)
+- [ ] T08 [US2] The free-ground index proposing the seats on both paths (D9) and the dispersed pre-screen behind it (D9a) in `settlement/rolling/place.py` + a `FreeGround` in `hamletgen/homesteads/boundary.py`; the same-seat tests on the rescue scenario and the toy, both paths
       research: rendering
-- [ ] T09 [US2] The bundle template and the household-keyed yard roll in `settlement/rolling/bundle.py` / `homestead_parts/yards.py` (D10); SC-002 and SC-003 by `make h276`
+- [ ] T09 [US2] The unraked bundle template with the rake per candidate, and the household-rolled yard, garden jitter and bed split, in `settlement/rolling/bundle.py` / `homestead_parts/yards.py` (D10); SC-002 and SC-003 by the harness on both paths
+      research: rendering
+- [ ] T09a [US2] `_toy_hamlet` sets the placer's own nucleated switch; the spur test says it wants a dispersed cluster (D20)
       research: rendering
 - [ ] T10 [US2] Inashiro regenerated (`make map`); its houses, form and yards read against `pool-before.json`
       research: rendering
@@ -37,14 +39,14 @@ Order: F's harness target first (so every after-figure is taken the same way), t
 
 - [ ] T11 [US3] Compute once (D11) and batch (D12) in `waterfields/seams/plots.py` and `close.py`
       research: rendering
-- [ ] T12 [US3] Touched cells in `_plant` and the diagonal-sliver test (D13); re-profile and treat the next heaviest step (D14); SC-004 by `make h276`
+- [ ] T12 [US3] Touched cells in `_plant` per connected piece of each row, the diagonal-sliver and two-piece-row tests (D13); re-profile and treat the next heaviest step (D14); SC-004 by the harness (`measure.py`)
       research: rendering
 - [ ] T13 [US3] Inashiro regenerated; its paddy, flooded and dry-plot counts against `pool-before.json`
       research: rendering
 
 ## US4 - a track is routed without re-scanning the map per candidate (P3)
 
-- [ ] T14 [US4] `PathChecker` in `hamletgen/ways/checks.py`, used by `hamletgen/ways/track.py` (D15); the equality test over Inashiro's candidate paths (D16); SC-005 by `make h276`
+- [ ] T14 [US4] `PathChecker` in `hamletgen/ways/checks.py`, used by `hamletgen/ways/track.py` (D15); the equality test over Inashiro's candidate paths (D16); SC-005 by the harness (`measure.py`)
       research: rendering
 - [ ] T15 [US4] Inashiro regenerated; its lanes against `pool-before.json`
       research: rendering
