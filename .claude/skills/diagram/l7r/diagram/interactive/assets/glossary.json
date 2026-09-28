@@ -3926,7 +3926,9 @@
   "def": "An \"outside lord\": a domain lord whose house submitted to the Tokugawa only after 1600, ranked apart from the hereditary vassal houses.",
   "variants": [
    "tozama daimyo",
-   "tozama"
+   "tozama",
+   "outer daimyo",
+   "outer daimyos"
   ]
  },
  "transect": {
@@ -10987,6 +10989,46 @@
   "def": "Japan's national online library of scholarly journals, where many Japanese academic articles are published as PDFs.",
   "variants": [
    "J-STAGE"
+  ]
+ },
+ "outer town": {
+  "def": "The part of a castle town lying beyond its inner core around the castle; at Sumoto a street lined by a lower mansion and its retainers' houses ran through it.",
+  "variants": [
+   "outer town",
+   "outer towns",
+   "soto-machi",
+   "sotomachi"
+  ]
+ },
+ "Court of the Imperial Stud": {
+  "def": "A Ming and earlier Chinese government office in charge of the state's horses: their breeding, pasturing and supply.",
+  "variants": [
+   "Court of the Imperial Stud",
+   "Imperial Stud"
+  ]
+ },
+ "Yamakawa Nihonshi Shojiten": {
+  "def": "A concise Japanese dictionary of Japanese history, published by Yamakawa; one of the dictionaries whose entries Kotobank prints.",
+  "variants": [
+   "Yamakawa Nihonshi Shojiten",
+   "Yamakawa entry",
+   "Nihonshi Shojiten"
+  ]
+ },
+ "Nihon Rekishi Chimei Taikei": {
+  "def": "A large Japanese dictionary of historical place names, with entries down to single towns, districts and streets; Kotobank prints parts of it.",
+  "variants": [
+   "Nihon Rekishi Chimei Taikei"
+  ]
+ },
+ "gate paddy": {
+  "def": "The paddy and dry fields at a medieval Japanese resident lord's gate. They belonged to the lord's moated seat, and the moat that defended the house also watered them.",
+  "variants": [
+   "gate paddy",
+   "gate paddies",
+   "gate field",
+   "gate-field",
+   "gate fields"
   ]
  }
 }

@@ -396,6 +396,7 @@ coursed	coursing
 courses	coursing
 coursing	coursing
 coursing line	coursing
+court of the imperial stud	Court of the Imperial Stud
 cpc	CPC
 crenel	crenel
 crenelated	crenellated
@@ -814,7 +815,11 @@ garans	garan
 gassho	gassho
 gassho-zukuri	gassho
 gasshozukuri	gassho
+gate field	gate paddy
+gate fields	gate paddy
 gate market	gate market
+gate paddies	gate paddy
+gate paddy	gate paddy
 gate range	nagayamon
 gate ranges	nagayamon
 gate rowhouse	nagayamon
@@ -822,6 +827,7 @@ gate rowhouses	nagayamon
 gate throat	gate throat
 gate town	monzen
 gate towns	monzen
+gate-field	gate paddy
 gate-land	gate-land
 gate-land lots	gate-land
 gate-mound	mitsuke
@@ -1129,6 +1135,7 @@ imperial magistrates	Imperial Magistrate
 imperial road	Imperial road
 imperial roads	Imperial road
 imperial spine	Imperial spine
+imperial stud	Court of the Imperial Stud
 important cultural landscape	Important Cultural Landscape
 important cultural landscapes	Important Cultural Landscape
 important cultural properties	Important Cultural Property
@@ -1767,8 +1774,10 @@ night watches	night watch
 night-soil	night soil
 nightsoil	night soil
 nihon kokugo daijiten	Nihon Kokugo Daijiten
+nihon rekishi chimei taikei	Nihon Rekishi Chimei Taikei
 nihonbashi	Nihonbashi
 nihonmatsu	Nihonmatsu
+nihonshi shojiten	Yamakawa Nihonshi Shojiten
 nimosaku	nimosaku
 ninjobon	ninjōbon
 ninjōbon	ninjōbon
@@ -1864,8 +1873,12 @@ otemon	ote-mon
 otesuji	ote-suji
 ou	Ou
 oute	ote-mon
+outer daimyo	tozama
+outer daimyos	tozama
 outer moat	outer moat
 outer moats	outer moat
+outer town	outer town
+outer towns	outer town
 outfall	outfall
 outwork	outwork
 outworks	outwork
@@ -2333,7 +2346,9 @@ sonsha	sonsha
 soroban	soroban
 soto	Sōtō
 soto zen	Sōtō
+soto-machi	outer town
 sotobori	sotobori
+sotomachi	outer town
 south town magistrate	town magistrate
 southern song	Song dynasty
 species richness	species richness
@@ -2833,6 +2848,8 @@ yakushi	Yakushi
 yam	yam
 yamada	yamada
 yamahannoki	yamahannoki
+yamakawa entry	Yamakawa Nihonshi Shojiten
+yamakawa nihonshi shojiten	Yamakawa Nihonshi Shojiten
 yamen	yamen
 yamen god	yamen-god
 yamen-god	yamen-god
