@@ -513,13 +513,12 @@ scatter-bases:  ## [diagnostics] where a map's ground-cover scatter stands: base
 	@if [ -z "$(MAP)" ]; then printf 'make scatter-bases: MAP=<pool map> is required - e.g. make scatter-bases MAP=pool/hamlets/sawada BOX=600,1600,1300,2000\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_scatter_bases.py" "$(MAP)" $(if $(BOX),--box "$(BOX)",)
 
-# GUARD_EDIT_OK: feature 266 adds a new operation, `make seat-label` - the one caption placer run on a hand-drawn sheet; nothing existing is weakened (its usage hint names no building tier)
-seat-label:     ## [maps] seat a hand-drawn Mode A sheet's captions by the ONE placer (feature 266): report, or WRITE=1 to rewrite   SHEET=<svg> [KIND=<data-kind>] [WRITE=1]
-##  SHEET=<svg>         the hand-drawn sheet
-##  KIND=<data-kind>    only the captions of this kind (e.g. "notice board")
-##  WRITE=1             move every caption to its standard seat and write, move or remove its leader
-	@if [ -z "$(SHEET)" ]; then printf 'make seat-label: SHEET=<svg> is required - e.g. make seat-label SHEET=pool/<tier>/<map>/<map>.svg KIND="notice board"\n' >&2; exit 2; fi
-	@python3 -m l7r.diagram.tools.seat_label "$(SHEET)" $(if $(KIND),--kind "$(KIND)",) $(if $(WRITE),--write,)
+# GUARD_EDIT_OK: feature 286 replaces `make seat-label` (a placement report and rewrite, retired at the GM's ruling - no check runs against the placer) with `make sheet-render`; nothing existing is weakened
+sheet-render:   ## [maps] render a hand-drawn Mode A sheet with its captions placed by the ONE placer (feature 286)   SHEET=<svg> OUT=<png>
+##  SHEET=<svg>         the hand-drawn sheet (its drawing and its captions' declarations)
+##  OUT=<png>           the picture to write
+	@if [ -z "$(SHEET)" ] || [ -z "$(OUT)" ]; then printf 'make sheet-render: SHEET=<svg> and OUT=<png> are required - e.g. make sheet-render SHEET=pool/<tier>/<map>/<map>.svg OUT=/tmp/<map>.png\n' >&2; exit 2; fi
+	@python3 -m l7r.diagram.labels.hand_sheet "$(SHEET)" "$(OUT)"
 
 
 page-lit:       ## [diagnostics] light ONE class on a map's page and report which classes' pixels change   MAP=<page.html> CLASS="<key>" [VECTOR=1] [OUT=lit.png]

@@ -1,6 +1,6 @@
 {
  "feature": "286-hand-sheet-labels-placed",
- "plan_sha256": "42ca9c0e5d8f331a791c2141edabbedbedc01ea55ccf5ecab3cb250cbed7e145",
+ "plan_sha256": "3ce92794bab62f89557bad1633c2554f95e08da36a13093354539a0db8ecdf1f",
  "reviewed": "2026-09-28",
  "declared": "spec-fidelity",
  "decisions": [
@@ -30,9 +30,9 @@
   },
   {
    "id": "D5",
-   "summary": "seat_label.placed() in each hand sheet's gen renders the PNG and the page from the placed text. make sheet-render renders any sheet placed.",
+   "summary": "hand_sheet.placed() (D10) in each hand sheet's gen renders the PNG and the page from the placed text. make sheet-render renders any sheet placed.",
    "class": "within",
-   "why": "FR-001: placing is a step of the pipeline and there is no separate tool to run. sheet-render is that same pipeline, offered to readers. Unchanged since round 1."
+   "why": "FR-001: placing is a step of the pipeline and there is no separate tool to run. sheet-render is that same pipeline, offered to readers. Unchanged since round 1. Round 3: the function is now named hand_sheet.placed (D10). Only the name changed."
   },
   {
    "id": "D6",
@@ -57,6 +57,42 @@
    "summary": "make quick; the one-time SC-002 measurement in measurements.json; the scripted maps' captions compared before and after D3; make done; the blind test at hand-back, with the 18 legacy exhibits named as untouched.",
    "class": "within",
    "why": "SC-002 as a one-time measurement and not a standing check; XIII verification of a change to shared code; the hand-back line the round-2 MODE 1 ruling required. Unchanged since round 1."
+  },
+  {
+   "id": "D10",
+   "summary": "The seat_label module moves to l7r/diagram/labels/hand_sheet.py, beside the placer, because every sheet's gen now imports placed. make sheet-render runs its main.",
+   "class": "within",
+   "why": "This decides where the code lives, and the requested behavior does not change. Moving it next to the one placer serves FR-001 (placing is a step of the pipeline, and no separate tool is run) and the GM's 'reuse the same literal code'."
+  },
+  {
+   "id": "D11",
+   "summary": "data-names lists data-id values, not SVG ids, because the sheets give three court rects one shared id (precinct) that the pack audit reads.",
+   "class": "within",
+   "why": "FR-002: a declaration carries its subject, 'one of several like parts included'. Naming by a shared id would name the wrong subject, as INNER and OUTER COURT did when they named all three rects. data-id is the mechanism that makes the declared subject the true one. Nothing positional is read."
+  },
+  {
+   "id": "D12",
+   "summary": "In the leader index, a dark stroke with a half-width of 2 px or more (WALL_HALF_PX) is an obstacle, unless it is part of what the caption names.",
+   "class": "within",
+   "why": "FR-003: the fallback must place at least as well as the hand seats. A leader led across a wall from the far side names something the reader cannot reach, so this rule makes the placer's result as good as a hand seat. The own-parts waiver is the standard's ordinary rule that a subject's own ink does not obstruct its own leader. It is not a carve-out, and nothing in it reads a caption's hand position (leader_blockers takes the drawn strokes and own_parts from the declaration). It lives in the hand-sheet adapter that reads walls from the SVG, and seats are still chosen by place(). FR-003's 'in the placer itself' concerns the fallback search that the generated maps share (D3), and that stays in placer.py."
+  },
+  {
+   "id": "D13",
+   "summary": "A caption of several texts may take the standard's own two- and three-line layouts (layouts()) for each one-line text, one line first. Line breaks the sheet declares are kept.",
+   "class": "within",
+   "why": "FR-003: the placer's standard wrap is extended to multi-text captions, so the granary's and the tally office's names fit inside their buildings. A one-text caption already had this. The line breaks a sheet writes are content (the caption's text and lines, FR-002), not position, so keeping them narrows nothing."
+  },
+  {
+   "id": "D14",
+   "summary": "Placement order: captions that must stand beside first, then those that fit inside, then glyphs in a named ground, each tier in document order. Then a repair pass re-places a caption still covering ink, with one near neighbor lifted, and keeps the pair only when the caption is freer and the neighbor no worse. A lift tries only the standard's seats.",
+   "class": "within",
+   "why": "Nothing in the order or in the repair reads a caption's hand position. The code (hand_sheet.seat/order/repair/fits_inside) uses the declared parts' boxes, each caption's font size and face, the placed blocks, and each caption's index in document order. Captions carry no x or y (D1), and Shape.center is not used in placement. Document order is where a text element sits in the drawing's paint order, which is already structural (classify uses it for ground painted after the caption). It is not where the caption's text was left, so FR-002 and SC-001 hold. The placer still decides every seat (FR-002). The repair adopts a change only when it lowers cost, and every caption's first placement ran the full extended search, so limiting a lift to extended=False cannot make the result worse than the greedy pass. FR-003 is not narrowed."
+  },
+  {
+   "id": "D15",
+   "summary": "Three declarations are written by hand where the migration's reading found no subject. Hayakawa's 'river landing' names landing-steps. The alcove notes on Hayakawa and Ubame continue the reception's caption (data-cont). Ubame's three border captions name fox-border-1 and east-wall-1..3. Each is recorded in its map's notes.",
+   "class": "within",
+   "why": "FR-002 makes the sheet the place that declares a caption's subject, so writing a subject by hand is the ordinary authoring act FR-002 describes. It is not an exception, and the choice reads no hand position at placement time. Each subject is true to the drawing. The sheet's comment says the landing is the flight of gangi steps. The alcove notes read '& ancestral alcove ...' and '& lineage alcove', which continue 'reception (zashiki)' as text, and the sheet draws no separate alcove shape for them to name. For the border, the east wall and the border line are drawn at the same x=1070, and the sheet's own note says 'The east wall IS the Fox/Scorpion line'. So the wall is part of what 'THE FOX BORDER' names, and the subject is faithful. The recorded motive ('so their seats stand off the wall') is about placement, but the subject stands on the sheet's own statement, not on that motive. Like D1's migration, reading where the alcove notes stood happened once, only to keep what they name, and placement does not depend on it."
   }
  ],
  "verdict": "CLEAR"

@@ -75,6 +75,7 @@ def test_crop_reads_every_kind_of_ink_and_skips_definitions_and_the_parchment() 
         '<text x="200" y="40" text-anchor="middle" font-size="10">title</text>'
         '<text x="390" y="60" text-anchor="end" font-size="10">right</text>'
         '<text x="30" y="60" font-size="10"> </text>'
+        '<g data-kind="hall"><text font-size="10">a caption declared, not yet placed</text></g>'  # feature 286: no ink until placed
     )
     text, plan = _plan(body)
     x1, y1, x2, y2 = s.ink_bounds(text, plan, 400 * 400)
@@ -255,28 +256,29 @@ def test_a_fence_ringing_the_precinct_is_reported_and_one_ringing_the_sanctuary_
     assert any("a fence rings the precinct" in f for f in s.no_precinct_enclosure(fenced, pa.parse_svg(fenced)))
 
 
-def test_a_group_label_matches_whole_words_only() -> None:
-    """`dwelling` is not `well`: the orphan check found by the second type (feature 254)."""
-    sheet = _svg(PRECINCT, '<text x="200" y="200" font-size="11">hall and dwelling</text>', _rect(300, 300, 22, 22, pa.WELL_FILL))
-    assert pa.orphan_group_labels(pa.parse_svg(sheet)) == []
-    sheet = _svg(PRECINCT, '<text x="60" y="60" font-size="11">the well</text>', _rect(300, 300, 22, 22, pa.WELL_FILL))
-    assert len(pa.orphan_group_labels(pa.parse_svg(sheet))) == 1
+# --- the tag pairing and the program checks (labels.py) ---
 
 
-# --- the label pairing and the program checks (labels.py) ---
+def _text(x: float, y: float, s: str, size: int = 11, kind: str = "") -> str:
+    tag = f' data-kind="{kind}"' if kind else ""
+    return f'<text x="{x}" y="{y}" text-anchor="middle" font-size="{size}"{tag}>{s}</text>'
 
 
-def _text(x: float, y: float, s: str, size: int = 11) -> str:
-    return f'<text x="{x}" y="{y}" text-anchor="middle" font-size="{size}">{s}</text>'
+def _kinded(kind: str, *bodies: str) -> str:
+    return f'<g data-kind="{kind}">' + "".join(bodies) + "</g>"
 
 
-def test_structure_for_prefers_the_smallest_containing_footprint_then_the_nearest_within_reach() -> None:
-    _, plan = _plan(_rect(40, 40, 200, 100, BLDG), _rect(60, 60, 30, 20, "#E8D2A8"), _text(75, 74, "porch"), _text(140, 130, "near"), _text(300, 300, "ground"))
-    by = {lb.text: lb for lb in plan.labels}
-    assert L.structure_for(by["porch"], plan.structures).w == 30.0  # the strip, not the block it lies in
-    assert L.structure_for(by["near"], plan.structures).w == 200.0  # 30 px under the block's edge
-    assert L.structure_for(by["ground"], plan.structures) is None  # far from every footprint
-    assert L.nearest_label(0, 0, []) is None and L.nearest_label(0, 0, [(3.0, 4.0, "a")]) == ("a", 5.0)
+def test_a_footprint_is_the_largest_structure_its_kind_tags_and_ground_has_none() -> None:
+    """Feature 286 (D7): the pairing reads the sheet's tags, never where a caption stands. A building's own parts carry
+    its tag and are smaller than it; a kind drawn only as ground has no footprint; an untagged rect names nothing."""
+    _, plan = _plan(
+        _kinded("hall", _rect(40, 40, 200, 100, BLDG), _rect(60, 60, 30, 20, "#E8D2A8")),  # the hall and its porch strip
+        _rect(260, 40, 60, 60, BLDG),  # untagged
+        _kinded("court", _rect(40, 200, 100, 100, "url(#court-earth)")),
+    )
+    hall = L.footprint(plan, "hall")
+    assert hall is not None and (hall.w, hall.h) == (200.0, 100.0), "the building, not its strip"
+    assert L.footprint(plan, "court") is None and L.footprint(plan, "shed") is None
 
 
 def test_program_and_band_checks_over_a_tiny_declaration() -> None:
@@ -297,15 +299,17 @@ def test_program_and_band_checks_over_a_tiny_declaration() -> None:
             }
         ]
     )[0]
-    _, plan = _plan(_rect(40, 40, 45, 45, BLDG), _text(62, 66, "hut"), _text(200, 300, "yard"), _text(62, 300, "loft"))
+    _, plan = _plan(_kinded("hut", _rect(40, 40, 45, 45, BLDG), _text(62, 66, "hut")), _text(200, 300, "yard"), _text(62, 300, "loft"))
     assert L.check_program(plan, types, None) == []  # loft is labeled (on open ground), shed optional
     assert L.check_program(plan, types, "one roof") == []
     assert "no `hut`" in L.check_program(pa.parse_svg(_svg(PRECINCT)), types, None)[0]
-    assert L.check_bands(plan, types, None) == []  # 15 x 15 ft in band; yard presence-only; loft on ground skipped
-    _, big = _plan(_rect(40, 40, 90, 45, BLDG), _text(85, 66, "hut"), _rect(200, 200, 60, 60, BLDG), _text(230, 230, "shed"))
+    assert L.check_bands(plan, types, None) == []  # 15 x 15 ft in band; yard presence-only; loft untagged, nothing to measure
+    _, big = _plan(_kinded("hut", _rect(40, 40, 90, 45, BLDG)), _text(300, 300, "hut", kind="hut"), _kinded("shed", _rect(200, 200, 60, 60, BLDG), _text(230, 230, "shed")))
     findings = L.check_bands(big, types, None)
-    assert any("`hut`" in f and "w 10-20 by h 10-20 ft" in f for f in findings)
+    assert any("`hut` (hut)" in f and "w 10-20 by h 10-20 ft" in f for f in findings), "measured by its tag, its caption 70 ft off"
     assert any("`shed`" in f and "area 50-200 sq ft" in f for f in findings)  # 20 x 20 ft = 400
+    _, untagged = _plan(_rect(40, 40, 90, 45, BLDG), _text(85, 66, "hut"))
+    assert L.check_bands(untagged, types, None) == [], "a caption standing on a footprint pairs with nothing: only a tag does"
 
 
 def test_fence_check_ignores_a_court_divider_stroke() -> None:
@@ -328,13 +332,13 @@ def test_a_tree_on_open_ground_is_fine_and_one_on_anything_else_is_named() -> No
         _CANOPY.format(x=40, y=40, r=15),  # on the gravel
         _CANOPY.format(x=95, y=120, r=15),  # 10 px into the hall
         _CANOPY.format(x=200, y=305, r=15),  # across the fence line
-        _CANOPY.format(x=305, y=57, r=15),  # under the label
+        _CANOPY.format(x=305, y=57, r=15),  # over a caption: the placer's to avoid, not a finding
     )
     findings = s.trees_overlap(plan)
     assert not [f for f in findings if "svg(40,40)" in f]
     assert any("svg(95,120)" in f and "into a building" in f for f in findings)
     assert any("svg(200,305)" in f and "into the fence" in f for f in findings)
-    assert any("svg(305,57)" in f and "the label 'a label'" in f for f in findings)
+    assert not [f for f in findings if "svg(305,57)" in f], "a caption under a canopy is the placer's to avoid, not a check's (feature 286)"
 
 
 def test_crowns_may_overlap_but_a_tree_is_not_drawn_on_another() -> None:
@@ -376,7 +380,7 @@ def _kind_types() -> _bt.BuildingType:
 
 def test_a_kind_item_is_found_by_the_sheet_s_tag_not_by_its_label_text() -> None:
     """Feature 262 FR-003a: a program item that names a kind is on the sheet when an element carries that kind, and
-    its band is measured on the structure a label of that kind stands on - whatever the label says."""
+    its band is measured on the largest structure tagged with that kind (feature 286) - whatever the label says."""
     types = _kind_types()
     _, plan = _plan('<g data-kind="granary">' + _rect(40, 40, 45, 45, BLDG) + _text(62, 66, "rice store") + "</g>")
     assert L.check_program(plan, types, None) == [] and L.check_bands(plan, types, None) == []
@@ -386,4 +390,4 @@ def test_a_kind_item_is_found_by_the_sheet_s_tag_not_by_its_label_text() -> None
     from l7r.diagram.interactive.compound_kinds import COMPOUND_CLASSES
 
     found = L.check_bands(big, types, None)
-    assert len(found) == 1 and "`store` ('rice store') is 30 x 15 ft" in found[0] and COMPOUND_CLASSES["granary"].label_note in found[0]
+    assert len(found) == 1 and "`store` (granary) is 30 x 15 ft" in found[0] and COMPOUND_CLASSES["granary"].label_note in found[0]

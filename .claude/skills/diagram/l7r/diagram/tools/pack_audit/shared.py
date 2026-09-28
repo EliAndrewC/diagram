@@ -170,7 +170,10 @@ def ink_bounds(text: str, plan: ParsedPlan, canvas_area: float = 0.0) -> tuple[f
             ys += [cy - ry, cy + ry]
         elif kind == "text":
             content = " ".join("".join(el.itertext()).split())
-            if content:
+            # A caption DECLARED without `x` stands nowhere until the render pipeline places it (feature 286), and the
+            # placer seats it inside the view (`labels.placer.place`'s frame), so it holds no edge the crop is judged by:
+            # the crop is the drawing's. Read at x=0 it would be ink at the origin, hiding a slack left or top margin.
+            if content and el.get("x") is not None:
                 fs = _num(el.get("font-size")) or 10.0
                 w = 0.55 * fs * len(content)
                 x, y = _num(el.get("x")) + dx, _num(el.get("y")) + dy
@@ -389,9 +392,10 @@ def no_precinct_enclosure(text: str, plan: ParsedPlan) -> list[str]:
 
 # A TREE STANDS ON OPEN GROUND AND ON NOTHING ELSE (feature 257; the GM, 2026-09-20: "an automated check
 # to prevent trees from overlapping with other things"). The ground - the precinct's gravel, a court, a
-# garden bed - is what a canopy grows from; a building, a fence, a well or a label under it reads as a
-# mistake, which is what the GM saw on the Hoshigaoka sheet. Crowns may overlap each other (feature 270, the GM
-# 2026-09-27); a tree drawn on top of another may not. The reach tolerance is the built-footprint check's.
+# garden bed - is what a canopy grows from; a building, a fence or a well under it reads as a mistake, which is
+# what the GM saw on the Hoshigaoka sheet. Crowns may overlap each other (feature 270, the GM 2026-09-27); a tree
+# drawn on top of another may not. The reach tolerance is the built-footprint check's. A caption is not among the
+# things checked (feature 286): the placer seats it clear of the canopies, and its unit tests hold that.
 def _canopy_depth(cx: float, cy: float, r: float, rect: Rect) -> float:
     """How far a canopy of radius `r` at (cx, cy) reaches into `rect` (px); zero or less = clear of it."""
     dx = max(rect.x - cx, 0.0, cx - rect.x2)
@@ -400,14 +404,13 @@ def _canopy_depth(cx: float, cy: float, r: float, rect: Rect) -> float:
 
 
 def _things_under_a_tree(plan: ParsedPlan) -> list[tuple[str, Rect]]:
-    """Everything a canopy may not cover, named: built footprints, furniture, walls, the fence, glyphs, tubs, labels.
+    """Everything a canopy may not cover, named: built footprints, furniture, walls, the fence, glyphs, tubs.
     Open ground (the precinct, a court, a garden bed - any pattern-filled or open-feature rect) is left out."""
     ground = set(plan.interior) | set(plan.open_features)
     out: list[tuple[str, Rect]] = [("a building", r) for r in plan.structures]
     out += [("furniture", r) for r in plan.furniture if r not in ground and not r.fill.startswith("url(") and r not in plan.structures]
     out += [("a wall", r) for r in plan.wall_bands] + [("a divider", r) for r in plan.dividers] + [("the fence", r) for r in plan.fence_segs]
     out += [("a glyph", r) for r in plan.glyphs] + [("a fire-water tub", r) for r in plan.tubs]
-    out += [(f"the label {lb.text!r}", Rect(lb.x, lb.y, lb.w, lb.h)) for lb in plan.labels]
     return out
 
 

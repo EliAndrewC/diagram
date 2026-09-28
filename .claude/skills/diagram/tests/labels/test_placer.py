@@ -270,7 +270,7 @@ def test_the_fallback_finds_a_free_seat_the_standard_misses() -> None:
 
 def test_the_least_cost_seat_is_nudged_into_a_band_between_grid_points() -> None:
     """Feature 286: a free band exactly as tall as the caption lies between any grid's points; the nudge finds it."""
-    from l7r.diagram.labels.placer import nudge, _Cand
+    from l7r.diagram.labels.placer import _Cand, nudge
 
     sub = Subject("area", tuple(rect(0.0, 0.0, 100.0, 100.0)))
     index = ObstacleIndex([Obstacle(tuple(rect(0.0, -20.0, 120.0, 10.0)), WEIGHT_OBSTACLE)])  # y -30 to -10, past the area's sides
@@ -278,3 +278,21 @@ def test_the_least_cost_seat_is_nudged_into_a_band_between_grid_points() -> None
     block = rect(0.0, -8.0, 4.0, 3.0)
     cost, moved, _ = nudge(1000.0, c, block, sub, index, 0.5, list(sub.poly), "x", None, None)  # a real clearance: an overlap reads a gap of 0
     assert cost == 0.0 and moved.center[1] > -8.0
+
+
+def test_the_index_skips_by_boxes_and_measures_level_rectangles_by_them() -> None:
+    """Feature 286: the outline test was nine tenths of placing a hand sheet's captions. An obstacle whose box is clear
+    of the block's is clear; two level rectangles are their boxes. Both agree with the outline test they stand for."""
+    from l7r.diagram.labels.geom import poly_gap
+    from l7r.diagram.labels.obstacles import level_rect
+
+    wall = Obstacle(tuple(rect(100.0, 0.0, 5.0, 50.0)), 1000.0)
+    turned = Obstacle(tuple(rect(0.0, 100.0, 20.0, 5.0, 30.0)), 1000.0)
+    index = ObstacleIndex([wall, turned])
+    for x in (80.0, 90.0, 92.5, 93.0, 96.0, 140.0):
+        block = rect(x, 0.0, 4.0, 3.0)
+        want = sum(o.weight for o in (wall, turned) if poly_gap(block, list(o.poly)) < 3.0 - 1e-6)
+        assert index.cost(block, 3.0) == want, x
+    near_turned = rect(0.0, 90.0, 4.0, 3.0)
+    assert index.cost(near_turned, 3.0) == (1000.0 if poly_gap(near_turned, list(turned.poly)) < 3.0 else 0.0)
+    assert level_rect(rect(0.0, 0.0, 4.0, 3.0)) and not level_rect(turned.poly) and not level_rect(((0.0, 0.0), (1.0, 1.0), (2.0, 0.0)))

@@ -229,15 +229,17 @@ def title_of(path: str) -> str:
     return os.path.basename(path).rsplit(".", 1)[0].replace("-", " ").title()
 
 
-def write_sheet_page(svg_path: str, registry: dict[str, FeatureClass], with_raster: bool | None = None) -> Census:
+def write_sheet_page(svg_path: str, registry: dict[str, FeatureClass], with_raster: bool | None = None, svg: str | None = None) -> Census:
     """`<map>.html` beside `<map>.svg`, from the sheet's own tags - and the sheet's census, for the caller to
     report. `with_raster` defaults to the render condition every other page uses (feature 208): no picture when
     `DIAGRAM_SKIP_RENDER=1`. The map's `<map>.notes.md` "Map notes" block is read by `write_html` from the
-    output path, as for a hamlet."""
+    output path, as for a hamlet. `svg` is the sheet's text when it is not the file's - a hand sheet's with its captions
+    placed (feature 286, `labels.hand_sheet.placed`); the page is still written beside, and named for, `svg_path`."""
     if with_raster is None:
         with_raster = os.environ.get("DIAGRAM_SKIP_RENDER") != "1"
-    with open(svg_path, encoding="utf-8") as fh:
-        svg = fh.read()
+    if svg is None:
+        with open(svg_path, encoding="utf-8") as fh:
+            svg = fh.read()
     ps = pieces(svg)
     strings, tags = [p[0] for p in ps], [p[1] for p in ps]
     # THE SHEET MARKS ITSELF (GM 2026-09-27: highlighted text became unreadable). On a Mode A sheet nearly every

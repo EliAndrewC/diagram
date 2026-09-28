@@ -1,4 +1,4 @@
-"""A placed caption written as SVG (feature 266) - one writer for the compound composer and `make seat-label`.
+"""A placed caption written as SVG (feature 266) - one writer for the compound composer and the hand-drawn sheets (`hand_sheet.py`).
 
 The settlement engine draws through its own `label()`, which carries its halo, its record and its interactive class;
 the Mode A paths write plain SVG, and they write it here so a caption and its leader come out the same way in both.
@@ -34,7 +34,7 @@ def caption_svg(p: Placement, size: float, style: str, fill: str, kind: str = ""
 
 def leader_svg(p: Placement, size: float, stroke: str, kind: str = "", mark: bool = False) -> str:
     """The leader line for a placement that has one, else the empty string. `mark` tags it `data-leader="1"`, which is
-    how `make seat-label` finds its own leaders on a hand-drawn sheet."""
+    how a placed hand-drawn sheet's leaders are told from its drawn lines."""
     if p.leader is None:
         return ""
     (x1, y1), (x2, y2) = p.leader

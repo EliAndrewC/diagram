@@ -41,7 +41,7 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
   scripted maps (a caption that moves there owes the settlement-review the pair guard asks for).
 - **D4 - a caption's lines at their own sizes** (FR-003). A caption with smaller sub-lines (a building's name over its
   gloss) is measured and written line by line at each line's size, not at the head's.
-- **D5 - placed in the render pipeline** (FR-001, FR-005). `seat_label.placed(svg_text)` returns the sheet with every
+- **D5 - placed in the render pipeline** (FR-001, FR-005). `hand_sheet.placed(svg_text)` (D10) returns the sheet with every
   caption placed; each hand sheet's gen renders its PNG and its page from that text (a temporary file), so the tracked
   SVG is the drawing and the declarations and the picture is always placed. `make sheet-render SHEET=<svg> OUT=<png>`
   renders any sheet placed, for a session or a review agent that wants to look at one.
@@ -60,6 +60,58 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
 - **D9 - verification**: `make quick` while building; the one-time SC-002 measurement (each caption's cost at its
   hand seat before, and at its placed seat after) in `measurements.json`; the scripted maps' captions compared before
   and after D3; `make done`; the GM's blind test at hand-back, with the line that the 18 legacy exhibits are untouched.
+
+## Decisions made in implementation (2026-09-28)
+
+Each found by rendering the four sheets and looking, then measuring (`measurements.json`).
+
+- **D10 - the module lives beside the placer.** `seat_label` became `l7r/diagram/labels/hand_sheet.py`: `tools/` holds
+  what no generator imports (its `CLAUDE.md`), and every sheet's gen now imports `placed`. D5's `seat_label.placed` is
+  `hand_sheet.placed`; `make sheet-render` runs its `main`.
+- **D11 - a declaration names by `data-id`, not the SVG `id`.** The magistracy sheets give three court rects one `id`,
+  `precinct`, which the pack audit reads; named by it, INNER COURT and OUTER COURT named all three and were set on the
+  bank street outside the wall. `data-names` lists `data-id`s, which the migration writes.
+- **D12 - a wall is a leader's obstacle.** With no hand seat to fall back on, the bath's and the granary's names were
+  led across the court divider and the compound wall from ground on the far side. A dark stroke 4 px or wider
+  (`WALL_HALF_PX`) is in the leader index; a wall the caption names is not (Ubame's east wall IS the Fox border).
+- **D13 - a caption of several texts wraps by the standard's rule.** Each one-line text may take the placer's own
+  two- or three-line layouts (`hand_sheet.wraps`), one line first: the granary's `staging store - tax grain` and the
+  tally office's `barge manifests & seals` fit inside their buildings only wrapped. A text the sheet breaks into lines
+  keeps its breaks.
+- **D14 - the order, then a repair.** Captions are placed beside-only first, then those that fit inside, then glyphs
+  in a named ground, each in document order (Imhof: points before areas). In document order alone a building's name
+  took Ochiba's garrison latrine's one free seat; smallest-first stranded Hayakawa's RESIDENCE; a glyph named before its
+  ground took the ground's inside and the ground's name went into an empty building. Then `repair`: a caption left
+  covering ink is re-placed with one near neighbor lifted (`REPAIR` ems plus its length), kept where it is freer and the
+  neighbor no worse. The lift tries the standard's seats only (`place(extended=False)`): a full search per lift ran past
+  ten minutes on Hayakawa.
+- **D15 - the declarations the old reading found nothing for** are written by hand, each recorded in its map's notes:
+  Hayakawa's `river landing` names the landing's steps; the alcove notes on Hayakawa and Ubame continue the reception's
+  caption, under which they stood; Ubame's three border names name the east wall with the border line.
+
+- **D16 - what has an inside.** One closed outline holding the caption's other parts is its area (a garden and the
+  lantern in it: Ochiba's inner garden, read as a scatter, was named from outside with a leader across the kitchen). A
+  scatter of like glyphs has none, and is named beside the group, else beside any one glyph, largest first; the ORDER's
+  "fits inside" asks only of a subject that has an inside (the tubs' box spans the compound).
+- **D17 - D12 widened: a leader crosses no building** it does not name, nor one holding what it names (a room's
+  range), as it crosses no wall.
+- **D18 - D14 amended: a repair is kept where the pair together cover less**, not only where the neighbor is no worse.
+  A chain of three lifts was built for Ochiba's tubs and freed nothing more; it was taken out and says so at the point
+  of change.
+- **D19 - the index skips by boxes** (`labels/obstacles.py`): an obstacle whose box is clear of the block's is clear,
+  and two level rectangles are measured by their boxes. Exact - the boxes' gap bounds the outlines' from below, and is
+  theirs for level rectangles (a unit test holds both against the outline test) - so no generated caption moves; the
+  outline test was nine tenths of placing a hand sheet (Ochiba 114 s profiled, 9.5 s after).
+- **D20 - SC-002 measured on the drawing** (`sc002_drawing.py`, in `measurements.json`): the hand seat (block and its
+  hand leader) and the placed seat priced against the drawing alone, each as the kind of seat it is. The first reading
+  scored the hand seat the old tool's way - block alone, among captions since moved - and so flagged seats that were
+  equal (the Ebisu note: `ebisu_probe.py`). Ochiba's and Hayakawa's `fire-water tubs` are declared against every tub, as
+  D15's hand declarations are: the migration had named the one nearest the caption.
+- **D21 - D7's readers, as built.** A program item is measured on the largest structure tagged with its kind; the
+  notice-board fallback to a caption is gone; `_size_table.py` names each rect by its `data-kind`. The crop check
+  (`ink_bounds`) skips a declared caption - it has no position - rather than render the placed sheet (10-62 s a sheet
+  in `make quick`, over its budget); the placer keeps every caption inside the frame. What it costs: a margin that only
+  a caption fills would read as slack. None of the four sheets has one. Chosen by the session, 2026-09-28.
 
 ## Constitution Check
 

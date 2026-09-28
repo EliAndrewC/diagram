@@ -1,17 +1,15 @@
-"""`seat_label` on the hand sheets it had to seat for real (feature 267): a group naming several things, the ground
-drawn after a caption, a face's width, and the hand's own seat where the standard finds none free.
+"""The hand-sheet placer on the cases the magistracy sheets found (features 267, 283, 286): the ground drawn after a
+caption, a face's width, ink inside what a caption names, a wall a leader may not cross, and the order captions are
+placed in.
 
-Kept apart from `test_seat_label.py`, which tests the tool's surface; these are the cases the three magistracy sheets
-found."""
+Kept apart from `test_hand_sheet.py`, which tests the module's surface."""
 
 from __future__ import annotations
-
-from dataclasses import replace
 
 import pytest
 
 from l7r.diagram.labels import Subject
-from l7r.diagram.tools import seat_label as sl
+from l7r.diagram.labels import hand_sheet as sl
 
 HEAD = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">\n'
 BACK = '  <rect x="0" y="0" width="400" height="300" fill="#EFE3C2" data-kind="-"/>\n'
@@ -33,25 +31,13 @@ PRIVIES = (
 )
 
 
-def test_a_group_of_two_privies_gives_each_name_its_own() -> None:
-    """Ubame's residence privies: one group, a rect at each end of the house, a name by each. Each name's subject is the
-    privy it stands by, not the span between them - both names were seated beside that span's middle."""
-    shapes, _view = sl.read_sheet(_sheet(PRIVIES))
-    east = sl.subject_of(_text(shapes, "latrine", 0)[1], shapes)
-    west = sl.subject_of(_text(shapes, "latrine", 1)[1], shapes)
-    assert east is not None and west is not None
-    assert sl.bbox(list(east.poly)) == (300.0, 100.0, 318.0, 114.0)
-    assert sl.bbox(list(west.poly)) == (40.0, 100.0, 58.0, 114.0)
-
-
-def test_a_cluster_is_everything_joined_within_reach() -> None:
+def test_a_box_within_another() -> None:
     shapes, _view = sl.read_sheet(
         _sheet(
             '  <g data-kind="genkan"><rect x="10" y="10" width="10" height="10"/><rect x="22" y="10" width="10" height="10"/><rect x="34" y="10" width="10" height="10"/><rect x="200" y="10" width="10" height="10"/></g>\n'
         )
     )
     rects = [s for s in shapes if s.kind == "genkan"]
-    assert len(sl.cluster_of(rects[0], rects, 3.0)) == 3, "joined link by link, the far one left out"
     assert sl._box_within(rects[0].poly, [(0.0, 0.0), (50.0, 0.0), (50.0, 50.0), (0.0, 50.0)])
     assert not sl._box_within(rects[3].poly, [(0.0, 0.0), (50.0, 0.0), (50.0, 50.0), (0.0, 50.0)])
 
@@ -74,81 +60,10 @@ def test_ground_drawn_after_a_caption_covers_it() -> None:
     assert len(sl.classify(shapes, view, {i}, after=i, group=cap.group).obstacles) == 1, "painted after it, it covers it"
 
 
-def test_the_hands_seat_stands_where_the_standard_finds_nothing_free() -> None:
-    """Where every candidate costs something, the caption's own seat is a candidate too, and it is kept when it costs
-    no more (HAND) - but a free standard seat always wins, and a hand seat costing more loses."""
-    src = _sheet('  <g data-kind="well"><rect x="100" y="100" width="10" height="10"/><text x="130" y="108" font-size="9">well</text></g>\n')
-    shapes, view = sl.read_sheet(src)
-    i, cap = _text(shapes, "well")
-    sub = sl.subject_of(cap, shapes)
-    assert sub is not None
-    index = sl.classify(shapes, view, {i})
-    _findings, placed = sl.seat(src)
-    (_caps, p) = placed[0]
-    assert sl.hand_seat_if_no_better(p, [cap], sub, index) == p if p.cost == 0 else True, "a free seat is taken as it is"
-    crowded = replace(p, cost=5000.0)
-    kept = sl.hand_seat_if_no_better(crowded, [cap], sub, index)
-    assert kept.position == sl.HAND and kept.x == cap.center[0] and kept.leader is None
-    cheap = replace(p, cost=0.5)
-    blocked = sl.classify(shapes, view, {i})
-    blocked.add(sl.Obstacle(tuple(cap.poly), sl.WEIGHT_TEXT))
-    assert sl.hand_seat_if_no_better(cheap, [cap], sub, blocked) == cheap, "a hand seat on other ink costs more"
-
-
-def test_an_area_hand_seat_spilling_out_of_its_area_pays_for_it() -> None:
-    src = _sheet('  <g data-kind="cell"><rect x="100" y="100" width="20" height="12"/><text x="110" y="109" font-size="9">a cell far too long</text></g>\n')
-    shapes, view = sl.read_sheet(src)
-    i, cap = _text(shapes, "a cell far too long")
-    area = Subject("area", ((100.0, 100.0), (120.0, 100.0), (120.0, 112.0), (100.0, 112.0)))
-    _findings, placed = sl.seat(src)
-    p = replace(placed[0][1], cost=sl.WEIGHT_OBSTACLE / 2)
-    assert sl.hand_seat_if_no_better(p, [cap], area, sl.classify(shapes, view, {i})) == p
-
-
-def test_a_least_cost_seat_is_written_once_and_then_stands() -> None:
-    """A name wider than its room, in a room walled on every side: nothing is free, so the standard's least-cost seat
-    is written once - and from then on it is the standard's choice again (a tie goes to the standard, 266 FR-007), is
-    reported nowhere, and the sheet is left as it is. Without the fixed point the fallback's seat moved on every pass."""
-    src = _sheet(
-        '  <g data-kind="store"><rect x="100" y="100" width="30" height="14" fill="#C8A878"/><text x="115" y="110" text-anchor="middle" font-size="9">store of the long name</text></g>\n',
-        '  <g stroke="#000" stroke-width="30" fill="none" data-kind="compound wall"><line x1="60" y1="80" x2="170" y2="80"/>'
-        '<line x1="60" y1="134" x2="170" y2="134"/><line x1="60" y1="80" x2="60" y2="134"/><line x1="170" y1="80" x2="170" y2="134"/></g>\n',
-    )
-    _findings, placed = sl.seat(src)
-    assert placed[0][1].cost > 0, "nothing free"
-    once = sl._rewrite_once(src)
-    findings, placed = sl.seat(once)
-    assert [p.position for _c, p in placed] != [sl.HAND] and findings == []
-    assert sl.rewrite(once) == once
-
-
-def test_a_hand_seat_strictly_cheaper_is_kept_and_left_alone() -> None:
-    """A well walled in on every side has no free seat beside it; its name, set by hand on open ground a little way off,
-    covers nothing - strictly less than the standard's least-cost seat - so it stands, reported nowhere and unwritten."""
-    src = _sheet(
-        '  <g data-kind="well"><rect x="100" y="100" width="10" height="10"/><text x="300" y="250" font-size="9">well</text></g>\n',
-        '  <g stroke="#000" stroke-width="60" fill="none" data-kind="compound wall"><line x1="40" y1="60" x2="170" y2="60"/>'
-        '<line x1="40" y1="150" x2="170" y2="150"/><line x1="60" y1="40" x2="60" y2="170"/><line x1="150" y1="40" x2="150" y2="170"/></g>\n',
-    )
-    findings, placed = sl.seat(src)
-    assert [p.position for _c, p in placed] == [sl.HAND] and findings == []
-    assert sl.rewrite(src) == src
-
-
-def test_each_caption_avoids_the_ones_seated_before_it() -> None:
-    """The two privy names, seated in turn: the second is placed against the first's block too."""
-    _findings, placed = sl.seat(_sheet(PRIVIES))
-    (_a, first), (_b, second) = placed
-    fx0, fy0, fx1, fy1 = sl.bbox(list(first.block))
-    sx0, sy0, sx1, sy1 = sl.bbox(list(second.block))
-    assert fx1 <= sx0 or sx1 <= fx0 or fy1 <= sy0 or sy1 <= fy0
-
-
 def _weights(src: str, text: str, area: bool = False) -> dict[tuple[int, int, int, int], tuple[float, bool]]:
     shapes, view = sl.read_sheet(src)
     i, cap = _text(shapes, text)
-    sub = sl.subject_of(cap, shapes)
-    assert sub is not None
+    sub = sl.subjects(sl.declared_parts(cap, shapes, alone=True))[-1]
     index = sl.classify(shapes, view, {i}, after=i, group=cap.group, kind=cap.kind, subject=list(sub.poly), area=area)
     return {tuple(round(v) for v in sl.bbox(list(o.poly))): (o.weight, o.inner) for o in index.obstacles}
 
@@ -163,9 +78,9 @@ def test_ink_inside_what_a_caption_names_is_ink_it_avoids() -> None:
         '<circle cx="110" cy="110" r="3" fill="#2D2A24"/>'
         '<text x="130" y="135" font-size="9">store</text>'
         '<rect x="190" y="140" width="20" height="10" fill="#E8D2A8" data-kind="straw mats"/></g>\n',
-        '  <rect x="200" y="200" width="150" height="80" data-kind="inner court" fill="#D9C28E"/>\n'
+        '  <rect x="200" y="200" width="150" height="80" data-kind="inner court" data-id="court" fill="#D9C28E"/>\n'
         '  <rect x="210" y="210" width="40" height="30" data-kind="garden" fill="#BFD0A0" stroke="#7A8C5C" stroke-width="1"/>\n'
-        '  <text x="300" y="260" font-size="9" data-kind="inner court">court</text>\n',
+        '  <text x="300" y="260" font-size="9" data-kind="inner court" data-names="court">court</text>\n',
     )
     w = _weights(src, "store")
     assert w[(160, 100, 160, 160)] == (sl.WEIGHT_OBSTACLE, True), "the store's own partition weighs in full (round 4)"
@@ -173,10 +88,13 @@ def test_ink_inside_what_a_caption_names_is_ink_it_avoids() -> None:
     assert w[(190, 140, 210, 150)] == (sl.WEIGHT_TEXT, True), "a mat painted after the name hides it"
     court = _weights(src, "court")
     assert court[(210, 210, 250, 240)] == (sl.WEIGHT_INNER, True), "a garden in the court is ground, but not the court's"
-    later = src.replace('  <text x="300" y="260" font-size="9" data-kind="inner court">court</text>\n', "").replace(
+    later = src.replace('  <text x="300" y="260" font-size="9" data-kind="inner court" data-names="court">court</text>\n', "").replace(
         "</svg>", '  <rect x="320" y="250" width="20" height="20" data-kind="vegetable garden" fill="#BFD0A0"/>\n</svg>'
     )
-    later = later.replace('data-kind="inner court" fill="#D9C28E"/>\n', 'data-kind="inner court" fill="#D9C28E"/>\n  <text x="300" y="260" font-size="9" data-kind="inner court">court</text>\n')
+    later = later.replace(
+        'data-kind="inner court" data-id="court" fill="#D9C28E"/>\n',
+        'data-kind="inner court" data-id="court" fill="#D9C28E"/>\n  <text x="300" y="260" font-size="9" data-kind="inner court" data-names="court">court</text>\n',
+    )
     assert _weights(later, "court")[(320, 250, 340, 270)] == (sl.WEIGHT_TEXT, True), "a garden painted after the name hides it (feature 283)"
 
 
@@ -204,9 +122,9 @@ def test_a_grounds_drawn_border_is_ink_but_not_the_one_it_names() -> None:
 def test_a_light_name_set_down_off_its_dark_roof_takes_the_dark_ink() -> None:
     """Ochiba's shrine names were cream for the dark hall; seated beside it, on court earth, they barely showed."""
     off = _sheet('  <g data-kind="shrine altar"><rect x="100" y="100" width="20" height="12" fill="#5C1A0A"/><text x="300" y="250" font-size="8" fill="#FFFAE6">altar</text></g>\n')
-    assert 'fill="#3A2E1C"' in sl.rewrite(off) and "#FFFAE6" not in sl.rewrite(off)
+    assert 'fill="#3A2E1C"' in sl.placed(off) and "#FFFAE6" not in sl.placed(off)
     on = _sheet('  <g data-kind="hall"><rect x="100" y="100" width="200" height="80" fill="#5C1A0A"/><text x="150" y="130" font-size="8" fill="#FFFAE6">hall</text></g>\n')
-    assert "#FFFAE6" in sl.rewrite(on), "still on its dark roof, it keeps its light ink"
+    assert "#FFFAE6" in sl.placed(on), "still on its dark roof, it keeps its light ink"
     assert sl._luma("#fff") == pytest.approx(1.0) and sl._luma("url(#p)") == 0.5
 
 
@@ -225,19 +143,19 @@ def test_a_sub_line_is_measured_at_its_own_size() -> None:
     """A guest house's 8 px italic note under its 12 px bold name ran 156 px wide measured at the name's face, and the
     name was seated across the house's wall; each line stands in for its own width."""
     src = _sheet(
-        '  <g data-kind="guest house"><rect x="100" y="100" width="90" height="100" fill="#E0B878"/><text x="145" y="140" font-size="12" font-weight="bold">guest house</text><text x="145" y="152" font-size="8" font-style="italic">(in the annex added by)</text></g>\n'
+        '  <g data-kind="guest house"><rect x="100" y="100" width="90" height="100" fill="#E0B878"/><text x="145" y="140" font-size="12" font-weight="bold">guest house</text><text x="145" y="152" font-size="8" font-style="italic" data-cont="1">(in the annex added by)</text></g>\n'
     )
     shapes, _view = sl.read_sheet(src)
     caps = [s for s in shapes if s.tag == "text"]
     head_w = sl.char_w_of(caps[0].element, caps[0].text, caps[0].size)
-    lines = sl._as_head(caps, head_w)
+    lines = sl._as_head(caps, head_w, [c.lines for c in caps])
     assert lines[0] == "guest house" and len(lines[1]) < len("(in the annex added by)") * 8 / 12 + 1
-    (_caps, p) = sl.seat(src)[1][0]
+    (_caps, p, per) = sl.seat(src)[0]
     x0, _y0, x1, _y1 = sl.bbox(list(p.block))
-    name, _h = sl.block_half(["guest house"], 12, head_w)
-    note, _h = sl.block_half([caps[1].text], 8, sl.char_w_of(caps[1].element, caps[1].text, 8))
-    assert x1 - x0 == pytest.approx(2 * max(name, note), rel=0.1), "as wide as its widest line at that line's own size"
-    assert x1 - x0 < 2 * sl.block_half([caps[1].text], 12, head_w)[0], "not the note measured at the name's face"
+    name = max(sl.block_half([ln], 12, head_w)[0] for ln in per[0])
+    note = max(sl.block_half([ln], 8, sl.char_w_of(caps[1].element, ln, 8))[0] for ln in per[1])
+    assert x1 - x0 == pytest.approx(2 * max(name, note), rel=0.1), "as wide as its widest line, as placed, at that line's own size"
+    assert x1 - x0 < 2 * max(sl.block_half([ln], 12, head_w)[0] for ln in per[1]), "not the note measured at the name's face"
 
 
 def test_ink_marked_as_texture_weighs_light() -> None:
@@ -257,11 +175,11 @@ def test_ink_marked_as_texture_weighs_light() -> None:
 def test_a_caption_keeps_off_a_leader_placed_before_it() -> None:
     """A caption seated with a leader lends the next ones its leader as well as its block: Ubame's INNER COURT lay
     across the leader tying RESIDENCE to the house (round 6)."""
-    walls = "".join(f'  <rect x="{x}" y="{y}" width="30" height="30" data-kind="house"/>\n' for x in range(100, 300, 30) for y in range(80, 220, 30) if not (180 <= x <= 210 and 130 <= y <= 150))
+    walls = "".join(f'  <rect x="{x}" y="{y}" width="30" height="30" data-kind="house"/>\n' for x in range(100, 300, 30) for y in range(80, 220, 30) if not (180 <= x <= 210 and y <= 150))
     board = '  <g data-kind="notice board">\n    <rect x="190" y="140" width="20" height="8"/>\n    <text x="200" y="200" text-anchor="middle" font-size="9">notice board</text>\n  </g>\n'
     later = '  <g data-kind="well"><rect x="330" y="140" width="8" height="8"/><text x="334" y="160" font-size="9">well</text></g>\n'
-    _findings, placed = sl.seat(_sheet(walls, board, later))
-    (_b, first), (_w, second) = placed
+    placed = sl.seat(_sheet(walls, board, later))
+    (_b, first, _pb), (_w, second, _pw) = placed
     assert first.leader is not None, "hemmed in, the board's name stands out with a leader"
     band = sl._band(first.leader[0], first.leader[1], 1.0)
     bx0, by0, bx1, by1 = sl.bbox(band)
@@ -273,32 +191,15 @@ def test_a_bed_in_rows_is_no_seat_for_another_name() -> None:
     """Feature 283: a worked bed's furrows run through a name's letters, so neither a court nesting it nor a neighbor
     may set its name there; the bed's own name lies on it."""
     src = _sheet(
-        '  <rect x="200" y="200" width="150" height="80" data-kind="inner court" fill="#D9C28E"/>\n'
+        '  <rect x="200" y="200" width="150" height="80" data-kind="inner court" data-id="court" fill="#D9C28E"/>\n'
         '  <rect x="210" y="210" width="40" height="30" data-kind="vegetable garden" fill="url(#vegetable-rows)"/>\n'
-        '  <text x="300" y="260" font-size="9" data-kind="inner court">court</text>\n'
+        '  <text x="300" y="260" font-size="9" data-kind="inner court" data-names="court">court</text>\n'
         '  <rect x="400" y="210" width="40" height="30" data-kind="vegetable garden" fill="url(#vegetable-rows)"/>\n'
-        '  <rect x="450" y="210" width="20" height="20" data-kind="well" fill="#9C8C70"/>\n'
-        '  <text x="480" y="225" font-size="9" data-kind="well">well</text>\n',
+        '  <rect x="450" y="210" width="20" height="20" data-kind="well" data-id="well" fill="#9C8C70"/>\n'
+        '  <text x="480" y="225" font-size="9" data-kind="well" data-names="well">well</text>\n',
     )
     assert _weights(src, "court")[(210, 210, 250, 240)] == (sl.WEIGHT_OBSTACLE, True), "nested, but in rows"
     assert _weights(src, "well")[(400, 210, 440, 240)][0] == sl.WEIGHT_OBSTACLE, "a neighbor's bed is no free ground"
-
-
-def test_a_stepped_building_is_named_against_its_largest_block() -> None:
-    """Feature 283: a house of two blocks in echelon leaves its box's corner empty, and a caption set against the box
-    led to nothing; it is set against the largest block. Parts that fill their box keep the box, as does a caption
-    lying inside it."""
-
-    def rect_shape(x, y, w, h):
-        return sl.Shape("rect", "residence", [(x, y), (x + w, y), (x + w, y + h), (x, y + h)])
-
-    west, east = rect_shape(0, 0, 100, 40), rect_shape(110, 30, 80, 40)
-    box = [(0, 0), (190, 0), (190, 70), (0, 70)]
-    assert sl.stepped_subject(box, [west, east], (100, 120)) == west.poly, "echelon: the largest block"
-    assert sl.stepped_subject(box, [west, east], (50, 20)) == box, "a caption inside keeps the box"
-    full = rect_shape(100, 0, 90, 70)
-    assert sl.stepped_subject(box, [rect_shape(0, 0, 100, 70), full], (100, 120)) == box, "parts that fill the box"
-    assert sl.stepped_subject(box, [west, rect_shape(150, 0, 10, 10)], (100, 120)) == box, "one block and a small part"
 
 
 def test_a_leader_ends_on_the_ink_it_names() -> None:
@@ -317,35 +218,45 @@ def test_a_leader_ends_on_the_ink_it_names() -> None:
     assert sl.leader_to_ink(p, []) == p and sl.leader_to_ink(_replace(p, leader=None), [pine]).leader is None
 
 
-def test_a_stepped_point_subject_is_tried_round_each_block_largest_first(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Feature 286: a caption naming a stepped building from outside is searched round each block, largest first, and
-    the first free seat wins (Hayakawa's RESIDENCE had none within reach of its larger block); where no block has one,
-    the cheapest stands. Its lines go to the placer at their own sizes."""
+def test_a_dark_ink_name_goes_beside_its_own_dark_fill() -> None:
+    """Feature 286 (plan D2): a well's shaft, a tub, a dark roof takes no name in the sheet's dark ink - inside first
+    would have set it there - while a name in light ink, chosen for the dark roof, may sit on it."""
+    src = _sheet('  <g data-kind="shaft"><rect x="100" y="100" width="80" height="40" fill="#2D2A24"/><text font-size="8">shaft</text></g>\n')
+    shapes, view = sl.read_sheet(src)
+    i, cap = _text(shapes, "shaft")
+    box = [(100.0, 100.0), (180.0, 100.0), (180.0, 140.0), (100.0, 140.0)]
+    dark = sl.classify(shapes, view, {i}, subject=box, area=True, dark_inside=True)
+    assert [(o.weight, o.inner) for o in dark.obstacles] == [(sl.WEIGHT_DARK, True)]
+    assert sl.classify(shapes, view, {i}, subject=box, area=True).obstacles == [], "a light name may lie on it"
+    (_c, p, _per) = sl.seat(src)[0]
+    assert p.position != "inside", "the dark-ink name stands beside"
 
-    def rect_shape(x, y, w, h):
-        return sl.Shape("rect", "residence", [(x, y), (x + w, y), (x + w, y + h), (x, y + h)])
 
-    west, east, step = rect_shape(0, 0, 100, 40), rect_shape(110, 30, 80, 40), rect_shape(95, 40, 10, 10)
-    real = sl.place("x", 9.0, sl.Subject("point", tuple(west.poly)), sl.ObstacleIndex())
-    tried: list[tuple] = []
+def test_a_leader_does_not_cross_a_wall_unless_it_names_the_wall() -> None:
+    """Feature 286: with no hand seat to fall back on, the bath's name was led across the court divider from ground on
+    the far side. A wall is a leader's obstacle - the Fox border's names excepted, which name the east wall itself."""
+    wall = sl.Shape("line", "compound wall", [(0.0, 50.0), (200.0, 50.0)], half=4.5, line=True, dark=True)
+    thin = sl.Shape("line", "partition", [(0.0, 80.0), (200.0, 80.0)], half=0.5, line=True, dark=True)
+    sub = Subject("point", ((90.0, 90.0), (110.0, 90.0), (110.0, 100.0), (90.0, 100.0)))
+    lead = sl.leader_blockers([wall, thin], set(), [], sub)
+    assert [o.weight for o in lead.obstacles] == [sl.WEIGHT_DARK], "the wall, not the partition"
+    assert sl.leader_blockers([wall, thin], set(), [], sub, [wall]).obstacles == [], "a wall the caption names"
 
-    def fake(text, size, s, index, view, **kw):
-        tried.append((s.poly, kw["line_sizes"]))
-        return replace(real, cost=costs[len(tried) - 1])
+    def building(x: float, y: float, kind: str) -> sl.Shape:
+        return sl.Shape("rect", kind, [(x, y), (x + 60, y), (x + 60, y + 40), (x, y + 40)], filled=True)
 
-    monkeypatch.setattr(sl, "place", fake)
-    head = sl.Shape("text", "residence", [(0, 0)], text="RESIDENCE", size=9.0, lines=["RESIDENCE"])
-    gloss = sl.Shape("text", "residence", [(0, 0)], text="(the family)", size=6.0, lines=["(the family)"])
-    sub, view, idx = sl.Subject("point", tuple(west.poly)), (0.0, 0.0, 400.0, 300.0), sl.ObstacleIndex()
-    costs = [40.0, 0.0]
-    p = sl.place_on_blocks("RESIDENCE", head, [head, gloss], 5.0, sub, [west, east, step], idx, view, idx)
-    assert p.cost == 0.0 and [t[0] for t in tried] == [tuple(west.poly), tuple(east.poly)], "largest first; east free"
-    assert tried[0][1] == [9.0, 6.0], "each line at its own size"
-    tried.clear()
-    costs = [40.0, 30.0]
-    assert sl.place_on_blocks("RESIDENCE", head, [head], 5.0, sub, [west, east], idx, view, idx).cost == 30.0
-    assert tried[0][1] is None, "one line: the head's size"
-    tried.clear()
-    costs = [40.0]
-    sl.place_on_blocks("RESIDENCE", head, [head], 5.0, sl.Subject("area", tuple(west.poly)), [west, east], idx, view, idx)
-    assert len(tried) == 1, "an inside seat is not a block's to move"
+    kitchen, court, room_range = building(200, 200, "kitchen"), building(300, 200, "outer court"), building(80, 80, "range")
+    lead = sl.leader_blockers([kitchen, court, room_range], set(), [], sub)
+    assert [sl.bbox(o.poly) for o in lead.obstacles] == [(200.0, 200.0, 260.0, 240.0)], "a building it would cross; not ground, not the range holding its room"
+
+
+def test_a_glyph_in_a_named_ground_is_named_after_the_ground() -> None:
+    """Feature 286: placed first, a practice ground's weapon rack took the ground's inside and the ground's name went
+    into the empty building beside it. The ground is named first; the glyph finds its seat after."""
+    src = _sheet(
+        '  <g data-kind="practice ground"><rect x="100" y="100" width="90" height="40" fill="#D9C28E"/><text font-size="9">practice ground</text></g>\n',
+        '  <g data-kind="weapon rack"><rect x="140" y="118" width="10" height="4" fill="#5C4830"/><text font-size="7">rack</text></g>\n',
+    )
+    placed = sl.seat(src)
+    ground = next(p for c, p, _ in placed if c[0].text == "practice ground")
+    assert ground.position == "inside" and ground.cost == 0.0

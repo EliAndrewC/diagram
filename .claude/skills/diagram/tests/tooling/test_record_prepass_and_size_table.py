@@ -100,8 +100,8 @@ def test_the_prepass_reads_the_real_record():
 
 SVG = """<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400">
 <defs><pattern id="p"><rect width="14" height="14"/></pattern></defs>
-<rect x="30" y="30" width="300" height="150" fill="url(#p)"/>
-<g transform="translate(100, 200)"><rect x="0" y="0" width="60" height="30"/><rect x="0" y="0" width="0" height="9"/></g>
+<rect x="30" y="30" width="300" height="150" fill="url(#p)" data-kind="outer court"/>
+<g transform="translate(100, 200)" data-kind="kitchen"><rect x="0" y="0" width="60" height="30"/><rect x="0" y="0" width="0" height="9"/></g>
 <g transform="rotate(30)"><rect x="400" y="10" width="33" height="33"/><line x1="0" y1="0" x2="50" y2="0"/></g>
 <text x="130" y="215">kitchen</text><text x="180" y="105">OUTER <tspan>COURT</tspan></text><text x="1" y="1">  </text>
 <g stroke="#333" stroke-width="9">
@@ -115,9 +115,9 @@ SVG = """<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400">
 def test_the_table_converts_translates_flags_and_finds_the_gate():
     data = st.table(SVG)
     court, kitchen, rotated = data["rects"]
-    assert (court["w_ft"], court["h_ft"], court["area_sqft"], court["label"]) == (100.0, 50.0, 5000, "OUTER COURT")
-    assert (kitchen["x_px"], kitchen["y_px"], kitchen["w_ft"], kitchen["h_ft"], kitchen["label"]) == (100.0, 200.0, 20.0, 10.0, "kitchen")
-    assert kitchen["label_ft_away"] == 0.0 and kitchen["note"] == ""
+    assert (court["w_ft"], court["h_ft"], court["area_sqft"], court["kind"]) == (100.0, 50.0, 5000, "outer court")
+    assert (kitchen["x_px"], kitchen["y_px"], kitchen["w_ft"], kitchen["h_ft"], kitchen["kind"]) == (100.0, 200.0, 20.0, 10.0, "kitchen"), "a rect is named by its own tag or its group's"
+    assert kitchen["note"] == "" and rotated["kind"] == "", "an untagged rect is named by no caption near it"
     assert rotated["note"] == "transform not applied", "a rotation is flagged, never silently ignored"
     assert len(data["rects"]) == 3, "the pattern tile and the zero-width rect are not drawn things"
     assert data["gaps"] == [
@@ -129,17 +129,17 @@ def test_the_table_converts_translates_flags_and_finds_the_gate():
     assert st.num(None) == 0.0 and st.num("12.5px") == 12.5
 
 
-def test_a_sheet_with_no_labels_and_no_gaps_still_renders(tmp_path, capsys):
+def test_a_sheet_with_no_tags_and_no_gaps_still_renders(tmp_path, capsys):
     bare = '<svg xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="30" height="30"/></svg>'
     data = st.table(bare)
-    assert data["rects"][0]["label"] == "" and data["rects"][0]["label_ft_away"] is None
+    assert data["rects"][0]["kind"] == ""
     text = st.render("bare.svg", data)
     assert "none found" in text and " - " not in text.splitlines()[2][:3]
     plan = tmp_path / "plan.svg"
     plan.write_text(SVG, encoding="utf-8")
     out = tmp_path / "t.json"
     assert st.main([str(plan), "--json", str(out)]) == 0
-    assert "OUTER COURT" in capsys.readouterr().out and json.loads(out.read_text())["gaps"]
+    assert "outer court" in capsys.readouterr().out and json.loads(out.read_text())["gaps"]
     assert st.main([str(plan)]) == 0
     assert st.main([str(tmp_path / "absent.svg")]) == 2
 

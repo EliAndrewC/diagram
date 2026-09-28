@@ -214,11 +214,15 @@ def _extended_cands(text: str, size: float, subject: Subject, lines: list[str] |
             rank = 0
             for name, side in (("above", -1.0), ("below", 1.0)):
                 for s in slides:
-                    yield _Cand(ring, rank, name, (c[0] + s * (su + bw) * u[0] + side * (sv + bh + g) * v[0], c[1] + s * (su + bw) * u[1] + side * (sv + bh + g) * v[1]), ang, tuple(ln), (bw, bh), size)
+                    yield _Cand(
+                        ring, rank, name, (c[0] + s * (su + bw) * u[0] + side * (sv + bh + g) * v[0], c[1] + s * (su + bw) * u[1] + side * (sv + bh + g) * v[1]), ang, tuple(ln), (bw, bh), size
+                    )
                     rank += 1
             for name, side in (("right", 1.0), ("left", -1.0)):
                 for s in slides:
-                    yield _Cand(ring, rank, name, (c[0] + side * (su + bw + g) * u[0] + s * (sv + bh) * v[0], c[1] + side * (su + bw + g) * u[1] + s * (sv + bh) * v[1]), ang, tuple(ln), (bw, bh), size)
+                    yield _Cand(
+                        ring, rank, name, (c[0] + side * (su + bw + g) * u[0] + s * (sv + bh) * v[0], c[1] + side * (su + bw + g) * u[1] + s * (sv + bh) * v[1]), ang, tuple(ln), (bw, bh), size
+                    )
                     rank += 1
 
 
@@ -244,12 +248,13 @@ def place(
     char_w: float = CHAR_W_EM,
     leader_index: ObstacleIndex | None = None,
     line_sizes: list[float] | None = None,
+    extended: bool = True,
 ) -> Placement:
     """Seat one caption by the standard (the module docstring). `frame` is the finished picture's (x0, y0, x1, y1); a
     block that leaves it is never a candidate, because a clipped caption cannot be read. `lines` fixes the caption's
     lines (a hand-drawn caption with a line of its own under it) instead of the wrap rule's layouts. Never returns
     nothing. `char_w` is the caption's width per character in ems - the standard's for the engine's own captions; a
-    hand sheet's bold, capital or letter-spaced caption runs wider (feature 267: `tools/seat_label.py` measures it).
+    hand sheet's bold, capital or letter-spaced caption runs wider (feature 267: `labels/hand_sheet.py` measures it).
     `line_sizes` gives each fixed line its own size (a name over a smaller gloss). When no standard candidate is free, a
     fallback search (`_extended_cands`) runs before the least-cost seat is taken.
     `leader_index` holds what a seat's leader line may not pass over or end against - the other captions and the small
@@ -260,7 +265,8 @@ def place(
     first: tuple[_Cand, Poly] | None = None
     # the standard's candidates, then - reached only when none was free, the chain being lazy - the fallback search
     # (feature 286), before the least cost is taken
-    for order, cand in enumerate(itertools.chain(_cands(text, size, subject, lines, char_w, line_sizes), _extended_cands(text, size, subject, lines, char_w, line_sizes))):
+    more = _extended_cands(text, size, subject, lines, char_w, line_sizes) if extended else iter(())
+    for order, cand in enumerate(itertools.chain(_cands(text, size, subject, lines, char_w, line_sizes), more)):
         block = rect(cand.center[0], cand.center[1], cand.half[0], cand.half[1], cand.angle)
         if first is None:
             first = (cand, block)
@@ -288,7 +294,18 @@ NUDGE_PX = 3
 tall as a caption and its clearance - Hayakawa's guardroom - lies between any grid's points."""
 
 
-def nudge(cost: float, cand: _Cand, block: Poly, subject: Subject, index: ObstacleIndex, clear: float, own: Poly | None, text: str, frame: tuple[float, float, float, float] | None, leader_index: ObstacleIndex | None) -> tuple[float, _Cand, Poly]:
+def nudge(
+    cost: float,
+    cand: _Cand,
+    block: Poly,
+    subject: Subject,
+    index: ObstacleIndex,
+    clear: float,
+    own: Poly | None,
+    text: str,
+    frame: tuple[float, float, float, float] | None,
+    leader_index: ObstacleIndex | None,
+) -> tuple[float, _Cand, Poly]:
     """The least-cost seat, or the cheapest one within `NUDGE_PX` of it in the caption's own frame - never a seat off
     the frame, never one that spills an area's name outside the area."""
     best = (cost, cand, block)
