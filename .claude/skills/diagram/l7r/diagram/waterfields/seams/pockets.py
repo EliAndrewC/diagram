@@ -284,6 +284,23 @@ def _open_to(pocket: Polygon, w: float) -> Polygon | None:
     return max(parts, key=lambda p: p.area)
 
 
+def _weld_apex(ring: Poly) -> float:
+    """How sharp a weld's recorded ring is, read the way the gate reads it - which is TWO ways.
+
+    The deduped ring is the measurement `paddy_plots_are_workable_basins` makes, and the weld is held to a stricter
+    THRESHOLD on it (`_WELD_MIN_APEX`, 18 against 15). But the shipped-hamlet test
+    (`tests/gate/test_paddy_fabric.py::test_no_shipped_hamlet_has_a_basin_tapering_to_a_point`) reads the ring AS
+    RECORDED, the rule `_is_a_needle` already applies to every repair in `_unjog`. This guard read only the deduped ring
+    (it used to say that one was the gate's only reading), so a weld recording a hairline spur - a vertex 0.5 px out and
+    straight back, 0.88 deg on the raw ring and 80 deg once deduped - passed it and shipped on Kashikawa (feature 276,
+    measured when the seam pass's reordered geometry first produced one). So the raw ring's apex counts too, at the
+    GATE's floor rather than the weld's: a raw apex under 15 deg is a needle whatever the dedup says, and one above it is
+    left to the deduped reading, which is the finer judgment of shape."""
+    apex = _min_apex(dedup_ring(ring, 1.0))
+    raw = _min_apex(ring)
+    return min(apex, raw) if raw < _GATE_MIN_APEX else apex
+
+
 def _min_apex(ring: Poly) -> float:
     """The sharpest interior angle in `ring`, in degrees (180.0 for a ring too short to have one).
 
@@ -370,14 +387,8 @@ def _absorb(pocket: Polygon, into: list[Polygon], grown: set[int], thin: float, 
         # research describes at a real fan toe - the fan's base floor (`comb_base_fill`) draws
         # under it, so it reads as the toe's own ground rather than as a hole, exactly as it does
         # for the slivers `_comb_toe_and_hem` drops.
-        # MEASURE THE RING THE GATE MEASURES - the DEDUPED one, and nothing else. This guard used to
-        # take min(raw, deduped): stricter, but stricter on a DIFFERENT measurement than the rule it
-        # is protecting, which is not a margin at all. `paddy_plots_are_workable_basins` reads the
-        # deduped ring, so an apex only the raw ring carries is invisible to the rule and must not be
-        # able to veto a weld here. Placer-stricter-than-gate means a stricter THRESHOLD on the SAME
-        # measurement (18 vs 15), never a second measurement bolted alongside it.
-        _cand = dedup_ring(_cring, 1.0)
-        _apex = _min_apex(_cand)
+        # MEASURE THE RINGS THE GATE MEASURES - see `_weld_apex`.
+        _apex = _weld_apex(_cring)
         if _apex < _WELD_MIN_APEX:
             # NOT GOOD ENOUGH, BUT REMEMBER IT - refusing outright is its own defect. Measured on
             # the 24-seed cohort: declining every needling weld traded two needles for two doubled
@@ -406,7 +417,7 @@ def _absorb(pocket: Polygon, into: list[Polygon], grown: set[int], thin: float, 
                     # ZERO chevrons entered `close_seams` on Inashiro and Mizuguchi and three left,
                     # because welding the workable PART of a scrap is exactly how a basin acquires a
                     # point at one end and a bite in its side.
-                    if Polygon(_r2).is_valid and _min_apex(dedup_ring(_r2, 1.0)) >= _WELD_MIN_APEX and not is_chevron(_r2):
+                    if Polygon(_r2).is_valid and _weld_apex(_r2) >= _WELD_MIN_APEX and not is_chevron(_r2):
                         into[j] = _c2
                         tree.replaced(j)
                         grown.add(j)

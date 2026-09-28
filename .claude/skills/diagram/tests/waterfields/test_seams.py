@@ -683,3 +683,16 @@ def test_plant_cuts_no_cell_between_the_two_pieces_of_a_row(monkeypatch: pytest.
     assert abs(sum(c.area for c in cuts) - u.area) < 1e-6 * u.area
     between = box(110.0, 0.0, 290.0, 230.0)
     assert not any(c.intersects(between) for c in cuts), "no cut falls between the arms"
+
+
+def test_a_weld_is_judged_on_the_ring_as_recorded_as_well_as_deduped() -> None:
+    """Feature 276: the weld Kashikawa shipped - a 0.5 px spur out and back, 0.88 deg raw and 80 deg deduped - is a
+    needle to the shipped-hamlet gate, so `_absorb` must read it as one; a clean ring reads as its deduped apex."""
+    from l7r.diagram.waterfields.banks import _GATE_MIN_APEX, _WELD_MIN_APEX
+    from l7r.diagram.waterfields.seams.pockets import _weld_apex
+
+    spur = [(1567.6, 2270.3), (1547.5, 2290.4), (1586.0, 2328.9), (1590.7, 2322.3), (1590.9, 2322.8), (1589.6, 2319.4), (1603.1, 2305.9)]
+    assert _min_apex(dedup_ring(spur, 1.0)) >= _WELD_MIN_APEX, "the deduped reading alone passes it - the old guard's blind spot"
+    assert _weld_apex(spur) < _GATE_MIN_APEX
+    square = [(0.0, 0.0), (40.0, 0.0), (40.0, 30.0), (0.0, 30.0)]
+    assert _weld_apex(square) == _min_apex(dedup_ring(square, 1.0))
