@@ -4,6 +4,8 @@ abreuvoir	abreuvoir
 abreuvoirs	abreuvoir
 aburana	rape
 aburaya	aburaya
+aburaya-machi	Aburayamachi
+aburayamachi	Aburayamachi
 abutment	abutment
 abutments	abutment
 across the beams	ridge span
@@ -455,6 +457,8 @@ daijokan	Daijokan
 daikan	daikan
 daikansho	daikansho
 daikon	daikon
+daiku-machi	Daikumachi
+daikumachi	Daikumachi
 daimyo	daimyo
 daimyojin	Daimyōjin
 daimyos	daimyo
@@ -876,6 +880,8 @@ god of government office	yamen-god
 god of land	tudi miao
 goemon-buro	goemon-buro
 goemonburo	goemon-buro
+gofuku-machi	Gofukumachi
+gofukumachi	Gofukumachi
 gogura	gogura
 gokaido	Five Highways
 gokenin	gokenin
@@ -1442,10 +1448,13 @@ komo	komo
 komo matting	komo
 komono	komono
 kon'ya	kon-ya
+kon'yamachi	Kon'yamachi
 kon-ya	kon-ya
+kon-yamachi	Kon'yamachi
 konara	konara
 kondo	kondo
 konya	kon-ya
+konyamachi	Kon'yamachi
 koraimon	koraimon
 kosatsu	kosatsuba
 kosatsuba	kosatsuba
@@ -2064,6 +2073,8 @@ rent-collection bursaries	rent bursary
 rent-collection bursary	rent bursary
 rest stop	tateba
 rest stops	tateba
+retainer terrace	row house
+retainer terraces	row house
 retsuson	retsuson
 return flow	return flow
 reverse-kesa	kesa
@@ -2364,6 +2375,8 @@ sotobori	sotobori
 sotomachi	outer town
 south town magistrate	town magistrate
 southern song	Song dynasty
+sovereign temple	sovereign temple
+sovereign temples	sovereign temple
 species richness	species richness
 sphere	Sphere
 spillway	spillway

@@ -3278,6 +3278,8 @@
   "variants": [
    "terraced form",
    "terrace of",
+   "retainer terrace",
+   "retainer terraces",
    "party wall",
    "party walls"
   ]
@@ -11112,6 +11114,46 @@
   "def": "The coin counterpart of kuchimai: a small surcharge collected with any annual tax assessed in coin rather than rice, and used, like kuchimai, for the intendant's office.",
   "variants": [
    "kuchiei"
+  ]
+ },
+ "Gofukumachi": {
+  "def": "A castle-town ward of dry-goods (kimono cloth) merchants, named for their trade like other castle-town wards.",
+  "variants": [
+   "Gofukumachi",
+   "gofukumachi",
+   "Gofuku-machi"
+  ]
+ },
+ "Aburayamachi": {
+  "def": "A castle-town ward of lamp-oil sellers, named for their trade like other castle-town wards.",
+  "variants": [
+   "Aburayamachi",
+   "aburayamachi",
+   "Aburaya-machi"
+  ]
+ },
+ "Daikumachi": {
+  "def": "A castle-town ward of carpenters, named for their trade like other castle-town wards.",
+  "variants": [
+   "Daikumachi",
+   "daikumachi",
+   "Daiku-machi"
+  ]
+ },
+ "Kon'yamachi": {
+  "def": "A castle-town ward of indigo dyers, named for their trade like other castle-town wards.",
+  "variants": [
+   "Kon'yamachi",
+   "kon'yamachi",
+   "Konyamachi",
+   "Kon-yamachi"
+  ]
+ },
+ "sovereign temple": {
+  "def": "The head temple of a temple order, standing in a domain's capital and run by a Grand Abbot; the order's temples in the provincial cities are subordinate to it. A capital's two sovereign temples on these maps are those of the ruling clan's two patron Fortunes.",
+  "variants": [
+   "sovereign temple",
+   "sovereign temples"
   ]
  }
 }
