@@ -31,7 +31,7 @@ modern period. A feature whose only attestation is modern has gone from the maps
 
 **Independent Test**: every inventory candidate has an outcome line in `outcomes.md`; every MODERN-ONLY outcome has a
 matching elimination (the kind retired, the knob option removed, the generator no longer drawing it, the motivating
-map regenerated) or a GM-ruled deviation.
+map regenerated), or, only where the GM ruled it in knowing it was modern-only, a GM ruling after `escalation-check`.
 
 **Acceptance Scenarios**:
 
@@ -51,16 +51,18 @@ finds through `source-reader`, and records the outcome by the record's rules.
 
 **Independent Test**: every MODERN-ONLY outcome names the search (terms, languages, where searched) and its date.
 
-### User Story 3 - The GM decides what the GM chose (Priority: P2)
+### User Story 3 - The GM hears what reverses a ruling (Priority: P2)
 
-Where the GM already ruled a feature in (as the duck pen was), a MODERN-ONLY finding does not remove it silently. It is
-relabeled a deliberate deviation and put to the GM through `escalation-check`, with the finding.
+Where the GM ruled a feature in without knowing it was modern (as the duck pen was: *"I didn't know that this was a
+modern thing when I asked to have it added, so we should get rid of it"*), it is eliminated like any other, and the GM
+is told which ruling the finding reverses. Only where the record shows the GM ruled a form in KNOWING it was
+modern-only - two GM rulings in conflict - does it go to the GM through `escalation-check` before it is removed.
 
 ## Edge Cases
 
 - **A modern source describing older practice.** The test is when the practice is attested, not when the source was
   written. A modern historian, a museum, an archaeological report or a folklore volume that places a form before
-  modernity is a premodern attestation. See D1 for the undated case.
+  modernity is a premodern attestation. A modern record that gives no date is not (D1).
 - **Frozen legacy maps.** The 18 hand-authored maps under `legacy-hand-authored-pool/` are never regenerated or edited
   (the GM, 2026-08-16), and on 2026-09-28 the GM declined to update hand-drawn maps for a finding (the headman's gate).
   A modern-only form on a legacy map is recorded against that map in `migration-plan.md` as owed at its scripted
@@ -93,8 +95,9 @@ relabeled a deliberate deviation and put to the GM through `escalation-check`, w
 - **FR-005**: A MODERN-ONLY form MUST be eliminated from every scripted map and every knob: the generator no longer
   draws or rolls it, its kind is retired, and each motivating map is regenerated and reviewed. A MIXED candidate loses
   only its modern-only forms.
-- **FR-006**: A MODERN-ONLY form the GM ruled in MUST instead be relabeled a deliberate deviation and put to the GM
-  through `escalation-check`; it is eliminated or kept on the GM's ruling.
+- **FR-006**: A MODERN-ONLY form the GM ruled in MUST be eliminated under FR-005 like any other; the finding and the
+  ruling it reverses are reported to the GM. The one exception is a form the record shows the GM ruled in KNOWING it
+  was modern-only: that conflict of two rulings goes to the GM through `escalation-check` before removal.
 - **FR-007**: A modern-only form on a frozen legacy map MUST be recorded in `migration-plan.md` against that map, owed
   at its conversion, and listed for the GM.
 - **FR-008**: The record MUST state each outcome in the section that makes the claim: the premodern attestation cited,
@@ -116,8 +119,8 @@ relabeled a deliberate deviation and put to the GM through `escalation-check`, w
   MODERN-ONLY line names its search and date.
 - **SC-003** (FR-005): no MODERN-ONLY form is drawn by a regenerated pool map or offered by a knob, and each changed
   map has a `settlement-review` or `building-review` row in `docs/review-ledger.md`.
-- **SC-004** (FR-006, FR-007): every GM-ruled modern-only form and every legacy-map list reaches the GM after an
-  `escalation-check` verdict.
+- **SC-004** (FR-006, FR-007): every reversed GM ruling, every knowingly-ruled modern-only form and every legacy-map
+  list reaches the GM after an `escalation-check` verdict.
 - **SC-005** (FR-009): every changed kind has an `entry-drift` verdict of IN-STEP.
 - **SC-006** (FR-010): `git diff` over the feature touches no held section, and no 269 module before 269 lands.
 
@@ -126,12 +129,20 @@ relabeled a deliberate deviation and put to the GM through `escalation-check`, w
 - **D1 - where "modern" begins, and the undated record** (guess, the session's; flagged to the GM). A form is attested
   premodern when a readable source places it in Japan before the Meiji Restoration (1868), or in China before the end
   of the Qing (1912), whatever the source's own date. A 20th-century record of remembered custom that gives no date
-  (a folklore volume's "in the old days") is recorded as PREMODERN-ATTESTED with the tag `undated-custom`, so that the
-  set can be re-sorted if the GM rules such records modern. The GM's examples (bananas and vegetable dikes on modern
-  lists; the duck pen of modern practice) were forms attested ONLY as current modern practice, which this rule catches.
+  (a folklore volume's "in the old days") does NOT place the form before modernity - it could mean the 1890s - so a
+  form attested only so is MODERN-ONLY with the tag `undated-custom`, which lets the set be re-sorted if the GM rules
+  such records premodern. This follows the GM's own handling on 2026-09-28: cane was dropped for being on one undated
+  modern list only, and the undated root-cut mulberry density was set aside for the dated late-Qing figure.
 - **D2 - the frozen legacy maps are not edited** (the GM's standing ruling, 2026-08-16, and 2026-09-28 on the headman's
   gate). Their modern-only forms are owed at conversion (FR-007).
 - Per candidate, filled from the handoffs: one line per outcome, labeled historically accurate, deliberate deviation,
   map drawing convention, or guess.
 
 ## Review history
+
+- Round 1 (spec-fidelity, 2026-09-28): CHANGES REQUIRED, two findings; D2 / FR-007 judged legitimate. (1) D1 counted an
+  undated modern record of custom as premodern - an exception to its own rule and to the GM's handling of cane and
+  mulberry; it is now MODERN-ONLY tagged `undated-custom`. (2) FR-006 held GM-ruled forms back, where the GM's own
+  example (the duck pen) is one to eliminate; such forms are now eliminated and the reversal reported, with only a form
+  ruled in knowingly going to the GM first (User Stories 1 and 3, SC-004). The legacy count, 18, was confirmed by
+  counting the directories.
