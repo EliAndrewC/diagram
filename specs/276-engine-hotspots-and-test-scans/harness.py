@@ -11,8 +11,9 @@ What each section measures:
 
 - `tests`: each named test ALONE in a fresh interpreter, its setup + call time from `--durations`, xdist off.
 - `homesteads`: `stage_homesteads` on the toy site of `tests/hamletgen/test_homesteads.py` - the rescue-rounds
-  scenario verbatim, then the open toy at 20 / 40 / 80 households (the density question) - with the count of
-  full fit tests (`_bundle_fits` + `_envelope_blocked`, whichever the placer calls) and houses seated.
+  scenario verbatim and the open toy at 10 and 20 households (the hamlet band), then the density question on the
+  placement primitive - `try_place` from 60 / 120 / 240 seeds at one constant density - each with the count of full
+  fit tests (`_bundle_fits` + `_envelope_blocked`, whichever the placer calls) and houses seated.
 - `seams`: `build_comb` at the comb-topology seeds, total and inside `close_seams`.
 - `track`: one reference roll (Inashiro, seed 4) with `stage_track` and `path_violations` timed inside it.
 """

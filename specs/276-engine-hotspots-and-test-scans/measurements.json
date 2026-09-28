@@ -4,35 +4,40 @@
     "unit": "s",
     "quantity": "the slowest of the four AST-scanning tests alone (setup + call)",
     "source": "specs/276-engine-hotspots-and-test-scans/harness.py, output harness-before.json (run 2026-09-28 at HEAD before any 276 engine change, the clone diagram-inashiro, best of 3 unprofiled)",
-    "observed": "2026-09-28"
+    "observed": "2026-09-28",
+    "varies": true
   },
   "before-ast-tests-min": {
     "value": 1.23,
     "unit": "s",
     "quantity": "the fastest of the four AST-scanning tests alone (setup + call)",
     "source": "specs/276-engine-hotspots-and-test-scans/harness.py, output harness-before.json (run 2026-09-28 at HEAD before any 276 engine change, the clone diagram-inashiro, best of 3 unprofiled)",
-    "observed": "2026-09-28"
+    "observed": "2026-09-28",
+    "varies": true
   },
   "before-record-tests-max": {
     "value": 4.47,
     "unit": "s",
     "quantity": "the slowest named record test alone (setup + call)",
     "source": "specs/276-engine-hotspots-and-test-scans/harness.py, output harness-before.json (run 2026-09-28 at HEAD before any 276 engine change, the clone diagram-inashiro, best of 3 unprofiled)",
-    "observed": "2026-09-28"
+    "observed": "2026-09-28",
+    "varies": true
   },
   "before-record-tests-sum": {
     "value": 17.22,
     "unit": "s",
     "quantity": "the five named record tests alone, summed",
     "source": "specs/276-engine-hotspots-and-test-scans/harness.py, output harness-before.json (run 2026-09-28 at HEAD before any 276 engine change, the clone diagram-inashiro, best of 3 unprofiled)",
-    "observed": "2026-09-28"
+    "observed": "2026-09-28",
+    "varies": true
   },
   "before-rescue-s": {
     "value": 2.718,
     "unit": "s",
     "quantity": "stage_homesteads on the rescue-rounds scenario (20 asked, 10 seated)",
     "source": "specs/276-engine-hotspots-and-test-scans/harness.py, output harness-before.json (run 2026-09-28 at HEAD before any 276 engine change, the clone diagram-inashiro, best of 3 unprofiled)",
-    "observed": "2026-09-28"
+    "observed": "2026-09-28",
+    "varies": true
   },
   "before-rescue-fits": {
     "value": 46781,
@@ -46,55 +51,63 @@
     "unit": "s",
     "quantity": "try_place cost per seated house, 60 seeds at constant density (38 seated)",
     "source": "specs/276-engine-hotspots-and-test-scans/harness.py, output harness-before.json (run 2026-09-28 at HEAD before any 276 engine change, the clone diagram-inashiro, best of 3 unprofiled)",
-    "observed": "2026-09-28"
+    "observed": "2026-09-28",
+    "varies": true
   },
   "before-dense-120-per-house": {
     "value": 0.0383,
     "unit": "s",
     "quantity": "try_place cost per seated house, 120 seeds at constant density (73 seated)",
     "source": "specs/276-engine-hotspots-and-test-scans/harness.py, output harness-before.json (run 2026-09-28 at HEAD before any 276 engine change, the clone diagram-inashiro, best of 3 unprofiled)",
-    "observed": "2026-09-28"
+    "observed": "2026-09-28",
+    "varies": true
   },
   "before-dense-240-per-house": {
     "value": 0.0586,
     "unit": "s",
     "quantity": "try_place cost per seated house, 240 seeds at constant density (140 seated)",
     "source": "specs/276-engine-hotspots-and-test-scans/harness.py, output harness-before.json (run 2026-09-28 at HEAD before any 276 engine change, the clone diagram-inashiro, best of 3 unprofiled)",
-    "observed": "2026-09-28"
+    "observed": "2026-09-28",
+    "varies": true
   },
   "before-dense-240-s": {
     "value": 8.198,
     "unit": "s",
     "quantity": "try_place total, 240 seeds at constant density",
     "source": "specs/276-engine-hotspots-and-test-scans/harness.py, output harness-before.json (run 2026-09-28 at HEAD before any 276 engine change, the clone diagram-inashiro, best of 3 unprofiled)",
-    "observed": "2026-09-28"
+    "observed": "2026-09-28",
+    "varies": true
   },
   "before-close-seams-max": {
     "value": 1.018,
     "unit": "s",
     "quantity": "close_seams inside one build_comb, the slowest of seeds 5/11/17",
     "source": "specs/276-engine-hotspots-and-test-scans/harness.py, output harness-before.json (run 2026-09-28 at HEAD before any 276 engine change, the clone diagram-inashiro, best of 3 unprofiled)",
-    "observed": "2026-09-28"
+    "observed": "2026-09-28",
+    "varies": true
   },
   "before-close-seams-min": {
     "value": 0.842,
     "unit": "s",
     "quantity": "close_seams inside one build_comb, the fastest of seeds 5/11/17",
     "source": "specs/276-engine-hotspots-and-test-scans/harness.py, output harness-before.json (run 2026-09-28 at HEAD before any 276 engine change, the clone diagram-inashiro, best of 3 unprofiled)",
-    "observed": "2026-09-28"
+    "observed": "2026-09-28",
+    "varies": true
   },
   "before-track-stage-s": {
     "value": 1.308,
     "unit": "s",
     "quantity": "stage_track on Inashiro seed 4",
     "source": "specs/276-engine-hotspots-and-test-scans/harness.py, output harness-before.json (run 2026-09-28 at HEAD before any 276 engine change, the clone diagram-inashiro, best of 3 unprofiled)",
-    "observed": "2026-09-28"
+    "observed": "2026-09-28",
+    "varies": true
   },
   "before-track-checks-s": {
     "value": 0.966,
     "unit": "s",
     "quantity": "path_violations inside stage_track on Inashiro seed 4 (176 calls)",
     "source": "specs/276-engine-hotspots-and-test-scans/harness.py, output harness-before.json (run 2026-09-28 at HEAD before any 276 engine change, the clone diagram-inashiro, best of 3 unprofiled)",
-    "observed": "2026-09-28"
+    "observed": "2026-09-28",
+    "varies": true
   }
 }

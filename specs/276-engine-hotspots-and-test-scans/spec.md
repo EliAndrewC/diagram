@@ -35,10 +35,12 @@ asserted before.
 
 **Acceptance Scenarios**:
 
-1. **Given** the four AST-scanning tests, **When** each runs alone, **Then** it finishes well under a second
-   and still fails on a planted offender of the kind it guards.
-2. **Given** the record tests, **When** each runs alone, **Then** it finishes well under a second and still
-   fails on a planted broken link, unused glossary term, retired rule-file name and converted `.md` token.
+1. **Given** the four AST-scanning tests, **When** they run together in one process, **Then** the engine is parsed
+   once (the parse counted), they take at most that one parse plus `0.5 s`, and each still fails on a planted
+   offender of the kind it guards.
+2. **Given** the five named record tests, **When** they run together in one process, **Then** their lookup tables
+   are built once, they take at least `3x` less than their summed time before (the build cost recorded), and each
+   still fails on a planted broken link, unused glossary term, retired rule-file name or converted `.md` token.
 
 ---
 
@@ -57,8 +59,9 @@ time, candidates fully tested, and the placement rules all holding.
 
 1. **Given** the rescue-rounds scenario, **When** the homestead stage runs, **Then** it is at least 5x faster
    and fully tests at least 10x fewer candidate seats, and every placement rule its tests assert still holds.
-2. **Given** a synthetic site with several hundred houses to seat, **When** placement runs at two densities,
-   **Then** the time per house stays within a small constant factor as the count grows (measured, recorded).
+2. **Given** the placement primitive seating houses from 60, 120 and 240 seeds at one constant density (the site
+   growing with the count, as a city's does), **When** placement runs, **Then** the cost per seated house grows by at
+   most `1.25x` from 60 to 240 seeds (measured, recorded).
 
 ---
 
@@ -222,3 +225,8 @@ a seam or a track lands differently it is because the same rules were asked more
   5. SC-005 measures the path checks' TIME (halved) with the stage not slower, not a share.
   The reviewer's aside: FR-007's "increase" meant a slowdown, and User Story 3's "every field build" - both reworded.
   The before-figures were then re-measured unprofiled by `harness.py` (`harness-before.json`, `measurements.json`).
+- **Round 2 (spec-fidelity, 2026-09-28): CHANGES REQUIRED**, two changes, both applied: User Story 1's scenarios
+  restated as SC-001 / SC-001a (the four AST tests together at one shared parse plus the margin; the record tests
+  together at a `3x` cut of their sum), and User Story 2's scenario 2 restated as SC-003 (one constant density, 60 to
+  240 seeds, per-house cost within `1.25x`). The asides: the harness docstring now names what it runs, and the timing
+  entries in `measurements.json` carry `varies`.
