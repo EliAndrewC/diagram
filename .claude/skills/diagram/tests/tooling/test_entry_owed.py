@@ -143,3 +143,13 @@ def test_a_renumbered_footnote_is_not_a_moved_section():
     assert eo.unnumbered(a) == eo.unnumbered(b)
     assert eo.unnumbered(a) != eo.unnumbered(c)
     assert eo.unnumbered(None) is None
+
+
+def test_a_repeated_note_and_the_page_trailer_are_not_moves():
+    """Feature 271 batch 2: a note's second use (`fnref-84-2`) renumbered, and the citations trailer that rides on a
+    page's last section, left behind when a question was added after it - neither moves the section."""
+    a = 'Tubs.<sup class="fn"><a id="fnref-84-2" href="citations/buildings.html#fn-84">84</a></sup>'
+    b = 'Tubs.<sup class="fn"><a id="fnref-90-2" href="citations/buildings.html#fn-90">90</a></sup>'
+    assert eo.unnumbered(a) == eo.unnumbered(b)
+    last = 'The scope note.</p>\n<section class="citations"><p>The notes behind this page ...</p></section>'
+    assert eo.unnumbered(last) == eo.unnumbered("The scope note.</p>")

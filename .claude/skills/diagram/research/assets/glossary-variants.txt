@@ -712,8 +712,8 @@ half-river closures	half-river closure
 half-stories	half-story
 half-story	half-story
 hall of the heavenly kings	hall of the Heavenly Kings
-hall-and-wing house	hall-and-wing house
-hall-and-wing houses	hall-and-wing house
+hall-and-wing house	weilongwu
+hall-and-wing houses	weilongwu
 han	han
 han china	Han dynasty
 han dynasty	Han dynasty
@@ -1051,7 +1051,7 @@ king post	king post
 king posts	king post
 king-post	king post
 kirisute-gomen	kirisute-gomen
-kirizuma	kirizuma
+kirizuma	gabled roof
 kishu school	Kishu school
 kishu-school	Kishu school
 knob	knob

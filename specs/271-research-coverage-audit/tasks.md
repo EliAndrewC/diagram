@@ -34,5 +34,6 @@ Batch 3 (K2 K4 U2 U3 K1 K3, in queues 1, 3 and 6, and K5 K6 K7 U4 T5 U5 U6 next)
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
       verify: DONE. group W2: 7 questions written or edited and 13 registry keys, researched through source-reader; quote-check, record-format and source-applicability applied with one re-check round and the owed modals answered (briefs/w2-checks.md)
 
-- [ ] T08 batch 2 lands: `owed-check`, `make page-check`, `make done`, the push; State updated
+- [x] T08 batch 2 lands: `owed-check`, `make page-check`, `make done`, the push; State updated
       research: rendering
+      verify: DONE. owed-check 13 of 13 IN-STEP (after _entry_owed learned to ignore a note's second-use numbering and the citations trailer), make page-check green, make done green; State updated

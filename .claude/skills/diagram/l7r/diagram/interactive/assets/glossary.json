@@ -6869,7 +6869,7 @@
   ]
  },
  "weilongwu": {
-  "def": "An enclosed Hakka house of south China: a central hall with wings, closed at the back by a ring of rooms for kitchens, stores, privies, pigsties and hen coops, built so its household could live self-sufficient inside its own walls.",
+  "def": "An enclosed Hakka house of south China: a central hall with wings, closed at the back by a ring of rooms for kitchens, stores, privies, pigsties and hen coops, built so its household could live self-sufficient inside its own walls. In front of it lie a rectangular drying floor (the heping) and a half-moon fengshui pond.",
   "variants": [
    "weilongwu",
    "hall-and-wing house",
@@ -7700,13 +7700,6 @@
    "Tanabata"
   ]
  },
- "hall-and-wing house": {
-  "def": "A Hakka walled house built with an ancestral hall on its central axis and wings of rooms around it. In front of it lie a rectangular drying floor (the heping) and a half-moon fengshui pond.",
-  "variants": [
-   "hall-and-wing house",
-   "hall-and-wing houses"
-  ]
- },
  "firebox": {
   "def": "The combustion chamber at the foot of a climbing kiln, where the wood fire is fed; the firing chambers climb the slope above it and the chimney stands at the top.",
   "variants": [
@@ -7973,12 +7966,6 @@
   "variants": [
    "odoko",
    "ōdoko"
-  ]
- },
- "kirizuma": {
-  "def": "A plain gable roof: two slopes meeting at one ridge, with a triangular gable wall at each end - simpler than the hip-and-gable irimoya.",
-  "variants": [
-   "kirizuma"
   ]
  },
  "noshi-buki": {

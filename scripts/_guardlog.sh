@@ -64,6 +64,13 @@ except Exception:
 # caller already read.
 escape_or_refuse() {
   local guard=$1 token=$2 rule=$3 here=$4 reason
+  # GUARD_EDIT_OK: a performance fix found while working (2026-09-27), no rule changed - NO TOKEN, NO PYTHON.
+  # This ran `_hm_escape.py` (a python start) on EVERY invocation of 13 guards, escape or not. `escape_used`
+  # answers `token in <the command, cleaned>`, and the cleaning only deletes text or inserts a space, `""` or
+  # ` <<BODY ` - none of which can complete a token - so a token absent from the command is absent from its
+  # cleaned form. The payload holds the command JSON-encoded, which leaves a token's ASCII letters and
+  # underscores as they are unless the encoder wrote `\u` escapes; a payload with any `\u` takes the full check.
+  case "${INPUT:-}" in *"$token"*|*'\u'*) ;; *) return 1 ;; esac
   printf '%s' "${INPUT:-}" | "$here/_hm_escape.py" escape "$token" 2>/dev/null | grep -q yes || return 1
   reason=$(printf '%s' "${INPUT:-}" | "$here/_hm_escape.py" escape-reason "$token" 2>/dev/null)
   if [ -z "$reason" ]; then
