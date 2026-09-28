@@ -140,3 +140,5 @@ development-secrets.ini
 .claude/skills/diagram/dev/perf-raw/
 .claude/skills/diagram/wip/*.html
 .claude/skills/diagram/wip/**/*.html
+# the prefix reservation ledger (feature 265 FR-010): host state shared by every clone, never committed
+.specify/prefixes.jsonl

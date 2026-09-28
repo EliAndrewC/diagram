@@ -30,12 +30,16 @@ decide differently."""
 class Obstacle:
     """A drawn thing a caption is scored against. `weight` is on Esri's 0-1,000 scale; `group` is the caption word that
     may cover it (the overlap taxonomy's caption group, FR-014), or None; `named` marks a civic building that carries a
-    name of its own (a ministry, the governor's yamen, a temple by name), which no other caption may lie on."""
+    name of its own (a ministry, the governor's yamen, a temple by name), which no other caption may lie on. `inner`
+    marks ink INSIDE a subject that its caption must still avoid - a hand sheet draws a building's partitions, a court's
+    mats, a garden's stepping stones, and a name set on them could not be read (feature 267); a generated map draws no
+    such ink, so none of its obstacles sets it."""
 
     poly: tuple[Pt, ...]
     weight: float
     group: str | None = None
     named: bool = False
+    inner: bool = False
 
 
 @dataclass(frozen=True)
@@ -94,7 +98,7 @@ class ObstacleIndex:
                     continue
                 seen.add(i)
                 o = self.obstacles[i]
-                if not o.weight or (o.group and o.group in words and not (civic and o.named and o.group in CIVIC_GROUPS)) or (subject is not None and part_of(o.poly, subject)):
+                if not o.weight or (o.group and o.group in words and not (civic and o.named and o.group in CIVIC_GROUPS)) or (subject is not None and not o.inner and part_of(o.poly, subject)):
                     continue
                 if poly_gap(block, list(o.poly)) < clear - 1e-6:  # strict: a seat exactly one offset off is clear (plan P6)
                     total += o.weight

@@ -1,0 +1,7 @@
+{
+  "utc": "2026-09-27T17:08:28Z",
+  "target": "review-accept",
+  "commit": "6b6031073",
+  "outcome": "permitted",
+  "why": "review-accept kuwabata F2: no norm on a lane detour ratio; the ring-lane shape and its ratios up to 2.4 were on main before this feature, so the delta did not introduce it; the reviewer filed it as a nitpick"
+}

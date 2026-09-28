@@ -6,6 +6,36 @@ module organization, and generation doctrine that applies at every tier.
 The test for this file is simple - if fixing it would change maps of more than one type, or would
 change no map at all (tooling, structure, checks), it belongs here.
 
+## FLAKY: the raster-mode wash test (`test_in_raster_mode_the_lit_paddy_is_washed_and_the_lit_beads_are_not`)
+
+`tests/full/interactive/page_browser/test_synthetic.py`. Failed twice in FULL gates under load and passed alone
+each time: 2026-09-26 (feature 250) and 2026-09-27 (feature 267 follow-up gate), both with the lit paddy at
+`fillOpacity` 1 where raster mode washes it to 0.45 (`('1', '1') == ('0.45', '1')`). The first fix made each read
+poll for its state up to 2 s (`_driver.settles`); the second failure came with that fix in place, so the paddy
+stayed unwashed for the whole 2 s - not a slow style recompute. Likely mechanism, UNMEASURED: the page leaves raster
+mode between the `data-mode == raster` check and the highlight (a debounced resize or fit after the viewport is
+shrunk to 100x100 re-evaluates the mode), or the highlight lands before the raster layer is ready. Next step is a
+measurement, not a longer timeout: run the test in a loop under parallel load (e.g. 20 runs beside a `make done`)
+logging `data-mode` and the highlight state at each read, and fix whichever of the two the log shows.
+
+MEASURED 2026-09-28 (the GM asked): NOT reproduced - 20 module runs with all 22 cores busy, then 8 package runs beside
+a real `make test-full` (itself green, this test included): 29 raster samples, 0 failures, and at every one the page
+was in raster mode with no highlight or modal pinned from the test before (`data-hl` empty, `#explain` closed) - so
+state leaking from the previous test is ruled out for these runs, and CPU load alone does not trigger it. Both real
+failures came in gates run while the machine was short of memory (the 2026-09-27 one as the system was killing
+background shells for low memory); memory pressure on Chromium is the untested condition, not safe to induce here.
+The assertion now names the page's state (mode, `data-hl`, the modal, raster readiness) before and after, so the
+next natural failure says which one was wrong.
+
+## The review-prereq guard matches a finding's measurement by bare id (found 2026-09-27, feature 267)
+
+`scripts/_review_prereq.py` `unverified_findings` counts a finding disposed when any `measurements.json` record has
+`verifies` equal to its id and `subject` equal to the map - with no round or engine key. A map reviewed more than once
+reuses F1, F2, ...: Kashikawa's round-2 PASS nitpicks F1/F2 (two docstrings) were counted disposed by the round-1
+records for F1/F2 (the grave's step, the page's feature note), and the reviewer caught it by reading the records'
+sources, not the guard. Sketch: a record names the verdict it answers (the verdict's engine key or a verdict id), and
+the lookup matches on it; or `make review-verdict` stamps each finding id with the round (`r2-F1`).
+
 ## 2. Fabric-first generation (the GM's ordering question, 2026-08-10) - RESEARCH DIRECTION
 Today's order is shell-first: wall/roads/water, then fabric fitted inside, with the wall
 PRE-SIZED from a budget density constant. The constant was wrong once (Tango's 690 vs the
@@ -445,3 +475,19 @@ target's recorded median duration times two (`scripts/_gatecost.py` has the medi
 the first thing to establish is how the notification was lost, because a hook cannot schedule a wakeup
 today (`ScheduleWakeup` is the session's tool), so the mechanism would need the harness's own support or
 a `Monitor` the guard starts.
+
+## MEASURE feature 274's write cap and line reads on the groups that run after it landed (owed by 274 FR-004)
+
+Feature 274 capped a research WRITE session at four questions and ten new registry keys (the runner and
+`make reserve`), and moved coordination files to `make lines` / `make append`. Neither can be measured before
+groups run under it, so the measurement is owed here. **Method**: `specs/274-leaner-research-sessions/measure/`
+- `collect.py` (edit its `CLONES` list to the clones that ran, and keep only sessions whose first record is after the
+landing commit's time - it has no cut-off of its own) writes `sessions.json` from the transcripts listed in each
+clone's `.git/page-sessions/index.txt`, folded per message id as 250's `tokens.py` folds them; `analyze.py` prints the per-group table in
+the shape of `groups-table.txt`; `decomp.py` splits the main context into floor, reads and tool results. Take every
+complete group started after the landing. **The figures to beat** (274's research R1, 282 sessions in 65 groups
+before it): per thing checked a median of 1.02 M (IQR 0.86-1.20); the largest context of any turn 246 K; write
+sessions a median of 74 turns (mean turn 147 K, peak 237 K); about 60 M carried by whole reads of coordination
+files. **Expected**: write sessions under ~40 turns, the peak back inside 250's 102-171 K band, per-thing cost
+10-20% lower, and coordination reads near zero - and `grep continued .git/page-sessions/run-*.log` says how often the
+key cap split a session. A continuation brief sits at `.git/page-sessions/<sid>/continue.md`, which `collect.py`'s `specs/NNN-` match does not read: attribute it to its parent's group through the run log's `continued <sid> -> <sid>` line. Close this entry with the table and the verdict in 274's research.md as R3.

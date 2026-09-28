@@ -125,7 +125,13 @@ def apply_term(root: pathlib.Path, b: dict, dry: bool) -> str:
         return f"would add a file for {b['term']!r}"
     # the prefix is RESERVED under the host-wide lock (feature 265 FR-010): two queues adding terms at once never
     # take the same one; the reservation writes the file, here with its full text as the stub
-    path = _reserve().reserve("glossary", b["term"], root, stub=json.dumps(entry, ensure_ascii=False, indent=1) + "\n")
+    # a key another clone is already defining is REFUSED like an edit, never a traceback: the traceback stopped the
+    # run mid-report and left the blocks after it unapplied (271 T3 check-b, `Kinki` held by 267)
+    reserve = _reserve()
+    try:
+        path = reserve.reserve("glossary", b["term"], root, stub=json.dumps(entry, ensure_ascii=False, indent=1) + "\n")
+    except reserve.Refusal as e:
+        return f"REFUSED - {e}"
     return f"added {path.name}"
 
 

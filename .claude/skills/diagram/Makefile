@@ -718,7 +718,10 @@ print()"
 # the escape rate is the number that matters: a guard escaped more often than it is obeyed is costing
 # a round trip to prevent nothing, which is what retired the quick+done refusal.
 	@python3 -c "import json,glob,os,collections; \
-rows=[json.load(open(f)) for f in glob.glob(os.path.expanduser(os.environ.get('GUARD_LOG_DIR','~/.claude/guard-log')+'/*.json'))]; \
+'GUARD_EDIT_OK: fixing a defect found while working (2026-09-27) - two ZERO-BYTE entries from 2026-09-26 made'; \
+'the whole audit die on a JSONDecodeError. The writer now renames a finished file into place, so no new one'; \
+'can be empty; an empty file left from before is skipped here, as scripts/guard-log.py already does.'; \
+rows=[json.load(open(f)) for f in glob.glob(os.path.expanduser(os.environ.get('GUARD_LOG_DIR','~/.claude/guard-log')+'/*.json')) if os.path.getsize(f)]; \
 print('\033[1mGuard firings\033[0m (~/.claude/guard-log/) - what each guard did: blocked, rewrote, reminded, escaped'); \
 by=collections.defaultdict(collections.Counter); \
 [by[r['guard']].update([r['event']]) for r in rows]; \
@@ -1084,8 +1087,18 @@ notes: ## [project] print the named notes of ONE question and only the blocks of
 	@if [ -z "$(PAGE)" ] || [ -z "$(SECTION)" ] || [ -z "$(KEYS)" ]; then printf 'make notes: PAGE=<page> SECTION=<question> KEYS=<key,key> are required\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_check_bundle.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" --section "$(SECTION)" --notes "$(KEYS)" --print-notes
 
+# GUARD_EDIT_OK: feature 274 D5 - two new operations (read a coordination file's matching lines; append one line without reading it); no guard changes.
+lines: ## [project] print ONLY a coordination file's matching lines - the claims file, a handoff, a checks report - numbered, with how many were shown of how many; never read one whole (feature 274)   FILE=<file> KEY=<regex>
+	@if [ -z "$(FILE)" ] || [ -z "$(KEY)" ]; then printf 'make lines: FILE=<file> KEY=<regex> are required - e.g. make lines FILE=/diagram/.clones/RESEARCH-CLAIMS.md KEY="^- 269"\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_coord.py" lines "$(FILE)" "$$KEY"
+
+append: ## [project] append ONE line to a coordination file without reading or printing it (feature 274)   FILE=<file> LINE="<text>"
+	@if [ -z "$(FILE)" ]; then printf 'make append: FILE=<file> LINE="<text>" are required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_coord.py" append "$(FILE)"
+
 # GUARD_EDIT_OK: feature 265 FR-010 - a new operation (reserve a glossary or registry prefix under a host-wide lock); new-file-hooks.sh makes it the way in.
-reserve: ## [project] reserve the next glossary or registry-entry prefix under a host-wide lock and write the file's stub - prints its path; fill it in (feature 265 FR-010: parallel queues never collide)   KIND=glossary|registry KEY=<term or key>
+# GUARD_EDIT_OK: feature 274 D4 - KEY_CAP_OK='<reason>' passes a write session's key cap; make exports it to the recipe as it is, so no change below.
+reserve: ## [project] reserve the next glossary or registry-entry prefix under a host-wide lock and write the file's stub - prints its path; fill it in (feature 265 FR-010: parallel queues never collide; feature 274: a write session's 11th registry key is refused)   KIND=glossary|registry KEY=<term or key> [KEY_CAP_OK='<reason>']
 	@if [ -z "$(KIND)" ] || [ -z "$(KEY)" ]; then printf 'make reserve: KIND=glossary|registry KEY=<term or key> are required\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/reserve-prefix.py" "$(KIND)" "$(KEY)"
 
@@ -1100,7 +1113,8 @@ apply-edits: ## [project] apply a quote-check or record-format report's EDIT and
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_apply_edits.py" "$(FROM)" --root "$$(git rev-parse --show-toplevel)" $(if $(SKIP),--skip "$(SKIP)",) $(if $(DRY),--dry-run,)
 
 # GUARD_EDIT_OK: feature 250 - a new operation (one page's work in a fresh headless session, started from a brief); no guard changes.
-page-session: ## [project] start ONE page's work in a FRESH headless session, detached, from written briefs, one after another - absolute paths; a then:<script> step queues the briefs it prints (feature 250 D7, R3)   BRIEF="<file> then:<script>" [NAME=<session name, default this clone's>] [MODEL=<model>]
+# GUARD_EDIT_OK: feature 274 D2 - the runner refuses a write brief over four questions; WRITE_CAP_OK='<reason>' reaches it through make's exported environment.
+page-session: ## [project] start ONE page's work in a FRESH headless session, detached, from written briefs, one after another - absolute paths; a then:<script> step queues the briefs it prints (feature 250 D7, R3); a write brief over four questions is refused (feature 274)   BRIEF="<file> then:<script>" [NAME=<session name, default this clone's>] [MODEL=<model>] [WRITE_CAP_OK='<reason>']
 	@if [ -z "$(BRIEF)" ]; then printf 'make page-session: BRIEF=<file> is required - e.g. make page-session BRIEF=specs/250-close-the-record-checks/briefs/homesteads.md\n' >&2; exit 2; fi
 	@cd "$$(git rev-parse --show-toplevel)" && scripts/page-session.sh "$(BRIEF)" "$(NAME)" "$(MODEL)"
 
@@ -1241,7 +1255,8 @@ quick:           ## [tests] tier 2: lint, types and every test that rolls no map
 	@: "(GUARD_EDIT_OK: feature 250 D14 - a research question this change touched stays under the size cap)"
 	@python3 ../../../scripts/check-question-size.py
 	@: "(GUARD_EDIT_OK: feature 171 - capture whether testmon was warm BEFORE the run, so the ratchet below judges like with like)"; \
-	warm=$$([ -f .testmondata ] && echo yes || echo no); start=$$(date +%s); $(EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(TESTMON) -q --no-cov -x --ff -m "not rolls_map" $(TIER_SELECT) $(QUICK_TREE); ec=$$?; \
+	: "(GUARD_EDIT_OK: the GM's ruling 2026-09-27 - and not tooling: the tooling tests that live OUTSIDE tests/tooling (five tests/tools modules) leave quick with the tree; see QUICK_TREE)"; \
+	warm=$$([ -f .testmondata ] && echo yes || echo no); start=$$(date +%s); $(EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(TESTMON) -q --no-cov -x --ff -m "not rolls_map and not tooling" $(TIER_SELECT) $(QUICK_TREE); ec=$$?; \
 	  el=$$(( $$(date +%s) - start )); \
 	  if [ $$ec -ne 0 ]; then exit $$ec; fi; \
 	  : "(GUARD_EDIT_OK: feature 171 - the RATCHET, which is the same check against a number that means"; \
@@ -1352,7 +1367,12 @@ _reference:
 # idle run to one whose record the push honors - a failure that increases trust instead of reducing
 # it. Now the probe's failure is distinguishable from its answer, and an unreadable answer fails
 # toward `idle-done`, which is the direction that can only ever withhold authority.
-IDLE_CTX = $(shell $(SWITCH) idle 2>/dev/null || echo unreadable)
+# GUARD_EDIT_OK: fixing a defect found while working (2026-09-27) - ASKED ONCE PER MAKE, ON FIRST USE. A plain
+# `=` re-ran this python probe at EVERY reference: 13 per `make done` (~1.5 s, 6.2 s of the 11 s
+# `test_make_done_short_circuits_on_an_unchanged_gate_key`). The answer cannot change within one make: an
+# idle run writes its marker BEFORE it starts the sub-make that reads it. Still lazy - a target that never
+# names DONE_NAME never runs the probe - and the failure direction above is untouched.
+IDLE_CTX = $(eval IDLE_CTX := $(shell $(SWITCH) idle 2>/dev/null || echo unreadable))$(IDLE_CTX)
 DONE_NAME = $(if $(filter 0,$(IDLE_CTX)),done,idle-done)
 # GUARD_EDIT_OK: "scope relaxed" described a lock retired in feature 185 - there is nothing to relax.
 idle-tests:     ## [tests] {inactive: arming is disabled - the GM turned it off 2026-09-06; the target still runs by hand} what an idle session runs unattended (feature 136): the whole gate, never FULL, recorded as `idle-done`
@@ -1578,10 +1598,15 @@ EXHAUSTIVE_ENV = $(if $(EXHAUSTIVE),L7R_TESTS_EXHAUSTIVE=1,)
 TESTMON = $(if $(ALL),--no-testmon,--testmon-forceselect)
 # THE QUICK TREE (GM 2026-08-26, T29): `tests/` IS the quick suite; everything that is not quick lives in its own
 # tree and is not even COLLECTED by quick - tests/tier_town and tests/tier_city (relevant to other tiers),
-# tests/gate (the corpus, the coverage carriers, the map-rolling tests) and tests/tooling (collected only when the
-# tooling changed since the last record, `ci tooling-fresh`). The gate collects all of `tests/`. Collection is
-# paid per worker, so ~1,000 fewer items is ~0.4 s of a 3.3 s floor - and the layout says what each test is.
-QUICK_TREE = tests --ignore=tests/tier_town --ignore=tests/tier_city --ignore=tests/gate --ignore=tests/full $(shell python3 -m l7r.diagram.ci tooling-fresh >/dev/null 2>&1 && echo --ignore=tests/tooling)
+# tests/gate (the corpus, the coverage carriers, the map-rolling tests) and tests/tooling. The gate collects all
+# of `tests/`. Collection is paid per worker, so ~1,000 fewer items is ~0.4 s of a 3.3 s floor - and the layout
+# says what each test is.
+# GUARD_EDIT_OK: the GM's ruling (2026-09-27) - tests/tooling LEFT QUICK ENTIRELY. It used to be collected
+# whenever the tooling had changed since the last green gate (`ci tooling-fresh`), which in practice meant the
+# first quick after every sync-in: those tests run make, git and coverage in subprocesses, and that run failed
+# quick's 11 s ratchet on a change the session never made. A tooling edit is now caught by `make done`, which
+# every push requires anyway; `make test-file FILE=tests/tooling` runs them on demand.
+QUICK_TREE = tests --ignore=tests/tier_town --ignore=tests/tier_city --ignore=tests/gate --ignore=tests/full --ignore=tests/tooling
 # THE TYPE CHECK IS ONE-SHOT pyrefly (feature 142, GM 2026-08-28). History, so nobody re-adds a daemon: mypy needed
 # 12.7 s cold, so it ran through dmypy - which held 380-600 MB of RSS per clone, could not be shared across clones,
 # and nothing ever stopped (five daemons, 2.3 GB, one for a session that had ended). pyrefly checks the whole engine

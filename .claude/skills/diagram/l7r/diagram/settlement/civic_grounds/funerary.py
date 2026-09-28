@@ -19,6 +19,17 @@ if TYPE_CHECKING:
     from ..core import Settlement
 
 
+def cremation_outline(cx: float, cy: float, rx: float, ry: float, n: int, jitter: float, rnd: random.Random) -> str:
+    """An SVG points string for a worn, ragged oval: n vertices round (cx, cy), each radius scaled by a factor
+    drawn from 1 +/- jitter - the cremation ground's cleared edge, its burned ground and its ash bed (feature 272)."""
+    pts = []
+    for k in range(n):
+        a = 2 * math.pi * k / n
+        f = 1 + rnd.uniform(-jitter, jitter)
+        pts.append(f"{cx + rx * f * math.cos(a):.1f},{cy + ry * f * math.sin(a):.1f}")
+    return " ".join(pts)
+
+
 class FuneraryGroundsMixin:
     def cemetery(  # type: ignore[misc]
         self: Settlement,
@@ -67,6 +78,11 @@ class FuneraryGroundsMixin:
             while xx < w / 2 - 5:
                 if blob is None or point_in_poly(xx, yy, blob):
                     mh = random.choice([6, 7, 8])
+                    # its TOP inside the blob too (feature 273, settlement-review on Kuwabata): a marker is drawn
+                    # upward from its base, and on a small ground a base just inside the rim put its top 5 ft out
+                    if blob is not None and not point_in_poly(xx, yy - mh, blob):
+                        xx += 9
+                        continue
                     g.append(f'<rect x="{xx - 1.4:.1f}" y="{yy - mh:.1f}" width="2.8" height="{mh}" rx="1" fill="#9AA1A4" stroke="#5A584F" stroke-width="0.5"/>')
                 xx += 9
             yy += 9
@@ -171,7 +187,7 @@ class FuneraryGroundsMixin:
             # ft - which is the size-by-rank ladder the whole change exists to remove.
             self.label(cx, ly, label, HALL_CAPTION_FS, weight="bold", italic=True, color="#3A352C")
 
-    def cremation_ground(self: Settlement, cx: float, cy: float, label: str = "cremation ground", label_above: bool = False) -> None:  # type: ignore[misc]
+    def cremation_ground(self: Settlement, cx: float, cy: float, label: str = "cremation ground", label_above: bool = False, jizo: bool = False) -> None:  # type: ignore[misc]
         """The CREMATORY (kasoba) - where the dead are burned before their bones are interred. Smoke, fire
         risk, and death-pollution put it OUTSIDE the walls; monks officiate with burakumin assistants (a
         religious order stands outside the caste system, so handling the dead does not pollute its caste).
@@ -183,19 +199,38 @@ class FuneraryGroundsMixin:
         # glyph was FIXED-PIXEL (116x80px) and silently tripled at city scale.
         across = 130.0 if self.M["meta"].get("scale") in CITY_TIER_SCALES else 75.0
         crx, cry = max(self.px(across) / 2, 14.0), max(self.px(across * 0.7) / 2, 10.0)
-        self.add(f'<ellipse cx="{cx}" cy="{cy}" rx="{crx:.1f}" ry="{cry:.1f}" fill="#C9BCA0" stroke="#8C7A56" stroke-width="1.5" opacity="0.85"/>')  # cleared scorched ground
-        self.add(f'<ellipse cx="{cx}" cy="{cy}" rx="{crx * 0.58:.1f}" ry="{cry * 0.55:.1f}" fill="#9A8A6A" opacity="0.5"/>')  # the burned center
+        # A WORN, RAGGED ground with its fire bed OFF CENTER (feature 272, settlement-review 2026-09-27 on
+        # Hoshigaoka): a ruled ellipse with a centered dark ellipse and a centered dark block read as an eye or a
+        # pit at fit zoom, and it was the only ruled ground on maps whose clearings are drawn ragged. The jitter
+        # is seeded from the seat, so a map redraws the same ground every time.
+        rnd = random.Random(f"cremation:{cx:.1f},{cy:.1f}")
+        self.add(
+            f'<polygon points="{cremation_outline(cx, cy, crx, cry, 22, 0.09, rnd)}" fill="#C9BCA0" stroke="#8C7A56" stroke-width="1.5" stroke-linejoin="round" opacity="0.85"/>'
+        )  # cleared scorched ground
+        fx = cx + crx * 0.08  # the fire bed a little east of center; the shelter keeps the east rim
+        self.add(f'<polygon points="{cremation_outline(fx + crx * 0.05, cy + cry * 0.07, crx * 0.52, cry * 0.5, 14, 0.2, rnd)}" fill="#9A8A6A" opacity="0.5"/>')  # the burned ground
         ppw, pph = max(self.px(15), 7.0), max(self.px(10), 5.0)
         self.add(
-            f'<rect x="{cx - ppw / 2:.1f}" y="{cy - pph / 2:.1f}" width="{ppw:.1f}" height="{pph:.1f}" rx="1.5" fill="#8C8470" stroke="#4A463C" stroke-width="1.2"/>'
+            f'<rect x="{fx - ppw / 2:.1f}" y="{cy - pph / 2:.1f}" width="{ppw:.1f}" height="{pph:.1f}" rx="1.5" fill="#8C8470" stroke="#4A463C" stroke-width="1.2"/>'
         )  # stone pyre platform (~15x10 ft)
         abw, abh = max(self.px(12), 5.0), max(self.px(8), 3.6)  # the ash bed ON the platform (~12x8 ft burn area)
-        self.add(f'<rect x="{cx - abw / 2:.1f}" y="{cy - abh / 2:.1f}" width="{abw:.1f}" height="{abh:.1f}" fill="#5A463A"/>')  # the ash bed
+        self.add(f'<polygon points="{cremation_outline(fx, cy, abw / 2, abh / 2, 9, 0.25, rnd)}" fill="#5A463A"/>')  # the ash bed, irregular
         shw, shh = max(self.px(14), 7.0), max(self.px(10), 5.0)  # the officiants' shelter (~14x10 ft hut)
         shx = cx + crx * 0.52
         self.add(f'<rect x="{shx:.1f}" y="{cy - shh / 2:.1f}" width="{shw:.1f}" height="{shh:.1f}" rx="1.5" fill="#CDB890" stroke="#5A4326" stroke-width="1.2"/>')
         self.add(f'<rect x="{shx:.1f}" y="{cy - shh / 2:.1f}" width="{shw:.1f}" height="{shh * 0.32:.1f}" fill="#5A4326"/>')
-        self.M["cremation_grounds"].append({"x": round(cx, 1), "y": round(cy, 1), "w": round(2 * crx, 1), "h": round(2 * cry, 1), "rot": 0})
+        rec: dict[str, Any] = {"x": round(cx, 1), "y": round(cy, 1), "w": round(2 * crx, 1), "h": round(2 * cry, 1), "rot": 0}
+        if jizo:
+            # SIX STONE JIZO in a row on the ground's upper rim (research religion-and-death 530: a cremation ground
+            # always had six). A stone jizo is about 2 ft; drawn at least 2.4 x 3.2 px - a map drawing convention, so
+            # they can be seen (the hand-drawn Hoshigaoka ground's size, feature 272).
+            jw, jh = max(self.px(2.0), 2.4), max(self.px(2.7), 3.2)
+            pitch = jw * 1.4
+            stones = [(round(cx - 2.5 * pitch + k * pitch, 1), round(cy - cry - jh, 1)) for k in range(6)]
+            for jx, jy in stones:
+                self.add(f'<rect x="{jx - jw / 2:.1f}" y="{jy - jh / 2:.1f}" width="{jw:.1f}" height="{jh:.1f}" rx="{jw * 0.45:.1f}" fill="#A8A294" stroke="#4A463C" stroke-width="0.5"/>')
+            rec["jizo"] = [list(p) for p in stones]
+        self.M["cremation_grounds"].append(rec)
         self.placed.append((cx, cy, 2 * crx, 2 * cry))
         m = 8
         self.block_polys.append([(cx - crx - m, cy - cry - m), (cx + crx + m, cy - cry - m), (cx + crx + m, cy + cry + m), (cx - crx - m, cy + cry + m)])

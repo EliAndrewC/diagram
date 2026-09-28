@@ -79,16 +79,6 @@ def test_an_acceptance_counts_only_for_the_round_it_answered(tmp_path: pathlib.P
     assert {"finding": "F2", "round": "k", "reason": "this round's finding, left for a stated reason"} in json.loads((d / "sawada.json").read_text())["accepted"]
 
 
-def test_a_not_reviewable_verdict_keeps_the_findings_it_was_written_over(tmp_path: pathlib.Path) -> None:
-    """Feature 261: a plain NOT-REVIEWABLE raises no findings of its own, and recording it wiped the last round's; it now
-    keeps that verdict (`previous`), whose findings still owe their dispositions."""
-    clone = _clone(tmp_path)
-    _verdict(clone, "sawada", "NEEDS-WORK", "F1")
-    got, rec = prereq.write_verdict(clone, "sawada", "NOT-REVIEWABLE", [], "green")
-    assert got == "NOT-REVIEWABLE" and rec["previous"]["findings"][0]["id"] == "F1"
-    assert prereq.unverified_findings(clone, "sawada") == ["F1"] and prereq.has_findings(clone, "sawada")
-
-
 def test_a_not_reviewable_verdict_raises_no_findings_and_no_verdict_means_nothing_to_verify(tmp_path: pathlib.Path) -> None:
     clone = _clone(tmp_path)
     assert prereq.unverified_findings(clone, "inashiro") == [] and not prereq.has_findings(clone, "inashiro")
@@ -96,25 +86,6 @@ def test_a_not_reviewable_verdict_raises_no_findings_and_no_verdict_means_nothin
     assert prereq.unverified_findings(clone, "inashiro") == [] and not prereq.has_findings(clone, "inashiro")
     (clone / ".git" / "review-verdicts" / "inashiro.json").write_text("not json")
     assert prereq.latest_verdict(clone, "inashiro") is None, "an unreadable record is no record"
-
-
-def test_a_gate_red_verdict_keeps_its_findings_and_a_record_answers_only_the_round_it_names(tmp_path: pathlib.Path) -> None:
-    """Feature 261: a review recorded NOT-REVIEWABLE only because its gate was red CONCLUDED something, and its findings
-    are owed records; and a record that names its `round` (the answered verdict's engine key, or a prefix) does not clear
-    a later round's finding that merely reuses its id."""
-    clone = _clone(tmp_path)
-    d = clone / ".git" / "review-verdicts"
-    d.mkdir(parents=True)
-    (d / "kashikawa.json").write_text(json.dumps({"map": "kashikawa", "engine_key": "abc123", "verdict": "NOT-REVIEWABLE", "concluded": "NEEDS-WORK", "findings": [{"id": "F1"}]}))
-    assert prereq.unverified_findings(clone, "kashikawa") == ["F1"] and prereq.has_findings(clone, "kashikawa")
-    rec = {"verifies": "F1", "subject": "kashikawa", "quantity": "q", "source": "s"}
-    _records(clone, **{"old": {**rec, "round": "e02347"}})
-    assert prereq.unverified_findings(clone, "kashikawa") == ["F1"], "a record for an earlier round does not clear this one's F1"
-    _records(clone, **{"old": {**rec, "round": "e02347"}, "new": {**rec, "round": "abc"}})
-    assert prereq.unverified_findings(clone, "kashikawa") == [], "the record naming this round does"
-
-
-# ---- FR-005 --------------------------------------------------------------------------------------------------
 
 
 def test_a_map_is_stale_when_its_key_moved_or_an_artifact_is_missing(tmp_path: pathlib.Path) -> None:
@@ -276,3 +247,39 @@ def test_the_verdict_cli_reads_a_findings_file(tmp_path: pathlib.Path, monkeypat
     assert prereq.main(["verdict", "--clone", str(clone), "--map", "m", "--verdict", "PASS", "--findings-file", str(f)]) == 2
     monkeypatch.setattr(prereq, "gate_state", lambda c: "red")
     assert prereq.main(["gate-state", "--clone", str(clone)]) == 0 and capsys.readouterr().out.strip().endswith("red")
+
+
+def test_a_strict_verdict_is_answered_only_by_a_record_that_names_it(tmp_path: pathlib.Path) -> None:
+    """Feature 273 (2026-09-28): every round numbers its findings from F1, so a bare-id match let round 1's F1 record
+    "verify" round 3's different F1. A strict verdict - every one `write_verdict` records now - is answered only by a
+    record whose `answers` names its engine key; a legacy verdict keeps the bare-id match."""
+    clone = _clone(tmp_path)
+    (clone / ".git" / "pairing-state.json").write_text(json.dumps({"review_dispatch_key": "0fb77d35e3ce389a"}))
+    prereq.write_verdict(clone, "kuwabata", "PASS", [{"severity": "nitpick", "what": "headman against headsman"}], "green")
+    old = {"verifies": "F1", "subject": "kuwabata", "source": "the svg", "quantity": "the ground outside the hull"}
+    _records(clone, **{"kuwabata-hull": old})
+    assert prereq.unverified_findings(clone, "kuwabata") == ["F1"], "an earlier round's F1 record does not answer this F1"
+    _records(clone, **{"kuwabata-hull": old, "kuwabata-headsman": {**old, "source": "the notes", "answers": "0fb77d35e3ce"}})
+    assert prereq.unverified_findings(clone, "kuwabata") == [], "a record naming the verdict answers it"
+    _records(clone, **{"kuwabata-headsman": {**old, "answers": "0fb7"}})
+    assert prereq.unverified_findings(clone, "kuwabata") == ["F1"], "an `answers` shorter than 12 characters names nothing"
+    assert '"answers": "0fb77d35e3ce"' in prereq.answers_hint(clone, "kuwabata")
+    _verdict(clone, "sawada", "PASS", "F1")  # a legacy verdict (no `strict`): the bare id still matches
+    _records(clone, **{"x": {**old, "subject": "sawada"}})
+    assert prereq.unverified_findings(clone, "sawada") == [] and prereq.answers_hint(clone, "sawada") == ""
+
+
+def test_a_not_reviewable_verdict_carries_the_findings_it_stopped_over(tmp_path: pathlib.Path) -> None:
+    """Feature 273 (2026-09-28): a NOT-REVIEWABLE verdict used to overwrite the prior findings with [], so
+    `review-accept` refused them and the check asked for nothing. It carries them, answered against the key that raised them."""
+    clone = _clone(tmp_path)
+    (clone / ".git" / "pairing-state.json").write_text(json.dumps({"review_dispatch_key": "aaaaaaaaaaaa1111"}))
+    prereq.write_verdict(clone, "m", "PASS", [{"severity": "nitpick", "what": "a"}, {"severity": "nitpick", "what": "b"}], "green")
+    (clone / ".git" / "pairing-state.json").write_text(json.dumps({"review_dispatch_key": "bbbbbbbbbbbb2222"}))
+    got, rec = prereq.write_verdict(clone, "m", "NOT-REVIEWABLE", [], "green")
+    assert got == "NOT-REVIEWABLE" and [f["id"] for f in rec["carried"]] == ["F1", "F2"] and rec["carried_from"] == "aaaaaaaaaaaa1111"
+    assert prereq.unverified_findings(clone, "m") == ["F1", "F2"] and prereq.has_findings(clone, "m") in (True, False)
+    assert prereq.accept(clone, "m", "F2", "left on purpose for the GM") is None, "a carried finding can be accepted"
+    _records(clone, **{"r": {"verifies": "F1", "subject": "m", "source": "s", "quantity": "q", "answers": "aaaaaaaaaaaa"}})
+    assert prereq.unverified_findings(clone, "m") == [], "answered against the verdict that raised it"
+    assert '"answers": "aaaaaaaaaaaa"' in prereq.answers_hint(clone, "m")

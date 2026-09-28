@@ -1,0 +1,3 @@
+# append-only ledgers that every page queue writes to (feature 271): git's union driver keeps both sides' lines,
+# where a text merge stopped every pull-back on the same file
+specs/250-close-the-record-checks/owed-verdicts.md merge=union

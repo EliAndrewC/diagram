@@ -78,7 +78,7 @@ class WetPaddy(Kind):
 
 class Bund(Kind):
     """
-    What: The aze: a puddled-mud ridge one to two feet wide and about a foot high between two basins, re-plastered
+    What: The aze: a puddled-mud ridge commonly one to two feet wide and about a foot high (outside modern works it had no fixed size, varying by region and soil) between two basins, re-plastered
     every spring so each paddy holds its water; a wider walking bund ran between the plots, two to five feet across in this
     record's reading. Where bunds cross,
     the earth is piled into a lumpy node - the most-worked point in a field.
@@ -135,14 +135,15 @@ class Millet(Kind):
     bare hill rather than coppice.
 
     Note: The catena's elements - paddy, dry field, woodland - are read, and one page read puts the dry fields on
-    the slopes around the settlement, for the Yoshino mountains only; that the old settlements stand on the raised
-    ground that is also their dry field, with the paddy in the wet ground behind it, is read too; the rest of the
-    order is this record's own reading, and one source read puts paddy round houses built on slightly higher ground
-    instead; the size of a household's plot by its house is a GUESS, and the crop MIX on any one map (how much
-    millet against buckwheat and barley) is rolled from the seed and is a GUESS at the proportions.
+    the slopes around the settlement, for the Yoshino mountains only; that the paddy takes the flat and the dry
+    crops the higher ground, and that dry plots cluster round the houses, is this record's own reading, and one
+    source read puts paddy round houses built on slightly higher ground instead; that the crop stands in ridged
+    rows at all is a GUESS - no page read says whether a pre-modern dry field was sown in rows or broadcast, and
+    the only ridged rows found are modern; the crop MIX on any one map (how much millet against buckwheat and
+    barley) is rolled from the seed and is a GUESS at the proportions.
 
-    Caveat: the size of a household's plot by its house is a GUESS, and the crop MIX on any one map (how much
-    millet against buckwheat and barley) is rolled from the seed and is a GUESS at the proportions.
+    Caveat: the crop MIX on any one map (how much millet against buckwheat and barley) is rolled from the seed and
+    is a GUESS at the proportions.
 
     Name: millet
     Covers: `dry_plots[crop=millet]` and their furrows
@@ -163,15 +164,13 @@ class Buckwheat(Kind):
     several places, terraces, levees, fan edges, lower slopes and above all round the houses.
 
     Note: The catena's elements - paddy, dry field, woodland - are read, and one page read puts the dry fields on
-    the slopes around the settlement, for the Yoshino mountains only; that the old settlements stand on the raised
-    ground that is also their dry field, with the paddy in the wet ground behind it, is read too; the rest of the
-    order is this record's own reading, and one source read puts paddy round houses built on slightly higher ground
-    instead. What is said here of the crop itself is not drawn from the section this entry names; the size of a
-    household's plot by its house is a GUESS, and the crop mix per map is rolled from the seed and is a GUESS at
-    the proportions.
+    the slopes around the settlement, for the Yoshino mountains only; that the dry crops take the higher ground
+    above the paddy, and cluster round the houses, is this record's own reading, and one source read puts paddy
+    round houses built on slightly higher ground instead. What is said here of the crop itself is not drawn
+    from the section this entry names; the crop mix per map is rolled from the seed and is a GUESS at the
+    proportions.
 
-    Caveat: the size of a household's plot by its house is a GUESS, and the crop mix per map is rolled from the seed
-    and is a GUESS at the proportions.
+    Caveat: the crop mix per map is rolled from the seed and is a GUESS at the proportions.
 
     Name: buckwheat
     Covers: `dry_plots[crop=buckwheat]` and their furrows
@@ -192,15 +191,13 @@ class Barley(Kind):
     several places, terraces, levees, fan edges, lower slopes and above all round the houses.
 
     Note: The catena's elements - paddy, dry field, woodland - are read, and one page read puts the dry fields on
-    the slopes around the settlement, for the Yoshino mountains only; that the old settlements stand on the raised
-    ground that is also their dry field, with the paddy in the wet ground behind it, is read too; the rest of the
-    order is this record's own reading, and one source read puts paddy round houses built on slightly higher ground
-    instead. What is said here of the crop itself is not drawn from the section this entry names; the size of a
-    household's plot by its house is a GUESS, and the crop mix per map is rolled from the seed and is a GUESS at
-    the proportions.
+    the slopes around the settlement, for the Yoshino mountains only; that the dry crops take the higher ground
+    above the paddy, and cluster round the houses, is this record's own reading, and one source read puts paddy
+    round houses built on slightly higher ground instead. What is said here of the crop itself is not drawn
+    from the section this entry names; the crop mix per map is rolled from the seed and is a GUESS at the
+    proportions.
 
-    Caveat: the size of a household's plot by its house is a GUESS, and the crop mix per map is rolled from the seed
-    and is a GUESS at the proportions.
+    Caveat: the crop mix per map is rolled from the seed and is a GUESS at the proportions.
 
     Name: barley
     Covers: `dry_plots[crop=barley]` and their furrows
@@ -222,15 +219,13 @@ class Soy(Kind):
     its own nitrogen, which is why it also went along the bunds.
 
     Note: The catena's elements - paddy, dry field, woodland - are read, and one page read puts the dry fields on
-    the slopes around the settlement, for the Yoshino mountains only; that the old settlements stand on the raised
-    ground that is also their dry field, with the paddy in the wet ground behind it, is read too; the rest of the
-    order is this record's own reading, and one source read puts paddy round houses built on slightly higher ground
-    instead. What is said here of the crop itself is not drawn from the section this entry names; the size of a
-    household's plot by its house is a GUESS, and the crop mix per map is rolled from the seed and is a GUESS at
-    the proportions.
+    the slopes around the settlement, for the Yoshino mountains only; that the dry crops take the higher ground
+    above the paddy, and cluster round the houses, is this record's own reading, and one source read puts paddy
+    round houses built on slightly higher ground instead. What is said here of the crop itself is not drawn
+    from the section this entry names; the crop mix per map is rolled from the seed and is a GUESS at the
+    proportions.
 
-    Caveat: the size of a household's plot by its house is a GUESS, and the crop mix per map is rolled from the seed
-    and is a GUESS at the proportions.
+    Caveat: the crop mix per map is rolled from the seed and is a GUESS at the proportions.
 
     Name: soy
     Covers: `dry_plots[crop=soy]` and their furrows

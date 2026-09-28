@@ -80,10 +80,14 @@ context when it mattered. It is one now.
 
 A README is written by a human for a human; if the GM wants one, the GM writes it. The one escape is
 the GM delegating an edit in their own words: README_OK in the command, with a reason that quotes the
-authorization (GM 2026-09-06, the research/ link table) - it is recorded, and `make audit` shows it.
+authorization (GM 2026-09-06, the research/ link table) - it is recorded, and \`make audit\` shows it.
 
 (scripts/readme-hooks.sh; constitution XVII, GM 2026-08-24)
 TAIL
+# GUARD_EDIT_OK: fixing a defect found while working (2026-09-27) - the heredoc above is UNQUOTED (it expands
+# $HIT), so its bare backticks around `make audit` were a command substitution: every README refusal RAN
+# `make audit` (~1.2 s) and spliced its whole output into the message. Escaped now; test-readme-hooks.sh
+# section 3 asserts the literal survives.
 # GUARD_EDIT_OK: feature 168 - records what it does (GM 2026-08-30). One rule, one slug; nothing
 # about what this guard refuses changes.
 guard_log readme blocked "$(guard_cmd)" readme-is-the-gm-s

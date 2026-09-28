@@ -1,0 +1,6 @@
+{
+  "utc": "20260927T120148Z",
+  "guard": "pair-hooks",
+  "what": "review prerequisites",
+  "reason": "REVIEW_PREREQ_OK: legacy hand-authored map has no pool generator; figures are the hand edit's own layout (observed 2026-09-27; method: measured on the layout script's output)"
+}

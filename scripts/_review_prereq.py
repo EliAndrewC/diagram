@@ -62,31 +62,21 @@ def latest_verdict(clone: pathlib.Path, name: str) -> dict | None:
     return rec if isinstance(rec, dict) and rec.get("verdict") in VERDICTS else None
 
 
-def accepted_ids(clone: pathlib.Path, name: str, round_key: str = "") -> set[str]:
-    """Finding ids `make review-accept` dispositioned as deliberately left (FR-003) - for the verdict whose engine key is
-    `round_key`. GUARD_EDIT_OK: feature 261 - every round numbers its findings from F1 again, and an acceptance matched by
-    the bare id cleared a LATER round's finding it never read (Inashiro's F3 and F4, Sawada's F2 and F3, all cleared by
-    earlier rounds' acceptances of other findings). An acceptance records the round it answered, and counts only there;
-    one written before acceptances carried a round counts for no round."""
+def accepted_ids(clone: pathlib.Path, name: str, key: str = "") -> set[str]:
+    """Finding ids `make review-accept` dispositioned as deliberately left (FR-003), for the verdict whose engine key is
+    `key`: an acceptance counts only for the round it answered.
+
+    GUARD_EDIT_OK: feature 261 - every round numbers its findings from F1 again, so an acceptance matched by the bare id
+    disposed of a LATER round's different F1 (the same defect `answers` closes for measurement records, feature 273). An
+    acceptance records the round it answers (`accept`); one with no round, written before acceptances carried one, clears
+    nothing where a key is asked for."""
     rec = _read_json(disposition_dir(clone) / f"{name}.json")
     items = rec.get("accepted", []) if isinstance(rec, dict) else []
     return {
         str(i.get("finding"))
         for i in items
-        if isinstance(i, dict) and i.get("finding") and len(str(i.get("reason", "")).split()) >= 2 and i.get("round") and round_key.startswith(str(i.get("round")))
+        if isinstance(i, dict) and i.get("finding") and len(str(i.get("reason", "")).split()) >= 2 and (not key or (i.get("round") and key.startswith(str(i["round"]))))
     }
-
-
-def findings_verdict(clone: pathlib.Path, name: str) -> dict | None:
-    """The verdict whose findings are owed dispositions: the latest one, or - when that is a plain NOT-REVIEWABLE, which
-    raises none - the finding-bearing verdict it was written over (`previous`, kept by `write_verdict`). GUARD_EDIT_OK:
-    feature 261 - a NOT-REVIEWABLE record overwrote the last round's findings, and the next dispatch was let through
-    with them never dispositioned."""
-    verdict = latest_verdict(clone, name)
-    if verdict and verdict["verdict"] == "NOT-REVIEWABLE" and verdict.get("concluded") not in ("PASS", "NEEDS-WORK"):
-        prev = verdict.get("previous")
-        return prev if isinstance(prev, dict) and prev.get("findings") else None
-    return verdict
 
 
 def measurement_records(clone: pathlib.Path) -> list[dict]:
@@ -106,34 +96,48 @@ def unverified_findings(clone: pathlib.Path, name: str, records: Iterable[dict] 
     """The ids of the findings the map's last verdict raised that nothing verifies and nothing accepted.
 
     NOT-REVIEWABLE raises no findings - it names missing prerequisites, which this same check is about to name
-    again - so only a PASS or NEEDS-WORK verdict's findings count. A verdict recorded NOT-REVIEWABLE only because its
-    gate was red still CONCLUDED one (`concluded`), and its findings are real: they count too."""
-    # GUARD_EDIT_OK: feature 261 - a review downgraded by a red gate kept real findings that no record was ever asked for
-    # (Kashikawa's brook crossing, Sawada's level brook), because this returned nothing for any NOT-REVIEWABLE verdict;
-    # and a plain NOT-REVIEWABLE now answers with the verdict it was written over (`findings_verdict`).
-    verdict = findings_verdict(clone, name)
+    again - so only a PASS or NEEDS-WORK verdict's findings count."""
+    verdict = latest_verdict(clone, name)
     if not verdict:
+        return []
+    raised = raised_findings(verdict)
+    if not raised:
         return []
     recs = list(measurement_records(clone) if records is None else records)
     # GUARD_EDIT_OK: feature 240 FR-009 / SC-007 - a verifying record must say WHAT it measured and FROM WHAT: the
     # reviewer's first stage judges the `source` against the finding (the canopy: `clumps` cannot verify a finding
     # about drawn crowns), and a record with no source gives it nothing to judge, so it verifies nothing.
-    # GUARD_EDIT_OK: feature 261 - every review round numbers its findings from F1 again, so a record matched by the bare id
-    # "verified" a LATER round's F1 it never measured (Kashikawa's windbreak record cleared a brook-crossing finding). A
-    # record that names its `round` - the engine key of the verdict it answers, or a prefix of it - counts only there.
-    _round = str(verdict.get("engine_key") or "")
+    # GUARD_EDIT_OK: feature 273 (defect found by its settlement-reviews, 2026-09-28) - every round numbers its findings
+    # from F1 again, so a record matched by bare id let an EARLIER round's F1 record "verify" a later round's different F1
+    # (twice in one session). A strict verdict - every one written since - is answered only by a record that names it:
+    # `"answers"` holding the verdict's engine key, or its first 12 characters. Older verdicts keep the bare-id match.
+    key = str(verdict.get("carried_from") if verdict.get("verdict") == "NOT-REVIEWABLE" and verdict.get("carried_from") else verdict.get("engine_key", ""))
     verified = {
         str(r.get("verifies"))
         for r in recs
-        if r.get("verifies") and r.get("subject") == name and r.get("quantity") and r.get("source") and _round.startswith(str(r.get("round") or ""))
+        if r.get("verifies") and r.get("subject") == name and r.get("quantity") and r.get("source") and (not verdict.get("strict") or (len(str(r.get("answers", ""))) >= 12 and key.startswith(str(r.get("answers")))))
     }
-    done = verified | accepted_ids(clone, name, _round)
-    return [str(f.get("id")) for f in verdict.get("findings", []) if isinstance(f, dict) and str(f.get("id")) not in done]
+    done = verified | accepted_ids(clone, name, key)
+    return [str(f.get("id")) for f in raised if str(f.get("id")) not in done]
+
+
+def answers_hint(clone: pathlib.Path, name: str) -> str:
+    """The `answers` a record must carry for this map's last verdict, when that verdict is strict."""
+    verdict = latest_verdict(clone, name) or {}
+    key = str(verdict.get("carried_from") if verdict.get("verdict") == "NOT-REVIEWABLE" and verdict.get("carried_from") else verdict.get("engine_key", ""))
+    return f" and \"answers\": \"{key[:12]}\"" if verdict.get("strict") and key else ""
+
+
+def raised_findings(verdict: dict) -> list[dict]:
+    """The findings a verdict leaves to be dispositioned: its own, or - on a NOT-REVIEWABLE verdict, which names missing
+    prerequisites rather than findings - the ones it CARRIED from the verdict it stopped over (see `write_verdict`)."""
+    own = verdict.get("carried", []) if verdict.get("verdict") == "NOT-REVIEWABLE" else verdict.get("findings", [])
+    return [f for f in own if isinstance(f, dict)]
 
 
 def has_findings(clone: pathlib.Path, name: str) -> bool:
-    verdict = findings_verdict(clone, name)  # GUARD_EDIT_OK: feature 261 - a gate-red verdict's findings are real, and a plain NOT-REVIEWABLE answers with the one it was written over
-    return bool(verdict and verdict.get("findings"))
+    verdict = latest_verdict(clone, name)
+    return bool(verdict and verdict["verdict"] != "NOT-REVIEWABLE" and verdict.get("findings"))
 
 
 # ---- FR-005: every map current, every artifact present -------------------------------------------------------
@@ -271,7 +275,7 @@ def check(clone: pathlib.Path, names: list[str], prompt: str, gate_green: bool, 
         if ids:
             problems.append(
                 f"FR-003 {name}: finding(s) {', '.join(ids)} from its last review have no record verifying them - add a "
-                f"measurements.json entry with \"verifies\" and \"subject\": \"{name}\", or `make review-accept MAP={name} "
+                f"measurements.json entry with \"verifies\", \"subject\": \"{name}\"{answers_hint(clone, name)}, or `make review-accept MAP={name} "
                 f"FINDING=<id> REASON=\"...\"` for one deliberately left"
             )
     if any(has_findings(clone, n) for n in names) and not gate_green:
@@ -300,16 +304,16 @@ def accept(clone: pathlib.Path, name: str, finding: str, reason: str) -> str | N
     acceptance of an id nobody reported would be a record of nothing."""
     if len(reason.split()) < 2 or len(reason.strip()) < 8:
         return "an acceptance needs a REASON of at least two words and eight characters - it is what a later audit reads"
-    verdict = findings_verdict(clone, name)
-    raised = {str(f.get("id")) for f in (verdict or {}).get("findings", []) if isinstance(f, dict)}
+    verdict = latest_verdict(clone, name)
+    raised = {str(f.get("id")) for f in raised_findings(verdict or {})}
     if finding not in raised:
         return f"{name}'s last verdict raised no finding {finding!r} (it raised: {', '.join(sorted(raised)) or 'none'})"
-    _round = str((verdict or {}).get("engine_key") or "")[:8]
     path = disposition_dir(clone) / f"{name}.json"
     path.parent.mkdir(parents=True, exist_ok=True)
     rec = _read_json(path)
-    items = [i for i in (rec.get("accepted", []) if isinstance(rec, dict) else []) if isinstance(i, dict) and (i.get("finding"), i.get("round")) != (finding, _round)]
-    items.append({"finding": finding, "round": _round, "reason": reason.strip()})
+    key = str(verdict.get("carried_from") if (verdict or {}).get("verdict") == "NOT-REVIEWABLE" and (verdict or {}).get("carried_from") else (verdict or {}).get("engine_key", ""))[:12]
+    items = [i for i in (rec.get("accepted", []) if isinstance(rec, dict) else []) if isinstance(i, dict) and not (i.get("finding") == finding and i.get("round") == key)]
+    items.append({"finding": finding, "round": key, "reason": reason.strip()})  # the round it answers - see `accepted_ids`
     path.write_text(json.dumps({"map": name, "accepted": items}, indent=1) + "\n")
     return None
 
@@ -373,17 +377,18 @@ def write_verdict(clone: pathlib.Path, name: str, verdict: str, findings: list[d
         raise ValueError(f"verdict must be one of {', '.join(VERDICTS)}")
     pairing = _read_json(clone / ".git" / "pairing-state.json")
     key = str(pairing.get("review_dispatch_key", "")) if isinstance(pairing, dict) else ""
-    rec: dict = {"map": name, "engine_key": key, "verdict": verdict, "gate": state, "findings": findings}
+    rec: dict = {"map": name, "engine_key": key, "verdict": verdict, "gate": state, "findings": findings, "strict": True}
     if verdict != "NOT-REVIEWABLE" and state == "red":
         rec.update(verdict="NOT-REVIEWABLE", concluded=verdict, why="the paired gate was red when the verdict was written")
-    if rec["verdict"] == "NOT-REVIEWABLE" and "concluded" not in rec:
-        # ...AND A PLAIN NOT-REVIEWABLE KEEPS THE VERDICT IT IS WRITTEN OVER (feature 261): it raises no findings, and
-        # overwriting the last finding-bearing record let the next dispatch through with those findings never answered
-        _prev = findings_verdict(clone, name)
-        if _prev:
-            rec["previous"] = _prev
     for i, f in enumerate(findings, 1):
         f.setdefault("id", f"F{i}")
+    # A NOT-REVIEWABLE VERDICT CARRIES THE FINDINGS IT STOPPED OVER (feature 273, 2026-09-28): it used to overwrite the
+    # prior record's findings with its own empty list, so `review-accept` refused them ("raised no finding") and the
+    # unverified check saw nothing to ask for.
+    prior = latest_verdict(clone, name)
+    if rec["verdict"] == "NOT-REVIEWABLE" and prior:
+        rec["carried"] = raised_findings(prior)
+        rec["carried_from"] = str(prior.get("engine_key", ""))
     path = verdict_dir(clone) / f"{name}.json"
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(rec, indent=1) + "\n")

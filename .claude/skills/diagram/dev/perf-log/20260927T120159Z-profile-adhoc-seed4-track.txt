@@ -1,0 +1,36 @@
+perf-profile seed 4 stage track: 3.0s under cProfile (the stages before it took 2.8s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20260927T120159Z-seed4-track.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         7359324 function calls (7051569 primitive calls) in 2.882 seconds
+
+   Ordered by: cumulative time
+   List reduced from 103 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    2.975    2.975 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py:295(stage_track)
+      176    0.026    0.000    1.906    0.011 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py:63(path_violations)
+419653/111898    0.120    0.000    1.662    0.000 {built-in method builtins.min}
+        1    0.001    0.001    1.421    1.421 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py:503(connector_track)
+      176    0.682    0.004    1.148    0.007 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/clearance.py:186(pairs_within)
+       72    0.001    0.000    0.881    0.012 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py:444(<lambda>)
+     4244    0.002    0.000    0.669    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py:78(<genexpr>)
+     3790    0.059    0.000    0.667    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/sitegen/geom.py:76(crosses_poly)
+      304    0.000    0.000    0.601    0.002 {built-in method builtins.sum}
+   339905    0.172    0.000    0.552    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:51(seg_dist)
+   355477    0.154    0.000    0.547    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/sitegen/geom.py:95(<genexpr>)
+        1    0.000    0.000    0.541    0.541 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py:134(_thread_the_fabric)
+        2    0.000    0.000    0.530    0.265 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py:412(clip_to_clear)
+      501    0.007    0.000    0.529    0.001 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py:429(fouled)
+    45020    0.050    0.000    0.522    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py:432(<genexpr>)
+  3310486    0.489    0.000    0.489    0.000 {built-in method math.hypot}
+   396334    0.393    0.000    0.427    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:29(point_in_poly)
+     3650    0.046    0.000    0.400    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py:402(_crosses_fabric)
+       41    0.000    0.000    0.392    0.010 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py:389(_fabric_hits)
+      229    0.001    0.000    0.391    0.002 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py:399(<genexpr>)
+   340265    0.233    0.000    0.328    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:42(seg_closest)
+    29661    0.021    0.000    0.324    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:126(edge_dist)
+   148305    0.065    0.000    0.271    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:127(<genexpr>)
+      123    0.000    0.000    0.209    0.002 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py:578(<genexpr>)
+       73    0.000    0.000    0.127    0.002 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py:443(<genexpr>)
+
+

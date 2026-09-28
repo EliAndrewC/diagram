@@ -1,0 +1,8 @@
+{
+ "term": "preceptor",
+ "def": "A cleric of one of the setting's Orders; every town has one preceptor per Order, and a town preceptor serves in a town monastery, where the Order's monks live under them.",
+ "variants": [
+  "preceptor",
+  "preceptors"
+ ]
+}

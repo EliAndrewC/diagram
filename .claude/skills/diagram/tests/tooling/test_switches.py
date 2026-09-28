@@ -106,9 +106,12 @@ def test_quick_collects_only_the_quick_tree(fixture_skill: Path, monkeypatch: py
     without an ignore, or an ignore dropped, fails here rather than silently re-collecting a thousand items."""
     monkeypatch.delenv("CODEBUILD_BUILD_ID", raising=False)
     cmd = make(fixture_skill, "-n", "quick").stdout
-    for tree in ("tests/tier_town", "tests/tier_city", "tests/gate", "tests/full"):
+    # tests/tooling joined the list for good on 2026-09-27 (the GM's ruling): it used to be collected whenever the
+    # tooling had changed, so it could not be pinned here.
+    for tree in ("tests/tier_town", "tests/tier_city", "tests/gate", "tests/full", "tests/tooling"):
         assert f"--ignore={tree}" in cmd, f"{tree} would be collected by make quick"
-    assert "--ignore=tests/tooling" in make(fixture_skill, "-n", "quick").stdout or True  # present only while the tooling is unchanged - not pinned
+    # ...and the `tooling` tests that live elsewhere (tests/tools) by their marker
+    assert '-m "not rolls_map and not tooling"' in cmd, "a tooling-marked test outside tests/tooling would run in make quick"
 
 
 @pytest.mark.tooling

@@ -49,8 +49,8 @@ sequence one-to-one. Where the two disagree, `STAGES` wins for anything under `h
 | 7 | `stage_track` | the CONNECTOR and the field spur, derived from the houses that landed. Before the appurtenances, so a well is sunk where the track already runs |
 | 8 | `stage_appurtenances` | yards, gardens, byres, wells, sheds |
 | 9 | `stage_pond_stock` | a dike-pond hamlet's pig sties and duck pens, on the banks of the ponds nearest the houses (feature 150 A3/A4) |
-| 10 | `stage_web` | the lane web - last of the BUILT things, because it fills leftover ground where everything above reserves it |
-| 11 | `stage_homestead_fields` | each household's own dry plot against its steading, on a lee or flank side, fitted to the lanes just drawn and registered as crop before the cover, the woods and the belt, which keep off it (feature 261) |
+| 10 | `stage_burial` | the hamlet's own burial ground, on its knob (feature 273: a ground at its edge, or none, its dead in the village's): seated against the placed houses and wells, before the web because it reserves ground the web and the scrub work around |
+| 11 | `stage_web` | the lane web - last of the BUILT things, because it fills leftover ground where everything above reserves it |
 | 12 | `stage_hinterland` | marsh, the coppice scan, the farmstead FIXTURES (privy, heap, bath, coop, stack, hokora, persimmon - seated after the web so no lane is re-threaded, before the bamboo and the scrub, which keep off them; feature 133 T53-T59), the household bamboo, then scrub and rough grazing |
 | 13 | `stage_woodland` | woodland commons |
 | 14 | `stage_windbreak` | the shelter belt |

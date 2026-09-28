@@ -126,3 +126,15 @@ def test_a_moved_table_fails_loudly_rather_than_matching_nothing(tmp_path: pathl
 
 def test_selftest_passes() -> None:
     chk.selftest()
+
+
+def test_a_british_word_inside_a_proper_name_is_not_reported(tmp_path: pathlib.Path) -> None:
+    """A source write-up naming its compiler: "Mary Neighbour Parent" is her name, not our spelling (feature 267)."""
+    root = _tree(tmp_path, {"a.md": "base\n"})
+    (root / "a.md").write_text("base\ncompiled by Mary Neighbour Parent, with no references\nthe Neighbour rule and a centre\n")
+    found = chk.findings(root)
+    assert [f.split(" -")[0] for f in found] == ["a.md:3: 'Neighbour'", "a.md:3: 'centre'"], found
+    assert chk.inside_a_name("Mary Neighbour Parent", 5, 14)
+    assert not chk.inside_a_name("the Neighbour rule", 4, 13), "one capitalized neighbor is not a name"
+    assert not chk.inside_a_name("Mary, Neighbour Parent", 6, 15), "a comma breaks the run"
+    assert not chk.inside_a_name("Mary neighbour Parent", 5, 14), "a lowercase hit is prose"

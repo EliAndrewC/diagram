@@ -38,8 +38,10 @@ SOURCE = os.path.join(_HERE, "assets", "glossary.json")
 TERMS = os.path.join("assets", "glossary")
 #: The prefix is gapped by ten, as `research/sources/` is: inserting a term between two renames nothing.
 GAP = 10
+#: DIGITS is the MINIMUM width: the prefixes passed 9990 on 2026-09-27 (feature 269), and a fifth digit is
+#: read, never refused - which is why the assembly sorts by the NUMBER, where `10020-` would sort before `1290-`.
 DIGITS = 4
-_NAMED = re.compile(r"^(\d{4})-(.+)\.json$")
+_NAMED = re.compile(r"^(\d{4,})-(.+)\.json$")
 #: What `json.dumps` was called with. Measured, not guessed: the committed file matches this exactly.
 _DUMP = {"ensure_ascii": False, "indent": 1}
 
@@ -59,8 +61,14 @@ def term_of(name: str) -> str:
     """The term a filename claims - for checking against the file's own content, never for the value."""
     found = _NAMED.match(name)
     if not found:
-        raise GlossaryError(f"{name}: not a term file. A term file is <prefix>-<term>.json, the prefix four digits counting by ten")
+        raise GlossaryError(f"{name}: not a term file. A term file is <prefix>-<term>.json, the prefix four or more digits counting by ten")
     return _decode(found.group(2))
+
+
+def _order(name: str) -> tuple[int, str]:
+    """By the prefix's NUMBER; a stray file sorts first so `term_of` refuses it."""
+    found = _NAMED.match(name)
+    return (int(found.group(1)) if found else -1, name)
 
 
 def position_of(name: str) -> int:
@@ -132,7 +140,7 @@ def term_files(root: str | None = None) -> list[dict]:
         raise GlossaryError(f"{TERMS}/: no term files - run `make glossary SPLIT=1`")
     seen: dict[int, str] = {}
     out = []
-    for name in sorted(os.listdir(here)):
+    for name in sorted(os.listdir(here), key=_order):
         term_of(name)  # refuses a stray file by its name
         at = position_of(name)
         if at in seen:
@@ -141,8 +149,11 @@ def term_files(root: str | None = None) -> list[dict]:
         with open(os.path.join(here, name), encoding="utf-8") as fh:
             entry = json.load(fh)
         # COMPARED IN THE ENCODE DIRECTION (the plan review, 2026-09-20): decoding a filename is not
-        # injective the moment a term contains a `%`, while encoding a term is exact forever.
-        if name != file_name(at // GAP, str(entry.get("term"))):
+        # injective the moment a term contains a `%`, while encoding a term is exact forever. ANY free
+        # four-digit prefix is read (2026-09-27): the gap of ten is how a new term is NAMED (`file_name`),
+        # so one can go between two; requiring the multiple of ten on reading capped the glossary at 999
+        # terms, and three features' terms (958 on main, some 125 more) overflowed it at a merge.
+        if name != f"{at:0{DIGITS}d}-{_encode(str(entry.get('term')))}.json":
             raise GlossaryError(f"{TERMS}/{name}: its filename says `{term_of(name)}` and its content says `{entry.get('term')}` - one of the two is wrong")
         out.append(entry)
     return out

@@ -1,0 +1,6 @@
+{
+  "utc": "20260927T120344Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "the settlement-review of exactly this content is already running (dispatched with the previous verify)"
+}
