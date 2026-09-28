@@ -727,6 +727,7 @@ fire-water tubs	fire-water
 firebox	firebox
 fireboxes	firebox
 fish fry	fish fry
+fish mouth	fish mouth
 fish-scale polder	yulin wei
 fish-scale polders	yulin wei
 fishway	fishway
@@ -1203,10 +1204,12 @@ irri	IRRI
 irrigation ditch	irrigation ditch
 irrigation ditches	irrigation ditch
 irrigation duty	water duty
+ishi-ibi	Ishi-ibi
 ishidaki	ishidaki
 ishidoro	stone lantern
 ishidōrō	stone lantern
 ishigaki	ishigaki
+ishiibi	Ishi-ibi
 ishikawa method	Ishikawa method
 ishikawa-method	Ishikawa method
 isohyet	isohyet
@@ -1544,6 +1547,7 @@ levees	levee
 levy storehouse	levy storehouse
 levy storehouses	levy storehouse
 li	li
+li river	Li River
 liberties	liberty
 liberty	liberty
 licensed quarter	yukaku
@@ -1558,7 +1562,9 @@ lineage chancellors	chancellor
 lineage village	lineage village
 lineage villages	lineage village
 lineages	lineage
+ling canal	Lingqu
 lingnan	Lingnan
+lingqu	Lingqu
 lion-dog	lion-dog
 lion-dogs	lion-dog
 lishe	gongxiefang
@@ -1680,6 +1686,7 @@ ming-dynasty	Ming dynasty
 ming-qing	Qing dynasty
 minka	minka
 mino	Mino
+mio-suji	thalweg
 mire	mire
 mirin	mirin
 mise	mise
@@ -2436,6 +2443,10 @@ stoke mouths	stoke mouth
 stone lantern	stone lantern
 stone lanterns	stone lantern
 stone pitching	stone pitching
+stoplog	stoplog gate
+stoplog gate	stoplog gate
+stoplog gates	stoplog gate
+stoplogs	stoplog gate
 storehouse-built	storehouse-built
 storehouse-built machiya	storehouse-built
 straw rick	rick
@@ -2594,6 +2605,8 @@ tertiary summaries	tertiary source
 tertiary summary	tertiary source
 tetsuki	tetsuki
 tezuki	tezuki
+thalweg	thalweg
+thalwegs	thalweg
 thatch field	thatch field
 thatch fields	thatch field
 the pool	the pool
@@ -2653,6 +2666,7 @@ toritsugi	yoritsuki
 toro	Toro
 toro site	Toro
 toshiyori	toshiyori
+toshuko	toshuko
 total length and fall	fall
 town elder	toshiyori
 town elders	toshiyori
@@ -2717,6 +2731,7 @@ two-grave settlements	two-grave
 two-grave villages	two-grave
 tōhoku	Tohoku
 tōkaidō	Tokaido
+tōshukō	toshuko
 tōya	miyaza
 ubuko	ubuko
 ubusuna	ubusuna
@@ -2767,6 +2782,7 @@ urajiro door	urajiro
 urajirodo	urajiro
 urajirogashi	urajirogashi
 ushi-waku	ushi-waku
+ushiwaku	ushi-waku
 usufruct	usufruct
 uzumimon	umon
 vaiśravaṇa	Bishamon
@@ -2805,6 +2821,8 @@ wallows	wallow
 wamyo ruijusho	Wamyosho
 wamyosho	Wamyosho
 wamyōshō	Wamyosho
+wang zhen	Wang Zhen
+wang zhen's	Wang Zhen
 wanghuolou	wanghuolou
 wanli	Wanli era
 wanli era	Wanli era
@@ -2891,6 +2909,8 @@ wrought iron	wrought iron
 wubei zhi	Wubei Zhi
 wujing zongyao	Wujing Zongyao
 xiang	xiang
+xiang river	Xiang River
+xiang seven, li three	Lingqu
 xiang-gan	Xiang-Gan
 xuanhua arch	memorial arch
 xun	xun
@@ -2964,6 +2984,7 @@ yui	yui
 yukaku	yukaku
 yukimi	yukimi
 yulin wei	yulin wei
+yuzui	fish mouth
 yūkaku	yukaku
 zaimachi	zaimachi
 zaimokuya	zaimokuya

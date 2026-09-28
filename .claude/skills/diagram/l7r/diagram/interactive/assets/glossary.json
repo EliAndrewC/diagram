@@ -7469,7 +7469,8 @@
  "ushi-waku": {
   "def": "A name sometimes used for the two Edo-period timber river works together: the ushi, a timber frame that came in several named types, and the waku, the square timber frame weighted with stone.",
   "variants": [
-   "ushi-waku"
+   "ushi-waku",
+   "ushiwaku"
   ]
  },
  "kaya-haguchi": {
@@ -11232,6 +11233,71 @@
   "def": "Inaba province, the old province whose castle town was Tottori, the domain of the Ikeda family.",
   "variants": [
    "Inshu"
+  ]
+ },
+ "thalweg": {
+  "def": "The line of deepest, fastest water along a river channel (Japanese mio-suji). A natural intake sets its mouth on the bank the thalweg runs along, and a crib weir's removable upper frame stood over it.",
+  "variants": [
+   "thalweg",
+   "thalwegs",
+   "mio-suji"
+  ]
+ },
+ "toshuko": {
+  "def": "Japanese for head works: originally the whole series of works for taking irrigation water from a river - the weir, the intake mouth, the settling basin, the division works - and in later use chiefly the intake weir itself.",
+  "variants": [
+   "toshuko",
+   "tōshukō"
+  ]
+ },
+ "Lingqu": {
+  "def": "An ancient Chinese canal joining the Xiang River to the Li River; a pointed divider, the plowshare snout, splits the Xiang so that seven parts of its water return to the Xiang and three pass into the canal.",
+  "variants": [
+   "Lingqu",
+   "Ling Canal",
+   "Xiang seven, Li three"
+  ]
+ },
+ "Ishi-ibi": {
+  "def": "A stone intake sluice in Japan, begun in 1615, whose weir and deflecting works turned the river's flow toward the sluice to take irrigation water, returning the surplus to the main river.",
+  "variants": [
+   "Ishi-ibi",
+   "Ishiibi"
+  ]
+ },
+ "stoplog gate": {
+  "def": "A gate made of timbers laid one on another in grooves across an opening in a weir or sluice; lifting the timbers out lets flood water and sediment through.",
+  "variants": [
+   "stoplog gate",
+   "stoplog gates",
+   "stoplog",
+   "stoplogs"
+  ]
+ },
+ "fish mouth": {
+  "def": "The pointed head of the dividing levee at Dujiangyan, which splits the river into the inner river, feeding the irrigation channels, and the outer river, carrying the flood.",
+  "variants": [
+   "fish mouth",
+   "yuzui"
+  ]
+ },
+ "Wang Zhen": {
+  "def": "A Yuan-dynasty Chinese official whose agricultural treatise, the Nong Shu (1313), describes and illustrates farm tools and irrigation works.",
+  "variants": [
+   "Wang Zhen",
+   "Wang Zhen's"
+  ]
+ },
+ "Xiang River": {
+  "def": "A river of south China flowing north through Dongting Lake to the Yangtze; the Lingqu canal takes three parts of its water across to the Li River.",
+  "variants": [
+   "Xiang River"
+  ]
+ },
+ "Li River": {
+  "def": "A river of south China flowing south toward the Pearl River; the Lingqu canal joins it to the Xiang River.",
+  "variants": [
+   "Li River"
   ]
  }
 }
