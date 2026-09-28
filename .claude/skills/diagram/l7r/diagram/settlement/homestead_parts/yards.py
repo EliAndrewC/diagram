@@ -15,22 +15,29 @@ if TYPE_CHECKING:
 # the outer row clears the floor's outline stroke (settlement-review, Kashikawa, 2026-09-28).
 MAT_FT = (6.0, 3.0)
 MAT_INSET_FT = 1.5
+# ...and every mat corner at least this far inside the floor's DRAWN outline, which `_quad` pulls in at its corners: the
+# rect inset alone left outer mats 0.1 ft off a pulled-in edge (measured on the pool's SVGs, 2026-09-28).
+MAT_EDGE_CLEAR_FT = 1.0
 MAT_SQ_FT = MAT_FT[0] * MAT_FT[1]
 # THE GAP LEFT BETWEEN DRAWN MATS, widest first (feature 282, a CONVENTION): a real yard's mats lay edge to edge, and drawn
 # so they read as a tiled floor (seen on Sawada, 2026-09-28, with a checkered half: mats meeting at their corners made
-# pavers, not mats). A 2 ft gap on every side leaves each mat on its own - a third to a half of a full cover once the
-# edges and the rack have taken theirs (measured on the pool, 0.34-0.54, 2026-09-28; the 2 ft pitch alone is 45%); a
+# pavers, not mats). A 2 ft gap on every side leaves each mat on its own - the 2 ft pitch alone is 45% of a full cover,
+# and the steps below keep every yard between a third and two thirds of one (spec 282 FR-004); a
 # yard too small or too clipped (by its pulled-in corners and the rack) to reach a third of one at that gap closes it a
 # step at a time, down to edge to edge on the smallest yards, and is thinned back evenly if that overshoots two thirds.
 MAT_GAPS_FT = (2.0, 1.5, 1.0, 0.5, 0.0)
 # ...and last, edge to edge WITHOUT the half-mat offset: an offset row carries one mat fewer, which on the smallest yards
 # the roll makes (8 tsubo, about 20 x 14 ft) leaves them short of a third even edge to edge.
 # THE RACK BY THE HOUSE (feature 282): a line of posts and poles hung with sheaves, drawn 2.5 ft wide so it reads - a
-# map drawing CONVENTION (the real poles are inches thick) - and inset 2 ft from the yard's side and front edges. It is
+# map drawing CONVENTION (the real poles are inches thick) - and inset 2 ft from the yard's front edge and 1 ft from its side. It is
 # drawn as a straw-gold LINE of hung sheaves with dark post dots and no box: drawn first as an outlined box, it read as
 # the woodpile beside the same houses (settlement-review, Sawada, 2026-09-28).
 RACK_WIDTH_FT = 2.5
-RACK_INSET_FT = 2.0
+RACK_INSET_FT = 2.0  # from the yard's front (house-facing) edge
+# ...but only 1 ft from its SIDE, so the rack stands in the slack the centered mat rows leave at the yard's flanks and does
+# not take a column of mats: at 2 ft it cost the smallest yards a third of their floor (Sawada's 20 x 14 ft yard drew 4 mats
+# of a floor of 6, the gate, 2026-09-28).
+RACK_SIDE_INSET_FT = 1.0
 RACK_MIN_FT = 4.0  # shorter than this and it is not drawn: a side clipped by the map-south rule to a stub reads as litter
 RACK_CLEAR_FT = 0.25  # the rack stops this far north of the yard's midline (the manifest rounds to 0.1 px)
 RACK_POST_FT = 6.0  # a post every ~6 ft (a GUESS within the attested racks: posts at even spacing, kotobank-hasa-nipponica)
@@ -41,14 +48,14 @@ def mat_cells(w: float, h: float, poly: list[tuple[float, float]], ftpx: float, 
 
     The real yard was covered edge to edge (40-60 mats), which at map scale reads as a textured floor rather than as mats,
     so the drawing lays them in rows across the whole yard with a gap around each, every other row set over by half a
-    mat, a third to a half of a full cover - the GM's
+    mat, a third to two thirds of a full cover - the GM's
     drawing convention (2026-09-28: "at this scale, we can't render dozens of mats and have that be legible. So our
     threshing yard glyphs show a smaller number to give the impression that there are many of them"). The rows are
     centered inside a 1.5 ft inset (an offset row carries one mat fewer, so it stays inside); a mat is kept only if its four corners lie inside the yard's quad `poly` (local coords)
     and it misses `keep_out` (the rack's footprint, x0, y0, x1, y1). The count is held to at least a third of the yard's
     full cover (area / 18 sq ft; spec 282 FR-004) by closing the gap (`MAT_GAPS_FT`); at the widest gap that still
     reaches it (last, edge to edge without the offset); a step that overshoots two thirds is thinned back evenly."""
-    mw, mh, inset = MAT_FT[0] / ftpx, MAT_FT[1] / ftpx, MAT_INSET_FT / ftpx
+    mw, mh, inset, clear = MAT_FT[0] / ftpx, MAT_FT[1] / ftpx, MAT_INSET_FT / ftpx, MAT_EDGE_CLEAR_FT / ftpx
     floor = math.ceil((w * ftpx) * (h * ftpx) / MAT_SQ_FT / 3.0)
     mats: list[tuple[float, float, float, float]] = []
     for gap_ft, stagger in [(gp, True) for gp in MAT_GAPS_FT] + [(0.0, False)]:
@@ -61,7 +68,7 @@ def mat_cells(w: float, h: float, poly: list[tuple[float, float]], ftpx: float, 
             shift = (mw + g) / 2.0 if odd else 0.0  # every other row set over by half a mat, and one mat shorter
             for c in range(cols - (1 if odd else 0)):
                 x, y = gx0 + shift + c * (mw + g), gy0 + r * (mh + g)
-                if not all(point_in_poly(px, py, poly) for px, py in ((x, y), (x + mw, y), (x + mw, y + mh), (x, y + mh))):
+                if not all(point_in_poly(px, py, poly) and edge_dist(px, py, poly) >= clear for px, py in ((x, y), (x + mw, y), (x + mw, y + mh), (x, y + mh))):
                     continue
                 if keep_out is not None and x < keep_out[2] and x + mw > keep_out[0] and y < keep_out[3] and y + mh > keep_out[1]:
                     continue
@@ -99,7 +106,7 @@ def rack_segment(w: float, h: float, rot: float, ftpx: float, side: int) -> tupl
     s, c = math.sin(th), math.cos(th)
     hw, inset, minlen = RACK_WIDTH_FT / 2.0 / ftpx, RACK_INSET_FT / ftpx, RACK_MIN_FT / ftpx
     for far, sd in ((0.0, side), (0.0, -side), (h / 2.0 - inset, side), (h / 2.0 - inset, -side)):
-        x = sd * (w / 2.0 - inset - hw)
+        x = sd * (w / 2.0 - RACK_SIDE_INSET_FT / ftpx - hw)
         lo, hi = -h / 2.0 + inset, far
         for xp in (x - hw, x + hw):  # each long edge of the footprint: y * c <= -xp * s
             k = -xp * s - RACK_CLEAR_FT / ftpx  # a hair north of the midline, so the manifest's rounding cannot carry it over
@@ -129,7 +136,7 @@ class ThreshingYardsMixin:
         rack = rack_segment(w, h, rot, self.ftpx, 1 if self._hjit(cx, cy, 53.0) < 0.5 else -1) if self._house_racks else None
         keep = (rack[0] - rack[3] - 0.5, rack[1] - 0.5, rack[0] + rack[3] + 0.5, rack[2] + 0.5) if rack else None
         mats = mat_cells(w, h, local, self.ftpx, keep)
-        for mx, my, mw, mh in mats:  # straw mats (mushiro), a third to a half of those that covered the floor, each on its own - a CONVENTION
+        for mx, my, mw, mh in mats:  # straw mats (mushiro), a third to two thirds of those that covered the floor, each on its own - a CONVENTION
             g.append(f'<rect x="{mx:.2f}" y="{my:.2f}" width="{mw:.2f}" height="{mh:.2f}" fill="#EBDDAE" stroke="#9A7C45" stroke-width="0.5"/>')
         out: dict[str, Any] = {"mats": len(mats)}
         if rack:

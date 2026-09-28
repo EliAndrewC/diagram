@@ -112,7 +112,7 @@ class ThreshingYard(Kind):
     coast of changeable autumn weather, so that the threshing could be done at home, and the drying method
     followed the climate over whole regions - so every settlement in one climate draws the same.
 
-    Note: we have rendered a third to a half of the straw mats that covered a yard, each with a little bare ground
+    Note: we have rendered between a third and two thirds of the straw mats that covered a yard, each with a little bare ground
     around it, in order to keep them legible: at this scale dozens of mats laid edge to edge would read as a textured
     floor rather than as mats, so the drawing shows a smaller number to give the impression of many. The real yard at
     harvest was covered, 40 to 60 mats of about 3 by 6 feet each on an ordinary farm and 100 to 150 on a large one. The

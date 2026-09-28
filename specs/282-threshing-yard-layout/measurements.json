@@ -1,0 +1,73 @@
+{
+ "sr1-sawada-f1-rack-glyph": {
+  "value": 0,
+  "unit": "racks drawn as a box",
+  "quantity": "rack ink drawn as a filled rect (the woodpile's form) in Sawada's 19 yard groups; the 19 racks are straw-gold lines (stroke #D9B64A) with post dots",
+  "verifies": "F1",
+  "subject": "sawada",
+  "answers": "3efdb2288c9a",
+  "source": "specs/282-threshing-yard-layout/measure.py (run from .claude/skills/diagram), reading the pool map's drawn SVG ink (each yard group's floor polygon and mat rects), its rendered .html and its notes",
+  "measured": "2026-09-28",
+  "method": "count of <rect> other than a mat, and of #D9B64A strokes, inside each threshing-yard group of sawada.svg",
+  "rack_lines": 19
+ },
+ "sr1-sawada-f2-notes": {
+  "value": 1,
+  "unit": "entries",
+  "quantity": "feature-282 entries in sawada.notes.md",
+  "verifies": "F2",
+  "subject": "sawada",
+  "answers": "3efdb2288c9a",
+  "source": "specs/282-threshing-yard-layout/measure.py (run from .claude/skills/diagram), reading the pool map's drawn SVG ink (each yard group's floor polygon and mat rects), its rendered .html and its notes",
+  "measured": "2026-09-28",
+  "method": "lines of pool/hamlets/sawada/sawada.notes.md containing 'feature 282'"
+ },
+ "sr1-mizuguchi-f1-modal-share": {
+  "value": 1,
+  "unit": "occurrences",
+  "quantity": "the rendered mizuguchi.html modal says 'between a third and two thirds of the straw mats' (0 'about half'); the drawn share is 0.36-0.65 of a full cover over the 12 yards",
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "answers": "3efdb2288c9a",
+  "source": "specs/282-threshing-yard-layout/measure.py (run from .claude/skills/diagram), reading the pool map's drawn SVG ink (each yard group's floor polygon and mat rects), its rendered .html and its notes",
+  "measured": "2026-09-28",
+  "method": "string count in mizuguchi.html; drawn mats over (drawn floor polygon area / 18 sq ft) per yard group in mizuguchi.svg",
+  "share_min": 0.36,
+  "share_max": 0.65
+ },
+ "sr1-mizuguchi-f2-rack-text": {
+  "value": 1,
+  "unit": "occurrences",
+  "quantity": "the rendered mizuguchi.html modal states the rack only conditionally ('where a map draws racks by the houses'); the map draws 0 rack lines",
+  "verifies": "F2",
+  "subject": "mizuguchi",
+  "answers": "3efdb2288c9a",
+  "source": "specs/282-threshing-yard-layout/measure.py (run from .claude/skills/diagram), reading the pool map's drawn SVG ink (each yard group's floor polygon and mat rects), its rendered .html and its notes",
+  "measured": "2026-09-28",
+  "method": "string count in mizuguchi.html; #D9B64A strokes in its yard groups"
+ },
+ "sr1-kashikawa-f1-modal-share": {
+  "value": 1,
+  "unit": "occurrences",
+  "quantity": "the rendered kashikawa.html modal says 'between a third and two thirds of the straw mats' (0 'about half'); the drawn share is 0.36-0.55 over the 20 yards",
+  "verifies": "F1",
+  "subject": "kashikawa",
+  "answers": "3efdb2288c9a",
+  "source": "specs/282-threshing-yard-layout/measure.py (run from .claude/skills/diagram), reading the pool map's drawn SVG ink (each yard group's floor polygon and mat rects), its rendered .html and its notes",
+  "measured": "2026-09-28",
+  "method": "string count in kashikawa.html; drawn mats over (drawn floor polygon area / 18 sq ft) per yard group in kashikawa.svg",
+  "share_min": 0.36,
+  "share_max": 0.55
+ },
+ "sr1-kashikawa-f2-mat-margin": {
+  "value": 1.0,
+  "unit": "ft",
+  "quantity": "the smallest distance from any drawn mat corner to its yard's drawn floor outline, over the 20 yards of kashikawa.svg (was 0.4-0.6)",
+  "verifies": "F2",
+  "subject": "kashikawa",
+  "answers": "3efdb2288c9a",
+  "source": "specs/282-threshing-yard-layout/measure.py (run from .claude/skills/diagram), reading the pool map's drawn SVG ink (each yard group's floor polygon and mat rects), its rendered .html and its notes",
+  "measured": "2026-09-28",
+  "method": "point-to-segment distance of every mat rect corner to the four edges of its group's floor polygon, in the group's local frame (1 px = 1 ft)"
+ }
+}
