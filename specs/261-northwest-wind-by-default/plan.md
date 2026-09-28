@@ -381,8 +381,9 @@ Measured before and after in research R10.
   the band thinned to a sliver, and Kashikawa's westernmost steading's garden and sun lane emptied it - a hole in the
   windward face (settlement-review, round 97c20bc9; research/vegetation.html: a belt "reads as a wall of trees only at"
   80-120 ft of depth, and a windbreak with a hole funnels the wind). The band's thinnest depth across itself went from 20.7 ft
-  to 97.2 on Kashikawa (`m:belt-r16-depth`). On the pool every belt is now at least 95.0 ft deep and its median 103-107
-  ft wherever the canvas edge does not cut it, at most 9% of a face over 120 ft (at its bends) - the record's 80-120.
+  to 97.2 on Kashikawa (`m:belt-r16-depth`). On the 105 ft band every pool belt was at least 95.0 ft deep and its median 103-107
+  ft wherever the canvas edge does not cut it, at most 9% of a face over 120 ft (at its bends) - the record's 80-120;
+  D23's 100 ft band draws 84.1-89.8 ft at its thinnest (`m:belt-r22-depth`).
   Round 31ef113b's spec-fidelity found Sawada's bend at 72.7 ft, and the next round the typical band past 120 ft once
   the first fix pushed both faces outward (observed 2026-09-28: `measure/belt_depth.py`, every 5 ft along the near face,
   reading where it ends from `meta.belt_near_vertices` and leaving out a stretch clamped to the canvas). Three causes
@@ -470,7 +471,7 @@ want to route around deficiencies in our placement algorithm... we should fix th
   house: Kashikawa's ran 37.3 ft from its westernmost farmhouse, through that house's garden, whose afternoon-sun lane
   then took the band's trees; Sawada's 33.8 ft (`m:belt-r22-near-face`). `round_the_houses` adds a point every 30 ft
   across the wind and every 15 degrees round each house's disc wherever the disc stands windward of the chord, so the
-  face goes round the house at the distance the column rule already gives it (73-82 ft now, the 79 ft reach less the
+  face goes round the house at the distance the column rule already gives it (73-82 ft now, `m:belt-r22-near-face`, the 79 ft reach less the
   near rag). A calibration of the column rule, not a new clearance. The 105 ft band of D20 was laid to cover that
   split; with its cause fixed it drew 17-24% of two faces past 120 ft, and the band goes back to 100 ft: thinnest
   84.1-89.8 ft, median 95.6-101.4, 1-16% of a face over 120 at the ends and bends, one piece on every map
@@ -481,7 +482,7 @@ want to route around deficiencies in our placement algorithm... we should fix th
   stood 157 ft from its nearest dry plot. Where no side has room flush, the plot is offered the nearest ground beside
   the steading, out from each lee or flank side and along it every 15 ft to 90 ft, never upwind of the steading
   (`beside_the_steading`): a plot there fouled the belt, and the belt's fit steps back from any crop (Sawada's belt
-  fell to 703 crowns in two pieces on the roll before that rule). Medians now 70-99 ft (`m:dry-r22-median`).
+  fell to 703 crowns in two pieces on the roll before that rule, observed 2026-09-28 on a roll not committed). Medians now 70-99 ft (`m:dry-r22-median`).
 - **A yard tree and a stack unseated** (the persimmon's ring a map drawing convention; the straight seats a GUESS,
   labeled - the record plants persimmons "round the homestead" and a stack at "whichever wall is free"). The plot
   laid flush took the last open ground round Mizuguchi's north-row house, a lane at its back and east wall, and its

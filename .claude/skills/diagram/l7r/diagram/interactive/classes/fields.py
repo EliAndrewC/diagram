@@ -170,7 +170,7 @@ class Buckwheat(Kind):
     settlements and their dry fields on the natural levee and another the paddy in the wet ground behind; elsewhere
     that order is this record's own reading, and one source read puts paddy
     round houses built on slightly higher ground instead. What is said here of the crop itself is not drawn
-    from the section this entry names; the crop mix per map is rolled from the seed and is a GUESS at the
+    from the section this entry names; the plot laid against a homestead (or beside it, where no side has room), as long as that side and one hem row deep, is a GUESS at its size; the crop mix per map is rolled from the seed and is a GUESS at the
     proportions.
 
     Caveat: the plot laid against a homestead (or beside it, where no side has room), as long as that side and one hem
@@ -201,7 +201,7 @@ class Barley(Kind):
     settlements and their dry fields on the natural levee and another the paddy in the wet ground behind; elsewhere
     that order is this record's own reading, and one source read puts paddy
     round houses built on slightly higher ground instead. What is said here of the crop itself is not drawn
-    from the section this entry names; the crop mix per map is rolled from the seed and is a GUESS at the
+    from the section this entry names; the plot laid against a homestead (or beside it, where no side has room), as long as that side and one hem row deep, is a GUESS at its size; the crop mix per map is rolled from the seed and is a GUESS at the
     proportions.
 
     Caveat: the plot laid against a homestead (or beside it, where no side has room), as long as that side and one hem
@@ -233,7 +233,7 @@ class Soy(Kind):
     settlements and their dry fields on the natural levee and another the paddy in the wet ground behind; elsewhere
     that order is this record's own reading, and one source read puts paddy
     round houses built on slightly higher ground instead. What is said here of the crop itself is not drawn
-    from the section this entry names; the crop mix per map is rolled from the seed and is a GUESS at the
+    from the section this entry names; the plot laid against a homestead (or beside it, where no side has room), as long as that side and one hem row deep, is a GUESS at its size; the crop mix per map is rolled from the seed and is a GUESS at the
     proportions.
 
     Caveat: the plot laid against a homestead (or beside it, where no side has room), as long as that side and one hem

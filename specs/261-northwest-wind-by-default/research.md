@@ -221,7 +221,8 @@ records `m:kashikawa-r4-caption`, `m:kuwabata-r4-tail`, `m:kuwabata-r4-caption-l
 | a lane hollowing the belt | Kuwabata, drawn crowns 58 ft deep at the median, 53% of the outline (main 93, 80%) | 88 ft, 75% (`m:kuwabata-r10-belt-depth`) |
 
 Kuwabata's first two rolls under the changed ways each left a farmhouse off the way network, so it keeps its third: 4
-of 16 farmsteads re-seated, the farthest 134 ft (`m:kuwabata-r4-notes`).
+of 16 farmsteads re-seated, the farthest 134 ft. On the pool main's feature 276 re-laid (plan D23) the first roll serves
+every farmhouse and 0 farmsteads re-seat against main (`m:kuwabata-r4-notes`).
 
 ## R11 - The round of engine 0ae309f0, and what each fix measured
 
@@ -258,7 +259,7 @@ one error on Kashikawa. What each fix measured:
 | finding | before | after |
 |---|---|---|
 | Kashikawa: a plank 44 degrees off square, the lane bent 3 ft inside the brook | 44 degrees | 1.0 degree at the worst crossing on the map (`m:kashikawa-r12-plank`) |
-| Kashikawa (nitpicks): the notes' connector bearing, the drain junction, four stale records | 11 degrees; 476 ft and 655 ft; greps on 360 clumps, aspect 1.03 | 14 degrees (`m:kashikawa-r12-bearing`); 584 ft inside the view, 778 ft of brook below (`m:kashikawa-r12-junction`); the belt's 277 clumps then, 504 after round 97c20bc9's belt fix and 498 on the 105 ft band, and every other record re-measured (`m:kashikawa-r12-records`) |
+| Kashikawa (nitpicks): the notes' connector bearing, the drain junction, four stale records | 11 degrees; 476 ft and 655 ft; greps on 360 clumps, aspect 1.03 | 14 degrees (`m:kashikawa-r12-bearing`; 5 degrees on the pool main's feature 276 re-laid, plan D23); 584 ft inside the view, 778 ft of brook below (`m:kashikawa-r12-junction`); the belt's 277 clumps then, 504 after round 97c20bc9's belt fix 498 on the 105 ft band, and 462 on the pool main's feature 276 re-laid (plan D23), and every other record re-measured (`m:kashikawa-r12-records`) |
 
 The same round's cohort ran 37/48 against main's 38/48 (observed 2026-09-27, method: `make cohort`): seed 45's view reached 41 ft past the predicted scatter frame (observed 2026-09-27, method: the roll's `scatter_frame_breach`),
 its title pocket placed below the content because every seat above it was off the canvas. The prediction now takes in
