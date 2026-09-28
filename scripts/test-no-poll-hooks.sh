@@ -48,7 +48,12 @@ except Exception: pass' 2>/dev/null)
     *) echo "  FAIL    $1 was not corrected (got '${got:-<nothing>}', wanted '$3')"; FAIL=$((FAIL+1)) ;;
   esac
 }
-rewritten "bare literal pattern is bracketed" 'pgrep -f "make done"' '[m]ake done'
+rewritten "bare literal pattern is bracketed" 'pgrep -f "resvg --width"' '[r]esvg --width'
+# GUARD_EDIT_OK: 2026-09-28 (GM: "Yes please") - a MAKE-RUN wait is scoped to the asking tree, not bracketed: a
+# bracketed "[m]ake done" still matched other clones' gates and held a waiter six hours past its own failed gate
+rewritten "a make-run wait is scoped to this tree" 'pgrep -f "make done"' '_own-make.sh done'
+rewritten "...bracketed already, scoped all the same" "until ! pgrep -f '[m]ake done' >/dev/null; do sleep 5; done  # POLL_OK: a detached gate" '_own-make.sh done'
+rewritten "...the flags kept apart from the pattern" 'pgrep -af "make page-check"' '_own-make.sh page-check'
 rewritten "pkill literal pattern is bracketed" 'pkill -f "cherryd"' '[c]herryd'
 # GUARD_EDIT_OK: feature 212 - a FOREGROUND file-watching wait is BACKGROUNDED now (section 5b), so
 # the busy-wait vector here waits on something that is not a file
@@ -63,7 +68,7 @@ check "backslash-escaped sleep bypass" blocked '\sleep 12'
 echo "2. the block explains the fault and the alternative"
 # GUARD_EDIT_OK: feature 164 - the self-match is CORRECTED now, so its explanation travels as the
 # rewrite's own context rather than as a refusal. The busy-wait block below still owes its message.
-SELF=$(run 'pgrep -f "make done"' 2>/dev/null)
+SELF=$(run 'pgrep -f "cherryd"' 2>/dev/null)
 printf '%s' "$SELF" | grep -q "finds the searching shell itself" && { echo "  ok      the correction names the self-match fault"; PASS=$((PASS+1)); } || { echo "  FAIL    self-match not explained"; FAIL=$((FAIL+1)); }
 printf '%s' "$SELF" | grep -q "Corrected rather than refused" && { echo "  ok      ...and says why it was corrected rather than refused"; PASS=$((PASS+1)); } || { echo "  FAIL    the correction does not say why"; FAIL=$((FAIL+1)); }
 run 'while :; do sleep 5; done' >/dev/null
@@ -187,16 +192,33 @@ printf '%s' "$U_PAYLOAD" \
 # correction ran. Now the wait is permitted AND the pattern is bracketed, and both are recorded.
 echo "4b. an escaped wait still gets the self-match correction"
 ESCAPED_SELF='true POLL_OK waits on the detached page-check gate writing its log; L=/tmp/pc.log; until grep -qE "passed|failed" $L 2>/dev/null && ! pgrep -f "make page-check" >/dev/null; do sleep 5; done; tail -6 $L'
-rewritten "the 2026-09-08 waiter: escaped AND bracketed" "$ESCAPED_SELF" '[m]ake page-check'
+rewritten "the 2026-09-08 waiter: escaped AND corrected (scoped since 2026-09-28)" "$ESCAPED_SELF" '_own-make.sh page-check'
 # GUARD_EDIT_OK: 2026-09-08 - both entries land: the escape (rule poll-ok) and the rewrite
 if grep -rlq 'poll-ok' "$GUARD_LOG_ROOT" && grep -rlq 'escaped-self-match' "$GUARD_LOG_ROOT"; then
   echo "  ok      the escaped-and-corrected wait records both the escape and the rewrite"; PASS=$((PASS+1))
 else
   echo "  FAIL    the escaped-and-corrected wait did not record both entries"; FAIL=$((FAIL+1))
 fi
-check "an escaped wait with a bracketed pattern is untouched" ok 'until ! pgrep -f "[m]ake done" >/dev/null; do sleep 5; done  # POLL_OK: a run detached by another session'
-rewritten "two literal patterns are BOTH bracketed" 'pgrep -f "make done"; pgrep -f "make quick"' '[m]ake quick'
-rewritten "...and the first of them too" 'pgrep -f "make done"; pgrep -f "make quick"' '[m]ake done'
+check "an escaped wait with a bracketed pattern is untouched" ok 'until ! pgrep -f "[c]herryd" >/dev/null; do sleep 5; done  # POLL_OK: a daemon another session started'
+rewritten "two literal patterns are BOTH bracketed" 'pgrep -f "cherryd"; pgrep -f "resvg"' '[r]esvg'
+rewritten "...and the first of them too" 'pgrep -f "cherryd"; pgrep -f "resvg"' '[c]herryd'
+rewritten "two make-run waits are BOTH scoped" 'pgrep -f "make done"; pgrep -f "make quick"' '_own-make.sh quick'
+rewritten "...and the first of them too" 'pgrep -f "make done"; pgrep -f "make quick"' '_own-make.sh done'
+rewritten "a kill is not a wait: pkill is bracketed, not scoped" 'pkill -f "make done"' 'pkill -f "[m]ake done"'
+SCOPED=$(run 'pgrep -f "make done"' 2>/dev/null)
+printf '%s' "$SCOPED" | grep -q "scoped to this working tree" && { echo "  ok      the scoping says why"; PASS=$((PASS+1)); } || { echo "  FAIL    the scoping is not explained"; FAIL=$((FAIL+1)); }
+grep -rlq 'self-match-scoped' "$GUARD_LOG_ROOT" && { echo "  ok      the scoping is recorded under its own rule slug"; PASS=$((PASS+1)); } || { echo "  FAIL    no self-match-scoped entry"; FAIL=$((FAIL+1)); }
+
+echo "4c. _own-make.sh counts only this tree's runs"
+OWN="$HERE/_own-make.sh"
+PROBE_A=$(mktemp -d); PROBE_B=$(mktemp -d); git -C "$PROBE_B" init -q
+( cd "$PROBE_A" && exec -a "make own-make-probe-target" sleep 30 ) & PROBE_PID=$!
+command sleep 0.3  # POLL_OK: let the probe process start before asking about it
+( cd "$PROBE_B" && "$OWN" own-make-probe-target ) && { echo "  FAIL    another tree's run was counted"; FAIL=$((FAIL+1)); } || { echo "  ok      another tree's run is not counted"; PASS=$((PASS+1)); }
+( cd "$PROBE_A" && "$OWN" own-make-probe-target ) && { echo "  ok      this tree's own run is counted"; PASS=$((PASS+1)); } || { echo "  FAIL    this tree's own run was missed"; FAIL=$((FAIL+1)); }
+kill "$PROBE_PID" 2>/dev/null; wait "$PROBE_PID" 2>/dev/null
+( cd "$PROBE_A" && "$OWN" own-make-probe-target ) && { echo "  FAIL    a finished run still counts"; FAIL=$((FAIL+1)); } || { echo "  ok      a finished run no longer counts"; PASS=$((PASS+1)); }
+rm -rf "$PROBE_A" "$PROBE_B"
 
 # GUARD_EDIT_OK: feature 227 (GM 2026-09-12) - THE WAIT GETS A PROOF OF LIFE, and the shape that already
 # carries one stops being refused. The incident: a detached `make placement-stages` finished its work and was

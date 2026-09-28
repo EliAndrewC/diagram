@@ -76,10 +76,19 @@ NP_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 bracket_self_match() {  # rule, context
   printf '%s' "$SCAN" | grep -Eq '\b(pgrep|pkill)\b[^|;&]*[[:space:]]-[a-zA-Z]*f' || return 0
   local fixed
-  fixed=$(printf '%s' "$INPUT" | "$NP_HERE/_hm_shape.py" bracket 2>/dev/null || true)
+  # GUARD_EDIT_OK: 2026-09-28 (GM: "Yes please") - a wait on a MAKE RUN is scoped to this tree first
+  # (`_own-make.sh`, header there): a bracketed pattern stopped the self-match but still matched other clones'
+  # gates, and held a waiter six hours past its own failed gate. The rule slug gains `-scoped` when it fired.
+  fixed=$(printf '%s' "$INPUT" | "$NP_HERE/_hm_shape.py" bracket "$NP_HERE/_own-make.sh" 2>/dev/null || true)
   [ -n "$fixed" ] || return 0
-  guard_log no-poll rewrote "$(guard_cmd)" "$1"
-  printf '%s' "$INPUT" | REWRITTEN="$fixed" CONTEXT="$2" python3 -c '
+  local rule="$1" context="$2"
+  case "$fixed" in
+    *_own-make.sh*)
+      rule="$1-scoped"
+      context="A wait on a make run was scoped to this working tree (_own-make.sh <target>): pgrep searches the whole host, and other sessions' runs of the same target held a waiter open for six hours after its own run had ended. A harness-tracked run (run_in_background) needs no waiter at all." ;;
+  esac
+  guard_log no-poll rewrote "$(guard_cmd)" "$rule"
+  printf '%s' "$INPUT" | REWRITTEN="$fixed" CONTEXT="$context" python3 -c '
 import json, os, sys
 payload = json.load(sys.stdin).get("tool_input", {})
 payload["command"] = os.environ["REWRITTEN"]
