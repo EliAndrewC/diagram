@@ -1232,6 +1232,8 @@ jail god	jail-god
 jail-god	jail-god
 jail-god temple	jail-god
 japanese zelkova	keyaki
+jar burial	jar burial
+jar burials	jar burial
 jetties	jetty
 jetty	jetty
 jiajing	Jiajing
@@ -2265,6 +2267,8 @@ sengoku	Sengoku
 sengoku house	Sengoku house
 senmaida	senmaida
 sensei	sensei
+senso-ji	Sensoji
+sensoji	Sensoji
 sento	sento
 sentō	sento
 senzai	senzai
