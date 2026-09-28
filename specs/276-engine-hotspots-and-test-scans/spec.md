@@ -197,7 +197,7 @@ The track stage's path checks read the static water and crop geometry from an in
   (m:before-close-seams-min, m:before-close-seams-max), and a diagonal sliver pocket's grid visits only the cells it
   touches.
 - **SC-005** (FR-005): The track stage's path checks take at least `2x` less than the CORRECTED function did before the index -
-  its time re-taken once `seg_intersect` was bounded (m:before-track-checks-corrected-s; 0.966 s was the uncorrected one,
+  its time re-taken once `seg_intersect` was bounded, 0.139 s (m:before-track-checks-corrected-s; 0.966 s was the uncorrected one,
   m:before-track-checks-s) - the stage is not slower than 1.308 s (m:before-track-stage-s), and the checks' counts equal the full scan's on every candidate.
 - **SC-006** (FR-006): Every live pool map regenerates with every gate rule passing, `make done` is green at `100%`, and FR-006's
   house counts and forms hold on every pool map and placement scenario.
@@ -273,4 +273,4 @@ pair); `path_violations`, FR-005's oracle, is the corrected function, so tracks 
 
 Round 2 of this amendment (CHANGES REQUIRED): the Decisions Recorded preamble named two of the fix's three consumers - the
 homestead brook-cut test was missing - and the fix had no row of its own; both added. SC-005's path-check baseline is
-re-taken on the corrected function (m:before-track-checks-corrected-s), so its `2x` credits the index, not the fix.
+re-taken on the corrected function, 0.139 s (m:before-track-checks-corrected-s), so its `2x` credits the index, not the fix.
