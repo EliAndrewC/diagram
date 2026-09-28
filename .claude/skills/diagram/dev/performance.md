@@ -319,7 +319,11 @@ parsed all ~264 engine modules and walked 1-1.5 million nodes; five record tests
 re-scanned the record per page or per term. `tests/_engine_ast.py` parses a file once per content (a counter the tests
 assert on), the scans take a needle so a file without the keyword is never parsed for them, and the record tests build
 their tables once. One scan walked every function's subtree separately, so a body n functions deep was walked n times -
-a nested walk is the same shape inside one test. The five record tests: 17.2 s alone summed -> about 6 s together.
+a nested walk is the same shape inside one test. Two record tests each ran a lookbehind-led pattern at every
+position of all ~7,900 tracked files; the pattern can only match inside a run of path characters around a `.md`, so it
+now runs over those runs alone, once per text for both tests (`md_tokens`), and a multi-word glossary variant is tried
+only where its first word starts rather than searched for across the whole record. The five record tests: 17.2 s alone
+summed -> 2.55 s together; the four AST tests 2.12 s together against one parse of 1.79 s.
 
 **And a correctness bug the profile found.** `seg_intersect` answered for the infinite LINES through two segments, not
 the segments, so the track refused candidate paths on crossings that were not there - 0.966 s of path checks over 176

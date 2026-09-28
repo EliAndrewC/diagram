@@ -3,6 +3,7 @@ A relative link cannot hide from this; the literal check beside it catches prose
 
 from __future__ import annotations
 
+import functools
 import pathlib
 import re
 import subprocess
@@ -88,6 +89,51 @@ _CONVERTED = {
     "cities/river-cities",
 }
 _MD_TOKEN = re.compile(r"(?<![\w/.-])((?:\.\./|\./)*(?:[A-Za-z0-9_.-]+/)*[A-Za-z0-9_-]+\.md)\b")
+_TOKEN_CHARS = frozenset("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_./-")
+
+
+@functools.cache
+def md_tokens(text: str) -> tuple[str, ...]:
+    """Every `_MD_TOKEN` match in `text`, in order - what `_MD_TOKEN.finditer(text)` yields, found ONCE per text for the
+    two tests that ask (feature 276, FR-002).
+
+    WHY NOT THE PLAIN SCAN. The pattern opens with a lookbehind, so it is tried at every position of every tracked file,
+    twice (1.3 s a test). A match is made only of `_TOKEN_CHARS` and ends in `.md`, so it lies inside the run of those
+    characters around some `.md`; the pattern is run over that run alone, from its first character to one past its last.
+    `finditer(text, pos, endpos)` still reads the character before `pos` for the lookbehind, and the one extra character
+    lets `\b` see what follows, so each run yields exactly the matches the whole-text scan found there."""
+    out: list[str] = []
+    at = text.find(".md")
+    done = -1
+    while at != -1:
+        lo = at
+        while lo > 0 and text[lo - 1] in _TOKEN_CHARS:
+            lo -= 1
+        hi = at + 3
+        while hi < len(text) and text[hi] in _TOKEN_CHARS:
+            hi += 1
+        if lo > done:
+            out += [m.group(1) for m in _MD_TOKEN.finditer(text, lo, min(hi + 1, len(text)))]
+            done = hi
+        at = text.find(".md", hi)
+    return tuple(out)
+
+
+@functools.cache
+def tracked_texts() -> dict[str, str]:
+    """Every tracked file that reads as UTF-8, read ONCE per process for the tests that scan them all (feature 276)."""
+    root = _repo_root()
+    out: dict[str, str] = {}
+    for rel in subprocess.run(["git", "-C", str(root), "ls-files"], capture_output=True, text=True, check=True).stdout.split("\n"):
+        if not rel:
+            continue
+        try:
+            out[rel] = (root / rel).read_text(encoding="utf-8")
+        except UnicodeDecodeError, OSError:
+            continue
+    return out
+
+
 _SKILL = "/".join([".claude", "skills", "diagram"])
 
 
@@ -132,22 +178,15 @@ def test_no_md_token_anywhere_resolves_to_a_converted_record_file() -> None:
     `scripts/fixtures/` is out too (feature 209, found red on main after feature 204 landed): a guard's replay corpus
     is a verbatim census of commands sessions actually ran, some of them from before the record was HTML, and
     rewriting a recorded command to satisfy this test would falsify the corpus it exists to replay."""
-    root = _repo_root()
-    files = subprocess.run(["git", "-C", str(root), "ls-files"], capture_output=True, text=True, check=True).stdout.split("\n")
     texts: dict[str, str] = {}
-    for rel in files:
-        if not rel or rel.startswith(("specs/", "scripts/fixtures/")) or rel == f"{_SKILL}/research/README.md":
+    for rel, text in tracked_texts().items():
+        if rel.startswith(("specs/", "scripts/fixtures/")) or rel == f"{_SKILL}/research/README.md":
             continue
         # A RECORDED FIXTURE IS HISTORY, NOT A POINTER (2026-09-07): `scripts/fixtures/` holds guard firings
         # replayed by the guard suites - the commands sessions actually typed, verbatim, some of them naming
         # research files that were Markdown at the time. Feature 204 landed one and turned main red here; the
         # commands are quotations of what happened, like a spec, and are never followed as links.
-        if rel.startswith("scripts/fixtures/"):
-            continue
-        try:
-            texts[rel] = (root / rel).read_text(encoding="utf-8")
-        except UnicodeDecodeError, OSError:
-            continue
+        texts[rel] = text
     hits = md_token_hits(texts)
     assert not hits, "tokens naming the deleted Markdown:\n" + "\n".join(hits[:20])
 
@@ -157,12 +196,19 @@ def md_token_hits(texts: dict[str, str]) -> list[str]:
     before the pattern runs (feature 276, FR-002): `_MD_TOKEN` cannot match without that literal."""
     hits = []
     for rel, text in texts.items():
-        if ".md" not in text:
-            continue
-        for m in _MD_TOKEN.finditer(text):
-            if _resolves_to_converted(m.group(1), rel):
-                hits.append(f"{rel}: {m.group(1)}")
+        for token in md_tokens(text):
+            if _resolves_to_converted(token, rel):
+                hits.append(f"{rel}: {token}")
     return hits
+
+
+def test_md_tokens_equal_the_whole_text_scan() -> None:
+    """Feature 276: the per-run scan yields exactly the whole-text `finditer`'s tokens - over the boundaries the pattern
+    names (a path before it, a word character after it, a non-ASCII word character either side, the text's ends, two
+    tokens in one run) and over every tracked text."""
+    edge = "a.md x/b.md ./c.md ../d/e.md f.mdx ōg.md h.mdō i.md.md j.md/k.md -l.md (m.md) n.md"
+    for text in (edge, "", ".md", "z.md", *tracked_texts().values()):
+        assert md_tokens(text) == tuple(m.group(1) for m in _MD_TOKEN.finditer(text)), text[:80]
 
 
 def test_a_token_naming_a_converted_file_is_reported() -> None:
@@ -236,11 +282,11 @@ def names_a_retired_rule_file(token: str, containing_rel: str, exists: set[str])
 def retired_rule_file_hits(files: dict[str, str], exists: set[str]) -> list[str]:
     hits = []
     for rel, text in files.items():
-        if rel.startswith(_RETIRED_EXEMPT_PREFIXES) or rel in _RETIRED_EXEMPT_FILES or ".md" not in text:
-            continue  # `.md` absent: `_MD_TOKEN` cannot match (feature 276, FR-002)
-        for m in _MD_TOKEN.finditer(text):
-            if names_a_retired_rule_file(m.group(1), rel, exists):
-                hits.append(f"{rel}: {m.group(1)}")
+        if rel.startswith(_RETIRED_EXEMPT_PREFIXES) or rel in _RETIRED_EXEMPT_FILES:
+            continue
+        for token in md_tokens(text):  # shared with the test above (feature 276, FR-002)
+            if names_a_retired_rule_file(token, rel, exists):
+                hits.append(f"{rel}: {token}")
                 break
     return hits
 
@@ -249,13 +295,7 @@ def test_no_tracked_file_names_a_retired_rule_file() -> None:
     """Feature 229: the `settlements/` rule files are gone and nothing points at them - by path or by bare basename."""
     root = _repo_root()
     tracked = [f for f in subprocess.run(["git", "-C", str(root), "ls-files"], capture_output=True, text=True, check=True).stdout.split("\n") if f]
-    files: dict[str, str] = {}
-    for rel in tracked:
-        try:
-            files[rel] = (root / rel).read_text(encoding="utf-8")
-        except UnicodeDecodeError, OSError:
-            continue
-    hits = retired_rule_file_hits(files, set(tracked))
+    hits = retired_rule_file_hits(tracked_texts(), set(tracked))
     assert not hits, "references to a retired rule file (feature 229; re-point at the research anchor):\n" + "\n".join(hits[:30])
 
 

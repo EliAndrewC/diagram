@@ -414,7 +414,7 @@
     "observed": "2026-09-28"
   },
   "after-ast-four-together-s": {
-    "value": 2.35,
+    "value": 2.12,
     "unit": "s",
     "quantity": "the four AST-scanning tests together in one process (SC-001)",
     "source": "measure.py -> make spec-harness SPEC=specs/276-engine-hotspots-and-test-scans, best of 3 unprofiled",
@@ -422,7 +422,7 @@
     "varies": true
   },
   "after-record-five-together-s": {
-    "value": 6.55,
+    "value": 2.55,
     "unit": "s",
     "quantity": "the five named record tests together in one process (SC-001a)",
     "source": "measure.py -> make spec-harness SPEC=specs/276-engine-hotspots-and-test-scans, best of 3 unprofiled",
@@ -430,7 +430,7 @@
     "varies": true
   },
   "after-ast-tests-max": {
-    "value": 2.88,
+    "value": 1.79,
     "unit": "s",
     "quantity": "the slowest of the four AST-scanning tests alone (setup + call)",
     "source": "measure.py -> make spec-harness SPEC=specs/276-engine-hotspots-and-test-scans, best of 3 unprofiled",
@@ -438,7 +438,7 @@
     "varies": true
   },
   "after-record-tests-sum": {
-    "value": 6.12,
+    "value": 2.93,
     "unit": "s",
     "quantity": "the five named record tests alone, summed",
     "source": "measure.py -> make spec-harness SPEC=specs/276-engine-hotspots-and-test-scans, best of 3 unprofiled",
@@ -446,7 +446,7 @@
     "varies": true
   },
   "after-rescue-nucleated-s": {
-    "value": 0.204,
+    "value": 0.115,
     "unit": "s",
     "quantity": "stage_homesteads on the rescue-rounds scenario, nucleated path",
     "source": "measure.py -> make spec-harness SPEC=specs/276-engine-hotspots-and-test-scans, best of 3 unprofiled",
@@ -468,7 +468,7 @@
     "command": "python3 specs/276-engine-hotspots-and-test-scans/measure.py"
   },
   "after-dense-60-nucleated-per-house": {
-    "value": 0.0007,
+    "value": 0.0004,
     "unit": "s",
     "quantity": "try_place cost per seated house, 60 seeds at constant density, nucleated path",
     "source": "measure.py -> make spec-harness SPEC=specs/276-engine-hotspots-and-test-scans, best of 3 unprofiled",
@@ -490,7 +490,7 @@
     "command": "python3 specs/276-engine-hotspots-and-test-scans/measure.py"
   },
   "after-dense-120-nucleated-per-house": {
-    "value": 0.0009,
+    "value": 0.0004,
     "unit": "s",
     "quantity": "try_place cost per seated house, 120 seeds at constant density, nucleated path",
     "source": "measure.py -> make spec-harness SPEC=specs/276-engine-hotspots-and-test-scans, best of 3 unprofiled",
@@ -512,7 +512,7 @@
     "command": "python3 specs/276-engine-hotspots-and-test-scans/measure.py"
   },
   "after-dense-240-nucleated-per-house": {
-    "value": 0.001,
+    "value": 0.0004,
     "unit": "s",
     "quantity": "try_place cost per seated house, 240 seeds at constant density, nucleated path",
     "source": "measure.py -> make spec-harness SPEC=specs/276-engine-hotspots-and-test-scans, best of 3 unprofiled",
@@ -541,7 +541,7 @@
     "command": "python3 specs/276-engine-hotspots-and-test-scans/measure.py"
   },
   "after-rescue-dispersed-s": {
-    "value": 0.616,
+    "value": 0.359,
     "unit": "s",
     "quantity": "stage_homesteads on the rescue-rounds scenario, dispersed path",
     "source": "measure.py -> make spec-harness SPEC=specs/276-engine-hotspots-and-test-scans, best of 3 unprofiled",
@@ -563,7 +563,7 @@
     "command": "python3 specs/276-engine-hotspots-and-test-scans/measure.py"
   },
   "after-dense-60-dispersed-per-house": {
-    "value": 0.0048,
+    "value": 0.0025,
     "unit": "s",
     "quantity": "try_place cost per seated house, 60 seeds at constant density, dispersed path",
     "source": "measure.py -> make spec-harness SPEC=specs/276-engine-hotspots-and-test-scans, best of 3 unprofiled",
@@ -585,7 +585,7 @@
     "command": "python3 specs/276-engine-hotspots-and-test-scans/measure.py"
   },
   "after-dense-120-dispersed-per-house": {
-    "value": 0.0048,
+    "value": 0.0026,
     "unit": "s",
     "quantity": "try_place cost per seated house, 120 seeds at constant density, dispersed path",
     "source": "measure.py -> make spec-harness SPEC=specs/276-engine-hotspots-and-test-scans, best of 3 unprofiled",
@@ -607,7 +607,7 @@
     "command": "python3 specs/276-engine-hotspots-and-test-scans/measure.py"
   },
   "after-dense-240-dispersed-per-house": {
-    "value": 0.0039,
+    "value": 0.0026,
     "unit": "s",
     "quantity": "try_place cost per seated house, 240 seeds at constant density, dispersed path",
     "source": "measure.py -> make spec-harness SPEC=specs/276-engine-hotspots-and-test-scans, best of 3 unprofiled",
@@ -636,7 +636,7 @@
     "command": "python3 specs/276-engine-hotspots-and-test-scans/measure.py"
   },
   "after-close-seams-max": {
-    "value": 0.456,
+    "value": 0.451,
     "unit": "s",
     "quantity": "close_seams inside one build_comb, the slowest of seeds 5/11/17",
     "source": "measure.py -> make spec-harness SPEC=specs/276-engine-hotspots-and-test-scans, best of 3 unprofiled",
@@ -644,7 +644,7 @@
     "varies": true
   },
   "after-track-stage-s": {
-    "value": 0.226,
+    "value": 0.22,
     "unit": "s",
     "quantity": "stage_track on Inashiro seed 4",
     "source": "measure.py -> make spec-harness SPEC=specs/276-engine-hotspots-and-test-scans, best of 3 unprofiled",
@@ -652,7 +652,7 @@
     "varies": true
   },
   "after-track-checks-s": {
-    "value": 0.012,
+    "value": 0.011,
     "unit": "s",
     "quantity": "the path checks inside stage_track on Inashiro seed 4",
     "source": "measure.py -> make spec-harness SPEC=specs/276-engine-hotspots-and-test-scans, best of 3 unprofiled",
