@@ -1260,6 +1260,7 @@ phytoplankton	phytoplankton
 picket line	picket line
 picket lines	picket line
 pig iron	pig iron
+pingyao	Pingyao
 pit rank	pit rank
 pit ranks	pit rank
 placer	placer
