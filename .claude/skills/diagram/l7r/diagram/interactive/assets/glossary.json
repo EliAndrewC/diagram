@@ -10024,5 +10024,20 @@
   "variants": [
    "ren"
   ]
+ },
+ "Lacey": {
+  "def": "Gerald Lacey's regime rule: an empirical law, drawn from stable earthen irrigation canals, that ties a channel's wetted perimeter, width and depth to the water it carries - the perimeter and width growing as the square root of the discharge.",
+  "variants": [
+   "Lacey"
+  ]
+ },
+ "Jomon period": {
+  "def": "Japan's prehistoric age of hunter-gatherers and pottery that came before the Yayoi period; rice paddies first appear toward its end.",
+  "variants": [
+   "Jomon period",
+   "Jomon",
+   "Jōmon",
+   "Jōmon period"
+  ]
  }
 }

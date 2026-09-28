@@ -1121,6 +1121,8 @@ jodo	Jodo
 jodo shinshu	Jodo Shinshu
 jokamachi	jokamachi
 jokyo	Jokyo
+jomon	Jomon period
+jomon period	Jomon period
 jori	jori
 jori-sei	jori
 joruri	joruri
@@ -1138,6 +1140,8 @@ jō	jo
 jōdo	Jodo
 jōdo shinshū	Jodo Shinshu
 jōgōe-chi	jōgōe-chi
+jōmon	Jomon period
+jōmon period	Jomon period
 jōruri	joruri
 jōsui ido	josui-ido
 kabata	kabata
@@ -1364,6 +1368,7 @@ kō group	kō
 kōsatsu	kosatsuba
 kōsatsu-ba	kosatsuba
 kōshin	Kōshin
+lacey	Lacey
 lake tai	Lower Yangzi
 land consolidation	kochi seiri
 land readjustment	kochi seiri
