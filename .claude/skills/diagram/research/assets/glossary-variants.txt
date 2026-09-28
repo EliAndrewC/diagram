@@ -1169,6 +1169,7 @@ initiates	initiate
 inkyo	inkyo
 inner moat	uchibori
 inner moats	uchibori
+inshu	Inshu
 intake	intake
 intake mouth	intake
 intakes	intake
