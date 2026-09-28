@@ -90,7 +90,7 @@ array, and two quads farther apart than the clearance need no `_quad_gap`. The m
 
 ## R4 - The coarser router lattice (B2, 2026-09-28)
 
-**Method** (observed 2026-09-28, method: `b2/harness.py` on the engine that ships - the router in cost order, the base's
+**Method** (observed 2026-09-28, method: `b2/harness.py` on the engine as it ships, just before main's 269 merged - the router in cost order, the base's
 field search, the re-roll resume and the connector fix; a first run made with A* and the probe lever still in was set aside
 at the reviews of Amendment 1, because the router itself decides which maps strand. The five pool hamlets, the 10- and
 20-household toys and cohort seeds 1-24, each rolled at each cell with `route.ROUTE_CELL` set and the driver's own
@@ -143,7 +143,7 @@ Kashikawa, after A1-A8, B1 and B3). What is left is spread thin:
 - **The blade flush** (`flush_blade_groups`, 0.23 s on Sawada, 0.43 on Kashikawa): the merge of each blade group's lines
   (`merge_lines`, 0.09 s). No lever taken.
 - **The grove fill** (`village_grove`, 0.57 s on Sawada): its tests are the grove blocks' indexed lookups (`near`, `inside`,
-  `hard`, each under 0.1 s), with the crown seat test on its grid since A6. No lever taken.
+  `hard`, each under 0.1 s), and the crown seat test two scans (the crown grid, A6, withdrawn as slower). No lever taken.
 - **The page's other parsing** (observed 2026-09-28, method: `parse/harness.py`, each page pass timed inside one finish of
   Kashikawa and of Sawada, fastest of three, load 12.5; `parse/results.json`): with the blade slots read from their structures,
   the passes that re-read a string the page already read - the off-map cull (`drop_offmap`) and the hit copies - take 0.051 s
@@ -174,7 +174,7 @@ Kashikawa, after A1-A8, B1 and B3). What is left is spread thin:
 ## R8 - A re-roll resumed at the seats (2026-09-28)
 
 The costliest thing in a roll that is not a stage: a roll that strands a house on its first attempt pays a whole second
-build - two of the 29 rolls of R4 at 10 px on the engine that ships, and six of 29 with the moving levers R6 measured
+build - two of the 31 rolls of R4 at 10 px on the engine that ships, and six of 29 with the moving levers R6 measured
 (observed 2026-09-28, method: `b2/harness.py` and `combined/harness.py`). The avoid list a re-roll carries is first read at `stage_homesteads` (the seat
 loops, `homesteads/seats.py` `_seat_allowed` and `rolling/place.py`); the five stages before it - the water frame, the
 field, the sink, the seat and the waterward fringe - read nothing that differs between attempts. So the first roll keeps a

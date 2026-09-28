@@ -1,4 +1,5 @@
-"""Feature 284: what FR-001 (A* in the router) does to a map, over the pool and cohort seeds 1-24 - re-run with FR-004 kept
+"""Feature 284: what FR-001 (A* in the router) does to a map, over the pool and cohort seeds 1-24 - run with FR-004 kept, and
+again on the merged engine with FR-004 out (A* alone; the third plan review)
 (the reviews of Amendment 1: no lever judged under another that has since changed). Three passes, interleaved by map: the
 shipping router (cost order) twice - the second the run-to-run spread - and A* (`astar.txt`, the heuristic search as the
 lever left it) swapped in; everything else the engine's (research R6).

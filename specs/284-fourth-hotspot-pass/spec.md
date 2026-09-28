@@ -227,7 +227,7 @@ added under FR-011's own rule ("whatever the after-profile shows"). What changed
 - **FR-008's coarser sampling taken**, as the spec required when the outward walk missed SC-006 on Mizuguchi (1.23x): the
   bamboo seat lattice is 16 ft, not 8 (`BAMBOO_SEAT_STEP_FT`); the Decisions row already covers it.
 - **FR-014 (new, under FR-011): a stranding re-roll resumes at the seats.** The after-profile's costliest item that is not a
-  stage: a roll that strands a house pays a whole second build (two of the 29 rolls of research R4 at 10 px on the engine
+  stage: a roll that strands a house pays a whole second build (two of the 31 rolls of research R4 at 10 px on the engine
   that ships, six of 29 with the moving levers in). The avoid list a re-roll carries is first read at `stage_homesteads`; the first roll keeps a copy of
   itself before that stage and each re-roll resumes from a fresh copy. Exact: manifest, svg and page byte-identical to a
   re-roll built from scratch on six re-rolling maps, each re-roll 1.1-1.7 s faster (research R8).

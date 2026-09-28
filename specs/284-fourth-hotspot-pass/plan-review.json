@@ -1,6 +1,6 @@
 {
  "feature": "284-fourth-hotspot-pass",
- "plan_sha256": "4e843cc5b4a3dba9b647dfe34f66b536395e92e03867afc734c4a7c47caec3a6",
+ "plan_sha256": "726e91126c8b24278c008af1618211638816e3bf6a6fb599e81232b9bf00bc1e",
  "reviewed": "2026-09-28",
  "declared": "spec-fidelity",
  "decisions": [
@@ -8,107 +8,104 @@
    "id": "A1",
    "summary": "one link index per route (landed)",
    "class": "within",
-   "why": "FR-002 as written; with A* now kept, the recorded-request test is the 5% bound and clearance test (test_route.py::test_the_router_keeps_its_answers_within_the_recorded_bound)."
+   "why": "FR-002 as written; exact, with the base's recorded-request equality test restored now that A* is out."
   },
   {
    "id": "A2",
    "summary": "the page from the scrub's and marsh's structured blade slots (landed)",
    "class": "within",
-   "why": "FR-006 first half; T09's pool byte-identity plus the committed test_the_page_reads_a_blade_slot_as_it_would_have_parsed_it (round-1 test gap closed)."
+   "why": "FR-006 first half; pool byte-identity and the synthetic-page test."
   },
   {
    "id": "A2-rest",
    "summary": "the one parse of every other class not built",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "It served the general clause, whose criterion is 'significantly faster'. R7's parse/harness.py entry (0.051 s Kashikawa, 0.059 s Sawada, a loaded ceiling, about 1% of a roll) is a measured bound, and one parse cannot remove more. The GM's named item (the page from the map's records) is the 83% A2 built. But plan.md's Amendment 1 row still says 'at most 0.09 s together (research R2)', a figure R2 does not contain: cite R7's figure as the spec now does."
+   "why": "The row now cites R7's measured ceiling (0.051 s and 0.059 s a map, about 1% of a roll); one parse cannot remove more, so building it would not serve the request's purpose (significantly faster)."
   },
   {
    "id": "A3",
    "summary": "board_choice, the caption level asked lazily (landed)",
    "class": "within",
-   "why": "FR-007 first half, exact; test_the_lazy_board_choice_is_the_full_choice."
+   "why": "FR-007 first half, exact."
   },
   {
    "id": "A4",
    "summary": "the bamboo walked outward (landed)",
    "class": "within",
-   "why": "FR-008; test_the_bamboo_walk_outward_finds_the_scans_seat."
+   "why": "FR-008, exact."
   },
   {
    "id": "A5",
    "summary": "the four whole-ring scans through indexes (landed)",
    "class": "within",
-   "why": "FR-009; the comb _dry now has test_the_comb_bead_test_through_the_segment_index_is_the_whole_scan (it tests a copy of _dry's water expression, not _dry itself; exactness also rests on T09's byte-identity)."
+   "why": "FR-009, exact."
   },
   {
    "id": "A6",
-   "summary": "the crown grid (landed)",
-   "class": "within",
-   "why": "FR-011; test_the_crown_grid_is_the_crown_scan."
+   "summary": "the grove draw's crown grid built and WITHDRAWN as slower than main's scans after 269",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "FR-011 takes a lever only where it makes the stage significantly faster; measured on main as merged, the grid made the windbreak 8-12% SLOWER. The draw's calls fell under 269 on four of five maps (after-main against base-rerun keys), so R7's 2-3%-of-a-build ceiling still bounds any other lever. R7's grove-fill bullet still says the crown test is 'on its grid since A6': stale, correct it."
   },
   {
    "id": "A7",
    "summary": "the toll's near-cell set (landed)",
    "class": "within",
-   "why": "FR-010; 281's toll equality test."
+   "why": "FR-010, exact."
   },
   {
    "id": "A8",
    "summary": "the yards' mats in arrays (landed)",
    "class": "within",
-   "why": "FR-011, SC-009; byte-identical mats test."
+   "why": "FR-011, SC-009; the same mats."
   },
   {
    "id": "B1",
-   "summary": "A* KEPT: 2.4% faster in all against a 0.6% same-run spread",
-   "class": "within",
-   "why": "FR-001 as written. Re-derived from astarcmp/results.json: A* 207.07 s against 211.53 and 212.74 s, 442 households seated, 29 connectors. Its first-attempt strandings (8 against 6) are healed by re-roll; SC-011 counts seated houses, and FR-003's every-attempt rule is the lattice's alone."
+   "summary": "A* WITHDRAWN on the rules together with B3",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "One justification stretched over two levers. A* was never measured on its own: astarcmp ran 'with FR-004 kept' (its docstring; R6 now says 'FR-004 in for the A* run'), and the pool regenerated with BOTH levers for the gate run that failed five rules and for the 23.76 s pool figure. At least two failure classes cannot be A*'s: the router is first called in stage_track, after stage_field and stage_seat, and a re-roll resumes at stage_homesteads without re-running them, so the plot ring built as a flight of steps (the field) and Sawada's seat off the regional wind (the seat) are FR-004's. The GM named this lever ('the router searching toward its goal') and FR-001 is unconditional in the accepted spec, bounded only by the rules; whether A* alone breaks a rule, or is faster, on the engine that ships (main as merged) is unmeasured. Required: on the merged engine, with FR-004 out, re-run astarcmp's comparison (A* against the cost-order router twice, the same-run spread) and regenerate the pool with A* alone and run the gate's pool rules. Keep A* if every rule holds and R6's own speed rule is met; otherwise withdraw it on THAT measurement, attributed to A* alone."
   },
   {
    "id": "B2",
-   "summary": "the coarser lattice withdrawn: 12 px strands two maps the 10 px lattice did not",
+   "summary": "the coarser lattice withdrawn: 12 px strands houses the 10 px lattice did not, and no coarser cell is faster",
    "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "The same defect as round 1, the other way round. b2/harness.py swaps nothing and ran on the tree as it stood at 20:27, with A* and FR-004 both withdrawn. Its 10 px row (5 unreached over every attempt, 2 re-rolls) is exactly combined/results.json's 'levers off' pass; the shipping engine at 10 px is 8 unreached and 6 re-rolls. A* and FR-004 were re-instated at 5afcaea81, so B2 was measured on a router and field search that do not ship. R4 labels it 'on the engine that ships', which is false. Round 1's own reasoning applies: the router and the field decide which maps strand (R6) and strandings move chaotically with the cell (R4), so a comparison with both levers off says nothing about the cell on the engine that ships. That goes for the strandings and for the 'slower at every cell' timings too, since those come from re-rolls. Re-run b2/harness.py on the engine as it ships (A*, FR-004, FR-014, the connector fix) and take or withdraw the cell by that. Then correct R4, the ROUTE_CELL docstring (which still says '20 unreached ... against 8, and cohort seed 03 kept a stranded house', figures no current run shows) and the spec's Amendment 1 FR-003 bullet (the same stale figures, and 'Measured with A* in the router ... before FR-001 was withdrawn')."
+   "ruling": "LEGITIMATE",
+   "why": "Round 2's defect is gone: with A* and FR-004 withdrawn, R4's run (router in cost order, base field search, resume, connector fix) is the shipping configuration but for 269's merge. Re-derived from b2/results.json: 10 px 5 unreached / 2 re-rolls, 12 px 8 / 4 (Sawada [1,0], cohort 08 [2,0]), rising to 16 at 18 px. The purpose leg does not rest on the chaotic strandings: over the maps that rolled once at both cells, every coarser cell is slower per roll (12 px 1.055x on 27 maps, 14 px 1.068x, 16 px 1.28x, 18 px 1.84x), so a coarser grid would defeat the request's purpose, not serve it. The monotone trend makes the ruling robust to 269's merge; R4's 'on the engine that ships' should say it was measured just before main's 269 merged."
   },
   {
    "id": "B3",
-   "summary": "FR-004 KEPT: 5% faster in all against a 1% same-run spread",
-   "class": "within",
-   "why": "FR-004 as written. Re-derived from b3cmp/results.json: 367.09 s against 383.93 and 388.25 s; combined: both on 327.27 and 329.37 s against both off 344.75 s. 442 seated and 29 connectors in every pass; the stubbed-fan tests carry the saturation clause."
+   "summary": "FR-004 WITHDRAWN on the rules",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "The GM allowed map changes that 'still correspond to historical norms'; the plot ring stepped twice and Sawada's seat off the regional wind sit in the field and seat stages, which only FR-004 of the two levers reaches, so FR-004 is shown to break the pool's rules (the GM's own condition), and the pool with both levers was about 0.6% faster, normalized to each run's base. Raise it with the GM once the work lands (CLAUDE.md, XVI), with the five finished-map rules the placers do not guarantee."
   },
   {
    "id": "B4",
    "summary": "rows as arrays withdrawn: the edge walk 3.6x slower",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "FR-005's own keep-if-faster rule, measured per call (the same 3,310 verdicts, 0.312 s against 0.086 s), so it holds with B3 kept. The pushes' whole scalar cost (0.024 s) is below the measured loss."
+   "why": "FR-005's own keep-if-faster rule, measured per call; independent of the other levers."
   },
   {
    "id": "B5",
    "summary": "the 24 px board lattice withdrawn (broke the entrance-board rule's test); VERGE_FIRST in its place",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "The GM allowed changes that still hold the norms, not broken rules (FR-013); the replacement is exact and tested."
+   "why": "FR-013 and the GM's condition that changes hold the norms; the replacement is exact and tested."
   },
   {
    "id": "B6",
    "summary": "the bamboo seat lattice 16 ft, since A4 missed SC-006 on Mizuguchi",
    "class": "within",
-   "why": "FR-008's own conditional fallback, the GM's 'bamboo stands sampled more coarsely'; Decisions row exists."
-  },
-  {
-   "id": "bamboo-strips",
-   "summary": "household bamboo strips 14% fewer where the moved houses leave less room",
-   "class": "within",
-   "why": "A consequence of the kept levers under an unchanged room rule and a labeled-guess presence; recorded with its measurement (combined 140 against 120); no household unseated."
+   "why": "FR-008's own conditional fallback; the thicket 18.1 and 24.5 ft from main's, recorded in R6."
   },
   {
    "id": "FR-014",
    "summary": "a re-roll resumes from a snapshot before the seats",
    "class": "within",
-   "why": "FR-011's after-profile clause; exact, byte-identical on six maps. Its justification ('eight of the 29 rolls of research R4 at the 10 px lattice', R8 and the spec's FR-014 bullet) no longer matches R4's table (2 re-rolls at 10 px) and should cite the shipping engine's re-rolls (6 of 29, combined)."
+   "why": "FR-011's after-profile clause; exact, re-verified on the merged engine. Its bullet and R8 say 'two of the 29 rolls of research R4 at 10 px'; R4's run has 31 rolls a cell (5 pool, 2 toys, 24 cohort; b2/results.json holds 155 rows): say 31."
   },
   {
    "id": "FR-009+",
@@ -126,13 +123,20 @@
    "id": "box-decline",
    "summary": "the router's box decline back on its own lattice",
    "class": "within",
-   "why": "Reverts support that served only the withdrawn coarser cell; the B2 re-run must keep the configuration R4 states."
+   "why": "Reverts support that served only the withdrawn coarser cell; at 10 px it is the configuration R4 measured."
+  },
+  {
+   "id": "SC-001-rebase",
+   "summary": "SC-001 judged against main as merged (1.32x) rather than the original base (1.20x)",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Applied literally the floor would charge this feature for 269's own added work (main 35.148 s against the base's 32.106 s, re-measured in the same run), which defeats SC-001's purpose of measuring this pass; both figures are reported and the GM judges 'significantly faster', as SC-001 itself says."
   },
   {
    "id": "C",
-   "summary": "the final measure and the pool regenerated",
+   "summary": "the final measure and the pool regenerated on the merged engine",
    "class": "within",
-   "why": "FR-012, SC-001; not final while B2 is re-measured."
+   "why": "FR-012, SC-001; not final while B1 is re-measured."
   }
  ],
  "verdict": "BLOCKED"
