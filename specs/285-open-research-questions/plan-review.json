@@ -1,6 +1,6 @@
 {
  "feature": "285-open-research-questions",
- "plan_sha256": "e08f7b921ce72d15fcb039f2fdbae05fcd3bcc32cfa319edf65190af4ad544f7",
+ "plan_sha256": "b8b01939f9a7efda0cad32272c03ac325de41f958f92075d2d61bce7992d8981",
  "reviewed": "2026-09-28",
  "declared": "spec-fidelity",
  "decisions": [
@@ -14,7 +14,7 @@
    "id": "D2-guess",
    "summary": "a guess item is each sentence of visible text carrying GUESS or GUESSES; lower-case guess is not a label",
    "class": "within",
-   "why": "FR-002(a), the comment edge case, SC-001 and the spec's edge case now naming the plural"
+   "why": "FR-002(a), the comment edge case, SC-001 and the spec's edge case naming the plural"
   },
   {
    "id": "D2-absence",
@@ -38,7 +38,7 @@
    "id": "D3-c",
    "summary": "route (c) matches an engine .py line on the anchor or the heading's question up to its '?', with no length floor",
    "class": "within",
-   "why": "round 1 item confirmed: the 25-character floor is gone from plan.md D3 and from scripts/_open_questions.py (MIN_HEADING removed, heading_key returns any length), and the test asserts a short heading keeps its key; this is now FR-003's 'its heading or its anchor' as written. research.md R5's hit count (8) re-grepped this review and confirmed, all citations"
+   "why": "FR-003's 'its heading or its anchor' as written (confirmed round 2); R5 now counts six short headings, three with no engine hit, eight hits all citations - the correction changes no conclusion"
   },
   {
    "id": "D4",
@@ -48,10 +48,9 @@
   },
   {
    "id": "D7",
-   "summary": "outside the record: tracked text files under the skill less research/, tests/, the three tooling logs and binaries; each line carrying the whole word GUESS is an item",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "round 1 item NOT confirmed: plan.md D7 (lines 34-37 at this digest) still reads 'Each line carrying the whole word `GUESS` is an item'; the round-1 commit touched only D3 in plan.md, and the plural was added to spec.md's edge case and to D2 (line 12), not to D7. FR-007 asks for every GUESS label and the spec's edge case now names the plural, so as written D7 misses the five GUESSES lines outside the record found in round 1; the code (_GUESS = GUESS(?:ES)?) already reads them, so the fix is D7's text only"
+   "summary": "outside the record: tracked text files under the skill less research/, tests/, the three tooling logs and binaries; each line carrying the whole word GUESS or GUESSES is an item",
+   "class": "within",
+   "why": "round 2 item confirmed: plan.md lines 36-37 now read 'the whole word GUESS or its plural GUESSES (as D2)', matching FR-007's 'every GUESS label' and the spec's plural edge case; the five GUESSES lines outside the record (compound.py 568/643, pondstock.py 8/25, county-magistracy-example.notes.md 24; git grep -w, this review) are now in scope, and scripts/_open_questions.py:38 _GUESS = GUESS(?:ES)? already reads them"
   },
   {
    "id": "D5",
@@ -66,5 +65,5 @@
    "why": "SC-003; a speed mechanism that changes no result"
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

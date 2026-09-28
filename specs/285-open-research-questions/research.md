@@ -14,7 +14,7 @@ stripped before counting; a note is an `<li>` in the notes file.
 
 ## R3 - the labels the collector finds (observed 2026-09-28, method: the built collector's `guess_sentences` on every question fragment against a whole-word count over the same visible text)
 
-The label is written `GUESS` and, `12` times in the record, `GUESSES` ("the shares are GUESSES"); both are labels. The
+The label is written `GUESS` and, `5` times in the fragments' visible text (`6` in their raw text, one inside a comment), `GUESSES` ("the shares are GUESSES"); both are labels. The
 collector's `149` labels fall in `139` listed sentences - ten sentences carry two - and none is outside a listed
 sentence. R1's `149` counted the substring, which includes the plural; the two methods agree.
 
@@ -47,7 +47,7 @@ per household is a GUESS until the record finds a figure").
 |---|---|
 | questions with an open item | `403` of `573` |
 | guess items (sentences) / absence items / settled | `139` / `580` / `0` |
-| GUESS lines outside the record | `123` (engine `92`, pool `25`, docs `6`) |
+| GUESS lines outside the record | `122` (`l7r/` `92`, pool `25`, `buildings.md` `2`, `future-work/` `2`, `dev/` `1`); the first run showed `123`, the extra one the new target's own Makefile help line, since reworded |
 | open questions whose map features come through a class's `Entry:` | `52` |
 | through a link from a question a class names, only | `19` |
 | cited in engine code (the question up to its `?`, or its anchor) | `134` |
