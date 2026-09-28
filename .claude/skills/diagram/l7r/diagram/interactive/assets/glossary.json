@@ -3300,12 +3300,6 @@
    "sae no kami"
   ]
  },
- "saien": {
-  "def": "The small intensive vegetable bed by a farmhouse kitchen, worked for the household's daily greens.",
-  "variants": [
-   "saien"
-  ]
- },
  "sakagura": {
   "def": "A sake brewery: vat hall, koji room, steaming hearth, its own well and a rice storehouse behind a shopfront.",
   "variants": [
@@ -7758,8 +7752,7 @@
   "def": "A city in Miyagi Prefecture in northeastern Japan, and the coastal plain around it, where the farmstead grove is called igune.",
   "variants": [
    "Sendai",
-   "Sendai plain",
-   "Sendai Plain"
+   "Sendai plain"
   ]
  },
  "Izumo": {

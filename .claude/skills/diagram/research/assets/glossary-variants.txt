@@ -2105,7 +2105,6 @@ sae no kami	sae no kami
 sagami	Sagami
 sagami province	Sagami
 sageba	ōkaji
-saien	saien
 saikyosho	saikyosho
 sakagura	sakagura
 sakaki	sakaki
