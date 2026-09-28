@@ -485,6 +485,8 @@ delivery ditch	delivery ditch
 delivery ditches	delivery ditch
 dem	DEM
 department	department
+department capital	department capital
+department capitals	department capital
 departmental	department
 departments	department
 design cell	design cell
@@ -561,6 +563,8 @@ draw-basins	draw-basin
 drawdown	drawdown
 dressed stone	dressed stone
 drill ground	drill ground
+drum tower	drum tower
+drum towers	drum tower
 dry run	wet run
 dry runs	wet run
 ds/m	dS/m
@@ -1184,6 +1188,7 @@ ita-bune	ita-bune
 itabashi	itabashi
 iyo	Iyo
 izumo	Izumo
+j-stage	J-STAGE
 ja zen-noh	Zennoh
 jagama	jagama
 jail god	jail-god
@@ -2607,6 +2612,8 @@ trevis	ox-shoeing frame
 tributary	tributary
 true duty	water duty
 trunk streets	trunk street
+tsinan	Tsinan
+tsinan's	Tsinan
 tsubo	tsubo
 tsubo-niwa	tsubo-niwa
 tsuijibei	tsuijibei
