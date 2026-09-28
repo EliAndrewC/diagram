@@ -1989,6 +1989,7 @@ sand junks	sand junk
 sand sluice	sand sluice
 sando	sando
 sandō	sando
+sangai banrei	three-worlds-myriad-spirits
 sangji yutang	dike-pond
 sanheyuan	sanheyuan
 sankin-kotai	alternate attendance
@@ -2365,6 +2366,9 @@ three-bay two-corridor house	three-bay two-corridor house
 three-bay two-corridor houses	three-bay two-corridor house
 three-squads	three-squads courtyard
 three-squads courtyard	three-squads courtyard
+three-worlds-myriad-spirits	three-worlds-myriad-spirits
+three-worlds-myriad-spirits stone	three-worlds-myriad-spirits
+three-worlds-myriad-spirits stones	three-worlds-myriad-spirits
 threshing yard	threshing yard
 threshing yards	threshing yard
 threshing-yard	threshing yard
