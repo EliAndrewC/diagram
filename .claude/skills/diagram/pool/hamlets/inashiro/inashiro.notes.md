@@ -6,8 +6,8 @@
 to a village district whose headman lives in the main village. Like every hamlet it has no headman
 of its own, no shrine, no tax-free plots and no cremation ground. It keeps a burial ground of its own
 (its rolled `hamlet_burial` is own_ground, feature 273): a small common ground holding the urns brought
-home from the main village's cremation ground, in a glade of the windbreak's east arm, beside the track
-north to the main village.
+home from the main village's cremation ground, in a glade of the windbreak's east arm, a short way
+through the trees from the track north to the main village.
 
 **Kanji triangle**: 稲 *ina* "rice plant" + 代 *shiro* "paddy" (as in 苗代 *nawashiro*, a seedbed).
 稲代 Inashiro, "the rice-field" - the plainest possible name for the plainest possible hamlet, which

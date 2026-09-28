@@ -14,8 +14,9 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D6).
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
       verify: DONE. DONE. _roll_cremation in the roller's village tier: 530's cremation_seat knob, the edge seat (120 ft, 30 px water, off the approach, within ~650 ft), six jizo (cremation_ground(jizo=True)); roll tests incl. no hamlet from either generator draws a cremation ground, shrine or headman's house
-- [ ] T04 The five pool hamlets re-rolled; a settlement-review per moved map; ledger rows (D6; FR-005)
+- [x] T04 The five pool hamlets re-rolled; a settlement-review per moved map; ledger rows (D6; FR-005)
       research: rendering
+      verify: DONE. DONE. settlement-review: rounds 1-3 on inashiro, kashikawa, kuwabata (round 3 PASS), rounds 1-2 on sawada, mizuguchi (PASS); every finding verified in specs/273-hamlet-graveyards/measurements.json or accepted; ledger rows
 - [ ] T05 `make done`; `scripts/sync-with-main.sh done`; relink 271's `RELINK 273` comment in 400 if it is on main
       research: rendering
 
