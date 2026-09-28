@@ -95,12 +95,12 @@ def _fit_at_aspect(
 ) -> tuple[tuple[bool, float], CombCarve]:
     """`fit_field`'s search at ONE fan aspect. Returns ((illegal, acreage error), the best CARVE).
 
-    `probe`: when two carves short of the target show the fan not growing with its size (`saturating`), the next goes
-    straight to the bracket's END - the largest fan this aspect can draw. If even that is short of the target by more than
-    the tolerance, the aspect SATURATES (the envelope clamps the fan; cohort seed 47 sat at 16-17 acres against 19.5 at four
-    of its five aspects, and burned nine carves at each proving it) and the bracket collapses, keeping the better. Until
-    feature 284 the probe followed ANY short first carve, which carved the largest fan on most fields for nothing. `fit_field`
-    re-runs the best aspect with `probe=False` when no aspect lands the target, so the refinement is never lost on the map
+    `probe`: when the first carve (k = 1) falls short, the second goes straight to the bracket's END
+    - the largest fan this aspect can draw. If even that is short of the target by more than the
+    tolerance, the aspect SATURATES (the envelope clamps the fan; cohort seed 47 sat at 16-17 acres
+    against 19.5 at four of its five aspects, and burned nine carves at each proving it) and the
+    search stops after those two carves, keeping the better. `fit_field` re-runs the best aspect
+    with `probe=False` when no aspect lands the target, so the refinement is never lost on the map
     that needs it."""
     lo, hi = 0.35, 2.2
     best: tuple[tuple[bool, float], CombCarve] | None = None
@@ -115,7 +115,6 @@ def _fit_at_aspect(
     # of the old loop holds: monotone narrowing, termination at `rounds`, the best legal net kept.
     # Measured on the reference (seed 4): 4 carves -> 2; the cohort's worst field seeds 7 -> 2-3.
     pts: list[tuple[float, float]] = []  # (k, acres) of every carve so far, for the power-law step
-    probed = False  # the saturation probe is taken at most once per aspect
     _trim_a = BROOK_FAN_TRIM if plan.brook_side < 0 else 1.0
     _trim_b = BROOK_FAN_TRIM if plan.brook_side > 0 else 1.0
     # THE FAN IS SIZED FOR THE FLANK THE BROOK TAKES (feature 230). Cutting one flank's canal to `BROOK_FAN_TRIM`
@@ -188,13 +187,11 @@ def _fit_at_aspect(
         # cannot change the fan; stop, keep the best, and let the next aspect have the time.
         if hi - lo < 0.03:
             break
-        # THE PROBE ONLY ON A MEASURED SATURATION (feature 284, FR-004). It used to follow any short first carve, and on three of
-        # the four pool fields that meant carving the LARGEST fan the aspect can draw - the costliest carve of the search, far
-        # past the target - before converging on the predicted size (research R1). A clamped fan shows itself: a larger `k`
-        # whose acreage grows less than `SATURATION_GROWTH` would say. So the search carves at the predicted size first and
-        # probes the top only when two carves show the fan not growing with its size; a saturating aspect is still found.
-        if probe and not probed and len(pts) >= 2 and acres < plan.target_acres and saturating(pts[-2], pts[-1]):
-            probed = True
+        # TRIED AND WITHDRAWN (feature 284, FR-004, specs/284 research R6): probing the bracket's top only when two carves
+        # show the fan saturating. It cut the field's calls 2-3x on Inashiro and Sawada, and across the pool and cohort seeds
+        # 1-24 the rolls came out SLOWER in all (190.7 s against 180.6 s): the fields it lands differ within tolerance, and
+        # the maps they move re-rolled more often (6 against 4) - a stranding re-roll costs more than the probe carve saved.
+        if probe and len(pts) == 1 and acres < plan.target_acres:
             k = hi - 1e-3  # the probe: the largest fan this aspect can draw
             continue
         # A SECOND SATURATION BREAK STOOD HERE AND WAS DEAD - the collapsed bracket above already does its
@@ -207,19 +204,6 @@ def _fit_at_aspect(
         k = _predict_k(pts, plan.target_acres, lo, hi)
     assert best is not None
     return best
-
-
-SATURATION_GROWTH = 1.0
-"""The fan's acreage grows about as `k ** 2` with its size multiplier `k` - it scales in both dimensions (`_predict_k`'s
-power law) - so a larger `k` whose acreage grows LESS than `k ** SATURATION_GROWTH` (less than linearly) is being clamped by
-the envelope rather than scaled: the saturation `_fit_at_aspect` probes for (feature 284)."""
-
-
-def saturating(a: tuple[float, float], b: tuple[float, float]) -> bool:
-    """Do the carves `a` then `b` - each `(k, acres)` - show a fan not growing with its size? Only for a larger `k` and a
-    carved first fan."""
-    (k0, a0), (k1, a1) = a, b
-    return k1 > k0 and a0 > 0 and a1 / a0 < (k1 / k0) ** SATURATION_GROWTH
 
 
 def _predict_k(pts: list[tuple[float, float]], target: float, lo: float, hi: float) -> float:
