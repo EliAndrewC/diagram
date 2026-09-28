@@ -1469,6 +1469,8 @@ meshimori	meshimori
 meshimori onna	meshimori
 meshimori women	meshimori
 meshimori-onna	meshimori
+meso scale	meso scale
+meso-scale	meso scale
 metamorphosis fengshui	metamorphosis fengshui
 miaohui	miaohui
 michikiri	michikiri

@@ -15,15 +15,16 @@ def to_map(x, y):
 
 # The grove (the precinct): a near-rectangle, sheet px
 GX0, GY0, GX1, GY1 = 220.0, 170.0, 630.0, 816.0  # the precinct (research 124) - the ground, not the wood
-# THE WOOD (feature 279, research religion-and-death 129): AT THE SIDES - the hall stands at the top of its slope and
-# the approach climbs to it from the south, so the candidates are behind-and-sides and sides; the roll on the map's
-# name gave sides. Two flanks, from about the hall's back line down past it to ragged tips; the ground behind the hall
-# (the well and its path) and the lower approach are open. Each flank's edge is its crowns' own (a guess): a
-# smooth-noise outline about a base shape, never a ruled line.
-_WEST = [(206, 372), (262, 352), (300, 368), (292, 420), (270, 470), (264, 540), (276, 596), (322, 622), (356, 672),
-         (344, 722), (318, 772), (276, 792), (232, 770), (204, 700), (186, 600), (190, 500), (196, 430)]
-_EAST = [(548, 300), (600, 282), (652, 300), (684, 370), (690, 460), (676, 560), (650, 628), (612, 650), (574, 640),
-         (560, 610), (572, 560), (576, 480), (566, 440), (548, 410), (536, 350)]
+# THE WOOD (feature 279, research religion-and-death 129): BEHIND AND AT THE SIDES. The hall stands mid-slope - the
+# ground rises behind it toward the village and falls before it down the approach, with no break of slope - so the
+# candidates are both slope classes' forms (a guess, the record covering only a hall at a break): behind, behind and
+# sides, sides; the roll on the map's name gave behind and sides. The wood runs from the well at its back edge down
+# both flanks to ragged tips short of the lower arches; the lower approach is open. Its edge is its crowns' own (a
+# guess): a smooth-noise outline about a base shape with real bays and spurs, never a ruled line.
+_WOOD = [(236, 236), (312, 196), (400, 182), (452, 168), (528, 184), (604, 206), (648, 268), (626, 336),
+         (664, 404), (652, 474), (682, 540), (660, 606), (628, 660), (596, 690), (566, 690), (548, 662),
+         (500, 676), (440, 684), (380, 676), (342, 688), (314, 708), (284, 722), (252, 704), (226, 660),
+         (240, 600), (204, 548), (196, 470), (220, 410), (192, 340), (208, 282)]
 def _resample(poly, step=10.0):
     pts = []
     for (ax, ay), (bx, by) in zip(poly, poly[1:] + poly[:1]):
@@ -44,7 +45,7 @@ def _noisy(poly, seed=279):
         d = sum(a * math.sin(2 * math.pi * f * i / n + ph) for f, a, ph in waves)
         out.append((round(x + nx * d, 1), round(y + ny * d, 1)))
     return out
-REGIONS = [_noisy(_WEST, 2791), _noisy(_EAST, 2794)]
+REGIONS = [_noisy(_WOOD, 2795)]
 REGION = [p for r in REGIONS for p in r]  # every outline point, for the bounding box
 
 
@@ -117,7 +118,7 @@ LABELS = []  # set from the seated captions after the first seat-label pass
 import os
 if os.path.exists(OUT + '.labels'):
     LABELS = json.load(open(OUT + '.labels'))
-rng = random.Random(2794)
+rng = random.Random(2796)
 trees = []  # (x, y, r) sheet px
 # dart-throwing, big crowns first, then fill with smaller ones: canopies may touch, never overlap
 for r_lo, r_hi, tries in ((25.0, 30.0, 80000), (19.5, 25.0, 120000)):
@@ -149,13 +150,23 @@ meas = {
     "canopy_of_allowed_ground": round(canopy_of_allowed, 3),
 }
 
+# THE FLOOR, pulled inside the crowns (building-review round 1: the region's outline poked past the crowns as pale
+# spikes): a floor point under no crown moves toward the nearest crown's center until it is inside 0.85 of its radius
+def _pull(x, y):
+    tx, ty, tr = min(trees, key=lambda t: math.hypot(t[0] - x, t[1] - y) - t[2])
+    d = math.hypot(x - tx, y - ty)
+    if d <= 0.85 * tr:
+        return (x, y)
+    f = 0.85 * tr / d
+    return (round(tx + (x - tx) * f, 1), round(ty + (y - ty) * f, 1))
+FLOORS = [[_pull(x, y) for x, y in R] for R in REGIONS]
 # ---- the village map ----
 PAL = [("#7C9A4E", "#3C5526"), ("#6E8B43", "#3C5526"), ("#496733", "#3C5526")]
 map_trees = []
 parts = ['<g id="shrine-grove">']
 # the grove's floor: a ragged outline about the precinct (the wood's edge is not ruled), then the swept clearing
 edge = list(REGIONS[0])  # the wood's floor is the region: its edge the wood's own (feature 279)
-for _ring in REGIONS:
+for _ring in FLOORS:
     parts.append('<polygon points="' + " ".join(f"{to_map(x, y)[0]:.1f},{to_map(x, y)[1]:.1f}" for x, y in _ring) + '" fill="#B9BE8A" fill-opacity="0.85"/>')
 FLOOR = edge
 parts.append('<polygon points="' + " ".join(f"{to_map(x, y)[0]:.1f},{to_map(x, y)[1]:.1f}" for x, y in CLEAR_POLY) + '" fill="#E6DCC4"/>')
@@ -230,8 +241,22 @@ for k, R in enumerate(REGIONS):
         w = [edge_crowns[(i + q) % m][1:] for q in range(4)]
         if m >= 4 and all(_off_line(w[q], w[0], w[3]) <= 6.0 for q in (1, 2)) and math.hypot(w[3][0] - w[0][0], w[3][1] - w[0][1]) > 30:
             runs.append([list(t) for t in w])
+long_runs = []
+for k, R in enumerate(REGIONS):
+    ec = sorted(((_nearest_index(R, x, y), x, y) for x, y, r in trees if _ring_of(x, y) == k and poly_dist(x, y, R) <= r + 6), key=lambda t: t[0])
+    m = len(ec)
+    for i in range(m):
+        for q in range(3, m):
+            w = [ec[(i + t) % m][1:] for t in range(q + 1)]
+            if math.hypot(w[-1][0] - w[0][0], w[-1][1] - w[0][1]) < 150:
+                continue
+            if all(_off_line(pt, w[0], w[-1]) <= 19.5 for pt in w[1:-1]):
+                long_runs.append([w[0], w[-1]])
+            break
+meas["long_runs"] = len(long_runs)
+meas["long_run_windows"] = long_runs
 meas["edge_crowns"] = m_all
 meas["straight_runs"] = len(runs)
 meas["straight_run_windows"] = runs
-json.dump({"regions": REGIONS, "region": REGION, "floor": [[round(x, 1), round(y, 1)] for x, y in FLOOR], "clear_poly": [[round(x, 1), round(y, 1)] for x, y in CLEAR_POLY], "meas": meas, "trees": trees, "sacred": SACRED, "grove_svg": grove_svg, "torii_svg": torii_svg, "manifest_add": manifest_add}, open(OUT, "w"), indent=1)
+json.dump({"floors": FLOORS, "regions": REGIONS, "region": REGION, "floor": [[round(x, 1), round(y, 1)] for x, y in FLOOR], "clear_poly": [[round(x, 1), round(y, 1)] for x, y in CLEAR_POLY], "meas": meas, "trees": trees, "sacred": SACRED, "grove_svg": grove_svg, "torii_svg": torii_svg, "manifest_add": manifest_add}, open(OUT, "w"), indent=1)
 print(json.dumps(meas))

@@ -19,6 +19,10 @@ Measured by the layout script on the tree list: the edge crowns (centers within 
 grove region's outline), ordered along the outline; every window of four is tested against the line through its
 first and last.
 
+`LONG_RUN` (added after the settlement-review of 2026-09-28, which found a `114 ft` east edge within `8 ft` of a plumb
+line that `STRAIGHT_RUN`'s four-crown window could not see): any stretch of consecutive edge crowns whose chord is
+`150 sheet px` (`50 ft`) or more and whose crowns all lie within the smallest crown radius of that chord.
+
 ## R3 - every text that placed a feature against the old grove, and what it says now
 
 Found 2026-09-28 by `grep -n -i grove` over every file the sheet renders from - `pool/country-shrines/hoshigaoka-shrine/`
@@ -27,17 +31,17 @@ Found 2026-09-28 by `grep -n -i grove` over every file the sheet renders from - 
 
 | where | said | now |
 |---|---|---|
-| notes, the precinct bullet | "The precinct is the grove", the wood "several crowns deep behind the hall", `138 canopies over 60%` of the precinct (feature 270's figure) | the precinct holds its wood at its sides; the flanks, 84 canopies (m:grove-trees-hoshigaoka), a canopy share of 0.653 of the flanks' ground (m:grove-canopy-share-hoshigaoka) |
-| notes, the clearing bullet | "so is the grove's own edge"; the footpath "through the grove to the well" | "so are the wood's edges"; the path across the open ground behind the hall |
-| notes, the arches bullet | the outermost "at the grove's edge"; the approach "from the grove's edge" | at the precinct's edge, in open ground below the flanks |
-| notes, the sacred tree bullet | "the grove's biggest"; the arches "from the grove's edge" | the precinct's biggest, alone below the east flank; from the precinct's edge |
-| notes, knob list | seven knobs | knob 8, `sides`, with the roll's exact call |
-| notes, the trees bullet | "a seeded dart-throw inside the grove" | inside the two flanks' outlines |
+| notes, the precinct bullet | "The precinct is the grove", the wood "several crowns deep behind the hall", `138 canopies over 60%` of the precinct (feature 270's figure) | the precinct holds its wood behind the hall and at its sides; 129 canopies (m:grove-trees-hoshigaoka), covering 0.894 of the ground they may cover (m:grove-canopy-share-hoshigaoka) |
+| notes, the clearing bullet | "so is the grove's own edge"; the footpath "through the grove to the well" | "so are the wood's edges"; the path through the wood behind the hall |
+| notes, the arches bullet | the outermost "at the grove's edge"; the approach "from the grove's edge" | at the precinct's edge, in open ground below the wood's tips |
+| notes, the sacred tree bullet | "the grove's biggest"; the arches "from the grove's edge" | the precinct's biggest, alone below the wood's east tip; from the precinct's edge |
+| notes, knob list and header | seven knobs | knob 8, `behind and sides`, with the mid-slope candidates and the roll's exact call; the `**Grove form**:` line |
+| notes, the trees bullet | "a seeded dart-throw inside the grove" | inside the wood's outline |
 | notes, Map notes `torii` | "the outermost at the grove's edge" | at the precinct's edge |
-| notes, Map notes `shrine grove` | "the precinct itself ... 137 by 215 ft, from the well at its back edge" | the wood at the precinct's sides, the form and why |
-| notes, Map notes `well` | "at the grove's back edge" | in the open ground at the precinct's back edge |
+| notes, Map notes `shrine grove` | "the precinct itself ... 137 by 215 ft, from the well at its back edge" | the wood behind the hall and at its sides, the form and why |
+| notes, Map notes `well` | "at the grove's back edge" | at the wood's back edge |
 | notes, line 11 (the sheet matches the map), line 27 (knob 4, "the grove the map now draws") | true under sides | unchanged |
-| svg, the header comment | "the hall in its grove", "the well at the grove's back" | the hall and its wood at its sides; the well behind the hall |
+| svg, the header comment and the subtitle | "the hall in its grove", "the well at the grove's back"; the subtitle "in its wood" | the hall in its wood, behind and at its sides; the well at the wood's back edge; the subtitle without "in its wood" |
 | svg, the parchment, precinct, floor, footpath, grove, approach, arches and well comments | the precinct is the grove; the grove's edge and back edge | restated to the precinct and its flanks |
 | svg, the `grove-floor` pattern and "Add grove to map" (the GM's words) | true under sides | unchanged |
 | `shrine.py` `SacredTree` What | "the grove's greatest tree" | the precinct's greatest tree |
@@ -45,6 +49,6 @@ Found 2026-09-28 by `grep -n -i grove` over every file the sheet renders from - 
 | `shrine.py` `Footpath` What, Why | "through the grove" | from the kitchen side to the well, off the sanctuary's ground |
 | `shrine.py` `ShrineApproach` What, Covers | "from the grove's edge" | from where the way enters the precinct |
 | `shrine.py` module docstring, line 5 | names the grove among the shared kinds | true, unchanged |
-| `grounds.py` `ShrineGrove` Why, Note, Caveat, Entry | "draws a village shrine's precinct as its grove"; the wood fills the unbuilt ground | the forms by the ground; the edge and the roll as guesses; Entry names research 129 |
+| `grounds.py` `ShrineGrove` What, Why, Note, Caveat, Entry | "around the compound's shrine, its hall and arch set in a cleared opening"; "rather than in cleared ground"; "draws a village shrine's precinct as its grove" | kept trees on the sides of the hall its ground gives them; the forms by the ground; the edge and the roll as guesses; Entry names research 129 |
 | `programs.md` composition rule, approach rule, size anchors, knob list; `types.json` notes | "the precinct is the grove"; the outermost arch "at the grove's edge" | the precinct holds its grove (knob 8); the precinct's edge; knob 8 |
 | `future-work/farming-communities.md`, the shrine-grove entry | "a village shrine's precinct IS its grove"; fill the precinct | holds its grove in the form its ground gives; the knob, the roll, the edge, the open paddy question |

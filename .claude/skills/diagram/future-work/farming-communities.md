@@ -69,14 +69,15 @@ them. Sketch: after `shrine_hall`, reserve a precinct outline from behind the sh
 (the register band of research 124 as its area), carve the clearing and the approach, then lay the WOOD in the
 form of the program's knob 8, `grove form` (feature 279, research 129): read the hall's ground - at the foot of a
 slope the candidates are `behind` / `behind and sides`, at the top with the approach climbing to it
-`behind and sides` / `sides`, on a rise or flat paddy `all around` - and roll between two candidates from the
-settlement's seed with equal weights; the wood's region is a smooth-noise outline about the form's base shape,
+`behind and sides` / `sides`, midway on an even slope all three slope forms, on a rise or flat paddy `all around` -
+and roll between the candidates from the settlement's seed with equal weights; the wood's region is a smooth-noise outline about the form's base shape,
 never a ruled box (the edge is its crowns' own where it meets scrub or slope; where a paddy-plain wood meets its
 fields, the foot's shape is OPEN with the GM - a photograph shows it along the fields' straight edge). Fill the
 region with the grove scatter the windbreak already uses (a `KeepoutGrid` of the clearing, the approach and the
 well), carry the scrub into the precinct's open ground, then seat the sacred tree beside the approach and the
 basin at the innermost arch. Measure: the region's area and canopy share, and feature 279's `STRAIGHT_RUN` on its
-edge crowns (no four within 2 ft of one line), against the hand-drawn Hoshigaoka grove (form `sides`, feature 279).
+edge crowns (no four within 2 ft of one line), against the hand-drawn Hoshigaoka grove (form `behind and sides`, feature 279), and the `LONG_RUN` bar (no
+stretch of edge 50 ft or longer within a crown's radius of one line).
 
 ## OPEN 2026-09-27, A GM DECISION: the dike-pond mulberry is drawn 10 to 20 times sparser than the one figure found
 

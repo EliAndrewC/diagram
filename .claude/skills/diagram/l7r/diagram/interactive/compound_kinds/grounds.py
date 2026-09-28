@@ -252,12 +252,12 @@ class VegetableGarden(Kind):
 
 class ShrineGrove(Kind):
     """
-    What: A stand of kept trees around the compound's shrine, its hall and arch set in a cleared opening among
-    them: the shrine's own sacred wood.
+    What: The shrine's own sacred wood: kept trees standing on the sides of the hall its ground gives them, round a
+    cleared opening where the hall stands.
 
     Why: A Japanese shrine's setting was a deliberately preserved grove, the chinju no mori - a wood kept and
-    tended around the sanctuary, the approach and the place of worship, so that the precinct sits inside
-    kept trees rather than in cleared ground. Which sides of the hall it stands on follows the ground: all around on a
+    tended around the sanctuary, the approach and the place of worship, so that the shrine stands among
+    kept trees. Which sides of the hall it stands on follows the ground: all around on a
     rise or in the paddy plain; on a slope behind the hall, at its sides, or both. This map draws a village shrine's
     wood in the form its ground gives, with the hall in a small swept clearing and no fence around the precinct.
 

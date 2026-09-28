@@ -61,8 +61,9 @@ torii_y = [1088 + 6 * i for i in range(7)]
 
 def clear_ground(x, y, pad):
     """True where a scatter mark may stand: vacated ground, clear of every shrine feature by pad map px."""
-    if not in_poly(x, y, OLD_FLOOR):
-        return False  # only the ground the old grove held; beyond it the map's own scatter already stands
+    if not (in_poly(x, y, OLD_FLOOR) or (348 <= x <= 432 and 985 <= y <= 1235)):
+        return False  # the ground the old grove held, and the bare strips north and south of it the old reservations left
+                      # (settlement-review round 1, F3); beyond them the map's own scatter already stands
     if any(in_poly(x, y, R) or poly_dist(x, y, R) < pad + 1.5 for R in regions):
         return False  # the wood (its edge crowns straddle the region by up to a crown)
     if in_poly(x, y, clear) or poly_dist(x, y, clear) < pad:
@@ -104,8 +105,7 @@ for m in re.finditer(r"<(line|circle)\b[^>]*/>", svg):
         continue
     if "stroke=" not in t:
         tufts.setdefault((x, y), []).append(t)
-    elif 'stroke="#6E8452"' in t or 'stroke="#7A6A48"' in t:
-        styled.append(((x, y), t))
+    # the donor's pines are NOT carried: tiled, one pine per tile read as a planted grid (session look, feature 279)
 
 
 def shift(tag, dx, dy):
@@ -117,7 +117,7 @@ def shift(tag, dx, dy):
 
 # tile the donor over the vacated ground: whole donor widths east, and a half-height step so the tiles do not repeat
 # in one visible grid
-OFFSETS = [(dx, dy) for dx in (60.0, 120.0) for dy in (0.0, -70.0, 70.0)]
+OFFSETS = [(dx, dy) for dx in (60.0, 120.0) for dy in (0.0, -70.0, 70.0, 140.0)]
 new_tufts, new_styled, used = [], [], set()
 for dx, dy in OFFSETS:
     for (bx, by), tags in tufts.items():

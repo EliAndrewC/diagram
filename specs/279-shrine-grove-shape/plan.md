@@ -29,28 +29,32 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 2). Request: [`request.md`](request.
   (the forms; the edge and the roll as guesses) and its Entry (research 129) - which also renders the program's
   `grove` row. Owed at conversion: the shrine-grove entry in `future-work/farming-communities.md` and
   `migration-plan.md` step 5 name the knob, the ground rule, the irregular edge and the open paddy question.
-- **D3 - Hoshigaoka's form**: the hall stands at the top of its slope and the approach climbs to it from the
-  south, so the candidates are `behind and sides` and `sides`; the roll (the map has no seed, so the seed is the
-  map's name) is exactly `random.Random(zlib.crc32(b"hoshigaoka:shrine grove form")).choice(["behind and sides",
-  "sides"])`, the candidates in the knob's order, and it gave **sides** (the order matters: reversed, the same seed
-  gives the other form - the call is recorded beside the result on the sheet's notes).
+- **D3 - Hoshigaoka's form** (amended after the building-review of 2026-09-28): the map has no break of slope at the
+  hall - its one terrain datum is an even fall to the south-east (`meta.down_deg` 45), the ground rising behind the
+  hall toward the village and falling before it down the approach - so the hall is in neither of the survey's two
+  classes. The rule for a mid-slope hall, recorded on research 129 and knob 8 as a guess: it takes both classes'
+  forms, `behind`, `behind and sides`, `sides`. The roll is exactly
+  `random.Random(zlib.crc32(b"hoshigaoka:shrine grove form")).choice(["behind", "behind and sides", "sides"])`, the
+  candidates in the knob's order, and it gave **behind and sides**. (The first reading, a hall at the top of its
+  slope, rolled `sides` between two; the review found no such break.)
 - **D4 - the layout, laid once** (FR-005, FR-006, FR-007): feature 270's layout script, re-run with the grove's
-  domain changed from the precinct box to two irregular flanks - the wood on both sides of the precinct from about
-  the hall's back line down past it to ragged tips short of the outermost arches; the ground behind the hall (the
-  well and its path) and the lower approach open. Each flank's edge is a smooth-noise outline (several low
-  frequencies, amplitude about a crown); trees are thrown with their centers inside it, so edge crowns straddle
-  it. Everything else (clearing, approach, arches, basin, sacred tree, path, well, captions) is unchanged. The one
-  layout writes the map fragment, the manifest records (one `village_groves` record of role `shrine` per flank,
-  as the sheet-to-map check reads every record's clumps) and the sheet's tree list.
+  domain changed from the precinct box to one irregular region - behind the hall from the well at its back edge,
+  round both flanks to ragged tips beside the forecourt's foot, the west tip lower; the lower approach open. The
+  edge is a smooth-noise outline about a base shape with real bays and spurs (no near-plumb side); trees are thrown
+  with their centers inside it, so edge crowns straddle it; the drawn floor is pulled inside the crowns. Everything
+  else (clearing, approach, arches, basin, sacred tree, path, well) is unchanged, and the captions are re-seated by
+  `make seat-label`. The one layout writes the map fragment, the manifest record and the sheet's tree list.
 - **D5 - the map** (FR-006): the frozen map is edited by hand, as features 268 and 270 did. Its svg is a
   gitignored render that exists only in the mirror (`/diagram`; the clone has none - a frozen map is never
   regenerated), so the `shrine-grove` group is replaced there, with `MAIN_TREE_OK` and a backup kept, and the
-  manifest's shrine grove record in the clone (tracked). The ground the wood gives up inside the old floor would
-  be bare tan in the scrub, so the map's own scatter (grass tufts, shrub dots, scraggly pines) is carried into it
-  from a donor patch just west of the grove, tiled and kept only where it clears the wood, the clearing, the
-  approach, the arches, the sacred tree, the basin, the well and the path. The map's notes record the edit.
+  manifest's shrine grove record in the clone (tracked). The precinct's open ground, and the bare strips north and
+  south of it that the old reservations left (settlement-review F3), carry the map's own scrub - grass tufts and
+  shrub dots (no pines: tiled, they read as a planted grid) - copied from the open ground just west, kept only where
+  it clears every shrine feature. The map's notes row records the wood once, as it now is.
 - **D6 - the sheet and every text that places a feature against the old grove** (FR-007): the grove floor and tree
-  list rewritten from D4, and the sheet's frame widened to hold the flanks' outer crowns; the precinct rect stays
+  list rewritten from D4, and the sheet's frame widened to hold the wood's outer crowns; the subtitle's "in its wood"
+  dropped; the knob written as the program declares it (`**Grove form**: behind and sides`); the precinct's open
+  ground drawn plain on the sheet where the map draws scrub, recorded as a map drawing convention; the precinct rect stays
   (layout, `-`). Restated to the sides form, each by name - in `hoshigaoka-shrine.notes.md`: the "precinct is the
   grove" bullet (its area, crown count and canopy share re-measured from D4's layout), the arches bullet and the
   sacred tree bullet ("at the grove's edge", "the grove's biggest"), the knob list (`**Grove form**: sides`, with
@@ -61,8 +65,9 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 2). Request: [`request.md`](request.
   the precinct, and the outermost arch stands there; and `future-work/farming-communities.md`'s "a village shrine's
   precinct IS its grove". The map's notes row "Shrine grounds" records feature 279's edit. The full list - every
   `grove` hit in every file the sheet renders from, each ruled on - is `research.md` R3.
-- **D7 - verification** (SC-002, SC-003, FR-009): `STRAIGHT_RUN` measured on the tree list by the layout script
-  and recorded in `measurements.json`; `matches_map` (the tree-overlap check) stays green; a `settlement-review`
+- **D7 - verification** (SC-002, SC-003, FR-009): `STRAIGHT_RUN`, and the long-window `LONG_RUN` the
+  settlement-review asked for (a 50 ft stretch of edge within a crown's radius of one line), measured on the tree
+  list by the layout script and recorded in `measurements.json`; `matches_map` (the tree-overlap check) stays green; a `settlement-review`
   of the map and a `building-review` of the sheet, ledgered; the paddy-edge question and the side forms' single
   source raised with the GM at hand-back (through `escalation-check`); `make done` green.
 
