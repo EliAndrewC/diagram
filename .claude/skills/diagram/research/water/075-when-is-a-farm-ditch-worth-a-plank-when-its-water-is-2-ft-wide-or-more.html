@@ -1,0 +1,52 @@
+<h2 id="when-is-a-farm-ditch-worth-a-plank-when-its-water-is-2-ft-wide-or-more">When is a farm ditch worth a plank? When its water is 2 ft wide or more</h2>
+<!-- Grounds: channel_footbridges; FOOTPLANK_MIN_FT; worth_planking -->
+<!-- Evidence: a GM ruling on a silent record (2026-08-26); measurements on the true-size Inashiro -->
+<p><strong>Sources:</strong> none - no page read says at what width a farm ditch was bridged (the searches are in the notes), so the line is the GM's ruling; drawing the net at true size, which put the question, is at <a href="#what-drawing-at-true-size-left-open">What drawing at TRUE SIZE left open</a></p>
+<p><strong>A plank is laid only over water you cannot stride across.</strong> A plank bridge is a real object a household builds and
+  maintains, and nobody builds one over something they step over.<sup class="fn" data-note="when-is-a-farm-ditch-worth-a-plank-when-its-water-is-2-ft-wide-or-more"></sup> Whether that crossing was a plank at all, or a log or earth over logs, is <a href="#what-crosses-a-farm-ditch-a-plank-a-log-or-earth-over-logs">below</a>.<!-- FIXED 2026-08-17. The rule had been about LENGTH alone - any ditch over ~140 px got a plank about midway - which was harmless while the net was oversize and absurd at true size: eight of Inashiro's fifteen bridges decked water 1.7-2.3 ft wide, with 3-4 ft abutments each side. The geometry had tracked the narrowing correctly (spans fell 18.4 -> 10.5 px, nothing short or floating); it was the FEATURE's justification that did not travel. --></p>
+<p>The width line for a plank (ruled below) is judged on the ditch's WIDEST point (a run wide at its head and a thread at its tail is worth
+  a crossing somewhere, and the plank is seated where the water is wide enough for one).<!-- "and the placer slides to find where), and the placer PREFERS wide seats rather than
+  refusing narrow ones, because its other constraints - houses, hem crop, other decks, oblique confluences -
+  can rule out every wide seat on a ditch that still earns a crossing." --></p>
+<!-- FOOTPLANK_MIN_FT = 3.0 (2026-08-17), about a stride, judged on the ditch's WIDEST point (a run wide at its
+  head and a thread at its tail is worth a crossing somewhere, and the placer slides to find where).
+  The measured pool leaves a clean gap for it - delivery ditches carry 1.8-2.5 ft and supply canals
+  3.0-4.5 - so the line separates "step over it" from "lay a board" without cutting through either
+  group. On Inashiro: 15 planks -&gt; 7, exactly the 8 delivery-ditch decks removed. <strong>One predicate,
+  <code>worth_planking</code>, called by BOTH the placer and <code>long_ditches_have_a_footbridge</code></strong> - a ditch the
+  placer declines to deck while the check still demands one is precisely the placer/check
+  disagreement this engine keeps rediscovering, and here it would have fired on every hamlet.</p>
+<p><em>Two scopes, and getting them wrong cost a round each.</em> Judged on the DITCH, the predicate answers
+  "is this worth a crossing anywhere", which is the gate's question. Judged on a SEAT, it answers "is
+  the water wide enough here", which is the placer's - and judging only the ditch let a run that
+  qualifies on its 3.0 ft head seat a board over 2.4 ft, narrower than decks the same rule had just
+  removed (caught by review). But making the seat width a hard REFUSAL re-opened the split from the
+  other side: cohort seeds 41 and 43 had a long ditch the gate demanded a plank on and the placer
+  would not lay, because its other constraints - houses, hem crop, other decks, oblique confluences -
+  ruled out every wide seat. <strong>So the placer PREFERS wide seats rather than refusing narrow ones</strong>
+  (candidates sorted wide-first), and the check was tightened to match from its own side:
+  <code>_ditch_plankable</code> now requires useful ground AND enough water at the SAME sample, so it stops
+  demanding a crossing on a ditch that is merely wide at one end and crossable at the other. The
+  general shape: when a placer has constraints its checker cannot model, a hard refusal on a shared
+  rule will always find the gap between them - make the shared rule a PREFERENCE on the placer's side
+  and tighten the checker's own question instead. -->
+<p><strong>RULED 2026-08-26 (GM): the line is 2.0 ft.</strong><!-- feature 133 T11; the line moved from 3.0 ft to 2.0 ft --> The GM asked
+  of the reference hamlet: <em>"I think there should probably be plank bridges over the irrigated
+  channels in a few places. Right? Or are these too narrow for that? They don't look too narrow. Is
+  it intentional that they're missing or an oversight?"</em><!-- It was intentional - the 2026-08-17 line above - but the 3.0 ft figure was a session's reading of "a stride", never researched and never put to the GM. --> The research pass (web, Japanese and English, six queries): the traditional
+  farm-level water channel is commonly given as <strong>2 shaku, ~60 cm</strong> (farm paths 3 shaku, the <em>sanshaku-michi</em>), though no page that could be read says so<sup class="fn" data-note="when-is-a-farm-ditch-worth-a-plank-when-its-water-is-2-ft-wide-or-more-2"></sup>,
+  which is about the width at the head of our delivery ditches (2.5 ft, tapering toward 1.2 ft, which the map draws no finer than 1.5); modern
+  ほ場整備 standard drawings size the smallest field ditches at 30-60 cm and carry a crossing at every
+  plot entrance, but that is machinery-era practice;<sup class="fn" data-note="when-is-a-farm-ditch-worth-a-plank-when-its-water-is-2-ft-wide-or-more-3"></sup> and NOTHING found says whether an Edo farmer
+  laid a board over a 2-shaku ditch or stepped it. The GM had already ruled on the map.<!-- "Two supportable readings would have become a
+  knob; a silent record goes to the GM, and the GM had already ruled on the map." -->
+  So the line is <strong>2.0 ft</strong><!-- FOOTPLANK_MIN_FT = 2.0 -->: the standard farm ditch earns a board, the ~1.2-1.5 ft tails do
+  not. On Inashiro: 10 planks, among them one per delivery branch (each over 2.0 ft of water or a little more, seated
+  just below the branch heads because the head itself is a confluence) and two more down the main
+  (2.8 / 2.4 ft); the two 1.8 ft branches stay unplanked.<!-- The placer's wide-first seating and the single shared predicate are untouched, so the placer/check split cannot reopen. -->
+  The three branch planks sit at the TAIL of each branch's qualifying run, 160-250 ft below the head,
+  each on a bund crossing mid-field - accepted, since a head seat would stand ~120 ft from the canal
+  plank at the junction. One parallel pair<!-- at x~2225/2240 --> has one branch planked and its twin 12 ft
+  away not, the price of two deliveries running 5-25 ft apart for 300 ft. And at 2.7 ft of drawn width against
+  3.0-3.7<!-- 2.7 px against 3.0-3.7 px at 1 ft/px -->, the unplanked 1.8 ft branches are indistinguishable from the planked ones on the page:
+  the map shows some branches with a crossing and some without.<!-- Review record (settlement-review, pass): the tail seating is because n is counted over the qualifying run while the slot's base is still mid-ditch, and the wide-first sort takes the qualifying seat nearest it. The width under a seat is taper_w (square-root taper); the review's linear read gave 1.95 ft for one seat that the authoritative taper puts at or above 2.0 - so that is the measurement to use, not w -> w_tail interpolated linearly. The parallel pair is pre-existing geometry, not worth a rule. --></p>

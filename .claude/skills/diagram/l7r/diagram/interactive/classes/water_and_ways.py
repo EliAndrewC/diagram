@@ -297,7 +297,7 @@ class Footbridge(Kind):
     Covers: `bridges[foot]` - every plank and deck over water
     Label: guess
     Sources: not recorded
-    Entry: research/water.html - 'What drawing at TRUE SIZE left open' (channel_footbridges)
+    Entry: research/water.html - 'When is a farm ditch worth a plank' (channel_footbridges)
     """
 
     key = 'footbridge'
