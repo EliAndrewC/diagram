@@ -138,7 +138,8 @@ class Millet(Kind):
     the slopes around the settlement, for the Yoshino mountains only; that the old settlements stand on the raised
     ground that is also their dry field, with the paddy in the wet ground behind it, is read too; the rest of the
     order is this record's own reading, and one source read puts paddy round houses built on slightly higher ground
-    instead; the plot a household works by its own house is its kitchen bed, read; that the crop stands in ridged rows at all is a
+    instead; the plot a household works by its own house is named for its own consumption, read, and no page read puts
+    grain there; that the crop stands in ridged rows at all is a
     GUESS - no page read says whether a pre-modern dry field was sown in rows or broadcast, and the only ridged rows
     found are modern; the crop MIX on any one map (how much millet against buckwheat and barley) is rolled from the
     seed and is a GUESS at the proportions.
@@ -164,15 +165,15 @@ class Buckwheat(Kind):
     Why: Dry crops take the higher, well-drained ground the paddy water cannot command - terraces, levee crests,
     the drier middle of a fan, lower slopes. On these maps that is the strip along the field's high edge, just above
     the supply canal where the paddy water stops. The plot a household works beside its own house is its kitchen
-    garden; its grain and beans grew out in its dry fields.
+    garden; no source read puts its grain there.
 
     Note: The catena's elements - paddy, dry field, woodland - are read, and one page read puts the dry fields on
     the slopes around the settlement, for the Yoshino mountains only; that the dry crops take the higher ground
     above the paddy, and share the houses' raised ground, is read for alluvial lowland, where one page puts the old
     settlements and their dry fields on the natural levee and another the paddy in the wet ground behind; elsewhere
     that order is this record's own reading, and one source read puts paddy
-    round houses built on slightly higher ground instead; the plot a household works by its own house is its
-    kitchen bed, read. What is said here of the crop itself is not drawn from the section this entry names; the crop
+    round houses built on slightly higher ground instead; the plot a household works by its own house is named
+    for its own consumption, read, and no page read puts grain there. What is said here of the crop itself is not drawn from the section this entry names; the crop
     mix per map is rolled from the seed and is a GUESS at the proportions.
 
     Caveat: the crop mix per map is rolled from the seed and is a GUESS at the proportions.
@@ -195,15 +196,15 @@ class Barley(Kind):
     Why: Dry crops take the higher, well-drained ground the paddy water cannot command - terraces, levee crests,
     the drier middle of a fan, lower slopes. On these maps that is the strip along the field's high edge, just above
     the supply canal where the paddy water stops. The plot a household works beside its own house is its kitchen
-    garden; its grain and beans grew out in its dry fields.
+    garden; no source read puts its grain there.
 
     Note: The catena's elements - paddy, dry field, woodland - are read, and one page read puts the dry fields on
     the slopes around the settlement, for the Yoshino mountains only; that the dry crops take the higher ground
     above the paddy, and share the houses' raised ground, is read for alluvial lowland, where one page puts the old
     settlements and their dry fields on the natural levee and another the paddy in the wet ground behind; elsewhere
     that order is this record's own reading, and one source read puts paddy
-    round houses built on slightly higher ground instead; the plot a household works by its own house is its
-    kitchen bed, read. What is said here of the crop itself is not drawn from the section this entry names; the crop
+    round houses built on slightly higher ground instead; the plot a household works by its own house is named
+    for its own consumption, read, and no page read puts grain there. What is said here of the crop itself is not drawn from the section this entry names; the crop
     mix per map is rolled from the seed and is a GUESS at the proportions.
 
     Caveat: the crop mix per map is rolled from the seed and is a GUESS at the proportions.
@@ -226,7 +227,7 @@ class Soy(Kind):
     Why: Dry crops take the higher, well-drained ground the paddy water cannot command - terraces, levee crests,
     the drier middle of a fan, lower slopes. On these maps that is the strip along the field's high edge, just above
     the supply canal where the paddy water stops. The plot a household works beside its own house is its kitchen
-    garden; its grain and beans grew out in its dry fields. The bean fixes its own nitrogen, which is why it also
+    garden; no source read puts its grain there. The bean fixes its own nitrogen, which is why it also
     went along the bunds.
 
     Note: The catena's elements - paddy, dry field, woodland - are read, and one page read puts the dry fields on
@@ -234,8 +235,8 @@ class Soy(Kind):
     above the paddy, and share the houses' raised ground, is read for alluvial lowland, where one page puts the old
     settlements and their dry fields on the natural levee and another the paddy in the wet ground behind; elsewhere
     that order is this record's own reading, and one source read puts paddy
-    round houses built on slightly higher ground instead; the plot a household works by its own house is its
-    kitchen bed, read. What is said here of the crop itself is not drawn from the section this entry names; the crop
+    round houses built on slightly higher ground instead; the plot a household works by its own house is named
+    for its own consumption, read, and no page read puts grain there. What is said here of the crop itself is not drawn from the section this entry names; the crop
     mix per map is rolled from the seed and is a GUESS at the proportions.
 
     Caveat: the crop mix per map is rolled from the seed and is a GUESS at the proportions.
