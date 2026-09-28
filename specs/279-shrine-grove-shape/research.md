@@ -35,7 +35,7 @@ Found 2026-09-28 by `grep -n -i grove` over every file the sheet renders from - 
 
 | where | said | now |
 |---|---|---|
-| notes, the precinct bullet | "The precinct is the grove", the wood "several crowns deep behind the hall", `138 canopies over 60%` of the precinct (feature 270's figure) | the precinct holds its wood behind the hall and at its sides; 128 canopies (m:grove-trees-hoshigaoka), covering 0.887 of the ground they may cover (m:grove-canopy-share-hoshigaoka) |
+| notes, the precinct bullet | "The precinct is the grove", the wood "several crowns deep behind the hall", `138 canopies over 60%` of the precinct (feature 270's figure) | the precinct holds its wood behind the hall and at its sides; 134 canopies (m:grove-trees-hoshigaoka), covering 0.896 of the ground they may cover (m:grove-canopy-share-hoshigaoka) |
 | notes, the clearing bullet | "so is the grove's own edge"; the footpath "through the grove to the well" | "so are the wood's edges"; the path through the wood behind the hall |
 | notes, the arches bullet | the outermost "at the grove's edge"; the approach "from the grove's edge" | at the precinct's edge, in open ground below the wood's tips |
 | notes, the sacred tree bullet | "the grove's biggest"; the arches "from the grove's edge" | the precinct's biggest, alone below the wood's east tip; from the precinct's edge |
