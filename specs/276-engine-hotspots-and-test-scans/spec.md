@@ -131,7 +131,7 @@ The track stage's path checks read the static water and crop geometry from an in
   static water, crop and pond geometry indexed once per track stage, not from a scan of every segment and
   polygon per candidate path.
 - **FR-006 Every rule still holds; maps may move.** After FR-003 to FR-005 every live pool map regenerates,
-  `make done` is green at the 100% floor, and every gate rule passes. A map that moved is named in research
+  `make done` is green at the `100%` floor, and every gate rule passes. A map that moved is named in research
   with what moved; byte-identity is not required (the GM, request.md).
 - **FR-007 Measured, before and after.** Research records, from the same machine and commands: each named
   test's time; the homestead stage (time, candidates fully tested) on the rescue-rounds scenario and a dense
@@ -156,16 +156,18 @@ The track stage's path checks read the static water and crop geometry from an in
 
 ### Measurable Outcomes
 
-- **SC-001**: Each of the four AST-scanning tests and each named record test runs in under 0.5 s alone (from
-  2.3-6.6 s and 2.8-4.4 s), and each fails on its planted violation.
-- **SC-002**: The rescue-rounds homestead stage is at least 5x faster (from 6.6 s under the profiler, measured
-  unprofiled before and after) with at least 10x fewer candidates fully tested.
+- **SC-001**: Each of the four AST-scanning tests and each named record test runs in under `0.5 s` alone (from
+  `2.3-6.6 s` and `2.8-4.4 s`, observed 2026-09-28, method: cProfile of each test alone plus `--durations` on
+  `make quick ALL=1`), and each fails on its planted violation.
+- **SC-002**: The rescue-rounds homestead stage is at least `5x` faster (from `6.6 s` under the profiler,
+  observed 2026-09-28, method: cProfile of the test alone; re-measured unprofiled before and after in research)
+  with at least `10x` fewer candidates fully tested.
 - **SC-003**: On a dense synthetic scenario, doubling the houses to seat at most roughly doubles placement
-  time (per-house time within 1.5x across the two sizes).
-- **SC-004**: Seam closing per comb build is at least 2x faster; the seams test's pathological map produces
+  time (per-house time within `1.5x` across the two sizes).
+- **SC-004**: Seam closing per comb build is at least `2x` faster; the seams test's pathological map produces
   cells bounded by its pockets' extent.
 - **SC-005**: The track stage's path-check share on the reference hamlet is at least halved.
-- **SC-006**: Every live pool map regenerates with every gate rule passing, and `make done` is green at 100%.
+- **SC-006**: Every live pool map regenerates with every gate rule passing, and `make done` is green at `100%`.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
