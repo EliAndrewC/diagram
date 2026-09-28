@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in the clone `diagram-inashiro`)
 **Created**: 2026-09-28
-**Status**: Accepted - FAITHFUL at round 3 of 5 (2026-09-28); Amendment 1 under review (2026-09-28)
+**Status**: Accepted - FAITHFUL at round 3 of 5 (2026-09-28); Amendment 1 FAITHFUL at round 2 of 5 (2026-09-28)
 **Request**: [`request.md`](request.md) - the GM's words verbatim: run the exercise again - measure, find what is slow,
 improve it "without any loss in accuracy"; the maps may change a little "as long as the ... invariants ... hold ... things
 that aren't supposed to overlap don't overlap".
@@ -201,6 +201,11 @@ density and keep-outs.
 - Round 2 (spec-fidelity, 2026-09-28): CHANGES REQUIRED - FR-002 cleared its store at a roll's start where the memo is
   cleared at its end (feature 210), and the Summary still named the array lever for the windbreak. Both reworded.
 - Round 3 (spec-fidelity-verify, 2026-09-28): FAITHFUL.
+- Amendment 1, round 1 (spec-fidelity, 2026-09-28): CHANGES REQUIRED - the base's ring builds move between runs, timings
+  carried no `varies` or load and `before` measured the clone, and FR-010, US4 and SC-011 still named the withdrawn marsh.
+  Addressed (the moving counts named, loads recorded, `before` in the base worktree, the passages marked).
+- Amendment 1, round 2 (spec-fidelity-verify, 2026-09-28; a retry after a rate limit cut the first off): FAITHFUL; its one
+  note (Kuwabata's range widened to the review's reading) applied.
 
 ### Amendment 1 (2026-09-28, from T14's measurement), review on a reset counter
 
@@ -242,7 +247,7 @@ run once more on its own, base then clone; research R2):
   1.20x against its back-to-back base. Two base re-runs read higher still - 37.715 s and 36.763 s
   (m:base-rerun-pool-roll-s, load 4.0 -> 9.6) - each carried by ONE map far off its every other reading: Kashikawa at
   13.23 s in the first, where the review's re-run read 8.988 s, and Kuwabata at 6.739 s in the second
-  (m:base-rerun-kuwabata-roll-s) against 3.73-3.82 s in every other reading; neither is used. What stands between 1.2x
+  (m:base-rerun-kuwabata-roll-s) against 3.73-3.91 s in every other reading (3.91 s the review's own re-run, observed 2026-09-28, method: `make figures`); neither is used. What stands between 1.2x
   and the target is the residue FR-011 records: the router's search, the field's carve and seam closing, and the page
   writer.
 

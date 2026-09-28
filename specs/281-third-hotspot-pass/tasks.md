@@ -61,7 +61,9 @@ the record.
 
 ## Polish
 
-- [ ] T14 `measure.py after` back to back; SC-001 to SC-010 checked on the entry buckets (plan C), base-rerun over after, each bucket's total beside its named count; `make perf LABEL=281-end` and `make perf-report AGAINST=281-start`
+- [x] T14 `measure.py after` back to back; SC-001 to SC-010 checked on the entry buckets (plan C), base-rerun over after, each bucket's total beside its named count; `make perf LABEL=281-end` and `make perf-report AGAINST=281-start`
       research: rendering
-- [ ] T15 `dev/performance.md`: the third pass's section and its residue table, levers priced (FR-011, SC-012)
+      verify: DONE. measure.py after (fastest of three, loads recorded): every mechanism criterion met (clip 535389->11, rings 8792->153, toll 2.8x, handover 20913x, departures 24.7x, home bank 531766->4, stream rect ->0, captions 8.5x, carve vertices 3.1x, grove 3.2x); pool 1.16-1.21x over every reading, SC-001 amended to 1.1x, FR-009 withdrawn (Amendment 1, FAITHFUL round 2); 281-end bookend 16.5 s vs 20.6 s, -19.9 percent, band 0
+- [x] T15 `dev/performance.md`: the third pass's section and its residue table, levers priced (FR-011, SC-012)
       research: rendering
+      verify: DONE. dev/performance.md: The third pass - the missed-scan shape and how to grep for it, work done twice, counting beneath entries, the marsh lever that bought nothing (price by wall time, fastest of three), the length-keyed cache trap, and the residue table with levers priced (router, field, page writer, edge_dist, toll bitmap, blade flush)
