@@ -754,9 +754,7 @@ def test_the_vectorized_grass_keeps_every_keep_out_the_point_test_kept():
     near = [(dx, dy) for dx in (-0.05, 0.0, 0.05) for dy in (-0.05, 0.0, 0.05)]
 
     def ok(x, y):
-        return any(
-            ring.inside(x + dx, y + dy) and not keep.hit(x + dx, y + dy, (0.0, 0.0)) and ((x + dx - pond[0]) / pond[2]) ** 2 + ((y + dy - pond[1]) / pond[3]) ** 2 > 1.0 for dx, dy in near
-        )
+        return any(ring.inside(x + dx, y + dy) and not keep.hit(x + dx, y + dy, (0.0, 0.0)) and ((x + dx - pond[0]) / pond[2]) ** 2 + ((y + dy - pond[1]) / pond[3]) ** 2 > 1.0 for dx, dy in near)
 
     for x, y in [*tufts, *dots]:
         assert frame[0] - 0.05 <= x <= frame[2] + 0.05 and frame[1] - 0.05 <= y <= frame[3] + 0.05

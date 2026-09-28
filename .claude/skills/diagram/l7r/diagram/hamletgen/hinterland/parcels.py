@@ -363,7 +363,9 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                     and not any(_crop_refuses((x, y), half, idx, n, sn) for idx, _bx0, _by0, _bx1, _by1 in crop_g.near(x, y))
                     and not any(math.hypot(x - kx, y - ky) < kr + half for kx, ky, kr in keep)
                     and not any(rx0 - half < x < rx1 + half and ry0 - half < y < ry1 + half for rx0, ry0, rx1, ry1 in keep_rects)
-                    and not any(bx0 <= x <= bx1 and by0 <= y <= by1 and seg_dist(x, y, a, b) < reach for a, b, reach, bx0, by0, bx1, by1 in _lines_at(line_g, lanes + streams, half).near(x, y))  # `_near_line`, from the index
+                    and not any(
+                        bx0 <= x <= bx1 and by0 <= y <= by1 and seg_dist(x, y, a, b) < reach for a, b, reach, bx0, by0, bx1, by1 in _lines_at(line_g, lanes + streams, half).near(x, y)
+                    )  # `_near_line`, from the index
                     and not _wet(x, y, half)
                 )
 

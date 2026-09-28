@@ -2,7 +2,8 @@
 
 import math
 import random
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
+from typing import Any
 
 Pt = tuple[float, float]  # an (x, y) point in map pixels
 Poly = list[Pt]  # a polyline / polygon as a list of points
@@ -500,3 +501,8 @@ def _miter_normals(bpts: Poly, F: _Frame) -> list[Pt]:
         out.append((ux * scale, uy * scale))
     out.append(cn[-1])
     return out
+
+
+def plot_boxes(plots: Sequence[dict[str, Any]]) -> list[tuple[dict[str, Any], float, float, float, float]]:
+    """`(plot, x0, y0, x1, y1)` - each plot filed by its ring's box (feature 278)."""
+    return [(pl, min(q[0] for q in pl["poly"]), min(q[1] for q in pl["poly"]), max(q[0] for q in pl["poly"]), max(q[1] for q in pl["poly"])) for pl in plots]

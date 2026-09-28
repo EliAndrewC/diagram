@@ -208,8 +208,14 @@ def test_the_lazy_router_returns_the_whole_box_routers_paths() -> None:
             c = rec["crossings"][req["crossing"]] if req["crossing"] >= 0 else {"brook": [], "radius": 0.0, "cost": 0.0}
             R.set_crossing([tuple(q) for q in c["brook"]], c["radius"], c["cost"])
             got = R._route(
-                tuple(req["start"]), tuple(req["goal"]), [polys[i] for i in req["hard"]], [polys[i] for i in req["walls"]],
-                [(tuple(a), tuple(b)) for a, b in req["water"]], cell=req["cell"], gap=req["gap"], pad_mult=req["pad_mult"],
+                tuple(req["start"]),
+                tuple(req["goal"]),
+                [polys[i] for i in req["hard"]],
+                [polys[i] for i in req["walls"]],
+                [(tuple(a), tuple(b)) for a, b in req["water"]],
+                cell=req["cell"],
+                gap=req["gap"],
+                pad_mult=req["pad_mult"],
             )
             assert [list(q) for q in got] == req["out"]
     finally:

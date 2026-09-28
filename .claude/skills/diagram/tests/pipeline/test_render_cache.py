@@ -442,4 +442,3 @@ def test_main_page_if_classes_reports_and_stops(tmp_path, monkeypatch, capsys):
     monkeypatch.setattr(rc, "replate_if_classes_moved", lambda skill, allow_main=False: False)
     assert rc.main(["--skill-dir", str(tmp_path), "--page-if-classes"]) == 0
     assert "placement page current" in capsys.readouterr().out
-

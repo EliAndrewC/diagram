@@ -773,7 +773,7 @@ def test_an_element_with_no_extent_is_treated_as_touching_everything() -> None:
     would split one feature into two hover groups on the sheet, which the reader sees, while merging
     slightly too eagerly costs nothing visible. Boxes and circles both go through here, and a circle
     is tested AS a circle - two crowns whose boxes overlap at a corner do not actually touch."""
-    from l7r.diagram.interactive.page import _hits
+    from l7r.diagram.interactive.extents import _hits
 
     assert _hits(None, (0.0, 0.0, 5.0)) is True
     assert _hits((0.0, 0.0, 5.0), None) is True

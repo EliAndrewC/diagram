@@ -16,6 +16,7 @@ from .civic_grounds import CivicGroundsMixin
 from .farm_fixtures import FarmFixturesMixin, PondStockMixin
 from .fields import FieldsMixin
 from .finish import FinishMixin
+from .hard_ground import HardGroundMixin
 from .homestead_parts import HomesteadPartsMixin
 from .houses import HousesMixin
 from .land import LandMixin
@@ -45,6 +46,7 @@ class Settlement(
     CityMixin,
     CastleCivicMixin,
     HousesMixin,
+    HardGroundMixin,  # feature 278: the hard no-build ground, out of houses.py
     RollingMixin,
     FinishMixin,
     FarmFixturesMixin,

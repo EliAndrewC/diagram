@@ -15,7 +15,7 @@ from typing import Any
 from l7r.diagram.settlement._geom import PointGrid
 
 from .banks import _TINT_END_FT, _TINT_MIN_APEX, StrokeIndex, dedup_ring, pointed_ring, polyline_cum, tapers_to_a_point
-from .frame import BANK_MARGIN, CANAL_BERM_FT, Poly, Pt, _at_f, _f_at_u, _Frame, _miter_normals, _pip, _seg_d, _Thread, at_f_cache, taper_w
+from .frame import BANK_MARGIN, CANAL_BERM_FT, Poly, Pt, _at_f, _f_at_u, _Frame, _miter_normals, _pip, _seg_d, _Thread, at_f_cache, plot_boxes, taper_w
 from .palette import DRY_CROPS, FLOODED, RICE_GREENS
 
 # a supply-stroke index row: (pts, cumulative arc-length, head width, tail width, padded bbox)
@@ -581,11 +581,6 @@ def _hem_pass(
                 if _quad_in_supply(quad, sup_idx, g):
                     continue  # no bank ground between the branch tail and the collector - leave it to the floor
                 plots.append({"poly": [(round(q[0], 1), round(q[1], 1)) for q in quad], "fill": R.choice(RICE_GREENS)})
-
-
-def plot_boxes(plots: Sequence[dict[str, Any]]) -> list[tuple[dict[str, Any], float, float, float, float]]:
-    """`(plot, x0, y0, x1, y1)` - each plot filed by its ring's box (feature 278)."""
-    return [(pl, min(q[0] for q in pl["poly"]), min(q[1] for q in pl["poly"]), max(q[0] for q in pl["poly"]), max(q[1] for q in pl["poly"])) for pl in plots]
 
 
 def _carve(*args: Any, **kwargs: Any) -> list[dict[str, Any]]:

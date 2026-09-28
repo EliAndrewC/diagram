@@ -540,7 +540,9 @@ def test_hard_clear_from_its_box_index_equals_the_scan():
         w, h = w0 * math.cos(th) + h * math.sin(th), w0 * math.sin(th) + h * math.cos(th)
         fp = [(x - w / 2, y - h / 2), (x + w / 2, y - h / 2), (x + w / 2, y + h / 2), (x - w / 2, y + h / 2)]
         hard = s._hard_ground()
-        return not any(quad_hits_poly(fp, hp) for hp, (hx0, hy0, hx1, hy1) in zip(hard, s._poly_bboxes(hard), strict=False) if not (x + w / 2 < hx0 or x - w / 2 > hx1 or y + h / 2 < hy0 or y - h / 2 > hy1))
+        return not any(
+            quad_hits_poly(fp, hp) for hp, (hx0, hy0, hx1, hy1) in zip(hard, s._poly_bboxes(hard), strict=False) if not (x + w / 2 < hx0 or x - w / 2 > hx1 or y + h / 2 < hy0 or y - h / 2 > hy1)
+        )
 
     for rnd in range(2):
         for _ in range(12):
