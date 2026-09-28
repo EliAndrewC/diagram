@@ -22,7 +22,7 @@ three, loads recorded. **Constraints**: every gate rule on every live map; the 1
 
 | | label | notes |
 |---|---|---|
-| before | `284-start` | taken in `/tmp/base284` at low load |
+| before | `284-start` | total 17.4 s, median 4.1 s, worst 5.4 s (observed 2026-09-28, method: `make perf LABEL=284-start` in `/tmp/base284`, load 5.6 -> 5.1, log copied into the clone) |
 | after | `284-end` | before the push; `make perf-report AGAINST=284-start` |
 
 ## Constitution Check
@@ -50,6 +50,8 @@ recorded requests (`tests/fixtures/route_requests_mizuguchi.json`) identical wit
   `marks_region` and `hit_layer`, which take an optional `elems=` and parse only when not given. A structured slot's
   elements are built from its tuples - a blade is a line with its four coordinates, a mark carries its extent - with the
   attrs its string carries, so each pass reads the same elements it read before.
+- Why this split and not every producer converted (research R2): the scrub's and the marsh's structured ink is 60% of the
+  page's parsing and no other class is over 5%; one parse per string covers the rest.
 - **Test**: every pool map's page byte-identical, and a synthetic page (lines, circles, a translucent and an outlined
   shape, a path, a transformed string) byte-identical through both routes.
 
@@ -66,7 +68,9 @@ the five pool rolls' boards and synthetic candidate sets with ties.
 ### A4. The bamboo search outward (FR-008, `hamletgen/hinterland/bamboo.py`)
 
 The positions of the old scan, each with its distance to the target and its scan index, sorted by `(distance, index)`; the
-first that fits is the answer - the old scan kept the nearest, the first met on a tie. Both scales as before. **Test**: the
+first that fits is the answer - the old scan kept the nearest, the first met on a tie. Both scales as before. This takes the
+table's "bamboo sampled more coarsely" by removing the same wasted tests exactly; if SC-006's floor is not met, the coarser
+sampling is added. **Test**: the
 seat against the old scan over synthetic obstacle sets and the pool maps' bamboo.
 
 ### A5. Whole-ring scans through indexes (FR-009)
@@ -97,9 +101,9 @@ extended.
 ### B1. A* (FR-001, `hamletgen/ways/route.py`)
 
 The heap holds `(g + h, g, ix, iy)` with `h = hypot(ix - gx, iy - gy) * cell`; the stale-entry check compares `g`. The
-start/goal presets, the corner rule and the toll are unchanged. **Test**: over the recorded requests, every lattice cost no
-more than Dijkstra's (a copy in the test), every drawn link clear, every drawn path at most `5%` longer than the old
-router's, and a request with no path still returns [].
+start/goal presets, the corner rule and the toll are unchanged. **Test**: over the recorded requests, on the same lattice
+every A* cost no more than Dijkstra's (a copy in the test), every drawn link clear, the new router's drawn path (A* and the
+chosen cell together) at most `5%` longer than the old router's, and a request with no path still returns [].
 
 ### B2. The coarser lattice (FR-003)
 
@@ -124,14 +128,16 @@ withdrawn with the measurement (research R2).
 
 ### B5. The board's coarser candidate lattice (FR-007 second half)
 
-Samples along a route every 24 ft instead of 12, for hamlets and villages. **Test**: the board's rules (verge, beds, water,
-fit, caption) hold on every pool map, via the gate.
+Samples along a route every `24` px instead of `12`, for hamlets and villages - kept only if the notice stage, fastest of
+three, is faster with it than without (FR-007). **Test**: the board's rules (verge, beds, water, fit, caption) hold on every
+pool map, via the gate.
 
 ### C. Measure and record (FR-012, SC-001 to SC-011)
 
 The four named stages (FR-011): the grove draw is A6; the grove fill, the seam closing, the commons and the flush are
-re-profiled once A lands, and each gets its lever or its measurement of why none of the allowed kind reaches it (research
-R2). The landing order: A lands, the pool regenerates byte-identical against `f52ed6aa8` (confirmed first to regenerate
+re-profiled once A lands, and each gets its lever. Then the after-profile is read under the same rule: anything slow that a
+change of the allowed kind makes significantly faster is taken in this feature; only what cannot be is left, each with its
+measurement (FR-012). The landing order: A lands, the pool regenerates byte-identical against `f52ed6aa8` (confirmed first to regenerate
 itself in `/tmp/base284`); then B, under 276's FR-006 condition. `measure.py after`, `make perf LABEL=284-end`,
 `dev/performance.md`'s fourth-pass section.
 
