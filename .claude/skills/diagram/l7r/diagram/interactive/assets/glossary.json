@@ -8437,5 +8437,19 @@
    "ohaguro-dobu",
    "ohaguro dobu"
   ]
+ },
+ "seyakuin": {
+  "def": "An ancient Japanese dispensary, set up at a temple or at court, that gave the sick medicine and treatment; the first were founded at Kofukuji in 723 and in the empress's household in 730.",
+  "variants": [
+   "seyakuin",
+   "施薬院"
+  ]
+ },
+ "hidenin": {
+  "def": "An ancient Japanese almshouse, founded beside a dispensary (seyakuin), that cared for the sick, orphans and the poor; one was set up at Kofukuji in 723.",
+  "variants": [
+   "hidenin",
+   "悲田院"
+  ]
  }
 }

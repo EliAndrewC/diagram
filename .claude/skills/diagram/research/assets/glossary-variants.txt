@@ -789,6 +789,7 @@ hereditary house	hereditary temple
 hereditary monastery	hereditary temple
 hereditary temple	hereditary temple
 hereditary temples	hereditary temple
+hidenin	hidenin
 hikan	hikan
 hinin	hinin
 hinoki	hinoki
@@ -1688,6 +1689,7 @@ settling basins	settling basin
 settsu	Settsu
 seven autumn grasses	seven autumn grasses
 seven-hall garan	garan
+seyakuin	seyakuin
 shadoof	jiegao
 shahi	shahi
 shaku	shaku
@@ -2234,6 +2236,8 @@ zushi-nikai	half-story
 塘泺	tanglao
 屋敷林	yashikirin
 御蔵	kura
+悲田院	hidenin
+施薬院	seyakuin
 杖	杖
 枝打ち	edauchi
 梁間	hari-ma
