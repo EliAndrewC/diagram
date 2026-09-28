@@ -5126,7 +5126,8 @@
    "prefectural city",
    "prefectural cities",
    "prefecture",
-   "prefectures"
+   "prefectures",
+   "prefectural"
   ]
  },
  "crenellated": {
@@ -7539,6 +7540,15 @@
   "variants": [
    "program item",
    "program items"
+  ]
+ },
+ "military examination": {
+  "def": "The Chinese state's examination for military degrees. Under the Ming and the Qing it ran at three levels: provincial, metropolitan (held at the capital) and palace, which was held in the palace with the emperor examining in person.",
+  "variants": [
+   "military examination",
+   "military examinations",
+   "palace examination",
+   "metropolitan examination"
   ]
  }
 }

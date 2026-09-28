@@ -1083,12 +1083,15 @@ memorials	memorial
 men-hai	taiping-gang
 menbansho	menbansho
 mengxi bitan	Mengxi Bitan
+metropolitan examination	military examination
 micro-high	micro-high
 micro-highs	micro-high
 mid-cut	mid-trunk
 mid-trunk	mid-trunk
 middle moat	middle moat
 middle moats	middle moat
+military examination	military examination
+military examinations	military examination
 mimizuka	ear mound
 miner's	siege mining
 ming	Ming dynasty
@@ -1240,6 +1243,7 @@ ox-frame	ox-frame
 ox-frames	ox-frame
 oyaike	oyaike
 paddy seams	seam
+palace examination	military examination
 panicle	panicle
 panicles	panicle
 pannage	pannage
@@ -1304,6 +1308,7 @@ post-stations	shukuba
 postern	postern
 precinct	precinct
 precincts	precinct
+prefectural	prefectural city
 prefectural cities	prefectural city
 prefectural city	prefectural city
 prefecture	prefectural city
