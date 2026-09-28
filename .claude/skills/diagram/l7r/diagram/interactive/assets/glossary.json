@@ -10576,5 +10576,46 @@
   "variants": [
    "Salt Road"
   ]
+ },
+ "sapeck": {
+  "def": "The European name for the Chinese copper cash, the smallest coin of Qing China; Huc's Peking night shelter charged one sapeck a night.",
+  "variants": [
+   "sapeck",
+   "sapecks"
+  ]
+ },
+ "phalanstery": {
+  "def": "The great communal building in which the French social theorist Charles Fourier proposed that a whole community live and work together; Huc uses the word in jest of Peking's feather-floored night shelter.",
+  "variants": [
+   "phalanstery",
+   "phalansteries"
+  ]
+ },
+ "Fourier": {
+  "def": "Charles Fourier (1772-1837), a French social theorist who proposed that communities live together in one great shared building, the phalanstery.",
+  "variants": [
+   "Fourier"
+  ]
+ },
+ "Peking": {
+  "def": "The older European name of Beijing, the capital of the Qing dynasty.",
+  "variants": [
+   "Peking",
+   "Pekin"
+  ]
+ },
+ "Gyosho": {
+  "def": "One of the editions of Hiroshige's Tokaido print series, known in Japanese as the Gyosho Tokaido (行書東海道); its print of Minakuchi shows a kichin-yado with its name on its paper doors.",
+  "variants": [
+   "Gyosho",
+   "Gyosho edition"
+  ]
+ },
+ "Huc": {
+  "def": "Evariste Huc (1813-1860), a missionary who lived in Qing China in the 1840s and wrote an account of the empire, published in French in 1854 and in English in 1855.",
+  "variants": [
+   "Huc",
+   "Evariste Huc"
+  ]
  }
 }

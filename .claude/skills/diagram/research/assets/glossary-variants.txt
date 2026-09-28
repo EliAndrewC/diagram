@@ -589,6 +589,7 @@ eutrophic	eutrophication
 eutrophication	eutrophication
 evapotranspiration	evapotranspiration
 evapotranspiration-and-percolation	evapotranspiration
+evariste huc	Huc
 ever-normal granaries	ever-normal granary
 ever-normal granary	ever-normal granary
 exposure burial	exposure burial
@@ -704,6 +705,7 @@ four trees and three grasses	four trees
 four-gods formulation	four gods
 four-room	four-room type
 four-room type	four-room type
+fourier	Fourier
 foxnut	foxnut
 foxnuts	foxnut
 foxtail millet	foxtail millet
@@ -851,6 +853,8 @@ gulou	gulou
 gun bugyo	gun-bugyo
 gun-bugyo	gun-bugyo
 gundai	gundai
+gyosho	Gyosho
+gyosho edition	Gyosho
 gyozui	gyozui
 gō	go
 gōnō	gōnō
@@ -1005,6 +1009,7 @@ house pad	house pad
 house pads	house pad
 houzhaofang	houzhaofang
 hsien	hsien
+huc	Huc
 hucheng he	hucheng he
 hui (huizhou) style	Hui style
 hui style	Hui style
@@ -1116,6 +1121,8 @@ jail god	jail-god
 jail-god	jail-god
 jail-god temple	jail-god
 japanese zelkova	keyaki
+jehol	Jehol
+jehol diary	Jehol
 jetties	jetty
 jetty	jetty
 jiajing	Jiajing era
@@ -1810,6 +1817,8 @@ pearl delta	Pearl delta
 pearl river delta	Pearl delta
 pearl-delta	Pearl delta
 peer-reviewed flora	flora
+pekin	Peking
+peking	Peking
 pent roof	pent roof
 pent roofs	pent roof
 penthouse	penthouse
@@ -1821,6 +1830,8 @@ periodic market	periodic market
 periodic markets	periodic market
 periodic-market	periodic market
 petuntse	petuntse
+phalansteries	phalanstery
+phalanstery	phalanstery
 phragmites	Phragmites
 phragmites australis	Phragmites
 phytoplankton	phytoplankton
@@ -1930,6 +1941,7 @@ regime theory	regime equation
 registered tangible cultural property	Tangible Cultural Property
 regulator	regulator
 regulators	regulator
+rehe	Jehol
 reikurikata	reikurikata
 remand	remand
 remanded	remand
@@ -2014,6 +2026,7 @@ sakutoku landlords	sakutoku
 sally gate	sally port
 sally port	sally port
 sallyport	sally port
+salt road	Salt Road
 salvage excavation	salvage excavation
 san no torii	ichi-no-torii
 san'yodo	Sanyodo
@@ -2040,6 +2053,8 @@ sanshaku-michi	sanshaku-michi
 sanson	sankyoson
 sanyo-do	Sanyodo
 sanyodo	Sanyodo
+sapeck	sapeck
+sapecks	sapeck
 sara-ike	sara-ike
 sarae	sarae
 sasa	sasa
@@ -2101,6 +2116,8 @@ shakuhachi	shakuhachi
 shakyamuni	Shakyamuni
 shakyamuni buddha	Shakyamuni
 shallow-water lotus	shallow-water lotus
+shanhai pass	Shanhaiguan
+shanhaiguan	Shanhaiguan
 shanxi merchant houses	Shanxi merchants
 shanxi merchants	Shanxi merchants
 shaso	shasō
@@ -2358,6 +2375,7 @@ tangible cultural properties	Tangible Cultural Property
 tangible cultural property	Tangible Cultural Property
 tanglao	tanglao
 tangpu	tangpu
+tartary	Tartary
 tatami	tatami
 tatara	tatara
 tateba	tateba
