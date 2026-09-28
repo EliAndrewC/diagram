@@ -173,6 +173,11 @@ def test_ink_inside_what_a_caption_names_is_ink_it_avoids() -> None:
     assert w[(190, 140, 210, 150)] == (sl.WEIGHT_TEXT, True), "a mat painted after the name hides it"
     court = _weights(src, "court")
     assert court[(210, 210, 250, 240)] == (sl.WEIGHT_INNER, True), "a garden in the court is ground, but not the court's"
+    later = src.replace('  <text x="300" y="260" font-size="9" data-kind="inner court">court</text>\n', "").replace(
+        "</svg>", '  <rect x="320" y="250" width="20" height="20" data-kind="vegetable garden" fill="#BFD0A0"/>\n</svg>'
+    )
+    later = later.replace('data-kind="inner court" fill="#D9C28E"/>\n', 'data-kind="inner court" fill="#D9C28E"/>\n  <text x="300" y="260" font-size="9" data-kind="inner court">court</text>\n')
+    assert _weights(later, "court")[(320, 250, 340, 270)] == (sl.WEIGHT_TEXT, True), "a garden painted after the name hides it (feature 283)"
 
 
 def test_a_room_names_itself_inside_the_building_that_holds_it() -> None:

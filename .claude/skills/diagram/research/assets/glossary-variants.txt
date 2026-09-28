@@ -289,6 +289,7 @@ chugen	chugen
 chugoku	Chugoku
 chuma	chuma
 chumon-zukuri	chumon-zukuri
+chō	cho
 chōtsuke	chōtsuke
 chōzuya	temizuya
 circuit	wall circuit
@@ -2404,6 +2405,8 @@ two-grave villages	two-grave
 tōhoku	Tohoku
 tōkaidō	Tokaido
 tōya	miyaza
+ubame	Ubame
+ubame's	Ubame
 uchi-bori	uchibori
 uchibori	uchibori
 uchigenkan	uchigenkan

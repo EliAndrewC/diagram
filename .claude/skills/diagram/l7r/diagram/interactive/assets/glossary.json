@@ -956,7 +956,8 @@
  "cho": {
   "def": "About one hectare (10 tan), the unit a holding or a village's fields were reckoned in; also a town block of that size.",
   "variants": [
-   "cho"
+   "cho",
+   "chō"
   ]
  },
  "chonin": {
@@ -10038,6 +10039,13 @@
   "def": "Garland chrysanthemum, a leafy green whose young leaves are eaten boiled or in hot pots.",
   "variants": [
    "shungiku"
+  ]
+ },
+ "Ubame": {
+  "def": "One of the county manors drawn for this project, beside Ochiba and Hayakawa: a border magistracy of about 290 by 200 ft whose east wall is the line between two clans' lands, with a parley room built into it.",
+  "variants": [
+   "Ubame",
+   "Ubame's"
   ]
  }
 }

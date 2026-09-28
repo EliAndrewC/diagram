@@ -58,6 +58,7 @@
 
 ## Review log
 
+- **2026-09-28 (feature 283, the garden's sun)**: the vegetable garden moved out of the rear strip, where the reception's shadow left it 1.5 h of direct sun in the shoulder month, to the NE corner of the south court below the reception's veranda, cut from the inner garden (88 x 80 px, about 780 sq ft as before; 9.5 h). The seat follows research buildings 405 - the seat is a knob and the sun decides it; here the west and the rear are all shaded, so the south is the one seat left. To make room the old pines went to the garden's NW corner above the pond, the well south to the garden's SE corner, and the roji's last two stones and the veranda stone 40 px west, still on the reception's veranda. The bed's size stays under the size knob's attested low end (a soup-greens plot of about 1,070 sq ft, research buildings 400): the corner holds no more without moving the roji.
 - **2026-09-28 (the GM's ruling: no GM-only notes on a page)**: the salt wards came from the GM-only notes of Hajime's Obsidian Portal record, so they came off the sheet and its page - every door's pair, the gate pair and its caption, the note box, and the map note.
 - **2026-09-27 (building-review round 6)**: pass (the drawing); the practice-ground entry's rack sentence brought to the drawing.
 - **2026-09-27 (feature 267 pass 6, building-review round 5)**: the weapon rack against the bale yard's west edge, where its name has a free seat inside the yard (on the north edge its only seat was across the divider); `Hajime's quarters` in two lines, clear of its walls.

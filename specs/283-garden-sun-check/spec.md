@@ -59,9 +59,12 @@ and its reviews.
   building); and to pass a sheet whose garden is open, and MUST carry unit tests to the gate's coverage floor.
 - **FR-005**: The Hoshigaoka shrine's garden and the Ochiba, Hayakawa and Ubame magistracies' gardens MUST be
   re-seated where the check passes as ordinary sun beds, none declared half-shade (the GM, 2026-09-28: "Move them all";
-  the half-shade option was offered and not chosen), a magistracy's preferring the west side of
-  its residence, the one side the record attests (research buildings 400); each sheet's notes, program checks and
-  kinds stay true, and each sheet passes a `building-review`, ledgered. A shrine garden's place stays within the sheet's
+  the half-shade option was offered and not chosen). Where a garden goes is a research question (the GM, 2026-09-28:
+  "This feels like you are asking me something that should be a research question"): a magistracy's seat is taken from
+  the attested seats of research buildings 405 (west of the residence, south beside the formal garden, the rear
+  service ground, a parcel of its own), the sun ruling out every seat under its hours; a bed that fits its sun only
+  smaller takes the size knob's attested low end (research buildings 400), never less than the sheet drew unless that
+  low end is itself what fits. Each sheet's notes, program checks and kinds stay true, and each sheet passes a `building-review`, ledgered. A shrine garden's place stays within the sheet's
   match to its village map.
 - **FR-006**: The program declarations and operative docs that describe where a garden goes MUST name the sun rule,
   so a later sheet is drawn to it.
@@ -88,6 +91,19 @@ and its reviews.
 - The binding season and sun are the record's (38 degrees north, the autumn shoulder month), as the scripted maps' rules
   use them.
 - The scripted maps keep their own placement rules; this feature adds nothing to the placer.
+
+## Decisions Recorded
+
+- **The seats (accurate as seats, a guess that the sun chooses)**: research buildings 405. At Ochiba, Hayakawa and
+  Ubame the west and the rear are shaded by the kitchen and the residence, so each bed takes the south court beside the
+  formal garden, cut from it; the Hoshigaoka shrine's bed moved to the open ground south-west of the hall (research
+  homesteads 044).
+- **Ubame's bed at the size knob's low end (accurate)**: the only open ground in its walls with six hours holds about
+  `1,065 sq ft` (observed 2026-09-28; method: the bed's rect 102 x 94 px at 3 px a foot), the soup-greens plot of research buildings 400; the rear strip held about `2,100 sq ft`. Hayakawa keeps the
+  `780 sq ft` it drew: its sunny corner holds no more without moving the roji, and that is recorded in its notes.
+- **A found defect fixed (constitution XIV)**: the caption placer weighed ground painted after a caption, inside the
+  ground the caption names, as open, and seated Hayakawa's garden name under the new bed; ground painted over a caption
+  now weighs as a caption does (`tools/seat_label.py`, with its unit test). No other sheet's seats moved.
 
 ## Review history
 

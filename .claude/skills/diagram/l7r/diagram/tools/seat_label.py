@@ -304,10 +304,12 @@ def classify(
             # kitchen garden, open ground inside the court), and so does ink the sheet marks `data-texture` - a
             # feature's surface, a wing's shutter marks, which a name may lie on; everything else in full - the caption's
             # own partitions too, which at a light weight lost to its building's outline and put Ubame's servants'
-            # quarters on one (round 4)
-            light = (s.kind in GROUND_KINDS and s.kind != kind) or s.texture
+            # quarters on one (round 4). Ground painted AFTER the caption is not light: it hides the name however open it
+            # is (Hayakawa's vegetable bed cut from the inner garden's corner took the garden's name, feature 283)
+            over = after is not None and i > after and s.filled and not s.line
+            light = (s.kind in GROUND_KINDS and s.kind != kind and not over) or s.texture
 
-            weight = WEIGHT_INNER if light else WEIGHT_TEXT if after is not None and i > after and s.filled and not s.line else WEIGHT_OBSTACLE
+            weight = WEIGHT_INNER if light else WEIGHT_TEXT if over else WEIGHT_OBSTACLE
             bands = [_band(a, b, max(s.half, 0.5)) for a, b in zip(s.poly, s.poly[1:], strict=False)] if s.line else [s.poly]
             obstacles += [Obstacle(tuple(b), weight, inner=True) for b in bands]
             continue
