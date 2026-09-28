@@ -142,5 +142,14 @@
     "observed": "2026-09-28",
     "subject": "kuwabata",
     "verifies": "F1"
+  },
+  "kashikawa-card-headsman": {
+    "value": 0,
+    "unit": "spellings of 'headman'",
+    "quantity": "the hamlet place card's caveat now reads 'the rule that a hamlet keeps no headsman', matching its description (round-3 F1)",
+    "source": "l7r/diagram/interactive/assets/place.json line 96 - read 2026-09-28",
+    "observed": "2026-09-28",
+    "subject": "kashikawa",
+    "verifies": "F1"
   }
 }
