@@ -33,7 +33,7 @@ class HomesteadBamboo(Kind):
     Covers: `bamboo_stands[role=homestead]`
     Label: convention
     Sources: not recorded
-    Entry: research/vegetation.html - 'Bamboo: how common, where it stood, and how to show it'
+    Entry: research/vegetation.html - 'Bamboo: how common, and where it stood', 'How is bamboo drawn, when one culm is too small to see?'
     """
 
     key = 'homestead bamboo'
@@ -56,7 +56,7 @@ class SharedBambooGrove(Kind):
     Covers: `bamboo_stands` with any role other than homestead - the take-yabu at the field margin
     Label: convention
     Sources: not recorded
-    Entry: research/vegetation.html - 'Bamboo: how common, where it stood, and how to show it'
+    Entry: research/vegetation.html - 'Bamboo: how common, and where it stood', 'How is bamboo drawn, when one culm is too small to see?'
     """
 
     key = 'shared bamboo grove'
@@ -229,7 +229,7 @@ class Marsh(Kind):
     Covers: `marshes` - every marsh patch, whatever its role
     Label: accurate
     Sources: aas-rice-technology, mineta-2007-tameike, tameike-jawiki, kagawa-tameike-structure, maff-tameike-shizen, nies-tameike, inamino-tameike-museum
-    Entry: research/water.html - 'Marsh - wet rice is reclaimed FROM wetland', 'The wet toe is as wide as the FAN', "A reservoir's shore is reeded, and its EMBANKMENT is mown"; research/vegetation.html - 'The marsh margin'
+    Entry: research/water.html - 'Marsh - wet rice is reclaimed FROM wetland', 'The wet toe is as wide as the FAN', "A reservoir's shore is reeded, and its EMBANKMENT is mown", "Why is a reservoir's embankment bare of reeds"; research/vegetation.html - 'The marsh margin'
     """
 
     key = 'marsh'
