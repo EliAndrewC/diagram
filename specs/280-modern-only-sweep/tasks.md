@@ -4,10 +4,12 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D8). Inventory: [`inv
 
 ## Phase 1 - audit and queue
 
-- [ ] T01 The audit: seven Opus agents over every record page, the kinds and knobs, and the pool, legacy and magistracy maps; consolidated into `inventory.md` (D1, FR-001, FR-002)
+- [x] T01 The audit: seven Opus agents over every record page, the kinds and knobs, and the pool, legacy and magistracy maps; consolidated into `inventory.md` (D1, FR-001, FR-002)
       research: procedure
-- [ ] T02 The research queue: `briefs/gen.py`, the 41 write briefs (each at most four questions by `scripts/_brief_load.py`), the `<g>-checks.sh` steps, `sync.sh`, `wait269.sh`, `queue.txt` (D2, D3, FR-004)
+      verify: DONE. seven Opus audits over every page, kind, knob and map (outputs /tmp/l7r-check/280-audit/out-1..7), consolidated into inventory.md: 130 items, 611 sections accounted for
+- [x] T02 The research queue: `briefs/gen.py`, the 41 write briefs (each at most four questions by `scripts/_brief_load.py`), the `<g>-checks.sh` steps, `sync.sh`, `wait269.sh`, `queue.txt` (D2, D3, FR-004)
       research: procedure
+      verify: DONE. 41 write briefs, each 2-4 questions by scripts/_brief_load.py; check generator dry-run on a dummy handoff (check-a 2, check-b 1, kind=check); queue.txt and queue-269.txt; plan review CLEAR round 2
 
 ## Phase 2 - the research (one write session, then its check sessions, per group; queue order; D2, D3)
 

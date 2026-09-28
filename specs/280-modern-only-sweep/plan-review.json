@@ -1,6 +1,6 @@
 {
  "feature": "280-modern-only-sweep",
- "plan_sha256": "cf8afc81c98cefb738938d0039950e32de5e28a70094867a30065705a4886d5a",
+ "plan_sha256": "a88dd61176ca6405434b49d45e1dc548dad078cd68fd7aeeb5889931d96d9c77",
  "reviewed": "2026-09-28",
  "declared": "spec-fidelity",
  "decisions": [
@@ -21,20 +21,6 @@
    "summary": "One serial queue; groups on sections 269 rewrote run after the others, behind wait269.sh (research-on-main as the proxy for 269 landing); 279's R5 last",
    "class": "within",
    "why": "Ordering only; spec Edge Cases hold 269's sections until it lands, and 269 cannot push its record before its tasks close, so the proxy is sound."
-  },
-  {
-   "id": "D3-269-timeout",
-   "summary": "wait269.sh gives up after 10 hours and the queue goes on; the brief's claims step then skips any item whose section is held, and nothing re-queues it",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "A timeout is not impossibility. A skipped item leaves with no outcome, against FR-003 (every candidate researched) and SC-002 (every candidate has an outcome line): up to 14 groups, M09-M63, M74-M77, M93-M95, M128-M130, could silently drop. The backstop also fails its own purpose: the brief skips sections 'claimed since' / 'in progress', and 269's claim lines read 'done, committed in clone', so after a timeout a session can edit 269's unlanded sections (FR-010)."
-  },
-  {
-   "id": "D3-279-skip",
-   "summary": "R5 (M78-M81, religion-and-death 124-127) runs only once 279 marks done; otherwise the claims step skips it and names it in the handoff",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "The spec already routes a held section: research it, write the finding in the handoff, send it to the owner (Edge Cases, FR-002). Skipping instead leaves M78-M81 with no outcome - two are strength S (the drawn precinct band is, by the record's own words, Meiji-or-later) and the engine kinds (ShrineGrove, ShrineBasin) are not 279's (279's claim: engine none). Also the mechanism cannot do what D3 says even when 279 is done: gen.py's HEAD forbids editing religion-and-death 124-129 unconditionally in every brief, including R5's, whose step 5 tells it to write on 124-127."
   },
   {
    "id": "D4",
@@ -65,7 +51,31 @@
    "summary": "Stray fixes found by the audit made in place when outside every held module and section; else listed with owner",
    "class": "within",
    "why": "Constitution XIV; bounded by FR-010."
+  },
+  {
+   "id": "D3-269-timeout",
+   "summary": "wait269.sh waits up to 24 hours; if 269 has not landed it prints a nonexistent brief path, the runner refuses it (admit raises Refused) and clears the queue; the 269-held tail is queue-269.txt, started once 269 lands",
+   "class": "within",
+   "why": "Round-1 item 2 resolved: the queue never proceeds into 269-held groups, nothing is dropped (queue-269.txt equals the queue tail after wait269), so FR-003/SC-002 and FR-010 both hold."
+  },
+  {
+   "id": "D3-held",
+   "summary": "A held section (claims line open for another feature, or rewritten by 269 and not on origin/main whatever its claim line says) is researched, not edited; the outcome goes in the handoff marked OWED-TO with the exact text, applied via briefs/extra/ once the hold clears",
+   "class": "within",
+   "why": "Round-1 items 1 and 3 resolved: this is the spec's own Edge Cases routing (research, hand the finding to the owner); no item leaves without an outcome; the blanket ban on religion-and-death 124-129 is gone from gen.py and every regenerated brief, so R5 runs and researches."
+  },
+  {
+   "id": "D4-phase3-gate",
+   "summary": "Phase 3 starts only when M01-M130 each have an outcome line or an exclusion naming its owner, and each OWED-TO text is applied or sent (T44)",
+   "class": "within",
+   "why": "Enforces FR-003/SC-002; round-1 item 1's T44 check."
+  },
+  {
+   "id": "D4-hoshigaoka",
+   "summary": "A change to the hoshigaoka-shrine sheet from R5's outcomes is agreed with 279 (its claim) first",
+   "class": "within",
+   "why": "Coordination with the claim holder, per spec Edge Cases and FR-010; it does not drop the elimination."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
