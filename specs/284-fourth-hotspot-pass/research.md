@@ -217,6 +217,12 @@ search; `astarcmp/results.json`): the cost-order search 211.5 s and 212.7 s, A* 
 mean, against a spread of 1.2 s (0.6%); 8 houses unreached over every attempt against 6, six re-rolls against five, every
 map healed by its re-roll.
 
+**A* alone, on the merged engine with FR-004 out** (observed 2026-09-28, method: `astarcmp/harness.py` after main's 269
+merged, the shipping router twice and A* between, interleaved by map; `astarcmp/results-alone.json`): the cost-order search
+220.19 s and 229.08 s, A* 219.67 s - 5.0 s under their mean, against a spread of 8.9 s (4%); 9 houses unreached over every
+attempt against 7, six re-rolls against four. **Not faster beyond the spread: A* is withdrawn on this measurement, by the
+rule above** - its 2.4% with FR-004 in does not survive FR-004's withdrawal.
+
 **Both together, against both off** (observed 2026-09-28, method: `combined/harness.py`; `combined/results.json`):
 
 | | the levers off (the base's router and search - the engine that ships) | levers on, pass 1 | levers on, pass 2 |
@@ -242,8 +248,10 @@ woodland parcels in a ruled row on Kashikawa, a copse clump off its house's bank
 degrees of a screen axis on Kashikawa and on Sawada; `test_pool_wind.py` found Sawada's seat no longer backed onto the
 regional northwest. Each is a rule the gate proves on the shipped maps rather than one its placer guarantees, so a map moved
 for any reason can meet it; these two levers met five. The GM allowed map changes for speed within the rules only, and the
-pool itself was no faster with them (23.76 s against 23.89 s without, each measure.py after back to back): **FR-001 and
-FR-004 are withdrawn**, the base's router order and field search restored, each with this at its point of change. With them
+pool itself was no faster with them (23.76 s against 23.89 s without, each measure.py after back to back): **FR-004 is withdrawn** on
+these failures - the stepped bund and Sawada's seat come from stages only the field search reaches (the router is first
+called in `stage_track`) - and A* on its own measurement above; the base's router order and field search restored, each
+with its reason at its point of change. With them
 out, the pool is main's map by map but for the bamboo thicket (FR-008's coarser sampling, below), and the gate's pool rules
 pass.
 

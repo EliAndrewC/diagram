@@ -193,7 +193,7 @@ removes is not predicted), and every stage figure is the fastest of three with t
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
-| The router searches toward its goal; of two equally short routes it may draw the other - WITHDRAWN, Amendment 1 (faster, but the moved maps broke gate rules) | map drawing convention (the same clearance rules; a tie resolved differently) | research R1; the GM's request | point of change in `hamletgen/ways/route.py` |
+| The router searches toward its goal; of two equally short routes it may draw the other - WITHDRAWN, Amendment 1 (alone, not faster than the run-to-run spread) | map drawing convention (the same clearance rules; a tie resolved differently) | research R1; the GM's request | point of change in `hamletgen/ways/route.py` |
 | The router's drawn path may be up to `5%` longer than today's for the same request - where A* picks another lattice path of the same cost, or the coarser lattice (FR-003) draws the way differently - WITHDRAWN, Amendment 1 (the router draws today's paths) | map drawing convention (the same clearance rules; the bound tested, SC-002) | research R1 | point of change in `hamletgen/ways/route.py` |
 | The router's lattice cell is the largest that strands no house - measured: 10 px, today's (Amendment 1; observed 2026-09-28, method: `b2/harness.py`) | map drawing convention (measured; a stranding cell is not taken) | FR-003 | point of change in `hamletgen/ways/route.py` |
 | The carve's rows as arrays, kept only if faster - WITHDRAWN, Amendment 1 (slower) | map drawing convention (plots within the fit's tolerance) | FR-005 | point of change in `waterfields/sector_rows.py` |
@@ -231,13 +231,15 @@ added under FR-011's own rule ("whatever the after-profile shows"). What changed
   that ships, six of 29 with the moving levers in). The avoid list a re-roll carries is first read at `stage_homesteads`; the first roll keeps a copy of
   itself before that stage and each re-roll resumes from a fresh copy. Exact: manifest, svg and page byte-identical to a
   re-roll built from scratch on six re-rolling maps, each re-roll 1.1-1.7 s faster (research R8).
-- **FR-001 and FR-004 measured faster, and withdrawn on the rules** (research R6): each moving lever was judged by the pool
-  and cohort seeds 1-24 rolled whole, against the run-to-run spread measured in the same run. On the engine that ships
-  FR-004 was 5% faster against a 1% spread, A* 2.4% against 0.6%, both together 4.8% (344.75 s off against 327.27 s and
-  329.37 s on). But the maps they moved failed the gate on the shipped pool - a bund built as a flight of steps, woodland
-  parcels in a ruled row, a copse off its house's bank, brook legs on a screen axis, Sawada's seat off the regional wind -
-  and the pool itself was no faster (23.76 s with them against 23.89 s without). The GM allowed map changes for speed within
-  the rules only; both are withdrawn, the base's router order and field search restored, the reasons at the points of change.
+- **FR-004 withdrawn on the rules, FR-001 on its own measurement** (research R6): each moving lever was judged by the pool and
+  cohort seeds 1-24 rolled whole, against the run-to-run spread measured in the same run. FR-004 was 5% faster against a 1%
+  spread, and with A* in both together 4.8% (344.75 s off against 327.27 s and 329.37 s on) - but the maps they moved failed
+  the gate on the shipped pool (a bund built as a flight of steps, woodland parcels in a ruled row, a copse off its house's
+  bank, brook legs on a screen axis, Sawada's seat off the regional wind), two of them from stages only FR-004 reaches, and
+  the pool itself was no faster (23.76 s with them against 23.89 s without). The GM allowed map changes for speed within the
+  rules only: FR-004 is withdrawn. A* measured alone on the merged engine, FR-004 out, is 5.0 s under the shipping search's
+  mean against a spread of 8.9 s - not faster beyond it - and is withdrawn on that. The base's router order and field search
+  are restored, the reasons at the points of change.
 - **A defect found and fixed (constitution XIV)**: a connector the web could not join was deleted as debris by the junction
   pass, and the reach check then passed on the network that was left - cohort seed 15 shipped a hamlet with no way off the
   map (research R6). The pass never drops the connector now; every roll of R6's three runs, 87 rolls each, draws its connector.
@@ -269,7 +271,7 @@ added under FR-011's own rule ("whatever the after-profile shows"). What changed
 | The router's lattice stays 10 px | map drawing convention (measured: every coarser cell tried strands a house; observed 2026-09-28, method: `b2/harness.py`) | research R4 | point of change in `hamletgen/ways/route.py` (`ROUTE_CELL`) |
 | The carve's rows stay scalar | map drawing convention (measured: arrays slower) | research R5 | this amendment |
 | The board's lattice stays 12 px; its verge band sampled first | map drawing convention (the same board; the coarser lattice broke the entrance rule) | this amendment | point of change in `settlement/structures/fixtures/siting.py` |
-| The router and the field search keep the base's forms | map drawing convention (measured: the moving levers broke gate rules on the shipped maps) | research R6 | points of change in `hamletgen/ways/route.py` and `hamletgen/water/fit.py` |
+| The router and the field search keep the base's forms | map drawing convention (measured: the field search's lever broke gate rules on the shipped maps; A* alone was not faster) | research R6 | points of change in `hamletgen/ways/route.py` and `hamletgen/water/fit.py` |
 | The junction pass never drops the connector | historically accurate (a hamlet has its way out; the rule the connector already carries) | research R6 | point of change in `hamletgen/ways/touch.py` |
 | SC-001 is judged against main as merged (`7c0c94f94`, 35.148 s), not the base it was first set on | map drawing convention (a measuring decision: main merged 269 during the work, and 269's own work would otherwise be charged to this feature) | this amendment | `measure.py after-main` |
 | A stranding re-roll resumes from the first roll's copy before the seats | map drawing convention (exact: the same map) | research R8 | point of change in `hamletgen/driver.py` (`resume_at`, `resume`) |

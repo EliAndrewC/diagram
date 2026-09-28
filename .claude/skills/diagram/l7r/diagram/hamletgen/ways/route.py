@@ -84,11 +84,10 @@ def lattice_search(
     """The router's search over its lattice: each cell's cost from `start` and the cell it was reached from, as far as the
     search went - to `goal`, or every reachable cell when there is no way. Dijkstra, in cost order.
 
-    A* TOWARD THE GOAL WAS TRIED, MEASURED FASTER, AND WITHDRAWN ON THE RULES (feature 284, FR-001, specs/284 research R6).
-    With the straight-line heuristic it returns a path of the same cost but, where two lattice paths tie, often the other
-    one; with the field-search lever it made the pool and cohort seeds 1-24 4.8% faster in all against a 0.6% spread - and
-    the moved maps failed the gate on the shipped pool (a brook leg on a screen axis, woodland parcels in a ruled row,
-    Sawada's seat off the wind). Map changes for speed are allowed only within the rules."""
+    A* TOWARD THE GOAL WAS TRIED AND WITHDRAWN (feature 284, FR-001, specs/284 research R6). With the straight-line heuristic
+    it returns a path of the same cost but, where two lattice paths tie, often the other one, and the maps it moves re-roll a
+    little more often. Measured alone over the pool and cohort seeds 1-24 on the engine as it ships, it was 5.0 s under this
+    search's mean against a run-to-run spread of 8.9 s - not faster beyond the noise, while moving maps."""
     sx, sy = start
     gx, gy = goal
     dist = {(sx, sy): 0.0}
