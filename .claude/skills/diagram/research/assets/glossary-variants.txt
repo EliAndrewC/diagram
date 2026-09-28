@@ -426,6 +426,8 @@ dohyō	dohyō
 doi	horinouchi
 dojo	dojo
 doma	doma
+domain kiln	domain kiln
+domain kilns	domain kiln
 donggusup	donggusup
 dongjing meng hua lu	Dongjing Meng Hua Lu
 dooryard	dooryard

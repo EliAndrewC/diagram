@@ -8471,5 +8471,12 @@
    "Enpo era",
    "Enpo"
   ]
+ },
+ "domain kiln": {
+  "def": "A kiln a domain owned and ran for its own fine ware, kept apart from the ordinary potters - the Nabeshima moved theirs to Okawachiyama in 1675 and set a barrier around it so its techniques and craftsmen could not leave.",
+  "variants": [
+   "domain kiln",
+   "domain kilns"
+  ]
  }
 }
