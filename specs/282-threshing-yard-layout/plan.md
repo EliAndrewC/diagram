@@ -54,8 +54,9 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
   accurate, the count drawn a CONVENTION in the GM's form with the real 40-60 and 3 x 6 ft, the rows a GUESS, the rack
   knob and its side a GUESS), `Label`, `Entry:` naming 020, 025, 030 and 505.
 - **D6 - maps and reviews** (FR-008). Regenerate the five pool hamlets (the glyph changes on all; Sawada also gains
-  racks; the layout of no map moves, as nothing placed changes size); `settlement-review` on Sawada (the map whose
-  look changes most), gate and review paired as the pair guard requires; `make done`.
+  racks; the layout of no map moves, as nothing placed changes size); the settlement-reviews the gate owes -
+  `make verify` named all five, every manifest having moved (`mats`, `rack`, `meta.harvest_weather`), one agent per map,
+  dispatched once the gate was green as the pair guard requires for a review of changes; `make done`.
 - **D7 - the 269 merge**. Feature 269 (diagram-supplemental, unlanded) edits `_attach_yard` (quarter turns). 282 edits
   only `_draw_threshing_yard`, the new helpers and the manifest dict; the rack is solved in map coordinates so it is
   right under a quarter turn. 282 lands after telling 269's session; if 269 lands first, merge main and re-run the

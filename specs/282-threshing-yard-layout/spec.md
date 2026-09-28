@@ -131,8 +131,8 @@ FR-002 finds (FR-005); its declaration names the research question it rests on.
   source-applicability with no open finding.
 - **SC-004** (FR-007): The `threshing yard` modal's registry entry carries the convention label, the real mat count and
   size, and names both new questions in its `Entry:` (measured by the interactive registry tests).
-- **SC-005** (FR-008): Every pool hamlet with drawn yards is regenerated and its settlement-review is a row in the
-  review ledger.
+- **SC-005** (FR-008): Every pool hamlet whose yards change is regenerated, and the settlement-review the gate owes
+  for this change is a row in the review ledger.
 
 ## Decisions Recorded
 
@@ -151,3 +151,5 @@ FR-002 finds (FR-005); its declaration names the research question it rests on.
 - Round 2 (spec-fidelity, 2026-09-28): CHANGES REQUIRED - US3's test line still said "rolled from the seed"; rewritten
   to FR-005's rule. The three round-1 items confirmed fixed.
 - Round 3 (spec-fidelity-verify, 2026-09-28): FAITHFUL - the US3 line resolved; no new drift.
+- Amendment round (spec-fidelity-verify, 2026-09-28): CHANGES REQUIRED - SC-005 required a settlement-review per
+  regenerated hamlet, beyond FR-008 and against plan D6; reworded as the review the gate owes.
