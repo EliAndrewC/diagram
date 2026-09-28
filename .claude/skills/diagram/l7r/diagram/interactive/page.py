@@ -442,7 +442,7 @@ def _in_any(x: float, y: float, polys: Sequence[Sequence[Sequence[float]]]) -> b
     return False
 
 
-def marks_region(strings: Sequence[str], cell: float = HIT_CELL, grow: int = 1, within: Sequence[Sequence[Sequence[float]]] = ()) -> str:
+def marks_region(strings: Sequence[str], cell: float = HIT_CELL, grow: int = 1, within: Sequence[Sequence[Sequence[float]]] = (), points: Sequence[tuple[str, str]] = ()) -> str:
     """Rects over the grid cells that hold a mark of the given strings - the scrub's real extent -
     GROWN by `grow` cells around every mark and kept inside the recorded footprints `within`. The
     growth is what makes a bare patch INSIDE the scrub count as scrub (the GM, 2026-08-28: "patches
@@ -450,7 +450,9 @@ def marks_region(strings: Sequence[str], cell: float = HIT_CELL, grow: int = 1, 
     the village's deliberate clearing, wider than two cells, stays clear; the footprint stops the
     growth spilling past the scrub's own edge. The rects carry fill="none" so the highlight never
     paints them - the first cut left the attribute off and the grid showed as gold steps."""
-    marked: set[tuple[int, int]] = set()
+    # `points`: the marks' own coordinate strings where the caller holds them (a blade slot's roots, feature 284) - the very
+    # figures the regex below reads out of the text
+    marked: set[tuple[int, int]] = {(int(float(x) // cell), int(float(y) // cell)) for x, y in points}
     for s in strings:
         for m in _MARK_XY.finditer(s):
             x, y = (m.group(1), m.group(2)) if m.group(1) is not None else (m.group(3), m.group(4))
@@ -488,14 +490,15 @@ def _inline_hits(s: str, key: str) -> str:
     return hit_copies(s, *HIT_WIDEN[key]) if key in HIT_WIDEN and key not in HIT_ON_TOP else ""
 
 
-def wrap(s: str, tag: ClsTag) -> str:
+def wrap(s: str, tag: ClsTag, premerged: bool = False) -> str:
     """The HTML form of one record-stream string: unchanged when unclassed or ruled out; wrapped in its
     class group when classed; two copies for a `Split` (fill-only under the fill class, stroke-only under
     the stroke class - the paddy body and the bund from one polygon); piece by piece for `Parts`."""
     if tag is None or tag == NOT_HIGHLIGHTED or not s:
         return s
     if isinstance(tag, str):
-        return _open(tag, isinstance(tag, Planted)) + merge_primitives(s) + _inline_hits(s, tag) + "</g>"
+        # `premerged`: a blade slot the finish wrote in its merged form (`merge_lines`), which `merge_primitives` returns as it is
+        return _open(tag, isinstance(tag, Planted)) + (s if premerged else merge_primitives(s)) + _inline_hits(s, tag) + "</g>"
     if isinstance(tag, Split):
         fill_copy = _ATTR_STROKE.sub(' stroke="none"', s)
         stroke_copy = _ATTR_FILL.sub(' fill="none"', s)
@@ -802,6 +805,7 @@ def render_page(
     registry: dict[str, FeatureClass] = CLASSES,
     caveat_lead: str = CAVEAT_LEAD,
     within: Sequence[tuple[str, ...]] | None = None,
+    blade_starts: dict[int, list[tuple[str, str]]] | None = None,
 ) -> str:
     """The whole page as one string - `write_html` writes it; tests read it.
 
@@ -814,6 +818,7 @@ def render_page(
     and openable, `"r": 0`. The raster is a RENDER: `finish()` passes the PNG's own condition, so a roll a test
     makes never pays the 7.3 s and 450 MB spike of a picture nobody opens (specs/208 research.md R1)."""
     present = present_classes(tags)
+    blades = blade_starts or {}
     # THE OFF-MAP INK IS DROPPED FIRST (feature 200, FR-001): 90% of a hamlet page's subpaths lay outside
     # the viewBox - the hinterland scatter the generator draws over the whole commons and the crop never
     # shows (specs/200 research.md R2). Invisible by construction, and the reason the page still loads
@@ -821,8 +826,9 @@ def render_page(
     # without). Only classed strings are judged; the sheet and the unclassed pass through.
     vb = raster.viewbox_of(strings[0]) if strings else None
     if vb is not None:
-        strings = [raster.drop_offmap(s, vb) if t is not None and t != NOT_HIGHLIGHTED else s for s, t in zip(strings, tags, strict=True)]
-    wrapped = [wrap(s, t) for s, t in zip(strings, tags, strict=True)]
+        # ...but not a blade slot the finish culled already, by this same rule (feature 284, FR-006; `flush_blade_groups`)
+        strings = [raster.drop_offmap(s, vb) if t is not None and t != NOT_HIGHLIGHTED and i not in blades else s for i, (s, t) in enumerate(zip(strings, tags, strict=True))]
+    wrapped = [wrap(s, t, premerged=i in blades) for i, (s, t) in enumerate(zip(strings, tags, strict=True))]
     if within is not None:
         wrapped = [part_of(w, ks) for w, ks in zip(wrapped, within, strict=True)]
     # the hit regions go right after the SHEET (the first "-"-tagged string), under everything drawn
@@ -841,7 +847,11 @@ def render_page(
             for rec in (manifest or {}).get(mk) or []
             if isinstance(rec, dict) and rec.get("poly") and roles.get(str(rec.get("role", "*")), roles.get("*")) == key
         ]
-        rects = marks_region([s for s, t in zip(strings, tags, strict=True) if t == key], within=polys)
+        rects = marks_region(
+            [s for i, (s, t) in enumerate(zip(strings, tags, strict=True)) if t == key and i not in blades],
+            within=polys,
+            points=[pt for i, t in enumerate(tags) if t == key and i in blades for pt in blades[i]],
+        )
         if rects:
             regions += _open(key) + f'<g class="hit" fill="none" style="pointer-events: fill">{rects}</g></g>'
     regions += hit_regions(manifest, present - HIT_FROM_MARKS)
@@ -947,6 +957,7 @@ def write_html(
     registry: dict[str, FeatureClass] = CLASSES,
     caveat_lead: str = CAVEAT_LEAD,
     within: Sequence[tuple[str, ...]] | None = None,
+    blade_starts: dict[int, list[tuple[str, str]]] | None = None,
 ) -> None:
     """`<base>.html`, beside the map's other outputs. The map's `<base>.notes.md` is read here if it
     exists - one place, derived from the output path rather than searched for, so a stale or foreign
@@ -954,4 +965,4 @@ def write_html(
     render condition (feature 208) - see `render_page`; `registry` the vocabulary (feature 262)."""
     notes = read_map_notes(path[: -len(".html")] + ".notes.md") if path.endswith(".html") else EMPTY
     with open(path, "w", encoding="utf-8") as fh:
-        fh.write(render_page(strings, tags, name, meta, manifest, notes, with_raster=with_raster, registry=registry, caveat_lead=caveat_lead, within=within))
+        fh.write(render_page(strings, tags, name, meta, manifest, notes, with_raster=with_raster, registry=registry, caveat_lead=caveat_lead, within=within, blade_starts=blade_starts))

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import math
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist
@@ -72,6 +72,26 @@ def bamboo_blocked_indexed(x: float, y: float, extent: Pt, pocket: tuple[float, 
     if not pond:
         return False
     return bool(((x - pond[0]) / (pond[2] + pond_pad)) ** 2 + ((y - pond[1]) / (pond[3] + pond_pad)) ** 2 <= 1.0)
+
+
+def nearest_fitting(target: Pt, reach: float, step: float, fits: Callable[[float, float], bool]) -> tuple[float, float, float] | None:
+    """The fitting position nearest `target` on the `step` lattice of the square `reach` round it, as (distance, x, y) - or
+    None - by walking OUTWARD and stopping at the first fit (feature 284, FR-008). The square was scanned whole, every
+    position tested, the nearest fit kept (the first met in row order on a tie); the same positions, made by the same
+    accumulation so every coordinate is the same float, are tested nearest first, ties in the old row order."""
+    spots: list[tuple[float, int, float, float]] = []
+    y = target[1] - reach
+    while y <= target[1] + reach:
+        x = target[0] - reach
+        while x <= target[0] + reach:
+            spots.append((math.hypot(x - target[0], y - target[1]), len(spots), x, y))
+            x += step
+        y += step
+    spots.sort()
+    for d, _k, x, y in spots:
+        if fits(x, y):
+            return (d, x, y)
+    return None
 
 
 def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
@@ -149,17 +169,7 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
         best: tuple[float, float, float] | None = None
         for scale in (1.0, 0.7):
             hw, hh = px(wft) * scale / 2, px(hft) * scale / 2
-            reach = px(220.0)
-            y = target[1] - reach
-            while y <= target[1] + reach:
-                x = target[0] - reach
-                while x <= target[0] + reach:
-                    if _fits(x, y, hw, hh):
-                        d = math.hypot(x - target[0], y - target[1])
-                        if best is None or d < best[0]:
-                            best = (d, x, y)
-                    x += step
-                y += step
+            best = nearest_fitting(target, px(220.0), step, lambda x, y, hw=hw, hh=hh: _fits(x, y, hw, hh))
             if best is not None:
                 ring = _parcel_outline(s, best[1], best[2], hw, hh, 1.0, 0.0)
                 out.append(ring)

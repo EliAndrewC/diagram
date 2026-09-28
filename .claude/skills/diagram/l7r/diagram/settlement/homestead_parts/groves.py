@@ -4,6 +4,7 @@ import random
 from typing import TYPE_CHECKING, Any
 
 from .._geom import _union_area, point_in_poly, seg_dist
+from ..shrines_wells.woods import CrownIndex
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -218,6 +219,7 @@ class GrovesMixin:
             krect, kcirc = self._canopy_keepouts((cx - w / 2 - _cpad, cy - h / 2 - _cpad, cx + w / 2 + _cpad, cy + h / 2 + _cpad))
             _near = self._crowns_near(cx - w / 2 - _cpad, cy - h / 2 - _cpad, cx + w / 2 + _cpad, cy + h / 2 + _cpad)  # the crowns of earlier clumps and stands (GM 2026-08-28)
             drawn: list[tuple[float, float, float]] = []
+            _seats = CrownIndex(_near)  # the nearby crowns and, as they land, this clump's own (feature 284, FR-011)
             g = [f'<g transform="translate({cx:.0f},{cy:.0f})">']
             # Draw back-to-front so the stand layers with depth. Each CROWN is one tree at real size (~5-6 m; a few
             # emergents larger) - that is the to-scale reading, and it is unchanged. We deliberately DROP two kinds
@@ -247,9 +249,10 @@ class GrovesMixin:
                 col = random.choice(ALDER_GREENS) if mix == "alder" else ("#496733" if kind == "conifer" else random.choice(["#7C9A4E", "#6E8B43"]))
                 if self._crown_covers(cx + px, cy + py - 3 * bs, rr, krect, kcirc, self.CANOPY_PAD):
                     continue
-                if not self._crown_seat_clear(cx + px, cy + py - 3 * bs, rr, _near) or not self._crown_seat_clear(cx + px, cy + py - 3 * bs, rr, drawn):
+                if not _seats.clear(cx + px, cy + py - 3 * bs, rr):
                     continue  # a crown centered under an already-drawn crown is an understory stem, not canopy (GM 2026-08-28; woods._crown_seat_clear)
                 drawn.append((cx + px, cy + py - 3 * bs, rr))
+                _seats.add([drawn[-1]])
                 # ONE DISC PER CROWN, conifer included (GM 2026-09-27). A conifer used to carry a second, darker
                 # disc at 40% of its radius (a "dense dark apex"); the GM read it as a trunk, which a plan view
                 # cannot show, and it was an unrecorded map convention. The darker fill and the 15% larger

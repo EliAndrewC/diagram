@@ -3,6 +3,8 @@
 import math
 from typing import TYPE_CHECKING, Any
 
+import numpy as np
+
 from .._geom import edge_dist, point_in_poly, turn_about
 
 if TYPE_CHECKING:
@@ -101,35 +103,15 @@ def mat_cells(
     # each unturned mat's corners fall on the same grid (6 x 3 ft is 24 x 12 quarter feet), so the floor test is asked once
     # per grid point and a mat's fit is four lookups plus the rack's box
     cw, ch = round(MAT_FT[0] / MAT_SEARCH_STEP_FT), round(MAT_FT[1] / MAT_SEARCH_STEP_FT)
-    inside = [[point_in_poly(x, y, poly) and edge_dist(x, y, poly) >= clear for y in ys] for x in xs]
-
-    def spot(i: int, j: int) -> bool:
-        if i + cw >= len(xs) or j + ch >= len(ys) or not (inside[i][j] and inside[i + cw][j] and inside[i][j + ch] and inside[i + cw][j + ch]):
-            return False
-        x, y = xs[i], ys[j]
-        return keep_out is None or not (x < keep_out[2] and x + mw > keep_out[0] and y < keep_out[3] and y + mh > keep_out[1])
-
-    ok = [[spot(i, j) for j in range(len(ys))] for i in range(len(xs))]
+    # THE GRID AND THE SPOTS AS ARRAYS (feature 284, FR-011): each of a yard's ~19,000 grid points was asked `point_in_poly`
+    # and `edge_dist` one at a time - 16 profiled seconds over three maps' 54 yards. `floor_grid` decides the same verdicts in
+    # arrays; a spot is its four corners' verdicts and the rack's box, as slices.
+    inside = floor_grid(xs, ys, poly, clear)
+    ok = mat_spots(inside, np.asarray(xs), np.asarray(ys), cw, ch, mw, mh, keep_out)
     best: list[tuple[float, float, float, float, float]] = []
     for gap_ft in MAT_GAPS_FT:
         px, py = round((MAT_FT[0] + gap_ft) / MAT_SEARCH_STEP_FT), round((MAT_FT[1] + gap_ft) / MAT_SEARCH_STEP_FT)
-        found: tuple[int, float, int, int, int, int] = (0, 0.0, 0, 0, 0, 0)  # count, -off-center, i0, j0, cols, rows
-        mc, mr = (len(xs) - 1) // px + 1, (len(ys) - 1) // py + 1  # the most columns and rows the yard's span allows
-        for nc in (mc, mc - 1):
-            for nr in (mr, mr - 1):
-                if nc < 1 or nr < 1 or nc * nr < found[0]:
-                    continue  # a smaller lattice than the best already found cannot seat as many
-                for i0 in range(len(xs) - (nc - 1) * px):
-                    for j0 in range(len(ys) - (nr - 1) * py):
-                        seated = [(xs[i0 + c * px], ys[j0 + r * py]) for c in range(nc) for r in range(nr) if ok[i0 + c * px][j0 + r * py]]
-                        if not seated or len(seated) < found[0]:
-                            continue
-                        # the most mats; of equals, the one whose SEATED mats sit nearest the yard's center (settlement-reviews of
-                        # round 9: scored on the whole lattice tried, a lattice with a row hanging off the floor won and its real
-                        # mats sat hard against the other side)
-                        cand = (len(seated), -_off_center(seated, mw, mh), i0, j0, nc, nr)
-                        if cand[:2] > found[:2]:
-                            found = cand
+        found = best_lattice(ok, xs, ys, px, py, mw, mh)
         _n, _o, i0, j0, nc, nr = found
         base = [(r, c, xs[i0 + c * px], ys[j0 + r * py]) for r in range(nr) for c in range(nc) if _n and ok[i0 + c * px][j0 + r * py]]
         if len(base) < floor and gap_ft == MAT_GAPS_FT[-1]:
@@ -149,6 +131,81 @@ def mat_cells(
     # and 3), and 0.5 ft (rounds 4 to 6: no room to lay a mat askew, even thinned). At 1 ft every mat keeps bare ground and
     # room to lie askew; research.md R4 of spec 282 counts the pool's yards that still fall short.
     return thin_evenly(best, max(1, math.floor((w * ftpx) * (h * ftpx) / MAT_SQ_FT * 2.0 / 3.0)))
+
+
+def floor_grid(xs: list[float], ys: list[float], poly: list[tuple[float, float]], clear: float) -> Any:
+    """`[[point_in_poly(x, y, poly) and edge_dist(x, y, poly) >= clear for y in ys] for x in xs]` as a boolean array, point
+    for point (feature 284): a point inside the floor shrunk by `clear` plus a margin is surely clear, one outside it shrunk
+    by `clear` minus the margin surely not, and a point between - within the margin of the line, where a buffer's chords and
+    rounding could disagree with the exact test - is asked the exact test itself."""
+    import shapely
+    from shapely.geometry import Polygon
+
+    gx, gy = np.meshgrid(np.asarray(xs, dtype=float), np.asarray(ys, dtype=float), indexing="ij")
+    out = np.zeros(gx.shape, dtype=bool)
+    if len(poly) < 3:
+        return out
+    floor = Polygon(poly)
+    margin = max(1e-6, clear * 0.02)  # past the chord error of a buffer's arcs at a reflex corner (under 0.5% of `clear`)
+    surely = floor.buffer(-(clear + margin))
+    maybe = floor.buffer(-(clear - margin)) if clear > margin else floor.buffer(0)
+    if not surely.is_empty:
+        out = shapely.contains_xy(surely, gx, gy)
+    band = ~out & (shapely.intersects_xy(maybe, gx, gy) if not maybe.is_empty else np.zeros(gx.shape, dtype=bool))
+    for i, j in zip(*np.nonzero(band), strict=True):
+        x, y = xs[i], ys[j]
+        out[i, j] = point_in_poly(x, y, poly) and edge_dist(x, y, poly) >= clear
+    return out
+
+
+def mat_spots(inside: Any, xs: Any, ys: Any, cw: int, ch: int, mw: float, mh: float, keep_out: tuple[float, float, float, float] | None) -> Any:
+    """`mat_cells`' old `spot(i, j)` for every grid point at once: the four corners of the mat whose origin is the point all
+    on the floor (`inside`), and its box clear of the rack's (`keep_out`) - the same comparisons."""
+    nx, ny = inside.shape
+    ok = np.zeros((nx, ny), dtype=bool)
+    if nx > cw and ny > ch:
+        ok[: nx - cw, : ny - ch] = inside[: nx - cw, : ny - ch] & inside[cw:, : ny - ch] & inside[: nx - cw, ch:] & inside[cw:, ch:]
+    if keep_out is not None:
+        x, y = xs[:, None], ys[None, :]
+        ok &= ~((x < keep_out[2]) & (x + mw > keep_out[0]) & (y < keep_out[3]) & (y + mh > keep_out[1]))
+    return ok
+
+
+def best_lattice(ok: Any, xs: list[float], ys: list[float], px: int, py: int, mw: float, mh: float) -> tuple[int, float, int, int, int, int]:
+    """The lattice `mat_cells` seats at one gap: (count, -off-center, i0, j0, cols, rows) - the most mats seated, of equals the
+    one whose seated mats sit nearest the yard's center (settlement-reviews of round 9: scored on the whole lattice tried, a
+    lattice with a row hanging off the floor won and its real mats sat hard against the other side), the first met on a tie.
+
+    THE COUNTS AS ARRAY SUMS (feature 284, FR-011): every offset of every lattice was walked in Python, its seated mats listed
+    one by one. The count at every offset of an `nc x nr` lattice is the sum of `nc * nr` strided slices of `ok`. The old walk
+    kept the lexicographic best of (count, -off-center) in (cols, rows, i0, j0) order with strict improvement, so it ends on
+    the first offset, in that order, holding the GLOBAL best count and the least off-center among those: only those offsets
+    are walked here, with the old `_off_center`, in the old order."""
+    nx, ny = ok.shape
+    mc, mr = (nx - 1) // px + 1, (ny - 1) // py + 1  # the most columns and rows the yard's span allows
+    counts: list[tuple[int, int, Any]] = []
+    top = 0
+    for nc in (mc, mc - 1):
+        for nr in (mr, mr - 1):
+            ni, nj = nx - (nc - 1) * px, ny - (nr - 1) * py
+            if nc < 1 or nr < 1 or ni < 1 or nj < 1:
+                continue
+            c = np.zeros((ni, nj), dtype=np.int64)
+            for ci in range(nc):
+                for rj in range(nr):
+                    c += ok[ci * px : ci * px + ni, rj * py : rj * py + nj]
+            counts.append((nc, nr, c))
+            top = max(top, int(c.max()))
+    found: tuple[int, float, int, int, int, int] = (0, 0.0, 0, 0, 0, 0)
+    if top == 0:
+        return found
+    for nc, nr, c in counts:
+        for i0, j0 in np.argwhere(c == top).tolist():
+            seated = [(xs[i0 + ci * px], ys[j0 + rj * py]) for ci in range(nc) for rj in range(nr) if ok[i0 + ci * px, j0 + rj * py]]
+            cand = (len(seated), -_off_center(seated, mw, mh), i0, j0, nc, nr)
+            if cand[:2] > found[:2]:
+                found = cand
+    return found
 
 
 def _off_center(seated: list[tuple[float, float]], mw: float, mh: float) -> float:
@@ -252,6 +309,15 @@ def _quad_gap(a: list[tuple[float, float]], b: list[tuple[float, float]]) -> flo
     return min(min(edge_dist(px, py, b) for px, py in a), min(edge_dist(px, py, a) for px, py in b))
 
 
+def _boxes_within(a: list[tuple[float, float]], b: list[tuple[float, float]], need: float) -> bool:
+    """Could the two quads be nearer than `need`? False when their boxes are `need` or more apart - every point of one then
+    stands at least that far from every point of the other, so `_quad_gap` is at least `need` (feature 284: each mat was
+    measured against every other mat of its yard)."""
+    dx = max(0.0, min(p[0] for p in b) - max(p[0] for p in a), min(p[0] for p in a) - max(p[0] for p in b))
+    dy = max(0.0, min(p[1] for p in b) - max(p[1] for p in a), min(p[1] for p in a) - max(p[1] for p in b))
+    return math.hypot(dx, dy) < need
+
+
 def _lay_by_hand(base: list[tuple[int, int, float, float]], mw: float, mh: float, ftpx: float, fits: Any, salt: float = 0.0) -> list[tuple[float, float, float, float, float]]:
     """Set each mat of the lattice `base` (row, column, x, y) down by hand: nudged up to `MAT_JITTER_FT` and turned up to
     `MAT_JITTER_DEG` by a positional draw, and kept so only where its corners still fit the floor (`fits`) and its drawn
@@ -264,13 +330,14 @@ def _lay_by_hand(base: list[tuple[int, int, float, float]], mw: float, mh: float
     need = (MAT_INK_CLEAR_FT + 2 * MAT_STROKE_FT) / ftpx
     laid: list[tuple[float, float, float, float, float]] = []
     quads: list[list[tuple[float, float]]] = []
+    lattice = [_mat_corners(bx, by, mw, mh, 0.0) for _r, _c, bx, by in base]  # each spot's unturned mat, made once
     for k, (r, c, x, y) in enumerate(base):
         dx, dy = (2 * _mat_hash(r, c, salt + 1.0) - 1) * MAT_JITTER_FT / ftpx, (2 * _mat_hash(r, c, salt + 2.0) - 1) * MAT_JITTER_FT / ftpx
         a = (2 * _mat_hash(r, c, salt + 3.0) - 1) * MAT_JITTER_DEG
-        ahead = [_mat_corners(bx, by, mw, mh, 0.0) for _r, _c, bx, by in base[k + 1 :]]
+        ahead = lattice[k + 1 :]
         for jx, jy, ja in ((x + dx, y + dy, a), (x, y, a), (x, y, a / 2.0), (x, y, 0.0)):
             q = _mat_corners(jx, jy, mw, mh, ja)
-            if ja == 0.0 or (fits(q) and all(_quad_gap(q, o) >= need for o in quads + ahead)):
+            if ja == 0.0 or (fits(q) and all(_quad_gap(q, o) >= need for o in quads + ahead if _boxes_within(q, o, need))):
                 laid.append((jx, jy, mw, mh, ja))
                 quads.append(q)
                 break

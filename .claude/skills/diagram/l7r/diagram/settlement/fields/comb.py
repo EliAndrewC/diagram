@@ -19,6 +19,7 @@ from .._geom import (
     quad_hits_seg,
     seg_closest,
     seg_dist,
+    seg_reach_index,
 )
 from .._knobs import _centroid, _sharp_corners, _toward
 from ..land.wet import pond_fringe_ring
@@ -361,9 +362,14 @@ class CombMixin:
         ]
         _water += [([(float(q[0]), float(q[1])) for q in c["poly"]], float(c.get("w", 3.0)) / 2.0) for c in (self.M.get("channels") or []) if len(c.get("poly") or ()) >= 2]
 
+        # THE WATER LINES FILED ONCE (feature 284, FR-009): every bead measured every segment of every ditch and channel. A
+        # bead nearer than `half` to a segment stands inside that segment's box widened by `half`, so the segments whose
+        # widened box holds the bead are every one that can drown it, and the same `seg_dist` decides.
+        _water_idx = seg_reach_index(_water, 0.0)
+
         def _dry(q: tuple[float, float]) -> bool:
-            return all(((q[0] - _wx) / _wrx) ** 2 + ((q[1] - _wy) / _wry) ** 2 > 1.0 for _wx, _wy, _wrx, _wry in _bw) and all(
-                min(seg_dist(q[0], q[1], poly[i], poly[i + 1]) for i in range(len(poly) - 1)) >= half for poly, half in _water
+            return all(((q[0] - _wx) / _wrx) ** 2 + ((q[1] - _wy) / _wry) ** 2 > 1.0 for _wx, _wy, _wrx, _wry in _bw) and not any(
+                x0 <= q[0] <= x1 and y0 <= q[1] <= y1 and seg_dist(q[0], q[1], a, b) < half for a, b, half, x0, y0, x1, y1 in _water_idx.near(q[0], q[1])
             )
 
         net["bund_bean_runs"] = [part for run in net["bund_bean_runs"] for part in bead_runs(run, _dry)]

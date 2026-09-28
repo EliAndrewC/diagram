@@ -574,6 +574,10 @@ class FinishMixin:
                     continue
                 kept.append(ln)
             self.out[z] = f'<g stroke="{color}" stroke-width="0.8">{merge_lines(kept)}</g>'
+            # THE PAGE READS THE BLADES, NOT THEIR TEXT (feature 284, FR-006): the slot is culled here by the page's own rule and
+            # is already its merged form, so the page need not cull or merge it again, and the scrub's hit region reads each
+            # blade's root - the `M` point `marks_region` found by regex in the path text - from here.
+            self._blade_starts[z] = [(ln[0], ln[1]) for ln in kept]
         # ...AND THE OTHER MARKS (feature 225): the brush dots, pines, wet tint and glints, each with its extent, appended to the
         # slot their scatter took (after the crowns that slot may already hold) - the pad's ring never reaches the file.
         for z, marks in pending_marks:
@@ -773,7 +777,16 @@ class FinishMixin:
         # 450 MB spike per roll, about thirty times a gate, for pages nothing reads (specs/208 research.md R1).
         self.M["ink_classes"], self.M["unclassed_ink"] = ink_census(body, body_cls)
         self.M["unregistered_classes"] = unregistered_classes(self.M["ink_classes"])
-        write_html(basepath + '.html', body, body_cls, name=str(self.M["meta"].get("name") or os.path.basename(basepath)), meta=self.M["meta"], manifest=self.M, with_raster=rendering)
+        write_html(
+            basepath + '.html',
+            body,
+            body_cls,
+            name=str(self.M["meta"].get("name") or os.path.basename(basepath)),
+            meta=self.M["meta"],
+            manifest=self.M,
+            with_raster=rendering,
+            blade_starts=self._blade_starts,
+        )
         # WRITTEN WHOLE, THEN MOVED INTO PLACE (feature 261): the gate reads a pool map's manifest in one worker
         # while another re-rolls it, and an in-place write let a reader see it half-written - measured as a
         # JSONDecodeError at char 122944 of kashikawa.json. A rename is atomic, so a reader sees old or new.

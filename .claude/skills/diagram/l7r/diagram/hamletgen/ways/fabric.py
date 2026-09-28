@@ -416,9 +416,20 @@ def _crosses_fabric(run: Poly, fabric: Sequence[Poly], gap: float) -> bool:
     caught them - and Mizuguchi did not: the connector shipped 0.2 px from a garden and 14.6 px from
     a farmhouse while this returned False at a gap of 0.5. So the poly's own vertices are measured
     against each segment as well, which is the half that closes it."""
+    # BOX PREFILTERS, PER POLYGON AND PER SEGMENT (feature 284, FR-009): every run segment was measured against every edge of
+    # every polygon. A crossing needs the two boxes to meet, and each distance below `gap` needs them within `gap` of each
+    # other, so a polygon - or a run segment - whose box, widened by `gap`, misses the other's cannot answer True; the same
+    # tests decide the rest.
+    rx0, ry0 = min(p[0] for p in run) - gap, min(p[1] for p in run) - gap
+    rx1, ry1 = max(p[0] for p in run) + gap, max(p[1] for p in run) + gap
     for poly in fabric:
+        px0, py0, px1, py1 = min(p[0] for p in poly), min(p[1] for p in poly), max(p[0] for p in poly), max(p[1] for p in poly)
+        if px1 < rx0 or px0 > rx1 or py1 < ry0 or py0 > ry1:
+            continue
         for k in range(len(run) - 1):
             a, b = run[k], run[k + 1]
+            if max(a[0], b[0]) + gap < px0 or min(a[0], b[0]) - gap > px1 or max(a[1], b[1]) + gap < py0 or min(a[1], b[1]) - gap > py1:
+                continue
             for j in range(len(poly)):
                 c, d = poly[j], poly[(j + 1) % len(poly)]
                 if segments_cross(a, b, c, d):

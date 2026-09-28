@@ -13,14 +13,14 @@ from ..consts import (
     Poly,
     Pt,
 )
-from .clearance import _clear_link, _clear_touch
+from .clearance import _clear_link, _clear_touch, link_index
 from .geom import _TOUCH_GAP, _turn_deg
 
 # THE BROOK'S BAND AND WHAT ENTERING IT COSTS, for the roll being drawn (feature 261). `_route` has a dozen callers and
 # none holds the settlement, so the ways stage sets this once where it lays the fords (`set_crossing`) - every map
 # rolled sets it afresh, a brookless map to nothing. Cells: the lattice cell keys (at the cell size asked) are not
 # known in advance, so the band is kept as brook sample points in a 20 px bucket grid and asked per cell center.
-_CROSSING: dict[str, object] = {"grid": {}, "radius": 0.0, "cost": 0.0, "cell": 20.0}
+_CROSSING: dict[str, object] = {"grid": {}, "radius": 0.0, "cost": 0.0, "cell": 20.0, "near": set()}
 
 
 def set_crossing(brook: Sequence[Pt], radius: float, cost: float) -> None:
@@ -38,13 +38,18 @@ def set_crossing(brook: Sequence[Pt], radius: float, cost: float) -> None:
         for i in range(n + 1):
             q = (a[0] + (b[0] - a[0]) * i / n, a[1] + (b[1] - a[1]) * i / n)
             grid.setdefault((int(q[0] // cell), int(q[1] // cell)), []).append(q)
-    _CROSSING.update(grid=grid, radius=radius, cost=cost if grid else 0.0, cell=cell)
+    # ...AND THE CELLS NEAR IT, ONCE (feature 284, FR-010): an ask far from the course read nine empty cells; a point whose cell
+    # has no sample in its 3 x 3 neighborhood is out of the band without reading any of them.
+    near = {(gx + dx, gy + dy) for gx, gy in grid for dx in (-1, 0, 1) for dy in (-1, 0, 1)}
+    _CROSSING.update(grid=grid, radius=radius, cost=cost if grid else 0.0, cell=cell, near=near)
 
 
 def in_brook_band(p: Pt) -> bool:
     """Is `p` within the recorded brook's band?"""
     grid, r, c = _CROSSING["grid"], float(_CROSSING["radius"]), float(_CROSSING["cell"])  # type: ignore[arg-type]
     gx, gy = int(p[0] // c), int(p[1] // c)
+    if (gx, gy) not in _CROSSING["near"]:  # type: ignore[operator]
+        return False
     return any(math.dist(p, q) <= r for dx in (-1, 0, 1) for dy in (-1, 0, 1) for q in grid.get((gx + dx, gy + dy), ()))  # type: ignore[union-attr]
 
 
@@ -174,7 +179,9 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
     path.append(start)
     path.reverse()
     path[-1] = goal
-    # STRING-PULL against the real geometry, so the lattice never shows in the drawing.
+    # STRING-PULL against the real geometry, so the lattice never shows in the drawing - every link asking ONE index (feature
+    # 284, FR-002): `_clear_link` asked the fabric memo per link, rebuilding its key over every polygon and water line.
+    _links = link_index(hard, walls, water, gap)
     out: Poly = [path[0]]
     i = 0
     while i < len(path) - 1:
@@ -184,7 +191,7 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
         # acceptance test a moment later - the router found a way through at 5 ft and the pull then
         # refused every shortcut along it at 7, leaving a chain of lattice steps whose diagonals
         # clipped the corners the cell centers had cleared. One number, used by both.
-        while j > i + 1 and (not _clear_link(path[i], path[j], hard, walls, water, gap=gap) or (_toll and _new_crossing(path, i, j))):
+        while j > i + 1 and (not _clear_link(path[i], path[j], hard, walls, water, gap=gap, index=_links) or (_toll and _new_crossing(path, i, j))):
             j -= 1
         out.append(path[j])
         i = j

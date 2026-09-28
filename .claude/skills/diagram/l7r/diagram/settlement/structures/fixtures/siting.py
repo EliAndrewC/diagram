@@ -1,6 +1,7 @@
 """Split from settlement/structures/fixtures.py by feature 173 - see this package's CLAUDE.md for the index."""
 
 import math
+from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 
 from ....labels import Subject, place
@@ -70,6 +71,36 @@ def under_canopy(grid: PointGrid, x: float, y: float, half: float) -> bool:
     points around the glyph canopy green), and on Sawada a crown center stood 1.8 ft from it. Both boards had
     clear verge 18-30 ft away on the same lane; the seat search simply could not see the difference."""
     return any(math.hypot(x - float(it[0]), y - float(it[1])) < float(it[2]) + half for it in grid.near(x, y, half))
+
+
+BOARD_CAPTION_TOP = 2
+"""`board_caption_level`'s best answer: the caption clear of every crown."""
+
+
+def board_choice(seats: list[Any], level: Callable[[Any], int]) -> Any:
+    """The board's seat among `seats`: the caption that fits best, then open ground among those, then (a caption seat by the
+    defaults, the traffic score) - `max(open or fitting, key=(level, lab, score))`, the first maximal seat on a tie.
+
+    ASKED LAZILY (feature 284, FR-007): the caption's level is a placement of the caption against every obstacle, and it was
+    asked of every seat. The seats are walked in the order of the rest of the key (stably, so a tie keeps the first seat),
+    and the first open seat at the best level possible is the answer; a shaded one at that level is the fallback. Only
+    where no seat reaches the best level is every seat asked and the old expression applied. The same seat, always."""
+    order = sorted(seats, key=lambda c: (c[5] is not None, c[1]), reverse=True)  # stable: equal keys keep their order
+    asked: dict[int, int] = {}
+    first_top = None
+    for c in order:
+        lv = asked[id(c)] = level(c)
+        if lv == BOARD_CAPTION_TOP:
+            if not c[7]:
+                return c
+            if first_top is None:
+                first_top = c
+    if first_top is not None:
+        return first_top
+    best = max(asked.values())
+    fitting = [c for c in seats if asked[id(c)] == best]
+    in_the_open = [c for c in fitting if not c[7]] or fitting
+    return max(in_the_open, key=lambda c: (asked[id(c)], c[5] is not None, c[1]))
 
 
 class FixtureSitingMixin:
@@ -479,10 +510,7 @@ class FixtureSitingMixin:
         # 261): open ground was filtered first, every seat with room for its caption stood under a crown, and the board
         # went up where its caption could only name the byre beside it. The GM's ruling (2026-08-29) is that a board under
         # a canopy is fine "as long as there is a label attached to it and the label is visible".
-        _fits = {id(c): _sitable(c[2], c[3], w / 2, h / 2, c[4]) for c in _above_floor}
-        _fitting = [c for c in _above_floor if _fits[id(c)] == max(_fits.values())]
-        _in_the_open = [c for c in _fitting if not c[7]] or _fitting
-        _b, _s, x, y, rot, lab, _gap, _shaded = max(_in_the_open, key=lambda c: (_fits[id(c)], c[5] is not None, c[1]))
+        _b, _s, x, y, rot, lab, _gap, _shaded = board_choice(_above_floor, lambda c: _sitable(c[2], c[3], w / 2, h / 2, c[4]))
         # THE BOARD FACES THE WAY A READER SEES IT BY, which is the NEAREST one (`kosatsuba_faces_the_road`, the
         # gate's own measure). `rot` above is the bearing of the lane the seat was scored against, and at a
         # junction - or where a later pass lays a footpath across the verge - another way can end up nearer:

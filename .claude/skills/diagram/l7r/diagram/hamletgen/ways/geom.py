@@ -5,9 +5,10 @@ from __future__ import annotations
 import math
 from collections.abc import Mapping, Sequence
 
-from l7r.diagram.settlement import PointGrid, edge_dist, point_in_poly, seg_closest, seg_dist, seg_intersect, segments_cross
+from l7r.diagram.settlement import PointGrid, point_in_poly, seg_closest, seg_dist, seg_intersect, segments_cross
 from l7r.diagram.sitegen.geom import centroid, unit
 
+from ..clearance import ring_index
 from ..consts import (
     STEADING_ARRIVAL_FT,
     TRACK_FABRIC_GAP,
@@ -253,7 +254,7 @@ def push_clear_of_fabric(base: Pt, unit: Pt, edge: float, fabric: Sequence[Poly]
     """
     for _ in range(24):
         gx, gy = base[0] + unit[0] * edge, base[1] + unit[1] * edge
-        if all(edge_dist(gx, gy, poly) >= gap for poly in fabric):
+        if not any(ring_within(gx, gy, poly, gap, closed=False) for poly in fabric):  # `edge_dist >= gap` for every one
             return (gx, gy)
         edge += 6.0
     return (base[0] + unit[0] * edge, base[1] + unit[1] * edge)
@@ -304,6 +305,14 @@ def steading_footprints(M: Mapping[str, object]) -> list[Poly]:
     return out
 
 
+def ring_within(x: float, y: float, poly: Sequence[Pt], limit: float, closed: bool = True) -> bool:
+    """`edge_dist(x, y, poly) <= limit` (or `< limit` with `closed=False`), exactly, from the ring's shared index (feature 284,
+    FR-009): `edge_dist` walks every edge; the index measures only the edges near the point, with the same `seg_dist`.
+    `edge_within` answers strictly under its limit, so a closed test asks it a hair wide and re-applies `<=`."""
+    d = ring_index(list(poly)).edge_within(x, y, limit + 1e-9 if closed else limit)
+    return d is not None and (d <= limit if closed else d < limit)
+
+
 def end_serves(
     q: Pt,
     segs: Sequence[tuple[Pt, Pt]] = (),
@@ -327,9 +336,9 @@ def end_serves(
         return True
     if any(math.dist(q, h) <= _house for h in houses):
         return True
-    if any(edge_dist(q[0], q[1], f) <= _field for f in fields):
+    if any(ring_within(q[0], q[1], f, _field) for f in fields):
         return True
-    return any(edge_dist(q[0], q[1], sp) <= STEADING_ARRIVAL_FT for sp in steadings)
+    return any(ring_within(q[0], q[1], sp, STEADING_ARRIVAL_FT) for sp in steadings)
 
 
 def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[Pt], fields: Sequence[Poly] = (), keep: Sequence[Pt] = (), steadings: Sequence[Poly] = ()) -> Poly:

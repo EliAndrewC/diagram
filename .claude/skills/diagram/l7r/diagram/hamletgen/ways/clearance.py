@@ -8,7 +8,7 @@ from collections.abc import Sequence
 
 from l7r.diagram.settlement import seg_closest, seg_intersect, segments_cross
 
-from ..clearance import fabric_index
+from ..clearance import FabricIndex, fabric_index
 from ..consts import (
     WEB_FABRIC_GAP,
     WEB_HARD_GAP,
@@ -18,7 +18,13 @@ from ..consts import (
 from .geom import _TOUCH_GAP, _turn_deg, fabric_clearance, polyline_len, push_out_of
 
 
-def _clear_link(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], gap: float = WEB_FABRIC_GAP) -> bool:
+def link_index(hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], gap: float = WEB_FABRIC_GAP) -> FabricIndex:
+    """The fabric index `_clear_link` asks with these grounds and this gap - built once by a caller that tests many links
+    (feature 284, FR-002)."""
+    return fabric_index(hard, WEB_HARD_GAP, walls, gap, water, 14.0)
+
+
+def _clear_link(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], gap: float = WEB_FABRIC_GAP, index: FabricIndex | None = None) -> bool:
     """Is the short run between two points walkable? Used before extending a lane end onto the way
     it meets, so a junction is drawn as a touch without the touch crossing anything."""
     span = math.dist(a, b)
@@ -29,7 +35,7 @@ def _clear_link(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: li
     # bridged - and the lane ink then crossed a house or a garden bed
     # (`features_do_not_overlap`, `houses_clear_of_lanes`). A link is walkable only if it survives
     # end to end.
-    runs = clear_runs([a, b], hard, WEB_HARD_GAP, step=3.0, lines=water, tight=walls, tight_margin=gap, floor=0.5)
+    runs = clear_runs([a, b], hard, WEB_HARD_GAP, step=3.0, lines=water, tight=walls, tight_margin=gap, floor=0.5, index=index)
     return any(polyline_len(r) >= span - 3.0 for r in runs)
 
 
@@ -351,6 +357,7 @@ def clear_runs(
     tight: Sequence[Poly] = (),
     tight_margin: float = 6.0,
     floor: float = 70.0,
+    index: FabricIndex | None = None,
 ) -> list[Poly]:
     """EVERY clear stretch of a polyline, not just the first or the longest - the through-lane
     counterpart of `clip_to_clear`.
@@ -387,8 +394,9 @@ def clear_runs(
     # it files each polygon and line by grid cell so a sample measures only its cell's candidates.
     # Same verdicts by construction - the candidates are a superset of what the box prefilter kept,
     # measured with the same predicate; `clearance.py` carries the argument and the oracle test.
-    index = fabric_index(obstacles, margin, tight, tight_margin, lines, line_margin)
-    fouled = index.fouled
+    # ...or handed in by a caller that asks many links of the SAME ground (feature 284, FR-002: `_route`'s string-pull, whose
+    # every link asked the memo, and the memo's key walks every polygon's identity, length and ends and every water line)
+    fouled = (index if index is not None else fabric_index(obstacles, margin, tight, tight_margin, lines, line_margin)).fouled
 
     samples: Poly = [pts[0]]
     for i in range(len(pts) - 1):
