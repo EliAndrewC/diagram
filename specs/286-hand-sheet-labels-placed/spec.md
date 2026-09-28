@@ -1,0 +1,84 @@
+# Feature 286 - a hand-drawn sheet's labels placed by the one placer
+
+**Feature**: 286-hand-sheet-labels-placed | **Created**: 2026-09-28 | **Status**: Draft
+**Input**: the GM's request and answer, verbatim in [`request.md`](request.md).
+
+## Summary
+
+The hand-drawn Mode A sheets (the magistracies, the country shrine) are drawn by hand for variation, but their labels
+should be placed by the same code that labels the generated maps - the one caption placer of feature 266
+(`l7r/diagram/labels/`, the cartographic standard) - as a step of the pipeline that renders a sheet, not by hand and
+not by a tool someone remembers to run. Placement becomes a function of the drawing alone. And since the labels are
+placed by an automated process, nothing checks where they stand: the placer's unit tests are what guarantee it (the
+GM: "There is no point in having an automated check run against an automated process").
+
+## User Scenarios & Testing *(mandatory)*
+
+### User Story 1 - Labels placed, not drawn (Priority: P1)
+
+A session draws or edits a hand sheet's buildings and grounds and names each thing's caption; it never places a
+caption. The sheet's picture and interactive page show every caption where the placer put it.
+
+**Independent test**: move every caption's text on a sheet to an arbitrary point (or strip its coordinates), render
+the sheet, and get byte-identical placed labels to rendering it unmoved.
+
+### User Story 2 - The GM's blind test (Priority: P1)
+
+The GM saw a label that "really just does not look well placed" and did not say which. After this feature the GM looks
+at the maps and judges whether that label now stands well - the measure of whether the class of issue is fixed.
+
+### User Story 3 - No checks against the placer (Priority: P1)
+
+The checks that judge where a hand sheet's captions stand are gone; the placer's own unit tests cover what they
+covered.
+
+## Requirements *(mandatory)*
+
+### Functional Requirements
+
+- **FR-001**: Every caption on every hand-drawn sheet MUST be placed by the one placer the generated maps use
+  (`l7r/diagram/labels/place`), as a step of the pipeline that renders the sheet - its picture and its interactive
+  page - with no hand placement and no separate tool to run.
+- **FR-002**: A sheet's placed labels MUST depend only on its drawing and its captions' declared text and subject -
+  never on the coordinates a caption's text was left at. This removes the hand-seat exception (a caption's hand position
+  kept where the placer found no free seat) and any other reading of a caption's position: what a caption names, and
+  whether it is set inside its subject or beside it, is declared on the sheet or derived from the drawing.
+- **FR-003**: Where the placer finds no free seat, its fallback MUST place the caption at least as well as the hand
+  seats it replaces - the reason the hand-seat exception existed - improved in the placer itself, with unit tests.
+- **FR-004**: No automated check of caption placement MUST remain for hand sheets: the caption-seat gate test and its
+  ledger, the `make seat-label` report, and the sheet audit's checks that judge caption placement (labels overlapping,
+  labels on dark ink, labels buried under later ink, group labels adrift) are removed. Correctness is carried by the
+  placer's unit tests. Checks of things that are still drawn by hand (a glyph buried under later ink) stay.
+- **FR-005**: Everything that reads a sheet's captions - the program and size checks that pair a label with the
+  structure it names, the review agents that look at a sheet, the interactive page - MUST read the placed captions or
+  the declared tags, never the hand coordinates.
+- **FR-006**: The operative docs (the skill's Mode A usage, `buildings.md`, the review agents' contracts) MUST say that
+  a sheet's labels are placed by the pipeline and how a sheet declares a caption.
+
+### Edge Cases
+
+- **A caption naming one of several like parts** (two clerks' seats in one group): the declaration says which part.
+- **A caption with no free seat anywhere**: placed by the improved fallback, never dropped (feature 266's rule).
+- **A sheet a gen composes** (the county example, `emit_svg`): already placed by the placer at generation; unchanged.
+
+## Success Criteria *(mandatory)*
+
+- **SC-001** (FR-001, FR-002): on every hand sheet, rendering with the captions' coordinates scrambled gives the same
+  placed labels as rendering unchanged; the render path calls the one placer.
+- **SC-002** (FR-003): the placer's fallback is unit-tested on the crowded cases the hand seats covered, and on every
+  hand sheet no caption covers more ink than its hand seat did when the feature began (measured, before and after).
+- **SC-003** (FR-004): the listed checks and the ledger are gone; `make done` is green.
+- **SC-004** (FR-005, FR-006): no reader of a hand sheet's captions uses their hand coordinates; the docs say so.
+- **SC-005** (User Story 2): the GM judges the label they saw.
+
+## Assumptions
+
+- The generated maps' labeling is unchanged except where the placer's fallback improves for everyone (FR-003); a
+  change there is measured on the scripted maps too.
+- The sheets stay hand-drawn in every other respect.
+
+## Decisions Recorded
+
+(filled as the plan decides)
+
+## Review history
