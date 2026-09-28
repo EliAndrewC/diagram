@@ -98,9 +98,9 @@ and its reviews.
   Ubame the west and the rear are shaded by the kitchen and the residence, so each bed takes the south court beside the
   formal garden, cut from it; the Hoshigaoka shrine's bed moved to the open ground south-west of the hall (research
   homesteads 044).
-- **Ubame's bed at the size knob's low end (accurate)**: the only open ground in its walls with six hours holds about
-  `1,065 sq ft` (observed 2026-09-28; method: the bed's rect 102 x 94 px at 3 px a foot), the soup-greens plot of research buildings 400; the rear strip held about `2,100 sq ft`. Hayakawa keeps the
-  `780 sq ft` it drew: its sunny corner holds no more without moving the roji, and that is recorded in its notes.
+- **Ubame's bed at the size knob's low end (accurate)**: the only open ground in its walls with a sun bed's hours (research homesteads 044) holds about
+  `1,065 sq ft` (observed 2026-09-28; method: the bed's rect 102 x 94 px at 3 px a foot), the soup-greens plot of research buildings 400; the rear strip held about `2,100 sq ft` (observed 2026-09-28; method: its rect 430 x 44 px at 3 px a foot). Hayakawa keeps the
+  `780 sq ft` it drew (observed 2026-09-28; method: its rect 88 x 80 px at 3 px a foot, as the rear strip's 160 x 44): its sunny corner holds no more without moving the roji, and that is recorded in its notes.
 - **A found defect fixed (constitution XIV)**: the caption placer weighed ground painted after a caption, inside the
   ground the caption names, as open, and seated Hayakawa's garden name under the new bed; ground painted over a caption
   now weighs as a caption does (`tools/seat_label.py`, with its unit test). No other sheet's seats moved.

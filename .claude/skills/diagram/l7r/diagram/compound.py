@@ -513,8 +513,8 @@ def county_magistracy_program() -> CompoundProgram:
         # faced is on the kitchen yard since pass 6. From the house's veranda (y 36) 46 ft deep to y 82, an 8 ft walk
         # along the divider. Its size is a GUESS.
         CourtZone("garden", 104.0, 36.0, 122.0, 46.0),
-        # The vegetable ground WEST of the house, filling the kitchen yard (research buildings 400: the one plot whose side
-        # is given lay west of the house; a residence's vegetable ground runs from the Takei house's ~1,070 sq ft plot to
+        # The vegetable ground WEST of the house, filling the kitchen yard (research buildings 400 and 405: west is one of the
+        # attested seats, and the sun decides among them - here it gets 9.5 h, feature 283's garden_sun; a residence's vegetable ground runs from the Takei house's ~1,070 sq ft plot to
         # a field over about half the Yokota house's grounds). Pass 7 (building-review round 6: the yard stood ~100 x 60
         # ft bare around the 36 x 30 plot) takes the larger, field form within the yard: 64 x 48 ft = 3,072 sq ft, a
         # GUESS in its size, leaving a 7 ft way from the postern along the west wall and the yard's north strip.
