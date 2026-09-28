@@ -28,27 +28,29 @@ the after-profile; then the measurement and the record.
       research: rendering
 - [ ] T08b [P] [US5] The yards' mats in arrays in `settlement/homestead_parts/yards.py`, with the recorded-yard equality test (A8)
       research: rendering
-- [ ] T09 [US1] The pool regenerated with A1-A8 landed and B not yet: every live pool manifest and page byte-identical against `5f15c65bd` (SC-011, the exact half)
+- [ ] T09 [US1] The pool - hamlets and magistracy pages - regenerated with A1-A8 landed and B not yet: byte-identical against `A_BASE`, the clone's HEAD before the first A commit, regenerated first in a detached worktree (SC-011, the exact half)
       research: rendering
 
 ## The moving pieces (US1, US2, US3, US5)
 
 - [ ] T10 [US2] A* in `hamletgen/ways/route.py`, with the cost, clearance and length-bound test over recorded requests (B1)
       research: rendering
-- [ ] T11 [US2] The coarser lattice: cells 12 and 14 rolled over the pool, the scenarios and the cohort, the unreached houses counted, the largest cell that strands none taken and the counts recorded (B2)
+- [ ] T11 [US2] The coarser lattice: cells 12, 14, 16, 18 in turn over the pool, the scenarios and the cohort, unreached houses counted per map and seed (re-roll-hidden strandings included), stopping at the first that strands; the largest before it taken and the counts recorded in research R4 (B2)
       research: rendering
 - [ ] T12 [US3] The field search without its blind probe in `hamletgen/water/fit.py`, with the stubbed saturating and growing fan tests (B3)
       research: rendering
-- [ ] T13 [US3] The carve's rows as arrays in `waterfields/sector_rows.py`, timed fastest of three against the scalar rows; kept or withdrawn with the measurement (B4)
+- [ ] T13 [US3] The carve's rows as arrays - the vertices, their supply-bank pushes and the plot tests - in `waterfields/sector_rows.py` and `waterfields/carve.py`, timed fastest of three against the scalar rows; kept or withdrawn with the measurement in research R5 (B4)
       research: rendering
-- [ ] T14 [US5] The board's coarser candidate lattice, timed fastest of three; kept or withdrawn with the measurement (B5)
+- [ ] T14 [US5] The board's coarser candidate lattice in `place_kosatsuba` and `stage_notice`'s re-seat lattice, timed fastest of three; kept or withdrawn with the measurement (B5)
+      research: rendering
+- [ ] T14b [US5] Only if A4 misses SC-006's floor: the bamboo's coarser sampling as a moving change (B6)
       research: rendering
 
 ## The other slow stages (FR-011)
 
 - [ ] T15 [US5] The grove fill, the seam closing, the commons and the blade flush re-profiled; each lever of the allowed kind taken, with its test; and the after-profile read under the same rule
       research: rendering
-- [ ] T16 [US1] The pool regenerated under 276's FR-006 condition: `make done` green, the rescue-rounds scenario and toys, forms and kinds, field acreage within tolerance, the moved maps' houses, paddies and ways before and after, `make cohort N=24` against the base's (SC-011)
+- [ ] T16 [US1] The pool regenerated under 276's FR-006 condition: `make done` green, the rescue-rounds scenario and toys, forms and kinds, field acreage within tolerance, each moved map's houses, paddies and ways before and after recorded in research R6, `make cohort N=24` against the base's (SC-011)
       research: rendering
 
 ## Polish

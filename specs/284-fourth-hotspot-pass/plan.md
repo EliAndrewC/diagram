@@ -70,7 +70,7 @@ the five pool rolls' boards and synthetic candidate sets with ties.
 The positions of the old scan, each with its distance to the target and its scan index, sorted by `(distance, index)`; the
 first that fits is the answer - the old scan kept the nearest, the first met on a tie. Both scales as before. This takes the
 table's "bamboo sampled more coarsely" by removing the same wasted tests exactly; if SC-006's floor is not met, the coarser
-sampling is added. **Test**: the
+sampling is added AFTER T09, as a moving change in the B phase under SC-011's moving condition (B6). **Test**: the
 seat against the old scan over synthetic obstacle sets and the pool maps' bamboo.
 
 ### A5. Whole-ring scans through indexes (FR-009)
@@ -80,7 +80,8 @@ seat against the old scan over synthetic obstacle sets and the pool maps' bamboo
   meet and `seg_dist < gap` needs them within `gap`.
 - `_trim_to_service`'s field and steading tests and `push_clear_of_fabric` (`ways/geom.py`): `edge_dist` against a polygon
   becomes `RingIndex(poly).edge_within(x, y, limit)` (the ring store's shared indexes, 281) with the closed/strict bound
-  each test uses.
+  each test uses - `edge_within` answers strictly-under, so a `<=` test (`_trim_to_service`'s `end_serves`) asks it at the
+  limit plus a hair and re-applies `<=` to the distance it returns.
 - The comb's `_dry` (`settlement/fields/comb.py`): the water lines filed once in `seg_reach_index` with their `half`; a bead
   asks the segments whose widened box holds it, `seg_dist >= half` deciding.
 **Test**: each against a copy of its old form over synthetic inputs, including points exactly at the bound.
@@ -89,7 +90,8 @@ seat against the old scan over synthetic obstacle sets and the pool maps' bamboo
 
 `_crown_seat_clear(x, y, r, crowns)` walked every nearby and every drawn crown per crown - 713,438 comparisons over the
 pool. A `CrownGrid` files crowns by position in cells of twice the largest crown radius (a crown within `max(r, r_other)` of
-the point lies in the 3 x 3 cells round it); `drawn` is filed as crowns land. The same `>=` decides. **Test**: equality over
+the point lies in the 3 x 3 cells round it); `drawn` is filed as crowns land. The cell is fixed before filing at twice the largest crown radius the draw can make, so it
+covers every query radius too. The same `>=` decides. **Test**: equality over
 synthetic crown sets; the pool byte-identical.
 
 ### A7. The toll's bitmap (FR-010, `hamletgen/ways/route.py`)
@@ -104,8 +106,8 @@ extended.
   of the convex floor quad; surely in where every one clears `clear` by a margin, surely out where one falls short by it,
   and the scalar `point_in_poly and edge_dist >= clear` asked in the band between. `spot` / `ok` then as arrays too.
 - The lattice search: for each gap and each `(nc, nr)`, the seated count at every offset `(i0, j0)` is the sum of `nc * nr`
-  strided slices of `ok`; the offsets reaching the best count so far are then walked in the old `(i0, j0)` order with the old
-  `_off_center` tie-break, so the lattice chosen is the old one.
+  strided slices of `ok`; the offsets reaching the GLOBAL best count over every `(nc, nr)` are then walked in the old `(nc, nr, i0, j0)` order
+  with the old `_off_center` tie-break and strict-improvement rule, so the lattice chosen is the old first-maximal one.
 - `_lay_by_hand`: a neighbor quad whose box is farther than `need` from the mat's box is skipped before `_quad_gap`.
 - **Test**: `mat_cells` against a copy of the old function over the pool's yards (their `w, h, poly, keep_out, salt` recorded)
   and synthetic ones (a rack, a small yard, a quarter-turned floor) - identical lists.
@@ -119,38 +121,61 @@ chosen cell together) at most `5%` longer than the old router's, and a request w
 
 ### B2. The coarser lattice (FR-003)
 
-The callers' cells (`cell=` at each `_route` call, default 10) raised to 12 and to 14 in turn; for each, the pool, the
-rescue-rounds scenario, the toys and `make cohort N=24` rolled and the unreached houses counted. The largest cell with none
-more than the base's is taken; the counts at every cell tried are recorded (research R2).
+Only the call sites at the default 10 ft lattice are raised; the deliberately fine lattices stay (the cells of 5.0 and 6.0,
+`_FINE_CELL` 3.0, and `sweeps`' `min(10, gap / 6)`). The cell steps 12, 14, 16, 18 toward `MIN_WEB_GAP` and stops at the
+first cell that strands a house; the largest cell before it is taken. At each cell the pool, the rescue-rounds scenario,
+the toys and `make cohort N=24` are rolled and the unreached houses counted PER MAP AND PER SEED against the base's (no new
+or larger shortfall anywhere, SC-011), a stranding the driver's re-roll hid counted too (`meta.roll_attempt` and
+`meta.roll_after` say a map was re-rolled after a stranded farmhouse). The counts at every cell tried are recorded (research
+R4).
 
 ### B3. The field search without its blind probe (FR-004, `hamletgen/water/fit.py`)
 
 After a first carve short of the target, the next carve is at `_predict_k`'s size, not the bracket's top. The probe to the
 top is taken when a carve's acreage grows less than `SATURATION_GROWTH` times the previous for a larger `k` (the fan not
 growing with its size - the clamped envelope of cohort seed 47), so a saturating aspect is still found and still cut short.
+`SATURATION_GROWTH` carries its reason beside it: a fan scales about as `k ** 2`, so a larger `k` whose acreage grows less
+than linearly in `k` is being clamped.
 **Test**: `_fit_at_aspect` over a stubbed `carve_comb` whose acreage saturates probes the top and stops; over one that grows
 as `k ** 2` it never carves the top; the pool's fields within tolerance.
 
-### B4. The carve's rows as arrays (FR-005, `waterfields/sector_rows.py`)
+### B4. The carve's rows as arrays (FR-005, `waterfields/sector_rows.py`, `waterfields/carve.py`)
 
-Each body row's vertices for all its columns at once: the two thread bounds per row (already per row), the column
-interpolation, the wobble and drift as numpy over the columns, then the supply push per vertex (scalar, through the memo)
-and the quad tests. Kept only if Sawada's field stage, fastest of three, is faster with it than without; otherwise
-withdrawn with the measurement (research R2).
+All three parts FR-005 names, as numpy over a row's columns (the body) and over a quad batch (the tests):
+- the vertices: the two thread bounds per row, the column interpolation, the wobble and the drift;
+- their pushes off the supply banks: `_clear_supply` as an array function - each stroke's segments against every vertex at
+  once (a stroke is tens of segments, so a points x segments distance array is small), the nearest segment, the bank's
+  half-width from the stroke's taper, the push along the normal, repeated for the vertices still inside a bank, at most the
+  scalar loop's six rounds, with the scalar tie-break for a point on a centerline;
+- the plot tests: `spills` (each corner's fall against the drain's at its `u`), `above` (the canal line) and `in_supply`
+  (each edge's 3 px samples against the strokes) over the row's quads at once.
+The quads that pass are appended in the scalar order, with the same random draws. Kept only if Sawada's field stage, fastest
+of three, is faster with it than the scalar rows; otherwise withdrawn and the measurement recorded (research R5). A part
+that cannot be put in arrays is brought to review as an exception with its measurement, not left scalar silently.
 
 ### B5. The board's coarser candidate lattice (FR-007 second half)
 
-Samples along a route every `24` px instead of `12`, for hamlets and villages - kept only if the notice stage, fastest of
+Samples along a route every `24` px instead of `12`, for hamlets and villages (the only tiers that roll; the frozen legacy
+town is never regenerated), in both lattices that seat the board - `place_kosatsuba`'s and `stage_notice`'s re-seat lattice
+(`hamletgen/frame.py`) - kept only if the notice stage, fastest of
 three, is faster with it than without (FR-007). **Test**: the board's rules (verge, beds, water, fit, caption) hold on every
 pool map, via the gate.
+
+### B6. The bamboo's coarser sampling, only if A4 misses SC-006's floor (FR-008)
+
+A moving change, after T09: the scan's step raised, the same keep-outs and reach; its Decisions row is in the spec.
 
 ### C. Measure and record (FR-012, SC-001 to SC-011)
 
 The five named stages (FR-011): the grove draw is A6 and the yards' mats A8; the grove fill, the seam closing, the commons and the flush are
 re-profiled once A lands, and each gets its lever. Then the after-profile is read under the same rule: anything slow that a
 change of the allowed kind makes significantly faster is taken in this feature; only what cannot be is left, each with its
-measurement (FR-012). The landing order: A lands, the pool regenerates byte-identical against `5f15c65bd` (confirmed first to regenerate
-itself in `/tmp/base284`); then B, under 276's FR-006 condition. `measure.py after`, `make perf LABEL=284-end`,
+measurement (FR-012). The landing order: A lands, and the pool - the hamlets AND the magistracy pages, which go through `render_page` - regenerates
+byte-identical against the clone's HEAD just before the first A commit (`A_BASE`), itself regenerated in a detached worktree
+first; main merged 283 after `5f15c65bd` and moved the magistracy sheets, so `5f15c65bd` is not the reference for T09 (it
+stays the TIMING base). A main merge during A re-takes `A_BASE` the same way. Then B, under 276's FR-006 condition, each
+moved map's houses, paddies and ways before and after recorded in the research record (research R6) - the "research entry"
+SC-011 asks for. `measure.py after`, `make perf LABEL=284-end`,
 `dev/performance.md`'s fourth-pass section.
 
 ## Verification per piece
