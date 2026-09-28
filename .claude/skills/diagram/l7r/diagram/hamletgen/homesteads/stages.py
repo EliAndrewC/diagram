@@ -626,6 +626,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     s._site_chains = None  # the boundary is the homestead stage's; every later placer runs the fit test's own path
     s._site_corridors = None
     s._free_ground = None
+    s._unreachable = None
     # THE ROLLED SHAPE MUST LEAVE A TRACE EVEN WHEN THE CLOUD NEVER RUNS (known-open ledger
     # 2026-08-16, Kashikawa: the front rows + lane frontage seated all 20 households, the
     # cluster-seeds cloud never ran, and the rolled cluster_shape knob went unhonored with no

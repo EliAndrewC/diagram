@@ -1,0 +1,51 @@
+{
+ "feature": "279-shrine-grove-shape",
+ "plan_sha256": "fad16fd753290f2a72d480a71f0094b484249069656c91c6524772dfdf42c6f9",
+ "reviewed": "2026-09-28",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "Research 129 with the paddy photograph's reading; 124 points at it; three sources registered and put through the four checks",
+   "class": "within",
+   "why": "Unchanged in the diff since round 5 (87dc9c718..227de9a91): FR-001-FR-003."
+  },
+  {
+   "id": "D2",
+   "summary": "Knob 8 grove form (behind, behind and sides, sides, all around) with the ground rule, equal weights between two or three candidates (guess), paddy edge OPEN with the GM; program, types.json notes and the shrine grove kind restated; owed list names the knob",
+   "class": "within",
+   "why": "FR-004, FR-007, FR-008. Round 5's note is resolved: D2 now says 'two or three candidates', and at HEAD the kind's Note and Caveat (interactive/compound_kinds/grounds.py lines 263, 265) and the program's grove row (programs.md line 104) say 'which of two or three forms a slope takes', agreeing with knob 8 (programs.md line 129) and D3's three-way roll."
+  },
+  {
+   "id": "D3",
+   "summary": "The hall is mid-slope with no break of slope (meta.down_deg 45 the one terrain datum), so it takes both slope classes' forms, a recorded guess; the roll choice(['behind','behind and sides','sides']) on crc32(b'hoshigaoka:shrine grove form') gave behind and sides",
+   "class": "within",
+   "why": "Unchanged in the diff since round 5; ruled within there (a labeled gap-filler that widens the candidates, FR-004)."
+  },
+  {
+   "id": "D4",
+   "summary": "One irregular region behind the hall from the well round both flanks to ragged tips beside the forecourt's foot, real bays and spurs, floor inside the crowns, lower approach open; captions reseated; one layout writes map fragment, manifest record and sheet tree list",
+   "class": "within",
+   "why": "Unchanged in the diff since round 5: FR-005, FR-006, FR-007."
+  },
+  {
+   "id": "D5",
+   "summary": "Frozen map edited by hand; the precinct's open ground and the bare strips the old reservations left carry the map's own tufts and shrub dots, no pines; the notes row records the wood once",
+   "class": "within",
+   "why": "Unchanged in the diff since round 5: FR-006."
+  },
+  {
+   "id": "D6",
+   "summary": "Sheet frame widened to the wood's crowns; subtitle's 'in its wood' dropped; Grove form line as declared; open ground plain on the sheet (map drawing convention); precinct rect stays and the notes now say the wood runs past its line, measured; every grove text restated (R3 ledger)",
+   "class": "within",
+   "why": "The one change since round 5 adds a statement to the notes that the wood overruns the precinct rectangle, with its size. That is FR-007's restating of every text that places a feature against the grove, made true of the new extent; it narrows nothing and adds no behavior."
+  },
+  {
+   "id": "D7",
+   "summary": "STRAIGHT_RUN and LONG_RUN measured and recorded, now with each outer side's wander from its best-fit line; matches_map green; settlement-review and building-review ledgered; paddy edge and the side forms' single source to the GM through escalation-check; make done green",
+   "class": "within",
+   "why": "The wander measure added since round 5 only verifies that the old box's parallel long sides do not survive as the wood's outer edges - enforcement of the irregular outline FR-005 and SC-002 ask for and of the GM's objection to the rectangle, so it serves the request (GM 2026-09-20). No behavior rides in with it."
+  }
+ ],
+ "verdict": "CLEAR"
+}

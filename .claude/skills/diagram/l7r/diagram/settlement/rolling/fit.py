@@ -301,6 +301,13 @@ class BundleFitMixin:
             return None
         return (float(hits[0][0]), float(hits[0][1]), float(hits[0][2]), float(hits[0][3])) if len(hits) == 1 else True
 
+    def _house_unreachable(self: Settlement, house: Any) -> bool:  # type: ignore[misc]
+        """Would this house stand beyond any way's reach - its center deep in the ground no way may be drawn on
+        (`hamletgen/homesteads/boundary.py` `UnreachableGround`, feature 278 FR-005)? Asked only while a hamlet's site
+        boundary is installed."""
+        ground = self._unreachable
+        return ground is not None and bool(ground.refuses(house[0], house[1]))
+
     def _parts_fit(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """The rules that read the PARTS of a homestead laid inside an envelope the ground already admitted
         (feature 227): the house's wall rule against the paddy, its tread, the eave gap to the nearest house, the
@@ -310,7 +317,7 @@ class BundleFitMixin:
             return False
         if self._parts_across_stream(geom):
             return False
-        if self._house_on_a_tread(house) or self._house_too_near_a_neighbor(house):
+        if self._house_on_a_tread(house) or self._house_too_near_a_neighbor(house) or self._house_unreachable(house):
             return False
         if not self._sun_corridor_ok(geom) or self._yard_sun_conflict(geom):
             return False
@@ -562,7 +569,7 @@ class BundleFitMixin:
             return False
         if self._house_on_a_tread(geom["house"]):
             return False
-        if self._house_too_near_a_neighbor(geom["house"]):
+        if self._house_too_near_a_neighbor(geom["house"]) or self._house_unreachable(geom["house"]):
             return False
         if "grove_n" in geom and any(self._rect_blocked(geom[k], fields=grove_off_field) for k in ("grove_n", "grove_w")):
             return False

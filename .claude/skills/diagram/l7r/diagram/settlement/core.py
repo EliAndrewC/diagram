@@ -16,6 +16,7 @@ from .civic_grounds import CivicGroundsMixin
 from .farm_fixtures import FarmFixturesMixin, PondStockMixin
 from .fields import FieldsMixin
 from .finish import FinishMixin
+from .hard_ground import HardGroundMixin
 from .homestead_parts import HomesteadPartsMixin
 from .houses import HousesMixin
 from .land import LandMixin
@@ -45,6 +46,7 @@ class Settlement(
     CityMixin,
     CastleCivicMixin,
     HousesMixin,
+    HardGroundMixin,  # feature 278: the hard no-build ground, out of houses.py
     RollingMixin,
     FinishMixin,
     FarmFixturesMixin,
@@ -93,6 +95,7 @@ class Settlement(
         # lanes follow; None elsewhere, where `_house_rot` keeps the +/-5 degree rake
         self._house_bearing: float | None = None
         self._bearing_follow: Any = None
+        self._unreachable: Any = None  # the ground no way can reach while a site boundary is installed (feature 278)
         self._seat_search: dict[str, int] = {
             "candidates": 0,
             "placer_calls": 0,
@@ -191,6 +194,7 @@ class Settlement(
         self._pending_block: Poly | None = None  # ...and the pond's no-build rect that must follow it (see `fields/comb.py`)
         self._hard_cache_key: tuple[int, ...] | None = None
         self._hard_cache: list[Any] = []
+        self._hard_grid: tuple[list[Any], PointGrid] | None = None  # `_hard_index`'s grid, keyed by the hard list it was built from (feature 278)
         # SWEPT/TENDED GROUND around sacred + funerary features - a keep-out for the LOOSE HINTERLAND
         # SCATTER (commons scrub + marsh reeds) ONLY, not for building placement and not for the grove.
         # A shrine precinct, the ground under a torii and along its sando, and the collar tended around

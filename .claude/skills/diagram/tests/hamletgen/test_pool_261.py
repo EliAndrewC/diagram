@@ -502,3 +502,17 @@ def segments_dist(q: tuple[float, float], sg: tuple[tuple[float, float], tuple[f
     from l7r.diagram.settlement import seg_dist
 
     return seg_dist(q[0], q[1], sg[0], sg[1])
+
+
+def test_a_house_beyond_the_reach_of_every_lane_has_no_way_out() -> None:
+    """`departure_routes` walks each dwelling from its nearest lane sample within `reach`; a house farther than that from
+    every lane is left out rather than routed from a far-off sample (feature 278: the branch Sawada's stranded house used to
+    take, stated directly)."""
+    from l7r.diagram.settlement.structures.fixtures._helpers import departure_routes
+
+    m = {
+        "houses": [{"x": 210.0, "y": 100.0}, {"x": 1000.0, "y": 1000.0}],
+        "lanes": [{"pts": [[0.0, 0.0], [200.0, 0.0]], "connector": True}, {"pts": [[200.0, 0.0], [200.0, 200.0]]}],
+    }
+    routes = departure_routes(m)
+    assert len(routes) == 1 and routes[0][0][0] == 200.0, "the near house walks out; the far one is not routed"

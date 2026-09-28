@@ -1,0 +1,11 @@
+{
+ "term": "break of slope",
+ "def": "A line where a slope's steepness changes: the lower break is the concave bend at the slope's foot, the upper break the convex bend at its top.",
+ "variants": [
+  "break of slope",
+  "lower break of slope",
+  "upper break of slope",
+  "lower break",
+  "upper break"
+ ]
+}

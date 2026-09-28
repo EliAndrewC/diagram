@@ -350,3 +350,28 @@ def test_an_entrance_board_stands_on_the_approach_and_not_on_a_straggler_at_its_
     rot = float(s.M["kosatsuba"][-1]["rot"])
     assert min(abs(rot - 90.0) % 180.0, 180.0 - abs(rot - 90.0) % 180.0) <= 15.0, f"squared to the track (bearing 90), not the straggler: {rot}"
     assert math.dist((s.M["kosatsuba"][-1]["x"], s.M["kosatsuba"][-1]["y"]), (500.0, 620.0)) <= 120.0
+
+
+def test_the_bed_segment_index_refuses_exactly_what_the_scan_refused():
+    """Feature 278 (FR-009): a verge candidate is off every bed when every segment stands at least its refusal distance
+    away; the index of widened segment boxes gives the scan's verdict over random beds and points."""
+    import random
+
+    from l7r.diagram.settlement._geom import seg_dist
+    from l7r.diagram.settlement.structures.fixtures.siting import bed_segment_index
+
+    rng = random.Random(278)
+    beds = []
+    for _ in range(30):
+        x, y = rng.uniform(0, 800), rng.uniform(0, 800)
+        beds.append(([(x + k * rng.uniform(-60, 60), y + k * rng.uniform(-60, 60)) for k in range(rng.randint(2, 6))], rng.uniform(2, 9)))
+    extra = 7.0
+    grid = bed_segment_index(beds, extra)
+    clear = 0
+    for _ in range(4000):
+        x, y = rng.uniform(0, 800), rng.uniform(0, 800)
+        want = all(seg_dist(x, y, bp[k], bp[k + 1]) >= bhw + extra for bp, bhw in beds for k in range(len(bp) - 1))
+        got = all(seg_dist(x, y, a, b) >= reach for a, b, reach, x0, y0, x1, y1 in grid.near(x, y) if x0 <= x <= x1 and y0 <= y <= y1)
+        assert got == want
+        clear += want
+    assert 200 < clear < 3800, "non-vacuity: both verdicts"

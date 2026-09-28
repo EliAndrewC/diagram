@@ -787,3 +787,87 @@ def test_nearest_way_bearing_breaks_a_corner_tie_by_manifest_order() -> None:
     assert round(nearest_way_bearing(corner, 150.0, 50.0) or 0.0, 1) == 90.0, "past the corner, the later arm alone"
     # and the legacy singular key is a way like any other, because `street_runs` says so
     assert round(nearest_way_bearing({"lane": [(0, 0), (0, 40)]}, 10.0, 20.0) or 0.0, 1) == 90.0
+
+
+def test_quad_hits_poly_with_its_box_prefilter_equals_the_full_scan():
+    """Feature 278 (FR-009): `quad_hits_poly` tests only the polygon vertices and edges the quad's box can meet, keeping
+    the corner-in-polygon stage whole. Over random quads and polygons - a quad deep inside a large polygon, a small
+    polygon inside a quad, crossings and misses - it answers as the full scan did, restated here."""
+    import random
+
+    from l7r.diagram.settlement._geom import point_in_poly, quad_hits_poly, segments_cross
+
+    def scan(quad, poly):
+        if any(point_in_poly(qx, qy, poly) for qx, qy in quad) or any(point_in_poly(px, py, quad) for px, py in poly):
+            return True
+        return any(segments_cross(quad[i], quad[(i + 1) % 4], poly[j], poly[(j + 1) % len(poly)]) for i in range(4) for j in range(len(poly)))
+
+    rng = random.Random(278)
+    hits = 0
+    for _ in range(3000):
+        cx, cy, r = rng.uniform(0, 500), rng.uniform(0, 500), rng.uniform(5, 250)
+        n = rng.randint(3, 30)
+        poly = [(cx + r * (0.4 + 0.6 * rng.random()) * math.cos(2 * math.pi * k / n), cy + r * (0.4 + 0.6 * rng.random()) * math.sin(2 * math.pi * k / n)) for k in range(n)]
+        qx, qy, qw, qh = rng.uniform(0, 500), rng.uniform(0, 500), rng.uniform(2, 120), rng.uniform(2, 120)
+        quad = [(qx, qy), (qx + qw, qy), (qx + qw, qy + qh), (qx, qy + qh)]
+        want = scan(quad, poly)
+        assert quad_hits_poly(quad, poly) == want
+        hits += want
+    assert 300 < hits < 2700, "non-vacuity: hits and misses"
+
+
+def test_keepout_hit_many_equals_hit_point_for_point():
+    """Feature 278 (FR-008): the vectorized keep-out test answers exactly as `hit` over every family - rings with a
+    pad and a query slot (and one ring shapely reads as invalid, a bow-tie), segments, strict and closed rects and
+    circles, a family skipped by `None` - including points placed exactly on boundaries; items filed after a first
+    query are seen by the next."""
+    import random
+
+    from l7r.diagram.settlement._geom import KeepoutGrid
+
+    rng = random.Random(278)
+
+    def blob(cx, cy, r, n):
+        return [(cx + r * (0.5 + 0.5 * rng.random()) * math.cos(2 * math.pi * k / n), cy + r * (0.5 + 0.5 * rng.random()) * math.sin(2 * math.pi * k / n)) for k in range(n)]
+
+    kg = KeepoutGrid()
+    kg.rings([blob(rng.uniform(0, 800), rng.uniform(0, 800), rng.uniform(20, 90), rng.randint(4, 14)) for _ in range(12)], pad=6.0, slot=1, reach=10.0)
+    kg.rings([[(300.0, 300.0), (400.0, 400.0), (400.0, 300.0), (300.0, 400.0)]])  # a bow-tie
+    kg.segs([([(rng.uniform(0, 800), rng.uniform(0, 800)) for _ in range(4)], rng.uniform(2, 8)) for _ in range(8)])
+    kg.rects([(100.0, 100.0, 160.0, 140.0)], closed=True)
+    kg.rects([(500.0, 600.0, 540.0, 650.0)])
+    kg.circles([(650.0, 200.0, 30.0)], closed=True)
+    kg.circles([(200.0, 650.0, 25.0)])
+    xs = [rng.uniform(0, 800) for _ in range(6000)] + [100.0, 160.0, 130.0, 500.0, 540.0, 680.0, 225.0, 350.0, 350.0]
+    ys = [rng.uniform(0, 800) for _ in range(6000)] + [120.0, 140.0, 100.0, 620.0, 650.0, 200.0, 650.0, 350.0, 300.0]
+    for extra in ((0.0, 0.0), (0.0, 7.5), (0.0, None)):
+        got = kg.hit_many(xs, ys, extra)
+        want = [kg.hit(x, y, extra) for x, y in zip(xs, ys, strict=True)]
+        assert got.tolist() == want, extra
+        assert 300 < sum(want) < 5700, "non-vacuity"
+    kg.circles([(400.0, 100.0, 40.0)], closed=True)
+    assert kg.hit_many([400.0], [100.0], (0.0, 0.0)).tolist() == [True], "an item filed after a query is seen"
+    assert kg.hit_many([], [], (0.0, 0.0)).tolist() == [], "no points, no answers"
+    wide = KeepoutGrid()  # an item wider than the grid files (oversized), and a segment family skipped by `None`
+    wide.rings([[(-5000.0, -5000.0), (12000.0, -5000.0), (12000.0, 12000.0), (-5000.0, 12000.0)]])
+    wide.segs([([(0.0, 0.0), (50.0, 0.0)], 4.0)], slot=1)
+    pts = ([10.0, 20000.0, 25.0], [2.0, 20000.0, 1.0])
+    for extra in ((0.0, 0.0), (0.0, None)):
+        assert wide.hit_many(*pts, extra).tolist() == [wide.hit(x, y, extra) for x, y in zip(*pts, strict=True)]
+
+
+def test_ring_inside_many_equals_inside_point_for_point():
+    """Feature 278 (FR-008): the vectorized ring test answers as `inside` - a valid ring, a bow-tie, points on edges and
+    vertices."""
+    import random
+
+    from l7r.diagram.settlement._geom import RingIndex
+
+    rng = random.Random(8)
+    ring = [(100.0, 100.0), (400.0, 120.0), (380.0, 380.0), (220.0, 250.0), (90.0, 400.0)]
+    bow = [(300.0, 300.0), (400.0, 400.0), (400.0, 300.0), (300.0, 400.0)]
+    for r in (ring, bow):
+        idx = RingIndex(r)
+        xs = [rng.uniform(50, 450) for _ in range(5000)] + [p[0] for p in r] + [250.0, 400.0]
+        ys = [rng.uniform(50, 450) for _ in range(5000)] + [p[1] for p in r] + [110.0, 350.0]
+        assert idx.inside_many(xs, ys).tolist() == [idx.inside(x, y) for x, y in zip(xs, ys, strict=True)]

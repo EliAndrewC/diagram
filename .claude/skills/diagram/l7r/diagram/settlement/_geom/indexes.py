@@ -327,6 +327,39 @@ class CanopyArea:
         return len(self.cells) * self.cell * self.cell
 
 
+def seg_reach_index(lines: Any, extra: float) -> PointGrid:
+    """Every segment of `(polyline, half-width)` pairs as `(a, b, reach, x0, y0, x1, y1)`: its refusal distance
+    (`half-width + extra`) and its box widened by that distance (feature 278). A point outside a segment's widened box
+    stands farther than its reach, so `seg_dist(p, a, b) < reach` over the items `near(p)` returns, box-checked, is the
+    scan over every segment."""
+    grid = PointGrid()
+    grid.extend(
+        (
+            pl[k],
+            pl[k + 1],
+            hw + extra,
+            min(pl[k][0], pl[k + 1][0]) - hw - extra,
+            min(pl[k][1], pl[k + 1][1]) - hw - extra,
+            max(pl[k][0], pl[k + 1][0]) + hw + extra,
+            max(pl[k][1], pl[k + 1][1]) + hw + extra,
+        )
+        for pl, hw in lines
+        for k in range(len(pl) - 1)
+    )
+    return grid
+
+
+def _parity_region(idx: Any) -> Any:
+    """The area `RingIndex.inside` counts as inside a ring that is not a valid polygon: its edges noded and polygonized
+    into faces, each face kept when its interior point is inside by the ring's even-odd count - which is constant across a
+    face, so the union of the kept faces is exactly that area (feature 278). None when no face is inside."""
+    from shapely.geometry import LineString
+    from shapely.ops import polygonize, unary_union
+
+    faces = [f for f in polygonize(unary_union(LineString([*idx.ring, idx.ring[0]]))) if idx.inside(*f.representative_point().coords[0])]
+    return unary_union(faces) if faces else None
+
+
 class RingIndex:
     """Point queries against ONE static ring - inside/outside and distance-to-edge - built once.
 
@@ -374,6 +407,30 @@ class RingIndex:
                 inside = not inside
         return inside
 
+    def inside_many(self, xs: Any, ys: Any) -> Any:
+        """`inside` for arrays of points at once (feature 278, FR-008) - the same verdict, point for point: a point
+        inside the polygon shrunk by a margin is surely in, one outside it grown by the margin surely out, and one between
+        is asked of `inside` itself; a ring shapely would not read as a valid polygon asks `inside` of every point in its
+        box."""
+        import numpy as np
+        import shapely
+        from shapely.geometry import Polygon
+
+        xs, ys = np.asarray(xs, dtype=float), np.asarray(ys, dtype=float)
+        out = np.zeros(len(xs), dtype=bool)
+        inbox = (xs >= self.x0) & (xs <= self.x1) & (ys >= self.y0) & (ys <= self.y1)
+        poly = Polygon(self.ring) if len(self.ring) >= 3 else None
+        if poly is None or not poly.is_valid:
+            ask = inbox
+        else:
+            core, hull = poly.buffer(-0.05), poly.buffer(0.05)
+            sure = shapely.contains_xy(core, xs, ys) if not core.is_empty else np.zeros(len(xs), dtype=bool)
+            out[sure] = True
+            ask = inbox & ~sure & shapely.intersects_xy(hull, xs, ys)
+        for i in np.flatnonzero(ask):
+            out[i] = self.inside(float(xs[i]), float(ys[i]))
+        return out
+
     def edge_within(self, px: float, py: float, limit: float) -> float | None:
         """The distance from (px, py) to the nearest edge if it is under `limit`, else None."""
         best = limit
@@ -407,11 +464,12 @@ class KeepoutGrid:
     exact test would have refused on (`boxed_hit`'s contract). Filing order does not matter: every
     test is a pure predicate with no randomness, so `any` of them is the same in any order."""
 
-    __slots__ = ("grid",)
+    __slots__ = ("_trees", "grid")
     RING, SEG, RECT, CIRCLE = 0, 1, 2, 3
 
     def __init__(self) -> None:
         self.grid = PointGrid()
+        self._trees: dict[tuple[float | None, ...], Any] = {}  # `hit_many`'s shapes, per (extra, the queried points' box)
 
     def rings(self, polys: Any, pad: float = 0.0, slot: int = 0, reach: float = 0.0) -> None:
         """Rings refused inside or within `pad` (+ the query's extra for `slot`) of an edge."""
@@ -421,6 +479,7 @@ class KeepoutGrid:
             r = pad + reach
             items.append((self.RING, idx, pad, slot, idx.x0 - r, idx.y0 - r, idx.x1 + r, idx.y1 + r))
         self.grid.extend(items)
+        self._trees.clear()  # `hit_many`'s shapes are of the items filed so far
 
     def segs(self, corridors: Any, slot: int = 0, reach: float = 0.0) -> None:
         """`(polyline, half-width)` pairs refused within the half-width (+ the query's extra)."""
@@ -431,12 +490,15 @@ class KeepoutGrid:
                 r = hw + reach
                 items.append((self.SEG, a, b, hw, slot, min(a[0], b[0]) - r, min(a[1], b[1]) - r, max(a[0], b[0]) + r, max(a[1], b[1]) + r))
         self.grid.extend(items)
+        self._trees.clear()  # `hit_many`'s shapes are of the items filed so far
 
     def rects(self, rects: Any, closed: bool = False) -> None:
         self.grid.extend([(self.RECT, x0, y0, x1, y1, closed, x0, y0, x1, y1) for x0, y0, x1, y1 in rects])
+        self._trees.clear()  # `hit_many`'s shapes are of the items filed so far
 
     def circles(self, circles: Any, closed: bool = False) -> None:
         self.grid.extend([(self.CIRCLE, cx, cy, r, closed, cx - r, cy - r, cx + r, cy + r) for cx, cy, r in circles])
+        self._trees.clear()  # `hit_many`'s shapes are of the items filed so far
 
     def hit(self, px: float, py: float, extra: tuple[float | None, ...] = (0.0,)) -> bool:
         """Is (px, py) refused by any keep-out its cell holds? `extra[slot]` widens a family's pad for
@@ -468,6 +530,121 @@ class KeepoutGrid:
                 if (d2 <= r * r) if closed else (d2 < r * r):
                     return True
         return False
+
+    def hit_many(self, xs: Any, ys: Any, extra: tuple[float | None, ...] = (0.0,)) -> Any:
+        """`hit` for arrays of points at once (feature 278, FR-008) - the same verdict, point for point.
+
+        Each item's refused region is drawn as a shapely shape twice: SHRUNK by a margin, so a point inside it is surely
+        refused, and GROWN by the margin, so a point outside every grown shape is surely clear. The margin covers the
+        chords a buffer draws in place of an arc (under 0.5% of the radius at shapely's 8 segments a quarter) and the
+        strict-or-closed boundary of each test; a point between the two answers is asked of `hit` itself. A ring shapely
+        would not read as a valid polygon (where its even-odd `inside` and shapely's area could differ) is never "surely
+        refused" and is "maybe" over its whole padded box. So `hit_many(xs, ys)[i] == hit(xs[i], ys[i])` for every point."""
+        import numpy as np
+        import shapely
+
+        xs, ys = np.asarray(xs, dtype=float), np.asarray(ys, dtype=float)
+        out = np.zeros(len(xs), dtype=bool)
+        if not len(xs):
+            return out
+        shrunk, grown = self._trees_for(extra, (float(xs.min()), float(ys.min()), float(xs.max()), float(ys.max())))
+        maybe = shapely.intersects_xy(grown, xs, ys) if grown is not None else np.zeros(len(xs), dtype=bool)
+        if shrunk is not None:
+            out[shapely.intersects_xy(shrunk, xs, ys)] = True
+        for i in np.flatnonzero(maybe & ~out):
+            out[i] = self.hit(float(xs[i]), float(ys[i]), extra)
+        return out
+
+    def _trees_for(self, extra: tuple[float | None, ...], within: tuple[float, float, float, float]) -> tuple[Any, Any]:
+        """The shrunk and grown shapes of every item whose box meets `within` (the queried points' box), as two prepared unions -
+        each kind's shapes buffered in one array call; an item whose box misses every point cannot refuse one, and a
+        scatter's grid holds the whole map's keep-outs while its throws cover one parcel. Kept per (`extra`, `within`). A
+        ring that is not a valid polygon is drawn as its even-odd region (`_parity_region`), which is what
+        `RingIndex.inside` counts, so it is shrunk and grown like any other."""
+        key = (*extra, *within)
+        if key in self._trees:
+            return cast(tuple[Any, Any], self._trees[key])
+        wx0, wy0, wx1, wy1 = within
+        import numpy as np
+        import shapely
+        from shapely.geometry import LineString, Point, Polygon, box
+
+        items: dict[int, Any] = {}
+        c = self.grid.cell
+        for i in range(int(wx0 // c), int(wx1 // c) + 1):
+            for j in range(int(wy0 // c), int(wy1 // c) + 1):
+                for it in self.grid.buckets.get((i, j), ()):
+                    items[id(it)] = it
+        for it in self.grid.oversized:
+            items[id(it)] = it
+        geoms: list[Any] = []  # (shape, radius): grown = shape buffered by radius + margin, shrunk by radius - margin
+        radii: list[float] = []
+        edge_lines: list[Any] = []  # an invalid ring's own edges, for its pad band
+        edge_radii: list[float] = []
+        rects: list[tuple[float, float, float, float]] = []
+        for it in items.values():
+            kind = it[0]
+            if kind == 0:
+                _k, idx, pad, slot, *_box = it
+                ex = extra[slot]
+                if ex is None or len(idx.ring) < 3:
+                    continue
+                poly = Polygon(idx.ring)
+                if poly.is_valid:
+                    geoms.append(poly)
+                    radii.append(pad + ex)
+                    continue
+                region = _parity_region(idx)
+                if region is not None:
+                    geoms.append(region)
+                    radii.append(0.0)
+                if pad + ex > 0:
+                    edge_lines.append(LineString([*idx.ring, idx.ring[0]]))
+                    edge_radii.append(pad + ex)
+            elif kind == 1:
+                _k, a, b, hw, slot, *_box = it
+                ex = extra[slot]
+                if ex is None:
+                    continue
+                geoms.append(LineString([a, b]) if (a[0], a[1]) != (b[0], b[1]) else Point(a))
+                radii.append(hw + ex)
+            elif kind == 2:
+                rects.append(it[1:5])
+            else:
+                _k, cx, cy, r, *_rest = it
+                geoms.append(Point(cx, cy))
+                radii.append(r)
+        shrunk: list[Any] = []
+        grown: list[Any] = []
+        for shapes, rs in ((geoms, radii), (edge_lines, edge_radii)):
+            if not shapes:
+                continue
+            r = np.asarray(rs, dtype=float)
+            m = 0.05 + 0.02 * r  # the margin: over the chord error of shapely's 8-a-quarter arcs, and the boundary itself
+            grown.extend(shapely.buffer(shapes, r + m).tolist())
+            inner = r - m
+            # a pad-less area shape shrinks INTO itself; a line or a point with no room left has no sure core
+            area = np.array([not isinstance(g, (LineString, Point)) for g in shapes])
+            dist = np.where(inner > 0, inner, np.where(area, -m, np.nan))
+            ok = ~np.isnan(dist)
+            if ok.any():
+                core = shapely.buffer([g for g, k in zip(shapes, ok, strict=True) if k], dist[ok])
+                shrunk.extend(g for g in core.tolist() if not g.is_empty)
+        for x0, y0, x1, y1 in rects:
+            m = 0.05
+            grown.append(box(x0 - m, y0 - m, x1 + m, y1 + m))
+            if x1 - x0 > 2 * m and y1 - y0 > 2 * m:
+                shrunk.append(box(x0 + m, y0 + m, x1 - m, y1 - m))
+        # ONE PREPARED UNION A SIDE: a point asked of a prepared shape is answered from its own index, and the vectorized
+        # predicate asks every point in one call - far cheaper than a tree query returning (point, shape) pairs.
+        su = shapely.union_all(shrunk) if shrunk else None
+        gu = shapely.union_all(grown) if grown else None
+        for u in (su, gu):
+            if u is not None:
+                shapely.prepare(u)
+        pair = (su, gu)
+        self._trees[key] = pair
+        return pair
 
 
 def boxed_rings(polys: Any, pad: float = 0.0) -> list[tuple[RingIndex, float, float, float, float]]:

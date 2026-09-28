@@ -207,8 +207,18 @@ def test_md_tokens_equal_the_whole_text_scan() -> None:
     names (a path before it, a word character after it, a non-ASCII word character either side, the text's ends, two
     tokens in one run) and over every tracked text."""
     edge = "a.md x/b.md ./c.md ../d/e.md f.mdx ōg.md h.mdō i.md.md j.md/k.md -l.md (m.md) n.md"
-    for text in (edge, "", ".md", "z.md", *tracked_texts().values()):
+    for text in (edge, "", ".md", "z.md", edge + "\n" + edge, "x\n.md\ny.md\n"):
         assert md_tokens(text) == tuple(m.group(1) for m in _MD_TOKEN.finditer(text)), text[:80]
+    # EVERY TRACKED TEXT, AGAINST THE PATTERN RUN LINE BY LINE (feature 278, FR-014). The whole-text scan here cost 4.6 s of
+    # `make quick`. A token holds no newline, and the pattern's lookbehind and `\b` read a newline as they read any other
+    # non-token character - so a text's tokens are its lines' tokens in order, and a line without `.md` has none. The
+    # edge strings above hold the whole-text form to the same answer, newlines included.
+    found = 0
+    for text in tracked_texts().values():
+        want = tuple(m.group(1) for line in text.split("\n") if ".md" in line for m in _MD_TOKEN.finditer(line))
+        assert md_tokens(text) == want, text[:80]
+        found += len(want)
+    assert found > 100, "non-vacuity: the tracked corpus names Markdown files"
 
 
 def test_a_token_naming_a_converted_file_is_reported() -> None:

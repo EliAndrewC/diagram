@@ -789,7 +789,7 @@ def test_an_element_with_no_extent_is_treated_as_touching_everything() -> None:
     would split one feature into two hover groups on the sheet, which the reader sees, while merging
     slightly too eagerly costs nothing visible. Boxes and circles both go through here, and a circle
     is tested AS a circle - two crowns whose boxes overlap at a corner do not actually touch."""
-    from l7r.diagram.interactive.page import _hits
+    from l7r.diagram.interactive.extents import _hits
 
     assert _hits(None, (0.0, 0.0, 5.0)) is True
     assert _hits((0.0, 0.0, 5.0), None) is True
@@ -941,3 +941,57 @@ def test_the_windbreak_pop_up_names_its_side_and_an_authored_note_beats_it() -> 
     assert data["windbreak"]["on_this_map"].startswith("Here the belt stands toward the northwest of the houses")
     notes = MapNotes(place={}, features={"windbreak": "This one is planted on the old dike."})
     assert _render([PLACE, "windbreak"], meta, notes)["windbreak"]["on_this_map"] == "This one is planted on the old dike."
+
+
+def test_the_merges_bucket_grids_change_no_byte(monkeypatch):
+    """Feature 278 (FR-011): `_refused` asks a grid of each bucket's extents instead of walking them. Over a dense,
+    interleaved scatter - lines and circles in several styles, some translucent, some outlined, some wider than the
+    grid's big-box bound - the merged page is byte-identical to the one the whole-list walk wrote (the grid forced to
+    return everything it holds)."""
+    import random
+
+    from l7r.diagram.interactive import page as pg
+
+    rng = random.Random(278)
+    parts = []
+    for _ in range(3000):
+        k = rng.random()
+        if k < 0.45:
+            x, y = rng.uniform(0, 1500), rng.uniform(0, 1500)
+            parts.append(f'<line x1="{x:.1f}" y1="{y:.1f}" x2="{x + rng.uniform(-9, 9):.1f}" y2="{y + rng.uniform(-9, 9):.1f}" stroke="#{rng.choice(["6a7", "8b5"])}" stroke-width="1"/>')
+        elif k < 0.9:
+            style = rng.choice(['fill="#2a4"', 'fill="#2a4" opacity="0.8"', 'fill="#475" stroke="#123" stroke-width="0.5"'])
+            parts.append(f'<circle cx="{rng.uniform(0, 1500):.1f}" cy="{rng.uniform(0, 1500):.1f}" r="{rng.uniform(1, 14):.1f}" {style}/>')
+        elif k < 0.97:
+            x, y = rng.uniform(0, 1500), rng.uniform(0, 1500)
+            parts.append(f'<line x1="{x:.1f}" y1="{y:.1f}" x2="{x + rng.uniform(-1600, 1600):.1f}" y2="{y + rng.uniform(-1600, 1600):.1f}" stroke="#6a7" stroke-width="1"/>')
+        else:
+            parts.append(f'<rect x="{rng.uniform(0, 1500):.1f}" y="{rng.uniform(0, 1500):.1f}" width="30" height="20" fill="#999"/>')
+    svg = "<g>" + "".join(parts) + "</g>"
+    indexed = pg.merge_primitives(svg)
+
+    def everything(self, e):
+        return list(self.big) + [x for b in self.cells.values() for x in b]
+
+    monkeypatch.setattr(pg._BoxGrid, "near", everything)
+    assert pg.merge_primitives(svg) == indexed
+    assert indexed.count("<path") > 5 and len(indexed) < len(svg), "non-vacuity: the scatter merged"
+
+
+def test_an_unreadable_extent_is_refused_by_any_bucket_holding_something():
+    """Feature 278: with the bucket grids, an element whose extent cannot be read still touches everything - a bucket
+    that skipped anything refuses it, an empty one does not - and a member with no extent marks a translucent bucket as
+    touching every newcomer."""
+    from l7r.diagram.interactive.extents import _BoxGrid, _file_extent, _refused
+
+    def bucket(translucent=False):
+        return {"blocked": False, "translucent": translucent, "outlined": False, "extents": [], "skip": [], "ext_grid": _BoxGrid(), "ext_none": False, "skip_grid": _BoxGrid()}
+
+    b = bucket()
+    assert _refused(b, None) is False
+    b["skip"].append((0.0, 0.0, 5.0, 5.0))
+    b["skip_grid"].add((0.0, 0.0, 5.0, 5.0))
+    assert _refused(b, None) is True
+    t = bucket(translucent=True)
+    _file_extent(t, None)
+    assert t["ext_none"] is True and _refused(t, (500.0, 500.0, 2.0)) is True

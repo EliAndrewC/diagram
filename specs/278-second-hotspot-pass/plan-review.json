@@ -1,0 +1,100 @@
+{
+ "feature": "278-second-hotspot-pass",
+ "plan_sha256": "7a810eee51626403fd6a969fb2188c7d8931ab6c3cf41da4145778fb0990973e",
+ "reviewed": "2026-09-28",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "A1",
+   "summary": "router judges free/band per cell on first ask",
+   "class": "within",
+   "why": "FR-001 as written; same predicates and short-circuit order, start/goal preset free, in_band asked only of free cells - exact. Unchanged from round 1."
+  },
+  {
+   "id": "A2",
+   "summary": "doorstep fabric_index hoisted once per house",
+   "class": "within",
+   "why": "FR-002; hard/water not mutated in _serve_stragglers, passable built once per house - exact. Unchanged."
+  },
+  {
+   "id": "A3",
+   "summary": "footbridge widening asks a segment grid, quad box widened by 3 px",
+   "class": "within",
+   "why": "FR-003; constant reach, under is a max, identity skip kept - exact. Unchanged."
+  },
+  {
+   "id": "A4",
+   "summary": "wells pool re-sorted only when placed grows; key parts cached",
+   "class": "within",
+   "why": "FR-004; exact. Unchanged."
+  },
+  {
+   "id": "A5",
+   "summary": "hem pass inside_any via a plot grid extended with each appended hem plot; _at_f fall values cached per _carve call, entries holding their polylines",
+   "class": "within",
+   "why": "FR-007; round-1 item fixed: the grid now sees plots _hem_pass appends inside its loop (carve.py 573), and the cache is scoped to one _carve (the _hem_pass and _carve_sector calls at carve.py 621-623 are inside it) with ids pinned by held references and the same first-segment walk - exact."
+  },
+  {
+   "id": "A6",
+   "summary": "notice board: bed segment grid, hard-poly box grid, quad_hits_poly stages 2-3 trimmed, stage 1 kept whole",
+   "class": "within",
+   "why": "FR-009; round-1 item fixed: overlap.py 116 (corner-in-polygon) keeps the full test; stage 2 (vertex in convex quad implies vertex in quad box) and stage 3 (edge box must meet quad box) prune exactly."
+  },
+  {
+   "id": "A7",
+   "summary": "grove static families in one tagged KeepoutGrid, too_near separate",
+   "class": "within",
+   "why": "FR-010; exact. Unchanged."
+  },
+  {
+   "id": "A8",
+   "summary": "page bucket extents/skip carry a box grid",
+   "class": "within",
+   "why": "FR-011; exact. Unchanged."
+  },
+  {
+   "id": "A9",
+   "summary": "only the kept attempt is finished",
+   "class": "within",
+   "why": "FR-006 as written. Unchanged."
+  },
+  {
+   "id": "B1",
+   "summary": "refuse a house whose center stands more than WEB_REACH_FT deep in the union of the web's hard ground (envelope, crops, toe, wet) inflated by WEB_HARD_GAP; FR-005 answered for seats unreachable by construction, the rest left to the roll's self-report",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "The round-1 form. Against the GM's purpose (the same exercise: make it faster, maps may shift while settlements stay what they are) and FR-005 (refuse a seat the reach rule would fail), refusing a SUBSET of those seats is legitimate where general seat-time reach prediction is recorded as failed (driver.py; wrong on five of six seeds), and it is recorded with that reason. Checked in code: web lanes keep WEB_HARD_GAP off `hard` (web.py 478/517, route.py 111, serve.py 130/419, clearance.py 32), skeleton arms clip 20 off it (web.py 125), the spur tip stops SPUR_SETBACK=17 out of the envelope (track.py spur_path) and the connector is route_around the envelope at 17 (track.py 405/524). One premise is not exact: connector_track keeps the LEAST-BAD bearing over crops and wet ground (clearance.py 302), so a connector can stand inside the crop/toe/wet part of the union. A refusal is then wrong only if that connector passes within 100 ft of a house more than 100 ft deep in the union, which the placer's own hard ground (plots, marshes, toe already refused for the house) makes rare, and SC-013 (no fewer houses, cohort, rescue scenario, toys) bounds the outcome. Not blocking; the implementation should MEASURE the premise (no drawn way point inside the union on the pool and the 24-seed cohort) rather than assert it."
+  },
+  {
+   "id": "B2",
+   "summary": "commons scatter vectorized; compliance test + density within 5%",
+   "class": "within",
+   "why": "FR-008 as written. Unchanged."
+  },
+  {
+   "id": "C-FR012",
+   "summary": "make map files the render roll into the roll cache so the reference check HITs",
+   "class": "within",
+   "why": "FR-012; round-1 item fixed: proof is the build count of one make map and the reference line reading HIT (SC-012)."
+  },
+  {
+   "id": "C-FR013",
+   "summary": "page records a registry hash; sync-in re-plates on mismatch; test unchanged with a planted missing class",
+   "class": "within",
+   "why": "FR-013's first option. Unchanged."
+  },
+  {
+   "id": "C-FR014",
+   "summary": "oracle runs the pattern per line holding .md over every tracked text",
+   "class": "within",
+   "why": "FR-014; exact. Unchanged."
+  },
+  {
+   "id": "D",
+   "summary": "after-figures into measurements.json, manifest comparison, SC-013 rescue scenario and 10/20-household toys, cohort, perf bookends, dev/performance.md residue incl. renderer wait and durations list",
+   "class": "within",
+   "why": "FR-015/SC-013/SC-014; round-1 item fixed: the rescue scenario, the toys, Sawada's research entry (B1 row), the renderer wait and the durations list are now named."
+  }
+ ],
+ "verdict": "CLEAR"
+}

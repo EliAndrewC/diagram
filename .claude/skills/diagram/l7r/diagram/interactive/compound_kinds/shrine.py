@@ -111,7 +111,8 @@ class WritingRoom(Kind):
 
 class ShrineApproach(Kind):
     """
-    What: The approach - the path that runs from the grove's edge under the arches to the hall's step.
+    What: The approach - the path that runs from where the way enters the precinct under the arches to the hall's
+    step.
 
     Why: A shrine is entered along its approach, and the arch stands where the approach enters the shrine's ground; a
     row of arches along it is a donors' row, each arch a gift. So the path runs straight up the axis, and the arches
@@ -123,7 +124,7 @@ class ShrineApproach(Kind):
     Caveat: its width is a guess, and the arches' number and pitch are the GM's rulings, not the record's.
 
     Name: approach
-    Covers: the path from the grove's edge to the hall
+    Covers: the path from the precinct's edge to the hall
     Label: accurate
     Sources: jinja-jawiki, kudamatsu-stone-torii, kato-kawataka-torii
     Entry: research/religion-and-death.html - 'Torii spacing', 'How big is a country shrine, and what stands in its precinct?'
@@ -158,7 +159,7 @@ class ShrineBasin(Kind):
 
 class SacredTree(Kind):
     """
-    What: The sacred tree - the grove's greatest tree, ringed at its trunk by a straw rope.
+    What: The sacred tree - the precinct's greatest tree, ringed at its trunk by a straw rope.
 
     Why: A shrine keeps a sacred tree, marked as the deity's by the rope round it; many shrines were built where such
     a tree already stood. So one great tree stands near the approach, roped.
@@ -179,10 +180,10 @@ class SacredTree(Kind):
 
 class SweptClearing(Kind):
     """
-    What: The swept ground round the building - bare earth kept clear inside the grove, its edge ragged, with the
-    forecourt before the hall's step where the villagers gather.
+    What: The swept ground round the building - bare earth kept clear about it, its edge ragged, with the forecourt
+    before the hall's step where the villagers gather.
 
-    Why: The ground at a shrine was kept swept, the grove left standing round it, and the parish did the sweeping;
+    Why: The ground at a shrine was kept swept, its wood left standing, and the parish did the sweeping;
     swept ground spreads from where people walk and stops where they do not, so its edge is ragged, never ruled.
 
     Note: The swept ground and the parish's keeping of it are read; its ragged edge is the project's reading of how
@@ -192,7 +193,7 @@ class SweptClearing(Kind):
     from its use.
 
     Name: swept clearing
-    Covers: the swept ground and the forecourt inside the grove
+    Covers: the swept ground and the forecourt about the building
     Label: accurate
     Sources: chinju-no-mori-jawiki, sando-jawiki, kotobank-ujiko, ndl-crd-nanukabon
     Entry: research/religion-and-death.html - 'Is the ground around a shrine or a grave swept clear of scrub?', 'Why does that swept ground have a ragged edge?'
@@ -203,10 +204,10 @@ class SweptClearing(Kind):
 
 class Footpath(Kind):
     """
-    What: A worn footpath through the grove from the building's kitchen side to the well.
+    What: A worn footpath from the building's kitchen side to the well.
 
-    Why: Water is carried from the well to the kitchen every day, and a way worn by feet runs where they go - through
-    the grove, off the sanctuary's ground.
+    Why: Water is carried from the well to the kitchen every day, and a way worn by feet runs where they go - off
+    the sanctuary's ground.
 
     Note: The path is a guess, the drawing's own reading of daily use; no page read draws a shrine's path to its well.
 

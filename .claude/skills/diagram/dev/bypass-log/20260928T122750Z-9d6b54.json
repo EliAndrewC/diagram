@@ -1,0 +1,6 @@
+{
+  "utc": "20260928T122750Z",
+  "guard": "pair-hooks",
+  "what": "review prerequisites",
+  "reason": "REVIEW_PREREQ_OK: hoshigaoka is a frozen hand-authored legacy map with no pool generator by design; features 268 and 270 reviewed its hand edits the same way"
+}

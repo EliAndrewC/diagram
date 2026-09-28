@@ -515,3 +515,42 @@ def test_frontage_walks_past_the_first_leg_of_a_bent_street():
     s.meta(name="T", scale="town", ftpx=1, toscale=True)
     assert s.frontage([(100.0, 500.0), (300.0, 500.0), (700.0, 500.0)], ["merchant"] * 6, spacing=58) == 6
     assert any(b["x"] > 300 for b in s.M["buildings"]), "seats were taken on the SECOND leg"
+
+
+def test_hard_clear_from_its_box_index_equals_the_scan():
+    """Feature 278 (FR-009): `_hard_clear` asks a grid of the hard polygons' boxes instead of comparing every box; over
+    random footprints it answers as the scan did (restated here), and the grid is rebuilt when the hard ground grows."""
+    import math
+    import random
+
+    from l7r.diagram.settlement import Settlement
+    from l7r.diagram.settlement._geom import quad_hits_poly
+
+    s = Settlement(900, 900, seed=2)
+    s.meta(name="H", scale="hamlet", ftpx=1, toscale=True)
+    rng = random.Random(278)
+
+    def blob():
+        cx, cy, r, n = rng.uniform(0, 900), rng.uniform(0, 900), rng.uniform(10, 120), rng.randint(4, 12)
+        return [(cx + r * math.cos(2 * math.pi * k / n), cy + r * math.sin(2 * math.pi * k / n)) for k in range(n)]
+
+    def scan(x, y, w, h):
+        th = math.radians(5.0)
+        w0 = w
+        w, h = w0 * math.cos(th) + h * math.sin(th), w0 * math.sin(th) + h * math.cos(th)
+        fp = [(x - w / 2, y - h / 2), (x + w / 2, y - h / 2), (x + w / 2, y + h / 2), (x - w / 2, y + h / 2)]
+        hard = s._hard_ground()
+        return not any(
+            quad_hits_poly(fp, hp) for hp, (hx0, hy0, hx1, hy1) in zip(hard, s._poly_bboxes(hard), strict=False) if not (x + w / 2 < hx0 or x - w / 2 > hx1 or y + h / 2 < hy0 or y - h / 2 > hy1)
+        )
+
+    for rnd in range(2):
+        for _ in range(12):
+            s.hard_polys.append(blob())
+        clear = 0
+        for _ in range(1500):
+            x, y, w, h = rng.uniform(0, 900), rng.uniform(0, 900), rng.uniform(10, 60), rng.uniform(10, 40)
+            want = scan(x, y, w, h)
+            assert s._hard_clear(x, y, w, h) == want
+            clear += want
+        assert 100 < clear < 1400, f"non-vacuity, round {rnd}"

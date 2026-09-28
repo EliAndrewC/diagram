@@ -11512,6 +11512,43 @@
    "ミズオオバコ"
   ]
  },
+ "hotoke": {
+  "def": "A buddha, or any deity of Buddhist worship, set beside the kami of Shinto; a shrine or temple may enshrine either.",
+  "variants": [
+   "hotoke"
+  ]
+ },
+ "Yamanote": {
+  "def": "The JR Yamanote line, the railway loop around central Tokyo; \"inside the Yamanote loop\" means the city's core.",
+  "variants": [
+   "Yamanote",
+   "Yamanote loop"
+  ]
+ },
+ "break of slope": {
+  "def": "A line where a slope's steepness changes: the lower break is the concave bend at the slope's foot, the upper break the convex bend at its top.",
+  "variants": [
+   "break of slope",
+   "lower break of slope",
+   "upper break of slope",
+   "lower break",
+   "upper break"
+  ]
+ },
+ "meisho zue": {
+  "def": "An Edo-period illustrated gazetteer of famous places, whose bird's-eye pictures of shrines, temples and scenery were sketched from life.",
+  "variants": [
+   "meisho zue",
+   "meisho-zue"
+  ]
+ },
+ "meso scale": {
+  "def": "In a study of land by spatial scale, the middle scale: a district, between the whole region and a single site. The Tokyo shrine-grove survey's meso scale is the ground inside the Yamanote loop, between all 23 wards and single shrines.",
+  "variants": [
+   "meso scale",
+   "meso-scale"
+  ]
+ },
  "low-trunk mulberry": {
   "def": "Mulberry trained on a short trunk, cut back lower than mid-trunk mulberry but above the ground where root-cut bushes are cut. In the Taihu district it came into use after mid-trunk mulberry had spread from the Ming dynasty on.",
   "variants": [

@@ -113,15 +113,21 @@ def region_blocked(quad: Poly, circles: Sequence[tuple[float, float, float]], ha
 def quad_hits_poly(quad: Poly, poly: Poly) -> bool:
     """Does a convex cell REGION meet an arbitrary polygon? Containment either way, plus edge
     crossings - so a polygon threading between the cell's sample points is still caught."""
-    if any(point_in_poly(qx, qy, poly) for qx, qy in quad):
+    if any(point_in_poly(qx, qy, poly) for qx, qy in quad):  # containment is not local to the quad's box: the full test
         return True
-    if any(point_in_poly(px, py, quad) for px, py in poly):
+    # ONLY WHAT THE QUAD'S BOX CAN MEET (feature 278, FR-009): a polygon vertex outside the quad's box cannot be inside the
+    # quad, and a polygon edge whose box misses the quad's box cannot cross a quad edge - so on a large polygon (a paddy
+    # field's envelope, a wide marsh) the two stages below skip nearly every vertex and edge without changing an answer.
+    qx0, qy0 = min(q[0] for q in quad), min(q[1] for q in quad)
+    qx1, qy1 = max(q[0] for q in quad), max(q[1] for q in quad)
+    if any(qx0 <= px <= qx1 and qy0 <= py <= qy1 and point_in_poly(px, py, quad) for px, py in poly):
         return True
-    for i in range(len(quad)):
-        a, b = quad[i], quad[(i + 1) % len(quad)]
-        for j in range(len(poly)):
-            c, d = poly[j], poly[(j + 1) % len(poly)]
-            if segments_cross(a, b, c, d):
+    for j in range(len(poly)):
+        c, d = poly[j], poly[(j + 1) % len(poly)]
+        if max(c[0], d[0]) < qx0 or min(c[0], d[0]) > qx1 or max(c[1], d[1]) < qy0 or min(c[1], d[1]) > qy1:
+            continue
+        for i in range(len(quad)):
+            if segments_cross(quad[i], quad[(i + 1) % len(quad)], c, d):
                 return True
     return False
 
