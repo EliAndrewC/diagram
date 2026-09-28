@@ -272,9 +272,11 @@ class GroundCoverMixin:
                     _wd_seated.append((cx, cy, r))
                     self.M["tree_crowns"] += [round(cx, 1), round(cy, 1), round(r, 1)]
                     _wd_crowns += 1
-                    g.append(f'<ellipse cx="{cx:.1f}" cy="{cy + 2 * bs:.1f}" rx="{r:.1f}" ry="{r * 0.72:.1f}" fill="#59703E" fill-opacity="0.30"/>')  # soft ground shadow
-                    g.append(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r:.1f}" fill="{col}" stroke="#4C6234" stroke-width="0.7"/>')  # the crown
-                    g.append(f'<circle cx="{cx - r * 0.32:.1f}" cy="{cy - r * 0.32:.1f}" r="{r * 0.42:.1f}" fill="#A6BA79" fill-opacity="0.55"/>')  # sun highlight
+                    # ONE FLAT DISC PER CROWN (GM 2026-09-28), as in groves.py and woods.py. A pale "sun highlight"
+                    # disc inside each crown and a soft ground shadow under it were a shading convention that
+                    # the GM read as a second tree or a trunk, worse under the page's highlighting; color alone
+                    # tells one kind of tree from another.
+                    g.append(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r:.1f}" fill="{col}" stroke="#4C6234" stroke-width="0.7"/>')
             else:
                 # A THROW OUTSIDE THE PREDICTED FRAME COSTS ITS TWO DRAWS AND NOTHING ELSE (feature 224): ~90% of a hamlet's
                 # throws land where the frame will clip them, and each used to pay the keep-out test and its marks' draws
