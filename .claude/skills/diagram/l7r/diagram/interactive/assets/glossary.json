@@ -176,7 +176,8 @@
    "Shinshū",
    "Shin sect",
    "Ikkō-shū",
-   "Ikkō"
+   "Ikkō",
+   "Shinshu"
   ]
  },
  "Kamakura period": {
@@ -1124,6 +1125,7 @@
   "variants": [
    "daikan",
    "intendancy",
+   "intendancies",
    "intendant",
    "intendants"
   ]
@@ -1248,7 +1250,9 @@
  "doma": {
   "def": "The earth-floored working half of a farmhouse, where the hearth, the kitchen work and the animals were.",
   "variants": [
-   "doma"
+   "doma",
+   "earth floor",
+   "earth floors"
   ]
  },
  "dooryard": {
@@ -1590,6 +1594,8 @@
   "def": "Siting graves, houses and villages by the lie of hills, water and wind - feng shui and its Japanese kin.",
   "variants": [
    "geomantic",
+   "geomancer",
+   "geomancers",
    "geomancy"
   ]
  },
@@ -3134,6 +3140,7 @@
   "def": "Walling made by pounding damp earth in layers inside a timber form - the oldest form of Chinese city wall, and why those walls run straight.",
   "variants": [
    "rammed earth",
+   "rammed-earth",
    "hangtu",
    "hanchiku"
   ]
@@ -5653,7 +5660,9 @@
    "ni-no-torii",
    "ni no torii",
    "san-no-torii",
-   "san no torii"
+   "san no torii",
+   "ichi-",
+   "ni-"
   ]
  },
  "Hachiman": {
@@ -5698,11 +5707,206 @@
    "dohyo"
   ]
  },
+ "irikawa": {
+  "def": "The inner veranda-corridor of a shoin-style house, inside the building line between the rooms and the outer veranda; by the dictionary one ken wide, though some houses made it half that.",
+  "variants": [
+   "irikawa",
+   "irikawa-en"
+  ]
+ },
+ "nure-en": {
+  "def": "The open veranda on the outer edge of a house, outside the shutters and usually a step below the floor within.",
+  "variants": [
+   "nure-en"
+  ]
+ },
+ "hiroen": {
+  "def": "A wide veranda set along the outside of the formal rooms, often facing the garden.",
+  "variants": [
+   "hiroen"
+  ]
+ },
+ "zashiki": {
+  "def": "The formal matted room of a house, with its alcove, where the master received guests.",
+  "variants": [
+   "zashiki",
+   "oku-zashiki"
+  ]
+ },
+ "tokonoma": {
+  "def": "The display alcove of a formal room, where a scroll or an arrangement stands.",
+  "variants": [
+   "tokonoma"
+  ]
+ },
+ "butsuma": {
+  "def": "The room of a house's Buddhist altar, where its Buddha images and the memorial tablets of its dead are kept.",
+  "variants": [
+   "butsuma",
+   "butsudan"
+  ]
+ },
+ "ihai": {
+  "def": "A memorial tablet of the dead, kept in the household altar; a house keeps those of its successive heads and their spouses.",
+  "variants": [
+   "ihai"
+  ]
+ },
+ "watari-roka": {
+  "def": "A covered corridor between two buildings that joins them.",
+  "variants": [
+   "watari-roka"
+  ]
+ },
+ "omote": {
+  "def": "The front, public part of a warrior's residence: the entrance, the halls and the rooms where the lord received and governed.",
+  "variants": [
+   "omote",
+   "omote-muki"
+  ]
+ },
+ "oku": {
+  "def": "The inner, private part of a warrior's residence, where the lord's family lived and coming and going was limited.",
+  "variants": [
+   "oku",
+   "oku-muki"
+  ]
+ },
+ "naka-oku": {
+  "def": "A modern name for the lord's own working room and bedroom, behind the omote and before the oku.",
+  "variants": [
+   "naka-oku"
+  ]
+ },
+ "goza-no-ma": {
+  "def": "The lord's own sitting room in a daimyo mansion, on the omote side with the great hall and the audience hall.",
+  "variants": [
+   "goza-no-ma"
+  ]
+ },
+ "oku-no-ma": {
+  "def": "The inner room of a house, deeper in than the rooms by the entrance.",
+  "variants": [
+   "oku-no-ma"
+  ]
+ },
+ "engawa": {
+  "def": "The veranda of a Japanese house, a floored strip along an outer face. Older dictionaries use the word for the veranda in general; in recent use it also names the irikawa, the veranda inside the building line.",
+  "variants": [
+   "engawa"
+  ]
+ },
+ "Katsura": {
+  "def": "The Katsura Imperial Villa in Kyoto, a surviving seventeenth-century shoin-style house whose halls show veranda widths changing from face to face.",
+  "variants": [
+   "Katsura",
+   "Katsura Imperial Villa",
+   "Katsura Rikyu"
+  ]
+ },
+ "Ko-shoin": {
+  "def": "The Old Shoin, the first-built hall of the Katsura villa.",
+  "variants": [
+   "Ko-shoin"
+  ]
+ },
+ "Naka-shoin": {
+  "def": "The Middle Shoin, the hall of the Katsura villa built beside the Ko-shoin.",
+  "variants": [
+   "Naka-shoin"
+  ]
+ },
+ "Genna": {
+  "def": "The Japanese era of 1615 to 1624, following Keicho.",
+  "variants": [
+   "Genna",
+   "Genna era"
+  ]
+ },
+ "ni-no-ma": {
+  "def": "The first, second and third rooms of a formal suite, numbered from the upper seat down; the ichi-no-ma is the main room.",
+  "variants": [
+   "ni-no-ma",
+   "ichi-no-ma",
+   "san-no-ma"
+  ]
+ },
+ "jodan-no-ma": {
+  "def": "A room whose floor is raised a step above the rooms before it, the upper seat of a formal suite, where the master sat.",
+  "variants": [
+   "jodan-no-ma",
+   "jodan"
+  ]
+ },
+ "tsuke-shoin": {
+  "def": "A built-in writing desk set into a window bay beside the tokonoma, one of the fixed decorations of a shoin-style main room.",
+  "variants": [
+   "tsuke-shoin"
+  ]
+ },
+ "nando-gamae": {
+  "def": "Decorative doors on the side wall of a shoin-style main room, framed like the doorway to a sleeping room or storeroom, one of the fixed decorations of the upper seat.",
+  "variants": [
+   "nando-gamae",
+   "chodaigamae"
+  ]
+ },
+ "kirime-en": {
+  "def": "An outer veranda whose boards run out from the building, so their ends face the edge of the veranda.",
+  "variants": [
+   "kirime-en"
+  ]
+ },
+ "massing": {
+  "def": "How a building's parts are arranged as masses: one block under one roof, or separate halls set apart and joined. A residence takes one form or the other.",
+  "variants": [
+   "massing"
+  ]
+ },
+ "shogun": {
+  "def": "The military ruler of Japan, head of the warrior government (the bakufu), above the daimyo. In the Edo period the Tokugawa house held the office.",
+  "variants": [
+   "shogun",
+   "shoguns"
+  ]
+ },
+ "Momoyama": {
+  "def": "The period of Japan's unification, about 1568 to 1600, just before the Edo period.",
+  "variants": [
+   "Momoyama",
+   "Momoyama period"
+  ]
+ },
+ "hojo": {
+  "def": "The abbot's quarters of a Zen temple. Its plan, rooms in two rows divided front and back, is a form the upper samurai house also took.",
+  "variants": [
+   "hojo",
+   "hojo form"
+  ]
+ },
+ "ima": {
+  "def": "The everyday living room of a Japanese house, the household's own room. In the Kuchiba house at Hagi it stands beside the kitchen.",
+  "variants": [
+   "ima"
+  ]
+ },
+ "hikae-no-ma": {
+  "def": "A waiting room off the entrance, where visitors or attendants wait before being shown in.",
+  "variants": [
+   "hikae-no-ma"
+  ]
+ },
  "undersluice": {
   "def": "At a river headworks, the gated low part of the weir beside the canal's intake: the silt-laden bottom water is passed on downstream through it, so that the cleaner top water is what feeds the canal.",
   "variants": [
    "undersluice",
    "undersluices"
+  ]
+ },
+ "taimenjo": {
+  "def": "An audience hall: the hall on the omote (front) side of a daimyo mansion where the lord received retainers and visitors in formal audience.",
+  "variants": [
+   "taimenjo"
   ]
  },
  "separation zone": {
@@ -5713,11 +5917,49 @@
    "separated flow"
   ]
  },
+ "hiroma": {
+  "def": "The great hall: the largest formal hall on the omote (front) side of a castle palace or daimyo mansion, used for audiences, events and ceremonies.",
+  "variants": [
+   "hiroma"
+  ]
+ },
+ "genkan-no-ma": {
+  "def": "The entrance room: the first room inside a house's genkan (entrance), from which the rest of the rooms are reached.",
+  "variants": [
+   "genkan-no-ma"
+  ]
+ },
+ "nageshi": {
+  "def": "A horizontal timber band fixed around a room's walls above the sliding doors; in a formal room its nail heads are hidden under decorative metal nail covers.",
+  "variants": [
+   "nageshi"
+  ]
+ },
+ "midaidokoro": {
+  "def": "The formal title of the shogun's principal wife, who presided over the women's quarters of the palace.",
+  "variants": [
+   "midaidokoro"
+  ]
+ },
+ "Osuzu corridor": {
+  "def": "The bell corridor at Edo castle: the only passage joining the shogun's own rooms to the walled-off women's quarters, a bell rung to announce the shogun's coming.",
+  "variants": [
+   "Osuzu corridor",
+   "Osuzu"
+  ]
+ },
  "Five Highways": {
   "def": "The five trunk roads of Edo-period Japan, the Tokaido among them. Their ordinary width was about 3 to 4 ken (5.4 to 7.2 m), wider close to Edo, and carts were forbidden on them until the Meiji period.",
   "variants": [
    "Five Highways",
    "gokaido"
+  ]
+ },
+ "branch house": {
+  "def": "A house split off from a main house, usually by a younger son, with its own head, its own property and its own line of ancestral tablets; Japanese bunke.",
+  "variants": [
+   "branch house",
+   "branch houses"
   ]
  },
  "post-horse system": {
@@ -5727,11 +5969,26 @@
    "post-horse"
   ]
  },
+ "shikidai": {
+  "def": "The low board step at a formal entrance (genkan), where a guest of rank stepped up from the earthen floor and was received; the name also went to the room behind it, which at the Sayama domain's council hall was 6 mats with a closet. In the Edo period an entrance with one was what the word genkan meant.",
+  "variants": [
+   "shikidai",
+   "shiki-dai"
+  ]
+ },
  "footslope": {
   "def": "The gentle lower slope at the foot of a hill or fan, above the wet ground. Here it is the dry ground a track can use to pass the ends of the wet toe.",
   "variants": [
    "footslope",
    "footslopes"
+  ]
+ },
+ "kyunin": {
+  "def": "A retainer of a domain who received a stipend or a small fief from the lord; at Sayama the middle-rank kyunin lived in detached houses the domain supplied.",
+  "variants": [
+   "kyunin",
+   "kyūnin",
+   "kyunins"
   ]
  },
  "fudoki": {
@@ -5741,10 +5998,22 @@
    "fudoki ko"
   ]
  },
+ "munamon": {
+  "def": "A simple gate with its own gabled roof resting on a single pair of posts. At the Koseki house at Shiroishi it is the gate from the street.",
+  "variants": [
+   "munamon"
+  ]
+ },
  "pledged land": {
   "def": "Farmland handed to a lender as security for a loan; the lender held or worked it until the loan was repaid, and kept it if the loan was not.",
   "variants": [
    "pledged land"
+  ]
+ },
+ "seigaiha": {
+  "def": "A traditional pattern of overlapping arcs arranged like fish scales, meant to show waves of the sea. It is used on cloth, paper and walls.",
+  "variants": [
+   "seigaiha"
   ]
  },
  "coursing": {
@@ -5756,10 +6025,22 @@
    "coursed"
   ]
  },
+ "yudono": {
+  "def": "A bath room in a house, found in the Edo period only in the residences of upper-rank samurai; a posting's residence listed it among its rooms, and a house plan names it beside the privy.",
+  "variants": [
+   "yudono"
+  ]
+ },
  "hiro": {
   "def": "A Japanese length of about 1.8 m (six shaku), the span of outstretched arms; used for the lengths of boats and rope.",
   "variants": [
    "hiro"
+  ]
+ },
+ "yonin": {
+  "def": "A steward in an official's household, who with the maids looked after the official and their family and had rooms of their own in the residence.",
+  "variants": [
+   "yonin"
   ]
  },
  "donggusup": {
@@ -5769,16 +6050,36 @@
    "동구숲"
   ]
  },
+ "gyozui": {
+  "def": "Washing oneself with water from a tub instead of bathing; how middle and lower samurai and ordinary people who had no bath of their own got clean when they did not go to the public bath.",
+  "variants": [
+   "gyozui"
+  ]
+ },
  "hydrosere": {
   "def": "The zonation from open water to dry land that every lowland wetland shows: open water, then the shallows, then reed swamp, then a sedge and wet-meadow zone, then dry ground.",
   "variants": [
    "hydrosere"
   ]
  },
+ "yoritsuki": {
+  "def": "The anteroom inside the entrance of a samurai house, between the shikidai entrance and the zashiki, where a visitor waited and was announced before being shown into the guest room.",
+  "variants": [
+   "yoritsuki",
+   "toritsugi"
+  ]
+ },
  "Baidu Baike": {
   "def": "A Chinese online encyclopedia whose entries anyone may edit; the record cites it only as an encyclopedia summary, not as a primary text.",
   "variants": [
    "Baidu Baike"
+  ]
+ },
+ "yosemune-zukuri": {
+  "def": "A hipped roof: four sloping faces, the two long faces meeting at the ridge and the two short ends sloping down to the eaves, with no gable.",
+  "variants": [
+   "yosemune-zukuri",
+   "yosemune"
   ]
  },
  "bastion": {
@@ -5788,10 +6089,23 @@
    "bastions"
   ]
  },
+ "honjin": {
+  "def": "The inn of a post town kept for traveling daimyo, hatamoto and shogunal officials, allowed what an ordinary inn was not: a front gate, a genkan with a shikidai, and a jodan-no-ma, the raised room of honor.",
+  "variants": [
+   "honjin",
+   "honjins"
+  ]
+ },
  "menbansho": {
   "def": "The main guard house of a Japanese barrier station, holding the upper guard office, a rest room and a bath.",
   "variants": [
    "menbansho"
+  ]
+ },
+ "tetsuki": {
+  "def": "One of the two grades of an intendant's staff, beside the tedai; the tetsuki and tedai of an intendancy lived in small houses (koya) and long-houses (nagaya) inside its compound.",
+  "variants": [
+   "tetsuki"
   ]
  },
  "mukaibansho": {
@@ -5800,10 +6114,22 @@
    "mukaibansho"
   ]
  },
+ "amado": {
+  "def": "The storm shutter: a board door set outside the openings of a Japanese building, running on a one-groove sill, closed at night and stowed by day in a box at the end of its run (the tobukuro); devised in the late sixteenth century, in its settled form from the seventeenth.",
+  "variants": [
+   "amado"
+  ]
+ },
  "gogura": {
   "def": "The village store for the tax rice in Edo-period Japan: one to a village or to several, holding the rice on its way out under strict guard.",
   "variants": [
    "gogura"
+  ]
+ },
+ "tobukuro": {
+  "def": "The box at the end of a run of storm shutters (amado) into which the shutters slide to be stored when not in use, by day.",
+  "variants": [
+   "tobukuro"
   ]
  },
  "myoji-taito": {
@@ -5812,10 +6138,23 @@
    "myoji-taito"
   ]
  },
+ "irori": {
+  "def": "The sunken hearth of a Japanese common house, cut into the floor of a room near the doma or the kitchen - most often at the center of the floored part - and sometimes set in the doma itself.",
+  "variants": [
+   "irori"
+  ]
+ },
  "Wanshu zaji": {
   "def": "A Ming-dynasty record of Wanping county, the county town in Beijing, quoted in the record for the town's fire-and-theft wards and watch posts.",
   "variants": [
    "Wanshu zaji"
+  ]
+ },
+ "joruri": {
+  "def": "A chanted narrative drama of the Edo period, sung to the shamisen and performed by puppets, the form later known as bunraku.",
+  "variants": [
+   "joruri",
+   "jōruri"
   ]
  },
  "yokocho": {
@@ -5824,10 +6163,27 @@
    "yokocho"
   ]
  },
+ "gun-bugyo": {
+  "def": "A domain official in charge of the rural districts outside the castle town, their villages and their taxes; the countryside counterpart of the town magistrate.",
+  "variants": [
+   "gun-bugyo",
+   "gun bugyo",
+   "district magistrate"
+  ]
+ },
  "kirisute-gomen": {
   "def": "A warrior's privilege in Edo-period Japan, named beside myoji-taito: the license to cut down a commoner who gave offense.",
   "variants": [
    "kirisute-gomen"
+  ]
+ },
+ "hip roof": {
+  "def": "A roof that slopes down to the eaves on all four sides, with no gable end.",
+  "variants": [
+   "hip roof",
+   "hip-roofed",
+   "hipped roof",
+   "hip-roof"
   ]
  },
  "keibodan": {
@@ -5836,10 +6192,25 @@
    "keibodan"
   ]
  },
+ "Kansei": {
+  "def": "A Japanese era name, 1789 to 1801; \"Kansei 6\" is 1794.",
+  "variants": [
+   "Kansei",
+   "Kansei era"
+  ]
+ },
  "shobodan": {
   "def": "Japan's volunteer fire brigade, a modern local body that still walks the night fire round.",
   "variants": [
    "shobodan"
+  ]
+ },
+ "Rakuchu rakugai": {
+  "def": "Painted folding screens showing scenes \"in and outside the capital,\" a panorama of Kyoto and its outskirts, made from the sixteenth century on. Builders' historians use them as a record of the buildings of the time.",
+  "variants": [
+   "Rakuchu rakugai",
+   "Rakuchu rakugai screens",
+   "Rakuchu rakugai zu"
   ]
  },
  "jobikeshi": {
@@ -5848,10 +6219,23 @@
    "jobikeshi"
   ]
  },
+ "gable-entered": {
+  "def": "Entered through the gable end, the short triangular end wall under the ridge, instead of through one of the long sides (tsumairi).",
+  "variants": [
+   "gable-entered"
+  ]
+ },
  "jinaicho": {
   "def": "A Japanese temple town ringed by a moat and rampart, the closed counterpart of the open gate-front town.",
   "variants": [
    "jinaicho"
+  ]
+ },
+ "Kinki": {
+  "def": "The region of central Japan around Kyoto, Osaka and Nara. It takes in the old home provinces, the Kinai.",
+  "variants": [
+   "Kinki",
+   "Kinki region"
   ]
  },
  "tauchiguruma": {
@@ -5861,10 +6245,24 @@
    "田打車"
   ]
  },
+ "nezumi-gaeshi": {
+  "def": "A rat-guard: a flared board or collar fixed around each post of a storehouse built on posts, so a rat climbing the post cannot get past it to the raised floor and the grain.",
+  "variants": [
+   "nezumi-gaeshi",
+   "rat-guard",
+   "rat-guards"
+  ]
+ },
  "yui": {
   "def": "Exchanged labor between farm households, lending one another hands at transplanting; it works because the households' planting dates differ.",
   "variants": [
    "yui"
+  ]
+ },
+ "takakura": {
+  "def": "A storehouse raised on posts, its floor built high to keep rats from the grain and to let air through against damp. In Japan it was still built on Amami Oshima, on Hachijojima and among the Ainu of Hokkaido into modern times.",
+  "variants": [
+   "takakura"
   ]
  },
  "oyaike": {
@@ -5873,10 +6271,24 @@
    "oyaike"
   ]
  },
+ "Ainu": {
+  "def": "The indigenous inhabitants of Hokkaido, the northern island of Japan, among whom storehouses on posts were still built into modern times.",
+  "variants": [
+   "Ainu"
+  ]
+ },
  "koike": {
   "def": "Child pond: one of the smaller irrigation ponds grouped under a parent pond (oyaike) in a Japanese parent-child pond system.",
   "variants": [
    "koike"
+  ]
+ },
+ "loose box": {
+  "def": "A stable stall big enough for a horse to move about in untied, as against a narrow stall where it stands tethered.",
+  "variants": [
+   "loose box",
+   "loose-box",
+   "loose-boxes"
   ]
  },
  "weineihe": {
@@ -5885,10 +6297,23 @@
    "weineihe"
   ]
  },
+ "karahafu": {
+  "def": "A curved gable that rises in a bow at its center and sweeps down and outward at each end, set over the gates and entrances of high-ranking buildings.",
+  "variants": [
+   "karahafu",
+   "kara-hafu"
+  ]
+ },
  "adlittoral": {
   "def": "Of a water plant, grown in the shallows at the water's edge; adlittoral lotus varieties stand in 10 to 20 cm of water.",
   "variants": [
    "adlittoral"
+  ]
+ },
+ "sanmon": {
+  "def": "The main gate of a Buddhist temple.",
+  "variants": [
+   "sanmon"
   ]
  },
  "kumi-chi": {
@@ -5897,10 +6322,22 @@
    "kumi-chi"
   ]
  },
+ "saikyosho": {
+  "def": "In the Edo town magistracy, the room where the magistrate handed down the ruling in a suit.",
+  "variants": [
+   "saikyosho"
+  ]
+ },
  "An'ei": {
   "def": "A Japanese era name: the years 1772 to 1781.",
   "variants": [
    "An'ei"
+  ]
+ },
+ "sengisho": {
+  "def": "In the Edo town magistracy, a room where the parties to a suit or an accused person were examined; the inner sengisho was a second such room further inside the compound.",
+  "variants": [
+   "sengisho"
   ]
  },
  "Bunsei": {
@@ -5909,16 +6346,36 @@
    "Bunsei"
   ]
  },
+ "shacho-sen'yokata": {
+  "def": "A section of the Edo town magistracy that kept the register of pardons and compiled the magistracy's collected records of its rulings.",
+  "variants": [
+   "shacho-sen'yokata"
+  ]
+ },
  "Kanbun": {
   "def": "A Japanese era name: the years 1661 to 1673.",
   "variants": [
    "Kanbun"
   ]
  },
+ "reikurikata": {
+  "def": "A section of the Edo town magistracy that searched earlier cases for precedents to set a sentence by, and kept the record of them.",
+  "variants": [
+   "reikurikata"
+  ]
+ },
  "Jokyo": {
   "def": "The Japanese era 1684 to 1688, of the halving of retainers' fiefs the record quotes.",
   "variants": [
    "Jokyo"
+  ]
+ },
+ "ronin": {
+  "def": "A samurai with no lord, and so no stipend: a masterless samurai. At a magistracy's court most ronin sat with the commoners on the gravel, and only those of good lineage sat on the lower veranda.",
+  "variants": [
+   "ronin",
+   "ronins",
+   "rōnin"
   ]
  },
  "wicket": {
@@ -5928,11 +6385,26 @@
    "wickets"
   ]
  },
+ "komo": {
+  "def": "Coarse matting woven of straw or rush, rougher than a mushiro. At a magistracy's court the town officials, headmen and landlords knelt on it behind the accused.",
+  "variants": [
+   "komo",
+   "komo matting"
+  ]
+ },
  "junk": {
   "def": "The Chinese cargo sailing boat that carried bulk goods on river and canal.",
   "variants": [
    "junk",
    "junks"
+  ]
+ },
+ "magistracy": {
+  "def": "A magistrate's office (bugyosho) - the compound where a magistrate did their work and held their court, hearing suits and judging crimes.",
+  "variants": [
+   "magistracy",
+   "magistracies",
+   "magistracies'"
   ]
  },
  "raku": {
@@ -5941,10 +6413,26 @@
    "raku"
   ]
  },
+ "agariya": {
+  "def": "A range of cells in an Edo-period jail, set apart from its great common cell. At Edo's Tenmacho jail there were two ranges, a front one (kuchi-agariya) and an inner one (oku-agariya), of three rooms each, 15 and 18 mats, each with a privy.",
+  "variants": [
+   "agariya",
+   "kuchi-agariya",
+   "oku-agariya"
+  ]
+ },
  "murabarai": {
   "def": "Banishment from the village: the heaviest punishment a village could put on one of its own.",
   "variants": [
    "murabarai"
+  ]
+ },
+ "Tenmacho": {
+  "def": "Edo's great jail compound (the Tenmacho royashiki), where the shogunate held prisoners in a 30-mat common cell and in smaller agariya rooms.",
+  "variants": [
+   "Tenmacho",
+   "Tenmacho's",
+   "Tenmacho jail"
   ]
  },
  "tokorobarai": {
@@ -5953,10 +6441,23 @@
    "tokorobarai"
   ]
  },
+ "tsukubo": {
+  "def": "A long pole with a T-shaped, barbed head, used by Edo officers to pin and hold a suspect at a distance. It was one of the three restraining tools set out at a guard post or court.",
+  "variants": [
+   "tsukubo",
+   "tsukubō"
+  ]
+ },
  "Wubei Zhi": {
   "def": "A great Ming-dynasty military treatise (1621), quoted in the record for what a wall's bastions were for.",
   "variants": [
    "Wubei Zhi"
+  ]
+ },
+ "sasumata": {
+  "def": "A long pole ending in a U-shaped fork, used to pin a suspect by the neck or body against a wall or the ground without closing in.",
+  "variants": [
+   "sasumata"
   ]
  },
  "normal depth": {
@@ -5965,16 +6466,35 @@
    "normal depth"
   ]
  },
+ "ishidaki": {
+  "def": "\"Stone-holding\": an Edo torture in which the accused knelt on a ridged wooden board while heavy stone slabs were stacked on the thighs.",
+  "variants": [
+   "ishidaki"
+  ]
+ },
  "笞": {
   "def": "The light bamboo cane, the lightest of the Five Punishments of the Chinese legal code: a beating on the buttocks, given in court by the yamen's runners.",
   "variants": [
    "笞"
   ]
  },
+ "soroban": {
+  "def": "Here, the board with triangular ridges that the accused knelt on in the ishidaki torture. It is named after the abacus, whose rods it resembles.",
+  "variants": [
+   "soroban"
+  ]
+ },
  "杖": {
   "def": "The heavy stick, the second of the Five Punishments of the Chinese legal code: a beating with a large stick on the back, buttocks or legs, given in court by the yamen's runners.",
   "variants": [
    "杖"
+  ]
+ },
+ "heishi": {
+  "def": "Heishi (平士), the Kaga domain's reading of the rank also read hirazamurai: ordinary full samurai of middle rank, above the foot soldiers (ashigaru). In Kanazawa's samurai quarter it was the lowest rank allowed to wall its land with earth; those below it planted hedges.",
+  "variants": [
+   "heishi",
+   "hirazamurai"
   ]
  },
  "pit rank": {
@@ -5984,6 +6504,13 @@
    "pit ranks"
   ]
  },
+ "pantile": {
+  "def": "A roof tile curved in an S across its width, so that each tile's edge overlaps the next. It is the English name for the Japanese sangawara, the ordinary tile of late Edo roofs.",
+  "variants": [
+   "pantile",
+   "pantiles"
+  ]
+ },
  "staking frame": {
   "def": "A frame set in the shallows at a tanning yard's bank, where salted hides are held in the river to steep for several days before the hair is scraped off.",
   "variants": [
@@ -5991,10 +6518,22 @@
    "staking frames"
   ]
  },
+ "yakuimon": {
+  "def": "A Japanese roofed gate of a single bay, one of the two forms a magistrate's post's main gate took beside the nagaya-mon; registered examples measure about 1.8 to 2.6 m (6 to 8.5 ft) across their frontage.",
+  "variants": [
+   "yakuimon"
+  ]
+ },
  "settlement core": {
   "def": "The middle of a settlement's dwellings, the point from which a direction out of town is measured.",
   "variants": [
    "settlement core"
+  ]
+ },
+ "Zhili": {
+  "def": "The metropolitan province of Qing China, surrounding Beijing; its governor-general held one of the highest provincial offices of the empire.",
+  "variants": [
+   "Zhili"
   ]
  },
  "night watch": {
@@ -6011,6 +6550,13 @@
    "hour of xu"
   ]
  },
+ "Tenjin": {
+  "def": "The deified ninth-century court scholar Sugawara no Michizane, worshiped as a god of learning; a Tenjin shrine is one dedicated to him.",
+  "variants": [
+   "Tenjin",
+   "Tenjin shrine"
+  ]
+ },
  "plinth": {
   "def": "The block or low stone base that a pillar, post or wall stands on, keeping the timber or earth above it off the wet ground.",
   "variants": [
@@ -6018,10 +6564,23 @@
    "plinths"
   ]
  },
+ "uchigenkan": {
+  "def": "The inner entrance of a samurai house, used by the other members of the household and its senior staff, while the main genkan was kept for the head of the house and honored guests.",
+  "variants": [
+   "uchigenkan"
+  ]
+ },
  "city grain": {
   "def": "The scale a city map is drawn at, about 3 ft of ground to a pixel, where a mark must be about 6 ft across to be seen at all.",
   "variants": [
    "city grain"
+  ]
+ },
+ "palanquin": {
+  "def": "A covered litter carried on poles by bearers, in which a person of rank rode; at a samurai residence it was set down against the step of the genkan, so its rider went straight into the building without touching the ground.",
+  "variants": [
+   "palanquin",
+   "palanquins"
   ]
  },
  "picket line": {
@@ -6046,16 +6605,40 @@
    "ever-normal granaries"
   ]
  },
+ "three-squads courtyard": {
+  "def": "The courtyard in a Chinese county yamen that housed its three squads of runners: the guards, the constables and the arresting officers.",
+  "variants": [
+   "three-squads courtyard",
+   "three-squads",
+   "sanban yuan"
+  ]
+ },
  "Qianlong": {
   "def": "The reign of the Qing emperor Qianlong, 1736-1796.",
   "variants": [
    "Qianlong"
   ]
  },
+ "stone lantern": {
+  "def": "A lantern built of stacked stone parts - from the top a jewel, a cap, a fire-box that holds the light, a middle platform, a post and a base. It came from China and Korea with Buddhism as a votive light for shrines and temples, and from the Momoyama period it was also set in tea gardens and ordinary gardens.",
+  "variants": [
+   "stone lantern",
+   "stone lanterns",
+   "ishidōrō",
+   "ishidoro"
+  ]
+ },
  "Jiaqing": {
   "def": "The reign of the Qing emperor Jiaqing, 1796-1820.",
   "variants": [
    "Jiaqing"
+  ]
+ },
+ "yukimi": {
+  "def": "A snow-viewing lantern: one of the named kinds of stone lantern, told apart by its use and shape.",
+  "variants": [
+   "yukimi",
+   "snow-viewing lantern"
   ]
  },
  "Azuchi-Momoyama period": {
@@ -6065,6 +6648,13 @@
    "Azuchi-Momoyama"
   ]
  },
+ "borrowed scenery": {
+  "def": "A garden laid out so that a view beyond its own boundary - a distant hill, a temple roof, a stand of trees - is framed as part of the garden's picture (shakkei in Japanese).",
+  "variants": [
+   "borrowed scenery",
+   "borrowed-scenery"
+  ]
+ },
  "loophole": {
   "def": "A narrow opening cut through a castle wall so that defenders can shoot out through it.",
   "variants": [
@@ -6072,10 +6662,33 @@
    "loopholes"
   ]
  },
+ "yorishiro": {
+  "def": "The object a god comes down to and dwells in when it is worshipped - often an old tree or a natural stone - which could serve as a household god's seat in place of a shrine.",
+  "variants": [
+   "yorishiro"
+  ]
+ },
+ "udegi gate": {
+  "def": "A simple gate whose small roof rests on arm-beams (udegi) projecting from the tops of its two posts; a common gate at a middle-rank samurai house.",
+  "variants": [
+   "udegi gate",
+   "udegi",
+   "udegimon"
+  ]
+ },
  "formwork": {
   "def": "The temporary boards that hold earth or plaster in shape while a wall is rammed or set; they are taken away once the wall stands.",
   "variants": [
    "formwork"
+  ]
+ },
+ "kesa": {
+  "def": "a diagonal sword cut from the shoulder down across the body; a reverse-kesa cut runs on the opposite diagonal",
+  "variants": [
+   "kesa",
+   "kesa cut",
+   "kesa cuts",
+   "reverse-kesa"
   ]
  },
  "commutation": {
@@ -6086,11 +6699,23 @@
    "commute"
   ]
  },
+ "sodegarami": {
+  "def": "a long-shafted arrest weapon with a head of barbs, used to catch an offender's clothing; one of the \"three tools\" kept at Edo-period checkpoints and guard posts",
+  "variants": [
+   "sodegarami"
+  ]
+ },
  "kokudai-no": {
   "def": "Paying the land tax, or a share of it, in money reckoned at the price of the rice owed; one Edo source puts it at three to four tenths of the whole tax.",
   "variants": [
    "kokudai-no",
    "kokudaino"
+  ]
+ },
+ "Satsuma": {
+  "def": "a domain in the far south of Japan, ruled through the Edo period by the Shimazu house",
+  "variants": [
+   "Satsuma"
   ]
  },
  "natto": {
@@ -6099,10 +6724,25 @@
    "natto"
   ]
  },
+ "kuchidome": {
+  "def": "A domain's own border guard post in the Edo period, set where its roads led into a neighboring domain or the shogun's land, to watch the people and goods crossing - chiefly to stop the domain's produce leaving - and sometimes to tax the goods at a fixed rate.",
+  "variants": [
+   "kuchidome",
+   "kuchidome bansho",
+   "kuchidome guard post",
+   "kuchidome guard posts"
+  ]
+ },
  "randori": {
   "def": "Free practice in jujutsu and the other grappling arts: partners attack and throw each other freely rather than following a set sequence. It needs a floor that can take a fall, which is one reason practice halls came to be floored with boards or tatami.",
   "variants": [
    "randori"
+  ]
+ },
+ "Nippo Jisho": {
+  "def": "A Japanese-Portuguese dictionary of 1603-04. A word found in it was already in use by then.",
+  "variants": [
+   "Nippo Jisho"
   ]
  },
  "Four Books and Five Classics": {
@@ -6113,6 +6753,12 @@
    "Five Classics"
   ]
  },
+ "Nihon Kokugo Daijiten": {
+  "def": "The largest dictionary of the Japanese language. Each entry gives a word's meaning and its earliest recorded uses, and Kotobank reproduces its entries.",
+  "variants": [
+   "Nihon Kokugo Daijiten"
+  ]
+ },
  "enfeoffment": {
   "def": "A lord's grant of a domain to a vassal, who holds it in return for service - as when Ikeda Terumasa was granted Himeji in 1600 at an assessed yield of 520,000 koku.",
   "variants": [
@@ -6121,10 +6767,26 @@
    "enfeoffed"
   ]
  },
+ "compound shrine": {
+  "def": "A small shrine standing inside a walled compound - a residence or an official's office - rather than on grounds of its own, so the ground in front of its hall is small.",
+  "variants": [
+   "compound shrine",
+   "compound shrines"
+  ]
+ },
  "kuruwa": {
   "def": "The Japanese word for a castle's bailey: one of the walled or ditched enclosures a castle's layout divides its ground into, the innermost being the honmaru.",
   "variants": [
    "kuruwa"
+  ]
+ },
+ "aidono": {
+  "def": "Enshrining two or more kami together in one shrine hall, or that hall itself; the secondary kami are often honored below the main one. An aidono-zukuri hall is two bays joined into one with two doors, or several small halls joined under a single roof.",
+  "variants": [
+   "aidono",
+   "aidono-zukuri",
+   "aiden",
+   "aidonoshin"
   ]
  },
  "shell keep": {
@@ -6136,6 +6798,13 @@
    "square keeps"
   ]
  },
+ "Kasuga-style": {
+  "def": "A small one-bay shrine hall entered at its gable end, with a roof carried forward over the entrance steps; named for the Kasuga shrine at Nara.",
+  "variants": [
+   "Kasuga-style",
+   "Kasuga-zukuri"
+  ]
+ },
  "trebuchet": {
   "def": "A siege engine that throws stones from a pivoting beam, worked by a counterweight or by a crew hauling ropes; in Europe it came into use around the end of the 12th century.",
   "variants": [
@@ -6143,11 +6812,24 @@
    "trebuchets"
   ]
  },
+ "Nagare-style": {
+  "def": "The commonest shrine-hall style: a gabled roof whose front slope runs on forward in one long sweep to shelter the entrance steps.",
+  "variants": [
+   "Nagare-style"
+  ]
+ },
  "dead ground": {
   "def": "Ground at the foot of a wall that its defenders cannot shoot into from the wall-top; at a square corner, the angle itself.",
   "variants": [
    "dead ground",
    "dead space"
+  ]
+ },
+ "Jingu": {
+  "def": "The Grand Shrine of Ise, the shrine of the sun goddess; a Jingu talisman is the paper talisman it issues to households, kept in the place of honor on a household altar shelf.",
+  "variants": [
+   "Jingu",
+   "Jingū"
   ]
  },
  "siege mining": {
@@ -6158,10 +6840,24 @@
    "miner's"
   ]
  },
+ "ninjōbon": {
+  "def": "A kind of popular novel of the late Edo period, about the love affairs and everyday lives of townspeople.",
+  "variants": [
+   "ninjōbon",
+   "ninjobon"
+  ]
+ },
  "Hakka": {
   "def": "A Han Chinese group of the hill country where Fujian, Guangdong and Jiangxi meet, whose clans built most of the Fujian tulou.",
   "variants": [
    "Hakka"
+  ]
+ },
+ "assignation house": {
+  "def": "A house that rented private rooms by the evening, where guests met entertainers or lovers; in Japanese a machiai, one of the customer trades of the Edo-period towns.",
+  "variants": [
+   "assignation house",
+   "assignation houses"
   ]
  },
  "Suzaku-oji": {
@@ -6186,6 +6882,12 @@
    "Heian-kyō's"
   ]
  },
+ "funabansho": {
+  "def": "A boat watch post: an office that Edo-period domains set up at the landings of busy boat routes and at other key points, to inspect passing boats and collect taxes.",
+  "variants": [
+   "funabansho"
+  ]
+ },
  "Heijo-kyo": {
   "def": "The imperial capital at Nara before Heian-kyo, also a grid on the Chinese model.",
   "variants": [
@@ -6195,10 +6897,23 @@
    "Heijō-kyō's"
   ]
  },
+ "yoriai": {
+  "def": "A rank of hatamoto (bannermen); the rank that held the Nakagawa river watch duty.",
+  "variants": [
+   "yoriai",
+   "yoriai-rank"
+  ]
+ },
  "Engishiki": {
   "def": "A 10th-century collection of Japanese court procedures and regulations, completed in 927, which records the dimensions of Heian-kyo.",
   "variants": [
    "Engishiki"
+  ]
+ },
+ "funadama": {
+  "def": "The guardian spirit of a boat, kept aboard in the hull at the foot of the mast, as dolls, coins, hair, grain or dice placed there; it is sometimes also given a shrine on land, and is chiefly worshipped by fishermen and shipwrights.",
+  "variants": [
+   "funadama"
   ]
  },
  "Bunka": {
@@ -6215,11 +6930,32 @@
    "Morisada mankō"
   ]
  },
+ "sho": {
+  "def": "A Japanese measure of volume, a tenth of a to. The shogunate's rice bale held 3 to and 5 sho.",
+  "variants": [
+   "sho"
+  ]
+ },
+ "steelyard": {
+  "def": "A hand-held weighing beam with the load hung from its short arm and a counterweight slid along its long, marked arm until it balances.",
+  "variants": [
+   "steelyard",
+   "steelyards"
+  ]
+ },
+ "dozo-zukuri": {
+  "def": "Plastered-storehouse construction: thick earth-and-plaster walls and plaster-faced doors, used for storehouses and, in Edo after the Kyoho era, spread by order to townhouses for fire prevention.",
+  "variants": [
+   "dozo-zukuri"
+  ]
+ },
  "yamen-god": {
   "def": "The god of the government office itself, whose small temple a Chinese county yamen kept inside its walls beside the earth-god shrine.",
   "variants": [
    "yamen-god",
-   "yamen god"
+   "yamen god",
+   "yamen-god temple",
+   "God of Government Office"
   ]
  },
  "jail-god": {
@@ -6227,13 +6963,29 @@
   "variants": [
    "jail-god",
    "jail god",
-   "prison god"
+   "prison god",
+   "jail-god temple"
+  ]
+ },
+ "volatiles": {
+  "def": "The gases and tars still held in charcoal that was not fully charred; charcoal high in them heats itself most readily and is the most prone to catching fire on its own.",
+  "variants": [
+   "volatiles",
+   "volatile",
+   "high-volatile"
   ]
  },
  "Dacheng gate": {
   "def": "The gate before the main hall of a Chinese Confucian temple; the shrines to meritorious local officials and to local worthies stood outside it, one on each side.",
   "variants": [
    "Dacheng gate"
+  ]
+ },
+ "coke": {
+  "def": "A fuel made by baking soft (bituminous) coal free of its gases; by the end of the 11th century it replaced charcoal in much of north China's iron smelting.",
+  "variants": [
+   "coke",
+   "bituminous coke"
   ]
  },
  "Important Cultural Property": {
@@ -6243,6 +6995,13 @@
    "Important Cultural Properties"
   ]
  },
+ "fully-involved": {
+  "def": "Of a fire: burning across the whole of its fuel at once, rather than at one spot.",
+  "variants": [
+   "fully-involved",
+   "fully involved"
+  ]
+ },
  "Dading": {
   "def": "A twelfth-century Chinese reign era (the name of an emperor's years) of the Jin dynasty in north China; its third year was 1163.",
   "variants": [
@@ -6250,11 +7009,24 @@
    "Dading era"
   ]
  },
+ "piloted ignition": {
+  "def": "The catching fire of a material, such as timber, heated by a nearby fire when a flame or spark is there to light it; the heat reaching it (the heat flux) at which wood so ignites is what a separation rule for timber rests on.",
+  "variants": [
+   "piloted ignition",
+   "piloted-ignition"
+  ]
+ },
  "GM": {
   "def": "The game master: the person running the campaign these maps are drawn for, whose questions and rulings this record answers.",
   "variants": [
    "GM",
    "game master"
+  ]
+ },
+ "inu-bashiri": {
+  "def": "A strip of ground about 3 shaku (about 3 ft) wide that a house in Edo was required to keep along its street front, between the building and the road.",
+  "variants": [
+   "inu-bashiri"
   ]
  },
  "remand": {
@@ -6270,16 +7042,45 @@
    "gokumon"
   ]
  },
+ "Tsushima": {
+  "def": "The Japanese island domain whose officers, sent to the Japan House at Pusan, conducted Japan's diplomacy and trade with Korea in the Edo period.",
+  "variants": [
+   "Tsushima",
+   "Tsushima's"
+  ]
+ },
  "geshunin": {
   "def": "An Edo-period death sentence carried out by beheading, one of the three grades the Tenmachō jail article names beside gokumon and shizai.",
   "variants": [
    "geshunin"
   ]
  },
+ "urajiro": {
+  "def": "A storehouse's second door, set inside its double hinged doors and outside its screen door; the name means \"white-backed door.\"",
+  "variants": [
+   "urajiro",
+   "urajiro door",
+   "urajirodo"
+  ]
+ },
  "yotsu": {
   "def": "\"Four\": the Edo-period name for the night hour around 10 pm (the hours were counted down from nine). After it, a town block's kido were shut and anyone with business went through the wicket past the watchman.",
   "variants": [
    "yotsu"
+  ]
+ },
+ "fusuma": {
+  "def": "An opaque sliding panel of paper over a wooden frame, used inside a house to divide one room from another.",
+  "variants": [
+   "fusuma"
+  ]
+ },
+ "ōdo": {
+  "def": "The big board door closing the large front opening onto a farmhouse's earth floor, sliding to one side or parting to both; the word originally meant a door wider than half a ken.",
+  "variants": [
+   "ōdo",
+   "odo",
+   "big door"
   ]
  },
  "wallow": {
@@ -6289,11 +7090,25 @@
    "wallows"
   ]
  },
+ "riser": {
+  "def": "The steep bank or wall between one terraced field and the next one down the slope.",
+  "variants": [
+   "riser",
+   "risers"
+  ]
+ },
  "well-house": {
   "def": "A small roofed shelter built over the mouth of a well; on these maps, the roof square drawn over a wellhead.",
   "variants": [
    "well-house",
    "well-houses"
+  ]
+ },
+ "grave island": {
+  "def": "A grave standing inside a field plot rather than at its edge, a mound of earth left in the middle of the crop; on these maps it is the Chinese form of the field grave.",
+  "variants": [
+   "grave island",
+   "grave islands"
   ]
  },
  "Enokida": {
@@ -6302,10 +7117,24 @@
    "Enokida"
   ]
  },
+ "burial grave": {
+  "def": "Under the two-grave custom of parts of Japan, the grave where the body itself was buried, kept apart from the grave the family visited; in some districts it stood on the family's own land until the Meiji government moved it to common land.",
+  "variants": [
+   "burial grave",
+   "burial graves",
+   "umebaka"
+  ]
+ },
  "dissection": {
   "def": "The cutting of a plateau or upland into valleys by the streams that erode it.",
   "variants": [
    "dissection"
+  ]
+ },
+ "CPC": {
+  "def": "The Communist Party of China; a provincial CPC committee secretary is the party's senior official in a province.",
+  "variants": [
+   "CPC"
   ]
  },
  "unhair": {
@@ -7557,9 +8386,7 @@
   "def": "A new household split off from a family's main house and given its own house plot and land.",
   "variants": [
    "branch household",
-   "branch households",
-   "branch house",
-   "branch houses"
+   "branch households"
   ]
  },
  "tsurube": {
@@ -7669,9 +8496,7 @@
   "variants": [
    "two-grave",
    "two-grave villages",
-   "two-grave settlements",
-   "burial grave",
-   "burial graves"
+   "two-grave settlements"
   ]
  },
  "fire bed": {
@@ -7895,9 +8720,7 @@
  "Tenmangu": {
   "def": "A shrine to Tenjin, the deified courtier-scholar Sugawara no Michizane, patron of learning; \"Tenjin shrine\" and \"Tenmangu\" name the same kind of shrine.",
   "variants": [
-   "Tenmangu",
-   "Tenjin",
-   "Tenjin shrine"
+   "Tenmangu"
   ]
  },
  "offering hall": {

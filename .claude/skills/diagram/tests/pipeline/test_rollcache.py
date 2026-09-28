@@ -4,6 +4,7 @@ toy engine, and the bypasses and the doubt rule are pinned so a served roll is n
 
 from __future__ import annotations
 
+import hashlib
 import importlib
 import json
 import os
@@ -14,6 +15,15 @@ from pathlib import Path
 import pytest
 
 from l7r.diagram.pipeline import gencache, rollcache
+
+
+def _run_id(prefix: str, tmp_path: Path) -> str:
+    """A run-store id no other process shares: the store lives under the SYSTEM temp dir, keyed by this id, and an
+    id built from `tmp_path`'s basename or a constant is the same in every clone - two sessions' gates running this
+    file at once removed each other's payload mid-rename (FileNotFoundError, feature 267, 2026-09-27). The full
+    `tmp_path` is per run (pytest's numbered base temp), so its hash is too."""
+    return f"{prefix}-{hashlib.sha256(str(tmp_path).encode()).hexdigest()[:12]}"
+
 
 # `keyed_to` through an alias: the marker guard (tests/test_markers.py) reads `rollcache.keyed_to` as a map roll, which
 # it is everywhere but here - this file rolls a TOY engine in milliseconds and belongs to the quick tree.
@@ -47,7 +57,7 @@ def _toy(tmp_path, monkeypatch):
     # A RUN STORE OF ITS OWN (feature 214): `reset_shared()` removes the run share directory, and under the gate
     # these tests ran with the GATE'S xdist id - every reset wiped the payloads sibling workers had placed, and
     # the census showed the reference rolled twice by two workers seconds apart. A per-test id keeps the resets here.
-    monkeypatch.setenv("PYTEST_XDIST_TESTRUNUID", "toy-" + os.path.basename(str(tmp_path)))
+    monkeypatch.setenv("PYTEST_XDIST_TESTRUNUID", _run_id("toy", tmp_path))
 
     def produce():
         m = importlib.reload(importlib.import_module(mod)) if mod in importlib.sys.modules else importlib.import_module(mod)
@@ -268,7 +278,7 @@ def test_a_sibling_workers_payload_is_read_from_the_RUN_store(tmp_path, monkeypa
     _, _, produce = _toy(tmp_path, monkeypatch)
     monkeypatch.setenv(rollcache.FULL_ENV, "1")
     # a run to scope the store to, whether or not this suite is itself running under xdist
-    monkeypatch.setenv("PYTEST_XDIST_TESTRUNUID", "feature-177-cross-worker")
+    monkeypatch.setenv("PYTEST_XDIST_TESTRUNUID", _run_id("feature-177-cross-worker", tmp_path))
     rollcache.reset_shared()
 
     first, how = rollcache.obtain("cross-worker", produce, share=True)
@@ -379,7 +389,7 @@ def test_the_first_wave_waits_on_one_roll_instead_of_each_rolling(tmp_path, monk
 
     _toy(tmp_path, monkeypatch)
     monkeypatch.setenv(rollcache.FULL_ENV, "1")
-    monkeypatch.setenv("PYTEST_XDIST_TESTRUNUID", "lock-test-" + tmp_path.name)
+    monkeypatch.setenv("PYTEST_XDIST_TESTRUNUID", _run_id("lock-test", tmp_path))
     monkeypatch.setattr(rollcache.tempfile, "gettempdir", lambda: str(tmp_path))
     rollcache.reset_shared()
     rolls: list[int] = []
@@ -507,7 +517,7 @@ def test_a_child_roll_keyed_to_a_test_is_shared_across_workers_under_the_full_ru
     seatings twice - the census named both tests. Simulated as the sibling worker exactly as the test above."""
     _toy(tmp_path, monkeypatch)
     monkeypatch.setenv(rollcache.FULL_ENV, "1")
-    monkeypatch.setenv("PYTEST_XDIST_TESTRUNUID", "feature-216-keyed-child")
+    monkeypatch.setenv("PYTEST_XDIST_TESTRUNUID", _run_id("feature-216-keyed-child", tmp_path))
     rollcache.reset_shared()
     calls: list[str] = []
 
@@ -555,7 +565,7 @@ def test_hamlet_and_report_are_two_views_of_the_one_child_roll(tmp_path, monkeyp
     monkeypatch.setattr(rollcache, "_hamlet_in_child", fake_child)
     monkeypatch.setattr(rollcache, "_entry", lambda subject: str(tmp_path / "entry"))
     monkeypatch.setenv(rollcache.FULL_ENV, "1")
-    monkeypatch.setenv("PYTEST_XDIST_TESTRUNUID", "feature-219-two-views-" + tmp_path.name)
+    monkeypatch.setenv("PYTEST_XDIST_TESTRUNUID", _run_id("feature-219-two-views", tmp_path))
     rollcache.reset_shared()
     spec = hg.HamletSpec(name="Probe", seed=2, households=10)
     assert hamlet_toy(spec) == ("plan", {"M": 1})

@@ -316,8 +316,8 @@
   <g data-kind="sanctuary">
     <rect x="427" y="422" width="26" height="4" fill="#B8AE98" stroke="#7A7060" stroke-width="0.6"/>
     <rect x="431" y="404" width="18" height="18" fill="#C9876C" stroke="#6B2A18" stroke-width="1.4" id="sanctuary"/>
-    <text x="507.7" y="393.5" text-anchor="middle" font-size="8" font-style="italic" fill="#6B2A18">sanctuary of Bishamon</text>
-    <line x1="460.8" y1="396.2" x2="453.7" y2="403.3" stroke="#6B2A18" stroke-width="0.64" stroke-linecap="round" data-leader="1"/>
+    <text x="501.2" y="412.6" text-anchor="middle" font-size="8" font-style="italic" fill="#6B2A18"><tspan x="501.2" dy="0.0">sanctuary</tspan><tspan x="501.2" dy="9.2">of Bishamon</tspan></text>
+    <line x1="476.0" y1="406.2" x2="454.0" y2="406.2" stroke="#6B2A18" stroke-width="0.64" stroke-linecap="round" data-leader="1"/>
   </g>
 
   <!-- The privy at the west gable's BACK corner, off the forecourt and the kitchen door, near the path to the well; the kitchen garden beside the west end, a yard before the kitchen door -->

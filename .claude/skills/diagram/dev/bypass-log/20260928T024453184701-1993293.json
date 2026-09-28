@@ -1,0 +1,7 @@
+{
+  "utc": "2026-09-28T02:44:53Z",
+  "target": "review-accept",
+  "commit": "5b7d593ef",
+  "outcome": "permitted",
+  "why": "review-accept kashikawa F1: the class key grave island is pinned by the page snapshot and names both forms in its Covers line; Kashikawa's own feature note names the corner form it draws (verified in the prior PASS round); renaming the class to field grave across engine, manifests, glossary and snapshot is recorded in future-work/farming-communities.md"
+}

@@ -13,7 +13,9 @@ Mode A analog of the Mode B water-first generator: a fixed ordering (reserve the
 hug the walls largest-first with fire-gaps) that cannot paint itself into a corner - the
 opposite of worst-fit, which would scatter buildings into the center.
 
-See buildings.md "Composition: perimeter buildings + a named court-spine".
+See buildings.md "Composition: perimeter buildings + a named court-spine". The program's types and units live in
+`compound_model.py`, what is seated around the placed masses (tubs, wells, doors, gates' posts, the roji) in
+`compound_parts.py` (feature 267 split them out); the pool generators still import this module alone.
 
 CLI:  python3 compound.py            # place the built-in county magistracy, write a draft SVG
 """
@@ -22,133 +24,40 @@ from __future__ import annotations
 
 import os
 import sys
-from collections.abc import Callable
-from dataclasses import dataclass, field
 
 from .buildings.types import load_types
+from .compound_model import (
+    COURT_FILL,
+    DIVIDER_INK_FT,
+    FIRE_GAP_FT,
+    FTPX,
+    GATE_POST_D_FT,
+    GATE_POST_W_FT,
+    KINDS,
+    NAKAMON_POST_D_FT,
+    OUTLINE_CLEAR_FT,
+    ROOF_POST_FT,
+    ROOFED_ZONES,
+    WALL_INK_FT,
+    WALL_MARGIN_FT,
+    BuildingSpec,
+    CompoundProgram,
+    CourtZone,
+    Envelope,
+    Placed,
+    PlaceResult,
+    _gate_interval,
+    _kind_attr,
+)
+from .compound_parts import _clerk_seats, _court_side, _dais, _engawa, _gate_posts, _lattice, _mats, _middle_gate, _point_features, _rear_band, _roof_posts, _wall_runs
 from .labels import Obstacle, ObstacleIndex, Subject
 from .labels import place as place_caption
 from .labels.standard import CHAR_W_EM, WEIGHT_OBSTACLE
 from .labels.svg import caption_svg, leader_svg
 
-FTPX: float = 3.0  # 3 px = 1 ft (emit-time only)
 # The built-in example's pool tier: the type that declares the example as its generated exception
 # (feature 254) - the folder is the declaration's to name, not this module's.
 _EXAMPLE_TIER: str = next(t.tier for t in load_types() if "county-magistracy-example" in t.generated_exceptions)
-FIRE_GAP_FT: float = 7.0  # default gap between hugging buildings (a real fire-gap)
-WALL_MARGIN_FT: float = 3.0  # a building's inset from the very corner / wall stroke
-# A wall is a built object with real thickness, drawn to scale and CENTERED on the boundary it
-# marks - so half of it stands inside the interior, and ground the wall occupies is not ground a
-# building can stand on. A hugging building therefore abuts the wall's INNER FACE (inset by half
-# the wall's thickness), never the raw boundary. Placing at the boundary drew every wall-ranging
-# building 1.5 ft inside the masonry, and since the wall is painted last it ate their outlines
-# (GM caught the hand-authored version of this on Ochiba, 2026-07-24; the check that now guards
-# it is pack_audit.structures_on_walls, and buildings.md "Walls and gates" carries the rule).
-WALL_INK_FT: float = 3.0  # compound wall: 9 px at 3 px = 1 ft
-DIVIDER_INK_FT: float = 2.0  # internal court divider: 6 px
-OUTLINE_CLEAR_FT: float = 0.5  # a hair beyond the ink, so the wall does not swallow the BUILDING'S
-# own outline stroke (a rect drawn exactly flush loses its edge under the wall and reads as merging
-# into it). 0.5 ft matches the gap the hand-authored Ochiba leaves between its servants' quarters
-# and the north wall - the house style this rule was reverse-engineered from.
-
-# palette keys -> (fill, stroke) reused from the Mode A vocabulary (SKILL.md)
-KINDS: dict[str, tuple[str, str]] = {
-    "lord": ("#DDB87A", "#5A3F1E"),
-    "service": ("#C9A57A", "#6B4F2A"),
-    "plain": ("#E8D2A8", "#6B4F2A"),
-    "kura": ("#F2EFE4", "#4A3318"),
-    "shrine": ("#C9876C", "#6B2A18"),
-    "cell": ("#B89868", "#5C4318"),
-    "dark": ("#8C6F3E", "#4A3318"),
-}
-COURT_FILL: dict[str, str] = {
-    "forecourt": "url(#court-earth)",
-    "oshirasu": "url(#oshirasu-sand)",
-    "garden": "url(#garden-stipple)",
-    "yard": "url(#court-earth)",
-    "practice ground": "url(#keiko-earth)",  # swept keiko earth (buildings.md "Practice ground")
-}
-
-
-@dataclass(frozen=True)
-class Envelope:
-    """The walled interior, in feet. Inner (residence) court is north (y small); outer
-    (administrative) court is south (y large), with the main gate on the south wall."""
-
-    w_ft: float
-    h_ft: float
-    divider_ft: float  # y of the inner/outer court divider
-    gate_w_ft: float = 13.0  # main-gate opening width (on the south wall, centered)
-
-
-@dataclass(frozen=True)
-class CourtZone:
-    """A reserved OPEN court in the spine (buildings never overlap it)."""
-
-    name: str
-    x_ft: float
-    y_ft: float
-    w_ft: float
-    h_ft: float
-
-    @property
-    def x2(self) -> float:
-        return self.x_ft + self.w_ft
-
-    @property
-    def y2(self) -> float:
-        return self.y_ft + self.h_ft
-
-
-@dataclass(frozen=True)
-class BuildingSpec:
-    """A building sized in feet with a placement tag."""
-
-    name: str
-    kind: str
-    w_ft: float
-    h_ft: float
-    court: str  # "outer" | "inner"
-    wall: str  # "N" | "S" | "E" | "W" | "divider"
-    order: int = 0  # higher places first (largest/most-important win a contested corner)
-    rank: int = 1  # 1 = hug the wall; 2 = sit as a second rank BEHIND the rank-1 row
-    # The Mode A KIND the building is (feature 262): the `data-kind` the emitter writes on it, a key of the
-    # registry in `interactive/compound/`, so the draft's interactive page knows what it drew. `emit_svg`
-    # refuses a building without one, naming it - a draft with an unkinded building would be a page with
-    # ink nobody ruled on.
-    feature: str = ""
-
-
-@dataclass(frozen=True)
-class CompoundProgram:
-    title: str
-    envelope: Envelope
-    spine: tuple[CourtZone, ...] = ()
-    buildings: tuple[BuildingSpec, ...] = ()
-
-
-@dataclass(frozen=True)
-class Placed:
-    """A building assigned a feet position (top-left)."""
-
-    spec: BuildingSpec
-    x_ft: float
-    y_ft: float
-
-    @property
-    def x2(self) -> float:
-        return self.x_ft + self.spec.w_ft
-
-    @property
-    def y2(self) -> float:
-        return self.y_ft + self.spec.h_ft
-
-
-@dataclass
-class PlaceResult:
-    placed: list[Placed] = field(default_factory=list)
-    overflow: list[BuildingSpec] = field(default_factory=list)  # did not fit the ring
-
 
 # ---- placement (perimeter-first, 2-D collision) ------------------------------------------
 #
@@ -164,11 +73,6 @@ class PlaceResult:
 
 def _court_yrange(env: Envelope, court: str) -> tuple[float, float]:
     return (0.0, env.divider_ft) if court == "inner" else (env.divider_ft, env.h_ft)
-
-
-def _gate_interval(env: Envelope) -> tuple[float, float]:
-    half = env.gate_w_ft / 2
-    return (env.w_ft / 2 - half, env.w_ft / 2 + half)
 
 
 def _rank_depth(env: Envelope, already: list[Placed], spec: BuildingSpec) -> float:
@@ -202,7 +106,7 @@ def _cross_coord(env: Envelope, spec: BuildingSpec, already: list[Placed]) -> fl
         return env.divider_ft + clear if spec.court == "outer" else env.divider_ft - spec.h_ft - clear
     # inward depth of this building's own face: the wall ink for rank 1, the rank-1 row + a
     # fire-gap for rank 2 (which already clears the ink, since that row sits beyond it)
-    depth = (_rank_depth(env, already, spec) + FIRE_GAP_FT) if spec.rank > 1 else clear
+    depth = ((_rank_depth(env, already, spec) + FIRE_GAP_FT) if spec.rank > 1 else clear) + spec.inset_ft
     if spec.wall == "N":
         return depth
     if spec.wall == "S":
@@ -240,9 +144,14 @@ def _obstacle_end(
 
 
 def _place_one(env: Envelope, spec: BuildingSpec, spine: tuple[CourtZone, ...], already: list[Placed]) -> Placed | None:
-    """Hug the wall and slide along it past every obstacle; None if it runs off the wall."""
+    """Hug the wall and slide along it past every obstacle; None if it runs off the wall. A `beside_gate` building
+    stands flush west of the main gate's west post instead, or nowhere if something already holds that ground."""
     horizontal = spec.wall in ("N", "S", "divider")
     cross = _cross_coord(env, spec, already)
+    if spec.beside_gate:
+        x = _gate_interval(env)[0] - GATE_POST_W_FT - OUTLINE_CLEAR_FT - spec.w_ft
+        clash = _obstacle_end(None, spine, already, x, cross, spec, True)
+        return Placed(spec, x, cross) if x >= WALL_MARGIN_FT and clash is None else None
     along_start, along_end = (0.0, env.w_ft) if horizontal else _court_yrange(env, spec.court)
     gate = _gate_interval(env) if spec.wall == "S" else None
     size = spec.w_ft if horizontal else spec.h_ft
@@ -292,12 +201,20 @@ ZONE_KINDS: dict[str, str] = {
     "oshirasu": "hearing court",
     "garden": "garden",
     "yard": "outer court",
+    "cart yard": "cart yard",
+    "vegetable garden": "vegetable garden",
+    "inner yard": "inner court",
     "practice ground": "practice ground",
 }
-
-
-def _kind_attr(kind: str) -> str:
-    return f' data-kind="{kind}"' if kind else ""
+#: Zones drawn as bare ground, with no edge: an outlined sub-rectangle of court reads as a FENCED court, and a fenced
+#: forecourt is a GUESS the record does not support (research buildings 300; building-review round 3).
+UNFENCED_ZONES: frozenset[str] = frozenset({"forecourt", "yard", "cart yard", "inner yard"})
+#: A zone's caption where its program name is not the reader's word: the hearing court is `oshirasu` in the program (and
+#: in its fill pattern) but the sheets caption it in English (the other drafts and the hand sheets say `hearing court`).
+#: A room's caption where its kind's name is not what the room is: the karo lodges in a BAY of the staff long-house
+#: (research buildings 340), which the kind `karo's house` finds, but a bay is not a house (building-review round 6).
+ROOM_CAPTIONS: dict[str, str] = {"karo's house": "karo's quarters"}
+ZONE_CAPTIONS: dict[str, str] = {"oshirasu": "hearing court", "yard": "outer court", "inner yard": "inner court"}
 
 
 _GROUND_KINDS = frozenset({*ZONE_KINDS.values(), "inner court", "outer court", "practice ground", "garden", "-"})
@@ -313,23 +230,33 @@ def stroke_band(a: tuple[float, float], b: tuple[float, float], half: float) -> 
     return [(a[0] + nx, a[1] + ny), (b[0] + nx, b[1] + ny), (b[0] - nx, b[1] - ny), (a[0] - nx, a[1] - ny)]
 
 
+BOLD_CHAR_W_EM = 0.60
+"""A bold mixed-case name's advance per character, in ems - the width the pack audit measured by rendering the pool's
+bold building names (`tools/pack_audit/parse.py` CHAR_W_BOLD_MIXED, 2026-07-25)."""
+
 CAPTION_ROOM = 40.0
 """How far below the drawn canvas a draft's caption may stand, in px (feature 266): room for one caption line beside
 the notice board outside the gate. The canvas grows to hug whatever is placed there."""
 
 
-def _seat_captions(requests: list[tuple[str, Subject, float, bool, str, str]], obstacles: list[Obstacle], frame: tuple[float, float, float, float]) -> tuple[list[str], float]:
+def _seat_captions(
+    requests: list[tuple[str, Subject, float, bool, str, str]], obstacles: list[Obstacle], frame: tuple[float, float, float, float], late: dict[int, list[Obstacle]] | None = None
+) -> tuple[list[str], float]:
     """Place every requested caption by the ONE placer (feature 266), in order, each an obstacle to the next, and write
-    it - with its leader when the standard gives it one (FR-005). Returns the strings and the lowest point drawn."""
+    it - with its leader when the standard gives it one (FR-005). `late[i]` are obstacles that join the index once
+    caption i is seated: ground only that caption may stand on (a roofed court's floor is its own caption's, and no
+    other caption stands under its roof). Returns the strings and the lowest point drawn."""
     index = ObstacleIndex(obstacles)
     out: list[str] = []
     foot = 0.0
-    for text, subject, size, italic, fill, kind in requests:
+    for i, (text, subject, size, italic, fill, kind) in enumerate(requests):
         p = place_caption(text, size, subject, index, frame)
         out.append(caption_svg(p, size, ' font-style="italic"' if italic else ' font-weight="bold"', fill, kind))
         if p.leader is not None:
             out.append(leader_svg(p, size, fill, kind))
         index.add(Obstacle(p.block, WEIGHT_OBSTACLE))
+        for ob in (late or {}).get(i, []):
+            index.add(ob)
         foot = max(foot, *(q[1] for q in p.block))
     return out, foot
 
@@ -367,6 +294,7 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 7
     # requests are placed and written last, in order, each an obstacle to the next.
     obstacles: list[Obstacle] = []
     requests: list[tuple[str, Subject, float, bool, str, str]] = []
+    late: dict[int, list[Obstacle]] = {}
 
     def px(x: float, y: float) -> tuple[float, float]:
         return ox + x * FTPX, oy + y * FTPX
@@ -375,11 +303,14 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 7
         (x0, y0), (x1, y1) = px(x, y), px(x + w, y + h)
         return ((x0, y0), (x1, y0), (x1, y1), (x0, y1))
 
-    def rect(x: float, y: float, w: float, h: float, fill: str, stroke: str, sw: float, ident: str = "", kind: str = "") -> str:
+    def rect(x: float, y: float, w: float, h: float, fill: str, stroke: str, sw: float, ident: str = "", kind: str = "", part_of: str = "") -> str:
         tag = f' id="{ident}"' if ident else ""
         if kind not in _GROUND_KINDS:
             obstacles.append(Obstacle(box(x, y, w, h), WEIGHT_OBSTACLE))
-        return f'<rect x="{ox + x * FTPX:.0f}" y="{oy + y * FTPX:.0f}" width="{w * FTPX:.0f}" height="{h * FTPX:.0f}" fill="{fill}"{tag} stroke="{stroke}" stroke-width="{sw}"{_kind_attr(kind)}/>'
+        whole = f' data-part-of="{part_of}"' if part_of else ""
+        return (
+            f'<rect x="{ox + x * FTPX:.0f}" y="{oy + y * FTPX:.0f}" width="{w * FTPX:.0f}" height="{h * FTPX:.0f}" fill="{fill}"{tag} stroke="{stroke}" stroke-width="{sw}"{_kind_attr(kind)}{whole}/>'
+        )
 
     def caption(where: str, x: float, y: float, w: float, h: float, s: str, size: int, italic: bool, fill: str, kind: str = "") -> str:
         """Ask the placer for a caption naming the feature at (x, y, w, h) in feet - `where` "area" (the name lies
@@ -413,8 +344,28 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 7
     ]
     for z in program.spine:  # reserved open courts, drawn + named
         zk = ZONE_KINDS.get(z.name, "outer court" if z.y_ft >= env.divider_ft else "inner court")
-        parts.append(rect(z.x_ft, z.y_ft, z.w_ft, z.h_ft, COURT_FILL.get(z.name, "url(#court-earth)"), "#9C7A40", 0.8, "", zk))
-        caption("area", z.x_ft, z.y_ft, z.w_ft, z.h_ft, z.name, 11, True, "#5C4318", zk)
+        zstroke, zsw = ("none", 0.0) if z.name in UNFENCED_ZONES else ROOFED_ZONES.get(z.name, ("#9C7A40", 0.8))
+        parts.append(rect(z.x_ft, z.y_ft, z.w_ft, z.h_ft, COURT_FILL.get(z.name, "url(#court-earth)"), zstroke, zsw, "", zk))
+        caption("area", z.x_ft, z.y_ft, z.w_ft, z.h_ft, ZONE_CAPTIONS.get(z.name, z.name), 11, True, "#5C4318", zk)
+        if z.name in ROOFED_ZONES:
+            # the straw mats the parties knelt on (`_mats`), a part of the court, then their caption - the one other
+            # caption under the roof; the court's floor joins the obstacles once both are seated
+            parts.append(f'<g{_kind_attr("kneeling positions")}><g fill="#C8B078" stroke="#7A5430" stroke-width="0.6">')
+            mats = _mats(z)
+            parts += [rect(mx, my, mx2 - mx, my2 - my, "#C8B078", "#7A5430", 0.6) for mx, my, mx2, my2 in mats]
+            parts.append("</g></g>")
+            ax, ay, ax2, ay2 = mats[-1]
+            caption("point", ax, ay, ax2 - ax, ay2 - ay, "straw mats", 8, True, "#7A5C30", "kneeling positions")
+            late[len(requests) - 1] = [Obstacle(box(z.x_ft, z.y_ft, z.w_ft, z.h_ft), WEIGHT_OBSTACLE)]
+            # the posts carrying the roof along the open (south) side, the court's own ink (ROOFED_ZONES)
+            # its solid outline is a building's edge, so no caption crosses it (the ground inside stays free)
+            corners = [px(z.x_ft, z.y_ft), px(z.x2, z.y_ft), px(z.x2, z.y2), px(z.x_ft, z.y2)]
+            obstacles.extend(Obstacle(tuple(stroke_band(corners[i], corners[(i + 1) % 4], zsw / 2 + 1)), WEIGHT_OBSTACLE) for i in range(4))
+            parts.append(f'<g fill="{zstroke}"{_kind_attr(zk)}>')
+            for pxf, pyf in _roof_posts(z):
+                obstacles.append(Obstacle(box(pxf, pyf, ROOF_POST_FT, ROOF_POST_FT), WEIGHT_OBSTACLE))
+                parts.append(f'<rect x="{ox + pxf * FTPX:.0f}" y="{oy + pyf * FTPX:.0f}" width="{ROOF_POST_FT * FTPX:.0f}" height="{ROOF_POST_FT * FTPX:.0f}"/>')
+            parts.append("</g>")
         if z.name == "practice ground":
             # The program item's durable equipment (buildings.md "Practice ground"): a weapon
             # rack on the zone's south edge (the hand-refined map moves it flush to the
@@ -431,8 +382,56 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 7
             parts.append("</g>")
     for p in result.placed:  # buildings
         fill, stroke = KINDS.get(p.spec.kind, KINDS["service"])
-        parts.append(rect(p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, fill, stroke, 2, "", p.spec.feature))
-        caption("area", p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, p.spec.name, 10, False, "#3A2E1C", p.spec.feature)
+        # a name that runs wider than its building at 10 px is written at 8 (the gatehouse's overran its 54 px box), measured
+        # at BOLD_CHAR_W_EM - a building's name is bold, and bold mixed case runs wider than the standard's em (pass 6: the
+        # retainers' 26-letter name, judged to fit, ran over the wall's ink)
+        size = 10 if len(p.spec.name) * 10 * BOLD_CHAR_W_EM <= p.spec.w_ft * FTPX - 6 else 8
+        if p.spec.kind == "cell":
+            # a cell reads by its lattice front: short bars across its court face, clear of its name (the two end lines
+            # it had bracketed the caption)
+            parts += [f"<g{_kind_attr(p.spec.feature)}>", rect(p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, fill, stroke, 2)]
+            parts += [f'<line x1="{ox + a * FTPX:.0f}" y1="{oy + b * FTPX:.0f}" x2="{ox + c * FTPX:.0f}" y2="{oy + d * FTPX:.0f}" stroke="#3A2010" stroke-width="0.8"/>' for a, b, c, d in _lattice(p)]
+            parts.append("</g>")
+            caption("area", p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, p.spec.name, size, False, "#3A2E1C", p.spec.feature)
+            continue
+        if not (p.spec.rooms or p.spec.engawa_ft or p.spec.dais[0]):
+            parts.append(rect(p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, fill, stroke, 2, "", p.spec.feature))
+            caption("area", p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, p.spec.name, size, False, "#3A2E1C", p.spec.feature)
+            continue
+        # a building with parts (rooms, a veranda, a dais): its fill, a same-color floor per room, partitions, the
+        # outline on top - all inside a group of the building's kind, the hand sheets' form (feature 264)
+        parts.append(f"<g{_kind_attr(p.spec.feature)}>")
+        parts.append(rect(p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, fill, "none", 0, "", p.spec.feature))
+        for rkind, rx, ry, rw, rh in p.spec.rooms:
+            parts.append(rect(p.x_ft + rx, p.y_ft + ry, rw, rh, fill, "none", 0, "", rkind))
+            caption("area", p.x_ft + rx, p.y_ft + ry, rw, rh, ROOM_CAPTIONS.get(rkind, rkind), 8, False, "#3A2E1C", rkind)
+            (x0, y0), (x1, y1) = px(p.x_ft + rx, p.y_ft + ry), px(p.x_ft + rx + rw, p.y_ft + ry + rh)
+            parts.append(f'<rect x="{x0:.0f}" y="{y0:.0f}" width="{x1 - x0:.0f}" height="{y1 - y0:.0f}" fill="none" stroke="{stroke}" stroke-width="0.8" stroke-dasharray="4 3"/>')
+        if p.spec.engawa_ft:  # the veranda, a lighter strip along the court face under the building's outline (R01)
+            ex, ey, ex2, ey2 = _engawa(p)
+            parts.append(rect(ex, ey, ex2 - ex, ey2 - ey, KINDS["plain"][0], stroke, 1.2, "", "engawa"))
+        if p.spec.dais[0]:  # the magistrate's dais, dark tatami on the court face (buildings.md "Office hall")
+            dx, dy, dx2, dy2 = _dais(p)
+            parts.append(rect(dx, dy, dx2 - dx, dy2 - dy, "#8C6F3E", "#4A3318", 1, "", "magistrate's dais"))
+            caption("area", dx, dy, dx2 - dx, dy2 - dy, "magistrate's dais", 8, False, "#FFFAE6", "magistrate's dais")
+        parts.append(rect(p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, "none", stroke, 2))
+        if p.spec.dais[0]:  # the clerks' positions flanking the dais, drawn over the outline so it buries neither
+            dx, dy, dx2, dy2 = _dais(p)
+            parts.append("<g" + _kind_attr("clerks' seats") + ">")
+            for sx0, sy0, sx1, sy1 in _clerk_seats((dx, dy, dx2, dy2), _court_side(p)):
+                parts.append(rect(sx0, sy0, sx1 - sx0, sy1 - sy0, "#B89868", "#5C4830", 0.5))
+                caption("area", sx0, sy0, sx1 - sx0, sy1 - sy0, "clerk", 7, False, "#3A2E1C", "clerks' seats")
+            parts.append("</g>")
+        parts.append("</g>")
+        # the block's own name after its rooms', and BESIDE the block where every room is named: inside, it sat within
+        # one room beside that room's name and read as a room (the residence's, building-review round 3)
+        # - in its rear alley where it stands off its wall (`inset_ft`), which reads as the block's own ground
+        full = sum(r[3] * r[4] for r in p.spec.rooms) >= 0.9 * p.spec.w_ft * (p.spec.h_ft - p.spec.engawa_ft)
+        if full and p.spec.inset_ft >= 5.0:
+            ax, ay, aw, ah = _rear_band(p)
+            caption("area", ax, ay, aw, ah, p.spec.name, size, False, "#3A2E1C", p.spec.feature)
+        else:
+            caption("point" if full else "area", p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, p.spec.name, size, False, "#3A2E1C", p.spec.feature)
     parts += _point_features(program, result, rect, caption, ox, oy)
     # the scale bar every Mode A sheet carries (buildings.md "Scale"; the registered check `scale_bar_present`)
     sx, sy = ox, oy - 12 * FTPX
@@ -445,27 +444,38 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 7
     # compound wall (4 segments; S wall broken by the gate) + divider - each in a `<g stroke=...>` group,
     # the authoring form the audit's gate-opening and divider readers parse (feature 254: the drafts are
     # swept by the gate like the hand-drawn sheets, so they are drawn the way the checks read)
-    gl, gr = _gate_interval(env)
+    # the compound wall, broken where the main gate and the postern pass through it (`_wall_runs`), and the divider
+    # broken at the middle gate - each in a `<g stroke=...>` group, the authoring form the audit's gate-opening and
+    # divider readers parse (feature 254: the drafts are swept by the gate like the hand-drawn sheets, so they are
+    # drawn the way the checks read). The gates' posts follow, each gate a group of its kind (feature 267).
     parts.append('<g stroke="#2D2A24" stroke-width="9" data-kind="compound wall">')
-    for x1, y1, x2, y2 in [
-        (0, 0, env.w_ft, 0),
-        (0, 0, 0, env.h_ft),
-        (env.w_ft, 0, env.w_ft, env.h_ft),
-        (0, env.h_ft, gl, env.h_ft),
-        (gr, env.h_ft, env.w_ft, env.h_ft),
-    ]:
+    for _side, x1, y1, x2, y2 in _wall_runs(env):
         parts.append(f'<line x1="{ox + x1 * FTPX:.0f}" y1="{oy + y1 * FTPX:.0f}" x2="{ox + x2 * FTPX:.0f}" y2="{oy + y2 * FTPX:.0f}"/>')
         obstacles.append(Obstacle(tuple(stroke_band(px(x1, y1), px(x2, y2), 4.5)), WEIGHT_OBSTACLE))  # the wall, 9 px drawn
     parts.append("</g>")
-    parts.append(
-        f'<g stroke="#3F3A30" stroke-width="6" data-kind="court divider"><line x1="{ox:.0f}" y1="{oy + env.divider_ft * FTPX:.0f}" x2="{ox + iw:.0f}" y2="{oy + env.divider_ft * FTPX:.0f}"/></g>'
-    )
-    obstacles.append(Obstacle(tuple(stroke_band(px(0, env.divider_ft), px(env.w_ft, env.divider_ft), 3.0)), WEIGHT_OBSTACLE))
+    gates = [("main gate", "S", *_gate_interval(env), env.h_ft, GATE_POST_D_FT, "#2D2A24", "")]
+    for side, at, w in env.posterns:
+        gates.append(("side gate", side, at - w / 2, at + w / 2, {"N": 0.0, "W": 0.0, "E": env.w_ft}.get(side, env.h_ft), GATE_POST_D_FT, "#2D2A24", ""))
+    mid = _middle_gate(env, result.placed)
+    runs = [(0.0, env.w_ft)] if mid is None else [(0.0, mid[0]), (mid[1], env.w_ft)]
+    if mid is not None:
+        gates.append(("nakamon", "divider", mid[0], mid[1], env.divider_ft, NAKAMON_POST_D_FT, "#3F3A30", ' data-part-of="court divider"'))
+    parts.append('<g stroke="#3F3A30" stroke-width="6" data-kind="court divider">')
+    for a, b in runs:
+        parts.append(f'<line x1="{ox + a * FTPX:.0f}" y1="{oy + env.divider_ft * FTPX:.0f}" x2="{ox + b * FTPX:.0f}" y2="{oy + env.divider_ft * FTPX:.0f}"/>')
+        obstacles.append(Obstacle(tuple(stroke_band(px(a, env.divider_ft), px(b, env.divider_ft), 3.0)), WEIGHT_OBSTACLE))
+    parts.append("</g>")
+    for gkind, side, lo, hi, line, deep, ink, whole in gates:
+        parts.append(f'<g fill="{ink}"{_kind_attr(gkind)}{whole}>')
+        for bx, by, bx2, by2 in _gate_posts(side, lo, hi, line, GATE_POST_W_FT, deep):
+            obstacles.append(Obstacle(box(bx, by, bx2 - bx, by2 - by), WEIGHT_OBSTACLE))
+            parts.append(f'<rect x="{ox + bx * FTPX:.0f}" y="{oy + by * FTPX:.0f}" width="{(bx2 - bx) * FTPX:.0f}" height="{(by2 - by) * FTPX:.0f}"/>')
+        parts.append("</g>")
     # A CAPTION MAY HOLD THE SHEET'S EDGE (the review checklist: every edge "held by real content"): the notice board
     # stands outside the gate, 21 px from the canvas's foot, where no caption fits beside it - the old draft's caption
     # hung past the edge and was clipped. So the placer is given room below, and the canvas then grows to hug what it
     # placed there.
-    seated, foot = _seat_captions(requests, obstacles, (0.0, 0.0, cw, ch + CAPTION_ROOM))
+    seated, foot = _seat_captions(requests, obstacles, (0.0, 0.0, cw, ch + CAPTION_ROOM), late)
     parts += seated
     if foot + margin_ft * FTPX > ch:
         grown = foot + margin_ft * FTPX
@@ -473,92 +483,6 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 7
         parts[2] = parts[2].replace(f'height="{ch:.0f}"', f'height="{grown:.0f}"')
     parts.append("</svg>")
     return "\n".join(parts)
-
-
-def _court_face(p: Placed, env: Envelope) -> tuple[float, float, float, float]:
-    """The side of a placed building that faces its court, as a unit normal (nx, ny) and the face's
-    two end points along it - what a gutter-fed tub, a well or a privy stands against."""
-    wall = p.spec.wall
-    if wall == "divider":
-        wall = "S" if p.spec.court == "inner" else "N"  # an inner-court divider building faces north; an outer one south
-    if wall == "N":
-        return 0.0, 1.0, p.x_ft, p.y2
-    if wall == "S":
-        return 0.0, -1.0, p.x_ft, p.y_ft
-    if wall == "E":
-        return -1.0, 0.0, p.x_ft, p.y_ft
-    return 1.0, 0.0, p.x2, p.y_ft
-
-
-def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callable[..., str], caption: Callable[..., str], ox: float, oy: float) -> list[str]:
-    """The program's point features, seated by the composition (feature 254): fire-water tubs at every
-    wooden building's court face (two at the kitchen), a well at the kitchen, the garden and the stables,
-    a privy beside the barracks, the stables and the servants' row, a bath in the garden, and the notice
-    board outside the main gate. The placer arranges the wall-ranging masses; these follow them, each
-    seated at the first spot along its building's court face that is CLEAR of every mass and of every
-    feature already seated - a draft swept by the gate carries the whole program, not the masses alone."""
-    env = program.envelope
-    parts: list[str] = []
-    taken: list[tuple[float, float, float, float]] = [(p.x_ft, p.y_ft, p.x2, p.y2) for p in result.placed]
-    by_name = {p.spec.name: p for p in result.placed}
-
-    def clear(x: float, y: float, w: float, h: float, margin: float = 1.0) -> bool:
-        if x < margin or y < margin or x + w > env.w_ft - margin or y + h > env.h_ft - margin:
-            return False
-        return all(x + w + margin <= tx or tx2 + margin <= x or y + h + margin <= ty or ty2 + margin <= y for tx, ty, tx2, ty2 in taken)
-
-    def seat(p: Placed, size: float, fracs: tuple[float, ...], offs: tuple[float, ...]) -> tuple[float, float] | None:
-        """The center of a `size`-square feature against `p`'s court face: the first clear (frac, off)."""
-        nx, ny, fx, fy = _court_face(p, env)
-        for off in offs:
-            for frac in fracs:
-                cx, cy = (fx + p.spec.w_ft * frac, fy + ny * off) if ny else (fx + nx * off, fy + p.spec.h_ft * frac)
-                if clear(cx - size / 2, cy - size / 2, size, size):
-                    taken.append((cx - size / 2, cy - size / 2, cx + size / 2, cy + size / 2))
-                    return cx, cy
-        return None
-
-    tubs: list[tuple[float, float]] = []
-    wells: list[tuple[float, float]] = []
-    privies: list[tuple[float, float]] = []
-    for name in ("kitchen", "stables"):  # wells first: they take the middle of a face
-        if name in by_name and (w := seat(by_name[name], 7.3, (0.5, 0.3, 0.7), (9.0, 12.0, 15.0))):
-            wells.append(w)
-    for z in program.spine:
-        if z.name == "garden":
-            wells.append((z.x_ft + 5.0, z.y_ft + 5.0))
-            taken.append((z.x_ft + 1.35, z.y_ft + 1.35, z.x_ft + 8.65, z.y_ft + 8.65))
-            bx, by = z.x2 - 18.0, z.y_ft + max(0.0, (z.h_ft - 12.0) / 2)
-            taken.append((bx, by, bx + 15.0, by + 12.0))
-            parts.append(rect(bx, by, 15.0, 12.0, KINDS["service"][0], KINDS["service"][1], 1.5, "", "bath"))
-            caption("area", bx, by, 15.0, 12.0, "bath", 8, False, "#3A2E1C", "bath")
-    for name in ("barracks", "stables", "servants"):
-        if name in by_name and (v := seat(by_name[name], 5.0, (0.85, 0.15, 0.5), (4.5, 7.0))):
-            privies.append(v)
-    for p in result.placed:
-        if p.spec.kind == "kura":
-            continue  # a plaster storehouse carries no tub (buildings.md, "Fire-water tubs")
-        for _ in range(2 if p.spec.name.startswith("kitchen") else 1):
-            if tub := seat(p, 2.6, (0.15, 0.85, 0.4, 0.6), (2.5,)):
-                tubs.append(tub)
-    for cx, cy in wells:
-        parts.append(rect(cx - 3.65, cy - 3.65, 7.3, 7.3, "#9C8C70", "#5C4830", 1.2, "", "well"))
-        caption("point", cx - 3.65, cy - 3.65, 7.3, 7.3, "well", 8, True, "#3A2E1C", "well")
-    for cx, cy in privies:
-        parts.append(rect(cx - 2.5, cy - 2.5, 5.0, 5.0, "#7E726A", "#4A3318", 0.8, "", "latrine"))
-        caption("point", cx - 2.5, cy - 2.5, 5.0, 5.0, "latrine", 7, True, "#3A2E1C", "latrine")
-    if tubs:
-        parts.append('<g fill="#8FB0C6" stroke="#3A5060" stroke-width="1" data-kind="fire-water tubs">')
-        parts += [f'<circle cx="{ox + cx * FTPX:.0f}" cy="{oy + cy * FTPX:.0f}" r="3.8"/>' for cx, cy in tubs]
-        parts.append("</g>")
-        for tx, ty in tubs:  # every tub is drawn - and so is an obstacle to every caption
-            rect(tx - 1.27, ty - 1.27, 2.54, 2.54, "none", "none", 0)  # registers the tub; its drawn circle follows
-        tx, ty = tubs[0]
-        caption("point", tx - 1.27, ty - 1.27, 2.54, 2.54, "fire-water tubs", 7, True, "#3A5060", "fire-water tubs")
-    gl, _gr = _gate_interval(env)
-    parts.append(rect(gl - 14.0, env.h_ft + 3.0, 6.0, 1.5, "#4A3318", "#2D2A24", 0.6, "", "notice board"))
-    caption("point", gl - 14.0, env.h_ft + 3.0, 6.0, 1.5, "notice board", 7, True, "#3A2E1C", "notice board")
-    return parts
 
 
 # ---- a built-in county-magistracy program ------------------------------------------------
@@ -572,42 +496,185 @@ def county_magistracy_program() -> CompoundProgram:
     the practice ground beside the barracks) sits clear of the wall rows so the placer never
     has to overlap it.
     """
-    env = Envelope(w_ft=270.0, h_ft=200.0, divider_ft=90.0, gate_w_ft=13.0)
+    # The main gate is a one-bay yakuimon with an 8 ft passage - R26's knob, the one-bay form (6-8.5 ft, research
+    # buildings 480); it was a 13 ft opening, the carriage gate the vocabulary once drew. The postern in the west wall,
+    # centered 50 ft down it, opens on the kitchen yard between the bath and the karo's house (buildings/programs.md:
+    # the kitchen postern keeps deliveries and night-soil off the hearing court); its 6 ft passage is a GUESS. The
+    # middle gate keeps the Envelope's 6 ft (narrower than the main gate). The outer court's SERVICE GATE (pass 4,
+    # building-review round 3; buildings/programs.md "Walled enclosure": a busy outer court warrants a small service
+    # gate so muck, night-soil and prisoner transfers skip the formal gate) stands in the south wall by the cell, at
+    # the head of the cart yard; its 6 ft passage is a GUESS, narrower than the main gate.
+    env = Envelope(w_ft=270.0, h_ft=200.0, divider_ft=90.0, gate_w_ft=8.0, posterns=(("W", 50.0, 6.0), ("S", 244.0, 6.0)))
     spine = (
-        # inner court, between residence and karo. Its north edge clears the N-wall row's new
-        # inward face: the 36 ft residence now starts 2 ft in (clear of the wall ink), ending at
-        # 38, so a garden starting at 36 would overlap it and shove it off its wall entirely.
-        CourtZone("garden", 50.0, 38.0, 165.0, 22.0),
-        CourtZone("oshirasu", 68.0, 126.0, 132.0, 39.0),  # outer court, before the office-hall dais
-        CourtZone("forecourt", 118.0, 166.0, 36.0, 31.0),  # just inside the main gate
-        # Practice ground beside where the watch lodges (the E-wall barracks lands at x 235,
+        # THE GARDEN LIES BEFORE THE HOUSE (research buildings 230 'The shady rear is the service strip': the garden faces
+        # the reception rooms). Pass 7 (building-review round 6: ~62 x 66 ft of bare inner court east of a garden sized to
+        # the house alone) runs it on to the guest house, x 104-226, so the one garden faces the reception and the guest
+        # house both - guests were received in the garden-facing rooms (research buildings 330); the servants' row it once
+        # faced is on the kitchen yard since pass 6. From the house's veranda (y 36) 46 ft deep to y 82, an 8 ft walk
+        # along the divider. Its size is a GUESS.
+        CourtZone("garden", 104.0, 36.0, 122.0, 46.0),
+        # The vegetable ground WEST of the house, filling the kitchen yard (research buildings 400: the one plot whose side
+        # is given lay west of the house; a residence's vegetable ground runs from the Takei house's ~1,070 sq ft plot to
+        # a field over about half the Yokota house's grounds). Pass 7 (building-review round 6: the yard stood ~100 x 60
+        # ft bare around the 36 x 30 plot) takes the larger, field form within the yard: 64 x 48 ft = 3,072 sq ft, a
+        # GUESS in its size, leaving a 7 ft way from the postern along the west wall and the yard's north strip.
+        CourtZone("vegetable garden", 14.0, 36.0, 64.0, 48.0),
+        # The hearing court is centered on the office hall (x 43-156 as placed: the tax archive's 34 ft and a
+        # fire-gap west of it) and no longer than it - R22, research buildings 450: under the office hall's roof or its
+        # own, before the dais. 80 ft leaves each end of the hall's south face out from under the roof, where its tub
+        # stands; 32 ft deep (36 until pass 5) keeps the cart slot to the stables and room for the stable well before
+        # them (buildings.md "Hearing court"). It was 132 x 39 ft, longer than the hall and 34 ft off its center. Its
+        # size is a GUESS - no roofed court's size was found.
+        CourtZone("oshirasu", 59.5, 130.0, 80.0, 32.0),  # y 130 since pass 6: the office hall is 38 ft deep
+        # just inside the main gate (131-139), east of the gatehouse that stands beside it, and 55 ft wide (it was 36)
+        # to take the ground east of the gate the hearing court gave up when it shrank to the hall's length; a
+        # marshalling apron's width is a GUESS
+        CourtZone("forecourt", 130.0, 166.0, 55.0, 31.0),
+        # Practice ground beside where the watch lodges (the E-wall barracks, 45 ft long since pass 5, lands at x 223,
         # y 128 under the current masses): 33 x 42 ft = 1,386 sqft, inside the 1,200-2,000
         # sqft full-platoon band at ~90-135 sqft per drilling samurai (buildings.md
-        # "Practice ground" + the dojo-is-a-city-institution grounding). Placed east of the
-        # oshirasu (ends x 200) and west of the E column, whose barracks now abuts the swept
-        # patch at x 235 - which is what "beside the watch's lodging" means - so the wall rows
-        # still flow past it without overflow.
-        CourtZone("practice ground", 202.0, 126.0, 33.0, 42.0),
+        # "Practice ground" + the dojo-is-a-city-institution grounding), west of the E column,
+        # whose barracks abuts the swept patch at x 223 - which is what "beside the watch's
+        # lodging" means - so the wall rows still flow past it without overflow. Pass 4 widened it to 45 ft; pass 5
+        # gave the 12 ft back to the barracks.
+        CourtZone("practice ground", 190.0, 126.0, 33.0, 42.0),
+        # The outer court's open ground between the hearing court and the practice ground (pass 4, building-review round
+        # 3: ~50 x 40 ft unnamed): the way from the forecourt to the middle gate and the hall's east door, named, not
+        # fenced (UNFENCED_ZONES). Its bounds are a drawing convention.
+        CourtZone("yard", 141.0, 131.0, 47.0, 33.0),  # y 131 since pass 6: the office hall is 38 ft deep
+        # The cart yard before the service gate (pass 4: the ~71 x 30 ft of bare ground in the SE outer court) - the
+        # carts, the stable muck and the prisoners' way out; the kind the hand sheets draw (a DEVIATION from canon on
+        # H and U, forms.md). Its size is a GUESS.
+        CourtZone("cart yard", 188.0, 172.0, 62.0, 25.0),  # its north edge 172 (pass 5) leaves the garrison privy its seat by the barracks
     )
     b = BuildingSpec
     buildings = (
         # inner (residence) court - buildings ring N/E/W walls + back the divider
-        b("residence", "lord", 92.0, 36.0, "inner", "N", order=10, feature="residence"),
-        b("servants", "service", 66.0, 15.0, "inner", "N", order=2, feature="servants' quarters"),
-        b("kitchen", "service", 44.0, 36.0, "inner", "W", order=5, feature="kitchen"),
-        b("shrine", "shrine", 36.0, 30.0, "inner", "E", order=4, feature="compound shrine"),  # at the hall-shrine ceiling (~36 x 30 ft); the 40 x 32 it was drew over it (feature 254)
-        b("guest house", "lord", 33.0, 30.0, "inner", "E", order=3, feature="guest quarters"),
-        b("karo's house", "lord", 37.0, 26.0, "inner", "divider", order=3, feature="karo's house"),
+        # The residence: one block under one roof (R02's ordinary form, research buildings 250), MASSED IN TWO ROWS front
+        # and back (forms.md R02; the Kuchiba house's rooms "stand in two rows, front and back", research buildings 260).
+        # Its rooms take the palace order's lesser form - the reception at the east END, the full depth, nearest the
+        # middle gate; the master's rooms beside it on the garden row; the family's beyond, with the inner rooms behind
+        # (R03, research buildings 260). The veranda runs along the garden face alone, 4 ft (R01's first form, research
+        # buildings 240: 3-6 ft). Its inner entrance opens on its west face, toward the kitchen (research buildings 370).
+        # It stands 10 ft off the north wall: the rear band narrowed to a cart/servant alley (research buildings 230),
+        # the family privy flush to the wall in it.
+        # THE HOUSE'S SIZE is research buildings 380's: the Yokota house of a 150-koku district magistrate (gun-bugyo, the
+        # county post itself) had a main house of about 49 tsubo, ~1,740 sq ft. Pass 6 takes that house, not the 67-tsubo
+        # house of a 500-1,000 koku retainer: the district magistrate is this posting's own rank. The residence 56 x 24 ft
+        # (1,344 sq ft with its veranda), the kitchen 20 x 18 (360) and the bath 10 x 8 (80) make ~1,784 sq ft, ~50
+        # tsubo. The room sizes are GUESSES.
+        b(
+            "residence",
+            "lord",
+            56.0,
+            24.0,
+            "inner",
+            "N",
+            order=10,
+            feature="residence",
+            rooms=(
+                ("inner rooms", 0.0, 0.0, 36.0, 10.0),
+                ("family quarters", 0.0, 10.0, 18.0, 10.0),
+                ("lord's quarters", 18.0, 10.0, 18.0, 10.0),
+                ("reception room", 36.0, 0.0, 20.0, 20.0),
+            ),
+            engawa_ft=4.0,
+            door_face="W",
+            inset_ft=10.0,
+        ),
+        # THE SERVANTS' ROW TAKES THE NW CORNER, the kitchen yard before it (pass 6, building-review round 5: east of the
+        # house the servants were cut off from the kitchen - the corridor closes the kitchen-residence gap - and ~190 ft
+        # round from the postern). It is placed first (order 12) so the kitchen and the house follow it east. 72 x 22 ft,
+        # a nagaya two rooms deep for the ~10 household servants, a GUESS.
+        b("servants' quarters", "service", 72.0, 22.0, "inner", "N", order=12, feature="servants' quarters"),
+        # The kitchen stands between the servants' row and the house, joined to the residence's west end by the short
+        # corridor (research buildings 360/370), its yard - the bath, the well, its one door, the postern - to the south
+        # and west. 20 x 18 ft, part of the house's 49 tsubo (above); the kitchen's own size is a GUESS (research 380:
+        # "How much of either house was kitchen is not given").
+        # Its one outside door opens WEST, onto the way between it and the servants' row that runs to the yard (pass 7,
+        # building-review round 6: on its yard face it opened into a ~5 ft pocket between the bath, the well and the house).
+        # It stands 10 ft off the north wall, as the house does (pass 8, building-review round 7): the house's rear alley
+        # then runs on behind the kitchen to the way between it and the servants' row, and down it to the kitchen yard
+        # and the postern - the night-soil carter's service route to the house's privies. Flush to the wall, the
+        # kitchen and the corridor closed the alley's west end, and the privies were ~400 ft round from any service edge.
+        b("kitchen", "service", 20.0, 18.0, "inner", "N", order=11, feature="kitchen", door_face="W", door_fracs=(0.5, 0.3, 0.7), inset_ft=10.0),
+        # A MODEST shrine, 18 x 14 ft (pass 4, building-review round 3: it was 36 x 30 ft, the hall-shrine ceiling, which
+        # is Ochiba's particular - buildings/programs.md: the shrine is universal equipment, its scale the per-manor
+        # particular; buildings.md "Modest shrine"). The size is a GUESS inside the shrine band (40-1,150 sq ft).
+        b("shrine", "shrine", 18.0, 14.0, "inner", "E", order=4, feature="compound shrine"),
+        # A detached guest house is a GUESS (R10, research buildings 330: guests were received in the main house, and a
+        # guest house apart at a samurai house was not found); kept as the example's draft of the item.
+        b("guest house", "lord", 33.0, 32.0, "inner", "E", order=3, feature="guest quarters"),  # 33 x 32 (was 33 x 30; pass 6, the house's mass returned)
         # outer (administrative) court - office hall backs the divider (oshirasu in front)
-        b("office hall", "lord", 113.0, 34.0, "outer", "divider", order=10, feature="office hall"),
-        b("tax archive", "kura", 34.0, 30.0, "outer", "W", order=6, feature="tax archive"),
-        b("senior retainers", "service", 60.0, 18.0, "outer", "W", order=4, feature="retainers' quarters"),
-        b("clerks' room", "plain", 30.0, 20.0, "outer", "W", order=2, feature="clerks' room"),
-        b("granary", "kura", 52.0, 28.0, "outer", "E", order=6, feature="granary"),
-        b("barracks", "service", 33.0, 34.0, "outer", "E", order=4, feature="barracks"),
-        b("cell", "cell", 18.0, 16.0, "outer", "E", order=1, feature="cell"),
-        b("gatehouse", "dark", 42.0, 15.0, "outer", "S", order=8, feature="gatehouse"),
-        b("stables", "service", 33.0, 23.0, "outer", "S", order=5, feature="stables"),
+        # The clerks' room is a ROOM of the office hall, at its west end on the rear (divider) side, 30 x 20 ft - the
+        # footprint the freestanding clerks' building had (feature 267 R20, research buildings 430: the clerks worked in
+        # rooms of the office; no page gives them a workroom building). Its size is a guess.
+        # Its DAIS BAND (pass 4, building-review round 3): the magistrate's dais, 30 x 10 ft centered on its south face over
+        # the hearing court (buildings.md "Office hall (with dais band)", the size Ochiba draws; a GUESS). Its door opens
+        # on its east face, by the middle gate - the south face is the court's.
+        b(
+            "office hall",
+            "lord",
+            113.0,
+            38.0,
+            "outer",
+            "divider",
+            order=10,
+            feature="office hall",
+            rooms=(("clerks' room", 0.0, 0.0, 30.0, 20.0), ("day office", 30.0, 0.0, 42.0, 20.0), ("official study", 72.0, 0.0, 41.0, 20.0)),
+            dais=(30.0, 10.0),
+            door_face="E",
+            # its doors open on the FRONT room (0.8 of the end faces), east by the middle gate and west to the archive
+            # and the retainers (pass 6, building-review round 5: the front room and the west end had none)
+            extra_doors=("W",),
+            door_fracs=(0.8, 0.7),
+        ),
+        # 34 x 34 ft (it was 34 x 30; pass 6, returning the house's mass - a GUESS in the band 20-48 x 10-36)
+        b("tax archive", "kura", 34.0, 34.0, "outer", "W", order=6, feature="tax archive"),
+        # 50 ft long (it was 60): the hearing court, now centered on the hall, starts at x 59.5, and the retainers'
+        # east face must keep a 7 ft run in front of it for its tub and door
+        # The staff long-house (pass 6): the senior retainers' quarters, 50 x 36 ft, with the KARO'S BAY at its north end,
+        # 14 ft of it with its own door - R11's attested form (research buildings 340: at an intendancy the staff lived
+        # inside the compound in small houses or long-houses; a chief retainer's house inside the lord's own compound was
+        # not found, and "a small house of their own rather than a bay of the staff long-house is a GUESS"). The karo's
+        # house of its own in the inner court (pass 5) is gone. The sizes are GUESSES.
+        b(
+            "senior retainers' quarters",
+            "service",
+            50.0,
+            36.0,
+            "outer",
+            "W",
+            order=4,
+            feature="retainers' quarters",
+            rooms=(("karo's house", 0.0, 0.0, 50.0, 14.0),),
+            extra_doors=("E",),
+            door_fracs=(0.2, 0.7, 0.5),
+        ),
+        # 60 x 30 ft (it was 52 x 28), the top of the granary band (30-60 x 14-36): pass 5 returned the ~2,000 sq ft the
+        # house gave up (research buildings 380) to the compound's working stores and lodgings, holding coverage in the
+        # jin'ya band (33-42%) without shrinking the envelope (buildings.md). A GUESS in the band.
+        b("granary", "kura", 60.0, 30.0, "outer", "E", order=6, feature="granary"),
+        # 45 ft long (it was 33): the platoon lodged on the grounds (staff housing option (a)) is ~10-20 men, and the
+        # watch's range should out-foot the stable by a margin (buildings.md "Barracks": ~27-53 ft); pass 5. A GUESS.
+        b("barracks", "service", 45.0, 34.0, "outer", "E", order=4, feature="barracks"),
+        # 12 x 10 ft: the small end of the single cells read (Osaka's 6 mats, ~12 x 9 ft, to Tenmacho's 18); a county
+        # remand cell belongs there, its size a guess in the span (feature 267 R24, research buildings 460). It was
+        # 18 x 16 ft.
+        b("cell", "cell", 12.0, 10.0, "outer", "E", order=1, feature="cell"),
+        # The gatehouse stands BESIDE the gate, a building of its own (R19's Takayama form, research buildings 420),
+        # 18 x 12 ft - the one measured freestanding guardroom (Kita-in's 3 x 2 ken). It was 42 x 15 ft in the SW
+        # corner, 83 ft from the gate; ~40 ft is the gate range's scale.
+        # Its door opens on the gate passage (east), where the gatekeepers watch - not on the court.
+        b("gatehouse", "dark", 18.0, 12.0, "outer", "S", order=8, feature="gatehouse", beside_gate=True, door_face="E"),
+        # 42 x 24 ft (it was 33 x 23; passes 5 and 6, the same return of mass), still under the barracks as buildings.md
+        # asks. Its grooms' privy is the grooms' row's, on the west wall.
+        b("stables", "service", 42.0, 24.0, "outer", "S", order=5, feature="stables"),
+        # The grooms' and bearers' row (pass 5, building-review round 4: the bare SW ground by the stables while the
+        # grooms lodged in the inner court): a servants' nagaya in the SW corner beside the stables it serves
+        # (research: the domestic servants - cooks, grooms, cleaners - lived in a nagaya; a second row by the stables is
+        # a GUESS), 44 x 18 ft. It takes the corner (order above the stables') so the stables' privy keeps its end face.
+        b("grooms' row", "service", 44.0, 18.0, "outer", "S", order=6, feature="servants' quarters"),
     )
     return CompoundProgram("County Magistracy (example)", env, spine, buildings)
 

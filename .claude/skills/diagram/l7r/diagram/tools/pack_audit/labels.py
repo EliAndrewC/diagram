@@ -91,6 +91,15 @@ def check_program(plan: ParsedPlan, btype: BuildingType, form: str | None, site:
     return out
 
 
+def _of_its_kind(label: Label, plan: ParsedPlan) -> Sequence[Rect]:
+    """The structures a label may name: those tagged with the label's own kind where it carries one and any are drawn,
+    else all of them. A caption seated beside its building by the standard (feature 267) can stand nearer another one -
+    Ubame's INARI SHRINE, set left of the shrine, stood nearest a 6 x 5 ft privy and was measured as the shrine."""
+    kind = plan.label_kinds.get(label.pos)
+    own = [r for r in plan.structures if kind and plan.label_kinds.get(r.pos) == kind]
+    return own or plan.structures
+
+
 def check_bands(plan: ParsedPlan, btype: BuildingType, form: str | None) -> list[str]:
     """Every labeled required item's footprint lies in its declared band (feet, either orientation)."""
     out: list[str] = []
@@ -99,7 +108,7 @@ def check_bands(plan: ParsedPlan, btype: BuildingType, form: str | None) -> list
         if band is None or band.presence_only:
             continue
         for lb in matches(item, plan.labels, plan.label_kinds):
-            r = structure_for(lb, plan.structures)
+            r = structure_for(lb, _of_its_kind(lb, plan))
             if r is None:
                 continue  # a label on open ground: the program check's business, not a size's
             w_ft, h_ft = r.w / FTPX, r.h / FTPX
