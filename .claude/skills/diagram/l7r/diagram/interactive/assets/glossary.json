@@ -8451,5 +8451,25 @@
    "hidenin",
    "悲田院"
   ]
+ },
+ "kabuki": {
+  "def": "Japan's popular stage drama of the Edo period, played by male actors with music and dance in roofed city playhouses such as Edo's three licensed theaters and Osaka's Dotonbori houses.",
+  "variants": [
+   "kabuki"
+  ]
+ },
+ "outer moat": {
+  "def": "The outermost moat of a castle town, the line that marked where the city proper ended; Edo's playhouses were moved in 1842 to land far outside it.",
+  "variants": [
+   "outer moat",
+   "outer moats"
+  ]
+ },
+ "Enpo era": {
+  "def": "A Japanese era, 1673 to 1681, the decade of the first count of Osaka's domain kurayashiki.",
+  "variants": [
+   "Enpo era",
+   "Enpo"
+  ]
  }
 }

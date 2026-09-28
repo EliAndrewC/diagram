@@ -494,6 +494,8 @@ enfeoffments	enfeoffment
 engishiki	Engishiki
 enoki	enoki
 enokida	Enokida
+enpo	Enpo era
+enpo era	Enpo era
 eta	eta
 eunis	EUNIS
 eutrophic	eutrophication
@@ -974,6 +976,7 @@ jōgōe-chi	jōgōe-chi
 jōsui ido	josui-ido
 kabata	kabata
 kabu-ido	kabu-ido
+kabuki	kabuki
 kachi	doshin
 kadoya	kadoya
 kaei	Kaei
@@ -1437,6 +1440,8 @@ otemon	ote-mon
 otesuji	ote-suji
 ou	Ou
 oute	ote-mon
+outer moat	outer moat
+outer moats	outer moat
 outfall	outfall
 outwork	outwork
 outworks	outwork
