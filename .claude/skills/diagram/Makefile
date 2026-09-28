@@ -1087,8 +1087,18 @@ notes: ## [project] print the named notes of ONE question and only the blocks of
 	@if [ -z "$(PAGE)" ] || [ -z "$(SECTION)" ] || [ -z "$(KEYS)" ]; then printf 'make notes: PAGE=<page> SECTION=<question> KEYS=<key,key> are required\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_check_bundle.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" --section "$(SECTION)" --notes "$(KEYS)" --print-notes
 
+# GUARD_EDIT_OK: feature 274 D5 - two new operations (read a coordination file's matching lines; append one line without reading it); no guard changes.
+lines: ## [project] print ONLY a coordination file's matching lines - the claims file, a handoff, a checks report - numbered, with how many were shown of how many; never read one whole (feature 274)   FILE=<file> KEY=<regex>
+	@if [ -z "$(FILE)" ] || [ -z "$(KEY)" ]; then printf 'make lines: FILE=<file> KEY=<regex> are required - e.g. make lines FILE=/diagram/.clones/RESEARCH-CLAIMS.md KEY="^- 269"\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_coord.py" lines "$(FILE)" "$$KEY"
+
+append: ## [project] append ONE line to a coordination file without reading or printing it (feature 274)   FILE=<file> LINE="<text>"
+	@if [ -z "$(FILE)" ]; then printf 'make append: FILE=<file> LINE="<text>" are required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_coord.py" append "$(FILE)"
+
 # GUARD_EDIT_OK: feature 265 FR-010 - a new operation (reserve a glossary or registry prefix under a host-wide lock); new-file-hooks.sh makes it the way in.
-reserve: ## [project] reserve the next glossary or registry-entry prefix under a host-wide lock and write the file's stub - prints its path; fill it in (feature 265 FR-010: parallel queues never collide)   KIND=glossary|registry KEY=<term or key>
+# GUARD_EDIT_OK: feature 274 D4 - KEY_CAP_OK='<reason>' passes a write session's key cap; make exports it to the recipe as it is, so no change below.
+reserve: ## [project] reserve the next glossary or registry-entry prefix under a host-wide lock and write the file's stub - prints its path; fill it in (feature 265 FR-010: parallel queues never collide; feature 274: a write session's 11th registry key is refused)   KIND=glossary|registry KEY=<term or key> [KEY_CAP_OK='<reason>']
 	@if [ -z "$(KIND)" ] || [ -z "$(KEY)" ]; then printf 'make reserve: KIND=glossary|registry KEY=<term or key> are required\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/reserve-prefix.py" "$(KIND)" "$(KEY)"
 
@@ -1103,7 +1113,8 @@ apply-edits: ## [project] apply a quote-check or record-format report's EDIT and
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_apply_edits.py" "$(FROM)" --root "$$(git rev-parse --show-toplevel)" $(if $(SKIP),--skip "$(SKIP)",) $(if $(DRY),--dry-run,)
 
 # GUARD_EDIT_OK: feature 250 - a new operation (one page's work in a fresh headless session, started from a brief); no guard changes.
-page-session: ## [project] start ONE page's work in a FRESH headless session, detached, from written briefs, one after another - absolute paths; a then:<script> step queues the briefs it prints (feature 250 D7, R3)   BRIEF="<file> then:<script>" [NAME=<session name, default this clone's>] [MODEL=<model>]
+# GUARD_EDIT_OK: feature 274 D2 - the runner refuses a write brief over four questions; WRITE_CAP_OK='<reason>' reaches it through make's exported environment.
+page-session: ## [project] start ONE page's work in a FRESH headless session, detached, from written briefs, one after another - absolute paths; a then:<script> step queues the briefs it prints (feature 250 D7, R3); a write brief over four questions is refused (feature 274)   BRIEF="<file> then:<script>" [NAME=<session name, default this clone's>] [MODEL=<model>] [WRITE_CAP_OK='<reason>']
 	@if [ -z "$(BRIEF)" ]; then printf 'make page-session: BRIEF=<file> is required - e.g. make page-session BRIEF=specs/250-close-the-record-checks/briefs/homesteads.md\n' >&2; exit 2; fi
 	@cd "$$(git rev-parse --show-toplevel)" && scripts/page-session.sh "$(BRIEF)" "$(NAME)" "$(MODEL)"
 

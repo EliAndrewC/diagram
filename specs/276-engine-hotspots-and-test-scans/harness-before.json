@@ -1,0 +1,73 @@
+{
+  "tests": {
+    "tests/test_memory.py::test_no_engine_module_imports_a_heavy_library_at_import_time": 1.79,
+    "tests/hamletgen/test_driver.py::test_every_loop_that_runs_the_stages_sits_inside_a_roll_scope": 1.58,
+    "tests/test_package_surfaces.py::test_the_census_found_the_tree": 1.87,
+    "tests/settlement/test_water_ways.py::test_no_pass_deletes_a_lane_record_without_its_ink_slot": 1.23,
+    "tests/interactive/test_record.py::test_every_link_in_a_record_page_resolves[religion-and-death.html]": 4.4,
+    "tests/interactive/test_record.py::test_every_link_in_a_record_page_resolves[buildings.html]": 2.83,
+    "tests/interactive/test_record.py::test_no_tracked_file_names_a_retired_rule_file": 2.98,
+    "tests/interactive/test_record.py::test_no_md_token_anywhere_resolves_to_a_converted_record_file": 2.54,
+    "tests/interactive/test_record_format.py::test_every_glossary_term_is_used_by_a_modal_or_a_record_page": 4.47,
+    "tests/hamletgen/test_homesteads.py::test_a_quota_the_ranks_cannot_seat_reaches_the_rescue_rounds": 3.2,
+    "tests/waterfields/test_seams.py::test_a_map_whose_blue_sample_is_all_demoted_still_exhibits_one_flooded_basin": 4.74,
+    "tests/waterfields/test_comb_topology.py::test_every_channel_is_a_real_run_rather_than_a_stub[11]": 1.77,
+    "tests/settlement/test_core.py::test_build_comb_supply_banks_hems_bunds_onto_the_channel_banks": 3.74
+  },
+  "homesteads": {
+    "rescue-20": {
+      "s": 2.718,
+      "houses": 10,
+      "fit_tests": 46781
+    },
+    "open-10": {
+      "s": 0.078,
+      "houses": 10,
+      "fit_tests": 509,
+      "s_per_house": 0.0078
+    },
+    "open-20": {
+      "s": 0.997,
+      "houses": 20,
+      "fit_tests": 5016,
+      "s_per_house": 0.0499
+    },
+    "dense-60": {
+      "s": 1.172,
+      "houses": 38,
+      "fit_tests": 7204,
+      "s_per_house": 0.0308
+    },
+    "dense-120": {
+      "s": 2.797,
+      "houses": 73,
+      "fit_tests": 14325,
+      "s_per_house": 0.0383
+    },
+    "dense-240": {
+      "s": 8.198,
+      "houses": 140,
+      "fit_tests": 29372,
+      "s_per_house": 0.0586
+    }
+  },
+  "seams": {
+    "seed-5": {
+      "build_s": 1.014,
+      "close_seams_s": 0.842
+    },
+    "seed-11": {
+      "build_s": 1.198,
+      "close_seams_s": 1.018
+    },
+    "seed-17": {
+      "build_s": 1.06,
+      "close_seams_s": 1.015
+    }
+  },
+  "track": {
+    "stage_s": 1.308,
+    "path_checks_s": 0.966,
+    "calls": 176
+  }
+}
