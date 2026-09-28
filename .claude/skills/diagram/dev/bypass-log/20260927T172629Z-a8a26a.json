@@ -1,0 +1,6 @@
+{
+  "utc": "20260927T172629Z",
+  "guard": "pair-hooks",
+  "what": "review prerequisites",
+  "reason": "REVIEW_PREREQ_OK: frozen hand map with no pool generator; F1 and F2 were the known conversion items accepted in 270's PASS; a region-only review as in 268 and 270"
+}

@@ -2,9 +2,12 @@
 `tests/` minus the tier, gate and tooling trees, so these are neither imported nor collected while the scope is
 locked to another tier; the gate collects everything. Helpers stay in the source module and are imported."""
 
+import random
+
 import pytest
 
 from l7r.diagram.settlement import Settlement
+from l7r.diagram.settlement.civic_grounds.funerary import cremation_outline
 from tests.settlement._builders import _cap020, _crop_settlement
 
 
@@ -167,3 +170,19 @@ def test_a_cramped_burial_ground_may_put_its_label_ABOVE_or_slide_it_along() -> 
     slid.cemetery(600.0, 600.0, 200.0, 140.0, label="burial ground", label_xy=(680.0, 690.0))
     slid.place_labels()
     assert any("burial" in str(lb[5]) for lb in slid.M["labels"] if len(lb) > 5), "and label_xy slides it along the plot"
+
+
+def test_cremation_ground_is_drawn_ragged_with_its_fire_bed_off_center() -> None:
+    """Feature 272 (settlement-review 2026-09-27): a ruled ellipse with a centered dark center read as an eye.
+    The ground is a ragged polygon, the same one every time for the same seat, and its outline is not a circle."""
+    a = cremation_outline(0.0, 0.0, 10.0, 10.0, 12, 0.2, random.Random("s"))
+    b = cremation_outline(0.0, 0.0, 10.0, 10.0, 12, 0.2, random.Random("s"))
+    assert a == b, "seeded: the same seat draws the same ground"
+    radii = {round((float(x) ** 2 + float(y) ** 2) ** 0.5, 1) for x, y in (p.split(",") for p in a.split())}
+    assert len(radii) > 1 and max(radii) <= 12.0 and min(radii) >= 8.0, "ragged, inside the jitter band"
+
+    v = Settlement(1000, 1000, seed=2)
+    v.meta(name="V", scale="village")
+    v.cremation_ground(500.0, 500.0)
+    drawn = "".join(v.out)
+    assert "<ellipse" not in drawn and drawn.count("<polygon") == 3, "the ground, its burned ground and its ash bed are ragged polygons"

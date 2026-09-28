@@ -7,6 +7,19 @@ tax-free plots, not a different kind of place, and its defects are the same defe
 This is where hamlet work goes - the paddy fabric, the lane web, homesteads and their groves, wells
 and byres, woodland and windbreaks, the notice board, and the cohort seeds that surface all of it.
 
+## OPEN 2026-09-27, OWED AT CONVERSION: the village generator draws no cremation ground and no wayside stones
+
+Feature 272 put a village cremation ground (six stone jizo at it) and a group of wayside stones at the south lane's
+entry on Hoshigaoka by hand, from research religion-and-death 530 (a VILLAGE draws a cremation ground of its own,
+seated by a roll beside its burial ground or on its own at the edge downstream; a hamlet none) and 520 (one to three
+wayside stones at each place a road or lane enters a hamlet or village; a wayside-hall knob at even odds). No village
+generator draws either, so converting Hoshigaoka drops them. Sketch: after the burial ground is seated, roll the
+cremation seat, and seat the ground with `Settlement.cremation_ground` (village size) 120 ft clear of houses and wells,
+inside ~650 ft of the middle of the houses; put `boundary_marker` stones (unlabeled) beside each lane where it passes
+`BOUNDARY_STONE_CLEAR_FT` beyond the last house. The engine's cremation glyph is a centered ellipse, which a
+settlement-review read as an eye on 2026-09-27 - draw its edge ragged and its fire bed off center, as the hand edit
+does (`p272_apply.py`'s shape, recorded in the Hoshigaoka notes).
+
 ## OPEN 2026-09-27, OWED AT CONVERSION: the village generator draws no shrine grove, sacred tree or basin
 
 Feature 268 (the GM, 2026-09-27: "Add grove to map") put a grove, a roped sacred tree and a stone basin round

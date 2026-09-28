@@ -128,20 +128,20 @@ def saved_rows(out: pathlib.Path) -> list[dict]:
     return rows
 
 
-def next_index(rows: list[dict]) -> int:
-    """The first number past every row AND every file an earlier save wrote.
+def next_number(out: pathlib.Path) -> int:
+    """One past the highest number a page file in `out` already carries.
 
-    WHY (feature 267, G7): counting rows alone reused numbers. A pointer that failed and is asked for again leaves
-    its old row, so a retry that saves it takes a number past the count while the count stays put - and the save
-    after that numbered from the count again and overwrote the retried page when the two shared a host."""
-    used = [int(m.group(1)) for r in rows if (m := re.match(r"(\d+)-", r["file"]))]
-    return max([len(rows), *used]) + 1
+    WHY (feature 271 W2, 2026-09-27): the count of the manifest's rows was used, but a retried failure's row is
+    dropped and re-added, so after one retry the count falls behind the numbers on disk; a third save then wrote
+    its pages over two of the first batch's (27 and 28, the stone-bridge and earth-bridge pages)."""
+    numbers = [int(m.group(1)) for p in out.iterdir() if (m := re.match(r"(\d+)-", p.name))]
+    return max(numbers, default=0) + 1
 
 
 def save(urls: list[str], out: pathlib.Path, pages, quotes: list[str] | None = None) -> list[dict]:  # noqa: ANN001
     out.mkdir(parents=True, exist_ok=True)
     rows = saved_rows(out)
-    start = next_index(rows)  # past every earlier file, so a new page never takes an old one's number
+    start = max(len(rows) + 1, next_number(out))  # past every earlier row and file, so a new page never takes an old one's number
     have = {r["pointer"] for r in rows if r["state"] == "FETCHED"}
     rows = [r for r in rows if r["pointer"] in have or r["pointer"] not in urls]
     for index, url in enumerate((u for u in dict.fromkeys(urls) if u not in have), start):

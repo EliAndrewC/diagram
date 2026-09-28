@@ -54,7 +54,7 @@ class IrrigationDitch(Kind):
     (Bungotakada); how few ditches that form left is this record's own reading, since no page read counts
     ditches: the pages on it describe water passing from paddy to paddy, the one village page giving its merit
     as saving water, not saving digging, and keeping many weirs; prefectural and ministry papers a search
-    showed saying such districts have hardly any channels could not be read. The widths are weaker than they look.
+    showed saying such districts have hardly any channels could not be read. That a ditch beside every paddy is a Meiji anachronism is likewise the record's reading of that contrast: the Ishikawa method of 1887 put each squared parcel on a channel, and the 1899 law set out to build irrigation and drainage works, not in so many words a ditch to every paddy. The widths are weaker than they look.
     The third of a meter is a modern design MINIMUM rather than a measured ditch, and the Chinese doctrine is
     carried by a 2021 provincial standard for consolidated farmland, so what it gives is the doctrine and not
     a premodern layout. The national standard the record once leaned on for both is readable nowhere and is
@@ -167,12 +167,12 @@ class FieldPond(Kind):
     What: A small pocket of open water inside one low paddy plot, reed-fringed - a low pocket where the ground
     pools, or a header pond within the field.
 
-    Why: Flat, flooded valley-bottom paddy is taken here to be the archetype that hosts non-rice obstacles LEAST -
-    graves and knolls go to the slope, rock outcrops belong to terraces - and a small open-water pond is the one thing
+    Why: Flat, flooded valley-bottom paddy, the most valuable and most worked ground, is reckoned to host non-rice obstacles LEAST - graves and
+    knolls go to the slope, rock outcrops are guessed to belong to terraces - and a small open-water pond, embanked and dug into low wet ground, is the one thing
     that genuinely belongs in the wet middle. It is drawn sunk into a single low plot, never across a bund.
 
-    Note: That graves go to high ground and ponds to hollows and low wet ground is read; that flat paddy hosts
-    obstacles least, and outcrops belong to terraces, is this map's own reading; no source counts how often, so the rate is chosen - often enough that a reader meets the feature, rare enough that it
+    Note: That a plains pond is dug into low wet ground is read, as is feng shui setting graves on the hills; that flat paddy hosts obstacles least is this map's reasoning, and rocks as a terrace feature a guess; no source counts
+    how often, so the rate is chosen - often enough that a reader meets the feature, rare enough that it
     does not litter the field.
 
     Caveat: no source counts how often, so the rate is chosen - often enough that a reader meets the feature, rare
@@ -190,8 +190,7 @@ class FieldPond(Kind):
 
 class FieldRock(Kind):
     """
-    What: A cluster of gray boulders inside a field plot - a bedrock outcrop the terrace risers wrap around, too
-    big to clear.
+    What: A cluster of gray boulders inside a field plot - a bedrock outcrop the terrace risers wrap around.
 
     Why: The maps treat rock outcrops as a TERRACE feature, bedrock the risers wrap around, absent on alluvial
     valley, polder and delta ground; where the archetype allows one it stands off-center in its plot so it reads as
