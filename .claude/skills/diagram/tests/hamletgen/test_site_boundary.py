@@ -220,3 +220,26 @@ def test_free_ground_with_nothing_to_claim_claims_no_cell() -> None:
     assert none.taken == set() and not none.rect_refused((10.0, 10.0, 4.0, 4.0))
     thin = FreeGround([], ([((0.0, 50.0), (100.0, 50.0), 0.3)], []), None, (0.0, 0.0, 100.0, 100.0))
     assert thin.taken == set() and not thin.rect_refused((50.0, 50.0, 4.0, 4.0))
+
+
+def test_a_seat_deeper_than_any_ways_reach_is_refused_and_one_within_reach_is_not() -> None:
+    """Feature 278 (FR-005): a way is never drawn on the web's hard ground nor within `WEB_HARD_GAP` of it, so a house
+    whose center stands more than `WEB_REACH_FT` inside that inflated ground is one `unreached_houses` must fail. A
+    500 px field: its middle is refused; a point 60 px in (a way on the margin 68 px off - within reach) is not, nor is
+    one outside; and with no ground installed the settlement refuses nothing."""
+    from l7r.diagram.hamletgen.consts import WEB_HARD_GAP, WEB_REACH_FT
+    from l7r.diagram.hamletgen.homesteads.boundary import UnreachableGround
+    from l7r.diagram.settlement import Settlement
+
+    field = [(100.0, 100.0), (600.0, 100.0), (600.0, 600.0), (100.0, 600.0)]
+    ground = UnreachableGround([field])
+    assert ground.refuses(350.0, 350.0), "the middle of the field, 258 px from any ground a way may stand on"
+    assert not ground.refuses(160.0, 350.0), "60 px in: a way at the margin stands 68 px off, within reach"
+    assert not ground.refuses(60.0, 350.0), "outside the field"
+    edge = WEB_REACH_FT - WEB_HARD_GAP  # the depth at which a margin way stands exactly at the reach
+    assert not ground.refuses(100.0 + edge - 1.0, 350.0) and ground.refuses(100.0 + edge + 3.0, 350.0), "the line sits at the reach"
+    assert UnreachableGround([]).deep is None and not UnreachableGround([]).refuses(0.0, 0.0)
+    s = Settlement(800, 800, seed=1)
+    assert s._house_unreachable((350.0, 350.0, 40.0, 26.0)) is False
+    s._unreachable = ground
+    assert s._house_unreachable((350.0, 350.0, 40.0, 26.0)) is True

@@ -89,6 +89,7 @@ class Settlement(
         self._site_chains: Any = None
         self._site_corridors: Any = None
         self._free_ground: Any = None  # the static ground's surely-taken cells while a site boundary is installed (feature 276)
+        self._unreachable: Any = None  # the ground no way can reach while a site boundary is installed (feature 278)
         self._seat_search: dict[str, int] = {
             "candidates": 0,
             "placer_calls": 0,

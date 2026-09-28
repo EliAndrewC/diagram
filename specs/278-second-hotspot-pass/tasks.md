@@ -6,13 +6,15 @@ pieces; then the tooling; then the sweep, the measurement and the records.
 
 ## Setup
 
-- [ ] T01 The base harness from the detached worktree of `ac01ffe2d` (`harness-before.json`, `measurements.json` before-keys) and the `278-start` bookend
+- [x] T01 The base harness from the detached worktree of `ac01ffe2d` (`harness-before.json`, `measurements.json` before-keys) and the `278-start` bookend
       research: rendering
+      verify: DONE. harness-before.json from make spec-harness in the detached worktree /tmp/base278 at ac01ffe2d; measurements.json before-keys; 278-start bookend 27.8 s (log copied into the clone)
 
 ## US2 - the ways are routed without evaluating ground the search never reaches (P1)
 
-- [ ] T02 [US2] The router's lazy lattice in `hamletgen/ways/route.py` and the recorded-request equality fixture (A1)
+- [x] T02 [US2] The router's lazy lattice in `hamletgen/ways/route.py` and the recorded-request equality fixture (A1)
       research: rendering
+      verify: DONE. route.py: free and band are judged on first ask; test_the_lazy_router_returns_the_whole_box_routers_paths over 14 requests recorded on ac01ffe2d (a recorder id-reuse bug was found and fixed first); ways tests 204 passed
 - [ ] T03 [US2] The doorstep index once per house in `hamletgen/ways/serve.py`, with its spy test (A2)
       research: rendering
 
@@ -53,8 +55,9 @@ pieces; then the tooling; then the sweep, the measurement and the records.
       research: rendering
 - [ ] T16 [P] [US6] The placement page's class hash and the sync-in re-plate, with the planted missing-class test (C, FR-013)
       research: rendering
-- [ ] T17 [P] [US6] The `md_tokens` equality test's line oracle, with the planted token test (C, FR-014)
+- [x] T17 [P] [US6] The `md_tokens` equality test's line oracle, with the planted token test (C, FR-014)
       research: rendering
+      verify: DONE. test_md_tokens_equal_the_whole_text_scan: line oracle over every tracked text plus whole-text edge strings with newlines; 0.64 s call (was 4.6 s); non-vacuity >100 tokens
 
 ## Polish - the sweep and the records
 

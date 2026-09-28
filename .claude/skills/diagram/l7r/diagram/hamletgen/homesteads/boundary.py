@@ -28,6 +28,9 @@ if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds
 
 from l7r.diagram.settlement._geom.indexes import PointGrid, RingIndex
 from l7r.diagram.settlement._geom.primitives import FIELD_KEEPOUT_EPS, facing_chains, seg_dist
+from l7r.diagram.sitegen.geom import crop_polys
+
+from ..consts import WEB_HARD_GAP, WEB_REACH_FT
 
 if TYPE_CHECKING:
     from l7r.diagram.settlement import Settlement
@@ -273,6 +276,53 @@ class FreeGround:
         return any(self.point_taken(px, py) for px, py in ((x0, y0), (x1, y0), (x1, y1), (x0, y1), (cx, y0), (x1, cy), (cx, y1), (x0, cy), (cx, cy)))
 
 
+class UnreachableGround:
+    """The ground where a farmhouse would stand beyond any way's reach (feature 278, FR-005).
+
+    A WAY CANNOT BE DRAWN ON THE WEB'S HARD GROUND. `stage_web` hands its router `hard = [plan.envelope, *crops, toe,
+    *wet]` (`ways/web.py`) and every web lane keeps `WEB_HARD_GAP` off it; the track's `PathChecker` keeps off the same
+    crop. So a house whose center stands more than `WEB_REACH_FT` inside that ground, inflated by the gap, has no way
+    within `WEB_REACH_FT` of it - and `unreached_houses`, a distance test at `WEB_REACH_FT` against the served lanes, is
+    certain to fail it. That is Sawada's first roll: a farmhouse seated in a bare pocket inside the paddy field, 157.1 px
+    deep, stranded on every roll and re-rolled every time (research R3). "Deeper than the reach" is the ground ERODED
+    by the reach - built once, asked per seat with one point test - and eroded a pixel further, so the polygonal
+    approximation of the erosion can only refuse less than the rule, never more.
+
+    THIS REFUSES ONLY THE SEATS UNREACHABLE BY CONSTRUCTION, and records the narrowing: a seat the web cannot reach for any
+    other reason (hemmed in by other steadings' fabric) is still found by the roll's self-report after the build, because
+    reach is not measurable at seating in general - three seat-time tests were built and all three failed
+    (`hamletgen/driver.py`, the re-roll's note). Measured before choosing (observed 2026-09-28, method: `build()` of the five
+    pool hamlets): no house on any pool map stands inside this ground but Sawada's stranded one."""
+
+    __slots__ = ("_contains", "deep")
+
+    def __init__(self, hard: list[Any], gap: float = WEB_HARD_GAP, reach: float = WEB_REACH_FT) -> None:
+        _load_shapely()
+        import shapely
+
+        self._contains = shapely.contains_xy
+        self.deep: Any = None
+        polys = [Polygon(p).buffer(0) for p in hard if len(p) >= 3]
+        if polys:
+            core = unary_union(polys).buffer(gap).buffer(-(reach + 1.0))
+            if not core.is_empty:
+                shapely.prepare(core)
+                self.deep = core
+
+    def refuses(self, x: float, y: float) -> bool:
+        return self.deep is not None and bool(self._contains(self.deep, x, y))
+
+
+def web_hard_ground(s: Settlement, plan: SitePlan) -> list[Any]:
+    """The ground `stage_web` hands its router as hard (`ways/web.py`), as far as it is drawn at seating: the field
+    envelope, the crops, the toe band (asked before it is drawn), the wet ground. A marsh drawn later is simply absent,
+    which only refuses less."""
+    toe = [(float(a), float(b)) for a, b in (s.toe_band() or [])]
+    wet = [[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes", []) if m.get("role") != "defense" and m.get("poly")]
+    env = list(getattr(plan, "envelope", None) or [])  # a plan with no field envelope contributes none
+    return [*([env] if len(env) >= 3 else []), *crop_polys(s), *([toe] if len(toe) >= 3 else []), *wet]
+
+
 def install_site_boundary(s: Settlement, plan: SitePlan) -> None:
     """Compute the boundary for this roll's seat and set it on the settlement for the fit test (`_site_chains`,
     `_site_corridors`), recording it in the manifest for the gate and the measurement - no page element (FR-001)."""
@@ -291,6 +341,7 @@ def install_site_boundary(s: Settlement, plan: SitePlan) -> None:
     s._site_chains = chains
     s._site_corridors = SiteCorridors(corridors, outline)
     s._free_ground = FreeGround(chains, corridors, outline, (0.0, 0.0, float(s.W), float(s.H)))
+    s._unreachable = UnreachableGround(web_hard_ground(s, plan))
     s.M["site_boundary"] = {
         "chords": [[[round(a[0], 1), round(a[1], 1)], [round(b[0], 1), round(b[1], 1)], [round(n[0], 4), round(n[1], 4)]] for ch in chains for a, b, n in ch],
         "water": [[[round(a[0], 1), round(a[1], 1)], [round(b[0], 1), round(b[1], 1)], round(clr, 1)] for a, b, clr in corridors[0]],

@@ -76,3 +76,14 @@ the ditch - paddies on three sides, the ditch and the dry plots below it - 226 p
 search ran six rounds. No way can reach the house without crossing crop, so the straggler router fails, the roll
 reports `farmhouses_reach_a_way`, and the driver re-rolls with that seat forbidden. The placer took a seat that no way
 can reach; only the roll's own self-report, after the whole build, catches it.
+
+## R4. The maps this feature moved (FR-005, and FR-008 when it lands)
+
+**The exact pieces moved nothing** (observed 2026-09-28, method: `make map` of each pool hamlet after A1-A9 and B1, each
+manifest compared byte for byte with the committed one): Inashiro, Kashikawa, Kuwabata and Mizuguchi identical.
+
+**Sawada** (B1; observed 2026-09-28, method: the regenerated manifest against the committed one): built ONCE now
+(`roll_attempt` 1, `roll_after` empty; before, attempt 2 after `farmhouses_reach_a_way`), 16.0 s to regenerate against
+about 31 s. Houses 19 before and after, all plain, nucleated; every farmhouse reaches a way. Paddies 1000 and 1000,
+flooded 1 and 1, dry plots 39 and 40, lane records 12 and 13. Read by eye: the same hamlet - the cluster west of the
+field, no house inside the paddies.
