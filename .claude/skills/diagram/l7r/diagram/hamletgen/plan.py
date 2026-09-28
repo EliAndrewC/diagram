@@ -11,6 +11,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from l7r.diagram.settlement import knob_rng
+from l7r.diagram.settlement._knobs import KNOBS
 
 from .consts import (
     BAMBOO_FORMS,
@@ -18,6 +19,7 @@ from .consts import (
     CARDINAL_BEARINGS,
     CLUSTER_SHAPES,
     COPSE_SITINGS,
+    DEFAULT_WINDWARD,
     DIKE_CROPS,
     FALL_BEARINGS,
     FAN_ASPECTS,
@@ -42,7 +44,6 @@ from .consts import (
     SETTLEMENT_FORMS,
     SINKS,
     SQ_FT_PER_ACRE,
-    WIND_TURNS,
     WIND_VECTORS,
     Poly,
     Pt,
@@ -86,6 +87,7 @@ class HamletSpec:
     manure_form: str | None = None  # the manure fixture's form, heap | pit (feature 150; `MANURE_FORMS`)
     copse_siting: str | None = None  # among_the_houses | against_the_belt (feature 152; `COPSE_SITINGS`)
     kosatsuba_siting: str | None = None  # frontage | waterside (feature 152; `KOSATSUBA_SITINGS`)
+    byre_form: str | None = None  # detached_commons | courtyard - the settlement engine's knob, pinnable so the pool can exhibit both (feature 261)
     dike_crop: str | None = None  # a dike-pond's dike planting, mulberry | sugarcane | banana | fruit (feature 150; `DIKE_CROPS`)
     leftover: str | None = None  # a dike-pond block's unconverted parcels, rice | vegetables | pond (feature 150; `LEFTOVER_FORMS`)
     plot_size: str | None = None
@@ -118,6 +120,8 @@ class HamletSpec:
             raise ValueError(f"windward {self.windward!r} is not a compass quarter: {sorted(WIND_VECTORS)}")
         if self.brook_side is not None and self.brook_side not in BROOK_FLANKS:
             raise ValueError(f"brook_side {self.brook_side!r} must be one of {sorted(BROOK_FLANKS)} - the two flanks the brook may pass the fan on")
+        if self.byre_form is not None and self.byre_form not in KNOBS["byre_form"].value_space:
+            raise ValueError(f"byre_form {self.byre_form!r} must be one of {KNOBS['byre_form'].value_space}")
         if self.water_sink is not None and self.water_sink not in ("pond", "offmap"):
             raise ValueError(f"water_sink {self.water_sink!r} must be 'pond' (a tameike below the fields) or 'offmap' (the drain brook leaves the frame)")
 
@@ -189,14 +193,6 @@ class SitePlan:
     title_pocket_outside: bool = False  # the reservation lies OUTSIDE the content and the crop must take it in (hamletgen.stage_frame)
     placed: int = 0
     acres: float = 0.0
-    # THE BROOK'S SAY IN THE SEAT (feature 230). `seat_cluster` scores a field margin down when the
-    # brook runs near the band and strikes it out entirely when the brook DIVIDES the band, because a
-    # cluster seated there stands in two halves with no crossing between them. Both can cost a
-    # household - the ground the brook rules out is ground the houses had - so neither is the last
-    # word: a roll counts the margins the brook steered it away from, and `generate` rolls again with
-    # the brook ignored at the seat when the map came up short, keeping whichever roll seats more.
-    seat_ignores_brook: bool = False
-    seat_brook_steered: int = 0
     # WHERE THE DRAIN MEETS THE BROOK, when it does (feature 230). Set by `stage_sink`; read by `stage_frame`,
     # which reserves it as content so the crop cannot leave the junction off the sheet. A confluence is the one
     # thing on a watercourse that is a FEATURE rather than a runner - two waters meeting is a place - and the
@@ -266,13 +262,6 @@ def canvas_for(target_acres: float, ftpx: float) -> tuple[int, int]:
     return side, side
 
 
-def windward_for(down_deg: float, seed: int) -> str:
-    """The compass quarter the cold wind blows FROM: upslope, turned by a rolled 45 deg. See
-    `WIND_TURNS` for why the wind is read off the slope instead of drawn independently."""
-    bearing = (down_deg + 180.0 + float(_roll(seed, "wind_turn", WIND_TURNS))) % 360.0
-    return min(WIND_VECTORS, key=lambda q: abs(((math.degrees(math.atan2(WIND_VECTORS[q][1], WIND_VECTORS[q][0])) - bearing + 180.0) % 360.0) - 180.0))
-
-
 def plan_site(spec: HamletSpec) -> SitePlan:
     """Turn a spec into a fully-resolved plan. PURE - no drawing, no engine, no RNG stream."""
     # A POLDER IS LAID TO THE CARDINAL SURVEY GRID, so its fall is rolled from the four cardinals
@@ -293,7 +282,8 @@ def plan_site(spec: HamletSpec) -> SitePlan:
     # which (skill SKILL.md: "these are not the same fact and must not be derived from each other")
     # and leaves the door open for a spec that sets a channel running across the fall.
     water_flow = spec.water_flow if spec.water_flow is not None else down_deg
-    windward = spec.windward or windward_for(down_deg, spec.seed)
+    # THE REGIONAL NORTHWEST unless the spec declares a local wind (feature 261; `DEFAULT_WINDWARD` for why).
+    windward = spec.windward or DEFAULT_WINDWARD
     target_acres = spec.households * GROSS_ACRES_PER_HOUSEHOLD
     a, b = offtakes_for(spec.households)
     W, H = canvas_for(target_acres, 1.0)

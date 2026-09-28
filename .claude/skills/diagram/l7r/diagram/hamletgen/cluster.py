@@ -12,7 +12,7 @@ from typing import Any
 from l7r.diagram.settlement import point_in_poly, seg_closest, seg_dist, seg_intersect
 from l7r.diagram.sitegen.geom import centroid, unit
 
-from .consts import BUNDLE_PITCH, CLUSTER_BAND_ASPECT, Poly, Pt
+from .consts import BUNDLE_PITCH, CLUSTER_BAND_ASPECT, WIND_BACK_MIN_DOT, Poly, Pt
 from .plan import SitePlan
 
 # ---- STAGE 4: seating the settlement, and its ways ----------------------------------------------
@@ -52,6 +52,23 @@ def back_fouled(anchor: Pt, out: Pt, dep: float, dry_plots: Sequence[Poly], reac
     return hit / total
 
 
+BELT_ROOM_MAX_OFF = 0.2  # share of the belt band that may fall off the canvas before a seat is only a fallback - three of
+# its fifteen sample points, the near corners a band square to a diagonal wind clips on a seat with room (a drawing
+# judgment: the seat's belt room is geometry, not a researched figure)
+
+
+def belt_off_canvas(center: Pt, along: Pt, out: Pt, lat: float, dep: float, wind: Pt, W: float, H: float) -> float:
+    """The share of the windbreak's band that would fall off the canvas behind a cluster seated at `center` (feature 261).
+    The band is sampled where `belt_polygon` draws it: 36, 90 and 146 ft upwind of the cluster's windward fringe, across
+    the cluster's width square to the wind."""
+    wx, wy = unit(*wind)
+    px, py = -wy, wx
+    reach = abs(wx * along[0] + wy * along[1]) * lat + abs(wx * out[0] + wy * out[1]) * dep  # the fringe, upwind of the middle
+    span = abs(px * along[0] + py * along[1]) * lat + abs(px * out[0] + py * out[1]) * dep  # half the width across the wind
+    pts = [(center[0] + wx * (reach + d) + px * span * t, center[1] + wy * (reach + d) + py * span * t) for d in (36.0, 90.0, 146.0) for t in (-0.9, -0.45, 0.0, 0.45, 0.9)]
+    return sum(1 for x, y in pts if not (0.0 <= x <= W and 0.0 <= y <= H)) / len(pts)
+
+
 def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | None = None, toe: Poly | None = None, wet: Sequence[Poly] = (), brook: Sequence[Pt] = ()) -> dict[str, Any]:
     """WHERE THE HOUSES GO - the one derivation that decides how the whole map reads.
 
@@ -61,7 +78,9 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
     So the cluster is seated on the field-envelope margin whose OUTWARD NORMAL best points into the
     wind, tie-broken toward the UPSLOPE end - which is also where the gate needs the dwellings to be
     (`dwellings_above_field_drain`: the ground below the drainage line is the wettest in the valley
-    and is not building ground).
+    and is not building ground). A margin whose normal is more than 45 degrees off the wind is not a
+    candidate at all (`WIND_BACK_MIN_DOT`, feature 261) - only the last fallback, reported as
+    `offwind` - because the wind is the regional northwest unless declared, and the seat bends to it.
 
     Scoring every margin point of the DRAWN envelope, rather than picking a compass corner, is what
     makes this survive a field that came out a different shape: the seat follows the fan.
@@ -97,7 +116,8 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
     lat = max(240.0, min(plan.spec.households * (BUNDLE_PITCH**2) / (math.pi * dep), 1100.0))
 
     best: tuple[float, Pt, Pt] | None = None
-    divided: list[tuple[float, Pt, Pt]] = []  # margins the brook runs through, kept only as the fallback
+    offwind: list[tuple[float, Pt, Pt]] = []  # margins whose back is more than 45 deg off the wind, kept only as the last fallback
+    cramped: list[tuple[float, Pt, Pt]] = []  # wind-facing margins whose belt would fall off the canvas, the fallback before those
     n = len(env)
     for i in range(n):
         ax, ay = env[i]
@@ -184,56 +204,39 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
             hem = min(min(seg_dist(mid[0], mid[1], p[i], p[(i + 1) % len(p)]) for i in range(len(p))) for p in dry_plots)
             score -= 1.6 * max(0.0, 1.0 - hem / (2.0 * dep))
             score -= 2.5 * back_fouled(mid, (nx, ny), dep, dry_plots)
-        # ...AND MINUS THE BROOK THROUGH THE BAND (feature 230). Since the brook stopped ending at the intake
-        # and began running on past the fan, a margin can have a stream down the middle of it - and a cluster
-        # seated there is a cluster in two halves: `settlement-review` measured two homesteads, their byre,
-        # two threshing yards and their gardens on the far bank, with every lane, both wells and the notice
-        # board on the near one, and a lane drawn walking into the water. The brook is drawn two stages before
-        # this one, so the seat can simply see it. Scored, not refused: a band the brook merely clips at one
-        # end should lose to the next margin along, while a hamlet whose every margin is crossed still gets
-        # seated - the same shape as the wet-ground foul above, and it reads the band's own sample points.
-        if brook and not plan.seat_ignores_brook:
+        # ...AND MINUS THE BROOK ON THE BAND. A band whose sample points stand on the water is ground the houses cannot
+        # have, so it scores down - scored, never refused. Until feature 261 a band the brook ran THROUGH was struck out,
+        # and the comment here called that "a GUESS ... NOT what the record shows; it is what this engine can draw":
+        # against a settlement's OWN small channel the record has the water run through the middle of the place (Harie's
+        # Okawa, specs/230 R6), and the strike-out existed only because no way could cross the brook. Ways cross it now
+        # at a ford (`ways/checks.py` `brook_fords`) and `bridges()` decks the crossing, so the seat is free to stand on
+        # either bank of its field, or astride the brook (the GM, 2026-09-27: "fix the placement algorithm instead").
+        if brook:
             _bp = [(mid[0] + nx * d - ny * lat * t, mid[1] + ny * d + nx * lat * t) for d in (dep * 0.5, dep + 34.0, dep * 2.0) for t in (-0.9, -0.45, 0.0, 0.45, 0.9)]
-            _sides = {1 if ((q[0] - mid[0]) * -ny + (q[1] - mid[1]) * nx) > 0 else -1 for q in _bp for a, b in zip(brook, brook[1:], strict=False) if seg_dist(q[0], q[1], a, b) < dep * 2.0}
             crossed = sum(1 for q in _bp if min((seg_dist(q[0], q[1], a, b) for a, b in zip(brook, brook[1:], strict=False)), default=1e9) < 30.0) / len(_bp)
             score -= 3.0 * crossed
-            plan.seat_brook_steered += crossed > 0.0 or len(_sides) > 1
-            if len(_sides) > 1:
-                # THIS IS A GUESS, AND IT IS THIS PROJECT'S OWN (constitution XII; the pass is specs/230 R6).
-                # The record was asked and answers by SCALE: against a RIVER a settlement stands on one bank
-                # (Harie sits on the Ado's left bank, Hagikura names the far bank "the facing mountain", the
-                # Tenryu's villages are 川東 and 川西), but against a settlement's OWN small channel the water
-                # runs through the middle of the place - Harie's Okawa flows through the center of the district
-                # and one of its channels runs alongside the house. A seven-foot brook is the second kind, so
-                # the rule below is NOT what the record shows; it is what this engine can draw. A hamlet seated
-                # astride the brook is one no way can cross: the stream is a keep-out, the router never routes
-                # over it, and `bridges()` decks only a crossing that already exists (0 bridges on 2,000 ft of
-                # water with a homestead stranded across it, settlement-review pass 4). The straddling form is
-                # the knob candidate in `future-work/farming-communities.md`, for the day a way can cross.
-                #
-                # A DIVIDED BAND IS REFUSED, not discounted. Scoring it down was the first cut and it left one
-                # homestead of fifteen on the far bank with no crossing anywhere on the brook, every lane, both
-                # wells and the notice board on the near one - the seat that wins on wind and slope can still be
-                # the one the water runs through. Two passes: the divided margins are struck out, and only if
-                # EVERY margin is divided does the scored form decide, so a hamlet the brook runs across
-                # whatever it does still gets seated rather than raising.
-                #
-                # ...AND NEITHER THE STRIKE-OUT NOR THE PENALTY MAY COST A HOUSEHOLD (cohort seeds 15 and 22,
-                # measured against the pre-feature baseline: 48/48 became 46/48). The ground the brook rules out
-                # is ground the houses had, and the two seeds failed by the two different halves of this rule -
-                # seed 15 on the strike-out (the best margin left held 15 of 16) and seed 22 on the PENALTY
-                # alone, its band never struck out at all, merely scored below a tighter margin across the map
-                # that held 8 of 10. So both halves are counted as the brook steering the seat, and `generate`
-                # rolls the map again with the brook ignored HERE when the first roll came up short, keeping that
-                # roll only if it seats more. A hamlet that loses a household is the worse map - the household is
-                # missing from it - while one the water divides is merely awkward; and which way a map came down
-                # is recorded on it (`meta.seat_divided`) rather than decided silently either way.
-                divided.append((score, mid, (nx, ny)))
-                continue
+        # ...AND A BELT WITH GROUND TO STAND ON (settlement-review of Mizuguchi, feature 261, two rounds). The windbreak
+        # stands 36-146 ft upwind of the houses' windward fringe (`belt_polygon`); a seat whose band runs that belt off the
+        # canvas left the belt a strip beside the westernmost farmsteads, holed where they stood in it. Scored alone (-2.5
+        # x the share off the canvas) the seat still won, because every other wind-facing margin had the brook across its
+        # band - so the share still scores, and past `BELT_ROOM_MAX_OFF` the seat is only a fallback, below every
+        # wind-facing seat with room and above the off-wind ones, as the off-wind margins are below all of these.
+        off = belt_off_canvas((mid[0] + nx * (dep + 12.0), mid[1] + ny * (dep + 12.0)), (-ny, nx), (nx, ny), lat, dep, (wx, wy), plan.W, plan.H)
+        score -= 2.5 * off
+        if nx * wx + ny * wy < WIND_BACK_MIN_DOT:
+            offwind.append((score, mid, (nx, ny)))
+            continue
+        if off > BELT_ROOM_MAX_OFF:
+            cramped.append((score, mid, (nx, ny)))
+            continue
         if best is None or score > best[0]:
             best = (score, mid, (nx, ny))
-    if best is None and divided:
-        best = max(divided, key=lambda t: t[0])  # every margin is divided: the best of them, rather than no seat at all
+    # THE FALLBACKS (feature 261): a wind-facing margin with no room for its belt, then one facing off the wind,
+    # recorded on the map as `seat_offwind`.
+    if best is None and cramped:
+        best = max(cramped, key=lambda t: t[0])
+    if best is None and offwind:
+        best = max(offwind, key=lambda t: t[0])
     if best is None:
         raise ValueError("no field margin is clear of the drain and the dry hem - the fan has no buildable flank")
     _, anchor, out = best
@@ -249,7 +252,16 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
     # fronts the paddy across its lane rather than standing in the rice.
     cx = anchor[0] + out[0] * (dep + 12.0)
     cy = anchor[1] + out[1] * (dep + 12.0)
-    return {"cx": cx, "cy": cy, "along": along, "out": out, "lat": lat, "dep": dep, "anchor": anchor, "divided": any(anchor == d[1] for d in divided)}
+    return {
+        "cx": cx,
+        "cy": cy,
+        "along": along,
+        "out": out,
+        "lat": lat,
+        "dep": dep,
+        "anchor": anchor,
+        "offwind": out[0] * wx + out[1] * wy < WIND_BACK_MIN_DOT,
+    }
 
 
 def _arm_hit(a: Poly, b: Poly) -> Pt | None:

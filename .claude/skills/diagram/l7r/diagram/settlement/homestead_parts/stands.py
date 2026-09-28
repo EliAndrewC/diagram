@@ -11,6 +11,26 @@ if TYPE_CHECKING:
     from ..core import Settlement
 
 
+class BankNear:
+    """`near`'s index when the points have a BANK (feature 261, settlement-review of Kashikawa): a clump is near a point
+    only within `reach` of it AND on its side of `barriers` - three dooryard-copse clumps stood 79-86 ft from a house as
+    the crow flies, across the brook from every farmhouse, where the copse is the trees "in the gaps between the houses".
+    Asked per clump like `Seats.too_near`."""
+
+    def __init__(self, points: Any, reach: float, barriers: Any) -> None:
+        from .._geom import PointGrid
+
+        self.reach = reach
+        self.points = PointGrid(max(reach, 1.0))
+        self.points.extend([((float(p[0]), float(p[1])), float(p[0]), float(p[1]), float(p[0]), float(p[1])) for p in points])
+        self.barriers = [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for a, b in barriers]
+
+    def too_near(self, x: float, y: float) -> bool:
+        from .._geom import segments_cross
+
+        return any(math.dist((x, y), it[0]) <= self.reach and not any(segments_cross((x, y), it[0], a, b) for a, b in self.barriers) for it in self.points.near(x, y, self.reach))
+
+
 class StandsMixin:
     def bamboo_stand(self: Settlement, poly: Any, role: str = "homestead") -> int:  # type: ignore[misc]
         """A BAMBOO STAND - a take-yabu: a clonal thicket with a hard edge, drawn as a STAND-LEVEL glyph
@@ -81,6 +101,7 @@ class StandsMixin:
         within: tuple[float, float, float, float] | None = None,
         face_margin: float | None = None,
         reserved: tuple[float, float, float, float] | None = None,
+        near: tuple[Any, ...] | None = None,
     ) -> int:
         """A COMMUNAL village grove - the Chinese *fengshui* forest (风水林). Unlike the per-house *yashikirin*,
         a NUCLEATED village shelters behind ONE village-scale grove, in three roles (see research/vegetation.html 'What are the village's three groves' 'Village
@@ -227,7 +248,16 @@ class StandsMixin:
             crop_pad=12 + cr,
             dry=self.dry_polys,
             dry_pad=12,
-            dikes=[dk["outline"] for dk in self.M.get("dikes", [])],
+            # ...AND THE MARSH, INSIDE ONLY, as a dike bank is: woody cover "stands on the dry ground above it"
+            # (research/vegetation.html, the marsh margin), so no clump is BASED in the marsh - a Kashikawa copse clump
+            # stood 3-21 ft inside the toe (settlement-review, feature 261) - while a crown may reach over its edge.
+            # The COPSE only: applied to every grove it took Sawada's windward belt from 179 crowns to 104, and 20-34 of the
+            # 68 crowns it refused stood on ground DRAWN dry - the toe marsh's recorded outline runs under the settlement's
+            # cleared ground there, so the outline is not the drawn marsh. The crops' padded keep-out was tried before that
+            # and was worse still. The copse is the grove the review measured, and the parcels' own marsh keep-out is the
+            # precedent it asked for.
+            dikes=[dk["outline"] for dk in self.M.get("dikes", [])]
+            + ([[(float(q[0]), float(q[1])) for q in mk["poly"]] for mk in self.M.get("marshes") or [] if len(mk.get("poly") or []) >= 3] if role == "copse" else []),
             water=[(wl, whw + cr) for wl, whw in water_lines],
             corridors=corr,
             circles=occ,
@@ -248,6 +278,15 @@ class StandsMixin:
         # the clumps seated so far, filed as they land: the re-seat search keeps `step * 0.55` off the
         # ROUNDED clumps and the gap fill keeps half a crown off the unrounded seats, as each always did
         near_clumps, near_seats = Seats(step * 0.55), Seats(clump * 0.5)
+        # `near`: (points, reach) - a clump stands only within `reach` of one of the points (feature 261: the dooryard
+        # copse within a dooryard of a house, the against-the-belt copse at the belt's back). One index, asked per clump.
+        _near: Seats | BankNear | None = None
+        if near is not None and len(near) > 2:
+            _near = BankNear(near[0], near[1], near[2])  # type: ignore[misc]
+        elif near is not None:
+            _near = Seats(near[1])
+            for _p in near[0]:
+                _near.add(float(_p[0]), float(_p[1]))
 
         def _reseat(qx: float, qy: float, require_interior: bool) -> tuple[float, float] | None:
             """A DENSE belt flows around a local obstacle instead of losing the column.
@@ -337,6 +376,8 @@ class StandsMixin:
                         continue
                     if near_clumps.too_near(ax, ay):
                         continue
+                    if _near is not None and not _near.too_near(ax, ay):
+                        continue  # a re-seat is a clump like any other: it stays within `near`'s reach (feature 261)
                     return (ax, ay)
             return None
 
@@ -398,7 +439,7 @@ class StandsMixin:
                 # separate causes have now punched holes in a wind wall here - a wellhead inside the
                 # belt, a peer session's lane crossing it, and a threshing yard's sun corridor - and
                 # each was fixed with its own ad-hoc nudge until the third made the pattern obvious.
-                if blocks.hard(jx, jy):
+                if blocks.hard(jx, jy) or (_near is not None and not _near.too_near(jx, jy)):
                     continue
                 if blocks.local(jx, jy) or blocks.lane(jx, jy):
                     _alt = _reseat(jx, jy, require_interior=not blocks.local(jx, jy))
@@ -482,7 +523,7 @@ class StandsMixin:
                         for _qx, _qy in _inside[len(_inside) // 2 :] + _inside[: len(_inside) // 2]:  # the band's middle outward
                             if within is not None and (_qx + clump * 0.9 < within[0] or _qx - clump * 0.9 > within[2] or _qy + clump * 0.9 < within[1] or _qy - clump * 0.9 > within[3]):
                                 continue
-                            if blocks.hard(_qx, _qy) or blocks.local(_qx, _qy) or blocks.lane(_qx, _qy):
+                            if blocks.hard(_qx, _qy) or blocks.local(_qx, _qy) or blocks.lane(_qx, _qy) or (_near is not None and not _near.too_near(_qx, _qy)):
                                 continue
                             # ...AND NEVER ON TOP OF A CLUMP THAT IS ALREADY THERE (settlement-review
                             # 2026-08-29, acceptance re-check). The depth search is deterministic, so a gap
@@ -532,9 +573,18 @@ class StandsMixin:
         # render, which is the documented behavior for a communal grove - see the note at `set_view`'s
         # frame list), and the RECORD is partitioned against the actual view once there is one.
         _offpage: list[Any] = []
+        # A BELT CROWN IN THE MARSH IS ALDER (feature 261, Sawada's belt on its toe's reed edge): the record's woody stage at
+        # a reed margin is alder or willow (research/vegetation.html, the marsh margin), and alder is the tree of a
+        # wetland's fertile edge, so where the windbreak's ground runs into the recorded marsh its trees are drawn as one
+        _wet = [[(float(a), float(b)) for a, b in m["poly"]] for m in self.M.get("marshes") or [] if m.get("role") in ("toe", "waterside") and m.get("poly")] if role == "windbreak" else []
+        alder = 0
         for jx, jy in seated:
             # feature 150: the belt and the copse are two highlight classes; a water_mouth grove has no
             # class in the vocabulary yet and stays unclassed so the census reports it
+            if any(point_in_poly(jx, jy, w) for w in _wet):
+                alder += 1
+                self._draw_grove(jx, jy, clump, clump, face=(0, -1), mix="alder", cls="alder")
+                continue
             self._draw_grove(jx, jy, clump, clump, face=(0, -1), mix=mix, cls={"windbreak": "windbreak", "copse": "copse"}.get(role))
         if clumps:
             # A COPSE IS RECORDED AT THE SIZE IT WAS DRAWN, not at the size it was asked for.
@@ -571,6 +621,7 @@ class StandsMixin:
                     "r": round(clump / 2, 1),
                     "clumps": clumps,
                     "clumps_offpage": (_offpage if face_margin is not None and clumps else []),  # actual drawn clump centers + radius, for groves_clear_of_lanes
+                    "alder": alder,  # of the clumps, those standing in the marsh and drawn as alder (feature 261)
                     "poly": [[round(px, 1), round(py, 1)] for px, py in poly],
                 }
             )

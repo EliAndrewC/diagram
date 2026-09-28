@@ -470,7 +470,9 @@ class WetGroundMixin:
             return []
         dx, dy = math.cos(math.radians(down_deg)), math.sin(math.radians(down_deg))
         ux, uy = -dy, dx  # cross-slope unit vector (the contour direction)
-        cult = [p for poly in polys for p in poly] + [p for dp in self.M.get("dry_plots", []) for p in dp["poly"]]
+        # ...not a HOMESTEAD field (feature 261): those are laid after the ways, so counting them moved the toe after the seat
+        # and the router had been handed it, and Sawada's marsh came out over the connector's handover
+        cult = [p for poly in polys for p in poly] + [p for dp in self.M.get("dry_plots", []) if not dp.get("homestead") for p in dp["poly"]]
         v_in = max(p[0] * dx + p[1] * dy for p in cult) - pad  # inner edge: `pad` ABOVE the crop's lowest point, so the reeds still tuck under the crop
         bleed = 120.0
         corners = [(-bleed, -bleed), (self.W + bleed, -bleed), (self.W + bleed, self.H + bleed), (-bleed, self.H + bleed)]

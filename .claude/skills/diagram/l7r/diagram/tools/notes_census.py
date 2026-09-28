@@ -39,8 +39,17 @@ def census(M: dict[str, Any]) -> str:
     ]
     boards = [b for b in (M.get("kosatsuba") or []) if isinstance(b, dict)]
     for b in boards:
-        near = sum(1 for h in houses if math.dist(h, (float(b["x"]), float(b["y"]))) <= 250.0)
-        rows.append(f"- notice board at **({float(b['x']):.1f}, {float(b['y']):.1f})**, **{near}** of {len(houses)} farmhouses within 250 ft")
+        if (M.get("meta") or {}).get("kosatsuba_seat") == "entrance":
+            # AN ENTRANCE BOARD IS JUDGED BY THE WAYS OUT, NOT BY THE HOUSES NEAR IT (feature 261): it stands where the
+            # approach meets the settlement, so a count of dwellings around it says nothing about whether it is there
+            from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_HANDOVER_BAND_FT, departure_routes, routes_missed
+
+            routes = departure_routes(M)
+            passed = len(routes) - routes_missed(routes, float(b["x"]), float(b["y"]), KOSATSUBA_HANDOVER_BAND_FT)
+            rows.append(f"- notice board at the entrance, **({float(b['x']):.1f}, {float(b['y']):.1f})**: **{passed}** of {len(routes)} households' ways out pass it")
+        else:
+            near = sum(1 for h in houses if math.dist(h, (float(b["x"]), float(b["y"]))) <= 250.0)
+            rows.append(f"- notice board at **({float(b['x']):.1f}, {float(b['y']):.1f})**, **{near}** of {len(houses)} farmhouses within 250 ft")
     return "\n".join(rows)
 
 

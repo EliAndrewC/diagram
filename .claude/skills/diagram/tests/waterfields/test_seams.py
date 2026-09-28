@@ -727,3 +727,15 @@ def test_visible_parts_leaves_a_list_with_no_real_ring_alone() -> None:
     plots: list[dict[str, Any]] = [{"poly": [(0.0, 0.0), (1.0, 1.0)]}, {"poly": []}]
     _visible_parts(plots, 100.0)
     assert plots == [{"poly": [(0.0, 0.0), (1.0, 1.0)]}, {"poly": []}]
+
+
+def test_a_thin_neighbor_that_takes_a_tail_is_asked_whether_it_grew_one() -> None:
+    """`_shed_necks`: a neighbor narrow enough to pass the mean-width prefilter is asked, after taking the tail, whether it
+    now carries a long tail of its own - it does not (its body is wider than the neck), so the trade stands."""
+    from l7r.diagram.waterfields.seams.close import _shed_necks
+
+    host = {"poly": [(0.0, 0.0), (160.0, 0.0), (160.0, 4.0), (60.0, 4.0), (60.0, 40.0), (0.0, 40.0)]}
+    along = {"poly": _rect(60, 4, 160, 16)}  # 100 x 12: under the prefilter's mean width once it takes the 4 ft tail
+    plots = [{"poly": list(host["poly"])}, {"poly": list(along["poly"])}]
+    _shed_necks(plots, 1.25 * 2.0, 15.0 * 2.0)
+    assert Polygon(plots[1]["poly"]).buffer(0).area > Polygon(along["poly"]).area, "the narrow neighbor took the tail"

@@ -195,7 +195,7 @@ def test_a_re_roll_that_does_not_help_is_not_kept(monkeypatch: pytest.MonkeyPatc
 
     failures, n_rolls, fail_lines, svg = roll_no_help(monkeypatch)
     assert failures == ["farmhouses_reach_a_way[1]"]  # the FIRST roll's verdict is kept, not the worse one
-    assert n_rolls == 3  # roll, rejected re-roll, then the keeper re-emitted
+    assert n_rolls == 2  # roll, rejected re-roll - the keeper was staged, so nothing is re-emitted (feature 261)
     assert fail_lines and "farmhouses_reach_a_way" in fail_lines[0]
     assert svg.count("<svg") == 1 and svg.count("</svg>") == 1  # finished exactly once...
     assert len(re.findall(r"<g[\s>]", svg)) == svg.count("</g>")  # ...so its groups balance

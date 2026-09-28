@@ -1946,6 +1946,7 @@ open-ended dikes	open-ended dike
 ordination platform	ordination platform
 ordination platforms	ordination platform
 origake	origake
+oroshi	oroshi
 oshi	oshi
 oshirasu	oshirasu
 ossuary	ossuary
@@ -2273,6 +2274,8 @@ sasumata	sasumata
 satetsu	satetsu
 satoyama	satoyama
 satsuma	Satsuma
+scattered farmstead	sankyoson
+scattered-farmstead	sankyoson
 schistosomiasis	schistosomiasis
 scour	scour
 screen wall	screen wall
@@ -2418,6 +2421,7 @@ shunzhi	Shunzhi
 shōwa	Showa
 shōya	shoya
 si	SI
+siberian high	Siberian high
 siege mining	siege mining
 sigma	sigma
 siheyuan	siheyuan

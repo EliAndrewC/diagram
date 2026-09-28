@@ -29,7 +29,7 @@ THREE RULES, and they are the whole contract:
 WHY IT STARTED SMALL. Feature 119 extracted ~110 lines, not the ~450 its own spec first estimated:
 reading the dependency edges refuted an estimate that had been made from filenames. That is the
 correct size for a FIRST extraction. The remaining candidates - `WIND_VECTORS`, `FALL_BEARINGS`,
-`CARDINAL_BEARINGS`, `WIND_TURNS`, all genuinely terrain doctrine a village shares - move when the
+`CARDINAL_BEARINGS`, `DEFAULT_WINDWARD`, all genuinely terrain doctrine a village shares - move when the
 village tier makes them a second real consumer, so the seam is OBSERVED rather than predicted.
 
 The re-export mechanism below is the same star-import surface the sibling packages use (clause 14,

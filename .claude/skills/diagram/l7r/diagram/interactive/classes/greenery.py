@@ -65,28 +65,60 @@ class SharedBambooGrove(Kind):
 class Windbreak(Kind):
     """
     What: The village shelter belt - the fengshui back grove: a dense, cedar-backed stand of real crowns on the
-    windward, high side of the cluster, embracing it.
+    windward one or two sides of the cluster, never ringing it - toward the northwest, where the region's winter
+    wind comes from, unless the place has a local wind of its own.
 
     Why: A nucleated village shelters behind one village-scale grove against the winter monsoon. Fujian villages
     keep about two fengshui forests each, at closed-canopy density in the well-kept Pearl River Delta patches;
     the one large measured sample of grove size, Hong Kong's survey of 115 village woods, puts the grove behind
-    the village at a median of about one hectare - half under a hectare, four in ten between one and two - so the
-    one-to-two-hectare belt drawn here sits in the upper half of the measured band, large relative to the
-    cluster, and drawn so. It is kept off the west side of the gardens so the beds keep their afternoon sun.
+    the village at a median of about one hectare - half under a hectare, four in ten between one and two. A
+    village's belt is drawn at one to two hectares, in the upper half of that band; a hamlet's follows the cluster it
+    stands behind - half a hectare to under two across these maps, inside the measured range. It is kept off the west side of the gardens so the beds keep their afternoon sun.
 
     Note: The grove count follows the Fujian figure (forests-2020), the density the Pearl-delta patches
     (hu-2011-fengshui-patches), and the size the Hong Kong survey (afcd-ncsc-9-06); the water-mouth cluster's
     size and the tree counts are guesses bracketed by Korean village-grove analogues; the belt's shape follows
-    the terrain and the cluster.
+    the terrain and the cluster. The side it stands on follows the Japanese homestead grove, kept on the north
+    and west against the northwesterly winter wind (irie-2020-igune, yashikirin-jawiki), and the GM's rulings
+    that the maps show that regional wind unless a place declares its own.
 
     Name: windbreak forest
     Covers: `village_groves[role=windbreak]`
     Label: accurate
     Sources: forests-2020
-    Entry: research/vegetation.html - 'The fengshui forest - real scale, and why ours is honest'; research/homesteads.html - 'The garden's sun, and how far the windbreak shades'
+    Entry: research/vegetation.html - 'The fengshui forest - real scale, and why ours is honest'; research/vegetation.html - 'Does a shelter belt wrap the settlement? No - it stands on one or two windward sides'; research/homesteads.html - 'The garden's sun, and how far the windbreak shades'
     """
 
     key = 'windbreak'
+
+
+class Alder(Kind):
+    """
+    What: Alder at the reed edge - where the village's shelter belt runs down into the marsh, its trees are the wet
+    ground's own: alder, drawn a blue-gray green apart from the belt's cedar and broadleaf.
+
+    Why: A marsh grades from reed through sedge and grass to dry ground, and where trees stand at a reed edge in
+    Japan they are alder and willow, never pine; alder takes the ground as a mire dries, and standing water, not a
+    table that swings below the ground, holds it off.
+
+    Note: The zonation is read (packer-2017-phragmites from reed to alluvial forest; lou-2016-floodplain-zones and
+    hotes-wetland-diversity for the sedge and grass between), pine's absence from it is the record's reading of
+    sources that never stand pine on wet ground, and alder's place in it is read (mlit-vegetation-classes,
+    haneishi-2011-kushiro-alder); that a village's belt runs on into the marsh as alder where its ground does is
+    this map's reading of them, and the crowns' blue-gray green is a map drawing convention - the real foliage is a
+    plain dark green, tinted here so the wet stand reads apart from the belt.
+
+    Caveat: the crowns' blue-gray green is a map drawing convention - the real foliage is a plain dark green, tinted
+    here so the wet stand reads apart from the belt.
+
+    Name: alder
+    Covers: `village_groves[role=windbreak]` crowns standing in the marsh
+    Label: accurate
+    Sources: haneishi-2011-kushiro-alder
+    Entry: research/vegetation.html - 'The marsh margin: reed -> sedge/grass -> dry ground; woody at a reed edge is alder or willow, never pine - ACCURATE'
+    """
+
+    key = 'alder'
 
 
 class Copse(Kind):
@@ -174,7 +206,9 @@ class Marsh(Kind):
 
     Why: Wet rice is reclaimed FROM marsh: where reclamation stops, or the ground is too wet to manage, it stays
     reed wetland, and an abandoned paddy reverts to it. The toe marsh is as wide as the fan it drains, and
-    its margin grades reed, then sedge and grass, then dry ground. A RESERVOIR'S SHORE IS REEDED BECAUSE THE
+    its margin grades reed, then sedge and grass, then dry ground - the form of a toe that is cut, since cutting is
+    what keeps willow and other trees from taking a reed bed; left alone, an alder and willow carr would stand at the reed
+    edge, and the map does not draw that form. A RESERVOIR'S SHORE IS REEDED BECAUSE THE
     POND IS WORKED, not in spite of it: the obvious guess is that a maintained tameike - its bank repaired,
     its silt dredged, its water drawn down each season - would have a margin kept clear, and the record
     contradicts that. A Kagawa Prefecture study found a statistically significant POSITIVE correlation
@@ -185,7 +219,10 @@ class Marsh(Kind):
     is dry-grassland herbs. So reeds stand in the shallows and stop at the foot of the bank - which is why
     you will not see the wet haze on a dike or a pond's raised rim.
 
-    Note: The reclaimed-from-marsh finding, the margin gradient, and the reeded-shore finding are all read; the
+    Note: The reclaimed-from-marsh finding, the order of the margin gradient, the reeded-shore finding, and that cutting
+    keeps trees out of a reed bed are all read; that this toe is the cut, open form rather than an alder-willow carr is
+    the map's choice between two forms the record leaves open, and that such margins were cut for thatch and fodder is
+    unsourced; the
     embankment is mown in the record as it is bare on the map.
 
     Name: marsh

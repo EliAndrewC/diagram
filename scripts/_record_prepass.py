@@ -303,11 +303,9 @@ def render(page: str, listing: list[dict]) -> str:
 
 
 def _bare(heading: str) -> str:
-    """A heading reduced to its letters and digits, so two spellings of one heading compare equal.
-
-    Unescaped first: the fragment's raw `-&gt;` kept `gt` where the page's text form had `>`, so
-    SECTION=120 on vegetation ("reed -&gt; sedge") matched no section (feature 269, 2026-09-27).
-    """
+    """A heading reduced to its letters and digits, so two spellings of one heading compare equal - its entities read
+    as the characters they stand for, since the fragment's `-&gt;` is the assembled section's `->` (feature 261: the
+    marsh-margin question matched no section, and `check-bundle` could not be built for it)."""
     return re.sub(r"[^a-z0-9]+", "", html.unescape(re.sub(r"<[^>]+>", "", heading)).casefold())
 
 

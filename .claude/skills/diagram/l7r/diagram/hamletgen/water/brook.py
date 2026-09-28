@@ -15,6 +15,7 @@ from l7r.diagram.sitegen.geom import crosses_poly, unit
 
 from ..consts import (
     BROOK_FRAME_MARGIN,
+    BROOK_MAX_TURN_DEG,
     BROOK_SKIRT,
     BROOK_TAP_RUN,
     BROOK_WANDER,
@@ -27,6 +28,16 @@ from ..consts import (
     Pt,
 )
 from ..plan import SitePlan
+
+EXIT_BEND_FRAC = 0.12  # an exit leg's midpoint bend, as a share of the leg ...
+EXIT_BEND_MAX_FT = 60.0  # ... at most this far aside
+
+
+def exit_bend(start: tuple[float, float], heading: tuple[float, float], leg: float, side: float) -> tuple[float, float]:
+    """The midpoint of an exit leg from `start` along `heading` for `leg` ft, set aside by `EXIT_BEND_FRAC` of the leg
+    (at most `EXIT_BEND_MAX_FT`) on `side` (+1 or -1) - one gentle bend in a leg the page still shows (feature 261)."""
+    off = side * min(EXIT_BEND_MAX_FT, EXIT_BEND_FRAC * leg)
+    return (start[0] + heading[0] * leg / 2 - heading[1] * off, start[1] + heading[1] * leg / 2 + heading[0] * off)
 
 
 def _wander(rng: random.Random, stray: float, swing: int) -> tuple[float, int]:
@@ -82,6 +93,29 @@ def _v_within(u: float, floor: float, want: float, d: Pt, p: Pt, box: tuple[floa
         a, b = (lo_b - base) / slope, (hi_b - base) / slope
         hi = min(hi, max(a, b))
     return max(floor, hi)
+
+
+def unfold(course: Poly, limit_deg: float) -> Poly:
+    """The course with every vertex that turns it more than `limit_deg` taken out, repeated until none does.
+
+    A NATURAL BROOK DOES NOT DOUBLE BACK (feature 261, settlement-review of Sawada): where the last stations are held
+    against the frame box and the corner-cutting pass re-clamps its points onto the same edge, the exit leaves from a
+    point behind the one before it and the course folds - 123 degrees, 51 ft inside the sheet, drawn as an acute V. The
+    exit block above already guards the heading it starts on; this holds the property itself on the finished course,
+    whatever produced the fold. Dropping the vertex keeps the ends and the order of everything else."""
+    out = list(course)
+    changed = True
+    while changed and len(out) > 2:
+        changed = False
+        for i in range(1, len(out) - 1):
+            ax, ay = out[i][0] - out[i - 1][0], out[i][1] - out[i - 1][1]
+            bx, by = out[i + 1][0] - out[i][0], out[i + 1][1] - out[i][1]
+            na, nb = math.hypot(ax, ay), math.hypot(bx, by)
+            if na and nb and math.degrees(math.acos(max(-1.0, min(1.0, (ax * bx + ay * by) / (na * nb))))) > limit_deg:
+                del out[i]
+                changed = True
+                break
+    return out
 
 
 def _off_the_axes(course: Poly, away: Pt, eps: float = 1.6, nudge: float = 11.0, hold: int = 0) -> Poly:
@@ -204,6 +238,12 @@ def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = ()
         # than the amplitude: where the crop's floor binds, the walk is not what decides the offset at all, so a
         # wider walk only moves the few stations where the field's own edge is already crooked.
         v = _v_within(u, floor, floor + stray, (dx, dy), (px, py), box)
+        # THE COURSE LEAVES WHERE THE FRAME WOULD PIN IT (settlement-review of Sawada, feature 261). A station the box
+        # holds below its walk is laid flat against the box, and a run of them drew the brook dead level along the sheet's
+        # top margin for 457 ft - the ruled line parallel to the edge the GM called out as a mistake (2026-08-26). Once
+        # the course has run half its stations, the first one the box binds is where it turns off the frame instead.
+        if i > steps // 2 and _v_within(u, float("-inf"), floor + stray, (dx, dy), (px, py), box) < floor + stray - 1.0:
+            break
         out.append((u * dx + v * px, u * dy + v * py))
     # ...and off the frame from the last station, still wandering, the run measured along the fall from there.
     # THE FIRST EXIT LEG KEEPS THE COURSE'S OWN HEADING and only then turns onto the fall: driving it straight
@@ -226,8 +266,14 @@ def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = ()
     # NO WANDER IN THE EXIT, and the turn onto the fall spread over four legs. A lateral term on a leg
     # hundreds of feet long folded the course back on itself (129 degrees on one map, 113 on another, both in
     # the last four vertices), and the part that leaves the sheet is the one place a straight run costs nothing.
-    for f, blend in ((0.22, 0.3), (0.26, 0.6), (0.26, 0.85), (0.26, 1.0)):
+    for k, (f, blend) in enumerate(((0.22, 0.3), (0.26, 0.6), (0.26, 0.85), (0.26, 1.0))):
         hx, hy = unit(heading[0] * (1.0 - blend) + dx * blend, heading[1] * (1.0 - blend) + dy * blend)
+        # ...BUT A LEG STILL ON THE PAGE BENDS AT ITS MIDDLE (settlement-review of Sawada, feature 261): the exit starts
+        # where the frame would pin the course, and on a map where that is 940 ft inside the sheet the straight legs drew
+        # 70% of the brook as a ruled line. One gentle bend per leg that starts in frame, alternating side, sized to the
+        # leg (`exit_bend`) - a turn of about 27 degrees, where the long lateral terms that folded the course were 113-129
+        if 0.0 <= px_ <= plan.W and 0.0 <= py_ <= plan.H:
+            out.append(exit_bend((px_, py_), (hx, hy), span * f, 1.0 if k % 2 == 0 else -1.0))
         px_, py_ = px_ + hx * span * f, py_ + hy * span * f
         out.append((px_, py_))
 
@@ -284,7 +330,9 @@ def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = ()
             cv = _v_within(cu, cfloor, max(cfloor, cv), (dx, dy), (px, py), box)
             cut.append((cu * dx + cv * px, cu * dy + cv * py))
     cut.append(mid[-1])
-    return _off_the_axes([*cut, *keep_tail], (px, py), hold=2)  # the tap run: two cut points on the fall, and the segment that leaves it
+    return unfold(
+        _off_the_axes([*cut, *keep_tail], (px, py), hold=1), BROOK_MAX_TURN_DEG
+    )  # the tap run: two cut points on the fall; the segment that leaves it is nudged off an axis like any other (feature 261: Sawada's drew exactly vertical below its tap)
 
 
 def feed_brook(plan: SitePlan, sluice: Pt, crop: Sequence[Poly] = (), run: float = 420.0) -> Poly:
@@ -317,6 +365,10 @@ def feed_brook(plan: SitePlan, sluice: Pt, crop: Sequence[Poly] = (), run: float
                 qx, qy = mid[0] + (sluice[0] - mid[0]) * t, mid[1] + (sluice[1] - mid[1]) * t
                 j = wob.uniform(-16.0, 16.0)
                 legs.append((qx - math.sin(th) * j, qy + math.cos(th) * j))
+            # ...and off the screen axes, as the course below the tap is (`_off_the_axes`): Inashiro's approach drew a leg
+            # 49 ft at 1.2 degrees off vertical (feature 261, found beside Sawada's tap-leaving segment). The nudge moves a
+            # leg's far end across the approach, never the sluice, so the tap stays where the head race leaves it.
+            legs = _off_the_axes(legs, (-math.sin(th), math.cos(th)))
             return [*legs, sluice, *brook_skirt(plan, sluice, plan.brook_side, crop)]
     up = (
         sluice[0] - dx * run,

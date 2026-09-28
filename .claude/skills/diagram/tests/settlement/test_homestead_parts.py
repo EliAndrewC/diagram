@@ -17,6 +17,28 @@ def test_village_grove_fills_an_irregular_polygon_and_records_it():
     assert len(vg) == 1 and vg[0]["role"] == "windbreak" and len(vg[0]["poly"]) == 4
 
 
+def test_a_belt_crown_in_the_marsh_is_drawn_as_alder():
+    """Feature 261 (Sawada's belt on its toe's reed edge): a windbreak clump seated inside a toe marsh is drawn with the
+    alder mix and its own highlight class, and the grove records how many; a clump on dry ground keeps the belt's mix,
+    and a pond-fringe marsh is not the toe."""
+    from l7r.diagram.settlement.homestead_parts.groves import ALDER_GREENS
+
+    s = _nuc_village()
+    s.M.setdefault("marshes", []).extend(
+        [
+            {"role": "toe", "poly": [[150, 480], [300, 480], [300, 700], [150, 700]]},
+            {"role": "pond_fringe", "poly": [[150, 300], [300, 300], [300, 400], [150, 400]]},
+        ]
+    )
+    s.village_grove([(150, 350), (260, 330), (280, 640), (160, 660)], role="windbreak")
+    g = s.M["village_groves"][0]
+    inside = sum(1 for c in g["clumps"] if 150 <= c[0] <= 300 and 480 <= c[1] <= 700)
+    assert 0 < g["alder"] == inside < len(g["clumps"])
+    alder_ink = [svg for svg, cls in zip(s.out, s.out_cls, strict=True) if "alder" in str(cls)]
+    assert len(alder_ink) == g["alder"] and all(any(col in svg for col in ALDER_GREENS) for svg in alder_ink if "<circle" in svg)
+    assert any("<circle" in svg for svg in alder_ink), "non-vacuity: some alder crowns are drawn"
+
+
 def test_village_grove_over_the_paddy_draws_and_records_nothing():
     s = _nuc_village()  # field at [(640,150),(1120,150),(1120,780),(640,780)]
     poly = [(700, 250), (900, 250), (900, 450), (700, 450)]  # a footprint ENTIRELY inside the paddy
@@ -40,6 +62,17 @@ def test_village_grove_skips_clumps_on_a_lane():
     assert vg["clumps"]  # drew clumps in the gaps beside the lane
     for cx, _cy in vg["clumps"]:  # ... but none on the lane tread + clump radius (mirrors the check)
         assert abs(cx - 300) >= 3 + vg["r"]
+
+
+def test_village_grove_keeps_a_reseated_clump_within_near_reach():
+    """Feature 261: `near` bounds every clump, the dense grove's re-seat nudge included - a clump the lane refuses is
+    nudged off the tread, and the nudge may not carry it beyond the reach of the points the grove is named for."""
+    s = _nuc_village()
+    s.M["lanes"] = [{"pts": [[300, 300], [300, 600]], "w": 6}]
+    points = [(300.0, float(y)) for y in range(300, 601, 2)]
+    s.village_grove([(250, 300), (350, 300), (350, 600), (250, 600)], role="windbreak", near=(points, 5.0))
+    for cx, cy in s.M["village_groves"][0]["clumps"] if s.M["village_groves"] else []:
+        assert min(math.hypot(cx - px, cy - py) for px, py in points) <= 5.0
 
 
 def test_corridor_buffers_gathers_lanes_streets_and_road():

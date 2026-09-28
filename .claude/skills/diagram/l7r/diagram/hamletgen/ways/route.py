@@ -16,6 +16,41 @@ from ..consts import (
 from .clearance import _clear_link, _clear_touch
 from .geom import _TOUCH_GAP, _turn_deg
 
+# THE BROOK'S BAND AND WHAT ENTERING IT COSTS, for the roll being drawn (feature 261). `_route` has a dozen callers and
+# none holds the settlement, so the ways stage sets this once where it lays the fords (`set_crossing`) - every map
+# rolled sets it afresh, a brookless map to nothing. Cells: the lattice cell keys (at the cell size asked) are not
+# known in advance, so the band is kept as brook sample points in a 20 px bucket grid and asked per cell center.
+_CROSSING: dict[str, object] = {"grid": {}, "radius": 0.0, "cost": 0.0}
+
+
+def set_crossing(brook: Sequence[Pt], radius: float, cost: float) -> None:
+    """Record the brook course whose band a route pays `cost` to enter, `radius` either side of it; an empty course
+    clears it."""
+    grid: dict[tuple[int, int], list[Pt]] = {}
+    for a, b in zip(brook, brook[1:], strict=False):
+        n = max(1, int(math.dist(a, b) // 5.0))
+        for i in range(n + 1):
+            q = (a[0] + (b[0] - a[0]) * i / n, a[1] + (b[1] - a[1]) * i / n)
+            grid.setdefault((int(q[0] // 20), int(q[1] // 20)), []).append(q)
+    _CROSSING.update(grid=grid, radius=radius, cost=cost if grid else 0.0)
+
+
+def in_brook_band(p: Pt) -> bool:
+    """Is `p` within the recorded brook's band?"""
+    grid, r = _CROSSING["grid"], float(_CROSSING["radius"])  # type: ignore[arg-type]
+    gx, gy, k = int(p[0] // 20), int(p[1] // 20), int(r // 20) + 1
+    return any(math.dist(p, q) <= r for dx in range(-k, k + 1) for dy in range(-k, k + 1) for q in grid.get((gx + dx, gy + dy), ()))  # type: ignore[union-attr]
+
+
+def _new_crossing(path: Sequence[Pt], i: int, j: int) -> bool:
+    """Would pulling path[i..j] straight enter the brook's band where the lattice route between them stayed out of it -
+    a crossing the toll was paid to avoid, taken back by the string-pull?"""
+    if any(in_brook_band(q) for q in path[i : j + 1]):
+        return False
+    (ax, ay), (bx, by) = path[i], path[j]
+    n = max(1, int(math.dist(path[i], path[j]) // 5.0))
+    return any(in_brook_band((ax + (bx - ax) * k / n, ay + (by - ay) * k / n)) for k in range(n + 1))
+
 
 def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], cell: float = 10.0, gap: float = WEB_FABRIC_GAP, pad_mult: float = 0.75) -> Poly:
     """A walkable route from a door to a way, THREADING the steadings rather than assuming a line.
@@ -78,6 +113,10 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
     sx, sy = min(nx - 1, max(0, round((start[0] - x0) / cell))), min(ny - 1, max(0, round((start[1] - y0) / cell)))
     gx, gy = min(nx - 1, max(0, round((goal[0] - x0) / cell))), min(ny - 1, max(0, round((goal[1] - y0) / cell)))
     free[sy][sx] = free[gy][gx] = True  # the two given endpoints are the caller's, not the lattice's to refuse
+    # ENTERING THE BROOK'S BAND IS A CROSSING, and a crossing is charged (`set_crossing`); only free band cells matter -
+    # everywhere but a ford the band is walled off already - so only those are asked
+    _toll = float(_CROSSING["cost"])  # type: ignore[arg-type]
+    band = {(ix, iy) for iy in range(ny) for ix in range(nx) if free[iy][ix] and in_brook_band(to_pt(ix, iy))} if _toll else set()
     dist = {(sx, sy): 0.0}
     prev: dict[tuple[int, int], tuple[int, int]] = {}
     heap = [(0.0, sx, sy)]
@@ -96,7 +135,7 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
                 # later, having been "found". Requiring both orthogonal neighbors makes the lattice
                 # tell the truth about what it can walk.
                 if (dx2 or dy2) and 0 <= jx < nx and 0 <= jy < ny and free[jy][jx] and (not (dx2 and dy2) or (free[iy][jx] and free[jy][ix])):
-                    nd = d + math.hypot(dx2, dy2) * cell
+                    nd = d + math.hypot(dx2, dy2) * cell + (_toll if (jx, jy) in band and (ix, iy) not in band else 0.0)
                     if nd < dist.get((jx, jy), 1e18):
                         dist[(jx, jy)] = nd
                         prev[(jx, jy)] = (ix, iy)
@@ -121,7 +160,7 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
         # acceptance test a moment later - the router found a way through at 5 ft and the pull then
         # refused every shortcut along it at 7, leaving a chain of lattice steps whose diagonals
         # clipped the corners the cell centers had cleared. One number, used by both.
-        while j > i + 1 and not _clear_link(path[i], path[j], hard, walls, water, gap=gap):
+        while j > i + 1 and (not _clear_link(path[i], path[j], hard, walls, water, gap=gap) or (_toll and _new_crossing(path, i, j))):
             j -= 1
         out.append(path[j])
         i = j

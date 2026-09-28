@@ -1,0 +1,1252 @@
+{
+ "ford-spacing": {
+  "value": 160,
+  "unit": "ft",
+  "quantity": "FORD_SPACING in hamletgen/consts.py - the along-brook distance between crossing places, 160 px at the hamlet scale of 1 ft per px; a chosen value (a guess, research/water/270), read 2026-09-27",
+  "command": "grep -n FORD_SPACING .claude/skills/diagram/l7r/diagram/hamletgen/consts.py"
+ },
+ "copse-house-reach": {
+  "value": 90,
+  "unit": "ft",
+  "quantity": "COPSE_HOUSE_REACH_FT in hamletgen/consts.py - how far a dooryard-copse crown may stand from a farmhouse; a calibration of 'in the gaps between the houses' (research/vegetation/020), read 2026-09-27",
+  "command": "grep -n COPSE_HOUSE_REACH_FT .claude/skills/diagram/l7r/diagram/hamletgen/consts.py"
+ },
+ "inashiro-F1": {
+  "verifies": "F1",
+  "subject": "inashiro",
+  "value": 0,
+  "unit": "routes",
+  "quantity": "households' ways out (the drawn lanes walked to the connector's handover and on along it) that pass no nearer than 20 ft to the entrance board: 0 of 15 (was a board 711 ft from the connector's mouth)",
+  "source": "pool/hamlets/inashiro/inashiro.json lanes, houses and kosatsuba[0], via departure_routes / routes_missed",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py",
+  "round": "e0234725"
+ },
+ "inashiro-F2": {
+  "verifies": "F2",
+  "subject": "inashiro",
+  "value": 72,
+  "unit": "ft",
+  "quantity": "median distance from the copse's clump BASES (village_groves role copse, clumps) to the nearest farmhouse; the furthest base 90 ft, so no base past the 90 ft reach (was 205 ft median). Measured on bases, not drawn crowns: a drawn crown can reach a few feet beyond its base",
+  "source": "pool/hamlets/inashiro/inashiro.json village_groves[role=copse].clumps against houses",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py",
+  "round": "e0234725"
+ },
+ "inashiro-F3": {
+  "verifies": "F3",
+  "subject": "inashiro",
+  "value": 2,
+  "unit": "pieces",
+  "quantity": "windbreak belt components at a 45 px crown link (was 4); the one gap is where the belt runs off the view's top edge - the frame cuts it, no way or water parts it; every judged 40 ft bin holds at least 106 ft of depth",
+  "source": "pool/hamlets/inashiro/inashiro.json village_groves[role=windbreak].clumps and clumps_offpage, meta.view",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_wind.py",
+  "round": "e0234725"
+ },
+ "inashiro-F4": {
+  "verifies": "F4",
+  "subject": "inashiro",
+  "value": 4,
+  "unit": "parcels",
+  "quantity": "woodland commons parcels: sizes 224x250, 268x143, 197x165, 285x177 ft (no shared size) and nearest strides 347 and 492 ft (no repeated step) - by the notes' 2026-08-18 criterion not the ruled chain; 619-1184 ft from the nearest house",
+  "source": "pool/hamlets/inashiro/inashiro.json commons[role=woodland] x, y, w, h against houses",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py",
+  "round": "e0234725"
+ },
+ "inashiro-F5": {
+  "verifies": "F5",
+  "subject": "inashiro",
+  "value": 1,
+  "unit": "bridges",
+  "quantity": "plank bridges on the brook carrying a way from the houses to the field; the field spur is drawn (94 ft now; 451 ft on the roll this record first measured), one spur lane; every way that crosses the brook has a bridge within its span",
+  "source": "pool/hamlets/inashiro/inashiro.json bridges, lanes[spur], streams",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py",
+  "round": "e0234725"
+ },
+ "inashiro-F6": {
+  "verifies": "F6",
+  "subject": "inashiro",
+  "value": 1,
+  "unit": "entries",
+  "quantity": "dated notes entry for this map's feature-261 layout move ('2026-09-27 (feature 261): the regional northwest wind, and the layout moved')",
+  "source": "pool/hamlets/inashiro/inashiro.notes.md",
+  "command": "grep -n '^## 2026-09-27 (feature 261)' .claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md",
+  "round": "e0234725"
+ },
+ "kashikawa-F1": {
+  "verifies": "F1",
+  "subject": "kashikawa",
+  "value": 69,
+  "unit": "ft",
+  "quantity": "the windbreak's minimum depth along the wind over every 40 ft bin across it that no way, brook or page edge cuts (the record's minimum 30 ft); 281 crowns at 319 degrees",
+  "source": "pool/hamlets/kashikawa/kashikawa.json village_groves[role=windbreak] via belt_depths",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_wind.py",
+  "round": "e0234725"
+ },
+ "kashikawa-F2": {
+  "verifies": "F2",
+  "subject": "kashikawa",
+  "value": 71,
+  "unit": "ft",
+  "quantity": "median distance from the copse's clump bases to the nearest farmhouse; the furthest base 89 ft, inside the 90 ft reach (was 166.6 ft, 393 crowns)",
+  "source": "pool/hamlets/kashikawa/kashikawa.json village_groves[role=copse].clumps against houses",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py",
+  "round": "e0234725"
+ },
+ "kashikawa-F3": {
+  "verifies": "F3",
+  "subject": "kashikawa",
+  "value": 14,
+  "unit": "deg",
+  "quantity": "compass bearing of the connector's first leg from the handover; the notes' district direction now reads north (the connector-scoring fix of feature 261 turned the track)",
+  "source": "pool/hamlets/kashikawa/kashikawa.json lanes[connector] and kashikawa.notes.md Map notes",
+  "command": "grep -n 'district direction' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md",
+  "round": "e0234725"
+ },
+ "kashikawa-F4": {
+  "verifies": "F4",
+  "subject": "kashikawa",
+  "value": 584,
+  "unit": "ft",
+  "quantity": "the confluence's distance inside the view's top edge, with about 655 ft of brook visible below it; the gen docstring and the notes say so",
+  "source": "pool/hamlets/kashikawa/kashikawa.json streams, channels ending at the brook, meta.view",
+  "command": "grep -n '584 ft' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.gen.py",
+  "round": "e0234725"
+ },
+ "kuwabata-F1": {
+  "verifies": "F1",
+  "subject": "kuwabata",
+  "value": 1,
+  "unit": "sentences",
+  "quantity": "the windbreak pop-up's default sentence names the direction, 'toward the northwest of the houses', not two sides",
+  "source": "interactive/place.py windbreak_default and pool/hamlets/kuwabata/kuwabata.html",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/interactive/test_place.py",
+  "round": "e0234725"
+ },
+ "kuwabata-F2": {
+  "verifies": "F2",
+  "subject": "kuwabata",
+  "value": 1,
+  "unit": "sentences",
+  "quantity": "the windbreak class What text says 'on the windward one or two sides of the cluster, never ringing it'",
+  "source": "interactive/classes/greenery.py Windbreak docstring",
+  "command": "grep -n 'windward one or two sides' .claude/skills/diagram/l7r/diagram/interactive/classes/greenery.py",
+  "round": "e0234725"
+ },
+ "mizuguchi-F1": {
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "value": 0,
+  "unit": "crowns",
+  "quantity": "against-the-belt copse clump bases farther than 60 ft from a belt crown, the belt's off-page crowns included (was 96 of 231 over the cluster)",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json village_groves[role=copse] against village_groves[role=windbreak]",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py",
+  "round": "e0234725"
+ },
+ "mizuguchi-F2": {
+  "verifies": "F2",
+  "subject": "mizuguchi",
+  "value": 0,
+  "unit": "routes",
+  "quantity": "households' ways out that pass no nearer than 20 ft to the entrance board: 0 of 12",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json lanes, houses and kosatsuba[0], via departure_routes / routes_missed",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py",
+  "round": "e0234725"
+ },
+ "mizuguchi-F3": {
+  "verifies": "F3",
+  "subject": "mizuguchi",
+  "value": 1,
+  "unit": "weirs",
+  "quantity": "weirs drawn at the intake (meta.intake 'weir') at seed 23, which the notes and the gen docstring describe",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json weirs, meta.intake",
+  "command": "grep -n 'rolled the \\*\\*weir' .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md",
+  "round": "e0234725"
+ },
+ "sawada-F1": {
+  "verifies": "F1",
+  "subject": "sawada",
+  "value": 0,
+  "unit": "routes",
+  "quantity": "households' ways out that pass no nearer than 20 ft to the entrance board: 0 of 19 (was a board 669 ft from its anchor on a stub)",
+  "source": "pool/hamlets/sawada/sawada.json lanes, houses and kosatsuba[0], via departure_routes / routes_missed",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py",
+  "round": "e0234725"
+ },
+ "sawada-F2": {
+  "verifies": "F2",
+  "subject": "sawada",
+  "value": 45,
+  "unit": "deg",
+  "quantity": "the brook's sharpest turn at a vertex (was 123); the limit is BROOK_MAX_TURN_DEG, 100; and no stretch within 80 ft of the view's edge runs level along it for more than 150 ft (was 457 ft)",
+  "source": "pool/hamlets/sawada/sawada.json streams[0].poly",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py",
+  "round": "e0234725"
+ },
+ "sawada-F3": {
+  "verifies": "F3",
+  "subject": "sawada",
+  "value": 2174,
+  "unit": "ft",
+  "quantity": "distance from where the drain leaves the view (the west edge) to the nearest in-view brook, which leaves by the top edge; the notes' water story says so",
+  "source": "pool/hamlets/sawada/sawada.json field_ditches[role=drain], channels, streams, meta.view",
+  "command": "grep -n 'leaving the frame by its west edge' .claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md",
+  "round": "e0234725"
+ },
+ "sawada-F4": {
+  "verifies": "F4",
+  "subject": "sawada",
+  "value": 0,
+  "unit": "crowns",
+  "quantity": "copse clump bases within 30 ft of a windbreak crown (the copse is 54 bases, all within 90 ft of a farmhouse; was 223 over the belt's west arm)",
+  "source": "pool/hamlets/sawada/sawada.json village_groves copse against windbreak",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py",
+  "round": "e0234725"
+ },
+ "sawada-F5": {
+  "verifies": "F5",
+  "subject": "sawada",
+  "value": 0.55,
+  "unit": "ratio",
+  "quantity": "area of the settlement keep-out the scrub is handed against the old axis-aligned bbox of house centers it replaced; the keep-out is now the hull of the houses AND the farmsteads' parts grown by 44 ft, following the diagonal ribbon",
+  "source": "settlement/land/cover.py hinterland keep-out over pool/hamlets/sawada/sawada.json houses",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/settlement/test_hinterland_cover.py",
+  "round": "e0234725"
+ },
+ "sawada-F6": {
+  "verifies": "F6",
+  "subject": "sawada",
+  "value": 3,
+  "unit": "maps",
+  "quantity": "pool maps with a brook that roll the weir (Inashiro, Kashikawa, Mizuguchi) - the stated reason for declaring intake='open' on Sawada, now true as written",
+  "source": "pool/hamlets/*/*.json meta.intake",
+  "command": "grep -n 'other pool maps with a brook' .claude/skills/diagram/pool/hamlets/sawada/sawada.gen.py",
+  "round": "e0234725"
+ },
+ "sawada-brook-ruled": {
+  "value": 457,
+  "unit": "ft",
+  "quantity": "the longest stretch of Sawada's brook within 80 ft of the view's edge running level along it (within 4 ft of one line), on the manifest before the frame-exit fix (commit 3f997a00); 66 ft after it",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kashikawa-r3-lane-crossings": {
+  "verifies": "F1",
+  "subject": "kashikawa",
+  "round": "3cf15e71",
+  "value": 1,
+  "unit": "crossings",
+  "quantity": "lane crossings of the brook: 1, the field spur's, square on a plank at a ford, reaching the rice across the water; 0 lanes crossing to join two ends on the same bank (lane z1122's double crossing is gone - a crossing is priced); all 20 houses on one bank, and the notes no longer say the hamlet stands astride its brook",
+  "source": "pool/hamlets/kashikawa/kashikawa.json lanes and bridges against streams[0].poly and houses; kashikawa.notes.md Known open and the 2026-09-27 entry",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kashikawa-r3-plank-angle": {
+  "verifies": "F2",
+  "subject": "kashikawa",
+  "round": "3cf15e71",
+  "value": 0,
+  "unit": "deg",
+  "quantity": "the largest angle off square at which any lane crosses the brook (every crossing is squared at stage_crossings before its plank is laid along it); was 52",
+  "source": "pool/hamlets/kashikawa/kashikawa.json lanes against streams[0].poly segment by segment, and bridges' rot",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kashikawa-r3-board": {
+  "verifies": "F3",
+  "subject": "kashikawa",
+  "round": "3cf15e71",
+  "value": 0,
+  "unit": "routes",
+  "quantity": "households' ways out that pass no nearer than 20 ft to the entrance board: 0 of 20; the board stands at the connector's handover, not on a one-house spur",
+  "source": "pool/hamlets/kashikawa/kashikawa.json lanes, houses and kosatsuba[0], via departure_routes / routes_missed",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "sawada-r3-brook-level": {
+  "verifies": "F1",
+  "subject": "sawada",
+  "round": "3cf15e71",
+  "value": 66,
+  "unit": "ft",
+  "quantity": "the longest stretch of brook within 80 ft of the view's edge running level along it (within 4 ft of one line); was 457 - the course now turns off the frame where the frame box would pin it",
+  "source": "pool/hamlets/sawada/sawada.json streams[0].poly against meta.view",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "sawada-r3-board": {
+  "verifies": "F2",
+  "subject": "sawada",
+  "round": "3cf15e71",
+  "value": 0,
+  "unit": "routes",
+  "quantity": "households' ways out that pass no nearer than 20 ft to the entrance board: 0 of 19, the farmhouse at (294,1738) included",
+  "source": "pool/hamlets/sawada/sawada.json lanes, houses and kosatsuba[0], via departure_routes / routes_missed",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kuwabata-r3-scrub": {
+  "verifies": "F1",
+  "subject": "kuwabata",
+  "round": "3cf15e71",
+  "value": 0,
+  "unit": "bases",
+  "quantity": "drawn scrub bases (blade, dot and pine, parsed from kuwabata.svg by the engine's own parse_bases) within 15 ft of a farmstead part: 0 (was 20); and inside the hull of the farmsteads' parts and houses: 0 (was 138)",
+  "source": "pool/hamlets/kuwabata/kuwabata.svg scatter bases against kuwabata.json farm_fixtures, gardens, threshing_yards, byres, farm_sheds, persimmons",
+  "command": "make -C .claude/skills/diagram scatter-bases MAP=pool/hamlets/kuwabata"
+ },
+ "inashiro-r3-spur": {
+  "verifies": "F2",
+  "subject": "inashiro",
+  "round": "3cf15e71",
+  "value": 94,
+  "unit": "ft",
+  "quantity": "the drawn field spur's length (meta.field_spur_ft 92.3): 36 ft to the brook, a 19 ft leg square across it carrying the plank, 39 ft on to the dry hem; the round-1 record inashiro-F5's 451 ft described an earlier roll",
+  "source": "pool/hamlets/inashiro/inashiro.json lanes[spur], meta.field_spur_ft",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "mizuguchi-r3-house-brook": {
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "round": "3cf15e71",
+  "value": 26,
+  "unit": "ft",
+  "quantity": "the nearest any farmhouse corner stands to the brook's course (the placer holds every solid part of a farmstead off a stream at its half-width plus 5 ft); was 0 - a wall on the centerline",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json houses against streams[0].poly",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "mizuguchi-r3-way-home": {
+  "verifies": "F2",
+  "subject": "mizuguchi",
+  "round": "3cf15e71",
+  "value": 0,
+  "unit": "houses",
+  "quantity": "farmhouses whose nearest drawn way stands across the brook from them (the straight line from the house to its nearest lane point crosses the course); was 1, and every lane crossing of the brook is decked and within 4 degrees of square",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json houses, lanes and bridges against streams[0].poly",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "mizuguchi-r3-board-canopy": {
+  "verifies": "F3",
+  "subject": "mizuguchi",
+  "round": "3cf15e71",
+  "value": 32.2,
+  "unit": "ft",
+  "quantity": "the entrance board's clearance from the nearest drawn crown's edge (tree_crowns); was -0.6, inside a crown; all 12 households' ways out still pass it",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json kosatsuba[0] against tree_crowns, and departure_routes",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "mizuguchi-r3-junction": {
+  "verifies": "F4",
+  "subject": "mizuguchi",
+  "round": "3cf15e71",
+  "value": 82,
+  "unit": "ft",
+  "quantity": "the board's distance from the handover - where a lane's end meets the through-running connector, found at (25, 914), inside the page - and the notes now say the board stands on the track beside the lanes' junction",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json lanes[connector], lanes, kosatsuba[0] via kosatsuba_handover",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kashikawa-r4-caption": {
+  "verifies": "F1",
+  "subject": "kashikawa",
+  "round": "4d1f0170",
+  "value": 11.2,
+  "unit": "ft",
+  "quantity": "the entrance board caption's least gap to any farmhouse roof, measured on the drawn (rotated) caption quad; it was 0 with the caption's center inside the roof. The board is sited only where the caption placer's own ladder has a clear seat (caption_room), and the placer judges a tilted caption by its drawn quad",
+  "source": "pool/hamlets/kashikawa/kashikawa.json labels['notice board'] via label_quad against houses[] rectangles",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kashikawa-r4-shape": {
+  "verifies": "F2",
+  "subject": "kashikawa",
+  "round": "4d1f0170",
+  "value": 1.61,
+  "unit": "aspect",
+  "quantity": "meta.cluster_aspect_drawn; the 2026-09-27 notes entry now says the rolled elongated shape draws as a round cloud and is recorded unhonored; re-measured 2026-09-28 after main's feature 276 re-laid the pool (plan D23): 1.61",
+  "source": "pool/hamlets/kashikawa/kashikawa.json meta.cluster_aspect_drawn and meta.cluster_shape_unhonored; kashikawa.notes.md 2026-09-27 entry",
+  "command": "grep -n 'drawn aspect of 1.61' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
+ },
+ "kashikawa-r4-empties": {
+  "verifies": "F3",
+  "subject": "kashikawa",
+  "round": "4d1f0170",
+  "value": 0,
+  "unit": "records",
+  "quantity": "lane records with fewer than two points (the web drops every husk after its last sweep)",
+  "source": "pool/hamlets/kashikawa/kashikawa.json lanes[].pts",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "inashiro-r4-notes": {
+  "verifies": "F1",
+  "subject": "inashiro",
+  "round": "4d1f0170",
+  "value": 2.0,
+  "unit": "aspect",
+  "quantity": "meta.cluster_aspect_drawn, which the notes' 2026-09-27 entry now states (with the copse median 70 ft, meta.copse_house_ft 69.7); re-measured 2026-09-27 against the notes as a later round rewrote them: the drawn aspect is 2.0 on the kept roll",
+  "source": "pool/hamlets/inashiro/inashiro.json meta.cluster_aspect_drawn, meta.copse_house_ft; inashiro.notes.md 2026-09-27 entry",
+  "command": "grep -n 'at an aspect of 2.0' .claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md"
+ },
+ "inashiro-r4-caption-crowns": {
+  "verifies": "F2",
+  "subject": "inashiro",
+  "round": "4d1f0170",
+  "value": 0,
+  "unit": "crowns",
+  "quantity": "drawn tree crowns the notice-board caption's rotated quad touches or contains (the board re-sited to (605,379))",
+  "source": "pool/hamlets/inashiro/inashiro.json labels['notice board'] via label_quad against tree_crowns (x, y, r)",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kuwabata-r4-tail": {
+  "verifies": "F1",
+  "subject": "kuwabata",
+  "round": "4d1f0170",
+  "value": 0,
+  "unit": "tails",
+  "quantity": "lane pairs where one runs back along the other for 30 ft or more within 14 ft (along_tail, cut by _sweep_doubled_tails)",
+  "source": "pool/hamlets/kuwabata/kuwabata.json lanes[].pts via hamletgen.ways.sweeps.along_tail",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kuwabata-r4-caption-lane": {
+  "verifies": "F2",
+  "subject": "kuwabata",
+  "round": "4d1f0170",
+  "value": 3.4,
+  "unit": "ft",
+  "quantity": "the notice-board caption's least clearance to any lane's tread edge, measured on the drawn rotated quad (the gate test test_no_caption_lies_across_a_way now reads the quad for a tilted caption, and the placer's _box_clearance skips the upright box for one)",
+  "source": "pool/hamlets/kuwabata/kuwabata.json labels['notice board'] via label_quad against lanes[] with w/2",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kuwabata-r4-notes": {
+  "verifies": "F3",
+  "subject": "kuwabata",
+  "round": "4d1f0170",
+  "value": 0,
+  "unit": "farmsteads",
+  "quantity": "farmsteads re-seated against main (the farthest 134 ft), which the rewritten 2026-09-27 entry now states with roll_attempt 3 and roll_after farmhouses_reach_a_way; re-measured 2026-09-27 against the notes as a later round rewrote them: the entry now says four farmsteads stand in new seats; re-measured 2026-09-28 after main's feature 276 re-laid the pool (plan D23): 0 - all sixteen farmsteads stand where main's do, on the first roll",
+  "source": "pool/hamlets/kuwabata/kuwabata.json houses[] against main's manifest; meta.roll_attempt, meta.roll_after; kuwabata.notes.md 2026-09-27 entry",
+  "command": "grep -n 'all sixteen farmsteads stand where' .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md"
+ },
+ "kuwabata-r4-outlier": {
+  "verifies": "F4",
+  "subject": "kuwabata",
+  "round": "4d1f0170",
+  "value": 151,
+  "unit": "ft",
+  "quantity": "the largest distance from any farmhouse to its nearest neighbor; the 402 ft outlier beyond the reservoir is not on the kept roll",
+  "source": "pool/hamlets/kuwabata/kuwabata.json houses[] x, y",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kuwabata-r4-empties": {
+  "verifies": "F6",
+  "subject": "kuwabata",
+  "round": "4d1f0170",
+  "value": 0,
+  "unit": "records",
+  "quantity": "lane records with fewer than two points",
+  "source": "pool/hamlets/kuwabata/kuwabata.json lanes[].pts",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kuwabata-r4-shrine": {
+  "verifies": "F7",
+  "subject": "kuwabata",
+  "round": "4d1f0170",
+  "value": 274,
+  "unit": "ft",
+  "quantity": "distance from the re-sited notice board (2040,480) to the nearest vermilion household shrine, now at (2312,520) on the re-seated roll; no shrine stands near the caption",
+  "source": "pool/hamlets/kuwabata/kuwabata.json kosatsuba[0] and farm_fixtures[kind=shrine]",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "mizuguchi-r4-over-and-back": {
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "round": "4d1f0170",
+  "value": 1,
+  "unit": "crossings",
+  "quantity": "the most brook crossings on any household's way out - its route through the drawn lanes and on along the connector (departure_routes), counted against the brook's course - so no way out crosses and comes back; per ROUTE, not per lane record (the per-lane count this record first carried could not see a way assembled from several lanes). The two north-bank farmsteads that crossed twice now have a footpath north on their own bank (_link_home_bank)",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json lanes[], houses[], streams[0].poly via departure_routes; test_every_way_out_crosses_the_brook_at_most_once",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "mizuguchi-r4-banks": {
+  "verifies": "F2",
+  "subject": "mizuguchi",
+  "round": "4d1f0170",
+  "value": 12,
+  "unit": "farmsteads",
+  "quantity": "farmhouses on the brook's larger bank (5 on the other), which line 23 of the notes now says; re-measured 2026-09-27 against the notes as a later round rewrote them: every farmstead now stands on one bank (feature 261 FR-013's fix)",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json houses[] sided against streams[0].poly; mizuguchi.notes.md line 23",
+  "command": "grep -n 'all 12 farmsteads on one bank' .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md"
+ },
+ "mizuguchi-r4-board-words": {
+  "verifies": "F3",
+  "subject": "mizuguchi",
+  "round": "4d1f0170",
+  "value": 40,
+  "unit": "ft",
+  "quantity": "the board's distance from the handover at (25,914); the notes now say it stands on the hamlet's stem lane, 82 ft before it meets the connector; re-measured 2026-09-27 against the notes as a later round rewrote them: the board now stands 144 ft out along the connector from where it meets the lanes (round 176042d3's seat; plan D18); re-measured 2026-09-28 on the belt's far envelope (plan D20): 156, the board re-seated with the belt's new clumps; re-measured 2026-09-28 after main's feature 276 re-laid the pool (plan D23): 40, the board re-seated on the re-laid map",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json kosatsuba[0] via kosatsuba_handover; mizuguchi.notes.md 2026-09-27 entry",
+  "command": "grep -n 'stands 40 ft out along it from where it meets the lanes' .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md"
+ },
+ "inashiro-r5-straggler-end": {
+  "verifies": "F1",
+  "subject": "inashiro",
+  "round": "775ea4b5",
+  "value": 5,
+  "unit": "deg",
+  "quantity": "the largest turn along the straggler lanes[5]: it now runs straight to where it crosses the join lane and ends there (a shallow Y at 21.6 degrees), with no elbow before the junction - the doubled tail is cut at the crossing it overran",
+  "source": "pool/hamlets/inashiro/inashiro.json lanes[5].pts",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "inashiro-r5-median": {
+  "verifies": "F2",
+  "subject": "inashiro",
+  "round": "775ea4b5",
+  "value": 990,
+  "unit": "ft",
+  "quantity": "the median distance from each of the 15 farmhouses to the nearest farmhouse on main's manifest, which the notes now state with that method; re-measured 2026-09-27 against the notes as a later round rewrote them: the median is 990 ft on the kept roll",
+  "source": "pool/hamlets/inashiro/inashiro.json houses[] against .git/review-snapshot/inashiro/main/inashiro.json houses[]; inashiro.notes.md 2026-09-27 entry",
+  "command": "grep -n 'median 990 ft, each house to the nearest house' .claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md"
+ },
+ "sawada-r5-hook": {
+  "verifies": "F1",
+  "subject": "sawada",
+  "round": "775ea4b5",
+  "value": 0,
+  "unit": "hooks",
+  "quantity": "lane ends whose last leg is 12 ft or less turning back 90 degrees or more (joints._HOOK_FT, _HOOK_DEG); a doubled tail that overran the way is now ended at the crossing (cut_at_tail)",
+  "source": "pool/hamlets/sawada/sawada.json lanes[].pts; test_no_lane_ends_in_a_hook",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "sawada-r5-route-wide": {
+  "verifies": "F2",
+  "subject": "sawada",
+  "round": "775ea4b5",
+  "value": 6,
+  "unit": "ft",
+  "quantity": "the width of the join-orphans track lanes[2], which runs unbroken from (669,2144) to the hub at (248,1772) where the connector leaves; the doubled-tails sweep cuts the narrower of two doubled tails, never the wider",
+  "source": "pool/hamlets/sawada/sawada.json lanes[2]",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kuwabata-r5-caption-pair": {
+  "verifies": "F1",
+  "subject": "kuwabata",
+  "round": "775ea4b5",
+  "value": 6.8,
+  "unit": "ft",
+  "quantity": "the notice-board caption's gap to its own board as drawn (turned 38.7 degrees), against 11.2 ft to the nearest other built footprint (the byre); the caption placer and the siter now refuse a seat nearer any other footprint than the board",
+  "source": "pool/hamlets/kuwabata/kuwabata.json labels['notice board'] via label_quad against kosatsuba[0] and every non-ground w/h record; test_the_board_caption_stands_nearest_its_own_board",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kuwabata-r5-moves": {
+  "verifies": "F2",
+  "subject": "kuwabata",
+  "round": "775ea4b5",
+  "value": 0,
+  "unit": "ft",
+  "quantity": "the largest move of the four re-seated farmsteads, matching vacated seats to new ones at the least total distance (562, 450, 134, 116 ft), which the notes now state; re-measured 2026-09-27 against the notes as a later round rewrote them: the entry now states each re-seated farmstead's distance to the nearest of main's seats, 67 to 149 ft, not a move; re-measured 2026-09-28 after main's feature 276 re-laid the pool (plan D23): 0 - no farmstead re-seated against main",
+  "source": "pool/hamlets/kuwabata/kuwabata.json houses[] against .git/review-snapshot/kuwabata/main/kuwabata.json houses[]; kuwabata.notes.md 2026-09-27 entry",
+  "command": "grep -n 'all sixteen farmsteads stand where' .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md"
+ },
+ "kuwabata-r5-woodland": {
+  "verifies": "F3",
+  "subject": "kuwabata",
+  "round": "775ea4b5",
+  "value": 38,
+  "unit": "crowns",
+  "quantity": "the woodland commons' crowns, which the notes now record with its size and its distance from the nearest farmhouse",
+  "source": "pool/hamlets/kuwabata/kuwabata.json commons[role=woodland]; kuwabata.notes.md 2026-09-27 entry",
+  "command": "grep -n 'woodland commons' .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md"
+ },
+ "kuwabata-r6-caption-angle": {
+  "verifies": "F1",
+  "subject": "kuwabata",
+  "round": "c2cb1a4b",
+  "value": 0.0,
+  "unit": "deg",
+  "quantity": "the notice-board caption's angle against its board's (38.7 against 38.7), modulo 180; the upright fallback is removed from the caption placer and from the siter's caption_room, so the board is sited only where a caption AT ITS ANGLE fits - the GM's 2026-08-27 ruling",
+  "source": "pool/hamlets/kuwabata/kuwabata.json labels['notice board'][7] and kosatsuba[0].rot; test_the_board_caption_stands_at_the_boards_angle",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kuwabata-r6-stages": {
+  "verifies": "F2",
+  "subject": "kuwabata",
+  "round": "c2cb1a4b",
+  "value": 0,
+  "unit": "directories",
+  "quantity": "tracked or present `.roll-*` staging directories under pool/: both removed and untracked, `.roll-*/` ignored, and a roll that raises now removes its own stage (driver.discard_on_failure)",
+  "source": "git ls-files pool/ and the pool directories; tests/hamletgen/test_driver.py::test_a_roll_that_raises_leaves_no_stage_behind",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_driver.py"
+ },
+ "mizuguchi-r6-headrace": {
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "round": "c2cb1a4b",
+  "value": 0.0,
+  "unit": "deg",
+  "quantity": "the most any lane crosses a drawn channel off square (the head-race plank by the weir, which lay 44 degrees off); stage_crossings squares crossings of every drawn channel as well as the brook",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json lanes[] against drawn_channels[].pts; test_every_lane_crosses_a_drawn_channel_square",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kuwabata-r7-caption-canopy": {
+  "verifies": "F1",
+  "subject": "kuwabata",
+  "round": "4329d494",
+  "value": 0,
+  "unit": "crowns",
+  "quantity": "drawn tree crowns the notice-board caption's quad and 1.5 ft halo touches (quad_on_canopy against tree_crowns); the siter ranks a board whose aligned caption clears the canopy above one that merely fits, and the placer's shaded test reads the drawn quad, not a disc round the center",
+  "source": "pool/hamlets/kuwabata/kuwabata.json labels['notice board'] via label_quad against tree_crowns; test_the_board_caption_notches_no_crown",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "inashiro-r7-parcel-row": {
+  "verifies": "F1",
+  "subject": "inashiro",
+  "round": "4329d494",
+  "value": 2,
+  "unit": "parcels",
+  "quantity": "woodland parcels drawn, none in a ruled row with two others (in_a_ruled_line, 20% of the span): the third seat stood 5 ft off the line through the first two over 1,104 ft and had no ground off the row, so it is refused",
+  "source": "pool/hamlets/inashiro/inashiro.json commons[role=woodland]; test_no_three_woodland_parcels_stand_in_a_ruled_row",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kashikawa-r7-copse-marsh": {
+  "verifies": "F1",
+  "subject": "kashikawa",
+  "round": "4329d494",
+  "value": 0,
+  "unit": "clumps",
+  "quantity": "copse clumps based inside the toe marsh's outline (they were 6, 3-21 ft in); the copse keeps off the marsh as the woodland parcels do",
+  "source": "pool/hamlets/kashikawa/kashikawa.json village_groves[role=copse].clumps against marshes[].poly; test_no_copse_clump_is_based_in_the_marsh",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kashikawa-r8-copse-bank": {
+  "verifies": "F1",
+  "subject": "kashikawa",
+  "round": "1bff4100",
+  "value": 0,
+  "unit": "clumps",
+  "quantity": "copse clumps standing across the brook from the farmhouse nearest them (they were 3, 8 drawn crowns); the copse's reach to a house is now asked on the clump's own bank (BankNear)",
+  "source": "pool/hamlets/kashikawa/kashikawa.json village_groves[role=copse].clumps, houses[], streams[0].poly; test_every_copse_clump_stands_on_its_nearest_houses_bank",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kashikawa-r8-notes-clumps": {
+  "verifies": "F3",
+  "subject": "kashikawa",
+  "round": "1bff4100",
+  "value": 462,
+  "unit": "clumps",
+  "quantity": "the belt's recorded clumps, which the notes call clumps rather than crowns (and on the other four maps too); 360 on the kept roll; re-measured on round 97c20bc9's fix: 504, the belt's far face now holding its depth where the fringe turns (plan D20); re-measured 2026-09-28 on the belt's far envelope (plan D20): 532; re-measured 2026-09-28 on the 105 ft band (plan D20): 498; re-measured 2026-09-28 after main's feature 276 re-laid the pool (plan D23): 462",
+  "source": "pool/hamlets/kashikawa/kashikawa.json village_groves[role=windbreak].clumps; kashikawa.notes.md 2026-09-27 entry",
+  "command": "grep -n 'The belt is 462 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
+ },
+ "inashiro-r9-belt-frame": {
+  "verifies": "F1",
+  "subject": "inashiro",
+  "round": "159e0244",
+  "value": 38,
+  "unit": "ft",
+  "quantity": "the view's top edge (was 121): the belt's seating window opens on both axes a diagonal wind has a share of, and the frame holds every belt clump within 100 ft of a farmhouse on the page, so the north arm wraps the northernmost house (belt 180 to 239 clumps, 28 to 17 off the page)",
+  "source": "pool/hamlets/inashiro/inashiro.json meta.view, village_groves[role=windbreak].clumps and clumps_offpage; test_pool_wind belt depths",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_wind.py"
+ },
+ "kuwabata-r10-belt-depth": {
+  "verifies": "F1",
+  "subject": "kuwabata",
+  "round": "c71e1926",
+  "value": 88,
+  "unit": "ft",
+  "quantity": "the belt's median covered depth along the NW wind per 20 ft column, measured on the DRAWN crowns (tree_crowns inside the windbreak's outline, each with its own radius): 88 ft (58 before the fix; main 93), 10 of 23 columns under 80 ft (19 before; main 8 of 22), and the crowns cover 75% of the belt's outline (53% before; main 80%) - the belt stands beyond the ring lane that ran down its middle (past_the_lanes)",
+  "source": "pool/hamlets/kuwabata/kuwabata.json tree_crowns (x, y, r) inside village_groves[role=windbreak].poly, meta.windward; the same measure on the pre-fix and main manifests",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_hinterland.py"
+ },
+ "kashikawa-r11-name": {
+  "verifies": "F1",
+  "subject": "kashikawa",
+  "round": "0ae309f0",
+  "value": 2,
+  "unit": "woodland stands",
+  "quantity": "the woodland stands upslope of the houses' middle along the map's fall (both, 755-1,059 ft up), where the notes' name sentence now puts the oaks, with the fengshui belt on the windward north and west rather than on high ground",
+  "source": "pool/hamlets/kashikawa/kashikawa.json commons[role=woodland], meta.down_deg, village_groves[role=windbreak]; kashikawa.notes.md name sentence",
+  "command": "grep -n 'dry ground upslope of the hamlet' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
+ },
+ "kashikawa-r11-record": {
+  "verifies": "F2",
+  "subject": "kashikawa",
+  "round": "0ae309f0",
+  "value": 462,
+  "unit": "clumps",
+  "quantity": "the record kashikawa-r8-notes-clumps now states and greps the kept roll's 360 belt clumps; re-measured on round 97c20bc9's fix: 504, the belt's far face now holding its depth where the fringe turns (plan D20); re-measured 2026-09-28 on the belt's far envelope (plan D20): 532; re-measured 2026-09-28 on the 105 ft band (plan D20): 498; re-measured 2026-09-28 after main's feature 276 re-laid the pool (plan D23): 462",
+  "source": "specs/261-northwest-wind-by-default/measurements.json kashikawa-r8-notes-clumps; kashikawa.notes.md",
+  "command": "grep -n 'The belt is 462 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
+ },
+ "kuwabata-r11-wedge": {
+  "verifies": "F1",
+  "subject": "kuwabata",
+  "round": "0ae309f0",
+  "value": 29.4,
+  "unit": "ft",
+  "quantity": "inside the old wedge's box (2276,248)-(2514,522), the radius of the largest disc with nothing drawn in it - scatter bases (1,569 blades, 70 scrub dots, 7 pines, 15 crowns), structures, dry plots, the field and the lanes - 72 ft in the round; the ground more than 20 ft from any mark is 2,000 sq ft, 24,600 in the round. The scrub now keeps off each farmstead's own grown outline and each near pair's, not the whole cluster's hull",
+  "source": "pool/hamlets/kuwabata/kuwabata.svg scatter bases (tools/scatter_audit.parse_bases) with kuwabata.json houses, yards, gardens, byres, sheds, fixtures, wells, persimmons, dry_plots, fields, lanes; sampled on a 4 ft grid",
+  "command": "make -C .claude/skills/diagram scatter-bases MAP=pool/hamlets/kuwabata BOX=2276,248,2514,522"
+ },
+ "sawada-r11-brook-straight": {
+  "verifies": "F1",
+  "subject": "sawada",
+  "round": "0ae309f0",
+  "value": 380,
+  "unit": "ft",
+  "quantity": "the longest run of Sawada's brook on the page with every vertex within 3.1 ft of the chord: 380 of 1,240 ft, 31% (872 ft, 70%, in the round); the other brook maps 17-23% (Kashikawa 628 of 3,154, Inashiro 473 of 2,096, Mizuguchi 332 of 1,966)",
+  "source": "pool/hamlets/sawada/sawada.json streams[0].poly, meta.view",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "mizuguchi-r11-belt-room": {
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "round": "0ae309f0",
+  "value": 1236,
+  "unit": "ft",
+  "quantity": "the westernmost farmhouse's distance from the canvas's west edge (34-47 ft in the round): a wind-facing seat whose belt band falls more than a fifth off the canvas is only a fallback now, and the houses stand north of the brook with the belt west of them on open ground (189 clumps)",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json houses, village_groves[role=windbreak]",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "mizuguchi-r11-board": {
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "round": "0ae309f0",
+  "value": 0,
+  "unit": "routes",
+  "quantity": "households' ways out that miss the notice board, which stands 16 ft from the connector's handover at the canvas top (202 ft away, missing 2, before the board could stand within 88 ft of the top edge)",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json kosatsuba, lanes",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "inashiro-r11-dry": {
+  "verifies": "F1",
+  "subject": "inashiro",
+  "round": "0ae309f0",
+  "value": 72,
+  "unit": "ft",
+  "quantity": "the median distance from a farmhouse to its nearest dry plot (658 ft in the round, by straight line to plot centers here): ten of fifteen homesteads carry a homestead field against their lee or flank side, and the canal hem stays across the rice",
+  "source": "pool/hamlets/inashiro/inashiro.json houses, dry_plots, meta.homestead_fields",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "inashiro-r11-woods": {
+  "verifies": "F2",
+  "subject": "inashiro",
+  "round": "0ae309f0",
+  "value": 2,
+  "unit": "parcels",
+  "quantity": "woodland parcels across the field from the cluster's middle, of 3 (3 of 3 in the round): no seat on the houses' side qualifies inside the predicted frame at any size, so the new near-side preference falls back; on this roll one parcel stands on the houses' side of the field",
+  "source": "pool/hamlets/inashiro/inashiro.json commons[role=woodland], fields[0].outline",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_hinterland.py"
+ },
+ "inashiro-r11-shape": {
+  "verifies": "F1",
+  "subject": "inashiro",
+  "round": "0ae309f0",
+  "value": 2.0,
+  "unit": "aspect",
+  "quantity": "Inashiro's drawn cluster aspect, its rolled crescent honored (1.62 and unhonored before the front row crossed the brook; main 4.07); Kuwabata's round 1.73 honored as on main, Mizuguchi's round 1.93 newly honored (unhonored on main), Kashikawa's and Sawada's unhonored as on main",
+  "source": "pool/hamlets/*/*.json meta.cluster_aspect_drawn, cluster_shape, cluster_shape_unhonored",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "sawada-r11-alder": {
+  "verifies": "F1",
+  "subject": "sawada",
+  "round": "0ae309f0",
+  "value": 70,
+  "unit": "clumps",
+  "quantity": "of Sawada's 201 windbreak clumps, those seated inside the toe marsh and drawn as alder; no other pool map's belt reaches a marsh",
+  "source": "pool/hamlets/sawada/sawada.json village_groves[role=windbreak].alder, marshes[role=toe]",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "sawada-r11-tap-axis": {
+  "verifies": "F4",
+  "subject": "sawada",
+  "round": "0ae309f0",
+  "value": 0,
+  "unit": "segments",
+  "quantity": "brook segments within 1.6 degrees of a screen axis below the tap run, on every brook map (Sawada's segment leaving its tap run drew exactly vertical, 0.1 degrees off; the leaving segment is nudged off the axis like any other now, and the approach's legs too - Inashiro's drew 1.2 degrees off)",
+  "source": "pool/hamlets/*/*.json streams[0].poly",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "pool-field-to-houses-arc": {
+  "value": 127,
+  "unit": "degrees",
+  "quantity": "the arc the five pool hamlets' field-to-houses bearings span (compass, from each field outline's mean vertex to the houses' middle): 249 (Sawada), 314 (Inashiro), 325 (Kashikawa), 354 (Kuwabata), 16 (Mizuguchi), from 249 through north to 16; on main 69, 74, 157, 203 and 353, round the whole compass - the pool's sameness under a wind that chooses the side, observed 2026-09-27; re-measured 2026-09-28 after main's feature 276 re-laid the pool (plan D23): main's own bearings now 72, 74, 156, 354 and 204, a 210-degree arc from 354 through east to 204; this branch's unchanged",
+  "source": "pool/hamlets/*/*.json fields[].outline, houses; main's from the worktree at 7f283feb",
+  "command": "python3 specs/261-northwest-wind-by-default/measure.py"
+ },
+ "mizuguchi-r11-wells": {
+  "verifies": "F2",
+  "subject": "mizuguchi",
+  "round": "0ae309f0",
+  "value": 2,
+  "unit": "wells",
+  "quantity": "wells on the bank the houses stand on: both, with all 12 farmhouses - the hamlet stands north of the brook now, so no bank is left without a well",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json wells, houses, streams[0].poly (hamletgen.homesteads.stages.bank_of)",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kashikawa-r12-plank": {
+  "verifies": "F1",
+  "subject": "kashikawa",
+  "round": "03cf6a84",
+  "value": 1.0,
+  "unit": "degrees",
+  "quantity": "the largest angle off square at which a lane crosses the brook (44 in the round, lane 13's plank at (1454,1610)): an elbow within the water's half-width is dropped before a crossing is squared, and the pool test now reads the streams as well as the drawn channels",
+  "source": "pool/hamlets/kashikawa/kashikawa.json lanes, streams",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "kashikawa-r12-bearing": {
+  "verifies": "F2",
+  "subject": "kashikawa",
+  "round": "03cf6a84",
+  "value": 5,
+  "unit": "degrees",
+  "quantity": "the connector's first leg bears 13.8 degrees, which the notes' 2026-09-27 entry now states as 14 (it said 11); re-measured 2026-09-28 after main's feature 276 re-laid the pool (plan D23): 5, the connector's first leg",
+  "source": ".claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.json lanes[connector]; kashikawa.notes.md",
+  "command": "grep -n 'leaves north (5 degrees)' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
+ },
+ "kashikawa-r12-junction": {
+  "verifies": "F3",
+  "subject": "kashikawa",
+  "round": "03cf6a84",
+  "value": 584,
+  "unit": "ft",
+  "quantity": "the drain joins the brook 584 ft inside the view's top edge, with 778 ft of brook visible below the junction to the edge (the notes and the gen docstring said 476 and about 655)",
+  "source": ".claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.json streams[0].poly, meta.view; the junction (1950,1252)",
+  "command": "grep -n '584 ft inside' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.gen.py"
+ },
+ "kashikawa-r12-records": {
+  "verifies": "F4",
+  "subject": "kashikawa",
+  "round": "03cf6a84",
+  "value": 462,
+  "unit": "clumps",
+  "quantity": "the four stale records re-measured on the kept roll: the belt then 277 clumps (kashikawa-r8-notes-clumps, kashikawa-r11-record), the drawn aspect 1.72 (kashikawa-r4-shape), 2 woodland stands upslope (kashikawa-r11-name), and the junction 584 ft (kashikawa-F4); re-measured on round 97c20bc9's fix: 504, the belt's far face now holding its depth where the fringe turns (plan D20); re-measured 2026-09-28 on the belt's far envelope (plan D20): 532; re-measured 2026-09-28 on the 105 ft band (plan D20): 498; re-measured 2026-09-28 after main's feature 276 re-laid the pool (plan D23): 462 clumps, aspect 1.61, bearing 5",
+  "source": ".claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.json village_groves, meta.cluster_aspect_drawn, commons; kashikawa.notes.md",
+  "command": "grep -n 'The belt is 462 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
+ },
+ "inashiro-r13-board": {
+  "verifies": "F1",
+  "subject": "inashiro",
+  "round": "0c0ac524",
+  "value": 0,
+  "unit": "routes",
+  "quantity": "of 15 households' ways out - each walked from its door to the connector's outer end - those that miss the entrance board: 0 (2 in the round). The entrance is now the last point where a way joins the track, walked in from the map's edge, and the board stands 16 ft from it",
+  "source": ".claude/skills/diagram/pool/hamlets/inashiro/inashiro.json kosatsuba, lanes, houses (settlement/structures/fixtures/_helpers.py departure_routes, kosatsuba_handover)",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "inashiro-r13-routes": {
+  "verifies": "F2",
+  "subject": "inashiro",
+  "round": "0c0ac524",
+  "value": 1,
+  "unit": "routes",
+  "quantity": "in a test fixture where a household's lane joins the track below its inner end, the routes that miss a board at the inner end: 1 - routes run from each door to the outer end, so a board passes 'by construction' no longer (before, every route was walked up to the handover and back, and 0 missed wherever the board stood)",
+  "source": ".claude/skills/diagram/tests/settlement/structures/test_fixtures.py",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/settlement/structures/test_fixtures.py"
+ },
+ "mizuguchi-r13-bamboo": {
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "round": "0c0ac524",
+  "value": 144,
+  "unit": "ft",
+  "quantity": "the bamboo thicket's nearest culm to the brook's centerline (13 culms on the water ribbon in the round): a watercourse is refused at its half-width and 3 ft",
+  "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.json bamboo_stands, streams[0].poly",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_hinterland.py"
+ },
+ "mizuguchi-r13-notes": {
+  "verifies": "F2",
+  "subject": "mizuguchi",
+  "round": "0c0ac524",
+  "value": 12,
+  "unit": "farmsteads",
+  "quantity": "the farmsteads the notes' Known-open line now puts on one bank, as drawn (it said seven and five, astride the brook)",
+  "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md, mizuguchi.json houses",
+  "command": "grep -n 'all twelve farmsteads on one bank' .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md"
+ },
+ "mizuguchi-r13-lane": {
+  "verifies": "F3",
+  "subject": "mizuguchi",
+  "round": "0c0ac524",
+  "value": 0,
+  "unit": "lane ends",
+  "quantity": "non-connector lane ends off the frame (lane 4 ran 52 ft past the connector's junction and off the sheet in the round): a lane that runs on past the connector to a loose end is cut where it met it",
+  "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.json lanes, meta.view",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/gate/test_lane_network.py"
+ },
+ "mizuguchi-r13-bearing": {
+  "verifies": "F4",
+  "subject": "mizuguchi",
+  "round": "0c0ac524",
+  "value": 59,
+  "unit": "degrees",
+  "quantity": "the connector's bearing on its first long leg, now stated alike in the Place section and the log (34 and 57 in the round)",
+  "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.json lanes[connector]; mizuguchi.notes.md",
+  "command": "grep -n '59 deg' .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md"
+ },
+ "kuwabata-r13-moves": {
+  "verifies": "F1",
+  "subject": "kuwabata",
+  "round": "0c0ac524",
+  "value": 0,
+  "unit": "farmsteads",
+  "quantity": "farmsteads in new seats, the notes now saying their 67-149 ft is the distance to the nearest of main's seats and not a move; re-measured 2026-09-28 after main's feature 276 re-laid the pool (plan D23): 0 farmsteads in new seats",
+  "source": ".claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md; kuwabata.json houses against main's",
+  "command": "grep -n 'all sixteen farmsteads stand where' .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md"
+ },
+ "kuwabata-r13-bearing": {
+  "verifies": "F2",
+  "subject": "kuwabata",
+  "round": "0c0ac524",
+  "value": 274,
+  "unit": "degrees",
+  "quantity": "the connector's first-leg bearing, now stated alike in both places (274 and 271 in the round)",
+  "source": ".claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.json lanes[connector]; kuwabata.notes.md",
+  "command": "grep -n '274 deg' .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md"
+ },
+ "sawada-r13-census": {
+  "verifies": "F3",
+  "subject": "sawada",
+  "round": "0c0ac524",
+  "value": 1,
+  "unit": "sections",
+  "quantity": "the dated 'What pass 12 changed here' section, moved above the Census heading and pointing at the 2026-09-27 entry for the board's caption now",
+  "source": ".claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md",
+  "command": "grep -n 'since feature 261 its caption lies over a crown' .claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md"
+ },
+ "inashiro-r14-lane": {
+  "verifies": "F1",
+  "subject": "inashiro",
+  "round": "176042d3",
+  "value": 39.7,
+  "unit": "ft",
+  "quantity": "the farmstead at (978,808)'s distance to its nearest way (100.5 ft with only a 4 ft stub in the round): the connector cut no longer takes a lane whose other end already stands on the connector, and the kept fragment no longer vouches for the houses its own cut would strand; the pool's shortest lane is 60.9 ft",
+  "source": ".claude/skills/diagram/pool/hamlets/inashiro/inashiro.json lanes, houses",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/ways/test_sweeps.py"
+ },
+ "inashiro-r14-board": {
+  "verifies": "F2",
+  "subject": "inashiro",
+  "round": "176042d3",
+  "value": 16,
+  "unit": "ft",
+  "quantity": "the board's distance from the last join on the track - that farmstead's restored lane - which the notes now state (15 in the round, measured to a stub); re-measured 2026-09-27 against the notes as a later round rewrote them: the board now stands on the track itself, 16 ft from the join (round 6fefdcdf's fix, plan D19)",
+  "source": ".claude/skills/diagram/pool/hamlets/inashiro/inashiro.json kosatsuba, lanes; inashiro.notes.md",
+  "command": "grep -n 'squared to it, 16 ft from where the track out meets the lanes' .claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md"
+ },
+ "mizuguchi-r14-nowhere": {
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "round": "176042d3",
+  "value": 0,
+  "unit": "lane ends",
+  "quantity": "lane ends that reach only the way their own far end stands on (1 in the round: lane 3's end at (1528,70), 61 ft past its house): the service trim no longer counts the way a lane left, and the lane that served nothing is dropped; house 11 stays within the connector's reach",
+  "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.json lanes, houses, fields (hamletgen.ways.geom.end_serves)",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "inashiro-r15-board": {
+  "verifies": "F1",
+  "subject": "inashiro",
+  "round": "6fefdcdf",
+  "value": 0.0,
+  "unit": "degrees",
+  "quantity": "the entrance board's angle off the track it stands on (rot 131.5 against the track's 131.5 bearing; 87.7 in the round, squared to the lane-7 straggler); 0 of 15 departures miss it, 16.3 ft from the handover",
+  "source": ".claude/skills/diagram/pool/hamlets/inashiro/inashiro.json kosatsuba, lanes",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/settlement/structures/test_fixtures.py"
+ },
+ "kuwabata-r15-grain": {
+  "verifies": "F1",
+  "subject": "kuwabata",
+  "round": "6fefdcdf",
+  "value": 0,
+  "unit": "plots",
+  "quantity": "homestead dry plots on the dike-pond hamlet (6 barley, millet and buckwheat plots in the round); meta.homestead_fields 0",
+  "source": ".claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.json dry_plots, meta.homestead_fields",
+  "command": "python3 specs/261-northwest-wind-by-default/measure/fixtures_and_board.py"
+ },
+ "kuwabata-r15-notes": {
+  "verifies": "F3",
+  "subject": "kuwabata",
+  "round": "6fefdcdf",
+  "value": 2,
+  "unit": "passages",
+  "quantity": "the two dated notes passages (the copse's 3 clumps, the frontage knob) now say 'at that roll' and point to meta.kosatsuba_seat",
+  "source": ".claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md",
+  "command": "grep -n 'at that roll' .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md"
+ },
+ "mizuguchi-r15-fixtures": {
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "round": "6fefdcdf",
+  "value": 0,
+  "unit": "fixtures",
+  "quantity": "farmstead fixtures and persimmons whose line to their house crosses a lane (4 in the round); the shrine passed to the house at 1466.6,119.4, and meta.farm_fixtures_unseated is empty - the coop and stack of the farmstead at (1277,257) seat on the yard ring past the homestead bundles",
+  "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.json farm_fixtures, persimmons, lanes",
+  "command": "python3 specs/261-northwest-wind-by-default/measure/fixtures_and_board.py"
+ },
+ "mizuguchi-r15-belt": {
+  "verifies": "F2",
+  "subject": "mizuguchi",
+  "round": "6fefdcdf",
+  "value": 208,
+  "unit": "clumps",
+  "quantity": "the belt's clump count the 2026-09-27 notes entry states, matching the census (189 in the round); re-measured on round 97c20bc9's fix: 252, the belt's far face now holding its depth where the fringe turns (plan D20); re-measured 2026-09-28 on the belt's far envelope (plan D20): 276; re-measured 2026-09-28 on the 105 ft band (plan D20): 253; re-measured 2026-09-28 after main's feature 276 re-laid the pool (plan D23): 208 clumps at 306 degrees",
+  "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md",
+  "command": "grep -n '208 clumps, 306' .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md"
+ },
+ "pool-r15-unseated": {
+  "subject": "pool",
+  "round": "6fefdcdf",
+  "value": 0,
+  "unit": "fixtures",
+  "quantity": "farmstead fixtures and persimmons recorded in meta.farm_fixtures_unseated across the five pool hamlets after the lane rule, the yard ring past the bundles and the persimmon's outer step (the commit before the lane rule: Sawada one heap; with the lane rule alone: seven on four maps)",
+  "source": ".claude/skills/diagram/pool/hamlets/*/*.json meta.farm_fixtures_unseated",
+  "command": "python3 specs/261-northwest-wind-by-default/measure/fixtures_and_board.py"
+ },
+ "belt-r16-depth": {
+  "verifies": "F1",
+  "subject": "kashikawa",
+  "round": "97c20bc9",
+  "value": 97.2,
+  "unit": "ft",
+  "quantity": "the windbreak band's thinnest depth across itself on the page (each near-face vertex to the far face): 20.7 ft in the round; Inashiro 33.9 -> 83.9, Sawada 13.8 -> 88.8; Kuwabata 19.1 and Mizuguchi 64.1 unchanged where the canvas edge clamps the far face; re-measured 2026-09-28 on round 31ef113b's roll (D22): Sawada 72.7 at the bend of its two arms; re-measured 2026-09-28 after the rag and the far envelope (plan D20): 92.0 on Kashikawa, and every pool belt at least 92.0 where the canvas does not clamp it (Inashiro 115.6, Kuwabata 121.2, Mizuguchi 117.7, Sawada 94.7); re-measured 2026-09-28 on the 105 ft band (plan D20): Kashikawa's thinnest 97.2, median 105.0; every pool belt's thinnest 95.0-97.2 and median 103.0-106.6 ft, at most 9% of a face over 120 ft (its bends)",
+  "source": ".claude/skills/diagram/pool/hamlets/*/*.json village_groves windbreak poly, meta.view",
+  "command": "python3 specs/261-northwest-wind-by-default/measure/belt_depth.py inashiro kashikawa kuwabata mizuguchi sawada"
+ },
+ "brook-r16-turn": {
+  "verifies": "F1",
+  "subject": "sawada",
+  "round": "97c20bc9",
+  "value": 17.4,
+  "unit": "degrees",
+  "quantity": "the sharpest turn at any vertex of Sawada's recorded brook (47 in the round, with corners of 41 and 27); across the pool 9.0-22.7, the largest at a held tap",
+  "source": ".claude/skills/diagram/pool/hamlets/*/*.json streams",
+  "command": "python3 specs/261-northwest-wind-by-default/measure/brook_turn.py inashiro kashikawa kuwabata mizuguchi sawada"
+ },
+ "kuwabata-r16-copse": {
+  "verifies": "F1",
+  "subject": "kuwabata",
+  "round": "97c20bc9",
+  "value": 27,
+  "unit": "clumps",
+  "quantity": "the dooryard copse the feature-261 notes entry states (29 in the round), median 55 ft from a farmhouse, matching meta.copse_clumps and meta.copse_house_ft; re-measured 2026-09-28 after main's feature 276 re-laid the pool (plan D23): 27 clumps, median 69 ft, the farthest 86 ft",
+  "source": ".claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md; kuwabata.json meta",
+  "command": "grep -n '27 clumps, median 69 ft' .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md"
+ },
+ "kashikawa-r16-belt-pieces": {
+  "verifies": "F1",
+  "subject": "kashikawa",
+  "round": "97c20bc9",
+  "value": 1,
+  "unit": "pieces",
+  "quantity": "the pieces the DRAWN windbreak is in: tree_crowns within 20 ft of the belt's outline, linked within 30 ft edge to edge - 1 piece of 1160 crowns (4 pieces of 705 at commit 881679390, the round's hole); every pool belt is 1 piece; re-measured 2026-09-28 on the far envelope: 1 piece on every pool belt",
+  "source": ".claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.json tree_crowns, village_groves windbreak poly",
+  "command": "python3 specs/261-northwest-wind-by-default/measure/belt_pieces.py inashiro kashikawa kuwabata mizuguchi sawada"
+ },
+ "sawada-r17-well": {
+  "verifies": "F1",
+  "subject": "sawada",
+  "round": "31ef113b",
+  "value": 173.3,
+  "unit": "ft",
+  "quantity": "meta.kosatsuba_well_ft, now the drawn board's distance to its nearest well (353.5 recorded in the round for the engine's first seat); every pool map's recorded figure equals its drawn one",
+  "source": ".claude/skills/diagram/pool/hamlets/sawada/sawada.json meta.kosatsuba_well_ft, kosatsuba, wells",
+  "command": "python3 specs/261-northwest-wind-by-default/measure/board_well.py sawada kashikawa inashiro mizuguchi"
+ },
+ "sawada-r17-alder": {
+  "verifies": "F2",
+  "subject": "sawada",
+  "round": "31ef113b",
+  "value": 201,
+  "unit": "clumps",
+  "quantity": "the alder the notes' feature-261 entry states (70 in the round), matching the windbreak's recorded alder; re-measured 2026-09-28 on round 31ef113b's roll (D22): 143; re-measured 2026-09-28 on the belt's far envelope (plan D20): 174; re-measured 2026-09-28 on the 105 ft band (plan D20): 160; re-measured 2026-09-28 after main's feature 276 re-laid the pool (plan D23): 201",
+  "source": ".claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md; sawada.json village_groves alder",
+  "command": "grep -n 'its 201 clumps that stand in the marsh are alder' .claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md"
+ },
+ "sawada-r17-spelling": {
+  "verifies": "F3",
+  "subject": "sawada",
+  "round": "31ef113b",
+  "value": 1,
+  "unit": "lines",
+  "quantity": "the siting comment spelled in American (the British spelling in the round)",
+  "source": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py",
+  "command": "grep -n 'and labeling it' .claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py"
+ },
+ "mizuguchi-r17-copse": {
+  "verifies": "F2",
+  "subject": "mizuguchi",
+  "round": "31ef113b",
+  "value": 0,
+  "unit": "crowns",
+  "quantity": "against-the-belt copse crowns more than 5 ft windward of their nearest belt crown (31 of 75 in the round); 43 crowns, all on the belt's lee face",
+  "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.json village_groves",
+  "command": "python3 specs/261-northwest-wind-by-default/measure/copse_side.py mizuguchi"
+ },
+ "rank-r18-spread": {
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "round": "31ef113b",
+  "value": 17.1,
+  "unit": "ft",
+  "quantity": "the tightest rank of three or more houses on Sawada, the pool's one alleys hamlet (ranks 37.0, 60.7 and 17.1 ft); Mizuguchi, back_lane, keeps its regular ranks (rows of 4.7, 5.2 and 40.5 ft) by the record's planned form",
+  "source": ".claude/skills/diagram/pool/hamlets/sawada/sawada.json houses; .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.json houses",
+  "command": "python3 specs/261-northwest-wind-by-default/measure/row_spread.py sawada mizuguchi"
+ },
+ "sawada-r18-moves": {
+  "subject": "sawada",
+  "round": "31ef113b",
+  "value": 7.9,
+  "unit": "ft",
+  "quantity": "the farthest a Sawada farmhouse moved when its rank seats took the accretion form's jitter (four moved, 3.1-7.9 ft; the rest stand where they stood at 1f2484649); meta.homestead_fields 11 -> 7",
+  "source": ".claude/skills/diagram/pool/hamlets/sawada/sawada.json houses, meta.homestead_fields; the same at commit 1f2484649",
+  "command": "python3 specs/261-northwest-wind-by-default/measure/house_moves.py 1f2484649 sawada"
+ },
+ "sawada-r19-board": {
+  "verifies": "F1",
+  "subject": "sawada",
+  "round": "10161535",
+  "answers": "101615354a60",
+  "value": 12,
+  "unit": "ft",
+  "quantity": "the board's distance from the connector's inner end the feature-261 notes entry states (27 in the round; 9.5 ft measured by the reviewer after the rank jitter moved the junction); re-measured 2026-09-28 after main's feature 276 re-laid the pool (plan D23): 12",
+  "source": ".claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md; sawada.json kosatsuba, lanes",
+  "command": "grep -n 'The entrance board stands 12 ft from where the connector meets the lanes' .claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md"
+ },
+ "kuwabata-r19-burial": {
+  "verifies": "F1",
+  "subject": "kuwabata",
+  "round": "10161535",
+  "answers": "101615354a60",
+  "value": 1,
+  "unit": "grounds",
+  "quantity": "main merged (feature 273): meta.hamlet_burial own_ground and one cemetery drawn on this feature's layout, east-north-east of the hamlet beyond its last houses, which the notes' Features line now says",
+  "source": ".claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.json meta.hamlet_burial, cemeteries; kuwabata.notes.md",
+  "command": "grep -n 'east-north-east of the hamlet beyond its last houses' .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md"
+ },
+ "kuwabata-r19-popup": {
+  "verifies": "F2",
+  "subject": "kuwabata",
+  "round": "10161535",
+  "answers": "101615354a60",
+  "value": 0.58,
+  "unit": "ha",
+  "quantity": "Kuwabata's drawn belt polygon; the windbreak pop-up no longer claims one to two hectares for every map but says a hamlet's belt is half a hectare to under two across these maps (the pool: 0.58-1.75 ha), from research/vegetation 030",
+  "source": ".claude/skills/diagram/l7r/diagram/interactive/classes/greenery.py Windbreak; .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.json village_groves",
+  "command": "grep -n 'half a hectare to under two across these maps' .claude/skills/diagram/l7r/diagram/interactive/classes/greenery.py"
+ },
+ "kuwabata-r19-unmoved": {
+  "verifies": "F4",
+  "subject": "kuwabata",
+  "round": "10161535",
+  "answers": "101615354a60",
+  "value": 0,
+  "unit": "ft",
+  "quantity": "the one of the twelve unmoved farmsteads that stands off its seat (the other eleven at 0 ft), as the notes now say; re-measured 2026-09-28 after main's feature 276 re-laid the pool (plan D23): 0 ft - every farmstead on its main seat",
+  "source": ".claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md",
+  "command": "grep -n 'all sixteen farmsteads stand where' .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md"
+ },
+ "inashiro-r20-burial": {
+  "verifies": "F1",
+  "subject": "inashiro",
+  "round": "10161535",
+  "answers": "101615354a60",
+  "value": 1,
+  "unit": "grounds",
+  "quantity": "main merged (feature 273): meta.hamlet_burial own_ground and one cemetery drawn on this feature's layout, in the windbreak west-north-west of the houses (bearing 300 from their middle, 144 ft from the nearest house), which the notes' Features line now says in place of main's east arm and north track",
+  "source": ".claude/skills/diagram/pool/hamlets/inashiro/inashiro.json meta.hamlet_burial, cemeteries; inashiro.notes.md",
+  "command": "grep -n 'cut into the windbreak west-north-west of the houses' .claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md"
+ },
+ "mizuguchi-r20-burial": {
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "round": "10161535",
+  "answers": "101615354a60",
+  "value": 0,
+  "unit": "grounds",
+  "quantity": "main merged (feature 273): meta.hamlet_burial village_ground, no cemetery drawn, and the notes' Features line saying its dead lie in the main village's ground",
+  "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.json meta.hamlet_burial, cemeteries; mizuguchi.notes.md",
+  "command": "grep -n 'Mizuguchi keeps none of its own' .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md"
+ },
+ "inashiro-r21-subject": {
+  "verifies": "F1",
+  "subject": "inashiro",
+  "round": "bf86eb9f",
+  "answers": "bf86eb9f260f",
+  "value": 1,
+  "unit": "passages",
+  "quantity": "the notes' opening paragraph, which placed the burial ground in the windbreak's east arm by a track north; it now says west-north-west of the houses, as the Features line and the drawing do (meta.hamlet_burial own_ground, one cemetery at bearing 300 from the houses' middle)",
+  "source": ".claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md; inashiro.json meta.hamlet_burial, cemeteries",
+  "command": "grep -n 'in a glade cut into the windbreak west-north-west of the' .claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md"
+ },
+ "inashiro-r21-hem": {
+  "verifies": "F2",
+  "subject": "inashiro",
+  "round": "bf86eb9f",
+  "answers": "bf86eb9f260f",
+  "value": 7391,
+  "unit": "sq ft",
+  "quantity": "the median hem plot the notes' known-open bullet states (20 plots; 6,084 in the round), the largest of the four hamlets with a hem (Kashikawa 6,518, Mizuguchi 6,263, Sawada 7,269), by the shoelace area of each non-homestead dry plot",
+  "source": ".claude/skills/diagram/pool/hamlets/*/*.json dry_plots; inashiro.notes.md",
+  "command": "grep -n 'median 7,391 sq ft against 1,707' .claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md"
+ },
+ "belt-r22-near-face": {
+  "verifies": "F1",
+  "subject": "pool",
+  "round": "merge-276",
+  "value": 72.9,
+  "unit": "ft",
+  "quantity": "the least distance from a farmhouse center to the windbreak's near face on the pool, 72.9-82.4 ft by map (the column reach 79 ft less the near rag's 5); on main's re-laid pool before `round_the_houses`, Kashikawa's near face ran 37.3 ft from its westernmost farmhouse (932,979), through its garden, and Sawada's 33.8 ft from (364,1609) - observed 2026-09-28 on those rolls, not committed",
+  "source": ".claude/skills/diagram/pool/hamlets/*/*.json village_groves windbreak poly, meta.belt_near_vertices, houses",
+  "command": "python3 specs/261-northwest-wind-by-default/measure/near_face.py inashiro kashikawa kuwabata mizuguchi sawada"
+ },
+ "belt-r22-depth": {
+  "verifies": "F1",
+  "subject": "pool",
+  "round": "merge-276",
+  "value": 84.1,
+  "unit": "ft",
+  "quantity": "the windbreak band's thinnest depth across itself on the page on the 100 ft band after `round_the_houses` (plan D23): thinnest 89.8 / 84.1 / 86.6 / 89.5 / 89.7 ft and median 96.9 / 95.6 / 101.4 / 97.2 / 97.7 ft on Inashiro, Kashikawa, Kuwabata, Mizuguchi and Sawada, over 120 ft on 5 / 7 / 1 / 5 / 16% of the face (Sawada's at the end of its southwest arm); the 105 ft band with the same fix drew 17% and 24% over 120 on Kashikawa and Sawada (observed 2026-09-28 on rolls not committed)",
+  "source": ".claude/skills/diagram/pool/hamlets/*/*.json village_groves windbreak poly",
+  "command": "python3 specs/261-northwest-wind-by-default/measure/belt_depth.py inashiro kashikawa kuwabata mizuguchi sawada"
+ },
+ "belt-r22-pieces": {
+  "verifies": "F1",
+  "subject": "pool",
+  "round": "merge-276",
+  "value": 1,
+  "unit": "pieces",
+  "quantity": "the pieces each pool hamlet's DRAWN windbreak is in (crowns within 20 ft of its outline, linked within 30 ft edge to edge): 1 on every map, of 773 / 1227 / 357 / 530 / 1233 crowns; on main's re-laid pool Kashikawa's and Sawada's were 2",
+  "source": ".claude/skills/diagram/pool/hamlets/*/*.json tree_crowns, village_groves windbreak poly",
+  "command": "python3 specs/261-northwest-wind-by-default/measure/belt_pieces.py inashiro kashikawa kuwabata mizuguchi sawada"
+ },
+ "dry-r22-median": {
+  "verifies": "F2",
+  "subject": "pool",
+  "round": "merge-276",
+  "value": 99,
+  "unit": "ft",
+  "quantity": "the median distance from a farmhouse to the center of its nearest dry plot, the largest of the four hamlets that lay homestead fields: Inashiro 70, Kashikawa 81, Mizuguchi 80, Sawada 99 ft, with 11 / 14 / 6 / 12 homestead plots; on main's re-laid pool Mizuguchi laid 3 and its median was 157 ft",
+  "source": ".claude/skills/diagram/pool/hamlets/*/*.json dry_plots, houses, meta.homestead_fields",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "pool-r22-unseated": {
+  "subject": "pool",
+  "round": "merge-276",
+  "value": 0,
+  "unit": "fixtures",
+  "quantity": "farmstead fixtures and persimmons in meta.farm_fixtures_unseated across the five pool hamlets; on main's re-laid pool Mizuguchi's north-row house (1368,255) left its woodpile and persimmon unseated",
+  "source": ".claude/skills/diagram/pool/hamlets/*/*.json meta.farm_fixtures_unseated",
+  "command": "python3 specs/261-northwest-wind-by-default/measure/fixtures_and_board.py inashiro kashikawa kuwabata mizuguchi sawada"
+ },
+ "lanes-r22-ends": {
+  "subject": "pool",
+  "round": "merge-276",
+  "value": 0,
+  "unit": "lane ends",
+  "quantity": "non-connector lane ends that reach only the way their own far end stands on, across the pool (end_serves); on main's re-laid pool 2: Kuwabata's skeleton lane end at (2272,287) in the scrub, and Kashikawa's field spur head at (1606,1534); Kuwabata's end stood 481 ft from the nearest paddy outline (observed 2026-09-28 on main's re-laid roll, not committed, by the distance from the end to fields[].outline)",
+  "source": ".claude/skills/diagram/pool/hamlets/*/*.json lanes, houses, fields",
+  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "inashiro-r22-notes": {
+  "verifies": "F3",
+  "subject": "inashiro",
+  "round": "bf86eb9f",
+  "answers": "bf86eb9f260f",
+  "value": 327,
+  "unit": "clumps",
+  "quantity": "the windbreak clumps the notes' feature-261 entry states, now equal to the Census block's drawn count (327, 65 off the page) and the manifest's village_groves windbreak clumps on the re-laid roll; the track's bearing it states is 221 degrees, the connector's first leg (lanes[1] 221.5 in the round); the entry's woodland stands are all three across the field (F2), and the hem bullet's stale parenthetical is gone (F1)",
+  "source": ".claude/skills/diagram/pool/hamlets/inashiro/inashiro.json village_groves, lanes; inashiro.notes.md",
+  "command": "grep -n '327 clumps over a 123-degree arc' .claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md"
+ }
+}

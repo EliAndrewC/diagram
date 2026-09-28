@@ -2339,27 +2339,6 @@ evidence for. SKETCH: aim the spur at the nearest point of the CULTIVATED ground
 hem is worked ground and a path to it is a path to the field), and let it stop at the hem's own edge; then ask
 whether the last stretch between the hem and the wet plots is a path at all or the bunds themselves.
 
-## One bank or both - a KNOB the crossing machinery blocks (researched 2026-09-12, feature 230)
-
-RESEARCHED, not silent (specs/230 research R6): the record shows BOTH forms, divided by the size of the water.
-Against a river a settlement stands on one bank; against its own small channel the water runs through the middle
-of the place, which Harie in Shiga does under a national Important Cultural Landscape designation - its Okawa
-"flows through roughly the center of the district", its channels are "channels inside the settlement", and one
-runs "alongside the house". The maps' brook is seven feet wide, the second kind. Under the knob doctrine that is
-a KNOB - which side a hamlet builds on, rolled per settlement - and the maps instead keep a rule.
-
-WHY THE KNOB IS NOT BUILT, measured: a hamlet seated astride the brook is one no way can cross. The stream is
-registered only as a keep-out (`site_boundary.water` and a 30 px corridor), so the router treats it as ground to
-avoid and `bridges()` decks only a crossing that already exists - settlement-review pass 4 measured the result,
-0 bridges on 2,000 ft of water with a full homestead stranded on the far bank and every lane, both wells and the
-notice board on the near one. Nothing can put a deck there today.
-
-SKETCH: let a WAY cross a watercourse at the cost of a deck. The router needs a crossing cost rather than a
-veto (a segment may cross a stream if it crosses square-ish and a deck can be drawn at the crossing), and
-`stage_crossings` already decks a way that crosses water, so the second half exists. Then `seat_cluster`'s
-strike-out becomes a knob value: one bank, or both banks with a crossing. The measurements to hold it to are in
-specs/230 R4 and R5.
-
 ## A tree stands in a path on the reference hamlet (measured 2026-09-12, feature 230)
 
 MEASURED: three tree trunks at (2303, 786), (2343, 789) and (2488, 795) stand 3.1, 4.2 and 3.1 ft from the
@@ -2515,3 +2494,26 @@ first (3 of the 10 rejections fail it), which saves the two `_fronts` scans but 
 
 **Why it is not taken here**: it changes which paths the router finds on every hamlet, so it moves the pool and
 owes its own 48-seed cohort and its own review round. This feature has had fourteen.
+
+## Where the dry hem stands once the houses move off it (measured 2026-09-27, feature 261)
+
+MEASURED: under the regional northwest wind Inashiro's cluster seats on the far side of its brook from the rice, and the
+dry hem - drawn as a band along the paddy's outer edge - stayed with the paddy: nearest-house distance to a hem plot went
+from a median 178 ft to 827 ft (nearest 90 -> 312 ft, farthest 565 -> 1,455 ft), across the brook and the whole paddy.
+research/fields.html "WHERE dry crops go" allows canal-high ground but says dry fields sit "above all AROUND the houses";
+the only near-home dry ground on the map is now the kitchen gardens. The record names more than one position, so under
+the knob doctrine this is a KNOB, not a fix (settlement-review of Inashiro, feature 261 round 3).
+
+SKETCH: a `hem_siting` knob - `field_edge` (today's band along the paddy) or `by_the_houses` (the dry plots seated in the
+open ground around the cluster, after `stage_homesteads`, from the same acreage). Research pass first: whether a hamlet
+whose home ground is paddy-bound kept its hatake by the houses, and in what share.
+
+## The toe marsh's recorded outline is not the drawn marsh (measured 2026-09-27, feature 261)
+
+MEASURED: on Sawada 68 of the windbreak's 179 crown bases lie inside `marshes[0].poly` (the toe), and sampled on the
+render with the belt removed, 20-34 of those 68 positions are ground drawn dry (the settlement's cleared ground, cream
+239,227,194 and 227,221,191) and the rest the marsh tint. So the outline runs under ground the marsh ink does not reach,
+and a keep-out read from it refuses dry ground - which is why feature 261 keeps the COPSE off the marsh outline and not
+the belt. MECHANISM: the marsh is drawn clipped by the settlement's clearing while its record keeps the unclipped ring.
+SKETCH: record the drawn extent (the ring after the clearing's cut) beside `poly`, as `drawn_poly`, and have every grove
+and the parcels test against it; then the belt gets the same keep-out as the copse.

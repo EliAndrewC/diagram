@@ -135,14 +135,17 @@ def _strip_blocked(
     pond: Any,
     lanes: Sequence[tuple[Poly, float]],
     footing: Footing | None = None,
+    skip: frozenset[tuple[float, float, float, float]] = frozenset(),
 ) -> bool:
-    """Would a household bamboo strip centered here stand on something? Its own farmhouse is not something."""
+    """Would a household bamboo strip centered here stand on something? Its own farmhouse is not something, and neither
+    is a reserved box in `skip` (a caller whose parts are each registered passes the homestead BUNDLE boxes: feature 261,
+    the fixtures pass, where a steading's own bundle and a neighbor's refused the open ground of its flanks)."""
     if cx - cw / 2 < 30 or cy - ch / 2 < 30 or cx + cw / 2 > s.W - 30 or cy + ch / 2 > s.H - 30:
         return True
     ft = footing or Footing(s, fields, marsh)  # a caller that tests many seats builds one and passes it (feature 218)
     corners = [(cx - cw / 2, cy - ch / 2), (cx + cw / 2, cy - ch / 2), (cx + cw / 2, cy + ch / 2), (cx - cw / 2, cy + ch / 2), (cx, cy)]
     for px_, py_, pw, ph, *_ in s.placed:
-        if px_ == hx and py_ == hy:
+        if (px_ == hx and py_ == hy) or (px_, py_, pw, ph) in skip:
             continue
         if abs(cx - px_) < (cw + pw) / 2 + 2 and abs(cy - py_) < (ch + ph) / 2 + 2:
             return True

@@ -6,12 +6,13 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, seg_intersect
+from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, seg_intersect, segments_cross
 from l7r.diagram.settlement._geom.indexes import PointGrid
 from l7r.diagram.sitegen.geom import crosses_disc, crosses_poly, unit
 
 from ..clearance import pairs_within
 from ..consts import (
+    FORD_HALF,
     LANE_JOIN_FT,
     WEB_REACH_FT,
     Poly,
@@ -39,8 +40,87 @@ def stream_segs(s: Settlement) -> list[tuple[Pt, Pt]]:
     water list today ("a link may go the long way round, and may be planked"), which is exactly why
     it is the pass that can lay a way down the length of a brook (cohort seed 47).
     `_bridge_collinear_breaks` does NOT: it hands its water to `_route`, which already refuses to
-    cross a watercourse at any angle, so a veto there would be unreachable code."""
-    return [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for st in s.M.get("streams", []) if st.get("poly") for a, b in zip(st["poly"], st["poly"][1:], strict=False)]
+    cross a watercourse at any angle, so a veto there would be unreachable code.
+
+    THE BROOK HAS CROSSINGS (feature 261): where `stage_ways` has opened fords (`s.brook_fords`), the stream's
+    segments come back with a short gap at each, so the router may carry a way over the brook there - and only
+    there, and only near square, because the gap is shorter than the corridor is deep. `bridges()` reads the
+    UNgapped `M["streams"]` and decks every such crossing."""
+    segs = [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for st in s.M.get("streams", []) if st.get("poly") for a, b in zip(st["poly"], st["poly"][1:], strict=False)]
+    return gap_segments(segs, getattr(s, "brook_fords", ()), FORD_HALF)
+
+
+def brook_fords(brook: Sequence[Pt], spacing: float, bend_deg: float) -> list[Pt]:
+    """Where the brook may be crossed: points every `spacing` along its course where it runs straight for the
+    deck's length either side (the turn between the reaches `FORD_HALF` behind and ahead is under `bend_deg`),
+    so a way crossing there crosses it square and the plank lands on both banks. A bend is skipped, not moved:
+    the next site along is `spacing` further on."""
+    out: list[Pt] = []
+    legs = [(a, b, math.dist(a, b)) for a, b in zip(brook, brook[1:], strict=False) if math.dist(a, b) > 0.0]
+    total = sum(n for _a, _b, n in legs)
+
+    def at(d: float) -> tuple[Pt, Pt]:
+        # the loop below only asks inside the course (d + FORD_HALF < total); the LAST leg answers whatever falls past
+        # the legs before it, float rounding past the end included, clamped to its far point
+        run = 0.0
+        for a, b, n in legs[:-1]:
+            if run + n >= d:
+                t = (d - run) / n
+                return (a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t), ((b[0] - a[0]) / n, (b[1] - a[1]) / n)
+            run += n
+        a, b, n = legs[-1]
+        t = min(1.0, (d - run) / n)
+        return (a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t), ((b[0] - a[0]) / n, (b[1] - a[1]) / n)
+
+    d = spacing / 2.0
+    while legs and d + FORD_HALF < total and d - FORD_HALF > 0.0:
+        c, _ = at(d)
+        _p, u0 = at(d - FORD_HALF)
+        _q, u1 = at(d + FORD_HALF)
+        if math.degrees(math.acos(max(-1.0, min(1.0, u0[0] * u1[0] + u0[1] * u1[1])))) < bend_deg:
+            out.append(c)
+        d += spacing
+    return out
+
+
+def ford_crossing(start: Pt, end: Pt, brook: Sequence[Pt], fords: Sequence[Pt], landing: float = 22.0) -> list[Pt]:
+    """The two landings of a square crossing at the ford that makes start -> ford -> end shortest, ordered from the
+    start's bank - or nothing, when the straight run from `start` to `end` does not cross the brook (or there is no
+    ford). A landing stands `landing` px off the brook square to its local reach: past the 14 px the router keeps off
+    water, and inside the ford's gap, so a path through the two lands on the deck `bridges()` puts there."""
+    legs = list(zip(brook, brook[1:], strict=False))
+    if not fords or not any(segments_cross(start, end, a, b) for a, b in legs):
+        return []
+    f = min(fords, key=lambda c: math.dist(start, c) + math.dist(c, end))
+    a, b = min(legs, key=lambda ab: seg_dist(f[0], f[1], ab[0], ab[1]))
+    ux, uy = unit(b[0] - a[0], b[1] - a[1])
+    nx, ny = -uy, ux  # square to the reach
+    p1, p2 = (f[0] + nx * landing, f[1] + ny * landing), (f[0] - nx * landing, f[1] - ny * landing)
+    return [p1, p2] if math.dist(start, p1) <= math.dist(start, p2) else [p2, p1]
+
+
+def gap_segments(segs: Sequence[tuple[Pt, Pt]], centers: Sequence[Pt], half: float) -> list[tuple[Pt, Pt]]:
+    """`segs` with every stretch within `half` of a center cut out - the pieces either side kept."""
+    out = list(segs)
+    for c in centers:
+        nxt: list[tuple[Pt, Pt]] = []
+        for a, b in out:
+            dx, dy = b[0] - a[0], b[1] - a[1]
+            n2 = dx * dx + dy * dy
+            t = ((c[0] - a[0]) * dx + (c[1] - a[1]) * dy) / n2 if n2 else 0.0
+            px, py = a[0] + dx * t, a[1] + dy * t
+            d2 = (c[0] - px) ** 2 + (c[1] - py) ** 2
+            if not n2 or d2 >= half * half:
+                nxt.append((a, b))
+                continue
+            w = math.sqrt(half * half - d2) / math.sqrt(n2)
+            t0, t1 = t - w, t + w
+            if t0 > 0.0:
+                nxt.append((a, (a[0] + dx * min(t0, 1.0), a[1] + dy * min(t0, 1.0))))
+            if t1 < 1.0:
+                nxt.append(((a[0] + dx * max(t1, 0.0), a[1] + dy * max(t1, 0.0)), b))
+        out = nxt
+    return out
 
 
 def drawn_water_segs(s: Settlement) -> list[tuple[Pt, Pt]]:
@@ -75,7 +155,7 @@ def path_violations(path: Poly, avoid: Sequence[Poly], pond: tuple[float, float,
         a, b = path[i], path[i + 1]
         if (
             (pond is not None and crosses_disc(a, b, (pond[0], pond[1]), max(pond[2], pond[3]) + 80.0))
-            or any(seg_intersect(a, b, p, q) is not None for p, q in brook)
+            or any(segments_cross(a, b, p, q) for p, q in brook)
             or any(crosses_poly(a, b, poly) for poly in avoid)
             or any(shallow_crossing(a, b, p, q) for p, q in waters)
             or any(crossing_lands_on_crop(a, b, p, q, avoid) for p, q in waters)
@@ -86,7 +166,9 @@ def path_violations(path: Poly, avoid: Sequence[Poly], pond: tuple[float, float,
     # each other - which `features_do_not_overlap` reads as a ('bridges', 'bridges') pair, and which
     # is a drawing error rather than a siting one. Crossing further along, where the ditches have
     # separated, is what a track does anyway.
-    hits = [x for i in range(len(path) - 1) for p, q in waters if (x := seg_intersect(path[i], path[i + 1], p, q)) is not None]
+    hits = [
+        x for i in range(len(path) - 1) for p, q in waters if segments_cross(path[i], path[i + 1], p, q) and (x := seg_intersect(path[i], path[i + 1], p, q)) is not None
+    ]  # the segments must MEET: `seg_intersect` alone answers for the lines (feature 261)
     bad += pairs_within(hits, 46.0)  # the same pairs the every-pair form counted (170 million `hypot` on a polder - feature 138), by a sweep
     return bad
 
@@ -256,3 +338,44 @@ def unreached_houses(M: Mapping[str, Any], reach: float = WEB_REACH_FT) -> list[
         if d > reach:
             far.append((round(cx), round(cy), round(d)))
     return far
+
+
+FORD_SQUARE_TOL_DEG = 10.0
+"""A way that crosses the brook more than this far off square is squared at the crossing (`square_crossings`). The ford
+gap lets a string-pulled way through it at up to about 40 degrees off square, and the deck takes the angle of the way it
+carries - Kashikawa drew a plank 52 degrees off square (settlement-review, feature 261). 10 degrees is a map drawing
+convention: square to the eye, and small enough that a gently angled approach is left as the router drew it."""
+
+
+def square_crossings(pts: Sequence[Pt], brook: Sequence[Pt], half: float) -> list[Pt]:
+    """`pts` with every crossing of `brook` that is more than `FORD_SQUARE_TOL_DEG` off square replaced by a leg `2 *
+    half` long along the brook's normal at the crossing, so the way - and the deck laid on it - crosses square. A
+    crossing whose segment is too short to hold the leg is left as drawn.
+
+    AN ELBOW IN THE WATER IS TAKEN OUT FIRST (settlement-review of Kashikawa, feature 261): a lane that bent 3 ft inside the
+    brook crossed on a segment too short to square, and its plank took the angle of the leg after the bend - 44 degrees off
+    square. An interior vertex within `half` of the brook is dropped, so the crossing lies on one segment that can hold
+    the square leg; the way's ends stay where they are."""
+    if len(pts) > 2 and len(brook) > 1:
+        pts = [pts[0], *(p for p in pts[1:-1] if min(seg_dist(p[0], p[1], c, d) for c, d in zip(brook, brook[1:], strict=False)) > half), pts[-1]]
+    out: list[Pt] = [pts[0]] if pts else []
+    for a, b in zip(pts, pts[1:], strict=False):
+        seg_len = math.dist(a, b)
+        for c, d in zip(brook, brook[1:], strict=False):
+            if seg_len == 0.0 or math.dist(c, d) == 0.0 or not segments_cross(a, b, c, d):
+                continue
+            x = seg_intersect(a, b, c, d)  # `seg_intersect` answers for the LINES; `segments_cross` said the segments meet
+            if x is None:  # pragma: no cover - segments that cross are not parallel
+                continue
+            tx, ty = (d[0] - c[0]) / math.dist(c, d), (d[1] - c[1]) / math.dist(c, d)
+            nx, ny = -ty, tx
+            ux, uy = (b[0] - a[0]) / seg_len, (b[1] - a[1]) / seg_len
+            dot = ux * nx + uy * ny
+            if dot < 0:
+                nx, ny, dot = -nx, -ny, -dot
+            if math.degrees(math.acos(min(1.0, dot))) <= FORD_SQUARE_TOL_DEG or min(math.dist(a, x), math.dist(x, b)) <= half:
+                continue
+            out += [(x[0] - nx * half, x[1] - ny * half), (x[0] + nx * half, x[1] + ny * half)]
+            break
+        out.append(b)
+    return out

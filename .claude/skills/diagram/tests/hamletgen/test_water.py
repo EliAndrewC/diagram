@@ -456,3 +456,26 @@ def test_a_leg_on_the_axis_is_tilted_just_off_it_not_kicked_into_a_sawtooth() ->
     # a long leg is still capped at the old ceiling
     far = _off_the_axes([(0.0, 0.0), (0.0, 5000.0)], (-1.0, 0.0))
     assert far[1][0] == -11.0
+
+
+def test_a_brook_that_doubles_back_is_unfolded() -> None:
+    """Feature 261 (settlement-review of Sawada): no vertex of a brook's course turns it more than the limit; a fold is
+    taken out vertex by vertex, and a course that turns gently is untouched."""
+    from l7r.diagram.hamletgen.water.brook import unfold
+
+    folded = [(0.0, 0.0), (100.0, 0.0), (40.0, -20.0), (40.0, -200.0)]  # out east, then back west and up
+    fixed = unfold(folded, 100.0)
+    assert fixed[0] == (0.0, 0.0) and fixed[-1] == (40.0, -200.0)
+    assert (100.0, 0.0) not in fixed
+    gentle = [(0.0, 0.0), (100.0, 0.0), (180.0, 40.0)]
+    assert unfold(gentle, 100.0) == gentle
+    assert unfold([(0.0, 0.0), (0.0, 0.0), (5.0, 5.0)], 100.0) == [(0.0, 0.0), (0.0, 0.0), (5.0, 5.0)], "a zero leg has no turn"
+
+
+def test_an_exit_bend_sits_at_the_legs_middle_to_one_side_and_is_capped() -> None:
+    """`exit_bend`: the midpoint of the leg, set aside by 12% of the leg on the given side, never more than 60 ft."""
+    from l7r.diagram.hamletgen.water.brook import EXIT_BEND_MAX_FT, exit_bend
+
+    assert exit_bend((0.0, 0.0), (1.0, 0.0), 100.0, 1.0) == pytest.approx((50.0, 12.0))
+    assert exit_bend((0.0, 0.0), (1.0, 0.0), 100.0, -1.0) == pytest.approx((50.0, -12.0))
+    assert exit_bend((0.0, 0.0), (0.0, 1.0), 1000.0, 1.0) == pytest.approx((-EXIT_BEND_MAX_FT, 500.0))

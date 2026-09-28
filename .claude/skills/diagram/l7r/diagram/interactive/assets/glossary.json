@@ -3340,7 +3340,9 @@
   "def": "Dispersed settlement: the form in which each farmstead stands alone among its own fields, with no village street; the Tonami plain is the canonical case.",
   "variants": [
    "sankyoson",
-   "sanson"
+   "sanson",
+   "scattered farmstead",
+   "scattered-farmstead"
   ]
  },
  "sanmai": {
@@ -11072,6 +11074,12 @@
    "Chenghua"
   ]
  },
+ "Siberian high": {
+  "def": "The great mass of cold, heavy air that settles over Siberia in winter. Wind blows out of it over Japan from the northwest all winter; in summer the wind comes from the Pacific instead, from the southeast.",
+  "variants": [
+   "Siberian high"
+  ]
+ },
  "fumoto": {
   "def": "In Satsuma's outer-district system, the settlement in each of the domain's outer districts where its rural samurai (gōshi) lived, farming in peacetime and serving under the district steward when fighting broke out.",
   "variants": [
@@ -11093,6 +11101,12 @@
    "underdrain",
    "underdrains",
    "underdrained"
+  ]
+ },
+ "oroshi": {
+  "def": "A cold wind blowing down off a mountain range onto the plain below in winter; in Japan it is named for the mountain it comes from, like the Zao oroshi of the Sendai plain.",
+  "variants": [
+   "oroshi"
   ]
  },
  "kuchimai": {

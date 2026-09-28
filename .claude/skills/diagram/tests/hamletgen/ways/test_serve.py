@@ -315,6 +315,19 @@ def test_the_late_pass_leaves_a_lane_whose_ends_both_serve() -> None:
     assert [list(q) for q in s.M["lanes"][-1]["pts"]] == before
 
 
+def test_the_late_pass_drops_a_lane_trimmed_to_a_nub() -> None:
+    """A lane that serves nothing past the tread it leaves goes (feature 261, Kashikawa's field spur): trimmed to service it
+    kept a stub shorter than a lane, and the pass used to leave such a lane whole - its head a plank to nothing."""
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]], houses=[(600.0, 600.0)])
+    s.M["lanes"].append({"pts": [[0.0, 100.0], [-12.0, 100.0], [-400.0, 100.0]], "w": 3})
+    hg.ways.tidy_lane_ends(s, [(200.0, 0.0), (600.0, 0.0), (600.0, 400.0), (200.0, 400.0)])
+    assert len(s.M["lanes"]) == 1, "the nub is dropped"
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]], houses=[(-20.0, 700.0)])
+    s.M["lanes"].append({"pts": [[0.0, 380.0], [-15.0, 395.0], [-20.0, 690.0]], "w": 3})
+    hg.ways.tidy_lane_ends(s, [(200.0, 0.0), (600.0, 0.0), (600.0, 400.0), (200.0, 400.0)])
+    assert len(s.M["lanes"]) == 2, "a lane that is some house's only way stays"
+
+
 def test_a_footpath_of_one_point_fronts_nothing() -> None:
     """`_ends_worth_walking_to` is asked of whatever the router returned, and a route that collapsed to a single
     point has no ends to judge - it is not a path, and drawing it would put a dot in a field."""
@@ -357,3 +370,30 @@ def test_a_footpath_end_may_front_the_field_it_serves() -> None:
     crop = [(500.0, 0.0), (700.0, 0.0), (700.0, 200.0), (500.0, 200.0)]
     path = [(10.0, 0.0), (300.0, 0.0), (480.0, 0.0)]  # starts on the way, ends 20 ft off the crop's edge
     assert _ends_worth_walking_to(_StubSettlement(), path, (9000.0, 9000.0), segs, [crop])
+
+
+def test_a_house_whose_admitted_ways_are_none_is_left_alone() -> None:
+    """Feature 261: `seg_ok` narrows what counts as the house's network (`_link_home_bank` admits only the ways on its own
+    bank that reach the connector dry-shod); a house none of whose ways is admitted has nothing to be served to here."""
+
+    class _Plan:
+        envelope = [(0.0, 0.0), (10.0, 0.0), (10.0, 10.0)]
+        watercourses: list = []
+
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 200.0)]], houses=[(300.0, 100.0)])
+    before = len(s.M["lanes"])
+    hg.ways._serve_stragglers(s, _Plan(), [], [], [], only=s.M["houses"], seg_ok=lambda c, g: False)
+    assert len(s.M["lanes"]) == before
+
+
+def test_the_overrun_past_the_connector_is_cut_and_the_connector_left() -> None:
+    """`cut_the_overruns` (feature 261, lifted from `stage_web`): a lane that met the way out and ran 52 ft on past it to a
+    loose end is cut where it met it; the connector itself is never cut, and a lane with nothing to cut is left as it is."""
+    s = _StubSettlement(lanes=[[(0.0, 100.0), (400.0, 100.0)]])
+    s.M["lanes"].append({"pts": [[0.0, 300.0], [0.0, 48.0]], "w": 3})
+    s.M["lanes"].append({"pts": [[200.0, 400.0], [200.0, 100.0]], "w": 3})
+    hg.ways.cut_the_overruns(s)
+    assert s.M["lanes"][0]["pts"] == [[0.0, 100.0], [400.0, 100.0]], "the connector is left"
+    end = s.M["lanes"][1]["pts"][-1]
+    assert abs(end[1] - 100.0) <= 6.0, "the overrun is cut where it met the way"
+    assert s.M["lanes"][2]["pts"] == [[200.0, 400.0], [200.0, 100.0]], "a lane ending on the way is left"

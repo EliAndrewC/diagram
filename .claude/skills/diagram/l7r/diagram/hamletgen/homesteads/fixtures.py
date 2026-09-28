@@ -6,7 +6,7 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, seg_dist
+from l7r.diagram.settlement import Settlement, seg_dist, segments_cross
 from l7r.diagram.settlement._geom import boxed_ring_hit
 from l7r.diagram.settlement._knobs import knob_rng
 from l7r.diagram.settlement.farm_fixtures import FIXTURE_FT, PERSIMMON_CROWN_FT
@@ -14,6 +14,7 @@ from l7r.diagram.settlement.farm_fixtures import FIXTURE_FT, PERSIMMON_CROWN_FT
 from ..consts import Poly, Pt
 from ..plan import SitePlan
 from .bamboo import Footing, _strip_blocked
+from .fields import homestead_box
 
 # FARMSTEAD FIXTURES (feature 133 T53-T59, GM 2026-08-27; research/homesteads.html "The farmstead's
 # fixtures"). Each row: the kind, the per-hamlet PREVALENCE BAND (rolled once per map from the seed -
@@ -145,8 +146,19 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
     pond = s.M.get("pond")
     lanes = [([(float(a), float(b)) for a, b in ln["pts"]], float(ln.get("w", 3)) / 2 + px(3.0)) for ln in s.M.get("lanes", []) if len(ln.get("pts") or []) >= 2]
     footing = Footing(s, fields, marsh)  # the static ground, indexed once per pass (feature 218)
+    # THE HOMESTEAD BUNDLES ARE PACKING RESERVATIONS, NOT GROUND (feature 261, spec-fidelity of round 6fefdcdf): each is the
+    # rectangle `_try_place_bundle` reserves round a whole steading, and its parts - the house, the yard, the gardens - are
+    # registered one by one besides. Tested as a solid, a bundle offset by its gardens refused its own house's open flank, and a
+    # neighbor's refused ground nothing stood on: Mizuguchi's farmstead at (1277,257) seated no coop and no stack. Skipped only
+    # for the yard ring (below): skipped for every seat, the fixtures took the flanks first and the persimmons after them
+    # lost their ground - on a trial roll of 2026-09-27, Inashiro drew 6 of its 12 persimmons (plan D19).
+    bundles = frozenset(b for b in (homestead_box(s.placed, float(q["x"]), float(q["y"])) for q in houses) if b is not None)
     count = 0
     shrines_left = max(1, round(shares["shrine"] * len(houses)), mins.get("shrine", 0))  # RARE means rare: positional luck cannot exceed the share (a spec floor may)
+    # A SHRINE WITH NO SEAT PASSES TO THE NEXT HOUSE WITH ROOM (settlement-review of Mizuguchi, feature 261): once a seat
+    # beyond a lane is refused (`across_a_lane`), the one house that rolled the map's rare shrine can have none, and the
+    # hamlet lost it. The share says how many households keep one, not which; the miss is recorded only if no house takes it.
+    shrine_owed = False
     # THE FLOOR (T61, GM 2026-08-27: "a min number of something which may or may not appear"): after the
     # rolled pass, any kind short of its spec'd minimum is forced onto the houses that lack it, in
     # positional order, until the floor is met or every house has been tried
@@ -175,7 +187,7 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                 )
                 if kind not in forced or has:
                     continue
-            elif s._hjit(hx, hy, _SALT[kind]) >= shares[kind]:
+            elif s._hjit(hx, hy, _SALT[kind]) >= shares[kind] and not (kind == "shrine" and shrine_owed):
                 continue
             if kind == "shrine" and shrines_left <= 0:
                 continue
@@ -191,11 +203,20 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                 tseats = [(reach, hh * 0.1), (-reach, hh * 0.1), (reach * 0.75, -reach * 0.75), (-reach * 0.75, -reach * 0.75), (reach * 0.75, reach * 0.75), (-reach * 0.75, reach * 0.75)]
                 if u < 0.5:
                     tseats[0], tseats[1] = tseats[1], tseats[0]
+                # ...THEN THE SAME BEARINGS A STEP OUT, AND TWO (10 and 20 ft; the second for Sawada's re-laid rank), and a tree that finds no seat is RECORDED (feature 261): the yard ring
+                # below seats a fixture where none stood before, and on Sawada it took the ground of a persimmon that then
+                # vanished without a record - this branch alone never said when it drew nothing.
+                tseats += [(lx * (reach + px(_st)) / reach, ly * (reach + px(_st)) / reach) for _st in (10.0, 20.0) for lx, ly in tseats]
+                # ...AND LAST, STRAIGHT BEHIND AND BEFORE THE HOUSE at the same three reaches (feature 261): the record plants
+                # them "round the homestead", and Mizuguchi's north-row house, a lane at its back and east wall and its beds
+                # at the west, had open ground only straight out past its yard. Appended, so no tree that seated moves.
+                tseats += [(0.0, sy * (reach + px(_st))) for _st in (0.0, 10.0, 20.0) for sy in (1.0, -1.0)]
+                _planted = False
                 for lx, ly in tseats:
                     cx, cy = hx + lx * ca - ly * sa, hy + lx * sa + ly * ca
                     # the TRUNK is tested against drawn footprints, not the plot reservations: a yard tree
                     # stands at a plot's edge, and in a nucleated cluster the reservations tile the ground
-                    if _trunk_blocked(s, cx, cy, px(4.0), fields, marsh, pond, lanes, footing):
+                    if _trunk_blocked(s, cx, cy, px(4.0), fields, marsh, pond, lanes, footing) or across_the_brook(s, (hx, hy), (cx, cy)) or across_a_lane(lanes, (hx, hy), (cx, cy)):
                         continue
                     # no tree on a roof: the SAME keep-outs and the same test the grove drawer uses, so
                     # structures_clear_of_trees (which mirrors them) cannot disagree with this seat
@@ -205,7 +226,11 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                     s.persimmon(cx, cy, of=(hx, hy))
                     s.placed.append((cx, cy, px(4.0), px(4.0)))
                     count += 1
+                    _planted = True
                     break
+                if not _planted:
+                    _miss = s.M["meta"].setdefault("farm_fixtures_unseated", {})
+                    _miss["persimmon"] = int(_miss.get("persimmon", 0)) + 1
                 continue
             w, d = px(FIXTURE_FT[kind][0]), px(FIXTURE_FT[kind][1])  # along the wall, out from it
             # candidate seats as (lx, ly, w_local, h_local); the fixture is drawn raked with the house
@@ -403,17 +428,33 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
             # them, so no map moves except where a fixture was previously dropped. Three rungs, at the wall
             # gap again each time, which is how `clear_label_seat` and the board's own caption ladder ring
             # outward for the same reason - the crowded ground is exactly where the thing has to stand.
-            _rungs = [(0.0, 0.0)] + [(px(8.0) * _k, px(8.0) * _k) for _k in (1, 2, 3)]
+            _rungs = [(0.0, 0.0, seats)] + [(px(8.0) * _k, px(8.0) * _k, seats) for _k in (1, 2, 3)]
+            # ...THEN THE REST OF ITS OWN YARD (feature 261, spec-fidelity of round 6fefdcdf): once a seat beyond a lane is refused
+            # (`across_a_lane`), a farmstead whose lane runs close behind its back wall had no recorded seat left, and seven
+            # coops, woodpiles, baths and heaps went unseated across the pool. The recorded seats keep their order and win
+            # wherever they fit; only a fixture that fits none of them is offered the ring round the house's other walls, which is
+            # still its own plot (a GUESS, labeled: the record places each fixture at a wall, not at which one when that is taken).
+            if kind != "shrine":
+                _ring = yard_ring(hw, hh, g, w, d)
+                _rungs += [(px(8.0) * _k, px(8.0) * _k, _ring) for _k in (0, 1, 2, 3)]
+                # ...and each seat straight out from its own wall (feature 261): the diagonal rungs move a front seat along the
+                # wall as far as out, into the lane or the neighbor's bed at a crowded corner, while Mizuguchi's north-row
+                # house had open ground straight out past its yard and seated no woodpile.
+                _rungs += [(_o, 0.0, _ring) for _o in (px(8.0) * _k for _k in (1, 2, 3, 4))] + [(0.0, _o, _ring) for _o in (px(8.0) * _k for _k in (1, 2, 3, 4))]
             _seated = False
-            for _ox, _oy in _rungs:
+            for _ox, _oy, _table in _rungs:
                 if _seated:
                     break
-                for lx, ly, cw, ch in seats:
+                for lx, ly, cw, ch in _table:
                     lx = lx + (_ox if lx >= 0 else -_ox)
                     ly = ly + (_oy if ly >= 0 else -_oy)
                     cx, cy = hx + lx * ca - ly * sa, hy + lx * sa + ly * ca
                     ext = abs(cw * ca) + abs(ch * sa), abs(cw * sa) + abs(ch * ca)  # the raked rect's bbox
-                    if _strip_blocked(s, cx, cy, ext[0], ext[1], hx, hy, fields, marsh, pond, lanes, footing):
+                    if (
+                        _strip_blocked(s, cx, cy, ext[0], ext[1], hx, hy, fields, marsh, pond, lanes, footing, bundles if _table is not seats else frozenset())
+                        or across_the_brook(s, (hx, hy), (cx, cy))
+                        or across_a_lane(lanes, (hx, hy), (cx, cy))
+                    ):
                         continue
                     spin = 90.0 if (cw, ch) == (d, w) and w != d else 0.0  # a flank seat turns the glyph to lie ALONG the wall (review at T99: stacks stood end-on)
                     s.farm_fixture(kind, cx, cy, rot=rot + spin, of=(hx, hy), form=("pit" if kind == "manure" and plan.manure_form == "pit" else None))  # the rolled manure form (feature 150)
@@ -424,16 +465,50 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                         privy_at = (lx, ly)
                     elif kind == "shrine":
                         shrines_left -= 1
+                        shrine_owed = False
                     count += 1
                     _seated = True
                     break
-            if not _seated:
+            if not _seated and kind == "shrine" and not h.get("_force"):
+                shrine_owed = True  # passed on (above); recorded after the pass if no house takes it
+            elif not _seated:
                 # THE MISS IS RECORDED, so a drawing that departs from its own declared share cannot ship
                 # unremarked again. `meta.farm_fixtures_unseated` is what a reader and a check compare against
                 # `meta.farm_fixtures`; a silent drop is the thing that made the Kuwabata defect invisible.
                 _miss = s.M["meta"].setdefault("farm_fixtures_unseated", {})
                 _miss[kind] = int(_miss.get(kind, 0)) + 1
+    if shrine_owed:  # no later house had room for the shrine passed on
+        _miss = s.M["meta"].setdefault("farm_fixtures_unseated", {})
+        _miss["shrine"] = int(_miss.get("shrine", 0)) + 1
     return count
+
+
+def across_the_brook(s: Settlement, house: Pt, seat: Pt) -> bool:
+    """Would this fixture stand across a stream from the house it serves (feature 261 FR-013)? The same rule, and the
+    same guess, as `Settlement._parts_across_stream` for the homestead's own parts: the line from the house to the
+    seat crosses no reach of any stream. Mizuguchi drew a privy and a persimmon on the far bank of the brook that runs
+    past their house's door."""
+    return any(segments_cross(house, seat, poly[k], poly[k + 1]) for f in s.M.get("streams", []) for poly in (f.get("poly") or [],) for k in range(len(poly) - 1))
+
+
+def yard_ring(hw: float, hh: float, g: float, w: float, d: float) -> list[tuple[float, float, float, float]]:
+    """The seats round a house's walls in its own frame (`lx, ly, along x, along y`), a wall gap out: the back wall at
+    its middle and ends, each flank at three heights, and the front corners - the last resort of a fixture every
+    recorded seat of which is refused (`farmstead_fixtures`). A seat on the back or front wall lies along it (`w, d`),
+    a flank seat turned to lie along its flank (`d, w`)."""
+    back, front, side = -(hh / 2 + g + d / 2), hh / 2 + g + d / 2, hw / 2 + g + d / 2
+    ring = [(0.0, back, w, d), (-hw * 0.35, back, w, d), (hw * 0.35, back, w, d)]
+    ring += [(sx * side, fy * hh, d, w) for fy in (-0.3, 0.0, 0.3) for sx in (-1.0, 1.0)]
+    return ring + [(-hw * 0.35, front, w, d), (hw * 0.35, front, w, d)]
+
+
+def across_a_lane(lanes: Sequence[tuple[Poly, float]], house: Pt, seat: Pt) -> bool:
+    """Would a lane run between this fixture and the house it serves (settlement-review of Mizuguchi, feature 261)? A
+    shrine stands "in a corner of the house plot" and a coop in the yard (research/homesteads.html), and a shared lane
+    between the house and the seat puts the seat outside the plot: Mizuguchi drew a household's coop, woodpile and the
+    map's one shrine 10-13 ft beyond the lane that carries the west rows past its back wall. The same line test as
+    `across_the_brook`, against the lanes' centerlines."""
+    return any(segments_cross(house, seat, pts[k], pts[k + 1]) for pts, _half in lanes for k in range(len(pts) - 1))
 
 
 def _trunk_blocked(

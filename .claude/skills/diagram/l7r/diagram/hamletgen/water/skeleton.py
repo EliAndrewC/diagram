@@ -47,6 +47,8 @@ def stage_water_frame(s: Settlement, plan: SitePlan) -> None:
         water_flow=plan.water_flow,
         down_deg=plan.down_deg,
         windward=plan.windward,
+        # WHETHER THE WIND IS THE REGION'S OR THE MAP'S OWN (feature 261): the windbreak's pop-up says which.
+        wind_source="declared" if plan.spec.windward else "regional",
         # THE FORM IS ROLLED, NOT ASSUMED (feature 126). This tier hardcoded `nucleated=True` from
         # the day it was written, which meant every hamlet the generator has ever produced was the
         # same KIND of settlement. The research supports three (research/homesteads.html, "Does a
