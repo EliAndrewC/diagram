@@ -127,6 +127,10 @@ result: 21 of 24 seeds pass the whole gate (m:cohort-before-passed); the three t
 `scatter_frame_breach` only, the cohort's standing residue. The after-cohort must pass these same 21 or more, every
 newly failing seed diagnosed.
 
+**The after-cohort** (`make cohort N=24`, 2026-09-28, after the green gate): 21 of 24 pass the whole gate - the same
+21 - and the three that fail are the same Audit-02, Audit-08 and Audit-23, on the same `scatter_frame_breach` only. No
+seed newly fails.
+
 ## R8. Historical grounding
 
 Nothing this feature changes asserts anything about the world: the same rules seat the same kinds of houses on the
