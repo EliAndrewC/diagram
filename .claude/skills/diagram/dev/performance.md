@@ -443,7 +443,8 @@ maps, and the moved maps re-roll more often. Judged by the pool and cohort seeds
 spread measured IN THE SAME RUN (the shipping engine rolled twice, interleaved by map with the lever's pass;
 `specs/284-fourth-hotspot-pass/combined/`), they were 4.8% faster together against a 0.6% spread - and the gate then failed
 on five rules over the moved POOL maps (a bund stepped twice, woodland parcels in a ruled row, a copse off its house's bank,
-brook legs on a screen axis, a seat off the wind), with the pool itself no faster. Withdrawn. **Three lessons:** run the
+brook legs on a screen axis, a seat off the wind), with the pool itself no faster. The field search's lever was
+withdrawn on the rules; A*, measured again alone once that was out, was not faster than the run-to-run spread, and went too. **Three lessons:** run the
 gate on the moved pool before calling a moving lever kept - a cohort comparison measures reach and time, not the pool's
 seed tests; never judge one lever with another in that has since changed (each was first withdrawn on a run under the other);
 and a lever's own stage can halve while the rolls get slower. The coarser router lattice, the carve's rows in arrays and the
