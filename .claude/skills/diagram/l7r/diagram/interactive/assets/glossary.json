@@ -804,7 +804,8 @@
   "def": "The samurai ground and the townsman ground of a castle town, assigned as separate districts by law.",
   "variants": [
    "buke-chi",
-   "chonin-chi"
+   "chonin-chi",
+   "samurai ground"
   ]
  },
  "buke-yashiki": {
@@ -2445,7 +2446,9 @@
  "kumi-yashiki": {
   "def": "Group residences: a block of plots where one squad of retainers lived together, on a castle town's fringe.",
   "variants": [
-   "kumi-yashiki"
+   "kumi-yashiki",
+   "group-residences",
+   "group-residence"
   ]
  },
  "kumigashira": {
@@ -2636,7 +2639,9 @@
    "machiya",
    "shophouse",
    "shop-house",
-   "shophouses"
+   "shophouses",
+   "townhouses",
+   "townhouse"
   ]
  },
  "madake": {

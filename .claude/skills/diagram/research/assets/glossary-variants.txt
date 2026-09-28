@@ -619,6 +619,8 @@ groins	groyne
 gross-up	gross-up
 gross-ups	gross-up
 ground mulberry	root-cut
+group-residence	kumi-yashiki
+group-residences	kumi-yashiki
 grow-out	grow-out pond
 grow-out pond	grow-out pond
 grow-out ponds	grow-out pond
@@ -1412,6 +1414,7 @@ sally gate	sally port
 sally port	sally port
 sallyport	sally port
 salvage excavation	salvage excavation
+samurai ground	buke-chi
 san no torii	ichi-no-torii
 san-no-maru	sannomaru
 san-no-torii	ichi-no-torii
@@ -1724,6 +1727,8 @@ toro	Toro
 toro site	Toro
 total length and fall	fall
 town magistrates	town magistrate
+townhouse	machiya
+townhouses	machiya
 towpath	towpath
 towpaths	towpath
 tozama	tozama
