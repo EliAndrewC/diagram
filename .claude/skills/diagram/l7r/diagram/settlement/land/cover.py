@@ -33,7 +33,7 @@ from typing import TYPE_CHECKING, Any
 # AND SINCE FEATURE 223 THE BUCKET IS KEPT AS COORDINATES UNTIL `finish()`, which knows the frame: ~90% of the blades
 # lie outside the viewBox (specs/200 R2) and are culled there by the page's own `drop_offmap` rule before the merge,
 # so the file never carries them (`Settlement.flush_blade_groups`).
-from .._geom import KeepoutGrid, Poly, RingIndex, convex_hull
+from .._geom import CrownIndex, KeepoutGrid, Poly, RingIndex, convex_hull
 from ..land.wet import MARSH_FEATHER_BS
 
 WOOD_FRINGE_FT = 8.0
@@ -218,9 +218,9 @@ class GroundCoverMixin:
             # type is defined PURELY by its feathered scatter, which thins to nothing at the margin - so the ground
             # has no boundary at all, just its cover petering out onto the open slope. THREE distinct looks so land
             # types read apart at a glance (the GM's rule - grass and woods must NOT look the same):
-            #   role="woodland"  -> a COPPICE WOOD: individual, spaced tree CROWNS, an OPEN canopy (gaps show) - the
-            #                       upland/ridge wood the hamlet coppices. Clearly TREES, but lighter and more open
-            #                       than the dense DARK closed-canopy fengshui village grove (they stay distinct too).
+            #   role="woodland"  -> a COPPICE WOOD: a thicket of small crowns whose neighbors just meet (8-9 ft on
+            #                       ~8 ft centers, research/vegetation/230) - the hill wood the hamlet coppices. Clearly
+            #                       TREES, lighter and finer-grained than the DARK big-crowned village grove (they stay distinct).
             #   role="pasture"   -> OPEN GRAZING GRASS: grass tufts + the odd brush dot, NO trees at all - reads as
             #                       open pasture, unmistakably NOT woodland.
             #   role="commons"/"grazing" (default) -> the cut-over fuel/fodder scrub: grass + a FEW scraggly pines.
@@ -251,25 +251,29 @@ class GroundCoverMixin:
                 # cannot hold its quota still terminates) makes the realized density the stated one on
                 # every parcel. The draws stay inside this function's `random.setstate` scope, so the
                 # extra throws cannot ripple into anything drawn later.
-                _wd_target = int(area / (540 * bs * bs))
-                _wd_seated = self._crowns_near(
-                    min(q[0] for q in poly), min(q[1] for q in poly), max(q[0] for q in poly), max(q[1] for q in poly)
-                )  # no crown under another's, this wood's or a neighbor's (GM 2026-08-28; woods._crown_seat_clear)
+                # THE COMMONS' OWN STOCKING (269 B28; research/vegetation/230): one crown to `COMMONS_SPACING_FT`
+                # squared (~63 sq ft, 1,700 stems/ha), each 8-9 ft across so neighbors just meet. It was one crown to
+                # 540 sq ft at 13-23 ft across, the hill wood's figures (vegetation/060) that no page gave for a coppice.
+                _wd_target = int(area / self.px(self.COMMONS_SPACING_FT) ** 2)
+                _r_lo, _r_hi = (self.px(v) for v in self.COMMONS_CROWN_R_FT)
+                # no crown under another's, this wood's or a neighbor's (GM 2026-08-28; woods._crown_seat_clear) -
+                # asked of an index, because a coppice at its real stocking seats hundreds of crowns (dev/performance.md)
+                _wd_seated = CrownIndex(self._crowns_near(min(q[0] for q in poly), min(q[1] for q in poly), max(q[0] for q in poly), max(q[1] for q in poly)))
                 for _ in range(_wd_target * 6):
                     if _wd_crowns >= _wd_target:
                         break
                     cx, cy = random.uniform(x0, x1), random.uniform(y0, y1)
-                    if _sparse(cx, cy, 0.6, 11.5 * bs):  # lean = the largest crown radius, so no canopy overhangs a crop
+                    if _sparse(cx, cy, 0.6, _r_hi):  # lean = the largest crown radius, so no canopy overhangs a crop
                         continue
-                    r = random.uniform(6.5, 11.5) * bs
+                    r = random.uniform(_r_lo, _r_hi)
                     col = random.choice(("#6E8B4A", "#7C9856", "#87A45C"))
                     # RECORD the crown (known-open ledger 2026-08-16, both review rounds
                     # independently): these used to be SVG ink only, so no manifest check could
                     # count a stand's canopy - which is how a zero-crown "woodland" parcel could
                     # ship green. Same flat [x, y, r] run the homestead groves use.
-                    if not self._crown_seat_clear(cx, cy, r, _wd_seated):
+                    if not _wd_seated.clear(cx, cy, r):
                         continue  # centered under an already-seated crown: an understory stem, not canopy
-                    _wd_seated.append((cx, cy, r))
+                    _wd_seated.add(cx, cy, r)
                     self.M["tree_crowns"] += [round(cx, 1), round(cy, 1), round(r, 1)]
                     _wd_crowns += 1
                     g.append(f'<ellipse cx="{cx:.1f}" cy="{cy + 2 * bs:.1f}" rx="{r:.1f}" ry="{r * 0.72:.1f}" fill="#59703E" fill-opacity="0.30"/>')  # soft ground shadow

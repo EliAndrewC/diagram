@@ -3,9 +3,10 @@
 import math
 from typing import TYPE_CHECKING, Any
 
-from .._geom import point_in_poly
+from .._geom import CanopyArea, point_in_poly
 from ._helpers import _BELT_GAP_FT, _belt_axis
 from .grove_blocks import GroveBlocks, Seats
+from .groves import bamboo_mark
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -60,16 +61,7 @@ class StandsMixin:
             while x < x1:
                 jx, jy = x + (self._hjit(x, y, 91.0) - 0.5) * step * 0.6, y + (self._hjit(x, y, 92.0) - 0.5) * step * 0.6
                 if point_in_poly(jx, jy, pts):
-                    h = (5.0 + 3.0 * self._hjit(x, y, 93.0)) * bs  # a mark 5-8 ft tall: legible, not a tree
-                    lean = (self._hjit(x, y, 94.0) - 0.5) * 1.6 * bs
-                    # two culms leaning together, and a leafy fork at the top of the taller one
-                    g.append(
-                        f'<path d="M{jx - 1.2 * bs:.1f},{jy:.1f} l{lean:.1f},{-h:.1f} M{jx + 1.2 * bs:.1f},{jy:.1f} l{-lean * 0.6:.1f},{-h * 0.8:.1f}" stroke="#9AAE3C" stroke-width="{0.9 * bs:.2f}" fill="none" stroke-linecap="round"/>'
-                    )
-                    tx, ty = jx - 1.2 * bs + lean, jy - h
-                    g.append(
-                        f'<path d="M{tx:.1f},{ty:.1f} l{-2.2 * bs:.1f},{-1.6 * bs:.1f} M{tx:.1f},{ty:.1f} l{2.4 * bs:.1f},{-1.2 * bs:.1f} M{tx:.1f},{ty:.1f} l{0.4 * bs:.1f},{-2.6 * bs:.1f}" stroke="#B9CC5A" stroke-width="{0.8 * bs:.2f}" fill="none" stroke-linecap="round"/>'
-                    )
+                    g.append(bamboo_mark(jx, jy, bs, self._hjit(x, y, 93.0), self._hjit(x, y, 94.0)))  # a mark 5-8 ft tall: legible, not a tree
                     n += 1
                 x += step
             y += step * 0.86
@@ -102,6 +94,7 @@ class StandsMixin:
         face_margin: float | None = None,
         reserved: tuple[float, float, float, float] | None = None,
         near: tuple[Any, ...] | None = None,
+        area: float | None = None,
     ) -> int:
         """A COMMUNAL village grove - the Chinese *fengshui* forest (风水林). Unlike the per-house *yashikirin*,
         a NUCLEATED village shelters behind ONE village-scale grove, in three roles (see research/vegetation.html 'What are the village's three groves' 'Village
@@ -118,7 +111,9 @@ class StandsMixin:
         `dense=True` packs overlapping clumps into a continuous belt/cluster; `dense=False` scatters them for the
         leafy fringe among houses. role tunes the species mix (windbreak/water_mouth = conifer-backed forest;
         copse = bamboo + fruit, no conifer). Recorded in M['village_groves'] (bbox + role + poly) IF any clump
-        is drawn (a footprint entirely over houses/crops draws nothing and records nothing). Returns the count."""
+        is drawn (a footprint entirely over houses/crops draws nothing and records nothing). `area` (px^2) is the canopy
+        the stand is filled TO: seating stops once its clumps cover it, and a second pass offers more seats where the first
+        fell short (269 B26, the copse sized by the homesteads' woods). Returns the count."""
         xs = [p[0] for p in poly]
         ys = [p[1] for p in poly]
         x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
@@ -384,6 +379,26 @@ class StandsMixin:
         nx, ny = max(1, round((x1 - x0) / step)), max(1, round((y1 - y0) / step))
         clumps: list[Any] = []
         seated: list[tuple[float, float]] = []  # unrounded seats, inked after the face trim below
+        canopy = CanopyArea(2.0 * bs)  # the ground the seated clumps cover, for an `area` goal (269 B26)
+
+        def _goal_met() -> bool:
+            return area is not None and canopy.area >= area
+
+        def _seat(jx: float, jy: float) -> None:
+            """One grid seat through the rejection chain: a HARD blocker drops it, a LOCAL one re-seats it (see below)."""
+            if blocks.hard(jx, jy) or (_near is not None and not _near.too_near(jx, jy)):
+                return
+            if blocks.local(jx, jy) or blocks.lane(jx, jy):
+                _alt = _reseat(jx, jy, require_interior=not blocks.local(jx, jy))
+                if _alt is None:
+                    return
+                jx, jy = _alt
+            seated.append((jx, jy))
+            clumps.append([round(jx, 1), round(jy, 1)])
+            near_seats.add(jx, jy)
+            near_clumps.add(round(jx, 1), round(jy, 1))
+            canopy.add(jx, jy, cr)
+
         for iy in range(ny + 1):
             for ix in range(nx + 1):
                 gx = x0 + ix * (x1 - x0) / nx
@@ -439,17 +454,29 @@ class StandsMixin:
                 # separate causes have now punched holes in a wind wall here - a wellhead inside the
                 # belt, a peer session's lane crossing it, and a threshing yard's sun corridor - and
                 # each was fixed with its own ad-hoc nudge until the third made the pattern obvious.
-                if blocks.hard(jx, jy) or (_near is not None and not _near.too_near(jx, jy)):
-                    continue
-                if blocks.local(jx, jy) or blocks.lane(jx, jy):
-                    _alt = _reseat(jx, jy, require_interior=not blocks.local(jx, jy))
-                    if _alt is None:
-                        continue
-                    jx, jy = _alt
-                seated.append((jx, jy))
-                clumps.append([round(jx, 1), round(jy, 1)])
-                near_seats.add(jx, jy)
-                near_clumps.add(round(jx, 1), round(jy, 1))
+                if _goal_met():
+                    continue  # the copse has its homesteads' wood (269 B26): the rest of the grid stays open ground
+                _seat(jx, jy)
+        # ...AND A COPSE IS FILLED TO THE HOMESTEADS' WOOD, not left at what one grid's gaps gave (269 B26;
+        # research/vegetation/210: each homestead that keeps a wood has ~6,000-28,000 sq ft of trees, its windward grove
+        # and its share of the copse together). The grid above tries one seat a `step`; where it falls short of `area`,
+        # the grid is offered again at its three half-step offsets, each seat asking every test the first pass asked.
+        # Nothing is relaxed: a copse the ground cannot hold stays short, and the caller records by how much.
+        for _ox, _oy in ((0.5, 0.0), (0.0, 0.5), (0.5, 0.5), (0.25, 0.25), (0.75, 0.25), (0.25, 0.75), (0.75, 0.75)) if area is not None else ():
+            for iy in range(ny + 1):
+                for ix in range(nx + 1):
+                    if _goal_met():
+                        break
+                    gx = x0 + (ix + _ox) * (x1 - x0) / nx
+                    gy = y0 + (iy + _oy) * (y1 - y0) / ny
+                    jx = gx + (self._hjit(gx, gy, 23.0) - 0.5) * step
+                    jy = gy + (self._hjit(gx, gy, 24.0) - 0.5) * step
+                    if (
+                        blocks.inside(jx, jy)
+                        and not near_clumps.too_near(jx, jy)
+                        and (within is None or not (jx + clump * 0.9 < within[0] or jx - clump * 0.9 > within[2] or jy + clump * 0.9 < within[1] or jy - clump * 0.9 > within[3]))
+                    ):
+                        _seat(jx, jy)
         # AND CLOSE THE INTERIOR HOLES (feature 152, acceptance review; the GM's own complaint in its
         # last form - "it's not clear that it will, in fact, be breaking much wind"). The grid decides
         # where a clump is TRIED, and where a try is refused the belt carries a hole: Kuwabata shipped
@@ -578,6 +605,7 @@ class StandsMixin:
         # wetland's fertile edge, so where the windbreak's ground runs into the recorded marsh its trees are drawn as one
         _wet = [[(float(a), float(b)) for a, b in m["poly"]] for m in self.M.get("marshes") or [] if m.get("role") in ("toe", "waterside") and m.get("poly")] if role == "windbreak" else []
         alder = 0
+        bamboo = 0  # the bamboo marks inked low under the windbreak's crowns (269 B29, `_draw_grove`)
         for jx, jy in seated:
             # feature 150: the belt and the copse are two highlight classes; a water_mouth grove has no
             # class in the vocabulary yet and stays unclassed so the census reports it
@@ -585,7 +613,7 @@ class StandsMixin:
                 alder += 1
                 self._draw_grove(jx, jy, clump, clump, face=(0, -1), mix="alder", cls="alder")
                 continue
-            self._draw_grove(jx, jy, clump, clump, face=(0, -1), mix=mix, cls={"windbreak": "windbreak", "copse": "copse"}.get(role))
+            bamboo += self._draw_grove(jx, jy, clump, clump, face=(0, -1), mix=mix, cls={"windbreak": "windbreak", "copse": "copse"}.get(role))
         if clumps:
             # A COPSE IS RECORDED AT THE SIZE IT WAS DRAWN, not at the size it was asked for.
             #
@@ -622,6 +650,7 @@ class StandsMixin:
                     "clumps": clumps,
                     "clumps_offpage": (_offpage if face_margin is not None and clumps else []),  # actual drawn clump centers + radius, for groves_clear_of_lanes
                     "alder": alder,  # of the clumps, those standing in the marsh and drawn as alder (feature 261)
+                    "bamboo": bamboo,  # bamboo marks inked in the gaps and along the edge (269 B29; 0 outside the windbreak mix)
                     "poly": [[round(px, 1), round(py, 1)] for px, py in poly],
                 }
             )

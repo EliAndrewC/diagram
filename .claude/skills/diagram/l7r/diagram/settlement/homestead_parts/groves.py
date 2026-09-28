@@ -10,6 +10,33 @@ if TYPE_CHECKING:
 
 
 ALDER_GREENS = ("#5E7F6A", "#6B8A74")  # the alder crowns' tint (a map drawing convention, `_draw_grove`)
+GROVE_BAMBOO_SHARE = 0.08  # of a windbreak clump's items, the bamboo under its crowns: a GUESS (269 B29, vegetation/260)
+
+HOMESTEAD_WOOD_FT2 = (6000.0, 28000.0)
+"""The trees one homestead keeps, its windward grove and its share of the copse together, in sq ft (269 B26;
+research/vegetation/210): a 1684 Mito register lists three homestead woods of about 6,100, 10,700 and 27,800 sq ft. A
+calibration against three households, not a survey; counting grove and copse as one wood is the entry's decision."""
+
+
+def homestead_wood_ft2(u: float) -> float:
+    """One homestead's wood from a positional roll `u` in [0, 1): log-uniform over `HOMESTEAD_WOOD_FT2`, so the middle
+    of the roll (~13,000 sq ft) sits near the register's middle household - the SHAPE of the roll is a GUESS; the
+    register gives three woods, not a spread. A degree along a continuum, so calibrated liberty rather than a knob."""
+    lo, hi = HOMESTEAD_WOOD_FT2
+    return float(lo * (hi / lo) ** u)
+
+
+def bamboo_mark(x: float, y: float, bs: float, tall: float, lean: float) -> str:
+    """ONE bamboo mark - two culms leaning together and a leafy fork at the top of the taller one - the stand glyph's
+    map drawing convention (`bamboo_stand`; a culm is inches across and cannot be drawn to scale). `tall` and `lean`
+    are the two positional rolls in [0, 1): a mark 5-8 ft tall, leaning up to 0.8 ft."""
+    h = (5.0 + 3.0 * tall) * bs
+    ln = (lean - 0.5) * 1.6 * bs
+    tx, ty = x - 1.2 * bs + ln, y - h
+    return (
+        f'<path d="M{x - 1.2 * bs:.1f},{y:.1f} l{ln:.1f},{-h:.1f} M{x + 1.2 * bs:.1f},{y:.1f} l{-ln * 0.6:.1f},{-h * 0.8:.1f}" stroke="#9AAE3C" stroke-width="{0.9 * bs:.2f}" fill="none" stroke-linecap="round"/>'
+        f'<path d="M{tx:.1f},{ty:.1f} l{-2.2 * bs:.1f},{-1.6 * bs:.1f} M{tx:.1f},{ty:.1f} l{2.4 * bs:.1f},{-1.2 * bs:.1f} M{tx:.1f},{ty:.1f} l{0.4 * bs:.1f},{-2.6 * bs:.1f}" stroke="#B9CC5A" stroke-width="{0.8 * bs:.2f}" fill="none" stroke-linecap="round"/>'
+    )
 
 
 class GrovesMixin:
@@ -108,7 +135,10 @@ class GrovesMixin:
         A farm boxed in on BOTH windward faces gets only what fits (a small grove - the genuinely cramped
         minority). Arms are NOT in `placed`, so adjacent groves abut into one continuous windbreak. Returns a
         list of (cx, cy, w, h, face)."""
-        target = self.GROVE_RATIO * hw * hh
+        # ...HELD INSIDE THE REGISTER'S RANGE (269 B26; research/vegetation/210): a homestead's own wood is ~6,000-28,000 sq
+        # ft, and a lone yashikirin is all the wood its homestead has, so the ~6:1 target never asks for less or more
+        _lo, _hi = (self.px(1.0) ** 2 * v for v in HOMESTEAD_WOOD_FT2)
+        target = min(_hi, max(_lo, self.GROVE_RATIO * hw * hh))
         own = [(hx, hy)]
         d0 = 1.4 * hh  # base belt depth; the loop deepens to hit the area target
         dcap = 3.6 * hh  # an open arm may deepen this far to cover a blocked one
@@ -166,12 +196,12 @@ class GrovesMixin:
                 return True
         return False
 
-    def _draw_grove(self: Settlement, cx: float, cy: float, w: float, h: float, face: Any, mix: str = "windbreak", cls: str | None = None) -> None:  # type: ignore[misc]
+    def _draw_grove(self: Settlement, cx: float, cy: float, w: float, h: float, face: Any, mix: str = "windbreak", cls: str | None = None) -> int:  # type: ignore[misc]
         """Draw one windbreak/grove clump as a DENSE MIXED STAND - overlapping canopies packed into a real
         grove (not a few scattered trees), of three species: tall EVERGREEN conifer (darker, larger crown - the
         windbreak backbone, cedar/pine), DECIDUOUS broadleaf (mid green - timber and fruit, zelkova/persimmon),
-        and (nominally) a BAMBOO clump - see the note at the item loop: `b_th` is 0.0 in both mixes, so no
-        clump has ever drawn one. `mix` picks the species blend: 'windbreak' is
+        and, in the windbreak mix, BAMBOO low under the crowns, inked only in the gaps and along the edge (269 B29;
+        `GROVE_BAMBOO_SHARE`). Returns the count of bamboo marks inked. `mix` picks the species blend: 'windbreak' is
         conifer-backed (the sheltering wall - the yashikirin and the fengshui back belt); 'dooryard' is bamboo
         + fruit broadleaf with NO conifer (the leafy bamboo/fruit greenery scattered among village houses).
         Distinct from the big s.forest area feature and the striped kitchen-garden bed. Species and placement
@@ -187,9 +217,16 @@ class GrovesMixin:
             # Inashiro that no one could see as bamboo, and not how bamboo grows: a stand is a clonal
             # thicket with a hard edge, not a seasoning through a cedar belt. Bamboo is now its own
             # feature (`bamboo_stand`, the `bamboo` knob). The windbreak is cedar-backed with broadleaf;
-            # the dooryard copse is fruit broadleaf. The culm glyph below is kept for the record and is
-            # unreachable at these thresholds.
-            b_th, c_th = (0.0, 0.38) if mix == "windbreak" else (0.0, 0.0)  # dooryard = fruit broadleaf, no conifer; alder = broadleaf only
+            # the dooryard copse is fruit broadleaf.
+            # ...AND CAME BACK LOW, UNDER THE TREES (269 B29; research/vegetation/260, "Did a farmstead's grove carry
+            # bamboo?"). The Tonami grove held many bamboo stands mixed with its cedar from the west round to the north,
+            # and the Sendai igune's bamboo filled the bare lower part of the trees against the wind: bamboo was one of
+            # the windbreak's own plants, low under its crowns. So the windbreak mix carries a small share of bamboo
+            # items, and each is drawn only where a plan view would see it - in a gap between the crowns or past the
+            # clump's edge - as the stand glyph's culm mark (`bamboo_stand`, a map drawing convention), not a crown.
+            # The share is a GUESS (no page gives one; "a grove is mostly trees with bamboo among them"): 8% of the
+            # items, taken from the broadleaf so the cedar backbone keeps its 38%. The dooryard and alder mixes carry none.
+            b_th, c_th = (GROVE_BAMBOO_SHARE, GROVE_BAMBOO_SHARE + 0.38) if mix == "windbreak" else (0.0, 0.0)  # dooryard = fruit broadleaf, no conifer; alder = broadleaf only
             items: list[Any] = []
             for _ in range(n):
                 px = random.uniform(-w / 2 + 2, w / 2 - 2)
@@ -227,12 +264,11 @@ class GrovesMixin:
             # comparison (the 'to scale, compact bamboo' option) for the before/after; groves stay to scale, the
             # SVG + rsvg raster roughly halve.
             for px, py, kind, s in sorted(items, key=lambda t: t[1]):
-                # THE BAMBOO ITEM WAS UNREACHABLE (feature 146). `b_th` is 0.0 for BOTH mixes above, so
-                # `roll < b_th` never held and no grove clump has ever drawn a culm - while the comment above
-                # still described bamboo as one of the stand's three species. Six lines of code the maps could
-                # not reach, removed rather than tested. If the bamboo IS wanted in the blend the fix is a
-                # non-zero `b_th`, which moves every grove on every map and belongs to a feature that owns the
-                # look; recorded in future-work/farming-communities.md so the intent is not lost with the code.
+                # THE BAMBOO ITEM WAS UNREACHABLE (feature 146: `b_th` was 0.0 in both mixes) until 269 B29 gave the
+                # windbreak a share; a bamboo item draws no crown - it stands under them, and is inked below, after
+                # every crown of the clump is known, only where it shows.
+                if kind == "bamboo":
+                    continue
                 # ONE CROWN AT THE RESEARCHED SIZE (GM 2026-08-28, feature 134 T36). This was `(4.6 | 4.0) * s * bs`,
                 # a pixel radius calibrated at the village's 2 ft/px ("a ~5-6 m canopy") and never rescaled by ftpx:
                 # at the hamlet's 1 ft/px the belt drew 9 ft crowns beside the commons' 18 ft ones (measured on
@@ -255,7 +291,24 @@ class GrovesMixin:
                 # cannot show, and it was an unrecorded map convention. The darker fill and the 15% larger
                 # crown already tell a conifer from a broadleaf.
                 g.append(f'<circle cx="{px:.1f}" cy="{py - 3 * bs:.1f}" r="{rr:.1f}" fill="{col}" stroke="#3C5526" stroke-width="0.8"/>')
+            # THE BAMBOO SHOWS IN THE GAPS AND ALONG THE EDGE (269 B29, vegetation/260): a bamboo item under a drawn
+            # crown, this clump's or an earlier one's, is hidden from above and not inked; one in the open, clear of
+            # every building and wellhead, is the culm mark, painted UNDER the crowns (first in the group) because it
+            # is the low layer.
+            culms: list[str] = []
+            _mark_r = 3.0 * bs  # the mark's own reach: two culms 1.2 ft apart and a leafy fork ~2.5 ft round their tops
+            for px, py, kind, _s in items:
+                if kind != "bamboo":
+                    continue
+                bx, by = cx + px, cy + py
+                if any((bx - ox) ** 2 + (by - oy) ** 2 < orr**2 for ox, oy, orr in (*drawn, *_near)):
+                    continue
+                if self._crown_covers(bx, by, _mark_r, krect, kcirc, self.CANOPY_PAD):
+                    continue
+                culms.append(bamboo_mark(px, py, bs, self._hjit(bx, by, 93.0), self._hjit(bx, by, 94.0)))
+            g[1:1] = culms
             g.append('</g>')
             self.add(''.join(g), cls=cls)
             self._record_crowns(drawn)
             random.setstate(st)
+            return len(culms)

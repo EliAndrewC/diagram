@@ -17,12 +17,33 @@ from ..plan import SitePlan
 # grove (kainyo) and bamboo was one of its named species beside a dominant cedar, valued as "important
 # daily-life material"; the bamboo stood WITH the storehouses on the plot's south side there, and at a
 # plot's wet edge for its roots elsewhere; the grove as a whole faces the local wind (N+W, W, or S+W by
-# region - summary-only). So the SIDE is rolled per farmstead, weighted toward the back and the shed's
-# side, never fixed; and the PRESENCE rate is a GUESS - no source gives a share; "one of several secondary
+# region). THE WIND SIDE IS READ NOW, not summary-only (269 B29; research/vegetation/260 and 154): on the Tonami
+# plain bamboo was often mixed into the grove from the west round to the north of the house, and the Sendai igune's
+# bamboo filled its low part against the wind. So the SIDE is rolled per farmstead, weighted toward the back, the
+# wind side and the shed's side, never fixed. The weights are a GUESS - no page gives a share per side; `wind` was
+# raised from .15 to .30 when the wind side was read, from `back` and `shed`, which stay the likeliest two together.
+# The PRESENCE rate is a GUESS - no source gives a share; "one of several secondary
 # species" says common but not universal - set like the shed's, and labeled. Sizes are a working strip.
 HOUSEHOLD_BAMBOO_PREVALENCE = 0.6
 HOUSEHOLD_BAMBOO_FT = (22.0, 16.0)
-_HOUSEHOLD_BAMBOO_SIDES = (("back", 0.45), ("shed", 0.30), ("wind", 0.15), ("side", 0.10))
+_HOUSEHOLD_BAMBOO_SIDES = (("back", 0.35), ("shed", 0.25), ("wind", 0.30), ("side", 0.10))
+
+
+_DIAGONAL = math.sin(math.radians(22.5))  # a wind component past this on both axes is a diagonal wind (NW, not N)
+
+
+def wind_seat(wlx: float, wly: float, hw: float, hh: float, gap: float, sw: float, sh: float) -> tuple[float, float, float, float]:
+    """The windward strip's (center x, center y, w, h) in the house's frame, for a wind (`wlx`, `wly`) pointing where it
+    comes FROM (269 B29). A diagonal wind seats it on the windward CORNER, a near-cardinal one on the windward FACE -
+    either way `gap` clear of the walls. It used to scale the half-sizes by the wind's components, which for a diagonal
+    wind put the strip's center ~0.7 of the way out and its body over the house's own corner: the near seat was refused
+    on every NW-wind hamlet in the pool, so the side rolled "wind" fell through to another side and raising its weight
+    moved nothing."""
+    if abs(wlx) > _DIAGONAL and abs(wly) > _DIAGONAL:
+        return (math.copysign(hw / 2 + gap + sw / 2, wlx), math.copysign(hh / 2 + gap + sh / 2, wly), sw, sh)
+    if abs(wly) >= abs(wlx):
+        return (0.0, math.copysign(hh / 2 + gap + sh / 2, wly), sw, sh)
+    return (math.copysign(hw / 2 + gap + sh / 2, wlx), 0.0, sh, sw)
 
 
 def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any]]) -> list[Poly]:
@@ -62,8 +83,7 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
             "shed": ((-(hw / 2 + gap + sh / 2)) if shed_side != "N" else 0.0, 0.0 if shed_side != "N" else -(hh / 2 + gap + sh / 2), sh if shed_side != "N" else sw, sw if shed_side != "N" else sh),
             "side": (hw / 2 + gap + sh / 2, 0.0, sh, sw),
         }
-        wlx, wly = wx * ca + wy * sa, -wx * sa + wy * ca  # the wind in the house's frame
-        local["wind"] = (wlx * (hw / 2 + gap + sh / 2), wly * (hh / 2 + gap + sh / 2), sw if abs(wly) >= abs(wlx) else sh, sh if abs(wly) >= abs(wlx) else sw)
+        local["wind"] = wind_seat(wx * ca + wy * sa, -wx * sa + wy * ca, hw, hh, gap, sw, sh)  # the wind in the house's frame
         # the rolled side first, then the others in their listed order as fallbacks
         roll = s._hjit(hx, hy, 96.0)
         first = _HOUSEHOLD_BAMBOO_SIDES[-1][0]
