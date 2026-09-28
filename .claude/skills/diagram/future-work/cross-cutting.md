@@ -6,6 +6,15 @@ module organization, and generation doctrine that applies at every tier.
 The test for this file is simple - if fixing it would change maps of more than one type, or would
 change no map at all (tooling, structure, checks), it belongs here.
 
+## The review-prereq guard matches a finding's measurement by bare id (found 2026-09-27, feature 267)
+
+`scripts/_review_prereq.py` `unverified_findings` counts a finding disposed when any `measurements.json` record has
+`verifies` equal to its id and `subject` equal to the map - with no round or engine key. A map reviewed more than once
+reuses F1, F2, ...: Kashikawa's round-2 PASS nitpicks F1/F2 (two docstrings) were counted disposed by the round-1
+records for F1/F2 (the grave's step, the page's feature note), and the reviewer caught it by reading the records'
+sources, not the guard. Sketch: a record names the verdict it answers (the verdict's engine key or a verdict id), and
+the lookup matches on it; or `make review-verdict` stamps each finding id with the round (`r2-F1`).
+
 ## 2. Fabric-first generation (the GM's ordering question, 2026-08-10) - RESEARCH DIRECTION
 Today's order is shell-first: wall/roads/water, then fabric fitted inside, with the wall
 PRE-SIZED from a budget density constant. The constant was wrong once (Tango's 690 vs the

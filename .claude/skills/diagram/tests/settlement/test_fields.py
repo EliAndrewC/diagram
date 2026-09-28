@@ -272,6 +272,41 @@ def test_paddy_features_cover_every_archetype_branch():
     assert not any(sd.M.get(k) for k in seen)
 
 
+def test_the_field_grave_takes_either_attested_form_and_a_corner_grave_stays_in_its_corner():
+    """Feature 267 (research/fields.html 'Are there really graves out in the middle of the fields?'): an island inside
+    a plot (the Chinese form) or a grave in a plot's corner (the Japanese form), rolled per hamlet on its own stream."""
+    from l7r.diagram.settlement.fields.features import corner_seat, grave_form
+
+    forms = {grave_form(seed) for seed in range(40)}
+    assert forms == {"island", "corner"}, forms
+    assert grave_form(7) == grave_form(7), "the form is the seed's, not the draw order's"
+    square = [(0.0, 0.0), (60.0, 0.0), (60.0, 30.0), (0.0, 30.0)]
+    assert math.dist(corner_seat(square, 0), (0.0, 0.0)) == pytest.approx(12.0), "never less than 12 px in, clear of the bunds (a third was 11.2 here)"
+    tiny = [(0.0, 0.0), (12.0, 0.0), (12.0, 16.0), (0.0, 16.0)]
+    assert math.dist(corner_seat(tiny, 0), (0.0, 0.0)) == pytest.approx(5.0), "never past half-way on a tiny plot"
+    big = [(0.0, 0.0), (300.0, 0.0), (300.0, 300.0), (0.0, 300.0)]
+    assert math.dist(corner_seat(big, 0), (0.0, 0.0)) == pytest.approx(16.0), "16 px into the corner of a large one"
+    assert corner_seat([(5.0, 5.0)], 0) == (5.0, 5.0), "a degenerate plot keeps its one point"
+    from l7r.diagram.settlement.fields.features import turning_corners
+
+    notched = [(0.0, 0.0), (30.0, 0.0), (60.0, 0.0), (60.0, 30.0), (0.0, 30.0)]
+    assert turning_corners(notched) == [0, 2, 3, 4], "the collinear side vertex is no corner"
+    assert turning_corners([(0.0, 0.0), (1.0, 0.0), (2.0, 0.0)], 181.0) == [0, 1, 2], "every vertex when none turns"
+    assert corner_seat(square, 6) == corner_seat(square, 2), "the vertex index wraps"
+    net = {"plots": [{"poly": square, "low": False, "fill": "#A6C398"}]}
+    found = {}
+    for seed in range(200):
+        s = Settlement(1200, 1200, seed=seed)
+        s.meta(name="G", scale="village", ftpx=1, down_deg=90, field_archetype="valley_paddy")
+        s._paddy_features(net)
+        for g in s.M.get("field_graves", []):
+            found.setdefault(g.get("form", "island"), g)
+    assert set(found) == {"island", "corner"}, found
+    corner = found["corner"]
+    assert 0 < corner["x"] < 60 and 0 < corner["y"] < 30, "inside its plot"
+    assert min(math.dist((corner["x"], corner["y"]), v) for v in square) < math.dist((corner["x"], corner["y"]), (30.0, 15.0)), "nearer a corner than the middle"
+
+
 def test_draw_comb_field_existing_stream_and_cascade_sources():
     # source={"kind":"stream"} WITHOUT a polyline = an existing on-map stream already runs at the
     # sluice (the town pattern: a comb tapping the map's stream via a weir) - nothing extra is

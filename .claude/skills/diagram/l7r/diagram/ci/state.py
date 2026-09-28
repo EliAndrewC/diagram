@@ -61,7 +61,7 @@ class VerificationState:
     hash: str
     commit: str
     engine_key: str = ""  # delta.engine_key_worktree at the time of the run - what a green local `done` VOUCHES for (GM 2026-08-25)
-    tooling: str = ""  # tooling_hash at the last green `done` - `make quick` skips the `tooling` tests while it still matches
+    tooling: str = ""  # tooling_hash at the last green `done` - the gate skips the `tooling` tests while it still matches
 
 
 def _gate_stamp(root: Path) -> ModuleType:
@@ -145,7 +145,8 @@ def write(root: Path, event: str, target: str, reused: bool = False) -> Verifica
 
 
 # The files the `tooling` tests exercise (tests/conftest.py, GM 2026-08-26, T22). Hashed on every green
-# `make done`; `make quick` skips the tooling tests while the hash is unchanged.
+# `make done`; the gate skips the tooling tests while the hash is unchanged (`make quick` never collects them,
+# GM 2026-09-27).
 TOOLING_PATHS = ("Makefile", "pyproject.toml", "l7r/diagram/ci", "l7r/diagram/pipeline", "l7r/diagram/switches.py", "l7r/diagram/_invocation.py", "tests/conftest.py", "tests/_scope.py")
 
 

@@ -192,22 +192,18 @@ class FieldRock(Kind):
     """
     What: A cluster of gray boulders inside a field plot - a bedrock outcrop the terrace risers wrap around.
 
-    Why: Rock outcrops are drawn as a TERRACE feature - a guess no source confirms - bedrock the risers wrap around, and are absent on alluvial valley,
-    polder and delta ground; where the archetype allows one it stands off-center in its plot so it reads as
+    Why: The maps treat rock outcrops as a TERRACE feature, bedrock the risers wrap around, absent on alluvial
+    valley, polder and delta ground; where the archetype allows one it stands off-center in its plot so it reads as
     a natural obstacle.
 
-    Note: Which archetypes host an outcrop is a guess that nothing read confirms, and no page read speaks of rocks left standing in a paddy at all; no source counts how many, so a terraced field
+    Note: Which archetypes host an outcrop is this project's guess - no source found puts outcrops on terraces and
+    off valley, polder and delta ground - and no source counts how many, so a terraced field
     gets one to three - enough that the reader meets the obstacle the terrace was cut around, few enough
     that the field still reads as worked ground.
 
-    Caveat: Which archetypes host an outcrop is a guess that nothing read confirms, and no page read speaks of
-    rocks left standing in a paddy at all; no source counts how many, so a terraced field gets one to three -
-    enough that the reader meets the obstacle the terrace was cut around, few enough that the field still
-    reads as worked ground.
-
     Name: field rock
     Covers: `field_rocks` - a bedrock outcrop inside a plot
-    Label: accurate
+    Label: guess
     Sources: not recorded
     Entry: research/fields.html - 'In-field features - flat flooded paddy hosts obstacles least'
     """
@@ -217,23 +213,27 @@ class FieldRock(Kind):
 
 class GraveIsland(Kind):
     """
-    What: A small raised earthen mound with two or three stone markers standing inside a paddy plot, the flat
-    paddy tiling around it.
+    What: A family's grave in the fields: a small raised earthen mound with stone markers, standing either inside a
+    paddy plot as an island the flat paddy tiles around, or in a plot's corner against its bunds.
 
-    Why: Graves among the paddy are held to be a north-China dry-plain signature (no page read gives it), with only a partial Japanese parallel - NOT the rice-south
-    default, where feng-shui puts the dead on the slope with a backing hill and a downslope water view. The
-    GM accepted both looks, so the island is drawn rarely (about three valley, terrace or ribbon maps in
-    ten, a rate chosen for the maps rather than read from any source) as a deliberate departure.
+    Why: Around Shanghai many villagers buried their dead one by one out in the open fields, wherever a geomancer
+    placed the grave, and a column of soldiers in 1842 found graves in every field; far to the north, Henan leveled
+    more than two million field graves in 2012. In Japan the grave stood beside the field rather than in it: beside
+    the bunds, until an order of 1872 forbade burying the dead at a field's bund edge, or in a corner of a field. So
+    the island inside a plot is the Chinese form and the corner grave the Japanese one, and each hamlet takes one.
 
-    Note: A calibrated liberty, disclosed: the in-field grave is drawn where the rice-south record would put the
-    dead on the slope. How often it is drawn is the project's own choice, and the evidence for graves out
-    among the paddy is thin: the one Japanese passage puts burials beside the bunds, at a field's edge rather than out in a plot, and no page read gives the north-China half.
+    Note: How often a map draws a field grave at all, about three valley, terrace or ribbon maps in ten, is a degree
+    chosen for the maps: no source gives a rate, and the record argues they were common where the custom held.
+
+    Caveat: How often a map draws a field grave at all, about three valley, terrace or ribbon maps in ten, is a
+    degree chosen for the maps: no source gives a rate, and the record argues they were common where the custom
+    held.
 
     Name: grave island
-    Covers: `field_graves` - the rare in-field grave mound
-    Label: deviation
-    Sources: not recorded
-    Entry: research/fields.html - 'In-field features - flat flooded paddy hosts obstacles least' (the CALIBRATED LIBERTY paragraph, GM 2026-07-20)
+    Covers: `field_graves` - a grave mound inside a paddy plot or in its corner
+    Label: accurate
+    Sources: henriot-shanghai-graves, henan-grave-removal-enwiki, ryobosei-jawiki, yashikibaka-ibaraki-blog
+    Entry: research/fields.html - 'Are there really graves out in the middle of the fields?', 'In-field features - flat flooded paddy hosts obstacles least'
     """
 
     key = 'grave island'

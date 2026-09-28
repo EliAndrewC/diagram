@@ -1244,7 +1244,8 @@ quick:           ## [tests] tier 2: lint, types and every test that rolls no map
 	@: "(GUARD_EDIT_OK: feature 250 D14 - a research question this change touched stays under the size cap)"
 	@python3 ../../../scripts/check-question-size.py
 	@: "(GUARD_EDIT_OK: feature 171 - capture whether testmon was warm BEFORE the run, so the ratchet below judges like with like)"; \
-	warm=$$([ -f .testmondata ] && echo yes || echo no); start=$$(date +%s); $(EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(TESTMON) -q --no-cov -x --ff -m "not rolls_map" $(TIER_SELECT) $(QUICK_TREE); ec=$$?; \
+	: "(GUARD_EDIT_OK: the GM's ruling 2026-09-27 - and not tooling: the tooling tests that live OUTSIDE tests/tooling (five tests/tools modules) leave quick with the tree; see QUICK_TREE)"; \
+	warm=$$([ -f .testmondata ] && echo yes || echo no); start=$$(date +%s); $(EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(TESTMON) -q --no-cov -x --ff -m "not rolls_map and not tooling" $(TIER_SELECT) $(QUICK_TREE); ec=$$?; \
 	  el=$$(( $$(date +%s) - start )); \
 	  if [ $$ec -ne 0 ]; then exit $$ec; fi; \
 	  : "(GUARD_EDIT_OK: feature 171 - the RATCHET, which is the same check against a number that means"; \
@@ -1586,10 +1587,15 @@ EXHAUSTIVE_ENV = $(if $(EXHAUSTIVE),L7R_TESTS_EXHAUSTIVE=1,)
 TESTMON = $(if $(ALL),--no-testmon,--testmon-forceselect)
 # THE QUICK TREE (GM 2026-08-26, T29): `tests/` IS the quick suite; everything that is not quick lives in its own
 # tree and is not even COLLECTED by quick - tests/tier_town and tests/tier_city (relevant to other tiers),
-# tests/gate (the corpus, the coverage carriers, the map-rolling tests) and tests/tooling (collected only when the
-# tooling changed since the last record, `ci tooling-fresh`). The gate collects all of `tests/`. Collection is
-# paid per worker, so ~1,000 fewer items is ~0.4 s of a 3.3 s floor - and the layout says what each test is.
-QUICK_TREE = tests --ignore=tests/tier_town --ignore=tests/tier_city --ignore=tests/gate --ignore=tests/full $(shell python3 -m l7r.diagram.ci tooling-fresh >/dev/null 2>&1 && echo --ignore=tests/tooling)
+# tests/gate (the corpus, the coverage carriers, the map-rolling tests) and tests/tooling. The gate collects all
+# of `tests/`. Collection is paid per worker, so ~1,000 fewer items is ~0.4 s of a 3.3 s floor - and the layout
+# says what each test is.
+# GUARD_EDIT_OK: the GM's ruling (2026-09-27) - tests/tooling LEFT QUICK ENTIRELY. It used to be collected
+# whenever the tooling had changed since the last green gate (`ci tooling-fresh`), which in practice meant the
+# first quick after every sync-in: those tests run make, git and coverage in subprocesses, and that run failed
+# quick's 11 s ratchet on a change the session never made. A tooling edit is now caught by `make done`, which
+# every push requires anyway; `make test-file FILE=tests/tooling` runs them on demand.
+QUICK_TREE = tests --ignore=tests/tier_town --ignore=tests/tier_city --ignore=tests/gate --ignore=tests/full --ignore=tests/tooling
 # THE TYPE CHECK IS ONE-SHOT pyrefly (feature 142, GM 2026-08-28). History, so nobody re-adds a daemon: mypy needed
 # 12.7 s cold, so it ran through dmypy - which held 380-600 MB of RSS per clone, could not be shared across clones,
 # and nothing ever stopped (five daemons, 2.3 GB, one for a session that had ended). pyrefly checks the whole engine

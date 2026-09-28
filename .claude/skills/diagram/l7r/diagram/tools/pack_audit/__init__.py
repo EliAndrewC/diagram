@@ -71,6 +71,7 @@ from .checks import dark_on_dark_labels as dark_on_dark_labels
 from .checks import fire_water_adrift as fire_water_adrift
 from .checks import floating_doors as floating_doors
 from .checks import gap_tag as gap_tag
+from .checks import main_gate_passage_ft as main_gate_passage_ft
 from .checks import notice_board_adrift as notice_board_adrift
 from .checks import occluded_foreground as occluded_foreground
 from .checks import orphan_group_labels as orphan_group_labels
@@ -130,6 +131,7 @@ from .report import format_report as format_report
 from .report import main as main
 from .report import read_form as read_form
 from .shared import coverage_band as coverage_band
+from .shared import divider_gates_ft as divider_gates_ft
 from .shared import gate_widths as gate_widths
 from .shared import ink_bounds as ink_bounds
 from .shared import perimeter_hugging as perimeter_hugging
