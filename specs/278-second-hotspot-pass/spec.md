@@ -25,7 +25,7 @@ take 60.1 s to roll between them (m:before-pool-roll-s), and it found:
   the driver finishes the discarded attempt too.
 - **A scatter in pure Python** that 218 priced as a vectorized one: the commons.
 - **Tooling**: `make map` rolls the reference twice; a test goes red in every clone after a sync-in that adds a class;
-  one of feature 276's equality tests costs 4.6 s of `make quick` (observed 2026-09-28, method: `make durations`).
+  one of feature 276's equality tests costs 4.6 s of `make quick` (observed 2026-09-28, method: `make durations`; research R1).
 
 Whatever the profile shows is left after these - the per-sample work each drawing genuinely needs - is written down
 with its levers priced (FR-015).
@@ -108,7 +108,7 @@ density.
 
 `make map` on the reference hamlet rolls it once for the gate's check and again to draw the render; a synced clone goes
 red on `test_every_clickable_class_is_named_somewhere_on_the_committed_page` until someone re-plates a gitignored page
-by hand; and the `md_tokens` equality test costs 4.6 s of `make quick` (observed 2026-09-28, method: `make durations`).
+by hand; and the `md_tokens` equality test costs 4.6 s of `make quick` (observed 2026-09-28, method: `make durations`; research R1).
 
 **Why this priority**: seconds on every iteration, and a false red on every sync-in that adds a class.
 
@@ -176,7 +176,7 @@ by hand; and the `md_tokens` equality test costs 4.6 s of `make quick` (observed
 A "per build" figure divides a count by the hamlet's builds (Sawada 2 before, m:before-sawada-builds), so FR-005's
 halving is not counted twice.
 
-- **SC-001** (all): the five pool hamlets' summed roll time is at least `1.5x` less than 60.1 s (m:before-pool-roll-s), back to back.
+- **SC-001** (spec-wide): the five pool hamlets' summed roll time is at least `1.5x` less than 60.1 s (m:before-pool-roll-s; research R1), back to back.
 - **SC-002** (FR-001): the router's cell tests are at least `2x` fewer on Kashikawa (358398 fouled and 174118 band,
   m:before-kashikawa-cell-fouled, m:before-kashikawa-brook-band) and Kuwabata (331302, m:before-kuwabata-cell-fouled),
   and an equality test over recorded route requests returns the eager router's paths.
