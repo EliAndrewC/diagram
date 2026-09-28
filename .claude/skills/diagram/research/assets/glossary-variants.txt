@@ -866,6 +866,7 @@ han's	han
 han-dynasty	Han dynasty
 hanchiku	rammed earth
 hane-tsurube	hanetsurube
+hanebashi	hanebashi
 hanetsurube	hanetsurube
 hangtu	rammed earth
 hanko	hanko
