@@ -355,7 +355,7 @@ class ShrineBurialGround(Kind):
     Why: The graves lie by the monk-run building, and in the setting the country monk's shrine is the parish temple;
     so where a village buries in the shrine's yard, the burial ground stands by it.
 
-    Note: The graves at the monk-run building are the record's village rule for the setting.
+    Note: The graves at the monk-run building are the record's village rule for the setting, and it rests on the setting's own canon: real Shinto shuns death, and the two-grave villages surveyed keep the shrine at the upper end and the burial ground below the houses, so a ground in a shrine's own yard is this setting's and not history's.
 
     Name: burial ground
     Covers: the burial ground by the shrine, where the village has it there
