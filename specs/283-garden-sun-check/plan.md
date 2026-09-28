@@ -28,7 +28,7 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md).
 - **D4 - the four beds** (FR-005), each measured by `garden_sun` after the move:
   - the Hoshigaoka shrine's to the open ground south-west of the hall (`2.5 h` before, `8 h` after; research.md R1);
   - Hayakawa's from the rear strip (1.5 h) to the SE corner of the south court, along the divider beyond the pond (8 h),
-    a `8 ft` strip of garden kept before the reception; the pines and the roji's last stones moved clear and the well to
+    an `8 ft` strip of garden kept before the reception; the pines and the roji's last stones moved clear and the well to
     the bed's NE corner. The sheet had drawn it under the size knob's attested low end (research buildings 400), so it
     grows to that low end (about `1,067 sq ft`, `96 x 100 px`; research.md R1) - a defect fixed where found (constitution XIV);
   - Ochiba's from the rear strip (0.5 h) to the NE corner of the south court under the karo's house, cut from the inner
