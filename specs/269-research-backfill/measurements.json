@@ -228,5 +228,55 @@
   "subject": "mizuguchi",
   "verifies": "F2",
   "answers": "fbf83868fa6c"
+ },
+ "sr4-kashikawa-f1-notes": {
+  "value": 1,
+  "unit": "entries",
+  "quantity": "the round 2-3 entry rewritten to the drawn map: the shrine at the north-west corner after the south-west seat was refused as nearer the next house, the bamboo stand back at its first seat",
+  "source": "pool/hamlets/kashikawa/kashikawa.notes.md, read 2026-09-28 after the round-4 notes fixes",
+  "observed": "2026-09-28",
+  "subject": "kashikawa",
+  "verifies": "F1",
+  "answers": "d3fead042d78"
+ },
+ "sr4-kashikawa-f3-spelling": {
+  "value": 0,
+  "unit": "hyphenated compass words",
+  "quantity": "'north-east' or 'north-west' in the burial-ground card the page prints (now 'northeast', 'northwest')",
+  "source": "pool/hamlets/kashikawa/kashikawa.notes.md Features, burial ground, read 2026-09-28 after the round-4 notes fixes",
+  "observed": "2026-09-28",
+  "subject": "kashikawa",
+  "verifies": "F3",
+  "answers": "d3fead042d78"
+ },
+ "sr4-kuwabata-f1-notes": {
+  "value": 1,
+  "unit": "entries",
+  "quantity": "a dated entry naming the three findings the landing's reviews left open on this map and pointing at future-work",
+  "source": "pool/hamlets/kuwabata/kuwabata.notes.md, read 2026-09-28 after the round-4 notes fixes",
+  "observed": "2026-09-28",
+  "subject": "kuwabata",
+  "verifies": "F1",
+  "answers": "d3fead042d78"
+ },
+ "sr4-mizuguchi-n1-docstring": {
+  "value": 0,
+  "unit": "claims",
+  "quantity": "claims in `over_the_water`'s docstring that squaring the crossing shortened the deck; it now says the path ends on the bund and the landing is held by the floor",
+  "source": "l7r/diagram/hamletgen/ways/bund.py, read 2026-09-28 after the round-4 notes fixes",
+  "observed": "2026-09-28",
+  "subject": "mizuguchi",
+  "verifies": "N1",
+  "answers": "d3fead042d78"
+ },
+ "sr4-mizuguchi-n2-notes": {
+  "value": 2,
+  "unit": "carried decks",
+  "quantity": "carried decks the round 2-3 entry now names (the spur's over the brook and the canal's), beside the four log footbridges",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.notes.md, read 2026-09-28 after the round-4 notes fixes",
+  "observed": "2026-09-28",
+  "subject": "mizuguchi",
+  "verifies": "N2",
+  "answers": "d3fead042d78"
  }
 }

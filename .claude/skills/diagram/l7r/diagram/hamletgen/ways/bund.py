@@ -234,9 +234,10 @@ OVER_THE_WATER_FT = 3.5
 
 def over_the_water(q: Pt, p: Pt, water: Sequence[tuple[Pt, Pt]]) -> Pt:
     """Where an end at `q` carried over the water toward the bund point `p` stops: straight across the first water course
-    the step crosses - square to it, so the crossing's deck spans the water and its landings rather than a long skew (the
-    round-3 review of Mizuguchi: a 24.5 ft road deck over a 4.5 ft canal, 7 ft of it over the flooded field) - and
-    `OVER_THE_WATER_FT` past its centerline, on the bund. `p` itself where the step crosses nothing."""
+    the step crosses, square to it, and `OVER_THE_WATER_FT` past its centerline, so the path ends ON the bund rather than
+    on the canal's centerline where the paddy's outline runs (the round-3 review of Mizuguchi). The carried deck's
+    paddy-side landing still runs onto the field - the gate's carried-way landing floor holds it; open in future-work.
+    `p` itself where the step crosses nothing."""
     from l7r.diagram.settlement import seg_closest
 
     seg = next(((c, d) for c, d in water if segments_cross(q, p, c, d)), None)

@@ -1,0 +1,7 @@
+{
+  "utc": "2026-09-28T19:11:13Z",
+  "target": "review-accept",
+  "commit": "aade5855b",
+  "outcome": "permitted",
+  "why": "review-accept sawada F1: nitpick: the shrine test passes on both measures; a margin is an open refinement"
+}

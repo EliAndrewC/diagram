@@ -743,3 +743,7 @@ a drying rack by each house. This hamlet threshes no rice, so it has no threshin
 here. Its manifest gains `meta.harvest_weather: settled` (the regional default, which applies where a map declares no weather;
 never rolled) and its forecourts' outlines recorded to a thousandth (none moved); neither draws anything on a map that
 inks no threshing floor.
+
+## 2026-09-28 (feature 269 landing, review rounds 1-4): the findings left open
+
+The landing's settlement-reviews left three defects visible on this map, each recorded with its measurement and sketch in `future-work/farming-communities.md` and accepted in the review dispositions: lane 2 runs east to (2054, 40) and turns 15 ft north to the connector's start, and the connector runs back west beside it for about 126 ft (`fold_the_connector_hairpin` would meet them as a T, but `may_write` refuses the move here); the north row's east house at (2148, 63) is reached only past its neighbor's yard, 96 ft from the nearest lane, inside the 100 ft reach; and 7 of the 15 eaves woodpiles stand 10.5-22.9 ft off any wall. The typed windbreak counts in the entries above describe their own rolls; the census block is the drawn count.
