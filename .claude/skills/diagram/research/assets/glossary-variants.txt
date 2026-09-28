@@ -891,6 +891,7 @@ isotherm	isohyet
 isotherms	isohyet
 ita-bune	ita-bune
 itabashi	itabashi
+iyo	Iyo
 jagama	jagama
 jail god	jail-god
 jail-god	jail-god
@@ -1681,6 +1682,8 @@ shiroyone senmaida	senmaida
 shitsuden	shitsuden
 shizai	shizai
 shobodan	shobodan
+shogunal village	shogunal village
+shogunal villages	shogunal village
 shogunate	bakufu
 shoin	shoin
 shoin-zukuri	shoin
