@@ -102,8 +102,8 @@ and its reviews.
 - **Ubame's bed at the size knob's low end (accurate)**: the only open ground in its walls with a sun bed's hours (research homesteads 044) holds about
   `1,065 sq ft` (observed 2026-09-28; method: the bed's rect 102 x 94 px at 3 px a foot), the soup-greens plot of research buildings 400 (research.md R1); the rear strip held about `2,100 sq ft` (observed 2026-09-28; method: its rect 430 x 44 px at 3 px a foot). Hayakawa's bed, drawn at
   `780 sq ft` (observed 2026-09-28; method: its rect 88 x 80 px at 3 px a foot, as the rear strip's 160 x 44), under that
-  low end, grows to it (about `1,067 sq ft`, research.md R1) at its seat by the divider beyond the pond, the garden well
-  moved to the bed's corner (constitution XIV).
+  low end, grows to it (about `1,076 sq ft`, research.md R1) at its seat before Hajime's quarters, the pond and pines moved
+  before the reception (constitution XIV).
 - **Round 1 of the building reviews applied (2026-09-28)**: Hayakawa's bed moved from the reception's garden front to
   the divider beyond the pond; each bed is painted in rows over its formal garden, which keeps its own shape (a map
   drawing convention - the bed reads as worked ground, not a compartment of the ornamental garden); the three rear
@@ -112,6 +112,12 @@ and its reviews.
   bed moved `12 px` south, clear of the swept clearing (observed 2026-09-28; method: the bed's rect). Screening, a bed's
   order against the formal garden, a plot's fencing and a shrine keeper's plot were searched and are absence notes on
   research buildings 405, the drawing labeled a guess. Measured in research.md R1.
+- **Round 2 of the building reviews applied (2026-09-28)**: Hayakawa's bed before Hajime's own rooms, the pond and the
+  old pines before the reception, the guests' path between; Ochiba's bed narrowed clear of the garden's arm to the
+  shrine; the storehouses drawn at the attested 2 by 3 ken (about 12 by 18 ft) behind each house, beyond a rear yard,
+  as at the Higuchi house (research buildings 230, four new sources), Ubame's rear yard named; the shrine's bed clear
+  of the wood, its bed kind a deliberate choice, its place on the village map owed at conversion (the map is a frozen
+  exhibit). Measured in research.md R1.
 - **Found defects fixed on the way (constitution XIV)**: the sheet audit read no `<path>` fill, so Ochiba's L-shaped
   garden was invisible to every fills-based check (it now reads a rectilinear path as the rects it covers); a hand
   sheet's leader could cross another caption or end on a glyph (the placer takes an optional index of what a leader

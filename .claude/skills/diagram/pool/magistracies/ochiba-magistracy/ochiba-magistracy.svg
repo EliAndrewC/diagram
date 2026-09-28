@@ -615,17 +615,17 @@
   </g>
 
   <!-- Household storehouses (dozo), two as the Matsushiro retainer's house kept (feature 283: the shady rear the
-       vegetable garden left, research buildings 230; a 7 ft alley left behind the house). Plastered, so no fire-water tub; sizes a guess, no
-       larger than the Takayama kitchen storehouse. -->
+       vegetable garden left, research buildings 230; a 7 ft alley left behind the house). Plastered, so no fire-water tub; each 12 by 18 ft, the common two
+       by three ken (the Yokota house's own is 9 by 12 ft), standing behind the house as the Higuchi house's did. -->
   <g data-kind="storehouse">
-    <rect x="500" y="158" width="96" height="33" fill="#F2EFE4" stroke="#4A3318" stroke-width="2.5"/>
-    <rect x="541" y="183" width="14" height="8" fill="#4A3318" data-kind="door"/>
-    <text x="548.0" y="177.2" text-anchor="middle" font-size="10" font-weight="bold" fill="#3A2E1C">storehouse</text>
+    <rect x="510" y="158" width="54" height="36" fill="#F2EFE4" stroke="#4A3318" stroke-width="2.5"/>
+    <rect x="530" y="186" width="14" height="8" fill="#4A3318" data-kind="door"/>
+    <text x="537.0" y="177.9" text-anchor="middle" font-size="7" font-weight="bold" fill="#3A2E1C">storehouse</text>
   </g>
   <g data-kind="storehouse">
-    <rect x="640" y="158" width="120" height="33" fill="#F2EFE4" stroke="#4A3318" stroke-width="2.5"/>
-    <rect x="693" y="183" width="14" height="8" fill="#4A3318" data-kind="door"/>
-    <text x="700.0" y="177.2" text-anchor="middle" font-size="10" font-weight="bold" fill="#3A2E1C">storehouse</text>
+    <rect x="650" y="158" width="54" height="36" fill="#F2EFE4" stroke="#4A3318" stroke-width="2.5"/>
+    <rect x="670" y="186" width="14" height="8" fill="#4A3318" data-kind="door"/>
+    <text x="677.0" y="177.9" text-anchor="middle" font-size="7" font-weight="bold" fill="#3A2E1C">storehouse</text>
   </g>
 
   <!-- Rear service strip (north band behind the residence) - the shady rear was
@@ -699,7 +699,7 @@
        buried under / grazed by the vegetable-garden fill - pack_audit BURIED
        finding, 2026-07-24; same coordinates, painted last) -->
   <!-- feature 267 pass 3: both nudged clear of the vegetable garden's dashed border, which they touched -->
-  <text x="655.0" y="315.1" text-anchor="middle" font-size="13" font-weight="bold" letter-spacing="2" fill="#5C4830" data-kind="inner court"><tspan x="655.0" dy="0.0">INNER</tspan><tspan x="655.0" dy="14.9">COURT</tspan></text>
+  <text x="603.0" y="185.1" text-anchor="middle" font-size="13" font-weight="bold" letter-spacing="2" fill="#5C4830" data-kind="inner court"><tspan x="603.0" dy="0.0">INNER</tspan><tspan x="603.0" dy="14.9">COURT</tspan></text>
   <text x="452.2" y="392.8" text-anchor="middle" font-size="11" font-weight="bold" letter-spacing="2" fill="#5C4830" data-kind="residence">RESIDENCE</text>
     <line x1="406.6" y1="383.0" x2="406.6" y2="363.0" stroke="#5C4830" stroke-width="0.88" stroke-linecap="round" data-kind="residence" data-leader="1"/>
   <g fill="#8FB0C6" stroke="#3A5060" stroke-width="1" data-kind="fire-water tubs">

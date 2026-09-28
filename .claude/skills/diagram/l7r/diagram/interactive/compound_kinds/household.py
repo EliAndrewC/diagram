@@ -406,26 +406,25 @@ class Kennel(Kind):
 class Storehouse(Kind):
     """
     What: The household's own earth-walled storehouse, a dozo, where the family keeps its goods and the kitchen its
-    stores, standing in the shady service ground behind the house.
+    stores, standing behind the house beyond the rear yard.
 
-    Why: A 150-koku retainer's house at Matsushiro keeps, with the house, a vegetable garden, a pond, a retirement
-    house and two dozo, and the Takayama intendancy kept a kitchen storehouse of 68.82 square meters, about 740 sq ft,
-    beside its rice store and its book storehouse. The shady ground behind a residence carried its service
-    economy, the formal garden taking the sunny south. A plastered storehouse is the one building made not to burn,
-    so it keeps no fire-water tub.
+    Why: A 150-koku retainer's house at Matsushiro keeps, with the house, a vegetable garden and two storehouses, and
+    the Takayama intendancy kept a kitchen storehouse beside its rice store. At the Higuchi house, also at Matsushiro,
+    the storehouse stands north with the main house and the rowhouse, beyond a yard behind the house, the garden
+    to the south. A household storehouse was small: the Yokota house's is 2.7 by 3.6 m, and the common size was about 2
+    by 3 ken, some 12 by 18 ft. A plastered storehouse is the one building made not to burn, so it keeps no
+    fire-water tub.
 
-    Note: That a household kept its own storehouses, and one for its kitchen, follows the record. Its seat in the
-    rear service strip is this project's reasoning from the sun, since no page read places a residence's storehouse,
-    and its size, drawn near the Takayama kitchen storehouse, is a guess for any one sheet.
+    Note: The storehouse, its place behind the house and its size follow the record, drawn at the common 2 by 3 ken;
+    how many a household kept - two here, as at Matsushiro - is a guess for any one sheet.
 
-    Caveat: Its seat in the rear service strip is this project's reasoning from the sun, since no page read places a
-    residence's storehouse, and its size, drawn near the Takayama kitchen storehouse, is a guess for any one sheet.
+    Caveat: How many storehouses a household kept - two here, as at Matsushiro - is a guess for any one sheet.
 
     Name: storehouse
     Covers: the household storehouse and its label
     Label: accurate
-    Sources: matsushiro-bukeyashiki, takayama-jinya-gifu
-    Entry: research/buildings.html - 'Where did a residence keep its vegetable garden, and how big was it?', 'Fire discipline: halls burn, kura endure', 'The shady rear is the service strip'
+    Sources: matsushiro-bukeyashiki, takayama-jinya-gifu, matsushiro-kankou-higuchi, kojodan-higuchi, bunka-yokota-dozo, suumo-kura-size
+    Entry: research/buildings.html - 'The shady rear is the service strip', 'Where did a residence keep its vegetable garden, and how big was it?', 'Fire discipline: halls burn, kura endure'
     """
 
     key = "storehouse"

@@ -26,14 +26,15 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md).
   under its hours (a guess that the sun chose). 400's "off the south side" is corrected to point at 405. Four sources
   registered; every record check run and applied.
 - **D4 - the four beds** (FR-005), each measured by `garden_sun` after the move:
-  - the Hoshigaoka shrine's to the open ground south-west of the hall (`2.5 h` before, `8 h` after; research.md R1);
-  - Hayakawa's from the rear strip (1.5 h) to the SE corner of the south court, along the divider beyond the pond (8 h),
-    an `8 ft` strip of garden kept before the reception; the pines and the roji's last stones moved clear and the well to
-    the bed's NE corner. The sheet had drawn it under the size knob's attested low end (research buildings 400), so it
-    grows to that low end (about `1,067 sq ft`, `96 x 100 px`; research.md R1) - a defect fixed where found (constitution XIV);
-  - Ochiba's from the rear strip (0.5 h) to the NE corner of the south court under the karo's house, cut from the inner
-    garden (9.5 h);
-  - Ubame's from the rear strip (0 h) to the middle of the south court between the writing pavilion and the roji's west
+  - the Hoshigaoka shrine's to the open ground below the forecourt, west of the approach (`2.5 h` before, `9.5 h` after;
+    research.md R1);
+  - Hayakawa's from the rear strip (`1.5 h`) to the inner court's garden before Hajime's own rooms (`7.5 h`), the pond
+    and the old pines moved before the reception, the guests' path between; the sheet had drawn it under the size knob's
+    attested low end (research buildings 400), so it grows to that low end (about `1,076 sq ft`, `110 x 88 px`;
+    research.md R1) - a defect fixed where found (constitution XIV);
+  - Ochiba's from the rear strip (`0.5 h`) to the inner court below the karo's house, painted over the inner garden clear
+    of its arm to the shrine (`10 h`, about `1,173 sq ft`, `80 x 132 px`; research.md R1);
+  - Ubame's from the rear strip (0 h) to the middle of the inner garden between the writing pavilion and the roji's west
     wall (7.5 h), at the size knob's low end (research buildings 400), the only open ground in its walls with a sun
     bed's hours; the pavilion shifted west with its tub, the well moved below it.
   None is declared half-shade. Each sheet's captions re-seated by `make seat-label`, its notes carry a dated bullet.
@@ -57,7 +58,7 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md).
 
 ## Round 2 (after the building reviews, 2026-09-28)
 
-- **D8 - the reviews' findings** (FR-005): Hayakawa's bed to the divider beyond the pond (`8 h`, about `1,067 sq ft`; research.md R1), the
+- **D8 - the reviews' findings** (FR-005): Hayakawa's bed off the reception's front (its final seat is D4's, after D10), the
   well at its corner; every bed painted in `vegetable-rows` over a formal garden restored to its own shape (a map drawing
   convention; `compound.py` draws the county example's bed the same way); two household storehouses in each magistracy's
   rear strip (a `storehouse` kind, written from research buildings 400, 160 and 230), a `7-11 ft` alley kept (the storehouses' rects against each house's north face) behind each
@@ -69,4 +70,9 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md).
   `tools/seat_label.py` supplies (the other captions and glyphs under `600 px2`, a well's curb being `24 x 24 px`), so the engine's maps are unchanged; a
   `busy` fill (a bed's rows) is no seat for another name; `tests/_sheets.fresh` checks staleness under its lock. Each
   with its unit test; the seat reports of every sheet compared against HEAD (only Ochiba's RESIDENCE moved).
-
+- **D10 - round 2 of the building reviews** (FR-005, FR-006): Hayakawa's bed and formal garden swapped (the bed before
+  the private rooms, the pond before the reception); Ochiba's bed narrowed off the shrine arm; storehouses at the attested
+  size and seat (research buildings 230: `matsushiro-kankou-higuchi`, `kojodan-higuchi`, `bunka-yokota-dozo`,
+  `suumo-kura-size`, each through quote-check and source-applicability), the `storehouse` kind rewritten from them;
+  Ubame's rear yard named (the inner-court kind, as Ochiba's service yard); the shrine's knob list, map note and owed
+  entry; the review contract's rear strip takes the sun condition. Measured in research.md R1.
