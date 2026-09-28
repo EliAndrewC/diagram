@@ -91,6 +91,13 @@ class Indexed(list):  # type: ignore[type-arg]
         self.appends = 0  # bumped ONLY by append/extend - see indexed_grid for why that distinction pays
         self.cache: dict[str, tuple[int, int, int, Any]] = {}
 
+    def __reduce__(self) -> tuple[Any, ...]:
+        """Pickled and copied as a FRESH registry over the same records (feature 276). Pickle's default for a list
+        subclass appends the items before it restores the slots, so `extend` ran on an instance with no `appends` and
+        the roll cache failed to read back a manifest whose `houses` had become an `Indexed`. A fresh registry starts
+        its version at 0 with an empty cache, which is correct: every index is rebuilt from the records it holds."""
+        return (type(self), (list(self),))
+
     def _bump(self) -> None:
         self.version += 1
 

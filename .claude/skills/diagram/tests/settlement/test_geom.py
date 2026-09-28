@@ -44,6 +44,23 @@ def test_seg_closest_degenerate_segment():
     assert settlement.seg_closest(0, 0, (5, 5), (5, 5)) == (5, 5)
 
 
+def test_indexed_survives_pickle_and_copy_as_a_fresh_registry():
+    """Feature 276: `M["houses"]` is an `Indexed` and the roll cache pickles the manifest. Pickle's default for a list
+    subclass appended the items before restoring the slots and raised in `extend`; the registry now comes back holding
+    the same records, a working version, and no cache carried over from the original."""
+    import copy
+    import pickle
+
+    reg = settlement.Indexed([_IDX_POLY])
+    reg.append(_IDX_POLY)
+    reg.cache["k"] = (1, 1, 1, "an index")
+    for back in (pickle.loads(pickle.dumps(reg)), copy.deepcopy(reg), copy.copy(reg)):
+        assert type(back) is settlement.Indexed and list(back) == list(reg) and back.cache == {}
+        v = back.version
+        back.append(_IDX_POLY)
+        assert back.version == v + 1
+
+
 def test_indexed_overrides_every_mutating_list_method():
     """Every way a list's CONTENT can change must bump the version, or an index cached against it
     goes stale silently - the exact failure that cost this engine two silent bugs in one day
