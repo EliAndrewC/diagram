@@ -1,0 +1,66 @@
+{
+ "feature": "279-shrine-grove-shape",
+ "plan_sha256": "469cfeed1ef6a014dca1c50391e9ba2fa1470aaac948754a244c68a671eefded",
+ "reviewed": "2026-09-28",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "Research 129 on religion-and-death; 124's decision points at it; three new sources registered and put through the four checks",
+   "class": "within",
+   "why": "FR-001-FR-003 as written. The two ja.wikipedia sources 129 also cites (chinju-no-mori-jawiki, jochi-jawiki) were registered before this feature, so 'three sources registered' is accurate."
+  },
+  {
+   "id": "D2a",
+   "summary": "A grove-form knob declared in programs.md's country-shrine knob list with its ground rule and labels; the owed-at-conversion list (farming-communities.md, migration-plan.md step 5) names it",
+   "class": "within",
+   "why": "FR-004 and FR-008: the knob, what constrains it (the ground) and each form's label, named in the program and the owed list. Equal weights where two candidates remain are a labeled guess, which is correct."
+  },
+  {
+   "id": "D2b",
+   "summary": "The survey's sides-only grove is left out of the knob as a 'deliberate deviation', on the reading that it may be what the city left",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-004 declares the knob 'with its forms', meaning the forms the sources attest (FR-001), and the one survey that sorts groves counts sides-only as its commonest single form (38.9%). The exclusion rests on 'may be' and 'on our reading': the paper (re-read in full, section 4.3.2) says that front-type shrines split into high and low green retention, and that the low type has trees merely lining the approach with buildings beyond. It never says sides-only IS that low type, and its high type (grove reaching beyond the approach on a steep slope) could be sides-only too. The attrition evidence (burned, replanted, shrunk, built on) is general to the whole sample, yet the same survey's behind-only form, which has no other witness either, is kept. So the argument is applied to one form out of four. It fails every test for a legitimate exception. Including it is not impossible. The GM's words do not imply it; they ask 'to know what tunable knobs we will have'. Including a labeled form does not defeat the request's purpose; excluding a possibly real form does. 'Deliberate deviation' is also the wrong class here: the doctrine reserves it for the setting differing from history or for a priced trade-off, not for a session doubting a source. The exclusion also decides Hoshigaoka (D3 goes from a roll to 'no roll'). Required: declare sides-only as a fourth form, a candidate for a hall at the top of its slope beside behind-and-sides, labeled as attested in one post-war city survey with the caveat quoted. A lower weight for it is permitted as a labeled guess. Raise the caveat with the GM at hand-back."
+  },
+  {
+   "id": "D3",
+   "summary": "Hoshigaoka (hall at the top of its slope, approach climbing from the south) takes behind-and-sides with no roll",
+   "class": "within",
+   "why": "It applies the plan's own ground rule correctly. But 'one candidate, no roll' exists only because of D2b. Once sides-only is a candidate, Hoshigaoka rolls from its seed between the two top-of-slope forms, and D4-D6 draw whichever form the roll gives."
+  },
+  {
+   "id": "D4",
+   "summary": "One layout script: the grove's domain becomes an irregular smooth-noise region (behind the hall and down both flanks, lower approach open); it writes the map fragment, the manifest record and the sheet's tree list",
+   "class": "within",
+   "why": "This is FR-005's silent-source branch (irregular, labeled a guess) and FR-006/FR-007's map and sheet from one layout, tree for tree. Everything outside the grove is unchanged, as FR-006 requires."
+  },
+  {
+   "id": "D4b",
+   "summary": "'No source shows a straight edge, so FR-005's escalation branch does not fire'; the owed list carries 'the irregular edge' for every form",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-005 names its own trigger: 'a wood cut off by paddy'. The only source for the paddy-plain all-around form (chinju-no-mori-jawiki) is cited by the caption of its lead photograph, 'a shrine wood surrounded by paddy fields'. The picture (Kasuga Shrine, Kawakita), viewed for this review, shows the wood meeting a straight paddy edge across its front with a thin verge between. Nothing on the record shows anyone looked at the picture. 'No source shows a straight edge' is a premise that decides scope and was never checked. Required: record in 129 what the photograph shows, including its limits (a side view, a modern field pattern), and apply FR-005, which puts that finding to the GM before the paddy-plain form's edge is fixed in the knob or the owed list. Hoshigaoka's slope grove need not wait on this only if its wood meets no paddy. Say which, measured on the map."
+  },
+  {
+   "id": "D5",
+   "summary": "Frozen map edited by hand: shrine-grove svg group and manifest record replaced; the scrub scatter extended into ground the wood gives up, from a donor patch of the map's own scatter",
+   "class": "within",
+   "why": "FR-006 authorizes exactly this: the grove, and the scrub where the wood leaves or arrives, with the edit recorded in the map's notes. Process aside, not a fidelity finding: the plan says the svg is edited 'in the mirror'. /diagram is never a workspace; do the edit in the clone."
+  },
+  {
+   "id": "D6",
+   "summary": "Sheet redrawn from D4; the 'shrine grove' Map notes line and header comment updated; the precinct rect stays",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-007 also requires the sheet's kinds' write-ups ('shrine grove') updated, and D2 keeps the program's grove item unchanged. The plan names neither. Those texts would then contradict the new form. The ShrineGrove kind docstring (l7r/diagram/interactive/compound_kinds/grounds.py) says the map 'draws a village shrine's precinct as its grove' and 'the wood fills most of a precinct's unbuilt ground', and its Entry does not name 129. programs.md line 84 says 'the wood fills the rest of the precinct', and the grove row at line 104 says the same. No argument is offered for leaving them, so this reads as an oversight, but it is still a narrowing of FR-007 (and of FR-004's program). Required: add these three texts to D6/D2, rewritten to the knob's form with 129 on the kind's Entry. The kind is engine code, so the push is gated."
+  },
+  {
+   "id": "D7",
+   "summary": "STRAIGHT_RUN measured by the layout and recorded; matches_map green; settlement-review and building-review ledgered; make done green",
+   "class": "within",
+   "why": "SC-002, SC-003 and FR-009 as written. STRAIGHT_RUN is enforcement of the requested irregular outline and is in scope."
+  }
+ ],
+ "verdict": "BLOCKED"
+}

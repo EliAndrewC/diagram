@@ -257,20 +257,19 @@ class ShrineGrove(Kind):
 
     Why: A Japanese shrine's setting was a deliberately preserved grove, the chinju no mori - a wood kept and
     tended around the sanctuary, the approach and the place of worship, so that the precinct sits inside
-    kept trees rather than in cleared ground. This map draws a village shrine's precinct as its grove, with the hall in a small
-    swept clearing inside it and no fence around it.
+    kept trees rather than in cleared ground. Which sides of the hall it stands on follows the ground: all around on a
+    rise or in the paddy plain; on a slope behind the hall, at its sides, or both. This map draws a village shrine's
+    wood in the form its ground gives, with the hall in a small swept clearing and no fence around the precinct.
 
-    Note: The grove as the setting of a shrine follows the record, as does the village's own households answering for the shrine's cleaning; that its clearing was a swept surface is general reading with no page found; that the wood fills most of a precinct's unbuilt ground is a guess, since no source measures what covered the ground beyond buildings that took a fortieth to a seventh of it. Everything the record holds is about a
-    village shrine standing in its own wood; nothing covers a grove kept inside a compound wall.
+    Note: The grove as the setting of a shrine follows the record, as do the forms it takes by the ground and the village's own households answering for the shrine's cleaning; that its clearing was a swept surface is general reading with no page found. Its edge, where it meets scrub or slope, is drawn irregular, a guess, and which of two forms a slope takes is rolled with equal weights, a guess; everything the record holds is about a village shrine standing in its own wood, and nothing covers a grove kept inside a compound wall.
 
-    Caveat: Everything the record holds is about a village shrine standing in its own wood; nothing covers a
-    grove kept inside a compound wall.
+    Caveat: Its edge, where it meets scrub or slope, is drawn irregular, a guess, and which of two forms a slope takes is rolled with equal weights, a guess; everything the record holds is about a village shrine standing in its own wood, and nothing covers a grove kept inside a compound wall.
 
     Name: shrine grove (chinju no mori)
     Covers: the grove's ground and its tree canopies
     Label: accurate
-    Sources: chinju-no-mori-jawiki, fengshui-woodland-enwiki, jinja-jawiki
-    Entry: research/religion-and-death.html - 'Is the ground around a shrine or a grave swept clear of scrub?', 'Where does a village put its shrine, and how big is it?', 'How big is a country shrine, and what stands in its precinct?', 'How large was a village shrine's precinct, and how much of it was built on?'
+    Sources: chinju-no-mori-jawiki, fengshui-woodland-enwiki, jinja-jawiki, short-2012-sacred-groves, fujita-2007-shaso-slopes
+    Entry: research/religion-and-death.html - 'What shape is a village shrine's wood, and on which sides of the hall does it stand?', 'Is the ground around a shrine or a grave swept clear of scrub?', 'Where does a village put its shrine, and how big is it?', 'How big is a country shrine, and what stands in its precinct?', 'How large was a village shrine's precinct, and how much of it was built on?'
     """
 
     key = "shrine grove"

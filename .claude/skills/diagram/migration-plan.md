@@ -260,7 +260,10 @@ Ordered by value per unit of effort, not by tier.
 5. **Village tier** - the first new generator. Biggest single step in the project: it must learn the
    institutions (headman, shrine, tax-free plots) and multi-field composition, and the village's funerary
    grounds - its cremation ground and its own burial ground (the GM's ruling of 2026-09-27; the owed list is
-   `future-work/farming-communities.md`, "OWED AT CONVERSION: a village's funerary grounds"). The architectural
+   `future-work/farming-communities.md`, "OWED AT CONVERSION: a village's funerary grounds"), and the shrine's
+   wood in the form of the country-shrine program's knob 8, `grove form` - behind, behind and sides, sides or
+   all around, by the hall's ground, rolled where two fit, its edge never ruled (feature 279; the owed entry
+   "the village generator draws no shrine grove, sacred tree or basin"). The architectural
    question this step used to be expected to surface - whether `hamletgen/` generalizes or whether
    tiers share a stage library - is **ANSWERED**, see below.
 6. **Town, then provincial city.**
