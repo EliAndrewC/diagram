@@ -244,9 +244,7 @@ def over_the_water(q: Pt, p: Pt, water: Sequence[tuple[Pt, Pt]]) -> Pt:
         return p
     cx, cy = seg_closest(q[0], q[1], seg[0], seg[1])
     dx, dy = cx - q[0], cy - q[1]
-    n = math.hypot(dx, dy)
-    if n < 1e-6:
-        dx, dy, n = p[0] - q[0], p[1] - q[1], max(math.dist(q, p), 1e-9)
+    n = max(math.hypot(dx, dy), 1e-9)  # never zero: a step starting ON the water line does not strictly cross it
     return (cx + dx / n * OVER_THE_WATER_FT, cy + dy / n * OVER_THE_WATER_FT)
 
 
