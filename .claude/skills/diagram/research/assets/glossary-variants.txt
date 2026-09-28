@@ -698,6 +698,7 @@ hereditary temples	hereditary temple
 hinin	hinin
 hinoki	hinoki
 hinomi-yagura	hinomi-yagura
+hip-and-gable	irimoya
 hipposandal	hipposandal
 hipposandals	hipposandal
 hiro	hiro
@@ -885,6 +886,8 @@ kanto	Kanto
 kanto plain	Kanto
 kantō	Kanto
 kaogongji	Kaogongji
+kara-hafu	kara-hafu
+kara-hafu-gabled	kara-hafu
 karamete	karamete-mon
 karamete-mon	karamete-mon
 karo	karo
@@ -1305,6 +1308,8 @@ prefectural cities	prefectural city
 prefectural city	prefectural city
 prefecture	prefectural city
 prefectures	prefectural city
+program item	program item
+program items	program item
 provincial capital	provincial seat
 provincial capitals	provincial seat
 provincial seats	provincial seat
