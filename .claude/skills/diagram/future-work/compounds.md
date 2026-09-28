@@ -18,13 +18,12 @@ to work, the research ones first:
 
 - **The rear strip is a knob, not yet declared.** Research buildings 230 now attests a garden behind the house with the
   storehouse beyond it (the Higuchi house) beside the old service-strip-or-alley rule; `buildings/programs.md` still
-  states only the latter. Declare the forms - a rear garden, a working yard, a service strip with an alley - with
+  states only the latter. Declare the forms - a rear yard (the Higuchi house), a service strip with an alley - with
   their evidence, and say which each sheet takes (Ubame the garden; Ochiba storehouses hard behind the house with a
   garden beside them, a form not yet shown attested; Hayakawa storehouses across the alley).
-- **Ubame's rear garden** is open stipple: draw its planting (trees that take the shade, a guess), stepping stones to
-  the two storehouse doors, a service way to the reception's privy (its cesspit has no approach that avoids a garden),
+- **Ubame's rear yard** (open ground since the GM's 2026-09-28 ruling to draw what the sources most safely support):
+  stepping stones or a way to the two storehouse doors, a service way to the reception's privy (its cesspit has no approach that avoids a garden),
   and settle the 19 x 31 ft strip east of the reception; end the garden at the storehouses' south faces.
-- **Ochiba**: whether its rear garden's west part (behind the open 22 ft way, not the karo's house) is shaded.
 - **Hayakawa**: the family's way out of the inner garden (research: a wicket, kido or shiorido, between a buke inner
   garden and its service ground?); the working well at the middle gate's mouth beside the guests' first stone
   (research: was a draw-well ever on the roji's line?); the 33 x 12 ft rear pocket kept for caption seats.

@@ -471,15 +471,16 @@
   </g>
 
 
-  <!-- The rear garden: behind the east block, between the house and the storehouses on the north wall - as behind the
-       Higuchi house at Matsushiro a garden lies behind the main house and the storehouse beyond it (feature 283,
-       research buildings 230). Shaded ground; its planting a guess (the rear garden kind). -->
-  <g data-kind="rear garden">
-    <rect x="536" y="158" width="376" height="74" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
-    <text x="724.0" y="197.5" text-anchor="middle" font-size="9" font-style="italic" fill="#3A4E38">rear garden</text>
+  <!-- The rear yard: open working ground behind the house, the storehouses beyond it on the north wall (feature 283,
+       research buildings 230: the Higuchi house's storehouse stands beyond the ground behind the main house, the source's
+       niwa a yard as much as a garden - the GM, 2026-09-28: draw what the sources most safely support). Unfilled, the
+       court's earth; a polygon the audit does not read as a fill. -->
+  <g data-kind="rear yard">
+    <polygon points="536,158 912,158 912,232 536,232" fill="none"/>
+    <text x="724.0" y="197.5" text-anchor="middle" font-size="9" font-style="italic" fill="#7A6A4A">rear yard</text>
   </g>
   <!-- Household storehouses (dozo), two as the Matsushiro retainer's house kept (feature 283: the shady rear the
-       vegetable garden left, research buildings 230; on the north wall beyond the rear garden behind the house). Plastered, so no fire-water tub; each 12 by 18 ft, the common two
+       vegetable garden left, research buildings 230; on the north wall beyond the rear yard behind the house). Plastered, so no fire-water tub; each 12 by 18 ft, the common two
        by three ken (the Yokota house kept two, 9 by 12 ft and 18 by 15 ft), standing behind the house as the Higuchi house's did. -->
   <g data-kind="storehouse">
     <rect x="620" y="164" width="54" height="36" fill="#F2EFE4" stroke="#4A3318" stroke-width="2.5"/>

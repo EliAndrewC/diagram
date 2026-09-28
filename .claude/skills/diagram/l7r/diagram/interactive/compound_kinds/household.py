@@ -412,7 +412,7 @@ class Kennel(Kind):
 class Storehouse(Kind):
     """
     What: The household's own earth-walled storehouse, a dozo, where the family keeps its goods and the kitchen its
-    stores, standing behind the house beyond its rear garden or yard.
+    stores, standing behind the house beyond the open ground there.
 
     Why: A 150-koku retainer's house at Matsushiro keeps, with the house, a vegetable garden and two storehouses, and
     the Takayama intendancy kept a kitchen storehouse beside its rice store. At the Higuchi house, also at Matsushiro,
