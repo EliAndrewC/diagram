@@ -242,12 +242,12 @@ added under FR-011's own rule ("whatever the after-profile shows"). What changed
   pass, and the reach check then passed on the network that was left - cohort seed 15 shipped a hamlet with no way off the
   map (research R6). The pass never drops the connector now; every roll of R6's three runs, 87 rolls each, draws its connector.
 - **What the final measurement shows** (measure.py after-main: main as merged, `7c0c94f94` with feature 269, and the clone,
-  back to back, loads 8.5 -> 2.2; every pool map main's map but for the thicket's 8 px on Kashikawa and Mizuguchi, every one a
-  single roll). **SC-001**: the five pool hamlets roll in 26.716 s against main's 35.148 s, 1.32x (m:after-pool-roll-s,
-  m:main-rerun-pool-roll-s); against the base the floors were set on it is 32.106 s, 1.20x (m:base-rerun-pool-roll-s) - main
-  merged 269 while this ran, which added its own work to the stages (main is 9% slower than the base), so the base comparison
-  charges this feature for 269; the floor is met against the main it lands on. Each bucket below is the base's figure against
-  the clone's, with main's beside it where 269 moved it. Met: SC-004 (the page, 1.68x and 1.74x), SC-005 (the notice board,
+  back to back, loads 8.5 -> 2.2; every pool map main's map but for the bamboo thicket on Kashikawa and Mizuguchi, research R6; every
+  one a single roll). **SC-001, re-based by this amendment on main as merged** (a Decisions row below): main merged feature 269 while
+  this ran, which added its own work to the stages - main rolls the pool 9% slower than the base the floor was first set on -
+  so the base comparison would charge this feature for 269. Against main as merged, 35.148 s (m:main-rerun-pool-roll-s), the
+  clone rolls in 26.716 s (m:after-pool-roll-s): 1.32x, met. Against the original base, 32.106 s (m:base-rerun-pool-roll-s),
+  it is 1.20x. Each bucket below is the base's figure against the clone's, with main's beside it where 269 moved it. Met: SC-004 (the page, 1.68x and 1.74x: m:before-sawada-b-page-total and m:after-sawada-b-page-total, m:before-kashikawa-b-page-total and m:after-kashikawa-b-page-total), SC-005 (the notice board,
   1.98x and 2.52x), SC-006 (the bamboo, 13.1x and 4.37x), SC-007 (the edge scans, 4.38x and 4.98x; `edge_dist` itself 32,850
   to 968 calls on Kuwabata, m:after-kuwabata-b-edge-scan-edge-dist), SC-008 (the toll's lookups, 590,253 to 8,397 on
   Kashikawa and 374,679 to 0 on Sawada) and the mats (14.6x, the same mats). Missed, each with why no allowed change
@@ -271,6 +271,7 @@ added under FR-011's own rule ("whatever the after-profile shows"). What changed
 | The board's lattice stays 12 px; its verge band sampled first | map drawing convention (the same board; the coarser lattice broke the entrance rule) | this amendment | point of change in `settlement/structures/fixtures/siting.py` |
 | The router and the field search keep the base's forms | map drawing convention (measured: the moving levers broke gate rules on the shipped maps) | research R6 | points of change in `hamletgen/ways/route.py` and `hamletgen/water/fit.py` |
 | The junction pass never drops the connector | historically accurate (a hamlet has its way out; the rule the connector already carries) | research R6 | point of change in `hamletgen/ways/touch.py` |
+| SC-001 is judged against main as merged (`7c0c94f94`, 35.148 s), not the base it was first set on | map drawing convention (a measuring decision: main merged 269 during the work, and 269's own work would otherwise be charged to this feature) | this amendment | `measure.py after-main` |
 | A stranding re-roll resumes from the first roll's copy before the seats | map drawing convention (exact: the same map) | research R8 | point of change in `hamletgen/driver.py` (`resume_at`, `resume`) |
 
 ## Assumptions

@@ -78,8 +78,8 @@ BAMBOO_SEAT_STEP_FT = 16.0
 """The lattice a bamboo stand's seat is searched on, in feet (feature 284, B6, a map drawing convention: the same keep-outs
 and reach, sampled coarser). It was 8 ft; the walk outward (`nearest_fitting`) removed the tests the whole-square scan wasted
 but on Mizuguchi, whose thicket seats far from its target, the bamboo still asked 226,223 calls (1.23x fewer, against the
-spec's 2x floor), so the spec's fallback is taken: a stand may seat up to half a step, 8 ft, from where the 8 ft lattice
-put it. The thicket is 84 by 58 ft (`BAMBOO_THICKET_FT`), so a stand on the coarser lattice is the same stand on the same ground."""
+spec's 2x floor), so the spec's fallback is taken: a stand seats at the nearest fitting point of the coarser lattice,
+which can be a step or two from where the 8 ft lattice put it (18 and 24.5 ft on the pool's two thickets, specs/284 R6). The thicket is 84 by 58 ft (`BAMBOO_THICKET_FT`), so a stand on the coarser lattice is the same stand on the same ground."""
 
 
 def nearest_fitting(target: Pt, reach: float, step: float, fits: Callable[[float, float], bool]) -> tuple[float, float, float] | None:

@@ -2254,3 +2254,16 @@ and a keep-out read from it refuses dry ground - which is why feature 261 keeps 
 the belt. MECHANISM: the marsh is drawn clipped by the settlement's clearing while its record keeps the unclipped ring.
 SKETCH: record the drawn extent (the ring after the clearing's cut) beside `poly`, as `drawn_poly`, and have every grove
 and the parcels test against it; then the belt gets the same keep-out as the copse.
+
+### Five finished-map rules no placer guarantees (found by feature 284, 2026-09-28)
+
+MEASUREMENT (`specs/284-fourth-hotspot-pass/research.md` R6): two speed levers that moved the pool's maps within every
+tolerance - A* in the router and the field search without its blind probe - left the regenerated pool failing five gate
+rules: a paddy bund built as a flight of steps (`tests/gate/test_paddy_fabric.py`), three woodland parcels in a ruled row on
+Kashikawa, a copse clump off its house's bank on Inashiro, brook legs within 1.6 degrees of a screen axis on Kashikawa and
+Sawada (`tests/hamletgen/test_pool_261.py`), and Sawada's seat off the regional northwest (`test_pool_wind.py`). The levers
+were withdrawn; the rules held on every cohort map the same levers moved. MECHANISM: each is a property of a FINISHED map
+that the gate observes on the shipped pool and no single placer promises, so any change that moves a pool map - for speed or
+for a new rule - can meet one. SKETCH: take each in turn to the placer that decides it (the seam pass for the stepped bund,
+the parcel layout for the ruled row, the copse seat for its bank, the brook's wander for the axis, the seat's scoring for the
+wind) and make it a placer guarantee with a unit test, as feature 166 did for the check battery.

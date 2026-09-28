@@ -204,7 +204,7 @@ The spec's Amendment 1 records the why; this is how each piece landed.
 | A2's "one parse of the rest" | not built: the passes that re-read a string cost 0.051 s and 0.059 s a map together, a ceiling of about 1% of a roll (research R7) | - |
 | A3 | built as `board_choice`, the caption level asked lazily in ranking order | `settlement/structures/fixtures/siting.py` |
 | B1 (A*) | built, measured over the pool and cohort against a same-run spread (research R6): 2.4% faster in all against 0.6% - WITHDRAWN on the rules: the maps it and B3 moved failed the gate on the shipped pool; the search is Dijkstra in the base's heap order, the base's recorded-request equality test restored | `hamletgen/ways/route.py` (`lattice_search`) |
-| B2 (the coarser lattice) | measured at 12-18 px on the engine that ships, the toys added (research R4), WITHDRAWN: `ROUTE_CELL` stays 10; a coarser cell declines what 10 px declined, a finer one its own lattice | `hamletgen/ways/route.py` |
+| B2 (the coarser lattice) | measured at 12-18 px on the engine that ships, the toys added (research R4), WITHDRAWN: `ROUTE_CELL` stays 10; the run's coarser cells declined what 10 px declined, and that change went with the withdrawal (it made the sweeps' own 14 px lattice decline boxes it routed) | `hamletgen/ways/route.py` |
 | B3 (the blind probe) | built, measured over the pool and cohort against a same-run spread (research R6): 5% faster in all against 1% - WITHDRAWN on the rules, with B1; the base's search restored with the reason at the point of change | `hamletgen/water/fit.py` |
 | B4 (rows as arrays) | the edge walk built in a probe and timed (research R5), WITHDRAWN: 3.6 times slower | `b4/harness.py` |
 | B5 (the board's 24 px lattice) | built, WITHDRAWN: it broke the entrance-board rule's test; in its place the verge band is sampled first (`VERGE_FIRST`), exact, tested against whole-band sampling | `settlement/structures/fixtures/siting.py` |
@@ -213,4 +213,4 @@ The spec's Amendment 1 records the why; this is how each piece landed.
 | FR-009, one more scan | `push_clear_of_fabric` asks only the polygons whose widened box holds the point; tested against the old walk | `hamletgen/ways/geom.py` |
 | the connector defect | `_touch_junctions` never drops the connector; its test and the corrected end-meets-end test | `hamletgen/ways/touch.py` |
 | A2, A5's tests | the synthetic page byte-identical through both routes; the comb's bead test against its whole scan | `tests/settlement/test_exact_pieces_284.py` |
-| C | `measure.py after` (research R1's keys); the pool regenerated: the base's maps but for the thicket's 8 px on Kashikawa and Mizuguchi | `measurements.json` |
+| C | `measure.py after` and `after-main` (research R1's keys, and main as merged); the pool regenerated: main's maps but for the bamboo thicket on Kashikawa and Mizuguchi (research R6) | `measurements.json` |

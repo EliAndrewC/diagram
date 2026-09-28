@@ -204,7 +204,8 @@ re-rolls - never by its own stage's calls; and by the run-to-run spread, measure
 rolled twice, interleaved by map with the lever's pass, twelve forked workers, so the load drifts over all passes alike.
 A lever is kept when it is faster in all by more than that spread with every rule holding. The first runs of FR-001 and
 FR-004 were each made with the other lever in, and with a router box decline that no longer ships; the reviews of
-Amendment 1 set them aside, and the runs below are on the engine as it ships.
+Amendment 1 set them aside. The runs below were made with every other lever as it then stood (FR-004 in for the A* run);
+both were then withdrawn on the rules (below), so the engine that ships is the "levers off" column.
 
 **The field search without its blind probe (FR-004)** (observed 2026-09-28, method: `b3cmp/harness.py`, the router in cost
 order; `b3cmp/results.json`): the shipping search 383.9 s and 388.3 s in its two passes, the lever 367.1 s - about 19 s
@@ -218,7 +219,7 @@ map healed by its re-roll.
 
 **Both together, against both off** (observed 2026-09-28, method: `combined/harness.py`; `combined/results.json`):
 
-| | the levers off (the base's router and search) | shipping, pass 1 | shipping, pass 2 |
+| | the levers off (the base's router and search - the engine that ships) | levers on, pass 1 | levers on, pass 2 |
 |---|---|---|---|
 | summed roll seconds (loaded) | 344.75 | 327.27 | 329.37 |
 | houses unreached, every attempt | 5 | 8 | 8 |
@@ -228,8 +229,8 @@ map healed by its re-roll.
 
 16.4 s (4.8%) faster in all, against a spread of 2.1 s (observed 2026-09-28, method: the table's harness). **The household bamboo falls 14%** - fewer on 13 maps, more on 3:
 presence is rolled per farmstead from its position (a labeled GUESS at 60%, `HOUSEHOLD_BAMBOO_PREVALENCE`) and a strip is
-dropped where the farmstead has no room, so the moved houses leave fewer rolled-present farmsteads room. No rule is broken
-and no household loses its seat; recorded as the one systematic map change the levers make.
+dropped where the farmstead has no room, so the moved houses leave fewer rolled-present farmsteads room. The cohort's rolls
+broke no rule the runs check and no household lost its seat - but the regenerated pool failed five gate rules (below).
 
 **The coarser lattice (FR-003)**: R4 - it strands at 12 px on this engine too (observed 2026-09-28, method: `b2/harness.py`).
 
@@ -243,7 +244,14 @@ regional northwest. Each is a rule the gate proves on the shipped maps rather th
 for any reason can meet it; these two levers met five. The GM allowed map changes for speed within the rules only, and the
 pool itself was no faster with them (23.76 s against 23.89 s without, each measure.py after back to back): **FR-001 and
 FR-004 are withdrawn**, the base's router order and field search restored, each with this at its point of change. With them
-out, the pool is the base's map by map but for the bamboo thicket (R4's and FR-008's), and the gate's pool rules pass.
+out, the pool is main's map by map but for the bamboo thicket (FR-008's coarser sampling, below), and the gate's pool rules
+pass.
+
+**The pool, against main as merged (`7c0c94f94`)** (observed 2026-09-28, method: `make maps SCOPE=all`, each manifest compared
+with `git show` of main's): Inashiro, Kuwabata and Sawada are main's maps byte for byte. On Kashikawa and Mizuguchi the
+houses, paddies, dry plots, ways and every household bamboo strip are main's, and the one bamboo thicket seats on the 16 ft
+lattice where the 8 ft one seated it: its center 18.1 ft from main's on Kashikawa and 24.5 ft on Mizuguchi - the nearest
+fitting seat on the coarser lattice, the same keep-outs and reach. Every map is a single roll.
 
 **What those five failures say about the placers.** None is a defect the levers made: each is a property of a FINISHED map
 that no single placer owns (the constitution's third kind of rule), and the cohort seeds the levers moved did not meet them
