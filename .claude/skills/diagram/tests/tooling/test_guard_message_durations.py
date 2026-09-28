@@ -89,6 +89,9 @@ def _is_output_call(node: ast.AST) -> bool:
     return isinstance(fn, ast.Attribute) and fn.attr == "write" and isinstance(fn.value, ast.Attribute) and fn.value.attr in _OUTPUT_ATTRS
 
 
+_CAN_PRINT = re.compile(r"\bprint[\s\\]*\(|std(?:out|err)[\s\\]*\.[\s\\]*write\b")
+
+
 def printed_text(source: str) -> list[str]:
     """Every string a session can READ from this module.
 
@@ -99,12 +102,13 @@ def printed_text(source: str) -> list[str]:
     answers in ~60 s"*, which matches both patterns below. It is a RECORD, not a message, and a
     guard that cannot tell one from the other fires on protected history and gets switched off.
     """
-    # A SOURCE THAT CANNOT PRINT IS NOT PARSED (2026-09-27): an output call is `print(...)` or a `.write` on
-    # `stdout`/`stderr`, so its text must contain one of those three words - a substring test that is a strict
-    # superset of the AST test, which still decides. 113 of the engine's 262 modules fail it (measured
-    # 2026-09-27; the scan over all of them went 1.35 s -> 0.63 s, same output). Likewise a docstring is
-    # only ever read through `__doc__`, so the docstring walk is skipped where that word is absent.
-    if not any(w in source for w in ("print", "stdout", "stderr")):
+    # A SOURCE THAT CANNOT PRINT IS NOT PARSED (2026-09-27): `_is_output_call` accepts a call on the NAME `print`
+    # or on `.write` of a `stdout`/`stderr` attribute, so the text must hold `print` then `(`, or
+    # `stdout`/`stderr` then `.write`, with only whitespace or a line continuation between - `_CAN_PRINT`, a
+    # strict superset of the AST test, which still decides. 225 of the engine's 262 modules fail it (measured
+    # 2026-09-27; a bare-word filter let 149 through, many for a `print` in a comment; same output either
+    # way). Likewise a docstring is only ever read through `__doc__`, so that walk is skipped without the word.
+    if not _CAN_PRINT.search(source):
         return []
     tree = ast.parse(source)
     docs = {node.name: ast.get_docstring(node) or "" for node in ast.walk(tree) if isinstance(node, (ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef))} if "__doc__" in source else {}
@@ -120,22 +124,45 @@ def printed_text(source: str) -> list[str]:
 
 
 def py_offenders(source: str) -> list[str]:
-    return [line.strip() for chunk in printed_text(source) for line in chunk.splitlines() if _DURATION.search(line) and _COMMAND.search(line)]
+    return offenders_in(printed_text(source))
 
 
-def _python_guard_files() -> list[Path]:
+def offenders_in(printed: list[str]) -> list[str]:
+    return [line.strip() for chunk in printed for line in chunk.splitlines() if _DURATION.search(line) and _COMMAND.search(line)]
+
+
+def _printing_files() -> list[tuple[Path, list[str]]]:
     """DERIVED, never a roster (constitution X clause 14): every engine `.py` that can print.
 
     The search space is stated because getting it wrong is this project's recurring failure - an
     earlier draft of this requirement derived the set from `_invocation.OPERATIONS`, which is
     hand-enumerated by its own docstring and does not contain `_invocation` itself, so it would
     have missed the one file the rule exists for.
+
+    Each module is returned with what it prints, read and parsed ONCE (the test used to parse every one twice).
     """
-    return [p for p in sorted(ENGINE.rglob("*.py")) if printed_text(p.read_text(encoding="utf-8"))]
+    return [(p, printed) for p in sorted(ENGINE.rglob("*.py")) for printed in [printed_text(p.read_text(encoding="utf-8"))] if printed]
+
+
+def test_the_prefilter_passes_every_spelling_of_an_output_call() -> None:
+    """`_CAN_PRINT` decides which modules are parsed at all, so a spelling it missed would hide a printed
+    duration silently. Every legal form the AST test accepts must get through it - and be found."""
+    forms = [
+        'print("make quick ~5 s")',
+        'print ("make quick ~5 s")',
+        'print(\n    "make quick ~5 s"\n)',
+        'print \\\n("make quick ~5 s")',
+        'import sys\nsys.stderr.write("make quick ~5 s")',
+        'import sys\nsys.stdout . write("make quick ~5 s")',
+        'import sys\nsys.stderr \\\n.write("make quick ~5 s")',
+    ]
+    for src in forms:
+        assert _CAN_PRINT.search(src), f"the prefilter skipped a module that prints: {src!r}"
+        assert py_offenders(src), f"and the whole check must find its duration: {src!r}"
 
 
 def test_no_python_guard_message_states_a_duration() -> None:
-    found = {p.name: bad for p in _python_guard_files() for bad in [py_offenders(p.read_text(encoding="utf-8"))] if bad}
+    found = {p.name: bad for p, printed in _printing_files() for bad in [offenders_in(printed)] if bad}
     assert not found, "a printed message states how long a command takes; ask scripts/_gatecost.py or say nothing:\n" + "\n".join(f"  {name}: {lines}" for name, lines in found.items())
 
 
