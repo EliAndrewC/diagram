@@ -100,5 +100,6 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D10). Inventory: [`in
 - [x] T24 future-work closed out (D10)
       research: rendering
       verify: DONE. future-work: eleven entries closed to closed.md, four narrowed, five new with measurement, mechanism and sketch; conversion-owed rows in farming-communities, cities and towns; the headman's gate owed at the village conversion
-- [ ] T25 `make done` green; the review ledger rows; land
+- [x] T25 `make done` green; the review ledger rows; land
       research: rendering
+      verify: DONE. make done green at the merged head (engine key 38ccadbca8ae); four review rounds on all five pool hamlets, rows in docs/review-ledger.md: round 4 PASS on inashiro, kuwabata, sawada and mizuguchi, kashikawa's notes-only NEEDS-WORK fixed and verified (sr4-); every finding verified in measurements.json or accepted with its reason
