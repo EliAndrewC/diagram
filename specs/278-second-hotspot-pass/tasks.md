@@ -54,17 +54,21 @@ pieces; then the tooling; then the sweep, the measurement and the records.
 
 ## US5 - the commons scatter runs as array operations (P2)
 
-- [ ] T13 [US5] The vectorized commons in `settlement/land/cover.py`, with the compliance and density tests (B2)
+- [x] T13 [US5] The vectorized commons in `settlement/land/cover.py`, with the compliance and density tests (B2)
       research: rendering
-- [ ] T14 [US5] Every pool map regenerated and read; each moved map's research entry (houses, paddies, ways before and after)
+      verify: DONE. grass_scatter + KeepoutGrid.hit_many + RingIndex.inside_many (exact: shrunk/grown band, even-odd parity regions for invalid rings; equality tests), the compliance test (rounding-aware); commons CPU 0.70 -> 0.51 s Kashikawa
+- [x] T14 [US5] Every pool map regenerated and read; each moved map's research entry (houses, paddies, ways before and after)
       research: rendering
+      verify: DONE. every pool map regenerated: only ink_classes moved; blades within 1.1%, dots within 2.7%, pines within sampling noise (research R4); a parcel-index defect found by the comparison and fixed (one line index per size)
 
 ## US6 - the tooling stops paying for work nobody asked for (P2)
 
-- [ ] T15 [P] [US6] `make map` rolls the reference once (C, FR-012)
+- [x] T15 [P] [US6] `make map` rolls the reference once (C, FR-012)
       research: rendering
-- [ ] T16 [P] [US6] The placement page's class hash and the sync-in re-plate, with the planted missing-class test (C, FR-013)
+      verify: DONE. the map recipe skips the reference check when GEN is the reference (regen gates what it rolls); make -n shows no _reference for the reference and one for Sawada; the double roll was check-roll + uncached re-roll for a render-less cached entry
+- [x] T16 [P] [US6] The placement page's class hash and the sync-in re-plate, with the planted missing-class test (C, FR-013)
       research: rendering
+      verify: DONE. render_cache.replate_if_classes_moved + the .classes stamp + make placement-stages-if-classes, run by sync_in after a merge; tests: re-plated when stale or unstamped, not when current, left alone with no page; the planted missing class still red; run in this clone it re-plated the stale page (alder) and then read current
 - [x] T17 [P] [US6] The `md_tokens` equality test's line oracle, with the planted token test (C, FR-014)
       research: rendering
       verify: DONE. test_md_tokens_equal_the_whole_text_scan: line oracle over every tracked text plus whole-text edge strings with newlines; 0.64 s call (was 4.6 s); non-vacuity >100 tokens
