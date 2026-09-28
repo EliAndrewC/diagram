@@ -307,3 +307,32 @@ class Persimmon(Kind):
     """
 
     key = 'persimmon'
+
+
+class BurialGround(Kind):
+    """
+    What: A small common burial ground at the hamlet's edge - an irregular patch of earth set with low stone
+    markers and a taller memorial stone or two.
+
+    Why: The district's cremation ground is the main village's, and its country monk performs the rites. Where
+    the bones then lie, the history gives two answers: by the hamlet's own houses - a hamlet's burial ground at
+    its edge, the ground its inhabitants hold in common, the two-grave custom's burial grave on common land - or at
+    the parish temple, which in this setting is the village's shrine. So some hamlets keep a ground of their own,
+    holding the urns brought home from the village's cremation ground, and some bury in the village's.
+
+    Note: Both answers are read. Which one a hamlet takes is rolled at even odds, and those odds are a guess; the
+    size is the band the record reckons for a hamlet's full-body ground, 750 to 2,450 sq ft, which overstates an
+    urn ground, so it is a guess; so is its outline, and its keeping 60 ft from houses and wells.
+
+    Caveat: Which one a hamlet takes is rolled at even odds, and those odds are a guess; the size is the band the
+    record reckons for a hamlet's full-body ground, 750 to 2,450 sq ft, which overstates an urn ground, so it is a
+    guess; so is its outline, and its keeping 60 ft from houses and wells.
+
+    Name: burial ground
+    Covers: `cemeteries` - the hamlet's own burial ground
+    Label: accurate
+    Sources: kofukuroman-sanmai, bochi-jawiki, kotobank-ryobosei, haka-jawiki, danka-jawiki, oikawa-2008-kikaijima, nakajima-2006-huizhou
+    Entry: research/religion-and-death.html - 'Where do a hamlet's dead lie?'; 'How much ground does a village burial ground need, and whose dead lie in it?'
+    """
+
+    key = 'burial ground'

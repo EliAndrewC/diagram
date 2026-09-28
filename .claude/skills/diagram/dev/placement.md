@@ -49,15 +49,16 @@ sequence one-to-one. Where the two disagree, `STAGES` wins for anything under `h
 | 7 | `stage_track` | the CONNECTOR and the field spur, derived from the houses that landed. Before the appurtenances, so a well is sunk where the track already runs |
 | 8 | `stage_appurtenances` | yards, gardens, byres, wells, sheds |
 | 9 | `stage_pond_stock` | a dike-pond hamlet's pig sties and duck pens, on the banks of the ponds nearest the houses (feature 150 A3/A4) |
-| 10 | `stage_web` | the lane web - last of the BUILT things, because it fills leftover ground where everything above reserves it |
-| 11 | `stage_hinterland` | marsh, the coppice scan, the farmstead FIXTURES (privy, heap, bath, coop, stack, hokora, persimmon - seated after the web so no lane is re-threaded, before the bamboo and the scrub, which keep off them; feature 133 T53-T59), the household bamboo, then scrub and rough grazing |
-| 12 | `stage_woodland` | woodland commons |
-| 13 | `stage_windbreak` | the shelter belt |
-| 14 | `stage_bamboo` | the bamboo stands, on seats the hinterland stage scanned (feature 133 T47) |
-| 15 | `stage_crossings` | planks and decks over every way that crosses water; on a polder the ring-canal planks cluster on the settlement-side toe collector and skip the feeder, the far toe and the drain (`polder_crossing_caps`, feature 150) |
-| 16 | `stage_frame` | crop to content, title, scalebar |
-| 17 | `stage_notice` | the kosatsuba - **the last map FEATURE**, after even the frame (GM 2026-08-29, feature 154): *"the real humans ... look around at the things which already exist and then decide where to put the notice board"*. It reserves no ground and grows into none, so nothing is placed after it for it to displace |
-| 18 | `stage_labels` | **the LABEL PHASE** - every caption on the map, seated against the finished sheet (GM 2026-08-29, feature 157): *"after the final map feature is added ... a final phase in which we add labels for whatever map features get labels ... how we place labels will always depend on what else is on the map."* No feature draws its own caption any more; `label()` queues and `Settlement.place_labels` drains, seating every searched caption by the ONE placer (`l7r/diagram/labels/`, feature 266: the cartographic standard). Draws no ink but text, reserves nothing, and so can only ever be last |
+| 10 | `stage_burial` | the hamlet's own burial ground, on its knob (feature 273: a ground at its edge, or none, its dead in the village's): seated against the placed houses and wells, before the web because it reserves ground the web and the scrub work around |
+| 11 | `stage_web` | the lane web - last of the BUILT things, because it fills leftover ground where everything above reserves it |
+| 12 | `stage_hinterland` | marsh, the coppice scan, the farmstead FIXTURES (privy, heap, bath, coop, stack, hokora, persimmon - seated after the web so no lane is re-threaded, before the bamboo and the scrub, which keep off them; feature 133 T53-T59), the household bamboo, then scrub and rough grazing |
+| 13 | `stage_woodland` | woodland commons |
+| 14 | `stage_windbreak` | the shelter belt |
+| 15 | `stage_bamboo` | the bamboo stands, on seats the hinterland stage scanned (feature 133 T47) |
+| 16 | `stage_crossings` | planks and decks over every way that crosses water; on a polder the ring-canal planks cluster on the settlement-side toe collector and skip the feeder, the far toe and the drain (`polder_crossing_caps`, feature 150) |
+| 17 | `stage_frame` | crop to content, title, scalebar |
+| 18 | `stage_notice` | the kosatsuba - **the last map FEATURE**, after even the frame (GM 2026-08-29, feature 154): *"the real humans ... look around at the things which already exist and then decide where to put the notice board"*. It reserves no ground and grows into none, so nothing is placed after it for it to displace |
+| 19 | `stage_labels` | **the LABEL PHASE** - every caption on the map, seated against the finished sheet (GM 2026-08-29, feature 157): *"after the final map feature is added ... a final phase in which we add labels for whatever map features get labels ... how we place labels will always depend on what else is on the map."* No feature draws its own caption any more; `label()` queues and `Settlement.place_labels` drains, seating every searched caption by the ONE placer (`l7r/diagram/labels/`, feature 266: the cartographic standard). Draws no ink but text, reserves nothing, and so can only ever be last |
 
 **THIS TABLE WAS STALE AND WAS REBUILT AGAINST `STAGES` (feature 157).** It still listed
 `stage_ways` at position 4 (split into `stage_seat` and `stage_track` by feature 126) and

@@ -27,6 +27,7 @@ SINCE_189: dict[str, tuple[str, ...]] = {
 ADDED_SINCE_189: tuple[str, ...] = (
     "weir",
     "pond canal",
+    "burial ground",  # feature 273: a hamlet's own burial ground, on its knob
 )  # feature 230: what stands where the head race leaves the brook; and a dike-pond's two-way canals, which the irrigation ditch mislabeled (pass 10)
 
 

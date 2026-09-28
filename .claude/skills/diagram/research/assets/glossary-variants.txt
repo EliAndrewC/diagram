@@ -1235,6 +1235,8 @@ kichin-yado	kichin-yado
 kido	kido
 kidoban	kidoban
 kidobans	kidoban
+kikaijima	Kikaijima
+kikaijima's	Kikaijima
 kiln house	kiln house
 kiln houses	kiln house
 kimoiri	shoya
@@ -2242,6 +2244,7 @@ tedai	tedai
 teikaku	teikaku
 temizuya	temizuya
 temple bell tower	shoro
+temple registration	temple registration
 tendai	Tendai
 tenjin	Tenjin
 tenjin shrine	Tenjin
@@ -2435,6 +2438,7 @@ wagon-inn	wagon inn
 waju	waju
 wakadoshiyori	wakadoshiyori
 wakamono-gumi	young men's association
+wakasa	Wakasa
 wakato	wakato
 waki-honjin	waki-honjin
 walled ward	lifang

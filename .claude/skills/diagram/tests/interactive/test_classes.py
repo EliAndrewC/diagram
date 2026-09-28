@@ -31,6 +31,7 @@ SPEC_CLASSES = [
     "hen coop",
     "household shrine",
     "persimmon",
+    "burial ground",  # feature 273: a hamlet's own burial ground, on its knob
     "homestead bamboo",
     "shared bamboo grove",
     "windbreak",

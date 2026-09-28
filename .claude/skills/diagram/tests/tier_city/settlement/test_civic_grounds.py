@@ -186,3 +186,14 @@ def test_cremation_ground_is_drawn_ragged_with_its_fire_bed_off_center() -> None
     v.cremation_ground(500.0, 500.0)
     drawn = "".join(v.out)
     assert "<ellipse" not in drawn and drawn.count("<polygon") == 3, "the ground, its burned ground and its ash bed are ragged polygons"
+
+
+def test_a_cremation_ground_draws_its_six_jizo_only_when_asked() -> None:
+    """Research 530 (feature 273): six stone jizo stood at a cremation ground; the glyph draws them when the caller
+    asks (the village roller), and not by default, so no other map's ground changes."""
+    v = Settlement(1000, 1000, seed=2)
+    v.meta(name="V", scale="village")
+    v.cremation_ground(500.0, 500.0, jizo=True)
+    v.cremation_ground(300.0, 300.0)
+    with_j, without = v.M["cremation_grounds"]
+    assert len(with_j["jizo"]) == 6 and "jizo" not in without
