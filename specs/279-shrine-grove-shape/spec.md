@@ -5,7 +5,8 @@
 
 ## Summary
 
-The Hoshigaoka village map draws its shrine's grove as a rectangle of trees, 137 by 215 ft, filling the
+The Hoshigaoka village map draws its shrine's grove as a rectangle of trees, 137 by 215 ft (observed 2026-09-28; method: the manifest's `village_groves` record of role
+`shrine`, w 68.3 by h 107.7 map px at the map's 2 ft to the px, read from `hoshigaoka.json`), filling the
 precinct box from the shrine's well to the outermost arch. The GM asked whether that was a research finding -
 the rectangle, and a shrine wooded on every side. It was neither: research 124 found the precinct's size and
 that the buildings cover little of it, the GM ruled (2026-09-27) to draw a grove, and the crowns were thrown
@@ -100,8 +101,9 @@ step 5) names it.
 - **SC-001** (FR-001-FR-003): The new question exists with at least one READ, quote-checked footnote per claim
   it rests on, or an absence note; all four checks have run on it and their findings are applied.
 - **SC-002** (FR-005, FR-006, FR-007): On the map and the sheet, the grove's trees stand in the declared form;
-  the outline, measured on the tree list, has no straight run: no four consecutive hull-edge crowns lie within
-  2 ft of one line.
+  the outline, measured on the tree list, has no straight run - the bar `STRAIGHT_RUN`: no four consecutive
+  hull-edge crowns lie within `2 ft` of one line (a named bar, not a measurement: about a third of the smallest
+  crown's radius, so a run that tight reads as a ruled edge).
 - **SC-003** (FR-006, FR-007): The sheet's trees match the map's one for one (the `matches_map` test stays green).
 - **SC-004** (FR-004, FR-008): The program and the owed list name the knob, its forms and labels.
 - **SC-005** (FR-009): the reviews are ledgered and `make done` is green.
@@ -115,3 +117,13 @@ step 5) names it.
 ## Decisions Recorded
 
 (Filled as the research lands.)
+
+## Review history
+
+- First reading (spec-fidelity, MODE 2, 2026-09-28): NOT-REVIEWABLE - not a round; the substance was not read.
+  Two figures with a unit stand in operative sections with no measurement key and no one-shot label (feature 239,
+  spec-lint check 5): (1) the Summary's grove size, `137 by 215 ft`, a measurement of the frozen map - record it
+  from the map's manifest with the command that reads it and cite the key, or label it with the date observed and
+  the method; (2) SC-002's crown-to-line tolerance, "within 2 ft", a chosen bar rather than a measurement - state it
+  as the bar it is (a backticked name, or a label saying why that tolerance) so check 5 does not read it as an
+  unmeasured figure. Re-dispatch as a first reading once both carry their pointer or label.
