@@ -949,6 +949,7 @@ hiyoza	hiyoza
 hoarding	hoarding
 hoardings	hoarding
 hoei	Hoei
+hoin	hōin
 hojo	hojo
 hojo form	hojo
 hojo seibi	hojo seibi
@@ -1006,6 +1007,7 @@ hyojosho	Hyōjōsho
 hyō	hyō
 hyōjōsho	Hyōjōsho
 hōei	Hoei
+hōin	hōin
 hōreki	Horeki
 iai	iai
 ichi no torii	ichi-no-torii
@@ -1589,7 +1591,9 @@ myoden	myoden
 myoden landlord	myoden
 myoden landlords	myoden
 myoji-taito	myoji-taito
+myoken	Myōken
 myōden	myoden
+myōken	Myōken
 nagare-style	Nagare-style
 nagare-zukuri	nagare-zukuri
 nagarezukuri	nagare-zukuri
@@ -1759,6 +1763,8 @@ palisades	palisade
 pannage	pannage
 pantile	pantile
 pantiles	pantile
+paper ingot	paper ingot
+paper ingots	paper ingot
 parapet	parapet
 parish	parish
 parish temple	parish
@@ -2175,6 +2181,7 @@ soto zen	Sōtō
 sotobori	sotobori
 south town magistrate	town magistrate
 southern song	Song dynasty
+sozu	sōzu
 species richness	species richness
 sphere	Sphere
 spillway	spillway
@@ -2271,6 +2278,7 @@ sword hunt	sword hunt
 sword hunts	sword hunt
 sōchinju	sōchinju
 sōtō	Sōtō
+sōzu	sōzu
 tabune	field boat
 tachimuba	tachimuba
 tagoshi	tagoshi kangai
@@ -2535,6 +2543,7 @@ wagon inns	wagon inn
 wagon-inn	wagon inn
 waju	waju
 wakadoshiyori	wakadoshiyori
+wakamiya	Wakamiya
 wakamono-gumi	young men's association
 wakasa	Wakasa
 wakato	wakato

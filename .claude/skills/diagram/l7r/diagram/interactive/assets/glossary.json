@@ -10269,5 +10269,39 @@
    "variety halls",
    "yose"
   ]
+ },
+ "paper ingot": {
+  "def": "Paper folded or cut into the shape of a gold or silver ingot, burned at a grave as money for the dead; in 1630s Beijing families burned them at the grave on Qingming day and then set paper money on the grave's top.",
+  "variants": [
+   "paper ingot",
+   "paper ingots"
+  ]
+ },
+ "hōin": {
+  "def": "\"Seal of the Law\" - the highest of the three honorary ranks of a Buddhist priest.",
+  "variants": [
+   "hōin",
+   "hoin"
+  ]
+ },
+ "Wakamiya": {
+  "def": "A shrine to the \"young prince\" - the offspring, or newly invoked spirit, of a main shrine's deity - often a subsidiary shrine standing in or near the main one's precinct.",
+  "variants": [
+   "Wakamiya"
+  ]
+ },
+ "Myōken": {
+  "def": "The bodhisattva of the Pole Star and the Big Dipper, worshipped at temples and shrines named for it; Myōkenzan at Kudamatsu is one such mountain cult.",
+  "variants": [
+   "Myōken",
+   "Myoken"
+  ]
+ },
+ "sōzu": {
+  "def": "The middle of the three official ranks of the Buddhist priesthood, below sōjō and above risshi; an \"acting\" (gon) sōzu held the grade just under the full one.",
+  "variants": [
+   "sōzu",
+   "sozu"
+  ]
  }
 }
