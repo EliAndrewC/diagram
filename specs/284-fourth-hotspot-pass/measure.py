@@ -3,7 +3,7 @@
     python3 specs/281-third-hotspot-pass/measure.py before   # the clone at the base commit: before-* keys
     python3 specs/281-third-hotspot-pass/measure.py after    # the base worktree, then the clone, back to back
 
-The base is `f52ed6aa8`, main when this work began (281 landed), in a detached worktree at `/tmp/base281` (created if missing). Seconds
+The base is `5f15c65bd`, main as this work was re-based on it (281 and 282 landed), in a detached worktree at `/tmp/base281` (created if missing). Seconds
 depend on the machine's load, so the after-run takes the base and the clone one straight after the other: the base as
 `base-rerun-*` beside the recorded `before-*`, the clone as `after-*`. Counts (`counts.py`, from the profiles) do not.
 """
@@ -18,7 +18,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-BASE = "f52ed6aa8"
+BASE = "5f15c65bd"
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 WT = Path("/tmp/base284")
@@ -35,6 +35,7 @@ BUCKET_CALLEES: dict[str, tuple[str, ...]] = {
     "seams": ("_absorb",),
     "commons": ("grass_scatter",),
     "flush": ("merge_lines",),
+    "mats": ("point_in_poly", "_quad_gap"),
     "clip": ("seg_dist",),
     "fabric": ("RingIndex.__init__",),
     "toll": ("dict.get",),

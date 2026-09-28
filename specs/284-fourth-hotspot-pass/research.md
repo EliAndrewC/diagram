@@ -1,6 +1,6 @@
 # Feature 284 - research
 
-## R1 - The measurement (2026-09-28, main `f52ed6aa8`: 281 landed)
+## R1 - The measurement (2026-09-28, main `5f15c65bd`: 281 and 282 landed; first taken at `f52ed6aa8`)
 
 **Method.** `measure.py before`, in the detached worktree `/tmp/base284`: each pool hamlet rolled three times unprofiled
 with every stage timed (the fastest kept), once writing its svg and page, once under cProfile (saved to
@@ -8,10 +8,11 @@ with every stage timed (the fastest kept), once writing its svg and page, once u
 (281's buckets plus this pass's: `router`, `field`, `notice`, `bamboo`, `page`, `edge_scan`). The load is recorded at each
 run's start and end. Every figure is in `measurements.json` as a `before-*` key.
 
-**The roll.** The five pool hamlets take 27.62 s between them (m:before-pool-roll-s; the load 3.7 -> 3.2 - a first run at 1.8 -> 7.8
-read 27.95 s, and one taken while other sessions held the load near 28 read 41.8 s and is not used). By stage, summed over the five: the
+**The roll.** The five pool hamlets take 32.168 s between them (m:before-pool-roll-s, load 3.1 -> 7.8), at `5f15c65bd`. At
+`f52ed6aa8`, before main merged feature 282, they took 27.62 s at load 3.7 -> 3.2 (observed 2026-09-28, method: `measure.py
+before` in that worktree) - the difference is the threshing yards' mats (R3). By stage, summed over the five: the
 field is the largest, then the ways (`stage_web`), the hinterland, the homesteads, the windbreak and the notice board.
-Sawada's field alone is 2.944 s (m:before-sawada-stage-field-s) and Kashikawa's ways 1.483 s
+Sawada's field alone is 2.939 s (m:before-sawada-stage-field-s) and Kashikawa's ways 1.448 s
 (m:before-kashikawa-stage-web-s).
 
 **The profile, by lever** (profiled seconds summed over the five; profiling inflates Python about 2.4 times, so these
@@ -58,8 +59,25 @@ and not a broken rule.
 **Method** (observed 2026-09-28, method: a probe timing the page's `wrap`, `drop_offmap` and `marks_region` per call and
 attributing each to its string's feature class, over one full generate of Kashikawa and one of Sawada): 1.597 s of parsing
 in all. The scrub and rough grazing took 41.4% (10,971 elements, 4.2 million characters), the marsh 18.5% - the two classes
-whose ink is the deferred blade and mark buckets the finish flattens (`_blade_groups`, `_mark_groups`). Calls from outside
-the page (the finish's own culling of those buckets, before the page) took 23.2%. No other class took more than 5.0%: the
-bunds 5.0%, the paddies 3.0%, the windbreak 1.9%, the bund beans 1.3%, every other class under 1%, together about 17%. So
-carrying the structures the engine already makes to the page reaches the bulk of the parsing, and what is left is spread
+whose ink is the deferred blade and mark buckets the finish flattens (`_blade_groups`, `_mark_groups`). The page's own
+`marks_region` - the scrub's hit region, drawn from the scrub's marks (`HIT_FROM_MARKS` holds only the scrub) - took
+another 23.2% (a probe attributing by string identity missed it, since that pass reads the marks by list; the review's
+re-measurement placed it, observed 2026-09-28, method: a probe timing `marks_region` itself). No other class took more than 5.0%: the
+bunds 5.0%, the paddies 3.0%, the windbreak 1.9%, the bund beans 1.3%, every other class under 1%, together about 17%. So the two
+structured classes hold about 83% of the page's parsing in all (41.4 + 18.5 + 23.2), and carrying the structures the
+engine already makes to the page reaches that, and what is left is spread
 thin over every other producer - which one parse per string covers without rewriting each producer's drawing code.
+
+## R3 - The threshing yards, after main merged feature 282 (2026-09-28)
+
+Main merged feature 282 (the threshing yard's mats and racks) while this work was specified, and every pool manifest moved,
+so the base was re-taken at `5f15c65bd`. The homesteads stage went from 0.357 s to 1.806 s on Inashiro (m:before-inashiro-stage-homesteads-s), 0.496 s to
+2.313 s on Kashikawa (m:before-kashikawa-stage-homesteads-s) and 0.497 s to 1.859 s on Sawada
+(m:before-sawada-stage-homesteads-s) - the first figure each from the `f52ed6aa8` run (observed 2026-09-28, method:
+`measure.py before` in that worktree). Kashikawa's mats bucket counts 14288475 calls (m:before-kashikawa-b-mats-total). The profile names it: `mat_cells` took 15 profiled seconds over the 54 yards of three
+maps, 10 million `hypot` calls - it tests every quarter-foot grid point of the yard against the floor's outline (point in
+polygon, then the distance to each edge), and it counts, for every lattice at every offset, the seated mats one by one in
+Python; `_lay_by_hand` then tests each mat's outline against every laid and every upcoming mat's (`_quad_gap`, 34,070 calls).
+Both are static geometry asked per candidate: the grid's test can be decided in arrays (surely inside the inset floor,
+surely outside it, the scalar test in the band between), the lattice counts are sums of shifted slices of one boolean
+array, and two quads farther apart than the clearance need no `_quad_gap`. The mats come out the same.

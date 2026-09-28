@@ -2,7 +2,7 @@
 
 Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (A1-A7, B1-B5, C). Research: [`research.md`](research.md).
 Order: the exact pieces first, each proved on its equality test; the pool regenerated and compared byte for byte against
-`f52ed6aa8` with all of them landed; then the moving pieces under 276's FR-006 condition; then the four named stages and
+`5f15c65bd` with all of them landed; then the moving pieces under 276's FR-006 condition; then the four named stages and
 the after-profile; then the measurement and the record.
 
 ## Setup
@@ -26,7 +26,9 @@ the after-profile; then the measurement and the record.
       research: rendering
 - [ ] T08 [P] [US5] The toll's bitmap in `hamletgen/ways/route.py`, with the toll equality test extended (A7)
       research: rendering
-- [ ] T09 [US1] The pool regenerated with A1-A7 landed and B not yet: every live pool manifest and page byte-identical against `f52ed6aa8` (SC-011, the exact half)
+- [ ] T08b [P] [US5] The yards' mats in arrays in `settlement/homestead_parts/yards.py`, with the recorded-yard equality test (A8)
+      research: rendering
+- [ ] T09 [US1] The pool regenerated with A1-A8 landed and B not yet: every live pool manifest and page byte-identical against `5f15c65bd` (SC-011, the exact half)
       research: rendering
 
 ## The moving pieces (US1, US2, US3, US5)

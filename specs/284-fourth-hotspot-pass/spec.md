@@ -12,7 +12,7 @@ significantly faster".
 
 The same exercise as 276, 278 and 281, with one difference the GM ruled: a lever is taken when its map change is of the
 kind the GM named - a lane taking the other of two equally short routes, plot boundaries shifting within tolerance, a
-tied seat resolving the other way, clumps sitting a little differently. The five pool hamlets roll in 27.62 s between
+tied seat resolving the other way, clumps sitting a little differently. The five pool hamlets roll in 32.168 s between
 them (m:before-pool-roll-s; research R1). The levers, from the profile and the GM's table: the router searches toward its
 goal, pulls its string with one index per route and runs on the coarsest lattice that strands no house; the field's size
 search stops carving the largest fan blind and its rows are computed as arrays; the page is built from the structured
@@ -96,7 +96,8 @@ profile names - the windbreak, the seam closing, the commons and the blade flush
 - **FR-006 The page is built from the structured primitives the engine already makes, and parses the rest once.** The
   scrub's and the marsh's ink - the grass and reed blades, the brush dots, the tint and glint marks - is made as tuples with
   their coordinates and extents (`_blade_groups`, `_mark_groups`) and flattened to SVG strings at the finish, and those two
-  classes are 60% of the page's parsing (observed 2026-09-28, method: research R2's probe); the page takes those structures as they are, not the strings. Every other record string is parsed once, and every page pass that
+  classes - the scrub's marks region included - are about 83% of the page's parsing (observed 2026-09-28, method: research
+  R2's probe and the review's re-measurement); the page takes those structures as they are, not the strings. Every other record string is parsed once, and every page pass that
   reads its elements (the off-map cull, the merge, the marks' regions, the hit layer) reads that parse - every other class
   is 5% of the parsing or less, about 17% together (research R2), spread over every producer of drawing code. The page is
   byte-identical.
@@ -107,15 +108,17 @@ profile names - the windbreak, the seam closing, the commons and the blade flush
   fastest of three, is faster with it than without (the GM allowed such changes where they make things faster).
 - **FR-008 The bamboo seat search walks outward from its target** and stops at the first seat that fits - the nearest, as
   the whole-square scan found it, ties broken in the old scan's order. Exact. This takes the table's bamboo lever ("sampled
-  more coarsely") by removing the same wasted tests without moving a clump; if SC-006's floor is not met by it, the coarser
-  sampling is taken as well.
+  more coarsely") by removing the same wasted tests without moving a clump. Only if SC-006's floor is not met by it is the
+  coarser sampling taken as well - a MOVING change then, under 276's FR-006 condition, with its own Decisions row.
 - **FR-009 The whole-ring distance scans ask ring and segment indexes**: `_crosses_fabric`, `_trim_to_service`,
   `push_clear_of_fabric` and the comb's bead test (`_dry`, every segment of every water line per bead) measure a point
   against the nearby edges only, deciding as now. Exact.
 - **FR-010 The brook toll reads a bitmap of the cells near the band** before any sample, deciding as now. Exact.
 - **FR-011 The other slow stages are taken too - those the before-profile names and whatever the after-profile shows.** The
-  before-profile names four more (research R1): the windbreak's grove (`village_grove`, its draw and its gap fill), the seam
-  closing (`close_seams`), the commons' scatter, and the finish's blade flush. For each of them, and for anything the
+  before-profile names five more (research R1, R3): the windbreak's grove (`village_grove`, its draw and its gap fill), the
+  seam closing (`close_seams`), the commons' scatter, the finish's blade flush, and - arrived with main's feature 282 as this
+  work was re-based - the threshing yards' mats (`mat_cells`, `_lay_by_hand`), which made the homesteads stage 3.5 to 4.7
+  times slower. The mats are made exactly: the same mats, found by array operations and a box prefilter. For each of them, and for anything the
   after-profile shows slow, a lever of the allowed kind is taken where one would make it significantly faster; only what
   cannot be made significantly faster without a fundamental change or a broken rule is left.
 - **FR-012 What is left is written down** in `dev/performance.md`: only what FR-011 could not take, each with the measurement
@@ -134,36 +137,41 @@ Every ratio below is a FLOOR set with no projection behind it (the counts are me
 removes is not predicted), and every stage figure is the fastest of three with the load recorded.
 
 - **SC-001** (spec-wide): the five pool hamlets' summed roll time is at least `1.25x` less than the base's, back to back
-  (27.62 s at the start, m:before-pool-roll-s; research R1). Whether that is "significantly faster" is the GM's to judge;
+  (32.168 s at the start, m:before-pool-roll-s; research R1). Whether that is "significantly faster" is the GM's to judge;
   the report states the figure.
-- **SC-002** (FR-001, FR-002, FR-003): the router bucket's calls are at least `2x` fewer on Kashikawa (6698394,
-  m:before-kashikawa-b-router-total) and Sawada (4816861, m:before-sawada-b-router-total); a test over recorded route
+- **SC-002** (FR-001, FR-002, FR-003): the router bucket's calls are at least `2x` fewer on Kashikawa (6698373,
+  m:before-kashikawa-b-router-total) and Sawada (4816914, m:before-sawada-b-router-total); a test over recorded route
   requests shows, on the same lattice, A*'s path costing no more than Dijkstra's, every drawn link clear, and the new
   router's drawn path - A* and the coarser lattice together - at most `5%` longer than the old router's for the same
   request, a bound recorded under Decisions.
 - **SC-003** (FR-004, FR-005): the field bucket's calls - the size search and its carves, the seam closing counted apart
   (buckets nest exclusively) - are at least `1.3x` fewer on Inashiro (1474667, m:before-inashiro-b-field-total) and Sawada
   (2459714, m:before-sawada-b-field-total), every field within its tolerance,
-  a test shows a saturating fan still probed, and FR-005 is kept only if Sawada's field stage (2.944 s,
+  a test shows a saturating fan still probed, and FR-005 is kept only if Sawada's field stage (2.939 s,
   m:before-sawada-stage-field-s) is faster with it than without.
-- **SC-004** (FR-006): the page bucket's calls are at least `1.5x` fewer on Sawada (3518827, m:before-sawada-b-page-total)
-  and Kashikawa (3463026, m:before-kashikawa-b-page-total), and every pool page byte-identical.
-- **SC-005** (FR-007): the notice bucket's calls are at least `1.5x` fewer on Inashiro (3142523,
-  m:before-inashiro-b-notice-total) and Sawada (2240617, m:before-sawada-b-notice-total).
+- **SC-004** (FR-006): the page bucket's calls are at least `1.5x` fewer on Sawada (3517145, m:before-sawada-b-page-total)
+  and Kashikawa (3462419, m:before-kashikawa-b-page-total), and every pool page byte-identical.
+- **SC-005** (FR-007): the notice bucket's calls are at least `1.5x` fewer on Inashiro (3142767,
+  m:before-inashiro-b-notice-total) and Sawada (2240653, m:before-sawada-b-notice-total), and FR-007's coarser spacing is
+  kept only if the notice stage, fastest of three, is faster with it than without.
 - **SC-006** (FR-008): the bamboo bucket's calls are at least `2x` fewer on Kashikawa (674263,
-  m:before-kashikawa-b-bamboo-total) and Mizuguchi (278855, m:before-mizuguchi-b-bamboo-total), the seats identical.
+  m:before-kashikawa-b-bamboo-total) and Mizuguchi (278855, m:before-mizuguchi-b-bamboo-total), the seats identical under
+  the outward search (the coarser fallback, if taken, is held to SC-011's moving condition instead).
 - **SC-007** (FR-009): the edge-scan bucket's calls, the comb's bead test among them, are at least `3x` fewer on Kashikawa
-  (2248786, m:before-kashikawa-b-edge-scan-total) and Kuwabata (1417688, m:before-kuwabata-b-edge-scan-total).
+  (2248774, m:before-kashikawa-b-edge-scan-total) and Kuwabata (1417712, m:before-kuwabata-b-edge-scan-total).
 - **SC-008** (FR-010): the toll's cell lookups are at least `2x` fewer on Kashikawa (590253,
   m:before-kashikawa-b-toll-dict-get) and Sawada (374679, m:before-sawada-b-toll-dict-get).
-- **SC-009** (FR-011): each of the four named stages asks at least `1.5x` fewer calls on the map where it asks most - the
+- **SC-009** (FR-011): each of the five named stages asks at least `1.5x` fewer calls on the map where it asks most - the
   grove's fill and draw on Kashikawa (2075676 and 824228, m:before-kashikawa-b-grove-total,
   m:before-kashikawa-b-grove-draw-total), the seam closing on Sawada (2079622, m:before-sawada-b-seams-total), the
   commons on Kashikawa (581710, m:before-kashikawa-b-commons-total), the blade flush on Sawada (1523927,
-  m:before-sawada-b-flush-total) - and is faster in wall time, fastest of three; or the plan's measurement says why no
-  allowed change reaches it.
-- **SC-010** (FR-012): `dev/performance.md` holds the after-profile's remaining costs with their levers priced; every
-  figure named here is in `measurements.json`, the after-figures carrying the command that re-runs them.
+  m:before-sawada-b-flush-total), the yards' mats on Kashikawa (14288475, m:before-kashikawa-b-mats-total, with the homesteads
+  stage at 2.313 s, m:before-kashikawa-stage-homesteads-s) - and is faster in wall time, fastest of three; or the plan's measurement says why
+  no allowed change reaches it. The mats are byte-identical.
+- **SC-010** (FR-011, FR-012): every stage the after-profile shows slow either has a lever of the allowed kind taken and is
+  faster, fastest of three, or is recorded in `dev/performance.md` with the measurement showing that no change of the
+  allowed kind makes it significantly faster - and that record holds nothing else; every figure named here is in
+  `measurements.json`, the after-figures carrying the command that re-runs them.
 - **SC-011** (FR-013, the pool): every live pool map regenerates; `make done` is green at the `100%` floor and every gate
   rule passes (the overlap rules among them); every pool map, the rescue-rounds scenario and the 10- and 20-household toys
   seat at least as many houses as today, with no new or larger shortfall, and keep their forms (dispersed or nucleated,
@@ -174,8 +182,8 @@ removes is not predicted), and every stage figure is the fastest of three with t
 - **Counts that move between runs of the same code** (observed 2026-09-28, method: round 1's `make figures` re-run): the
   fabric bucket by tens of thousands (Kuwabata 702611 and 731256, Sawada 776100 and 762559) and anything beneath the
   fabric index by a few calls - the router's (Kuwabata 1134922 and 1134924) and the clip's (Sawada 7390 and 7388) - with
-  the id-keyed memo's hits (281's Amendment 1). No floor above is set on the fabric bucket, and the router's and the clip's
-  moves are far inside theirs.
+  the id-keyed memo's hits (281's Amendment 1). No floor above is set on the fabric bucket or the clip bucket, and the router's
+  moves are far inside its floor.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
@@ -187,6 +195,7 @@ removes is not predicted), and every stage figure is the fastest of three with t
 | The carve's rows as arrays, kept only if faster | map drawing convention (plots within the fit's tolerance) | FR-005 | point of change in `waterfields/sector_rows.py` |
 | The field's size search probes the largest fan only on measured saturation | map drawing convention (the same tolerance and target; the plots may differ) | research R1 | point of change in `hamletgen/water/fit.py` |
 | The notice board's candidates sampled every `24` px along a route, not `12`, kept only if faster | map drawing convention (the same rules and ranking; the board may stand a few feet along its verge) | FR-007 | point of change in `settlement/structures/fixtures/siting.py` |
+| Bamboo clumps may sit a little differently - taken only if the outward search misses SC-006's floor | map drawing convention (the same keep-outs and reach; coarser sampling) | FR-008 | point of change in `hamletgen/hinterland/bamboo.py` |
 
 ## Assumptions
 
@@ -210,3 +219,9 @@ removes is not predicted), and every stage figure is the fastest of three with t
   under the same rule and FR-012 records only what cannot be taken; the moves given with their sizes; the board's edge
   case narrowed and its coarser lattice kept only if faster; FR-008 states the swap; the crown callee named by its
   qualified name.
+- Round 3 (spec-fidelity-verify, 2026-09-28): CHANGES REQUIRED - R2 misattributed the scrub's marks region; SC-010 still
+  priced what FR-012 now takes, and the after-profile clause had no criterion; the bamboo fallback contradicted "exact";
+  SC-005 did not test the keep-if-faster; the counts note implied a clip floor; the crown figures still read 0. Addressed
+  (R2 and FR-006 on the corrected share, SC-010 rewritten over the after-profile, the fallback a moving change with its Decisions row,
+  SC-005's condition, the note corrected, and the whole base re-taken at `5f15c65bd` - main having merged 282, which moved
+  every pool manifest - with the corrected crown callee).

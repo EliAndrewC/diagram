@@ -122,6 +122,7 @@ ENTRIES: tuple[tuple[str, str, str], ...] = (
     ("seams", "l7r.diagram.waterfields.seams.close", "close_seams"),
     ("commons", "l7r.diagram.settlement", "Settlement.commons"),
     ("flush", "l7r.diagram.settlement", "Settlement.flush_blade_groups"),
+    ("mats", "l7r.diagram.settlement.homestead_parts.yards", "mat_cells"),  # feature 282's threshing-yard mats
 )
 
 

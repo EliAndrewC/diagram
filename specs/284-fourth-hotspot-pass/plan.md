@@ -15,7 +15,7 @@ coarser candidate lattice - held to 276's FR-006 condition. (C) The measurement 
 ## Technical Context
 
 **Language/Version**: Python 3.14, shapely 2 and numpy (already dependencies). **Testing**: pytest through `make`; the
-harness (`harness.py`, `counts.py`, `measure.py`), before in `/tmp/base284` (`f52ed6aa8`), after back to back, fastest of
+harness (`harness.py`, `counts.py`, `measure.py`), before in `/tmp/base284` (`5f15c65bd`), after back to back, fastest of
 three, loads recorded. **Constraints**: every gate rule on every live map; the 100% floor; files under 1,000 lines.
 
 ## Performance bookends (constitution VI)
@@ -50,8 +50,8 @@ recorded requests (`tests/fixtures/route_requests_mizuguchi.json`) identical wit
   `marks_region` and `hit_layer`, which take an optional `elems=` and parse only when not given. A structured slot's
   elements are built from its tuples - a blade is a line with its four coordinates, a mark carries its extent - with the
   attrs its string carries, so each pass reads the same elements it read before.
-- Why this split and not every producer converted (research R2): the scrub's and the marsh's structured ink is 60% of the
-  page's parsing and no other class is over 5%; one parse per string covers the rest.
+- Why this split and not every producer converted (research R2): the scrub's and the marsh's structured ink, the scrub's marks region
+  included, is about 83% of the page's parsing and no other class is over 5%; one parse per string covers the rest.
 - **Test**: every pool map's page byte-identical, and a synthetic page (lines, circles, a translucent and an outlined
   shape, a path, a transformed string) byte-identical through both routes.
 
@@ -98,6 +98,18 @@ synthetic crown sets; the pool byte-identical.
 for a point whose cell is not in it (the old 9 lookups would all have come back empty). **Test**: 281's toll equality test,
 extended.
 
+### A8. The yards' mats in arrays (FR-011, `settlement/homestead_parts/yards.py`)
+
+- `inside` (the quarter-foot grid's floor test): numpy over the whole grid - the signed distance of every point to every edge
+  of the convex floor quad; surely in where every one clears `clear` by a margin, surely out where one falls short by it,
+  and the scalar `point_in_poly and edge_dist >= clear` asked in the band between. `spot` / `ok` then as arrays too.
+- The lattice search: for each gap and each `(nc, nr)`, the seated count at every offset `(i0, j0)` is the sum of `nc * nr`
+  strided slices of `ok`; the offsets reaching the best count so far are then walked in the old `(i0, j0)` order with the old
+  `_off_center` tie-break, so the lattice chosen is the old one.
+- `_lay_by_hand`: a neighbor quad whose box is farther than `need` from the mat's box is skipped before `_quad_gap`.
+- **Test**: `mat_cells` against a copy of the old function over the pool's yards (their `w, h, poly, keep_out, salt` recorded)
+  and synthetic ones (a rack, a small yard, a quarter-turned floor) - identical lists.
+
 ### B1. A* (FR-001, `hamletgen/ways/route.py`)
 
 The heap holds `(g + h, g, ix, iy)` with `h = hypot(ix - gx, iy - gy) * cell`; the stale-entry check compares `g`. The
@@ -137,7 +149,7 @@ pool map, via the gate.
 The four named stages (FR-011): the grove draw is A6; the grove fill, the seam closing, the commons and the flush are
 re-profiled once A lands, and each gets its lever. Then the after-profile is read under the same rule: anything slow that a
 change of the allowed kind makes significantly faster is taken in this feature; only what cannot be is left, each with its
-measurement (FR-012). The landing order: A lands, the pool regenerates byte-identical against `f52ed6aa8` (confirmed first to regenerate
+measurement (FR-012). The landing order: A lands, the pool regenerates byte-identical against `5f15c65bd` (confirmed first to regenerate
 itself in `/tmp/base284`); then B, under 276's FR-006 condition. `measure.py after`, `make perf LABEL=284-end`,
 `dev/performance.md`'s fourth-pass section.
 
