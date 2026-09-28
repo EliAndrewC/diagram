@@ -388,5 +388,27 @@
   "source": "the drawn SVG: each yard group's floor polygon and its mat rects (bounding boxes, in the group's local frame, 1 px = 1 ft)",
   "measured": "2026-09-28",
   "method": "per yard group: |(left margin) - (right margin)| and |(top) - (bottom)| of the mats' box inside the floor polygon's box; the maximum"
+ },
+ "sr10-sawada-f2-exhibit": {
+  "value": 0,
+  "unit": "passages",
+  "quantity": "passages in sawada.gen.py and sawada.notes.md that justify harvest_weather='changeable' by the map's own wet or marsh ground - the declaration now rests on the pool's exhibit role alone (gen lines 39-41, notes lines 89 and 957-959: 'the pool's exhibit of racks gathered by the houses, the form the record names for a coast of changeable autumn weather')",
+  "verifies": "F2",
+  "subject": "sawada",
+  "answers": "8a3660fb81bc",
+  "source": "pool/hamlets/sawada/sawada.gen.py and sawada.notes.md at commit f6a634a6f",
+  "measured": "2026-09-28",
+  "method": "grep -n -i 'wet|marsh' in the gen (hits only the name's gloss, the drainage story and the wind seat, none about the weather) and 'harvest weather|changeable' in the notes, each hit read"
+ },
+ "sr10-kashikawa-f2-wording": {
+  "value": 0,
+  "unit": "passages",
+  "quantity": "occurrences of 'stand out' in kashikawa.notes.md; its threshing-yard note (line 115) now reads 'its racks would be put up out on the paddies after the harvest ... (that settled weather keeps them off the houses is the record's reading, not a finding)', the reading labeled as research homesteads 505 labels it",
+  "verifies": "F2",
+  "subject": "kashikawa",
+  "answers": "8a3660fb81bc",
+  "source": "pool/hamlets/kashikawa/kashikawa.notes.md at commit f6a634a6f",
+  "measured": "2026-09-28",
+  "method": "grep -c 'stand out' (0) and the line read in full"
  }
 }

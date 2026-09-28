@@ -227,12 +227,11 @@ def _exact_lattice(
             strict = seats(cx, cy, -1e-9)
             for q in range(len(cx)):
                 n = int(strict[:, q].sum())
-                if n <= best[0] and (n < best[0] or not best[2]):
-                    continue
-                seated = [(r, c, float(cx[q]) + tx, float(cy[q]) + ty) for k, (r, c, tx, ty) in enumerate(spots) if strict[k, q]]
-                off = _off_center([(sx, sy) for _r, _c, sx, sy in seated], mw, mh)
-                if n > best[0] or not best[2] or off < best[1]:
-                    best = (n, off, seated)
+                if n > best[0] or (n == best[0] and best[2]):
+                    seated = [(r, c, float(cx[q]) + tx, float(cy[q]) + ty) for k, (r, c, tx, ty) in enumerate(spots) if strict[k, q]]
+                    off = _off_center([(sx, sy) for _r, _c, sx, sy in seated], mw, mh)
+                    if n > best[0] or off < best[1]:
+                        best = (n, off, seated)
     return best[2]
 
 
