@@ -6,8 +6,9 @@ Order: F's harness target first (so every after-figure is taken the same way), t
 
 ## Setup
 
-- [ ] T01 `make h276` runs `harness.py` into a JSON; `measurements.json` entries name it as their `command` (D17)
+- [x] T01 `make h276` runs `harness.py` into a JSON; `measurements.json` entries name it as their `command` (D17)
       research: rendering
+      verify: DONE. make spec-harness SPEC=specs/276-engine-hotspots-and-test-scans OUT=<json> runs harness.py as a test node; measure.py drives it and every after- entry carries it as its command
 
 ## US1 - the slow tests stop redoing work (P1)
 
@@ -74,7 +75,9 @@ Order: F's harness target first (so every after-figure is taken the same way), t
 - [x] T17 The after-cohort `make cohort N=24` against research R7's baseline; every newly failing seed diagnosed
       research: rendering
       verify: DONE. make cohort N=24 on 2026-09-28: 21/24, failing Audit-02/08/23 on scatter_frame_breach only - identical to the baseline; no newly failing seed
-- [ ] T18 `make perf LABEL=276-end`, `make perf-report AGAINST=276-start`; the after-figures in `measurements.json` and research; `make quick ALL=1` and `make done` wall time
+- [x] T18 `make perf LABEL=276-end`, `make perf-report AGAINST=276-start`; the after-figures in `measurements.json` and research; `make quick ALL=1` and `make done` wall time
       research: rendering
-- [ ] T19 `dev/performance.md` gains the three shapes with their measurements (D19)
+      verify: DONE. 276-end vs 276-start: 31.3 s -> 20.6 s (-34.2%, band 0); after-figures in measurements.json by measure.py; make quick ALL=1 22.3 s; make done 33 s green - research R9
+- [x] T19 `dev/performance.md` gains the three shapes with their measurements (D19)
       research: rendering
+      verify: DONE. dev/performance.md 'Three more shapes, found before the city tier (feature 276)': the seat search, the geometry chain, the re-derived test scan, and the seg_intersect bug, each with its measurement
