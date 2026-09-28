@@ -46,6 +46,8 @@ anchor cultures	anchor culture
 animal unit	animal unit
 animal units	animal unit
 anjifang	anjifang
+appurtenance	appurtenance
+appurtenances	appurtenance
 apron	apron
 aprons	apron
 aqueduct	aqueduct

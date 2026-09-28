@@ -10186,5 +10186,12 @@
    "Tangible Cultural Properties",
    "Registered Tangible Cultural Property"
   ]
+ },
+ "appurtenance": {
+  "def": "Anything that belongs to a homestead and stands on its grounds - the farmhouse, the garden, the threshing yard, the bamboo stand and the grove around them.",
+  "variants": [
+   "appurtenance",
+   "appurtenances"
+  ]
  }
 }
