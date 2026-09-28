@@ -81,8 +81,9 @@ pieces; then the tooling; then the sweep, the measurement and the records.
 - [x] T19 `make cohort N=24` against the base's 21/24
       research: rendering
       verify: DONE. make cohort N=24 on 2026-09-28: 24/24 pass the whole gate (feature 276 closed at 21/24; no seed can newly fail)
-- [ ] T20 The after-harness back to back (`measure.py`), SC-001 to SC-012; `make perf LABEL=278-end`, `make perf-report AGAINST=278-start`
+- [x] T20 The after-harness back to back (`measure.py`), SC-001 to SC-012; `make perf LABEL=278-end`, `make perf-report AGAINST=278-start`
       research: rendering
+      verify: DONE. measure.py back to back 2026-09-28: pool 1.80x (61.3->34.0 s); SC-002..006, SC-011 met (cells 2.06/2.61/4.72x, doorstep 3.56x, footbridge 55.9x, wells 70.5/38.6x, Kuwabata appurtenances 19.3x, Sawada once, _hits 66/57x); SC-007..010 amended (Amendment 1, FAITHFUL round 2) and met: field 1.23x, hinterland 1.28/1.20x, notice 1.87/1.19x, windbreak 1.43/1.51x; SC-012 tests green; 278-end bookend 21.5 vs 27.8 s, band 0
 - [x] T21 `dev/performance.md`: the after-profile's residue with its levers priced (FR-015)
       research: rendering
       verify: DONE. dev/performance.md 'The second pass, and where the returns start to diminish (feature 278)': the scans, the two traps, the roll done twice, vectorizing is not free, and the residue per stage with its lever priced (field, hinterland, notice, windbreak, finish, tests)

@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in the clone `diagram-inashiro`)
 **Created**: 2026-09-28
-**Status**: Accepted - FAITHFUL at round 3 of 5 (2026-09-28); Amendment 1 under review (2026-09-28)
+**Status**: Accepted - FAITHFUL at round 3 of 5 (2026-09-28); Amendment 1 FAITHFUL at round 2 of 5 (2026-09-28)
 **Request**: [`request.md`](request.md) - the GM's words verbatim: run feature 276's exercise again - measure, find, make faster.
 **Predecessors**: 276 (the first pass: placement indexes, batched seam closing, the track's `PathChecker`, the shared
 test parses; `dev/performance.md` "Three more shapes"), 218 (the index-once doctrine; its research R2 priced the
@@ -237,6 +237,10 @@ halving is not counted twice.
   scenario and the toys). The aside on `_bnd` is answered in research R2: `_at_f` is a linear per-query scan of a static
   polyline, so it joins FR-007 as a lever, with a field-stage target in SC-007.
 - Round 3 (spec-fidelity-verify, 2026-09-28): FAITHFUL.
+- Amendment 1, round 1 (spec-fidelity, 2026-09-28): CHANGES REQUIRED - old targets left standing, unnamed maps, four unkeyed
+  figures, page-hits partly hand-entered. Addressed by a fresh `measure.py` run and the rewrite below.
+- Amendment 1, round 2 (spec-fidelity-verify, 2026-09-28): FAITHFUL; its two notes (Kuwabata 19.3x, the residue table in
+  `dev/performance.md`) applied.
 
 ### Amendment 1 (2026-09-28, from T20's measurement), review on a reset counter
 
@@ -244,7 +248,7 @@ Measured back to back against the base (observed 2026-09-28, method: `measure.py
 clone's, one run each, every figure written to `measurements.json` as `base-rerun-*` and `after-*` with that command):
 SC-001 to SC-006 and SC-011 hold - the pool rolls 1.80x faster (61.345 s, m:base-rerun-pool-roll-s; 34.033 s,
 m:after-pool-roll-s), the router's cells 2.06x / 2.61x / 4.72x fewer, the doorstep's indexes 3.56x per build, the
-footbridge's segment tests 55.9x, the wells' key 70.5x and 38.6x with Kuwabata's appurtenances 19.6x faster, Sawada built
+footbridge's segment tests 55.9x, the wells' key 70.5x and 38.6x with Kuwabata's appurtenances 19.3x faster, Sawada built
 and finished once (m:after-sawada-builds, m:after-sawada-finishes), `_pip` 81x per build on Sawada (11899,
 m:after-sawada-field-pip) and 96x on Kashikawa (2630, m:after-kashikawa-field-pip), the page's `_hits` 66x per finish on
 Sawada (6789, m:after-sawada-page-hits) and 57x on Kashikawa (6943, m:after-kashikawa-page-hits). Four stage-time targets

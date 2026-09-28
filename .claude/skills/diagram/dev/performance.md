@@ -365,10 +365,10 @@ held throughout: points surely in or surely out are decided in arrays, and the b
 
 | stage | measured after | what is left | the lever, and what it costs |
 |---|---|---|---|
-| field | 1.12x per build | the carve's per-row geometry, three to four carves per build (the fit's size search) | a closer first guess of the fan's size, or the rows as array operations - both change the field |
-| hinterland | 1.22x | the marsh scatter (the commons' old per-point shape), the bamboo seats' 10,000 samples, the parcels' crop set-backs | the marsh vectorized as the grass was; coarser bamboo sampling - a drawing change |
-| notice | 1.19-1.80x | ~21,000 verge probes, each through the indexed `_fits` the scoring needs | score first, fit only the probes that could win - changes the seat when two tie |
-| windbreak | 1.36-1.47x | ~130,000 candidate points through Python predicates | the static tests over the jittered grid as arrays, the spacing test sequential - the commons' hybrid applied to the grove |
+| field | 1.075-1.23x per build (Sawada) | the carve's per-row geometry, 4 carves per build on Inashiro and 3 on Kashikawa (the fit's size search) | a closer first guess of the fan's size, or the rows as array operations - both change the field |
+| hinterland | 1.20-1.28x | the marsh scatter (the commons' old per-point shape), the bamboo seats' 10,000 samples, the parcels' crop set-backs | the marsh vectorized as the grass was; coarser bamboo sampling - a drawing change |
+| notice | 1.19x Inashiro, 1.87x Sawada | the verge probes (9,708 `_fits` calls in Sawada's build, 8,001 in Inashiro's), each through the indexed `_fits` the scoring needs | score first, fit only the probes that could win - changes the seat when two tie |
+| windbreak | 1.43x Kashikawa, 1.51x Inashiro | 128,952 candidate points on Kashikawa through Python predicates | the static tests over the jittered grid as arrays, the spacing test sequential - the commons' hybrid applied to the grove |
 | finish | - | about 4.7 s profiled over three finishes waiting on the external renderer (PNG and page raster) | fewer or smaller raster tiles; out of this pass's scope (the render path, feature 225's territory) |
 | tests | - | the gate's slowest items are pool rolls through a cold roll cache after an engine change | inherent to a change that re-keys the cache; `make quick` is 3,789 tests in ~27 s |
 
