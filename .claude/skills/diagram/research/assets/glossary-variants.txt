@@ -1487,7 +1487,8 @@ meshimori-onna	meshimori
 metamorphosis fengshui	metamorphosis fengshui
 miaohui	miaohui
 michikiri	michikiri
-micro-high	micro-high
+micro-high	micro-high ground
+micro-high ground	micro-high ground
 micro-highs	micro-high
 midaidokoro	midaidokoro
 middle moat	middle moat
@@ -1997,6 +1998,7 @@ self-watch house	jishinban
 senbon torii	Senbon Torii
 sengisho	sengisho
 sengoku	Sengoku
+senkomizu	senkomizu
 senmaida	senmaida
 sensei	sensei
 sento	sento
@@ -2197,6 +2199,7 @@ suid	suid
 suiden	suiden
 suids	suid
 suimon	suimon
+suiren	Suiren
 sukego	sukego
 sun lane	sun lane
 sun lanes	sun lane

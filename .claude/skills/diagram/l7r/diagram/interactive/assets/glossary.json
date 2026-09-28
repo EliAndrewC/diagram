@@ -935,7 +935,7 @@
   ]
  },
  "chi": {
-  "def": "A Chinese foot of about 33 centimeters; ten cun.",
+  "def": "The Chinese foot, ten cun. Its length changed over the centuries: about 23 to 24 centimeters from the Warring States period through the Han dynasty, and about 33 centimeters in later use.",
   "variants": [
    "chi"
   ]
@@ -1077,7 +1077,7 @@
   ]
  },
  "cun": {
-  "def": "A Chinese inch of about 3.3 centimeters; ten to a chi.",
+  "def": "A Chinese inch, ten to a chi, so its length followed the chi's: about 2.3 to 2.4 centimeters from the Warring States period through the Han dynasty, and about 3.3 centimeters in later use.",
   "variants": [
    "cun"
   ]
@@ -3953,7 +3953,7 @@
   ]
  },
  "tsubo": {
-  "def": "The Japanese unit of area, a square about six feet on a side - the floor of two straw mats laid side by side, about 3.3 square meters (36 square feet). House floors and work yards were counted in it.",
+  "def": "The Japanese unit of area, a square about six feet on a side - the floor of two straw mats laid side by side, about 3.3 square meters (36 square feet). House floors and work yards were counted in it. In the ancient jori grid of fields the word named something else: one of the thirty-six squares of a block, one cho (about 109 meters) on a side.",
   "variants": [
    "tsubo"
   ]
@@ -10038,6 +10038,31 @@
    "Jomon",
    "Jōmon",
    "Jōmon period"
+  ]
+ },
+ "Jiangren": {
+  "def": "In the Rites of Zhou's craft chapter (the Kaogongji), the builders - the office that laid out and dug the field channels, from the one-chi quan up to the hui that runs into the rivers.",
+  "variants": [
+   "Jiangren"
+  ]
+ },
+ "micro-high ground": {
+  "def": "Ground a little higher than the low-lying plain around it, such as the raised strip beside a river; a canal cut along it can send its water down onto the lower land.",
+  "variants": [
+   "micro-high ground",
+   "micro-high"
+  ]
+ },
+ "Suiren": {
+  "def": "In the Rites of Zhou, the officer over the outer districts of the royal domain, whose chapter lays out their grain land and its ladder of channels.",
+  "variants": [
+   "Suiren"
+  ]
+ },
+ "senkomizu": {
+  "def": "Timing each turn at the irrigation water by how long a fixed number of incense sticks takes to burn; used where severe drought forced some paddies to be planted with dry field crops instead.",
+  "variants": [
+   "senkomizu"
   ]
  }
 }
