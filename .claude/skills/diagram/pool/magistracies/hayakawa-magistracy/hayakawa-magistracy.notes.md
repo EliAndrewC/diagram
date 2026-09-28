@@ -31,8 +31,8 @@
    - clerks: their room is a room of the office hall (R20) - the freestanding duty room is gone.
    - landing: steps cut in the revetment across a bank street from the east gate (R42) - the timber pier is gone; the boatmen's shrine is a water-god (suijin) shrine (R41).
    - vegetable garden (feature 283, research buildings 400 and 405): its SEAT a knob among the attested seats - west of the house, south beside the formal garden, the rear service ground, a parcel of its own - the sun ruling out every seat under six hours in the shoulder month; its SIZE a knob from a soup-greens plot (about 1,070 sq ft) to half the grounds; a SUN bed, not half-shade (the GM, 2026-09-28: "Move them all"). Drawn in rows over the ground it stands on, unscreened (no divider attested, a guess).
+     This sheet: seat: the inner court's garden, before Hajime's quarters, west of the roji (the west and the rear are shaded by the kitchen and the house); size: the soup-greens plot; bed: sun.
    - rear service strip: two household storehouses (dozo), as the Matsushiro retainer's house kept two; plastered, no fire-water tub; their sizes a guess, no larger than the Takayama kitchen storehouse (about 740 sq ft).
-     This sheet: seat: south beside the formal garden, along the divider (the west and the rear are shaded by the kitchen and the house); size: the soup-greens plot.
 
 
 ## The river logistics story

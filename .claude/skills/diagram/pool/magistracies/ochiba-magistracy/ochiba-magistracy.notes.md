@@ -26,8 +26,8 @@
    - garden: a pond garden (R30), the pond before the reception, west of the guests' line from the nakamon to the stone; the striking posts upright (R34).
    - shrine: several kami in one hall, each at its own altar - an attested form (R36).
    - vegetable garden (feature 283, research buildings 400 and 405): its SEAT a knob among the attested seats - west of the house, south beside the formal garden, the rear service ground, a parcel of its own - the sun ruling out every seat under six hours in the shoulder month; its SIZE a knob from a soup-greens plot (about 1,070 sq ft) to half the grounds; a SUN bed, not half-shade (the GM, 2026-09-28: "Move them all"). Drawn in rows over the ground it stands on, unscreened (no divider attested, a guess).
+     This sheet: seat: the inner court, south of the karo's house, beside the inner garden; size: between the two attested forms, about 1,510 sq ft; bed: sun.
    - rear service strip: two household storehouses (dozo), as the Matsushiro retainer's house kept two; plastered, no fire-water tub; their sizes a guess, no larger than the Takayama kitchen storehouse (about 740 sq ft).
-     This sheet: seat: south beside the formal garden, below the karo's house; size: between the two attested forms, about 1,510 sq ft.
 
 
 ## Deliberate choices and tolerated stretches

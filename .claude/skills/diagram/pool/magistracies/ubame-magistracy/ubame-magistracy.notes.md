@@ -42,8 +42,8 @@
    - garden: a DRY GARDEN of raked gravel and set stones where a pond would be, before the RECEPTION (R30); the writing pavilion before Koharu's quarters. The striking post a knee-high BUNDLE of branches (R34) - a GUESS at a period post: the adult bundle is attested only as a present-day practice, its one writer holding the older form a children's exercise of one to a few branches.
    - weighing: a STEELYARD, not a balance (R44).
    - kitchen garden (feature 283, research buildings 400 and 405): its SEAT a knob among the attested seats - west of the house, south beside the formal garden, the rear service ground, a parcel of its own - the sun ruling out every seat under six hours in the shoulder month; its SIZE a knob from a soup-greens plot (about 1,070 sq ft) to half the grounds; a SUN bed, not half-shade (the GM, 2026-09-28: "Move them all"). Drawn in rows over the ground it stands on, unscreened (no divider attested, a guess).
+     This sheet: seat: the inner garden, before Koharu's quarters and the guest room, between the writing pavilion and the roji (the only seat with its sun); size: the soup-greens plot; bed: sun.
    - rear service strip: two household storehouses (dozo), as the Matsushiro retainer's house kept two; plastered, no fire-water tub; their sizes a guess, no larger than the Takayama kitchen storehouse (about 740 sq ft).
-     This sheet: seat: south beside the formal garden, between the writing pavilion and the roji (the only seat with its sun); size: the soup-greens plot.
 
 ## The border
 
