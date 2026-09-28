@@ -153,3 +153,5 @@ FR-002 finds (FR-005); its declaration names the research question it rests on.
 - Round 3 (spec-fidelity-verify, 2026-09-28): FAITHFUL - the US3 line resolved; no new drift.
 - Amendment round (spec-fidelity-verify, 2026-09-28): CHANGES REQUIRED - SC-005 required a settlement-review per
   regenerated hamlet, beyond FR-008 and against plan D6; reworded as the review the gate owes.
+- Amendment round 2 (spec-fidelity, 2026-09-28): FAITHFUL - SC-005 now reads "the settlement-review the gate owes",
+  matching FR-008; no new drift. Plan review round 4 CLEAR (D3 matches the code, D6 names the five reviews owed).
