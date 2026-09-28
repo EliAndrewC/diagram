@@ -224,6 +224,29 @@ def _drop_collapsed(s: Settlement) -> list[int]:
     return collapsed
 
 
+def cut_the_overruns(s: Settlement) -> None:
+    """A free end's stub past a kink is taken off (feature 261: Kuwabata's ring lane, `trim_free_stub`), and a lane that
+    ran on past the connector to a loose end is cut where it met it (`cut_past_connector`); the connector itself is left.
+
+    LIFTED TO MODULE LEVEL (feature 261, the GM's 2026-08-28 ruling on inner functions): it was the tail of `stage_web`,
+    and once main's placer re-laid the pool no shipped roll rewrote a lane here, so the rewrite went uncovered."""
+    for _i, _ln in enumerate(s.M.get("lanes") or []):
+        _p = [(float(x), float(y)) for x, y in _ln.get("pts") or []]
+        _others = [
+            (a, b) for _j, _o in enumerate(s.M.get("lanes") or []) if _j != _i for a, b in zip([tuple(q) for q in _o.get("pts") or []], [tuple(q) for q in (_o.get("pts") or [])[1:]], strict=False)
+        ]
+        _conn = [(a, b) for _o in s.M.get("lanes") or [] if _o.get("connector") for a, b in zip([tuple(q) for q in _o.get("pts") or []], [tuple(q) for q in (_o.get("pts") or [])[1:]], strict=False)]
+        # ...and a lane that ran on past the connector to a loose end is cut where it met it (feature 261: `cut_past_connector`)
+        _q = (
+            trim_free_stub(cut_past_connector(_p, _conn, [sg for sg in _others if sg not in _conn], [(float(h["x"]), float(h["y"])) for h in s.M.get("houses") or []]), _others)
+            if not _ln.get("connector")
+            else _p
+        )
+        if _q != _p:
+            _ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in _q]
+            s.reink_lane(_i)
+
+
 def tidy_lane_ends(s: Settlement, envelope: Poly) -> None:
     """THE LAST PASS OVER EVERY LANE END, after the stragglers: pull back anything that still reaches nothing.
 
@@ -608,22 +631,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     _sweep_dangling_ends(s)
     # ...AND A LANE THAT ENDS ON ANOTHER STANDS ON ITS CENTERLINE (GM 2026-09-27): an end a few feet off it shows its round cap past the far edge.
     center_lane_ends(s)
-    # ...and a free end's stub past a kink is taken off (feature 261: Kuwabata's ring lane, `trim_free_stub`)
-    for _i, _ln in enumerate(s.M.get("lanes") or []):
-        _p = [(float(x), float(y)) for x, y in _ln.get("pts") or []]
-        _others = [
-            (a, b) for _j, _o in enumerate(s.M.get("lanes") or []) if _j != _i for a, b in zip([tuple(q) for q in _o.get("pts") or []], [tuple(q) for q in (_o.get("pts") or [])[1:]], strict=False)
-        ]
-        _conn = [(a, b) for _o in s.M.get("lanes") or [] if _o.get("connector") for a, b in zip([tuple(q) for q in _o.get("pts") or []], [tuple(q) for q in (_o.get("pts") or [])[1:]], strict=False)]
-        # ...and a lane that ran on past the connector to a loose end is cut where it met it (feature 261: `cut_past_connector`)
-        _q = (
-            trim_free_stub(cut_past_connector(_p, _conn, [sg for sg in _others if sg not in _conn], [(float(h["x"]), float(h["y"])) for h in s.M.get("houses") or []]), _others)
-            if not _ln.get("connector")
-            else _p
-        )
-        if _q != _p:
-            _ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in _q]
-            s.reink_lane(_i)
+    cut_the_overruns(s)
     # ...and a record the joins emptied is not a lane: a husk with no points declares a way nothing draws (a review
     # counted three on Kashikawa and two on Kuwabata) - dropped with its ink slot, the one way lanes leave
     # ...and a record whose points are all one point is a husk too (Mizuguchi, feature 261: seven three-point records at a

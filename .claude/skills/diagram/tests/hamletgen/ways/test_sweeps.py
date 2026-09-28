@@ -641,3 +641,12 @@ def test_a_lane_that_runs_on_past_the_connector_to_a_loose_end_is_cut_where_it_m
     assert cut_past_connector(leg, conn, [((-50.0, 48.0), (50.0, 48.0))]) == leg, "the end stands on a lane"
     assert cut_past_connector([(0.0, 300.0), (0.0, -100.0)], conn, []) == [(0.0, 300.0), (0.0, -100.0)], "past the reach"
     assert on_the_way((0.0, 300.0), (0.0, 200.0), conn, 6.0) is None
+
+
+def test_a_cut_on_a_later_leg_keeps_the_vertices_before_it() -> None:
+    """`cut_at_tail` on a lane whose cut sample lies on its THIRD leg: the vertices before the cut are kept, in order, and
+    the one past it goes with the tail."""
+    from l7r.diagram.hamletgen.ways.sweeps import cut_at_tail
+
+    got = cut_at_tail([(0.0, 0.0), (10.0, 0.0), (20.0, 0.0), (30.0, 0.0)], 5, [(0.0, 6.0), (60.0, 6.0)])
+    assert got[:3] == [(0.0, 0.0), (10.0, 0.0), (20.0, 0.0)] and (30.0, 0.0) not in got

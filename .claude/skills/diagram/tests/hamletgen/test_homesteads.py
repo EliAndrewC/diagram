@@ -627,3 +627,21 @@ def test_every_surely_taken_cell_is_ground_the_fit_test_refuses() -> None:
     for i, j in r.sample(sorted(fg.taken), 300):
         px, py = fg.x0 + (i + r.random()) * fg.cell, fg.y0 + (j + r.random()) * fg.cell
         assert s._site_blocks_rect((px, py, 0.0, 0.0)), (px, py)
+
+
+def test_the_front_row_loop_stops_once_its_share_is_seated(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """`stage_homesteads`: the row's loop breaks when its share is placed, however many seats the chain still offers - here
+    the chain's seats are offered twice over, and the row still takes exactly its share."""
+    import math
+
+    from l7r.diagram.hamletgen.consts import CLUSTER_DRAWN_ASPECT
+    from l7r.diagram.hamletgen.homesteads import stage_homesteads
+    from l7r.diagram.hamletgen.homesteads import stages as st
+
+    real = st.front_row
+    monkeypatch.setattr(st, "front_row", lambda *a, **k: (lambda seats: seats + seats)(list(real(*a, **k))))
+    s, plan = _toy_hamlet(10)
+    plan.cluster_shape = "round"
+    stage_homesteads(s, plan)
+    lo, hi = CLUSTER_DRAWN_ASPECT["round"]
+    assert s.M["meta"]["seat_search"]["front"] == min(10, max(6, round(math.sqrt(10 * (lo + hi)))))

@@ -359,3 +359,14 @@ def test_a_footplank_is_not_laid_on_top_of_another_deck():
     # claim is not "no plank" but "no plank ON one already there"
     for b in s2.M["bridges"][len(before) :]:
         assert all(math.hypot(b["x"] - a["x"], b["y"] - a["y"]) > 1.0 for a in before), "a new plank sits clear of every standing deck"
+
+
+def test_a_plank_whose_far_bank_is_the_village_reaches_useful_ground():
+    """`_plank_reaches_useful_ground`: a bank a dwelling stands within a short reach of is the village - useful ground,
+    as the field on the other bank is - so the plank is sited; a bank onto nothing is refused."""
+    s = _crop_settlement()
+    s.M["fields"] = [{"outline": [[0, 0], [400, 0], [400, 190], [0, 190]]}]
+    s.M["houses"] = [{"x": 200, "y": 225, "w": 40, "h": 24}]
+    assert s._plank_reaches_useful_ground(200.0, 200.0, 90.0, 12.0), "field on one bank, the village on the other"
+    s.M["houses"] = []
+    assert not s._plank_reaches_useful_ground(200.0, 200.0, 90.0, 12.0), "a far bank onto nothing"
