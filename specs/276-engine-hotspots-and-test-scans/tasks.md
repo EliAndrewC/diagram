@@ -41,24 +41,30 @@ Order: F's harness target first (so every after-figure is taken the same way), t
 - [x] T09a [US2] `_toy_hamlet` sets the placer's own nucleated switch; the spur test says it wants a dispersed cluster (D20)
       research: rendering
       verify: DONE. _toy_hamlet sets s._nucleated from its plan; the spur test asks for a dispersed cluster explicitly; hamletgen 511 green
-- [ ] T10 [US2] Inashiro regenerated (`make map`); its houses, form and yards read against `pool-before.json`
+- [x] T10 [US2] Inashiro regenerated (`make map`); its houses, form and yards read against `pool-before.json`
       research: rendering
+      verify: DONE. make map on Inashiro (2026-09-28): CLEAN, 15 houses on the same seats as before, nucleated, all plain - pool_counts.py
 
 ## US3 - a comb field closes its seams in a fraction of the time (P2)
 
-- [ ] T11 [US3] Compute once (D11) and batch (D12) in `waterfields/seams/plots.py` and `close.py`
+- [x] T11 [US3] Compute once (D11) and batch (D12) in `waterfields/seams/plots.py` and `close.py`
       research: rendering
-- [ ] T12 [US3] Touched cells in `_plant` per connected piece of each row, the diagonal-sliver and two-piece-row tests (D13); re-profile and treat the next heaviest step (D14); SC-004 by the harness (`measure.py`)
+      verify: DONE. compute-once and batched array calls in plots.py/close.py/pockets.py/geoms.py (ring_polygons, _despike_many, relate_pattern cut, hull/mrr/distance arrays, PlotGeoms tree kept while rings change, GeomTree cached envelopes); waterfields + test_core 238 passed
+- [x] T12 [US3] Touched cells in `_plant` per connected piece of each row, the diagonal-sliver and two-piece-row tests (D13); re-profile and treat the next heaviest step (D14); SC-004 by the harness (`measure.py`)
       research: rendering
-- [ ] T13 [US3] Inashiro regenerated; its paddy, flooded and dry-plot counts against `pool-before.json`
+      verify: DONE. touched-cell _plant with test_plant_cuts_only_the_cells_a_diagonal_sliver_touches and test_plant_cuts_no_cell_between_the_two_pieces_of_a_row; close_seams back to back against 9f28392f6 (observed 2026-09-28, the harness seams section): 0.806/0.978/0.841 s -> 0.386/0.451/0.413 s on seeds 5/11/17, 2.1-2.2x
+- [x] T13 [US3] Inashiro regenerated; its paddy, flooded and dry-plot counts against `pool-before.json`
       research: rendering
+      verify: DONE. Inashiro regenerated: 624 paddy plots, 1 flooded, 20 dry - equal to pool-before.json (pool_counts.py)
 
 ## US4 - a track is routed without re-scanning the map per candidate (P3)
 
-- [ ] T14 [US4] `PathChecker` in `hamletgen/ways/checks.py`, used by `hamletgen/ways/track.py` (D15); the equality test over Inashiro's candidate paths (D16); SC-005 by the harness (`measure.py`)
+- [x] T14 [US4] `PathChecker` in `hamletgen/ways/checks.py`, used by `hamletgen/ways/track.py` (D15); the equality test over Inashiro's candidate paths (D16); SC-005 by the harness (`measure.py`)
       research: rendering
-- [ ] T15 [US4] Inashiro regenerated; its lanes against `pool-before.json`
+      verify: DONE. PathChecker.violations inside one Inashiro seed-4 roll (observed 2026-09-28, the harness track section, best of 3): 0.011 s over 83 calls against the corrected 0.139 s over 83 (12x); stage_track 0.22 s; equality tests in tests/hamletgen/ways/test_checks.py
+- [x] T15 [US4] Inashiro regenerated; its lanes against `pool-before.json`
       research: rendering
+      verify: DONE. Inashiro regenerated: 13 lane records against 11 (8 drawn against 9); the connector leaves east instead of north because the bounded seg_intersect no longer refuses that route on a phantom crossing; read by eye, the hamlet is the same place
 
 ## Across the pool, and the records
 
