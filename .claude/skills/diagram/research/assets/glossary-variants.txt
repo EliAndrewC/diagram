@@ -284,6 +284,8 @@ coppicing	coppice
 copse	copse
 corvee	corvee
 corvée	corvee
+cotton beater	cotton beater
+cotton beaters	cotton beater
 country monk	country monk
 country monks	country monk
 county magistrate	county magistrate
@@ -956,6 +958,7 @@ kaji-ya	kaji-ya
 kajimachi	kajimachi
 kakaemoto	hitoyado
 kakehi	kakehi
+kakoigura	kakoigura
 kamado	kamado
 kamakura	Kamakura period
 kamakura period	Kamakura period

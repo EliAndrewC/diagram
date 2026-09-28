@@ -8260,5 +8260,18 @@
    "shogunal village",
    "shogunal villages"
   ]
+ },
+ "cotton beater": {
+  "def": "A craftsman who loosened and cleaned raw cotton by striking it with the string of a large bow, readying it for spinning or for padding bedding and clothes.",
+  "variants": [
+   "cotton beater",
+   "cotton beaters"
+  ]
+ },
+ "kakoigura": {
+  "def": "A storehouse for grain held in reserve against bad harvests, which the Edo shogunate ordered villages to build alongside the gogura in 1790.",
+  "variants": [
+   "kakoigura"
+  ]
  }
 }
