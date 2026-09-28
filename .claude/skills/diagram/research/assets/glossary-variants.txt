@@ -811,12 +811,14 @@ jail-god	jail-god
 japanese zelkova	keyaki
 jetties	jetty
 jetty	jetty
+jiajing	Jiajing
 jiangnan	Lower Yangzi
 jiaqing	Jiaqing
 jiegao	jiegao
 jiguchi-sen	jiguchi-sen
 jin'ya	jin'ya
 jinaicho	jinaicho
+jingtai	Jingtai
 jingtian	jingtian
 jinguji	jingūji
 jingū-ji	jingūji
@@ -1019,6 +1021,7 @@ log boom	boom
 lognormal	lognormal
 longan	longan
 longans	longan
+longqing	Longqing
 loophole	loophole
 loopholes	loophole
 loose-cluster	loose-cluster village
@@ -1705,6 +1708,7 @@ tokugawa ieyasu	Ieyasu
 ton'ya	ton'ya
 tonami	Tonami plain
 tonami plain	Tonami plain
+tongdian	Tongdian
 tonya	ton'ya
 torii	torii
 toro	Toro
@@ -1733,6 +1737,7 @@ tudi miao	tudi miao
 tudigong	tudi miao
 tulou	tulou
 tulous	tulou
+tumu crisis	Tumu crisis
 twelve-mat	tatami
 two-grave	ryobosei
 tōhoku	Tohoku
@@ -1904,6 +1909,7 @@ zen-noh	Zennoh
 zennoh	Zennoh
 zhalan	zhalan
 zhang	zhang
+zhengtong	Zhengtong
 zhengyi	Zhengyi
 zhonggulou	gulou
 zhonglou	gulou

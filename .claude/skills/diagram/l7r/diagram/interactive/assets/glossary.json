@@ -7444,5 +7444,41 @@
   "variants": [
    "Shikoku"
   ]
+ },
+ "Tongdian": {
+  "def": "A Tang encyclopedia of institutions compiled by Du You and finished in 801, whose military books preserve the drill of the Tang armies.",
+  "variants": [
+   "Tongdian"
+  ]
+ },
+ "Jiajing": {
+  "def": "The reign name of a Ming emperor, by which the years of his reign were counted; its twentieth year is 1541.",
+  "variants": [
+   "Jiajing"
+  ]
+ },
+ "Longqing": {
+  "def": "The reign name of a Ming emperor, by which the years of his reign were counted; its first to fourth years are 1567-1570.",
+  "variants": [
+   "Longqing"
+  ]
+ },
+ "Zhengtong": {
+  "def": "The reign name of a Ming emperor, by which the years of his reign were counted; its fourteenth year is 1449.",
+  "variants": [
+   "Zhengtong"
+  ]
+ },
+ "Jingtai": {
+  "def": "The reign name of the Ming emperor who followed Zhengtong's capture in 1449; its first year is 1450.",
+  "variants": [
+   "Jingtai"
+  ]
+ },
+ "Tumu crisis": {
+  "def": "The Mongol defeat and capture of a Ming emperor at Tumu in 1449, after which the Mongols raided deep into northern China.",
+  "variants": [
+   "Tumu crisis"
+  ]
  }
 }
