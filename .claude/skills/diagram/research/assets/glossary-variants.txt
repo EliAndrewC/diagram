@@ -53,6 +53,7 @@ anchor cultures	anchor culture
 animal unit	animal unit
 animal units	animal unit
 anjifang	anjifang
+anthropogenic	anthropogenic
 apron	apron
 aprons	apron
 aqueduct	aqueduct
@@ -115,6 +116,8 @@ baileys	bailey
 bakufu	bakufu
 bakuhan	bakuhan
 bakumatsu	bakumatsu
+bald hill	bald hill
+bald hills	bald hill
 bamboo grass	sasa
 bamboo-grass	sasa
 ban-hinin	banta
@@ -136,6 +139,9 @@ banyuechi	banyuechi
 banyuetang	banyuechi
 barbican	barbican
 barbicans	barbican
+bare hill	bald hill
+bare hills	bald hill
+bare red hill	bald hill
 baren	baren
 bargeboard	bargeboard
 bargeboards	bargeboard
@@ -352,6 +358,8 @@ climbing kiln	noborigama
 climbing kilns	noborigama
 cloister	cloister
 cloisters	cloister
+closed canopy	closed-canopy
+closed-canopy	closed-canopy
 coefficient of variation	coefficient of variation
 coke	coke
 collar	planted collar
@@ -368,6 +376,8 @@ combs	comb
 command area	command area
 commanderies	commandery
 commandery	commandery
+common hill	commons
+commons	commons
 commutation	commutation
 commute	commutation
 commuted	commutation
@@ -802,6 +812,7 @@ fudoki	fudoki
 fudoki ko	fudoki
 fudō	Fudo
 fudō myōō	Fudo
+fuel-and-fodder commons	commons
 fujiwara	Fujiwara-kyo
 fujiwara-kyo	Fujiwara-kyo
 fukada	fukada
@@ -924,6 +935,8 @@ goza-no-ma	goza-no-ma
 grain of the paddy	field grain
 grand canal	Grand Canal
 grass carp	grass carp
+grass hill	kusayama
+grass hills	kusayama
 grave good	grave goods
 grave goods	grave goods
 grave island	grave island
@@ -965,6 +978,7 @@ hachiku	hachiku
 hachiman	Hachiman
 hachure	hachure
 hachures	hachure
+hageyama	bald hill
 haiden	haiden
 hakehi	hakehi
 hakka	Hakka
@@ -1733,6 +1747,7 @@ mongol yam	yam
 monk outlet	monk outlet
 monk-style outlet	monk outlet
 monospecific	monospecific
+montane	montane
 monto	monto
 monzen	monzen
 morijio	morijio
@@ -2102,6 +2117,9 @@ reaches	reach
 recharge	recharge
 recharges	recharge
 red chinquapin	chinquapin
+red pine	red pine
+red pine wood	red pine
+red pine woods	red pine
 reducing atmosphere	reducing firing
 reducing firing	reducing firing
 reel	reeling
@@ -2407,6 +2425,9 @@ six-day markets	rokusai-ichi
 skimmer wall	skimmer wall
 skirt roof	mokoshi
 skirt roofs	mokoshi
+slope face	slope face
+slope faces	slope face
+slope-face	slope face
 sluice	sluice
 sluices	sluice
 snow-viewing lantern	yukimi

@@ -7928,7 +7928,9 @@
   "def": "A grass mountain: a hill whose trees were felled and kept down so that it carried only the grass a village's paddies needed as fertilizer; a small one set aside for one paddy was a tazuke kusayama.",
   "variants": [
    "kusayama",
-   "tazuke kusayama"
+   "tazuke kusayama",
+   "grass hill",
+   "grass hills"
   ]
  },
  "ichirizuka": {
@@ -11410,6 +11412,60 @@
   "def": "Officially designated by notice in a government gazette - of a forest or reserve, put under legal protection as a named protected area.",
   "variants": [
    "gazetted"
+  ]
+ },
+ "slope face": {
+  "def": "The sloping earthen side of a bund or of a terraced field, falling from the field's edge to the ground below. It cannot be cropped and is kept cut like the bund top; in mountain paddies it can cover more ground than the flooded field above it.",
+  "variants": [
+   "slope face",
+   "slope faces",
+   "slope-face"
+  ]
+ },
+ "commons": {
+  "def": "Land a village held and used in common for firewood, brush and dry grass, lying beyond the protected grove on the high side.",
+  "variants": [
+   "commons",
+   "common hill",
+   "fuel-and-fodder commons"
+  ]
+ },
+ "red pine": {
+  "def": "The Japanese red pine, a hardy pine that took over village hills stripped of their broadleaf wood; red pine stands lie between grass hill and bare ground.",
+  "variants": [
+   "red pine",
+   "red pine wood",
+   "red pine woods"
+  ]
+ },
+ "bald hill": {
+  "def": "A hill stripped of its trees and brush down to bare ground by overcutting for fuel, common in Japan by the Edo period.",
+  "variants": [
+   "bald hill",
+   "bald hills",
+   "bare hill",
+   "bare hills",
+   "bare red hill",
+   "hageyama"
+  ]
+ },
+ "closed-canopy": {
+  "def": "Of a wood whose tree crowns meet overhead, so that little light reaches the ground.",
+  "variants": [
+   "closed-canopy",
+   "closed canopy"
+  ]
+ },
+ "montane": {
+  "def": "Of the mountains: belonging to the higher slopes above a valley.",
+  "variants": [
+   "montane"
+  ]
+ },
+ "anthropogenic": {
+  "def": "Caused by human activity - here, plant cover cut, burned or grazed by villagers rather than left to grow.",
+  "variants": [
+   "anthropogenic"
   ]
  }
 }
