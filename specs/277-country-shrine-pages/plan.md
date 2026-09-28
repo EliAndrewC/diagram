@@ -49,6 +49,13 @@ the PNG and writes the page from the one SVG; tests hold every country-shrine sh
 - **D6 - the tests**: `test_compound_kinds.py` reads every `pool/country-shrines/*/` sheet beside the magistracies (every
   element tagged and known), and the closure covers the kinds the sheets draw or the programs name; a seeded fault (an
   untagged element, an unknown kind) is proved red.
+- **D7 - the shrine's own reading of a shared kind** (the spec's Edge Case: "the page's own notes carry the difference,
+  not a second kind"; plan review round 1): `hoshigaoka-shrine.notes.md` gains the "Map notes" `### Features` block
+  (feature 262's FR-010, read by `write_sheet_page`) keyed by kind, for every shared kind the sheet draws - `torii`,
+  `shrine grove`, `well` (the folded item's reason and the 5 ft curb), `kitchen`, `genkan`, `latrine`, `vegetable
+  garden`, `fire-water tubs`. Each line is read off the sheet and its design notes; nothing from the monk's Obsidian
+  Portal record. The shared `Torii` write-up's stale "20 ft" becomes the 12 ft pitch (feature 268) and names the
+  country shrine in its What and Covers.
 
 ## Phases
 

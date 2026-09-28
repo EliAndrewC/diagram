@@ -1,0 +1,46 @@
+{
+ "feature": "277-country-shrine-pages",
+ "plan_sha256": "f55ac4b4ad609a75f9192709ed1bdd839a9de3db892bfdb54214cb773dd1ad45",
+ "reviewed": "2026-09-28",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "One module compound_kinds/shrine.py: 7 kinds the sheet draws and no magistracy does, 2 for its untagged ink (swept clearing, footpath), 7 its program names but no sheet draws; shared kinds (torii, shrine grove, well, kitchen, genkan, latrine, vegetable garden, fire-water tubs) stay in their magistracy families, written once.",
+   "class": "within",
+   "why": "FR-002 (a write-up for every kind drawn), FR-006 (a write-up for every program kind, burial ground included: it is an item no sheet draws), and the spec's Edge Case (a shared kind written once). Nothing added beyond the kinds the sheet or program needs."
+  },
+  {
+   "id": "D2",
+   "summary": "Carry-over: each new kind takes its folded item's class and reason (dwelling and bell tower stay guess); a shared kind keeps the classification 262 gave it; the well takes the shared label (convention) over the shrine item's accurate. No decision anywhere says where the shrine's differing reading of a shared kind goes.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The carry-over for new kinds is correct (checked: all 16 labels in shrine.py match their folded items). But the spec's Edge Case says a shared kind is written once AND 'where the country shrine's reads differently, the page's own notes carry the difference, not a second kind'. D2 drops the difference instead. The well is the clear case: the folded item's reason ('the shrine's water point ... never under an arch', class accurate) is deleted from types.json and stated nowhere, and the shared Well write-up the shrine page will open describes 'a private well inside the compound's walls' of samurai and government households and 'each well as a stone-curb marker about 7 ft square'. The shrine's well is 15 px at 3 px = 1 ft, so 5 ft (read from hoshigaoka-shrine.svg line 263, 2026-09-28). The same applies to latrine and vegetable garden (samurai-residence text; the items said 'attached to the dwelling' and 'the household bed at the dwelling'). Nothing makes this impossible: the mechanism exists (262 FR-010, the <map>.notes.md 'Map notes' block that write_sheet_page reads), and hoshigaoka-shrine.notes.md has no such block today."
+  },
+  {
+   "id": "D3",
+   "summary": "The fold: each country-shrines item becomes id, kind, band_ft plus forms, site, optional, with the item->kind map given; the pack audit resolves kinded items through the tags and programs.md takes class and why from the registry.",
+   "class": "within",
+   "why": "FR-006 as written. Checked: pack_audit/labels.py resolves a kinded item by data-kind, and types.py takes a kinded item's class and why from COMPOUND_CLASSES."
+  },
+  {
+   "id": "D4",
+   "summary": "Untagged ink: background and the precinct's layout rect '-'; the grove's ragged floor polygon 'shrine grove'; the clearing polygon 'swept clearing'; the well path 'footpath'. Tags only.",
+   "class": "within",
+   "why": "FR-001 and FR-005. The precinct rect is fill none with no stroke (pure layout), so '-' is the spec's 'pure framing' Edge Case."
+  },
+  {
+   "id": "D5",
+   "summary": "hoshigaoka-shrine.gen.py gains write_sheet_page(SVG, COMPOUND_CLASSES) and fails on an unclean census.",
+   "class": "within",
+   "why": "FR-003 and SC-001, the magistracy gens' form."
+  },
+  {
+   "id": "D6",
+   "summary": "test_compound_kinds.py reads every pool/country-shrines/*/ sheet beside the magistracies; the closure covers kinds drawn or named by programs; red on a seeded fault.",
+   "class": "within",
+   "why": "FR-004, SC-003 and FR-006's closure clause; enforcement of what was asked."
+  }
+ ],
+ "verdict": "BLOCKED"
+}

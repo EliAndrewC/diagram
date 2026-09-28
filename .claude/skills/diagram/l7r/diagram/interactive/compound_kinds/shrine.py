@@ -75,9 +75,6 @@ class MonksRooms(Kind):
     house has been measured, so the dwelling is sized from the village map's own farmhouse, 46 by 28 ft, and under one
     roof it is no separate building but the hall's dwelling end.
 
-    Caveat: Its size is a guess: no small priest's house has been measured, so the dwelling is sized from the village
-    map's own farmhouse, 46 by 28 ft, and under one roof it is no separate building but the hall's dwelling end.
-
     Name: the monk's rooms
     Covers: the dwelling end's rooms
     Label: guess
@@ -211,9 +208,7 @@ class Footpath(Kind):
     Why: Water is carried from the well to the kitchen every day, and a way worn by feet runs where they go - through
     the grove, off the sanctuary's ground.
 
-    Note: The path is the drawing's own reading of daily use; no page read draws a shrine's path to its well.
-
-    Caveat: no page read draws a shrine's path to its well.
+    Note: The path is a guess, the drawing's own reading of daily use; no page read draws a shrine's path to its well.
 
     Name: footpath
     Covers: the path from the clearing to the well
@@ -249,7 +244,7 @@ class GuardianFigures(Kind):
 
 class StoneLanterns(Kind):
     """
-    What: Stone lanterns along the approach.
+    What: Stone lanterns set along the approach, each the gift of villagers of the parish.
 
     Why: Stone lanterns were votive donations, dated by the villagers who gave them, so a shrine has them only as its
     parish grows richer; at average wealth there are none.
@@ -340,9 +335,6 @@ class BellTower(Kind):
 
     Note: The minimal temple as a main hall and a bell tower rests on one undated commercial page in the present tense,
     and a village hall may have had neither - so its presence is a knob, and the rule for it a guess.
-
-    Caveat: The minimal temple as a main hall and a bell tower rests on one undated commercial page in the present
-    tense, and a village hall may have had neither - so its presence is a knob, and the rule for it a guess.
 
     Name: bell tower
     Covers: the bell tower

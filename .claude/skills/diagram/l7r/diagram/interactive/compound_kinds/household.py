@@ -792,8 +792,8 @@ class ShrineAltar(Kind):
 
 class Torii(Kind):
     """
-    What: A torii, the gateway arch over the approach to a compound shrine, standing a short way in front of the
-    hall.
+    What: A torii, the gateway arch over a shrine's approach - a compound's small shrine, or a village's - standing a
+    short way in front of the hall.
 
     Why: A torii stands at the boundary between the shrine and the world outside, so how far it stands from the
     hall is how deep the shrine's ground is in front of it, and a compound shrine's ground is small. An arch is a
@@ -804,15 +804,15 @@ class Torii(Kind):
 
     Note: The arch at the boundary of the shrine's ground, and both a shared arch and one to each shrine, are
     recorded findings; each sheet takes one. How far the arch stands from its hall is a guess, kept short because
-    a compound shrine's ground is small - about 5 ft where the plan is tight, up to the 20 ft a village shrine is
-    drawn with where there is room: no page read gives a distance from any torii to its hall.
+    a compound shrine's ground is small - about 5 ft where the plan is tight, up to the 12 ft at which a village shrine's
+    innermost arch stands where there is room (the GM's ruling of 2026-09-27): no page read gives a distance from any torii to its hall.
 
     Caveat: How far the arch stands from its hall is a guess, kept short because a compound shrine's ground is
-    small - about 5 ft where the plan is tight, up to the 20 ft a village shrine is drawn with where there is
-    room: no page read gives a distance from any torii to its hall.
+    small - about 5 ft where the plan is tight, up to the 12 ft at which a village shrine's innermost arch stands where there is
+    room (the GM's ruling of 2026-09-27): no page read gives a distance from any torii to its hall.
 
     Name: torii
-    Covers: the approach torii before a compound shrine
+    Covers: the approach torii before a compound shrine or a country shrine
     Label: accurate
     Sources: jinjahoncho-keidai, jawiki-torii, jawiki-yashikigami, torii-enwiki, fushimi-inari-jawiki, fushimi-inari-senbon, hokora-jawiki, nara-nagao-jinja, jinja-jawiki
     Entry: research/religion-and-death.html - 'How far before a small shrine does its torii stand, and can two shrines share one?', 'Torii are VOTIVE DONATIONS', 'Torii spacing', 'Where do the first and the innermost arches stand, and where does the hall's label go?', 'How big is a country shrine, and what stands in its precinct?'
