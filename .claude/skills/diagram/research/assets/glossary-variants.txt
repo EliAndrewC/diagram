@@ -1379,6 +1379,7 @@ omoteya-zukuri	omoteya-zukuri
 omoya	omoya
 onari-goten	onari-goten
 one-bay	bay
+onin war	Onin war
 onkura	kura
 onmyodo	onmyodo
 open-ended dike	open-ended dike
@@ -2176,6 +2177,7 @@ zushi-nikai	half-story
 ōiya	ōiya
 ōkaji	ōkaji
 ōkajiba	ōkaji
+ōnin war	Onin war
 ōya	yamori
 ほ場整備	hojo seibi
 ホオノキ	hoonoki
