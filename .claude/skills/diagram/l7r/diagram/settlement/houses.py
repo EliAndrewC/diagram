@@ -276,7 +276,8 @@ class HousesMixin:
         if held is None or held[0] is not hard:
             grid = PointGrid()
             grid.extend((hp, *bb) for hp, bb in zip(hard, self._poly_bboxes(hard), strict=False))
-            held = self._hard_grid = (hard, grid)
+            self._hard_grid: tuple[list[Any], PointGrid] | None = (hard, grid)
+            return grid
         return held[1]
 
     def _record_tread(self: Settlement, pts: Any, half: float) -> None:  # type: ignore[misc]

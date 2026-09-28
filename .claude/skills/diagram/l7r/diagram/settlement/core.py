@@ -187,7 +187,7 @@ class Settlement(
         self._pending_block: Poly | None = None  # ...and the pond's no-build rect that must follow it (see `fields/comb.py`)
         self._hard_cache_key: tuple[int, ...] | None = None
         self._hard_cache: list[Any] = []
-        self._hard_grid: tuple[list[Any], Any] | None = None  # `_hard_index`'s grid, keyed by the hard list it was built from (feature 278)
+        self._hard_grid: tuple[list[Any], PointGrid] | None = None  # `_hard_index`'s grid, keyed by the hard list it was built from (feature 278)
         # SWEPT/TENDED GROUND around sacred + funerary features - a keep-out for the LOOSE HINTERLAND
         # SCATTER (commons scrub + marsh reeds) ONLY, not for building placement and not for the grove.
         # A shrine precinct, the ground under a torii and along its sando, and the collar tended around

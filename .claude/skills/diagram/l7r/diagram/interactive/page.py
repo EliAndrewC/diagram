@@ -230,9 +230,64 @@ def _refused(b: dict[str, Any], ext: Extent) -> bool:
     since this bucket's last member, or `blocked` when one of them could not be read at all."""
     if b["blocked"]:
         return True
-    if (b["translucent"] or b["outlined"]) and any(_hits(ext, e) for e in b["extents"]):
+    # FROM EACH LIST'S GRID (feature 278, FR-011): the lists were walked whole per element - up to `_SKIP_CAP` skipped
+    # extents and every member's - 896,436 `_hits` over Sawada's two finishes. `_hits` is true only of two extents whose
+    # boxes touch (a disc pair is judged as discs, and two discs that touch have touching boxes), so a grid of the boxes
+    # returns every extent the test could find, and `_hits` decides as before. An unreadable extent is judged as before:
+    # it touches everything, so the answer is whether the list holds anything.
+    if (b["translucent"] or b["outlined"]) and (ext is None or b["ext_none"] or any(_hits(ext, e) for e in b["ext_grid"].near(ext))):
         return True
-    return any(_hits(ext, e) for e in b["skip"])
+    if ext is None:
+        return bool(b["skip"])
+    return any(_hits(ext, e) for e in b["skip_grid"].near(ext))
+
+
+class _BoxGrid:
+    """Extents filed by their boxes in square cells, for `_refused` (feature 278). `near(ext)` returns every filed extent
+    whose box shares a cell with `ext`'s box - a superset of those whose boxes touch it, since touching boxes share a
+    cell. A box wider than `_BIG` cells is kept aside and always returned."""
+
+    __slots__ = ("big", "cells")
+    _CELL = 64.0
+    _BIG = 24
+
+    def __init__(self) -> None:
+        self.cells: dict[tuple[int, int], list[tuple[float, ...]]] = {}
+        self.big: list[tuple[float, ...]] = []
+
+    def _span(self, e: tuple[float, ...]) -> tuple[int, int, int, int]:
+        x0, y0, x1, y1 = _box(e)
+        c = self._CELL
+        return int(x0 // c), int(y0 // c), int(x1 // c), int(y1 // c)
+
+    def add(self, e: tuple[float, ...]) -> None:
+        i0, j0, i1, j1 = self._span(e)
+        if i1 - i0 > self._BIG or j1 - j0 > self._BIG:
+            self.big.append(e)
+            return
+        for i in range(i0, i1 + 1):
+            for j in range(j0, j1 + 1):
+                self.cells.setdefault((i, j), []).append(e)
+
+    def near(self, e: tuple[float, ...]) -> list[tuple[float, ...]]:
+        i0, j0, i1, j1 = self._span(e)
+        out = list(self.big)
+        if i1 - i0 > self._BIG or j1 - j0 > self._BIG:  # a query this wide reads everything filed
+            for bucket in self.cells.values():
+                out.extend(bucket)
+            return out
+        for i in range(i0, i1 + 1):
+            for j in range(j0, j1 + 1):
+                out.extend(self.cells.get((i, j), ()))
+        return out
+
+
+def _file_extent(b: dict[str, Any], ext: Extent) -> None:
+    """A member's extent into its bucket's grid, or the flag that an unreadable one is among them."""
+    if ext is None:
+        b["ext_none"] = True
+    else:
+        b["ext_grid"].add(ext)
 
 
 def _outlined(tag: str, at: dict[str, str]) -> bool:
@@ -321,19 +376,23 @@ def merge_primitives(s: str) -> str:
             if got is not None:
                 got["members"].append(idx)
                 got["extents"].append(ext)
+                _file_extent(got, ext)
                 joined = got
             else:
                 _st = dict(at)
                 _translucent = any(float(_st.get(k, 1) or 1) < 1.0 for k in ("opacity", "fill-opacity", "stroke-opacity"))
-                joined = {"first": idx, "members": [idx], "extents": [ext], "skip": [], "blocked": False, "tag": tag, "translucent": _translucent, "outlined": _outlined(tag, _st)}
+                joined = {"first": idx, "members": [idx], "extents": [ext], "skip": [], "blocked": False, "tag": tag, "translucent": _translucent, "outlined": _outlined(tag, _st), "ext_grid": _BoxGrid(), "ext_none": False, "skip_grid": _BoxGrid()}
+                _file_extent(joined, ext)
                 buckets[key] = joined
                 order.append(joined)
         for other in buckets.values():
-            if other is joined:
+            if other is joined or other["blocked"]:  # a blocked bucket never reads its skips again (feature 278)
                 continue
             other["skip"].append(ext)
             if ext is None or len(other["skip"]) > _SKIP_CAP:
                 other["blocked"] = True
+            else:
+                other["skip_grid"].add(ext)
 
     #: what each element becomes: its own text, nothing (it was gathered into an earlier one), or the path
     repl: dict[int, str] = {}

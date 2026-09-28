@@ -925,3 +925,38 @@ def test_the_windbreak_pop_up_names_its_side_and_an_authored_note_beats_it() -> 
     assert data["windbreak"]["on_this_map"].startswith("Here the belt stands toward the northwest of the houses")
     notes = MapNotes(place={}, features={"windbreak": "This one is planted on the old dike."})
     assert _render([PLACE, "windbreak"], meta, notes)["windbreak"]["on_this_map"] == "This one is planted on the old dike."
+
+
+def test_the_merges_bucket_grids_change_no_byte(monkeypatch):
+    """Feature 278 (FR-011): `_refused` asks a grid of each bucket's extents instead of walking them. Over a dense,
+    interleaved scatter - lines and circles in several styles, some translucent, some outlined, some wider than the
+    grid's big-box bound - the merged page is byte-identical to the one the whole-list walk wrote (the grid forced to
+    return everything it holds)."""
+    import random
+
+    from l7r.diagram.interactive import page as pg
+
+    rng = random.Random(278)
+    parts = []
+    for _ in range(3000):
+        k = rng.random()
+        if k < 0.45:
+            x, y = rng.uniform(0, 1500), rng.uniform(0, 1500)
+            parts.append(f'<line x1="{x:.1f}" y1="{y:.1f}" x2="{x + rng.uniform(-9, 9):.1f}" y2="{y + rng.uniform(-9, 9):.1f}" stroke="#{rng.choice(["6a7", "8b5"])}" stroke-width="1"/>')
+        elif k < 0.9:
+            style = rng.choice(['fill="#2a4"', 'fill="#2a4" opacity="0.8"', 'fill="#475" stroke="#123" stroke-width="0.5"'])
+            parts.append(f'<circle cx="{rng.uniform(0, 1500):.1f}" cy="{rng.uniform(0, 1500):.1f}" r="{rng.uniform(1, 14):.1f}" {style}/>')
+        elif k < 0.97:
+            x, y = rng.uniform(0, 1500), rng.uniform(0, 1500)
+            parts.append(f'<line x1="{x:.1f}" y1="{y:.1f}" x2="{x + rng.uniform(-1600, 1600):.1f}" y2="{y + rng.uniform(-1600, 1600):.1f}" stroke="#6a7" stroke-width="1"/>')
+        else:
+            parts.append(f'<rect x="{rng.uniform(0, 1500):.1f}" y="{rng.uniform(0, 1500):.1f}" width="30" height="20" fill="#999"/>')
+    svg = "<g>" + "".join(parts) + "</g>"
+    indexed = pg.merge_primitives(svg)
+
+    def everything(self, e):
+        return list(self.big) + [x for b in self.cells.values() for x in b]
+
+    monkeypatch.setattr(pg._BoxGrid, "near", everything)
+    assert pg.merge_primitives(svg) == indexed
+    assert indexed.count("<path") > 5 and len(indexed) < len(svg), "non-vacuity: the scatter merged"
