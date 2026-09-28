@@ -115,17 +115,28 @@ def mat_cells(
         mc, mr = (len(xs) - 1) // px + 1, (len(ys) - 1) // py + 1  # the most columns and rows the yard's span allows
         for nc in (mc, mc - 1):
             for nr in (mr, mr - 1):
-                if nc < 1 or nr < 1 or nc * nr <= found[0]:
-                    continue  # a smaller lattice than the best already found cannot seat more
+                if nc < 1 or nr < 1 or nc * nr < found[0]:
+                    continue  # a smaller lattice than the best already found cannot seat as many
                 for i0 in range(len(xs) - (nc - 1) * px):
                     for j0 in range(len(ys) - (nr - 1) * py):
-                        n = sum(ok[i0 + c * px][j0 + r * py] for c in range(nc) for r in range(nr))
-                        # the most mats; of equals, the lattice nearest the yard's center (the floor stays spread over it)
-                        cand = (n, -abs(xs[i0] + ((nc - 1) * px * q + mw) / 2.0) - abs(ys[j0] + ((nr - 1) * py * q + mh) / 2.0), i0, j0, nc, nr)
+                        seated = [(xs[i0 + c * px], ys[j0 + r * py]) for c in range(nc) for r in range(nr) if ok[i0 + c * px][j0 + r * py]]
+                        if not seated or len(seated) < found[0]:
+                            continue
+                        # the most mats; of equals, the one whose SEATED mats sit nearest the yard's center (settlement-reviews of
+                        # round 9: scored on the whole lattice tried, a lattice with a row hanging off the floor won and its real
+                        # mats sat hard against the other side)
+                        cand = (len(seated), -_off_center(seated, mw, mh), i0, j0, nc, nr)
                         if cand[:2] > found[:2]:
                             found = cand
         _n, _o, i0, j0, nc, nr = found
         base = [(r, c, xs[i0 + c * px], ys[j0 + r * py]) for r in range(nr) for c in range(nc) if _n and ok[i0 + c * px][j0 + r * py]]
+        if len(base) < floor and gap_ft == MAT_GAPS_FT[-1]:
+            # THE LAST GAP IS SOLVED EXACTLY WHERE THE GRID FALLS SHORT (spec-fidelity, amendment round 7, 2026-09-28): a lattice
+            # that fits in a window narrower than the quarter-foot grid was missed, and a yard that CAN hold a third drew one
+            # short; so before a yard is let off with fewer, the lattice is solved row by row on the floor's own outline
+            exact = _exact_lattice(poly, clear, keep_out, mw, mh, (MAT_FT[0] + gap_ft) / ftpx, (MAT_FT[1] + gap_ft) / ftpx, w, h, len(base), 0.02 / ftpx)
+            if len(exact) > len(base):
+                base = [b for b in exact if fits(_mat_corners(b[2], b[3], mw, mh, 0.0))]
         mats = _lay_by_hand(base, mw, mh, ftpx, fits, salt)
         if len(mats) > len(best):
             best = mats
@@ -136,6 +147,66 @@ def mat_cells(
     # and 3), and 0.5 ft (rounds 4 to 6: no room to lay a mat askew, even thinned). At 1 ft every mat keeps bare ground and
     # room to lie askew; research.md R4 of spec 282 counts the pool's yards that still fall short.
     return thin_evenly(best, max(1, math.floor((w * ftpx) * (h * ftpx) / MAT_SQ_FT * 2.0 / 3.0)))
+
+
+def _off_center(seated: list[tuple[float, float]], mw: float, mh: float) -> float:
+    """How far the box round the seated mats (their unturned origins, each `mw` x `mh`) sits off the yard's center."""
+    x0, x1 = min(p[0] for p in seated), max(p[0] for p in seated) + mw
+    y0, y1 = min(p[1] for p in seated), max(p[1] for p in seated) + mh
+    return abs((x0 + x1) / 2.0) + abs((y0 + y1) / 2.0)
+
+
+def _row_intervals(poly: list[tuple[float, float]], clear: float, keep: tuple[float, float, float, float] | None, mw: float, mh: float, y: float) -> list[tuple[float, float]]:
+    """The x-intervals where an unturned `mw` x `mh` mat with its top edge at `y` keeps every corner `clear` inside the
+    convex `poly` and misses `keep` - exact, from the outline's edges: a corner is `clear` inside a convex polygon exactly
+    where it is inside the polygon every edge of which is moved in by `clear`."""
+    area = sum(poly[i][0] * poly[(i + 1) % len(poly)][1] - poly[(i + 1) % len(poly)][0] * poly[i][1] for i in range(len(poly)))
+    sign = 1.0 if area > 0 else -1.0
+    lo, hi = -math.inf, math.inf
+    for yy in (y, y + mh):  # the mat's two edges; each x-bound applies to both corners on that edge
+        for i in range(len(poly)):
+            (ax, ay), (bx, by) = poly[i], poly[(i + 1) % len(poly)]
+            ln = math.hypot(bx - ax, by - ay)
+            nx, ny = sign * (by - ay) / ln, -sign * (bx - ax) / ln  # the outward normal
+            c = nx * ax + ny * ay - clear  # inside, moved in by `clear`: nx*x + ny*y <= c
+            if abs(nx) < 1e-12:
+                if ny * yy > c:
+                    return []
+            elif nx > 0:
+                hi = min(hi, (c - ny * yy) / nx - mw)  # the right-hand corners sit at x + mw
+            else:
+                lo = max(lo, (c - ny * yy) / nx)
+    lo, hi = lo + 1e-6, hi - 1e-6
+    if lo > hi:
+        return []
+    if keep is not None and y < keep[3] and y + mh > keep[1]:
+        return [iv for iv in ((lo, min(hi, keep[0] - mw)), (max(lo, keep[2]), hi)) if iv[0] <= iv[1]]
+    return [(lo, hi)]
+
+
+def _exact_lattice(
+    poly: list[tuple[float, float]], clear: float, keep: tuple[float, float, float, float] | None, mw: float, mh: float, pw: float, ph: float, w: float, h: float, beat: int, y_step: float
+) -> list[tuple[int, int, float, float]]:
+    """The lattice (pitch `pw` x `ph`) seating the most mats, found exactly across and on a `y_step` grid down: for a top
+    row at y0, each row's feasible x-intervals are solved from the outline (`_row_intervals`), and the count changes only
+    where a lattice column meets an interval's left end, so the best x is one of those. Returns [] unless it beats `beat`."""
+    best: tuple[int, float, list[tuple[int, int, float, float]]] = (beat, 0.0, [])
+    for nr in range(1, int(h // ph) + 2):
+        for nc in range(1, int(w // pw) + 2):
+            if nc * nr <= best[0]:
+                continue
+            steps = int(max(0.0, h - (nr - 1) * ph - mh) / y_step) + 1
+            for k in range(steps):
+                y0 = -h / 2.0 + k * y_step
+                rows = [_row_intervals(poly, clear, keep, mw, mh, y0 + r * ph) for r in range(nr)]
+                for x in {a - c * pw for ivs in rows for a, _b in ivs for c in range(nc)}:
+                    seated = [(r, c, x + c * pw, y0 + r * ph) for r in range(nr) for c in range(nc) if any(a <= x + c * pw <= b for a, b in rows[r])]
+                    if len(seated) < best[0] or not seated:
+                        continue
+                    off = _off_center([(sx, sy) for _r, _c, sx, sy in seated], mw, mh)
+                    if (len(seated), -off) > (best[0], -best[1]) or (len(seated) > beat and not best[2]):
+                        best = (len(seated), off, seated)
+    return best[2]
 
 
 def _quad_gap(a: list[tuple[float, float]], b: list[tuple[float, float]]) -> float:
@@ -404,7 +475,7 @@ class ThreshingYardsMixin:
                 "h": yh,
                 "rot": round(rot, 2),
                 "of": [hx, hy],
-                "poly": [[round(px, 1), round(py, 1)] for px, py in poly],
+                "poly": [[round(px, 3), round(py, 3)] for px, py in poly],  # to a thousandth, so a check can re-derive the mats (feature 282)
                 **({"kind": "forecourt"} if _fore else {}),
                 **drawn,
             }

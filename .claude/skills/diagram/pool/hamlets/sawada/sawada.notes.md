@@ -86,7 +86,7 @@ DIRECTION is not invented: it is the bearing of this map's own connector track w
 
 ### Features
 
-- **threshing yard**: This map declares changeable harvest weather, so every household gathers its drying rack by the house, along one side of its yard in the half nearest the house.
+- **threshing yard**: This map declares changeable harvest weather - a marsh-paddy place of wet low ground, where the record has farmers putting their rice on racks for the wet paddies and in wet autumns - so every household gathers its drying rack by the house, along one side of its yard in the half nearest the house.
 - **burial ground**: Sawada keeps none of its own: its dead lie in the main village's ground, by the shrine that is the setting's parish temple.
 
 ## 2026-08-17 - the fan-toe needle fix, and the tint threshold it collided with

@@ -1,6 +1,6 @@
 {
  "feature": "282-threshing-yard-layout",
- "plan_sha256": "53846aa146b95b33c1415b6db9ee53a96a81267eb6edf053ec2e9be92cdfbaa3",
+ "plan_sha256": "d6ad1c3acf5e8e20c9006d98d32ba949bb82d58fcfdc39c4b46bf7166b2c0f10",
  "reviewed": "2026-09-28",
  "declared": "spec-fidelity",
  "decisions": [
@@ -18,35 +18,35 @@
   },
   {
    "id": "D3-mats",
-   "summary": "6 x 3 ft mats in rows, 1 ft inset and edge clearance, gaps 2/1.5/1 ft never below 1 ft, hand-laid nudge and turn kept only where clear of neighbors; count in [ceil(full/3), floor(2 full/3)], thinned evenly.",
+   "summary": "6 x 3 ft mats in rows, 1 ft edge clearance, gaps 2/1.5/1 ft never below 1 ft, hand-laid nudge and turn kept only where clear of neighbors; count in [ceil(full/3), floor(2 full/3)], thinned evenly.",
    "class": "within",
-   "why": "Unchanged in substance; serves the GM's aim that the drawn mats read as mats. Matches yards.py."
+   "why": "Unchanged in substance; serves the GM's aim that the drawn mats read as mats."
   },
   {
    "id": "D3-salt-turn",
    "summary": "The nudge and turn salted per yard; the turn up to 10 degrees where the neighbors leave room.",
    "class": "within",
-   "why": "A degree of the hand-laid convention already ruled within; it removes a repeated stamp so the floor reads as mats laid by hand. No change to count or placement rules."
+   "why": "Unchanged; a degree of the hand-laid convention."
   },
   {
    "id": "D3-short-yard-physical",
    "summary": "A yard that physically cannot hold a third at a 1 ft gap draws as many as fit at it, at any size.",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "As ruled in round 5: the third is this project's proxy, and forcing it where it cannot fit at the least legible gap defeats the GM's aim. Measured this round (brute force, every quarter-foot lattice origin at a 1 ft gap, corners 1 ft inside the drawn outline, off the padded rack): eight of the nine short pool yards are genuinely fit-limited (drawn = most that fit)."
+   "why": "As ruled in round 5: the third is this project's proxy, and forcing it where it cannot fit at the least legible gap defeats the GM's aim that the mats read as mats. Six of the pool's short yards are genuinely fit-limited on the exact geometry mat_cells receives."
   },
   {
    "id": "D3-short-yard-search",
-   "summary": "'Cannot reach a third at 1 ft' decided by the lattice search mat_cells runs: four lattice sizes, each at five offsets per axis (centered, half and all the way across its slack).",
+   "summary": "'Cannot reach a third at 1 ft' decided by a lattice search on a quarter-foot grid anchored at -w/2 (the per-yard fit table); SC-001's oracle searches the same quarter-foot grid.",
    "class": "narrowing",
    "ruling": "NOT LEGITIMATE",
-   "why": "Still excuses a yard that CAN hold a third. Kashikawa's 27.1 x 18.7 ft yard (manifest x 1036.7, y 886.0, no rack) draws 9 against a third of 10, and a 1 ft lattice of 3 x 4 seats 12 (local origin about (-11.3, -7.3); the rows fit in a 0.2 ft window of y, which the five offsets per axis step over). The result holds with the edge clearance raised to 1.05 ft to cover the SVG outline's 0.1 px rounding. The exception's words are 'cannot hold'; a coarse search that misses a fitting lattice is the alignment failure round 5 ruled out, now on one yard instead of eight."
+   "why": "Still excuses yards that CAN hold a third. On this round's own run - Sawada rolled in memory with mat_cells wrapped to capture its exact inputs (outline, rack keep-out with its 0.25 ft pad), then every lattice origin searched on a 0.05 ft grid at a 1 ft gap and a 1 ft clearance, at two grid anchors - Sawada's 31.2 x 21.5 ft yard seats 13 (its third) where 12 are drawn, and its 20.3 x 14.0 ft yard seats 6 (its third) where 5 are drawn. The fitting lattices lie in windows narrower than the quarter-foot step: the same failure as the Kashikawa yard of round 6, at a finer grain. The oracle cannot see it because it enumerates exactly the lattices mat_cells does (quarter-foot offsets from -w/2, pitches a whole number of quarter feet), and the pool test's 1.05 ft clearance hides the 20 x 14 yard besides (it fits to 1.04 ft on the SVG outline). The exception's words are 'cannot hold'; a discretized search that misses a fitting lattice does not establish it."
   },
   {
    "id": "D3-floor-four",
    "summary": "The short-yard floor is four mats.",
    "class": "within",
-   "why": "Restored to the form ruled LEGITIMATE; it bounds the exception rather than widening it. The smallest rolled yard (Inashiro's 20 x 14 ft, 8 tsubo) measures 4 fit and 4 drawn."
+   "why": "Bounds the exception rather than widening it; Inashiro's 20 x 14 ft yard fits 4 and draws 4 (0.05 ft grid, this round)."
   },
   {
    "id": "D4",
@@ -56,9 +56,9 @@
   },
   {
    "id": "D5",
-   "summary": "Threshing yard docstring rewritten from 025 and 505 with labels and the GM's convention wording.",
+   "summary": "Threshing yard docstring rewritten from 025 and 505 with labels and the GM's convention wording; now 'a mat or two fewer'.",
    "class": "within",
-   "why": "FR-007. The new '(a yard whose outline or rack leaves no room for the last one, a mat fewer)' understates Inashiro's 4 of 6 (two fewer) - a wording fix recorded in the spec verdict, not a narrowing."
+   "why": "FR-007; the round-6 wording item is fixed."
   },
   {
    "id": "D6",

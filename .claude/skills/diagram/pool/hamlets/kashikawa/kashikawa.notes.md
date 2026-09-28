@@ -112,7 +112,7 @@ names.*
 
 ### Features
 
-- **threshing yard**: This map's harvest weather is settled - the regional default - so the racks stand out on the paddies after the harvest and none is drawn by the houses.
+- **threshing yard**: This map's harvest weather is settled - the regional default - so its racks would stand out on the paddies after the harvest - the seasonal map's business, not drawn here - and none is drawn by the houses.
 - **burial ground**: Kashikawa keeps its own ground, a glade of graves in the windbreak's south-west arm, beyond its last houses on the high side of the land; its field grave among the paddy is a single family's, a separate thing.
 - **grave island**: Kashikawa's field grave takes the Japanese form: a small mound with its stones in the corner of a rice plot, against its bunds, not an island in the plot's middle (each hamlet takes one form).
 

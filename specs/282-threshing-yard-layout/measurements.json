@@ -366,5 +366,27 @@
   "source": "the drawn mizuguchi.svg: the rect y positions and rotate angles in those two yard groups, rows grouped by position",
   "measured": "2026-09-28",
   "method": "per row of each named yard group: the spread of the drawn mats' y positions, in feet (1 px = 1 ft); rotate transforms counted"
+ },
+ "sr9-inashiro-f1-centered": {
+  "value": 1.54,
+  "unit": "ft",
+  "quantity": "the worst difference, over inashiro's yards, between the bare floor left on the two sides of the drawn mats (either axis) - the mats now sit centered, the hand-laid nudge aside (was 4 to 6 ft of bare band on one side): the tie-break is scored on the seated mats, and an equal-count smaller lattice competes",
+  "verifies": "F1",
+  "subject": "inashiro",
+  "answers": "ffad411334e2",
+  "source": "the drawn SVG: each yard group's floor polygon and its mat rects (bounding boxes, in the group's local frame, 1 px = 1 ft)",
+  "measured": "2026-09-28",
+  "method": "per yard group: |(left margin) - (right margin)| and |(top) - (bottom)| of the mats' box inside the floor polygon's box; the maximum"
+ },
+ "sr9-kashikawa-f1-centered": {
+  "value": 1.36,
+  "unit": "ft",
+  "quantity": "the worst difference, over kashikawa's yards, between the bare floor left on the two sides of the drawn mats (either axis) - the mats now sit centered, the hand-laid nudge aside (was 4 to 6 ft of bare band on one side): the tie-break is scored on the seated mats, and an equal-count smaller lattice competes",
+  "verifies": "F1",
+  "subject": "kashikawa",
+  "answers": "ffad411334e2",
+  "source": "the drawn SVG: each yard group's floor polygon and its mat rects (bounding boxes, in the group's local frame, 1 px = 1 ft)",
+  "measured": "2026-09-28",
+  "method": "per yard group: |(left margin) - (right margin)| and |(top) - (bottom)| of the mats' box inside the floor polygon's box; the maximum"
  }
 }

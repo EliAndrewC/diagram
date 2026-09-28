@@ -34,7 +34,7 @@ DIRECTION is not invented: it is the bearing of this map's own connector track w
 
 ### Features
 
-- **threshing yard**: This map's harvest weather is settled - the regional default - so the racks stand out on the paddies after the harvest and none is drawn by the houses.
+- **threshing yard**: This map's harvest weather is settled - the regional default - so its racks would stand out on the paddies after the harvest - the seasonal map's business, not drawn here - and none is drawn by the houses.
 - **burial ground**: Inashiro keeps its own ground: a glade of graves cut into the windbreak west-north-west of the houses, beyond its last houses, holding the urns brought home from the main village's cremation ground. The land falls south, but the ground below the houses is paddy.
 
 ## Why it exists

@@ -25,12 +25,13 @@ mats; the mat band of FR-004 is sized against that range.
 
 ## R4 - the gap, and the yards that cannot hold a third at it
 
-Observed 2026-09-28; method: the regenerated pool manifests' `threshing_yards` (`w`, `h`, `mats`, `rack`) after the lattice
-search - at each gap of `2`, `1.5` and `1 ft`, the lattice as wide and as deep as the yard allows and one column and one
-row fewer, at every offset on a quarter-foot grid, each corner held `1 ft` inside the drawn outline and clear of the rack -
-and checked by a brute-force search over every lattice size and quarter-foot offset on each short yard's own drawn outline
-(`tests/hamletgen/test_pool_282.py`). The narrower steps were tried and read as paving in the settlement-reviews: edge to
-edge (rounds 2 and 3), and `0.5 ft` (rounds 4 to 6). At `1 ft`, 8 yards of the four rice maps fall one or two mats short
-of a third of a full cover - inashiro 20 x 14 ft 4 of 6, kashikawa 22 x 15 ft 6 of 7, kashikawa 22 x 15 ft 6 of 7, sawada 24 x 16 ft 7 of 8 (rack), sawada 31 x 22 ft 12 of 13 (rack), sawada 22 x 15 ft 6 of 7 (rack), sawada 25 x 17 ft 8 of 9 (rack), sawada 20 x 14 ft 5 of 6 (rack) - the
-pulled-in corners of their outlines, or the rack, leaving no room for the last mats at that gap. The fewest any yard draws is
-4 (Inashiro's `20 x 14 ft`).
+Observed 2026-09-28; method: the regenerated pool manifests' `threshing_yards` (`w`, `h`, `mats`, `rack`, the outline to a
+thousandth of a px) after the lattice search - at each gap of `2`, `1.5` and `1 ft`, the lattice as wide and as deep as the
+yard allows and one column and one row fewer, at every offset on a quarter-foot grid; and, where the `1 ft` gap still falls
+short of a third, solved exactly across (each row's feasible positions are intervals of the convex outline moved in by the
+`1 ft` clearance) and on a `0.02 ft` grid down - each corner held `1 ft` inside the drawn outline and clear of the rack.
+Checked by an oracle that shares no grid with it (every lattice origin on a `0.02 ft` grid anchored `0.01 ft` off,
+`tests/hamletgen/test_pool_282.py`), which also finds the two yards the quarter-foot search alone left short. The narrower
+steps were tried and read as paving in the settlement-reviews: edge to edge (rounds 2 and 3), and `0.5 ft` (rounds 4 to 6).
+At `1 ft`, 6 yards of the four rice maps fall one or two mats short of a third of a full cover - inashiro 20 x 14 ft 4 of 6, kashikawa 22 x 15 ft 6 of 7, kashikawa 22 x 15 ft 6 of 7, sawada 24 x 16 ft 7 of 8 (rack), sawada 22 x 15 ft 6 of 7 (rack), sawada 25 x 17 ft 8 of 9 (rack) -
+no lattice at that gap seating more. The fewest any yard draws is 4 (Inashiro's `20 x 14 ft`).

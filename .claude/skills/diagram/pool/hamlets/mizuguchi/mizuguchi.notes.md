@@ -106,7 +106,7 @@ DIRECTION is not invented: it is the bearing of this map's own connector track w
 
 ### Features
 
-- **threshing yard**: This map's harvest weather is settled - the regional default - so the racks stand out on the paddies after the harvest and none is drawn by the houses.
+- **threshing yard**: This map's harvest weather is settled - the regional default - so its racks would stand out on the paddies after the harvest - the seasonal map's business, not drawn here - and none is drawn by the houses.
 - **burial ground**: Mizuguchi keeps none of its own: its dead lie in the main village's ground, by the shrine that is the setting's parish temple.
 
 ## 2026-08-17 - re-packed twice: feature 121, then the front-row cap

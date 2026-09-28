@@ -202,3 +202,19 @@ FR-002 finds (FR-005); its declaration names the research question it rests on.
   yard that fails it - run it on every pool yard that draws under a third, from its drawn outline and rack; (3) the modal,
   025 and the notes say "a mat fewer", but Inashiro's `20 x 14 ft` yard draws 4 of 6 - say "a mat or two fewer". Plan
   review round 7 BLOCKED (D3's lattice search).
+- Amendment round 7 (spec-fidelity, 2026-09-28; the round-6 items, then the plan re-read whole): (1) confirmed for the
+  yard named - Kashikawa's `27.1 x 18.7 ft` yard now draws 12 against a third of 10; (3) confirmed - the modal, 025 and
+  the four rice maps' notes say "a mat or two fewer". (2) NOT resolved, and (1)'s premise does not hold for two more
+  yards. On this round's own run (Sawada rolled in memory with `mat_cells` wrapped to capture its exact inputs - the
+  unrounded outline and the rack keep-out with its `0.25 ft` pad - then every lattice origin searched on a `0.05 ft` grid
+  at a `1 ft` gap and a `1 ft` clearance, at two grid anchors): Sawada's `31.2 x 21.5 ft` yard seats 13, its third, where 12
+  are drawn, and its `20.3 x 14.0 ft` yard seats 6, its third, where 5 are drawn. Their fitting lattices lie in windows
+  narrower than the quarter-foot step, the round-6 failure at a finer grain (this reviewer's round-6 oracle used the same
+  quarter-foot grid and missed them too). The other six short yards are fit-limited at the finer grid. CHANGES REQUIRED:
+  (1) those two yards must draw at least a third, and "cannot hold a third at `1 ft`" must be decided by a search that finds
+  every lattice that fits, not one sampled at a fixed step; research.md R4 then lists six short yards, and its method line
+  says how the search reaches every fit; (2) SC-001's oracle must not share the search's grid - `_brute_fit` enumerates
+  exactly the quarter-foot offsets from `-w/2` that `mat_cells` does, so it agrees with it by construction - and the pool
+  test must be able to see the two yards above: run it on the exact outline (or a manifest outline recorded finely enough
+  that no clearance allowance is needed; the `1.05 ft` allowance alone hides the `20 x 14 ft` yard, which fits to `1.04 ft` on the SVG outline),
+  and show it fails on the current code. Plan review round 8 BLOCKED (D3's lattice search).
