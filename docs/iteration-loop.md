@@ -243,7 +243,7 @@ even collected by `make quick`:
 | `tests/tier_town/`, `tests/tier_city/` | tests tagged for other tiers only (232 + 451 functions), mirrored package paths | the gate; quick once the scope lock moves to that tier |
 | `tests/gate/` | the bad-map corpus and the map-rolling tests that earn MERGE time - one representative spec each, served from the roll cache while nothing they execute changed | the gate only |
 | `tests/full/` (feature 135, 2026-08-27) | the pool sweep, the seed sweeps, the determinism tests, the coverage carriers, the real-map cache round trip | `make done FULL=1` and the AWS check only |
-| `tests/tooling/` | tests that RUN the make/ci/pipeline tooling (+ the whole ci package) | the gate and FULL; quick only when the tooling changed (`ci tooling-fresh`); skipped at the gate too while unchanged (never in FULL) |
+| `tests/tooling/` | tests that RUN the make/ci/pipeline tooling (+ the whole ci package) | the gate and FULL, never quick (GM 2026-09-27); skipped at the gate while unchanged (never in FULL) |
 
 Feature 135 (GM 2026-08-27: *"the directory into which we added is the thing that inherently
 determines When and under what circumstance that test is run"*) added the third tree and deleted the
