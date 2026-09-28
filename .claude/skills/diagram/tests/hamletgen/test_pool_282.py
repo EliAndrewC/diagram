@@ -35,7 +35,9 @@ def test_every_drawn_yard_is_a_floor_of_mats_and_racks_follow_the_weather(gen: s
     changeable = m["meta"].get("harvest_weather") == "changeable"
     for y in yards:
         full = y["w"] * y["h"] * ftpx * ftpx / MAT_SQ_FT
-        assert math.ceil(full / 3) <= y["mats"] <= math.floor(2 * full / 3), f"yard at ({y['x']}, {y['y']}): {y['mats']} mats of a {full:.0f}-mat cover"
+        # FR-004 as amended (2026-09-28): a yard under 400 sq ft draws as many as fit with bare ground round each, at least 4
+        low = 4 if y["w"] * y["h"] * ftpx * ftpx < 400.0 else math.ceil(full / 3)
+        assert low <= y["mats"] <= math.floor(2 * full / 3), f"yard at ({y['x']}, {y['y']}): {y['mats']} mats of a {full:.0f}-mat cover"
         if changeable:
             assert "rack" in y, f"yard at ({y['x']}, {y['y']}) has no rack on a changeable-weather map"
             assert all(py <= y["y"] + 1e-6 for _px, py in y["rack"]), f"yard at ({y['x']}, {y['y']}): a rack corner map-south of its center"

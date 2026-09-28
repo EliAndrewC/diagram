@@ -776,3 +776,13 @@ west of them - a south-row house walks about 1,000 ft to a bund 130 ft away - an
 (1515, 738) carries no way. Whether a hamlet across a stream from its paddies kept one crossing or one per reach of
 houses is not settled by the record (one search, 2026-09-28, found nothing decisive); if both are attested it becomes a
 knob. The shared bamboo thicket stands 27 ft from the east marsh's reeds and reads as a pale tuft at fit zoom.
+
+## 2026-09-28 (feature 282): the harvest yard drawn as a floor of mats; nothing placed moved
+
+Every threshing yard is now drawn as the harvest leaves it: straw mats of 3 by 6 ft over the whole floor, each with a
+little bare ground around it and nudged and turned a little as if laid by hand, between a third and two thirds of those
+that covered it (a drawing convention - the real yard was covered, research homesteads 'What lay in the work yard at
+harvest?'). The old fixed center mat and the rack along each yard's south edge are gone. This map declares no harvest
+weather, so it takes the regional default, settled, and draws no rack by the houses (research homesteads 'Did a village
+put its drying racks by the houses by custom, or because of its weather?'). The weather is declared, never rolled: the
+manifest diff is `mats` on each yard and `meta.harvest_weather`.

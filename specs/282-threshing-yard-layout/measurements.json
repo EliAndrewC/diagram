@@ -69,5 +69,82 @@
   "source": "specs/282-threshing-yard-layout/measure.py (run from .claude/skills/diagram), reading the pool map's drawn SVG ink (each yard group's floor polygon and mat rects), its rendered .html and its notes",
   "measured": "2026-09-28",
   "method": "point-to-segment distance of every mat rect corner to the four edges of its group's floor polygon, in the group's local frame (1 px = 1 ft)"
+ },
+ "sr3-sawada-f1-no-edge-to-edge": {
+  "value": 0.49,
+  "unit": "ft",
+  "quantity": "the smallest drawn gap between any two mats in any of sawada's 19 yards (0 before: edge-to-edge rows); 264 of its 343 mats are turned a few degrees and nudged off their row, and no row is set over by half a mat, so no running bond remains",
+  "verifies": "F1",
+  "subject": "sawada",
+  "answers": "9327acf0e36b",
+  "source": "specs/282-threshing-yard-layout/measure.py (run from .claude/skills/diagram), reading the pool map's drawn SVG ink (each yard group's floor polygon and its mats, turned as drawn), its rendered .html and its notes",
+  "measured": "2026-09-28",
+  "method": "corner-to-edge distance between every pair of drawn mat quads in a yard group, and the count of mats carrying a rotate transform, in the map's SVG"
+ },
+ "sr3-inashiro-f1-not-brick": {
+  "value": 0.49,
+  "unit": "ft",
+  "quantity": "the smallest drawn gap between any two mats in any of inashiro's 15 yards (0 before: edge-to-edge rows); 308 of its 331 mats are turned a few degrees and nudged off their row, and no row is set over by half a mat, so no running bond remains",
+  "verifies": "F1",
+  "subject": "inashiro",
+  "answers": "9327acf0e36b",
+  "source": "specs/282-threshing-yard-layout/measure.py (run from .claude/skills/diagram), reading the pool map's drawn SVG ink (each yard group's floor polygon and its mats, turned as drawn), its rendered .html and its notes",
+  "measured": "2026-09-28",
+  "method": "corner-to-edge distance between every pair of drawn mat quads in a yard group, and the count of mats carrying a rotate transform, in the map's SVG"
+ },
+ "sr3-inashiro-f2-notes": {
+  "value": 1,
+  "unit": "entries",
+  "quantity": "feature-282 entries in inashiro.notes.md",
+  "verifies": "F2",
+  "subject": "inashiro",
+  "answers": "9327acf0e36b",
+  "source": "specs/282-threshing-yard-layout/measure.py (run from .claude/skills/diagram), reading the pool map's drawn SVG ink (each yard group's floor polygon and its mats, turned as drawn), its rendered .html and its notes",
+  "measured": "2026-09-28",
+  "method": "lines of pool/hamlets/inashiro/inashiro.notes.md containing 'feature 282'"
+ },
+ "sr3-kashikawa-f1-not-brick": {
+  "value": 0.49,
+  "unit": "ft",
+  "quantity": "the smallest drawn gap between any two mats in any of kashikawa's 20 yards (0 before: edge-to-edge rows); 342 of its 363 mats are turned a few degrees and nudged off their row, and no row is set over by half a mat, so no running bond remains",
+  "verifies": "F1",
+  "subject": "kashikawa",
+  "answers": "9327acf0e36b",
+  "source": "specs/282-threshing-yard-layout/measure.py (run from .claude/skills/diagram), reading the pool map's drawn SVG ink (each yard group's floor polygon and its mats, turned as drawn), its rendered .html and its notes",
+  "measured": "2026-09-28",
+  "method": "corner-to-edge distance between every pair of drawn mat quads in a yard group, and the count of mats carrying a rotate transform, in the map's SVG"
+ },
+ "sr3-kashikawa-f2-bare-ground": {
+  "value": 0.49,
+  "unit": "ft",
+  "quantity": "the smallest drawn gap between two mats on kashikawa (0.49 ft, never 0), so the modal's 'a little bare ground around it' holds on every yard",
+  "verifies": "F2",
+  "subject": "kashikawa",
+  "answers": "9327acf0e36b",
+  "source": "specs/282-threshing-yard-layout/measure.py (run from .claude/skills/diagram), reading the pool map's drawn SVG ink (each yard group's floor polygon and its mats, turned as drawn), its rendered .html and its notes",
+  "measured": "2026-09-28",
+  "method": "corner-to-edge distance between every pair of drawn mat quads in a yard group, and the count of mats carrying a rotate transform, in the map's SVG"
+ },
+ "sr3-mizuguchi-f1-no-edge-to-edge": {
+  "value": 0.5,
+  "unit": "ft",
+  "quantity": "the smallest drawn gap between any two mats in any of mizuguchi's 12 yards (0 before: edge-to-edge rows); 122 of its 199 mats are turned a few degrees and nudged off their row, and no row is set over by half a mat, so no running bond remains",
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "answers": "9327acf0e36b",
+  "source": "specs/282-threshing-yard-layout/measure.py (run from .claude/skills/diagram), reading the pool map's drawn SVG ink (each yard group's floor polygon and its mats, turned as drawn), its rendered .html and its notes",
+  "measured": "2026-09-28",
+  "method": "corner-to-edge distance between every pair of drawn mat quads in a yard group, and the count of mats carrying a rotate transform, in the map's SVG"
+ },
+ "sr3-mizuguchi-f2-attribution": {
+  "value": 1,
+  "unit": "occurrences",
+  "quantity": "the rendered mizuguchi.html modal attributes the 40-60 mats to 'the barley country the count comes from' and says a rice farm's yard was smaller",
+  "verifies": "F2",
+  "subject": "mizuguchi",
+  "answers": "9327acf0e36b",
+  "source": "specs/282-threshing-yard-layout/measure.py (run from .claude/skills/diagram), reading the pool map's drawn SVG ink (each yard group's floor polygon and its mats, turned as drawn), its rendered .html and its notes",
+  "measured": "2026-09-28",
+  "method": "string count of 'barley country' in mizuguchi.html"
  }
 }

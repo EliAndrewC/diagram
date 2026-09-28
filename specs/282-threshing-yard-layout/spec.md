@@ -92,8 +92,10 @@ FR-002 finds (FR-005); its declaration names the research question it rests on.
   number drawn MUST be fewer than would cover the yard, as a map drawing convention recorded with the real count,
   and MUST still read as a yard covered in mats: the drawn mats spread over the whole yard (every quarter of it
   carries mats) and the drawn count is tied to the yard's area - between one third and two thirds of the count
-  that would cover it, so a 60 sq m yard (about 36 mats to cover) draws 12 to 24. The single fixed central mat
-  MUST go.
+  that would cover it, so a 60 sq m yard (about 36 mats to cover) draws 12 to 24. Each drawn mat MUST keep a little
+  bare ground around it (no two drawn edge to edge): a yard under `400 sq ft` that cannot hold a third with that gap
+  draws as many as fit with it, and never fewer than four (amended 2026-09-28, after three settlement-reviews ruled
+  edge-to-edge mats read as paving - research.md R4). The single fixed central mat MUST go.
 - **FR-005**: The yard's rack MUST be drawn only where the settlement's rack-by-the-house knob gives one; the knob
   MUST be pinnable from the settlement's spec. Where FR-002 finds the choice followed the environment, the knob MUST
   be SET from that environmental fact, never rolled free: from the fact itself where the generator models it, and
@@ -121,7 +123,7 @@ FR-002 finds (FR-005); its declaration names the research question it rests on.
 ## Success Criteria *(mandatory)*
 
 - **SC-001** (FR-004): No drawn yard carries the old central mat (`14 x 9 ft`, research.md R1); every drawn yard's mat
-  count lies between one third and two thirds of the count that would cover its area, and each quarter of the yard
+  count lies between one third and two thirds of the count that would cover its area (at least four under `400 sq ft`), and each quarter of the yard
   carries at least one mat (measured by test on the regenerated pool hamlets and on the yard sizes the roll makes).
 - **SC-002** (FR-005, FR-006): No rack is drawn on a map whose knob gives none; on a map whose knob gives one, every
   yard carries a rack and no rack's footprint enters the yard's southern half or the `39 ft` corridor south of it

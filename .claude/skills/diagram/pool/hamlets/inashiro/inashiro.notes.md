@@ -1777,3 +1777,13 @@ pass, 2026-09-28, found the house-side plot of the record is the kitchen bed, re
 (hatake) crops go"), so the dry crops stand in the hem along the supply canal, across the rice. The woodland commons are three stands, all of them across the field from the houses: the frame they
 must fit in begins 100 ft west of the houses, and the ground on the houses' side inside it lies between their keep-out
 and the field's set-back, too narrow for a stand.
+
+## 2026-09-28 (feature 282): the harvest yard drawn as a floor of mats; nothing placed moved
+
+Every threshing yard is now drawn as the harvest leaves it: straw mats of 3 by 6 ft over the whole floor, each with a
+little bare ground around it and nudged and turned a little as if laid by hand, between a third and two thirds of those
+that covered it (a drawing convention - the real yard was covered, research homesteads 'What lay in the work yard at
+harvest?'). The old fixed center mat and the rack along each yard's south edge are gone. This map declares no harvest
+weather, so it takes the regional default, settled, and draws no rack by the houses (research homesteads 'Did a village
+put its drying racks by the houses by custom, or because of its weather?'). The weather is declared, never rolled: the
+manifest diff is `mats` on each yard and `meta.harvest_weather`.

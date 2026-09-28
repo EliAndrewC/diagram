@@ -16,6 +16,7 @@ from l7r.diagram.settlement.homestead_parts.yards import MAT_SQ_FT, RACK_MIN_FT,
 from tests.settlement._builders import _nuc_village
 
 TSUBO_FT2 = 35.583
+SMALL_YARD_FT2 = 400.0  # spec 282 FR-004 (amended 2026-09-28): under this a yard draws as many mats as fit with bare ground round each
 
 
 def _rect(w: float, h: float) -> list[tuple[float, float]]:
@@ -35,17 +36,18 @@ def test_the_mats_cover_the_whole_yard_at_between_a_third_and_two_thirds_of_a_fu
     w, h = depth_ft * 1.45 / ftpx, depth_ft / ftpx
     mats = mat_cells(w, h, _rect(w, h), ftpx)
     lo, hi = _band(w, h, ftpx)
-    assert lo <= len(mats) <= hi, f"{tsubo} tsubo at {ftpx} ft/px: {len(mats)} mats, band {lo}-{hi}"
-    quarters = {(mx + mw / 2 > 0, my + mh / 2 > 0) for mx, my, mw, mh in mats}
+    small = tsubo * TSUBO_FT2 < SMALL_YARD_FT2  # FR-004 as amended: the smallest yards draw as many as fit with a gap
+    assert (4 if small else lo) <= len(mats) <= hi, f"{tsubo} tsubo at {ftpx} ft/px: {len(mats)} mats, band {lo}-{hi}"
+    quarters = {(mx + mw / 2 > 0, my + mh / 2 > 0) for mx, my, mw, mh, _a in mats}
     assert len(quarters) == 4, f"{tsubo} tsubo: mats in only {sorted(quarters)} - the floor must read covered, every quarter"
-    assert all(mw * ftpx == 6.0 and mh * ftpx == 3.0 for _x, _y, mw, mh in mats), "a mat is 3 x 6 ft, drawn at its real size"
+    assert all(mw * ftpx == 6.0 and mh * ftpx == 3.0 for _x, _y, mw, mh, _a in mats), "a mat is 3 x 6 ft, drawn at its real size"
 
 
 def test_a_mat_stays_inside_the_yards_quad_and_off_the_rack() -> None:
     w, h = 40.0, 28.0
     quad = [(-18.0, -14.0), (20.0, -14.0), (17.0, 12.0), (-20.0, 14.0)]  # corners pulled in, as `_quad` pulls them
     keep = (12.0, -13.0, 18.0, 0.0)
-    for mx, my, mw, mh in mat_cells(w, h, quad, 1.0, keep):
+    for mx, my, mw, mh, _a in mat_cells(w, h, quad, 1.0, keep):
         assert not (mx < keep[2] and mx + mw > keep[0] and my < keep[3] and my + mh > keep[1]), "a mat under the rack"
         for px, py in ((mx, my), (mx + mw, my), (mx + mw, my + mh), (mx, my + mh)):
             assert -20.0 <= px <= 20.0 and -14.0 <= py <= 14.0

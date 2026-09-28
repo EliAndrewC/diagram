@@ -99,7 +99,8 @@ class ThreshingYard(Kind):
     """
     What: A tamped-earth work floor in front of each farmhouse, drawn as the harvest leaves it: covered in straw
     mats. The rice was threshed here on mats, and the grain was then dried on mats spread over the whole
-    yard - a household measured its yard in them, 40 to 60 mats on an ordinary farm, two to the tsubo. Where the
+    yard - a household measured its yard in them, two to the tsubo: 40 to 60 on an ordinary farm of the barley country
+    the count comes from, fewer on a rice farm, whose yard was smaller. Where the
     harvest weather is changeable, each household also gathers its drying rack by the house, along one side of
     the yard.
 
@@ -112,10 +113,11 @@ class ThreshingYard(Kind):
     coast of changeable autumn weather, so that the threshing could be done at home, and the drying method
     followed the climate over whole regions - so every settlement in one climate draws the same.
 
-    Note: we have rendered between a third and two thirds of the straw mats that covered a yard, each with a little bare ground
-    around it, in order to keep them legible: at this scale dozens of mats laid edge to edge would read as a textured
+    Note: we have rendered between a third and two thirds of the straw mats that covered a yard, each with a little bare
+    ground around it and laid a little askew, as by hand, in order to keep them legible: at this scale dozens of mats laid edge to edge would read as a textured
     floor rather than as mats, so the drawing shows a smaller number to give the impression of many. The real yard at
-    harvest was covered, 40 to 60 mats of about 3 by 6 feet each on an ordinary farm and 100 to 150 on a large one. The
+    harvest was covered, 40 to 60 mats of about 3 by 6 feet each on an ordinary barley-country farm and 100 to 150 on a
+    large one. The
     mats' size, the yard's size band and its spread are read; the rows the mats are laid in are a guess - no source read
     says; and where a map draws racks by the houses, which side of the yard a rack takes is a guess too, and the rack is
     drawn wider than its poles so that it reads.

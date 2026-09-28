@@ -22,3 +22,11 @@ the rack out of it.
 Observed 2026-09-28; method: `w` and `h` of every `threshing_yards` record in `pool/hamlets/inashiro/inashiro.json`
 before regeneration - fifteen yards from 20 by 14 ft to 47 by 32 ft, so a full cover of 3 by 6 ft mats is about 15 to 84
 mats; the mat band of FR-004 is sized against that range.
+
+## R4 - the smallest yards and the gap
+
+Observed 2026-09-28; method: the regenerated pool manifests' `threshing_yards` (`w`, `h`, `mats`) with mats laid at gaps of
+`2`, `1.5`, `1` and `0.5 ft` and every corner held `1 ft` inside the drawn outline - five yards under `400 sq ft` (Sawada's
+`20 x 14`, `22 x 15` and `24 x 16 ft`, Kashikawa's two `22 x 15 ft`) fell one or two mats short of a third, and the only step
+that reached it was edge to edge, which the settlement-reviews of rounds 2 and 3 (Sawada, Inashiro, Kashikawa, Mizuguchi)
+each read as paving or brickwork. At the `0.5 ft` gap they draw 4 to 6 mats.

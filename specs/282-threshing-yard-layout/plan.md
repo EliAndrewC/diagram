@@ -30,15 +30,19 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
   independent exhibits (Sawada already declares a wind for the same reason). Only Sawada's yards gain racks; the four
   others keep none. Class: this project's decision.
 - **D3 - the mats** (FR-004). `_draw_threshing_yard` drops the fixed 14 x 9 ft center mat, the swept-rim line and the
-  south rack. The yard's local frame is tiled in cells of 6 x 3 ft (`MAT_FT`, tobunken-mushiro: 3 x 6 shaku), long side
-  along the yard's width, inset 1 ft, laid in rows with a 2 ft gap around each (45% of a full cover; the gap closes a step at a time - 1.5, 1, 0.5, then 0 ft - where a small or clipped yard would fall under a third, and is thinned back evenly where the edge-to-edge step overshoots two thirds; a checkered half was tried first and read as pavers), each only if its four
-  corners lie inside the yard's quad; the count lands in the band [ceil(full/3), floor(2 full/3)], `full` = the
-  yard's area / 18 sq ft - the floor by closing the gap, the ceiling by the even thinning. The
-  pure layout is a module-level function `mat_cells(w, h, poly_local, ftpx, keep_out)` so it is tested with plain
-  inputs. Rows and the gapped thinning: the rows a GUESS, the thinning a CONVENTION (the GM's words), recorded on 025.
+  south rack. Mats of 6 x 3 ft (`MAT_FT`, tobunken-mushiro: 3 x 6 shaku), long side along the yard's width, in rows
+  sized inside a 1 ft inset, each corner held 1 ft inside the drawn outline and a quarter foot off the rack; a gap of
+  2 ft round each mat, closing to 1.5, 1 and 0.5 ft where a yard would fall under a third of a full cover, never to
+  nothing; each mat nudged up to 0.4 ft and turned up to 6 degrees by a positional draw, so the floor reads as mats laid
+  by hand - every regular layout tried (a checkered half, square rows, rows set over by half a mat, edge to edge) read as
+  paving in the settlement-reviews. Straw-gold with a same-hue outline, no dark "mortar". The count lands in
+  [ceil(full/3), floor(2 full/3)], `full` = area / 18 sq ft, the ceiling held by an even thinning (`thin_evenly`); a yard
+  under 400 sq ft that cannot reach a third with a gap draws as many as fit with one (FR-004 as amended, research.md R4).
+  The pure layout is `mat_cells(w, h, poly_local, ftpx, keep_out)`, tested with plain inputs. The rows are a GUESS, the
+  thinning and the hand-laid nudge a CONVENTION, recorded on 025.
 - **D4 - the rack** (FR-006). When `_house_racks`: a module-level `rack_segment(w, h, rot, ftpx, side_pref)` returns the
   rack's centerline in the local frame, or None. Candidates run along the yard's two side edges (the local x = +/-
-  edges, inset 2 ft), from the edge facing the house (local north, inset 2 ft) toward the far edge, clipped so that
+  edges, inset 1 ft, in the slack the centered mat rows leave), from the edge facing the house (local north, inset 2 ft) toward the far edge, clipped so that
   (a) they stay in the half nearest the house (local y <= 0) and (b) every corner of the rack's footprint (2.5 ft wide,
   a CONVENTION so it reads) lies in the yard's MAP-north half after the house's rake is applied - the clip is solved
   in map coordinates, so it holds for any rotation, the quarter turns of feature 269 included. The preferred side comes
