@@ -48,7 +48,7 @@ COUNTS = {
     "random_uniform": ("random.py", "uniform"),
     "quad_hits_poly": ("overlap.py", "quad_hits_poly"),
     "seg_dist": ("primitives.py", "seg_dist"),
-    "page_hits": ("page.py", "_hits"),
+    "page_hits": ("extents.py", "_hits"),  # in page.py on the base; moved to extents.py by this feature (T20 counts both files)
 }
 
 
@@ -100,7 +100,8 @@ def _counts(spec) -> dict:
     stats = pstats.Stats(pr).stats  # type: ignore[attr-defined]
     out = {}
     for label, (fname, func) in COUNTS.items():
-        out[label] = sum(v[1] for (f, _line, name), v in stats.items() if f.endswith(fname) and name == func)
+        files = (fname, "page.py") if label == "page_hits" else (fname,)  # `_hits` lived in page.py before feature 278
+        out[label] = sum(v[1] for (f, _line, name), v in stats.items() if f.endswith(files) and name == func)
     return out
 
 

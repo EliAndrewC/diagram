@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in the clone `diagram-inashiro`)
 **Created**: 2026-09-28
-**Status**: Accepted - FAITHFUL at round 3 of 5 (2026-09-28)
+**Status**: Accepted - FAITHFUL at round 3 of 5 (2026-09-28); Amendment 1 under review (2026-09-28)
 **Request**: [`request.md`](request.md) - the GM's words verbatim: run feature 276's exercise again - measure, find, make faster.
 **Predecessors**: 276 (the first pass: placement indexes, batched seam closing, the track's `PathChecker`, the shared
 test parses; `dev/performance.md` "Three more shapes"), 218 (the index-once doctrine; its research R2 priced the
@@ -237,3 +237,27 @@ halving is not counted twice.
   scenario and the toys). The aside on `_bnd` is answered in research R2: `_at_f` is a linear per-query scan of a static
   polyline, so it joins FR-007 as a lever, with a field-stage target in SC-007.
 - Round 3 (spec-fidelity-verify, 2026-09-28): FAITHFUL.
+
+### Amendment 1 (2026-09-28, from T20's measurement), review on a reset counter
+
+Measured back to back against the base (observed 2026-09-28, method: `measure.py`, the base worktree then the clone;
+`measurements.json` `base-rerun-*` and `after-*`): SC-001 to SC-006 and SC-011 hold - the pool rolls 1.73x faster
+(m:base-rerun-pool-roll-s, m:after-pool-roll-s), the router's cells 2.06x / 2.61x / 4.72x fewer, the doorstep's indexes 3.56x
+per build, the footbridge's segment tests 55.9x, the wells' key 70.5x and 38.6x with Kuwabata's appurtenances 19.6x
+faster, Sawada built and finished once, `_pip` 81x and 96x per build, the page's `_hits` 57x and 66x per finish. Four
+stage-time targets did not hold, each for a measured reason, and are amended to what was achieved:
+
+| SC | asked | measured | why the rest is not an index | what would reach it (sketch) |
+|---|---|---|---|---|
+| SC-007 (field per build, Sawada) | `1.2x` | 1.12x per build (7.663 s over two builds, m:base-rerun-sawada-stage-field-s; 3.418 s over one, m:after-sawada-stage-field-s) | the scan it named went 81x fewer; what remains is the carve's per-row geometry, run three to four times per build by the fit's size search | fewer carves (a closer first guess of the fan's size) or the row geometry as array operations - both change the field |
+| SC-008 (hinterland per build) | `2x` | 1.22x Sawada, 1.22x Kashikawa | the commons are vectorized (their CPU 0.70 -> 0.51 s, Kashikawa); what remains is the marsh scatter (per point, the commons' old shape), the bamboo seats' samples (already indexed) and the parcels' crop set-backs | the marsh scatter vectorized as the grass was; the bamboo sampled coarser - a drawing change |
+| SC-009 (notice per build) | `2x` | 1.80x Sawada, 1.19x Inashiro | the scans went (bed segments, hard boxes); what remains is ~21,000 verge probes through the indexed `_fits`, each a real test the board's scoring needs | score the probes first and fit only the few that could win - a change to which board seat is chosen when two tie |
+| SC-010 (windbreak) | `1.5x` | 1.47x Kashikawa, 1.36x Inashiro | one grid, a reach-sized seat grid and a remembered outline test are in; what remains is ~130,000 candidate points through Python predicates | the static tests over the whole jittered grid as array operations, the spacing test sequential - the commons' hybrid applied to the grove |
+
+The amended criteria: **SC-007** `1.1x` on the field stage per build (the `10x` `_pip` clause unchanged); **SC-008** `1.2x` on
+the hinterland stage per build; **SC-009** `1.15x` on the notice stage per build; **SC-010** `1.3x` on the windbreak stage.
+Each "sketch" is recorded in `dev/performance.md` (FR-015) as the next lever, priced, and none is taken here: each moves what
+a map draws or needs a rewrite on the scale of the commons', which is the next pass's to decide - the point of diminishing
+returns the GM anticipated ("Eventually we'll reach a point where we've optimized as much as can be expected"), found by
+measuring it.
+

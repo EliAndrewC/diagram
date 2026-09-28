@@ -75,10 +75,12 @@ pieces; then the tooling; then the sweep, the measurement and the records.
 
 ## Polish - the sweep and the records
 
-- [ ] T18 `make done` green; SC-013 in full (the rescue-rounds scenario and the toys, no new or larger shortfall, forms and kinds)
+- [x] T18 `make done` green; SC-013 in full (the rescue-rounds scenario and the toys, no new or larger shortfall, forms and kinds)
       research: rendering
-- [ ] T19 `make cohort N=24` against the base's 21/24
+      verify: DONE. make done green 2026-09-28 (71 s, 100% coverage); SC-013: the four exact-piece manifests byte-identical, Sawada attempt 1 with 19 households, B2 moved only ink_classes; the rescue scenario, the toys and the dense layouts seat the same houses on base and clone (research R4)
+- [x] T19 `make cohort N=24` against the base's 21/24
       research: rendering
+      verify: DONE. make cohort N=24 on 2026-09-28: 24/24 pass the whole gate (feature 276 closed at 21/24; no seed can newly fail)
 - [ ] T20 The after-harness back to back (`measure.py`), SC-001 to SC-012; `make perf LABEL=278-end`, `make perf-report AGAINST=278-start`
       research: rendering
 - [ ] T21 `dev/performance.md`: the after-profile's residue with its levers priced (FR-015)
