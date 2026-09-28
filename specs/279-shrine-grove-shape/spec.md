@@ -32,20 +32,20 @@ its reader (record-format).
 **Acceptance**:
 1. **Given** the religion-and-death page, **When** a reader looks for the grove's shape, **Then** a question
    answers which sides of the hall the wood stands on, what outline it has, and which forms are attested.
-2. **Given** research 124's decision, **When** it describes the grove, **Then** it no longer says or implies
-   the wood fills the precinct on every side, and it points at the new question.
+2. **Given** research 124's decision, **When** it describes the grove, **Then** it says what the new question
+   found about the wood's sides and extent, and points at it.
 
 ### User Story 2 - The map and the sheet show the grove as it was (Priority: P1)
 
-The GM, looking at Hoshigaoka, sees the shrine in a wood of the researched form, with an outline no one would
-take for a surveyed rectangle.
+The GM, looking at Hoshigaoka, sees the shrine in a wood of the researched form, with the outline the research
+gives it.
 
 **Independent test**: on the village map and on the shrine sheet, the grove's trees stand in the form the
-research and the map's terrain give; no straight run of crown edges traces a side of the old precinct box.
+research and the map's terrain give, and its outline is the one FR-005 settles.
 
 **Acceptance**:
 1. **Given** the Hoshigaoka map, **When** the grove is drawn, **Then** it stands in a researched form (US3)
-   chosen for the shrine's ground, with an irregular outline.
+   chosen for the shrine's ground, with FR-005's outline.
 2. **Given** the shrine sheet, **When** it is compared with the map, **Then** it draws the same trees, one for
    one (the GM's rule of 2026-09-20 that a sheet shows what its map shows; feature 257's `matches_map`).
 
@@ -55,8 +55,9 @@ A session scripting villages later finds, in the program and the operative docs,
 the research supports, what it depends on (the ground, the seed), and how it is drawn.
 
 **Independent test**: the country-shrines program in `types.json` / `programs.md` names the knob and its forms
-with their labels; the village conversion's owed list (`future-work/farming-communities.md`, `migration-plan.md`
-step 5) names it.
+with their labels - or, if the research supports one form only, that form with its label and the statement that
+the research supports no knob; the village conversion's owed list (`future-work/farming-communities.md`,
+`migration-plan.md` step 5) names the same.
 
 ## Requirements *(mandatory)*
 
@@ -66,8 +67,8 @@ step 5) names it.
   the shape of a village shrine's wood: which sides of the hall it stands on; its outline; the forms the sources
   attest and what each depends on (the ground's slope, flat paddy land, a hill); and how common each is where a
   source counts it. Each claim carries a quoted footnote or an absence note; each rule a label.
-- **FR-002**: Research 124's decision paragraph MUST stop implying the wood fills the precinct on every side, and
-  MUST point at FR-001's question for the grove's form and outline.
+- **FR-002**: Research 124's decision paragraph MUST say what FR-001's question found about the wood's sides and
+  extent, and MUST point at it for the grove's form and outline.
 - **FR-003**: Every new source MUST be registered (what it is; why it applies and its limits) and pass
   source-reader, quote-check, source-applicability and record-format before its content reaches the map or a
   rule. A modern survey used for a rate states that it is modern and where it was taken.
@@ -75,24 +76,28 @@ step 5) names it.
   variance (constitution XII): the country-shrines program MUST declare it with its forms, what constrains the
   choice (the ground), and each form's label; a degree along a continuum (how far the wood reaches down the
   sides, how many trees) is calibrated liberty, not a knob.
-- **FR-005**: The grove's outline MUST be drawn irregular, never ruled, and the choice labeled with its class
-  (accurate, deviation, convention or guess) and its reason.
+- **FR-005**: The grove's outline MUST come from FR-001's findings, labeled with its class (accurate, deviation,
+  convention or guess) and its reason. Where the sources are silent on it, it is drawn irregular and labeled a
+  guess (the GM called the rectangle "very visually wrong"); where a source shows a straight edge - a wood cut
+  off by paddy or by the precinct's line - that finding goes to the GM before either form is drawn, since it
+  would reverse the GM's own judgment.
 - **FR-006**: The frozen Hoshigaoka village map MUST be edited by hand - its drawing and its manifest together -
   to draw the grove in the form FR-004 gives for its shrine's ground, with FR-005's outline; the GM authorized
   this edit (2026-09-28, `request.md`). Nothing else on the map moves except what the grove's new extent frees
   or covers (the scrub scatter where the wood leaves or arrives), and the change is recorded in the map's notes.
 - **FR-007**: The Hoshigaoka shrine sheet MUST be redrawn to match the map's grove tree for tree, and its notes,
   its kinds' write-ups (`shrine grove`) and its Map notes block updated to the new form.
-- **FR-008**: The village conversion's owed list MUST name the grove knob (`future-work/farming-communities.md`;
-  `migration-plan.md` step 5), so the scripted village rolls it.
+- **FR-008**: The village conversion's owed list MUST name the grove's knob, or its single form where the research
+  supports no knob (`future-work/farming-communities.md`; `migration-plan.md` step 5), so the scripted village
+  draws it.
 - **FR-009**: The edited map MUST pass a `settlement-review` and the redrawn sheet a `building-review`, each
   ledgered; `make done` MUST be green.
 
 ### Edge Cases
 
-- **The precinct is larger than the wood.** Research 124's precinct size stays: the precinct is the tax-exempt
-  ground (jochi), and the wood is what stands on part of it. Where the form leaves the front open, the open
-  front is still precinct.
+- **Where the wood covers less than the precinct.** Research 124's precinct size stays: the precinct is the
+  tax-exempt ground (jochi), and the wood stands on some or all of it. Where the form leaves part of it open,
+  the open part is still precinct.
 - **Only one form is attested for ground like Hoshigaoka's.** Then that form is drawn and the knob is still
   declared for the forms other ground takes.
 
@@ -101,11 +106,12 @@ step 5) names it.
 - **SC-001** (FR-001-FR-003): The new question exists with at least one READ, quote-checked footnote per claim
   it rests on, or an absence note; all four checks have run on it and their findings are applied.
 - **SC-002** (FR-005, FR-006, FR-007): On the map and the sheet, the grove's trees stand in the declared form;
-  the outline, measured on the tree list, has no straight run - the bar `STRAIGHT_RUN`: no four consecutive
+  where FR-005 settles an irregular outline, the outline, measured on the tree list, has no straight run - the bar `STRAIGHT_RUN`: no four consecutive
   hull-edge crowns lie within `2 ft` of one line (a named bar, not a measurement: about a third of the smallest
   crown's radius, so a run that tight reads as a ruled edge).
 - **SC-003** (FR-006, FR-007): The sheet's trees match the map's one for one (the `matches_map` test stays green).
-- **SC-004** (FR-004, FR-008): The program and the owed list name the knob, its forms and labels.
+- **SC-004** (FR-004, FR-008): The program and the owed list name the knob, its forms and labels - or the single
+  attested form with its label and the statement that the research supports no knob.
 - **SC-005** (FR-009): the reviews are ledgered and `make done` is green.
 
 ## Assumptions
@@ -127,3 +133,18 @@ step 5) names it.
   the method; (2) SC-002's crown-to-line tolerance, `within 2 ft`, a chosen bar rather than a measurement - state it
   as the bar it is (a backticked name, or a label saying why that tolerance) so check 5 does not read it as an
   unmeasured figure. Re-dispatch as a first reading once both carry their pointer or label.
+- Round 1 (spec-fidelity, MODE 2, 2026-09-28): CHANGES REQUIRED - the spec settles, before the research pass, three
+  outcomes the GM asked the research to decide (the proposal the GM approved: "redraw the outline from it").
+  1. FR-005 (with User Story 2's acceptance 1 and independent test, and SC-002) makes the outline irregular whatever
+     the sources say. The outline MUST come from FR-001's findings: where the sources are silent on it, an irregular
+     outline drawn as a labeled guess (the GM judged the rectangle "very visually wrong"); where a source attests a
+     straight edge (a wood cut off by paddy or a precinct boundary), the finding is put to the GM before either form
+     is drawn, since it would reverse the GM's judgment. `STRAIGHT_RUN` stays as the test of the irregular outcome.
+  2. FR-002, User Story 1's acceptance 2 and the first Edge Case assert that the wood does not fill the precinct on
+     every side - one of the three forms the pass is to weigh ("wooded all round") and the GM's own open question.
+     FR-002 MUST make research 124's decision say what FR-001 found about the sides and extent and point at it; the
+     Edge Case becomes conditional ("where the wood covers less than the precinct, ...").
+  3. SC-004 (and User Story 3) require the program and the owed list to name "the knob", but FR-004 makes a knob only
+     where the sources support more than one form. SC-004 MUST read: the knob, its forms and labels, or the single
+     attested form with its label and the statement that the research supports no knob - knowing there is none is
+     what the GM asked to know, and an unconditional success criterion invites a manufactured knob.
