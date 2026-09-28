@@ -1,7 +1,7 @@
 {
  "feature": "261-northwest-wind-by-default",
- "plan_sha256": "282ba120b8dd01a40b6e86916e80d40ee68f3d3273255fe29b4e826bed2db64c",
- "reviewed": "2026-09-27",
+ "plan_sha256": "2acd4f230ee9f3cb426635900521e4e1edff3eb3da7fbe8393e041bb2f73f6c0",
+ "reviewed": "2026-09-28",
  "declared": "spec-fidelity",
  "decisions": [
   {
@@ -33,7 +33,7 @@
    "id": "D4-seeds-original-kept-sawada-24",
    "summary": "Inashiro 4, Kuwabata 21, Kashikawa 3, Mizuguchi 23 kept; Sawada 6 -> 24 on the drain and wet toe; the pool test holds bearing and a 200-degree arc.",
    "class": "within",
-   "why": "Exactly the amended Edge Case and SC-008. No seed is moved to route around the engine. The citation nit (R5 for the belt) is fixed."
+   "why": "Exactly the amended Edge Case and SC-008. No seed is moved to route around the engine. The citation nit (R5 for the belt) is fixed. Re-read 2026-09-28: unchanged. Its \"astride its brook (8 and 4)\" is R7's measurement at seed 23; Mizuguchi now seats all 12 on one bank after D18's belt-room tier, a seat moved for belt room, not refused for the brook (FR-012 holds)."
   },
   {
    "id": "D5-popup",
@@ -118,7 +118,7 @@
    "id": "D15-field-path-reaches-the-field",
    "summary": "The spur's origin stops on the houses' bank, short of a stream it would cross; the spur is scored against the brook gapped at the fords; trim_lane_stubs leaves the spur to the sweeps that record a drop; the dangling-ends sweep counts the dry hem, as well as the paddy, as the field.",
    "class": "within",
-   "why": "FR-012 ('at least one way reaches the field') and SC-008 ('every hamlet whose field is across the brook has a way that reaches it'). Each of the three fixes removes something that stopped the engine from drawing the crossing the GM's ruling asks for: fix the algorithm, not the seat. On the dry hem: the hem plots are worked ground of the same field (the spec's Edge Case names them as cropland beside 'the crop'), and a path ending at the field's cultivated hem has reached the field on a plain reading. test_pool_261 test_a_way_reaches_the_field holds a way within 60 ft of the paddy or the hem on every map whose field lies across the brook. Wording nit: the plan says each of the three maps gets 'its one way to the rice', but Mizuguchi's spur stops at the hem, which the code comment puts 108 ft from the paddy outline. 'To the field' is the accurate phrase."
+   "why": "FR-012 ('at least one way reaches the field') and SC-008 ('every hamlet whose field is across the brook has a way that reaches it'). Each of the three fixes removes something that stopped the engine from drawing the crossing the GM's ruling asks for: fix the algorithm, not the seat. On the dry hem: the hem plots are worked ground of the same field (the spec's Edge Case names them as cropland beside 'the crop'), and a path ending at the field's cultivated hem has reached the field on a plain reading. test_pool_261 test_a_way_reaches_the_field holds a way within 60 ft of the paddy or the hem on every map whose field lies across the brook. Wording nit: the plan says each of the three maps gets 'its one way to the rice', but Mizuguchi's spur stops at the hem, which the code comment puts 108 ft from the paddy outline. 'To the field' is the accurate phrase. Re-read 2026-09-28: the only change is \"rice\" -> \"field\" (the dry hem counts as the field), which matches FR-012 \"at least one way reaches the field\"."
   },
   {
    "id": "D16-seg-intersect-misuses",
@@ -181,10 +181,185 @@
    "why": "The new crossing price states how it is indexed (the bucket grid), as the project rule asks. It narrows nothing."
   },
   {
-   "id": "Phases-1-6",
-   "summary": "Engine (D1-D3, D9-D14), measurement, pool, page, record, acceptance.",
+   "id": "D17f-h-farmstead-off-the-stream-through-connector-handover-last-dangling-sweep",
+   "summary": "No solid farmstead part, the house included, on a stream (_rect_on_stream); the board prefers an open seat among those every departure passes; a through connector hands over where a lane end meets it; the dangling-ends sweep runs again after straighten_joints.",
    "class": "within",
-   "why": "Each phase carries a spec requirement or a standing acceptance rule. Record nit: phase 1 still lists 'D9-D14' although D15-D17 are engine work, and tasks.md's header (D1-D6, R0-R4) and T17's verify note describe the superseded D12. T24 carries the new work, so this is bookkeeping, not fidelity."
+   "why": "Review findings on the re-rolled maps fixed in the placer (constitution XIV, US6, FR-013, FR-015). None narrows a clause of the request or the spec."
+  },
+  {
+   "id": "D18a-doubled-tails-cut-and-husks-dropped",
+   "summary": "A lane running back along another for 30 ft within 14 ft is cut where the doubling starts; the narrower tail is cut, never the wider; empty and one-point lane records dropped.",
+   "class": "within",
+   "why": "Drawing defects the reviews found (constitution XIV). No household loses its way: the cut is refused where a tail is some house's only way."
+  },
+  {
+   "id": "D18b-orphan-join-and-home-bank-link",
+   "summary": "An orphan join routes with the brook as an obstacle and refuses an even-count crossing except as a last resort; a household whose way out crosses the brook and back is served on its own bank (_link_home_bank), and the lane over the brook it no longer needs is dropped where every house it serves is served by the rest.",
+   "class": "within",
+   "why": "FR-011/FR-012 ask that ways MAY cross the brook where the layout needs it, decked; a crossing and straight back is not needed. The last resort keeps a household joined (FR-012 'every household reaches a way'), so nothing asked is given up."
+  },
+  {
+   "id": "D18c-board-sited-where-its-caption-fits",
+   "summary": "The siter and the frame re-seat ask feature 266's one placer whether the caption fits at the board's angle; a seat clear of the canopy ranks first; the level recorded.",
+   "class": "within",
+   "why": "Review findings (caption on a roof, a lane, the canopy) fixed by using main's placer; honors the GM's 2026-08-27 ruling that the caption stands at the board's angle. Narrows nothing asked."
+  },
+  {
+   "id": "D18d-channel-crossings-squared",
+   "summary": "A lane crossing any drawn channel is squared like a brook crossing; a lane elbow inside the brook's half-width is dropped before squaring.",
+   "class": "within",
+   "why": "Extends FR-011's 'crosses it squarely' to the plank the research says crosses its ditch square (ways/030); a fix, not a narrowing."
+  },
+  {
+   "id": "D18e-rolls-clean-their-stage-and-review-prereq-rounds",
+   "summary": "A roll that raises removes its own stage and .roll-*/ is ignored; a review acceptance counts only for the round it answered and a NOT-REVIEWABLE record keeps the verdict it was written over (scripts/_review_prereq.py).",
+   "class": "within",
+   "why": "Defects found in this work and fixed in it (constitution XIV). No effect on what a map draws."
+  },
+  {
+   "id": "D18f-woodland-parcels-off-a-ruled-row",
+   "summary": "A third woodland parcel in a ruled line with two others is stepped sideways where ground allows and refused where it does not; Inashiro keeps 2 parcels; a parcel prefers a seat not across the field, a preference that falls back where no near-side seat qualifies inside the predicted frame.",
+   "class": "within",
+   "why": "The request and spec are silent on woodland parcels, so no clause is narrowed. Checked against the GM's standing ruling: the parcel count was already a target the scan meets only where there is ground (pre-feature parcels.py: 'a slot no size can seat is honestly dropped'), and a hamlet with two woodlots is itself a valid configuration, so this is not an engine failing to lay out a known-valid layout. The alternative kept was the recorded defect (the ruled chain)."
+  },
+  {
+   "id": "D18g-copse-off-the-marsh-and-on-its-houses-bank",
+   "summary": "No copse clump based in the marsh (the copse alone; applied to every grove it cut Sawada's windward belt 179 -> 104 crowns, and 20-34 of 68 refused crowns stood on ground drawn dry because the toe marsh's recorded outline runs under cleared ground - deferred to future-work with measurement and sketch); a copse clump is near a house only on its own bank.",
+   "class": "within",
+   "why": "The copse keep-out is a new fix for a review finding (FR-014 family, constitution XIV); not extending it to the belt narrows nothing the GM or the spec asked, because the belt obeyed no marsh rule before this feature (pre-feature hinterland/belt.py has none), so FR-010's 'every rule the belt obeyed before' is intact. The marsh-outline defect is deferred with its measurement and sketch, the form XIV allows."
+  },
+  {
+   "id": "D18h-belt-wraps-both-axes-and-frame-holds-house-shelter",
+   "summary": "A diagonal wind opens the belt's seating window on both axes; each arm has its own inner face (windbreak_faces); the frame holds every belt clump within 100 ft of a farmhouse on the page.",
+   "class": "within",
+   "why": "Makes the belt stand on the north AND west of the cluster for a NW wind (US1 scenario 3, SC-002); serves the request directly."
+  },
+  {
+   "id": "D18i-belt-room-tier-and-belt-off-canvas-score",
+   "summary": "A seat whose belt band would fall off the canvas scores down; a wind-facing seat whose band is more than a fifth off the canvas is a fallback below every wind-facing seat with room and above the off-wind ones.",
+   "class": "within",
+   "why": "Still inside FR-004's 45-degree bar: the new tier only orders wind-facing seats, and the off-wind fallback (D2) stays last and forbidden on the pool. It makes FR-006's 'windbreak on its cluster's northwest side' drawable on the page; it refuses no seat for the brook (FR-012)."
+  },
+  {
+   "id": "D18j-belt-past-a-lane-unless-marsh",
+   "summary": "A belt stands its near face 12 ft beyond a lane that runs lengthwise inside its band (past_the_lanes), unless the moved band would stand in the marsh.",
+   "class": "within",
+   "why": "A new fix of Kuwabata's finding (a lane halving the drawn belt). The 'unless marsh' limits that new fix, not anything the request or spec asks: FR-016's floor is the record's 30 ft minimum (spec Decisions Recorded row), which the band keeps. Its stated premise conflicts with D18l; see the aside in the verdict."
+  },
+  {
+   "id": "D18k-front-row-water-push-and-quarter-pitch-tries",
+   "summary": "A front-row seat in the brook's corridor is pushed past the water (water_push) and, where the water moved it and it collides, tries a quarter pitch either way along the row.",
+   "class": "within",
+   "why": "Code read (homesteads/stages.py water_push): it pushes a seat's box clear of the water's clearance along the row normal; it refuses no seat for the brook and does not re-create the far-bank refusal, so FR-012 holds. It restored Inashiro's rolled crescent (a regression against main, constitution XIII)."
+  },
+  {
+   "id": "D18l-belt-crowns-on-the-toe-marsh-drawn-as-alder",
+   "summary": "A windbreak crown seated in a toe marsh is drawn as alder; holding the belt off the reeds removed Sawada's windward belt and failed its depth test; the carr along the rest of the toe is not built.",
+   "class": "within",
+   "why": "This keeps the requested thing (a NW belt on every map, FR-006, on Sawada whose NW is its wet toe) rather than narrowing it; the belt had no marsh rule before (FR-010 intact). Not building the carr elsewhere narrows nothing asked. The research class is not this review's call, but R11 records the record silent on a windbreak grove running onto marsh; see the aside."
+  },
+  {
+   "id": "D18m-scrub-keepouts-per-farmstead",
+   "summary": "The scrub keeps off each farmstead's grown outline and the ground between two within 140 ft, not the cluster's hull.",
+   "class": "within",
+   "why": "Review finding (a bare straight-edged wedge) fixed in the placer; constitution XIV."
+  },
+  {
+   "id": "D18n-brook-wander-exit-bend-tap-axis-title-pocket",
+   "summary": "BROOK_WANDER_STEP 4 -> 10 and exit_bend; the segment leaving the tap run and the approach legs nudged off the screen axes; the scatter frame's prediction takes in the title pocket's band.",
+   "class": "within",
+   "why": "Drawing defects the reviews and the cohort found (constitution XIV, XIII); the GM's standing axis ruling honored. Narrows nothing asked."
+  },
+  {
+   "id": "D18o-homestead-dry-plot-against-the-steading",
+   "summary": "A household's own dry plot is laid against its homestead after the ways (the levee model), the canal hem kept as the second position; the plot's size a guess.",
+   "class": "within",
+   "why": "Review finding (Inashiro's dry plots a median 658 ft across the rice) fixed from the research (R11); constitution XIV."
+  },
+  {
+   "id": "D18p-entrance-outermost-join-and-routes-from-the-door",
+   "summary": "The entrance is the outermost join walked in from the map's edge; a household's way out runs from its door to the connector's outer end; a lane run on past the connector to a loose end is cut unless it is some house's only way; _trim_to_service judges a lane end against every way but its own far end's.",
+   "class": "within",
+   "why": "FR-015 (every departure passes the board) measured honestly rather than by construction; fixes the lane-cut regressions the previous round made. No household loses its way."
+  },
+  {
+   "id": "D18q-bamboo-off-the-water",
+   "summary": "A bamboo stand keeps off the water at its half-width and 3 ft.",
+   "class": "within",
+   "why": "Review finding (culms on the brook); constitution XIV."
+  },
+  {
+   "id": "D19a-board-on-the-approach",
+   "summary": "An entrance board at a handover stands on the approach itself where a seat there passes every departure, squared to the way it stands on.",
+   "class": "within",
+   "why": "FR-015 and the research (broadside to the one way out)."
+  },
+  {
+   "id": "D19b-no-grain-plot-where-grain-is-bought-in",
+   "summary": "GRAIN_BOUGHT_IN: the mulberry dike-fishpond archetype lays no homestead grain plot (Kuwabata's GM-confirmed economy).",
+   "class": "within",
+   "why": "Makes the map match the GM's own canon (FR-018 family, constitution XIV); a review finding, not a narrowing."
+  },
+  {
+   "id": "D19c-fixtures-own-side-of-lanes-yard-ring-shrine-passes",
+   "summary": "A fixture is refused a seat across a lane from its house; a fixture with no recorded seat left gets the ring round its own house (a guess, labeled); a shrine with no seat passes to the next house with room, the count kept; the bundle box does not refuse the ring; the persimmon tries 10 and 20 ft further out and records a miss.",
+   "class": "within",
+   "why": "The GM's ruling applied as written: the new rule cost seven fixtures and two shrines, and the placer was fixed rather than the rule relaxed; 0 unseated on the pool. Narrows nothing asked."
+  },
+  {
+   "id": "D20a-belt-far-face-disc-envelope",
+   "summary": "The far face is the fringe grown by a disc of the belt's depth sampled along the profile; the near face roughened only outward; the band laid 100 ft (D23).",
+   "class": "within",
+   "why": "FR-016 (the belt keeps its researched depth), fixing Kashikawa's hole and Sawada's bend at their cause."
+  },
+  {
+   "id": "D20b-brook-rounded-late",
+   "summary": "The brook's corners are filleted at 2.5 widths at the start of the crossings stage, the tap held, the planks squared against the rounded course; rounding at first draw was tried and reverted.",
+   "class": "within",
+   "why": "A drawing defect fixed (research: channels turn on curves). The request and spec say nothing it narrows; crossings stay square and decked (FR-011)."
+  },
+  {
+   "id": "D21-copse-at-the-lee-face-board-well-as-drawn-belt-one-piece",
+   "summary": "The against-the-belt copse anchors on the belt's lee face, 0-60 ft leeward; meta.kosatsuba_well_ft records the board as drawn; the belt measured as one piece in crowns.",
+   "class": "within",
+   "why": "FR-014 ('at the belt's lee face, on the houses' side'), FR-018 (records match the map), FR-016."
+  },
+  {
+   "id": "D22-rank-jitter-for-accretion-only",
+   "summary": "An alleys (accretion) hamlet's rank seats stand up to an eighth of a pitch off their exact rank; a back_lane (planned) hamlet's ranks stay regular, so Mizuguchi's lattice, the finding, is kept.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "It leaves the review finding unfixed on the map it was found on, so it is an exception and is ruled. The previous spec-fidelity round refused keeping the lattice because the proposer never read the form and Sawada (alleys) drew the same lattice; both are now cured: the proposer reads the form and Sawada's ranks spread. What remains is the case the GM's own ruling names as legitimate - 'our research shows' - and the research does show it: research/homesteads 080 reads a back lane as a planning device giving 'a regular layout, right-angled development' (back-lane-enwiki, nucleated-village-enwiki, quoted in its notes). It keeps no behavior the GM asked to change and rests on no engine limitation."
+  },
+  {
+   "id": "D23a-lane-ends-that-serve-nothing",
+   "summary": "tidy_lane_ends reads the field as drawn, drops a lane trimmed to a point or a nub unless it is some house's only way, and runs as the web's last pass.",
+   "class": "within",
+   "why": "Fixes what main's re-laid pool exposed in the placer, per the GM's ruling; no household loses its way."
+  },
+  {
+   "id": "D23b-near-face-round-the-houses-band-100",
+   "summary": "round_the_houses adds near-face points every 30 ft and every 15 degrees round each house's disc windward of the chord; the band goes back to 100 ft; one piece on every map.",
+   "class": "within",
+   "why": "FR-016 and the belt's continuity (FR-010), fixed at the cause rather than covered by a deeper band."
+  },
+  {
+   "id": "D23c-dry-plot-beside-the-steading",
+   "summary": "Where no side has room flush, the dry plot takes the nearest ground beside the steading, out from each lee or flank side and along it, never upwind, clear of the persimmon's trunk ring (a guess, labeled).",
+   "class": "within",
+   "why": "Fixes main's packed placer at the placer (the GM's ruling); never upwind keeps the belt's crop set-back (FR-010)."
+  },
+  {
+   "id": "D23d-fixture-and-persimmon-straight-seats",
+   "summary": "The fixture ring's last resort adds seats straight out from each wall; the persimmon's adds seats straight behind and before the house; all appended, so seated fixtures do not move.",
+   "class": "within",
+   "why": "0 unseated on the pool; a placement fix, not a relaxation."
+  },
+  {
+   "id": "Phases-1-6",
+   "summary": "Engine (D1-D3, D9-D17), measurement, pool, page, record, acceptance.",
+   "class": "within",
+   "why": "Sequencing only; D18-D23 are fixes found at acceptance and ride under phase 6's reviews."
   }
  ],
  "verdict": "CLEAR"

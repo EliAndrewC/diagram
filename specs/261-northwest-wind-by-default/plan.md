@@ -90,7 +90,7 @@ refused is no longer an exception to anything.
 The spec's Edge Case (amended 2026-09-27) measures each map at its current seed once crossings exist and returns it
 to that seed unless a research-supported refusal is recorded. Measured (R7, and R5 for the belt): Kashikawa at seed 3 seats 20/20
 wind-facing, the belt 285 crowns at 320 degrees; Mizuguchi at seed 23 seats 12/12 wind-facing astride its brook
-(8 and 4), its weir back. Both keep their original seeds. Sawada's seed 6 was refused by the drain and the wet toe
+(8 and 4) at that measurement, its weir back; D18's belt-room tier later seats all 12 on one bank. Both keep their original seeds. Sawada's seed 6 was refused by the drain and the wet toe
 - rules FR-010 keeps, supported by the record - so 24 stands (R2). Nothing in the spec's "When no seed works"
 list is done. The reason is in each generator's docstring, and the pool test holds the belt's arc to 200 degrees
 as well as its bearing.
@@ -271,7 +271,8 @@ Measured before and after in research R10.
   each arm of the belt has its own inner face (`windbreak_faces`), and the frame holds every belt clump within 100 ft of
   a farmhouse on the page - that house's shelter - since the face is the belt's TYPICAL front.
 - A seat whose windbreak band would fall off the canvas scores down (`belt_off_canvas`), as the brook and the dry hem do.
-- A belt stands beyond a lane that runs along its band (`past_the_lanes`), unless that would put it in the marsh: Kuwabata's
+- A belt stands beyond a lane that runs along its band (`past_the_lanes`), unless that would put the band's middle in the marsh - the belt is not moved INTO the reeds' body,
+  while the crowns it already reaches at the reed edge are drawn as alder (below): Kuwabata's
   ring lane ran lengthwise down the belt's middle and halved its drawn depth (median 67 ft against main's 104).
 - A wind-facing seat whose belt band falls more than a fifth off the canvas (`BELT_ROOM_MAX_OFF`, three of the band's
   fifteen sample points) is only a fallback, below every wind-facing seat with room and above the off-wind ones: scored
@@ -330,7 +331,8 @@ Measured before and after in research R10.
   connector it had left.
 - A belt crown seated in a toe marsh is drawn as alder (the `alder` mix and class): the record's woody stage at a reed
   edge is alder or willow, never pine (research/vegetation.html, the marsh margin). Sawada's windward belt stands on
-  its toe's reed edge (70 of 201 clumps in the marsh); holding the belt off the reeds took the windward belt away and
+  its toe's reed edge (70 of 201 clumps in the marsh in that round; 201 alder clumps of the belt's 1,233 crowns on
+  the pool main's feature 276 re-laid, `m:sawada-r17-alder`); holding the belt off the reeds took the windward belt away and
   failed its depth test, and a belt that stops at the marsh does the same. The carr along the rest of the toe - the
   second form the record names for it - is not built.
 
