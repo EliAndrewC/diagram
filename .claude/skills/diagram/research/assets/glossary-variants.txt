@@ -191,6 +191,7 @@ black-charcoal	black charcoal
 black-seal	shuinchi
 black-seal land	shuinchi
 black-seal lands	shuinchi
+blyxa	Blyxa
 bo	bo
 board feet	board foot
 board foot	board foot
@@ -761,6 +762,10 @@ five-household group	five-household group
 five-household groups	five-household group
 five-ring pagoda	five-ring pagoda
 five-ring pagodas	five-ring pagoda
+floating-leaf	floating-leaf plant
+floating-leaf plant	floating-leaf plant
+floating-leaf plants	floating-leaf plant
+floating-leaved	floating-leaf plant
 flood stage	river stage
 floodway	floodway
 floodways	floodway
@@ -1040,6 +1045,8 @@ heijō-kyō	Heijo-kyo
 heijō-kyō's	Heijo-kyo
 heimen	heimen
 heimin	heimen
+heisei	Heisei
+heisei era	Heisei
 heishi	heishi
 hem	hem
 heping	heping
@@ -1724,6 +1731,7 @@ mise	mise
 mitochigai	mitochigai
 mitsuke	mitsuke
 miyaza	miyaza
+mizu-oobako	Ottelia
 mizugaki	mizugaki
 mizugashira	mizugashira
 mizuguchi	mizuguchi
@@ -1950,6 +1958,7 @@ ote-suji	ote-suji
 otedori	ote-suji
 otemon	ote-mon
 otesuji	ote-suji
+ottelia	Ottelia
 ou	Ou
 oute	ote-mon
 outer daimyo	tozama
@@ -2515,6 +2524,7 @@ sub-temple	sub-temple
 sub-temple's	sub-temple
 sub-temples	sub-temple
 subgrade	subgrade
+subuta	Blyxa
 sue ware	Sue ware
 sueki	Sue ware
 sugi	sugi
@@ -3083,7 +3093,9 @@ zushi-nikai	half-story
 ōya	yamori
 ほ場整備	hojo seibi
 ウキヤガラ	ukiyagara
+スブタ	Blyxa
 ホオノキ	hoonoki
+ミズオオバコ	Ottelia
 合掌造り	gassho
 四間取り	four-room type
 圃場整備	hojo seibi
