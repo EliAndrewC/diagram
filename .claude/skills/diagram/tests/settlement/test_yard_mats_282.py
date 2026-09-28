@@ -12,11 +12,10 @@ import math
 import pytest
 
 from l7r.diagram import hamletgen as hg
-from l7r.diagram.settlement.homestead_parts.yards import MAT_SQ_FT, RACK_MIN_FT, mat_cells, rack_segment, scatter_to, thin_evenly
+from l7r.diagram.settlement.homestead_parts.yards import MAT_SQ_FT, RACK_MIN_FT, _quad_gap, mat_cells, rack_segment, thin_evenly
 from tests.settlement._builders import _nuc_village
 
 TSUBO_FT2 = 35.583
-SMALL_YARD_FT2 = 400.0  # spec 282 FR-004 (amended 2026-09-28): under this a yard draws as many mats as fit with bare ground round each
 
 
 def _rect(w: float, h: float) -> list[tuple[float, float]]:
@@ -36,8 +35,8 @@ def test_the_mats_cover_the_whole_yard_at_between_a_third_and_two_thirds_of_a_fu
     w, h = depth_ft * 1.45 / ftpx, depth_ft / ftpx
     mats = mat_cells(w, h, _rect(w, h), ftpx)
     lo, hi = _band(w, h, ftpx)
-    small = tsubo * TSUBO_FT2 < SMALL_YARD_FT2  # FR-004 as amended: the smallest yards draw as many as fit with a gap
-    assert (4 if small else lo) <= len(mats) <= hi, f"{tsubo} tsubo at {ftpx} ft/px: {len(mats)} mats, band {lo}-{hi}"
+    # FR-004 as amended (2026-09-28): a third where the yard holds one at a 1 ft gap, else as many as fit there, never under 3
+    assert (lo if tsubo >= 18 else 3) <= len(mats) <= hi, f"{tsubo} tsubo at {ftpx} ft/px: {len(mats)} mats, band {lo}-{hi}"
     quarters = {(mx + mw / 2 > 0, my + mh / 2 > 0) for mx, my, mw, mh, _a in mats}
     assert len(quarters) == 4, f"{tsubo} tsubo: mats in only {sorted(quarters)} - the floor must read covered, every quarter"
     assert all(mw * ftpx == 6.0 and mh * ftpx == 3.0 for _x, _y, mw, mh, _a in mats), "a mat is 3 x 6 ft, drawn at its real size"
@@ -56,14 +55,6 @@ def test_a_mat_stays_inside_the_yards_quad_and_off_the_rack() -> None:
 def test_an_overshoot_is_thinned_evenly_not_from_one_end() -> None:
     assert thin_evenly(list(range(11)), 10) == [0, 1, 2, 3, 4, 6, 7, 8, 9, 10], "the drop falls mid-list"
     assert thin_evenly(list(range(4)), 10) == [0, 1, 2, 3], "under the cap, untouched"
-
-
-def test_the_tightest_step_is_scattered_down_to_the_floor_not_by_columns() -> None:
-    kept = scatter_to(list(range(30)), 18)
-    assert len(kept) == 18 and kept == sorted(kept), "eighteen survivors, in their order"
-    dropped = sorted(set(range(30)) - set(kept))
-    assert dropped != list(range(dropped[0], dropped[0] + 12)), "the drops are scattered, not one run"
-    assert scatter_to([1, 2], 5) == [1, 2], "under the floor, untouched"
 
 
 def test_a_yard_with_room_for_no_mat_draws_none() -> None:
@@ -120,3 +111,9 @@ def test_harvest_weather_is_declared_never_rolled() -> None:
     assert hg.plan_site(hg.HamletSpec(name="X", seed=3, households=15, harvest_weather="changeable")).harvest_weather == "changeable"
     with pytest.raises(ValueError, match="harvest_weather"):
         hg.HamletSpec(name="X", seed=1, harvest_weather="monsoon")
+
+
+def test_two_mats_that_overlap_have_no_gap_and_two_apart_have_theirs() -> None:
+    a = [(0.0, 0.0), (6.0, 0.0), (6.0, 3.0), (0.0, 3.0)]
+    assert _quad_gap(a, [(5.0, 1.0), (11.0, 1.0), (11.0, 4.0), (5.0, 4.0)]) == 0.0, "a corner inside the other: they touch"
+    assert abs(_quad_gap(a, [(7.0, 0.0), (13.0, 0.0), (13.0, 3.0), (7.0, 3.0)]) - 1.0) < 1e-9, "side by side, a foot apart"

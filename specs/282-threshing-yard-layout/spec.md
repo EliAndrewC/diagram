@@ -92,10 +92,10 @@ FR-002 finds (FR-005); its declaration names the research question it rests on.
   number drawn MUST be fewer than would cover the yard, as a map drawing convention recorded with the real count,
   and MUST still read as a yard covered in mats: the drawn mats spread over the whole yard (every quarter of it
   carries mats) and the drawn count is tied to the yard's area - between one third and two thirds of the count
-  that would cover it, so a 60 sq m yard (about 36 mats to cover) draws 12 to 24. Each drawn mat MUST keep a little
-  bare ground around it (no two drawn edge to edge): a yard under `400 sq ft` that cannot hold a third with that gap
-  draws as many as fit with it, and never fewer than four (amended 2026-09-28, after three settlement-reviews ruled
-  edge-to-edge mats read as paving - research.md R4). The single fixed central mat MUST go.
+  that would cover it, so a 60 sq m yard (about 36 mats to cover) draws 12 to 24. Each drawn mat MUST keep bare ground
+  around it and room to lie askew - at least a `1 ft` gap to its neighbors on the lattice: a yard that cannot hold a
+  third at that gap draws as many as fit at it, and never fewer than three (amended 2026-09-28, after the
+  settlement-reviews ruled edge-to-edge mats, and mats at a `0.5 ft` gap, read as paving - research.md R4). The single fixed central mat MUST go.
 - **FR-005**: The yard's rack MUST be drawn only where the settlement's rack-by-the-house knob gives one; the knob
   MUST be pinnable from the settlement's spec. Where FR-002 finds the choice followed the environment, the knob MUST
   be SET from that environmental fact, never rolled free: from the fact itself where the generator models it, and
@@ -123,7 +123,7 @@ FR-002 finds (FR-005); its declaration names the research question it rests on.
 ## Success Criteria *(mandatory)*
 
 - **SC-001** (FR-004): No drawn yard carries the old central mat (`14 x 9 ft`, research.md R1); every drawn yard's mat
-  count lies between one third and two thirds of the count that would cover its area (at least four under `400 sq ft`), and each quarter of the yard
+  count lies between one third and two thirds of the count that would cover its area (where the yard cannot hold a third at a `1 ft` gap, as many as fit at it and at least three), and each quarter of the yard
   carries at least one mat (measured by test on the regenerated pool hamlets and on the yard sizes the roll makes).
 - **SC-002** (FR-005, FR-006): No rack is drawn on a map whose knob gives none; on a map whose knob gives one, every
   yard carries a rack and no rack's footprint enters the yard's southern half or the `39 ft` corridor south of it
@@ -144,9 +144,10 @@ FR-002 finds (FR-005); its declaration names the research question it rests on.
 - **D2 - fewer mats than the real count.** A map drawing convention, the GM's own form: the real yard was covered
   (40-60 mats); the drawing thins them so each reads as a mat. The band of one third to two thirds of a full cover
   is this project's decision (spec-fidelity round 1: a floor tied to area, so the impression of a covered yard holds).
-  EXCEPTION (amended 2026-09-28, ruled LEGITIMATE by spec-fidelity): a yard under `400 sq ft` that cannot hold a third
-  with bare ground around every mat draws as many as fit with it, never fewer than four - a map drawing convention, since
-  edge-to-edge mats read as paving (research.md R4). To go to the GM at hand-back, per the exception procedure.
+  EXCEPTION (amended 2026-09-28; the first form, for yards under `400 sq ft`, ruled LEGITIMATE by spec-fidelity, then
+  broadened): a yard that cannot hold a third at a `1 ft` gap draws as many as fit at it, never fewer than three - a map
+  drawing convention, since mats edge to edge or at a `0.5 ft` gap read as paving (research.md R4). To go to the GM at
+  hand-back, per the exception procedure.
 
 ## Review history
 
@@ -172,3 +173,20 @@ FR-002 finds (FR-005); its declaration names the research question it rests on.
   (Kashikawa's two `22 x 15 ft` at 6 and 5 of 7, Sawada's `22 x 15` and `24 x 16 ft` at 6 and 6 of 7 and 8), matching
   the working-tree manifests re-read with `jq`; (2) D2 carries the small-yard exception in FR-004's terms, labeled a map
   drawing convention and marked to go to the GM at hand-back. No new drift.
+- Amendment round 5 (spec-fidelity, 2026-09-28; MODE 1 on the broadened exception, then the spec): the `1 ft` least gap
+  LEGITIMATE (it serves the GM's aim that the drawn mats read as mats; rounds 4-6 read `0.5 ft` as paving); a yard that
+  PHYSICALLY cannot hold a third at `1 ft` drawing as many as fit there LEGITIMATE at any size (the `400 sq ft` bound was a
+  proxy for that). NOT LEGITIMATE: the floor lowered from four to three, and "cannot hold" decided by the one centered
+  lattice the code lays per gap step. On this round's own run (the working-tree SVGs and manifests, 2026-09-28; a shifted,
+  unturned `1 ft`-gap lattice of `6 x 3 ft` mats, corners `1 ft` inside the drawn outline, off the rack): of the nine yards
+  drawn under a third of their drawn outline's cover, eight hold a third at `1 ft` - Kashikawa's `22 x 15 ft` yard draws 3
+  where 6 fit, Sawada's `31 x 22 ft` draws 8 where 12 fit, Mizuguchi's two draw 10 and 11 where 12 and 15 fit; only
+  Inashiro's `20 x 14 ft` yard cannot (4 fit, 4 drawn). CHANGES REQUIRED: (1) research.md R4 does not reproduce - eleven
+  short yards is neither the nine under a third of the drawn outline nor the sixteen under a third of the manifest's
+  `w x h` (the area the code's floor uses), and the fewest-3 yards are two (Kashikawa's, no rack, as well as Sawada's
+  `20 x 14 ft`); and it reports what the centered lattice drew, not what fits at `1 ft`, which is the premise FR-004's
+  exception turns on - re-measure what fits; (2) FR-004, SC-001 and D2: "never fewer than three" back to four (no
+  measured yard holds fewer than four at `1 ft`; three exists only where the code draws half of what fits), unless a
+  rolled yard is measured that cannot hold four; (3) SC-001: the exception's test MUST establish "cannot hold a third at
+  `1 ft`" independently of the layout under test (the most that fit), so a yard drawn short only by lattice alignment
+  fails it. Plan review round 6 BLOCKED (D3's short-yard test and floor).

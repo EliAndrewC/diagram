@@ -23,11 +23,11 @@ Observed 2026-09-28; method: `w` and `h` of every `threshing_yards` record in `p
 before regeneration - fifteen yards from 20 by 14 ft to 47 by 32 ft, so a full cover of 3 by 6 ft mats is about 15 to 84
 mats; the mat band of FR-004 is sized against that range.
 
-## R4 - the smallest yards and the gap
+## R4 - the gap, and the yards that cannot hold a third at it
 
-Observed 2026-09-28; method: the regenerated pool manifests' `threshing_yards` (`w`, `h`, `mats`), read with the rack `1 ft`
-off the yard's side and mats laid at gaps of `2`, `1.5`, `1` and `0.5 ft`, every corner held `1 ft` inside the drawn outline.
-Four yards under `400 sq ft` fall one or two mats short of a third: Kashikawa's two `22 x 15 ft` yards draw 6 and 5 where 7
-is a third, and Sawada's `22 x 15` and `24 x 16 ft` yards draw 6 and 6 where 7 and 8 are. The only step that reached a
-third on them was edge to edge, which the settlement-reviews of rounds 2 and 3 (Sawada, Inashiro, Kashikawa, Mizuguchi)
-each read as paving or brickwork.
+Observed 2026-09-28; method: the regenerated pool manifests' `threshing_yards` (`w`, `h`, `mats`) and the drawn SVGs, mats
+laid at gaps of `2`, `1.5` and `1 ft`, each corner held `1 ft` inside the drawn outline and each mat's outline `0.1 ft`
+clear of its neighbors'. The narrower steps were tried and read as paving in the settlement-reviews: edge to edge (rounds 2
+and 3), and `0.5 ft` (rounds 4 to 6 - no room there to lay a mat askew, even with the lattice thinned). At `1 ft`, eleven
+yards of the four rice maps fall short of a third of a full cover: shares from 0.18 to 0.33, the fewest drawing 3 mats
+(Sawada's `20 x 14 ft` yard, which also holds a rack).

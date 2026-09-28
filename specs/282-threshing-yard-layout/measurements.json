@@ -212,5 +212,71 @@
   "source": "specs/282-threshing-yard-layout/measure.py (run from .claude/skills/diagram), reading the pool map's drawn SVG ink (each yard group's floor polygon and its mats, turned as drawn), its rendered .html and its notes; and the map's manifest for the per-yard mat counts",
   "measured": "2026-09-28",
   "method": "grep of pool/hamlets/sawada/sawada.notes.md"
+ },
+ "sr6-mizuguchi-f1-no-lattice": {
+  "value": 0.8,
+  "unit": "share of a yard's mats",
+  "quantity": "the least share of turned mats in any ONE of mizuguchi's yards (164 of 166 mats turned map-wide): no step below 1 ft is drawn any more, and each mat keeps its turn wherever its outline stays 0.1 ft clear of every neighbor's, so no yard is a lattice; the smallest fill gap between two mats is 0.55 ft",
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "answers": "7ed47895e6e1",
+  "source": "specs/282-threshing-yard-layout/measure.py (run from .claude/skills/diagram), reading the pool map's drawn SVG ink (each yard group's floor polygon and its mats, turned as drawn), its rendered .html and its notes",
+  "measured": "2026-09-28",
+  "method": "per yard group of the map's SVG: mats carrying a rotate transform over all mats, the minimum over the yards; and the least corner-to-edge distance between two drawn mat quads"
+ },
+ "sr6-mizuguchi-f2-askew-per-yard": {
+  "value": 0.8,
+  "unit": "share of a yard's mats",
+  "quantity": "'most laid a little askew' now holds in every yard of mizuguchi, not only map-wide: the least per-yard share of turned mats is 0.8",
+  "verifies": "F2",
+  "subject": "mizuguchi",
+  "answers": "7ed47895e6e1",
+  "source": "specs/282-threshing-yard-layout/measure.py (run from .claude/skills/diagram), reading the pool map's drawn SVG ink (each yard group's floor polygon and its mats, turned as drawn), its rendered .html and its notes",
+  "measured": "2026-09-28",
+  "method": "per yard group of the map's SVG: mats carrying a rotate transform over all mats, the minimum over the yards"
+ },
+ "sr6-sawada-f1-turn-restored": {
+  "value": 0.92,
+  "unit": "share of a yard's mats",
+  "quantity": "the least share of turned mats in any ONE of sawada's yards (317 of 321 mats turned map-wide): no step below 1 ft is drawn any more, and each mat keeps its turn wherever its outline stays 0.1 ft clear of every neighbor's, so no yard is a lattice; the smallest fill gap between two mats is 0.51 ft",
+  "verifies": "F1",
+  "subject": "sawada",
+  "answers": "7ed47895e6e1",
+  "source": "specs/282-threshing-yard-layout/measure.py (run from .claude/skills/diagram), reading the pool map's drawn SVG ink (each yard group's floor polygon and its mats, turned as drawn), its rendered .html and its notes",
+  "measured": "2026-09-28",
+  "method": "per yard group of the map's SVG: mats carrying a rotate transform over all mats, the minimum over the yards; and the least corner-to-edge distance between two drawn mat quads"
+ },
+ "sr6-sawada-f2-askew-per-yard": {
+  "value": 0.92,
+  "unit": "share of a yard's mats",
+  "quantity": "'most laid a little askew' now holds in every yard of sawada, not only map-wide: the least per-yard share of turned mats is 0.92",
+  "verifies": "F2",
+  "subject": "sawada",
+  "answers": "7ed47895e6e1",
+  "source": "specs/282-threshing-yard-layout/measure.py (run from .claude/skills/diagram), reading the pool map's drawn SVG ink (each yard group's floor polygon and its mats, turned as drawn), its rendered .html and its notes",
+  "measured": "2026-09-28",
+  "method": "per yard group of the map's SVG: mats carrying a rotate transform over all mats, the minimum over the yards"
+ },
+ "sr6-kashikawa-f1-turn-restored": {
+  "value": 0.67,
+  "unit": "share of a yard's mats",
+  "quantity": "the least share of turned mats in any ONE of kashikawa's yards (364 of 369 mats turned map-wide): no step below 1 ft is drawn any more, and each mat keeps its turn wherever its outline stays 0.1 ft clear of every neighbor's, so no yard is a lattice; the smallest fill gap between two mats is 0.51 ft",
+  "verifies": "F1",
+  "subject": "kashikawa",
+  "answers": "7ed47895e6e1",
+  "source": "specs/282-threshing-yard-layout/measure.py (run from .claude/skills/diagram), reading the pool map's drawn SVG ink (each yard group's floor polygon and its mats, turned as drawn), its rendered .html and its notes",
+  "measured": "2026-09-28",
+  "method": "per yard group of the map's SVG: mats carrying a rotate transform over all mats, the minimum over the yards; and the least corner-to-edge distance between two drawn mat quads"
+ },
+ "sr6-inashiro-f1-turn-restored": {
+  "value": 0.92,
+  "unit": "share of a yard's mats",
+  "quantity": "the least share of turned mats in any ONE of inashiro's yards (322 of 326 mats turned map-wide): no step below 1 ft is drawn any more, and each mat keeps its turn wherever its outline stays 0.1 ft clear of every neighbor's, so no yard is a lattice; the smallest fill gap between two mats is 0.51 ft",
+  "verifies": "F1",
+  "subject": "inashiro",
+  "answers": "7ed47895e6e1",
+  "source": "specs/282-threshing-yard-layout/measure.py (run from .claude/skills/diagram), reading the pool map's drawn SVG ink (each yard group's floor polygon and its mats, turned as drawn), its rendered .html and its notes",
+  "measured": "2026-09-28",
+  "method": "per yard group of the map's SVG: mats carrying a rotate transform over all mats, the minimum over the yards; and the least corner-to-edge distance between two drawn mat quads"
  }
 }

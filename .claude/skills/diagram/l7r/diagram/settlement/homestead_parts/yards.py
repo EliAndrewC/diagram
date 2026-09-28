@@ -21,8 +21,8 @@ MAT_SQ_FT = MAT_FT[0] * MAT_FT[1]
 # THE GAP LEFT BETWEEN DRAWN MATS, widest first (feature 282, a CONVENTION): a real yard's mats lay edge to edge, and drawn
 # so they read as a textured floor. A 2 ft gap on every side leaves each mat on its own - the 2 ft pitch alone is 45% of a
 # full cover - and a yard too small or too clipped (by its pulled-in corners and the rack) to reach a third of one at that
-# gap closes it a step at a time; a step that overshoots two thirds is thinned back evenly (spec 282 FR-004).
-MAT_GAPS_FT = (2.0, 1.5, 1.0, 0.5)
+# gap closes it a step at a time, never below 1 ft; a step that overshoots two thirds is thinned back evenly (FR-004).
+MAT_GAPS_FT = (2.0, 1.5, 1.0)
 # EACH MAT LAID BY HAND, NOT SET IN A PATTERN (settlement-reviews of 2026-09-28): every REGULAR layout read as paving - a
 # checkered half as pavers meeting at their corners (Sawada), square rows as a tiled grid (Inashiro), rows set over by half
 # a mat as brick bond (Kashikawa). So each mat is nudged off its row by up to this much and turned by up to this many
@@ -30,6 +30,7 @@ MAT_GAPS_FT = (2.0, 1.5, 1.0, 0.5)
 # wherever the nudge would carry it off the floor or onto the rack.
 MAT_JITTER_FT = 0.4
 MAT_STROKE_FT = 0.2  # half the mat outline's drawn width (0.4 at a hamlet's 1 ft to the px)
+MAT_INK_CLEAR_FT = 0.1  # bare ground left between two mats' drawn outlines, at the least
 MAT_JITTER_DEG = 6.0
 
 
@@ -87,45 +88,55 @@ def mat_cells(w: float, h: float, poly: list[tuple[float, float]], ftpx: float, 
         g = gap_ft / ftpx
         cols, rows = int((w - 2 * inset + g) // (mw + g)), int((h - 2 * inset + g) // (mh + g))
         gx0, gy0 = -(cols * (mw + g) - g) / 2.0, -(rows * (mh + g) - g) / 2.0
-        nudge = min(MAT_JITTER_FT / ftpx, max(0.0, g / 2.0 - 0.25 / ftpx))  # never across half the gap: neighbors never touch
-        mats = []
+        base = []
         for r in range(rows):
             for c in range(cols):
                 x, y = gx0 + c * (mw + g), gy0 + r * (mh + g)
-                jx, jy = x + (2 * _mat_hash(r, c, 1.0) - 1) * nudge, y + (2 * _mat_hash(r, c, 2.0) - 1) * nudge
-                # THE TURN HAS ITS OWN LIMIT, NOT THE NUDGE'S (settlement-reviews, Sawada and Mizuguchi, 2026-09-28): tied to the
-                # nudge it fell to nothing at the 0.5 ft step, and those yards drew a rigid grid. A mat's corner swings by
-                # about half its diagonal times the sine of the turn, so the turn is held to what leaves the outlines of two
-                # neighbors turning toward each other still apart (settlement-review, Sawada, 2026-09-28: fills held apart, the
-                # 0.4-wide outlines met at the corners).
-                a = (2 * _mat_hash(r, c, 3.0) - 1) * min(MAT_JITTER_DEG, math.degrees(math.asin(min(1.0, max(0.0, (g / 2.0 - (0.05 + MAT_STROKE_FT) / ftpx - nudge) / (math.hypot(mw, mh) / 2.0))))))
-                if fits(_mat_corners(jx, jy, mw, mh, a)):
-                    mats.append((jx, jy, mw, mh, a))
-                elif fits(_mat_corners(x, y, mw, mh, 0.0)):
-                    mats.append((x, y, mw, mh, 0.0))
-        if gap_ft < 1.0:
-            # THE TIGHTEST STEP IS THINNED TO THE FLOOR (settlement-review, Mizuguchi, 2026-09-28): at 0.5 ft there is no room
-            # to nudge, and a full lattice of turned mats still read as a tiled grid; dropping the mats past the floor, spread
-            # at random positions (a positional draw, not the index: dropped by index they fell as whole columns and read as
-            # stripes), opens bare patches through it, so the floor reads as mats set down, not as a lattice.
-            mats = scatter_to(mats, floor)
+                if fits(_mat_corners(x, y, mw, mh, 0.0)):
+                    base.append((r, c, x, y))
+        mats = _lay_by_hand(base, mw, mh, ftpx, fits)
         if len(mats) > len(best):
             best = mats
         if len(mats) >= floor:
             break
-    # A YARD TOO SMALL TO HOLD A THIRD WITH BARE GROUND ROUND EVERY MAT DRAWS AS MANY AS IT CAN (spec 282 FR-004, amended
-    # 2026-09-28): the few smallest yards the roll makes (under 400 sq ft, about 20 x 14 to 24 x 16 ft) fall a mat or two
-    # short at the narrowest gap, and closing the gap to nothing drew them as paving - three settlement-reviews ruled it so.
+    # A YARD THAT CANNOT HOLD A THIRD WITH ROOM ROUND EVERY MAT DRAWS AS MANY AS FIT AT 1 FT (spec 282 FR-004, amended
+    # 2026-09-28): the narrower steps were tried and each read as paving in the settlement-reviews - edge to edge (rounds 2
+    # and 3), and 0.5 ft (rounds 4 to 6: no room to lay a mat askew, even thinned). At 1 ft every mat keeps bare ground and
+    # room to lie askew; eleven yards of the pool fall short of a third there, by up to half, the fewest drawing 3.
     return thin_evenly(best, max(1, math.floor((w * ftpx) * (h * ftpx) / MAT_SQ_FT * 2.0 / 3.0)))
 
 
-def scatter_to(items: list[Any], keep: int) -> list[Any]:
-    """`items` cut to `keep` by a positional draw on each item's index, the survivors in their original order - the
-    dropped ones scattered through the list rather than falling in a pattern."""
-    if len(items) <= keep:
-        return items
-    kept = set(sorted(range(len(items)), key=lambda i: _mat_hash(i, len(items), 5.0))[:keep])
-    return [it for i, it in enumerate(items) if i in kept]
+def _quad_gap(a: list[tuple[float, float]], b: list[tuple[float, float]]) -> float:
+    """The gap between two convex quads: the least corner-to-edge distance either way, 0 where a corner of one is inside
+    the other."""
+    if any(point_in_poly(px, py, b) for px, py in a) or any(point_in_poly(px, py, a) for px, py in b):
+        return 0.0
+    return min(min(edge_dist(px, py, b) for px, py in a), min(edge_dist(px, py, a) for px, py in b))
+
+
+def _lay_by_hand(base: list[tuple[int, int, float, float]], mw: float, mh: float, ftpx: float, fits: Any) -> list[tuple[float, float, float, float, float]]:
+    """Set each mat of the lattice `base` (row, column, x, y) down by hand: nudged up to `MAT_JITTER_FT` and turned up to
+    `MAT_JITTER_DEG` by a positional draw, and kept so only where its corners still fit the floor (`fits`) and its drawn
+    outline stays `MAT_INK_CLEAR_FT` clear of every neighbor's - the mats already laid and the lattice spots still to come.
+    Where the full draw does not fit, the same turn with no nudge, then half the turn, then the lattice spot unturned.
+
+    ONE BUDGET PER MAT, NOT A FORMULA PER GAP (settlement-reviews of round 6, 2026-09-28): a turn limit derived from the
+    gap and the nudge fell to nothing at the 1 ft step as well as the 0.5 ft one, and six to eleven yards a map drew a rigid
+    grid again; asking each mat whether its own turn fits beside its own neighbors keeps the turn wherever there is room."""
+    need = (MAT_INK_CLEAR_FT + 2 * MAT_STROKE_FT) / ftpx
+    laid: list[tuple[float, float, float, float, float]] = []
+    quads: list[list[tuple[float, float]]] = []
+    for k, (r, c, x, y) in enumerate(base):
+        dx, dy = (2 * _mat_hash(r, c, 1.0) - 1) * MAT_JITTER_FT / ftpx, (2 * _mat_hash(r, c, 2.0) - 1) * MAT_JITTER_FT / ftpx
+        a = (2 * _mat_hash(r, c, 3.0) - 1) * MAT_JITTER_DEG
+        ahead = [_mat_corners(bx, by, mw, mh, 0.0) for _r, _c, bx, by in base[k + 1 :]]
+        for jx, jy, ja in ((x + dx, y + dy, a), (x, y, a), (x, y, a / 2.0), (x, y, 0.0)):
+            q = _mat_corners(jx, jy, mw, mh, ja)
+            if ja == 0.0 or (fits(q) and all(_quad_gap(q, o) >= need for o in quads + ahead)):
+                laid.append((jx, jy, mw, mh, ja))
+                quads.append(q)
+                break
+    return laid
 
 
 def thin_evenly(items: list[Any], cap: int) -> list[Any]:

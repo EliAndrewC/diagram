@@ -32,12 +32,13 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
 - **D3 - the mats** (FR-004). `_draw_threshing_yard` drops the fixed 14 x 9 ft center mat, the swept-rim line and the
   south rack. Mats of 6 x 3 ft (`MAT_FT`, tobunken-mushiro: 3 x 6 shaku), long side along the yard's width, in rows
   sized inside a 1 ft inset, each corner held 1 ft inside the drawn outline and a quarter foot off the rack; a gap of
-  2 ft round each mat, closing to 1.5, 1 and 0.5 ft where a yard would fall under a third of a full cover, never to
-  nothing; each mat nudged up to 0.4 ft and turned up to 6 degrees by a positional draw, so the floor reads as mats laid
+  2 ft round each mat, closing to 1.5 and 1 ft where a yard would fall under a third of a full cover, never below
+  1 ft; each mat nudged up to 0.4 ft and turned up to 6 degrees by a positional draw, kept only where its outline stays
+  0.1 ft clear of every neighbor's (else the turn alone, half the turn, then unturned), so the floor reads as mats laid
   by hand - every regular layout tried (a checkered half, square rows, rows set over by half a mat, edge to edge) read as
   paving in the settlement-reviews. Straw-gold with a same-hue outline, no dark "mortar". The count lands in
   [ceil(full/3), floor(2 full/3)], `full` = area / 18 sq ft, the ceiling held by an even thinning (`thin_evenly`); a yard
-  under 400 sq ft that cannot reach a third with a gap draws as many as fit with one (FR-004 as amended, research.md R4).
+  that cannot reach a third at a 1 ft gap draws as many as fit at it, at least three (FR-004 as amended, research.md R4).
   The pure layout is `mat_cells(w, h, poly_local, ftpx, keep_out)`, tested with plain inputs. The rows are a GUESS, the
   thinning and the hand-laid nudge a CONVENTION, recorded on 025.
 - **D4 - the rack** (FR-006). When `_house_racks`: a module-level `rack_segment(w, h, rot, ftpx, side_pref)` returns the
