@@ -1,0 +1,82 @@
+{
+ "feature": "269-research-backfill",
+ "plan_sha256": "8604925f86d2aa5bf98418f58963f092bfb23669c0df4bbe0a8da0730df238fc",
+ "reviewed": "2026-09-28",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "Research runs in fresh headless page sessions from briefs (briefs/gen.py), write then checks, two questions a check session, check briefs queued as then: steps",
+   "class": "within",
+   "why": "Carries FR-005 (the feature 250 procedure: page sessions from briefs) and the request's 'plug away in the background'."
+  },
+  {
+   "id": "D2-queue",
+   "summary": "One serial queue in this clone in the inventory's order; then:sync.sh merges main between groups, a conflict aborted and the queue carries on",
+   "class": "within",
+   "why": "The spec's Edge Cases state exactly this: the queue syncs from main between sessions and a conflict stops the sync while the queue carries on."
+  },
+  {
+   "id": "D2-wait265-cap",
+   "summary": "then:wait265.sh holds the edit-existing groups until 265 has landed, but only for up to 10 hours; past that (per wait265.sh) it syncs and goes on regardless",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The accepted spec (Edge Cases) says no group that edits an existing fragment starts until the clone has 265's landing - unconditionally. The 10-hour cap lets those groups start without it, which guts the rule in the one case it exists for (265's unpushed edits to the same fragments; the request's 'make sure that you and the other sessions are not duplicating work'). Not physically impossible to honor (wait on, or stop the queue and leave it to the hourly heartbeat), not implied by the GM's words, and the overnight purpose does not require editing 265's fragments early - other groups or a stopped-and-reported queue serve it. Measured: the fallback never fired - 265 closed 2026-09-27 07:38 (1c2797c99), reserve-prefix.py reached origin/main at the 07:40 fetch (origin/main reflog; absent at 07:08), and the first edit-existing group (H3) followed A1 (12:40-13:03) - so the remedy is the plan text and wait265.sh: drop the cap (wait until landed, or stop rather than proceed)."
+  },
+  {
+   "id": "D3",
+   "summary": "Usage-limit survival: runner 4d13ad4f waits until the named reset (else 15/30/60 min) and --resumes the same session, RETRIES=14 (~11 h); an hourly CronCreate heartbeat at :17 restarts a dead queue with work left and checks peers; heartbeat lives with this process, 7-day expiry",
+   "class": "within",
+   "why": "Carries FR-007 and the request's first concern (automatic resume when the five-hour window ends); an ~11-hour retry span exceeds a five-hour window, and the 7-day expiry and idle-only firing are platform facts, not a narrowing of 'many hours'."
+  },
+  {
+   "id": "D4",
+   "summary": "Peers checked each heartbeat via ListAgents against RESEARCH-CLAIMS.md; idle-with-unfinished-claims messaged, confirmed next wake (busy, commits or run-log lines), re-nudged if still idle; busy peers never messaged; every check logged; each write brief re-reads claims and marks its group; headless peer runners self-resume",
+   "class": "within",
+   "why": "Carries FR-008, FR-011 and the request's 'check in on the other sessions to make sure that they have automatically resumed'. Not messaging a busy peer is what FR-008 asks (only an idle one is nudged); the peer-checks log shows runners observed, not exempted."
+  },
+  {
+   "id": "D5",
+   "summary": "Prefixes reserved through a byte copy of 265's reserve-prefix.py kept outside the repository, same lock and ledger",
+   "class": "within",
+   "why": "Implements FR-005's host-wide-lock reservation (265 FR-010) with the same lock and ledger; where the script file lives narrows nothing."
+  },
+  {
+   "id": "D6",
+   "summary": "Each item ends in one of four outcomes, recorded in its handoff line and gathered into outcomes.md",
+   "class": "within",
+   "why": "FR-001 and SC-001 settle the four outcomes and outcomes.md; the handoff-line format is mechanism."
+  },
+  {
+   "id": "D7",
+   "summary": "Kinds (Entry:, label, prose) and the generator follow each group's outcomes in this session after its checks, entry-drift on a bundle; map changes become seed-rolled knobs, motivating map regenerated, make done green; a change past one feature's size goes to future-work with measurement, mechanism, sketch",
+   "class": "within",
+   "why": "Restates FR-003, FR-004 and the Edge Cases' overhaul case; nothing narrower than the spec."
+  },
+  {
+   "id": "D8",
+   "summary": "Corrections owed to another feature's section sent to that session by SendMessage and listed in outcomes.md",
+   "class": "within",
+   "why": "The spec's Edge Cases: the owning session is sent the correction and this feature does not make it (FR-006)."
+  },
+  {
+   "id": "D9",
+   "summary": "The GM's items go through escalation-check",
+   "class": "within",
+   "why": "FR-010 verbatim."
+  },
+  {
+   "id": "D10",
+   "summary": "future-work closed out at the end: each answered item moved to closed.md or rewritten to what remains",
+   "class": "within",
+   "why": "FR-009 and SC-009."
+  },
+  {
+   "id": "CC-XVI",
+   "summary": "Constitution check: every inventory item researched; B33 and B34 get research and the rulings stay the GM's",
+   "class": "within",
+   "why": "FR-001 and the Edge Cases' B33/B34 line; no carve-out."
+  }
+ ],
+ "verdict": "BLOCKED"
+}

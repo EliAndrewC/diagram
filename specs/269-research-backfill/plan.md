@@ -17,8 +17,10 @@ usage-limit resets, and once a group is checked, rewrites the kinds and the gene
   and the check briefs are queued as `then:<g>-checks.sh` steps.
 - **D2 - One queue, serial, in this clone** (the runner's rule: do not edit the clone while it runs). The order is the
   inventory's "Queue order". `then:sync.sh` between groups merges main in (a conflict is aborted and the queue goes
-  on), and `then:wait265.sh` before the first group that edits existing fragments waits, for up to 10 hours, until
-  265 has landed (its close carries `scripts/reserve-prefix.py` to main).
+  on), and `then:wait265.sh` before the first group that edits existing fragments waits until
+  265 has landed (its close carries `scripts/reserve-prefix.py` to main), with no time limit: the spec's Edge Cases
+  hold that group back until then, so a long wait is a stalled queue for the hourly heartbeat to flag, never a reason
+  to go on.
 - **D3 - Surviving the usage limit** (FR-007): the runner carries diagram-buildings' 4d13ad4f byte-identical. A
   failed session waits until the reset its message names, else 15, 30, then 60 minutes, and RESUMES by `--resume`,
   up to 14 times. This session holds an hourly `CronCreate` heartbeat (at :17). It fires only while this session is
