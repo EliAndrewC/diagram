@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-28
 
-**Status**: specified; awaiting spec-fidelity
+**Status**: specified; spec-fidelity round 1 CHANGES REQUIRED (1) - applied, round 2 next
 
 **Input**: the GM's request of 2026-09-28, verbatim in [`request.md`](request.md).
 
@@ -41,7 +41,9 @@ sheet with untagged ink or an unregistered kind, and on a registered kind no shr
   both; where the country shrine's reads differently, the page's own notes carry the difference, not a second kind.
 - The background and pure framing ink carry the ruled-out tag (`-`), as on the magistracy sheets.
 - A write-up is written FROM the research record (religion-and-death 090-128, 540 where it applies); a kind the record
-  does not cover says it is silent, as the magistracy kinds do.
+  does not cover says it is silent, as the magistracy kinds do. A kind that a folded `types.json` item already
+  classifies keeps that classification and its reason (feature 262's FR-005 carry-over) - the dwelling and the bell
+  tower stay `guess` with their stated reasons; nothing is re-decided.
 
 ## Requirements *(mandatory)*
 
@@ -57,6 +59,13 @@ sheet with untagged ink or an unregistered kind, and on a registered kind no shr
   over the sheets it serves, as they do for the magistracies.
 - **FR-005**: The drawn sheet and its PNG MUST NOT change in appearance: this feature adds tags, write-ups and a page,
   not ink.
+- **FR-006** (feature 262's FR-003a, which deferred the country-shrine tier to this feature): each `country-shrines`
+  item in `buildings/types.json` MUST name the Mode A kind it is (`id`, `kind`, `band_ft`); its classification and
+  reason are stated once, in that kind's registry entry, and its label-to-kind binding is the sheet's own tag. No
+  shrine item keeps a `label`, `class` or `why`. The pack audit's shrine checks and `buildings/programs.md` MUST take
+  the class, the why and the item-to-feature binding from the registry and the tags. An item that names a kind no sheet
+  draws yet (the optional guardian figures, lanterns, strength stones, stage, sumo ring and bell tower) gets its kind's
+  write-up too, and the registry's closure is over the kinds the sheets draw OR the programs name.
 
 ## Success Criteria *(mandatory)*
 
@@ -66,9 +75,18 @@ sheet with untagged ink or an unregistered kind, and on a registered kind no shr
   silent.
 - **SC-003** (FR-004): the tests fail on a shrine sheet with an untagged element or an unregistered kind (proved on a
   seeded fault).
-- **SC-004** (FR-005): the PNG before and after differs by no pixel.
+- **SC-004** (FR-005): the PNG before and after differs by no pixel, and the pack audit's output on the shrine sheet is
+  identical before and after.
+- **SC-005** (FR-006): no `country-shrines` item in `types.json` carries a `label`, `class` or `why`; `make
+  building-programs CHECK=1` is current.
 
 ## Assumptions
 
 - "Country shrine maps" are the pool's `country-shrines/` sheets (today one, Hoshigaoka's); the village map that shows
   the shrine as a glyph is a Mode B map with its own page and is not in scope.
+
+## Review history
+
+- Round 1 (spec-fidelity, MODE 2, 2026-09-28): CHANGES REQUIRED - the country-shrine tier's `types.json` items still
+  carry their own label, class and why, the duplication the GM named; 262's FR-003a deferred exactly this fold to the
+  shrine's page. Applied: FR-006, the carry-over clause in the Edge Cases, SC-004 extended to the pack audit, SC-005.
