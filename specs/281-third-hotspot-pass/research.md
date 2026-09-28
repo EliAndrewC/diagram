@@ -10,8 +10,9 @@ function that encloses it, so a count survives line moves. Every figure is in `m
 **The roll.** The five pool hamlets take 33.835 s between them (m:before-pool-roll-s), against 60.1 s before feature 278.
 By stage, summed over the five: the field is the largest, then the ways (`stage_web`), the windbreak, the hinterland, the
 notice board, the homesteads and the track. A full generate writing the svg and the interactive page costs about the same
-as the roll alone except on Inashiro (m:before-inashiro-full-s against m:before-inashiro-roll-s), so the finish is not
-where the time goes; the pixel render is a separate step outside the roll (feature 278 priced it and left it).
+as the roll alone on four of the five; Inashiro's full generate took 9.737 s (m:before-inashiro-full-s) against a
+6.735 s roll (m:before-inashiro-roll-s), one run each, and the after-profile says whether that is the reference map's
+extra output or load. The pixel render is a separate step outside the roll (feature 278 priced it and left it).
 
 **The profile** (profiled seconds summed over the five, `/tmp/m281/before/*.prof`; profiling inflates Python-level work
 about 2.4 times, so these rank, they do not predict). The self-time leaders are the distance primitives: `seg_dist` 5.8
@@ -47,6 +48,6 @@ And two stages whose remaining cost is per-candidate Python work over an index t
 by 278; its remaining cost is regex parsing of the element text) and the finish's blade grouping. These go to the
 after-profile's residue with their levers priced (FR-011).
 
-**The tests.** `make durations` (observed 2026-09-28): the quick tree is 4,062 tests in 27.8 s wall; its slowest test is
+**The tests.** `make durations` (observed 2026-09-28, method: `make durations`, one run): the quick tree is 4,062 tests in 27.8 s wall; its slowest test is
 3.8 s and no one test is its critical path, so no test-side lever is taken - the gate's cost is the pool rolls, which the
 engine levers reduce.
