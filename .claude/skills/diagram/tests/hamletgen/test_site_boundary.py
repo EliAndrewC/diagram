@@ -159,3 +159,53 @@ def test_the_computed_standoff_without_an_envelope_is_the_house_alone() -> None:
     chain = [((300.0, 300.0), (700.0, 300.0), (0.0, -1.0))]
     row = front_row(plan, 12, standoff=None, chains=[chain])  # type: ignore[arg-type]
     assert row and all(abs(y - (300.0 - (HOUSE_PADDY_GAP_FT + 1.0 + STANDOFF_SLACK_PX + DEFAULT_HOUSE[1] / 2))) < 1e-6 for _x, y in row)
+
+
+def test_the_indexed_hit_points_answer_as_the_linear_scan_did() -> None:
+    """Feature 276 (plan D8): the vertex grids, the hole grid and the one lookup per rectangle answer every rectangle
+    exactly as the linear form - every water segment, every ring, every vertex, every hole - over random rings with
+    holes and random water, including rectangles that hold a ring vertex without a sample point inside it."""
+    import math
+    import random
+
+    from l7r.diagram.hamletgen.homesteads.boundary import SiteCorridors
+    from l7r.diagram.settlement._geom.indexes import RingIndex
+    from l7r.diagram.settlement._geom.primitives import seg_dist
+
+    r = random.Random(276)
+
+    def blob(cx, cy, rad, n):  # type: ignore[no-untyped-def]
+        return [(cx + rad * (0.7 + 0.3 * r.random()) * math.cos(2 * math.pi * k / n), cy + rad * (0.7 + 0.3 * r.random()) * math.sin(2 * math.pi * k / n)) for k in range(n)]
+
+    for _ in range(6):
+        rings = [blob(r.uniform(100, 900), r.uniform(100, 900), r.uniform(40, 160), r.randint(6, 40)) for _ in range(5)]
+        holes = [blob(ring[0][0] - 20, ring[0][1], 15, 8) for ring in rings[:2]]
+        water = []
+        for _ in range(40):
+            x, y = r.uniform(0, 1000), r.uniform(0, 1000)
+            water.append(((x, y), (x + r.uniform(-80, 80), y + r.uniform(-80, 80)), r.uniform(2, 12)))
+        corr = SiteCorridors((water, []), (rings, holes))
+        ring_ix = [RingIndex(g) for g in rings]
+        hole_ix = [RingIndex(h) for h in holes]
+
+        def linear(pts):  # type: ignore[no-untyped-def]
+            if any(seg_dist(x, y, a, b) < clr for x, y in pts for a, b, clr in water):
+                return True
+            xs, ys = [p[0] for p in pts], [p[1] for p in pts]
+            rx0, ry0, rx1, ry1 = min(xs), min(ys), max(xs), max(ys)
+            for g, ix in zip(rings, ring_ix, strict=True):
+                if max(p[0] for p in g) < rx0 or min(p[0] for p in g) > rx1 or max(p[1] for p in g) < ry0 or min(p[1] for p in g) > ry1:
+                    continue
+                if any(ix.inside(px, py) and not any(h.inside(px, py) for h in hole_ix) for px, py in pts) or any(rx0 <= vx <= rx1 and ry0 <= vy <= ry1 for vx, vy in g):
+                    return True
+            return False
+
+        hits = 0
+        for _ in range(300):
+            cx, cy, w, h = r.uniform(0, 1000), r.uniform(0, 1000), r.uniform(4, 90), r.uniform(4, 90)
+            x0, y0, x1, y1 = cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2
+            pts = ((x0, y0), (x1, y0), (x1, y1), (x0, y1), (cx, y0), (x1, cy), (cx, y1), (x0, cy), (cx, cy))
+            got = corr.hit_points(pts)
+            assert got == linear(pts)
+            hits += got
+        assert 20 < hits < 280, "non-vacuity: both answers occur"

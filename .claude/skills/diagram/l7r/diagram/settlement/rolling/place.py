@@ -6,7 +6,7 @@ Split from settlement/rolling.py by feature 118 - see settlement/rolling/CLAUDE.
 import math
 from typing import TYPE_CHECKING, Any
 
-from .._geom import Indexed, Pt
+from .._geom import Indexed, Pt, point_in_poly
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -66,6 +66,49 @@ class PlacerMixin:
                 bd, best = d, (px, py)
         return best
 
+    def _seat_refused(self: Settlement, x: float, y: float, hw: float, hh: float) -> bool:  # type: ignore[misc]
+        """Would `_bundle_fits` refuse a DISPERSED bundle whose house stands at (x, y) - answered from the free ground,
+        before its bundle is built (feature 276, FR-003, plan D9/D9a)?
+
+        Three of `_bundle_fits`' own conjuncts, each of which reads only the house rectangle `_bundle_geom` gives the
+        bundle - `(x, y, hw, hh)`, exactly: one of the house's nine points on surely-taken static ground (the house-ground
+        conjunct refuses that point); the house within the 2 px margin of a placed box (the bundle's bbox holds the house,
+        and the side fit refuses any placed box within that margin of the bbox); the eave gap to a neighbor. The
+        conjunction is order-independent, so a YES here is the fit test's NO. The dispersed path only: on the nucleated
+        path one overlapping box is a computed move, not a refusal."""
+        house = (x, y, hw, hh)
+        fg = getattr(self, "_free_ground", None)
+        if fg is not None and fg.rect_refused(house):
+            return True
+        for it in self._reach_index(self.placed, "placed_reach").near(x, y, max(hw, hh) / 2 + 2):
+            if abs(x - it[0]) < (hw + it[2]) / 2 + 2 and abs(y - it[1]) < (hh + it[3]) / 2 + 2:
+                return True
+        return bool(self._house_too_near_a_neighbor(house))
+
+    def _bundle_refused(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
+        """Would `_bundle_fits` refuse this DISPERSED bundle, by one of the conjuncts the indexes answer cheaply (feature
+        276, plan D9a)? Behind `_seat_refused`, once the bundle is built (moved from its template, so building is cheap):
+        a part's nine points on surely-taken static ground (with a site boundary installed, `_rect_blocked` IS the
+        nine-point test, whichever `fields` it is asked with), the bbox off the canvas or the bounding ring, the bbox within
+        the 2 px margin of a placed box, and the three sun rules. Each is a conjunct of the order-independent
+        `_bundle_fits`, so a YES here is its NO; what survives gets the whole test, as before."""
+        fg = getattr(self, "_free_ground", None)
+        if fg is not None:
+            parts = [geom.get(k) for k in ("yard", "grove_n", "grove_w", "shed")] + list(geom["gardens"])
+            if any(r is not None and fg.rect_refused(r) for r in parts):
+                return True
+        cx, cy, W, H = geom["bbox"]
+        if cx - W / 2 < 6 or cx + W / 2 > self.W - 6 or cy - H / 2 < 6 or cy + H / 2 > self.H - 6:
+            return True
+        if self.bound and any(not point_in_poly(vx, vy, self.bound) for vx, vy in self._rect_corners(geom["bbox"])):
+            return True
+        for it in self._reach_index(self.placed, "placed_reach").near(cx, cy, max(W, H) / 2 + 2):
+            if abs(cx - it[0]) < (W + it[2]) / 2 + 2 and abs(cy - it[1]) < (H + it[3]) / 2 + 2:
+                return True
+        if not self._sun_corridor_ok(geom) or not self._gardens_sun_ok(geom):
+            return True
+        return bool(geom.get("yard") is not None and self._yard_sun_conflict(geom))
+
     def _slide(self: Settlement, cx: float, cy: float, hw: float, hh: float, target_fn: Any, grove_off_field: bool) -> Pt:  # type: ignore[misc]
         """Greedily shove the bundle toward target_fn (a field bund, then a neighbor) in small steps, as
         far as it still fits - the 'pack as close as the rules allow' step."""
@@ -78,7 +121,12 @@ class PlacerMixin:
             if dist < 1.5:
                 break
             ncx, ncy = cx + dx / dist * 2.0, cy + dy / dist * 2.0
-            if self._bundle_fits(self._bundle_geom(ncx, ncy, hw, hh), grove_off_field=grove_off_field):
+            # THE FREE GROUND FIRST (feature 276, plan D9): a step it refuses is a step `_bundle_fits` refuses, and the
+            # slide stops at the first refusal either way.
+            if self._seat_refused(ncx, ncy, hw, hh):
+                break
+            geom = self._bundle_geom(ncx, ncy, hw, hh)
+            if not self._bundle_refused(geom) and self._bundle_fits(geom, grove_off_field=grove_off_field):
                 cx, cy = ncx, ncy
             else:
                 break
@@ -89,8 +137,19 @@ class PlacerMixin:
         - shove the grove up against the nearest paddy bund (without entering it), then pack the whole
         complex against its nearest neighbor, each as far as the rules allow. `shed` reserves a north kura in
         the bundle. Returns (cx, cy, geom) or None."""
-        if getattr(self, "_nucleated", False):
-            return self._place_bundle_nucleated(x, y, hw, hh, shed)
+        # THE HOUSEHOLD'S SEAT, for the rolls of its bundle's parts (feature 276, plan D10): the seat it is sought from,
+        # wherever the search moves it - so its yard and garden are the household's, not each candidate's.
+        prior = getattr(self, "_household_seat", None)
+        self._household_seat = (float(x), float(y))
+        try:
+            if getattr(self, "_nucleated", False):
+                return self._place_bundle_nucleated(x, y, hw, hh, shed)
+            return self._place_bundle_dispersed(x, y, hw, hh)
+        finally:
+            self._household_seat = prior
+
+    def _place_bundle_dispersed(self: Settlement, x: float, y: float, hw: float, hh: float) -> Any:  # type: ignore[misc]
+        """The dispersed spiral: the nearest seat that fits, then the two slides (see `_place_bundle`)."""
         offsets = [(0, 0)]
         for r in range(7, 92, 7):
             for k in range(12):
@@ -98,7 +157,12 @@ class PlacerMixin:
                 offsets.append((round(r * math.cos(a)), round(r * math.sin(a))))
         start: Pt | None = None
         for nx, ny in offsets:
-            if self._bundle_fits(self._bundle_geom(x + nx, y + ny, hw, hh)):
+            # THE FREE GROUND PROPOSES, THE FIT TEST DECIDES (feature 276, plan D9): an offset whose house the index
+            # refuses is one `_bundle_fits` would refuse, so it is dropped without building its bundle.
+            if self._seat_refused(x + nx, y + ny, hw, hh):
+                continue
+            geom = self._bundle_geom(x + nx, y + ny, hw, hh)
+            if not self._bundle_refused(geom) and self._bundle_fits(geom):
                 start = (x + nx, y + ny)
                 break
         if start is None:
@@ -143,7 +207,13 @@ class PlacerMixin:
         # ponds hold a one-sided homestead and not the both-sided box (Kuwabata 11 of 16) - and the GM's rectangle is the
         # one the homestead will occupy, garden on the left OR the right, not both at once. At most five rectangles.
         self._seat_search["positions"] += 1
-        _union_clear = self._envelope_blocked(self._bundle_envelope(x, y, hw, hh, shed)) is None
+        # THE FREE GROUND FIRST, WHERE THE LOOP ITSELF JUDGES GROUND (feature 276, plan D9): the whole envelope here; a
+        # side's own box only below, when this envelope was refused (only then does the loop test that box); a moved box
+        # at its moved position. A box the static ground refuses is one `_envelope_blocked` refuses (True, before any
+        # placed box is read), so asking it first changes no verdict and never removes a move.
+        _fg = getattr(self, "_free_ground", None)
+        _env = self._bundle_envelope(x, y, hw, hh, shed)
+        _union_clear = not (_fg is not None and _fg.rect_refused(_env)) and self._envelope_blocked(_env) is None
         best: Any = None
         for rank, side in enumerate(self._NUC_SIDES):
             cx, cy = x, y
@@ -151,7 +221,7 @@ class PlacerMixin:
             hit = None
             if not _union_clear:
                 self._seat_search["positions"] += 1
-                hit = self._envelope_blocked(geom["bbox"])
+                hit = True if _fg is not None and _fg.rect_refused(geom["bbox"]) else self._envelope_blocked(geom["bbox"])
             if isinstance(hit, tuple):
                 # THE ONE COMPUTED MOVE: the overlap with that neighbor's box on each axis, plus the 2 px the placed-box
                 # test keeps; move along the axis that needs the smaller push, away from the neighbor's center
@@ -165,7 +235,7 @@ class PlacerMixin:
                     cy += oy if env[1] >= py else -oy
                 geom = self._bundle_geom(cx, cy, hw, hh, side, shed)
                 self._seat_search["positions"] += 1
-                hit = self._envelope_blocked(geom["bbox"])
+                hit = True if _fg is not None and _fg.rect_refused(geom["bbox"]) else self._envelope_blocked(geom["bbox"])
             if hit is not None:
                 continue
             if _avoid and any(math.hypot(cx - _ax, cy - _ay) <= 50.0 for _ax, _ay in _avoid):
