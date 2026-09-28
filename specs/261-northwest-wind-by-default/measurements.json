@@ -1157,5 +1157,27 @@
   "quantity": "main merged (feature 273): meta.hamlet_burial village_ground, no cemetery drawn, and the notes' Features line saying its dead lie in the main village's ground",
   "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.json meta.hamlet_burial, cemeteries; mizuguchi.notes.md",
   "command": "grep -n 'Mizuguchi keeps none of its own' .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md"
+ },
+ "inashiro-r21-subject": {
+  "verifies": "F1",
+  "subject": "inashiro",
+  "round": "bf86eb9f",
+  "answers": "bf86eb9f260f",
+  "value": 1,
+  "unit": "passages",
+  "quantity": "the notes' opening paragraph, which placed the burial ground in the windbreak's east arm by a track north; it now says west-north-west of the houses, as the Features line and the drawing do (meta.hamlet_burial own_ground, one cemetery at bearing 300 from the houses' middle)",
+  "source": ".claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md; inashiro.json meta.hamlet_burial, cemeteries",
+  "command": "grep -n 'in a glade cut into the windbreak west-north-west of the' .claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md"
+ },
+ "inashiro-r21-hem": {
+  "verifies": "F2",
+  "subject": "inashiro",
+  "round": "bf86eb9f",
+  "answers": "bf86eb9f260f",
+  "value": 7391,
+  "unit": "sq ft",
+  "quantity": "the median hem plot the notes' known-open bullet states (20 plots; 6,084 in the round), the largest of the four hamlets with a hem (Kashikawa 6,518, Mizuguchi 6,263, Sawada 7,269), by the shoelace area of each non-homestead dry plot",
+  "source": ".claude/skills/diagram/pool/hamlets/*/*.json dry_plots; inashiro.notes.md",
+  "command": "grep -n 'median 7,391 sq ft against 1,707' .claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md"
  }
 }

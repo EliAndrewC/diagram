@@ -6,8 +6,8 @@
 to a village district whose headman lives in the main village. Like every hamlet it has no headman
 of its own, no shrine, no tax-free plots and no cremation ground. It keeps a burial ground of its own
 (its rolled `hamlet_burial` is own_ground, feature 273): a small common ground holding the urns brought
-home from the main village's cremation ground, in a glade of the windbreak's east arm, a short way
-through the trees from the track north to the main village.
+home from the main village's cremation ground, in a glade cut into the windbreak west-north-west of the
+houses, beyond its last houses.
 
 **Kanji triangle**: 稲 *ina* "rice plant" + 代 *shiro* "paddy" (as in 苗代 *nawashiro*, a seedbed).
 稲代 Inashiro, "the rice-field" - the plainest possible name for the plainest possible hamlet, which
@@ -88,7 +88,7 @@ pipeline's, and it is the same order a person follows:
   from the slope and then re-read off the seat, which made the belt's side circular here. Every map now
   takes the northwest unless its spec declares a local wind (none does), and the cluster is seated with
   its back to it; this map's belt stands on the north and west of its houses.
-- **Dry hem plots run ~3.6x the size of Ikegami's** (median 6,084 sq ft against 1,707; the finest of the four scripted hamlets - Kashikawa 6,137, Mizuguchi 7,323, Sawada 6,478. This bullet read "~3.5x" until a settlement-review re-measured it on the SHIPPED manifests, 2026-08-18: a standing known-open carries the current number or it is not a measurement) and chain single-file rather than packing two or (numbers re-measured 2026-09-09, feature 220, after the dry hem re-rolled 24 -> 29 plots: Inashiro is now the finest of the four, not the coarsest.)
+- **Dry hem plots run ~4.3x the size of Ikegami's** (20 plots, median 7,391 sq ft against 1,707; the largest of the four scripted hamlets with a hem - Kashikawa 6,518, Mizuguchi 6,263, Sawada 7,269, re-measured on the shipped manifests 2026-09-28. This bullet read "~3.5x" until a settlement-review re-measured it on the SHIPPED manifests, 2026-08-18: a standing known-open carries the current number or it is not a measurement) and chain single-file rather than packing two or (numbers re-measured 2026-09-09, feature 220, after the dry hem re-rolled 24 -> 29 plots: Inashiro is now the finest of the four, not the coarsest.)
   three deep, so the hem reads as large fields rather than household strips (`settlement-review`,
   2026-08-11). Parcel size, not acreage - the total is comparable. It wants a researched constant of
   its own.
