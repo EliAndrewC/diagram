@@ -335,5 +335,54 @@
     "quantity": "houses seated from 240 seeds summed over five layouts, dispersed path, the old (position-keyed) rolls",
     "source": "a probe test (scratch) summing the placement primitive's seated houses over five jitter layouts per density, with the per-household roll switched OFF (the old position-keyed rolls; every other change of this feature is exact, so this is the old placement) - 2026-09-28",
     "observed": "2026-09-28"
+  },
+  "household-dense-60-nucleated-houses-five": {
+    "value": 281,
+    "unit": "houses",
+    "quantity": "houses seated from 60 seeds summed over five layouts, nucleated path, the per-household roll",
+    "source": "a probe test (scratch) of the placement primitive with the per-household roll switched ON (this feature's code at commit 3d10740f2's successors, before the extended pre-screen, which is exact and changes no seat) - 2026-09-28",
+    "observed": "2026-09-28"
+  },
+  "household-dense-120-nucleated-houses-five": {
+    "value": 560,
+    "unit": "houses",
+    "quantity": "houses seated from 120 seeds summed over five layouts, nucleated path, the per-household roll",
+    "source": "a probe test (scratch) of the placement primitive with the per-household roll switched ON (this feature's code at commit 3d10740f2's successors, before the extended pre-screen, which is exact and changes no seat) - 2026-09-28",
+    "observed": "2026-09-28"
+  },
+  "household-dense-240-nucleated-houses-five": {
+    "value": 1133,
+    "unit": "houses",
+    "quantity": "houses seated from 240 seeds summed over five layouts, nucleated path, the per-household roll",
+    "source": "a probe test (scratch) of the placement primitive with the per-household roll switched ON (this feature's code at commit 3d10740f2's successors, before the extended pre-screen, which is exact and changes no seat) - 2026-09-28",
+    "observed": "2026-09-28"
+  },
+  "household-dense-60-dispersed-houses-five": {
+    "value": 191,
+    "unit": "houses",
+    "quantity": "houses seated from 60 seeds summed over five layouts, dispersed path, the per-household roll",
+    "source": "a probe test (scratch) of the placement primitive with the per-household roll switched ON (this feature's code at commit 3d10740f2's successors, before the extended pre-screen, which is exact and changes no seat) - 2026-09-28",
+    "observed": "2026-09-28"
+  },
+  "household-dense-120-dispersed-houses-five": {
+    "value": 365,
+    "unit": "houses",
+    "quantity": "houses seated from 120 seeds summed over five layouts, dispersed path, the per-household roll",
+    "source": "a probe test (scratch) of the placement primitive with the per-household roll switched ON (this feature's code at commit 3d10740f2's successors, before the extended pre-screen, which is exact and changes no seat) - 2026-09-28",
+    "observed": "2026-09-28"
+  },
+  "household-dense-240-dispersed-houses-five": {
+    "value": 707,
+    "unit": "houses",
+    "quantity": "houses seated from 240 seeds summed over five layouts, dispersed path, the per-household roll",
+    "source": "a probe test (scratch) of the placement primitive with the per-household roll switched ON (this feature's code at commit 3d10740f2's successors, before the extended pre-screen, which is exact and changes no seat) - 2026-09-28",
+    "observed": "2026-09-28"
+  },
+  "household-dense-240-dispersed-houses": {
+    "value": 137,
+    "unit": "houses",
+    "quantity": "houses seated from 240 seeds on the single harness layout, dispersed path, the per-household roll",
+    "source": "harness.py homesteads section (scratch run h-home-d10.json) after D10, 2026-09-28",
+    "observed": "2026-09-28"
   }
 }

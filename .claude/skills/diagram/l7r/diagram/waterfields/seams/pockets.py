@@ -115,6 +115,26 @@ def _despike(geom: BaseGeometry) -> BaseGeometry:
         return cleaned
 
 
+def _despike_many(geoms: list[BaseGeometry]) -> list[BaseGeometry]:
+    """`_despike` over a list, as shapely 2 ARRAY calls - one call per step for all of them instead of four calls per
+    geometry (feature 276, FR-004). The same opening by `_SPIKE`, mitred, intersected back with the cleaned input; and the
+    same refusal to raise: GEOS may refuse to offset one geometry of the batch, and then the batch is redone one at a time
+    through `_despike` itself, which leaves only that one un-tidied - exactly what it did alone."""
+    _load_shapely()
+    if not geoms:
+        return []
+    import shapely
+
+    try:
+        cleaned = shapely.buffer(geoms, 0)
+        opened = shapely.buffer(shapely.buffer(cleaned, -_SPIKE, join_style="mitre", mitre_limit=2.0), _SPIKE, join_style="mitre", mitre_limit=2.0)
+        out = shapely.intersection(cleaned, opened)
+    except GEOSException:
+        return [_despike(g) for g in geoms]
+    empty = shapely.is_empty(cleaned)
+    return [c if e else o for c, o, e in zip(cleaned.tolist(), out.tolist(), empty.tolist(), strict=True)]
+
+
 def _ring(poly: Polygon) -> Poly:
     """A plot ring as the manifest records it: 1dp, no repeated closing vertex, and no vertex
     that rounding has collapsed onto its predecessor (a boolean result carries plenty)."""

@@ -285,10 +285,14 @@ Round 3 of this amendment (spec-fidelity-verify, 2026-09-28): FAITHFUL.
 
 SC-003's "neither path seats fewer houses than before" was judged on ONE layout of each density, and one layout's count
 moves by a few houses whenever the households' rolls are reshuffled: with the per-household roll (Decisions Recorded, ruled
-LEGITIMATE), the dispersed single-layout count at 240 seeds went from 140 to 137 - while over five layouts it went from 703
-to 707. So the clause is now judged on the total over five layouts, within `2%`. Stated plainly, because it is the
-judgment this amendment asks for: on the NUCLEATED path the five-layout totals read 281, 560 and 1133 against 285, 563
-and 1138 (-1.4%, -0.5%, -0.4%; observed 2026-09-28, method: the probe named in measurements.json) - small and
+LEGITIMATE), the dispersed single-layout count at 240 seeds went from 140 to 137 (m:before-dense-240-dispersed-houses,
+m:household-dense-240-dispersed-houses) - while over five layouts it went from 703 to 707
+(m:before-dense-240-dispersed-houses-five, m:household-dense-240-dispersed-houses-five). So the clause is now judged on the
+total over five layouts, within `2%`. Stated plainly, because it is the judgment this amendment asks for: on the NUCLEATED
+path the five-layout totals read 281, 560 and 1133 (m:household-dense-60-nucleated-houses-five,
+m:household-dense-120-nucleated-houses-five, m:household-dense-240-nucleated-houses-five - the per-household roll ON)
+against 285, 563 and 1138 (m:before-dense-60-nucleated-houses-five, m:before-dense-120-nucleated-houses-five,
+m:before-dense-240-nucleated-houses-five - the old rolls) (-1.4%, -0.5%, -0.4%) - small and
 consistent, most likely because a seat moved clear of a neighbor used to be re-rolled at its new position, a second chance
 the household's own roll no longer gives. The pool hamlets' own counts are held separately by FR-006 (every household
 seated), and checked when the pool regenerates.

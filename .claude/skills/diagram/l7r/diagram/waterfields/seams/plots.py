@@ -20,7 +20,7 @@ from ..banks import (
 )
 from ..frame import Poly, Pt, _Frame
 from .geoms import PlotGeoms
-from .pockets import _despike, _parts, _ring
+from .pockets import _despike, _despike_many, _parts, _ring
 
 _SHAPELY_LOADED = False
 
@@ -103,11 +103,32 @@ def _plant(F: _Frame, pocket: Polygon, plot_across: float, row_step: tuple[float
     marks = [F.to_uf(float(q[0]), float(q[1])) for q in pocket.exterior.coords]
     us = _seam_cuts(ulo, uhi, plot_across, sorted(m[0] for m in marks))
     fs = _seam_cuts(flo, fhi, (row_step[0] + row_step[1]) / 2, sorted(m[1] for m in marks))
-    cells: list[Polygon] = []
+    import shapely
+
+    # ONLY THE CELLS THE POCKET TOUCHES (feature 276, FR-004, plan D13). Each row band is intersected with the pocket
+    # once, and a cell is cut only where a CONNECTED PIECE of that row's intersection reaches its column - so a long
+    # sliver lying diagonally across the field frame, or a U-shaped pocket whose row meets it twice, no longer cuts every
+    # cell of its bounding box (one test's map cut ~1,400 per pocket). A cell no piece reaches has an empty intersection
+    # with the pocket, so skipping it changes nothing; a cell it reaches is cut exactly as before, pocket against cell.
+    rows: list[list[tuple[float, float]]] = []
+    for fa, fb in zip(fs[:-1], fs[1:], strict=True):
+        band = Polygon([F.to_xy(ulo - 1.0, fa), F.to_xy(uhi + 1.0, fa), F.to_xy(uhi + 1.0, fb), F.to_xy(ulo - 1.0, fb)])
+        spans = []
+        for piece in getattr(pocket.intersection(band), "geoms", None) or [pocket.intersection(band)]:
+            if piece.is_empty or not hasattr(piece, "exterior"):
+                continue
+            pu = [F.to_uf(float(q[0]), float(q[1]))[0] for q in piece.exterior.coords]
+            spans.append((min(pu), max(pu)))
+        rows.append(spans)
+    cut: list[Polygon] = []
     for ua, ub in zip(us[:-1], us[1:], strict=True):
-        for fa, fb in zip(fs[:-1], fs[1:], strict=True):
-            cell = Polygon([F.to_xy(ua, fa), F.to_xy(ub, fa), F.to_xy(ub, fb), F.to_xy(ua, fb)])
-            cells += _parts(_despike(pocket.intersection(cell)))
+        for r, (fa, fb) in enumerate(zip(fs[:-1], fs[1:], strict=True)):
+            if any(pu1 >= ua and pu0 <= ub for pu0, pu1 in rows[r]):
+                cut.append(Polygon([F.to_xy(ua, fa), F.to_xy(ub, fa), F.to_xy(ub, fb), F.to_xy(ua, fb)]))
+    # EACH STEP ONCE, OVER ALL THE CELLS AT A TIME (feature 276, FR-004, plans D11 and D12): shapely 2's array calls do in
+    # one call what a Python loop did in one call per cell, and each kept piece's opening by `half` - asked twice below
+    # before, once to keep it and once to throw it back - is computed once.
+    cells: list[Polygon] = [part for g in _despike_many(list(shapely.intersection(pocket, cut)) if cut else []) for part in _parts(g)]
     # A BASIN IS ITS FAT PART; ITS ARMS GO BACK AS OFFCUTS (feature 220, settlement-review of Mizuguchi).
     # A cell piece counted as a basin if it held ONE disk of the minimum side anywhere, and kept whatever
     # hung off that disk: Mizuguchi shipped ring 475, a 17 x 23 ft lobe with a 4 ft collar wrapping three
@@ -117,16 +138,27 @@ def _plant(F: _Frame, pocket: Polygon, plot_across: float, row_step: tuple[float
     # the offcuts, which `_absorb` welds into the neighbor whose wall they lie along.
     good: list[Polygon] = []
     thin: list[Polygon] = []
-    for c in cells:
-        core = c.buffer(-half)
-        if core.is_empty:
-            thin.append(c)
-            continue
-        fat = core.buffer(half, join_style="mitre", mitre_limit=2.0).buffer(0)
-        kept = _parts(_despike(c.intersection(fat)))
-        arms = _parts(c.difference(fat).buffer(0))
-        good += [k for k in kept if not k.buffer(-half).is_empty]
-        thin += [k for k in kept if k.buffer(-half).is_empty] + arms
+    if cells:
+        cores = shapely.buffer(cells, -half)
+        solid = [i for i, e in enumerate(shapely.is_empty(cores).tolist()) if not e]
+        fats = shapely.buffer(shapely.buffer(cores[solid], half, join_style="mitre", mitre_limit=2.0), 0) if solid else []
+        kept_all = _despike_many(list(shapely.intersection([cells[i] for i in solid], fats))) if solid else []
+        arms_all = list(shapely.buffer(shapely.difference([cells[i] for i in solid], fats), 0)) if solid else []
+        fat_of = dict(zip(solid, range(len(solid)), strict=True))
+        kept_parts = [_parts(g) for g in kept_all]
+        flat = [k for ks in kept_parts for k in ks]
+        thin_k = shapely.is_empty(shapely.buffer(flat, -half)).tolist() if flat else []
+        at = 0
+        for i, c in enumerate(cells):
+            j = fat_of.get(i)
+            if j is None:
+                thin.append(c)
+                continue
+            ks = kept_parts[j]
+            flags = thin_k[at : at + len(ks)]
+            at += len(ks)
+            good += [k for k, t in zip(ks, flags, strict=True) if not t]
+            thin += [k for k, t in zip(ks, flags, strict=True) if t] + _parts(arms_all[j])
     if not good:
         return [pocket], []  # the grid cut the one thick part up; the pocket is a basin as it stands
     return good, [t for t in thin if not t.is_empty and t.area > 0.0]
