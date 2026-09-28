@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in the clone `diagram-inashiro`)
 **Created**: 2026-09-28
-**Status**: Draft
+**Status**: Accepted - FAITHFUL at round 3 of 5 (2026-09-28)
 **Request**: [`request.md`](request.md) - the GM's words verbatim: run the exercise again - measure, find what is slow,
 improve it "without any loss in accuracy"; the maps may change a little "as long as the ... invariants ... hold ... things
 that aren't supposed to overlap don't overlap".
@@ -201,3 +201,4 @@ density and keep-outs.
   exact changes byte-identical before the moving ones land, against the pool at the re-taken base `c13a6ebe6`.
 - Round 2 (spec-fidelity, 2026-09-28): CHANGES REQUIRED - FR-002 cleared its store at a roll's start where the memo is
   cleared at its end (feature 210), and the Summary still named the array lever for the windbreak. Both reworded.
+- Round 3 (spec-fidelity-verify, 2026-09-28): FAITHFUL.
