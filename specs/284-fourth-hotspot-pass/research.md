@@ -205,7 +205,8 @@ rolled twice, interleaved by map with the lever's pass, twelve forked workers, s
 A lever is kept when it is faster in all by more than that spread with every rule holding. The first runs of FR-001 and
 FR-004 were each made with the other lever in, and with a router box decline that no longer ships; the reviews of
 Amendment 1 set them aside. The runs below were made with every other lever as it then stood (FR-004 in for the A* run);
-both were then withdrawn on the rules (below), so the engine that ships is the "levers off" column.
+then FR-004 was withdrawn on the rules and A* on its own measurement once FR-004 was out (below), so the engine that
+ships is the "levers off" column.
 
 **The field search without its blind probe (FR-004)** (observed 2026-09-28, method: `b3cmp/harness.py`, the router in cost
 order; `b3cmp/results.json`): the shipping search 383.9 s and 388.3 s in its two passes, the lever 367.1 s - about 19 s
@@ -240,7 +241,7 @@ broke no rule the runs check and no household lost its seat - but the regenerate
 
 **The coarser lattice (FR-003)**: R4 - it strands at 12 px on this engine too (observed 2026-09-28, method: `b2/harness.py`).
 
-**Both withdrawn, on the rules.** With both kept, the pool regenerated (Inashiro, Kashikawa and Sawada moved; Kashikawa
+**FR-004 withdrawn on the rules; A* on its own measurement.** With both kept, the pool regenerated (Inashiro, Kashikawa and Sawada moved; Kashikawa
 re-rolled; every household seated, every connector drawn, every field within its tolerance), and the gate failed on the
 moved maps (observed 2026-09-28, method: `make done`, its FULL test phase over the shipped pool):
 `test_a_bund_does_not_build_a_flight_of_steps` (a plot ring stepped twice), and in `tests/hamletgen/test_pool_261.py` three

@@ -1,6 +1,6 @@
 {
  "feature": "284-fourth-hotspot-pass",
- "plan_sha256": "726e91126c8b24278c008af1618211638816e3bf6a6fb599e81232b9bf00bc1e",
+ "plan_sha256": "77301ae26748f2dfe685371898636c8d14ddede3b04ea08630d0fd3071ab693a",
  "reviewed": "2026-09-28",
  "declared": "spec-fidelity",
  "decisions": [
@@ -46,7 +46,7 @@
    "summary": "the grove draw's crown grid built and WITHDRAWN as slower than main's scans after 269",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "FR-011 takes a lever only where it makes the stage significantly faster; measured on main as merged, the grid made the windbreak 8-12% SLOWER. The draw's calls fell under 269 on four of five maps (after-main against base-rerun keys), so R7's 2-3%-of-a-build ceiling still bounds any other lever. R7's grove-fill bullet still says the crown test is 'on its grid since A6': stale, correct it."
+   "why": "FR-011 takes a lever only where it makes the stage significantly faster; measured on main as merged, the grid made the windbreak 8-12% SLOWER; R7 now says the crown test is two scans. R7's 2-3%-of-a-build ceiling bounds any other lever."
   },
   {
    "id": "A7",
@@ -62,24 +62,24 @@
   },
   {
    "id": "B1",
-   "summary": "A* WITHDRAWN on the rules together with B3",
+   "summary": "A* withdrawn on its own measurement: alone, on the merged engine, FR-004 out",
    "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "One justification stretched over two levers. A* was never measured on its own: astarcmp ran 'with FR-004 kept' (its docstring; R6 now says 'FR-004 in for the A* run'), and the pool regenerated with BOTH levers for the gate run that failed five rules and for the 23.76 s pool figure. At least two failure classes cannot be A*'s: the router is first called in stage_track, after stage_field and stage_seat, and a re-roll resumes at stage_homesteads without re-running them, so the plot ring built as a flight of steps (the field) and Sawada's seat off the regional wind (the seat) are FR-004's. The GM named this lever ('the router searching toward its goal') and FR-001 is unconditional in the accepted spec, bounded only by the rules; whether A* alone breaks a rule, or is faster, on the engine that ships (main as merged) is unmeasured. Required: on the merged engine, with FR-004 out, re-run astarcmp's comparison (A* against the cost-order router twice, the same-run spread) and regenerate the pool with A* alone and run the gate's pool rules. Keep A* if every rule holds and R6's own speed rule is met; otherwise withdraw it on THAT measurement, attributed to A* alone."
+   "ruling": "LEGITIMATE",
+   "why": "Round 3's requirement met. astarcmp/results-alone.json, re-summed here: cost-order 220.19 s and 229.08 s, A* 219.67 s (29 rolls a pass, 0 failures each) - 4.97 s under the mean against an 8.89 s same-run spread; 9 unreached over every attempt against 7 and 7, six re-rolls against four and four. The engine is main as merged (fit.py differs from 7c0c94f94 only by a comment; the harness swaps only lattice_search). The GM's willingness to let maps change was conditioned on the change allowing it to be 'significantly faster'; a lever that moves maps and strands more houses for a gain inside the noise does not serve that purpose, so R6's keep-only-beyond-the-spread rule applies. Attributed to A* alone in R6, the spec's bullet, the Decisions row and route.py's docstring. Stale: plan.md's B3 row still says 'WITHDRAWN on the rules, with B1', spec Amendment 1's SC-002 sub-bullet says 'A* on the rules, R6', and R6's opening paragraph says 'both were then withdrawn on the rules' - correct each to the measurement attribution."
   },
   {
    "id": "B2",
    "summary": "the coarser lattice withdrawn: 12 px strands houses the 10 px lattice did not, and no coarser cell is faster",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Round 2's defect is gone: with A* and FR-004 withdrawn, R4's run (router in cost order, base field search, resume, connector fix) is the shipping configuration but for 269's merge. Re-derived from b2/results.json: 10 px 5 unreached / 2 re-rolls, 12 px 8 / 4 (Sawada [1,0], cohort 08 [2,0]), rising to 16 at 18 px. The purpose leg does not rest on the chaotic strandings: over the maps that rolled once at both cells, every coarser cell is slower per roll (12 px 1.055x on 27 maps, 14 px 1.068x, 16 px 1.28x, 18 px 1.84x), so a coarser grid would defeat the request's purpose, not serve it. The monotone trend makes the ruling robust to 269's merge; R4's 'on the engine that ships' should say it was measured just before main's 269 merged."
+   "why": "Re-derived from b2/results.json in round 3: 10 px 5 unreached / 2 re-rolls, 12 px 8 / 4, rising to 16 at 18 px; and every coarser cell slower per roll over the maps that rolled once at both cells (12 px 1.055x on 27 maps up to 18 px 1.84x), so a coarser grid would defeat the request's purpose. R4 now says it was measured just before main's 269 merged; the monotone trend makes the ruling robust to the merge."
   },
   {
    "id": "B3",
    "summary": "FR-004 WITHDRAWN on the rules",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "The GM allowed map changes that 'still correspond to historical norms'; the plot ring stepped twice and Sawada's seat off the regional wind sit in the field and seat stages, which only FR-004 of the two levers reaches, so FR-004 is shown to break the pool's rules (the GM's own condition), and the pool with both levers was about 0.6% faster, normalized to each run's base. Raise it with the GM once the work lands (CLAUDE.md, XVI), with the five finished-map rules the placers do not guarantee."
+   "why": "The GM allowed map changes that 'still correspond to historical norms'; the stepped plot ring and Sawada's seat off the regional wind come from the field and seat stages, which the router (first called in stage_track) does not reach, so FR-004 is shown to break the pool's rules (the GM's own condition), and the pool with the levers was about 0.6% faster. Now attributed to FR-004 alone except plan.md's B3 row ('with B1'), which should drop 'with B1'. Raise it with the GM once the work lands (CLAUDE.md, XVI)."
   },
   {
    "id": "B4",
@@ -105,7 +105,7 @@
    "id": "FR-014",
    "summary": "a re-roll resumes from a snapshot before the seats",
    "class": "within",
-   "why": "FR-011's after-profile clause; exact, re-verified on the merged engine. Its bullet and R8 say 'two of the 29 rolls of research R4 at 10 px'; R4's run has 31 rolls a cell (5 pool, 2 toys, 24 cohort; b2/results.json holds 155 rows): say 31."
+   "why": "FR-011's after-profile clause; exact, re-verified on the merged engine. The count now says 31 rolls."
   },
   {
    "id": "FR-009+",
@@ -136,8 +136,8 @@
    "id": "C",
    "summary": "the final measure and the pool regenerated on the merged engine",
    "class": "within",
-   "why": "FR-012, SC-001; not final while B1 is re-measured."
+   "why": "FR-012, SC-001; B1 is now measured and withdrawn, so the final measure stands."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

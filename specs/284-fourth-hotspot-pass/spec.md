@@ -255,7 +255,8 @@ added under FR-011's own rule ("whatever the after-profile shows"). What changed
   Kashikawa and 374,679 to 0 on Sawada) and the mats (14.6x, the same mats). Missed, each with why no allowed change
   reaches it (SC-009's and SC-010's own exit):
   - SC-002, the router (1.88x and 1.37x against the base, 1.03x and 1.06x against main - most of the fall is 269's): its two
-    call-cutting levers were withdrawn by measurement (A* on the rules, R6; the coarser lattice strands, R4); what is left is
+    call-cutting levers were withdrawn by measurement (A* alone not faster than the run-to-run spread, R6; the coarser lattice
+    strands, R4); what is left is
     FR-002's one index per route and FR-010's bitmap, exact.
   - SC-003, the field (1.0x): FR-004 withdrawn on the rules and FR-005 slower (research R5, R6); the field is main's.
   - SC-009 on the grove fill (1.28x against the base, 1.0x against main: 269's), the grove draw (1.49x, 1.0x: 269's, with this
