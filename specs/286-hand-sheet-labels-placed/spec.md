@@ -39,21 +39,26 @@ covered.
 - **FR-001**: Every caption on every hand-drawn sheet MUST be placed by the one placer the generated maps use
   (`l7r/diagram/labels/place`), as a step of the pipeline that renders the sheet - its picture and its interactive
   page - with no hand placement and no separate tool to run.
-- **FR-002**: A sheet's placed labels MUST depend only on its drawing and its captions' declared text and subject -
-  never on the coordinates a caption's text was left at. This removes the hand-seat exception (a caption's hand position
-  kept where the placer found no free seat) and any other reading of a caption's position: what a caption names, and
-  whether it is set inside its subject or beside it, is declared on the sheet or derived from the drawing.
+- **FR-002**: A caption's declaration on a sheet MUST carry its text and its subject - what it names, one of several
+  like parts included - and nothing that decides where it stands: no coordinates that count, no inside-or-beside. The
+  placer decides where, inside its subject or beside it, from the drawing. A sheet's placed labels MUST depend only on
+  the drawing and those declarations, never on where a caption's text was left: the hand-seat exception (a caption's
+  hand position kept where the placer found no free seat) and every reading of a caption's position (to choose its
+  subject, or inside against beside) are removed.
 - **FR-003**: Where the placer finds no free seat, its fallback MUST place the caption at least as well as the hand
   seats it replaces - the reason the hand-seat exception existed - improved in the placer itself, with unit tests.
 - **FR-004**: No automated check of caption placement MUST remain for hand sheets: the caption-seat gate test and its
-  ledger, the `make seat-label` report, and the sheet audit's checks that judge caption placement (labels overlapping,
-  labels on dark ink, labels buried under later ink, group labels adrift) are removed. Correctness is carried by the
+  ledger, the `make seat-label` report, the `building-review` contract's caption-seat step, and the sheet audit's
+  checks that judge caption placement (labels overlapping, labels on dark ink, labels buried under later ink, group
+  labels adrift) MUST NOT remain. Correctness is carried by the
   placer's unit tests. Checks of things that are still drawn by hand (a glyph buried under later ink) stay.
 - **FR-005**: Everything that reads a sheet's captions - the program and size checks that pair a label with the
   structure it names, the review agents that look at a sheet, the interactive page - MUST read the placed captions or
   the declared tags, never the hand coordinates.
 - **FR-006**: The operative docs (the skill's Mode A usage, `buildings.md`, the review agents' contracts) MUST say that
-  a sheet's labels are placed by the pipeline and how a sheet declares a caption.
+  a sheet's labels are placed by the pipeline and how a sheet declares a caption; the review contracts MUST no longer
+  judge or ask to move a caption's position. What a label says - its wording, spelling, precision, whether it is
+  redundant - is not placement and stays reviewed.
 
 ### Edge Cases
 
@@ -65,8 +70,9 @@ covered.
 
 - **SC-001** (FR-001, FR-002): on every hand sheet, rendering with the captions' coordinates scrambled gives the same
   placed labels as rendering unchanged; the render path calls the one placer.
-- **SC-002** (FR-003): the placer's fallback is unit-tested on the crowded cases the hand seats covered, and on every
-  hand sheet no caption covers more ink than its hand seat did when the feature began (measured, before and after).
+- **SC-002** (FR-003): the placer's fallback is unit-tested on the crowded cases the hand seats covered; and, as a
+  one-time acceptance measurement recorded in the feature's `measurements.json` (not a standing test), no caption on a
+  hand sheet covers more ink than its hand seat did when the feature began.
 - **SC-003** (FR-004): the listed checks and the ledger are gone; `make done` is green.
 - **SC-004** (FR-005, FR-006): no reader of a hand sheet's captions uses their hand coordinates; the docs say so.
 - **SC-005** (User Story 2): the GM judges the label they saw.
@@ -79,6 +85,20 @@ covered.
 
 ## Decisions Recorded
 
-(filled as the plan decides)
+- **Scope: the hand-drawn Mode A sheets** (the three magistracies and the Hoshigaoka country shrine), not the
+  hand-authored Mode B exhibits in `legacy-hand-authored-pool/`, whose captions are also hand-seated (feature 266 D8).
+  Those maps are FROZEN (dev/pool.md: never regenerated; the fix for a frozen map is conversion to scripted generation,
+  which already brings the one placer). Put to a MODE 1 fidelity check in round 2. The risk, said to the GM at
+  hand-back: if the label the GM saw is on a legacy map, this feature does not reach it.
+- **The measurement that shaped FR-003** (observed 2026-09-28; method: the hand-seat exception instrumented over
+  every hand sheet): on 7 captions the hand seat covers no ink while the placer's best covers some (Hayakawa's
+  RESIDENCE, forecourt, HEARING COURT, guardroom and the Ebisu altar note; Ubame's two Fox-border notes) and on an eighth
+  the hand seat covers less (Hayakawa's bath): the placer's search misses free seats a person found.
 
 ## Review history
+
+**Round 1** (spec-fidelity, MODE 2, 2026-09-28): CHANGES REQUIRED, four items - FR-002 let a sheet declare
+inside-or-beside and kept inference from the drawing (a declaration is now text and subject only; the placer decides);
+FR-004 missed the building-review contract's caption-seat step and read "MUST remain" (now named, "MUST NOT remain");
+SC-002 could have become a standing check (now a one-time measurement); the scope narrowed to Mode A unrecorded (now a
+decision, put to MODE 1).
