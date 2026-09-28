@@ -43,7 +43,8 @@ def stage_field(s: Settlement, plan: SitePlan) -> None:
     s.M["meta"]["water_source_position"] = position
 
     across, step = s.plot_texture(plan.plot_size, "organic")
-    net = fit_field(plan, sluice, plan.spec.seed, across, step)
+    s.M["meta"]["fan_middle"] = fan_middle = s.resolve("fan_middle")  # 269 B07: where the dry band lies (`FAN_MIDDLE`, fit.py)
+    net = fit_field(plan, sluice, plan.spec.seed, across, step, fan_middle=fan_middle)
     plan.net = net
     plan.acres = net_acres(net, plan.ftpx)
 

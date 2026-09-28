@@ -223,7 +223,11 @@ def draw_homestead_field(s: Settlement, ring: Sequence[Pt], crop: str, theta: fl
     pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in ring)
     s.add(f'<polygon points="{pts}" fill="{fill}" stroke="#A98C58" stroke-width="1.4" stroke-linejoin="round"/>', cls=crop)
     s._draw_furrows(list(ring), furrow, theta, cls=crop)
-    s.M.setdefault("dry_plots", []).append({"poly": [[round(x, 1), round(y, 1)] for x, y in ring], "crop": crop, "theta": round(theta, 3), "homestead": True})
+    # A HOUSEHOLD'S OWN PLOT IS A TRACT OF ITS OWN (269 B06): it lies on its house's ground, not on the hem's, so its rows owe the hem
+    # plots beside it a seam (`furrow_apart`), named by its place so no two share a name.
+    s.M.setdefault("dry_plots", []).append(
+        {"poly": [[round(x, 1), round(y, 1)] for x, y in ring], "crop": crop, "theta": round(theta, 3), "homestead": True, "tract": f"homestead:{round(ring[0][0])},{round(ring[0][1])}"}
+    )
     s.block_polys.append(list(ring))
     s.dry_polys.append(list(ring))
     s.placed.append(

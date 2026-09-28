@@ -26,6 +26,9 @@ fall, its sink and its intake kept: over seeds 1-30 only seed 24 seats all 19 ho
 margin (specs/261 research).
 `lane_web="alleys"` - DECLARED, NOT ROLLED (feature 261): a knob owes one map per value on the sheet, and re-seeding this map for
 the regional wind took the pool's only exhibit of that value with it; declaring it here keeps the pool whole.
+`pins={"paddy_rest": "unsettled"}` - DECLARED, NOT ROLLED (269 B01), for the same reason: the resting-paddy knob rolls the
+settled form on every comb map of the pool (Kuwabata rolls unsettled, but a dike-pond block rests nothing), so this map
+exhibits the few whole, scattered, grazed basins of the unsettled form.
 """
 
 import os
@@ -36,5 +39,5 @@ SKILL = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))  # <tree>/<tier>
 sys.path.insert(0, SKILL)
 from l7r.diagram.hamletgen import HamletSpec, generate  # noqa: E402
 
-report = generate(HamletSpec(name="Sawada", seed=24, households=19, down_deg=225, water_sink="offmap", intake="open", lane_web="alleys"), out_base=os.path.join(HERE, "sawada"))
+report = generate(HamletSpec(name="Sawada", seed=24, households=19, down_deg=225, water_sink="offmap", intake="open", lane_web="alleys", pins={"paddy_rest": "unsettled"}), out_base=os.path.join(HERE, "sawada"))
 print(report.line())

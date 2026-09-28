@@ -10,6 +10,7 @@ import math
 from collections.abc import Mapping
 from typing import Any
 
+from l7r.diagram.settlement._knobs import Knob, register_knob
 from l7r.diagram.sitegen.geom import SQ_FT_PER_ACRE
 from l7r.diagram.waterfields import CombCarve, carve_comb, finish_comb
 
@@ -26,8 +27,14 @@ from ..plan import SitePlan, _roll
 
 # ---- STAGE 2: the field the water shapes --------------------------------------------------------
 
+# THE FAN'S MIDDLE, WILD OR CLEARED (269 B07; research/fields.html 'Where dry (hatake) crops go - the topographic catena',
+# fields/160): a fan's dry middle was often left coppice or wild ground until late, which is a tendency, not a rule - old
+# heartlands cleared their fans early. Two attested forms, so a knob; "wild" keeps the dry band on the toe (`fan_toe_hem`,
+# waterfields/comb.py). The record calls wild ground the usual case without a figure, so the 3:1 weighting is a GUESS.
+FAN_MIDDLE = register_knob(Knob("fan_middle", ["wild", "cleared"], default="wild", weights={"wild": 0.75, "cleared": 0.25}))
 
-def fit_field(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, row_step: tuple[float, float], tolerance: float = 0.06, rounds: int = 9) -> dict[str, Any]:
+
+def fit_field(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, row_step: tuple[float, float], tolerance: float = 0.06, rounds: int = 9, fan_middle: str = "cleared") -> dict[str, Any]:
     """SOLVE the comb for the acreage the household count demands, instead of guessing a fall length.
 
     `build_comb` takes a `field_fall` in PIXELS, and the relationship between that number and the
@@ -87,6 +94,7 @@ def fit_field(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, row_ste
         again = _fit_at_aspect(plan, sluice, seed, plot_across, row_step, best_aspect, tolerance, rounds, probe=False)
         if again[0] < best[0]:
             best = again
+    best[1].fan_middle = fan_middle  # where the dry band lies is the finish's question, not the search's (`fan_toe_hem`)
     return finish_comb(best[1])  # ONE finish per roll: the seams closed, the dry plots laid, on the winner alone
 
 

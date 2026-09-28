@@ -1589,142 +1589,10 @@ FORMS of the same thing, and this is not that. It is a question about what a fea
 record cannot answer it because the record never had our palette. So it is genuinely a ruling, it is
 queued, and nothing should be built on a guess about it.
 
-**AND IT GATES THREE OTHER ITEMS, so do not fix them one at a time.** The tint eligibility, the
-`hem_block_len` knob, the paddy WIDTH floor and the 0614 cohort residue all land in the same toe pass,
+**AND IT GATES TWO OTHER ITEMS, so do not fix them one at a time.** The tint eligibility, the
+paddy WIDTH floor and the 0614 cohort residue all land in the same toe pass,
 and the waterfields session has batched them deliberately as ONE feature. Fixing any one alone means
 rewriting that pass again for the next - which is the specific waste this note exists to prevent.
-
-## OPEN 2026-08-19: the dry-hem furrow variety falls off a ONE-FOOT CLIFF at 56 ft, and its check goes blind with it
-
-The furrow-angle machinery in `waterfields/carve.py:834-838` is a maximize-separation algorithm: it
-collects the angles of already-placed plots within `ADJ2` (56 px), takes the WIDEST angular gap between
-them, and seats the new plot's furrows in the middle of it. When it works it works well. **When `nb`
-comes back empty it degenerates silently**: `edges` is just `[lo, hi]`, the widest gap is the whole
-allowance, and every plot gets `(lo+hi)/2` - which is exactly `theta0`, the contour angle - plus a
-`R.uniform(-0.03, 0.03)` jitter worth +/-1.7 degrees.
-
-**ADJ2 is 56 px and the plots are now 54-59 px apart, so which side of the cliff a map lands on is
-luck:**
-
-    kashikawa  closest centers 54.4 ft  -> neighbors seen  -> furrow spread 33.98 deg   healthy
-    mizuguchi  closest centers 55.7 ft  -> neighbors seen  -> furrow spread 32.37 deg   healthy
-    sawada     closest centers 57.0 ft  -> NONE seen       -> furrow spread  3.27 deg   collapsed
-    inashiro   closest centers 58.5 ft  -> NONE seen       -> furrow spread  3.15 deg   collapsed
-
-A one-foot difference in plot spacing is the whole distance between a patchwork of family strips and one
-ruled hatch laid across the hem. `settlements`' own doctrine calls for the patchwork
-(`segments_05c`: "Fragmented dry holdings were a mosaic of family strips, each plowed to its OWN
-orientation"), and `meta.dry_furrows_vary` is declared True on all four - so two of them declare a
-variety they do not draw.
-
-**AND THE CHECK GOES BLIND AT THE SAME MOMENT, FOR THE SAME REASON.**
-`dry_plot_furrows_vary` compares only plot pairs whose CENTERS lie within `min(50.0, 1.25 * mean_side)`.
-Mean side is 81-87 ft on all four, so the formula wants ~102 and the **cap forces 50** - below every
-map's closest spacing. It compares ZERO pairs on all four maps and has been vacuous the whole time.
-
-The generator's own comment explains the pairing and it is sound reasoning: the radius "stays UNSCALED:
-`dry_plot_furrows_vary` judges adjacency at this px radius on every map, and a generator that varies over
-a WIDER circle than the check demands is safely conservative". 56 > 50, so the generator IS the wider of
-the two, exactly as intended. **What defeats it is that BOTH are absolute px radii while the thing they
-measure grew.** The two guards were calibrated against each other rather than against the plots, so when
-the plots outgrew them they went silent together and neither could catch the other.
-
-That is the day's pattern in its purest form: a check and a generator agreeing perfectly with each other
-about a quantity that no longer describes the map.
-
-**FIX DIRECTION, and it must land on BOTH SIDES AT ONCE** (fixing only the check turns the gate red on two
-maps whose generator cannot produce variety): scale both radii to the plots actually on the map - the
-check's own `1.25 * mean_side` is the right shape, so uncap it, and give the generator the same measure
-plus a margin so it stays the wider of the two. Then re-measure the spread on all four; the two healthy
-maps show what the machinery does when it can see its neighbors.
-
-**FIXED, AND THE NUMBER IS OVER-CORRECTED - the fix stays in, the value is queued to the GM.** Scaling
-both radii to the plots landed all four maps at 96-104 deg of spread (from 3.15/3.27 on the two collapsed
-ones and ~33 on the two healthy ones). That is strictly better than 3 deg and the two-sided blindness was
-a genuine bug worth fixing regardless - but 3 deg being wrong does not make 102 right, and the waterfields
-owner supplied the prior that says it is not:
-
-  - In an open-field system the strips group into **FURLONGS, and a furlong shares ONE orientation**; the
-    direction changes BETWEEN furlongs, chosen from the lie of the land for drainage. Coherent block,
-    varied blocks - not varied neighbors.
-  - The physical reason is the decisive one: adjacent strips at a large angle **drain into each other**,
-    and a plowman turns at a **shared headland**. Two neighbors 100 deg apart have neither. That is not a
-    stylistic objection, it is what furrows are for.
-  - Our own code already says it. `carve.py:656`: "the furrow direction is the contour heading, varied per
-    plot" - varied AROUND the contour, not maximally separated from the neighbor. With
-    `furrow_spread = 1.1` rad (+/-63 deg), a 96-104 deg spread means the algorithm is pushing neighbors to
-    opposite ends of the permitted band: the band's outer limit doing the work rather than the contour.
-
-So the algorithm's SHAPE is suspect, not only its radius - maximize-separation produces exactly the
-neighbor-vs-neighbor contrast the furlong evidence argues against. The likely target is a modest spread
-around a block-coherent grain, with the larger changes between GROUPS of plots rather than between every
-adjacent pair.
-
-**SUPERSEDED 2026-08-19 - do not act on this paragraph.** It read: *"Neither session is picking the
-number. It is a legibility-vs-accuracy trade of the kind this project sends to the GM rather than
-deciding quietly ... Queued to him beside the FLOODED-tint decision."* It was withdrawn from the GM's
-queue the same evening, and the error is kept because it misreads Principle XII rather than the
-evidence. The ladder is: research it -> decisive means implement what it says -> **two supportable
-forms means roll a KNOB per settlement** -> only a SILENT record earns a GM ruling. The waterfields
-owner jumped to the fourth rung because the NUMBER felt like a judgment call - and it only felt that
-way because they were trying to pick ONE spread for every hamlet, which is precisely what that rung
-exists to prevent. The record here is neither silent nor decisive-for-one-form, so this is the knob
-rung. See "THE ANSWER IS A KNOB" below, which is the live disposition.
-
-**REVIEWED, AND THE VERDICT IS SHARPER THAN EITHER SESSION'S GUESS: the RANGE is right, the
-DISTRIBUTION is wrong** (settlement-review with a research pass, 2026-08-19). ~102 deg reads as a mosaic
-rather than chaos - the hem never fragments, every parcel's hatch is internally clean, and the two
-already-healthy maps were not damaged (Kashikawa "reads as a genuinely handsome quilt"). So do NOT narrow
-the allowance.
-
-What is wrong is the SHAPE of the angle field. `_dry_fields` maximizes separation - it seats each plot in
-the widest gap its neighbors leave - and the measured signature is a **hole at zero**: Sawada's median
-neighbor delta is 52.1 deg out of a 126 deg fan and NO pair is under 13.9. A real hem's neighbor-delta
-histogram is bimodal, a pile near 0 (same block, same owner, same outfall) with a few big jumps at block
-seams. The sourced record is decisive on the mechanism:
-
-  - a FURLONG is "a group of strips or lands all oriented in the same direction", and "adjacent furlongs
-    often ran at different angles to one another, which is why you sometimes see ridge and furrow
-    changing direction as you cross a field boundary" (Nottingham/Laxton; Evershot; Fieldworthy). The
-    variety lives at BLOCK scale with agreement INSIDE a block.
-  - blocks were "orientated in such a way as to take advantage of the topology of the land and so further
-    assist the drainage" - direction is DERIVED from slope and outfall, not free.
-  - strips were long and narrow "to reduce the number of times the plough-team had to turn", sharing a
-    headland at each end (DigVentures), and were "separated from their neighbours by a double furrow, or
-    ... an unploughed grass balk" (How-to History) - a boundary form that only exists between PARALLEL
-    strips.
-  - the East Asian record does not overturn it: contour ridging is the documented STEEP-SLOPE measure
-    (FAO Nishi-Awa), which `research/fields.html` already declines to apply on a gentle hem, and fragmented
-    smallholdings make per-parcel choice more available - but shared slope, a shared outfall and a shared
-    parcel shape still push neighbors toward agreement. The East Asian record is SILENT on the angle
-    field specifically.
-
-**AND THE CHECK CODIFIES THE WRONG MODEL.** `dry_plot_furrows_vary` forbids two plots within ~50 px from
-running within ~6 deg - i.e. it forbids the attested arrangement outright, which is precisely why the
-generator has to anti-correlate. Fixing the generator without re-scoping the check would just make the
-gate red on the correct answer.
-
-**THE ANSWER IS A KNOB (Principle XII), not a number.** The record supports BOTH a furlong-block hem (3-6
-adjacent parcels sharing a direction, changing at seams) and a fully fragmented per-parcel hem, and at
-~1,500 ft of hem those give 2-5 direction domains versus 28 - instantly distinguishable at fit zoom, which
-is the different-but-plausible-places goal exactly. Sketch from the reviewer: roll `hem_block_len` from
-the seed (1 = today, 3-6 = furlong-like), assign a direction per BLOCK, seat blocks by maximize-separation,
-let parcels inside a block share it with a small jitter - and re-scope `dry_plot_furrows_vary` to compare
-BLOCKS, or it fires on every block interior.
-
-**ONE CONCRETE DEFECT THE GREEN GATE PERMITS, worth fixing whatever happens to the knob**: a 13.9 deg
-neighbor pair reads as one plot bisected rather than two holdings - Sawada's stacked pair at (740,3097)
-and (742,3028), and Mizuguchi's twin at 11.5 deg. The gate's 6 deg floor is a CONSERVATION threshold, not
-a legibility one, so roughly 6-20 deg is the worst of both worlds: too different to be one block, too
-similar to read as two. Do not simply raise the 6 deg - that punishes the honest near-parallel case. Give
-the GENERATOR a minimum separation (~20 deg) for edge-adjacent parcels, or adopt the block model, where
-near-parallel neighbors become correct and the jump moves to the seam.
-
-**Owner: `waterfields/`, taking BOTH halves.** The furrow angle sits three lines from the tint eligibility
-that session is about to change, so splitting them would be worse than either session holding both. A
-caution recorded with it: a VISUAL reviewer can say whether 102 deg looks tidy - a map where every plot is
-distinguishable does look tidy - but cannot say whether two adjacent plots at that angle could both drain,
-which is the question that decides it.
 
 ## OPEN 2026-08-19: the kura roll under-delivers 2.2x, the fix WORKS, and it exposes a packing defect that blocks it
 
@@ -1841,7 +1709,7 @@ FIX DIRECTION (from the reviewer): add a minimum working width - `area / longest
 AND to the gate, derived rather than picked; a basin must be wide enough to stand in and puddle, which
 puts it somewhere in the 12-16 ft band. `research/fields.html` "Minimum basin SIZE" already holds the
 reasoning frame, including the point that the alternative to a scrap is making its neighbour bigger.
-**Owner: `waterfields/`** - same subsystem as the FLOODED tint and `hem_block_len`, and the toe pass is
+**Owner: `waterfields/`** - same subsystem as the FLOODED tint (the `hem_block_len` knob it once named was settled as hem TRACTS, 269 B06), and the toe pass is
 where all three meet.
 
 ## OPEN 2026-08-19 (small, unclaimed): the notice-board caption's halo notches the lane it stands on

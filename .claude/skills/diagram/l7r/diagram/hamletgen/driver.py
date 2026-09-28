@@ -232,6 +232,10 @@ def build(plan: SitePlan, avoid: Sequence[tuple[float, float]] = ()) -> Settleme
     s._avoid_seats = list(avoid)  # type: ignore[attr-defined]
     if plan.spec.byre_form is not None:  # a declared byre form bypasses the settlement engine's roll (feature 261)
         s.pin_knob("byre_form", plan.spec.byre_form)
+    # THE SPEC'S PINS REACH THE ENGINE'S CATALOG, as `HamletSpec.pins` has always said they do; nothing passed them on until
+    # 269 E4, whose knobs (`paddy_rest`, `fan_middle`) have no field of their own on the spec.
+    for knob, value in plan.spec.pins.items():
+        s.pin_knob(knob, value)
 
     if not os.environ.get(STAGE_PROFILE_ENV):
         with roll_scope(plan.spec):

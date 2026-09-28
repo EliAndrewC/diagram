@@ -697,15 +697,29 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
         def _reaches(q: Pt, _o: Sequence[tuple[Pt, Pt]] = others) -> bool:
             return end_serves(q, _o, houses, ground, steadings)
 
-        before = len(pts)
         _mine = [(float(x), float(y)) for x, y in pts]
+        # ...BUT NEVER PAST ANOTHER LANE'S END THAT RESTS ON THIS ONE (269 E4). Pulling an unserving end back takes the
+        # stretch it gives up away from any lane that was laid to meet it there - a straggler's end on it, say - and that
+        # lane is left in open ground, the network in two pieces at the ink tolerance. Found when 269 B06 re-laid Sawada's
+        # hem and its re-roll put a straggler's end 27 ft from the web it had met. The pull-back stops at that junction.
+        _tails = [(float(o["pts"][e][0]), float(o["pts"][e][1])) for j, o in enumerate(lanes) if j != i and len(o.get("pts") or []) >= 2 for e in (0, -1)]
+        # (and a lane left short by the hold is still the link that lane ends on, so it is not emptied as debris below)
         while len(pts) >= 2 and not _reaches(pts[-1]):
+            _hold = held_at(pts[-2], pts[-1], _tails)
+            if _hold is not None:
+                pts[-1] = _hold
+                break
             pts.pop()
         while len(pts) >= 2 and not _reaches(pts[0]):
+            _hold = held_at(pts[1], pts[0], _tails)
+            if _hold is not None:
+                pts[0] = _hold
+                break
             pts.pop(0)
-        if len(pts) == before:
+        if pts == _mine:
             continue
-        if len(pts) < 2 or polyline_len(pts) < _WEB_MIN_FT:
+        _held = any(held_at(a, b, _tails) is not None for a, b in zip(pts, pts[1:], strict=False))
+        if len(pts) < 2 or (polyline_len(pts) < _WEB_MIN_FT and not _held):  # a short lane another lane ends on is a LINK, not debris
             pts = []
         # ...AND NEVER AT THE COST OF A HOUSE, the clause every other sweep here carries. Without it this pass drops a lane
         # some farmhouse needs, `generate` re-rolls the whole map to serve it, and the roll costs what the re-roll costs:
@@ -744,6 +758,15 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
         fixed += 1
     s.drop_lanes(emptied)  # record and ink together - see `drop_lanes`
     return fixed
+
+
+def held_at(a: Pt, b: Pt, tails: Sequence[Pt]) -> Pt | None:
+    """The point of the segment from `a` to the end `b` that the farthest-out of `tails` (other lanes' ends) rests on,
+    within `_TOUCH_GAP` - where a pull-back of that end has to stop - or None where no other lane ends on it."""
+    dx, dy = b[0] - a[0], b[1] - a[1]
+    l2 = dx * dx + dy * dy
+    held = [max(0.0, min(1.0, ((t[0] - a[0]) * dx + (t[1] - a[1]) * dy) / l2)) for t in tails if l2 > 0 and seg_dist(t[0], t[1], a, b) <= _TOUCH_GAP]
+    return (a[0] + dx * max(held), a[1] + dy * max(held)) if held else None
 
 
 def carry_to_dooryard(q: Pt, houses: Sequence[Pt], steadings: Sequence[Sequence[Pt]], reach: float, step: float = 2.0) -> Pt | None:

@@ -5,7 +5,10 @@ Split from settlement/fields.py by feature 112 - see settlement/fields/CLAUDE.md
 
 import math
 import random
+from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
+
+from l7r.diagram.interactive.tags import Split
 
 from .._geom import (
     FLOODED_SHADES,
@@ -21,6 +24,7 @@ from .._geom import (
     smooth_closed,
     smooth_points,
 )
+from .._knobs import Knob, knob_rng, register_knob
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -50,9 +54,66 @@ def _uf_xy(u: float, f: float) -> Pt:
     return (_UF_RT * (u + f), _UF_RT * (f - u))
 
 
+# IS ANY PADDY LEFT TO REST? (269 B01; research/fields.html 'Is any paddy left to rest - and where does a resting plot
+# lie?', fields/250). The record attests two forms of a village's paddy, so it is a KNOB rolled per settlement:
+#   settled    - cropped every year, no plot rests: the nucleated village on stable ground, and the setting's canon (a
+#                paddy once made crops for centuries, and what limits rice is hands, not soil) sides with it.
+#   unsettled  - this year a few whole plots rest (kataarashi), each scattered among the cropped plots, never a block,
+#                and grazed rather than planted: the early medieval estate, where water or soil could not carry every
+#                plot every year.
+# The record reads the settled form as the commoner and gives no figure, so the 4:1 weighting is a GUESS. A resting plot
+# is a whole basin inside its own bunds, never a patch within one - the blighted sub-region with its red crosses this
+# replaced drew exactly that.
+PADDY_REST = register_knob(Knob("paddy_rest", ["settled", "unsettled"], default="settled", weights={"settled": 0.8, "unsettled": 0.2}))
+# HOW MANY REST, AND HOW FAR APART - liberties the record leaves the map, kept within it:
+#   REST_COUNT        "a few plots of a hamlet's paddy", per field; the estate of 1102, with nearly a third resting, is the
+#                     record's upper bound, not a hamlet's norm. 2-4 is a GUESS.
+#   REST_APART_SIDES  scattered, not side by side: two resting plots stand at least this many plot sides apart,
+#                     center to center, so no two share a bund - a map drawing convention for "scattered".
+#   REST_FAR_POWER    they favor the far end of the water's run (the record's reading of "short water", a GUESS): a
+#                     plot's chance grows as the square of how far down the fall it lies.
+REST_COUNT = (2, 4)
+REST_APART_SIDES = 3.0
+REST_FAR_POWER = 2.0
+REST_GRASS, REST_TUFT = "#C8CF92", "#8FA05E"  # the pasture's grass and tuft inks (`pasture`): a resting plot is grazed
+
+
+def _ring_area(poly: Sequence[Pt]) -> float:
+    n = len(poly)
+    return abs(sum(poly[i][0] * poly[(i + 1) % n][1] - poly[(i + 1) % n][0] * poly[i][1] for i in range(n))) / 2
+
+
+def _ring_center(poly: Sequence[Pt]) -> Pt:
+    return (sum(p[0] for p in poly) / len(poly), sum(p[1] for p in poly) / len(poly))
+
+
+def rest_plots(cands: Sequence[tuple[Sequence[Pt], float]], rng: random.Random, count: int) -> list[int]:
+    """Which of `cands` - `(ring, fall position)` pairs, the plots that may rest - rest this year: `count` of them at most,
+    whole basins no smaller than the median candidate (a scrap of fabric is not a holding), drawn with a chance that grows
+    toward the far end of the fall (`REST_FAR_POWER`) and kept `REST_APART_SIDES` mean plot sides apart. Indices into
+    `cands`, ascending."""
+    if not cands:
+        return []
+    areas = [_ring_area(r) for r, _f in cands]
+    floor = sorted(areas)[len(areas) // 2]
+    pool = [i for i, a in enumerate(areas) if a >= floor]
+    side = (sum(areas[i] for i in pool) / len(pool)) ** 0.5
+    fs = [f for _r, f in cands]
+    f0 = min(fs[i] for i in pool)  # the fall is measured over the plots that may rest, so a stray scrap cannot stretch it
+    span = (max(fs[i] for i in pool) - f0) or 1.0
+    cents = [_ring_center(r) for r, _f in cands]
+    chosen: list[int] = []
+    while pool and len(chosen) < count:
+        pick = rng.choices(pool, weights=[0.05 + ((fs[i] - f0) / span) ** REST_FAR_POWER for i in pool])[0]
+        pool.remove(pick)
+        if all(math.dist(cents[pick], cents[c]) >= REST_APART_SIDES * side for c in chosen):
+            chosen.append(pick)
+    return sorted(chosen)
+
+
 class PaddyMixin:
     def paddy_field(  # type: ignore[misc]
-        self: Settlement, shape: Any, label: Any, name: str, amp: float = 52, taxfree: int = 0, fallow_patch: Any = None, label_xy: Any = None, plot: float = 46, kind: str = "paddy"
+        self: Settlement, shape: Any, label: Any, name: str, amp: float = 52, taxfree: int = 0, label_xy: Any = None, plot: float = 46, kind: str = "paddy"
     ) -> None:
         """shape: a bbox (x0,y0,x1,y1) OR a list of base polygon vertices (e.g. a V).
         `plot` is the target plot (sub-paddy) size in px: the field is quilted into jittered
@@ -96,6 +157,7 @@ class PaddyMixin:
         self.add(f'<g clip-path="url(#{cid})">')  # downstream house placement
         self.add(f'<rect x="{ex0:.0f}" y="{ey0:.0f}" width="{ex1 - ex0:.0f}" height="{ey1 - ey0:.0f}" fill="{AZE}"/>')
         interior: list[Any] = []
+        rice: list[Poly] = []  # the whole, dry-surfaced rice basins inside the outline - the plots that may rest (`PADDY_REST`)
         for poly in plots:
             pts = ' '.join(f'{q[0]:.0f},{q[1]:.0f}' for q in poly)
             cx = sum(q[0] for q in poly) / len(poly)
@@ -120,16 +182,20 @@ class PaddyMixin:
                     fill, flooded = random.choice(PADDY_SHADES), False
                 self.add(f'<polygon points="{pts}" fill="{fill}" stroke="{AZE}" stroke-width="{bund:.1f}" stroke-linejoin="round"/>')
                 self._paddy_surface(poly, pts, flooded)
+                if not flooded and point_in_poly(cx, cy, smoothed):
+                    rice.append(poly)
             else:
                 fill = 'url(#drycrop)' if crop == 'dry' else '#9CB36A'
                 self.add(f'<polygon points="{pts}" fill="{fill}" stroke="{AZE}" stroke-width="{bund:.1f}" stroke-linejoin="round"/>')
                 self._rows(poly, pts, crop)  # dryland crops ARE ridge/row-cultivated
             if point_in_poly(cx, cy, smoothed):
                 interior.append((poly, cx, cy))
+        # A RESTING PLOT is painted over its basin whole (`PADDY_REST`), and is no tax-free holding's plot.
+        rested = [rice[i] for i in sorted(self.resting_plots(name, [(poly, _uf_f(*_ring_center(poly))) for poly in rice]))]
+        for poly in rested:
+            self.rest_basin(poly, bund)
         if label and taxfree:
-            self._taxfree_plots(interior, taxfree)
-        if fallow_patch:
-            self._fallow_patch(fallow_patch)
+            self._taxfree_plots([t for t in interior if not any(t[0] is poly for poly in rested)], taxfree)
         self.add('</g>')
         random.setstate(_fillstate)  # end fill-RNG isolation
         self.add(f'<path d="{d}" fill="none" stroke="#A98A52" stroke-width="3.5"/>')
@@ -288,19 +354,35 @@ class PaddyMixin:
         g.append('</g>')
         self.add(''.join(g))
 
-    def _fallow_patch(self: Settlement, base: Poly) -> None:  # type: ignore[misc]
-        """A blighted sub-region inside a field: fallow stipple + red X marks. No
-        abandoned houses implied (that is a village-specific story, not universal)."""
-        d = smooth_closed(organic_poly(base, 16))
-        self.add(f'<path d="{d}" fill="url(#fallow)" stroke="#9C7A40" stroke-width="1.6" stroke-dasharray="5,3"/>')
-        xs = [p[0] for p in base]
-        ys = [p[1] for p in base]
-        cx, cy = sum(xs) / len(xs), sum(ys) / len(ys)
-        for _ in range(4):
-            mx = cx + random.uniform(-1, 1) * (max(xs) - min(xs)) * 0.28
-            my = cy + random.uniform(-1, 1) * (max(ys) - min(ys)) * 0.28
-            self.add(f'<g transform="translate({mx:.0f},{my:.0f})" stroke="#9A3A2A" stroke-width="2.4"><line x1="-7" y1="-7" x2="7" y2="7"/><line x1="-7" y1="7" x2="7" y2="-7"/></g>')
-        self.M["fallow_patches"].append({"outline": [[round(p[0], 1), round(p[1], 1)] for p in smooth_points(organic_poly(base, 16))]})
+    def resting_plots(self: Settlement, field: str, cands: Sequence[tuple[Sequence[Pt], float]]) -> set[int]:  # type: ignore[misc]
+        """Which of a field's candidate plots rest this year (`PADDY_REST`): none on a settled paddy, `rest_plots`' pick on
+        an unsettled one, from the field's own substream so one field's pick never moves another's. The form goes in
+        `meta.paddy_rest`."""
+        form = self.resolve("paddy_rest")
+        self.M["meta"]["paddy_rest"] = form
+        if form == "settled":
+            return set()
+        rng = knob_rng(self.seed, f"paddy_rest:{field}")
+        return set(rest_plots(cands, rng, rng.randint(*REST_COUNT)))
+
+    def rest_basin(self: Settlement, poly: Sequence[Pt], bund: float) -> None:  # type: ignore[misc]
+        """A resting paddy plot: the whole basin inside its own bunds, grass where the rice would be, a few tufts of the
+        grazing on it (`PADDY_REST`). Recorded in `fallow_patches` with its ring, and counted in `meta.paddy_rested`."""
+        from l7r.diagram.waterfields import AZE
+
+        pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in poly)
+        self.add(f'<polygon points="{pts}" fill="{REST_GRASS}" stroke="{AZE}" stroke-width="{bund:.2f}" stroke-linejoin="round"/>', cls=Split("fallow", "bund"))
+        cx, cy = sum(p[0] for p in poly) / len(poly), sum(p[1] for p in poly) / len(poly)
+        rng = random.Random(int(abs(cx) * 7 + abs(cy) * 13))  # positional: the tufts are decoration and move nothing else
+        xs, ys = [p[0] for p in poly], [p[1] for p in poly]
+        tufts = []
+        for _ in range(max(3, int(_ring_area(poly) / 900))):
+            tx, ty = rng.uniform(min(xs), max(xs)), rng.uniform(min(ys), max(ys))
+            if point_in_poly(tx, ty, list(poly)):
+                tufts.append(f'<path d="M{tx - 3:.1f},{ty + 2:.1f} L{tx:.1f},{ty - 4:.1f} L{tx + 3:.1f},{ty + 2:.1f}" fill="none" stroke="{REST_TUFT}" stroke-width="0.8"/>')
+        self.add("".join(tufts), cls="fallow")
+        self.M["fallow_patches"].append({"outline": [[round(p[0], 1), round(p[1], 1)] for p in poly], "form": "rested_basin"})
+        self.M["meta"]["paddy_rested"] = self.M["meta"].get("paddy_rested", 0) + 1
 
     def water_field(  # type: ignore[misc]
         self: Settlement, shape: Any, label: Any, name: str, source: Any, drain: Any, amp: float = 52, taxfree: int = 0, plot: float = 34, label_xy: Any = None, drain_anchor: Any = None

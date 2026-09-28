@@ -65,17 +65,48 @@ def test_water_field_accepts_a_polygon_shape():
     assert any(d["field"] == "f" for d in s.M["field_ditches"])
 
 
-# ---- paddy_field: the tax-free plots + fallow patch + field label branches -----------------
-def test_paddy_field_marks_taxfree_plots_and_a_fallow_patch_and_labels():
-    # label + taxfree marks scattered vermilion tax-free plots; a fallow_patch stipples a blighted
-    # sub-region; the label renders and is recorded. Exercises _taxfree_plots (interior non-empty)
-    # and _fallow_patch, which the pool gens do not both trigger on one field.
+# ---- paddy_field: the tax-free plots + resting plots + field label branches ----------------
+def test_paddy_field_marks_taxfree_plots_rests_whole_plots_and_labels():
+    # label + taxfree marks scattered vermilion tax-free plots; an UNSETTLED paddy (269 B01) rests a few whole rice
+    # basins as grass, none of them a tax-free plot; the label renders and is recorded.
     s = _village()
-    s.paddy_field((150, 150, 470, 470), "Rice", "f", taxfree=2, fallow_patch=[[250, 250], [380, 250], [380, 380], [250, 380]])
+    s.pin_knob("paddy_rest", "unsettled")
+    s.paddy_field((150, 150, 870, 870), "Rice", "f", taxfree=2)
     assert s.M["taxfree"]  # tax-free plots recorded -> _taxfree_plots did real work
-    assert s.M["fallow_patches"]  # blighted sub-region recorded
+    rested = s.M["fallow_patches"]
+    assert rested and all(r["form"] == "rested_basin" for r in rested)
+    assert s.M["meta"]["paddy_rest"] == "unsettled" and s.M["meta"]["paddy_rested"] == len(rested)
+    rest_cents = {tuple(round(sum(p[i] for p in r["outline"]) / len(r["outline"])) for i in (0, 1)) for r in rested}
+    assert not rest_cents & {tuple(round(v) for v in t) for t in s.M["taxfree"]}, "a resting plot is no tax-free holding"
     s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     assert any(lab[5] == "Rice" for lab in s.M["labels"])  # field name labeled
+
+
+def test_a_settled_paddy_rests_nothing():
+    s = _village()
+    s.pin_knob("paddy_rest", "settled")
+    s.paddy_field((150, 150, 470, 470), None, "f")
+    assert s.M["meta"]["paddy_rest"] == "settled" and not s.M["fallow_patches"]
+
+
+def test_rest_plots_takes_whole_scattered_basins_toward_the_far_end_of_the_fall():
+    # 269 B01: only basins at least the median's size, never two within REST_APART_SIDES sides, the far end favored.
+    from l7r.diagram.settlement.fields.paddy import REST_APART_SIDES, rest_plots
+
+    grid = [([(x, y), (x + 40, y), (x + 40, y + 40), (x, y + 40)], float(y)) for x in range(0, 800, 40) for y in range(0, 800, 40)]
+    scraps = [([(1000 + x, 0), (1004 + x, 0), (1004 + x, 4)], 10000.0) for x in range(0, 40, 8)]  # tiny, and farthest down
+    cands = grid + scraps
+    picks = rest_plots(cands, random.Random(3), 4)
+    assert len(picks) == 4 and all(i < len(grid) for i in picks), "a scrap of fabric is never a resting holding"
+    cents = [(sum(p[0] for p in cands[i][0]) / 4, sum(p[1] for p in cands[i][0]) / 4) for i in picks]
+    assert all(math.dist(a, b) >= REST_APART_SIDES * 40 - 1e-6 for k, a in enumerate(cents) for b in cents[k + 1 :])
+    far = sum(sum(cands[i][1] for i in rest_plots(cands, random.Random(seed), 3)) for seed in range(40))
+    assert far / 120 > 400, "resting plots favor the far end of the water's run"
+    assert rest_plots([], random.Random(1), 3) == []
+    one = [([(0, 0), (40, 0), (40, 40), (0, 40)], 5.0)]
+    assert rest_plots(one, random.Random(1), 3) == [0], "a flat fall still picks"
+    crowd = [([(x, 0), (x + 40, 0), (x + 40, 40), (x, 40)], 0.0) for x in (0, 40)]
+    assert len(rest_plots(crowd, random.Random(1), 2)) == 1, "neighbors sharing a bund never both rest"
 
 
 # ---- water_field: the BBOX-shape branch + taxfree + label ----------------------------------
@@ -305,6 +336,29 @@ def test_the_field_grave_takes_either_attested_form_and_a_corner_grave_stays_in_
     corner = found["corner"]
     assert 0 < corner["x"] < 60 and 0 < corner["y"] < 30, "inside its plot"
     assert min(math.dist((corner["x"], corner["y"]), v) for v in square) < math.dist((corner["x"], corner["y"]), (30.0, 15.0)), "nearer a corner than the middle"
+
+
+def test_an_unsettled_comb_rests_whole_dry_basins_and_a_dike_pond_rests_none():
+    # 269 B01 on the comb path: the resting plots are drawn in place of paddy, never low or blue, and marked on the net;
+    # a dike-pond block rolls the knob and rests nothing, its open water being the fabric.
+    from l7r.diagram.waterfields import FLOODED
+
+    s = Settlement(W=1400, H=1400, seed=5)
+    s.meta(name="Rs", scale="hamlet", ftpx=1, down_deg=90)
+    s.pin_knob("paddy_rest", "unsettled")
+    net = _comb(1400, 1400, (700, 200), full_or(1, 5), down_deg=90, field_fall=400)
+    net["brook"] = []
+    s.draw_comb_field(net, "f1", {"kind": "stream"})
+    rested = [p for p in net["plots"] if p.get("rest")]
+    assert rested and len(rested) == len(s.M["fallow_patches"]) == s.M["meta"]["paddy_rested"]
+    assert not any(p.get("low") or p["fill"] == FLOODED for p in rested)
+    d = Settlement(W=1400, H=1400, seed=5)
+    d.meta(name="Dp", scale="hamlet", ftpx=1, down_deg=90, field_archetype="mulberry_dike_fishpond")
+    d.pin_knob("paddy_rest", "unsettled")
+    net2 = _comb(1400, 1400, (700, 200), full_or(1, 5), down_deg=90, field_fall=400)
+    net2["brook"] = []
+    d.draw_comb_field(net2, "f1", {"kind": "stream"})
+    assert d.M["meta"]["paddy_rest"] == "unsettled" and not d.M["fallow_patches"]
 
 
 def test_draw_comb_field_existing_stream_and_cascade_sources():
@@ -565,7 +619,8 @@ _FIELDS_SURFACE = frozenset(
         # private helpers, reached through self. (several also called on an instance from tests
         # and from settlement/land/nearring.py, which is why they are part of the surface)
         "_draw_furrows",
-        "_fallow_patch",
+        # `_fallow_patch` (the blighted sub-region with red crosses) was RETIRED by 269 B01: a resting paddy plot is a whole
+        # basin (`rest_basin`), never a patch within one - a deliberate removal, not a member lost in a move.
         "_mulberry_rows",
         "_paddy_features",
         "_paddy_plots",
