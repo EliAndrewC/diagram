@@ -10248,5 +10248,18 @@
    "three-worlds-myriad-spirits stones",
    "sangai banrei"
   ]
+ },
+ "suji-bei": {
+  "def": "A temple's earthen wall striped with white horizontal lines (jōgi-suji), whose number, five the highest, showed the temple's rank.",
+  "variants": [
+   "suji-bei",
+   "sujibei"
+  ]
+ },
+ "Shinden Togashi": {
+  "def": "The Dragon Clan's mountain temple city in this setting, a large city whose pilgrims at any time outnumber its natives.",
+  "variants": [
+   "Shinden Togashi"
+  ]
  }
 }

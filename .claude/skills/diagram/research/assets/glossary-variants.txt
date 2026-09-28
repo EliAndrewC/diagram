@@ -2088,6 +2088,7 @@ shimo-yashiki	lower mansion
 shin sect	Jodo Shinshu
 shinai	shinai
 shinden	shinden
+shinden togashi	Shinden Togashi
 shinsei	Shinsei
 shinshu	Jodo Shinshu
 shinshū	Jodo Shinshu
@@ -2240,6 +2241,8 @@ suiden	suiden
 suids	suid
 suimon	suimon
 suiren	Suiren
+suji-bei	suji-bei
+sujibei	suji-bei
 sukego	sukego
 sun lane	sun lane
 sun lanes	sun lane
