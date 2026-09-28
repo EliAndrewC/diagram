@@ -7400,5 +7400,49 @@
   "variants": [
    "shumon aratame cho"
   ]
+ },
+ "myoshu": {
+  "def": "In the early Edo period, a powerful farmer who held dependent farmers, semi-dependent small farmers and collateral kin under one large household. Those dependents later split off into small farms of their own.",
+  "variants": [
+   "myoshu",
+   "myōshu"
+  ]
+ },
+ "person-year": {
+  "def": "A count that weights each person by the years they appear in a register, so someone recorded for five years counts five times.",
+  "variants": [
+   "person-year",
+   "person-years"
+  ]
+ },
+ "placer": {
+  "def": "The part of the map generator that seats farmhouses on the sheet. It must seat between 0.85 and 1.05 occupied farmhouses per declared household, and when it runs short it widens the ground it draws seats from.",
+  "variants": [
+   "placer"
+  ]
+ },
+ "Bitchu": {
+  "def": "A province of western Japan on the Inland Sea coast. Its village registers of 1870 are one of the record's sources for household size.",
+  "variants": [
+   "Bitchu"
+  ]
+ },
+ "Nihonmatsu": {
+  "def": "A castle town and domain in the Tohoku. The record's figures come from two of its villages, Shimo-Moriya and Niida, in their register of 1862.",
+  "variants": [
+   "Nihonmatsu"
+  ]
+ },
+ "Suwa": {
+  "def": "A mountain region of central Japan around Lake Suwa, where the average household halved from about eight in the seventeenth century to about four in the nineteenth.",
+  "variants": [
+   "Suwa"
+  ]
+ },
+ "Shikoku": {
+  "def": "The smallest of Japan's four main islands, on the south side of the Inland Sea.",
+  "variants": [
+   "Shikoku"
+  ]
  }
 }

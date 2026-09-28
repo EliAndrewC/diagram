@@ -111,6 +111,7 @@ bidens tripartita	Bidens tripartita
 bingo	Bingo
 bishamon	Bishamon
 bishamonten	Bishamon
+bitchu	Bitchu
 board feet	board foot
 board foot	board foot
 bodaiji	bodaiji
@@ -1129,6 +1130,8 @@ mushiro	mushiro
 muster perimeter	muster perimeter
 muster perimeters	muster perimeter
 myoji-taito	myoji-taito
+myoshu	myoshu
+myōshu	myoshu
 naca	NACA
 nagare-zukuri	nagare-zukuri
 nagarezukuri	nagare-zukuri
@@ -1165,6 +1168,7 @@ night watches	night watch
 night-soil	night soil
 nightsoil	night soil
 nihonbashi	Nihonbashi
+nihonmatsu	Nihonmatsu
 nimosaku	nimosaku
 ninomaru	ninomaru
 noborigama	noborigama
@@ -1244,6 +1248,8 @@ perched, silt-choked river	perched river
 periodic market	periodic market
 periodic markets	periodic market
 periodic-market	periodic market
+person-year	person-year
+person-years	person-year
 petuntse	petuntse
 phragmites	Phragmites
 phragmites australis	Phragmites
@@ -1253,6 +1259,7 @@ picket lines	picket line
 pig iron	pig iron
 pit rank	pit rank
 pit ranks	pit rank
+placer	placer
 plankton	plankton
 plant association	plant association
 planted collar	planted collar
@@ -1476,6 +1483,7 @@ shifting cultivation	shifting cultivation
 shijin soo	four gods
 shijin-soo	four gods
 shijing	Book of Songs
+shikoku	Shikoku
 shimenawa	shimenawa
 shinai	shinai
 shinden	shinden
@@ -1597,6 +1605,7 @@ superelevation	superelevation
 superstructure	superstructure
 sus	Sus
 susuki	susuki
+suwa	Suwa
 suzaku avenue	Suzaku-oji
 suzaku boulevard	Suzaku-oji
 suzaku oji	Suzaku-oji
