@@ -316,16 +316,16 @@
     <line x1="460.8" y1="396.2" x2="453.7" y2="403.3" stroke="#6B2A18" stroke-width="0.64" stroke-linecap="round" data-leader="1"/>
   </g>
 
-  <!-- The privy at the west gable's BACK corner, off the forecourt and the kitchen door, near the path to the well; the kitchen garden beside the west end, a yard before the kitchen door -->
+  <!-- The privy at the west gable's BACK corner, off the forecourt and the kitchen door, near the path to the well. The kitchen garden in the open ground at the forecourt's foot, west of the approach: the only ground near the house the sun reaches for its six hours (feature 283; research homesteads 044) - the hall and the wood shade the yard by the kitchen door -->
   <g data-kind="latrine">
     <rect x="335" y="452" width="15" height="15" fill="#7E726A" stroke="#4A3318" stroke-width="0.8"/>
     <text x="310.5" y="435.4" text-anchor="middle" font-size="7" font-style="italic" fill="#4A4640">privy</text>
     <line x1="320.9" y1="437.9" x2="334.3" y2="451.3" stroke="#4A4640" stroke-width="0.60" stroke-linecap="round" data-leader="1"/>
   </g>
   <g data-kind="vegetable garden">
-    <rect x="282" y="460" width="42" height="68" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="3 2" id="kitchen_garden"/>
-    <text x="303.0" y="491.9" text-anchor="middle" font-size="7" font-style="italic" fill="#3A4A28">kitchen</text>
-    <text x="303.0" y="499.9" text-anchor="middle" font-size="7" font-style="italic" fill="#3A4A28">garden</text>
+    <rect x="364" y="668" width="42" height="68" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="3 2" id="kitchen_garden"/>
+    <text x="385.0" y="699.9" text-anchor="middle" font-size="7" font-style="italic" fill="#3A4A28">kitchen</text>
+    <text x="385.0" y="707.9" text-anchor="middle" font-size="7" font-style="italic" fill="#3A4A28">garden</text>
   </g>
 
   <!-- Fire-water tubs at the building's four corners (gutter-fed, against the wall) -->

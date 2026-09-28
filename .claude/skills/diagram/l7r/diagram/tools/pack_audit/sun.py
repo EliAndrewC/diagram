@@ -109,7 +109,8 @@ def gardens(plan: ParsedPlan, text: str) -> list[tuple[Rect, bool]]:
 
 
 def casters(plan: ParsedPlan, text: str, bed: Polygon) -> list[Caster]:
-    """Everything the sheet draws that stands up: its buildings, its walls and its trees - never the bed itself."""
+    """Everything the sheet draws that stands up: its buildings, its walls (the compound's and its court dividers) and its
+    trees - never the bed itself, nor what NOT_STANDING names."""
     kinds = element_kinds(text)
     out: list[Caster] = []
     for r in plan.structures:
@@ -119,7 +120,7 @@ def casters(plan: ParsedPlan, text: str, bed: Polygon) -> list[Caster]:
             continue
         small = r.w * r.h / (FTPX * FTPX) < SMALL_BUILDING_SQFT
         out.append(Caster(p, SMALL_BUILDING_FT if small else BUILDING_FT, kind or "building"))
-    out += [Caster(_rect_poly(w), WALL_FT, "wall") for w in plan.wall_segs]
+    out += [Caster(_rect_poly(w), WALL_FT, "wall") for w in (*plan.wall_segs, *plan.dividers)]  # a court divider is a wall too
     out += [Caster(Point(t.x + t.w / 2, t.y + t.h / 2).buffer(t.w / 2, 16), TREE_FT, "trees", tree=True) for t in plan.trees]
     return out
 
