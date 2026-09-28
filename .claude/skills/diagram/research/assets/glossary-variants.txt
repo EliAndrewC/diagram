@@ -371,6 +371,9 @@ commute	commutation
 commuted	commutation
 compound shrine	compound shrine
 compound shrines	compound shrine
+concave bank	concave bank
+concave banks	concave bank
+concave-bank	concave bank
 confluence	confluence
 confluences	confluence
 conservation headland	conservation headland
@@ -1435,6 +1438,8 @@ kobito	kobito
 kochi seiri	kochi seiri
 kochi-seiri	kochi seiri
 kochi-seki	kochi-seki
+kodera	Kodera site
+kodera site	Kodera site
 koebune	fertilizer boat
 koedame	koedame
 kofun	Kofun period
