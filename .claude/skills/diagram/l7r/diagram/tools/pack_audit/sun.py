@@ -19,10 +19,12 @@ from __future__ import annotations
 import math
 import re
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
-from shapely.geometry import Point, Polygon, box
-from shapely.geometry.base import BaseGeometry
-from shapely.ops import unary_union
+if TYPE_CHECKING:  # the names for the type checker; each function imports shapely when it runs (the engine loads no heavy
+    # library at import time - tests/test_memory.py)
+    from shapely.geometry import Polygon
+    from shapely.geometry.base import BaseGeometry
 
 from ...interactive.sheet import element_kinds
 from .grids import FTPX
@@ -72,6 +74,8 @@ def sun_at(hour: float, lat_deg: float = LAT_DEG, decl_deg: float = DECL_DEG) ->
 def shadow(caster: Caster, el_deg: float, az_deg: float) -> BaseGeometry:
     """The ground a caster darkens with the sun at (el, az): its footprint swept away from the sun by its shadow's length.
     On a sheet north is up and a px is 1/FTPX ft, so the shadow runs (-sin az, +cos az) in px."""
+    from shapely.geometry import Polygon
+    from shapely.ops import unary_union
     length = caster.height_ft / math.tan(math.radians(el_deg)) * FTPX
     dx, dy = -math.sin(math.radians(az_deg)) * length, math.cos(math.radians(az_deg)) * length
     ends = [(x + dx, y + dy) for x, y in caster.shape.exterior.coords]
@@ -80,6 +84,7 @@ def shadow(caster: Caster, el_deg: float, az_deg: float) -> BaseGeometry:
 
 def lit_hours(bed: Polygon, casters: list[Caster], half_shade: bool = False) -> float:
     """Hours of the day at least LIT_SHARE of the bed is in direct sun (for a half-shade bed a tree's shadow is dappled light)."""
+    from shapely.ops import unary_union
     hours = 0.0
     steps = int(24 / STEP_H)
     for k in range(steps):
@@ -94,6 +99,7 @@ def lit_hours(bed: Polygon, casters: list[Caster], half_shade: bool = False) -> 
 
 
 def _rect_poly(r: Rect) -> Polygon:
+    from shapely.geometry import box
     return box(r.x, r.y, r.x + r.w, r.y + r.h)
 
 
@@ -115,6 +121,7 @@ def gardens(plan: ParsedPlan, text: str) -> list[tuple[Rect, bool]]:
 def casters(plan: ParsedPlan, text: str, bed: Polygon) -> list[Caster]:
     """Everything the sheet draws that stands up: its buildings, its walls (the compound's and its court dividers) and its
     trees - never the bed itself, nor what NOT_STANDING names."""
+    from shapely.geometry import Point
     kinds = element_kinds(text)
     out: list[Caster] = []
     for r in plan.structures:

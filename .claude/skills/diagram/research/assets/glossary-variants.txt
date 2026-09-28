@@ -977,7 +977,6 @@ huizhou style	Hui style
 hutong	hutong
 hutongs	hutong
 hyakusho denki	Hyakusho Denki
-hyakushō denki	Hyakusho Denki
 hydrophilic	hydrophilic
 hydrosere	hydrosere
 hyo	hyō
@@ -1646,7 +1645,6 @@ numajiro	numajiro
 nunosarashi	nunosarashi
 nure-en	nure-en
 nuriya	nuriya
-nōgyō zensho	Nogyo Zensho
 o-aza	ō-aza
 oaza	ō-aza
 oblique weir	oblique weir

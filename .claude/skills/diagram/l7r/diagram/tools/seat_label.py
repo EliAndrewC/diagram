@@ -32,8 +32,6 @@ import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field, replace
 from pathlib import Path
 
-from shapely.geometry import LineString, Point, Polygon
-from shapely.ops import nearest_points, unary_union
 
 from l7r.diagram.labels import Obstacle, ObstacleIndex, Placement, Subject, Way, place
 from l7r.diagram.labels.geom import Poly, Pt, bbox, inside, rect
@@ -422,6 +420,8 @@ def leader_to_ink(p: Placement, parts: list[Shape]) -> Placement:
     """A leader ends on the drawn thing it names, not on the box around its parts: a barge moored by lines and three
     pines are boxed with empty water or ground in the box's corner, and a leader to the corner named nothing (feature
     283 - the tax barge's and the old pines' leaders ended 5-6 ft short)."""
+    from shapely.geometry import LineString, Point, Polygon
+    from shapely.ops import nearest_points, unary_union
     if p.leader is None or not parts:
         return p
     a = Point(p.leader[0])
@@ -447,6 +447,8 @@ corner, on nothing (feature 283 - RESIDENCE's leader ended 4 ft short of the hou
 def stepped_subject(box: Poly, own: list[Shape], at: Pt) -> Poly:
     """The outline a caption outside a multi-part subject is set against: the parts' box where they fill it, else the
     largest part - a caption beside one block of a stepped house names the house, and a leader to it ends on it."""
+    from shapely.geometry import Polygon
+    from shapely.ops import unary_union
     blocks = [s for s in own if s.tag == "rect" and _area(s.poly) >= BLOCK_PX]
     if len(blocks) < 2 or inside(at[0], at[1], box):
         return box

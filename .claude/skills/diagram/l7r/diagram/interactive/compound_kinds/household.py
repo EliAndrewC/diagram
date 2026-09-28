@@ -415,10 +415,10 @@ class Storehouse(Kind):
     by 3 ken, some 12 by 18 ft. A plastered storehouse is the one building made not to burn, so it keeps no
     fire-water tub.
 
-    Note: The storehouse, its place behind the house and its size follow the record, drawn at the common 2 by 3 ken;
-    how many a household kept - two here, as at Matsushiro - is a guess for any one sheet.
+    Note: The storehouse, its place behind the house and its size follow the record, drawn at the common 2 by 3 ken.
+    How many storehouses a household kept - two here, as the Yokota house kept - is a guess for any one sheet.
 
-    Caveat: How many storehouses a household kept - two here, as at Matsushiro - is a guess for any one sheet.
+    Caveat: How many storehouses a household kept - two here, as the Yokota house kept - is a guess for any one sheet.
 
     Name: storehouse
     Covers: the household storehouse and its label

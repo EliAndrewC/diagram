@@ -229,9 +229,8 @@ class RearGarden(Kind):
     Why: At the Higuchi house at Matsushiro a garden lies behind the main house, and the storehouse stands beyond it;
     the formal garden took the sunny south, and the ground behind the house carried the household's own buildings.
 
-    Note: A garden behind the house, with the storehouse beyond it, follows the record. What grew in it - trees and
-    moss that take the shade - is a guess, no source read describing one's planting, and the map draws it as open
-    garden ground.
+    Note: A garden behind the house, with the storehouse beyond it, follows the record, and the map draws it as open
+    garden ground. What grew in a rear garden is a guess: no source read describes one's planting.
 
     Caveat: What grew in a rear garden is a guess: no source read describes one's planting.
 
@@ -262,13 +261,13 @@ class VegetableGarden(Kind):
     house, south beside the formal garden, the rear service ground, or a parcel of its own ("Where does a walled
     compound keep its vegetable garden, and does the sun decide it?"). The sun rules out a seat where the bed gets under
     its six hours in the autumn ("How many hours of direct sun does a kitchen bed need?"; a sheet may declare a
-    half-shade bed, which needs three), and that a household chose among its seats by the sun is a guess. Where the west
-    and the rear lie in the shade of the house and the kitchen, the bed stands in the inner court beside the formal
-    garden. At a country shrine it is the resident keeper's plot, near the dwelling on whatever open ground gets its
-    sun, its place and its size both guesses, no keeper's plot having been placed or measured.
+    half-shade bed, which needs three). Where the west and the rear lie in the shade of the house and the kitchen, the
+    bed stands in the inner court beside the formal garden; at a country shrine it is the resident keeper's plot, near
+    the dwelling on whatever open ground gets its sun. That a household chose its seat by the sun is a guess, and so are
+    a country shrine keeper's plot's place and size: no source read places or measures one.
 
-    Caveat: That a household chose its seat by the sun is a guess: no source read says why a plot was put where it
-    was. A country shrine keeper's plot, its place and its size, is a guess: no source read places or measures one.
+    Caveat: That a household chose its seat by the sun is a guess, and so are a country shrine keeper's plot's place and
+    size: no source read places or measures one.
 
     Name: vegetable garden
     Covers: the kitchen garden's beds and label
