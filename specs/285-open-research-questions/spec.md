@@ -175,3 +175,12 @@ A tooling feature: it draws and states nothing on a map, so there is no renderin
   (3) plan D7 still reads "the whole word `GUESS`" although D2 and the spec's edge case now make GUESSES the label
   too and FR-007 lists "every GUESS label" (09968f383's message says D7 names the plural; it does not): D7 should
   read "the whole word `GUESS` or `GUESSES` (D2)".
+- Amendment pass, round 2 (spec-fidelity VERIFY, 2026-09-28): FAITHFUL - (1) RESOLVED: R3 now reads `5` GUESSES in
+  the fragments' visible text, `6` raw (`git grep -o -w GUESSES` over the fragments gives `6`; the assembled pages'
+  extra `6` are no longer counted; on this round's own run); (2) RESOLVED: R4's row reads `122` with the breakdown
+  l7r 92, pool 25, buildings.md 2, future-work 2, dev 1, which `git grep -I -c -w -E "GUESS|GUESSES"` over FR-007's
+  paths and `make open-questions` both reproduce (on this round's own run); no committed Makefile ever carried the
+  upper-case help line, so the "first run" note describes an uncommitted state, which the Makefile's own comment on
+  the target corroborates; (3) RESOLVED: plan D7 reads "`GUESS` or its plural `GUESSES` (as D2)". D3's dropped floor
+  and R5 (the plan review's, in this diff) implement FR-003's "its heading or its anchor" as written; nothing new
+  contradicts a requirement.
