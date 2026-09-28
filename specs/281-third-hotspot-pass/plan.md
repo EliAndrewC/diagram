@@ -86,9 +86,11 @@ byte-identical.
   asks the segments whose box meets its own (two segments whose boxes do not meet cannot cross), `segments_cross`
   deciding; the `home` parity counts crossings of `(c, mid)` over the segments its box meets - every segment it can cross.
 - `_rect_on_stream`: the stream segments are filed ONCE in a `PointGrid` (`(a, b, hw)` with each segment's box widened by
-  its `hw`), built and cached beside `_water_obstacles` under the same key and for the same reason - the streams are laid
-  before the homestead solve and do not change during it, and a stream added later changes the key and rebuilds it (the
-  exposure `_rect_on_water` already accepts in the same solve). A rect asks `near(center, half-diagonal)` - every segment
+  its `hw`), built once and cached: the streams are laid before the homestead solve and do not change during it. The
+  cache HOLDS the streams list, each stream record and each course it was built from and compares them by identity, with
+  each course's length and width - not `_water_obstacles`' length key, which served a stale index when a caller replaced
+  the streams with a different list of the same length (the gate's feature-261 test caught it, research R2's note in
+  `dev/performance.md`). A rect asks `near(center, half-diagonal)` - every segment
   whose widened box can meet the rect's - and the old `seg_dist < hw` over its five points and `segments_cross` over its
   four edges decide. The test itself is lifted to module level (`rect_touches_stream(gc, pts, streams)`, building a
   one-shot index) so it can be compared with the old scan without a settlement.
