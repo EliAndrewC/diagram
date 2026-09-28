@@ -1,13 +1,16 @@
 """The particulars: things a compound plan draws because of its place in the setting or its map's story (feature 262).
 
-Ochiba's Fox wardings (the threshold stones and their buried Pact-Bowl, the Fox-Fire Lantern, the cinnabar
-workshop, the fox relics), Hayakawa's river, landing and salt wards, and Ubame's Fox border, parley room,
+Ochiba's Fox wardings (the threshold stones and their buried Pact-Bowl, the cinnabar workshop), Hayakawa's river
+and landing, and Ubame's Fox border, parley room,
 boundary stones, charcoal store and wood-kami altar. A kind the SETTING makes - with no historical counterpart
 the record covers - is `deviation`, written from the GM's canon (`/host-l7r-repo/setting/l7r.md`, which needs no
 citation, so `Sources: not recorded`) and the map's design notes. A kind the record DOES cover (the river, the
 landing, the drawn border line) keeps the record's classification, and what its one map
-adds is in that map's `.notes.md` "Map notes" block. A kind neither the record nor the canon covers (the salt
-wards) is a `guess`. The measurement behind every label is `specs/262-interactive-magistracy-pages/coverage.md`.
+adds is in that map's `.notes.md` "Map notes" block.
+
+A page shows nothing drawn from the GM-only notes of an Obsidian Portal record - not now and not ever (the GM,
+2026-09-28): the Fox-Fire Lantern, the fox relics and Hayakawa's salt wards came from those notes and were taken off
+the pages; a note the GM wants shown, they move to a visible place first. The measurement behind every label is `specs/262-interactive-magistracy-pages/coverage.md`.
 """
 
 from __future__ import annotations
@@ -46,102 +49,27 @@ class ThresholdStones(Kind):
     key = "threshold stones"
 
 
-class FoxFireLantern(Kind):
-    """
-    What: The Fox-Fire Lantern, a small stone lantern kept at the compound's Inari shrine by day and carried
-    to the magistrate's bench when a grain-tax hearing is held in the evening - drawn at both of its places.
-
-    Why: It is a votive offering to Inari: a small lantern of gray granite, carved by a stonemason once
-    falsely accused of shorting his village's tax grain, and given to the County Magistrate so that it would
-    burn at grain-tax hearings. Its flame is said to flicker blue when a witness conceals the truth about a
-    harvest. It belongs to the compound's shrine and to its bench at once, which is why the plan marks it
-    twice: at rest at the shrine, and in the hearing court, where an evening hearing brings it.
-
-    Note: the lantern is one of the relics of the setting's own record, which describes it; it has no
-    historical counterpart, and the research record holds nothing like it, so it is a departure made by the
-    setting.
-
-    Name: fox-fire lantern
-    Covers: the lantern's sublabel at the rice altar and the note in the hearing court
-    Label: deviation
-    Sources: not recorded
-    Entry: research/buildings.html (no dedicated entry - recorded as silent)
-    """
-
-    key = "fox-fire lantern"
-
-
 class CinnabarWorkshop(Kind):
     """
-    What: An open-sided covered colonnade against the shrine where the threshold stones are painted with their
+    What: An open-sided covered workshop against the shrine where the threshold stones are painted with their
     cinnabar fox-tracks.
 
-    Why: The stones of the Fox road wardings are painted with cinnabar, and the painting is sacred work: the
-    setting's record has the magistrate paint each newly dressed stone by their own hand, in daylight, at the
-    colonnade off the shrine's eastern altar - which is why the workshop adjoins the shrine hall rather than
-    standing in the service yard.
+    Why: The stones of the Fox road wardings are river-stones painted with cinnabar fox-tracks, and the County
+    Magistrate of Ochiba, a Fox priest, keeps the wardings - so the workshop where they are painted adjoins the
+    compound's shrine rather than standing in the service yard.
 
-    Note: the painted threshold stones and the colonnade where they are painted belong to the setting's own
-    canon and record, a departure made by the setting with no historical counterpart in the research record.
+    Note: the painted threshold stones and the magistrate's charge of the wardings belong to the setting's own
+    canon, a departure made by the setting with no historical counterpart in the research record; that the
+    workshop adjoins the shrine is this map's design.
 
     Name: cinnabar workshop
-    Covers: the hatched colonnade, its posts and its label
+    Covers: the hatched workshop, its posts and its label
     Label: deviation
     Sources: not recorded
     Entry: research/buildings.html (no dedicated entry - recorded as silent)
     """
 
     key = "cinnabar workshop"
-
-
-class FoxRelics(Kind):
-    """
-    What: Two relics of the Fox, the Akami-fude and the Chigiri-no-Chou, kept with the warding materials at the
-    fox altar of the compound's Inari hall.
-
-    Why: They pass with the office rather than the family - the magistrate who holds the post keeps them, with
-    the duty of the road wardings - so they rest in the compound's own shrine, at the altar of the fox, beside
-    the work of the wardings.
-
-    Note: the Akami-fude is the setting's own relic - the brush that paints the fox-tracks on each threshold
-    stone, kept on its own stand at the shrine's eastern, fox altar - and the Chigiri-no-Chou is the setting's
-    too. Neither has a historical counterpart, and the research record holds nothing like them, so both are a
-    departure made by the setting.
-
-    Name: fox relics
-    Covers: the fox-altar sublabel and the relics annotation below the workshop
-    Label: deviation
-    Sources: not recorded
-    Entry: research/buildings.html (no dedicated entry - recorded as silent)
-    """
-
-    key = "fox relics"
-
-
-class SaltWards(Kind):
-    """
-    What: Small cones of salt set in a pair outside a door of the compound, one on each side of the opening,
-    set out for good fortune at the threshold.
-
-    Why: A small heap of salt at a doorway, morijio, is recorded in the late Edo period at the doors of the
-    trades that wanted customers - restaurants, assignation houses and variety halls - set out for good
-    fortune. Today the salt is pressed into a cone or a three-sided pyramid, and at an entrance it commonly
-    stands outside, one heap on each side, so the pair flanks each opening on its outer face, and every door
-    so warded carries its own pair - the gates, the posterns and the river door alike.
-
-    Note: The form follows the present-day custom, since no page read gives an Edo-period shape: a small cone,
-    a pair outside each warded opening. No page read puts salt at the gates of a samurai residence or an
-    official's compound, so its use here is a guess, and each heap is drawn as a marker far larger than a
-    real cone of salt, which the record calls only small.
-
-    Name: salt wards
-    Covers: every salt-ward marker at the doors, the "salt wards" label and the salt-wards note box
-    Label: guess
-    Sources: kotobank-morijio, jawiki-morijio, ise-miyachu-morijio
-    Entry: research/religion-and-death.html - "Were cones of salt set at the doors of an official's compound?"
-    """
-
-    key = "salt wards"
 
 
 class River(Kind):
@@ -530,10 +458,10 @@ class ParleyMats(Kind):
 
 class DryingStonesAndBowls(Kind):
     """
-    What: River-stones and small lacquer-black bowls laid out to dry under a cinnabar workshop's colonnade.
+    What: River-stones and small lacquer-black bowls laid out to dry under a cinnabar workshop's roof.
 
     Why: The workshop is where the Fox Clan's threshold stones are made and painted - river-stones the size of two
-    fists, painted with cinnabar fox-tracks - beside the shrine of the priest-magistrate who keeps the road
+    fists, painted with cinnabar fox-tracks - beside the shrine of the Fox priest who, as County Magistrate of Ochiba, keeps the road
     wardings.
 
     Note: the threshold stones and their Pact-Bowls are the campaign's own canon, a departure made by the setting

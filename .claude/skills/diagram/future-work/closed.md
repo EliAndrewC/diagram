@@ -46,3 +46,4 @@ OPEN - one for five days, one for seven - and both were about to be put to the G
 - CORRECTED - cohort seed 10's belt hole is a SUN CORRIDOR, not a polygon pinch
 - DONE 2026-08-19: the gen-time budgets had drifted from protection into a coin toss
 - DONE 2026-08-19: coverage that depends on whether the GEN CACHE was warm
+- RULED 2026-09-28 (the GM): no GM-only Obsidian Portal notes on a page, not now and not ever - the GM moves a note somewhere visible to show it; Ubame's post stays within one lineage (Moriguchi is its domain's only dynasty province)

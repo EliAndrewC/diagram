@@ -211,11 +211,7 @@
        fortune from crossing the threshold, so it sits outside; feature 267 pass 2: they stood 0.7-1.3 ft inside the
        mouths) -->
   <!-- landing gate (east wall), flanking the opening, outside (east) -->
-  <circle cx="890" cy="495" r="2.5" fill="#F5F2E8" stroke="#9C9484" stroke-width="1" data-kind="salt wards"/>
-  <circle cx="890" cy="535" r="2.5" fill="#F5F2E8" stroke="#9C9484" stroke-width="1" data-kind="salt wards"/>
   <!-- service gate (west wall), flanking, outside (west) -->
-  <circle cx="129" cy="686" r="2.5" fill="#F5F2E8" stroke="#9C9484" stroke-width="1" data-kind="salt wards"/>
-  <circle cx="129" cy="724" r="2.5" fill="#F5F2E8" stroke="#9C9484" stroke-width="1" data-kind="salt wards"/>
   <!-- Kitchen postern posts (west service door, opening into the open gap
        between residence and kitchen rather than against the kitchen flank) -->
   <g fill="#2D2A24" data-kind="side gate">
@@ -223,8 +219,6 @@
     <rect x="134" y="320" width="12" height="8"/>
   </g>
   <!-- kitchen postern (west wall), flanking, outside (west) -->
-  <circle cx="129" cy="290" r="2.5" fill="#F5F2E8" stroke="#9C9484" stroke-width="1" data-kind="salt wards"/>
-  <circle cx="129" cy="324" r="2.5" fill="#F5F2E8" stroke="#9C9484" stroke-width="1" data-kind="salt wards"/>
   <!-- Service-gate posts (west wall by the stable yard - a service door,
        so opening into work space is correct) -->
   <g fill="#2D2A24" data-kind="side gate">
@@ -239,16 +233,7 @@
   <path d="M 1004 344 L 1036 344" stroke="#9C7448" stroke-width="6" stroke-dasharray="8 8" fill="none" opacity="0.5" data-kind="road"/>
   <!-- river door (annex east wall), flanking, outside (east) - the door
        Hajime fears most, so it is warded like the rest -->
-  <circle cx="1010" cy="328" r="2.5" fill="#F5F2E8" stroke="#9C9484" stroke-width="1" data-kind="salt wards"/>
-  <circle cx="1010" cy="360" r="2.5" fill="#F5F2E8" stroke="#9C9484" stroke-width="1" data-kind="salt wards"/>
 
-  <!-- Salt wards flanking the main gate, outside (south of the wall) -->
-  <g data-kind="salt wards">
-    <circle cx="484" cy="764" r="2.5" fill="#F5F2E8" stroke="#9C9484" stroke-width="1"/>
-    <circle cx="536" cy="764" r="2.5" fill="#F5F2E8" stroke="#9C9484" stroke-width="1"/>
-    <!-- label pulled west off the street's stripe (pass 3), clear of the note box -->
-    <text x="468.5" y="775.2" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830"><tspan x="468.5" dy="0.0">salt</tspan><tspan x="468.5" dy="8.6">wards</tspan></text>
-  </g>
 
   <!-- Notice board just outside the wall, hugging the main gate (a kosatsu is read where
        people pass; it sat ~28 ft west of any gate before - GM 2026-07) -->
@@ -870,8 +855,7 @@
     <line x1="436" y1="712.5" x2="436" y2="754.5" stroke="#4A3318" stroke-width="1"/>
     <!-- the gatekeepers' lodging's door, on the north face onto the forecourt -->
     <rect x="373" y="706.5" width="24" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
-    <text x="276.2" y="681.7" text-anchor="middle" font-size="10" font-weight="bold" fill="#3A2E1C">gate range</text>
-    <line x1="306.4" y1="684.9" x2="333.3" y2="711.8" stroke="#3A2E1C" stroke-width="0.80" stroke-linecap="round" data-leader="1"/>
+    <text x="439.2" y="767.5" text-anchor="middle" font-size="10" font-weight="bold" fill="#3A2E1C">gate range</text>
     <text x="385.0" y="731.1" text-anchor="middle" font-size="8" font-style="italic" fill="#3A2E1C">gatekeepers'</text>
     <text x="385.0" y="740.3" text-anchor="middle" font-size="8" font-style="italic" fill="#3A2E1C">lodging</text>
     <text x="459.0" y="736.0" text-anchor="middle" font-size="7.5" font-style="italic" fill="#FFFAE6">guardroom</text>
@@ -889,18 +873,6 @@
     </g>
   </g>
 
-  <!-- ============================================================ -->
-  <!-- SALT WARDS note box (bottom-left) - unique instance feature      -->
-  <!-- ============================================================ -->
-  <g transform="translate(140, 762)" data-kind="salt wards">
-    <rect x="0" y="0" width="310" height="96" fill="#F7EFD8" stroke="#6B4F2A" stroke-width="1.2"/>
-    <text x="155.0" y="28.6" text-anchor="middle" font-size="13" font-weight="bold" fill="#3A2E1C">Salt wards</text>
-    <text x="155.0" y="41.0" text-anchor="middle" font-size="10" fill="#3A2E1C">Yasuki sea salt at every door - never salt that has</text>
-    <text x="155.0" y="52.5" text-anchor="middle" font-size="10" fill="#3A2E1C">touched the river. Hajime sets them with his own hand,</text>
-    <text x="155.0" y="64.0" text-anchor="middle" font-size="10" fill="#3A2E1C">renewing them after every rain, main gate last. A ward</text>
-    <text x="155.0" y="75.5" text-anchor="middle" font-size="10" fill="#3A2E1C">found scattered on a dry day is the worst kind of omen.</text>
-    
-  </g>
 
   <!-- (No key box: the sheet is labeled directly - GM 2026-07. Palette
        semantics live in buildings.md/SKILL.md.) -->
