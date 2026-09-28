@@ -16,6 +16,7 @@ from ...labels.geom import rect, seg_closest
 from ...labels.standard import WEIGHT_OBSTACLE
 from .._geom import (
     LAND,
+    PointGrid,
     Poly,
     Pt,
     label_aabb,
@@ -98,6 +99,32 @@ def subject_ref(subject: Subject, p: Placement) -> tuple[float, float, float, fl
 
 if TYPE_CHECKING:
     from ..core import Settlement
+
+
+def lane_seat_index(lanes: Any) -> tuple[PointGrid, float]:
+    """Every lane segment as `(a, b, half, x0, y0, x1, y1)` filed by its own box, `half` the tread's half-width plus the
+    3 px halo plus 2 ft (`captions_clear_the_ways_they_stand_on`'s tolerance), with the largest `half` - for the caption
+    probe, which asks it of many seats while the lanes do not change (feature 281, FR-006)."""
+    grid = PointGrid()
+    top = 0.0
+    for ln in lanes:
+        pts = ln.get("pts") or []
+        half = float(ln.get("w", 5)) / 2 + 3.0 + 2.0
+        top = max(top, half)
+        for k in range(len(pts) - 1):
+            a, b = (float(pts[k][0]), float(pts[k][1])), (float(pts[k + 1][0]), float(pts[k + 1][1]))
+            grid.extend([(a, b, half, min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1]))])
+    return grid, top
+
+
+def clear_of_lanes(b: tuple[float, float, float, float], index: tuple[PointGrid, float]) -> bool:
+    """Does no lane come within its `half` plus half the box's larger side of the box's center? The scan over every lane
+    segment this replaces (feature 281, FR-006): a segment that near the center lies within `half + side / 2` of it, so its
+    own box does too, and `near` at the largest such reach returns it; `seg_dist` decides as before."""
+    grid, top = index
+    cx, cy = (b[0] + b[2]) / 2, (b[1] + b[3]) / 2
+    side = max(b[2] - b[0], b[3] - b[1]) / 2
+    return not any(seg_dist(cx, cy, a, e) < half + side for a, e, half, *_box in grid.near(cx, cy, top + side))
 
 
 class CaptionProbesMixin:
@@ -345,9 +372,18 @@ class CaptionProbesMixin:
         (Minami, 2026-07-27). Placement and its check read the SAME geometry."""
         return len(label) * size * 0.55 / 2
 
-    def label_seat_clear(self: Settlement, lx: float, ly: float, tw: float, size: float = 9.0, boxes: list[tuple[float, float, float, float]] | None = None, tilt: float = 0.0) -> bool:  # type: ignore[misc]
+    def label_seat_clear(  # type: ignore[misc]
+        self: Settlement,
+        lx: float,
+        ly: float,
+        tw: float,
+        size: float = 9.0,
+        boxes: list[tuple[float, float, float, float]] | None = None,
+        tilt: float = 0.0,
+        lanes: tuple[PointGrid, float] | None = None,
+    ) -> bool:
         """Is a caption box centered at (lx, ly) clear of every blocker? `boxes` lets a caller that
-        probes many seats build the blocker list once. A TILTED caption probes its rotated AABB -
+        probes many seats build the blocker list once, and `lanes` (`lane_seat_index`) the lanes' index. A TILTED caption probes its rotated AABB -
         conservative against these axis-aligned blockers, so the probe stays at least as strict as
         the quad the gate tests."""
         bx = self.label_blockers() if boxes is None else boxes
@@ -368,15 +404,7 @@ class CaptionProbesMixin:
         # close to the busiest node; feature 126 derives the lanes from the houses, so they thread
         # the cluster more tightly and it started happening (cohort seeds 34 and 35, both clean at
         # HEAD). The check's own tolerance is the tread half-width plus its 3 px halo plus 2 ft.
-        for _ln in self.M.get("lanes", []):
-            _pts = _ln.get("pts") or []
-            _half = float(_ln.get("w", 5)) / 2 + 3.0 + 2.0
-            for _k in range(len(_pts) - 1):
-                _a, _b2 = _pts[_k], _pts[_k + 1]
-                _cx, _cy = (b[0] + b[2]) / 2, (b[1] + b[3]) / 2
-                if seg_dist(_cx, _cy, (float(_a[0]), float(_a[1])), (float(_b2[0]), float(_b2[1]))) < _half + max(b[2] - b[0], b[3] - b[1]) / 2:
-                    return False
-        return True
+        return clear_of_lanes(b, lanes if lanes is not None else lane_seat_index(self.M.get("lanes", [])))
 
     def clear_label_seat(self: Settlement, x: float, y: float, w: float, h: float, label: str, size: float = 9.0, skip_key: str | None = None) -> Pt | None:  # type: ignore[misc]
         """A caption seat for a verge-hugging feature: below, above, then left and right, walking
@@ -390,10 +418,11 @@ class CaptionProbesMixin:
         up silently is worse than no probe, so callers must handle None rather than inherit a seat."""
         tw = self.label_caption_hw(label, size)
         boxes = self.label_blockers(skip_key)
+        lanes = lane_seat_index(self.M.get("lanes", []))  # built once, as `boxes` is: the lanes do not change while it probes (feature 281)
         for ring in range(16):
             d = ring * 14
             for lx, ly in ((x, y + h / 2 + 11 + d), (x, y - h / 2 - 9 - d), (x - tw - w / 2 - 6 - d, y + 3), (x + tw + w / 2 + 6 + d, y + 3)):
-                if self.label_seat_clear(lx, ly, tw, size, boxes):
+                if self.label_seat_clear(lx, ly, tw, size, boxes, lanes=lanes):
                     return (lx, ly)
         return None
 

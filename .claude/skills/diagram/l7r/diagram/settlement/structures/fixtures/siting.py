@@ -18,16 +18,17 @@ from ..._geom import (
     way_beds,
 )
 from ..._knobs import KOSATSUBA_MARKER_MIN_PX, PUNISHMENT_SPOT_FT, resolve_knob
+from ..captions import lane_seat_index
 from ._helpers import (
     KOSATSUBA_ANCHOR_BAND_FT,
     KOSATSUBA_HANDOVER_BAND_FT,
     KOSATSUBA_VERGE_FT,
+    RouteReach,
     departure_routes,
     kosatsuba_affordances,
     kosatsuba_anchor,
     kosatsuba_handover,
     quad_on_canopy,
-    routes_missed,
 )
 
 if TYPE_CHECKING:
@@ -291,6 +292,7 @@ class FixtureSitingMixin:
         _view0 = (self.M.get("meta") or {}).get("view")
         _frame = (_view0[0], _view0[1], _view0[0] + _view0[2], _view0[1] + _view0[3]) if _view0 else None
         kb_boxes = self.label_blockers("kosatsuba")  # built once: the probe tests many seats against the same map
+        kb_lanes = lane_seat_index(self.M.get("lanes", []))  # ...and the lanes likewise (feature 281, FR-006)
         _siting = str((self.M.get("meta") or {}).get("kosatsuba_siting") or "frontage")
         _wells = [(float(_w["x"]), float(_w["y"])) for _w in (self.M.get("wells") or []) if "x" in _w]
         _canopy = canopy_index(self.M)  # built ONCE for the whole probe, not per seat - see `canopy_index`
@@ -339,7 +341,11 @@ class FixtureSitingMixin:
                                 # that hunts for ground big enough to hold BOTH walks away from the
                                 # traffic and out to the quiet end of the road, which is how Ubame's
                                 # board came to stand across the bridge from its own town.
-                                lab = 0 if self.label_seat_clear(x, y + h / 2 + 11, tw_lab, 8.0, kb_boxes) else (1 if self.label_seat_clear(x, y - h / 2 - 11, tw_lab, 8.0, kb_boxes) else None)
+                                lab = (
+                                    0
+                                    if self.label_seat_clear(x, y + h / 2 + 11, tw_lab, 8.0, kb_boxes, lanes=kb_lanes)
+                                    else (1 if self.label_seat_clear(x, y - h / 2 - 11, tw_lab, 8.0, kb_boxes, lanes=kb_lanes) else None)
+                                )
                                 cands.append(
                                     (busy, busy * 10 - off / 3, x, y, rot, lab, off - _rw / 2 - h / 2, under_canopy(_canopy, x, y, math.hypot(w, h) / 2))
                                 )  # last two: the gap from tread edge to board edge, and whether trees stand over it
@@ -387,7 +393,8 @@ class FixtureSitingMixin:
                 # AN ENTRANCE BOARD AT A HANDOVER STANDS WHERE EVERY DEPARTURE PASSES (feature 261 FR-015): first the seats
                 # the fewest households' ways out miss, then the tight band beside the handover among those
                 _routes = departure_routes(self.M)
-                _miss = {id(c): routes_missed(_routes, c[2], c[3], KOSATSUBA_HANDOVER_BAND_FT / ftpx) for c in cands}
+                _reach = RouteReach(_routes)  # the routes filed once for every seat (feature 281, FR-004)
+                _miss = {id(c): _reach.missed(c[2], c[3], KOSATSUBA_HANDOVER_BAND_FT / ftpx) for c in cands}
                 _fewest = min(_miss.values())
                 cands = [c for c in cands if _miss[id(c)] == _fewest]
                 # ...ON THE APPROACH ITSELF where it offers one (settlement-review of Inashiro, feature 261): a board is squared to

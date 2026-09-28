@@ -75,3 +75,35 @@ def test_pairs_within_counts_exactly_what_the_pairwise_form_counts() -> None:
         pairwise = sum(1 for i, u in enumerate(pts) for v in pts[i + 1 :] if math.hypot(u[0] - v[0], u[1] - v[1]) < reach)
         assert pairs_within(pts, reach) == pairwise
     assert pairs_within([(0.0, 0.0), (45.0, 0.0), (46.0, 0.0)], 46.0) == 2  # strict: 46 is not within 46 of 0, 45 is of both... 45-46 is 1 apart
+
+
+def test_a_ring_is_indexed_once_by_its_points_and_a_changed_ring_anew(monkeypatch) -> None:
+    """Feature 281, FR-002: fabric indexes over overlapping polygon sets build each distinct ring once; a ring with the same
+    points in another list object shares it; a ring changed in place gets a new index; and `reset` empties the store."""
+    from l7r.diagram.hamletgen import clearance as C
+
+    built: list[int] = []
+    real = C.RingIndex
+
+    class Spy(real):  # type: ignore[misc, valid-type]
+        def __init__(self, pts, *a, **k):
+            built.append(len(pts))
+            super().__init__(pts, *a, **k)
+
+    monkeypatch.setattr(C, "RingIndex", Spy)
+    C.reset()
+    try:
+        a = [(0.0, 0.0), (50.0, 0.0), (50.0, 50.0), (0.0, 50.0)]
+        b = [(100.0, 100.0), (160.0, 100.0), (130.0, 150.0)]
+        C.FabricIndex([a, b], 5.0)
+        C.FabricIndex([list(a)], 7.0, [b], 2.0)  # the same points in new list objects, other margins
+        assert len(built) == 2, "each distinct ring built once"
+        a[2] = (60.0, 60.0)  # the same list object, changed in place
+        idx = C.FabricIndex([a], 5.0)
+        assert len(built) == 3, "a changed ring is not served its old index"
+        q = (57.0, 57.0)
+        assert idx.fouled(q) == fouled_brute(q, [a], 5.0) is True
+        C.reset()
+        assert not C._RINGS
+    finally:
+        C.reset()
