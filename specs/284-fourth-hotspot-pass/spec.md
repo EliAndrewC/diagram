@@ -190,13 +190,13 @@ removes is not predicted), and every stage figure is the fastest of three with t
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
-| The router searches toward its goal; of two equally short routes it may draw the other | map drawing convention (the same clearance rules; a tie resolved differently) | research R1; the GM's request | point of change in `hamletgen/ways/route.py` |
-| The router's drawn path may be up to `5%` longer than today's for the same request - where A* picks another lattice path of the same cost, or the coarser lattice (FR-003) draws the way differently | map drawing convention (the same clearance rules; the bound tested, SC-002) | research R1 | point of change in `hamletgen/ways/route.py` |
-| The router's lattice cell is the largest that strands no house | map drawing convention (measured; a stranding cell is not taken) | FR-003 | point of change in `hamletgen/ways/route.py` |
-| The carve's rows as arrays, kept only if faster | map drawing convention (plots within the fit's tolerance) | FR-005 | point of change in `waterfields/sector_rows.py` |
-| The field's size search probes the largest fan only on measured saturation | map drawing convention (the same tolerance and target; the plots may differ) | research R1 | point of change in `hamletgen/water/fit.py` |
-| The notice board's candidates sampled every `24` px along a route, not `12`, kept only if faster | map drawing convention (the same rules and ranking; the board may stand a few feet along its verge) | FR-007 | point of change in `settlement/structures/fixtures/siting.py` |
-| Bamboo clumps may sit a little differently - taken only if the outward search misses SC-006's floor | map drawing convention (the same keep-outs and reach; coarser sampling) | FR-008 | point of change in `hamletgen/hinterland/bamboo.py` |
+| The router searches toward its goal; of two equally short routes it may draw the other - WITHDRAWN, Amendment 1 | map drawing convention (the same clearance rules; a tie resolved differently) | research R1; the GM's request | point of change in `hamletgen/ways/route.py` |
+| The router's drawn path may be up to `5%` longer than today's for the same request - where A* picks another lattice path of the same cost, or the coarser lattice (FR-003) draws the way differently - WITHDRAWN, Amendment 1 (the router draws today's paths) | map drawing convention (the same clearance rules; the bound tested, SC-002) | research R1 | point of change in `hamletgen/ways/route.py` |
+| The router's lattice cell is the largest that strands no house - measured: 10 px, today's (Amendment 1) | map drawing convention (measured; a stranding cell is not taken) | FR-003 | point of change in `hamletgen/ways/route.py` |
+| The carve's rows as arrays, kept only if faster - WITHDRAWN, Amendment 1 (slower) | map drawing convention (plots within the fit's tolerance) | FR-005 | point of change in `waterfields/sector_rows.py` |
+| The field's size search probes the largest fan only on measured saturation - WITHDRAWN, Amendment 1 (slower in all) | map drawing convention (the same tolerance and target; the plots may differ) | research R1 | point of change in `hamletgen/water/fit.py` |
+| The notice board's candidates sampled every `24` px along a route, not `12`, kept only if faster - WITHDRAWN, Amendment 1 (broke the entrance rule) | map drawing convention (the same rules and ranking; the board may stand a few feet along its verge) | FR-007 | point of change in `settlement/structures/fixtures/siting.py` |
+| Bamboo clumps may sit a little differently - taken only if the outward search misses SC-006's floor - TAKEN, Amendment 1 (16 ft) | map drawing convention (the same keep-outs and reach; coarser sampling) | FR-008 | point of change in `hamletgen/hinterland/bamboo.py` |
 
 ## Amendment 1 (2026-09-28): what the measurements decided
 
@@ -224,6 +224,10 @@ added under FR-011's own rule ("whatever the after-profile shows"). What changed
   after FR-004, below). The avoid list a re-roll carries is first read at `stage_homesteads`; the first roll keeps a copy of
   itself before that stage and each re-roll resumes from a fresh copy. Exact: manifest, svg and page byte-identical to a
   re-roll built from scratch on six re-rolling maps, each re-roll 1.1-1.7 s faster (research R8).
+- **FR-001 withdrawn by measurement** (research R6): A*'s tie-broken paths stranded 26 houses on first rolls against 5
+  over the pool and cohort seeds 1-24 (Sawada 15 of its 19), re-rolled four maps against two, and were no faster in all
+  (192.9 s against 198.7 s, inside the noise). The search is back in cost order; the router returns today's paths exactly
+  (the recorded-request equality test restored), so SC-002's bound is moot and its floor is judged on FR-002 and FR-010.
 - **FR-004 withdrawn by measurement** (research R6): without the blind probe the field bucket's calls fell 2-3x on
   Inashiro and Sawada, but the fields it lands - within the same tolerance - move the maps, and the moved maps re-roll more
   often: over the pool and cohort seeds 1-24 the rolls came out slower in all (190.7 s against 180.6 s, six re-rolls against

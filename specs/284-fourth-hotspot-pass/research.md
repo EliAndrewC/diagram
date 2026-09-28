@@ -202,6 +202,21 @@ was left and passed: the roll reported OK on a hamlet with no way off the map. F
 deletion as its expected result (`test_touch.py`, the end-meets-end case) and now asserts the join it meant. With the fix
 every one of the 58 rolls above draws its connector.
 
-**The other moving levers.** A* (FR-001) moved Mizuguchi's lanes and nothing else on it; the bamboo seat lattice (FR-008's
-fallback) moved Mizuguchi's thicket; neither changes what a house, a paddy or a way is. The pool's before and after for each
-moved map is below, from `pool_compare.py`.
+**A* in the router (FR-001), withdrawn.** With FR-004 withdrawn, Sawada still re-rolled: its first roll stranded 15 of its
+19 houses with A* and none with the search in cost order (`strand/harness.py`). Measured the same way over the pool and
+cohort seeds 1-24 (observed 2026-09-28, method: `astarcmp/harness.py`, the clone with its search ordered by cost alone as the
+base orders it; `astarcmp/results.json`):
+
+| | cost order (the base's) | A* |
+|---|---|---|
+| houses unreached, every attempt summed | 5 | 26 |
+| rolls that re-rolled | 2 | 4 |
+| summed roll seconds (loaded) | 198.7 | 192.9 |
+| households seated, connectors drawn | 442, 29 | 442, 29 |
+
+A* returns a path of the same cost, but where two lattice paths tie it often takes the other, and the ways those paths make
+leave houses off the web on first rolls; every map is repaired by its re-roll, and the rolls were no faster in all (a 3%
+difference inside the run's noise, against a re-roll's whole second build). Withdrawn: the search is Dijkstra again, in the
+base's heap order, and the base's test that the router returns the recorded answers point for point passes again.
+
+**What moves the pool now.** The bamboo seat lattice (FR-008's fallback) and the connector fix; the rest is exact.
