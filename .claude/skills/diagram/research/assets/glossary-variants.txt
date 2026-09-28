@@ -45,6 +45,7 @@ anchor culture	anchor culture
 anchor cultures	anchor culture
 animal unit	animal unit
 animal units	animal unit
+anjifang	anjifang
 apron	apron
 aprons	apron
 aqueduct	aqueduct
@@ -446,6 +447,8 @@ dohyō	dohyō
 doi	horinouchi
 dojo	dojo
 doma	doma
+domain kiln	domain kiln
+domain kilns	domain kiln
 donggusup	donggusup
 dongjing meng hua lu	Dongjing Meng Hua Lu
 dooryard	dooryard
@@ -518,6 +521,8 @@ engawa	engawa
 engishiki	Engishiki
 enoki	enoki
 enokida	Enokida
+enpo	Enpo era
+enpo era	Enpo era
 eta	eta
 eunis	EUNIS
 eutrophic	eutrophication
@@ -832,6 +837,7 @@ hereditary house	hereditary temple
 hereditary monastery	hereditary temple
 hereditary temple	hereditary temple
 hereditary temples	hereditary temple
+hidenin	hidenin
 high-volatile	volatiles
 hikae-no-ma	hikae-no-ma
 hikan	hikan
@@ -1039,6 +1045,7 @@ jujutsu	jujutsu
 juku	shukuba
 junk	junk
 junks	junk
+juyangyuan	juyangyuan
 jō	jo
 jōdo	Jodo
 jōdo shinshū	Jodo Shinshu
@@ -1047,6 +1054,7 @@ jōruri	joruri
 jōsui ido	josui-ido
 kabata	kabata
 kabu-ido	kabu-ido
+kabuki	kabuki
 kachi	doshin
 kadoya	kadoya
 kaei	Kaei
@@ -1268,6 +1276,8 @@ levy storehouses	levy storehouse
 li	li
 liberties	liberty
 liberty	liberty
+licensed quarter	yukaku
+licensed quarters	yukaku
 lifang	lifang
 light bamboo	light bamboo
 lijia	lijia
@@ -1352,6 +1362,7 @@ men-hai	taiping-gang
 menbansho	menbansho
 mengxi bitan	Mengxi Bitan
 meshimori	meshimori
+meshimori onna	meshimori
 meshimori women	meshimori
 meshimori-onna	meshimori
 metamorphosis fengshui	metamorphosis fengshui
@@ -1529,6 +1540,9 @@ offering hall	offering hall
 offtake	offtake
 offtakes	offtake
 ofuregaki	ofuregaki
+ohaguro dobu	ohaguro-dobu
+ohaguro-dobu	ohaguro-dobu
+okabasho	okabasho
 okaji	ōkaji
 okajiba	ōkaji
 oku	oku
@@ -1563,6 +1577,8 @@ otemon	ote-mon
 otesuji	ote-suji
 ou	Ou
 oute	ote-mon
+outer moat	outer moat
+outer moats	outer moat
 outfall	outfall
 outwork	outwork
 outworks	outwork
@@ -1842,6 +1858,7 @@ settling basins	settling basin
 settsu	Settsu
 seven autumn grasses	seven autumn grasses
 seven-hall garan	garan
+seyakuin	seyakuin
 shacho-sen'yokata	shacho-sen'yokata
 shadoof	jiegao
 shahi	shahi
@@ -2073,6 +2090,8 @@ tawed	shironameshi
 tawing	shironameshi
 tax-farming	tax-farming
 tax-free plot	tax-free plot
+tayu	tayu
+tayū	tayu
 tazuke kusayama	kusayama
 tedai	tedai
 teikaku	teikaku
@@ -2275,6 +2294,8 @@ warren	warren
 warrens	warren
 warring states	Warring States
 warring-states	Warring States
+washe	wazi
+wasi	wazi
 watari-roka	watari-roka
 watashiba	watashiba
 water duty	water duty
@@ -2290,7 +2311,7 @@ water-mouth	water-mouth
 water-tail	water-mouth
 wayside hall	tsujido
 wayside halls	tsujido
-wazi	goulan
+wazi	wazi
 weathering	weathering
 wei-tian	weitian
 weilongwu	weilongwu
@@ -2392,8 +2413,10 @@ yuan rebuild	Yuan dynasty
 yudono	yudono
 yuecheng	yuecheng
 yui	yui
+yukaku	yukaku
 yukimi	yukimi
 yulin wei	yulin wei
+yūkaku	yukaku
 zaimokuya	zaimokuya
 zaofang	zaofang
 zaojun	Zaojun
@@ -2437,6 +2460,8 @@ zushi-nikai	half-story
 塘泺	tanglao
 屋敷林	yashikirin
 御蔵	kura
+悲田院	hidenin
+施薬院	seyakuin
 杖	杖
 枝打ち	edauchi
 梁間	hari-ma
