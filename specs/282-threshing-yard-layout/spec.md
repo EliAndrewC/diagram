@@ -190,3 +190,15 @@ FR-002 finds (FR-005); its declaration names the research question it rests on.
   rolled yard is measured that cannot hold four; (3) SC-001: the exception's test MUST establish "cannot hold a third at
   `1 ft`" independently of the layout under test (the most that fit), so a yard drawn short only by lattice alignment
   fails it. Plan review round 6 BLOCKED (D3's short-yard test and floor).
+- Amendment round 6 (spec-fidelity, 2026-09-28; the round-5 items, then the plan re-read whole): (2) confirmed - FR-004,
+  SC-001 and D2 say four. (1) and (3) NOT resolved. On this round's own run (a brute-force search over every lattice
+  origin on a quarter-foot grid at a `1 ft` gap, corners `1 ft` inside the SVG's drawn outline, off the padded rack; the
+  same result with the clearance at `1.05 ft` to cover the outline's 0.1 px rounding), eight of the nine short pool yards
+  are fit-limited as R4 says, but Kashikawa's `27.1 x 18.7 ft` yard (manifest x 1036.7, y 886.0, no rack) draws 9 against a
+  third of 10 where a 3 x 4 lattice seats 12 - its rows fit in a `0.2 ft` window that `mat_cells`' five offsets per axis
+  step over. CHANGES REQUIRED: (1) that yard must draw at least a third, and research.md R4 then lists eight short yards,
+  not nine (its "no room for the last mat" is false for this one); (2) SC-001's test: the "27 x 19 ft" case is not the
+  pool's outline (the pool's is `(-13.0, -8.4), (13.4, -8.4), (13.0, 8.9), (-12.5, 8.8)`), so the oracle never met the
+  yard that fails it - run it on every pool yard that draws under a third, from its drawn outline and rack; (3) the modal,
+  025 and the notes say "a mat fewer", but Inashiro's `20 x 14 ft` yard draws 4 of 6 - say "a mat or two fewer". Plan
+  review round 7 BLOCKED (D3's lattice search).

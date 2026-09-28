@@ -10,10 +10,9 @@ if TYPE_CHECKING:
 
 # THE STRAW MAT, 3 x 6 ft (feature 282): the mushiro was woven about 3 shaku by 6 (90 x 180 cm; tobunken-mushiro), and a
 # yard at harvest was a floor of them - "mats were spread to fill the yard" (Kitamoto). Laid long side across the yard's
-# width, in rows (a GUESS: no page read says how they lay), the rows sized inside a 1 ft inset; what keeps the outer row
-# off the floor's outline stroke is the edge clearance below (settlement-review, Kashikawa, 2026-09-28).
+# width, in rows (a GUESS: no page read says how they lay); what keeps the outer row off the floor's outline stroke is the
+# edge clearance below (settlement-review, Kashikawa, 2026-09-28).
 MAT_FT = (6.0, 3.0)
-MAT_INSET_FT = 1.0
 # ...and every mat corner at least this far inside the floor's DRAWN outline, which `_quad` pulls in at its corners: the
 # rect inset alone left outer mats 0.1 ft off a pulled-in edge (measured on the pool's SVGs, 2026-09-28).
 MAT_EDGE_CLEAR_FT = 1.0
@@ -29,6 +28,7 @@ MAT_GAPS_FT = (2.0, 1.5, 1.0)
 # degrees, a positional draw from its row and column (never the map's random stream), and kept at its row position
 # wherever the nudge would carry it off the floor or onto the rack.
 MAT_JITTER_FT = 0.4
+MAT_SEARCH_STEP_FT = 0.25  # the grid the lattice's offset is searched on - every gap's pitch is a whole number of it
 MAT_STROKE_FT = 0.2  # half the mat outline's drawn width (0.4 at a hamlet's 1 ft to the px)
 MAT_INK_CLEAR_FT = 0.1  # bare ground left between two mats' drawn outlines, at the least
 MAT_JITTER_DEG = 10.0  # up to 10 degrees where the neighbors leave room: at 6 a corner swung under half a pixel at map scale (settlement-review, Mizuguchi, round 7)
@@ -71,15 +71,16 @@ def mat_cells(
     so the drawing lays them in rows across the whole yard with a gap around each, each nudged and turned a little as if
     laid by hand, a third to two thirds of a full cover - the GM's drawing convention (2026-09-28: "at this scale, we
     can't render dozens of mats and have that be legible. So our threshing yard glyphs show a smaller number to give the
-    impression that there are many of them"). The rows are centered inside a 1 ft inset; a mat is kept only if its
-    four corners lie at least `MAT_EDGE_CLEAR_FT` inside the yard's quad `poly` (local coords) and miss `keep_out` (the
-    rack's footprint, x0, y0, x1, y1). The count is held to at least a third of the yard's full cover (area / 18 sq ft;
-    spec 282 FR-004) by closing the gap (`MAT_GAPS_FT`), at the widest gap that reaches it; where none does, the gap that
-    holds the most. At each gap the lattice is tried as wide as the inset allows and one column and one row narrower,
-    and the one that seats the most is kept - a centered lattice one column too wide lost both outer columns to the
-    floor's pulled-in corners and drew half what fits (settlement-reviews of round 7, Sawada and Kashikawa, 2026-09-28).
+    impression that there are many of them"). A mat is kept only if its four corners lie at least `MAT_EDGE_CLEAR_FT`
+    inside the yard's quad `poly` (local coords) and miss `keep_out` (the rack's footprint, x0, y0, x1, y1). The count is
+    held to at least a third of the yard's full cover (area / 18 sq ft; spec 282 FR-004) by closing the gap
+    (`MAT_GAPS_FT`), at the widest gap that reaches it; where none does, the gap that holds the most. At each gap the
+    lattice is tried as wide and as deep as the yard allows and one column and one row fewer, at every offset on a
+    quarter-foot grid, and the one that seats the most is kept, of equals the one nearest the center - a centered lattice
+    one column too wide lost both outer columns to the floor's pulled-in corners and drew half what fits
+    (settlement-reviews of round 7, Sawada and Kashikawa, 2026-09-28).
     `salt` is the yard's own: the nudge and the turn are drawn per yard, not repeated from one to the next."""
-    mw, mh, inset, clear = MAT_FT[0] / ftpx, MAT_FT[1] / ftpx, MAT_INSET_FT / ftpx, MAT_EDGE_CLEAR_FT / ftpx
+    mw, mh, clear = MAT_FT[0] / ftpx, MAT_FT[1] / ftpx, MAT_EDGE_CLEAR_FT / ftpx
     floor = math.ceil((w * ftpx) * (h * ftpx) / MAT_SQ_FT / 3.0)
 
     def fits(corners: list[tuple[float, float]]) -> bool:
@@ -88,27 +89,43 @@ def mat_cells(
         xs, ys = [p[0] for p in corners], [p[1] for p in corners]
         return keep_out is None or not (min(xs) < keep_out[2] and max(xs) > keep_out[0] and min(ys) < keep_out[3] and max(ys) > keep_out[1])
 
+    # WHICH MAT SPOTS FIT, ON A QUARTER-FOOT GRID, ONCE (spec-fidelity, amendment round 6, 2026-09-28): a lattice tried at a
+    # few offsets missed the one that fits a yard in a 0.2 ft band and drew it a third short; every gap's pitch (7, 7.5 and
+    # 8 ft across, 4, 4.5 and 5 ft down) is a whole number of quarter feet, so every lattice at every offset is a sum of
+    # lookups in this one table - the whole search, asked of the geometry once.
+    q = MAT_SEARCH_STEP_FT / ftpx
+    xs = [-w / 2.0 + i * q for i in range(int(w / q) + 1)]
+    ys = [-h / 2.0 + j * q for j in range(int(h / q) + 1)]
+    # each unturned mat's corners fall on the same grid (6 x 3 ft is 24 x 12 quarter feet), so the floor test is asked once
+    # per grid point and a mat's fit is four lookups plus the rack's box
+    cw, ch = round(MAT_FT[0] / MAT_SEARCH_STEP_FT), round(MAT_FT[1] / MAT_SEARCH_STEP_FT)
+    inside = [[point_in_poly(x, y, poly) and edge_dist(x, y, poly) >= clear for y in ys] for x in xs]
+
+    def spot(i: int, j: int) -> bool:
+        if i + cw >= len(xs) or j + ch >= len(ys) or not (inside[i][j] and inside[i + cw][j] and inside[i][j + ch] and inside[i + cw][j + ch]):
+            return False
+        x, y = xs[i], ys[j]
+        return keep_out is None or not (x < keep_out[2] and x + mw > keep_out[0] and y < keep_out[3] and y + mh > keep_out[1])
+
+    ok = [[spot(i, j) for j in range(len(ys))] for i in range(len(xs))]
     best: list[tuple[float, float, float, float, float]] = []
     for gap_ft in MAT_GAPS_FT:
-        g = gap_ft / ftpx
-        cols, rows = int((w - 2 * inset + g) // (mw + g)), int((h - 2 * inset + g) // (mh + g))
-        base: list[tuple[int, int, float, float]] = []
-        for nc, nr in ((cols, rows), (cols - 1, rows), (cols, rows - 1), (cols - 1, rows - 1)):
-            if nc * nr <= len(base):
-                continue  # this lattice cannot seat more than the best already found
-            span_x, span_y = nc * (mw + g) - g, nr * (mh + g) - g
-            sx, sy = max(0.0, (w - 2 * inset - span_x) / 2.0), max(0.0, (h - 2 * inset - span_y) / 2.0)
-            for ox in (0.0, -sx / 2.0, sx / 2.0, -sx, sx):  # centered, then pushed half and all the way to either side of its slack
-                for oy in (0.0, -sy / 2.0, sy / 2.0, -sy, sy):
-                    gx0, gy0 = ox - span_x / 2.0, oy - span_y / 2.0
-                    trial = [(r, c, gx0 + c * (mw + g), gy0 + r * (mh + g)) for r in range(max(0, nr)) for c in range(max(0, nc))]
-                    trial = [t for t in trial if fits(_mat_corners(t[2], t[3], mw, mh, 0.0))]
-                    if len(trial) > len(base):
-                        base = trial
-                    if len(base) == nc * nr:
-                        break  # every spot of this lattice seats: no shift can do better
-                if len(base) == nc * nr:
-                    break
+        px, py = round((MAT_FT[0] + gap_ft) / MAT_SEARCH_STEP_FT), round((MAT_FT[1] + gap_ft) / MAT_SEARCH_STEP_FT)
+        found: tuple[int, float, int, int, int, int] = (0, 0.0, 0, 0, 0, 0)  # count, -off-center, i0, j0, cols, rows
+        mc, mr = (len(xs) - 1) // px + 1, (len(ys) - 1) // py + 1  # the most columns and rows the yard's span allows
+        for nc in (mc, mc - 1):
+            for nr in (mr, mr - 1):
+                if nc < 1 or nr < 1 or nc * nr <= found[0]:
+                    continue  # a smaller lattice than the best already found cannot seat more
+                for i0 in range(len(xs) - (nc - 1) * px):
+                    for j0 in range(len(ys) - (nr - 1) * py):
+                        n = sum(ok[i0 + c * px][j0 + r * py] for c in range(nc) for r in range(nr))
+                        # the most mats; of equals, the lattice nearest the yard's center (the floor stays spread over it)
+                        cand = (n, -abs(xs[i0] + ((nc - 1) * px * q + mw) / 2.0) - abs(ys[j0] + ((nr - 1) * py * q + mh) / 2.0), i0, j0, nc, nr)
+                        if cand[:2] > found[:2]:
+                            found = cand
+        _n, _o, i0, j0, nc, nr = found
+        base = [(r, c, xs[i0 + c * px], ys[j0 + r * py]) for r in range(nr) for c in range(nc) if _n and ok[i0 + c * px][j0 + r * py]]
         mats = _lay_by_hand(base, mw, mh, ftpx, fits, salt)
         if len(mats) > len(best):
             best = mats

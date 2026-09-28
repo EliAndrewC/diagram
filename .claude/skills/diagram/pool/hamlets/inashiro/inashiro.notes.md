@@ -34,6 +34,7 @@ DIRECTION is not invented: it is the bearing of this map's own connector track w
 
 ### Features
 
+- **threshing yard**: This map's harvest weather is settled - the regional default - so the racks stand out on the paddies after the harvest and none is drawn by the houses.
 - **burial ground**: Inashiro keeps its own ground: a glade of graves cut into the windbreak west-north-west of the houses, beyond its last houses, holding the urns brought home from the main village's cremation ground. The land falls south, but the ground below the houses is paddy.
 
 ## Why it exists
@@ -1782,7 +1783,7 @@ and the field's set-back, too narrow for a stand.
 
 Every threshing yard is now drawn as the harvest leaves it: straw mats of 3 by 6 ft over the whole floor, each with a
 little bare ground around it, most turned a little as if laid by hand and nudged off their rows where the gap leaves room, between a third and two thirds of those
-that covered it, a mat fewer where the outline or the rack leaves no room (a drawing convention - the real yard was covered, research homesteads 'What lay in the work yard at
+that covered it, a mat or two fewer where the outline or the rack leaves no room (a drawing convention - the real yard was covered, research homesteads 'What lay in the work yard at
 harvest?'). The old fixed center mat and the rack along each yard's south edge are gone. This map declares no harvest
 weather, so it takes the regional default, settled, and draws no rack by the houses (research homesteads 'Did a village
 put its drying racks by the houses by custom, or because of its weather?'). The weather is declared, never rolled: the

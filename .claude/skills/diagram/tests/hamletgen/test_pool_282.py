@@ -12,6 +12,7 @@ import os
 import pytest
 
 from l7r.diagram.settlement.homestead_parts.yards import MAT_SQ_FT
+from tests.settlement.test_yard_mats_282 import _brute_fit
 
 SKILL = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 GENS = sorted(glob.glob(os.path.join(SKILL, "pool", "hamlets", "*", "*.gen.py")))
@@ -39,6 +40,21 @@ def test_every_drawn_yard_is_a_floor_of_mats_and_racks_follow_the_weather(gen: s
         # under 4 (the rule itself is pinned on plain inputs in tests/settlement/test_yard_mats_282.py; the manifest's outline
         # is rounded to 0.1 px, too coarse to re-derive the count against a 1 ft edge clearance)
         assert 4 <= y["mats"] <= math.floor(2 * full / 3), f"yard at ({y['x']}, {y['y']}): {y['mats']} mats of a {full:.0f}-mat cover"
+        if y["mats"] < math.ceil(full / 3):
+            # SHORT OF A THIRD ONLY WHERE NO 1 FT LATTICE SEATS MORE (spec 282 SC-001): the brute-force oracle - every lattice
+            # at every quarter-foot offset - on this yard's own drawn outline and rack, at a 1.05 ft clearance so the
+            # manifest's 0.1 px rounding cannot make it find a lattice the drawing could not hold
+            th = math.radians(y["rot"])
+
+            def local(px: float, py: float, y: dict = y, th: float = th) -> tuple[float, float]:
+                return ((px - y["x"]) * math.cos(th) + (py - y["y"]) * math.sin(th), -(px - y["x"]) * math.sin(th) + (py - y["y"]) * math.cos(th))
+
+            keep = None
+            if "rack" in y:
+                rl = [local(px, py) for px, py in y["rack"]]
+                keep = (min(p[0] for p in rl) - 0.25, min(p[1] for p in rl) - 0.25, max(p[0] for p in rl) + 0.25, max(p[1] for p in rl) + 0.25)
+            fit = _brute_fit(y["w"], y["h"], [local(px, py) for px, py in y["poly"]], keep, clear=1.05)
+            assert y["mats"] >= min(math.ceil(full / 3), fit), f"yard at ({y['x']}, {y['y']}): {y['mats']} drawn where a 1 ft lattice seats {fit}"
         if changeable:
             assert "rack" in y, f"yard at ({y['x']}, {y['y']}) has no rack on a changeable-weather map"
             assert all(py <= y["y"] + 1e-6 for _px, py in y["rack"]), f"yard at ({y['x']}, {y['y']}): a rack corner map-south of its center"

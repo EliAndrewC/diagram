@@ -114,7 +114,7 @@ class ThreshingYard(Kind):
     followed the climate over whole regions - so every settlement in one climate draws the same.
 
     Note: we have rendered between a third and two thirds of the straw mats that covered a yard (a yard whose
-    outline or rack leaves no room for the last one, a mat fewer), each with a little bare
+    outline or rack leaves no room for the last ones, a mat or two fewer), each with a little bare
     ground around it, most laid a little askew, as by hand, in order to keep them legible: at this scale dozens of mats laid edge to edge would read as a textured
     floor rather than as mats, so the drawing shows a smaller number to give the impression of many. The real yard at
     harvest was covered, 40 to 60 mats of about 3 by 6 feet each on an ordinary barley-country farm and 100 to 150 on a

@@ -119,7 +119,7 @@ def test_two_mats_that_overlap_have_no_gap_and_two_apart_have_theirs() -> None:
     assert abs(_quad_gap(a, [(7.0, 0.0), (13.0, 0.0), (13.0, 3.0), (7.0, 3.0)]) - 1.0) < 1e-9, "side by side, a foot apart"
 
 
-def _brute_fit(w: float, h: float, poly: list[tuple[float, float]], keep: tuple[float, float, float, float] | None) -> int:
+def _brute_fit(w: float, h: float, poly: list[tuple[float, float]], keep: tuple[float, float, float, float] | None, clear: float = 1.0) -> int:
     """The most unturned 6 x 3 ft mats any lattice at a 1 ft gap seats in the yard - every column and row count and every
     offset on a quarter-foot grid - with each corner 1 ft inside `poly` and clear of `keep`. The independent oracle for
     FR-004's "cannot hold a third": it shares no search with `mat_cells`."""
@@ -127,7 +127,7 @@ def _brute_fit(w: float, h: float, poly: list[tuple[float, float]], keep: tuple[
 
     def ok(x: float, y: float) -> bool:
         cs = ((x, y), (x + 6, y), (x + 6, y + 3), (x, y + 3))
-        if not all(point_in_poly(px, py, poly) and edge_dist(px, py, poly) >= 1.0 for px, py in cs):
+        if not all(point_in_poly(px, py, poly) and edge_dist(px, py, poly) >= clear for px, py in cs):
             return False
         return keep is None or not (x < keep[2] and x + 6 > keep[0] and y < keep[3] and y + 3 > keep[1])
 

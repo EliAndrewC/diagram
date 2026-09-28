@@ -38,7 +38,7 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
   by hand - every regular layout tried (a checkered half, square rows, rows set over by half a mat, edge to edge) read as
   paving in the settlement-reviews. Straw-gold with a same-hue outline, no dark "mortar". The count lands in
   [ceil(full/3), floor(2 full/3)], `full` = area / 18 sq ft, the ceiling held by an even thinning (`thin_evenly`); a yard
-  that cannot reach a third at a 1 ft gap draws as many as fit at it, at least four (FR-004 as amended, research.md R4). The lattice is searched at each gap: as wide as the inset allows and one column and one row narrower, centered and pushed half and all the way across its slack, the one seating the most kept; the nudge and turn are salted per yard.
+  that cannot reach a third at a 1 ft gap draws as many as fit at it, at least four (FR-004 as amended, research.md R4). The lattice is searched at each gap: as wide and as deep as the yard allows and one column and one row fewer, at every offset on a quarter-foot grid (every gap's pitch is a whole number of quarter feet, so which mat spots fit is computed once per yard and every lattice is a sum of lookups), the one seating the most kept and, of equals, the one nearest the yard's center; the nudge and turn are salted per yard. SC-001's test runs a brute-force search on every short pool yard's own drawn outline and rack.
   The pure layout is `mat_cells(w, h, poly_local, ftpx, keep_out)`, tested with plain inputs. The rows are a GUESS, the
   thinning and the hand-laid nudge a CONVENTION, recorded on 025.
 - **D4 - the rack** (FR-006). When `_house_racks`: a module-level `rack_segment(w, h, rot, ftpx, side_pref)` returns the
