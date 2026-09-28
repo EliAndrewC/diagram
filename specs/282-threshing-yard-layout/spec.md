@@ -7,7 +7,8 @@
 
 Every threshing yard on a settlement map is drawn the same way (`settlement/homestead_parts/yards.py`,
 `_draw_threshing_yard`): a tamped floor rolled to the household's size, ONE straw mat of a fixed 14 x 9 ft at its
-center, and a rack as wide as the yard along its SOUTH edge. The yard's size is researched (homesteads 020, 030);
+center, and a rack as wide as the yard along its SOUTH edge (observed 2026-09-28; method: read from the code at
+c13a6ebe6; research.md R1). The yard's size is researched (homesteads 020, 030);
 its interior is not, and its modal calls it accurate. The record already contradicts it: the yard-size source says
 mats were spread over the whole yard at harvest, 40 to 60 of them, each 3 by 6 ft (Kitamoto; Imaishi); entry 500
 says racks stood mainly on the paddies and only in some regions, as tall racks, by the house; and a rack on the
@@ -103,7 +104,7 @@ FR-002 finds (FR-005); its declaration names the research question it rests on.
   knob, not two that can disagree.
 - **FR-006**: A rack drawn by the house MUST stand where FR-002 places it, and MUST NOT stand on the yard's south
   side: neither in the yard's southern half nor anywhere in the sun corridor entry 030 keeps clear south of the yard
-  (39 ft deep, the yard's width). "South" is MAP south, not the glyph's local lower edge (the glyph is turned by its
+  (`39 ft` deep, the yard's width - research homesteads 030's derived figure, research.md R2). "South" is MAP south, not the glyph's local lower edge (the glyph is turned by its
   house's rake). Where the sources are silent on its place it is seated off the south side and labeled a guess.
 - **FR-007**: The `threshing yard` interactive class's docstring MUST be rewritten from the new questions: the mats'
   convention stated in the GM's form ("we can't render dozens of mats and have that be legible"; the real count and
@@ -119,13 +120,19 @@ FR-002 finds (FR-005); its declaration names the research question it rests on.
 
 ## Success Criteria *(mandatory)*
 
-- **SC-001**: No drawn yard carries the old 14 x 9 ft central mat; every drawn yard's mat count lies between one
-  third and two thirds of the count that would cover its area, and each quarter of the yard carries at least one
-  mat (measured by test on the regenerated pool hamlets).
-- **SC-002**: No rack is drawn on a map whose knob gives none; on a map whose knob gives one, no rack's footprint
-  enters the yard's southern half or the 39 ft corridor south of it, taken in map coordinates (measured by test on a
-  pinned hamlet).
-- **SC-003**: The two new questions pass quote-check, record-format and source-applicability with no open finding.
+- **SC-001** (FR-004): No drawn yard carries the old central mat (`14 x 9 ft`, research.md R1); every drawn yard's mat
+  count lies between one third and two thirds of the count that would cover its area, and each quarter of the yard
+  carries at least one mat (measured by test on the regenerated pool hamlets and on the yard sizes the roll makes).
+- **SC-002** (FR-005, FR-006): No rack is drawn on a map whose knob gives none; on a map whose knob gives one, every
+  yard carries a rack and no rack's footprint enters the yard's southern half or the `39 ft` corridor south of it
+  (research.md R2), taken in map coordinates (measured by test on the pool's changeable-weather hamlet and on the
+  placement for any rotation).
+- **SC-003** (FR-001, FR-002, FR-003): The two new questions pass source-reader, quote-check, record-format and
+  source-applicability with no open finding.
+- **SC-004** (FR-007): The `threshing yard` modal's registry entry carries the convention label, the real mat count and
+  size, and names both new questions in its `Entry:` (measured by the interactive registry tests).
+- **SC-005** (FR-008): Every pool hamlet with drawn yards is regenerated and its settlement-review is a row in the
+  review ledger.
 
 ## Decisions Recorded
 

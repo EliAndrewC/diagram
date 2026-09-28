@@ -1,6 +1,6 @@
 {
  "feature": "282-threshing-yard-layout",
- "plan_sha256": "2fece35e30717ea37f49e7f5672aa4c4d902f1df0a3d5bec313b3789bce31d36",
+ "plan_sha256": "d0fc12671f101a617dc1bd804ac19734575d594f7f366b2756a780f64878628c",
  "reviewed": "2026-09-28",
  "declared": "spec-fidelity",
  "decisions": [
@@ -18,9 +18,9 @@
   },
   {
    "id": "D3",
-   "summary": "Mats tiled in 6 x 3 ft cells, checkered, count held to [ceil(full/3), floor(2 full/3)], center mat and rim line dropped; rows a GUESS, thinning a CONVENTION.",
+   "summary": "Mats tiled in 6 x 3 ft cells in rows with a gap around each (2 ft, closing a step at a time where a yard would fall under a third), count held to [ceil(full/3), floor(2 full/3)], center mat and rim line dropped; rows a GUESS, the gapped thinning a CONVENTION.",
    "class": "within",
-   "why": "Unchanged. FR-004 as written; the GM: render a bunch of mats over the yard, a smaller number to give the impression of many."
+   "why": "Round 3: the checkered half replaced by gapped rows (it read as pavers). Still FR-004 as written: mats over the whole yard, fewer than cover it, in rows labeled a guess, the band [1/3, 2/3] of a full cover unchanged, every quarter carrying mats - both held by test_yard_mats_282.py. Nothing narrowed. Note: plan text says the gap closes to 1.5 then 1 ft and the ceiling comes from the 1 ft pitch; yards.py MAT_GAPS_FT is (2, 1.5, 1, 0.5, 0) with even thinning where edge to edge overshoots two thirds - a description lag, not a narrowing."
   },
   {
    "id": "D4-seat",

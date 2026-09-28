@@ -31,9 +31,9 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
   others keep none. Class: this project's decision.
 - **D3 - the mats** (FR-004). `_draw_threshing_yard` drops the fixed 14 x 9 ft center mat, the swept-rim line and the
   south rack. The yard's local frame is tiled in cells of 6 x 3 ft (`MAT_FT`, tobunken-mushiro: 3 x 6 shaku), long side
-  along the yard's width, inset 1 ft, laid in rows with a 2 ft gap around each (45% of a full cover; the gap closes to 1.5 then 1 ft where a small or clipped yard would fall under a third - a checkered half was tried first and read as pavers), each only if its four
+  along the yard's width, inset 1 ft, laid in rows with a 2 ft gap around each (45% of a full cover; the gap closes a step at a time - 1.5, 1, 0.5, then 0 ft - where a small or clipped yard would fall under a third, and is thinned back evenly where the edge-to-edge step overshoots two thirds; a checkered half was tried first and read as pavers), each only if its four
   corners lie inside the yard's quad; the count lands in the band [ceil(full/3), floor(2 full/3)], `full` = the
-  yard's area / 18 sq ft - the floor by closing the gap, the ceiling by the narrowest gap's own pitch (7 x 4 ft). The
+  yard's area / 18 sq ft - the floor by closing the gap, the ceiling by the even thinning. The
   pure layout is a module-level function `mat_cells(w, h, poly_local, ftpx, keep_out)` so it is tested with plain
   inputs. Rows and the gapped thinning: the rows a GUESS, the thinning a CONVENTION (the GM's words), recorded on 025.
 - **D4 - the rack** (FR-006). When `_house_racks`: a module-level `rack_segment(w, h, rot, ftpx, side_pref)` returns the
