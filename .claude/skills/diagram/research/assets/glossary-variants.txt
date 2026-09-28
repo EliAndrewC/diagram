@@ -2572,6 +2572,7 @@ tang-song	Tang dynasty
 tanglao	tanglao
 tangpu	tangpu
 tani-ike	valley pond
+taper law	taper law
 tatami	tatami
 tatara	tatara
 tateba	tateba
@@ -2885,6 +2886,7 @@ wayside hall	tsujido
 wayside halls	tsujido
 wazi	wazi
 weathering	weathering
+weblio	weblio
 wei-tian	weitian
 weilongwu	weilongwu
 weineihe	weineihe
