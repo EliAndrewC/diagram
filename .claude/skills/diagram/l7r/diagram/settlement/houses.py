@@ -259,12 +259,25 @@ class HousesMixin:
         h = w0 * math.sin(_th) + h * math.cos(_th)
         fp = [(x - w / 2, y - h / 2), (x + w / 2, y - h / 2), (x + w / 2, y + h / 2), (x - w / 2, y + h / 2)]
         fx0, fy0, fx1, fy1 = x - w / 2, y - h / 2, x + w / 2, y + h / 2
-        for hp, (hx0, hy0, hx1, hy1) in zip(hard, self._poly_bboxes(hard), strict=False):
+        # THE HARD POLYGONS FROM AN INDEX OF THEIR BOXES (feature 278, FR-009): every hard polygon's box was compared per
+        # call - the notice board's verge probe alone makes thousands. A polygon whose box misses the footprint's cannot
+        # meet it, so the index returns every one the test could find; the answer is any-of, so the order is immaterial.
+        for hp, hx0, hy0, hx1, hy1 in self._hard_index(hard).near((fx0 + fx1) / 2, (fy0 + fy1) / 2, max(fx1 - fx0, fy1 - fy0) / 2):
             if fx1 < hx0 or fx0 > hx1 or fy1 < hy0 or fy0 > hy1:
                 continue
             if quad_hits_poly(fp, hp):
                 return False
         return True
+
+    def _hard_index(self: Settlement, hard: list[Any]) -> PointGrid:  # type: ignore[misc]
+        """A grid of `_hard_ground()`'s polygons by box, rebuilt when that list is rebuilt (it is cached on its record
+        counts and handed back as the same list object until they change)."""
+        held = self._hard_grid
+        if held is None or held[0] is not hard:
+            grid = PointGrid()
+            grid.extend((hp, *bb) for hp, bb in zip(hard, self._poly_bboxes(hard), strict=False))
+            held = self._hard_grid = (hard, grid)
+        return held[1]
 
     def _record_tread(self: Settlement, pts: Any, half: float) -> None:  # type: ignore[misc]
         """Register a way's DRAWN tread, so `_fits` can keep whole footprints off it (see `_on_a_tread`).

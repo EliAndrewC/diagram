@@ -787,3 +787,30 @@ def test_nearest_way_bearing_breaks_a_corner_tie_by_manifest_order() -> None:
     assert round(nearest_way_bearing(corner, 150.0, 50.0) or 0.0, 1) == 90.0, "past the corner, the later arm alone"
     # and the legacy singular key is a way like any other, because `street_runs` says so
     assert round(nearest_way_bearing({"lane": [(0, 0), (0, 40)]}, 10.0, 20.0) or 0.0, 1) == 90.0
+
+
+def test_quad_hits_poly_with_its_box_prefilter_equals_the_full_scan():
+    """Feature 278 (FR-009): `quad_hits_poly` tests only the polygon vertices and edges the quad's box can meet, keeping
+    the corner-in-polygon stage whole. Over random quads and polygons - a quad deep inside a large polygon, a small
+    polygon inside a quad, crossings and misses - it answers as the full scan did, restated here."""
+    import random
+
+    from l7r.diagram.settlement._geom import point_in_poly, quad_hits_poly, segments_cross
+
+    def scan(quad, poly):
+        if any(point_in_poly(qx, qy, poly) for qx, qy in quad) or any(point_in_poly(px, py, quad) for px, py in poly):
+            return True
+        return any(segments_cross(quad[i], quad[(i + 1) % 4], poly[j], poly[(j + 1) % len(poly)]) for i in range(4) for j in range(len(poly)))
+
+    rng = random.Random(278)
+    hits = 0
+    for _ in range(3000):
+        cx, cy, r = rng.uniform(0, 500), rng.uniform(0, 500), rng.uniform(5, 250)
+        n = rng.randint(3, 30)
+        poly = [(cx + r * (0.4 + 0.6 * rng.random()) * math.cos(2 * math.pi * k / n), cy + r * (0.4 + 0.6 * rng.random()) * math.sin(2 * math.pi * k / n)) for k in range(n)]
+        qx, qy, qw, qh = rng.uniform(0, 500), rng.uniform(0, 500), rng.uniform(2, 120), rng.uniform(2, 120)
+        quad = [(qx, qy), (qx + qw, qy), (qx + qw, qy + qh), (qx, qy + qh)]
+        want = scan(quad, poly)
+        assert quad_hits_poly(quad, poly) == want
+        hits += want
+    assert 300 < hits < 2700, "non-vacuity: hits and misses"
