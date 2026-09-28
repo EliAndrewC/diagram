@@ -786,6 +786,7 @@ fukugi	fukugi
 fully involved	fully-involved
 fully-involved	fully-involved
 fumiguruma	treadle wheel
+fumoto	fumoto
 funabansho	funabansho
 funadama	funadama
 funairi-bori	funairi-bori
