@@ -2950,6 +2950,8 @@ yamen god	yamen-god
 yamen-god	yamen-god
 yamen-god temple	yamen-god
 yamori	yamori
+yanagita	Yanagita Kunio
+yanagita kunio	Yanagita Kunio
 yangtze delta	Lower Yangzi
 yangtze-delta	Lower Yangzi
 yanushi	yamori
