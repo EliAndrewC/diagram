@@ -29,6 +29,7 @@ ADDED_SINCE_189: tuple[str, ...] = (
     "pond canal",
     "alder",  # feature 261: the belt's trees where it runs into the marsh
     "burial ground",  # feature 273: a hamlet's own burial ground, on its knob
+    "retirement house",  # 269 B42: the old couple's own roof in the homestead, on the family-form knob
 )  # feature 230: what stands where the head race leaves the brook; and a dike-pond's two-way canals, which the irrigation ditch mislabeled (pass 10)
 
 

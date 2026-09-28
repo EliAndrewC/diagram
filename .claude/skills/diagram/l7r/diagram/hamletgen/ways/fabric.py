@@ -182,7 +182,7 @@ def _homestead_polys(s: Settlement) -> list[tuple[Poly, Pt | None, str]]:
         # same reason: a four-point ring inscribed in a circle understates it by 30%.
         r = max(float(w.get("r", 8.0)), float(w.get("vr", 0.0)))
         out.append(([(float(w["x"]) + r * math.cos(math.pi * k / 4), float(w["y"]) + r * math.sin(math.pi * k / 4)) for k in range(8)], None, "wells"))
-    for key in ("farm_sheds", "byres"):
+    for key in ("farm_sheds", "byres", "retirement_houses"):
         for r in s.M.get(key, []):
             own = r.get("of")
             out.append((rot_rect(float(r["x"]), float(r["y"]), float(r["w"]), float(r["h"]), float(r.get("rot", 0.0))), (float(own[0]), float(own[1])) if own else None, key))

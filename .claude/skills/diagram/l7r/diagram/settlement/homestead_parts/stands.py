@@ -132,7 +132,11 @@ class StandsMixin:
         # BESIDE the building, touching at most (grove_clumps_clear_of_structures gates it). (A grove may still hug
         # the eaves visually; the blob edge just may not cross the wall.) Was 0.35*clump - too small by ~0.15*clump,
         # which let a blob corner clip a small house.
-        occ = [(o["x"], o["y"], 0.5 * math.hypot(o["w"], o["h"]) + clump * 0.5 + 2) for k in ("houses", "threshing_yards", "gardens", "byres", "farm_sheds") for o in self.M.get(k, [])]
+        occ = [
+            (o["x"], o["y"], 0.5 * math.hypot(o["w"], o["h"]) + clump * 0.5 + 2)
+            for k in ("houses", "threshing_yards", "gardens", "byres", "farm_sheds", "retirement_houses")
+            for o in self.M.get(k, [])
+        ]
         # a WELL is a clean draw-point: no tree CANOPY may reach the wellhead (a well lost under the grove reads
         # wrong - wells_clear_of_trees gates it). Keep-out = the well's DRAWN half-size (vr) + the canopy reach
         # (~0.9*clump, as for a shrine), NOT the tight 0.35*clump a homestead eave gets. (o["r"] is the recorded

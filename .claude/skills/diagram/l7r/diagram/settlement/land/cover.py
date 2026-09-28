@@ -57,7 +57,7 @@ def farmstead_keepouts(M: Any, margin: float) -> list[Any]:
     if not hs:
         return []
     groups: list[list[tuple[float, float]]] = [[h] for h in hs]
-    for key in ("gardens", "threshing_yards", "farm_fixtures", "byres", "farm_sheds", "persimmons"):
+    for key in ("gardens", "threshing_yards", "farm_fixtures", "byres", "farm_sheds", "retirement_houses", "persimmons"):
         for r in M.get(key) or []:
             if "x" in r:
                 hw, hh = float(r.get("w", 0.0)) / 2, float(r.get("h", 0.0)) / 2

@@ -418,7 +418,7 @@ HIT_PRIORITY: tuple[str, ...] = ("stream", "village lane", "bund", "bund beans",
 #: EVERY KEY LISTED MUST RECORD `x/y/w/h`: a key whose records carry some other shape (a well's `x,y,r`,
 #: a footbridge's `span`, a sluice gate's bare `x,y,rot`) makes no hole and no error, so
 #: `test_every_keep_clear_key_makes_its_holes` counts holes against records on a real manifest.
-HIT_KEEP_CLEAR: tuple[str, ...] = ("houses", "byres", "farm_sheds", "farm_fixtures", "duck_pens", "pig_sties", "kosatsuba")
+HIT_KEEP_CLEAR: tuple[str, ...] = ("houses", "byres", "farm_sheds", "retirement_houses", "farm_fixtures", "duck_pens", "pig_sties", "kosatsuba")
 HIT_WIDEN_FACTOR = 4.0
 HIT_WIDEN_MIN = 6.0
 #: The scrub's hit region is where its MARKS are, not its recorded polygon (the polygon is the whole

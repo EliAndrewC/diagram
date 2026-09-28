@@ -287,7 +287,7 @@
   "footbridge": {
     "caveat": "",
     "covers": "`bridges[foot]` - every plank and deck over water",
-    "entry": "research/water.html - 'When is a farm ditch worth a plank' (channel_footbridges)",
+    "entry": "research/water.html - 'When is a farm ditch worth a plank' (channel_footbridges); 'What crosses a farm ditch - a plank, a log, or earth over logs'",
     "key": "footbridge",
     "label": "guess",
     "label_note": "That ditches were planked is reasoned, not read: the record consulted says nothing about a plank over a two-foot ditch, so the plank and its spacing are a guess.",

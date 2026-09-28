@@ -96,6 +96,37 @@ class Byre(Kind):
     key = 'byre'
 
 
+class RetirementHouse(Kind):
+    """
+    What: A small thatched dwelling standing a few paces off its farmhouse, in the same homestead, with a door of its
+    own: the retirement house, where the old couple lived once they had handed the farm to their heir.
+
+    Why: In much of the country the old couple did not stay under the heir's roof. On inkyo, retirement, they moved
+    out to a small house of their own, and most such houses stood inside the family's own house plot, with a separate
+    entrance - often with separate meals and purse too, one family living as two households. Elsewhere the generations
+    stayed together under one roof. Both forms are attested, so each settlement rolls one from its seed, and a
+    settlement that keeps the custom draws a retirement house in some of its homesteads. It belongs to its farmhouse's
+    household: it is not counted as a household of its own, so the map's household count is the farmhouses.
+
+    Note: The two family forms, and that the retirement house stood inside the family's own house plot with its own
+    entrance, are read; how many of a settlement's homesteads keep one, how the two forms are weighted in the roll, the
+    house's size (about 18 by 15 feet), its distance from the farmhouse (one or two ken) and its seat off the back wall
+    or a flank rather than the front, and which of those three sides, are guesses: no page read gives them, save one survey of a single windswept village that found most on the windward side.
+
+    Caveat: how many of a settlement's homesteads keep one, how the two forms are weighted in the roll, the house's size
+    (about 18 by 15 feet), its distance from the farmhouse (one or two ken) and its seat off the back wall or a flank
+    rather than the front, and which of those three sides, are guesses: no page read gives them, save one survey of a single windswept village that found most on the windward side.
+
+    Name: retirement house
+    Covers: `retirement_houses` - the retired couple's own roof in the homestead
+    Label: accurate
+    Sources: kotobank-inkyo, kotobank-inkyoya
+    Entry: research/settlements.html - 'How many lived in one farmhouse, and under how many roofs?', 'Is every household in a hamlet actually drawn?'
+    """
+
+    key = 'retirement house'
+
+
 class ThreshingYard(Kind):
     """
     What: A small tamped-earth work floor beside each farmhouse - swept bare, with a straw drying mat and a little

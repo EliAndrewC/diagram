@@ -23,6 +23,7 @@ SPEC_CLASSES = [
     "farmhouse",
     "storage shed",
     "byre",
+    "retirement house",  # 269 B42 (settlements/035)
     "threshing yard",
     "garden",
     "privy",

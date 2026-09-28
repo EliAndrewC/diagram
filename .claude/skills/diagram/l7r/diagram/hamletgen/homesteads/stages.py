@@ -13,6 +13,7 @@ from l7r.diagram.settlement.rolling.bearing import COMMON_BEARING_DEG, MarginBea
 from ..consts import BUNDLE_PITCH, CLUSTER_DRAWN_ASPECT, MIN_WEB_GAP, SUN_CORRIDOR_FT, WEB_FABRIC_GAP, WEST_SUN_FT, Pt
 from ..plan import SitePlan
 from .boundary import install_site_boundary
+from .retirement import retirement_houses
 from .seats import _seat_allowed, cluster_aspect, front_row, lane_frontage
 from .wells import place_wells
 
@@ -667,7 +668,9 @@ def stage_appurtenances(s: Settlement, plan: SitePlan) -> None:
     Steps:
         l7r.diagram.hamletgen.homesteads.wells.place_wells
         l7r.diagram.settlement.Settlement.draft_byres
+        l7r.diagram.hamletgen.homesteads.retirement.retirement_houses
     """
     houses = s.M.get("houses", [])
     place_wells(s, plan, houses)
     s.draft_byres(fraction=0.22, gap=60)
+    retirement_houses(s, plan)  # after the byres, so the draft team keeps the seats it always had (269 B42)

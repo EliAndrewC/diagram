@@ -87,6 +87,7 @@ _OVERLAP_STRUCTS = (
     "fire_towers",
     "drum_towers",
     "byres",
+    "retirement_houses",  # the retirement house (inkyoya), a second roof of its farmhouse's family in the same yard (269 B42)
     "kosatsuba",
     # the justice works (research/urban-features.html "The justice works - why a county seat executes, and why the ground is outside")
     "punishment_spots",
@@ -210,6 +211,7 @@ _LABEL_GROUP = {
     # with the gate green by construction. Under the "farmhouse" group a farmhouse caption may still cover it
     # and nothing else may.
     "byres": "farmhouse",
+    "retirement_houses": "farmhouse",  # 269 B42: a small dwelling a ken or two off its own farmhouse, in the same homestead as a byre
     "pig_sties": "sty",
     "duck_pens": "duck pen",
     "quays": "quay",
@@ -393,7 +395,7 @@ OVERLAP_CLASS: dict[str, str] = {
     **{k: "WAY" for k in ("road", "roads", "town_streets", "alleys", "lanes", "towpaths", "quays")},
     # ANNEX - belongs to a named parent and abuts IT (and nothing else)
     **{
-        k: "ANNEX" for k in ("gardens", "threshing_yards", "farm_sheds", "storehouses", "byres", "farm_fixtures", "persimmons", "pig_sties", "duck_pens")
+        k: "ANNEX" for k in ("gardens", "threshing_yards", "farm_sheds", "storehouses", "byres", "retirement_houses", "farm_fixtures", "persimmons", "pig_sties", "duck_pens")
     },  # pig_sties / duck_pens stand ON the pond dike by construction (feature 150)
     # --- PERMISSIVE CLASSES (never tested; each row below records WHY) ---------------------------
     **{k: "COVER" for k in ("commons", "pastures", "marsh", "marshes")},
@@ -578,6 +580,7 @@ _MATRIX_PARENT_FIELD = {
     "farm_fixtures": "of",
     "persimmons": "of",
     "byres": "of",
+    "retirement_houses": "of",
     "storehouses": "of",
     "field_ditches": "field",  # a field's own irrigation, drawn ON it by design
 }

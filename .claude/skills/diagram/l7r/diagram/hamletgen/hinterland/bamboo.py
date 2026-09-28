@@ -102,7 +102,7 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
     else:
         thicket_target = home_target  # pragma: no cover - a hamlet always has its field [174: KEPT, not deletable - an else branch that binds thicket_target]
     rects: list[tuple[float, float, float, float, float]] = []  # (x, y, w, h, pad)
-    for key, pad in (("houses", 10.0), ("threshing_yards", 8.0), ("gardens", 8.0), ("farm_sheds", 8.0), ("byres", 8.0), ("wells", 14.0), ("kosatsuba", 12.0)):
+    for key, pad in (("houses", 10.0), ("threshing_yards", 8.0), ("gardens", 8.0), ("farm_sheds", 8.0), ("byres", 8.0), ("retirement_houses", 10.0), ("wells", 14.0), ("kosatsuba", 12.0)):
         for o in s.M.get(key, []):
             if all(isinstance(o.get(f), (int, float)) for f in ("x", "y", "w", "h")):
                 rects.append((float(o["x"]), float(o["y"]), float(o["w"]), float(o["h"]), px(pad)))

@@ -21,6 +21,9 @@ def test_the_census_counts_what_the_map_DREW_including_the_clumps_off_the_page()
     assert "windbreak: **2** clumps drawn, **1** off the page" in body
     assert "copse: **1** clumps drawn" in body
     assert "farmhouses: **2**" in body
+    assert "family form: **one_roof**, retirement houses **0**" in body, "a map that declares no form drew the one roof"
+    M2 = {**M, "meta": {"family_form": "retirement_house"}, "retirement_houses": [{"x": 1.0, "y": 1.0}]}
+    assert "family form: **retirement_house**, retirement houses **1**" in nc.census(M2)
     assert "rack **2**" in body and "trough **1**", "fixtures are counted by form, falling back to kind"
 
 

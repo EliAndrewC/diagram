@@ -36,7 +36,7 @@ if HERE not in sys.path:
 
 from l7r.diagram import hamletgen as hg  # noqa: E402
 
-_PART_KEYS = ("gardens", "threshing_yards", "farm_fixtures", "byres", "farm_sheds", "persimmons", "bamboo_stands")
+_PART_KEYS = ("gardens", "threshing_yards", "farm_fixtures", "byres", "farm_sheds", "retirement_houses", "persimmons", "bamboo_stands")
 
 
 def parts_across_brook(manifest: dict) -> int:

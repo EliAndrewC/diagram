@@ -198,7 +198,7 @@ class PondStockMixin:
         w, h = STY_FT if kind == "sty" else PEN_FT
         w, h = self.px(w), self.px(h)
         half = math.hypot(w, h) / 2 + self.px(2.0)
-        for key in ("pig_sties", "duck_pens", "houses", "farm_sheds", "byres", "wells", "kosatsuba", "footbridges"):
+        for key in ("pig_sties", "duck_pens", "houses", "farm_sheds", "byres", "retirement_houses", "wells", "kosatsuba", "footbridges"):
             for o in self.M.get(key, []):
                 if "x" in o and math.hypot(float(o["x"]) - cx, float(o["y"]) - cy) < half + math.hypot(float(o.get("w", 6)), float(o.get("h", 6))) / 2:
                     return False

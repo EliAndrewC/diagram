@@ -293,7 +293,7 @@ def steading_footprints(M: Mapping[str, object]) -> list[Poly]:
     these distances by less than the clip's 4 ft step; a house turned 30 degrees, or a quarter turn, is not that, so each
     building is its `rot_rect` at its own `rot`."""
     out: list[Poly] = []
-    for key in ("houses", "byres", "farm_sheds"):
+    for key in ("houses", "byres", "farm_sheds", "retirement_houses"):
         for r in M.get(key) or []:  # type: ignore[union-attr]
             if all(k in r for k in ("x", "y", "w", "h")):
                 out.append(rot_rect(float(r["x"]), float(r["y"]), float(r["w"]), float(r["h"]), float(r.get("rot") or 0.0)))

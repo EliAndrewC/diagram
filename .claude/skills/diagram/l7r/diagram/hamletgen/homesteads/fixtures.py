@@ -783,7 +783,7 @@ def _trunk_blocked(
     if cx - t < 30 or cy - t < 30 or cx + t > s.W - 30 or cy + t > s.H - 30:
         return True
     ft = footing or Footing(s, fields, marsh)  # (feature 218) see `Footing`
-    for key in ("houses", "farm_sheds", "gardens", "threshing_yards", "byres", "wells", "kosatsuba", "farm_fixtures", "persimmons", "bamboo_stands"):
+    for key in ("houses", "farm_sheds", "retirement_houses", "gardens", "threshing_yards", "byres", "wells", "kosatsuba", "farm_fixtures", "persimmons", "bamboo_stands"):
         for o in s.M.get(key, []):
             if "x" not in o:
                 continue

@@ -169,7 +169,7 @@ def _strip_blocked(
             continue
         if abs(cx - px_) < (cw + pw) / 2 + 2 and abs(cy - py_) < (ch + ph) / 2 + 2:
             return True
-    for key in ("wells", "kosatsuba", "byres", "farm_sheds"):  # everything seated between the sheds and this pass (T49)
+    for key in ("wells", "kosatsuba", "byres", "farm_sheds", "retirement_houses"):  # everything seated between the sheds and this pass (T49)
         for o in s.M.get(key, []):
             ow, oh = float(o.get("w", 2 * float(o.get("r", 8)))), float(o.get("h", 2 * float(o.get("r", 8))))
             if abs(cx - float(o["x"])) < (cw + ow) / 2 + 6 and abs(cy - float(o["y"])) < (ch + oh) / 2 + 6:
