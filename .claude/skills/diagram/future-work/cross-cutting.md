@@ -6,6 +6,18 @@ module organization, and generation doctrine that applies at every tier.
 The test for this file is simple - if fixing it would change maps of more than one type, or would
 change no map at all (tooling, structure, checks), it belongs here.
 
+## FLAKY: the raster-mode wash test (`test_in_raster_mode_the_lit_paddy_is_washed_and_the_lit_beads_are_not`)
+
+`tests/full/interactive/page_browser/test_synthetic.py`. Failed twice in FULL gates under load and passed alone
+each time: 2026-09-26 (feature 250) and 2026-09-27 (feature 267 follow-up gate), both with the lit paddy at
+`fillOpacity` 1 where raster mode washes it to 0.45 (`('1', '1') == ('0.45', '1')`). The first fix made each read
+poll for its state up to 2 s (`_driver.settles`); the second failure came with that fix in place, so the paddy
+stayed unwashed for the whole 2 s - not a slow style recompute. Likely mechanism, UNMEASURED: the page leaves raster
+mode between the `data-mode == raster` check and the highlight (a debounced resize or fit after the viewport is
+shrunk to 100x100 re-evaluates the mode), or the highlight lands before the raster layer is ready. Next step is a
+measurement, not a longer timeout: run the test in a loop under parallel load (e.g. 20 runs beside a `make done`)
+logging `data-mode` and the highlight state at each read, and fix whichever of the two the log shows.
+
 ## The review-prereq guard matches a finding's measurement by bare id (found 2026-09-27, feature 267)
 
 `scripts/_review_prereq.py` `unverified_findings` counts a finding disposed when any `measurements.json` record has
