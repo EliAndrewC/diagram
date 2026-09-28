@@ -1775,7 +1775,10 @@
   "def": "Dry-field farmland - the unirrigated ground that grows grains, beans and vegetables, as against the flooded paddy.",
   "variants": [
    "hatake",
-   "hata"
+   "hata",
+   "upland field",
+   "upland fields",
+   "upland-field"
   ]
  },
  "hatamoto": {
@@ -2194,7 +2197,10 @@
  "kanden": {
   "def": "Dry paddy: rice ground that drains, so that when the water is let out it dries to an ordinary dry field and can carry a winter crop before the next flooding.",
   "variants": [
-   "kanden"
+   "kanden",
+   "dry-field conversion",
+   "dry-field conditions",
+   "dry paddy"
   ]
  },
  "kannushi": {
@@ -3530,7 +3536,10 @@
  "shitsuden": {
   "def": "Wet paddy: rice ground too poorly drained to dry out, which holds water even out of season. Harder to work, colder, and lower-yielding than a paddy that can be emptied, and it takes no winter crop.",
   "variants": [
-   "shitsuden"
+   "shitsuden",
+   "wet paddy",
+   "wet paddies",
+   "deep paddies"
   ]
  },
  "shoin": {
@@ -9992,6 +10001,13 @@
   "def": "In the Edo period, a weir whose middle sags downstream, so that the sand coming down the river settles in that pocket instead of burying the intake. It was used on rivers carrying much sand.",
   "variants": [
    "fukuro-zeki"
+  ]
+ },
+ "evapotranspiration": {
+  "def": "The water a flooded field loses to the air - by evaporation from the water and soil and by transpiration through the rice plants' leaves - counted with what seeps down as the daily loss the supply must make good.",
+  "variants": [
+   "evapotranspiration",
+   "evapotranspiration-and-percolation"
   ]
  }
 }

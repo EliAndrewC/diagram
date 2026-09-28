@@ -431,6 +431,7 @@ dba	dBA
 dbh	DBH
 dead ground	dead ground
 dead space	dead ground
+deep paddies	shitsuden
 deep percolation	deep percolation
 deep percolation losses	deep percolation
 degawari	degawari
@@ -506,8 +507,11 @@ draw-basins	draw-basin
 drawdown	drawdown
 dressed stone	dressed stone
 drill ground	drill ground
+dry paddy	kanden
 dry run	wet run
 dry runs	wet run
+dry-field conditions	kanden
+dry-field conversion	kanden
 ds/m	dS/m
 dujiangyan	Dujiangyan
 dunhuang	Dunhuang
@@ -567,6 +571,8 @@ eta	eta
 eunis	EUNIS
 eutrophic	eutrophication
 eutrophication	eutrophication
+evapotranspiration	evapotranspiration
+evapotranspiration-and-percolation	evapotranspiration
 ever-normal granaries	ever-normal granary
 ever-normal granary	ever-normal granary
 exposure burial	exposure burial
@@ -2426,6 +2432,9 @@ unhairing	unhair
 unhairs	unhair
 unjo-gura	levy storehouse
 uogashi	uogashi
+upland field	hatake
+upland fields	hatake
+upland-field	hatake
 upper estate	kami-yashiki
 upper estates	kami-yashiki
 upper residence	kami-yashiki
@@ -2520,6 +2529,8 @@ weng cheng	wengcheng
 wengcheng	wengcheng
 wenmiao	wenmiao
 western wei	Western Wei
+wet paddies	shitsuden
+wet paddy	shitsuden
 wet run	wet run
 wet runs	wet run
 wetted perimeter	wetted perimeter
