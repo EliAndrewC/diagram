@@ -71,7 +71,7 @@ so no marked guess is missed.
 - A GUESS inside an HTML comment (a session note) is not the record's visible claim and is not listed.
 - An absence note marked settled (two independent passes on different dates, research/CLAUDE.md) is listed apart,
   as searched twice, so it is not mistaken for a question nobody has tried.
-- The word GUESS in a heading or a quoted source passage is still a label the reader sees; it is listed.
+- The label GUESS (or its plural GUESSES) in a heading or a quoted source passage is still a label the reader sees; it is listed.
 - Assembled pages (`research/<page>.html`) and citations pages repeat what the fragments hold; only the fragments
   are read, so nothing is counted twice.
 - A GROUNDS note ("no source is owed") and a CONVENTION label are not open research and are not listed.
