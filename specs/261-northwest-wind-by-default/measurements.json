@@ -471,11 +471,11 @@
   "verifies": "F3",
   "subject": "mizuguchi",
   "round": "4d1f0170",
-  "value": 144,
+  "value": 156,
   "unit": "ft",
-  "quantity": "the board's distance from the handover at (25,914); the notes now say it stands on the hamlet's stem lane, 82 ft before it meets the connector; re-measured 2026-09-27 against the notes as a later round rewrote them: the board now stands 144 ft out along the connector from where it meets the lanes (round 176042d3's seat; plan D18)",
+  "quantity": "the board's distance from the handover at (25,914); the notes now say it stands on the hamlet's stem lane, 82 ft before it meets the connector; re-measured 2026-09-27 against the notes as a later round rewrote them: the board now stands 144 ft out along the connector from where it meets the lanes (round 176042d3's seat; plan D18); re-measured 2026-09-28 on the belt's far envelope (plan D20): 156, the board re-seated with the belt's new clumps",
   "source": "pool/hamlets/mizuguchi/mizuguchi.json kosatsuba[0] via kosatsuba_handover; mizuguchi.notes.md 2026-09-27 entry",
-  "command": "grep -n 'stands 144 ft out along it from where it meets the lanes' .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md"
+  "command": "grep -n 'stands 156 ft out along it from where it meets the lanes' .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md"
  },
  "inashiro-r5-straggler-end": {
   "verifies": "F1",
@@ -621,11 +621,11 @@
   "verifies": "F3",
   "subject": "kashikawa",
   "round": "1bff4100",
-  "value": 504,
+  "value": 532,
   "unit": "clumps",
-  "quantity": "the belt's recorded clumps, which the notes call clumps rather than crowns (and on the other four maps too); 360 on the kept roll; re-measured on round 97c20bc9's fix: 504, the belt's far face now holding its depth where the fringe turns (plan D20)",
+  "quantity": "the belt's recorded clumps, which the notes call clumps rather than crowns (and on the other four maps too); 360 on the kept roll; re-measured on round 97c20bc9's fix: 504, the belt's far face now holding its depth where the fringe turns (plan D20); re-measured 2026-09-28 on the belt's far envelope (plan D20): 532",
   "source": "pool/hamlets/kashikawa/kashikawa.json village_groves[role=windbreak].clumps; kashikawa.notes.md 2026-09-27 entry",
-  "command": "grep -n 'The belt is 504 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
+  "command": "grep -n 'The belt is 532 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
  },
  "inashiro-r9-belt-frame": {
   "verifies": "F1",
@@ -661,11 +661,11 @@
   "verifies": "F2",
   "subject": "kashikawa",
   "round": "0ae309f0",
-  "value": 504,
+  "value": 532,
   "unit": "clumps",
-  "quantity": "the record kashikawa-r8-notes-clumps now states and greps the kept roll's 360 belt clumps; re-measured on round 97c20bc9's fix: 504, the belt's far face now holding its depth where the fringe turns (plan D20)",
+  "quantity": "the record kashikawa-r8-notes-clumps now states and greps the kept roll's 360 belt clumps; re-measured on round 97c20bc9's fix: 504, the belt's far face now holding its depth where the fringe turns (plan D20); re-measured 2026-09-28 on the belt's far envelope (plan D20): 532",
   "source": "specs/261-northwest-wind-by-default/measurements.json kashikawa-r8-notes-clumps; kashikawa.notes.md",
-  "command": "grep -n 'The belt is 504 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
+  "command": "grep -n 'The belt is 532 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
  },
  "kuwabata-r11-wedge": {
   "verifies": "F1",
@@ -808,11 +808,11 @@
   "verifies": "F4",
   "subject": "kashikawa",
   "round": "03cf6a84",
-  "value": 504,
+  "value": 532,
   "unit": "clumps",
-  "quantity": "the four stale records re-measured on the kept roll: the belt then 277 clumps (kashikawa-r8-notes-clumps, kashikawa-r11-record), the drawn aspect 1.72 (kashikawa-r4-shape), 2 woodland stands upslope (kashikawa-r11-name), and the junction 584 ft (kashikawa-F4); re-measured on round 97c20bc9's fix: 504, the belt's far face now holding its depth where the fringe turns (plan D20)",
+  "quantity": "the four stale records re-measured on the kept roll: the belt then 277 clumps (kashikawa-r8-notes-clumps, kashikawa-r11-record), the drawn aspect 1.72 (kashikawa-r4-shape), 2 woodland stands upslope (kashikawa-r11-name), and the junction 584 ft (kashikawa-F4); re-measured on round 97c20bc9's fix: 504, the belt's far face now holding its depth where the fringe turns (plan D20); re-measured 2026-09-28 on the belt's far envelope (plan D20): 532",
   "source": ".claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.json village_groves, meta.cluster_aspect_drawn, commons; kashikawa.notes.md",
-  "command": "grep -n 'The belt is 504 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
+  "command": "grep -n 'The belt is 532 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
  },
  "inashiro-r13-board": {
   "verifies": "F1",
@@ -978,11 +978,11 @@
   "verifies": "F2",
   "subject": "mizuguchi",
   "round": "6fefdcdf",
-  "value": 252,
+  "value": 276,
   "unit": "clumps",
-  "quantity": "the belt's clump count the 2026-09-27 notes entry states, matching the census (189 in the round); re-measured on round 97c20bc9's fix: 252, the belt's far face now holding its depth where the fringe turns (plan D20)",
+  "quantity": "the belt's clump count the 2026-09-27 notes entry states, matching the census (189 in the round); re-measured on round 97c20bc9's fix: 252, the belt's far face now holding its depth where the fringe turns (plan D20); re-measured 2026-09-28 on the belt's far envelope (plan D20): 276",
   "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md",
-  "command": "grep -n '252 clumps, 300' .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md"
+  "command": "grep -n '276 clumps, 300' .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md"
  },
  "pool-r15-unseated": {
   "subject": "pool",
@@ -997,9 +997,9 @@
   "verifies": "F1",
   "subject": "kashikawa",
   "round": "97c20bc9",
-  "value": 93.5,
+  "value": 92.0,
   "unit": "ft",
-  "quantity": "the windbreak band's thinnest depth across itself on the page (each near-face vertex to the far face): 20.7 ft in the round; Inashiro 33.9 -> 83.9, Sawada 13.8 -> 88.8; Kuwabata 19.1 and Mizuguchi 64.1 unchanged where the canvas edge clamps the far face; re-measured 2026-09-28 on round 31ef113b's roll (D22): Sawada 72.7 at the bend of its two arms",
+  "quantity": "the windbreak band's thinnest depth across itself on the page (each near-face vertex to the far face): 20.7 ft in the round; Inashiro 33.9 -> 83.9, Sawada 13.8 -> 88.8; Kuwabata 19.1 and Mizuguchi 64.1 unchanged where the canvas edge clamps the far face; re-measured 2026-09-28 on round 31ef113b's roll (D22): Sawada 72.7 at the bend of its two arms; re-measured 2026-09-28 after the rag and the far envelope (plan D20): 92.0 on Kashikawa, and every pool belt at least 92.0 where the canvas does not clamp it (Inashiro 115.6, Kuwabata 121.2, Mizuguchi 117.7, Sawada 94.7)",
   "source": ".claude/skills/diagram/pool/hamlets/*/*.json village_groves windbreak poly, meta.view",
   "command": "python3 specs/261-northwest-wind-by-default/measure/belt_depth.py inashiro kashikawa kuwabata mizuguchi sawada"
  },
@@ -1029,7 +1029,7 @@
   "round": "97c20bc9",
   "value": 1,
   "unit": "pieces",
-  "quantity": "the pieces the DRAWN windbreak is in: tree_crowns within 20 ft of the belt's outline, linked within 30 ft edge to edge - 1 piece of 1160 crowns (4 pieces of 705 at commit 881679390, the round's hole); every pool belt is 1 piece",
+  "quantity": "the pieces the DRAWN windbreak is in: tree_crowns within 20 ft of the belt's outline, linked within 30 ft edge to edge - 1 piece of 1160 crowns (4 pieces of 705 at commit 881679390, the round's hole); every pool belt is 1 piece; re-measured 2026-09-28 on the far envelope: 1 piece on every pool belt",
   "source": ".claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.json tree_crowns, village_groves windbreak poly",
   "command": "python3 specs/261-northwest-wind-by-default/measure/belt_pieces.py inashiro kashikawa kuwabata mizuguchi sawada"
  },
@@ -1047,11 +1047,11 @@
   "verifies": "F2",
   "subject": "sawada",
   "round": "31ef113b",
-  "value": 143,
+  "value": 174,
   "unit": "clumps",
-  "quantity": "the alder the notes' feature-261 entry states (70 in the round), matching the windbreak's recorded alder; re-measured 2026-09-28 on round 31ef113b's roll (D22): 143",
+  "quantity": "the alder the notes' feature-261 entry states (70 in the round), matching the windbreak's recorded alder; re-measured 2026-09-28 on round 31ef113b's roll (D22): 143; re-measured 2026-09-28 on the belt's far envelope (plan D20): 174",
   "source": ".claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md; sawada.json village_groves alder",
-  "command": "grep -n 'its 143 clumps that stand in the marsh are alder' .claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md"
+  "command": "grep -n 'its 174 clumps that stand in the marsh are alder' .claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md"
  },
  "sawada-r17-spelling": {
   "verifies": "F3",

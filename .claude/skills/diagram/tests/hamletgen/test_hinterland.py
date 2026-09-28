@@ -605,22 +605,6 @@ def test_a_bamboo_thicket_is_not_seated_on_the_water() -> None:
     assert all(seg_dist(q[0], q[1], brook[0], brook[1]) > 3.5 + 3.0 for poly in seats for q in poly), "a stand on the water"
 
 
-def test_the_belts_far_face_keeps_its_depth_across_a_steep_fringe() -> None:
-    """`far_face` (settlement-review of Kashikawa, feature 261): the fringe grown by a disc of the belt's depth. A square
-    fringe, or one that bumps by less than the disc, is unchanged; where the fringe falls back steeply across the wind,
-    the far face stands behind the neighbor's lead, so the band is the depth across itself and not a sliver."""
-    from l7r.diagram.hamletgen.hinterland.belt import BELT_DEPTH_FT, far_face
-
-    flat = [(-180.0, 0.0), (-90.0, 0.0), (0.0, 0.0), (90.0, 0.0)]
-    assert far_face(flat) == flat
-    bumpy = [(-90.0, 0.0), (0.0, 20.0), (90.0, 0.0)]
-    assert far_face(bumpy) == bumpy, "a 20 ft bump is less than the disc gives a neighbor 90 ft across"
-    steep = [(-90.0, 0.0), (0.0, 150.0), (90.0, 300.0)]
-    grown = far_face(steep)
-    lead = 150.0 + BELT_DEPTH_FT * (1.0 - (90.0 / BELT_DEPTH_FT) ** 2) ** 0.5 - BELT_DEPTH_FT
-    assert grown[2] == (90.0, 300.0) and abs(grown[1][1] - (150.0 + lead)) < 1e-9 and grown[1][1] > 150.0
-
-
 def test_the_copse_against_the_belt_anchors_on_its_lee_face() -> None:
     """`lee_face` (settlement-review of Mizuguchi, feature 261): in each band across the wind, only the crowns within a crown's
     depth of the most leeward - so the copse gathers on the houses' side of the belt, not beyond its windward face."""
@@ -631,3 +615,29 @@ def test_the_copse_against_the_belt_anchors_on_its_lee_face() -> None:
     lee = lee_face(belt, north)
     assert set(lee) == {(0.0, -100.0), (0.0, -120.0), (100.0, -150.0)}
     assert LEE_DEPTH_FT < 50.0
+
+
+def test_the_profile_is_sampled_along_its_length() -> None:
+    """`along_the_profile`: a sample every `step` along each stretch between columns, the columns kept and the last one
+    closing it; a short stretch keeps just its ends."""
+    from l7r.diagram.hamletgen.hinterland.belt import along_the_profile
+
+    pts = along_the_profile([(0.0, 0.0), (0.0, 90.0), (10.0, 90.0)], 30.0)
+    assert pts == [(0.0, 0.0), (0.0, 30.0), (0.0, 60.0), (0.0, 90.0), (10.0, 90.0)]
+
+
+def test_the_far_face_keeps_the_depth_across_a_right_angle_between_columns() -> None:
+    """`far_envelope` (spec-fidelity of round 31ef113b): where the fringe turns a right angle between two columns 90 ft
+    apart across the wind, the band stays its depth across itself - every point along the steep chord stands at least the
+    depth from the far face - and the face never folds back across the wind."""
+    import math
+
+    from l7r.diagram.hamletgen.hinterland.belt import BELT_DEPTH_FT, along_the_profile, far_envelope
+
+    cols = [(-180.0, 0.0), (-90.0, 0.0), (0.0, 400.0), (90.0, 400.0)]
+    far = [(v, u + BELT_DEPTH_FT) for v, u in far_envelope(cols)]
+    assert all(b[0] > a[0] for a, b in zip(far, far[1:], strict=False)), "sampled in order across the wind"
+    for p in along_the_profile(cols):
+        gap = min(math.dist(p, q) for q in far)
+        assert gap >= BELT_DEPTH_FT * 0.9, (p, gap)
+    assert far_envelope([(-90.0, 0.0), (0.0, 0.0), (90.0, 0.0)]) == [(-90.0, 0.0), (-60.0, 0.0), (-30.0, 0.0), (0.0, 0.0), (30.0, 0.0), (60.0, 0.0), (90.0, 0.0)]

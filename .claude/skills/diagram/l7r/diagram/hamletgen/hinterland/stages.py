@@ -277,7 +277,11 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
         _by = [q[1] for q in _dented]
         _box = [(min(_bx), min(_by)), (max(_bx), min(_by)), (max(_bx), max(_by)), (min(_bx), max(_by))]
         _belt = [(float(c[0]), float(c[1])) for g in s.M.get("village_groves") or [] if g.get("role") == "windbreak" for c in g.get("clumps") or []]
-        _copse_near = (lee_face(_belt, plan.wind), s.px(COPSE_BELT_REACH_FT), _brook)
+        # ...and on its LEE side of that face: the reach is centered half of it leeward of each lee crown, so a copse crown
+        # stands 0 to `COPSE_BELT_REACH_FT` leeward and never windward of the face - at the belt's thin end a band's one or
+        # two crowns are its lee face, and a copse anchored round them stood beyond its windward side (Mizuguchi, two crowns)
+        _half = s.px(COPSE_BELT_REACH_FT) / 2.0
+        _copse_near = ([(x - plan.wind[0] * _half, y - plan.wind[1] * _half) for x, y in lee_face(_belt, plan.wind)], _half, _brook)
     s.village_grove(_box, role="copse", dense=False, reserved=title_pocket(s, plan), near=_copse_near)  # the map's name has ground reserved; the copse honors it like the belt does
     # RECORD WHAT THE GROUND GAVE, beside what the knob asked for (settlement-review, feature 230 pass 12; the same
     # move `place_kosatsuba` makes with `kosatsuba_well_ft`, and for the same reason). `copse_siting` says

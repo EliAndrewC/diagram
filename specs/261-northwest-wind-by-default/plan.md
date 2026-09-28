@@ -381,9 +381,17 @@ Measured before and after in research R10.
   the band thinned to a sliver, and Kashikawa's westernmost steading's garden and sun lane emptied it - a hole in the
   windward face (settlement-review, round 97c20bc9; research/vegetation.html: a belt "reads as a wall of trees only at"
   80-120 ft of depth, and a windbreak with a hole funnels the wind). The band's thinnest depth across itself went from 20.7 ft
-  to 93.5 on Kashikawa (`m:belt-r16-depth`); on the pool it is now at least 72.7 ft where no page edge cuts it, the
-  shortest at the bend where Sawada's west arm meets its marsh arm - under the record's 80 ft at that one vertex, and
-  recorded rather than claimed (observed 2026-09-28 on the round-31ef113b roll: `measure/belt_depth.py`). A square window (a neighbor's whole lead) was tried
+  to 92.0 on Kashikawa (`m:belt-r16-depth`), and on the pool it is at least 92.0 ft wherever the canvas edge does not cut
+  it. Two further causes of a thin band were fixed after round 31ef113b's spec-fidelity found Sawada's bend at 72.7 ft
+  (observed 2026-09-28: `measure/belt_depth.py`, which reads where the near face ends from `meta.belt_near_vertices`
+  and leaves out a stretch clamped to the canvas): the rag, which moved every face vertex up to 13 ft either way on both
+  axes, now roughens a face along its length and pushes it only out of the band; and the far face is laid behind a disc
+  grown round every point ALONG the fringe profile (`along_the_profile`, every 30 ft), sampled in order across the wind
+  (`far_envelope`) - Sawada's belt turns a right angle between two columns 90 ft apart, one 480 ft chord of near face,
+  and a disc round the columns alone ran the far face parallel to it 72 ft away. Sampling the far face along the profile
+  itself was tried and folded it back over the steep chord (Sawada's belt in six pieces), and sampling it across the wind
+  from the columns' discs alone thinned Inashiro and Mizuguchi and split Kashikawa's belt in three (observed 2026-09-28 on
+  rolls not committed); both are reverted. A square window (a neighbor's whole lead) was tried
   first and thickened belts for bumps of a few tens of feet (observed 2026-09-27 on a roll not committed: Sawada 559
   clumps, Inashiro 364, Kuwabata 232, Mizuguchi 304, against the disc's 539, 312, 191 and 252); the disc leaves a square
   or gently bumped fringe unchanged. Every belt grew, most where its fringe turns (observed 2026-09-27, the census
@@ -408,7 +416,11 @@ Measured before and after in research R10.
   within a crown's 30 ft depth of the most leeward), so it stands in the belt's shelter on the houses' side, "tucked
   against the back grove" (`COPSE_SITINGS`). Anchored on every belt crown, and once D20 gave the belt its depth where it
   turns, 31 of Mizuguchi's 75 copse crowns stood beyond the belt's windward face (settlement-review, round 31ef113b); none
-  does now (`m:mizuguchi-r17-copse`, 0 crowns). The band and depth are a map drawing convention, calibrated to a crown.
+  does now (`m:mizuguchi-r17-copse`, 0 crowns). The reach is centered half of it leeward of each lee crown, so a copse
+  crown stands 0-60 ft leeward of the face and never windward of it: at the belt's thin end a band's one or two crowns are
+  its lee face, and anchored round them two copse crowns stood past its windward side (observed 2026-09-28 on the far
+  envelope's roll, not committed: `measure/copse_side.py`). The band and depth are a map drawing convention, calibrated
+  to a crown.
 - `meta.kosatsuba_well_ft` is recorded for the board as drawn: the frame stage's re-seat records it too
   (`record_board_well`). Sawada's said 353.5 ft of a board 173.3 ft from its nearest well, the first seat's figure; every
   pool map's recorded figure is now its drawn one (`m:sawada-r17-well`, 173.3 ft).
