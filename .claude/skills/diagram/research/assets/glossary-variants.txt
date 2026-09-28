@@ -98,7 +98,7 @@ bamboo grass	sasa
 bamboo-grass	sasa
 ban-hinin	banta
 banfang	banfang
-bangi	bangi
+bangi	clapper-board
 bangumi	bangumi
 banner	banner
 banner garrison	banner
@@ -160,7 +160,7 @@ bo	bo
 board feet	board foot
 board foot	board foot
 board-clapper	clapper-board
-bobana	boubana
+bobana	bobana
 bodaiji	bodaiji
 boji	boji
 bojikui	bojikui
@@ -173,7 +173,7 @@ boom	boom
 booms	boom
 borrowed scenery	borrowed scenery
 borrowed-scenery	borrowed scenery
-boubana	boubana
+boubana	bobana
 boundary post	bojikui
 boundary posts	bojikui
 branch house	branch house
@@ -1303,7 +1303,7 @@ kotaiyoriai	kotaiyoriai
 kozashi	kozashi
 kuchi-agariya	agariya
 kuchidome	kuchidome
-kuchidome bansho	kuchidome bansho
+kuchidome bansho	kuchidome
 kuchidome guard post	kuchidome
 kuchidome guard posts	kuchidome
 kuchiireya	hitoyado
@@ -1412,7 +1412,7 @@ machi-doshiyori	toshiyori
 machi-hanare	machi-hanare
 machi-kaisho	machi-kaisho
 machi-kido	kido
-machidoshiyori	town elder
+machidoshiyori	toshiyori
 machiya	machiya
 madake	madake
 made ground	made ground
@@ -1959,7 +1959,7 @@ seigaiha	seigaiha
 seijoue	seijoue
 seisatsu	kosatsuba
 seisatsuba	kosatsuba
-sekai daihyakka jiten	Sekai daihyakka jiten
+sekai daihyakka jiten	Sekai Daihyakka Jiten
 sekisho	sekisho
 self-watch house	jishinban
 senbon torii	Senbon Torii
@@ -2317,8 +2317,8 @@ toro	Toro
 toro site	Toro
 toshiyori	toshiyori
 total length and fall	fall
-town elder	town elder
-town elders	town elder
+town elder	toshiyori
+town elders	toshiyori
 town grain	town grain
 town ground	town ground
 town grounds	town ground

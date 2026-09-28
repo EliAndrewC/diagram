@@ -7510,7 +7510,8 @@
    "toshiyori",
    "machi-doshiyori",
    "town elder",
-   "town elders"
+   "town elders",
+   "machidoshiyori"
   ]
  },
  "chōtsuke": {
@@ -9159,12 +9160,6 @@
    "back-to-back drains"
   ]
  },
- "kuchidome bansho": {
-  "def": "A domain's own barrier post of the Edo period, set on its borders and at key points of traffic to watch travelers and goods and collect a duty - a domain's answer to the shogunate's barrier stations.",
-  "variants": [
-   "kuchidome bansho"
-  ]
- },
  "ogashoya": {
   "def": "A senior headman set over a group of villages, above the ordinary shoya - one of the commoner offices that did the auxiliary work of rule, and so could be granted a warrior's privileges.",
   "variants": [
@@ -9356,14 +9351,6 @@
    "palisades"
   ]
  },
- "town elder": {
-  "def": "One of Edo's three chief commoner officials, the heads of the Naraya, Taruya and Kitamura houses, who worked from their own residences on corner lots facing Honcho street, each residence doubling as their office.",
-  "variants": [
-   "town elder",
-   "town elders",
-   "machidoshiyori"
-  ]
- },
  "chome": {
   "def": "A numbered section of a Japanese street or district: Honcho 1-chome is the first section of Honcho street.",
   "variants": [
@@ -9527,7 +9514,8 @@
  "bobana": {
   "def": "The spot at the edge of an Edo-period post town, on the highway (棒鼻), where the lowest-grade inns stood.",
   "variants": [
-   "bobana"
+   "bobana",
+   "boubana"
   ]
  },
  "clapper-board": {
@@ -9567,13 +9555,6 @@
    "three arresting tools",
    "torimono mitsu dogu",
    "arresting tools"
-  ]
- },
- "boubana": {
-  "def": "The marker post that stood at the entrance of a post town and showed where its precinct began, beside its mitsuke and gate.",
-  "variants": [
-   "boubana",
-   "bobana"
   ]
  },
  "shitomi": {
@@ -9687,17 +9668,10 @@
    "nokaji"
   ]
  },
- "bangi": {
-  "def": "A thick wooden board struck as a signal, used for alarms and to call people to meetings before the bronze alarm bell spread in the Edo period.",
-  "variants": [
-   "bangi"
-  ]
- },
  "kajimachi": {
   "def": "The smiths' street of a castle town, where the lord settled the town's smiths together; the name survives in town after town.",
   "variants": [
-   "kajimachi",
-   "Kajimachi"
+   "kajimachi"
   ]
  },
  "sishu": {
@@ -9771,7 +9745,6 @@
   "def": "The war fought in and around Kyoto at the end of the Muromachi period between an eastern and a western army of lords; the western army's camp ground gave Kyoto's weaving quarter, Nishijin, its name.",
   "variants": [
    "Onin war",
-   "Onin War",
    "Ōnin war"
   ]
  },
@@ -9837,13 +9810,6 @@
    "wakamono-gumi"
   ]
  },
- "Sekai daihyakka jiten": {
-  "def": "Heibonsha's World Encyclopedia, a Japanese general encyclopedia whose entries Kotobank carries.",
-  "variants": [
-   "Sekai daihyakka jiten",
-   "Sekai Daihyakka Jiten"
-  ]
- },
  "pleasure quarter": {
   "def": "A district of a town set aside for licensed entertainment - teahouses, entertainers' houses and brothels - often near the port or at the town's edge.",
   "variants": [
@@ -9874,8 +9840,7 @@
  "kyuden": {
   "def": "\"Palace\": the word Rokugan puts before the name of a clan's or family's great castle-seat, as in Kyuden Shinjo, the seat of the Shinjo family.",
   "variants": [
-   "kyuden",
-   "Kyuden"
+   "kyuden"
   ]
  },
  "ox-shoeing frame": {
