@@ -758,6 +758,8 @@ gaison	gaison
 galleried mining	siege mining
 game master	GM
 gangi	gangi
+gannin	gannin
+gannin bozu	gannin
 garan	garan
 garans	garan
 gassho	gassho
