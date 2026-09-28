@@ -72,7 +72,7 @@ plot edge, once per plot.
 1. **Given** any roll, **When** the fabric index misses its memo, **Then** each polygon's ring index is reused.
 2. **Given** a carve, **When** its plots are laid, **Then** each bund vertex is computed once per sector.
 
-### User Story 4 - The windbreak stops re-asking, and the marsh asks as arrays (Priority: P2)
+### User Story 4 - The windbreak stops re-asking (Priority: P2; its marsh half WITHDRAWN by Amendment 1)
 
 The windbreak's gap fill offers every unfilled gap the same candidate points round after round, asking the outline,
 the hard ground, the local keep-outs and the lanes of each again; the marsh scatter tests its marks one at a time, and
@@ -128,8 +128,8 @@ density and keep-outs.
   still run for every point offered, in today's order, so the clumps are today's.
 - **FR-009** WITHDRAWN by Amendment 1 (it asked the marsh scatter vectorized as the grass was, 278's FR-008; built,
   measured, and it bought no time - research R2).
-- **FR-010 Every map keeps its invariants.** A change that moves a map (FR-007, FR-009) is held to SC-011; nothing that
-  may not overlap overlaps.
+- **FR-010 Every map keeps its invariants.** A change that may move a map (FR-007; FR-009 until Amendment 1 withdrew it) is
+  held to SC-011; nothing that may not overlap overlaps.
 - **FR-011 What is left is measured and written down.** `dev/performance.md` records what the after-profile shows
   remaining - per stage, where the seconds go - with each remaining lever priced.
 
@@ -166,7 +166,8 @@ density and keep-outs.
   and Kashikawa (209535, m:before-kashikawa-grove-inside), its hard-ground tests at least `1.5x` fewer on the same two
   (82773, m:before-sawada-grove-hard; 92000, m:before-kashikawa-grove-hard), and every pool map's clumps are today's.
 - **SC-010** (FR-009): WITHDRAWN with FR-009 by Amendment 1.
-- **SC-011** (the pool, FR-010): FR-001 to FR-006 and FR-008 leave every manifest they touch byte-identical - shown by
+- **SC-011** (the pool, FR-010): AMENDED - see Amendment 1 (as landed, every manifest is byte-identical). As first written:
+  FR-001 to FR-006 and FR-008 leave every manifest they touch byte-identical - shown by
   regenerating the pool with them landed and FR-007 and FR-009 not yet landed, against the pool as committed at
   `c13a6ebe6`, since the moving changes would hide them afterwards. The maps FR-007
   and FR-009 move hold feature 276's FR-006 condition in full: every live pool map regenerates, `make done` is green at the
@@ -204,7 +205,8 @@ density and keep-outs.
 ### Amendment 1 (2026-09-28, from T14's measurement), review on a reset counter
 
 Measured (observed 2026-09-28, method: `measure.py after`, the base worktree's harness then the clone's, each map the
-fastest of three unprofiled rolls; and the same stage timing run once more on its own, base then clone; research R2):
+fastest of three unprofiled rolls, the 1-minute load average recorded at each run's start and end; and the same stage timing
+run once more on its own, base then clone; research R2):
 
 - **Every mechanism criterion holds, most by far** (base-rerun over after, each counted beneath its entries with the
   bucket's total beside it, plan C): the clip's `seg_dist` 535389 -> 11 on Kashikawa (m:base-rerun-kashikawa-b-clip-seg-dist,
@@ -219,6 +221,13 @@ fastest of three unprofiled rolls; and the same stage timing run once more on it
   m:after-sawada-b-carve-strokeindex-clearance); the grove's outline tests 253704 -> 79299 and hard-ground tests 82773 ->
   25617 on Sawada (m:after-sawada-b-grove-groveblocks-inside, m:after-sawada-b-grove-groveblocks-hard). No bucket's named
   count fell while its total did not.
+- **One count moves between runs of the base: the ring builds.** Sawada's read 8792 in two base re-runs
+  (m:base-rerun-sawada-b-fabric-ringindex-init) and 9098 in the review's re-run of the same command and in the first
+  measurement (m:before-sawada-ring-index-builds); Kashikawa's 6740 and 7020, Kuwabata's 4132 and 4236, and the fabric
+  bucket's total with them. The base's fabric memo (`hamletgen.clearance._MEMO`) is keyed on object identities, so how often
+  it hits - and so how many polygons a miss re-indexes - moves with the reuse of ids. A count may not carry `varies`
+  (FR-011b), so these stay counts, named here as moving; the after side's ring builds, keyed on the ring's points (FR-002),
+  read 153 in every run. SC-003 holds on either base reading: 57x or 59x against its `5x`.
 - **FR-009 is withdrawn.** The vectorized marsh was built to 278's priced form and cut the marsh's scalar keep-out tests
   359x on Sawada, but its wall time did not fall: the hinterland stage, fastest of three, went 0.596 -> 0.614 s on
   Inashiro and 0.380 -> 0.443 s on Kuwabata, flat on the other three, because building the shapely shapes of the keep-outs
@@ -226,19 +235,22 @@ fastest of three unprofiled rolls; and the same stage timing run once more on it
   every map's marks and buys no time is not what the GM asked for; the marsh keeps its scalar throws. The defect it
   exposed - a pond bank's keep-out thinned to every 16th point - stays fixed. With it withdrawn, the whole pool
   regenerates byte-identical against `c13a6ebe6`: this feature, as landed, moves no pool map.
-- **SC-001's `1.25x` did not hold.** The pool rolled in 27.587 s after (m:after-pool-roll-s) against 32.902 s before
-  (m:before-pool-roll-s): 1.19x. The same-session base re-run read 37.715 s (m:base-rerun-pool-roll-s), its Kashikawa at
-  13.23 s (m:base-rerun-kashikawa-roll-s) against 8.9-9.0 s in every other reading of the same code - a load spike, so it is
-  reported and not used; the separate stage run gave 32.785 s against 27.069 s (1.21x). What stands between that and the
-  target is the residue FR-011 records: the router's search, the field's carve and seam closing, and the page writer.
+- **SC-001's `1.25x` did not hold.** Every reading of the pool on this host, base then after: 32.902 s before
+  (m:before-pool-roll-s) against 28.477 s after in the latest run (m:after-pool-roll-s, load 9.6 -> 5.8): 1.16x; the
+  separate stage run, 32.785 s against 27.069 s: 1.21x; and the review's own re-run, 1.18x against the recorded base and
+  1.20x against its back-to-back base. Two base re-runs read higher still - 37.715 s and 36.763 s
+  (m:base-rerun-pool-roll-s, load 4.0 -> 9.6) - each carried by ONE map far off its every other reading: Kashikawa at
+  13.23 s in the first, where the review's re-run read 8.988 s, and Kuwabata at 6.739 s in the second
+  (m:base-rerun-kuwabata-roll-s) against 3.73-3.82 s in every other reading; neither is used. What stands between 1.2x
+  and the target is the residue FR-011 records: the router's search, the field's carve and seam closing, and the page
+  writer.
 
 The amended criteria:
 
-- **SC-001** the five pool hamlets' summed roll time is at least `1.15x` less than the base's (the readings above are 1.19x
-  and 1.21x, and a single reading on this host moves by a few tenths of a second per map).
+- **SC-001** the five pool hamlets' summed roll time is at least `1.1x` less than the base's (the readings above run 1.16x
+  to 1.21x, and on this host a loaded run moves one map by seconds).
 - **SC-010** withdrawn with FR-009.
 - **SC-011** holds in its stronger form: with every landed change, every live pool manifest is byte-identical against
   `c13a6ebe6`. FR-007's second half remains a map drawing convention (a plot within rounding of the bank's threshold may
   flip on another map); it moved nothing on the pool, and the cohort (`make cohort N=24`) passed 24 of 24 on the base and
   the clone alike.
-

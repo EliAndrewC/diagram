@@ -9,8 +9,9 @@ Eleven requirements in three kinds. (A) The exact removals - the clip through th
 by content, the toll's grid, the notice board's two indexes, the watercourse indexes, the caption probe's lane index, the
 carve's vertex memo and the windbreak gap fill's memory: each index PRUNES and the existing exact test DECIDES
 (`dev/performance.md`), each proved by an equality test against the old form, and the pool comes out byte-identical with
-all of (A) landed and (B) not yet (SC-011). (B) The two moving changes - the carve's shared-edge walk and the vectorized
-marsh - held to feature 276's FR-006 condition in full. (C) The measurement and the record.
+all of (A) landed and (B) not yet (SC-011). (B) The moving changes - the carve's shared-edge walk, held to feature 276's FR-006
+condition in full, and the vectorized marsh, built, measured and WITHDRAWN (spec Amendment 1: it bought no time) - and
+the defect the marsh's moved throws exposed, fixed where found (B3). (C) The measurement and the record.
 
 ## Technical Context
 
@@ -32,8 +33,9 @@ runs a detached worktree of it (`/tmp/base281`) and the clone back to back.
 
 - **VI (performance)**: bookends above.
 - **X clause 15 (index once, ask per candidate)**: A1 and A3 to A6 are this clause - the index built before the loop.
-- **XII (research)**: every task is `research: rendering`; no physical claim changes. B1 and B2 change where a plot edge's
-  threshold lands in the last floating-point bits and where random marsh marks land at the same density.
+- **XII (research)**: every task is `research: rendering`; no physical claim changes. B1 changes where a plot edge's
+  threshold lands in the last floating-point bits; B2, withdrawn, would have moved where random marsh marks land; B3
+  enforces an existing rule (reeds off planted earth) at the bank's drawn corners.
 - **XIII (no regressions)**: the base worktree is the baseline; `make cohort N=24` before and after.
 - **XIV (fix where found)**: anything found on the way is fixed in this work.
 - **XVI (the literal thing)**: every FR as written; no exceptions.
@@ -146,6 +148,13 @@ crescent ponds, the pond's ellipse with the lateral pad and, for a tuft, the bla
 generator. **Test**: a compliance test like the grass's - no mark's keep-out test fails, rounding-aware; the density per
 1,000 sq ft within the old scatter's across seeds; Kuwabata's shore still reeded (feature 150's fringe figures).
 
+### B3. The pond bank's whole ring (found in B2's measurement; spec Decisions Recorded, `settlement/land/wet.py`)
+
+The marsh's keep-out read each fish-pond bank thinned to every 16th point (feature 139's cost choice, made while every bank
+was asked per point); the thinned ring cuts a rectangular bank's corners, and a reed based 0.8 ft inside a drawn corner
+passed. The keep-out grid indexes each ring now, so the whole ring is filed. Enforces the existing rule; kept when B2 was
+withdrawn. **Test**: the existing pond-bank test, which the moved throws turned red on the thinned ring.
+
 ### C. Measure and record (FR-011, SC-001, SC-011, SC-012)
 
 **Counting the work where it moves.** `counts.py` credits a primitive call to its DIRECT caller, and A1, A2, A4, A5 and
@@ -169,7 +178,7 @@ every function that does its work, including the new builders:
 | SC-007 | caption lanes | `label_seat_clear`, `lane_seat_index`, `clear_of_lanes` | `seg_dist` |
 | SC-008 | carve | `_carve_sector` | `edge`, `StrokeIndex.clearance` |
 | SC-009 | grove | `village_grove` | `GroveBlocks.inside`, `GroveBlocks.hard` |
-| SC-010 | marsh | `marsh`, `marsh_scatter` | `KeepoutGrid.hit` (a scalar keep-out test: once per point before, only the band's points after) |
+| SC-010 (withdrawn) | marsh | `marsh`, `marsh_scatter` | `KeepoutGrid.hit` - still counted, SC-010 went with FR-009 |
 
 Each bucket also records its TOTAL calls, and a named count that falls while its bucket's total does not is a finding to
 fix, not a pass - so no criterion passes on work that merely moved. The same harness runs in the base worktree and in the
@@ -181,7 +190,7 @@ difference is reported beside the ratio.
 regenerates byte-identically in the base worktree (`make maps SCOPE=all` there, `git diff --quiet` over the pool). Then A1
 to A8 land, the pool regenerates in the clone, and `git diff --quiet c13a6ebe6 -- <the pool manifests>` must hold; if a
 sync-in before then brings engine or pool changes, the reference becomes the merged commit's own regenerated pool,
-confirmed the same way. Then B1 and B2 land and the pool regenerates under 276's FR-006 condition - `make done`, the
+confirmed the same way. Then B1 (and B2, until its withdrawal; B3 with it) land and the pool regenerates under 276's FR-006 condition - `make done`, the
 rescue-rounds scenario and toys, the forms, the moved maps' research entries, `make cohort N=24` against the base's.
 `measure.py after` - the base worktree then the clone, back to back - writes `base-rerun-*` and `after-*`.
 `dev/performance.md` gets the third pass's section and residue table.
@@ -192,7 +201,8 @@ rescue-rounds scenario and toys, the forms, the moved maps' research entries, `m
 |---|---|---|
 | A1-A8 | equality against the old form, in the test | the pool byte-identical against `c13a6ebe6` before B lands |
 | B1 | shared-edge symmetry; quad verdicts equal but for rounding | 276's FR-006 condition |
-| B2 | compliance and density | 276's FR-006 condition |
+| B2 (withdrawn) | compliance and density, while it stood | its hinterland stage timed, fastest of three: no gain, so withdrawn |
+| B3 | the pond-bank test (`test_a_pond_bank_keeps_the_reeds_off_the_same_way`) | the pool byte-identical (no drawn reed stood in a cut corner) |
 
 ## Complexity Tracking
 

@@ -1,6 +1,6 @@
 {
  "feature": "281-third-hotspot-pass",
- "plan_sha256": "ce43583075f70362f97d95b06e61bed41889bb3b85d4d0afe8ef549697d4c392",
+ "plan_sha256": "b3eeddc4f83f3f96483c7a9406f750d6875f22097095e7bdeab31d773d117ec3",
  "reviewed": "2026-09-28",
  "declared": "spec-fidelity",
  "decisions": [
@@ -36,9 +36,9 @@
   },
   {
    "id": "A5-stream-rect",
-   "summary": "the stream segments filed once in a PointGrid by box widened by each segment's hw, cached beside _water_obstacles under its key; a rect asks near(center, half-diagonal) and the old seg_dist < hw / segments_cross decide; lifted to rect_touches_stream",
+   "summary": "the stream segments filed once in a PointGrid by box widened by each segment's hw and cached; the cache holds the streams list, each record and each course and compares them by identity with each course's length and width (not _water_obstacles' length key); a rect asks near(center, half its extent) and the old seg_dist < hw / segments_cross decide; lifted to rect_touches_stream",
    "class": "within",
-   "why": "FR-005 second half now as written: a segment index of the watercourse built once and asked per rect. Every rect point and edge lies within half-diagonal of the center, and a segment within hw of a point (or crossing an edge) has its widened box within that reach, so near() never omits one; the same closed tests decide. Staleness is the length key _water_obstacles already uses, and SC-011's byte-identity would expose a miss."
+   "why": "FR-005 second half as written: a segment index of the watercourse built once and asked per rect. Round 3: the restated key is strictly stronger than the length key it replaces (a same-length list swap, the feature-261 case, now rebuilds); as built in fit.py _rect_on_stream it compares list identity, count, record and course identity, length and w, and stream_segment_index uses the same hw (w/2 + 5, default 9) as _water_obstacles. The residual exposure (a course mutated in place at the same length) is stated and matches clearance._MEMO's; PointGrid.near is a square query that never omits a box within pad, so the same closed tests decide. Research R2 reports the pool byte-identical against c13a6ebe6. Exactness serves 'without any loss in accuracy'; narrows nothing."
   },
   {
    "id": "A6",
@@ -66,9 +66,10 @@
   },
   {
    "id": "B2",
-   "summary": "marsh_scatter with numpy throws and the same tests _sparse runs (frame, outline, the four-slot keep-outs, crescent ponds, pond ellipse with lateral pad, blade top, feather); compliance and density tests",
-   "class": "within",
-   "why": "FR-009 and SC-010; the listed tests match _sparse in wet.py term for term; density and keep-out tests are what SC-010 names."
+   "summary": "WITHDRAWN (spec Amendment 1): the vectorized marsh was built and measured and is removed; the marsh keeps its scalar throws",
+   "class": "narrowing",
+   "why": "Narrows the accepted spec (FR-009, SC-010), not the GM's words: the request asks to 'see what we could do to improve it' - performance - and never names the marsh. Keeping B2 would defeat the request's stated purpose concretely: research R2 measured the hinterland stage flat on four maps and slower on Kuwabata (0.380 -> 0.443 s, observed 2026-09-28, fastest of three), while moving every map's marsh marks - a map change bought for no speed. This is not a session completing the GM's thought; it is the measurement the request itself asks for ('take a set of measurements and see what's slow') ruling a lever out. Contingent on Amendment 1's parallel spec review: if that review rejects the withdrawal, this decision is reopened.",
+   "ruling": "LEGITIMATE"
   },
   {
    "id": "C-order",
