@@ -111,11 +111,12 @@ so no marked guess is missed.
 
 ### Measurable Outcomes
 
-- **SC-001**: On the current record, the target lists the homesteads 500 rack-length guess, and its count of guess
-  items equals the count of visible GUESS labels in the question fragments (`149` on 2026-09-28, research.md R1).
-- **SC-002**: Replacing a guess in a fragment and re-running removes exactly that item (a unit test).
-- **SC-003**: The target finishes in under `10 s` on the whole record.
-- **SC-004**: On the current tree, the target lists the `compound.py` kitchen-postern GUESS with its file and line, and
+- **SC-001** (FR-001, FR-002, FR-004, FR-005): On the current record, the target lists the homesteads 500 rack-length guess, and every visible GUESS
+  label in the question fragments (`149` on 2026-09-28, research.md R1) falls in a listed guess item - the items being
+  sentences, one sentence may carry two (research.md R3); the counts print first and a settled absence is marked.
+- **SC-002**: Replacing a guess in a fragment and re-running removes exactly that item (a unit test; FR-001, FR-006).
+- **SC-003**: The target finishes in under `10 s` on the whole record (FR-001).
+- **SC-004** (FR-003, FR-007): On the current tree, the target lists the `compound.py` kitchen-postern GUESS with its file and line, and
   names the `threshing yard` class for the homesteads 500 rack-length item.
 
 ## Decisions Recorded
@@ -154,3 +155,11 @@ A tooling feature: it draws and states nothing on a map, so there is no renderin
   ("outside `research/`") with FR-007's `research/` and `tests/`; and a new contradiction the change introduced: Key
   Entities still defines the **Dependent class** by `Entry:` alone, against FR-003's three routes, and has no entity
   for FR-007's file-and-line items: redefine it as the map features FR-003 finds and add the outside-the-record item.
+- Round 3 (spec-fidelity VERIFY, 2026-09-28): FAITHFUL - round 2's (1) RESOLVED: FR-007, US3's scenario and plan D7
+  read every tracked text file outside `research/` and `tests/` but the tooling's logs, the hand-drawn `pool/**/*.svg`
+  plans included; R2's svg and bypass-log rows corrected; a re-run of `git ls-files -z` less those paths through
+  `grep -I -c -w GUESS` gave `117` lines in `37` files (85/25, 20/5, 8/5, 4/2), R2 exactly, so no tracked generated
+  file carries the word and dropping D7's old `*.json`/`*.html` exclusions adds nothing (on round 3's own run);
+  (4) RESOLVED: Key Entities define the dependent map feature by FR-003's three routes and add the guess outside
+  the record. Plan D3's question-up-to-`?` match implements FR-003's "an engine file citing it" and D6 cites R1's
+  dated file counts; no contradiction found.

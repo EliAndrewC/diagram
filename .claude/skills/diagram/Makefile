@@ -1096,6 +1096,10 @@ record-prepass: ## [project] the session notes and vocabulary candidates a patte
 question-sizes: ## [project] every research question over the size cap (question + notes, feature 250 D14), largest first - make quick fails on one a change touched
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/check-question-size.py" --report
 
+# GUARD_EDIT_OK: feature 285 - a new operation (list the open research questions, read from the record); no guard changes. Its help says "guess" in lower case: the list reads this file, and an upper-case label here would list itself.
+open-questions: ## [project] every guess and every unfound source, read from the record and the tracked files now - the research still owed, with the map features each touches (feature 285)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_open_questions.py" --root "$$(git rev-parse --show-toplevel)"
+
 # GUARD_EDIT_OK: feature 250 - a new operation (print the named notes of one question, not the whole file); no guard changes.
 notes: ## [project] print the named notes of ONE question and only the blocks of its fragment that carry them - for editing a few notes without reading the whole file (feature 250)   PAGE=homesteads SECTION=040 KEYS=kyuhi-jawiki,kyuhi-jawiki-2
 	@if [ -z "$(PAGE)" ] || [ -z "$(SECTION)" ] || [ -z "$(KEYS)" ]; then printf 'make notes: PAGE=<page> SECTION=<question> KEYS=<key,key> are required\n' >&2; exit 2; fi

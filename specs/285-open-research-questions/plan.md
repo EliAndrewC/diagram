@@ -9,7 +9,7 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). Measurement: [`
   The assembled pages and the citations pages repeat those fragments, so reading them would count each item twice.
   The page's name is the fragment's directory, the question's heading and anchor are the fragment's `<h2 id="...">`.
 - **D2 - what an item is** (FR-002, FR-005). HTML comments are stripped first (a session note is not a claim).
-  - *guess*: each occurrence of the capitalized word `GUESS` in the question's visible text; the item's text is the
+  - *guess*: each occurrence of the capitalized label `GUESS` (or its plural `GUESSES`, research.md R3) in the question's visible text; the item's text is the
     sentence carrying it, tags stripped (a sentence ends at `. `, `? ` or `! ` or the paragraph's end). Two labels in
     one sentence are one item. Lower-case "guess" is not a label (research/README.md's four labels are written in
     capitals).
@@ -41,7 +41,7 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). Measurement: [`
   labels in one sentence), a class naming a question, a question linked from a class's, an engine file quoting a heading, a tracked file outside the record with a GUESS, the counts; the item gone after the fixture's guess
   is rewritten; and one test on the real record: it finds the homesteads 500 rack-length guess with the `threshing yard` class (through 505) and the `compound.py`
   postern guess, and its guess count equals a plain count of visible `GUESS` sentences. The tooling tree runs at the gate (tests/CLAUDE.md).
-- **D6 - speed** (SC-003). One pass over the question fragments and their notes (`573` and `544` files, research.md R1), the tracked text files, and one import of the class registry; the run is timed at the end.
+- **D6 - speed** (SC-003). One pass over the question fragments and their notes (`573` and `544` files, research.md R1), the tracked text files, and one import of the class registry; a whole-text search before a file's line walk in the code route - `2.0 s`, research.md R4.
 
 ## Constitution check
 

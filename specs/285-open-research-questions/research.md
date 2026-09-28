@@ -12,6 +12,12 @@ stripped before counting; a note is an `<li>` in the notes file.
 | absence notes ("no publicly readable source") | `580` |
 | of them marked `settled DATE` | `0` |
 
+## R3 - the labels the collector finds (observed 2026-09-28, method: the built collector's `guess_sentences` on every question fragment against a whole-word count over the same visible text)
+
+The label is written `GUESS` and, `12` times in the record, `GUESSES` ("the shares are GUESSES"); both are labels. The
+collector's `149` labels fall in `139` listed sentences - ten sentences carry two - and none is outside a listed
+sentence. R1's `149` counted the substring, which includes the plural; the two methods agree.
+
 ## R2 - guesses outside the record, and how a question reaches a map feature (measured 2026-09-28)
 
 `git grep -c -w GUESS` over the skill's tracked files outside `research/` and `tests/`:
@@ -34,3 +40,16 @@ the threshing yard class names and which links to 500 twice.
 
 The motivating item, the rack length per household, is in `research/homesteads/500-...html` ("The length of rack
 per household is a GUESS until the record finds a figure").
+
+## R4 - the built target on the whole tree (observed 2026-09-28, method: `make open-questions` from the skill, timed with `date`, its report parsed)
+
+| what | count |
+|---|---|
+| questions with an open item | `403` of `573` |
+| guess items (sentences) / absence items / settled | `139` / `580` / `0` |
+| GUESS lines outside the record | `123` (engine `92`, pool `25`, docs `6`) |
+| open questions whose map features come through a class's `Entry:` | `52` |
+| through a link from a question a class names, only | `19` |
+| cited in engine code (the question up to its `?`, or its anchor) | `134` |
+| reached by none of the three | `237` |
+| wall time | `2.0 s` (`8.5 s` before the whole-text pre-check in `code_citations`) |
