@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in the clone `diagram-inashiro`)
 **Created**: 2026-09-28
-**Status**: Draft
+**Status**: Accepted - spec-fidelity FAITHFUL at round 3 of 5 (2026-09-28); rounds 1 and 2 CHANGES REQUIRED, all applied (Review history)
 **Request**: [`request.md`](request.md) - the GM's words verbatim, and the analysis they said yes to.
 **Predecessors**: 218 (efficient overlap checks: the index-once doctrine, `dev/performance.md`), 220 (the field
 fitted once), 222-226 (render and scatter levers), this session's quick-suite passes (gate-stamp per-file
@@ -230,3 +230,4 @@ a seam or a track lands differently it is because the same rules were asked more
   together at a `3x` cut of their sum), and User Story 2's scenario 2 restated as SC-003 (one constant density, 60 to
   240 seeds, per-house cost within `1.25x`). The asides: the harness docstring now names what it runs, and the timing
   entries in `measurements.json` carry `varies`.
+- **Round 3 (spec-fidelity-verify, 2026-09-28): FAITHFUL.** Both round-2 items resolved; nothing introduced. Aside kept for the plan: give the harness a make-runnable command so `make figures` can re-run the recorded figures.
