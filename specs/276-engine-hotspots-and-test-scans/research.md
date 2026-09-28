@@ -111,8 +111,8 @@ finding to diagnose, not a report.
 
 **The result** (`pool-after.json`, written by `pool_counts.py` from the manifests the green gate of 2026-09-28 left):
 every hamlet seats the households it asks for - Inashiro 15, Kashikawa 20, Kuwabata 16, Mizuguchi 12, Sawada 19 - all
-nucleated, all plain houses, as before. Kuwabata is unchanged in every count. Paddy plots: Kashikawa 774 -> 786 (+1.6%),
-Sawada 810 -> 804 (-0.7%), the rest equal; dry plots Kashikawa 22 -> 27, Sawada 28 -> 25; flooded plots equal on every
+nucleated, all plain houses, as before. Kuwabata is unchanged in every count. Paddy plots: Kashikawa 774 -> 786 (+1.6%, observed 2026-09-28, method: pool_counts.py over the manifests),
+Sawada 810 -> 804 (-0.7%, observed 2026-09-28, pool_counts.py), the rest equal; dry plots Kashikawa 22 -> 27, Sawada 28 -> 25; flooded plots equal on every
 map. Lane records: Inashiro 11 -> 13, Kashikawa 14 -> 13, Mizuguchi 9 -> 10, Sawada 11 -> 14. The lanes move because
 `seg_intersect` now bounds both segments: before, a candidate track crossing the infinite extension of a water or crop
 edge was refused on a crossing that was not there, so the stage settled for another route - Inashiro's connector left
