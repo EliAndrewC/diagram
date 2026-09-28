@@ -224,26 +224,23 @@ class CompoundGarden(Kind):
     key = "garden"
 
 
-class RearGarden(Kind):
+class RearYard(Kind):
     """
-    What: A garden behind the house, in the house's shade, between it and the household's storehouses.
+    What: The open ground behind the house, between it and the household's storehouses: working ground, not a garden.
 
-    Why: At the Higuchi house at Matsushiro a garden lies behind the main house, and the storehouse stands beyond it;
-    the formal garden took the sunny south, and the ground behind the house carried the household's own buildings.
+    Why: At the Higuchi house at Matsushiro the storehouse stands beyond the ground behind the main house; the source's
+    word for that ground, niwa, is a yard as much as a garden, and the formal garden took the sunny south.
 
-    Note: A garden behind the house, with the storehouse beyond it, follows the record, and the map draws it as open
-    garden ground. What grew in a rear garden is a guess: no source read describes one's planting.
+    Note: Open ground behind the house, with the storehouse beyond it, follows the record, drawn as the court's own earth.
 
-    Caveat: What grew in a rear garden is a guess: no source read describes one's planting.
-
-    Name: rear garden
-    Covers: the rear garden and its label
+    Name: rear yard
+    Covers: the rear yard and its label
     Label: accurate
     Sources: kojodan-higuchi, matsushiro-kankou-higuchi
     Entry: research/buildings.html - 'The shady rear is the service strip'
     """
 
-    key = "rear garden"
+    key = "rear yard"
 
 
 class VegetableGarden(Kind):
