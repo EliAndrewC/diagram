@@ -255,7 +255,9 @@ The sections owed a correction by another feature's findings are edited here bec
 
 ## Queue order
 
-New-question groups first, since they touch no fragment 265's unpushed sweeps edited. The audit's priority runs:
+New-question groups first. A1 and R1 are NOT such groups, though this order ran them as ones: A1 edits archetypes 140
+and 170-173 and R1 religion-and-death 160-206, so each belonged after 265's landing (plan D2 records the early run and
+the check that nothing of main's was dropped). The audit's priority runs:
 H1 (five guess kinds on every live hamlet), V1 (blocks a placer fix), H2 (knob candidates with measured defects
 waiting), F1, W1. Then F2, V2, A1, R1. Then the edit-existing groups, after a sync from main and 265's landing: H3, F3, W2,
 A2, S1, R2, C1, C2, C3, C4, X1.

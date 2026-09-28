@@ -1,88 +1,87 @@
 {
  "feature": "269-research-backfill",
- "plan_sha256": "a5610cf4d383869cfeb362892a4b8a9f3d118d61357f01f94f871c80cd23c97f",
+ "plan_sha256": "71e69016f1e667f6b3756cd5bab158191f941cb6b901f5db0ca3169f14be73c1",
  "reviewed": "2026-09-28",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "D1",
-   "summary": "Research runs in fresh headless page sessions from briefs (briefs/gen.py), write then checks, two questions a check session, check briefs queued as then: steps",
+   "summary": "Research runs in fresh headless page sessions from briefs (briefs/gen.py), write then checks, check briefs queued as then: steps",
    "class": "within",
-   "why": "Unchanged since round 1. Carries FR-005 (the feature 250 procedure) and the request's 'plug away in the background'."
+   "why": "Unchanged since round 1. FR-005 and the request's 'plug away in the background'."
   },
   {
    "id": "D2-queue",
    "summary": "One serial queue in this clone; then:sync.sh merges main between groups, a conflict aborted and the queue carries on",
    "class": "within",
-   "why": "Unchanged since round 1. The spec's Edge Cases state exactly this."
+   "why": "Unchanged. The spec's Edge Cases state exactly this."
   },
   {
    "id": "D2-wait265",
-   "summary": "then:wait265.sh holds the first edit-existing group until 265 has landed, with no time limit (round-1 cap removed in bbef245e0; wait265.sh now loops with no counter)",
+   "summary": "then:wait265.sh before EVERY group that edits an existing fragment (A1 and R1 named) waits, with no time limit, until 265's close 1c2797c99 is an ancestor of the clone's HEAD",
    "class": "within",
-   "why": "The round-1 NOT LEGITIMATE narrowing is fixed: plan.md D2 and wait265.sh wait unconditionally, which is what the Edge Cases rule asks. The ordering of groups relative to this barrier is ruled separately (D2-order)."
+   "why": "Round 2's D2-order narrowing is resolved: plan.md D2 now holds every edit-existing group, A1 and R1 included, and tests the CLONE (merge-base --is-ancestor 1c2797c99 HEAD), not origin/main - the Edge Cases' 'no group that edits an existing fragment starts until the clone has 265's landing', literally. wait265.sh does that: exits only on the ancestor test, loops every 600s with no counter. Measured 2026-09-28: the clone's HEAD now carries 1c2797c99, so the barrier holds for every remaining group."
   },
   {
-   "id": "D2-order",
-   "summary": "D2 adopts the inventory's Queue order, which places A1 and R1 among the 'new-question groups' ahead of the wait265 barrier on the premise that they 'touch no fragment 265's unpushed sweeps edited'",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "The Edge Cases rule is that NO group that edits an existing fragment starts until the clone has 265's landing. R1 edits existing fragments by its own inventory heading ('edits 160-206', inventory.md:131) and A1 edited archetypes 140 and 170-173 (c23242d21), yet both are queued before the barrier on an unmeasured premise. Measured 2026-09-28 (git merge-base --is-ancestor 1c2797c99): the clone lacked 265's close at A1 (c23242d21, 12:40), at R1 (a5adb5994, 13:22) and until the H3 sync-in merge 110004e58 (16:50), five hours after 265 reached main (07:38), because sync.sh exits without merging while the tree is dirty; that merge resolved a conflict on archetypes/170 by keeping A1's side over main's. That is the harm the rule exists to prevent (the request's 'not duplicating work'); nothing made compliance impossible and the GM's words imply no carve-out. Remedy: plan D2 must say that every group editing an existing fragment (A1 and R1 included) waits for the clone - not origin/main - to carry 265's landing, and record A1 and R1 as having run before it; and the fragments A1 and R1 edited are checked against main's side of 110004e58 (archetypes/170 first) so nothing main landed was dropped."
+   "id": "D2-asrun",
+   "summary": "D2 records that A1 (12:40) and R1 (13:22) ran before the clone had 265, which first arrived at merge 110004e58, and that every fragment both sides edited there keeps main's edits",
+   "class": "within",
+   "why": "A factual record of a past deviation, not a rule narrowing the request; it serves the request's 'not duplicating work' by checking nothing of 265's was lost. Re-run 2026-09-28 (word-diff of merge-base 7f283feb..110004e58^2 against 110004e58^2..110004e58 for each file both sides touched): the four registry entries keep main's translated titles (the merge differs from main only in Used-for lines); archetypes/170's fry line replaces main's 'attested and drawn, as a share of the ponds' with A1's 'drawn on the block's smallest parcels' plus a link to the new fry question - a later research finding superseding it, not a drop. Two further both-edited files D2's list omits, glossary 0910-azemichi.json and 4320-nucleated.json, also keep main's edits (the 'nawate' and 'nucleus'/'nuclei' variants are present); the conclusion 'nothing main had landed was dropped' holds."
   },
   {
    "id": "D3",
-   "summary": "Usage-limit survival: runner 4d13ad4f waits for the named reset (else 15/30/60 min) and --resumes, RETRIES=14; hourly CronCreate heartbeat restarts a dead queue and checks peers",
+   "summary": "Usage-limit survival: runner 4d13ad4f waits for the named reset (else 15/30/60 min) and --resumes up to 14 times; hourly CronCreate heartbeat restarts a dead queue and checks peers",
    "class": "within",
-   "why": "Unchanged since round 1. Carries FR-007 and the request's automatic resume."
+   "why": "Unchanged. FR-007 and the request's automatic resume."
   },
   {
    "id": "D4",
    "summary": "Peers checked each heartbeat via ListAgents against RESEARCH-CLAIMS.md; idle-with-unfinished-claims nudged and confirmed; busy peers not messaged; every check logged",
    "class": "within",
-   "why": "Unchanged since round 1. Carries FR-008, FR-011 and the request's 'check in on the other sessions'."
+   "why": "Unchanged. FR-008, FR-011 and 'check in on the other sessions'."
   },
   {
    "id": "D5",
    "summary": "Prefixes reserved through a byte copy of 265's reserve-prefix.py outside the repository, same lock and ledger",
    "class": "within",
-   "why": "Unchanged since round 1. Implements FR-005's host-wide-lock reservation."
+   "why": "Unchanged. FR-005's host-wide-lock reservation."
   },
   {
    "id": "D6",
-   "summary": "Each item ends in one of four outcomes, recorded in its handoff line and gathered into outcomes.md",
+   "summary": "Each item ends in one of four outcomes, in its handoff line and outcomes.md",
    "class": "within",
-   "why": "Unchanged since round 1. FR-001 and SC-001."
+   "why": "Unchanged. FR-001 and SC-001."
   },
   {
    "id": "D7",
    "summary": "Kinds and the generator follow each group's outcomes after its checks; map changes become seed-rolled knobs; a change past one feature's size goes to future-work with measurement, mechanism, sketch",
    "class": "within",
-   "why": "Unchanged since round 1. FR-003, FR-004 and the Edge Cases' overhaul case."
+   "why": "Unchanged. FR-003, FR-004 and the Edge Cases' overhaul case."
   },
   {
    "id": "D8",
    "summary": "Corrections owed to another feature's section sent to that session and listed in outcomes.md",
    "class": "within",
-   "why": "Unchanged since round 1. Edge Cases and FR-006."
+   "why": "Unchanged. Edge Cases and FR-006."
   },
   {
    "id": "D9",
    "summary": "The GM's items go through escalation-check",
    "class": "within",
-   "why": "Unchanged since round 1. FR-010."
+   "why": "Unchanged. FR-010."
   },
   {
    "id": "D10",
    "summary": "future-work closed out at the end",
    "class": "within",
-   "why": "Unchanged since round 1. FR-009 and SC-009."
+   "why": "Unchanged. FR-009 and SC-009."
   },
   {
    "id": "CC-XVI",
    "summary": "Every inventory item researched; B33 and B34 get research and the rulings stay the GM's",
    "class": "within",
-   "why": "Unchanged since round 1. FR-001 and the Edge Cases' B33/B34 line."
+   "why": "Unchanged. FR-001 and the Edge Cases' B33/B34 line."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
