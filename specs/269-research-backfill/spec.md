@@ -147,9 +147,9 @@ sizes, odds and weights each names as a guess are recorded as guesses at the poi
   toe; the 0.75/0.25 odds a guess (fields 160).
 - **B10 privy** - historically accurate: four attested seats; the per-hamlet weights a guess (homesteads 260).
 - **B11 night-soil pit** - historically accurate: a rolled share of pits at the field edge (homesteads 260).
-- **B12 bath** - historically accurate: 0-80% of households, in the front yard or joined by a corridor (homesteads 214).
-- **B13 hen coop** - historically accurate: the band centered on Buck's 82% (homesteads 215).
-- **B14 persimmon** - historically accurate: a 23 ft crown in the dooryard or behind the house, never on the flank
+- **B12 bath** - historically accurate: a share of households rolled per hamlet up to most of them, in the front yard or joined by a corridor (homesteads 214).
+- **B13 hen coop** - historically accurate: the band centered on Buck's farm survey share (homesteads 215).
+- **B14 persimmon** - historically accurate: the recorded crown, in the dooryard or behind the house, never on the flank
   (homesteads 218).
 - **B15 woodpile** - historically accurate: woodshed, kizuma along the windbreak, or eaves stack; the even odds a guess
   (homesteads 212).
@@ -160,14 +160,14 @@ sizes, odds and weights each names as a guess are recorded as guesses at the poi
 - **B18 house bearings** - historically accurate: a common bearing within 11.25 deg of south, each house following
   its lanes' margin, one in ten a quarter turn with its yard (the GM's 2026-09-26 ruling) (homesteads 240).
 - **B21 footbridge** - historically accurate: log, earth-decked log or plank; the even odds a guess (water 290).
-- **B22 weir and intake** - historically accurate: four weir forms (the fence's 1.5 ft a map drawing convention,
-  frame and crib 5 ft a guess) and a race that opens out of the bank with no gate (water 300, 310).
-- **B26 homestead woods** - historically accurate: 6,000-28,000 sq ft a homestead, the log-uniform roll a guess;
+- **B22 weir and intake** - historically accurate: four weir forms (the fence's thin bar a map drawing convention,
+  the frame and crib widths a guess) and a race that opens out of the bank with no gate (water 300, 310).
+- **B26 homestead woods** - historically accurate: each homestead keeps a wood in the recorded range, the log-uniform roll a guess;
   PARTIAL on three maps (future-work) (vegetation 210).
 - **B27 woodland siting** - historically accurate: beyond the fields and above them; the ridge/stream/path boundary a
   guess (vegetation 140).
-- **B28 coppice** - historically accurate: one crown per 64 sq ft; the crown width a guess (vegetation 230).
-- **B29 grove bamboo** - guess: 8% of the windbreak mix and the household stand's side weights (vegetation 260, 154).
+- **B28 coppice** - historically accurate: stocked at the recorded coppice density; the crown width a guess (vegetation 230).
+- **B29 grove bamboo** - guess: the bamboo's small share of the windbreak mix and the household stand's side weights (vegetation 260, 154).
 - **B30 windbreak belt** - historically accurate: conifer-led rows or mixed broadleaf, rolled (vegetation 270).
 - **B32 duck pen** - historically accurate: removed as a modern-only form, the GM's ruling of 2026-09-28; the ducks are
   written into the paddy's write-up (archetypes 210).
@@ -176,7 +176,7 @@ sizes, odds and weights each names as a guess are recorded as guesses at the poi
 - **B40 town alley** - historically accurate: beaten earth under a line of drain boards; the ground beside the boards
   a guess (cities/fabric 160).
 - **B42 retirement house** - historically accurate (the form): a rolled share of homesteads keeps one; the share and
-  the 18 x 15 ft size guesses (settlements 035).
+  the house size guesses (settlements 035).
 - **K1-K5 the kinds** - every changed modal was written from its `Entry:` sections and checked by `entry-drift`; the
   bath, coop and persimmon relabeled from guess to historically accurate.
 
