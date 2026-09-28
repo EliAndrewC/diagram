@@ -1012,6 +1012,7 @@ hidenin	hidenin
 high-volatile	volatiles
 hikae-no-ma	hikae-no-ma
 hikan	hikan
+hikioi	hikioi
 hikiri-ichi	hikiri-ichi
 hill-style	tsukiyama
 hinin	hinin
@@ -1461,6 +1462,7 @@ kuchidome bansho	kuchidome
 kuchidome guard post	kuchidome
 kuchidome guard posts	kuchidome
 kuchiireya	hitoyado
+kuchimai	kuchimai
 kui	kui
 kumi	kumi
 kumi-chi	kumi-chi

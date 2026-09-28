@@ -11088,5 +11088,17 @@
    "underdrains",
    "underdrained"
   ]
+ },
+ "kuchimai": {
+  "def": "A small rice surcharge collected with the land tax, which at first paid for an intendant's office.",
+  "variants": [
+   "kuchimai"
+  ]
+ },
+ "hikioi": {
+  "def": "An intendant's debt to the shogunate for tax he had collected and spent rather than passed on.",
+  "variants": [
+   "hikioi"
+  ]
  }
 }
