@@ -711,3 +711,27 @@ its seven pig sties and no pen. The dike-crop knob now rolls mulberry, fruit or 
 stays pinned to mulberry. The leftover knob lost its vegetable-ground form, and seed 21 now rolls `pond`: the whole block
 is dug, 29 ponds with no leftover parcel, where the three unconverted parcels drew as tilled rows before. The "What the
 GM's audit added" section above describes the map as it was on 2026-08-28.
+
+## 2026-09-28 (feature 269 landing): byres, fixtures, retirement houses, the belt and the duck pens' removal against main
+
+Against main's pre-269 manifest the houses hold at 16, but the byres changed both count and form: 7 now
+(`byre_form: courtyard`) against main's 4 (`detached_commons`). The lane web grew from 8 segments to 11. Farm
+fixtures now count 11 baths, 13 coops, 7 manure heaps, 14 privies, 1 shrine and 15 woodpiles (`farm_fixtures`),
+against main's 5, 11, 6, 15, 1 and 14. Seven retirement houses stand where main stood none (`family_form:
+retirement_house`, target 7, share 0.437). The copse holds 112 clumps against main's 27; the windbreak holds 178
+against main's 169 and now carries a rolled form, `windbreak_belt: mixed_broadleaf`, 416 broadleaf crowns and 29
+bamboo marks where main counted none. This map draws no woodland commons stand, on either manifest - a dike-pond
+hamlet by archetype, and the fan scan finds no open ground to take. It likewise draws no dry plot on either manifest
+(`field_archetype: mulberry_dike_fishpond`). Persimmons hold at 15. Main's manifest carried 2 duck pens (`duck_pens`,
+`ink_classes["duck pen"]`: 6); by the GM's 2026-09-28 ruling (269 B32, already recorded above at feature 269 E9) this
+map draws none, and its seven pig sties stand alone. Two knobs draw against their own roll: `woodpile_form` rolled
+`kizuma` but every one of the 15 drawn woodpiles is `eaves` (`woodpile_forms_drawn`); `bath_seat` rolled `front_yard`
+but every one of the 11 drawn baths is `unjoined` (`bath_seats_drawn`). The common house bearing sits near south
+(`house_bearing_deg` 5.44) with 2 of the 16 houses turned square to the lane instead (`house_quarter_turns`).
+
+**Homestead wood below the record's floor**: `meta.homestead_wood_ft2` reads `{"rolled": 13030, "drawn": 6441}` on
+this manifest - 441 sq ft ABOVE the research record's 6,000 sq ft floor (research/vegetation 210), not under it.
+future-work/farming-communities.md's OPEN 2026-09-28 (269 B26, PARTIAL) entry still names this map at "10,891 / 5,619
+(under the 6,000 floor)", the figure from the 269-landing commit before today's review round re-rolled the pool; that
+entry's Kuwabata figure is now stale and wants a re-measurement there. The entry's title still names three maps
+short of their rolled area, so it stays open regardless - this note only corrects Kuwabata's own number.

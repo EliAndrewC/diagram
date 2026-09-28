@@ -779,9 +779,34 @@ west of them - a south-row house walks about 1,000 ft to a bund 130 ft away - an
 houses is not settled by the record (one search, 2026-09-28, found nothing decisive); if both are attested it becomes a
 knob. The shared bamboo thicket stands 27 ft from the east marsh's reeds and reads as a pale tuft at fit zoom.
 
+SUPERSEDED 2026-09-28 (feature 269 landing): every figure in the paragraph above describes the pre-269 roll. Feature
+269 gave this map a footbridge form (`footbridge_form: log`) and the crossing question resolved itself: the manifest
+now draws 4 log footbridges (`bridges`, at (553, 1602), (792, 1648), (976, 1291) and (1160, 1059)) rather than the one
+plank and the unused ford above, and neither the (986, 743) plank nor the (1515, 738) ford is on the map as it now
+ships. The homestead bamboo thicket sits at (666, 1135), about 800-1,000 ft from either marsh polygon now, not 27 ft.
+The rolled `round` shape draws at an aspect of 1.27 (`cluster_aspect_drawn`), not the 1.51 above. The entrance board's
+offset from where the connector meets the lanes was not re-measured for this correction; read it fresh from
+`kosatsuba` and `lanes` rather than trusting either figure.
+
 ## 2026-09-28 (feature 269 B30): the belt rolls its form - conifer-led, in rows along the belt
 
 The village windbreak belt is now drawn in one of two forms, the `windbreak_belt` knob (research/vegetation/270): this map
 rolled `conifer_led` (meta.windbreak_belt), so its conifers stand in rows along the belt as drawn, seated before and painted
 over the lesser broadleaf and bamboo between them. The belt's record counts 272 conifer crowns, 106 broadleaf and 35 bamboo
 marks inked; no clump seat moved. Reviewed on Inashiro, the reference hamlet (docs/review-ledger.md).
+
+## 2026-09-28 (feature 269 landing): byres, retirement houses, the belt, the woodland stands and a knob that draws against its own roll
+
+Against main's pre-269 manifest the houses hold at 12, but the byres grew from 3 to 5 with their form unchanged
+(`byre_form: courtyard`). The lane web grew from 7 segments to 9. Farm fixtures now count 2 baths, 10 coops, 8 manure
+heaps, 11 privies, 1 shrine and 10 woodpiles (`farm_fixtures`), against main's 2, 9, 10, 11, none and 11 - main drew
+no household shrine at all. Five retirement houses stand where main stood none (`family_form: retirement_house`,
+target 5, share 0.398). The copse holds 41 clumps against main's 30; the windbreak holds 260 against main's 208 and
+now carries a rolled form, `windbreak_belt: conifer_led`, 220 conifer and 116 broadleaf crowns where main counted
+none. The woodland commons dropped from 2 stands to 1, which now carries 226 crowns against the 85 the two main
+stands carried between them. The dry hem draws 3 plots at 0.413 acre total against main's 16 plots at 2.51 acres.
+Persimmons fell to 10 from 12. `woodpile_form` rolled `eaves` and all 10 drawn agree; `bath_seat` rolled `corridor`
+but both of the 2 drawn baths are `unjoined` (`bath_seats_drawn`) - the rolled form and the drawn form agree on
+nothing here. The common house bearing sits near south (`house_bearing_deg` 7.46) with 1 of the 12 houses turned
+square to the lane instead (`house_quarter_turns`); the weir now carries a rolled form too (`weir_form: gabion`,
+against main's unset weir).

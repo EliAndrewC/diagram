@@ -112,7 +112,11 @@ names.*
 
 ### Features
 
-- **burial ground**: Kashikawa keeps its own ground, a glade of graves in the windbreak's south-west arm, beyond its last houses on the high side of the land; its field grave among the paddy is a single family's, a separate thing.
+- **burial ground**: Kashikawa keeps its own ground (`cemeteries`, `hamlet_burial: own_ground`), north-east of the
+  house cluster and just past the windbreak's east edge - the belt itself now stands north-west of the houses,
+  upwind of the regional northwest wind (`windbreak_belt: mixed_broadleaf`); its field grave among the paddy is a
+  single family's, a separate thing. (Rewritten 2026-09-28 from the current manifest after feature 269's landing
+  re-laid the house bearings and the belt: the ground no longer sits in a "south-west arm" the belt no longer draws.)
 - **grave island**: Kashikawa's field grave takes the Japanese form: a small mound with its stones in the corner of a rice plot, against its bunds, not an island in the plot's middle (each hamlet takes one form).
 
 ## 2026-09-27 - feature 267: the field grave is the corner form
@@ -968,9 +972,33 @@ pass, 2026-09-28, found the house-side plot of the record is the kitchen bed, re
 (hatake) crops go"), so the dry crops stand in the hem along the supply canal.
 Known open (settlement-review, 2026-09-28): the field path's tip turns back 126 degrees over its last 27 ft, a J-hook in
 the grass 17-43 ft off the paddy, left where a later pass dropped the field spur (`meta.field_spur_swept`).
+CLOSED 2026-09-28 (feature 269 landing): the current manifest carries no `meta.field_spur_swept` - this roll's field
+spur is drawn (`field_spur_ft` 99.7, against 92.6 on the swept roll above) rather than dropped, so the J-hook this
+bullet describes is not on the map as it now ships. The bullet is kept as the record of the roll that had it.
 
 ## 2026-09-28 (feature 269 B30): the belt rolls its form - mixed broadleaf
 
 The village windbreak belt is now drawn in one of two forms, the `windbreak_belt` knob (research/vegetation/270): this map
 rolled `mixed_broadleaf` (meta.windbreak_belt), the Chinese village grove's form - an irregular wood of rounded broadleaf
 crowns like the woods around it, with no conifer. The belt's record counts 732 broadleaf crowns and 71 bamboo marks; no clump seat moved.
+
+CORRECTED 2026-09-28 (feature 269 landing): today's review round re-laid the house bearings and re-rolled the pool,
+and the belt's clump seats moved with them - this map's windbreak now carries 289 clumps against the 579 the roll
+above counted, 753 broadleaf crowns and 60 bamboo marks (`village_groves[windbreak]`). "No clump seat moved" describes
+the roll this entry was written against, not the map as it currently ships; see the landing entry at the end of this
+file for the current counts.
+
+## 2026-09-28 (feature 269 landing): byres, fixtures, the belt and a knob that draws against its own roll
+
+Against main's pre-269 manifest the houses hold at 20, but the byres changed both count and form: 8 now
+(`byre_form: yard_shed`) against main's 4 (`detached_commons`). The lane web grew from 13 segments to 16. Farm
+fixtures now count 7 baths, 18 coops, 9 manure heaps, 17 privies, 1 shrine and 16 woodpiles (`farm_fixtures`),
+against main's 5, 13, 8, 15, none and 18 - main drew no household shrine at all. No retirement house stands here;
+the family knob rolled `one_roof` instead (`family_form`), the multi-generation form. The copse holds 221 clumps
+against main's 110; the two woodland commons stands (unchanged in count) now carry 1,034 crowns between them against
+main's 133. The dry hem still draws 27 plots, now tagged to their paddy tract (`dry_plots[].tract`, new), at 3.851
+acres total against main's 3.854 - effectively unchanged. Persimmons rose to 16 from 14. One knob draws flatly
+against its own roll: `woodpile_form` rolled `kizuma` but every one of the 16 drawn woodpiles is `eaves`
+(`woodpile_forms_drawn`); `bath_seat` rolled `corridor` and splits 3 corridor / 4 unjoined drawn. The common house
+bearing sits near south (`house_bearing_deg` -2.24) with 2 of the 20 houses - one in ten - turned square to the lane
+instead (`house_quarter_turns`).

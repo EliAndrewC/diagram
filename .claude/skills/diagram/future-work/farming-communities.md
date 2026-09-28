@@ -104,19 +104,57 @@ basin at the innermost arch. Measure: the region's area and canopy share, and fe
 edge crowns (no four within 2 ft of one line), against the hand-drawn Hoshigaoka grove (form `behind and sides`, feature 279), and the `LONG_RUN` bar (no
 stretch of edge 50 ft or longer within a crown's radius of one line).
 
-## OPEN 2026-09-28 (269 B26, PARTIAL): the homesteads' woods fall short of their rolled area on three maps
+## OPEN 2026-09-28 (269 B26, PARTIAL): the homesteads' woods fall short of their rolled area on every map
 
 The record gives the floor the old copse entry lacked: each homestead that keeps a wood keeps 6,000-28,000 sq ft of
 it (research/vegetation 210), and 269 E6 rolls it per homestead (log-uniform, a GUESS) and fills the copse to what the
 belt leaves of the sum (`homestead_parts/groves.py` `HOMESTEAD_WOOD_FT2`, `village_grove(area=)`, the `CanopyArea`
 raster, half- and quarter-step top-up passes). **Measurement** (`meta.homestead_wood_ft2`, rolled / drawn, the pool
-regenerated at the 269 landing): Inashiro 12,235 / 10,997, Kashikawa 16,662 / 9,164, Kuwabata 10,891 / 5,619 (under
-the 6,000 floor), Mizuguchi 14,691 / 10,754, Sawada 12,224 / 12,237. **Mechanism**: the copse may only seat within
-`COPSE_HOUSE_REACH_FT` (90 ft, feature 261's review ruling) and in the belt's lee, and on the three short maps that
-ground is used up - the quarter-step pass added only 14 clumps on Kuwabata. **Sketch**: either widen the reach for a
+regenerated after the landing's first review round, 2026-09-28): Inashiro 13,059 / 11,797, Kashikawa 11,523 / 9,645,
+Kuwabata 13,030 / 6,441 (just over the 6,000 floor; an earlier roll the same day drew 5,619, under it), Mizuguchi
+12,534 / 10,682, Sawada 13,422 / 10,952. **Mechanism**: the copse may only seat within `COPSE_HOUSE_REACH_FT` (90 ft,
+feature 261's review ruling) and in the belt's lee, and where that ground is used up the top-up passes find no seat -
+on the first landing roll the quarter-step pass added only 14 clumps on Kuwabata. A reviewer also found 22% of
+Kuwabata's copse crowns with every farmhouse within 110 ft on the far side of a lane: the reach measures distance and
+cannot see a lane between (research question: did a village lane ever run between a house and its own grove?). **Sketch**: either widen the reach for a
 homestead whose own ground is full (which undoes feature 261's ruling, so it is the GM's call), or seat the shortfall
 as a second stand behind the belt on the homestead's side; either way the check reads `drawn / rolled`, not a
 self-measured density (the old entry's lesson: a density on a self-measured extent cannot see a collapse).
+
+## OPEN 2026-09-28 (269 B07), RESEARCH OWED: a wild fan middle leaves a hamlet almost no dry field
+
+The settlement-reviews at the 269 landing: with `meta.fan_middle` = wild, `waterfields/comb.py` `fan_toe_hem` keeps the
+dry hem only on the toe's last third of the fall, and **Inashiro draws 2 dry plots (0.42 acre, from 20 plots and 3.64
+acres on main) and Mizuguchi 3 (0.41 acre, from 16 and 2.51)** - about 0.03 acre a household, while research/fields
+("Acreage from population") sizes the paddy on coarse grain being about a third of the diet. **Mechanism**: the knob
+removes the middle's hem and nothing places the dry band anywhere else. **The research question** (constitution XII, so
+no number is picked by eye): where did a fan-toe hamlet with a wild middle grow its coarse grain - on the raised ground
+the houses stand on, on a lower slope or levee, or as winter barley on the drained paddy (research/fields, "Did a paddy
+grow a second crop over the winter?")? **Sketch** once answered: the dry band goes to the named ground at the acreage
+the sizing rule leaves, or the winter crop is recorded and the sizing rule says so.
+
+## OPEN 2026-09-28: the rest of the 269 landing's settlement-review findings
+
+Each measured by the round-1 reviews (`docs/review-ledger.md`, 2026-09-28) on the maps as they stood before the round-1
+engine fixes; the round-2 reviews re-measure them.
+- **A lane end behind a house counts as its dooryard** (Kuwabata F1): `trim_lane_stubs`' dooryard is 12 ft of the drawn
+  house, yard or beds (269 B17), so a lane arriving at the back wall passes - lane 5 stopped 11 ft behind house 1, 43 ft
+  from its yard. Sketch: judge an END against the recorded yard and the front face only; E3 found a dooryard-only rule
+  stranded 4 Inashiro houses, so the lane web must then carry such an end round the gable.
+- **A rolled form the sheet never draws**: Kashikawa and Kuwabata roll `woodpile_form` kizuma and draw none (the belt is
+  never within 40 ft of a windward wall - `belt_near_vertices` fell from 115 to 8 on Kuwabata), and Mizuguchi rolls
+  `bath_seat` corridor and draws its baths unjoined. `meta.woodpile_forms_drawn` and `meta.bath_seats_drawn` now record
+  the truth. Sketch: offer a form only where a homestead can seat it (a kizuma only where the belt reaches), and let the
+  knob fall back per homestead to the next attested form rather than to the eaves stack.
+- **Eaves woodpiles standing off the wall** (Mizuguchi F2): 5 of 10 stacks 10.5-27.8 ft from any building, placed by the
+  feature-261 outward rungs. Sketch: for the eaves form try every wall of the steading's own buildings (shed, byre,
+  retirement house) at the wall gap before stepping out.
+- **Belt bamboo reads as grass** (Sawada F3, Mizuguchi N1): the culm marks share the scrub grass's size and yellow-green.
+  Sketch: draw the belt's bamboo as a small clustered stand, or in a culm color no grass uses.
+- **Coppice lots read as stamped discs** (Kashikawa F5, Sawada F4): the new stocking fills a near-round 12-sided outline
+  edge to edge. Sketch: bound a lot by what research/vegetation 140 names (a path, a stream, the slope) and roughen it.
+- **The burial ground beside the title placard** (Kashikawa F2): the glyph stood 23 ft left of the placard on its center
+  line and read as its ornament. Sketch: the title pocket treats feature glyphs and their clearings as keep-outs.
 
 ## OPEN 2026-09-28 (269 B16), A GM DECISION: the shared byre on the commons is still rolled, one map in ten
 

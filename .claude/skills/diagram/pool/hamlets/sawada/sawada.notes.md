@@ -954,3 +954,22 @@ about 25 ft behind a house's rear wall, the stub class recorded above.
 The village windbreak belt is now drawn in one of two forms, the `windbreak_belt` knob (research/vegetation/270): this map
 rolled `mixed_broadleaf` (meta.windbreak_belt), the Chinese village grove's form - an irregular wood of rounded broadleaf
 crowns like the woods around it, with no conifer. The belt's record counts 1,068 broadleaf crowns and 69 bamboo marks, with 99 clumps in the marsh drawn as alder as before; no clump seat moved.
+
+CORRECTED 2026-09-28 (feature 269 landing): the counts above are the earlier roll's. The manifest as it currently
+ships (`village_groves[windbreak]`) counts 567 broadleaf crowns, 44 bamboo marks and 187 clumps in the marsh drawn as
+alder - read straight off the belt's record rather than restated here again, since the last correction already went
+stale once.
+
+## 2026-09-28 (feature 269 landing): byres, fixtures, the belt and the dry hem against main
+
+Against main's pre-269 manifest the houses hold at 19 and the byres at 4 (`byre_form: detached_commons`, unchanged),
+and the lane web holds at 13 segments too. Farm fixtures now count 13 baths, 14 coops, 13 manure heaps, 17 privies, 1
+shrine and 17 woodpiles (`farm_fixtures`), against main's 9, 8, 14, 18, 1 and 16. No retirement house stands here;
+the family knob rolled `one_roof` (`family_form`). The copse holds 150 clumps against main's 46; the windbreak holds
+377 against main's 468 (see the correction above for its current crown and bamboo counts). The two woodland commons
+stands (unchanged in count) now carry 1,426 crowns between them against main's 168. The dry hem draws 30 plots at
+4.751 acres total against main's 27 plots at 4.68 acres. Persimmons fell to 16 from 17. `woodpile_form` rolled `shed`
+and all 17 drawn agree; `bath_seat` rolled `front_yard` but every one of the 13 drawn baths is `unjoined`
+(`bath_seats_drawn`). The common house bearing sits near south (`house_bearing_deg` -2.06) with 4 of the 19 houses
+turned square to the lane instead (`house_quarter_turns`) - more than the one-in-ten most maps draw, under the soft
+limit review round 1 gave this map's pile (+-30).

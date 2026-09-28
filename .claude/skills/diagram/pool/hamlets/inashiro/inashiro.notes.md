@@ -89,7 +89,10 @@ pipeline's, and it is the same order a person follows:
   from the slope and then re-read off the seat, which made the belt's side circular here. Every map now
   takes the northwest unless its spec declares a local wind (none does), and the cluster is seated with
   its back to it; this map's belt stands on the north and west of its houses.
-- **Dry hem plots run ~4.3x the size of Ikegami's** (20 plots, median 7,391 sq ft against 1,707; the largest of the four scripted hamlets with a hem - Kashikawa 5,919, Mizuguchi 6,263, Sawada 7,253, re-measured on the shipped manifests 2026-09-28 after main's feature 276 re-laid the pool. This bullet read "~3.5x" until a settlement-review re-measured it on the SHIPPED manifests, 2026-08-18: a standing known-open carries the current number or it is not a measurement) and chain single-file rather than packing two or
+- **Dry hem plots run ~4.3x the size of Ikegami's** - the pre-269 roll's figure (feature 269, 2026-09-28, redrew
+  the hem as 2 furrow tracts, one buckwheat at 7,773 sq ft and one millet at 10,674 sq ft, 0.42 acre total against
+  this bullet's 20 plots over 3.64 acres; the multiplier below no longer describes this map - see the landing entry
+  at the end of this file) (20 plots, median 7,391 sq ft against 1,707; the largest of the four scripted hamlets with a hem - Kashikawa 5,919, Mizuguchi 6,263, Sawada 7,253, re-measured on the shipped manifests 2026-09-28 after main's feature 276 re-laid the pool. This bullet read "~3.5x" until a settlement-review re-measured it on the SHIPPED manifests, 2026-08-18: a standing known-open carries the current number or it is not a measurement) and chain single-file rather than packing two or
   three deep, so the hem reads as large fields rather than household strips (`settlement-review`,
   2026-08-11). Parcel size, not acreage - the total is comparable. It wants a researched constant of
   its own.
@@ -1778,7 +1781,10 @@ southwest. The rolled crescent is drawn, at an aspect of 2.0. The plot a househo
 pass, 2026-09-28, found the house-side plot of the record is the kitchen bed, research/fields.html "Where dry
 (hatake) crops go"), so the dry crops stand in the hem along the supply canal, across the rice. The woodland commons are three stands, all of them across the field from the houses: the frame they
 must fit in begins 100 ft west of the houses, and the ground on the houses' side inside it lies between their keep-out
-and the field's set-back, too narrow for a stand.
+and the field's set-back, too narrow for a stand. (This describes the pre-269 roll: feature 269's coppice stocking,
+2026-09-28, restocked these same three stands to one crown per 64 sq ft - 1,659 crowns between them where this
+paragraph's roll drew 195 - and the dry crops now draw as 2 furrow tracts rather than discrete plots; see the
+landing entry at the end of this file.)
 
 ## 2026-09-28 (feature 269 B30): the belt rolls its form - conifer-led, in rows along the belt
 
@@ -1792,3 +1798,19 @@ Review log: settlement-review, DELTA, three rounds (2026-09-28). Round 1 caught 
 axis fitted to the whole crescent) and a later clump's broadleaf inked over an earlier clump's conifers; round 2 confirmed
 both fixed and caught the east tip left without rows (the crescent turns back on its principal axis there); round 3 passed.
 Each round recorded NOT-REVIEWABLE, the gate being red (`make done` is the landing session's).
+
+## 2026-09-28 (feature 269 landing): fixtures, byres, retirement houses, the belt and the dry hem against main
+
+Against main's pre-269 manifest the houses hold at 15 and the byres at 3 (`byre_form: detached_commons`, unchanged),
+but the lane web grew from 8 segments to 11 (a crossing cut into a junction, review round 1) and almost everything
+around the houses is new. Farm fixtures now count 6 baths, 13 coops, 8 manure heaps, 13 privies, 1 shrine and 13
+woodpiles (`farm_fixtures`), against main's 2, 12, 12, 12, 1 and 12. Ten retirement houses stand where main stood
+none (`family_form: retirement_house`, target 10, share 0.696). The copse holds 119 clumps against main's 57; the
+windbreak holds 331 against main's 327 but now carries a rolled form, `windbreak_belt: conifer_led`, and 254 conifer
+plus 123 broadleaf crowns where main counted none. The three woodland commons stands (unchanged in count) now carry
+1,659 crowns between them against main's 195, the coppice-stocking knob's one crown per 64 sq ft. Persimmons hold at
+12. The dry hem draws 2 plots (`dry_plots`: one buckwheat at 7,773 sq ft, one millet at 10,674 sq ft, 0.42 acre
+total) where main drew 20 over 3.64 acres - the Known open bullet above is corrected to this count. Two knobs draw
+against their own roll: `bath_seat` rolled `corridor` but `bath_seats_drawn` splits 3 corridor / 3 unjoined;
+`woodpile_form` rolled `eaves` and all 13 drawn agree. The common house bearing sits near south (`house_bearing_deg`
+-2.93) with 1 of the 15 houses turned square to the lane instead (`house_quarter_turns`).
