@@ -1696,6 +1696,8 @@ threshing yards	threshing yard
 threshing-yard	threshing yard
 throat	throat
 throats	throat
+through-lane	through-lane
+through-lanes	through-lane
 throwing	throwing
 tian'geng	bund
 tiangeng	bund

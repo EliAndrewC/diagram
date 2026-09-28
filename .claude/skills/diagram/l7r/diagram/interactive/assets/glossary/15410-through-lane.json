@@ -1,0 +1,8 @@
+{
+ "term": "through-lane",
+ "def": "A lane that runs on through a block or town from one road to another; a side lane that reaches it ends there instead of crossing it.",
+ "variants": [
+  "through-lane",
+  "through-lanes"
+ ]
+}
