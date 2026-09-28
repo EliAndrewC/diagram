@@ -376,6 +376,13 @@ def _touch_junctions(
             _dropped = 0
             _dropped_idx: list[int] = []
             for i in orphans:
+                # THE CONNECTOR IS NEVER DEBRIS (feature 284, cohort seed 15): it is the track out of the settlement, and a
+                # connector the web could not join serves no house of its own, so this pass deleted it - the hamlet shipped
+                # with no way off the map, and the reach check, which reads whatever network is left, passed. Kept, it is
+                # the broken piece the reach check names, and the roll's re-roll seats the houses where a way can reach
+                # them. `trim_lane_stubs` has always exempted it for the same reason.
+                if lanes[i].get("connector"):
+                    continue
                 _mine = list(zip(ways[i], ways[i][1:], strict=False))
                 _served = [h for h in _houses if _near(h, _mine) <= _SERVE_FT]
                 if all(_near(h, _others) <= _SERVE_FT for h in _served):

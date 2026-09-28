@@ -193,7 +193,10 @@ def test_an_end_is_NOT_moved_onto_a_junction_when_the_rewrite_rule_refuses(monke
     allowed = _StubSettlement(lanes=[list(ln) for ln in lanes], houses=[(150.0, 320.0)])
     allowed.M.setdefault("meta", {"ftpx": 1})
     T._touch_junctions(allowed, [], [], [])
-    assert len(allowed.M["lanes"]) == 2, "with the rule permitting, the ends run together and the three lanes become two"
+    # ...and the connector, which the web never meets, stays: its deletion as debris was what made this count two (feature
+    # 284 - cohort seed 15 shipped with no way off the map that way)
+    assert len(allowed.M["lanes"]) == 3 and allowed.M["lanes"][0].get("connector"), "the connector is never debris"
+    assert [tuple(p) for p in allowed.M["lanes"][2]["pts"]][0] == lanes[1][0], "with the rule permitting, the ends run together"
 
     monkeypatch.setattr(T, "may_write", lambda *_a, **_k: False)
     refused = _StubSettlement(lanes=[list(ln) for ln in lanes], houses=[(150.0, 320.0)])

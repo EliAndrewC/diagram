@@ -198,6 +198,55 @@ removes is not predicted), and every stage figure is the fastest of three with t
 | The notice board's candidates sampled every `24` px along a route, not `12`, kept only if faster | map drawing convention (the same rules and ranking; the board may stand a few feet along its verge) | FR-007 | point of change in `settlement/structures/fixtures/siting.py` |
 | Bamboo clumps may sit a little differently - taken only if the outward search misses SC-006's floor | map drawing convention (the same keep-outs and reach; coarser sampling) | FR-008 | point of change in `hamletgen/hinterland/bamboo.py` |
 
+## Amendment 1 (2026-09-28): what the measurements decided
+
+Each lever the spec made conditional was measured, and the measurements decided it; one lever the after-profile found is
+added under FR-011's own rule ("whatever the after-profile shows"). What changed from the accepted spec:
+
+- **FR-003 withdrawn by its own rule** (research R4): the first cell tried, 12 px, strands houses the 10 px lattice did not
+  (20 unreached over every attempt against 8; cohort seed 03 kept one through its re-roll), so the largest cell before it is
+  today's 10. The lattice is unchanged, the constant named (`ROUTE_CELL`) with the measurement at the point of change.
+- **FR-005 withdrawn by its own rule** (research R5): the plot tests' edge walk in arrays is 3.6 times slower than the
+  scalar walk over the same 3,310 calls on Sawada (0.312 s against 0.086 s), with the same verdicts; the vertices' pushes
+  total 0.024 s scalar, under the loss already measured.
+- **FR-006's "parses the rest once" not taken**: with the scrub's and the marsh's structures carried to the page, the
+  parsing of every other class together measured at most 0.09 s over Kashikawa and Sawada (research R2's classes); the page
+  bucket met SC-004 without it (2.75x on Sawada, 1.70x on Kashikawa, measure.py after).
+- **FR-007's coarser lattice withdrawn**: at 24 px the entrance board stood on a straggler at its join, the rule
+  `test_an_entrance_board_stands_on_the_approach_and_not_on_a_straggler_at_its_join` enforces, so the spacing stays 12 px
+  (the reason at `BOARD_ALONG_STEP_PX`). In its place an exact lever: at the lane tiers the roadside rule keeps only the
+  verge band whenever it holds a seat, so the verge band is sampled first and the rest only when it holds none - the same
+  candidates, in the same order (`VERGE_FIRST`, tested against the whole-band sampling).
+- **FR-008's coarser sampling taken**, as the spec required when the outward walk missed SC-006 on Mizuguchi (1.23x): the
+  bamboo seat lattice is 16 ft, not 8 (`BAMBOO_SEAT_STEP_FT`); the Decisions row already covers it.
+- **FR-014 (new, under FR-011): a stranding re-roll resumes at the seats.** The after-profile's costliest item that is not a
+  stage: a roll that strands a house pays a whole second build (eight of 29 base rolls; Kashikawa among the pool maps
+  after FR-004, below). The avoid list a re-roll carries is first read at `stage_homesteads`; the first roll keeps a copy of
+  itself before that stage and each re-roll resumes from a fresh copy. Exact: manifest, svg and page byte-identical to a
+  re-roll built from scratch on six re-rolling maps, each re-roll 1.1-1.7 s faster (research R8).
+- **FR-004 moved Kashikawa into a re-roll**: its field, fitted without the blind probe, lands within the same tolerance on
+  a different carve, and its first roll then strands one house, which the re-roll seats (observed 2026-09-28, method:
+  `strand/harness.py` - the base's `_fit_at_aspect` swapped in, the first roll strands none with either router). The rule
+  holds on the finished map; the cost is the re-roll, which FR-014 cuts to the stages from the seats on. Kashikawa's counts
+  below the seats are therefore two builds' against the base's one.
+- **The floors the measurement missed** (measure.py after, back to back, loads 3.8-5.0), each with why no allowed change
+  reaches it - SC-009's and SC-010's own exit:
+  - SC-007's `3x` on the edge-scan bucket (2.23x on Kashikawa per build, 2.34x on Kuwabata): `edge_dist` itself fell from
+    42,119 calls to 308 on Kashikawa; what the bucket still counts is the ring indexes' own queries beneath the four entries
+    and the track's push (now box-prefiltered too), under 0.15 profiled s.
+  - SC-009 on the grove draw (1.33x per build on Kashikawa), the seam closing (0.87x on Sawada, whose field FR-004 moved
+    to 822 pocket welds from 727) and the commons (0.97x per build on Kashikawa): research R7 - each is a sum of indexed
+    lookups or shapely welds of about a millisecond, with no scan left to index and the shapes the rule.
+- **SC-001** reads 1.35x: the five pool hamlets' summed roll time 24.15 s against the base's 32.564 s back to back
+  (m:after-pool-roll-s, m:base-rerun-pool-roll-s).
+
+| Decision | Class | Why | Recorded at |
+|---|---|---|---|
+| The router's lattice stays 10 px | map drawing convention (measured: every coarser cell tried strands a house) | research R4 | point of change in `hamletgen/ways/route.py` (`ROUTE_CELL`) |
+| The carve's rows stay scalar | map drawing convention (measured: arrays slower) | research R5 | this amendment |
+| The board's lattice stays 12 px; its verge band sampled first | map drawing convention (the same board; the coarser lattice broke the entrance rule) | this amendment | point of change in `settlement/structures/fixtures/siting.py` |
+| A stranding re-roll resumes from the first roll's copy before the seats | map drawing convention (exact: the same map) | research R8 | point of change in `hamletgen/driver.py` (`resume_at`, `resume`) |
+
 ## Assumptions
 
 - The seconds are taken back to back against the base worktree, fastest of three, with the load recorded; the counts are

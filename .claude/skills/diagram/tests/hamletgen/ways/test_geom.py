@@ -600,3 +600,20 @@ def test_shadow_share_of_a_one_point_lane_is_nothing() -> None:
     from l7r.diagram.hamletgen.ways.geom import shadow_share
 
     assert shadow_share([(10.0, 10.0)], [[(0.0, 0.0), (100.0, 0.0)]], 8.0) == 0.0
+
+
+def test_touch_junctions_never_drops_the_connector() -> None:
+    """The connector is the track off the map: stranded from the web and serving no house of its own, it is still kept -
+    deleting it shipped cohort seed 15 with no way out and a reach check that passed on what was left (feature 284)."""
+    from l7r.diagram.hamletgen.ways import _touch_junctions
+
+    s = _StubWeb(
+        lanes=[
+            {"pts": [[0.0, 0.0], [200.0, 0.0]], "w": 3},
+            {"pts": [[0.0, 900.0], [120.0, 900.0]], "w": 6, "connector": True},
+        ],
+        houses=[{"x": 60.0, "y": 5.0}],  # on the web, not on the connector
+    )
+    _touch_junctions(s, [], [], [], only_orphans=False)  # type: ignore[arg-type]
+    assert [ln.get("connector") for ln in s.M["lanes"]] == [None, True], "the connector stays, record and all"
+    assert not s.M["meta"].get("lane_fragments_dropped")
