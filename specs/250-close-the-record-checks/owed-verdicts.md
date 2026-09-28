@@ -209,3 +209,7 @@
 - OfficeHall (buildings SECTION=180): IN-STEP - the office-hall-largest departure is still labeled this project's reading
 - Residence (buildings SECTION=180): IN-STEP - only the office hall may out-measure it, still a reading
 - Stables (buildings SECTION=180): IN-STEP - the 2-4 horse stable and its stall figure are unchanged
+- Stream (water SECTION=010): IN-STEP - the creek's ~2 m, the moat-feeder ruling and the 0.3 m ditch's standing all still hold; 271 K7 changes (city-canal row, conghua citation) do not touch the brook
+- particulars.River (ways SECTION=040): REWRITTEN - Note and Caveat now say the tax rice's going by water is recorded (kashi-jawiki) and only heavy freight in general rests on general reading; kashi-jawiki added to Sources
+- particulars.RiverLanding (ways SECTION=040): IN-STEP - the narrowed tax-rice claim and the kashi sentence touch nothing the modal says
+- particulars.Dock (ways SECTION=040): IN-STEP - the modal's Why (freight by boat on navigable water) is the section's rule unchanged
