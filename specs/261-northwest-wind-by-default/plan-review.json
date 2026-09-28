@@ -1,6 +1,6 @@
 {
  "feature": "261-northwest-wind-by-default",
- "plan_sha256": "2acd4f230ee9f3cb426635900521e4e1edff3eb3da7fbe8393e041bb2f73f6c0",
+ "plan_sha256": "6c749e8a974d1c5e46365bd1dd4e9aa79250488147d3f95c71efa2c75af08f0a",
  "reviewed": "2026-09-28",
  "declared": "spec-fidelity",
  "decisions": [
@@ -33,7 +33,7 @@
    "id": "D4-seeds-original-kept-sawada-24",
    "summary": "Inashiro 4, Kuwabata 21, Kashikawa 3, Mizuguchi 23 kept; Sawada 6 -> 24 on the drain and wet toe; the pool test holds bearing and a 200-degree arc.",
    "class": "within",
-   "why": "Exactly the amended Edge Case and SC-008. No seed is moved to route around the engine. The citation nit (R5 for the belt) is fixed. Re-read 2026-09-28: unchanged. Its \"astride its brook (8 and 4)\" is R7's measurement at seed 23; Mizuguchi now seats all 12 on one bank after D18's belt-room tier, a seat moved for belt room, not refused for the brook (FR-012 holds)."
+   "why": "Exactly the amended Edge Case and SC-008. No seed is moved to route around the engine. Re-read 2026-09-28 after the wording fix: the plan now marks 'astride its brook (8 and 4)' as R7's measurement at seed 23 and states that D18's belt-room tier later seats all 12 on one bank - a seat moved for belt room, not refused for the brook (FR-012 holds). Class unchanged."
   },
   {
    "id": "D5-popup",
@@ -242,9 +242,9 @@
   },
   {
    "id": "D18j-belt-past-a-lane-unless-marsh",
-   "summary": "A belt stands its near face 12 ft beyond a lane that runs lengthwise inside its band (past_the_lanes), unless the moved band would stand in the marsh.",
+   "summary": "A belt stands its near face 12 ft beyond a lane that runs lengthwise inside its band (past_the_lanes), unless that would put the band's middle in the marsh; the band is not moved into the reeds' body, while crowns it already reaches at the reed edge are drawn as alder (D18l).",
    "class": "within",
-   "why": "A new fix of Kuwabata's finding (a lane halving the drawn belt). The 'unless marsh' limits that new fix, not anything the request or spec asks: FR-016's floor is the record's 30 ft minimum (spec Decisions Recorded row), which the band keeps. Its stated premise conflicts with D18l; see the aside in the verdict."
+   "why": "A new fix of Kuwabata's finding (a lane halving the drawn belt). The 'unless marsh' limits that new fix, not anything the request or spec asks: FR-016's floor is the record's 30 ft minimum (spec Decisions Recorded row), which the band keeps. Re-read 2026-09-28: the premise that conflicted with D18l is fixed - the plan now says the band is not moved INTO the reeds' body while its reed-edge crowns are alder, which agrees with D18l and the new spec Decisions row. Class unchanged."
   },
   {
    "id": "D18k-front-row-water-push-and-quarter-pitch-tries",
@@ -256,7 +256,7 @@
    "id": "D18l-belt-crowns-on-the-toe-marsh-drawn-as-alder",
    "summary": "A windbreak crown seated in a toe marsh is drawn as alder; holding the belt off the reeds removed Sawada's windward belt and failed its depth test; the carr along the rest of the toe is not built.",
    "class": "within",
-   "why": "This keeps the requested thing (a NW belt on every map, FR-006, on Sawada whose NW is its wet toe) rather than narrowing it; the belt had no marsh rule before (FR-010 intact). Not building the carr elsewhere narrows nothing asked. The research class is not this review's call, but R11 records the record silent on a windbreak grove running onto marsh; see the aside."
+   "why": "This keeps the requested thing (a NW belt on every map, FR-006, on Sawada whose NW is its wet toe) rather than narrowing it; the belt had no marsh rule before (FR-010 intact). Not building the carr elsewhere narrows nothing asked. Re-read 2026-09-28: the Sawada figure is updated to 201 alder clumps (m:sawada-r17-alder, re-run: the notes line it greps is present) with the 70-of-201 figure marked as that round's; the spec now carries a Decisions row labeling the species accurate and the windbreak-on-marsh question a GUESS (R11). Class unchanged."
   },
   {
    "id": "D18m-scrub-keepouts-per-farmstead",
