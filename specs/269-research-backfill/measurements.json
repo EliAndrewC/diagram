@@ -1,12 +1,182 @@
 {
-  "sr1-sawada-f1-bearing-spread": {"value": 10.1, "unit": "deg", "quantity": "the largest turn of a farmhouse that is not quarter-turned from Sawada's common bearing (meta.house_bearing_deg), 15 houses; none at or past 15 deg, where round 1 found 9 of 16 at the +-30 deg edge - after settlement/rolling/bearing.py read the margin's turn square to the house, faded its pull from 96 to 240 px off the margin, and replaced the clamp with a soft limit", "source": "pool/hamlets/sawada/sawada.json houses[].rot against meta.house_bearing_deg, folded to +-90 and kept under 45 deg, read 2026-09-28 at commit 56785773b", "observed": "2026-09-28", "subject": "sawada", "verifies": "F1", "answers": "935667dce1ea"},
-  "sr1-sawada-f2-belt-counts": {"value": 567, "unit": "crowns", "quantity": "the broadleaf crowns the notes' B30 entry now states for the belt, read from the manifest's village_groves windbreak record (with 44 bamboo marks and 187 marsh clumps), replacing the earlier roll's 1,068 / 69 / 99", "source": "pool/hamlets/sawada/sawada.notes.md line 959 against pool/hamlets/sawada/sawada.json, 2026-09-28", "observed": "2026-09-28", "subject": "sawada", "verifies": "F2", "answers": "935667dce1ea"},
-  "sr1-kuwabata-f3-woodpile-drawn": {"value": 15, "unit": "stacks", "quantity": "eaves stacks recorded in meta.woodpile_forms_drawn beside the rolled woodpile_form kizuma, so the manifest no longer claims a form the sheet does not draw (the placement shortfall is open in future-work)", "source": "pool/hamlets/kuwabata/kuwabata.json meta, 2026-09-28", "observed": "2026-09-28", "subject": "kuwabata", "verifies": "F3", "answers": "935667dce1ea"},
-  "sr1-kuwabata-f5-roadside-pits": {"value": 1, "unit": "pits", "quantity": "night-soil pits recorded seat roadside on the current roll (6 privy-side, 0 field_edge): a pit seated beside a lane is now recorded as the seat it took", "source": "pool/hamlets/kuwabata/kuwabata.json farm_fixtures[kind=manure].seat, 2026-09-28", "observed": "2026-09-28", "subject": "kuwabata", "verifies": "F5", "answers": "935667dce1ea"},
-  "sr1-kuwabata-f7-wood-floor": {"value": 6441, "unit": "sq ft", "quantity": "meta.homestead_wood_ft2 drawn on the current roll, above the record's 6,000 floor (round 1 read 5,619); the shortfall against the roll stays open in future-work", "source": "pool/hamlets/kuwabata/kuwabata.json meta.homestead_wood_ft2, 2026-09-28", "observed": "2026-09-28", "subject": "kuwabata", "verifies": "F7", "answers": "935667dce1ea"},
-  "sr1-mizuguchi-f1-bath-drawn": {"value": 2, "unit": "baths", "quantity": "baths recorded unjoined in meta.bath_seats_drawn beside the rolled bath_seat corridor, so the manifest no longer claims a form the sheet does not draw (the placement shortfall is open in future-work)", "source": "pool/hamlets/mizuguchi/mizuguchi.json meta, 2026-09-28", "observed": "2026-09-28", "subject": "mizuguchi", "verifies": "F1", "answers": "935667dce1ea"},
-  "sr1-mizuguchi-f6-notes": {"value": 1, "unit": "entries", "quantity": "the feature-261 Known-open paragraph marked SUPERSEDED with the current roll's figures (4 log footbridges, aspect 1.27) and a 2026-09-28 feature 269 entry added", "source": "pool/hamlets/mizuguchi/mizuguchi.notes.md line 782, 2026-09-28", "observed": "2026-09-28", "subject": "mizuguchi", "verifies": "F6", "answers": "935667dce1ea"},
-  "sr1-inashiro-f2-notes": {"value": 2, "unit": "tracts", "quantity": "the dry hem's furrow tracts the notes' Known-open bullet now states (0.42 acre), replacing the earlier roll's 20 plots; a 2026-09-28 feature 269 entry added", "source": "pool/hamlets/inashiro/inashiro.notes.md line 93, 2026-09-28", "observed": "2026-09-28", "subject": "inashiro", "verifies": "F2", "answers": "935667dce1ea"},
-  "sr1-kashikawa-f1-burial-text": {"value": 1, "unit": "entries", "quantity": "the Features entry for the burial ground rewritten from the manifest's cemeteries record and belt (north-east of the cluster, past the belt's east edge), which the page's burial-ground card prints", "source": "pool/hamlets/kashikawa/kashikawa.notes.md line 115, 2026-09-28", "observed": "2026-09-28", "subject": "kashikawa", "verifies": "F1", "answers": "935667dce1ea"},
-  "sr1-kashikawa-f3-notes": {"value": 1, "unit": "entries", "quantity": "a 2026-09-28 feature 269 entry added, the B30 entry's 'no clump seat moved' corrected and the J-hook Known-open closed (meta.field_spur_swept is not set)", "source": "pool/hamlets/kashikawa/kashikawa.notes.md, 2026-09-28", "observed": "2026-09-28", "subject": "kashikawa", "verifies": "F3", "answers": "935667dce1ea"}
+ "sr1-sawada-f1-bearing-spread": {
+  "value": 10.1,
+  "unit": "deg",
+  "quantity": "the largest turn of a farmhouse that is not quarter-turned from Sawada's common bearing (meta.house_bearing_deg), 15 houses; none at or past 15 deg, where round 1 found 9 of 16 at the +-30 deg edge - after settlement/rolling/bearing.py read the margin's turn square to the house, faded its pull from 96 to 240 px off the margin, and replaced the clamp with a soft limit",
+  "source": "pool/hamlets/sawada/sawada.json houses[].rot against meta.house_bearing_deg, folded to +-90 and kept under 45 deg, read 2026-09-28 at commit 56785773b",
+  "observed": "2026-09-28",
+  "subject": "sawada",
+  "verifies": "F1",
+  "answers": "935667dce1ea"
+ },
+ "sr1-sawada-f2-belt-counts": {
+  "value": 567,
+  "unit": "crowns",
+  "quantity": "the broadleaf crowns the notes' B30 entry now states for the belt, read from the manifest's village_groves windbreak record (with 44 bamboo marks and 187 marsh clumps), replacing the earlier roll's 1,068 / 69 / 99",
+  "source": "pool/hamlets/sawada/sawada.notes.md line 959 against pool/hamlets/sawada/sawada.json, 2026-09-28",
+  "observed": "2026-09-28",
+  "subject": "sawada",
+  "verifies": "F2",
+  "answers": "935667dce1ea"
+ },
+ "sr1-kuwabata-f3-woodpile-drawn": {
+  "value": 15,
+  "unit": "stacks",
+  "quantity": "eaves stacks recorded in meta.woodpile_forms_drawn beside the rolled woodpile_form kizuma, so the manifest no longer claims a form the sheet does not draw (the placement shortfall is open in future-work)",
+  "source": "pool/hamlets/kuwabata/kuwabata.json meta, 2026-09-28",
+  "observed": "2026-09-28",
+  "subject": "kuwabata",
+  "verifies": "F3",
+  "answers": "935667dce1ea"
+ },
+ "sr1-kuwabata-f5-roadside-pits": {
+  "value": 1,
+  "unit": "pits",
+  "quantity": "night-soil pits recorded seat roadside on the current roll (6 privy-side, 0 field_edge): a pit seated beside a lane is now recorded as the seat it took",
+  "source": "pool/hamlets/kuwabata/kuwabata.json farm_fixtures[kind=manure].seat, 2026-09-28",
+  "observed": "2026-09-28",
+  "subject": "kuwabata",
+  "verifies": "F5",
+  "answers": "935667dce1ea"
+ },
+ "sr1-kuwabata-f7-wood-floor": {
+  "value": 6441,
+  "unit": "sq ft",
+  "quantity": "meta.homestead_wood_ft2 drawn on the current roll, above the record's 6,000 floor (round 1 read 5,619); the shortfall against the roll stays open in future-work",
+  "source": "pool/hamlets/kuwabata/kuwabata.json meta.homestead_wood_ft2, 2026-09-28",
+  "observed": "2026-09-28",
+  "subject": "kuwabata",
+  "verifies": "F7",
+  "answers": "935667dce1ea"
+ },
+ "sr1-mizuguchi-f1-bath-drawn": {
+  "value": 2,
+  "unit": "baths",
+  "quantity": "baths recorded unjoined in meta.bath_seats_drawn beside the rolled bath_seat corridor, so the manifest no longer claims a form the sheet does not draw (the placement shortfall is open in future-work)",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json meta, 2026-09-28",
+  "observed": "2026-09-28",
+  "subject": "mizuguchi",
+  "verifies": "F1",
+  "answers": "935667dce1ea"
+ },
+ "sr1-mizuguchi-f6-notes": {
+  "value": 1,
+  "unit": "entries",
+  "quantity": "the feature-261 Known-open paragraph marked SUPERSEDED with the current roll's figures (4 log footbridges, aspect 1.27) and a 2026-09-28 feature 269 entry added",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.notes.md line 782, 2026-09-28",
+  "observed": "2026-09-28",
+  "subject": "mizuguchi",
+  "verifies": "F6",
+  "answers": "935667dce1ea"
+ },
+ "sr1-inashiro-f2-notes": {
+  "value": 2,
+  "unit": "tracts",
+  "quantity": "the dry hem's furrow tracts the notes' Known-open bullet now states (0.42 acre), replacing the earlier roll's 20 plots; a 2026-09-28 feature 269 entry added",
+  "source": "pool/hamlets/inashiro/inashiro.notes.md line 93, 2026-09-28",
+  "observed": "2026-09-28",
+  "subject": "inashiro",
+  "verifies": "F2",
+  "answers": "935667dce1ea"
+ },
+ "sr1-kashikawa-f1-burial-text": {
+  "value": 1,
+  "unit": "entries",
+  "quantity": "the Features entry for the burial ground rewritten from the manifest's cemeteries record and belt (north-east of the cluster, past the belt's east edge), which the page's burial-ground card prints",
+  "source": "pool/hamlets/kashikawa/kashikawa.notes.md line 115, 2026-09-28",
+  "observed": "2026-09-28",
+  "subject": "kashikawa",
+  "verifies": "F1",
+  "answers": "935667dce1ea"
+ },
+ "sr1-kashikawa-f3-notes": {
+  "value": 1,
+  "unit": "entries",
+  "quantity": "a 2026-09-28 feature 269 entry added, the B30 entry's 'no clump seat moved' corrected and the J-hook Known-open closed (meta.field_spur_swept is not set)",
+  "source": "pool/hamlets/kashikawa/kashikawa.notes.md, 2026-09-28",
+  "observed": "2026-09-28",
+  "subject": "kashikawa",
+  "verifies": "F3",
+  "answers": "935667dce1ea"
+ },
+ "sr2-inashiro-f1-caption-gap": {
+  "value": 49.6,
+  "unit": "ft",
+  "quantity": "the gap between the notice-board caption's top edge and the burial ground's bottom edge on the current roll (the round-2 roll had the caption 10 ft below the ground, centered on it); the caption stands beside its own board",
+  "source": "pool/hamlets/inashiro/inashiro.json labels['notice board'] and cemeteries[0], read 2026-09-28 from the gated roll at commit 881af6a9b",
+  "observed": "2026-09-28",
+  "subject": "inashiro",
+  "verifies": "F1",
+  "answers": "b42b3ab1963b"
+ },
+ "sr2-kashikawa-f1-card-prose": {
+  "value": 0,
+  "unit": "backticks",
+  "quantity": "manifest keys and change notes in the burial-ground Features entry the page prints, after it was rewritten as plain prose for the reader",
+  "source": "pool/hamlets/kashikawa/kashikawa.notes.md Features, burial ground, read 2026-09-28 from the gated roll at commit 881af6a9b",
+  "observed": "2026-09-28",
+  "subject": "kashikawa",
+  "verifies": "F1",
+  "answers": "b42b3ab1963b"
+ },
+ "sr2-kashikawa-f2-shrine-corner": {
+  "value": 44,
+  "unit": "ft",
+  "quantity": "the household shrine's offset south of its quarter-turned house (rot 93.6; offset -31 ft west, +44 ft south: the world SW corner, one of the three attested corners), now that the rolled compass corner is laid out in the world and carried into the house frame (`shrine_corner_local`)",
+  "source": "pool/hamlets/kashikawa/kashikawa.json farm_fixtures[kind=shrine] against its house, read 2026-09-28 from the gated roll at commit 881af6a9b",
+  "observed": "2026-09-28",
+  "subject": "kashikawa",
+  "verifies": "F2",
+  "answers": "b42b3ab1963b"
+ },
+ "sr2-kuwabata-f1-hairpin": {
+  "value": 0,
+  "unit": "hairpins",
+  "quantity": "joints on the current roll where two lanes meet end to end, or a lane turns over a leg under 25 ft, by more than 140 deg in total (the round-2 connector hairpin is gone once lanes are cut at crossings and the bearings re-laid)",
+  "source": "a scan of pool/hamlets/kuwabata/kuwabata.json lanes, read 2026-09-28 from the gated roll at commit 881af6a9b",
+  "observed": "2026-09-28",
+  "subject": "kuwabata",
+  "verifies": "F1",
+  "answers": "b42b3ab1963b"
+ },
+ "sr2-sawada-f1-belt-arm": {
+  "value": 0,
+  "unit": "clumps",
+  "quantity": "windbreak clumps in the old south-west arm's box (x under 540, y over 1790) after `trim_receding_ends` ends the belt at the column before one that falls back more than a belt's depth downwind",
+  "source": "pool/hamlets/sawada/sawada.json village_groves[windbreak].clumps, read 2026-09-28 from the gated roll at commit 881af6a9b",
+  "observed": "2026-09-28",
+  "subject": "sawada",
+  "verifies": "F1",
+  "answers": "b42b3ab1963b"
+ },
+ "sr2-mizuguchi-f1-spur-stub": {
+  "value": 0,
+  "unit": "ft",
+  "quantity": "the field spur's run past its own junction: it now starts at the junction (567.0, 1239.4) - `cut_past_the_junction` cut the 28 ft stub to the brook bank",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json lanes[spur], read 2026-09-28 from the gated roll at commit 881af6a9b",
+  "observed": "2026-09-28",
+  "subject": "mizuguchi",
+  "verifies": "F1",
+  "answers": "b42b3ab1963b"
+ },
+ "sr2-mizuguchi-f2-field-path": {
+  "value": 1,
+  "unit": "bridges",
+  "quantity": "bridges where the field path now crosses supply canal A on to the bund (at 620, 1349): an end at the bund with water between is carried over it (`a_way_onto_the_bund`, meta.field_path run_on) and the crossings stage bridges it",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json bridges and meta.field_path, read 2026-09-28 from the gated roll at commit 881af6a9b",
+  "observed": "2026-09-28",
+  "subject": "mizuguchi",
+  "verifies": "F2",
+  "answers": "b42b3ab1963b"
+ },
+ "sr2-mizuguchi-f4-title": {
+  "value": 0,
+  "unit": "fixtures",
+  "quantity": "farm fixtures inside the title pocket (255.9, 1627.4, 465.9, 1747.4) once `_title_obstacles` lists farm_fixtures, byres, farm_sheds and retirement_houses",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json meta.title_pocket against farm_fixtures, read 2026-09-28 from the gated roll at commit 881af6a9b",
+  "observed": "2026-09-28",
+  "subject": "mizuguchi",
+  "verifies": "F4",
+  "answers": "b42b3ab1963b"
+ }
 }

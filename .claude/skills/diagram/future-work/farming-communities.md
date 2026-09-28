@@ -148,7 +148,7 @@ engine fixes; the round-2 reviews re-measure them.
   `bath_seat` corridor and draws its baths unjoined. `meta.woodpile_forms_drawn` and `meta.bath_seats_drawn` now record
   the truth. Sketch: offer a form only where a homestead can seat it (a kizuma only where the belt reaches), and let the
   knob fall back per homestead to the next attested form rather than to the eaves stack.
-- **Eaves woodpiles standing off the wall** (Mizuguchi F2): 5 of 10 stacks 10.5-27.8 ft from any building, placed by the
+- **Eaves woodpiles standing off the wall** (Mizuguchi F2): 5 of 10 stacks 10.5-27.8 ft from any building (7 of 10 at 10.9-16.3 ft on the round-2 roll), placed by the
   feature-261 outward rungs. Sketch: for the eaves form try every wall of the steading's own buildings (shed, byre,
   retirement house) at the wall gap before stepping out.
 - **Belt bamboo reads as grass** (Sawada F3, Mizuguchi N1): the culm marks share the scrub grass's size and yellow-green.
