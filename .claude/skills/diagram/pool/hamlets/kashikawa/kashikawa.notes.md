@@ -100,7 +100,7 @@ beyond the frame.
 *Hirose (広瀬, "broad rapids") is INVENTED for this map - drawn from gm-assistant's
 `place-names/pool.jsonl`, which carries its kanji and meaning, and not ruled on by the GM. The
 DIRECTION is not invented: it is the bearing of this map's own connector track where it leaves the
-cluster - compass 14 deg, north (measured 2026-09-27).*
+cluster - compass 5 deg, north (measured 2026-09-28, after main's feature 276 re-laid the map).*
 
 *It was Kawakami (川上, "upstream") until settlement-review measured the two against each other on
 2026-08-29: this land falls to the north-east, so upstream is roughly the opposite way from the
@@ -964,3 +964,6 @@ ground, passed by all 20 households' ways out. The rolled `elongated` shape is n
 gather as a round cloud, a drawn aspect of 1.61 - and the manifest records it as unhonored rather than claiming it.
 Fourteen homesteads carry their own dry plot against a lee or flank side or on the ground beside it, so a house's nearest
 dry ground lies a median 81 ft away.
+Known open (settlement-review, 2026-09-28): the field path's tip turns back 126 degrees over its last 27 ft, a J-hook in
+the grass 17-43 ft off the paddy, left where a later pass dropped the field spur (`meta.field_spur_swept`); and woodland
+stand 8 at (911, 2849), at 39% canopy with its east side open, reads as a ring rather than a stand at fit zoom.

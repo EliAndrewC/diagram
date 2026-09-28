@@ -773,3 +773,8 @@ their own dry plot, against a lee or flank side or, where the packed steadings l
 beside it, so a house's nearest dry ground lies a median 80 ft away. No household fixture stands across a lane from its
 house, and none goes unseated: the north-row house with a lane at its back and east wall stands its stack and its
 persimmon straight out from its walls, past its yard.
+Known open (settlement-review, 2026-09-28): the houses reach their rice by the one plank at (986, 743), about 390 ft
+west of them - a south-row house walks about 1,000 ft to a bund 130 ft away - and the ford the engine opened at
+(1515, 738) carries no way. Whether a hamlet across a stream from its paddies kept one crossing or one per reach of
+houses is not settled by the record (one search, 2026-09-28, found nothing decisive); if both are attested it becomes a
+knob. The shared bamboo thicket stands 27 ft from the east marsh's reeds and reads as a pale tuft at fit zoom.

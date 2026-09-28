@@ -632,7 +632,7 @@ gray-green boundary line beside the brown bund it runs against. It is a dark sla
 thirds of the way from the supply in value.
 
 **The notice board came out of the belt**, where a crown center stood 1.8 ft from it and 58% of the ground within 8 ft
-of the plank was canopy. It stood clear of the drawn canopy then - by 0.6 ft, the tightest seat in the pool; since feature 261 its caption lies over a crown (the 2026-09-27 entry below) - on the same entrance seat. The earlier figure here said 6.6 ft, which was measured against the grove's clump BASES and its one nominal radius; a clump draws several jittered crowns, and pass 13 measured their edges a median 16.3 ft past the base, so the probe now reads the drawn crowns themselves.
+of the plank was canopy. It stood clear of the drawn canopy then - by 0.6 ft, the tightest seat in the pool; later in feature 261 its caption lay over a crown for a time, and it now stands on clear ground (the 2026-09-27 entry below) - on the same entrance seat. The earlier figure here said 6.6 ft, which was measured against the grove's clump BASES and its one nominal radius; a clump draws several jittered crowns, and pass 13 measured their edges a median 16.3 ft past the base, so the probe now reads the drawn crowns themselves.
 
 **What did not change, and why**: the brook's ruled middle reach. Widening the walk was measured a third time (wander
 10 -> 18 on a longer step, the frame margin opened to hold it) and moves the straightest 12-vertex run by under a pixel,
@@ -942,3 +942,7 @@ the drain leaves by the west edge, the brook by the top. The copse keeps within 
 The rolled `elongated` shape is not what this seat draws - a drawn aspect of 1.92, inside the round form's ceiling of 2 -
 and the manifest records it as unhonored rather than claiming it. Twelve homesteads carry their own dry plot against a
 lee or flank side or on the ground beside it, so a house's nearest dry ground lies a median 99 ft away; the ranks of this accretion-form hamlet (`lane_web: alleys`) stand off their exact lines by up to an eighth of a pitch either way (`RANK_DEPTH_JITTER`).
+Known open (settlement-review, 2026-09-28): five of the seven homestead bamboo stands are inked over a copse crown, so
+at fit zoom their culms read as grass under a tree - a draw-order question, since bamboo among the homestead's trees is
+the attested yashiki-rin form; one homestead dry plot (228, 1801) lies 14% under the belt's crowns; and lane 11 stops
+about 25 ft behind a house's rear wall, the stub class recorded above.

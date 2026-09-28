@@ -483,8 +483,7 @@ want to route around deficiencies in our placement algorithm... we should fix th
   the steading, out from each lee or flank side and along it every 15 ft to 90 ft, never upwind of the steading
   (`beside_the_steading`): a plot there fouled the belt, and the belt's fit steps back from any crop (Sawada's belt
   fell to 703 crowns in two pieces on the roll before that rule, observed 2026-09-28 on a roll not committed). Medians now 70-99 ft (`m:dry-r22-median`).
-- **A yard tree and a stack unseated** (the persimmon's ring a map drawing convention; the straight seats a GUESS,
-  labeled - the record plants persimmons "round the homestead" and a stack at "whichever wall is free"). The plot
+- **A yard tree and a stack unseated** (the persimmon's ring and the straight seats a GUESS, labeled - the record plants persimmons "round the homestead" and a stack at "whichever wall is free"). The plot
   laid flush took the last open ground round Mizuguchi's north-row house, a lane at its back and east wall, and its
   woodpile and persimmon went unseated. A plot keeps clear of the ring the house's yard persimmon's trunk stands on
   (a crown may overhang a plot, a trunk may not stand in one - `_trunk_blocked`); the fixture ring's last resort adds
