@@ -32,6 +32,9 @@ import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field, replace
 from pathlib import Path
 
+from shapely.geometry import Polygon
+from shapely.ops import unary_union
+
 from l7r.diagram.labels import Obstacle, ObstacleIndex, Placement, Subject, Way, place
 from l7r.diagram.labels.geom import Poly, Pt, bbox, inside, rect
 from l7r.diagram.labels.standard import CENTER_ABOVE_BASELINE_EM, CHAR_W_EM, CLEAR_EM, PITCH_EM, WEIGHT_OBSTACLE, WEIGHT_WAY, block_half
@@ -397,6 +400,7 @@ def subject_of(caption: Shape, shapes: list[Shape]) -> Subject | None:
     else:
         x0, y0, x1, y1 = bbox([p for s in own for p in s.poly])
         poly = [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
+        poly = stepped_subject(poly, own, caption.center)
     ang = math.degrees(math.atan2(poly[1][1] - poly[0][1], poly[1][0] - poly[0][0])) if len(poly) == 4 else 0.0
     area = inside(caption.center[0], caption.center[1], poly)
     # an elongated area is named ALONG its length, as a map names a river band (feature 267: Hayakawa's river, a tall
@@ -404,6 +408,27 @@ def subject_of(caption: Shape, shapes: list[Shape]) -> Subject | None:
     x0, y0, x1, y1 = bbox(poly)
     along = 90.0 if area and (y1 - y0) > ELONGATED * max(x1 - x0, 1e-9) else 0.0
     return Subject("area" if area else "point", tuple(poly), angle=along if area else ang)
+
+
+BLOCK_PX = 2000.0
+"""A part big enough to be a block of a building (about 220 sq ft): a notice board's legs, a sanctuary's steps or a mat
+are parts of one thing, not blocks that can stand in echelon."""
+STEPPED = 0.85
+"""How much of its box a multi-part subject must fill to be named against the box: under it the parts leave an empty
+corner (Hayakawa's residence, two blocks in echelon), and a caption and its leader set against the box land in that
+corner, on nothing (feature 283 - RESIDENCE's leader ended 4 ft short of the house, under INNER COURT)."""
+
+
+def stepped_subject(box: Poly, own: list[Shape], at: Pt) -> Poly:
+    """The outline a caption outside a multi-part subject is set against: the parts' box where they fill it, else the
+    largest part - a caption beside one block of a stepped house names the house, and a leader to it ends on it."""
+    blocks = [s for s in own if s.tag == "rect" and _area(s.poly) >= BLOCK_PX]
+    if len(blocks) < 2 or inside(at[0], at[1], box):
+        return box
+    x0, y0, x1, y1 = bbox([p for s in blocks for p in s.poly])
+    if unary_union([Polygon(s.poly) for s in blocks]).area >= STEPPED * (x1 - x0) * (y1 - y0):
+        return box
+    return list(max(blocks, key=lambda s: _area(s.poly)).poly)
 
 
 def cluster_of(seed: Shape, same: list[Shape], reach: float) -> list[Shape]:

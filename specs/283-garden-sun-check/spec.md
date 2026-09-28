@@ -95,8 +95,8 @@ and its reviews.
 ## Decisions Recorded
 
 - **The seats (accurate as seats, a guess that the sun chooses)**: research buildings 405. At Ochiba, Hayakawa and
-  Ubame the west and the rear are shaded by the kitchen and the residence, so each bed takes the south court beside the
-  formal garden, drawn as rows over it while the garden keeps its own shape (see Round 1 below); the Hoshigaoka
+  Ubame the west and the rear are shaded by the kitchen and the residence, so each bed takes the inner court's garden beside the
+  formal ground, drawn as rows over it while the garden keeps its own shape (see Round 1 below); the Hoshigaoka
   shrine's bed moved to the open ground below the forecourt, west of the approach (research
   homesteads 044).
 - **Ubame's bed at the size knob's low end (accurate)**: the only open ground in its walls with a sun bed's hours (research homesteads 044) holds about
