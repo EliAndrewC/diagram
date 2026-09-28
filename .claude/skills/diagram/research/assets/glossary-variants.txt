@@ -602,6 +602,7 @@ eel's-bed	eel's bed
 eel's-bed plot	eel's bed
 egune	igune
 egune's	igune
+eight trigrams	eight trigrams
 eighty-eighth night	eighty-eighth night
 eiro	eiro
 ekika	ekika
@@ -1768,6 +1769,8 @@ ni-no-ma	ni-no-ma
 ni-no-torii	ichi-no-torii
 nichiren	Nichiren
 nichiren sect	Nichiren
+nicho-ibi	Nichō-ibi
+nichō-ibi	Nichō-ibi
 night soil	night soil
 night watch	night watch
 night watches	night watch
@@ -2197,6 +2200,7 @@ sendai	Sendai
 sendai plain	Sendai
 sengisho	sengisho
 sengoku	Sengoku
+sengoku house	Sengoku house
 senmaida	senmaida
 sensei	sensei
 sento	sento
@@ -2625,6 +2629,8 @@ trebuchet	trebuchet
 trebuchets	trebuchet
 trevis	ox-shoeing frame
 tributary	tributary
+trigram	eight trigrams
+trigrams	eight trigrams
 true duty	water duty
 trunk streets	trunk street
 tsinan	Tsinan
@@ -2835,6 +2841,7 @@ wujing zongyao	Wujing Zongyao
 xiang	xiang
 xiang-gan	Xiang-Gan
 xuanhua arch	memorial arch
+xun	xun
 xunjiansi	xunjiansi
 yabusame	yabusame
 yacheng	yacheng

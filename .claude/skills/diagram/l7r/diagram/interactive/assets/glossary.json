@@ -11030,5 +11030,32 @@
    "gate-field",
    "gate fields"
   ]
+ },
+ "eight trigrams": {
+  "def": "The eight three-line figures of Chinese divination, each set at a compass position and linked to an element such as wind or water; house siting used them to judge which side of a compound was auspicious for its gate.",
+  "variants": [
+   "eight trigrams",
+   "trigram",
+   "trigrams"
+  ]
+ },
+ "xun": {
+  "def": "The trigram of wind, set at the southeast; in a courtyard house, the auspicious position for the main gate, letting in the mild southeast wind and shutting out the northwest wind of winter.",
+  "variants": [
+   "xun"
+  ]
+ },
+ "Nichō-ibi": {
+  "def": "The outlet sluice at Okinohata, at the seaward end of Yanagawa's canals. It is opened when the castle-town moat is drained, letting the moat's stored water out to the Ariake Sea.",
+  "variants": [
+   "Nichō-ibi",
+   "Nicho-ibi"
+  ]
+ },
+ "Sengoku house": {
+  "def": "The lords of Ueda domain, a family whose name is written 仙石. The name sounds the same as the Sengoku age of civil wars but is a different word.",
+  "variants": [
+   "Sengoku house"
+  ]
  }
 }
