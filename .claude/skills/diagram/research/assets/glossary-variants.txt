@@ -1555,6 +1555,8 @@ lingnan	Lingnan
 lion-dog	lion-dog
 lion-dogs	lion-dog
 lishe	gongxiefang
+litchi	litchi
+litchis	litchi
 littoral	littoral
 liuchu	liuchu
 loess	loess
@@ -1583,6 +1585,8 @@ luban ruler	Luban ruler
 luban rulers	Luban ruler
 lulu	lulu
 luocheng	luocheng
+lychee	litchi
+lychees	litchi
 machi	machi
 machi-bikeshi	machi-bikeshi
 machi-bugyo	town magistrate
@@ -1678,6 +1682,7 @@ mizugashira	mizugashira
 mizuguchi	mizuguchi
 mizujiri	shirimito
 mizuka	mizuya
+mizunara	mizunara
 mizunomi	mizunomi
 mizuya	mizuya
 mlit	MLIT

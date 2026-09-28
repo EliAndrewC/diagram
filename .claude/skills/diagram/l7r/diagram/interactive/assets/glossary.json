@@ -11184,5 +11184,20 @@
    "Kazusa",
    "Kazusa province"
   ]
+ },
+ "mizunara": {
+  "def": "A Japanese oak that, together with konara, made up most of Nagano's old fuel and charcoal woods, which were cut and let regrow from the stump.",
+  "variants": [
+   "mizunara"
+  ]
+ },
+ "litchi": {
+  "def": "A southern Chinese fruit tree, grown with the longan among a village's houses as dooryard fruit; its small round fruit has a rough red skin and sweet white flesh.",
+  "variants": [
+   "litchi",
+   "litchis",
+   "lychee",
+   "lychees"
+  ]
  }
 }
