@@ -46,14 +46,20 @@ and its reviews.
   heights it gives what casts shade - each with a source or a label (research homesteads 044).
 - **FR-002**: Where the sources support more than one kind of bed (sun crops, half-shade crops), the bed's kind MUST
   be a knob a sheet declares, with the sun bed the default.
-- **FR-003**: The sheet audit MUST gain a check, `garden_sun`, run on every hand-drawn sheet the audit reads, that
-  finds each drawn kitchen garden by its kind, casts the shadows of every drawn building, wall and tree over it through
-  the day of the record's season, and fails the sheet when the bed's lit hours fall under its kind's threshold. It MUST
-  report the hours, the threshold and the shade makers.
+- **FR-003**: The sheet audit MUST gain a check, `garden_sun`, run on every hand-drawn building sheet (the GM,
+  2026-09-28: "Sheets only" - the frozen settlement maps get the sun rules at their conversion to scripted generation),
+  that finds each drawn kitchen garden by its kind, casts the shadows of every drawn thing that stands up over it through
+  the day of the record's season, and fails the sheet when the bed's lit hours fall under its kind's threshold. What
+  stands up MUST be named by kind: every roofed building (a residence, a hall, a gatehouse, a granary, a stage, a bell
+  tower, a privy, a compound shrine), every wall, and every tree - a single crown, the crowns of a wood or grove, a
+  sacred tree; what does not (a basin, a well, a door, a veranda, a hearth, low furniture) MUST be listed with why. It
+  MUST report the hours, the threshold and the shade makers by kind.
 - **FR-004**: The check MUST be proved to fire on a frozen negative fixture (the shrine sheet as drawn before this
-  feature) and to pass a sheet whose garden is open, and MUST carry unit tests to the gate's coverage floor.
+  feature), its report naming the wood among the shade makers; to fail a bed shaded by trees alone (a unit test with no
+  building); and to pass a sheet whose garden is open, and MUST carry unit tests to the gate's coverage floor.
 - **FR-005**: The Hoshigaoka shrine's garden and the Ochiba, Hayakawa and Ubame magistracies' gardens MUST be
-  re-seated where the check passes (the GM, 2026-09-28: "Move them all"), a magistracy's preferring the west side of
+  re-seated where the check passes as ordinary sun beds, none declared half-shade (the GM, 2026-09-28: "Move them all";
+  the half-shade option was offered and not chosen), a magistracy's preferring the west side of
   its residence, the one side the record attests (research buildings 400); each sheet's notes, program checks and
   kinds stay true, and each sheet passes a `building-review`, ledgered. A shrine garden's place stays within the sheet's
   match to its village map.
@@ -72,7 +78,7 @@ and its reviews.
   and applied.
 - **SC-002** (FR-003, FR-004): the check fails the negative fixture naming its hours and shade makers, and passes the
   county example; its tests reach the gate's coverage floor.
-- **SC-003** (FR-005, FR-007): every hand-drawn sheet with a kitchen garden passes `garden_sun`; the re-seated sheets
+- **SC-003** (FR-005, FR-007): every hand-drawn building sheet with a kitchen garden passes `garden_sun` as a sun bed; the re-seated sheets
   pass `building-review`; `make done` is green.
 - **SC-004** (FR-006): the program and the operative docs name the sun rule where they say where a garden goes.
 
@@ -81,3 +87,29 @@ and its reviews.
 - The binding season and sun are the record's (38 degrees north, the autumn shoulder month), as the scripted maps' rules
   use them.
 - The scripted maps keep their own placement rules; this feature adds nothing to the placer.
+
+## Review history
+
+**Round 1** (spec-fidelity, MODE 2, 2026-09-28): CHANGES REQUIRED, three items. The check itself (hours of sun from
+shadows cast by what stands up, against a threshold from the record, reported with its shade makers), the record behind
+it and the re-seating of the four failing gardens carry the request and the GM's answer; FR-006 and the half-shade knob
+(FR-002, research-driven, sun by default) serve it. Nothing unrequested was found.
+
+1. **FR-003 scope is keyed to the tool, not to the GM's class.** The GM asked for a check "that gets run on hand-drawn
+   diagrams that have gardens"; FR-003 says "every hand-drawn sheet the audit reads", which silently leaves out the
+   frozen hand-authored Mode B maps in legacy-hand-authored-pool/, several of which draw kitchen gardens (the Hoshigaoka
+   village, the Ubame town, Minami). Being frozen is existing behavior the GM did not ask to preserve. FR-003 should
+   name the class as the GM did - every hand-drawn diagram with a kitchen garden, the legacy hand-authored maps
+   included - and FR-005/SC-003 should say what happens to a failure there: the GM's "move them all" answered for the
+   four sheets measured, so a legacy map that fails is measured, reported with its hours, and put to the GM as the same
+   fix-scope question (not moved unasked, not exempted). If the session holds that those maps are not what "hand-drawn
+   diagrams" means, that is an exception to put to the GM verbatim, not a scope line in an FR.
+2. **Nothing proves the trees are counted.** The GM's question is clearance "from the trees", but the shrine sheet as
+   drawn fails on the hall alone (request.md: the hall shades the bed until about 10, 2.5 h lit in all), so a check that
+   ignored the wood would pass FR-004 and SC-002 as written. FR-003 should state which drawn kinds count as a building,
+   a wall and a tree - a tree including a wood or grove drawn as an area (shrine grove, garden pines, sacred tree), and
+   a building every roofed kind (gatehouse, bell tower, stage, granary) - and FR-004 should add a test that a bed shaded
+   by trees alone fails, and require the negative fixture's report to name the wood among its shade makers.
+3. **FR-005 leaves the rejected fix open.** The GM was offered "declare half-shade beds" and chose "Move them all". As
+   written, FR-002's knob would let a re-seated sheet pass by declaring its bed half-shade. FR-005 should say the four
+   re-seated gardens pass as sun beds (the default) with no half-shade declaration. FR-002 itself stands.

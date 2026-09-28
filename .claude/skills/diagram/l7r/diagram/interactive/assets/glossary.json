@@ -10021,5 +10021,23 @@
   "variants": [
    "shiso"
   ]
+ },
+ "fuki": {
+  "def": "Japanese butterbur, a shade-tolerant plant of damp ground whose long leaf stalks are cooked as a vegetable.",
+  "variants": [
+   "fuki"
+  ]
+ },
+ "seri": {
+  "def": "Japanese water dropwort, a creeping herb of wet ground and paddy margins, eaten as a spring green.",
+  "variants": [
+   "seri"
+  ]
+ },
+ "shungiku": {
+  "def": "Garland chrysanthemum, a leafy green whose young leaves are eaten boiled or in hot pots.",
+  "variants": [
+   "shungiku"
+  ]
  }
 }

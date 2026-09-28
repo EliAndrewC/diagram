@@ -17,3 +17,8 @@ Ubame 0 h, Hayakawa 0 h, Ochiba 0.5 h (strips along the north wall about 11 ft n
 example 9.5 h. The GM was asked how to fix the three magistracies - move them all, shrine now and magistracies later, or
 declare half-shade beds - and answered (2026-09-28): "Move them all (Recommended)" - re-seat each magistracy garden where
 the check passes, preferring the west side of the residence (the one side the record attests), and the shrine's the same.
+
+The GM was asked (2026-09-28, after the spec's first reading) whether the check should also cover the frozen hand-drawn
+settlement maps (the Hoshigaoka village, Ubame town, Minami and the other legacy maps), whose farmhouses draw kitchen
+gardens, or only the hand-drawn building sheets, and answered: "Sheets only (Recommended)" - the legacy maps get the sun
+rules when each is converted to scripted generation, whose placer already enforces them.

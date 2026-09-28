@@ -695,6 +695,7 @@ fudō myōō	Fudo
 fujiwara	Fujiwara-kyo
 fujiwara-kyo	Fujiwara-kyo
 fukada	fukada
+fuki	fuki
 fukugi	fukugi
 fully involved	fully-involved
 fully-involved	fully-involved
@@ -1996,6 +1997,7 @@ sentō	sento
 senzai	senzai
 separated flow	separation zone
 separation zone	separation zone
+seri	seri
 sericulture	sericulture
 setchin	kawaya
 settlement core	settlement core
@@ -2086,6 +2088,7 @@ shuinchi	shuinchi
 shuku	shukuba
 shukuba	shukuba
 shunde	Shunde
+shungiku	shungiku
 shunzhi	Shunzhi
 shōwa	Showa
 shōya	shoya
