@@ -8281,5 +8281,18 @@
   "variants": [
    "bobana"
   ]
+ },
+ "tofuya": {
+  "def": "A tofu maker, or the shop where tofu is made; from the seventeenth century it sold over its own counter and through peddlers carrying tubs.",
+  "variants": [
+   "tofuya"
+  ]
+ },
+ "crude drug": {
+  "def": "A medicinal plant, animal or mineral part, dried but otherwise unprocessed, which an apothecary compounded into medicine.",
+  "variants": [
+   "crude drug",
+   "crude drugs"
+  ]
  }
 }
