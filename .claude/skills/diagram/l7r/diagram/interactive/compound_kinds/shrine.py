@@ -364,4 +364,3 @@ class ShrineBurialGround(Kind):
     """
 
     key = "burial ground"
-
