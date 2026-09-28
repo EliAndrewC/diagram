@@ -14,7 +14,6 @@ if TYPE_CHECKING:
     from ..core import Settlement
 
 
-
 # ---- feature 276, FR-003: the placed houses, indexed ONCE and extended as each lands --------------------------------
 #
 # Every scan of the house records a candidate seat makes - the eave gap, the sun corridor both ways, the gardens' sun,
@@ -50,6 +49,7 @@ def _extent_boxed(recs: Any) -> list[Any]:
 
 def houses_meeting(houses: Any, box: tuple[float, float, float, float]) -> list[Any]:
     """The records of `houses` whose extent meets `box`, each once, in list order (the order the linear scans read)."""
+
     def build(lst: Any) -> PointGrid:
         grid = PointGrid()
         grid.extend(_extent_boxed(lst))
@@ -70,6 +70,7 @@ def houses_meeting(houses: Any, box: tuple[float, float, float, float]) -> list[
         out.append(rec)
     order = {id(rec): k for k, rec in enumerate(houses)} if len(out) > 1 else {}
     return sorted(out, key=lambda rec: order.get(id(rec), 0))
+
 
 class BundleFitMixin:
     def _field_adjacent(self: Settlement, x: float, y: float) -> bool:  # type: ignore[misc]
@@ -469,7 +470,10 @@ class BundleFitMixin:
         houses = self.M.get("houses", [])
         # FROM THE INDEX (feature 276): a house shading a bed has its north wall within `reach` south of the bed
         return all(
-            not any(abs(b["x"] - gx) < (b["w"] + gw) / 2 + side and 0 < (b["y"] - b["h"] / 2) - (gy + gh / 2) < reach for b in houses_meeting(houses, (gx - gw / 2 - side, gy + gh / 2, gx + gw / 2 + side, gy + gh / 2 + reach)))
+            not any(
+                abs(b["x"] - gx) < (b["w"] + gw) / 2 + side and 0 < (b["y"] - b["h"] / 2) - (gy + gh / 2) < reach
+                for b in houses_meeting(houses, (gx - gw / 2 - side, gy + gh / 2, gx + gw / 2 + side, gy + gh / 2 + reach))
+            )
             for gx, gy, gw, gh in geom["gardens"]
         )
 
