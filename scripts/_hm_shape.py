@@ -304,6 +304,25 @@ def bracket_pattern(cmd: str) -> str | None:
     return None if out == cmd else out
 
 
+# GUARD_EDIT_OK: 2026-09-28 (GM: "Yes please") - A WAIT ON A MAKE RUN IS SCOPED TO THE ASKING TREE. `pgrep -f
+# "make done"` searches the whole host, and every clone gates with the same words: a bracketed pattern stops the
+# self-match but still matches another session's gate, which held a waiter open for six hours after its own gate
+# had failed. A match on `make <target>` (bracketed or not) becomes `_own-make.sh <target>`, which counts only
+# runs whose working directory is inside the asking tree. pkill is left alone: a kill is not a wait.
+_MAKEWAIT = re.compile(r"\bpgrep\b(?:\s+-[a-zA-Z]+)*\s+-[a-zA-Z]*f[a-zA-Z]*(?:\s+-[a-zA-Z]+)*\s+(['\"]?)(?:\[m\]|m)ake\s+([\w][\w .=-]*?)\1(?=[\s|;&)]|$)")
+
+
+def scope_make_waits(cmd: str, helper: str) -> str | None:
+    """`cmd` with every `pgrep -f "make <target>"` replaced by `<helper> <target>`, or None when there is none."""
+    out = cmd
+    for m in reversed(list(_MAKEWAIT.finditer(cmd))):
+        target = m.group(2).strip()
+        if not target or "$" in target:
+            continue
+        out = out[: m.start()] + f"{helper} {target}" + out[m.end() :]
+    return None if out == cmd else out
+
+
 # ---------------------------------------------------------------------------------------------
 # A LEAF CLI, so a guard can depend on the module it uses rather than on all of them (feature 172).
 # A split behind an umbrella that imports everything changes no dependency set at all: the closure is
@@ -336,7 +355,10 @@ if __name__ == "__main__":
         if _with:
             print(_with)
     elif mode == "bracket":
-        out = bracket_pattern(CMD)
+        # GUARD_EDIT_OK: 2026-09-28 - argument 2, when given, is `_own-make.sh`'s absolute path: a make-run wait is
+        # scoped to the asking tree first, then any other literal pattern is bracketed
+        scoped = scope_make_waits(CMD, sys.argv[2]) if len(sys.argv) > 2 else None
+        out = bracket_pattern(scoped or CMD) or scoped
         if out:
             print(out)
     elif mode == "file-wait":
