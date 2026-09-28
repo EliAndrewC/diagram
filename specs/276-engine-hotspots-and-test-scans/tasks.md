@@ -26,7 +26,7 @@ Order: F's harness target first (so every after-figure is taken the same way), t
       research: rendering
 - [ ] T07 [US2] The static ground index: `SiteCorridors` vertex and hole grids in `hamletgen/homesteads/boundary.py`; the equality test (D8)
       research: rendering
-- [ ] T08 [US2] The free-ground index proposing the seats on both paths (D9) and the dispersed pre-screen behind it (D9a) in `settlement/rolling/place.py` + a `FreeGround` in `hamletgen/homesteads/boundary.py`; the same-seat tests on the rescue scenario and the toy, both paths
+- [ ] T08 [US2] The free-ground index (D9): static surely-taken cells where a site boundary is installed (empty otherwise) plus the placed boxes added as each bundle lands (D7's grid); asked first for every spiral offset and every `_slide` step (dispersed) and, on the nucleated path, for the placed-box hits and the static ground only where the loop judges ground; the dispersed pre-screen behind it (D9a); in `settlement/rolling/place.py`, `settlement/rolling/fit.py` and `hamletgen/homesteads/boundary.py`; the same-seat tests on both paths, including the whole-envelope-clear, side-on-taken-ground case
       research: rendering
 - [ ] T09 [US2] The unraked bundle template with the rake per candidate, and the household-rolled yard, garden jitter and bed split, in `settlement/rolling/bundle.py` / `homestead_parts/yards.py` (D10); SC-002 and SC-003 by the harness on both paths
       research: rendering
