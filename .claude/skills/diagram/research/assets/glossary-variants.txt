@@ -177,8 +177,8 @@ burakumin	burakumin
 burgage	burgage plot
 burgage plot	burgage plot
 burgage plots	burgage plot
-burial grave	two-grave
-burial graves	two-grave
+burial grave	burial grave
+burial graves	burial grave
 bursaries	rent bursary
 bursary	rent bursary
 bushi	bushi
@@ -2025,8 +2025,8 @@ teikaku	teikaku
 temizuya	temizuya
 temple bell tower	shoro
 tendai	Tendai
-tenjin	Tenmangu
-tenjin shrine	Tenmangu
+tenjin	Tenjin
+tenjin shrine	Tenjin
 tenma-cho	tenma-cho
 tenmacho	Tenmacho
 tenmacho jail	Tenmacho

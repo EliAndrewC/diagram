@@ -6100,8 +6100,7 @@
  "tetsuki": {
   "def": "One of the two grades of an intendant's staff, beside the tedai; the tetsuki and tedai of an intendancy lived in small houses (koya) and long-houses (nagaya) inside its compound.",
   "variants": [
-   "tetsuki",
-   "tezuki"
+   "tetsuki"
   ]
  },
  "mukaibansho": {
@@ -8491,9 +8490,7 @@
   "variants": [
    "two-grave",
    "two-grave villages",
-   "two-grave settlements",
-   "burial grave",
-   "burial graves"
+   "two-grave settlements"
   ]
  },
  "fire bed": {
@@ -8711,9 +8708,7 @@
  "Tenmangu": {
   "def": "A shrine to Tenjin, the deified courtier-scholar Sugawara no Michizane, patron of learning; \"Tenjin shrine\" and \"Tenmangu\" name the same kind of shrine.",
   "variants": [
-   "Tenmangu",
-   "Tenjin",
-   "Tenjin shrine"
+   "Tenmangu"
   ]
  },
  "offering hall": {
