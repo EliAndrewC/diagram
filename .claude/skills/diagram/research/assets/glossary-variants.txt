@@ -130,7 +130,8 @@ banners'	banner
 bansho	bansho
 bansui	bansui
 banta	banta
-banyuetang	banyuetang
+banyuechi	banyuechi
+banyuetang	banyuechi
 barbican	barbican
 barbicans	barbican
 baren	baren
