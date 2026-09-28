@@ -71,8 +71,9 @@ Order: F's harness target first (so every after-figure is taken the same way), t
 - [x] T16 `make done` green (every live pool map regenerated, 100% coverage); FR-006's counts for all five hamlets against `pool-before.json`, recorded in research
       research: rendering
       verify: DONE. make done green 2026-09-28 (53 s, 100% coverage); FR-006 by pool_counts.py: every hamlet seats its quota, nucleated, plain - research R6, pool-after.json
-- [ ] T17 The after-cohort `make cohort N=24` against research R7's baseline; every newly failing seed diagnosed
+- [x] T17 The after-cohort `make cohort N=24` against research R7's baseline; every newly failing seed diagnosed
       research: rendering
+      verify: DONE. make cohort N=24 on 2026-09-28: 21/24, failing Audit-02/08/23 on scatter_frame_breach only - identical to the baseline; no newly failing seed
 - [ ] T18 `make perf LABEL=276-end`, `make perf-report AGAINST=276-start`; the after-figures in `measurements.json` and research; `make quick ALL=1` and `make done` wall time
       research: rendering
 - [ ] T19 `dev/performance.md` gains the three shapes with their measurements (D19)

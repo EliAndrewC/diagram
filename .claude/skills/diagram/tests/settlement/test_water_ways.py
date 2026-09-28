@@ -797,22 +797,37 @@ def test_no_pass_deletes_a_lane_record_without_its_ink_slot():
 
 
 def lane_deletes(modules, root):  # type: ignore[no-untyped-def]
-    """`path:line del target` for every `del` of a lane record outside `drop_lanes` - the scan above, lifted."""
+    """`path:line del target` for every `del` of a lane record inside a function other than `drop_lanes` - the scan
+    above, lifted.
+
+    ONE PASS OVER THE SHARED WALK (feature 276, FR-001). The scan walked every function's subtree separately, so a body
+    nested n functions deep was walked n times - more than the parse this feature shares. Now each `del` is found once
+    and judged by the functions that enclose it: reported when some enclosing function exists and none is `drop_lanes`
+    (the old scan reported it from each enclosing function that was not `drop_lanes`; the offender list names each
+    `del` once instead of once per enclosing function)."""
     import ast
 
     from tests import _engine_ast
 
     offenders = []
     for path, _source, tree in modules:
-        for fn in [n for n in _engine_ast.walked(tree) if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))]:
-            if fn.name == "drop_lanes":
+        nodes = _engine_ast.walked(tree)
+        deletes = [n for n in nodes if isinstance(n, ast.Delete)]
+        if not deletes:
+            continue
+        inside: dict[int, bool] = {}  # id(Delete) -> True when some enclosing function is NOT drop_lanes
+        for fn in (n for n in nodes if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))):
+            span = (fn.lineno, fn.end_lineno or fn.lineno)
+            for d in deletes:
+                if span[0] <= d.lineno <= span[1]:
+                    inside[id(d)] = inside.get(id(d), False) or fn.name != "drop_lanes"
+        for d in deletes:
+            if not inside.get(id(d)):
                 continue
-            for node in ast.walk(fn):
-                if isinstance(node, ast.Delete):
-                    for target in node.targets:
-                        text = ast.unparse(target)
-                        if "lanes" in text and "_lane_ink" not in text:
-                            offenders.append(f"{path.relative_to(root)}:{node.lineno} del {text}")
+            for target in d.targets:
+                text = ast.unparse(target)
+                if "lanes" in text and "_lane_ink" not in text:
+                    offenders.append(f"{path.relative_to(root)}:{d.lineno} del {text}")
     return offenders
 
 

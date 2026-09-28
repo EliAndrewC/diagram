@@ -77,6 +77,25 @@ def test_garden_shaded_detects_a_house_to_the_south():
     assert s._garden_shaded((900, 450, 22, 12)) is False  # open sky to the south -> not shaded
 
 
+def test_garden_shaded_from_the_index_equals_the_scan_of_every_house():
+    """Feature 276: the indexed garden-shade test flags exactly the gardens the scan over every placed house flags."""
+    import random
+
+    s = _village()
+    rng = random.Random(276)
+    for _ in range(80):
+        s.M["houses"].append({"x": rng.uniform(0, 600), "y": rng.uniform(0, 600), "w": rng.uniform(20, 50), "h": rng.uniform(14, 30), "kind": "plain"})
+
+    def scan(g):
+        gx, gy, gw, gh = g
+        return any(r["y"] > gy + gh / 2 - 3 and abs(r["x"] - gx) < (r["w"] + gw) / 2 and (r["y"] - r["h"] / 2) - (gy + gh / 2) < gh + 4 for r in s.M["houses"])
+
+    gardens = [(rng.uniform(0, 600), rng.uniform(0, 600), rng.uniform(10, 30), rng.uniform(8, 20)) for _ in range(400)]
+    got = [s._garden_shaded(g) for g in gardens]
+    assert got == [scan(g) for g in gardens]
+    assert 20 < sum(got) < 380, "non-vacuity: both answers occur"
+
+
 def test_sun_corridor_covers_a_neighbors_garden_and_this_bundles_gardens():
     """Feature 133 T10: both directions of the garden corridor, and the side split that keeps the
     side-dependent half out of `_sun_corridor_ok` (which `_fits_any_side` runs once for all sides)."""

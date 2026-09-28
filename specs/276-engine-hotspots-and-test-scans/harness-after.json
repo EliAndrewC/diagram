@@ -1,0 +1,104 @@
+{
+  "tests": {
+    "tests/test_memory.py::test_no_engine_module_imports_a_heavy_library_at_import_time": 0.09,
+    "tests/hamletgen/test_driver.py::test_every_loop_that_runs_the_stages_sits_inside_a_roll_scope": 0.07,
+    "tests/test_package_surfaces.py::test_the_census_found_the_tree": 2.88,
+    "tests/settlement/test_water_ways.py::test_no_pass_deletes_a_lane_record_without_its_ink_slot": 0.81,
+    "tests/interactive/test_record.py::test_every_link_in_a_record_page_resolves[religion-and-death.html]": 0.07,
+    "tests/interactive/test_record.py::test_every_link_in_a_record_page_resolves[buildings.html]": 0.07,
+    "tests/interactive/test_record.py::test_no_tracked_file_names_a_retired_rule_file": 1.69,
+    "tests/interactive/test_record.py::test_no_md_token_anywhere_resolves_to_a_converted_record_file": 1.68,
+    "tests/interactive/test_record_format.py::test_every_glossary_term_is_used_by_a_modal_or_a_record_page": 2.61,
+    "tests/hamletgen/test_homesteads.py::test_a_quota_the_ranks_cannot_seat_reaches_the_rescue_rounds": 0.2,
+    "tests/waterfields/test_seams.py::test_a_map_whose_blue_sample_is_all_demoted_still_exhibits_one_flooded_basin": 1.46,
+    "tests/waterfields/test_comb_topology.py::test_every_channel_is_a_real_run_rather_than_a_stub[11]": 0.84,
+    "tests/settlement/test_core.py::test_build_comb_supply_banks_hems_bunds_onto_the_channel_banks": 1.07,
+    "group:ast-four-together": 2.35,
+    "group:record-five-together": 6.55
+  },
+  "homesteads": {
+    "rescue-20-nucleated": {
+      "s": 0.204,
+      "houses": 16,
+      "fit_tests": 367
+    },
+    "rescue-20-dispersed": {
+      "s": 0.616,
+      "houses": 10,
+      "fit_tests": 128
+    },
+    "open-10": {
+      "s": 0.113,
+      "houses": 10,
+      "fit_tests": 40,
+      "s_per_house": 0.0113
+    },
+    "open-20": {
+      "s": 0.138,
+      "houses": 20,
+      "fit_tests": 190,
+      "s_per_house": 0.0069
+    },
+    "dense-60-nucleated": {
+      "s": 0.043,
+      "houses": 58,
+      "fit_tests": 305,
+      "s_per_house": 0.0007,
+      "houses_five_layouts": 281
+    },
+    "dense-120-nucleated": {
+      "s": 0.099,
+      "houses": 114,
+      "fit_tests": 637,
+      "s_per_house": 0.0009,
+      "houses_five_layouts": 560
+    },
+    "dense-240-nucleated": {
+      "s": 0.219,
+      "houses": 227,
+      "fit_tests": 1257,
+      "s_per_house": 0.001,
+      "houses_five_layouts": 1133
+    },
+    "dense-60-dispersed": {
+      "s": 0.177,
+      "houses": 37,
+      "fit_tests": 84,
+      "s_per_house": 0.0048,
+      "houses_five_layouts": 191
+    },
+    "dense-120-dispersed": {
+      "s": 0.331,
+      "houses": 69,
+      "fit_tests": 189,
+      "s_per_house": 0.0048,
+      "houses_five_layouts": 365
+    },
+    "dense-240-dispersed": {
+      "s": 0.53,
+      "houses": 137,
+      "fit_tests": 304,
+      "s_per_house": 0.0039,
+      "houses_five_layouts": 707
+    }
+  },
+  "seams": {
+    "seed-5": {
+      "build_s": 0.564,
+      "close_seams_s": 0.394
+    },
+    "seed-11": {
+      "build_s": 0.643,
+      "close_seams_s": 0.456
+    },
+    "seed-17": {
+      "build_s": 0.618,
+      "close_seams_s": 0.434
+    }
+  },
+  "track": {
+    "stage_s": 0.226,
+    "path_checks_s": 0.012,
+    "calls": 83
+  }
+}
