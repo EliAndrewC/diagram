@@ -3,7 +3,7 @@
     python3 specs/281-third-hotspot-pass/measure.py before   # the clone at the base commit: before-* keys
     python3 specs/281-third-hotspot-pass/measure.py after    # the base worktree, then the clone, back to back
 
-The base is `2a61d1488`, 278 landed with 261 merged, in a detached worktree at `/tmp/base281` (created if missing). Seconds
+The base is `c13a6ebe6`, main when this work began (278 and 261 landed, 279's crowns merged), in a detached worktree at `/tmp/base281` (created if missing). Seconds
 depend on the machine's load, so the after-run takes the base and the clone one straight after the other: the base as
 `base-rerun-*` beside the recorded `before-*`, the clone as `after-*`. Counts (`counts.py`, from the profiles) do not.
 """
@@ -16,7 +16,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-BASE = "2a61d1488"
+BASE = "c13a6ebe6"
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 WT = Path("/tmp/base281")

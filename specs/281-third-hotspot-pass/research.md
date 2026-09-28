@@ -1,18 +1,18 @@
 # Feature 281 - research
 
-## R1 - The measurement (2026-09-28, main `2a61d1488`: 278 landed with 261 merged)
+## R1 - The measurement (2026-09-28, main `c13a6ebe6`: 278 and 261 landed, 279's woodland crowns merged)
 
 **Method.** `measure.py before`: the harness (`harness.py`, via `make spec-harness`) rolls each pool hamlet twice
 unprofiled with every stage timed (the faster roll kept), once more writing its svg and page, and once under cProfile
 writing the page too, saving the profile; `counts.py` reads the profiles and credits each generator expression to the
 function that encloses it, so a count survives line moves. Every figure is in `measurements.json` as a `before-*` key.
 
-**The roll.** The five pool hamlets take 33.835 s between them (m:before-pool-roll-s), against 60.1 s before feature 278.
+**The roll.** The five pool hamlets take 32.902 s between them (m:before-pool-roll-s), against 60.1 s before feature 278. (A first
+run at `2a61d1488`, before 279's crowns merged, gave every count here unchanged and 33.8 s.)
 By stage, summed over the five: the field is the largest, then the ways (`stage_web`), the windbreak, the hinterland, the
 notice board, the homesteads and the track. A full generate writing the svg and the interactive page costs about the same
-as the roll alone on four of the five; Inashiro's full generate took 9.737 s (m:before-inashiro-full-s) against a
-6.735 s roll (m:before-inashiro-roll-s), one run each, and the after-profile says whether that is the reference map's
-extra output or load. The pixel render is a separate step outside the roll (feature 278 priced it and left it).
+as the roll alone (Inashiro 5.859 s against 5.893 s, m:before-inashiro-full-s, m:before-inashiro-roll-s), so the
+finish is not where the time goes. The pixel render is a separate step outside the roll (feature 278 priced it and left it).
 
 **The profile** (profiled seconds summed over the five, `/tmp/m281/before/*.prof`; profiling inflates Python-level work
 about 2.4 times, so these rank, they do not predict). The self-time leaders are the distance primitives: `seg_dist` 5.8
@@ -35,11 +35,14 @@ And two stages whose remaining cost is per-candidate Python work over an index t
 
 - **The windbreak** (`village_grove`): 278 filed its keep-outs in one grid; what remains is the scalar tests themselves -
   the outline, the hard ground, the local keep-outs, the lanes - asked of every grid point and of every re-seat ring
-  (40 positions round each blocked point). The re-seat rings dominate: m:before-sawada-grove-inside outline tests against
-  roughly 11,000 grid points over the five maps (observed 2026-09-28, method: the profile's `_hjit` calls, two per grid
-  point). Every one of those tests is STATIC - the ground does not change during the fill; only the spacing test against
-  clumps already seated is sequential. 278 priced this lever: "the static tests over the whole jittered grid as array
-  operations, the spacing test sequential - the commons' hybrid applied to the grove".
+  (40 positions round each blocked point), and above all of the GAP FILL, which offers each gap between two seated
+  clumps 5 fractions x 33 depths in every round, for up to six rounds. Counted by caller: of Sawada's 253704 outline
+  tests (m:before-sawada-grove-inside) 519 come from the re-seat (m:before-sawada-grove-inside-reseat), and the grid holds
+  at most 3,276 points (observed 2026-09-28, method: the profile's `_hjit` calls from the grove, two per point) - so
+  nearly all come from the gap fill. Every one of those tests but the spacing one is STATIC - the ground does not change during the fill -
+  and the spacing test's refusals only grow as clumps land. So a gap that took nothing in a round takes nothing later:
+  re-offering it is the whole of the repeat cost, and remembering that is exact, where 278's priced lever (the static
+  tests as array operations) would only have made the repeats cheaper.
 - **The marsh scatter** (`marsh`): per point, the commons' old shape (m:before-kuwabata-marsh-sparse,
   m:before-sawada-marsh-sparse). 278 priced it: "the marsh vectorized as the grass was".
 

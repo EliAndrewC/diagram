@@ -11,7 +11,7 @@ that aren't supposed to overlap don't overlap".
 
 ## Summary
 
-The same exercise as features 276 and 278, on main after both landed (`2a61d1488`). The five pool hamlets roll in 33.8 s
+The same exercise as features 276 and 278, on main as this work began (`c13a6ebe6`: both landed, 279's woodland crowns merged). The five pool hamlets roll in 32.9 s
 between them (m:before-pool-roll-s). Research R1 profiled a full generation of each and traced every hot primitive to
 its caller. It found:
 
@@ -72,27 +72,27 @@ plot edge, once per plot.
 1. **Given** any roll, **When** the fabric index misses its memo, **Then** each polygon's ring index is reused.
 2. **Given** a carve, **When** its plots are laid, **Then** each bund vertex is computed once per sector.
 
-### User Story 4 - The windbreak and the marsh ask their static questions as arrays (Priority: P2)
+### User Story 4 - The windbreak stops re-asking, and the marsh asks as arrays (Priority: P2)
 
-The windbreak's fill asks the outline, the hard ground, the local keep-outs and the lanes of every grid point and every
-re-seat position, one at a time; the marsh scatter tests its marks one at a time. 278 priced both array forms.
+The windbreak's gap fill offers every unfilled gap the same candidate points round after round, asking the outline,
+the hard ground, the local keep-outs and the lanes of each again; the marsh scatter tests its marks one at a time, and
+278 priced its array form.
 
 **Independent Test**: count the scalar tests before and after; the grove's clumps are the same, the marsh keeps its
 density and keep-outs.
 
 **Acceptance Scenarios**:
 
-1. **Given** a grove fill, **When** it runs, **Then** every static verdict is the one the scalar test gives, and the
-   seating (the spacing between clumps) runs in the same order.
+1. **Given** a grove fill, **When** it runs, **Then** its clumps are today's, and a gap that took no seat is not offered
+   its points again.
 2. **Given** a marsh, **When** it is scattered, **Then** its marks keep every keep-out and its density.
 
 ### Edge Cases
 
 - A clip with no obstacles and no lines: returns the polyline, as now.
 - A roll with no brook: the toll and the home-bank join do nothing, as now.
-- A point exactly on a keep-out's boundary in the grove's array form: decided by the scalar test (the band between the
-  surely-in and surely-out shapes), so no verdict moves.
-- A grove with no re-seat: the array form still decides the grid.
+- A gap whose neighbors change (a clump lands between them): it is a new gap between new neighbors, offered its own points.
+- A fill that stops after one round: nothing is skipped.
 
 ## Requirements *(mandatory)*
 
@@ -102,7 +102,9 @@ density and keep-outs.
   same obstacles, margin, lines and line margin - the index `clear_runs` already asks - so every clip returns what it
   returns today.
 - **FR-002 A polygon's ring index is built once per roll** and shared by every fabric index that files it; a memo miss
-  builds only the polygons it has not seen.
+  builds only the polygons it has not seen. A ring index is reused only for a ring with the SAME POINTS - the reuse is
+  keyed on the ring's content, never on its identity, length or ends (`dev/performance.md`: such a key is "a guess about
+  content") - and the store is cleared with the fabric-index memo at the start of every roll.
 - **FR-003 The brook-band toll reads a grid sized to the band**, so an ask reads at most nine cells; the verdict is the
   same distance test.
 - **FR-004 The notice board asks indexes**: `outermost_join` a segment index of the other ways; `routes_missed` an index
@@ -111,15 +113,18 @@ density and keep-outs.
   crossing and distance tests deciding as before.
 - **FR-006 The caption seat probe asks an index of the lane segments**, built once per caption pass while the lanes do
   not change.
-- **FR-007 The carve computes each bund vertex once per sector** (a vertex is a pure function of its fall and column), and
-  walks each shared plot edge against the supply banks once. The shared edge is walked in one direction for both plots,
+- **FR-007 The carve computes each bund vertex once per sector**, and walks each shared plot edge against the supply banks
+  once. A vertex depends on its fall, its column, its column count AND the row wander, which is off while the sector's
+  fall limit is probed and live after; so the vertices are remembered only once the wander is live, keyed on (fall,
+  column, count), and the probe's are never reused for plots. The shared edge is walked in one direction for both plots,
   so a sample point can differ from today's in its last floating-point bits: a plot at the bank's exact threshold may
   flip, which this spec accepts as a map change under the GM's ruling, with SC-011's condition.
-- **FR-008 The windbreak's static tests are array operations.** The outline, the hard ground, the local keep-outs, the
-  lanes and the rim are decided for every grid point and every re-seat position in batches: surely inside and surely
-  outside from shapes shrunk and grown past floating-point noise, the scalar test deciding the band between (278's
-  commons form). Only the spacing test against clumps already seated, and the `near` reach, run in the seating loop, in
-  today's order - so the clumps are today's.
+- **FR-008 The windbreak's gap fill does not re-ask what it already knows.** The fill offers each gap between two seated
+  clumps the same candidate points in every round (5 fractions x 33 depths), and nothing it asks of them changes during the
+  fill except the spacing test, whose refusals only grow as clumps land. So a gap that took no seat in a round cannot take
+  one in a later round, and is not offered again; and a point's static verdict - the outline, the hard ground, the local
+  keep-outs, the lanes - is remembered per point, as the outline's already is (278). The spacing test and the `near` reach
+  still run for every point offered, in today's order, so the clumps are today's.
 - **FR-009 The marsh scatter is vectorized** as the grass was (278, FR-008): throws and keep-out tests as array
   operations, the same density and the same keep-outs; its marks move.
 - **FR-010 Every map keeps its invariants.** A change that moves a map (FR-007, FR-009) is held to SC-011; nothing that
@@ -130,7 +135,7 @@ density and keep-outs.
 ### Key Entities
 
 - **The harness** (`harness.py`, `counts.py`, `measure.py`): stage seconds from unprofiled rolls, mechanism counts from
-  a saved profile; `measure.py before` recorded the base in the clone at `2a61d1488`, `measure.py after` runs a detached
+  a saved profile; `measure.py before` recorded the base in the clone at `c13a6ebe6`, `measure.py after` runs a detached
   worktree of it and the clone back to back.
 
 ## Success Criteria *(mandatory)*
@@ -138,7 +143,7 @@ density and keep-outs.
 ### Measurable Outcomes
 
 - **SC-001** (spec-wide): the five pool hamlets' summed roll time is at least `1.25x` less than the base's, measured back to
-  back (33.835 s at the start, m:before-pool-roll-s; research R1).
+  back (32.902 s at the start, m:before-pool-roll-s; research R1).
 - **SC-002** (FR-001): `seg_dist` calls from the clip's test are at least `10x` fewer on Kashikawa (535389,
   m:before-kashikawa-clip-seg-dist) and Kuwabata (413895, m:before-kuwabata-clip-seg-dist).
 - **SC-003** (FR-002): ring-index builds by the fabric index are at least `5x` fewer on Sawada (9098,
@@ -156,13 +161,15 @@ density and keep-outs.
 - **SC-008** (FR-007): the carve's vertex computations are at least `2x` fewer on Sawada (28011,
   m:before-sawada-carve-edge) and Inashiro (14690, m:before-inashiro-carve-edge); its supply-bank tests at least `1.3x`
   fewer on Sawada (162275, m:before-sawada-supply-clearance).
-- **SC-009** (FR-008): the grove's scalar outline tests are at least `5x` fewer on Sawada (253704,
-  m:before-sawada-grove-inside) and Kashikawa (209535, m:before-kashikawa-grove-inside), and an equality test shows the
-  array form's clumps equal the scalar form's on every pool hamlet.
+- **SC-009** (FR-008): the grove's outline tests are at least `1.5x` fewer on Sawada (253704, m:before-sawada-grove-inside)
+  and Kashikawa (209535, m:before-kashikawa-grove-inside), its hard-ground tests at least `1.5x` fewer on the same two
+  (82773, m:before-sawada-grove-hard; 92000, m:before-kashikawa-grove-hard), and every pool map's clumps are today's.
 - **SC-010** (FR-009): the marsh's scalar keep-out tests are at least `5x` fewer on Sawada (28861,
   m:before-sawada-marsh-sparse) and Kuwabata (27617, m:before-kuwabata-marsh-sparse), and a test holds the marsh to its
   density and keep-outs.
-- **SC-011** (the pool, FR-010): FR-001 to FR-006 and FR-008 leave every manifest they touch byte-identical. The maps FR-007
+- **SC-011** (the pool, FR-010): FR-001 to FR-006 and FR-008 leave every manifest they touch byte-identical - shown by
+  regenerating the pool with them landed and FR-007 and FR-009 not yet landed, against the pool as committed at
+  `c13a6ebe6`, since the moving changes would hide them afterwards. The maps FR-007
   and FR-009 move hold feature 276's FR-006 condition in full: every live pool map regenerates, `make done` is green at the
   `100%` floor and every gate rule passes (the overlap rules among them); every pool map, the rescue-rounds scenario and the
   10- and 20-household toys seat at least as many houses as today, with no new or larger shortfall, and keep their forms
@@ -182,9 +189,12 @@ density and keep-outs.
 ## Assumptions
 
 - The seconds are taken back to back against the base worktree; the counts are load-independent.
-- The grove's array form (FR-008) finds its surely-in and surely-out shapes from shapely buffers; where the plan finds a
-  keep-out family those cannot bound, that family keeps its scalar test and the plan records it.
 
 ## Review history
 
-(none yet)
+- Round 1 (spec-fidelity, 2026-09-28): CHANGES REQUIRED - the windbreak lever aimed at the re-seat when the gap fill makes
+  nearly all the tests; the bund vertex is not pure while the row wander is off; the ring-index reuse named no condition;
+  the byte-identity of the exact changes could not be seen under the moving ones, and main had moved past the base.
+  Addressed: FR-008 is the gap fill's (a gap that took nothing is not re-offered; static verdicts remembered per point),
+  R1 keyed by caller; FR-007 remembers vertices only once the wander is live; FR-002 reuses by content; SC-011 shows the
+  exact changes byte-identical before the moving ones land, against the pool at the re-taken base `c13a6ebe6`.

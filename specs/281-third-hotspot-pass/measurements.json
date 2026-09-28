@@ -2,1477 +2,1512 @@
   "before-inashiro-absorb": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "absorb over one full generate() of inashiro, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 192
   },
   "before-inashiro-brook-band-tests": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
-    "quantity": "grid-cell lookups in the brook-band test over one full generate() of inashiro, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "quantity": "brook_band_tests over one full generate() of inashiro, counted by cProfile (counts.py)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 137364
   },
   "before-inashiro-builds": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "builds over one full generate() of inashiro, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "builds",
     "value": 1
   },
   "before-inashiro-caption-lane-seg-dist": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "caption_lane_seg_dist over one full generate() of inashiro, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 46736
   },
   "before-inashiro-carve-comb": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "carve_comb over one full generate() of inashiro, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 4
   },
   "before-inashiro-carve-edge": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "carve_edge over one full generate() of inashiro, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 14690
   },
   "before-inashiro-clip-pip": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "clip_pip over one full generate() of inashiro, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 45823
   },
   "before-inashiro-clip-seg-dist": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "clip_seg_dist over one full generate() of inashiro, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 210651
   },
   "before-inashiro-full-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "one generate() of inashiro writing its svg and page, unprofiled",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 9.737
+    "value": 5.859
   },
   "before-inashiro-grove-hard": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "grove_hard over one full generate() of inashiro, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 61572
   },
   "before-inashiro-grove-inside": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "grove_inside over one full generate() of inashiro, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 136277
+  },
+  "before-inashiro-grove-inside-reseat": {
+    "command": "python3 specs/281-third-hotspot-pass/measure.py before",
+    "quantity": "grove_inside_reseat over one full generate() of inashiro, counted by cProfile (counts.py)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
+    "unit": "calls",
+    "value": 55
   },
   "before-inashiro-handover-seg-dist": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "handover_seg_dist over one full generate() of inashiro, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 69340
   },
   "before-inashiro-home-bank-cross": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "home_bank_cross over one full generate() of inashiro, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 371965
   },
   "before-inashiro-marsh-sparse": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "marsh_sparse over one full generate() of inashiro, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 15746
   },
   "before-inashiro-page-extent": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "page_extent over one full generate() of inashiro, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
-    "value": 12047
+    "value": 11657
   },
   "before-inashiro-quad-in-supply": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "quad_in_supply over one full generate() of inashiro, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 2586
   },
   "before-inashiro-ring-index-builds": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "ring_index_builds over one full generate() of inashiro, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 4407
   },
   "before-inashiro-roll-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "one generate() of inashiro, render off, the faster of two unprofiled rolls",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 6.735
+    "value": 5.893
   },
   "before-inashiro-routes-missed-dist": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "routes_missed_dist over one full generate() of inashiro, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 631718
   },
   "before-inashiro-seg-dist": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "seg_dist over one full generate() of inashiro, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 772611
   },
   "before-inashiro-stage-appurtenances-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_appurtenances inside that roll of inashiro (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.034
   },
   "before-inashiro-stage-bamboo-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_bamboo inside that roll of inashiro (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.0
   },
   "before-inashiro-stage-burial-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_burial inside that roll of inashiro (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.021
+    "value": 0.022
   },
   "before-inashiro-stage-crossings-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_crossings inside that roll of inashiro (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.043
   },
   "before-inashiro-stage-field-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_field inside that roll of inashiro (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 1.954
+    "value": 1.583
   },
   "before-inashiro-stage-frame-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_frame inside that roll of inashiro (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.02
+    "value": 0.005
   },
   "before-inashiro-stage-hinterland-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_hinterland inside that roll of inashiro (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.629
+    "value": 0.6
   },
   "before-inashiro-stage-homesteads-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_homesteads inside that roll of inashiro (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.509
+    "value": 0.448
   },
   "before-inashiro-stage-labels-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_labels inside that roll of inashiro (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.007
+    "value": 0.003
   },
   "before-inashiro-stage-notice-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_notice inside that roll of inashiro (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.723
+    "value": 0.698
   },
   "before-inashiro-stage-pond-stock-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_pond_stock inside that roll of inashiro (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.0
   },
   "before-inashiro-stage-seat-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_seat inside that roll of inashiro (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.045
+    "value": 0.051
   },
   "before-inashiro-stage-sink-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_sink inside that roll of inashiro (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.009
+    "value": 0.008
   },
   "before-inashiro-stage-track-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_track inside that roll of inashiro (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.251
+    "value": 0.248
   },
   "before-inashiro-stage-water-frame-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_water_frame inside that roll of inashiro (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.0
   },
   "before-inashiro-stage-waterward-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_waterward inside that roll of inashiro (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.0
   },
   "before-inashiro-stage-web-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_web inside that roll of inashiro (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.547
+    "value": 0.5
   },
   "before-inashiro-stage-windbreak-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_windbreak inside that roll of inashiro (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.764
+    "value": 0.678
   },
   "before-inashiro-stage-woodland-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_woodland inside that roll of inashiro (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.041
+    "value": 0.022
   },
   "before-inashiro-stream-rect-cross": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stream_rect_cross over one full generate() of inashiro, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 73480
   },
   "before-inashiro-stream-rect-seg-dist": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stream_rect_seg_dist over one full generate() of inashiro, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 91850
   },
   "before-inashiro-supply-clearance": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "supply_clearance over one full generate() of inashiro, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 76332
   },
   "before-kashikawa-absorb": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "absorb over one full generate() of kashikawa, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 342
   },
   "before-kashikawa-brook-band-tests": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
-    "quantity": "grid-cell lookups in the brook-band test over one full generate() of kashikawa, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "quantity": "brook_band_tests over one full generate() of kashikawa, counted by cProfile (counts.py)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 1638800
   },
   "before-kashikawa-builds": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "builds over one full generate() of kashikawa, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "builds",
     "value": 1
   },
   "before-kashikawa-caption-lane-seg-dist": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "caption_lane_seg_dist over one full generate() of kashikawa, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 49321
   },
   "before-kashikawa-carve-comb": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "carve_comb over one full generate() of kashikawa, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 3
   },
   "before-kashikawa-carve-edge": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "carve_edge over one full generate() of kashikawa, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 12276
   },
   "before-kashikawa-clip-pip": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "clip_pip over one full generate() of kashikawa, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 87385
   },
   "before-kashikawa-clip-seg-dist": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "clip_seg_dist over one full generate() of kashikawa, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 535389
   },
   "before-kashikawa-full-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "one generate() of kashikawa writing its svg and page, unprofiled",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 9.099
+    "value": 8.891
   },
   "before-kashikawa-grove-hard": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "grove_hard over one full generate() of kashikawa, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 92000
   },
   "before-kashikawa-grove-inside": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "grove_inside over one full generate() of kashikawa, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 209535
+  },
+  "before-kashikawa-grove-inside-reseat": {
+    "command": "python3 specs/281-third-hotspot-pass/measure.py before",
+    "quantity": "grove_inside_reseat over one full generate() of kashikawa, counted by cProfile (counts.py)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
+    "unit": "calls",
+    "value": 682
   },
   "before-kashikawa-handover-seg-dist": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "handover_seg_dist over one full generate() of kashikawa, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 146176
   },
   "before-kashikawa-home-bank-cross": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "home_bank_cross over one full generate() of kashikawa, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 531766
   },
   "before-kashikawa-marsh-sparse": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "marsh_sparse over one full generate() of kashikawa, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 17096
   },
   "before-kashikawa-page-extent": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "page_extent over one full generate() of kashikawa, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
-    "value": 14563
+    "value": 14297
   },
   "before-kashikawa-quad-in-supply": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "quad_in_supply over one full generate() of kashikawa, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 2416
   },
   "before-kashikawa-ring-index-builds": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "ring_index_builds over one full generate() of kashikawa, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 7020
   },
   "before-kashikawa-roll-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "one generate() of kashikawa, render off, the faster of two unprofiled rolls",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 8.953
+    "value": 8.975
   },
   "before-kashikawa-routes-missed-dist": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "routes_missed_dist over one full generate() of kashikawa, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 676524
   },
   "before-kashikawa-seg-dist": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "seg_dist over one full generate() of kashikawa, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 1613107
   },
   "before-kashikawa-stage-appurtenances-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_appurtenances inside that roll of kashikawa (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.076
+    "value": 0.079
   },
   "before-kashikawa-stage-bamboo-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_bamboo inside that roll of kashikawa (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.001
   },
   "before-kashikawa-stage-burial-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_burial inside that roll of kashikawa (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.029
   },
   "before-kashikawa-stage-crossings-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_crossings inside that roll of kashikawa (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.059
   },
   "before-kashikawa-stage-field-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_field inside that roll of kashikawa (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 1.793
+    "value": 1.828
   },
   "before-kashikawa-stage-frame-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_frame inside that roll of kashikawa (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.01
   },
   "before-kashikawa-stage-hinterland-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_hinterland inside that roll of kashikawa (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.985
+    "value": 0.951
   },
   "before-kashikawa-stage-homesteads-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_homesteads inside that roll of kashikawa (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.584
+    "value": 0.617
   },
   "before-kashikawa-stage-labels-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_labels inside that roll of kashikawa (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.004
   },
   "before-kashikawa-stage-notice-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_notice inside that roll of kashikawa (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.628
+    "value": 0.617
   },
   "before-kashikawa-stage-pond-stock-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_pond_stock inside that roll of kashikawa (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.0
   },
   "before-kashikawa-stage-seat-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_seat inside that roll of kashikawa (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.064
+    "value": 0.067
   },
   "before-kashikawa-stage-sink-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_sink inside that roll of kashikawa (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.017
   },
   "before-kashikawa-stage-track-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_track inside that roll of kashikawa (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.317
+    "value": 0.316
   },
   "before-kashikawa-stage-water-frame-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_water_frame inside that roll of kashikawa (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.0
   },
   "before-kashikawa-stage-waterward-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_waterward inside that roll of kashikawa (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.0
   },
   "before-kashikawa-stage-web-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_web inside that roll of kashikawa (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 2.134
+    "value": 2.136
   },
   "before-kashikawa-stage-windbreak-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_windbreak inside that roll of kashikawa (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 1.106
+    "value": 1.107
   },
   "before-kashikawa-stage-woodland-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_woodland inside that roll of kashikawa (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.022
+    "value": 0.023
   },
   "before-kashikawa-stream-rect-cross": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stream_rect_cross over one full generate() of kashikawa, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 61160
   },
   "before-kashikawa-stream-rect-seg-dist": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stream_rect_seg_dist over one full generate() of kashikawa, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 76450
   },
   "before-kashikawa-supply-clearance": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "supply_clearance over one full generate() of kashikawa, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 127946
   },
   "before-kuwabata-absorb": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "absorb over one full generate() of kuwabata, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 0
   },
   "before-kuwabata-brook-band-tests": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
-    "quantity": "grid-cell lookups in the brook-band test over one full generate() of kuwabata, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "quantity": "brook_band_tests over one full generate() of kuwabata, counted by cProfile (counts.py)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 0
   },
   "before-kuwabata-builds": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "builds over one full generate() of kuwabata, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "builds",
     "value": 1
   },
   "before-kuwabata-caption-lane-seg-dist": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "caption_lane_seg_dist over one full generate() of kuwabata, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 5316
   },
   "before-kuwabata-carve-comb": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "carve_comb over one full generate() of kuwabata, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 0
   },
   "before-kuwabata-carve-edge": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "carve_edge over one full generate() of kuwabata, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 0
   },
   "before-kuwabata-clip-pip": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "clip_pip over one full generate() of kuwabata, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 60128
   },
   "before-kuwabata-clip-seg-dist": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "clip_seg_dist over one full generate() of kuwabata, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 413895
   },
   "before-kuwabata-full-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "one generate() of kuwabata writing its svg and page, unprofiled",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 3.905
+    "value": 3.867
   },
   "before-kuwabata-grove-hard": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "grove_hard over one full generate() of kuwabata, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 12497
   },
   "before-kuwabata-grove-inside": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "grove_inside over one full generate() of kuwabata, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 33457
+  },
+  "before-kuwabata-grove-inside-reseat": {
+    "command": "python3 specs/281-third-hotspot-pass/measure.py before",
+    "quantity": "grove_inside_reseat over one full generate() of kuwabata, counted by cProfile (counts.py)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
+    "unit": "calls",
+    "value": 1882
   },
   "before-kuwabata-handover-seg-dist": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "handover_seg_dist over one full generate() of kuwabata, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 0
   },
   "before-kuwabata-home-bank-cross": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "home_bank_cross over one full generate() of kuwabata, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 0
   },
   "before-kuwabata-marsh-sparse": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "marsh_sparse over one full generate() of kuwabata, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 27617
   },
   "before-kuwabata-page-extent": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "page_extent over one full generate() of kuwabata, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 11722
   },
   "before-kuwabata-quad-in-supply": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "quad_in_supply over one full generate() of kuwabata, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 0
   },
   "before-kuwabata-ring-index-builds": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "ring_index_builds over one full generate() of kuwabata, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 4236
   },
   "before-kuwabata-roll-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "one generate() of kuwabata, render off, the faster of two unprofiled rolls",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 3.916
+    "value": 3.774
   },
   "before-kuwabata-routes-missed-dist": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "routes_missed_dist over one full generate() of kuwabata, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 0
   },
   "before-kuwabata-seg-dist": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "seg_dist over one full generate() of kuwabata, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 895915
   },
   "before-kuwabata-stage-appurtenances-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_appurtenances inside that roll of kuwabata (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.092
+    "value": 0.09
   },
   "before-kuwabata-stage-bamboo-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_bamboo inside that roll of kuwabata (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.001
   },
   "before-kuwabata-stage-burial-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_burial inside that roll of kuwabata (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.02
   },
   "before-kuwabata-stage-crossings-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_crossings inside that roll of kuwabata (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.013
   },
   "before-kuwabata-stage-field-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_field inside that roll of kuwabata (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.742
+    "value": 0.706
   },
   "before-kuwabata-stage-frame-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_frame inside that roll of kuwabata (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.003
+    "value": 0.004
   },
   "before-kuwabata-stage-hinterland-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_hinterland inside that roll of kuwabata (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.405
+    "value": 0.414
   },
   "before-kuwabata-stage-homesteads-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_homesteads inside that roll of kuwabata (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.266
+    "value": 0.269
   },
   "before-kuwabata-stage-labels-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_labels inside that roll of kuwabata (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.004
+    "value": 0.003
   },
   "before-kuwabata-stage-notice-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_notice inside that roll of kuwabata (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.197
+    "value": 0.195
   },
   "before-kuwabata-stage-pond-stock-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_pond_stock inside that roll of kuwabata (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.013
+    "value": 0.014
   },
   "before-kuwabata-stage-seat-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_seat inside that roll of kuwabata (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.004
   },
   "before-kuwabata-stage-sink-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_sink inside that roll of kuwabata (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.0
   },
   "before-kuwabata-stage-track-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_track inside that roll of kuwabata (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.239
+    "value": 0.236
   },
   "before-kuwabata-stage-water-frame-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_water_frame inside that roll of kuwabata (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.0
   },
   "before-kuwabata-stage-waterward-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_waterward inside that roll of kuwabata (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.147
+    "value": 0.146
   },
   "before-kuwabata-stage-web-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_web inside that roll of kuwabata (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.789
+    "value": 0.763
   },
   "before-kuwabata-stage-windbreak-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_windbreak inside that roll of kuwabata (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.207
+    "value": 0.202
   },
   "before-kuwabata-stage-woodland-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_woodland inside that roll of kuwabata (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.011
+    "value": 0.01
   },
   "before-kuwabata-stream-rect-cross": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stream_rect_cross over one full generate() of kuwabata, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 0
   },
   "before-kuwabata-stream-rect-seg-dist": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stream_rect_seg_dist over one full generate() of kuwabata, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 0
   },
   "before-kuwabata-supply-clearance": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "supply_clearance over one full generate() of kuwabata, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 0
   },
   "before-mizuguchi-absorb": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "absorb over one full generate() of mizuguchi, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 182
   },
   "before-mizuguchi-brook-band-tests": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
-    "quantity": "grid-cell lookups in the brook-band test over one full generate() of mizuguchi, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "quantity": "brook_band_tests over one full generate() of mizuguchi, counted by cProfile (counts.py)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 548823
   },
   "before-mizuguchi-builds": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "builds over one full generate() of mizuguchi, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "builds",
     "value": 1
   },
   "before-mizuguchi-caption-lane-seg-dist": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "caption_lane_seg_dist over one full generate() of mizuguchi, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 21992
   },
   "before-mizuguchi-carve-comb": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "carve_comb over one full generate() of mizuguchi, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 2
   },
   "before-mizuguchi-carve-edge": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "carve_edge over one full generate() of mizuguchi, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 4500
   },
   "before-mizuguchi-clip-pip": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "clip_pip over one full generate() of mizuguchi, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 44416
   },
   "before-mizuguchi-clip-seg-dist": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "clip_seg_dist over one full generate() of mizuguchi, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 240390
   },
   "before-mizuguchi-full-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "one generate() of mizuguchi writing its svg and page, unprofiled",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 4.454
+    "value": 4.475
   },
   "before-mizuguchi-grove-hard": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "grove_hard over one full generate() of mizuguchi, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 30497
   },
   "before-mizuguchi-grove-inside": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "grove_inside over one full generate() of mizuguchi, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 75327
+  },
+  "before-mizuguchi-grove-inside-reseat": {
+    "command": "python3 specs/281-third-hotspot-pass/measure.py before",
+    "quantity": "grove_inside_reseat over one full generate() of mizuguchi, counted by cProfile (counts.py)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
+    "unit": "calls",
+    "value": 1439
   },
   "before-mizuguchi-handover-seg-dist": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "handover_seg_dist over one full generate() of mizuguchi, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 131875
   },
   "before-mizuguchi-home-bank-cross": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "home_bank_cross over one full generate() of mizuguchi, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 305806
   },
   "before-mizuguchi-marsh-sparse": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "marsh_sparse over one full generate() of mizuguchi, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 10819
   },
   "before-mizuguchi-page-extent": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "page_extent over one full generate() of mizuguchi, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
-    "value": 8494
+    "value": 8324
   },
   "before-mizuguchi-quad-in-supply": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "quad_in_supply over one full generate() of mizuguchi, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 851
   },
   "before-mizuguchi-ring-index-builds": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "ring_index_builds over one full generate() of mizuguchi, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 2848
   },
   "before-mizuguchi-roll-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "one generate() of mizuguchi, render off, the faster of two unprofiled rolls",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 4.444
+    "value": 4.516
   },
   "before-mizuguchi-routes-missed-dist": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "routes_missed_dist over one full generate() of mizuguchi, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 138178
   },
   "before-mizuguchi-seg-dist": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "seg_dist over one full generate() of mizuguchi, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 897546
   },
   "before-mizuguchi-stage-appurtenances-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_appurtenances inside that roll of mizuguchi (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.023
   },
   "before-mizuguchi-stage-bamboo-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_bamboo inside that roll of mizuguchi (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.001
   },
   "before-mizuguchi-stage-burial-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_burial inside that roll of mizuguchi (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.0
   },
   "before-mizuguchi-stage-crossings-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_crossings inside that roll of mizuguchi (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.039
+    "value": 0.04
   },
   "before-mizuguchi-stage-field-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_field inside that roll of mizuguchi (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.854
+    "value": 0.877
   },
   "before-mizuguchi-stage-frame-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_frame inside that roll of mizuguchi (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.003
+    "value": 0.004
   },
   "before-mizuguchi-stage-hinterland-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_hinterland inside that roll of mizuguchi (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.536
+    "value": 0.542
   },
   "before-mizuguchi-stage-homesteads-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_homesteads inside that roll of mizuguchi (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.346
+    "value": 0.336
   },
   "before-mizuguchi-stage-labels-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_labels inside that roll of mizuguchi (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.004
   },
   "before-mizuguchi-stage-notice-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_notice inside that roll of mizuguchi (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.313
+    "value": 0.317
   },
   "before-mizuguchi-stage-pond-stock-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_pond_stock inside that roll of mizuguchi (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.0
   },
   "before-mizuguchi-stage-seat-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_seat inside that roll of mizuguchi (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.052
+    "value": 0.05
   },
   "before-mizuguchi-stage-sink-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_sink inside that roll of mizuguchi (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.021
+    "value": 0.022
   },
   "before-mizuguchi-stage-track-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_track inside that roll of mizuguchi (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.218
+    "value": 0.231
   },
   "before-mizuguchi-stage-water-frame-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_water_frame inside that roll of mizuguchi (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.0
   },
   "before-mizuguchi-stage-waterward-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_waterward inside that roll of mizuguchi (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.0
   },
   "before-mizuguchi-stage-web-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_web inside that roll of mizuguchi (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.956
+    "value": 0.938
   },
   "before-mizuguchi-stage-windbreak-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_windbreak inside that roll of mizuguchi (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.38
+    "value": 0.39
   },
   "before-mizuguchi-stage-woodland-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_woodland inside that roll of mizuguchi (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.013
+    "value": 0.017
   },
   "before-mizuguchi-stream-rect-cross": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stream_rect_cross over one full generate() of mizuguchi, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 31020
   },
   "before-mizuguchi-stream-rect-seg-dist": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stream_rect_seg_dist over one full generate() of mizuguchi, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 38775
   },
   "before-mizuguchi-supply-clearance": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "supply_clearance over one full generate() of mizuguchi, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 26288
   },
   "before-pool-roll-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "the five pool hamlets' roll times summed",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 33.835
+    "value": 32.902
   },
   "before-sawada-absorb": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "absorb over one full generate() of sawada, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 727
   },
   "before-sawada-brook-band-tests": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
-    "quantity": "grid-cell lookups in the brook-band test over one full generate() of sawada, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "quantity": "brook_band_tests over one full generate() of sawada, counted by cProfile (counts.py)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 1040775
   },
   "before-sawada-builds": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "builds over one full generate() of sawada, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "builds",
     "value": 1
   },
   "before-sawada-caption-lane-seg-dist": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "caption_lane_seg_dist over one full generate() of sawada, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 44178
   },
   "before-sawada-carve-comb": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "carve_comb over one full generate() of sawada, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 4
   },
   "before-sawada-carve-edge": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "carve_edge over one full generate() of sawada, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 28011
   },
   "before-sawada-clip-pip": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "clip_pip over one full generate() of sawada, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 83255
   },
   "before-sawada-clip-seg-dist": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "clip_seg_dist over one full generate() of sawada, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 441733
   },
   "before-sawada-full-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "one generate() of sawada writing its svg and page, unprofiled",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 9.905
+    "value": 9.786
   },
   "before-sawada-grove-hard": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "grove_hard over one full generate() of sawada, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 82773
   },
   "before-sawada-grove-inside": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "grove_inside over one full generate() of sawada, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 253704
+  },
+  "before-sawada-grove-inside-reseat": {
+    "command": "python3 specs/281-third-hotspot-pass/measure.py before",
+    "quantity": "grove_inside_reseat over one full generate() of sawada, counted by cProfile (counts.py)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
+    "unit": "calls",
+    "value": 519
   },
   "before-sawada-handover-seg-dist": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "handover_seg_dist over one full generate() of sawada, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 209131
   },
   "before-sawada-home-bank-cross": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "home_bank_cross over one full generate() of sawada, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 430086
   },
   "before-sawada-marsh-sparse": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "marsh_sparse over one full generate() of sawada, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 28861
   },
   "before-sawada-page-extent": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "page_extent over one full generate() of sawada, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
-    "value": 15920
+    "value": 15589
   },
   "before-sawada-quad-in-supply": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "quad_in_supply over one full generate() of sawada, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 3996
   },
   "before-sawada-ring-index-builds": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "ring_index_builds over one full generate() of sawada, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 9098
   },
   "before-sawada-roll-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "one generate() of sawada, render off, the faster of two unprofiled rolls",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 9.787
+    "value": 9.744
   },
   "before-sawada-routes-missed-dist": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "routes_missed_dist over one full generate() of sawada, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 724209
   },
   "before-sawada-seg-dist": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "seg_dist over one full generate() of sawada, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 1615599
   },
   "before-sawada-stage-appurtenances-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_appurtenances inside that roll of sawada (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.096
+    "value": 0.094
   },
   "before-sawada-stage-bamboo-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_bamboo inside that roll of sawada (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.001
   },
   "before-sawada-stage-burial-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_burial inside that roll of sawada (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.0
   },
   "before-sawada-stage-crossings-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_crossings inside that roll of sawada (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.061
   },
   "before-sawada-stage-field-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_field inside that roll of sawada (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 3.087
+    "value": 3.103
   },
   "before-sawada-stage-frame-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_frame inside that roll of sawada (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.008
+    "value": 0.009
   },
   "before-sawada-stage-hinterland-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_hinterland inside that roll of sawada (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.863
+    "value": 0.838
   },
   "before-sawada-stage-homesteads-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_homesteads inside that roll of sawada (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.652
+    "value": 0.639
   },
   "before-sawada-stage-labels-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_labels inside that roll of sawada (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.006
   },
   "before-sawada-stage-notice-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_notice inside that roll of sawada (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.715
   },
   "before-sawada-stage-pond-stock-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_pond_stock inside that roll of sawada (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.0
   },
   "before-sawada-stage-seat-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_seat inside that roll of sawada (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.042
   },
   "before-sawada-stage-sink-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_sink inside that roll of sawada (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.005
   },
   "before-sawada-stage-track-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_track inside that roll of sawada (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.29
+    "value": 0.286
   },
   "before-sawada-stage-water-frame-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_water_frame inside that roll of sawada (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.0
   },
   "before-sawada-stage-waterward-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_waterward inside that roll of sawada (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
     "value": 0.0
   },
   "before-sawada-stage-web-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_web inside that roll of sawada (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 1.694
+    "value": 1.672
   },
   "before-sawada-stage-windbreak-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_windbreak inside that roll of sawada (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 1.104
+    "value": 1.098
   },
   "before-sawada-stage-woodland-s": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stage_woodland inside that roll of sawada (summed over its builds)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "s",
-    "value": 0.039
+    "value": 0.073
   },
   "before-sawada-stream-rect-cross": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stream_rect_cross over one full generate() of sawada, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 111628
   },
   "before-sawada-stream-rect-seg-dist": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "stream_rect_seg_dist over one full generate() of sawada, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 139535
   },
   "before-sawada-supply-clearance": {
     "command": "python3 specs/281-third-hotspot-pass/measure.py before",
     "quantity": "supply_clearance over one full generate() of sawada, counted by cProfile (counts.py)",
-    "source": "harness.py in the clone at 2a61d1488 (the unmodified engine)",
+    "source": "harness.py in the clone at c13a6ebe6 (the unmodified engine)",
     "unit": "calls",
     "value": 162275
   }
