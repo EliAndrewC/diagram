@@ -151,5 +151,14 @@
     "observed": "2026-09-28",
     "subject": "kashikawa",
     "verifies": "F1"
+  },
+  "kuwabata-headsman": {
+    "value": 0,
+    "unit": "spellings of 'headman'",
+    "quantity": "kuwabata.notes.md's hamlet paragraph now says 'No headsman', the card's and the canon's spelling (round-3 F1)",
+    "source": "pool/hamlets/kuwabata/kuwabata.notes.md and l7r/diagram/interactive/assets/place.json - read 2026-09-28",
+    "observed": "2026-09-28",
+    "subject": "kuwabata",
+    "verifies": "F1"
   }
 }
