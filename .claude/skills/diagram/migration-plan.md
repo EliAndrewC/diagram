@@ -263,7 +263,12 @@ Ordered by value per unit of effort, not by tier.
    `future-work/farming-communities.md`, "OWED AT CONVERSION: a village's funerary grounds"), and the shrine's
    wood in the form of the country-shrine program's knob 8, `grove form` - behind, behind and sides, sides or
    all around, by the hall's ground, rolled among the forms that fit, its edge never ruled (feature 279; the owed entry
-   "the village generator draws no shrine grove, sacred tree or basin"). The architectural
+   "the village generator draws no shrine grove, sacred tree or basin"). The scripted village MUST gate the
+   headman's house: the nagayamon was the headman's right, and the GM confirmed it on 2026-09-28 ("when we begin
+   scripting our village generation ... we should absolutely make sure that the village headsman's house is gated";
+   research/homesteads 110 and 520; `specs/269-research-backfill/rulings-2026-09-28.md`). The hand-drawn village maps
+   are not changed for it. The rest of what 269 left owed here (the headman's kura or a village gogura, the house's
+   size, the cluster's spacing, the dosojin at the entrance) is in the same future-work entry. The architectural
    question this step used to be expected to surface - whether `hamletgen/` generalizes or whether
    tiers share a stage library - is **ANSWERED**, see below.
 6. **Town, then provincial city.**

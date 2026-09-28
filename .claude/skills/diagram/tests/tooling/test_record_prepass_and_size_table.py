@@ -177,6 +177,17 @@ def test_a_section_named_by_its_file_is_found_whatever_its_heading_punctuates(tm
     assert "matched no section" in capsys.readouterr().err
 
 
+def test_a_section_whose_heading_holds_an_entity_is_found_by_its_file(tmp_path, capsys):
+    """`SECTION=120` on vegetation ("reed -&gt; sedge") matched nothing: the raw fragment kept `gt`."""
+    research = tmp_path / rp.RESEARCH
+    (research / "lanes").mkdir(parents=True)
+    body = '<h2 id="reed--gt-sedge">Reed -&gt; sedge</h2>\n<p>Ordinary words.</p>\n'
+    (research / "lanes.html").write_text(PAGE + body, encoding="utf-8")
+    (research / "lanes" / "120-reed--gt-sedge.html").write_text(body, encoding="utf-8")
+    assert rp.main(["lanes", "--root", str(tmp_path), "--section", "120"]) == 0
+    assert "1 sections" in capsys.readouterr().out
+
+
 # --------------------------------------------------------------- feature 260: the candidate words
 
 

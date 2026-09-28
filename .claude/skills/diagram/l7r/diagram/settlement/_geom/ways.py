@@ -46,7 +46,7 @@ LANE_CROSSES_MIN_DEG = (
 
 def lane_runs(M: Manifest) -> list[tuple[Poly, float]]:
     """Every traveled way on the map as (polyline, bed half-width): the major/Imperial roads, the
-    town streets, the gravel alleys, and the city ring road. Deliberately NOT walls, fences or
+    town streets, the earth alleys, and the city ring road. Deliberately NOT walls, fences or
     watercourses - this answers "what could someone walk or cart along here"."""
     runs: list[tuple[Poly, float]] = []
     roads: Any = M.get("roads")

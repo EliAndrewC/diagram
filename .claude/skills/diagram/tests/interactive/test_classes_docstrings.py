@@ -22,6 +22,11 @@ SNAPSHOT = pathlib.Path(__file__).resolve().parents[1] / "fixtures" / "classes_b
 #: in the snapshot or is a successor here, and the count moves with the table rather than by hand.
 SINCE_189: dict[str, tuple[str, ...]] = {
     "field ditch": ("irrigation ditch", "drainage ditch"),  # feature 230, GM 2026-09-12: the two ends of the field are two questions
+    # 269 E9, the GM 2026-09-28: a form attested only in modern sources is not drawn - retired with no successor
+    "sugarcane dike": (),
+    "banana dike": (),
+    "vegetable ground": (),
+    "duck pen": (),
 }
 #: Kinds the map draws that the snapshot's registry did not have at all.
 ADDED_SINCE_189: tuple[str, ...] = (
@@ -29,6 +34,8 @@ ADDED_SINCE_189: tuple[str, ...] = (
     "pond canal",
     "alder",  # feature 261: the belt's trees where it runs into the marsh
     "burial ground",  # feature 273: a hamlet's own burial ground, on its knob
+    "retirement house",  # 269 B42: the old couple's own roof in the homestead, on the family-form knob
+    "tea dike",  # 269 E9 (B34): the attested tea dike, a third dike-crop form beside mulberry and fruit
 )  # feature 230: what stands where the head race leaves the brook; and a dike-pond's two-way canals, which the irrigation ditch mislabeled (pass 10)
 
 
@@ -84,6 +91,48 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
     never do is still move any of the three. The same feature moved `field rock` from accurate to guess: research fields
     010 found no source putting outcrops on terraces and off valley, polder and delta ground (entry-drift, 2026-09-27).
 
+    Feature 269 (K1) moved `fallow`'s `label` from guess to accurate under the same bar: its section was recorded as
+    silent, and fields/250 now reads the resting paddy basin - scattered among the cropped plots, grazed - which the
+    engine draws as a rolled form; its entry and sources moved with it. The same pass re-pointed paddy (fields/270),
+    bund (fields/260) and the four dry crops (fields/180, and 050 on the three that lacked it) and gave each the keys
+    its rewritten prose rests on, and corrected the five fallow sibling texts, which still called fallow a patch of
+    ground resting for the season.
+
+    Feature 269 (K2) moved three more labels from guess to accurate under the same bar, each once the engine drew
+    what the record now reads: `bathhouse` (homesteads/214 - the village-by-village share and the front-yard or
+    corridor seat), `hen coop` (215 - Buck's 82% of farms) and `persimmon` (218 - the dooryard or behind the house,
+    the 23 ft crown). It re-pointed farmhouse (240, the spread of bearings), byre (300, the beast living with its
+    keeper), privy and manure heap (260, the four seats and the field pit), and corrected two sibling texts the
+    engine had made false: a byre drawn against its farmhouse, and a night-soil pit out at the fields.
+
+    Feature 269 (K3) re-pointed the seven greenery kinds at what the engine now draws, each gaining the keys its
+    rewritten prose rests on: homestead bamboo (vegetation/154 and 260 - the windward side read), windbreak (270 -
+    the conifer-led and mixed-broadleaf forms, and 260's bamboo low in the grove), copse (210 - the homesteads' own
+    woods), woodland commons (220 and 230 - beyond the fields, ~1,700 a hectare; 060 dropped, its figures no longer
+    the commons'), scrub (090's flat-ground figure) and marsh (vegetation/280's yearly cutting, water/340's unharvested
+    pond fringe). It corrected five sibling texts the engine had made false: a cedar-backed belt, a copse of loose
+    greenery, a bamboo strip always on the damp north or west, a 10-30 year cycle, and a coppice on the slope above
+    the paddy.
+
+    Feature 269 (K4) moved `footbridge`'s `label` from guess to accurate under the same bar: water/290 reads the three
+    crossings over small water (a single log or board, logs under trodden earth, a planked deck), which the engine now
+    rolls per settlement; the evenness of the roll, the 2 ft line and the spacing stay disclosed guesses and rulings.
+    Its entry gained ways/030 and its sources the keys 290 and 030 rest on. The same pass gave `village lane`
+    homesteads/310 (the run-out rule, its distances a guess) and fields/290 (the field path ends on the bund) with the
+    keys 290 cites; re-pointed the irrigation ditch (water/310, the bare intake mouth), the drainage ditch (water/090 and
+    fields/090 - where the drain lets its water go and why it runs across the fall; the retired 'Water-first v2'
+    heading dropped) and the weir (300's four forms and 310's choice); and corrected two sibling texts the engine had
+    made false: a weir always of stone-packed crib, and a ditch always crossed by a plank.
+
+    Feature 269 (K5) moved `pig sty`'s `label` from guess to accurate under the same bar: archetypes/210 reads the pig
+    as the dike-pond district's own animal and a pen on a fish-pond bank as a late-Ming instruction, so the sty is read
+    and only the share of households keeping one stays a disclosed guess. The same pass re-pointed the mulberry dike
+    (220 - the density continuum, the drawn spacing the late-Qing figure by the GM's ruling), the fruit dike (230 - the
+    oldest dike planting, lychee above all; the modern cane-and-vegetable succession no longer its why), the fry pond
+    (200 - the fry bought from one township, the two kinds of village), the manure pit (homesteads/260 - the field
+    pit), and, by the GM's ruling that a write-up of a place where animals lived says so, the fish pond (200 and 210 -
+    its carp) and the paddy (210 - the delta's ducks herded in the rice fields), each with the keys its prose rests on.
+
     Feature 282 moved `threshing yard`'s `label`, `covers`, `sources` and `entry` under the same bar: the GM asked whether
     the one centered mat and the south-edge rack were accurate, and research homesteads 025 and 505 found the harvest yard
     covered in mats and racks by the house only where the harvest weather is changeable - so the glyph now draws mats over
@@ -106,7 +155,8 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
         kept = {k: t for k, t in was["siblings"].items() if k not in SINCE_189}
         assert {k: t for k, t in fc.siblings.items() if k in kept} == kept, key
         for retired in set(was["siblings"]) & set(SINCE_189):
-            assert set(SINCE_189[retired]) & set(fc.siblings), (key, retired)
+            if SINCE_189[retired]:  # a key retired with no successor (269 E9) leaves its pairs with nothing to name
+                assert set(SINCE_189[retired]) & set(fc.siblings), (key, retired)
         assert fc.what and fc.why and fc.label_note, key
         if fc.caveat:
             assert fc.caveat in fc.label_note, key

@@ -27,7 +27,7 @@ from tests.gate import _pool
 # the forms the engine actually declares - read off the placer rather than guessed (my first
 # draft allowed "detached" and the roll declares "detached_commons"). A superset would make this
 # assertion weaker than the rule it replaces, which is the quiet way a migration loses a guarantee.
-FORMS = ("courtyard", "detached_commons")
+FORMS = ("courtyard", "yard_shed", "detached_commons")  # 269 B16: the inner stable, the outer stable, the rare shared shed
 
 SPEC = rolls.REFERENCE  # the pool's brief (feature 215)
 

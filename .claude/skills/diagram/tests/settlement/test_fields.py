@@ -65,17 +65,48 @@ def test_water_field_accepts_a_polygon_shape():
     assert any(d["field"] == "f" for d in s.M["field_ditches"])
 
 
-# ---- paddy_field: the tax-free plots + fallow patch + field label branches -----------------
-def test_paddy_field_marks_taxfree_plots_and_a_fallow_patch_and_labels():
-    # label + taxfree marks scattered vermilion tax-free plots; a fallow_patch stipples a blighted
-    # sub-region; the label renders and is recorded. Exercises _taxfree_plots (interior non-empty)
-    # and _fallow_patch, which the pool gens do not both trigger on one field.
+# ---- paddy_field: the tax-free plots + resting plots + field label branches ----------------
+def test_paddy_field_marks_taxfree_plots_rests_whole_plots_and_labels():
+    # label + taxfree marks scattered vermilion tax-free plots; an UNSETTLED paddy (269 B01) rests a few whole rice
+    # basins as grass, none of them a tax-free plot; the label renders and is recorded.
     s = _village()
-    s.paddy_field((150, 150, 470, 470), "Rice", "f", taxfree=2, fallow_patch=[[250, 250], [380, 250], [380, 380], [250, 380]])
+    s.pin_knob("paddy_rest", "unsettled")
+    s.paddy_field((150, 150, 870, 870), "Rice", "f", taxfree=2)
     assert s.M["taxfree"]  # tax-free plots recorded -> _taxfree_plots did real work
-    assert s.M["fallow_patches"]  # blighted sub-region recorded
+    rested = s.M["fallow_patches"]
+    assert rested and all(r["form"] == "rested_basin" for r in rested)
+    assert s.M["meta"]["paddy_rest"] == "unsettled" and s.M["meta"]["paddy_rested"] == len(rested)
+    rest_cents = {tuple(round(sum(p[i] for p in r["outline"]) / len(r["outline"])) for i in (0, 1)) for r in rested}
+    assert not rest_cents & {tuple(round(v) for v in t) for t in s.M["taxfree"]}, "a resting plot is no tax-free holding"
     s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     assert any(lab[5] == "Rice" for lab in s.M["labels"])  # field name labeled
+
+
+def test_a_settled_paddy_rests_nothing():
+    s = _village()
+    s.pin_knob("paddy_rest", "settled")
+    s.paddy_field((150, 150, 470, 470), None, "f")
+    assert s.M["meta"]["paddy_rest"] == "settled" and not s.M["fallow_patches"]
+
+
+def test_rest_plots_takes_whole_scattered_basins_toward_the_far_end_of_the_fall():
+    # 269 B01: only basins at least the median's size, never two within REST_APART_SIDES sides, the far end favored.
+    from l7r.diagram.settlement.fields.paddy import REST_APART_SIDES, rest_plots
+
+    grid = [([(x, y), (x + 40, y), (x + 40, y + 40), (x, y + 40)], float(y)) for x in range(0, 800, 40) for y in range(0, 800, 40)]
+    scraps = [([(1000 + x, 0), (1004 + x, 0), (1004 + x, 4)], 10000.0) for x in range(0, 40, 8)]  # tiny, and farthest down
+    cands = grid + scraps
+    picks = rest_plots(cands, random.Random(3), 4)
+    assert len(picks) == 4 and all(i < len(grid) for i in picks), "a scrap of fabric is never a resting holding"
+    cents = [(sum(p[0] for p in cands[i][0]) / 4, sum(p[1] for p in cands[i][0]) / 4) for i in picks]
+    assert all(math.dist(a, b) >= REST_APART_SIDES * 40 - 1e-6 for k, a in enumerate(cents) for b in cents[k + 1 :])
+    far = sum(sum(cands[i][1] for i in rest_plots(cands, random.Random(seed), 3)) for seed in range(40))
+    assert far / 120 > 400, "resting plots favor the far end of the water's run"
+    assert rest_plots([], random.Random(1), 3) == []
+    one = [([(0, 0), (40, 0), (40, 40), (0, 40)], 5.0)]
+    assert rest_plots(one, random.Random(1), 3) == [0], "a flat fall still picks"
+    crowd = [([(x, 0), (x + 40, 0), (x + 40, 40), (x, 40)], 0.0) for x in (0, 40)]
+    assert len(rest_plots(crowd, random.Random(1), 2)) == 1, "neighbors sharing a bund never both rest"
 
 
 # ---- water_field: the BBOX-shape branch + taxfree + label ----------------------------------
@@ -305,6 +336,29 @@ def test_the_field_grave_takes_either_attested_form_and_a_corner_grave_stays_in_
     corner = found["corner"]
     assert 0 < corner["x"] < 60 and 0 < corner["y"] < 30, "inside its plot"
     assert min(math.dist((corner["x"], corner["y"]), v) for v in square) < math.dist((corner["x"], corner["y"]), (30.0, 15.0)), "nearer a corner than the middle"
+
+
+def test_an_unsettled_comb_rests_whole_dry_basins_and_a_dike_pond_rests_none():
+    # 269 B01 on the comb path: the resting plots are drawn in place of paddy, never low or blue, and marked on the net;
+    # a dike-pond block rolls the knob and rests nothing, its open water being the fabric.
+    from l7r.diagram.waterfields import FLOODED
+
+    s = Settlement(W=1400, H=1400, seed=5)
+    s.meta(name="Rs", scale="hamlet", ftpx=1, down_deg=90)
+    s.pin_knob("paddy_rest", "unsettled")
+    net = _comb(1400, 1400, (700, 200), full_or(1, 5), down_deg=90, field_fall=400)
+    net["brook"] = []
+    s.draw_comb_field(net, "f1", {"kind": "stream"})
+    rested = [p for p in net["plots"] if p.get("rest")]
+    assert rested and len(rested) == len(s.M["fallow_patches"]) == s.M["meta"]["paddy_rested"]
+    assert not any(p.get("low") or p["fill"] == FLOODED for p in rested)
+    d = Settlement(W=1400, H=1400, seed=5)
+    d.meta(name="Dp", scale="hamlet", ftpx=1, down_deg=90, field_archetype="mulberry_dike_fishpond")
+    d.pin_knob("paddy_rest", "unsettled")
+    net2 = _comb(1400, 1400, (700, 200), full_or(1, 5), down_deg=90, field_fall=400)
+    net2["brook"] = []
+    d.draw_comb_field(net2, "f1", {"kind": "stream"})
+    assert d.M["meta"]["paddy_rest"] == "unsettled" and not d.M["fallow_patches"]
 
 
 def test_draw_comb_field_existing_stream_and_cascade_sources():
@@ -565,7 +619,8 @@ _FIELDS_SURFACE = frozenset(
         # private helpers, reached through self. (several also called on an instance from tests
         # and from settlement/land/nearring.py, which is why they are part of the surface)
         "_draw_furrows",
-        "_fallow_patch",
+        # `_fallow_patch` (the blighted sub-region with red crosses) was RETIRED by 269 B01: a resting paddy plot is a whole
+        # basin (`rest_basin`), never a patch within one - a deliberate removal, not a member lost in a move.
         "_mulberry_rows",
         "_paddy_features",
         "_paddy_plots",
@@ -767,73 +822,44 @@ def test_the_patch_seeds_are_A_HANDFUL_not_everyone_at_once() -> None:
     assert len(picked) == 2, "even a two-plot conversion has a seed to grow from"
 
 
-def test_the_leftover_form_VEGETABLES_erases_the_bund_and_tills_the_ground() -> None:
-    """Feature 150 B2, and the research behind the knob: what the leftover parcels of a wholesale
-    conversion read as. Fei records vegetables under the mulberry; the gazetteers record no rice
-    inside a converted district. So "vegetables" is not a decoration - it is one of the three
-    attested readings, and it draws TILLED EARTH with the bund erased rather than textured paddy.
-
-    Asserted against the default: the same conversion with `leftover="rice"` draws paddy, so the two
-    must differ in what they emit.
-    """
-    net = _comb(1300, 1700, (520, 220), full_or(2, 5), down_deg=90, field_fall=760, offtakes_a=(0.32, 0.7), offtakes_b=())
-    rng = __import__("random")
-
-    veg = Settlement(1400, 1800, seed=3)
-    veg.meta(name="LUV", scale="village", ftpx=1, down_deg=90)
-    veg.apply_land_use(net, "mulberry_fishpond", rng.Random(1), fraction=0.9, eligible="all", leftover="vegetables")
-
-    rice = Settlement(1400, 1800, seed=3)
-    rice.meta(name="LUR", scale="village", ftpx=1, down_deg=90)
-    rice.apply_land_use(net, "mulberry_fishpond", rng.Random(1), fraction=0.9, eligible="all", leftover="rice")
-
-    assert "vegetable ground" in "".join(str(c) for c in veg.out_cls), "the leftovers are drawn as vegetable ground"
-    assert "vegetable ground" not in "".join(str(c) for c in rice.out_cls), "which the rice form does not do"
-
-
-def test_a_SUGARCANE_dike_is_drawn_in_ROWS_ALONG_it_not_as_a_scatter() -> None:
-    """settlement-review: a scatter read as rough grass. Cane is sett-planted in furrows down the
-    bank's LENGTH, so the texture is ruled rows running with the dike - three rows of near-continuous
-    dashes, each dash following the loop's own direction.
-
-    `DIKE_CROPS` holds four forms and only mulberry had a test; this covers the one whose drawing is
-    a different SHAPE rather than a different colour.
+def test_a_TEA_dike_is_drawn_as_clipped_hedgerows_not_as_crowns() -> None:
+    """269 B34: tea is the third premodern dike planting (research/archetypes/230). A clipped tea bush reads
+    as a hedge, so its rows are runs of dark stroke, broken between bushes - a different SHAPE from the
+    mulberry's scatter of round crowns, which is what lets a reader tell the two at fit zoom.
     """
     net = _comb(1300, 1700, (520, 220), full_or(2, 5), down_deg=90, field_fall=760, offtakes_a=(0.32, 0.7), offtakes_b=())
     s = Settlement(1400, 1800, seed=3)
-    s.meta(name="LUC", scale="village", ftpx=1, down_deg=90)
-    n = s.apply_land_use(net, "mulberry_fishpond", __import__("random").Random(1), dike_crop="sugarcane")
-    mulberry = Settlement(1400, 1800, seed=3)
-    mulberry.meta(name="LUM", scale="village", ftpx=1, down_deg=90)
-    mulberry.apply_land_use(net, "mulberry_fishpond", __import__("random").Random(1))
-
+    s.meta(name="LUT", scale="village", ftpx=1, down_deg=90)
+    n = s.apply_land_use(net, "mulberry_fishpond", __import__("random").Random(1), dike_crop="tea")
+    ink = "".join(s.out)
     assert n > 0, "the conversion still happens"
-    # The crop is not recorded on the land_use row - it is a DRAWING difference, so that is what is
-    # asserted: the same conversion emits different ink for cane than for mulberry.
-    assert s.out != mulberry.out, "cane is drawn in rows along the dike, mulberry as a scatter of crowns"
+    assert s.M["meta"]["dike_crop"] == "tea"
+    assert "#3F5A2A" in ink or "#4A6630" in ink, "the hedgerow runs are drawn"
+    assert "tea dike" in "".join(str(c) for c in s.out_cls), "the bank and its bushes light as the tea dike"
 
 
 def test_every_attested_DIKE_CROP_draws_a_form_that_tells_it_from_the_others() -> None:
-    """`DIKE_CROPS` holds four distinct plantings and each is a different SHAPE at fit zoom, which is
-    the whole reason they are separate forms rather than four colours:
+    """`DIKE_CROPS` holds three distinct premodern plantings (269 B34; research/archetypes/230) and each is a
+    different SHAPE at fit zoom, which is the whole reason they are separate forms rather than colors:
 
-      - mulberry: a scatter of crowns
-      - sugarcane: ruled rows down the bank's length (a scatter read as rough grass - settlement-review)
-      - banana: STOOLS IN CLUMPS, three to five pseudostems with gaps between mats, "the form that
-        tells it from the fruit dike at fit zoom" (settlement-review)
+      - mulberry: a scatter of coppiced crowns in two rows
+      - tea: two clipped hedgerows, dark runs broken between bushes
       - fruit: an orchard's single crowns at a regular pitch
 
-    So the test is that no two draw the same ink - which is the property a reader depends on, and
-    the one a fifth crop added as a colour would break.
+    So the test is that no two draw the same ink - which is the property a reader depends on, and the one a
+    fourth crop added as a color would break. The modern cane, banana and vegetable dikes are refused.
     """
     net = _comb(1300, 1700, (520, 220), full_or(2, 5), down_deg=90, field_fall=760, offtakes_a=(0.32, 0.7), offtakes_b=())
     ink = {}
-    for crop in ("mulberry", "sugarcane", "banana", "fruit"):
+    for crop in ("mulberry", "tea", "fruit"):
         s = Settlement(1400, 1800, seed=3)
         s.meta(name=f"LU{crop}", scale="village", ftpx=1, down_deg=90)
         s.apply_land_use(net, "mulberry_fishpond", __import__("random").Random(1), dike_crop=crop)
         ink[crop] = "".join(s.out)
-    assert len(set(ink.values())) == 4, f"four crops, four distinguishable plantings: {[k for k in ink]}"
+    assert len(set(ink.values())) == 3, f"three crops, three distinguishable plantings: {[k for k in ink]}"
+    for modern in ("sugarcane", "banana", "vegetable"):
+        with pytest.raises(ValueError, match="dike_crop"):
+            Settlement(1400, 1800, seed=3).apply_land_use(net, "mulberry_fishpond", __import__("random").Random(1), dike_crop=modern)
 
 
 def test_an_unknown_dike_crop_or_leftover_form_is_REFUSED_at_the_call() -> None:
@@ -848,6 +874,8 @@ def test_an_unknown_dike_crop_or_leftover_form_is_REFUSED_at_the_call() -> None:
         s.apply_land_use(net, "mulberry_fishpond", __import__("random").Random(1), dike_crop="kiwi")
     with pytest.raises(ValueError, match="leftover"):
         s.apply_land_use(net, "mulberry_fishpond", __import__("random").Random(1), leftover="fallow")
+    with pytest.raises(ValueError, match="leftover"):  # retired with the modern vegetable dike (269 E9)
+        s.apply_land_use(net, "mulberry_fishpond", __import__("random").Random(1), leftover="vegetables")
 
 
 def test_a_dike_pond_bank_is_a_ring_around_its_water():

@@ -134,6 +134,8 @@ class RetainersQuarters(Kind):
     offices that sent their constables to live in a district of their own. Where lower-ranking samurai and foot
     soldiers lived as households, they lived in terraced ranges - one surviving ashigaru rowhouse holds eight
     households under one thatched roof, 143 by 24 ft - so a range, not a cluster of small houses, is the form.
+    Even a chief retainer's great house at Aizu, rebuilt in 1975 from a bird's-eye view of the lost original, 38 rooms under one roof, keeps its retainers' dwellings in a
+    one-sided range beside the front gate.
 
     Note: Retainers' official residences laid out inside a small domain's jin'ya are recorded, and the city
     magistracy's separate constables' district and ranked households in terraced ranges rest on recorded
@@ -150,8 +152,8 @@ class RetainersQuarters(Kind):
     Name: retainers' quarters
     Covers: the senior retainers' quarters, a family rowhouse for married retainers, and their labels
     Label: accurate
-    Sources: hatchobori-jawiki, jinya-jawiki, takayama-jinya-jawiki, shibata-ashigaru-nagaya, hikone-ashigaru
-    Entry: research/buildings.html - 'Staff housing spans a real spectrum'; research/cities/government.html - 'Servant housing in the samurai ward'
+    Sources: hatchobori-jawiki, jinya-jawiki, takayama-jinya-jawiki, shibata-ashigaru-nagaya, hikone-ashigaru, aizu-bukeyashiki-guide
+    Entry: research/buildings.html - 'Staff housing spans a real spectrum'; research/cities/government.html - 'Servant housing in the samurai ward', "Where do a samurai household's servants sleep when the house has no gate range?"
     """
 
     key = "retainers' quarters"
@@ -168,19 +170,21 @@ class ServantsQuarters(Kind):
     rear wall there, beside the household's storehouses and the family privy; the vegetable plot stands wherever it
     gets its sun.
 
-    Note: Servants housed inside the walls, in a range along the boundary, is a recorded finding. The program
-    classes the building's size as a guess: a nagaya for about ten servants, with no measured example behind
-    the band, and its seat in the north rear is reasoned from the sun rather than read.
+    Note: Servants housed inside the walls, the range along the front boundary, and a smaller house with no range are recorded findings; where that smaller house's servants slept is a guess, on no page read. The
+    program classes the building's size as a guess: a nagaya for about ten servants, with no measured example
+    behind the band. And its seat in the north rear is reasoned from the sun rather than read: the record puts
+    the servants' range at the front, on the street, and no page read puts one at the rear.
 
-    Caveat: The program classes the building's size as a guess: a nagaya for about ten servants, with no
-    measured example behind the band, and its seat in the north rear is reasoned from the sun rather than
-    read.
+    Caveat: The
+    program classes the building's size as a guess: a nagaya for about ten servants, with no measured example
+    behind the band. And its seat in the north rear is reasoned from the sun rather than read: the record puts
+    the servants' range at the front, on the street, and no page read puts one at the rear.
 
     Name: servants' quarters
     Covers: the servants' nagaya and its label
     Label: accurate
-    Sources: jta-nagayamon, fukui-bushi-jutaku, aizu-bukeyashiki-jawiki, kotobank-degawari, nagayamon-jawiki, nando-jawiki, daozuofang, shoinzukuri-jawiki
-    Entry: research/cities/government.html - 'Servant housing in the samurai ward'; research/buildings.html - 'The shady rear is the service strip'
+    Sources: jta-nagayamon, fukui-bushi-jutaku, aizu-bukeyashiki-jawiki, kotobank-degawari, nagayamon-jawiki, nando-jawiki, daozuofang, shoinzukuri-jawiki, kotobank-bukeyashiki, kotobank-nagayamon
+    Entry: research/cities/government.html - 'Servant housing in the samurai ward', "Where do a samurai household's servants sleep when the house has no gate range?"; research/buildings.html - 'The shady rear is the service strip'
     """
 
     key = "servants' quarters"

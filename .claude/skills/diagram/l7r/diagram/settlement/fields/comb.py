@@ -190,8 +190,8 @@ class CombMixin:
         # imperfect tessellation never shows the parchment background as bare "white" gaps (research.md D5).
         self.comb_base_fill(net, name)
 
-        self._comb_draw_hem(net, source)
-        self._comb_draw_paddies(net)
+        self._comb_draw_hem(net, source, name)
+        self._comb_draw_paddies(net, name)
         self.bund_junctions(net["plots"], name)
         # WATER-HONEST BEADS, the draw-site half (GM 2026-08-15: "fix the water-buried beads so
         # the record stays honest"; settlement-review found 40 of Inashiro's 727 recorded beads
@@ -239,7 +239,7 @@ class CombMixin:
             self._pending_block = None
         return cast("list[Pt]", net["envelope"])
 
-    def _comb_draw_hem(self: Settlement, net: dict[str, Any], source: dict[str, Any] | None = None) -> None:  # type: ignore[misc]
+    def _comb_draw_hem(self: Settlement, net: dict[str, Any], source: dict[str, Any] | None = None, name: str = "") -> None:  # type: ignore[misc]
         """Draw the dry upslope hem, skipping any plot that falls on an earlier fan's rice or on standing water -
         including the brook the field is being cut around, which `source` carries and the manifest does not yet."""
         from l7r.diagram.waterfields import hem_on_paddy
@@ -286,7 +286,11 @@ class CombMixin:
             pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in p["poly"])
             self.add(f'<polygon points="{pts}" fill="{p["fill"]}" stroke="#A98C58" stroke-width="1.4" stroke-linejoin="round"/>', cls=p["crop"])  # each dry crop is its own class (feature 134)
             self._draw_furrows(p["poly"], p["furrow"], p["theta"], cls=p["crop"])
-            self.M["dry_plots"].append({"poly": [[round(x, 1), round(y, 1)] for x, y in p["poly"]], "crop": p["crop"], "theta": round(p["theta"], 3)})
+            # ...with its TRACT (269 B06), named by field so two fans' tracts never share a name: `dry_plot_furrows_vary` judges the
+            # plots of one tract to share a row direction and the plots across a seam to differ.
+            self.M["dry_plots"].append(
+                {"poly": [[round(x, 1), round(y, 1)] for x, y in p["poly"]], "crop": p["crop"], "theta": round(p["theta"], 3), **({"tract": f"{name}:{p['tract']}"} if "tract" in p else {})}
+            )
             # A HEM PLOT GOES IN BOTH REGISTRIES, and the second one is the fix (2026-08-11).
             # `block_polys` is the no-build list, which keeps a farmstead off the crop. `dry_polys`
             # is the list the GROVE clump filter, the lane/tree fringe, the threshing-yard and
@@ -301,14 +305,27 @@ class CombMixin:
             self.block_polys.append(p["poly"])
             self.dry_polys.append(p["poly"])
 
-    def _comb_draw_paddies(self: Settlement, net: dict[str, Any]) -> None:  # type: ignore[misc]
+    def _comb_draw_paddies(self: Settlement, net: dict[str, Any], name: str = "") -> None:  # type: ignore[misc]
         """Draw the flooded paddy plots, and write the topography record and the paint record the overlay
         and flooded-wedge checks read."""
         from l7r.diagram.waterfields import AZE  # noqa: I001 - FLOODED is aliased for the picture record below
         from l7r.diagram.waterfields import FLOODED as _WF_FLOODED
         from l7r.diagram.waterfields import aze_w
 
-        for p in net["plots"]:  # the flooded paddies
+        # THE RESTING PLOTS (269 B01, `PADDY_REST` in paddy.py): whole basins, chosen from the plots that are neither low
+        # (the wet ground the pocket pond and the overlays take) nor painted blue, along this fan's own fall. A dike-pond
+        # block rests none: its open water is the fabric (`_paddy_features` stands off it for the same reason).
+        _ddp = math.radians(float(net.get("down_deg") if net.get("down_deg") is not None else self.M["meta"].get("down_deg", 90)))
+        _may = [i for i, p in enumerate(net["plots"]) if not p.get("low") and p["fill"] != _WF_FLOODED and len(p["poly"]) >= 3]
+        if self.M["meta"].get("field_archetype") == "mulberry_dike_fishpond":
+            _may = []
+        _cands = [(p["poly"], sum(v[0] * math.cos(_ddp) + v[1] * math.sin(_ddp) for v in p["poly"]) / len(p["poly"])) for p in (net["plots"][i] for i in _may)]
+        _rest = {_may[k] for k in self.resting_plots(name, _cands)}
+        for i, p in enumerate(net["plots"]):  # the flooded paddies
+            if i in _rest:
+                p["rest"] = True
+                self.rest_basin(p["poly"], aze_w(self.ftpx))
+                continue
             pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in p["poly"])
             # ONE polygon, TWO classes (feature 134 `Split`): the fill is the flooded paddy, the stroke is
             # the bund - the HTML target emits a fill-only and a stroke-only copy so they highlight apart

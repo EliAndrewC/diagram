@@ -7,10 +7,13 @@ import random
 from collections.abc import Sequence
 
 from l7r.diagram.settlement import Settlement, seg_dist
+from l7r.diagram.settlement._knobs import knob_rng
+from l7r.diagram.settlement.rolling.bearing import COMMON_BEARING_DEG, MarginBearing, turned_reach, wrap_line_deg
 
 from ..consts import BUNDLE_PITCH, CLUSTER_DRAWN_ASPECT, MIN_WEB_GAP, SUN_CORRIDOR_FT, WEB_FABRIC_GAP, WEST_SUN_FT, Pt
 from ..plan import SitePlan
 from .boundary import install_site_boundary
+from .retirement import retirement_houses
 from .seats import _seat_allowed, cluster_aspect, front_row, lane_frontage
 from .wells import place_wells
 
@@ -49,6 +52,35 @@ def water_push(water: Sequence[tuple[Pt, Pt, float]], center: Pt, n: Pt, half_la
                 if near - clr <= d <= far + clr:
                     push = max(push, d + clr - near)
     return push
+
+
+def face_the_houses(s: Settlement, plan: SitePlan) -> None:
+    """Which way this hamlet's farmhouses face (269 B18, research/homesteads/240), set before the first house is seated.
+
+    The COMMON BEARING is rolled per settlement from the map's seed within `COMMON_BEARING_DEG` of south (a degree
+    along a continuum, so calibrated liberty rather than a knob) and recorded as `meta.house_bearing_deg`; each house
+    turns from it with the field margin its lanes will follow (`MarginBearing`, on the paddy's envelope and the seat's
+    own axis), plus its own by-eye spread, and one in ten a quarter turn (`Settlement._house_rot`)."""
+    common = round((knob_rng(s.seed, "house_bearing").random() * 2.0 - 1.0) * COMMON_BEARING_DEG, 2)
+    s._house_bearing = common
+    ax, ay = plan.seat["along"]
+    s._bearing_follow = MarginBearing(plan.envelope, math.degrees(math.atan2(ay, ax))) if len(plan.envelope) >= 3 else None
+    s.M["meta"]["house_bearing_deg"] = common
+
+
+def turn_the_seat(s: Settlement, seat: Pt, n: Pt, core: tuple[float, float, float, float]) -> Pt:
+    """A front-row seat moved out along `n` by how much further the homestead's core reaches toward its chord once
+    turned (269 B18). `front_row` offsets every seat by the unturned core (`core`: left, top, right, bottom about the house
+    center); the turn is the seat's own, known before it is offered, so the extra is measured, not a slack. Asked twice -
+    the seat it moves to may take a different turn - and the larger move kept; the placer's own tests stay the judge."""
+    toward = (-n[0], -n[1])
+    base = turned_reach(core, 0.0, toward)
+    extra = 0.0
+    q = seat
+    for _ in range(2):
+        extra = max(extra, turned_reach(core, s._house_rot(q[0], q[1]), toward) - base)
+        q = (seat[0] + n[0] * extra, seat[1] + n[1] * extra)
+    return q
 
 
 def bank_of(x: float, y: float, brook: Sequence[Pt]) -> int:
@@ -129,6 +161,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # THE SITE BOUNDARY FIRST (feature 226): one outline separating the buildable ground from everything the map holds,
     # computed once; the fit test reads it instead of its five ground scans, and the seats below are proposed from it.
     install_site_boundary(s, plan)
+    face_the_houses(s, plan)
     s._seat_search = {"candidates": 0, "placer_calls": 0, "positions": 0, "rects": 0, "rounds": 0}  # rounds: lattice rounds run (0 when the front row seated everything; over 4 = the rescue ran)
     _house_max = (s.px(46) * 1.35, s.px(28) * 1.10)  # the LARGEST house `_try_place_bundle` rolls: the front row's computed standoff clears it
 
@@ -145,7 +178,9 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         the rest because no way could reach it - Kashikawa shipped one 52 ft beyond the water with no bridge anywhere.
         Ways cross the brook at a ford now and `bridges()` decks the crossing, so a hamlet may stand astride its own
         small channel, as the record has it (Harie, specs/230 R6); a house the web still cannot reach is caught by the
-        reach check and re-rolled, as any stranded house is."""
+        reach check and re-rolled, as any stranded house is. Both forms are attested at a stream's size (269 B23;
+        research/water/270: Hongcun beside its stream, Xidi and Likeng on both banks), so neither bank is refused;
+        each farmstead stays whole on one bank, which the same entry records as a guess."""
         s._seat_search["candidates"] += 1
         return True
 
@@ -305,7 +340,9 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         # brook skirts the fan 34-44 ft outside its margin, so on a seat facing the wind down that flank every front seat
         # lay in the water's corridor and was refused; the displaced households were seated by the cloud behind, and a
         # crescent that drew 4.07:1 on main drew 1.62:1. The row stands on the brook's far bank instead, fronting its field
-        # across the water - the push is the course's reach past the box's near edge, by its own clearance.
+        # across the water - the push is the course's reach past the box's near edge, by its own clearance. A row across
+        # its brook from its field is one of the two forms the record gives a hamlet at a stream's size (269 B23,
+        # research/water/270), not an exception to it.
         wet = water_push(s_._site_corridors.water, (_bx[0], _bx[1]), n_, half_lat, near, far)
         by_water = wet > push
         push = max(push, wet)
@@ -320,7 +357,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # the homestead's CORE - the house, the yard south of it, the kura north - is what always faces the paddy the same
     # way; the garden's side is chosen later by the sun, so it is not in the reach (counted, it stood every front house
     # off a paddy beside it by a garden's width, 81 px on Inashiro against the 60 the cluster is held to)
-    _g0 = s._bundle_geom(0.0, 0.0, _house_max[0], _house_max[1], "E", shed=True)
+    _g0 = s._bundle_geom(0.0, 0.0, _house_max[0], _house_max[1], "E", shed=True, rot=0.0)  # unturned: each seat adds its own turn
     _core = s._bbox_of([r for r in (_g0["house"], _g0["yard"], _g0.get("shed")) if r is not None])
     _reach = (_core[0] - _core[2] / 2, _core[1] - _core[3] / 2, _core[0] + _core[2] / 2, _core[1] + _core[3] / 2)  # (left, top, right, bottom) about the house center
     for _rung in (0,):
@@ -333,7 +370,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
             # it (Kuwabata's dike heads: every front seat refused, the cluster 112 px off its polder). Where the seat's
             # box is inside the outline, it is pushed once along the chord's normal by the outline's measured reach
             # past the box's near edge, and offered there.
-            (fx, fy), _by_water = _ground_push(s, (fx, fy), _n, _house_max)
+            (fx, fy), _by_water = _ground_push(s, turn_the_seat(s, (fx, fy), _n, _reach), _n, _house_max)
             # NO LANE TEST HERE ANY MORE (feature 126). This used to read
             # `_row_seats < _FIELD_RING_FLOOR or _lane_dist(...) <= _FRONT_ROW_LANE_CAP`, which
             # judged a front-row seat by how near it fell to a drawn lane. The internal lanes are
@@ -602,6 +639,8 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # which stopped meaning anything the moment the shape was always declared.
     s.M["meta"]["cluster_seeding"] = "cloud" if _cloud_placed * 2 >= max(1, plan.spec.households) else "frontage"
     plan.placed = s.farmsteads()
+    # how many farmhouses the quarter turn took (269 B18) - measured on what was drawn, so the share is a count, not a hope
+    s.M["meta"]["house_quarter_turns"] = sum(1 for h in s.M.get("houses") or [] if abs(wrap_line_deg(float(h.get("rot", 0.0)) - (s._house_bearing or 0.0))) > 45.0)
     # THE TRIM MOVED OUT OF THIS STAGE (feature 126). It existed because the skeleton was laid
     # before the houses, so its arms had to be shortened afterwards once there was something to
     # measure them against. The arms are now laid after the houses and fitted to them, so there is
@@ -630,7 +669,9 @@ def stage_appurtenances(s: Settlement, plan: SitePlan) -> None:
     Steps:
         l7r.diagram.hamletgen.homesteads.wells.place_wells
         l7r.diagram.settlement.Settlement.draft_byres
+        l7r.diagram.hamletgen.homesteads.retirement.retirement_houses
     """
     houses = s.M.get("houses", [])
     place_wells(s, plan, houses)
     s.draft_byres(fraction=0.22, gap=60)
+    retirement_houses(s, plan)  # after the byres, so the draft team keeps the seats it always had (269 B42)

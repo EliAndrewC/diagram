@@ -26,7 +26,7 @@ accepted for 267 with that note standing in. The rename touches 17 files: the in
 `overlap/taxonomy.py`, `tools/placement_stages.py`, the Mizuguchi and Kashikawa manifests' `ink_classes`, and the pinned
 snapshot `tests/fixtures/classes_before_189.json` (through `SINCE_189`, the renaming table the snapshot test keeps).
 
-## OPEN 2026-09-28, OWED AT CONVERSION: a village's funerary grounds (was feature 275, withdrawn)
+## OPEN 2026-09-28, OWED AT CONVERSION: a village's funerary grounds (was feature 275, withdrawn), and the headman's gate
 
 The GM, 2026-09-28: *"we just want to make sure that [when] we make village maps scripted that we do the correct
 things in the scripted generation."* So the village's own burial ground is not a feature of its own now; it is owed by
@@ -45,6 +45,29 @@ funerary grounds. The design, already researched:
   stand beside.
 - **The hamlets**: already done (feature 273, `hamletgen/burial.py`).
 Hand-rolled village maps are not edited for any of this (the GM, 2026-09-28).
+
+**The headman's gate (269 B19, the GM's ruling of 2026-09-28).** The scripted village MUST gate the headman's house.
+The GM: *"As for the headsman's gate, Yes, absolutely, we should have that. ... I don't want you to update the
+hand-drawn maps with this, but I do want it recorded in the research, and I do want it to be the case that when we
+begin scripting our village generation ... we should absolutely make sure that the village headsman's house is gated
+if that was a headsman's right."* It was: the one headman's plot read has a nagayamon (research/homesteads 110, 520;
+`specs/269-research-backfill/rulings-2026-09-28.md`). Measurement: `settlement/rolling/place.py` `headman()` draws a
+92 x 56 ft house and no gate on every hand-rolled village. Mechanism: nothing in the roller knows a gate. Sketch: the
+village generator seats the headman's house with a nagayamon on its road face as part of the plot, reserved with the
+house, so a lane arrives at the gate rather than at the wall.
+
+**The rest of 269's village rows (outcomes.md section 3), owed at the same conversion:**
+- **Tax rice (B19)**: today the tax rice is taken to be in the headman's kura; the record allows either the
+  headman's kura or a village gogura among the houses. Mechanism: no storehouse placer exists at the village tier.
+  Sketch: a knob `tax_store` headman_kura / gogura, the gogura seated among the houses (`gogura-kotobank` gives the
+  siting).
+- **The cluster's spacing (B19)**: no house more than ~650 ft from the next. Measurement: no village is scripted, so
+  nothing holds it. Sketch: the village's cluster seating asks a nearest-house test per candidate from the placed
+  index, and the gate checks the largest gap.
+- **The headman's house size (B19)**: 92 x 56 ft is about four times a farmhouse; the record reads 2 to 2.5 times,
+  about 65-75 x 40 ft, a labeled guess. Sketch: the village generator takes the record's figure as `headman()`'s default.
+- **The dosojin (B20)**: the entrance stone is a guess today; the record puts a dosojin by the road at the
+  village's entrance. Sketch: seat it through `edge_seat` at the road's crossing of the village edge.
 
 ## OPEN 2026-09-27, OWED AT CONVERSION: the village generator draws no cremation ground and no wayside stones
 
@@ -82,34 +105,114 @@ west of the approach). Measure: the region's area and canopy share, and feature 
 edge crowns (no four within 2 ft of one line), against the hand-drawn Hoshigaoka grove (form `behind and sides`, feature 279), and the `LONG_RUN` bar (no
 stretch of edge 50 ft or longer within a crown's radius of one line).
 
-## OPEN 2026-09-27, A GM DECISION: the dike-pond mulberry is drawn 10 to 20 times sparser than the one figure found
+## OPEN 2026-09-28 (269 B26, PARTIAL): the homesteads' woods fall short of their rolled area on every map
 
-Found by feature 250's `archetypes` write session (research R9); the GM, 2026-09-27: *"Mark those two things as
-future work so we don't forget about it, but for now I want to focus on getting the research process right."*
+The record gives the floor the old copse entry lacked: each homestead that keeps a wood keeps 6,000-28,000 sq ft of
+it (research/vegetation 210), and 269 E6 rolls it per homestead (log-uniform, a GUESS) and fills the copse to what the
+belt leaves of the sum (`homestead_parts/groves.py` `HOMESTEAD_WOOD_FT2`, `village_grove(area=)`, the `CanopyArea`
+raster, half- and quarter-step top-up passes). **Measurement** (`meta.homestead_wood_ft2`, rolled / drawn, the pool
+regenerated after the landing's third review round, 2026-09-28): Inashiro 13,059 / 10,539, Kashikawa 11,523 / 8,658,
+Kuwabata 13,030 / 6,441 (just over the 6,000 floor; an earlier roll the same day drew 5,619, under it), Mizuguchi
+12,534 / 10,682, Sawada 13,422 / 9,879 (the belt's trimmed arm took Sawada's and Kashikawa's down). **Mechanism**: the copse may only seat within `COPSE_HOUSE_REACH_FT` (90 ft, a map drawing convention calibrated by feature 261, not a GM ruling) and in the belt's lee, and where that ground is used up the top-up passes find no seat -
+on the first landing roll the quarter-step pass added only 14 clumps on Kuwabata. A reviewer also found 22% of
+Kuwabata's copse crowns with every farmhouse within 110 ft on the far side of a lane: the reach measures distance and
+cannot see a lane between (research question: did a village lane ever run between a house and its own grove?). **Sketch**: either widen the reach for a
+homestead whose own ground is full (a convention, so the session's to re-calibrate with a review), or seat the shortfall
+as a second stand behind the belt on the homestead's side; either way the check reads `drawn / rolled`, not a
+self-measured density (the old entry's lesson: a density on a self-measured extent cannot see a collapse).
 
-**THE EVIDENCE**: the map draws one mulberry bush per 10 to 20 square feet on a dike - a GUESS the GM ruled on. The
-one figure the record now carries, `pwsannong-sangji-yutang` (a modern Chinese agricultural encyclopedia on the
-Pearl River delta), gives 8,000 to 10,000 root-cut bushes a mu, about one per square foot. It is modern, undated and
-covers the whole silk district rather than the dikes alone; the record states the gap at
-`research/archetypes/140-the-64-water-to-dike-ratio-and-coppiced-mulberry.html`.
+## OPEN 2026-09-28 (269 B07), RESEARCH OWED: a wild fan middle leaves a hamlet almost no dry field
 
-**THE SKETCH**: put the two figures to the GM with their limits - keep the drawn density as a legible deviation
-(and say so in the MulberryDike modal's `Note:`), or draw nearer the source's density - and, whichever, record the
-class (accurate / deviation) at the modal and the rule.
+The settlement-reviews at the 269 landing: with `meta.fan_middle` = wild, `waterfields/comb.py` `fan_toe_hem` keeps the
+dry hem only on the toe's last third of the fall, and **Inashiro draws 2 dry plots (0.42 acre, from 20 plots and 3.64
+acres on main) and Mizuguchi 3 (0.41 acre, from 16 and 2.51)** - about 0.03 acre a household, while research/fields
+("Acreage from population") sizes the paddy on coarse grain being about a third of the diet. **Mechanism**: the knob
+removes the middle's hem and nothing places the dry band anywhere else. **The research question** (constitution XII, so
+no number is picked by eye): where did a fan-toe hamlet with a wild middle grow its coarse grain - on the raised ground
+the houses stand on, on a lower slope or levee, or as winter barley on the drained paddy (research/fields, "Did a paddy
+grow a second crop over the winter?")? **Sketch** once answered: the dry band goes to the named ground at the acreage
+the sizing rule leaves, or the winter crop is recorded and the sizing rule says so.
 
-## OPEN 2026-09-27, A GM DECISION: the fruit, cane and vegetable dikes are modern forms drawn as "accurate"
+## OPEN 2026-09-28: the rest of the 269 landing's settlement-review findings
 
-Found by the same round's check of `archetypes` 170 (research R9); the same ruling of the GM defers it.
+Each measured by the round-1 reviews (`docs/review-ledger.md`, 2026-09-28) on the maps as they stood before the round-1
+engine fixes; the round-2 reviews re-measure them.
+- **A lane end behind a house counts as its dooryard** (Kuwabata F1): `trim_lane_stubs`' dooryard is 12 ft of the drawn
+  house, yard or beds (269 B17), so a lane arriving at the back wall passes - lane 5 stopped 11 ft behind house 1, 43 ft
+  from its yard. Sketch: judge an END against the recorded yard and the front face only; E3 found a dooryard-only rule
+  stranded 4 Inashiro houses, so the lane web must then carry such an end round the gable.
+- **A rolled form the sheet never draws**: Kashikawa and Kuwabata roll `woodpile_form` kizuma and draw none (the belt is
+  never within 40 ft of a windward wall - `belt_near_vertices` fell from 115 to 8 on Kuwabata), and Mizuguchi rolls
+  `bath_seat` corridor and draws its baths unjoined. `meta.woodpile_forms_drawn` and `meta.bath_seats_drawn` now record
+  the truth. Sketch: offer a form only where a homestead can seat it (a kizuma only where the belt reaches), and let the
+  knob fall back per homestead to the next attested form rather than to the eaves stack.
+- **Eaves woodpiles standing off the wall** (Mizuguchi F2): 5 of 10 stacks 10.5-27.8 ft from any building (7 of 10 at 10.9-16.3 ft on the round-2 roll), placed by the
+  feature-261 outward rungs. Sketch: for the eaves form try every wall of the steading's own buildings (shed, byre,
+  retirement house) at the wall gap before stepping out.
+- **Belt bamboo reads as grass** (Sawada F3, Mizuguchi N1): the culm marks share the scrub grass's size and yellow-green.
+  Sketch: draw the belt's bamboo as a small clustered stand, or in a culm color no grass uses.
+- **Coppice lots read as stamped discs** (Kashikawa F5, Sawada F4): the new stocking fills a near-round 12-sided outline
+  edge to edge. Sketch: bound a lot by what research/vegetation 140 names (a path, a stream, the slope) and roughen it.
+- **The burial ground beside the title placard** (Kashikawa F2): the glyph stood 23 ft left of the placard on its center
+  line and read as its ornament. Sketch: the title pocket treats feature glyphs and their clearings as keep-outs.
+- **A needle join** (Mizuguchi round 1 F4, round 2 F3): the orphan join lane runs back along the skeleton lane 35 ft at
+  16 degrees before meeting it, a ~250 sq ft needle of ground. Squaring the join (the foot of the vertex before it) was
+  tried at the landing and REVERTED: the tidy then trimmed the skeleton's tail, a gable-end house's nearest way, and two
+  households' ways out missed the entrance board (the failure is recorded in `ways/web.py` beside `center_lane_ends`).
+  Sketch: square the join and keep the tail as that house's way (name it in the tidy's `keep`).
+- **A house at the edge of the lanes' reach** (Kuwabata round 2 F2): the north row's east house stands 96 ft from the
+  nearest lane, inside the 100 ft `WEB_REACH_FT` (a guess), with a neighbor's back yard between. Sketch: the straggler
+  pass serves a house whose nearest way is past its neighbor's yard, not only one past the reach.
+- **Woodpiles off the wall** also on Kuwabata (round 2 F3): 7 of 15 stacks 10.5-22.9 ft from any building.
+- **The field path's canal deck runs onto the paddy** (Mizuguchi round 3): carried square over supply canal A on to the
+  bund, the path is bridged by `bridges()`' carried deck, whose 10 ft landing (`LANDING_FT`) puts the paddy-side end about
+  7 ft onto the flooded field, and the check's carried-way floor (6 ft past the water's half-width) forbids a shorter one.
+  Sketch: a field path crossing its own field canal takes the channel footbridge form (a short abutment each side, the
+  settlement's rolled `footbridge_form`), and `roads_bridge_water` accepts a foot deck under a footpath.
+- **A lane and the connector doubling back** (Kuwabata rounds 2-3): lane 2 runs east to (2054, 40), turns 15 ft north to
+  the connector's start, and the connector runs back west 15-40 ft from it for 126 ft - 169 degrees over the short leg.
+  `ways/joints.py` `fold_the_connector_hairpin` meets them as a T at the lane's vertex before the leg, but on Kuwabata
+  `may_write` refuses it (the moved connector stands nearer the fabric). Sketch: start the connector at the lane's
+  earlier vertex (1929, 56) and let the web serve the north row's east house, or route the moved start round the steading.
 
-**THE EVIDENCE**: the county gazetteer the record now cites dates the fruit, sugarcane and vegetable dikes to the
-Pearl River delta's urbanization and industrialization - modern forms - while the dike-pond hamlet draws them as
-options (`SugarcaneDike`, `FruitDike`, `VegetableGround`, `BananaDike` in `interactive/classes/dikepond.py`) labeled
-accurate. The record says this plainly at
-`research/archetypes/173-what-else-was-planted-on-a-pond-dike-besides-mulberry.html`.
+## OPEN 2026-09-28 (269 B16): the shared byre on the commons is still rolled, one map in ten, against homesteads/060
 
-**THE SKETCH**: the GM chooses - drop them from the premodern hamlet, keep them as a labeled deviation (the modals'
-label moves from accurate), or keep them for a later-era setting - and the modals, the knob that draws them and the
-record move together.
+`settlement/_knobs.py` `byre_form` rolls `courtyard` (the inner stable) / `yard_shed` (the outer stable) /
+`detached_commons` at 0.6 / 0.3 / 0.1. The record found the beast living with its household and no page describing a
+shed several households kept in common or one at the village edge (research/homesteads 300), and homesteads/060 now
+says a byre on the commons "is a GUESS and not a second form to roll against the homestead's own". **Measurement**:
+Inashiro (seed 4) and Sawada (seed 24) roll `detached_commons` and draw it. **Mechanism**: the form was kept as a rare
+labeled guess when B16 added the two household forms. **Sketch**: drop `detached_commons` from the knob (or weight it
+0), re-roll the two maps, and retire its gate form and the `fraction` sizing the test pins; the byre-edge question and
+the inner-commons-or-fringe question this replaces are closed (`closed.md`).
+
+## OPEN 2026-09-28 (269 B32): grow-out hamlet or fry village - a knob the record supports, owed
+
+The GM's rulings of 2026-09-28 retired the duck pen and did not rule on the fry pond. The record (research/archetypes
+200) reads two kinds of dike-pond village: a grow-out village that buys its fry (from one township's West River
+landings by Jiujiang) and keeps no fry pond, and a fry village where about seven in ten of the water is nursery.
+**Measurement**: `hamletgen/pondstock.py` makes the smallest parcel in ten a fry pond, which matches neither;
+Kuwabata draws 3. **Mechanism**: a share with no knob behind it. **Sketch**: a knob `pond_village` grow_out / fry,
+rolled per dike-pond hamlet (grow-out the likelier, since fry ponds stood only at Jiujiang), the FryPond modal already
+names the two kinds.
+
+## OPEN 2026-09-28 (269 K3): the toe marsh rolls no alder-willow carr
+
+research/vegetation 120 now reads the wet toe as either the cut open reed form or an alder-willow carr; the engine
+draws only the first, and the Marsh modal names the shortfall. **Mechanism**: the marsh placer has one form.
+**Sketch**: a knob `marsh_form` open / carr in the marsh placer, the carr drawn as the alder clumps the belt's marsh
+already uses; the modal's shortfall sentence goes when it lands.
+
+## OPEN 2026-09-28 (269 K1-K5): record text that still describes the engine before 269
+
+The kind pass (269 K1-K5, `specs/269-research-backfill/briefs/engine/log.md`) left these research sentences stale;
+each is a rewrite of the "what the map draws" prose to the engine as it is now, with `record-format` and, where a note
+moves, `quote-check`: homesteads/210 (the privy's retired back .60 / gate .25 / stable .15 roll and its counts);
+homesteads/211 (the heap "near the stable or under the eaves" - drawn beyond the privy); homesteads/215 (the band
+higher on wet-rice hamlets, and 0.50-0.80 "until B13 lands"); homesteads/218 (the flank first and "the 18 ft" crown);
+vegetation/154 (back .45 / shed .30 / wind .15); fields/180 ("What the map draws today"); archetypes/140 (the GM's
+2026-08-28 water-heavy DEVIATION beside an accurate label); towns/110 (a storehouse row in a rice-transit town against
+the modal's remote county); cities/government/070 (~20 samurai a county seat against the modal's ~15).
 
 ## OPEN 2026-08-24, MEASURED BY REVIEW: the web stops exactly one clearance short of the lane it should join
 
@@ -139,66 +242,6 @@ and did make it worse.**
 of the way it is joining - a junction is contact, not a violation - and then drop `_LANE_JOIN` below
 `WEB_CLEARANCE` so the check can ever see a gap again. Fixing only the constant turns four maps red
 without connecting anything.
-
-## QUESTIONABLE 2026-08-24: is a detached byre on the inner commons or the outer fringe? (a knob, probably)
-
-`byre_form` rolls `detached_commons`, grounded in a shared or hired team standing "where the borrowing
-household can reach it". On Inashiro two of three landed OUTSIDE the cluster - one 109 ft from the
-nearest house among the shelter-belt canopy, one 89 ft south of the last house alone in grass.
-
-The reviewer's read, which is a research question rather than a GM ruling: both bands are plausibly
-attested - fodder and litter come from the fringe, the borrowing households are inside - which under
-Principle XII makes it a **placement-band knob** (inner commons vs fringe, rolled per settlement)
-rather than a defect. Today it is neither: all three byres are placed by one maximin spread with no
-opinion about which band it is in.
-
-**Do the research pass before implementing.** If the record is decisive, implement what it says; if
-it supports both forms, that is the knob.
-
-## OPEN 2026-08-24: the copse collapses when the cluster packs tight, and its check CANNOT see it
-
-Found by `settlement-review` on Mizuguchi after feature 128, then measured across the live tier and
-found worse than the reviewer saw. Deferred here rather than fixed in that feature because setting the
-floor is a RESEARCH question (Principle XII) and the placement change is its own piece of work.
-
-**THE MEASUREMENT**, `village_groves[role="copse"]` on the four live hamlets as shipped:
-
-| map | clumps | recorded extent |
-|---|---|---|
-| inashiro | **1** | 30 x 30 ft |
-| mizuguchi | **3** | 335 x 107 ft |
-| sawada | 15 | 371 x 245 ft |
-| kashikawa | 11 | 343 x 340 ft |
-
-Mizuguchi is a 335 ft "copse" drawn as three saplings 300 ft apart. Inashiro's is one clump. Pre-128
-Mizuguchi held 12 over 550 x 287 ft.
-
-**THE MECHANISM.** The copse fills the OPEN gaps among the houses (`research/vegetation.html`), and
-it is seated after the windbreak, whose canopy is a keep-out. Feature 128 packed the clusters tighter -
-that is the whole point of it, Inashiro's long axis went 603 -> 462 ft - so there is less gap ground,
-and a blocked clump in a sparse grove is dropped rather than relocated. The delta did not introduce
-this (the same collapse is logged 2026-08-17, 11 -> 4) but it made it reliable.
-
-**WHY `village_groves_visibly_stocked` (segment 0618) CANNOT CATCH IT, which is the part worth having.**
-The check scores clumps per 100k sq px of RECORDED footprint against a floor of 1.5. That metric is
-**self-normalizing**: the recorded extent is the bbox of the clumps that survived, so when clumps are
-dropped the extent shrinks with them and the density does not move. Inashiro's one-clump copse scores
-**111/100k** - seventy times the floor, the densest grove on the map - because 1 clump in 30 x 30 ft is
-arithmetically dense. **A density check on a self-measured extent can never detect a collapse.** It was
-written (2026-08-20) against exactly this defect and it is structurally incapable of seeing it.
-
-**TWO CANDIDATE FIXES, and the choice needs the research pass first:**
-
-1. **An absolute floor on clump COUNT for a declared copse**, not a density. Needs a number, and the
-   number is a research question - what a *yashikirin*-adjacent village copse actually was. Do NOT
-   pick one by eye.
-2. **Do not record a feature you did not draw.** If fewer than the floor survive, drop the copse record
-   entirely rather than shipping a claim the ink does not support. This is honest without needing the
-   number to be exactly right, and it is the cheaper half.
-
-Both are probably wanted: (2) stops the false claim, (1) is what makes the generator try harder. The
-generator-side question - relocate a blocked clump instead of dropping it - is the actual repair and
-is the largest part.
 
 ## OPEN 2026-08-24, WITH THE MEASUREMENT: the field SPUR can be forced onto a house on tight clusters
 
@@ -890,36 +933,6 @@ Sawada, so they run, pass, and test the wrong geometry; a skeleton arm overruns 
 because `_trim_to_service` only runs on web lanes; and `plot_regularity` is recorded in `meta` as though
 rolled while `water.py` passes the literal `"organic"`, so it can never vary.
 
-## 2d. "How far past its last steading may a way run?" - a RESEARCH question, not a bug
-(2026-08-19, from the same two reviews. Recorded here rather than fixed because the ladder in
-constitution Principle XII puts research BEFORE a number, and this is a calibration with no obviously
-correct value - unlike `M["lane"]`, which was a plain correctness bug and was fixed in the same pass.)
-
-**The measurement.** `trim_lane_stubs` pulls back any internal lane end that reaches nothing, where
-"reaching" a farmhouse means within `house_reach = 90 ft` OF ITS CENTER. Two arms survive that test
-and still read as blunt treads dying in grass:
-
-- Sawada `lanes[2]`, NW terminus (1335.0, 2077.3): the main street stops **85 ft past its last
-  steading** (house center 1417, 2054) and ~30 ft short of the paddy bund it is aimed at, 103 ft from
-  any other way.
-- Kashikawa `lanes[2]`, end (2346.6, 2569.8): **81.7 ft from the house center but 55 ft from its
-  wall**, and lying 75.7 ft to one side of that house, level with its threshing yard rather than
-  facing the dooryard. Nearest other way 119 ft.
-
-**Why it is not a one-line fix.** The obvious move - measure to the drawn CORNERS the way feature 121
-made `houses_clear_of_lanes` do - pushes the wrong way on its own: the wall is nearer than the center,
-so at an unchanged 90 ft MORE ends would count as serving and FEWER would be trimmed. Fixing this
-means measuring to the footprint AND re-deriving the threshold, i.e. answering "how far beyond the
-last house does a village lane actually run before it becomes a field track?" That is a question about
-how these places were built, so it gets a research pass first, and if the record supports two forms
-(a lane that stops at the last dooryard, and one that runs on to the field edge) it becomes a KNOB
-rolled per settlement rather than a number someone picked.
-
-Note the gate already carries this mechanism in a comment beside `_BREAK_GAP_FT` - "an end 83 ft from
-a house CENTRE counts as fronting it, even when that is 55 ft from the wall, i.e. out past the
-dooryard". Kashikawa is that comment realized in ink. The comment predicted the defect and nothing
-acted on it, which is its own small lesson.
-
 ## 2e. `plot_regularity` is recorded as though rolled and is a literal
 (2026-08-19, from the Kashikawa review.) `meta.plot_regularity` reads like a rolled knob and the comb
 path passes the literal `"organic"` (`hamletgen/water/comb.py`), so it can never vary. Alongside it, all
@@ -1295,24 +1308,6 @@ fall line per parcel from `_hjit`; emit the rotated quad; `_ok` already tests a 
 extent, so give it the rotated half-extents. Do NOT square-to-rectangle uniformly - the point is that
 two hamlets differ.
 
-### B. Kashikawa's woodland sits DOWNSLOPE, against doctrine stated in three places
-
-Measured against the cluster centroid with the map's own fall vector: parcel 1 is 505 ft downslope,
-parcel 2 is 887 ft downslope and stands 75 ft from the reed marsh. `research/vegetation.html` says
-woodland goes "on the higher / farther ground", `research/fields.html` says "satoyama crowns the hills
-above", and `hinterland.py`'s own comment says "the back slope behind the houses". The scorer is
-`-hypot(dist_to_cluster) + 0.35 * upslope`, so a 90 px step toward the cluster outbids 257 px of
-height and the upslope term never binds.
-
-**Why this needs a RULING and not a tweak**: raising the weight until it binds returns Kashikawa to
-ZERO parcels - its only in-frame upslope ground is a shallow SW triangle already taken by the
-connector lane, the SW homesteads and the belt rect - which is the exact defect closed this morning.
-The two honest options are (a) raise the weight AND add an explicit, commented "no upslope seat
-qualified, taking the best cross-slope seat" fallback so the downslope outcome is a recorded decision
-rather than an accident, or (b) keep the scorer and correct the prose, including this map's own kanji
-paragraph, which currently claims the sheet draws the high-ground oaks. **Both files must not go on
-saying opposite things.**
-
 ### C. `surface_water_dist` reads `channels`, but a comb map's watercourses live in `drawn_channels`
 
 The predicate behind the well objective's exclusion set reads `M["channels"] + M["streams"]`. On
@@ -1350,14 +1345,6 @@ round-2 reviewers independently showed that framing is wrong, and both did the m
 wind, not coverage per latitude - a latitude rule flags healthy diagonal belts and misses thin
 windows. Gate key **0613** (0612 went to the peer). Red-first against Inashiro's y 660-720 band.
 Claimed by this session, explicitly, after offering it to the peer and being told to take it.
-
-### F. Woodland is stocked like parkland, not like a wood
-
-Sawada's parcel: 19 crowns over 127 x 127 ft = 1 crown per 852 sq ft, against the copse's ~1 per 287.
-`woodland_commons_visibly_stocked` tests `crowns >= 5`, a COUNT, so it cannot see density. A coppice
-is a thicket cut on rotation. **Sketch**: raise stand density inside a woodland parcel and make the
-check area-scaled rather than a flat floor; watch `woodland_clear_of_grove` and
-`structures_clear_of_trees` for fallout.
 
 ### G. Two glyph-vocabulary collisions (cosmetic, both flagged twice)
 
@@ -1418,34 +1405,7 @@ site is the one the check's own failure message names - `close_seams` / `_seam_c
 pitch goes out of register with the fabric. Do NOT reach for the threshold: "more than one step on a
 ring" is the deliberate line, and retuning it is the one dial that guts the check.
 
-## OPEN 2026-08-18: the byre at the settlement EDGE - a knob candidate, and what to research first
-
-Raised by `settlement-review` on Inashiro while it was checking the jog delta, so it is a finding
-from outside the delta rather than part of it (which is the reviewer working as intended).
-
-**The measurement.** Byre 0 sits at (1047.8, 989.5) - 70 ft past the westernmost house, INSIDE the
-shelter belt, 29.3 ft from the nearest grove clump with 45 tree crowns within 40 ft - and reaches
-**2 of 15 households within 200 ft**, against 5 for byre 1 and 6 for byre 2. `research/homesteads.html`
-puts a shared draft-animal byre "in the COURTYARDS among the homesteads", and the 2026-08-18 pass
-added a borrow-coverage term to stop the maximin spread picking isolated seats. On this roll the
-spread term still wins at one seat of three. The notes ledger a version of this from an earlier roll
-(a different byre, at the NE outlier), so what recurs is the CLASS, not the instance.
-
-**The research question, and it is a research question rather than a ruling** (Principle XII): was a
-shared ox shed ever sited at the settlement edge under the shelter planting - for shade, for manure
-handling, for keeping the beasts out of the dooryard - as opposed to in a courtyard?
-`research/homesteads.html` covers the byre-vs-well question and does not address byre-vs-edge, so the
-search pass has not been run. **Run it before touching the placer.**
-
-**The likely shape of the answer.** The reviewer's read, which I share on the evidence so far, is
-that both sitings are defensible - which by Principle XII makes this a KNOB with per-settlement
-variance rolled from the map's own seed (courtyard byre vs edge byre), not a fix, and a knob that
-would visibly differentiate hamlets. What is NOT defensible on either reading is a byre reachable by
-2 of 15 households while two other seats on the same map reach 5 and 6: whichever form the roll
-picks, the coverage term has to bind. So the work is: research it; if it supports both forms, add the
-knob AND make the borrow-coverage term binding within whichever form is rolled.
-
-### Two nitpicks from the same review, neither worth its own feature
+## Two nitpicks from the 2026-08-18 byre review, neither worth its own feature
 
 - **DONE 2026-08-19: flooded-basin tint on a long wedge.** Raised twice - first as a hue-separation
   nitpick, then again by a second review that measured it properly: Inashiro's two tinted plots ran
@@ -1468,18 +1428,6 @@ knob AND make the borrow-coverage term binding within whichever form is rolled.
 
 Round 2 confirmed five defects and refuted one; all five are fixed at their point of change, and the
 rulings the GM asked me to make are recorded there too. What is left:
-
-### The belt and the copse share one crown vocabulary
-
-Sawada's two grove records sit 23 ft apart with half the copse's clumps touching the belt's, so the
-manifest declares two features and the sheet shows one wood. A planted *yashikirin* windbreak was
-typically one tall species in a row against mixed broadleaf coppice, so the honest fix is a
-different crown treatment for the belt - darker, taller, ranked - rather than a separation distance.
-That would also make the belt's form legible: Sawada's measures 906 x 199 ft at aspect 4.5, which is
-a textbook belt that currently does not read as one.
-
-**Why deferred**: it changes how every grove on every map is drawn, at every tier, which is a
-visual-doctrine pass rather than a defect fix. Ledgered with the measurement so it is not rediscovered.
 
 ### The grazing commons are a tiling, not a landscape
 
@@ -1600,142 +1548,10 @@ FORMS of the same thing, and this is not that. It is a question about what a fea
 record cannot answer it because the record never had our palette. So it is genuinely a ruling, it is
 queued, and nothing should be built on a guess about it.
 
-**AND IT GATES THREE OTHER ITEMS, so do not fix them one at a time.** The tint eligibility, the
-`hem_block_len` knob, the paddy WIDTH floor and the 0614 cohort residue all land in the same toe pass,
+**AND IT GATES TWO OTHER ITEMS, so do not fix them one at a time.** The tint eligibility, the
+paddy WIDTH floor and the 0614 cohort residue all land in the same toe pass,
 and the waterfields session has batched them deliberately as ONE feature. Fixing any one alone means
 rewriting that pass again for the next - which is the specific waste this note exists to prevent.
-
-## OPEN 2026-08-19: the dry-hem furrow variety falls off a ONE-FOOT CLIFF at 56 ft, and its check goes blind with it
-
-The furrow-angle machinery in `waterfields/carve.py:834-838` is a maximize-separation algorithm: it
-collects the angles of already-placed plots within `ADJ2` (56 px), takes the WIDEST angular gap between
-them, and seats the new plot's furrows in the middle of it. When it works it works well. **When `nb`
-comes back empty it degenerates silently**: `edges` is just `[lo, hi]`, the widest gap is the whole
-allowance, and every plot gets `(lo+hi)/2` - which is exactly `theta0`, the contour angle - plus a
-`R.uniform(-0.03, 0.03)` jitter worth +/-1.7 degrees.
-
-**ADJ2 is 56 px and the plots are now 54-59 px apart, so which side of the cliff a map lands on is
-luck:**
-
-    kashikawa  closest centers 54.4 ft  -> neighbors seen  -> furrow spread 33.98 deg   healthy
-    mizuguchi  closest centers 55.7 ft  -> neighbors seen  -> furrow spread 32.37 deg   healthy
-    sawada     closest centers 57.0 ft  -> NONE seen       -> furrow spread  3.27 deg   collapsed
-    inashiro   closest centers 58.5 ft  -> NONE seen       -> furrow spread  3.15 deg   collapsed
-
-A one-foot difference in plot spacing is the whole distance between a patchwork of family strips and one
-ruled hatch laid across the hem. `settlements`' own doctrine calls for the patchwork
-(`segments_05c`: "Fragmented dry holdings were a mosaic of family strips, each plowed to its OWN
-orientation"), and `meta.dry_furrows_vary` is declared True on all four - so two of them declare a
-variety they do not draw.
-
-**AND THE CHECK GOES BLIND AT THE SAME MOMENT, FOR THE SAME REASON.**
-`dry_plot_furrows_vary` compares only plot pairs whose CENTERS lie within `min(50.0, 1.25 * mean_side)`.
-Mean side is 81-87 ft on all four, so the formula wants ~102 and the **cap forces 50** - below every
-map's closest spacing. It compares ZERO pairs on all four maps and has been vacuous the whole time.
-
-The generator's own comment explains the pairing and it is sound reasoning: the radius "stays UNSCALED:
-`dry_plot_furrows_vary` judges adjacency at this px radius on every map, and a generator that varies over
-a WIDER circle than the check demands is safely conservative". 56 > 50, so the generator IS the wider of
-the two, exactly as intended. **What defeats it is that BOTH are absolute px radii while the thing they
-measure grew.** The two guards were calibrated against each other rather than against the plots, so when
-the plots outgrew them they went silent together and neither could catch the other.
-
-That is the day's pattern in its purest form: a check and a generator agreeing perfectly with each other
-about a quantity that no longer describes the map.
-
-**FIX DIRECTION, and it must land on BOTH SIDES AT ONCE** (fixing only the check turns the gate red on two
-maps whose generator cannot produce variety): scale both radii to the plots actually on the map - the
-check's own `1.25 * mean_side` is the right shape, so uncap it, and give the generator the same measure
-plus a margin so it stays the wider of the two. Then re-measure the spread on all four; the two healthy
-maps show what the machinery does when it can see its neighbors.
-
-**FIXED, AND THE NUMBER IS OVER-CORRECTED - the fix stays in, the value is queued to the GM.** Scaling
-both radii to the plots landed all four maps at 96-104 deg of spread (from 3.15/3.27 on the two collapsed
-ones and ~33 on the two healthy ones). That is strictly better than 3 deg and the two-sided blindness was
-a genuine bug worth fixing regardless - but 3 deg being wrong does not make 102 right, and the waterfields
-owner supplied the prior that says it is not:
-
-  - In an open-field system the strips group into **FURLONGS, and a furlong shares ONE orientation**; the
-    direction changes BETWEEN furlongs, chosen from the lie of the land for drainage. Coherent block,
-    varied blocks - not varied neighbors.
-  - The physical reason is the decisive one: adjacent strips at a large angle **drain into each other**,
-    and a plowman turns at a **shared headland**. Two neighbors 100 deg apart have neither. That is not a
-    stylistic objection, it is what furrows are for.
-  - Our own code already says it. `carve.py:656`: "the furrow direction is the contour heading, varied per
-    plot" - varied AROUND the contour, not maximally separated from the neighbor. With
-    `furrow_spread = 1.1` rad (+/-63 deg), a 96-104 deg spread means the algorithm is pushing neighbors to
-    opposite ends of the permitted band: the band's outer limit doing the work rather than the contour.
-
-So the algorithm's SHAPE is suspect, not only its radius - maximize-separation produces exactly the
-neighbor-vs-neighbor contrast the furlong evidence argues against. The likely target is a modest spread
-around a block-coherent grain, with the larger changes between GROUPS of plots rather than between every
-adjacent pair.
-
-**SUPERSEDED 2026-08-19 - do not act on this paragraph.** It read: *"Neither session is picking the
-number. It is a legibility-vs-accuracy trade of the kind this project sends to the GM rather than
-deciding quietly ... Queued to him beside the FLOODED-tint decision."* It was withdrawn from the GM's
-queue the same evening, and the error is kept because it misreads Principle XII rather than the
-evidence. The ladder is: research it -> decisive means implement what it says -> **two supportable
-forms means roll a KNOB per settlement** -> only a SILENT record earns a GM ruling. The waterfields
-owner jumped to the fourth rung because the NUMBER felt like a judgment call - and it only felt that
-way because they were trying to pick ONE spread for every hamlet, which is precisely what that rung
-exists to prevent. The record here is neither silent nor decisive-for-one-form, so this is the knob
-rung. See "THE ANSWER IS A KNOB" below, which is the live disposition.
-
-**REVIEWED, AND THE VERDICT IS SHARPER THAN EITHER SESSION'S GUESS: the RANGE is right, the
-DISTRIBUTION is wrong** (settlement-review with a research pass, 2026-08-19). ~102 deg reads as a mosaic
-rather than chaos - the hem never fragments, every parcel's hatch is internally clean, and the two
-already-healthy maps were not damaged (Kashikawa "reads as a genuinely handsome quilt"). So do NOT narrow
-the allowance.
-
-What is wrong is the SHAPE of the angle field. `_dry_fields` maximizes separation - it seats each plot in
-the widest gap its neighbors leave - and the measured signature is a **hole at zero**: Sawada's median
-neighbor delta is 52.1 deg out of a 126 deg fan and NO pair is under 13.9. A real hem's neighbor-delta
-histogram is bimodal, a pile near 0 (same block, same owner, same outfall) with a few big jumps at block
-seams. The sourced record is decisive on the mechanism:
-
-  - a FURLONG is "a group of strips or lands all oriented in the same direction", and "adjacent furlongs
-    often ran at different angles to one another, which is why you sometimes see ridge and furrow
-    changing direction as you cross a field boundary" (Nottingham/Laxton; Evershot; Fieldworthy). The
-    variety lives at BLOCK scale with agreement INSIDE a block.
-  - blocks were "orientated in such a way as to take advantage of the topology of the land and so further
-    assist the drainage" - direction is DERIVED from slope and outfall, not free.
-  - strips were long and narrow "to reduce the number of times the plough-team had to turn", sharing a
-    headland at each end (DigVentures), and were "separated from their neighbours by a double furrow, or
-    ... an unploughed grass balk" (How-to History) - a boundary form that only exists between PARALLEL
-    strips.
-  - the East Asian record does not overturn it: contour ridging is the documented STEEP-SLOPE measure
-    (FAO Nishi-Awa), which `research/fields.html` already declines to apply on a gentle hem, and fragmented
-    smallholdings make per-parcel choice more available - but shared slope, a shared outfall and a shared
-    parcel shape still push neighbors toward agreement. The East Asian record is SILENT on the angle
-    field specifically.
-
-**AND THE CHECK CODIFIES THE WRONG MODEL.** `dry_plot_furrows_vary` forbids two plots within ~50 px from
-running within ~6 deg - i.e. it forbids the attested arrangement outright, which is precisely why the
-generator has to anti-correlate. Fixing the generator without re-scoping the check would just make the
-gate red on the correct answer.
-
-**THE ANSWER IS A KNOB (Principle XII), not a number.** The record supports BOTH a furlong-block hem (3-6
-adjacent parcels sharing a direction, changing at seams) and a fully fragmented per-parcel hem, and at
-~1,500 ft of hem those give 2-5 direction domains versus 28 - instantly distinguishable at fit zoom, which
-is the different-but-plausible-places goal exactly. Sketch from the reviewer: roll `hem_block_len` from
-the seed (1 = today, 3-6 = furlong-like), assign a direction per BLOCK, seat blocks by maximize-separation,
-let parcels inside a block share it with a small jitter - and re-scope `dry_plot_furrows_vary` to compare
-BLOCKS, or it fires on every block interior.
-
-**ONE CONCRETE DEFECT THE GREEN GATE PERMITS, worth fixing whatever happens to the knob**: a 13.9 deg
-neighbor pair reads as one plot bisected rather than two holdings - Sawada's stacked pair at (740,3097)
-and (742,3028), and Mizuguchi's twin at 11.5 deg. The gate's 6 deg floor is a CONSERVATION threshold, not
-a legibility one, so roughly 6-20 deg is the worst of both worlds: too different to be one block, too
-similar to read as two. Do not simply raise the 6 deg - that punishes the honest near-parallel case. Give
-the GENERATOR a minimum separation (~20 deg) for edge-adjacent parcels, or adopt the block model, where
-near-parallel neighbors become correct and the jump moves to the seam.
-
-**Owner: `waterfields/`, taking BOTH halves.** The furrow angle sits three lines from the tint eligibility
-that session is about to change, so splitting them would be worse than either session holding both. A
-caution recorded with it: a VISUAL reviewer can say whether 102 deg looks tidy - a map where every plot is
-distinguishable does look tidy - but cannot say whether two adjacent plots at that angle could both drain,
-which is the question that decides it.
 
 ## OPEN 2026-08-19: the kura roll under-delivers 2.2x, the fix WORKS, and it exposes a packing defect that blocks it
 
@@ -1852,7 +1668,7 @@ FIX DIRECTION (from the reviewer): add a minimum working width - `area / longest
 AND to the gate, derived rather than picked; a basin must be wide enough to stand in and puddle, which
 puts it somewhere in the 12-16 ft band. `research/fields.html` "Minimum basin SIZE" already holds the
 reasoning frame, including the point that the alternative to a scrap is making its neighbour bigger.
-**Owner: `waterfields/`** - same subsystem as the FLOODED tint and `hem_block_len`, and the toe pass is
+**Owner: `waterfields/`** - same subsystem as the FLOODED tint (the `hem_block_len` knob it once named was settled as hem TRACTS, 269 B06), and the toe pass is
 where all three meet.
 
 ## OPEN 2026-08-19 (small, unclaimed): the notice-board caption's halo notches the lane it stands on
@@ -2120,8 +1936,9 @@ other crops in the off season are also the kind of thing that we would need to d
 not others."* Sketch when it comes: a `season` knob on the spec (spring / summer / harvest / winter)
 read by the field renderer (flooded vs drained vs winter crop), by a `farmstead_fixtures` row for the
 rick (harvest and winter only, at the yard's edge) and by a hasa pass in the fields; the checks that
-read `meta.farm_fixtures` already carry the declaration shape. Research owed before any of it: the
-off-season crops of a paddy (二毛作) and where the rick stood.
+read `meta.farm_fixtures` already carry the declaration shape. The research is now recorded (269 B05): the
+winter barley on a drained paddy and the rick on the reaped paddy or its bund (research/fields); the GM's deferral
+stands, so nothing is drawn.
 
 ## OPEN 2026-08-27 (settlement-review at the T99 acceptance): the south well stands in the commons, not a dooryard
 
@@ -2148,17 +1965,6 @@ the orphan joiner in `_touch_junctions` to accept the 30-35 ft links the smoothi
 refuses them first); seed 27 wants the two new checks (T32 bends, T49 bamboo-off-lanes) satisfied on
 a layout other than Inashiro's; seed 47 is the old set. Then drop each pin row and run the 48-cohort.
 
-## Where does a field path END? (settlement-review, Inashiro, 2026-08-27 and 2026-08-28)
-
-Lane 0's field spur has ended short of the field outline on two consecutive rolls of the reference
-(1318,1306 under feature 140; 1333,1216 under 145, 17 ft from the outline, in open scrub) - so it is
-a property of `stage_ways`' spur, not of a roll. `research: physical`, and open: does a hamlet's
-path to its field end at a bund head, at a gap in the outer bund (a gate), or simply where the
-worked ground begins? Sketch once the record answers: the spur's terminal is snapped to the nearest
-bund end or outline vertex within ~30 ft (`field_face` chords give the candidates), and
-`field_spur_reaches_the_field` becomes a placer unit test rather than a check. Deferred under 145
-(a performance feature) with this measurement; not a regression of it.
-
 ## Is the in-field grave island attested? (research owed, GM 2026-09-26)
 
 `research: physical`, held by the GM until the research procedure is retuned to conserve tokens - do not
@@ -2184,18 +1990,6 @@ plots around the grave where the toe pass builds them - the same shape as the po
 then the registry's "the flat paddy tiling around it" becomes true again. `research: rendering`; deferred
 under 145 as a field-engine change rather than half-done. Kashikawa is the only pool map with a field grave,
 so it is the whole test bed.
-
-## The grove's bamboo species is declared and never drawn (feature 146, 2026-08-28)
-
-`_draw_grove` describes a mixed stand of conifer, broadleaf and bamboo, and its item loop had a
-`kind == "bamboo"` arm drawing one compact culm with a leafy top. It was unreachable: `b_th` - the
-threshold that selects bamboo - is `0.0` for BOTH mixes (`windbreak` and the dooryard blend), so
-`roll < b_th` never held. Feature 146 removed the six-line arm (dead code cannot be tested and should
-not be) and left the threshold alone, because raising it would put culms into every grove clump on
-every map - an appearance change that belongs to a feature that owns the look, with a settlement-review.
-`research: physical` when picked up: whether a yashikirin's mixed stand carried *take* at all, and in
-what share, is a question the record can answer. The bamboo the maps DO draw is the separate
-`bamboo_stand` take-yabu, which is unaffected.
 
 ## Two checks that pass VACUOUSLY (feature 146, from the 145 settlement-reviews)
 
@@ -2269,56 +2063,6 @@ and 0 to 2 on Kashikawa. That oversized margin is keeping canopy off by accident
 purpose; relax it and the second goes with the first. The fix has to be at the SCATTER - the drawn
 crown positions - not at the margin. `research: rendering`.
 
-## THE DECLARED FIXTURE PREVALENCE IS NOT WHAT THE MAP DRAWS (found 2026-08-30, feature 166's acceptance review)
-
-**The measurement, over all five live hamlets.** `meta.farm_fixtures` declares a per-household share
-for each farmstead fixture. Comparing that against what is actually seated, as a binomial tail
-`P(X <= seated | n = households, p = declared)`:
-
-| map | fixture | declared | expected | seated | P(<= seated) |
-|---|---|---|---|---|---|
-| Kuwabata | persimmon | 0.928 | 14.8 | 2 | 1.05e-14 |
-| Mizuguchi | privy | 0.917 | 11.0 | 3 | 3.26e-08 |
-| Inashiro | persimmon | 0.822 | 12.3 | 5 | 3.98e-05 |
-| Inashiro | coop | 0.689 | 10.3 | 3 | 1.35e-04 |
-| Sawada | persimmon | 0.900 | 17.1 | 11 | 2.73e-04 |
-| Inashiro | woodpile | 0.864 | 13.0 | 7 | 3.07e-04 |
-| Sawada | woodpile | 0.815 | 15.5 | 9 | 8.38e-04 |
-| ... | | | | | |
-
-**15 of 35 (map, fixture) pairs** fall below a 1% tail. This is not sampling noise; it is candidates
-refusing a seat and being dropped silently.
-
-**WHY IT MATTERS BEYOND THE PICTURE.** The interactive map quotes the reader a share the sheet does not
-have. That is the one failure the record doctrine forbids outright - a reader told a figure the drawing
-contradicts - and it is worse than an admitted guess, because the number looks measured.
-
-**WHY IT IS DEFERRED RATHER THAN FIXED IN FEATURE 166** (constitution XIV's architectural clause, which
-requires the measurement, the mechanism and a sketch - all three are here). The honest fix changes what
-the placer SEATS, which moves every live map and is a placement-engine change rather than a migration.
-It is also NOT a regression from retiring the check battery: the battery had no prevalence rule at all,
-which the acceptance review verified independently. It was first caught on 2026-08-29 for `manure` alone
-and was recorded, not fixed; this is the same defect, measured properly and found to be general.
-
-**MECHANISM.** `homesteads.farm_fixtures` rolls a per-hamlet share from `FIXTURE_BANDS`, then walks the
-households offering each a seat from the per-kind seat table in the house frame. A household whose seat
-candidates are all blocked (by the yard, the garden, a lane, a neighbor's eave) contributes nothing and
-the shortfall is invisible - the rolled share is recorded, the achieved one is not.
-
-**SKETCH, in the order the work should go:**
-
-1. **Record the realized share** next to the declared one, so nothing lies while the seating is being
-   worked on. This is small, moves no map, and removes the false claim from the modal immediately.
-2. **Widen the seat search** for the three worst kinds (persimmon, coop, woodpile), which are dooryard
-   features with more legal ground available than the seat table currently offers.
-3. **Reconcile the knob**: where a share genuinely cannot be seated at a hamlet's density, the ROLL
-   should draw from what is seatable rather than the placer silently missing its target.
-
-**And the general lesson, which is the acceptance review's real finding:** a per-map STATISTICAL
-property - a realized rate against a declared knob - was invisible to the retired battery *and* is
-invisible to its successors, because the battery ran per manifest while `tests/gate/` runs seed tests on
-a cached roll. That gap is closed by a ratchet in `tests/full/` over the live pool; see the entry below.
-
 ## SEED 45'S WINDBREAK PIN NEEDS THE FULL COHORT TO VERIFY (feature 166, 2026-08-30)
 
 `GATE_COHORT_EXPECTED` held seed 45 against `village_windbreak_is_continuous`. Seed 45 is a FULL-cohort
@@ -2333,22 +2077,6 @@ because it looks like verification. So the instance is ledgered here rather than
 **To close it:** roll the FULL cohort, read the belt on seed 45 against the real continuity predicate the
 belt placer uses, and either fix the placer or carry the seed as a strict xfail beside seed 43's in
 `tests/gate/test_cohort_lane_rules.py`'s successor.
-
-## Where a field path ENDS, and why three pool maps have none (measured 2026-09-12, feature 230)
-
-The spur from the cluster to the paddy is routed to the envelope's nearest vertex, clipped out of the crop and
-trimmed off the marsh, and drawn only if more than 20 ft survives. MEASURED on the pool the day feature 230
-landed (`meta.field_spur_ft`, recorded on every map from that day): Inashiro 125 ft and drawn; Kashikawa,
-Mizuguchi and Sawada **0.0 ft** - the clip leaves nothing at all, so those three hamlets have no drawn way to
-their own rice, and until the number was recorded nothing said so. Kuwabata is a polder and has no spur by design.
-
-MECHANISM: the dry hem is cultivated ground and sits between the cluster and the paddy on every comb map, so a
-spur aimed at the paddy's outline is clipped at the hem's edge and what remains is under the floor. The floor is
-right - a 20 ft stub is not a path - and the routing is what is wrong: the spur should end where a field path
-really ends, which is the question this file has carried since feature 128 and which the measurement above is the
-evidence for. SKETCH: aim the spur at the nearest point of the CULTIVATED ground rather than of the paddy (the
-hem is worked ground and a path to it is a path to the field), and let it stop at the hem's own edge; then ask
-whether the last stretch between the hem and the wet plots is a path at all or the bunds themselves.
 
 ## A tree stands in a path on the reference hamlet (measured 2026-09-12, feature 230)
 
@@ -2422,20 +2150,16 @@ the envelope, and any ground freed near an in-field branch is available to it. T
 against the branch centerlines at half the drawn width plus the bund - then take the one-line stub drop above. It moves
 every map's packing, so it belongs to a feature that can re-roll the cohort and re-review all five maps.
 
-## What a reader takes for the river at the tap (feature 230 pass 12, 2026-09-13)
+## What a reader takes for the river at the tap: the width and the hue (feature 230 pass 12, 2026-09-13)
 
 **Measured** (Sawada): the head race leaves the brook at `#6C9CBE` (128,167,191) - darker and more saturated than the
 brook's own `#9CB4C8` (168,187,199) - and at 6.0 px against the brook's 7, so it is 86% of the trunk's width. At 9x the
-dug ditch reads as the principal watercourse and the stream as its bank shadow, and the race's stroke ends in a rounded
-cap laid ON the brook rather than opening out of its bank.
-
-**Why it is not simply a width fix**: both widths are the water-width ladder's own figures (`research/water.html`,
-"Water-width ladder"), drawn by RANK rather than by discharge, and the hues are the supply/brook pair every map uses.
-Changing either for this one junction would trade a junction-scale misread for a map-scale one.
-
-**Sketch**: leave the ladder alone and change the MOUTH - a short flare where the race meets the bank (the intake's own
-opening, which the record describes and the map does not draw), so the reader sees the ditch beginning AT the brook
-rather than crossing it. That is a new glyph and owes its own research pass on what an intake mouth looked like.
+dug ditch can read as the principal watercourse. The mouth half is done (269 B22: the race now opens out of the brook's
+bank, research/water 310, `hamletgen/water/brook.py` `open_race_mouth`); the width and the hue are what remain.
+**Mechanism**: both widths are the water-width ladder's own figures, drawn by RANK rather than discharge, and the hues
+are the supply/brook pair every map uses; changing either for this junction trades a junction-scale misread for a
+map-scale one. **Sketch**: judge the new mouth at 9x in a settlement-review first; only if the race still reads as the
+river, taper its first ~30 ft from the brook's hue to its own.
 
 ## Two ways that meet where the material changes (feature 230 pass 12, 2026-09-13)
 

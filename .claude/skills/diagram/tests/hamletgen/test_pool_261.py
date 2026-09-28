@@ -482,11 +482,11 @@ def test_no_lane_end_is_served_only_by_the_way_it_left(gen: str) -> None:
     """A lane end reaches something other than the way its own far end stands on (settlement-review of Mizuguchi, round
     176042d3: a lane left the connector, ran 61 ft past its house and stopped in the grass, counted as arriving because it
     was still within reach of the connector it had left). Asked of the engine's own `end_serves`."""
-    from l7r.diagram.hamletgen.ways.geom import _TOUCH_GAP, end_serves, steading_footprints
+    from l7r.diagram.hamletgen.ways.geom import _TOUCH_GAP, end_serves, steading_footprints, worked_ground
 
     m = _manifest(gen)
     houses = [(float(h["x"]), float(h["y"])) for h in m["houses"]]
-    fields = [[(float(a), float(b)) for a, b in f["outline"]] for f in m.get("fields") or [] if f.get("outline")]
+    fields = worked_ground(m)  # the bund, not the outline within 60 ft (269 B04)
     steadings = steading_footprints(m)
     lanes = [[(float(x), float(y)) for x, y in ln["pts"]] for ln in m["lanes"] if not ln.get("connector") and len(ln.get("pts") or []) >= 2]
     allsegs = [(a, b) for ln in m["lanes"] for a, b in zip([tuple(map(float, q)) for q in ln["pts"]], [tuple(map(float, q)) for q in ln["pts"]][1:], strict=False)]

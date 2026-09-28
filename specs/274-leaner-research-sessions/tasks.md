@@ -39,6 +39,7 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D11). Research: [`res
 is open and has no flag, and this step can only happen once the landing is on main. So it is recorded here as a
 post-landing step, as 136, 190 and 246 recorded theirs, and it is written up below when it is done:
 
-- T12 Tell the research sessions, after the landing is on main (D11) - OPEN: the session "Diagram supplemental" does
-  it and records here whom it told and when (FR-005, SC-005).
+- T12 Tell the research sessions, after the landing is on main (D11) - DONE: Diagram supplemental told Diagram
+  research, Diagram shrines and Diagram buildings on 2026-09-28 after 825925e73 reached main; recorded in
+  /diagram/.clones/RESEARCH-PEER-CHECKS.log (FR-005, SC-005).
       research: rendering

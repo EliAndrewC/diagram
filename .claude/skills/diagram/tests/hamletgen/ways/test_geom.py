@@ -181,14 +181,16 @@ def test_steading_footprints_reads_the_built_ground_and_not_the_ground_cover() -
     assert hg.ways.steading_footprints({}) == []
 
 
-def test_trim_to_service_counts_ARRIVING_AT_THE_FIELD_as_service() -> None:
-    """The spur's whole purpose is the crop, which is neither a house nor another lane. At the gate's own bar
-    since feature 227, which is the only bar the trim has: the looser private triple this test used to reach
-    through `end_reach=None` was reachable from nothing that ships, and went."""
+def test_trim_to_service_counts_ARRIVING_AT_THE_BUND_as_service() -> None:
+    """The spur's whole purpose is the crop, which is neither a house nor another lane - and it arrives ON the bund
+    (269 B04, research/fields/290: the path "never ends in open ground short of the bund"), no longer anywhere within
+    the gate's 60 ft of the field."""
     field = [(400.0, 0.0), (600.0, 0.0), (600.0, 200.0), (400.0, 200.0)]
     run = [(0.0, 100.0), (200.0, 100.0), (395.0, 100.0)]
-    assert _trim_to_service(run, [], [(0.0, 100.0)], [field]) == run
-    assert len(_trim_to_service(run, [], [(0.0, 100.0)], [])) == 2
+    assert _trim_to_service(run, [], [(0.0, 100.0)], hg.ways.WorkedGround([field])) == run, "5 ft off the bund is on it"
+    assert len(_trim_to_service(run, [], [(0.0, 100.0)], None)) == 2
+    short = [(0.0, 100.0), (200.0, 100.0), (360.0, 100.0)]
+    assert _trim_to_service(short, [], [(0.0, 100.0)], hg.ways.WorkedGround([field])) != short, "40 ft short of the bund is open ground"
 
 
 # ---- the splice helpers (feature 137 T04) ---------------------------------------------------------

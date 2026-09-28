@@ -1,0 +1,6 @@
+{
+  "utc": "20260928T123642Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "review deferred to the 269 landing session: its paired gate is red until that session runs make done, so a review now could only record NOT-REVIEWABLE; logged as owed in briefs/engine/log.md"
+}

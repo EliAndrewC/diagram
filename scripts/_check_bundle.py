@@ -56,14 +56,16 @@ def cited_keys(notes_html: str) -> list[str]:
 
 def url_of(entry_html: str) -> str:
     """The pointer a registry entry names. A closing parenthesis ends it unless the URL opened one:
-    `(https://.../Edo)` is written around a URL, `町屋_(商家)` is part of one."""
+    `(https://.../Edo)` is written around a URL, `町屋_(商家)` is part of one. Punctuation after the wrapping
+    parenthesis (`.../174809), 5 August`) goes with it, and an entity is unescaped: the entry is HTML, so
+    `&amp;page=` is `&page=` - fetched as written it lands on the site's front page (feature 269)."""
     found = _URL.search(entry_html)
     if not found:
         return ""
     url = html.unescape(found.group(0))  # the entry is HTML: `&amp;` in a query string is `&` (feature 268: the NDL records fetched as the home page)
-    while url.endswith(")") and url.count(")") > url.count("("):
+    while url.endswith((".", ",", ";")) or (url.endswith(")") and url.count(")") > url.count("(")):
         url = url[:-1]
-    return url.rstrip(".,;")
+    return url
 
 
 def registry_entry(root: pathlib.Path, key: str) -> pathlib.Path | None:

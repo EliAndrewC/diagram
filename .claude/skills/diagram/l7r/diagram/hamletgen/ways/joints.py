@@ -33,7 +33,7 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement, seg_closest, seg_dist
 
-from ..consts import Poly, Pt
+from ..consts import WEB_CLEARANCE, Poly, Pt
 from .clearance import _HAIRPIN_DEG, _clear_link, _clear_touch
 from .geom import _TOUCH_GAP, _seg_cross, _turn_deg
 from .smooth import _JOG_FT, commit_lane, web_pieces
@@ -286,3 +286,138 @@ def center_lane_ends(s: Settlement) -> int:
             ln["pts"] = _rounded(p)
             s.reink_lane(i)
     return moved
+
+
+# TWO ENDS THIS NEAR ARE ONE WAY WITH A HOLE IN IT: nearer than a steading's keep-out from a web lane (`WEB_FABRIC_GAP`,
+# 7 ft) plus the two treads' half-widths (3 ft for the connector, 1.5 for a footpath), so nothing a lane keeps clear of can
+# stand in the gap - and wider than `_TOUCH_GAP`, where `center_lane_ends` already sets an end on the tread it stops on.
+_MEET_FT = 11.5
+
+
+def meet_end_to_end(s: Settlement, fabric: Sequence[Poly] = ()) -> int:
+    """Close the last hole between two lane ENDS that stop within `_MEET_FT` of each other and on nothing else: the free
+    end is moved onto the other's end point, when the moved lane may be written (`may_write` - no nearer the fabric, no
+    worse bent). The connector's end is a target, never moved: its off-map run is its own job.
+
+    FOUND ON KASHIKAWA (269 E3): a straggler path and the skeleton arm stopped 9.6 ft apart end to end; the touch pass's
+    end-meets-end branch was refused its move and skipped the end, and the connector the later passes laid there stood
+    6.9 ft off it - one way in the picture, two networks at the 4 ft ink tolerance (`lanes_form_one_network`)."""
+    from .clearance import may_write
+
+    lanes: list[dict[str, Any]] = s.M.get("lanes") or []
+    closed = 0
+    for i, ln in enumerate(lanes):
+        p = _pts(ln)
+        if ln.get("connector") or len(p) < 2:
+            continue
+        for k in (0, -1):
+            q = p[k]
+            others = [(j, _pts(o)) for j, o in enumerate(lanes) if j != i and len(o.get("pts") or []) >= 2]
+            if any(seg_dist(q[0], q[1], a, b) <= _TOUCH_GAP for _j, op in others for a, b in _segs(op)):
+                continue  # already on a way
+            near = [(math.dist(q, op[e]), op[e]) for _j, op in others for e in (0, -1) if _TOUCH_GAP < math.dist(q, op[e]) <= _MEET_FT]
+            if not near:
+                continue
+            _d, to = min(near)
+            new = list(p)
+            new[k] = to
+            if may_write(p, new, float(ln.get("w") or 3.0), fabric):
+                p = new
+                ln["pts"] = _rounded(p)
+                s.reink_lane(i)
+                closed += 1
+    return closed
+
+
+def split_at_crossings(s: Settlement) -> int:
+    """Cut a lane where it crosses another mid-run, so the junction a walker uses is one the records hold: the lane becomes
+    two records, each ending on the crossing, which stands on the other lane's tread. Where either lane already ends within
+    `_TOUCH_GAP` of the crossing it is a junction already and nothing is cut; the connector is never cut, and a lane that
+    crosses it is. Returns the cuts made.
+
+    FOUND AT THE 269 LANDING (Inashiro, the house bearings re-laid): a skeleton arm crossed a web lane 5 ft past its own
+    bend, and the only record of the junction was a 2.4 ft "touch" nub - shorter than the gap every end test allows, so the
+    tidy pass dropped it as serving nothing and the map shipped as two networks (`lanes_form_one_network`), while kept it
+    failed `test_no_lane_end_is_served_only_by_the_way_it_left`. A crossing is a junction; now it is recorded as one."""
+    lanes: list[dict[str, Any]] = s.M.get("lanes") or []
+    cuts = 0
+    i = 0
+    while i < len(lanes):
+        ln = lanes[i]
+        p = _pts(ln)
+        cut: tuple[int, Pt] | None = None
+        if not ln.get("connector") and len(p) >= 2:
+            for j, other in enumerate(lanes):
+                op = _pts(other)
+                if j == i or len(op) < 2:
+                    continue
+                for k, (a, b) in enumerate(_segs(p)):
+                    x = next((c for c in (_seg_cross(a, b, c0, d0) for c0, d0 in _segs(op)) if c is not None), None)
+                    if x is None or min(math.dist(x, e) for e in (p[0], p[-1], op[0], op[-1])) <= _TOUCH_GAP:
+                        continue
+                    cut = (k, x)
+                    break
+                if cut is not None:
+                    break
+        if cut is None:
+            i += 1
+            continue
+        k, x = cut
+        head, tail = [*p[: k + 1], x], [x, *p[k + 1 :]]
+        ln["pts"] = _rounded(head)
+        s.reink_lane(i)
+        s.lane(tail, width=float(ln.get("w") or 3.0), clearance=WEB_CLEARANCE, worn=bool(ln.get("worn", True)))
+        lanes[-1].update({key: ln[key] for key in ("role", "web") if key in ln})
+        cuts += 1  # lane i is asked again: its head may cross a second lane
+    return cuts
+
+
+_SHORT_LEG_FT = 25.0  # a last leg this short, with the joint beyond it, is read as one turn (a map drawing convention)
+
+
+def hairpin_over_a_short_leg(a: Pt, b: Pt, j: Pt, c: Pt) -> bool:
+    """Do a lane's last two points `a` -> `b`, its short last leg `b` -> `j` and the other way's first leg `j` -> `c`
+    double back - more than `_HAIRPIN_DEG` of turn in total, the leg under `_SHORT_LEG_FT`? Each turn alone can stay under
+    the limit, which is how the joint pass missed one (the 269 landing's round-2 review of Kuwabata: 79 + 90 degrees
+    across a 15 ft leg, a lane and the connector running back side by side 15-40 ft apart)."""
+    if math.dist(b, j) > _SHORT_LEG_FT:
+        return False
+
+    def signed(p: Pt, q: Pt, r: Pt) -> float:
+        h1, h2 = math.atan2(q[1] - p[1], q[0] - p[0]), math.atan2(r[1] - q[1], r[0] - q[0])
+        return math.degrees((h2 - h1 + math.pi) % (2 * math.pi) - math.pi)
+
+    return abs(signed(a, b, j) + signed(b, j, c)) > _HAIRPIN_DEG
+
+
+def fold_the_connector_hairpin(s: Settlement, fabric: Sequence[Poly] = ()) -> int:
+    """Where a lane's short last leg meets the CONNECTOR's start and the two double back (`hairpin_over_a_short_leg`), the
+    connector is started at the lane's vertex before that leg instead - a T - and the leg dropped, record and ink
+    together, when the moved connector may be written (`may_write`). Returns the folds made."""
+    from .clearance import may_write
+
+    lanes: list[dict[str, Any]] = s.M.get("lanes") or []
+    conn = [(k, o) for k, o in enumerate(lanes) if o.get("connector") and len(o.get("pts") or []) >= 2]
+    folds = 0
+    for ci, co in conn:
+        cp = _pts(co)
+        for i, ln in enumerate(lanes):
+            p = _pts(ln)
+            if i == ci or ln.get("connector") or len(p) < 3:
+                continue
+            for seq, back in ((p, False), (p[::-1], True)):
+                a, b, j = seq[-3], seq[-2], seq[-1]
+                if math.dist(j, cp[0]) > 1.5 or not hairpin_over_a_short_leg(a, b, j, cp[1]):
+                    continue
+                new_c = [b, *cp[1:]]
+                if not may_write(cp, new_c, float(co.get("w") or 5.0), fabric):
+                    continue
+                kept = seq[:-1]
+                ln["pts"] = _rounded(kept[::-1] if back else kept)
+                co["pts"] = _rounded(new_c)
+                s.reink_lane(i)
+                s.reink_lane(ci)
+                folds += 1
+                cp = new_c
+                break
+    return folds

@@ -450,6 +450,12 @@ class FinishMixin:
             "cremation_grounds",
             "ossuaries",
             "ministries",
+            # the homestead's own small buildings and fixtures (the 269 landing's review of Mizuguchi: the title placard
+            # covered a woodpile whole - none of these keys was here, so a title could sit on any of them on any map)
+            "farm_fixtures",
+            "byres",
+            "farm_sheds",
+            "retirement_houses",
         ):
             for o in self.M.get(k, []):
                 if o.get("poly"):

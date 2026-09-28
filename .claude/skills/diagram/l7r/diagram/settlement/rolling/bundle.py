@@ -6,6 +6,7 @@ Split from settlement/rolling.py by feature 118 - see settlement/rolling/CLAUDE.
 from typing import TYPE_CHECKING, Any
 
 from .._geom import turn_about
+from .bearing import turned_box
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -58,7 +59,7 @@ class BundleGeomMixin:
         ground the envelope did not clear."""
         return self._bbox_of([self._bundle_geom(hx, hy, hw, hh, side, shed)["bbox"] for side in self._NUC_SIDES])
 
-    def _bundle_geom(self: Settlement, hx: float, hy: float, hw: float, hh: float, garden_side: str = "E", shed: bool = False) -> dict[str, Any]:  # type: ignore[misc]
+    def _bundle_geom(self: Settlement, hx: float, hy: float, hw: float, hh: float, garden_side: str = "E", shed: bool = False, rot: float | None = None) -> dict[str, Any]:  # type: ignore[misc]
         """The bundle at (hx, hy): its UNRAKED layout, built once per household and size (`_bundle_layout`), moved here
         and turned by this seat's rake (feature 276, FR-003, plan D10).
 
@@ -69,7 +70,12 @@ class BundleGeomMixin:
         (`_household_seat`, set by the placer) they are rolled at the seat it was sought from (the spec's Decisions
         Recorded: the same distributions, rolled per household). The RAKE stays the seat's, applied after the move, so
         the homestead still turns as one piece wherever it lands (GM 2026-09-26). Outside a seat search the rolls key
-        on (hx, hy) as they always did."""
+        on (hx, hy) as they always did. `rot` overrides the seat's turn (0.0: the unturned layout a caller measures).
+
+        THE GROUND CLEARED IS THE GROUND DRAWN, AT ANY TURN (269 B18). The parts keep their true sizes - the drawing and
+        the fixtures read a part in its house's frame - and `boxes` holds each part's axis-aligned box AS DRAWN, turned
+        (`turned_box`); every fit rule reads the boxes, and the bundle's `bbox` is theirs. Under the old +/-5 degree
+        rake the difference was two pixels and was let stand; a house turned 30 degrees, or a quarter turn, is not."""
         seat = getattr(self, "_household_seat", None) or (hx, hy)
         key = (hw, hh, garden_side, shed, bool(getattr(self, "_nucleated", False)), seat)
         cache = self.__dict__.setdefault("_bundle_templates", {})
@@ -83,12 +89,16 @@ class BundleGeomMixin:
 
         base: dict[str, Any] = {k: ([moved(r) for r in v] if k == "gardens" else moved(v)) for k, v in tpl.items()}
         frame = base.pop("_frame", None)
-        self._rake_parts(base, hx, hy)
-        if frame is None:  # nucleated: every part, as raked
-            rects = [r for r in (base["house"], base["yard"], *base["gardens"], base.get("shed")) if r is not None]
+        turn = self._house_rot(hx, hy) if rot is None else rot
+        self._rake_parts(base, hx, hy, turn)
+        boxes: dict[str, Any] = {k: (turned_box(base[k], turn) if base.get(k) is not None else None) for k in ("house", "yard", "shed")}
+        boxes["gardens"] = [turned_box(g, turn) for g in base["gardens"]]
+        base["boxes"] = boxes
+        if frame is None:  # nucleated: every part, as drawn
+            rects = [r for r in (boxes["house"], boxes["yard"], *boxes["gardens"], boxes.get("shed")) if r is not None]
             base["bbox"] = self._bbox_of(rects)
-        else:  # dispersed: the grove's unraked frame with the raked yard and garden
-            base["bbox"] = self._bbox_of([frame, base["yard"], base["garden"]])
+        else:  # dispersed: the grove's unraked frame with the turned yard and garden
+            base["bbox"] = self._bbox_of([frame, boxes["yard"], boxes["gardens"][0]])
         return base
 
     def _bundle_layout(self: Settlement, hx: float, hy: float, hw: float, hh: float, garden_side: str, shed: bool, seat: Any) -> dict[str, Any]:  # type: ignore[misc]
@@ -179,7 +189,7 @@ class BundleGeomMixin:
         base["_frame"] = ((west + east) / 2, (north + south) / 2, east - west, south - north)  # the grove's frame, unraked
         return base
 
-    def _rake_parts(self: Settlement, base: dict[str, Any], hx: float, hy: float) -> None:  # type: ignore[misc]
+    def _rake_parts(self: Settlement, base: dict[str, Any], hx: float, hy: float, rot: float) -> None:  # type: ignore[misc]
         """Carry the yard, the garden bed(s) and the kura round the house center by the house's rake, in place.
 
         THE HOMESTEAD TURNS AS ONE PIECE (GM 2026-09-26). The house is drawn raked by `_house_rot`; its parts are
@@ -190,7 +200,6 @@ class BundleGeomMixin:
         room at one end of the yard than the other. The rake is position-seeded, so it is known here, at seat
         time, and every fit test the placer runs reads the moved centers - the ground cleared is the ground drawn.
         The grove arms are not moved: they are drawn unraked."""
-        rot = self._house_rot(hx, hy)
 
         def turned(r: Any) -> Any:
             ((x, y),) = turn_about([(r[0], r[1])], hx, hy, rot)

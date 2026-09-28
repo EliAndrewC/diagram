@@ -683,3 +683,13 @@ def test_the_parcel_line_index_is_one_per_size_asked() -> None:
         for y in (100.0, 125.0, 135.0, 160.0, 175.0):
             got = any(bx0 <= 100.0 <= bx1 and by0 <= y <= by1 and seg_dist(100.0, y, a, b) < r for a, b, r, bx0, by0, bx1, by1 in grid.near(100.0, y))
             assert got == _near_line((100.0, y), half, lines[0][0], 10.0), (half, y)
+
+
+def test_a_belt_end_that_recedes_along_the_wind_is_trimmed() -> None:
+    """`trim_receding_ends` (the 269 landing's review of Sawada): an end column more than a belt's depth downwind of its
+    neighbor goes, from each end inward; a level fringe and a two-column profile are left whole."""
+    from l7r.diagram.hamletgen.hinterland.belt import trim_receding_ends
+
+    assert trim_receding_ends([(-313.0, -105.0), (-226.0, 661.0), (-140.0, 647.0), (-53.0, 697.0), (33.0, 400.0), (120.0, 90.0)], 100.0) == [(-226.0, 661.0), (-140.0, 647.0), (-53.0, 697.0)]
+    assert trim_receding_ends([(0.0, 10.0), (90.0, 20.0), (180.0, 5.0)], 100.0) == [(0.0, 10.0), (90.0, 20.0), (180.0, 5.0)]
+    assert trim_receding_ends([(0.0, -500.0), (90.0, 20.0)], 100.0) == [(0.0, -500.0), (90.0, 20.0)]

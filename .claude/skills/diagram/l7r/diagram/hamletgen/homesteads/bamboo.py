@@ -8,6 +8,7 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement, seg_dist, segments_cross
 from l7r.diagram.settlement._geom import PointGrid, boxed_grid, boxed_ring_hit, boxed_rings, boxed_segs
+from l7r.diagram.settlement.rolling.bearing import turned_box
 
 from ..consts import Poly
 from ..plan import SitePlan
@@ -17,12 +18,33 @@ from ..plan import SitePlan
 # grove (kainyo) and bamboo was one of its named species beside a dominant cedar, valued as "important
 # daily-life material"; the bamboo stood WITH the storehouses on the plot's south side there, and at a
 # plot's wet edge for its roots elsewhere; the grove as a whole faces the local wind (N+W, W, or S+W by
-# region - summary-only). So the SIDE is rolled per farmstead, weighted toward the back and the shed's
-# side, never fixed; and the PRESENCE rate is a GUESS - no source gives a share; "one of several secondary
+# region). THE WIND SIDE IS READ NOW, not summary-only (269 B29; research/vegetation/260 and 154): on the Tonami
+# plain bamboo was often mixed into the grove from the west round to the north of the house, and the Sendai igune's
+# bamboo filled its low part against the wind. So the SIDE is rolled per farmstead, weighted toward the back, the
+# wind side and the shed's side, never fixed. The weights are a GUESS - no page gives a share per side; `wind` was
+# raised from .15 to .30 when the wind side was read, from `back` and `shed`, which stay the likeliest two together.
+# The PRESENCE rate is a GUESS - no source gives a share; "one of several secondary
 # species" says common but not universal - set like the shed's, and labeled. Sizes are a working strip.
 HOUSEHOLD_BAMBOO_PREVALENCE = 0.6
 HOUSEHOLD_BAMBOO_FT = (22.0, 16.0)
-_HOUSEHOLD_BAMBOO_SIDES = (("back", 0.45), ("shed", 0.30), ("wind", 0.15), ("side", 0.10))
+_HOUSEHOLD_BAMBOO_SIDES = (("back", 0.35), ("shed", 0.25), ("wind", 0.30), ("side", 0.10))
+
+
+_DIAGONAL = math.sin(math.radians(22.5))  # a wind component past this on both axes is a diagonal wind (NW, not N)
+
+
+def wind_seat(wlx: float, wly: float, hw: float, hh: float, gap: float, sw: float, sh: float) -> tuple[float, float, float, float]:
+    """The windward strip's (center x, center y, w, h) in the house's frame, for a wind (`wlx`, `wly`) pointing where it
+    comes FROM (269 B29). A diagonal wind seats it on the windward CORNER, a near-cardinal one on the windward FACE -
+    either way `gap` clear of the walls. It used to scale the half-sizes by the wind's components, which for a diagonal
+    wind put the strip's center ~0.7 of the way out and its body over the house's own corner: the near seat was refused
+    on every NW-wind hamlet in the pool, so the side rolled "wind" fell through to another side and raising its weight
+    moved nothing."""
+    if abs(wlx) > _DIAGONAL and abs(wly) > _DIAGONAL:
+        return (math.copysign(hw / 2 + gap + sw / 2, wlx), math.copysign(hh / 2 + gap + sh / 2, wly), sw, sh)
+    if abs(wly) >= abs(wlx):
+        return (0.0, math.copysign(hh / 2 + gap + sh / 2, wly), sw, sh)
+    return (math.copysign(hw / 2 + gap + sh / 2, wlx), 0.0, sh, sw)
 
 
 def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any]]) -> list[Poly]:
@@ -62,8 +84,7 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
             "shed": ((-(hw / 2 + gap + sh / 2)) if shed_side != "N" else 0.0, 0.0 if shed_side != "N" else -(hh / 2 + gap + sh / 2), sh if shed_side != "N" else sw, sw if shed_side != "N" else sh),
             "side": (hw / 2 + gap + sh / 2, 0.0, sh, sw),
         }
-        wlx, wly = wx * ca + wy * sa, -wx * sa + wy * ca  # the wind in the house's frame
-        local["wind"] = (wlx * (hw / 2 + gap + sh / 2), wly * (hh / 2 + gap + sh / 2), sw if abs(wly) >= abs(wlx) else sh, sh if abs(wly) >= abs(wlx) else sw)
+        local["wind"] = wind_seat(wx * ca + wy * sa, -wx * sa + wy * ca, hw, hh, gap, sw, sh)  # the wind in the house's frame
         # the rolled side first, then the others in their listed order as fallbacks
         roll = s._hjit(hx, hy, 96.0)
         first = _HOUSEHOLD_BAMBOO_SIDES[-1][0]
@@ -149,7 +170,17 @@ def _strip_blocked(
             continue
         if abs(cx - px_) < (cw + pw) / 2 + 2 and abs(cy - py_) < (ch + ph) / 2 + 2:
             return True
-    for key in ("wells", "kosatsuba", "byres", "farm_sheds"):  # everything seated between the sheds and this pass (T49)
+    # EVERY OTHER FARMHOUSE, as drawn: a caller that passes the bundle boxes in `skip` excuses a neighbor's bundle, and on a
+    # map whose houses carry no separate placed box that excused the neighbor's house as well - Kuwabata's woodpile landed
+    # on the next house's gable once the 269 landing's bearing fix moved the row (tests/gate/test_no_feature_overlaps.py).
+    for o in s.M.get("houses", []):
+        ox, oy = float(o["x"]), float(o["y"])
+        if abs(ox - hx) < 0.5 and abs(oy - hy) < 0.5:
+            continue
+        _, _, ow, oh = turned_box((ox, oy, float(o["w"]), float(o["h"])), float(o.get("rot", 0.0)))
+        if abs(cx - ox) < (cw + ow) / 2 + 2 and abs(cy - oy) < (ch + oh) / 2 + 2:
+            return True
+    for key in ("wells", "kosatsuba", "byres", "farm_sheds", "retirement_houses"):  # everything seated between the sheds and this pass (T49)
         for o in s.M.get(key, []):
             ow, oh = float(o.get("w", 2 * float(o.get("r", 8)))), float(o.get("h", 2 * float(o.get("r", 8))))
             if abs(cx - float(o["x"])) < (cw + ow) / 2 + 6 and abs(cy - float(o["y"])) < (ch + oh) / 2 + 6:

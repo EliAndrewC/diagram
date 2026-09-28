@@ -10,8 +10,8 @@ import random
 from l7r.diagram.hamletgen.hinterland.bamboo import nearest_fitting
 from l7r.diagram.hamletgen.ways.fabric import _crosses_fabric
 from l7r.diagram.hamletgen.ways.geom import ring_within
-from l7r.diagram.settlement._geom import edge_dist, seg_dist, segments_cross
-from l7r.diagram.settlement.shrines_wells.woods import CrownIndex, TreeStandsMixin
+from l7r.diagram.settlement._geom import CrownIndex, edge_dist, seg_dist, segments_cross
+from l7r.diagram.settlement.shrines_wells.woods import TreeStandsMixin
 from l7r.diagram.settlement.structures.fixtures.siting import BOARD_CAPTION_TOP, board_choice
 
 
@@ -122,7 +122,8 @@ def test_the_crown_grid_is_the_crown_scan() -> None:
     for _ in range(100):
         crowns = [(rng.uniform(0, 300), rng.uniform(0, 300), rng.uniform(3, 20)) for _ in range(rng.randint(0, 40))]
         index = CrownIndex(crowns[: len(crowns) // 2])
-        index.add(crowns[len(crowns) // 2 :])
+        for c in crowns[len(crowns) // 2 :]:
+            index.add(*c)
         for _k in range(60):
             x, y, r = rng.uniform(-20, 320), rng.uniform(-20, 320), rng.uniform(3, 20)
             assert index.clear(x, y, r) == TreeStandsMixin._crown_seat_clear(x, y, r, crowns)

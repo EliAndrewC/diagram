@@ -8,7 +8,6 @@ from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
 from .._geom import (
-    PointGrid,
     Poly,
     edge_dist,
     point_in_poly,
@@ -17,28 +16,6 @@ from .._geom import (
 
 if TYPE_CHECKING:
     from ..core import Settlement
-
-
-class CrownIndex:
-    """Crowns `(x, y, r)` filed by their own boxes, for `TreeStandsMixin._crown_seat_clear`'s test asked of many seats (feature
-    284, FR-011: the belt's draw walked every nearby and every drawn crown per crown - 713,438 comparisons over the pool).
-
-    A crown refuses a seat `(x, y, r)` when `d < max(r, r_other)`: either the seat lies inside the crown (`d < r_other`, so
-    inside its box) or the crown's center lies within `r` of the seat - both put the crown's box within `r` of the seat, so
-    `near(x, y, r)` returns every crown the test can refuse, and the same `>=` decides."""
-
-    __slots__ = ("grid",)
-
-    def __init__(self, crowns: Any = ()) -> None:
-        self.grid = PointGrid(cell=32.0)
-        self.add(crowns)
-
-    def add(self, crowns: Any) -> None:
-        self.grid.extend((cx, cy, cr, cx - cr, cy - cr, cx + cr, cy + cr) for cx, cy, cr in crowns)
-
-    def clear(self, x: float, y: float, r: float) -> bool:
-        """`_crown_seat_clear(x, y, r, <every crown filed>)`, exactly."""
-        return all((x - cx) ** 2 + (y - cy) ** 2 >= max(r, cr) ** 2 for cx, cy, cr, *_box in self.grid.near(x, y, r))
 
 
 class TreeStandsMixin:

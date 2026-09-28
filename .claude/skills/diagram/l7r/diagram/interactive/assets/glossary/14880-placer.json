@@ -1,0 +1,7 @@
+{
+ "term": "placer",
+ "def": "The part of the map generator that seats farmhouses on the sheet. It must seat between 0.85 and 1.05 occupied farmhouses per declared household, and when it runs short it widens the ground it draws seats from.",
+ "variants": [
+  "placer"
+ ]
+}

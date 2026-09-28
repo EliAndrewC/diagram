@@ -110,7 +110,7 @@ KINDS: dict[str, Kind] = {
 
 #: Which classes are a CROP, and how the card groups them. Read from the classes PRESENT on the map
 #: (spec FR-010, FR-014), never from a per-map list - which is what lets the dike-pond hamlet, whose
-#: fields are mulberry, sugarcane, banana and fish and which draws no dry plot at all, describe
+#: fields are a dike crop (mulberry, fruit or tea) and fish and which draws no dry plot at all, describe
 #: itself correctly with no code of its own.
 CROPS: dict[str, tuple[str, str]] = {key: (group, word) for key, (group, word) in _CONTENT["crops"].items()}
 

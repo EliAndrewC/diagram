@@ -267,44 +267,75 @@ def test_every_beaded_bund_segment_shows_at_least_two_beads(gen: str) -> None:
         assert sizes and min(sizes) >= 2, f"{os.path.basename(gen)} {field.get('name')}: {sizes.count(1)} bund segment(s) show a single bead"
 
 
-def test_neighboring_dry_plots_are_ploughed_at_different_angles(comb) -> None:
-    """`dry_plot_furrows_vary`. Dry plots carry a furrow direction, and edge-adjacent plots ploughed at
-    the same angle read as one machine-cut block rather than as separate households' ground. Each holding
-    was ploughed to its OWN plot's shape by its own household with its own team.
+def _tract_pairs(M: dict) -> tuple[int, int, list, list]:
+    """For one manifest: (pairs within a tract, pairs across a seam, tract pairs run apart, seams that do not turn) among
+    the dry plots that carry a row direction and a tract, adjacency at 1.25 mean plot sides, center to center."""
+    from l7r.diagram.waterfields.furrows import TRACT_PLOT_TURN_RAD, furrow_turn
 
-    THE ADJACENCY RADIUS DERIVES FROM THE PLOTS' OWN SIZE, and that is the whole history of this rule. It
-    used to be a flat 50 px cap, which made the check VACUOUS: mean plot side on the scripted hamlets is
-    81-87 ft, so the formula wants ~102 and the cap forced 50 - below every map's closest plot spacing
-    (54-59 ft), so it compared ZERO pairs on all four maps and had been doing so for as long as the plots
-    had been that size. It went blind in the same moment and for the same reason as the GENERATOR feeding
-    it, whose own adjacency radius was also a flat pixel figure: the two were calibrated against each
-    other rather than against the plots, so when the plots outgrew both, neither could catch the other."""
-    _plan, M = comb
-    plots = [p for p in (M.get("dry_plots") or []) if p.get("poly") and p.get("theta") is not None]
-    assert len(plots) >= 4, f"the roll drew {len(plots)} angled dry plots - too few for adjacency to mean anything"
+    plots = [p for p in (M.get("dry_plots") or []) if p.get("poly") and p.get("theta") is not None and p.get("tract") is not None]
+    if len(plots) < 2:
+        return 0, 0, [], []
     cents = [(sum(v[0] for v in p["poly"]) / len(p["poly"]), sum(v[1] for v in p["poly"]) / len(p["poly"])) for p in plots]
     sides = []
     for p in plots:
         pp = p["poly"]
         n = len(pp)
-        area = abs(sum(pp[i][0] * pp[(i + 1) % n][1] - pp[(i + 1) % n][0] * pp[i][1] for i in range(n))) / 2
-        sides.append(area**0.5)
+        sides.append((abs(sum(pp[i][0] * pp[(i + 1) % n][1] - pp[(i + 1) % n][0] * pp[i][1] for i in range(n))) / 2) ** 0.5)
     radius = 1.25 * (sum(sides) / len(sides))
-    # `theta` IS IN RADIANS. My first draft compared it in degrees, called all 24 adjacent pairs identical
-    # and reported a defect that is not there - the live spread is -0.9 to +0.8 rad, i.e. -52 to +46 deg.
-    # Two plots read as the same row direction within ~6 deg (0.10 rad), modulo pi because a furrow has
-    # no head and tail.
-    pairs, same = 0, []
+    within, seams, split, blurred = 0, 0, [], []
     for a in range(len(plots)):
         for b in range(a + 1, len(plots)):
             if math.dist(cents[a], cents[b]) >= radius:
                 continue
-            pairs += 1
-            d = abs(float(plots[a]["theta"]) - float(plots[b]["theta"])) % math.pi
-            if min(d, math.pi - d) <= 0.10:
-                same.append((round(cents[a][0]), round(cents[a][1])))
-    assert pairs, f"no dry-plot pair fell inside the derived adjacency radius of {radius:.0f} px - the rule is blind again"
-    assert not same, f"{len(same)} adjacent dry-plot pair(s) run their furrows the same way: {same[:3]}"
+            turn = furrow_turn(float(plots[a]["theta"]), float(plots[b]["theta"]))
+            where = (round(cents[a][0]), round(cents[a][1]))
+            if plots[a]["tract"] == plots[b]["tract"]:
+                within += 1
+                if turn > 2 * TRACT_PLOT_TURN_RAD + 0.002:  # + the manifest's rounding of theta to 0.001
+                    split.append(where)
+            else:
+                seams += 1
+                if turn <= 0.10:
+                    blurred.append(where)
+    return within, seams, split, blurred
+
+
+def test_dry_plots_share_a_row_direction_within_a_tract_and_change_it_at_the_seams() -> None:
+    """`dry_plot_furrows_vary`, re-scoped to TRACTS (269 B06; research/fields.html 'Why do neighboring dry plots run their
+    furrows different ways?', fields/180). The land set the row direction tract by tract: the neighboring plots of one
+    tract share one direction, turned a few degrees from plot to plot, and the direction changes at the seam between
+    tracts, so the seams read the family strips apart. The rule used to demand that EVERY pair of neighbors differ, which
+    forbade the neighbors that share a direction - the record's common case.
+
+    Read over EVERY shipped hamlet whose `meta.dry_furrows_vary` declares the patchwork, not the reference alone: a fan
+    whose middle rolled wild (`fan_middle`, 269 B07) keeps a hem only on its toe, too few plots to judge by themselves, so
+    non-vacuity is asserted over the set. Adjacency is derived from the plots (a flat pixel radius once made this check
+    compare zero pairs on every map). Two plots of one tract may differ by no more than twice the turn a plot takes within
+    its tract; two neighbors across a seam must differ by more than ~6 deg (0.10 rad), where two rows read as one."""
+    within = seams = 0
+    bad: list[str] = []
+    for gen in sorted(glob.glob(os.path.join(_pool.HERE, "pool", "hamlets", "*", "*.gen.py"))):
+        with open(_pool.obtain(gen)) as fh:
+            M = json.load(fh)
+        if not (M.get("meta") or {}).get("dry_furrows_vary"):
+            continue
+        w, s, split, blurred = _tract_pairs(M)
+        within, seams = within + w, seams + s
+        bad += [f"{os.path.basename(gen)}: one tract run apart at {q}" for q in split[:2]]
+        bad += [f"{os.path.basename(gen)}: a seam that does not turn at {q}" for q in blurred[:2]]
+    assert within, "no two plots of one tract are neighbors on any shipped hamlet - the tract half of the rule is blind"
+    assert seams, "no seam between tracts has neighbors on any shipped hamlet - the seam half of the rule is blind"
+    assert not bad, bad
+
+
+def test_the_tract_judge_fires_on_a_split_tract_and_a_blurred_seam() -> None:
+    """The judge above has teeth: one tract whose rows run apart and one seam whose rows do not turn are both named."""
+    sq = [[0.0, 0.0], [40.0, 0.0], [40.0, 40.0], [0.0, 40.0]]
+    at = lambda dx: [[x + dx, y] for x, y in sq]  # noqa: E731
+    M = {"dry_plots": [{"poly": at(0), "theta": 0.0, "tract": "a"}, {"poly": at(40), "theta": 0.5, "tract": "a"}, {"poly": at(80), "theta": 0.52, "tract": "b"}]}
+    within, seams, split, blurred = _tract_pairs(M)
+    assert (within, seams, len(split), len(blurred)) == (1, 1, 1, 1)
+    assert _tract_pairs({"dry_plots": []}) == (0, 0, [], [])
 
 
 def test_the_polder_dike_is_a_hand_piled_earthwork(polder) -> None:

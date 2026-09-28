@@ -40,7 +40,8 @@ class IrrigationDitch(Kind):
     """
     What: The dug channels that bring water TO the paddies: the head race that leaves the brook at its intake,
     the two supply canals it forks into along the field's high margins, and the delivery ditches running
-    down-slope between the plots.
+    down-slope between the plots. The intake is only an opening in the brook's bank: the head race opens out
+    of the bank there, with no gate and no boards across its mouth.
 
     Why: The comb layout - supply along the high margins, delivery ditches perpendicular down-slope, one drain on
     the lowest line - is the Edo layout attributed to the Kishu school, and it is what Chinese canal doctrine
@@ -48,7 +49,9 @@ class IrrigationDitch(Kind):
     bund (tagoshi) rather than down a ditch to each, and a ditch beside every paddy is a Meiji anachronism, so
     the net is drawn SPARSE. What the net draws is drawn at true size, and it stops
     one tier above the finest: the distribution lateral at about a meter is the last thing on the sheet, and
-    the field ditch that waters a single paddy is a hairline the map does not attempt.
+    the field ditch that waters a single paddy is a hairline the map does not attempt. Where a brook's water
+    stood high enough, the intake was nothing more than an entrance cut for it; the gates and slotted boards
+    read at canal mouths and weirs all stand on great works, and none is recorded at a village intake.
 
     Note: Topology and taper are read (Tabayashi, the Minuma-dai record), and so is the paddy-to-paddy form
     (Bungotakada); how few ditches that form left is this record's own reading, since no page read counts
@@ -60,15 +63,17 @@ class IrrigationDitch(Kind):
     a premodern layout. The national standard the record once leaned on for both is readable nowhere and is
     not cited. And the Kishu attribution is the layout's, not the name's: the school is attested for river
     channelization rather than for a field plan. Nor is the shape of this one drawn from a survey: the head
-    race's length from the intake to the fork follows the fan's geometry, the record giving no distance.
+    race's length from the intake to the fork follows the fan's geometry, the record giving no distance. The
+    bare mouth is read; that no gate or boards are drawn there rests on none being recorded at a village
+    intake, and at a two-foot opening either would be smaller than the map can show.
 
     Caveat: the head race's length from the intake to the fork follows the fan's geometry, the record giving no distance
 
     Name: irrigation ditch
     Covers: `field_ditches` whose role is not `drain` (except on a dike-pond field, whose canals are the pond canal), and `channels` not leaving a drain - the head race, the supply canals, the delivery ditches, a source-to-field feed
     Label: accurate
-    Sources: tabayashi-1987, jsidre-minumadai, jsslkx-002-2021, nougyoudoboku-matsutan, bungotakada-tagoshi
-    Entry: research/water.html - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'The head-race forks', 'Where does the brook stop being a brook and become the ditch'; research/fields.html - 'Where does a field's water come from, and how is it shared out?'
+    Sources: tabayashi-1987, jsidre-minumadai, jsslkx-002-2021, nougyoudoboku-matsutan, bungotakada-tagoshi, suido-ishizue-iseki, people-zhishui-2025, pwsannong-gudai-shuili, thepaper-guangai
+    Entry: research/water.html - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'The head-race forks', 'Where does the brook stop being a brook and become the ditch', 'Where on the brook's bank is the intake', 'What does the intake mouth look like'; research/fields.html - 'Where does a field's water come from, and how is it shared out?'
     """
 
     key = "irrigation ditch"
@@ -86,20 +91,29 @@ class DrainageDitch(Kind):
     be used again below. On a comb field the collector widens as it goes - a thread where it starts
     between the last plots, its full width where it leaves the field - because every plot it passes adds that
     plot's drawdown to what it is already carrying; a polder's ring drain instead carries the whole basin at one
-    rank from the start, and is drawn at one width.
+    rank from the start, and is drawn at one width. The collector runs ACROSS the fall, not down it: it has to
+    gather what runs off every column of plots, and a drain that ran straight downhill would follow one column
+    and collect nothing - so on a map whose land falls diagonally its outfall can sit up the page while lying
+    lower on the ground than the end it starts from. It lets its water go at its lowest point - its low end, or partway along where its run meets a sink - off the map, into
+    the passing brook, or into the pond at the field's foot, whichever lies below it.
 
     Note: The collector's form and its separation from the supply net are read, as the layout of modern
-    consolidation; whether it widens along its run follows the field it drains; it is drawn for every hamlet,
+    consolidation, and so is a drain letting its water go into a river or a natural watercourse, in a modern
+    design standard and in a Saitama drain, which its article does not date, that carried the spent water of a district its canals watered in the
+    Edo period; whether it widens along its run follows the field it drains; it is drawn for every hamlet,
     a deliberate trade over the older field-to-field and combined forms the record also holds, so a reader
-    has a ditch between the plots to hover, and the sink its run reaches is the map's declared water sink.
+    has a ditch between the plots to hover, and the sink its run reaches is the map's declared water sink. A
+    drain that ends in a pond of its own is a guess, no page read describing one; and the angle at which the
+    collector meets the brook is this record's own inference, the right angle a modern drainage manual gives
+    being the one between the field drains and the collector.
 
-    Caveat: it is drawn for every hamlet, a deliberate trade over the older field-to-field and combined forms the record also holds, so a reader has a ditch between the plots to hover, and the sink its run reaches is the map's declared water sink
+    Caveat: it is drawn for every hamlet, a deliberate trade over the older field-to-field and combined forms the record also holds, so a reader has a ditch between the plots to hover, and the sink its run reaches is the map's declared water sink. A drain that ends in a pond of its own is a guess, no page read describing one; and the angle at which the collector meets the brook is this record's own inference, the right angle a modern drainage manual gives being the one between the field drains and the collector.
 
     Name: drainage ditch
     Covers: `field_ditches` whose role is `drain`, and `channels` leaving a drain - the collector and its run to the pond, the brook or the frame
     Label: accurate
-    Sources: tabayashi-1987, maff-nogyoyosui-suiden, jawiki-yosuiro
-    Entry: research/water.html - 'Where does the water go once it has watered the paddies', 'The comb net is drawn at TRUE SIZE'; research/fields.html - 'Water-first v2'
+    Sources: tabayashi-1987, maff-nogyoyosui-suiden, jawiki-yosuiro, maff-drain-shape, shonairyo-akusuiro-jawiki, fao-drainage-systems, akusuiro-kotobank
+    Entry: research/water.html - 'Where does a field's drain let its water go?', 'Where does the water go once it has watered the paddies', 'The comb net is drawn at TRUE SIZE'; research/fields.html - 'Why does the drain run across the slope instead of down it?'
     """
 
     key = "drainage ditch"
@@ -107,25 +121,35 @@ class DrainageDitch(Kind):
 
 class Weir(Kind):
     """
-    What: A low bar of stone-packed timber crib thrown across the brook at the intake, set at a slant so
-    that it runs diagonally upstream from the point where the head race leaves the bank.
+    What: A low bar thrown across the brook at the intake, set at a slant so that it runs diagonally upstream
+    from the point where the head race leaves the bank. Each weir hamlet builds it in one of four ways: a fence
+    of driven stakes with reed woven between them, a frame of stakes and logs packed with clay, a crib of
+    timber packed with stone, or a course of stone-filled baskets.
 
     Why: A weir does not take the brook - it raises its surface a little, so that water enters the canal
     at the height the field needs, and the rest goes on over the crest and down the valley. The slant is
     the old builders' way of leading water to the intake: it dams the shallow riffle, and it also keeps the bar out of the fastest
-    water, where a flood is least able to break it. Not every hamlet has one -
-    where the brook ran high enough the water was simply led off the bank, and this map's roll decided.
+    water, where a flood is least able to break it. A weir on water this small was built of what lay to hand,
+    and the first weirs, of nearby wood and stone, were fragile enough that small streams were the only place
+    they could stand. Not every hamlet has one: where the brook kept its level through the season the intake
+    was only an opening in the bank, and where the level fell something had to be set in the stream to raise
+    it. The map gives a brook no level or season, so each hamlet's roll decides.
 
     Note: we have drawn the weir closing the brook bank to bank, in order to make it visible on the map at
     this scale; half-river closures were the common old form, and across a brook 7 ft wide a half-bar would
-    be a line a pixel or two long. Its materials and its slant are read in the modern engineering histories, no period drawing of a village weir having been read; the 5 ft thickness it is drawn at
-    is a guess, no source read giving the thickness of a village weir.
+    be a line a pixel or two long. Its slant is read in the modern engineering histories, no period drawing
+    of a village weir having been read. The four forms are read for small water except the baskets, which the
+    record reads only on large rivers, so a course of them across a brook is a guess; which form a hamlet
+    builds is rolled per settlement with an even chance, and that evenness is a guess, as is the even chance
+    of a weir at all. Each form is drawn at its own thickness: the baskets at their read diameter, about 2 ft;
+    the fence at about 1.5 ft, wider than a row of stakes so that it can be seen; the frame and the crib at
+    5 ft, a guess, no source read giving the thickness of a village weir.
 
     Name: weir
     Covers: `weirs` - the bar across the brook at a weir hamlet's intake
     Label: convention
-    Sources: maff-toshuko-history, jsidre-miwa-2023, jawiki-seki, japanriver-koborebanashi-21, wangzhen-nongshu-18
-    Entry: research/water.html - 'Where does the brook stop being a brook and become the ditch'
+    Sources: maff-toshuko-history, jsidre-miwa-2023, jawiki-seki, japanriver-koborebanashi-21, wangzhen-nongshu-18, suido-ishizue-iseki, hrr-agagawa-dento, kotobank-jakago, people-zhishui-2025, pwsannong-quxi
+    Entry: research/water.html - 'Is there a weir at the intake', 'What was a village weir built of', 'What does the intake mouth look like', 'Where does the brook stop being a brook and become the ditch'
     """
 
     key = "weir"
@@ -255,7 +279,12 @@ class VillageLane(Kind):
     turns as the plots allow, none sharp, never back on itself. The connector to the off-map road predates
     the settlement; the lanes between the farmsteads were trodden by the households already living there.
     And the lane leads somewhere: unless this map's notes say otherwise, a village lane runs to the main
-    village of the district the settlement belongs to.
+    village of the district the settlement belongs to. Past its last farmhouse a lane stops at that house's
+    dooryard, or runs on until it reaches something a reader can see - the fields, another way; it never
+    trails off into empty ground. The way out to the rice does not stop at the field's edge either: among the
+    paddies the way is the bund itself, the path a farmer walks to weed and manure, so the path to the fields
+    runs on to the paddy's outer bund and joins it, and where a hamlet stands so close to its paddy that no
+    path is left between them, its nearest lane runs on to the bund.
 
     Note: That every house is reached by a way is read from a surveyed village's own lane hierarchy; of the two
     forms, the planned back lane is read and the alleys off the spine are on no publicly readable page, as is
@@ -264,19 +293,28 @@ class VillageLane(Kind):
     The record now carries ONE measured figure for a way of this kind - blind alleys of 2 to 4 m, about 6.5 to
     13 ft, reaching the house lots of a surveyed village - and the map deliberately draws below that band,
     because the village measured is a twentieth-century dry-plain one in the north rather than a wet-rice
-    hamlet.
+    hamlet. How far a lane runs past its last farmhouse is a guess: no page read measures it or says whether a
+    lane stopped at the dooryard or ran on, so the map's rule - end at the dooryard or reach something seen,
+    and a lane end that reaches nothing is pulled back to the last house it serves - is its own, and how close
+    counts as serving a house (within 12 ft of its house, yard or beds, or beside it within 60 ft) is a guess
+    too, as is the point where the field path joins its bund, the one nearest the hamlet.
 
     Caveat: the drawn WIDTHS (3, 5 and 6 ft) are a GUESS, laddered from a footpath to a wheelbarrow's width,
     with the connector kept under the 9 ft of the one cart road the record does measure. The record now
     carries ONE measured figure for a way of this kind - blind alleys of 2 to 4 m, about 6.5 to 13 ft,
     reaching the house lots of a surveyed village - and the map deliberately draws below that band, because
-    the village measured is a twentieth-century dry-plain one in the north rather than a wet-rice hamlet.
+    the village measured is a twentieth-century dry-plain one in the north rather than a wet-rice hamlet. How
+    far a lane runs past its last farmhouse is a guess: no page read measures it or says whether a lane stopped
+    at the dooryard or ran on, so the map's rule - end at the dooryard or reach something seen, and a lane end
+    that reaches nothing is pulled back to the last house it serves - is its own, and how close counts as
+    serving a house (within 12 ft of its house, yard or beds, or beside it within 60 ft) is a guess too, as is
+    the point where the field path joins its bund, the one nearest the hamlet.
 
     Name: village lane
     Covers: `lanes` - every lane on the map: the web, the internal skeleton, the connector to the off-map road and the field spur
     Label: accurate
-    Sources: not recorded
-    Entry: research/homesteads.html - 'Is every farmhouse reached by a lane, and in what FORM?', 'How does a village lane bend?'; research/SOURCES.html re-sourcing queue (lane width)
+    Sources: kotobank-nodo, kotobank-aze-sekai-daihyakka, aze-jawiki, kotobank-keihan, kotobank-nawate
+    Entry: research/homesteads.html - 'Is every farmhouse reached by a lane, and in what FORM?', 'How does a village lane bend?', 'How far does a village lane run past its last farmhouse?'; research/fields.html - 'Where does the path to the fields end?'; research/SOURCES.html re-sourcing queue (lane width)
     """
 
     key = 'village lane'
@@ -284,20 +322,31 @@ class VillageLane(Kind):
 
 class Footbridge(Kind):
     """
-    What: A plank laid over a ditch, or a small timber deck where a lane crosses the stream.
+    What: A small single-file crossing laid over a ditch too wide to step across, or a small timber deck where
+    a lane crosses the stream. Each settlement lays its ditch crossings in one of three forms: a single log or
+    board laid across, a short deck of logs under trodden earth, or a planked deck.
 
-    Why: Farmers reach the plots by walking the bunds, and the long laterals cut across that walking; a plank
-    every so often keeps the field passable. Where a way crosses water, one deck - never two at the same
-    point.
+    Why: Farmers reach the plots by walking the bunds, and the long laterals cut across that walking; a
+    crossing every so often is taken to keep the field passable, laid square across its ditch where both banks land on
+    ground worth crossing to. All three forms are attested over small water: the one-log bridge laid across a
+    brook, the earthen bridge that was the common bridge of old Japan, and the plank deck that was the rarer
+    one; the record cannot say which crossed a paddy ditch, so each settlement rolls its own. Where a way
+    crosses water, one deck - never two at the same point, and a lane's deck is always planked.
 
-    Note: That ditches were planked is reasoned, not read: the record consulted says nothing about a plank over a
-    two-foot ditch, so the plank and its spacing are a guess.
+    Note: The three forms are read; no page read shows one laid where a bund path meets a paddy ditch, so what
+    the crossing is for is a guess; which one a settlement lays is rolled with an even chance, and that
+    evenness is a guess - the one proportion read, for river bridges and from an article that cites no
+    sources, would make the planked deck far rarer than logs under earth. No page read says at what width a
+    farm ditch was bridged: a crossing is laid over water 2 ft wide or more by the GM's ruling, about 4 ft wide
+    by another, and where along a ditch it stands and how often is a guess.
+
+    Caveat: no page read shows one laid where a bund path meets a paddy ditch, so what the crossing is for is a guess; which one a settlement lays is rolled with an even chance, and that evenness is a guess - the one proportion read, for river bridges and from an article that cites no sources, would make the planked deck far rarer than logs under earth. No page read says at what width a farm ditch was bridged: a crossing is laid over water 2 ft wide or more by the GM's ruling, about 4 ft wide by another, and where along a ditch it stands and how often is a guess.
 
     Name: footbridge
     Covers: `bridges[foot]` - every plank and deck over water
-    Label: guess
-    Sources: not recorded
-    Entry: research/water.html - 'What drawing at TRUE SIZE left open' (channel_footbridges)
+    Label: accurate
+    Sources: kotobank-marukibashi, kotobank-ipponbashi, zhwiki-dumuqiao, dobashi-jawiki, xinhua-jiahou-muqiao, itabashi-kotobank, aze-jawiki
+    Entry: research/water.html - 'What crosses a farm ditch - a plank, a log, or earth over logs', 'When is a farm ditch worth a plank' (channel_footbridges); research/ways.html - 'What is a plank bridge, and what is it for?'
     """
 
     key = 'footbridge'

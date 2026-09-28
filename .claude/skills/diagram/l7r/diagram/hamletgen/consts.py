@@ -378,19 +378,23 @@ KOSATSUBA_SITINGS = ("frontage", "waterside")  # the notice board on the busiest
 # 12 at the frontage optimum and called it defensible-but-off-optimum, which is exactly the shape of a
 # genuine two-answer question rather than a defect.
 
-# THE DIKE CROP - which of the dike-pond TYPES a hamlet is (feature 150, GM 2026-08-28 choosing audit A6).
-# The gazetteer office frames 桑基 (mulberry), 果基 (fruit), 蔗基 (sugar cane) and 蕉基 (banana) as a
-# succession of types across the region's history, not crops mixed on one dike; the late-1980s survey
-# carried by Ruddle & Zhong had cane dikes at 18% of the district against mulberry at 12%, while the
-# Ming-Qing heartland of Nanhai and Shunde was the silk case. Mulberry is weighted as the premodern norm
-# (a DEGREE, constitution XII); the others roll so two dike-pond hamlets can honestly differ.
-DIKE_CROPS = ("mulberry", "mulberry", "mulberry", "sugarcane", "banana", "fruit")
+# THE DIKE CROP - which dike-pond planting a hamlet is (feature 150, GM 2026-08-28 choosing audit A6; the
+# options re-read by 269 B34). research/archetypes/230: Qu Dajun (late 17th c.) has the villages' pond dikes
+# planted with fruit - lychee most, tea and mulberry next - and a modern history dates the fruit dike first
+# (mid-Ming) and the mulberry dike dominant through the Qing. So three premodern plantings: mulberry, fruit and
+# tea. The cane, banana and vegetable dikes are attested only in modern sources (one undated modern listing
+# for cane, nothing earlier than the modern surveys for banana and vegetable), and by the GM's ruling of
+# 2026-09-28 a form attested only in modern sources is not drawn - they are no longer options. The weighting
+# is a GUESS, a degree (constitution XII): mulberry the Qing norm at 3 in 6, fruit the oldest form at 2, tea,
+# named after lychee and never as a district's type, at 1.
+DIKE_CROPS = ("mulberry", "mulberry", "mulberry", "fruit", "fruit", "tea")
 
-# WHAT THE LEFTOVER PARCELS OF A WHOLESALE CONVERSION READ AS (feature 150 B2): standing rice, vegetable
-# ground (Fei: vegetables under the mulberry; the gazetteers: no rice inside a converted district), or no
-# leftover at all (every parcel a pond). Three attested states; the roll is even.
+# WHAT THE LEFTOVER PARCELS OF A WHOLESALE CONVERSION READ AS (feature 150 B2): standing rice, or no leftover
+# at all (every parcel a pond); the roll is even. A third state, tilled vegetable ground, rested on Fei's 1930s
+# silk village and the modern vegetable dike, and is retired by the GM's ruling of 2026-09-28 that a form
+# attested only in modern sources is not drawn (269 E9; research/archetypes/230).
 WATERWARD_DEPTH = 280.0  # px of wild water drawn outside a polder's dike face (feature 150 T55). Not "to the canvas edge": the crop keeps ~120 px past the content at most on this tier, so everything beyond was scattered, keep-out tested and thrown away - 18.4 s of a 40 s gen. 280 outlasts any hamlet crop measured (the tightest flank keeps 245 px of headroom), and `waterward_strips_run_off_the_frame` holds the line.
-LEFTOVER_FORMS = ("rice", "vegetables", "pond")
+LEFTOVER_FORMS = ("rice", "pond")
 POND_LAYOUT_MOSAIC = 0.5
 
 # THE SHARE OF THE BLOCK THAT CONVERTED in the end state. `apply_land_use(fraction=)` is the ECONOMIC
@@ -519,8 +523,8 @@ FAN_ASPECTS = (0.88, 0.95, 1.0, 1.08, 1.16)
 # turn into a ditch: it is TAPPED at an intake on one bank and keeps its own course below it, so the
 # hamlet's brook now passes the fan's head and runs on down one flank to the frame.
 #
-# THE INTAKE'S FORM IS A KNOB because the record attests two and prefers neither: in old Japan "in many
-# cases no intake weir was built at all - water was taken naturally", and where the level would not serve
+# THE INTAKE'S FORM IS A KNOB (research/water.html "Is there a weir at the intake?") because the record
+# attests two and prefers neither: in old Japan "in many cases no intake weir was built at all - water was taken naturally", and where the level would not serve
 # a weir was built, of timber frames packed with stone, gabions and brushwood. The record gives no
 # proportion between them, so the roll is EVEN and that evenness is a GUESS (labeled in the entry).
 INTAKE_FORMS = ("weir", "open")
@@ -590,13 +594,21 @@ BROOK_FAN_TRIM = 0.72
 # that the head race really does leave it at `OFFTAKE_DEG` - the record's rule is an angle off the parent's
 # DOWNSTREAM HEADING, and a brook already turning at the tap is not heading down the fall there.
 BROOK_TAP_RUN = 70.0
-# THE WEIR GLYPH at a `weir` hamlet's intake: an oblique bar of stone-packed timber crib across the brook,
-# running diagonally upstream from the intake mouth as the old ones did. Half-length and thickness in feet.
-# The full closure is a MAP DRAWING CONVENTION - half-river closures were the common old form and at a 7 ft
-# brook a half-bar is a pixel or two - and the thickness is a GUESS: no source read gives a village weir's
-# cross-section (the histories' dimensions are river weirs', hundreds of meters long).
+# THE WEIR GLYPH at a `weir` hamlet's intake: an oblique bar across the brook, running diagonally upstream from the
+# intake mouth as the old ones did. Half-length in feet. The full closure is a MAP DRAWING CONVENTION - half-river
+# closures were the common old form and at a 7 ft brook a half-bar is a pixel or two.
 WEIR_HALF_FT = 7.0
-WEIR_THICK_FT = 5.0
+# WHAT THE WEIR IS BUILT OF, AND SO HOW THICK IT IS DRAWN, in feet, by form (269 B22; research/water/300, "What was a
+# village weir built of, and how thick was it?"). The weir on small water was built of what lay to hand, and four forms
+# are read, so the form is a knob (`WEIR_FORM`, water/brook.py) rolled per weir hamlet, each at its own thickness:
+# - `fence`, stakes with reed woven between them (the grass weir): a fence is as thick as its row of stakes; 1.5 ft is
+#   WIDER than that so it can be seen at all - a MAP DRAWING CONVENTION;
+# - `gabion`, a course of stone-filled baskets: one basket "about 40-60 cm in diameter", read as about 2 ft - the
+#   basket's read size; the gabion course as a BROOK weir at all is a GUESS (the source gives gabions on rivers);
+# - `frame`, stakes and logs packed with clay (the Kodera site) and `crib`, timber frames weighted with stone: 5 ft,
+#   a GUESS - the only dimensions read are river works', and a crib at village scale is not recorded. 5 ft is the
+#   thickness the one crib glyph was drawn at before the knob.
+WEIR_THICK_FT = {"fence": 1.5, "gabion": 2.0, "frame": 5.0, "crib": 5.0}
 WEIR_SKEW_DEG = 30.0
 
 # DELIVERY-DITCH DENSITY by household count. A comb's offtakes are how many delivery ditches drop

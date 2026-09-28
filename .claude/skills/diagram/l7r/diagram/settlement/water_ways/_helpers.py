@@ -5,6 +5,9 @@ from typing import TYPE_CHECKING, Any
 
 from .._geom import (
     Pt,
+    edge_dist,
+    point_in_poly,
+    rot_rect,
     seg_dist,
 )
 
@@ -28,6 +31,58 @@ def _angle_between(run: Any, other: Any) -> float:
 
 
 _LANE_MIN_FT = 71.0  # one homestead's frontage: below this a lane can front nobody (see trim_lane_stubs)
+
+# A LANE THAT SERVES A FARMHOUSE ENDS AT ITS DOORYARD (269 B17, research/homesteads/310 - "a lane that serves a farmhouse
+# ends at that house's dooryard, or runs on to reach something a reader can see"; how close counts as serving is the
+# record's GUESS). It was 90 ft to the house's CENTER here, which let an end run 60 ft past the last steading into the
+# grass. The figure is hamletgen's `STEADING_ARRIVAL_FT`, derived there from the clip (a tread that reaches a plot records
+# its last point 7-11 ft off it), and a test holds the two equal; the settlement engine cannot import the scripted tier.
+DOORYARD_REACH_FT = 12.0
+# ...or stands beside the house, within this of its center and not past it: the scripted tier's `WAY_END_REACH_FT`, the gate's
+# own reach for an end (a test holds the two equal). It was 90 here, the looser figure feature 227 retired everywhere else.
+HOUSE_SERVE_FT = 60.0
+# An end has walked past a house when the foot of the perpendicular from the house falls more than this far back along
+# its last segment - the 4 ft grain `_trim_to_service` walks in, and the `_stop_at_closest_approach` cut's own.
+PAST_GRAIN_FT = 4.0
+# ...OR RUNS ON TO THE BUND (269 B04/B17, research/fields/290 - "the field path runs from the hamlet to the paddy's outer
+# bund and joins it ... it never ends in open ground short of the bund"). An end has arrived when its centerline stops
+# within a bund's width (~1.5 ft) and the widest lane's half-tread (3 ft) of the worked ground's edge, with a foot and a
+# half of drawing margin: the cap of the tread then lies on the bund line. A map drawing convention.
+BUND_REACH_FT = 6.0
+
+
+def walked_past(prev: Pt, q: Pt, house: Pt) -> bool:
+    """Has a tread arriving at `q` from `prev` walked on past `house` - does the foot of the perpendicular from the house
+    fall more than `PAST_GRAIN_FT` back from the end (269 B17)?"""
+    dx, dy = q[0] - prev[0], q[1] - prev[1]
+    d2 = dx * dx + dy * dy
+    if d2 <= 0.0:
+        return False
+    t = ((house[0] - prev[0]) * dx + (house[1] - prev[1]) * dy) / d2
+    return t < 1.0 and (1.0 - max(t, 0.0)) * math.sqrt(d2) > PAST_GRAIN_FT
+
+
+def vertex_behind(q: Pt, pts: Any) -> Pt:
+    """The vertex of `pts` a point `q` lying on it was walked to from: the start of the segment nearest `q`, the last such
+    on a tie - so a pulled-back end is judged along the segment it now stands on, not the one it was cut from."""
+    k = min(range(1, len(pts)), key=lambda j: (seg_dist(q[0], q[1], pts[j - 1], pts[j]), -j))
+    return (float(pts[k - 1][0]), float(pts[k - 1][1]))
+
+
+def dooryard_dist(house: Any, q: Pt) -> float:
+    """How far `q` stands from a farmhouse's dooryard - its drawn footprint, its threshing yard and its garden beds, each
+    turned with the house (the record's `geom`, 269 B18); zero inside one. A house with no bundle is its footprint alone.
+    GAP VERDICT family: the drawn quads, never the center."""
+    rot = float(house.get("rot") or 0.0)
+    g = house.get("geom") or {}
+    rects = [(house["x"], house["y"], house["w"], house["h"])] + [g[k] for k in ("yard", "shed") if g.get(k) is not None] + list(g.get("gardens") or ())
+    best = float("inf")
+    for r in rects:
+        quad = rot_rect(float(r[0]), float(r[1]), float(r[2]), float(r[3]), rot)
+        if point_in_poly(q[0], q[1], quad):
+            return 0.0
+        best = min(best, edge_dist(q[0], q[1], quad))
+    return best
 
 
 def _lane_len(pts: list[Pt]) -> float:
