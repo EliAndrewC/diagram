@@ -25,14 +25,14 @@ about twice R11's size, and because every turn re-reads the context so far, a se
 square of its length. The outliers were all long write sessions: one 272 write session cost 24.5 M over 109 turns,
 peaking at 385 K. Two 271 write sessions cost 20.0 M and 13.2 M.
 
-**Where the tokens go.** Write sessions' main context is 48.5% of raw tokens (36.6% by price); check sessions' main
+**Where the tokens go** (observed 2026-09-27; method: `measure/decomp.py` over R1's sessions). Write sessions' main context is 48.5% of raw tokens (36.6% by price); check sessions' main
 context is 37.8% (31.5% by price); agents are 11.7% raw but about 30% by price. In a check session's main input the
 fixed floor is the largest part at 34%: about 20 K a turn, of which the clone's root CLAUDE.md is about 5.2 K and the
 research CLAUDE.md about 3.5 K.
 
 **What the per-page rounds could not see.**
 
-- **Coordination files are re-read whole.** 619 reads of the cross-session claims file across 172 sessions (~30 M
+- **Coordination files are re-read whole** (observed 2026-09-27; method: the transcripts' Read calls, `measure/collect.py`). 619 reads of the cross-session claims file across 172 sessions (~30 M
   carried), 418 reads of a group's handoff across 254 sessions (~20 M, though the briefs say "read only your own
   lines"), and 388 reads of a checks report across 183 sessions (~12 M), mostly to append a line. Together that is
   about 60 M, or 5%.
@@ -43,8 +43,7 @@ research CLAUDE.md about 3.5 K.
   - Sources are almost never read twice by different groups.
   - The quote-check re-checks find a real problem 13% of the time after fixes, so they stay.
 
-**The candidates.**
-
+**The candidates** (observed 2026-09-27; method: estimates from the figures above).
 1. Cap a write session at about 4 questions or 10 keys: est. 188-231 M saved (16-20% raw, about 10% by price).
 2. Own lines only for coordination files: est. 40-50 M (about 4% raw).
 3. A slim instructions file for headless sessions: about 5 K a turn over about 12,500 turns, 60 M raw, about 2% by price.
@@ -67,7 +66,7 @@ uncached tokens plus the cache write plus the cache read, from each session's JS
 | old | `ec30b943` | 19,642 | 2 | 13,376 | 6,264 |
 | new | `909b7b3f` | 13,050 | 2 | 6,784 | 6,264 |
 
-**Result.** The floor fell by 6,592 tokens a turn (34%). That is more than R1's estimate of about 5.2 K for the root
+**Result** (observed 2026-09-27; method: the two probe sessions above). The floor fell by 6,592 tokens a turn (34%). That is more than R1's estimate of about 5.2 K for the root
 CLAUDE.md, because the file has grown since, and it is net of the slim file (about 1.5 K) added in its place. At
 R1's rate of about 12,500 page-session turns, it is about 82 M raw tokens, most of them cache reads.
 The research record's CLAUDE.md is not in either figure because the probe reads no research file. It still loads
