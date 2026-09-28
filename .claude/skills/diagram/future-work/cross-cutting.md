@@ -18,6 +18,15 @@ shrunk to 100x100 re-evaluates the mode), or the highlight lands before the rast
 measurement, not a longer timeout: run the test in a loop under parallel load (e.g. 20 runs beside a `make done`)
 logging `data-mode` and the highlight state at each read, and fix whichever of the two the log shows.
 
+MEASURED 2026-09-28 (the GM asked): NOT reproduced - 20 module runs with all 22 cores busy, then 8 package runs beside
+a real `make test-full` (itself green, this test included): 29 raster samples, 0 failures, and at every one the page
+was in raster mode with no highlight or modal pinned from the test before (`data-hl` empty, `#explain` closed) - so
+state leaking from the previous test is ruled out for these runs, and CPU load alone does not trigger it. Both real
+failures came in gates run while the machine was short of memory (the 2026-09-27 one as the system was killing
+background shells for low memory); memory pressure on Chromium is the untested condition, not safe to induce here.
+The assertion now names the page's state (mode, `data-hl`, the modal, raster readiness) before and after, so the
+next natural failure says which one was wrong.
+
 ## The review-prereq guard matches a finding's measurement by bare id (found 2026-09-27, feature 267)
 
 `scripts/_review_prereq.py` `unverified_findings` counts a finding disposed when any `measurements.json` record has
