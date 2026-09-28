@@ -15,5 +15,6 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D7).
 - [x] T04 The shrine sheet redrawn from the same layout; its notes and Map notes (D6; FR-007)
       research: rendering
       verify: DONE. the sheet redrawn from the same layout, 134 crowns tree for tree (matches_map OK), captions seated, notes/Map notes/kinds restated (research.md R3); building-review round 4 found the drawing sound, its figure error fixed
-- [ ] T05 STRAIGHT_RUN recorded; matches_map green; settlement-review and building-review ledgered; make done; push (D7; FR-009)
+- [x] T05 STRAIGHT_RUN recorded; matches_map green; settlement-review and building-review ledgered; make done; push (D7; FR-009)
       research: rendering
+      verify: DONE. STRAIGHT_RUN 0, LONG_RUN 0, the sides off a line by more than a crown radius (measurements.json); matches_map OK; settlement-review PASS and building-review rounds ledgered; make done green 2026-09-28 on the merged tree
