@@ -135,12 +135,13 @@ class Millet(Kind):
     bare hill rather than coppice.
 
     Note: The catena's elements - paddy, dry field, woodland - are read, and one page read puts the dry fields on
-    the slopes around the settlement, for the Yoshino mountains only; that the paddy takes the flat and the dry
-    crops the higher ground, and that dry plots cluster round the houses, is this record's own reading, and one
-    source read puts paddy round houses built on slightly higher ground instead; that the crop stands in ridged
-    rows at all is a GUESS - no page read says whether a pre-modern dry field was sown in rows or broadcast, and
-    the only ridged rows found are modern; the crop MIX on any one map (how much millet against buckwheat and
-    barley) is rolled from the seed and is a GUESS at the proportions.
+    the slopes around the settlement, for the Yoshino mountains only; that the old settlements stand on the raised
+    ground that is also their dry field, with the paddy in the wet ground behind it, is read too; the rest of the
+    order is this record's own reading, and one source read puts paddy round houses built on slightly higher ground
+    instead; the size of a household's plot by its house is a GUESS; that the crop stands in ridged rows at all is a
+    GUESS - no page read says whether a pre-modern dry field was sown in rows or broadcast, and the only ridged rows
+    found are modern; the crop MIX on any one map (how much millet against buckwheat and barley) is rolled from the
+    seed and is a GUESS at the proportions.
 
     Caveat: the crop MIX on any one map (how much millet against buckwheat and barley) is rolled from the seed and
     is a GUESS at the proportions.

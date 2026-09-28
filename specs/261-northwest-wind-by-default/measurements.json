@@ -1091,5 +1091,49 @@
   "quantity": "the farthest a Sawada farmhouse moved when its rank seats took the accretion form's jitter (four moved, 3.1-7.9 ft; the rest stand where they stood at 1f2484649); meta.homestead_fields 11 -> 7",
   "source": ".claude/skills/diagram/pool/hamlets/sawada/sawada.json houses, meta.homestead_fields; the same at commit 1f2484649",
   "command": "python3 specs/261-northwest-wind-by-default/measure/house_moves.py 1f2484649 sawada"
+ },
+ "sawada-r19-board": {
+  "verifies": "F1",
+  "subject": "sawada",
+  "round": "10161535",
+  "answers": "101615354a60",
+  "value": 10,
+  "unit": "ft",
+  "quantity": "the board's distance from the connector's inner end the feature-261 notes entry states (27 in the round; 9.5 ft measured by the reviewer after the rank jitter moved the junction)",
+  "source": ".claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md; sawada.json kosatsuba, lanes",
+  "command": "grep -n 'The entrance board stands 10 ft from where the connector meets the lanes' .claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md"
+ },
+ "kuwabata-r19-burial": {
+  "verifies": "F1",
+  "subject": "kuwabata",
+  "round": "10161535",
+  "answers": "101615354a60",
+  "value": 1,
+  "unit": "grounds",
+  "quantity": "main merged (feature 273): meta.hamlet_burial own_ground and one cemetery drawn on this feature's layout, east-north-east of the hamlet beyond its last houses, which the notes' Features line now says",
+  "source": ".claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.json meta.hamlet_burial, cemeteries; kuwabata.notes.md",
+  "command": "grep -n 'east-north-east of the hamlet beyond its last houses' .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md"
+ },
+ "kuwabata-r19-popup": {
+  "verifies": "F2",
+  "subject": "kuwabata",
+  "round": "10161535",
+  "answers": "101615354a60",
+  "value": 0.58,
+  "unit": "ha",
+  "quantity": "Kuwabata's drawn belt polygon; the windbreak pop-up no longer claims one to two hectares for every map but says a hamlet's belt is half a hectare to under two across these maps (the pool: 0.58-1.75 ha), from research/vegetation 030",
+  "source": ".claude/skills/diagram/l7r/diagram/interactive/classes/greenery.py Windbreak; .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.json village_groves",
+  "command": "grep -n 'half a hectare to under two across these maps' .claude/skills/diagram/l7r/diagram/interactive/classes/greenery.py"
+ },
+ "kuwabata-r19-unmoved": {
+  "verifies": "F4",
+  "subject": "kuwabata",
+  "round": "10161535",
+  "answers": "101615354a60",
+  "value": 10.2,
+  "unit": "ft",
+  "quantity": "the one of the twelve unmoved farmsteads that stands off its seat (the other eleven at 0 ft), as the notes now say",
+  "source": ".claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md",
+  "command": "grep -n 'eleven stand where they stood and one 10.2 ft off' .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md"
  }
 }
