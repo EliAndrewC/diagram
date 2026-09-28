@@ -89,7 +89,7 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D8). Inventory: [`inv
 - [ ] T28 B3 buildings: the Chinese drill hall, the carters' inn and the barracks' bunk rooms (M117-M119; holds: none (M119's kind was written by 267, done))
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
-- [ ] T29 F4 fields: the bund, the water, the collector and the pond (M09-M12; holds: 269)
+- [ ] T29 F4 fields: the bund, the water, the collector and the pond (M09-M12; holds: 269) - the first 269-held group: after `wait269.sh`; if 269 has not landed in 24 hours the queue stops and `queue-269.txt` starts it later (plan D3)
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
 - [ ] T30 W3 water: the canal berm and the weir (M35-M36; holds: 269)
@@ -131,13 +131,13 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D8). Inventory: [`inv
 - [ ] T42 C5 cities/fabric, cities/hinterland and cities/defenses: the open reserve, farming inside the wall, and moat width (M128-M130; holds: 269)
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
-- [ ] T43 R5 religion-and-death: shrine precincts, gifts and the basin (M78-M81; holds: 279, 272 (done))
+- [ ] T43 R5 religion-and-death: shrine precincts, gifts and the basin (M78-M81; holds: 279, 272 (done)) - runs last; 279's sections are researched and their text handed over (OWED-TO 279) while 279's line is open (plan D3)
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
 
 ## Phase 3 - the eliminations (after the research; 269's modules after 269 lands; D4-D6)
 
-- [ ] T44 Gather every handoff's `M<nn>` lines into `outcomes.md`; the spec's Decisions Recorded gets one line per outcome (FR-003, SC-002)
+- [ ] T44 Gather every handoff's `M<nn>` lines into `outcomes.md`, and confirm each of M01-M130 has an outcome line or an exclusion naming its owner before phase 3 starts; apply each `OWED-TO` text through a `briefs/extra/` brief once its hold clears, or send it to the owner; the spec's Decisions Recorded gets one line per outcome (FR-003, SC-002, plan D3)
       research: procedure
 - [ ] T45 Report to the GM through `escalation-check`: each GM ruling a MODERN-ONLY outcome reverses, each form ruled in knowingly (held until the GM rules), and the `undated-custom` set (spec D1) (D5, FR-006, SC-004)
       research: procedure

@@ -28,18 +28,27 @@ and the maps.
   range, chosen above every range the record and the other features use on that page.
 - **D3 - One serial queue in this clone, 269's sections last** (spec Edge Cases, FR-010). The groups whose sections 269
   has NOT touched run first. `then:wait269.sh` stands before the first group that edits a section 269 rewrote: it
-  waits (10-minute checks, up to 10 hours) until the last commit in 269's clone that touched the record is on
-  origin/main, then syncs. `then:sync.sh` between groups merges main in (a conflict is aborted and the queue goes on)
-  and queues any `briefs/extra/*.md` once. A group that edits a section 279 holds (religion-and-death 124-129) runs
-  only once 279 has marked it done in the claims file; the write brief's claims step skips it otherwise and names it
-  in the handoff.
+  waits (10-minute checks, up to 24 hours) until the last commit in 269's clone that touched the record is on
+  origin/main, then syncs. If 269 has still not landed, it STOPS the queue (it prints a brief path that does not
+  exist, which the runner refuses and logs as STOPPED) and never goes on into the 269-held groups; the rest of the
+  queue is `queue-269.txt`, started once 269 lands. `then:sync.sh` between groups merges main in (a conflict is
+  aborted and the queue goes on) and queues any `briefs/extra/*.md` once. **No candidate is skipped.** A section is
+  HELD when the claims file names it in progress for another feature (279's religion-and-death 124-129 while its line
+  is open) or when 269 rewrote it and has not landed, whatever 269's line says (the brief checks
+  `git log origin/main..HEAD` in 269's clone). An item on a held section is researched all the same; the session does
+  not edit the section but writes its outcome, marked `OWED-TO <feature>`, with the exact text the section owes, and
+  the orchestrator applies that text through a `briefs/extra/` brief once the hold clears. R5 (279's sections) runs
+  last on this rule.
 - **D4 - The eliminations wait for the research, and 269's modules wait for 269** (FR-005, FR-010). Phase 3 starts
   from `outcomes.md` (each handoff's `M<nn>` lines gathered), and no change touches a module in 269's
   `briefs/engine/groups.md` until 269 has landed. Per MODERN-ONLY form: the knob option is removed or the generator
   stops drawing it; the kind is retired (or, where the form is one of several a kind covers, its prose loses the form);
   the motivating pool map is regenerated; `settlement-review` or `building-review` runs on it (one map per agent) and
   the pass is a row in `docs/review-ledger.md`; `make done` is green before the landing. A MIXED item keeps the
-  attested forms (a knob among two or more) and is calibrated to the premodern figure where it is a degree.
+  attested forms (a knob among two or more) and is calibrated to the premodern figure where it is a degree. Phase 3
+  starts only when every item M01-M130 has an outcome line (or an exclusion naming its owner), and each `OWED-TO`
+  text has been applied or sent. The hoshigaoka-shrine sheet is 279's (its claim): a change there from R5's outcomes
+  is agreed with 279 first.
 - **D5 - A reversed GM ruling is reported, not held** (FR-006). The handoff says per item whether the GM ruled the form
   in and whether knowingly. A form ruled in unknowingly is eliminated with the rest and listed for the GM; a form ruled
   in knowingly goes to the GM through `escalation-check` before it is removed.

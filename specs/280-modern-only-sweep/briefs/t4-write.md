@@ -12,13 +12,16 @@ FIRST, and to record what you find. You do not change the engine or the maps: th
 
 **Read narrowly.** For a few notes of a question use `make notes PAGE=<page> SECTION=<NNN> KEYS=<key,key>` (in
 `.claude/skills/diagram`). Grep with `-o` and a short context. Send the lookups you know you need in one message.
-**Do not edit sections other features hold.** Religion-and-death 124-129 (feature 279). Anything the claims file
-names as in progress for another feature. Where a finding OWES one of those a correction, say exactly what in the
-handoff; the orchestrator sends it to the owner.
+**A held section is researched, never edited, and never skipped.** A section is HELD when the claims file names it
+in progress for another feature (religion-and-death 124-129 are feature 279's while its line is open), or when
+feature 269 rewrote it and has not landed - whatever 269's claim line says, "done, committed in clone" included: any
+output from `git -C /diagram/.clones/diagram-supplemental log origin/main..HEAD --oneline -- .claude/skills/diagram/research/<page>/<NNN>-*`
+means unlanded. For an item on a held section, do the research all the same, but do not edit the section: put the
+outcome in the handoff as usual, with `OWED-TO <feature>` and the exact text the section owes (the finding and its
+footnotes), so the orchestrator applies it once the hold clears. No item leaves your session without an outcome.
 **Coordination files are read by line, never whole** (feature 274): `make lines FILE=<f> KEY=<regex>` and
 `make append FILE=<f> LINE="<text>"`. **Claims first:** `make lines FILE=/diagram/.clones/RESEARCH-CLAIMS.md
-KEY="<each page your items name>"`; skip any item whose section another session has claimed since, naming it in the
-handoff; then `make append FILE=/diagram/.clones/RESEARCH-CLAIMS.md LINE="Diagram supplemental (diagram-supplemental-2) | 280 |
+KEY="<each page your items name>"` (a held section is handled as above, never skipped); then `make append FILE=/diagram/.clones/RESEARCH-CLAIMS.md LINE="Diagram supplemental (diagram-supplemental-2) | 280 |
 group T4 in progress (<the sections>) | <date>"`. Read only your own lines of a handoff (`make lines
 FILE=<handoff> KEY="SECTION=<yours>|KEY=<yours>"`), and add to a checks report with `make append`.
 **New registry entries and glossary terms take their prefix from `make reserve KIND=registry|glossary KEY=<k>`** (in

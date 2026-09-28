@@ -1,0 +1,71 @@
+{
+ "feature": "280-modern-only-sweep",
+ "plan_sha256": "cf8afc81c98cefb738938d0039950e32de5e28a70094867a30065705a4886d5a",
+ "reviewed": "2026-09-28",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "Audit read-only over a copy of the record taken from 269's clone (main plus 269's unlanded research); every section classed; judgment on Opus",
+   "class": "within",
+   "why": "FR-001's coverage; reading the newest text widens, not narrows, what is swept."
+  },
+  {
+   "id": "D2",
+   "summary": "Research in page sessions from generated briefs, four-question cap, reserved prefixes, three outcomes incl. undated-custom",
+   "class": "within",
+   "why": "Restates FR-003, FR-004 and spec D1."
+  },
+  {
+   "id": "D3-order",
+   "summary": "One serial queue; groups on sections 269 rewrote run after the others, behind wait269.sh (research-on-main as the proxy for 269 landing); 279's R5 last",
+   "class": "within",
+   "why": "Ordering only; spec Edge Cases hold 269's sections until it lands, and 269 cannot push its record before its tasks close, so the proxy is sound."
+  },
+  {
+   "id": "D3-269-timeout",
+   "summary": "wait269.sh gives up after 10 hours and the queue goes on; the brief's claims step then skips any item whose section is held, and nothing re-queues it",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "A timeout is not impossibility. A skipped item leaves with no outcome, against FR-003 (every candidate researched) and SC-002 (every candidate has an outcome line): up to 14 groups, M09-M63, M74-M77, M93-M95, M128-M130, could silently drop. The backstop also fails its own purpose: the brief skips sections 'claimed since' / 'in progress', and 269's claim lines read 'done, committed in clone', so after a timeout a session can edit 269's unlanded sections (FR-010)."
+  },
+  {
+   "id": "D3-279-skip",
+   "summary": "R5 (M78-M81, religion-and-death 124-127) runs only once 279 marks done; otherwise the claims step skips it and names it in the handoff",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The spec already routes a held section: research it, write the finding in the handoff, send it to the owner (Edge Cases, FR-002). Skipping instead leaves M78-M81 with no outcome - two are strength S (the drawn precinct band is, by the record's own words, Meiji-or-later) and the engine kinds (ShrineGrove, ShrineBasin) are not 279's (279's claim: engine none). Also the mechanism cannot do what D3 says even when 279 is done: gen.py's HEAD forbids editing religion-and-death 124-129 unconditionally in every brief, including R5's, whose step 5 tells it to write on 124-127."
+  },
+  {
+   "id": "D4",
+   "summary": "Eliminations only after research and from outcomes.md; nothing touches a 269 module before 269 lands; per-form removal, retirement or prose narrowing, regeneration, review, make done; MIXED keeps attested forms and calibrates degrees",
+   "class": "within",
+   "why": "Spec phase 3, FR-005, FR-010, acceptance scenario 3."
+  },
+  {
+   "id": "D5",
+   "summary": "Unknowingly ruled-in forms eliminated and reported; knowingly ruled-in forms to the GM via escalation-check before removal",
+   "class": "within",
+   "why": "FR-006 verbatim; the exception was ruled on at spec round 2."
+  },
+  {
+   "id": "D6",
+   "summary": "Legacy maps not edited; each modern-only form recorded in migration-plan.md owed at conversion; list to the GM via escalation-check",
+   "class": "within",
+   "why": "Spec D2, FR-007, SC-004; judged legitimate at spec round 1 and the plan adds nothing to it."
+  },
+  {
+   "id": "D7",
+   "summary": "Findings owed to another feature's section go in the handoff to the owner",
+   "class": "within",
+   "why": "Spec Edge Cases."
+  },
+  {
+   "id": "D8",
+   "summary": "Stray fixes found by the audit made in place when outside every held module and section; else listed with owner",
+   "class": "within",
+   "why": "Constitution XIV; bounded by FR-010."
+  }
+ ],
+ "verdict": "BLOCKED"
+}
