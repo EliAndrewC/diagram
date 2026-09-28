@@ -236,11 +236,13 @@ class VegetableGarden(Kind):
 
     Note: At a residence or a walled compound its size is one of two attested forms, a soup-greens plot or a field
     over about half the grounds, and each sheet takes its own; its seat is one of four attested ones - west of the
-    house, south beside the formal garden, the rear service ground, or a parcel of its own - and where the west and the
-    rear lie in the shade of the house and the kitchen, the bed stands in the inner court beside the formal garden. At a
-    country shrine it is the resident keeper's plot, near the dwelling on whatever open ground gets its sun, its size a
-    guess, no keeper's plot having been measured. Anywhere, the sun rules out a seat where the bed gets under its six
-    hours in the autumn.
+    house, south beside the formal garden, the rear service ground, or a parcel of its own ("Where does a walled
+    compound keep its vegetable garden, and does the sun decide it?"). The sun rules out a seat where the bed gets under
+    its six hours in the autumn ("How many hours of direct sun does a kitchen bed need?"; a sheet may declare a
+    half-shade bed, which needs three), and that a household chose among its seats by the sun is a guess. Where the west
+    and the rear lie in the shade of the house and the kitchen, the bed stands in the inner court beside the formal
+    garden. At a country shrine it is the resident keeper's plot, near the dwelling on whatever open ground gets its
+    sun, its place and its size both guesses, no keeper's plot having been placed or measured.
 
     Caveat: That a household chose its seat by the sun is a guess: no source read says why a plot was put where it
     was. A country shrine keeper's plot, its place and its size, is a guess: no source read places or measures one.
