@@ -32,7 +32,8 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D11). Research: [`res
 - [x] T10 The owed post-landing measurement in future-work/cross-cutting.md (D10)
       research: rendering
       verify: DONE. future-work/cross-cutting.md holds the owed post-landing measurement with measure/'s scripts and R1's baseline
-- [ ] T11 `make done` green; land
+- [x] T11 `make done` green; land
       research: rendering
+      verify: DONE. make done green 2026-09-28: 4650 passed, 4 skipped, every floor; landed by sync-with-main.sh done
 - [ ] T12 Tell the research sessions, after the landing is on main (D11)
       research: rendering
