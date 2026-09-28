@@ -9943,5 +9943,11 @@
   "variants": [
    "Siberian high"
   ]
+ },
+ "oroshi": {
+  "def": "A cold wind blowing down off a mountain range onto the plain below in winter; in Japan it is named for the mountain it comes from, like the Zao oroshi of the Sendai plain.",
+  "variants": [
+   "oroshi"
+  ]
  }
 }

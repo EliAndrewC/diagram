@@ -1673,6 +1673,7 @@ open-ended dikes	open-ended dike
 ordination platform	ordination platform
 ordination platforms	ordination platform
 origake	origake
+oroshi	oroshi
 oshi	oshi
 oshirasu	oshirasu
 ossuary	ossuary

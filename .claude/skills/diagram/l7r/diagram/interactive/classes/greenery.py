@@ -207,7 +207,7 @@ class Marsh(Kind):
     Why: Wet rice is reclaimed FROM marsh: where reclamation stops, or the ground is too wet to manage, it stays
     reed wetland, and an abandoned paddy reverts to it. The toe marsh is as wide as the fan it drains, and
     its margin grades reed, then sedge and grass, then dry ground - the form of a toe that is cut, since cutting is
-    what keeps willow and alder from taking a reed bed; left alone, an alder and willow carr would stand at the reed
+    what keeps willow and other trees from taking a reed bed; left alone, an alder and willow carr would stand at the reed
     edge, and the map does not draw that form. A RESERVOIR'S SHORE IS REEDED BECAUSE THE
     POND IS WORKED, not in spite of it: the obvious guess is that a maintained tameike - its bank repaired,
     its silt dredged, its water drawn down each season - would have a margin kept clear, and the record

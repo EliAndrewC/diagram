@@ -1135,5 +1135,27 @@
   "quantity": "the one of the twelve unmoved farmsteads that stands off its seat (the other eleven at 0 ft), as the notes now say",
   "source": ".claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md",
   "command": "grep -n 'eleven stand where they stood and one 10.2 ft off' .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md"
+ },
+ "inashiro-r20-burial": {
+  "verifies": "F1",
+  "subject": "inashiro",
+  "round": "10161535",
+  "answers": "101615354a60",
+  "value": 1,
+  "unit": "grounds",
+  "quantity": "main merged (feature 273): meta.hamlet_burial own_ground and one cemetery drawn on this feature's layout, in the windbreak west-north-west of the houses (bearing 300 from their middle, 144 ft from the nearest house), which the notes' Features line now says in place of main's east arm and north track",
+  "source": ".claude/skills/diagram/pool/hamlets/inashiro/inashiro.json meta.hamlet_burial, cemeteries; inashiro.notes.md",
+  "command": "grep -n 'cut into the windbreak west-north-west of the houses' .claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md"
+ },
+ "mizuguchi-r20-burial": {
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "round": "10161535",
+  "answers": "101615354a60",
+  "value": 0,
+  "unit": "grounds",
+  "quantity": "main merged (feature 273): meta.hamlet_burial village_ground, no cemetery drawn, and the notes' Features line saying its dead lie in the main village's ground",
+  "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.json meta.hamlet_burial, cemeteries; mizuguchi.notes.md",
+  "command": "grep -n 'Mizuguchi keeps none of its own' .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md"
  }
 }
