@@ -53,6 +53,7 @@ aprons	apron
 aqueduct	aqueduct
 aquifer	aquifer
 aquifers	aquifer
+aragaki	aragaki
 araiba	kawado
 arresting tools	three arresting tools
 artesian	artesian
@@ -851,6 +852,7 @@ hachiman	Hachiman
 hachure	hachure
 hachures	hachure
 haiden	haiden
+haikai	haikai
 hakehi	hakehi
 hakka	Hakka
 hakone barrier	Hakone barrier
@@ -1309,6 +1311,7 @@ kofun period	Kofun period
 koguchi	koguchi
 koike	koike
 koji	koji
+kojiki	Kojiki
 koke	koke
 kokera	kokera
 kokera shingle	kokera
@@ -1342,6 +1345,7 @@ koshin tower	koshin tower
 koshin towers	koshin tower
 kotai-yoriai	kotaiyoriai
 kotaiyoriai	kotaiyoriai
+kotobank	Kotobank
 kozashi	kozashi
 kuai	kuai
 kuchi-agariya	agariya
@@ -1648,6 +1652,7 @@ night watch	night watch
 night watches	night watch
 night-soil	night soil
 nightsoil	night soil
+nihon dai-hyakka zensho	Nihon Dai-hyakka Zensho
 nihon kokugo daijiten	Nihon Kokugo Daijiten
 nihonbashi	Nihonbashi
 ninjobon	ninjōbon
@@ -2043,6 +2048,8 @@ sengisho	sengisho
 sengoku	Sengoku
 senkomizu	senkomizu
 senmaida	senmaida
+senryu	senryu
+senryū	senryu
 sensei	sensei
 sento	sento
 sentō	sento
@@ -2677,6 +2684,7 @@ yonin	yonin
 yoriai	yoriai
 yoriai-rank	yoriai
 yoriai-seki	yoriai-seki
+yorigumi	yorigumi
 yoriki	yoriki
 yorishiro	yorishiro
 yoritsuki	yoritsuki

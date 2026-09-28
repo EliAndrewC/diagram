@@ -10303,5 +10303,48 @@
    "sōzu",
    "sozu"
   ]
+ },
+ "aragaki": {
+  "def": "One of the fences round a shrine: a tale of 1283 names it with the tamagaki and the mizugaki as the layers of fence that enclosed a great shrine's sanctuary.",
+  "variants": [
+   "aragaki"
+  ]
+ },
+ "Kojiki": {
+  "def": "A book of Japan's myths and early history, finished in 712. Its songs give the earliest written uses of some Japanese words, among them tamagaki, the word for a shrine's fence.",
+  "variants": [
+   "Kojiki"
+  ]
+ },
+ "yorigumi": {
+  "def": "A rank of retainers of the Mori family's Hagi domain; the Kuchiba family, at 1,018 koku, held it at the end of the Edo period.",
+  "variants": [
+   "yorigumi"
+  ]
+ },
+ "haikai": {
+  "def": "Linked comic verse, the popular form of Japanese linked poetry in the Edo period, from which the haiku later grew.",
+  "variants": [
+   "haikai"
+  ]
+ },
+ "senryu": {
+  "def": "A short comic verse in the same seventeen-syllable form as the haiku, about everyday life and human failings, much written in the Edo period.",
+  "variants": [
+   "senryu",
+   "senryū"
+  ]
+ },
+ "Nihon Dai-hyakka Zensho": {
+  "def": "A Japanese general encyclopedia, one of the reference works whose entries Kotobank carries.",
+  "variants": [
+   "Nihon Dai-hyakka Zensho"
+  ]
+ },
+ "Kotobank": {
+  "def": "A Japanese website carrying the entries of several dictionaries and encyclopedias, the Nihon Kokugo Daijiten among them.",
+  "variants": [
+   "Kotobank"
+  ]
  }
 }
