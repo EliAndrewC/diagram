@@ -17,8 +17,9 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D6).
 - [x] T04 The five pool hamlets re-rolled; a settlement-review per moved map; ledger rows (D6; FR-005)
       research: rendering
       verify: DONE. DONE. settlement-review: rounds 1-3 on inashiro, kashikawa, kuwabata (round 3 PASS), rounds 1-2 on sawada, mizuguchi (PASS); every finding verified in specs/273-hamlet-graveyards/measurements.json or accepted; ledger rows
-- [ ] T05 `make done`; `scripts/sync-with-main.sh done`; relink 271's `RELINK 273` comment in 400 if it is on main
+- [x] T05 `make done`; `scripts/sync-with-main.sh done`; relink 271's `RELINK 273` comment in 400 if it is on main
       research: rendering
+      verify: DONE. DONE. make done green 2026-09-28 (78 s; short-circuited after on content-only edits); 400's RELINK 273 linked to 540; pushed by sync-with-main.sh done
 
 - [x] T06 The village's burial ground (D5): built here if 269's 270 and 280 are on main when T01-T05 are done, or ticked by claiming the follow-up feature that carries the design
       research: physical
