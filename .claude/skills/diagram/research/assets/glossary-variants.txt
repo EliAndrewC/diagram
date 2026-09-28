@@ -496,6 +496,8 @@ desire line	desire path
 desire path	desire path
 desire paths	desire path
 desire-line	desire path
+detached territories	detached territory
+detached territory	detached territory
 detached village grain	village grain
 detritus	detritus
 dharma hall	dharma hall
@@ -2584,6 +2586,7 @@ tillering	tillering
 tillers	tillering
 time bell	time bell
 time bells	time bell
+tobichi	detached territory
 tobiguchi	tobiguchi
 tobukuro	tobukuro
 toe	toe
