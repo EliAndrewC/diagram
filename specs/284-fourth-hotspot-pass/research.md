@@ -83,3 +83,7 @@ Python; `_lay_by_hand` then tests each mat's outline against every laid and ever
 Both are static geometry asked per candidate: the grid's test can be decided in arrays (surely inside the inset floor,
 surely outside it, the scalar test in the band between), the lattice counts are sums of shifted slices of one boolean
 array, and two quads farther apart than the clearance need no `_quad_gap`. The mats come out the same.
+
+**The bookend.** `284-start` was first taken at `f52ed6aa8` (17.4 s, before 282's mats merged) and re-taken at the base
+`5f15c65bd`: total 23.3 s, median 5.6 s, worst 7.1 s (observed 2026-09-28, method: `make perf LABEL=284-start` in
+`/tmp/base284`, load 6.7). The re-taken one is the bookend `284-end` is judged against.

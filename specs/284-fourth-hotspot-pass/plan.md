@@ -22,7 +22,7 @@ three, loads recorded. **Constraints**: every gate rule on every live map; the 1
 
 | | label | notes |
 |---|---|---|
-| before | `284-start` | total 23.3 s, median 5.6 s, worst 7.1 s (observed 2026-09-28, method: `make perf LABEL=284-start` in `/tmp/base284` at `5f15c65bd`, load 6.7; the first bookend, 17.4 s at `f52ed6aa8`, predates 282's mats and was replaced) |
+| before | `284-start` | total 17.4 s, median 4.1 s, worst 5.4 s (observed 2026-09-28, method: `make perf LABEL=284-start` in `/tmp/base284`, load 5.6 -> 5.1, log copied into the clone) |
 | after | `284-end` | before the push; `make perf-report AGAINST=284-start` |
 
 ## Constitution Check
