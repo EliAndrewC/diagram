@@ -5410,7 +5410,10 @@
  "jishinban": {
   "def": "A town ward's own watch house in an Edo-period city, kept by the townspeople: from it the neighborhood was patrolled and the fire watch kept, and its ladder, alarm bell and firefighting gear stood there.",
   "variants": [
-   "jishinban"
+   "jishinban",
+   "watch house",
+   "watch-house",
+   "self-watch house"
   ]
  },
  "town magistrate": {
@@ -9229,6 +9232,12 @@
    "Hongwu"
   ]
  },
+ "ita-bune": {
+  "def": "A flat board, about 70 cm by 150 cm, on which fish were laid out and sold at Edo's fish market.",
+  "variants": [
+   "ita-bune"
+  ]
+ },
  "banta": {
   "def": "A watchman hired by an Edo-period town or village for the night watch and the fire watch, often living in a hut beside a ward gate; outside Edo most were of hinin status.",
   "variants": [
@@ -9268,11 +9277,44 @@
    "shimo-yashiki"
   ]
  },
+ "palisade": {
+  "def": "A barrier of upright wooden stakes or timbers set close together; at Suzhou's Pan Gate one stands across the water passage, front and back, beside the sluice gate, to shut boats out.",
+  "variants": [
+   "palisade",
+   "palisades"
+  ]
+ },
+ "uogashi": {
+  "def": "A kashi (riverbank landing) that holds a fish market, where fish and shellfish landed from boats were wholesaled to ordinary traders; one was found in every part of the country, Edo's at Nihonbashi the best known.",
+  "variants": [
+   "uogashi"
+  ]
+ },
  "machi-hanare": {
   "def": "The name used in Shinano and at Tsuruoka and Sakata for an outcaste quarter placed at a castle town's entrance or edge. It is written 町離, which this record reads as \"apart from town\".",
   "variants": [
    "machi-hanare",
    "cho-hanare"
+  ]
+ },
+ "dock basin": {
+  "def": "An enclosed pool of still water cut back from a waterway into a town, where boats lie out of the current to load and unload.",
+  "variants": [
+   "dock basin",
+   "dock basins"
+  ]
+ },
+ "bill of lading": {
+  "def": "A shipper's written receipt for goods taken aboard a boat, listing the cargo and where it is bound.",
+  "variants": [
+   "bill of lading",
+   "bills of lading"
+  ]
+ },
+ "mirin": {
+  "def": "A sweet rice wine brewed for cooking and seasoning.",
+  "variants": [
+   "mirin"
   ]
  },
  "bangumi": {
@@ -9471,6 +9513,12 @@
    "cosmopolitan"
   ]
  },
+ "chuma": {
+  "def": "A packhorse carrying trade of Edo-period Japan, in which one man led three or four horses and carried around 100 kan of goods at a time.",
+  "variants": [
+   "chuma"
+  ]
+ },
  "Jiajing era": {
   "def": "The Jiajing reign of the Ming, 1522 to 1566.",
   "variants": [
@@ -9509,6 +9557,37 @@
    "origake"
   ]
  },
+ "terakoya": {
+  "def": "An Edo-period writing school where a master taught commoners' children to read, write and reckon; it needed only a master and one room, in his house, the headman's or a temple, not a building of its own.",
+  "variants": [
+   "terakoya"
+  ]
+ },
+ "nokaji": {
+  "def": "A village smith: a maker and mender of farm tools, fishing gear and household tools, working small, as a family, to order for the farmers round about.",
+  "variants": [
+   "nokaji"
+  ]
+ },
+ "bangi": {
+  "def": "A thick wooden board struck as a signal, used for alarms and to call people to meetings before the bronze alarm bell spread in the Edo period.",
+  "variants": [
+   "bangi"
+  ]
+ },
+ "kajimachi": {
+  "def": "The smiths' street of a castle town, where the lord settled the town's smiths together; the name survives in town after town.",
+  "variants": [
+   "kajimachi",
+   "Kajimachi"
+  ]
+ },
+ "sishu": {
+  "def": "A Chinese private school for children, often held in a family's ancestral hall between its spring and autumn rites.",
+  "variants": [
+   "sishu"
+  ]
+ },
  "yukaku": {
   "def": "A licensed pleasure quarter of Edo-period Japan: a district where the authorities gathered the licensed brothels, closed off by a wall, a ditch or a fence and entered by a gate. Besides the three great ones of Edo, Kyoto and Osaka, only twenty-odd places in the country had one.",
   "variants": [
@@ -9544,6 +9623,32 @@
    "juyangyuan"
   ]
  },
+ "Iyo": {
+  "def": "An old province of Japan on the island of Shikoku, the land of the modern Ehime prefecture.",
+  "variants": [
+   "Iyo"
+  ]
+ },
+ "shogunal village": {
+  "def": "A village in land the shogunate held directly, rather than in a daimyo's domain, its taxes paid to the shogun's own officials.",
+  "variants": [
+   "shogunal village",
+   "shogunal villages"
+  ]
+ },
+ "cotton beater": {
+  "def": "A craftsman who loosened and cleaned raw cotton by striking it with the string of a large bow, readying it for spinning or for padding bedding and clothes.",
+  "variants": [
+   "cotton beater",
+   "cotton beaters"
+  ]
+ },
+ "kakoigura": {
+  "def": "A storehouse for grain held in reserve against bad harvests, which the Edo shogunate ordered villages to build alongside the gogura in 1790.",
+  "variants": [
+   "kakoigura"
+  ]
+ },
  "penthouse": {
   "def": "In a building's measurements, a smaller structure raised on its roof (Japanese 塔屋, touya) - in a keep, the upper stories set on top of the main floors, counted apart from the stories above ground.",
   "variants": [
@@ -9571,6 +9676,35 @@
    "ohaguro dobu"
   ]
  },
+ "Kamigata": {
+  "def": "The Kyoto-Osaka region of central Japan, home of the imperial court and the great merchant city - in Edo-period speech, \"the upper parts\" as against Edo in the east.",
+  "variants": [
+   "Kamigata"
+  ]
+ },
+ "five-household group": {
+  "def": "A group of about five neighboring households in an Edo-period village or ward, answerable together for its members; in the villages it was one of the bodies that fought fire until modern times.",
+  "variants": [
+   "five-household group",
+   "five-household groups",
+   "gonin-gumi"
+  ]
+ },
+ "young men's association": {
+  "def": "A village's organized body of its young men, which, with the five-household groups, fought the village's fires until modern times.",
+  "variants": [
+   "young men's association",
+   "young men's associations",
+   "wakamono-gumi"
+  ]
+ },
+ "Sekai daihyakka jiten": {
+  "def": "Heibonsha's World Encyclopedia, a Japanese general encyclopedia whose entries Kotobank carries.",
+  "variants": [
+   "Sekai daihyakka jiten",
+   "Sekai Daihyakka Jiten"
+  ]
+ },
  "pleasure quarter": {
   "def": "A district of a town set aside for licensed entertainment - teahouses, entertainers' houses and brothels - often near the port or at the town's edge.",
   "variants": [
@@ -9590,6 +9724,27 @@
   "variants": [
    "hidenin",
    "悲田院"
+  ]
+ },
+ "tamahagane": {
+  "def": "The steel a tatara smelt yields from iron sand (satetsu) and charcoal. One smelt burned about 9 t of iron sand and 11 t of charcoal to leave about 2.3 t of it, which is why Japanese steel was scarce and went to blades and tools first.",
+  "variants": [
+   "tamahagane"
+  ]
+ },
+ "kyuden": {
+  "def": "\"Palace\": the word Rokugan puts before the name of a clan's or family's great castle-seat, as in Kyuden Shinjo, the seat of the Shinjo family.",
+  "variants": [
+   "kyuden",
+   "Kyuden"
+  ]
+ },
+ "ox-shoeing frame": {
+  "def": "A frame in which an ox is held, slung, while it is shod - once a village fixture from Spain to England, called a crush or a trevis in English and a potro de herrar in Spanish.",
+  "variants": [
+   "ox-shoeing frame",
+   "ox-shoeing frames",
+   "trevis"
   ]
  },
  "kabuki": {
