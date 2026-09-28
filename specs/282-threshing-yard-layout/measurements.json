@@ -146,5 +146,38 @@
   "source": "specs/282-threshing-yard-layout/measure.py (run from .claude/skills/diagram), reading the pool map's drawn SVG ink (each yard group's floor polygon and its mats, turned as drawn), its rendered .html and its notes",
   "measured": "2026-09-28",
   "method": "string count of 'barley country' in mizuguchi.html"
+ },
+ "sr4-sawada-f1-no-rigid-grid": {
+  "value": 0.83,
+  "unit": "share of a yard's mats",
+  "quantity": "the least share of turned mats in any one of sawada's yards (every yard now draws its mats turned a few degrees, the 0.5 ft step included; no yard is a rigid grid); the smallest drawn gap between two mats stays above zero",
+  "verifies": "F1",
+  "subject": "sawada",
+  "answers": "67fd8d98b481",
+  "source": "specs/282-threshing-yard-layout/measure.py (run from .claude/skills/diagram), reading the pool map's drawn SVG ink (each yard group's floor polygon and its mats, turned as drawn), its rendered .html and its notes",
+  "measured": "2026-09-28",
+  "method": "per yard group of the map's SVG: mats carrying a rotate transform over all mats; the minimum over the yards"
+ },
+ "sr4-mizuguchi-f1-no-rigid-grid": {
+  "value": 0.83,
+  "unit": "share of a yard's mats",
+  "quantity": "the least share of turned mats in any one of mizuguchi's yards (every yard now draws its mats turned a few degrees, the 0.5 ft step included; no yard is a rigid grid); the smallest drawn gap between two mats stays above zero",
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "answers": "67fd8d98b481",
+  "source": "specs/282-threshing-yard-layout/measure.py (run from .claude/skills/diagram), reading the pool map's drawn SVG ink (each yard group's floor polygon and its mats, turned as drawn), its rendered .html and its notes",
+  "measured": "2026-09-28",
+  "method": "per yard group of the map's SVG: mats carrying a rotate transform over all mats; the minimum over the yards"
+ },
+ "sr4-kashikawa-f1-note-smallest": {
+  "value": 1,
+  "unit": "occurrences",
+  "quantity": "the rendered kashikawa.html modal now says 'the smallest yards a little fewer' beside 'between a third and two thirds'",
+  "verifies": "F1",
+  "subject": "kashikawa",
+  "answers": "67fd8d98b481",
+  "source": "specs/282-threshing-yard-layout/measure.py (run from .claude/skills/diagram), reading the pool map's drawn SVG ink (each yard group's floor polygon and its mats, turned as drawn), its rendered .html and its notes",
+  "measured": "2026-09-28",
+  "method": "string count in kashikawa.html"
  }
 }

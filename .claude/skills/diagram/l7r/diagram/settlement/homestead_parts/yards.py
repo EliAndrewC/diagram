@@ -67,7 +67,7 @@ def mat_cells(w: float, h: float, poly: list[tuple[float, float]], ftpx: float, 
     so the drawing lays them in rows across the whole yard with a gap around each, each nudged and turned a little as if
     laid by hand, a third to two thirds of a full cover - the GM's drawing convention (2026-09-28: "at this scale, we
     can't render dozens of mats and have that be legible. So our threshing yard glyphs show a smaller number to give the
-    impression that there are many of them"). The rows are centered inside a 1.5 ft inset; a mat is kept only if its
+    impression that there are many of them"). The rows are centered inside a 1 ft inset; a mat is kept only if its
     four corners lie at least `MAT_EDGE_CLEAR_FT` inside the yard's quad `poly` (local coords) and miss `keep_out` (the
     rack's footprint, x0, y0, x1, y1). The count is held to at least a third of the yard's full cover (area / 18 sq ft;
     spec 282 FR-004) by closing the gap (`MAT_GAPS_FT`), at the widest gap that reaches it; where none does, the gap that
@@ -92,7 +92,11 @@ def mat_cells(w: float, h: float, poly: list[tuple[float, float]], ftpx: float, 
             for c in range(cols):
                 x, y = gx0 + c * (mw + g), gy0 + r * (mh + g)
                 jx, jy = x + (2 * _mat_hash(r, c, 1.0) - 1) * nudge, y + (2 * _mat_hash(r, c, 2.0) - 1) * nudge
-                a = (2 * _mat_hash(r, c, 3.0) - 1) * MAT_JITTER_DEG * min(1.0, nudge * ftpx / MAT_JITTER_FT)
+                # THE TURN HAS ITS OWN LIMIT, NOT THE NUDGE'S (settlement-reviews, Sawada and Mizuguchi, 2026-09-28): tied to the
+                # nudge it fell to nothing at the 0.5 ft step, and those yards drew a rigid grid. A mat's corner swings by
+                # about half its diagonal times the sine of the turn, so the turn is held to what leaves a tenth of the gap
+                # between two neighbors turning toward each other.
+                a = (2 * _mat_hash(r, c, 3.0) - 1) * min(MAT_JITTER_DEG, math.degrees(math.asin(min(1.0, max(0.0, (g / 2.0 - 0.05 / ftpx - nudge) / (math.hypot(mw, mh) / 2.0))))))
                 if fits(_mat_corners(jx, jy, mw, mh, a)):
                     mats.append((jx, jy, mw, mh, a))
                 elif fits(_mat_corners(x, y, mw, mh, 0.0)):
