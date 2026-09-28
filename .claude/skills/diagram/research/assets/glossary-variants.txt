@@ -571,6 +571,8 @@ gassho	gassho
 gassho-zukuri	gassho
 gasshozukuri	gassho
 gate market	gate market
+gate range	nagayamon
+gate ranges	nagayamon
 gate throat	gate throat
 gate-throat	gate throat
 gazetteer	gazetteer
