@@ -433,7 +433,9 @@ and every pool map came out the base's map but for one bamboo thicket's 8 px on 
 the same mats), the page reading the blade slots' structures instead of re-parsing their strings, the notice board sampling
 its verge band before the rest (the roadside rule throws the rest away whenever the band holds a seat), the bamboo walked
 outward from its target, the whole-ring `edge_dist` scans asked through indexes, one link index per route, the brook toll's
-near-cell set - and a stranding re-roll resuming from a copy of the first roll taken before the seats, the stages before
+near-cell set (and one exact lever withdrawn for costing more than it saved: a crown grid per grove clump, whose few crowns are
+cheaper to walk than to file) (and one exact lever withdrawn for costing more than it saved: a crown grid per grove clump, whose few crowns are
+cheaper to walk than to file) - and a stranding re-roll resuming from a copy of the first roll taken before the seats, the stages before
 them being the same on every attempt (a re-roll 1.1-1.7 s faster).
 
 **The moving levers, and how to judge one.** A* in the router and the field's size search without its blind probe each move

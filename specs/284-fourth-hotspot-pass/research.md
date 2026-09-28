@@ -149,6 +149,10 @@ Kashikawa, after A1-A8, B1 and B3). What is left is spread thin:
   the passes that re-read a string the page already read - the off-map cull (`drop_offmap`) and the hit copies - take 0.051 s
   and 0.059 s together; the merge (`merge_primitives`, 0.170 and 0.178 s) is work on the elements, not a second parse. One
   shared parse could at most remove the first two - about 1% of a roll, a ceiling since the load inflates it.
+- **The grove draw's crown grid, withdrawn** (observed 2026-09-28, method: `measure.py after-main`, main as merged against
+  the clone back to back): with it the windbreak stage was 0.55 -> 0.60 s on Kashikawa, 0.60 -> 0.65 on Mizuguchi and 0.68 ->
+  0.76 on Sawada - a grid filed per clump costs more than walking the clump's few nearby crowns. Main's 269 had already put
+  its own crown index where the crowns are many (the rank), so the draw goes back to its two scans.
 - **The grove draw** (`_draw_grove`; observed 2026-09-28, method: `grove/harness.py`, each call timed inside one build,
   fastest of three, load 3.6; `grove/results.json`): 0.128 s of Kashikawa's 4.46 s build and 0.092 s of Sawada's 4.71 s,
   its crown seat test 0.022 and 0.017 s of that. At 2-3% of a build, no change to it - a coarser crown lattice included,

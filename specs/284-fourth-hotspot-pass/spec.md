@@ -255,7 +255,9 @@ added under FR-011's own rule ("whatever the after-profile shows"). What changed
     closing on Sawada (0.87x - its field, moved by FR-004, closes 822 pockets where the base's closed 727): research R7 - the
     grove draw is 2-3% of a build and its crown test a fifth of that; the commons and the fill are sums of indexed lookups;
     the seam closing's moving levers are priced there (fewer welds leaves doubled bunds; dropping its `simplify` buys 1-2%).
-    The grove draw's crown grid (A6) is exact and its stage no slower; it asks more, smaller calls than the scan it replaced.
+    The grove draw's crown grid (A6) was exact and slower - a grid filed per clump costs more than walking a clump's few
+    nearby crowns (the windbreak 8-12% slower than main's on three pool hamlets, measure.py after-main) - and is withdrawn;
+    main's own crown index (269) covers the grove's rank.
 - **FR-009 carried one more scan**: the track's `push_clear_of_fabric` asked every polygon's ring at every step; it asks only
   the polygons whose widened box holds the point (exact: tested against the old walk, and on all 72 of Sawada's calls).
 

@@ -200,6 +200,7 @@ The spec's Amendment 1 records the why; this is how each piece landed.
 | piece | outcome | where |
 |---|---|---|
 | A1-A8 | built as designed; the pool byte-identical against `A_BASE` before B (T09) | as designed above |
+| A6 (the grove draw's crown grid) | built, exact, and WITHDRAWN: slower than main's two scans after main's 269 reworked the draw (the windbreak 8-12% slower on three pool hamlets); main's own `CrownIndex` in `_geom` serves the rank | `settlement/homestead_parts/groves.py` |
 | A2's "one parse of the rest" | not built: the passes that re-read a string cost 0.051 s and 0.059 s a map together, a ceiling of about 1% of a roll (research R7) | - |
 | A3 | built as `board_choice`, the caption level asked lazily in ranking order | `settlement/structures/fixtures/siting.py` |
 | B1 (A*) | built, measured over the pool and cohort against a same-run spread (research R6): 2.4% faster in all against 0.6% - WITHDRAWN on the rules: the maps it and B3 moved failed the gate on the shipped pool; the search is Dijkstra in the base's heap order, the base's recorded-request equality test restored | `hamletgen/ways/route.py` (`lattice_search`) |
