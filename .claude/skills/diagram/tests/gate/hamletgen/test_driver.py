@@ -255,3 +255,16 @@ def test_every_resume_starts_from_the_same_snapshot(monkeypatch: pytest.MonkeyPa
     assert one.M["seen_avoid"] == [(1.0, 2.0)] and two.M["seen_avoid"] == [(3.0, 4.0)]
     assert one.M["field"] == two.M["field"] == [1, "seated"]
     assert snap[0][0].M["field"] == [1]
+
+
+@pytest.mark.rolls_map
+def test_the_stage_profile_takes_the_same_snapshot(monkeypatch: pytest.MonkeyPatch) -> None:
+    """With the stage profile on, `build` keeps the same copy before the seats that the plain loop keeps (feature 284) -
+    the profile changes what is printed, never what a re-roll resumes from."""
+    _resuming_stages(monkeypatch)
+    monkeypatch.setenv(hg.driver.STAGE_PROFILE_ENV, "1")
+    snap: list = []
+    hg.driver.build(hg.plan_site(hg.HamletSpec(name="Profiled", seed=4, households=10)), snapshot=snap)
+    assert len(snap) == 1 and snap[0][0].M["field"] == [1]
+    again, _plan = hg.driver.resume(snap, [(5.0, 6.0)])
+    assert again.M["seen_avoid"] == [(5.0, 6.0)]
