@@ -76,7 +76,8 @@ Every one of the audit's 33 groups (172 rows) is closed. 29 landed in three batc
   more often than they count it.
 - **What waits on the GM.** Free sources that bots cannot fetch were appended to
   `/host-l7r-repo/academic-sources/TO-DOWNLOAD.md` as they were found, each with both links. The list now runs to
-  No. 277; this feature's queues added entries alongside features 269 and 272. Reading a downloaded copy re-opens
+  No. 277; this feature's queues added entries alongside features 269 and 272. Reading the copies the GM downloads is
+  its own feature (GM 2026-09-28), not part of this one; reading a downloaded copy re-opens
   the absence note it would answer.
 - **Owed follow-up.** Religion-and-death 400 points at 540 (feature 273's question, where a hamlet's dead lie).
   The link is live now that 273 has landed.
