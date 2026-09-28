@@ -5649,7 +5649,8 @@
   "def": "A hip-and-gable roof: hipped on its lower slopes, with a small gable at each end of the ridge.",
   "variants": [
    "irimoya",
-   "irimoya-roofed"
+   "irimoya-roofed",
+   "hip-and-gable"
   ]
  },
  "nagare-zukuri": {
@@ -7524,6 +7525,20 @@
   "variants": [
    "through-lane",
    "through-lanes"
+  ]
+ },
+ "kara-hafu": {
+  "def": "a Japanese gable whose edge rises in a curve to a peak at its center, built over the gates and entrances of houses of rank.",
+  "variants": [
+   "kara-hafu",
+   "kara-hafu-gabled"
+  ]
+ },
+ "program item": {
+  "def": "An institution a settlement of a given tier holds exactly one of whatever its size - an item on the list of what that tier contains - as against a building whose number is worked out from the settlement's population.",
+  "variants": [
+   "program item",
+   "program items"
   ]
  }
 }
