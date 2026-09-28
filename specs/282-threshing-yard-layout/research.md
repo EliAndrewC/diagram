@@ -25,8 +25,9 @@ mats; the mat band of FR-004 is sized against that range.
 
 ## R4 - the smallest yards and the gap
 
-Observed 2026-09-28; method: the regenerated pool manifests' `threshing_yards` (`w`, `h`, `mats`) with mats laid at gaps of
-`2`, `1.5`, `1` and `0.5 ft` and every corner held `1 ft` inside the drawn outline - five yards under `400 sq ft` (Sawada's
-`20 x 14`, `22 x 15` and `24 x 16 ft`, Kashikawa's two `22 x 15 ft`) fell one or two mats short of a third, and the only step
-that reached it was edge to edge, which the settlement-reviews of rounds 2 and 3 (Sawada, Inashiro, Kashikawa, Mizuguchi)
-each read as paving or brickwork. At the `0.5 ft` gap they draw 4 to 6 mats.
+Observed 2026-09-28; method: the regenerated pool manifests' `threshing_yards` (`w`, `h`, `mats`), read with the rack `1 ft`
+off the yard's side and mats laid at gaps of `2`, `1.5`, `1` and `0.5 ft`, every corner held `1 ft` inside the drawn outline.
+Four yards under `400 sq ft` fall one or two mats short of a third: Kashikawa's two `22 x 15 ft` yards draw 6 and 5 where 7
+is a third, and Sawada's `22 x 15` and `24 x 16 ft` yards draw 6 and 6 where 7 and 8 are. The only step that reached a
+third on them was edge to edge, which the settlement-reviews of rounds 2 and 3 (Sawada, Inashiro, Kashikawa, Mizuguchi)
+each read as paving or brickwork.

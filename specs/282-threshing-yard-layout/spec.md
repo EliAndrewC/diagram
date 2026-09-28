@@ -144,6 +144,9 @@ FR-002 finds (FR-005); its declaration names the research question it rests on.
 - **D2 - fewer mats than the real count.** A map drawing convention, the GM's own form: the real yard was covered
   (40-60 mats); the drawing thins them so each reads as a mat. The band of one third to two thirds of a full cover
   is this project's decision (spec-fidelity round 1: a floor tied to area, so the impression of a covered yard holds).
+  EXCEPTION (amended 2026-09-28, ruled LEGITIMATE by spec-fidelity): a yard under `400 sq ft` that cannot hold a third
+  with bare ground around every mat draws as many as fit with it, never fewer than four - a map drawing convention, since
+  edge-to-edge mats read as paving (research.md R4). To go to the GM at hand-back, per the exception procedure.
 
 ## Review history
 
@@ -157,3 +160,15 @@ FR-002 finds (FR-005); its declaration names the research question it rests on.
   regenerated hamlet, beyond FR-008 and against plan D6; reworded as the review the gate owes.
 - Amendment round 2 (spec-fidelity, 2026-09-28): FAITHFUL - SC-005 now reads "the settlement-review the gate owes",
   matching FR-008; no new drift. Plan review round 4 CLEAR (D3 matches the code, D6 names the five reviews owed).
+- Amendment round 3 (spec-fidelity, 2026-09-28; MODE 1 on the small-yard exception, then the spec): the exception to
+  FR-004's one-third floor LEGITIMATE - the floor is this project's proxy, not the GM's number, and holding it on the
+  smallest yards drew them edge to edge, which the reviews read as paving, defeating the GM's stated aim that the drawn
+  mats be legible as mats; bounded to under `400 sq ft`, every quarter still carries mats. CHANGES REQUIRED: (1)
+  research.md R4's counts moved - re-measured on the working-tree manifests (2026-09-28), four yards fall short, not five
+  (Sawada's `20 x 14 ft` yard now draws 6, its third), and the short yards draw 5 to 6, not 4 to 6; (2) D2 does not
+  record the small-yard exception and does not mark it for the GM (the XVI procedure: an agreed exception goes to the GM
+  once the implementation works). Plan review round 5 CLEAR (D3-small-yard a narrowing, LEGITIMATE).
+- Amendment round 4 (spec-fidelity-verify, 2026-09-28): FAITHFUL - (1) research.md R4 now names four short yards
+  (Kashikawa's two `22 x 15 ft` at 6 and 5 of 7, Sawada's `22 x 15` and `24 x 16 ft` at 6 and 6 of 7 and 8), matching
+  the working-tree manifests re-read with `jq`; (2) D2 carries the small-yard exception in FR-004's terms, labeled a map
+  drawing convention and marked to go to the GM at hand-back. No new drift.

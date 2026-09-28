@@ -1,54 +1,55 @@
 {
  "feature": "282-threshing-yard-layout",
- "plan_sha256": "5dfa4b372ab4be75e84de1450454169a4ee405ea7b6415a76d71c10b54d18d61",
+ "plan_sha256": "8b00c5ef823b1cfed47681fef336902c80c845358772e21935b075a41459e636",
  "reviewed": "2026-09-28",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "D1",
-   "summary": "Rack-by-the-house knob is HamletSpec.harvest_weather (settled|changeable), set from the spec, never rolled; default settled; other engines draw no rack; entry 500's drying-method knob folded into it.",
+   "summary": "Rack-by-the-house knob is HamletSpec.harvest_weather (settled|changeable), declared on the spec, never rolled; default settled; entry 500's drying-method knob folded into it.",
    "class": "within",
-   "why": "Unchanged since round 3. FR-005: 505 finds the environment decided, so the knob is set from a stated environment input, pinnable, one knob with 500's - the GM's worry about adjacent villages in one climate differing."
+   "why": "Unchanged. FR-005: 505 finds the environment decided, so the knob is set from a stated environment input and is one knob with 500's - the GM's worry about adjacent villages in one climate differing."
   },
   {
    "id": "D2",
-   "summary": "Sawada declares harvest_weather=changeable as the pool's exhibit; the other four keep none.",
+   "summary": "Sawada declares harvest_weather=changeable as the pool's exhibit.",
    "class": "within",
-   "why": "Unchanged. An exhibit choice inside FR-005/FR-008; some settlements have racks and some do not, as the GM asked."
+   "why": "Unchanged. Inside FR-005/FR-008."
   },
   {
-   "id": "D3",
-   "summary": "Mats in 6 x 3 ft cells in rows, 1 ft inset, gap 2 ft closing 1.5, 1, 0.5, 0 ft where a yard would fall under a third, thinned back evenly where edge to edge overshoots two thirds; band [ceil(full/3), floor(2 full/3)]; center mat, rim line and south rack dropped; rows a GUESS, thinning a CONVENTION.",
+   "id": "D3-mats",
+   "summary": "6 x 3 ft mats in rows over the whole yard, 1 ft inset, corners 1 ft inside the drawn outline and 0.25 ft off the rack, gap 2/1.5/1/0.5 ft, each nudged up to 0.4 ft and turned up to 6 degrees by a positional draw, straw-gold with a same-hue outline, count in [ceil(full/3), floor(2 full/3)] with an even thinning; rows a GUESS, thinning and nudge a CONVENTION.",
    "class": "within",
-   "why": "Round 3's description lag is resolved: the text now matches yards.py (MAT_GAPS_FT = (2.0, 1.5, 1.0, 0.5, 0.0); the cap branch thins with centered even picks), read 2026-09-28. Still FR-004 as written - mats over the whole yard, fewer than cover it, rows labeled a guess, the [1/3, 2/3] band unchanged. Nothing narrowed."
+   "why": "Matches yards.py as read 2026-09-28 (MAT_GAPS_FT = (2.0, 1.5, 1.0, 0.5), MAT_JITTER_FT 0.4, MAT_JITTER_DEG 6, fill #E4CC86 stroke #C4A45E, pad 0.25 ft). The nudge keeps the rows (FR-004's labeled guess) and serves the GM's stated aim that the drawn mats read as mats; styling is not a scope question."
   },
   {
-   "id": "D4-seat",
-   "summary": "Rack along a side edge, preferring the half nearest the house, always off the yard's MAP-south half (solved in map coordinates for any rotation), 2.5 ft drawn width, side by _hjit, mats skip its footprint, manifest records it.",
-   "class": "within",
-   "why": "Unchanged. FR-006: off the southern half and the corridor, map south not local south, the side a labeled guess. The GM: racks not at the south side."
+   "id": "D3-small-yard",
+   "summary": "A yard under 400 sq ft that cannot reach a third of a full cover with a gap draws as many as fit with one (never edge to edge), at least four.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Narrows the accepted FR-004 floor, which was this project's proxy (spec-fidelity round 1), not the GM's number. The GM's purpose is legibility: 'we can't render dozens of mats and have that be legible. So our threshing yard glyphs show a smaller number to give the impression that there are many of them.' Holding the floor on these yards forced edge-to-edge mats, recorded as reading as paving, which defeats that purpose. Scope is bounded (under 400 sq ft; measured from the manifests 2026-09-28: four pool yards short by one or two, drawing 5-6), mats still spread over every quarter (SC-001), and tests enforce the full band at 400 sq ft and above. Same ruling as the MODE 1 check on FR-004."
   },
   {
-   "id": "D4-fallback",
-   "summary": "Where neither near-house half leaves 4 ft, the whole side edge is tried, still off the map-south half; every yard on a changeable-weather map takes a rack, asserted by a Sawada test.",
+   "id": "D4",
+   "summary": "Rack along a side edge inset 1 ft (in the slack beside the mat rows), preferring the half nearest the house, always off the yard's MAP-south half solved in map coordinates, 2.5 ft drawn width, whole-side fallback so every changeable-weather yard takes one.",
    "class": "within",
-   "why": "Unchanged since round 3; the project's guess yields to the knob, the GM's hard rule is kept, and the every-yard test enforces the request."
+   "why": "The side inset moved 2 -> 1 ft (RACK_SIDE_INSET_FT = 1.0 in the code); nothing in FR-006 turns on it. Map-south rule, corridor and knob unchanged."
   },
   {
    "id": "D5",
-   "summary": "Threshing yard docstring rewritten from 025 and 505 with per-claim labels, the GM's convention wording, Entry naming 020, 025, 030, 505.",
+   "summary": "Threshing yard docstring rewritten from 025 and 505 with per-claim labels and the GM's convention wording.",
    "class": "within",
-   "why": "Unchanged. FR-007 as written."
+   "why": "Unchanged. FR-007."
   },
   {
    "id": "D6",
-   "summary": "Regenerate the five pool hamlets; the settlement-reviews the gate owes - all five, every manifest having moved (mats, rack, meta.harvest_weather) - one agent per map, dispatched once the gate is green; make done.",
+   "summary": "Regenerate the five pool hamlets; the settlement-reviews the gate owes; make done.",
    "class": "within",
-   "why": "FR-008 and the reworded SC-005: the review the gate owes. The premise is measured, not assumed: git diff against the merge base with origin/main shows all five pool hamlet manifests (inashiro, kashikawa, kuwabata, mizuguchi, sawada) changed, which is what _review_owed.py keys on, and 282 carries physical tasks so the rendering-only waiver cannot apply. Reviewing what the tooling owes is not a narrowing; it widens round 3's Sawada-only review to match the gate, and no review the gate owes is skipped."
+   "why": "Unchanged. FR-008 and SC-005."
   },
   {
    "id": "D7",
-   "summary": "Landing order with feature 269: tell its session; merge and re-run yard tests if 269 lands first.",
+   "summary": "Landing order with feature 269.",
    "class": "within",
    "why": "Unchanged. Process only."
   }
