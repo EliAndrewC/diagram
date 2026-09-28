@@ -242,24 +242,21 @@ added under FR-011's own rule ("whatever the after-profile shows"). What changed
 - **A defect found and fixed (constitution XIV)**: a connector the web could not join was deleted as debris by the junction
   pass, and the reach check then passed on the network that was left - cohort seed 15 shipped a hamlet with no way off the
   map (research R6). The pass never drops the connector now; every one of the 58 rolls of R6 draws its connector.
-- **What the final measurement shows** (measure.py after, the base worktree and the clone back to back, loads 3.6-4.0;
-  every pool map the base's map, byte for byte, but for the thicket's 8 px on Kashikawa and Mizuguchi, and every one a
-  single roll). **SC-001 met**: 23.891 s against 32.46 s, 1.36x (m:after-pool-roll-s, m:base-rerun-pool-roll-s). Met: SC-004
-  (the page, 1.76x and 1.77x), SC-006 (the bamboo, 4.59x and 3.99x), SC-008 (the toll's lookups, 590,253 to 27,708 on
-  Kashikawa and to none on Sawada), the mats (18.4x, byte-identical), SC-005 on Sawada (2.74x) and SC-007 on Kashikawa (3.47x).
-  Missed, each with why no allowed change reaches it (SC-009's and SC-010's own exit):
-  - SC-002, the router (1.05x): its two call-cutting levers were withdrawn by measurement (FR-001 A*, FR-003 the coarser
-    lattice - both stranded houses the base did not); what is left is FR-002's one index per route and FR-010's bitmap, exact.
-    The web stage is 1.42 -> 1.22 s on Kashikawa.
-  - SC-003, the field (1.0x): FR-004 and FR-005 were both withdrawn by measurement (research R5, R6); the field is the base's.
-  - SC-005 on Inashiro (1.46x against 1.5x): the verge band holds its board, so the far band is never sampled, and what is
-    left is the caption test and the fit of the verge seats; the notice stage is 0.544 -> 0.315 s.
-  - SC-007 on Kuwabata (2.39x against 3x): `edge_dist` fell from 32,850 calls to 910 (m:after-kuwabata-b-edge-scan-edge-dist); the bucket counts the ring indexes'
-    own queries beneath the entries.
-  - SC-009 on the grove fill and draw, the seam closing, the commons and the blade flush (1.0x, the grove draw 0.78x in calls
-    with its stage time unchanged, 0.692 -> 0.712 s): research R7 - the grove draw is 2-3% of a build, and the seam
-    closing's moving levers are priced there (fewer welds breaks the doubled-bund rule; dropping its `simplify` buys 1-2%). The grove draw's crown grid (A6) is exact and its stage no slower;
-    it asks more, smaller calls than the scan it replaced.
+- **What the final measurement shows** (measure.py after, the base worktree and the clone back to back, loads 2.0-5.6; the
+  pool as research R6's table leaves it - Kashikawa re-rolled once, so its counts from the seats on are two builds' against the
+  base's one). **SC-001 met**: 23.764 s against 32.494 s, 1.37x (m:after-pool-roll-s, m:base-rerun-pool-roll-s). Met:
+  SC-002 (the router, 2.37x and 6.06x), SC-003 (the field, 2.11x and 2.97x), SC-004 (the page, 2.75x and 1.70x), SC-005 (the
+  notice board, 1.58x and 2.00x), SC-006 (the bamboo, 4.65x and 4.02x), SC-008 (the toll's lookups, 590,253 to 11,780 on
+  Kashikawa and 374,679 to 4,855 on Sawada), the mats (10.4x, byte-identical) and the blade flush (1.74x). Missed, each with
+  why no allowed change reaches it (SC-009's and SC-010's own exit):
+  - SC-007's `3x` on the edge-scan bucket (1.78x on Kashikawa over its two builds, 2.39x on Kuwabata): `edge_dist` itself
+    fell from 32,850 calls to 912 on Kuwabata (m:after-kuwabata-b-edge-scan-edge-dist); what the bucket still counts is the
+    ring indexes' own queries beneath the four entries and the track's push (now box-prefiltered too).
+  - SC-009 on the grove fill (1.21x) and draw (0.66x) and the commons (0.48x), all on Kashikawa over two builds, and the seam
+    closing on Sawada (0.87x - its field, moved by FR-004, closes 822 pockets where the base's closed 727): research R7 - the
+    grove draw is 2-3% of a build and its crown test a fifth of that; the commons and the fill are sums of indexed lookups;
+    the seam closing's moving levers are priced there (fewer welds leaves doubled bunds; dropping its `simplify` buys 1-2%).
+    The grove draw's crown grid (A6) is exact and its stage no slower; it asks more, smaller calls than the scan it replaced.
 - **FR-009 carried one more scan**: the track's `push_clear_of_fabric` asked every polygon's ring at every step; it asks only
   the polygons whose widened box holds the point (exact: tested against the old walk, and on all 72 of Sawada's calls).
 
