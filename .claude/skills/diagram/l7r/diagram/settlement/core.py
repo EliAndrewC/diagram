@@ -84,7 +84,7 @@ class Settlement(
         self._blade_groups: list[tuple[int, str, list[tuple[str, str, str, str]]]] = []
         # the scatter's other marks - brush dots, pines, wet tint, glints - kept as (extent, string) until finish culls the off-frame ones (feature 225)
         self._mark_groups: list[tuple[int, list[tuple[float, float, float, float, str]]]] = []
-        self._blade_starts: dict[int, list[tuple[str, str]]] = {}  # per flushed blade slot, its blades' roots - handed to the page (feature 284)
+        self._blade_starts: dict[int, tuple[str, list[tuple[str, str]]]] = {}  # id(slot string) -> (the string, its blades' roots) - for the page (feature 284)
         # the frame the scatter may predict (feature 224): a throw outside it is skipped before the keep-out test; each frame
         # used is kept so `finish()` can record whether the view stayed inside the tightest of them
         self._scatter_frame: tuple[float, float, float, float] | None = None

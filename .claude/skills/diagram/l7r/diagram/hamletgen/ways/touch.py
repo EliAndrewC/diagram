@@ -40,7 +40,7 @@ def _detour_links(cands: Sequence[tuple[float, Pt, Pt]], hard: Any, walls: Any, 
             break  # sorted by air distance: nothing further out is worth a route
         link = _route(v, q, hard, walls, water, gap=_TOUCH_GAP, pad_mult=2.0, cell=6.0)
         if not link:  # the DETOUR: around the yard or the house that walls the slot - a wider box, a longer leash
-            link = _route(v, q, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=5.0, cell=10.0)
+            link = _route(v, q, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=5.0, cell=None)
         if link and polyline_len(link) <= _DETOUR_DIRECTNESS * max(d, 1.0):
             found.append((polyline_len(link), v, link))
             if len(found) >= _SHORTEST_OF:
@@ -221,7 +221,7 @@ def _touch_junctions(
                 link = (
                     [q, foot]
                     if _clear_touch(q, foot, hard, walls, water, max(_TOUCH_GAP, float(ln.get("w") or 5.0) / 2.0 + 2.0))
-                    else _route(q, foot, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=10.0)
+                    else _route(q, foot, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=None)
                 )
                 if not link and d <= _LANE_JOIN_FT:
                     # A SHORT GAP GETS A SECOND, TIGHTER ATTEMPT (settlement-review 2026-08-29, error 1).
@@ -312,7 +312,7 @@ def _touch_junctions(
             for d, v, q in cands[:12]:
                 if d > _ORPHAN_REACH:
                     break
-                link = [v, q] if _clear_touch(v, q, hard, walls, water) else _route(v, q, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=10.0)
+                link = [v, q] if _clear_touch(v, q, hard, walls, water) else _route(v, q, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=None)
                 if link and polyline_len(link) <= _LINK_DIRECTNESS * max(d, 1.0):
                     _join_piece(s, lanes, i, ways[i], v, link, hard, walls, water, main_segs)
                     joined = True

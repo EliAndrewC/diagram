@@ -21,6 +21,7 @@ from l7r.diagram.settlement.structures.fixtures import (
     kosatsuba_handover,
     under_canopy,
 )
+from l7r.diagram.settlement.structures.fixtures.siting import BOARD_ALONG_STEP_PX
 
 from .consts import BROOK_BEND_WIDTHS, POLDER_ARCHETYPES
 from .hinterland import CROP_MARGIN, brook_beside_the_field, title_pocket
@@ -260,8 +261,8 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
                     seg = math.hypot(bx - ax, by - ay) or 1.0
                     ux, uy = -(by - ay) / seg, (bx - ax) / seg
                     rot = math.degrees(math.atan2(by - ay, bx - ax))
-                    for t in range(int(seg // 12) + 1):
-                        mx, my = ax + (bx - ax) * (t * 12 / seg), ay + (by - ay) * (t * 12 / seg)
+                    for t in range(int(seg // BOARD_ALONG_STEP_PX) + 1):  # the board's lattice step (feature 284)
+                        mx, my = ax + (bx - ax) * (t * BOARD_ALONG_STEP_PX / seg), ay + (by - ay) * (t * BOARD_ALONG_STEP_PX / seg)
                         # ROADSIDE, per T13's verge (feature 133 T48): the old 16 px offset stood the
                         # board outside `kosatsuba_by_the_road`'s band the first time this path ran
                         # on the reference hamlet. Tread half-width + the verge + the board's half depth.

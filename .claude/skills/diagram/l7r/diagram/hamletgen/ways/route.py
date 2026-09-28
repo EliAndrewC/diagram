@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import heapq
 import math
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 
 from ..clearance import fabric_index
 from ..consts import (
@@ -63,7 +63,62 @@ def _new_crossing(path: Sequence[Pt], i: int, j: int) -> bool:
     return any(in_brook_band((ax + (bx - ax) * k / n, ay + (by - ay) * k / n)) for k in range(n + 1))
 
 
-def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], cell: float = 10.0, gap: float = WEB_FABRIC_GAP, pad_mult: float = 0.75) -> Poly:
+ROUTE_CELL = 10.0
+"""The router's standard lattice cell, in px - every call that does not ask a finer one (feature 284, FR-003 measures the
+coarsest cell that strands no house; the deliberately fine lattices - 5, 6, `_FINE_CELL`, the sweeps' own - are not it)."""
+
+
+def lattice_search(
+    start: tuple[int, int],
+    goal: tuple[int, int],
+    nx: int,
+    ny: int,
+    is_free: Callable[[int, int], bool],
+    in_band: Callable[[int, int], bool],
+    toll: float,
+    cell: float,
+) -> tuple[dict[tuple[int, int], float], dict[tuple[int, int], tuple[int, int]]]:
+    """The router's search over its lattice: each cell's cost from `start` and the cell it was reached from, as far as the
+    search went - to `goal`, or every reachable cell when there is no way.
+
+    A* TOWARD THE GOAL (feature 284, FR-001): Dijkstra settled every cell nearer the start than the goal. Ordered by the cost
+    so far plus the straight-line distance still to go - never more than any path's remaining cost, since a step costs
+    `hypot * cell` plus a toll that is never negative, and consistent for the same reason - the search settles the cells
+    toward the goal first and returns a path costing no more than Dijkstra's. Where two lattice paths cost the same it may
+    return the other one; the drawn path is held within `5%` of the old router's length (spec 284, SC-002)."""
+    sx, sy = start
+    gx, gy = goal
+
+    def _h(ix: int, iy: int) -> float:
+        return math.hypot(ix - gx, iy - gy) * cell
+
+    dist = {(sx, sy): 0.0}
+    prev: dict[tuple[int, int], tuple[int, int]] = {}
+    heap = [(_h(sx, sy), 0.0, sx, sy)]
+    while heap:
+        _f, d, ix, iy = heapq.heappop(heap)
+        if (ix, iy) == (gx, gy):
+            break
+        if d > dist.get((ix, iy), 1e18):
+            continue
+        for dx2 in (-1, 0, 1):
+            for dy2 in (-1, 0, 1):
+                jx, jy = ix + dx2, iy + dy2
+                # A DIAGONAL MAY NOT CUT A BLOCKED CORNER. Cell centers can both be clear while the
+                # step between them clips the corner of a steading standing between them - so the
+                # planned route was not actually walkable and failed its own acceptance test a moment
+                # later, having been "found". Requiring both orthogonal neighbors makes the lattice
+                # tell the truth about what it can walk.
+                if (dx2 or dy2) and 0 <= jx < nx and 0 <= jy < ny and is_free(jx, jy) and (not (dx2 and dy2) or (is_free(jx, iy) and is_free(ix, jy))):
+                    nd = d + math.hypot(dx2, dy2) * cell + (toll if toll and in_band(jx, jy) and not in_band(ix, iy) else 0.0)
+                    if nd < dist.get((jx, jy), 1e18):
+                        dist[(jx, jy)] = nd
+                        prev[(jx, jy)] = (ix, iy)
+                        heapq.heappush(heap, (nd + _h(jx, jy), nd, jx, jy))
+    return dist, prev
+
+
+def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], cell: float | None = None, gap: float = WEB_FABRIC_GAP, pad_mult: float = 0.75) -> Poly:
     """A walkable route from a door to a way, THREADING the steadings rather than assuming a line.
 
     A straight run plus a few dog-legs was the first two attempts and it is not enough. Measured on
@@ -82,6 +137,7 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
     Returns [] when there is genuinely no way through - which is a real answer, and better than the
     caret a review found on Mizuguchi: a 38 ft mark drawn 71 ft from the house it served, touching
     nothing, to cure a one-foot violation."""
+    cell = ROUTE_CELL if cell is None else cell  # the standard lattice unless a caller asks a finer one
     span = math.dist(start, goal)
     if span < 1.0:
         return [start, goal]
@@ -101,7 +157,9 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
     # declines EVERY connector, which is precisely why `_thread_the_fabric` cannot rescue a track
     # aimed through the cluster and why the bearing has to be chosen clear of the steadings up in
     # `connector_track`. Knowing that this returns [] rather than a detour is load-bearing.
-    if nx * ny > 90000:
+    # ...JUDGED ON THE 10 PX LATTICE WHATEVER THE CELL (feature 284): the decline below is load-bearing (it is what keeps every
+    # connector out of this router), so a coarser `ROUTE_CELL` must decline exactly the boxes the 10 px lattice declined.
+    if (int((x1 - x0) / 10.0) + 1) * (int((y1 - y0) / 10.0) + 1) > 90000:
         return []
 
     def to_pt(ix: int, iy: int) -> Pt:
@@ -146,29 +204,7 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
             v = band[(ix, iy)] = in_brook_band(to_pt(ix, iy))
         return v
 
-    dist = {(sx, sy): 0.0}
-    prev: dict[tuple[int, int], tuple[int, int]] = {}
-    heap = [(0.0, sx, sy)]
-    while heap:
-        d, ix, iy = heapq.heappop(heap)
-        if (ix, iy) == (gx, gy):
-            break
-        if d > dist.get((ix, iy), 1e18):
-            continue
-        for dx2 in (-1, 0, 1):
-            for dy2 in (-1, 0, 1):
-                jx, jy = ix + dx2, iy + dy2
-                # A DIAGONAL MAY NOT CUT A BLOCKED CORNER. Cell centers can both be clear while the
-                # step between them clips the corner of a steading standing between them - so the
-                # planned route was not actually walkable and failed its own acceptance test a moment
-                # later, having been "found". Requiring both orthogonal neighbors makes the lattice
-                # tell the truth about what it can walk.
-                if (dx2 or dy2) and 0 <= jx < nx and 0 <= jy < ny and is_free(jx, jy) and (not (dx2 and dy2) or (is_free(jx, iy) and is_free(ix, jy))):
-                    nd = d + math.hypot(dx2, dy2) * cell + (_toll if _toll and in_band(jx, jy) and not in_band(ix, iy) else 0.0)
-                    if nd < dist.get((jx, jy), 1e18):
-                        dist[(jx, jy)] = nd
-                        prev[(jx, jy)] = (ix, iy)
-                        heapq.heappush(heap, (nd, jx, jy))
+    dist, prev = lattice_search((sx, sy), (gx, gy), nx, ny, is_free, in_band, _toll, cell)
     if (gx, gy) not in dist:
         return []
     path: Poly = []

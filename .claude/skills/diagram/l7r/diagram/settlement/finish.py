@@ -577,7 +577,9 @@ class FinishMixin:
             # THE PAGE READS THE BLADES, NOT THEIR TEXT (feature 284, FR-006): the slot is culled here by the page's own rule and
             # is already its merged form, so the page need not cull or merge it again, and the scrub's hit region reads each
             # blade's root - the `M` point `marks_region` found by regex in the path text - from here.
-            self._blade_starts[z] = [(ln[0], ln[1]) for ln in kept]
+            # KEYED BY THE SLOT'S STRING, NOT ITS INDEX: the water block is spliced into the stream after this flush, which
+            # shifts every later slot's index; the string itself (held here, so its id cannot be reused) is found again below.
+            self._blade_starts[id(self.out[z])] = (self.out[z], [(ln[0], ln[1]) for ln in kept])
         # ...AND THE OTHER MARKS (feature 225): the brush dots, pines, wet tint and glints, each with its extent, appended to the
         # slot their scatter took (after the crowns that slot may already hold) - the pad's ring never reaches the file.
         for z, marks in pending_marks:
@@ -785,7 +787,7 @@ class FinishMixin:
             meta=self.M["meta"],
             manifest=self.M,
             with_raster=rendering,
-            blade_starts=self._blade_starts,
+            blade_starts={i: got[1] for i, b in enumerate(self.out) if (got := self._blade_starts.get(id(b))) is not None and got[0] is b},
         )
         # WRITTEN WHOLE, THEN MOVED INTO PLACE (feature 261): the gate reads a pool map's manifest in one worker
         # while another re-rolls it, and an in-place write let a reader see it half-written - measured as a

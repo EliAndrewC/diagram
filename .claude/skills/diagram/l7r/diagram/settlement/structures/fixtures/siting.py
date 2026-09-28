@@ -73,6 +73,13 @@ def under_canopy(grid: PointGrid, x: float, y: float, half: float) -> bool:
     return any(math.hypot(x - float(it[0]), y - float(it[1])) < float(it[2]) + half for it in grid.near(x, y, half))
 
 
+BOARD_ALONG_STEP_PX = 12.0
+"""How far apart the board's candidate seats stand along a route. 24 was TRIED AND WITHDRAWN (feature 284, FR-007): the
+coarser lattice left no approach seat inside the 20 ft band every departure passes (`KOSATSUBA_HANDOVER_BAND_FT`), so an
+entrance board went up on the straggler lane, side-on to the track - the placement feature 261's settlement-review ruled out
+(`test_an_entrance_board_stands_on_the_approach_and_not_on_a_straggler_at_its_join`). The board's costliest question, its
+caption's level, is asked lazily instead (`board_choice`), which moves no seat."""
+
 BOARD_CAPTION_TOP = 2
 """`board_caption_level`'s best answer: the caption clear of every crown."""
 
@@ -329,6 +336,7 @@ class FixtureSitingMixin:
         _canopy = canopy_index(self.M)  # built ONCE for the whole probe, not per seat - see `canopy_index`
         cands: list[tuple[int, float, float, float, float, int | None, float, bool]] = []  # (busy, score, x, y, rot, label_above|None, gap from tread edge to board edge, under the trees)
         _approach_ways = [[(p[0], p[1]) for p in ln["pts"]] for ln in self.M.get("lanes") or [] if ln.get("connector")]
+        _along = BOARD_ALONG_STEP_PX
         _on_approach: set[int] = set()  # id() of the candidates standing on the approach itself (the entrance rule below)
         for pts, _rw in routes:
             for i in range(len(pts) - 1):
@@ -340,8 +348,8 @@ class FixtureSitingMixin:
                 # long axis ALONG the route: the board's face is broadside to the traffic that
                 # reads it, never edge-on (kosatsuba_faces_the_road; see kosatsuba's docstring)
                 rot = math.degrees(math.atan2(by - ay, bx - ax))
-                for t in range(int(seg // 12) + 1):
-                    f = t * 12 / seg
+                for t in range(int(seg // _along) + 1):
+                    f = t * _along / seg
                     mx, my = ax + (bx - ax) * f, ay + (by - ay) * f
                     for side in (1.0, -1.0):
                         off = _rw / 2 + h / 2 + 4
