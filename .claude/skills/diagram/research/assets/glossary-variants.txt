@@ -298,6 +298,7 @@ charity graveyard	charity graveyard
 charity graveyards	charity graveyard
 charity ground	charity graveyard
 charity grounds	charity graveyard
+chenghua	Chenghua
 chenghuangmiao	chenghuangmiao
 chi	chi
 chigaidana	staggered shelves
@@ -2528,6 +2529,8 @@ tenna	Tenna
 tenon	mortise and tenon
 tenpo	Tenpo era
 tenpo era	Tenpo era
+tenpō	Tenpo era
+tenpō era	Tenpo era
 tensho	Tensho
 tensho-era	Tensho
 tenshu	tenshu

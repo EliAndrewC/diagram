@@ -5342,7 +5342,9 @@
   "def": "A Japanese era, 1830 to 1844, when the late-Edo boom in private sword halls began.",
   "variants": [
    "Tenpo era",
-   "Tenpo"
+   "Tenpo",
+   "Tenpō era",
+   "Tenpō"
   ]
  },
  "anchor culture": {
@@ -11056,6 +11058,12 @@
   "def": "The lords of Ueda domain, a family whose name is written 仙石. The name sounds the same as the Sengoku age of civil wars but is a different word.",
   "variants": [
    "Sengoku house"
+  ]
+ },
+ "Chenghua": {
+  "def": "The reign era of the Ming emperor Xianzong, 1465-1487; a year was dated by counting from its start, so its sixteenth year is 1480.",
+  "variants": [
+   "Chenghua"
   ]
  }
 }
