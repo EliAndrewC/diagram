@@ -63,11 +63,13 @@ class InnerCourt(Kind):
     Note: The household inside the compound follows the record; the residence-behind-the-office order is
     Chinese regulation (Neixiang), while the Japanese pages read show no front-and-rear order - at Takayama the
     residence stood beside the office, to the west. The two-court split and the formal garden south of the
-    reception rooms follow the record. The service strip along the shady north rear is this record's own
-    reasoning from where the formal garden sat, not something a source describes.
+    reception rooms follow the record. That a household's storehouse stood behind the house is read, at the Higuchi
+    house; the rest of the service strip along the shady north rear is this record's own reasoning from where the
+    formal garden sat, not something a source describes.
 
-    Caveat: The service strip along the shady north rear is this record's own reasoning from where the formal
-    garden sat, not something a source describes.
+    Caveat: That a household's storehouse stood behind the house is read, at the Higuchi house; the rest of the
+    service strip along the shady north rear is this record's own reasoning from where the formal garden sat, not
+    something a source describes.
 
     Name: inner court
     Covers: the inner court's ground and its label

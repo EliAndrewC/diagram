@@ -40,15 +40,16 @@ class Residence(Kind):
     and about 67 tsubo (about 2,380 sq ft), as restored to its Meiji plan, for a retainer of 500 to 1,000 koku; the hand sheets' wings, about 180 to
     200 ft long, are larger than either, a guess. Both massings are attested and each sheet takes one: one block is the ordinary posting's form, and a
     residence drawn in echelon reads as one its holders have added to. That a corridor joins each hall to the last
-    is this project's reading; no source read says how Katsura's echelon halls are joined. The service strip on
-    the shady rear is reasoned from the sun rule, with no source read for it, and that the residence out-measures
+    is this project's reading; no source read says how Katsura's echelon halls are joined. Of the service strip on
+    the shady rear only its storehouse, behind the house, is read (the Higuchi house); the rest is reasoned from the
+    sun rule, and that the residence out-measures
     every other domestic building is this project's own reading of the compound; no page a reader can open ranks
     the footprints. A garden standing where the court would be, between the gate and the entrance, is a guess.
     Each labeled room is a suite of several rooms compressed to one label, a schematic convenience.
 
     Caveat: That a corridor joins each hall to the last is this project's reading; no source read says how
-    Katsura's echelon halls are joined. The service strip on the shady rear is reasoned from the sun rule, with no
-    source read for it, and that the residence out-measures every other domestic building is this project's own
+    Katsura's echelon halls are joined. Of the service strip on the shady rear only its storehouse, behind the
+    house, is read (the Higuchi house); the rest is reasoned from the sun rule, and that the residence out-measures every other domestic building is this project's own
     reading of the compound; no page a reader can open ranks the footprints. A garden standing where the court
     would be, between the gate and the entrance, is a guess. Each labeled room is a suite of several rooms
     compressed to one label, a schematic convenience.
@@ -163,8 +164,9 @@ class ServantsQuarters(Kind):
 
     Why: A samurai household's servants lived inside their master's walls, never in houses of their own - in a
     range along the boundary, in the rooms of the gate, or for a small household in rooms off the kitchen.
-    The shady north rear, behind the residence, is the compound's service strip, so the servants' range
-    backs the rear wall there, beside the vegetable plot and the family privy.
+    The shady north rear, behind the residence, is the compound's service strip, so the servants' range backs the
+    rear wall there, beside the household's storehouses and the family privy; the vegetable plot stands wherever it
+    gets its sun.
 
     Note: Servants housed inside the walls, in a range along the boundary, is a recorded finding. The program
     classes the building's size as a guess: a nagaya for about ten servants, with no measured example behind
