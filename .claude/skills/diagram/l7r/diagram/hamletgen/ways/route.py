@@ -66,9 +66,9 @@ def _new_crossing(path: Sequence[Pt], i: int, j: int) -> bool:
 ROUTE_CELL = 10.0
 """The router's standard lattice cell, in px - every call that does not ask a finer one (the deliberately fine lattices - 5,
 6, `_FINE_CELL`, the sweeps' own - are not it). KEPT AT 10 BY MEASUREMENT (feature 284, B2, specs/284 research R4): cells
-12, 14, 16 and 18 over the pool and cohort seeds 1-24 each stranded houses the 10 px lattice did not (12: 20 unreached over
-every attempt against 8, and cohort seed 03 kept a stranded house through its re-roll), so the coarser lattice was
-withdrawn. A stranding costs a whole re-roll, which is more than the router's share of a roll."""
+12, 14, 16 and 18 over the pool, the toys and cohort seeds 1-24 each stranded houses the 10 px lattice did not (12: 8
+unreached over every attempt against 5, on cohort seed 08 and Sawada), and no coarser cell was faster in all, so the
+coarser lattice was withdrawn. A stranding costs a whole re-roll, which is more than the router's share of a roll."""
 
 
 def lattice_search(
@@ -82,29 +82,20 @@ def lattice_search(
     cell: float,
 ) -> tuple[dict[tuple[int, int], float], dict[tuple[int, int], tuple[int, int]]]:
     """The router's search over its lattice: each cell's cost from `start` and the cell it was reached from, as far as the
-    search went - to `goal`, or every reachable cell when there is no way.
+    search went - to `goal`, or every reachable cell when there is no way. Dijkstra, in cost order.
 
-    A* TOWARD THE GOAL (feature 284, FR-001): Dijkstra settled every cell nearer the start than the goal. Ordered by the cost
-    so far plus the straight-line distance still to go - never more than any path's remaining cost, since a step costs
-    `hypot * cell` plus a toll that is never negative, and consistent for the same reason - the search settles the cells
-    toward the goal first and returns a path costing no more than Dijkstra's. Where two lattice paths cost the same it may
-    return the other one; the drawn path is held within `5%` of the old router's length (spec 284, SC-002).
-
-    MEASURED BY THE COHORT (specs/284 research R6): the other tie-broken paths leave a house off the web on a first roll a
-    little more often (8 unreached over every attempt against 6, over the pool and cohort seeds 1-24), each healed by its
-    re-roll, and the rolls are 2.4% faster in all against a run-to-run spread of 0.6%. A first measurement, taken with a
-    router box decline that no longer ships, read 26 against 5 and was withdrawn on it; the re-run is what stands."""
+    A* TOWARD THE GOAL WAS TRIED, MEASURED FASTER, AND WITHDRAWN ON THE RULES (feature 284, FR-001, specs/284 research R6).
+    With the straight-line heuristic it returns a path of the same cost but, where two lattice paths tie, often the other
+    one; with the field-search lever it made the pool and cohort seeds 1-24 4.8% faster in all against a 0.6% spread - and
+    the moved maps failed the gate on the shipped pool (a brook leg on a screen axis, woodland parcels in a ruled row,
+    Sawada's seat off the wind). Map changes for speed are allowed only within the rules."""
     sx, sy = start
     gx, gy = goal
-
-    def _h(ix: int, iy: int) -> float:
-        return math.hypot(ix - gx, iy - gy) * cell
-
     dist = {(sx, sy): 0.0}
     prev: dict[tuple[int, int], tuple[int, int]] = {}
-    heap = [(_h(sx, sy), 0.0, sx, sy)]
+    heap = [(0.0, sx, sy)]
     while heap:
-        _f, d, ix, iy = heapq.heappop(heap)
+        d, ix, iy = heapq.heappop(heap)
         if (ix, iy) == (gx, gy):
             break
         if d > dist.get((ix, iy), 1e18):
@@ -122,7 +113,7 @@ def lattice_search(
                     if nd < dist.get((jx, jy), 1e18):
                         dist[(jx, jy)] = nd
                         prev[(jx, jy)] = (ix, iy)
-                        heapq.heappush(heap, (nd + _h(jx, jy), nd, jx, jy))
+                        heapq.heappush(heap, (nd, jx, jy))
     return dist, prev
 
 
