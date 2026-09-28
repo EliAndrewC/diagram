@@ -224,10 +224,11 @@ run once more on its own, base then clone; research R2):
 - **One count moves between runs of the base: the ring builds.** Sawada's read 8792 in two base re-runs
   (m:base-rerun-sawada-b-fabric-ringindex-init) and 9098 in the review's re-run of the same command and in the first
   measurement (m:before-sawada-ring-index-builds); Kashikawa's 6740 and 7020, Kuwabata's 4132 and 4236, and the fabric
-  bucket's total with them. The base's fabric memo (`hamletgen.clearance._MEMO`) is keyed on object identities, so how often
+  bucket's total with them - on the after side too (Kuwabata's 702611 and 731256, m:after-kuwabata-b-fabric-total), since
+  the fabric index's own filing still follows that memo's hits. The base's fabric memo (`hamletgen.clearance._MEMO`) is keyed on object identities, so how often
   it hits - and so how many polygons a miss re-indexes - moves with the reuse of ids. A count may not carry `varies`
   (FR-011b), so these stay counts, named here as moving; the after side's ring builds, keyed on the ring's points (FR-002),
-  read 153 in every run. SC-003 holds on either base reading: 57x or 59x against its `5x`.
+  read 153 on Sawada in every run. SC-003 holds on either base reading: 57x or 59x against its `5x`.
 - **FR-009 is withdrawn.** The vectorized marsh was built to 278's priced form and cut the marsh's scalar keep-out tests
   359x on Sawada, but its wall time did not fall: the hinterland stage, fastest of three, went 0.596 -> 0.614 s on
   Inashiro and 0.380 -> 0.443 s on Kuwabata, flat on the other three, because building the shapely shapes of the keep-outs

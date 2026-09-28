@@ -1,6 +1,6 @@
 {
  "feature": "281-third-hotspot-pass",
- "plan_sha256": "b3eeddc4f83f3f96483c7a9406f750d6875f22097095e7bdeab31d773d117ec3",
+ "plan_sha256": "d8deeaf57501df62a90a7735bc08df07e350bca6ad1654468ceeb6347d3279a7",
  "reviewed": "2026-09-28",
  "declared": "spec-fidelity",
  "decisions": [
@@ -68,14 +68,20 @@
    "id": "B2",
    "summary": "WITHDRAWN (spec Amendment 1): the vectorized marsh was built and measured and is removed; the marsh keeps its scalar throws",
    "class": "narrowing",
-   "why": "Narrows the accepted spec (FR-009, SC-010), not the GM's words: the request asks to 'see what we could do to improve it' - performance - and never names the marsh. Keeping B2 would defeat the request's stated purpose concretely: research R2 measured the hinterland stage flat on four maps and slower on Kuwabata (0.380 -> 0.443 s, observed 2026-09-28, fastest of three), while moving every map's marsh marks - a map change bought for no speed. This is not a session completing the GM's thought; it is the measurement the request itself asks for ('take a set of measurements and see what's slow') ruling a lever out. Contingent on Amendment 1's parallel spec review: if that review rejects the withdrawal, this decision is reopened.",
+   "why": "Narrows the accepted spec (FR-009, SC-010), not the GM's words: the request asks to 'see what we could do to improve it' - performance - and never names the marsh. Keeping B2 would defeat the request's stated purpose concretely: research R2 measured the hinterland stage flat on four maps and slower on Kuwabata (0.380 -> 0.443 s, observed 2026-09-28, fastest of three), while moving every map's marsh marks - a map change bought for no speed. This is not a session completing the GM's thought; it is the measurement the request itself asks for ('take a set of measurements and see what's slow') ruling a lever out. Contingent on Amendment 1's parallel spec review: if that review rejects the withdrawal, this decision is reopened. Round 4: the plan's summary, Constitution Check XII, the SC-010 row, the C ordering and the verification table now all mark B2 withdrawn; no passage still reads as if it lands.",
    "ruling": "LEGITIMATE"
   },
   {
-   "id": "C-order",
-   "summary": "the committed pool at c13a6ebe6 first confirmed to regenerate byte-identically in the base worktree; A1-A8 land and the pool is diffed against it (or against a merged commit's own confirmed regeneration after a sync-in); then B1-B2 under 276's FR-006 condition",
+   "id": "B3",
+   "summary": "the marsh's pond-bank keep-out files each fish-pond bank's WHOLE ring in the KeepoutGrid (slot 2) instead of every 16th point, so a reed cannot stand in a drawn corner the thinned chord cut; kept when B2 was withdrawn; tested by test_a_pond_bank_keeps_the_reeds_off_the_same_way",
    "class": "within",
-   "why": "SC-011 as written; confirming the reference regenerates at the base makes the byte-identity diff a test of A1-A8 rather than of drift, and the sync-in fallback confirms its reference the same way."
+   "why": "Read wet.py line 313: _banks now takes dp['bank'] whole (the diff from c13a6ebe6 removes only the [:: len//16] stride), filed by keep.rings(_banks, slot=2, reach=max(_pads)) exactly as before. This is the request's own invariant stated verbatim - 'as long as things that aren't supposed to overlap don't overlap' - enforced where a reed based inside the bank's drawn corner passed; and constitution XIV (fix where found). It adds no new rule (reeds off planted earth is feature 150 T54's existing rule) and narrows nothing; the spec carries it in Decisions Recorded (historically accurate, the existing rule now enforced at the drawn corners). The pool is reported byte-identical, so no drawn map moved."
+  },
+  {
+   "id": "C-order",
+   "summary": "the committed pool at c13a6ebe6 first confirmed to regenerate byte-identically in the base worktree; A1-A8 land and the pool is diffed against it (or a merged commit's own confirmed regeneration after a sync-in); then B1 (and B2 until its withdrawal, B3 with it) under 276's FR-006 condition",
+   "class": "within",
+   "why": "SC-011 as written; confirming the reference regenerates at the base makes the byte-identity diff a test of A1-A8 rather than of drift, and the sync-in fallback confirms its reference the same way. Round 4: the ordering now records B2's withdrawal and B3 riding with B1; the spec's Amendment 1 reports the landed pool byte-identical against c13a6ebe6."
   },
   {
    "id": "C-counts",
