@@ -144,3 +144,11 @@ FR-004 as passing a tree-blind check, is unchanged.
    fixture naming its hours and shade makers" - met by a check that names only the hall. It should read: the check
    fails the negative fixture naming its hours and its shade makers by kind, the wood among them; fails a bed shaded by
    trees alone; and passes the county example; its tests reach the gate's coverage floor.
+
+**Round 3** (spec-fidelity-verify, MODE 3, 2026-09-28): first NOT-REVIEWABLE (three unlabeled figures, labeled), then
+CHANGES REQUIRED, one item: FR-005 quoted a GM answer that request.md did not record. request.md now records the
+question, its three options and the answer verbatim.
+
+**Round 4** (spec-fidelity-verify, MODE 3, 2026-09-28): FAITHFUL. The answer checked against the session transcript; the
+west-side preference was the session's own wording in an option the GM picked, so dropping it sets aside nothing the GM
+said.
