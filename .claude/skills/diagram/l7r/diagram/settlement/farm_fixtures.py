@@ -50,7 +50,15 @@ FIXTURE_FT: dict[str, tuple[float, float]] = {
     "coop": (5.0, 5.0),
     "shrine": (6.0, 6.0),  # DRAWN at the small-shed module, not the ~1.3 ft stone: a glyph convention (GM 2026-08-27, T62)
 }
-PERSIMMON_CROWN_FT = 9.0  # radius: a yard persimmon's crown runs ~5-6 m across (uekipedia: tree 5-10 m tall)
+# radius: "a persimmon grows to about 12 m tall and 7 m across, a crown of about 23 ft" (research/homesteads/218, pfaf-kaki;
+# 269 B14) - the full-grown size, which fits the "old giant persimmon in the dooryard" the record remembers. It was 9.0.
+PERSIMMON_CROWN_FT = 11.5
+# THE WOODPILE'S THREE FORMS (269 B15, research/homesteads/212): the woodshed (a 木小屋 at Boso-no-Mura, "the woodshed of the
+# cold north" on the Shonai plain), the KIZUMA stacked along the inside of the windbreak on its windward side (the Isawa plain,
+# "from afar it looked like a wall"), and the open stack under the eaves - one kind, three forms, rolled per hamlet. Sizes in
+# real feet, (along, out): the shed two ken by one and a half, a GUESS (no page gives one); the kizuma a long stack, 24 ft of it,
+# a GUESS - the record gives its line (under the grove's lower branches), not its length.
+WOODPILE_FORM_FT: dict[str, tuple[float, float]] = {"shed": (12.0, 9.0), "kizuma": (24.0, 3.5)}
 FIXTURE_KINDS = tuple(FIXTURE_FT)
 SHRINE_RED = "#A03020"  # the same vermilion as small_shrine's roof - the GM's "red marking" convention
 
@@ -58,19 +66,29 @@ SHRINE_RED = "#A03020"  # the same vermilion as small_shrine's roof - the GM's "
 class FarmFixturesMixin:
     def farm_fixture(self: Settlement, kind: str, cx: float, cy: float, rot: float = 0.0, of: Any = None, form: str | None = None) -> None:  # type: ignore[misc]
         """Draw and record one farmstead fixture of `kind` centered at (cx, cy), raked with its house. `form`
-        picks an attested alternative glyph of the same kind (`manure` -> `pit`, feature 150)."""
+        picks an attested alternative glyph of the same kind (`manure` -> `pit`, feature 150; `woodpile` -> `shed` or
+        `kizuma`, 269 B15, at its own size in `WOODPILE_FORM_FT`)."""
         if kind not in FIXTURE_FT:
             raise ValueError(f"unknown farm fixture kind {kind!r}")
-        if form is not None and (kind, form) != ("manure", "pit"):
+        if form is not None and (kind, form) != ("manure", "pit") and not (kind == "woodpile" and form in WOODPILE_FORM_FT):
             raise ValueError(f"no form {form!r} for fixture kind {kind!r}")
-        w, h = (self.px(PIT_FT), self.px(PIT_FT)) if form == "pit" else (self.px(FIXTURE_FT[kind][0]), self.px(FIXTURE_FT[kind][1]))
+        _ft = (PIT_FT, PIT_FT) if form == "pit" else WOODPILE_FORM_FT[form] if form in WOODPILE_FORM_FT else FIXTURE_FT[kind]
+        w, h = self.px(_ft[0]), self.px(_ft[1])
         x0, y0 = -w / 2, -h / 2
         edge = "#5A4326"
         g = [f'<g transform="translate({cx:.1f},{cy:.1f}) rotate({rot:.2f})">']
         if kind == "privy":
             g.append(f'<rect x="{x0:.1f}" y="{y0:.1f}" width="{w:.1f}" height="{h:.1f}" rx="1" fill="#8F7548" stroke="{edge}" stroke-width="1.1"/>')
             g.append(f'<line x1="{x0 + 1:.1f}" y1="0" x2="{-x0 - 1:.1f}" y2="0" stroke="#D8C08C" stroke-width="1"/>')
-        elif kind == "woodpile":
+        elif kind == "woodpile" and form == "shed":
+            # the woodshed (269 B15): a roof, and along its open front a band of log ends - which a roof would hide from above,
+            # so the band is a MAP DRAWING CONVENTION naming what the shed holds, as the byre's stall mouth names its beast
+            g.append(f'<rect x="{x0:.1f}" y="{y0:.1f}" width="{w:.1f}" height="{h:.1f}" rx="1" fill="#9C7C4C" stroke="{edge}" stroke-width="1.1"/>')
+            g.append(f'<line x1="{x0 + 1:.1f}" y1="{y0 + h * 0.3:.1f}" x2="{-x0 - 1:.1f}" y2="{y0 + h * 0.3:.1f}" stroke="#D8C08C" stroke-width="0.9"/>')  # the ridge
+            n = max(3, int(w / 2.6))
+            for i in range(n):
+                g.append(f'<circle cx="{x0 + (i + 0.5) * w / n:.1f}" cy="{-y0 - min(h, 3.0) * 0.45:.1f}" r="{min(h, 2.6) * 0.3:.1f}" fill="#C9A874"/>')
+        elif kind == "woodpile":  # the eaves stack and the kizuma (269 B15): a stack of split logs, end grain up
             g.append(f'<rect x="{x0:.1f}" y="{y0:.1f}" width="{w:.1f}" height="{h:.1f}" fill="#8B6A3E" stroke="{edge}" stroke-width="0.8"/>')
             n = max(3, int(w / 2.6))
             for i in range(n):  # the end grain of the split logs, the thing that makes a stack read as a stack

@@ -87,7 +87,7 @@ class HamletSpec:
     manure_form: str | None = None  # the manure fixture's form, heap | pit (feature 150; `MANURE_FORMS`)
     copse_siting: str | None = None  # among_the_houses | against_the_belt (feature 152; `COPSE_SITINGS`)
     kosatsuba_siting: str | None = None  # frontage | waterside (feature 152; `KOSATSUBA_SITINGS`)
-    byre_form: str | None = None  # detached_commons | courtyard - the settlement engine's knob, pinnable so the pool can exhibit both (feature 261)
+    byre_form: str | None = None  # courtyard | yard_shed | detached_commons - the settlement engine's knob, pinnable so the pool can exhibit each (feature 261; 269 B16)
     dike_crop: str | None = None  # a dike-pond's dike planting, mulberry | sugarcane | banana | fruit (feature 150; `DIKE_CROPS`)
     leftover: str | None = None  # a dike-pond block's unconverted parcels, rice | vegetables | pond (feature 150; `LEFTOVER_FORMS`)
     plot_size: str | None = None

@@ -270,7 +270,10 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     # ...AND ON ITS OWN BANK: a clump near a house across the brook is not among the houses (settlement-review of Kashikawa,
     # feature 261: three clumps stood across the water from every farmhouse, within reach only as the crow flies)
     _brook = [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for f in s.M.get("streams") or [] for a, b in zip(f.get("poly") or [], (f.get("poly") or [])[1:], strict=False)]
-    _copse_near: tuple[Any, ...] = ([(float(x), float(y)) for x, y in zip(xs, ys, strict=False)], s.px(COPSE_HOUSE_REACH_FT), _brook)
+    # ...A HAIR INSIDE THE REACH (269 E2): the manifest records a clump to 0.1 px, so a clump the placer seats at the reach's
+    # very edge can read as beyond it - Kashikawa's clump at (1069.3, 1011.6) stood 89.99 ft from its house as placed and
+    # 90.01 as recorded. The same placement-side margin `CANOPY_PAD` keeps for a crown against a wall.
+    _copse_near: tuple[Any, ...] = ([(float(x), float(y)) for x, y in zip(xs, ys, strict=False)], s.px(COPSE_HOUSE_REACH_FT) - 0.1, _brook)
     if plan.copse_siting == "against_the_belt" and _dented:
         # the belt's own footprint, stood off the houses so the two stands read as one wood at its back
         _bx = [q[0] for q in _dented]

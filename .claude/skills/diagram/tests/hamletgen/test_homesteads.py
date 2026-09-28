@@ -756,3 +756,112 @@ def test_a_front_yard_bath_stands_beside_its_work_yard() -> None:
     from l7r.diagram.hamletgen.homesteads.fixtures import corridor_rect
 
     assert corridor_rect(32.0, -7.0, 46.0, 28.0, 6.0, 3.0, trim=3.0) == (27.5, -7.0, 3.0, 3.0)
+
+
+def _one_house(monkeypatch: pytest.MonkeyPatch, fx: object, keep: tuple[str, ...], plan: object = None) -> Settlement:
+    """One raked-square farmhouse at (400, 350) with only `keep` fixtures owed, seated by `farmstead_fixtures`."""
+    _one_kind(monkeypatch, fx, keep)
+    s = Settlement(W=900, H=700, seed=7)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    house = {"x": 400.0, "y": 350.0, "w": 46.0, "h": 28.0, "rot": 0.0, "shed_side": "W"}
+    s.M["houses"].append(dict(house))
+    s.placed.append((400.0, 350.0, 46.0, 28.0))
+    fx.farmstead_fixtures(s, plan or a_plan(), [house])  # type: ignore[attr-defined]
+    return s
+
+
+def test_the_persimmon_stands_in_the_dooryard_or_behind_the_house_never_on_the_flank() -> None:
+    """269 B14 (research/homesteads/218): the dooryard in front - the work yard's edge first - or behind the house; the side
+    rolled first is tried first, the flank is no seat, and the same bearings follow a step out."""
+    from l7r.diagram.hamletgen.homesteads.fixtures import persimmon_seats
+
+    front = persimmon_seats((0.0, 40.0, 30.0, 20.0), 50.0, 5.0, True, [10.0])
+    assert front[:4] == [(20.0, 40.0), (-20.0, 40.0), (20.0, 50.0), (-20.0, 50.0)], "beside the work yard, level with its middle then its edge"
+    assert all(ly > 0 for _lx, ly in front[4:7]) and all(ly < 0 for _lx, ly in front[7:10])
+    back = persimmon_seats(None, 50.0, 5.0, False, [10.0])
+    assert all(ly < 0 for _lx, ly in back[:3]) and len(back) == 12 and back[6] == (pytest.approx(45.0), pytest.approx(-45.0))
+    assert not any(abs(ly) < 1.0 and abs(lx) > 0.0 for lx, ly in front + back), "no seat on the house's flank"
+
+
+def test_the_persimmon_seats_on_a_pool_map_house_and_declares_its_front_share(monkeypatch: pytest.MonkeyPatch) -> None:
+    """269 B14: the hamlet's front share is rolled in its band and declared; the tree is drawn at the new crown."""
+    from l7r.diagram.hamletgen.homesteads import fixtures as fx
+
+    s = _one_house(monkeypatch, fx, ("persimmon",))
+    lo, hi = fx.PERSIMMON_FRONT_BAND
+    assert lo <= s.M["meta"]["persimmon_front_share"] <= hi
+    (tree,) = s.M["persimmons"]
+    assert tree["r"] == 11.5 and abs(tree["y"] - 350.0) > 14.0, "in front of or behind the house, not level with it"
+
+
+def test_the_woodshed_form_stands_a_ken_off_the_wall(monkeypatch: pytest.MonkeyPatch) -> None:
+    """269 B15 (research/homesteads/212): on a woodshed hamlet the woodpile is a shed of its own, 12 x 9 ft, a ken out."""
+    from l7r.diagram.hamletgen.homesteads import fixtures as fx
+
+    monkeypatch.setattr(fx, "WOODPILE_FORMS", ("shed",))
+    s = _one_house(monkeypatch, fx, ("woodpile",))
+    (shed,) = s.M["farm_fixtures"]
+    assert s.M["meta"]["woodpile_form"] == "shed" and shed["form"] == "shed" and (shed["w"], shed["h"]) == (12.0, 9.0)
+    gap = max(abs(shed["x"] - 400.0) - 23.0, abs(shed["y"] - 350.0) - 14.0) - min(shed["w"], shed["h"]) / 2
+    assert gap >= 6.0, f"a building of its own, {gap:.1f} ft off the wall"
+
+
+def test_the_kizuma_lies_along_the_windbreak_to_windward_and_else_the_stack_goes_under_the_eaves(monkeypatch: pytest.MonkeyPatch) -> None:
+    """269 B15: on a kizuma hamlet the firewood is stacked along the windbreak's inner edge where the belt is at this yard's
+    windward back; a homestead with no belt there keeps the eaves stack."""
+    from l7r.diagram.hamletgen.homesteads import fixtures as fx
+
+    monkeypatch.setattr(fx, "WOODPILE_FORMS", ("kizuma",))
+    plan = a_plan()
+    plan.belt = [(330.0, 270.0), (470.0, 270.0), (470.0, 316.0), (330.0, 316.0)]  # NW is the default wind: the belt at the back
+    s = _one_house(monkeypatch, fx, ("woodpile",), plan)
+    (stack,) = s.M["farm_fixtures"]
+    assert stack["form"] == "kizuma" and stack["w"] == 24.0 and stack["y"] < 322.0 and stack["rot"] % 180.0 == pytest.approx(0.0, abs=0.5)
+    plan.belt = [(330.0, 400.0), (470.0, 400.0), (470.0, 440.0), (330.0, 440.0)]  # to leeward: not this yard's windbreak
+    s = _one_house(monkeypatch, fx, ("woodpile",), plan)
+    (stack,) = s.M["farm_fixtures"]
+    assert "form" not in stack and stack["w"] == 10.0, "the eaves stack"
+
+
+def test_kizuma_seats_keep_to_the_windward_edge_within_reach() -> None:
+    """`kizuma_seats` (269 B15): the edge point nearest the house and a stack's length either way, each only to windward and
+    within reach; nothing for a belt out of reach, and nothing where the house stands on the belt's own line."""
+    from l7r.diagram.hamletgen.homesteads.fixtures import _WIND_VEC, belt_edge, kizuma_seats
+
+    line = belt_edge([(330.0, 270.0), (470.0, 270.0), (470.0, 316.0), (330.0, 316.0)])
+    got = kizuma_seats(line, 400.0, 350.0, 70.0, _WIND_VEC["NW"], 24.0, 2.0)
+    assert len(got) == 2 and got[0][:2] == (pytest.approx(400.0), pytest.approx(318.0)), "the nearest point, and the one to the west"
+    assert kizuma_seats(line, 400.0, 500.0, 70.0, _WIND_VEC["NW"], 24.0, 2.0) == []
+
+    assert all(p[1] < 316.0 for p in kizuma_seats(line, 400.0, 316.0, 70.0, _WIND_VEC["N"], 24.0, 2.0)), "the house on the line is no seat"
+
+
+def test_fixture_form_names_the_drawn_form() -> None:
+    """`fixture_form` (feature 150, 269 B15): the pit, the woodshed, the kizuma, or the plain glyph."""
+    from l7r.diagram.hamletgen.homesteads.fixtures import fixture_form
+
+    assert fixture_form("manure", "pit", "eaves", False) == "pit" and fixture_form("manure", "heap", "eaves", False) is None
+    assert fixture_form("woodpile", None, "kizuma", True) == "kizuma" and fixture_form("woodpile", None, "shed", False) == "shed"
+    assert fixture_form("woodpile", None, "kizuma", False) is None and fixture_form("coop", "pit", "shed", False) is None
+
+
+def test_every_share_is_seated_as_its_count(monkeypatch: pytest.MonkeyPatch) -> None:
+    """269 fc:2261: a declared share of the households is drawn as that many fixtures - `round(share x houses)` - and a
+    chosen house with no room passes its fixture on to one that has it, so the count is met."""
+    from l7r.diagram.hamletgen.homesteads import fixtures as fx
+
+    _one_kind(monkeypatch, fx, ())
+    monkeypatch.setitem(fx.FIXTURE_BANDS, "coop", (0.5, 0.5))
+    s = Settlement(W=1400, H=700, seed=7)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    houses = [{"x": 200.0 + 200.0 * k, "y": 350.0, "w": 46.0, "h": 28.0, "rot": 0.0, "shed_side": "W"} for k in range(6)]
+    for h in houses:
+        s.M["houses"].append(dict(h))
+        s.placed.append((h["x"], h["y"], 46.0, 28.0))
+    first = min(range(6), key=lambda i: s._hjit(houses[i]["x"], houses[i]["y"], fx._SALT["coop"]))
+    s.field_polys.append([(houses[first]["x"] - 60.0, 250.0), (houses[first]["x"] + 60.0, 250.0), (houses[first]["x"] + 60.0, 450.0), (houses[first]["x"] - 60.0, 450.0)])
+    fx.farmstead_fixtures(s, a_plan(), houses)
+    coops = [r for r in s.M["farm_fixtures"] if r["kind"] == "coop"]
+    assert s.M["meta"]["farm_fixtures_target"]["coop"] == 3 and len(coops) == 3, "three of six, as declared"
+    assert houses[first]["x"] not in {r["of"][0] for r in coops}, "the house in the paddy passed its coop on"
+    assert "farm_fixtures_unseated" not in s.M["meta"]

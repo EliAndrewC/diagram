@@ -319,3 +319,16 @@ def test_an_unregistered_notice_board_placement_is_not_available() -> None:
     from l7r.diagram.settlement._knobs import _kosatsuba_seat_ok
 
     assert _kosatsuba_seat_ok("a placement nobody registered", {"has_approach": True, "has_headman_house": True}) is False
+
+
+def test_a_weighted_knob_rolls_by_its_weights_and_an_unweighted_one_is_unchanged():
+    """269 B16: a knob may carry weights (the inner stable the commoner form); a value weighted zero is never rolled, an
+    all-zero weighting falls to the last allowed value, and a knob with no weights draws exactly as before."""
+    w = settlement.Knob("t_weighted", ["a", "b", "c"], default="a", weights={"a": 0.0, "b": 1.0, "c": 0.0})
+    assert {w.roll(seed, {}) for seed in range(40)} == {"b"}
+    z = settlement.Knob("t_zero", ["a", "b"], default="a", weights={})
+    assert z.roll(5, {}) == "b"
+    plain = settlement.Knob("t_plain", ["a", "b", "c"], default="a")
+    assert [plain.roll(seed, {}) for seed in range(8)] == [["a", "b", "c"][settlement.knob_rng(seed, "t_plain").randrange(3)] for seed in range(8)]
+    both = settlement.Knob("t_both", ["x", "y"], default="x", weights={"x": 0.5, "y": 0.5})
+    assert {both.roll(seed, {}) for seed in range(60)} == {"x", "y"}

@@ -51,11 +51,14 @@ class Knob:
     geography / already-resolved knobs. `roll` draws deterministically and independently from the
     typing-filtered space."""
 
-    def __init__(self, name: str, value_space: Sequence[Any], default: Any, typing_rule: TypingRule | None = None) -> None:
+    def __init__(self, name: str, value_space: Sequence[Any], default: Any, typing_rule: TypingRule | None = None, weights: Mapping[Any, float] | None = None) -> None:
         self.name = name
         self.value_space: list[Any] = list(value_space)
         self.default = default
         self.typing_rule: TypingRule = typing_rule if typing_rule is not None else _always_typed
+        # WEIGHTS, for a knob whose record says one form was the commoner (269 B16: the inner stable "widespread", the
+        # commons shed a rare guess). None keeps the even roll every other knob draws, draw for draw.
+        self.weights: dict[Any, float] | None = dict(weights) if weights is not None else None
 
     def allowed(self, context: Mapping[str, Any]) -> list[Any]:
         """value_space filtered to the values whose typing_rule holds in this context."""
@@ -67,7 +70,15 @@ class Knob:
         pool = self.allowed(context)
         if not pool:
             raise ValueError(f"knob {self.name!r}: no value in {self.value_space} satisfies its typing rule for context {dict(context)!r}")
-        return pool[knob_rng(seed, self.name).randrange(len(pool))]
+        if self.weights is None:
+            return pool[knob_rng(seed, self.name).randrange(len(pool))]
+        tot = sum(self.weights.get(v, 0.0) for v in pool)
+        u = knob_rng(seed, self.name).random() * tot
+        for v in pool:
+            u -= self.weights.get(v, 0.0)
+            if u < 0:
+                return v
+        return pool[-1]  # float dust at the top of the range
 
 
 KNOBS: dict[str, Knob] = {}
@@ -295,7 +306,18 @@ register_knob(Knob("grain_drift", [-12, -8, -4, 0, 4, 8, 12], default=0))  # deg
 # and these maps exist to be told apart at a glance, so picking one throws that away permanently.
 # Rolled per settlement from the map's own seed like every other knob. `draft_byres` reads it;
 # `byres_stand_in_their_declared_form` gates the declaration and the courtyard form's geometry.
-register_knob(Knob("byre_form", ["detached_commons", "courtyard"], default="detached_commons"))
+#
+# RE-READ BY 269 B16 (research/homesteads/300, "Where did a village's draft ox stand"). The record found the
+# beast living WITH ITS HOUSEHOLD - owned or on loan - and no page read describes a shed several households
+# kept in common, nor one at the village edge. It attests two household forms: the INNER stable, a corner of
+# the house's earth floor, "widespread across the country" (kotobank-umaya), and the OUTER stable, a shed of
+# its own. So: `courtyard` is the inner stable - a stall under the house's own roof cannot be seen from above,
+# so it is drawn as the arm against the farmhouse (a MAP DRAWING CONVENTION); `yard_shed` is the outer stable,
+# a small shed standing on its own in the homestead near the house (269 B16, new); `detached_commons` stays
+# only as a RARE, labeled GUESS until the record finds it or rules it out. The default is the inner stable,
+# the form the record calls widespread. The weights: inner the more common roll, "how much more is calibrated
+# liberty, since no page read counts them" (homesteads/300) - 0.6 / 0.3 / 0.1 is that liberty, a GUESS.
+register_knob(Knob("byre_form", ["courtyard", "yard_shed", "detached_commons"], default="courtyard", weights={"courtyard": 0.6, "yard_shed": 0.3, "detached_commons": 0.1}))
 
 # THE CARAVAN INN HAS TWO ATTESTED FORMS, OPPOSITE ON THE ONE QUESTION A MAP CAN SHOW - so it is a knob
 # rather than a ruling (Principle XII again; feature 244). `wagon` is the north-Chinese wagon inn, the

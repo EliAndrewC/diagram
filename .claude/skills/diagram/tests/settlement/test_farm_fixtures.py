@@ -49,7 +49,7 @@ def test_persimmon_is_one_crown_with_fruit_and_joins_the_tree_record():
     s.meta(name="T", scale="hamlet", ftpx=1)
     before = len(s.M["tree_crowns"])
     s.persimmon(200, 200, of=(180, 200))
-    assert s.M["persimmons"] == [{"x": 200.0, "y": 200.0, "r": 9.0, "of": [180.0, 200.0]}]
+    assert s.M["persimmons"] == [{"x": 200.0, "y": 200.0, "r": 11.5, "of": [180.0, 200.0]}]  # 269 B14: a ~23 ft crown
     assert len(s.M["tree_crowns"]) == before + 3, "the crown is a tree: structures_clear_of_trees reads it"
     assert s.top[-1].count("#E07B22") == 4, "four fruit dots are the persimmon convention"
 
@@ -80,3 +80,18 @@ def test_a_duck_pens_fence_arc_is_held_off_the_sluice_as_well_as_its_dry_run():
     assert s.pond_fixture_fits(100.0, 150.0, 0.0, "sty"), "the shed's own footprint is nowhere near it"
     assert not s.pond_fixture_fits(100.0, 150.0, 0.0, "pen", water=water), "but the pen's fence arc reaches the stub"
     assert s.pond_fixture_fits(100.0, 150.0, 0.0, "pen"), "with no pond outline there is no arc to foul"
+
+
+def test_the_woodpile_forms_draw_at_their_own_size_and_keep_the_woodpile_class():
+    """269 B15: the woodshed (a roof with its band of log ends) and the kizuma (a long stack) are forms of the one kind."""
+    from l7r.diagram.settlement.farm_fixtures import WOODPILE_FORM_FT
+
+    s = Settlement(W=400, H=400, seed=1)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    for form in ("shed", "kizuma"):
+        s.farm_fixture("woodpile", 100.0, 100.0, rot=0.0, of=(80.0, 90.0), form=form)
+        rec = s.M["farm_fixtures"][-1]
+        assert rec["form"] == form and (rec["w"], rec["h"]) == WOODPILE_FORM_FT[form] and s.top_cls[-1] == "woodpile"
+    assert "<line" in s.top[-2] and s.top[-1].count("<circle") >= 9, "the shed's ridge; the kizuma's end grain along 24 ft"
+    with pytest.raises(ValueError, match="form"):
+        s.farm_fixture("coop", 100.0, 100.0, form="shed")
