@@ -76,12 +76,15 @@ bakuhan	bakuhan
 bakumatsu	bakumatsu
 bamboo grass	sasa
 bamboo-grass	sasa
+ban-hinin	banta
 banfang	banfang
+bangi	bangi
 bannerman	hatamoto
 bannerman's	hatamoto
 bannermen	hatamoto
 bansho	bansho
 bansui	bansui
+banta	banta
 banyuetang	banyuetang
 barbican	barbican
 baren	baren
@@ -949,6 +952,7 @@ kainyo	kainyo
 kaisho	kaisho
 kaishochi	kaishochi
 kaji-ya	kaji-ya
+kajimachi	kajimachi
 kakaemoto	hitoyado
 kakehi	kakehi
 kamado	kamado
@@ -1330,6 +1334,7 @@ nipponica	Nipponica
 noborigama	noborigama
 nogu benriron	Nogu benriron
 nogyo zensho	Nogyo Zensho
+nokaji	nokaji
 noria	noria
 norias	noria
 normal depth	normal depth
@@ -1709,6 +1714,7 @@ sigma	sigma
 siheyuan	siheyuan
 siku quanshu	Siku Quanshu
 sill	sill
+sishu	sishu
 six chambers	Six Chambers
 six fang	Six Chambers
 six ministries	Six Ministries
@@ -1866,6 +1872,7 @@ tensho-era	Tensho
 tenshu	tenshu
 tensuioke	tensuioke
 tera-machi	teramachi
+terakoya	terakoya
 teramachi	teramachi
 terauke	terauke
 terauke seido	terauke

@@ -8171,6 +8171,13 @@
    "ita-bune"
   ]
  },
+ "banta": {
+  "def": "A watchman hired by an Edo-period town or village for the night watch and the fire watch, often living in a hut beside a ward gate; outside Edo most were of hinin status.",
+  "variants": [
+   "banta",
+   "ban-hinin"
+  ]
+ },
  "palisade": {
   "def": "A barrier of upright wooden stakes or timbers set close together; at Suzhou's Pan Gate one stands across the water passage, front and back, beside the sluice gate, to shut boats out.",
   "variants": [
@@ -8208,6 +8215,37 @@
   "def": "A packhorse carrying trade of Edo-period Japan, in which one man led three or four horses and carried around 100 kan of goods at a time.",
   "variants": [
    "chuma"
+  ]
+ },
+ "terakoya": {
+  "def": "An Edo-period writing school where a master taught commoners' children to read, write and reckon; it needed only a master and one room, in his house, the headman's or a temple, not a building of its own.",
+  "variants": [
+   "terakoya"
+  ]
+ },
+ "nokaji": {
+  "def": "A village smith: a maker and mender of farm tools, fishing gear and household tools, working small, as a family, to order for the farmers round about.",
+  "variants": [
+   "nokaji"
+  ]
+ },
+ "bangi": {
+  "def": "A thick wooden board struck as a signal, used for alarms and to call people to meetings before the bronze alarm bell spread in the Edo period.",
+  "variants": [
+   "bangi"
+  ]
+ },
+ "kajimachi": {
+  "def": "The smiths' street of a castle town, where the lord settled the town's smiths together; the name survives in town after town.",
+  "variants": [
+   "kajimachi",
+   "Kajimachi"
+  ]
+ },
+ "sishu": {
+  "def": "A Chinese private school for children, often held in a family's ancestral hall between its spring and autumn rites.",
+  "variants": [
+   "sishu"
   ]
  }
 }
