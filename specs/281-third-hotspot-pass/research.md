@@ -8,7 +8,8 @@ writing the page too, saving the profile; `counts.py` reads the profiles and cre
 function that encloses it, so a count survives line moves. Every figure is in `measurements.json` as a `before-*` key.
 
 **The roll.** The five pool hamlets take 32.902 s between them (m:before-pool-roll-s), against 60.1 s before feature 278. (A first
-run at `2a61d1488`, before 279's crowns merged, gave every count here unchanged and 33.8 s.)
+run at `2a61d1488`, before 279's crowns merged, gave every count here unchanged and 33.8 s - observed 2026-09-28,
+method: `measure.py before` at that commit.)
 By stage, summed over the five: the field is the largest, then the ways (`stage_web`), the windbreak, the hinterland, the
 notice board, the homesteads and the track. A full generate writing the svg and the interactive page costs about the same
 as the roll alone (Inashiro 5.859 s against 5.893 s, m:before-inashiro-full-s, m:before-inashiro-roll-s), so the

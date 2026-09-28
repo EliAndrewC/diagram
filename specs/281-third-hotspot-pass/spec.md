@@ -21,8 +21,8 @@ its caller. It found:
   per ask.
 - **Work done twice**: every fabric-index miss rebuilds the ring index of polygons already indexed; the carve computes
   each bund vertex once per plot sharing it, and walks each shared plot edge once per plot.
-- **Static tests asked one at a time in Python** where 278 priced the array form: the windbreak's fill and the marsh
-  scatter.
+- **Questions asked again**: the windbreak's gap fill re-offers every unfilled gap the same points in every round; the
+  marsh scatter asks its marks one at a time, where 278 priced the array form.
 
 What the after-profile shows is left is written down with its levers priced (FR-011).
 
@@ -104,7 +104,8 @@ density and keep-outs.
 - **FR-002 A polygon's ring index is built once per roll** and shared by every fabric index that files it; a memo miss
   builds only the polygons it has not seen. A ring index is reused only for a ring with the SAME POINTS - the reuse is
   keyed on the ring's content, never on its identity, length or ends (`dev/performance.md`: such a key is "a guess about
-  content") - and the store is cleared with the fabric-index memo at the start of every roll.
+  content") - and the store is cleared with the fabric-index memo, in `clearance.reset()`, when every roll ends
+  (`driver.roll_scope`; feature 210's ruling that a finished roll's indexes are released).
 - **FR-003 The brook-band toll reads a grid sized to the band**, so an ask reads at most nine cells; the verdict is the
   same distance test.
 - **FR-004 The notice board asks indexes**: `outermost_join` a segment index of the other ways; `routes_missed` an index
@@ -198,3 +199,5 @@ density and keep-outs.
   Addressed: FR-008 is the gap fill's (a gap that took nothing is not re-offered; static verdicts remembered per point),
   R1 keyed by caller; FR-007 remembers vertices only once the wander is live; FR-002 reuses by content; SC-011 shows the
   exact changes byte-identical before the moving ones land, against the pool at the re-taken base `c13a6ebe6`.
+- Round 2 (spec-fidelity, 2026-09-28): CHANGES REQUIRED - FR-002 cleared its store at a roll's start where the memo is
+  cleared at its end (feature 210), and the Summary still named the array lever for the windbreak. Both reworded.
