@@ -54,10 +54,36 @@ def _vertex_box(ring: Any) -> tuple[float, float, float, float]:
     return min(xs), min(ys), max(xs), max(ys)
 
 
+def ring_polygons(rings: list[Any], clean: bool = True) -> list[Any]:
+    """`Polygon(ring).buffer(0)` (or, with `clean=False`, `Polygon(ring)`) for every ring of three or more vertices, and
+    `None` for the rest - as two ARRAY calls rather than two calls per ring (feature 276, FR-004, plan D11/D12). The seam
+    passes built this per plot in five places, 700 plots at a time. The coordinates are handed to GEOS as they stand, and
+    a ring GEOS will not build as one batch (one already closed on itself, say) sends the whole list back through the
+    per-ring constructor, so the answer is the per-ring answer either way."""
+    _load_shapely()
+    import numpy
+    import shapely
+
+    keep = [k for k, r in enumerate(rings) if len(r) >= 3]
+    out: list[Any] = [None] * len(rings)
+    if not keep:
+        return out
+    try:
+        coords = numpy.asarray([(float(v[0]), float(v[1])) for k in keep for v in rings[k]], dtype=float)
+        index = numpy.repeat(numpy.arange(len(keep)), [len(rings[k]) for k in keep])
+        built = shapely.polygons(shapely.linearrings(coords, indices=index))
+    except ValueError, shapely.errors.GEOSException:
+        built = [Polygon(rings[k]) for k in keep]
+    made: Any = shapely.buffer(built, 0) if clean else built
+    for k, p in zip(keep, list(made), strict=True):
+        out[k] = p
+    return out
+
+
 class PlotGeoms:
     """The plots of one seam pass: a geometry per plot on demand, neighbors by tree."""
 
-    __slots__ = ("_geom", "_ring", "_tree", "_tree_ids", "_tree_rings", "plots")
+    __slots__ = ("_built", "_geom", "_ring", "_tree", "_tree_ids", "plots")
 
     def __init__(self, plots: list[dict[str, Any]]) -> None:
         _load_shapely()
@@ -66,7 +92,7 @@ class PlotGeoms:
         self._ring: dict[int, Any] = {}
         self._tree: STRtree | None = None
         self._tree_ids: list[int] = []
-        self._tree_rings: list[Any] = []
+        self._built: list[Any] = []
 
     def geom(self, k: int) -> BaseGeometry:
         """`Polygon(plots[k]["poly"]).buffer(0)`, built once per ring object."""
@@ -76,23 +102,40 @@ class PlotGeoms:
             self._ring[k] = ring
         return self._geom[k]
 
-    def _fresh(self) -> bool:
-        return (
-            self._tree is not None
-            and len(self._tree_ids) == sum(1 for p in self.plots if len(p["poly"]) >= 3)
-            and all(self.plots[k]["poly"] is r for k, r in zip(self._tree_ids, self._tree_rings, strict=True))
-        )
-
     def near(self, bounds: tuple[float, float, float, float], exclude: int = -1) -> list[int]:
         """Every plot index (ascending, `exclude` left out, rings under three vertices left out) whose
-        vertex extent touches `bounds` - the set the passes' strict bounds gate admitted."""
-        if not self._fresh():
-            self._tree_ids = [k for k, p in enumerate(self.plots) if len(p["poly"]) >= 3]
-            self._tree_rings = [self.plots[k]["poly"] for k in self._tree_ids]
-            self._tree = STRtree([box(*_vertex_box(r)) for r in self._tree_rings])
+        vertex extent touches `bounds` - the set the passes' strict bounds gate admitted.
+
+        THE TREE IS KEPT WHILE RINGS CHANGE, AND A CHANGED RING IS ASKED DIRECTLY (feature 276, FR-004, plan D12). It
+        used to be rebuilt over every plot whenever any one ring had been reassigned since the last query - about
+        twenty rebuilds of a 700-plot tree per build. Now a plot whose ring is no longer the one the tree was built
+        over is left out of the tree's answer and tested against its CURRENT vertex extent, the way `GeomTree` does
+        for a replaced basin; the tree is rebuilt only when the plot list changes length or the stale set grows past
+        `_STALE_REBUILD`. The answer is the same set either way: every plot whose current extent touches `bounds`."""
+        n = len(self.plots)
+        stale = [k for k in range(n) if self.plots[k]["poly"] is not self._built[k]] if self._tree is not None and len(self._built) == n else None
+        if stale is None or len(stale) > _STALE_REBUILD:
+            self._built = [p["poly"] for p in self.plots]
+            self._tree_ids = [k for k in range(n) if len(self._built[k]) >= 3]
+            self._tree = STRtree([box(*_vertex_box(self._built[k])) for k in self._tree_ids])
+            stale = []
         assert self._tree is not None
-        hits = sorted(int(self._tree_ids[j]) for j in self._tree.query(box(*bounds)))
-        return [k for k in hits if k != exclude]
+        gone = set(stale)
+        hits = {k for k in (int(self._tree_ids[j]) for j in self._tree.query(box(*bounds))) if k not in gone}
+        qx0, qy0, qx1, qy1 = bounds
+        for k in stale:
+            ring = self.plots[k]["poly"]
+            if len(ring) >= 3:
+                x0, y0, x1, y1 = _vertex_box(ring)
+                if not (x1 < qx0 or x0 > qx1 or y1 < qy0 or y0 > qy1):
+                    hits.add(k)
+        return sorted(k for k in hits if k != exclude)
+
+
+# PAST THIS MANY CHANGED RINGS THE TREE IS REBUILT (feature 276): each stale ring costs a direct extent test per query,
+# a rebuild costs one box per plot; at 64 against a 700-plot field the two are the same order. A tuning figure, not a
+# rule - the answer does not depend on it.
+_STALE_REBUILD = 64
 
 
 class GeomTree:
@@ -111,22 +154,22 @@ class GeomTree:
         self.geoms = geoms
         self._tree: STRtree | None = None
         self._n = -1
-        self.changed: set[int] = set()
+        self.changed: dict[int, tuple[float, float, float, float]] = {}
 
     def replaced(self, j: int) -> None:
-        """`geoms[j]` has a new geometry: read its envelope directly from now on."""
-        self.changed.add(j)
+        """`geoms[j]` has a new geometry: read its envelope directly from now on - taken here, once, rather than on every
+        query that follows (feature 276, FR-004: a round's queries re-read up to a hundred changed envelopes each)."""
+        self.changed[j] = self.geoms[j].bounds
 
     def near(self, bounds: tuple[float, float, float, float], pad: float = 0.0) -> list[int]:
         """Every index (ascending) whose CURRENT envelope touches `bounds` widened by `pad` on every side."""
         if self._tree is None or self._n != len(self.geoms):
-            self._tree = STRtree([box(*g.bounds) for g in self.geoms])
+            self._tree = STRtree(list(self.geoms))  # a tree over the geometries answers by their envelopes - the same boxes, unbuilt
             self._n = len(self.geoms)
             self.changed.clear()
         x0, y0, x1, y1 = bounds[0] - pad, bounds[1] - pad, bounds[2] + pad, bounds[3] + pad
         hits = {int(j) for j in self._tree.query(box(x0, y0, x1, y1)) if int(j) not in self.changed}
-        for j in self.changed:
-            gx0, gy0, gx1, gy1 = self.geoms[j].bounds
+        for j, (gx0, gy0, gx1, gy1) in self.changed.items():
             if not (gx1 < x0 or gx0 > x1 or gy1 < y0 or gy0 > y1):
                 hits.add(j)
         return sorted(hits)

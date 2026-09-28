@@ -102,3 +102,60 @@ def test_an_oblique_crossing_is_squared_and_a_square_or_short_one_is_left() -> N
     assert square_crossings(short, brook, 15.0) == short
     assert square_crossings([], brook, 10.0) == []
     assert square_crossings(oblique, [(0.0, 0.0), (0.0, 0.0)], 10.0) == oblique
+
+
+# ---- feature 276 FR-005: the PathChecker answers exactly what path_violations does ------------------------------
+
+
+def test_the_path_checker_counts_what_path_violations_counts_on_inashiros_candidates() -> None:
+    """Every candidate path the track stage asked about on Inashiro seed 4, with the water, crop and pond it asked
+    against - captured from a real roll into a fixture, so the equality is proved on the inputs the stage actually
+    meets (four argument sets, 83 paths; the largest holds 21 crop rings and 523 water segments)."""
+    import json
+    import pathlib
+
+    from l7r.diagram.hamletgen.ways.checks import PathChecker, path_violations
+
+    sets = json.loads((pathlib.Path(__file__).resolve().parents[2] / "fixtures" / "track_candidates_inashiro_seed4.json").read_text())
+    asked = 0
+    for entry in sets:
+        a = entry["args"]
+        avoid = [[tuple(p) for p in poly] for poly in a["avoid"]]
+        pond = tuple(a["pond"]) if a["pond"] else None
+        brook = [(tuple(p), tuple(q)) for p, q in a["brook"]]
+        waters = [(tuple(p), tuple(q)) for p, q in a["waters"]]
+        chk = PathChecker(avoid, pond, brook, waters)
+        for path in entry["paths"]:
+            pts = [tuple(p) for p in path]
+            assert chk.violations(pts) == path_violations(pts, avoid, pond, brook, waters)
+            asked += 1
+    assert asked >= 80, "non-vacuity: the fixture's paths were all asked"
+
+
+def test_the_path_checker_matches_on_random_water_crop_and_brook() -> None:
+    """Random geometry with every clause live - a pond, brook segments, crop rings, many water segments - so the
+    prune is tested where a real map might not reach (a brook, a path wholly inside a crop ring)."""
+    import random
+
+    from l7r.diagram.hamletgen.ways.checks import PathChecker, path_violations
+
+    r = random.Random(276)
+    for _ in range(40):
+
+        def seg():  # type: ignore[no-untyped-def]
+            x, y = r.uniform(0, 1000), r.uniform(0, 1000)
+            return ((x, y), (x + r.uniform(-120, 120), y + r.uniform(-120, 120)))
+
+        waters = [seg() for _ in range(60)]
+        brook = [seg() for _ in range(6)]
+        avoid = []
+        for _ in range(5):
+            cx, cy, rr = r.uniform(100, 900), r.uniform(100, 900), r.uniform(20, 90)
+            avoid.append([(cx + rr, cy - rr), (cx + rr, cy + rr), (cx - rr, cy + rr), (cx - rr, cy - rr)])
+        pond = (r.uniform(0, 1000), r.uniform(0, 1000), 30.0, 20.0)
+        chk = PathChecker(avoid, pond, brook, waters)
+        for _ in range(10):
+            path = [(r.uniform(0, 1000), r.uniform(0, 1000)) for _ in range(r.randint(2, 6))]
+            assert chk.violations(path) == path_violations(path, avoid, pond, brook, waters)
+        inside = [(avoid[0][0][0] - 5, avoid[0][0][1] + 5), (avoid[0][0][0] - 6, avoid[0][0][1] + 8)]  # wholly inside a ring
+        assert chk.violations(inside) == path_violations(inside, avoid, pond, brook, waters)

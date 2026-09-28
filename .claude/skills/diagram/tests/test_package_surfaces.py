@@ -28,6 +28,8 @@ import pathlib
 
 import pytest
 
+from tests import _engine_ast
+
 SKILL = pathlib.Path(__file__).resolve().parents[1]
 SKIP = {"legacy-hand-authored-pool", "__pycache__", ".git"}
 
@@ -35,14 +37,11 @@ SKIP = {"legacy-hand-authored-pool", "__pycache__", ".git"}
 def _from_imports() -> list[tuple[pathlib.Path, str, str]]:
     """(file, module, name) for every `from l7r.diagram... import name` with an absolute module."""
     out: list[tuple[pathlib.Path, str, str]] = []
-    for p in sorted(SKILL.rglob("*.py")):
-        if SKIP.intersection(p.relative_to(SKILL).parts):
-            continue
-        try:
-            tree = ast.parse(p.read_text(encoding="utf-8"))
-        except SyntaxError:  # a gen script mid-edit is not this test's business
-            continue
-        for node in ast.walk(tree):
+    files = [p for p in sorted(SKILL.rglob("*.py")) if not SKIP.intersection(p.relative_to(SKILL).parts)]
+    # ONE SHARED PARSE, AND ONLY THE FILES THAT NAME `diagram` (feature 276, FR-001): an absolute
+    # `from l7r.diagram... import` cannot be written without the identifier (`l7r . diagram` is legal too). A gen script mid-edit is not this test's business.
+    for p, _source, tree in _engine_ast.engine_modules(files, ("diagram",), skip_broken=True):
+        for node in _engine_ast.walked(tree):
             if not isinstance(node, ast.ImportFrom) or node.level or not node.module:
                 continue
             if not node.module.startswith("l7r.diagram"):

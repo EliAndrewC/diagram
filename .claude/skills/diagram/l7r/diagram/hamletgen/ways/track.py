@@ -24,7 +24,7 @@ from ..consts import (
     Pt,
 )
 from ..plan import SitePlan
-from .checks import brook_fords, drawn_water_segs, ford_crossing, gap_segments, path_violations, stream_segs
+from .checks import PathChecker, brook_fords, drawn_water_segs, ford_crossing, gap_segments, stream_segs
 from .clearance import _HAIRPIN_DEG, clip_to_clear, route_around
 from .fabric import _crosses_fabric, _fabric_hits, _homestead_polys
 from .geom import _turn_deg, polyline_len, push_clear_of_fabric, push_out_of
@@ -462,9 +462,10 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         return [_s, (_mx + ax * 14, _my + ay * 14), edge]
 
     # ...and again the candidate is the DRAWN path, bow and all - see `path_is_clear`.
+    spur_check = PathChecker(crops, plan.sink_pond, brook_segs, plan.watercourses)  # built once for every candidate (FR-005)
     spur = min(
         (spur_path(q) for q in sorted(plan.envelope, key=lambda v: math.hypot(v[0] - cx, v[1] - cy))),
-        key=lambda p: (path_violations(p, crops, plan.sink_pond, brook_segs, plan.watercourses), polyline_len(p)),
+        key=lambda p: (spur_check.violations(p), polyline_len(p)),
     )
     _spur_pts = s.trim_off_marsh(clip_to_clear(spur, [*crops, *([toe_now] if toe_now else [])], 12.0))
     _spur_pts = _fork_spur(_spur_pts, _kept_arms)
@@ -575,6 +576,10 @@ def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), reach
         return list(ring_offset(w, 8.0, 0.0)[: len(w)])
 
     wet_grown = [_inflated(w) for w in wet if len(w) >= 3]
+    # THE WATER, THE CROP AND THE POND INDEXED ONCE FOR THE WHOLE SWEEP (feature 276, FR-005): 41 bearings each asked
+    # every segment and polygon again. `PathChecker` answers exactly what `path_violations` did.
+    wet_checks = [PathChecker([w], None, ()) for w in wet_grown]
+    ground_check = PathChecker(avoid or [plan.envelope], pond, brook, waters)
     best: tuple[tuple[int, int, int], Poly] | None = None
     for swing in sorted((9.0 * k for k in range(-20, 21)), key=abs):
         theta = math.radians(base + swing)
@@ -598,7 +603,7 @@ def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), reach
         # leave along the contour and exit the frame ABOVE the marsh, which is what a real valley
         # road does; whatever crop it then clips is bent round afterwards by `route_around`, which
         # the marsh has no equivalent of because a track through a marsh cannot be nudged dry.
-        soaked = sum(path_violations(path, [w], None, ()) for w in wet_grown)  # the WET POLYGON only - pond and brook are scored once, below
+        soaked = sum(chk.violations(path) for chk in wet_checks)  # the WET POLYGON only - pond and brook are scored once, below
         # THE STEADINGS ARE SCORED TOO, and they have to be scored HERE (feature 128). With the
         # houses standing before any track is drawn, the sweep's ideal bearing can point straight back
         # through the cluster - and nothing downstream can rescue that. `_thread_the_fabric` routes
@@ -629,7 +634,7 @@ def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), reach
         # known to be larger.
         if best is not None and (soaked, steaded) > best[0][:2]:
             continue
-        violations = path_violations(path, avoid or [plan.envelope], pond, brook, waters)
+        violations = ground_check.violations(path)
         if soaked == 0 and steaded == 0 and violations == 0:
             return path
         if best is None or (soaked, steaded, violations) < best[0]:

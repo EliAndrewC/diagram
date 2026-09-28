@@ -785,23 +785,50 @@ def test_no_pass_deletes_a_lane_record_without_its_ink_slot():
     """The static half of the same rule: a `del` on the lane records anywhere but `drop_lanes` is the defect
     returning, whatever the comment beside it says - five comments said 'the husk goes with the ink' over code
     that took the husk and left the ink."""
-    import ast
     import pathlib
 
+    from tests import _engine_ast
+
     root = pathlib.Path(__file__).resolve().parents[2] / "l7r" / "diagram"
-    offenders = []
-    for path in root.rglob("*.py"):
-        tree = ast.parse(path.read_text())
-        for fn in [n for n in ast.walk(tree) if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))]:
-            if fn.name == "drop_lanes":
-                continue
-            for node in ast.walk(fn):
-                if isinstance(node, ast.Delete):
-                    for target in node.targets:
-                        text = ast.unparse(target)
-                        if "lanes" in text and "_lane_ink" not in text:
-                            offenders.append(f"{path.relative_to(root)}:{node.lineno} del {text}")
+    # ONE SHARED PARSE, AND ONLY THE FILES THAT SAY `del` (feature 276, FR-001): a `del` statement cannot be written
+    # without the keyword - `del(x)` included, which is why the needle is the bare word and not `del `.
+    offenders = lane_deletes(_engine_ast.engine_modules(sorted(root.rglob("*.py")), ("del",)), root)
     assert not offenders, "delete lane records through `drop_lanes`, which removes the ink slot too: " + "; ".join(offenders)
+
+
+def lane_deletes(modules, root):  # type: ignore[no-untyped-def]
+    """`path:line del target` for every `del` of a lane record inside a function other than `drop_lanes` - the scan
+    above, lifted.
+
+    ONE PASS OVER THE SHARED WALK (feature 276, FR-001). The scan walked every function's subtree separately, so a body
+    nested n functions deep was walked n times - more than the parse this feature shares. Now each `del` is found once
+    and judged by the functions that enclose it: reported when some enclosing function exists and none is `drop_lanes`
+    (the old scan reported it from each enclosing function that was not `drop_lanes`; the offender list names each
+    `del` once instead of once per enclosing function)."""
+    import ast
+
+    from tests import _engine_ast
+
+    offenders = []
+    for path, _source, tree in modules:
+        nodes = _engine_ast.walked(tree)
+        deletes = [n for n in nodes if isinstance(n, ast.Delete)]
+        if not deletes:
+            continue
+        inside: dict[int, bool] = {}  # id(Delete) -> True when some enclosing function is NOT drop_lanes
+        for fn in (n for n in nodes if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))):
+            span = (fn.lineno, fn.end_lineno or fn.lineno)
+            for d in deletes:
+                if span[0] <= d.lineno <= span[1]:
+                    inside[id(d)] = inside.get(id(d), False) or fn.name != "drop_lanes"
+        for d in deletes:
+            if not inside.get(id(d)):
+                continue
+            for target in d.targets:
+                text = ast.unparse(target)
+                if "lanes" in text and "_lane_ink" not in text:
+                    offenders.append(f"{path.relative_to(root)}:{d.lineno} del {text}")
+    return offenders
 
 
 def test_dropping_the_field_spur_is_always_recorded_and_a_passes_own_reason_is_kept():
