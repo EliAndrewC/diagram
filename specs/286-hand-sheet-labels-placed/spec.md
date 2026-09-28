@@ -75,7 +75,7 @@ covered.
   hand sheet covers more ink than its hand seat did when the feature began.
 - **SC-003** (FR-004): the listed checks and the ledger are gone; `make done` is green.
 - **SC-004** (FR-005, FR-006): no reader of a hand sheet's captions uses their hand coordinates; the docs say so.
-- **SC-005** (spec-wide; User Story 2): the GM judges the label they saw.
+- **SC-005** (spec-wide): the blind test of User Story 2 - the GM judges the label they saw.
 
 ## Assumptions
 
