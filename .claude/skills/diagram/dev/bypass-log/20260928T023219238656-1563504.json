@@ -1,0 +1,7 @@
+{
+  "utc": "2026-09-28T02:32:19Z",
+  "target": "review-accept",
+  "commit": "74661eca3",
+  "outcome": "permitted",
+  "why": "review-accept kashikawa F2: the stupas drawn over two markers is the shared engine glyph's layout, predates this feature, and still reads as graves"
+}

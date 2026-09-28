@@ -70,5 +70,77 @@
     "observed": "2026-09-28",
     "subject": "kuwabata",
     "verifies": "F3"
+  },
+  "inashiro-title-card": {
+    "value": 0,
+    "unit": "contradictions",
+    "quantity": "the hamlet card no longer says 'no burial ground'; it says the dead lie in the village's ground unless the hamlet keeps its own, and a map drawing one adds 'This one keeps its own'",
+    "source": "l7r/diagram/interactive/assets/place.json (the hamlet card's what, and the burial ground collision line) - read 2026-09-28",
+    "observed": "2026-09-28",
+    "subject": "inashiro",
+    "verifies": "F1"
+  },
+  "sawada-title-card": {
+    "value": 0,
+    "unit": "contradictions",
+    "quantity": "the hamlet card's burial clause is true of both rolls (village_ground: the dead lie in the village's ground)",
+    "source": "l7r/diagram/interactive/assets/place.json (the hamlet card's what, and the burial ground collision line) - read 2026-09-28",
+    "observed": "2026-09-28",
+    "subject": "sawada",
+    "verifies": "F1"
+  },
+  "inashiro-notes-wording": {
+    "value": 1,
+    "unit": "line",
+    "quantity": "the Features line now says 'a glade of graves cut into the windbreak's east arm ... a short way through the trees from the track'",
+    "source": "pool/hamlets/inashiro/inashiro.notes.md - read 2026-09-28",
+    "observed": "2026-09-28",
+    "subject": "inashiro",
+    "verifies": "F2"
+  },
+  "inashiro-record-sources": {
+    "value": 3,
+    "unit": "records",
+    "quantity": "the three notes records in this file now name the notes file as their source",
+    "source": "specs/273-hamlet-graveyards/measurements.json - read 2026-09-28",
+    "observed": "2026-09-28",
+    "subject": "inashiro",
+    "verifies": "F4"
+  },
+  "kashikawa-record-sources": {
+    "value": 3,
+    "unit": "records",
+    "quantity": "the three notes records in this file now name the notes file as their source",
+    "source": "specs/273-hamlet-graveyards/measurements.json - read 2026-09-28",
+    "observed": "2026-09-28",
+    "subject": "kashikawa",
+    "verifies": "F3"
+  },
+  "kuwabata-record-sources": {
+    "value": 3,
+    "unit": "records",
+    "quantity": "the three notes records in this file now name the notes file as their source",
+    "source": "specs/273-hamlet-graveyards/measurements.json - read 2026-09-28",
+    "observed": "2026-09-28",
+    "subject": "kuwabata",
+    "verifies": "F2"
+  },
+  "kashikawa-graves-under-crowns": {
+    "value": 0,
+    "unit": "markers",
+    "quantity": "grave markers whose middle lies under a tree crown, of 17, after the crown keep-out was widened to the markers (CEMETERY_CORE 0.9)",
+    "source": "pool/hamlets/kashikawa/kashikawa.svg (marker rects) and .json (tree_crowns) - measured 2026-09-28",
+    "observed": "2026-09-28",
+    "subject": "kashikawa",
+    "verifies": "F1"
+  },
+  "kuwabata-graves-under-crowns": {
+    "value": 0,
+    "unit": "markers",
+    "quantity": "grave markers whose middle lies under a tree crown, of 14, after the crown keep-out was widened to the markers (CEMETERY_CORE 0.9)",
+    "source": "pool/hamlets/kuwabata/kuwabata.svg (marker rects) and .json (tree_crowns) - measured 2026-09-28",
+    "observed": "2026-09-28",
+    "subject": "kuwabata",
+    "verifies": "F1"
   }
 }
