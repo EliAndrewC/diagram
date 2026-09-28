@@ -127,3 +127,46 @@ def test_the_crown_grid_is_the_crown_scan() -> None:
             x, y, r = rng.uniform(-20, 320), rng.uniform(-20, 320), rng.uniform(3, 20)
             assert index.clear(x, y, r) == TreeStandsMixin._crown_seat_clear(x, y, r, crowns)
     assert CrownIndex().clear(1.0, 1.0, 5.0) is True
+
+
+def _hamlet_with_a_board_to_seat(rng: random.Random, blocked_verge: bool):
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(1400, 1000, seed=rng.randint(1, 99))
+    s.meta(name="Board", scale="hamlet", ftpx=1)
+    y0 = rng.uniform(350, 650)
+    s.M["lanes"] = [{"pts": [(150.0, y0), (rng.uniform(600, 800), y0 + rng.uniform(-80, 80)), (1250.0, y0 + rng.uniform(-120, 120))], "w": 5.0}]
+    s.M["houses"] = [{"x": rng.uniform(200, 1200), "y": y0 + rng.choice((-1, 1)) * rng.uniform(40, 200), "w": 46.0, "h": 28.0, "rot": 0.0} for _ in range(rng.randint(3, 9))]
+    if blocked_verge:  # a band of taken ground down the whole lane: every verge seat fails and the far band decides
+        pts = s.M["lanes"][0]["pts"]
+        for (ax, ay), (bx, by) in zip(pts, pts[1:], strict=False):
+            n = int(math.hypot(bx - ax, by - ay) // 20) + 1
+            for i in range(n + 1):
+                s.placed.append((ax + (bx - ax) * i / n, ay + (by - ay) * i / n, 40.0, 30.0))
+    return s
+
+
+def test_the_board_sampled_verge_first_is_the_board_sampled_whole() -> None:
+    """FR-007: sampling the verge band first seats the same board, with the same record, as sampling the whole band - on
+    hamlets whose verge holds a seat and on hamlets whose verge is taken, so the far band decides."""
+    import copy
+
+    from l7r.diagram.settlement.structures.fixtures import siting
+
+    rng = random.Random(2848)
+    seated = off_the_verge = 0
+    for k in range(24):
+        s = _hamlet_with_a_board_to_seat(rng, blocked_verge=k % 3 == 0)
+        whole = copy.deepcopy(s)
+        siting.VERGE_FIRST = False
+        try:
+            want = whole.place_kosatsuba()
+        finally:
+            siting.VERGE_FIRST = True
+        assert s.place_kosatsuba() == want
+        assert s.M.get("kosatsuba") == whole.M.get("kosatsuba")
+        if want is not None:
+            seated += 1
+            lane = s.M["lanes"][0]["pts"]
+            off_the_verge += min(seg_dist(want[0], want[1], a, b) for a, b in zip(lane, lane[1:], strict=False)) > 12.0
+    assert seated >= 20 and off_the_verge, f"non-vacuity: boards seated {seated}, of them off the verge {off_the_verge}"

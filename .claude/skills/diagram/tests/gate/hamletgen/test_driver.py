@@ -202,15 +202,15 @@ def test_a_re_roll_that_does_not_help_is_not_kept(monkeypatch: pytest.MonkeyPatc
 
 
 def _resuming_stages(monkeypatch: pytest.MonkeyPatch) -> list[str]:
-    """Stand-in stages with a stand-in `stage_homesteads` among them, so `resume_at` finds its seam: `before` stands for
-    the stages that do not read the avoid list, `seats` reads it, `after` stands for what follows (feature 284)."""
+    """Stand-in stages with a stand-in `stage_homesteads` among them, so `resume_at` finds its seam by name: `before` stands
+    for the stages that do not read the avoid list, the stand-in reads it, `after` stands for what follows (feature 284)."""
     ran: list[str] = []
 
     def before(s, plan):  # noqa: ANN001, ARG001
         ran.append("before")
         s.M["field"] = [len(ran)]  # what the field drew - the same object must come back through every copy
 
-    def seats(s, plan):  # noqa: ANN001, ARG001
+    def stage_homesteads(s, plan):  # noqa: ANN001, ARG001  # the name is the seam `resume_at` finds
         ran.append("seats")
         s.M["seen_avoid"] = list(s._avoid_seats)
         s.M["field"].append("seated")
@@ -218,8 +218,7 @@ def _resuming_stages(monkeypatch: pytest.MonkeyPatch) -> list[str]:
     def after(s, plan):  # noqa: ANN001, ARG001
         ran.append("after")
 
-    monkeypatch.setattr(hg.driver, "stage_homesteads", seats)
-    monkeypatch.setattr(hg.driver, "STAGES", (before, seats, after))
+    monkeypatch.setattr(hg.driver, "STAGES", (before, stage_homesteads, after))
     return ran
 
 

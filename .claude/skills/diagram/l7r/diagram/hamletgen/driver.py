@@ -227,8 +227,9 @@ def resume_at() -> int | None:
     whose seat loops refuse the avoided ground). Every stage before it - the water frame, the field, the sink, the seat,
     the waterward fringe - runs the same on every attempt, because nothing it reads differs between them (feature 284: a
     stranding re-roll used to rebuild the field, the costliest stage, to get it back unchanged). None when the stages
-    have no such stage (a test's stand-in tuple)."""
-    return STAGES.index(stage_homesteads) if stage_homesteads in STAGES else None
+    have no such stage (a test's stand-in tuple). Found by NAME, so a stage wrapped by a timer that keeps its name (the
+    measurement harnesses, the stage profile) still resumes."""
+    return next((i for i, st in enumerate(STAGES) if getattr(st, "__name__", "") == stage_homesteads.__name__), None)
 
 
 def build(plan: SitePlan, avoid: Sequence[tuple[float, float]] = (), snapshot: list[Any] | None = None) -> Settlement:

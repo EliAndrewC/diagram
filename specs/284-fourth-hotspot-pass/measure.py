@@ -27,7 +27,7 @@ ENGINE = Path(".claude/skills/diagram/l7r/diagram")
 BUCKET_CALLEES: dict[str, tuple[str, ...]] = {
     "router": ("_route.<locals>.is_free", "_route.<locals>.in_band", "heapq.heappop"),
     "field": ("carve_comb", "_carve_sector", "close_seams"),
-    "notice": ("_fits", "label_seat_clear", "place"),
+    "notice": ("HousesMixin._fits", "CaptionProbesMixin.label_seat_clear", "place"),
     "bamboo": ("bamboo_blocked",),
     "page": ("merge_primitives", "drop_offmap"),
     "edge_scan": ("edge_dist",),
