@@ -145,7 +145,7 @@ POOL_GENS: tuple[PoolGen, ...] = (
         "pool/hamlets/kashikawa/kashikawa.gen.py",
         "the largest hamlet: 20 households, fall 315, the off-map sink (the immune experiment perturbed it until 215, and was retired in 219 - GUARD_EDIT_OK: feature 219)",
     ),
-    PoolGen(("Sawada", 6), "pool/hamlets/sawada/sawada.gen.py", "a pool-only hamlet: 19 households, fall 225, off-map sink"),
+    PoolGen(("Sawada", 24), "pool/hamlets/sawada/sawada.gen.py", "a pool-only hamlet: 19 households, fall 225, off-map sink"),
     PoolGen(("Mizuguchi", 23), "pool/hamlets/mizuguchi/mizuguchi.gen.py", "a pool-only hamlet: 12 households, fall 0, a pond"),
 )
 

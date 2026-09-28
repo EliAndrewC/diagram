@@ -336,9 +336,20 @@ class HousesMixin:
         return False
 
     def _fits(  # type: ignore[misc]
-        self: Settlement, x: float, y: float, w: float, h: float, skip: Any = None, corridors: bool = True, row_mates: Any = None, row_axis: Any = None, disc: bool = False, rot: float | None = None
+        self: Settlement,
+        x: float,
+        y: float,
+        w: float,
+        h: float,
+        skip: Any = None,
+        corridors: bool = True,
+        row_mates: Any = None,
+        row_axis: Any = None,
+        disc: bool = False,
+        rot: float | None = None,
+        top: float = 88.0,
     ) -> bool:
-        if x < 55 or x > self.W - 55 or y < 88 or y > self.H - 26:  # keep clear of edges + title
+        if x < 55 or x > self.W - 55 or y < top or y > self.H - 26:
             return False
         if self.bound and not point_in_poly(x, y, self.bound):  # stay inside a bounding ring (city wall)
             return False

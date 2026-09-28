@@ -550,7 +550,7 @@ BROOK_SKIRT = 34.0
 # The course's variety comes from the field's own outline, which it now follows at this distance, and the walk
 # only keeps it off a ruled line.
 BROOK_WANDER = 10.0
-BROOK_WANDER_STEP = 4.0
+BROOK_WANDER_STEP = 10.0
 # HOW FAR PAST THE FIELD's own bounds a station may sit, px - the belt to the skirt's braces, and sized to the
 # crop margin (`CROP_MARGIN`, 48) so that a station inside this box is inside the picture. On a map whose land
 # falls on a diagonal the first cut bounded the offset in the FALL's frame, which is not the frame the sheet is
@@ -625,27 +625,78 @@ OFFTAKE_LADDER: tuple[tuple[int, tuple[float, ...], tuple[float, ...]], ...] = (
 FALL_BEARINGS = (0.0, 45.0, 90.0, 135.0, 180.0, 225.0, 270.0, 315.0)
 CARDINAL_BEARINGS = (0.0, 90.0, 180.0, 270.0)  # the survey grid a polder is laid to; see plan_site
 
-# WHICH WAY THE COLD WIND COMES FROM - and why it is DERIVED from the slope rather than rolled.
+# WHICH WAY THE COLD WIND COMES FROM: THE NORTHWEST, UNLESS THE MAP DECLARES A LOCAL WIND (feature 261).
 #
-# The engine's default is NW, the East Asian winter monsoon, and at the scale of a province that is
-# the right answer. At the scale of ONE VALLEY it is not the whole answer, because the wind a
-# settlement actually shelters from is the local one, and the local one follows the ground: cold air
-# is dense, it pools on the high ground overnight and DRAINS DOWNHILL (the katabatic / mountain
-# breeze), so in a valley the cold night wind comes off the high side. That is why the doctrine
-# 背山面水 - back to the hill, face the water - shelters a settlement at all: the hill is both the
-# high side AND the windward side, and they are the same fact rather than two that happen to agree.
+# The East Asian winter monsoon blows out of the Siberian high from the northwest across China and Japan, and
+# the GM ruled (2026-08-29) that it does across Rokugan too "in most places when the local geography does not
+# override the regional geography" - which is why shelter belts stand on the north and west, and why a reader
+# who sees them there is being told a real fact about the regional wind (research/vegetation, 'Does a shelter
+# belt wrap the settlement?'). A local wind that departs from it - a valley whose cold air drains off its own
+# high side, say - is a DECLARATION on the spec (`HamletSpec.windward`), and nothing else (GM 2026-09-26:
+# "only when declared"). No pool map declares one.
 #
-# So the windward quarter is the UPSLOPE bearing, turned by a rolled 45 degrees either way (real
-# terrain is not a smooth ramp and the wind follows the valley's own line, not the field's fall) and
-# snapped to a compass quarter. `HamletSpec.windward` pins the regional answer when the GM knows it.
-#
-# THIS ALSO FIXED A REAL DEFECT, which is how it was found. Rolling the wind independently produced
-# maps whose wind and slope disagreed - and the cluster is seated by BOTH (its back to the wind, its
-# feet out of the wet), so on a map where they pointed opposite ways the wind term won and the
-# settlement was seated at the field's drain outfall, among the drainage ditch and the tameike. That
-# is three gate failures (a structure on a channel, a bridge on an oblique crossing, dwellings in
-# the wet toe) with one cause: two facts about the same landscape, rolled as if they were unrelated.
-WIND_TURNS = (-45.0, 0.0, 0.0, 45.0)
+# WHAT THIS RETIRED, and why. Until feature 261 every map's wind was its UPSLOPE bearing turned by a rolled 45
+# degrees (`WIND_TURNS`, the katabatic reading: cold air pools on the high ground and drains downhill), and
+# `stage_ways` then RENAMED it after whatever the seat's back faced when the two disagreed by more than ~70
+# degrees. Between them the regional northwest never reached a map: the five scripted hamlets came out W/N,
+# SE, NW, S and NE, and Kashikawa's belt stood on the south and east with no explanation on the page. The GM
+# asked whether that was a bug; it was. The katabatic finding stays in the record as the reason a map MAY
+# declare a local wind.
+DEFAULT_WINDWARD = "NW"
+
+# THE SEAT TURNS ITS BACK TO THE WIND, and the wind is never renamed to fit the seat (feature 261). A field
+# margin is a candidate seat only if its outward normal - the direction the settlement's back faces - lies
+# within 45 degrees of the windward bearing: cos 45 deg = 0.7071. 45 degrees is half the spacing of the
+# compass quarters a wind is named in, so a seat inside the bar is one whose back faces the windward quarter
+# itself rather than a neighboring one. A map convention, not a finding: nothing read gives a tolerance for
+# how squarely a settlement faces away from its wind. A margin outside the bar is kept only as the last
+# fallback, and a map that falls back to it records `meta.seat_offwind`, which the gate refuses on the pool.
+WIND_BACK_MIN_DOT = 0.7071
+
+# THE BROOK IS CROSSED WHERE A WAY NEEDS TO CROSS IT (feature 261, the GM 2026-09-27: "fix the placement algorithm
+# instead"). The record puts a settlement's own small channel through the middle of the place (the Harie finding,
+# feature 230), and the engine refused every seat the brook ran through or ran between the houses and their rice
+# only because no way could cross it. Now the routing corridor round the brook has a gap at a ford every
+# `FORD_SPACING` along its course, on a straight reach, and `bridges()` decks whatever crosses there.
+#   FORD_HALF: half the gap, px. The router keeps 14 px off water and plans on a 10-14 px lattice, so a lane
+#     threads a gap only when its half-length clears the corridor by a cell (14 + 14); and a gap no longer than
+#     the corridor is deep lets a way through only near square - about 40 deg from square at most, the same
+#     bound `shallow_crossing` holds every other crossing to. A map drawing convention, not a finding.
+#   FORD_SPACING: px along the brook between fords. A guess: often enough that a field path never walks far to
+#     one (the record gives no spacing for field-path crossings; searched 2026-09-27, see research/ways).
+#   FORD_BEND_DEG: a site where the brook turns more than this across the gap is skipped - a deck across a bend
+#     is not square to both reaches.
+FORD_HALF = 30.0
+FORD_SPACING = 160.0
+FORD_BEND_DEG = 20.0
+
+# THE COPSE STANDS AMONG WHAT IT IS NAMED FOR (feature 261). The record gives the dooryard copse as "a loose copse of
+# bamboo and fruit trees in the gaps between the houses" and no distance (research/vegetation, 'What are the village's
+# three groves'); 90 ft is the bar the feature-230 settlement-review itself used to call a copse a wood (86% of clumps
+# more than 90 ft from any house), and the pool's copses before the reseats sat at a median 77-81 ft. A map drawing
+# convention on the record's words, not a finding. The against-the-belt copse reads as one wood with the belt when its
+# crowns stand within a crown or two of the belt's: 60 ft, the same kind of convention.
+COPSE_HOUSE_REACH_FT = 90.0
+COPSE_BELT_REACH_FT = 60.0
+
+# A NATURAL BROOK DOES NOT DOUBLE BACK (feature 261, settlement-review of Sawada): no vertex of the drawn course turns it
+# more than this. The pool's brooks turn at most 41-53 deg anywhere on their meandered courses; 100 deg is well above that
+# and well below the 113-131 deg folds the exit has produced at the frame edge. A map drawing convention.
+BROOK_MAX_TURN_DEG = 100.0
+
+# A BROOK TURNS ON A CURVE (feature 261, settlement-review of Sawada): every corner of the drawn course is filleted at this
+# many widths of its drawn bed, the ratio the ditches have been drawn at since 2026-07-25 (`fillet_polyline`,
+# research/water.html "Why does every ditch turn on a curve?": sharp corners belong to stone-lined channels, and nothing
+# on these maps shows one) - Sawada's brook drew mitred corners of 27-47 degrees. Rounded LATE, at the crossings stage,
+# and held at the tap the head race leaves from (`round_the_brooks`). A map drawing convention on an accurate rule.
+BROOK_BEND_WIDTHS = 2.5
+
+# WHAT A WAY PAYS TO CROSS THE BROOK (feature 261, settlement-review of Kashikawa). Fords made the brook passable, and
+# at no cost the router took any ford that was a few feet shorter: a lane crossed the brook and came straight back to
+# reach a house on its own bank - two planks built to save a short walk. A crossing is one more thing to build and keep,
+# so the router charges it as this much extra walking; a way that has to reach the far bank still crosses. 150 ft is a
+# GUESS (no page read prices a plank against a detour), about the length of a house row, recorded in research/water/270.
+BROOK_CROSSING_COST_FT = 150.0
 
 WIND_VECTORS: dict[str, Pt] = {
     "N": (0.0, -1.0),

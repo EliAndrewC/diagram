@@ -6,13 +6,18 @@ import math
 import random
 from collections.abc import Sequence
 
-from l7r.diagram.settlement import Settlement, seg_dist, seg_intersect
+from l7r.diagram.settlement import Settlement, seg_dist
 
 from ..consts import BUNDLE_PITCH, CLUSTER_DRAWN_ASPECT, MIN_WEB_GAP, SUN_CORRIDOR_FT, WEB_FABRIC_GAP, WEST_SUN_FT, Pt
 from ..plan import SitePlan
 from .boundary import install_site_boundary
 from .seats import _seat_allowed, cluster_aspect, front_row, lane_frontage
 from .wells import place_wells
+
+#: The range a rank seat may stand off its exact rank, as a share of `BUNDLE_PITCH` - half of it each way (feature 261,
+#: settlement-review of Mizuguchi): a GUESS calibrated against main's roll of that map, whose rows spread 24 and 78 ft - a
+#: quarter pitch keeps a rank a rank while taking it off the surveyed line.
+RANK_DEPTH_JITTER = 0.25
 
 FORM_BOUND: dict[str, float] = {}
 """Per-FORM override of how far from the seat center a homestead may stand, as a multiple of the
@@ -27,6 +32,25 @@ time lost, nothing bought. A wider search bound only permits sprawl the feature 
 so the honest value is no override at all."""
 
 
+def water_push(water: Sequence[tuple[Pt, Pt, float]], center: Pt, n: Pt, half_lat: float, near: float, far: float) -> float:
+    """How far a box must move along `n` so that no water course (`(a, b, clearance)` segments) lies within its clearance
+    of the box: the box spans `near`-`far` along `n` and `half_lat` either side of `center` across it. Zero when clear.
+    Each segment is sampled every 8 ft, which is finer than any clearance the courses carry (half-width + 5)."""
+    lx, ly = -n[1], n[0]
+    push = 0.0
+    for a, b, clr in water:
+        if seg_dist(center[0], center[1], a, b) > half_lat + (far - near) + clr:
+            continue
+        k = max(1, int(math.dist(a, b) / 8.0))
+        for j in range(k + 1):
+            x, y = a[0] + (b[0] - a[0]) * j / k, a[1] + (b[1] - a[1]) * j / k
+            if abs((x - center[0]) * lx + (y - center[1]) * ly) <= half_lat + clr:
+                d = x * n[0] + y * n[1]
+                if near - clr <= d <= far + clr:
+                    push = max(push, d + clr - near)
+    return push
+
+
 def bank_of(x: float, y: float, brook: Sequence[Pt]) -> int:
     """Which side of the brook a point stands on: the sign of its offset from the NEAREST reach of the course.
 
@@ -38,29 +62,6 @@ def bank_of(x: float, y: float, brook: Sequence[Pt]) -> int:
     j = min(range(len(brook) - 1), key=lambda i: seg_dist(x, y, brook[i], brook[i + 1]))
     (ax, ay), (bx, by) = brook[j], brook[j + 1]
     return 1 if (bx - ax) * (y - ay) - (by - ay) * (x - ax) >= 0 else -1
-
-
-def far_bank(x: float, y: float, brook: Sequence[Pt], placed: Sequence[Pt]) -> bool:
-    """Is this candidate across the brook from the hamlet that is already there?
-
-    THE BANK IS DECIDED BY THE HOUSES, not by a point chosen in advance - both fixed hubs were tried and both
-    were wrong in their own direction. The band's CENTER sits near the water where the brook grazes the band, and
-    on Kashikawa it fell on the far side, so the test inverted and let two of twenty across. The seat's ANCHOR is
-    on the field margin, with the brook running down that flank between the field and the band, so on Inashiro it
-    put the whole settlement on the wrong side of its own test. The houses already standing are the hamlet's bank
-    by definition; the first is free and the rest follow it.
-
-    BOTH TESTS MUST AGREE, and each alone was measured wrong. The SIDE of the nearest reach flips where the
-    course wraps the field's toe; a CROSSING of the straight line between two houses is wrong the other way, a
-    brook that bends around them both being crossed by a line that stays on one bank throughout. Together they
-    name the case that is actually wrong - the water between two houses AND a different bank under each - which
-    is Kashikawa's outlier, 52 ft beyond the brook from the other nineteen."""
-    if len(brook) < 2 or not placed:
-        return False
-    near = sorted(placed, key=lambda b: (b[0] - x) ** 2 + (b[1] - y) ** 2)[:8]
-    mine = bank_of(x, y, brook)
-    cut = sum(1 for b in near if bank_of(b[0], b[1], brook) != mine and any(seg_intersect(b, (x, y), brook[i], brook[i + 1]) is not None for i in range(len(brook) - 1)))
-    return cut * 2 > len(near)
 
 
 def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
@@ -131,18 +132,6 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     s._seat_search = {"candidates": 0, "placer_calls": 0, "positions": 0, "rects": 0, "rounds": 0}  # rounds: lattice rounds run (0 when the front row seated everything; over 4 = the rescue ran)
     _house_max = (s.px(46) * 1.35, s.px(28) * 1.10)  # the LARGEST house `_try_place_bundle` rolls: the front row's computed standoff clears it
 
-    # THE HAMLET'S OWN BANK, HOUSE BY HOUSE (feature 230, settlement-review pass 7). `seat_cluster` keeps the BAND
-    # off a margin the brook divides, and that is not the same as keeping every HOUSE on one bank: a band that
-    # merely grazes the water can still seat a farmstead across it. Kashikawa shipped exactly that - one house
-    # 52 ft beyond the brook from the other nineteen, 133 ft from the lane web, with no bridge anywhere on the
-    # water, which is the stranded homestead of pass 2 arriving by a different road. A candidate is on the far
-    # bank when the line from the cluster's own center to it crosses the brook; that is exact, needs no side
-    # convention, and costs one segment test against a course of fifty points.
-    _brook = [(float(q[0]), float(q[1])) for q in (plan.brook or ())]
-
-    def _far_bank(x: float, y: float) -> bool:
-        return far_bank(x, y, _brook, [(float(b[0]), float(b[1])) for b in s.placed])
-
     def _pretest(x: float, y: float) -> bool:
         """Count a candidate (feature 226 FR-003). The cheap refusal that stood here - a house-sized box against the
         boundary and the placed boxes - is the placer's own first test now (feature 227: the whole homestead's
@@ -152,10 +141,13 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         fix is NOT to restore the box test - those locals are the envelope's now - it is to assert field adjacency on
         the PLACED position and to score the envelope for it, which is the next piece of work on this feature.
 
-        THE BROOK'S FAR BANK STAYS HERE, though (feature 230). It is not a packing question the envelope can answer -
-        it is a site rule about which side of the water the cluster stands on - so it refuses before the placer."""
+        THE BROOK'S FAR BANK IS NO LONGER REFUSED HERE (feature 261). Feature 230 refused a house across the brook from
+        the rest because no way could reach it - Kashikawa shipped one 52 ft beyond the water with no bridge anywhere.
+        Ways cross the brook at a ford now and `bridges()` decks the crossing, so a hamlet may stand astride its own
+        small channel, as the record has it (Harie, specs/230 R6); a house the web still cannot reach is caught by the
+        reach check and re-rolled, as any stranded house is."""
         s._seat_search["candidates"] += 1
-        return not _far_bank(x, y)
+        return True
 
     ax, ay = seat["along"]
     ox, oy = seat["out"]
@@ -292,12 +284,12 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # candidates per map and a cluster strung along the paddy whatever shape it rolled; a rung of one house depth
     # seated NOBODY on Kuwabata's dike heads (the yard faces the paddy there) and the cluster drifted 112 px off its
     # field. The ranks behind the front row are proposed behind the standing houses, below.
-    def _ground_push(s_: Settlement, seat_: Pt, n_: Pt, house_: tuple[float, float]) -> Pt:
+    def _ground_push(s_: Settlement, seat_: Pt, n_: Pt, house_: tuple[float, float]) -> tuple[Pt, bool]:
         """The seat moved once along `n_` by the outline's reach past the homestead's near edge - zero when the box is clear."""
         _bx = s_._bundle_envelope(seat_[0], seat_[1], house_[0], house_[1], shed=True)
         _pts = [(_bx[0] + dx * _bx[2] / 2, _bx[1] + dy * _bx[3] / 2) for dx in (-1, 0, 1) for dy in (-1, 0, 1)]
         if s_._site_corridors is None or not s_._site_corridors.hit_points(_pts):
-            return seat_
+            return seat_, False
         lx, ly = -n_[1], n_[0]  # the lateral axis
         half_lat = abs(lx) * _bx[2] / 2 + abs(ly) * _bx[3] / 2
         near = _bx[0] * n_[0] + _bx[1] * n_[1] - (abs(n_[0]) * _bx[2] / 2 + abs(n_[1]) * _bx[3] / 2)  # the box's near edge along n
@@ -309,13 +301,21 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
                     d = x * n_[0] + y * n_[1]
                     if near <= d <= far:
                         push = max(push, d - near)
+        # ...AND ACROSS A BROOK THAT RUNS BETWEEN THE ROW AND ITS FIELD (feature 261, Inashiro's rolled crescent). The
+        # brook skirts the fan 34-44 ft outside its margin, so on a seat facing the wind down that flank every front seat
+        # lay in the water's corridor and was refused; the displaced households were seated by the cloud behind, and a
+        # crescent that drew 4.07:1 on main drew 1.62:1. The row stands on the brook's far bank instead, fronting its field
+        # across the water - the push is the course's reach past the box's near edge, by its own clearance.
+        wet = water_push(s_._site_corridors.water, (_bx[0], _bx[1]), n_, half_lat, near, far)
+        by_water = wet > push
+        push = max(push, wet)
         if push <= 0.0:
-            return seat_
+            return seat_, False
         # ...cleared by a FOOTPATH's room, not a hair: a homestead pushed to two pixels off a dike's bank left no way a
         # lane could pass between them, the web stranded it, and the re-roll then forbade the only front seats the
         # dike heads offer (Kuwabata: front 0 on the kept roll, the cluster 162 px off its polder)
         push += WEB_FABRIC_GAP * 2.0 + 6.0
-        return (seat_[0] + n_[0] * push, seat_[1] + n_[1] * push)
+        return (seat_[0] + n_[0] * push, seat_[1] + n_[1] * push), by_water
 
     # the homestead's CORE - the house, the yard south of it, the kura north - is what always faces the paddy the same
     # way; the garden's side is chosen later by the sun, so it is not in the reach (counted, it stood every front house
@@ -333,7 +333,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
             # it (Kuwabata's dike heads: every front seat refused, the cluster 112 px off its polder). Where the seat's
             # box is inside the outline, it is pushed once along the chord's normal by the outline's measured reach
             # past the box's near edge, and offered there.
-            fx, fy = _ground_push(s, (fx, fy), _n, _house_max)
+            (fx, fy), _by_water = _ground_push(s, (fx, fy), _n, _house_max)
             # NO LANE TEST HERE ANY MORE (feature 126). This used to read
             # `_row_seats < _FIELD_RING_FLOOR or _lane_dist(...) <= _FRONT_ROW_LANE_CAP`, which
             # judged a front-row seat by how near it fell to a drawn lane. The internal lanes are
@@ -343,8 +343,16 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
             # settlement's shape depend on a way that has not been decided yet, which is the exact
             # inversion this feature exists to remove: a farmhouse is sited by the FIELD it works
             # and the ground it can stand on, and the lane is worn afterwards between the houses.
-            if math.hypot(fx - seat["cx"], fy - seat["cy"]) <= bound * 1.3 and _seat_allowed(s, fx, fy) and _pretest(fx, fy) and s.try_place(fx, fy, "plain"):
-                placed += 1
+            # A SEAT PUSHED ACROSS THE BROOK TRIES A QUARTER PITCH EITHER WAY ALONG THE ROW (feature 261): each seat moves by
+            # the water's own reach at its place, so seats a pitch apart on the chord land nearer than a pitch on the far
+            # bank and every other one collided - Inashiro's crescent seated 5 of 10 in its row and drew 1.95:1. Sampling
+            # the whole row at three quarters of a pitch honored it and moved Kuwabata, which has no brook, enough to
+            # split its lane web in two; the extra tries go only where the water moved the seat.
+            _tries = [(fx, fy)] + ([(fx - _n[1] * d, fy + _n[0] * d) for d in (BUNDLE_PITCH / 4.0, -BUNDLE_PITCH / 4.0)] if _by_water else [])
+            for tx, ty in _tries:
+                if math.hypot(tx - seat["cx"], ty - seat["cy"]) <= bound * 1.3 and _seat_allowed(s, tx, ty) and _pretest(tx, ty) and s.try_place(tx, ty, "plain"):
+                    placed += 1
+                    break
     # ...then rows FLANKING the lanes, before any shape fill. A lane exists to be fronted, and a
     # cluster seeded only by its shape leaves them running across empty middle: the review of the
     # first draft measured a median house-to-lane distance of 94 ft against Ikegami's 55, with one
@@ -489,9 +497,26 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
                 ):
                     continue  # the same guess again
                 _kept.append((_sx4, _sy4))
-                if _seat_allowed(s, _sx4, _sy4) and _pretest(_sx4, _sy4) and s.try_place(_sx4, _sy4, "plain"):
-                    placed += 1
-                    _cloud_placed += 1
+                # ...AND A RANK IS NOT A SURVEYED LINE EITHER (settlement-review of Mizuguchi, feature 261): with the depth
+                # exact, 11 of its 12 houses stood on four rows within 5 ft and three columns within 3 ft - a lattice, where
+                # the record's nucleated village is houses gathered irregularly (kaison-jawiki) and main's roll of the same
+                # map spread its rows by 24 and 78 ft. A rank seat stands up to half of `RANK_DEPTH_JITTER` of a pitch nearer
+                # to or further from the field, from the same position hash; the placer still holds the lane room and the sun
+                # corridor, and the exact seat is offered where the jittered one is refused, so no household is lost to it.
+                # (Outward only was tried first: the last rank stands against the band's outer edge, the placer's computed move
+                # pulled every jittered seat back to that one line, and Mizuguchi's back rank stood within 3 ft again.)
+                # ...ONLY WHERE THE VILLAGE GREW BY ACCRETION. The record gives two forms and rolls between them per map
+                # (research/homesteads "Is every farmhouse reached by a lane"): a back lane implies PLANNING - the framework laid
+                # out at once and the plots regular - and alleys off a spine imply ACCRETION, each household cutting its own way,
+                # the result irregular. So the ranks of a `back_lane` hamlet stay regular and an `alleys` hamlet's are taken off
+                # the line. (Jittering every form was tried first: each amplitude re-laid all five maps into a new draw, and 0.15,
+                # 0.18 and 0.25 each tipped Inashiro's rolled crescent under round's ceiling - a knob that moves which map fails.)
+                _dj = (s._hjit(_sx4, _sy4, 14.0) - 0.5) * BUNDLE_PITCH * RANK_DEPTH_JITTER if attempt < 4 and not _along_the_field and plan.lane_web == "alleys" else 0.0
+                for _tx, _ty in ((_sx4 + ox * _dj, _sy4 + oy * _dj), (_sx4, _sy4)) if _dj != 0.0 else ((_sx4, _sy4),):
+                    if _seat_allowed(s, _tx, _ty) and _pretest(_tx, _ty) and s.try_place(_tx, _ty, "plain"):
+                        placed += 1
+                        _cloud_placed += 1
+                        break
             if _along_the_field or not (attempt < 4 and _standing and placed == _before_round and placed < plan.spec.households):
                 break
             _offered, _along_the_field = _ends, True
@@ -549,6 +574,12 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     _cys = [h["y"] for h in s.M.get("houses", [])] or [0.0]
     _drawn = cluster_aspect(_cxs, _cys)
     _lo, _hi = CLUSTER_DRAWN_ASPECT.get(plan.cluster_shape or "crescent", (1.9, 4.2))
+    # ...AND A DRAWING ROUND'S BAND ALSO HOLDS IS NOT DECLARED ANYTHING ELSE (settlement-review of Inashiro, feature 261):
+    # crescent's band starts at 1.9 and round's ends at 2.0, so a cluster drawn at 1.97 - a quarter-disc of houses with a
+    # 63 ft bow against 131 ft of scatter - was declared a crescent. The bands stay as they are for the front row's
+    # sizing above; a shape other than round is declared only past round's ceiling.
+    if (plan.cluster_shape or "crescent") != "round":
+        _lo = max(_lo, CLUSTER_DRAWN_ASPECT["round"][1] + 1e-9)
     if _lo <= _drawn <= _hi:
         s.M["meta"]["cluster_shape"] = plan.cluster_shape
     else:
@@ -557,6 +588,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     s.M["meta"]["seat_search"] = dict(s._seat_search)  # the guesses counted (feature 226 FR-003): candidates, placer calls, positions, rectangles
     s._site_chains = None  # the boundary is the homestead stage's; every later placer runs the fit test's own path
     s._site_corridors = None
+    s._free_ground = None
     # THE ROLLED SHAPE MUST LEAVE A TRACE EVEN WHEN THE CLOUD NEVER RUNS (known-open ledger
     # 2026-08-16, Kashikawa: the front rows + lane frontage seated all 20 households, the
     # cluster-seeds cloud never ran, and the rolled cluster_shape knob went unhonored with no

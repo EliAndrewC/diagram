@@ -19,7 +19,7 @@ class BundleGeomMixin:
         ys = [r[1] - r[3] / 2 for r in rects] + [r[1] + r[3] / 2 for r in rects]
         return ((min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2, max(xs) - min(xs), max(ys) - min(ys))
 
-    def _garden_beds(self: Settlement, hx: float, hy: float, hw: float, hh: float, gx: float, gy: float, gw: float, gh: float, side: str, gap: float) -> list[Any]:  # type: ignore[misc]
+    def _garden_beds(self: Settlement, hx: float, hy: float, hw: float, hh: float, gx: float, gy: float, gw: float, gh: float, side: str, gap: float, seat: Any = None) -> list[Any]:  # type: ignore[misc]
         """The dooryard garden BED(S) of one nucleated homestead. Usually ONE bed (the reserved plot at
         (gx, gy)). But ~1 in 4 households FRAGMENT the plot into two beds - soil and paths made a single
         clean plot impractical, so you work the good topsoil where it lies. Of the splits (all position-
@@ -32,16 +32,17 @@ class BundleGeomMixin:
         enough (~12 ft) to read as a real garden, so it is the larger (well-off / headman) plots that
         fragment. Total bed area stays in the saien band (`garden_area_within_norms`). Returns (cx,cy,w,h) rects."""
         bs = self.bscale
-        if self._hjit(hx, hy, 8.0) >= 0.26:  # the common case: one undivided plot
+        jx, jy = seat if seat is not None else (hx, hy)  # the household's seat when one is being sought (feature 276, D10)
+        if self._hjit(jx, jy, 8.0) >= 0.26:  # the common case: one undivided plot
             return [(gx, gy, gw, gh)]
         south = side in ("SE", "SW")
         # OPPOSITE-SIDE (flanking) split: a bed on each of the E and W walls (or the two south corners for a
         # south garden), each ~half width, the house standing between them
-        if self._hjit(hx, hy, 9.0) < 0.5 and gw * 0.55 >= 6 * bs:
+        if self._hjit(jx, jy, 9.0) < 0.5 and gw * 0.55 >= 6 * bs:
             pw = gw * 0.55
             return [(hx + hw / 2 + gap + pw / 2, gy, pw, gh), (hx - hw / 2 - gap - pw / 2, gy, pw, gh)]
         # SAME-SIDE STACKED (above/below): only for a south garden, so the upper bed does not fall into shade
-        if south and self._hjit(hx, hy, 10.0) < 0.5 and (gh - gap) / 2 >= 6 * bs:
+        if south and self._hjit(jx, jy, 10.0) < 0.5 and (gh - gap) / 2 >= 6 * bs:
             ph = (gh - gap) / 2
             return [(gx, gy - (gap + ph) / 2, gw, ph), (gx, gy + (gap + ph) / 2, gw, ph)]
         # SAME-SIDE SIDE-BY-SIDE (the default fragmentation), both beds on the primary wall
@@ -58,6 +59,39 @@ class BundleGeomMixin:
         return self._bbox_of([self._bundle_geom(hx, hy, hw, hh, side, shed)["bbox"] for side in self._NUC_SIDES])
 
     def _bundle_geom(self: Settlement, hx: float, hy: float, hw: float, hh: float, garden_side: str = "E", shed: bool = False) -> dict[str, Any]:  # type: ignore[misc]
+        """The bundle at (hx, hy): its UNRAKED layout, built once per household and size (`_bundle_layout`), moved here
+        and turned by this seat's rake (feature 276, FR-003, plan D10).
+
+        WHY ONCE. The placer asks for this bundle at every candidate seat - the spiral's offsets, every 2 px of a
+        slide, four garden sides - and rebuilt it each time (46,781 builds on the rescue scenario). A layout relative
+        to its house center does not depend on the seat once its ROLLED parts - the yard's size, the garden's jitter,
+        the bed split - are the household's rather than the seat's, so while a household's seat is sought
+        (`_household_seat`, set by the placer) they are rolled at the seat it was sought from (the spec's Decisions
+        Recorded: the same distributions, rolled per household). The RAKE stays the seat's, applied after the move, so
+        the homestead still turns as one piece wherever it lands (GM 2026-09-26). Outside a seat search the rolls key
+        on (hx, hy) as they always did."""
+        seat = getattr(self, "_household_seat", None) or (hx, hy)
+        key = (hw, hh, garden_side, shed, bool(getattr(self, "_nucleated", False)), seat)
+        cache = self.__dict__.setdefault("_bundle_templates", {})
+        tpl = cache.get(key)
+        if tpl is None:
+            tpl = self._bundle_layout(0.0, 0.0, hw, hh, garden_side, shed, seat)
+            cache[key] = tpl
+
+        def moved(r: Any) -> Any:
+            return None if r is None else (r[0] + hx, r[1] + hy, r[2], r[3])
+
+        base: dict[str, Any] = {k: ([moved(r) for r in v] if k == "gardens" else moved(v)) for k, v in tpl.items()}
+        frame = base.pop("_frame", None)
+        self._rake_parts(base, hx, hy)
+        if frame is None:  # nucleated: every part, as raked
+            rects = [r for r in (base["house"], base["yard"], *base["gardens"], base.get("shed")) if r is not None]
+            base["bbox"] = self._bbox_of(rects)
+        else:  # dispersed: the grove's unraked frame with the raked yard and garden
+            base["bbox"] = self._bbox_of([frame, base["yard"], base["garden"]])
+        return base
+
+    def _bundle_layout(self: Settlement, hx: float, hy: float, hw: float, hh: float, garden_side: str, shed: bool, seat: Any) -> dict[str, Any]:  # type: ignore[misc]
         """The metric layout of one homestead BUNDLE around a house centered at (hx, hy). TWO forms:
         NUCLEATED (self._nucleated) = house + lee GARDEN (E) + south YARD only, compact so a cluster can
         pack tight (no per-house grove - a nucleus shelters itself); DISPERSED (default) also carries the
@@ -67,7 +101,8 @@ class BundleGeomMixin:
         dispersed) plus the whole-bundle bbox. (NW windward; other winds are a later generalisation.)"""
         gap = self.px(3)  # 3 ft between a house and its yard/garden, at this map's ftpx
         gw, gh = 0.48 * hw, 0.85 * hh  # garden - tight to the house, scales with wealth
-        yw, yh = self._yard_dims(hw, hh, hx, hy)  # threshing/drying yard - the rolled area (homestead_parts._yard_area_ft2); the placer reserves exactly what gets drawn
+        sx, sy = seat  # the rolls key on the household's seat (see `_bundle_geom`)
+        yw, yh = self._yard_dims(hw, hh, sx, sy)  # threshing/drying yard - the rolled area (homestead_parts._yard_area_ft2); the placer reserves exactly what gets drawn
         if not getattr(self, "_nucleated", False):
             # CAP the DISPERSED appurtenances too, same doctrine as the nucleated branch below: a BIG house
             # (the 46x28 px headman) keeps an ORDINARY farm's garden/yard, not ones scaled to the grand
@@ -107,8 +142,8 @@ class BundleGeomMixin:
             # THE YARD KEEPS ITS ROLLED DIMS (feature 134 T49): the lognormal IS its variation, and
             # re-jittering it here would flatten the distribution the research fixed. The garden below
             # still jitters UP from its minimum - that rule is unchanged.
-            gw = min(gw * (1.0 + self._hjit(hx, hy, 3.0) * 0.25), self.px(48))  # garden [1.00,1.25]x, capped at 48 ft
-            gh = min(gh * (1.0 + self._hjit(hx, hy, 4.0) * 0.25), self.px(34))
+            gw = min(gw * (1.0 + self._hjit(sx, sy, 3.0) * 0.25), self.px(48))  # garden [1.00,1.25]x, capped at 48 ft
+            gh = min(gh * (1.0 + self._hjit(sx, sy, 4.0) * 0.25), self.px(34))
             # THE FORECOURT IS RESERVED WHETHER OR NOT A THRESHING FLOOR IS DRAWN ON IT (feature 150, GM
             # 2026-08-28: "thrashing yards on a no-rice hamlet seem bad and should be eliminated"). A
             # dike-pond hamlet grows no rice, so `_attach_yard` draws and records no threshing floor
@@ -125,15 +160,12 @@ class BundleGeomMixin:
                 gx, gy = hx - hw / 2 - gap - gw / 2, hy
             else:  # "E" - lee wall, house mid-height
                 gx, gy = hx + hw / 2 + gap + gw / 2, hy
-            beds = self._garden_beds(hx, hy, hw, hh, gx, gy, gw, gh, garden_side, gap)
+            beds = self._garden_beds(hx, hy, hw, hh, gx, gy, gw, gh, garden_side, gap, seat)
             base["gardens"] = beds  # 1 bed normally; 2 (flanking / stacked / side-by-side) when fragmented
             base["garden"] = beds[0]  # primary bed (kept for the shading score + back-compat)
             if shed:  # a north-wall kura, reserved so a neighbor never lands on it
                 base["shed"] = (hx, hy - 0.60 * hh, 0.46 * hw, 0.30 * hh)
-            self._rake_parts(base, hx, hy)
-            rects = [r for r in (base["house"], base["yard"], *base["gardens"], base.get("shed")) if r is not None]
-            base["bbox"] = self._bbox_of(rects)
-            return base
+            return base  # raked and boxed by `_bundle_geom`, per seat
         # DISPERSED farmstead (the shipped ring-village behavior): the windward GROVE as an L (an N
         # band + a W band, for the default NW wind), sized so the grove footprint is ~6x the house. The
         # multi-bed garden split is a NUCLEATED feature (clean E/W walls, no grove or shed in the way); a
@@ -144,8 +176,7 @@ class BundleGeomMixin:
         north = hy - hh / 2 - gap - b
         base["grove_n"] = ((west + east) / 2, north + b / 2, east - west, b)
         base["grove_w"] = (west + b / 2, (north + b + south) / 2, b, south - (north + b))
-        self._rake_parts(base, hx, hy)
-        base["bbox"] = self._bbox_of([((west + east) / 2, (north + south) / 2, east - west, south - north), base["yard"], base["garden"]])
+        base["_frame"] = ((west + east) / 2, (north + south) / 2, east - west, south - north)  # the grove's frame, unraked
         return base
 
     def _rake_parts(self: Settlement, base: dict[str, Any], hx: float, hy: float) -> None:  # type: ignore[misc]

@@ -9,6 +9,9 @@ if TYPE_CHECKING:
     from ..core import Settlement
 
 
+ALDER_GREENS = ("#5E7F6A", "#6B8A74")  # the alder crowns' tint (a map drawing convention, `_draw_grove`)
+
+
 class GrovesMixin:
     # the windward faces a homestead grove (yashikirin) shelters, by where the prevailing cold wind comes
     # FROM (its compass key). The grove is an L-BELT: a deep stand on each windward face (for a diagonal
@@ -186,7 +189,7 @@ class GrovesMixin:
             # feature (`bamboo_stand`, the `bamboo` knob). The windbreak is cedar-backed with broadleaf;
             # the dooryard copse is fruit broadleaf. The culm glyph below is kept for the record and is
             # unreachable at these thresholds.
-            b_th, c_th = (0.0, 0.38) if mix == "windbreak" else (0.0, 0.0)  # dooryard = fruit broadleaf, no conifer
+            b_th, c_th = (0.0, 0.38) if mix == "windbreak" else (0.0, 0.0)  # dooryard = fruit broadleaf, no conifer; alder = broadleaf only
             items: list[Any] = []
             for _ in range(n):
                 px = random.uniform(-w / 2 + 2, w / 2 - 2)
@@ -237,7 +240,11 @@ class GrovesMixin:
                 # use, in real feet (research/vegetation.html 'Forest density and crown size'); a conifer 15% wider,
                 # the old ratio. A village (ftpx 2, bscale 1) gets 4.25 px, within a pixel of what it drew before.
                 rr = self.px(self.CANOPY_R_FT) * s * (1.15 if kind == "conifer" else 1.0)
-                col = "#496733" if kind == "conifer" else random.choice(["#7C9A4E", "#6E8B43"])
+                # ALDER AT THE REED EDGE (feature 261): the woody stage of a marsh margin is alder or willow, never pine
+                # (research/vegetation.html, the marsh margin), so a belt crown standing in the marsh is drawn as one - a
+                # blue-gray green set apart from the belt's own two greens and its cedar, a map drawing convention (the
+                # real foliage is a plain dark green; the tint is chosen so the wet stand reads apart)
+                col = random.choice(ALDER_GREENS) if mix == "alder" else ("#496733" if kind == "conifer" else random.choice(["#7C9A4E", "#6E8B43"]))
                 if self._crown_covers(cx + px, cy + py - 3 * bs, rr, krect, kcirc, self.CANOPY_PAD):
                     continue
                 if not self._crown_seat_clear(cx + px, cy + py - 3 * bs, rr, _near) or not self._crown_seat_clear(cx + px, cy + py - 3 * bs, rr, drawn):

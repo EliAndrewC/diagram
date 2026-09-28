@@ -33,7 +33,7 @@ from typing import TYPE_CHECKING, Any
 # AND SINCE FEATURE 223 THE BUCKET IS KEPT AS COORDINATES UNTIL `finish()`, which knows the frame: ~90% of the blades
 # lie outside the viewBox (specs/200 R2) and are culled there by the page's own `drop_offmap` rule before the merge,
 # so the file never carries them (`Settlement.flush_blade_groups`).
-from .._geom import KeepoutGrid, Poly, RingIndex
+from .._geom import KeepoutGrid, Poly, RingIndex, convex_hull
 from ..land.wet import MARSH_FEATHER_BS
 
 WOOD_FRINGE_FT = 8.0
@@ -45,6 +45,31 @@ A few paces is the record's own figure, so this is ACCURATE as a degree; 8 ft is
 
 if TYPE_CHECKING:
     from ..core import Settlement
+
+
+FARMSTEAD_NEIGHBOR_FT = 140.0  # ft: two farmsteads this near share the ground between them - a lane, a gap a copse fills
+
+
+def farmstead_keepouts(M: Any, margin: float) -> list[Any]:
+    """The settlement's scrub keep-out as rings: each farmstead's own outline - its house and the parts nearest it -
+    grown by `margin`, and the outline of each pair of farmsteads within `FARMSTEAD_NEIGHBOR_FT` (feature 261)."""
+    hs = [(float(h["x"]), float(h["y"])) for h in M.get("houses") or [] if "x" in h]
+    if not hs:
+        return []
+    groups: list[list[tuple[float, float]]] = [[h] for h in hs]
+    for key in ("gardens", "threshing_yards", "farm_fixtures", "byres", "farm_sheds", "persimmons"):
+        for r in M.get(key) or []:
+            if "x" in r:
+                hw, hh = float(r.get("w", 0.0)) / 2, float(r.get("h", 0.0)) / 2
+                k = min(range(len(hs)), key=lambda i: math.dist(hs[i], (float(r["x"]), float(r["y"]))))
+                groups[k] += [(float(r["x"]) + sx * hw, float(r["y"]) + sy * hh) for sx in (-1, 1) for sy in (-1, 1)]
+
+    def grown(pts: list[tuple[float, float]]) -> Any:
+        return convex_hull([(x + margin * math.cos(math.radians(a)), y + margin * math.sin(math.radians(a))) for x, y in pts for a in range(0, 360, 45)])
+
+    rings = [grown(g) for g in groups]
+    rings += [grown(groups[i] + groups[j]) for i in range(len(hs)) for j in range(i + 1, len(hs)) if math.dist(hs[i], hs[j]) <= FARMSTEAD_NEIGHBOR_FT]
+    return rings
 
 
 class GroundCoverMixin:
@@ -370,7 +395,9 @@ class GroundCoverMixin:
             return
         xs = [p[0] for poly in polys for p in poly]
         ys = [p[1] for poly in polys for p in poly]
-        for dp in self.M.get("dry_plots", []):  # the CULTIVATED extent includes the dry hatake plots
+        for dp in (
+            d for d in self.M.get("dry_plots", []) if not d.get("homestead")
+        ):  # the CULTIVATED extent includes the dry hatake plots - the field's, not a homestead field among the houses (feature 261)
             xs += [p[0] for p in dp["poly"]]
             ys += [p[1] for p in dp["poly"]]
         fx0, fx1, fy0, fy1 = min(xs), max(xs), min(ys), max(ys)
@@ -381,9 +408,22 @@ class GroundCoverMixin:
         hs = self.M.get("houses", [])
         m = 44
         if hs and self.M.get("meta", {}).get("nucleated", True):
-            # NUCLEATED: the houses are one tight blob, so the bbox of their positions IS the built footprint.
-            hxs, hys = [h["x"] for h in hs], [h["y"] for h in hs]
-            avoid.append([(min(hxs) - m, min(hys) - m), (max(hxs) + m, min(hys) - m), (max(hxs) + m, max(hys) + m), (min(hxs) - m, max(hys) + m)])
+            # NUCLEATED: the houses are one blob, so the HULL of their positions, grown by the margin, is the built
+            # footprint. It was the axis-aligned BBOX, which is the same thing only for a round cluster: on a diagonal
+            # ribbon (Sawada, drawn aspect 4) the bbox took in open ground far off the houses and the scrub stopped
+            # along ruler-straight north-south and east-west lines round an empty rectangle (settlement-review,
+            # feature 261: 0 blade bases in a 50 ft band against 219 just beyond it). Each house point is grown by
+            # the margin in eight directions before the hull is taken, so the keep-out clears every house by `m`.
+            # ...AND EVERY PART OF THE FARMSTEADS, NOT ONLY THE HOUSES (settlement-review of Kuwabata, feature 261): a hull of
+            # house centers left a fringe farmstead's privy, heap and garden outside it, with scrub on three sides of the
+            # privy - where the record puts them in the homestead's own work yard. Each part's footprint corners join the
+            # house points, grown by the same margin.
+            # ...AND NOT ONE HULL ROUND THEM ALL (settlement-review of Kuwabata, feature 261): a single convex hull took in open
+            # ground more than a dooryard from any house, where the copse may not stand either, and left a bare wedge 240 x
+            # 270 ft with a straight 430 ft edge inside the cluster. Each farmstead's own grown outline is kept clear, and so
+            # is the ground between two farmsteads near enough to share it (`FARMSTEAD_NEIGHBOR_FT`); wider open ground
+            # carries the scrub the rest of the map does.
+            avoid += farmstead_keepouts(self.M, m)
         elif hs:
             # DISPERSED: the farmsteads RING the settlement, so a bbox of their positions is not their footprint
             # - it is the WHOLE MAP, and using it forbids ground cover everywhere inside the ring. That is what

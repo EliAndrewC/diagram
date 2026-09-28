@@ -265,3 +265,88 @@ def test_kosatsuba_records_a_blocking_struct():
     rec = s.M["labels"][-1]
     # feature 266: the standard's first position - upper right in the board's own turned frame - at its angle
     assert rec[5] == "notice board" and rec[7] == 15
+
+
+def test_a_caption_on_a_crown_is_on_the_canopy():
+    """Feature 261 (settlement-review of Kuwabata): the caption's drawn quad and its halo, not a disc round its center."""
+    from l7r.diagram.settlement.structures.fixtures._helpers import quad_on_canopy
+
+    quad = [(0.0, 0.0), (50.0, 0.0), (50.0, 8.0), (0.0, 8.0)]
+    assert quad_on_canopy(quad, lambda x, y, pad: [(25.0, 4.0, 5.0)]), "a crown under the words"
+    assert quad_on_canopy(quad, lambda x, y, pad: [(48.0, 14.0, 5.0)]), "a crown the halo reaches at one end"
+    assert not quad_on_canopy(quad, lambda x, y, pad: [(25.0, 40.0, 5.0)])
+
+
+def test_a_board_under_a_canopy_still_takes_a_seat():
+    # feature 261: a board whose caption would lie on crowns ranks below one clear of them, and is still offered - a
+    # board may stand under trees (the GM, 2026-08-29)
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    s.M["road"] = [[100, 300], [900, 300]]
+    s.M["tree_crowns"] = [500.0, 300.0, 600.0]
+    assert s.place_kosatsuba() is not None
+
+
+def test_a_board_whose_caption_cannot_fit_is_not_sitable():
+    # feature 261: the siter asks the one placer, and a caption the placer can only seat on an obstacle or at a leader's
+    # distance does not make the board's seat sitable - the board is still placed (a board is never dropped)
+    s = Settlement(400, 400, seed=1)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    s.M["road"] = [[20, 200], [380, 200]]
+    s.M["houses"] = [{"x": float(x), "y": float(y), "w": 30.0, "h": 30.0, "rot": 0.0} for x in range(40, 380, 34) for y in (170, 230)]
+    assert s.place_kosatsuba() is not None
+
+
+def test_a_hamlet_with_no_houses_or_no_handover_has_no_ways_out():
+    # feature 261: the handover needs dwellings, and the routes need a handover
+    from l7r.diagram.settlement.structures.fixtures._helpers import departure_routes, kosatsuba_handover
+
+    assert kosatsuba_handover({"lanes": [{"pts": [[0, 0], [100, 0]], "connector": True}]}) is None
+    assert kosatsuba_handover({"houses": [{"x": 50.0, "y": 50.0}], "lanes": [{"pts": [[0, 0], [100, 0]], "connector": True}]}) is None, "a connector no lane meets"
+    through = {"houses": [{"x": 500.0, "y": 100.0}], "lanes": [{"pts": [[-900, 0], [1900, 0]], "connector": True}, {"pts": [[500, 100], [500, 1]]}, {"pts": [[800, 90], [800, 2]]}]}
+    assert kosatsuba_handover(through) == (500.0, 1.0), "a track that runs through hands over at the lane end nearest the houses"
+    assert departure_routes({"houses": [{"x": 50.0, "y": 50.0}], "lanes": []}) == []
+
+
+def test_the_entrance_is_the_last_join_on_the_way_out_and_every_route_walks_to_the_outer_end():
+    # feature 261 (settlement-review of Inashiro): a household's lane met the track below its inner end, so the handover is
+    # the first point walked in from the outer end that a way meets, and each route runs from the house to the outer end -
+    # not up to the handover and back - so a board at the old inner end is missed by that household
+    from l7r.diagram.settlement.structures.fixtures._helpers import departure_routes, kosatsuba_handover, outermost_join, routes_missed
+
+    M = {
+        "houses": [{"x": 0.0, "y": 0.0}, {"x": 300.0, "y": 0.0}],
+        "lanes": [
+            {"pts": [[0, 0], [0, 100]]},  # the cluster's lane, meeting the track's inner end
+            {"pts": [[300, 0], [300, 250], [0, 250]]},  # a household's own lane, meeting the track lower down
+            {"pts": [[0, 100], [0, 400], [0, 2000]], "connector": True},
+        ],
+    }
+    hand = kosatsuba_handover(M)
+    assert hand is not None and abs(hand[1] - 250.0) <= 10.0 and hand[0] == 0.0, "the last join, walked in from the edge"
+    routes = departure_routes(M)
+    assert len(routes) == 2 and all(r[-1][1] >= 1990.0 for r in routes), "every route ends at the outer end"
+    assert routes_missed(routes, 0.0, 100.0, 20.0) == 1 and routes_missed(routes, *hand, 20.0) == 0
+    assert outermost_join([(0.0, 0.0), (0.0, 50.0)], [[(500.0, 500.0), (600.0, 500.0)]]) is None
+
+
+def test_an_entrance_board_stands_on_the_approach_and_not_on_a_straggler_at_its_join():
+    # feature 261 (settlement-review of Inashiro): the outermost join is a one-farmstead web lane, whose verge passes every
+    # departure as well as the track's does - but a board is squared to the way it stands on, so on the straggler it
+    # stood side-on to the track. Among the seats every departure passes, the approach's own win.
+    import math
+
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    s.M["meta"]["knobs"] = {"kosatsuba_seat": "entrance"}
+    s.M["houses"] = [{"x": 300.0, "y": 280.0, "w": 30.0, "h": 24.0, "rot": 0.0}, {"x": 700.0, "y": 280.0, "w": 30.0, "h": 24.0, "rot": 0.0}, {"x": 820.0, "y": 560.0, "w": 30.0, "h": 24.0, "rot": 0.0}]
+    s.M["lanes"] = [
+        {"pts": [[300.0, 300.0], [700.0, 300.0]], "w": 5},
+        {"pts": [[500.0, 300.0], [500.0, 500.0]], "w": 5},
+        {"pts": [[800.0, 560.0], [500.0, 620.0]], "w": 3, "web": True},
+        {"pts": [[500.0, 500.0], [500.0, 990.0]], "w": 6, "connector": True},
+    ]
+    assert s.place_kosatsuba() is not None
+    rot = float(s.M["kosatsuba"][-1]["rot"])
+    assert min(abs(rot - 90.0) % 180.0, 180.0 - abs(rot - 90.0) % 180.0) <= 15.0, f"squared to the track (bearing 90), not the straggler: {rot}"
+    assert math.dist((s.M["kosatsuba"][-1]["x"], s.M["kosatsuba"][-1]["y"]), (500.0, 620.0)) <= 120.0

@@ -283,6 +283,54 @@ PROFILE=1`; the maps byte-identical after every step):
   158k feather distances - in Python. The levers below that change what a map draws and are recorded
   in `specs/218-efficient-overlap-checks/research.md` R2 for the GM's decision, not taken.
 
+## Three more shapes, found before the city tier (feature 276, 2026-09-28)
+
+The GM, on the hamlet tests: *"I'm less interested in optimizing specific tests as I am in getting to the root of
+these inefficiencies"* - a city has thousands of inhabitants, and a cost that grows with what is already on the map
+becomes the whole run there. Every figure below is in `specs/276-engine-hotspots-and-test-scans/measurements.json`.
+
+**A generate-and-test seat search: answer from the free ground.** The dispersed placer walked a 157-offset spiral
+per house, built the whole bundle at each offset and ran the full fit test on it; the nucleated placer and every sun
+rule scanned every house already standing. On the rescue scenario that was 46,781 full fit tests for ten houses, and
+at constant density the cost per seated house grew with the houses already placed. The fix is three indexes and a
+pre-screen: the placed houses in an `Indexed` list with a grid of each record's extent (the eave gap, the sun rules
+and the yard-sun rule ask it for their reach box); the site's static ground as a raster of SURELY TAKEN cells
+(`FreeGround` - the forbidden union shrunk by half a pixel, so a cell is claimed only where every point of it is
+refused); and, ahead of the full test, the cheapest exact conjuncts of an order-independent conjunction
+(`_seat_refused`, `_bundle_refused`). The bundle is built once per household as a template and moved per seat.
+Measured: 2.718 s and 46,781 fit tests -> 0.35 s and 128 on the rescue scenario (dispersed); 29,372 fit tests -> 304
+at 240 seeds; per-house cost flat from 60 to 240 seeds on both paths; the same houses seated (five-layout totals
+within 2%). **The trap**: the test toy never set the placer's own nucleated switch, so the first profile measured the
+path no pool map runs - check which path a scenario exercises before believing its profile.
+
+**A chain of per-piece geometry calls: batch it, and never compute the same result twice.** `close_seams` was ~1 s
+per comb field, hundreds of one-polygon shapely calls: `Polygon(ring).buffer(0)` rebuilt per plot in five passes, a
+buffer computed twice to keep a piece and again to throw it back, a spatial tree rebuilt whenever any ring changed,
+a pocket's grid cutting every cell of its bounding box (a diagonal sliver ~1,400 cells). Shapely 2 takes arrays:
+`ring_polygons` builds every plot in two calls, `_despike_many` opens a list at once, a tree query plus
+`relate_pattern("T********")` finds only the neighbors whose interiors overlap, `PlotGeoms` keeps its tree and tests
+only the rings that changed, and `_plant` cuts only the cells a connected piece of each row reaches. 0.81-0.98 s ->
+0.39-0.45 s on seeds 5/11/17, back to back against the unmodified engine. **The trap**: a batched pass that reorders
+float work moves a map slightly - here a weld came out with a 0.5 px hairline spur, and the weld guard read only the
+deduped ring while the gate reads the ring as recorded. The fix went to the guard (`_weld_apex`), not the batching.
+
+**A test that re-derives what another test already derived: parse or scan once per process.** Four AST tests each
+parsed all ~264 engine modules and walked 1-1.5 million nodes; five record tests each rebuilt the same id tables and
+re-scanned the record per page or per term. `tests/_engine_ast.py` parses a file once per content (a counter the tests
+assert on), the scans take a needle so a file without the keyword is never parsed for them, and the record tests build
+their tables once. One scan walked every function's subtree separately, so a body n functions deep was walked n times -
+a nested walk is the same shape inside one test. Two record tests each ran a lookbehind-led pattern at every
+position of all ~7,900 tracked files; the pattern can only match inside a run of path characters around a `.md`, so it
+now runs over those runs alone, once per text for both tests (`md_tokens`), and a multi-word glossary variant is tried
+only where its first word starts rather than searched for across the whole record. The five record tests: 17.2 s alone
+summed -> 2.55 s together; the four AST tests 2.12 s together against one parse of 1.79 s.
+
+**And a correctness bug the profile found.** `seg_intersect` answered for the infinite LINES through two segments, not
+the segments, so the track refused candidate paths on crossings that were not there - 0.966 s of path checks over 176
+calls became 0.139 s over 83 once bounded, and 0.011 s with the `PathChecker` index over the same 83. Several maps'
+tracks moved (Inashiro's connector now leaves east), each the same hamlet on the same rules. A profile that shows a
+check called far more than it should be is sometimes a wrong answer, not a slow one.
+
 ## Memory: the spike is C buffers, not Python objects, and it lands where nothing reads it (feature 208, 2026-09-07)
 
 The GM asked why a full gate costs 6.8 GiB and whether each of the eight workers really needs most of a

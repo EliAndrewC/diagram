@@ -6,26 +6,29 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import cast
 
-from l7r.diagram.settlement import Settlement, edge_dist, skeleton_layout
+from l7r.diagram.settlement import Settlement, edge_dist, seg_intersect, segments_cross, skeleton_layout
 from l7r.diagram.settlement._geom import ring_offset
 from l7r.diagram.sitegen.geom import centroid, crop_polys, pull_clear, unit
 
 from ..cluster import _fork_spur, seat_cluster
 from ..consts import (
+    BROOK_CROSSING_COST_FT,
+    FORD_BEND_DEG,
+    FORD_HALF,
+    FORD_SPACING,
     LANE_CLEARANCE,
     POLDER_ARCHETYPES,
     SPUR_SETBACK,
     TRACK_FABRIC_GAP,
-    WIND_VECTORS,
     Poly,
     Pt,
 )
 from ..plan import SitePlan
-from .checks import drawn_water_segs, path_violations
+from .checks import PathChecker, brook_fords, drawn_water_segs, ford_crossing, gap_segments, stream_segs
 from .clearance import _HAIRPIN_DEG, clip_to_clear, route_around
 from .fabric import _crosses_fabric, _fabric_hits, _homestead_polys
 from .geom import _turn_deg, polyline_len, push_clear_of_fabric, push_out_of
-from .route import _route
+from .route import _route, set_crossing
 
 # how near the field a spur's end must stand to have reached it - `lanes_reach_something`'s own 60 ft for a lane end
 SPUR_REACH_FT = 60.0
@@ -128,7 +131,20 @@ def _cluster_edge_toward(s: Settlement, target: Pt, fallback: Pt) -> Pt:
     ux, uy = ux / n, uy / n
     reach = max(((x - cx) * ux + (y - cy) * uy for x, y in zip(xs, ys, strict=False)), default=0.0)
     fabric = [poly for poly, _owner, _kind in _homestead_polys(s)]
-    return push_clear_of_fabric((cx, cy), (ux, uy), reach + TRACK_FABRIC_GAP + 8.0, fabric)
+    edge = push_clear_of_fabric((cx, cy), (ux, uy), reach + TRACK_FABRIC_GAP + 8.0, fabric)
+    # ...AND ON THE HOUSES' OWN BANK (feature 261). Pushed past the furthest house by the fabric gap, the origin landed
+    # across a brook that runs close by - Inashiro's by 20 ft - so the spur began on the field's side of the water, never
+    # crossed it, and was a stub too short to draw: the hamlet had no way to its rice. Where the push crosses a stream,
+    # the origin stops short of it by the router's own 14 px off water, and the spur crosses at a ford like any other way.
+    for f in s.M.get("streams") or []:
+        poly = [(float(x), float(y)) for x, y in (f.get("poly") or [])]
+        for a, b in zip(poly, poly[1:], strict=False):
+            if segments_cross((cx, cy), edge, a, b):
+                x = seg_intersect((cx, cy), edge, a, b)
+                if x is not None:
+                    back = math.dist((cx, cy), x) - 14.0 - float(f.get("w", 8.0)) / 2
+                    edge = (cx + ux * back, cy + uy * back)
+    return edge
 
 
 def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TRACK_FABRIC_GAP) -> Poly:
@@ -252,11 +268,21 @@ def stage_seat(s: Settlement, plan: SitePlan) -> None:
     # drawing it (`fillet_polyline`, so a mitred corner does not spike), and it is the drawn line a
     # bridge gets placed on - so routing against the recorded one can send a way across a ditch at a
     # slant the router never saw. Same rule as the connector's own bow: measure what is drawn.
-    plan.watercourses = [
-        ((float(a[0]), float(a[1])), (float(b[0]), float(b[1])))
-        for rec in list(s.M.get("field_ditches", [])) + list(s.M.get("channels", [])) + list(s.M.get("streams", []))
-        for a, b in zip(rec["poly"], rec["poly"][1:], strict=False)
-    ] + [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for rec in s.M.get("drawn_channels", []) for a, b in zip(rec["pts"], rec["pts"][1:], strict=False)]
+    # THE FORDS ARE OPENED FIRST (feature 261): every routing list below reads the brook through `stream_segs`, which
+    # gaps it at these, so a way may cross the brook at a ford and nowhere else.
+    s.brook_fords = brook_fords(plan.brook or [], FORD_SPACING, FORD_BEND_DEG)  # type: ignore[attr-defined]
+    # every route this roll draws pays to cross the brook, at the fords (the only free cells in its band)
+    set_crossing(plan.brook or [], FORD_HALF, s.px(BROOK_CROSSING_COST_FT))
+    s.M["meta"]["brook_fords"] = [[round(x, 1), round(y, 1)] for x, y in s.brook_fords]  # type: ignore[attr-defined]
+    plan.watercourses = (
+        [
+            ((float(a[0]), float(a[1])), (float(b[0]), float(b[1])))
+            for rec in list(s.M.get("field_ditches", [])) + list(s.M.get("channels", []))
+            for a, b in zip(rec["poly"], rec["poly"][1:], strict=False)
+        ]
+        + stream_segs(s)
+        + [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for rec in s.M.get("drawn_channels", []) for a, b in zip(rec["pts"], rec["pts"][1:], strict=False)]
+    )
     seat = seat_cluster(
         plan,
         dry_plots=crop_polys(s),
@@ -266,25 +292,12 @@ def stage_seat(s: Settlement, plan: SitePlan) -> None:
         brook=plan.brook,  # the stream runs past the fan since feature 230; a cluster does not straddle it
     )  # the reservoir's reed fringe: not building ground (feature 150 T50)
     plan.seat = seat
-    # WHICH SIDE OF THE BROOK RULE THIS MAP CAME DOWN ON (feature 230): true when the seat stands on a
-    # margin the brook divides, which happens only when every margin does, or when refusing them cost the
-    # map a household and `generate` rolled it again with them allowed.
-    s.M["meta"]["seat_divided"] = bool(seat.get("divided"))
-    # THE SITE'S BACK IS THE WINDWARD SIDE, and where the two disagree the site wins.
-    #
-    # The wind is derived from the slope (cold air drains off the high ground) and the cluster is
-    # seated partly by it - back to the hill, face to the water. But the seat has hard constraints
-    # the wind does not: not below the drain, not on the hem, not off the canvas. When those rule
-    # out every wind-facing margin, the settlement ends up with its back to the FIELD, and a belt
-    # placed on the declared windward side is then planted in the rice - where `village_grove`
-    # throws away almost every clump and the map fails both windbreak checks with a grove of eight
-    # trees. Re-reading the exposure off the seat is the self-consistent answer and the true one: a
-    # settlement's sheltered side is the side it actually turns its back to, and this map is
-    # declaring which quarter that is. A GM who knows the region's real prevailing wind pins it on
-    # the spec, and then the seat search is what bends instead.
-    if plan.wind[0] * seat["out"][0] + plan.wind[1] * seat["out"][1] < 0.34:  # more than ~70 deg apart
-        plan.windward = min(WIND_VECTORS, key=lambda q: -(WIND_VECTORS[q][0] * seat["out"][0] + WIND_VECTORS[q][1] * seat["out"][1]))
-        s.M["meta"]["windward"] = plan.windward
+    # THE SEAT BENDS TO THE WIND, NEVER THE WIND TO THE SEAT (feature 261). Until then this stage renamed the
+    # wind after whatever the seat's back faced whenever the two disagreed by more than ~70 degrees, which is how
+    # Kashikawa's belt came to stand on the south and east: the wind a map declares was being rewritten by where
+    # its houses happened to land. `seat_cluster` now seats only on a margin whose back faces the wind, and a map
+    # that had to fall back to one that does not says so here, rather than changing the wind to hide it.
+    s.M["meta"]["seat_offwind"] = bool(seat.get("offwind"))
     s.M["meta"]["lane_skeleton"] = plan.lane_skeleton
     # THE SIDE THE HOUSES STAND ON, told to the settlement (feature 140): every field test from here on measures
     # the outline's few chords facing this seat (`rolling/fit.py::_field_chains`), never the whole outline.
@@ -405,7 +418,11 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     # just outside it. The band point is kept only as the no-houses fallback.
     _band_start = to_screen((0.0, 0.0))
     cen = centroid(plan.envelope)
-    brook_segs = [(plan.sink_brook[i], plan.sink_brook[i + 1]) for i in range(len(plan.sink_brook) - 1)]
+    # ...GAPPED AT THE FORDS (feature 261): a spur that crosses at a ford crosses legally - `bridges()` decks it - so only
+    # a crossing between fords counts against it. Judged against the whole course, every spur to rice across the brook
+    # scored the same violation, the shortest won the tie, and the clip cut that straight run to a 28 ft stub that was
+    # never drawn: Inashiro and Kashikawa lost their only way to the field.
+    brook_segs = gap_segments([(plan.sink_brook[i], plan.sink_brook[i + 1]) for i in range(len(plan.sink_brook) - 1)], getattr(s, "brook_fords", ()), FORD_HALF)
 
     def spur_path(target: Pt) -> Poly:
         # THE TIP STOPS OUTSIDE THE FIELD, measured on the LOCAL edge normal (GM 2026-08-12:
@@ -435,13 +452,20 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         # Now: the origin faces THIS target, and the bow is the midpoint of the actual run with a
         # small lateral swing so the path reads as walked rather than ruled.
         _s = _cluster_edge_toward(s, target, _band_start)
+        # ...AND OVER THE BROOK AT A FORD (feature 261). Where the houses stand across the brook from their rice, the
+        # path crosses it square at the ford that makes the walk shortest, and `bridges()` decks the crossing - a
+        # straight run would meet the brook wherever it happened to, between fords, and the clip would cut it there.
+        _via = ford_crossing(_s, edge, plan.brook or [], getattr(s, "brook_fords", ()))
+        if _via:
+            return [_s, *_via, edge]
         _mx, _my = (_s[0] + edge[0]) / 2, (_s[1] + edge[1]) / 2
         return [_s, (_mx + ax * 14, _my + ay * 14), edge]
 
     # ...and again the candidate is the DRAWN path, bow and all - see `path_is_clear`.
+    spur_check = PathChecker(crops, plan.sink_pond, brook_segs, plan.watercourses)  # built once for every candidate (FR-005)
     spur = min(
         (spur_path(q) for q in sorted(plan.envelope, key=lambda v: math.hypot(v[0] - cx, v[1] - cy))),
-        key=lambda p: (path_violations(p, crops, plan.sink_pond, brook_segs, plan.watercourses), polyline_len(p)),
+        key=lambda p: (spur_check.violations(p), polyline_len(p)),
     )
     _spur_pts = s.trim_off_marsh(clip_to_clear(spur, [*crops, *([toe_now] if toe_now else [])], 12.0))
     _spur_pts = _fork_spur(_spur_pts, _kept_arms)
@@ -552,6 +576,10 @@ def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), reach
         return list(ring_offset(w, 8.0, 0.0)[: len(w)])
 
     wet_grown = [_inflated(w) for w in wet if len(w) >= 3]
+    # THE WATER, THE CROP AND THE POND INDEXED ONCE FOR THE WHOLE SWEEP (feature 276, FR-005): 41 bearings each asked
+    # every segment and polygon again. `PathChecker` answers exactly what `path_violations` did.
+    wet_checks = [PathChecker([w], None, ()) for w in wet_grown]
+    ground_check = PathChecker(avoid or [plan.envelope], pond, brook, waters)
     best: tuple[tuple[int, int, int], Poly] | None = None
     for swing in sorted((9.0 * k for k in range(-20, 21)), key=abs):
         theta = math.radians(base + swing)
@@ -575,7 +603,7 @@ def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), reach
         # leave along the contour and exit the frame ABOVE the marsh, which is what a real valley
         # road does; whatever crop it then clips is bent round afterwards by `route_around`, which
         # the marsh has no equivalent of because a track through a marsh cannot be nudged dry.
-        soaked = sum(path_violations(path, [w], None, ()) for w in wet_grown)  # the WET POLYGON only - pond and brook are scored once, below
+        soaked = sum(chk.violations(path) for chk in wet_checks)  # the WET POLYGON only - pond and brook are scored once, below
         # THE STEADINGS ARE SCORED TOO, and they have to be scored HERE (feature 128). With the
         # houses standing before any track is drawn, the sweep's ideal bearing can point straight back
         # through the cluster - and nothing downstream can rescue that. `_thread_the_fabric` routes
@@ -606,7 +634,7 @@ def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), reach
         # known to be larger.
         if best is not None and (soaked, steaded) > best[0][:2]:
             continue
-        violations = path_violations(path, avoid or [plan.envelope], pond, brook, waters)
+        violations = ground_check.violations(path)
         if soaked == 0 and steaded == 0 and violations == 0:
             return path
         if best is None or (soaked, steaded, violations) < best[0]:

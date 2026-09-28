@@ -517,3 +517,152 @@ def test_a_belt_column_with_no_house_leans_on_its_neighbor_not_on_the_far_end_of
 
     # ...and with no houses anywhere, every column is the floor rather than an error
     assert [u for _v, u in fringe_profile([], 3, 100.0, 0.0, 12.0, 1.0)] == [12.0, 12.0, 12.0, 12.0]
+
+
+def test_a_parcel_in_line_with_two_others_is_in_a_ruled_row() -> None:
+    """Feature 261 (settlement-review of Inashiro): three parcels 5 ft off one line over 1,104 ft read as a chain."""
+    from l7r.diagram.hamletgen.hinterland.parcels import in_a_ruled_line, off_the_row
+
+    placed = [(0.0, 0.0), (500.0, 0.0)]
+    assert in_a_ruled_line((1000.0, 5.0), placed)
+    assert not in_a_ruled_line((1000.0, 400.0), placed)
+    assert not in_a_ruled_line((1000.0, 5.0), placed[:1]), "two parcels make no row"
+    steps = off_the_row((1000.0, 5.0), placed)
+    assert steps and all(not in_a_ruled_line(q, placed) for q in steps)
+    assert off_the_row((1000.0, 400.0), placed) == []
+
+
+def test_a_seat_in_the_row_is_stepped_off_it_or_refused() -> None:
+    """Feature 261: a parcel is seated as found, stepped sideways off a row where the ground allows, and refused where
+    it does not."""
+    from l7r.diagram.hamletgen.hinterland.parcels import in_a_ruled_line, seat_off_the_row
+
+    placed = [(0.0, 0.0), (500.0, 0.0)]
+    assert seat_off_the_row((1000.0, 400.0), placed, lambda q: False) == (1000.0, 400.0)
+    stepped = seat_off_the_row((1000.0, 5.0), placed, lambda q: True)
+    assert stepped is not None and not in_a_ruled_line(stepped, placed)
+    assert seat_off_the_row((1000.0, 5.0), placed, lambda q: False) is None
+
+
+def test_a_bank_aware_reach_stops_at_the_brook() -> None:
+    """Feature 261: within reach of a house AND on its side of the brook."""
+    from l7r.diagram.settlement.homestead_parts.stands import BankNear
+
+    near = BankNear([(0.0, 0.0)], 90.0, [((-500.0, 50.0), (500.0, 50.0))])
+    assert near.too_near(0.0, 40.0)
+    assert not near.too_near(0.0, 60.0), "across the brook"
+    assert not near.too_near(200.0, 0.0), "beyond the reach"
+
+
+def test_a_belt_stands_beyond_a_lane_running_along_its_band() -> None:
+    """Feature 261 (settlement-review of Kuwabata): a lane inside the band moves that column's near face past it, keeping
+    the band's depth; a column with no lane in its band stays; and a move that would put the band in the marsh is not
+    made."""
+    from l7r.diagram.hamletgen.hinterland.belt import BELT_LANE_CLEAR_FT, past_the_lanes
+
+    cols = [(0.0, 0.0), (100.0, 0.0)]
+    lanes = [(76.0, 0.0), (500.0, 100.0)]  # one lane 40 ft into column 0's band; the other far past column 1's
+    moved = past_the_lanes(cols, lanes, 30.0)
+    assert moved[0] == (0.0, 76.0 + BELT_LANE_CLEAR_FT - 36.0) and moved[1] == (100.0, 0.0)
+    assert past_the_lanes(cols, lanes, 30.0, wet=lambda v, u: True) == cols
+
+
+def test_a_third_parcel_with_no_ground_off_the_row_is_not_seated(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The woodland scan's row rule: a seat in line with two placed parcels is stepped off the row, and where no ground off
+    it qualifies (`seat_off_the_row` returns None - asked of every seat, which it passes through when it is in no row) no
+    parcel is seated there. Forced here because the pool's rolls reach it
+    only by the accident of a layout, and a feature 261 re-seat moved Inashiro off it."""
+    from l7r.diagram.hamletgen.hinterland import parcels
+
+    plan = a_plan()
+
+    def _scan() -> list:
+        s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+        s.M["fields"] = []
+        plan.belt = []
+        return parcels.open_ground_patches(s, plan, count=6)
+
+    seated = _scan()
+    assert len(seated) >= 3, "non-vacuity: the open canvas seats a third parcel, so the row rule is asked"
+    asked: list = []
+    monkeypatch.setattr(parcels, "seat_off_the_row", lambda *a, **k: asked.append(1))
+    assert _scan() == [] and asked, "every seat asked, none with ground off the row, and none seated"
+
+
+def test_a_bamboo_thicket_is_not_seated_on_the_water() -> None:
+    """Feature 261 (settlement-review of Mizuguchi): the stand's target fell on the brook once the houses moved north of it;
+    a watercourse is refused at its half-width and 3 ft, so no seat stands on a stream the scan is given."""
+    from l7r.diagram.settlement import Settlement, seg_dist
+
+    from ._builders import a_plan
+
+    plan = a_plan()
+    s = Settlement(plan.W, plan.H, seed=plan.spec.seed)
+    s.meta(name="B", scale="hamlet", ftpx=1, down_deg=90)
+    brook = [(0.0, 1000.0), (float(plan.W), 1000.0)]
+    s.M["streams"] = [{"poly": [list(p) for p in brook], "w": 7}]
+    seats = hg.hinterland.bamboo_seats(s, plan)
+    assert all(seg_dist(q[0], q[1], brook[0], brook[1]) > 3.5 + 3.0 for poly in seats for q in poly), "a stand on the water"
+
+
+def test_the_copse_against_the_belt_anchors_on_its_lee_face() -> None:
+    """`lee_face` (settlement-review of Mizuguchi, feature 261): in each band across the wind, only the crowns within a crown's
+    depth of the most leeward - so the copse gathers on the houses' side of the belt, not beyond its windward face."""
+    from l7r.diagram.hamletgen.hinterland.stages import LEE_DEPTH_FT, lee_face
+
+    north = (0.0, -1.0)  # the wind from the north: windward is -y
+    belt = [(0.0, -100.0), (0.0, -120.0), (0.0, -200.0), (100.0, -150.0), (100.0, -250.0)]
+    lee = lee_face(belt, north)
+    assert set(lee) == {(0.0, -100.0), (0.0, -120.0), (100.0, -150.0)}
+    assert LEE_DEPTH_FT < 50.0
+
+
+def test_the_profile_is_sampled_along_its_length() -> None:
+    """`along_the_profile`: a sample every `step` along each stretch between columns, the columns kept and the last one
+    closing it; a short stretch keeps just its ends."""
+    from l7r.diagram.hamletgen.hinterland.belt import along_the_profile
+
+    pts = along_the_profile([(0.0, 0.0), (0.0, 90.0), (10.0, 90.0)], 30.0)
+    assert pts == [(0.0, 0.0), (0.0, 30.0), (0.0, 60.0), (0.0, 90.0), (10.0, 90.0)]
+
+
+def test_the_near_face_goes_round_the_house_it_leads_with() -> None:
+    """`round_the_houses` (feature 261, Kashikawa's belt in two pieces): where the fringe falls back steeply after the
+    column a house leads, the chord cut the corner 37 ft from that house; with points added where the house's disc stands
+    windward of the chord, every point of the near face stands at least `reach` from the house, the columns are kept and
+    the profile stays in order across the wind - either way round."""
+    import math
+
+    from l7r.diagram.hamletgen.hinterland.belt import along_the_profile, round_the_houses
+
+    reach = 79.0
+    cols = [(-90.0, 0.0), (0.0, 0.0), (90.0, -400.0), (180.0, -400.0)]
+    uv = [(0.0, 0.0)]  # (u, v): the house the middle column leads with
+    got = round_the_houses(cols, uv, reach)
+    assert all(c in got for c in cols) and len(got) > len(cols)
+    assert all(b[0] > a[0] for a, b in zip(got, got[1:], strict=False)), "in order across the wind"
+    for v, u in along_the_profile(got, 2.0):
+        assert math.dist((v, u + reach), (0.0, 0.0)) >= reach - 1.0, (v, u)  # within the sag of a 15 degree chord, 0.7 ft
+    before = min(math.dist((v, u + reach), (0.0, 0.0)) for v, u in along_the_profile(cols, 2.0))
+    assert before < reach - 30.0, "the chord alone cut the corner"
+    back = round_the_houses(list(reversed(cols)), uv, reach)
+    assert back == list(reversed(got))
+    assert round_the_houses(cols[:1], uv, reach) == cols[:1]
+    assert round_the_houses([(-90.0, 0.0), (90.0, 0.0)], [(-500.0, 0.0)], reach) == [(-90.0, 0.0), (90.0, 0.0)], "a house behind the face adds nothing"
+
+
+def test_the_far_face_keeps_the_depth_across_a_right_angle_between_columns() -> None:
+    """`far_envelope` (spec-fidelity of round 31ef113b): where the fringe turns a right angle between two columns 90 ft
+    apart across the wind, the band stays its depth across itself - every point along the steep chord stands at least the
+    depth from the far face - and the face never folds back across the wind."""
+    import math
+
+    from l7r.diagram.hamletgen.hinterland.belt import BELT_DEPTH_FT, along_the_profile, far_envelope
+
+    cols = [(-180.0, 0.0), (-90.0, 0.0), (0.0, 400.0), (90.0, 400.0)]
+    far = [(v, u + BELT_DEPTH_FT) for v, u in far_envelope(cols)]
+    assert all(b[0] > a[0] for a, b in zip(far, far[1:], strict=False)), "sampled in order across the wind"
+    for p in along_the_profile(cols):
+        gap = min(math.dist(p, q) for q in far)
+        assert gap >= BELT_DEPTH_FT * 0.9, (p, gap)
+    assert far_envelope([(-90.0, 0.0), (0.0, 0.0), (90.0, 0.0)]) == [(-90.0, 0.0), (-60.0, 0.0), (-30.0, 0.0), (0.0, 0.0), (30.0, 0.0), (60.0, 0.0), (90.0, 0.0)]

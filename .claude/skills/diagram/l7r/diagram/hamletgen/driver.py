@@ -27,7 +27,7 @@ from .burial import stage_burial
 from .consts import FIELD_ARCHETYPES, REF_HOUSEHOLDS
 from .frame import stage_crossings, stage_frame, stage_labels, stage_notice
 from .hinterland import stage_bamboo, stage_hinterland, stage_windbreak, stage_woodland
-from .homesteads import stage_appurtenances, stage_homesteads
+from .homesteads import stage_appurtenances, stage_homestead_fields, stage_homesteads
 from .plan import HamletSpec, SitePlan, plan_site
 from .pondstock import stage_pond_stock
 from .sink import stage_sink
@@ -103,6 +103,7 @@ STAGES = (
     # lane, and after this reorder it does, because the byre is simply part of the fabric the web
     # threads around.
     stage_web,
+    stage_homestead_fields,  # each household's own dry plot against its steading, fitted to the lanes (feature 261)
     stage_hinterland,
     stage_woodland,
     stage_windbreak,
@@ -229,6 +230,8 @@ def build(plan: SitePlan, avoid: Sequence[tuple[float, float]] = ()) -> Settleme
     these points. See `generate`, which re-rolls a map whose finished manifest stranded a farmhouse."""
     s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
     s._avoid_seats = list(avoid)  # type: ignore[attr-defined]
+    if plan.spec.byre_form is not None:  # a declared byre form bypasses the settlement engine's roll (feature 261)
+        s.pin_knob("byre_form", plan.spec.byre_form)
 
     if not os.environ.get(STAGE_PROFILE_ENV):
         with roll_scope(plan.spec):
@@ -254,6 +257,51 @@ def build(plan: SitePlan, avoid: Sequence[tuple[float, float]] = ()) -> Settleme
         if dur >= 0.05:
             print(f"  {dur:6.2f}s  {100 * dur / total:4.1f}%  {name}", file=sys.stderr)
     return s
+
+
+def stage_for(out_base: str) -> str:
+    """A staging base beside `out_base`, for one roll's files (feature 261). The directory sits next to the map's own
+    files, so the promotion is a same-filesystem rename, and it carries a copy of the map's `.notes.md` because the
+    page reads the notes from beside its own path."""
+    import shutil
+    import tempfile
+
+    stage = tempfile.mkdtemp(prefix=".roll-", dir=os.path.dirname(out_base) or ".")
+    base = os.path.join(stage, os.path.basename(out_base))
+    if os.path.exists(out_base + ".notes.md"):
+        shutil.copy2(out_base + ".notes.md", base + ".notes.md")
+    return base
+
+
+def promote(stage_base: str, out_base: str | None) -> None:
+    """Move a staged roll's files onto `out_base` (each an atomic rename) and remove the stage; with no `out_base`, only
+    remove it. THE POOL NEVER SHOWS A REJECTED ROLL (feature 261): `generate` used to finish every attempt straight
+    into the map's own files, so between a stranding roll and its re-roll the disk held the roll about to be thrown
+    away - and the gate's census, reading the pool beside its sweep, read Sawada's first attempt (146 belt crowns,
+    where the kept map draws 179)."""
+    import shutil
+
+    stage = os.path.dirname(stage_base)
+    prefix = os.path.basename(stage_base)
+    if out_base is not None:
+        for name in sorted(os.listdir(stage)):
+            if name.startswith(prefix + ".") and not name.endswith(".notes.md"):
+                os.replace(os.path.join(stage, name), out_base + name[len(prefix) :])
+    shutil.rmtree(stage, ignore_errors=True)
+
+
+def discard_on_failure(stage_base: str | None, roll: Callable[[], Any]) -> Any:
+    """Run one roll into its stage, and remove the stage if the roll raises (settlement-review of Kuwabata, feature 261: two
+    interrupted rolls left `.roll-*` directories in the pool folder, one holding a whole rejected roll, and a commit swept
+    them in - the pool showed the rejected roll `promote` exists to hide)."""
+    import shutil
+
+    try:
+        return roll()
+    except BaseException:
+        if stage_base is not None:
+            shutil.rmtree(os.path.dirname(stage_base), ignore_errors=True)
+        raise
 
 
 def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True) -> Report:
@@ -347,20 +395,20 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
     #
     # The retry is self-limiting: it runs only for a map that stranded a house, and it keeps a
     # re-roll only if the reach count got no worse.
-    _s, failures, seats, lines = _roll((), out_base)
+    # EVERY ATTEMPT FINISHES INTO ITS OWN STAGE, and only the kept one is promoted onto `out_base` (`promote`).
+    _stage = stage_for(out_base) if out_base is not None else None
+    _s, failures, seats, lines = discard_on_failure(_stage, lambda: _roll((), _stage))
+    kept_stage = _stage
     avoid: list[tuple[float, float]] = []
-    kept: list[tuple[float, float]] = []  # the avoid list that produced the map we are keeping
     stale = False  # ...and whether the files on disk came from a later roll we then rejected
     attempt = kept_attempt = 1
     after: list[str] = []  # the checks that forced each re-roll, in order
     _kept_placed = int(_s.M["meta"]["roll_placed"])  # the households the kept roll seated - a re-roll may not seat fewer
     # THE REPORT MUST CARRY THE KEPT ROLL, NOT THE LAST ONE. `rolled`/`rolled_m` hold whichever roll ran most
-    # recently, on the argument that "the kept attempt rolls last" - true only when the re-emit below runs, and
-    # the re-emit needs an `out_base`. A COHORT passes none: every member finishes into a scratch directory and
+    # recently, on the argument that "the kept attempt rolls last" - which a rejected re-roll makes false. A COHORT passes no `out_base`: every member finishes into a scratch directory and
     # is thrown away, so a rejected re-roll was the manifest the report handed back, and `cohort_audit` reads
     # `meta.roll_placed` off exactly that manifest (feature 215). The verdict lines were the kept roll's and the
-    # numbers beside them the rejected roll's. Snapshot the keeper instead, and restore it when nothing rewrote
-    # the files. Found while adding the shortfall re-roll below, which meets the same door.
+    # numbers beside them the rejected roll's. Snapshot the keeper instead, and hand it back. Found while adding the shortfall re-roll below, which meets the same door.
     _keep_plan, _keep_m = rolled["plan"], rolled_m["M"]
     for _ in range(4):
         # THE LOOP'S ENTRY IS THE PREDICATE TOO (feature 166 T03). It used to also require the gate to
@@ -372,7 +420,8 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
         avoid = avoid + seats
         after = after + ["farmhouses_reach_a_way"]
         attempt += 1
-        _s2, f2, seats2, lines2 = _roll(avoid, out_base, attempt, after)
+        _stage2 = stage_for(out_base) if out_base is not None else None
+        _s2, f2, seats2, lines2 = discard_on_failure(_stage2, lambda _a=avoid, _o=_stage2, _n=attempt, _f=after: _roll(_a, _o, _n, _f))
         # THE ACCEPT CRITERION IS THE REACH COUNT, NOT THE GATE'S TOTAL (feature 166 T03).
         #
         # It used to be `len(f2) <= len(failures)`: keep a re-roll only if the battery's WHOLE failure
@@ -392,47 +441,23 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
         # boundary: attempt 1 seated 14 of 20 with two stranded, attempt 2 seated 13 with none, and the loop KEPT the
         # second - a map that lost a household to reach the rest). The reach count decides, the seated count may not fall.
         if len(seats2) <= len(seats) and int(_s2.M["meta"]["roll_placed"]) >= _kept_placed:
-            failures, seats, lines, kept, kept_attempt = f2, seats2, lines2, list(avoid), attempt
+            failures, seats, lines, kept_attempt = f2, seats2, lines2, attempt
             _kept_placed = int(_s2.M["meta"]["roll_placed"])
             _keep_plan, _keep_m = rolled["plan"], rolled_m["M"]
+            if kept_stage is not None:
+                promote(kept_stage, None)  # the roll it replaces is discarded unseen
+            kept_stage = _stage2
         else:
+            if _stage2 is not None:
+                promote(_stage2, None)
             stale = True
             break
-    # THE BROOK'S SAY IN THE SEAT MAY NOT COST A HOUSE - EITHER A MISSING ONE OR AN UNREACHED ONE (feature 230).
-    # `seat_cluster` scores a field margin down when the brook runs near the band and strikes it out entirely when
-    # the brook divides the band, so that a hamlet does not stand astride its own stream - a defect
-    # `settlement-review` measured twice. The cohort then measured what that costs, against the pre-feature
-    # baseline of 48 of 48: seed 22 seated 8 of 10 on a margin the PENALTY alone had pushed it to, and seed 15
-    # seated all sixteen on the margin the strike-out left it and then could not reach one of them. Both are
-    # defects a reader sees, so neither rule wins outright and the map decides: roll it once more with the brook
-    # ignored at the seat, and keep that roll only if it is BETTER - more households seated, or as many with
-    # fewer of them stranded.
-    #
-    # IT RUNS AFTER THE REACH LOOP, NOT BEFORE IT, and that is a cost decision as much as a logical one: the loop
-    # above fixes most strandings by forbidding the ground, and a map it fixes must not pay for a second seat it
-    # does not need. So this fires only on a map that is still wrong when the cheaper ladder has finished.
-    if (_kept_placed < spec.households or seats) and int(rolled["plan"].seat_brook_steered) > 0 and not plan.seat_ignores_brook:
-        plan.seat_ignores_brook = True
-        attempt += 1
-        after = after + ["households_seated" if _kept_placed < spec.households else "farmhouses_reach_a_way"]
-        _s2, f2, seats2, lines2 = _roll((), out_base, attempt, after)
-        if (int(_s2.M["meta"]["roll_placed"]), -len(seats2)) > (_kept_placed, -len(seats)):
-            failures, seats, lines, kept, kept_attempt = f2, seats2, lines2, [], attempt
-            _kept_placed = int(_s2.M["meta"]["roll_placed"])
-            _keep_plan, _keep_m, stale = rolled["plan"], rolled_m["M"], False
-        else:
-            plan.seat_ignores_brook = False  # ignoring the brook was no better; the roll that stands is the one the loop kept
-            stale = True
-    if stale and out_base is not None:
-        # Generation is deterministic, so re-rolling the keeper's avoid list reproduces it exactly -
-        # and it is the only way to put the KEPT map back on disk without finishing a Settlement
-        # twice, which corrupts the SVG (see `_roll`).
-        # RE-EMIT ONLY - the verdict is already known. Generation is deterministic, so this rebuild
-        # is the same map with the same failures; taking the re-gate's answer instead would let a
-        # second opinion overwrite the one that was actually chosen.
-        _roll(kept, out_base, kept_attempt, after[: kept_attempt - 1])
-    elif stale:
-        rolled["plan"], rolled_m["M"] = _keep_plan, _keep_m  # no files to rewrite, so hand back the keeper itself
+    if kept_stage is not None:
+        promote(kept_stage, out_base)  # the kept roll's files, and only those, reach the map's own paths
+    if stale:
+        # The kept roll's files were staged, not overwritten, so there is nothing to re-emit (a re-roll of the keeper's
+        # avoid list used to put it back on disk): hand back the keeper itself.
+        rolled["plan"], rolled_m["M"] = _keep_plan, _keep_m
     return Report(plan=rolled.get("plan", plan), failures=failures, path=out_base, fail_lines=lines, attempt=kept_attempt, rerolled_after=after[: kept_attempt - 1], manifest=rolled_m.get("M"))
 
 

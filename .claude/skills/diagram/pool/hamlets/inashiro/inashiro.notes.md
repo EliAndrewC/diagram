@@ -6,8 +6,8 @@
 to a village district whose headman lives in the main village. Like every hamlet it has no headman
 of its own, no shrine, no tax-free plots and no cremation ground. It keeps a burial ground of its own
 (its rolled `hamlet_burial` is own_ground, feature 273): a small common ground holding the urns brought
-home from the main village's cremation ground, in a glade of the windbreak's east arm, a short way
-through the trees from the track north to the main village.
+home from the main village's cremation ground, in a glade cut into the windbreak west-north-west of the
+houses, beyond its last houses.
 
 **Kanji triangle**: 稲 *ina* "rice plant" + 代 *shiro* "paddy" (as in 苗代 *nawashiro*, a seedbed).
 稲代 Inashiro, "the rice-field" - the plainest possible name for the plainest possible hamlet, which
@@ -25,16 +25,16 @@ is the point: this map exists to be ordinary.
 ### Place
 
 - **district**: Mizuho-no-sato
-- **district direction**: north
+- **district direction**: southwest
 
 *Mizuho-no-sato (瑞穂の里, "village of ripe rice ears") is INVENTED for this map - drawn from gm-assistant's
 `place-names/pool.jsonl`, which carries its kanji and meaning, and not ruled on by the GM. The
-DIRECTION is not invented: it is the bearing of this map's own connector track where it leaves the cluster.*
+DIRECTION is not invented: it is the bearing of this map's own connector track where it leaves the cluster - compass 221 deg, southwest (measured 2026-09-27).*
 
 
 ### Features
 
-- **burial ground**: Inashiro keeps its own ground: a glade of graves cut into the windbreak's east arm, north-east of the houses, a short way through the trees from the track that runs north to the main village, the way the urns come home from its cremation ground. The land falls south, but the ground below the houses is paddy.
+- **burial ground**: Inashiro keeps its own ground: a glade of graves cut into the windbreak west-north-west of the houses, beyond its last houses, holding the urns brought home from the main village's cremation ground. The land falls south, but the ground below the houses is paddy.
 
 ## Why it exists
 
@@ -84,18 +84,11 @@ pipeline's, and it is the same order a person follows:
 - The **bare comb floor** on the fan's shoulders - paddy-green ground inside the field envelope
   where the carve did not tessellate into plots - is inherited from the shared `build_comb` engine,
   not from the scripted pipeline; Ikegami shows the same thing at the foot of its fan.
-- The wind is derived from the slope (cold air drains downhill off the high ground), which makes the
-  windbreak's side a consequence of the terrain rather than an independent regional fact. A GM who
-  knows the real prevailing wind for the province should pin it on the spec.
-- **On THIS map the wind is a restatement of the seat, not of the slope.** The fall is 90 deg, from
-  which `windward_for` can only return N, NW or NE - and the manifest declares **W**, because the
-  cluster came to rest on a flank margin and `stage_ways` re-reads the windward quarter off the
-  site's own back when the two disagree by more than ~70 deg (a house whose back is to the wrong
-  quarter has its shelter belt planted in the rice). That override is right, and it does mean the
-  belt's side here is circular: the belt stands west because the cluster's back is west, and the
-  wind was then named to match. On a cluster seated on the field's UPSLOPE margin the two rules
-  agree and the declared wind carries real information; on a flank seat it does not.
-- **Dry hem plots run ~3.6x the size of Ikegami's** (median 6,084 sq ft against 1,707; the finest of the four scripted hamlets - Kashikawa 6,137, Mizuguchi 7,323, Sawada 6,478. This bullet read "~3.5x" until a settlement-review re-measured it on the SHIPPED manifests, 2026-08-18: a standing known-open carries the current number or it is not a measurement) and chain single-file rather than packing two or (numbers re-measured 2026-09-09, feature 220, after the dry hem re-rolled 24 -> 29 plots: Inashiro is now the finest of the four, not the coarsest.)
+- **CLOSED 2026-09-26 (feature 261): the wind is the regional northwest.** The wind used to be derived
+  from the slope and then re-read off the seat, which made the belt's side circular here. Every map now
+  takes the northwest unless its spec declares a local wind (none does), and the cluster is seated with
+  its back to it; this map's belt stands on the north and west of its houses.
+- **Dry hem plots run ~4.3x the size of Ikegami's** (20 plots, median 7,391 sq ft against 1,707; the largest of the four scripted hamlets with a hem - Kashikawa 5,919, Mizuguchi 6,263, Sawada 7,253, re-measured on the shipped manifests 2026-09-28 after main's feature 276 re-laid the pool. This bullet read "~3.5x" until a settlement-review re-measured it on the SHIPPED manifests, 2026-08-18: a standing known-open carries the current number or it is not a measurement) and chain single-file rather than packing two or
   three deep, so the hem reads as large fields rather than household strips (`settlement-review`,
   2026-08-11). Parcel size, not acreage - the total is comparable. It wants a researched constant of
   its own.
@@ -1532,11 +1525,11 @@ caught a hand-typed count describing a roll that no longer shipped, twice in the
 correct the last one - so the numbers a reader can check now come from the artifact itself.
 
 <!-- census: generated by `make notes-census` - do not hand-edit -->
-- windbreak: **269** clumps drawn, **0** off the page
-- copse: **59** clumps drawn
+- windbreak: **327** clumps drawn, **65** off the page
+- copse: **52** clumps drawn
 - farmhouses: **15**
-- farmstead fixtures: bath **1**, coop **12**, manure **9**, privy **14**, shrine **1**, woodpile **14**
-- notice board at **(2603.4, 892.1)**, **7** of 15 farmhouses within 250 ft
+- farmstead fixtures: bath **2**, coop **12**, manure **12**, privy **12**, shrine **1**, woodpile **12**
+- notice board at the entrance, **(916.5, 740.5)**: **15** of 15 households' ways out pass it
 <!-- /census -->
 
 
@@ -1751,7 +1744,8 @@ among the rest. The strike-out has one limit, found by measuring a 48-seed cohor
 baseline: the ground the brook rules out is ground the houses had, and two seeds seated a household short on the
 margin it left them. So a hamlet that comes up short is rolled again with the brook ignored at the seat and kept
 only if it seats more, and every map records which way it came down (`meta.seat_divided`). This one did not need
-the second roll: it seats all fifteen on an undivided margin. And the path to the rice was being swept away as an orphan fragment: the sweeps ask whether every
+the second roll: it seats all fifteen on an undivided margin. (Retired 2026-09-27 by feature 261: ways cross the brook
+at a ford now, so the strike-out and its re-roll are gone and a hamlet may stand astride its brook.) And the path to the rice was being swept away as an orphan fragment: the sweeps ask whether every
 HOUSE a fragment serves is served by something else, and the field spur serves no house at all. It is flagged now
 and kept like a house's only way, and the length the clip leaves is recorded on every map (`meta.field_spur_ft`)
 whether the spur is drawn or not - which is how the three maps that currently have none became visible.
@@ -1766,3 +1760,20 @@ The random stream is untouched: the manifest diff is the `bund_beans` list only.
 dispatch) confirmed it from the two snapshots - every single-bead position removed and a pair laid in its
 place, run count unchanged, every new bead on the bund stroke, no pair crowding closer than the thirds of
 the shortest edge - and recorded PASS (`.git/review-verdicts/`).
+
+## 2026-09-27 (feature 261): the regional northwest wind, the brook crossed, and the layout moved
+
+The wind is no longer read off the slope: every map takes the region's northwest winter wind unless it declares a
+local one, and this one declares none. The main manifest recorded a north wind; the cluster now seats with its back
+to the northwest on the brook's west bank, so all 15 farmsteads moved (median 990 ft, each house to the nearest house
+on main's map) and the belt stands at 337 degrees from the houses, 327 clumps over a 123-degree arc, the frame holding
+every clump within 100 ft of a farmhouse on the page. The brook runs between the houses and the rice, and the front
+row stands on its far bank, fronting the field across the water; the field path crosses the brook square on a plank
+at a ford - the hamlet's one way to its rice. Each farmstead stands whole on its own bank, the dooryard copse keeps
+within 90 ft of a farmhouse (median 71 ft), and the entrance board stands on the track itself, squared to it, 16 ft from where the track out meets the lanes,
+passed by all 15 households' ways out. The track leaves southwest (221 degrees), so the district direction reads
+southwest. The rolled crescent is drawn, at an aspect of 2.0. Eleven of the fifteen homesteads carry their own dry plot
+against a lee or flank side or on the ground beside it, so a house's nearest dry ground lies a median 70 ft away; the hem along the supply canal
+stays, across the rice. The woodland commons are three stands, all of them across the field from the houses: the frame they
+must fit in begins 100 ft west of the houses, and the ground on the houses' side inside it lies between their keep-out
+and the field's set-back, too narrow for a stand.

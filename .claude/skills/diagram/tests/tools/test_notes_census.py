@@ -76,3 +76,17 @@ def test_main_rewrites_each_map_and_distinguishes_missing_absent_and_current(tmp
 def test_main_with_no_arguments_says_how_to_use_it_and_refuses(capsys) -> None:
     assert nc.main([]) == 2
     assert "usage:" in capsys.readouterr().err
+
+
+def test_an_entrance_board_is_counted_by_the_ways_out_that_pass_it() -> None:
+    """Feature 261: for a board seated at the entrance the census states how many households' ways out pass it, not how
+    many farmhouses stand within 250 ft - a count that says nothing about whether it is at the entrance."""
+    from l7r.diagram.tools import notes_census as nc
+
+    M = {
+        "meta": {"kosatsuba_seat": "entrance"},
+        "houses": [{"x": 100.0, "y": 60.0}, {"x": 100.0, "y": -60.0}],
+        "lanes": [{"connector": True, "pts": [[-400.0, 0.0], [0.0, 0.0]]}, {"pts": [[0.0, 0.0], [100.0, 50.0]]}, {"pts": [[0.0, 0.0], [100.0, -50.0]]}],
+        "kosatsuba": [{"x": -30.0, "y": 5.0}],
+    }
+    assert "at the entrance, **(-30.0, 5.0)**: **2** of 2 households' ways out pass it" in nc.census(M)

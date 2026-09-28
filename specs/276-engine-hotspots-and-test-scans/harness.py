@@ -1,10 +1,11 @@
 """Feature 276's measurement harness - the SAME code takes the before and the after figures.
 
-Run it from the skill directory through a pytest node (the engine refuses in-process calls outside make):
+Run it through make (the engine refuses in-process calls outside it):
 
-    cp ../../../specs/276-engine-hotspots-and-test-scans/harness.py tests/test_zz_harness_276_tmp.py
-    make test-file FILE=tests/test_zz_harness_276_tmp.py      # writes $H276_OUT (default /tmp/h276.json)
-    rm tests/test_zz_harness_276_tmp.py
+    make -C .claude/skills/diagram spec-harness SPEC=specs/276-engine-hotspots-and-test-scans OUT=<json>
+
+`measure.py` beside it does that and writes the AFTER figures into `measurements.json` (what `make figures` re-runs);
+the BEFORE figures are one-time observations of the unmodified code and carry no command.
 
 Every timing is wall-clock, unprofiled, the best of `REPEAT` runs in one process (the first run pays imports).
 What each section measures:
@@ -15,7 +16,8 @@ What each section measures:
   placement primitive - `try_place` from 60 / 120 / 240 seeds at one constant density - each with the count of full
   fit tests (`_bundle_fits` + `_envelope_blocked`, whichever the placer calls) and houses seated.
 - `seams`: `build_comb` at the comb-topology seeds, total and inside `close_seams`.
-- `track`: one reference roll (Inashiro, seed 4) with `stage_track` and `path_violations` timed inside it.
+- `track`: one reference roll (Inashiro, seed 4) with `stage_track` and its path checks timed inside it (`PathChecker.violations`
+  since feature 276; `path_violations` on the code before it).
 """
 
 from __future__ import annotations
@@ -30,7 +32,7 @@ from pathlib import Path
 
 REPEAT = 3
 SKILL = Path(__file__).resolve().parents[1] if (Path(__file__).resolve().parents[1] / "Makefile").exists() else Path.cwd()
-OUT = Path(os.environ.get("H276_OUT", "/tmp/h276.json"))
+OUT = Path(os.environ.get("HARNESS_OUT") or os.environ.get("H276_OUT") or "/tmp/h276.json")
 
 TESTS = [
     "tests/test_memory.py::test_no_engine_module_imports_a_heavy_library_at_import_time",
@@ -51,27 +53,39 @@ TESTS = [
 _DUR = re.compile(r"^([0-9.]+)s (setup|call|teardown)\s+(\S+)", re.M)
 
 
+def _run(nids: list[str]) -> float:
+    """Setup + call time of `nids` run together in ONE fresh interpreter, xdist off; -1 when any fails."""
+    r = subprocess.run(
+        [sys.executable, "-m", "pytest", "-q", "-p", "no:xdist", "-p", "no:cacheprovider", "--no-cov", "--durations=0", "--durations-min=0", *nids],
+        cwd=SKILL, capture_output=True, text=True,
+        env={**os.environ, "GATE_NO_CACHE": "1"},  # a comb test must BUILD, not read the roll cache
+    )
+    tot = sum(float(m.group(1)) for m in _DUR.finditer(r.stdout) if m.group(2) != "teardown")
+    return round(tot, 3) if r.returncode == 0 else -1.0
+
+
+AST_GROUP = TESTS[:4]
+RECORD_GROUP = [t for t in TESTS if "interactive/" in t]
+
+
 def _tests() -> dict[str, float]:
-    out = {}
-    for nid in TESTS:
-        r = subprocess.run(
-            [sys.executable, "-m", "pytest", "-q", "-p", "no:xdist", "-p", "no:cacheprovider", "--no-cov", "--durations=0", "--durations-min=0", nid],
-            cwd=SKILL, capture_output=True, text=True,
-            env={**os.environ, "GATE_NO_CACHE": "1"},  # a comb test must BUILD, not read the roll cache
-        )
-        tot = sum(float(m.group(1)) for m in _DUR.finditer(r.stdout) if m.group(2) != "teardown")
-        out[nid] = round(tot, 3) if r.returncode == 0 else -1.0
+    out = {nid: _run([nid]) for nid in TESTS}
+    out["group:ast-four-together"] = _run(AST_GROUP)  # SC-001: the four share one parse in one process
+    out["group:record-five-together"] = _run(RECORD_GROUP)  # SC-001a: the five share their tables
     return out
 
 
 def _best(fn):
+    """The fastest of `REPEAT` runs AND that run's own result (a sub-timing the result carries belongs to the same run -
+    the first version returned the LAST run's result beside the best run's time)."""
     best = None
     res = None
     for _ in range(REPEAT):
         t = time.perf_counter()
-        res = fn()
+        got = fn()
         dt = time.perf_counter() - t
-        best = dt if best is None else min(best, dt)
+        if best is None or dt < best:
+            best, res = dt, got
     return best, res
 
 
@@ -94,8 +108,12 @@ def _homesteads() -> dict:
             patched.append((name, real))
     rows = {}
     try:
-        def rescue():
+        # EACH SCENARIO ON BOTH PATHS (feature 276's plan review): the pool's hamlets are all NUCLEATED
+        # (`_place_bundle_nucleated`, `_envelope_blocked`); the dispersed spiral (`_place_bundle`, `_bundle_fits`) is the
+        # other form. `_toy_hamlet` now sets the placer's switch from its plan; `form` overrides it per row.
+        def rescue(form):
             s, plan = _toy_hamlet(20)
+            s._nucleated = form == "nucleated"
             cx_, cy_ = float(plan.seat["cx"]), float(plan.seat["cy"])
             s.block_polys.append([(cx_ - 2000.0, cy_ - 2000.0), (cx_ + 2000.0, cy_ - 2000.0), (cx_ + 2000.0, cy_ - 260.0), (cx_ - 2000.0, cy_ - 260.0)])
             s.block_polys.append([(cx_ - 2000.0, cy_ + 260.0), (cx_ + 2000.0, cy_ + 260.0), (cx_ + 2000.0, cy_ + 2000.0), (cx_ - 2000.0, cy_ + 2000.0)])
@@ -103,8 +121,9 @@ def _homesteads() -> dict:
             stage_homesteads(s, plan)
             return len(s.M["houses"]), counted["fits"]
 
-        dt, (houses, fits) = _best(rescue)
-        rows["rescue-20"] = {"s": round(dt, 3), "houses": houses, "fit_tests": fits}
+        for form in ("nucleated", "dispersed"):
+            dt, (houses, fits) = _best(lambda form=form: rescue(form))
+            rows[f"rescue-20-{form}"] = {"s": round(dt, 3), "houses": houses, "fit_tests": fits}
         for n in (10, 20):  # the hamlet band is 10-20 households; a larger quota is a village
             def open_toy(n=n):
                 s, plan = _toy_hamlet(n)
@@ -119,25 +138,44 @@ def _homesteads() -> dict:
         # shows a flat `s_per_house`, and one that re-tests every placed house per candidate grows with N.
         import random as _r
 
-        for n in (60, 120, 240):
-            def dense(n=n):
-                side = int((n ** 0.5) * 95) + 400
-                s = Settlement(side, side, seed=7)
-                s.meta(name="D", scale="hamlet", ftpx=1, toscale=True, households=15, down_deg=90, water_flow=90, nucleated=True)
-                rng = _r.Random(n)
-                k = int(n ** 0.5) + 1
-                counted["fits"] = 0
-                seated = 0
-                for i in range(n):
-                    gx, gy = i % k, i // k
-                    x = 200 + gx * 95 + rng.uniform(-20, 20)
-                    y = 200 + gy * 95 + rng.uniform(-20, 20)
-                    if s.try_place(x, y, "plain"):
-                        seated += 1
-                return seated, counted["fits"]
+        for form in ("nucleated", "dispersed"):
+            for n in (60, 120, 240):
+                def dense(n=n, form=form):
+                    side = int((n ** 0.5) * 95) + 400
+                    s = Settlement(side, side, seed=7)
+                    s.meta(name="D", scale="hamlet", ftpx=1, toscale=True, households=15, down_deg=90, water_flow=90, nucleated=form == "nucleated")
+                    s._nucleated = form == "nucleated"
+                    rng = _r.Random(n)
+                    k = int(n ** 0.5) + 1
+                    counted["fits"] = 0
+                    seated = 0
+                    for i in range(n):
+                        gx, gy = i % k, i // k
+                        x = 200 + gx * 95 + rng.uniform(-20, 20)
+                        y = 200 + gy * 95 + rng.uniform(-20, 20)
+                        if s.try_place(x, y, "plain"):
+                            seated += 1
+                    return seated, counted["fits"]
 
-            dt, (houses, fits) = _best(dense)
-            rows[f"dense-{n}"] = {"s": round(dt, 3), "houses": houses, "fit_tests": fits, "s_per_house": round(dt / max(houses, 1), 4)}
+                dt, (houses, fits) = _best(dense)
+                rows[f"dense-{n}-{form}"] = {"s": round(dt, 3), "houses": houses, "fit_tests": fits, "s_per_house": round(dt / max(houses, 1), 4)}
+                # THE HOUSE COUNT OVER FIVE LAYOUTS (spec Amendment 2): one layout's count moves by a few houses with any
+                # reshuffle of the households' rolls, so "no fewer houses" is judged on the total over five jitter seeds.
+                def five(n=n, form=form):  # type: ignore[no-untyped-def]
+                    total = 0
+                    for lay in range(5):
+                        side = int((n ** 0.5) * 95) + 400
+                        s = Settlement(side, side, seed=7)
+                        s.meta(name="D", scale="hamlet", ftpx=1, toscale=True, households=15, down_deg=90, water_flow=90, nucleated=form == "nucleated")
+                        s._nucleated = form == "nucleated"
+                        rng = _r.Random(n * 1000 + lay)
+                        k = int(n ** 0.5) + 1
+                        for i in range(n):
+                            s.try_place(200 + (i % k) * 95 + rng.uniform(-20, 20), 200 + (i // k) * 95 + rng.uniform(-20, 20), "plain")
+                        total += len(s.M["houses"])
+                    return total
+
+                rows[f"dense-{n}-{form}"]["houses_five_layouts"] = five()
     finally:
         for name, real in patched:
             setattr(Settlement, name, real)
@@ -174,11 +212,14 @@ def _seams() -> dict:
 
 
 def _track() -> dict:
+    """The track stage and its path checks, timed inside one reference roll. The checks are `PathChecker.violations`
+    since feature 276 (the stage no longer calls `path_violations`, which is kept as the oracle); on the code before it,
+    `path_violations` is what this wraps."""
     from l7r.diagram import hamletgen as hg
-    from l7r.diagram.hamletgen.ways import track
+    from l7r.diagram.hamletgen.ways import checks, track
 
     acc = {"stage": 0.0, "checks": 0.0, "calls": 0}
-    real_stage, real_pv = track.stage_track, track.path_violations
+    real_stage = track.stage_track
 
     def stage(*a, **k):
         t = time.perf_counter()
@@ -187,15 +228,22 @@ def _track() -> dict:
         finally:
             acc["stage"] += time.perf_counter() - t
 
-    def pv(*a, **k):
-        acc["calls"] += 1
-        t = time.perf_counter()
-        try:
-            return real_pv(*a, **k)
-        finally:
-            acc["checks"] += time.perf_counter() - t
+    def timed(fn):
+        def run(*a, **k):
+            acc["calls"] += 1
+            t = time.perf_counter()
+            try:
+                return fn(*a, **k)
+            finally:
+                acc["checks"] += time.perf_counter() - t
+        return run
 
-    track.path_violations = pv
+    has_checker = hasattr(checks, "PathChecker")
+    real = checks.PathChecker.violations if has_checker else track.path_violations
+    if has_checker:
+        checks.PathChecker.violations = timed(real)
+    else:
+        track.path_violations = timed(real)
     import l7r.diagram.hamletgen.driver as drv
     stages_before = drv.STAGES
     try:
@@ -209,7 +257,10 @@ def _track() -> dict:
                 best = row
         return best or {}
     finally:
-        track.path_violations = real_pv
+        if has_checker:
+            checks.PathChecker.violations = real
+        else:
+            track.path_violations = real
         drv.STAGES = stages_before
 
 

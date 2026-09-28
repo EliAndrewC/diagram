@@ -276,21 +276,25 @@ jog instead of ignoring it. It found two things:
   field outline and the fill spills further still. The honest fix is a second pass that adds lane
   after the homesteads land, serving whatever the fill actually produced; that is real work and it
   is listed under "If this is continued".
-- **A flank-seated cluster makes its declared wind circular.** `stage_ways` re-reads the windward
-  quarter off the site's own back when the seat and the rolled wind disagree by more than ~70 deg,
-  which is right - but it means that on a map like Inashiro the belt is west because the cluster's
-  back is west, and the wind was named to match. Recorded in the map's own notes, where the claim
-  that the wind comes off the slope was stated without that qualification.
+- **The seat bends to the wind, never the wind to the seat** (feature 261). The wind is the regional
+  northwest unless the spec declares a local one, and the cluster is seated only on a margin whose
+  back faces within 45 degrees of it; a map that has no such margin falls back to the best other one
+  and records `meta.seat_offwind`, which the pool may not carry.
+- **The brook is crossed, never routed around** (feature 261, GM 2026-09-27: *"if we find instead that our
+  placement algorithm ends up not making it possible to lay out a known-to-be-valid settlement configuration
+  then we should fix the placement algorithm instead"*). Fords stand every ~160 ft along the brook where it runs
+  straight enough to cross square; a way that meets the water crosses at one and `stage_crossings` decks it. So
+  a seat the brook runs through is only scored down, never refused, and a hamlet may stand astride its brook -
+  the form the record attests for a settlement's own channel - with each farmstead whole on one bank.
 
 ## Where it is weaker than a person
 
 Recorded honestly, because these are the things that decide whether to adopt it:
 
-- **The wind is derived from the slope**, not from the region. Cold air drains downhill, so the
-  local cold wind comes off the high ground - which is real, and it is what makes "back to the hill"
-  and "back to the wind" one fact. But it means the map declares an exposure implied by its own
-  layout rather than a fact about the province. A GM who knows the real prevailing wind should pin
-  it on the spec.
+- **The wind is the region's, not the valley's.** Every map takes the northwesterly winter wind
+  unless its spec declares a local one (GM 2026-09-26: "only when declared"). A real valley may have
+  a cold wind of its own draining off its high side; the script cannot know that, so a GM who does
+  declares it on the spec.
 - **No sense of PLACE.** The script produces a correct hamlet; it does not produce Ikegami, which is
   named for its relationship to its pond. Naming, the one distinguishing feature, the reason this
   hamlet is worth a map - all still a person's job.

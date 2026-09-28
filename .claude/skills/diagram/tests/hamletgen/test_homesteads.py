@@ -102,6 +102,27 @@ def test_farmstead_fixtures_honor_the_spec_floor() -> None:
     assert len(owners) == len(s.M["farm_fixtures"]), "the floor never doubles a house"
 
 
+def test_a_fixture_no_seat_can_take_is_recorded_as_unseated(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The miss is RECORDED (settlement-review of Kuwabata, 2026-09-12): with every seat and every outward rung blocked,
+    nothing is drawn and `meta.farm_fixtures_unseated` counts each kind that could not stand - asked directly since
+    feature 276's maps stopped taking this branch on any pool roll."""
+    from l7r.diagram.hamletgen.homesteads import farmstead_fixtures
+    from l7r.diagram.hamletgen.homesteads import fixtures as fixtures_mod
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(W=900, H=700, seed=7)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    houses = [{"x": 200.0 + 110 * i, "y": 300.0, "w": 46.0, "h": 28.0, "rot": 0.0, "shed_side": "N"} for i in range(4)]
+    for h in houses:
+        s.M["houses"].append(dict(h))
+        s.placed.append((h["x"], h["y"], h["w"], h["h"]))
+    monkeypatch.setattr(fixtures_mod, "_strip_blocked", lambda *a, **k: True)
+    monkeypatch.setattr(fixtures_mod, "_trunk_blocked", lambda *a, **k: True)  # the yard trees seat by their own test
+    assert farmstead_fixtures(s, a_plan(), houses) == 0
+    missed = s.M["meta"].get("farm_fixtures_unseated") or {}
+    assert missed and sum(missed.values()) > 0 and not s.M.get("farm_fixtures")
+
+
 # ---- feature 145: the refusal branches of the fixture placer that no cohort seed took --------------
 
 
@@ -282,6 +303,30 @@ def test_a_trunk_on_a_stream_is_refused_by_the_water_arm_alone() -> None:
     assert _trunk_blocked(s, 700.0, 700.0, 20.0, [], [], None, []) is False
 
 
+def test_a_fixture_across_the_brook_from_its_house_is_across() -> None:
+    """Feature 261 FR-013: the line from the house to a fixture's seat crossing a stream puts the seat on the far
+    bank; a seat on the house's own bank, or a sheet with no stream, is not."""
+    from l7r.diagram.hamletgen.homesteads.fixtures import across_the_brook
+
+    s = Settlement(1400, 1400, seed=1)
+    s.meta(name="T", scale="hamlet", ftpx=1, down_deg=90)
+    assert across_the_brook(s, (700.0, 600.0), (700.0, 800.0)) is False
+    s.M["streams"] = [{"poly": [[100.0, 700.0], [1300.0, 700.0]], "w": 9}]
+    assert across_the_brook(s, (700.0, 600.0), (700.0, 800.0)) is True
+    assert across_the_brook(s, (700.0, 600.0), (760.0, 640.0)) is False
+
+
+def test_a_fixture_beyond_a_lane_from_its_house_is_across() -> None:
+    """Settlement-review of Mizuguchi (feature 261): a lane between the house and the seat puts the seat outside the
+    plot; a seat on the house's side of every lane is not across."""
+    from l7r.diagram.hamletgen.homesteads.fixtures import across_a_lane
+
+    lane = ([(100.0, 700.0), (500.0, 700.0), (1300.0, 700.0)], 4.5)
+    assert across_a_lane([lane], (700.0, 600.0), (700.0, 720.0)) is True
+    assert across_a_lane([lane], (700.0, 600.0), (740.0, 660.0)) is False
+    assert across_a_lane([], (700.0, 600.0), (700.0, 720.0)) is False
+
+
 def test_the_shrine_budget_refuses_a_second_house_that_rolls_one(monkeypatch) -> None:  # type: ignore[no-untyped-def]
     """`farmstead_fixtures`: the shrine share is a CEILING - "very rare, but notable" - so once the budget the share
     allows is spent, a later house that rolls a shrine gets none, whatever its roll says."""
@@ -304,6 +349,39 @@ def test_the_shrine_budget_refuses_a_second_house_that_rolls_one(monkeypatch) ->
     assert len(shrines) == 2, "the share allows two of four; the third house that rolled one is refused"
 
 
+def test_a_shrine_with_no_seat_passes_to_the_next_house_with_room(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """`farmstead_fixtures` (settlement-review of Mizuguchi, feature 261): the one house that rolled the map's shrine has
+    every seat beyond a lane, so the shrine goes to the next house with room rather than off the map - and where no house
+    has room, the miss is recorded once."""
+    from l7r.diagram.hamletgen.homesteads import fixtures as fx
+    from l7r.diagram.settlement import Settlement
+
+    monkeypatch.setitem(fx.FIXTURE_BANDS, "shrine", (0.5, 0.5))
+    probe = Settlement(W=1200, H=700, seed=7)
+    spots = [(float(x), y) for x in range(150, 1100, 110) for y in (250.0, 400.0)]
+    rolls = next(p for p in spots if probe._hjit(p[0], p[1], fx._SALT["shrine"]) < 0.5)
+    other = next(p for p in spots if probe._hjit(p[0], p[1], fx._SALT["shrine"]) >= 0.5 and abs(p[0] - rolls[0]) > 200)
+
+    def run(boxed):  # type: ignore[no-untyped-def]
+        s = Settlement(W=1200, H=700, seed=7)
+        s.meta(name="T", scale="hamlet", ftpx=1)
+        houses = [{"x": x, "y": y, "w": 46.0, "h": 28.0, "rot": 0.0, "shed_side": "N"} for x, y in (rolls, other)]
+        for h in houses:
+            s.M["houses"].append(dict(h))
+            s.placed.append((h["x"], h["y"], h["w"], h["h"]))
+        monkeypatch.setattr(fx, "across_a_lane", lambda lanes, house, seat: house in boxed)
+        fx.farmstead_fixtures(s, a_plan(), houses)
+        return s
+
+    s = run({rolls})
+    shrines = [r for r in s.M["farm_fixtures"] if r["kind"] == "shrine"]
+    assert [tuple(r["of"]) for r in shrines] == [(round(other[0], 1), round(other[1], 1))], "passed to the house with room"
+    assert "shrine" not in (s.M["meta"].get("farm_fixtures_unseated") or {})
+    s = run({rolls, other})
+    assert not [r for r in s.M["farm_fixtures"] if r["kind"] == "shrine"]
+    assert s.M["meta"]["farm_fixtures_unseated"]["shrine"] == 1, "no house had room: one miss"
+
+
 def _toy_hamlet(households: int, seed: int = 3):  # type: ignore[no-untyped-def]
     """The linear toy's setup, for the stage's own branches: a square field, a seat band, the connector."""
     plan = a_plan(households=households)
@@ -311,6 +389,10 @@ def _toy_hamlet(households: int, seed: int = 3):  # type: ignore[no-untyped-def]
     plan.settlement_form = "nucleated"
     s = Settlement(1400, 1400, seed=seed)
     s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=households, down_deg=90, water_flow=90, nucleated=True)
+    # THE PLACER'S OWN SWITCH, as the generator sets it (`hamletgen/water/skeleton.py`): `meta(nucleated=True)` only
+    # RECORDS the form, and without this the toy's homesteads ran the DISPERSED spiral - a path no pool hamlet uses
+    # (found by feature 276's plan review: the rescue scenario's grove rejections could only come from a dispersed bundle).
+    s._nucleated = plan.settlement_form == "nucleated"
     s.field_polys.append(list(plan.envelope))
     cx_, cy_ = float(plan.seat["cx"]), float(plan.seat["cy"])
     s.M["lanes"] = [{"pts": [[cx_ - 400, cy_], [cx_ + 400, cy_]], "w": 6, "connector": True}]
@@ -357,6 +439,10 @@ def test_a_cluster_standing_off_its_field_gets_the_spur_to_it() -> None:
     from l7r.diagram.hamletgen.ways import stage_track
 
     s, plan = _toy_hamlet(10)
+    # A DISPERSED cluster, said so (feature 276): the seats three hundred feet back fall off the toy's canvas, and it
+    # was the dispersed spiral - which the toy ran by accident until `_toy_hamlet` set the placer's own switch -
+    # that found room within reach of them. The spur is a property of the track, whatever form stands back there.
+    s._nucleated = False
     cx_, cy_ = float(plan.seat["cx"]), float(plan.seat["cy"])
     ox, oy = plan.seat["out"]
     n = 0
@@ -392,3 +478,170 @@ def test_a_rank_round_that_seats_nothing_grows_the_cluster_along_the_field() -> 
     ss = s.M["meta"]["seat_search"]
     assert ss["rounds"] >= 1, "the ranks ran"
     assert len(s.M["houses"]) > ss["front"], "the only seats left were the ends, and the cluster took them"
+
+
+def test_the_yard_ring_seats_a_fixture_at_every_wall_of_its_own_house() -> None:
+    """`yard_ring` (feature 261): the last resort of a fixture whose recorded seats are all refused - the back wall at three
+    points, each flank at three heights turned along it, and the front corners - each a wall gap and half a depth out."""
+    from l7r.diagram.hamletgen.homesteads.fixtures import yard_ring
+
+    ring = yard_ring(40.0, 20.0, 3.0, 6.0, 4.0)
+    assert len(ring) == 11
+    assert all(ly == -(10.0 + 3.0 + 2.0) and (cw, ch) == (6.0, 4.0) for _lx, ly, cw, ch in ring[:3]), "the back wall, along it"
+    assert all(abs(lx) == 20.0 + 3.0 + 2.0 and (cw, ch) == (4.0, 6.0) for lx, _ly, cw, ch in ring[3:9]), "the flanks, turned"
+    assert all(ly == 10.0 + 3.0 + 2.0 for _lx, ly, _cw, _ch in ring[9:]), "the front corners"
+
+
+def test_a_fixture_with_no_seat_anywhere_is_recorded_persimmons_included(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """`farmstead_fixtures` (feature 261): every seat refused - here by a lane between the house and every seat - leaves
+    each rolled kind recorded in `meta.farm_fixtures_unseated`, the persimmon too, which used to vanish unrecorded."""
+    from l7r.diagram.hamletgen.homesteads import fixtures as fx
+    from l7r.diagram.settlement import Settlement
+
+    for kind in fx.FIXTURE_BANDS:
+        monkeypatch.setitem(fx.FIXTURE_BANDS, kind, (1.0, 1.0))
+    s = Settlement(W=1200, H=700, seed=7)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    houses = [{"x": 600.0, "y": 350.0, "w": 46.0, "h": 28.0, "rot": 0.0, "shed_side": "N"}]
+    s.M["houses"].append(dict(houses[0]))
+    s.placed.append((600.0, 350.0, 46.0, 28.0))
+    monkeypatch.setattr(fx, "across_a_lane", lambda lanes, house, seat: True)
+    fx.farmstead_fixtures(s, a_plan(), houses)
+    missed = s.M["meta"]["farm_fixtures_unseated"]
+    assert missed.get("persimmon") == 1 and missed.get("privy") == 1 and missed.get("shrine") == 1
+    assert not s.M.get("persimmons") and not s.M.get("farm_fixtures")
+
+
+def test_the_yard_ring_looks_past_the_homestead_bundles(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """`farmstead_fixtures` (feature 261, spec-fidelity of round 6fefdcdf): a bundle box is a packing reservation, so the yard
+    ring is not refused by one - the house's own offset by its gardens, or a neighbor's over open ground - while the
+    recorded seats still are."""
+    from l7r.diagram.hamletgen.homesteads import fixtures as fx
+    from l7r.diagram.settlement import Settlement
+
+    monkeypatch.setitem(fx.FIXTURE_BANDS, "coop", (1.0, 1.0))
+    for kind in ("privy", "manure", "bath", "woodpile", "shrine", "persimmon"):
+        monkeypatch.setitem(fx.FIXTURE_BANDS, kind, (0.0, 0.0))
+    s = Settlement(W=1200, H=700, seed=7)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    houses = [{"x": 600.0, "y": 350.0, "w": 46.0, "h": 28.0, "rot": 0.0, "shed_side": "N"}]
+    s.M["houses"].append(dict(houses[0]))
+    s.placed += [(600.0, 350.0, 46.0, 28.0), (590.0, 360.0, 140.0, 120.0)]  # the house, and its bundle offset off-center
+    fx.farmstead_fixtures(s, a_plan(), houses)
+    coops = [r for r in s.M.get("farm_fixtures", []) if r["kind"] == "coop"]
+    assert len(coops) == 1 and not (s.M["meta"].get("farm_fixtures_unseated") or {}), "seated by the ring, through the bundle"
+
+
+def test_an_accretion_hamlets_ranks_stand_off_their_lines_and_a_planned_ones_do_not() -> None:
+    """`stage_homesteads` (feature 261 D22): an `alleys` hamlet's rank seats take the depth jitter, so the ranks behind the
+    front row are not all on one line; a `back_lane` hamlet seated the same way keeps its ranks exact. Both seat every
+    household."""
+    from l7r.diagram.hamletgen.homesteads import stage_homesteads
+
+    seats = {}
+    for form in ("alleys", "back_lane"):
+        s, plan = _toy_hamlet(14)
+        plan.lane_web = form
+        stage_homesteads(s, plan)
+        assert len(s.M["houses"]) == 14
+        seats[form] = {(round(h["x"], 1), round(h["y"], 1)) for h in s.M["houses"]}
+    moved = seats["alleys"] - seats["back_lane"]
+    assert moved and len(moved) < 14, "the ranks' seats moved off their lines; the front row did not"
+
+
+# ---- feature 276 FR-003 (plan D9): the free ground proposes, the fit test decides ----------------------------------
+
+
+def _seats(s):  # type: ignore[no-untyped-def]
+    return [(round(h["x"], 3), round(h["y"], 3), tuple(round(v, 3) for v in (h.get("geom") or {}).get("bbox", ()))) for h in s.M["houses"]]
+
+
+def _rescue(form):  # type: ignore[no-untyped-def]
+    s, plan = _toy_hamlet(20)
+    s._nucleated = form == "nucleated"
+    cx_, cy_ = float(plan.seat["cx"]), float(plan.seat["cy"])
+    s.block_polys.append([(cx_ - 2000.0, cy_ - 2000.0), (cx_ + 2000.0, cy_ - 2000.0), (cx_ + 2000.0, cy_ - 260.0), (cx_ - 2000.0, cy_ - 260.0)])
+    s.block_polys.append([(cx_ - 2000.0, cy_ + 260.0), (cx_ + 2000.0, cy_ + 260.0), (cx_ + 2000.0, cy_ + 2000.0), (cx_ - 2000.0, cy_ + 2000.0)])
+    return s, plan
+
+
+@pytest.mark.parametrize("form", ["nucleated", "dispersed"])
+@pytest.mark.parametrize("scenario", ["rescue", "open"])
+def test_the_free_ground_changes_no_seat(form: str, scenario: str, monkeypatch: pytest.MonkeyPatch) -> None:
+    """The same houses, at the same seats, with the index asked first and with it switched off entirely."""
+    from l7r.diagram.hamletgen.homesteads import boundary, stage_homesteads
+    from l7r.diagram.settlement import Settlement
+
+    def roll():  # type: ignore[no-untyped-def]
+        s, plan = _rescue(form) if scenario == "rescue" else _toy_hamlet(15)
+        s._nucleated = form == "nucleated"
+        stage_homesteads(s, plan)
+        return _seats(s)
+
+    with_index = roll()
+    monkeypatch.setattr(boundary.FreeGround, "rect_refused", lambda self, rect: False)
+    monkeypatch.setattr(Settlement, "_seat_refused", lambda self, x, y, hw, hh: False)
+    monkeypatch.setattr(Settlement, "_bundle_refused", lambda self, geom: False)
+    without = roll()
+    assert with_index == without and len(with_index) >= 10
+
+
+def test_a_side_is_not_dropped_for_ground_the_loop_never_judges() -> None:
+    """Plan review 2's case: on the nucleated path a side's own box is ground-tested only when the whole envelope was
+    refused. With the envelope clear, an index claiming EVERY other box as taken - each side's own sample points
+    included - must leave the seat exactly as it is with no index at all."""
+    from l7r.diagram.settlement import Settlement
+
+    class RefusesAllButTheEnvelope:
+        def __init__(self, env):  # type: ignore[no-untyped-def]
+            self.env = env
+
+        def rect_refused(self, rect):  # type: ignore[no-untyped-def]
+            return rect != self.env
+
+    seated = 0
+    for x, y in ((300.0, 300.0), (620.0, 410.0), (900.0, 760.0)):
+        s = Settlement(1400, 1400, seed=5)
+        s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=15, down_deg=90, water_flow=90, nucleated=True)
+        s._nucleated = True
+        plain = s._place_bundle_nucleated(x, y, 30.0, 20.0, False)
+        assert s._envelope_blocked(s._bundle_envelope(x, y, 30.0, 20.0, False)) is None, "the case: the whole envelope clear"
+        s._free_ground = RefusesAllButTheEnvelope(s._bundle_envelope(x, y, 30.0, 20.0, False))
+        assert s._place_bundle_nucleated(x, y, 30.0, 20.0, False) == plain
+        seated += plain is not None
+    assert seated == 3, "non-vacuity: each seat was taken"
+
+
+def test_every_surely_taken_cell_is_ground_the_fit_test_refuses() -> None:
+    """FreeGround's exactness, asked of the real boundary on the toy: any point inside a taken cell is refused by the
+    nine-point ground test itself (a zero-size rectangle there is nine copies of the point)."""
+    import random
+
+    from l7r.diagram.hamletgen.homesteads.boundary import install_site_boundary
+
+    s, plan = _rescue("nucleated")
+    install_site_boundary(s, plan)
+    fg = s._free_ground
+    assert len(fg.taken) > 100, "non-vacuity: the no-build walls and the field make taken ground"
+    r = random.Random(276)
+    for i, j in r.sample(sorted(fg.taken), 300):
+        px, py = fg.x0 + (i + r.random()) * fg.cell, fg.y0 + (j + r.random()) * fg.cell
+        assert s._site_blocks_rect((px, py, 0.0, 0.0)), (px, py)
+
+
+def test_the_front_row_loop_stops_once_its_share_is_seated(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """`stage_homesteads`: the row's loop breaks when its share is placed, however many seats the chain still offers - here
+    the chain's seats are offered twice over, and the row still takes exactly its share."""
+    import math
+
+    from l7r.diagram.hamletgen.consts import CLUSTER_DRAWN_ASPECT
+    from l7r.diagram.hamletgen.homesteads import stage_homesteads
+    from l7r.diagram.hamletgen.homesteads import stages as st
+
+    real = st.front_row
+    monkeypatch.setattr(st, "front_row", lambda *a, **k: (lambda seats: seats + seats)(list(real(*a, **k))))
+    s, plan = _toy_hamlet(10)
+    plan.cluster_shape = "round"
+    stage_homesteads(s, plan)
+    lo, hi = CLUSTER_DRAWN_ASPECT["round"]
+    assert s.M["meta"]["seat_search"]["front"] == min(10, max(6, round(math.sqrt(10 * (lo + hi)))))

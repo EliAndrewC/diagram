@@ -160,41 +160,117 @@ class SiteCorridors:
     its holes, or a ring vertex inside the rectangle (the `_rect_hits` arms); `hit_center` asks the REGISTERED set
     at one point (the center, as `_near_corridor`)."""
 
-    __slots__ = ("center", "full", "holes", "rings", "ring_pts")
+    __slots__ = ("center", "full", "hole_grid", "holes", "rings", "ring_pts", "water")
 
     def __init__(self, corridors: tuple[list[Seg], list[Seg]], outline: tuple[list[list[tuple[float, float]]], list[list[tuple[float, float]]]] | None = None, cell: float = 128.0) -> None:
         self.ring_pts: list[list[tuple[float, float]]] = [list(r) for r in (outline[0] if outline else [])]  # the rings as points, for the front row's ground push (feature 227)
         water, registered = corridors
+        self.water = list(water)  # the water courses as segments with their clearance, for the front row's push across a brook (feature 261)
         rings, holes = outline if outline is not None else ([], [])
         self.full = PointGrid(cell)
         self.full.extend([(a, b, clr, min(a[0], b[0]) - clr, min(a[1], b[1]) - clr, max(a[0], b[0]) + clr, max(a[1], b[1]) + clr) for a, b, clr in water])
         self.center = PointGrid(cell)
         self.center.extend([(a, b, clr, min(a[0], b[0]) - clr, min(a[1], b[1]) - clr, max(a[0], b[0]) + clr, max(a[1], b[1]) + clr) for a, b, clr in registered])
+        # EACH RING CARRIES A GRID OF ITS OWN VERTICES, AND THE HOLES A GRID OF THEIR BOXES (feature 276, FR-003): the
+        # vertex-in-rectangle arm walked every vertex of each nearby ring - the union outline runs to thousands - and
+        # `_in_outline` walked every hole, for every one of the nine points of every candidate. The grids return every
+        # vertex a query box could hold and every hole whose box could hold a point; the same tests decide.
         self.rings = PointGrid(cell)
-        self.rings.extend([(RingIndex(r), min(p[0] for p in r), min(p[1] for p in r), max(p[0] for p in r), max(p[1] for p in r)) for r in rings if len(r) >= 3])
+        self.rings.extend([(RingIndex(r), _vertex_grid(r), min(p[0] for p in r), min(p[1] for p in r), max(p[0] for p in r), max(p[1] for p in r)) for r in rings if len(r) >= 3])
         self.holes = [RingIndex(h) for h in holes if len(h) >= 3]
+        self.hole_grid = PointGrid(cell)
+        self.hole_grid.extend([(h, min(p[0] for p in h.ring), min(p[1] for p in h.ring), max(p[0] for p in h.ring), max(p[1] for p in h.ring)) for h in self.holes])
 
     def _in_outline(self, x: float, y: float, ring: Any) -> bool:
-        return ring.inside(x, y) and not any(h.inside(x, y) for h in self.holes)
+        return ring.inside(x, y) and not any(bx0 <= x <= bx1 and by0 <= y <= by1 and h.inside(x, y) for h, bx0, by0, bx1, by1 in self.hole_grid.near(x, y))
 
     def hit_points(self, pts: Any) -> bool:
-        if any(seg_dist(x, y, a, b) < clr for x, y in pts for a, b, clr, _x0, _y0, _x1, _y1 in self.full.near(x, y)):
-            return True
         xs = [p[0] for p in pts]
         ys = [p[1] for p in pts]
         rx0, ry0, rx1, ry1 = min(xs), min(ys), max(xs), max(ys)
+        cx_, cy_, pad = (rx0 + rx1) / 2, (ry0 + ry1) / 2, max(rx1 - rx0, ry1 - ry0) / 2
+        # ONE LOOKUP FOR ALL THE POINTS (feature 276): every point lies in the points' own box, so the items the grid returns
+        # for that box include every item near any one of them - nine lookups a rectangle were 320,469 on the rescue
+        # scenario. The same distance and containment tests decide.
+        if any(seg_dist(x, y, a, b) < clr for a, b, clr, _x0, _y0, _x1, _y1 in self.full.near(cx_, cy_, pad) for x, y in pts):
+            return True
         seen: set[int] = set()
-        for x, y in pts:
-            for ring, bx0, by0, bx1, by1 in self.rings.near(x, y):
-                if id(ring) in seen or bx1 < rx0 or bx0 > rx1 or by1 < ry0 or by0 > ry1:
-                    continue
-                seen.add(id(ring))
-                if any(self._in_outline(px, py, ring) for px, py in pts) or any(rx0 <= vx <= rx1 and ry0 <= vy <= ry1 for vx, vy in ring.ring):
-                    return True
+        for ring, verts, bx0, by0, bx1, by1 in self.rings.near(cx_, cy_, pad):
+            if id(ring) in seen or bx1 < rx0 or bx0 > rx1 or by1 < ry0 or by0 > ry1:
+                continue
+            seen.add(id(ring))
+            if any(self._in_outline(px, py, ring) for px, py in pts) or any(rx0 <= vx <= rx1 and ry0 <= vy <= ry1 for vx, vy, *_ in verts.near(cx_, cy_, pad)):
+                return True
         return False
 
     def hit_center(self, x: float, y: float) -> bool:
         return any(seg_dist(x, y, a, b) < clr for a, b, clr, _x0, _y0, _x1, _y1 in self.center.near(x, y))
+
+
+def _vertex_grid(ring: Any) -> PointGrid:
+    """A ring's vertices, each filed at its own point, for "which vertices lie in this box" (feature 276)."""
+    grid = PointGrid(32.0)
+    grid.extend([(float(x), float(y), float(x), float(y), float(x), float(y)) for x, y in ring])
+    return grid
+
+
+class FreeGround:
+    """The site's STATIC ground a homestead may not take, as a raster of SURELY TAKEN cells (feature 276, FR-003, plan D9).
+
+    A cell is surely taken only when EVERY point of it is refused by the nine-point ground test `_site_blocks_rect`
+    applies: it lies inside the union of the paddy chords' field-side strips (a point there projects onto the chord and
+    stands on its field side - `chain_violated` at gap 0), the outline's rings less their holes (`hit_points`'
+    containment arm), and the water corridors inflated by their clearance (its distance arm) - that union shrunk by half
+    a pixel, so a point ON its boundary, where the strict tests may pass it, is never claimed. So a candidate with one of
+    its sample points in such a cell is refused by the test it would have received, and dropping it unasked is exact.
+    The registered corridors are left out (the fit test asks them at the center only), which only prunes less.
+
+    Where no site boundary is installed there is no FreeGround (the placer asks the placed-box index alone)."""
+
+    __slots__ = ("cell", "taken", "x0", "y0")
+
+    def __init__(self, chains: Any, corridors: Any, outline: Any, bounds: tuple[float, float, float, float], cell: float = 8.0) -> None:
+        _load_shapely()
+        import shapely
+
+        x0, y0, x1, y1 = bounds
+        self.cell, self.x0, self.y0 = cell, x0, y0
+        depth = 2.0 * math.hypot(x1 - x0, y1 - y0)
+        parts: list[Any] = []
+        for chain in chains:
+            for (ax, ay), (bx, by), (nx, ny) in chain:
+                if (bx - ax) ** 2 + (by - ay) ** 2 <= 1e-12:
+                    continue
+                parts.append(Polygon([(ax, ay), (bx, by), (bx - nx * depth, by - ny * depth), (ax - nx * depth, ay - ny * depth)]).buffer(0))
+        rings, holes = outline if outline is not None else ([], [])
+        ring_union = unary_union([Polygon(r).buffer(0) for r in rings if len(r) >= 3]) if rings else None
+        if ring_union is not None and holes:
+            ring_union = ring_union.difference(unary_union([Polygon(h).buffer(0) for h in holes if len(h) >= 3]))
+        if ring_union is not None:
+            parts.append(ring_union)
+        water, _registered = corridors
+        parts += [LineString([a, b]).buffer(clr) for a, b, clr in water if clr > 0]
+        self.taken: set[tuple[int, int]] = set()
+        if not parts:
+            return
+        region = unary_union(parts).buffer(-0.5)
+        if region.is_empty:
+            return
+        shapely.prepare(region)
+        nx_, ny_ = int((x1 - x0) // cell) + 1, int((y1 - y0) // cell) + 1
+        keys = [(i, j) for i in range(nx_) for j in range(ny_)]
+        cells = shapely.box([x0 + i * cell for i, _ in keys], [y0 + j * cell for _, j in keys], [x0 + (i + 1) * cell for i, _ in keys], [y0 + (j + 1) * cell for _, j in keys])
+        inside = shapely.contains(region, cells)
+        self.taken = {k for k, t in zip(keys, inside.tolist(), strict=True) if t}
+
+    def point_taken(self, x: float, y: float) -> bool:
+        return (int((x - self.x0) // self.cell), int((y - self.y0) // self.cell)) in self.taken
+
+    def rect_refused(self, rect: Any) -> bool:
+        """Is one of the nine points `_site_blocks_rect` asks of this (cx, cy, w, h) rectangle in a surely-taken cell?"""
+        cx, cy, w, h = rect
+        x0, y0, x1, y1 = cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2
+        return any(self.point_taken(px, py) for px, py in ((x0, y0), (x1, y0), (x1, y1), (x0, y1), (cx, y0), (x1, cy), (cx, y1), (x0, cy), (cx, cy)))
 
 
 def install_site_boundary(s: Settlement, plan: SitePlan) -> None:
@@ -214,6 +290,7 @@ def install_site_boundary(s: Settlement, plan: SitePlan) -> None:
     chains, corridors, outline = site_boundary(s, seat)
     s._site_chains = chains
     s._site_corridors = SiteCorridors(corridors, outline)
+    s._free_ground = FreeGround(chains, corridors, outline, (0.0, 0.0, float(s.W), float(s.H)))
     s.M["site_boundary"] = {
         "chords": [[[round(a[0], 1), round(a[1], 1)], [round(b[0], 1), round(b[1], 1)], [round(n[0], 4), round(n[1], 4)]] for ch in chains for a, b, n in ch],
         "water": [[[round(a[0], 1), round(a[1], 1)], [round(b[0], 1), round(b[1], 1)], round(clr, 1)] for a, b, clr in corridors[0]],

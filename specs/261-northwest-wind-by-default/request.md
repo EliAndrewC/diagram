@@ -22,3 +22,20 @@ override only where a map declares one:
   DECLARES a local wind. Today it happens silently on every map.
 - When a map does depart from northwest, the windbreak pop-up says so and gives the reason.
 - The record's false "northwest by default" sentence gets corrected.
+
+## The GM's rulings on the placement defects (verbatim, 2026-09-26 and 2026-09-27)
+
+<!-- SOURCE: GM NOTES -->
+
+Asked whether Kashikawa should drop its declared brook flank, keep its houses across the brook, or declare a local
+wind, and whether the reference hamlet Inashiro may be re-seeded:
+
+> I do not want to route around deficiencies in our placement algorithm.  If we ever ended up with findings like "our research shows that farmhouses were literally never on X side of their common fields" then that's one things, but if we find instead that our placement algorithm ends up not making it possible to lay out a known-to-be-valid settlement configuration then we should fix the placement algorithm instead.  Which situation is this?
+
+Told that it was the second - the record puts a settlement's own small channel through the middle of the place, and
+the brook strike-out is labeled in the engine as "a GUESS ... what this engine can draw" because no way crosses the
+brook - and that the fix is to let ways cross the brook with a plank footbridge:
+
+> Yes that's fine, please add that to feature 261 and then do all of the work, not stopping until you have it complete and working.  Let me know when you're done and it's landed on main.
+
+<!-- /SOURCE -->

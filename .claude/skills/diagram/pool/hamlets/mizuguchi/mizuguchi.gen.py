@@ -10,6 +10,9 @@ The brief: 12 households on land falling east (`down_deg=0`), the field draining
 into a tameike (`water_sink="pond"`) - named for the sluice mouth where the brook is taken onto the
 field, the one piece of engineering that makes the place possible. See `mizuguchi.notes.md` for the
 kanji triangle and the review log.
+
+`byre_form="courtyard"` AND `copse_siting="against_the_belt"` DECLARED, NOT ROLLED (feature 261): a knob owes one map per value on the sheet; the value this map
+exhibited is declared so the pool keeps its only exhibit of it whatever the roll.
 """
 
 import os
@@ -20,5 +23,5 @@ SKILL = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))  # <tree>/<tier>
 sys.path.insert(0, SKILL)
 from l7r.diagram.hamletgen import HamletSpec, generate  # noqa: E402
 
-report = generate(HamletSpec(name="Mizuguchi", seed=23, households=12, down_deg=0, water_sink="pond"), out_base=os.path.join(HERE, "mizuguchi"))
+report = generate(HamletSpec(name="Mizuguchi", seed=23, households=12, down_deg=0, water_sink="pond", byre_form="courtyard", copse_siting="against_the_belt"), out_base=os.path.join(HERE, "mizuguchi"))
 print(report.line())

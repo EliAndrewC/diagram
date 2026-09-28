@@ -1,0 +1,6 @@
+{
+  "utc": "20260926T210638Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "the reviews are dispatched after this gate is green"
+}

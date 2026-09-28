@@ -857,6 +857,7 @@ hata-ei	hata-ei
 hatago	hatago
 hatake	hatake
 hatamoto	hatamoto
+hate-ike	hate-ike
 hayakawa	Hayakawa
 hayakawa's	Hayakawa
 hazakake	hazakake
@@ -1314,6 +1315,7 @@ kumi	kumi
 kumi-chi	kumi-chi
 kumi-yashiki	kumi-yashiki
 kumigashira	kumigashira
+kundoku	kundoku
 kune	kune
 kune-gaki	kune
 kunugi	kunugi
@@ -1392,6 +1394,8 @@ loopholes	loophole
 loose box	loose box
 loose-box	loose box
 loose-boxes	loose box
+loose-cluster	loose-cluster village
+loose-cluster village	loose-cluster village
 loose-log drive	kanagashi
 loose-log driving	kanagashi
 louzeyuan	louzeyuan
@@ -1669,6 +1673,7 @@ open-ended dikes	open-ended dike
 ordination platform	ordination platform
 ordination platforms	ordination platform
 origake	origake
+oroshi	oroshi
 oshi	oshi
 oshirasu	oshirasu
 ossuary	ossuary
@@ -1946,6 +1951,8 @@ sasumata	sasumata
 satetsu	satetsu
 satoyama	satoyama
 satsuma	Satsuma
+scattered farmstead	sankyoson
+scattered-farmstead	sankyoson
 schistosomiasis	schistosomiasis
 scour	scour
 screen wall	screen wall
@@ -2066,6 +2073,7 @@ shunde	Shunde
 shunzhi	Shunzhi
 shōwa	Showa
 shōya	shoya
+siberian high	Siberian high
 siege mining	siege mining
 sigma	sigma
 siheyuan	siheyuan
@@ -2468,12 +2476,14 @@ watch-house	jishinban
 water duty	water duty
 water gate	water gate
 water gates	water gate
+water head	water-head
 water mouth	water-mouth
 water pestle	water pestle
 water pestles	water pestle
 water tail	water-mouth
 water teahouse	water teahouse
 water teahouses	water teahouse
+water-head	water-head
 water-mouth	water-mouth
 water-tail	water-mouth
 wayside hall	tsujido

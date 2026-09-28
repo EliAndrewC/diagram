@@ -1,0 +1,6 @@
+{
+  "utc": "20260927T050343Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "coverage pass first; reviews are dispatched on the green gate with the engine frozen"
+}

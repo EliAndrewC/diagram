@@ -1,0 +1,6 @@
+{
+  "utc": "2026-09-27T01:00:34Z",
+  "target": "plan-gate tick 261-northwest-wind-by-default",
+  "commit": "9eba368c",
+  "why": "the only plan edits since the CLEAR review are the five non-blocking fixes that review itself listed, applied as it worded them"
+}

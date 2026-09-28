@@ -6,7 +6,7 @@ import math
 from collections.abc import Sequence
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist
+from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, segments_cross
 from l7r.diagram.settlement._geom import PointGrid, RingIndex, boxed_grid
 
 from ..consts import Poly, Pt
@@ -97,6 +97,53 @@ def fit_square_parcel(half: float, floor_half: float, fits: Any) -> float | None
         if fits(cand):
             return cand
     return None
+
+
+_CHAIN_OFF = 0.2  # a third parcel within this fraction of the span off the line through two others stands in their row
+
+
+def in_a_ruled_line(p: tuple[float, float], centers: Sequence[tuple[float, ...]], frac: float = _CHAIN_OFF) -> bool:
+    """Would a parcel at `p` stand in a ruled line with two parcels already placed - off the line through them by less
+    than `frac` of the three's span (settlement-review of Inashiro, feature 261)? Varying the stride did not break the
+    CHAIN the 2026-08-18 reviews recorded: the monotone score still seats each parcel on the first legal ground along the
+    crop's keep-out edge, and Inashiro's three stood 5 ft off one line over 1,104 ft, Kashikawa's in a column."""
+    for i in range(len(centers)):
+        for j in range(i + 1, len(centers)):
+            a, b = (float(centers[i][0]), float(centers[i][1])), (float(centers[j][0]), float(centers[j][1]))
+            span = max(math.dist(a, b), math.dist(a, p), math.dist(b, p))
+            ab = math.dist(a, b)
+            if span and ab and abs((b[0] - a[0]) * (a[1] - p[1]) - (a[0] - p[0]) * (b[1] - a[1])) / ab < frac * span:
+                return True
+    return False
+
+
+def off_the_row(p: tuple[float, float], centers: Sequence[tuple[float, ...]], frac: float = _CHAIN_OFF) -> list[tuple[float, float]]:
+    """Seats stepped sideways off the row `p` would stand in, nearest first: along the normal of the first row it joins,
+    by 1, 1.5 and 2 times the off-line distance `in_a_ruled_line` asks for, each side (settlement-review of Inashiro,
+    feature 261: the open ground there is a narrow band along the field's keep-out, every qualifying seat in the row)."""
+    for i in range(len(centers)):
+        for j in range(i + 1, len(centers)):
+            a, b = (float(centers[i][0]), float(centers[i][1])), (float(centers[j][0]), float(centers[j][1]))
+            if not in_a_ruled_line(p, [a, b], frac):
+                continue
+            ab = math.dist(a, b)
+            nx, ny = -(b[1] - a[1]) / ab, (b[0] - a[0]) / ab
+            span = max(ab, math.dist(a, p), math.dist(b, p))
+            return [(p[0] + sgn * k * frac * span * nx, p[1] + sgn * k * frac * span * ny) for k in (1.05, 1.5, 2.0) for sgn in (1.0, -1.0)]
+    return []
+
+
+def seat_off_the_row(p: tuple[float, float], centers: Sequence[tuple[float, ...]], ok: Any) -> tuple[float, float] | None:
+    """`p` itself when it stands in no row with two placed parcels; otherwise the nearest sideways step off the row that
+    `ok` admits and that stands in no row either; otherwise None (feature 261)."""
+    if not in_a_ruled_line(p, centers):
+        return p
+    return next((q for q in off_the_row(p, centers) if ok(q) and not in_a_ruled_line(q, centers)), None)
+
+
+def reached_across(field: Poly, frm: Pt, to: Pt) -> bool:
+    """Whether the straight walk `frm` -> `to` crosses the field's outline - the seat lies across the field (feature 261)."""
+    return any(segments_cross(frm, to, a, b) for a, b in zip(field, list(field[1:]) + list(field[:1]), strict=False))
 
 
 def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float = 250.0) -> list[Poly]:
@@ -360,11 +407,26 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
             _cross_seats = [t for t in scored if abs((t[1] - ccx) * -dy + (t[2] - ccy) * dx) >= ((t[1] - ccx) * dx + (t[2] - ccy) * dy)]
             if _cross_seats:
                 scored = _cross_seats
+            # ...AND ON THE HOUSES' SIDE OF THEIR FIELD (settlement-review of Inashiro, feature 261): a coppice walked to daily
+            # for fuel and fodder stands on the hillside the settlement backs onto, and with the houses seated against the
+            # wind Inashiro's parcels went up across the paddy from every house. A preference as the one above: where no seat
+            # is reached from the cluster without crossing the field, the rest are still offered.
+            _near_side = [t for t in scored if not reached_across(plan.envelope, (ccx, ccy), (t[1], t[2]))]
+            if _near_side:
+                scored = _near_side
+            # ...NOT IN A ROW: a seat in line with two placed parcels is stepped sideways off the row where the ground allows,
+            # and refused where it does not - the count is a target the scan already meets only where there is open ground
+            # (a map with one parcel is common), and a ruled chain is the defect two reviews recorded (Inashiro's band lies
+            # between the field's keep-out and the frame's corner: its third parcel had nowhere off the line)
             for _, x, y in sorted(scored, reverse=True):
                 if len(chosen) >= count:
                     break
                 if any(math.hypot(x - cx0, y - cy0) < _ex0 for cx0, cy0, _ex0 in centers):
                     continue
+                _off = seat_off_the_row((x, y), centers, lambda q: _ok(*q) and not any(math.hypot(q[0] - cx0, q[1] - cy0) < _ex0 for cx0, cy0, _ex0 in centers))
+                if _off is None:
+                    continue  # the stride varied and the line did not; with no ground off the row, no parcel here
+                x, y = _off
                 # OFF THE LATTICE, AND NOT ALL ONE SIZE (settlement-review, Mizuguchi 2026-08-18).
                 # The scan samples a uniform 90 px lattice, scores every seat by one monotone
                 # function (near the cluster, leaning upslope) and then takes the best remaining seat

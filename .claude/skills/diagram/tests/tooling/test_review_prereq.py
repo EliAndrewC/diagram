@@ -59,8 +59,24 @@ def test_a_finding_with_no_record_is_unverified_and_a_verifying_record_or_an_acc
 
     d = clone / ".git" / "review-dispositions"
     d.mkdir()
-    (d / "sawada.json").write_text(json.dumps({"accepted": [{"finding": "E2", "reason": "the byre sits 2.2 ft off, as village_grove intends"}, {"finding": "E3", "reason": "ok"}]}))
+    (d / "sawada.json").write_text(
+        json.dumps({"accepted": [{"finding": "E2", "round": "k", "reason": "the byre sits 2.2 ft off, as village_grove intends"}, {"finding": "E3", "round": "k", "reason": "ok"}]})
+    )
     assert prereq.unverified_findings(clone, "sawada") == ["E1", "E3"], "E2 is accepted with a reason; E3's one-word reason does not count"
+
+
+def test_an_acceptance_counts_only_for_the_round_it_answered(tmp_path: pathlib.Path) -> None:
+    """Feature 261: every round numbers its findings from F1 again, so an acceptance written for another round's F2 - or
+    one written before acceptances carried a round - clears nothing; `accept` writes the round of the verdict it answers."""
+    clone = _clone(tmp_path)
+    _verdict(clone, "sawada", "NEEDS-WORK", "F1", "F2")
+    d = clone / ".git" / "review-dispositions"
+    d.mkdir()
+    (d / "sawada.json").write_text(json.dumps({"accepted": [{"finding": "F1", "reason": "an older round's own finding"}, {"finding": "F2", "round": "old", "reason": "an older round's own finding"}]}))
+    assert prereq.unverified_findings(clone, "sawada") == ["F1", "F2"]
+    assert prereq.accept(clone, "sawada", "F2", "this round's finding, left for a stated reason") is None
+    assert prereq.unverified_findings(clone, "sawada") == ["F1"]
+    assert {"finding": "F2", "round": "k", "reason": "this round's finding, left for a stated reason"} in json.loads((d / "sawada.json").read_text())["accepted"]
 
 
 def test_a_not_reviewable_verdict_raises_no_findings_and_no_verdict_means_nothing_to_verify(tmp_path: pathlib.Path) -> None:
@@ -70,9 +86,6 @@ def test_a_not_reviewable_verdict_raises_no_findings_and_no_verdict_means_nothin
     assert prereq.unverified_findings(clone, "inashiro") == [] and not prereq.has_findings(clone, "inashiro")
     (clone / ".git" / "review-verdicts" / "inashiro.json").write_text("not json")
     assert prereq.latest_verdict(clone, "inashiro") is None, "an unreadable record is no record"
-
-
-# ---- FR-005 --------------------------------------------------------------------------------------------------
 
 
 def test_a_map_is_stale_when_its_key_moved_or_an_artifact_is_missing(tmp_path: pathlib.Path) -> None:

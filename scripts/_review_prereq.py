@@ -62,11 +62,21 @@ def latest_verdict(clone: pathlib.Path, name: str) -> dict | None:
     return rec if isinstance(rec, dict) and rec.get("verdict") in VERDICTS else None
 
 
-def accepted_ids(clone: pathlib.Path, name: str) -> set[str]:
-    """Finding ids `make review-accept` dispositioned as deliberately left (FR-003)."""
+def accepted_ids(clone: pathlib.Path, name: str, key: str = "") -> set[str]:
+    """Finding ids `make review-accept` dispositioned as deliberately left (FR-003), for the verdict whose engine key is
+    `key`: an acceptance counts only for the round it answered.
+
+    GUARD_EDIT_OK: feature 261 - every round numbers its findings from F1 again, so an acceptance matched by the bare id
+    disposed of a LATER round's different F1 (the same defect `answers` closes for measurement records, feature 273). An
+    acceptance records the round it answers (`accept`); one with no round, written before acceptances carried one, clears
+    nothing where a key is asked for."""
     rec = _read_json(disposition_dir(clone) / f"{name}.json")
     items = rec.get("accepted", []) if isinstance(rec, dict) else []
-    return {str(i.get("finding")) for i in items if isinstance(i, dict) and i.get("finding") and len(str(i.get("reason", "")).split()) >= 2}
+    return {
+        str(i.get("finding"))
+        for i in items
+        if isinstance(i, dict) and i.get("finding") and len(str(i.get("reason", "")).split()) >= 2 and (not key or (i.get("round") and key.startswith(str(i["round"]))))
+    }
 
 
 def measurement_records(clone: pathlib.Path) -> list[dict]:
@@ -107,7 +117,7 @@ def unverified_findings(clone: pathlib.Path, name: str, records: Iterable[dict] 
         for r in recs
         if r.get("verifies") and r.get("subject") == name and r.get("quantity") and r.get("source") and (not verdict.get("strict") or (len(str(r.get("answers", ""))) >= 12 and key.startswith(str(r.get("answers")))))
     }
-    done = verified | accepted_ids(clone, name)
+    done = verified | accepted_ids(clone, name, key)
     return [str(f.get("id")) for f in raised if str(f.get("id")) not in done]
 
 
@@ -301,8 +311,9 @@ def accept(clone: pathlib.Path, name: str, finding: str, reason: str) -> str | N
     path = disposition_dir(clone) / f"{name}.json"
     path.parent.mkdir(parents=True, exist_ok=True)
     rec = _read_json(path)
-    items = [i for i in (rec.get("accepted", []) if isinstance(rec, dict) else []) if isinstance(i, dict) and i.get("finding") != finding]
-    items.append({"finding": finding, "reason": reason.strip()})
+    key = str(verdict.get("carried_from") if (verdict or {}).get("verdict") == "NOT-REVIEWABLE" and (verdict or {}).get("carried_from") else (verdict or {}).get("engine_key", ""))[:12]
+    items = [i for i in (rec.get("accepted", []) if isinstance(rec, dict) else []) if isinstance(i, dict) and not (i.get("finding") == finding and i.get("round") == key)]
+    items.append({"finding": finding, "round": key, "reason": reason.strip()})  # the round it answers - see `accepted_ids`
     path.write_text(json.dumps({"map": name, "accepted": items}, indent=1) + "\n")
     return None
 

@@ -6,15 +6,28 @@ Split from hamletgen.py by feature 111; bodies verbatim. See hamletgen/CLAUDE.md
 from __future__ import annotations
 
 import math
+from typing import Any
 
 from l7r.diagram.settlement import Settlement, nearest_way_bearing
-from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_ANCHOR_BAND_FT, KOSATSUBA_MARKER_MIN_PX, KOSATSUBA_VERGE_FT, canopy_index, kosatsuba_anchor, under_canopy
+from l7r.diagram.settlement.structures.fixtures import (
+    KOSATSUBA_ANCHOR_BAND_FT,
+    KOSATSUBA_HANDOVER_BAND_FT,
+    KOSATSUBA_MARKER_MIN_PX,
+    KOSATSUBA_VERGE_FT,
+    canopy_index,
+    departure_routes,
+    kosatsuba_anchor,
+    kosatsuba_handover,
+    routes_missed,
+    under_canopy,
+)
 
-from .consts import POLDER_ARCHETYPES
+from .consts import BROOK_BEND_WIDTHS, POLDER_ARCHETYPES
 from .hinterland import CROP_MARGIN, brook_beside_the_field, title_pocket
 from .plan import SitePlan
 from .sink import BROOK_JOIN_TRUNK
 from .water import polder_crossing_caps
+from .ways.checks import square_crossings
 
 # THE RE-SEAT PROBE MUST MEASURE THE BOARD THAT IS DRAWN (feature 134 T50, 2026-08-29). This was pinned
 # at 14 x 8 while `Settlement.kosatsuba` draws the researched 12 x 5 - not even the same aspect - and the
@@ -39,6 +52,20 @@ def _board_footprint(s: Settlement) -> tuple[float, float]:
 # ---- STAGE 8: crossings, the board, and the frame ------------------------------------------------
 
 
+def round_the_brooks(s: Settlement) -> None:
+    """Every brook's bends rounded at `BROOK_BEND_WIDTHS` of its drawn width, once the ways that were routed against it are
+    laid and before the crossings are squared and decked against it (settlement-review of Sawada, feature 261: corners of
+    27-47 degrees on a natural brook). The tap - the vertex the head race leaves from - is held, so the race still leaves
+    the course where the offtake angle is measured."""
+    heads = [(float(c["poly"][0][0]), float(c["poly"][0][1])) for c in s.M.get("channels") or [] if (c.get("frm") or {}).get("kind") == "stream" and c.get("poly")]
+    for rec in s.M.get("streams") or []:
+        pts = [(float(x), float(y)) for x, y in rec.get("poly") or []]
+        if len(pts) < 3:
+            continue
+        taps = {min(range(len(pts)), key=lambda k, h=h: math.dist(pts[k], h)) for h in heads if min(math.dist(p, h) for p in pts) <= 1.0}
+        s.round_stream(rec, BROOK_BEND_WIDTHS * float(rec.get("w") or 7.0), hold=taps)
+
+
 def stage_crossings(s: Settlement, plan: SitePlan) -> None:
     """Planks and decks.
 
@@ -51,11 +78,28 @@ def stage_crossings(s: Settlement, plan: SitePlan) -> None:
     the engine's own `bridges()` docstring says so and the `roads_bridge_water` check enforces it.
 
     Steps:
+        l7r.diagram.hamletgen.frame.round_the_brooks
         l7r.diagram.settlement.Settlement.bridges
         l7r.diagram.settlement.Settlement.channel_footbridges
         l7r.diagram.settlement.Settlement.dike_gates
         l7r.diagram.hamletgen.water.polder_crossing_caps
+        l7r.diagram.hamletgen.ways.checks.square_crossings
     """
+    round_the_brooks(s)
+    # EVERY WAY CROSSES THE BROOK SQUARE, and so does its deck (feature 261): the lane is squared at the crossing first,
+    # its record and its ink together, because `bridges` lays the plank along the way it carries.
+    # ...AND EVERY DRAWN CHANNEL (settlement-review of Mizuguchi, feature 261): a lane over the head-race beside the weir lay
+    # 44 degrees off square, because only the brook was squared - and the record says a plank "crosses its ditch square
+    # rather than obliquely" (research ways/030)
+    waters = [(f["poly"], float(f.get("w", 8.0)) / 2 + s.px(6.0)) for f in s.M.get("streams", []) if len(f.get("poly") or ()) >= 2]
+    waters += [(c["pts"], float(c.get("w0", 4.0)) / 2 + s.px(6.0)) for c in s.M.get("drawn_channels", []) if len(c.get("pts") or ()) >= 2]
+    for brook, half in waters:
+        for i, ln in enumerate(s.M.get("lanes", [])):
+            pts = [(float(x), float(y)) for x, y in ln["pts"]]
+            squared = square_crossings(pts, [(float(x), float(y)) for x, y in brook], half)
+            if len(squared) != len(pts):
+                ln["pts"] = [[x, y] for x, y in squared]
+                s.reink_lane(i)
     s.bridges()
     if s.M.get("field_ditches"):
         if plan.field_archetype in POLDER_ARCHETYPES:
@@ -186,10 +230,21 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
             _seat = str((s.M.get("meta") or {}).get("kosatsuba_seat") or "center")
             _anchor = kosatsuba_anchor(s.M, _seat)
             _seats: list[tuple[float, float, float, float]] = []  # (distance to the anchor, x, y, rot); the traffic is counted after the band narrows
+            _on_approach: set[tuple[float, float, float, float]] = set()  # the seats on the connector itself (below)
             _pxb = getattr(s, "px", None)
             _canopy = canopy_index(s.M)  # once for the whole re-seat probe, not per verge
             _lanes = [ln for ln in s.M.get("lanes", []) if not ln.get("connector")]
             _ranked = [ln for ln in _lanes if not ln.get("web")] or _lanes
+            # ...BUT AN ANCHORED BOARD STANDS ON WHATEVER WAY MEETS ITS ANCHOR (feature 261, settlement-review of Inashiro,
+            # Mizuguchi and Sawada). The lane the approach meets at the settlement's mouth is often a web lane, so the
+            # main-ways-first ranking skipped it and the `entrance` board went to a main-lane stub 669-711 ft inside the
+            # cluster, where half the households never pass it. The side-lane rule keeps a board off a straggler in the
+            # middle of the fabric; a web lane that passes the anchor itself is the entrance, and is offered.
+            if _anchor is not None:
+                _reach = (_pxb(KOSATSUBA_ANCHOR_BAND_FT) if _pxb else KOSATSUBA_ANCHOR_BAND_FT) * 2.0
+                _ranked = _ranked + [ln for ln in _lanes if ln not in _ranked and any(math.dist((float(p[0]), float(p[1])), _anchor) <= _reach for p in ln["pts"])]
+                if _seat == "entrance" and kosatsuba_handover(s.M) is not None:
+                    _ranked = _ranked + [ln for ln in s.M.get("lanes", []) if ln.get("connector")]  # the approach every departure walks
             best: tuple[float, float, float, float] | None = None
             # ...AND A SEAT TO FALL BACK ON THAT STILL FACES ITS WAY (feature 230). Every verge candidate can be
             # refused by the 15-degree rule above - a hamlet whose web lays a straggler across every main-lane
@@ -245,6 +300,8 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
                                     loose = (_rank, cx2, cy2)  # kept only for the fallback, and turned to its own nearest way
                                 continue
                             _seats.append((_rank, cx2, cy2, rot))
+                            if lane.get("connector"):
+                                _on_approach.add(_seats[-1])
             # AN ANCHORED PLACEMENT CHOOSES THE GROUND, THE TRAFFIC CHOOSES THE SEAT ON IT - the rule
             # `place_kosatsuba` states and applies, read here from the same constant rather than restated
             # (settlement-review, feature 227). This loop ranked an anchored seat by its distance to the anchor
@@ -260,11 +317,37 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
             if _seats:
                 if _anchor is not None:
                     _near = min(q[0] for q in _seats)
-                    _band = _pxb(KOSATSUBA_ANCHOR_BAND_FT) if _pxb else KOSATSUBA_ANCHOR_BAND_FT
+                    _bft = KOSATSUBA_ANCHOR_BAND_FT
+                    if _seat == "entrance" and kosatsuba_handover(s.M) is not None:
+                        # where every departure passes, then beside the handover - the rule `place_kosatsuba` applies
+                        _routes = departure_routes(s.M)
+                        _pass = _pxb(KOSATSUBA_HANDOVER_BAND_FT) if _pxb else KOSATSUBA_HANDOVER_BAND_FT
+                        _missed = [routes_missed(_routes, q[1], q[2], _pass) for q in _seats]
+                        _seats = [q for q, k in zip(_seats, _missed, strict=True) if k == min(_missed)]
+                        # ...ON THE APPROACH ITSELF where it offers one (settlement-review of Inashiro, feature 261): the board
+                        # is squared to the way it stands on, and the kosatsuba stands broadside to the one way out
+                        # (research/urban-features.html). A web lane passing the anchor was offered for the lane the approach
+                        # meets the settlement by, but where the outermost join is a one-farmstead straggler its verge won,
+                        # and Inashiro's board stood 87.7 degrees off the track every household walks out by.
+                        _seats = [q for q in _seats if q in _on_approach] or _seats
+                        _near = min(q[0] for q in _seats)
+                        _bft = KOSATSUBA_HANDOVER_BAND_FT
+                    # ...AND WHERE ITS CAPTION FITS, before the band, as the siter ranks it (feature 261: Sawada's re-seated board put
+                    # its caption on a crown, the band having left only seats whose caption lay on one) - the placer's own
+                    # answer, best level first, before the traffic decides among them. Where no seat the departures pass
+                    # offers a clear caption (Sawada still), the best level wins and `kosatsuba_caption_level` records it
+                    _lv = _caption_levels(s, _seats, str(board.get("label") or ""), (hx0, hy0, hx1, hy1) if _view else None, _fw, _fh, _canopy)
+                    _seats = [q for q in _seats if _lv[q] == max(_lv.values())]
+                    _near = min(q[0] for q in _seats)
+                    _band = _pxb(_bft) if _pxb else _bft
                     _seats = [q for q in _seats if q[0] <= _near + _band] or _seats
+                else:
+                    _lv = _caption_levels(s, _seats, str(board.get("label") or ""), (hx0, hy0, hx1, hy1) if _view else None, _fw, _fh, _canopy)
+                    _seats = [q for q in _seats if _lv[q] == max(_lv.values())]
                 # the traffic is counted only over the seats the band kept: a count per candidate cost seed 4's notice
                 # stage 1.1 s, and the engine's own order is the band first and the traffic second
                 _pick = max(_seats, key=lambda q: (sum(1 for h in hs if math.hypot(q[1] - h["x"], q[2] - h["y"]) < 260), -q[0]))
+                s.M.setdefault("meta", {})["kosatsuba_caption_level"] = _lv.get(_pick, 2)  # the re-seat's own answer
                 best = (0.0, _pick[1], _pick[2], _pick[3])
             # ...and a hamlet whose every verge lies under its own belt still gets a board (feature 230)
             if best is None and loose is not None:
@@ -272,10 +355,30 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
                 best = (loose[0], loose[1], loose[2], _lb if _lb is not None else 0.0)
             if best is not None:
                 s.kosatsuba(best[1], best[2], rot=best[3])
+                record_board_well(s.M, best[1], best[2])  # the board drawn, not the engine's first seat
             else:
                 s.M["kosatsuba"].append(
                     board
                 )  # pragma: no cover - no verge inside the cloud takes a board; keep the engine's seat rather than none [174: KEPT, not deletable - an else branch that binds the seat this method returns]
+
+
+def record_board_well(M: dict[str, Any], x: float, y: float) -> None:
+    """`meta.kosatsuba_well_ft` for the board where it is DRAWN (settlement-review of Sawada, feature 261): `place_kosatsuba`
+    records it for its own seat, and a board this stage re-seats kept the first seat's figure - Sawada's said 353.5 ft of a
+    board 173.3 ft from its nearest well. The field exists to record what was drawn (`siting.py`), so it follows the board."""
+    wells = [(float(w["x"]), float(w["y"])) for w in M.get("wells") or [] if "x" in w]
+    if wells:
+        M.setdefault("meta", {})["kosatsuba_well_ft"] = round(min(math.hypot(x - wx, y - wy) for wx, wy in wells) * float(M.get("meta", {}).get("ftpx") or 1), 1)
+
+
+def _caption_levels(s: Settlement, seats: list[tuple[float, float, float, float]], label: str, frame: Any, fw: float, fh: float, canopy: Any) -> dict[tuple[float, float, float, float], int]:
+    """Each re-seat candidate's caption level (`board_caption_level`: 2 fits clear of the crowns, 1 over one, 0 not at
+    all), against the one placer's obstacles indexed once."""
+    level = getattr(s, "board_caption_level", None)  # the frame test drives this stage with a stub that places no caption
+    if level is None:
+        return dict.fromkeys(seats, 2)
+    index = s.label_obstacles() if label else None
+    return {q: level(q[1], q[2], fw / 2, fh / 2, q[3], label, index, frame, canopy) for q in seats}
 
 
 def _nearest_way_bearing(s: Settlement, x: float, y: float) -> float | None:

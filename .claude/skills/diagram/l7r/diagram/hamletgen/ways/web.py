@@ -29,7 +29,20 @@ from .joints import center_lane_ends, straighten_joints
 from .route import _route
 from .serve import _lay_web_lane, _serve_stragglers
 from .smooth import _STUB_REACH_FT, _smooth_web
-from .sweeps import _bridge_collinear_breaks, _drop_end_nubs, _join_orphan_ways, _keep_the_route_wide, _sweep_dangling_ends, _sweep_debris, _sweep_doubled_remnants, _sweep_steading_fouls
+from .sweeps import (
+    _bridge_collinear_breaks,
+    _drop_end_nubs,
+    _join_orphan_ways,
+    _keep_the_route_wide,
+    _link_home_bank,
+    _sweep_dangling_ends,
+    _sweep_debris,
+    _sweep_doubled_remnants,
+    _sweep_doubled_tails,
+    _sweep_steading_fouls,
+    cut_past_connector,
+    trim_free_stub,
+)
 from .touch import _touch_junctions
 
 
@@ -211,6 +224,29 @@ def _drop_collapsed(s: Settlement) -> list[int]:
     return collapsed
 
 
+def cut_the_overruns(s: Settlement) -> None:
+    """A free end's stub past a kink is taken off (feature 261: Kuwabata's ring lane, `trim_free_stub`), and a lane that
+    ran on past the connector to a loose end is cut where it met it (`cut_past_connector`); the connector itself is left.
+
+    LIFTED TO MODULE LEVEL (feature 261, the GM's 2026-08-28 ruling on inner functions): it was the tail of `stage_web`,
+    and once main's placer re-laid the pool no shipped roll rewrote a lane here, so the rewrite went uncovered."""
+    for _i, _ln in enumerate(s.M.get("lanes") or []):
+        _p = [(float(x), float(y)) for x, y in _ln.get("pts") or []]
+        _others = [
+            (a, b) for _j, _o in enumerate(s.M.get("lanes") or []) if _j != _i for a, b in zip([tuple(q) for q in _o.get("pts") or []], [tuple(q) for q in (_o.get("pts") or [])[1:]], strict=False)
+        ]
+        _conn = [(a, b) for _o in s.M.get("lanes") or [] if _o.get("connector") for a, b in zip([tuple(q) for q in _o.get("pts") or []], [tuple(q) for q in (_o.get("pts") or [])[1:]], strict=False)]
+        # ...and a lane that ran on past the connector to a loose end is cut where it met it (feature 261: `cut_past_connector`)
+        _q = (
+            trim_free_stub(cut_past_connector(_p, _conn, [sg for sg in _others if sg not in _conn], [(float(h["x"]), float(h["y"])) for h in s.M.get("houses") or []]), _others)
+            if not _ln.get("connector")
+            else _p
+        )
+        if _q != _p:
+            _ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in _q]
+            s.reink_lane(_i)
+
+
 def tidy_lane_ends(s: Settlement, envelope: Poly) -> None:
     """THE LAST PASS OVER EVERY LANE END, after the stragglers: pull back anything that still reaches nothing.
 
@@ -229,6 +265,12 @@ def tidy_lane_ends(s: Settlement, envelope: Poly) -> None:
         return 0.0 <= q[0] <= _W and 0.0 <= q[1] <= _H
 
     _fabric_now = [poly for poly, _owner, _kind in _homestead_polys(s)]  # what the connector's end must stay clear of, as `_thread_the_fabric` left it
+    _nowhere: list[int] = []  # lanes that serve nothing at either end - dropped after the loop, back to front
+    # THE FIELD AS DRAWN, not the plan's envelope (feature 261): an end serves the field where it reaches the paddy a reader
+    # sees - the bar the pool's lane-end test holds - and the envelope stands well out from it on a polder, so a skeleton
+    # arm into Kuwabata's scrub 481 ft from any paddy counted as reaching the field. The envelope stands in where no field
+    # outline is recorded.
+    _fields = [[(float(a), float(b)) for a, b in f["outline"]] for f in s.M.get("fields") or [] if len(f.get("outline") or []) >= 3] or [list(envelope)]
     for _i, _ln in enumerate(list(s.M.get("lanes", []))):
         # KEPT AND NOT REACHABLE TODAY, deliberately (feature 146). Every pass that can empty a lane
         # DELETES the record with the ink (feature 145's "the husk goes with the ink"), so no husk
@@ -255,13 +297,29 @@ def tidy_lane_ends(s: Settlement, envelope: Poly) -> None:
         _kept = (
             _pull_back_to_service(_pts, _others, _final_houses, _inside, _fabric_now)
             if _ln.get("connector")
-            else _trim_to_service(_pts, _others, _final_houses, [list(envelope)], keep=_keep, steadings=_final_steadings)
+            else _trim_to_service(_pts, _others, _final_houses, _fields, keep=_keep, steadings=_final_steadings)
         )
         if len(_kept) >= 2 and polyline_len(_kept) >= _WEB_MIN_FT and _kept != _pts:
             _ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in _kept]
             # AND THE INK WITH IT - see `Settlement.reink_lane`. Shortening the record alone left the
             # drawn lane longer than the checked one, which is the quietest kind of wrong there is.
             s.reink_lane(_i)
+        elif (
+            not _ln.get("connector")
+            and (
+                len(_kept) < 2
+                # trimmed to a nub too short to be a lane (Kashikawa's field spur kept 2 ft past the tread it stopped on) that is
+                # no house's only way: the nub serves nothing the tread it leaves does not
+                or (polyline_len(_kept) < _WEB_MIN_FT and not any(min(seg_dist(_h[0], _h[1], _a, _b) for _a, _b in zip(_pts, _pts[1:], strict=False)) <= WEB_REACH_FT for _h in _keep))
+            )
+        ):
+            _nowhere.append(_i)
+    # ...AND A LANE THAT SERVES NOTHING AT EITHER END GOES (feature 261, once main's placer re-laid the pool): trimmed to
+    # service it keeps a single point, and this pass used to leave such a lane whole - a skeleton arm run into the scrub on
+    # Kuwabata, and on Kashikawa a field spur whose far end another lane had joined and taken over, its head a plank over
+    # the brook to nothing. A lane that is some house's only way names that house in `keep` and never trims to a point, so
+    # nothing it serves is stranded; the planks are laid after this stage, so none is left behind.
+    s.drop_lanes(_nowhere)
 
 
 def stage_web(s: Settlement, plan: SitePlan) -> None:
@@ -558,12 +616,32 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     _sweep_doubled_remnants(s)  # ...and a bridge can itself be doubled ink
     _sweep_dangling_ends(s)  # LAST: an end the passes above left in open ground is pulled back to something, or dropped
     _sweep_debris(s)  # a fragment the passes above whittled below the floor and left standing alone
+    # A WAY OUT THAT CROSSES THE BROOK AND BACK GETS A WAY ON ITS OWN BANK (feature 261) - before the passes that read the
+    # finished joints, so the path it draws is straightened, de-hooked and cut back like every other
+    _pass("home-bank")
+    _link_home_bank(s, plan, hard, fabric, list(plan.watercourses) + drawn_water)
     _keep_the_route_wide(s, hard_built, walls, list(plan.watercourses) + drawn_water)  # ...and a cart route may not neck to a footpath
     # AND READ THE JOINTS AS ONE WAY (GM 2026-09-26): two records meeting end to end are one lane to the walker;
     # a fold there becomes a T and a jog is pulled straight. Last, because every pass above can lay a joint.
     straighten_joints(s, hard_built, walls, list(plan.watercourses) + drawn_water)
+    # ...AND THE ENDS ARE ASKED ONCE MORE, after the joints are read as one way (feature 261). An end that reached the lane it
+    # was about to be joined to passed the sweep above and was left, after the join, reaching only its own lane: Mizuguchi's
+    # (558, 1096) stood 56 ft from lane 2's end until the two became one lane, and then 104 ft from anything.
+    _sweep_doubled_tails(s)  # a lane that runs on beside the way it met ends where it met it (feature 261)
+    _sweep_dangling_ends(s)
     # ...AND A LANE THAT ENDS ON ANOTHER STANDS ON ITS CENTERLINE (GM 2026-09-27): an end a few feet off it shows its round cap past the far edge.
     center_lane_ends(s)
+    cut_the_overruns(s)
+    # ...and a record the joins emptied is not a lane: a husk with no points declares a way nothing draws (a review
+    # counted three on Kashikawa and two on Kuwabata) - dropped with its ink slot, the one way lanes leave
+    # ...and a record whose points are all one point is a husk too (Mizuguchi, feature 261: seven three-point records at a
+    # single spot, left by the passes that re-cut the home-bank footpath)
+    s.drop_lanes([i for i, ln in enumerate(s.M.get("lanes") or []) if len(ln.get("pts") or []) < 2 or polyline_len([(float(x), float(y)) for x, y in ln["pts"]]) < 1.0])
+    # ...AND THE ENDS ARE TRIMMED TO SERVICE ONCE MORE, LAST (feature 261, once main's placer re-laid the pool): every pass
+    # after the first tidy can leave an end in open ground - the dangling-end sweeps, the joint straightening and the cut
+    # past the connector all reshape lanes - and Kuwabata shipped a skeleton arm into the scrub that the first tidy had
+    # seen as part of a longer lane. The same trim, with the same `keep` for a house whose only way a lane is.
+    tidy_lane_ends(s, list(plan.envelope))
     s.M["meta"]["lane_web"] = plan.lane_web
 
 

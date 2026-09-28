@@ -268,6 +268,30 @@ def lane_default(scale: str, place: dict[str, str]) -> str:
     return f"The connector track leads out of the hamlet toward {district}, the main village of the district it belongs to; the lanes between the farmsteads feed it."
 
 
+WINDBREAK = "windbreak"
+
+# The quarter a belt stands toward, named by where the wind blows from. It names ONE direction, never the two sides
+# of a hook (settlement-review of Kuwabata, feature 261): a belt on the west flank alone stands "toward the northwest"
+# truly, and "on the north and west" of it falsely - one or two sides are both the record's forms.
+WIND_NAMES = {"N": "north", "NE": "northeast", "E": "east", "SE": "southeast", "S": "south", "SW": "southwest", "W": "west", "NW": "northwest"}
+
+
+def windbreak_default(meta: dict[str, Any]) -> str:
+    """Which side THIS map's windbreak stands on, and why (feature 261).
+
+    The GM, looking at Kashikawa's belt on the south and east: *"I don't see any, any explanation for that."* So
+    the pop-up says the side and the reason on every map that records its wind: the regional northwest, or a
+    local wind the map declares (the only way a map departs from it, GM 2026-09-26: "only when declared"). A
+    manifest that does not record where its wind came from - every frozen hand-authored map - gets nothing, and
+    the class's own explanation stands alone, exactly as the lane default does."""
+    quarter, source = str(meta.get("windward") or ""), meta.get("wind_source")
+    if quarter not in WIND_NAMES or source not in ("regional", "declared"):
+        return ""
+    if source == "regional":
+        return f"Here the belt stands toward the {WIND_NAMES[quarter]} of the houses, the side the winter wind across this region blows from; no local wind is recorded for this place."
+    return f"Here the belt stands toward the {WIND_NAMES[quarter]} of the houses, because this place has a local wind from the {WIND_NAMES[quarter]} that departs from the region's northwesterly winter wind."
+
+
 def dwellings_shown(manifest: dict[str, Any], kind: Kind) -> int:
     """How many dwellings this map DRAWS that the tier is willing to count.
 

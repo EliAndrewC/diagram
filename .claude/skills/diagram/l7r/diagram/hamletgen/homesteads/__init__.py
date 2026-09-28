@@ -17,6 +17,7 @@ from .bamboo import HOUSEHOLD_BAMBOO_FT as HOUSEHOLD_BAMBOO_FT
 from .bamboo import HOUSEHOLD_BAMBOO_PREVALENCE as HOUSEHOLD_BAMBOO_PREVALENCE
 from .bamboo import _strip_blocked as _strip_blocked
 from .bamboo import household_bamboo as household_bamboo
+from .fields import stage_homestead_fields as stage_homestead_fields
 from .fixtures import FIXTURE_BANDS as FIXTURE_BANDS
 from .fixtures import PRIVY_SUN_MAX_FT as PRIVY_SUN_MAX_FT
 from .fixtures import PRIVY_SUN_MIN_FT as PRIVY_SUN_MIN_FT

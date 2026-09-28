@@ -131,6 +131,25 @@ def test_poly_dist_and_the_segment_predicates() -> None:
     assert seg_intersect((0.0, 0.0), (10.0, 0.0), (0.0, 5.0), (10.0, 5.0)) is None
 
 
+@pytest.mark.parametrize("module", ["taxonomy", "primitives"])
+def test_seg_intersect_is_bounded_on_both_segments(module: str) -> None:
+    """Feature 276: two segments whose LINES meet but which do not themselves cross have no crossing point - the
+    infinite-line answer made seven callers count water they never crossed. Both copies, and the answer agrees with
+    `segments_cross` on every random pair."""
+    import random
+
+    from l7r.diagram.settlement._geom import primitives
+
+    fn = seg_intersect if module == "taxonomy" else primitives.seg_intersect
+    assert fn((0.0, 0.0), (1.0, 0.0), (100.0, 5.0), (100.0, 6.0)) is None, "the lines meet at (100, 0); the segments do not"
+    assert fn((0.0, 0.0), (2.0, 0.0), (1.0, 3.0), (1.0, 1.0)) is None, "one segment stops short of the other"
+    assert fn((0.0, 0.0), (2.0, 0.0), (1.0, 0.0), (1.0, 2.0)) == pytest.approx((1.0, 0.0)), "a T-junction touches"
+    r = random.Random(276)
+    for _ in range(2000):
+        a, b, c, d = [(r.uniform(0, 10), r.uniform(0, 10)) for _ in range(4)]
+        assert (fn(a, b, c, d) is not None) == segments_cross(a, b, c, d)
+
+
 def test_load_reads_a_manifest_from_disk(tmp_path) -> None:
     """The module's one I/O function, used by every audit that reads a finished map."""
     p = tmp_path / "m.json"

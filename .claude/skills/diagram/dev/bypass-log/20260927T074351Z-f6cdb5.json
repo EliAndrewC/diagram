@@ -1,0 +1,6 @@
+{
+  "utc": "20260927T074351Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "the gate must be green before the reviews of fixes are dispatched (FR-004); they follow with make verify"
+}

@@ -3,6 +3,7 @@ A relative link cannot hide from this; the literal check beside it catches prose
 
 from __future__ import annotations
 
+import functools
 import pathlib
 import re
 import subprocess
@@ -21,10 +22,22 @@ def _pages() -> list[pathlib.Path]:
     return sorted(root.glob("*.html")) + sorted((root / "cities").glob("*.html")) + sorted((root / "citations").glob("*.html")) + sorted((root / "citations" / "cities").glob("*.html"))
 
 
-@pytest.mark.parametrize("page", _pages(), ids=lambda p: str(p.relative_to(RESEARCH_DIR)))
-def test_every_link_in_a_record_page_resolves(page: pathlib.Path) -> None:
+_IDS: dict[tuple[str, int, int], set[str]] = {}
+
+
+def _ids_of(path: pathlib.Path) -> set[str]:
+    """The ids a page declares, read ONCE per content (feature 276, FR-002): the link test used to re-read and re-scan
+    the target page for every link into it - 544 scans for one page - and a page's ids do not change between links."""
+    st = path.stat()
+    key = (str(path), st.st_mtime_ns, st.st_size)
+    if key not in _IDS:
+        _IDS[key] = set(_ID.findall(path.read_text(encoding="utf-8")))
+    return _IDS[key]
+
+
+def broken_links(page: pathlib.Path) -> list[str]:
+    """Every link in `page` that names a missing file or a missing id - the test below, lifted for the planted case."""
     text = page.read_text(encoding="utf-8")
-    ids_here = set(_ID.findall(text))
     bad = []
     for href in _HREF.findall(text):
         if href.startswith(("http://", "https://", "mailto:")):
@@ -37,12 +50,24 @@ def test_every_link_in_a_record_page_resolves(page: pathlib.Path) -> None:
                 continue
             if path.suffix != ".html":
                 continue  # a Markdown target's anchors are GitHub's to render; the file existing is the check here
-            ids = set(_ID.findall(path.read_text(encoding="utf-8")))
+            ids = _ids_of(path)
         else:
-            ids = ids_here
+            ids = _ids_of(page)
         if frag and frag not in ids:
             bad.append(f"{href}: no id {frag!r} in {target or page.name}")
+    return bad
+
+
+@pytest.mark.parametrize("page", _pages(), ids=lambda p: str(p.relative_to(RESEARCH_DIR)))
+def test_every_link_in_a_record_page_resolves(page: pathlib.Path) -> None:
+    bad = broken_links(page)
     assert not bad, f"{page.name}:\n" + "\n".join(bad[:20])
+
+
+def test_a_broken_link_and_a_missing_id_are_reported(tmp_path: pathlib.Path) -> None:
+    (tmp_path / "b.html").write_text('<h2 id="here">x</h2>')
+    (tmp_path / "a.html").write_text('<a href="b.html#here">ok</a> <a href="b.html#gone">x</a> <a href="nope.html">y</a> <p id="self"></p><a href="#self">z</a>')
+    assert broken_links(tmp_path / "a.html") == ["b.html#gone: no id 'gone' in b.html", "nope.html: no such file"]
 
 
 _CONVERTED = {
@@ -64,6 +89,51 @@ _CONVERTED = {
     "cities/river-cities",
 }
 _MD_TOKEN = re.compile(r"(?<![\w/.-])((?:\.\./|\./)*(?:[A-Za-z0-9_.-]+/)*[A-Za-z0-9_-]+\.md)\b")
+_TOKEN_CHARS = frozenset("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_./-")
+
+
+@functools.cache
+def md_tokens(text: str) -> tuple[str, ...]:
+    """Every `_MD_TOKEN` match in `text`, in order - what `_MD_TOKEN.finditer(text)` yields, found ONCE per text for the
+    two tests that ask (feature 276, FR-002).
+
+    WHY NOT THE PLAIN SCAN. The pattern opens with a lookbehind, so it is tried at every position of every tracked file,
+    twice (1.3 s a test). A match is made only of `_TOKEN_CHARS` and ends in `.md`, so it lies inside the run of those
+    characters around some `.md`; the pattern is run over that run alone, from its first character to one past its last.
+    `finditer(text, pos, endpos)` still reads the character before `pos` for the lookbehind, and the one extra character
+    lets `\b` see what follows, so each run yields exactly the matches the whole-text scan found there."""
+    out: list[str] = []
+    at = text.find(".md")
+    done = -1
+    while at != -1:
+        lo = at
+        while lo > 0 and text[lo - 1] in _TOKEN_CHARS:
+            lo -= 1
+        hi = at + 3
+        while hi < len(text) and text[hi] in _TOKEN_CHARS:
+            hi += 1
+        if lo > done:
+            out += [m.group(1) for m in _MD_TOKEN.finditer(text, lo, min(hi + 1, len(text)))]
+            done = hi
+        at = text.find(".md", hi)
+    return tuple(out)
+
+
+@functools.cache
+def tracked_texts() -> dict[str, str]:
+    """Every tracked file that reads as UTF-8, read ONCE per process for the tests that scan them all (feature 276)."""
+    root = _repo_root()
+    out: dict[str, str] = {}
+    for rel in subprocess.run(["git", "-C", str(root), "ls-files"], capture_output=True, text=True, check=True).stdout.split("\n"):
+        if not rel:
+            continue
+        try:
+            out[rel] = (root / rel).read_text(encoding="utf-8")
+        except UnicodeDecodeError, OSError:
+            continue
+    return out
+
+
 _SKILL = "/".join([".claude", "skills", "diagram"])
 
 
@@ -108,26 +178,42 @@ def test_no_md_token_anywhere_resolves_to_a_converted_record_file() -> None:
     `scripts/fixtures/` is out too (feature 209, found red on main after feature 204 landed): a guard's replay corpus
     is a verbatim census of commands sessions actually ran, some of them from before the record was HTML, and
     rewriting a recorded command to satisfy this test would falsify the corpus it exists to replay."""
-    root = _repo_root()
-    files = subprocess.run(["git", "-C", str(root), "ls-files"], capture_output=True, text=True, check=True).stdout.split("\n")
-    hits = []
-    for rel in files:
-        if not rel or rel.startswith(("specs/", "scripts/fixtures/")) or rel == f"{_SKILL}/research/README.md":
+    texts: dict[str, str] = {}
+    for rel, text in tracked_texts().items():
+        if rel.startswith(("specs/", "scripts/fixtures/")) or rel == f"{_SKILL}/research/README.md":
             continue
         # A RECORDED FIXTURE IS HISTORY, NOT A POINTER (2026-09-07): `scripts/fixtures/` holds guard firings
         # replayed by the guard suites - the commands sessions actually typed, verbatim, some of them naming
         # research files that were Markdown at the time. Feature 204 landed one and turned main red here; the
         # commands are quotations of what happened, like a spec, and are never followed as links.
-        if rel.startswith("scripts/fixtures/"):
-            continue
-        try:
-            text = (root / rel).read_text(encoding="utf-8")
-        except UnicodeDecodeError, OSError:
-            continue
-        for m in _MD_TOKEN.finditer(text):
-            if _resolves_to_converted(m.group(1), rel):
-                hits.append(f"{rel}: {m.group(1)}")
+        texts[rel] = text
+    hits = md_token_hits(texts)
     assert not hits, "tokens naming the deleted Markdown:\n" + "\n".join(hits[:20])
+
+
+def md_token_hits(texts: dict[str, str]) -> list[str]:
+    """`rel: token` for every `.md` token resolving to a converted record file. A text with no `.md` in it is skipped
+    before the pattern runs (feature 276, FR-002): `_MD_TOKEN` cannot match without that literal."""
+    hits = []
+    for rel, text in texts.items():
+        for token in md_tokens(text):
+            if _resolves_to_converted(token, rel):
+                hits.append(f"{rel}: {token}")
+    return hits
+
+
+def test_md_tokens_equal_the_whole_text_scan() -> None:
+    """Feature 276: the per-run scan yields exactly the whole-text `finditer`'s tokens - over the boundaries the pattern
+    names (a path before it, a word character after it, a non-ASCII word character either side, the text's ends, two
+    tokens in one run) and over every tracked text."""
+    edge = "a.md x/b.md ./c.md ../d/e.md f.mdx ōg.md h.mdō i.md.md j.md/k.md -l.md (m.md) n.md"
+    for text in (edge, "", ".md", "z.md", *tracked_texts().values()):
+        assert md_tokens(text) == tuple(m.group(1) for m in _MD_TOKEN.finditer(text)), text[:80]
+
+
+def test_a_token_naming_a_converted_file_is_reported() -> None:
+    texts = {"docs/a.md": f"see {_SKILL}/research/water.md for it", "docs/b.md": "nothing here", "docs/c.py": "x = 1"}
+    assert md_token_hits(texts) == [f"docs/a.md: {_SKILL}/research/water.md"]
 
 
 #: THE RULE FILES RETIRED INTO THE RECORD (feature 229, GM 2026-09-12: the settlements rule files "can be deleted
@@ -198,9 +284,9 @@ def retired_rule_file_hits(files: dict[str, str], exists: set[str]) -> list[str]
     for rel, text in files.items():
         if rel.startswith(_RETIRED_EXEMPT_PREFIXES) or rel in _RETIRED_EXEMPT_FILES:
             continue
-        for m in _MD_TOKEN.finditer(text):
-            if names_a_retired_rule_file(m.group(1), rel, exists):
-                hits.append(f"{rel}: {m.group(1)}")
+        for token in md_tokens(text):  # shared with the test above (feature 276, FR-002)
+            if names_a_retired_rule_file(token, rel, exists):
+                hits.append(f"{rel}: {token}")
                 break
     return hits
 
@@ -209,13 +295,7 @@ def test_no_tracked_file_names_a_retired_rule_file() -> None:
     """Feature 229: the `settlements/` rule files are gone and nothing points at them - by path or by bare basename."""
     root = _repo_root()
     tracked = [f for f in subprocess.run(["git", "-C", str(root), "ls-files"], capture_output=True, text=True, check=True).stdout.split("\n") if f]
-    files: dict[str, str] = {}
-    for rel in tracked:
-        try:
-            files[rel] = (root / rel).read_text(encoding="utf-8")
-        except UnicodeDecodeError, OSError:
-            continue
-    hits = retired_rule_file_hits(files, set(tracked))
+    hits = retired_rule_file_hits(tracked_texts(), set(tracked))
     assert not hits, "references to a retired rule file (feature 229; re-point at the research anchor):\n" + "\n".join(hits[:30])
 
 

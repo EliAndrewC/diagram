@@ -160,12 +160,28 @@ def test_every_loop_that_runs_the_stages_sits_inside_a_roll_scope() -> None:
     The one excluded shape is a comprehension that only reads stage attributes - `perf_profile.py`'s
     `names = [st.__name__ ... for st in STAGES]` - which runs no stage: asserted present, so the exclusion
     stays honest rather than silent."""
-    import ast
     import pathlib
 
     from l7r.diagram.hamletgen import driver
+    from tests import _engine_ast
 
     engine = pathlib.Path(driver.__file__).resolve().parents[1]
+    # ONE SHARED PARSE, AND ONLY THE FILES THAT NAME `STAGES` (feature 276, FR-001): a loop whose iterable
+    # references it, or a comprehension over it, cannot exist in a file without the word.
+    found, outside, comprehensions = stage_loops(_engine_ast.engine_modules(sorted(engine.rglob("*.py")), ("STAGES",)), engine)
+    assert len(found) >= 5, f"the engine has fewer stage-running loops than it did (build's two branches and three tools): {found}"
+    assert outside == [], f"stage-running loops outside roll_scope(): {outside}"
+    assert comprehensions >= 1, "the excluded shape (perf_profile's attribute-reading comprehension) is still there; if it went, drop this line"
+
+
+def stage_loops(modules, engine):  # type: ignore[no-untyped-def]
+    """(found, outside, comprehensions) over `(path, source, tree)` triples: every `for` loop whose iterable
+    references `STAGES` and whose body calls its own loop variable, those not inside a `with roll_scope()`, and the
+    count of comprehensions that only read `STAGES` - the test above, lifted so a planted module can be fed to it."""
+    import ast
+
+    from tests import _engine_ast
+
     found: list[str] = []
     outside: list[str] = []
     comprehensions = 0
@@ -176,10 +192,10 @@ def test_every_loop_that_runs_the_stages_sits_inside_a_roll_scope() -> None:
     def loop_targets(target: ast.AST) -> set[str]:
         return {n.id for n in ast.walk(target) if isinstance(n, ast.Name)}
 
-    for path in sorted(engine.rglob("*.py")):
-        tree = ast.parse(path.read_text(encoding="utf-8"))
-        parents: dict[ast.AST, ast.AST] = {c: p for p in ast.walk(tree) for c in ast.iter_child_nodes(p)}
-        for node in ast.walk(tree):
+    for path, _source, tree in modules:
+        nodes = _engine_ast.walked(tree)
+        parents: dict[ast.AST, ast.AST] = {c: p for p in nodes for c in ast.iter_child_nodes(p)}
+        for node in nodes:
             if isinstance(node, ast.ListComp) and mentions_stages(node):
                 comprehensions += 1
             if not isinstance(node, ast.For) or not mentions_stages(node.iter):
@@ -201,9 +217,7 @@ def test_every_loop_that_runs_the_stages_sits_inside_a_roll_scope() -> None:
                 p = parents.get(p)
             if not in_scope:
                 outside.append(where)
-    assert len(found) >= 5, f"the engine has fewer stage-running loops than it did (build's two branches and three tools): {found}"
-    assert outside == [], f"stage-running loops outside roll_scope(): {outside}"
-    assert comprehensions >= 1, "the excluded shape (perf_profile's attribute-reading comprehension) is still there; if it went, drop this line"
+    return found, outside, comprehensions
 
 
 # ---- feature 151 US4: the stage profile prints, and changes nothing -------------------------------
@@ -328,54 +342,48 @@ def test_a_re_roll_that_seats_fewer_households_is_not_kept(monkeypatch) -> None:
     assert rep.attempt == 2 and rep.failures == [], "a re-roll that seats no fewer and strands none is kept"
 
 
-def _stub_stage(placed_plain: int, placed_ignoring: int, steered: int):  # type: ignore[no-untyped-def]
-    """A stand-in stage that seats a declared number of households and nothing else.
+def test_a_staged_roll_reaches_the_map_only_when_promoted(tmp_path) -> None:  # type: ignore[no-untyped-def]
+    """Feature 261: each attempt finishes into a stage beside the map carrying a copy of its notes; `promote` renames
+    the staged files onto the map's own paths (not the notes copy) and removes the stage, and a rejected roll's stage
+    is removed without touching the map."""
+    import os
+    import pathlib
 
-    Lifted out of the two tests below rather than written as a closure in each (GM 2026-08-28): it takes the
-    two counts and the steer count as plain integers, so what each test is asking is legible in its own call."""
+    from l7r.diagram.hamletgen.driver import promote, stage_for
 
-    def stage(s, plan):  # type: ignore[no-untyped-def]
-        plan.seat_brook_steered = 0 if plan.seat_ignores_brook else steered
-        plan.placed = placed_ignoring if plan.seat_ignores_brook else placed_plain
-
-    return stage
-
-
-@pytest.mark.rolls_map  # it builds and finishes a Settlement twice (one stand-in stage, no render)
-def test_a_map_short_of_households_is_rolled_again_with_the_brook_ignored_at_the_seat(monkeypatch) -> None:  # type: ignore[no-untyped-def]
-    """Feature 230: `seat_cluster` scores a margin down when the brook runs near the band and strikes it out
-    when the brook divides it - and the cohort measured what that costs, 48/48 becoming 46/48, seeds 15 and
-    22 seating short on the margin the brook left them. So a roll that comes up short and was steered by the
-    brook is rolled again with the brook ignored at the seat, and kept when it seats MORE."""
-    from l7r.diagram.hamletgen import driver
-
-    monkeypatch.setattr(driver, "STAGES", (_stub_stage(placed_plain=9, placed_ignoring=10, steered=2),))
-    rep = driver.generate(driver.HamletSpec(name="Short", seed=1, households=10), out_base=None, render=False)
-    assert rep.manifest is not None
-    assert rep.manifest["meta"]["roll_placed"] == 10, "the second roll seated the missing household"
-    assert rep.attempt == 2 and rep.rerolled_after == ["households_seated"]
-
-
-@pytest.mark.rolls_map  # the same two rolls, with the second one rejected
-def test_ignoring_the_brook_is_kept_only_when_it_seats_more(monkeypatch) -> None:
-    """The other branch, and the reason the re-roll is safe: a second roll that seats no more than the first is
-    thrown away, the brook keeps its say, and the REPORT goes back to the first roll's own manifest. That last
-    part is what a cohort reads - it passes no `out_base`, so nothing rewrites the files and the report is the
-    only record of what the map did."""
-    from l7r.diagram.hamletgen import driver
-
-    monkeypatch.setattr(driver, "STAGES", (_stub_stage(placed_plain=9, placed_ignoring=9, steered=2),))
-    rep = driver.generate(driver.HamletSpec(name="NoBetter", seed=1, households=10), out_base=None, render=False)
-    assert rep.manifest is not None
-    assert rep.manifest["meta"]["roll_placed"] == 9
-    assert rep.attempt == 1 and rep.rerolled_after == [], "the first roll is the one that stands"
+    out = str(tmp_path / "hamlet")
+    (tmp_path / "hamlet.notes.md").write_text("## Map notes\n")
+    (tmp_path / "hamlet.json").write_text("old")
+    kept, rejected = stage_for(out), stage_for(out)
+    assert pathlib.Path(kept + ".notes.md").read_text() == "## Map notes\n"
+    for base, word in ((kept, "kept"), (rejected, "rejected")):
+        pathlib.Path(base + ".json").write_text(word)
+        pathlib.Path(base + ".svg").write_text(word)
+    promote(rejected, None)
+    assert pathlib.Path(out + ".json").read_text() == "old" and not os.path.exists(os.path.dirname(rejected))
+    promote(kept, out)
+    assert pathlib.Path(out + ".json").read_text() == "kept" and pathlib.Path(out + ".svg").read_text() == "kept"
+    assert pathlib.Path(out + ".notes.md").read_text() == "## Map notes\n" and not os.path.exists(os.path.dirname(kept))
+    bare = stage_for(str(tmp_path / "other"))
+    assert not os.path.exists(bare + ".notes.md")
+    promote(bare, None)
 
 
-@pytest.mark.rolls_map  # one stand-in stage, one roll
-def test_a_map_that_seats_its_households_is_not_rolled_again(monkeypatch) -> None:
-    """The door stays shut on a map that is not short, however much the brook steered its seat."""
-    from l7r.diagram.hamletgen import driver
+def test_a_roll_that_raises_leaves_no_stage_behind(tmp_path) -> None:
+    """Feature 261 (settlement-review of Kuwabata): an interrupted roll's `.roll-*` stage is removed, never left in the
+    pool folder for a commit to sweep in."""
+    import os
 
-    monkeypatch.setattr(driver, "STAGES", (_stub_stage(placed_plain=10, placed_ignoring=10, steered=5),))
-    rep = driver.generate(driver.HamletSpec(name="Full", seed=1, households=10), out_base=None, render=False)
-    assert rep.attempt == 1 and rep.rerolled_after == []
+    import pytest
+
+    from l7r.diagram.hamletgen.driver import discard_on_failure, stage_for
+
+    base = stage_for(str(tmp_path / "m"))
+
+    def boom() -> None:
+        raise RuntimeError("interrupted")
+
+    with pytest.raises(RuntimeError):
+        discard_on_failure(base, boom)
+    assert not os.path.exists(os.path.dirname(base))
+    assert discard_on_failure(None, lambda: 7) == 7

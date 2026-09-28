@@ -1049,6 +1049,15 @@ figures:        ## [project] re-run every recorded measurement and report what m
 	@: "GUARD_EDIT_OK: feature 239 FR-011 - a figure is only as good as the command behind it, and this re-runs the command" ; \
 	python3 "$$(git rev-parse --show-toplevel)/scripts/figures.py" $(SPEC)
 
+spec-harness:   ## [project] run a feature's measurement harness (its harness.py) as a test node   SPEC=specs/NNN-slug OUT=<json>
+##  SPEC=<dir>   the feature directory holding `harness.py`
+##  OUT=<json>   where the harness writes its figures (default: the harness's own default)
+	@: "GUARD_EDIT_OK: feature 276 D17 - a new operation, nothing loosened: a harness that drives the engine must run under make (the engine refuses in-process calls outside it), so it runs as a copied test node and the copy is always removed"; \
+	root=$$(git rev-parse --show-toplevel); src="$$root/$(SPEC)/harness.py"; [ -f "$$src" ] || { echo "spec-harness: no harness.py in $(SPEC)" >&2; exit 2; }; \
+	cp "$$src" tests/test_zz_spec_harness_tmp.py; \
+	HARNESS_OUT="$(OUT)" python3 -m pytest -q -p no:cacheprovider --no-cov -p no:randomly tests/test_zz_spec_harness_tmp.py; ec=$$?; \
+	rm -f tests/test_zz_spec_harness_tmp.py; exit $$ec
+
 claim:          ## [project] claim the next spec-kit feature number under the host-wide lock   SLUG=kebab-slug | RENUMBER=specs/NNN-slug [PEEK=1: look, claim nothing]
 ##  SLUG=<slug>          lower-case kebab; the directory becomes specs/NNN-<slug>/ in THIS clone
 ##  RENUMBER=<specs/dir> instead of a slug: MOVE that existing directory to the next number (a deduplication, GM 2026-09-07)

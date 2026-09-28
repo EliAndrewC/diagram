@@ -1,0 +1,62 @@
+{
+  "inashiro": {
+    "houses": 15,
+    "house_kinds": {
+      "plain": 15
+    },
+    "nucleated": true,
+    "paddy_plots": 624,
+    "flooded_plots": 1,
+    "dry_plots": 20,
+    "lanes": 11,
+    "households_asked": 15
+  },
+  "kashikawa": {
+    "houses": 20,
+    "house_kinds": {
+      "plain": 20
+    },
+    "nucleated": true,
+    "paddy_plots": 774,
+    "flooded_plots": 1,
+    "dry_plots": 22,
+    "lanes": 14,
+    "households_asked": 20
+  },
+  "kuwabata": {
+    "houses": 16,
+    "house_kinds": {
+      "plain": 16
+    },
+    "nucleated": true,
+    "paddy_plots": 29,
+    "flooded_plots": 5,
+    "dry_plots": 0,
+    "lanes": 10,
+    "households_asked": 16
+  },
+  "mizuguchi": {
+    "houses": 12,
+    "house_kinds": {
+      "plain": 12
+    },
+    "nucleated": true,
+    "paddy_plots": 444,
+    "flooded_plots": 1,
+    "dry_plots": 16,
+    "lanes": 9,
+    "households_asked": 12
+  },
+  "sawada": {
+    "houses": 19,
+    "house_kinds": {
+      "plain": 19
+    },
+    "nucleated": true,
+    "paddy_plots": 810,
+    "flooded_plots": 1,
+    "dry_plots": 28,
+    "lanes": 11,
+    "households_asked": 19
+  }
+}

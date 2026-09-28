@@ -304,3 +304,17 @@ def test_a_page_whose_split_does_not_rebuild_is_refused(tmp_path: pathlib.Path, 
     monkeypatch.setattr(store, "read_page", lambda page_rel, record_dir=None: "not the page at all")
     with pytest.raises(RecordError, match="does not assemble back"):
         write_fragments("ways.html", str(tmp_path))
+
+
+def test_a_note_edited_alone_is_written_by_the_command(record: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:
+    """Feature 261: an edit to a `.notes.html` fragment moves only the citations page, and `make record` must write
+    it - it used to write the research page alone, so `--check` stayed STALE with nothing the command would do."""
+    write_notes_fragments("ways.html", str(record))
+    write_pages("ways.html", str(record))
+    notes = record / "ways" / "020-second.notes.html"
+    notes.write_text(notes.read_text(encoding="utf-8").replace("</li>", " (a gloss moved)</li>", 1), encoding="utf-8")
+    assert record_asset.main(["--check", "--research-dir", str(record)]) == 1
+    assert record_asset.main(["--research-dir", str(record)]) == 0
+    assert record_asset.main(["--check", "--research-dir", str(record)]) == 0
+    assert "(a gloss moved)" in (record / "citations" / "ways.html").read_text(encoding="utf-8")
+    capsys.readouterr()

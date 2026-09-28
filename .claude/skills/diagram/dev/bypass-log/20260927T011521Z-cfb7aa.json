@@ -1,0 +1,6 @@
+{
+  "utc": "20260927T011521Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "the settlement-reviews are refused by their prerequisite guard until this engine key has a green gate; they are dispatched when it lands"
+}

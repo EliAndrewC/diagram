@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import math
-from typing import cast
+from collections.abc import Sequence
+from typing import Any, cast
 
 from l7r.diagram.settlement import Settlement
 
+from ..consts import COPSE_BELT_REACH_FT, COPSE_HOUSE_REACH_FT
 from ..homesteads import farmstead_fixtures, household_bamboo
 from ..plan import SitePlan
 from .bamboo import bamboo_seats
@@ -15,6 +17,26 @@ from .frame import scatter_frame, title_pocket
 from .parcels import CROP_MARGIN, open_ground_patches
 
 # ---- STAGE 7: the ground between everything ------------------------------------------------------
+
+
+LEE_BAND_FT = 40.0  # ft: the width across the wind of one band of the belt, about a crown and a half
+LEE_DEPTH_FT = 30.0  # ft: a crown's depth, the lee face's thickness in each band
+
+
+def lee_face(clumps: Sequence[tuple[float, float]], wind: tuple[float, float]) -> list[tuple[float, float]]:
+    """The belt crowns on its LEE face - in each `LEE_BAND_FT` band across the wind, those within `LEE_DEPTH_FT` of the
+    band's most leeward crown (settlement-review of Mizuguchi, feature 261).
+
+    The against-the-belt copse is "tucked against the back grove" (`COPSE_SITINGS`): the fruit and bamboo a household
+    keeps stand in the belt's shelter, on the houses' side. Anchored on every belt crown, it could stand anywhere within
+    reach of one, and once the belt kept its depth where its fringe turns, 31 of Mizuguchi's 75 copse crowns stood beyond
+    its windward face, farther from every house than the belt beside them - one wood 250 ft deep. `wind` points toward
+    where the wind comes from."""
+    wx, wy = wind
+    bands: dict[int, list[tuple[float, tuple[float, float]]]] = {}
+    for c in clumps:
+        bands.setdefault(int((c[0] * -wy + c[1] * wx) // LEE_BAND_FT), []).append((c[0] * wx + c[1] * wy, c))
+    return [c for band in bands.values() for u, c in band if u <= min(v for v, _ in band) + LEE_DEPTH_FT]
 
 
 def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
@@ -198,9 +220,12 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     _bxs = [q[0] for q in _dented]
     _bys = [q[1] for q in _dented]
     _wx, _wy = plan.wind
-    if abs(_wx) >= abs(_wy):
+    # ...ON EVERY AXIS THE WIND HAS A SHARE OF (settlement-review of Inashiro, feature 261): a diagonal wind wraps the belt
+    # round two sides, and opening only the dominant axis - the x axis, on the tie a northwest wind makes - left the north
+    # arm clamped to the frame the houses set, 28 ft deep behind the northernmost farmhouse
+    if abs(_wx) > 1e-6:
         _fx0, _fx1 = (min(_fx0, min(_bxs) - 30.0), _fx1) if _wx < 0 else (_fx0, max(_fx1, max(_bxs) + 30.0))
-    else:
+    if abs(_wy) > 1e-6:
         _fy0, _fy1 = (min(_fy0, min(_bys) - 30.0), _fy1) if _wy < 0 else (_fy0, max(_fy1, max(_bys) + 30.0))
     s.village_grove(_dented, role="windbreak", within=(_fx0, _fy0, _fx1, _fy1), face_margin=CROP_MARGIN, reserved=_tp)
     # The COPSE fills the leafy gaps AMONG the homes, over the house cloud. That is only reasonable
@@ -236,12 +261,28 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
         (_a1 * _al[0] + _o1 * _ou[0], _a1 * _al[1] + _o1 * _ou[1]),
         (_a0 * _al[0] + _o1 * _ou[0], _a0 * _al[1] + _o1 * _ou[1]),
     ]
+    # ...AND WITHIN REACH OF WHAT IT STANDS AMONG (feature 261, settlement-review of Kashikawa, Inashiro and Mizuguchi).
+    # The oriented box above is the cluster's extent, not its ground: a crescent or a cloud seat leaves an empty bay
+    # inside the box, and the copse filled it as a wood 500 x 450 ft across that hid the belt behind it. So a dooryard
+    # copse clump stands within `COPSE_HOUSE_REACH_FT` of a house, and an against-the-belt one within
+    # `COPSE_BELT_REACH_FT` of a belt crown - scattered over the belt's axis-aligned box it spread across the whole
+    # cluster wherever the belt wrapped a diagonal ribbon.
+    # ...AND ON ITS OWN BANK: a clump near a house across the brook is not among the houses (settlement-review of Kashikawa,
+    # feature 261: three clumps stood across the water from every farmhouse, within reach only as the crow flies)
+    _brook = [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for f in s.M.get("streams") or [] for a, b in zip(f.get("poly") or [], (f.get("poly") or [])[1:], strict=False)]
+    _copse_near: tuple[Any, ...] = ([(float(x), float(y)) for x, y in zip(xs, ys, strict=False)], s.px(COPSE_HOUSE_REACH_FT), _brook)
     if plan.copse_siting == "against_the_belt" and _dented:
         # the belt's own footprint, stood off the houses so the two stands read as one wood at its back
         _bx = [q[0] for q in _dented]
         _by = [q[1] for q in _dented]
         _box = [(min(_bx), min(_by)), (max(_bx), min(_by)), (max(_bx), max(_by)), (min(_bx), max(_by))]
-    s.village_grove(_box, role="copse", dense=False, reserved=title_pocket(s, plan))  # the map's name has ground reserved; the copse honors it like the belt does
+        _belt = [(float(c[0]), float(c[1])) for g in s.M.get("village_groves") or [] if g.get("role") == "windbreak" for c in g.get("clumps") or []]
+        # ...and on its LEE side of that face: the reach is centered half of it leeward of each lee crown, so a copse crown
+        # stands 0 to `COPSE_BELT_REACH_FT` leeward and never windward of the face - at the belt's thin end a band's one or
+        # two crowns are its lee face, and a copse anchored round them stood beyond its windward side (Mizuguchi, two crowns)
+        _half = s.px(COPSE_BELT_REACH_FT) / 2.0
+        _copse_near = ([(x - plan.wind[0] * _half, y - plan.wind[1] * _half) for x, y in lee_face(_belt, plan.wind)], _half, _brook)
+    s.village_grove(_box, role="copse", dense=False, reserved=title_pocket(s, plan), near=_copse_near)  # the map's name has ground reserved; the copse honors it like the belt does
     # RECORD WHAT THE GROUND GAVE, beside what the knob asked for (settlement-review, feature 230 pass 12; the same
     # move `place_kosatsuba` makes with `kosatsuba_well_ft`, and for the same reason). `copse_siting` says
     # `among_the_houses` on four of the five pool maps, and what that produces depends entirely on whether the
