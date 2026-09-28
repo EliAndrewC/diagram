@@ -172,3 +172,36 @@ R4 found re-rolling at the 10 px lattice, the re-roll made both ways and each fi
 
 A resumed re-roll is 1.1 to 1.7 s faster (about a third); the snapshot's copy costs the first roll no more than its own
 run-to-run spread (single runs each, so within noise either way).
+
+## R6 - What the moving levers did to the maps (2026-09-28)
+
+**The field search without its blind probe (FR-004), withdrawn.** It cut the field bucket's calls 2.1x on Inashiro and 3.0x
+on Sawada and the field stage from 1.51 to 1.06 s and from 2.89 to 2.21 s (measure.py after, back to back). But the fields it
+lands, within the same tolerance, are other fields, and the maps they move re-roll more often. Over the pool and cohort
+seeds 1-24, each rolled with the base's `_fit_at_aspect` swapped in and with the lever, everything else the clone's
+(observed 2026-09-28, method: `b3cmp/harness.py`, twelve forked workers; `b3cmp/results.json`):
+
+| | the base's search | without the blind probe |
+|---|---|---|
+| households seated | 442 | 442 |
+| rolls that re-rolled | 4 | 6 |
+| summed roll seconds (loaded, both halves under the same load) | 180.6 | 190.7 |
+| household bamboo stands | 141 | 120 |
+| connectors drawn | 29 | 29 |
+
+Kashikawa was one of the maps it moved into a re-roll: with the base's search its first roll strands none, with either
+router (`strand/harness.py`). The lever was slower in all, so it was withdrawn and the base's search restored, with this
+measurement at the point of change in `hamletgen/water/fit.py`.
+
+**A defect the moved maps found: a connector deleted as debris.** Cohort seed 15, rolled with the lever, came out with
+no connector at all - its 4,004 px track out to the map edge planned, threaded, drawn, and then deleted by the junction
+pass (`_touch_junctions`), which drops a piece the web cannot join when it serves no house of its own. The connector is the
+one way that must not go (`trim_lane_stubs` has always exempted it), and with it gone the reach check read the network that
+was left and passed: the roll reported OK on a hamlet with no way off the map. Fixed: the pass never drops the connector
+(`tests/hamletgen/ways/test_geom.py::test_touch_junctions_never_drops_the_connector`); one test of the pass had counted the
+deletion as its expected result (`test_touch.py`, the end-meets-end case) and now asserts the join it meant. With the fix
+every one of the 58 rolls above draws its connector.
+
+**The other moving levers.** A* (FR-001) moved Mizuguchi's lanes and nothing else on it; the bamboo seat lattice (FR-008's
+fallback) moved Mizuguchi's thicket; neither changes what a house, a paddy or a way is. The pool's before and after for each
+moved map is below, from `pool_compare.py`.

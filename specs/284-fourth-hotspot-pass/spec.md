@@ -224,11 +224,14 @@ added under FR-011's own rule ("whatever the after-profile shows"). What changed
   after FR-004, below). The avoid list a re-roll carries is first read at `stage_homesteads`; the first roll keeps a copy of
   itself before that stage and each re-roll resumes from a fresh copy. Exact: manifest, svg and page byte-identical to a
   re-roll built from scratch on six re-rolling maps, each re-roll 1.1-1.7 s faster (research R8).
-- **FR-004 moved Kashikawa into a re-roll**: its field, fitted without the blind probe, lands within the same tolerance on
-  a different carve, and its first roll then strands one house, which the re-roll seats (observed 2026-09-28, method:
-  `strand/harness.py` - the base's `_fit_at_aspect` swapped in, the first roll strands none with either router). The rule
-  holds on the finished map; the cost is the re-roll, which FR-014 cuts to the stages from the seats on. Kashikawa's counts
-  below the seats are therefore two builds' against the base's one.
+- **FR-004 withdrawn by measurement** (research R6): without the blind probe the field bucket's calls fell 2-3x on
+  Inashiro and Sawada, but the fields it lands - within the same tolerance - move the maps, and the moved maps re-roll more
+  often: over the pool and cohort seeds 1-24 the rolls came out slower in all (190.7 s against 180.6 s, six re-rolls against
+  four), Kashikawa among them. Calls removed are not time saved (281's lesson); the base's search is restored, the
+  measurement at the point of change. SC-003 is therefore judged on the base's search (below).
+- **A defect found and fixed (constitution XIV)**: a connector the web could not join was deleted as debris by the junction
+  pass, and the reach check then passed on the network that was left - cohort seed 15 shipped a hamlet with no way off the
+  map (research R6). The pass never drops the connector now; every one of the 58 rolls of R6 draws its connector.
 - **The floors the measurement missed** (measure.py after, back to back, loads 3.8-5.0), each with why no allowed change
   reaches it - SC-009's and SC-010's own exit:
   - SC-007's `3x` on the edge-scan bucket (2.23x on Kashikawa per build, 2.34x on Kuwabata): `edge_dist` itself fell from
@@ -245,6 +248,8 @@ added under FR-011's own rule ("whatever the after-profile shows"). What changed
 | The router's lattice stays 10 px | map drawing convention (measured: every coarser cell tried strands a house) | research R4 | point of change in `hamletgen/ways/route.py` (`ROUTE_CELL`) |
 | The carve's rows stay scalar | map drawing convention (measured: arrays slower) | research R5 | this amendment |
 | The board's lattice stays 12 px; its verge band sampled first | map drawing convention (the same board; the coarser lattice broke the entrance rule) | this amendment | point of change in `settlement/structures/fixtures/siting.py` |
+| The field's size search keeps its probe of the bracket's top after a short first carve | map drawing convention (measured: the lever slowed the pool and cohort) | research R6 | point of change in `hamletgen/water/fit.py` |
+| The junction pass never drops the connector | historically accurate (a hamlet has its way out; the rule the connector already carries) | research R6 | point of change in `hamletgen/ways/touch.py` |
 | A stranding re-roll resumes from the first roll's copy before the seats | map drawing convention (exact: the same map) | research R8 | point of change in `hamletgen/driver.py` (`resume_at`, `resume`) |
 
 ## Assumptions

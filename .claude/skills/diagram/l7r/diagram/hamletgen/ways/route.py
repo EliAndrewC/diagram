@@ -82,24 +82,21 @@ def lattice_search(
     cell: float,
 ) -> tuple[dict[tuple[int, int], float], dict[tuple[int, int], tuple[int, int]]]:
     """The router's search over its lattice: each cell's cost from `start` and the cell it was reached from, as far as the
-    search went - to `goal`, or every reachable cell when there is no way.
+    search went - to `goal`, or every reachable cell when there is no way. Dijkstra, in cost order.
 
-    A* TOWARD THE GOAL (feature 284, FR-001): Dijkstra settled every cell nearer the start than the goal. Ordered by the cost
-    so far plus the straight-line distance still to go - never more than any path's remaining cost, since a step costs
-    `hypot * cell` plus a toll that is never negative, and consistent for the same reason - the search settles the cells
-    toward the goal first and returns a path costing no more than Dijkstra's. Where two lattice paths cost the same it may
-    return the other one; the drawn path is held within `5%` of the old router's length (spec 284, SC-002)."""
+    A* TOWARD THE GOAL WAS TRIED AND WITHDRAWN (feature 284, FR-001, specs/284 research R6). With the straight-line
+    heuristic it returns a path of the same cost but, where two lattice paths tie, often another one - and over the pool
+    and cohort seeds 1-24 those other paths stranded 26 houses on first rolls against 5 (Sawada's first roll 15 of its 19,
+    its web left off the connector), re-rolled four maps against two, and the rolls were no faster in all (192.9 s against
+    198.7 s, inside the run's noise). The router's share of a roll is small; a stranding costs a whole re-roll."""
     sx, sy = start
     gx, gy = goal
 
-    def _h(ix: int, iy: int) -> float:
-        return math.hypot(ix - gx, iy - gy) * cell
-
     dist = {(sx, sy): 0.0}
     prev: dict[tuple[int, int], tuple[int, int]] = {}
-    heap = [(_h(sx, sy), 0.0, sx, sy)]
+    heap = [(0.0, sx, sy)]
     while heap:
-        _f, d, ix, iy = heapq.heappop(heap)
+        d, ix, iy = heapq.heappop(heap)
         if (ix, iy) == (gx, gy):
             break
         if d > dist.get((ix, iy), 1e18):
@@ -117,7 +114,7 @@ def lattice_search(
                     if nd < dist.get((jx, jy), 1e18):
                         dist[(jx, jy)] = nd
                         prev[(jx, jy)] = (ix, iy)
-                        heapq.heappush(heap, (nd + _h(jx, jy), nd, jx, jy))
+                        heapq.heappush(heap, (nd, jx, jy))
     return dist, prev
 
 

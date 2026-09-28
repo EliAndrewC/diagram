@@ -13,7 +13,7 @@ import os
 from pathlib import Path
 
 OUT = Path(os.environ.get("HARNESS_OUT") or "/tmp/strand-284.json")
-KASHIKAWA = dict(name="Kashikawa", seed=3, households=20, down_deg=315, water_sink="offmap", brook_side=-1, bamboo="both")
+KASHIKAWA = dict(name="Sawada", seed=24, households=19, down_deg=225, water_sink="offmap", intake="open", lane_web="alleys")
 
 
 def _dijkstra(start, goal, nx, ny, is_free, in_band, toll, cell):
@@ -78,4 +78,4 @@ def _first_roll(patch: bool, base_fit: bool = False) -> list[int]:
 
 
 def test_strand() -> None:
-    OUT.write_text(json.dumps({"clone_a_star": _first_roll(False), "clone_dijkstra": _first_roll(True), "base_fit_a_star": _first_roll(False, True), "base_fit_dijkstra": _first_roll(True, True)}))
+    OUT.write_text(json.dumps({"clone_a_star": _first_roll(False), "clone_dijkstra": _first_roll(True)}))
