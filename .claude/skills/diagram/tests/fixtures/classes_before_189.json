@@ -294,7 +294,7 @@
   "fish pond": {
     "caveat": "the pond SIZES are from 20th-century surveys of the traditional landscape, not Ming or Qing documents, and the whole-block conversion drawn here is the rare end state of a normally scattered system.",
     "covers": "the dug water of every `dikeponds[]` parcel - the pond inset inside its mulberry dike",
-    "entry": "research/archetypes.html - 'The three overlays a village may carry', 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'A dike-pond is fed and drained through sluice gates'",
+    "entry": "research/archetypes.html - 'The three overlays a village may carry', 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'A dike-pond is fed and drained through sluice gates', \"Did a dike-pond village rear its own fish fry, or buy them? Most bought them - the nursery ponds were one township's trade\", 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields'",
     "key": "fish pond",
     "label": "accurate",
     "label_note": "The form and the loop are read; the pond SIZES are from 20th-century surveys of the traditional landscape, not Ming or Qing documents, and the whole-block conversion drawn here is the rare end state of a normally scattered system.",
@@ -304,7 +304,10 @@
       "isis-dykepond",
       "ruddle-zhong-1988",
       "fao-ac241e",
-      "gmrb-2024-sangji"
+      "gmrb-2024-sangji",
+      "guangdong-xinyu-22",
+      "pwsannong-zhusanjiao-nongyeshi",
+      "nongzheng-quanshu-41"
     ],
     "what": "A stocked carp pond dug out of a former paddy parcel, two to three meters deep, its water held back by the planted dike piled from its own spoil - one cell of the mulberry-dike fish-pond system (桑基魚塘).",
     "why": "A dike-pond is dug where the ground was low and flood-prone: the digging drains the hollow and the spoil raises the dike, so the landscape was made cell by cell by the households that farmed it, over centuries. Each pond is fed and drained through a sluice in its dike, plumbed inlet-high and outlet-low, and is drained two or three times a year to dredge the mud onto the dikes. The ponds here are 0.4 to 0.6 hectare oblongs, the size the surveys of the traditional landscape record."
@@ -333,7 +336,7 @@
   "fruit dike": {
     "caveat": "the tree spacing is an orchard convention, not a measured dike.",
     "covers": "the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is fruit, and its trees",
-    "entry": "research/archetypes.html - 'What else was planted on a pond dike besides mulberry?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'",
+    "entry": "research/archetypes.html - 'Were fruit, cane or banana dikes older than the mulberry dike? Fruit was - lychee above all', 'What else was planted on a pond dike besides mulberry?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'",
     "key": "fruit dike",
     "label": "accurate",
     "label_note": "The type is read; the tree spacing is an orchard convention, not a measured dike.",
@@ -342,8 +345,10 @@
       "perimeter dike": "The crop dike is the wall AROUND one pond - a planted collar of dredged mud, part of the loop that feeds the fish. The perimeter dike is the polder's own embankment, the one that holds the river off the whole settlement. You can walk a crop dike round in about three minutes; the polder's takes the better part of twenty, and it is the reason the hamlet is dry."
     },
     "sources": [
-      "gd-gazetteer-sangji",
-      "dili360-2005-sangji"
+      "guangdong-xinyu-22",
+      "guangdong-xinyu-25",
+      "pwsannong-zhusanjiao-nongyeshi",
+      "gd-gazetteer-sangji"
     ],
     "what": "The raised dike around a fish pond planted with fruit trees - lychee, longan, citrus - the 果基魚塘 type, the delta's older form before mulberry took the dikes.",
     "why": "The fruit dike is the type the delta's own accounts put first, before mulberry displaced it; the standard trees stand on the band's crest at an orchard's spacing."
@@ -351,7 +356,7 @@
   "fry pond": {
     "caveat": "",
     "covers": "the dug water of a `dikeponds[]` parcel recorded `kind: fry` - the block's smallest parcels",
-    "entry": "research/archetypes.html - 'Were fish fry a trade, and which ponds were the nursery ponds?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'",
+    "entry": "research/archetypes.html - \"Did a dike-pond village rear its own fish fry, or buy them? Most bought them - the nursery ponds were one township's trade\", 'Were fish fry a trade, and which ponds were the nursery ponds?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'",
     "key": "fry pond",
     "label": "guess",
     "label_note": "GUESS: the fry trade and the nursery stage are read, but nothing read gives how many fry ponds a hamlet kept or which parcels - the one-in-ten share and the choice of the smallest parcels are the generator's.",
@@ -359,7 +364,9 @@
     "siblings": {},
     "sources": [
       "cssn-sangyuanwei",
-      "isis-dykepond"
+      "isis-dykepond",
+      "guangdong-xinyu-22",
+      "pwsannong-zhusanjiao-nongyeshi"
     ],
     "what": "A small nursery pond where carp fry are reared before they are stocked into the grow-out ponds - the hamlet's own hatchery corner of the dike-pond block.",
     "why": "Fry were a trade of their own in the delta: Jiujiang township on the Xijiang rose on it from the Ming, and the polder proverb has the men trading fry while the women feed the worms. A hamlet stocking its ponds each year keeps a few small ponds for the fry; the smallest parcels of the block are read as those."
@@ -490,7 +497,7 @@
   "manure pit": {
     "caveat": "the drawn 3.5 ft mouth is a size the record does not give.",
     "covers": "a `farm_fixtures[]` record of kind `manure` with `form: pit` - the alternative to the heap",
-    "entry": "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'",
+    "entry": "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'; research/homesteads.html - 'Where did the privy stand, and where was its night soil kept?'",
     "key": "manure pit",
     "label": "accurate",
     "label_note": "The form and its place behind the house are read (Fei 1939); the drawn 3.5 ft mouth is a size the record does not give.",
@@ -498,7 +505,8 @@
     "siblings": {},
     "sources": [
       "fei-1939",
-      "sugiura-1973-fuzoku"
+      "sugiura-1973-fuzoku",
+      "suzuki-1959-noson-benjo"
     ],
     "what": "An earthenware jar sunk to its mouth in the ground behind the house, in which the household's night soil is kept until it goes to the fields - the manure store in its Lake Tai form.",
     "why": "The most important fertilizer on a rice-and-silk farm was human manure, and Fei's village kept it in pits of earthenware half buried behind the buildings, so many that the public road along the stream was lined with them. Where Tohoku farms heaped theirs by the stable, the silk villages potted theirs: two attested forms, so each hamlet rolls one."
@@ -559,7 +567,7 @@
   "mulberry dike": {
     "caveat": "the coppice density the crowns are drawn at (one bush per ten to twenty square feet) was not re-found and stays on the re-sourcing queue.",
     "covers": "the bank ring of every `dikeponds[]` parcel and the coppiced crowns planted along it",
-    "entry": "research/archetypes.html - 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'Why dikes were planted'",
+    "entry": "research/archetypes.html - 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'Why dikes were planted', 'How thickly was dike mulberry planted, and how wide did a bush grow?'",
     "key": "mulberry dike",
     "label": "accurate",
     "label_note": "The ratio, the dike width and the planting are read; the coppice density the crowns are drawn at (one bush per ten to twenty square feet) was not re-found and stays on the re-sourcing queue.",
@@ -571,7 +579,11 @@
       "gd-gazetteer-sangji",
       "fao-ac241e",
       "isis-dykepond",
-      "ruddle-zhong-1988"
+      "ruddle-zhong-1988",
+      "pwsannong-gudai-zaisang",
+      "pwsannong-sangji-yutang",
+      "kotobank-souen",
+      "kotobank-negari"
     ],
     "what": "The raised earthen dike around a fish pond, six to ten meters wide, piled from the pond's own dredged mud and planted with coppiced mulberry - low bushes stripped for leaf several times a year to feed silkworms.",
     "why": "The dike is the silk side of the loop: mulberry leaf feeds the silkworms, the silkworm waste feeds the fish, the dredged pond mud re-fertilizes the dike. The prescription was six parts water to four parts dike (three-to-seven to four-to-six in the gazetteers) because too much water starves the worms and too much dike starves the fish. A bare dike of heaped mud gullies and slumps, so every dike was planted; in sericulture districts that planting was mulberry."
@@ -597,7 +609,7 @@
   "paddy": {
     "caveat": "the field is shown flooded, which is one moment of a cycle that runs from flooded to cracked and back; the depths behind that choice are modern extension figures, and no pre-modern record of either the depths or the drying stages was found.",
     "covers": "the wet plots of every `fields[kind=paddy]` - the flooded basins",
-    "entry": "research/fields.html - 'Paddy plots - irregular patchwork', 'Nitrogen - a flooded paddy makes its own', 'Plot sizes', 'How deep the water actually stands', 'Was a paddy drained in midsummer before modern times?'",
+    "entry": "research/fields.html - 'Paddy plots - irregular patchwork', 'Nitrogen - a flooded paddy makes its own', 'Plot sizes', 'How deep the water actually stands', 'Was a paddy drained in midsummer before modern times?'; research/archetypes.html - 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields'",
     "key": "paddy",
     "label": "accurate",
     "label_note": "Plot form and the irregular patchwork are read; plot sizes are calibrated from the record. the field is shown flooded, which is one moment of a cycle that runs from flooded to cracked and back; the depths behind that choice are modern extension figures, and no pre-modern record of either the depths or the drying stages was found.",
@@ -617,7 +629,9 @@
       "maff-suitou-mizu",
       "zennoh-mizukanri",
       "horikawa-2011-nakaboshi",
-      "doyoboshi-jawiki"
+      "doyoboshi-jawiki",
+      "guangdong-xinyu-20",
+      "pwsannong-zhusanjiao-nongyeshi"
     ],
     "what": "A rice basin under a shallow sheet of water behind its bunds - an inch or so for most of the season - one plot of the hamlet's comb field. The sheet is not constant: at midsummer the field is drained on purpose until the mud cracks underfoot, and it is drained again before the harvest.",
     "why": "Pre-modern paddies were fitted to land and water by piecemeal reclamation and inheritance, so the plots are odd-sized and odd-shaped, meeting at T-junctions; the tidy rectangular grid is a Meiji land-consolidation artifact. A flooded paddy makes its own nitrogen, which is why the same basins were cropped year after year."
@@ -668,9 +682,9 @@
   "pig sty": {
     "caveat": "",
     "covers": "every `pig_sties[]` record - a shed with its railed pen on a pond dike",
-    "entry": "research/archetypes.html - \"Does a pig sty have to stand back from the water, or from the pond's sluice?\", 'Does a dike-pond hamlet keep pigs and ducks on its pond dikes?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'",
+    "entry": "research/archetypes.html - \"Does a pig sty have to stand back from the water, or from the pond's sluice?\", 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields', 'Does a dike-pond hamlet keep pigs and ducks on its pond dikes?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'",
     "key": "pig sty",
-    "label": "guess",
+    "label": "accurate",
     "label_note": "GUESS: the practice is read (the 1980s survey and the FAO/NACA manual), but nothing read gives how many households kept a sty in Ming or Qing; the per-hamlet share band is the generator's.",
     "name": "pig sty",
     "siblings": {},
@@ -682,7 +696,9 @@
       "fao-ac257e",
       "fao-x6708e",
       "isis-dykepond",
-      "ruddle-zhong-1988"
+      "ruddle-zhong-1988",
+      "pwsannong-zhusanjiao-nongyeshi",
+      "nongzheng-quanshu-41"
     ],
     "what": "A simple pig shed built on the dike of a fish pond, its pen railed at the water's edge so the pigs' manure runs straight into the pond.",
     "why": "The dike-pond loop fed its fish with more than silkworm waste: pigs, chickens and ducks were reared on the dikes to manure the ponds, and a cane hamlet fed its pigs on bagasse. The shed stands on the pond nearest the houses."

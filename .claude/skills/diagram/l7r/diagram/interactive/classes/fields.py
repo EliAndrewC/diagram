@@ -20,7 +20,10 @@ class Paddy(Kind):
     Why: Pre-modern paddies were fitted to land and water by piecemeal reclamation, so the plots are
     odd-sized and odd-shaped; the tidy rectangular grid is a Meiji/Showa land-consolidation artifact, though
     the alluvial plains of the west kept the far older jori grid working into the medieval period. A flooded
-    paddy makes its own nitrogen, which is why the same basins were cropped year after year.
+    paddy makes its own nitrogen, which is why the same basins were cropped year after year. On the Chinese
+    delta the rice fields were also where the ducks fed: Qu Dajun, writing of Guangdong in 1678, says the
+    coastal fields bred small crabs that ate the rice sprouts and only ducks could eat them, so the villages
+    kept many ducks, herded in the fields - on the crabs in spring and summer, on the gleaned rice in autumn.
 
     Note: Plot form and the irregular patchwork are read, and so is the scattering of a household's holding;
     that the bunds meet at T-junctions is a guess no page read states; drawing the patchwork on the western
@@ -40,8 +43,8 @@ class Paddy(Kind):
     Name: paddy
     Covers: the wet plots of every `fields[kind=paddy]` - the flooded basins
     Label: accurate
-    Sources: maff-suitou-mizu, zennoh-mizukanri, horikawa-2011-nakaboshi, doyoboshi-jawiki
-    Entry: research/fields.html - 'Paddy plots - irregular patchwork', 'Nitrogen - a flooded paddy makes its own', 'Plot sizes', 'How deep the water actually stands', 'Was a paddy drained in midsummer before modern times?'
+    Sources: maff-suitou-mizu, zennoh-mizukanri, horikawa-2011-nakaboshi, doyoboshi-jawiki, guangdong-xinyu-20, pwsannong-zhusanjiao-nongyeshi
+    Entry: research/fields.html - 'Paddy plots - irregular patchwork', 'Nitrogen - a flooded paddy makes its own', 'Plot sizes', 'How deep the water actually stands', 'Was a paddy drained in midsummer before modern times?'; research/archetypes.html - 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields'
     """
 
     key = 'paddy'

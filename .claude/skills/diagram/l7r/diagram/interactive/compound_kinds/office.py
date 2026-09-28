@@ -150,7 +150,7 @@ class Granary(Kind):
     Why: Both forms are attested. The storehouse on posts, the takakura, kept its floor high against rats and
     damp; the rice storehouse of the Takayama intendancy is an earth-walled kura, its walls set with gaps for
     ventilation, and a kura guarded its grain against fire, damp and theft. Tax rice flowed from the village granaries through the magistrate's compound toward central stores,
-    so the office kura holds grain in transit plus a local reserve, and a county seat's granary stands inside
+    so the office kura holds grain in transit plus a local reserve; and since an intendant's seat was also where the year's tax was stored, a county seat's granary stands inside
     the compound rather than in the town. Where water gives a county a way out, the grain moves on; a remote
     county, where transport costs more, keeps a row of kura instead. The lord's kura held the paddy tax as brown rice in straw
     bales, with a corner of unhulled rice kept against famine.

@@ -20,7 +20,11 @@ class FishPond(Kind):
     centuries. Each pond is fed and drained through a sluice in its dike, plumbed inlet-high and outlet-low where the ground slopes,
     and is drained two or three times a year to dredge the mud onto the dikes. The ponds here are about 4 mu of water each - a
     little over a quarter of a hectare, SMALLER than the 0.4 to 0.6 hectares the surveys of the traditional
-    landscape report, because this is a hamlet and a hamlet's ponds are small.
+    landscape report, because this is a hamlet and a hamlet's ponds are small. What lives in it is carp. The
+    young carp were not bred here: they were netted wild in the West River by the fry households of one
+    township, Jiujiang, and sold to the pond districts, so an ordinary hamlet bought its fry and
+    raised them to grown fish. A late-Ming farming compendium, written far to the north in Shanghai, names
+    two carps fed in a fish pond there, the grass carp and the silver carp; of the delta's own ponds the record says only that they raised the four domestic carps.
 
     Note: The form and the loop are read, save the inlet-high, outlet-low plumbing, which rests on a monograph with no publicly readable copy. The pond sizes drawn here are a hamlet's own, deliberately below the
     band those surveys report - and that band is 20th-century rather than Ming or Qing, and reaches this
@@ -36,8 +40,8 @@ class FishPond(Kind):
     Name: fish pond
     Covers: the dug water of every `dikeponds[]` parcel - the pond inset inside its mulberry dike
     Label: accurate
-    Sources: isis-dykepond, ruddle-zhong-1988, fao-ac241e, gmrb-2024-sangji
-    Entry: research/archetypes.html - 'The three overlays a village may carry', 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'A dike-pond is fed and drained through sluice gates'
+    Sources: isis-dykepond, ruddle-zhong-1988, fao-ac241e, gmrb-2024-sangji, guangdong-xinyu-22, pwsannong-zhusanjiao-nongyeshi, nongzheng-quanshu-41
+    Entry: research/archetypes.html - 'The three overlays a village may carry', 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'A dike-pond is fed and drained through sluice gates', "Did a dike-pond village rear its own fish fry, or buy them? Most bought them - the nursery ponds were one township's trade", 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields'
     """
 
     key = 'fish pond'
@@ -51,7 +55,7 @@ class MulberryDike(Kind):
 
     Why: The dike is the silk side of the loop: mulberry leaf feeds the silkworms, the silkworm waste feeds the
     fish, the dredged pond mud re-fertilizes the dike. The prescription was six parts water to four parts
-    dike (three-to-seven to four-to-six in the gazetteers) because the dike's mulberry had to yield enough
+    dike (the Guangdong gazetteer's water-to-dike split of three-seven to four-six, read in the order it names, leans the other way) because the dike's mulberry had to yield enough
     feed and fertilizer for the fish in the water beside it. A bare dike of heaped mud gullies and slumps, so every dike was planted; in
     sericulture districts that planting was mulberry.
 
@@ -62,28 +66,27 @@ class MulberryDike(Kind):
     contested - the classic prescription survives as six parts dike to four parts pond as well as the reverse,
     and seven to three is recorded where the fish had feed from beyond the dike - so the water-heavy reading drawn here is a regional one, disclosed
     rather than the only one; measured on the map that draws them, water is 80% of the parcel ground and the
-    planted bank 20%, and about half the block once the canal corridors between the parcels count. The crowns
-    are drawn THINNER than this page's own guess - one bush per twenty-three square feet against a guessed one
-    per ten to twenty - because at the honest step the crowns fuse into a solid green band and stop reading as
-    bushes at all; that guess is itself sparse, since the one density read is 8,000 to 10,000 root-cut bushes
-    a mu, about one bush to a square foot, and no page read gives a crown's width, so the four and a half to
-    seven feet drawn is this project's own figure; only the density is a map drawing convention. And the
-    dike is drawn as a RING, the band between the parcel's outer edge and the water's own outline, so hovering
-    a dike lights its bank and not the pond inside it. So: the collar drawn around each pond is about two
-    meters where the traditional figure is a dike of six to ten, and the crowns stand at one bush per
-    twenty-three square feet where this page's own guess is one per ten to twenty, and the one density read
-    is about one to a square foot.
+    planted bank 20%, and about half the block once the canal corridors between the parcels count. How
+    thickly mulberry stood depended on how low it was cut, along one continuum: from about one bush to a
+    square foot in the Pearl River delta's root-cut planting, a figure given as current practice with no date,
+    to about 300 trees a mu - one to about 24 square feet - in the late-Qing Yangtze delta, the only figure
+    dated before the modern period; none was measured on a pond dike. The crowns are drawn at about one bush
+    per twenty-three square feet, the late-Qing figure, by the GM's ruling that the map keeps the premodern
+    spacing. No page read gives how wide a bush grew, so the four and a half to seven feet drawn is this
+    project's own figure. And the dike is drawn as a RING, the band between the parcel's outer edge and the
+    water's own outline, so hovering a dike lights its bank and not the pond inside it. So: the collar drawn
+    around each pond is about two meters where the traditional figure is a dike of six to ten, and the width
+    of a bush's crown is this project's own.
 
-    Caveat: the collar drawn around each pond is about two
-    meters where the traditional figure is a dike of six to ten, and the crowns stand at one bush per
-    twenty-three square feet where this page's own guess is one per ten to twenty, and the one density read
-    is about one to a square foot.
+    Caveat: the collar drawn
+    around each pond is about two meters where the traditional figure is a dike of six to ten, and the width
+    of a bush's crown is this project's own.
 
     Name: mulberry dike
     Covers: the bank ring of every `dikeponds[]` parcel and the coppiced crowns planted along it
     Label: accurate
-    Sources: gd-gazetteer-sangji, fao-ac241e, isis-dykepond, ruddle-zhong-1988
-    Entry: research/archetypes.html - 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'Why dikes were planted'
+    Sources: gd-gazetteer-sangji, fao-ac241e, isis-dykepond, ruddle-zhong-1988, pwsannong-gudai-zaisang, pwsannong-sangji-yutang, kotobank-souen, kotobank-negari
+    Entry: research/archetypes.html - 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'Why dikes were planted', 'How thickly was dike mulberry planted, and how wide did a bush grow?'
     """
 
     key = 'mulberry dike'
@@ -145,24 +148,36 @@ class PondSluice(Kind):
 
 class FruitDike(Kind):
     """
-    What: The raised dike around a fish pond planted with fruit trees - the 果基魚塘 type of the dike-pond system.
+    What: The raised dike around a fish pond planted with fruit trees - the 果基魚塘 type of the dike-pond system:
+    lychee above all, with longan, mandarin and orange, standing in a single line along the bank's crest.
 
-    Why: The dike-pond types succeeded one another across the delta, and the gazetteer office puts mulberry
-    first, with the fruit, cane and vegetable dikes following it as the delta urbanized and industrialized. One hamlet is one type, so
-    a fruit hamlet rolls fruit on every dike, and the trees stand on the band's crest at an orchard's spacing.
+    Why: The fruit dike is the oldest dike-pond planting read. Qu Dajun, writing of Guangdong in the late
+    seventeenth century, says the villages of Guangzhou's large counties often gave up good fields to make
+    dikes and planted them with fruit trees - lychee most, tea and mulberry next, then mandarin and orange -
+    with a pond for fish below the dike. A modern history of the delta's farming dates the order: fruit-dike
+    fish ponds arose first, in Nanhai and Shunde in the mid-Ming, and the mulberry dike replaced them in the
+    late Ming and early Qing and became the dominant type in the Qing. So in Qu Dajun's day the fruit dike
+    still stood beside the mulberry, and a hamlet may roll it as its dike crop, as it may mulberry or tea. One
+    hamlet is one planting, so a fruit hamlet plants fruit on every dike.
 
-    Note: The type is read, and by the gazetteer's account it is a modern one; the fruit is named only in bulk -
-    chiefly banana and citrus - with no species given for a single dike, and the tree spacing is an orchard
-    convention, not a measured dike.
+    Note: The fruit dike, its age and its fruit are read. How thickly the trees stood is known only for a
+    field turned to orchard - twenty-odd lychee to a mu, about one tree to 300 square feet - and nothing read
+    gives the spacing along a dike, so the trees drawn about eighteen feet apart on the crest are this
+    project's own, and so is how often a hamlet rolls fruit, about two in six. So is one planting to a
+    hamlet: Qu Dajun names the fruit, tea and mulberry of the villages' dikes together, and only the modern
+    gazetteer's succession of dike types puts one type to a place.
 
-    Caveat: the fruit is named only in bulk - chiefly banana and citrus - with no species given for a single
-    dike, and the tree spacing is an orchard convention, not a measured dike.
+    Caveat: nothing read
+    gives the spacing along a dike, so the trees drawn about eighteen feet apart on the crest are this
+    project's own, and so is how often a hamlet rolls fruit, about two in six. So is one planting to a
+    hamlet: Qu Dajun names the fruit, tea and mulberry of the villages' dikes together, and only the modern
+    gazetteer's succession of dike types puts one type to a place.
 
     Name: fruit dike
     Covers: the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is fruit, and its trees
     Label: accurate
-    Sources: gd-gazetteer-sangji, dili360-2005-sangji
-    Entry: research/archetypes.html - 'What else was planted on a pond dike besides mulberry?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'
+    Sources: guangdong-xinyu-22, guangdong-xinyu-25, pwsannong-zhusanjiao-nongyeshi, gd-gazetteer-sangji
+    Entry: research/archetypes.html - 'Were fruit, cane or banana dikes older than the mulberry dike? Fruit was - lychee above all', 'What else was planted on a pond dike besides mulberry?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'
     """
 
     key = 'fruit dike'
@@ -180,10 +195,11 @@ class TeaDike(Kind):
 
     Note: The tea dike is read, but only named in a list: nothing read says how the bushes stood on a dike, so the
     two clipped rows drawn here and their spacing are this project's own, and so is how often a hamlet rolls tea,
-    about one in six.
+    about one in six, and so is one planting to a hamlet, since Qu Dajun names the dike crops together.
 
     Caveat: nothing read says how the bushes stood on a dike, so the two clipped rows drawn here and their spacing
-    are this project's own, and so is how often a hamlet rolls tea, about one in six.
+    are this project's own, and so is how often a hamlet rolls tea, about one in six, and so is one planting to a
+    hamlet, since Qu Dajun names the dike crops together.
 
     Name: tea dike
     Covers: the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is tea, and its bushes
@@ -210,21 +226,31 @@ class PigSty(Kind):
     bones are excavated at the Satsuma domain's Edo residence, at Osaka castle, at Hakata and at Nagasaki
     harbor, and the familiar account that the country did not is called an assumption under review by its most
     recent scholarly treatment - but nothing read links a Japanese pig to a pond at all. So it is the FORM
-    rather than the animal that belongs to this kind of hamlet and to no other on these maps.
+    rather than the animal that belongs to this kind of hamlet and to no other on these maps. And the pig is
+    the dike-pond village's own animal: a modern history of the Pearl River delta's farming names pig-raising
+    as the dike-pond district's stock, as duck-raising was the sand fields', and puts the pig inside the Qing
+    loop - fed from the pond, its dung and the pond mud manuring the mulberry. A pen on a fish-pond bank is an
+    old instruction too: a farming compendium printed in 1639, written far to the north in Shanghai, advises
+    penning a flock of sheep - the form, not the pig - on the bank of a fish pond and sweeping its dung into the water each morning to feed the
+    fish.
 
-    Note: GUESS: the practice is read, and so is the reason the shed sits at the water, but nothing read gives
-    how many households kept a sty in Ming or Qing - the per-hamlet share band is the generator's. The few feet
+    Note: The sty is read - the pig as the dike-pond village's animal and the pen on the pond bank - and so is
+    the reason the shed sits at the water. But nothing read gives how many households kept a sty: the
+    quarter to half of the households drawn with one, rolled per hamlet, is a guess. The few feet
     of clearance at the sluice is a guess too: the record gives dike widths and no spacing along a dike at all.
     And the widths it does give, the drawn bank does not meet - the planted collar under these sheds is two to
     five meters, short of the five-meter floor a modern manual sets for a shed-carrying dike (its ten-meter ceiling answers to pigsties, piping and traffic together, and the traffic at least, if it ran on the dikes as this page infers, is later than this map), while a Shunde village's dikes
     ran twenty meters before commercial fish farming eroded them, a width later than this map and so no measure of it;
     a reader measuring the collar should know it is snug by a modern standard and that no older standard was found to judge it by.
 
+    Caveat: nothing read gives how many households kept a sty: the
+    quarter to half of the households drawn with one, rolled per hamlet, is a guess.
+
     Name: pig sty
     Covers: every `pig_sties[]` record - a shed with its railed pen on a pond dike
-    Label: guess
-    Sources: fao-ac264e, fao-ac264e-ch9, fao-y1187e, qimin-yaoshu-yangzhu, fao-ac257e, fao-x6708e, isis-dykepond, ruddle-zhong-1988
-    Entry: research/archetypes.html - "Does a pig sty have to stand back from the water, or from the pond's sluice?", 'Does a dike-pond hamlet keep pigs and ducks on its pond dikes?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'
+    Label: accurate
+    Sources: fao-ac264e, fao-ac264e-ch9, fao-y1187e, qimin-yaoshu-yangzhu, fao-ac257e, fao-x6708e, isis-dykepond, ruddle-zhong-1988, pwsannong-zhusanjiao-nongyeshi, nongzheng-quanshu-41
+    Entry: research/archetypes.html - "Does a pig sty have to stand back from the water, or from the pond's sluice?", 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields', 'Does a dike-pond hamlet keep pigs and ducks on its pond dikes?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'
     """
 
     key = 'pig sty'
@@ -233,23 +259,27 @@ class PigSty(Kind):
 class FryPond(Kind):
     """
     What: A small nursery pond where carp fry are reared, then grown on as fingerlings, before they are stocked
-    into the grow-out ponds - the hamlet's own hatchery corner of the dike-pond block.
+    into the grow-out ponds - the hamlet's own nursery corner of the dike-pond block.
 
-    Why: Fry were a trade of their own in the delta: a seventeenth-century account of Guangdong has the men
-    trading fish fry while the women feed and tend the silkworms. A hamlet stocking its ponds each year keeps
-    a few small ponds for the fry and fingerlings; the smallest parcels of the block are read as those.
+    Why: Fry were a trade of their own in the delta, and one township's. The young carp that stocked the ponds
+    were netted wild in the West River by the fry households of Jiujiang in Nanhai, who held the fry-catching
+    landings on the river - granted to them in the Hongzhi reign (1488-1505) - and supplied the other pond
+    districts. Qu Dajun, writing in the late seventeenth century, says fry ponds were found only in Jiujiang,
+    where seven parts in ten of the pond water raised fry; elsewhere the ponds mostly raised grown fish, and
+    where they tried to raise fry the fry did not thrive. So the record holds two kinds of dike-pond village:
+    one that raises grown fish and buys its fry, with no nursery ponds at all, and a fry village of the
+    Jiujiang kind, where most of the water is nursery water.
 
-    Note: GUESS: the fry trade and the nursery stages are read, and so is the village the trade is named in, Jiujiang in Nanhai, but the century
-    the trade rose in is not - the work that carried it is not readable anywhere - and nothing read gives how
-    many nursery ponds a premodern hamlet kept or which parcels: a modern manual puts nursery water at a
-    quarter to three tenths of pond area where grass- or grain-fed fish are the main stock and 15 percent where plankton-feeders are, a design prescription rather than an observation of an old block,
-    so the one-in-ten share and the choice of the smallest parcels are the generator's.
+    Note: GUESS: the fry trade, the township that held it and the two kinds of village are read, but the map
+    draws neither: it marks the smallest parcels of a block, about one in ten, as fry ponds, a share that
+    matches no village read and rests on the assumption that nursery ponds were the smallest, and the order of fry pond, fingerling pond and grow-out pond is a modern manual's, with no premodern block read; which of the two
+    kinds a hamlet should be is awaiting the GM's ruling.
 
     Name: fry pond
     Covers: the dug water of a `dikeponds[]` parcel recorded `kind: fry` - the block's smallest parcels
     Label: guess
-    Sources: cssn-sangyuanwei, isis-dykepond
-    Entry: research/archetypes.html - 'Were fish fry a trade, and which ponds were the nursery ponds?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'
+    Sources: cssn-sangyuanwei, isis-dykepond, guangdong-xinyu-22, pwsannong-zhusanjiao-nongyeshi
+    Entry: research/archetypes.html - "Did a dike-pond village rear its own fish fry, or buy them? Most bought them - the nursery ponds were one township's trade", 'Were fish fry a trade, and which ponds were the nursery ponds?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'
     """
 
     key = 'fry pond'
@@ -257,24 +287,31 @@ class FryPond(Kind):
 
 class ManurePit(Kind):
     """
-    What: An earthenware jar half buried in the ground behind the house, in which the household's night soil
-    is kept until it goes to the fields - the manure store in its Lake Tai form.
+    What: An earthenware jar half buried in the ground, in which the household's night soil is kept until it
+    goes to the fields - the manure store in its Lake Tai form. Each hamlet has its own mix: some stand behind the house beside its privy,
+    others out at the edge of the household's nearest field, or beside a road.
 
     Why: The most important fertilizer on a rice-and-silk farm was human manure, and Fei's village kept it in
     pits of earthenware half buried behind the buildings, so many that the public road along the stream was
     lined with them. Where Tohoku farms heaped theirs by the stable, the silk villages potted theirs: two
-    attested forms, so each hamlet rolls one.
+    attested forms, so each hamlet rolls one. Where the pit stood is a second choice. A 1959 survey of three
+    Japanese villages found night soil kept in a tank beside the privy or in a pit out by the fields, the
+    tank thought to have moved from the privy to the fields or the roadside to make manuring easier, and the
+    share of households with a field pit ran from 2 of 83 in one village to 15 of 18 in another. So each
+    hamlet rolls its share of field pits somewhere between almost none and most households.
 
-    Note: The form and its place behind the house are read (Fei 1939); the drawn 3.5 ft mouth is a size the record
-    does not give.
+    Note: The form and its place behind the house are read (Fei 1939), and so are the field pit and how widely
+    its share varied (the highest, 15 of 18, in a village whose field pits also took night soil carted in from Sendai); carrying the field pit, found in Japan, to the silk village's jar is this project's own
+    step, and the drawn 3.5 ft mouth is a size the record does not give.
 
-    Caveat: the drawn 3.5 ft mouth is a size the record does not give.
+    Caveat: carrying the field pit, found in Japan, to the silk village's jar is this project's own
+    step, and the drawn 3.5 ft mouth is a size the record does not give.
 
     Name: manure pit
     Covers: a `farm_fixtures[]` record of kind `manure` with `form: pit` - the alternative to the heap
     Label: accurate
-    Sources: fei-1939, sugiura-1973-fuzoku
-    Entry: research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'
+    Sources: fei-1939, sugiura-1973-fuzoku, suzuki-1959-noson-benjo
+    Entry: research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'; research/homesteads.html - 'Where did the privy stand, and where was its night soil kept?'
     """
 
     key = 'manure pit'

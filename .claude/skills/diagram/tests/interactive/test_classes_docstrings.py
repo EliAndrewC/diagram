@@ -122,7 +122,16 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
     keys 290 cites; re-pointed the irrigation ditch (water/310, the bare intake mouth), the drainage ditch (water/090 and
     fields/090 - where the drain lets its water go and why it runs across the fall; the retired 'Water-first v2'
     heading dropped) and the weir (300's four forms and 310's choice); and corrected two sibling texts the engine had
-    made false: a weir always of stone-packed crib, and a ditch always crossed by a plank."""
+    made false: a weir always of stone-packed crib, and a ditch always crossed by a plank.
+
+    Feature 269 (K5) moved `pig sty`'s `label` from guess to accurate under the same bar: archetypes/210 reads the pig
+    as the dike-pond district's own animal and a pen on a fish-pond bank as a late-Ming instruction, so the sty is read
+    and only the share of households keeping one stays a disclosed guess. The same pass re-pointed the mulberry dike
+    (220 - the density continuum, the drawn spacing the late-Qing figure by the GM's ruling), the fruit dike (230 - the
+    oldest dike planting, lychee above all; the modern cane-and-vegetable succession no longer its why), the fry pond
+    (200 - the fry bought from one township, the two kinds of village), the manure pit (homesteads/260 - the field
+    pit), and, by the GM's ruling that a write-up of a place where animals lived says so, the fish pond (200 and 210 -
+    its carp) and the paddy (210 - the delta's ducks herded in the rice fields), each with the keys its prose rests on."""
     before = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
     added = {s for succ in SINCE_189.values() for s in succ} | set(ADDED_SINCE_189)
     assert set(SINCE_189) <= set(before) and not (added & set(before)), "the tables name snapshot keys and NEW keys only"
