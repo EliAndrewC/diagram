@@ -156,10 +156,7 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
     # declines EVERY connector, which is precisely why `_thread_the_fabric` cannot rescue a track
     # aimed through the cluster and why the bearing has to be chosen clear of the steadings up in
     # `connector_track`. Knowing that this returns [] rather than a detour is load-bearing.
-    # ...A COARSER CELL DECLINES WHAT THE 10 PX LATTICE DECLINED (feature 284, B2): the decline is load-bearing, and a cell
-    # above 10 would otherwise route boxes 10 px never did. A cell of 10 or finer counts its own lattice, as it always has.
-    _dc = min(cell, 10.0)
-    if (int((x1 - x0) / _dc) + 1) * (int((y1 - y0) / _dc) + 1) > 90000:
+    if nx * ny > 90000:
         return []
 
     def to_pt(ix: int, iy: int) -> Pt:

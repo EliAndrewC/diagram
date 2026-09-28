@@ -94,7 +94,8 @@ array, and two quads farther apart than the clearance need no `_quad_gap`. The m
 field search, the re-roll resume and the connector fix; a first run made with A* and the probe lever still in was set aside
 at the reviews of Amendment 1, because the router itself decides which maps strand. The five pool hamlets, the 10- and
 20-household toys and cohort seeds 1-24, each rolled at each cell with `route.ROUTE_CELL` set and the driver's own
-`unreached_houses` wrapped so every attempt's count is kept; a coarser cell declines the boxes the 10 px lattice declined.
+`unreached_houses` wrapped so every attempt's count is kept; a coarser cell declined, for the run, the boxes the 10 px lattice
+declined (the change went with the withdrawal, since it made the sweeps' own 14 px lattice decline boxes it used to route).
 Twelve forked workers; the rows are `b2/results.json`):
 
 | cell (px) | unreached, all attempts | rolls re-rolled | stranded in the kept map | maps worse than 10 px (every attempt) | roll seconds, summed (loaded; observed 2026-09-28, method: `b2/harness.py`) |
