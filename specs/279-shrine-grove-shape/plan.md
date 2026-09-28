@@ -5,9 +5,10 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 2). Request: [`request.md`](request.
 ## What the research found (research religion-and-death 129; FR-001)
 
 - **Forms, tied to the ground** (accurate as forms): on a rise or in the paddy plain the wood stands **all
-  around**; on a slope it stands **behind** the hall, **behind and at the sides**, or **at the sides** - the two
-  side forms on a slope rest on one modern city survey, whose groves burned, were replanted and lost ground, a
-  caveat that covers all its forms and is quoted on the record.
+  around**; on a slope it stands **behind** the hall, **behind and at the sides**, or **at the sides**. Behind and
+  at the sides is also Short's general description; behind only and at the sides only rest on one modern city
+  survey alone, whose groves burned, were replanted and lost ground - a caveat that covers all its forms and is
+  quoted on the record.
 - **The outline**: no source gives a grove's plan; the precinct came to be surveyed land, but nothing says the wood
   followed that line; where the wood meets scrub or slope its edge is drawn irregular, its crowns' own (a guess).
   The one picture of an edge, the paddy-plain photograph, shows the wood's foot along the fields' straight edge:
@@ -30,7 +31,9 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 2). Request: [`request.md`](request.
   `migration-plan.md` step 5 name the knob, the ground rule, the irregular edge and the open paddy question.
 - **D3 - Hoshigaoka's form**: the hall stands at the top of its slope and the approach climbs to it from the
   south, so the candidates are `behind and sides` and `sides`; the roll (the map has no seed, so the seed is the
-  map's name: `random.Random(zlib.crc32(b"hoshigaoka:shrine grove form"))`, equal weights) gave **sides**.
+  map's name) is exactly `random.Random(zlib.crc32(b"hoshigaoka:shrine grove form")).choice(["behind and sides",
+  "sides"])`, the candidates in the knob's order, and it gave **sides** (the order matters: reversed, the same seed
+  gives the other form - the call is recorded beside the result on the sheet's notes).
 - **D4 - the layout, laid once** (FR-005, FR-006, FR-007): feature 270's layout script, re-run with the grove's
   domain changed from the precinct box to two irregular flanks - the wood on both sides of the precinct from about
   the hall's back line down past it to ragged tips short of the outermost arches; the ground behind the hall (the
@@ -46,9 +49,17 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 2). Request: [`request.md`](request.
   be bare tan in the scrub, so the map's own scatter (grass tufts, shrub dots, scraggly pines) is carried into it
   from a donor patch just west of the grove, tiled and kept only where it clears the wood, the clearing, the
   approach, the arches, the sacred tree, the basin, the well and the path. The map's notes record the edit.
-- **D6 - the sheet** (FR-007): the grove floor and tree list rewritten from D4; the sheet notes' knob list gains
-  `**Grove form**: sides`; its `shrine grove` Map notes line and its header comment say the form; the precinct
-  rect stays (layout, `-`).
+- **D6 - the sheet and every text that places a feature against the old grove** (FR-007): the grove floor and tree
+  list rewritten from D4, and the sheet's frame widened to hold the flanks' outer crowns; the precinct rect stays
+  (layout, `-`). Restated to the sides form, each by name - in `hoshigaoka-shrine.notes.md`: the "precinct is the
+  grove" bullet (its area, crown count and canopy share re-measured from D4's layout), the arches bullet and the
+  sacred tree bullet ("at the grove's edge", "the grove's biggest"), the knob list (`**Grove form**: sides`, with
+  the roll's exact call), and the Map notes lines `torii`, `shrine grove` and `well` ("at the grove's back edge",
+  "the outermost at the grove's edge"); in the sheet svg the comments at the parchment, the precinct, the approach,
+  the arches and the well; the shared `approach` kind (`compound_kinds/shrine.py`: What and Covers, "from the
+  grove's edge") and the program's approach rule (`buildings/programs.md`: "at the grove's edge") - the way enters
+  the precinct, and the outermost arch stands there; and `future-work/farming-communities.md`'s "a village shrine's
+  precinct IS its grove". The map's notes row "Shrine grounds" records feature 279's edit.
 - **D7 - verification** (SC-002, SC-003, FR-009): `STRAIGHT_RUN` measured on the tree list by the layout script
   and recorded in `measurements.json`; `matches_map` (the tree-overlap check) stays green; a `settlement-review`
   of the map and a `building-review` of the sheet, ledgered; the paddy-edge question and the side forms' single

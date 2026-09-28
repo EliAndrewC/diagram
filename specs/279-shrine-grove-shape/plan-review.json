@@ -1,65 +1,51 @@
 {
  "feature": "279-shrine-grove-shape",
- "plan_sha256": "469cfeed1ef6a014dca1c50391e9ba2fa1470aaac948754a244c68a671eefded",
+ "plan_sha256": "3f7221e42947073e2af4fdb54ae67f6be55ce3f763e1a83bd7b76bbe07975ecd",
  "reviewed": "2026-09-28",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "D1",
-   "summary": "Research 129 on religion-and-death; 124's decision points at it; three new sources registered and put through the four checks",
+   "summary": "Research 129 with the paddy photograph's reading; 124 points at it; three sources registered and put through the four checks",
    "class": "within",
-   "why": "FR-001-FR-003 as written. The two ja.wikipedia sources 129 also cites (chinju-no-mori-jawiki, jochi-jawiki) were registered before this feature, so 'three sources registered' is accurate."
+   "why": "FR-001-FR-003. Round 1's D4b premise is now on the record: 129's outline paragraph and note chinju-no-mori-jawiki-6 say what the photograph shows (the foot along the paddy's straight edge) and its limits (modern, one side, ground level)."
   },
   {
-   "id": "D2a",
-   "summary": "A grove-form knob declared in programs.md's country-shrine knob list with its ground rule and labels; the owed-at-conversion list (farming-communities.md, migration-plan.md step 5) names it",
+   "id": "D2",
+   "summary": "Knob 8 grove form - behind, behind and sides, sides, all around - with the ground rule, equal weights between two candidates (guess), the paddy edge OPEN with the GM; the program's composition rule, size anchors, types.json notes and the shrine grove kind (Why, Note, Caveat, Entry naming 129) restated; the owed list names the knob",
    "class": "within",
-   "why": "FR-004 and FR-008: the knob, what constrains it (the ground) and each form's label, named in the program and the owed list. Equal weights where two candidates remain are a labeled guess, which is correct."
-  },
-  {
-   "id": "D2b",
-   "summary": "The survey's sides-only grove is left out of the knob as a 'deliberate deviation', on the reading that it may be what the city left",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-004 declares the knob 'with its forms', meaning the forms the sources attest (FR-001), and the one survey that sorts groves counts sides-only as its commonest single form (38.9%). The exclusion rests on 'may be' and 'on our reading': the paper (re-read in full, section 4.3.2) says that front-type shrines split into high and low green retention, and that the low type has trees merely lining the approach with buildings beyond. It never says sides-only IS that low type, and its high type (grove reaching beyond the approach on a steep slope) could be sides-only too. The attrition evidence (burned, replanted, shrunk, built on) is general to the whole sample, yet the same survey's behind-only form, which has no other witness either, is kept. So the argument is applied to one form out of four. It fails every test for a legitimate exception. Including it is not impossible. The GM's words do not imply it; they ask 'to know what tunable knobs we will have'. Including a labeled form does not defeat the request's purpose; excluding a possibly real form does. 'Deliberate deviation' is also the wrong class here: the doctrine reserves it for the setting differing from history or for a priced trade-off, not for a session doubting a source. The exclusion also decides Hoshigaoka (D3 goes from a roll to 'no roll'). Required: declare sides-only as a fourth form, a candidate for a hall at the top of its slope beside behind-and-sides, labeled as attested in one post-war city survey with the caveat quoted. A lower weight for it is permitted as a labeled guess. Raise the caveat with the GM at hand-back."
+   "why": "Round 1 D2b RESOLVED: sides-only is a fourth form and a candidate for a hall at the top of its slope, labeled as resting on the one city survey with its caveat quoted (fujita-2007-shaso-slopes-3), and 129 no longer claims it is the city's leavings. The four forms are the survey's whole classification (11.8+29.9+19.4+38.9 = 100%), so the survey's 'row of trees along the approach' is a sub-state inside them, not a fifth form left out. Round 1 D6's kind and program items RESOLVED in the diff (grounds.py ShrineGrove, programs.md composition rule, grove row, notes paragraph, size anchors, types.json notes). FR-004 and FR-008 as written."
   },
   {
    "id": "D3",
-   "summary": "Hoshigaoka (hall at the top of its slope, approach climbing from the south) takes behind-and-sides with no roll",
+   "summary": "Hoshigaoka (hall at the top of its slope) rolls between behind and sides and sides from random.Random(zlib.crc32(b'hoshigaoka:shrine grove form')), equal weights; the roll gave sides",
    "class": "within",
-   "why": "It applies the plan's own ground rule correctly. But 'one candidate, no roll' exists only because of D2b. Once sides-only is a candidate, Hoshigaoka rolls from its seed between the two top-of-slope forms, and D4-D6 draw whichever form the roll gives."
+   "why": "The per-settlement roll FR-004 asks for. Re-run for this review: with the candidates in the plan's order (behind and sides, sides) both choice() and random()<0.5 give sides; the reverse order gives behind and sides, so record the exact call and order beside the result."
   },
   {
    "id": "D4",
-   "summary": "One layout script: the grove's domain becomes an irregular smooth-noise region (behind the hall and down both flanks, lower approach open); it writes the map fragment, the manifest record and the sheet's tree list",
+   "summary": "One layout: two irregular smooth-noise flanks from about the hall's back line down to ragged tips short of the outermost arches, behind the hall and the lower approach open; one village_groves record per flank; map fragment, manifest and sheet tree list from the one layout",
    "class": "within",
-   "why": "This is FR-005's silent-source branch (irregular, labeled a guess) and FR-006/FR-007's map and sheet from one layout, tree for tree. Everything outside the grove is unchanged, as FR-006 requires."
-  },
-  {
-   "id": "D4b",
-   "summary": "'No source shows a straight edge, so FR-005's escalation branch does not fire'; the owed list carries 'the irregular edge' for every form",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-005 names its own trigger: 'a wood cut off by paddy'. The only source for the paddy-plain all-around form (chinju-no-mori-jawiki) is cited by the caption of its lead photograph, 'a shrine wood surrounded by paddy fields'. The picture (Kasuga Shrine, Kawakita), viewed for this review, shows the wood meeting a straight paddy edge across its front with a thin verge between. Nothing on the record shows anyone looked at the picture. 'No source shows a straight edge' is a premise that decides scope and was never checked. Required: record in 129 what the photograph shows, including its limits (a side view, a modern field pattern), and apply FR-005, which puts that finding to the GM before the paddy-plain form's edge is fixed in the knob or the owed list. Hoshigaoka's slope grove need not wait on this only if its wood meets no paddy. Say which, measured on the map."
+   "why": "The sides form drawn with FR-005's silent-source outline (irregular, a guess), FR-006/FR-007's map and sheet from one layout. Round 1 D4b RESOLVED: the paddy-plain edge goes to the GM before that form's edge is fixed (plan, 129, knob 8, owed list), and Hoshigaoka's wood meets no paddy - measured for this review on hoshigaoka.json: the current shrine grove box (389.5,1072.8 +68.3x107.7 px) lies 731 ft from the hoshigaoka-paddies outline, and the new flanks lie inside that box."
   },
   {
    "id": "D5",
-   "summary": "Frozen map edited by hand: shrine-grove svg group and manifest record replaced; the scrub scatter extended into ground the wood gives up, from a donor patch of the map's own scatter",
+   "summary": "Frozen map edited by hand: the svg's shrine-grove group replaced in the mirror (a gitignored render the clone lacks, confirmed), the manifest in the clone; scrub scatter carried into the ground the wood gives up; the map's notes record the edit",
    "class": "within",
-   "why": "FR-006 authorizes exactly this: the grove, and the scrub where the wood leaves or arrives, with the edit recorded in the map's notes. Process aside, not a fidelity finding: the plan says the svg is edited 'in the mirror'. /diagram is never a workspace; do the edit in the clone."
+   "why": "FR-006 as written. Where the svg is edited is process, not fidelity."
   },
   {
    "id": "D6",
-   "summary": "Sheet redrawn from D4; the 'shrine grove' Map notes line and header comment updated; the precinct rect stays",
+   "summary": "Sheet: grove floor and tree list from D4; notes' knob list gains Grove form: sides; the shrine grove Map notes line and header comment say the form; precinct rect stays",
    "class": "narrowing",
    "ruling": "NOT LEGITIMATE",
-   "why": "FR-007 also requires the sheet's kinds' write-ups ('shrine grove') updated, and D2 keeps the program's grove item unchanged. The plan names neither. Those texts would then contradict the new form. The ShrineGrove kind docstring (l7r/diagram/interactive/compound_kinds/grounds.py) says the map 'draws a village shrine's precinct as its grove' and 'the wood fills most of a precinct's unbuilt ground', and its Entry does not name 129. programs.md line 84 says 'the wood fills the rest of the precinct', and the grove row at line 104 says the same. No argument is offered for leaving them, so this reads as an oversight, but it is still a narrowing of FR-007 (and of FR-004's program). Required: add these three texts to D6/D2, rewritten to the knob's form with 129 on the kind's Entry. The kind is engine code, so the push is gated."
+   "why": "FR-007 requires the sheet's 'notes, its kinds' write-ups (shrine grove) and its Map notes block updated to the new form'. D6 enumerates three parts of the notes and leaves the rest, with no argument, and the rest states the old form: hoshigaoka-shrine.notes.md line 16 'The precinct is the grove, 137 by 215 ft ... the wood stands several crowns deep behind the hall ... 138 canopies ... cover 60% of the precinct' (the very phrase D2 retired from the program; under 'sides' the ground behind the hall is open and the area and canopy figures change); line 58 (well) 'at the grove's back edge' (D4 leaves the well in open ground); lines 18 and 56 (arches, torii) 'the outermost at the grove's edge' (D4's flanks end short of the outermost arches); line 39 (trees laid 'inside the grove' - true, but the region is now two flanks). The same stale edge rides in two write-ups that render on this sheet: the approach kind (compound_kinds/shrine.py lines 114, 126, 'from the grove's edge') and the program's approach rule (programs.md line 85, 'at the grove's edge'). This is the class round 1 found in D6 (texts naming the grove that would contradict its new form), one layer further out. Required: D6 names the notes' precinct-and-grove bullet (restated to the sides form, its area and canopy figures re-measured from D4's layout), the well, arches and torii lines, and the approach kind and program rule restated as 'where the way enters the precinct' or the form-dependent equivalent."
   },
   {
    "id": "D7",
-   "summary": "STRAIGHT_RUN measured by the layout and recorded; matches_map green; settlement-review and building-review ledgered; make done green",
+   "summary": "STRAIGHT_RUN measured and recorded; matches_map green; settlement-review and building-review ledgered; the paddy-edge question and the side forms' single source raised with the GM through escalation-check; make done green",
    "class": "within",
-   "why": "SC-002, SC-003 and FR-009 as written. STRAIGHT_RUN is enforcement of the requested irregular outline and is in scope."
+   "why": "SC-002, SC-003, FR-009, and FR-005's escalation. STRAIGHT_RUN enforces the requested irregular outline and is in scope."
   }
  ],
  "verdict": "BLOCKED"
