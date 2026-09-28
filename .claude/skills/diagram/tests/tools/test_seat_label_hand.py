@@ -282,3 +282,20 @@ def test_a_bed_in_rows_is_no_seat_for_another_name() -> None:
     )
     assert _weights(src, "court")[(210, 210, 250, 240)] == (sl.WEIGHT_OBSTACLE, True), "nested, but in rows"
     assert _weights(src, "well")[(400, 210, 440, 240)][0] == sl.WEIGHT_OBSTACLE, "a neighbor's bed is no free ground"
+
+
+def test_a_stepped_building_is_named_against_its_largest_block() -> None:
+    """Feature 283: a house of two blocks in echelon leaves its box's corner empty, and a caption set against the box
+    led to nothing; it is set against the largest block. Parts that fill their box keep the box, as does a caption
+    lying inside it."""
+
+    def rect_shape(x, y, w, h):
+        return sl.Shape("rect", "residence", [(x, y), (x + w, y), (x + w, y + h), (x, y + h)])
+
+    west, east = rect_shape(0, 0, 100, 40), rect_shape(110, 30, 80, 40)
+    box = [(0, 0), (190, 0), (190, 70), (0, 70)]
+    assert sl.stepped_subject(box, [west, east], (100, 120)) == west.poly, "echelon: the largest block"
+    assert sl.stepped_subject(box, [west, east], (50, 20)) == box, "a caption inside keeps the box"
+    full = rect_shape(100, 0, 90, 70)
+    assert sl.stepped_subject(box, [rect_shape(0, 0, 100, 70), full], (100, 120)) == box, "parts that fill the box"
+    assert sl.stepped_subject(box, [west, rect_shape(150, 0, 10, 10)], (100, 120)) == box, "one block and a small part"
