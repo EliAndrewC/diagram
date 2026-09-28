@@ -144,7 +144,9 @@ by hand; and the `md_tokens` equality test costs 4.6 s of `make quick` (observed
   would fail - found at the placer, not after the build - so Sawada's first roll seats every farmhouse (research R3);
   the class of the change is recorded under Decisions when the plan settles the mechanism.
 - **FR-006 The driver finishes only the attempt it keeps.**
-- **FR-007 The field's hem pass asks an index of the plots** for a drain sample's containment, not every plot.
+- **FR-007 The field stops re-scanning static geometry**: the hem pass asks an index of the plots for a drain sample's
+  containment, not every plot; and a thread's point at a fall (`_at_f`) is found from its vertices projected once, not
+  by re-projecting and walking the whole polyline per query.
 - **FR-008 The commons scatter is vectorized** - throws and keep-out tests as array operations (218's research R2),
   the same density and the same keep-outs; its marks move.
 - **FR-009 The notice board's probes ask indexes**: `off_every_bed` a segment index of the way beds; `_hard_clear` an
@@ -187,7 +189,8 @@ halving is not counted twice.
 - **SC-006** (FR-005, FR-006): Sawada is built once and finished once (m:before-sawada-builds, m:before-sawada-finishes),
   seating all 19 households with every farmhouse reaching a way; a stubbed re-roll shows the discarded attempt unfinished.
 - **SC-007** (FR-007): `_pip` calls per build are at least `10x` fewer on Sawada (1932276 over two builds,
-  m:before-sawada-field-pip) and Kashikawa (252417, m:before-kashikawa-field-pip).
+  m:before-sawada-field-pip) and Kashikawa (252417, m:before-kashikawa-field-pip), and the field stage per build is at
+  least `1.2x` faster on Sawada (7.494 s over two builds, m:before-sawada-stage-field-s).
 - **SC-008** (FR-008): the hinterland stage per build is at least `2x` faster on Sawada (2.143 s over two builds,
   m:before-sawada-stage-hinterland-s) and Kashikawa (1.199 s, m:before-kashikawa-stage-hinterland-s).
 - **SC-009** (FR-009): the notice stage per build is at least `2x` faster on Sawada (2.516 s over two builds,
@@ -231,4 +234,5 @@ halving is not counted twice.
   class of the old row is gone with the row; SC-012 names both planted offenders.
 - Round 2 (spec-fidelity, 2026-09-28): CHANGES REQUIRED - SC-013 claimed 276's FR-006 condition but stated less of it. Addressed:
   SC-013 now carries it in full (research entries before and after, no new or larger shortfall, the rescue-rounds
-  scenario and the toys). The aside on `_bnd` is answered in research R2.
+  scenario and the toys). The aside on `_bnd` is answered in research R2: `_at_f` is a linear per-query scan of a static
+  polyline, so it joins FR-007 as a lever, with a field-stage target in SC-007.

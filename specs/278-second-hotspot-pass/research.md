@@ -52,7 +52,8 @@ sorted; the profiled seconds are inflated, read for their shares):
 
 - **The field** (21.3 s profiled; observed 2026-09-28, method: the per-stage cProfile): `_pip` 2.18 million calls, 1.91 million of them from the hem pass's `inside_any`
   (`waterfields/carve.py`, point-in-polygon against EVERY plot per drain sample - a per-candidate scan); `_bnd`'s
-  `_at_f` 118,836 calls, 1.6 s (per-call work, a bisection along the ditch's cumulative length - not a scan; FR-015 prices it after the pass); `_quad_in_supply` 261,368 clearance calls, 1.1 s, already bbox-gated per stroke.
+  `_at_f` 118,836 calls, 1.6 s - a LINEAR walk of a static thread polyline per query, re-projecting every vertex each
+  call (`waterfields/frame.py`), a scan of geometry that does not change during the carve; `_quad_in_supply` 261,368 clearance calls, 1.1 s, already bbox-gated per stroke.
 - **The windbreak** (12.6 s; observed 2026-09-28, method: the per-stage cProfile): 2.04 million `PointGrid.near` calls - the grove's keep-out families (`hard`, `local`,
   `lane`, `inside`, `too_near`) are separate grids, each asked per candidate, the shape 218 fixed for the scatters
   ("one grid per scatter, not one per family") and never applied to the grove.
