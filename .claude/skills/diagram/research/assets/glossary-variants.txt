@@ -1206,6 +1206,8 @@ kangxi	Kangxi
 kanjo-nawa	kanjo-nawa
 kanjo-tsuri	kanjo-nawa
 kannon	Kannon
+kannon biraki	kannon-biraki
+kannon-biraki	kannon-biraki
 kannushi	kannushi
 kansai	Kansai
 kansei	Kansei
@@ -1614,6 +1616,10 @@ naka-shoin	Naka-shoin
 nakaboshi	nakaboshi
 nakamon	nakamon
 nakasendo	Nakasendo
+namako	namako-tiled
+namako wall	namako-tiled
+namako walls	namako-tiled
+namako-tiled	namako-tiled
 nanbokucho	Northern and Southern Courts
 nanbu	Tohoku
 nando	nando
@@ -2096,6 +2102,7 @@ shijin soo	four gods
 shijin-soo	four gods
 shiki-dai	shikidai
 shikidai	shikidai
+shimazu	Shimazu
 shimenawa	shimenawa
 shimo-yashiki	lower mansion
 shin sect	Jodo Shinshu
@@ -2679,6 +2686,8 @@ yizhan	shukuba
 yizhong	yizhong
 yohaisui bunri	yohaisui bunri
 yokocho	yokocho
+yokogi	yokogi
+yokogi-uchi	yokogi
 yomadori	four-room type
 yonin	yonin
 yoriai	yoriai
@@ -2764,6 +2773,7 @@ zushi-nikai	half-story
 杖	杖
 枝打ち	edauchi
 梁間	hari-ma
+横木	yokogi
 水口林	water-mouth
 清明上河図	Qingming Shanghe Tu
 田打車	tauchiguruma

@@ -10352,5 +10352,35 @@
   "variants": [
    "Zhengde"
   ]
+ },
+ "kannon-biraki": {
+  "def": "A pair of door leaves that meet in the middle and swing open to either side, like the doors of a shrine cabinet - the kind of plastered double doors that close a storehouse's doorway.",
+  "variants": [
+   "kannon-biraki",
+   "kannon biraki"
+  ]
+ },
+ "namako-tiled": {
+  "def": "A wall facing of square flat tiles whose joints are raised in thick white plaster, used on a storehouse's lower walls against rain and fire.",
+  "variants": [
+   "namako-tiled",
+   "namako",
+   "namako wall",
+   "namako walls"
+  ]
+ },
+ "yokogi": {
+  "def": "A crosspiece struck in sword practice: in a branch line of Satsuma swordsmanship, a bundle of a dozen or more long thin branches laid at knee height and struck with a wooden sword.",
+  "variants": [
+   "yokogi",
+   "yokogi-uchi",
+   "横木"
+  ]
+ },
+ "Shimazu": {
+  "def": "The warrior house that ruled the Satsuma domain.",
+  "variants": [
+   "Shimazu"
+  ]
  }
 }
