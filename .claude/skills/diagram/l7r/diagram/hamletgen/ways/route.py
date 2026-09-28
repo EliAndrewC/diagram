@@ -20,26 +20,32 @@ from .geom import _TOUCH_GAP, _turn_deg
 # none holds the settlement, so the ways stage sets this once where it lays the fords (`set_crossing`) - every map
 # rolled sets it afresh, a brookless map to nothing. Cells: the lattice cell keys (at the cell size asked) are not
 # known in advance, so the band is kept as brook sample points in a 20 px bucket grid and asked per cell center.
-_CROSSING: dict[str, object] = {"grid": {}, "radius": 0.0, "cost": 0.0}
+_CROSSING: dict[str, object] = {"grid": {}, "radius": 0.0, "cost": 0.0, "cell": 20.0}
 
 
 def set_crossing(brook: Sequence[Pt], radius: float, cost: float) -> None:
     """Record the brook course whose band a route pays `cost` to enter, `radius` either side of it; an empty course
     clears it."""
+    # CELLS A HAIR WIDER THAN THE BAND (feature 281, FR-003). The samples were filed in 20 px cells and an ask read every
+    # cell within the radius - 25 dict lookups at the ford's 30 px, 1,638,800 of them on Kashikawa's routes, nearly all
+    # empty. A sample within `radius` of a point lies at most one cell away when the cell is WIDER than the radius (strictly,
+    # so the floor at an exact boundary cannot put it two away), so the 3 x 3 cells round the point hold every sample the
+    # test can accept, and the same `math.dist(p, q) <= r` decides.
+    cell = max(20.0, radius + 1.0)
     grid: dict[tuple[int, int], list[Pt]] = {}
     for a, b in zip(brook, brook[1:], strict=False):
         n = max(1, int(math.dist(a, b) // 5.0))
         for i in range(n + 1):
             q = (a[0] + (b[0] - a[0]) * i / n, a[1] + (b[1] - a[1]) * i / n)
-            grid.setdefault((int(q[0] // 20), int(q[1] // 20)), []).append(q)
-    _CROSSING.update(grid=grid, radius=radius, cost=cost if grid else 0.0)
+            grid.setdefault((int(q[0] // cell), int(q[1] // cell)), []).append(q)
+    _CROSSING.update(grid=grid, radius=radius, cost=cost if grid else 0.0, cell=cell)
 
 
 def in_brook_band(p: Pt) -> bool:
     """Is `p` within the recorded brook's band?"""
-    grid, r = _CROSSING["grid"], float(_CROSSING["radius"])  # type: ignore[arg-type]
-    gx, gy, k = int(p[0] // 20), int(p[1] // 20), int(r // 20) + 1
-    return any(math.dist(p, q) <= r for dx in range(-k, k + 1) for dy in range(-k, k + 1) for q in grid.get((gx + dx, gy + dy), ()))  # type: ignore[union-attr]
+    grid, r, c = _CROSSING["grid"], float(_CROSSING["radius"]), float(_CROSSING["cell"])  # type: ignore[arg-type]
+    gx, gy = int(p[0] // c), int(p[1] // c)
+    return any(math.dist(p, q) <= r for dx in (-1, 0, 1) for dy in (-1, 0, 1) for q in grid.get((gx + dx, gy + dy), ()))  # type: ignore[union-attr]
 
 
 def _new_crossing(path: Sequence[Pt], i: int, j: int) -> bool:

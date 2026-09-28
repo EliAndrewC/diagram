@@ -35,6 +35,7 @@ COUNTS: dict[str, tuple[str, str, str | None, str | None]] = {
     "stream_rect_cross": ("primitives.py", "segments_cross", "rolling/fit.py", "_rect_on_stream.<genexpr>"),
     "marsh_sparse": ("wet.py", "_sparse", None, None),
     "grove_inside": ("grove_blocks.py", "inside", None, None),
+    "grove_inside_reseat": ("grove_blocks.py", "inside", "homestead_parts/stands.py", "_reseat"),
     "grove_hard": ("grove_blocks.py", "hard", None, None),
     "quad_in_supply": ("carve.py", "_quad_in_supply", None, None),
     "supply_clearance": ("banks.py", "clearance", None, None),

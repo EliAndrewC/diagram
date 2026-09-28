@@ -214,6 +214,7 @@ class Settlement(
         self._bbox_cache: dict[Any, Any] = {}  # id(poly-list) -> (len, [per-poly (minx,miny,maxx,maxy)]) for the collision
         #                           pre-filter: reject a far polygon cheaply before the O(vertices) corner /
         #                           segment tests (the homestead solver probes _rect_blocked ~100k+ times)
+        self._stream_idx_cache: Any = None  # (streams, their key, stream_segment_index) - `_rect_on_stream`'s index (feature 281)
         self._water_obs_cache: Any = None  # (lengths-key, [(poly, keep-out half-width, bbox)]) - same pre-filter idea
         #                                for _rect_on_water's irrigation lines (channels / ditches / streams)
         self._clip = 0

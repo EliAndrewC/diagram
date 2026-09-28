@@ -50,6 +50,27 @@ def bounds(poly: Sequence[Pt]) -> tuple[float, float, float, float]:
 _MEMO: dict[tuple[object, ...], FabricIndex] = {}
 _MEMO_MAX = 64
 
+# EACH RING'S INDEX IS BUILT ONCE, SHARED BY EVERY FABRIC INDEX THAT FILES IT (feature 281, FR-002). A memo miss above
+# rebuilt a `RingIndex` for every polygon it filed, though most of them had been indexed by the miss before: on Kashikawa
+# 376 distinct polygons were built 5,932 times (specs/281 research R1). This store is keyed on the ring's POINTS - its
+# content, never its identity, length or ends (`dev/performance.md`: such a key is a guess about content) - so a ring with
+# the same points gets the same index and a changed ring cannot get an old one. A `RingIndex` reads only the points it
+# was given, so the shared index answers as a fresh one would. Cleared with `_MEMO` when a roll ends, and cleared whole
+# past `_RINGS_MAX` entries, which only costs rebuilds.
+_RINGS: dict[tuple[tuple[float, float], ...], RingIndex] = {}
+_RINGS_MAX = 4096
+
+
+def ring_index(pts: list[Pt]) -> RingIndex:
+    """The `RingIndex` of these points, from `_RINGS` when a ring with the same points was indexed this roll."""
+    key = tuple((float(p[0]), float(p[1])) for p in pts)
+    hit = _RINGS.get(key)
+    if hit is None:
+        if len(_RINGS) >= _RINGS_MAX:
+            _RINGS.clear()
+        hit = _RINGS[key] = RingIndex(pts)
+    return hit
+
 
 def reset() -> None:
     """Forget every memoized index. Called when a roll ends (`driver.roll_scope`, feature 210, GM
@@ -58,8 +79,9 @@ def reset() -> None:
     life of the process, and a test worker at the end of a full run held 46 MB of a finished roll's
     geometry through it: every RingIndex and PointGrid alive, 110,000 of its 112,000 lists
     (`specs/210-the-roll-leaves-the-worker/research.md` R1). Clearing costs nothing within a roll, which is
-    the only place a hit can happen."""
+    the only place a hit can happen. The ring store goes with it (feature 281)."""
     _MEMO.clear()
+    _RINGS.clear()
 
 
 # AN ENTRY THAT WOULD SPAN MORE THAN THIS MANY CELLS IS NOT FILED IN THE GRID - the field envelope, a crop
@@ -119,7 +141,7 @@ class FabricIndex:
                     continue
                 pts = list(o)
                 bx0, by0, bx1, by1 = bounds(pts)
-                entries.append((0, RingIndex(pts), m, (bx0 - m, by0 - m, bx1 + m, by1 + m)))
+                entries.append((0, ring_index(pts), m, (bx0 - m, by0 - m, bx1 + m, by1 + m)))  # shared by content (FR-002)
         for a, b in lines:
             bx0, by0, bx1, by1 = min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1])
             entries.append((1, [a, b], line_margin, (bx0 - line_margin, by0 - line_margin, bx1 + line_margin, by1 + line_margin)))

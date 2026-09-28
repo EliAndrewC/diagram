@@ -219,6 +219,12 @@ def _keyholed(g: Any) -> Any:
     return ring
 
 
+def bank_rings(dikeponds: Any, near: Any) -> list[list[tuple[float, float]]]:
+    """Every fish pond's mulberry bank near the marsh, WHOLE - each ring as drawn, never thinned (feature 281; the reason is
+    at the call in `marsh`). Lifted to module level so a test can hold the whole ring without a scatter to throw into it."""
+    return [[(float(mx), float(my)) for mx, my in dp["bank"]] for dp in dikeponds if dp.get("bank") and near(dp["bank"])]
+
+
 class WetGroundMixin:
     def marsh(self: Settlement, poly: Any, role: str = "toe", avoid: Any = ()) -> None:  # type: ignore[misc]
         """REED MARSH / WET MEADOW - wet reed ground drawn WET and SPARSE, FEATHERED to nothing at the margin like
@@ -305,7 +311,12 @@ class WetGroundMixin:
         _crests = [
             ([(float(mx), float(my)) for mx, my in dk["crest"]], float(dk.get("w_max", 0.0)) / 2) for dk in self.M.get("dikes", []) if len(dk.get("crest") or []) >= 2 and _near_box(dk["crest"])
         ]
-        _banks = [[(float(mx), float(my)) for mx, my in dp["bank"][:: max(1, len(dp["bank"]) // 16)]] for dp in self.M.get("dikeponds", []) if dp.get("bank") and _near_box(dp["bank"])]
+        # THE WHOLE BANK, NOT EVERY 16TH OF IT (feature 281). Feature 139 thinned each bank to 16 points ("16 points hold
+        # its shape for a keep-out") while every bank was asked per scatter point; the keep-out grid indexes each ring now,
+        # so the whole ring costs a cell read. The thinned ring cut every corner of a rectangular bank with a chord, and a
+        # reed based 0.8 ft inside a drawn corner passed the keep-out - found when feature 281 moved the marsh's throws
+        # (a change it then withdrew, having bought no time: specs/281 Amendment 1).
+        _banks = bank_rings(self.M.get("dikeponds", []), _near_box)
         keep = KeepoutGrid()
         keep.rings(self.field_polys, pad=10.0)
         keep.rings(self.block_polys)

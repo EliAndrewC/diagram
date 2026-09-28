@@ -22,6 +22,7 @@ before and after (the feature's oracle).
 | `banks.py` | how plots hem to canals and ditches: `polyline_cum`, `drain_bank_clearance`, `supply_bank_clearance`, `floor_overhang`, `hem_to_bank`, `hem_on_paddy`, `_TOE_MIN_THICKNESS`, `_TOE_MIN_APEX`, `pointed_ring`, `dedup_ring`, `round_channel_joints`, and `jog_steps`/`jog_vertices` (a wall that steps sideways and carries on parallel to itself - `_absorb` refuses a weld that adds one;|
 | `comb.py` | `build_comb` - the water-first comb builder (pond sluice, head-race, supply canals, thread march, offtakes) - and `_fill_wedges` |
 | `carve.py` | `_carve` (cutting paddy plots between marched threads), `_dry_fields` (the dry-crop hem tiling), `_bund_beans` (azemame bead accents) |
+| `sector_rows.py` | a comb sector's three kinds of plot row - `_sector_body_rows`, `_sector_canal_closers`, `_sector_closing_rank` - laid by `carve._carve_sector` in that order (moved out of `carve.py` by feature 281) |
 | `seams/` | the bund FABRIC - a PACKAGE with its own [`CLAUDE.md`](seams/CLAUDE.md) index since feature 173. Read that first, then load one of: `pockets.py` (a pocket's geometry and `_absorb`), `plots.py` (`_plant`, `_tab_cut`, `_unjog`, `_trade`), `close.py` (`close_seams`, the driver and the only name the engine calls) |
 | `polder.py` | `build_polder` (dike-and-drain reclamation), `build_terraces` (contour terraces), `build_ribbon` (valley ribbon paddies) |
 

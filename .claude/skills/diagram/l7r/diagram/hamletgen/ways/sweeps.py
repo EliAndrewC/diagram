@@ -17,7 +17,7 @@ from ..consts import (
 from .checks import stream_segs
 from .clearance import _bends_badly, _clear_touch, drop_end_nubs, existing_walk, may_write
 from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _draw_web, _hits_a_steading
-from .geom import _TOUCH_GAP, _aim_off, _components, _net_reach, _reach, polyline_len, shadow_share, shadowing_lane
+from .geom import _TOUCH_GAP, _aim_off, _components, _net_reach, _reach, brook_segment_index, crossing_hits, crossings_parity, polyline_len, shadow_share, shadowing_lane
 from .route import _route
 
 # HOW FAR A FOOTPATH MAY WANDER, as a multiple of its own straight-line chord. A review measured
@@ -338,8 +338,9 @@ def _link_home_bank(s: Settlement, plan: Any, hard: list[Poly], fabric: list[tup
     houses = [h for h in s.M.get("houses") or [] if isinstance(h, dict)]
     good: list[Pt] = []
     excursions: list[Mapping[str, Any]] = []
+    brook_idx = brook_segment_index(segs)  # filed once for every route and every chord below (feature 281, FR-005)
     for r in departure_routes(s.M):
-        hits = [m for m in range(len(r) - 1) if any(segments_cross(r[m], r[m + 1], c, d) for c, d in segs)]
+        hits = crossing_hits(r, brook_idx)
         good += r[hits[-1] + 1 :] if hits else r
         if len(hits) >= 2 and houses:
             excursions.append(min(houses, key=lambda h: math.dist((float(h["x"]), float(h["y"])), r[0])))
@@ -352,7 +353,7 @@ def _link_home_bank(s: Settlement, plan: Any, hard: list[Poly], fabric: list[tup
     def home(c: Pt, g: tuple[Pt, Pt]) -> bool:
         mid = ((g[0][0] + g[1][0]) / 2, (g[0][1] + g[1][1]) / 2)
         on_way = any(math.dist(mid, it[0]) <= _HOME_BANK_JOIN_FT for it in grid.near(mid[0], mid[1], _HOME_BANK_JOIN_FT))
-        return on_way and sum(1 for a, b in segs if segments_cross(c, mid, a, b)) % 2 == 0
+        return on_way and crossings_parity(c, mid, brook_idx) == 0
 
     _serve_stragglers(s, plan, hard, fabric, [*water, *segs], only=excursions, seg_ok=home)
     laid = len(s.M.get("lanes") or []) - before
