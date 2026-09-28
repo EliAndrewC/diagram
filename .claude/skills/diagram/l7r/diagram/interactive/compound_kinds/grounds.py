@@ -234,14 +234,16 @@ class VegetableGarden(Kind):
     office a field of its own, and a Chinese county office listed its plot behind the residence gate after the
     kitchen and the stable. A bed of vegetables that want full sun needs about six hours of direct sun a day.
 
-    Note: Its size is one of two attested forms, a soup-greens plot or a field over about half the grounds, and
-    each sheet takes its own. Its seat is one of four attested ones - west of the house, south beside the formal
-    garden, the rear service ground, or a parcel of its own - and the sun rules out any seat where the bed gets
-    under its six hours in the autumn; where the west and the rear lie in the shade of the house and the kitchen,
-    the bed stands in the south court beside the formal garden.
+    Note: At a residence or a walled compound its size is one of two attested forms, a soup-greens plot or a field
+    over about half the grounds, and each sheet takes its own; its seat is one of four attested ones - west of the
+    house, south beside the formal garden, the rear service ground, or a parcel of its own - and where the west and the
+    rear lie in the shade of the house and the kitchen, the bed stands in the inner court beside the formal garden. At a
+    country shrine it is the resident keeper's plot, near the dwelling on whatever open ground gets its sun, its size a
+    guess, no keeper's plot having been measured. Anywhere, the sun rules out a seat where the bed gets under its six
+    hours in the autumn.
 
-    Caveat: That a household chose its seat by the sun is a guess: no source read says why a plot was put where
-    it was.
+    Caveat: That a household chose its seat by the sun is a guess: no source read says why a plot was put where it
+    was. A country shrine keeper's plot, its place and its size, is a guess: no source read places or measures one.
 
     Name: vegetable garden
     Covers: the kitchen garden's beds and label
