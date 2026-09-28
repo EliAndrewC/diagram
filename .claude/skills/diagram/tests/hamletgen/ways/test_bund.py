@@ -156,3 +156,27 @@ def test_the_worked_ground_is_built_once_per_settlement_until_its_registries_gro
     s.M.setdefault("dry_plots", []).append({"poly": [[0.0, 0.0], [10.0, 0.0], [10.0, 10.0]]})
     assert memo_ground(s, "worked", build) is not first and len(calls) == 2, "a plot laid since: built again"
     assert memo_ground(_stub(), "worked", build) is not first, "another settlement never reads it"
+
+
+def test_an_end_at_the_bund_with_water_between_is_carried_over_it() -> None:
+    """The 269 landing's review of Mizuguchi: an end within the bund's reach but across a canal has not joined the paddy; it
+    is carried over the water to the bund (the crossings stage bridges it), and `water_between` says which is which."""
+    canal = _stub(streams=[{"poly": [[398.0, -100.0], [398.0, 400.0]], "w": 2}])
+    canal.M["lanes"].append({"pts": [[200.0, 100.0], [395.0, 100.0]], "w": 3})
+    assert B.a_way_onto_the_bund(canal) == "run_on"
+    assert canal.M["lanes"][1]["pts"][-1] == [400.0, 100.0] and len(canal.M["lanes"][1]["pts"]) == 3
+    assert B.water_between((395.0, 100.0), (400.0, 100.0), [((398.0, -100.0), (398.0, 400.0))])
+    assert not B.water_between((395.0, 100.0), (400.0, 100.0), [((300.0, -100.0), (300.0, 400.0))])
+
+
+def test_a_free_end_run_on_past_its_junction_to_nothing_is_cut_back_to_it() -> None:
+    """`cut_stub_ends` (the 269 landing's review of Mizuguchi): a 28 ft run from a junction to a free end with no house
+    and no bund in reach goes; a run that serves a house, one too long to be a stub, and an end on a way all stay."""
+    ground = WorkedGround([_FIELD])
+    way = [((567.0, 1000.0), (567.0, 1239.4))]
+    spur = [(594.7, 1241.1), (567.0, 1239.4), (570.0, 1300.0), (600.0, 1400.0)]
+    assert B.cut_stub_ends(spur, way, [], WorkedGround([])) == spur[1:]
+    assert B.cut_stub_ends(spur, way, [(600.0, 1260.0)], WorkedGround([])) == spur, "a house beside the end: it serves it"
+    far = [(700.0, 1241.1), *spur[1:]]
+    assert B.cut_stub_ends(far, way, [], WorkedGround([])) == far, "too long a run to be a stub"
+    assert B.cut_stub_ends(spur, [*way, ((594.7, 1200.0), (594.7, 1300.0))], [], ground) == spur, "the end on a way"

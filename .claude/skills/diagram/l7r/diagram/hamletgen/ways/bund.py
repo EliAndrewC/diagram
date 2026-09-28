@@ -189,9 +189,20 @@ def a_way_onto_the_bund(s: Settlement, blocks: RunOnBlocks | None = None) -> str
     lanes = s.M.get("lanes") or []
     live = [(i, ln) for i, ln in enumerate(lanes) if not ln.get("connector") and len(ln.get("pts") or []) >= 2]
     ends = [(i, e, (float(ln["pts"][e][0]), float(ln["pts"][e][1]))) for i, ln in live for e in (0, -1)]
-    if any(paddy.dist(q) <= BUND_REACH_FT for _i, _e, q in ends):
-        return "joined"
     blocks = blocks or RunOnBlocks(s)
+    # AN END AT THE BUND WITH WATER BETWEEN HAS NOT JOINED IT (settlement-review of Mizuguchi at the 269 landing): the field
+    # path stopped on the outer bank of a supply canal 3 ft short of the bund and counted as joined, with no crossing. Such an
+    # end is carried over the water on to the bund, and the crossings stage bridges it like any way over a channel.
+    near = [(i, e, q, paddy.nearest(q)) for i, e, q in ends if paddy.dist(q) <= BUND_REACH_FT]
+    if any(p is None or not water_between(q, p, blocks.water) for _i, _e, q, p in near):
+        return "joined"
+    for i, e, _q, p in near:
+        if p is not None:
+            pts = [(float(x), float(y)) for x, y in lanes[i]["pts"]]
+            pts = [*pts, p] if e == -1 else [p, *pts]
+            lanes[i]["pts"] = [[round(x, 1), round(y, 1)] for x, y in pts]
+            s.reink_lane(i)
+            return "run_on"
     for i, e, q in sorted(ends, key=lambda t: paddy.dist(t[2])):
         tgt = run_on_target(q, paddy, float(lanes[i].get("w") or 3) / 2.0, reach=float("inf"))
         prev = (float(lanes[i]["pts"][-2 if e == -1 else 1][0]), float(lanes[i]["pts"][-2 if e == -1 else 1][1]))
@@ -215,7 +226,65 @@ def a_way_onto_the_bund(s: Settlement, blocks: RunOnBlocks | None = None) -> str
     return "none: every straight way from the lanes to the paddy crosses water, the marsh or a steading"
 
 
+def water_between(q: Pt, p: Pt, water: Sequence[tuple[Pt, Pt]]) -> bool:
+    """Does the straight step from a lane end `q` to the bund point `p` cross a drawn water course?"""
+    return any(segments_cross(q, p, c, d) for c, d in water)
+
+
 def worked_ground_of(s: Settlement, fallback: Poly) -> WorkedGround:
     """The worked ground of the map as it stands (`worked_ground`), or `fallback` (the plan's envelope) where the manifest
     records no field."""
     return memo_ground(s, "worked", worked_ground) if s.M.get("fields") or s.M.get("dry_plots") else WorkedGround([list(fallback)])
+
+
+_PAST_JUNCTION_FT = 40.0  # ft: a free end's run past the junction it met, this short, is a stub (a map drawing convention)
+
+
+def cut_past_the_junction(s: Settlement, touch: float = 4.0) -> int:
+    """Cut a lane's FREE end back to the junction it met, where the run past the junction is short and serves nothing: no
+    house within `HOUSE_SERVE_FT` of the end, and not on the worked ground's bund. Returns the lanes cut.
+
+    FOUND AT THE 269 LANDING (settlement-review of Mizuguchi, rounds 1 and 2): the field spur began on the brook bank and
+    ran 28 ft to the junction where another lane met it, then turned over the bridge - a stub reaching nothing, which the
+    end rule counted as served because it stood within reach of the very lane it had just met, and which
+    `trim_free_stub` misses because its corner is a single turn, not a kink (research/homesteads 310: a lane ends at the
+    last house it serves)."""
+    lanes = s.M.get("lanes") or []
+    houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses") or []]
+    ground = worked_ground_of(s, []) if s.M.get("fields") or s.M.get("dry_plots") else WorkedGround([])
+    cuts = 0
+    for i, ln in enumerate(lanes):
+        p = [(float(x), float(y)) for x, y in ln.get("pts") or []]
+        if ln.get("connector") or len(p) < 3:
+            continue
+        others = _segs_of(lanes, i)
+        q = cut_stub_ends(p, others, houses, ground, touch)
+        if q != p:
+            ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in q]
+            s.reink_lane(i)
+            cuts += 1
+    return cuts
+
+
+def cut_stub_ends(p: list[Pt], others: Sequence[tuple[Pt, Pt]], houses: Sequence[Pt], ground: WorkedGround, touch: float = 4.0) -> list[Pt]:
+    """`p` with each free end's short run past its first junction cut off (see `cut_past_the_junction`); plain inputs."""
+    from l7r.diagram.settlement import seg_dist
+    from l7r.diagram.settlement.water_ways._helpers import HOUSE_SERVE_FT
+
+    def on_a_way(q: Pt) -> bool:
+        return any(seg_dist(q[0], q[1], a, b) <= touch for a, b in others)
+
+    out = list(p)
+    for _end in range(2):
+        k = next((k for k in range(1, len(out) - 1) if on_a_way(out[k])), None)
+        end = out[0]
+        if (
+            k is not None
+            and not on_a_way(end)
+            and sum(math.dist(out[j], out[j + 1]) for j in range(k)) <= _PAST_JUNCTION_FT
+            and all(math.dist(end, h) > HOUSE_SERVE_FT for h in houses)
+            and ground.dist(end) > BUND_REACH_FT
+        ):
+            out = out[k:]
+        out.reverse()
+    return out

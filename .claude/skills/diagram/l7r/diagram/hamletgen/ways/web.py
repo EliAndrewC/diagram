@@ -22,7 +22,7 @@ from ..consts import (
     Pt,
 )
 from ..plan import SitePlan
-from .bund import a_way_onto_the_bund, run_lanes_on_to_the_bund, worked_ground_of
+from .bund import a_way_onto_the_bund, cut_past_the_junction, run_lanes_on_to_the_bund, worked_ground_of
 from .checks import drawn_water_segs
 from .clearance import clear_runs, clip_to_clear
 from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _homestead_polys, _margin_frame, _net_segs, _pass, _pull_back_to_service
@@ -657,8 +657,15 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     _sweep_doubled_tails(s)  # a lane that runs on beside the way it met ends where it met it (feature 261)
     _sweep_dangling_ends(s)
     # ...AND A LANE THAT ENDS ON ANOTHER STANDS ON ITS CENTERLINE (GM 2026-09-27): an end a few feet off it shows its round cap past the far edge.
+    # A NEEDLE JOIN SQUARED HERE WAS TRIED AND REVERTED (the 269 landing, 2026-09-28): Mizuguchi's orphan join runs 35 ft
+    # back along the skeleton lane at 16 degrees before meeting it, and moving its end to the foot of the vertex before it
+    # (square to the tread) let the tidy trim the skeleton's tail, which had been a gable-end house's nearest way - two
+    # households' ways out then left by another lane and missed the entrance board (`test_an_entrance_board_stands_at_the_
+    # entrance`). Open in future-work/farming-communities.md with the measurement; a fix has to keep the tail's service.
+
     center_lane_ends(s)
     cut_the_overruns(s)
+    cut_past_the_junction(s)  # ...and a free end run on past its own junction to nothing (the 269 landing, Mizuguchi)
     # ...and a record the joins emptied is not a lane: a husk with no points declares a way nothing draws (a review
     # counted three on Kashikawa and two on Kuwabata) - dropped with its ink slot, the one way lanes leave
     # ...and a record whose points are all one point is a husk too (Mizuguchi, feature 261: seven three-point records at a

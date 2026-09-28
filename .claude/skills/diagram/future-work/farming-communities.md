@@ -157,6 +157,15 @@ engine fixes; the round-2 reviews re-measure them.
   edge to edge. Sketch: bound a lot by what research/vegetation 140 names (a path, a stream, the slope) and roughen it.
 - **The burial ground beside the title placard** (Kashikawa F2): the glyph stood 23 ft left of the placard on its center
   line and read as its ornament. Sketch: the title pocket treats feature glyphs and their clearings as keep-outs.
+- **A needle join** (Mizuguchi round 1 F4, round 2 F3): the orphan join lane runs back along the skeleton lane 35 ft at
+  16 degrees before meeting it, a ~250 sq ft needle of ground. Squaring the join (the foot of the vertex before it) was
+  tried at the landing and REVERTED: the tidy then trimmed the skeleton's tail, a gable-end house's nearest way, and two
+  households' ways out missed the entrance board (the failure is recorded in `ways/web.py` beside `center_lane_ends`).
+  Sketch: square the join and keep the tail as that house's way (name it in the tidy's `keep`).
+- **A house at the edge of the lanes' reach** (Kuwabata round 2 F2): the north row's east house stands 96 ft from the
+  nearest lane, inside the 100 ft `WEB_REACH_FT` (a guess), with a neighbor's back yard between. Sketch: the straggler
+  pass serves a house whose nearest way is past its neighbor's yard, not only one past the reach.
+- **Woodpiles off the wall** also on Kuwabata (round 2 F3): 7 of 15 stacks 10.5-22.9 ft from any building.
 
 ## OPEN 2026-09-28 (269 B16), A GM DECISION: the shared byre on the commons is still rolled, one map in ten
 
