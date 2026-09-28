@@ -679,6 +679,7 @@ goshi	gōshi
 goten	goten
 goulan	goulan
 goyoba	goyoba
+goyobeya	goyobeya
 goyōba	goyoba
 green manure	green manure
 gross-up	gross-up
@@ -1432,6 +1433,8 @@ pearl-delta	Pearl delta
 peer-reviewed flora	flora
 pent roof	pent roof
 pent roofs	pent roof
+penthouse	penthouse
+penthouses	penthouse
 perched	perched river
 perched river	perched river
 perched, silt-choked river	perched river
