@@ -606,6 +606,15 @@ class StandsMixin:
         _wet = [[(float(a), float(b)) for a, b in m["poly"]] for m in self.M.get("marshes") or [] if m.get("role") in ("toe", "waterside") and m.get("poly")] if role == "windbreak" else []
         alder = 0
         bamboo = 0  # the bamboo marks inked low under the windbreak's crowns (269 B29, `_draw_grove`)
+        # THE VILLAGE BELT IS DRAWN IN ITS ROLLED FORM (269 B30, `windbreak_belt`; research/vegetation/270): conifer-led, its
+        # rows of conifers laid along the belt as drawn and seated before the clumps' lesser crowns, then painted over them
+        # (`_belt_ranks`), or mixed broadleaf. The water-mouth grove keeps the older mix.
+        form = self._windbreak_belt() if role == "windbreak" and seated else None
+        crowns: dict[str, int] = {}
+        rows_ink = ""
+        if form == "conifer_led":
+            _rows, rows_ink = self._belt_ranks(seated, clump, _wet)
+            crowns["conifer"] = len(_rows)
         for jx, jy in seated:
             # feature 150: the belt and the copse are two highlight classes; a water_mouth grove has no
             # class in the vocabulary yet and stays unclassed so the census reports it
@@ -613,7 +622,9 @@ class StandsMixin:
                 alder += 1
                 self._draw_grove(jx, jy, clump, clump, face=(0, -1), mix="alder", cls="alder")
                 continue
-            bamboo += self._draw_grove(jx, jy, clump, clump, face=(0, -1), mix=mix, cls={"windbreak": "windbreak", "copse": "copse"}.get(role))
+            bamboo += self._draw_grove(jx, jy, clump, clump, face=(0, -1), mix=form or mix, cls={"windbreak": "windbreak", "copse": "copse"}.get(role), tally=crowns)
+        if rows_ink:
+            self.add(rows_ink, cls="windbreak")
         if clumps:
             # A COPSE IS RECORDED AT THE SIZE IT WAS DRAWN, not at the size it was asked for.
             #
@@ -651,6 +662,8 @@ class StandsMixin:
                     "clumps_offpage": (_offpage if face_margin is not None and clumps else []),  # actual drawn clump centers + radius, for groves_clear_of_lanes
                     "alder": alder,  # of the clumps, those standing in the marsh and drawn as alder (feature 261)
                     "bamboo": bamboo,  # bamboo marks inked in the gaps and along the edge (269 B29; 0 outside the windbreak mix)
+                    "form": form,  # the village belt's rolled form (269 B30, meta.windbreak_belt); None off the belt
+                    "crowns": crowns,  # the crowns drawn, by kind (conifer / broadleaf; the alder clumps are not counted)
                     "poly": [[round(px, 1), round(py, 1)] for px, py in poly],
                 }
             )

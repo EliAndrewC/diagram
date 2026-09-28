@@ -652,7 +652,7 @@ correct the last one - so the numbers a reader can check now come from the artif
 - copse: **89** clumps drawn
 - farmhouses: **19**
 - farmstead fixtures: bath **13**, coop **14**, pit **13**, privy **17**, shed **17**, shrine **1**
-- notice board at the entrance, **(124.7, 1757.2)**: **19** of 19 households' ways out pass it
+- notice board at the entrance, **(116.2, 1748.7)**: **19** of 19 households' ways out pass it
 <!-- /census -->
 
 
@@ -947,3 +947,9 @@ Known open (settlement-review, 2026-09-28): four or five of the eight homestead 
 at fit zoom their culms read as grass under a tree - a draw-order question, since bamboo among the homestead's trees is
 the attested yashiki-rin form; and lane 11 stops
 about 25 ft behind a house's rear wall, the stub class recorded above.
+
+## 2026-09-28 (feature 269 B30): the belt rolls its form - mixed broadleaf
+
+The village windbreak belt is now drawn in one of two forms, the `windbreak_belt` knob (research/vegetation/270): this map
+rolled `mixed_broadleaf` (meta.windbreak_belt), the Chinese village grove's form - an irregular wood of rounded broadleaf
+crowns like the woods around it, with no conifer. The belt's record counts 1,068 broadleaf crowns and 69 bamboo marks, with 99 clumps in the marsh drawn as alder as before; no clump seat moved.

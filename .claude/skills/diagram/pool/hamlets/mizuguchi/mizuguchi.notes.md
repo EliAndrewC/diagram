@@ -776,3 +776,10 @@ west of them - a south-row house walks about 1,000 ft to a bund 130 ft away - an
 (1515, 738) carries no way. Whether a hamlet across a stream from its paddies kept one crossing or one per reach of
 houses is not settled by the record (one search, 2026-09-28, found nothing decisive); if both are attested it becomes a
 knob. The shared bamboo thicket stands 27 ft from the east marsh's reeds and reads as a pale tuft at fit zoom.
+
+## 2026-09-28 (feature 269 B30): the belt rolls its form - conifer-led, in rows along the belt
+
+The village windbreak belt is now drawn in one of two forms, the `windbreak_belt` knob (research/vegetation/270): this map
+rolled `conifer_led` (meta.windbreak_belt), so its conifers stand in rows along the belt as drawn, seated before and painted
+over the lesser broadleaf and bamboo between them. The belt's record counts 272 conifer crowns, 106 broadleaf and 35 bamboo
+marks inked; no clump seat moved. Reviewed on Inashiro, the reference hamlet (docs/review-ledger.md).

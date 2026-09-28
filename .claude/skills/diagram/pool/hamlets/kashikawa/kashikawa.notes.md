@@ -967,3 +967,9 @@ pass, 2026-09-28, found the house-side plot of the record is the kitchen bed, re
 (hatake) crops go"), so the dry crops stand in the hem along the supply canal.
 Known open (settlement-review, 2026-09-28): the field path's tip turns back 126 degrees over its last 27 ft, a J-hook in
 the grass 17-43 ft off the paddy, left where a later pass dropped the field spur (`meta.field_spur_swept`).
+
+## 2026-09-28 (feature 269 B30): the belt rolls its form - mixed broadleaf
+
+The village windbreak belt is now drawn in one of two forms, the `windbreak_belt` knob (research/vegetation/270): this map
+rolled `mixed_broadleaf` (meta.windbreak_belt), the Chinese village grove's form - an irregular wood of rounded broadleaf
+crowns like the woods around it, with no conifer. The belt's record counts 732 broadleaf crowns and 71 bamboo marks; no clump seat moved.

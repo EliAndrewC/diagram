@@ -1,9 +1,13 @@
 """Split from settlement/homestead_parts.py by feature 173 - see this package's CLAUDE.md for the index."""
 
+import heapq
+import math
 import random
 from typing import TYPE_CHECKING, Any
 
-from .._geom import _union_area, point_in_poly, seg_dist
+from .._geom import CrownIndex, PointGrid, _union_area, point_in_poly, seg_dist
+from .._knobs import Knob, register_knob
+from ._helpers import _belt_axis
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -11,6 +15,124 @@ if TYPE_CHECKING:
 
 ALDER_GREENS = ("#5E7F6A", "#6B8A74")  # the alder crowns' tint (a map drawing convention, `_draw_grove`)
 GROVE_BAMBOO_SHARE = 0.08  # of a windbreak clump's items, the bamboo under its crowns: a GUESS (269 B29, vegetation/260)
+
+# THE VILLAGE BELT HAS TWO ATTESTED FORMS, SO IT IS A KNOB (269 B30; research/vegetation/270, "Was a windbreak one kind of
+# tree in a row?"). Neither is a line of one kind of tree. `conifer_led` is the Japanese farmstead grove drawn at village
+# scale - planted in rows round one tall conifer (cedar at every homestead of three surveyed regions, the igune's four tall
+# trees), with many lesser kinds among it; the village scale is an interpolation the entry names, every survey being of one
+# farmstead's grove. `mixed_broadleaf` is the Chinese village fengshui wood - ~47 kinds a patch, measuring as evergreen
+# broadleaf forest - drawn as an irregular wood of rounded crowns like the woods around it. The clipped pine wall of Izumo is
+# one house's, not a village's, and is not drawn. The roll is even: no source says which was commoner. The homestead
+# yashikirin (`_find_grove_arms`) and the water-mouth grove keep the `windbreak` mix; the knob is the village belt's.
+WINDBREAK_BELT_FORMS = ("conifer_led", "mixed_broadleaf")
+register_knob(Knob("windbreak_belt", list(WINDBREAK_BELT_FORMS), default="conifer_led"))
+
+# THE RANKS OF A CONIFER-LED BELT (269 B30, vegetation/270): the conifers stand in rows laid ALONG THE BELT AS DRAWN - each
+# row an offset of the belt's own centerline (`belt_centerline`, `rank_points`), so on a bent belt the rows bend with it
+# (settlement-review 2026-09-28: one straight axis fitted to Inashiro's crescent set the east arm's rows ~76 deg across it).
+# They are laid once for the whole belt, seated before any lesser crown and painted over them all (`_belt_ranks`). The
+# survey says "planted in a row" and gives no spacing, so both numbers are a GUESS chosen to be read: along a row the crowns
+# just meet (the row's conifer is ~20-22 ft across, `RANK_CONIFER_S`), and the rows stand a little wider apart so the lesser
+# broadleaf between them shows. The conifer is the commonest crown in this form, which the entry states as a guess.
+RANK_ALONG_FT = 20.0
+RANK_APART_FT = 26.0
+# a planted tree stands a little off its mark, so the rows do not read as a surveyed grid: a GUESS (the same review; its round
+# 2 measured 1.5 ft as ~2 px on a 27 px pitch, invisible at any zoom)
+RANK_JITTER_FT = 3.0
+RANK_BIN_FT = 40.0  # the centerline's vertex spacing along the belt: two rows' width, fine enough to follow a crescent's bend (a GUESS)
+RANK_CONIFER_S = (1.0, 1.1)  # a planted row is even-aged: one size band (x CANOPY_R_FT x 1.15), not the emergent mix
+LESSER_BROADLEAF_S = (0.6, 0.85)  # "lesser broadleaf crowns among them" (vegetation/270): smaller than the woods' crowns
+# ...and FEWER than the conifers: of a clump's usual rolls, this share is thrown for the broadleaf and the bamboo between the
+# rows, so the conifer stays the commonest crown (the entry's guess; the share itself a GUESS, measured against the maps'
+# `crowns` tallies, 269 B30). Measured on Inashiro's belt with the rows laid per clump: 0.3 drew 182 conifers to 330
+# broadleaf (a belt's clumps overlap, so each throws its own), 0.15 drew 189 to 230, 0.1 drew 197 to 114 - about one roll a clump.
+LESSER_ROLL_SHARE = 0.1
+
+
+def belt_walk(pts: list[tuple[float, float]], link: float, start: int = 0) -> list[float]:
+    """Each seat's distance from seat `start` WALKING THROUGH THE BELT: Dijkstra over the seats, each joined to those
+    within `link` (a grid index, never a scan), and a seat the walk cannot reach joined by the shortest hop from the
+    seats it has reached (a gap the belt's own fill left open)."""
+    grid = PointGrid(link)
+    grid.extend([(i, x, y, x, y) for i, (x, y) in enumerate(pts)])
+    dist = [math.inf] * len(pts)
+    dist[start] = 0.0
+    heap = [(0.0, start)]
+    done: set[int] = set()
+    while len(done) < len(pts):
+        if not heap:  # the walk ran out: bridge the nearest unreached seat to the reached ones
+            d, u = min((dist[r] + math.hypot(pts[r][0] - pts[u][0], pts[r][1] - pts[u][1]), u) for u in range(len(pts)) if u not in done for r in done)
+            dist[u] = d
+            heap.append((d, u))
+        d, i = heapq.heappop(heap)
+        if i in done:
+            continue
+        done.add(i)
+        for j, x, y, *_ in grid.near(pts[i][0], pts[i][1], link):
+            e = math.hypot(x - pts[i][0], y - pts[i][1])
+            if j not in done and e <= link and d + e < dist[j]:
+                dist[j] = d + e
+                heapq.heappush(heap, (d + e, j))
+    return dist
+
+
+def belt_centerline(pts: list[tuple[float, float]], step: float) -> list[tuple[float, float]]:
+    """A belt's centerline as drawn, from its clump seats: the seats binned `step` apart by how far each lies from the
+    belt's END WALKING THROUGH THE BELT (`belt_walk`: the end is the seat farthest from a seat farthest along the principal
+    axis), each bin's mean a vertex, the inner vertices smoothed by a three-point mean, and the line carried on a step past
+    each end so an end clump's rows reach it. Walking, not projecting: Inashiro's crescent turns back on its own principal
+    axis at its east tip, and binning along that axis averaged across the turn and left the tip with no rows (the
+    settlement-review's round 2, 2026-09-28)."""
+    ax, ay = _belt_axis(pts)
+    first = min(range(len(pts)), key=lambda i: pts[i][0] * ax + pts[i][1] * ay)
+    probe = belt_walk(pts, step, first)
+    walked = belt_walk(pts, step, max(range(len(pts)), key=lambda i: probe[i]))
+    bins: dict[int, list[tuple[float, float]]] = {}
+    for (x, y), u in zip(pts, walked, strict=True):
+        bins.setdefault(int(u // step), []).append((x, y))
+    verts = [(sum(p[0] for p in b) / len(b), sum(p[1] for p in b) / len(b)) for _, b in sorted(bins.items())]
+    if len(verts) == 1:
+        verts = [(verts[0][0] - ax * step / 2, verts[0][1] - ay * step / 2), (verts[0][0] + ax * step / 2, verts[0][1] + ay * step / 2)]
+    elif len(verts) >= 3:
+        verts = [verts[0], *(((a[0] + b[0] + c[0]) / 3, (a[1] + b[1] + c[1]) / 3) for a, b, c in zip(verts, verts[1:], verts[2:], strict=False)), verts[-1]]
+
+    def carried(a: tuple[float, float], b: tuple[float, float]) -> tuple[float, float]:  # a step on past `b`, away from `a`
+        d = math.hypot(b[0] - a[0], b[1] - a[1]) or 1.0
+        return (b[0] + (b[0] - a[0]) / d * step, b[1] + (b[1] - a[1]) / d * step)
+
+    return [carried(verts[1], verts[0]), *verts, carried(verts[-2], verts[-1])]
+
+
+def rank_points(line: list[tuple[float, float]], half_depth: float, along: float, apart: float) -> list[tuple[float, float]]:
+    """The rows of a ranked belt: offsets of `line` every `apart` out to `half_depth` on both sides, and on each offset a
+    point every `along` of its own length (so a row on the outside of a bend is not stretched, nor one inside crowded). A
+    vertex's normal is the mean of its two segments' normals."""
+    segs = list(zip(line, line[1:], strict=False))
+    seg_n = []
+    for (x0, y0), (x1, y1) in segs:
+        d = math.hypot(x1 - x0, y1 - y0) or 1.0
+        seg_n.append((-(y1 - y0) / d, (x1 - x0) / d))
+    vert_n = []
+    for k in range(len(line)):
+        nx = seg_n[max(0, k - 1)][0] + seg_n[min(len(segs) - 1, k)][0]
+        ny = seg_n[max(0, k - 1)][1] + seg_n[min(len(segs) - 1, k)][1]
+        d = math.hypot(nx, ny) or 1.0
+        vert_n.append((nx / d, ny / d))
+    out: list[tuple[float, float]] = []
+    rows = math.ceil(half_depth / apart)
+    for j in range(-rows, rows + 1):
+        off = [(x + nx * j * apart, y + ny * j * apart) for (x, y), (nx, ny) in zip(line, vert_n, strict=True)]
+        walked = 0.0  # arc length along this row up to the start of the current segment
+        nxt = 0.0  # where the next point falls
+        for (x0, y0), (x1, y1) in zip(off, off[1:], strict=False):
+            seg = math.hypot(x1 - x0, y1 - y0)
+            while nxt <= walked + seg and seg > 0:
+                t = (nxt - walked) / seg
+                out.append((x0 + (x1 - x0) * t, y0 + (y1 - y0) * t))
+                nxt += along
+            walked += seg
+    return out
+
 
 HOMESTEAD_WOOD_FT2 = (6000.0, 28000.0)
 """The trees one homestead keeps, its windward grove and its share of the copse together, in sq ft (269 B26;
@@ -62,6 +184,55 @@ class GrovesMixin:
         """The map's prevailing-wind compass key (where the cold wind blows FROM), default NW."""
         w = str(self.M["meta"].get("windward", "NW")).upper().strip()
         return w if w in self._GROVE_ARMS else "NW"
+
+    def _windbreak_belt(self: Settlement) -> str:  # type: ignore[misc]
+        """The village belt's form, `conifer_led` or `mixed_broadleaf` (269 B30, vegetation/270): pinned or rolled from the
+        map's seed, and declared as meta.windbreak_belt."""
+        form = str(self.resolve("windbreak_belt"))
+        self.M["meta"]["windbreak_belt"] = form
+        return form
+
+    def _belt_ranks(self: Settlement, seated: list[tuple[float, float]], clump: float, wet: list[Any]) -> tuple[list[tuple[float, float, float]], str]:  # type: ignore[misc]
+        """Seat a conifer-led belt's rows of conifers (269 B30, vegetation/270) over the whole belt at once, BEFORE its clumps
+        draw their lesser crowns, and return (the crowns, their ink). The caller paints the ink after every clump, so no lesser
+        crown is inked over a conifer - painted per clump, a later clump's broadleaf lay over an earlier clump's conifers (the
+        settlement-review of 2026-09-28 counted 29 of the 73 broadleaf on Inashiro's page). A row point is kept only on the
+        belt's ground (inside a seated clump's box: each seat passed the belt's keep-outs, the ground between them did not), off
+        the marsh (`wet`, where the belt is alder), and where the crown covers no building or wellhead and stands under no
+        other crown - the tests every crown of `_draw_grove` answers, asked of indexes built once here."""
+        line = belt_centerline(seated, self.px(RANK_BIN_FT))
+        segs = list(zip(line, line[1:], strict=False))
+        half = max(min(seg_dist(x, y, a, b) for a, b in segs) for x, y in seated) + clump / 2
+        ground = PointGrid(clump)
+        ground.extend([(x - clump / 2 + 2, y - clump / 2 + 2, x + clump / 2 - 2, y + clump / 2 - 2) for x, y in seated])
+        bb = (min(p[0] for p in seated) - clump, min(p[1] for p in seated) - clump, max(p[0] for p in seated) + clump, max(p[1] for p in seated) + clump)
+        krect, kcirc = self._canopy_keepouts(bb)
+        rects, circs = PointGrid(64.0), PointGrid(64.0)
+        rects.extend([(cx, cy, hw, hh, cx - hw, cy - hh, cx + hw, cy + hh) for cx, cy, hw, hh in krect])
+        circs.extend([(wx, wy, wr, wx - wr, wy - wr, wx + wr, wy + wr) for wx, wy, wr in kcirc])
+        crowns = CrownIndex(self._crowns_near(*bb))
+        jit, base = self.px(RANK_JITTER_FT), self.px(self.CANOPY_R_FT) * 1.15
+        lo, hi = RANK_CONIFER_S
+        drawn: list[tuple[float, float, float]] = []
+        ink: list[str] = []
+        for rx, ry in rank_points(line, half, self.px(RANK_ALONG_FT), self.px(RANK_APART_FT)):
+            if not any(b[0] <= rx <= b[2] and b[1] <= ry <= b[3] for b in ground.near(rx, ry)):
+                continue
+            if any(point_in_poly(rx, ry, w) for w in wet):
+                continue
+            x = rx + (self._hjit(rx, ry, 95.0) - 0.5) * 2 * jit
+            y = ry + (self._hjit(rx, ry, 96.0) - 0.5) * 2 * jit
+            rr = base * (lo + (hi - lo) * self._hjit(rx, ry, 97.0))
+            reach = rr + self.CANOPY_PAD
+            if self._crown_covers(x, y, rr, [it[:4] for it in rects.near(x, y, reach)], [it[:3] for it in circs.near(x, y, reach)], self.CANOPY_PAD):
+                continue
+            if not crowns.clear(x, y, rr):
+                continue
+            crowns.add(x, y, rr)
+            drawn.append((x, y, rr))
+            ink.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{rr:.1f}" fill="#496733" stroke="#3C5526" stroke-width="0.8"/>')
+        self._record_crowns(drawn)
+        return drawn, f"<g>{''.join(ink)}</g>"
 
     def _windward_x(self: Settlement) -> int:  # type: ignore[misc]
         """The horizontal sign of the windward direction: -1 if the wind is from the W (NW/W/SW), +1 if from
@@ -196,7 +367,17 @@ class GrovesMixin:
                 return True
         return False
 
-    def _draw_grove(self: Settlement, cx: float, cy: float, w: float, h: float, face: Any, mix: str = "windbreak", cls: str | None = None) -> int:  # type: ignore[misc]
+    def _draw_grove(  # type: ignore[misc]
+        self: Settlement,
+        cx: float,
+        cy: float,
+        w: float,
+        h: float,
+        face: Any,
+        mix: str = "windbreak",
+        cls: str | None = None,
+        tally: dict[str, int] | None = None,
+    ) -> int:
         """Draw one windbreak/grove clump as a DENSE MIXED STAND - overlapping canopies packed into a real
         grove (not a few scattered trees), of three species: tall EVERGREEN conifer (darker, larger crown - the
         windbreak backbone, cedar/pine), DECIDUOUS broadleaf (mid green - timber and fruit, zelkova/persimmon),
@@ -204,6 +385,10 @@ class GrovesMixin:
         `GROVE_BAMBOO_SHARE`). Returns the count of bamboo marks inked. `mix` picks the species blend: 'windbreak' is
         conifer-backed (the sheltering wall - the yashikirin and the fengshui back belt); 'dooryard' is bamboo
         + fruit broadleaf with NO conifer (the leafy bamboo/fruit greenery scattered among village houses).
+        The village belt draws one of the `windbreak_belt` knob's two forms (269 B30, vegetation/270): a 'conifer_led'
+        clump draws only the lesser broadleaf and the bamboo between the belt's rows of conifers, which `_belt_ranks`
+        seats for the whole belt first; 'mixed_broadleaf' is rounded broadleaf crowns in the woods' irregular size mix,
+        no conifer. `tally`, when given, counts the crowns drawn by kind.
         Distinct from the big s.forest area feature and the striped kitchen-garden bed. Species and placement
         are seeded by position (stable across regenerations). Canopy count scales with footprint area."""
         # SCOPED (2026-08-08): a homestead grove's crowns are decoration keyed to the grove itself.
@@ -226,14 +411,23 @@ class GrovesMixin:
             # clump's edge - as the stand glyph's culm mark (`bamboo_stand`, a map drawing convention), not a crown.
             # The share is a GUESS (no page gives one; "a grove is mostly trees with bamboo among them"): 8% of the
             # items, taken from the broadleaf so the cedar backbone keeps its 38%. The dooryard and alder mixes carry none.
-            b_th, c_th = (GROVE_BAMBOO_SHARE, GROVE_BAMBOO_SHARE + 0.38) if mix == "windbreak" else (0.0, 0.0)  # dooryard = fruit broadleaf, no conifer; alder = broadleaf only
+            # The village belt's two forms (269 B30) carry the same bamboo share; a conifer-led belt's conifers are its rows,
+            # seated for the whole belt by `_belt_ranks`, so its clumps throw only the lesser crowns; a mixed broadleaf belt has none.
+            b_th = GROVE_BAMBOO_SHARE if mix in ("windbreak", *WINDBREAK_BELT_FORMS) else 0.0  # dooryard = fruit broadleaf, no conifer; alder = broadleaf only
+            c_th = b_th + 0.38 if mix == "windbreak" else b_th
+            if mix == "conifer_led":
+                rows = max(0.0, (w - 4) * (h - 4)) / (self.px(RANK_ALONG_FT) * self.px(RANK_APART_FT))  # the row conifers this clump's box holds
+                n = max(1, round(n * LESSER_ROLL_SHARE))
+                # ...and the bamboo stays GROVE_BAMBOO_SHARE of ALL the clump's items (269 B29), rows included, not of the fewer rolls
+                b_th = c_th = min(1.0, GROVE_BAMBOO_SHARE * (rows + n) / n)
             items: list[Any] = []
             for _ in range(n):
                 px = random.uniform(-w / 2 + 2, w / 2 - 2)
                 py = random.uniform(-h / 2 + 2, h / 2 - 2)
                 roll = random.random()
                 kind = "bamboo" if roll < b_th else ("conifer" if roll < c_th else "broadleaf")
-                size = random.uniform(1.25, 1.7) if random.random() < 0.25 else random.uniform(0.72, 1.05)  # a few emergent crowns over many small
+                band = LESSER_BROADLEAF_S if mix == "conifer_led" else ((1.25, 1.7) if random.random() < 0.25 else (0.72, 1.05))  # a few emergent crowns over many small
+                size = random.uniform(*band)
                 items.append((px, py, kind, size))
             # ORDER-SENSITIVE: this reads M, so it can only avoid structures that ALREADY EXIST when the
             # grove is drawn. That is why the yashikirin arms draw after their farmstead's house and why
@@ -291,6 +485,8 @@ class GrovesMixin:
                 # cannot show, and it was an unrecorded map convention. The darker fill and the 15% larger
                 # crown already tell a conifer from a broadleaf.
                 g.append(f'<circle cx="{px:.1f}" cy="{py - 3 * bs:.1f}" r="{rr:.1f}" fill="{col}" stroke="#3C5526" stroke-width="0.8"/>')
+                if tally is not None:
+                    tally[kind] = tally.get(kind, 0) + 1
             # THE BAMBOO SHOWS IN THE GAPS AND ALONG THE EDGE (269 B29, vegetation/260): a bamboo item under a drawn
             # crown, this clump's or an earlier one's, is hidden from above and not inked; one in the open, clear of
             # every building and wellhead, is the culm mark, painted UNDER the crowns (first in the group) because it

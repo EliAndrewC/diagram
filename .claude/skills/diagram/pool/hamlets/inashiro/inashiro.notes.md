@@ -1777,3 +1777,16 @@ pass, 2026-09-28, found the house-side plot of the record is the kitchen bed, re
 (hatake) crops go"), so the dry crops stand in the hem along the supply canal, across the rice. The woodland commons are three stands, all of them across the field from the houses: the frame they
 must fit in begins 100 ft west of the houses, and the ground on the houses' side inside it lies between their keep-out
 and the field's set-back, too narrow for a stand.
+
+## 2026-09-28 (feature 269 B30): the belt rolls its form - conifer-led, in rows along the belt
+
+The village windbreak belt is now drawn in one of two forms, the `windbreak_belt` knob (research/vegetation/270, "Was a
+windbreak one kind of tree in a row?"): conifer-led, the Japanese farmstead grove's form at village scale, or mixed
+broadleaf, the Chinese village grove's. This map rolled `conifer_led` (meta.windbreak_belt). Its conifers stand in rows
+laid along the belt as drawn - offsets of the crescent's own centerline, found by walking the belt's clump seats - and are
+seated before, and painted over, the lesser broadleaf and bamboo between them. The belt's record counts 210 conifer crowns,
+100 broadleaf and 27 bamboo marks inked (`village_groves[windbreak].crowns`, `.bamboo`); no clump seat moved.
+Review log: settlement-review, DELTA, three rounds (2026-09-28). Round 1 caught the rows crossing the east arm (one straight
+axis fitted to the whole crescent) and a later clump's broadleaf inked over an earlier clump's conifers; round 2 confirmed
+both fixed and caught the east tip left without rows (the crescent turns back on its principal axis there); round 3 passed.
+Each round recorded NOT-REVIEWABLE, the gate being red (`make done` is the landing session's).

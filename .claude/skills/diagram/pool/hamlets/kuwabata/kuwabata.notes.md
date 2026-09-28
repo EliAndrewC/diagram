@@ -694,3 +694,9 @@ stopped counting as clear of the belt, and the worst walk to a well is the same 
 away a dead-end stub that ended in the old copse and served no house, and one farmstead's coop, woodpile and persimmon
 moved from its west side to its east. Known open (settlement-review, 2026-09-28): six belt crowns hang over the
 connector's bed where it passes through the belt; the track still reads through.
+
+## 2026-09-28 (feature 269 B30): the belt rolls its form - mixed broadleaf
+
+The village windbreak belt is now drawn in one of two forms, the `windbreak_belt` knob (research/vegetation/270): this map
+rolled `mixed_broadleaf` (meta.windbreak_belt), the Chinese village grove's form - an irregular wood of rounded broadleaf
+crowns like the woods around it, with no conifer. The belt's record counts 389 broadleaf crowns and 34 bamboo marks; no clump seat moved.
