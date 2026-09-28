@@ -45,8 +45,6 @@ _BOUNDARY = re.compile(r"</?(?:p|li|ul|ol|h[1-6]|td|th|tr|table|dd|dt|dl|blockqu
 _SENTENCE_END = re.compile(r"(?<=[.?!])\s+(?=[A-Z(\"'])")
 #: tracked files outside the record that repeat a source or are the tooling's own logs (D7)
 _SKIP_OUTSIDE = re.compile(r"^(research|tests)/|^dev/(bypass-log|run-log|perf-log)/")
-#: the least a heading's question must be to be matched in code - a short one would match stray text (plan D3)
-MIN_HEADING = 25
 
 
 def visible(html: str) -> str:
@@ -162,9 +160,9 @@ def class_routes(entries: dict[str, list[str]], qs: Sequence[Question]) -> dict[
 
 def heading_key(question: str) -> str:
     """What a code comment quotes of a heading: the question up to its first '?' (a heading may carry its answer
-    after it), or '' when that is under `MIN_HEADING` characters and would match stray text."""
-    key = question.split("?", 1)[0] + "?" if "?" in question else question
-    return key if len(key) >= MIN_HEADING else ""
+    after it). No length floor: the short headings are cited by the engine too (plan review 2026-09-28: capitals
+    240's "A castle has TWO gates" is cited by its heading alone), and research.md R5 found no stray match."""
+    return question.split("?", 1)[0] + "?" if "?" in question else question
 
 
 def code_citations(sources: dict[str, str], q: Question, heading_key: str) -> list[str]:

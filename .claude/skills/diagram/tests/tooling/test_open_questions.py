@@ -100,7 +100,7 @@ def test_a_question_reaches_its_map_features_three_ways(tmp_path: pathlib.Path) 
     engine = {"l7r/yards.py": "x = 1\n# the rack length: research homesteads 'How long was a rice-drying rack?'\n", "l7r/other.py": "# #how-long-was-a-rack\n"}
     key = oq.heading_key(qs[0].heading)
     assert key == "How long was a rice-drying rack?"
-    assert oq.heading_key("Why?") == "", "a question too short to match without stray hits"
+    assert oq.heading_key("A castle has TWO gates") == "A castle has TWO gates", "no length floor: a short heading is cited too"
     assert oq.code_citations(engine, qs[0], key) == ["l7r/yards.py:2", "l7r/other.py:1"]
     unreached = oq.Question("homesteads", "x", "X", "p", items=[oq.Item("guess", "a GUESS")])
     text = oq.report([qs[0], unreached], routes, {"how-long-was-a-rack": ["l7r/yards.py:2"]}, [])

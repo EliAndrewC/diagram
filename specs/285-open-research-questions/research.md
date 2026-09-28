@@ -53,3 +53,7 @@ per household is a GUESS until the record finds a figure").
 | cited in engine code (the question up to its `?`, or its anchor) | `134` |
 | reached by none of the three | `237` |
 | wall time | `2.0 s` (`8.5 s` before the whole-text pre-check in `code_citations`) |
+
+## R5 - do short headings match stray text in the engine? (observed 2026-09-28, method: every question heading under `25` characters, up to its `?`, searched in every tracked `l7r/**/*.py` and each hit read)
+
+Five headings are under `25` characters. Two ("Setting canon", "Works cited") and "How a josui actually ran" appear in no engine file. "A castle has TWO gates" appears once (`settlement/castle_civic.py:186`, a comment citing capitals 240 by its heading, whose anchor the engine never names); "Drawing a clan border" four times and "No interrogation room" three, all in `Entry:` lines of the Mode A compound kinds. All eight hits are citations; none is stray text. So the code route takes a heading of any length, and on the current tree that reaches one more open question ("Drawing a clan border", through the compound kinds) than a `25`-character floor did.

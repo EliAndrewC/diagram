@@ -24,7 +24,7 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). Measurement: [`
   whose URLs end `<page file>#<anchor>`, inverted to anchor -> class keys; (b) a question a class names that links
   (`href="...#<anchor>"`) to this one gives that class, "through <the linking question>" - one hop only, since a chain
   of links soon reaches everything; (c) a tracked engine `.py` file whose text contains the question's anchor or its
-  heading's question (less its dated bookkeeping, `question_text`, and up to its first `?` where it has one - a comment quotes the question, not the answer after it; at least `25` characters, so a short question cannot match stray text) gives that file and line. R2 counted this route by a heading's first `40` characters; the tool's own count is re-measured at the end. A question none reaches says
+  heading's question (less its dated bookkeeping, `question_text`, and up to its first `?` where it has one - a comment quotes the question, not the answer after it) with no length floor (research.md R5: every short heading's engine matches are real citations) gives that file and line. R2 counted this route by a heading's first `40` characters; the tool's own count is re-measured at the end. A question none reaches says
   "no map feature found depending on it".
 - **D4 - the target** (FR-001, FR-004). `make open-questions` in the skill's Makefile, running
   `scripts/_open_questions.py --root <repo>`. It prints the counts first (per page: questions, guesses, absences,

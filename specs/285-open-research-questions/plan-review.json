@@ -1,0 +1,71 @@
+{
+ "feature": "285-open-research-questions",
+ "plan_sha256": "a51e9379a46e253cfa379c6c42da7e17d86493ec832fd95319e84c0c992956c3",
+ "reviewed": "2026-09-28",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "read only the question fragments and their notes, never the assembled or citations pages",
+   "class": "within",
+   "why": "the spec's edge case and Decisions Recorded settle it; the assembled pages repeat the fragments"
+  },
+  {
+   "id": "D2-guess",
+   "summary": "a guess item is each sentence of visible (comment-stripped) text carrying GUESS or GUESSES; two labels in one sentence are one item; lower-case guess is not a label",
+   "class": "within",
+   "why": "FR-002(a), the comment edge case, SC-001 (one sentence may carry two) and the capitals Assumption"
+  },
+  {
+   "id": "D2-absence",
+   "summary": "an absence item is each notes li carrying 'no publicly readable source', shown with its search record and the claim sentence that cites it; 'settled YYYY-MM-DD' makes it absence-settled",
+   "class": "within",
+   "why": "FR-002(b) and FR-005; showing the claim serves the suggestion's 'the question'; the settled form is research/CLAUDE.md's ABSENCE form, and an unmatched settled note is still listed, not dropped"
+  },
+  {
+   "id": "D2-not-items",
+   "summary": "GROUNDS notes and CONVENTION or DEVIATION labels are not items",
+   "class": "within",
+   "why": "the spec's edge case names both"
+  },
+  {
+   "id": "D3-a-b",
+   "summary": "route (a) a class's Entry: resolved by research_questions; route (b) one hop of links from a question a class names",
+   "class": "within",
+   "why": "FR-003 and US2 define exactly these two routes; one hop is what 'a question a class names links to it' says"
+  },
+  {
+   "id": "D3-c-min25",
+   "summary": "route (c) matches an engine .py line on the anchor or the heading's question up to its '?', but only when that question is at least 25 characters",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-003 and US2 route (c) take 'its heading or its anchor' with no length floor; the floor's premise ('a short question cannot match stray text') was not measured, and a grep of l7r/**.py (2026-09-28, this review) finds three question headings under 25 characters ('No interrogation room', 'A castle has TWO gates', 'Drawing a clan border') whose seven engine hits are all genuine citations and none stray - castle_civic.py:186 cites capitals 240 by heading only (the anchor appears nowhere), so the floor drops a real citation and would report 'no map feature found' for a question the map uses the day it carries an open item; no open item is affected today"
+  },
+  {
+   "id": "D4",
+   "summary": "make open-questions prints counts first (per page, per kind, outside-the-record by area, totals), then the list, text only, no filters",
+   "class": "within",
+   "why": "FR-001, FR-004 and the Assumption that it prints to the terminal"
+  },
+  {
+   "id": "D7",
+   "summary": "outside the record: git ls-files under the skill less research/, tests/, the three tooling logs and binaries; each line carrying the whole word GUESS is an item",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-007 asks for every GUESS label; R3 and D2 establish GUESSES as the plural label, and as written D7's whole-word GUESS misses five labeled lines outside the record (git grep -w GUESSES, 2026-09-28: compound.py:568 and 643, hamletgen/pondstock.py:8 and 25, county-magistracy-example.notes.md:24); the built code (_GUESS = GUESS(?:ES)?) already reads the plural, so this is the plan's text contradicting its own D2 and the spec"
+  },
+  {
+   "id": "D5",
+   "summary": "unit tests on a fixture record and one real-record test (homesteads 500 through 505, the compound.py postern, the guess count against a plain count)",
+   "class": "within",
+   "why": "FR-006, SC-001, SC-002, SC-004; enforcement of the request"
+  },
+  {
+   "id": "D6",
+   "summary": "one pass over the files, one registry import, a whole-text pre-check in the code route",
+   "class": "within",
+   "why": "SC-003; a speed mechanism that changes no result"
+  }
+ ],
+ "verdict": "BLOCKED"
+}
