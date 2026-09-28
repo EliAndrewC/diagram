@@ -102,6 +102,27 @@ def test_farmstead_fixtures_honor_the_spec_floor() -> None:
     assert len(owners) == len(s.M["farm_fixtures"]), "the floor never doubles a house"
 
 
+def test_a_fixture_no_seat_can_take_is_recorded_as_unseated(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The miss is RECORDED (settlement-review of Kuwabata, 2026-09-12): with every seat and every outward rung blocked,
+    nothing is drawn and `meta.farm_fixtures_unseated` counts each kind that could not stand - asked directly since
+    feature 276's maps stopped taking this branch on any pool roll."""
+    from l7r.diagram.hamletgen.homesteads import farmstead_fixtures
+    from l7r.diagram.hamletgen.homesteads import fixtures as fixtures_mod
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(W=900, H=700, seed=7)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    houses = [{"x": 200.0 + 110 * i, "y": 300.0, "w": 46.0, "h": 28.0, "rot": 0.0, "shed_side": "N"} for i in range(4)]
+    for h in houses:
+        s.M["houses"].append(dict(h))
+        s.placed.append((h["x"], h["y"], h["w"], h["h"]))
+    monkeypatch.setattr(fixtures_mod, "_strip_blocked", lambda *a, **k: True)
+    monkeypatch.setattr(fixtures_mod, "_trunk_blocked", lambda *a, **k: True)  # the yard trees seat by their own test
+    assert farmstead_fixtures(s, a_plan(), houses) == 0
+    missed = s.M["meta"].get("farm_fixtures_unseated") or {}
+    assert missed and sum(missed.values()) > 0 and not s.M.get("farm_fixtures")
+
+
 # ---- feature 145: the refusal branches of the fixture placer that no cohort seed took --------------
 
 

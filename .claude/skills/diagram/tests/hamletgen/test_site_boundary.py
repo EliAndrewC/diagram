@@ -209,3 +209,14 @@ def test_the_indexed_hit_points_answer_as_the_linear_scan_did() -> None:
             assert got == linear(pts)
             hits += got
         assert 20 < hits < 280, "non-vacuity: both answers occur"
+
+
+def test_free_ground_with_nothing_to_claim_claims_no_cell() -> None:
+    """Feature 276 (D9): a zero-length chord contributes nothing, no ground at all leaves the raster empty, and ground
+    thinner than the half-pixel shrink leaves it empty too - so a seat there is never pruned."""
+    from l7r.diagram.hamletgen.homesteads.boundary import FreeGround
+
+    none = FreeGround([[((10.0, 10.0), (10.0, 10.0), (0.0, 1.0))]], ([], []), None, (0.0, 0.0, 100.0, 100.0))
+    assert none.taken == set() and not none.rect_refused((10.0, 10.0, 4.0, 4.0))
+    thin = FreeGround([], ([((0.0, 50.0), (100.0, 50.0), 0.3)], []), None, (0.0, 0.0, 100.0, 100.0))
+    assert thin.taken == set() and not thin.rect_refused((50.0, 50.0, 4.0, 4.0))

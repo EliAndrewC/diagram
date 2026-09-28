@@ -696,3 +696,34 @@ def test_a_weld_is_judged_on_the_ring_as_recorded_as_well_as_deduped() -> None:
     assert _weld_apex(spur) < _GATE_MIN_APEX
     square = [(0.0, 0.0), (40.0, 0.0), (40.0, 30.0), (0.0, 30.0)]
     assert _weld_apex(square) == _min_apex(dedup_ring(square, 1.0))
+
+
+def test_despike_many_is_empty_on_nothing_and_falls_back_one_at_a_time(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 276: an empty batch is an empty answer, and a batch GEOS refuses is redone through `_despike` itself."""
+    import shapely
+    from shapely.errors import GEOSException
+    from shapely.geometry import box
+
+    from l7r.diagram.waterfields.seams.pockets import _despike_many
+
+    assert _despike_many([]) == []
+    geoms = [box(0, 0, 10, 10), box(20, 0, 30, 8)]
+    real = shapely.intersection
+
+    def batch_refused(a: Any, b: Any, *r: Any, **k: Any) -> Any:
+        if isinstance(a, (list, tuple)) or hasattr(a, "shape"):
+            raise GEOSException("refused")
+        return real(a, b, *r, **k)
+
+    monkeypatch.setattr(shapely, "intersection", batch_refused)
+    got = _despike_many(geoms)
+    assert [g.equals(_despike(q)) for g, q in zip(got, geoms, strict=True)] == [True, True]
+
+
+def test_visible_parts_leaves_a_list_with_no_real_ring_alone() -> None:
+    """Feature 276: nothing to cut when no plot has three vertices."""
+    from l7r.diagram.waterfields.seams.close import _visible_parts
+
+    plots: list[dict[str, Any]] = [{"poly": [(0.0, 0.0), (1.0, 1.0)]}, {"poly": []}]
+    _visible_parts(plots, 100.0)
+    assert plots == [{"poly": [(0.0, 0.0), (1.0, 1.0)]}, {"poly": []}]

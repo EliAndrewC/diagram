@@ -662,3 +662,49 @@ def test_a_house_moved_in_place_is_not_answered_from_its_old_box() -> None:
     houses[0]["x"] = 900.0
     houses._bump()
     assert not fit.houses_meeting(houses, (90, 90, 110, 110)) and fit.houses_meeting(houses, (890, 90, 910, 110))
+
+
+def test_the_eave_gap_ignores_an_abandoned_neighbor_and_flags_a_standing_one():
+    # feature 276: the indexed eave-gap scan still skips a derelict (no roof left to shed) and still flags a house
+    s = _village()
+    s.M["houses"].append({"x": 330.0, "y": 300.0, "w": 40.0, "h": 26.0, "kind": "abandoned"})
+    assert s._house_too_near_a_neighbor((300.0, 300.0, 40.0, 26.0)) is False
+    s.M["houses"].append({"x": 330.0, "y": 300.0, "w": 40.0, "h": 26.0, "kind": "plain"})
+    assert s._house_too_near_a_neighbor((300.0, 300.0, 40.0, 26.0)) is True
+
+
+def test_the_sun_rules_pass_over_a_neighbor_record_with_no_bundle():
+    # feature 276: a drawn house with no `geom` (no yard, no garden, no grove) inside the indexed reach box has nothing
+    # the corridor or the yard-sun rule can read, so both pass it over
+    s = _village()
+    s.meta(name="V", scale="village", ftpx=2, toscale=True)
+    s.sun_corridor(39)  # the rule is opt-in; the scripted path asks for it
+    geom = s._bundle_geom(300, 300, 40, 26)
+    s.M["houses"].append({"x": 300.0, "y": 260.0, "w": 30.0, "h": 20.0, "kind": "plain"})  # north: in the corridor's box
+    assert s._sun_corridor_ok(geom) is True
+    yard = geom["yard"]
+    s.M["houses"].append({"x": yard[0], "y": yard[1] + yard[3] / 2 + 11, "w": 10.0, "h": 10.0, "kind": "plain"})  # the yard's strip
+    assert s._yard_sun_conflict(geom) is False
+
+
+def test_the_bundle_prescreen_refuses_off_the_bound_on_a_placed_box_and_on_a_sun_rule(monkeypatch):
+    # feature 276 (D9a): three of `_bundle_refused`'s conjuncts - a bbox corner outside the bounding ring, a placed box
+    # inside the 2 px margin, a sun rule - and nothing refused on open ground
+    s = _village()
+    geom = s._bundle_geom(300, 300, 40, 26)
+    assert s._bundle_refused(geom) is False
+    s.bound = [(290, 290), (600, 290), (600, 600), (290, 600)]
+    assert s._bundle_refused(geom) is True
+    s.bound = None
+    s.placed.append((300.0, 300.0, 20.0, 20.0))
+    assert s._bundle_refused(geom) is True
+    s.placed.clear()
+    monkeypatch.setattr(Settlement, "_gardens_sun_ok", lambda self, g: False)
+    assert s._bundle_refused(geom) is True
+
+
+def test_slide_stops_where_the_free_ground_refuses_the_next_step():
+    # feature 276 (D9): the step the pre-screen refuses (a placed box in the way) ends the slide where it stands
+    s = _village()
+    s.placed.append((240.0, 200.0, 40.0, 26.0))  # the first 2 px step comes within the 2 px margin of it
+    assert s._slide(200, 200, 40, 26, lambda x, y: (400.0, 200.0), True) == (200, 200)

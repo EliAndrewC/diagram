@@ -116,3 +116,27 @@ def test_geom_tree_reads_a_replaced_basins_current_envelope_without_rebuilding()
     assert t._tree is tree_before  # answered from the changed set, not a rebuild
     into.append(Polygon([(120.0, 120.0), (130.0, 120.0), (130.0, 130.0), (120.0, 130.0)]))  # the list grew: a rebuild
     assert t.near(q) == gate(0.0) and t._tree is not tree_before
+
+
+def test_ring_polygons_answers_per_ring_empty_or_batched(monkeypatch: Any) -> None:
+    """Feature 276: rings under three vertices come back None (all of them, when none qualifies), and a batch GEOS
+    refuses is rebuilt ring by ring into the same polygons."""
+    import shapely
+
+    from l7r.diagram.waterfields.seams.geoms import ring_polygons
+
+    assert ring_polygons([[(0.0, 0.0)], []]) == [None, None]
+    rings = [[(0.0, 0.0), (10.0, 0.0), (10.0, 10.0)], [(0.0, 0.0), (1.0, 1.0)], [(20.0, 0.0), (30.0, 0.0), (30.0, 5.0), (20.0, 5.0)]]
+    batched = ring_polygons(rings)
+
+    real = shapely.linearrings
+
+    def refuse(*a: Any, **k: Any) -> Any:
+        if "indices" in k:  # the batched call only - `Polygon()` builds its own ring through the same function
+            raise ValueError("refused")
+        return real(*a, **k)
+
+    monkeypatch.setattr(shapely, "linearrings", refuse)
+    one_by_one = ring_polygons(rings)
+    assert batched[1] is None and one_by_one[1] is None
+    assert all(a.equals(b) for a, b in zip([batched[0], batched[2]], [one_by_one[0], one_by_one[2]], strict=True))
