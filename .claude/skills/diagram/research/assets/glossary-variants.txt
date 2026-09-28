@@ -38,6 +38,7 @@ anchor culture	anchor culture
 anchor cultures	anchor culture
 animal unit	animal unit
 animal units	animal unit
+anjifang	anjifang
 apron	apron
 aprons	apron
 aqueduct	aqueduct
@@ -964,6 +965,7 @@ jujutsu	jujutsu
 juku	shukuba
 junk	junk
 junks	junk
+juyangyuan	juyangyuan
 jō	jo
 jōdo	Jodo
 jōdo shinshū	Jodo Shinshu
@@ -1167,6 +1169,8 @@ levy storehouses	levy storehouse
 li	li
 liberties	liberty
 liberty	liberty
+licensed quarter	yukaku
+licensed quarters	yukaku
 lifang	lifang
 light bamboo	light bamboo
 lijia	lijia
@@ -1244,6 +1248,7 @@ men-hai	taiping-gang
 menbansho	menbansho
 mengxi bitan	Mengxi Bitan
 meshimori	meshimori
+meshimori onna	meshimori
 meshimori women	meshimori
 meshimori-onna	meshimori
 metamorphosis fengshui	metamorphosis fengshui
@@ -1403,6 +1408,7 @@ offering hall	offering hall
 offtake	offtake
 offtakes	offtake
 ofuregaki	ofuregaki
+okabasho	okabasho
 okaji	ōkaji
 okajiba	ōkaji
 okura	kura
@@ -2073,6 +2079,7 @@ warren	warren
 warrens	warren
 warring states	Warring States
 warring-states	Warring States
+washe	wazi
 watashiba	watashiba
 water duty	water duty
 water gate	water gate
@@ -2087,7 +2094,7 @@ water-mouth	water-mouth
 water-tail	water-mouth
 wayside hall	tsujido
 wayside halls	tsujido
-wazi	goulan
+wazi	wazi
 weathering	weathering
 wei-tian	weitian
 weilongwu	weilongwu
@@ -2179,7 +2186,9 @@ yuan dynasty	Yuan dynasty
 yuan rebuild	Yuan dynasty
 yuecheng	yuecheng
 yui	yui
+yukaku	yukaku
 yulin wei	yulin wei
+yūkaku	yukaku
 zaimokuya	zaimokuya
 zaofang	zaofang
 zaojun	Zaojun

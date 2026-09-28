@@ -1658,10 +1658,9 @@
   ]
  },
  "goulan": {
-  "def": "The permanent roofed theaters of Song Kaifeng and the pleasure precincts around them.",
+  "def": "A Song performance hall: a railed or board-walled enclosure with a stage and seats, standing inside an entertainment precinct (a wazi), a large one holding audiences of several thousand. From the Ming on the word came to mean a brothel.",
   "variants": [
-   "goulan",
-   "wazi"
+   "goulan"
   ]
  },
  "goyoba": {
@@ -7088,11 +7087,12 @@
   ]
  },
  "meshimori": {
-  "def": "A woman kept at a post town's inn to serve travelers their meals. The name means \"rice-server\". Keeping such women marked a place as an inn for lodging, so a teahouse, which was only for resting, had to be built differently.",
+  "def": "A woman kept at a post town's inn, in name to serve travelers their meals (the name means \"rice-server\"), and in fact often an unlicensed prostitute, tolerated by the shogunate as an inn servant up to a set number per post town. Keeping such women marked a place as an inn for lodging, so a teahouse, which was only for resting, had to be built differently.",
   "variants": [
    "meshimori",
    "meshimori women",
-   "meshimori-onna"
+   "meshimori-onna",
+   "meshimori onna"
   ]
  },
  "bakuhan": {
@@ -8387,6 +8387,40 @@
   "variants": [
    "village grain",
    "detached village grain"
+  ]
+ },
+ "yukaku": {
+  "def": "A licensed pleasure quarter of Edo-period Japan: a district where the authorities gathered the licensed brothels, closed off by a wall, a ditch or a fence and entered by a gate. Besides the three great ones of Edo, Kyoto and Osaka, only twenty-odd places in the country had one.",
+  "variants": [
+   "yukaku",
+   "yūkaku",
+   "licensed quarter",
+   "licensed quarters"
+  ]
+ },
+ "wazi": {
+  "def": "An entertainment precinct of a Song city, open to all comers, holding performance halls (goulan) among shops, teahouses and wine shops. Also called washe.",
+  "variants": [
+   "wazi",
+   "washe"
+  ]
+ },
+ "okabasho": {
+  "def": "An unlicensed place of prostitution in Edo-period Japan, such as a temple-gate town, as against the walled and licensed pleasure quarter.",
+  "variants": [
+   "okabasho"
+  ]
+ },
+ "anjifang": {
+  "def": "A Song state infirmary for the sick poor, set up early in the Chongning era (1102-1106) in the counties and in every sizable town, run by monks recruited for it.",
+  "variants": [
+   "anjifang"
+  ]
+ },
+ "juyangyuan": {
+  "def": "A Song state poorhouse that housed and fed widows, orphans, the old, the disabled and the destitute, set up early in the Chongning era (1102-1106) in the counties and in every sizable town.",
+  "variants": [
+   "juyangyuan"
   ]
  }
 }
