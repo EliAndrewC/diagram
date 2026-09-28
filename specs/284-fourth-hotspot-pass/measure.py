@@ -2,6 +2,7 @@
 
     python3 specs/281-third-hotspot-pass/measure.py before   # the clone at the base commit: before-* keys
     python3 specs/281-third-hotspot-pass/measure.py after    # the base worktree, then the clone, back to back
+    python3 specs/284-fourth-hotspot-pass/measure.py after-main   # main as merged into the clone (MAIN), then the clone
 
 The base is `5f15c65bd`, main as this work was re-based on it (281 and 282 landed), in a detached worktree at `/tmp/base281` (created if missing). Seconds
 depend on the machine's load, so the after-run takes the base and the clone one straight after the other: the base as
@@ -22,6 +23,10 @@ BASE = "5f15c65bd"
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 WT = Path("/tmp/base284")
+# MAIN AS MERGED (feature 269 landed while this work ran, with its own changes to the stages): the timing that says what
+# this feature buys over the main it lands on, beside the base the counts were set against
+MAIN = "7c0c94f94"
+MAIN_WT = Path("/tmp/main284")
 ENGINE = Path(".claude/skills/diagram/l7r/diagram")
 # the named callee of each entry bucket (plan C's table); every bucket also records its TOTAL
 BUCKET_CALLEES: dict[str, tuple[str, ...]] = {
@@ -102,6 +107,13 @@ def main() -> int:
     if mode == "before":  # the BASE, wherever the clone has moved since (first taken in the clone while it stood at BASE)
         t, c, load = run(WT, scratch / "before")
         rec.update(keys("before", t, c, f"harness.py in the detached worktree of {BASE} (the unmodified engine)", command, load))
+    elif mode == "after-main":
+        if not MAIN_WT.exists():
+            subprocess.run(["git", "-C", str(ROOT), "worktree", "add", "--detach", str(MAIN_WT), MAIN], check=True, capture_output=True)
+        t, c, load = run(MAIN_WT, scratch / "main")
+        rec.update(keys("main-rerun", t, c, f"harness.py in the detached worktree of {MAIN} (main as merged), run just before the clone's", command, load))
+        t, c, load = run(ROOT, scratch / "after")
+        rec.update(keys("after", t, c, "harness.py in the clone, run just after main's", command, load))
     else:
         t, c, load = run(WT, scratch / "base")
         rec.update(keys("base-rerun", t, c, f"harness.py in the detached worktree of {BASE}, run just before the clone's", command, load))
