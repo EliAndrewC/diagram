@@ -173,6 +173,106 @@ run-to-run spread (single runs each, so within noise either way).
 
 ## R6 - What the moving levers did to the maps (2026-09-28)
 
+Each moving lever is judged by the pool and cohort seeds 1-24 rolled whole - summed roll seconds, first-roll strandings,
+re-rolls - never by its own stage's calls; and by the run-to-run spread, measured in the same run: the shipping engine is
+rolled twice, interleaved by map with the lever's pass, twelve forked workers, so the load drifts over all passes alike.
+A lever is kept when it is faster in all by more than that spread with every rule holding. The first runs of FR-001 and
+FR-004 were each made with the other lever in, and with a router box decline that no longer ships; the reviews of
+Amendment 1 set them aside, and the runs below are on the engine as it ships.
+
+**The field search without its blind probe (FR-004)** (observed 2026-09-28, method: `b3cmp/harness.py`, the router in cost
+order; `b3cmp/results.json`): the shipping search 383.9 s and 388.3 s in its two passes, the lever 367.1 s - about 19 s
+(5%) faster than their mean, against a spread of 4.3 s (1%). It re-rolls five maps against two. **Kept.** Its own stage:
+Inashiro's field 1.51 to 1.06 s, Sawada's 2.89 to 2.21 s (measure.py after, the interim run).
+
+**A* in the router (FR-001), with FR-004 in** (observed 2026-09-28, method: `astarcmp/harness.py`, `astar.txt` the lever's
+search; `astarcmp/results.json`): the cost-order search 211.5 s and 212.7 s, A* 207.1 s - 5.1 s (2.4%) faster than their
+mean, against a spread of 1.2 s (0.6%); 8 houses unreached over every attempt against 6, six re-rolls against five, every
+map healed by its re-roll. **Kept.**
+
+**Both together, against both off** (observed 2026-09-28, method: `combined/harness.py`; `combined/results.json`):
+
+| | the levers off (the base's router and search) | shipping, pass 1 | shipping, pass 2 |
+|---|---|---|---|
+| summed roll seconds (loaded) | 344.75 | 327.27 | 329.37 |
+| houses unreached, every attempt | 5 | 8 | 8 |
+| rolls that re-rolled | 2 | 6 | 6 |
+| households seated, connectors drawn, failing rolls | 442, 29, 0 | 442, 29, 0 | 442, 29, 0 |
+| household bamboo strips | 140 | 120 | 120 |
+
+16.4 s (4.8%) faster in all, against a spread of 2.1 s. **The household bamboo falls 14%** - fewer on 13 maps, more on 3:
+presence is rolled per farmstead from its position (a labeled GUESS at 60%, `HOUSEHOLD_BAMBOO_PREVALENCE`) and a strip is
+dropped where the farmstead has no room, so the moved houses leave fewer rolled-present farmsteads room. No rule is broken
+and no household loses its seat; recorded as the one systematic map change the levers make.
+
+**The coarser lattice (FR-003)**: R4 - it strands at 12 px on this engine too.
+
+**The pool, before (`5f15c65bd`) and after** (observed 2026-09-28, method: `make maps SCOPE=all`, the manifests compared with
+`git show` of the base's; every map seats every household, keeps its form - nucleated - and draws its connector):
+
+| map | roll | acres (target within 6%) | houses | ways (count / length px) | household bamboo |
+|---|---|---|---|---|---|
+| Inashiro | 1 -> 1 | 19.62 -> 19.85 | moved | 8 / 5,608 -> 9 / 5,872 | 3 -> 8 |
+| Kashikawa | 1 -> 2 (re-rolled) | 25.22 -> 26.73 | moved | 13 / 7,082 -> 13 / 7,002 | 8 -> 6 |
+| Kuwabata | 1 -> 1 | 19.13 -> 19.13 | the same | 8 / 5,604 -> 8 / 5,604 | 9 -> 9 |
+| Mizuguchi | 1 -> 1 | 14.64 -> 14.64 | the same | 7 / 6,350 -> 7 / 6,347 | 0 -> 0 |
+| Sawada | 1 -> 1 | 23.47 -> 23.86 | moved | 13 / 6,926 -> 13 / 6,423 | 11 -> 7 |
+
+**A defect the moved maps found: a connector deleted as debris** (observed 2026-09-28, method: `c15/harness.py`, spies on
+the connector's routing, threading and `drop_lanes`). Cohort seed 15, rolled with FR-004 under A*, came out with no connector
+at all - its 4,004 px track out to the map edge planned, threaded, drawn, and then deleted by the junction pass
+(`_touch_junctions`), which drops a piece the web cannot join when it serves no house of its own. The connector is the one
+way that must not go (`trim_lane_stubs` has always exempted it), and with it gone the reach check read the network that was
+left and passed: the roll reported OK on a hamlet with no way off the map. Fixed: the pass never drops the connector
+(`tests/hamletgen/ways/test_geom.py::test_touch_junctions_never_drops_the_connector`); one test of the pass had counted the
+deletion as its expected result (`test_touch.py`, the end-meets-end case) and now asserts the join it meant. Every roll of
+the runs above draws its connector.
+
+## R7 - The other slow stages, re-profiled (T15, 2026-09-28)
+
+**Method** (observed 2026-09-28, method: `t15/harness.py`, one cProfile of a build and finish of Sawada and one of
+Kashikawa, after A1-A8, B1 and B3). What is left is spread thin:
+
+- **The seam closing** (`close_seams`, 2.5 profiled s on Sawada, 1.4 on Kashikawa; observed 2026-09-28, method: the profile above): 822 pocket welds on Sawada at about
+  1.2 ms each (`_absorb`, 0.97 s), the remainder `_plant` 0.35, `_unjog` 0.29, `_shed_necks` 0.22. A weld is a handful of
+  shapely unions, buffers and a simplify on the one pocket and its ranked neighbors, already ranked in one array call and
+  read from a shared tree (feature 276); there is no scan left to index, and the shapes are the rule. No lever taken.
+- **The commons** (`commons`, 0.43 s on Sawada): the grass scatter, 0.37, already clipped to a predicted frame (feature 224).
+  No lever taken.
+- **The blade flush** (`flush_blade_groups`, 0.23 s on Sawada, 0.43 on Kashikawa): the merge of each blade group's lines
+  (`merge_lines`, 0.09 s). No lever taken.
+- **The grove fill** (`village_grove`, 0.57 s on Sawada): its tests are the grove blocks' indexed lookups (`near`, `inside`,
+  `hard`, each under 0.1 s), with the crown seat test on its grid since A6. No lever taken.
+- **The geometry primitives**: `seg_dist` is called 312,391 times on Sawada (0.54 profiled s), from about 25 callers, none
+  above 0.09 s. An index per caller would each buy under a tenth of a second.
+
+## R8 - A re-roll resumed at the seats (2026-09-28)
+
+R4's table showed the costliest thing in a roll that is not a stage: eight of the 29 base rolls strand a house on the
+first attempt and pay a whole second build. The avoid list a re-roll carries is first read at `stage_homesteads` (the seat
+loops, `homesteads/seats.py` `_seat_allowed` and `rolling/place.py`); the five stages before it - the water frame, the
+field, the sink, the seat and the waterward fringe - read nothing that differs between attempts. So the first roll keeps a
+deep copy of the settlement and plan as they stand before the seats, and each re-roll starts from a fresh copy of that
+(`driver.resume`), rather than running the field again. An exact change: the same map, sooner.
+
+**Method** (observed 2026-09-28, method: `reroll/harness.py` - on Kashikawa and cohort seeds 1, 5, 17, 18 and 19, the maps
+R4 found re-rolling at the 10 px lattice, the re-roll made both ways and each finished to a scratch svg and page; load
+4.8; `reroll/results.json`):
+
+| map | re-roll built from scratch | re-roll resumed | first roll without / with the snapshot | manifest, svg, page (observed 2026-09-28, method: `reroll/harness.py`) |
+|---|---|---|---|---|
+| Kashikawa | 5.08 s | 3.39 s | 4.98 / 4.80 s | identical |
+| cohort 01 | 3.50 s | 2.18 s | 3.43 / 3.29 s | identical |
+| cohort 05 | 4.23 s | 2.73 s | 3.88 / 3.93 s | identical |
+| cohort 17 | 3.80 s | 2.67 s | 3.81 / 3.97 s | identical |
+| cohort 18 | 3.67 s | 2.42 s | 4.16 / 4.29 s | identical |
+| cohort 19 | 2.94 s | 1.75 s | 2.65 / 2.81 s | identical |
+
+A resumed re-roll is 1.1 to 1.7 s faster (about a third; observed 2026-09-28, method: the table's harness); the snapshot's copy costs the first roll no more than its own
+run-to-run spread (single runs each, so within noise either way).
+
+## R6 - What the moving levers did to the maps (2026-09-28)
+
 **The field search without its blind probe (FR-004), withdrawn.** It cut the field bucket's calls 2.1x on Inashiro and 3.0x
 on Sawada and the field stage from 1.51 to 1.06 s and from 2.89 to 2.21 s (measure.py after, back to back). But the fields it
 lands, within the same tolerance, are other fields, and the maps they move re-roll more often. Over the pool and cohort
