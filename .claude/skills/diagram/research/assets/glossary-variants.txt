@@ -75,6 +75,8 @@ asunaro	asunaro
 at grade	at grade
 autumn assize	assize
 auxiliary post duty	sukego
+awa	Awa
+awa province	Awa
 aze	bund
 aze-mame	azemame
 aze-zukuri	azezukuri
@@ -176,6 +178,8 @@ bishamon	Bishamon
 bishamonten	Bishamon
 bitchu	Bitchu
 bituminous coke	coke
+bizen	Bizen
+bizen province	Bizen
 black charcoal	black charcoal
 black-charcoal	black charcoal
 black-seal	shuinchi
@@ -1058,6 +1062,8 @@ hojo seibi	hojo seibi
 hojutsu	onmyodo
 hokaku sen	hokaku sen
 hokaku-sen	hokaku sen
+hoki	Hoki
+hoki province	Hoki
 hokke	Hokke
 hokke sect	Hokke
 hokora	hokora
@@ -1662,6 +1668,8 @@ middle moat	middle moat
 middle moats	middle moat
 military examination	military examination
 military examinations	military examination
+mimasaka	Mimasaka
+mimasaka province	Mimasaka
 mimizuka	ear mound
 miner's	siege mining
 ming	Ming dynasty

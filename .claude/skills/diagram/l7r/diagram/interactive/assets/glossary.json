@@ -11199,5 +11199,33 @@
    "lychee",
    "lychees"
   ]
+ },
+ "Bizen": {
+  "def": "An old province of Japan on the Inland Sea coast, in what is now the southeastern part of Okayama prefecture.",
+  "variants": [
+   "Bizen",
+   "Bizen province"
+  ]
+ },
+ "Mimasaka": {
+  "def": "An old inland province of Japan, north of Bizen, in what is now the northern part of Okayama prefecture.",
+  "variants": [
+   "Mimasaka",
+   "Mimasaka province"
+  ]
+ },
+ "Awa": {
+  "def": "The name of two old provinces of Japan: Awa (阿波) on Shikoku, now Tokushima prefecture, across the mountains from Sanuki; and Awa (安房) at the southern tip of the Boso peninsula, now part of Chiba prefecture.",
+  "variants": [
+   "Awa",
+   "Awa province"
+  ]
+ },
+ "Hoki": {
+  "def": "An old province of Japan on the Sea of Japan coast, in what is now the western part of Tottori prefecture.",
+  "variants": [
+   "Hoki",
+   "Hoki province"
+  ]
  }
 }
