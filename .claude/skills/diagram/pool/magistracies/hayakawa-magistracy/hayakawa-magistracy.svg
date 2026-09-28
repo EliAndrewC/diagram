@@ -431,7 +431,7 @@
   </g>
 
   <!-- Garden well -->
-  <g data-kind="well" data-part-of="garden">
+  <g data-kind="well" data-part-of="vegetable garden">
     <!-- at the bed's north-east corner, in the strip before the reception, where it waters the bed (feature 283) -->
     <rect x="676" y="325" width="24" height="24" fill="#9C8C70" stroke="#5C4830" stroke-width="1.2"/>
     <circle cx="688" cy="337" r="7" fill="#2D2A24"/>

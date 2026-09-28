@@ -30,6 +30,9 @@
    - garden: a pond garden (R30); the striking posts upright (R34).
    - clerks: their room is a room of the office hall (R20) - the freestanding duty room is gone.
    - landing: steps cut in the revetment across a bank street from the east gate (R42) - the timber pier is gone; the boatmen's shrine is a water-god (suijin) shrine (R41).
+   - vegetable garden (feature 283, research buildings 400 and 405): its SEAT a knob among the attested seats - west of the house, south beside the formal garden, the rear service ground, a parcel of its own - the sun ruling out every seat under six hours in the shoulder month; its SIZE a knob from a soup-greens plot (about 1,070 sq ft) to half the grounds; a SUN bed, not half-shade (the GM, 2026-09-28: "Move them all"). Drawn in rows over the ground it stands on, unscreened (no divider attested, a guess).
+   - rear service strip: two household storehouses (dozo), as the Matsushiro retainer's house kept two; plastered, no fire-water tub; their sizes a guess, no larger than the Takayama kitchen storehouse (about 740 sq ft).
+     This sheet: seat: south beside the formal garden, along the divider (the west and the rear are shaded by the kitchen and the house); size: the soup-greens plot.
 
 
 ## The river logistics story
@@ -58,7 +61,7 @@
 
 ## Review log
 
-- **2026-09-28 (feature 283, the garden's sun)**: the vegetable garden moved out of the rear strip, where the reception's shadow left it 1.5 h of direct sun in the shoulder month, to the NE corner of the south court below the reception's veranda, cut from the inner garden (88 x 80 px, about 780 sq ft as before; 9.5 h). The seat follows research buildings 405 - the seat is a knob and the sun decides it; here the west and the rear are all shaded, so the south is the one seat left. To make room the old pines went to the garden's NW corner above the pond, the well south to the garden's SE corner, and the roji's last two stones and the veranda stone 40 px west, still on the reception's veranda. The bed's size stays under the size knob's attested low end (a soup-greens plot of about 1,070 sq ft, research buildings 400): the corner holds no more without moving the roji.
+- **2026-09-28 (feature 283, the garden's sun; building-review round 1 applied)**: the vegetable garden moved out of the north rear strip, in the house's shade, to the SE corner of the south court, along the divider beyond the pond, an 8 ft strip of the garden kept before the reception (96 x 100 px, about 1,067 sq ft, the size knob's low end; 8 h). Round 1 had cut it from the garden's NE corner, where it took 72% of the reception's garden front (building-review): moved to the divider. The pines went to the garden's NW corner above the pond, the well to the bed's north-east corner in the strip before the reception, and the roji's last three stones became two with the veranda stone 40 px west, still on the reception's veranda. Two storehouses fill the rear strip the bed left, an 8 ft alley kept to the privies. Servants reach the bed from the service alley down the 13 ft strip between the house's east end and the shrine grove.
 - **2026-09-28 (the GM's ruling: no GM-only notes on a page)**: the salt wards came from the GM-only notes of Hajime's Obsidian Portal record, so they came off the sheet and its page - every door's pair, the gate pair and its caption, the note box, and the map note.
 - **2026-09-27 (building-review round 6)**: pass (the drawing); the practice-ground entry's rack sentence brought to the drawing.
 - **2026-09-27 (feature 267 pass 6, building-review round 5)**: the weapon rack against the bale yard's west edge, where its name has a free seat inside the yard (on the north edge its only seat was across the divider); `Hajime's quarters` in two lines, clear of its walls.
@@ -125,3 +128,5 @@
 - **boatmen's altar**: A small shrine to the water god, kept ashore by the crews who work the swift river.
 - **revetment**: The stone facing holds the bank against a swift river's floods.
 - **servants' quarters**: About ten domestic servants - cooks, grooms and cleaners - lodge in this range along the north wall, its doors on the service alley behind the house; the senior retainers keep their own houses in town, and the barracks holds only the duty watch.
+- **vegetable garden**: The household's bed stands in the south court along the divider, beyond the pond: the west and the rear of the house lie in the shade of the kitchen and the house, so the sunny south is the one seat left (research buildings 405).
+- **storehouse**: Two household storehouses in the shady rear, where the vegetable garden could not grow: a household kept its own storehouses, and the rear strip behind the house carried its service economy.

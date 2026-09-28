@@ -745,7 +745,7 @@
   
 
   <!-- Garden well -->
-  <g data-kind="well" data-part-of="garden">
+  <g data-kind="well" data-part-of="vegetable garden">
     <!-- moved west of the kitchen garden, below the writing pavilion (feature 283) -->
     <rect x="540" y="398" width="24" height="24" fill="#9C8C70" stroke="#5C4830" stroke-width="1.2"/>
     <circle cx="552" cy="410" r="7" fill="#2D2A24"/>
@@ -843,7 +843,7 @@
   <!-- RESIDENCE before INNER COURT: captions are seated in document order, and the court's name, first, took the
        one free seat against the house (feature 267 round 5) -->
   <text x="563.3" y="209.8" text-anchor="middle" font-size="11" font-weight="bold" fill="#5C4830" data-kind="residence">RESIDENCE</text>
-  <text x="629.0" y="341.1" text-anchor="middle" font-size="13" font-weight="bold" letter-spacing="2" fill="#5C4830" data-kind="inner court"><tspan x="629.0" dy="0.0">INNER</tspan><tspan x="629.0" dy="14.9">COURT</tspan></text>
+  <text x="668.0" y="211.1" text-anchor="middle" font-size="13" font-weight="bold" letter-spacing="2" fill="#5C4830" data-kind="inner court"><tspan x="668.0" dy="0.0">INNER</tspan><tspan x="668.0" dy="14.9">COURT</tspan></text>
   <text x="973.0" y="505.7" text-anchor="middle" font-size="11" font-weight="bold" letter-spacing="2" fill="#3A5A30" data-kind="border court"><tspan x="973.0" dy="0.0">BORDER</tspan><tspan x="973.0" dy="12.6">COURT</tspan></text>
   <g data-kind="outer court">
     <!-- the ground it names: the apron between the hearing court and the gate range, where the main gate lets onto

@@ -267,3 +267,18 @@ def test_a_caption_keeps_off_a_leader_placed_before_it() -> None:
     bx0, by0, bx1, by1 = sl.bbox(band)
     sx0, sy0, sx1, sy1 = sl.bbox(list(second.block))
     assert sx1 <= bx0 or bx1 <= sx0 or sy1 <= by0 or by1 <= sy0
+
+
+def test_a_bed_in_rows_is_no_seat_for_another_name() -> None:
+    """Feature 283: a worked bed's furrows run through a name's letters, so neither a court nesting it nor a neighbor
+    may set its name there; the bed's own name lies on it."""
+    src = _sheet(
+        '  <rect x="200" y="200" width="150" height="80" data-kind="inner court" fill="#D9C28E"/>\n'
+        '  <rect x="210" y="210" width="40" height="30" data-kind="vegetable garden" fill="url(#vegetable-rows)"/>\n'
+        '  <text x="300" y="260" font-size="9" data-kind="inner court">court</text>\n'
+        '  <rect x="400" y="210" width="40" height="30" data-kind="vegetable garden" fill="url(#vegetable-rows)"/>\n'
+        '  <rect x="450" y="210" width="20" height="20" data-kind="well" fill="#9C8C70"/>\n'
+        '  <text x="480" y="225" font-size="9" data-kind="well">well</text>\n',
+    )
+    assert _weights(src, "court")[(210, 210, 250, 240)] == (sl.WEIGHT_OBSTACLE, True), "nested, but in rows"
+    assert _weights(src, "well")[(400, 210, 440, 240)][0] == sl.WEIGHT_OBSTACLE, "a neighbor's bed is no free ground"

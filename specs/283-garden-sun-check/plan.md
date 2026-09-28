@@ -54,3 +54,19 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md).
 - XIV (fix where found): D5.
 - XVI (the literal thing): the check runs on the GM's class as answered ("Sheets only"); the four gardens move as
   chosen ("Move them all"), none declared half-shade.
+
+## Round 2 (after the building reviews, 2026-09-28)
+
+- **D8 - the reviews' findings** (FR-005): Hayakawa's bed to the divider beyond the pond (8 h, about 1,067 sq ft), the
+  well at its corner; every bed painted in `vegetable-rows` over a formal garden restored to its own shape (a map drawing
+  convention; `compound.py` draws the county example's bed the same way); two household storehouses in each magistracy's
+  rear strip (a `storehouse` kind, written from research buildings 400, 160 and 230), a 7-11 ft alley kept behind each
+  house; the shrine's bed 12 px south, clear of the clearing; `programs.md` and `buildings.md` put a kitchen garden in the
+  rear only where it gets its sun; notes, knob lists and Map notes restated; research buildings 405's open questions as
+  absence notes.
+- **D9 - tooling defects fixed where found** (constitution XIV): `pack_audit/parse.py` reads a filled rectilinear
+  `<path>` as its rects (even-odd slabs); `labels/placer.place` takes an optional `leader_index`, which only
+  `tools/seat_label.py` supplies (the other captions and glyphs under 600 px2), so the engine's maps are unchanged; a
+  `busy` fill (a bed's rows) is no seat for another name; `tests/_sheets.fresh` checks staleness under its lock. Each
+  with its unit test; the seat reports of every sheet compared against HEAD (only Ochiba's RESIDENCE moved).
+

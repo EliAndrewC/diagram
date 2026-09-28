@@ -53,6 +53,9 @@ WEIGHT_INNER = WEIGHT_OBSTACLE / 4
 earth before a garden inside it, and a garden before a building."""
 
 WEIGHT_DARK = 2 * WEIGHT_OBSTACLE
+BUSY_FILLS: frozenset[str] = frozenset({"url(#vegetable-rows)"})
+"""Fills a name cannot be read on even as nested ground: a worked bed's rows run through the letters (feature 283 - Ubame's
+INNER COURT, its seat above the house taken by the storehouses, went onto the kitchen garden's furrows)."""
 """What covering dark ink costs - a wall, a post, a dark roof (feature 267): black caption ink cannot be read on it,
 where on light ink it can, so a caption with no free seat takes light ink first. At one weight Hayakawa's practice
 ground's name, with no free seat in its ground, lay across the compound wall."""
@@ -152,6 +155,7 @@ class Shape:
     edge: float = 0.0  # a closed shape's drawn outline half-width (0 when it has none)
     texture: bool = False  # marked `data-texture` on the sheet: ink that is a feature's surface (a wing's shutter marks), not its parts
     filled: bool = False  # a closed shape painted with a fill (SVG's default fill is black), which hides what is under it
+    busy: bool = False  # painted in a banded fill (a worked bed's rows) that crosses a name's letters, however light its ground
     dark: bool = False  # drawn in dark ink - a line's stroke, a shape's fill - which black caption ink cannot be read on
 
 
@@ -243,6 +247,7 @@ def read_sheet(src: str) -> tuple[list[Shape], tuple[float, float, float, float]
                         filled=ink[1] != "none",
                         dark=_luma(ink[1]) < DARK,
                         texture=texture,
+                        busy=ink[1] in BUSY_FILLS,
                     )
                 )
         for c in el:
@@ -307,7 +312,7 @@ def classify(
             # quarters on one (round 4). Ground painted AFTER the caption is not light: it hides the name however open it
             # is (Hayakawa's vegetable bed cut from the inner garden's corner took the garden's name, feature 283)
             over = after is not None and i > after and s.filled and not s.line
-            light = (s.kind in GROUND_KINDS and s.kind != kind and not over) or s.texture
+            light = (s.kind in GROUND_KINDS and s.kind != kind and not over and not s.busy) or s.texture
 
             weight = WEIGHT_INNER if light else WEIGHT_TEXT if over else WEIGHT_OBSTACLE
             bands = [_band(a, b, max(s.half, 0.5)) for a, b in zip(s.poly, s.poly[1:], strict=False)] if s.line else [s.poly]
@@ -329,6 +334,8 @@ def classify(
             # surely as another name would (Hayakawa's weapon rack under the granary, feature 267)
             obstacles.append(Obstacle(tuple(s.poly), WEIGHT_TEXT))
 
+        elif s.busy and s.kind != kind:
+            obstacles.append(Obstacle(tuple(s.poly), WEIGHT_OBSTACLE))  # ground in rows no other name can be read on
         elif s.kind in GROUND_KINDS or _is_background(s, view):
             # a ground's drawn border is ink even where its floor is free space (Ochiba's RESIDENCE on the vegetable
             # garden's dashed edge, feature 267); the border of the ground a caption names is its own, and waived

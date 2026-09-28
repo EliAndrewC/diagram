@@ -102,6 +102,20 @@ and its reviews.
   `1,065 sq ft` (observed 2026-09-28; method: the bed's rect 102 x 94 px at 3 px a foot), the soup-greens plot of research buildings 400 (research.md R1); the rear strip held about `2,100 sq ft` (observed 2026-09-28; method: its rect 430 x 44 px at 3 px a foot). Hayakawa's bed, drawn at
   `780 sq ft` (observed 2026-09-28; method: its rect 88 x 80 px at 3 px a foot, as the rear strip's 160 x 44), under that
   low end, grows to it by moving the garden well out of the corner (constitution XIV).
+- **Round 1 of the building reviews applied (2026-09-28)**: Hayakawa's bed moved from the reception's garden front to
+  the divider beyond the pond; each bed is painted in rows over its formal garden, which keeps its own shape (a map
+  drawing convention - the bed reads as worked ground, not a compartment of the ornamental garden); the three rear
+  strips the beds left are filled by two household storehouses each (research buildings 400, 160 and 230: Matsushiro's
+  two dozo, Takayama's kitchen storehouse; a `storehouse` kind), a service alley kept behind each house; the shrine's
+  bed moved `12 px` south, clear of the swept clearing (observed 2026-09-28; method: the bed's rect). Screening, a bed's
+  order against the formal garden, a plot's fencing and a shrine keeper's plot were searched and are absence notes on
+  research buildings 405, the drawing labeled a guess. Measured in research.md R1.
+- **Found defects fixed on the way (constitution XIV)**: the sheet audit read no `<path>` fill, so Ochiba's L-shaped
+  garden was invisible to every fills-based check (it now reads a rectilinear path as the rects it covers); a hand
+  sheet's leader could cross another caption or end on a glyph (the placer takes an optional index of what a leader
+  may not touch, which only `make seat-label` passes - the engine's maps place as before); a name could be seated on a
+  bed's rows; and the Mode A sheet test read a generated sheet half-written by another worker (its staleness check now
+  runs under the lock).
 - **A found defect fixed (constitution XIV)**: the caption placer weighed ground painted after a caption, inside the
   ground the caption names, as open, and seated Hayakawa's garden name under the new bed; ground painted over a caption
   now weighs as a caption does (`tools/seat_label.py`, with its unit test). No other sheet's seats moved.

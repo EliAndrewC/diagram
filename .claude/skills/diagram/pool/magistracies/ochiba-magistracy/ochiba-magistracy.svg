@@ -488,7 +488,7 @@
        resolution already applied on the south side). Drawn BEFORE the shrine
        hall so the hall and its labels paint on top (same draw-order rule as
        Hayakawa's shrine grove). -->
-  <rect x="802" y="202" width="74" height="108" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3" data-kind="garden"/>
+  <rect x="802" y="202" width="74" height="96" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3" data-kind="garden"/>
 
   <!-- Inari shrine hall (east range, upper portion) - two altars under one roof.
        37x31 ft: still a commanding two-altar HALL (the priest-magistrate's
@@ -568,7 +568,8 @@
   </g>
 
   <!-- Inner garden (feature 267 pass 2): laid out BEFORE the reception and the guest room - the whole garden
-       (south) face of the re-massed house - and on east of the house below the karo's house. Visitors come on
+       (south) face of the re-massed house - and on east of the house below the karo's house, where the vegetable garden
+       is painted over its NE corner (feature 283). Visitors come on
        through the office's rear door and the nakamon, straight up to a stepping stone at the reception's veranda
        (research buildings 300, Takayama). -->
   <g data-kind="garden">
@@ -596,7 +597,7 @@
        residence court (a chief retainer never lodged in the lord's own wing;
        interior-audit historical correction 2026-07). feature 267 pass 2: moved
        from the divider (where it stood where the re-massed house's garden now
-       lies) to the ground east of the house, below the vegetable garden. -->
+       lies) to the ground east of the house; the vegetable garden stands below it since feature 283. -->
   <g data-kind="karo's house">
     <rect x="676" y="216" width="110" height="70" fill="#DDB87A" stroke="#5A3F1E" stroke-width="2"/>
     <!-- informal side entrance (a modest door flush in the wall, not a second genkan) on the WEST face, onto the
@@ -667,8 +668,8 @@
        half an hour of sun in the shoulder month, in the shadow of the house and the karo's house; the west and the
        rear are all shaded here, so the south is the one seat left. -->
   <g data-kind="vegetable garden">
-    <rect x="720" y="298" width="145" height="97" fill="url(#vegetable-rows)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
-    <text x="792.5" y="349.0" text-anchor="middle" font-size="9" font-style="italic" fill="#3A4E38">vegetable garden</text>
+    <rect x="720" y="298" width="140" height="97" fill="url(#vegetable-rows)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
+    <text x="790.0" y="349.0" text-anchor="middle" font-size="9" font-style="italic" fill="#3A4E38">vegetable garden</text>
   </g>
 
   
@@ -699,8 +700,8 @@
        finding, 2026-07-24; same coordinates, painted last) -->
   <!-- feature 267 pass 3: both nudged clear of the vegetable garden's dashed border, which they touched -->
   <text x="655.0" y="315.1" text-anchor="middle" font-size="13" font-weight="bold" letter-spacing="2" fill="#5C4830" data-kind="inner court"><tspan x="655.0" dy="0.0">INNER</tspan><tspan x="655.0" dy="14.9">COURT</tspan></text>
-  <text x="698.4" y="413.6" text-anchor="middle" font-size="11" font-weight="bold" letter-spacing="2" fill="#5C4830" data-kind="residence">RESIDENCE</text>
-    <line x1="652.1" y1="404.1" x2="610.7" y2="362.7" stroke="#5C4830" stroke-width="0.88" stroke-linecap="round" data-kind="residence" data-leader="1"/>
+  <text x="694.5" y="409.7" text-anchor="middle" font-size="11" font-weight="bold" letter-spacing="2" fill="#5C4830" data-kind="residence">RESIDENCE</text>
+    <line x1="648.2" y1="400.2" x2="610.7" y2="362.7" stroke="#5C4830" stroke-width="0.88" stroke-linecap="round" data-kind="residence" data-leader="1"/>
   <g fill="#8FB0C6" stroke="#3A5060" stroke-width="1" data-kind="fire-water tubs">
     <!-- feature 267 pass 2: the kitchen pair at the ell's corners (see pass 3 below), the residence's two at the block's east
          corners (the re-mass moved both), the gatehouse's at its shortened NW corner -->
