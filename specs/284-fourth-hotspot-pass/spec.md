@@ -213,9 +213,12 @@ added under FR-011's own rule ("whatever the after-profile shows"). What changed
 - **FR-005 withdrawn by its own rule** (research R5): the plot tests' edge walk in arrays is 3.6 times slower than the
   scalar walk over the same 3,310 calls on Sawada (0.312 s against 0.086 s), with the same verdicts; the vertices' pushes
   total 0.024 s scalar, under the loss already measured.
-- **FR-006's "parses the rest once" not taken**: with the scrub's and the marsh's structures carried to the page, the
-  parsing of every other class together measured at most 0.09 s over Kashikawa and Sawada (research R2's classes); the page
-  bucket met SC-004 without it (1.76x on Sawada, 1.77x on Kashikawa, the final measure.py after).
+- **FR-006's "parses the rest once" not taken, on its ceiling** (research R7): with the scrub's and the marsh's structures
+  carried to the page, the passes that re-read a string the page already read - the off-map cull and the hit copies - cost
+  0.051 s of Kashikawa's page and 0.059 s of Sawada's together (observed 2026-09-28, method: `parse/harness.py`, each pass
+  timed inside the page write, fastest of three, load 12.5 - a ceiling, since load inflates it); one parse could at most
+  remove those, about 1% of a roll. The merge itself (0.17-0.18 s) is work, not a re-parse. The page bucket met SC-004
+  without it (1.76x on Sawada, 1.77x on Kashikawa, the final measure.py after).
 - **FR-007's coarser lattice withdrawn**: at 24 px the entrance board stood on a straggler at its join, the rule
   `test_an_entrance_board_stands_on_the_approach_and_not_on_a_straggler_at_its_join` enforces, so the spacing stays 12 px
   (the reason at `BOARD_ALONG_STEP_PX`). In its place an exact lever: at the lane tiers the roadside rule keeps only the
@@ -251,11 +254,11 @@ added under FR-011's own rule ("whatever the after-profile shows"). What changed
   - SC-003, the field (1.0x): FR-004 and FR-005 were both withdrawn by measurement (research R5, R6); the field is the base's.
   - SC-005 on Inashiro (1.46x against 1.5x): the verge band holds its board, so the far band is never sampled, and what is
     left is the caption test and the fit of the verge seats; the notice stage is 0.544 -> 0.315 s.
-  - SC-007 on Kuwabata (2.39x against 3x): `edge_dist` fell from 32,850 calls to 912; the bucket counts the ring indexes'
+  - SC-007 on Kuwabata (2.39x against 3x): `edge_dist` fell from 32,850 calls to 910 (m:after-kuwabata-b-edge-scan-edge-dist); the bucket counts the ring indexes'
     own queries beneath the entries.
   - SC-009 on the grove fill and draw, the seam closing, the commons and the blade flush (1.0x, the grove draw 0.78x in calls
-    with its stage time unchanged, 0.692 -> 0.712 s): research R7 - sums of indexed lookups or shapely welds of about a
-    millisecond each, no scan left to index, the shapes the rule. The grove draw's crown grid (A6) is exact and its stage no slower;
+    with its stage time unchanged, 0.692 -> 0.712 s): research R7 - the grove draw is 2-3% of a build, and the seam
+    closing's moving levers are priced there (fewer welds breaks the doubled-bund rule; dropping its `simplify` buys 1-2%). The grove draw's crown grid (A6) is exact and its stage no slower;
     it asks more, smaller calls than the scan it replaced.
 - **FR-009 carried one more scan**: the track's `push_clear_of_fabric` asked every polygon's ring at every step; it asks only
   the polygons whose widened box holds the point (exact: tested against the old walk, and on all 72 of Sawada's calls).

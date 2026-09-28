@@ -1,6 +1,6 @@
 """Feature 284, SC-009's grove draw and seam closing: what each costs on the engine that ships - the grove draw
 (`_draw_grove`) with the share of its crown seat test (`CrownIndex.clear`), and the seam closing (`close_seams`) with its
-pocket welds (`_absorb`) - timed around the calls inside one build of Kashikawa and one of Sawada, fastest of three.
+pocket welds (`_absorb`) and the shapely steps a weld makes (`simplify`, `buffer`, `union`, over the whole build) - timed around the calls inside one build of Kashikawa and one of Sawada, fastest of three.
 
     make spec-harness SPEC=specs/284-fourth-hotspot-pass/grove OUT=<json>
 """
@@ -27,7 +27,9 @@ def test_grove() -> None:
     from l7r.diagram.waterfields import comb
     from l7r.diagram.waterfields.seams import close
 
-    targets = ((groves.GrovesMixin, "_draw_grove"), (woods.CrownIndex, "clear"), (comb, "close_seams"), (close, "_absorb"))  # each patched where it is CALLED from: both are bound by name at import
+    from shapely.geometry.base import BaseGeometry
+
+    targets = ((BaseGeometry, "simplify"), (BaseGeometry, "buffer"), (BaseGeometry, "union"), (groves.GrovesMixin, "_draw_grove"), (woods.CrownIndex, "clear"), (comb, "close_seams"), (close, "_absorb"))  # each patched where it is CALLED from: both are bound by name at import
     out: dict = {}
     for key, kw in SPECS.items():
         best: dict[str, float] = {}

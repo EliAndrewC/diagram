@@ -1,0 +1,19 @@
+{
+ "kashikawa": {
+  "drop_offmap": 0.0392,
+  "merge_primitives": 0.1697,
+  "hit_copies": 0.0116,
+  "marks_region": 0.1488,
+  "hit_layer": 0.0019,
+  "render_page": 0.5402
+ },
+ "sawada": {
+  "drop_offmap": 0.0451,
+  "merge_primitives": 0.1781,
+  "hit_copies": 0.0137,
+  "marks_region": 0.1173,
+  "hit_layer": 0.0023,
+  "render_page": 0.4957
+ },
+ "load": 12.48095703125
+}

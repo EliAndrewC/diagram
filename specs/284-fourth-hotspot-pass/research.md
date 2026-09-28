@@ -105,7 +105,7 @@ Twelve forked workers; the rows are `b2/results.json`):
 | 16 | 13 | 5 | 1 | cohort 10, 19, 21 [1, 3], Sawada | 289.9 |
 | 18 | 16 | 5 | 0 | cohort 01, 10, 18 [11, 0], 19, 21 | 388.2 |
 
-The first cell tried, 12, strands houses the 10 px lattice does not (two maps, each healed by a re-roll), so by the plan's
+The first cell tried, 12, strands houses the 10 px lattice does not (two maps, each healed by a re-roll; observed 2026-09-28, method: the table's harness), so by the plan's
 rule the largest cell before it is today's 10: **B2 is withdrawn**. The rolls are not faster at any coarser cell either:
 the router is a small share of a roll, and every extra stranding is a whole second build of the stages from the seats on.
 The rescue-rounds scenario is a homestead-seat scenario with no ways in it, so the lattice does not reach it.
@@ -143,6 +143,26 @@ Kashikawa, after A1-A8, B1 and B3). What is left is spread thin:
   (`merge_lines`, 0.09 s). No lever taken.
 - **The grove fill** (`village_grove`, 0.57 s on Sawada): its tests are the grove blocks' indexed lookups (`near`, `inside`,
   `hard`, each under 0.1 s), with the crown seat test on its grid since A6. No lever taken.
+- **The page's other parsing** (observed 2026-09-28, method: `parse/harness.py`, each page pass timed inside one finish of
+  Kashikawa and of Sawada, fastest of three, load 12.5; `parse/results.json`): with the blade slots read from their structures,
+  the passes that re-read a string the page already read - the off-map cull (`drop_offmap`) and the hit copies - take 0.051 s
+  and 0.059 s together; the merge (`merge_primitives`, 0.170 and 0.178 s) is work on the elements, not a second parse. One
+  shared parse could at most remove the first two - about 1% of a roll, a ceiling since the load inflates it.
+- **The grove draw** (`_draw_grove`; observed 2026-09-28, method: `grove/harness.py`, each call timed inside one build,
+  fastest of three, load 3.6; `grove/results.json`): 0.128 s of Kashikawa's 4.46 s build and 0.092 s of Sawada's 4.71 s,
+  its crown seat test 0.022 and 0.017 s of that. At 2-3% of a build, no change to it - a coarser crown lattice included,
+  which could at most remove the draw - makes a roll significantly faster.
+- **The seam closing, priced for a moving lever** (the same run): `close_seams` 0.890 s of Kashikawa's build and 1.628 s of
+  Sawada's, the welds (`_absorb`) 0.317 and 0.681 s. Every shapely step in the whole build together - `buffer` 0.281 and
+  0.352 s, `simplify` 0.041 and 0.084 s, `union` 0.028 and 0.054 s - is under half of it; the rest is the pass's own
+  ladder of repairs, each the fix for a rule: a strip left between two basins is a doubled bund
+  (`tests/waterfields/test_seams.py::test_a_thin_strip_between_two_basins_is_absorbed_not_left_as_a_doubled_bund`), a weld
+  that points a basin is refused (`...::test_absorb_leaves_the_scrap_bare_when_every_weld_would_make_a_real_needle`), a
+  crossing ring is refused (`...::test_a_repaired_crossing_ring_is_refused_when_its_raw_ring_is_a_needle`), and the
+  shipped hamlets carry no basin tapering to a point (`tests/gate/test_paddy_fabric.py`). The moving levers priced: weld
+  fewer pockets (leaves doubled bunds - the first rule), or drop the weld's tidying `simplify` (at most 0.041-0.084 s, 1-2%
+  of a build, and it would record rings with more vertices for nothing). Neither makes a roll significantly faster within
+  the rules.
 - **The geometry primitives**: `seg_dist` is called 312,391 times on Sawada (0.54 profiled s), from about 25 callers, none
   above 0.09 s. An index per caller would each buy under a tenth of a second.
 
@@ -200,17 +220,17 @@ map healed by its re-roll. **Kept.**
 | households seated, connectors drawn, failing rolls | 442, 29, 0 | 442, 29, 0 | 442, 29, 0 |
 | household bamboo strips | 140 | 120 | 120 |
 
-16.4 s (4.8%) faster in all, against a spread of 2.1 s. **The household bamboo falls 14%** - fewer on 13 maps, more on 3:
+16.4 s (4.8%) faster in all, against a spread of 2.1 s (observed 2026-09-28, method: the table's harness). **The household bamboo falls 14%** - fewer on 13 maps, more on 3:
 presence is rolled per farmstead from its position (a labeled GUESS at 60%, `HOUSEHOLD_BAMBOO_PREVALENCE`) and a strip is
 dropped where the farmstead has no room, so the moved houses leave fewer rolled-present farmsteads room. No rule is broken
 and no household loses its seat; recorded as the one systematic map change the levers make.
 
-**The coarser lattice (FR-003)**: R4 - it strands at 12 px on this engine too.
+**The coarser lattice (FR-003)**: R4 - it strands at 12 px on this engine too (observed 2026-09-28, method: `b2/harness.py`).
 
 **The pool, before (`5f15c65bd`) and after** (observed 2026-09-28, method: `make maps SCOPE=all`, the manifests compared with
 `git show` of the base's; every map seats every household, keeps its form - nucleated - and draws its connector):
 
-| map | roll | acres (target within 6%) | houses | ways (count / length px) | household bamboo |
+| map | roll | acres (target within 6%; observed 2026-09-28, method: the regenerated manifests) | houses | ways (count / length px) | household bamboo |
 |---|---|---|---|---|---|
 | Inashiro | 1 -> 1 | 19.62 -> 19.85 | moved | 8 / 5,608 -> 9 / 5,872 | 3 -> 8 |
 | Kashikawa | 1 -> 2 (re-rolled) | 25.22 -> 26.73 | moved | 13 / 7,082 -> 13 / 7,002 | 8 -> 6 |
@@ -243,6 +263,26 @@ Kashikawa, after A1-A8, B1 and B3). What is left is spread thin:
   (`merge_lines`, 0.09 s). No lever taken.
 - **The grove fill** (`village_grove`, 0.57 s on Sawada): its tests are the grove blocks' indexed lookups (`near`, `inside`,
   `hard`, each under 0.1 s), with the crown seat test on its grid since A6. No lever taken.
+- **The page's other parsing** (observed 2026-09-28, method: `parse/harness.py`, each page pass timed inside one finish of
+  Kashikawa and of Sawada, fastest of three, load 12.5; `parse/results.json`): with the blade slots read from their structures,
+  the passes that re-read a string the page already read - the off-map cull (`drop_offmap`) and the hit copies - take 0.051 s
+  and 0.059 s together; the merge (`merge_primitives`, 0.170 and 0.178 s) is work on the elements, not a second parse. One
+  shared parse could at most remove the first two - about 1% of a roll, a ceiling since the load inflates it.
+- **The grove draw** (`_draw_grove`; observed 2026-09-28, method: `grove/harness.py`, each call timed inside one build,
+  fastest of three, load 3.6; `grove/results.json`): 0.128 s of Kashikawa's 4.46 s build and 0.092 s of Sawada's 4.71 s,
+  its crown seat test 0.022 and 0.017 s of that. At 2-3% of a build, no change to it - a coarser crown lattice included,
+  which could at most remove the draw - makes a roll significantly faster.
+- **The seam closing, priced for a moving lever** (the same run): `close_seams` 0.890 s of Kashikawa's build and 1.628 s of
+  Sawada's, the welds (`_absorb`) 0.317 and 0.681 s. Every shapely step in the whole build together - `buffer` 0.281 and
+  0.352 s, `simplify` 0.041 and 0.084 s, `union` 0.028 and 0.054 s - is under half of it; the rest is the pass's own
+  ladder of repairs, each the fix for a rule: a strip left between two basins is a doubled bund
+  (`tests/waterfields/test_seams.py::test_a_thin_strip_between_two_basins_is_absorbed_not_left_as_a_doubled_bund`), a weld
+  that points a basin is refused (`...::test_absorb_leaves_the_scrap_bare_when_every_weld_would_make_a_real_needle`), a
+  crossing ring is refused (`...::test_a_repaired_crossing_ring_is_refused_when_its_raw_ring_is_a_needle`), and the
+  shipped hamlets carry no basin tapering to a point (`tests/gate/test_paddy_fabric.py`). The moving levers priced: weld
+  fewer pockets (leaves doubled bunds - the first rule), or drop the weld's tidying `simplify` (at most 0.041-0.084 s, 1-2%
+  of a build, and it would record rings with more vertices for nothing). Neither makes a roll significantly faster within
+  the rules.
 - **The geometry primitives**: `seg_dist` is called 312,391 times on Sawada (0.54 profiled s), from about 25 callers, none
   above 0.09 s. An index per caller would each buy under a tenth of a second.
 
