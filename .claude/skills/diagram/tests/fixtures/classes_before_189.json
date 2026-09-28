@@ -346,7 +346,7 @@
       "buckwheat": "The dooryard garden grows the household's vegetables beside the house; the buckwheat plot is a field crop on the dry hem above the paddy, worked in rows.",
       "millet": "The dooryard garden grows the household's vegetables beside the house; the millet plot is a field crop on the dry hem above the paddy, worked in rows.",
       "soy": "The dooryard garden grows the household's vegetables beside the house; the soybean plot is a field crop on the dry hem above the paddy, worked in rows.",
-      "threshing yard": "The threshing yard is bare, swept, tamped earth - a work floor for drying and threshing the harvest; the kitchen garden is tilled soil in planted rows. Both want sun, which is why neither is put in a neighbor's shadow."
+      "threshing yard": "The threshing yard is swept, tamped earth - a work floor for threshing the harvest, drawn covered in the straw mats its grain was dried on; the kitchen garden is tilled soil in planted rows. Both want sun, which is why neither is put in a neighbor's shadow."
     },
     "sources": [
       "not recorded"
@@ -829,17 +829,20 @@
   },
   "threshing yard": {
     "caveat": "the wet-rice CENTER is interpolated from the crop (rice is field-dried on racks first, so a paddy household needs less floor than the barley district the mat counts come from), and the sun corridor is derived from the read roof pitch.",
-    "covers": "`threshing_yards`",
-    "entry": "research/homesteads.html - 'How big was the work yard, and how did the sizes spread'; 'The threshing yard's sun, and how far a farmhouse shades'",
+    "covers": "`threshing_yards` - the floor, its mats, and the rack by the house where the harvest weather is changeable",
+    "entry": "research/homesteads.html - 'What lay in the work yard at harvest? Straw mats over the whole floor'; 'Did a village put its drying racks by the houses by custom, or because of its weather?'; 'How big was the work yard, and how did the sizes spread'; 'The threshing yard's sun, and how far a farmhouse shades'",
     "key": "threshing yard",
-    "label": "accurate",
+    "label": "convention",
     "label_note": "The size band and the spread's shape are read - Kitamoto's mat counts, and the lognormal that fits Kamikanai's 1771 house histogram; the wet-rice CENTER is interpolated from the crop (rice is field-dried on racks first, so a paddy household needs less floor than the barley district the mat counts come from), and the sun corridor is derived from the read roof pitch.",
     "name": "threshing yard",
     "siblings": {
-      "garden": "The threshing yard is bare, swept, tamped earth - a work floor for drying and threshing the harvest; the kitchen garden is tilled soil in planted rows. Both want sun, which is why neither is put in a neighbor's shadow."
+      "garden": "The threshing yard is swept, tamped earth - a work floor for threshing the harvest, drawn covered in the straw mats its grain was dried on; the kitchen garden is tilled soil in planted rows. Both want sun, which is why neither is put in a neighbor's shadow."
     },
     "sources": [
-      "not recorded"
+      "kitamoto-inakoki-niwa",
+      "kitamoto-mushiro-niwa",
+      "tobunken-mushiro",
+      "nishimura-makino-1959"
     ],
     "what": "A small tamped-earth work floor beside each farmhouse - swept bare, with a straw drying mat and a little rack for hanging sheaves. Households measured it in straw mats: 40 to 60 of them, two mats to the tsubo, so an ordinary yard is 20 to 30 tsubo and a few run past 50.",
     "why": "Threshing and drying were done per household, in the yard, and the yard needs sun: a thatched roof pitched at 45 degrees puts a minka's ridge at 20-22 feet, so no yard is placed in the shadow band south of a neighbor's wall. Its SIZE follows the crop the household must dry, which is why every yard on this map is different: each is rolled from a right-skewed spread about 18 tsubo (59.5 sq m), correlated with the household - a large farm overwhelmingly has a large yard, and the occasional mismatch is a fact about that farmstead."

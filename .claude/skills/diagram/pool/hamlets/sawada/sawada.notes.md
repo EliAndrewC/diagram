@@ -86,6 +86,7 @@ DIRECTION is not invented: it is the bearing of this map's own connector track w
 
 ### Features
 
+- **threshing yard**: This map declares changeable harvest weather - as the pool's exhibit of racks gathered by the houses, the form the record names for a coast of changeable autumn weather - so every household gathers its drying rack by the house, along one side of its yard in the half nearest the house.
 - **burial ground**: Sawada keeps none of its own: its dead lie in the main village's ground, by the shrine that is the setting's parish temple.
 
 ## 2026-08-17 - the fan-toe needle fix, and the tint threshold it collided with
@@ -947,3 +948,15 @@ Known open (settlement-review, 2026-09-28): four or five of the eight homestead 
 at fit zoom their culms read as grass under a tree - a draw-order question, since bamboo among the homestead's trees is
 the attested yashiki-rin form; and lane 11 stops
 about 25 ft behind a house's rear wall, the stub class recorded above.
+
+## 2026-09-28 (feature 282): the harvest yard drawn - mats over the floor, and racks by the houses; nothing placed moved
+
+Every threshing yard is now drawn as the harvest leaves it: straw mats of 3 by 6 ft laid in rows over the whole floor,
+most turned a little as if laid by hand and nudged off their rows where the gap leaves room, and the map draws between a third and two thirds of the mats that covered it, a mat or two fewer where the yard's outline or its rack leaves no room (a drawing convention - the real yard was covered, research homesteads 'What lay in the work yard at harvest?'). The old fixed center mat and the rack
+along each yard's south edge are gone. This map DECLARES changeable harvest weather (`harvest_weather="changeable"` in
+`sawada.gen.py`): it is the pool's exhibit of racks gathered by the houses, the form the record names for a coast of
+changeable autumn weather (research homesteads 'Did a village put its drying racks by the houses by custom, or because
+of its weather?'), so each yard carries a rack along one side in its map-north half, out of the drying floor's sun. The
+weather is declared, never rolled, so the random stream is untouched: the manifest diff is `mats` and `rack` on each
+yard, `meta.harvest_weather`, and each yard's outline recorded to a thousandth (no yard moved). The first settlement-review (2026-09-28) found the rack, drawn as an outlined box,
+read as the woodpile beside the same houses; it is now a straw-gold line with dark post dots.

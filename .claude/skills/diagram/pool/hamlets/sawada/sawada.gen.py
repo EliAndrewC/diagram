@@ -36,5 +36,8 @@ SKILL = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))  # <tree>/<tier>
 sys.path.insert(0, SKILL)
 from l7r.diagram.hamletgen import HamletSpec, generate  # noqa: E402
 
-report = generate(HamletSpec(name="Sawada", seed=24, households=19, down_deg=225, water_sink="offmap", intake="open", lane_web="alleys"), out_base=os.path.join(HERE, "sawada"))
+# THE HARVEST WEATHER IS CHANGEABLE HERE (feature 282): Sawada is the pool's exhibit of racks gathered by the houses, the
+# form the record names for a coast of changeable autumn weather (research homesteads 505); the weather is a fact of the
+# country, declared, and every other pool map takes the regional settled default.
+report = generate(HamletSpec(name="Sawada", seed=24, households=19, down_deg=225, water_sink="offmap", intake="open", lane_web="alleys", harvest_weather="changeable"), out_base=os.path.join(HERE, "sawada"))
 print(report.line())

@@ -8,26 +8,352 @@ from .._geom import edge_dist, point_in_poly, turn_about
 if TYPE_CHECKING:
     from ..core import Settlement
 
+# THE STRAW MAT, 3 x 6 ft (feature 282): the mushiro was woven about 3 shaku by 6 (90 x 180 cm; tobunken-mushiro), and a
+# yard at harvest was a floor of them - "mats were spread to fill the yard" (Kitamoto). Laid long side across the yard's
+# width, in rows (a GUESS: no page read says how they lay); what keeps the outer row off the floor's outline stroke is the
+# edge clearance below (settlement-review, Kashikawa, 2026-09-28).
+MAT_FT = (6.0, 3.0)
+# ...and every mat corner at least this far inside the floor's DRAWN outline, which `_quad` pulls in at its corners: the
+# rect inset alone left outer mats 0.1 ft off a pulled-in edge (measured on the pool's SVGs, 2026-09-28).
+MAT_EDGE_CLEAR_FT = 1.0
+MAT_SQ_FT = MAT_FT[0] * MAT_FT[1]
+# THE GAP LEFT BETWEEN DRAWN MATS, widest first (feature 282, a CONVENTION): a real yard's mats lay edge to edge, and drawn
+# so they read as a textured floor. A 2 ft gap on every side leaves each mat on its own - the 2 ft pitch alone is 45% of a
+# full cover - and a yard too small or too clipped (by its pulled-in corners and the rack) to reach a third of one at that
+# gap closes it a step at a time, never below 1 ft; a step that overshoots two thirds is thinned back evenly (FR-004).
+MAT_GAPS_FT = (2.0, 1.5, 1.0)
+# EACH MAT LAID BY HAND, NOT SET IN A PATTERN (settlement-reviews of 2026-09-28): every REGULAR layout read as paving - a
+# checkered half as pavers meeting at their corners (Sawada), square rows as a tiled grid (Inashiro), rows set over by half
+# a mat as brick bond (Kashikawa). So each mat is nudged off its row by up to this much and turned by up to this many
+# degrees, a positional draw from its row and column (never the map's random stream), and kept at its row position
+# wherever the nudge would carry it off the floor or onto the rack.
+MAT_JITTER_FT = 0.4
+MAT_SEARCH_STEP_FT = 0.25  # the grid the lattice's offset is searched on - every gap's pitch is a whole number of it
+MAT_STROKE_FT = 0.2  # half the mat outline's drawn width (0.4 at a hamlet's 1 ft to the px)
+MAT_INK_CLEAR_FT = 0.1  # bare ground left between two mats' drawn outlines, at the least
+MAT_PROBE_FT = 1e-6  # how far off a crossing the exact solve probes a region cut by the rack (a hair: far above the 1e-9 test tolerance)
+_PROBE_DIRS = tuple((math.cos(k * math.pi / 8), math.sin(k * math.pi / 8)) for k in range(16))
+MAT_JITTER_DEG = 10.0  # up to 10 degrees where the neighbors leave room: at 6 a corner swung under half a pixel at map scale (settlement-review, Mizuguchi, round 7)
+
+
+def _mat_hash(r: int, c: int, salt: float) -> float:
+    """A deterministic draw in [0, 1) for the mat in row `r`, column `c` - positional, like `Settlement._hjit`."""
+    v = math.sin(r * 12.9898 + c * 78.233 + salt * 37.719) * 43758.5453
+    return v - math.floor(v)
+
+
+def _mat_corners(x: float, y: float, mw: float, mh: float, a: float) -> list[tuple[float, float]]:
+    """The four corners of a mat whose unturned rect is (x, y, mw, mh), turned `a` degrees about its center."""
+    cx, cy, t = x + mw / 2.0, y + mh / 2.0, math.radians(a)
+    return [(cx + dx * math.cos(t) - dy * math.sin(t), cy + dx * math.sin(t) + dy * math.cos(t)) for dx, dy in ((-mw / 2, -mh / 2), (mw / 2, -mh / 2), (mw / 2, mh / 2), (-mw / 2, mh / 2))]
+
+
+# THE RACK BY THE HOUSE (feature 282): a line of posts and poles hung with sheaves, drawn 2.5 ft wide so it reads - a
+# map drawing CONVENTION (the real poles are inches thick) - and inset 2 ft from the yard's front edge and 1 ft from its side. It is
+# drawn as a straw-gold LINE of hung sheaves with dark post dots and no box: drawn first as an outlined box, it read as
+# the woodpile beside the same houses (settlement-review, Sawada, 2026-09-28).
+RACK_WIDTH_FT = 2.5
+RACK_INSET_FT = 2.0  # from the yard's front (house-facing) edge
+# ...but only 1 ft from its SIDE, so the rack stands in the slack the centered mat rows leave at the yard's flanks and does
+# not take a column of mats: at 2 ft it cost the smallest yards a third of their floor (Sawada's 20 x 14 ft yard drew 4 mats
+# of a floor of 6, the gate, 2026-09-28).
+RACK_SIDE_INSET_FT = 1.0
+RACK_MIN_FT = 4.0  # shorter than this and it is not drawn: a side clipped by the map-south rule to a stub reads as litter
+RACK_CLEAR_FT = 0.25  # the rack stops this far north of the yard's midline (the manifest rounds to 0.1 px)
+RACK_POST_FT = 6.0  # a post every ~6 ft (a GUESS within the attested racks: posts at even spacing, kotobank-hasa-nipponica)
+
+
+def mat_cells(
+    w: float, h: float, poly: list[tuple[float, float]], ftpx: float, keep_out: tuple[float, float, float, float] | None = None, salt: float = 0.0
+) -> list[tuple[float, float, float, float, float]]:
+    """The mats one yard draws, as (x, y, w, h, angle) in the yard's LOCAL, unturned frame (its center at 0,0): the
+    unturned rect and the degrees it is turned about its own center.
+
+    The real yard was covered edge to edge (40-60 mats), which at map scale reads as a textured floor rather than as mats,
+    so the drawing lays them in rows across the whole yard with a gap around each, each nudged and turned a little as if
+    laid by hand, a third to two thirds of a full cover - the GM's drawing convention (2026-09-28: "at this scale, we
+    can't render dozens of mats and have that be legible. So our threshing yard glyphs show a smaller number to give the
+    impression that there are many of them"). A mat is kept only if its four corners lie at least `MAT_EDGE_CLEAR_FT`
+    inside the yard's quad `poly` (local coords) and miss `keep_out` (the rack's footprint, x0, y0, x1, y1). The count is
+    held to at least a third of the yard's full cover (area / 18 sq ft; spec 282 FR-004) by closing the gap
+    (`MAT_GAPS_FT`), at the widest gap that reaches it; where none does, the gap that holds the most. At each gap the
+    lattice is tried as wide and as deep as the yard allows and one column and one row fewer, at every offset on a
+    quarter-foot grid, and the one that seats the most is kept, of equals the one nearest the center - a centered lattice
+    one column too wide lost both outer columns to the floor's pulled-in corners and drew half what fits
+    (settlement-reviews of round 7, Sawada and Kashikawa, 2026-09-28).
+    `salt` is the yard's own: the nudge and the turn are drawn per yard, not repeated from one to the next."""
+    mw, mh, clear = MAT_FT[0] / ftpx, MAT_FT[1] / ftpx, MAT_EDGE_CLEAR_FT / ftpx
+    floor = math.ceil((w * ftpx) * (h * ftpx) / MAT_SQ_FT / 3.0)
+
+    def fits(corners: list[tuple[float, float]]) -> bool:
+        if not all(point_in_poly(px, py, poly) and edge_dist(px, py, poly) >= clear for px, py in corners):
+            return False
+        xs, ys = [p[0] for p in corners], [p[1] for p in corners]
+        return keep_out is None or not (min(xs) < keep_out[2] and max(xs) > keep_out[0] and min(ys) < keep_out[3] and max(ys) > keep_out[1])
+
+    # WHICH MAT SPOTS FIT, ON A QUARTER-FOOT GRID, ONCE (spec-fidelity, amendment round 6, 2026-09-28): a lattice tried at a
+    # few offsets missed the one that fits a yard in a 0.2 ft band and drew it a third short; every gap's pitch (7, 7.5 and
+    # 8 ft across, 4, 4.5 and 5 ft down) is a whole number of quarter feet, so every lattice at every offset is a sum of
+    # lookups in this one table - the whole search, asked of the geometry once.
+    q = MAT_SEARCH_STEP_FT / ftpx
+    xs = [-w / 2.0 + i * q for i in range(int(w / q) + 1)]
+    ys = [-h / 2.0 + j * q for j in range(int(h / q) + 1)]
+    # each unturned mat's corners fall on the same grid (6 x 3 ft is 24 x 12 quarter feet), so the floor test is asked once
+    # per grid point and a mat's fit is four lookups plus the rack's box
+    cw, ch = round(MAT_FT[0] / MAT_SEARCH_STEP_FT), round(MAT_FT[1] / MAT_SEARCH_STEP_FT)
+    inside = [[point_in_poly(x, y, poly) and edge_dist(x, y, poly) >= clear for y in ys] for x in xs]
+
+    def spot(i: int, j: int) -> bool:
+        if i + cw >= len(xs) or j + ch >= len(ys) or not (inside[i][j] and inside[i + cw][j] and inside[i][j + ch] and inside[i + cw][j + ch]):
+            return False
+        x, y = xs[i], ys[j]
+        return keep_out is None or not (x < keep_out[2] and x + mw > keep_out[0] and y < keep_out[3] and y + mh > keep_out[1])
+
+    ok = [[spot(i, j) for j in range(len(ys))] for i in range(len(xs))]
+    best: list[tuple[float, float, float, float, float]] = []
+    for gap_ft in MAT_GAPS_FT:
+        px, py = round((MAT_FT[0] + gap_ft) / MAT_SEARCH_STEP_FT), round((MAT_FT[1] + gap_ft) / MAT_SEARCH_STEP_FT)
+        found: tuple[int, float, int, int, int, int] = (0, 0.0, 0, 0, 0, 0)  # count, -off-center, i0, j0, cols, rows
+        mc, mr = (len(xs) - 1) // px + 1, (len(ys) - 1) // py + 1  # the most columns and rows the yard's span allows
+        for nc in (mc, mc - 1):
+            for nr in (mr, mr - 1):
+                if nc < 1 or nr < 1 or nc * nr < found[0]:
+                    continue  # a smaller lattice than the best already found cannot seat as many
+                for i0 in range(len(xs) - (nc - 1) * px):
+                    for j0 in range(len(ys) - (nr - 1) * py):
+                        seated = [(xs[i0 + c * px], ys[j0 + r * py]) for c in range(nc) for r in range(nr) if ok[i0 + c * px][j0 + r * py]]
+                        if not seated or len(seated) < found[0]:
+                            continue
+                        # the most mats; of equals, the one whose SEATED mats sit nearest the yard's center (settlement-reviews of
+                        # round 9: scored on the whole lattice tried, a lattice with a row hanging off the floor won and its real
+                        # mats sat hard against the other side)
+                        cand = (len(seated), -_off_center(seated, mw, mh), i0, j0, nc, nr)
+                        if cand[:2] > found[:2]:
+                            found = cand
+        _n, _o, i0, j0, nc, nr = found
+        base = [(r, c, xs[i0 + c * px], ys[j0 + r * py]) for r in range(nr) for c in range(nc) if _n and ok[i0 + c * px][j0 + r * py]]
+        if len(base) < floor and gap_ft == MAT_GAPS_FT[-1]:
+            # THE LAST GAP IS SOLVED EXACTLY WHERE THE GRID FALLS SHORT (spec-fidelity, amendment round 7, 2026-09-28): a lattice
+            # that fits in a window narrower than the quarter-foot grid was missed, and a yard that CAN hold a third drew one
+            # short; so before a yard is let off with fewer, the lattice is solved exactly on the floor's own outline
+            exact = _exact_lattice(poly, clear, keep_out, mw, mh, (MAT_FT[0] + gap_ft) / ftpx, (MAT_FT[1] + gap_ft) / ftpx, w, h, len(base))
+            if len(exact) > len(base):
+                base = [b for b in exact if fits(_mat_corners(b[2], b[3], mw, mh, 0.0))]
+        mats = _lay_by_hand(base, mw, mh, ftpx, fits, salt)
+        if len(mats) > len(best):
+            best = mats
+        if len(mats) >= floor:
+            break
+    # A YARD THAT CANNOT HOLD A THIRD WITH ROOM ROUND EVERY MAT DRAWS AS MANY AS FIT AT 1 FT (spec 282 FR-004, amended
+    # 2026-09-28): the narrower steps were tried and each read as paving in the settlement-reviews - edge to edge (rounds 2
+    # and 3), and 0.5 ft (rounds 4 to 6: no room to lay a mat askew, even thinned). At 1 ft every mat keeps bare ground and
+    # room to lie askew; research.md R4 of spec 282 counts the pool's yards that still fall short.
+    return thin_evenly(best, max(1, math.floor((w * ftpx) * (h * ftpx) / MAT_SQ_FT * 2.0 / 3.0)))
+
+
+def _off_center(seated: list[tuple[float, float]], mw: float, mh: float) -> float:
+    """How far the box round the seated mats (their unturned origins, each `mw` x `mh`) sits off the yard's center."""
+    x0, x1 = min(p[0] for p in seated), max(p[0] for p in seated) + mw
+    y0, y1 = min(p[1] for p in seated), max(p[1] for p in seated) + mh
+    return abs((x0 + x1) / 2.0) + abs((y0 + y1) / 2.0)
+
+
+def _exact_lattice(
+    poly: list[tuple[float, float]], clear: float, keep: tuple[float, float, float, float] | None, mw: float, mh: float, pw: float, ph: float, w: float, h: float, beat: int
+) -> list[tuple[int, int, float, float]]:
+    """The lattice (pitch `pw` x `ph`) seating the most unturned `mw` x `mh` mats, found EXACTLY - no step anywhere
+    (spec-fidelity, amendment round 8, 2026-09-28: a y grid of 0.02 ft missed a lattice that fits in a band thinner than
+    that, just below a rack's end). Whether a lattice spot seats is a set of linear conditions on the lattice's origin:
+    each corner stays `clear` inside the convex `poly` (a corner is `clear` inside a convex polygon exactly where it is
+    inside the polygon every edge of which is moved in by `clear`), and the mat misses `keep`. The seated count is
+    constant between those conditions' lines, so its largest value is reached at a crossing of two of them; every
+    crossing, and a hair to each side of it, is tried. Returns [] unless it seats more than `beat`; of equals, the lattice
+    whose seated mats sit nearest the yard's center."""
+    import numpy as np
+
+    area = sum(poly[i][0] * poly[(i + 1) % len(poly)][1] - poly[(i + 1) % len(poly)][0] * poly[i][1] for i in range(len(poly)))
+    sign = 1.0 if area > 0 else -1.0
+    edges = []
+    for i in range(len(poly)):
+        (ax, ay), (bx, by) = poly[i], poly[(i + 1) % len(poly)]
+        ln = math.hypot(bx - ax, by - ay)
+        nx, ny = sign * (by - ay) / ln, -sign * (bx - ax) / ln  # the outward normal
+        edges.append((nx, ny, nx * ax + ny * ay - clear))  # inside, moved in: nx*x + ny*y <= c
+    corners = ((0.0, 0.0), (mw, 0.0), (0.0, mh), (mw, mh))
+    best: tuple[int, float, list[tuple[int, int, float, float]]] = (beat, 0.0, [])
+    for nr in range(1, int(h // ph) + 2):
+        for nc in range(1, int(w // pw) + 2):
+            if nc * nr <= best[0]:
+                continue
+            spots = [(r, c, c * pw, r * ph) for r in range(nr) for c in range(nc)]
+            # every condition as a line a*ox + b*oy = k on the origin (ox, oy)
+            lines = [(nx, ny, ce - nx * (tx + dx) - ny * (ty + dy)) for _r, _c, tx, ty in spots for dx, dy in corners for nx, ny, ce in edges]
+            if keep is not None:
+                for _r, _c, tx, ty in spots:
+                    lines += [(1.0, 0.0, keep[2] - tx), (1.0, 0.0, keep[0] - mw - tx), (0.0, 1.0, keep[3] - ty), (0.0, 1.0, keep[1] - mh - ty)]
+            lines += [(1.0, 0.0, -w / 2.0), (1.0, 0.0, w / 2.0), (0.0, 1.0, -h / 2.0), (0.0, 1.0, h / 2.0)]
+            A = np.array(lines)
+            a1, a2 = np.triu_indices(len(A), 1)
+            det = A[a1, 0] * A[a2, 1] - A[a1, 1] * A[a2, 0]
+            ok = np.abs(det) > 1e-12
+            a1, a2, det = a1[ok], a2[ok], det[ok]
+            ox = (A[a1, 2] * A[a2, 1] - A[a1, 1] * A[a2, 2]) / det
+            oy = (A[a1, 0] * A[a2, 2] - A[a1, 2] * A[a2, 0]) / det
+            inbox = (ox >= -w / 2.0 - 1e-9) & (ox <= w / 2.0 + 1e-9) & (oy >= -h / 2.0 - 1e-9) & (oy <= h / 2.0 + 1e-9)
+            ox, oy = ox[inbox], oy[inbox]
+
+            def seats(ox: Any, oy: Any, tol: float, spots: list[tuple[int, int, float, float]] = spots) -> Any:
+                # which spots seat at each origin; `tol` > 0 counts a spot on its boundary (closed), < 0 only well inside
+                seat = np.ones((len(spots), len(ox)), bool)
+                for k, (_r, _c, tx, ty) in enumerate(spots):
+                    for dx, dy in corners:
+                        for nx, ny, ce in edges:
+                            seat[k] &= nx * (ox + tx + dx) + ny * (oy + ty + dy) <= ce + tol
+                    if keep is not None:
+                        x, y = ox + tx, oy + ty
+                        seat[k] &= ~((x < keep[2] - tol) & (x + mw > keep[0] + tol) & (y < keep[3] - tol) & (y + mh > keep[1] + tol))
+                return seat
+
+            # each region where one set of spots seats is convex, and its corners are crossings; the crossings are grouped
+            # by the set they seat on its closed boundary, and each group's centroid - inside its region - is where the
+            # set is confirmed with every spot well inside, so a region however thin is found and none is claimed falsely
+            closed = seats(ox, oy, 1e-9)
+            live = closed.sum(axis=0) > best[0]
+            if not live.any():
+                continue
+            _sets, which = np.unique(closed[:, live].T, axis=0, return_inverse=True)
+            which = which.ravel()
+            size = np.bincount(which)
+            cx = np.bincount(which, weights=ox[live]) / size
+            cy = np.bincount(which, weights=oy[live]) / size
+            if keep is not None:
+                # missing the rack is a union of four half-planes, so a region can be an L whose centroid lies in the
+                # cut-out corner (spec-fidelity, amendment round 9: a 10 x 7 ft yard drew 0 where 1 fits); a hair to
+                # each side of every crossing lies inside each region meeting it, however it is cut
+                hx, hy = ox[live], oy[live]
+                cx = np.concatenate([cx] + [hx + MAT_PROBE_FT * dx for dx, dy in _PROBE_DIRS])
+                cy = np.concatenate([cy] + [hy + MAT_PROBE_FT * dy for dx, dy in _PROBE_DIRS])
+            strict = seats(cx, cy, -1e-9)
+            for q in range(len(cx)):
+                n = int(strict[:, q].sum())
+                if n > best[0] or (n == best[0] and best[2]):
+                    seated = [(r, c, float(cx[q]) + tx, float(cy[q]) + ty) for k, (r, c, tx, ty) in enumerate(spots) if strict[k, q]]
+                    off = _off_center([(sx, sy) for _r, _c, sx, sy in seated], mw, mh)
+                    if n > best[0] or off < best[1]:
+                        best = (n, off, seated)
+    return best[2]
+
+
+def _quad_gap(a: list[tuple[float, float]], b: list[tuple[float, float]]) -> float:
+    """The gap between two convex quads: the least corner-to-edge distance either way, 0 where a corner of one is inside
+    the other."""
+    if any(point_in_poly(px, py, b) for px, py in a) or any(point_in_poly(px, py, a) for px, py in b):
+        return 0.0
+    return min(min(edge_dist(px, py, b) for px, py in a), min(edge_dist(px, py, a) for px, py in b))
+
+
+def _lay_by_hand(base: list[tuple[int, int, float, float]], mw: float, mh: float, ftpx: float, fits: Any, salt: float = 0.0) -> list[tuple[float, float, float, float, float]]:
+    """Set each mat of the lattice `base` (row, column, x, y) down by hand: nudged up to `MAT_JITTER_FT` and turned up to
+    `MAT_JITTER_DEG` by a positional draw, and kept so only where its corners still fit the floor (`fits`) and its drawn
+    outline stays `MAT_INK_CLEAR_FT` clear of every neighbor's - the mats already laid and the lattice spots still to come.
+    Where the full draw does not fit, the same turn with no nudge, then half the turn, then the lattice spot unturned.
+
+    ONE BUDGET PER MAT, NOT A FORMULA PER GAP (settlement-reviews of round 6, 2026-09-28): a turn limit derived from the
+    gap and the nudge fell to nothing at the 1 ft step as well as the 0.5 ft one, and six to eleven yards a map drew a rigid
+    grid again; asking each mat whether its own turn fits beside its own neighbors keeps the turn wherever there is room."""
+    need = (MAT_INK_CLEAR_FT + 2 * MAT_STROKE_FT) / ftpx
+    laid: list[tuple[float, float, float, float, float]] = []
+    quads: list[list[tuple[float, float]]] = []
+    for k, (r, c, x, y) in enumerate(base):
+        dx, dy = (2 * _mat_hash(r, c, salt + 1.0) - 1) * MAT_JITTER_FT / ftpx, (2 * _mat_hash(r, c, salt + 2.0) - 1) * MAT_JITTER_FT / ftpx
+        a = (2 * _mat_hash(r, c, salt + 3.0) - 1) * MAT_JITTER_DEG
+        ahead = [_mat_corners(bx, by, mw, mh, 0.0) for _r, _c, bx, by in base[k + 1 :]]
+        for jx, jy, ja in ((x + dx, y + dy, a), (x, y, a), (x, y, a / 2.0), (x, y, 0.0)):
+            q = _mat_corners(jx, jy, mw, mh, ja)
+            if ja == 0.0 or (fits(q) and all(_quad_gap(q, o) >= need for o in quads + ahead)):
+                laid.append((jx, jy, mw, mh, ja))
+                quads.append(q)
+                break
+    return laid
+
+
+def thin_evenly(items: list[Any], cap: int) -> list[Any]:
+    """`items` cut to `cap`, dropping evenly across the list rather than from one end (centered picks, so the drops fall
+    mid-yard). The mats' two-thirds ceiling (spec 282 FR-004): a step that closes the gap can more than double a small
+    yard's count, and this is what holds it under two thirds whatever the step."""
+    if len(items) <= cap:
+        return items
+    step = len(items) / cap
+    return [items[int((i + 0.5) * step)] for i in range(cap)]
+
+
+def rack_segment(w: float, h: float, rot: float, ftpx: float, side: int) -> tuple[float, float, float, float] | None:
+    """The rack by the house, as (x, y0, y1, half width) in the yard's LOCAL frame, or None where no side takes one.
+
+    It runs along one of the yard's two side edges (local x = +/-), from the edge facing the house (local north) toward
+    the middle, and never past it: the half nearest the house (505's GUESS - the sources are silent on the side). It must
+    also stay out of the yard's MAP-south half, because the drying floor needs the sun from the south (entry 030) - and
+    that is solved in MAP coordinates, after the house's rake `rot`, so it holds for any turn (a quarter-turned homestead
+    included): a local point (x, y) lies map-south of the yard's center by x sin(rot) + y cos(rot), and every corner of the
+    rack's footprint must keep that at or below zero. `side` (+1 east, -1 west, in the local frame) is tried first.
+
+    THE HALF NEAREST THE HOUSE YIELDS BEFORE THE KNOB DOES (plan review, 2026-09-28): it is our guess, while the knob is
+    the research's - where the weather is changeable EVERY farmstead gathers its rack by the house - so where neither side's
+    near half leaves `RACK_MIN_FT`, the whole side is tried, still held off the map-south half. Some part of one side edge
+    always lies map-north of the center, so a yard of the sizes the roll makes always takes a rack."""
+    th = math.radians(rot)
+    s, c = math.sin(th), math.cos(th)
+    hw, inset, minlen = RACK_WIDTH_FT / 2.0 / ftpx, RACK_INSET_FT / ftpx, RACK_MIN_FT / ftpx
+    for far, sd in ((0.0, side), (0.0, -side), (h / 2.0 - inset, side), (h / 2.0 - inset, -side)):
+        x = sd * (w / 2.0 - RACK_SIDE_INSET_FT / ftpx - hw)
+        lo, hi = -h / 2.0 + inset, far
+        for xp in (x - hw, x + hw):  # each long edge of the footprint: y * c <= -xp * s
+            k = -xp * s - RACK_CLEAR_FT / ftpx  # a hair north of the midline, so the manifest's rounding cannot carry it over
+            if abs(c) < 1e-9:
+                if k < 0.0:
+                    hi = lo - 1.0  # this side lies map-south of the center along its whole length
+            elif c > 0.0:
+                hi = min(hi, k / c)
+            else:
+                lo = max(lo, k / c)
+        if hi - lo >= minlen:
+            return (x, lo, hi, hw)
+    return None
+
 
 class ThreshingYardsMixin:
-    def _draw_threshing_yard(self: Settlement, cx: float, cy: float, w: float, h: float, poly: Any, rot: float = 0.0) -> None:  # type: ignore[misc]
-        """Draw one small tamped earthen threshing/drying yard (a straw mat + a little hazakake rack). The
-        outer footprint is a slightly-irregular quad (`poly`, absolute corner coords, UNTURNED) - a swept work
-        surface stays NEAR-square; interior detail is laid out in the local (w,h) frame, and the whole group
-        is turned by `rot`, its farmhouse's rake."""
-        x0, y0 = -w / 2, -h / 2
+    def _draw_threshing_yard(self: Settlement, cx: float, cy: float, w: float, h: float, poly: Any, rot: float = 0.0) -> dict[str, Any]:  # type: ignore[misc]
+        """Draw one tamped earthen threshing yard as the harvest leaves it (feature 282): a floor of straw mats, and a
+        rack by the house where the settlement's harvest weather is changeable. The outer footprint is a
+        slightly-irregular quad (`poly`, absolute corner coords, UNTURNED); the interior is laid out in the local (w,h)
+        frame and the whole group turned by `rot`, its farmhouse's rake. Returns what it drew for the manifest: `mats`
+        (the count) and, with a rack, `rack` (its footprint's four corners in MAP coordinates)."""
         g = [f'<g transform="translate({cx:.1f},{cy:.1f}) rotate({rot:.2f})">']
-        pts = " ".join(f"{px - cx:.1f},{py - cy:.1f}" for px, py in poly)
+        local = [(px - cx, py - cy) for px, py in poly]
+        pts = " ".join(f"{px:.1f},{py:.1f}" for px, py in local)
         g.append(f'<polygon points="{pts}" fill="#D2BE94" stroke="#A98E54" stroke-width="1.5"/>')  # tamped earthen floor
-        g.append(f'<rect x="{x0 + 3:.0f}" y="{y0 + 3:.0f}" width="{w - 6:.0f}" height="{h - 6:.0f}" rx="1.5" fill="none" stroke="#BBA06E" stroke-width="0.7" opacity="0.6"/>')  # swept rim
-        g.append('<rect x="-7" y="-6" width="14" height="9" rx="1" fill="#E2D2A2" stroke="#A98E54" stroke-width="0.6" opacity="0.9"/>')  # a straw drying mat
-        ry = h / 2 - 3  # a little drying rack (hazakake) along the floor's lower edge
-        g.append(f'<line x1="{x0 + 4:.1f}" y1="{ry:.1f}" x2="{-x0 - 4:.1f}" y2="{ry:.1f}" stroke="#7A5A30" stroke-width="1.2"/>')
-        g.append(f'<line x1="{x0 + 4:.1f}" y1="{ry - 3:.1f}" x2="{-x0 - 4:.1f}" y2="{ry - 3:.1f}" stroke="#7A5A30" stroke-width="1.0"/>')
-        for px in (x0 + 4, 0.0, -x0 - 4):  # posts + a few hung sheaves
-            g.append(f'<line x1="{px:.1f}" y1="{ry - 5:.1f}" x2="{px:.1f}" y2="{ry + 3:.1f}" stroke="#5A3F1E" stroke-width="1.2"/>')
+        rack = rack_segment(w, h, rot, self.ftpx, 1 if self._hjit(cx, cy, 53.0) < 0.5 else -1) if self._house_racks else None
+        pad = 0.25 / self.ftpx  # the mats keep a quarter foot off the rack - a wider margin cost the smallest yards a column
+        keep = (rack[0] - rack[3] - pad, rack[1] - pad, rack[0] + rack[3] + pad, rack[2] + pad) if rack else None
+        mats = mat_cells(w, h, local, self.ftpx, keep, salt=round(self._hjit(cx, cy, 61.0) * 997.0, 3))  # the yard's own draw
+        for mx, my, mw, mh, ma in mats:  # straw mats (mushiro), a third to two thirds of those that covered the floor, each laid by hand - a CONVENTION
+            turn = f' transform="rotate({ma:.1f} {mx + mw / 2:.2f} {my + mh / 2:.2f})"' if ma else ""
+            g.append(f'<rect x="{mx:.2f}" y="{my:.2f}" width="{mw:.2f}" height="{mh:.2f}"{turn} fill="#E4CC86" stroke="#C4A45E" stroke-width="0.4"/>')
+        out: dict[str, Any] = {"mats": len(mats)}
+        if rack:
+            x, y0, y1, hw = rack
+            g.append(f'<line x1="{x:.2f}" y1="{y0:.2f}" x2="{x:.2f}" y2="{y1:.2f}" stroke="#D9B64A" stroke-width="{2 * hw:.2f}"/>')  # hung sheaves
+            g.append(f'<line x1="{x:.2f}" y1="{y0:.2f}" x2="{x:.2f}" y2="{y1:.2f}" stroke="#6B4A22" stroke-width="0.5"/>')  # the pole
+            n = max(1, round((y1 - y0) * self.ftpx / RACK_POST_FT))
+            for i in range(n + 1):  # the posts, as dots
+                g.append(f'<circle cx="{x:.2f}" cy="{y0 + (y1 - y0) * i / n:.2f}" r="{hw * 0.55:.2f}" fill="#5A3F1E"/>')
+            th = math.radians(rot)
+            out["rack"] = [
+                [round(cx + px * math.cos(th) - py * math.sin(th), 2), round(cy + px * math.sin(th) + py * math.cos(th), 2)] for px, py in ((x - hw, y0), (x + hw, y0), (x + hw, y1), (x - hw, y1))
+            ]
         g.append('</g>')
         self.add(''.join(g), cls="threshing yard")
+        return out
 
     def _yard_fits(self: Settlement, x: float, y: float, w: float, h: float, hx: float, hy: float) -> bool:  # type: ignore[misc]
         """A threshing yard fits where it is in-bounds, on DRY ground (clear of paddies / blocks),
@@ -175,8 +501,7 @@ class ThreshingYardsMixin:
         # ask. Only the ink goes: no swept floor, no bordered frame. `harvest_yards_present` reads
         # `meta.work_yards` and stands aside; the interactive class `threshing yard` has no ink here.
         _fore = not getattr(self, "_work_yards", True)
-        if not _fore:
-            self._draw_threshing_yard(ox, oy, yw, yh, flat, rot)
+        drawn = {} if _fore else self._draw_threshing_yard(ox, oy, yw, yh, flat, rot)  # its mats and rack, for the manifest (feature 282)
         self.M["threshing_yards"].append(
             {
                 "x": round(ox, 1),
@@ -185,8 +510,9 @@ class ThreshingYardsMixin:
                 "h": yh,
                 "rot": round(rot, 2),
                 "of": [hx, hy],
-                "poly": [[round(px, 1), round(py, 1)] for px, py in poly],
+                "poly": [[round(px, 3), round(py, 3)] for px, py in poly],  # to a thousandth, so a check can re-derive the mats (feature 282)
                 **({"kind": "forecourt"} if _fore else {}),
+                **drawn,
             }
         )
         self.placed.append((ox, oy, yw, yh))
