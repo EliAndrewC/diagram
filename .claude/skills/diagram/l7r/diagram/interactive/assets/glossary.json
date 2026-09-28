@@ -1944,7 +1944,8 @@
  "idoyakata": {
   "def": "The well house: posts set beside a well with a roof laid over them and nothing more.",
   "variants": [
-   "idoyakata"
+   "idoyakata",
+   "ido-yakata"
   ]
  },
  "igeta": {
@@ -3540,7 +3541,7 @@
   ]
  },
  "shoya": {
-  "def": "A village headman: the villager who answered to the domain for the village's taxes, registers and order.",
+  "def": "A village headman: the villager who answered to the domain for the village's taxes, registers and order. In a town the same title (nanushi) named a ward headman, who answered for their ward in the same way.",
   "variants": [
    "shoya",
    "nanushi",
@@ -4110,7 +4111,9 @@
  "well-sweep": {
   "def": "A counterweighted pole pivoted on a post beside a well, swung down to dip the bucket and up to raise it.",
   "variants": [
-   "well-sweep"
+   "well-sweep",
+   "sweep well",
+   "sweep-type well"
   ]
  },
  "wengcheng": {
@@ -7503,9 +7506,12 @@
   ]
  },
  "toshiyori": {
-  "def": "At a post station, the deputy officers who helped the headman run the relay office (toiyaba).",
+  "def": "An elder: at a post station, the deputy officers who helped the headman run the relay office (toiyaba); in a castle town, the town elder (machi-doshiyori), the leading townsman who ran the town's commoner affairs for the lord.",
   "variants": [
-   "toshiyori"
+   "toshiyori",
+   "machi-doshiyori",
+   "town elder",
+   "town elders"
   ]
  },
  "chōtsuke": {
@@ -9058,6 +9064,63 @@
    "sensei"
   ]
  },
+ "ritsuryo": {
+  "def": "The ancient Japanese state's codes of law and government, modeled on China's; under them the capitals were run ward by ward, with a head over each ward who checked its households and pressed its labor levies.",
+  "variants": [
+   "ritsuryo",
+   "ritsuryo system",
+   "ritsuryō"
+  ]
+ },
+ "time bell": {
+  "def": "A bell rung at set hours to tell a city the time; in Edo its upkeep was one of the running costs the wards paid.",
+  "variants": [
+   "time bell",
+   "time bells"
+  ]
+ },
+ "fire brigade's standard": {
+  "def": "The emblem on a pole that a town's fire brigade carried as its sign (Japanese *matoi*); in Edo the wards shared its cost.",
+  "variants": [
+   "fire brigade's standard",
+   "fire brigade's standards",
+   "fire standard"
+  ]
+ },
+ "bo": {
+  "def": "A ward of an ancient Japanese capital's grid, bounded by the main streets and cut by lanes into blocks (machi); 90 jo on a side at Fujiwara-kyo and 180 jo at Heijo-kyo.",
+  "variants": [
+   "bo"
+  ]
+ },
+ "Fujiwara-kyo": {
+  "def": "The earliest of Japan's gridded capitals, before Heijo-kyo and Heian-kyo, whose wards were 90 jo on a side, each cut into four blocks.",
+  "variants": [
+   "Fujiwara-kyo",
+   "Fujiwara"
+  ]
+ },
+ "jobo": {
+  "def": "The grid plan of the ancient Japanese capitals: east-west rows (jo) and north-south columns of wards (bo), each ward cut by lanes into blocks (machi).",
+  "variants": [
+   "jobo",
+   "jobo system"
+  ]
+ },
+ "Taiho code": {
+  "def": "An early Japanese law code from which the plan of the capital Fujiwara-kyo is inferred.",
+  "variants": [
+   "Taiho code",
+   "Taiho"
+  ]
+ },
+ "shigyo-hachimon": {
+  "def": "The Heian capital's rule for dividing a block (machi) into 32 house lots, four across by eight down, each 5 jo by 10 jo, facing the north-south streets.",
+  "variants": [
+   "shigyo-hachimon",
+   "shigyo-hachimon system"
+  ]
+ },
  "eel's bed": {
   "def": "A town lot with a narrow frontage on the street and a long depth behind it, like the Kyoto town-house lots about 3 ken wide; the phrase translates the Japanese name for such a plot.",
   "variants": [
@@ -9084,10 +9147,47 @@
    "xunjiansi"
   ]
  },
+ "Genji": {
+  "def": "A Japanese era name, 1864-1865. The great fire of Genji burned much of Kyoto in the summer of 1864.",
+  "variants": [
+   "Genji"
+  ]
+ },
+ "back-to-back drain": {
+  "def": "The open drain running down the middle of a block, where the back lots of the houses facing two parallel streets meet; in a castle town it often also marks the boundary between wards.",
+  "variants": [
+   "back-to-back drain",
+   "back-to-back drains"
+  ]
+ },
  "kuchidome bansho": {
   "def": "A domain's own barrier post of the Edo period, set on its borders and at key points of traffic to watch travelers and goods and collect a duty - a domain's answer to the shogunate's barrier stations.",
   "variants": [
    "kuchidome bansho"
+  ]
+ },
+ "ogashoya": {
+  "def": "A senior headman set over a group of villages, above the ordinary shoya - one of the commoner offices that did the auxiliary work of rule, and so could be granted a warrior's privileges.",
+  "variants": [
+   "ogashoya",
+   "ōgashoya",
+   "ojoya"
+  ]
+ },
+ "sword hunt": {
+  "def": "The state policy that took weapons from farmers, after which carrying a sword became in principle a privilege of the warrior status alone.",
+  "variants": [
+   "sword hunt",
+   "sword hunts",
+   "katanagari"
+  ]
+ },
+ "purveyor merchant": {
+  "def": "A merchant house licensed to supply a daimyo or the shogunate - one of the commoner groups that could be granted the surname and the sword.",
+  "variants": [
+   "purveyor merchant",
+   "purveyor merchants",
+   "goyo shonin"
   ]
  },
  "crenel": {
@@ -9148,6 +9248,18 @@
    "Sekai Daihyakka Jiten"
   ]
  },
+ "baba": {
+  "def": "A riding ground: a long, narrow strip of level ground, banked and fenced, where samurai trained their horses and practiced archery from the saddle.",
+  "variants": [
+   "baba"
+  ]
+ },
+ "jiaochang": {
+  "def": "A Chinese city's drill ground: a walled open field, usually outside a gate, with a reviewing hall and platform, where the garrison drilled and was reviewed.",
+  "variants": [
+   "jiaochang"
+  ]
+ },
  "lower mansion": {
   "def": "A ruling house's secondary residence, set toward the edge of the castle town - at Kanazawa outside the outer sogamae, beside the temple quarter and the artisans' town - rather than in the inner quarters.",
   "variants": [
@@ -9161,6 +9273,30 @@
   "variants": [
    "machi-hanare",
    "cho-hanare"
+  ]
+ },
+ "bangumi": {
+  "def": "At Fukui, the ranked companies of middle samurai: company heads, commissioners and retainers of about 100 to 300 koku, each granted a house lot of fixed size by stipend.",
+  "variants": [
+   "bangumi"
+  ]
+ },
+ "kochi-seki": {
+  "def": "Fukui's highest retainer rank: 17 houses of 1,000 to 4,025 koku, from which the house elders and the castle warden came.",
+  "variants": [
+   "kochi-seki"
+  ]
+ },
+ "koke": {
+  "def": "At Fukui, a rank of two houses with small stipends but treated as a class apart from the ranks around them.",
+  "variants": [
+   "koke"
+  ]
+ },
+ "jozabangai-seki": {
+  "def": "A Fukui middle-samurai rank of about 200 to 450 koku, held by posts such as escort heads and the temple-and-shrine commissioners.",
+  "variants": [
+   "jozabangai-seki"
   ]
  },
  "uchibori": {
@@ -9193,6 +9329,20 @@
    "House Chancellery",
    "chancellery",
    "chancellery's"
+  ]
+ },
+ "tsukiyama": {
+  "def": "A Japanese garden built around an artificial mound or small hill (the word means \"built mountain\"), usually with stones and plantings on and around it - the usual form of a samurai house's garden.",
+  "variants": [
+   "tsukiyama",
+   "tsukiyama-style",
+   "hill-style"
+  ]
+ },
+ "nukimon": {
+  "def": "The simplest framed gate: two posts joined by a horizontal tie-beam (*nuki*) passed through them, with no roof.",
+  "variants": [
+   "nukimon"
   ]
  },
  "matoi": {
@@ -9266,6 +9416,42 @@
    "bobana"
   ]
  },
+ "shitomi": {
+  "def": "A lattice-faced wooden shutter hinged at the top: it swings up and outward and is hooked open, and in bad weather it closes the opening like a wall panel.",
+  "variants": [
+   "shitomi",
+   "shitomi shutters"
+  ]
+ },
+ "Ashina": {
+  "def": "A warrior house, once lords of Aizu, that held Kakunodate under the Satake lords of Akita from 1620 until its line died out in the 1650s; the Iwahashi family were among its senior retainers.",
+  "variants": [
+   "Ashina"
+  ]
+ },
+ "banner": {
+  "def": "One of the Eight Banners, the hereditary military divisions of the Qing dynasty. Banner troops and their families were garrisoned across the country, most often in a walled quarter of their own in a corner of a provincial capital.",
+  "variants": [
+   "banner",
+   "banners",
+   "banners'",
+   "banner garrison",
+   "banner garrisons"
+  ]
+ },
+ "sakimono-gashira": {
+  "def": "The head of one of a castle town's vanguard foot-soldier companies, a high post for a middle-rank retainer. Fukui had sixteen of them, and the one who held the Kaga-guchi gate had an official residence beside it.",
+  "variants": [
+   "sakimono-gashira"
+  ]
+ },
+ "Guangxu era": {
+  "def": "The reign of the Qing emperor Guangxu, 1875-1908. Chinese records date events by the year of the reign, so its eleventh year is 1885.",
+  "variants": [
+   "Guangxu era",
+   "Guangxu"
+  ]
+ },
  "chancellor": {
   "def": "In the setting, the member of the domain's House Chancellery who sits for one samurai lineage; a House has about six, each of Rank 11, second only to the daimyo.",
   "variants": [
@@ -9285,11 +9471,42 @@
    "cosmopolitan"
   ]
  },
+ "Jiajing era": {
+  "def": "The Jiajing reign of the Ming, 1522 to 1566.",
+  "variants": [
+   "Jiajing era",
+   "Jiajing"
+  ]
+ },
  "village grain": {
   "def": "The loose spacing of a farming village: houses stand apart, each among its own plots, with open field between them rather than walls shared along a street.",
   "variants": [
    "village grain",
    "detached village grain"
+  ]
+ },
+ "yabusame": {
+  "def": "Mounted archery run as a contest: a rider gallops straight down a long, narrow riding ground and shoots at targets from the saddle.",
+  "variants": [
+   "yabusame"
+  ]
+ },
+ "dakyu": {
+  "def": "A ball game played on horseback, one of the arts samurai practiced on a riding ground.",
+  "variants": [
+   "dakyu"
+  ]
+ },
+ "dogata": {
+  "def": "A timber copy of the long eaves of Kyoto's Sanjusangendo hall, built by some great domains to practice the long-shot archery contest; some copied only the highest stretch of the arrow's flight, some the whole length.",
+  "variants": [
+   "dogata"
+  ]
+ },
+ "origake": {
+  "def": "A cheap practice rig for the long-shot archery contest: ropes strung between pairs of bamboo poles, standing in for the roof the arrows had to pass under.",
+  "variants": [
+   "origake"
   ]
  },
  "yukaku": {
