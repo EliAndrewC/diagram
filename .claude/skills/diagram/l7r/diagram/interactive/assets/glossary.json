@@ -8305,5 +8305,26 @@
    "Sekai daihyakka jiten",
    "Sekai Daihyakka Jiten"
   ]
+ },
+ "tamahagane": {
+  "def": "The steel a tatara smelt yields from iron sand (satetsu) and charcoal. One smelt burned about 9 t of iron sand and 11 t of charcoal to leave about 2.3 t of it, which is why Japanese steel was scarce and went to blades and tools first.",
+  "variants": [
+   "tamahagane"
+  ]
+ },
+ "kyuden": {
+  "def": "\"Palace\": the word Rokugan puts before the name of a clan's or family's great castle-seat, as in Kyuden Shinjo, the seat of the Shinjo family.",
+  "variants": [
+   "kyuden",
+   "Kyuden"
+  ]
+ },
+ "ox-shoeing frame": {
+  "def": "A frame in which an ox is held, slung, while it is shod - once a village fixture from Spain to England, called a crush or a trevis in English and a potro de herrar in Spanish.",
+  "variants": [
+   "ox-shoeing frame",
+   "ox-shoeing frames",
+   "trevis"
+  ]
  }
 }

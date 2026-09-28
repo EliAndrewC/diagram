@@ -1114,6 +1114,7 @@ kyoho	Kyoho
 kyoma	Kyoto measure
 kyoto measure	Kyoto measure
 kyozo	sutra house
+kyuden	kyuden
 kyuhi	kyuhi
 kyō-ma	Kyoto measure
 kyōgen	kyogen
@@ -1406,6 +1407,8 @@ overlays	overlay
 owari	Owari
 ox-frame	ox-frame
 ox-frames	ox-frame
+ox-shoeing frame	ox-shoeing frame
+ox-shoeing frames	ox-shoeing frame
 oyaike	oyaike
 pagoda tree	pagoda tree
 pagoda trees	pagoda tree
@@ -1845,6 +1848,7 @@ take-yabu	take-yabu
 takeyabu	take-yabu
 tako-beya	tako-beya
 tamagaki	tamagaki
+tamahagane	tamahagane
 tamajari	tamajari
 tameike	tameike
 tamonten	Bishamon
@@ -1949,6 +1953,7 @@ treadle wheels	treadle wheel
 treads	tread
 trebuchet	trebuchet
 trebuchets	trebuchet
+trevis	ox-shoeing frame
 tributary	tributary
 true duty	water duty
 trunk streets	trunk street
