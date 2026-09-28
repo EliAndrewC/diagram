@@ -115,7 +115,7 @@ class ThreshingYard(Kind):
 
     Note: we have rendered between a third and two thirds of the straw mats that covered a yard (the smallest yards a
     little fewer), each with a little bare
-    ground around it and laid a little askew, as by hand, in order to keep them legible: at this scale dozens of mats laid edge to edge would read as a textured
+    ground around it, most laid a little askew, as by hand, in order to keep them legible: at this scale dozens of mats laid edge to edge would read as a textured
     floor rather than as mats, so the drawing shows a smaller number to give the impression of many. The real yard at
     harvest was covered, 40 to 60 mats of about 3 by 6 feet each on an ordinary barley-country farm and 100 to 150 on a
     large one. The

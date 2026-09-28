@@ -780,7 +780,7 @@ knob. The shared bamboo thicket stands 27 ft from the east marsh's reeds and rea
 ## 2026-09-28 (feature 282): the harvest yard drawn as a floor of mats; nothing placed moved
 
 Every threshing yard is now drawn as the harvest leaves it: straw mats of 3 by 6 ft over the whole floor, each with a
-little bare ground around it and nudged and turned a little as if laid by hand, between a third and two thirds of those
+little bare ground around it, most turned a little as if laid by hand and nudged off their rows where the gap leaves room, between a third and two thirds of those
 that covered it (a drawing convention - the real yard was covered, research homesteads 'What lay in the work yard at
 harvest?'). The old fixed center mat and the rack along each yard's south edge are gone. This map declares no harvest
 weather, so it takes the regional default, settled, and draws no rack by the houses (research homesteads 'Did a village

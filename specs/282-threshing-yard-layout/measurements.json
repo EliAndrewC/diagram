@@ -179,5 +179,38 @@
   "source": "specs/282-threshing-yard-layout/measure.py (run from .claude/skills/diagram), reading the pool map's drawn SVG ink (each yard group's floor polygon and its mats, turned as drawn), its rendered .html and its notes",
   "measured": "2026-09-28",
   "method": "string count in kashikawa.html"
+ },
+ "sr5-mizuguchi-f1-thinned-lattice": {
+  "value": 18,
+  "unit": "mats",
+  "quantity": "the 37 x 25 ft yard at (1328.7,417.2) now draws 18 mats (was 30, a full lattice at the 0.5 ft step) and the two 31 x 21 ft yards at (1237.9,638.1) and (1369.2,281.5) draw 12 each (were 20): the tightest step is cut to the floor with the drops scattered by a positional draw, so bare patches break the lattice",
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "answers": "974b60427eec",
+  "source": "specs/282-threshing-yard-layout/measure.py (run from .claude/skills/diagram), reading the pool map's drawn SVG ink (each yard group's floor polygon and its mats, turned as drawn), its rendered .html and its notes; and the map's manifest for the per-yard mat counts",
+  "measured": "2026-09-28",
+  "method": "the `mats` of those three threshing_yards records in mizuguchi.json after regeneration; the drawn crop checked by eye"
+ },
+ "sr5-sawada-f1-outlines-apart": {
+  "value": 0.1,
+  "unit": "ft",
+  "quantity": "the smallest gap between the drawn OUTLINES of two mats on sawada: the smallest fill-to-fill gap (0.5 ft) less the two 0.2 ft half-widths of the 0.4 outline - the turn limit now counts the outline, and the 0.5 ft step draws its mats unturned",
+  "verifies": "F1",
+  "subject": "sawada",
+  "answers": "974b60427eec",
+  "source": "specs/282-threshing-yard-layout/measure.py (run from .claude/skills/diagram), reading the pool map's drawn SVG ink (each yard group's floor polygon and its mats, turned as drawn), its rendered .html and its notes; and the map's manifest for the per-yard mat counts",
+  "measured": "2026-09-28",
+  "method": "measure.py's min_gap_ft over sawada.svg's mat quads (0.5) minus the drawn stroke-width (0.4)"
+ },
+ "sr5-sawada-f2-notes-wording": {
+  "value": 1,
+  "unit": "entries",
+  "quantity": "sawada.notes.md's feature-282 entry now says 'most turned a little as if laid by hand and nudged off their rows where the gap leaves room'",
+  "verifies": "F2",
+  "subject": "sawada",
+  "answers": "974b60427eec",
+  "source": "specs/282-threshing-yard-layout/measure.py (run from .claude/skills/diagram), reading the pool map's drawn SVG ink (each yard group's floor polygon and its mats, turned as drawn), its rendered .html and its notes; and the map's manifest for the per-yard mat counts",
+  "measured": "2026-09-28",
+  "method": "grep of pool/hamlets/sawada/sawada.notes.md"
  }
 }

@@ -12,7 +12,7 @@ import math
 import pytest
 
 from l7r.diagram import hamletgen as hg
-from l7r.diagram.settlement.homestead_parts.yards import MAT_SQ_FT, RACK_MIN_FT, mat_cells, rack_segment, thin_evenly
+from l7r.diagram.settlement.homestead_parts.yards import MAT_SQ_FT, RACK_MIN_FT, mat_cells, rack_segment, scatter_to, thin_evenly
 from tests.settlement._builders import _nuc_village
 
 TSUBO_FT2 = 35.583
@@ -56,6 +56,14 @@ def test_a_mat_stays_inside_the_yards_quad_and_off_the_rack() -> None:
 def test_an_overshoot_is_thinned_evenly_not_from_one_end() -> None:
     assert thin_evenly(list(range(11)), 10) == [0, 1, 2, 3, 4, 6, 7, 8, 9, 10], "the drop falls mid-list"
     assert thin_evenly(list(range(4)), 10) == [0, 1, 2, 3], "under the cap, untouched"
+
+
+def test_the_tightest_step_is_scattered_down_to_the_floor_not_by_columns() -> None:
+    kept = scatter_to(list(range(30)), 18)
+    assert len(kept) == 18 and kept == sorted(kept), "eighteen survivors, in their order"
+    dropped = sorted(set(range(30)) - set(kept))
+    assert dropped != list(range(dropped[0], dropped[0] + 12)), "the drops are scattered, not one run"
+    assert scatter_to([1, 2], 5) == [1, 2], "under the floor, untouched"
 
 
 def test_a_yard_with_room_for_no_mat_draws_none() -> None:
