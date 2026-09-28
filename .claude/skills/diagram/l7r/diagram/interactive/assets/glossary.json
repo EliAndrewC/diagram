@@ -11393,5 +11393,17 @@
    "Neo-Confucianism",
    "Cheng-Zhu"
   ]
+ },
+ "major axis": {
+  "def": "The longest dimension of a grave, coffin or burial chamber, its length, as an excavation report measures it.",
+  "variants": [
+   "major axis"
+  ]
+ },
+ "rotation period": {
+  "def": "The years a grave is held before its ground is reused for another burial.",
+  "variants": [
+   "rotation period"
+  ]
  }
 }

@@ -1637,6 +1637,7 @@ magistracy	magistracy
 magusaba	magusaba
 main channel	main stem
 main stem	main stem
+major axis	major axis
 mamian	mamian
 manji	Manji
 manji era	Manji
@@ -2183,6 +2184,7 @@ ronins	ronin
 root-cut	root-cut
 root-cutting	root-cut
 roson	roson
+rotation period	rotation period
 row village	roson
 rowhouse gate	nagayamon
 rowhouse gates	nagayamon
