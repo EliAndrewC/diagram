@@ -87,16 +87,23 @@ spec; its declaration names the research question it rests on.
   source-reader, quote-check, source-applicability and record-format before its content reaches the map or a rule.
 - **FR-004**: The yard MUST be drawn with straw mats tiled over its area, each at the researched mat size in real
   feet, laid as FR-001 finds (or, where the sources are silent on the arrangement, in rows, labeled a guess); the
-  number drawn MUST be fewer than would cover the yard, as a map drawing convention recorded with the real count.
-  The single fixed central mat MUST go.
+  number drawn MUST be fewer than would cover the yard, as a map drawing convention recorded with the real count,
+  and MUST still read as a yard covered in mats: the drawn mats spread over the whole yard (every quarter of it
+  carries mats) and the drawn count is tied to the yard's area - between one third and two thirds of the count
+  that would cover it, so a 60 sq m yard (about 36 mats to cover) draws 12 to 24. The single fixed central mat
+  MUST go.
 - **FR-005**: The yard's rack MUST be drawn only where the settlement's rack-by-the-house knob gives one; the knob
-  MUST be rolled per settlement from the seed and pinnable. Where FR-002 finds the choice followed the environment,
-  the knob MUST be constrained by (or pinned from) that environmental fact where the generator has it, and its
-  declaration MUST say that neighboring settlements in one environment share a value; where FR-002 finds it a
-  village custom, or is inconclusive, it is a free per-settlement roll (the GM's stated fallback, 2026-09-28).
-- **FR-006**: A rack drawn by the house MUST stand where FR-002 places it, and MUST NOT stand along or across the
-  yard's south edge (the sun corridor, entry 030); where the sources are silent on its place it is seated off the
-  yard's south side and labeled a guess.
+  MUST be pinnable from the settlement's spec. Where FR-002 finds the choice followed the environment, the knob MUST
+  be SET from that environmental fact, never rolled free: from the fact itself where the generator models it, and
+  otherwise from an environment input the settlement's spec states (so neighboring settlements in one environment are
+  given the same value), and its declaration MUST say so. Only where FR-002 finds it a village custom, or is
+  inconclusive, is it a free per-settlement roll from the seed (the GM's stated fallback, 2026-09-28). Where entry
+  500's drying-method knob (four forms, "where the roll gives tall racks") covers the same choice, the two MUST be one
+  knob, not two that can disagree.
+- **FR-006**: A rack drawn by the house MUST stand where FR-002 places it, and MUST NOT stand on the yard's south
+  side: neither in the yard's southern half nor anywhere in the sun corridor entry 030 keeps clear south of the yard
+  (39 ft deep, the yard's width). "South" is MAP south, not the glyph's local lower edge (the glyph is turned by its
+  house's rake). Where the sources are silent on its place it is seated off the south side and labeled a guess.
 - **FR-007**: The `threshing yard` interactive class's docstring MUST be rewritten from the new questions: the mats'
   convention stated in the GM's form ("we can't render dozens of mats and have that be legible"; the real count and
   size given), the rack's knob, and a label per claim; its `Entry:` MUST name the new questions.
@@ -111,10 +118,12 @@ spec; its declaration names the research question it rests on.
 
 ## Success Criteria *(mandatory)*
 
-- **SC-001**: No drawn yard carries the old 14 x 9 ft central mat; every drawn yard carries at least three mats
-  (measured on the regenerated pool hamlets' SVGs).
+- **SC-001**: No drawn yard carries the old 14 x 9 ft central mat; every drawn yard's mat count lies between one
+  third and two thirds of the count that would cover its area, and each quarter of the yard carries at least one
+  mat (measured by test on the regenerated pool hamlets).
 - **SC-002**: No rack is drawn on a map whose knob gives none; on a map whose knob gives one, no rack's footprint
-  crosses the yard's south edge band (measured by test on a pinned hamlet).
+  enters the yard's southern half or the 39 ft corridor south of it, taken in map coordinates (measured by test on a
+  pinned hamlet).
 - **SC-003**: The two new questions pass quote-check, record-format and source-applicability with no open finding.
 
 ## Decisions Recorded
@@ -123,4 +132,11 @@ spec; its declaration names the research question it rests on.
   the yard is drawn as the harvest leaves it while the paddies stay as they are drawn now. Class: this project's
   decision (GM 2026-09-28).
 - **D2 - fewer mats than the real count.** A map drawing convention, the GM's own form: the real yard was covered
-  (40-60 mats); the drawing thins them so each reads as a mat.
+  (40-60 mats); the drawing thins them so each reads as a mat. The band of one third to two thirds of a full cover
+  is this project's decision (spec-fidelity round 1: a floor tied to area, so the impression of a covered yard holds).
+
+## Review history
+
+- Round 1 (spec-fidelity, 2026-09-28): CHANGES REQUIRED - the south side widened from the edge to the sun corridor in
+  map coordinates; the environment-driven knob set from a stated input, never a free roll; a mat-count floor tied
+  to area. All three applied.
