@@ -299,6 +299,8 @@ crop margin	crop margin
 crop margins	crop margin
 crop-margin	crop margin
 crown shyness	crown shyness
+crude drug	crude drug
+crude drugs	crude drug
 cryptomeria	sugi
 cryptomeria japonica	sugi
 culm	culm
@@ -1912,6 +1914,7 @@ tier	tier
 tiers	tier
 tillering	tillering
 toe	toe
+tofuya	tofuya
 tohoku	Tohoku
 toiya	ton'ya
 toiyaba	toiyaba
