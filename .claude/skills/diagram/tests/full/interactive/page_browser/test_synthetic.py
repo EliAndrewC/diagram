@@ -326,6 +326,8 @@ def test_in_raster_mode_the_lit_paddy_is_washed_and_the_lit_beads_are_not(synthe
     paddy = "() => getComputedStyle(document.querySelector('g.f[data-k=\"paddy\"] rect')).fillOpacity"
     beads = "() => getComputedStyle(document.querySelector('g.f[data-k=\"bund beans\"] circle:not(.hit)')).fillOpacity"
 
+    seen: dict[str, object] = {}
+
     def lit(want: tuple[str, str]) -> tuple[str, str]:
         # Each read waits for its STATE, bounded (the driver's `settles`, feature 145), not for nothing: it read
         # the computed opacity in the same tick as the highlight, and under a loaded gate the style had not
@@ -333,6 +335,7 @@ def test_in_raster_mode_the_lit_paddy_is_washed_and_the_lit_beads_are_not(synthe
         # (feature 250, 2026-09-26). The assertion is exactly as strict: a value that never arrives still fails.
         synthetic.js("k => window.l7rMap.highlight(k)", "paddy")
         p = synthetic.settles(want[0], lambda: synthetic.js(paddy))
+        seen["lit"] = synthetic.js(state_lit)  # WHILE the paddy is lit - the state `after` below reads only once cleared
         synthetic.js("k => window.l7rMap.highlight(k)", "bund beans")
         b = synthetic.settles(want[1], lambda: synthetic.js(beads))
         synthetic.clear()
@@ -348,9 +351,12 @@ def test_in_raster_mode_the_lit_paddy_is_washed_and_the_lit_beads_are_not(synthe
         # or beside a test-full (29 runs, 2026-09-28): the message names the page's state so the next failure says which
         # of mode, highlight, a pinned modal or raster readiness was wrong
         state = "() => ({mode: document.getElementById('map').getAttribute('data-mode'), hl: document.getElementById('map').getAttribute('data-hl'), explain: document.getElementById('explain').open, ready: window.l7rMap.rasterReady()})"
+        # ...and while the paddy is lit: its groups' classes and the rect's own style, so a failure says whether the highlight
+        # took (feature 281: three gate failures in a row with every `before` field right and `after` read once cleared)
+        state_lit = "() => ({mode: document.getElementById('map').getAttribute('data-mode'), hl: document.getElementById('map').getAttribute('data-hl'), groups: [...document.querySelectorAll('g.f[data-k=\"paddy\"]')].map(g => g.getAttribute('class')), fill: getComputedStyle(document.querySelector('g.f[data-k=\"paddy\"] rect')).fillOpacity})"
         before = synthetic.js(state)
         got = lit(("0.45", "1"))
-        assert got == ("0.45", "1"), f"raster mode: the lit paddy is a wash, the lit beads are solid; before={before} after={synthetic.js(state)}"
+        assert got == ("0.45", "1"), f"raster mode: the lit paddy is a wash, the lit beads are solid; before={before} lit={seen.get('lit')} after={synthetic.js(state)}"
     finally:
         synthetic.page.set_viewport_size(was)
         synthetic.js("() => window.l7rMap.fitWidth()")

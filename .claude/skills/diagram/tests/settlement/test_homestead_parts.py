@@ -661,3 +661,33 @@ def test_commons_grass_reaches_only_a_few_paces_under_a_wood():
     assert any(250 <= gx < 300 and 100 <= gy <= 600 for gx, gy in pts), "and runs right up to its edge"
     deep = [(gx, gy) for gx, gy in pts if gx > 300 + s.px(WOOD_FRINGE_FT) + 0.5 and 100 <= gy <= 600]
     assert not deep, deep[:5]
+
+
+def test_the_gap_fill_skips_a_barren_gap_and_seats_the_same_clumps(monkeypatch):
+    """Feature 281, FR-008: a windbreak whose belt crosses the paddy leaves a gap the ground refuses; with the gap fill's
+    memory the clumps are exactly those without it, and the refused gap's points are asked fewer times."""
+    from l7r.diagram.settlement.homestead_parts import grove_blocks, stands
+
+    calls = {"n": 0}
+    real = grove_blocks.GroveBlocks.inside
+
+    def counted(self, x, y):
+        calls["n"] += 1
+        return real(self, x, y)
+
+    monkeypatch.setattr(grove_blocks.GroveBlocks, "inside", counted)
+    belt = [(300, 420), (1000, 420), (1000, 520), (300, 520)]  # runs east across the paddy (x >= 640)
+
+    def roll(memory):
+        monkeypatch.setattr(stands, "_GAP_MEMORY", memory)
+        s = _nuc_village()
+        s.M.setdefault("houses", []).append({"x": 420, "y": 470, "w": 40, "h": 30})  # a house in the belt: a local hole
+        calls["n"] = 0
+        s.village_grove(belt, role="windbreak")
+        return s.M["village_groves"][0]["clumps"], calls["n"]
+
+    with_memory, asked = roll(True)
+    without, asked_before = roll(False)
+    assert with_memory, "non-vacuity: the belt seated clumps"
+    assert with_memory == without
+    assert asked < asked_before, "the barren gap was offered again without the memory"

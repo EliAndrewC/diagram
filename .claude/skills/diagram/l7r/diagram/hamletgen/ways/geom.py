@@ -6,7 +6,7 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import Any, cast
 
-from l7r.diagram.settlement import edge_dist, point_in_poly, rot_rect, seg_closest, seg_dist, seg_intersect, segments_cross
+from l7r.diagram.settlement import PointGrid, edge_dist, point_in_poly, rot_rect, seg_closest, seg_dist, seg_intersect, segments_cross
 from l7r.diagram.settlement.water_ways._helpers import BUND_REACH_FT
 from l7r.diagram.sitegen.geom import centroid, unit
 
@@ -581,3 +581,33 @@ def push_out_of(poly: Poly, p: Pt, margin: float) -> Pt:
 
 def polyline_len(pts: Poly) -> float:
     return sum(math.hypot(pts[i + 1][0] - pts[i][0], pts[i + 1][1] - pts[i][1]) for i in range(len(pts) - 1))
+
+
+# A COURSE'S SEGMENTS, FILED ONCE, FOR THE CROSSING TESTS OF MANY ROUTES (feature 281, FR-005). `_link_home_bank` asked every
+# brook segment of every route segment - 531,766 `segments_cross` on Kashikawa. Two segments cross only where their boxes
+# meet, so the brook segments whose box meets a route segment's box are every one it can cross, and `segments_cross`
+# decides as before. Module level so the crossings can be compared with the scan without a settlement.
+
+
+def brook_segment_index(segs: Sequence[tuple[Pt, Pt]]) -> PointGrid:
+    """`(k, a, b, x0, y0, x1, y1)` for the k-th segment, filed by its box."""
+    grid = PointGrid()
+    grid.extend((k, a, b, min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1])) for k, (a, b) in enumerate(segs))
+    return grid
+
+
+def _crossed(p: Pt, q: Pt, idx: PointGrid) -> set[int]:
+    """The indices of the filed segments that `p -> q` crosses."""
+    x0, y0, x1, y1 = min(p[0], q[0]), min(p[1], q[1]), max(p[0], q[0]), max(p[1], q[1])
+    cx, cy, pad = (x0 + x1) / 2, (y0 + y1) / 2, max(x1 - x0, y1 - y0) / 2
+    return {k for k, a, b, bx0, by0, bx1, by1 in idx.near(cx, cy, pad) if bx0 <= x1 and x0 <= bx1 and by0 <= y1 and y0 <= by1 and segments_cross(p, q, a, b)}
+
+
+def crossing_hits(route: Sequence[Pt], idx: PointGrid) -> list[int]:
+    """The indices m of the route's segments that cross the filed course - `[m for m in ... if any(segments_cross(...))]`."""
+    return [m for m in range(len(route) - 1) if _crossed(route[m], route[m + 1], idx)]
+
+
+def crossings_parity(c: Pt, mid: Pt, idx: PointGrid) -> int:
+    """How many filed segments `c -> mid` crosses, mod 2 - the home-bank test's `sum(...) % 2`."""
+    return len(_crossed(c, mid, idx)) % 2

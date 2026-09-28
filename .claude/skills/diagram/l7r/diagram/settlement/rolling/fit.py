@@ -85,6 +85,33 @@ def houses_meeting(houses: Any, box: tuple[float, float, float, float]) -> list[
     return sorted(out, key=lambda rec: order.get(id(rec), 0))
 
 
+def stream_segment_index(streams: Any) -> PointGrid:
+    """Every stream segment as `(a, b, hw, x0, y0, x1, y1)`, `hw` the stream's half-width plus 5 px and the box widened by
+    it (feature 281, FR-005)."""
+    grid = PointGrid()
+    for f in streams:
+        poly = f.get("poly") or []
+        hw = float(f.get("w", 9.0)) / 2 + 5
+        grid.extend((a, b, hw, min(a[0], b[0]) - hw, min(a[1], b[1]) - hw, max(a[0], b[0]) + hw, max(a[1], b[1]) + hw) for a, b in zip(poly, poly[1:], strict=False))
+    return grid
+
+
+def rect_touches_stream(gc: Any, pts: Any, streams: Any, index: PointGrid | None = None) -> bool:
+    """`_rect_on_stream`'s test on plain lists: does a point of `pts` stand within a stream's `hw`, or an edge of the
+    quad `gc` cross a stream segment? A point within `hw` of a segment lies in its widened box, and a crossing puts a
+    point of the segment on the quad's edge - so either way the widened box meets the box of `pts`, the segments
+    `near` returns for that box are every one the test can accept, and the old `seg_dist` / `segments_cross` decide."""
+    idx = index if index is not None else stream_segment_index(streams)
+    rx0, ry0 = min(p[0] for p in pts), min(p[1] for p in pts)
+    rx1, ry1 = max(p[0] for p in pts), max(p[1] for p in pts)
+    for a, b, hw, x0, y0, x1, y1 in idx.near((rx0 + rx1) / 2, (ry0 + ry1) / 2, max(rx1 - rx0, ry1 - ry0) / 2):
+        if x1 < rx0 or x0 > rx1 or y1 < ry0 or y0 > ry1:
+            continue
+        if any(seg_dist(px, py, a, b) < hw for px, py in pts) or any(segments_cross(a, b, gc[e], gc[(e + 1) % 4]) for e in range(4)):
+            return True
+    return False
+
+
 class BundleFitMixin:
     def _field_adjacent(self: Settlement, x: float, y: float) -> bool:  # type: ignore[misc]
         """A RAIL, NOT A NORM: a nudge may not drift a farmhouse off the map's farmland entirely.
@@ -220,17 +247,23 @@ class BundleFitMixin:
         return cast(list[Any], self._water_obs_cache[1])
 
     def _rect_on_stream(self: Settlement, rect: Any) -> bool:  # type: ignore[misc]
-        """Does this solid rect touch a STREAM, at its half-width plus 5 px - `_rect_on_water`'s own test, streams only?"""
+        """Does this solid rect touch a STREAM, at its half-width plus 5 px - `_rect_on_water`'s own test, streams only?
+
+        The stream segments are INDEXED once (feature 281, FR-005): every rect walked every segment of every stream -
+        139,535 `seg_dist` on Sawada. The streams are laid before the homestead solve and do not change during it, so the
+        index is kept - under a key that HOLDS the streams list, each stream record and each course it was built from and
+        compares them by identity, with each course's length and width. A length key alone (`_water_obstacles`' key) served
+        a stale index when a caller replaced the streams with a different list of the same length - the feature-261 test
+        of a brook moved between the house and its garden caught it. Holding the objects means no id can be reused while
+        the key stands; a course's points changed in place at the same length would still be served stale - nothing in the
+        engine does that (courses are built, then read), the exposure `hamletgen.clearance._MEMO` states for its own key."""
+        streams = self.M.get("streams", [])
+        key = [(f, f.get("poly"), len(f.get("poly") or []), f.get("w")) for f in streams]
+        got = self._stream_idx_cache
+        if got is None or got[0] is not streams or len(got[1]) != len(key) or any(a[0] is not b[0] or a[1] is not b[1] or a[2:] != b[2:] for a, b in zip(got[1], key, strict=True)):
+            self._stream_idx_cache = got = (streams, key, stream_segment_index(streams))
         gc = self._rect_corners(rect)
-        pts = gc + [(rect[0], rect[1])]
-        for f in self.M.get("streams", []):
-            poly = f.get("poly") or []
-            hw = float(f.get("w", 9.0)) / 2 + 5
-            for k in range(len(poly) - 1):
-                a, b = poly[k], poly[k + 1]
-                if any(seg_dist(px, py, a, b) < hw for px, py in pts) or any(segments_cross(a, b, gc[e], gc[(e + 1) % 4]) for e in range(4)):
-                    return True
-        return False
+        return rect_touches_stream(gc, gc + [(rect[0], rect[1])], streams, got[2])
 
     def _rect_on_water(self: Settlement, rect: Any) -> bool:  # type: ignore[misc]
         """Whether a SOLID bundle rect (house/yard/garden/shed) lands on an irrigation LINE - a feeder

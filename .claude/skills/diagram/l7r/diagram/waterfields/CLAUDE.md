@@ -23,6 +23,7 @@ before and after (the feature's oracle).
 | `comb.py` | `build_comb` - the water-first comb builder (pond sluice, head-race, supply canals, thread march, offtakes) - `_fill_wedges`, and `fan_toe_hem` (where a fan's dry band lies, the `fan_middle` knob; 269 B07) |
 | `carve.py` | `_carve` (cutting paddy plots between marched threads), `_dry_fields` (the dry-crop hem tiling), `_bund_beans` (azemame bead accents) |
 | `furrows.py` | the dry hem's row directions, set tract by tract (`tract_ways`, `furrow_turn`, the `TRACT_*` figures; 269 B06) - what `_dry_fields` asks for each column's heading and what `dry_plot_furrows_vary` judges against |
+| `sector_rows.py` | a comb sector's three kinds of plot row - `_sector_body_rows`, `_sector_canal_closers`, `_sector_closing_rank` - laid by `carve._carve_sector` in that order (moved out of `carve.py` by feature 281) |
 | `seams/` | the bund FABRIC - a PACKAGE with its own [`CLAUDE.md`](seams/CLAUDE.md) index since feature 173. Read that first, then load one of: `pockets.py` (a pocket's geometry and `_absorb`), `plots.py` (`_plant`, `_tab_cut`, `_unjog`, `_trade`), `close.py` (`close_seams`, the driver and the only name the engine calls) |
 | `polder.py` | `build_polder` (dike-and-drain reclamation), `build_terraces` (contour terraces), `build_ribbon` (valley ribbon paddies) |
 

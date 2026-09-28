@@ -12,6 +12,11 @@ if TYPE_CHECKING:
     from ..core import Settlement
 
 
+_GAP_MEMORY = True
+"""The windbreak gap fill skips a gap that seated nothing (feature 281, FR-008); off only in the test that proves the
+clumps are unchanged."""
+
+
 class BankNear:
     """`near`'s index when the points have a BANK (feature 261, settlement-review of Kashikawa): a clump is near a point
     only within `reach` of it AND on its side of `barriers` - three dooryard-copse clumps stood 79-86 ft from a house as
@@ -497,6 +502,13 @@ class StandsMixin:
         # a 94 ft hole into two 47 ft holes, which is still a hole - measured on Kuwabata's first pass.
         if role == "windbreak" and len(seated) >= 2:
             _wv = _belt_axis(seated)
+            # A GAP THAT SEATED NOTHING IS NOT OFFERED AGAIN (feature 281, FR-008). The depth search offers a gap the same
+            # points every round - they depend only on its two clumps, `_wv` and the outline - and every test they face is
+            # fixed during the fill but the spacing test against clumps already down, whose refusals only grow as clumps
+            # land. So a gap that took no seat in a round takes none in a later one: re-offering it was 5 fractions x 33
+            # depths of refusals per round, most of the 253,704 outline tests on Sawada's belts. A gap whose clumps change
+            # (one lands between them) is a new pair, offered its own points.
+            _barren: set[tuple[tuple[float, float], tuple[float, float]]] = set()
             for _ in range(6):  # a 94 ft gap needs three rounds; six is headroom, and it stops when nothing lands
                 _order = sorted(range(len(seated)), key=lambda _k: seated[_k][0] * _wv[0] + seated[_k][1] * _wv[1])
                 _added = 0
@@ -513,7 +525,7 @@ class StandsMixin:
                 # chase a belt that "stops short" - measure whether the short end is on the page first.
                 for _a, _b in zip(_order, _order[1:], strict=False):
                     _pa, _pb = seated[_a], seated[_b]
-                    if math.dist(_pa, _pb) <= _BELT_GAP_FT:
+                    if math.dist(_pa, _pb) <= _BELT_GAP_FT or (_GAP_MEMORY and (_pa, _pb) in _barren):
                         continue
                     # FILL UP TO THE OBSTACLE FROM BOTH SIDES, not only at the midpoint. Where a lane
                     # crosses the belt the midpoint IS the lane, so a midpoint-only fill gives up and
@@ -554,7 +566,7 @@ class StandsMixin:
                         for _qx, _qy in _inside[len(_inside) // 2 :] + _inside[: len(_inside) // 2]:  # the band's middle outward
                             if within is not None and (_qx + clump * 0.9 < within[0] or _qx - clump * 0.9 > within[2] or _qy + clump * 0.9 < within[1] or _qy - clump * 0.9 > within[3]):
                                 continue
-                            if blocks.hard(_qx, _qy) or blocks.local(_qx, _qy) or blocks.lane(_qx, _qy) or (_near is not None and not _near.too_near(_qx, _qy)):
+                            if not blocks.static_clear(_qx, _qy) or (_near is not None and not _near.too_near(_qx, _qy)):
                                 continue
                             # ...AND NEVER ON TOP OF A CLUMP THAT IS ALREADY THERE (settlement-review
                             # 2026-08-29, acceptance re-check). The depth search is deterministic, so a gap
@@ -578,6 +590,8 @@ class StandsMixin:
                             break
                     if _took:
                         _added += 1
+                    else:
+                        _barren.add((_pa, _pb))
                 if not _added:
                     break
         # THE FACE TRIM, then the ink (GM 2026-08-26, feature 133 T10). With `face_margin` the
