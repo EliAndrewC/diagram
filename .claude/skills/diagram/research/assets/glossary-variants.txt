@@ -975,6 +975,7 @@ huizhou style	Hui style
 hutong	hutong
 hutongs	hutong
 hyakusho denki	Hyakusho Denki
+hyakushō denki	Hyakusho Denki
 hydrophilic	hydrophilic
 hydrosere	hydrosere
 hyo	hyō
@@ -1289,6 +1290,7 @@ kokuso	kokuso
 kokuzo	kokuso
 komae	komae
 komainu	lion-dog
+komatsuna	komatsuna
 komo	komo
 komo matting	komo
 komono	komono
@@ -1492,6 +1494,7 @@ mire	mire
 mirin	mirin
 mise	mise
 mitochigai	mitochigai
+mitsuba	mitsuba
 mitsuke	mitsuke
 miyaza	miyaza
 mizugaki	mizugaki
@@ -1552,8 +1555,10 @@ muster perimeters	muster perimeter
 myoden	myoden
 myoden landlord	myoden
 myoden landlords	myoden
+myoga	myoga
 myoji-taito	myoji-taito
 myōden	myoden
+myōga	myoga
 nagare-style	Nagare-style
 nagare-zukuri	nagare-zukuri
 nagarezukuri	nagare-zukuri
@@ -1587,6 +1592,7 @@ nawabari	nawabari
 nawate	azemichi
 naya	naya
 near-monospecific	monospecific
+negi	negi
 nehan	Nehan gate
 nehan gate	Nehan gate
 neige	neige
@@ -1638,6 +1644,7 @@ numajiro	numajiro
 nunosarashi	nunosarashi
 nure-en	nure-en
 nuriya	nuriya
+nōgyō zensho	Nogyo Zensho
 o-aza	ō-aza
 oaza	ō-aza
 oblique weir	oblique weir
@@ -2041,6 +2048,7 @@ shirasu	oshirasu
 shirimito	shirimito
 shironameshi	shironameshi
 shiroyone senmaida	senmaida
+shiso	shiso
 shitomi	shitomi
 shitomi shutters	shitomi
 shitsuden	shitsuden

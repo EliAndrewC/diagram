@@ -51,7 +51,7 @@ and its reviews.
   the day of the record's season, and fails the sheet when the bed's lit hours fall under its kind's threshold. It MUST
   report the hours, the threshold and the shade makers.
 - **FR-004**: The check MUST be proved to fire on a frozen negative fixture (the shrine sheet as drawn before this
-  feature) and to pass a sheet whose garden is open, and MUST carry unit tests to the 100% floor.
+  feature) and to pass a sheet whose garden is open, and MUST carry unit tests to the gate's coverage floor.
 - **FR-005**: The Hoshigaoka shrine's garden and the Ochiba, Hayakawa and Ubame magistracies' gardens MUST be
   re-seated where the check passes (the GM, 2026-09-28: "Move them all"), a magistracy's preferring the west side of
   its residence, the one side the record attests (research buildings 400); each sheet's notes, program checks and
@@ -71,7 +71,7 @@ and its reviews.
 - **SC-001** (FR-001, FR-002): research homesteads 044 exists, every claim footnoted or labeled, all record checks run
   and applied.
 - **SC-002** (FR-003, FR-004): the check fails the negative fixture naming its hours and shade makers, and passes the
-  county example; its tests reach 100% of its code.
+  county example; its tests reach the gate's coverage floor.
 - **SC-003** (FR-005, FR-007): every hand-drawn sheet with a kitchen garden passes `garden_sun`; the re-seated sheets
   pass `building-review`; `make done` is green.
 - **SC-004** (FR-006): the program and the operative docs name the sun rule where they say where a garden goes.

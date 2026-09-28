@@ -5018,14 +5018,18 @@
   "def": "A Japanese farming manual of 1681, quoted on rotting night soil in a storage jar before it goes on the fields.",
   "variants": [
    "Hyakusho Denki",
-   "百姓伝記"
+   "百姓伝記",
+   "Hyakushō denki",
+   "Hyakushō Denki"
   ]
  },
  "Nogyo Zensho": {
   "def": "A Japanese farming book published in 1697, which advises letting dung lie and rot until ripe before it is used.",
   "variants": [
    "Nogyo Zensho",
-   "農業全書"
+   "農業全書",
+   "Nōgyō zensho",
+   "Nōgyō Zensho"
   ]
  },
  "soffit": {
@@ -9985,6 +9989,37 @@
   "variants": [
    "meso scale",
    "meso-scale"
+  ]
+ },
+ "komatsuna": {
+  "def": "A Japanese leafy green of the mustard family, grown for its leaves and eaten cooked or pickled; it does with half a day of sun.",
+  "variants": [
+   "komatsuna"
+  ]
+ },
+ "negi": {
+  "def": "The Japanese long green onion, a bunching onion grown for its long white-and-green stalk; it does with half a day of sun.",
+  "variants": [
+   "negi"
+  ]
+ },
+ "mitsuba": {
+  "def": "A Japanese herb, sometimes called Japanese wild parsley, grown for its three-part leaves; it grows even in shade.",
+  "variants": [
+   "mitsuba"
+  ]
+ },
+ "myoga": {
+  "def": "A Japanese ginger grown for its edible flower buds and shoots; it grows even in shade.",
+  "variants": [
+   "myoga",
+   "myōga"
+  ]
+ },
+ "shiso": {
+  "def": "Perilla, a leaf herb of the mint family grown for its fragrant leaves; it grows even in shade.",
+  "variants": [
+   "shiso"
   ]
  }
 }
