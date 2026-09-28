@@ -47,6 +47,21 @@ def test_every_adjacent_seat_is_tried_before_a_farther_one_and_the_farther_one_g
     assert poly_gap(list(p.block), [a, a, a]) < 1.5 and poly_gap(list(BOARD.poly), [b, b, b]) < 1.5, "block to board"
 
 
+def test_a_leader_given_what_it_may_not_cross_goes_around_it() -> None:
+    """Feature 283: a hand sheet hands the placer the captions and small glyphs a leader may not pass over or end
+    against; the seat whose leader would cross one is passed over for a seat whose leader is clear. The engine passes
+    none, and places as before."""
+    ring0 = [rect(500.0, 500.0, 6.0 + 5.0, 2.5 + 5.0)]
+    walls = ObstacleIndex([Obstacle(tuple(q), WEIGHT_OBSTACLE) for q in _collar(ring0[0], 4.5)])
+    first = place("notice board", SIZE, BOARD, walls)
+    a, b = first.leader
+    across = rect((a[0] + b[0]) / 2, (a[1] + b[1]) / 2, 3.0, 3.0)  # a caption lying on that leader
+    again = place("notice board", SIZE, BOARD, walls, leader_index=ObstacleIndex([Obstacle(tuple(across), WEIGHT_OBSTACLE)]))
+    assert again.leader is not None and again.block != first.block and again.cost == 0.0
+    assert not any(segments_cross(again.leader[0], again.leader[1], p, q) for p, q in zip(across, across[1:] + across[:1], strict=False))
+    assert place("notice board", SIZE, BOARD, walls, leader_index=ObstacleIndex()) == first, "nothing to avoid, nothing moves"
+
+
 def _collar(poly, width):
     """Four thin rects hugging `poly`'s box out to `width` - obstacles that fill every seat at the preferred gap."""
     xs, ys = [q[0] for q in poly], [q[1] for q in poly]

@@ -19,6 +19,7 @@ from .consts import (
     CARDINAL_BEARINGS,
     CLUSTER_SHAPES,
     COPSE_SITINGS,
+    DEFAULT_HARVEST_WEATHER,
     DEFAULT_WINDWARD,
     DIKE_CROPS,
     FALL_BEARINGS,
@@ -26,6 +27,7 @@ from .consts import (
     FIELD_ARCHETYPES,
     GRAIN_DRIFTS,
     GROSS_ACRES_PER_HOUSEHOLD,
+    HARVEST_WEATHERS,
     HEAD_RACE_LEAD,
     HOUSEHOLD_BAND,
     INTAKE_FORMS,
@@ -72,6 +74,7 @@ class HamletSpec:
     down_deg: float | None = None
     water_flow: float | None = None
     windward: str | None = None
+    harvest_weather: str | None = None  # settled | changeable - declared, never rolled (feature 282; `HARVEST_WEATHERS`)
     # The rolled knobs, pinnable.
     water_sink: str | None = None
     intake: str | None = None  # the intake's form at the brook: weir | open (feature 230; `INTAKE_FORMS`)
@@ -116,6 +119,8 @@ class HamletSpec:
             raise ValueError(
                 f"{self.households} households is outside the hamlet band {lo}-{hi} - a smaller place is an outlying farmstead, a larger one is a village (which needs a headman, a shrine and tax-free plots this generator does not draw)"
             )
+        if self.harvest_weather is not None and self.harvest_weather not in HARVEST_WEATHERS:
+            raise ValueError(f"harvest_weather {self.harvest_weather!r} must be one of {list(HARVEST_WEATHERS)}")
         if self.windward is not None and self.windward not in WIND_VECTORS:
             raise ValueError(f"windward {self.windward!r} is not a compass quarter: {sorted(WIND_VECTORS)}")
         if self.brook_side is not None and self.brook_side not in BROOK_FLANKS:
@@ -153,6 +158,7 @@ class SitePlan:
     # and pinned to "grid" for a rice polder (see `POND_LAYOUTS`). Read by `stage_polder`.
     pond_layout: str
     manure_form: str  # heap | pit (feature 150, `MANURE_FORMS`), read by `farmstead_fixtures`
+    harvest_weather: str  # settled | changeable (feature 282): the spec's declaration or the regional default, never a roll
     copse_siting: str  # among_the_houses | against_the_belt (feature 152, `COPSE_SITINGS`)
     kosatsuba_siting: str  # frontage | waterside (feature 152, `KOSATSUBA_SITINGS`)
     dike_crop: str  # the dike-pond's planting (feature 150 A6), read by `stage_polder`
@@ -302,6 +308,7 @@ def plan_site(spec: HamletSpec) -> SitePlan:
         field_archetype=_archetype,
         pond_layout=_pond_layout,
         manure_form=spec.manure_form or str(_roll(spec.seed, "manure_form", MANURE_FORMS)),
+        harvest_weather=spec.harvest_weather or DEFAULT_HARVEST_WEATHER,  # declared, never rolled (`HARVEST_WEATHERS`)
         copse_siting=spec.copse_siting or str(_roll(spec.seed, "copse_siting", COPSE_SITINGS)),
         kosatsuba_siting=spec.kosatsuba_siting or str(_roll(spec.seed, "kosatsuba_siting", KOSATSUBA_SITINGS)),
         dike_crop=(spec.dike_crop or str(_roll(spec.seed, "dike_crop", DIKE_CROPS))) if _archetype == "mulberry_dike_fishpond" else "mulberry",

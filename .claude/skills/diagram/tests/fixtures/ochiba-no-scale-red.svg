@@ -533,7 +533,8 @@
        compound's vegetables come from this rear plot (servant-tended) + outside via
        the kitchen postern - normal for a compact walled magistracy (GM 2026-07). -->
   <g data-kind="vegetable garden">
-    <rect x="560" y="156" width="320" height="44" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
+    <!-- re-seated where it gets its sun (feature 283), so the fixture fires only its own fault -->
+    <rect x="720" y="298" width="145" height="97" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
     <text x="731" y="182" text-anchor="middle" font-size="9" font-style="italic" fill="#3A4E38">vegetable garden</text>
   </g>
 

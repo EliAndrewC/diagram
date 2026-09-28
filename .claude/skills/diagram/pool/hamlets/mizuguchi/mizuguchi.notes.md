@@ -106,6 +106,7 @@ DIRECTION is not invented: it is the bearing of this map's own connector track w
 
 ### Features
 
+- **threshing yard**: This map's harvest weather is settled, the regional default, so no rack is drawn by the houses: its racks would be put up out on the paddies after the harvest, which is the seasonal map's business and not drawn here (settled weather keeping the racks off the houses is our reading of the survey, which records racks gathered by the houses only on a coast of changeable weather).
 - **burial ground**: Mizuguchi keeps none of its own: its dead lie in the main village's ground, by the shrine that is the setting's parish temple.
 
 ## 2026-08-17 - re-packed twice: feature 121, then the front-row cap
@@ -776,3 +777,12 @@ west of them - a south-row house walks about 1,000 ft to a bund 130 ft away - an
 (1515, 738) carries no way. Whether a hamlet across a stream from its paddies kept one crossing or one per reach of
 houses is not settled by the record (one search, 2026-09-28, found nothing decisive); if both are attested it becomes a
 knob. The shared bamboo thicket stands 27 ft from the east marsh's reeds and reads as a pale tuft at fit zoom.
+
+## 2026-09-28 (feature 282): the harvest yard drawn as a floor of mats; nothing placed moved
+
+Every threshing yard is now drawn as the harvest leaves it: straw mats of 3 by 6 ft over the whole floor, each with a
+little bare ground around it, most turned a little as if laid by hand and nudged off their rows where the gap leaves room, and the map draws between a third and two thirds of the mats that covered it, a mat or two fewer where the yard's outline leaves no room (a drawing convention - the real yard was covered, research homesteads 'What lay in the work yard at
+harvest?'). The old fixed center mat and the rack along each yard's south edge are gone. This map declares no harvest
+weather, so it takes the regional default, settled, and draws no rack by the houses (research homesteads 'Did a village
+put its drying racks by the houses by custom, or because of its weather?'). The weather is a fact of the country, set by a map's declaration or else the regional default, and never rolled: the
+manifest diff is `mats` on each yard, `meta.harvest_weather`, and each yard's outline recorded to a thousandth (no yard moved).

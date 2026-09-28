@@ -82,7 +82,13 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
     bund edge or a field's corner in Japan, which the engine now draws as the knob's second form - so `covers` names
     both. A label that research overturns is miscited exactly as a stale `sources` is; what a PROSE edit alone may
     never do is still move any of the three. The same feature moved `field rock` from accurate to guess: research fields
-    010 found no source putting outcrops on terraces and off valley, polder and delta ground (entry-drift, 2026-09-27)."""
+    010 found no source putting outcrops on terraces and off valley, polder and delta ground (entry-drift, 2026-09-27).
+
+    Feature 282 moved `threshing yard`'s `label`, `covers`, `sources` and `entry` under the same bar: the GM asked whether
+    the one centered mat and the south-edge rack were accurate, and research homesteads 025 and 505 found the harvest yard
+    covered in mats and racks by the house only where the harvest weather is changeable - so the glyph now draws mats over
+    the whole yard, fewer than covered it (a CONVENTION, the GM's own form), and a rack by the house on its weather; the
+    garden sibling's "bare" moved with it."""
     before = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
     added = {s for succ in SINCE_189.values() for s in succ} | set(ADDED_SINCE_189)
     assert set(SINCE_189) <= set(before) and not (added & set(before)), "the tables name snapshot keys and NEW keys only"

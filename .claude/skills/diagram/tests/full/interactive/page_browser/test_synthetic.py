@@ -333,11 +333,13 @@ def test_in_raster_mode_the_lit_paddy_is_washed_and_the_lit_beads_are_not(synthe
         # the computed opacity in the same tick as the highlight, and under a loaded gate the style had not
         # been recomputed yet - `('1', '1')` against `('0.45', '1')` once in a FULL run, green alone twice
         # (feature 250, 2026-09-26). The assertion is exactly as strict: a value that never arrives still fails.
-        synthetic.js("k => window.l7rMap.highlight(k)", "paddy")
-        p = synthetic.settles(want[0], lambda: synthetic.js(paddy))
+        # each poll re-asserts the highlight before it reads: feature 283's two failures had the page in raster mode with
+        # no highlight at all (`data-hl` empty, the paddy group without `on`) - the highlight undone, most likely by the
+        # pointer event the browser fires for the stationary mouse once the viewport shrinks, which calls `highlight`
+        # for whatever is under it. A wash that never arrives still fails.
+        p = synthetic.settles(want[0], lambda: (synthetic.js("k => window.l7rMap.highlight(k)", "paddy"), synthetic.js(paddy))[1])
         seen["lit"] = synthetic.js(state_lit)  # WHILE the paddy is lit - the state `after` below reads only once cleared
-        synthetic.js("k => window.l7rMap.highlight(k)", "bund beans")
-        b = synthetic.settles(want[1], lambda: synthetic.js(beads))
+        b = synthetic.settles(want[1], lambda: (synthetic.js("k => window.l7rMap.highlight(k)", "bund beans"), synthetic.js(beads))[1])
         synthetic.clear()
         return p, b
 

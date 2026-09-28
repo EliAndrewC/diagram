@@ -956,7 +956,8 @@
  "cho": {
   "def": "About one hectare (10 tan), the unit a holding or a village's fields were reckoned in; also a town block of that size.",
   "variants": [
-   "cho"
+   "cho",
+   "chō"
   ]
  },
  "chonin": {
@@ -1790,7 +1791,8 @@
   "def": "Rice-drying racks: poles in the field on which the cut sheaves hang for a week or two before threshing.",
   "variants": [
    "hazakake",
-   "hasa"
+   "hasa",
+   "inekake"
   ]
  },
  "head race": {
@@ -3817,8 +3819,6 @@
   "def": "A straw floor mat about 90 by 180 centimeters; a room's size is counted in them.",
   "variants": [
    "tatami",
-   "mat",
-   "mats",
    "twelve-mat"
   ]
  },
@@ -9985,6 +9985,89 @@
   "variants": [
    "meso scale",
    "meso-scale"
+  ]
+ },
+ "San'in": {
+  "def": "The Sea of Japan coast of western Honshu, a country of deep snow where the weather changes easily at harvest.",
+  "variants": [
+   "San'in",
+   "San-in"
+  ]
+ },
+ "Hokuriku": {
+  "def": "The Sea of Japan coast of central Honshu, north of the Kinki, a country of deep winter snow.",
+  "variants": [
+   "Hokuriku"
+  ]
+ },
+ "Tokai": {
+  "def": "The Pacific coast of central Honshu, between the Kanto and the Kinki, along the Tokaido road.",
+  "variants": [
+   "Tokai"
+  ]
+ },
+ "senbakoki": {
+  "def": "The threshing comb: a row of teeth set in a frame, through which the cut rice was drawn a handful at a time to strip the grain.",
+  "variants": [
+   "senbakoki",
+   "threshing comb",
+   "threshing combs"
+  ]
+ },
+ "komatsuna": {
+  "def": "A Japanese leafy green of the mustard family, grown for its leaves and eaten cooked or pickled; it does with half a day of sun.",
+  "variants": [
+   "komatsuna"
+  ]
+ },
+ "negi": {
+  "def": "The Japanese long green onion, a bunching onion grown for its long white-and-green stalk; it does with half a day of sun.",
+  "variants": [
+   "negi"
+  ]
+ },
+ "mitsuba": {
+  "def": "A Japanese herb, sometimes called Japanese wild parsley, grown for its three-part leaves; it grows even in shade.",
+  "variants": [
+   "mitsuba"
+  ]
+ },
+ "myoga": {
+  "def": "A Japanese ginger grown for its edible flower buds and shoots; it grows even in shade.",
+  "variants": [
+   "myoga",
+   "myōga"
+  ]
+ },
+ "shiso": {
+  "def": "Perilla, a leaf herb of the mint family grown for its fragrant leaves; it grows even in shade.",
+  "variants": [
+   "shiso"
+  ]
+ },
+ "fuki": {
+  "def": "Japanese butterbur, a shade-tolerant plant of damp ground whose long leaf stalks are cooked as a vegetable.",
+  "variants": [
+   "fuki"
+  ]
+ },
+ "seri": {
+  "def": "Japanese water dropwort, a creeping herb of wet ground and paddy margins, eaten as a spring green.",
+  "variants": [
+   "seri"
+  ]
+ },
+ "shungiku": {
+  "def": "Garland chrysanthemum, a leafy green whose young leaves are eaten boiled or in hot pots.",
+  "variants": [
+   "shungiku"
+  ]
+ },
+ "Ubame": {
+  "def": "One of the county manors drawn for this project, beside Ochiba and Hayakawa: a border magistracy of about 290 by 200 ft whose east wall is the line between two clans' lands, with a parley room built into it.",
+  "variants": [
+   "Ubame",
+   "Ubame's"
   ]
  }
 }

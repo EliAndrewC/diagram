@@ -34,6 +34,7 @@ DIRECTION is not invented: it is the bearing of this map's own connector track w
 
 ### Features
 
+- **threshing yard**: This map's harvest weather is settled, the regional default, so no rack is drawn by the houses: its racks would be put up out on the paddies after the harvest, which is the seasonal map's business and not drawn here (settled weather keeping the racks off the houses is our reading of the survey, which records racks gathered by the houses only on a coast of changeable weather).
 - **burial ground**: Inashiro keeps its own ground: a glade of graves cut into the windbreak west-north-west of the houses, beyond its last houses, holding the urns brought home from the main village's cremation ground. The land falls south, but the ground below the houses is paddy.
 
 ## Why it exists
@@ -1777,3 +1778,12 @@ pass, 2026-09-28, found the house-side plot of the record is the kitchen bed, re
 (hatake) crops go"), so the dry crops stand in the hem along the supply canal, across the rice. The woodland commons are three stands, all of them across the field from the houses: the frame they
 must fit in begins 100 ft west of the houses, and the ground on the houses' side inside it lies between their keep-out
 and the field's set-back, too narrow for a stand.
+
+## 2026-09-28 (feature 282): the harvest yard drawn as a floor of mats; nothing placed moved
+
+Every threshing yard is now drawn as the harvest leaves it: straw mats of 3 by 6 ft over the whole floor, each with a
+little bare ground around it, most turned a little as if laid by hand and nudged off their rows where the gap leaves room, and the map draws between a third and two thirds of the mats that covered it, a mat or two fewer where the yard's outline leaves no room (a drawing convention - the real yard was covered, research homesteads 'What lay in the work yard at
+harvest?'). The old fixed center mat and the rack along each yard's south edge are gone. This map declares no harvest
+weather, so it takes the regional default, settled, and draws no rack by the houses (research homesteads 'Did a village
+put its drying racks by the houses by custom, or because of its weather?'). The weather is a fact of the country, set by a map's declaration or else the regional default, and never rolled: the
+manifest diff is `mats` on each yard, `meta.harvest_weather`, and each yard's outline recorded to a thousandth (no yard moved).

@@ -173,6 +173,11 @@ def test_ink_inside_what_a_caption_names_is_ink_it_avoids() -> None:
     assert w[(190, 140, 210, 150)] == (sl.WEIGHT_TEXT, True), "a mat painted after the name hides it"
     court = _weights(src, "court")
     assert court[(210, 210, 250, 240)] == (sl.WEIGHT_INNER, True), "a garden in the court is ground, but not the court's"
+    later = src.replace('  <text x="300" y="260" font-size="9" data-kind="inner court">court</text>\n', "").replace(
+        "</svg>", '  <rect x="320" y="250" width="20" height="20" data-kind="vegetable garden" fill="#BFD0A0"/>\n</svg>'
+    )
+    later = later.replace('data-kind="inner court" fill="#D9C28E"/>\n', 'data-kind="inner court" fill="#D9C28E"/>\n  <text x="300" y="260" font-size="9" data-kind="inner court">court</text>\n')
+    assert _weights(later, "court")[(320, 250, 340, 270)] == (sl.WEIGHT_TEXT, True), "a garden painted after the name hides it (feature 283)"
 
 
 def test_a_room_names_itself_inside_the_building_that_holds_it() -> None:
@@ -262,3 +267,51 @@ def test_a_caption_keeps_off_a_leader_placed_before_it() -> None:
     bx0, by0, bx1, by1 = sl.bbox(band)
     sx0, sy0, sx1, sy1 = sl.bbox(list(second.block))
     assert sx1 <= bx0 or bx1 <= sx0 or sy1 <= by0 or by1 <= sy0
+
+
+def test_a_bed_in_rows_is_no_seat_for_another_name() -> None:
+    """Feature 283: a worked bed's furrows run through a name's letters, so neither a court nesting it nor a neighbor
+    may set its name there; the bed's own name lies on it."""
+    src = _sheet(
+        '  <rect x="200" y="200" width="150" height="80" data-kind="inner court" fill="#D9C28E"/>\n'
+        '  <rect x="210" y="210" width="40" height="30" data-kind="vegetable garden" fill="url(#vegetable-rows)"/>\n'
+        '  <text x="300" y="260" font-size="9" data-kind="inner court">court</text>\n'
+        '  <rect x="400" y="210" width="40" height="30" data-kind="vegetable garden" fill="url(#vegetable-rows)"/>\n'
+        '  <rect x="450" y="210" width="20" height="20" data-kind="well" fill="#9C8C70"/>\n'
+        '  <text x="480" y="225" font-size="9" data-kind="well">well</text>\n',
+    )
+    assert _weights(src, "court")[(210, 210, 250, 240)] == (sl.WEIGHT_OBSTACLE, True), "nested, but in rows"
+    assert _weights(src, "well")[(400, 210, 440, 240)][0] == sl.WEIGHT_OBSTACLE, "a neighbor's bed is no free ground"
+
+
+def test_a_stepped_building_is_named_against_its_largest_block() -> None:
+    """Feature 283: a house of two blocks in echelon leaves its box's corner empty, and a caption set against the box
+    led to nothing; it is set against the largest block. Parts that fill their box keep the box, as does a caption
+    lying inside it."""
+
+    def rect_shape(x, y, w, h):
+        return sl.Shape("rect", "residence", [(x, y), (x + w, y), (x + w, y + h), (x, y + h)])
+
+    west, east = rect_shape(0, 0, 100, 40), rect_shape(110, 30, 80, 40)
+    box = [(0, 0), (190, 0), (190, 70), (0, 70)]
+    assert sl.stepped_subject(box, [west, east], (100, 120)) == west.poly, "echelon: the largest block"
+    assert sl.stepped_subject(box, [west, east], (50, 20)) == box, "a caption inside keeps the box"
+    full = rect_shape(100, 0, 90, 70)
+    assert sl.stepped_subject(box, [rect_shape(0, 0, 100, 70), full], (100, 120)) == box, "parts that fill the box"
+    assert sl.stepped_subject(box, [west, rect_shape(150, 0, 10, 10)], (100, 120)) == box, "one block and a small part"
+
+
+def test_a_leader_ends_on_the_ink_it_names() -> None:
+    """Feature 283: a leader set against a group's box ended in the box's empty corner (a moored barge, three pines);
+    it is carried on to the nearest drawn part. A leader already on the ink, or with nothing drawn, is left alone."""
+    from dataclasses import replace as _replace
+
+    pine = sl.Shape("circle", "garden pines", [(100, 100), (110, 100), (110, 110), (100, 110)])
+    rope = sl.Shape("line", "garden pines", [(120, 90), (140, 90)], half=0.5, line=True)
+    p = sl.place("x", 9.0, sl.Subject("point", ((100, 100), (110, 100), (110, 110), (100, 110))), sl.ObstacleIndex())
+    p = _replace(p, leader=((60.0, 105.0), (95.0, 105.0)))
+    moved = sl.leader_to_ink(p, [pine, rope])
+    assert moved.leader is not None and 99.0 <= moved.leader[1][0] <= 100.0, "carried on to the pine's edge"
+    on = _replace(p, leader=((60.0, 105.0), (100.5, 105.0)))
+    assert sl.leader_to_ink(on, [pine]) == on, "already on the ink"
+    assert sl.leader_to_ink(p, []) == p and sl.leader_to_ink(_replace(p, leader=None), [pine]).leader is None

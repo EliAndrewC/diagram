@@ -24,6 +24,7 @@ from . import checks as c
 from . import labels as lbl
 from . import mapmatch as mm
 from . import shared as s
+from . import sun
 from .grids import FTPX
 from .onmap import OnMap
 from .parse import ParsedPlan
@@ -150,6 +151,15 @@ CHECKS: tuple[Check, ...] = (
         "hoshigaoka-off-map-red.svg",
         "draw what the map shows at the subject and nothing it does not - move, add or remove the feature, or size the subject to the map's footprint (the map is the canon for the site)",
         skipped=lambda ctx: mm.skipped(ctx.on_map),
+    ),
+    # A kitchen bed gets its sun (feature 283, the GM 2026-09-28: "That feels like it should be an automated check that gets
+    # run on hand-drawn diagrams that have gardens"; research homesteads 044): every sheet, since both programs draw one.
+    Check(
+        "garden_sun",
+        lambda ctx: sun.garden_sun(ctx.plan, ctx.text),
+        True,
+        "hoshigaoka-garden-shaded-red.svg",
+        "move the bed to open ground where it gets its hours - clear of the shadows the report names, never by declaring a sun bed half-shade",
     ),
     # --- the program itself, generic over the declaration: every type's required items and their bands (D7) ---
     Check(

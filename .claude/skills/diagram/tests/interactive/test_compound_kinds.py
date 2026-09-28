@@ -91,10 +91,11 @@ def test_every_drawn_element_carries_a_kind_the_registry_knows(name: str) -> Non
 #: 2026-09-27: *"individual features inside of buildings or other features to get their own individual
 #: highlighting"*). A part lights and opens as itself and lights with its parent - the reader must say both.
 #: (part, parent) pairs, since one kind of part (a well) can be part of different parents on one sheet.
-_SHARED = [("hearth", "kitchen"), ("well", "kitchen"), ("well", "garden"), ("garden pond", "garden"), ("latrine", "residence")]
+_SHARED = [("hearth", "kitchen"), ("well", "kitchen"), ("garden pond", "garden"), ("latrine", "residence")]
 PARTS: dict[str, list[tuple[str, str]]] = {
     "ochiba-magistracy": _SHARED
     + [
+        ("well", "garden"),  # the garden well: the formal garden's, or since feature 283 the bed's it waters
         ("genkan", "office hall"),
         ("engawa", "residence"),
         ("door", "residence"),
@@ -120,6 +121,7 @@ PARTS: dict[str, list[tuple[str, str]]] = {
     ],
     "hayakawa-magistracy": _SHARED
     + [
+        ("well", "vegetable garden"),  # the garden well: the formal garden's, or since feature 283 the bed's it waters
         ("stone lantern", "garden"),
         ("garden pines", "garden"),
         ("engawa", "residence"),
@@ -153,6 +155,7 @@ PARTS: dict[str, list[tuple[str, str]]] = {
     ],
     "ubame-magistracy": _SHARED
     + [
+        ("well", "vegetable garden"),  # the garden well: the formal garden's, or since feature 283 the bed's it waters
         ("stone lantern", "border court"),
         ("engawa", "residence"),
         ("residence corridor", "residence"),
