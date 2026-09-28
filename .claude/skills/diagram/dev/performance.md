@@ -425,8 +425,8 @@ not a measurement on this host: one base re-run read Kashikawa at 13.2 s against
 ## The fourth pass: the exact levers kept, the moving ones measured faster and withdrawn on the rules (feature 284, 2026-09-28)
 
 The GM, on 281's priced residue: *"look at what is slow and then be willing to let things of that nature change if those
-changes would allow it to be significantly faster."* The pool's five rolls went from 32.49 s to 23.89 s back to back (1.36x),
-and every pool map came out the base's map but for one bamboo thicket's 8 px on two maps. All figures are in
+changes would allow it to be significantly faster."* The pool's five rolls went from 35.15 s on main (as merged, with feature
+269) to 26.72 s back to back (1.32x), and every pool map came out main's map but for one bamboo thicket's 8 px on two maps. All figures are in
 `specs/284-fourth-hotspot-pass/measurements.json` and its research record.
 
 **What paid, all exact:** the threshing yards' mats in arrays (feature 282 had made the homesteads stage 3.7-5.1 times slower;
