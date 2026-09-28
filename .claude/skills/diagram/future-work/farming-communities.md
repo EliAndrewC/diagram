@@ -7,6 +7,16 @@ tax-free plots, not a different kind of place, and its defects are the same defe
 This is where hamlet work goes - the paddy fabric, the lane web, homesteads and their groves, wells
 and byres, woodland and windbreaks, the notice board, and the cohort seeds that surface all of it.
 
+## Rename the `grave island` class to `field grave` (settlement-review, Kashikawa 2026-09-28)
+
+Feature 267 made the field grave a knob - an island inside a plot (the Chinese form) or a grave in a plot's corner (the
+Japanese form) - but the page class is still keyed and named `grave island`, so a corner-form hamlet's hover says
+"grave island" while its own feature note says the grave is "not an island". Kashikawa's review raised it twice; it was
+accepted for 267 with that note standing in. The rename touches 17 files: the ink tags in `settlement/fields/features.py`,
+`GraveIsland` in `interactive/classes/water_and_ways.py`, the glossary term, `place.json`, `siblings.json`,
+`overlap/taxonomy.py`, `tools/placement_stages.py`, the Mizuguchi and Kashikawa manifests' `ink_classes`, and the pinned
+snapshot `tests/fixtures/classes_before_189.json` (through `SINCE_189`, the renaming table the snapshot test keeps).
+
 ## OPEN 2026-09-27, OWED AT CONVERSION: the village generator draws no cremation ground and no wayside stones
 
 Feature 272 put a village cremation ground (six stone jizo at it) and a group of wayside stones at the south lane's
