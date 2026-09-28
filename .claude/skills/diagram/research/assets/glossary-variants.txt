@@ -311,6 +311,8 @@ chinese-style gates	Chinese-style gate
 chinju	chinju
 chinju no mori	chinju no mori
 chinjusan	chinju
+chinquapin	chinquapin
+chinquapins	chinquapin
 cho	cho
 cho-bu	cho
 cho-hanare	machi-hanare
@@ -1759,6 +1761,7 @@ nanbokucho	Northern and Southern Courts
 nanbu	Tohoku
 nando	nando
 nando-gamae	nando-gamae
+nanmu	nanmu
 nanohana	rape
 nanushi	shoya
 nara period	Nara period
@@ -2052,6 +2055,7 @@ reach	reach
 reaches	reach
 recharge	recharge
 recharges	recharge
+red chinquapin	chinquapin
 reducing atmosphere	reducing firing
 reducing firing	reducing firing
 reel	reeling
