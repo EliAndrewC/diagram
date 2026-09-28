@@ -6,7 +6,7 @@
 ## Summary
 
 The Hoshigaoka village map draws its shrine's grove as a rectangle of trees, 137 by 215 ft (observed 2026-09-28; method: the manifest's `village_groves` record of role
-`shrine`, w 68.3 by h 107.7 map px at the map's 2 ft to the px, read from `hoshigaoka.json`), filling the
+`shrine`, w 68.3 by h 107.7 map px at the map's 2 ft to the px, read from `hoshigaoka.json`; research.md R1), filling the
 precinct box from the shrine's well to the outermost arch. The GM asked whether that was a research finding -
 the rectangle, and a shrine wooded on every side. It was neither: research 124 found the precinct's size and
 that the buildings cover little of it, the GM ruled (2026-09-27) to draw a grove, and the crowns were thrown
@@ -103,12 +103,12 @@ the research supports no knob; the village conversion's owed list (`future-work/
 
 ## Success Criteria *(mandatory)*
 
-- **SC-001** (FR-001-FR-003): The new question exists with at least one READ, quote-checked footnote per claim
+- **SC-001** (FR-001, FR-002, FR-003): The new question exists with at least one READ, quote-checked footnote per claim
   it rests on, or an absence note; all four checks have run on it and their findings are applied.
 - **SC-002** (FR-005, FR-006, FR-007): On the map and the sheet, the grove's trees stand in the declared form;
   where FR-005 settles an irregular outline, the outline, measured on the tree list, has no straight run - the bar `STRAIGHT_RUN`: no four consecutive
   hull-edge crowns lie within `2 ft` of one line (a named bar, not a measurement: about a third of the smallest
-  crown's radius, so a run that tight reads as a ruled edge).
+  crown's radius, so a run that tight reads as a ruled edge; research.md R2).
 - **SC-003** (FR-006, FR-007): The sheet's trees match the map's one for one (the `matches_map` test stays green).
 - **SC-004** (FR-004, FR-008): The program and the owed list name the knob, its forms and labels - or the single
   attested form with its label and the statement that the research supports no knob.
