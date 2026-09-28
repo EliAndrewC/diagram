@@ -901,6 +901,9 @@ def test_the_drawn_forms_are_recorded_beside_the_rolled_knob() -> None:
     the baths by whether a corridor joins them."""
     from l7r.diagram.hamletgen.homesteads.fixtures import record_drawn_forms
 
-    m = {"meta": {}, "farm_fixtures": [{"kind": "woodpile"}, {"kind": "woodpile", "form": "kizuma"}, {"kind": "woodpile"}, {"kind": "bath", "corridor": {"x": 1.0}}, {"kind": "bath"}, {"kind": "coop"}]}
+    m = {
+        "meta": {},
+        "farm_fixtures": [{"kind": "woodpile"}, {"kind": "woodpile", "form": "kizuma"}, {"kind": "woodpile"}, {"kind": "bath", "corridor": {"x": 1.0}}, {"kind": "bath"}, {"kind": "coop"}],
+    }
     record_drawn_forms(m)
     assert m["meta"]["woodpile_forms_drawn"] == {"eaves": 2, "kizuma": 1} and m["meta"]["bath_seats_drawn"] == {"corridor": 1, "unjoined": 1}
