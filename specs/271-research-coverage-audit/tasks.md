@@ -57,5 +57,6 @@
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
       verify: DONE. group U6: 7 questions written or edited and 16 registry keys, researched through source-reader; quote-check, record-format and source-applicability applied with one re-check round and the owed modals answered (briefs/u6-checks.md)
 
-- [ ] T14 batch 3 lands: `owed-check`, `make page-check`, `make done`, the push; State updated
+- [x] T14 batch 3 lands: `owed-check`, `make page-check`, `make done`, the push; State updated
       research: rendering
+      verify: DONE. owed-check 5 of 5 IN-STEP, make page-check green, make done green; every 271 group now landed or done by 272
