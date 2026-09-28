@@ -297,7 +297,7 @@ Measured before and after in research R10.
 - The brook's walk swings across its whole band at every station (`BROOK_WANDER_STEP` 4 -> 10, the band unchanged at
   10 ft, so the frame and the skirt it is sized to are untouched), and an exit leg still on the page bends at its middle
   (`exit_bend`): Sawada's middle reach ran 872 ft within 3.1 ft of a line, 70% of its course on the page.
-- A household's own dry plot is laid against its homestead (`stage_homestead_fields`, after the ways): the levee model -
+- (RETIRED 2026-09-28 by D24) A household's own dry plot is laid against its homestead (`stage_homestead_fields`, after the ways): the levee model -
   the old settlement and its dry fields on the same raised ground, the paddy behind (research/fields.html, the catena;
   `shizen-teibo-jawiki`, `kohai-shicchi-jawiki`) - beside the canal hem, which stays as the second position. The toe
   band and the cover's cultivated extent leave these plots out, so neither moves after the seat and the router were
@@ -342,7 +342,7 @@ Measured before and after in research R10.
   seats every way out passes, the connector's win, in the siter and the frame stage's re-seat alike. A board is squared
   to the way it stands on, and Inashiro's outermost join is a one-farmstead web straggler whose verge won, so the board
   stood 87.7 degrees off the track every household walks (research/urban-features.html: broadside to the one way out).
-- The homestead field is a grain plot, so an archetype that buys its grain in lays none (`GRAIN_BOUGHT_IN`: the
+- (RETIRED 2026-09-28 by D24) The homestead field is a grain plot, so an archetype that buys its grain in lays none (`GRAIN_BOUGHT_IN`: the
   mulberry dike-fishpond, which 「abandoned rice to plant mulberry」 - research/archetypes.html; Kuwabata's GM-confirmed
   economy). Kuwabata had drawn six barley, millet and buckwheat plots.
 - A farmstead fixture is refused a seat whose line to its house crosses a lane (`across_a_lane`, the brook's line test):
@@ -478,7 +478,7 @@ want to route around deficiencies in our placement algorithm... we should fix th
   split; with its cause fixed it drew 17-24% of two faces past 120 ft, and the band goes back to 100 ft: thinnest
   84.1-89.8 ft, median 95.6-101.4, 1-16% of a face over 120 at the ends and bends, one piece on every map
   (`m:belt-r22-depth`, `m:belt-r22-pieces`).
-- **Too few homestead fields on a packed cluster** (accurate for the position: a household's dry field lay on the
+- (RETIRED 2026-09-28 by D24) **Too few homestead fields on a packed cluster** (accurate for the position: a household's dry field lay on the
   raised ground its house stood on, research/fields "Where dry (hatake) crops go"; the offset a GUESS, labeled). Main's
   placer packed Mizuguchi's steadings closer than a plot's depth, 3 of 12 households laid a plot, and the median house
   stood 157 ft from its nearest dry plot. Where no side has room flush, the plot is offered the nearest ground beside

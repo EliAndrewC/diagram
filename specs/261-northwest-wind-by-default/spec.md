@@ -331,3 +331,9 @@ match the maps.
   no figure with a unit (seeds are identifiers), nothing unrequested, and contradict no FR, SC or Assumption (the
   Assumptions' "an engine limitation is fixed in the engine, not re-seeded" agrees). plan.md D4 and
   plan-review.json D4 still describe the 8/27 re-seeds; that is for the plan's next review, not a spec finding.
+- D24 round 1 (2026-09-28, `spec-fidelity`, Opus, on the retirement of the homestead field): CHANGES REQUIRED, three
+  items, all applied - row 276 relabeled to what the record supports (accurate for the yashikibatake and the levee; the
+  grain in the fields and the canal hem the record's own reading, a GUESS), row 269 marked retired, and the Kashikawa and
+  Sawada records re-measured (`make figures`: 0 moved, 0 not re-measured).
+- D24 round 2 (2026-09-28, `spec-fidelity-verify`, Opus): **FAITHFUL**. All three items resolved; the GM's question and
+  ruling of 2026-09-28 added to `request.md` verbatim on its aside.
