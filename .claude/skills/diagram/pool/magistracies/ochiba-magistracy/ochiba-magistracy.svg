@@ -248,9 +248,8 @@
       <rect x="647" y="668" width="5" height="5"/>
       <rect x="723" y="668" width="5" height="5"/>
     </g>
-    <text x="574.0" y="580.2" text-anchor="middle" font-size="14" font-weight="bold" letter-spacing="1" fill="#5C4318">HEARING COURT</text>
-    <text x="574.0" y="591.2" text-anchor="middle" font-size="8" font-style="italic" fill="#7A5C30">white gravel</text>
-    <text x="573" y="613" text-anchor="middle" font-size="9" font-style="italic" fill="#7A5C30" data-kind="fox-fire lantern">Fox-Fire Lantern brought to the dais at evening</text>
+    <text x="574.0" y="594.2" text-anchor="middle" font-size="14" font-weight="bold" letter-spacing="1" fill="#5C4318">HEARING COURT</text>
+    <text x="574.0" y="605.2" text-anchor="middle" font-size="8" font-style="italic" fill="#7A5C30">white gravel</text>
     <!-- feature 267 pass 2: the sublabel carries only this sheet's floor (every court is roofed, and the modal says so), and the mats' roster is the modal's -->
     <g data-kind="kneeling positions">
       <g fill="#C8B078" stroke="#7A5430" stroke-width="0.6">
@@ -509,13 +508,8 @@
         <circle cx="0" cy="-6" r="5" fill="#E8D2A8" stroke="#6B4F2A" stroke-width="0.8"/>
       </g>
       <!-- feature 267 pass 3: font 10 -> 8 so the name stays inside the 55 px west bay (it crossed the hall's west wall) -->
-      <text x="918.8" y="183.8" text-anchor="middle" font-size="8" font-weight="bold" fill="#3A2E1C">Ta-no-Kami</text>
-      <text x="918.8" y="193.0" text-anchor="middle" font-size="8" font-style="italic" fill="#3A2E1C">(rice)</text>
-    <line x1="901.0" y1="196.0" x2="901.0" y2="214.0" stroke="#3A2E1C" stroke-width="0.64" stroke-linecap="round" data-leader="1"/>
     </g>
     <!-- pass 3: split over two lines - on one it touched the west wall and the rail -->
-    <text x="907" y="272" text-anchor="middle" font-size="7" fill="#FFFAE6" data-kind="fox-fire lantern">Fox-Fire</text>
-    <text x="907" y="280" text-anchor="middle" font-size="7" fill="#FFFAE6" data-kind="fox-fire lantern">Lantern</text>
     <!-- E altar marker (Myobu) - torii silhouette -->
     <g data-kind="shrine altar">
       <g transform="translate(963, 218)">
@@ -524,11 +518,7 @@
         <line x1="-8" y1="5" x2="-8" y2="20" stroke="#FFFAE6" stroke-width="2"/>
         <line x1="8" y1="5" x2="8" y2="20" stroke="#FFFAE6" stroke-width="2"/>
       </g>
-      <text x="968.9" y="182.8" text-anchor="middle" font-size="8" font-weight="bold" fill="#3A2E1C">Myobu</text>
-      <text x="968.9" y="192.0" text-anchor="middle" font-size="8" font-style="italic" fill="#3A2E1C">(fox)</text>
-    <line x1="957.1" y1="195.0" x2="957.1" y2="217.0" stroke="#3A2E1C" stroke-width="0.64" stroke-linecap="round" data-leader="1"/>
     </g>
-    <text x="963" y="283" text-anchor="middle" font-size="7.5" fill="#FFFAE6" data-kind="fox relics">Akami-fude</text>
   </g>
 
   <!-- Shrine garden: nests the shrine + workshop's south side, filling the SE inner-court
@@ -541,16 +531,8 @@
   </g>
 
   <!-- Shrine hall label (above) -->
-  <text x="838.4" y="242.4" text-anchor="middle" font-size="12" font-weight="bold" letter-spacing="1" fill="#5C1A0A" data-kind="compound shrine"><tspan x="838.4" dy="0.0">INARI</tspan><tspan x="838.4" dy="13.8">SHRINE</tspan></text>
-    <line x1="869.0" y1="232.8" x2="879.0" y2="232.8" stroke="#5C1A0A" stroke-width="0.96" stroke-linecap="round" data-kind="compound shrine" data-leader="1"/>
+  <text x="949.8" y="177.2" text-anchor="middle" font-size="12" font-weight="bold" letter-spacing="1" fill="#5C1A0A" data-kind="compound shrine"><tspan x="949.8" dy="0.0">INARI</tspan><tspan x="949.8" dy="13.8">SHRINE</tspan></text>
 
-  <!-- Fox relics kept at the Myobu altar (annotation below the workshop, in the
-       open court freed by the smaller hall) -->
-  <g data-kind="fox relics">
-    <text x="935" y="392" text-anchor="middle" font-size="8.5" font-style="italic" fill="#5C1A0A">Chigiri-no-Chou &amp;</text>
-    <text x="935" y="404" text-anchor="middle" font-size="8.5" font-style="italic" fill="#5C1A0A">warding materials</text>
-    <text x="935" y="416" text-anchor="middle" font-size="8.5" font-style="italic" fill="#5C1A0A">(at the Myobu altar)</text>
-  </g>
 
   <!-- Cinnabar workshop colonnade (south of shrine, hatched to indicate covered open-air).
        Shifted +60 px east with the shrine to back the east wall (backing-void fix). -->
@@ -576,8 +558,7 @@
          them and the south posts to the name (the re-seat set it over a stone and a bowl) -->
     <!-- feature 267 pass 3: the name at font 8.5 (at 10 it ran over the colonnade's border strokes), the lower
          stone and bowl raised 3-5 px to clear it, the sublabel lifted off the middle south post -->
-    <text x="931.0" y="340.8" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#3A2E1C">Cinnabar Workshop</text>
-    <text x="931.0" y="349.3" text-anchor="middle" font-size="7" font-style="italic" fill="#3A2E1C">(colonnade)</text>
+    <text x="935.0" y="338.3" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#3A2E1C">Cinnabar Workshop</text>
   </g>
 
   <!-- Inner garden (feature 267 pass 2): laid out BEFORE the reception and the guest room - the whole garden

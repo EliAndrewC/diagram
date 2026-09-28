@@ -58,6 +58,7 @@
 
 ## Review log
 
+- **2026-09-28 (the GM's ruling: no GM-only notes on a page)**: the salt wards came from the GM-only notes of Hajime's Obsidian Portal record, so they came off the sheet and its page - every door's pair, the gate pair and its caption, the note box, and the map note.
 - **2026-09-27 (building-review round 6)**: pass (the drawing); the practice-ground entry's rack sentence brought to the drawing.
 - **2026-09-27 (feature 267 pass 6, building-review round 5)**: the weapon rack against the bale yard's west edge, where its name has a free seat inside the yard (on the north edge its only seat was across the divider); `Hajime's quarters` in two lines, clear of its walls.
 - **2026-09-27 (feature 267 pass 5, building-review round 4)**: the tally office stands 10 ft off the granary (the bale carts' way from their waiting ground into the bale yard, 6.7 ft before); the weapon rack moved off the granary's north face to the yard's north edge as a rail on two posts (it read as a second door); the guests' board veranda its own part, so `guest privy` names the privy; the guest house's note `(in the annex added by the 9th magistrate)` in three lines and its name at 11 px, so both fit the house; HEARING COURT seated at the top of its court, clear of its walls and the mats.
@@ -108,7 +109,6 @@
 - **ancestral alcove**: Hayakawa is held by a lineage - its past magistrates are Hajime's own forebears - so the alcove beside the reception holds their tablets. This is the case the rule was written for.
 - **bath**: Hajime enlarged the bath, an addition on the kitchen range: at about 18 by 12 ft it is larger than the rest of the house would need.
 - **guest quarters**: A rich posting, Hayakawa has a detached guest house in an annex added by the ninth magistrate. Its guests - provincial inspectors, the lineage's chancellors - outrank a county magistrate, and the setting's etiquette lodges a superior in the private depth of the household, so the house stands in the inner court. Guests arrive by their own river door into the guest garden. The annex has no privy: the household staff serve its guests of rank with chamber pots.
-- **salt wards**: Hajime sets a pair outside every door of the compound with his own hand - Yasuki sea salt, never salt that has touched the river - renewing them after every rain, main gate last.
 - **river**: The Hayakawa is a swift river with a history of floods. The sheet shows only its near-bank reach, a margin of a wider river; most barges go on downstream to Nagahara city.
 - **river landing**: The county's tax grain goes down to Nagahara city from here, carried out of the east gate, across the bank street and down the landing steps. No customs are collected at the landing - tariffs are taken at the city's gates downstream.
 - **residence**: Two halls joined by a corridor, one set back from the other: the lineage has added to the house over generations, and the later hall holds Hajime's rooms and the reception at its far end.

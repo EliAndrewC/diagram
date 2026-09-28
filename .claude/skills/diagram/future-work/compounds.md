@@ -64,12 +64,8 @@ the Fuchu Joge pamphlet's drawing labels, which sit only in its PDF's images and
 
 ### Canon gaps (for the GM, not research)
 
-- Ubame, Hayakawa, the Kurogi, Moriguchi and Nagahara are absent from the mounted `l7r.md`, though Ubame's
-  notes cite it (and cite line 832 for the Ministry controlling shrines, where 832 has the Ministry of Rites
-  deciding doctrine). Their particulars rest on each map's own notes.
-- Whether a magistracy page may carry GM-only Obsidian Portal notes is the GM's call; until they rule, the
-  stroke-practice line is off Ochiba's page, and the Ochiba notes that may rest on the same GM-only source (the
-  fox-fire lantern's story, the Chigiri-no-Chou) are left as feature 262 shipped them.
+- Ubame, Hayakawa, the Kurogi, Moriguchi and Nagahara are absent from the mounted `l7r.md`; their particulars rest
+  on each map's own notes (Ubame's two broken `l7r.md` citations were corrected in feature 267).
 
 ### Drawing and tooling questions left open
 
