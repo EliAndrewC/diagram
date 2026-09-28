@@ -5,7 +5,7 @@ import random
 from collections.abc import Iterator
 from typing import TYPE_CHECKING, Any, cast
 
-from ._geom import PointGrid, Pt, boxed_polys, drawn_extent, edge_dist, indexed_grid, point_in_poly, quad_hits_poly, rot_rect, seg_dist
+from ._geom import PointGrid, Pt, boxed_polys, drawn_extent, edge_dist, indexed_grid, point_in_poly, rot_rect, seg_dist
 from ._knobs import skeleton_layout
 
 # HOW FAR A FARMHOUSE WALL STANDS OFF THE PADDY (researched 2026-08-27, feature 133 T41; the record
@@ -203,68 +203,6 @@ class HousesMixin:
             return grid
 
         return indexed_grid(polys, key, build)
-
-    def _hard_ground(self: Settlement) -> list[Any]:  # type: ignore[misc]
-        """Every HARD no-build polygon, read from the MANIFEST plus anything a gen registered by hand.
-
-        Manifest-sourced on purpose. The first cut kept a `hard_polys` registry that `draw_comb_field`
-        populated - and it was EMPTY on any map whose field is drawn by a different path (the polder
-        and contour archetypes have their own), so the rule silently did nothing there. Reading the
-        drawn record instead makes it order-independent and impossible for a gen to forget: the same
-        placement-and-check-read-the-same-source doctrine the footbridges taught us. Cached on the
-        record counts, since this is called once per placement candidate."""
-        dp, fd = self.M.get("dry_plots", []) or [], self.M.get("field_ditches", []) or []
-        key = (len(dp), len(fd), len(self.hard_polys), len(self.wet_polys))
-        if self._hard_cache_key == key:
-            return self._hard_cache
-        out: list[Any] = [list(self.hard_polys)[i] for i in range(len(self.hard_polys))]
-        out += [list(wp) for wp in self.wet_polys if len(wp) >= 3]  # every drawn marsh (feature 150 T50)
-        out += [[(q[0], q[1]) for q in d["poly"]] for d in dp if d.get("poly") and len(d["poly"]) >= 3]
-        for ch in fd:
-            pts = ch.get("poly") or ch.get("pts")
-            if not pts:
-                continue
-            hw = float(ch.get("w") or 1.5) / 2 + 2.0
-            for k in range(len(pts) - 1):
-                ax, ay = pts[k]
-                bx, by = pts[k + 1]
-                ln = math.hypot(bx - ax, by - ay) or 1.0
-                nx, ny = -(by - ay) / ln * hw, (bx - ax) / ln * hw
-                out.append([(ax + nx, ay + ny), (bx + nx, by + ny), (bx - nx, by - ny), (ax - nx, ay - ny)])
-        self._hard_cache_key: tuple[int, ...] | None = key
-        self._hard_cache = out
-        return out
-
-    def _hard_clear(self: Settlement, x: float, y: float, w: float, h: float) -> bool:  # type: ignore[misc]
-        """Is this footprint clear of HARD no-build ground (crop, pond, bog, a field's own ditches)?
-
-        Factored out of `_fits` because placement is not the only moment that needs it:
-        `_solve_homestead` NUDGES a farmstead after it has already passed `_fits`, to make room for
-        its yard, garden and grove - and nothing re-tested the moved position, so a steading that
-        genuinely cleared every keep-out where it was placed could be shifted onto a ditch or a hem
-        plot afterwards. That was the last root cause behind the overlap matrix's residue."""
-        hard = self._hard_ground()
-        if not hard:
-            return True
-        # ROTATION ALLOWANCE. `_fits` is called before a farmhouse is given its small random tilt
-        # (+/-5 deg), so the box tested here is axis-aligned while the box DRAWN and RECORDED is
-        # rotated - and a rotated rect reaches further on both axes than its unrotated self. Testing
-        # the swept extent closes that gap; without it a steading clears at placement and laps a hem
-        # plot once tilted, which is exactly one of the defects the overlap matrix kept reporting.
-        _th = math.radians(5.0)
-        # BOTH AXES FROM THE ORIGINAL SIDES (feature 226, a spec-fidelity aside): this inflated `h` from the already-swept
-        # `w`, so one axis was wider than the tilt's extent; `w0` keeps the sweep what it claims to be.
-        w0 = w
-        w = w0 * math.cos(_th) + h * math.sin(_th)
-        h = w0 * math.sin(_th) + h * math.cos(_th)
-        fp = [(x - w / 2, y - h / 2), (x + w / 2, y - h / 2), (x + w / 2, y + h / 2), (x - w / 2, y + h / 2)]
-        fx0, fy0, fx1, fy1 = x - w / 2, y - h / 2, x + w / 2, y + h / 2
-        for hp, (hx0, hy0, hx1, hy1) in zip(hard, self._poly_bboxes(hard), strict=False):
-            if fx1 < hx0 or fx0 > hx1 or fy1 < hy0 or fy0 > hy1:
-                continue
-            if quad_hits_poly(fp, hp):
-                return False
-        return True
 
     def _record_tread(self: Settlement, pts: Any, half: float) -> None:  # type: ignore[misc]
         """Register a way's DRAWN tread, so `_fits` can keep whole footprints off it (see `_on_a_tread`).

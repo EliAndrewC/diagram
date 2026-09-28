@@ -83,7 +83,7 @@ class PlacerMixin:
         for it in self._reach_index(self.placed, "placed_reach").near(x, y, max(hw, hh) / 2 + 2):
             if abs(x - it[0]) < (hw + it[2]) / 2 + 2 and abs(y - it[1]) < (hh + it[3]) / 2 + 2:
                 return True
-        return bool(self._house_too_near_a_neighbor(house))
+        return bool(self._house_too_near_a_neighbor(house) or self._house_unreachable(house))
 
     def _bundle_refused(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """Would `_bundle_fits` refuse this DISPERSED bundle, by one of the conjuncts the indexes answer cheaply (feature

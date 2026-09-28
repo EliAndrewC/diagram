@@ -739,3 +739,51 @@ def test_a_thin_neighbor_that_takes_a_tail_is_asked_whether_it_grew_one() -> Non
     plots = [{"poly": list(host["poly"])}, {"poly": list(along["poly"])}]
     _shed_necks(plots, 1.25 * 2.0, 15.0 * 2.0)
     assert Polygon(plots[1]["poly"]).buffer(0).area > Polygon(along["poly"]).area, "the narrow neighbor took the tail"
+
+
+def test_the_carves_plot_index_and_fall_cache_change_no_plot(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 278 (FR-007): the hem pass asks an index of the plots' boxes, grown as it appends hem plots, and `_at_f`
+    reads fall values projected once per carve. One comb built three ways - as shipped, with the index answering every
+    filed plot (the scan it replaced) and with the fall cache off - carves the same plots."""
+    from l7r.diagram.waterfields import carve as carve_mod
+    from l7r.diagram.waterfields import comb, frame
+
+    def plots() -> list[Any]:
+        net = comb.build_comb(2400, 2400, (300.0, 300.0), seed=11, down_deg=90)
+        return [p["poly"] for p in net["plots"]]
+
+    shipped = plots()
+    assert len(shipped) > 100, "non-vacuity: a real comb"
+
+    class _Scan(carve_mod.PointGrid):
+        def near(self, px: float, py: float, pad: float = 0.0) -> Any:  # every filed item: the scan
+            return [it for b in self.buckets.values() for it in b] + list(self.oversized)
+
+    monkeypatch.setattr(carve_mod, "PointGrid", _Scan)
+    assert plots() == shipped
+    monkeypatch.undo()
+
+    class _Off:
+        def __enter__(self) -> None:
+            return None
+
+        def __exit__(self, *_a: object) -> None:
+            return None
+
+    monkeypatch.setattr(carve_mod, "at_f_cache", _Off)
+    assert frame._AT_F is None
+    assert plots() == shipped
+
+
+def test_at_f_answers_as_the_walk_did_on_a_non_monotone_polyline() -> None:
+    """Feature 278: with the cache on, a polyline whose fall doubles back answers at its first matching segment, as the
+    per-call projection did, and a second polyline gets its own falls."""
+    from l7r.diagram.waterfields.frame import _at_f, _Frame, at_f_cache
+
+    F = _Frame(90.0)
+    pts = [(0.0, 0.0), (0.0, 50.0), (0.0, 20.0), (0.0, 90.0)]
+    want = [_at_f(F, pts, f) for f in (-5.0, 10.0, 30.0, 60.0, 95.0)]
+    with at_f_cache():
+        assert [_at_f(F, pts, f) for f in (-5.0, 10.0, 30.0, 60.0, 95.0)] == want
+        other = [(5.0, 0.0), (5.0, 100.0)]
+        assert _at_f(F, other, 40.0) == (5.0, 40.0)

@@ -40,11 +40,70 @@ mechanism counts (cProfile call counts, load-independent):
   on every pass of its loop: 168 sorts, 3.1 s profiled on Kuwabata.
 - Sawada is built twice: `meta.roll_attempt` 2, `roll_after` `farmhouses_reach_a_way`.
 
-**The residue** - each already indexed, its cost the number of samples its drawing takes:
+**What the first reading called the residue** - the field, the windbreak, the commons and the notice board - was
+claimed to be each algorithm's own density on call counts alone. The fidelity review (round 1) held that unmeasured,
+and R2 measures it.
 
-- The comb carve: 3-4 carves per build (the power-law fit, feature 220), each mostly `_sector_body_rows` - 12,244
-  `edge` and 2,373 `in_supply` calls per build on Inashiro, no scan among them.
-- The windbreak: 60,307 (Inashiro) to 128,952 (Kashikawa) `too_near` tests over its jittered grid, each a grid lookup.
-- The commons scatter: 35,960 to 164,042 `_sparse` tests.
-- The notice board: every verge point every `12 px` along every route, both sides, each through the indexed `_fits` -
-  8,001 to 21,311 `_fits` calls per roll.
+## R2. Where the residue stages' seconds go (2026-09-28)
+
+Each stage profiled ALONE (a profiler enabled only inside that stage's function), over Kashikawa and Sawada's two
+builds, with the finish profiled the same way (observed 2026-09-28, method: cProfile per stage in a test node, own time
+sorted; the profiled seconds are inflated, read for their shares):
+
+- **The field** (21.3 s profiled; observed 2026-09-28, method: the per-stage cProfile): `_pip` 2.18 million calls, 1.91 million of them from the hem pass's `inside_any`
+  (`waterfields/carve.py`, point-in-polygon against EVERY plot per drain sample - a per-candidate scan); `_bnd`'s
+  `_at_f` 118,836 calls, 1.6 s - a LINEAR walk of a static thread polyline per query, re-projecting every vertex each
+  call (`waterfields/frame.py`), a scan of geometry that does not change during the carve; `_quad_in_supply` 261,368 clearance calls, 1.1 s, already bbox-gated per stroke.
+- **The windbreak** (12.6 s; observed 2026-09-28, method: the per-stage cProfile): 2.04 million `PointGrid.near` calls - the grove's keep-out families (`hard`, `local`,
+  `lane`, `inside`, `too_near`) are separate grids, each asked per candidate, the shape 218 fixed for the scatters
+  ("one grid per scatter, not one per family") and never applied to the grove.
+- **The hinterland** (9.5 s; observed 2026-09-28, method: the per-stage cProfile): the commons scatter 5.6 s of it - 2.29 million `random.uniform` draws, 241,939 `_sparse`
+  tests, 593,218 grid lookups. 218's research R2 priced a vectorized scatter (numpy throws and tests) that keeps the
+  density: it moves the map, which the GM has since allowed.
+- **The notice board** (10.7 s; observed 2026-09-28, method: the per-stage cProfile): `off_every_bed` measures every way segment per verge candidate (880,459 generator
+  steps); `_hard_clear` walks the bounding box of every hard polygon per call and runs `quad_hits_poly` - every vertex
+  and edge of each big polygon whose box it meets - 7,569 calls, 3.1 s.
+- **The finish** (14.9 s over three finishes; observed 2026-09-28, method: the per-stage cProfile): 4.7 s waiting on the external renderer; the page's `_hits` 1.29 million
+  calls; and one of the three finishes is Sawada's discarded first attempt - the driver finishes every attempt, kept or
+  not.
+
+## R3. Why Sawada is rolled twice (2026-09-28)
+
+Attempt 1 (observed 2026-09-28, method: `build()` and `unreached_houses()` in a test node, the attempt's map rendered
+and cropped): the easternmost farmhouse, at (1271, 1890), is seated in a bare pocket INSIDE the paddy field, north of
+the ditch - paddies on three sides, the ditch and the dry plots below it - 226 px from the nearest other house and
+237 px from the nearest lane. Its four fixtures (privy, manure, coop, persimmon) found no seat around it. The seat
+search ran six rounds. No way can reach the house without crossing crop, so the straggler router fails, the roll
+reports `farmhouses_reach_a_way`, and the driver re-rolls with that seat forbidden. The placer took a seat that no way
+can reach; only the roll's own self-report, after the whole build, catches it.
+
+## R4. The maps this feature moved (FR-005, and FR-008 when it lands)
+
+**The exact pieces moved nothing** (observed 2026-09-28, method: `make map` of each pool hamlet after A1-A9 and B1, each
+manifest compared byte for byte with the committed one): Inashiro, Kashikawa, Kuwabata and Mizuguchi identical.
+
+**Sawada** (B1; observed 2026-09-28, method: the regenerated manifest against the committed one): built ONCE now
+(`roll_attempt` 1, `roll_after` empty; before, attempt 2 after `farmhouses_reach_a_way`), 16.0 s to regenerate against
+about 31 s. Houses 19 before and after, all plain, nucleated; every farmhouse reaches a way. Paddies 1000 and 1000,
+flooded 1 and 1, dry plots 39 and 40, lane records 12 and 13. Read by eye: the same hamlet - the cluster west of the
+field, no house inside the paddies.
+
+**The vectorized commons** (B2; observed 2026-09-28, method: every pool map regenerated, each manifest compared with the
+post-B1 one, and `commons_marks.py` over the SVGs before and after): the only manifest key that changed on any map is
+`ink_classes`, the census of drawn ink - houses, lanes, fields, woodland parcels and every `meta` field identical. The
+marks' counts (`commons-marks-before.json`, `commons-marks-after.json`): grass blades within 1.1% on every map and brush
+dots within 2.7%, the same throw counts at the same odds landing at different places. Pines moved by up to 6.5%
+(Kashikawa 310 -> 291, Sawada 292 -> 311): their code is unchanged - only the random stream they draw from moved, one draw
+later than before - and on ~300 marks the sampling spread alone is about the square root, 17 marks or 6%, so the plan's
+5% band sits below one standard deviation for this family. Recorded rather than tuned: the expected count is the old one.
+
+**A defect caught by that comparison**: the parcel seat's line index was first built once for the size the scan offers,
+but `_ok` is re-asked with a different `half` when the size roll re-tests a seat, and the reach is `pad + half` - so a
+re-asked seat was judged at the wrong reach and Kashikawa's and Mizuguchi's woodland parcels moved. The index is now one
+per size asked (`_lines_at`), and the parcels are back on their seats byte for byte.
+
+
+**SC-013's scenarios beyond the pool** (observed 2026-09-28, method: feature 276's harness placement section run in the
+base worktree and in the clone): the rescue-rounds scenario seats 16 nucleated and 10 dispersed houses on both, the 10-
+and 20-household toys 10 and 20 on both, and every constant-density layout the same count on both paths (five-layout
+totals 281, 560 and 1133 nucleated, 191, 365 and 707 dispersed). No shortfall anywhere, new or larger.

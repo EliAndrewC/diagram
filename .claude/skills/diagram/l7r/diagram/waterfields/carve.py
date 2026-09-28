@@ -12,8 +12,10 @@ import random
 from collections.abc import Callable, Sequence
 from typing import Any
 
+from l7r.diagram.settlement._geom import PointGrid
+
 from .banks import _TINT_END_FT, _TINT_MIN_APEX, StrokeIndex, dedup_ring, pointed_ring, polyline_cum, tapers_to_a_point
-from .frame import BANK_MARGIN, CANAL_BERM_FT, Poly, Pt, _at_f, _f_at_u, _Frame, _miter_normals, _pip, _seg_d, _Thread, taper_w
+from .frame import BANK_MARGIN, CANAL_BERM_FT, Poly, Pt, _at_f, _f_at_u, _Frame, _miter_normals, _pip, _seg_d, _Thread, at_f_cache, plot_boxes, taper_w
 from .palette import DRY_CROPS, FLOODED, RICE_GREENS
 
 # a supply-stroke index row: (pts, cumulative arc-length, head width, tail width, padded bbox)
@@ -513,8 +515,16 @@ def _hem_pass(
     gap down to the drain, fill it with a thin plot snapped onto the collector. Localised -
     it only fires on an actual gap, so it never disturbs the flooded closers."""
 
+    # THE PLOTS FROM AN INDEX OF THEIR BOXES (feature 278, FR-007): every drain sample asked `_pip` of every plot - 1.91
+    # million calls over Kashikawa and Sawada's carves. A point outside a plot's box is outside the plot, so the index
+    # returns every plot the test could find it in. And this pass APPENDS its hem plots to `plots` as it goes, which later
+    # samples must see, so the index files whatever has been appended before each question.
+    grid = PointGrid()
+
     def inside_any(px: float, py: float) -> bool:
-        return any(_pip(px, py, pl["poly"]) for pl in plots)
+        if grid.n < len(plots):
+            grid.extend(plot_boxes(plots[grid.n :]))
+        return any(bx0 <= px <= bx1 and by0 <= py <= by1 and _pip(px, py, pl["poly"]) for pl, bx0, by0, bx1, by1 in grid.near(px, py))
 
     for i in range(len(dpts) - 1):
         da, db = dpts[i], dpts[i + 1]
@@ -573,7 +583,14 @@ def _hem_pass(
                 plots.append({"poly": [(round(q[0], 1), round(q[1], 1)) for q in quad], "fill": R.choice(RICE_GREENS)})
 
 
-def _carve(
+def _carve(*args: Any, **kwargs: Any) -> list[dict[str, Any]]:
+    """`_carve_plots`, with each thread's and the drain's fall values projected once for the whole carve (feature 278,
+    FR-007; `frame.at_f_cache`) - the threads and the drain are finished before a carve begins and not changed in it."""
+    with at_f_cache():
+        return _carve_plots(*args, **kwargs)
+
+
+def _carve_plots(
     R: random.Random,
     F: _Frame,
     threads: list[_Thread],

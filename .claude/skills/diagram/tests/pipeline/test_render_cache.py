@@ -413,3 +413,32 @@ def test_main_replates_the_placement_page_in_a_tree_that_carries_the_tool(repo, 
     monkeypatch.setattr(rc, "replate_page", lambda skill_dir, fingerprint, allow_main=True: True)
     assert rc.main(["--main-repo", repo_dir, "--skill-dir", skill, "--jobs", "2"]) == 0
     assert "placement page re-plated" in capsys.readouterr().out
+
+
+def test_the_page_is_re_plated_only_when_the_class_registry_moved(tmp_path, monkeypatch):
+    """Feature 278 (FR-013): sync-in re-plates the placement page when the classes it was plated from differ from the
+    registry - a page with a stale stamp or none is re-plated, a current one is not, and a clone with no page is left
+    alone (the test that reads it skips)."""
+    calls: list[str] = []
+    page_dir = tmp_path / rc.PAGE_DIR
+    monkeypatch.setattr(rc, "engine_fingerprint", lambda skill: "fp")
+
+    def fake_replate(skill, fingerprint, allow_main=True):
+        calls.append(fingerprint)
+        (page_dir / ".classes").write_text(rc.classes_fingerprint() + "\n")
+        return True
+
+    monkeypatch.setattr(rc, "replate_page", fake_replate)
+    assert rc.replate_if_classes_moved(str(tmp_path)) is False and calls == [], "no page yet: nothing to refresh"
+    page_dir.mkdir(parents=True)
+    (page_dir / "hamlet-placement.html").write_text("<html></html>")
+    assert rc.replate_if_classes_moved(str(tmp_path)) is True and calls == ["fp"], "a page plated before the stamp existed"
+    assert rc.replate_if_classes_moved(str(tmp_path)) is False and calls == ["fp"], "the stamp matches the registry"
+    (page_dir / ".classes").write_text("an older registry\n")
+    assert rc.replate_if_classes_moved(str(tmp_path)) is True and len(calls) == 2, "the registry moved"
+
+
+def test_main_page_if_classes_reports_and_stops(tmp_path, monkeypatch, capsys):
+    monkeypatch.setattr(rc, "replate_if_classes_moved", lambda skill, allow_main=False: False)
+    assert rc.main(["--skill-dir", str(tmp_path), "--page-if-classes"]) == 0
+    assert "placement page current" in capsys.readouterr().out

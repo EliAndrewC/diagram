@@ -305,6 +305,11 @@ def _serve_stragglers(
             _key = tuple((round(float(t[0]), 1), round(float(t[1]), 1)) for t in targets[:60])
             if _exhausted.get(id(h)) == _key:
                 continue  # same house, same candidate ways, same obstacles - a replay of a pass that already failed
+            # THE DOORSTEP'S GROUND, OBTAINED ONCE PER HOUSE (feature 278, FR-002): the standing places below asked
+            # `fabric_index` for it once per ring point, and the memo answered each time - but its key walks every polygon
+            # and line, 5,407 times on Sawada for one index. `hard` and `water` are never changed here and `passable` is this
+            # house's, so every ask would have returned this same index.
+            _door_ground = fabric_index(hard, WEB_HARD_GAP, passable, FOOTPATH_FABRIC_GAP, water, 14.0)
             for tgt in targets[:60]:
                 # A FOOTPATH CANNOT START IN THE WATER (feature 145, cohort seed 41 after the field moved): the
                 # nearest point of the network was where a lane skirts the drain brook, so the path's junction
@@ -349,7 +354,7 @@ def _serve_stragglers(
                         # A POINT, NOT A LINK (feature 145): `_clear_link(q, q, ...)` returns True for any span
                         # under 1 px, so the standing place was never tested at all - cohort seed 41's footpath
                         # began 1.3 px from the drain brook. The same index the router uses judges the point.
-                        if not fabric_index(hard, WEB_HARD_GAP, passable, FOOTPATH_FABRIC_GAP, water, 14.0).fouled(q)
+                        if not _door_ground.fouled(q)
                     ),
                     (c[0] + dx * step, c[1] + dy * step),
                 )

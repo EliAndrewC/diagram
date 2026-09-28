@@ -12,6 +12,7 @@ from .._geom import (
     PLANK_ABUTMENT,
     PLANK_BANK_REACH,
     PLANK_VILLAGE_REACH,
+    PointGrid,
     Pt,
     point_in_poly,
     quad_hits_poly,
@@ -274,6 +275,7 @@ class BridgesMixin:
         # planked, and `wl is pts` cannot exclude a twin, so every candidate then reads as sitting at
         # a confluence with itself. Tried 2026-08-11; it made both footbridge checks fail at once.
         other_water = [(rec.get("poly") or rec.get("pts"), float(rec.get("w") or DEFAULT_W[key])) for key in ("streams", "channels", "field_ditches") for rec in self.M.get(key, []) or []]
+        _water_segs = water_segment_index(other_water)  # built once for every deck candidate below (feature 278, FR-003)
         for d in self.M.get("field_ditches", []):
             pts = d["poly"]
             seg = [math.hypot(pts[i + 1][0] - pts[i][0], pts[i + 1][1] - pts[i][1]) for i in range(len(pts) - 1)]
@@ -356,7 +358,7 @@ class BridgesMixin:
                     # a plank at a junction spans the junction. Tested as "another course runs UNDER
                     # this deck", not "another course passes within a deck's length" - the looser
                     # form catches a ditch merely running parallel to a neighbor.
-                    span_here = self._widen_for_confluence(quad, deck, pts, other_water, span, plank_w)
+                    span_here = self._widen_for_confluence(quad, deck, pts, other_water, span, plank_w, _water_segs)
                     # THE OBLIQUENESS CEILING IS MEASURED AGAINST THE DITCH'S WIDEST SECTION, not
                     # against `span`, which is built from the HEAD width. On a COLLECTOR the head is
                     # the narrow end - a drain starts as a thread and earns its section at the
@@ -404,34 +406,47 @@ class BridgesMixin:
                     break
         return len(self.M["bridges"]) - n0
 
-    def _widen_for_confluence(self: Settlement, quad: Any, deck: float, own_pts: Any, other_water: Any, span: float, plank_w: float) -> float:  # type: ignore[misc]
+    def _widen_for_confluence(self: Settlement, quad: Any, deck: float, own_pts: Any, other_water: Any, span: float, plank_w: float, segs: PointGrid | None = None) -> float:  # type: ignore[misc]
         """The widest water actually UNDER this deck, expressed as a span - a plank at a junction is
         simply a longer plank, which is what a farmer would lay. Tested as "another course runs
         under this deck", not "another course passes within a deck's length": the looser form
         catches a ditch merely running alongside a neighbor. Returns `span` unchanged where nothing
-        else crosses."""
+        else crosses.
+
+        THE SEGMENTS FROM AN INDEX (feature 278, FR-003): every segment of every other watercourse was tested per deck
+        candidate - 62,565 of Inashiro's 63,674 `quad_hits_seg` calls. `quad_hits_seg(..., 3.0)` can pass only a segment
+        whose box meets the deck's box widened by those 3 px, so the index (`water_segment_index`, built once per
+        footbridge pass by the caller) returns every segment the test could pass, and the test decides as before. `under`
+        is a maximum, so neither the order of the hits nor a hit met twice changes it."""
         _da = math.radians(deck)
         _dux, _duy = math.cos(_da), math.sin(_da)
         under: list[float] = []
-        for wl, ow in other_water:
+        segs = segs if segs is not None else water_segment_index(other_water)
+        qx0, qy0 = min(q[0] for q in quad) - 3.0, min(q[1] for q in quad) - 3.0
+        qx1, qy1 = max(q[0] for q in quad) + 3.0, max(q[1] for q in quad) + 3.0
+        seen: set[tuple[int, int]] = set()
+        for wi, i2, bx0, by0, bx1, by1 in segs.near((qx0 + qx1) / 2, (qy0 + qy1) / 2, max(qx1 - qx0, qy1 - qy0) / 2):
+            if (wi, i2) in seen or bx1 < qx0 or bx0 > qx1 or by1 < qy0 or by0 > qy1:
+                continue
+            seen.add((wi, i2))
+            wl, ow = other_water[wi]
             if wl is own_pts:
                 continue
-            for i2 in range(len(wl) - 1):
-                if not quad_hits_seg(quad, tuple(wl[i2]), tuple(wl[i2 + 1]), 3.0):
-                    continue
-                _wx, _wy = wl[i2 + 1][0] - wl[i2][0], wl[i2 + 1][1] - wl[i2][1]
-                _wl = math.hypot(_wx, _wy) or 1.0
-                _sin = abs(_dux * _wy / _wl - _duy * _wx / _wl)  # deck-vs-course crossing angle
-                _cos = abs(_dux * _wx / _wl + _duy * _wy / _wl)
-                # THE CHECK'S OWN GEOMETRY, not the shorthand in its message. It requires
-                # every deck CORNER to stand at least `cw/2 + floor` from the crossed
-                # course's centerline (floor = 2 real ft for a footplank), so at a
-                # crossing angle t the deck's half-length must exceed that over sin(t) -
-                # i.e. the whole span is (cw + 2*floor + deck_w*|cos|) / sin. Deriving it
-                # from the message's "(width + deck_w*|cos|)/sin plus a landing" leaves
-                # the landing UNDIVIDED by sin and comes up short on a shallow crossing,
-                # which is precisely the case this exists for.
-                under.append((ow + 2.0 * (2.0 / self.ftpx) + plank_w * _cos) / max(_sin, 0.02) + 1.0)
+            if not quad_hits_seg(quad, tuple(wl[i2]), tuple(wl[i2 + 1]), 3.0):
+                continue
+            _wx, _wy = wl[i2 + 1][0] - wl[i2][0], wl[i2 + 1][1] - wl[i2][1]
+            _wl = math.hypot(_wx, _wy) or 1.0
+            _sin = abs(_dux * _wy / _wl - _duy * _wx / _wl)  # deck-vs-course crossing angle
+            _cos = abs(_dux * _wx / _wl + _duy * _wy / _wl)
+            # THE CHECK'S OWN GEOMETRY, not the shorthand in its message. It requires
+            # every deck CORNER to stand at least `cw/2 + floor` from the crossed
+            # course's centerline (floor = 2 real ft for a footplank), so at a
+            # crossing angle t the deck's half-length must exceed that over sin(t) -
+            # i.e. the whole span is (cw + 2*floor + deck_w*|cos|) / sin. Deriving it
+            # from the message's "(width + deck_w*|cos|)/sin plus a landing" leaves
+            # the landing UNDIVIDED by sin and comes up short on a shallow crossing,
+            # which is precisely the case this exists for.
+            under.append((ow + 2.0 * (2.0 / self.ftpx) + plank_w * _cos) / max(_sin, 0.02) + 1.0)
         return max([span] + under)
 
     def _deck_clears_its_water(self: Settlement, px: float, py: float, deck: float, span_here: float, plank_w: float) -> bool:  # type: ignore[misc]
@@ -493,3 +508,16 @@ class BridgesMixin:
                 continue
             return False
         return True
+
+
+def water_segment_index(water: Any) -> PointGrid:
+    """Every segment of every watercourse in `water` - `(polyline, width)` pairs - filed by its box as
+    `(course index, segment index, x0, y0, x1, y1)` (feature 278, FR-003)."""
+    grid = PointGrid()
+    grid.extend(
+        (wi, i, min(wl[i][0], wl[i + 1][0]), min(wl[i][1], wl[i + 1][1]), max(wl[i][0], wl[i + 1][0]), max(wl[i][1], wl[i + 1][1]))
+        for wi, (wl, _w) in enumerate(water)
+        if wl
+        for i in range(len(wl) - 1)
+    )
+    return grid

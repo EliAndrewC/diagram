@@ -397,3 +397,36 @@ def test_the_overrun_past_the_connector_is_cut_and_the_connector_left() -> None:
     end = s.M["lanes"][1]["pts"][-1]
     assert abs(end[1] - 100.0) <= 6.0, "the overrun is cut where it met the way"
     assert s.M["lanes"][2]["pts"] == [[200.0, 400.0], [200.0, 100.0]], "a lane ending on the way is left"
+
+
+def test_a_stragglers_doorstep_ground_is_obtained_once_per_house(monkeypatch) -> None:
+    """Feature 278 (FR-002): the standing places ringed round a straggler's house were each tested against an index
+    obtained afresh per ring point - the memo answered, but its key walks every polygon. The index is obtained once per
+    house now: two stragglers, at most two doorstep requests, however many ring points their doors try."""
+    plan = hg.plan_site(hg.HamletSpec(name="X", seed=4, households=12))
+
+    def _box(x0, y0, x1, y1):
+        return [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
+
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 600.0)]], houses=[(400.0, 300.0), (400.0, 120.0)])
+    fabric = [(_box(120, 240, 260, 360), (190.0, 300.0), "house"), (_box(120, 60, 260, 180), (190.0, 120.0), "house")]
+    asks: list[int] = []
+    points: list[int] = []
+    real = hg.ways.serve.fabric_index
+
+    def counted(*a, **k):
+        asks.append(1)
+        idx = real(*a, **k)
+        fouled = idx.fouled
+
+        class _Counted:
+            def fouled(self, q):
+                points.append(1)
+                return fouled(q)
+
+        return _Counted()
+
+    monkeypatch.setattr(hg.ways.serve, "fabric_index", counted)
+    hg.ways._serve_stragglers(s, plan, [], fabric, [])
+    assert len(asks) <= 2, f"{len(asks)} index requests for two houses"
+    assert len(points) > len(asks), f"non-vacuity: more standing places were tried ({len(points)}) than indexes asked for - one ask per point would not pass"

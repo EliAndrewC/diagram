@@ -12,6 +12,7 @@ from ..._geom import (
     nearest_way_bearing,
     point_in_poly,
     seg_dist,
+    seg_reach_index,
     segments_cross,
     street_runs,
     way_beds,
@@ -278,7 +279,12 @@ class FixtureSitingMixin:
             # every route, including ones it was not sampled from (a junction spot offset
             # from lane A can land on lane B, or on a town street or alley this tier's
             # candidate list does not carry at all - see way_beds)
-            return all(seg_dist(x, y, bp[k], bp[k + 1]) >= bhw + h / 2 + 3 for bp, bhw in beds for k in range(len(bp) - 1))
+            # FROM AN INDEX OF THE BEDS' SEGMENTS (feature 278, FR-009): every segment of every way was measured per
+            # candidate. Each segment is filed by its box widened by its own refusal distance, so a segment whose widened
+            # box misses the point stands farther than that distance and cannot refuse it.
+            return all(seg_dist(x, y, a, b) >= reach for a, b, reach, _x0, _y0, _x1, _y1 in _bed_segs.near(x, y) if _x0 <= x <= _x1 and _y0 <= y <= _y1)
+
+        _bed_segs = bed_segment_index(beds, h / 2 + 3)
 
         tw_lab = self.label_caption_hw(label, 8.0) if label else 0.0  # the caption half-width the seat must also hold, as RECORDED
         _label_index = self.label_obstacles() if label else None  # the one placer's obstacles, indexed once for every candidate
@@ -557,7 +563,12 @@ class FixtureSitingMixin:
         # deliberately (it is a house setback), never the roadbed itself
 
         def off_every_bed(x: float, y: float) -> bool:
-            return all(seg_dist(x, y, bp[k], bp[k + 1]) >= bhw + h / 2 + 3 for bp, bhw in beds for k in range(len(bp) - 1))
+            # FROM AN INDEX OF THE BEDS' SEGMENTS (feature 278, FR-009): every segment of every way was measured per
+            # candidate. Each segment is filed by its box widened by its own refusal distance, so a segment whose widened
+            # box misses the point stands farther than that distance and cannot refuse it.
+            return all(seg_dist(x, y, a, b) >= reach for a, b, reach, _x0, _y0, _x1, _y1 in _bed_segs.near(x, y) if _x0 <= x <= _x1 and _y0 <= y <= _y1)
+
+        _bed_segs = bed_segment_index(beds, h / 2 + 3)
 
         best: tuple[float, float, float, float] | None = None  # (score, x, y, rot)
         # ...and the best seat that is ALSO out from under the captions already on the map. A
@@ -602,3 +613,6 @@ class FixtureSitingMixin:
             label_xy = self.clear_label_seat(x, y, w, h, label, skip_key="punishment_spots")
         self.punishment_spot(x, y, rot, label=label, label_xy=label_xy)
         return (x, y)
+
+
+bed_segment_index = seg_reach_index  # the verge probes' name for it (feature 278; defined with the other indexes)

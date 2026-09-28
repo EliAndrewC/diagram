@@ -395,7 +395,8 @@ map: export L7R_STAGE_PROFILE = $(if $(PROFILE),1,)
 map:            ## [maps] regenerate ONE gen and gate it   GEN=pool/hamlets/inashiro/inashiro.gen.py [PROFILE=1: where the roll spent its time]
 ##  GEN=<gen path>  which generator to re-run (default: `pool/hamlets/inashiro/inashiro.gen.py`)
 ##  PROFILE=1       also print where the roll spent its time, stage by stage
-	$(REF_FIRST)
+	@: "GUARD_EDIT_OK: feature 278 FR-012 - make map on the REFERENCE rolled it twice: the reference check rolled it render-less into the roll cache, then regen found that entry without a render and rolled it again uncached to draw one. When the map asked for IS the reference, the check is the regen itself (regen gates what it rolls), so it is skipped; for every other map the check still runs first."
+	$(if $(filter pool/hamlets/inashiro/inashiro.gen.py,$(or $(GEN),pool/hamlets/inashiro/inashiro.gen.py)),,$(REF_FIRST))
 	$(RUN).pipeline.regen $(or $(GEN),pool/hamlets/inashiro/inashiro.gen.py)
 	@: "GUARD_EDIT_OK: feature 240 FR-005 - a CACHED map may come back with no picture. The gate files its entries with rendering skipped, so a hit on one restores the manifest and DELETES the render (gencache.load, deliberately: a render the entry lacks is stale). make map then printed CACHED over a map with no .png and no .html, and the review precondition that names make map as its remedy could not be satisfied by it. So a hit that leaves a render missing is rolled again, uncached, which draws both."
 	@g="$(or $(GEN),pool/hamlets/inashiro/inashiro.gen.py)"; s="$${g%.gen.py}"; \
@@ -443,6 +444,10 @@ cache-audit:    ## [maps] does using the generation cache change any map?
 placement-stages: ## [maps] re-plate the stage-by-stage walk-through page
 	$(REF_FIRST)
 	$(RUN).tools.placement_stages $(ARGS)
+
+placement-stages-if-classes: ## [maps] {internal} re-plate the walk-through page only if the class registry moved (sync-in runs it)
+	@: "GUARD_EDIT_OK: feature 278 FR-013 - a new operation, nothing loosened: the page is gitignored and re-plated at landing, so a clone that merged a new class went red on the page test until a hand re-plate; sync-in runs this, which re-plates only when the page's class stamp differs from the registry"
+	$(RUN).pipeline.render_cache --page-if-classes --no-allow-main
 
 pool-index:     ## [maps] rebuild the pool index
 	$(RUN).pipeline.pool_index $(ARGS)

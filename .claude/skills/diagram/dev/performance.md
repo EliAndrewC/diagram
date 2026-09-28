@@ -331,6 +331,47 @@ calls became 0.139 s over 83 once bounded, and 0.011 s with the `PathChecker` in
 tracks moved (Inashiro's connector now leaves east), each the same hamlet on the same rules. A profile that shows a
 check called far more than it should be is sometimes a wrong answer, not a slow one.
 
+## The second pass, and where the returns start to diminish (feature 278, 2026-09-28)
+
+The GM: *"If we run through exactly the same exercise a second time, then I expect we'll turn up even more. Eventually
+we'll reach a point where we've optimized as much as can be expected."* The same exercise - every pool hamlet rolled with
+each stage timed and each mechanism counted, each heavy stage profiled alone - found nine more per-candidate scans and
+one roll done twice. All figures are in `specs/278-second-hotspot-pass/measurements.json`, taken back to back against the
+base; the pool's five rolls went from 60.5 s to 35.0 s together.
+
+**The scans, the shape of the first section again.** The router judged its whole search box - up to 90,000 cells - before
+Dijkstra ran; now each cell is judged when the search first asks (2-5x fewer cell tests, the same paths). A doorstep search
+rebuilt one memoized index's KEY per candidate - a memo whose key walks every polygon is not free (3.6x fewer asks). The
+footbridge widening tested every watercourse segment per deck (56x fewer); the wells re-sorted their whole pool on every
+pass, including passes that placed nothing (Kuwabata's appurtenances 1.77 s -> 0.09 s); the carve's hem pass asked
+point-in-polygon of every plot per sample (81-96x fewer); the notice board measured every way segment and every hard
+polygon's box per verge probe; the windbreak asked seven grids per candidate and read a 128 px cell to find neighbors
+within 10 px; the page merge walked every extent in a bucket per element (57-66x fewer). **Two traps worth carrying**: an
+index keyed by a parameter the caller varies (`_ok` is re-asked with a different `half`) must be one index per value -
+the first cut used one and moved a woodland parcel, caught only because the exact pieces are held to byte-identical
+manifests; and a harness counter keyed by FILE reads zero once a function moves (`_hits`, now in `extents.py`).
+
+**A roll done twice.** Sawada seated a farmhouse 157 px deep inside its paddy field, where no way can ever be drawn, so the
+driver re-rolled it every time - and finished the discarded attempt first. The placer now refuses a seat deeper than any
+way's reach inside the web's hard ground (`UnreachableGround`), and the driver finishes only the attempt it keeps.
+
+**Vectorizing is not free.** The commons grass, thrown and tested as numpy arrays, was first SLOWER than the per-point loop
+it replaced: building a shapely shape for every keep-out on the map, per call, cost more than 16,000 in-frame points took
+in Python. It paid only once the shapes were built for the items near the throws, unioned and PREPARED (a tree query
+returning pairs was the slow step), and invalid rings drawn as their even-odd faces instead of their whole box. Exactness
+held throughout: points surely in or surely out are decided in arrays, and the band between them by the scalar test.
+
+**What is left, priced - the next pass's levers** (none taken here; the spec's Amendment 1 records why):
+
+| stage | measured after | what is left | the lever, and what it costs |
+|---|---|---|---|
+| field | 1.075-1.23x per build (Sawada) | the carve's per-row geometry, 4 carves per build on Inashiro and 3 on Kashikawa (the fit's size search) | a closer first guess of the fan's size, or the rows as array operations - both change the field |
+| hinterland | 1.20-1.28x | the marsh scatter (the commons' old per-point shape), the bamboo seats' 10,000 samples, the parcels' crop set-backs | the marsh vectorized as the grass was; coarser bamboo sampling - a drawing change |
+| notice | 1.19x Inashiro, 1.87x Sawada | the verge probes (9,708 `_fits` calls in Sawada's build, 8,001 in Inashiro's), each through the indexed `_fits` the scoring needs | score first, fit only the probes that could win - changes the seat when two tie |
+| windbreak | 1.43x Kashikawa, 1.51x Inashiro | 128,952 candidate points on Kashikawa through Python predicates | the static tests over the jittered grid as arrays, the spacing test sequential - the commons' hybrid applied to the grove |
+| finish | - | about 4.7 s profiled over three finishes waiting on the external renderer (PNG and page raster) | fewer or smaller raster tiles; out of this pass's scope (the render path, feature 225's territory) |
+| tests | - | the gate's slowest items are pool rolls through a cold roll cache after an engine change | inherent to a change that re-keys the cache; `make quick` is 3,789 tests in ~27 s |
+
 ## Memory: the spike is C buffers, not Python objects, and it lands where nothing reads it (feature 208, 2026-09-07)
 
 The GM asked why a full gate costs 6.8 GiB and whether each of the eight workers really needs most of a

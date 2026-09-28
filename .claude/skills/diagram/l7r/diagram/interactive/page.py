@@ -27,6 +27,7 @@ from typing import Any
 from . import raster
 from .classes import CLASSES, NOT_HIGHLIGHTED, PLACE, FeatureClass, lead_sentence, slug
 from .content import content
+from .extents import Extent, _BoxGrid, _file_extent, _refused
 from .glossary import CASED, GLOSSARY
 from .notes import EMPTY, MapNotes, read_map_notes
 from .place import LANE, WINDBREAK, lane_default, place_card, windbreak_default
@@ -79,9 +80,6 @@ _COORDS: dict[str, tuple[str, ...]] = {
     "circle": ("cx", "cy", "r"),
     "ellipse": ("cx", "cy", "rx", "ry"),
 }
-#: What one element paints inside: a disc (cx, cy, r) for a circle, a box (x0, y0, x1, y1) for anything
-#: else, None for a shape whose area cannot be read - which counts as being in the way everywhere.
-Extent = tuple[float, float, float] | tuple[float, float, float, float] | None
 #: How many skipped extents one bucket will hold before it gives up and starts a new run. A bound on the
 #: work, not a rule about the map: past this the bucket is almost certainly blocked anyway.
 _SKIP_CAP = 400
@@ -190,51 +188,6 @@ def _extent(tag: str, at: dict[str, str], raw: str) -> Extent:
     return (min(xs) - pad, min(ys) - pad, max(xs) + pad, max(ys) + pad)
 
 
-def _hits(a: Extent, b: Extent) -> bool:
-    """Do these two painted areas touch? An unknown one is treated as touching everything.
-
-    A CIRCLE IS TESTED AS A CIRCLE (feature 153). Boxes are what every other shape gets, but a scatter
-    of round blobs is exactly where a box lies most: two crowns whose boxes overlap in a corner do not
-    touch at all, and under the box test they refuse to merge for nothing. Measured on Kuwabata's
-    woodland, where the difference is thousands of elements."""
-    if a is None or b is None:
-        return True
-    if len(a) == 3 and len(b) == 3:
-        return (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 <= (a[2] + b[2]) ** 2
-    ba, bb = _box(a), _box(b)
-    return not (ba[2] < bb[0] or bb[2] < ba[0] or ba[3] < bb[1] or bb[3] < ba[1])
-
-
-def _box(e: tuple[float, ...]) -> tuple[float, float, float, float]:
-    """A disc's bounding box, or a box unchanged."""
-    if len(e) == 3:
-        x, y, r = e
-        return (x - r, y - r, x + r, y + r)
-    return (e[0], e[1], e[2], e[3])
-
-
-def _refused(b: dict[str, Any], ext: Extent) -> bool:
-    """May this bucket NOT take an element painting inside `ext`? Three ways it may not.
-
-    A TRANSLUCENT SHAPE MAY NOT MERGE WITH ONE IT OVERLAPS (feature 148, measured). Two blobs at
-    opacity 0.85 stack darker where they cross; the same two as subpaths of ONE path are a single 0.85
-    fill and the crossing goes light. Small - 0.0025% of the reference hamlet's pixels - and still the
-    picture changing, which feature 134's FR-002 forbids.
-
-    NOR MAY AN OUTLINED ONE (feature 153, measured on Kuwabata). A path paints ALL its subpath fills and
-    only THEN its stroke, so an earlier crown's outline that a later crown's fill used to hide comes back
-    over it: the dike-pond map's woodland read as a heap of glass rings, and the page sat 0.255% of
-    pixels from its own PNG against the reference hamlet's 0.015%.
-
-    And nothing may move BACKWARD past a different element it overlaps - the `skip` extents gathered
-    since this bucket's last member, or `blocked` when one of them could not be read at all."""
-    if b["blocked"]:
-        return True
-    if (b["translucent"] or b["outlined"]) and any(_hits(ext, e) for e in b["extents"]):
-        return True
-    return any(_hits(ext, e) for e in b["skip"])
-
-
 def _outlined(tag: str, at: dict[str, str]) -> bool:
     """Does this element paint a fill AND a stroke? Those two are painted in different PASSES once the
     element is a subpath of a merged path - every fill, then the one stroke - so where two of them
@@ -321,19 +274,35 @@ def merge_primitives(s: str) -> str:
             if got is not None:
                 got["members"].append(idx)
                 got["extents"].append(ext)
+                _file_extent(got, ext)
                 joined = got
             else:
                 _st = dict(at)
                 _translucent = any(float(_st.get(k, 1) or 1) < 1.0 for k in ("opacity", "fill-opacity", "stroke-opacity"))
-                joined = {"first": idx, "members": [idx], "extents": [ext], "skip": [], "blocked": False, "tag": tag, "translucent": _translucent, "outlined": _outlined(tag, _st)}
+                joined = {
+                    "first": idx,
+                    "members": [idx],
+                    "extents": [ext],
+                    "skip": [],
+                    "blocked": False,
+                    "tag": tag,
+                    "translucent": _translucent,
+                    "outlined": _outlined(tag, _st),
+                    "ext_grid": _BoxGrid(),
+                    "ext_none": False,
+                    "skip_grid": _BoxGrid(),
+                }
+                _file_extent(joined, ext)
                 buckets[key] = joined
                 order.append(joined)
         for other in buckets.values():
-            if other is joined:
+            if other is joined or other["blocked"]:  # a blocked bucket never reads its skips again (feature 278)
                 continue
             other["skip"].append(ext)
             if ext is None or len(other["skip"]) > _SKIP_CAP:
                 other["blocked"] = True
+            else:
+                other["skip_grid"].add(ext)
 
     #: what each element becomes: its own text, nothing (it was gathered into an earlier one), or the path
     repl: dict[int, str] = {}
