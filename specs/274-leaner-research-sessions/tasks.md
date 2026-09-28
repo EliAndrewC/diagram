@@ -35,5 +35,10 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D11). Research: [`res
 - [x] T11 `make done` green; land
       research: rendering
       verify: DONE. make done green 2026-09-28: 4650 passed, 4 skipped, every floor; landed by sync-with-main.sh done
-- [ ] T12 Tell the research sessions, after the landing is on main (D11)
+**After the landing (not a checkbox, and NOT done at the landing).** `sync-with-main.sh` lands nothing while any task
+is open and has no flag, and this step can only happen once the landing is on main. So it is recorded here as a
+post-landing step, as 136, 190 and 246 recorded theirs, and it is written up below when it is done:
+
+- T12 Tell the research sessions, after the landing is on main (D11) - OPEN: the session "Diagram supplemental" does
+  it and records here whom it told and when (FR-005, SC-005).
       research: rendering
