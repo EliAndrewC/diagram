@@ -8,6 +8,7 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement, seg_dist, segments_cross
 from l7r.diagram.settlement._geom import PointGrid, boxed_grid, boxed_ring_hit, boxed_rings, boxed_segs
+from l7r.diagram.settlement.rolling.bearing import turned_box
 
 from ..consts import Poly
 from ..plan import SitePlan
@@ -168,6 +169,16 @@ def _strip_blocked(
         if (px_ == hx and py_ == hy) or (px_, py_, pw, ph) in skip:
             continue
         if abs(cx - px_) < (cw + pw) / 2 + 2 and abs(cy - py_) < (ch + ph) / 2 + 2:
+            return True
+    # EVERY OTHER FARMHOUSE, as drawn: a caller that passes the bundle boxes in `skip` excuses a neighbor's bundle, and on a
+    # map whose houses carry no separate placed box that excused the neighbor's house as well - Kuwabata's woodpile landed
+    # on the next house's gable once the 269 landing's bearing fix moved the row (tests/gate/test_no_feature_overlaps.py).
+    for o in s.M.get("houses", []):
+        ox, oy = float(o["x"]), float(o["y"])
+        if abs(ox - hx) < 0.5 and abs(oy - hy) < 0.5:
+            continue
+        _, _, ow, oh = turned_box((ox, oy, float(o["w"]), float(o["h"])), float(o.get("rot", 0.0)))
+        if abs(cx - ox) < (cw + ow) / 2 + 2 and abs(cy - oy) < (ch + oh) / 2 + 2:
             return True
     for key in ("wells", "kosatsuba", "byres", "farm_sheds", "retirement_houses"):  # everything seated between the sheds and this pass (T49)
         for o in s.M.get(key, []):

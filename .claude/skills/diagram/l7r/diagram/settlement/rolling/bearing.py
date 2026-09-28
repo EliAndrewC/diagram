@@ -42,8 +42,13 @@ COMMON_BEARING_DEG = 11.25
 # does. A map drawing convention.
 FOLLOW_HALF_SPAN_PX = 48.0
 _SAMPLE_PX = 8.0
-# A house further than this from every margin sample follows nothing: it is not on a lane that runs along the field.
-FOLLOW_REACH_PX = 400.0
+# A house within FOLLOW_FULL_PX of the margin stands on the lane that runs along it and follows its whole turn; past
+# that the pull fades to nothing at FOLLOW_REACH_PX, so a house two rows back follows the lanes of its own row rather
+# than a field edge it cannot see. About one homestead bundle deep, then a second; a map drawing convention. The first
+# version followed the margin out to 400 px at full strength, and the settlement-review of Sawada at the 269 landing
+# (2026-09-28) found houses 340-400 ft off the margin turned by it, 9 of 16 of them at the spread's edge.
+FOLLOW_FULL_PX = 96.0
+FOLLOW_REACH_PX = 240.0
 # The per-house draws key on the seat rounded to this many px (a map drawing convention): a front-row seat moved a pixel or
 # two by the rake's own reach keeps the rake it was moved for.
 KEY_CELL_PX = 4.0
@@ -52,6 +57,19 @@ KEY_CELL_PX = 4.0
 def wrap_line_deg(d: float) -> float:
     """An undirected line's angle folded into [-90, 90): a lane has no front or back, so 170 degrees is -10."""
     return (d + 90.0) % 180.0 - 90.0
+
+
+def wrap_square_deg(d: float) -> float:
+    """A lane's turn as a rectangular house follows it, folded into [-45, 45): a house stands square to its lane with
+    its front or with its gable, so a lane at 80 degrees to the axis turns the house -10, not 80 - which the spread
+    would only have clamped to its edge (the pile-up at +-30 the Sawada review found)."""
+    return (d + 45.0) % 90.0 - 45.0
+
+
+def soft_limit(d: float, limit: float) -> float:
+    """`d` held inside +-`limit` by a smooth curve: near zero it is `d` itself, and it approaches the limit without
+    reaching it, so turns that run past the edge spread under it instead of piling on it."""
+    return limit * math.tanh(d / limit)
 
 
 class MarginBearing:
@@ -92,23 +110,28 @@ class MarginBearing:
         return None
 
     def __call__(self, x: float, y: float) -> float:
-        """The margin's turn from the settlement's axis at the point nearest (x, y), in degrees; 0.0 out of its reach."""
+        """How far the margin nearest (x, y) turns a house standing there, in degrees: its turn from the settlement's
+        axis folded square (`wrap_square_deg`), in full within `FOLLOW_FULL_PX` of it and fading to 0.0 at
+        `FOLLOW_REACH_PX`; 0.0 out of its reach."""
         k = self.nearest(x, y)
         if k is None or len(self.samples) < 3:
             return 0.0
         n = len(self.samples)
         a, b = self.samples[(k - self.span) % n], self.samples[(k + self.span) % n]
-        return wrap_line_deg(math.degrees(math.atan2(b[1] - a[1], b[0] - a[0])) - self.along)
+        turn = wrap_square_deg(math.degrees(math.atan2(b[1] - a[1], b[0] - a[0])) - self.along)
+        d = math.dist((x, y), self.samples[k])
+        return turn * max(0.0, min(1.0, (FOLLOW_REACH_PX - d) / (FOLLOW_REACH_PX - FOLLOW_FULL_PX)))
 
 
 def house_rot(jit: Callable[[float, float, float], float], x: float, y: float, common: float, follow: Callable[[float, float], float] | None, share: float) -> float:
     """The full turn a farmhouse seated at (x, y) is drawn at, in degrees: the village's common bearing, the lane's turn
-    and the house's own by-eye spread (together held within `BEARING_SPREAD_DEG`), and a quarter turn on one house in
+    and the house's own by-eye spread (together held inside `BEARING_SPREAD_DEG` by `soft_limit`, so turns that would run
+    past the edge spread under it rather than all standing on it), and a quarter turn on one house in
     `1 / share`. `jit` is the settlement's position-seeded draw (`Settlement._hjit`)."""
     kx, ky = round(x / KEY_CELL_PX) * KEY_CELL_PX, round(y / KEY_CELL_PX) * KEY_CELL_PX
     spread = (jit(kx, ky, 11.0) + jit(kx, ky, 14.0) - 1.0) * BEARING_JITTER_DEG  # triangular: most houses near the lane
     lane = follow(x, y) if follow is not None else 0.0
-    rake = max(-BEARING_SPREAD_DEG, min(BEARING_SPREAD_DEG, lane + spread))
+    rake = soft_limit(lane + spread, BEARING_SPREAD_DEG)
     quarter = QUARTER_TURN_DEG if jit(kx, ky, 13.0) < share else 0.0
     return common + rake + quarter
 

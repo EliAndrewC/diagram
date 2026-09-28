@@ -33,7 +33,7 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement, seg_closest, seg_dist
 
-from ..consts import Poly, Pt
+from ..consts import WEB_CLEARANCE, Poly, Pt
 from .clearance import _HAIRPIN_DEG, _clear_link, _clear_touch
 from .geom import _TOUCH_GAP, _seg_cross, _turn_deg
 from .smooth import _JOG_FT, commit_lane, web_pieces
@@ -327,3 +327,46 @@ def meet_end_to_end(s: Settlement, fabric: Sequence[Poly] = ()) -> int:
                 s.reink_lane(i)
                 closed += 1
     return closed
+
+
+def split_at_crossings(s: Settlement) -> int:
+    """Cut a lane where it crosses another mid-run, so the junction a walker uses is one the records hold: the lane becomes
+    two records, each ending on the crossing, which stands on the other lane's tread. Where either lane already ends within
+    `_TOUCH_GAP` of the crossing it is a junction already and nothing is cut; the connector is never cut, and a lane that
+    crosses it is. Returns the cuts made.
+
+    FOUND AT THE 269 LANDING (Inashiro, the house bearings re-laid): a skeleton arm crossed a web lane 5 ft past its own
+    bend, and the only record of the junction was a 2.4 ft "touch" nub - shorter than the gap every end test allows, so the
+    tidy pass dropped it as serving nothing and the map shipped as two networks (`lanes_form_one_network`), while kept it
+    failed `test_no_lane_end_is_served_only_by_the_way_it_left`. A crossing is a junction; now it is recorded as one."""
+    lanes: list[dict[str, Any]] = s.M.get("lanes") or []
+    cuts = 0
+    i = 0
+    while i < len(lanes):
+        ln = lanes[i]
+        p = _pts(ln)
+        cut: tuple[int, Pt] | None = None
+        if not ln.get("connector") and len(p) >= 2:
+            for j, other in enumerate(lanes):
+                op = _pts(other)
+                if j == i or len(op) < 2:
+                    continue
+                for k, (a, b) in enumerate(_segs(p)):
+                    x = next((c for c in (_seg_cross(a, b, c0, d0) for c0, d0 in _segs(op)) if c is not None), None)
+                    if x is None or min(math.dist(x, e) for e in (p[0], p[-1], op[0], op[-1])) <= _TOUCH_GAP:
+                        continue
+                    cut = (k, x)
+                    break
+                if cut is not None:
+                    break
+        if cut is None:
+            i += 1
+            continue
+        k, x = cut
+        head, tail = [*p[: k + 1], x], [x, *p[k + 1 :]]
+        ln["pts"] = _rounded(head)
+        s.reink_lane(i)
+        s.lane(tail, width=float(ln.get("w") or 3.0), clearance=WEB_CLEARANCE, worn=bool(ln.get("worn", True)))
+        lanes[-1].update({key: ln[key] for key in ("role", "web") if key in ln})
+        cuts += 1  # lane i is asked again: its head may cross a second lane
+    return cuts

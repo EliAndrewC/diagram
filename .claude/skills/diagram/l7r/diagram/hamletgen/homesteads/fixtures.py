@@ -181,15 +181,17 @@ def edge_index(field_rings: Sequence[Poly], lanes: Sequence[tuple[Poly, float]])
     return STRtree([g for g, _h in items]), items
 
 
-def field_edge_seats(index: tuple[Any, list[tuple[Any, float]]], hx: float, hy: float, reach: float, clear: float) -> list[Pt]:
+def field_edge_seats(index: tuple[Any, list[tuple[Any, float]]], hx: float, hy: float, reach: float, clear: float) -> list[tuple[float, float, bool]]:
     """World points for a field pit (269 B11): the nearest point of each paddy edge or road within `reach` of the house,
     stepped TOWARD the house by `clear` (plus a road's own keep-out), so the pit stands on the house's side of its field
-    or road; nearest first, at most `_PIT_CANDIDATES`."""
+    or road; nearest first, at most `_PIT_CANDIDATES`. Each carries whether its edge is a ROAD, so the pit is recorded
+    as the seat it took - `roadside` or `field_edge` (settlement-review of Kuwabata at the 269 landing: two pits by the
+    road were recorded as field-edge pits)."""
     from shapely import Point
 
     tree, items = index
     here = Point(hx, hy)
-    out: list[tuple[float, Pt]] = []
+    out: list[tuple[float, tuple[float, float, bool]]] = []
     for i in tree.query(here, predicate="dwithin", distance=reach):
         line, half = items[int(i)]
         q = line.interpolate(line.project(here))
@@ -198,7 +200,7 @@ def field_edge_seats(index: tuple[Any, list[tuple[Any, float]]], hx: float, hy: 
         if dist <= clear + half:  # the house itself stands within the pit's clearance - nothing to step out onto
             continue
         k = (clear + half) / dist
-        out.append((dist, (q.x + dx * k, q.y + dy * k)))
+        out.append((dist, (q.x + dx * k, q.y + dy * k, half > 0.0)))
     out.sort()
     return [p for _d, p in out[:_PIT_CANDIDATES]]
 
@@ -330,6 +332,7 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
             _ft = WOODPILE_FORM_FT["shed"] if kind == "woodpile" and woodpile_form == "shed" else FIXTURE_FT[kind]
             w, d = px(_ft[0]), px(_ft[1])  # along the wall, out from it
             field_table: list[tuple[float, float, float, float]] = []  # a field pit's seats (269 B11), tried first and never offset
+            roadside: dict[int, bool] = {}  # which of them stands by a road rather than a field, keyed by the seat's id
             kizuma_table: list[tuple[float, float, float, float, float]] = []  # a kizuma's seats (269 B15), each with its own bearing
             corridor_table: list[tuple[float, float, float, float]] = []  # a corridor bath's seats (269 B12), tried first
             sun_table: list[tuple[float, float, float, float]] = []  # the privy's sun-side search, when rolled, tried first
@@ -426,9 +429,10 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                 # nearest paddy or plot, or beside the road, rather than beside the privy. Those seats are tried first; the
                 # privy-side ones below stay as the fallback, so a house with no field or road edge in reach keeps its pit.
                 if edges is not None and s._hjit(hx, hy, 102.7) < pit_field_share:
-                    for _fx, _fy in field_edge_seats(edges, hx, hy, px(PIT_FIELD_REACH_FT), px(_PIT_EDGE_CLEAR_FT) + d / 2):
+                    for _fx, _fy, _road in field_edge_seats(edges, hx, hy, px(PIT_FIELD_REACH_FT), px(_PIT_EDGE_CLEAR_FT) + d / 2):
                         _ddx, _ddy = _fx - hx, _fy - hy
                         field_table.append((_ddx * ca + _ddy * sa, -_ddx * sa + _ddy * ca, w, d))
+                        roadside[id(field_table[-1])] = _road
                 if privy_at is not None:
                     plx, ply = privy_at
                     out_ = -1.0 if ply < 0 else 1.0
@@ -618,7 +622,7 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                     s.placed.append((cx, cy, ext[0], ext[1]))
                     s.block_polys.append(ring)
                     if _table is field_table:
-                        s.M["farm_fixtures"][-1]["seat"] = "field_edge"
+                        s.M["farm_fixtures"][-1]["seat"] = "roadside" if roadside.get(id(_seat)) else "field_edge"
                     if _walk is not None:
                         _corridor(s, _walk, rot, s.M["farm_fixtures"][-1])
                     if kind == "privy":
@@ -635,7 +639,20 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
     short = {k: targets[k] - have[k] for k in targets if have[k] < targets[k]}
     if short:
         s.M["meta"]["farm_fixtures_unseated"] = short
+    record_drawn_forms(s.M)
     return count
+
+
+def record_drawn_forms(m: dict[str, Any]) -> None:
+    """Beside each rolled form knob, what the sheet DRAWS: the woodpiles by form and the baths by seat. A knob names the
+    hamlet's form; a homestead with no seat for it falls back (no belt within reach for a kizuma, no clear corridor for a
+    joined bath), and the settlement-reviews at the 269 landing found Kuwabata declaring kizuma with fifteen eaves stacks
+    drawn and Mizuguchi declaring corridor baths with none - a declaration the drawing did not bear out."""
+    rows = m.get("farm_fixtures") or []
+    piles = [str(r.get("form") or "eaves") for r in rows if r.get("kind") == "woodpile"]
+    baths = ["corridor" if r.get("corridor") else "unjoined" for r in rows if r.get("kind") == "bath"]
+    m["meta"]["woodpile_forms_drawn"] = {f: piles.count(f) for f in sorted(set(piles))}
+    m["meta"]["bath_seats_drawn"] = {f: baths.count(f) for f in sorted(set(baths))}
 
 
 def corridor_rect(lx: float, ly: float, hw: float, hh: float, cl: float, cw: float, trim: float = 0.0) -> tuple[float, float, float, float]:

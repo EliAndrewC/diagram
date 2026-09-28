@@ -21,14 +21,29 @@ def test_a_line_has_no_front_or_back() -> None:
     assert B.wrap_line_deg(0.0) == 0.0
 
 
+def test_a_house_follows_a_lane_with_its_front_or_its_gable() -> None:
+    assert B.wrap_square_deg(80.0) == pytest.approx(-10.0) and B.wrap_square_deg(20.0) == pytest.approx(20.0)
+    assert B.wrap_square_deg(-50.0) == pytest.approx(40.0) and B.wrap_square_deg(90.0) == pytest.approx(0.0)
+    assert B.soft_limit(3.0, 30.0) == pytest.approx(3.0, abs=0.01), "near zero the turn is itself"
+    assert 29.0 < B.soft_limit(80.0, 30.0) < 30.0 and B.soft_limit(-80.0, 30.0) == pytest.approx(-B.soft_limit(80.0, 30.0))
+
+
 def test_the_margin_bearing_reads_the_lane_line_a_house_stands_on() -> None:
-    """A house beside a margin running along the settlement's axis follows no turn; one beside a stretch at a right angle
-    to it reads the full quarter (the house turn clamps it later); out of reach, and on a ring too small to have a
-    direction, nothing is followed."""
+    """A house beside a margin running along the settlement's axis follows no turn, and one beside a stretch square to it
+    none either (it stands gable-on); a stretch at 20 degrees turns a house on it by 20, half that at mid-fade, and none
+    past the reach; on a ring too small to have a direction nothing is followed."""
     square = [(0.0, 0.0), (400.0, 0.0), (400.0, 400.0), (0.0, 400.0)]
     mb = B.MarginBearing(square, 0.0)
     assert mb(200.0, -30.0) == pytest.approx(0.0, abs=1e-6), "beside the bottom edge, which runs along the axis"
-    assert abs(mb(430.0, 200.0)) == pytest.approx(90.0, abs=1e-6), "beside the right edge, square to the axis"
+    assert mb(430.0, 200.0) == pytest.approx(0.0, abs=1e-6), "beside the right edge, square to the axis: gable-on"
+    t = math.radians(20.0)
+    c, s = math.cos(t), math.sin(t)
+    tilted = B.MarginBearing([(0.0, 0.0), (400 * c, 400 * s), (400 * c - 400 * s, 400 * s + 400 * c), (-400 * s, 400 * c)], 0.0)
+    mid, out = (200 * c, 200 * s), (s, -c)
+    at = lambda d: tilted(mid[0] + out[0] * d, mid[1] + out[1] * d)  # noqa: E731
+    assert at(30.0) == pytest.approx(20.0, abs=0.5), "on the lane: its whole turn"
+    assert at((B.FOLLOW_FULL_PX + B.FOLLOW_REACH_PX) / 2) == pytest.approx(10.0, abs=0.5), "half-way out: half of it"
+    assert at(B.FOLLOW_REACH_PX + 20.0) == 0.0, "past the reach: nothing"
     assert mb(5000.0, 5000.0) == 0.0 and mb.nearest(5000.0, 5000.0) is None, "past the reach: no lane to follow"
     assert mb.nearest(200.0, -30.0) is not None
     assert B.MarginBearing([(0.0, 0.0), (1.0, 0.0)], 0.0)(0.0, 0.0) == 0.0, "two samples are no direction"
@@ -40,10 +55,11 @@ def test_the_house_turn_is_common_bearing_lane_and_spread_within_thirty_and_a_qu
     mid = lambda x, y, salt: 0.5  # noqa: E731 - a draw at the middle: no spread, no quarter turn
     low = lambda x, y, salt: 0.0  # noqa: E731 - the bottom of every draw: the widest spread, and a quarter turn
     assert B.house_rot(mid, 10.0, 10.0, 5.0, None, B.QUARTER_TURN_SHARE) == pytest.approx(5.0)
-    assert B.house_rot(mid, 10.0, 10.0, 5.0, lambda x, y: 12.0, B.QUARTER_TURN_SHARE) == pytest.approx(17.0), "the lane's turn"
-    assert B.house_rot(mid, 10.0, 10.0, 0.0, lambda x, y: 80.0, B.QUARTER_TURN_SHARE) == pytest.approx(B.BEARING_SPREAD_DEG), "clamped to the spread"
-    assert B.house_rot(low, 10.0, 10.0, 0.0, None, B.QUARTER_TURN_SHARE) == pytest.approx(B.QUARTER_TURN_DEG - B.BEARING_JITTER_DEG)
-    assert B.house_rot(low, 10.0, 10.0, 0.0, None, 0.0) == pytest.approx(-B.BEARING_JITTER_DEG), "no share, no quarter turn"
+    lim = lambda d: B.soft_limit(d, B.BEARING_SPREAD_DEG)  # noqa: E731
+    assert B.house_rot(mid, 10.0, 10.0, 5.0, lambda x, y: 12.0, B.QUARTER_TURN_SHARE) == pytest.approx(5.0 + lim(12.0)), "the lane's turn"
+    assert B.BEARING_SPREAD_DEG - 1.0 < B.house_rot(mid, 10.0, 10.0, 0.0, lambda x, y: 80.0, B.QUARTER_TURN_SHARE) < B.BEARING_SPREAD_DEG, "held under the spread"
+    assert B.house_rot(low, 10.0, 10.0, 0.0, None, B.QUARTER_TURN_SHARE) == pytest.approx(B.QUARTER_TURN_DEG + lim(-B.BEARING_JITTER_DEG))
+    assert B.house_rot(low, 10.0, 10.0, 0.0, None, 0.0) == pytest.approx(lim(-B.BEARING_JITTER_DEG)), "no share, no quarter turn"
     # the draw keys on the seat's 4 ft cell: a seat moved a pixel keeps its turn
     seen = []
     B.house_rot(lambda x, y, salt: seen.append((x, y)) or 0.5, 101.3, 58.9, 0.0, None, 0.1)

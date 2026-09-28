@@ -130,3 +130,19 @@ def test_an_end_on_another_lanes_tread_is_set_on_its_centerline() -> None:
     assert s.M["lanes"][1]["pts"] == [[100.0, 402.0], [100.0, 300.0]], "the record moves, the far end stays"
     assert "100.0,300.0" in s.ground[s._lane_ink[1][0]]["bed"], "and the ink with it"
     assert center_lane_ends(s) == 0, "a second pass finds nothing to move"
+
+
+def test_a_lane_is_cut_where_it_crosses_another_and_each_half_ends_on_the_crossing() -> None:
+    """`split_at_crossings` (the 269 landing): an X crossing becomes two records meeting the other lane there; an end
+    already at a crossing, and the connector, are not cut."""
+    from l7r.diagram.hamletgen.ways.joints import split_at_crossings
+
+    from ._builders import _StubSettlement
+
+    s = _StubSettlement(lanes=[[(0.0, 500.0), (1000.0, 500.0)], [(100.0, 0.0), (100.0, 300.0)], [(300.0, 400.0), (300.0, 600.0)], [(600.0, 400.0), (600.0, 502.0)]])
+    s.M["lanes"][2]["role"] = "skeleton"
+    assert split_at_crossings(s) == 1, "the connector (lane 0) is never cut; the lane ending on it (3) is a junction already"
+    pts = [ln["pts"] for ln in s.M["lanes"]]
+    assert pts[2] == [[300.0, 400.0], [300.0, 500.0]] and pts[4] == [[300.0, 500.0], [300.0, 600.0]]
+    assert s.M["lanes"][4].get("role") == "skeleton", "the cut half keeps its provenance"
+    assert pts[1] == [[100.0, 0.0], [100.0, 300.0]] and pts[3] == [[600.0, 400.0], [600.0, 502.0]]

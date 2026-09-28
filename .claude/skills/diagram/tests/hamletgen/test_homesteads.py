@@ -691,7 +691,8 @@ def test_field_edge_seats_come_nearest_first_and_skip_an_edge_the_house_stands_w
 
     idx = edge_index([[(100.0, 0.0), (200.0, 0.0), (200.0, 100.0), (100.0, 100.0)]], [([(0.0, 80.0), (60.0, 80.0)], 5.0), ([(0.0, 52.0), (60.0, 52.0)], 5.0)])
     pts = field_edge_seats(idx, 50.0, 50.0, 200.0, 10.0)
-    assert pts[0] == pytest.approx((50.0, 65.0)) and pts[1] == pytest.approx((90.0, 50.0)), "the road, then the paddy"
+    assert pts[0][:2] == pytest.approx((50.0, 65.0)) and pts[1][:2] == pytest.approx((90.0, 50.0)), "the road, then the paddy"
+    assert pts[0][2] is True and pts[1][2] is False, "each seat says whether its edge is a road"
     assert len(pts) == 2, "the road 2 px off the house leaves no ground between"
 
 
@@ -893,3 +894,13 @@ def test_the_steading_is_the_largest_box_holding_the_house() -> None:
 
     assert homestead_box([(0.0, 0.0, 10.0, 10.0), (0.0, 0.0, 100.0, 80.0), (500.0, 0.0, 400.0, 400.0)], 0.0, 0.0) == (0.0, 0.0, 100.0, 80.0)
     assert homestead_box([(500.0, 0.0, 10.0, 10.0)], 0.0, 0.0) is None
+
+
+def test_the_drawn_forms_are_recorded_beside_the_rolled_knob() -> None:
+    """`record_drawn_forms` (the 269 landing's reviews): the woodpiles by form - an unformed stack is the eaves stack - and
+    the baths by whether a corridor joins them."""
+    from l7r.diagram.hamletgen.homesteads.fixtures import record_drawn_forms
+
+    m = {"meta": {}, "farm_fixtures": [{"kind": "woodpile"}, {"kind": "woodpile", "form": "kizuma"}, {"kind": "woodpile"}, {"kind": "bath", "corridor": {"x": 1.0}}, {"kind": "bath"}, {"kind": "coop"}]}
+    record_drawn_forms(m)
+    assert m["meta"]["woodpile_forms_drawn"] == {"eaves": 2, "kizuma": 1} and m["meta"]["bath_seats_drawn"] == {"corridor": 1, "unjoined": 1}

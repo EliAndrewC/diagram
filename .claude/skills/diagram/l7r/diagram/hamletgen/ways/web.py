@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 import math
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
+from typing import Any
 
 from l7r.diagram.settlement import Settlement, seg_dist, skeleton_layout, web_cuts
 from l7r.diagram.sitegen.geom import crop_polys
@@ -25,8 +26,8 @@ from .bund import a_way_onto_the_bund, run_lanes_on_to_the_bund, worked_ground_o
 from .checks import drawn_water_segs
 from .clearance import clear_runs, clip_to_clear
 from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _homestead_polys, _margin_frame, _net_segs, _pass, _pull_back_to_service
-from .geom import _trim_to_service, polyline_len, steading_footprints
-from .joints import center_lane_ends, meet_end_to_end, straighten_joints
+from .geom import _components, _trim_to_service, polyline_len, steading_footprints
+from .joints import center_lane_ends, meet_end_to_end, split_at_crossings, straighten_joints
 from .route import _route
 from .serve import _lay_web_lane, _serve_stragglers
 from .smooth import _STUB_REACH_FT, _smooth_web
@@ -323,7 +324,26 @@ def tidy_lane_ends(s: Settlement, envelope: Poly) -> None:
     # Kuwabata, and on Kashikawa a field spur whose far end another lane had joined and taken over, its head a plank over
     # the brook to nothing. A lane that is some house's only way names that house in `keep` and never trims to a point, so
     # nothing it serves is stranded; the planks are laid after this stage, so none is left behind.
-    s.drop_lanes(_nowhere)
+    # ...BUT A LANE THAT IS THE ONLY LINK BETWEEN TWO PARTS OF THE WEB SERVES THEM BOTH, and stays: this is the last pass
+    # that drops a lane and nothing rejoins after it, so on Inashiro at the 269 landing (the house bearings re-laid) it
+    # dropped the lane that tied a skeleton arm to the rest, and the map shipped two networks (`lanes_form_one_network`).
+    s.drop_lanes(unsplitting_drops(s.M.get("lanes", []), _nowhere))
+
+
+def unsplitting_drops(lanes: Sequence[Mapping[str, Any]], drops: Sequence[int]) -> list[int]:
+    """The lanes of `drops` that can go without parting the web: each is dropped only if the lanes left after it fall into
+    no more networks (at the 4 ft ink tolerance) than before - tried back to front, each against the drops already taken."""
+    ways = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
+    gone: set[int] = set()
+
+    def networks(skip: set[int]) -> int:
+        live = [w for k, w in enumerate(ways) if k not in skip and len(w) >= 2]
+        return len(set(_components(live, 4.0)))
+
+    for i in sorted(drops, reverse=True):
+        if networks(gone | {i}) <= networks(gone):
+            gone.add(i)
+    return sorted(gone)
 
 
 def stage_web(s: Settlement, plan: SitePlan) -> None:
@@ -648,6 +668,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # after the first tidy can leave an end in open ground - the dangling-end sweeps, the joint straightening and the cut
     # past the connector all reshape lanes - and Kuwabata shipped a skeleton arm into the scrub that the first tidy had
     # seen as part of a longer lane. The same trim, with the same `keep` for a house whose only way a lane is.
+    split_at_crossings(s)  # a crossing is a junction: recorded as one before the trim judges what each end serves (the 269 landing)
     tidy_lane_ends(s, list(plan.envelope))
     meet_end_to_end(s, walls)  # ...and two ends the trims left facing each other across a hand's width are joined
     # ...AND THE PADDY IS REACHED (269 B04, research/fields/290): where no lane end stands on its bund - the spur swept, or
