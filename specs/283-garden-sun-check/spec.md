@@ -96,12 +96,14 @@ and its reviews.
 
 - **The seats (accurate as seats, a guess that the sun chooses)**: research buildings 405. At Ochiba, Hayakawa and
   Ubame the west and the rear are shaded by the kitchen and the residence, so each bed takes the south court beside the
-  formal garden, cut from it; the Hoshigaoka shrine's bed moved to the open ground south-west of the hall (research
+  formal garden, drawn as rows over it while the garden keeps its own shape (see Round 1 below); the Hoshigaoka
+  shrine's bed moved to the open ground below the forecourt, west of the approach (research
   homesteads 044).
 - **Ubame's bed at the size knob's low end (accurate)**: the only open ground in its walls with a sun bed's hours (research homesteads 044) holds about
   `1,065 sq ft` (observed 2026-09-28; method: the bed's rect 102 x 94 px at 3 px a foot), the soup-greens plot of research buildings 400 (research.md R1); the rear strip held about `2,100 sq ft` (observed 2026-09-28; method: its rect 430 x 44 px at 3 px a foot). Hayakawa's bed, drawn at
   `780 sq ft` (observed 2026-09-28; method: its rect 88 x 80 px at 3 px a foot, as the rear strip's 160 x 44), under that
-  low end, grows to it by moving the garden well out of the corner (constitution XIV).
+  low end, grows to it (about `1,067 sq ft`, research.md R1) at its seat by the divider beyond the pond, the garden well
+  moved to the bed's corner (constitution XIV).
 - **Round 1 of the building reviews applied (2026-09-28)**: Hayakawa's bed moved from the reception's garden front to
   the divider beyond the pond; each bed is painted in rows over its formal garden, which keeps its own shape (a map
   drawing convention - the bed reads as worked ground, not a compartment of the ornamental garden); the three rear
