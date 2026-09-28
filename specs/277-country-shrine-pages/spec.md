@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-28
 
-**Status**: specified; spec-fidelity round 2 CHANGES REQUIRED (1) - applied, round 3 next
+**Status**: specified; spec-fidelity FAITHFUL at round 3; plan next
 
 **Input**: the GM's request of 2026-09-28, verbatim in [`request.md`](request.md).
 
@@ -93,3 +93,4 @@ sheet with untagged ink or an unregistered kind, and on a registered kind no shr
   shrine's page. Applied: FR-006, the carry-over clause in the Edge Cases, SC-004 extended to the pack audit, SC-005.
 - Round 2 (spec-fidelity-verify, MODE 3): the fold resolved but FR-006 listed only (id, kind, band_ft) - an item keeps
   its forms, site and optional where it has them, as 262's FR-003a said. Applied.
+- Round 3 (spec-fidelity-verify, MODE 3, 2026-09-28): FAITHFUL.
