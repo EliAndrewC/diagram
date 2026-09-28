@@ -78,7 +78,18 @@ def past_the_lanes(cols: Sequence[tuple[float, float]], lanes: Sequence[tuple[fl
     return out
 
 
-BELT_DEPTH_FT = 110.0  # the band's depth, near face to far (36 to 146 ft behind the fringe)
+BELT_NEAR_FT = 36.0  # ft behind the fringe the band's near face stands
+# THE BAND'S DEPTH BEFORE THE RAG, near face to far, and the rag on each face. The near face is roughened along its length
+# and pushed only OUT of the band, 0-`BELT_NEAR_RAG_FT`; the far face moves up to `BELT_FAR_RAG_FT` either way. A band
+# laid 105 ft deep so draws 95-120 ft where the fringe lies square to the wind - inside the record's 80-120 ft
+# (research/vegetation.html "What are the village's three groves"). The old rag moved both faces up to 13 ft either way
+# about a 110 ft band (84-136): the near face moving in with the far took the band to 72.7 ft at Sawada's bend. Moving
+# both faces only outward about 110 drew a median band of 118-122 ft, over half of two maps' faces past 120; 94 and 100
+# ft bands with an outward rag held the range but left Kashikawa's belt in two pieces where its westernmost garden's
+# afternoon-sun lane crosses the band (spec-fidelity rounds of 2026-09-28; measured every 5 ft along the near face).
+BELT_DEPTH_FT = 105.0
+BELT_NEAR_RAG_FT = 5.0
+BELT_FAR_RAG_FT = 10.0
 
 
 BELT_PROFILE_STEP_FT = 30.0  # ft along the fringe profile between the band's samples
@@ -171,14 +182,14 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
     v_mid = (v_lo + v_hi) / 2
     rng = random.Random((plan.spec.seed * 7919) & 0xFFFFFFFF)
 
-    def rag(q: Pt, out: float, amp: float = 13.0) -> Pt:
-        """A face vertex roughened ALONG the face and pushed only OUT of the band - `out` +1 for the far face (windward), -1
-        for the near (leeward) - never into it (spec-fidelity of round 31ef113b: Sawada's belt 72.7 ft across itself at one
-        bend). The two draws are the two the old rag made, so the sequence is the same; the old rag moved a vertex up to
-        13 ft either way on both axes, and a near and a far vertex moved toward each other took 26 ft of the band's depth,
-        under the record's 80 ft (research/vegetation.html) where the faces also bend."""
+    def rag(q: Pt, out: float) -> Pt:
+        """A face vertex roughened ALONG the face, and moved across it - the near face (`out` -1, leeward) only OUT of the
+        band, up to `BELT_NEAR_RAG_FT`; the far face (`out` +1) up to `BELT_FAR_RAG_FT` either way. The two draws are the two
+        the old rag made, so the sequence is the same (see `BELT_DEPTH_FT` for the range this draws)."""
+        amp = BELT_FAR_RAG_FT if out > 0 else BELT_NEAR_RAG_FT
         a, b = rng.uniform(-amp, amp), rng.uniform(-amp, amp)
-        return (q[0] + px * a + wx * out * abs(b), q[1] + py * a + wy * out * abs(b))
+        d = b if out > 0 else -abs(b)
+        return (q[0] + px * a + wx * d, q[1] + py * a + wy * d)
 
     # NO COLUMN FALLS BEHIND THE MEDIAN HOUSE. Following the profile is right, but on a cluster
     # that is long ACROSS the wind the flank columns' own frontrunner sits well downwind of the
@@ -224,24 +235,26 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
     _marsh = [[(float(q[0]), float(q[1])) for q in mk["poly"]] for mk in s.M.get("marshes") or [] if len(mk.get("poly") or []) >= 3]
 
     def _in_marsh(v: float, u: float) -> bool:
-        """Would the band moved to fringe `u` in column `v` stand in the marsh - its middle, 91 ft behind the fringe?"""
-        x, y = ccx + wx * (u + 91.0 + _sun_off) + px * v, ccy + wy * (u + 91.0 + _sun_off) + py * v
+        """Would the band moved to fringe `u` in column `v` stand in the marsh - its middle, half its depth behind its near face?"""
+        _mid = BELT_NEAR_FT + BELT_DEPTH_FT / 2.0
+        x, y = ccx + wx * (u + _mid + _sun_off) + px * v, ccy + wy * (u + _mid + _sun_off) + py * v
         return any(point_in_poly(x, y, ring) for ring in _marsh)
 
     _near_n = [0]  # how many of the band's vertices are its near face, recorded for the depth measure (the far face has more)
 
     def band(span_f: float, back: float) -> Poly:
-        cols = past_the_lanes(profile(span_f), _lanes, half * span_f / COLS, wet=_in_marsh)
+        cols = past_the_lanes(profile(span_f), _lanes, half * span_f / COLS, near=BELT_NEAR_FT, depth=BELT_NEAR_FT + BELT_DEPTH_FT, wet=_in_marsh)
         # 36 px, not 24. `village_grove` filters clumps against every structure and crop, and it
         # filters the near face hardest - so a belt whose POLYGON sits clearly windward can still
         # have its DRAWN clumps average back onto the cluster's own line, which is what
         # `village_windbreak_on_windward_side` measures (Kashikawa: polygon centroid +137, drawn
         # centroid -5). The extra 12 px comes out of the 150 px embrace budget and leaves plenty.
-        # The 36..146 px band is the belt's 80-120 ft depth (research/vegetation.html "What are the
-        # village's three groves" - a belt reads as a wall of trees only at that depth).
+        # The band is the belt's 80-120 ft depth (`BELT_DEPTH_FT` with the rag's outward push; research/vegetation.html
+        # "What are the village's three groves" - a belt reads as a wall of trees only at that depth).
         _near_n[0] = len(cols)
-        near = [rag((ccx + wx * (u + 36.0 + _sun_off + back) + px * v, ccy + wy * (u + 36.0 + _sun_off + back) + py * v), -1.0) for v, u in cols]
-        far = [rag((ccx + wx * (u + 146.0 + _sun_off + back) + px * v, ccy + wy * (u + 146.0 + _sun_off + back) + py * v), 1.0) for v, u in reversed(far_envelope(cols))]
+        near = [rag((ccx + wx * (u + BELT_NEAR_FT + _sun_off + back) + px * v, ccy + wy * (u + BELT_NEAR_FT + _sun_off + back) + py * v), -1.0) for v, u in cols]
+        _far = BELT_NEAR_FT + BELT_DEPTH_FT
+        far = [rag((ccx + wx * (u + _far + _sun_off + back) + px * v, ccy + wy * (u + _far + _sun_off + back) + py * v), 1.0) for v, u in reversed(far_envelope(cols))]
         return near + far
 
     def fouled(poly: Poly) -> bool:

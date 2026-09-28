@@ -375,23 +375,28 @@ Measured before and after in research R10.
 
 ### D20 - The belt keeps its depth across itself, and the brook turns on curves (round 97c20bc9)
 
-- The belt's far face is the fringe grown by a DISC of the belt's depth (`far_face`, `BELT_DEPTH_FT` 110): a neighbor `d`
+- The belt's far face is the fringe grown by a DISC of the belt's depth (`far_envelope` over `along_the_profile`, `BELT_DEPTH_FT` 105): a neighbor `d`
   across the wind counts by `depth * sqrt(1 - (d / depth)^2)` of its lead. The far face used to be the near face moved
   along the wind, which is the belt's depth only where the fringe lies square to it; where the fringe runs along the wind
   the band thinned to a sliver, and Kashikawa's westernmost steading's garden and sun lane emptied it - a hole in the
   windward face (settlement-review, round 97c20bc9; research/vegetation.html: a belt "reads as a wall of trees only at"
   80-120 ft of depth, and a windbreak with a hole funnels the wind). The band's thinnest depth across itself went from 20.7 ft
-  to 92.0 on Kashikawa (`m:belt-r16-depth`), and on the pool it is at least 92.0 ft wherever the canvas edge does not cut
-  it. Two further causes of a thin band were fixed after round 31ef113b's spec-fidelity found Sawada's bend at 72.7 ft
-  (observed 2026-09-28: `measure/belt_depth.py`, which reads where the near face ends from `meta.belt_near_vertices`
-  and leaves out a stretch clamped to the canvas): the rag, which moved every face vertex up to 13 ft either way on both
-  axes, now roughens a face along its length and pushes it only out of the band; and the far face is laid behind a disc
-  grown round every point ALONG the fringe profile (`along_the_profile`, every 30 ft), sampled in order across the wind
-  (`far_envelope`) - Sawada's belt turns a right angle between two columns 90 ft apart, one 480 ft chord of near face,
-  and a disc round the columns alone ran the far face parallel to it 72 ft away. Sampling the far face along the profile
-  itself was tried and folded it back over the steep chord (Sawada's belt in six pieces), and sampling it across the wind
-  from the columns' discs alone thinned Inashiro and Mizuguchi and split Kashikawa's belt in three (observed 2026-09-28 on
-  rolls not committed); both are reverted. A square window (a neighbor's whole lead) was tried
+  to 97.2 on Kashikawa (`m:belt-r16-depth`). On the pool every belt is now at least 95.0 ft deep and its median 103-107
+  ft wherever the canvas edge does not cut it, at most 9% of a face over 120 ft (at its bends) - the record's 80-120.
+  Round 31ef113b's spec-fidelity found Sawada's bend at 72.7 ft, and the next round the typical band past 120 ft once
+  the first fix pushed both faces outward (observed 2026-09-28: `measure/belt_depth.py`, every 5 ft along the near face,
+  reading where it ends from `meta.belt_near_vertices` and leaving out a stretch clamped to the canvas). Three causes
+  are fixed. The far face is laid behind a disc grown round every point ALONG the fringe profile (`along_the_profile`,
+  every 30 ft), sampled in order across the wind (`far_envelope`): Sawada's belt turns a right angle between two
+  columns 90 ft apart, one chord of near face, and a disc round the columns alone ran the far face parallel to it 72 ft
+  away. The rag no longer moves the near face into the band (0-5 ft outward only; the far face 10 ft either way). And the
+  band is laid 105 ft deep (`BELT_DEPTH_FT`), so a square fringe draws 95-120 ft. Tried and reverted (observed
+  2026-09-28 on rolls not committed): sampling the far face along the profile, which folded it over the steep chord
+  (Sawada in six pieces); sampling it across the wind from the columns' discs alone (Inashiro and Mizuguchi thinned,
+  Kashikawa in three pieces); a 94 and a 100 ft band with an outward rag on both faces, which left Kashikawa's belt in
+  two pieces where its westernmost garden's afternoon-sun lane crosses the band; and moving the near face, or the far
+  face alone, past that lane, which stood Sawada's southwest arm beyond the frame's shelter reach and off the page, or
+  deepened the outline over the unplanted lane. A square window (a neighbor's whole lead) was tried
   first and thickened belts for bumps of a few tens of feet (observed 2026-09-27 on a roll not committed: Sawada 559
   clumps, Inashiro 364, Kuwabata 232, Mizuguchi 304, against the disc's 539, 312, 191 and 252); the disc leaves a square
   or gently bumped fringe unchanged. Every belt grew, most where its fringe turns (observed 2026-09-27, the census
