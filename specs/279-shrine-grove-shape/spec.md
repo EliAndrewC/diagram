@@ -122,7 +122,11 @@ the research supports no knob; the village conversion's owed list (`future-work/
 
 ## Decisions Recorded
 
-(Filled as the research lands.)
+- The paddy-plain wood's foot where it meets its fields (FR-005's straight-edge case, put to the GM at hand-back): the GM,
+  2026-09-28 - *"we have reason to believe that at least in some cases it was a certain way, but ... we don't have any
+  strong evidence about this always being the case. So our general project guidelines is that that always should result in
+  a tunable knob"*. It is a second grove knob, `field line` or `ragged`, rolled from the seed (research 129; programs.md
+  knob 8). No drawn map is affected: Hoshigaoka's wood meets scrub.
 
 ## Review history
 

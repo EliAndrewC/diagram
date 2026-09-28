@@ -72,7 +72,8 @@ slope the candidates are `behind` / `behind and sides`, at the top with the appr
 `behind and sides` / `sides`, midway on an even slope all three slope forms, on a rise or flat paddy `all around` -
 and roll between the candidates from the settlement's seed with equal weights; the wood's region is a smooth-noise outline about the form's base shape,
 never a ruled box (the edge is its crowns' own where it meets scrub or slope; where a paddy-plain wood meets its
-fields, the foot's shape is OPEN with the GM - a photograph shows it along the fields' straight edge). Fill the
+fields, its foot rolls the program's second grove knob - `field line` along the fields' straight edge, as a
+photograph shows, or `ragged` - with equal weights). Fill the
 region with the grove scatter the windbreak already uses (a `KeepoutGrid` of the clearing, the approach and the
 well), carry the scrub into the precinct's open ground, then seat the sacred tree beside the approach and the
 basin at the innermost arch. Measure: the region's area and canopy share, and feature 279's `STRAIGHT_RUN` on its
