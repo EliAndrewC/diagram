@@ -22,3 +22,11 @@ The GM was asked (2026-09-28, after the spec's first reading) whether the check 
 settlement maps (the Hoshigaoka village, Ubame town, Minami and the other legacy maps), whose farmhouses draw kitchen
 gardens, or only the hand-drawn building sheets, and answered: "Sheets only (Recommended)" - the legacy maps get the sun
 rules when each is converted to scripted generation, whose placer already enforces them.
+
+The GM was then asked (2026-09-28): "In Ochiba, Hayakawa and Ubame, the only ground inside the walls that gets 6 hours
+of sun is the south court, where the formal garden is. The west side, the one side the record attests for a residence's
+vegetable garden, is shaded by the kitchen range and other buildings. How should the three vegetable gardens be
+re-seated?" - offered "Beside the formal garden", "Open the west side" and "Outside the wall" - and answered: "This feels
+like you are asking me something that should be a research question." The west-side preference in the first answer was
+the session's own reading of the record at the time; the research pass that followed (research buildings 405) found four
+attested seats, west among them, and the seats are taken from it.

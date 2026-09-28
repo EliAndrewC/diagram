@@ -224,27 +224,30 @@ class CompoundGarden(Kind):
 
 class VegetableGarden(Kind):
     """
-    What: A vegetable garden for the household's own table, worked in the service ground behind the residence.
+    What: A vegetable garden for the household's own table, set where it gets its sun.
 
     Why: Samurai grew their own vegetables, on anything from a kitchen plot to half their grounds. The
-    Boso-no-mura house of a middle-rank samurai family has a soup-greens plot of about 1,070 sq ft, planted
-    mainly with leafy greens, on the west side of the house; at Matsushiro a 150-koku retainer's house kept
-    about half its grounds in vegetable field. The formal garden took the south side of the house, so the
-    vegetable garden lay off it.
+    Boso-no-mura house of a middle-rank samurai family, as the museum reconstructs it, has a soup-greens plot of
+    about 1,070 sq ft, planted mainly with leafy greens, on the west side of the house; at Matsushiro a 150-koku
+    retainer's house keeps about half its grounds in vegetable field today, and the Higuchi house's field lay south
+    of its pond, where its formal garden is now. A jin'ya had a vegetable garden inside its grounds, a daikan's
+    office a field of its own, and a Chinese county office listed its plot behind the residence gate after the
+    kitchen and the stable. A bed of vegetables that want full sun needs about six hours of direct sun a day.
 
     Note: Its size is one of two attested forms, a soup-greens plot or a field over about half the grounds, and
-    each sheet takes its own. Seating it to the north of the house is a guess, reasoned from the formal garden
-    taking the sunny south: no vegetable garden north of a house was found, and the one plot whose side is given
-    lay to the west.
+    each sheet takes its own. Its seat is one of four attested ones - west of the house, south beside the formal
+    garden, the rear service ground, or a parcel of its own - and the sun rules out any seat where the bed gets
+    under its six hours in the autumn; where the west and the rear lie in the shade of the house and the kitchen,
+    the bed stands in the south court beside the formal garden.
 
-    Caveat: Seating it to the north of the house is a guess, reasoned from the formal garden taking the sunny
-    south: no vegetable garden north of a house was found, and the one plot whose side is given lay to the west.
+    Caveat: That a household chose its seat by the sun is a guess: no source read says why a plot was put where
+    it was.
 
     Name: vegetable garden
     Covers: the kitchen garden's beds and label
     Label: accurate
-    Sources: boso-no-mura-takei, matsushiro-bukeyashiki, shoinzukuri-jawiki
-    Entry: research/buildings.html - 'Where did a residence keep its vegetable garden, and how big was it?', 'The shady rear is the service strip'
+    Sources: boso-no-mura-takei, matsushiro-bukeyashiki, sanada-higuchi, kasama-iwama-jinya, kotobank-kisaku-daikansho, gujin-xie-yamen, atariya-nisho
+    Entry: research/buildings.html - 'Where did a residence keep its vegetable garden, and how big was it?', 'Where does a walled compound keep its vegetable garden, and does the sun decide it?'; research/homesteads.html - 'How many hours of direct sun does a kitchen bed need?'
     """
 
     key = "vegetable garden"

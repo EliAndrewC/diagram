@@ -21,6 +21,7 @@ import re
 from dataclasses import dataclass
 
 from shapely.geometry import Point, Polygon, box
+from shapely.geometry.base import BaseGeometry
 from shapely.ops import unary_union
 
 from ...interactive.sheet import element_kinds
@@ -68,7 +69,7 @@ def sun_at(hour: float, lat_deg: float = LAT_DEG, decl_deg: float = DECL_DEG) ->
     return math.degrees(el), math.degrees(az) % 360.0
 
 
-def shadow(caster: Caster, el_deg: float, az_deg: float) -> Polygon:
+def shadow(caster: Caster, el_deg: float, az_deg: float) -> BaseGeometry:
     """The ground a caster darkens with the sun at (el, az): its footprint swept away from the sun by its shadow's length.
     On a sheet north is up and a px is 1/FTPX ft, so the shadow runs (-sin az, +cos az) in px."""
     length = caster.height_ft / math.tan(math.radians(el_deg)) * FTPX
@@ -97,7 +98,10 @@ def _rect_poly(r: Rect) -> Polygon:
 
 
 def gardens(plan: ParsedPlan, text: str) -> list[tuple[Rect, bool]]:
-    """Every drawn kitchen bed - a rect of the `vegetable garden` kind - and whether it is declared a half-shade bed."""
+    """Every drawn kitchen bed - a rect of the `vegetable garden` kind - and whether it is declared a half-shade bed. A
+    sheet that tags no bed is not parsed for kinds (a bare test sheet has no tagged structure to parse)."""
+    if f'data-kind="{GARDEN_KIND}"' not in text:
+        return []
     kinds = element_kinds(text)
     out = []
     for r in plan.fills:
