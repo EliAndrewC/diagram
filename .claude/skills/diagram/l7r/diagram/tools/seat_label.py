@@ -32,8 +32,8 @@ import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field, replace
 from pathlib import Path
 
-from shapely.geometry import Polygon
-from shapely.ops import unary_union
+from shapely.geometry import LineString, Point, Polygon
+from shapely.ops import nearest_points, unary_union
 
 from l7r.diagram.labels import Obstacle, ObstacleIndex, Placement, Subject, Way, place
 from l7r.diagram.labels.geom import Poly, Pt, bbox, inside, rect
@@ -371,12 +371,8 @@ def _band(a: Pt, b: Pt, half: float) -> Poly:
     return [(a[0] + nx, a[1] + ny), (b[0] + nx, b[1] + ny), (b[0] - nx, b[1] - ny), (a[0] - nx, a[1] - ny)]
 
 
-def subject_of(caption: Shape, shapes: list[Shape]) -> Subject | None:
-    """A caption's subject: the non-text shapes of the tagged element it sits in (its `<g data-kind>`) - or, for a
-    caption tagged on its own, the nearest drawn shape of its kind - as a point subject beside which it stands; an
-    area subject when the caption already lies inside it. None when there is nothing drawn for it to name."""
-    if not caption.kind or caption.kind == "-":
-        return None
+def own_parts(caption: Shape, shapes: list[Shape]) -> list[Shape]:
+    """The drawn shapes a caption names (see `subject_of`), empty when nothing is drawn for it."""
     own = [s for s in shapes if s.group == caption.group and s.group and s.tag != "text" and not s.leader]
     # a group naming several things (two clerks' seats, each with its label) gives a caption the shape it lies in, not
     # the group's whole extent - which set each label beside the group's middle (feature 267)
@@ -390,11 +386,23 @@ def subject_of(caption: Shape, shapes: list[Shape]) -> Subject | None:
     if not own:
         same = [s for s in shapes if s.kind == caption.kind and s.tag != "text" and not s.leader]
         if not same:
-            return None
+            return []
         # the shape of its kind the caption lies in (Ubame's shuttered wing: its name sits in the wing's rect, and the
         # nearest shape of the kind was a shutter line, which read the name as a point caption far off - feature 267)
         held = [s for s in same if s.tag == "rect" and inside(caption.center[0], caption.center[1], s.poly)]
         own = [min(held, key=lambda s: _area(s.poly))] if held else cluster_of(min(same, key=lambda s: math.dist(_mid(s.poly), caption.center)), same, 2 * caption.size)
+    return own
+
+
+def subject_of(caption: Shape, shapes: list[Shape]) -> Subject | None:
+    """A caption's subject: the non-text shapes of the tagged element it sits in (its `<g data-kind>`) - or, for a
+    caption tagged on its own, the nearest drawn shape of its kind - as a point subject beside which it stands; an
+    area subject when the caption already lies inside it. None when there is nothing drawn for it to name."""
+    if not caption.kind or caption.kind == "-":
+        return None
+    own = own_parts(caption, shapes)
+    if not own:
+        return None
     if len(own) == 1 and own[0].tag == "rect":
         poly = own[0].poly
     else:
@@ -408,6 +416,23 @@ def subject_of(caption: Shape, shapes: list[Shape]) -> Subject | None:
     x0, y0, x1, y1 = bbox(poly)
     along = 90.0 if area and (y1 - y0) > ELONGATED * max(x1 - x0, 1e-9) else 0.0
     return Subject("area" if area else "point", tuple(poly), angle=along if area else ang)
+
+
+def leader_to_ink(p: Placement, parts: list[Shape]) -> Placement:
+    """A leader ends on the drawn thing it names, not on the box around its parts: a barge moored by lines and three
+    pines are boxed with empty water or ground in the box's corner, and a leader to the corner named nothing (feature
+    283 - the tax barge's and the old pines' leaders ended 5-6 ft short)."""
+    if p.leader is None or not parts:
+        return p
+    a = Point(p.leader[0])
+    ink = unary_union([LineString(s.poly).buffer(max(s.half, 0.5)) if s.line else Polygon(s.poly) for s in parts if len(s.poly) >= (2 if s.line else 3)])
+    if ink.is_empty or ink.distance(Point(p.leader[1])) < 1.5:
+        return p
+    tip = nearest_points(ink, a)[0]
+    d = a.distance(tip)
+    trim = min(1.0, d / 4)
+    ux, uy = (tip.x - a.x) / d, (tip.y - a.y) / d
+    return replace(p, leader=(p.leader[0], (tip.x - ux * trim, tip.y - uy * trim)))
 
 
 BLOCK_PX = 2000.0
@@ -544,6 +569,7 @@ def seat(src: str, kinds: set[str] | None = None) -> tuple[list[Finding], list[t
             placed.append((caps, p))
             continue  # at its seat as it stands: the hand's own seat won, so nothing is rewritten or reported
 
+        p = leader_to_ink(p, own_parts(head, shapes))
         placed.append((caps, p))
         want = _line_centers(p, [c.size for c in caps], [len(c.lines) for c in caps])
         off = any(math.dist(w, c.center) > TOLERANCE for w, c in zip(want, caps, strict=True))

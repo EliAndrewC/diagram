@@ -299,3 +299,19 @@ def test_a_stepped_building_is_named_against_its_largest_block() -> None:
     full = rect_shape(100, 0, 90, 70)
     assert sl.stepped_subject(box, [rect_shape(0, 0, 100, 70), full], (100, 120)) == box, "parts that fill the box"
     assert sl.stepped_subject(box, [west, rect_shape(150, 0, 10, 10)], (100, 120)) == box, "one block and a small part"
+
+
+def test_a_leader_ends_on_the_ink_it_names() -> None:
+    """Feature 283: a leader set against a group's box ended in the box's empty corner (a moored barge, three pines);
+    it is carried on to the nearest drawn part. A leader already on the ink, or with nothing drawn, is left alone."""
+    from dataclasses import replace as _replace
+
+    pine = sl.Shape("circle", "garden pines", [(100, 100), (110, 100), (110, 110), (100, 110)])
+    rope = sl.Shape("line", "garden pines", [(120, 90), (140, 90)], half=0.5, line=True)
+    p = sl.place("x", 9.0, sl.Subject("point", ((100, 100), (110, 100), (110, 110), (100, 110))), sl.ObstacleIndex())
+    p = _replace(p, leader=((60.0, 105.0), (95.0, 105.0)))
+    moved = sl.leader_to_ink(p, [pine, rope])
+    assert moved.leader is not None and 99.0 <= moved.leader[1][0] <= 100.0, "carried on to the pine's edge"
+    on = _replace(p, leader=((60.0, 105.0), (100.5, 105.0)))
+    assert sl.leader_to_ink(on, [pine]) == on, "already on the ink"
+    assert sl.leader_to_ink(p, []) == p and sl.leader_to_ink(_replace(p, leader=None), [pine]).leader is None

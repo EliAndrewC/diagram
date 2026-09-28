@@ -313,7 +313,7 @@
     <rect x="427" y="422" width="26" height="4" fill="#B8AE98" stroke="#7A7060" stroke-width="0.6"/>
     <rect x="431" y="404" width="18" height="18" fill="#C9876C" stroke="#6B2A18" stroke-width="1.4" id="sanctuary"/>
     <text x="507.7" y="393.5" text-anchor="middle" font-size="8" font-style="italic" fill="#6B2A18">sanctuary of Bishamon</text>
-    <line x1="460.8" y1="396.2" x2="453.7" y2="403.3" stroke="#6B2A18" stroke-width="0.64" stroke-linecap="round" data-leader="1"/>
+    <line x1="460.8" y1="396.2" x2="449.8" y2="403.4" stroke="#6B2A18" stroke-width="0.64" stroke-linecap="round" data-leader="1"/>
   </g>
 
   <!-- The privy at the west gable's BACK corner, off the forecourt and the kitchen door, near the path to the well. The kitchen garden in the open ground below the forecourt, west of the approach: the only ground near the house the sun reaches for its six hours (feature 283; research homesteads 044) - the hall and the wood shade the yard by the kitchen door -->
@@ -341,7 +341,7 @@
   <g data-kind="sacred tree">
     <path d="M513.0,746.0 a5,5 0 1,0 10,0 a5,5 0 1,0 -10,0" fill="none" stroke="#EDE3B8" stroke-width="2" stroke-dasharray="2 1.5"/>
     <text x="589.7" y="747.9" text-anchor="middle" font-size="7" font-style="italic" fill="#3A4A28">sacred tree</text>
-    <line x1="567.5" y1="746.0" x2="524.0" y2="746.0" stroke="#3A4A28" stroke-width="0.60" stroke-linecap="round" data-leader="1"/>
+    <line x1="567.5" y1="746.0" x2="525.0" y2="746.0" stroke="#3A4A28" stroke-width="0.60" stroke-linecap="round" data-leader="1"/>
   </g>
 
   <!-- Scale bar (3 px = 1 ft), in the open south-west corner -->

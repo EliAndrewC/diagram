@@ -222,6 +222,29 @@ class CompoundGarden(Kind):
     key = "garden"
 
 
+class RearGarden(Kind):
+    """
+    What: A garden behind the house, in the house's shade, between it and the household's storehouses.
+
+    Why: At the Higuchi house at Matsushiro a garden lies behind the main house, and the storehouse stands beyond it;
+    the formal garden took the sunny south, and the ground behind the house carried the household's own buildings.
+
+    Note: A garden behind the house, with the storehouse beyond it, follows the record. What grew in it - trees and
+    moss that take the shade - is a guess, no source read describing one's planting, and the map draws it as open
+    garden ground.
+
+    Caveat: What grew in a rear garden is a guess: no source read describes one's planting.
+
+    Name: rear garden
+    Covers: the rear garden and its label
+    Label: accurate
+    Sources: kojodan-higuchi, matsushiro-kankou-higuchi
+    Entry: research/buildings.html - 'The shady rear is the service strip'
+    """
+
+    key = "rear garden"
+
+
 class VegetableGarden(Kind):
     """
     What: A vegetable garden for the household's own table, set where it gets its sun.

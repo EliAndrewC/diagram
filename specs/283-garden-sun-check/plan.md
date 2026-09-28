@@ -76,3 +76,10 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md).
   `suumo-kura-size`, each through quote-check and source-applicability), the `storehouse` kind rewritten from them;
   Ubame's rear yard named (the inner-court kind, as Ochiba's service yard); the shrine's knob list, map note and owed
   entry; the review contract's rear strip takes the sun condition. Measured in research.md R1.
+- **D11 - rounds 3 and 4 of the building reviews** (FR-005): the rear gardens (a `rear garden` kind, its planting a
+  labeled guess) behind Ubame's house and beside Ochiba's storehouses; Hayakawa's storehouses east for its captions;
+  the caption tool sets a stepped building's caption against its largest block and ends every leader on drawn ink
+  (`stepped_subject`, `leader_to_ink`, each tested); the kitchen-garden kind's guesses in its visible text; notes and
+  comments restated. What round 4 still found about the rear strips is carried to `future-work/compounds.md` (spec,
+  Decisions Recorded), every finding ledgered in `docs/review-ledger.md`.
+

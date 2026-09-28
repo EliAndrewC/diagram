@@ -9,6 +9,35 @@ looked at a compound recently. Feature 262 (the interactive magistracy pages) lo
 drawn kind against the whole research record (`specs/262-interactive-magistracy-pages/coverage.md`) and ran
 `building-review` over the Ochiba page - and what it found is below.
 
+## OPEN 2026-09-28: the magistracies' rear strips, and what feature 283's reviews left open
+
+Feature 283 moved the three magistracies' kitchen gardens out of their shady rear strips for their sun (the GM, "Move
+them all"). Filling the strips they left took four `building-review` rounds a sheet; the session carried what the
+fourth round still found here rather than into a fifth (spec 283, Decisions Recorded, with its cost). Each is a finding
+to work, the research ones first:
+
+- **The rear strip is a knob, not yet declared.** Research buildings 230 now attests a garden behind the house with the
+  storehouse beyond it (the Higuchi house) beside the old service-strip-or-alley rule; `buildings/programs.md` still
+  states only the latter. Declare the forms - a rear garden, a working yard, a service strip with an alley - with
+  their evidence, and say which each sheet takes (Ubame the garden; Ochiba storehouses hard behind the house with a
+  garden beside them, a form not yet shown attested; Hayakawa storehouses across the alley).
+- **Ubame's rear garden** is open stipple: draw its planting (trees that take the shade, a guess), stepping stones to
+  the two storehouse doors, a service way to the reception's privy (its cesspit has no approach that avoids a garden),
+  and settle the 19 x 31 ft strip east of the reception; end the garden at the storehouses' south faces.
+- **Ochiba**: whether its rear garden's west part (behind the open 22 ft way, not the karo's house) is shaded.
+- **Hayakawa**: the family's way out of the inner garden (research: a wicket, kido or shiorido, between a buke inner
+  garden and its service ground?); the working well at the middle gate's mouth beside the guests' first stone
+  (research: was a draw-well ever on the roji's line?); the 33 x 12 ft rear pocket kept for caption seats.
+- **Ubame**: the servants' quarters have one door for four bays (research: one dormitory behind sliding partitions, or
+  a door a household?); "(and his son)" against the GM's 2026-09-28 ruling on GM-only Obsidian Portal notes.
+- **Every sheet's bed**: whether it stood beyond the ornamental ground, before the rooms, or within the garden, and
+  whether it was screened (research buildings 405 records all three as searched and not found).
+- **The shrine**: whether a keeper's plot ever stood in a precinct's front ground (research 405's absence note).
+- **Tools**: `make seat-label` accepts a hand seat that is no worse than any standard seat, so its verdict can depend
+  on where a caption starts (Hayakawa's RESIDENCE); pack-audit's aligned-gap finder pairs two buildings across a third
+  (Ochiba's "28.7 ft" nagaya-to-storehouse gap); `building-review`'s contract names an "all N structures clear the wall
+  ink" line the audit no longer prints.
+
 ## Research owed (rewritten by feature 267, 2026-09-27)
 
 Feature 267 took up everything this section held when the GM released it (*"take on whatever future work research
