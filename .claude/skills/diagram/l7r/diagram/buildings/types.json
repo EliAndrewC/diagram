@@ -239,7 +239,7 @@
     "required": [
       {
         "id": "sanctuary",
-        "label": "^sanctuary",
+        "kind": "sanctuary",
         "band_ft": {
           "w": [
             4,
@@ -249,13 +249,11 @@
             4,
             10
           ]
-        },
-        "class": "accurate",
-        "why": "a one-bay honden; a village example of 1789 measures 1.98 by 1.82 m"
+        }
       },
       {
         "id": "hall",
-        "label": "^hall|shrine hall|hall and dwelling",
+        "kind": "hall and dwelling",
         "band_ft": {
           "w": [
             18,
@@ -273,13 +271,11 @@
               3600
             ]
           }
-        },
-        "class": "accurate",
-        "why": "a village hall of 20-35 ft on a side from measured rural examples (a 1778 Kannon hall 6.54 m square; a 1790 haiden 9.78 by 10.62 m), with a Nara temple hondō of 5 by 5 ken as the upper bound, not a village example; under one roof with the dwelling, the Kaie-ji band of 200-330 sq m - one attested example, a city Zen temple's, called rare by its own listing"
+        }
       },
       {
         "id": "dwelling",
-        "label": "dwelling|monk's house|kuri",
+        "kind": "the monk's rooms",
         "band_ft": {
           "w": [
             34,
@@ -292,119 +288,89 @@
         },
         "forms": {
           "one roof": null
-        },
-        "class": "guess",
-        "why": "form accurate - a kuri resembling the farmhouse of its region; size the map's own farmhouse of 46 by 28 ft, no small kuri measured; absent as a separate building under one roof"
+        }
       },
       {
         "id": "arch",
-        "label": "^arch$|torii",
-        "band_ft": {},
-        "class": "accurate",
-        "why": "the first torii stands where the approach enters the shrine's ground, further arches deeper in, at the 12 ft pitch - research 'Torii spacing'"
+        "kind": "torii",
+        "band_ft": {}
       },
       {
         "id": "approach",
-        "label": "^approach$",
-        "band_ft": {},
-        "class": "accurate",
-        "why": "the sandō from the outermost arch, at the grove's edge, to the hall"
+        "kind": "approach",
+        "band_ft": {}
       },
       {
         "id": "well",
-        "label": "^well$|basin",
-        "band_ft": {},
-        "class": "accurate",
-        "why": "the shrine's water point: a well, or a plain stone basin beside the approach, never under an arch"
+        "kind": "well",
+        "band_ft": {}
       },
       {
         "id": "grove",
-        "label": "grove",
+        "kind": "shrine grove",
         "band_ft": {},
-        "class": "accurate",
-        "why": "the chinju no mori: the precinct IS the grove, the hall and sanctuary in a swept clearing inside it - research 'How large was a village shrine's precinct'",
         "site": "tree"
       },
       {
         "id": "sacred_tree",
-        "label": "^sacred tree",
+        "kind": "sacred tree",
         "band_ft": {},
-        "class": "accurate",
-        "why": "a roped sacred tree: a shrine was often first built where one stood (accurate in kind; how common at village scale a guess, no source counting it) - research 'What else stood in a village shrine's precinct?'",
         "site": "tree"
       },
       {
         "id": "guardian_figures",
-        "label": "guardian|lion-dog|komainu|tiger",
+        "kind": "guardian figures",
         "band_ft": {},
-        "optional": true,
-        "class": "accurate",
-        "why": "stone guardian pairs are late-Edo villager donations - the wealth knob, none at average"
+        "optional": true
       },
       {
         "id": "lanterns",
-        "label": "lantern",
+        "kind": "lanterns",
         "band_ft": {},
-        "optional": true,
-        "class": "accurate",
-        "why": "stone lanterns are votive donations - the wealth knob, none at average"
+        "optional": true
       },
       {
         "id": "strength_stones",
-        "label": "strength stone|chikaraishi",
+        "kind": "strength stones",
         "band_ft": {},
-        "optional": true,
-        "class": "accurate",
-        "why": "strength stones beside the approach, late Edo on - the wealth knob, none at average"
+        "optional": true
       },
       {
         "id": "stage",
-        "label": "stage|kagura",
+        "kind": "stage",
         "band_ft": {},
-        "optional": true,
-        "class": "accurate",
-        "why": "a farmers' stage on shrine ground: real, early 1800s on, regional - a knob, absent by default"
+        "optional": true
       },
       {
         "id": "sumo_ring",
-        "label": "sumo|dohyo",
+        "kind": "sumo ring",
         "band_ft": {},
-        "optional": true,
-        "class": "accurate",
-        "why": "a sumo ring for the dedicatory bouts, attested at ordinary shrines - a knob, absent by default"
+        "optional": true
       },
       {
         "id": "burial_ground",
-        "label": "burial|graves",
+        "kind": "burial ground",
         "band_ft": {},
-        "class": "accurate",
-        "why": "the village burial ground in the shrine's yard - the record's village rule",
         "site": "burial_ground"
       },
       {
         "id": "kitchen_garden",
-        "label": "^kitchen garden$|^vegetable garden$",
-        "band_ft": {},
-        "class": "accurate",
-        "why": "the household bed at the dwelling"
+        "kind": "vegetable garden",
+        "band_ft": {}
       },
       {
         "id": "privy",
-        "label": "^privy$|^latrine$",
-        "band_ft": {},
-        "class": "accurate",
-        "why": "attached to the dwelling"
+        "kind": "latrine",
+        "band_ft": {}
       },
       {
         "id": "fire_water",
-        "label": "^fire-water",
-        "band_ft": {},
-        "class": "accurate",
-        "why": "tensuioke at the wooden buildings, as at the magistracy"
+        "kind": "fire-water tubs",
+        "band_ft": {}
       },
       {
         "id": "bell_tower",
-        "label": "bell",
+        "kind": "bell tower",
         "band_ft": {
           "w": [
             6,
@@ -415,9 +381,7 @@
             16
           ]
         },
-        "optional": true,
-        "class": "guess",
-        "why": "the minimal temple as 'a main hall and a bell tower' rests on one undated commercial page in the present tense; a village hall may have neither - the bell knob, its presence rule a guess for that reason"
+        "optional": true
       }
     ]
   }
