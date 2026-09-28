@@ -10163,5 +10163,28 @@
   "variants": [
    "chobu"
   ]
+ },
+ "free stall": {
+  "def": "In modern cattle housing, a single stall that an untied animal walks into to lie down and leaves at will, sized to one beast - the FAO manual gives 2.2 m by 1.2 m for a cow of 500 to 600 kg.",
+  "variants": [
+   "free stall",
+   "free stalls",
+   "Free Stalls"
+  ]
+ },
+ "Restoration": {
+  "def": "The change of government in 1868 that ended the Edo period and the rule of the shoguns and began the Meiji years.",
+  "variants": [
+   "Restoration",
+   "Meiji Restoration"
+  ]
+ },
+ "Tangible Cultural Property": {
+  "def": "A building or object entered on Japan's national register of cultural properties; the register's pages give each building's date, construction and size.",
+  "variants": [
+   "Tangible Cultural Property",
+   "Tangible Cultural Properties",
+   "Registered Tangible Cultural Property"
+  ]
  }
 }

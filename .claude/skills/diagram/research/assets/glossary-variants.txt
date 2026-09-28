@@ -694,6 +694,8 @@ four-room type	four-room type
 foxtail millet	foxtail millet
 foxtail millets	foxtail millet
 frass	frass
+free stall	free stall
+free stalls	free stall
 freeboard	freeboard
 frontage	frontage
 fu	fu
@@ -1480,6 +1482,7 @@ matsu	matsu
 meander	meander
 meibutsu	meibutsu
 meiji	Meiji
+meiji restoration	Restoration
 meireki	Meireki
 meiwa	Meiwa
 meiwa era	Meiwa
@@ -1876,6 +1879,7 @@ reform and opening-up	reform and opening-up
 regime equation	regime equation
 regime power laws	regime equation
 regime theory	regime equation
+registered tangible cultural property	Tangible Cultural Property
 regulator	regulator
 regulators	regulator
 reikurikata	reikurikata
@@ -1889,6 +1893,7 @@ rent-collection bursaries	rent bursary
 rent-collection bursary	rent bursary
 rest stop	tateba
 rest stops	tateba
+restoration	Restoration
 return flow	return flow
 reverse-kesa	kesa
 revetment	revetment
@@ -2287,6 +2292,8 @@ tang	Tang dynasty
 tang dynasty	Tang dynasty
 tang-dynasty	Tang dynasty
 tang-song	Tang dynasty
+tangible cultural properties	Tangible Cultural Property
+tangible cultural property	Tangible Cultural Property
 tanglao	tanglao
 tangpu	tangpu
 tatami	tatami
