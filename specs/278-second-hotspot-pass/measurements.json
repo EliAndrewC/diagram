@@ -1176,77 +1176,77 @@
     "source": "harness.py via make spec-harness in a detached worktree of ac01ffe2d, 2026-09-28"
   },
   "base-rerun-inashiro-roll-s": {
-    "value": 8.196,
+    "value": 8.564,
     "unit": "s",
     "quantity": "one generate() of inashiro, render off, the faster of two unprofiled rolls",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-inashiro-stage-field-s": {
-    "value": 1.829,
+    "value": 1.973,
     "unit": "s",
     "quantity": "stage_field inside one generate() of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-inashiro-stage-windbreak-s": {
-    "value": 1.021,
+    "value": 1.034,
     "unit": "s",
     "quantity": "stage_windbreak inside one generate() of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-inashiro-stage-crossings-s": {
-    "value": 0.978,
+    "value": 0.968,
     "unit": "s",
     "quantity": "stage_crossings inside one generate() of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-inashiro-stage-hinterland-s": {
-    "value": 0.958,
+    "value": 0.961,
     "unit": "s",
     "quantity": "stage_hinterland inside one generate() of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-inashiro-stage-notice-s": {
-    "value": 0.827,
+    "value": 0.89,
     "unit": "s",
     "quantity": "stage_notice inside one generate() of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-inashiro-stage-web-s": {
-    "value": 0.551,
+    "value": 0.593,
     "unit": "s",
     "quantity": "stage_web inside one generate() of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-inashiro-stage-homesteads-s": {
-    "value": 0.444,
+    "value": 0.491,
     "unit": "s",
     "quantity": "stage_homesteads inside one generate() of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-inashiro-stage-track-s": {
-    "value": 0.263,
+    "value": 0.254,
     "unit": "s",
     "quantity": "stage_track inside one generate() of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-inashiro-stage-appurtenances-s": {
-    "value": 0.154,
+    "value": 0.157,
     "unit": "s",
     "quantity": "stage_appurtenances inside one generate() of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-inashiro-stage-seat-s": {
-    "value": 0.047,
+    "value": 0.046,
     "unit": "s",
     "quantity": "stage_seat inside one generate() of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
@@ -1260,14 +1260,14 @@
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-inashiro-stage-homestead-fields-s": {
-    "value": 0.037,
+    "value": 0.038,
     "unit": "s",
     "quantity": "stage_homestead_fields inside one generate() of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-inashiro-stage-burial-s": {
-    "value": 0.023,
+    "value": 0.024,
     "unit": "s",
     "quantity": "stage_burial inside one generate() of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
@@ -1281,7 +1281,7 @@
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-inashiro-stage-frame-s": {
-    "value": 0.006,
+    "value": 0.019,
     "unit": "s",
     "quantity": "stage_frame inside one generate() of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
@@ -1449,35 +1449,35 @@
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-kashikawa-roll-s": {
-    "value": 12.978,
+    "value": 13.174,
     "unit": "s",
     "quantity": "one generate() of kashikawa, render off, the faster of two unprofiled rolls",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-kashikawa-stage-web-s": {
-    "value": 2.547,
+    "value": 2.59,
     "unit": "s",
     "quantity": "stage_web inside one generate() of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-kashikawa-stage-windbreak-s": {
-    "value": 2.169,
+    "value": 2.217,
     "unit": "s",
     "quantity": "stage_windbreak inside one generate() of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-kashikawa-stage-field-s": {
-    "value": 2.018,
+    "value": 2.035,
     "unit": "s",
     "quantity": "stage_field inside one generate() of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-kashikawa-stage-hinterland-s": {
-    "value": 1.207,
+    "value": 1.233,
     "unit": "s",
     "quantity": "stage_hinterland inside one generate() of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
@@ -1491,35 +1491,35 @@
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-kashikawa-stage-crossings-s": {
-    "value": 0.893,
+    "value": 0.886,
     "unit": "s",
     "quantity": "stage_crossings inside one generate() of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-kashikawa-stage-notice-s": {
-    "value": 0.868,
+    "value": 0.911,
     "unit": "s",
     "quantity": "stage_notice inside one generate() of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-kashikawa-stage-homesteads-s": {
-    "value": 0.569,
+    "value": 0.573,
     "unit": "s",
     "quantity": "stage_homesteads inside one generate() of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-kashikawa-stage-track-s": {
-    "value": 0.341,
+    "value": 0.319,
     "unit": "s",
     "quantity": "stage_track inside one generate() of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-kashikawa-stage-woodland-s": {
-    "value": 0.066,
+    "value": 0.067,
     "unit": "s",
     "quantity": "stage_woodland inside one generate() of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
@@ -1533,21 +1533,21 @@
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-kashikawa-stage-homestead-fields-s": {
-    "value": 0.055,
+    "value": 0.054,
     "unit": "s",
     "quantity": "stage_homestead_fields inside one generate() of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-kashikawa-stage-burial-s": {
-    "value": 0.033,
+    "value": 0.034,
     "unit": "s",
     "quantity": "stage_burial inside one generate() of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-kashikawa-stage-sink-s": {
-    "value": 0.017,
+    "value": 0.018,
     "unit": "s",
     "quantity": "stage_sink inside one generate() of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
@@ -1722,91 +1722,91 @@
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-kuwabata-roll-s": {
-    "value": 5.872,
+    "value": 5.991,
     "unit": "s",
     "quantity": "one generate() of kuwabata, render off, the faster of two unprofiled rolls",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-kuwabata-stage-appurtenances-s": {
-    "value": 1.766,
+    "value": 1.736,
     "unit": "s",
     "quantity": "stage_appurtenances inside one generate() of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-kuwabata-stage-web-s": {
-    "value": 1.195,
+    "value": 1.207,
     "unit": "s",
     "quantity": "stage_web inside one generate() of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-kuwabata-stage-field-s": {
-    "value": 0.723,
+    "value": 0.72,
     "unit": "s",
     "quantity": "stage_field inside one generate() of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-kuwabata-stage-hinterland-s": {
-    "value": 0.412,
+    "value": 0.42,
     "unit": "s",
     "quantity": "stage_hinterland inside one generate() of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-kuwabata-stage-homesteads-s": {
-    "value": 0.263,
+    "value": 0.276,
     "unit": "s",
     "quantity": "stage_homesteads inside one generate() of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-kuwabata-stage-windbreak-s": {
-    "value": 0.245,
+    "value": 0.261,
     "unit": "s",
     "quantity": "stage_windbreak inside one generate() of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-kuwabata-stage-track-s": {
-    "value": 0.241,
+    "value": 0.246,
     "unit": "s",
     "quantity": "stage_track inside one generate() of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-kuwabata-stage-notice-s": {
-    "value": 0.201,
+    "value": 0.21,
     "unit": "s",
     "quantity": "stage_notice inside one generate() of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-kuwabata-stage-waterward-s": {
-    "value": 0.144,
+    "value": 0.167,
     "unit": "s",
     "quantity": "stage_waterward inside one generate() of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-kuwabata-stage-crossings-s": {
-    "value": 0.024,
+    "value": 0.025,
     "unit": "s",
     "quantity": "stage_crossings inside one generate() of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-kuwabata-stage-burial-s": {
-    "value": 0.022,
+    "value": 0.023,
     "unit": "s",
     "quantity": "stage_burial inside one generate() of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-kuwabata-stage-woodland-s": {
-    "value": 0.018,
+    "value": 0.024,
     "unit": "s",
     "quantity": "stage_woodland inside one generate() of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
@@ -1995,84 +1995,84 @@
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-mizuguchi-roll-s": {
-    "value": 5.908,
+    "value": 5.884,
     "unit": "s",
     "quantity": "one generate() of mizuguchi, render off, the faster of two unprofiled rolls",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-mizuguchi-stage-web-s": {
-    "value": 0.965,
+    "value": 0.951,
     "unit": "s",
     "quantity": "stage_web inside one generate() of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-mizuguchi-stage-field-s": {
-    "value": 0.927,
+    "value": 0.933,
     "unit": "s",
     "quantity": "stage_field inside one generate() of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-mizuguchi-stage-hinterland-s": {
-    "value": 0.682,
+    "value": 0.687,
     "unit": "s",
     "quantity": "stage_hinterland inside one generate() of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-mizuguchi-stage-crossings-s": {
-    "value": 0.651,
+    "value": 0.627,
     "unit": "s",
     "quantity": "stage_crossings inside one generate() of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-mizuguchi-stage-windbreak-s": {
-    "value": 0.536,
+    "value": 0.514,
     "unit": "s",
     "quantity": "stage_windbreak inside one generate() of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-mizuguchi-stage-notice-s": {
-    "value": 0.526,
+    "value": 0.547,
     "unit": "s",
     "quantity": "stage_notice inside one generate() of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-mizuguchi-stage-homesteads-s": {
-    "value": 0.331,
+    "value": 0.32,
     "unit": "s",
     "quantity": "stage_homesteads inside one generate() of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-mizuguchi-stage-track-s": {
-    "value": 0.219,
+    "value": 0.234,
     "unit": "s",
     "quantity": "stage_track inside one generate() of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-mizuguchi-stage-appurtenances-s": {
-    "value": 0.162,
+    "value": 0.166,
     "unit": "s",
     "quantity": "stage_appurtenances inside one generate() of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-mizuguchi-stage-homestead-fields-s": {
-    "value": 0.087,
+    "value": 0.088,
     "unit": "s",
     "quantity": "stage_homestead_fields inside one generate() of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-mizuguchi-stage-seat-s": {
-    "value": 0.058,
+    "value": 0.048,
     "unit": "s",
     "quantity": "stage_seat inside one generate() of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
@@ -2268,98 +2268,98 @@
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-sawada-roll-s": {
-    "value": 27.584,
+    "value": 27.732,
     "unit": "s",
     "quantity": "one generate() of sawada, render off, the faster of two unprofiled rolls",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-sawada-stage-field-s": {
-    "value": 7.663,
+    "value": 7.666,
     "unit": "s",
     "quantity": "stage_field inside one generate() of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-sawada-stage-web-s": {
-    "value": 6.101,
+    "value": 6.027,
     "unit": "s",
     "quantity": "stage_web inside one generate() of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-sawada-stage-notice-s": {
-    "value": 2.621,
+    "value": 2.666,
     "unit": "s",
     "quantity": "stage_notice inside one generate() of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-sawada-stage-windbreak-s": {
-    "value": 2.294,
+    "value": 2.384,
     "unit": "s",
     "quantity": "stage_windbreak inside one generate() of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-sawada-stage-hinterland-s": {
-    "value": 2.211,
+    "value": 2.27,
     "unit": "s",
     "quantity": "stage_hinterland inside one generate() of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-sawada-stage-crossings-s": {
-    "value": 1.707,
+    "value": 1.661,
     "unit": "s",
     "quantity": "stage_crossings inside one generate() of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-sawada-stage-homesteads-s": {
-    "value": 1.249,
+    "value": 1.276,
     "unit": "s",
     "quantity": "stage_homesteads inside one generate() of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-sawada-stage-track-s": {
-    "value": 0.596,
+    "value": 0.588,
     "unit": "s",
     "quantity": "stage_track inside one generate() of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-sawada-stage-appurtenances-s": {
-    "value": 0.352,
+    "value": 0.354,
     "unit": "s",
     "quantity": "stage_appurtenances inside one generate() of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-sawada-stage-woodland-s": {
-    "value": 0.151,
+    "value": 0.187,
     "unit": "s",
     "quantity": "stage_woodland inside one generate() of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-sawada-stage-homestead-fields-s": {
-    "value": 0.11,
+    "value": 0.105,
     "unit": "s",
     "quantity": "stage_homestead_fields inside one generate() of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-sawada-stage-seat-s": {
-    "value": 0.082,
+    "value": 0.083,
     "unit": "s",
     "quantity": "stage_seat inside one generate() of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-sawada-stage-labels-s": {
-    "value": 0.032,
+    "value": 0.009,
     "unit": "s",
     "quantity": "stage_labels inside one generate() of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
@@ -2541,70 +2541,70 @@
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "base-rerun-pool-roll-s": {
-    "value": 60.538,
+    "value": 61.345,
     "unit": "s",
     "quantity": "the five pool hamlets' roll times summed",
     "source": "harness.py in the detached worktree of ac01ffe2d, run just before the clone's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-inashiro-roll-s": {
-    "value": 6.442,
+    "value": 6.096,
     "unit": "s",
     "quantity": "one generate() of inashiro, render off, the faster of two unprofiled rolls",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-inashiro-stage-field-s": {
-    "value": 1.666,
+    "value": 1.551,
     "unit": "s",
     "quantity": "stage_field inside one generate() of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-inashiro-stage-hinterland-s": {
-    "value": 0.796,
+    "value": 0.613,
     "unit": "s",
     "quantity": "stage_hinterland inside one generate() of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-inashiro-stage-windbreak-s": {
-    "value": 0.75,
+    "value": 0.685,
     "unit": "s",
     "quantity": "stage_windbreak inside one generate() of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-inashiro-stage-notice-s": {
-    "value": 0.697,
+    "value": 0.746,
     "unit": "s",
     "quantity": "stage_notice inside one generate() of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-inashiro-stage-web-s": {
-    "value": 0.522,
+    "value": 0.542,
     "unit": "s",
     "quantity": "stage_web inside one generate() of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-inashiro-stage-homesteads-s": {
-    "value": 0.491,
+    "value": 0.452,
     "unit": "s",
     "quantity": "stage_homesteads inside one generate() of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-inashiro-stage-track-s": {
-    "value": 0.265,
+    "value": 0.247,
     "unit": "s",
     "quantity": "stage_track inside one generate() of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-inashiro-stage-crossings-s": {
-    "value": 0.054,
+    "value": 0.053,
     "unit": "s",
     "quantity": "stage_crossings inside one generate() of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
@@ -2618,35 +2618,35 @@
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-inashiro-stage-appurtenances-s": {
-    "value": 0.042,
+    "value": 0.035,
     "unit": "s",
     "quantity": "stage_appurtenances inside one generate() of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-inashiro-stage-woodland-s": {
-    "value": 0.039,
+    "value": 0.024,
     "unit": "s",
     "quantity": "stage_woodland inside one generate() of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-inashiro-stage-homestead-fields-s": {
-    "value": 0.037,
+    "value": 0.036,
     "unit": "s",
     "quantity": "stage_homestead_fields inside one generate() of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-inashiro-stage-burial-s": {
-    "value": 0.021,
+    "value": 0.022,
     "unit": "s",
     "quantity": "stage_burial inside one generate() of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-inashiro-stage-frame-s": {
-    "value": 0.02,
+    "value": 0.005,
     "unit": "s",
     "quantity": "stage_frame inside one generate() of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
@@ -2660,7 +2660,7 @@
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-inashiro-stage-labels-s": {
-    "value": 0.005,
+    "value": 0.003,
     "unit": "s",
     "quantity": "stage_labels inside one generate() of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
@@ -2814,77 +2814,77 @@
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-inashiro-page-hits": {
-    "value": 0,
+    "value": 6713,
     "unit": "calls",
     "quantity": "page_hits over one generate() of inashiro",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-kashikawa-roll-s": {
-    "value": 9.527,
+    "value": 9.742,
     "unit": "s",
     "quantity": "one generate() of kashikawa, render off, the faster of two unprofiled rolls",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-kashikawa-stage-web-s": {
-    "value": 2.227,
+    "value": 2.138,
     "unit": "s",
     "quantity": "stage_web inside one generate() of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-kashikawa-stage-field-s": {
-    "value": 1.796,
+    "value": 1.834,
     "unit": "s",
     "quantity": "stage_field inside one generate() of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-kashikawa-stage-windbreak-s": {
-    "value": 1.479,
+    "value": 1.551,
     "unit": "s",
     "quantity": "stage_windbreak inside one generate() of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-kashikawa-stage-hinterland-s": {
-    "value": 0.988,
+    "value": 1.025,
     "unit": "s",
     "quantity": "stage_hinterland inside one generate() of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-kashikawa-stage-notice-s": {
-    "value": 0.612,
+    "value": 0.688,
     "unit": "s",
     "quantity": "stage_notice inside one generate() of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-kashikawa-stage-homesteads-s": {
-    "value": 0.581,
+    "value": 0.576,
     "unit": "s",
     "quantity": "stage_homesteads inside one generate() of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-kashikawa-stage-track-s": {
-    "value": 0.318,
+    "value": 0.314,
     "unit": "s",
     "quantity": "stage_track inside one generate() of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-kashikawa-stage-appurtenances-s": {
-    "value": 0.077,
+    "value": 0.078,
     "unit": "s",
     "quantity": "stage_appurtenances inside one generate() of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-kashikawa-stage-crossings-s": {
-    "value": 0.07,
+    "value": 0.095,
     "unit": "s",
     "quantity": "stage_crossings inside one generate() of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
@@ -2898,28 +2898,28 @@
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-kashikawa-stage-homestead-fields-s": {
-    "value": 0.057,
+    "value": 0.056,
     "unit": "s",
     "quantity": "stage_homestead_fields inside one generate() of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-kashikawa-stage-woodland-s": {
-    "value": 0.033,
+    "value": 0.034,
     "unit": "s",
     "quantity": "stage_woodland inside one generate() of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-kashikawa-stage-burial-s": {
-    "value": 0.03,
+    "value": 0.035,
     "unit": "s",
     "quantity": "stage_burial inside one generate() of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-kashikawa-stage-labels-s": {
-    "value": 0.022,
+    "value": 0.003,
     "unit": "s",
     "quantity": "stage_labels inside one generate() of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
@@ -2933,7 +2933,7 @@
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-kashikawa-stage-frame-s": {
-    "value": 0.01,
+    "value": 0.009,
     "unit": "s",
     "quantity": "stage_frame inside one generate() of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
@@ -3089,33 +3089,33 @@
   "after-kashikawa-page-hits": {
     "value": 6943,
     "unit": "calls",
-    "quantity": "_hits over one generate() of kashikawa (render off), counted in extents.py where feature 278 moved it (the harness's first after-run read page.py alone, 0)",
-    "source": "a cProfile count in a test node, 2026-09-28; harness.py now counts both files",
+    "quantity": "page_hits over one generate() of kashikawa",
+    "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-kuwabata-roll-s": {
-    "value": 3.817,
+    "value": 3.764,
     "unit": "s",
     "quantity": "one generate() of kuwabata, render off, the faster of two unprofiled rolls",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-kuwabata-stage-web-s": {
-    "value": 0.82,
+    "value": 0.786,
     "unit": "s",
     "quantity": "stage_web inside one generate() of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-kuwabata-stage-field-s": {
-    "value": 0.712,
+    "value": 0.704,
     "unit": "s",
     "quantity": "stage_field inside one generate() of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-kuwabata-stage-hinterland-s": {
-    "value": 0.423,
+    "value": 0.426,
     "unit": "s",
     "quantity": "stage_hinterland inside one generate() of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
@@ -3129,21 +3129,21 @@
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-kuwabata-stage-track-s": {
-    "value": 0.249,
+    "value": 0.237,
     "unit": "s",
     "quantity": "stage_track inside one generate() of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-kuwabata-stage-windbreak-s": {
-    "value": 0.202,
+    "value": 0.201,
     "unit": "s",
     "quantity": "stage_windbreak inside one generate() of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-kuwabata-stage-notice-s": {
-    "value": 0.182,
+    "value": 0.187,
     "unit": "s",
     "quantity": "stage_notice inside one generate() of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
@@ -3164,14 +3164,14 @@
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-kuwabata-stage-burial-s": {
-    "value": 0.024,
+    "value": 0.021,
     "unit": "s",
     "quantity": "stage_burial inside one generate() of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-kuwabata-stage-pond-stock-s": {
-    "value": 0.015,
+    "value": 0.013,
     "unit": "s",
     "quantity": "stage_pond_stock inside one generate() of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
@@ -3185,7 +3185,7 @@
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-kuwabata-stage-woodland-s": {
-    "value": 0.011,
+    "value": 0.01,
     "unit": "s",
     "quantity": "stage_woodland inside one generate() of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
@@ -3199,7 +3199,7 @@
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-kuwabata-stage-labels-s": {
-    "value": 0.004,
+    "value": 0.003,
     "unit": "s",
     "quantity": "stage_labels inside one generate() of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
@@ -3360,91 +3360,91 @@
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-kuwabata-page-hits": {
-    "value": 0,
+    "value": 26621,
     "unit": "calls",
     "quantity": "page_hits over one generate() of kuwabata",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-mizuguchi-roll-s": {
-    "value": 4.482,
+    "value": 4.561,
     "unit": "s",
     "quantity": "one generate() of mizuguchi, render off, the faster of two unprofiled rolls",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-mizuguchi-stage-web-s": {
-    "value": 0.956,
+    "value": 0.962,
     "unit": "s",
     "quantity": "stage_web inside one generate() of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-mizuguchi-stage-field-s": {
-    "value": 0.856,
+    "value": 0.857,
     "unit": "s",
     "quantity": "stage_field inside one generate() of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-mizuguchi-stage-hinterland-s": {
-    "value": 0.539,
+    "value": 0.561,
     "unit": "s",
     "quantity": "stage_hinterland inside one generate() of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-mizuguchi-stage-windbreak-s": {
-    "value": 0.358,
+    "value": 0.386,
     "unit": "s",
     "quantity": "stage_windbreak inside one generate() of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-mizuguchi-stage-homesteads-s": {
-    "value": 0.325,
+    "value": 0.336,
     "unit": "s",
     "quantity": "stage_homesteads inside one generate() of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-mizuguchi-stage-notice-s": {
-    "value": 0.316,
+    "value": 0.32,
     "unit": "s",
     "quantity": "stage_notice inside one generate() of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-mizuguchi-stage-track-s": {
-    "value": 0.215,
+    "value": 0.214,
     "unit": "s",
     "quantity": "stage_track inside one generate() of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-mizuguchi-stage-homestead-fields-s": {
-    "value": 0.065,
+    "value": 0.066,
     "unit": "s",
     "quantity": "stage_homestead_fields inside one generate() of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-mizuguchi-stage-seat-s": {
-    "value": 0.048,
+    "value": 0.047,
     "unit": "s",
     "quantity": "stage_seat inside one generate() of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-mizuguchi-stage-crossings-s": {
-    "value": 0.043,
+    "value": 0.045,
     "unit": "s",
     "quantity": "stage_crossings inside one generate() of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-mizuguchi-stage-appurtenances-s": {
-    "value": 0.023,
+    "value": 0.022,
     "unit": "s",
     "quantity": "stage_appurtenances inside one generate() of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
@@ -3472,7 +3472,7 @@
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-mizuguchi-stage-frame-s": {
-    "value": 0.003,
+    "value": 0.004,
     "unit": "s",
     "quantity": "stage_frame inside one generate() of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
@@ -3633,105 +3633,105 @@
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-mizuguchi-page-hits": {
-    "value": 0,
+    "value": 4229,
     "unit": "calls",
     "quantity": "page_hits over one generate() of mizuguchi",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-sawada-roll-s": {
-    "value": 10.734,
+    "value": 9.87,
     "unit": "s",
     "quantity": "one generate() of sawada, render off, the faster of two unprofiled rolls",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-sawada-stage-field-s": {
-    "value": 3.418,
+    "value": 3.127,
     "unit": "s",
     "quantity": "stage_field inside one generate() of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-sawada-stage-web-s": {
-    "value": 1.832,
+    "value": 1.689,
     "unit": "s",
     "quantity": "stage_web inside one generate() of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-sawada-stage-windbreak-s": {
-    "value": 1.291,
+    "value": 1.078,
     "unit": "s",
     "quantity": "stage_windbreak inside one generate() of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-sawada-stage-hinterland-s": {
-    "value": 0.908,
+    "value": 0.885,
     "unit": "s",
     "quantity": "stage_hinterland inside one generate() of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-sawada-stage-notice-s": {
-    "value": 0.727,
+    "value": 0.711,
     "unit": "s",
     "quantity": "stage_notice inside one generate() of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-sawada-stage-homesteads-s": {
-    "value": 0.631,
+    "value": 0.622,
     "unit": "s",
     "quantity": "stage_homesteads inside one generate() of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-sawada-stage-track-s": {
-    "value": 0.29,
+    "value": 0.285,
     "unit": "s",
     "quantity": "stage_track inside one generate() of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-sawada-stage-appurtenances-s": {
-    "value": 0.113,
+    "value": 0.096,
     "unit": "s",
     "quantity": "stage_appurtenances inside one generate() of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-sawada-stage-crossings-s": {
-    "value": 0.076,
+    "value": 0.075,
     "unit": "s",
     "quantity": "stage_crossings inside one generate() of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-sawada-stage-homestead-fields-s": {
-    "value": 0.067,
+    "value": 0.048,
     "unit": "s",
     "quantity": "stage_homestead_fields inside one generate() of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-sawada-stage-woodland-s": {
-    "value": 0.045,
+    "value": 0.044,
     "unit": "s",
     "quantity": "stage_woodland inside one generate() of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-sawada-stage-seat-s": {
-    "value": 0.041,
+    "value": 0.04,
     "unit": "s",
     "quantity": "stage_seat inside one generate() of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-sawada-stage-frame-s": {
-    "value": 0.009,
+    "value": 0.008,
     "unit": "s",
     "quantity": "stage_frame inside one generate() of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
@@ -3908,12 +3908,12 @@
   "after-sawada-page-hits": {
     "value": 6789,
     "unit": "calls",
-    "quantity": "_hits over one generate() of sawada (render off), counted in extents.py where feature 278 moved it (the harness's first after-run read page.py alone, 0)",
-    "source": "a cProfile count in a test node, 2026-09-28; harness.py now counts both files",
+    "quantity": "page_hits over one generate() of sawada",
+    "source": "harness.py in the clone, run just after the base's",
     "command": "python3 specs/278-second-hotspot-pass/measure.py"
   },
   "after-pool-roll-s": {
-    "value": 35.002,
+    "value": 34.033,
     "unit": "s",
     "quantity": "the five pool hamlets' roll times summed",
     "source": "harness.py in the clone, run just after the base's",
