@@ -200,8 +200,12 @@ halving is not counted twice.
   the placement-stages page, while a class planted missing from the page still turns the test red; the `md_tokens`
   equality test takes under `1 s`, and a planted `.md` token is still found.
 - **SC-013** (the pool): FR-001 to FR-004, FR-006, FR-007 and FR-009 to FR-012 leave every manifest they touch
-  byte-identical. The maps FR-005 and FR-008 move hold feature 276's FR-006 condition: every hamlet seats the households
-  it asks for, keeps its form and its house kinds, `make done` is green, and `make cohort N=24` shows no newly failing seed.
+  byte-identical. The maps FR-005 and FR-008 move hold feature 276's FR-006 condition in full: every live pool map
+  regenerates, `make done` is green at the `100%` floor and every gate rule passes; every pool map, the rescue-rounds
+  scenario and the 10- and 20-household toys seat at least as many houses as today, with no new or larger shortfall,
+  and keep their forms (dispersed or nucleated, the headman's house) and house kinds; each moved map's research entry
+  gives its houses, paddies and ways before and after, and a material change is a finding to fix, not a report; and
+  `make cohort N=24` shows no newly failing seed.
 - **SC-014** (FR-015): `dev/performance.md` holds the after-profile's remaining costs with their levers priced; every
   before- and after-figure named here is in `measurements.json`, the after-figures carrying the command that re-runs them.
 
@@ -225,3 +229,6 @@ halving is not counted twice.
   SC (FR-006 to FR-011); the moving levers are held to 276's FR-006 condition (SC-013); FR-015 now records only what
   the after-profile shows is left, with levers priced, the finishing and the durations list included; the Decisions
   class of the old row is gone with the row; SC-012 names both planted offenders.
+- Round 2 (spec-fidelity, 2026-09-28): CHANGES REQUIRED - SC-013 claimed 276's FR-006 condition but stated less of it. Addressed:
+  SC-013 now carries it in full (research entries before and after, no new or larger shortfall, the rescue-rounds
+  scenario and the toys). The aside on `_bnd` is answered in research R2.
