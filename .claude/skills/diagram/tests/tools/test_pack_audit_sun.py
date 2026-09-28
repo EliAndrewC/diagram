@@ -102,3 +102,13 @@ def test_the_county_example_passes() -> None:
     program = compound.county_magistracy_program()
     text = compound.emit_svg(program, compound.place(program))
     assert S.gardens(parse_svg(text), text) and S.garden_sun(parse_svg(text), text) == []
+
+
+def test_a_half_shade_bed_names_no_tree_among_its_shaders() -> None:
+    """A half-shade bed takes a tree's dappled light as lit, so a tree is not named as what takes its sun."""
+    from shapely.geometry import Point, box
+
+    bed = box(0, 0, 30, 30)
+    tree = S.Caster(Point(15, 70).buffer(20), S.TREE_FT, "trees", tree=True)  # south of the bed: its shadow falls north onto it
+    assert S.shaders(bed, [tree], half_shade=True) == []
+    assert S.shaders(bed, [tree]) == ["trees"]
