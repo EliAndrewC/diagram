@@ -104,7 +104,7 @@ _VERTEX_MEMO = True
 proves the memo changes no plot."""
 
 
-def _quad_in_supply(quad: Poly, sup_idx: list[_SupRow], g: float) -> bool:
+def _quad_in_supply(quad: Poly, sup_idx: list[_SupRow], g: float, memo: dict[tuple[Pt, Pt], bool] | None = None) -> bool:
     """A quad with a corner - or ANY point of any EDGE - still inside a supply stroke's bank
     after the push. Near a takeoff the ground between a parent channel and its child ditch is
     narrower than the two banks, so no legal corner exists there; the alternating push cannot
@@ -116,19 +116,40 @@ def _quad_in_supply(quad: Poly, sup_idx: list[_SupRow], g: float) -> bool:
     between them - the drawn bund crosses the water with all four vertices on land. So each
     edge is walked at a 3 px step, bbox-gated so only edges near a stroke pay for it. 0.5 px
     under the placer's line keeps the drop to the genuinely unresolvable (the gate fires
-    further down, at BANK_MARGIN - 0.15 over halfw)."""
+    further down, at BANK_MARGIN - 0.15 over halfw).
+
+    A SHARED EDGE IS WALKED ONCE (feature 281, FR-007): each plot edge is shared with its neighbor, and both walked it -
+    162,275 stroke clearances on Sawada. With `memo` (one per sector) an edge's verdict is kept under its two endpoints in
+    tuple order and walked from the lesser, so both plots read one walk. The other plot's own walk ran the other way, and
+    its samples are the same points but for rounding, so a plot within rounding of the threshold may flip - a map drawing
+    convention the spec records (specs/281 Decisions Recorded), the rule and the threshold unchanged."""
     for i in range(len(quad)):
         a, b = quad[i], quad[(i + 1) % len(quad)]
-        for _spts, _scum, _w0, _w1, sbb, sidx in sup_idx:
-            if max(a[0], b[0]) < sbb[0] or min(a[0], b[0]) > sbb[2] or max(a[1], b[1]) < sbb[1] or min(a[1], b[1]) > sbb[3]:
-                continue
-            nstep = max(1, int(math.dist(a, b) / 3.0))
-            for k in range(nstep + 1):
-                t = k / nstep
-                q = (a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1]))
-                gap, halfw, past, _foot, _nrm = sidx.clearance(q, exact=False)  # the threshold below is under the reach; BEYOND reads as clear
-                if not past and gap < halfw + BANK_MARGIN * g - 0.5:
-                    return True
+        if memo is None:
+            if _edge_in_supply(a, b, sup_idx, g):
+                return True
+            continue
+        key = (a, b) if tuple(a) <= tuple(b) else (b, a)
+        hit = memo.get(key)
+        if hit is None:
+            hit = memo[key] = _edge_in_supply(key[0], key[1], sup_idx, g)
+        if hit:
+            return True
+    return False
+
+
+def _edge_in_supply(a: Pt, b: Pt, sup_idx: list[_SupRow], g: float) -> bool:
+    """Does any 3 px sample of the edge `a -> b` stand inside a supply stroke's bank (`_quad_in_supply`'s test)?"""
+    for _spts, _scum, _w0, _w1, sbb, sidx in sup_idx:
+        if max(a[0], b[0]) < sbb[0] or min(a[0], b[0]) > sbb[2] or max(a[1], b[1]) < sbb[1] or min(a[1], b[1]) > sbb[3]:
+            continue
+        nstep = max(1, int(math.dist(a, b) / 3.0))
+        for k in range(nstep + 1):
+            t = k / nstep
+            q = (a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1]))
+            gap, halfw, past, _foot, _nrm = sidx.clearance(q, exact=False)  # the threshold below is under the reach; BEYOND reads as clear
+            if not past and gap < halfw + BANK_MARGIN * g - 0.5:
+                return True
     return False
 
 
@@ -305,8 +326,10 @@ def _carve_sector(
     def above(quad: Poly) -> bool:
         return _above_canal(quad, F, a_pts, a_ulo, a_uhi, g)
 
+    _walked: dict[tuple[Pt, Pt], bool] = {}  # each shared plot edge's supply-bank verdict, walked once (feature 281)
+
     def in_supply(quad: Poly) -> bool:
-        return _quad_in_supply(quad, sup_idx, g)
+        return _quad_in_supply(quad, sup_idx, g, _walked)
 
     def chord(u0: float, u1: float) -> tuple[float, float] | None:
         return _bank_chord(u0, u1, F, dpts, bank_at)

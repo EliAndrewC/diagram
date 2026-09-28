@@ -55,3 +55,43 @@ after-profile's residue with their levers priced (FR-011).
 **The tests.** `make durations` (observed 2026-09-28, method: `make durations`, one run): the quick tree is 4,062 tests in 27.8 s wall; its slowest test is
 3.8 s and no one test is its critical path, so no test-side lever is taken - the gate's cost is the pool rolls, which the
 engine levers reduce.
+
+## R2 - The pool after the exact pieces, and after the moving ones (2026-09-28)
+
+**The exact pieces (A1-A8), SC-011's first half.** The committed pool at `c13a6ebe6` was first confirmed to regenerate
+byte-identically in the base worktree (observed 2026-09-28, method: `make maps SCOPE=all` in `/tmp/base281`, then
+`git status` over `pool/` - clean). With A1-A8 landed and B1-B2 not, `make maps SCOPE=all` in the clone left
+`git diff c13a6ebe6 -- .claude/skills/diagram/pool` empty: every live pool manifest, svg and page byte-identical.
+
+**The moving pieces (B1, B2), each map's houses, paddies and ways before and after** (observed 2026-09-28, method:
+`pool_compare.py`, the manifests at `c13a6ebe6` against the regenerated ones, and a key-by-key diff of each manifest).
+On all five maps the ONLY key that changed is `ink_classes.marsh`, the count of marsh marks inked: the houses (15, 20,
+16, 12, 19), their kinds, the form, every field and plot record, every way and its length, and the marsh outlines are
+identical. So B1's shared-edge walk moved no plot on any pool map - no plot edge sits within rounding of the bank's
+threshold there - and B2 moved only where the marsh's random marks land:
+
+| map | marsh marks before | after |
+|---|---|---|
+| Inashiro | 2278 | 2254 |
+| Kashikawa | 2559 | 2476 |
+| Kuwabata | 802 | 767 |
+| Mizuguchi | 1772 | 1826 |
+| Sawada | 4140 | 4096 |
+
+A scatter's count moves by its sampling noise when its throws move; these are within 5% either way (from the table
+above, observed 2026-09-28, method: the manifests' `ink_classes`), and the marsh test
+(`test_the_vectorized_marsh_keeps_every_keep_out_and_its_density`) holds the kept share to the per-point form's over
+20,000 throws.
+
+**A defect the moved throws exposed, fixed where found.** An existing test - reeds keep off a fish pond's bank - failed:
+one tuft based at (699.0, 497.2), inside the drawn bank's corner. The keep-out and its array form agree there; the marsh
+tested each bank thinned to every 16th point (feature 139: "16 points hold its shape for a keep-out"), and the thinned
+ring cuts each corner of a rectangular bank with a chord 7.45 px from that point (observed 2026-09-28, method: the
+distance from the point to the chord between the thinned ring's 56th and 63rd points), beyond a tuft's 7 px pad. The old
+throws had simply never landed in the sliver. The thinning was a cost choice made while every bank was walked per point;
+the keep-out grid indexes each ring now, so the whole bank is used and the reeds keep off the corners too.
+
+**Beyond the pool** (observed 2026-09-28, method: feature 276's harness `_homesteads` section run in the base worktree and
+in the clone): the rescue-rounds scenario seats 16 nucleated and 10 dispersed houses on both, the 10- and 20-household
+toys 10 and 20 on both, and every constant-density layout the same count (five-layout totals 281, 560 and 1133 nucleated,
+191, 365 and 707 dispersed). No shortfall anywhere, new or larger.

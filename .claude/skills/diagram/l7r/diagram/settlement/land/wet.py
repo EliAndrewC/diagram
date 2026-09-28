@@ -219,6 +219,82 @@ def _keyholed(g: Any) -> Any:
     return ring
 
 
+def marsh_scatter(
+    counts: tuple[int, int],
+    box: tuple[float, float, float, float],
+    frame: tuple[float, float, float, float] | None,
+    ring: Any,
+    keep: Any,
+    extras: tuple[tuple[float | None, ...], tuple[float | None, ...]],
+    crescent: Any,
+    crescent_pads: tuple[float, float],
+    pond: Any,
+    pads: tuple[float, float],
+    blade_up: float,
+    feather: float,
+    tint_r: float,
+    bs: float,
+    seed: int,
+) -> tuple[list[tuple[str, str, str, str]], list[tuple[float, float, float, float, str]]]:
+    """A marsh's tint patches and reed tufts - `counts` throws of each over `box` - THROWN AND TESTED AS ARRAYS (feature
+    281, FR-009; 278's `grass_scatter` form, which 278's residue table priced for the marsh).
+
+    The loops this replaces drew two coordinates per throw and asked `_sparse` of each, one point at a time. The same
+    throws are made here as numpy arrays from a generator seeded off the marsh's own seeded stream, and every test is the
+    one `_sparse` ran, point for point, per mark kind (the tint, then the tufts): the predicted frame, the outline
+    (`RingIndex.inside_many`), the keep-outs at the kind's pads (`KeepoutGrid.hit_many`, `extras`), the crescent ponds at
+    `crescent_pads`, the pond's ellipse at the kind's lateral reach and, for a tuft, the blade top (`pads`), then the
+    feather - dropped where `u > (ed / feather) ** drop` (0.9 for a tint, 0.7 for a tuft). The density is the marsh's own:
+    the same throw counts and the same odds; the marks land at different random places (the spec's Decisions Recorded).
+    A tint's radius is rolled after its test from the same range as before; 12% of the kept tufts are water glints."""
+    import numpy as np
+    import shapely
+    from shapely.geometry import LinearRing
+
+    blades: list[tuple[str, str, str, str]] = []
+    marks: list[tuple[float, float, float, float, str]] = []
+    rng = np.random.default_rng(seed)
+    x0, y0, x1, y1 = box
+    edge = LinearRing(ring.ring)
+    for kind, (n, extra, cpad, lat, drop) in enumerate(((counts[0], extras[0], crescent_pads[0], pads[0], 0.9), (counts[1], extras[1], crescent_pads[1], pads[1], 0.7))):
+        if n <= 0:
+            continue
+        gx, gy, u = rng.uniform(x0, x1, n), rng.uniform(y0, y1, n), rng.random(n)
+        idx = np.arange(n)
+        if frame is not None:
+            idx = idx[(gx >= frame[0]) & (gx <= frame[2]) & (gy >= frame[1]) & (gy <= frame[3])]
+        idx = idx[ring.inside_many(gx[idx], gy[idx])]
+        idx = idx[~keep.hit_many(gx[idx], gy[idx], extra)]
+        if crescent is not None and len(idx):
+            idx = idx[~np.array([bool(crescent(float(gx[i]), float(gy[i]), cpad)) for i in idx], dtype=bool)]
+        tip = blade_up if kind else 0.0
+        if pond:
+            idx = idx[((gx[idx] - pond[0]) / (pond[2] + lat)) ** 2 + ((gy[idx] - pond[1]) / (pond[3] + lat)) ** 2 >= 1.0]
+            if tip:
+                idx = idx[((gx[idx] - pond[0]) / pond[2]) ** 2 + ((gy[idx] - tip - pond[1]) / pond[3]) ** 2 >= 1.0]
+        if len(idx):
+            ed = shapely.distance(edge, shapely.points(gx[idx], gy[idx]))
+            idx = idx[~((ed < feather) & (u[idx] > (np.minimum(ed, feather) / feather) ** drop))]
+        k = len(idx)
+        px, py = gx[idx].tolist(), gy[idx].tolist()
+        if kind == 0:
+            radii = (rng.uniform(min(15.0, tint_r * 0.6), tint_r, k) * bs).tolist()
+            for x, y, r in zip(px, py, radii, strict=True):
+                marks.append((x - r, y - r, x + r, y + r, f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r:.1f}" fill="#9FBBAE" fill-opacity="0.14"/>'))
+            continue
+        glint = (rng.random(k) < 0.12).tolist()
+        rx, ry = (rng.uniform(2.6, 4.6, k) * bs).tolist(), (rng.uniform(1.2, 2.0, k) * bs).tolist()
+        ang, blen = rng.uniform(-0.2, 0.2, (k, 4)), rng.uniform(4.0, 7.0, (k, 4)) * bs
+        ex, ey = (np.asarray(px)[:, None] + np.sin(ang) * blen).tolist(), (np.asarray(py)[:, None] - np.cos(ang) * blen).tolist()
+        for i in range(k):
+            x, y = px[i], py[i]
+            if glint[i]:  # a standing-water glint
+                marks.append((x - rx[i], y - ry[i], x + rx[i], y + ry[i], f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="{rx[i]:.1f}" ry="{ry[i]:.1f}" fill="#C2D6CE" fill-opacity="0.85"/>'))
+            else:  # a reed tuft: four fine near-VERTICAL blades, taller than dry grass
+                blades.extend((f"{x:.1f}", f"{y:.1f}", f"{ex[i][j]:.1f}", f"{ey[i][j]:.1f}") for j in range(4))
+    return blades, marks
+
+
 class WetGroundMixin:
     def marsh(self: Settlement, poly: Any, role: str = "toe", avoid: Any = ()) -> None:  # type: ignore[misc]
         """REED MARSH / WET MEADOW - wet reed ground drawn WET and SPARSE, FEATHERED to nothing at the margin like
@@ -305,7 +381,11 @@ class WetGroundMixin:
         _crests = [
             ([(float(mx), float(my)) for mx, my in dk["crest"]], float(dk.get("w_max", 0.0)) / 2) for dk in self.M.get("dikes", []) if len(dk.get("crest") or []) >= 2 and _near_box(dk["crest"])
         ]
-        _banks = [[(float(mx), float(my)) for mx, my in dp["bank"][:: max(1, len(dp["bank"]) // 16)]] for dp in self.M.get("dikeponds", []) if dp.get("bank") and _near_box(dp["bank"])]
+        # THE WHOLE BANK, NOT EVERY 16TH OF IT (feature 281). Feature 139 thinned each bank to 16 points ("16 points hold
+        # its shape for a keep-out") while every bank was asked per scatter point; the keep-out grid indexes each ring now,
+        # so the whole ring costs a cell read. The thinned ring cut every corner of a rectangular bank with a chord, and a
+        # reed based 0.8 ft inside a drawn corner passed the keep-out - found when the marsh's throws moved (FR-009).
+        _banks = [[(float(mx), float(my)) for mx, my in dp["bank"]] for dp in self.M.get("dikeponds", []) if dp.get("bank") and _near_box(dp["bank"])]
         keep = KeepoutGrid()
         keep.rings(self.field_polys, pad=10.0)
         keep.rings(self.block_polys)
@@ -319,38 +399,6 @@ class WetGroundMixin:
         keep.segs(self._watercourse_segs(0.0), slot=3, reach=max(_pads) + 2.0)
         crescents = self.M.get("crescent_ponds", [])  # read once (feature 218)  # base = the drawn half-width; the query adds 2 px + the mark's pad in the SAME association the linear scan used
         ring = RingIndex(poly)  # the outline, indexed once per marsh (feature 145; the why is on RingIndex)
-
-        def _sparse(
-            px: float, py: float, drop: float, mound_pad: float = 0.0, blade_up: float = 0.0
-        ) -> bool:  # skip a point outside the poly, IN a paddy / ON the pond / on a corridor/building / in the urban halo / in a keep-out, or (probabilistically) near the edge
-            if (
-                not ring.inside(px, py)
-                or keep.hit(
-                    px, py, (0.0, mound_pad if mound_pad in _pads else None, mound_pad, 2.0 if role == "pond_fringe" else 2.0 + mound_pad)
-                )  # one cell read: the paddy, every footprint, the treads, the halo, the mounds, the banks, the water
-                or (crescents and self._on_crescent_pond(px, py, 2.0 if role == "pond_fringe" else 2.0 + mound_pad))  # ... and the fengshui pond's open water
-            ):  # ... and OUT of any keep-out
-                return True
-            # ...AND THE MARK'S OWN REACH KEEPS OFF THE WATER, not just its center (feature 150 T54,
-            # settlement-review): this read the CENTER while the mound test above reads the radius, so a 28 ft
-            # tint circle centered a foot outside the rim washed 27 ft of haze over open water - measured, 26%
-            # of Kuwabata's reservoir surface.
-            # A BLADE REACHES UP, NOT SIDEWAYS (settlement-review 2026-08-29, Mizuguchi). The pad against the
-            # water was the mark's own isotropic reach - 7 ft for a tuft - so reeds were held 7.7 ft off the
-            # waterline all round, and the density profile out from the rim ran 12.0 / 27.4 / 33.0 / 24.4 per
-            # 1,000 sq ft: THINNEST exactly where the record says reeds are thickest (research/water.html, "A
-            # reservoir's shore is reeded"; the emergent belt roots in the shallows). But a reed tuft's blades
-            # are drawn near-VERTICAL - `random.uniform(-0.2, 0.2)` radians off vertical, 4-7 ft long - so they
-            # reach ~7 ft UP the sheet and at most ~1.4 ft to the side. The pad is therefore split: the LATERAL
-            # reach keeps the tuft's own point off the water, and the blade TOP is tested separately, so a tuft
-            # standing south of the pond still keeps its full height back while one beside it stands at the rim.
-            _lat = mound_pad if not blade_up else min(mound_pad, 1.5)
-            if pond and ((px - pond[0]) / (pond[2] + _lat)) ** 2 + ((py - pond[1]) / (pond[3] + _lat)) ** 2 < 1.0:
-                return True  # reeds fringe the shore, they do not float on open water
-            if blade_up and pond and ((px - pond[0]) / pond[2]) ** 2 + ((py - blade_up - pond[1]) / pond[3]) ** 2 < 1.0:
-                return True  # ...and neither do the blade TIPS, which is the reach that actually crosses a rim
-            ed = ring.edge_within(px, py, feather)
-            return ed is not None and random.random() > (ed / feather) ** drop
 
         g: list[str] = []
         marks: list[tuple[float, float, float, float, str]] = []  # (extent, string): the tint and the glints, culled to the frame at finish (feature 225)
@@ -372,27 +420,38 @@ class WetGroundMixin:
         _fr = self._scatter_frame  # a throw outside the predicted frame is skipped before the keep-out test (feature 224; the note in cover.py)
         if _fr is not None:
             self._scatter_frames.append((_fr, (x0, y0, x1, y1)))
-        for _ in range(int(area / (360 * bs * bs))):  # faint WET TINT: soft translucent blue-green patches (feathered, no hard edge)
-            gx, gy = random.uniform(x0, x1), random.uniform(y0, y1)
-            if _fr is not None and not (_fr[0] <= gx <= _fr[2] and _fr[1] <= gy <= _fr[3]):
-                continue
-            if _sparse(gx, gy, 0.9, _tint_r * bs):  # the WIDEST tint radius, not this circle's: the radius is drawn after the test, and drawing it first would re-roll every marsh on every map
-                continue
-            _r = random.uniform(min(15.0, _tint_r * 0.6), _tint_r) * bs
-            marks.append((gx - _r, gy - _r, gx + _r, gy + _r, f'<circle cx="{gx:.1f}" cy="{gy:.1f}" r="{_r:.1f}" fill="#9FBBAE" fill-opacity="0.14"/>'))
-        for _ in range(int(area / (150 * bs * bs))):  # SPARSE reed / sedge tufts + the odd standing-water glint (thin, not a solid reedbed)
-            gx, gy = random.uniform(x0, x1), random.uniform(y0, y1)
-            if _fr is not None and not (_fr[0] <= gx <= _fr[2] and _fr[1] <= gy <= _fr[3]):
-                continue
-            if _sparse(gx, gy, 0.7, MARSH_TUFT_R * bs, blade_up=MARSH_TUFT_R * bs):  # a tuft's blades reach this far UP; see `blade_up`
-                continue
-            if random.random() < 0.12:  # a standing-water glint
-                _rx, _ry = random.uniform(2.6, 4.6) * bs, random.uniform(1.2, 2.0) * bs
-                marks.append((gx - _rx, gy - _ry, gx + _rx, gy + _ry, f'<ellipse cx="{gx:.1f}" cy="{gy:.1f}" rx="{_rx:.1f}" ry="{_ry:.1f}" fill="#C2D6CE" fill-opacity="0.85"/>'))
-            else:  # a reed tuft: a few fine near-VERTICAL blades, taller than dry grass
-                for _ in range(4):
-                    a, bl = random.uniform(-0.2, 0.2), random.uniform(4.0, 7.0) * bs
-                    blades.append((f"{gx:.1f}", f"{gy:.1f}", f"{gx + math.sin(a) * bl:.1f}", f"{gy - math.cos(a) * bl:.1f}"))
+        # THE THROWS AS ARRAYS (feature 281, FR-009): the tint patches, then the reed tufts, thrown and tested by
+        # `marsh_scatter` - a mark is skipped outside the outline, IN a paddy / ON the pond / on a corridor or building /
+        # in the urban halo / in a keep-out, or (with the feather's odds) near the edge. The tint is tested at the WIDEST
+        # tint radius: its radius is drawn after the test, as it always was.
+        # ...AND THE MARK'S OWN REACH KEEPS OFF THE WATER, not just its center (feature 150 T54, settlement-review): a 28 ft
+        # tint centered a foot outside the rim washed 27 ft of haze over open water - 26% of Kuwabata's reservoir surface.
+        # A BLADE REACHES UP, NOT SIDEWAYS (settlement-review 2026-08-29, Mizuguchi): held 7.7 ft off the waterline all
+        # round, the reeds were THINNEST exactly where the record says they are thickest (research/water.html, "A
+        # reservoir's shore is reeded"). A tuft's blades are near-vertical, 4-7 ft long, reaching ~7 ft UP the sheet and
+        # at most ~1.4 ft to the side, so its LATERAL reach (capped at 1.5) keeps its point off the water and its blade TOP
+        # is tested on its own - a tuft south of the pond keeps its full height back while one beside it stands at the rim.
+        _tint_pad, _tuft_pad = _tint_r * bs, MARSH_TUFT_R * bs
+        _kx = [(0.0, p if p in _pads else None, p, 2.0 if role == "pond_fringe" else 2.0 + p) for p in (_tint_pad, _tuft_pad)]
+        _tb, _tm = marsh_scatter(
+            (int(area / (360 * bs * bs)), int(area / (150 * bs * bs))),
+            (x0, y0, x1, y1),
+            _fr,
+            ring,
+            keep,
+            (tuple(_kx[0]), tuple(_kx[1])),
+            self._on_crescent_pond if crescents else None,
+            tuple(2.0 if role == "pond_fringe" else 2.0 + p for p in (_tint_pad, _tuft_pad)),  # type: ignore[arg-type]
+            pond,
+            (_tint_pad, min(_tuft_pad, 1.5)),
+            _tuft_pad,
+            feather,
+            _tint_r,
+            bs,
+            random.getrandbits(64),
+        )
+        blades.extend(_tb)
+        marks.extend(_tm)
         self._blade_groups.append((self.add("", cls="marsh"), "#6E9377", blades))  # flushed at finish, the off-map blades culled (feature 223); an empty bucket is harmless
         self._mark_groups.append((self.add(''.join(g), cls="marsh"), marks))  # `g` holds nothing today; the marks are flushed into this slot at finish
         random.setstate(st)

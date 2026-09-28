@@ -186,6 +186,7 @@ density and keep-outs.
 |---|---|---|---|
 | The marsh's marks are thrown and tested as arrays, so every marsh's marks land in different places at the same density and under the same keep-outs | map drawing convention (no rule, density or keep-out changes; only which random places the marks take) | 278 priced it; the GM: the maps may change "as long as the ... invariants ... hold" | point of change in `settlement/land/wet.py`; research R1 |
 | A plot edge shared by two plots is tested against the supply banks once, walked in one direction | map drawing convention (the same rule and threshold; a plot exactly at it may flip in the last floating-point bits) | research R1; the same ruling | point of change in `waterfields/carve.py` |
+| The marsh's pond-bank keep-out reads the whole bank ring, not every 16th point of it, so no reed stands in a bank's cut corner | historically accurate (the existing rule: reeds root outside planted earth, `research/water.html`; now enforced at the drawn corners) | a defect the moved throws exposed (research R2) | point of change in `settlement/land/wet.py`; research R2 |
 
 ## Assumptions
 

@@ -238,3 +238,69 @@ def test_the_hard_ground_sweep_SKIPS_a_ditch_that_carries_no_path() -> None:
     s._hard_cache = None if hasattr(s, "_hard_cache") else None
     hard = s._hard_ground()
     assert hard, "the ditch that HAS a path is still folded in; the pathless one is simply skipped"
+
+
+def test_the_vectorized_marsh_keeps_every_keep_out_and_its_density() -> None:
+    """Feature 281 (FR-009): the marsh's tints and tufts are thrown and tested as arrays. Every mark stands where the
+    per-point test would have let it - inside the outline, off every keep-out at its kind's pads, off the pond at its
+    lateral reach and (a tuft) with its blade top off the water, inside the frame; a tuft's glint or blades stand at its
+    base - and the share of throws kept matches a per-point scatter of the old form over many throws (the density), for
+    both kinds. The same seed throws the same marks."""
+    import math
+    import random
+
+    from l7r.diagram.settlement._geom import KeepoutGrid, RingIndex
+    from l7r.diagram.settlement.land.wet import marsh_scatter
+
+    outline = [(0.0, 0.0), (700.0, 0.0), (720.0, 520.0), (320.0, 580.0), (0.0, 500.0)]
+    ring = RingIndex(outline)
+    keep = KeepoutGrid()
+    keep.rings([[(100.0, 100.0), (220.0, 90.0), (230.0, 200.0), (110.0, 210.0)]], pad=10.0)
+    keep.segs([([(0.0, 330.0), (700.0, 360.0)], 3.0)])
+    keep.segs([([(400.0, 420.0), (650.0, 440.0)], 2.0)], slot=3, reach=30.0)
+    pond = (480.0, 180.0, 60.0, 40.0)
+    frame = (0.0, 0.0, 690.0, 570.0)
+    extras = ((0.0, 28.0, 28.0, 30.0), (0.0, 7.0, 7.0, 9.0))
+    pads, tip, feather = (28.0, 1.5), 7.0, 46.0
+    args = ((6000, 14000), (0.0, 0.0, 720.0, 580.0), frame, ring, keep, extras, None, (30.0, 9.0), pond, pads, tip, feather, 28.0, 1.0, 281)
+    blades, marks = marsh_scatter(*args)
+    tints = [((m[0] + m[2]) / 2, (m[1] + m[3]) / 2) for m in marks if "<circle" in m[4]]
+    glints = [((m[0] + m[2]) / 2, (m[1] + m[3]) / 2) for m in marks if "<ellipse" in m[4]]
+    tufts = {(float(b[0]), float(b[1])) for b in blades}
+    assert tints and glints and tufts, "non-vacuity: every kind of mark"
+    near = [(dx, dy) for dx in (-0.05, 0.0, 0.05) for dy in (-0.05, 0.0, 0.05)]  # a mark is recorded to 0.1 px
+
+    def ok(x, y, extra, lat, up):
+        def one(px, py):
+            if not ring.inside(px, py) or keep.hit(px, py, extra):
+                return False
+            if ((px - pond[0]) / (pond[2] + lat)) ** 2 + ((py - pond[1]) / (pond[3] + lat)) ** 2 < 1.0:
+                return False
+            return not (up and ((px - pond[0]) / pond[2]) ** 2 + ((py - up - pond[1]) / pond[3]) ** 2 < 1.0)
+
+        return any(one(x + dx, y + dy) for dx, dy in near)
+
+    for x, y in tints:
+        assert ok(x, y, extras[0], pads[0], 0.0), (x, y)
+    for x, y in [*tufts, *glints]:
+        assert frame[0] - 0.05 <= x <= frame[2] + 0.05 and frame[1] - 0.05 <= y <= frame[3] + 0.05
+        assert ok(x, y, extras[1], pads[1], tip), (x, y)
+
+    def old_kept(n, extra, lat, up, drop, seed):  # the per-point form: `_sparse`, one throw at a time
+        rnd = random.Random(seed)
+        kept = 0
+        for _ in range(n):
+            px, py = rnd.uniform(0.0, 720.0), rnd.uniform(0.0, 580.0)
+            if not (frame[0] <= px <= frame[2] and frame[1] <= py <= frame[3]) or not ok(px, py, extra, lat, up):
+                continue
+            ed = ring.edge_within(px, py, feather)
+            if ed is not None and rnd.random() > (ed / feather) ** drop:
+                continue
+            kept += 1
+        return kept
+
+    for got, n, extra, lat, up, drop in ((len(tints), 6000, extras[0], pads[0], 0.0, 0.9), (len(glints) + len(tufts), 14000, extras[1], pads[1], tip, 0.7)):
+        want = sum(old_kept(n, extra, lat, up, drop, s) for s in range(3)) / 3
+        assert abs(got - want) <= 4 * math.sqrt(want) + 0.02 * want, (got, want)
+    assert marsh_scatter(*args) == (blades, marks)
+    assert marsh_scatter((0, 0), *args[1:]) == ([], [])
