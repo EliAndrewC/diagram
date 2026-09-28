@@ -188,7 +188,7 @@ def test_the_indexed_hit_points_answer_as_the_linear_scan_did() -> None:
         ring_ix = [RingIndex(g) for g in rings]
         hole_ix = [RingIndex(h) for h in holes]
 
-        def linear(pts):  # type: ignore[no-untyped-def]
+        def linear(pts, water=water, rings=rings, ring_ix=ring_ix, hole_ix=hole_ix):  # type: ignore[no-untyped-def]
             if any(seg_dist(x, y, a, b) < clr for x, y in pts for a, b, clr in water):
                 return True
             xs, ys = [p[0] for p in pts], [p[1] for p in pts]
