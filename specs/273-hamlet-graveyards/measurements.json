@@ -1,0 +1,164 @@
+{
+  "inashiro-notes": {
+    "value": 1,
+    "unit": "line",
+    "quantity": "inashiro.notes.md's Subject and Features now record the hamlet's own burial ground (hamlet_burial own_ground)",
+    "source": "pool/hamlets/inashiro/inashiro.notes.md - read 2026-09-28 for the burial-ground lines",
+    "observed": "2026-09-28",
+    "subject": "inashiro",
+    "verifies": "F1"
+  },
+  "inashiro-drawn-area": {
+    "value": 1429,
+    "unit": "sq ft",
+    "quantity": "the drawn burial ground's area, 15 households, against its 1,430 sq ft target in the 750-2,450 band",
+    "source": "pool/hamlets/inashiro/inashiro.svg and .json - measured 2026-09-28 from the map's SVG (the burial ground's drawn path and marker rects) and manifest (houses, cemeteries), by the session's scratch script",
+    "observed": "2026-09-28",
+    "subject": "inashiro",
+    "verifies": "F3"
+  },
+  "kashikawa-drawn-area": {
+    "value": 1766,
+    "unit": "sq ft",
+    "quantity": "the drawn burial ground's area, 20 households, against its 1,770 sq ft target",
+    "source": "pool/hamlets/kashikawa/kashikawa.svg and .json - measured 2026-09-28 from the map's SVG (the burial ground's drawn path and marker rects) and manifest (houses, cemeteries), by the session's scratch script",
+    "observed": "2026-09-28",
+    "subject": "kashikawa",
+    "verifies": "F1"
+  },
+  "kashikawa-markers": {
+    "value": 0,
+    "unit": "markers",
+    "quantity": "grave markers with base or top outside the drawn outline, of 17",
+    "source": "pool/hamlets/kashikawa/kashikawa.svg and .json - measured 2026-09-28 from the map's SVG (the burial ground's drawn path and marker rects) and manifest (houses, cemeteries), by the session's scratch script",
+    "observed": "2026-09-28",
+    "subject": "kashikawa",
+    "verifies": "F3"
+  },
+  "kashikawa-notes": {
+    "value": 1,
+    "unit": "line",
+    "quantity": "kashikawa.notes.md's Features block records the burial ground",
+    "source": "pool/hamlets/kashikawa/kashikawa.notes.md - read 2026-09-28 for the burial-ground lines",
+    "observed": "2026-09-28",
+    "subject": "kashikawa",
+    "verifies": "F5"
+  },
+  "kuwabata-hull": {
+    "value": 0,
+    "unit": "grounds inside the hull",
+    "quantity": "the burial ground's center inside the convex hull of the house footprints (the ground now stands west, 270 ft from the houses' middle)",
+    "source": "pool/hamlets/kuwabata/kuwabata.svg and .json - measured 2026-09-28 from the map's SVG (the burial ground's drawn path and marker rects) and manifest (houses, cemeteries), by the session's scratch script",
+    "observed": "2026-09-28",
+    "subject": "kuwabata",
+    "verifies": "F1"
+  },
+  "kuwabata-notes": {
+    "value": 1,
+    "unit": "line",
+    "quantity": "kuwabata.notes.md no longer says 'no graveyard' and records the ground",
+    "source": "pool/hamlets/kuwabata/kuwabata.notes.md - read 2026-09-28 for the burial-ground lines",
+    "observed": "2026-09-28",
+    "subject": "kuwabata",
+    "verifies": "F2"
+  },
+  "kuwabata-markers": {
+    "value": 0,
+    "unit": "markers",
+    "quantity": "grave markers with base or top outside the drawn outline, of 14",
+    "source": "pool/hamlets/kuwabata/kuwabata.svg and .json - measured 2026-09-28 from the map's SVG (the burial ground's drawn path and marker rects) and manifest (houses, cemeteries), by the session's scratch script",
+    "observed": "2026-09-28",
+    "subject": "kuwabata",
+    "verifies": "F3"
+  },
+  "inashiro-title-card": {
+    "value": 0,
+    "unit": "contradictions",
+    "quantity": "the hamlet card no longer says 'no burial ground'; it says the dead lie in the village's ground unless the hamlet keeps its own, and a map drawing one adds 'This one keeps its own'",
+    "source": "l7r/diagram/interactive/assets/place.json (the hamlet card's what, and the burial ground collision line) - read 2026-09-28",
+    "observed": "2026-09-28",
+    "subject": "inashiro",
+    "verifies": "F1"
+  },
+  "sawada-title-card": {
+    "value": 0,
+    "unit": "contradictions",
+    "quantity": "the hamlet card's burial clause is true of both rolls (village_ground: the dead lie in the village's ground)",
+    "source": "l7r/diagram/interactive/assets/place.json (the hamlet card's what, and the burial ground collision line) - read 2026-09-28",
+    "observed": "2026-09-28",
+    "subject": "sawada",
+    "verifies": "F1"
+  },
+  "inashiro-notes-wording": {
+    "value": 1,
+    "unit": "line",
+    "quantity": "the Features line now says 'a glade of graves cut into the windbreak's east arm ... a short way through the trees from the track'",
+    "source": "pool/hamlets/inashiro/inashiro.notes.md - read 2026-09-28",
+    "observed": "2026-09-28",
+    "subject": "inashiro",
+    "verifies": "F2"
+  },
+  "inashiro-record-sources": {
+    "value": 3,
+    "unit": "records",
+    "quantity": "the three notes records in this file now name the notes file as their source",
+    "source": "specs/273-hamlet-graveyards/measurements.json - read 2026-09-28",
+    "observed": "2026-09-28",
+    "subject": "inashiro",
+    "verifies": "F4"
+  },
+  "kashikawa-record-sources": {
+    "value": 3,
+    "unit": "records",
+    "quantity": "the three notes records in this file now name the notes file as their source",
+    "source": "specs/273-hamlet-graveyards/measurements.json - read 2026-09-28",
+    "observed": "2026-09-28",
+    "subject": "kashikawa",
+    "verifies": "F3"
+  },
+  "kuwabata-record-sources": {
+    "value": 3,
+    "unit": "records",
+    "quantity": "the three notes records in this file now name the notes file as their source",
+    "source": "specs/273-hamlet-graveyards/measurements.json - read 2026-09-28",
+    "observed": "2026-09-28",
+    "subject": "kuwabata",
+    "verifies": "F2"
+  },
+  "kashikawa-graves-under-crowns": {
+    "value": 0,
+    "unit": "markers",
+    "quantity": "grave markers whose middle lies under a tree crown, of 17, after the crown keep-out was widened to the markers (CEMETERY_CORE 0.9)",
+    "source": "pool/hamlets/kashikawa/kashikawa.svg (marker rects) and .json (tree_crowns) - measured 2026-09-28",
+    "observed": "2026-09-28",
+    "subject": "kashikawa",
+    "verifies": "F1"
+  },
+  "kuwabata-graves-under-crowns": {
+    "value": 0,
+    "unit": "markers",
+    "quantity": "grave markers whose middle lies under a tree crown, of 14, after the crown keep-out was widened to the markers (CEMETERY_CORE 0.9)",
+    "source": "pool/hamlets/kuwabata/kuwabata.svg (marker rects) and .json (tree_crowns) - measured 2026-09-28",
+    "observed": "2026-09-28",
+    "subject": "kuwabata",
+    "verifies": "F1"
+  },
+  "kashikawa-card-headsman": {
+    "value": 0,
+    "unit": "spellings of 'headman'",
+    "quantity": "the hamlet place card's caveat now reads 'the rule that a hamlet keeps no headsman', matching its description (round-3 F1)",
+    "source": "l7r/diagram/interactive/assets/place.json line 96 - read 2026-09-28",
+    "observed": "2026-09-28",
+    "subject": "kashikawa",
+    "verifies": "F1"
+  },
+  "kuwabata-headsman": {
+    "value": 0,
+    "unit": "spellings of 'headman'",
+    "quantity": "kuwabata.notes.md's hamlet paragraph now says 'No headsman', the card's and the canon's spelling (round-3 F1)",
+    "source": "pool/hamlets/kuwabata/kuwabata.notes.md and l7r/diagram/interactive/assets/place.json - read 2026-09-28",
+    "observed": "2026-09-28",
+    "subject": "kuwabata",
+    "verifies": "F1"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "utc": "2026-09-28T03:32:55Z",
+  "target": "entry-gate",
+  "commit": "5289d6f6d",
+  "why": "every named pair has an IN-STEP entry-drift verdict in specs/250-close-the-record-checks/owed-verdicts.md (owed-check 5 of 5)"
+}

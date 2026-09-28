@@ -1,0 +1,6 @@
+{
+  "utc": "20260928T025815Z",
+  "guard": "pair-hooks",
+  "what": "review prerequisites",
+  "reason": "REVIEW_PREREQ_OK: the gate is green for this key; the prior finding's record is now written"
+}

@@ -40,8 +40,10 @@ from what you find (by the orchestrating session, NOT by you); O, H, U are the O
    refuses that). Write only from what it returns READ with a quote.
 4. **Decide each item's outcome** from what was read: ACCURATE (the record now says it, cited), KNOB (two or more
    forms attested - name each, each cited), SILENT (nothing readable says it - an ABSENCE note with what was
-   searched and when), or CONTRADICTION-RESOLVED (an existing section was wrong - say which and what corrects it).
-   A search that finds nothing is an outcome, not a failure: record it and move on.
+   searched and when), or CONTRADICTION-RESOLVED (an existing section was wrong). A CONTRADICTION-RESOLVED is not
+   done until the wrong section is CORRECTED, cited, in this session - on any page, whatever its prefix - unless it is
+   on the do-not-edit list above, in which case the handoff says exactly what the correction is. A search that finds
+   nothing is an outcome, not a failure: record it and move on.
 5. **Write.** Each item (or a few closely joined ones) is a question on buildings 360-420: a new fragment
    `research/<page>/NNN-<heading id>.html` at a free prefix in your range, opening with `<h2 id="...">` whose text is
    the question a reader would ask from the map; a `<p><strong>Sources:</strong> ...</p>` roster; the finding; and
@@ -54,8 +56,8 @@ from what you find (by the orchestrating session, NOT by you); O, H, U are the O
    make test-file FILE="tests/interactive/test_footnotes.py tests/interactive/test_citations.py
    tests/interactive/test_sources.py tests/interactive/test_record_format.py"`, and `python3 scripts/check-question-size.py`
    from the clone root (a question and its notes stay under 20,000 bytes - split one along its topics).
-6. **Hand off.** Write `specs/267-compound-research-owed/briefs/g2-handoff.md`: one line per new or changed question as
-   `- SECTION=<page>/<NNN>` (e.g. `- SECTION=buildings/240`), one per new registry key as `- KEY=<key>`, and one line
+6. **Hand off.** Write `specs/267-compound-research-owed/briefs/g2-handoff.md`: one line per new or changed question - a corrected
+   existing section included, so the checks read it - as `- SECTION=<page>/<NNN>` (e.g. `- SECTION=buildings/240`), one per new registry key as `- KEY=<key>`, and one line
    per item: `R<nn> <OUTCOME> - <one sentence of what the record now says> - <what it means for the kinds and sheets
    named>`. Then anything left open and why. Commit (a message naming the group). Do NOT run the record checks, do NOT
    push - the check sessions do that in fresh contexts. Your last message is one paragraph saying what you wrote.

@@ -1,0 +1,113 @@
+{
+ "feature": "267-compound-research-owed",
+ "plan_sha256": "3dcc02b57fb9e96c6a87f3221212f95e8885b84f90c36b3b56879ddfae70ffc0",
+ "reviewed": "2026-09-27",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "Research runs in fresh headless page sessions from generated briefs.",
+   "class": "within",
+   "why": "Unchanged. FR-005; the landed procedure the GM asked for."
+  },
+  {
+   "id": "D2",
+   "summary": "Ten groups of at most eight items, run in sequence in this clone.",
+   "class": "within",
+   "why": "Unchanged. How, not what."
+  },
+  {
+   "id": "D3",
+   "summary": "Each group owns a free prefix range on its page.",
+   "class": "within",
+   "why": "Unchanged."
+  },
+  {
+   "id": "D4",
+   "summary": "No section on 265's list edited while 265's task for its page is open; owed edits made once ticked.",
+   "class": "within",
+   "why": "Unchanged. FR-006."
+  },
+  {
+   "id": "D5",
+   "summary": "Four outcomes; a CONTRADICTION-RESOLVED corrects the wrong section, checked.",
+   "class": "within",
+   "why": "Unchanged. FR-001."
+  },
+  {
+   "id": "D6",
+   "summary": "Kinds and sheets follow per group; sheets redrawn, measured, building-review run.",
+   "class": "within",
+   "why": "Unchanged. FR-003, FR-004. The program example's pass 5 (house brought to research buildings 380's size, privies, office-hall rooms, doors) is this decision carried out."
+  },
+  {
+   "id": "D7",
+   "summary": "GM items and results the GM must rule on go through escalation-check.",
+   "class": "within",
+   "why": "Unchanged. FR-008."
+  },
+  {
+   "id": "D8",
+   "summary": "future-work/compounds.md Research owed rewritten at the end to what remains.",
+   "class": "within",
+   "why": "Unchanged. FR-007."
+  },
+  {
+   "id": "B2",
+   "summary": "Check sessions: two questions each; one re-check round; PARTIAL labeled.",
+   "class": "within",
+   "why": "Unchanged. Feature 250's brief pattern."
+  },
+  {
+   "id": "D9",
+   "summary": "Placer hand-sheet path fixed; Ochiba/Hayakawa/Ubame (and Hoshigaoka) seated at the standard; caption ledger empty; pack_audit reading fixes.",
+   "class": "within",
+   "why": "Re-verified on the tree 2026-09-27 (this round's own run): make seat-label reports 48/62/61/9 captions, 0 not at the standard seat, on Ochiba/Hayakawa/Ubame/Hoshigaoka; WRITE=1 on scratch copies leaves all four byte-identical; make pack-audit on the three magistracies: every check OK (matches_map skipped, no On map line); tests/gate/test_hand_sheet_captions.py 5 passed; caption_ledger.json is {}. The wording the last round asked corrected ('five captions had no seat at all') is gone; D9 now states every caption is at its seat, the least-cost one where none is free."
+  },
+  {
+   "id": "D9-hand-cheaper",
+   "summary": "Where no seat is free, the hand seat is kept only when it covers strictly less than the standard's least-cost pick.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Unchanged; implied by 266 FR-006/FR-007 (least total weight is drawn)."
+  },
+  {
+   "id": "D9-tie",
+   "summary": "A tie goes to the standard's order.",
+   "class": "within",
+   "why": "Unchanged; 266 FR-007's own tie-break."
+  },
+  {
+   "id": "D9-weights",
+   "summary": "Hand-sheet obstacle rules: inner ink avoided, a ground's border is ink, dark ink heavier, a fill painted after a caption weighs as text, a room's containing building waived for that room's area caption; round 4: a caption's own partitions now weigh in full, and an area caption keeps off the drawn outline of its area and of the building holding it.",
+   "class": "within",
+   "why": "The round-4 rules each ADD weight where a seat was cheaper before (the outline bands are obstacles; the partitions went from light to full), so neither can drop or loosen a caption; FR-006's free-beats-covered rule and FR-007's never-drop rule are untouched, and seat-label reports 0 off seat under them. The one loosening, the containing building waived, stays physically forced by 266 FR-008 (an area caption lies inside its area)."
+  },
+  {
+   "id": "D9-subline-measure",
+   "summary": "A caption's sub-lines are measured at their own size and face, not the head's.",
+   "class": "within",
+   "why": "A measurement correction: 266 FR-002 gives the placer the caption's text and size, and a block measured at the wrong size is the wrong subject. Unit-tested (test_a_sub_line_is_measured_at_its_own_size)."
+  },
+  {
+   "id": "D9-hand-edits",
+   "summary": "By hand, recorded in each sheet's notes: three sub-lines wrapped; captions set a size smaller to fit (Hayakawa guest house 12->11, Ochiba gatehouse 9->8; Myobu 10->8 to match the Ta-no-Kami); the guests' veranda made its own part; the guest house's note reworded; service yard and forecourt given their own ground; glyphs rearranged (drying stones, steam, tub, weapon rack).",
+   "class": "within",
+   "why": "Every caption is still drawn: a text-set diff of each sheet between c007ae342 and HEAD shows only re-wrapped lines and OUTER COURT added, nothing removed. Size, wrap and glyph placement are sheet editing under D6; 266 takes the caption's size as an input and rules nothing on it."
+  },
+  {
+   "id": "D9-hand-sublines",
+   "summary": "Hayakawa's river-kami shrine gloss and Ubame's '(his letters)' removed from the sheet; the text lives in the modals.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Unchanged from the last round: the thing keeps its label; the removed text is a gloss about it, carried by the modals, and no GM request puts it on the sheet. Raise at landing, as D9 says."
+  },
+  {
+   "id": "D9-outer-court",
+   "summary": "Ubame's OUTER COURT caption restored at the standard's least-cost seat (the hearing court's roof).",
+   "class": "within",
+   "why": "The last round's remedy carried out: the caption is drawn (tspans OUTER/COURT at 642,602 with data-kind outer court) and seat-label reports it at the standard seat, which is 266 FR-007 verbatim - never dropped, least total weight drawn. The NOT LEGITIMATE drop no longer exists."
+  }
+ ],
+ "verdict": "CLEAR"
+}

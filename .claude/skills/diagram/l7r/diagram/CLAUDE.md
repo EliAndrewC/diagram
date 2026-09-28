@@ -59,7 +59,9 @@ Two engine modules are still single files rather than packages, and stay that wa
 **`l7r/diagram/compound.py`** (the Mode A compound program and perimeter-first placer) and
 **`l7r/diagram/citybudget.py`** (the space-budget city/capital planner). Both are peers of the
 engine packages above - pool generators import them directly - and folding them into a package
-would rewrite six frozen generator scripts for no navigational gain.
+would rewrite six frozen generator scripts for no navigational gain. `compound.py` keeps its import surface but
+lent two siblings its bulk when the draft's gates, doors and roji took it past the 1,000-line bar (feature 267):
+`compound_model.py` (units, palettes, the program types) and `compound_parts.py` (what is seated around the masses).
 
 The prose reference (as opposed to the code) splits the same way: [`SKILL.md`](../../SKILL.md) is the
 usage-facing index, and it indexes [`buildings/`](../../buildings) (the Mode A design doctrine) and

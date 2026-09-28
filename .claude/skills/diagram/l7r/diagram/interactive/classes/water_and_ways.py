@@ -54,7 +54,7 @@ class IrrigationDitch(Kind):
     (Bungotakada); how few ditches that form left is this record's own reading, since no page read counts
     ditches: the pages on it describe water passing from paddy to paddy, the one village page giving its merit
     as saving water, not saving digging, and keeping many weirs; prefectural and ministry papers a search
-    showed saying such districts have hardly any channels could not be read. The widths are weaker than they look.
+    showed saying such districts have hardly any channels could not be read. That a ditch beside every paddy is a Meiji anachronism is likewise the record's reading of that contrast: the Ishikawa method of 1887 put each squared parcel on a channel, and the 1899 law set out to build irrigation and drainage works, not in so many words a ditch to every paddy. The widths are weaker than they look.
     The third of a meter is a modern design MINIMUM rather than a measured ditch, and the Chinese doctrine is
     carried by a 2021 provincial standard for consolidated farmland, so what it gives is the doctrine and not
     a premodern layout. The national standard the record once leaned on for both is readable nowhere and is
@@ -167,11 +167,11 @@ class FieldPond(Kind):
     What: A small pocket of open water inside one low paddy plot, reed-fringed - a low pocket where the ground
     pools, or a header pond within the field.
 
-    Why: Flat, flooded valley-bottom paddy is the archetype that hosts non-rice obstacles LEAST - graves and
-    knolls go to the slope, rock outcrops belong to terraces - and a small open-water pond is the one thing
+    Why: Flat, flooded valley-bottom paddy, the most valuable and most worked ground, is reckoned to host non-rice obstacles LEAST - graves and
+    knolls go to the slope, rock outcrops are guessed to belong to terraces - and a small open-water pond, embanked and dug into low wet ground, is the one thing
     that genuinely belongs in the wet middle. It is drawn sunk into a single low plot, never across a bund.
 
-    Note: The kind of obstacle a flooded paddy hosts is read (corroborated in both traditions); no source counts
+    Note: That a plains pond is dug into low wet ground is read, as is feng shui setting graves on the hills; that flat paddy hosts obstacles least is this map's reasoning, and rocks as a terrace feature a guess; no source counts
     how often, so the rate is chosen - often enough that a reader meets the feature, rare enough that it
     does not litter the field.
 
@@ -190,23 +190,20 @@ class FieldPond(Kind):
 
 class FieldRock(Kind):
     """
-    What: A cluster of gray boulders inside a field plot - a bedrock outcrop the terrace risers wrap around, too
-    big to clear.
+    What: A cluster of gray boulders inside a field plot - a bedrock outcrop the terrace risers wrap around.
 
-    Why: Rock outcrops are a TERRACE feature, bedrock the risers wrap around, and are absent on alluvial valley,
-    polder and delta ground; where the archetype allows one it stands off-center in its plot so it reads as
+    Why: The maps treat rock outcrops as a TERRACE feature, bedrock the risers wrap around, absent on alluvial
+    valley, polder and delta ground; where the archetype allows one it stands off-center in its plot so it reads as
     a natural obstacle.
 
-    Note: Which archetypes host an outcrop is read (corroborated); no source counts how many, so a terraced field
+    Note: Which archetypes host an outcrop is this project's guess - no source found puts outcrops on terraces and
+    off valley, polder and delta ground - and no source counts how many, so a terraced field
     gets one to three - enough that the reader meets the obstacle the terrace was cut around, few enough
     that the field still reads as worked ground.
 
-    Caveat: no source counts how many, so a terraced field gets one to three - enough that the reader meets the
-    obstacle the terrace was cut around, few enough that the field still reads as worked ground.
-
     Name: field rock
     Covers: `field_rocks` - a bedrock outcrop inside a plot
-    Label: accurate
+    Label: guess
     Sources: not recorded
     Entry: research/fields.html - 'In-field features - flat flooded paddy hosts obstacles least'
     """
@@ -216,23 +213,27 @@ class FieldRock(Kind):
 
 class GraveIsland(Kind):
     """
-    What: A small raised earthen mound with two or three stone markers standing inside a paddy plot, the flat
-    paddy tiling around it.
+    What: A family's grave in the fields: a small raised earthen mound with stone markers, standing either inside a
+    paddy plot as an island the flat paddy tiles around, or in a plot's corner against its bunds.
 
-    Why: Graves among the paddy are a north-China dry-plain signature, corroborated in Japan - NOT the rice-south
-    default, where feng-shui puts the dead on the slope with a backing hill and a downslope water view. The
-    GM accepted both looks, so the island is drawn rarely (about three valley, terrace or ribbon maps in
-    ten, a rate chosen for the maps rather than read from any source) as a deliberate departure.
+    Why: Around Shanghai many villagers buried their dead one by one out in the open fields, wherever a geomancer
+    placed the grave, and a column of soldiers in 1842 found graves in every field; far to the north, Henan leveled
+    more than two million field graves in 2012. In Japan the grave stood beside the field rather than in it: beside
+    the bunds, until an order of 1872 forbade burying the dead at a field's bund edge, or in a corner of a field. So
+    the island inside a plot is the Chinese form and the corner grave the Japanese one, and each hamlet takes one.
 
-    Note: A calibrated liberty, disclosed: the in-field grave is drawn where the rice-south record would put the
-    dead on the slope. How often it is drawn is the project's own choice, and the evidence for graves out
-    among the paddy is thin.
+    Note: How often a map draws a field grave at all, about three valley, terrace or ribbon maps in ten, is a degree
+    chosen for the maps: no source gives a rate, and the record argues they were common where the custom held.
+
+    Caveat: How often a map draws a field grave at all, about three valley, terrace or ribbon maps in ten, is a
+    degree chosen for the maps: no source gives a rate, and the record argues they were common where the custom
+    held.
 
     Name: grave island
-    Covers: `field_graves` - the rare in-field grave mound
-    Label: deviation
-    Sources: not recorded
-    Entry: research/fields.html - 'In-field features - flat flooded paddy hosts obstacles least' (the CALIBRATED LIBERTY paragraph, GM 2026-07-20)
+    Covers: `field_graves` - a grave mound inside a paddy plot or in its corner
+    Label: accurate
+    Sources: henriot-shanghai-graves, henan-grave-removal-enwiki, ryobosei-jawiki, yashikibaka-ibaraki-blog
+    Entry: research/fields.html - 'Are there really graves out in the middle of the fields?', 'In-field features - flat flooded paddy hosts obstacles least'
     """
 
     key = 'grave island'
@@ -305,7 +306,7 @@ class Footbridge(Kind):
 class Well(Kind):
     """
     What: A communal wellhead: a stone curb and the dark water of the shaft, under a small roof. (In Edo a
-    tenement's communal "well" was often an aqueduct intake rather than a dug shaft.)
+    tenement's communal "well" could be an aqueduct intake rather than a dug shaft.)
 
     Why: A pre-modern rice village of about seventy households ran one to three communal wells, two being
     typical in this record's estimate - drinking water came mostly from surface water, settled and boiled,
@@ -317,8 +318,8 @@ class Well(Kind):
     many times its true size, in order to make the well visible at map scale: the glyph marks where the well
     stands, not how much ground it takes. A hand-dug well's shaft is about 1 m across, big enough for a
     person to work in, under a well house that is posts and a roof and nothing more; the width of the curb
-    frame itself was not found. The Edo aqueduct intake is read, and of the village figures only these are:
-    the capacity (Sphere/UNICEF: one open well serves about 400 people), and that digging was costly so
+    frame is read from one bucket well measured for a book of old implements, 118 cm square - about 4 ft. The Edo aqueduct intake is read, and of the village figures only these are:
+    the capacity (Sphere: one open well serves about 400 inhabitants), and that digging was costly so
     shared wells were the majority; the one-to-three count, the settled-and-boiled surface water, the
     subscription financing, the typical two, the households-per-well ratio, and the shallow water table that
     makes a farmstead's own well cheap (the groundwater paper gives no depth) were searched for and not
@@ -355,8 +356,9 @@ class NoticeBoard(Kind):
     order to post them; that EVERY town and village kept one is this record's reading), and so is the siting
     at the center, the entrance, the official's gate and a bridgehead; the assembly place and the shrine precinct are this record's inference, and no page read says
     the notices were read aloud. The placement is chosen from the attested set the map can actually site, never
-    from one preferred reading; at hamlet grain the glyph is drawn at its true size, a frame of about 12 x 5 ft
-    around a 7 by 3 ft face - both this record's own figures, not read on any page.
+    from one preferred reading; at hamlet grain the glyph is a frame of about 12 x 5 ft around a 7 by 3 ft face,
+    both this record's own figures - shorter than the boards the record measured, roofed frames about 16 ft along
+    the way on a stone footing, fenced; no village board was measured.
 
     Name: notice board
     Covers: `kosatsuba`, with its label

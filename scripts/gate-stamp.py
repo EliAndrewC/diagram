@@ -334,6 +334,12 @@ def _git_dir(root: Path) -> Path | None:
     recognized that `.git` might not be a directory and simply gave up on the cache - which is why
     only the STAMP path crashed and the cache path did not.
     """
+    # GUARD_EDIT_OK: fixing a slow path found while working (2026-09-28) - ASKED ONCE PER ROOT, NOT PER FILE.
+    # `content_id` reaches this through `_cache_table` for every file hashed (and `_flush_cache` again per
+    # miss), so one `make quick` status record ran `git rev-parse` 302 times: 0.66 s of its 0.85 s. Only a
+    # FOUND directory is remembered - a root with none is asked again, since a test may `git init` it later.
+    if root in _git_dirs and _git_dirs[root].is_dir():
+        return _git_dirs[root]
     out = subprocess.run(
         ["git", "-C", str(root), "rev-parse", "--git-common-dir"],
         capture_output=True,
@@ -344,7 +350,13 @@ def _git_dir(root: Path) -> Path | None:
     d = Path(out.stdout.strip())
     if not d.is_absolute():
         d = root / d
-    return d if d.is_dir() else None
+    if not d.is_dir():
+        return None
+    _git_dirs[root] = d
+    return d
+
+
+_git_dirs: dict[Path, Path] = {}
 
 
 def _cache_path(root: Path | None) -> Path | None:

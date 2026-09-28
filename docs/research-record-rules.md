@@ -101,6 +101,21 @@ from written briefs (`make page-session BRIEF="<1> <2>"` runs them in order), an
 between them, not the context, carry the state. `make notes PAGE= SECTION= KEYS=` prints a few notes and the
 paragraphs carrying them; a re-check names only the notes that moved (`make check-bundle ... NOTES=<key,key>`).
 
+**At most four questions and ten new registry keys to a write session** (feature 274, its research R1). After
+feature 250 the cost per thing checked held (median 1.02 M), but the largest context doubled to 246 K, and it was the
+write sessions: median 74 turns, a cost that follows the turn count (r = 0.92) and grows roughly with the square of
+the length; one 272 write session cost 24.5 M over 109 turns. So the runner counts the questions every brief ASSIGNS
+(`scripts/_brief_load.py`, which reads `## Your items`, `**Your questions:**` and `**Your pairs**` and never a
+do-not-edit paragraph) and refuses one over four, or one assigning nothing, naming the split; a brief that is not a
+group's writing declares `<!-- page-load: kind=<kind> -->`, one of `check`, `assertions`, `split` and `handover`, and
+is not capped. Keys are not known before writing, so `make reserve` refuses a write session's eleventh registry key
+with the continuation: the session writes its unreached items to `$L7R_CONTINUE`, commits and stops, and the runner
+queues that brief next, before the group's checks. Escapes: `WRITE_CAP_OK='<reason>'`, `KEY_CAP_OK='<reason>'`,
+each logged. **Coordination files by line**: 619 whole reads of the claims file, 418 of handoffs and 388 of checks
+reports carried about 60 M tokens (5%), so a session reads its own lines with `make lines FILE= KEY=` and adds one
+with `make append FILE= LINE=`. And a headless page session carries `container-scripts/page-session-rules.md` in
+place of the root CLAUDE.md (about 5,200 tokens a turn).
+
 This file auto-loads when a research entry is being written or changed - which is exactly when the
 rule below applies. The entry FORMAT, the evidence classes, the citing rules and the table of which
 research file grounds which rule file are in [`README.md`](../.claude/skills/diagram/research/README.md); this file carries the one thing

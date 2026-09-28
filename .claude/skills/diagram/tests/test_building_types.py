@@ -96,6 +96,9 @@ def test_a_form_can_change_or_remove_an_item_band() -> None:
 
 _ENGINE_GLOBS = ("l7r", "scripts")  # the skill's engine and the repository's scripts
 _ALLOWED = ("l7r/diagram/buildings/types.json",)  # the declaration
+#: The glossary's word files: "magistracies" there is a word a reader hovers, the plural of a term, not a building
+#: type named in code (feature 267 added the term `magistracy`).
+_WORDS = ("l7r/diagram/interactive/assets/glossary",)
 
 
 def _engine_files() -> list[str]:
@@ -117,7 +120,7 @@ def test_no_type_name_outside_its_declaration() -> None:
     hits = []
     for path in _engine_files():
         rel = os.path.relpath(path, SKILL)
-        if rel in _ALLOWED:
+        if rel in _ALLOWED or rel.startswith(_WORDS):
             continue
         with open(path, encoding="utf-8", errors="replace") as fh:
             for n, line in enumerate(fh, 1):

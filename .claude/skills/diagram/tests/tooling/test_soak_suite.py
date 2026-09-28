@@ -15,6 +15,7 @@ test that reached a line nothing else reaches would fail the floor by name.
 
 from __future__ import annotations
 
+import json
 import subprocess
 import sys
 import tomllib
@@ -53,32 +54,46 @@ def test_the_pytest_defaults_survive_the_override() -> None:
     assert not missing, f"setting norecursedirs REPLACES pytest's list; these defaults were dropped: {sorted(missing)}"
 
 
-def _collect(*extra: str) -> subprocess.CompletedProcess[str]:
+# Both collections in ONE child interpreter (2026-09-27): a pytest start-up - the interpreter, pytest and
+# every auto-loaded plugin - is ~0.5 s of each run and identical between the two, so paying it once took the
+# test from ~1.04 s to ~0.74 s. Each run is still a full `pytest.main` over the real pyproject with every
+# plugin loaded; only the process is shared.
+_BOTH = """
+import contextlib, io, json, sys
+import pytest
+base, control = json.loads(sys.argv[1])
+out = []
+for args in (base, base + control):
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        rc = pytest.main(args)
+    out.append([int(rc), buf.getvalue()])
+sys.stdout.write(json.dumps(out))
+"""
+
+
+def _collect_both(control: list[str]) -> list[tuple[int, str]]:
     """A broad collection from the skill root - the real pyproject, pytest walking `testpaths` itself -
-    with every SIBLING of `tests/soak` ignored (2026-09-27). Whether the walk descends into `soak/` is
-    decided by `norecursedirs` alone, not by what sits beside it, and importing the ~4,000 sibling tests
-    only to discard them was all of this test's 5 s."""
+    with every SIBLING of `tests/soak` ignored (2026-09-27), then the same collection plus `control`.
+    Whether the walk descends into `soak/` is decided by `norecursedirs` alone, not by what sits beside
+    it, and importing the ~4,000 sibling tests only to discard them was all of this test's 5 s."""
     siblings = [f"--ignore=tests/{p.name}" for p in sorted((SKILL / "tests").iterdir()) if p.name not in ("soak", "conftest.py", "__init__.py")]
-    return subprocess.run(
-        [sys.executable, "-m", "pytest", "--co", "-q", "--no-cov", "-p", "no:cacheprovider", *siblings, *extra],
-        cwd=SKILL,
-        capture_output=True,
-        text=True,
-        timeout=600,
-    )
+    base = ["--co", "-q", "--no-cov", "-p", "no:cacheprovider", *siblings]
+    r = subprocess.run([sys.executable, "-c", _BOTH, json.dumps([base, control])], cwd=SKILL, capture_output=True, text=True, timeout=600)
+    assert r.returncode == 0, r.stdout + r.stderr
+    return [(rc, text) for rc, text in json.loads(r.stdout)]
 
 
 def test_an_ordinary_collection_does_not_descend_into_the_soak() -> None:
-    r = _collect()
+    (rc, out), (control_rc, control_out) = _collect_both(["-o", "norecursedirs=" + " ".join(sorted(PYTEST_DEFAULTS))])
     # Exit 5 is "collected nothing", which is what a walk that skipped soak/ leaves. Any other code is a
     # collection that did not happen - a refusal or an import error - and the old form of this test,
     # which never read the code, would have passed on one.
-    assert r.returncode == 5, r.stdout + r.stderr
-    assert "tests/soak" not in r.stdout, "a broad run must not collect the soak suite"
+    assert rc == 5, out
+    assert "tests/soak" not in out, "a broad run must not collect the soak suite"
     # THE CONTROL: the same walk with pytest's defaults in place of the pyproject list DOES collect the
     # soak suite, so the verdict above is the setting's doing and not an artifact of the ignores.
-    control = _collect("-o", "norecursedirs=" + " ".join(sorted(PYTEST_DEFAULTS)))
-    assert control.returncode == 0 and "tests/soak" in control.stdout, control.stdout + control.stderr
+    assert control_rc == 0 and "tests/soak" in control_out, control_out
 
 
 def test_make_soak_refuses_rather_than_reporting_a_vacuous_green(tmp_path: Path) -> None:

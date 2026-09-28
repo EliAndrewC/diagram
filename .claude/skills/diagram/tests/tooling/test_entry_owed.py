@@ -132,3 +132,24 @@ def test_the_agent_pins_opus_like_every_subagent_check():
     file this feature adds, so a failure here names the feature rather than the roster."""
     text = (REPO / ".claude/agents/entry-drift.md").read_text(encoding="utf-8")
     assert "\nmodel: opus\n" in text, "entry-drift must pin model: opus"
+
+
+def test_a_renumbered_footnote_is_not_a_moved_section():
+    """Feature 271: a note added to an earlier question renumbers a later section's footnotes on the assembled page;
+    only the numbers moved, so the section is not moved - but a change of the prose around the marker still is."""
+    a = 'Farms kept one.<sup class="fn"><a id="fnref-3" href="citations/homesteads.html#fn-3">3</a></sup> Done.'
+    b = 'Farms kept one.<sup class="fn"><a id="fnref-7" href="citations/homesteads.html#fn-7">7</a></sup> Done.'
+    c = 'Most farms kept one.<sup class="fn"><a id="fnref-7" href="citations/homesteads.html#fn-7">7</a></sup> Done.'
+    assert eo.unnumbered(a) == eo.unnumbered(b)
+    assert eo.unnumbered(a) != eo.unnumbered(c)
+    assert eo.unnumbered(None) is None
+
+
+def test_a_repeated_note_and_the_page_trailer_are_not_moves():
+    """Feature 271 batch 2: a note's second use (`fnref-84-2`) renumbered, and the citations trailer that rides on a
+    page's last section, left behind when a question was added after it - neither moves the section."""
+    a = 'Tubs.<sup class="fn"><a id="fnref-84-2" href="citations/buildings.html#fn-84">84</a></sup>'
+    b = 'Tubs.<sup class="fn"><a id="fnref-90-2" href="citations/buildings.html#fn-90">90</a></sup>'
+    assert eo.unnumbered(a) == eo.unnumbered(b)
+    last = 'The scope note.</p>\n<section class="citations"><p>The notes behind this page ...</p></section>'
+    assert eo.unnumbered(last) == eo.unnumbered("The scope note.</p>")

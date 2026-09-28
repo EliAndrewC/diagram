@@ -95,12 +95,21 @@ CASES = [
 
 @pytest.mark.parametrize(("guard", "payload", "event", "rule"), CASES, ids=[f"{c[0]}:{c[3]}" for c in CASES])
 def test_a_guard_records_the_rule_that_fired(tmp_path, guard: str, payload: str, event: str, rule: str) -> None:
+    # IN A THROWAWAY REPO, never the checkout running the suite (2026-09-27). With no `cwd` the guard ran inside
+    # the session's own clone, so the escalation case above ARMED that clone's real `.git/escalation-state.json`
+    # - its log entry went to this tmp dir, the state did not - and the session's next turn end was refused
+    # for a settlement-review nobody had dispatched. A guard that keeps state beside the repo it resolves
+    # must resolve this one.
+    work = tmp_path / "repo"
+    work.mkdir()
+    subprocess.run(["git", "init", "-q", str(work)], check=True)
     subprocess.run(
         [str(SCRIPTS / f"{guard}-hooks.sh"), "pretool"],
         input=payload,
         capture_output=True,
         text=True,
         check=False,
+        cwd=work,
         env={"PATH": "/usr/bin:/bin", "HOME": str(tmp_path), "GUARD_LOG_DIR": str(tmp_path / "log")},
     )
     entries = [json.loads(f.read_text()) for f in sorted((tmp_path / "log").glob("*.json"))]
@@ -318,6 +327,11 @@ _ESCAPES = {
         "routes through _hm_escape.py escape via escape_or_refuse in shell-check-hooks.sh; checked FIRST so the guard can be repaired through the channel it guards (feature 236)",
     ),
     "GATE_STAMP_OK": ("environment", "read as ${GATE_STAMP_OK:-} at push time; same ground as REVIEW_GATE_OK. Missed by three drafts of the spec (round 3)"),
+    "WRITE_CAP_OK": (
+        "environment",
+        "read by _page_session_runner.py through _escape_log.escape from os.environ (make exports it); reason floor via _hm_escape.reason_is_enough, logged (feature 274 D2)",
+    ),
+    "KEY_CAP_OK": ("environment", "read by reserve-prefix.py through _escape_log.escape from os.environ (make exports it); reason floor via _hm_escape.reason_is_enough, logged (feature 274 D4)"),
     "REF_OK": ("make-variable", "a make override, already anchored positionally by _hookmatch.py:116 - it must appear as REF_OK= at a command position"),
     "ESCALATION_OK": (
         "command",

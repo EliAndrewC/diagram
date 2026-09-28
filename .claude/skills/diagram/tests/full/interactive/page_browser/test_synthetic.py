@@ -344,7 +344,13 @@ def test_in_raster_mode_the_lit_paddy_is_washed_and_the_lit_beads_are_not(synthe
         synthetic.js("() => window.l7rMap.fit()")
         assert synthetic.js("() => window.l7rMap.rasterReady()"), "the synthetic page carries its picture and id map"
         assert synthetic.settles("raster", lambda: synthetic.js(mode)) == "raster", "fitted in a 100-unit viewport the page is below the raster switch"
-        assert lit(("0.45", "1")) == ("0.45", "1"), "raster mode: the lit paddy is a wash, the lit beads are solid"
+        # FLAKY in two loaded FULL runs (2026-09-26, 2026-09-27; future-work/cross-cutting.md), never reproduced under CPU load
+        # or beside a test-full (29 runs, 2026-09-28): the message names the page's state so the next failure says which
+        # of mode, highlight, a pinned modal or raster readiness was wrong
+        state = "() => ({mode: document.getElementById('map').getAttribute('data-mode'), hl: document.getElementById('map').getAttribute('data-hl'), explain: document.getElementById('explain').open, ready: window.l7rMap.rasterReady()})"
+        before = synthetic.js(state)
+        got = lit(("0.45", "1"))
+        assert got == ("0.45", "1"), f"raster mode: the lit paddy is a wash, the lit beads are solid; before={before} after={synthetic.js(state)}"
     finally:
         synthetic.page.set_viewport_size(was)
         synthetic.js("() => window.l7rMap.fitWidth()")

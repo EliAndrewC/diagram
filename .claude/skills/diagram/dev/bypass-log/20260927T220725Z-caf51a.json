@@ -1,0 +1,6 @@
+{
+  "utc": "2026-09-27T22:07:25Z",
+  "target": "entry-gate",
+  "commit": "91f2bd8c7",
+  "why": "entry-drift ran on all three owed pairs (CompoundShrine, ShrineGrove, Torii against 090, 120 and 124): IN-STEP"
+}

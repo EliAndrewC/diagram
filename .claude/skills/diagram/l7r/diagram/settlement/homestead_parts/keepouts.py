@@ -187,6 +187,7 @@ class KeepoutsMixin:
         "castle_towers",  # yagura are roofed buildings
     )
     _CANOPY_STRUCT_KEYS = _HALO_STRUCT_KEYS + _CANOPY_EXTRA_KEYS + _CANOPY_ROOFED_KEYS
+    CEMETERY_CORE = 0.9  # the fraction of a burial ground's half-extent kept clear of crowns: the grave markers reach ~0.8-0.9 of it (cemetery's grid), and at 0.6 a crown hid a whole grave on Kuwabata (settlement-review round 2) - feature 273
 
     def _canopy_keepouts(self: Settlement, bbox: tuple[float, float, float, float]) -> tuple[list[tuple[float, float, float, float]], list[tuple[float, float, float]]]:  # type: ignore[misc]
         """Every drawn BUILDING footprint (as x, y, half-w, half-h) and WELLHEAD (as x, y, r) near `bbox` -
@@ -207,6 +208,15 @@ class KeepoutsMixin:
                     hw = hh = math.hypot(hw, hh)
                 if o["x"] + hw >= bx0 and o["x"] - hw <= bx1 and o["y"] + hh >= by0 and o["y"] - hh <= by1:
                     rects.append((o["x"], o["y"], hw, hh))
+        # A BURIAL GROUND'S MIDDLE (feature 273). It stays an open-air key - trees among graves are correct, and a
+        # bough over its edge is normal - but a wood grown over the whole of it hides the graves: on the reference
+        # hamlet a windbreak laid after the ground drew eight crowns centered on it. So the middle of the ground,
+        # CEMETERY_CORE of its half-extent each way, is kept out; crowns may still overhang the rest. The fraction is
+        # a GUESS (no source measures how near the graves a village let trees stand).
+        for o in self.M.get("cemeteries", []):
+            hw, hh = o["w"] / 2 * self.CEMETERY_CORE, o["h"] / 2 * self.CEMETERY_CORE
+            if o["x"] + hw >= bx0 and o["x"] - hw <= bx1 and o["y"] + hh >= by0 and o["y"] - hh <= by1:
+                rects.append((o["x"], o["y"], hw, hh))
         circles = [(o["x"], o["y"], o.get("vr", o["r"])) for o in self.M.get("wells", []) if bx0 <= o["x"] <= bx1 and by0 <= o["y"] <= by1]
         return rects, circles
 

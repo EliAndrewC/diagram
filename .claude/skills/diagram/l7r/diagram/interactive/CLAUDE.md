@@ -143,6 +143,14 @@ PICTURE"*), and the land-use overlays still key off `low`, never off the class.
 A settlement's own `<name>.notes.md` may carry a `## Map notes` section, and the page reads it.
 Optional everywhere, and absent from most of the pool.
 
+**Nothing from the GM-only notes of an Obsidian Portal record ever reaches a page** (the GM, 2026-09-28: *"magistracy
+pages should not show GM only Obsidian portal notes. Not now and not ever. If I have notes that I want to be shown that
+are in the GM only section, then I will move them somewhere else that is visible"*). A record's `game_master_info` is
+not a source for a map note, a caption, a drawn particular or a kind's prose; its public `bio` and the canon
+(`make canon`) are. Before a particular goes on a sheet, check which field holds it; one only the GM-only field holds
+stays off - no inference that it is probably fine. The first audit (feature 267 follow-up) took the Fox-Fire Lantern,
+the fox relics, Hayakawa's salt wards and several Ubame notes off their pages.
+
 ```markdown
 ## Map notes
 

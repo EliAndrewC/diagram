@@ -1,0 +1,9 @@
+{
+ "term": "seed",
+ "def": "The number a map is generated from: every choice the map rolls, such as which form a town's inn takes, follows from it, so the same seed always draws the same map, settling each choice a real place could have made either way.",
+ "variants": [
+  "seed",
+  "seeds",
+  "seed's"
+ ]
+}

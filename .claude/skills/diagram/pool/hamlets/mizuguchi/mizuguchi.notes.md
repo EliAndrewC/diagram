@@ -103,6 +103,11 @@ intake on its bank and runs on past the field, and this map draws a weir there.
 `place-names/pool.jsonl`, which carries its kanji and meaning, and not ruled on by the GM. The
 DIRECTION is not invented: it is the bearing of this map's own connector track where it leaves the cluster.*
 
+
+### Features
+
+- **burial ground**: Mizuguchi keeps none of its own: its dead lie in the main village's ground, by the shrine that is the setting's parish temple.
+
 ## 2026-08-17 - re-packed twice: feature 121, then the front-row cap
 
 **Read this entry, not an earlier draft of it.** A first version was written after the feature-121

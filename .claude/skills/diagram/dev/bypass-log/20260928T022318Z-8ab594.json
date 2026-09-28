@@ -1,0 +1,6 @@
+{
+  "utc": "20260928T022318Z",
+  "guard": "pair-hooks",
+  "what": "review prerequisites",
+  "reason": "REVIEW_PREREQ_OK: make verify started the gate beside this review; the review's first stage reads the paired gate"
+}

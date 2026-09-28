@@ -61,6 +61,11 @@ def _point_rect_dist(px: float, py: float, r: Rect) -> float:
     return math.hypot(dx, dy)
 
 
+def _rect_gap(a: Rect, b: Rect) -> float:
+    """The distance between two rectangles' edges (0 when they touch or overlap)."""
+    return math.hypot(max(a.x - b.x2, 0.0, b.x - a.x2), max(a.y - b.y2, 0.0, b.y - a.y2))
+
+
 def fire_water_adrift(plan: ParsedPlan, max_gap_ft: float = TUB_MAX_GAP_FT) -> list[TubAdrift]:
     """Fire-water tubs sitting farther than max_gap_ft from any building.
 
@@ -98,6 +103,9 @@ def tubs_in_buildings(plan: ParsedPlan, min_px: float = TUB_BLDG_MIN_PX) -> list
     it OUT of one, and only the narrow band along the outside wall - where a real tub stands -
     satisfies both. Worst (deepest in) first.
 
+    A ROOFED court counts as a footprint (feature 267 pass 3, the building-review's catch: the placer seated the office
+    hall's tub inside its roofed hearing court): the tub stands under the roof, where no gutter feeds it.
+
     The measure is the DRAWN DISC's penetration past the nearest footprint edge, not its center's
     position (GM catch 2026-07-26, Ubame's karo's-house tub). A center test asks "is the tub
     indoors?", but what the GM sees is INK ON INK, and a tub whose center sits a hair outside the
@@ -112,7 +120,7 @@ def tubs_in_buildings(plan: ParsedPlan, min_px: float = TUB_BLDG_MIN_PX) -> list
     for t in plan.tubs:
         cx, cy, rad = t.x + t.w / 2, t.y + t.h / 2, t.w / 2
         into = 0.0
-        for b in plan.buildings:
+        for b in plan.buildings + plan.roofed_courts:
             gap = _point_rect_dist(cx, cy, b)
             # center outside: the disc reaches (rad - gap) past the edge. Center inside: it reaches
             # its own radius PLUS the center's depth, so the two cases join continuously at gap=0.
@@ -218,7 +226,9 @@ def orphan_group_labels(plan: ParsedPlan, max_ft: float = GROUP_LABEL_MAX_FT) ->
             centers = kinds[kind]
             if centers:
                 lr = Rect(lab.x, lab.y, lab.w, lab.h)
-                d = min(_point_rect_dist(c.x + c.w / 2, c.y + c.h / 2, lr) for c in centers) / FTPX
+                # from the glyph's EDGE: a caption the standard seats just off a well (feature 267) was measured from the
+                # well's middle, and a 10 ft well read its own neighbor as 9 ft away
+                d = min(_rect_gap(c, lr) for c in centers) / FTPX
                 if d > max_ft:
                     out.append(OrphanLabel(lab.text, lab.cx, lab.cy, d))
             break
@@ -333,6 +343,28 @@ class MisplacedBoard:
     gap_ft: float
 
 
+def _main_gate_passage(plan: ParsedPlan) -> list[tuple[float, float]]:
+    """The middle of the passage between the `main gate`'s posts. A nagaya-mon's passage runs THROUGH its gate range,
+    which stands in a wall break wider than any gap the wall-opening scan counts as a gate (feature 267: the range is
+    the wall line, research buildings 420), so a board at that gate read as adrift; the posts say where it is."""
+    posts = plan.gate_posts
+    if not posts:
+        return []
+    return [(sum(r.x + r.w / 2 for r in posts) / len(posts), sum(r.y + r.h / 2 for r in posts) / len(posts))]
+
+
+def main_gate_passage_ft(plan: ParsedPlan) -> float | None:
+    """The clear width between the `main gate`'s two posts, in feet - the ceremonial gate's passage, which a wall-gap scan
+    cannot see where it runs through a gate range standing in a wider break (feature 267). The posts are the group's two
+    SMALLEST rects: a gate drawn through a range tags its passage floor `main gate` too (Hayakawa). None without two."""
+    if len(plan.gate_posts) < 2:
+        return None
+    posts = sorted(sorted(plan.gate_posts, key=lambda r: r.w * r.h)[:2], key=lambda r: (r.x, r.y))
+    a, b = posts
+    across = b.x - (a.x + a.w) if abs(a.y - b.y) < max(a.h, b.h) else b.y - (a.y + a.h)
+    return across / FTPX
+
+
 def notice_board_adrift(plan: ParsedPlan, max_ft: float = NOTICE_BOARD_MAX_FT) -> list[MisplacedBoard]:
     """A notice board (kosatsu) is read where people pass, so it must sit at a gate. Flag any notice
     board farther than max_ft from the nearest wall gate opening.
@@ -342,7 +374,7 @@ def notice_board_adrift(plan: ParsedPlan, max_ft: float = NOTICE_BOARD_MAX_FT) -
     cartographic standard - beside the board at its first free ranked position - the caption can stand a
     board's length off to one side, and a board at the gate read as adrift. The sheet tags the board
     (feature 262), so its own drawn rect is measured; an untagged sheet still falls back to the label."""
-    ops = _gate_openings(plan)
+    ops = _gate_openings(plan) + _main_gate_passage(plan)
     if not ops:
         return []
     boards = [r for r in plan.fills if plan.label_kinds.get(r.pos) == "notice board"]

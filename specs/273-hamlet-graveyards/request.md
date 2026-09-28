@@ -1,0 +1,13 @@
+# Feature 273 - the GM's request, verbatim (2026-09-27, answering feature 272's item on village cremation)
+
+> So I believe that what we have previously decided is that monks handle funerary rites out in the countryside, and even handle quite a lot of the funerary rites in the cities. And that therefore, there is a cremation ground in towns, but also in villages themselves. But note that I said villages and not hamlets. So basically, hamlets are villages that are too small to have a village headsman. They will typically have an elder or someone in a position of authority who is designated but who lacks the same standing legally and in terms of having a stipend and such as the hamlet does and this is often a point of contention and such but the country monk also lives in the main village itself rather than out in the hamlets and the same country monk is serving everyone in the village district where the village district is the village and its surrounding hamlets usually around half a dozen or so So the village itself therefore has a few features which the hamlets do not have. That includes the village shrine, the village headsman's house, and a cremation ground. Now where I'm somewhat more uncertain is whether or not the hamlets would themselves have their own cemeteries, because such things were usually, I think, by a shrine. So it might be that you would have to go into the village to visit your ancestors where they are interred. Or alternatively, It might be that the cremation happens at the cremation ground in the village, but then the bones are brought back and interred in or around the hamlet. I'm not really sure. That might be worth a research pass. I realize that Rakugan is neither China nor Japan, and that there was a variety of practices, but basically if Everything points in one direction, and there was enough commonality for us to say that one of these is correct, then we should go with the one that is correct. Otherwise, it can be a tunable knob, and we can randomly select one or the other for a given hamlet, where perhaps some hamlets have their own graveyard, and then some do not.
+
+(Voice-to-text: "Rakugan" is Rokugan.)
+
+## Context
+
+- Feature 272's `gm-items.md` item 1 asked whether villages burn their own dead; this answers it: yes for villages (and towns),
+  no cremation ground in a hamlet - the record's reading in religion-and-death 530 is now the GM's ruling.
+- Hamlets today (`pool/hamlets/`) draw no graveyard; Kashikawa and Mizuguchi carry one field grave each.
+- Burial as a subject is feature 269's group R1 (religion-and-death 160-206, 270-300, in diagram-supplemental); the hamlet
+  question is not among its sections - offered to 269 before taking it (2026-09-27).
