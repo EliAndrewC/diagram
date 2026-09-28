@@ -45,9 +45,9 @@
   "answers": "92d79f1b3c1e"
  },
  "sr1-f3-strips-scrub": {
-  "value": 192,
+  "value": 104,
   "unit": "tuft bases",
-  "quantity": "grass-tuft bases now in the bare strips the review named: 161 south of the precinct (x 348-432, y 1127-1235) and 31 north of it (y 985-1018), of 232 tuft bases and 40 shrub dots in the shrine-open-ground group",
+  "quantity": "grass-tuft bases now in the bare strips the review named: 83 south of the precinct (x 348-432, y 1127-1235) and 21 north of it (y 985-1018), of 124 tuft bases and 21 shrub dots in the shrine-open-ground group; densities 9.1 (south) and 7.6 (north) per 1,000 sq px against 9.4 in the field just west (whole donor tiles, no overlap)",
   "source": "the mirror's legacy-hand-authored-pool/villages/hoshigaoka/hoshigaoka.svg, shrine-open-ground group - counted 2026-09-28",
   "observed": "2026-09-28",
   "subject": "hoshigaoka",

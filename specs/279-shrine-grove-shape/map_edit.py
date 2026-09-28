@@ -117,7 +117,7 @@ def shift(tag, dx, dy):
 
 # tile the donor over the vacated ground: whole donor widths east, and a half-height step so the tiles do not repeat
 # in one visible grid
-OFFSETS = [(dx, dy) for dx in (60.0, 120.0) for dy in (0.0, -70.0, 70.0, 140.0)]
+OFFSETS = [(dx, dy) for dx in (60.0, 120.0) for dy in (0.0, -140.0, 140.0)]  # whole donor tiles, no overlap: an overlap doubles the density
 new_tufts, new_styled, used = [], [], set()
 for dx, dy in OFFSETS:
     for (bx, by), tags in tufts.items():
