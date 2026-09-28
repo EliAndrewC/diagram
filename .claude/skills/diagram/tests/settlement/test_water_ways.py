@@ -785,14 +785,26 @@ def test_no_pass_deletes_a_lane_record_without_its_ink_slot():
     """The static half of the same rule: a `del` on the lane records anywhere but `drop_lanes` is the defect
     returning, whatever the comment beside it says - five comments said 'the husk goes with the ink' over code
     that took the husk and left the ink."""
-    import ast
     import pathlib
 
+    from tests import _engine_ast
+
     root = pathlib.Path(__file__).resolve().parents[2] / "l7r" / "diagram"
+    # ONE SHARED PARSE, AND ONLY THE FILES THAT SAY `del` (feature 276, FR-001): a `del` statement cannot be written
+    # without the keyword - `del(x)` included, which is why the needle is the bare word and not `del `.
+    offenders = lane_deletes(_engine_ast.engine_modules(sorted(root.rglob("*.py")), ("del",)), root)
+    assert not offenders, "delete lane records through `drop_lanes`, which removes the ink slot too: " + "; ".join(offenders)
+
+
+def lane_deletes(modules, root):  # type: ignore[no-untyped-def]
+    """`path:line del target` for every `del` of a lane record outside `drop_lanes` - the scan above, lifted."""
+    import ast
+
+    from tests import _engine_ast
+
     offenders = []
-    for path in root.rglob("*.py"):
-        tree = ast.parse(path.read_text())
-        for fn in [n for n in ast.walk(tree) if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))]:
+    for path, _source, tree in modules:
+        for fn in [n for n in _engine_ast.walked(tree) if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))]:
             if fn.name == "drop_lanes":
                 continue
             for node in ast.walk(fn):
@@ -801,7 +813,7 @@ def test_no_pass_deletes_a_lane_record_without_its_ink_slot():
                         text = ast.unparse(target)
                         if "lanes" in text and "_lane_ink" not in text:
                             offenders.append(f"{path.relative_to(root)}:{node.lineno} del {text}")
-    assert not offenders, "delete lane records through `drop_lanes`, which removes the ink slot too: " + "; ".join(offenders)
+    return offenders
 
 
 def test_dropping_the_field_spur_is_always_recorded_and_a_passes_own_reason_is_kept():

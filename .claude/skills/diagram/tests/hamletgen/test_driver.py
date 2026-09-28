@@ -160,12 +160,28 @@ def test_every_loop_that_runs_the_stages_sits_inside_a_roll_scope() -> None:
     The one excluded shape is a comprehension that only reads stage attributes - `perf_profile.py`'s
     `names = [st.__name__ ... for st in STAGES]` - which runs no stage: asserted present, so the exclusion
     stays honest rather than silent."""
-    import ast
     import pathlib
 
     from l7r.diagram.hamletgen import driver
+    from tests import _engine_ast
 
     engine = pathlib.Path(driver.__file__).resolve().parents[1]
+    # ONE SHARED PARSE, AND ONLY THE FILES THAT NAME `STAGES` (feature 276, FR-001): a loop whose iterable
+    # references it, or a comprehension over it, cannot exist in a file without the word.
+    found, outside, comprehensions = stage_loops(_engine_ast.engine_modules(sorted(engine.rglob("*.py")), ("STAGES",)), engine)
+    assert len(found) >= 5, f"the engine has fewer stage-running loops than it did (build's two branches and three tools): {found}"
+    assert outside == [], f"stage-running loops outside roll_scope(): {outside}"
+    assert comprehensions >= 1, "the excluded shape (perf_profile's attribute-reading comprehension) is still there; if it went, drop this line"
+
+
+def stage_loops(modules, engine):  # type: ignore[no-untyped-def]
+    """(found, outside, comprehensions) over `(path, source, tree)` triples: every `for` loop whose iterable
+    references `STAGES` and whose body calls its own loop variable, those not inside a `with roll_scope()`, and the
+    count of comprehensions that only read `STAGES` - the test above, lifted so a planted module can be fed to it."""
+    import ast
+
+    from tests import _engine_ast
+
     found: list[str] = []
     outside: list[str] = []
     comprehensions = 0
@@ -176,10 +192,10 @@ def test_every_loop_that_runs_the_stages_sits_inside_a_roll_scope() -> None:
     def loop_targets(target: ast.AST) -> set[str]:
         return {n.id for n in ast.walk(target) if isinstance(n, ast.Name)}
 
-    for path in sorted(engine.rglob("*.py")):
-        tree = ast.parse(path.read_text(encoding="utf-8"))
-        parents: dict[ast.AST, ast.AST] = {c: p for p in ast.walk(tree) for c in ast.iter_child_nodes(p)}
-        for node in ast.walk(tree):
+    for path, _source, tree in modules:
+        nodes = _engine_ast.walked(tree)
+        parents: dict[ast.AST, ast.AST] = {c: p for p in nodes for c in ast.iter_child_nodes(p)}
+        for node in nodes:
             if isinstance(node, ast.ListComp) and mentions_stages(node):
                 comprehensions += 1
             if not isinstance(node, ast.For) or not mentions_stages(node.iter):
@@ -201,9 +217,7 @@ def test_every_loop_that_runs_the_stages_sits_inside_a_roll_scope() -> None:
                 p = parents.get(p)
             if not in_scope:
                 outside.append(where)
-    assert len(found) >= 5, f"the engine has fewer stage-running loops than it did (build's two branches and three tools): {found}"
-    assert outside == [], f"stage-running loops outside roll_scope(): {outside}"
-    assert comprehensions >= 1, "the excluded shape (perf_profile's attribute-reading comprehension) is still there; if it went, drop this line"
+    return found, outside, comprehensions
 
 
 # ---- feature 151 US4: the stage profile prints, and changes nothing -------------------------------

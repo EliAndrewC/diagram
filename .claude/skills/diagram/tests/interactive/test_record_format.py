@@ -105,6 +105,37 @@ def _bounded_in(variant: str, text: str) -> bool:
     return False
 
 
+_WORDY = re.compile(r"\w+")
+_BOUNDED_RUN = re.compile(r"(?<![\w'])\w+")
+
+
+def bounded_words(text: str) -> set[str]:
+    """Every maximal run of word characters in `text` that no apostrophe precedes - built ONCE per text.
+
+    For a variant made only of word characters, `_bounded_in(variant, text)` holds exactly when the variant is one of
+    these runs: its boundary rule (no word character or apostrophe before, no word character after) is the definition
+    of a maximal run with no apostrophe in front (feature 276, FR-002). The lookbehind is the rule's whole one - no
+    word character AND no apostrophe - because a run refused for its apostrophe would otherwise be retried one
+    character in, and `o'koku` would record `oku`: the equality test below holds that case."""
+    return {m.group(0) for m in _BOUNDED_RUN.finditer(text)}
+
+
+def stands_in(variant: str, text: str, words: set[str]) -> bool:
+    """`_bounded_in(variant, text)`, answered from `words` (`bounded_words(text)`) whenever the variant is one word."""
+    return variant in words if _WORDY.fullmatch(variant) else _bounded_in(variant, text)
+
+
+def test_the_word_set_answers_as_the_bounded_search_does() -> None:
+    """FR-002's equality: over text built to hit every boundary the rule names - an apostrophe, an underscore, digits,
+    a non-ASCII word character, the text's own ends, a variant inside a longer word, a repeated near-miss before a hit."""
+    text = "koku o'koku kokudaka xkoku _koku koku_ 2koku koku2 ōkoku kōku sugi. 'sugi sugi's ta-koku (koku) kokukoku koku"
+    words = bounded_words(text)
+    for variant in ("koku", "sugi", "kokudaka", "kōku", "koku2", "_koku", "ta", "s", "o", "kokukoku", "ōkoku", "oku", "okudaka", "ugi", "missing"):
+        assert stands_in(variant, text, words) == _bounded_in(variant, text), variant
+    for variant in ("ta-koku", "sugi's", "(koku)", "o'koku"):  # not one word: the bounded search answers, as before
+        assert stands_in(variant, text, words) == _bounded_in(variant, text), variant
+
+
 def test_bounded_in_reads_the_boundaries_as_the_pattern_did() -> None:
     assert _bounded_in("koku", "the koku of rice") and _bounded_in("koku", "koku")
     assert not _bounded_in("koku", "kokudaka") and not _bounded_in("koku", "o'koku") and not _bounded_in("koku", "xkoku")
@@ -120,7 +151,8 @@ def test_every_glossary_term_is_used_by_a_modal_or_a_record_page() -> None:
 
     in_modals = {g["term"] for g in glossary_for(explanations(set(CLASSES)))} | {g["term"] for g in glossary_for(explanations(set(COMPOUND_CLASSES), registry=COMPOUND_CLASSES))}
     record = " ".join(visible_text(_COMMENT.sub(" ", re.sub(r"<code>.*?</code>", " ", p.read_text(encoding="utf-8"), flags=re.S))) for p in _all_pages()).lower()
-    in_record = {term for term, (variants, _) in GLOSSARY.items() if any(_bounded_in(v.lower(), record) for v in variants)}
+    words = bounded_words(record)  # built once: a one-word variant is a set lookup, not a search of the whole record (FR-002)
+    in_record = {term for term, (variants, _) in GLOSSARY.items() if any(stands_in(v.lower(), record, words) for v in variants)}
     unused = set(GLOSSARY) - in_modals - in_record
     assert not unused, f"glossary terms no modal and no record page uses: {sorted(unused)}"
     assert {"kainyo", "sugi"} <= in_record - in_modals, "record-only terms are what this test exists for (non-vacuity)"

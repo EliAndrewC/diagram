@@ -1,10 +1,11 @@
 """Feature 276's measurement harness - the SAME code takes the before and the after figures.
 
-Run it from the skill directory through a pytest node (the engine refuses in-process calls outside make):
+Run it through make (the engine refuses in-process calls outside it):
 
-    cp ../../../specs/276-engine-hotspots-and-test-scans/harness.py tests/test_zz_harness_276_tmp.py
-    make test-file FILE=tests/test_zz_harness_276_tmp.py      # writes $H276_OUT (default /tmp/h276.json)
-    rm tests/test_zz_harness_276_tmp.py
+    make -C .claude/skills/diagram spec-harness SPEC=specs/276-engine-hotspots-and-test-scans OUT=<json>
+
+`measure.py` beside it does that and writes the AFTER figures into `measurements.json` (what `make figures` re-runs);
+the BEFORE figures are one-time observations of the unmodified code and carry no command.
 
 Every timing is wall-clock, unprofiled, the best of `REPEAT` runs in one process (the first run pays imports).
 What each section measures:
@@ -30,7 +31,7 @@ from pathlib import Path
 
 REPEAT = 3
 SKILL = Path(__file__).resolve().parents[1] if (Path(__file__).resolve().parents[1] / "Makefile").exists() else Path.cwd()
-OUT = Path(os.environ.get("H276_OUT", "/tmp/h276.json"))
+OUT = Path(os.environ.get("HARNESS_OUT") or os.environ.get("H276_OUT") or "/tmp/h276.json")
 
 TESTS = [
     "tests/test_memory.py::test_no_engine_module_imports_a_heavy_library_at_import_time",
@@ -51,16 +52,25 @@ TESTS = [
 _DUR = re.compile(r"^([0-9.]+)s (setup|call|teardown)\s+(\S+)", re.M)
 
 
+def _run(nids: list[str]) -> float:
+    """Setup + call time of `nids` run together in ONE fresh interpreter, xdist off; -1 when any fails."""
+    r = subprocess.run(
+        [sys.executable, "-m", "pytest", "-q", "-p", "no:xdist", "-p", "no:cacheprovider", "--no-cov", "--durations=0", "--durations-min=0", *nids],
+        cwd=SKILL, capture_output=True, text=True,
+        env={**os.environ, "GATE_NO_CACHE": "1"},  # a comb test must BUILD, not read the roll cache
+    )
+    tot = sum(float(m.group(1)) for m in _DUR.finditer(r.stdout) if m.group(2) != "teardown")
+    return round(tot, 3) if r.returncode == 0 else -1.0
+
+
+AST_GROUP = TESTS[:4]
+RECORD_GROUP = [t for t in TESTS if "interactive/" in t]
+
+
 def _tests() -> dict[str, float]:
-    out = {}
-    for nid in TESTS:
-        r = subprocess.run(
-            [sys.executable, "-m", "pytest", "-q", "-p", "no:xdist", "-p", "no:cacheprovider", "--no-cov", "--durations=0", "--durations-min=0", nid],
-            cwd=SKILL, capture_output=True, text=True,
-            env={**os.environ, "GATE_NO_CACHE": "1"},  # a comb test must BUILD, not read the roll cache
-        )
-        tot = sum(float(m.group(1)) for m in _DUR.finditer(r.stdout) if m.group(2) != "teardown")
-        out[nid] = round(tot, 3) if r.returncode == 0 else -1.0
+    out = {nid: _run([nid]) for nid in TESTS}
+    out["group:ast-four-together"] = _run(AST_GROUP)  # SC-001: the four share one parse in one process
+    out["group:record-five-together"] = _run(RECORD_GROUP)  # SC-001a: the five share their tables
     return out
 
 

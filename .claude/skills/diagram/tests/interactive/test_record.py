@@ -21,10 +21,22 @@ def _pages() -> list[pathlib.Path]:
     return sorted(root.glob("*.html")) + sorted((root / "cities").glob("*.html")) + sorted((root / "citations").glob("*.html")) + sorted((root / "citations" / "cities").glob("*.html"))
 
 
-@pytest.mark.parametrize("page", _pages(), ids=lambda p: str(p.relative_to(RESEARCH_DIR)))
-def test_every_link_in_a_record_page_resolves(page: pathlib.Path) -> None:
+_IDS: dict[tuple[str, int, int], set[str]] = {}
+
+
+def _ids_of(path: pathlib.Path) -> set[str]:
+    """The ids a page declares, read ONCE per content (feature 276, FR-002): the link test used to re-read and re-scan
+    the target page for every link into it - 544 scans for one page - and a page's ids do not change between links."""
+    st = path.stat()
+    key = (str(path), st.st_mtime_ns, st.st_size)
+    if key not in _IDS:
+        _IDS[key] = set(_ID.findall(path.read_text(encoding="utf-8")))
+    return _IDS[key]
+
+
+def broken_links(page: pathlib.Path) -> list[str]:
+    """Every link in `page` that names a missing file or a missing id - the test below, lifted for the planted case."""
     text = page.read_text(encoding="utf-8")
-    ids_here = set(_ID.findall(text))
     bad = []
     for href in _HREF.findall(text):
         if href.startswith(("http://", "https://", "mailto:")):
@@ -37,12 +49,24 @@ def test_every_link_in_a_record_page_resolves(page: pathlib.Path) -> None:
                 continue
             if path.suffix != ".html":
                 continue  # a Markdown target's anchors are GitHub's to render; the file existing is the check here
-            ids = set(_ID.findall(path.read_text(encoding="utf-8")))
+            ids = _ids_of(path)
         else:
-            ids = ids_here
+            ids = _ids_of(page)
         if frag and frag not in ids:
             bad.append(f"{href}: no id {frag!r} in {target or page.name}")
+    return bad
+
+
+@pytest.mark.parametrize("page", _pages(), ids=lambda p: str(p.relative_to(RESEARCH_DIR)))
+def test_every_link_in_a_record_page_resolves(page: pathlib.Path) -> None:
+    bad = broken_links(page)
     assert not bad, f"{page.name}:\n" + "\n".join(bad[:20])
+
+
+def test_a_broken_link_and_a_missing_id_are_reported(tmp_path: pathlib.Path) -> None:
+    (tmp_path / "b.html").write_text('<h2 id="here">x</h2>')
+    (tmp_path / "a.html").write_text('<a href="b.html#here">ok</a> <a href="b.html#gone">x</a> <a href="nope.html">y</a> <p id="self"></p><a href="#self">z</a>')
+    assert broken_links(tmp_path / "a.html") == ["b.html#gone: no id 'gone' in b.html", "nope.html: no such file"]
 
 
 _CONVERTED = {
@@ -110,7 +134,7 @@ def test_no_md_token_anywhere_resolves_to_a_converted_record_file() -> None:
     rewriting a recorded command to satisfy this test would falsify the corpus it exists to replay."""
     root = _repo_root()
     files = subprocess.run(["git", "-C", str(root), "ls-files"], capture_output=True, text=True, check=True).stdout.split("\n")
-    hits = []
+    texts: dict[str, str] = {}
     for rel in files:
         if not rel or rel.startswith(("specs/", "scripts/fixtures/")) or rel == f"{_SKILL}/research/README.md":
             continue
@@ -121,13 +145,29 @@ def test_no_md_token_anywhere_resolves_to_a_converted_record_file() -> None:
         if rel.startswith("scripts/fixtures/"):
             continue
         try:
-            text = (root / rel).read_text(encoding="utf-8")
+            texts[rel] = (root / rel).read_text(encoding="utf-8")
         except UnicodeDecodeError, OSError:
+            continue
+    hits = md_token_hits(texts)
+    assert not hits, "tokens naming the deleted Markdown:\n" + "\n".join(hits[:20])
+
+
+def md_token_hits(texts: dict[str, str]) -> list[str]:
+    """`rel: token` for every `.md` token resolving to a converted record file. A text with no `.md` in it is skipped
+    before the pattern runs (feature 276, FR-002): `_MD_TOKEN` cannot match without that literal."""
+    hits = []
+    for rel, text in texts.items():
+        if ".md" not in text:
             continue
         for m in _MD_TOKEN.finditer(text):
             if _resolves_to_converted(m.group(1), rel):
                 hits.append(f"{rel}: {m.group(1)}")
-    assert not hits, "tokens naming the deleted Markdown:\n" + "\n".join(hits[:20])
+    return hits
+
+
+def test_a_token_naming_a_converted_file_is_reported() -> None:
+    texts = {"docs/a.md": f"see {_SKILL}/research/water.md for it", "docs/b.md": "nothing here", "docs/c.py": "x = 1"}
+    assert md_token_hits(texts) == [f"docs/a.md: {_SKILL}/research/water.md"]
 
 
 #: THE RULE FILES RETIRED INTO THE RECORD (feature 229, GM 2026-09-12: the settlements rule files "can be deleted
@@ -196,8 +236,8 @@ def names_a_retired_rule_file(token: str, containing_rel: str, exists: set[str])
 def retired_rule_file_hits(files: dict[str, str], exists: set[str]) -> list[str]:
     hits = []
     for rel, text in files.items():
-        if rel.startswith(_RETIRED_EXEMPT_PREFIXES) or rel in _RETIRED_EXEMPT_FILES:
-            continue
+        if rel.startswith(_RETIRED_EXEMPT_PREFIXES) or rel in _RETIRED_EXEMPT_FILES or ".md" not in text:
+            continue  # `.md` absent: `_MD_TOKEN` cannot match (feature 276, FR-002)
         for m in _MD_TOKEN.finditer(text):
             if names_a_retired_rule_file(m.group(1), rel, exists):
                 hits.append(f"{rel}: {m.group(1)}")
