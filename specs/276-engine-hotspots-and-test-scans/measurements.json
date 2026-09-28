@@ -297,44 +297,44 @@
   "before-dense-60-nucleated-houses-five": {
     "value": 285,
     "unit": "houses",
-    "quantity": "houses seated from 60 seeds summed over five layouts, nucleated path, the old (position-keyed) rolls",
-    "source": "a probe test (scratch) summing the placement primitive's seated houses over five jitter layouts per density, with the per-household roll switched OFF (the old position-keyed rolls; every other change of this feature is exact, so this is the old placement) - 2026-09-28",
-    "observed": "2026-09-28"
+    "quantity": "houses seated from 60 seeds summed over five layouts, nucleated path, on the UNMODIFIED engine (9f28392f6)",
+    "source": "measure_before_five.py - a detached worktree of 9f28392f6, the harness's five-layout loop",
+    "command": "python3 specs/276-engine-hotspots-and-test-scans/measure_before_five.py"
   },
   "before-dense-120-nucleated-houses-five": {
-    "value": 563,
+    "value": 567,
     "unit": "houses",
-    "quantity": "houses seated from 120 seeds summed over five layouts, nucleated path, the old (position-keyed) rolls",
-    "source": "a probe test (scratch) summing the placement primitive's seated houses over five jitter layouts per density, with the per-household roll switched OFF (the old position-keyed rolls; every other change of this feature is exact, so this is the old placement) - 2026-09-28",
-    "observed": "2026-09-28"
+    "quantity": "houses seated from 120 seeds summed over five layouts, nucleated path, on the UNMODIFIED engine (9f28392f6)",
+    "source": "measure_before_five.py - a detached worktree of 9f28392f6, the harness's five-layout loop",
+    "command": "python3 specs/276-engine-hotspots-and-test-scans/measure_before_five.py"
   },
   "before-dense-240-nucleated-houses-five": {
-    "value": 1138,
+    "value": 1140,
     "unit": "houses",
-    "quantity": "houses seated from 240 seeds summed over five layouts, nucleated path, the old (position-keyed) rolls",
-    "source": "a probe test (scratch) summing the placement primitive's seated houses over five jitter layouts per density, with the per-household roll switched OFF (the old position-keyed rolls; every other change of this feature is exact, so this is the old placement) - 2026-09-28",
-    "observed": "2026-09-28"
+    "quantity": "houses seated from 240 seeds summed over five layouts, nucleated path, on the UNMODIFIED engine (9f28392f6)",
+    "source": "measure_before_five.py - a detached worktree of 9f28392f6, the harness's five-layout loop",
+    "command": "python3 specs/276-engine-hotspots-and-test-scans/measure_before_five.py"
   },
   "before-dense-60-dispersed-houses-five": {
     "value": 188,
     "unit": "houses",
-    "quantity": "houses seated from 60 seeds summed over five layouts, dispersed path, the old (position-keyed) rolls",
-    "source": "a probe test (scratch) summing the placement primitive's seated houses over five jitter layouts per density, with the per-household roll switched OFF (the old position-keyed rolls; every other change of this feature is exact, so this is the old placement) - 2026-09-28",
-    "observed": "2026-09-28"
+    "quantity": "houses seated from 60 seeds summed over five layouts, dispersed path, on the UNMODIFIED engine (9f28392f6)",
+    "source": "measure_before_five.py - a detached worktree of 9f28392f6, the harness's five-layout loop",
+    "command": "python3 specs/276-engine-hotspots-and-test-scans/measure_before_five.py"
   },
   "before-dense-120-dispersed-houses-five": {
     "value": 368,
     "unit": "houses",
-    "quantity": "houses seated from 120 seeds summed over five layouts, dispersed path, the old (position-keyed) rolls",
-    "source": "a probe test (scratch) summing the placement primitive's seated houses over five jitter layouts per density, with the per-household roll switched OFF (the old position-keyed rolls; every other change of this feature is exact, so this is the old placement) - 2026-09-28",
-    "observed": "2026-09-28"
+    "quantity": "houses seated from 120 seeds summed over five layouts, dispersed path, on the UNMODIFIED engine (9f28392f6)",
+    "source": "measure_before_five.py - a detached worktree of 9f28392f6, the harness's five-layout loop",
+    "command": "python3 specs/276-engine-hotspots-and-test-scans/measure_before_five.py"
   },
   "before-dense-240-dispersed-houses-five": {
     "value": 703,
     "unit": "houses",
-    "quantity": "houses seated from 240 seeds summed over five layouts, dispersed path, the old (position-keyed) rolls",
-    "source": "a probe test (scratch) summing the placement primitive's seated houses over five jitter layouts per density, with the per-household roll switched OFF (the old position-keyed rolls; every other change of this feature is exact, so this is the old placement) - 2026-09-28",
-    "observed": "2026-09-28"
+    "quantity": "houses seated from 240 seeds summed over five layouts, dispersed path, on the UNMODIFIED engine (9f28392f6)",
+    "source": "measure_before_five.py - a detached worktree of 9f28392f6, the harness's five-layout loop",
+    "command": "python3 specs/276-engine-hotspots-and-test-scans/measure_before_five.py"
   },
   "household-dense-60-nucleated-houses-five": {
     "value": 281,
@@ -383,6 +383,34 @@
     "unit": "houses",
     "quantity": "houses seated from 240 seeds on the single harness layout, dispersed path, the per-household roll",
     "source": "harness.py homesteads section (scratch run h-home-d10.json) after D10, 2026-09-28",
+    "observed": "2026-09-28"
+  },
+  "direct-dense-120-nucleated-houses-five": {
+    "value": 567,
+    "unit": "houses",
+    "quantity": "houses seated from 120 seeds over five layouts, nucleated, with the per-household roll OFF and the bundle built directly at the seat (no template translation) - equals the unmodified engine",
+    "source": "a probe test (scratch) replacing _bundle_geom with a direct _bundle_layout at (hx, hy), 2026-09-28",
+    "observed": "2026-09-28"
+  },
+  "direct-dense-240-nucleated-houses-five": {
+    "value": 1140,
+    "unit": "houses",
+    "quantity": "as direct-dense-120, at 240 seeds",
+    "source": "the same probe",
+    "observed": "2026-09-28"
+  },
+  "off-dense-120-nucleated-houses-five": {
+    "value": 563,
+    "unit": "houses",
+    "quantity": "houses seated from 120 seeds over five layouts, nucleated, the per-household roll OFF but the template translated (the float reassociation alone)",
+    "source": "the same probe",
+    "observed": "2026-09-28"
+  },
+  "off-dense-240-nucleated-houses-five": {
+    "value": 1138,
+    "unit": "houses",
+    "quantity": "as off-dense-120, at 240 seeds",
+    "source": "the same probe",
     "observed": "2026-09-28"
   }
 }

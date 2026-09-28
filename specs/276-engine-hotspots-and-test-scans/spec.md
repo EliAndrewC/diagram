@@ -142,8 +142,9 @@ The track stage's path checks read the static water and crop geometry from an in
 - **FR-006 Every rule still holds, and every settlement stays what it was.** After FR-003 to FR-005 every live pool
   map regenerates, `make done` is green at the `100%` floor, and every gate rule passes. The GM's condition -
   shifts are allowed "as long as the underlying reality of what these settlements are generally like stays the
-  same" - is held concretely: every pool map and every placement-test scenario seats at least as many houses
-  as today, with no new or larger shortfall, and keeps its forms (dispersed or nucleated, the headman's house);
+  same" - is held concretely: every pool map, the rescue-rounds scenario and the 10- and 20-household toys seat at least
+  as many houses as today (the synthetic constant-density scenario alone is judged by SC-003's five-layout total within
+  `2%`, Amendment 2), with no new or larger shortfall, and keeps its forms (dispersed or nucleated, the headman's house);
   each moved map's research entry gives its houses, paddies and ways before and after, and a material change is
   a finding to fix, not a report. Byte-identity is not required (the GM, request.md).
 - **FR-007 Measured, before and after.** The harness (`harness.py`) records, on the same machine and code path:
@@ -188,8 +189,8 @@ The track stage's path checks read the static water and crop geometry from an in
 - **SC-003** (FR-003): At constant density the placement primitive's cost per seated house is flat ON BOTH PATHS: from 60
   to 240 seeds it grows by at most `1.25x` - before, nucleated 0.0009 s to 0.0017 s (m:before-dense-60-nucleated-per-house,
   m:before-dense-240-nucleated-per-house), which the unmodified engine fails - and neither path seats materially fewer
-  houses: summed over five layouts of each density, each path's total is within `2%` of the old rolls' total (before,
-  nucleated 285, 563 and 1138 at 60, 120 and 240 seeds - m:before-dense-60-nucleated-houses-five,
+  houses: summed over five layouts of each density, each path's total is within `2%` of the UNMODIFIED engine's total (before,
+  nucleated 285, 567 and 1140 at 60, 120 and 240 seeds - m:before-dense-60-nucleated-houses-five,
   m:before-dense-120-nucleated-houses-five, m:before-dense-240-nucleated-houses-five - and dispersed 188, 368 and 703,
   m:before-dense-60-dispersed-houses-five, m:before-dense-120-dispersed-houses-five, m:before-dense-240-dispersed-houses-five;
   Amendment 2). The DISPERSED path is also held to a deterministic target at density, because its timings are noise-bound (the
@@ -204,7 +205,7 @@ The track stage's path checks read the static water and crop geometry from an in
   its time re-taken once `seg_intersect` was bounded, 0.139 s (m:before-track-checks-corrected-s; 0.966 s was the uncorrected one,
   m:before-track-checks-s) - the stage is not slower than 1.308 s (m:before-track-stage-s), and the checks' counts equal the full scan's on every candidate.
 - **SC-006** (FR-006): Every live pool map regenerates with every gate rule passing, `make done` is green at `100%`, and FR-006's
-  house counts and forms hold on every pool map and placement scenario.
+  house counts and forms hold on every pool map, the rescue-rounds scenario and the two toys.
 - **SC-007** (FR-007, FR-008): every before- and after-figure SC-001 to SC-006 names is in `measurements.json`, the
   after-figures carrying the command that re-runs them (`make figures`), and `dev/performance.md` holds the three shapes
   this feature found, each with its measurement.
@@ -291,8 +292,15 @@ m:household-dense-240-dispersed-houses) - while over five layouts it went from 7
 total over five layouts, within `2%`. Stated plainly, because it is the judgment this amendment asks for: on the NUCLEATED
 path the five-layout totals read 281, 560 and 1133 (m:household-dense-60-nucleated-houses-five,
 m:household-dense-120-nucleated-houses-five, m:household-dense-240-nucleated-houses-five - the per-household roll ON)
-against 285, 563 and 1138 (m:before-dense-60-nucleated-houses-five, m:before-dense-120-nucleated-houses-five,
-m:before-dense-240-nucleated-houses-five - the old rolls) (-1.4%, -0.5%, -0.4%) - small and
-consistent, most likely because a seat moved clear of a neighbor used to be re-rolled at its new position, a second chance
-the household's own roll no longer gives. The pool hamlets' own counts are held separately by FR-006 (every household
-seated), and checked when the pool regenerates.
+against 285, 567 and 1140 on the unmodified engine (m:before-dense-60-nucleated-houses-five,
+m:before-dense-120-nucleated-houses-five, m:before-dense-240-nucleated-houses-five; re-runnable: `measure_before_five.py`
+checks the base commit out and counts) - -1.4%, -1.2% and -0.6%. TWO causes, both measured, neither an index deciding:
+(1) the per-household roll itself (a seat moved clear of a neighbor used to be re-rolled at its new position); (2) the
+bundle TEMPLATE's translation, which re-associates the float sums that place each part (`(offset) + hx` where the old code
+summed `hx + ...` term by term) - differences under a pixel's billionth that flip a strict comparison at a few seats: with
+the roll switched OFF the translated template seats 563 and 1138 (m:off-dense-120-nucleated-houses-five,
+m:off-dense-240-nucleated-houses-five), and the same code building each bundle directly at its seat seats 567 and 1140
+(m:direct-dense-120-nucleated-houses-five, m:direct-dense-240-nucleated-houses-five), the unmodified engine's exactly - so
+the indexes and pre-screens change no seat (their own tests assert it, `test_the_free_ground_changes_no_seat`). Both causes
+belong to D10, whose shifts the plan review ruled LEGITIMATE. The pool hamlets, the rescue-rounds scenario and the 10- and 20-household toys stay under FR-006's own rule - at least
+as many houses as today, no new or larger shortfall - checked when they run and when the pool regenerates.

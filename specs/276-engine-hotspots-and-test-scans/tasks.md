@@ -26,14 +26,18 @@ Order: F's harness target first (so every after-figure is taken the same way), t
 
 ## US2 - a house is seated without testing a hundred wrong places first (P1)
 
-- [ ] T06 [US2] The placed-house index: `M["houses"]` and `placed` as `Indexed` (`settlement/core.py`, `settlement/rolling/farmsteads.py`), every per-candidate scan in `settlement/rolling/fit.py` answered from an `indexed_grid`; the equality tests against the linear forms (D7)
+- [x] T06 [US2] The placed-house index: `M["houses"]` and `placed` as `Indexed` (`settlement/core.py`, `settlement/rolling/farmsteads.py`), every per-candidate scan in `settlement/rolling/fit.py` answered from an `indexed_grid`; the equality tests against the linear forms (D7)
       research: rendering
-- [ ] T07 [US2] The static ground index: `SiteCorridors` vertex and hole grids in `hamletgen/homesteads/boundary.py`; the equality test (D8)
+      verify: DONE. M[houses] and placed Indexed (core.py, farmsteads.py rebinds, _solve_homestead bumps on its in-place move); every per-candidate scan in fit.py from houses_meeting / the placed reach index; test_the_house_and_placed_indexes_answer_every_fit_rule_as_the_scans_did (both paths, 400 candidates, 40+ houses) + the moved-record test green
+- [x] T07 [US2] The static ground index: `SiteCorridors` vertex and hole grids in `hamletgen/homesteads/boundary.py`; the equality test (D8)
       research: rendering
-- [ ] T08 [US2] The free-ground index (D9): static surely-taken cells where a site boundary is installed (empty otherwise) plus the placed boxes added as each bundle lands (D7's grid); asked first for every spiral offset and every `_slide` step (dispersed) and, on the nucleated path, for the placed-box hits and the static ground only where the loop judges ground; the dispersed pre-screen behind it (D9a); in `settlement/rolling/place.py`, `settlement/rolling/fit.py` and `hamletgen/homesteads/boundary.py`; the same-seat tests on both paths, including the whole-envelope-clear, side-on-taken-ground case
+      verify: DONE. SiteCorridors: a vertex grid per ring, a hole grid, one grid lookup per rectangle; test_the_indexed_hit_points_answer_as_the_linear_scan_did (1,800 random rectangles over rings with holes) green
+- [x] T08 [US2] The free-ground index (D9): static surely-taken cells where a site boundary is installed (empty otherwise) plus the placed boxes added as each bundle lands (D7's grid); asked first for every spiral offset and every `_slide` step (dispersed) and, on the nucleated path, for the placed-box hits and the static ground only where the loop judges ground; the dispersed pre-screen behind it (D9a); in `settlement/rolling/place.py`, `settlement/rolling/fit.py` and `hamletgen/homesteads/boundary.py`; the same-seat tests on both paths, including the whole-envelope-clear, side-on-taken-ground case
       research: rendering
-- [ ] T09 [US2] The unraked bundle template with the rake per candidate, and the household-rolled yard, garden jitter and bed split, in `settlement/rolling/bundle.py` / `homestead_parts/yards.py` (D10); SC-002 and SC-003 by the harness on both paths
+      verify: DONE. FreeGround (static surely-taken cells where a boundary is installed) + the placed index; _seat_refused and _bundle_refused ahead of every spiral offset and slide step (dispersed); nucleated prune only where the loop judges ground; test_the_free_ground_changes_no_seat (both paths, rescue + toy, all pre-screens off vs on), the envelope-clear case, and the surely-taken cells refused by the real ground test - all green; plan review 4 CLEAR
+- [x] T09 [US2] The unraked bundle template with the rake per candidate, and the household-rolled yard, garden jitter and bed split, in `settlement/rolling/bundle.py` / `homestead_parts/yards.py` (D10); SC-002 and SC-003 by the harness on both paths
       research: rendering
+      verify: DONE. _bundle_geom = the unraked _bundle_layout built once per household and size, moved and raked per seat; yard, garden jitter and bed split rolled at the household seat; dispersed rescue 2.718 s -> 0.352 s with 46781 -> 128 full fit tests, 240 seeds 29372 -> 304, per house flat on both paths (harness scratch runs; after-figures recorded at T18)
 - [x] T09a [US2] `_toy_hamlet` sets the placer's own nucleated switch; the spur test says it wants a dispersed cluster (D20)
       research: rendering
       verify: DONE. _toy_hamlet sets s._nucleated from its plan; the spur test asks for a dispersed cluster explicitly; hamletgen 511 green

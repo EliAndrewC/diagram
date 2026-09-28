@@ -360,26 +360,41 @@ def _visible_parts(plots: list[dict[str, Any]], cell: float, neck: float = 0.0) 
         gk = Polygon(ring).buffer(0) if len(ring) >= 3 else None
         if isinstance(gk, Polygon) and not gk.is_empty:
             shapes.append((k, gk))
-    tree = STRtree([gk for _k, gk in shapes])
+    if not shapes:
+        return
+    import shapely
+
+    # EVERY PLOT AT ONCE (feature 276, FR-004, plan D14). Each plot's visible part is cut against the ORIGINAL shapes of the
+    # later plots it meets - never against one already cut here - so no plot's answer depends on another's, and the pass
+    # runs as array calls: one tree query for every intersecting pair (the `intersects` the loop asked), one difference,
+    # one opening at the neck. The per-plot bookkeeping below is the loop's, plot by plot, walking back from the last.
+    geoms = [gk for _k, gk in shapes]
+    tree = STRtree(geoms)
+    src, dst = tree.query(geoms, predicate="intersects")
+    later_of: dict[int, list[int]] = {}
+    for a, b in zip(src.tolist(), dst.tolist(), strict=True):
+        if shapes[b][0] > shapes[a][0]:
+            later_of.setdefault(a, []).append(b)
+    order = sorted(later_of, reverse=True)
+    viss: Any = []
+    if order:
+        viss = shapely.difference([geoms[a] for a in order], [shapely.union_all([geoms[b] for b in later_of[a]]) for a in order])
+        if neck > 0.0:
+            # ...AND OPENED AT THE WIDTH FLOOR (settlement-review, feature 230 pass 11). Where two rings only partly
+            # overlapped, the cut leaves the earlier plot a thin tail along its neighbor - six on Kashikawa, 46 to 81 ft
+            # long and under 5 ft wide, none on main - which draws as a doubled bund. Opening at half the floor (`neck`,
+            # 2.5 ft) sheds the tail, and its ground goes back to the bare pocket like any other scrap.
+            viss = shapely.intersection(shapely.buffer(shapely.buffer(viss, -neck, join_style="mitre"), neck, join_style="mitre"), viss)
     drop: list[int] = []
-    for k, g in reversed(shapes):
-        i = k
-        later = [shapes[int(n)][1] for n in tree.query(g) if shapes[int(n)][0] > i and shapes[int(n)][1].intersects(g)]
-        if later:
-            vis = g.difference(unary_union(later))
-            if neck > 0.0:
-                # ...AND OPENED AT THE WIDTH FLOOR (settlement-review, feature 230 pass 11). Where two rings only partly
-                # overlapped, the cut leaves the earlier plot a thin tail along its neighbor - six on Kashikawa, 46 to 81 ft
-                # long and under 5 ft wide, none on main - which draws as a doubled bund. Opening at half the floor (`neck`,
-                # 2.5 ft) sheds the tail, and its ground goes back to the bare pocket like any other scrap.
-                vis = vis.buffer(-neck, join_style="mitre").buffer(neck, join_style="mitre").intersection(vis)
-            if vis.area < g.area - 1.0:
-                parts = sorted(_parts(vis), key=lambda q: -q.area)
-                best = _ring(parts[0]) if parts else []
-                if not parts or parts[0].area < _TOE_MIN_AREA * cell or len(best) < 3 or pointed_ring(best, _TOE_MIN_APEX) or pointed_ring(dedup_ring(best, 1.0), _TOE_MIN_APEX):
-                    drop.append(i)
-                else:
-                    plots[i]["poly"] = best
+    for a, vis in zip(order, list(viss), strict=True):
+        i, g = shapes[a]
+        if vis.area < g.area - 1.0:
+            parts = sorted(_parts(vis), key=lambda q: -q.area)
+            best = _ring(parts[0]) if parts else []
+            if not parts or parts[0].area < _TOE_MIN_AREA * cell or len(best) < 3 or pointed_ring(best, _TOE_MIN_APEX) or pointed_ring(dedup_ring(best, 1.0), _TOE_MIN_APEX):
+                drop.append(i)
+            else:
+                plots[i]["poly"] = best
     for i in sorted(drop, reverse=True):
         del plots[i]
 
