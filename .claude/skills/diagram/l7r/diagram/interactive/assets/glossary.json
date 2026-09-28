@@ -2310,7 +2310,9 @@
   "def": "The land-survey register: the book of every plot and homestead lot in a village, with its grade, area and holder.",
   "variants": [
    "kenchicho",
-   "kenchi-cho"
+   "kenchi-cho",
+   "survey register",
+   "survey registers"
   ]
  },
  "kera": {
@@ -2369,7 +2371,8 @@
    "land readjustment",
    "land consolidation",
    "consolidated paddy",
-   "consolidated paddies"
+   "consolidated paddies",
+   "readjustment"
   ]
  },
  "koedame": {
@@ -3514,7 +3517,9 @@
  "shinden": {
   "def": "New fields: land reclaimed and settled by allotment in the Edo period, each household given a homestead and a strip.",
   "variants": [
-   "shinden"
+   "shinden",
+   "new field",
+   "new fields"
   ]
  },
  "shirimito": {
@@ -3896,7 +3901,8 @@
  "tillering": {
   "def": "The stage after rooting when a rice plant throws up side shoots; shallow warm water encourages it.",
   "variants": [
-   "tillering"
+   "tillering",
+   "tillered"
   ]
  },
  "toe": {
@@ -10063,6 +10069,99 @@
   "def": "Timing each turn at the irrigation water by how long a fixed number of incense sticks takes to burn; used where severe drought forced some paddies to be planted with dry field crops instead.",
   "variants": [
    "senkomizu"
+  ]
+ },
+ "Musashino": {
+  "def": "The broad upland plateau of Musashi province west of Edo, settled in the Edo period by new-field villages laid out in rows, whose dry fields grew barley, millets and vegetables.",
+  "variants": [
+   "Musashino",
+   "Musashino plateau"
+  ]
+ },
+ "thousand-tooth thresher": {
+  "def": "An Edo-period threshing frame, a comb of long iron teeth that cut rice stalks were pulled through to strip off the grain; it replaced threshing chopsticks.",
+  "variants": [
+   "thousand-tooth thresher",
+   "senba-koki",
+   "senbakoki"
+  ]
+ },
+ "gou": {
+  "def": "In the Rites of Zhou's scheme for laying out the countryside, the channel serving ten farmers' allotments; it has a field road on it.",
+  "variants": [
+   "gou"
+  ]
+ },
+ "xu": {
+  "def": "In the Rites of Zhou's scheme for laying out the countryside, the channel serving a hundred farmers' allotments; it has a lane on it.",
+  "variants": [
+   "xu"
+  ]
+ },
+ "kuai": {
+  "def": "In the Rites of Zhou's scheme for laying out the countryside, the channel serving a thousand farmers' allotments; it has a road on it. Above it only the river remains.",
+  "variants": [
+   "kuai"
+  ]
+ },
+ "Taiko survey": {
+  "def": "The land survey that Toyotomi Hideyoshi, the Taiko, carried out across Japan in the 1580s and 1590s. It replaced the older great, half and small units of area with the tan of 300 bu.",
+  "variants": [
+   "Taiko survey",
+   "Taiko kenchi"
+  ]
+ },
+ "Beiyang government": {
+  "def": "The government of the Republic of China seated at Beijing from 1912 to 1928, run by the generals of the Qing dynasty's old northern (Beiyang) army.",
+  "variants": [
+   "Beiyang government"
+  ]
+ },
+ "sui channel": {
+  "def": "In the Rites of Zhou's scheme for laying out the countryside, the smallest channel, the one between two farmers' allotments; it has a path along it.",
+  "variants": [
+   "sui channel"
+  ]
+ },
+ "proso": {
+  "def": "A small-grained millet (Japanese kibi), grown as a summer grain on dry fields.",
+  "variants": [
+   "proso",
+   "proso millet"
+  ]
+ },
+ "foxtail millet": {
+  "def": "A millet (Japanese awa) with a dense, drooping, bristly seed head, one of the chief grains of premodern dry fields.",
+  "variants": [
+   "foxtail millet",
+   "foxtail millets"
+  ]
+ },
+ "seed drill": {
+  "def": "A sowing tool drawn by an ox that drops seed through its hollow legs into the soil in straight rows. The Qimin yaoshu names a two-legged one.",
+  "variants": [
+   "seed drill",
+   "seed drills"
+  ]
+ },
+ "Hou Ji": {
+  "def": "The legendary first farmer of Chinese tradition, honored as the founder of grain growing and the ancestor of the Zhou royal house.",
+  "variants": [
+   "Hou Ji"
+  ]
+ },
+ "Double Ninth": {
+  "def": "The festival of the ninth day of the ninth month of the old calendar, when chrysanthemums were shown and viewed; the Japanese court kept it until the Meiji period, and it lives on as an imperial garden party.",
+  "variants": [
+   "Double Ninth",
+   "Choyo",
+   "Choyo festival"
+  ]
+ },
+ "chobu": {
+  "def": "A land area counted in cho (町歩); 5 chobu is 5 cho of land, about 5 hectares.",
+  "variants": [
+   "chobu"
   ]
  }
 }

@@ -137,6 +137,7 @@ bed shear stress	bed shear stress
 bedload	bedload
 beishan mianshui	beishan mianshui
 beitang	beitang
+beiyang government	Beiyang government
 bell-and-drum tower	gulou
 benjo	kawaya
 berm	berm
@@ -274,6 +275,7 @@ chinju no mori	chinju no mori
 chinjusan	chinju
 cho	cho
 cho-hanare	machi-hanare
+chobu	chobu
 chodaigamae	nando-gamae
 chome	chome
 chongzhen	Chongzhen era
@@ -283,6 +285,8 @@ chonin-chi	buke-chi
 chori	chori
 choriboshi	chori
 chotsuke	chōtsuke
+choyo	Double Ninth
+choyo festival	Double Ninth
 chronosequence	chronosequence
 chubu	Chubu
 chugen	chugen
@@ -493,6 +497,7 @@ dooryard	dooryard
 dorui	dorui
 doshin	doshin
 dosojin	dosojin
+double ninth	Double Ninth
 dozo	kura
 dozo-zukuri	dozo-zukuri
 dozō	kura
@@ -686,6 +691,8 @@ four trees and three grasses	four trees
 four-gods formulation	four gods
 four-room	four-room type
 four-room type	four-room type
+foxtail millet	foxtail millet
+foxtail millets	foxtail millet
 frass	frass
 freeboard	freeboard
 frontage	frontage
@@ -797,6 +804,7 @@ gorinto	five-ring pagoda
 gosha	gōsha
 goshi	gōshi
 goten	goten
+gou	gou
 goulan	goulan
 governor-general	governor-general
 governor-general's	governor-general
@@ -965,6 +973,7 @@ horse-face	mamian
 horse-faces	mamian
 hot shoeing	hot-shoeing
 hot-shoeing	hot-shoeing
+hou ji	Hou Ji
 houlongshan	houlongshan
 hour of xu	hour of xu
 house chancellery	House Chancellery
@@ -1324,6 +1333,7 @@ koshin towers	koshin tower
 kotai-yoriai	kotaiyoriai
 kotaiyoriai	kotaiyoriai
 kozashi	kozashi
+kuai	kuai
 kuchi-agariya	agariya
 kuchidome	kuchidome
 kuchidome bansho	kuchidome
@@ -1557,6 +1567,8 @@ murataka	murataka
 muromachi	Muromachi
 musashi	Musashi
 musashi province	Musashi
+musashino	Musashino
+musashino plateau	Musashino
 mushiko	mushiko
 mushiko windows	mushiko
 mushiko-mado	mushiko
@@ -1609,6 +1621,8 @@ nembutsu	nenbutsu
 nenbutsu	nenbutsu
 nengu	nengu
 neribei	neribei
+new field	shinden
+new fields	shinden
 nezumi-gaeshi	nezumi-gaeshi
 ni no torii	ichi-no-torii
 ni-	ichi-no-torii
@@ -1802,6 +1816,8 @@ prefectural city	prefectural city
 prefecture	prefectural city
 prefectures	prefectural city
 prison god	jail-god
+proso	proso
+proso millet	proso
 provincial capital	provincial seat
 provincial capitals	provincial seat
 provincial seats	provincial seat
@@ -1845,6 +1861,7 @@ rat-guard	nezumi-gaeshi
 rat-guards	nezumi-gaeshi
 reach	reach
 reaches	reach
+readjustment	kochi seiri
 recharge	recharge
 recharges	recharge
 reducing atmosphere	reducing firing
@@ -1987,6 +2004,8 @@ secondary forest	secondary forest
 secondary woodland	secondary forest
 secondary woodlands	secondary forest
 seed	seed
+seed drill	seed drill
+seed drills	seed drill
 seeds	seed
 seigaiha	seigaiha
 seijoue	seijoue
@@ -1995,6 +2014,8 @@ seisatsuba	kosatsuba
 sekai daihyakka jiten	Sekai Daihyakka Jiten
 sekisho	sekisho
 self-watch house	jishinban
+senba-koki	thousand-tooth thresher
+senbakoki	thousand-tooth thresher
 senbon torii	Senbon Torii
 sengisho	sengisho
 sengoku	Sengoku
@@ -2193,6 +2214,7 @@ sugi	sugi
 sugoya	sugoya
 sugumagi	sugumagi
 sui	Sui dynasty
+sui channel	sui channel
 sui dynasty	Sui dynasty
 sui-dynasty	Sui dynasty
 suid	suid
@@ -2207,6 +2229,8 @@ superelevated	superelevation
 superelevates	superelevation
 superelevation	superelevation
 superstructure	superstructure
+survey register	kenchicho
+survey registers	kenchicho
 sus	Sus
 sutra house	sutra house
 sutra houses	sutra house
@@ -2234,6 +2258,8 @@ taiho	Taiho code
 taiho code	Taiho code
 taihu	Lower Yangzi
 taiji	Taiji
+taiko kenchi	Taiko survey
+taiko survey	Taiko survey
 taimenjo	taimenjo
 taiping-gang	taiping-gang
 tairo	tairo
@@ -2313,6 +2339,7 @@ thatch fields	thatch field
 the pool	the pool
 the reform and opening-up	reform and opening-up
 thousand character classic	Thousand Character Classic
+thousand-tooth thresher	thousand-tooth thresher
 three arresting tools	three arresting tools
 three bays	bay
 three-bay two-corridor house	three-bay two-corridor house
@@ -2330,6 +2357,7 @@ tiangeng	bund
 tiangong kaiwu	Tiangong kaiwu
 tier	tier
 tiers	tier
+tillered	tillering
 tillering	tillering
 time bell	time bell
 time bells	time bell
@@ -2570,6 +2598,7 @@ wubei zhi	Wubei Zhi
 wujing zongyao	Wujing Zongyao
 xiang	xiang
 xiang-gan	Xiang-Gan
+xu	xu
 xuanhua arch	memorial arch
 xunjiansi	xunjiansi
 yabusame	yabusame
