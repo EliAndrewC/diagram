@@ -1642,6 +1642,7 @@ naka-shoin	Naka-shoin
 nakaboshi	nakaboshi
 nakamon	nakamon
 nakasendo	Nakasendo
+nakatsugawa	Nakatsugawa
 namako	namako-tiled
 namako wall	namako-tiled
 namako walls	namako-tiled
@@ -2468,6 +2469,7 @@ tokugawa yoshimune	Yoshimune
 ton'ya	ton'ya
 tonya	ton'ya
 torii	torii
+toriimoto	Toriimoto
 torimono mitsu dogu	three arresting tools
 toritsugi	yoritsuki
 toro	Toro
@@ -2510,6 +2512,7 @@ tsukiyama	tsukiyama
 tsukiyama-style	tsukiyama
 tsukubo	tsukubo
 tsukubō	tsukubo
+tsumago	Tsumago
 tsumairi	tsumairi
 tsumairi-type	tsumairi
 tsunaba	tsunaba
@@ -2699,6 +2702,7 @@ wujing zongyao	Wujing Zongyao
 xiang	xiang
 xiang-gan	Xiang-Gan
 xu	xu
+xu tan	Xu Tan
 xuanhua arch	memorial arch
 xunjiansi	xunjiansi
 yabusame	yabusame
