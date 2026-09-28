@@ -552,6 +552,8 @@ five classics	Four Books and Five Classics
 five dynasties	Five Dynasties
 five highways	Five Highways
 five watches	night watch
+five-household group	five-household group
+five-household groups	five-household group
 five-ring pagoda	five-ring pagoda
 five-ring pagodas	five-ring pagoda
 flood stage	river stage
@@ -666,6 +668,7 @@ gokaido	Five Highways
 gokumon	gokumon
 gold paper	gold paper
 gongxiefang	gongxiefang
+gonin-gumi	five-household group
 gono	gōnō
 gorinto	five-ring pagoda
 gosha	gōsha
@@ -966,6 +969,7 @@ kame	kame
 kami	kami
 kami-yashiki	kami-yashiki
 kamidana	kamidana
+kamigata	Kamigata
 kamiza	kamiza
 kan	kan
 kan'ei	Kan'ei
@@ -1629,7 +1633,9 @@ seeds	seed
 seijoue	seijoue
 seisatsu	kosatsuba
 seisatsuba	kosatsuba
+sekai daihyakka jiten	Sekai daihyakka jiten
 sekisho	sekisho
+self-watch house	jishinban
 senbon torii	Senbon Torii
 sengoku	Sengoku
 senmaida	senmaida
@@ -2016,6 +2022,7 @@ wagon inn	wagon inn
 wagon inns	wagon inn
 wagon-inn	wagon inn
 waju	waju
+wakamono-gumi	young men's association
 wakato	wakato
 waki-honjin	waki-honjin
 walled ward	lifang
@@ -2037,6 +2044,8 @@ warrens	warren
 warring states	Warring States
 warring-states	Warring States
 watashiba	watashiba
+watch house	jishinban
+watch-house	jishinban
 water duty	water duty
 water gate	water gate
 water gates	water gate
@@ -2134,6 +2143,8 @@ yoshizu	yoshizu
 yosui	yosui
 yotsu	yotsu
 youfang	aburaya
+young men's association	young men's association
+young men's associations	young men's association
 yuan	Yuan dynasty
 yuan dynasty	Yuan dynasty
 yuan rebuild	Yuan dynasty

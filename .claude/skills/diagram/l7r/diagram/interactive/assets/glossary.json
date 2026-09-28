@@ -5389,7 +5389,10 @@
  "jishinban": {
   "def": "A town ward's own watch house in an Edo-period city, kept by the townspeople: from it the neighborhood was patrolled and the fire watch kept, and its ladder, alarm bell and firefighting gear stood there.",
   "variants": [
-   "jishinban"
+   "jishinban",
+   "watch house",
+   "watch-house",
+   "self-watch house"
   ]
  },
  "town magistrate": {
@@ -8272,6 +8275,35 @@
   "def": "A storehouse for grain held in reserve against bad harvests, which the Edo shogunate ordered villages to build alongside the gogura in 1790.",
   "variants": [
    "kakoigura"
+  ]
+ },
+ "Kamigata": {
+  "def": "The Kyoto-Osaka region of central Japan, home of the imperial court and the great merchant city - in Edo-period speech, \"the upper parts\" as against Edo in the east.",
+  "variants": [
+   "Kamigata"
+  ]
+ },
+ "five-household group": {
+  "def": "A group of about five neighboring households in an Edo-period village or ward, answerable together for its members; in the villages it was one of the bodies that fought fire until modern times.",
+  "variants": [
+   "five-household group",
+   "five-household groups",
+   "gonin-gumi"
+  ]
+ },
+ "young men's association": {
+  "def": "A village's organized body of its young men, which, with the five-household groups, fought the village's fires until modern times.",
+  "variants": [
+   "young men's association",
+   "young men's associations",
+   "wakamono-gumi"
+  ]
+ },
+ "Sekai daihyakka jiten": {
+  "def": "Heibonsha's World Encyclopedia, a Japanese general encyclopedia whose entries Kotobank carries.",
+  "variants": [
+   "Sekai daihyakka jiten",
+   "Sekai Daihyakka Jiten"
   ]
  }
 }
