@@ -24,16 +24,16 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). Measurement: [`
   whose URLs end `<page file>#<anchor>`, inverted to anchor -> class keys; (b) a question a class names that links
   (`href="...#<anchor>"`) to this one gives that class, "through <the linking question>" - one hop only, since a chain
   of links soon reaches everything; (c) a tracked engine `.py` file whose text contains the question's anchor or its
-  full heading (less its dated bookkeeping, `question_text`) gives that file and line. A question none reaches says
+  heading's question (less its dated bookkeeping, `question_text`, and up to its first `?` where it has one - a comment quotes the question, not the answer after it; at least `25` characters, so a short question cannot match stray text) gives that file and line. R2 counted this route by a heading's first `40` characters; the tool's own count is re-measured at the end. A question none reaches says
   "no map feature found depending on it".
 - **D4 - the target** (FR-001, FR-004). `make open-questions` in the skill's Makefile, running
   `scripts/_open_questions.py --root <repo>`. It prints the counts first (per page: questions, guesses, absences,
   settled; the outside-the-record lines per area; the totals), then per page, per question in file order: the
   heading, the fragment's path, the map features, and each item; then the outside-the-record guesses by file. Text
   only, to the terminal; nothing is written into the repository. No filters (spec-fidelity round 1: unrequested).
-- **D7 - guesses outside the record** (FR-007). `git ls-files` under the skill, less `research/`, `tests/` and the
-  generated or logged files (`*.svg`, `*.png`, `*.html` under `pool/`, `dev/bypass-log/`, `dev/run-log/`,
-  `dev/perf-log/`, `*.json` assets written by `make record`/`make glossary`); each line carrying the whole word
+- **D7 - guesses outside the record** (FR-007). `git ls-files` under the skill, less `research/`, `tests/`, the
+  tooling's logs (`dev/bypass-log/`, `dev/run-log/`, `dev/perf-log/`) and binary files; every tracked text file is
+  read, the hand-drawn `pool/**/*.svg` plans included (spec-fidelity round 2). Each line carrying the whole word
   `GUESS` is an item with file, line number and the stripped line.
 - **D5 - tests** (FR-006, SC-001, SC-002). `tests/tooling/test_open_questions.py`, loading the script as
   `test_record_prepass_and_size_table.py` loads its siblings: a fixture record in `tmp_path` (a guess in text, one in a
@@ -41,7 +41,7 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). Measurement: [`
   labels in one sentence), a class naming a question, a question linked from a class's, an engine file quoting a heading, a tracked file outside the record with a GUESS, the counts; the item gone after the fixture's guess
   is rewritten; and one test on the real record: it finds the homesteads 500 rack-length guess with the `threshing yard` class (through 505) and the `compound.py`
   postern guess, and its guess count equals a plain count of visible `GUESS` sentences. The tooling tree runs at the gate (tests/CLAUDE.md).
-- **D6 - speed** (SC-003). One pass over ~1,100 small files and one import of the class registry; measured at the end.
+- **D6 - speed** (SC-003). One pass over the question fragments and their notes (`573` and `544` files, research.md R1), the tracked text files, and one import of the class registry; the run is timed at the end.
 
 ## Constitution check
 

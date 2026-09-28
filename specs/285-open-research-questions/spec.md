@@ -62,8 +62,9 @@ so no marked guess is missed.
 
 **Acceptance Scenarios**:
 
-1. **Given** a tracked source or document file in the skill outside `research/` carries a GUESS label, **When** the
-   target runs, **Then** the line is listed under its file, with its line number and text.
+1. **Given** a tracked text file of the skill outside `research/` and `tests/`, other than the tooling's logs,
+   carries a GUESS label, **When** the target runs, **Then** the line is listed under its file, with its line number
+   and text.
 
 ### Edge Cases
 
@@ -90,8 +91,9 @@ so no marked guess is missed.
 - **FR-004**: The target MUST print the counts (per page, per kind, and in total) before the list.
 - **FR-007**: The target MUST also list every GUESS label in a tracked text file of the skill outside `research/`
   and `tests/` - engine code and docstrings, the pool's notes, the skill's docs - with file, line and the line's
-  text, grouped by file. Generated output (a rendered sheet, a page, a log the tooling writes) repeats a source and is
-  not read (research.md R2).
+  text, grouped by file - the hand-drawn plans (the tracked `pool/**/*.svg`, which are sources, not renders) among
+  them. Only the logs the tooling writes (`dev/bypass-log/`, `dev/run-log/`, `dev/perf-log/`) are not read: they
+  repeat what a session typed elsewhere (research.md R2).
 - **FR-005**: Settled absence notes MUST be marked as settled, not dropped.
 - **FR-006**: Tested: the collector is unit tested on plain inputs (a guess in text, one in a comment, an absence
   note, a settled one, a grounds note, a convention label, a class naming a question, a question linked from it,
@@ -101,7 +103,9 @@ so no marked guess is missed.
 ### Key Entities
 
 - **Open item**: page, question heading, fragment path, kind (guess | absence | absence-settled), the text.
-- **Dependent class**: a modal class whose `Entry:` names the item's question.
+- **Dependent map feature**: a modal class whose `Entry:` names the item's question; a class whose named question
+  links to it (naming that linking question); or an engine file and line citing the question.
+- **Guess outside the record**: a file, a line number and the line's text.
 
 ## Success Criteria
 
@@ -141,3 +145,12 @@ A tooling feature: it draws and states nothing on a map, so there is no renderin
   GUESS is in homesteads 500, which no class's `Entry:` names; the threshing yard names 505 - so FR-003's `Entry:`-only
   mechanism reports "no modal" for the motivating item, which the map draws: correct the test and make FR-003 find the
   map feature that depends on the question; (3) US3 and FR-004's page and kind filters are UNREQUESTED: cut them.
+- Round 2 (spec-fidelity VERIFY, 2026-09-28): CHANGES REQUIRED - round 1's (2) and (3) RESOLVED (505 links to 500
+  twice and the threshing yard's `Entry:` names 505, checked; the filters are gone); (1) PARTLY RESOLVED: R2's counts
+  re-ran exactly, but FR-007's exclusion of "a rendered sheet" as generated output is false for the tracked `pool/**/*.svg`,
+  which are hand-authored plan SOURCE with only the png derived (`hayakawa-magistracy.gen.py`'s docstring), and two
+  of their four GUESS lines are found nowhere else (`hayakawa-magistracy.svg:860`, the east room;
+  `ubame-magistracy.svg:354`, the period post): read the tracked svgs, correct R2's row, and align US3's scenario
+  ("outside `research/`") with FR-007's `research/` and `tests/`; and a new contradiction the change introduced: Key
+  Entities still defines the **Dependent class** by `Entry:` alone, against FR-003's three routes, and has no entity
+  for FR-007's file-and-line items: redefine it as the map features FR-003 finds and add the outside-the-record item.

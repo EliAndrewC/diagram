@@ -21,8 +21,8 @@ stripped before counting; a note is an `<li>` in the notes file.
 | engine Python (code, comments, class docstrings) `l7r/**/*.py` | `85` | `25` |
 | pool notes `pool/**/*.notes.md` | `20` | `5` |
 | skill docs (`l7r/**/CLAUDE.md`, `future-work/`, `buildings.md`, `dev/*.md`) | `8` | `5` |
-| rendered sheets `pool/**/*.svg` (generated from the sources above) | `4` | `2` |
-| bypass logs `dev/bypass-log/*.json` (escape reasons the tooling records) | `4` | `4` |
+| hand-drawn Mode A plans `pool/**/*.svg` (tracked sources; `hayakawa-magistracy.svg:860` and `ubame-magistracy.svg:354` mark guesses found nowhere else) | `4` | `2` |
+| bypass logs `dev/bypass-log/*.json` (escape reasons the tooling records; all four repeat record items) | `4` | `4` |
 
 At least one is marked only in code: `compound.py`'s kitchen postern, a `6 ft` passage labeled GUESS, whose only
 record fragment (`buildings/120`) does not label its width (spec-fidelity round 1's sample).
