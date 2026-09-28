@@ -10500,5 +10500,29 @@
    "wild-rice stem",
    "wild-rice stems"
   ]
+ },
+ "Wamyo Ruijusho": {
+  "def": "An early Japanese dictionary that gives Chinese characters their Japanese names, cited here for the old word for dried grass fed to horses.",
+  "variants": [
+   "Wamyo Ruijusho"
+  ]
+ },
+ "Water Margin": {
+  "def": "A Chinese novel of the Ming dynasty about a band of outlaws, set in the Northern Song; one chapter describes an army fodder depot.",
+  "variants": [
+   "Water Margin"
+  ]
+ },
+ "Koeki Kokusanko": {
+  "def": "A Japanese farm book of the late Edo period; among much else it describes the kunugi cut for Ikeda charcoal.",
+  "variants": [
+   "Koeki Kokusanko"
+  ]
+ },
+ "daiba kunugi": {
+  "def": "A kunugi oak cut back at a height of about a meter or more, so that many thin branches sprout from the stump and can be cut again every several years for charcoal.",
+  "variants": [
+   "daiba kunugi"
+  ]
  }
 }

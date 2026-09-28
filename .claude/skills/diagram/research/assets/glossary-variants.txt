@@ -410,6 +410,7 @@ dacheng hall	Dacheng Hall
 dacheng halls	Dacheng Hall
 dading	Dading
 dading era	Dading
+daiba kunugi	daiba kunugi
 daidokoro	daidokoro
 daihachiguruma	daihachiguruma
 daijokan	Daijokan
@@ -1319,6 +1320,7 @@ kochi-seiri	kochi seiri
 kochi-seki	kochi-seki
 koebune	fertilizer boat
 koedame	koedame
+koeki kokusanko	Koeki Kokusanko
 kofun	Kofun period
 kofun period	Kofun period
 koguchi	koguchi
@@ -2583,6 +2585,7 @@ waki-honjin	waki-honjin
 walled ward	lifang
 wallow	wallow
 wallows	wallow
+wamyo ruijusho	Wamyo Ruijusho
 wanghuolou	wanghuolou
 wanli	Wanli era
 wanli era	Wanli era
@@ -2610,6 +2613,7 @@ water duty	water duty
 water gate	water gate
 water gates	water gate
 water head	water-head
+water margin	Water Margin
 water mouth	water-mouth
 water pestle	water pestle
 water pestles	water pestle
