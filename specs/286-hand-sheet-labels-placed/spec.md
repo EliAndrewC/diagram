@@ -47,10 +47,10 @@ covered.
   subject, or inside against beside) are removed.
 - **FR-003**: Where the placer finds no free seat, its fallback MUST place the caption at least as well as the hand
   seats it replaces - the reason the hand-seat exception existed - improved in the placer itself, with unit tests.
-- **FR-004**: No automated check of caption placement MUST remain for hand sheets: the caption-seat gate test and its
+- **FR-004**: Every automated check of caption placement on hand sheets MUST be removed, including: the caption-seat gate test and its
   ledger, the `make seat-label` report, the `building-review` contract's caption-seat step, and the sheet audit's
   checks that judge caption placement (labels overlapping, labels on dark ink, labels buried under later ink, group
-  labels adrift) MUST NOT remain. Correctness is carried by the
+  labels adrift). Correctness is carried by the
   placer's unit tests. Checks of things that are still drawn by hand (a glyph buried under later ink) stay.
 - **FR-005**: Everything that reads a sheet's captions - the program and size checks that pair a label with the
   structure it names, the review agents that look at a sheet, the interactive page - MUST read the placed captions or
@@ -102,3 +102,9 @@ inside-or-beside and kept inference from the drawing (a declaration is now text 
 FR-004 missed the building-review contract's caption-seat step and read "MUST remain" (now named, "MUST NOT remain");
 SC-002 could have become a standing check (now a one-time measurement); the scope narrowed to Mode A unrecorded (now a
 decision, put to MODE 1).
+
+**Round 2** (spec-fidelity-verify, MODE 3 + MODE 1, 2026-09-28): CHANGES REQUIRED, one item - FR-004's opening clause
+still read "MUST remain" (now "Every automated check ... MUST be removed, including:"). The scope exception (the frozen
+legacy Mode B exhibits) ruled LEGITIMATE: the request is about maps still drawn by hand; frozen exhibits are never
+re-gated or re-rendered, and editing them would be the retrofit the GM's 2026-08-16 ruling forbids. The GM is to be
+told at hand-back that the 18 legacy exhibits are untouched.
