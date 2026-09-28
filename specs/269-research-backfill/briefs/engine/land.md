@@ -20,9 +20,10 @@ Your job is 269's tasks T19-T25 (`specs/269-research-backfill/tasks.md`) and the
    section 3, each with its measurement, mechanism and sketch (constitution XIV).
 4. **The spec's Decisions Recorded** (spec.md): one line per outcome that changed what a map draws. Label each one
    historically accurate, deliberate deviation, map drawing convention, or guess.
-5. **The GM's items** are in `/diagram/.clones/.tools/logs/269-gm-items-reviewed.md`, and escalation-check is done. The
-   rows waiting on the GM (B32 duck pen, B33, B34, B35, the B19 gate) are recorded in future-work as waiting on the GM's
-   ruling, with the reviewed wording. They are not implemented.
+5. **The GM ruled on all five on 2026-09-28** (`specs/269-research-backfill/rulings-2026-09-28.md`); E9 and K5 carried
+   them out. Confirm each ruling is in place. The headman's gate (B19) and the village's funerary grounds are recorded
+   as OWED AT THE VILLAGE CONVERSION in `future-work/farming-communities.md` and in `migration-plan.md`'s village step:
+   the scripted village MUST gate the headman's house. The spec's Decisions Recorded cites the rulings file.
 6. **Tick.** Tick every task whose verification exists (`make tick`); the plan review must be CLEAR (`scripts/plan-gate.sh`).
    A task that cannot be ticked is reported, not forced.
 7. **`make glossary && make record && make citations`**, then `make done` in the FOREGROUND. Fix every failure, and
