@@ -207,11 +207,6 @@
     <rect x="874" y="492" width="12" height="8"/>
     <rect x="874" y="530" width="12" height="8"/>
   </g>
-  <!-- salt wards OUTSIDE every door, one on EACH SIDE of the opening, beyond the mouth's edges (the ward keeps ill
-       fortune from crossing the threshold, so it sits outside; feature 267 pass 2: they stood 0.7-1.3 ft inside the
-       mouths) -->
-  <!-- landing gate (east wall), flanking the opening, outside (east) -->
-  <!-- service gate (west wall), flanking, outside (west) -->
   <!-- Kitchen postern posts (west service door, opening into the open gap
        between residence and kitchen rather than against the kitchen flank) -->
   <g fill="#2D2A24" data-kind="side gate">
