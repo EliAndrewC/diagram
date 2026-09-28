@@ -41,6 +41,14 @@ COUNTS = {
     "grove_too_near": ("grove_blocks.py", "too_near"),
     "commons_sparse": ("cover.py", "_sparse"),
     "builds": ("driver.py", "build"),
+    "finishes": ("finish.py", "finish"),
+    "wells_key": ("wells.py", "_key"),
+    "field_pip": ("frame.py", "_pip"),
+    "grid_near": ("indexes.py", "near"),
+    "random_uniform": ("random.py", "uniform"),
+    "quad_hits_poly": ("overlap.py", "quad_hits_poly"),
+    "seg_dist": ("primitives.py", "seg_dist"),
+    "page_hits": ("page.py", "_hits"),
 }
 
 
