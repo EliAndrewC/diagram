@@ -2514,6 +2514,8 @@ urajirodo	urajiro
 usufruct	usufruct
 uzumimon	umon
 vaiśravaṇa	Bishamon
+variety hall	variety hall
+variety halls	variety hall
 verge	verge
 verges	verge
 vermilion line	shubiki
@@ -2669,6 +2671,7 @@ yoriai-seki	yoriai-seki
 yoriki	yoriki
 yorishiro	yorishiro
 yoritsuki	yoritsuki
+yose	variety hall
 yosemune	yosemune-zukuri
 yosemune-zukuri	yosemune-zukuri
 yoshi	Phragmites
