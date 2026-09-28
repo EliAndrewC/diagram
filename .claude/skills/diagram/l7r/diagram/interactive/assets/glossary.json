@@ -2660,7 +2660,8 @@
    "machiya",
    "shophouse",
    "shop-house",
-   "shophouses"
+   "shophouses",
+   "shop-houses"
   ]
  },
  "madake": {
@@ -9394,7 +9395,9 @@
  "zaimachi": {
   "def": "A country town of Edo-period Japan: a built-up town of merchants and craftsmen in the countryside, outside the castle towns. Around Kyoto and Osaka many six-day markets grew into one.",
   "variants": [
-   "zaimachi"
+   "zaimachi",
+   "country town",
+   "country towns"
   ]
  },
  "ke": {
@@ -10688,6 +10691,61 @@
   "variants": [
    "gannin",
    "gannin bozu"
+  ]
+ },
+ "dosō": {
+  "def": "A medieval Japanese moneylender who lent on pledges, called after the large, solid earthen storehouse that held the pledged goods; the Muromachi-period forerunner of the pawnbroker (shichiya).",
+  "variants": [
+   "dosō",
+   "doso",
+   "dogura"
+  ]
+ },
+ "horse-head wall": {
+  "def": "In a Chinese town building, a high gable wall that rises above the roof at the building's end as a fire wall; the Qinxiang pawnshop's street front had one 8 m high.",
+  "variants": [
+   "horse-head wall",
+   "horse-head gable wall",
+   "horse-head gable walls",
+   "horse-head walls"
+  ]
+ },
+ "treadle pestle": {
+  "def": "A foot-worked grain pounder: the mortar is fixed in the ground and the pestle sits on one end of a see-saw beam, so stepping on the other end and letting go drops the pestle onto the grain. It is how a rice dealer polished brown rice in the shop.",
+  "variants": [
+   "treadle pestle",
+   "treadle-pestle",
+   "treadle-pestles",
+   "treadle pestles"
+  ]
+ },
+ "refining forge": {
+  "def": "A forge where raw iron from the smelting furnace is reheated and hammered to drive out its slag and make iron a smith can work. It is a very large fire, but one that is stoked and watched throughout.",
+  "variants": [
+   "refining forge",
+   "refining forges"
+  ]
+ },
+ "Eitaijima": {
+  "def": "An island at Edo onto which the city's timber dealers were gathered after the great fire of 1641, blamed on their high stacks of timber; it was later called Moto-Kiba.",
+  "variants": [
+   "Eitaijima",
+   "Moto-Kiba"
+  ]
+ },
+ "pile": {
+  "def": "A timber post driven upright into a riverbed or soft ground, used alone or in clusters to anchor a boom or carry a structure.",
+  "variants": [
+   "pile",
+   "piles",
+   "pilings"
+  ]
+ },
+ "raft-mat": {
+  "def": "A raft of logs lashed together flat and moored against a slack bank or in a pond, the way a premodern East Asian timber city held its stock on the water.",
+  "variants": [
+   "raft-mat",
+   "raft-mats"
   ]
  }
 }

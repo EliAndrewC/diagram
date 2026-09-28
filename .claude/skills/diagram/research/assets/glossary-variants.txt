@@ -357,6 +357,8 @@ cotton beater	cotton beater
 cotton beaters	cotton beater
 country monk	country monk
 country monks	country monk
+country town	zaimachi
+country towns	zaimachi
 county magistrate	county magistrate
 county magistrates	county magistrate
 county seat	county seat
@@ -492,6 +494,7 @@ dochu bugyo	road magistrate
 dock basin	dock basin
 dock basins	dock basin
 dogata	dogata
+dogura	dosō
 dohyo	dohyō
 dohyō	dohyō
 doi	horinouchi
@@ -504,7 +507,9 @@ dongjing meng hua lu	Dongjing Meng Hua Lu
 dooryard	dooryard
 dorui	dorui
 doshin	doshin
+doso	dosō
 dosojin	dosojin
+dosō	dosō
 dou	dou
 double ninth	Double Ninth
 dozo	kura
@@ -558,6 +563,7 @@ eel's-bed	eel's bed
 eel's-bed plot	eel's bed
 eighty-eighth night	eighty-eighth night
 eiro	eiro
+eitaijima	Eitaijima
 ekika	ekika
 elder house	karo
 elder houses	karo
@@ -997,6 +1003,10 @@ horinouchi's	horinouchi
 horita	horita
 horse-face	mamian
 horse-faces	mamian
+horse-head gable wall	horse-head wall
+horse-head gable walls	horse-head wall
+horse-head wall	horse-head wall
+horse-head walls	horse-head wall
 hot shoeing	hot-shoeing
 hot-shoeing	hot-shoeing
 hou ji	Hou Ji
@@ -1592,6 +1602,7 @@ morijio	morijio
 morisada manko	Morisada manko
 morisada mankō	Morisada manko
 moso	moso
+moto-kiba	Eitaijima
 mozi	Mozi
 mu	mu
 muen	muenzuka
@@ -1845,6 +1856,9 @@ phytoplankton	phytoplankton
 picket line	picket line
 picket lines	picket line
 pig iron	pig iron
+pile	pile
+piles	pile
+pilings	pile
 piloted ignition	piloted ignition
 piloted-ignition	piloted ignition
 pit rank	pit rank
@@ -1913,6 +1927,8 @@ quay	quay
 quays	quay
 quercus acutissima	kunugi
 quercus serrata	konara
+raft-mat	raft-mat
+raft-mats	raft-mat
 raku	raku
 rakuchu rakugai	Rakuchu rakugai
 rakuchu rakugai screens	Rakuchu rakugai
@@ -1943,6 +1959,8 @@ reeling machine	reeling
 reeling shed	reeling
 refectories	refectory
 refectory	refectory
+refining forge	refining forge
+refining forges	refining forge
 reform and opening-up	reform and opening-up
 regime equation	regime equation
 regime power laws	regime equation
@@ -2188,6 +2206,7 @@ shoji	shoji
 shokuho	Shokuho period
 shokuho period	Shokuho period
 shop-house	machiya
+shop-houses	machiya
 shophouse	machiya
 shophouses	machiya
 shoro	shoro
@@ -2501,8 +2520,12 @@ tozama daimyo	tozama
 transect	transect
 transects	transect
 tread	tread
+treadle pestle	treadle pestle
+treadle pestles	treadle pestle
 treadle wheel	treadle wheel
 treadle wheels	treadle wheel
+treadle-pestle	treadle pestle
+treadle-pestles	treadle pestle
 treads	tread
 trebuchet	trebuchet
 trebuchets	trebuchet
