@@ -35,9 +35,9 @@
   "answers": "92d79f1b3c1e"
  },
  "sr1-f2-one-wood": {
-  "value": 55.3,
-  "unit": "sheet px",
-  "quantity": "the drawn crowns' outer sides: per 20 px band from y 250 to 640, the outermost crown edge on each side (west crowns x < 440, east x > 440), a best-fit line through each - west -1.1 deg off vertical with crowns wandering up to 55.3 px (18 ft) from it, east -2.1 deg and 60.3 px (20 ft); the smaller wander, over two crown radii (19.5 px each), is the value - neither side is a line, so the old box's parallel long sides do not survive",
+  "value": 7.4,
+  "unit": "ft",
+  "quantity": "the drawn silhouette's outer sides (the union of the 134 crowns, sampled every px from y 250 to 640, west of x 440 and east of it), a best-fit line through each: west 0.5 deg off vertical, departing -8.6 to +16.6 ft; east -1.1 deg, departing -10.6 to +7.4 ft; the value is the smaller departure on the east, which still exceeds a crown's radius (6.5 ft) - neither side stays within a crown radius of a line (research.md R2), so the old box's sides do not survive (building-review round 4 re-measured on the silhouette; the earlier band figure took interior crowns for the edge)",
   "source": "the tree list in specs/279-shrine-grove-shape/layout.py's output, drawn one for one as the map's shrine-grove crowns (each crown at its tree's position, radius r/6) - measured 2026-09-28",
   "observed": "2026-09-28",
   "subject": "hoshigaoka",

@@ -214,6 +214,13 @@ torii_svg = "".join(
 )
 def _ring_of(x, y):
     return min(range(len(REGIONS)), key=lambda k: poly_dist(x, y, REGIONS[k]))
+def _valid_ring(pts):
+    """The recorded outline as a valid ring: the noise can fold a few vertices over each other (settlement-review round 4
+    found a bowtie on the back edge), so it is repaired by a zero buffer and its largest piece kept."""
+    from shapely.geometry import Polygon
+    g = Polygon(pts).buffer(0)
+    g = max(g.geoms, key=lambda q: q.area) if hasattr(g, "geoms") else g
+    return [[round(x, 1), round(y, 1)] for x, y in list(g.exterior.coords)[:-1]]
 def _flank_record(k):
     R = REGIONS[k]
     pts = [to_map(x, y) for x, y in R]
@@ -221,7 +228,7 @@ def _flank_record(k):
     clumps = [list(map_trees[i]) for i, (x, y, r) in enumerate(trees) if _ring_of(x, y) == k]
     return {"x": round((min(xs) + max(xs)) / 2, 1), "y": round((min(ys) + max(ys)) / 2, 1), "w": round(max(xs) - min(xs), 1),
             "h": round(max(ys) - min(ys), 1), "rot": 0, "role": "shrine", "r": 4.0, "clumps": clumps,
-            "poly": [[round(x, 1), round(y, 1)] for x, y in pts]}
+            "poly": _valid_ring(pts)}
 _bx = [x for x, _ in REGION]; _by = [y for _, y in REGION]
 mx0, my0 = to_map(min(_bx), min(_by))
 mx1, my1 = to_map(max(_bx), max(_by))

@@ -24,8 +24,10 @@ line that `STRAIGHT_RUN`'s four-crown window could not see): any stretch of cons
 `150 sheet px` (`50 ft`) or more and whose crowns all lie within the smallest crown radius of that chord.
 
 The outer sides (added after the settlement-review's second round, which found the wood's two outer edges still a
-near-plumb parallel pair where the old box's sides were): per `20 px` band, the outermost crown edge on each side,
-a best-fit line through each; a side whose crowns all lie within a crown radius of its line reads as ruled.
+near-plumb parallel pair where the old box's sides were): the drawn silhouette - the union of the crowns - sampled
+every `1 px` down each side, a best-fit line through each; a side that stays within a crown radius of its line reads
+as ruled. (A first version took the outermost crown centered in each band, which let an interior crown stand for the
+edge; the building-review's fourth round measured the silhouette instead.)
 
 ## R3 - every text that placed a feature against the old grove, and what it says now
 
