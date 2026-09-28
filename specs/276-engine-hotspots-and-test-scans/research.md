@@ -137,3 +137,17 @@ Nothing this feature changes asserts anything about the world: the same rules se
 same ground and close the same paddies. Where a seat, a seam or a track lands differently it is a different legal
 answer to the same rules - the spec's Decisions Recorded classes both as map drawing conventions. The closing
 bookend is the GM's own look at the regenerated pool (the GM, 2026-08-29: they read the maps themselves).
+
+## R9. The closing measurements
+
+- Performance bookend `276-end` against `276-start` (observed 2026-09-28, method: `make perf LABEL=276-end`, then
+  `make perf-report AGAINST=276-start`): the reference hamlet over seeds 4, 25, 39 and 47 took 31.3 s and now takes
+  20.6 s, -34.2%; median 7.7 s -> 5.1 s; every seed faster (-24.7% to -43.5%); band 0, nothing owed.
+- Wall times (observed 2026-09-28, method: `date` around the command in this clone): `make quick ALL=1` 22.3 s, 3,427
+  tests; the last full `make done` 33 s, green, 100% coverage.
+- Every SC's after-figure is in `measurements.json` under an `after-` key, written by `measure.py` at a load average near
+  3. A first run at a load of 8.7 (other sessions' gates) read the same scenarios up to twice as slow; its figures were
+  discarded and re-taken, and the deterministic counts (fit tests, houses) were the same in both.
+- Found while measuring and fixed in this feature: `_garden_shaded` still scanned every placed house (19% of the
+  nucleated placer at 960 seeds; flat per house from 60 to 960 once indexed), and `lane_deletes` walked each function's
+  subtree separately.
