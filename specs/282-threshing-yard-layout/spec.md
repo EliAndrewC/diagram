@@ -69,8 +69,9 @@ the real 40-60 and why.
 A session scripting a hamlet or village finds the rack-by-the-house knob declared with its forms, what constrains
 it, and how it is pinned, so that neighboring settlements in one environment can be given the same value.
 
-**Independent test**: the hamlet generator's plan carries the knob, rolled from the seed and pinnable from the
-spec; its declaration names the research question it rests on.
+**Independent test**: the hamlet generator's plan carries the knob, pinnable from the spec, and either set from the
+environment (the fact the generator models, or the environment input the spec states) or rolled from the seed, as
+FR-002 finds (FR-005); its declaration names the research question it rests on.
 
 ## Requirements *(mandatory)*
 
@@ -140,3 +141,5 @@ spec; its declaration names the research question it rests on.
 - Round 1 (spec-fidelity, 2026-09-28): CHANGES REQUIRED - the south side widened from the edge to the sun corridor in
   map coordinates; the environment-driven knob set from a stated input, never a free roll; a mat-count floor tied
   to area. All three applied.
+- Round 2 (spec-fidelity, 2026-09-28): CHANGES REQUIRED - US3's test line still said "rolled from the seed"; rewritten
+  to FR-005's rule. The three round-1 items confirmed fixed.
