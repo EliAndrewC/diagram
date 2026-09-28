@@ -166,12 +166,15 @@ class Buckwheat(Kind):
 
     Note: The catena's elements - paddy, dry field, woodland - are read, and one page read puts the dry fields on
     the slopes around the settlement, for the Yoshino mountains only; that the dry crops take the higher ground
-    above the paddy, and cluster round the houses, is this record's own reading, and one source read puts paddy
+    above the paddy, and share the houses' raised ground, is read for alluvial lowland, where one page puts the old
+    settlements and their dry fields on the natural levee and another the paddy in the wet ground behind; elsewhere
+    that order is this record's own reading, and one source read puts paddy
     round houses built on slightly higher ground instead. What is said here of the crop itself is not drawn
     from the section this entry names; the crop mix per map is rolled from the seed and is a GUESS at the
     proportions.
 
-    Caveat: the crop mix per map is rolled from the seed and is a GUESS at the proportions.
+    Caveat: the plot laid against a homestead, as long as that side and one hem row deep, is a GUESS at its size;
+    the crop mix per map is rolled from the seed and is a GUESS at the proportions.
 
     Name: buckwheat
     Covers: `dry_plots[crop=buckwheat]` and their furrows
@@ -193,12 +196,15 @@ class Barley(Kind):
 
     Note: The catena's elements - paddy, dry field, woodland - are read, and one page read puts the dry fields on
     the slopes around the settlement, for the Yoshino mountains only; that the dry crops take the higher ground
-    above the paddy, and cluster round the houses, is this record's own reading, and one source read puts paddy
+    above the paddy, and share the houses' raised ground, is read for alluvial lowland, where one page puts the old
+    settlements and their dry fields on the natural levee and another the paddy in the wet ground behind; elsewhere
+    that order is this record's own reading, and one source read puts paddy
     round houses built on slightly higher ground instead. What is said here of the crop itself is not drawn
     from the section this entry names; the crop mix per map is rolled from the seed and is a GUESS at the
     proportions.
 
-    Caveat: the crop mix per map is rolled from the seed and is a GUESS at the proportions.
+    Caveat: the plot laid against a homestead, as long as that side and one hem row deep, is a GUESS at its size;
+    the crop mix per map is rolled from the seed and is a GUESS at the proportions.
 
     Name: barley
     Covers: `dry_plots[crop=barley]` and their furrows
@@ -221,12 +227,15 @@ class Soy(Kind):
 
     Note: The catena's elements - paddy, dry field, woodland - are read, and one page read puts the dry fields on
     the slopes around the settlement, for the Yoshino mountains only; that the dry crops take the higher ground
-    above the paddy, and cluster round the houses, is this record's own reading, and one source read puts paddy
+    above the paddy, and share the houses' raised ground, is read for alluvial lowland, where one page puts the old
+    settlements and their dry fields on the natural levee and another the paddy in the wet ground behind; elsewhere
+    that order is this record's own reading, and one source read puts paddy
     round houses built on slightly higher ground instead. What is said here of the crop itself is not drawn
     from the section this entry names; the crop mix per map is rolled from the seed and is a GUESS at the
     proportions.
 
-    Caveat: the crop mix per map is rolled from the seed and is a GUESS at the proportions.
+    Caveat: the plot laid against a homestead, as long as that side and one hem row deep, is a GUESS at its size;
+    the crop mix per map is rolled from the seed and is a GUESS at the proportions.
 
     Name: soy
     Covers: `dry_plots[crop=soy]` and their furrows

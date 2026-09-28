@@ -72,9 +72,8 @@ class Windbreak(Kind):
     keep about two fengshui forests each, at closed-canopy density in the well-kept Pearl River Delta patches;
     the one large measured sample of grove size, Hong Kong's survey of 115 village woods, puts the grove behind
     the village at a median of about one hectare - half under a hectare, four in ten between one and two. A
-    village's belt is drawn at one to two hectares, in the upper half of that band; a hamlet's is smaller, behind a
-    cluster a fraction of a village's size - half a hectare to under two across these maps, inside the measured
-    range. It is kept off the west side of the gardens so the beds keep their afternoon sun.
+    village's belt is drawn at one to two hectares, in the upper half of that band; a hamlet's follows the cluster it
+    stands behind - half a hectare to under two across these maps, inside the measured range. It is kept off the west side of the gardens so the beds keep their afternoon sun.
 
     Note: The grove count follows the Fujian figure (forests-2020), the density the Pearl-delta patches
     (hu-2011-fengshui-patches), and the size the Hong Kong survey (afcd-ncsc-9-06); the water-mouth cluster's
@@ -207,7 +206,9 @@ class Marsh(Kind):
 
     Why: Wet rice is reclaimed FROM marsh: where reclamation stops, or the ground is too wet to manage, it stays
     reed wetland, and an abandoned paddy reverts to it. The toe marsh is as wide as the fan it drains, and
-    its margin grades reed, then sedge and grass, then dry ground. A RESERVOIR'S SHORE IS REEDED BECAUSE THE
+    its margin grades reed, then sedge and grass, then dry ground - the form of a toe that is cut, since cutting is
+    what keeps willow and alder from taking a reed bed; left alone, an alder and willow carr would stand at the reed
+    edge, and the map does not draw that form. A RESERVOIR'S SHORE IS REEDED BECAUSE THE
     POND IS WORKED, not in spite of it: the obvious guess is that a maintained tameike - its bank repaired,
     its silt dredged, its water drawn down each season - would have a margin kept clear, and the record
     contradicts that. A Kagawa Prefecture study found a statistically significant POSITIVE correlation
@@ -218,7 +219,10 @@ class Marsh(Kind):
     is dry-grassland herbs. So reeds stand in the shallows and stop at the foot of the bank - which is why
     you will not see the wet haze on a dike or a pond's raised rim.
 
-    Note: The reclaimed-from-marsh finding, the margin gradient, and the reeded-shore finding are all read; the
+    Note: The reclaimed-from-marsh finding, the order of the margin gradient, the reeded-shore finding, and that cutting
+    keeps trees out of a reed bed are all read; that this toe is the cut, open form rather than an alder-willow carr is
+    the map's choice between two forms the record leaves open, and that such margins were cut for thatch and fodder is
+    unsourced; the
     embankment is mown in the record as it is bare on the map.
 
     Name: marsh
