@@ -123,7 +123,7 @@ def test_every_glossary_term_is_used_by_a_modal_or_a_record_page() -> None:
     in_record = {term for term, (variants, _) in GLOSSARY.items() if any(_bounded_in(v.lower(), record) for v in variants)}
     unused = set(GLOSSARY) - in_modals - in_record
     assert not unused, f"glossary terms no modal and no record page uses: {sorted(unused)}"
-    assert {"kainyo", "sugi", "koku"} <= in_record - in_modals, "record-only terms are what this test exists for (non-vacuity)"
+    assert {"kainyo", "sugi", "yabusame"} <= in_record - in_modals, "record-only terms are what this test exists for (non-vacuity)"
 
 
 @pytest.mark.parametrize("page", _finding_files(), ids=lambda p: p.name)
