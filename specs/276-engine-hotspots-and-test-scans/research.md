@@ -109,6 +109,17 @@ of houses as it asks for (all five do today), keep nucleated form and plain hous
 dry-plot and lane counts are reported beside the before counts; a paddy count moving more than a few percent is a
 finding to diagnose, not a report.
 
+**The result** (`pool-after.json`, written by `pool_counts.py` from the manifests the green gate of 2026-09-28 left):
+every hamlet seats the households it asks for - Inashiro 15, Kashikawa 20, Kuwabata 16, Mizuguchi 12, Sawada 19 - all
+nucleated, all plain houses, as before. Kuwabata is unchanged in every count. Paddy plots: Kashikawa 774 -> 786 (+1.6%),
+Sawada 810 -> 804 (-0.7%), the rest equal; dry plots Kashikawa 22 -> 27, Sawada 28 -> 25; flooded plots equal on every
+map. Lane records: Inashiro 11 -> 13, Kashikawa 14 -> 13, Mizuguchi 9 -> 10, Sawada 11 -> 14. The lanes move because
+`seg_intersect` now bounds both segments: before, a candidate track crossing the infinite extension of a water or crop
+edge was refused on a crossing that was not there, so the stage settled for another route - Inashiro's connector left
+north and now leaves east through the cluster, with the web re-laid around it; read by eye, the same hamlet. The
+Kashikawa weld that shipped a 0.88 deg hairline spur (the seam pass's reordered geometry produced it) was fixed at the
+placer - `_weld_apex` reads the ring as recorded as well as deduped - not waived.
+
 ## R7. The regression baseline (constitution XIII)
 
 `make cohort N=24` on the unmodified code in a detached worktree (`scratchpad/base276`), started 2026-09-28; its
