@@ -426,7 +426,8 @@ emergents	emergent
 enceinte	enceinte
 enemy platform	mamian
 enemy platforms	mamian
-enemy tower	mamian
+enemy tower	enemy tower
+enemy towers	enemy tower
 enfeoffed	enfeoffment
 enfeoffment	enfeoffment
 enfeoffments	enfeoffment
@@ -1128,6 +1129,8 @@ mulberry-dike fishpond	dike-pond
 mumun	Mumun
 mura	mura
 murabarai	murabarai
+mural tower	mural tower
+mural towers	mural tower
 murataka	murataka
 muromachi	Muromachi
 musashi	Musashi

@@ -7499,5 +7499,19 @@
   "variants": [
    "Grand Canal"
   ]
+ },
+ "mural tower": {
+  "def": "A tower built into the run of a city wall, standing out from its face so that defenders can shoot along the wall's foot, as distinct from a gate tower over an opening.",
+  "variants": [
+   "mural tower",
+   "mural towers"
+  ]
+ },
+ "enemy tower": {
+  "def": "A roofed tower built on top of a mamian platform on a Chinese city wall, from which defenders shoot along the wall's face to reduce the ground they cannot hit.",
+  "variants": [
+   "enemy tower",
+   "enemy towers"
+  ]
  }
 }
