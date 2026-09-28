@@ -598,3 +598,67 @@ def test_a_hamlet_draws_no_cremation_ground_shrine_or_headman() -> None:
             m = json.load(fh)
         assert not m.get("cremation_grounds") and not m.get("shrines") and not m.get("religious"), path
         assert not any(h.get("role") == "headman" for h in m.get("houses", [])), path
+
+
+# ---- feature 276 FR-003: the placed-house index answers every fit rule exactly as the linear scans did -------------
+
+
+class _AllOf:
+    """A stand-in for a PointGrid that returns every entry: the linear scan the index replaced."""
+
+    def __init__(self, entries):  # type: ignore[no-untyped-def]
+        self.entries = list(entries)
+
+    def near(self, *_a, **_k):  # type: ignore[no-untyped-def]
+        return self.entries
+
+
+@pytest.mark.parametrize("nucleated", [True, False])
+def test_the_house_and_placed_indexes_answer_every_fit_rule_as_the_scans_did(nucleated: bool, monkeypatch: pytest.MonkeyPatch) -> None:
+    import random
+
+    from l7r.diagram.settlement.rolling import fit
+
+    s = Settlement(1800, 1800, seed=11)
+    s.meta(name="I", scale="hamlet", ftpx=1, toscale=True, households=15, down_deg=90, water_flow=90, nucleated=nucleated)
+    s._nucleated = nucleated
+    s.sun_corridor(39)
+    r = random.Random(276)
+    for i in range(160):  # a dense grid, so every rule has neighbors to read
+        s.try_place(200 + (i % 13) * 105 + r.uniform(-25, 25), 200 + (i // 13) * 105 + r.uniform(-25, 25), "plain")
+    houses = s.M["houses"]
+    assert len(houses) >= 40 and isinstance(houses, fit.Indexed), "non-vacuity: many houses standing, in the versioned list"
+
+    def rules(geom):  # type: ignore[no-untyped-def]
+        return (
+            s._house_too_near_a_neighbor(geom["house"]),
+            s._sun_corridor_ok(geom),
+            s._gardens_sun_ok(geom),
+            s._yard_sun_conflict(geom) if geom.get("yard") is not None else None,
+            s._bundle_side_fits(geom),
+            s._envelope_blocked(geom["bbox"]),
+        )
+
+    cands = []
+    for _ in range(400):
+        x, y = r.uniform(150, 1650), r.uniform(150, 1650)
+        side = r.choice(s._NUC_SIDES) if nucleated else "E"
+        cands.append(s._bundle_geom(x, y, 30.0, 20.0, side, False))
+    indexed = [rules(g) for g in cands]
+    monkeypatch.setattr(fit, "houses_meeting", lambda hs, _box: list(hs))
+    real_reach = s._reach_index
+    monkeypatch.setattr(s, "_reach_index", lambda reg, key: _AllOf(real_reach(reg, key).near(900.0, 900.0, 5000.0)) if key == "placed_reach" else real_reach(reg, key))
+    linear = [rules(g) for g in cands]
+    assert indexed == linear
+    assert sum(1 for v in indexed if v[0]) and sum(1 for v in indexed if not v[4]), "non-vacuity: the eave gap and the overlap both fire"
+
+
+def test_a_house_moved_in_place_is_not_answered_from_its_old_box() -> None:
+    """`_solve_homestead` moves a record; the house index must see the move (the list's version is bumped there)."""
+    from l7r.diagram.settlement.rolling import fit
+
+    houses = fit.Indexed([{"x": 100.0, "y": 100.0, "w": 30.0, "h": 20.0}])
+    assert fit.houses_meeting(houses, (90, 90, 110, 110))
+    houses[0]["x"] = 900.0
+    houses._bump()
+    assert not fit.houses_meeting(houses, (90, 90, 110, 110)) and fit.houses_meeting(houses, (890, 90, 910, 110))

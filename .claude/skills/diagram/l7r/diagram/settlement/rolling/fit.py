@@ -262,7 +262,14 @@ class BundleFitMixin:
             return True
         if self._rect_blocked(env, fields=True):
             return True
-        hits = [b for b in self.placed if abs(cx - b[0]) < (w + b[2]) / 2 + 2 and abs(cy - b[1]) < (h + b[3]) / 2 + 2]
+        # FROM THE PLACED INDEX (feature 276), deduplicated (an item spanning cells comes back once per cell) and in the
+        # registry's order, so "the ONE box" is the box it always was.
+        seen: set[int] = set()
+        hits = []
+        for it in self._reach_index(self.placed, "placed_reach").near(cx, cy, max(w, h) / 2 + 2):
+            if id(it) not in seen and abs(cx - it[0]) < (w + it[2]) / 2 + 2 and abs(cy - it[1]) < (h + it[3]) / 2 + 2:
+                seen.add(id(it))  # by the filed item, one per placed entry: two entries at one spot are two hits
+                hits.append((it[0], it[1], it[2], it[3]))
         if not hits:
             return None
         return (float(hits[0][0]), float(hits[0][1]), float(hits[0][2]), float(hits[0][3])) if len(hits) == 1 else True
@@ -361,7 +368,9 @@ class BundleFitMixin:
         cx, cy, w, h = rect
         quad = rot_rect(cx, cy, w, h, self._house_rot(cx, cy))
         reach = lim + math.hypot(w, h) / 2
-        for rec in self.M.get("houses", []):
+        # FROM THE INDEX (feature 276): a record the prefilter below admits has its center within `reach` plus its own
+        # half-diagonal, so its extent meets this box - the index returns every record the scan could have flagged.
+        for rec in houses_meeting(self.M.get("houses", []), (cx - reach, cy - reach, cx + reach, cy + reach)):
             if rec.get("kind") == "abandoned":
                 continue  # a derelict has no roof left to shed
             ow, oh = rec["w"], rec["h"]
@@ -420,7 +429,10 @@ class BundleFitMixin:
         # that matters (a new house shading a yard already standing), and the first version of this
         # rule cleared only about half the shaded yards because of it. Each bundle's record carries
         # its own `geom`, so the yard is there to be read.
-        for b in self.M.get("houses", []):
+        houses = self.M.get("houses", [])
+        # FROM THE INDEX (feature 276): a yard or bed this house shades lies within `side` of its width and within `reach`
+        # north of its north wall, so its record's extent meets this box.
+        for b in houses_meeting(houses, (hx - hw / 2 - side, hy - hh / 2 - reach, hx + hw / 2 + side, hy - hh / 2)):
             g = b.get("geom")
             if not g:
                 continue
@@ -440,7 +452,9 @@ class BundleFitMixin:
         if yard is None:
             return True
         yx, yy, yw, yh = yard
-        return not any(abs(b["x"] - yx) < (b["w"] + yw) / 2 + side and 0 < (b["y"] - b["h"] / 2) - (yy + yh / 2) < reach for b in self.M.get("houses", []))
+        # ...and a house that shades this yard has its north wall within `reach` south of the yard's south edge
+        near = houses_meeting(houses, (yx - yw / 2 - side, yy + yh / 2, yx + yw / 2 + side, yy + yh / 2 + reach))
+        return not any(abs(b["x"] - yx) < (b["w"] + yw) / 2 + side and 0 < (b["y"] - b["h"] / 2) - (yy + yh / 2) < reach for b in near)
 
     def _gardens_sun_ok(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """The side-DEPENDENT half of the sun corridor: this bundle's garden bed(s) must not sit in a
@@ -453,7 +467,11 @@ class BundleFitMixin:
             return True
         reach, side = self.px(ft + 2.0), self.px(2.0)
         houses = self.M.get("houses", [])
-        return all(not any(abs(b["x"] - gx) < (b["w"] + gw) / 2 + side and 0 < (b["y"] - b["h"] / 2) - (gy + gh / 2) < reach for b in houses) for gx, gy, gw, gh in geom["gardens"])
+        # FROM THE INDEX (feature 276): a house shading a bed has its north wall within `reach` south of the bed
+        return all(
+            not any(abs(b["x"] - gx) < (b["w"] + gw) / 2 + side and 0 < (b["y"] - b["h"] / 2) - (gy + gh / 2) < reach for b in houses_meeting(houses, (gx - gw / 2 - side, gy + gh / 2, gx + gw / 2 + side, gy + gh / 2 + reach)))
+            for gx, gy, gw, gh in geom["gardens"]
+        )
 
     def sun_corridor(self: Settlement, feet: float) -> None:  # type: ignore[misc]
         """Ask the placer to keep `feet` of open ground SOUTH of every threshing yard (see
@@ -518,7 +536,10 @@ class BundleFitMixin:
             return False
         if not self._gardens_sun_ok(geom):
             return False
-        return all(not (abs(cx - px) < (W + pw) / 2 + 2 and abs(cy - py) < (H + ph) / 2 + 2) for px, py, pw, ph, *_ in self.placed)
+        # FROM THE PLACED INDEX (feature 276): a box within the 2 px margin of this bbox has its reach box meet the square
+        # queried; the comparison decides, as before.
+        near = self._reach_index(self.placed, "placed_reach").near(cx, cy, max(W, H) / 2 + 2)
+        return all(not (abs(cx - px) < (W + pw) / 2 + 2 and abs(cy - py) < (H + ph) / 2 + 2) for px, py, pw, ph, *_ in near)
 
     def _yard_sun_conflict(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """A threshing yard dries rice in the southern sun, so no grove may sit in the ~22px strip directly
@@ -532,7 +553,22 @@ class BundleFitMixin:
 
         new_groves = (geom["grove_n"], geom["grove_w"]) if "grove_n" in geom else ()
         new_yard = geom["yard"]
-        for rec in self.M["houses"]:
+        # FROM THE INDEX (feature 276): a yard a new grove shades has its south edge within 22 px north of the grove's box,
+        # and a grove shading the new yard meets the 22 px strip south of it - so each such record's extent meets one of
+        # these boxes. Read in list order, as the scan did.
+        boxes = [(gv[0] - gv[2] / 2, gv[1] - gv[3] / 2 - 22, gv[0] + gv[2] / 2, gv[1] + gv[3] / 2) for gv in new_groves]
+        if new_yard is not None:
+            boxes.append((new_yard[0] - new_yard[2] / 2, new_yard[1] + new_yard[3] / 2, new_yard[0] + new_yard[2] / 2, new_yard[1] + new_yard[3] / 2 + 22))
+        houses = self.M["houses"]
+        seen: set[int] = set()
+        near = []
+        for box in boxes:
+            for rec in houses_meeting(houses, box):
+                if id(rec) not in seen:
+                    seen.add(id(rec))
+                    near.append(rec)
+        order = {id(rec): k for k, rec in enumerate(houses)} if len(near) > 1 else {}
+        for rec in sorted(near, key=lambda r: order.get(id(r), 0)):
             g = rec.get("geom")
             if not g:
                 continue

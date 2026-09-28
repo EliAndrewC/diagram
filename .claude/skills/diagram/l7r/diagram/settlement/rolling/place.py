@@ -214,5 +214,8 @@ class PlacerMixin:
                 break  # already perfect at the home spot
         cx, cy = (best[2], best[3]) if best else (x0, y0)
         rec["x"], rec["y"] = cx, cy
+        houses = self.M.get("houses")
+        if isinstance(houses, Indexed):
+            houses._bump()  # a record MOVED in place: the fit rules' house index (rolling/fit.py) must not answer from its old box
         self.placed.append((cx, cy, w, h))  # re-reserve at the chosen (or original) spot
         return best[4] if best else None

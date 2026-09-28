@@ -214,7 +214,7 @@ class Settlement(
         self._clip = 0
         self._nbig = 0
         self.M: Manifest = {
-            "houses": [],
+            "houses": Indexed(),  # versioned, so the fit rules' house index (rolling/fit.py) knows when it is stale
             "fields": [],
             "fallow_patches": [],
             "channels": [],

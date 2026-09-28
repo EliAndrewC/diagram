@@ -11,14 +11,18 @@ Order: F's harness target first (so every after-figure is taken the same way), t
 
 ## US1 - the slow tests stop redoing work (P1)
 
-- [ ] T02 [US1] `tests/_engine_ast.py`: the content-keyed parse cache, the `PARSES` counter, `walked()`, `engine_modules()` with a needle (D1)
+- [x] T02 [US1] `tests/_engine_ast.py`: the content-keyed parse cache, the `PARSES` counter, `walked()`, `engine_modules()` with a needle (D1)
       research: rendering
-- [ ] T03 [US1] The four AST tests read from it, each scan lifted to a function, each with its needle (D2): `tests/test_memory.py`, `tests/hamletgen/test_driver.py`, `tests/test_package_surfaces.py`, `tests/settlement/test_water_ways.py`
+      verify: DONE. tests/_engine_ast.py: content-keyed parse cache, PARSES counter, walked(), engine_modules() with needles and opt-in skip_broken, module_level(); tests/test_engine_ast.py green
+- [x] T03 [US1] The four AST tests read from it, each scan lifted to a function, each with its needle (D2): `tests/test_memory.py`, `tests/hamletgen/test_driver.py`, `tests/test_package_surfaces.py`, `tests/settlement/test_water_ways.py`
       research: rendering
-- [ ] T04 [US1] `tests/test_engine_ast.py`: one parse per file across the four; each scan flags a planted offender (D3); SC-001 by the harness (`measure.py`)
+      verify: DONE. the four tests read the shared parse with identifier/keyword needles (heavy names, STAGES, del, diagram), each scan lifted to a function; their files green (87 passed)
+- [x] T04 [US1] `tests/test_engine_ast.py`: one parse per file across the four; each scan flags a planted offender (D3); SC-001 by the harness (`measure.py`)
       research: rendering
-- [ ] T05 [P] [US1] Record tests: the cached id table, the `.md` prefilter (D4) in `tests/interactive/test_record.py`; the joined corpus and the word-set lookup with its equality test (D5) in `tests/interactive/test_record_format.py`; planted-violation tests (D6); SC-001a by the harness (`measure.py`)
+      verify: DONE. tests/test_engine_ast.py: one parse per file across the four scans (non-vacuous overlap asserted), planted offenders caught by all three lifted scans, broken files raise unless skip_broken
+- [x] T05 [P] [US1] Record tests: the cached id table, the `.md` prefilter (D4) in `tests/interactive/test_record.py`; the joined corpus and the word-set lookup with its equality test (D5) in `tests/interactive/test_record_format.py`; planted-violation tests (D6); SC-001a by the harness (`measure.py`)
       research: rendering
+      verify: DONE. test_record.py: _ids_of content-keyed, .md prefilter in both token scans, broken_links and md_token_hits lifted with planted tests; test_record_format.py: bounded_words set + stands_in with an equality test over every boundary case (a flawed lookbehind caught: oku/ugi); 45 + 3 green
 
 ## US2 - a house is seated without testing a hundred wrong places first (P1)
 
@@ -30,8 +34,9 @@ Order: F's harness target first (so every after-figure is taken the same way), t
       research: rendering
 - [ ] T09 [US2] The unraked bundle template with the rake per candidate, and the household-rolled yard, garden jitter and bed split, in `settlement/rolling/bundle.py` / `homestead_parts/yards.py` (D10); SC-002 and SC-003 by the harness on both paths
       research: rendering
-- [ ] T09a [US2] `_toy_hamlet` sets the placer's own nucleated switch; the spur test says it wants a dispersed cluster (D20)
+- [x] T09a [US2] `_toy_hamlet` sets the placer's own nucleated switch; the spur test says it wants a dispersed cluster (D20)
       research: rendering
+      verify: DONE. _toy_hamlet sets s._nucleated from its plan; the spur test asks for a dispersed cluster explicitly; hamletgen 511 green
 - [ ] T10 [US2] Inashiro regenerated (`make map`); its houses, form and yards read against `pool-before.json`
       research: rendering
 
