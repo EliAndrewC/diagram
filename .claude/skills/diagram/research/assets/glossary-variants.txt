@@ -1957,6 +1957,8 @@ picket lines	picket line
 pig iron	pig iron
 piloted ignition	piloted ignition
 piloted-ignition	piloted ignition
+pingjiang map	Pingjiang tu
+pingjiang tu	Pingjiang tu
 pingyao	Pingyao
 pit rank	pit rank
 pit ranks	pit rank
