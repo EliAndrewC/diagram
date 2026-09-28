@@ -71,9 +71,10 @@ class Windbreak(Kind):
     Why: A nucleated village shelters behind one village-scale grove against the winter monsoon. Fujian villages
     keep about two fengshui forests each, at closed-canopy density in the well-kept Pearl River Delta patches;
     the one large measured sample of grove size, Hong Kong's survey of 115 village woods, puts the grove behind
-    the village at a median of about one hectare - half under a hectare, four in ten between one and two - so the
-    one-to-two-hectare belt drawn here sits in the upper half of the measured band, large relative to the
-    cluster, and drawn so. It is kept off the west side of the gardens so the beds keep their afternoon sun.
+    the village at a median of about one hectare - half under a hectare, four in ten between one and two. A
+    village's belt is drawn at one to two hectares, in the upper half of that band; a hamlet's is smaller, behind a
+    cluster a fraction of a village's size - half a hectare to under two across these maps, inside the measured
+    range. It is kept off the west side of the gardens so the beds keep their afternoon sun.
 
     Note: The grove count follows the Fujian figure (forests-2020), the density the Pearl-delta patches
     (hu-2011-fengshui-patches), and the size the Hong Kong survey (afcd-ncsc-9-06); the water-mouth cluster's
