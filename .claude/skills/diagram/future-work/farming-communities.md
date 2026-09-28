@@ -64,9 +64,8 @@ house, so a lane arrives at the gate rather than at the wall.
 - **The cluster's spacing (B19)**: no house more than ~650 ft from the next. Measurement: no village is scripted, so
   nothing holds it. Sketch: the village's cluster seating asks a nearest-house test per candidate from the placed
   index, and the gate checks the largest gap.
-- **The headman's house size (B19, a GM call at conversion)**: 92 x 56 ft is about four times a farmhouse; the
-  record reads 2 to 2.5 times, about 65-75 x 40 ft, a labeled guess. Sketch: the village generator takes the GM's
-  answer as `headman()`'s default.
+- **The headman's house size (B19)**: 92 x 56 ft is about four times a farmhouse; the record reads 2 to 2.5 times,
+  about 65-75 x 40 ft, a labeled guess. Sketch: the village generator takes the record's figure as `headman()`'s default.
 - **The dosojin (B20)**: the entrance stone is a guess today; the record puts a dosojin by the road at the
   village's entrance. Sketch: seat it through `edge_seat` at the road's crossing of the village edge.
 
@@ -114,12 +113,11 @@ belt leaves of the sum (`homestead_parts/groves.py` `HOMESTEAD_WOOD_FT2`, `villa
 raster, half- and quarter-step top-up passes). **Measurement** (`meta.homestead_wood_ft2`, rolled / drawn, the pool
 regenerated after the landing's third review round, 2026-09-28): Inashiro 13,059 / 10,539, Kashikawa 11,523 / 8,658,
 Kuwabata 13,030 / 6,441 (just over the 6,000 floor; an earlier roll the same day drew 5,619, under it), Mizuguchi
-12,534 / 10,682, Sawada 13,422 / 9,879 (the belt's trimmed arm took Sawada's and Kashikawa's down). **Mechanism**: the copse may only seat within `COPSE_HOUSE_REACH_FT` (90 ft,
-feature 261's review ruling) and in the belt's lee, and where that ground is used up the top-up passes find no seat -
+12,534 / 10,682, Sawada 13,422 / 9,879 (the belt's trimmed arm took Sawada's and Kashikawa's down). **Mechanism**: the copse may only seat within `COPSE_HOUSE_REACH_FT` (90 ft, a map drawing convention calibrated by feature 261, not a GM ruling) and in the belt's lee, and where that ground is used up the top-up passes find no seat -
 on the first landing roll the quarter-step pass added only 14 clumps on Kuwabata. A reviewer also found 22% of
 Kuwabata's copse crowns with every farmhouse within 110 ft on the far side of a lane: the reach measures distance and
 cannot see a lane between (research question: did a village lane ever run between a house and its own grove?). **Sketch**: either widen the reach for a
-homestead whose own ground is full (which undoes feature 261's ruling, so it is the GM's call), or seat the shortfall
+homestead whose own ground is full (a convention, so the session's to re-calibrate with a review), or seat the shortfall
 as a second stand behind the belt on the homestead's side; either way the check reads `drawn / rolled`, not a
 self-measured density (the old entry's lesson: a density on a self-measured extent cannot see a collapse).
 
@@ -177,7 +175,7 @@ engine fixes; the round-2 reviews re-measure them.
   `may_write` refuses it (the moved connector stands nearer the fabric). Sketch: start the connector at the lane's
   earlier vertex (1929, 56) and let the web serve the north row's east house, or route the moved start round the steading.
 
-## OPEN 2026-09-28 (269 B16), A GM DECISION: the shared byre on the commons is still rolled, one map in ten
+## OPEN 2026-09-28 (269 B16): the shared byre on the commons is still rolled, one map in ten, against homesteads/060
 
 `settlement/_knobs.py` `byre_form` rolls `courtyard` (the inner stable) / `yard_shed` (the outer stable) /
 `detached_commons` at 0.6 / 0.3 / 0.1. The record found the beast living with its household and no page describing a
@@ -188,7 +186,7 @@ labeled guess when B16 added the two household forms. **Sketch**: drop `detached
 0), re-roll the two maps, and retire its gate form and the `fraction` sizing the test pins; the byre-edge question and
 the inner-commons-or-fringe question this replaces are closed (`closed.md`).
 
-## OPEN 2026-09-28 (269 B32), A GM DECISION: grow-out hamlet or fry village
+## OPEN 2026-09-28 (269 B32): grow-out hamlet or fry village - a knob the record supports, owed
 
 The GM's rulings of 2026-09-28 retired the duck pen and did not rule on the fry pond. The record (research/archetypes
 200) reads two kinds of dike-pond village: a grow-out village that buys its fry (from one township's West River

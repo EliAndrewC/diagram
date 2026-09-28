@@ -155,7 +155,7 @@ sizes, odds and weights each names as a guess are recorded as guesses at the poi
   (homesteads 212).
 - **fc:2261 fixture counts** - historically accurate: each declared share is drawn as its count.
 - **B16 byre** - historically accurate: the beast with its household, the inner stable drawn against the farmhouse (a
-  map drawing convention) or a yard shed; the shared commons shed a rare guess, left for the GM (future-work).
+  map drawing convention) or a yard shed; the shared commons shed a rare guess that homesteads/060 now disagrees with, open in future-work.
 - **B17 lane ends** - historically accurate: a lane ends at the last dooryard it serves (ways; homesteads).
 - **B18 house bearings** - historically accurate: a common bearing within 11.25 deg of south, each house following
   its lanes' margin, one in ten a quarter turn with its yard (the GM's 2026-09-26 ruling) (homesteads 240).
