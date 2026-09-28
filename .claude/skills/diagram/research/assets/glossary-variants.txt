@@ -931,6 +931,8 @@ hereditary house	hereditary temple
 hereditary monastery	hereditary temple
 hereditary temple	hereditary temple
 hereditary temples	hereditary temple
+hexi	Hexi Corridor
+hexi corridor	Hexi Corridor
 hidenin	hidenin
 high-volatile	volatiles
 hikae-no-ma	hikae-no-ma
@@ -1493,6 +1495,7 @@ magistracy	magistracy
 magusaba	magusaba
 main channel	main stem
 main stem	main stem
+makusa	makusa
 mamian	mamian
 manji	Manji
 manji era	Manji
@@ -1998,6 +2001,7 @@ rōnin	ronin
 sae no kami	sae no kami
 sagami	Sagami
 sagami province	Sagami
+sagamino	Sagamino
 sageba	ōkaji
 saien	saien
 saikyosho	saikyosho
@@ -2750,6 +2754,7 @@ yw	yu
 yūkaku	yukaku
 zaimachi	zaimachi
 zaimokuya	zaimokuya
+zama	Zama
 zaofang	zaofang
 zaojun	Zaojun
 zashiki	zashiki

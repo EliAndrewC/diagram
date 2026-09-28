@@ -10524,5 +10524,30 @@
   "variants": [
    "daiba kunugi"
   ]
+ },
+ "makusa": {
+  "def": "An old Japanese reading of 秣, one of the two old characters for fodder, as the Wamyo Ruijusho gives it; the other, 蒭, it reads karakusa, \"dried grass\".",
+  "variants": [
+   "makusa"
+  ]
+ },
+ "Hexi Corridor": {
+  "def": "The long, narrow strip of oases in the northwest of China through which the Han road ran west to Dunhuang; the Han post station of Xuanquanzhi stood in its desert.",
+  "variants": [
+   "Hexi Corridor",
+   "Hexi"
+  ]
+ },
+ "Sagamino": {
+  "def": "The Sagami plain, the upland of central Sagami province (today's Kanagawa), southwest of Edo; its villages cut fodder and roofing material on shared ground.",
+  "variants": [
+   "Sagamino"
+  ]
+ },
+ "Zama": {
+  "def": "A district on the Sagamino upland in Sagami province (today's Kanagawa), southwest of Edo.",
+  "variants": [
+   "Zama"
+  ]
  }
 }
