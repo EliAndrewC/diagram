@@ -118,9 +118,9 @@ def casters(plan: ParsedPlan, text: str, bed: Polygon) -> list[Caster]:
         if kind == GARDEN_KIND or kind in NOT_STANDING or p.intersection(bed).area > 0.5 * bed.area:
             continue
         small = r.w * r.h / (FTPX * FTPX) < SMALL_BUILDING_SQFT
-        out.append(Caster(p, SMALL_BUILDING_FT if small else BUILDING_FT, kind or "a building"))
-    out += [Caster(_rect_poly(w), WALL_FT, "the wall") for w in plan.wall_segs]
-    out += [Caster(Point(t.x + t.w / 2, t.y + t.h / 2).buffer(t.w / 2, 16), TREE_FT, "a tree", tree=True) for t in plan.trees]
+        out.append(Caster(p, SMALL_BUILDING_FT if small else BUILDING_FT, kind or "building"))
+    out += [Caster(_rect_poly(w), WALL_FT, "wall") for w in plan.wall_segs]
+    out += [Caster(Point(t.x + t.w / 2, t.y + t.h / 2).buffer(t.w / 2, 16), TREE_FT, "trees", tree=True) for t in plan.trees]
     return out
 
 
@@ -136,7 +136,7 @@ def shaders(bed: Polygon, cs: list[Caster], half_shade: bool = False) -> list[st
             if el >= MIN_SUN_DEG and shadow(c, el, az).intersects(bed):
                 hit[c.what] = hit.get(c.what, 0) + 1
                 break
-    return [f"{n} {what}" if n > 1 else what for what, n in sorted(hit.items(), key=lambda kv: (-kv[1], kv[0]))]
+    return [f"{what} ({n})" if n > 1 else what for what, n in sorted(hit.items(), key=lambda kv: (-kv[1], kv[0]))]
 
 
 def garden_sun(plan: ParsedPlan, text: str) -> list[str]:

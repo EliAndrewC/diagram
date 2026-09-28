@@ -76,8 +76,9 @@ and its reviews.
 
 - **SC-001** (FR-001, FR-002): research homesteads 044 exists, every claim footnoted or labeled, all record checks run
   and applied.
-- **SC-002** (FR-003, FR-004): the check fails the negative fixture naming its hours and shade makers, and passes the
-  county example; its tests reach the gate's coverage floor.
+- **SC-002** (FR-003, FR-004): the check fails the negative fixture, naming its hours and its shade makers by kind, with
+  the wood among them; it fails a bed shaded by trees alone; it passes the county example; and its tests reach the
+  gate's coverage floor.
 - **SC-003** (FR-005, FR-007): every hand-drawn building sheet with a kitchen garden passes `garden_sun` as a sun bed; the re-seated sheets
   pass `building-review`; `make done` is green.
 - **SC-004** (FR-006): the program and the operative docs name the sun rule where they say where a garden goes.
@@ -113,3 +114,17 @@ it and the re-seating of the four failing gardens carry the request and the GM's
 3. **FR-005 leaves the rejected fix open.** The GM was offered "declare half-shade beds" and chose "Move them all". As
    written, FR-002's knob would let a re-seated sheet pass by declaring its bed half-shade. FR-005 should say the four
    re-seated gardens pass as sun beds (the default) with no half-shade declaration. FR-002 itself stands.
+
+**Round 2** (spec-fidelity-verify, MODE 3, 2026-09-28): CHANGES REQUIRED, one item. Item 1 RESOLVED - the scope was
+put to the GM, who answered "Sheets only (Recommended)" (request.md), and FR-003 now names hand-drawn building sheets
+with that answer cited, so no legacy-map failure path is owed. Item 3 RESOLVED - FR-005 requires the four re-seated
+gardens to pass as ordinary sun beds, none declared half-shade; SC-003 says "as a sun bed". Item 2 PARTLY RESOLVED -
+FR-003 now names what stands up by kind (every roofed kind, every wall, every tree including a wood's or grove's crowns
+and a sacred tree, with what does not stand up listed with why), and FR-004 adds the trees-only test and requires the
+fixture's report to name the wood; the list of non-casters serves the request. But SC-002, which round 1 named alongside
+FR-004 as passing a tree-blind check, is unchanged.
+
+1. **SC-002 still passes a check that ignores trees.** SC-002 (FR-003, FR-004) reads "the check fails the negative
+   fixture naming its hours and shade makers" - met by a check that names only the hall. It should read: the check
+   fails the negative fixture naming its hours and its shade makers by kind, the wood among them; fails a bed shaded by
+   trees alone; and passes the county example; its tests reach the gate's coverage floor.
