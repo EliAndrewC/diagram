@@ -27,7 +27,14 @@ Your job is 269's tasks T19-T25 (`specs/269-research-backfill/tasks.md`) and the
 6. **Tick.** Tick every task whose verification exists (`make tick`); the plan review must be CLEAR (`scripts/plan-gate.sh`).
    A task that cannot be ticked is reported, not forced.
 7. **`make glossary && make record && make citations`**, then `make done` in the FOREGROUND. Fix every failure, and
-   re-run once. Then run `scripts/sync-with-main.sh done` from the clone. If a guard refuses the push, read why and fix
+   re-run once.
+7b. **Settlement review, paired with the green gate** (`pair-hooks.sh`: the pool layouts moved in E1-E8). Dispatch ONE
+   `settlement-review` per pool hamlet (inashiro, kashikawa, kuwabata, sawada, mizuguchi), all five in one message,
+   the prompts from `make verify`. Wait for all five to return before anything else: you are headless. Apply their
+   findings. Re-run the gate if an engine file changed, and then the reviews of the maps that moved. Add one row per
+   review to `docs/review-ledger.md`. E2's five reviews came back NOT-REVIEWABLE because no gate was green then; these
+   replace them. Findings for the GM go through `escalation-check`.
+7c. Then run `scripts/sync-with-main.sh done` from the clone. If a guard refuses the push, read why and fix
    it; use an escape only with a real reason.
 8. **Report.** Your last message is one paragraph: the landing hash on main, what was ticked, what is left and where it
    is recorded.
