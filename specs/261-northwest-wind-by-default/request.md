@@ -39,3 +39,11 @@ brook - and that the fix is to let ways cross the brook with a plank footbridge:
 > Yes that's fine, please add that to feature 261 and then do all of the work, not stopping until you have it complete and working.  Let me know when you're done and it's landed on main.
 
 <!-- /SOURCE -->
+
+## The GM's question and ruling on the dry fields by the houses (verbatim, 2026-09-28)
+
+<!-- SOURCE: GM NOTES -->
+> This looks really good, but I do have a couple of questions. The main one is that, as you say, dry fields are by the houses now. And while I see that you made that as a change which you called out, I'm a little unclear as to why that change occurred. Is this because we have done research that shows that there were dry crops by the houses? If so, then that's fine, but I just didn't see anything about this, and when I click on the dry crops in the interactive map, it doesn't explain it either. Like, it doesn't explain why the dry crops are mostly next to the irrigated ditches, but then there are just a few of them randomly strewn around the houses. So why did that happen? Was that deliberate and the result of research findings?
+
+> Yeah, let's start with number one for the research pass because keeping the dry crops close to the irrigated water was the idea, I thought. I mean, I might be wrong about that or I might be misunderstanding, but I understand that they take higher ground in the sense that rice paddies get the lower ground because they need to be flooded, so the water is flowing downhill. And then the dry crops are on the higher ground where they can't grow in marshland, but they still need to be close to the water. So I haven't seen anything that indicates that there are just randomly patches of dry crops around within the village. I know that there were vegetable gardens, but That's a different thing. So yeah, go ahead and do that research pass and then if it's not supported, then go ahead and remove them. And if it is supported, then add it to the write-up in the pop-up.
+<!-- /SOURCE -->

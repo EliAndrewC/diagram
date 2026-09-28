@@ -621,11 +621,11 @@
   "verifies": "F3",
   "subject": "kashikawa",
   "round": "1bff4100",
-  "value": 462,
+  "value": 579,
   "unit": "clumps",
-  "quantity": "the belt's recorded clumps, which the notes call clumps rather than crowns (and on the other four maps too); 360 on the kept roll; re-measured on round 97c20bc9's fix: 504, the belt's far face now holding its depth where the fringe turns (plan D20); re-measured 2026-09-28 on the belt's far envelope (plan D20): 532; re-measured 2026-09-28 on the 105 ft band (plan D20): 498; re-measured 2026-09-28 after main's feature 276 re-laid the pool (plan D23): 462",
+  "quantity": "the belt's recorded clumps, which the notes call clumps rather than crowns (and on the other four maps too); 360 on the kept roll; re-measured on round 97c20bc9's fix: 504, the belt's far face now holding its depth where the fringe turns (plan D20); re-measured 2026-09-28 on the belt's far envelope (plan D20): 532; re-measured 2026-09-28 on the 105 ft band (plan D20): 498; re-measured 2026-09-28 after main's feature 276 re-laid the pool (plan D23): 462; re-measured 2026-09-28 after plan D24 retired the homestead field: 579",
   "source": "pool/hamlets/kashikawa/kashikawa.json village_groves[role=windbreak].clumps; kashikawa.notes.md 2026-09-27 entry",
-  "command": "grep -n 'The belt is 462 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
+  "command": "grep -n 'The belt is 579 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
  },
  "inashiro-r9-belt-frame": {
   "verifies": "F1",
@@ -661,11 +661,11 @@
   "verifies": "F2",
   "subject": "kashikawa",
   "round": "0ae309f0",
-  "value": 462,
+  "value": 579,
   "unit": "clumps",
-  "quantity": "the record kashikawa-r8-notes-clumps now states and greps the kept roll's 360 belt clumps; re-measured on round 97c20bc9's fix: 504, the belt's far face now holding its depth where the fringe turns (plan D20); re-measured 2026-09-28 on the belt's far envelope (plan D20): 532; re-measured 2026-09-28 on the 105 ft band (plan D20): 498; re-measured 2026-09-28 after main's feature 276 re-laid the pool (plan D23): 462",
+  "quantity": "the record kashikawa-r8-notes-clumps now states and greps the kept roll's 360 belt clumps; re-measured on round 97c20bc9's fix: 504, the belt's far face now holding its depth where the fringe turns (plan D20); re-measured 2026-09-28 on the belt's far envelope (plan D20): 532; re-measured 2026-09-28 on the 105 ft band (plan D20): 498; re-measured 2026-09-28 after main's feature 276 re-laid the pool (plan D23): 462; re-measured 2026-09-28 after plan D24 retired the homestead field: 579",
   "source": "specs/261-northwest-wind-by-default/measurements.json kashikawa-r8-notes-clumps; kashikawa.notes.md",
-  "command": "grep -n 'The belt is 462 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
+  "command": "grep -n 'The belt is 579 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
  },
  "kuwabata-r11-wedge": {
   "verifies": "F1",
@@ -808,11 +808,11 @@
   "verifies": "F4",
   "subject": "kashikawa",
   "round": "03cf6a84",
-  "value": 462,
+  "value": 579,
   "unit": "clumps",
-  "quantity": "the four stale records re-measured on the kept roll: the belt then 277 clumps (kashikawa-r8-notes-clumps, kashikawa-r11-record), the drawn aspect 1.72 (kashikawa-r4-shape), 2 woodland stands upslope (kashikawa-r11-name), and the junction 584 ft (kashikawa-F4); re-measured on round 97c20bc9's fix: 504, the belt's far face now holding its depth where the fringe turns (plan D20); re-measured 2026-09-28 on the belt's far envelope (plan D20): 532; re-measured 2026-09-28 on the 105 ft band (plan D20): 498; re-measured 2026-09-28 after main's feature 276 re-laid the pool (plan D23): 462 clumps, aspect 1.61, bearing 5",
+  "quantity": "the four stale records re-measured on the kept roll: the belt then 277 clumps (kashikawa-r8-notes-clumps, kashikawa-r11-record), the drawn aspect 1.72 (kashikawa-r4-shape), 2 woodland stands upslope (kashikawa-r11-name), and the junction 584 ft (kashikawa-F4); re-measured on round 97c20bc9's fix: 504, the belt's far face now holding its depth where the fringe turns (plan D20); re-measured 2026-09-28 on the belt's far envelope (plan D20): 532; re-measured 2026-09-28 on the 105 ft band (plan D20): 498; re-measured 2026-09-28 after main's feature 276 re-laid the pool (plan D23): 462 clumps, aspect 1.61, bearing 5; re-measured 2026-09-28 after plan D24 retired the homestead field: 579",
   "source": ".claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.json village_groves, meta.cluster_aspect_drawn, commons; kashikawa.notes.md",
-  "command": "grep -n 'The belt is 462 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
+  "command": "grep -n 'The belt is 579 clumps' .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md"
  },
  "inashiro-r13-board": {
   "verifies": "F1",
@@ -900,9 +900,9 @@
   "round": "0c0ac524",
   "value": 1,
   "unit": "sections",
-  "quantity": "the dated 'What pass 12 changed here' section, moved above the Census heading and pointing at the 2026-09-27 entry for the board's caption now",
+  "quantity": "the dated 'What pass 12 changed here' section, moved above the Census heading and pointing at the 2026-09-27 entry for the board's caption now; the sentence was rewritten 2026-09-28 (settlement-review F1): the caption now stands on clear ground",
   "source": ".claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md",
-  "command": "grep -n 'since feature 261 its caption lies over a crown' .claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md"
+  "command": "grep -n 'later in feature 261 its caption lay over a crown for a time' .claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md"
  },
  "inashiro-r14-lane": {
   "verifies": "F1",
@@ -1216,9 +1216,9 @@
   "round": "merge-276",
   "value": 99,
   "unit": "ft",
-  "quantity": "the median distance from a farmhouse to the center of its nearest dry plot, the largest of the four hamlets that lay homestead fields: Inashiro 70, Kashikawa 81, Mizuguchi 80, Sawada 99 ft, with 11 / 14 / 6 / 12 homestead plots; on main's re-laid pool Mizuguchi laid 3 and its median was 157 ft",
+  "quantity": "the median distance from a farmhouse to the center of its nearest dry plot, the largest of the four hamlets that lay homestead fields: Inashiro 70, Kashikawa 81, Mizuguchi 80, Sawada 99 ft, with 11 / 14 / 6 / 12 homestead plots; on main's re-laid pool Mizuguchi laid 3 and its median was 157 ft; SUPERSEDED 2026-09-28 by plan D24: the homestead field is retired (`m:dry-r24-retired`)",
   "source": ".claude/skills/diagram/pool/hamlets/*/*.json dry_plots, houses, meta.homestead_fields",
-  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+  "command": "python3 specs/261-northwest-wind-by-default/measure/fixtures_and_board.py inashiro kashikawa kuwabata mizuguchi sawada"
  },
  "pool-r22-unseated": {
   "subject": "pool",
@@ -1248,5 +1248,14 @@
   "quantity": "the windbreak clumps the notes' feature-261 entry states, now equal to the Census block's drawn count (327, 65 off the page) and the manifest's village_groves windbreak clumps on the re-laid roll; the track's bearing it states is 221 degrees, the connector's first leg (lanes[1] 221.5 in the round); the entry's woodland stands are all three across the field (F2), and the hem bullet's stale parenthetical is gone (F1)",
   "source": ".claude/skills/diagram/pool/hamlets/inashiro/inashiro.json village_groves, lanes; inashiro.notes.md",
   "command": "grep -n '327 clumps over a 123-degree arc' .claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md"
+ },
+ "dry-r24-retired": {
+  "subject": "pool",
+  "round": "gm-2026-09-28",
+  "value": 0,
+  "unit": "homestead plots",
+  "quantity": "grain plots laid beside a house across the five pool hamlets after the homestead field was retired on the research pass (plan D24); the median straight-line distance from a house to its nearest dry plot is now 575 / 418 / 383 / 367 ft on Inashiro, Kashikawa, Mizuguchi and Sawada (Kuwabata draws no dry plot), the canal hem's (near_dry_median_ft of measure/notes_figures.py)",
+  "source": ".claude/skills/diagram/pool/hamlets/*/*.json dry_plots, meta",
+  "command": "python3 specs/261-northwest-wind-by-default/measure/fixtures_and_board.py inashiro kashikawa kuwabata mizuguchi sawada"
  }
 }

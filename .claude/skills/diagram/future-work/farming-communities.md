@@ -2500,13 +2500,15 @@ owes its own 48-seed cohort and its own review round. This feature has had fourt
 MEASURED: under the regional northwest wind Inashiro's cluster seats on the far side of its brook from the rice, and the
 dry hem - drawn as a band along the paddy's outer edge - stayed with the paddy: nearest-house distance to a hem plot went
 from a median 178 ft to 827 ft (nearest 90 -> 312 ft, farthest 565 -> 1,455 ft), across the brook and the whole paddy.
-research/fields.html "WHERE dry crops go" allows canal-high ground but says dry fields sit "above all AROUND the houses";
-the only near-home dry ground on the map is now the kitchen gardens. The record names more than one position, so under
-the knob doctrine this is a KNOB, not a fix (settlement-review of Inashiro, feature 261 round 3).
+The research pass the sketch below asked for ran on 2026-09-28 (feature 261 plan D24, at the GM's instruction): no page
+read puts a household's grain beside its house - the plot there is the yashikibatake, its kitchen bed - and the pages
+place dry fields on the ground just above the paddy water (a levee ridge shared with the settlement) or upslope on a
+fan. research/fields.html "Where dry (hatake) crops go" now says so. What stays open is the settlement's own raised
+ground as a dry-field position on LEVEE terrain, where the settlement and its dry fields share the ridge.
 
-SKETCH: a `hem_siting` knob - `field_edge` (today's band along the paddy) or `by_the_houses` (the dry plots seated in the
-open ground around the cluster, after `stage_homesteads`, from the same acreage). Research pass first: whether a hamlet
-whose home ground is paddy-bound kept its hatake by the houses, and in what share.
+SKETCH: a `hem_siting` knob - `field_edge` (today's band along the paddy) or `on_the_ridge` (dry plots on the raised
+ground the settlement shares, for a levee archetype only, from the same acreage). Not for the valley and fan maps the
+pool draws; research first on what share of a levee hamlet's dry ground lay on its own ridge.
 
 ## The toe marsh's recorded outline is not the drawn marsh (measured 2026-09-27, feature 261)
 

@@ -1,6 +1,6 @@
 {
  "feature": "261-northwest-wind-by-default",
- "plan_sha256": "6c749e8a974d1c5e46365bd1dd4e9aa79250488147d3f95c71efa2c75af08f0a",
+ "plan_sha256": "250e9b7efc6da5316003688f0865511ef3e6a57cedaf55821f75aa52918d6e56",
  "reviewed": "2026-09-28",
  "declared": "spec-fidelity",
  "decisions": [
@@ -274,7 +274,7 @@
    "id": "D18o-homestead-dry-plot-against-the-steading",
    "summary": "A household's own dry plot is laid against its homestead after the ways (the levee model), the canal hem kept as the second position; the plot's size a guess.",
    "class": "within",
-   "why": "Review finding (Inashiro's dry plots a median 658 ft across the rice) fixed from the research (R11); constitution XIV."
+   "why": "Review finding (Inashiro's dry plots a median 658 ft across the rice) fixed from the research (R11); constitution XIV. [2026-09-28: plan.md marks the bullet RETIRED by D24; the ruling on it as written is kept.]"
   },
   {
    "id": "D18p-entrance-outermost-join-and-routes-from-the-door",
@@ -298,7 +298,7 @@
    "id": "D19b-no-grain-plot-where-grain-is-bought-in",
    "summary": "GRAIN_BOUGHT_IN: the mulberry dike-fishpond archetype lays no homestead grain plot (Kuwabata's GM-confirmed economy).",
    "class": "within",
-   "why": "Makes the map match the GM's own canon (FR-018 family, constitution XIV); a review finding, not a narrowing."
+   "why": "Makes the map match the GM's own canon (FR-018 family, constitution XIV); a review finding, not a narrowing. [2026-09-28: plan.md marks the bullet RETIRED by D24; the ruling on it as written is kept.]"
   },
   {
    "id": "D19c-fixtures-own-side-of-lanes-yard-ring-shrine-passes",
@@ -347,13 +347,31 @@
    "id": "D23c-dry-plot-beside-the-steading",
    "summary": "Where no side has room flush, the dry plot takes the nearest ground beside the steading, out from each lee or flank side and along it, never upwind, clear of the persimmon's trunk ring (a guess, labeled).",
    "class": "within",
-   "why": "Fixes main's packed placer at the placer (the GM's ruling); never upwind keeps the belt's crop set-back (FR-010)."
+   "why": "Fixes main's packed placer at the placer (the GM's ruling); never upwind keeps the belt's crop set-back (FR-010). [2026-09-28: plan.md marks the bullet RETIRED by D24; the ruling on it as written is kept.]"
   },
   {
    "id": "D23d-fixture-and-persimmon-straight-seats",
    "summary": "The fixture ring's last resort adds seats straight out from each wall; the persimmon's adds seats straight behind and before the house; all appended, so seated fixtures do not move.",
    "class": "within",
    "why": "0 unseated on the pool; a placement fix, not a relaxation."
+  },
+  {
+   "id": "D24a-homestead-field-retired",
+   "summary": "The homestead grain plot (D18o, D19b's GRAIN_BOUGHT_IN, D23c) is removed with stage_homestead_fields, homesteads/fields.py, its fallback seats and its persimmon-ring reservation, after a search pass found no page placing a grain plot beside a house.",
+   "class": "within",
+   "why": "The request (northwest wind by default; fix the placement algorithm, not route around it) never asked for a homestead grain plot; the plot was the session's own addition under D18o. Removing it narrows nothing the GM asked for, and it executes the GM's explicit conditional instruction of 2026-09-28 (request.md's SOURCE block of 2026-09-28, verbatim: 'do that research pass and then if it's not supported, then go ahead and remove them'). The plan records the pass as finding no support (the grain-in-the-fields reading labeled a GUESS with an absence note), so the removal branch is the one the GM ordered. The fallback seats and persimmon reservation exist only to serve the plot and fall with it; GRAIN_BOUGHT_IN governed only the plot and is retired with it (spec row 269 marks it so)."
+  },
+  {
+   "id": "D24b-dry-crops-in-the-canal-hem-and-popups",
+   "summary": "The dry crops stand in the comb's hem along the supply canal as on main; the research entry and the four dry-crop pop-ups say so, the grain-in-its-fields reading labeled a GUESS.",
+   "class": "within",
+   "why": "This is main's behavior restored, not a new carve-out, and it matches the model the GM's question named (dry crops on the higher ground just above the paddy water; the supply canal runs along the paddy's upper edge). The GM's 'if it is supported, add it to the write-up in the pop-up' branch did not fire; correcting the pop-ups so they no longer describe a removed plot is the record following the drawing."
+  },
+  {
+   "id": "D24c-inashiro-dry-finding-answered-by-the-record-test-inverted",
+   "summary": "Inashiro's settlement-review finding (dry plots across the rice, median 658 ft) is answered by the record rather than the drawing; the pool test for a dry plot within 150 ft of the median house becomes a test that no grain plot stands by a house (0 on every map, m:dry-r24-retired).",
+   "class": "within",
+   "why": "The finding was a reviewer's, not the GM's request, and the GM's 2026-09-28 instruction decides it: with no support for a plot by the house, the plot is removed, and the distance the finding objected to is the direct consequence of that ruling. The inverted pool test only fails if the retired plot returns, so it enforces what the GM ordered rather than adding scope."
   },
   {
    "id": "Phases-1-6",
