@@ -560,6 +560,7 @@
  "aquifer": {
   "def": "The water-bearing layer of ground a well is sunk to reach.",
   "variants": [
+   "aquifers",
    "aquifer"
   ]
  },
@@ -2949,7 +2950,9 @@
   "def": "A weir set at a slant, running diagonally upstream from the intake mouth instead of square across the stream, so it dams the shallow riffle and stands clear of the flood's fastest water.",
   "variants": [
    "oblique weirs",
-   "oblique weir"
+   "oblique weir",
+   "slanting weirs",
+   "slanting weir"
   ]
  },
  "ochiba": {
@@ -9948,6 +9951,47 @@
   "def": "A cold wind blowing down off a mountain range onto the plain below in winter; in Japan it is named for the mountain it comes from, like the Zao oroshi of the Sendai plain.",
   "variants": [
    "oroshi"
+  ]
+ },
+ "ichimoji-zeki": {
+  "def": "In the Edo period, a weir built straight across a river, square to its flow. The name means \"the character for one\", a single straight stroke. It is shorter than a slanting minote-zeki.",
+  "variants": [
+   "ichimoji-zeki",
+   "ichimoji weir"
+  ]
+ },
+ "minote-zeki": {
+  "def": "In the Edo period, a weir built slanting with the river's flow and longer than a straight ichimoji-zeki. Its intake is on the downstream side, the side toward which the water flows.",
+  "variants": [
+   "minote-zeki"
+  ]
+ },
+ "underflow": {
+  "def": "Water that runs underground through a riverbed's or a fan's gravels instead of on the surface (伏流, fukuryu). On an alluvial fan it sinks at mid-fan, leaving the streams there dry, and comes back up as springs at the fan's toe.",
+  "variants": [
+   "underflow",
+   "underflows",
+   "underground flow"
+  ]
+ },
+ "water table": {
+  "def": "The depth below the ground surface at which the soil is saturated with groundwater. Where it is deep, as across an alluvial fan's mid-fan, paddy is hard to water and crops needing little water, such as mulberry, were grown instead.",
+  "variants": [
+   "water table",
+   "water tables"
+  ]
+ },
+ "deep percolation": {
+  "def": "Irrigation water that sinks below the reach of the crop's roots and joins the groundwater. It is lost to the field but recharges the ground below, and it can raise the water table enough to waterlog it.",
+  "variants": [
+   "deep percolation",
+   "deep percolation losses"
+  ]
+ },
+ "fukuro-zeki": {
+  "def": "In the Edo period, a weir whose middle sags downstream, so that the sand coming down the river settles in that pocket instead of burying the intake. It was used on rivers carrying much sand.",
+  "variants": [
+   "fukuro-zeki"
   ]
  }
 }

@@ -50,6 +50,7 @@ apron	apron
 aprons	apron
 aqueduct	aqueduct
 aquifer	aquifer
+aquifers	aquifer
 araiba	kawado
 arresting tools	three arresting tools
 artesian	artesian
@@ -430,6 +431,8 @@ dba	dBA
 dbh	DBH
 dead ground	dead ground
 dead space	dead ground
+deep percolation	deep percolation
+deep percolation losses	deep percolation
 degawari	degawari
 delivery ditch	delivery ditch
 delivery ditches	delivery ditch
@@ -695,6 +698,7 @@ fujiwara	Fujiwara-kyo
 fujiwara-kyo	Fujiwara-kyo
 fukada	fukada
 fukugi	fukugi
+fukuro-zeki	fukuro-zeki
 fully involved	fully-involved
 fully-involved	fully-involved
 fumiguruma	treadle wheel
@@ -987,6 +991,8 @@ ichi-	ichi-no-torii
 ichi-no-ma	ni-no-ma
 ichi-no-torii	ichi-no-torii
 ichigami	ichigami
+ichimoji weir	ichimoji-zeki
+ichimoji-zeki	ichimoji-zeki
 ichirizuka	ichirizuka
 ido	ido
 ido-yakata	idoyakata
@@ -1480,6 +1486,7 @@ ming-dynasty	Ming dynasty
 ming-qing	Qing dynasty
 minka	minka
 mino	Mino
+minote-zeki	minote-zeki
 mire	mire
 mirin	mirin
 mise	mise
@@ -2088,6 +2095,8 @@ six-day markets	rokusai-ichi
 skimmer wall	skimmer wall
 skirt roof	mokoshi
 skirt roofs	mokoshi
+slanting weir	oblique weir
+slanting weirs	oblique weir
 sluice	sluice
 sluices	sluice
 snow-viewing lantern	yukimi
@@ -2405,6 +2414,9 @@ umebaka	burial grave
 umon	umon
 unconfined	unconfined groundwater
 unconfined groundwater	unconfined groundwater
+underflow	underflow
+underflows	underflow
+underground flow	underflow
 undersluice	undersluice
 undersluices	undersluice
 understory	understory
@@ -2480,6 +2492,8 @@ water head	water-head
 water mouth	water-mouth
 water pestle	water pestle
 water pestles	water pestle
+water table	water table
+water tables	water table
 water tail	water-mouth
 water teahouse	water teahouse
 water teahouses	water teahouse
