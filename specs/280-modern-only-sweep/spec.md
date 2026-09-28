@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-28
 
-**Status**: Draft; phase 1 (audit and research queue)
+**Status**: FAITHFUL at round 2; phase 1 (audit and research queue)
 
 **Input**: the GM's request, verbatim in [`request.md`](request.md): *"We should eliminate anything which is only
 modern"*, and *"I do also want a sweep of what we have to find anything else that is modern only"*, run *"as its own
@@ -146,3 +146,6 @@ modern-only - two GM rulings in conflict - does it go to the GM through `escalat
   example (the duck pen) is one to eliminate; such forms are now eliminated and the reversal reported, with only a form
   ruled in knowingly going to the GM first (User Stories 1 and 3, SC-004). The legacy count, 18, was confirmed by
   counting the directories.
+- Round 2 (spec-fidelity, 2026-09-28): FAITHFUL. Both fixes confirmed against the diff; the knowingly-ruled exception
+  checked as an exception and held (it only asks the GM before removal, and never keeps the form); the 18 legacy maps
+  recounted. No new findings.
