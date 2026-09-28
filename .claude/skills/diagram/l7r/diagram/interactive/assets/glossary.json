@@ -10459,5 +10459,46 @@
   "variants": [
    "Amoy"
   ]
+ },
+ "deep-water lotus": {
+  "def": "Lotus grown for its root in standing water, in a village's lowest and wettest plots - the older form in China, essentially the only one grown before the Song dynasty, when shallow-water lotus first appears in the texts.",
+  "variants": [
+   "deep-water lotus",
+   "deep-water lotus field",
+   "deep-water lotus fields"
+  ]
+ },
+ "shallow-water lotus": {
+  "def": "Lotus grown for its root in shallower water than deep-water lotus - first recorded in China in Song-dynasty texts.",
+  "variants": [
+   "shallow-water lotus"
+  ]
+ },
+ "water caltrop": {
+  "def": "An aquatic plant grown in lakes and ponds for its horned, starchy nut (Chinese 菱, ling) - one of the water vegetables of the lake districts around Suzhou.",
+  "variants": [
+   "water caltrop",
+   "water caltrops"
+  ]
+ },
+ "water shield": {
+  "def": "A floating-leaved pond plant (Chinese 莼菜, chuncai) whose young jelly-coated leaves are eaten as a vegetable - a water vegetable of Taihu's lake districts.",
+  "variants": [
+   "water shield"
+  ]
+ },
+ "foxnut": {
+  "def": "The seed of a prickly water lily (Chinese 芡实, qianshi), gathered from lakes and ponds and eaten as a starchy food.",
+  "variants": [
+   "foxnut",
+   "foxnuts"
+  ]
+ },
+ "wild-rice stem": {
+  "def": "The swollen stem of a wild rice grass (Chinese 茭白, jiaobai), grown in shallow water and eaten as a vegetable.",
+  "variants": [
+   "wild-rice stem",
+   "wild-rice stems"
+  ]
  }
 }

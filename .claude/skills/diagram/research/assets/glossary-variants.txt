@@ -444,6 +444,9 @@ dead space	dead ground
 deep paddies	shitsuden
 deep percolation	deep percolation
 deep percolation losses	deep percolation
+deep-water lotus	deep-water lotus
+deep-water lotus field	deep-water lotus
+deep-water lotus fields	deep-water lotus
 degawari	degawari
 delivery ditch	delivery ditch
 delivery ditches	delivery ditch
@@ -700,6 +703,8 @@ four trees and three grasses	four trees
 four-gods formulation	four gods
 four-room	four-room type
 four-room type	four-room type
+foxnut	foxnut
+foxnuts	foxnut
 foxtail millet	foxtail millet
 foxtail millets	foxtail millet
 frass	frass
@@ -2089,6 +2094,7 @@ shaku	shaku
 shakuhachi	shakuhachi
 shakyamuni	Shakyamuni
 shakyamuni buddha	Shakyamuni
+shallow-water lotus	shallow-water lotus
 shanxi merchant houses	Shanxi merchants
 shanxi merchants	Shanxi merchants
 shaso	shasō
@@ -2598,6 +2604,8 @@ watari-roka	watari-roka
 watashiba	watashiba
 watch house	jishinban
 watch-house	jishinban
+water caltrop	water caltrop
+water caltrops	water caltrop
 water duty	water duty
 water gate	water gate
 water gates	water gate
@@ -2605,6 +2613,7 @@ water head	water-head
 water mouth	water-mouth
 water pestle	water pestle
 water pestles	water pestle
+water shield	water shield
 water table	water table
 water tables	water table
 water tail	water-mouth
@@ -2644,6 +2653,8 @@ white-sand court	oshirasu
 white-tawed	shironameshi
 wicket	wicket
 wickets	wicket
+wild-rice stem	wild-rice stem
+wild-rice stems	wild-rice stem
 willow association	plant association
 willow palisade	Willow Palisade
 windlass	windlass
