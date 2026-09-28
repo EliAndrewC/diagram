@@ -960,3 +960,22 @@ def test_the_merges_bucket_grids_change_no_byte(monkeypatch):
     monkeypatch.setattr(pg._BoxGrid, "near", everything)
     assert pg.merge_primitives(svg) == indexed
     assert indexed.count("<path") > 5 and len(indexed) < len(svg), "non-vacuity: the scatter merged"
+
+
+def test_an_unreadable_extent_is_refused_by_any_bucket_holding_something():
+    """Feature 278: with the bucket grids, an element whose extent cannot be read still touches everything - a bucket
+    that skipped anything refuses it, an empty one does not - and a member with no extent marks a translucent bucket as
+    touching every newcomer."""
+    from l7r.diagram.interactive.extents import _BoxGrid, _file_extent, _refused
+
+    def bucket(translucent=False):
+        return {"blocked": False, "translucent": translucent, "outlined": False, "extents": [], "skip": [], "ext_grid": _BoxGrid(), "ext_none": False, "skip_grid": _BoxGrid()}
+
+    b = bucket()
+    assert _refused(b, None) is False
+    b["skip"].append((0.0, 0.0, 5.0, 5.0))
+    b["skip_grid"].add((0.0, 0.0, 5.0, 5.0))
+    assert _refused(b, None) is True
+    t = bucket(translucent=True)
+    _file_extent(t, None)
+    assert t["ext_none"] is True and _refused(t, (500.0, 500.0, 2.0)) is True

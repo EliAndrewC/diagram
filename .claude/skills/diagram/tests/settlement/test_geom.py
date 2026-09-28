@@ -847,6 +847,13 @@ def test_keepout_hit_many_equals_hit_point_for_point():
         assert 300 < sum(want) < 5700, "non-vacuity"
     kg.circles([(400.0, 100.0, 40.0)], closed=True)
     assert kg.hit_many([400.0], [100.0], (0.0, 0.0)).tolist() == [True], "an item filed after a query is seen"
+    assert kg.hit_many([], [], (0.0, 0.0)).tolist() == [], "no points, no answers"
+    wide = KeepoutGrid()  # an item wider than the grid files (oversized), and a segment family skipped by `None`
+    wide.rings([[(-5000.0, -5000.0), (12000.0, -5000.0), (12000.0, 12000.0), (-5000.0, 12000.0)]])
+    wide.segs([([(0.0, 0.0), (50.0, 0.0)], 4.0)], slot=1)
+    pts = ([10.0, 20000.0, 25.0], [2.0, 20000.0, 1.0])
+    for extra in ((0.0, 0.0), (0.0, None)):
+        assert wide.hit_many(*pts, extra).tolist() == [wide.hit(x, y, extra) for x, y in zip(*pts, strict=True)]
 
 
 def test_ring_inside_many_equals_inside_point_for_point():

@@ -645,3 +645,12 @@ def test_the_front_row_loop_stops_once_its_share_is_seated(monkeypatch) -> None:
     stage_homesteads(s, plan)
     lo, hi = CLUSTER_DRAWN_ASPECT["round"]
     assert s.M["meta"]["seat_search"]["front"] == min(10, max(6, round(math.sqrt(10 * (lo + hi)))))
+
+
+def test_strip_blocked_refuses_a_strip_standing_on_a_paddy() -> None:
+    """A household strip whose corner stands in a paddy (or within 6 ft of its edge) is blocked - the branch the pool
+    stopped reaching once Sawada's stranded field-house seat was refused (feature 278)."""
+    s, _plan = _strip_settlement()
+    paddy = [(480.0, 480.0), (700.0, 480.0), (700.0, 700.0), (480.0, 700.0)]
+    assert hg.homesteads._strip_blocked(s, 500, 500, 30, 20, 0, 0, [paddy], [], None, []) is True
+    assert hg.homesteads._strip_blocked(s, 300, 300, 30, 20, 0, 0, [paddy], [], None, []) is False
