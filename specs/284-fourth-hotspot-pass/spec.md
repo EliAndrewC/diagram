@@ -38,8 +38,9 @@ profile names - the windbreak, the seam closing, the commons and the blade flush
 
 **Acceptance Scenarios**:
 
-1. **Given** any start, goal and ground, **When** the router runs, **Then** its lattice path costs no more than the old
-   router's, every drawn link passes the same clearance test, and the drawn path is within the recorded bound of today's.
+1. **Given** any start, goal and ground, **When** the router runs, **Then** on the same lattice A*'s path costs no more
+   than Dijkstra's, every drawn link passes the same clearance test, and the new router's drawn path - A* and the
+   coarser lattice together - is within the recorded bound of today's.
 
 ### User Story 3 - The field is sized without its costliest carve (Priority: P1)
 
@@ -65,7 +66,8 @@ profile names - the windbreak, the seam closing, the commons and the blade flush
 
 - A route with no path: the search toward the goal explores every reachable cell, as now, and returns [].
 - A field that genuinely saturates (the envelope clamps it): it is still detected, and the bracket's top still tried.
-- A tie on the board where the scoring's first criterion alone decides: the same seat as today.
+- The board's lazy caption test on a given candidate set: the same seat as the full evaluation (the coarser candidate
+  lattice changes the set itself, FR-007).
 
 ## Requirements *(mandatory)*
 
@@ -92,26 +94,32 @@ profile names - the windbreak, the seam closing, the commons and the blade flush
   tolerance. It is judged by the field stage's wall time, fastest of three (281's lesson: calls removed are not time
   saved); if it does not pay it is recorded as tried with that measurement and withdrawn.
 - **FR-006 The page is built from the structured primitives the engine already makes, and parses the rest once.** The
-  bulk of a hamlet's ink - the grass and reed blades, the brush dots, the tint and glint marks - is made as tuples with
-  their coordinates and extents (`_blade_groups`, `_mark_groups`) and flattened to SVG strings at the finish; the page
-  takes those structures as they are, not the strings. Every other record string is parsed once, and every page pass that
-  reads its elements (the off-map cull, the merge, the marks' regions, the hit layer) reads that parse. The page is
+  scrub's and the marsh's ink - the grass and reed blades, the brush dots, the tint and glint marks - is made as tuples with
+  their coordinates and extents (`_blade_groups`, `_mark_groups`) and flattened to SVG strings at the finish, and those two
+  classes are 60% of the page's parsing (observed 2026-09-28, method: research R2's probe); the page takes those structures as they are, not the strings. Every other record string is parsed once, and every page pass that
+  reads its elements (the off-map cull, the merge, the marks' regions, the hit layer) reads that parse - every other class
+  is 5% of the parsing or less, about 17% together (research R2), spread over every producer of drawing code. The page is
   byte-identical.
 - **FR-007 The notice board fits only the seats that can still win.** Its final choice ranks by caption level first; the
   caption level is asked in that ranking's order and the asking stops at the first seat that holds the best level possible
   and stands in the open - exact, the same seat. And its candidate lattice along a route is coarsened (from `12` to `24` px
-  between samples), so the board may stand a few feet along its verge from today's.
+  between samples), so the board may stand a few feet along its verge from today's - kept only if the notice stage,
+  fastest of three, is faster with it than without (the GM allowed such changes where they make things faster).
 - **FR-008 The bamboo seat search walks outward from its target** and stops at the first seat that fits - the nearest, as
-  the whole-square scan found it, ties broken in the old scan's order. Exact.
+  the whole-square scan found it, ties broken in the old scan's order. Exact. This takes the table's bamboo lever ("sampled
+  more coarsely") by removing the same wasted tests without moving a clump; if SC-006's floor is not met by it, the coarser
+  sampling is taken as well.
 - **FR-009 The whole-ring distance scans ask ring and segment indexes**: `_crosses_fabric`, `_trim_to_service`,
   `push_clear_of_fabric` and the comb's bead test (`_dry`, every segment of every water line per bead) measure a point
   against the nearby edges only, deciding as now. Exact.
 - **FR-010 The brook toll reads a bitmap of the cells near the band** before any sample, deciding as now. Exact.
-- **FR-011 The other slow stages are taken too.** The before-profile names four more (research R1): the windbreak's grove
-  (`village_grove`, its draw and its gap fill), the seam closing (`close_seams`), the commons' scatter, and the finish's
-  blade flush. For each the plan names a lever of the allowed kind and it is taken; only a stage that cannot be made
-  significantly faster without a fundamental change or a broken rule is left, with the measurement that shows it.
-- **FR-012 What is left is written down** in `dev/performance.md` with its levers priced.
+- **FR-011 The other slow stages are taken too - those the before-profile names and whatever the after-profile shows.** The
+  before-profile names four more (research R1): the windbreak's grove (`village_grove`, its draw and its gap fill), the seam
+  closing (`close_seams`), the commons' scatter, and the finish's blade flush. For each of them, and for anything the
+  after-profile shows slow, a lever of the allowed kind is taken where one would make it significantly faster; only what
+  cannot be made significantly faster without a fundamental change or a broken rule is left.
+- **FR-012 What is left is written down** in `dev/performance.md`: only what FR-011 could not take, each with the measurement
+  that shows why.
 - **FR-013 Every moved map keeps its invariants**: 276's FR-006 condition in full (SC-011).
 
 ### Key Entities
@@ -130,8 +138,9 @@ removes is not predicted), and every stage figure is the fastest of three with t
   the report states the figure.
 - **SC-002** (FR-001, FR-002, FR-003): the router bucket's calls are at least `2x` fewer on Kashikawa (6698394,
   m:before-kashikawa-b-router-total) and Sawada (4816861, m:before-sawada-b-router-total); a test over recorded route
-  requests shows every new lattice path costing no more than the old one's and every drawn link clear; and each drawn
-  path is at most `5%` longer than the old router's for the same request, a bound recorded under Decisions.
+  requests shows, on the same lattice, A*'s path costing no more than Dijkstra's, every drawn link clear, and the new
+  router's drawn path - A* and the coarser lattice together - at most `5%` longer than the old router's for the same
+  request, a bound recorded under Decisions.
 - **SC-003** (FR-004, FR-005): the field bucket's calls - the size search and its carves, the seam closing counted apart
   (buckets nest exclusively) - are at least `1.3x` fewer on Inashiro (1474667, m:before-inashiro-b-field-total) and Sawada
   (2459714, m:before-sawada-b-field-total), every field within its tolerance,
@@ -162,21 +171,22 @@ removes is not predicted), and every stage figure is the fastest of three with t
   map's research entry gives its houses, paddies and ways before and after, and a material change is a finding to fix,
   not a report; and `make cohort N=24` shows no newly failing seed. The exact changes (FR-002, FR-006, FR-008, FR-009,
   FR-010, the board's lazy caption test) leave every output they touch byte-identical, shown before the moving ones land.
-- **Counts that move between runs of the same code**: the fabric bucket's and anything beneath the fabric index (the
-  router's among them) move by a few calls with the id-keyed memo's hits (281's Amendment 1; Kuwabata's router 1134922
-  and 1134924 in two base runs, observed 2026-09-28, method: `make figures` in the review); none of the floors above is
-  near such a margin.
+- **Counts that move between runs of the same code** (observed 2026-09-28, method: round 1's `make figures` re-run): the
+  fabric bucket by tens of thousands (Kuwabata 702611 and 731256, Sawada 776100 and 762559) and anything beneath the
+  fabric index by a few calls - the router's (Kuwabata 1134922 and 1134924) and the clip's (Sawada 7390 and 7388) - with
+  the id-keyed memo's hits (281's Amendment 1). No floor above is set on the fabric bucket, and the router's and the clip's
+  moves are far inside theirs.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
 | The router searches toward its goal; of two equally short routes it may draw the other | map drawing convention (the same clearance rules; a tie resolved differently) | research R1; the GM's request | point of change in `hamletgen/ways/route.py` |
-| The router's drawn path may be up to `5%` longer than today's for the same request, where A* picks another lattice path of the same cost | map drawing convention (the same clearance rules; the bound tested, SC-002) | research R1 | point of change in `hamletgen/ways/route.py` |
+| The router's drawn path may be up to `5%` longer than today's for the same request - where A* picks another lattice path of the same cost, or the coarser lattice (FR-003) draws the way differently | map drawing convention (the same clearance rules; the bound tested, SC-002) | research R1 | point of change in `hamletgen/ways/route.py` |
 | The router's lattice cell is the largest that strands no house | map drawing convention (measured; a stranding cell is not taken) | FR-003 | point of change in `hamletgen/ways/route.py` |
-| The carve's rows as arrays, kept only if faster | map drawing convention (plots within the fit's tolerance) | FR-005 | point of change in `waterfields/carve.py` |
+| The carve's rows as arrays, kept only if faster | map drawing convention (plots within the fit's tolerance) | FR-005 | point of change in `waterfields/sector_rows.py` |
 | The field's size search probes the largest fan only on measured saturation | map drawing convention (the same tolerance and target; the plots may differ) | research R1 | point of change in `hamletgen/water/fit.py` |
-| The notice board's candidates sampled every `24` px along a route, not `12` | map drawing convention (the same rules and ranking; the board may stand a few feet along its verge) | FR-007 | point of change in `settlement/structures/fixtures/siting.py` |
+| The notice board's candidates sampled every `24` px along a route, not `12`, kept only if faster | map drawing convention (the same rules and ranking; the board may stand a few feet along its verge) | FR-007 | point of change in `settlement/structures/fixtures/siting.py` |
 
 ## Assumptions
 
@@ -192,3 +202,11 @@ removes is not predicted), and every stage figure is the fastest of three with t
   rows as arrays, kept only if faster), FR-006 (the page from the structured blades and marks, the rest parsed once),
   FR-009 with `_dry`, FR-002 keeps the pull exact and SC-002 bounds the drawn length, FR-011 takes the four named
   stages; the floors are labeled as floors; the moving counts are named.
+- Round 2 (spec-fidelity-verify, 2026-09-28): CHANGES REQUIRED - SC-002 compared costs across lattices; FR-006 carried
+  structure only for the scrub and marsh with no measurement of the rest; FR-011/FR-012 left the after-profile to be
+  recorded; the moving counts understated; the board's edge case and coarser lattice; the bamboo swap unstated; the crown
+  bucket counted nothing. Addressed: SC-002 and US2 on the same lattice with the bound on the whole router; research R2
+  measures the page's parsing by class (most of it in the two structured classes); FR-011 takes the after-profile
+  under the same rule and FR-012 records only what cannot be taken; the moves given with their sizes; the board's edge
+  case narrowed and its coarser lattice kept only if faster; FR-008 states the swap; the crown callee named by its
+  qualified name.

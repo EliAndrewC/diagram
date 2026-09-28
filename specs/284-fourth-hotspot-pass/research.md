@@ -52,3 +52,14 @@ rank, they do not predict):
 the field's acreage tolerance (`fit_field`'s `tolerance`), a tied board seat resolving the other way, bamboo clumps sitting a little differently -
 and in general any change of that nature that makes a map significantly faster. Not a change to what a settlement is,
 and not a broken rule.
+
+## R2 - Where the page's parsing goes, by class (2026-09-28)
+
+**Method** (observed 2026-09-28, method: a probe timing the page's `wrap`, `drop_offmap` and `marks_region` per call and
+attributing each to its string's feature class, over one full generate of Kashikawa and one of Sawada): 1.597 s of parsing
+in all. The scrub and rough grazing took 41.4% (10,971 elements, 4.2 million characters), the marsh 18.5% - the two classes
+whose ink is the deferred blade and mark buckets the finish flattens (`_blade_groups`, `_mark_groups`). Calls from outside
+the page (the finish's own culling of those buckets, before the page) took 23.2%. No other class took more than 5.0%: the
+bunds 5.0%, the paddies 3.0%, the windbreak 1.9%, the bund beans 1.3%, every other class under 1%, together about 17%. So
+carrying the structures the engine already makes to the page reaches the bulk of the parsing, and what is left is spread
+thin over every other producer - which one parse per string covers without rewriting each producer's drawing code.

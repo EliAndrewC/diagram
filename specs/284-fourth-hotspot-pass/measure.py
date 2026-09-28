@@ -31,7 +31,7 @@ BUCKET_CALLEES: dict[str, tuple[str, ...]] = {
     "bamboo": ("bamboo_blocked",),
     "page": ("merge_primitives", "drop_offmap"),
     "edge_scan": ("edge_dist",),
-    "grove_draw": ("_crown_seat_clear",),
+    "grove_draw": ("TreeStandsMixin._crown_seat_clear",),
     "seams": ("_absorb",),
     "commons": ("grass_scatter",),
     "flush": ("merge_lines",),
