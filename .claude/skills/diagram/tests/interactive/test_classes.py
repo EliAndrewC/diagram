@@ -255,7 +255,9 @@ def test_every_accurate_class_without_a_caveat_is_deliberate() -> None:
     # reservoir above the fields" and then "on this map the pond is the field's drainage sink", on every map. Rewritten
     # to cover both parts a pond plays, it now discloses that a pond at the field's foot is the map's declared sink with
     # no surveyed bank or outlet behind it.
-    assert bare == {"marsh", "bund", "notice board", "windbreak"}
+    # `bund` LEFT the list on 2026-09-28 (feature 269 K1): fields/260 reads the dividing bund's one to two shaku, and
+    # the walking bund's two to five feet is now disclosed as a GUESS held between that and the one-ken farm road.
+    assert bare == {"marsh", "notice board", "windbreak"}
 
 
 def test_slug_is_a_css_token() -> None:

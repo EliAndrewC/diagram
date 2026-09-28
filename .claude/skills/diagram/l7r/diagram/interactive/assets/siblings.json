@@ -127,7 +127,7 @@
     [
       "paddy",
       "fallow",
-      "A paddy is in crop and under water; a fallow patch is ground resting out of crop for the season."
+      "A paddy is in crop and under water; a fallow basin is a paddy plot left to rest this year, dry, in grass and grazed."
     ],
     [
       "bund",
@@ -152,17 +152,17 @@
     [
       "millet",
       "fallow",
-      "The millet plot is in crop; a fallow patch rests out of crop for the season."
+      "The millet plot is in crop; a fallow basin is a paddy plot left to rest this year, grazed rather than cropped."
     ],
     [
       "buckwheat",
       "fallow",
-      "The buckwheat plot is in crop; a fallow patch rests out of crop for the season."
+      "The buckwheat plot is in crop; a fallow basin is a paddy plot left to rest this year, grazed rather than cropped."
     ],
     [
       "barley",
       "fallow",
-      "The barley plot is in crop; a fallow patch rests out of crop for the season."
+      "The barley plot is in crop; a fallow basin is a paddy plot left to rest this year, grazed rather than cropped."
     ],
     [
       "stream",
@@ -202,7 +202,7 @@
     [
       "soy",
       "fallow",
-      "The soybean plot is in crop; a fallow patch rests out of crop for the season."
+      "The soybean plot is in crop; a fallow basin is a paddy plot left to rest this year, grazed rather than cropped."
     ],
     [
       "soy",

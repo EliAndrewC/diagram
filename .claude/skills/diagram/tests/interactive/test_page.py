@@ -187,7 +187,8 @@ def test_a_question_s_text_drops_the_dated_bookkeeping_and_nothing_else() -> Non
 
 def test_the_questions_come_in_the_entry_s_order_and_every_class_that_names_a_section_has_some() -> None:
     """Spec FR-004 / D4: the class author's primary question first, not file order; FR-002: the one entry
-    that resolves to nothing is `fallow`, whose link was hidden already."""
+    that resolved to nothing was `fallow`, whose link was hidden already - until feature 269 (K1) wrote it from
+    fields/250, so now every class names a findable section."""
     qs = research_questions(CLASSES["farmhouse"].entry)
     assert [q["text"][:30] for q in qs] == ["What stood on a farmstead - th", "How close does a farmhouse sta", "Is every farmhouse reached by "], qs
     assert all(q["url"].startswith(RESEARCH_PAGES + "homesteads.html#") for q in qs)
@@ -195,7 +196,7 @@ def test_the_questions_come_in_the_entry_s_order_and_every_class_that_names_a_se
     # file order would put the lane entry (line 274) before the paddy entry (line 400); the entry's order wins
     assert [q["url"] for q in research_questions(CLASSES["farmhouse"].entry)] == [q["url"] for q in qs], "deterministic"
     unresolved = sorted(k for k, fc in CLASSES.items() if not research_questions(fc.entry))
-    assert unresolved == ["fallow"], "every other class's entry names at least one findable section"
+    assert unresolved == [], "every class's entry names at least one findable section"
     assert research_questions("nothing here") == []
     for k, fc in CLASSES.items():
         for q in research_questions(fc.entry):
@@ -407,7 +408,8 @@ def test_the_citations_come_from_the_research_entries() -> None:
 
 
 def test_every_class_cites_what_its_entry_cites_and_the_uncited_are_the_known_four() -> None:
-    """One entry the citation passes have left without a key: `fallow`, whose section records a silence. The
+    """No entry is left without a key. `fallow` was the last, its section recording a silence, until feature 269 (K1)
+    wrote it from fields/250 (the resting paddy basin). The
     in-field-features section of `fields.html` (field pond, field rock, grave island) was cited in feature 242. `copse` and `windbreak` were uncited for a day: their
     fengshui-forest entry rested on two MDPI papers mdpi.com would not serve to this container, until the GM
     downloaded them (2026-09-07) and the passages were read from the copies - the Fujian paper supports the
@@ -419,7 +421,7 @@ def test_every_class_cites_what_its_entry_cites_and_the_uncited_are_the_known_fo
     openly, so the ladder is cited from that and from an open design report. GB 50288 itself stays on the
     list of documents only a person could reach."""
     uncited = sorted(k for k, fc in CLASSES.items() if not research_sources(fc.entry))
-    assert uncited == ["fallow"], "an entry without a cited key - see the docstring for the one known one"
+    assert uncited == [], "an entry without a cited key - see the docstring"
     for k, fc in CLASSES.items():
         for key in research_sources(fc.entry):
             assert key in registry(), f"{k} cites {key}, which SOURCES.md does not register"
