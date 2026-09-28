@@ -32,7 +32,6 @@ import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field, replace
 from pathlib import Path
 
-
 from l7r.diagram.labels import Obstacle, ObstacleIndex, Placement, Subject, Way, place
 from l7r.diagram.labels.geom import Poly, Pt, bbox, inside, rect
 from l7r.diagram.labels.standard import CENTER_ABOVE_BASELINE_EM, CHAR_W_EM, CLEAR_EM, PITCH_EM, WEIGHT_OBSTACLE, WEIGHT_WAY, block_half
@@ -422,6 +421,7 @@ def leader_to_ink(p: Placement, parts: list[Shape]) -> Placement:
     283 - the tax barge's and the old pines' leaders ended 5-6 ft short)."""
     from shapely.geometry import LineString, Point, Polygon
     from shapely.ops import nearest_points, unary_union
+
     if p.leader is None or not parts:
         return p
     a = Point(p.leader[0])
@@ -449,6 +449,7 @@ def stepped_subject(box: Poly, own: list[Shape], at: Pt) -> Poly:
     largest part - a caption beside one block of a stepped house names the house, and a leader to it ends on it."""
     from shapely.geometry import Polygon
     from shapely.ops import unary_union
+
     blocks = [s for s in own if s.tag == "rect" and _area(s.poly) >= BLOCK_PX]
     if len(blocks) < 2 or inside(at[0], at[1], box):
         return box

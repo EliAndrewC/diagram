@@ -572,8 +572,9 @@
       <text x="299.5" y="253.2" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#3A2E1C"><tspan x="299.5" dy="0.0">shuttered</tspan><tspan x="299.5" dy="10.9">wing</tspan></text>
     </g>
     <g data-kind="family quarters">
-      <text x="394.5" y="258.3" text-anchor="middle" font-size="10.5" fill="#3A2E1C">family quarters</text>
-      <text x="394.5" y="268.2" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">(and his son)</text>
+      <text x="387.0" y="252.8" text-anchor="middle" font-size="10.5" fill="#3A2E1C"><tspan x="387.0" dy="0.0">family</tspan><tspan x="387.0" dy="12.1">quarters</tspan></text>
+      <!-- "(and his son)" removed (feature 283): the son is in the GM-only field of Koharu's Obsidian Portal record, and
+           the GM ruled on 2026-09-28 that nothing from that field reaches a page -->
     </g>
     <text x="477.0" y="258.9" text-anchor="middle" font-size="10.5" fill="#3A2E1C" data-kind="inner rooms">inner rooms</text>
     <!-- Connecting corridor -->
