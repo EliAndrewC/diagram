@@ -1088,6 +1088,7 @@ jetty	jetty
 jiajing	Jiajing era
 jiajing era	Jiajing era
 jiangnan	Lower Yangzi
+jiangren	Jiangren
 jiaochang	jiaochang
 jiaqing	Jiaqing
 jiegao	jiegao
