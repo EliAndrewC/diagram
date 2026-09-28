@@ -7,6 +7,7 @@ from collections.abc import Mapping, Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, seg_intersect
+from l7r.diagram.settlement._geom.indexes import PointGrid
 from l7r.diagram.sitegen.geom import crosses_disc, crosses_poly, unit
 
 from ..clearance import pairs_within
@@ -88,6 +89,71 @@ def path_violations(path: Poly, avoid: Sequence[Poly], pond: tuple[float, float,
     hits = [x for i in range(len(path) - 1) for p, q in waters if (x := seg_intersect(path[i], path[i + 1], p, q)) is not None]
     bad += pairs_within(hits, 46.0)  # the same pairs the every-pair form counted (170 million `hypot` on a polder - feature 138), by a sweep
     return bad
+
+
+class PathChecker:
+    """`path_violations` for many candidate paths against the SAME water, crop and pond, with that geometry indexed
+    ONCE (feature 276, FR-005). The stage asked `path_violations` 176 times per roll and each call walked every brook
+    segment, every avoid polygon and every water segment for every segment of the candidate: 0.966 s of Inashiro's
+    1.308 s track stage (specs/276 research R4).
+
+    THE INDEX PRUNES, THE SAME TESTS DECIDE. Two segments can cross only if their boxes overlap, and a path segment
+    can enter or lie inside a polygon only if its box overlaps the polygon's - so asking the grid for the items whose
+    boxes meet each path segment's box drops nothing a test could have counted. `violations` then runs
+    `path_violations`' own per-segment tests on those items, and `path_violations` stays as the oracle a test compares
+    this with on real candidate paths."""
+
+    __slots__ = ("avoid", "brook", "pond", "waters")
+
+    def __init__(self, avoid: Sequence[Poly], pond: tuple[float, float, float, float] | None, brook: Sequence[tuple[Pt, Pt]], waters: Sequence[tuple[Pt, Pt]] = ()) -> None:
+        self.pond = pond
+        self.avoid = PointGrid()
+        self.avoid.extend([(poly, min(p[0] for p in poly), min(p[1] for p in poly), max(p[0] for p in poly), max(p[1] for p in poly)) for poly in avoid if len(poly) >= 3])
+        self.brook = _seg_grid(brook)
+        self.waters = _seg_grid(waters)
+
+    def violations(self, path: Poly) -> int:
+        bad = 0
+        hits: list[Pt] = []
+        for i in range(len(path) - 1):
+            a, b = path[i], path[i + 1]
+            box = (min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1]))
+            brook = _meeting(self.brook, box)
+            waters = _meeting(self.waters, box)
+            avoid = _meeting(self.avoid, box)
+            # the crop-landing test reads EVERY avoid polygon at the crossing point, which lies on this segment - so
+            # the polygons whose boxes meet the segment's box are every polygon that point could be in or near (pad 14)
+            landing = _meeting(self.avoid, (box[0] - 14.0, box[1] - 14.0, box[2] + 14.0, box[3] + 14.0))
+            if (
+                (self.pond is not None and crosses_disc(a, b, (self.pond[0], self.pond[1]), max(self.pond[2], self.pond[3]) + 80.0))
+                or any(seg_intersect(a, b, p, q) is not None for p, q in brook)
+                or any(crosses_poly(a, b, poly) for poly in avoid)
+                or any(shallow_crossing(a, b, p, q) for p, q in waters)
+                or any(crossing_lands_on_crop(a, b, p, q, landing) for p, q in waters)
+            ):
+                bad += 1
+            hits += [x for p, q in waters if (x := seg_intersect(a, b, p, q)) is not None]
+        return bad + pairs_within(hits, 46.0)
+
+
+def _seg_grid(segs: Sequence[tuple[Pt, Pt]]) -> PointGrid:
+    grid = PointGrid()
+    grid.extend([((p, q), min(p[0], q[0]), min(p[1], q[1]), max(p[0], q[0]), max(p[1], q[1])) for p, q in segs])
+    return grid
+
+
+def _meeting(grid: PointGrid, box: tuple[float, float, float, float]) -> list[Any]:
+    """The payload of every item of `grid` whose box meets `box`, once each. Order is not kept, and nothing needs it:
+    every caller asks `any(...)` or counts crossing pairs."""
+    x0, y0, x1, y1 = box
+    seen: set[int] = set()
+    out = []
+    for it in grid.near((x0 + x1) / 2, (y0 + y1) / 2, max(x1 - x0, y1 - y0) / 2):
+        if id(it) in seen or it[-4] > x1 or it[-2] < x0 or it[-3] > y1 or it[-1] < y0:
+            continue
+        seen.add(id(it))
+        out.append(it[0])
+    return out
 
 
 def crossing_lands_on_crop(a: Pt, b: Pt, p: Pt, q: Pt, crops: Sequence[Poly], pad: float = 14.0) -> bool:

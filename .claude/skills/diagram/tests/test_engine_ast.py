@@ -12,8 +12,7 @@ import pathlib
 
 import pytest
 
-from tests import _engine_ast
-from tests import test_memory, test_package_surfaces
+from tests import _engine_ast, test_memory, test_package_surfaces
 from tests.hamletgen import test_driver
 from tests.settlement import test_water_ways
 
@@ -44,7 +43,7 @@ def test_the_four_scans_parse_each_file_once(fresh: None, monkeypatch: pytest.Mo
     test_water_ways.lane_deletes(_engine_ast.engine_modules(files, ("del",)), ENGINE)
     test_package_surfaces._from_imports()
     assert len(reads) == 4 and sum(reads) > _engine_ast.PARSES, "non-vacuity: the four scans read overlapping files, so sharing had something to share"
-    assert _engine_ast.PARSES == len({k[0] for k in _engine_ast._TREES}), "every file parsed exactly once across the four scans"
+    assert len({k[0] for k in _engine_ast._TREES}) == _engine_ast.PARSES, "every file parsed exactly once across the four scans"
 
 
 def test_a_changed_file_is_parsed_again(fresh: None, tmp_path: pathlib.Path) -> None:

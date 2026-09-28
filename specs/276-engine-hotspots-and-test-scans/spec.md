@@ -196,8 +196,9 @@ The track stage's path checks read the static water and crop geometry from an in
 - **SC-004** (FR-004): `close_seams` inside a comb build takes at least `2x` less than its 0.842 s to 1.018 s
   (m:before-close-seams-min, m:before-close-seams-max), and a diagonal sliver pocket's grid visits only the cells it
   touches.
-- **SC-005** (FR-005): The track stage's path checks take at least `2x` less than 0.966 s (m:before-track-checks-s), the stage is
-  not slower than 1.308 s (m:before-track-stage-s), and the checks' counts equal the full scan's on every candidate.
+- **SC-005** (FR-005): The track stage's path checks take at least `2x` less than the CORRECTED function did before the index -
+  its time re-taken once `seg_intersect` was bounded (m:before-track-checks-corrected-s; 0.966 s was the uncorrected one,
+  m:before-track-checks-s) - the stage is not slower than 1.308 s (m:before-track-stage-s), and the checks' counts equal the full scan's on every candidate.
 - **SC-006** (FR-006): Every live pool map regenerates with every gate rule passing, `make done` is green at `100%`, and FR-006's
   house counts and forms hold on every pool map and placement scenario.
 - **SC-007** (FR-007, FR-008): every before- and after-figure SC-001 to SC-006 names is in `measurements.json`, the
@@ -208,13 +209,15 @@ The track stage's path checks read the static water and crop geometry from an in
 
 This feature changes no rule, glyph or density, and no size distribution: every map is drawn by the same rules, a
 homestead's part sizes come from the same distributions (rolled per household, the row below), and where a seat, a seam or
-a track lands differently it is because the same rules were asked more efficiently - or, for the tracks and two cluster
-tests, because a crossing test that counted water a way never crossed now counts only real crossings (Amendment 1).
+a track lands differently it is because the same rules were asked more efficiently - or, for the tracks, a cluster's
+way-crossing finder and spur trim, and a homestead's brook-cut test, because a crossing test that counted segments that never
+crossed now counts only real crossings (Amendment 1).
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
 | Homestead seats are chosen by the same fit rules from a pruned candidate set, so a house may land at a different legal seat than before | map drawing convention (no rule changed; the placement order is an engine property, not a finding) | the GM: shifts are fine "as long as the underlying reality of what these settlements are generally like stays the same" | point of change in the placer; research R-section naming each moved map |
 | A homestead's yard size, garden proportions and bed split are rolled once per household (at the seat it was sought from), not per candidate seat; the rake stays per seat | map drawing convention (the sizes come from the same distributions; only which seat seeds the roll changes) | a bundle built once per size and moved (FR-003) cannot re-roll its parts at every candidate; the GM allowed shifts "as long as the underlying reality ... stays the same" | point of change in `settlement/rolling/bundle.py`; research R2 |
+| Crossing tests count only real segment crossings (`seg_intersect` bounded on both segments), so a track, a cluster's ways and spur, and a homestead's brook-cut may resolve differently | map drawing convention (no rule changed; the implementation now does what the rules said) | constitution XIV - a defect found while implementing FR-005, where seven callers counted crossings that did not exist (Inashiro's candidate paths scored 3,847 to 8,773, observed 2026-09-28, method: a probe wrapping `path_violations` in one roll); the GM's "as long as the underlying reality ... stays the same" | `settlement/_geom/primitives.py` and `overlap/taxonomy.py` `seg_intersect`; research R6 per moved map |
 | Seam closing's grid is bounded by the pocket's extent; results may differ by sub-plot amounts where batched geometry rounds differently | map drawing convention | same ruling | point of change in `waterfields/seams`; research |
 
 ## Assumptions
@@ -267,3 +270,7 @@ two infinite LINES for any non-parallel pair, and seven callers used it as a cro
 tests (Inashiro's candidate paths scored thousands of "violations" with no real crossing), a cluster's way-crossing finder
 and spur trim, and a homestead's brook-cut test. It is now bounded on both segments (agreeing with `segments_cross` on every
 pair); `path_violations`, FR-005's oracle, is the corrected function, so tracks on maps with water may choose differently.
+
+Round 2 of this amendment (CHANGES REQUIRED): the Decisions Recorded preamble named two of the fix's three consumers - the
+homestead brook-cut test was missing - and the fix had no row of its own; both added. SC-005's path-check baseline is
+re-taken on the corrected function (m:before-track-checks-corrected-s), so its `2x` credits the index, not the fix.

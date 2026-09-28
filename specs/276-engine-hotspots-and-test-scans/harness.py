@@ -191,11 +191,14 @@ def _seams() -> dict:
 
 
 def _track() -> dict:
+    """The track stage and its path checks, timed inside one reference roll. The checks are `PathChecker.violations`
+    since feature 276 (the stage no longer calls `path_violations`, which is kept as the oracle); on the code before it,
+    `path_violations` is what this wraps."""
     from l7r.diagram import hamletgen as hg
-    from l7r.diagram.hamletgen.ways import track
+    from l7r.diagram.hamletgen.ways import checks, track
 
     acc = {"stage": 0.0, "checks": 0.0, "calls": 0}
-    real_stage, real_pv = track.stage_track, track.path_violations
+    real_stage = track.stage_track
 
     def stage(*a, **k):
         t = time.perf_counter()
@@ -204,15 +207,22 @@ def _track() -> dict:
         finally:
             acc["stage"] += time.perf_counter() - t
 
-    def pv(*a, **k):
-        acc["calls"] += 1
-        t = time.perf_counter()
-        try:
-            return real_pv(*a, **k)
-        finally:
-            acc["checks"] += time.perf_counter() - t
+    def timed(fn):
+        def run(*a, **k):
+            acc["calls"] += 1
+            t = time.perf_counter()
+            try:
+                return fn(*a, **k)
+            finally:
+                acc["checks"] += time.perf_counter() - t
+        return run
 
-    track.path_violations = pv
+    has_checker = hasattr(checks, "PathChecker")
+    real = checks.PathChecker.violations if has_checker else track.path_violations
+    if has_checker:
+        checks.PathChecker.violations = timed(real)
+    else:
+        track.path_violations = timed(real)
     import l7r.diagram.hamletgen.driver as drv
     stages_before = drv.STAGES
     try:
@@ -226,7 +236,10 @@ def _track() -> dict:
                 best = row
         return best or {}
     finally:
-        track.path_violations = real_pv
+        if has_checker:
+            checks.PathChecker.violations = real
+        else:
+            track.path_violations = real
         drv.STAGES = stages_before
 
 

@@ -33,8 +33,10 @@ and 240 seeds (m:before-dense-60-nucleated-per-house, m:before-dense-240-nucleat
 below, which are the city's problem. The dispersed spiral - staged for the form `_SETTLEMENT_FORMS_WHEN_GROVES_WORK`
 rolls - is the generate-and-test search the rest of this section measures.
 
-**Decision**: an exact PRE-SCREEN in front of the full fit test, and indexes for every scan of the placed houses
-and of the static ground.
+**Decision** (revised after the plan reviews): a FREE-GROUND index - the static ground's surely-taken cells and the
+placed boxes, updated as each house lands - asked for every seat's candidates before any is tested; behind it, on the
+dispersed path only, a pre-screen by the fit test's cheapest exact conjuncts; and indexes for every scan of the placed
+houses and of the static ground.
 
 **What the probe found** (rescue scenario):
 - Almost every question is new: 45368 distinct (house rect, placed count) keys among the 46781 fit tests
@@ -54,11 +56,11 @@ site boundary's `SiteCorridors.hit_points` checks every VERTEX of each nearby ou
 outline for every one of the nine points. The first group grows with the houses placed (the density curve in
 R1); the second is static geometry re-scanned per candidate - the shape `dev/performance.md` names.
 
-**Alternatives priced**: a free-space RASTER of the whole site asked for "the nearest seat that fits" was
-considered and rejected: the fit test's rules (sun corridors, the wall rule against the bund, the eave gap by
-rotated corners, the tread by the drawn rake) are not a property of a cell, so a raster could only prune, and the
-pruning the pre-screen does from the exact rules is stronger. The spiral's offsets are kept (the order a household
-prefers its seats in), so a seat is still the nearest acceptable one.
+**Alternatives priced**: a free-space raster that DECIDES seats ("the nearest cell that fits") was rejected: the fit
+test's rules (sun corridors, the wall rule against the bund, the eave gap by rotated corners, the tread by the drawn
+rake) are not a property of a cell. So the index PRUNES - it drops only candidates the exact test would refuse at a point
+it holds as taken - and proposes the survivors in the spiral's own order, so a seat is still the nearest acceptable one.
+Caching verdicts was rejected on the probe's evidence (almost every question is new).
 
 ## R3. Why seam closing is slow
 

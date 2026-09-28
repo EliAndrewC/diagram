@@ -6,11 +6,12 @@
 ## Summary
 
 Five independent pieces, each proved on its own before the next: (A) the four AST-scanning tests share one parse;
-(B) the record tests share one scan; (C) homestead placement pre-screens candidates by its cheapest exact rules
-and answers every placed-house and static-ground scan from an index; (D) seam closing computes each result once,
+(B) the record tests share one scan; (C) homestead placement asks a free-ground index - static ground and the houses
+placed so far, updated as each lands - for its candidates before testing any, and answers every placed-house and
+static-ground scan from an index; (D) seam closing computes each result once,
 batches per-piece work, and visits only the cells a pocket touches; (E) the track stage's path checks read an
 index built once per stage. Every index PRUNES and the existing exact test DECIDES (`dev/performance.md`), so the
-rules are unchanged; where a batched geometry call or a household-keyed yard roll (D4) moves a map, FR-006's house
+rules are unchanged; where a batched geometry call or a household-keyed yard roll (D10) moves a map, FR-006's house
 counts and forms must hold.
 
 ## Technical Context
@@ -54,7 +55,7 @@ A decrease is the point; an increase on any seed is diagnosed under the bands li
 - **XIII No known regressions**: baseline `make cohort N=24` in a detached worktree on unmodified code (research
   R7); zero new failing seeds at merge.
 - **XIV Fix defects found**: any found in passing is fixed in this feature.
-- **XVI Build what was asked**: all five pieces; no exception is planned.
+- **XVI Build what was asked**: all five pieces. Two narrowings were put to `spec-fidelity` and ruled LEGITIMATE (D10's per-household roll, recorded in the spec's Decisions Recorded); every other decision was ruled within.
 
 ## Design
 
@@ -98,16 +99,27 @@ A decrease is the point; an increase on any seed is diagnosed under the bands li
 - **D8 The static ground index**: `SiteCorridors` gains a vertex grid per ring and a hole grid, so `hit_points` asks
   only the vertices inside the query box and only the holes whose box contains the point; the exact tests decide.
   A unit test compares with the linear form on synthetic rings with holes.
-- **D9 The free-ground index proposes the seats** (plan review, 2026-09-28: the index must PROPOSE, not only make
-  each test cheaper). `FreeGround`, built once per homestead stage from the installed site boundary: a raster whose
-  cells are classified SURELY TAKEN only when every point of the cell is refused by the nine-point ground test - the
-  cell lies inside the forbidden union (the paddy's facing-chain strips, the outline's rings less their holes, the
-  water corridors inflated by their clearance), shrunk by a hair so a point on the boundary is never claimed. The
-  placer asks it FIRST, for all of a seat's candidates at once: every spiral offset (dispersed) and every garden side's
-  bbox (nucleated) whose sample points include one in a surely-taken cell is dropped without a test - the exact test
-  it would have received refuses that point, so the drop is exact on both paths - and only the survivors are tested
-  one at a time. A test compares the seats chosen with and without the index on the rescue scenario and the toy, on
-  both paths.
+- **D9 The free-ground index proposes the seats, and is updated as houses land** (plan reviews 1 and 2, 2026-09-28).
+  `FreeGround`, built once per homestead stage, holds two kinds of taken ground:
+  - STATIC ground, only where the site boundary is installed: raster cells classified SURELY TAKEN only when every point
+    of the cell is refused by the nine-point ground test - the cell lies inside the forbidden union (the paddy's
+    facing-chain strips, the outline's rings less their holes, the water corridors inflated by their clearance), shrunk
+    by a hair so a boundary point is never claimed. Where no boundary is installed (the placement primitive called
+    directly, as the density scenario does) this part is EMPTY and only the placed boxes below answer.
+  - PLACED boxes, added as each bundle lands (the placed registry's own index, D7's grid, extended on append), each at
+    the 2 px margin the side fit keeps.
+  The placer asks it FIRST, for all of a seat's candidates at once, and tests one at a time only the survivors:
+  - DISPERSED (`_place_bundle`'s spiral offsets, and each step of `_slide`, which runs the whole fit test every 2 px): a
+    candidate is dropped when a sample point of its house rect lies in a surely-taken static cell (the house-ground
+    conjunct refuses that point) or when its bbox overlaps a placed box at the margin (the side fit refuses any such
+    overlap outright, `fit.py`); both are conjuncts of the order-independent `_bundle_fits`, so the drop is exact.
+  - NUCLEATED (`_place_bundle_nucleated`): the index answers `_envelope_blocked`'s placed-box hits (the ONE box a move
+    is computed from, in list order as today - a single overlap is a MOVE here, never a drop), and prunes by static
+    ground only where the loop itself judges ground: the whole-homestead envelope first; a side's own box only when the
+    whole envelope was refused, since only then does the loop test that box; a moved box only at its moved position. A
+    side whose envelope was clear goes to `_parts_fit` as today, whatever its own sample points would say.
+  Tests: the seats chosen with and without the index are the same on the rescue scenario and the toy on both paths,
+  including a case whose whole envelope is clear while one side's sample point lies on taken ground.
 - **D9a The dispersed pre-screen** (ruled within): behind the index, `_place_bundle`'s survivors are pre-screened by
   `_bundle_fits`'s own cheapest conjuncts (the house's and yard's ground, the eave gap, the placed-box overlap) before
   the rest - exact because that conjunction is order-independent. **Not on the nucleated path**: its test is

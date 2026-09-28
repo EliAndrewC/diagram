@@ -39,13 +39,14 @@ def after_entries(b: dict) -> dict[str, dict]:
     add("after-ast-tests-max", max(t[k] for k in ast_ids), "s", "the slowest of the four AST-scanning tests alone (setup + call)")
     add("after-record-tests-sum", round(sum(t[k] for k in rec_ids), 2), "s", "the five named record tests alone, summed")
     h = b["homesteads"]
-    add("after-rescue-s", h["rescue-20"]["s"], "s", "stage_homesteads on the rescue-rounds scenario")
-    add("after-rescue-fits", h["rescue-20"]["fit_tests"], "fit tests", "full fit tests on the rescue-rounds scenario", varies=False)
-    add("after-rescue-houses", h["rescue-20"]["houses"], "houses", "houses seated on the rescue-rounds scenario", varies=False)
-    for n in (60, 120, 240):
-        add(f"after-dense-{n}-per-house", h[f"dense-{n}"]["s_per_house"], "s", f"try_place cost per seated house, {n} seeds at constant density")
-        add(f"after-dense-{n}-houses", h[f"dense-{n}"]["houses"], "houses", f"houses seated from {n} seeds at constant density", varies=False)
-    add("after-dense-240-s", h["dense-240"]["s"], "s", "try_place total, 240 seeds at constant density")
+    for form in ("nucleated", "dispersed"):
+        add(f"after-rescue-{form}-s", h[f"rescue-20-{form}"]["s"], "s", f"stage_homesteads on the rescue-rounds scenario, {form} path")
+        add(f"after-rescue-{form}-fits", h[f"rescue-20-{form}"]["fit_tests"], "fit tests", f"full fit tests on the rescue-rounds scenario, {form} path", varies=False)
+        add(f"after-rescue-{form}-houses", h[f"rescue-20-{form}"]["houses"], "houses", f"houses seated on the rescue-rounds scenario, {form} path", varies=False)
+        for n in (60, 120, 240):
+            add(f"after-dense-{n}-{form}-per-house", h[f"dense-{n}-{form}"]["s_per_house"], "s", f"try_place cost per seated house, {n} seeds at constant density, {form} path")
+            add(f"after-dense-{n}-{form}-houses", h[f"dense-{n}-{form}"]["houses"], "houses", f"houses seated from {n} seeds, {form} path", varies=False)
+        add(f"after-dense-240-{form}-fits", h[f"dense-240-{form}"]["fit_tests"], "fit tests", f"full fit tests, 240 seeds at constant density, {form} path", varies=False)
     s = b["seams"]
     add("after-close-seams-max", max(v["close_seams_s"] for v in s.values()), "s", "close_seams inside one build_comb, the slowest of seeds 5/11/17")
     tr = b["track"]

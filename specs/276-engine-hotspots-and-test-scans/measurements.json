@@ -285,5 +285,13 @@
     "quantity": "full fit tests, 240 seeds at constant density, dispersed path (deterministic: identical in both runs)",
     "source": "harness.py homesteads section on both placement paths (harness-before-homesteads-both-paths.json), unmodified engine, 2026-09-28",
     "observed": "2026-09-28"
+  },
+  "before-track-checks-corrected-s": {
+    "value": 0.139,
+    "unit": "s",
+    "quantity": "the CORRECTED path_violations (seg_intersect bounded) inside one Inashiro seed-4 roll, best of 3, before the PathChecker index - 83 calls (the corrected scores let the sweep stop earlier than the 176 calls of the uncorrected run)",
+    "source": "a probe test routing PathChecker.violations back to path_violations during hg.generate (scratch; it also wrote tests/fixtures/track_candidates_inashiro_seed4.json), 2026-09-28",
+    "observed": "2026-09-28",
+    "varies": true
   }
 }
