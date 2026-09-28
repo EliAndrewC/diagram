@@ -19,3 +19,11 @@ def test_every_pool_yard_lays_the_mats_it_laid_before() -> None:
         w, h, poly, ftpx, keep, salt = rec["args"]
         got = Y.mat_cells(w, h, [tuple(p) for p in poly], ftpx, tuple(keep) if keep else None, salt)
         assert [list(m) for m in got] == rec["mats"], k
+
+
+def test_a_floor_of_fewer_than_three_points_holds_no_mat() -> None:
+    """A8: `floor_grid` over a degenerate floor answers no point clear, as the scalar test over no polygon did."""
+    from l7r.diagram.settlement.homestead_parts.yards import floor_grid
+
+    grid = floor_grid([0.0, 1.0, 2.0], [0.0, 1.0], [(0.0, 0.0), (5.0, 5.0)], 0.5)
+    assert grid.shape == (3, 2) and not grid.any()
