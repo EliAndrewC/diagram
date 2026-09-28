@@ -143,3 +143,4 @@ FR-002 finds (FR-005); its declaration names the research question it rests on.
   to area. All three applied.
 - Round 2 (spec-fidelity, 2026-09-28): CHANGES REQUIRED - US3's test line still said "rolled from the seed"; rewritten
   to FR-005's rule. The three round-1 items confirmed fixed.
+- Round 3 (spec-fidelity-verify, 2026-09-28): FAITHFUL - the US3 line resolved; no new drift.

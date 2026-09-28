@@ -934,6 +934,7 @@ hokaku-sen	hokaku sen
 hokke	Hokke
 hokke sect	Hokke
 hokora	hokora
+hokuriku	Hokuriku
 holding jail	holding jail
 hon-byakusho	honbyakusho
 honbyakusho	honbyakusho
@@ -1021,6 +1022,7 @@ important cultural properties	Important Cultural Property
 important cultural property	Important Cultural Property
 inari	Inari
 inashiro	Inashiro
+inekake	hazakake
 initiate	initiate
 initiates	initiate
 inkyo	inkyo
@@ -1445,10 +1447,8 @@ martial temples	Martial temple
 massing	massing
 masson pine	masson pine
 masugata	masugata
-mat	tatami
 matoi	matoi
 matou	gangi
-mats	tatami
 matsu	matsu
 meander	meander
 meibutsu	meibutsu
@@ -1929,7 +1929,9 @@ sally port	sally port
 sallyport	sally port
 salvage excavation	salvage excavation
 san no torii	ichi-no-torii
+san'in	San'in
 san'yodo	Sanyodo
+san-in	San'in
 san-no-ma	ni-no-ma
 san-no-maru	sannomaru
 san-no-torii	ichi-no-torii
@@ -1979,6 +1981,7 @@ seisatsuba	kosatsuba
 sekai daihyakka jiten	Sekai Daihyakka Jiten
 sekisho	sekisho
 self-watch house	jishinban
+senbakoki	senbakoki
 senbon torii	Senbon Torii
 sengisho	sengisho
 sengoku	Sengoku
@@ -2299,6 +2302,8 @@ three-bay two-corridor house	three-bay two-corridor house
 three-bay two-corridor houses	three-bay two-corridor house
 three-squads	three-squads courtyard
 three-squads courtyard	three-squads courtyard
+threshing comb	senbakoki
+threshing combs	senbakoki
 threshing yard	threshing yard
 threshing yards	threshing yard
 threshing-yard	threshing yard
@@ -2320,6 +2325,7 @@ tofuya	tofuya
 tohoku	Tohoku
 toiya	ton'ya
 toiyaba	toiyaba
+tokai	Tokai
 tokaido	Tokaido
 toki no kane	toki no kane
 tokonoma	tokonoma

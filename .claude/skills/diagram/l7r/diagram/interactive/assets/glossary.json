@@ -1790,7 +1790,8 @@
   "def": "Rice-drying racks: poles in the field on which the cut sheaves hang for a week or two before threshing.",
   "variants": [
    "hazakake",
-   "hasa"
+   "hasa",
+   "inekake"
   ]
  },
  "head race": {
@@ -3817,8 +3818,6 @@
   "def": "A straw floor mat about 90 by 180 centimeters; a room's size is counted in them.",
   "variants": [
    "tatami",
-   "mat",
-   "mats",
    "twelve-mat"
   ]
  },
@@ -9985,6 +9984,33 @@
   "variants": [
    "meso scale",
    "meso-scale"
+  ]
+ },
+ "San'in": {
+  "def": "The Sea of Japan coast of western Honshu, a country of deep snow where the weather changes easily at harvest.",
+  "variants": [
+   "San'in",
+   "San-in"
+  ]
+ },
+ "Hokuriku": {
+  "def": "The Sea of Japan coast of central Honshu, north of the Kinki, a country of deep winter snow.",
+  "variants": [
+   "Hokuriku"
+  ]
+ },
+ "Tokai": {
+  "def": "The Pacific coast of central Honshu, between the Kanto and the Kinki, along the Tokaido road.",
+  "variants": [
+   "Tokai"
+  ]
+ },
+ "senbakoki": {
+  "def": "The threshing comb: a row of teeth set in a frame, through which the cut rice was drawn a handful at a time to strip the grain.",
+  "variants": [
+   "senbakoki",
+   "threshing comb",
+   "threshing combs"
   ]
  }
 }
