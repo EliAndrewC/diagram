@@ -192,6 +192,34 @@ label) owes no source. Say so in the handoff and leave it.
   rules invert in a capital): no footnotes. M.
 - B46 `cities/river-cities/030` and `ways/050`: thin. S.
 
+## Split under feature 274's write cap (2026-09-28): C4 and X1 run as these parts
+
+C4 and X1 each assign more than four questions, so they run as parts (feature 274: a write session takes at most four).
+
+## C4A - cities/hinterland (edits existing; new hinterland 060-090)
+
+- B41a Near-city retreats and how far an estate reached (`cities/hinterland/010`, `cities/hinterland/015`); the moat and
+  fields (`cities/hinterland/030`); the size of the strip outside a gate (`cities/hinterland/040`). M.
+
+## C4B - cities/sizing (edits existing; new sizing 030-050)
+
+- B41b The population split (`cities/sizing/010`). S.
+
+## X1A - towns (edits existing; held until 265 lands, which it has)
+
+- B43 Who lives in a town and in how many houses (`towns/020`), a town's paddy plot (`towns/150`), and the thin
+  `towns/120` and `towns/140`. M.
+
+## X1B - towns, buildings and capitals (edits existing)
+
+- B44 The magistrate's manor drawn as a plain walled box (`towns/110`) and poverty texture (`buildings/110`). S.
+- B45 Scorpion against Crane capital (`cities/capitals/380`, canon first by `make canon`) and which provincial rules
+  invert in a capital (`cities/capitals/390`). M.
+
+## X1C - river cities and ways (edits existing)
+
+- B46 The thin `cities/river-cities/030` and `ways/050`. S.
+
 ## Queue order
 
 New-question groups first, since they touch no fragment 265's unpushed sweeps edited. The audit's priority runs:

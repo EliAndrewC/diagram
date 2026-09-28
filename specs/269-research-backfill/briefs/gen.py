@@ -43,6 +43,11 @@ GROUPS = {
     "C2": ("cities/government", "cities/government 100-140, and the existing sections the items name"),
     "C3": ("cities/fabric", "cities/fabric 160-190, and the existing sections the items name"),
     "C4": ("cities/hinterland and sizing", "cities/hinterland 060-090, cities/sizing 030-050, and the existing sections the items name"),
+    "C4A": ("cities/hinterland", "cities/hinterland 060-090, and the existing sections the items name"),
+    "C4B": ("cities/sizing", "cities/sizing 030-050, and the existing sections the items name"),
+    "X1A": ("towns (265's pages, part a)", "the existing sections the items name (265 has landed; they are free)"),
+    "X1B": ("towns, buildings and capitals (part b)", "the existing sections the items name"),
+    "X1C": ("river cities and ways (part c)", "the existing sections the items name"),
     "S1": ("settlements: is every household drawn", "the existing settlements 030; settlements 090-110 for a split"),
     "X1": ("the thin sections on 265's pages", "the existing sections the items name (265 has landed; they are free)"),
 }
@@ -61,11 +66,15 @@ cities/river-cities 010-040; urban-features 010, 012, 020, 030, 050, 060, 070, 0
 090, 100, 130; cities/capitals 040, 150, 155, 330-336. Feature 267: buildings 240-640, vegetation 170-200,
 religion-and-death 220-260, fields 220-240. Feature 268: religion-and-death 080-126. Where a finding OWES one of those
 a correction, say exactly what in the handoff; the orchestrator sends it to the owner.
-**New registry entries and glossary terms take their prefix under the host-wide lock**, never "the highest + 10" by
-eye: `python3 {reserve} registry <key> --root {clone}` (or `glossary "<term>"`) prints the stub's path; fill it in.
-**Claims first (FR-011).** Before any research, read `/diagram/.clones/RESEARCH-CLAIMS.md`. Skip any item of yours
-that another session has claimed since, and name it in the handoff. Then set 269's line there to say group {group} is
-in progress; edit only that line.
+**New registry entries and glossary terms take their prefix from `make reserve KIND=registry|glossary KEY=<k>`** (in
+`.claude/skills/diagram`); a write session's eleventh registry key is refused - then follow its message (write the
+unreached items to `$L7R_CONTINUE` as a brief of this same shape, commit, stop).
+**Coordination files are read by line, never whole** (feature 274): `make lines FILE=<f> KEY=<regex>` and
+`make append FILE=<f> LINE="<text>"`. **Claims first (FR-011):** `make lines FILE=/diagram/.clones/RESEARCH-CLAIMS.md
+KEY="<each page your items name>"`; skip any item another session has claimed since, naming it in the handoff; then
+`make append FILE=/diagram/.clones/RESEARCH-CLAIMS.md LINE="Diagram supplemental | 269 | group {group} in progress | <date>"`.
+Read only your own lines of a handoff (`make lines FILE=<handoff> KEY="SECTION=<yours>|KEY=<yours>"`), and add to a
+checks report with `make append`.
 """
 
 WRITE = HEAD + """
