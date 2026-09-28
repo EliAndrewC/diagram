@@ -907,3 +907,16 @@ def test_the_drawn_forms_are_recorded_beside_the_rolled_knob() -> None:
     }
     record_drawn_forms(m)
     assert m["meta"]["woodpile_forms_drawn"] == {"eaves": 2, "kizuma": 1} and m["meta"]["bath_seats_drawn"] == {"corridor": 1, "unjoined": 1}
+
+
+def test_a_shrine_corner_named_by_the_compass_is_that_corner_on_a_turned_house() -> None:
+    """`shrine_corner_local` (the 269 landing's review of Kashikawa): a world offset carried into the house frame lands back
+    at the same world point through the seat loop's own transform, so NE is north-east on a quarter-turned house too."""
+    import math
+
+    from l7r.diagram.hamletgen.homesteads.fixtures import shrine_corner_local
+
+    for rot in (0.0, 4.0, 93.6):
+        ca, sa = math.cos(math.radians(rot)), math.sin(math.radians(rot))
+        lx, ly = shrine_corner_local(30.0, -20.0, ca, sa)
+        assert (lx * ca - ly * sa, lx * sa + ly * ca) == (pytest.approx(30.0), pytest.approx(-20.0))

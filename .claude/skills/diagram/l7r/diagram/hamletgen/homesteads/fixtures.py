@@ -108,6 +108,14 @@ PRIVY_SUNNY_SHARE = 0.727  # the share of outhouses seated SE-to-S: Wang & Ochia
 # Arakawa village, and the GM (2026-08-29) ruled the figure be used literally rather than rounded. The
 # reason the record gives is fermentation, not wind - see the note at the seat roll.
 _SHRINE_CORNERS = (("NW", 0.45), ("NE", 0.35), ("SW", 0.20))
+# each corner's direction in the world, y down: north is -y
+_CORNER_SIGNS = {"NW": (-1.0, -1.0), "NE": (1.0, -1.0), "SW": (-1.0, 1.0)}
+
+
+def shrine_corner_local(wx: float, wy: float, ca: float, sa: float) -> Pt:
+    """A world offset (wx, wy) from the house center in the house's own frame, the inverse of the seat loop's
+    `hx + lx * ca - ly * sa, hy + lx * sa + ly * ca`: the household shrine's corner is rolled by compass name."""
+    return (wx * ca + wy * sa, -wx * sa + wy * ca)
 # THE PERSIMMON'S SIDE (269 B14, research/homesteads/218): "the dooryard in front of the house, most often, and behind it" -
 # the front the likelier, by how much no page says, so this hamlet's front share is rolled in this band (calibrated liberty).
 PERSIMMON_FRONT_BAND = (0.60, 0.85)
@@ -552,7 +560,11 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                     seats = seats[_sh:] + seats[:_sh]
             else:  # shrine: a plot corner, world frame
                 off = px(14.0)
-                corner = {"NW": (-(hw / 2 + off), -(hh / 2 + off)), "NE": (hw / 2 + off, -(hh / 2 + off)), "SW": (-(hw / 2 + off), hh / 2 + off)}
+                # THE CORNER IS ROLLED BY COMPASS NAME, so it is laid out in the WORLD and carried into the house frame the
+                # seat loop works in (settlement-review of Kashikawa at the 269 landing): laid out in the house frame, a
+                # quarter-turned house swung every name 90 degrees - a roll of NE, the kimon corner, drew at world SE.
+                ex, ey = abs(hw * ca) + abs(hh * sa), abs(hw * sa) + abs(hh * ca)
+                corner = {k: shrine_corner_local(sx * (ex / 2 + off), sy * (ey / 2 + off), ca, sa) for k, (sx, sy) in _CORNER_SIGNS.items()}
                 first = _roll(_SHRINE_CORNERS, u)
                 seats = [(*corner[first], w, d)] + [(*corner[k], w, d) for k, _ in _SHRINE_CORNERS if k != first]
             # THE SEATS, THEN THE SAME SEATS FURTHER OUT - and a MISS IS RECORDED (settlement-review of
