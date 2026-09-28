@@ -952,8 +952,7 @@ about 25 ft behind a house's rear wall, the stub class recorded above.
 ## 2026-09-28 (feature 282): the harvest yard drawn - mats over the floor, and racks by the houses; nothing placed moved
 
 Every threshing yard is now drawn as the harvest leaves it: straw mats of 3 by 6 ft laid in rows over the whole floor,
-most turned a little as if laid by hand and nudged off their rows where the gap leaves room, the drawn mats between a third and two thirds of those that covered it (a mat or two fewer where the outline or the rack leaves no room) (a drawing convention - the real
-yard was covered, research homesteads 'What lay in the work yard at harvest?'). The old fixed center mat and the rack
+most turned a little as if laid by hand and nudged off their rows where the gap leaves room, and the map draws between a third and two thirds of the mats that covered it, a mat or two fewer where the yard's outline or its rack leaves no room (a drawing convention - the real yard was covered, research homesteads 'What lay in the work yard at harvest?'). The old fixed center mat and the rack
 along each yard's south edge are gone. This map DECLARES changeable harvest weather (`harvest_weather="changeable"` in
 `sawada.gen.py`): it is the pool's exhibit of racks gathered by the houses, the form the record names for a coast of
 changeable autumn weather (research homesteads 'Did a village put its drying racks by the houses by custom, or because

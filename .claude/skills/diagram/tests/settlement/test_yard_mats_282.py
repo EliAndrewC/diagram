@@ -164,3 +164,10 @@ def test_a_lattice_that_fits_only_in_a_band_thinner_than_any_grid_is_found() -> 
     poly = [(-10.916545273005731, -8.000801383130378), (12.539506545824656, -8.56225445403871), (12.554600478710167, 8.22205926909465), (-11.471217965375882, 8.56225445403871)]
     keep = (8.952654744209827, -7.010451547730915, 11.952654744209827, 0.25)
     assert len(mat_cells(25.405309488419654, 17.52090309546183, poly, 1.0, keep)) >= 8
+
+
+def test_a_lattice_that_fits_only_in_an_arm_of_an_l_the_rack_cuts_is_found() -> None:
+    # a 10 x 7 ft yard whose keep-out takes a corner, leaving the one mat room only in an L with 0.1 ft arms
+    # (spec-fidelity, amendment round 9, 2026-09-28): the region's centroid lies in the cut-out, and it drew none
+    poly = [(-4.9, -3.4), (5.0, -3.4), (5.0, 3.5), (-4.9, 3.5)]
+    assert len(mat_cells(10.0, 7.0, poly, 1.0, (2.2, 0.7, 5.0, 5.0))) == 1

@@ -31,6 +31,8 @@ MAT_JITTER_FT = 0.4
 MAT_SEARCH_STEP_FT = 0.25  # the grid the lattice's offset is searched on - every gap's pitch is a whole number of it
 MAT_STROKE_FT = 0.2  # half the mat outline's drawn width (0.4 at a hamlet's 1 ft to the px)
 MAT_INK_CLEAR_FT = 0.1  # bare ground left between two mats' drawn outlines, at the least
+MAT_PROBE_FT = 1e-6  # how far off a crossing the exact solve probes a region cut by the rack (a hair: far above the 1e-9 test tolerance)
+_PROBE_DIRS = tuple((math.cos(k * math.pi / 8), math.sin(k * math.pi / 8)) for k in range(16))
 MAT_JITTER_DEG = 10.0  # up to 10 degrees where the neighbors leave room: at 6 a corner swung under half a pixel at map scale (settlement-review, Mizuguchi, round 7)
 
 
@@ -224,6 +226,13 @@ def _exact_lattice(
             size = np.bincount(which)
             cx = np.bincount(which, weights=ox[live]) / size
             cy = np.bincount(which, weights=oy[live]) / size
+            if keep is not None:
+                # missing the rack is a union of four half-planes, so a region can be an L whose centroid lies in the
+                # cut-out corner (spec-fidelity, amendment round 9: a 10 x 7 ft yard drew 0 where 1 fits); a hair to
+                # each side of every crossing lies inside each region meeting it, however it is cut
+                hx, hy = ox[live], oy[live]
+                cx = np.concatenate([cx] + [hx + MAT_PROBE_FT * dx for dx, dy in _PROBE_DIRS])
+                cy = np.concatenate([cy] + [hy + MAT_PROBE_FT * dy for dx, dy in _PROBE_DIRS])
             strict = seats(cx, cy, -1e-9)
             for q in range(len(cx)):
                 n = int(strict[:, q].sum())

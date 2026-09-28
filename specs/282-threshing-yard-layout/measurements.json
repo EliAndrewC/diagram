@@ -410,5 +410,27 @@
   "source": "pool/hamlets/kashikawa/kashikawa.notes.md at commit f6a634a6f",
   "measured": "2026-09-28",
   "method": "grep -c 'stand out' (0) and the line read in full"
+ },
+ "sr12-mizuguchi-f1-reading": {
+  "value": 0,
+  "unit": "passages",
+  "quantity": "notes passages (the source of the modal's on_this_map line) ending '(that settled weather keeps them off the houses is the record's reading, not a finding)' on the three settled-weather maps; each now ends '(settled weather keeping the racks off the houses is our reading of the survey, which records racks gathered by the houses only on a coast of changeable weather)'",
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "answers": "6ab2eaa6cf5a",
+  "source": "pool/hamlets/{mizuguchi,kashikawa,inashiro}/*.notes.md",
+  "measured": "2026-09-28",
+  "method": "grep -n 'not a finding' over the pool's notes (0 hits) and the new sentence read in each"
+ },
+ "sr12-kashikawa-f1-notes": {
+  "value": 0,
+  "unit": "passages",
+  "quantity": "feature-282 notes entries with two parentheticals back to back, the verbless 'the drawn mats between ...', or 'or the rack' on a map that draws no rack; each now reads 'and the map draws between a third and two thirds of the mats that covered it, a mat or two fewer where the yard's outline leaves no room (a drawing convention - ...)', Sawada's alone keeping 'or its rack'",
+  "verifies": "F1",
+  "subject": "kashikawa",
+  "answers": "6ab2eaa6cf5a",
+  "source": "pool/hamlets/*/*.notes.md",
+  "measured": "2026-09-28",
+  "method": "grep -n 'or the rack leaves' (0 hits) and grep -c 'and the map draws between' (one entry on each of the four maps that draw mats)"
  }
 }

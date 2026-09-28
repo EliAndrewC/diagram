@@ -233,3 +233,15 @@ FR-002 finds (FR-005); its declaration names the research question it rests on.
   rack limit, `k1 - mh - r ph` and `k3 - r ph`, and the pairwise crossings of the spots' outline constraint lines), each then
   swept exactly across as now - and pin that yard on plain inputs; R4's method line then says so. Plan review round 9
   BLOCKED (D3's search down).
+- Amendment round 9 (spec-fidelity-verify, 2026-09-28; the round-8 item and the passages changed since): FAITHFUL. (1)
+  resolved - `_exact_lattice` now takes every crossing of the fit conditions' lines on the lattice origin, with no step in
+  either direction, and the `25.4 x 17.5 ft` yard is pinned on plain inputs (drawn 8). On this round's own run: the 282 test
+  files pass (49); the 1,000-yard sweep of round 8 re-run on four seeds (4,000 yards of the roll's sizes) finds no short yard
+  an exact oracle seats more in; 12,000 perturbations of the pinned yard (corners and rack moved up to `1 ft`) find none;
+  and `_exact_lattice` agrees with an independent ground truth (every crossing probed a hair round in 16 directions) on 1,260
+  yards, with racks from `rack_segment` and with arbitrary keep-out boxes. The regenerated pool's short yards are R4's six
+  (4, 6, 6, 7, 6, 8 against thirds of 6, 7, 7, 8, 7, 9). R4's method line and plan D3 describe the exact solve. Aside, not a
+  finding: confirming a group of crossings at its centroid is exact only where each seated set's region is convex; a
+  keep-out box can cut an L-shaped region, and a hand-built `10 x 7 ft` yard with a keep-out box at its corner and arms
+  `0.1 ft` wide draws 0 where one mat fits. No rack and no yard in the roll's range reproduced it. The docstring's "a hair
+  to each side of it" would close it. The plan changed since round 9's record, so the plan review is owed to `spec-fidelity`.

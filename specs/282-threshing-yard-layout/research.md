@@ -30,7 +30,7 @@ thousandth of a px) after the lattice search - at each gap of `2`, `1.5` and `1 
 yard allows and one column and one row fewer, at every offset on a quarter-foot grid; and, where the `1 ft` gap still falls
 short of a third, solved exactly with no step anywhere: every spot's fit is a set of linear conditions on the lattice's
 origin (each corner inside the outline moved in by the `1 ft` clearance, the mat clear of the rack), the seated count is
-constant between their lines, and every crossing of two of them is tried, each region's set confirmed at its centroid.
+constant between their lines, and every crossing of two of them is tried, each region's set confirmed at its centroid and, where the rack's keep-out cuts a region so its centroid may fall outside it, a hair to each side of every crossing.
 Checked by an oracle that shares no grid with it (every lattice origin on a `0.02 ft` grid anchored `0.01 ft` off,
 `tests/hamletgen/test_pool_282.py`), which also finds the two yards the quarter-foot search alone left short. The narrower
 steps were tried and read as paving in the settlement-reviews: edge to edge (rounds 2 and 3), and `0.5 ft` (rounds 4 to 6).
