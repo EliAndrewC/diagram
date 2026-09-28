@@ -8,6 +8,17 @@ The research is done. The record-finishing queue (FX1-FX4, SP1-SP2, FIN) and the
 run. Their results are in `specs/269-research-backfill/briefs/*-checks.md`, `briefs/engine/log.md` and the git log.
 Your job is 269's tasks T19-T25 (`specs/269-research-backfill/tasks.md`) and the landing.
 
+0. **Merge main first.** Main has moved since 269's last merge (feature 281's hotspot pass and others: core.py,
+   settlement/_geom/indexes.py, waterfields/carve.py, the pool manifests, the glossary, record pages). Run
+   `git -C <clone> pull --no-rebase --no-edit origin main` and resolve every conflict:
+   - keep BOTH sides' engine edits (main's performance restructuring AND 269's E1-E9 behavior; where main restructured
+     a function 269 changed, re-apply 269's change to main's structure, and never revert main's speedups);
+   - union registry and glossary edits;
+   - `git checkout --theirs` the assembled pages and regenerate them;
+   - keep both sides' fragment edits and quote-check each merged fragment from a bundle (wait for the agents);
+   - take main's pool manifests, then regenerate all five pool hamlets from the merged engine, with their notes
+     censuses.
+   Then run `make quick` in the foreground until green, and commit the merge. Do this before anything else below.
 1. **Relinks.** `grep -rn "RELINK 269\|RELINK 273" .claude/skills/diagram/research`. Each comment names the section and
    the anchor to link: 272's religion-and-death 210/510/530 point to 270 and 280, and 160 points to 273's 540. Turn
    each plain title back into a link to that anchor, and delete the comment.
