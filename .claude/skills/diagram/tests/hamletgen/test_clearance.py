@@ -103,6 +103,9 @@ def test_a_ring_is_indexed_once_by_its_points_and_a_changed_ring_anew(monkeypatc
         assert len(built) == 3, "a changed ring is not served its old index"
         q = (57.0, 57.0)
         assert idx.fouled(q) == fouled_brute(q, [a], 5.0) is True
+        monkeypatch.setattr(C, "_RINGS_MAX", 2)  # past the cap the store is emptied whole, and fills again
+        C.ring_index([(0.0, 0.0), (1.0, 0.0), (0.0, 1.0)])
+        assert len(C._RINGS) == 1
         C.reset()
         assert not C._RINGS
     finally:

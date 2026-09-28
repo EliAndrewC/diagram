@@ -304,3 +304,13 @@ def test_the_vectorized_marsh_keeps_every_keep_out_and_its_density() -> None:
         assert abs(got - want) <= 4 * math.sqrt(want) + 0.02 * want, (got, want)
     assert marsh_scatter(*args) == (blades, marks)
     assert marsh_scatter((0, 0), *args[1:]) == ([], [])
+    # a crescent pond keeps both kinds off its water at each kind's pad, point for point
+    moon = (200.0, 450.0, 50.0)
+
+    def crescent(x, y, pad):
+        return math.hypot(x - moon[0], y - moon[1]) < moon[2] + pad
+
+    cb, cm = marsh_scatter(*args[:6], crescent, *args[7:])
+    kept = [((m[0] + m[2]) / 2, (m[1] + m[3]) / 2, 30.0) for m in cm if "<circle" in m[4]] + [(float(b[0]), float(b[1]), 9.0) for b in cb]
+    assert kept and all(math.hypot(x - moon[0], y - moon[1]) >= moon[2] + pad - 0.1 for x, y, pad in kept)
+    assert len(cm) + len(cb) < len(marks) + len(blades), "the crescent refused some throws"
