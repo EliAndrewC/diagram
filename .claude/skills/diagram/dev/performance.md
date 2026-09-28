@@ -372,6 +372,56 @@ held throughout: points surely in or surely out are decided in arrays, and the b
 | finish | - | about 4.7 s profiled over three finishes waiting on the external renderer (PNG and page raster) | fewer or smaller raster tiles; out of this pass's scope (the render path, feature 225's territory) |
 | tests | - | the gate's slowest items are pool rolls through a cold roll cache after an engine change | inherent to a change that re-keys the cache; `make quick` is 3,789 tests in ~27 s |
 
+## The third pass: scans that were missed, work done twice, and a lever that bought nothing (feature 281, 2026-09-28)
+
+The GM, after 278: *"each time it seems to be paying out with really big performance gains. So let's do the full thing
+again."* The same exercise, with one change to the measuring: every primitive call is traced to the caller that makes it.
+All figures are in `specs/281-third-hotspot-pass/measurements.json`; the pool's five rolls went from 32.9 s to 27.6 s
+together (1.19x), and the reference hamlet's perf bookend 20.6 s -> 16.5 s. Every pool manifest came out byte-identical.
+
+**Scans the index doctrine missed.** Each was a sibling of code already indexed: the lane clip (`clip_to_clear`) walked
+every obstacle edge per 8 ft sample while `clear_runs` beside it asked the fabric index - 535,389 `seg_dist` on Kashikawa
+to 11; the notice board walked every way segment per handover sample and every route point per seat; the home-bank join
+and the homestead fit walked every brook segment; the caption probe walked every lane segment per seat; the brook toll read
+25 mostly empty 20 px cells per ask where a cell a hair wider than the band needs nine. **The shape to look for**: grep a
+module for `seg_dist`/`segments_cross` inside `any(`/`min(` generator expressions over a whole registry - that is where the
+ones left over from the first two passes were.
+
+**Work done twice.** A fabric-index memo miss rebuilt the ring index of every polygon it filed - 376 distinct polygons
+built 5,932 times on Kashikawa - so ring indexes are now shared by CONTENT (the ring's points are the key). The carve asked
+each bund vertex once per plot sharing it (four), and walked each shared plot edge once per plot (two). And the windbreak's
+gap fill re-offered a gap that seated nothing the same 165 candidate points every round for up to six rounds - though a gap
+that seats nothing cannot seat anything later, because every test it faces is static except the spacing test, whose
+refusals only grow.
+
+**Measuring where work moves.** A count credited to a primitive's direct caller reads zero once an index moves the call
+under a new method - a criterion "passed" on work that merely moved. The harness now counts every call made beneath each
+mechanism's entry functions with `sys.monitoring` (the builders included), and records each bucket's TOTAL beside its
+named count: a named count that falls while the total does not is a finding, not a pass.
+
+**A lever priced by 278 that bought nothing.** The marsh scatter, thrown and tested as arrays in 278's grass form, cut its
+scalar keep-out tests 359x - and its hinterland stage did not get faster (Kuwabata's got slower): on small marshes, building
+the shapely shapes of the keep-outs near each mark kind's throws costs what the scalar tests did. It was withdrawn. **Price
+a vectorization by the stage's wall time, fastest of three, not by the calls it removes** - the profile favors it, since
+profiling inflates Python calls and not C. Its one lasting find was a defect: a pond bank's keep-out thinned to every 16th
+point cut the bank's corners, fixed by using the whole ring.
+
+**Two traps worth carrying.** A cache keyed by a list's LENGTH (the precedent `_water_obstacles` uses) served a stale index
+when a caller replaced the streams with a different list of the same length - the gate's feature-261 test caught it; the
+stream index now holds the objects it was built from and compares them by identity. And a single back-to-back reading is
+not a measurement on this host: one base re-run read Kashikawa at 13.2 s against 8.9-9.0 s in every other reading.
+
+**What is left, priced** (profiled seconds over the five maps, `/tmp/m281/after`; profiling inflates Python ~2.4x):
+
+| where | profiled | what it is | the lever, and what it costs |
+|---|---|---|---|
+| the router (`_route`) | 7.9 s | Dijkstra over lazily judged cells, `_clear_link` per shortcut | a coarser lattice, or A* toward the goal - both change which of two equal paths is drawn |
+| field fit and seams | ~9 s | the carve's per-row geometry and shapely buffers/unions in `close_seams` | the rows as array operations; fewer carves by a closer first guess - both change the field |
+| the page writer | ~4 s | regex parsing of the element text (`merge_primitives`, `drop_offmap`) | emit the page's elements from the records instead of re-parsing the svg - a rewrite of the page path |
+| `edge_dist` over whole rings | ~1.5 s | `_crosses_fabric`, `ways/geom.py`'s service trims, the comb's `_dry` | the fourth batch of the missed-scan shape: a `RingIndex` per ring; exact, about 0.6 s real |
+| the brook toll | 590,253 lookups on Kashikawa | 9 cells per ask, most empty | a bitmap of cells near the band - exact, small |
+| the finish | ~1.5 s | the blade buckets' flush | out of this pass's scope (feature 223's) |
+
 ## Memory: the spike is C buffers, not Python objects, and it lands where nothing reads it (feature 208, 2026-09-07)
 
 The GM asked why a full gate costs 6.8 GiB and whether each of the eight workers really needs most of a

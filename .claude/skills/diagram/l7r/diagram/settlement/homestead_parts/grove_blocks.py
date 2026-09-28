@@ -42,7 +42,7 @@ class GroveBlocks:
     re-seats. `displaced` is the other grove's canopy alone, the one blocker a SPARSE grove re-seats
     for. `inside` and `rim_within` are the grove's own outline."""
 
-    __slots__ = ("_fams", "_inside", "_last", "crop_pad", "displacers", "dry_pad", "ring", "static")
+    __slots__ = ("_clear", "_fams", "_inside", "_last", "crop_pad", "displacers", "dry_pad", "ring", "static")
 
     def __init__(
         self,
@@ -82,6 +82,7 @@ class GroveBlocks:
         self._last: tuple[float, float] | None = None
         self._fams: tuple[list[Any], ...] = ()
         self._inside: dict[tuple[float, float], bool] = {}
+        self._clear: dict[tuple[float, float], bool] = {}
 
     def _at(self, x: float, y: float) -> tuple[list[Any], ...]:
         """The static items in (x, y)'s cell, split by family: crops, dry, dikes, water, corridors, circles, rects."""
@@ -115,6 +116,14 @@ class GroveBlocks:
         hit = self._inside.get((x, y))
         if hit is None:
             hit = self._inside[(x, y)] = self.ring.inside(x, y)
+        return hit
+
+    def static_clear(self, x: float, y: float) -> bool:
+        """`not (hard or local or lane)`, remembered per point (feature 281, FR-008): the windbreak's gap fill offers a gap
+        the same points on every round, and none of the three changes during the fill."""
+        hit = self._clear.get((x, y))
+        if hit is None:
+            hit = self._clear[(x, y)] = not (self.hard(x, y) or self.local(x, y) or self.lane(x, y))
         return hit
 
     def rim_within(self, x: float, y: float, limit: float) -> bool:

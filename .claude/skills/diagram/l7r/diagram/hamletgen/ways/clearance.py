@@ -6,7 +6,7 @@ import heapq
 import math
 from collections.abc import Sequence
 
-from l7r.diagram.settlement import point_in_poly, seg_closest, seg_dist, seg_intersect, segments_cross
+from l7r.diagram.settlement import seg_closest, seg_intersect, segments_cross
 
 from ..clearance import fabric_index
 from ..consts import (
@@ -426,10 +426,12 @@ def clip_to_clear(pts: Poly, obstacles: Sequence[Poly], margin: float, step: flo
     if not obstacles and not lines:
         return pts
 
-    def fouled(q: Pt) -> bool:
-        if any(seg_dist(q[0], q[1], a, b) < line_margin for a, b in lines):
-            return True
-        return any(point_in_poly(q[0], q[1], list(o)) or min(seg_dist(q[0], q[1], o[j], o[(j + 1) % len(o)]) for j in range(len(o))) < margin for o in obstacles)
+    # THE FABRIC INDEX, AS `clear_runs` ASKS IT (feature 281, FR-001). This walked every obstacle's every edge and every
+    # line per 8 ft sample - 535,389 `seg_dist` on Kashikawa's lane arms, field spur and threading - while its through-lane
+    # sibling below had asked the index since feature 138. The closure it replaces was `fouled_brute` term for term (each
+    # line under `line_margin`, then each obstacle inside or its nearest edge under `margin`), and `FabricIndex.fouled`
+    # equals `fouled_brute` (feature 138's oracle test), so every clip is what it was.
+    fouled = fabric_index(obstacles, margin, (), 0.0, lines, line_margin).fouled
 
     out: Poly = [pts[0]]
     for i in range(len(pts) - 1):

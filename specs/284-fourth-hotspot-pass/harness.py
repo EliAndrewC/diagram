@@ -1,4 +1,4 @@
-"""Feature 281's discovery harness: per pool hamlet, the stage times (unprofiled) and one profiled FULL regeneration.
+"""Feature 284's harness (281's, with this pass's buckets): per pool hamlet, the stage times (unprofiled) and one profiled FULL regeneration.
 
     make spec-harness SPEC=specs/281-third-hotspot-pass OUT=<dir>
 
@@ -18,7 +18,7 @@ import tempfile
 import time
 from pathlib import Path
 
-OUT = Path(os.environ.get("HARNESS_OUT") or "/tmp/h281")
+OUT = Path(os.environ.get("HARNESS_OUT") or "/tmp/h284")
 
 SPECS = {
     "inashiro": dict(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond", fixtures_min={"shrine": 1}),
@@ -108,6 +108,15 @@ ENTRIES: tuple[tuple[str, str, str], ...] = (
     ("grove", "l7r.diagram.settlement", "Settlement.village_grove"),
     ("marsh", "l7r.diagram.settlement", "Settlement.marsh"),
     ("marsh", "l7r.diagram.settlement.land.wet", "marsh_scatter"),
+    # feature 284's levers
+    ("router", "l7r.diagram.hamletgen.ways.route", "_route"),
+    ("field", "l7r.diagram.hamletgen.water.fit", "fit_field"),
+    ("notice", "l7r.diagram.settlement", "Settlement.place_kosatsuba"),
+    ("bamboo", "l7r.diagram.hamletgen.hinterland.bamboo", "bamboo_seats"),
+    ("page", "l7r.diagram.interactive.page", "write_html"),
+    ("edge_scan", "l7r.diagram.hamletgen.ways.fabric", "_crosses_fabric"),
+    ("edge_scan", "l7r.diagram.hamletgen.ways.geom", "_trim_to_service"),
+    ("edge_scan", "l7r.diagram.hamletgen.ways.geom", "push_clear_of_fabric"),
 )
 
 
@@ -172,7 +181,7 @@ def _buckets(spec) -> dict[str, dict[str, int]]:
             c[_callee(fn)] += 1
             c["TOTAL"] += 1
 
-    mon.use_tool_id(tool, "harness281")
+    mon.use_tool_id(tool, "harness284")
     try:
         mon.register_callback(tool, ev.PY_START, start)
         mon.register_callback(tool, ev.PY_RETURN, leave)
@@ -190,7 +199,7 @@ def _buckets(spec) -> dict[str, dict[str, int]]:
     return {b: dict(c) for b, c in counts.items()}
 
 
-def test_harness_281() -> None:
+def test_harness_284() -> None:
     from l7r.diagram.hamletgen import HamletSpec
 
     OUT.mkdir(parents=True, exist_ok=True)

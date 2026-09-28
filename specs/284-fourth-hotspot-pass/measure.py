@@ -1,9 +1,9 @@
-"""Feature 281's figures: the harness (stage seconds, one saved profile per hamlet), then the counts read from the profiles.
+"""Feature 284's figures (281's driver, re-based): the harness (stage seconds, one saved profile per hamlet), then the counts read from the profiles.
 
     python3 specs/281-third-hotspot-pass/measure.py before   # the clone at the base commit: before-* keys
     python3 specs/281-third-hotspot-pass/measure.py after    # the base worktree, then the clone, back to back
 
-The base is `c13a6ebe6`, main when this work began (278 and 261 landed, 279's crowns merged), in a detached worktree at `/tmp/base281` (created if missing). Seconds
+The base is `f52ed6aa8`, main when this work began (281 landed), in a detached worktree at `/tmp/base281` (created if missing). Seconds
 depend on the machine's load, so the after-run takes the base and the clone one straight after the other: the base as
 `base-rerun-*` beside the recorded `before-*`, the clone as `after-*`. Counts (`counts.py`, from the profiles) do not.
 """
@@ -18,13 +18,19 @@ import subprocess
 import sys
 from pathlib import Path
 
-BASE = "c13a6ebe6"
+BASE = "f52ed6aa8"
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
-WT = Path("/tmp/base281")
+WT = Path("/tmp/base284")
 ENGINE = Path(".claude/skills/diagram/l7r/diagram")
 # the named callee of each entry bucket (plan C's table); every bucket also records its TOTAL
 BUCKET_CALLEES: dict[str, tuple[str, ...]] = {
+    "router": ("_route.<locals>.is_free", "_route.<locals>.in_band", "heapq.heappop"),
+    "field": ("carve_comb", "_carve_sector", "close_seams"),
+    "notice": ("_fits", "label_seat_clear", "place"),
+    "bamboo": ("bamboo_blocked",),
+    "page": ("merge_primitives", "drop_offmap"),
+    "edge_scan": ("edge_dist",),
     "clip": ("seg_dist",),
     "fabric": ("RingIndex.__init__",),
     "toll": ("dict.get",),
@@ -85,7 +91,7 @@ def main() -> int:
     command = f"python3 {HERE.relative_to(ROOT)}/measure.py {mode}"
     path = HERE / "measurements.json"
     rec = json.loads(path.read_text()) if path.exists() else {}
-    scratch = Path("/tmp/m281")
+    scratch = Path("/tmp/m284")
     if not WT.exists():
         subprocess.run(["git", "-C", str(ROOT), "worktree", "add", "--detach", str(WT), BASE], check=True, capture_output=True)
     if mode == "before":  # the BASE, wherever the clone has moved since (first taken in the clone while it stood at BASE)

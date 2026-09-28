@@ -238,3 +238,15 @@ def test_the_hard_ground_sweep_SKIPS_a_ditch_that_carries_no_path() -> None:
     s._hard_cache = None if hasattr(s, "_hard_cache") else None
     hard = s._hard_ground()
     assert hard, "the ditch that HAS a path is still folded in; the pathless one is simply skipped"
+
+
+def test_a_pond_bank_is_kept_off_whole_not_thinned() -> None:
+    """Feature 281 (B3): the marsh's bank keep-out reads each bank ring as drawn. Thinned to every 16th point (feature 139),
+    a rectangular bank lost its corners to chords and a reed based inside a drawn corner passed; a bank far from the marsh
+    is still pruned."""
+    from l7r.diagram.settlement.land.wet import bank_rings
+
+    ring = _ring(600.0, 300.0, 700.0, 500.0)
+    got = bank_rings([{"bank": ring}, {"bank": _ring(5000.0, 5000.0, 5100.0, 5100.0)}, {"bank": []}], lambda pts: pts[0][0] < 1000)
+    assert got == [[(float(x), float(y)) for x, y in ring]]
+    assert (700.0, 500.0) in got[0], "the corner a thinned ring cut is kept"
