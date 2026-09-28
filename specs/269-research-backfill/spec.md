@@ -139,7 +139,7 @@ sizes, odds and weights each names as a guess are recorded as guesses at the poi
 
 - **B01 fallow** - historically accurate: a field rests 2-4 whole paddy basins, not a blighted patch; the knob
   settled/unsettled and its 0.8/0.2 weighting a guess (research/fields 250).
-- **B04 field paths** - historically accurate: every way reaches the field on its bund; the 20 ft spur floor gone
+- **B04 field paths** - historically accurate: every way reaches the field on its bund; the old floor on a spur's drawn length gone
   (fields 290).
 - **B06 dry-hem furrows** - historically accurate: rows set tract by tract, turning at the seams; tract sizes and angles
   guesses (fields 180).
