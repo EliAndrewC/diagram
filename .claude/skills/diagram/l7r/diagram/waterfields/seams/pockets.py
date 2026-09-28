@@ -163,7 +163,7 @@ def _water(channels: list[dict[str, Any]], g: float) -> BaseGeometry:
     discs close them without the over-claim a round CAP would add past the head and tail, where
     `supply_bank_clearance` reports `past` and the stroke governs nothing anyway."""
     _load_shapely()
-    strokes: list[BaseGeometry] = []
+    strokes: list[tuple[str, BaseGeometry, float]] = []
     for c in channels:
         pts = [(float(q[0]), float(q[1])) for q in c.get("pts") or []]
         if len(pts) < 2:
@@ -177,10 +177,25 @@ def _water(channels: list[dict[str, Any]], g: float) -> BaseGeometry:
             return taper_w(w0, w1, cum[k] / tot) / 2 + BANK_MARGIN * g
 
         for i in range(len(pts) - 1):
-            strokes.append(LineString([pts[i], pts[i + 1]]).buffer(half(i), cap_style="flat"))
+            strokes.append(("seg", LineString([pts[i], pts[i + 1]]), half(i)))
         for i in range(1, len(pts) - 1):
-            strokes.append(Point(pts[i]).buffer(half(i)))
-    return unary_union(strokes) if strokes else Polygon()
+            strokes.append(("disc", Point(pts[i]), half(i)))
+    if not strokes:
+        return Polygon()
+    import shapely
+
+    # BUFFERED AS TWO ARRAY CALLS, one for the segments and one for the discs, then put back in the order they were
+    # listed (feature 276, FR-004): the same buffers, a few hundred calls fewer.
+    segs = [k for k, st in enumerate(strokes) if st[0] == "seg"]
+    discs = [k for k, st in enumerate(strokes) if st[0] == "disc"]
+    shapes: list[Any] = [None] * len(strokes)
+    for idx, made in (
+        (segs, shapely.buffer([strokes[k][1] for k in segs], [strokes[k][2] for k in segs], cap_style="flat") if segs else []),
+        (discs, shapely.buffer([strokes[k][1] for k in discs], [strokes[k][2] for k in discs]) if discs else []),
+    ):
+        for k, geom in zip(idx, list(made), strict=True):
+            shapes[k] = geom
+    return unary_union(shapes)
 
 
 def _band(F: _Frame, us: list[float], fs: list[float], f_far: float) -> Polygon:
@@ -297,12 +312,15 @@ def _absorb(pocket: Polygon, into: list[Polygon], grown: set[int], thin: float, 
     _load_shapely()
     tree = tree or GeomTree(into)  # the pocket pass shares one across a round (feature 220); a lone call builds its own
     reach = pocket.buffer(0.4)
-    ranked: list[tuple[float, int]] = []
-    for j in tree.near(pocket.bounds, pad=1.0):  # the basins whose envelope comes within a px of the pocket's - the old gate, from the tree
-        q = into[j]
-        shared = q.boundary.intersection(reach).length
-        if shared > 0.0:
-            ranked.append((-shared, j))
+    import shapely
+
+    # RANKED IN ONE ARRAY CALL, AND THE POCKET GROWN ONCE (feature 276, FR-004, plan D11/D12): each nearby basin's shared
+    # boundary with the pocket was measured one call at a time, and `pocket.buffer(0.02)` was rebuilt for every basin
+    # tried. The same lengths, the same order, the same grown pocket.
+    near = list(tree.near(pocket.bounds, pad=1.0))  # the basins whose envelope comes within a px of the pocket's - the old gate, from the tree
+    shared_all = shapely.length(shapely.intersection(shapely.boundary([into[j] for j in near]), reach)).tolist() if near else []
+    ranked: list[tuple[float, int]] = [(-shared, j) for j, shared in zip(near, shared_all, strict=True) if shared > 0.0]
+    grown_pocket = pocket.buffer(0.02)
     # EVERY candidate in turn, not just the best one. A union comes back as a MultiPolygon (the
     # strip meets that basin only at a point) or with a hole (it wraps the basin) often enough to
     # matter - 64 of 255 welds on Inashiro - and each failure leaves the doubled bund it was there
@@ -317,7 +335,7 @@ def _absorb(pocket: Polygon, into: list[Polygon], grown: set[int], thin: float, 
         # as a MultiPolygon or an invalid ring as often as not - which used to abandon the weld and
         # leave the doubled bund. 0.02 px is two orders below the 0.1 px the manifest records, so
         # it changes the geometry by nothing and the overlap by enough.
-        merged = into[j].union(pocket.buffer(0.02)).buffer(0)
+        merged = into[j].union(grown_pocket).buffer(0)
         if not isinstance(merged, Polygon) or merged.interiors:
             continue
         # SIMPLIFY CAN INVALIDATE. Douglas-Peucker moves vertices independently, and on the long
@@ -336,7 +354,8 @@ def _absorb(pocket: Polygon, into: list[Polygon], grown: set[int], thin: float, 
         # downstream consumer that measures basin geometry gets a MultiPolygon where it expects a
         # basin. So the recorded ring is round-tripped and the weld declined if it does not survive
         # - the runner-up basin takes the scrap instead.
-        if not Polygon(_ring(candidate)).is_valid:
+        _cring = _ring(candidate)  # the candidate's ring, derived once (feature 276): four readers below
+        if not Polygon(_cring).is_valid:
             continue
         # AND A WELD MUST NOT MAKE A NEEDLE OUT OF THE BASIN THAT TAKES THE SCRAP. Measured by
         # provenance on Inashiro (2026-08-17): with the carve and `_plant` both refusing needles,
@@ -357,7 +376,7 @@ def _absorb(pocket: Polygon, into: list[Polygon], grown: set[int], thin: float, 
         # deduped ring, so an apex only the raw ring carries is invisible to the rule and must not be
         # able to veto a weld here. Placer-stricter-than-gate means a stricter THRESHOLD on the SAME
         # measurement (18 vs 15), never a second measurement bolted alongside it.
-        _cand = dedup_ring(_ring(candidate), 1.0)
+        _cand = dedup_ring(_cring, 1.0)
         _apex = _min_apex(_cand)
         if _apex < _WELD_MIN_APEX:
             # NOT GOOD ENOUGH, BUT REMEMBER IT - refusing outright is its own defect. Measured on
@@ -409,7 +428,7 @@ def _absorb(pocket: Polygon, into: list[Polygon], grown: set[int], thin: float, 
         # `_CHEVRON_MIN_APEX` for the measured population. Same treatment as a lump - remembered, not
         # refused outright, so the scrap still finds a host when no clean one exists.
         _sol = candidate.area / (candidate.convex_hull.area or 1.0)
-        if is_chevron(_ring(candidate)):
+        if is_chevron(_cring):
             if _chev is None or _sol > _chev[0]:
                 _chev = (_sol, j, candidate)
             continue
@@ -428,7 +447,7 @@ def _absorb(pocket: Polygon, into: list[Polygon], grown: set[int], thin: float, 
         # host's current ring rather than as an absolute, for the reason the apex guard gives about
         # measuring what the rule measures: a host that already carries a step must not be barred
         # from taking in the scrap beside it because of a step that was there first.
-        _jog = jog_steps(_ring(candidate), g) - jog_steps(_ring(into[j]), g)
+        _jog = jog_steps(_cring, g) - jog_steps(_ring(into[j]), g)
         if _jog > 0:
             if _jogged is None or _jog < _jogged[0]:
                 _jogged = (_jog, j, candidate)

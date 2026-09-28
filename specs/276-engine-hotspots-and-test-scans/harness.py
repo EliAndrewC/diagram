@@ -76,13 +76,16 @@ def _tests() -> dict[str, float]:
 
 
 def _best(fn):
+    """The fastest of `REPEAT` runs AND that run's own result (a sub-timing the result carries belongs to the same run -
+    the first version returned the LAST run's result beside the best run's time)."""
     best = None
     res = None
     for _ in range(REPEAT):
         t = time.perf_counter()
-        res = fn()
+        got = fn()
         dt = time.perf_counter() - t
-        best = dt if best is None else min(best, dt)
+        if best is None or dt < best:
+            best, res = dt, got
     return best, res
 
 

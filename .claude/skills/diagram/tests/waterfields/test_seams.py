@@ -610,3 +610,76 @@ def test_shed_necks_passes_over_a_plot_with_no_polygon_and_a_tail_that_is_the_wh
     assert plots[0]["poly"] == degenerate["poly"], "a record with no shape is passed over"
     assert plots[1]["poly"] == sliver["poly"], "a plot that IS its own tail keeps it - the giver would be left with nothing"
     assert plots[2]["poly"] == neighbor["poly"], "so the neighbor takes nothing"
+
+
+@pytest.mark.parametrize("seed", [5, 11, 17])
+def test_the_incremental_unjog_moves_every_wall_the_full_rescan_moves(seed: int, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 276 (plan D14): a later round of `_unjog` re-tries only the plots near what the last round changed. On real
+    comb builds, the pass's inputs are captured and run both ways - incremental and re-trying every plot every round -
+    and must leave identical rings."""
+    import copy
+
+    from l7r.diagram.waterfields import comb
+    from l7r.diagram.waterfields.seams import close
+    from l7r.diagram.waterfields.seams import plots as plots_mod
+
+    captured = []
+    real = close._unjog
+
+    def spy(plots, *a, **k):  # type: ignore[no-untyped-def]
+        captured.append((copy.deepcopy(plots), a, k))
+        return real(plots, *a, **k)
+
+    monkeypatch.setattr(close, "_unjog", spy)
+    comb.build_comb(2400, 2400, (300.0, 300.0), seed=seed, down_deg=90)
+    assert captured, "non-vacuity: the pass ran"
+    for plots, a, k in captured:
+        inc, full = copy.deepcopy(plots), copy.deepcopy(plots)
+        monkeypatch.setattr(plots_mod, "UNJOG_INCREMENTAL", True)
+        real(inc, *a, **k)
+        monkeypatch.setattr(plots_mod, "UNJOG_INCREMENTAL", False)
+        real(full, *a, **k)
+        assert [q["poly"] for q in inc] == [q["poly"] for q in full]
+        assert [q["poly"] for q in inc] != [q["poly"] for q in plots], "non-vacuity: the pass moved walls (6-25 rings a build)"
+
+
+def _cells_cut(monkeypatch: pytest.MonkeyPatch, pocket: Any) -> list[Any]:
+    """The pocket-against-cell pieces `_plant` cut: its first batch through `_despike_many` is exactly those."""
+    from l7r.diagram.waterfields.seams import plots as plots_mod
+
+    seen: list[list[Any]] = []
+    real = plots_mod._despike_many
+
+    def spy(geoms: list[Any]) -> list[Any]:
+        seen.append(list(geoms))
+        return real(geoms)
+
+    monkeypatch.setattr(plots_mod, "_despike_many", spy)
+    _plant(_Frame(90.0), pocket, 48.0, (26.0, 36.0), HALF)
+    return seen[0]
+
+
+def test_plant_cuts_only_the_cells_a_diagonal_sliver_touches(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 276 (D13): a sliver lying diagonally across the frame cuts the cells along it, not every cell of its
+    bounding box - and none it touches is skipped: every cut meets the pocket, and the cuts' area is the pocket's."""
+    from shapely.geometry import Polygon as P
+
+    sliver = P([(0.0, 0.0), (10.0, 0.0), (1010.0, 1000.0), (1000.0, 1000.0)])
+    cuts = _cells_cut(monkeypatch, sliver)
+    box_cells = (1010.0 / 48.0) * (1000.0 / 31.0)
+    assert cuts and all(not c.is_empty for c in cuts), "every cell cut is one the sliver touches"
+    assert abs(sum(c.area for c in cuts) - sliver.area) < 1e-6 * sliver.area, "no touched cell was skipped"
+    assert len(cuts) < 0.25 * box_cells, f"{len(cuts)} cells cut against a {box_cells:.0f}-cell box - the grid tracks the sliver"
+
+
+def test_plant_cuts_no_cell_between_the_two_pieces_of_a_row(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 276 (D13): a U-shaped pocket meets its rows twice, and the cells between the two arms are not cut."""
+    from shapely.geometry import Polygon as P
+    from shapely.geometry import box
+
+    u = P(box(0.0, 0.0, 400.0, 300.0)).difference(box(60.0, 0.0, 340.0, 240.0))
+    cuts = _cells_cut(monkeypatch, u)
+    assert cuts and all(not c.is_empty for c in cuts)
+    assert abs(sum(c.area for c in cuts) - u.area) < 1e-6 * u.area
+    between = box(110.0, 0.0, 290.0, 230.0)
+    assert not any(c.intersects(between) for c in cuts), "no cut falls between the arms"

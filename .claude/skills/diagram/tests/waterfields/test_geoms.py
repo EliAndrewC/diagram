@@ -71,6 +71,33 @@ def test_plot_geoms_near_equals_the_vertex_gate_before_and_after_rings_change() 
             plots[k]["poly"] = [(x, y), (x + 40.0, y), (x + 40.0, y + 30.0), (x, y + 30.0)]
 
 
+def test_plot_geoms_answers_a_changed_ring_directly_and_rebuilds_only_past_the_stale_bar(monkeypatch: Any) -> None:
+    """Feature 276: a reassigned ring is tested against its CURRENT extent while the tree stands - including a ring
+    that drops under three vertices or climbs back over - and the tree is rebuilt when the list grows or the stale
+    set passes the bar. Every answer equals the passes' own gate."""
+    from l7r.diagram.waterfields.seams import geoms as geoms_mod
+
+    monkeypatch.setattr(geoms_mod, "_STALE_REBUILD", 3)
+    rng = random.Random(276)
+    plots = [{"poly": r} for r in _rings(rng, 30)]
+    plots.append({"poly": [(0.0, 0.0), (1.0, 0.0)]})
+    g = PlotGeoms(plots)
+    q = (100.0, 100.0, 400.0, 400.0)
+    assert g.near(q) == _gate(plots, q, -1)
+    tree = g._tree
+    plots[4]["poly"] = [(0.0, 0.0), (1.0, 1.0)]  # under three: leaves the answer
+    plots[30]["poly"] = [(150.0, 150.0), (160.0, 150.0), (160.0, 160.0)]  # climbs over: joins it
+    plots[7]["poly"] = [(200.0, 200.0), (220.0, 200.0), (220.0, 220.0), (200.0, 220.0)]
+    got = g.near(q)
+    assert got == _gate(plots, q, -1) and 30 in got and 4 not in got and 7 in got
+    assert g._tree is tree, "three stale rings are answered directly, not by a rebuild"
+    plots[9]["poly"] = [(900.0, 900.0), (910.0, 900.0), (910.0, 910.0)]  # the fourth: past the bar
+    assert g.near(q) == _gate(plots, q, -1) and g._tree is not tree
+    tree = g._tree
+    plots.append({"poly": [(300.0, 300.0), (310.0, 300.0), (310.0, 310.0)]})  # the list grew
+    assert g.near(q) == _gate(plots, q, -1) and g._tree is not tree
+
+
 def test_geom_tree_reads_a_replaced_basins_current_envelope_without_rebuilding() -> None:
     rng = random.Random(7)
     into = [Polygon(r) for r in _rings(rng, 50)]
