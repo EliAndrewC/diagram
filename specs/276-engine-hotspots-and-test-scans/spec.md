@@ -67,7 +67,7 @@ time, candidates fully tested, and the placement rules all holding.
 Closing the seams of a comb field does each geometric operation once, batched over the pieces, and a long
 thin pocket can no longer explode into a thousand grid cells.
 
-**Why this priority**: ~80% of every field build and most of a hamlet's field stage; linear in paddies with
+**Why this priority**: most of a field build and most of a hamlet's field stage; linear in paddies with
 a large constant, so it matters at village and town scale.
 
 **Independent Test**: time `close_seams` in the field builds the tests use and in the pool hamlets' field
@@ -77,8 +77,9 @@ stage, before and after; every field test and gate rule still passes.
 
 1. **Given** the comb builds the waterfields tests use, **When** a field is built, **Then** seam closing is
    at least 2x faster and every paddy, bund and seam rule still holds.
-2. **Given** the seams test map whose pockets cut ~1,400 cells each, **When** it closes, **Then** the cell
-   count is bounded by the pocket's own extent, not its bounding box, and the test's assertion still holds.
+2. **Given** a pocket that is a long sliver lying diagonally across the field's frame, **When** it is planted,
+   **Then** the grid visits only cells the pocket touches, so the work grows with the pocket's area, and every
+   basin rule still holds.
 
 ---
 
@@ -92,8 +93,9 @@ The track stage's path checks read the static water and crop geometry from an in
 
 **Acceptance Scenarios**:
 
-1. **Given** the reference hamlet, **When** the track stage runs, **Then** the path checks' share of the stage
-   is at least halved and the ways drawn obey every crossing and clearance rule.
+1. **Given** the reference hamlet, **When** the track stage runs, **Then** the path checks take at least half
+   the time they did, the stage is not slower, and for every candidate path the checks report exactly the
+   violations the full scan reports.
 
 ### Edge Cases
 
@@ -119,25 +121,34 @@ The track stage's path checks read the static water and crop geometry from an in
 - **FR-003 Homestead seats come from the free ground.** Homestead placement (dispersed and nucleated, the
   spiral search, the slides and the rescue rounds) asks an index of the ground already taken - built once
   per stage and updated as each bundle lands - for candidate seats, instead of running the full fit test at
-  every spiral offset. The bundle's geometry for a given house size, form and side is built once and moved,
-  not rebuilt per candidate. The full fit test still DECIDES every seat that is taken (the index prunes, it
-  never decides - `dev/performance.md`), so every rule the placement tests and the gate assert still holds.
-- **FR-004 Seam closing does each operation once, batched.** `close_seams` and its steps (`_plant`,
-  `_despike`, `_absorb`, `_unjog`, `_shed_necks`, `_repair_crossing_rings`, `_visible_parts`) compute each
-  geometric result once (no repeated identical operation on the same piece), run per-piece operations over
-  arrays where the geometry library supports it, and bound `_plant`'s grid by the pocket's extent in the
-  field frame, so a long thin pocket yields cells in proportion to its area.
-- **FR-005 Track path checks read an index.** `path_violations` and the checks it calls answer from the
-  static water, crop and pond geometry indexed once per track stage, not from a scan of every segment and
-  polygon per candidate path.
-- **FR-006 Every rule still holds; maps may move.** After FR-003 to FR-005 every live pool map regenerates,
-  `make done` is green at the `100%` floor, and every gate rule passes. A map that moved is named in research
-  with what moved; byte-identity is not required (the GM, request.md).
-- **FR-007 Measured, before and after.** Research records, from the same machine and commands: each named
-  test's time; the homestead stage (time, candidates fully tested) on the rescue-rounds scenario and a dense
-  synthetic scenario at two sizes; `close_seams` time per field build; the track stage's path-check share;
-  each pool hamlet's stage profile; `make quick ALL=1` and `make done` wall time. A performance increase
-  anywhere is reported under constitution VI's bands like any other.
+  every spiral offset, and no fit test scans every placed house. The bundle's geometry for a given house size,
+  form and side is built once and moved, not rebuilt per candidate. The full fit test still DECIDES every seat
+  that is taken (the index prunes, it never decides - `dev/performance.md`), so every rule the placement tests
+  and the gate assert still holds.
+- **FR-004 Seam closing does each operation once, batched, over the ground a pocket touches.** `close_seams` and
+  its steps (`_plant`, `_despike`, `_absorb`, `_unjog`, `_shed_necks`, `_repair_crossing_rings`,
+  `_visible_parts`) compute each geometric result once (no repeated identical operation on the same piece) and
+  run per-piece operations over arrays where the geometry library supports it. `_plant`'s grid visits only the
+  cells the pocket touches, so its work grows with the pocket's area and not with any bounding box - a long
+  sliver lying diagonally across the field frame is the test case.
+- **FR-005 Track path checks read an index, and report exactly what the scan reports.** `path_violations` and the
+  checks it calls answer from the static water, crop and pond geometry indexed once per track stage, not from a
+  scan of every segment and polygon per candidate path. The index prunes and the exact test decides: for every
+  candidate path, the count is exactly the full scan's, proved by comparing both over the reference hamlet's
+  candidate paths.
+- **FR-006 Every rule still holds, and every settlement stays what it was.** After FR-003 to FR-005 every live pool
+  map regenerates, `make done` is green at the `100%` floor, and every gate rule passes. The GM's condition -
+  shifts are allowed "as long as the underlying reality of what these settlements are generally like stays the
+  same" - is held concretely: every pool map and every placement-test scenario seats at least as many houses
+  as today, with no new or larger shortfall, and keeps its forms (dispersed or nucleated, the headman's house);
+  each moved map's research entry gives its houses, paddies and ways before and after, and a material change is
+  a finding to fix, not a report. Byte-identity is not required (the GM, request.md).
+- **FR-007 Measured, before and after.** The harness (`harness.py`) records, on the same machine and code path:
+  each named test's time alone; the homestead stage (time, full fit tests) on the rescue-rounds scenario, the toy
+  at 10 and 20 households, and the placement primitive at constant density at 60, 120 and 240 seeds;
+  `close_seams` inside a comb build; the track stage and its path checks. Research adds each pool hamlet's stage
+  profile and `make quick ALL=1` and `make done` wall time. A slowdown anywhere is reported under constitution
+  VI's bands like any other.
 - **FR-008 The practice is written down.** `dev/performance.md` gains the two shapes this feature found in the
   engine - a generate-and-test seat search (answer from the free ground) and a chain of per-piece geometry
   calls (batch it, never compute the same result twice) - and the test-side shape (parse or scan once per
@@ -156,18 +167,26 @@ The track stage's path checks read the static water and crop geometry from an in
 
 ### Measurable Outcomes
 
-- **SC-001**: Each of the four AST-scanning tests and each named record test runs in under `0.5 s` alone (from
-  `2.3-6.6 s` and `2.8-4.4 s`, observed 2026-09-28, method: cProfile of each test alone plus `--durations` on
-  `make quick ALL=1`), and each fails on its planted violation.
-- **SC-002**: The rescue-rounds homestead stage is at least `5x` faster (from `6.6 s` under the profiler,
-  observed 2026-09-28, method: cProfile of the test alone; re-measured unprofiled before and after in research)
-  with at least `10x` fewer candidates fully tested.
-- **SC-003**: On a dense synthetic scenario, doubling the houses to seat at most roughly doubles placement
-  time (per-house time within `1.5x` across the two sizes).
-- **SC-004**: Seam closing per comb build is at least `2x` faster; the seams test's pathological map produces
-  cells bounded by its pockets' extent.
-- **SC-005**: The track stage's path-check share on the reference hamlet is at least halved.
-- **SC-006**: Every live pool map regenerates with every gate rule passing, and `make done` is green at `100%`.
+- **SC-001**: The four AST-scanning tests, run together in one process, parse the engine ONCE (a parse count
+  asserted by a test), and each fails on its planted offender. Their before-times alone were 1.23 s to 1.87 s
+  (m:before-ast-tests-min, m:before-ast-tests-max) - most of it the parse one of them must pay alone, so the
+  target is the four together: at most the one shared parse plus `0.5 s`.
+- **SC-001a**: The five named record tests build their lookup tables once per process; together alone they take at
+  least `3x` less than their 17.22 s sum (m:before-record-tests-sum; the slowest alone was 4.47 s,
+  m:before-record-tests-max), and each fails on its planted violation. The one-time build cost is recorded in
+  research.
+- **SC-002**: The rescue-rounds homestead stage is at least `5x` faster than 2.718 s (m:before-rescue-s) with at least
+  `10x` fewer than its 46781 full fit tests (m:before-rescue-fits).
+- **SC-003**: At constant density the placement primitive's cost per seated house is flat: from 60 to 240 seeds it
+  grows by at most `1.25x` (before: 0.0308 s to 0.0586 s, m:before-dense-60-per-house, m:before-dense-240-per-house),
+  and 240 seeds take at least `4x` less than 8.198 s (m:before-dense-240-s).
+- **SC-004**: `close_seams` inside a comb build takes at least `2x` less than its 0.842 s to 1.018 s
+  (m:before-close-seams-min, m:before-close-seams-max), and a diagonal sliver pocket's grid visits only the cells it
+  touches.
+- **SC-005**: The track stage's path checks take at least `2x` less than 0.966 s (m:before-track-checks-s), the stage is
+  not slower than 1.308 s (m:before-track-stage-s), and the checks' counts equal the full scan's on every candidate.
+- **SC-006**: Every live pool map regenerates with every gate rule passing, `make done` is green at `100%`, and FR-006's
+  house counts and forms hold on every pool map and placement scenario.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
@@ -187,3 +206,19 @@ a seam or a track lands differently it is because the same rules were asked more
 - The dense synthetic placement scenario is a measurement harness (research), plus at most a bounded test;
   it is not a new pool map.
 - Every task is `research: rendering` - performance of existing rules, no new physical claim.
+
+## Review history
+
+- **Round 1 (spec-fidelity, 2026-09-28): CHANGES REQUIRED**, five changes, all applied:
+  1. FR-006 now holds the GM's condition concretely - no fewer houses seated, no new or larger shortfall, the forms
+     kept, and each moved map's houses, paddies and ways reported before and after (a gate-green placer that seated
+     fewer houses would otherwise have passed).
+  2. FR-005 now says the index prunes and the exact test decides, with the count equality proved on the reference
+     hamlet's candidate paths.
+  3. FR-004, SC-004 and User Story 3 state the grid's goal as an outcome - only the cells the pocket touches - with a
+     diagonal sliver as the test, because a frame-aligned extent does not bound a diagonal one.
+  4. SC-001 now measures what FR-001 does (one parse shared by the four tests) instead of a per-test alone time the
+     mechanism cannot reach; the record tests' target (SC-001a) is set from their measured sum.
+  5. SC-005 measures the path checks' TIME (halved) with the stage not slower, not a share.
+  The reviewer's aside: FR-007's "increase" meant a slowdown, and User Story 3's "every field build" - both reworded.
+  The before-figures were then re-measured unprofiled by `harness.py` (`harness-before.json`, `measurements.json`).
