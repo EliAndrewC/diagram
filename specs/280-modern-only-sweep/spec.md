@@ -129,7 +129,7 @@ modern-only - two GM rulings in conflict - does it go to the GM through `escalat
 - **D1 - where "modern" begins, and the undated record** (guess, the session's; flagged to the GM). A form is attested
   premodern when a readable source places it in Japan before the Meiji Restoration (1868), or in China before the end
   of the Qing (1912), whatever the source's own date. A 20th-century record of remembered custom that gives no date
-  (a folklore volume's "in the old days") does NOT place the form before modernity - it could mean the 1890s - so a
+  (a folklore volume's "in the old days") does NOT place the form before modernity - it could mean the Meiji era - so a
   form attested only so is MODERN-ONLY with the tag `undated-custom`, which lets the set be re-sorted if the GM rules
   such records premodern. This follows the GM's own handling on 2026-09-28: cane was dropped for being on one undated
   modern list only, and the undated root-cut mulberry density was set aside for the dated late-Qing figure.
