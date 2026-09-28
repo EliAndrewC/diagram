@@ -117,6 +117,11 @@ ENTRIES: tuple[tuple[str, str, str], ...] = (
     ("edge_scan", "l7r.diagram.hamletgen.ways.fabric", "_crosses_fabric"),
     ("edge_scan", "l7r.diagram.hamletgen.ways.geom", "_trim_to_service"),
     ("edge_scan", "l7r.diagram.hamletgen.ways.geom", "push_clear_of_fabric"),
+    ("edge_scan", "l7r.diagram.settlement", "Settlement._comb_drop_drowned_beads"),  # the comb's `_dry`, beneath it
+    ("grove_draw", "l7r.diagram.settlement.homestead_parts.groves", "GrovesMixin._draw_grove"),
+    ("seams", "l7r.diagram.waterfields.seams.close", "close_seams"),
+    ("commons", "l7r.diagram.settlement", "Settlement.commons"),
+    ("flush", "l7r.diagram.settlement", "Settlement.flush_blade_groups"),
 )
 
 

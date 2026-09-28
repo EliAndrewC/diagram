@@ -12,11 +12,13 @@ significantly faster".
 
 The same exercise as 276, 278 and 281, with one difference the GM ruled: a lever is taken when its map change is of the
 kind the GM named - a lane taking the other of two equally short routes, plot boundaries shifting within tolerance, a
-tied seat resolving the other way, clumps sitting a little differently. The five pool hamlets roll in 27.95 s between
-them (m:before-pool-roll-s; research R1). The levers, from the profile: the router searches toward its goal and pulls its
-string with one index per route; the field's size search stops carving the largest fan blind; the page parses each
-record string once; the notice board scores before it fits; the bamboo seats sample coarser; the whole-ring distance
-scans and the brook toll ask indexes.
+tied seat resolving the other way, clumps sitting a little differently. The five pool hamlets roll in 27.62 s between
+them (m:before-pool-roll-s; research R1). The levers, from the profile and the GM's table: the router searches toward its
+goal, pulls its string with one index per route and runs on the coarsest lattice that strands no house; the field's size
+search stops carving the largest fan blind and its rows are computed as arrays; the page is built from the structured
+primitives the engine already makes; the notice board fits only the seats that can still win, on a coarser lattice; the
+bamboo search walks outward; the whole-ring distance scans and the brook toll ask indexes; and the other slow stages the
+profile names - the windbreak, the seam closing, the commons and the blade flush - are taken too.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -36,8 +38,8 @@ scans and the brook toll ask indexes.
 
 **Acceptance Scenarios**:
 
-1. **Given** any start, goal and ground, **When** the router runs, **Then** it returns a path no longer than the old
-   router's, whose every link passes the same clearance test.
+1. **Given** any start, goal and ground, **When** the router runs, **Then** its lattice path costs no more than the old
+   router's, every drawn link passes the same clearance test, and the drawn path is within the recorded bound of today's.
 
 ### User Story 3 - The field is sized without its costliest carve (Priority: P1)
 
@@ -52,7 +54,7 @@ scans and the brook toll ask indexes.
 
 1. **Given** a finished map, **When** its page is written, **Then** the page is byte-identical to today's.
 
-### User Story 5 - The board, the bamboo and the scans ask less (Priority: P2)
+### User Story 5 - The board, the bamboo, the scans and the other slow stages ask less (Priority: P2)
 
 **Acceptance Scenarios**:
 
@@ -70,32 +72,47 @@ scans and the brook toll ask indexes.
 ### Functional Requirements
 
 - **FR-001 The router searches toward its goal.** An admissible, consistent heuristic (the straight-line distance, never
-  more than any path's cost) orders the search, so the path it returns costs no more than Dijkstra's; where two paths cost
-  the same it may return the other.
-- **FR-002 The router's string-pull asks one index per route** (the link test's fabric index, built once, not its memo key
-  per link) **and finds the farthest clear point by a galloping search** (doubling, then halving between the last clear and
-  the first fouled point) rather than by testing every point from the path's end inward. Every link it keeps is tested
-  exactly as now; where visibility along the path is not monotone it may keep a nearer point, and `_unjog` still runs.
-- **FR-003 The field's size search does not carve the largest fan blind.** After a first guess that falls short it carves
+  more than any path's cost - the step is `hypot * cell` plus a toll that is never negative) orders the search, so the
+  lattice path it returns costs no more than Dijkstra's; where two lattice paths cost the same it may return the other.
+- **FR-002 The router's string-pull asks one index per route**: the link test's fabric index is built once for the route,
+  not its memo key rebuilt per link. The pull still takes, from each point, the farthest point whose link is clear - the
+  same search as now, so for a given lattice path the drawn path is exactly today's.
+- **FR-003 The router's lattice is coarsened where the gaps allow.** The cell is raised from 10 toward the width of the
+  narrowest gap a way must thread (`MIN_WEB_GAP`; the docstring's rule: "a lattice coarser than the gap cannot see
+  the gap"), with the plan's half-diagonal clearance kept, and it is taken at the largest cell under which every pool map,
+  the rescue-rounds scenario, the toys and the cohort keep every house reached - a house left without a way breaks the
+  one rule a roll reports on, so a cell that strands one is not taken, and the measurement saying where it bites is
+  recorded.
+- **FR-004 The field's size search does not carve the largest fan blind.** After a first guess that falls short it carves
   at the predicted size; it probes the bracket's top only when a carve shows the fan saturating (its acreage not growing
   with its size), so a clamped fan is still found. The fit lands within the same tolerance of the same target; the
   plots may differ.
-- **FR-004 The page parses each record string once** and every pass that reads its elements - the off-map cull, the merge,
-  the marks' regions, the hit layer - reads that one parse. The page is byte-identical. (This is how "the page built from
-  the map's records instead of re-reading the SVG" is met: the records ARE the SVG strings, and the waste is the
-  re-reading; if the one parse still dominates the page after this, carrying structured primitives from `add()` is the
-  next step, recorded in FR-009.)
-- **FR-005 The notice board scores its candidate seats before fitting them**, fitting and captioning a seat only while it
-  can still win; where two seats tie on everything the board may stand at the other.
-- **FR-006 The bamboo seats sample coarser**, the stands' rules (their keep-outs and their reach from the house) unchanged;
-  the clumps sit a little differently.
-- **FR-007 The whole-ring distance scans ask ring indexes**: `_crosses_fabric`, `_trim_to_service` and
-  `push_clear_of_fabric` measure a point against a polygon's nearby edges only, deciding as now. Exact.
-- **FR-008 The brook toll reads a bitmap of the cells near the band** before any sample, deciding as now. Exact.
-- **FR-009 Anything else the after-profile shows slow**, and a change of the same nature would make significantly faster,
-  is taken in this feature or recorded with its price (the GM's general instruction); what is left is written down in
-  `dev/performance.md` with its levers priced.
-- **FR-010 Every moved map keeps its invariants**: 276's FR-006 condition in full (SC-009).
+- **FR-005 The carve's rows are computed as array operations** - each sector's row-by-column bund vertices and their
+  pushes off the supply banks, and the plot tests, as numpy arrays - with the plots allowed to shift within `fit_field`'s
+  tolerance. It is judged by the field stage's wall time, fastest of three (281's lesson: calls removed are not time
+  saved); if it does not pay it is recorded as tried with that measurement and withdrawn.
+- **FR-006 The page is built from the structured primitives the engine already makes, and parses the rest once.** The
+  bulk of a hamlet's ink - the grass and reed blades, the brush dots, the tint and glint marks - is made as tuples with
+  their coordinates and extents (`_blade_groups`, `_mark_groups`) and flattened to SVG strings at the finish; the page
+  takes those structures as they are, not the strings. Every other record string is parsed once, and every page pass that
+  reads its elements (the off-map cull, the merge, the marks' regions, the hit layer) reads that parse. The page is
+  byte-identical.
+- **FR-007 The notice board fits only the seats that can still win.** Its final choice ranks by caption level first; the
+  caption level is asked in that ranking's order and the asking stops at the first seat that holds the best level possible
+  and stands in the open - exact, the same seat. And its candidate lattice along a route is coarsened (from `12` to `24` px
+  between samples), so the board may stand a few feet along its verge from today's.
+- **FR-008 The bamboo seat search walks outward from its target** and stops at the first seat that fits - the nearest, as
+  the whole-square scan found it, ties broken in the old scan's order. Exact.
+- **FR-009 The whole-ring distance scans ask ring and segment indexes**: `_crosses_fabric`, `_trim_to_service`,
+  `push_clear_of_fabric` and the comb's bead test (`_dry`, every segment of every water line per bead) measure a point
+  against the nearby edges only, deciding as now. Exact.
+- **FR-010 The brook toll reads a bitmap of the cells near the band** before any sample, deciding as now. Exact.
+- **FR-011 The other slow stages are taken too.** The before-profile names four more (research R1): the windbreak's grove
+  (`village_grove`, its draw and its gap fill), the seam closing (`close_seams`), the commons' scatter, and the finish's
+  blade flush. For each the plan names a lever of the allowed kind and it is taken; only a stage that cannot be made
+  significantly faster without a fundamental change or a broken rule is left, with the measurement that shows it.
+- **FR-012 What is left is written down** in `dev/performance.md` with its levers priced.
+- **FR-013 Every moved map keeps its invariants**: 276's FR-006 condition in full (SC-011).
 
 ### Key Entities
 
@@ -105,43 +122,61 @@ scans and the brook toll ask indexes.
 
 ### Measurable Outcomes
 
-- **SC-001** (spec-wide): the five pool hamlets' summed roll time is at least `1.25x` less than the base's, fastest of
-  three, back to back (27.95 s at the start, m:before-pool-roll-s; research R1).
-- **SC-002** (FR-001, FR-002): the router bucket's calls are at least `2x` fewer on Kashikawa (6698394,
-  m:before-kashikawa-b-router-total) and Sawada (4816861, m:before-sawada-b-router-total), and a test over recorded route
-  requests shows every new path no longer than the old one's and every kept link clear.
-- **SC-003** (FR-003): the field bucket's calls are at least `1.3x` fewer on Inashiro (2359101,
-  m:before-inashiro-b-field-total) and Sawada (4539336, m:before-sawada-b-field-total), every field within its tolerance,
-  and a test shows a saturating fan still probed.
-- **SC-004** (FR-004): the page bucket's calls are at least `1.5x` fewer on Sawada (3518827, m:before-sawada-b-page-total)
+Every ratio below is a FLOOR set with no projection behind it (the counts are measured; the fraction each lever
+removes is not predicted), and every stage figure is the fastest of three with the load recorded.
+
+- **SC-001** (spec-wide): the five pool hamlets' summed roll time is at least `1.25x` less than the base's, back to back
+  (27.62 s at the start, m:before-pool-roll-s; research R1). Whether that is "significantly faster" is the GM's to judge;
+  the report states the figure.
+- **SC-002** (FR-001, FR-002, FR-003): the router bucket's calls are at least `2x` fewer on Kashikawa (6698394,
+  m:before-kashikawa-b-router-total) and Sawada (4816861, m:before-sawada-b-router-total); a test over recorded route
+  requests shows every new lattice path costing no more than the old one's and every drawn link clear; and each drawn
+  path is at most `5%` longer than the old router's for the same request, a bound recorded under Decisions.
+- **SC-003** (FR-004, FR-005): the field bucket's calls - the size search and its carves, the seam closing counted apart
+  (buckets nest exclusively) - are at least `1.3x` fewer on Inashiro (1474667, m:before-inashiro-b-field-total) and Sawada
+  (2459714, m:before-sawada-b-field-total), every field within its tolerance,
+  a test shows a saturating fan still probed, and FR-005 is kept only if Sawada's field stage (2.944 s,
+  m:before-sawada-stage-field-s) is faster with it than without.
+- **SC-004** (FR-006): the page bucket's calls are at least `1.5x` fewer on Sawada (3518827, m:before-sawada-b-page-total)
   and Kashikawa (3463026, m:before-kashikawa-b-page-total), and every pool page byte-identical.
-- **SC-005** (FR-005): the notice bucket's calls are at least `1.5x` fewer on Inashiro (3142523,
+- **SC-005** (FR-007): the notice bucket's calls are at least `1.5x` fewer on Inashiro (3142523,
   m:before-inashiro-b-notice-total) and Sawada (2240617, m:before-sawada-b-notice-total).
-- **SC-006** (FR-006): the bamboo bucket's calls are at least `2x` fewer on Kashikawa (674263,
-  m:before-kashikawa-b-bamboo-total) and Mizuguchi (278855, m:before-mizuguchi-b-bamboo-total).
-- **SC-007** (FR-007): the edge-scan bucket's calls are at least `3x` fewer on Kashikawa (1679823,
-  m:before-kashikawa-b-edge-scan-total) and Kuwabata (1417401, m:before-kuwabata-b-edge-scan-total).
-- **SC-008** (FR-008): the toll's cell lookups are at least `2x` fewer on Kashikawa (590253,
+- **SC-006** (FR-008): the bamboo bucket's calls are at least `2x` fewer on Kashikawa (674263,
+  m:before-kashikawa-b-bamboo-total) and Mizuguchi (278855, m:before-mizuguchi-b-bamboo-total), the seats identical.
+- **SC-007** (FR-009): the edge-scan bucket's calls, the comb's bead test among them, are at least `3x` fewer on Kashikawa
+  (2248786, m:before-kashikawa-b-edge-scan-total) and Kuwabata (1417688, m:before-kuwabata-b-edge-scan-total).
+- **SC-008** (FR-010): the toll's cell lookups are at least `2x` fewer on Kashikawa (590253,
   m:before-kashikawa-b-toll-dict-get) and Sawada (374679, m:before-sawada-b-toll-dict-get).
-- **SC-009** (FR-010, the pool): every live pool map regenerates; `make done` is green at the `100%` floor and every gate
+- **SC-009** (FR-011): each of the four named stages asks at least `1.5x` fewer calls on the map where it asks most - the
+  grove's fill and draw on Kashikawa (2075676 and 824228, m:before-kashikawa-b-grove-total,
+  m:before-kashikawa-b-grove-draw-total), the seam closing on Sawada (2079622, m:before-sawada-b-seams-total), the
+  commons on Kashikawa (581710, m:before-kashikawa-b-commons-total), the blade flush on Sawada (1523927,
+  m:before-sawada-b-flush-total) - and is faster in wall time, fastest of three; or the plan's measurement says why no
+  allowed change reaches it.
+- **SC-010** (FR-012): `dev/performance.md` holds the after-profile's remaining costs with their levers priced; every
+  figure named here is in `measurements.json`, the after-figures carrying the command that re-runs them.
+- **SC-011** (FR-013, the pool): every live pool map regenerates; `make done` is green at the `100%` floor and every gate
   rule passes (the overlap rules among them); every pool map, the rescue-rounds scenario and the 10- and 20-household toys
   seat at least as many houses as today, with no new or larger shortfall, and keep their forms (dispersed or nucleated,
   the headman's house) and house kinds; every comb field's acreage stays within its tolerance of its target; each moved
   map's research entry gives its houses, paddies and ways before and after, and a material change is a finding to fix,
-  not a report; and `make cohort N=24` shows no newly failing seed. The exact changes (FR-004, FR-007, FR-008) leave every
-  output they touch byte-identical, shown before the moving ones land.
-- **SC-010** (FR-009): `dev/performance.md` holds the after-profile's remaining costs with their levers priced; every
-  figure named here is in `measurements.json`, the after-figures carrying the command that re-runs them.
+  not a report; and `make cohort N=24` shows no newly failing seed. The exact changes (FR-002, FR-006, FR-008, FR-009,
+  FR-010, the board's lazy caption test) leave every output they touch byte-identical, shown before the moving ones land.
+- **Counts that move between runs of the same code**: the fabric bucket's and anything beneath the fabric index (the
+  router's among them) move by a few calls with the id-keyed memo's hits (281's Amendment 1; Kuwabata's router 1134922
+  and 1134924 in two base runs, observed 2026-09-28, method: `make figures` in the review); none of the floors above is
+  near such a margin.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
 | The router searches toward its goal; of two equally short routes it may draw the other | map drawing convention (the same clearance rules; a tie resolved differently) | research R1; the GM's request | point of change in `hamletgen/ways/route.py` |
-| The string-pull gallops to its farthest clear point | map drawing convention (every link tested as now) | research R1 | point of change in `hamletgen/ways/route.py` |
+| The router's drawn path may be up to `5%` longer than today's for the same request, where A* picks another lattice path of the same cost | map drawing convention (the same clearance rules; the bound tested, SC-002) | research R1 | point of change in `hamletgen/ways/route.py` |
+| The router's lattice cell is the largest that strands no house | map drawing convention (measured; a stranding cell is not taken) | FR-003 | point of change in `hamletgen/ways/route.py` |
+| The carve's rows as arrays, kept only if faster | map drawing convention (plots within the fit's tolerance) | FR-005 | point of change in `waterfields/carve.py` |
 | The field's size search probes the largest fan only on measured saturation | map drawing convention (the same tolerance and target; the plots may differ) | research R1 | point of change in `hamletgen/water/fit.py` |
-| The notice board fits only the seats that can still win | map drawing convention (the same scoring; a full tie may resolve the other way) | research R1 | point of change in `settlement/structures/fixtures/siting.py` |
-| The bamboo seats sample coarser | map drawing convention (the same keep-outs and reach) | research R1 | point of change in `hamletgen/hinterland/bamboo.py` |
+| The notice board's candidates sampled every `24` px along a route, not `12` | map drawing convention (the same rules and ranking; the board may stand a few feet along its verge) | FR-007 | point of change in `settlement/structures/fixtures/siting.py` |
 
 ## Assumptions
 
@@ -150,4 +185,10 @@ scans and the brook toll ask indexes.
 
 ## Review history
 
-(none yet)
+- Round 1 (spec-fidelity, 2026-09-28): CHANGES REQUIRED - the field's rows-as-arrays and the router's coarser grid were
+  missing; the page lever was narrowed to one parse; the comb's `_dry` scan was dropped from the whole-ring scans; the
+  galloping pull contradicted "no longer than today's"; the general instruction was weakened and the slow stages the
+  profile already names were not taken. Addressed: FR-003 (the coarser lattice, measured against stranding), FR-005 (the
+  rows as arrays, kept only if faster), FR-006 (the page from the structured blades and marks, the rest parsed once),
+  FR-009 with `_dry`, FR-002 keeps the pull exact and SC-002 bounds the drawn length, FR-011 takes the four named
+  stages; the floors are labeled as floors; the moving counts are named.
