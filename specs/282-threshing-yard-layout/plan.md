@@ -1,6 +1,6 @@
 # Plan - feature 282, what is in a threshing yard, and where
 
-Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.md).
+Spec: [`spec.md`](spec.md) (FAITHFUL, amendment round 9). Request: [`request.md`](request.md).
 
 ## What the research found (homesteads 025 and 505; FR-001, FR-002)
 
@@ -33,7 +33,7 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
   south rack. Mats of 6 x 3 ft (`MAT_FT`, tobunken-mushiro: 3 x 6 shaku), long side along the yard's width, in rows
   sized inside a 1 ft inset, each corner held 1 ft inside the drawn outline and a quarter foot off the rack; a gap of
   2 ft round each mat, closing to 1.5 and 1 ft where a yard would fall under a third of a full cover, never below
-  1 ft; each mat nudged up to 0.4 ft and turned up to 6 degrees by a positional draw, kept only where its outline stays
+  1 ft; each mat nudged up to 0.4 ft and turned up to 10 degrees by a positional draw, kept only where its outline stays
   0.1 ft clear of every neighbor's (else the turn alone, half the turn, then unturned), so the floor reads as mats laid
   by hand - every regular layout tried (a checkered half, square rows, rows set over by half a mat, edge to edge) read as
   paving in the settlement-reviews. Straw-gold with a same-hue outline, no dark "mortar". The count lands in
