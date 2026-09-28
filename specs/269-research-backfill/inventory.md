@@ -220,6 +220,39 @@ C4 and X1 each assign more than four questions, so they run as parts (feature 27
 
 - B46 The thin `cities/river-cities/030` and `ways/050`. S.
 
+## Finishing the record (T19's outcomes.md, 2026-09-28): fixes, splits and owed corrections
+
+The sections owed a correction by another feature's findings are edited here because those features have closed (267,
+271 and 272 are DONE in RESEARCH-CLAIMS.md), so the sections are unclaimed.
+
+## FX1 - homesteads fixes (edits existing)
+
+- F01 `homesteads/060`: the shared-byre sentence points to the stable question (homesteads 300) (B16's finding: the beast lived in the house).
+- F02 `homesteads/240`: the heading says what the section finds ("a little off due south").
+- F03 `homesteads/180`: B19's remaining village-form claims (it was held by 271 V7, now closed).
+- F04 `homesteads/130`: the plain farmhouse drawn 46 x 28 ft is about twice the 1885 usual 18 tsubo (weak: one district); say so, cited.
+
+## FX2 - vegetation, fields and government fixes (edits existing)
+
+- F05 `vegetation/020`: point to the copse question (vegetation 210).
+- F06 `vegetation/230`: the hedge's 1,700 a hectare is an overgrown stand; say so.
+- F07 `fields/270`: the heading says what the section finds.
+- F08 `cities/government/050`: a samurai house's frontage of 2-2.5 ken (12-15 ft), cited from the handoff's source.
+
+## FX3 - corrections owed to other sections (edits existing)
+
+- F09 `towns/250`: "where the Japanese compound stands is a guess" points at the magistrate's-compound question (towns 120).
+- F10 `ways/020`: point at the field-path question (fields 290) for the paddy case.
+- F11 `homesteads/145`: cite `matsumoto-dosojin` (already in the registry).
+- F12 the stable question, `homesteads/300`: cite `kotobank-umaya`.
+
+## FX4 - registry and government pointers (edits existing)
+
+- F13 `cities/government/080`: pointers to buildings 750 and 340.
+- F14 registry `shuson-jawiki`: the What-it-is replacement sentences and its (homesteads) Used-for, from `h3-checks.md`.
+- F15 registry `kotobank-jokamachi`: Used-for gains government.
+- F16 registry `gogura-kotobank`: its siting quote noted for a village storehouse (Used-for).
+
 ## Queue order
 
 New-question groups first, since they touch no fragment 265's unpushed sweeps edited. The audit's priority runs:

@@ -48,6 +48,13 @@ GROUPS = {
     "X1A": ("towns (265's pages, part a)", "the existing sections the items name (265 has landed; they are free)"),
     "X1B": ("towns, buildings and capitals (part b)", "the existing sections the items name"),
     "X1C": ("river cities and ways (part c)", "the existing sections the items name"),
+    "FX1": ("homesteads fixes", "the existing sections the items name"),
+    "FX2": ("vegetation, fields and government fixes", "the existing sections the items name"),
+    "FX3": ("corrections owed to other sections", "the existing sections the items name"),
+    "FX4": ("registry and government pointers", "the existing sections and registry entries the items name"),
+    "SP1": ("splits over the size cap, part 1", "the questions it split"),
+    "SP2": ("splits over the size cap, part 2", "the questions it split"),
+    "FIN": ("the re-checks owed after the last fixes", "none - checks only"),
     "S1": ("settlements: is every household drawn", "the existing settlements 030; settlements 090-110 for a split"),
     "X1": ("the thin sections on 265's pages", "the existing sections the items name (265 has landed; they are free)"),
 }
