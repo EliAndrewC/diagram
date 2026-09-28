@@ -269,6 +269,9 @@ _DEFS = (
     '<pattern id="oshirasu-sand" patternUnits="userSpaceOnUse" width="12" height="12">'
     '<rect width="12" height="12" fill="#F2EAD0"/><circle cx="3" cy="4" r="0.5" fill="#C9B884"/>'
     '<circle cx="8" cy="2" r="0.5" fill="#C9B884"/></pattern>'
+    # a worked bed's furrows (feature 283, a map drawing convention: a vegetable bed reads apart from the ornamental garden)
+    '<pattern id="vegetable-rows" patternUnits="userSpaceOnUse" width="8" height="8">'
+    '<rect width="8" height="8" fill="#CDBF95"/><rect y="2.5" width="8" height="3" fill="#8FA36A"/></pattern>'
     '<pattern id="garden-stipple" patternUnits="userSpaceOnUse" width="14" height="14">'
     '<rect width="14" height="14" fill="#BFCFA0"/><circle cx="3" cy="3" r="0.8" fill="#7A8C5C"/>'
     '<circle cx="10" cy="9" r="0.8" fill="#7A8C5C"/></pattern>'

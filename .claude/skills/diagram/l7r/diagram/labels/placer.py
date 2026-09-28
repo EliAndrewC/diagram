@@ -172,13 +172,22 @@ def _cands(text: str, size: float, subject: Subject, lines: list[str] | None = N
 
 
 def place(
-    text: str, size: float, subject: Subject, index: ObstacleIndex, frame: tuple[float, float, float, float] | None = None, lines: list[str] | None = None, char_w: float = CHAR_W_EM
+    text: str,
+    size: float,
+    subject: Subject,
+    index: ObstacleIndex,
+    frame: tuple[float, float, float, float] | None = None,
+    lines: list[str] | None = None,
+    char_w: float = CHAR_W_EM,
+    leader_index: ObstacleIndex | None = None,
 ) -> Placement:
     """Seat one caption by the standard (the module docstring). `frame` is the finished picture's (x0, y0, x1, y1); a
     block that leaves it is never a candidate, because a clipped caption cannot be read. `lines` fixes the caption's
     lines (a hand-drawn caption with a line of its own under it) instead of the wrap rule's layouts. Never returns
     nothing. `char_w` is the caption's width per character in ems - the standard's for the engine's own captions; a
-    hand sheet's bold, capital or letter-spaced caption runs wider (feature 267: `tools/seat_label.py` measures it)."""
+    hand sheet's bold, capital or letter-spaced caption runs wider (feature 267: `tools/seat_label.py` measures it).
+    `leader_index` holds what a seat's leader line may not pass over or end against - the other captions and the small
+    glyphs, which a hand sheet supplies (feature 283); the engine passes none, and its leaders are weighed as before."""
     clear = CLEAR_EM * size
     own: Poly | None = list(subject.poly) if subject.kind != "line" else None
     best: tuple[float, int, _Cand, Poly] | None = None
@@ -193,6 +202,8 @@ def place(
         cost = index.cost(block, clear, own, text, subject.civic)
         if subject.kind == "area" and not all(inside(p[0], p[1], subject.poly) for p in block):
             cost += WEIGHT_OBSTACLE  # an area's name lies inside the area; spilling out is covering what is outside it
+        if leader_index is not None:
+            cost += leader_cost(cand, block, subject, leader_index, clear, own, text)
         if cost == 0.0:
             return _placement(cand, block, cost, subject)
         if best is None or cost < best[0]:
@@ -203,14 +214,32 @@ def place(
     return _placement(best[2], best[3], best[0], subject)
 
 
+def leader_of(ring: int, block: Poly, subject: Subject) -> tuple[Pt, Pt] | None:
+    """The leader a seat off the preferred offset draws: from the caption's block to the nearest point of what it names,
+    trimmed a little at each end. None at ring 0 and for an area, whose name lies inside it."""
+    if ring == 0 or subject.kind == "area":
+        return None
+    a, b = nearest_points(block, list(subject.poly), closed=subject.kind != "line")
+    d = math.dist(a, b)
+    trim = min(1.0, d / 4)
+    ux, uy = (b[0] - a[0]) / d, (b[1] - a[1]) / d
+    return ((a[0] + ux * trim, a[1] + uy * trim), (b[0] - ux * trim, b[1] - uy * trim))
+
+
+def leader_cost(c: _Cand, block: Poly, subject: Subject, index: ObstacleIndex, clear: float, own: Poly | None, text: str) -> float:
+    """What a seat's leader line passes over or ends against, of the things `index` holds: a leader through another
+    caption, or ending on a tub beside the feature it names, reads as naming the wrong thing (feature 283: Ochiba's
+    RESIDENCE led through INNER COURT to a tub at the house's corner)."""
+    seg = leader_of(c.ring, block, subject)
+    if seg is None or math.dist(*seg) < 1e-6:
+        return 0.0
+    (ax, ay), (bx, by) = seg
+    band = rect((ax + bx) / 2, (ay + by) / 2, math.dist(*seg) / 2, 0.5, math.degrees(math.atan2(by - ay, bx - ax)))
+    return index.cost(band, clear, own, text, subject.civic)
+
+
 def _placement(c: _Cand, block: Poly, cost: float, subject: Subject) -> Placement:
-    leader = None
-    if c.ring > 0 and subject.kind != "area":
-        a, b = nearest_points(block, list(subject.poly), closed=subject.kind != "line")
-        d = math.dist(a, b)
-        trim = min(1.0, d / 4)
-        ux, uy = (b[0] - a[0]) / d, (b[1] - a[1]) / d
-        leader = ((a[0] + ux * trim, a[1] + uy * trim), (b[0] - ux * trim, b[1] - uy * trim))
+    leader = leader_of(c.ring, block, subject)
     return Placement(
         x=c.center[0],
         y=c.center[1] + CENTER_ABOVE_BASELINE_EM * c.size,

@@ -1,0 +1,51 @@
+{
+ "feature": "283-garden-sun-check",
+ "plan_sha256": "008c9631a1e045428465cf770f4355340801f38d86a4bacadb2217e694f90a71",
+ "reviewed": "2026-09-28",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "Research homesteads 044: 6 h for a sun bed, 3 h for a half-shade bed; the counting (38N, shoulder month, half-hour steps, a step lit when half the bed is out of shadow); least heights labeled (building 20 ft, small roof 6 ft, wall 1.6 m, tree 10 m).",
+   "class": "within",
+   "why": "FR-001 asks for the hours, the crop classes and how the check counts them, each sourced or labeled; FR-002 the half-shade kind. Least heights are a calibration along a continuum, labeled, not a choice between forms."
+  },
+  {
+   "id": "D2",
+   "summary": "garden_sun in the pack audit's shared layer, run on every hand-drawn building sheet; casts buildings (small roofs at 6 ft), walls and dividers, every tree; a named not-standing list; reports hours, threshold and shade makers by kind; red fixture is the shrine sheet as drawn, report naming the trees; a trees-only unit test; no index.",
+   "class": "within",
+   "why": "Carries FR-003/FR-004 as written: the GM's class ('Sheets only'), the kinds that stand up, the fixture naming the wood, the trees-only test. The not-standing list is the spec's 'low furniture' class; notice board, stone lantern and weapon rack are drawn as 1-3 ft footprints (Hayakawa's lanterns 4 x 7 px at 3 px a foot, read from the sheet 2026-09-28), whose shadow cannot darken half a bed, so excluding them removes nothing the GM's 'things known to produce shade' covers. 'No index' is design, not fidelity."
+  },
+  {
+   "id": "D3",
+   "summary": "Research buildings 405: four attested seats as a knob, the sun ruling out seats under their hours (a guess that the sun chose); 400 corrected to point at 405.",
+   "class": "within",
+   "why": "FR-005 takes the seat from 405 as the GM directed ('This feels like ... a research question')."
+  },
+  {
+   "id": "D4",
+   "summary": "The four beds moved to sun (shrine SW of the hall; Hayakawa, Ochiba, Ubame to the south court); Ubame at the size knob's low end; Hayakawa grown from 780 to about 1,075 sq ft (the knob's attested low end) with the well moved; none half-shade; each measured by garden_sun after the move.",
+   "class": "within",
+   "why": "'Move them all', to seats from 405, none half-shade, as FR-005 says. Ubame's shrink is FR-005's own rule. Hayakawa's growth adds nothing outside the request: research buildings 400 makes the size a knob between about 1,070 sq ft and half the grounds, so 780 sq ft lies outside every attested form - a defect on a sheet the GM already ordered edited, fixed to the record's low end (constitution XIV), and it narrows nothing asked."
+  },
+  {
+   "id": "D5",
+   "summary": "Caption placer defect (ground painted over a caption weighed as open) fixed in tools/seat_label.py with a test; other sheets' seats measured unchanged against HEAD.",
+   "class": "within",
+   "why": "A found defect fixed where found (constitution XIV), measured for regressions; it narrows nothing."
+  },
+  {
+   "id": "D6",
+   "summary": "programs.md kitchen_garden row and the shrine hall bullet name the seat knob and the sun rule; compound.py's county-example comment points at 405.",
+   "class": "within",
+   "why": "FR-006 as written."
+  },
+  {
+   "id": "D7",
+   "summary": "make quick; entry-drift on modals written from 400; building-review of each of the four sheets, ledgered, findings through escalation-check; make done green.",
+   "class": "within",
+   "why": "FR-005's reviews and FR-007's gate."
+  }
+ ],
+ "verdict": "CLEAR"
+}

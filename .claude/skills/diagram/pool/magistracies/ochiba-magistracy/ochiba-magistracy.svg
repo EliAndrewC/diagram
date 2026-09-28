@@ -11,6 +11,12 @@
       <line x1="0" y1="0" x2="0" y2="10" stroke="#8C4A30" stroke-width="1.2"/>
     </pattern>
     <!-- Tatami-style stipple for the garden / open courtyards -->
+    <!-- a worked bed's furrows (feature 283, a map drawing convention: a vegetable bed drawn in rows so it reads
+         apart from the stippled ornamental garden it may stand beside) -->
+    <pattern id="vegetable-rows" patternUnits="userSpaceOnUse" width="8" height="8">
+      <rect width="8" height="8" fill="#CDBF95"/>
+      <rect y="2.5" width="8" height="3" fill="#8FA36A"/>
+    </pattern>
     <pattern id="garden-stipple" patternUnits="userSpaceOnUse" width="14" height="14">
       <rect width="14" height="14" fill="#BFCFA0"/>
       <circle cx="3" cy="3" r="0.8" fill="#7A8C5C"/>
@@ -566,8 +572,7 @@
        through the office's rear door and the nakamon, straight up to a stepping stone at the reception's veranda
        (research buildings 300, Takayama). -->
   <g data-kind="garden">
-    <!-- its NE corner given to the vegetable garden (feature 283) -->
-    <path d="M 346 374 H 616 V 298 H 720 V 395 H 865 V 445 H 346 Z" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
+    <path d="M 346 374 H 616 V 298 H 865 V 445 H 346 Z" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
     <!-- a small ornamental pond BEFORE THE RECEPTION (feature 267 pass 3: pass 2 had set it east of the house, where
          the reception's veranda did not face it; research buildings 'The shady rear is the service strip' - the
          garden faces the reception rooms). It lies west of the nakamon-to-stone line, off the guests' way. -->
@@ -606,6 +611,20 @@
     <rect x="778" y="406" width="24" height="24" fill="#9C8C70" stroke="#5C4830" stroke-width="1.2"/>
     <circle cx="790" cy="418" r="7" fill="#2D2A24"/>
     <text x="816.4" y="420.5" text-anchor="middle" font-size="9" font-style="italic" fill="#3A2E1C">well</text>
+  </g>
+
+  <!-- Household storehouses (dozo), two as the Matsushiro retainer's house kept (feature 283: the shady rear the
+       vegetable garden left, research buildings 230; a 7 ft alley left behind the house). Plastered, so no fire-water tub; sizes a guess, no
+       larger than the Takayama kitchen storehouse. -->
+  <g data-kind="storehouse">
+    <rect x="500" y="158" width="96" height="33" fill="#F2EFE4" stroke="#4A3318" stroke-width="2.5"/>
+    <rect x="541" y="183" width="14" height="8" fill="#4A3318" data-kind="door"/>
+    <text x="548.0" y="177.2" text-anchor="middle" font-size="10" font-weight="bold" fill="#3A2E1C">storehouse</text>
+  </g>
+  <g data-kind="storehouse">
+    <rect x="640" y="158" width="120" height="33" fill="#F2EFE4" stroke="#4A3318" stroke-width="2.5"/>
+    <rect x="693" y="183" width="14" height="8" fill="#4A3318" data-kind="door"/>
+    <text x="700.0" y="177.2" text-anchor="middle" font-size="10" font-weight="bold" fill="#3A2E1C">storehouse</text>
   </g>
 
   <!-- Rear service strip (north band behind the residence) - the shady rear was
@@ -648,7 +667,7 @@
        half an hour of sun in the shoulder month, in the shadow of the house and the karo's house; the west and the
        rear are all shaded here, so the south is the one seat left. -->
   <g data-kind="vegetable garden">
-    <rect x="720" y="298" width="145" height="97" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
+    <rect x="720" y="298" width="145" height="97" fill="url(#vegetable-rows)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
     <text x="792.5" y="349.0" text-anchor="middle" font-size="9" font-style="italic" fill="#3A4E38">vegetable garden</text>
   </g>
 
@@ -679,9 +698,9 @@
        buried under / grazed by the vegetable-garden fill - pack_audit BURIED
        finding, 2026-07-24; same coordinates, painted last) -->
   <!-- feature 267 pass 3: both nudged clear of the vegetable garden's dashed border, which they touched -->
-  <text x="603.0" y="192.6" text-anchor="middle" font-size="13" font-weight="bold" letter-spacing="2" fill="#5C4830" data-kind="inner court">INNER COURT</text>
-  <text x="694.5" y="170.4" text-anchor="middle" font-size="11" font-weight="bold" letter-spacing="2" fill="#5C4830" data-kind="residence">RESIDENCE</text>
-    <line x1="648.2" y1="173.8" x2="610.7" y2="211.3" stroke="#5C4830" stroke-width="0.88" stroke-linecap="round" data-kind="residence" data-leader="1"/>
+  <text x="655.0" y="315.1" text-anchor="middle" font-size="13" font-weight="bold" letter-spacing="2" fill="#5C4830" data-kind="inner court"><tspan x="655.0" dy="0.0">INNER</tspan><tspan x="655.0" dy="14.9">COURT</tspan></text>
+  <text x="698.4" y="413.6" text-anchor="middle" font-size="11" font-weight="bold" letter-spacing="2" fill="#5C4830" data-kind="residence">RESIDENCE</text>
+    <line x1="652.1" y1="404.1" x2="610.7" y2="362.7" stroke="#5C4830" stroke-width="0.88" stroke-linecap="round" data-kind="residence" data-leader="1"/>
   <g fill="#8FB0C6" stroke="#3A5060" stroke-width="1" data-kind="fire-water tubs">
     <!-- feature 267 pass 2: the kitchen pair at the ell's corners (see pass 3 below), the residence's two at the block's east
          corners (the re-mass moved both), the gatehouse's at its shortened NW corner -->

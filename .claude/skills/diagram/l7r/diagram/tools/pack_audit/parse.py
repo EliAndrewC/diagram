@@ -18,7 +18,7 @@ COURT_FLOORS: frozenset[str] = frozenset({"url(#oshirasu-sand)", "url(#court-cob
 #: placer's `ROOFED_ZONES` and all three hand sheets draw it so). Under that roof stands no fire-water tub: a tub is
 #: gutter-fed from the eaves, so the roofed floor is a footprint to `tubs_in_buildings`, not open ground.
 ROOF_STROKES: frozenset[str] = frozenset({"#5A3F1E"})
-OPEN_PATTERNS: frozenset[str] = frozenset({"url(#garden-stipple)", "url(#keiko-earth)"}) | COURT_FLOORS
+OPEN_PATTERNS: frozenset[str] = frozenset({"url(#garden-stipple)", "url(#vegetable-rows)", "url(#keiko-earth)"}) | COURT_FLOORS
 MIN_BLDG_AREA_PX: float = 500.0  # ~55 sqft; below this it is furniture, not a building mass. Lowered
 # from 900 (2026-07-21): the glyph-doctrine retirement shrank real buildings to TRUE size - an 11x7 ft
 # modest shrine is 693 px2 - and the old floor silently dropped them from coverage/adjacency, emitting
@@ -339,6 +339,65 @@ def _rects(text: str, need_fill: bool = True) -> list[Rect]:
         except ValueError:
             continue
         out.append(Rect(x, y, w, h, attrs.get("fill", ""), m.start(), attrs.get("id", "")))
+    return sorted(out + _path_rects(text), key=lambda r: r.pos) if need_fill else out
+
+
+_PATH_TAG_RE = re.compile(r"<path\b([^>]*)>")
+_PATH_TOKEN_RE = re.compile(r"[MLHVZ]|-?\d+(?:\.\d+)?")
+
+
+def path_rings(d: str) -> list[list[tuple[float, float]]] | None:
+    """The rings of a path drawn only with absolute moves, lines and axis steps, every edge axis-aligned - the form a
+    hand sheet draws an L-shaped or holed ground in; None for any other path (a curve, a relative step, a diagonal)."""
+    if re.search(r"[^MLHVZ\d\s.,-]", d):
+        return None
+    rings: list[list[tuple[float, float]]] = []
+    x = y = 0.0
+    cmd = ""
+    toks = _PATH_TOKEN_RE.findall(d)
+    i = 0
+    while i < len(toks):
+        t = toks[i]
+        if t in "MLHVZ":
+            cmd, i = t, i + 1
+            if t == "Z":
+                continue
+            if t == "M":
+                rings.append([])
+            continue
+        if cmd in "ML":
+            x, y, i = float(toks[i]), float(toks[i + 1]), i + 2
+        elif cmd == "H":
+            x, i = float(t), i + 1
+        else:  # V
+            y, i = float(t), i + 1
+        if not rings:
+            return None
+        rings[-1].append((x, y))
+    for ring in rings:
+        for (ax, ay), (bx, by) in zip(ring, ring[1:] + ring[:1], strict=False):
+            if ax != bx and ay != by:
+                return None
+    return [r for r in rings if len(r) >= 4] or None
+
+
+def _path_rects(text: str) -> list[Rect]:
+    """A filled rectilinear `<path>` as the rects it covers, cut into horizontal slabs by the even-odd rule, so the checks
+    that read fills see an L-shaped or holed ground as they see a rect (feature 283: Ochiba's inner garden, drawn as an
+    L, was invisible to every fills-based check)."""
+    out: list[Rect] = []
+    for m in _PATH_TAG_RE.finditer(text):
+        attrs = dict(_ATTR_ANY_RE.findall(m.group(1)))
+        fill = attrs.get("fill", "")
+        rings = path_rings(attrs.get("d", "")) if fill and fill != "none" else None
+        if rings is None:
+            continue
+        verticals = [(ax, min(ay, by), max(ay, by)) for ring in rings for (ax, ay), (bx, by) in zip(ring, ring[1:] + ring[:1], strict=False) if ax == bx and ay != by]
+        ys = sorted({p[1] for ring in rings for p in ring})
+        for y0, y1 in zip(ys, ys[1:], strict=False):
+            mid = (y0 + y1) / 2
+            xs = sorted(x for x, lo, hi in verticals if lo < mid < hi)
+            out += [Rect(a, y0, b - a, y1 - y0, fill, m.start(), attrs.get("id", "")) for a, b in zip(xs[::2], xs[1::2], strict=False) if b > a]
     return out
 
 

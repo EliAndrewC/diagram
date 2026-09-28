@@ -505,7 +505,8 @@ def seat(src: str, kinds: set[str] | None = None) -> tuple[list[Finding], list[t
                 index.add(Obstacle(tuple(_band(done.leader[0], done.leader[1], 1.0)), WEIGHT_TEXT))
 
         cw = char_w_of(head.element, head.text, head.size)
-        p = place(" ".join(lines), head.size, sub, index, view, lines=_as_head(caps, cw) if len(caps) > 1 else None, char_w=cw)
+        lead = leader_blockers(shapes, skip, placed, sub)
+        p = place(" ".join(lines), head.size, sub, index, view, lines=_as_head(caps, cw) if len(caps) > 1 else None, char_w=cw, leader_index=lead)
         p = hand_seat_if_no_better(p, caps, sub, index)
         if p.position == HAND:
             placed.append((caps, p))
@@ -523,6 +524,25 @@ def seat(src: str, kinds: set[str] | None = None) -> tuple[list[Finding], list[t
         elif p.leader is not None and (have is None or max(math.dist(have.poly[0], p.leader[0]), math.dist(have.poly[-1], p.leader[1])) > TOLERANCE):
             findings.append(Finding(head.kind, head.text, "a missing or misplaced leader", p))
     return findings, placed
+
+
+GLYPH_MAX_PX = 600.0
+"""The largest drawn thing a leader may not end against, in px (a well's curb is 24 x 24): a tub, a stone, a basin -
+beside the feature a leader names, the tip would name it instead. A building is larger and is what leaders point at."""
+
+
+def leader_blockers(shapes: list[Shape], skip: set[int], placed: list[tuple[list[Shape], Placement]], sub: Subject) -> ObstacleIndex:
+    """What a caption's leader may not pass over or end against (feature 283): every other caption - those still where
+    the hand set them and those already seated - and every small glyph that is not part of what the caption names."""
+    own = list(sub.poly)
+    out = [Obstacle(tuple(s.poly), WEIGHT_TEXT) for i, s in enumerate(shapes) if s.tag == "text" and i not in skip]
+    out += [Obstacle(done.block, WEIGHT_TEXT) for _caps, done in placed]
+    out += [
+        Obstacle(tuple(s.poly), WEIGHT_OBSTACLE)
+        for s in shapes
+        if s.tag != "text" and s.filled and not s.line and not s.leader and s.kind != "door" and 0 < _area(s.poly) <= GLYPH_MAX_PX and not _box_within(s.poly, own)
+    ]
+    return ObstacleIndex(out)
 
 
 #: Width per character, in ems, of a hand sheet's captions by their face (feature 267). The standard's 0.55 holds for the
