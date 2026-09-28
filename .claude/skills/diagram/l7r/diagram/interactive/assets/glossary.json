@@ -10401,5 +10401,37 @@
   "variants": [
    "Pan Jixun"
   ]
+ },
+ "lying willow": {
+  "def": "A low willow planted densely from walnut-thick cuttings close to a dike's foot, with only a few cun showing above ground, so its branches and leaves fend off wind and waves; Pan Jixun's Ming river manual pairs it with the long willow.",
+  "variants": [
+   "lying willow"
+  ]
+ },
+ "long willow": {
+  "def": "A tall willow set about 5-6 chi out from a dike, which holds back the water and each year gives big branches for fascines; Pan Jixun's Ming river manual pairs it with the lying willow.",
+  "variants": [
+   "long willow"
+  ]
+ },
+ "yu": {
+  "def": "Fei Xiaotong's word for a Lake Tai polder: a block of fields enclosed by a dike, whose raised margin carried the mulberry trees and the houses.",
+  "variants": [
+   "yu",
+   "yw"
+  ],
+  "cased": true
+ },
+ "juan": {
+  "def": "One of the numbered books a Chinese work is divided into, like a volume or chapter.",
+  "variants": [
+   "juan"
+  ]
+ },
+ "sheng": {
+  "def": "A Chinese unit of grain volume, a tenth of a dou; ten he make one sheng.",
+  "variants": [
+   "sheng"
+  ]
  }
 }

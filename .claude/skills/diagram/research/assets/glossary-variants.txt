@@ -1156,6 +1156,7 @@ josui ido	josui-ido
 josui-ido	josui-ido
 jozabangai-seki	jozabangai-seki
 ju-jutsu	jujutsu
+juan	juan
 jujutsu	jujutsu
 juku	shukuba
 junk	junk
@@ -1437,6 +1438,7 @@ liuchu	liuchu
 loess	loess
 log boom	boom
 lognormal	lognormal
+long willow	long willow
 longan	longan
 longans	longan
 loophole	loophole
@@ -1458,6 +1460,7 @@ luban ruler	Luban ruler
 luban rulers	Luban ruler
 lulu	lulu
 luocheng	luocheng
+lying willow	lying willow
 machi	machi
 machi-bikeshi	machi-bikeshi
 machi-bugyo	town magistrate
@@ -2093,6 +2096,7 @@ sheer boom	boom
 shell keep	shell keep
 shell keeps	shell keep
 shen kuo	Shen Kuo
+sheng	sheng
 shi	shi
 shibai-goya	shibai-goya
 shiboku sanso	four trees
@@ -2713,6 +2717,7 @@ yotsu	yotsu
 youfang	aburaya
 young men's association	young men's association
 young men's associations	young men's association
+yu	yu
 yuan	Yuan dynasty
 yuan dynasty	Yuan dynasty
 yuan rebuild	Yuan dynasty
@@ -2722,6 +2727,7 @@ yui	yui
 yukaku	yukaku
 yukimi	yukimi
 yulin wei	yulin wei
+yw	yu
 yūkaku	yukaku
 zaimachi	zaimachi
 zaimokuya	zaimokuya
