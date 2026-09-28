@@ -103,7 +103,16 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
     corridor seat), `hen coop` (215 - Buck's 82% of farms) and `persimmon` (218 - the dooryard or behind the house,
     the 23 ft crown). It re-pointed farmhouse (240, the spread of bearings), byre (300, the beast living with its
     keeper), privy and manure heap (260, the four seats and the field pit), and corrected two sibling texts the
-    engine had made false: a byre drawn against its farmhouse, and a night-soil pit out at the fields."""
+    engine had made false: a byre drawn against its farmhouse, and a night-soil pit out at the fields.
+
+    Feature 269 (K3) re-pointed the seven greenery kinds at what the engine now draws, each gaining the keys its
+    rewritten prose rests on: homestead bamboo (vegetation/154 and 260 - the windward side read), windbreak (270 -
+    the conifer-led and mixed-broadleaf forms, and 260's bamboo low in the grove), copse (210 - the homesteads' own
+    woods), woodland commons (220 and 230 - beyond the fields, ~1,700 a hectare; 060 dropped, its figures no longer
+    the commons'), scrub (090's flat-ground figure) and marsh (vegetation/280's yearly cutting, water/340's unharvested
+    pond fringe). It corrected five sibling texts the engine had made false: a cedar-backed belt, a copse of loose
+    greenery, a bamboo strip always on the damp north or west, a 10-30 year cycle, and a coppice on the slope above
+    the paddy."""
     before = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
     added = {s for succ in SINCE_189.values() for s in succ} | set(ADDED_SINCE_189)
     assert set(SINCE_189) <= set(before) and not (added & set(before)), "the tables name snapshot keys and NEW keys only"

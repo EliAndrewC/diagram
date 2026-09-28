@@ -153,18 +153,22 @@
   "copse": {
     "caveat": "how much ground one takes is nowhere given, so a copse is drawn to whatever gaps the houses, yards and crop leave it.",
     "covers": "`village_groves[role=copse]`",
-    "entry": "research/vegetation.html - 'The fengshui forest'; research/vegetation.html - 'What are the village's three groves'",
+    "entry": "research/vegetation.html - 'The fengshui forest'; research/vegetation.html - 'What are the village's three groves'; research/vegetation.html - \"How big was the village's dooryard copse\"",
     "key": "copse",
     "label": "accurate",
     "label_note": "The role is attested with the fengshui-grove system; how much ground one takes is nowhere given, so a copse is drawn to whatever gaps the houses, yards and crop leave it.",
     "name": "copse",
     "siblings": {
-      "persimmon": "The persimmon is one household's dooryard tree, planted beside the house for its fruit and its summer shade; the copse is village greenery standing in the open ground among the houses.",
-      "windbreak": "The windbreak is a planted shelter belt - the fengshui back grove - kept on the windward one or two sides of the cluster - toward the northwest, unless the place has a local wind - to break the winter monsoon, cedar-backed and dense. A copse is looser fruit-tree and broadleaf greenery in the gaps among the houses, with no sheltering purpose; the households used it for shade and fruit, not as a wall against the wind.",
-      "woodland commons": "The copse is greenery among the houses, used for shade and fruit; the woodland commons is a managed coppice on the slope above the paddy, cut on a cycle for fuel and fertilizer under the village's own rules."
+      "persimmon": "The persimmon is one household's dooryard tree, planted beside the house for its fruit and its summer shade; the copse is the homesteads' own bamboo and fruit trees in the open ground among the houses, sized with their windward groves as each homestead's wood.",
+      "windbreak": "The windbreak is a planted shelter belt - the fengshui back grove - kept on the windward one or two sides of the cluster - toward the northwest, unless the place has a local wind - to break the winter monsoon, dense, and either led by rows of conifers or a mixed broadleaf wood. A copse is the homesteads' own bamboo and fruit trees in the gaps among the houses, with no sheltering purpose; the households used it for shade and fruit, not as a wall against the wind.",
+      "woodland commons": "The copse is the homesteads' own trees among the houses, used for shade and fruit; the woodland commons is a worked coppice beyond the fields on the hill ground above them, cut on a cycle for fuel and fertilizer under the village's own rules."
     },
     "sources": [
-      "forests-2020"
+      "forests-2020",
+      "yashikirin-jawiki",
+      "miura-2019-yashikiyama",
+      "kotobank-yashikirin-heibonsha",
+      "takehara-2004-yashikirin"
     ],
     "what": "A stand of fruit-tree and broadleaf greenery in the open ground among the houses - shade and fruit, not shelter.",
     "why": "The leafy greenery scattered through the gaps of a nucleated cluster is the third of the village's grove roles, after the back belt and the water-mouth grove; it threads between the dwellings and never stands on a roof, a yard or a crop."
@@ -419,16 +423,22 @@
   "homestead bamboo": {
     "caveat": "",
     "covers": "`bamboo_stands[role=homestead]`",
-    "entry": "research/vegetation.html - 'Bamboo: how common, and where it stood', 'How is bamboo drawn, when one culm is too small to see?'",
+    "entry": "research/vegetation.html - 'Bamboo: how common, and where it stood', 'Did every farmstead keep its own bamboo', \"Did a farmstead's grove carry bamboo\", 'How is bamboo drawn, when one culm is too small to see?'",
     "key": "homestead bamboo",
     "label": "convention",
     "label_note": "we have rendered the bamboo stand as paired culm strokes with a leafy fork on a 7 ft grid, in order to show a stand that cannot be drawn at true scale: a culm is a few inches across, a fraction of a pixel at one foot per pixel. The stand's extent is to scale; the marks inside it are symbolic - the convention Japan's own topographic legend uses. Presence and place are read.",
     "name": "homestead bamboo",
     "siblings": {
-      "shared bamboo grove": "This stand belongs to one household - the damp north or west strip of its plot, cut for the household's own baskets, poles and fences. A shared grove is a take-yabu held by the hamlet at the field margin and cut like a coppice, under the village's rules on who may cut and when."
+      "shared bamboo grove": "This stand belongs to one household - a strip of its plot behind the house, beside the shed or on the windward side, cut for the household's own baskets, poles and fences. A shared grove is a take-yabu standing on its own at the village edge, where the plain meets the worked hills, cut in moderation and renewed from its shoots."
     },
     "sources": [
-      "not recorded"
+      "yashikirin-jawiki",
+      "tonami-yashikirin-haichi",
+      "sendai-igune-modelplan",
+      "tsuijimatsu",
+      "visit-toyama-sankyoson",
+      "chikurin-jawiki",
+      "phyllostachys-enwiki"
     ],
     "what": "A household's own bamboo stand on the damp north or west strip of its plot - a clonal thicket with a hard edge, drawn as paired culm strokes with a leafy fork.",
     "why": "Below the frost line bamboo was a matter of course in a lowland paddy hamlet - baskets, poles, fences, fans, food wrappings - and the shady, always-damp service side of the yashiki was where it stood. A cold upland hamlet may have none; whether a hamlet has bamboo is rolled per settlement."
@@ -490,7 +500,7 @@
   "marsh": {
     "caveat": "",
     "covers": "`marshes` - every marsh patch, whatever its role",
-    "entry": "research/water.html - 'Marsh - wet rice is reclaimed FROM wetland', 'The wet toe is as wide as the FAN', \"A reservoir's shore is reeded, and its EMBANKMENT is mown\", \"Why is a reservoir's embankment bare of reeds\"; research/vegetation.html - 'The marsh margin'",
+    "entry": "research/water.html - 'Marsh - wet rice is reclaimed FROM wetland', 'The wet toe is as wide as the FAN', \"A reservoir's shore is reeded, and its EMBANKMENT is mown\", \"Why is a reservoir's embankment bare of reeds\", \"Was the reed at a reservoir's margin cut as a crop\"; research/vegetation.html - 'The marsh margin', 'Were the reed beds cut'",
     "key": "marsh",
     "label": "accurate",
     "label_note": "The reclaimed-from-marsh finding, the margin gradient, and the reeded-shore finding are all read; the embankment is mown in the record as it is bare on the map.",
@@ -506,7 +516,11 @@
       "kagawa-tameike-structure",
       "maff-tameike-shizen",
       "nies-tameike",
-      "inamino-tameike-museum"
+      "inamino-tameike-museum",
+      "kayabun-kayabuki",
+      "ohmi-yoshi",
+      "biwako-visitors-yoshi-hiire",
+      "opal-biwa-yoshi-hara"
     ],
     "what": "Reed wetland on the undrained low ground - the wet toe below the fields and the fringe of the pond.",
     "why": "Wet rice is reclaimed FROM marsh: where reclamation stops, or the ground is too wet to manage, it stays reed wetland, and an abandoned paddy reverts to it. The toe marsh is as wide as the fan it drains, and its margin grades reed, then sedge and grass, then dry ground. A RESERVOIR'S SHORE IS REEDED BECAUSE THE POND IS WORKED, not in spite of it: the obvious guess is that a maintained tameike - its bank repaired, its silt dredged, its water drawn down each season - would have a margin kept clear, and the record contradicts that. A Kagawa Prefecture study found a statistically significant POSITIVE correlation between the number of emergent-plant species (the reed and cattail belt) and the practice of dredging silt and cutting algae, and it is the ponds whose water use has STOPPED that lose the fringe. The reeds are a sign of a pond in use. The EMBANKMENT is the other half of the same finding and is different ground: it is mown and burned and may not be cultivated, to keep the bank strong, and what grows on it is dry-grassland herbs. So reeds stand in the shallows and stop at the foot of the bank - which is why you will not see the wet haze on a dike or a pond's raised rim."
@@ -633,7 +647,7 @@
     "label_note": "Presence and the beside-the-house placement are read (toyoko, uekipedia); WHICH side and the 18 ft crown are guesses - the crown width was found nowhere.",
     "name": "persimmon",
     "siblings": {
-      "copse": "The persimmon is one household's dooryard tree, planted beside the house for its fruit and its summer shade; the copse is village greenery standing in the open ground among the houses."
+      "copse": "The persimmon is one household's dooryard tree, planted beside the house for its fruit and its summer shade; the copse is the homesteads' own bamboo and fruit trees in the open ground among the houses, sized with their windward groves as each homestead's wood."
     },
     "sources": [
       "toyoko-kaki",
@@ -740,7 +754,10 @@
       "marsh": "Scrub is dry ground - cut-over fuel and fodder land with grass and the odd scraggly pine, grazed and cut; marsh is the undrained wet ground that wet rice was reclaimed from and that stays reed wetland where reclamation stopped."
     },
     "sources": [
-      "not recorded"
+      "pmc7538448-levee",
+      "meadow-enwiki",
+      "nonoichi-keihanritsu",
+      "hiroshima-keihan-manual"
     ],
     "what": "The cut-over fuel and fodder land around the settlement: grass with a few scraggly pines, grazed and cut.",
     "why": "Everything the paddy and the homesteads do not take is the hamlet's rough ground, and it is worked: scrub stands six feet off every field edge (one scythe swath - land hunger keeps the margin to that), off open water and off the cut banks of the channels."
@@ -754,10 +771,13 @@
     "label_note": "we have rendered the shared grove with the same stand-level glyph as a homestead stand - paired culm strokes on a 7 ft grid - in order to show it at all: a culm is a few inches across and cannot be drawn at one foot per pixel. The grove's extent is to scale; the marks are symbolic. Presence is read.",
     "name": "shared bamboo grove",
     "siblings": {
-      "homestead bamboo": "This stand belongs to one household - the damp north or west strip of its plot, cut for the household's own baskets, poles and fences. A shared grove is a take-yabu held by the hamlet at the field margin and cut like a coppice, under the village's rules on who may cut and when."
+      "homestead bamboo": "This stand belongs to one household - a strip of its plot behind the house, beside the shed or on the windward side, cut for the household's own baskets, poles and fences. A shared grove is a take-yabu standing on its own at the village edge, where the plain meets the worked hills, cut in moderation and renewed from its shoots."
     },
     "sources": [
-      "not recorded"
+      "chikurin-jawiki",
+      "take-jawiki",
+      "satoyama-enwiki",
+      "phyllostachys-enwiki"
     ],
     "what": "A bamboo thicket held by the hamlet at the field margin, cut like a coppice.",
     "why": "The record gives bamboo two places: the household's own strip, and the take-yabu as a stand of its own at the village edge, harvested under the village's rules. The two forms are two knobs, not a choice."
@@ -953,17 +973,21 @@
   "windbreak": {
     "caveat": "",
     "covers": "`village_groves[role=windbreak]`",
-    "entry": "research/vegetation.html - 'The fengshui forest - real scale, and why ours is honest'; research/vegetation.html - 'Does a shelter belt wrap the settlement? No - it stands on one or two windward sides'; research/homesteads.html - 'The garden's sun, and how far the windbreak shades'",
+    "entry": "research/vegetation.html - 'The fengshui forest - real scale, and why ours is honest'; research/vegetation.html - 'Does a shelter belt wrap the settlement? No - it stands on one or two windward sides'; research/homesteads.html - 'The garden's sun, and how far the windbreak shades'; research/vegetation.html - 'Was a windbreak one kind of tree in a row', \"Did a farmstead's grove carry bamboo\"",
     "key": "windbreak",
     "label": "accurate",
     "label_note": "Scale, density and placement follow the surveyed figures (forests-2020); the belt's shape follows the terrain and the cluster.",
     "name": "windbreak forest",
     "siblings": {
-      "copse": "The windbreak is a planted shelter belt - the fengshui back grove - kept on the windward one or two sides of the cluster - toward the northwest, unless the place has a local wind - to break the winter monsoon, cedar-backed and dense. A copse is looser fruit-tree and broadleaf greenery in the gaps among the houses, with no sheltering purpose; the households used it for shade and fruit, not as a wall against the wind.",
-      "woodland commons": "The windbreak belongs to the settlement as shelter and was kept standing - a village would not cut its own wind wall. The woodland commons was cut: an iriai wood coppiced on a 10-30 year cycle for firewood, forage and leaf litter, under customary rules on who might cut, when, and how much."
+      "copse": "The windbreak is a planted shelter belt - the fengshui back grove - kept on the windward one or two sides of the cluster - toward the northwest, unless the place has a local wind - to break the winter monsoon, dense, and either led by rows of conifers or a mixed broadleaf wood. A copse is the homesteads' own bamboo and fruit trees in the gaps among the houses, with no sheltering purpose; the households used it for shade and fruit, not as a wall against the wind.",
+      "woodland commons": "The windbreak belongs to the settlement as shelter and was kept standing - a village would not cut its own wind wall. The woodland commons was cut: an iriai wood cut and let regrow from the stump every fifteen to thirty years or so, for firewood, forage and leaf litter, under customary rules on who might cut, when, and how much."
     },
     "sources": [
-      "forests-2020"
+      "forests-2020",
+      "hu-2011-fengshui-patches",
+      "takehara-2004-yashikirin",
+      "tonami-yashikirin-haichi",
+      "sendai-igune-modelplan"
     ],
     "what": "The village shelter belt - the fengshui back grove: a dense, cedar-backed stand of real crowns on the windward, high side of the cluster, embracing it.",
     "why": "A nucleated village shelters behind one village-scale grove against the winter monsoon. Surveys of southern-China village fengshui forests find about two groves per village at closed-canopy density, the typical back grove one to two hectares - large relative to the cluster, and drawn so. It is kept off the west side of the gardens so the beds keep their afternoon sun."
@@ -971,17 +995,25 @@
   "woodland commons": {
     "caveat": "a lot's boundary was NOT laid out as a surveyed square, so the patches are irregular.",
     "covers": "`commons[role=woodland]` - the coppice patches",
-    "entry": "research/vegetation.html - 'How is a coppice lot bounded?', 'Does scrub stand under a village wood?', 'Forest density and crown size'",
+    "entry": "research/vegetation.html - 'Where did a village keep its fuel wood', 'How thickly was a worked coppice stocked', 'How is a coppice lot bounded?', 'Does scrub stand under a village wood?'",
     "key": "woodland commons",
     "label": "accurate",
     "label_note": "The commons regime and the raked floor are read (the Yamaguni study, the satoyama entries); a lot's boundary was NOT laid out as a surveyed square, so the patches are irregular.",
     "name": "woodland commons",
     "siblings": {
-      "copse": "The copse is greenery among the houses, used for shade and fruit; the woodland commons is a managed coppice on the slope above the paddy, cut on a cycle for fuel and fertilizer under the village's own rules.",
-      "windbreak": "The windbreak belongs to the settlement as shelter and was kept standing - a village would not cut its own wind wall. The woodland commons was cut: an iriai wood coppiced on a 10-30 year cycle for firewood, forage and leaf litter, under customary rules on who might cut, when, and how much."
+      "copse": "The copse is the homesteads' own trees among the houses, used for shade and fruit; the woodland commons is a worked coppice beyond the fields on the hill ground above them, cut on a cycle for fuel and fertilizer under the village's own rules.",
+      "windbreak": "The windbreak belongs to the settlement as shelter and was kept standing - a village would not cut its own wind wall. The woodland commons was cut: an iriai wood cut and let regrow from the stump every fifteen to thirty years or so, for firewood, forage and leaf litter, under customary rules on who might cut, when, and how much."
     },
     "sources": [
-      "not recorded"
+      "ijc-yamaguni",
+      "satoyama-enwiki",
+      "satoyama-jawiki",
+      "kotobank-murazakai",
+      "iriaichi-jawiki",
+      "miura-2019-yashikiyama",
+      "rinya-satoyama-junkan",
+      "katakura-1989-konara-coppice",
+      "migita-chiba-konara-canopy"
     ],
     "what": "A managed coppice wood on the slope above the paddy: spaced crowns with an open canopy, the floor raked clear of leaf litter.",
     "why": "The village woods were iriai commons - customary common land held by the village and governed by its own rules on who might cut, when, and how much - coppiced on a 10-30 year cycle for firewood, forage and the leaf litter that fertilized the paddies. A cut wood lets sun reach the floor, so herbs grow there, not brush; the wood sits on the slope break above the fields, one part of the satoyama the community worked as a whole."

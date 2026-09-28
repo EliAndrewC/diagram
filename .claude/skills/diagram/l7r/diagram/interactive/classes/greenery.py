@@ -15,25 +15,30 @@ class HomesteadBamboo(Kind):
     drawn as paired culm strokes with a leafy fork.
 
     Why: Below the frost line bamboo was a matter of course in a lowland paddy hamlet - baskets, fans, food
-    wrappings, building timber and everyday tools. Which side of the plot it stood on was done more than one way - on the Tonami plain
-    with the storehouses and fruit trees to the south; at the wet edge, its roots holding the soil; on the
-    wind side - so the side is rolled per farmstead, weighted toward the back of the house and the shed's
-    side (that it stood on the shady north-west service strip is on no page read). A cold upland hamlet may
-    have none; whether a hamlet has bamboo is rolled per settlement, and that about three farmsteads in five
-    keep a stand is a guess.
+    wrappings, building timber and everyday tools; on the Tonami plain bamboo stands once grew in many a farmstead's
+    grove, beside the cedar that led it. Which side of the plot it stood on was done more than one way: on the Tonami
+    plain with the storehouses and fruit trees to the south; by rivers and in flood-prone ground at the wet edge, its
+    roots holding the soil; and on the windward side - the groves of the Sendai plain filled their bare lower part with
+    it against the wind, and the Tonami groves often mixed it in from the west round to the north of the house, likely
+    their windward side too.
+    So the side is rolled per farmstead - behind the house, beside the shed, on the windward side (the windward corner
+    when the wind comes on a diagonal) or on the other flank. A cold upland hamlet may have none; whether a hamlet's
+    bamboo stands in its farmsteads, in a thicket of its own, or both is rolled per settlement.
 
     Note: we have rendered the bamboo stand as paired culm strokes with a leafy fork on a 7 ft grid, in order to
-    show a stand that cannot be drawn at true scale: a culm is only inches across (no page read gives the
-    figure), a fraction of a pixel at one foot per pixel. The stand's extent is to scale; the marks inside it are symbolic - the convention
-    Japan's own topographic legend uses. Presence below the frost line and the stand's two places (the
-    household's plot, the village-edge thicket) are read; the side of the plot is rolled from the forms the
-    record attests, and the share of farmsteads keeping one is a guess.
+    show a stand that cannot be drawn at true scale: a culm is only inches across, madake at most about four inches,
+    a fraction of a pixel at one foot per pixel. The stand's extent is to scale; the marks inside it are symbolic - the convention
+    Japan's own topographic legend uses. Presence below the frost line, the stand's two places (the
+    household's plot, the village-edge thicket - that one from a page's present-day observation) and the three sides
+    of the plot are read; the weights among the sides
+    (behind the house and the windward side the likeliest), the share of farmsteads keeping one (about three in five)
+    and the 22 by 16 ft strip are guesses, no page giving a share or a size.
 
     Name: homestead bamboo
     Covers: `bamboo_stands[role=homestead]`
     Label: convention
-    Sources: not recorded
-    Entry: research/vegetation.html - 'Bamboo: how common, and where it stood', 'How is bamboo drawn, when one culm is too small to see?'
+    Sources: yashikirin-jawiki, tonami-yashikirin-haichi, sendai-igune-modelplan, tsuijimatsu, visit-toyama-sankyoson, chikurin-jawiki, phyllostachys-enwiki
+    Entry: research/vegetation.html - 'Bamboo: how common, and where it stood', 'Did every farmstead keep its own bamboo', "Did a farmstead's grove carry bamboo", 'How is bamboo drawn, when one culm is too small to see?'
     """
 
     key = 'homestead bamboo'
@@ -44,18 +49,20 @@ class SharedBambooGrove(Kind):
     What: A bamboo thicket standing on its own at the field margin, cut in moderation and renewed from its shoots.
 
     Why: The record gives bamboo two places: the household's own strip, and the take-yabu as a stand of its own
-    at the village edge, where the plain meets the worked hills. The record supports both, so a map rolls each rather than the project picking one.
+    at the village edge, where the plain meets the worked hills. The record supports both, so whether a hamlet's
+    bamboo stands in its farmsteads, in a thicket of its own, or both is rolled per settlement rather than the project
+    picking one.
 
     Note: we have rendered the shared grove with the same stand-level glyph as a homestead stand - paired culm
-    strokes on a 7 ft grid - in order to show it at all: a culm is only inches across (no page read gives the
-    figure) and cannot be drawn at one foot per pixel. The grove's extent is to scale; the marks are symbolic.
+    strokes on a 7 ft grid - in order to show it at all: a culm is only inches across, madake at most about four
+    inches, and cannot be drawn at one foot per pixel. The grove's extent is to scale; the marks are symbolic.
     Bamboo below the frost line and its two places are read, though the page placing the thicket at the plain's
     edge describes the present day; that it was cut like a coppice is this record's likeness, no page making it.
 
     Name: shared bamboo grove
     Covers: `bamboo_stands` with any role other than homestead - the take-yabu at the field margin
     Label: convention
-    Sources: not recorded
+    Sources: chikurin-jawiki, take-jawiki, satoyama-enwiki, phyllostachys-enwiki
     Entry: research/vegetation.html - 'Bamboo: how common, and where it stood', 'How is bamboo drawn, when one culm is too small to see?'
     """
 
@@ -64,9 +71,11 @@ class SharedBambooGrove(Kind):
 
 class Windbreak(Kind):
     """
-    What: The village shelter belt - the fengshui back grove: a dense, cedar-backed stand of real crowns on the
-    windward one or two sides of the cluster, never ringing it - toward the northwest, where the region's winter
-    wind comes from, unless the place has a local wind of its own.
+    What: The village shelter belt - the fengshui back grove: a dense stand of real crowns on the windward one or
+    two sides of the cluster, never ringing it - toward the northwest, where the region's winter wind comes from,
+    unless the place has a local wind of its own. It is drawn in one of two forms, rolled per settlement:
+    conifer-led, darker conifers set in rows along the belt with lesser broadleaf among them; or mixed broadleaf,
+    an irregular wood of rounded crowns. In either, a little bamboo shows between the crowns.
 
     Why: A nucleated village shelters behind one village-scale grove against the winter monsoon. Fujian villages
     keep about two fengshui forests each, at closed-canopy density in the well-kept Pearl River Delta patches;
@@ -74,19 +83,36 @@ class Windbreak(Kind):
     the village at a median of about one hectare - half under a hectare, four in ten between one and two. A
     village's belt is drawn at one to two hectares, in the upper half of that band; a hamlet's follows the cluster it
     stands behind - half a hectare to under two across these maps, inside the measured range. It is kept off the west side of the gardens so the beds keep their afternoon sun.
+    What it was made of was done two ways. The Japanese farmstead grove was led by one tall tree - in three of the four
+    regions of a 2004 survey cedar grew at every homestead and was the dominant tree, in two of them planted in rows -
+    with about nine to eighteen kinds of tree beside it; the Chinese village grove of the Pearl River Delta is a mixed
+    evergreen broadleaf wood of some 47 kinds a patch. Neither is a line of one kind of tree, so the map rolls between
+    the two forms per settlement. Bamboo grew in the Japanese farmstead grove too, low under the tall trees on its
+    windward side, filling the bare lower part against the wind.
 
     Note: The grove count follows the Fujian figure (forests-2020), the density the Pearl-delta patches
     (hu-2011-fengshui-patches), and the size the Hong Kong survey (afcd-ncsc-9-06); the water-mouth cluster's
     size and the tree counts are guesses bracketed by Korean village-grove analogues; the belt's shape follows
     the terrain and the cluster. The side it stands on follows the Japanese homestead grove, kept on the north
     and west against the northwesterly winter wind (irie-2020-igune, yashikirin-jawiki), and the GM's rulings
-    that the maps show that regional wind unless a place declares its own.
+    that the maps show that regional wind unless a place declares its own. The two forms are read (the four-region
+    survey, takehara-2004-yashikirin; the delta patches), and so is the bamboo, in the Japanese farmstead grove only
+    (tonami-yashikirin-haichi, sendai-igune-modelplan); drawing the Japanese form at village scale is an interpolation,
+    since every survey of it is of one farmstead's grove, and so is giving bamboo to a village belt and to the broadleaf
+    form; the even odds between the forms, the rows' spacing, the conifer being the commonest crown and the bamboo's
+    share - about one plant in twelve, showing only in the gaps between crowns and at the edge - are guesses, no page
+    giving a share.
+
+    Caveat: drawing the Japanese form at village scale is an interpolation, since every survey of it is of one
+    farmstead's grove, and so is giving bamboo to a village belt and to the broadleaf form; the even odds between the
+    forms, the rows' spacing, the conifer being the commonest crown and the bamboo's share - about one plant in twelve,
+    showing only in the gaps between crowns and at the edge - are guesses, no page giving a share.
 
     Name: windbreak forest
     Covers: `village_groves[role=windbreak]`
     Label: accurate
-    Sources: forests-2020
-    Entry: research/vegetation.html - 'The fengshui forest - real scale, and why ours is honest'; research/vegetation.html - 'Does a shelter belt wrap the settlement? No - it stands on one or two windward sides'; research/homesteads.html - 'The garden's sun, and how far the windbreak shades'
+    Sources: forests-2020, hu-2011-fengshui-patches, takehara-2004-yashikirin, tonami-yashikirin-haichi, sendai-igune-modelplan
+    Entry: research/vegetation.html - 'The fengshui forest - real scale, and why ours is honest'; research/vegetation.html - 'Does a shelter belt wrap the settlement? No - it stands on one or two windward sides'; research/homesteads.html - 'The garden's sun, and how far the windbreak shades'; research/vegetation.html - 'Was a windbreak one kind of tree in a row', "Did a farmstead's grove carry bamboo"
     """
 
     key = 'windbreak'
@@ -123,24 +149,37 @@ class Alder(Kind):
 
 class Copse(Kind):
     """
-    What: A stand of bamboo and fruit trees in the open ground among the houses - useful trees, not shelter.
+    What: The homesteads' own trees in the open ground among the houses - bamboo and fruit trees, useful trees, not
+    shelter.
 
     Why: The leafy greenery scattered through the gaps of a nucleated cluster is the third of the village's grove
     roles, after the back belt and the water-mouth grove; it threads between the dwellings and never stands
-    on a roof, a yard or a crop.
+    on a roof, a yard or a crop. In the Japanese record the grove that stands with a house is that homestead's own
+    wood, formed on its lot, and the one period measurement of one - a 1684 register of village woods in the Mito
+    domain - lists three households' woods of about 6,100, 10,700 and 27,800 sq ft; an encyclopedia account says their
+    size varied. A 1910 account of the Musashino upland puts cedar, bamboo, evergreen-oak and zelkova woods round the
+    farmhouses, and a survey of the Tonami groves finds persimmon among the three commonest trees, so the bamboo and
+    fruit trees are the homestead wood's own. So the copse is sized by its homesteads: each rolls a wood of between
+    about 6,000 and 28,000 sq ft, its windward grove and its share of the copse counted together, and the copse is
+    filled to what the belt leaves of their sum.
 
-    Note: That fruit trees and bamboo were the useful species planted in a fengshui wood is read; that they fill the
-    gaps throughout the cluster is the GM's reading of a leafy village, on no page read; how much ground one takes is nowhere given, so a
-    copse is drawn to whatever gaps the houses, yards and crop leave it.
+    Note: That fruit trees and bamboo were the useful species planted in a fengshui wood, and that a homestead's wood
+    was its own and ran from about 6,000 to 28,000 sq ft, are read; that they fill the gaps throughout the cluster is
+    the GM's correction, on no page read. The range is a calibration against one register of three households, not a
+    survey, and its low end rests on an entry whose sides (9 by 9 ken) do not match its stated area; counting the grove
+    and the copse as one wood is this project's decision, because the record knows them as one. How the rolls spread across that range is a guess, and a clump stands only within a
+    dooryard's reach of a house (90 ft), so where the ground near the houses is used up a copse is drawn short of its
+    homesteads' woods - on some maps by nearly half - rather than pushed further out.
 
-    Caveat: how much ground one takes is nowhere given, so a copse is drawn to whatever gaps the houses, yards and
-    crop leave it.
+    Caveat: How the rolls spread across that range is a guess, and a clump stands only within a dooryard's reach of a
+    house (90 ft), so where the ground near the houses is used up a copse is drawn short of its homesteads' woods - on
+    some maps by nearly half - rather than pushed further out.
 
     Name: copse
     Covers: `village_groves[role=copse]`
     Label: accurate
-    Sources: forests-2020
-    Entry: research/vegetation.html - 'The fengshui forest'; research/vegetation.html - 'What are the village's three groves'
+    Sources: forests-2020, yashikirin-jawiki, miura-2019-yashikiyama, kotobank-yashikirin-heibonsha, takehara-2004-yashikirin
+    Entry: research/vegetation.html - 'The fengshui forest'; research/vegetation.html - 'What are the village's three groves'; research/vegetation.html - "How big was the village's dooryard copse"
     """
 
     key = 'copse'
@@ -148,26 +187,37 @@ class Copse(Kind):
 
 class WoodlandCommons(Kind):
     """
-    What: A managed coppice wood on the slope above the paddy: overlapping crowns over a floor raked clear of
-    leaf litter.
+    What: A worked coppice wood beyond the fields, on the hill ground above them: a thicket of small crowns over a
+    floor raked clear of leaf litter.
 
     Why: The village woods were iriai commons - customary common land held by the village and governed by its own
-    rules on who might cut, when, and how much - coppiced on a 15-20 year cycle for firewood, forage and the
-    leaf litter that fertilized the paddies. A cut wood lets sun reach the floor, so herbs grow there, not
-    brush; the wood sits on the slope break above the fields, one part of the satoyama the community worked
-    as a whole.
+    rules on who might cut, when, and how much - cut and let regrow from the stump every fifteen to thirty years or
+    so, for firewood, forage and the leaf litter that fertilized the paddies. The village of the record is its houses
+    at the center, its fields around them and hill land beyond, and the nearest hill slope - the satoyama - carried the
+    fuel wood; the ground below the houses, where the fields run down to the flat, was the grass and riverbank commons',
+    not the forest's. So the wood is seated beyond the fields, on ground higher than the field it adjoins - or, where
+    the map has no such ground, on the level past the fields - and never downslope of the houses. A worked wood stood as clumps of thin stems: konara stands near their cutting age held
+    about 1,700 stems a hectare, one to about 63 sq ft on centers near 8 ft - a thicket, denser than an old hill wood.
+    A cut wood lets sun reach the floor, so herbs grow there, not brush.
 
-    Note: The commons regime and the raked floor are read (the Yamaguni study, the satoyama entries); the crowns'
-    density and size are interpolated from two papers whose pages could not be read; a lot's
-    boundary was NOT laid out as a surveyed square, so the patches are irregular.
+    Note: The commons regime, the raked floor, the order of houses, fields and wood, and the stocking are read (the
+    Yamaguni study, the satoyama, village-boundary and iriai-land entries, a 1910 forester's account of the Musashino
+    upland, the Nagano and Tsukuba konara stands); reading "beyond the fields" as higher than the field a wood adjoins
+    is this record's reading of "the slopes around the settlement". The 1,700 a hectare is calibrated on a planted
+    konara stand of 29 years and on Nagano woods of 26-31 that this record reads, the report not saying so, as fuel
+    woods left uncut - both a little past the age a wood was cut - so the wood may read a little more open than it
+    stood, and each crown's 8-9 ft width is a guess sized from the spacing, no
+    page giving one. A lot's edge was a line the villages agreed or were given, bent to the ground, and was NOT laid out
+    as a surveyed square, so the patches are irregular; that it followed ridge, stream and path is a guess, no page
+    read saying so.
 
-    Caveat: a lot's boundary was NOT laid out as a surveyed square, so the patches are irregular.
+    Caveat: each crown's 8-9 ft width is a guess sized from the spacing, no page giving one.
 
     Name: woodland commons
     Covers: `commons[role=woodland]` - the coppice patches
     Label: accurate
-    Sources: not recorded
-    Entry: research/vegetation.html - 'How is a coppice lot bounded?', 'Does scrub stand under a village wood?', 'Forest density and crown size'
+    Sources: ijc-yamaguni, satoyama-enwiki, satoyama-jawiki, kotobank-murazakai, iriaichi-jawiki, miura-2019-yashikiyama, rinya-satoyama-junkan, katakura-1989-konara-coppice, migita-chiba-konara-canopy
+    Entry: research/vegetation.html - 'Where did a village keep its fuel wood', 'How thickly was a worked coppice stocked', 'How is a coppice lot bounded?', 'Does scrub stand under a village wood?'
     """
 
     key = 'woodland commons'
@@ -178,14 +228,19 @@ class ScrubAndRoughGrazing(Kind):
     What: The cut-over fuel and fodder land around the settlement: grass with a few scraggly pines, grazed and
     cut.
 
-    Why: Everything the paddy and the homesteads do not take is the hamlet's rough ground, and it is worked:
-    scrub stands six feet off every field edge, where the grass beside a crop was kept cut (the record reasons
-    that land hunger kept the margin narrow), off open water and off the cut banks of the channels.
+    Why: Everything the paddy and the homesteads do not take is the hamlet's rough ground, and it is worked. The
+    grass of a paddy bund was cut several times a season, and cut ground does not go over to scrub, so scrub stands
+    6 ft off every field edge - the bund and the cut strip beside it; off open water; and off the banks of the
+    irrigation channels, taken here to be kept like the bunds, though not off a natural brook, whose bank is grown to
+    the water's edge.
 
-    Note: That bund grass was cut several times a season, and that cut land does not go over to scrub, is read;
-    both 6 ft widths are this record's choice, no page giving one, and the bank takes the crop margin's figure
-    by analogy with the paddy levee; nothing describes how the clumps sit within them, so the scatter is drawn to read
-    as rough grazing rather than as any surveyed pattern.
+    Note: That bund grass is cut several times a season today, and that cut land does not go over to scrub, are read;
+    that it was cut as often in the past is a guess, no page giving the old rate;
+    the 6 ft is this record's choice, no page giving one, and it is a flat-ground figure: on terraced ground the
+    kept-cut slope face below a field is wider, at times wider than the field itself, and the map does not set that
+    width. The channel bank takes the same 6 ft by the GM's ruling, and that a bank was kept like a bund at all is this
+    record's analogy, no page read speaking of a channel bank; nothing describes how
+    the clumps sit within them, so the scatter is drawn to read as rough grazing rather than as any surveyed pattern.
 
     Caveat: nothing describes how the clumps sit within them, so the scatter is drawn to read as rough grazing
     rather than as any surveyed pattern.
@@ -193,7 +248,7 @@ class ScrubAndRoughGrazing(Kind):
     Name: scrub and rough grazing
     Covers: `commons[role=grazing]`
     Label: accurate
-    Sources: not recorded
+    Sources: pmc7538448-levee, meadow-enwiki, nonoichi-keihanritsu, hiroshima-keihan-manual
     Entry: research/vegetation.html - 'The crop margin', 'Scrub stays off open water', 'The cut bank'
     """
 
@@ -206,30 +261,42 @@ class Marsh(Kind):
 
     Why: Wet rice is reclaimed FROM marsh: where reclamation stops, or the ground is too wet to manage, it stays
     reed wetland, and an abandoned paddy reverts to it. The toe marsh is as wide as the fan it drains, and
-    its margin grades reed, then sedge and grass, then dry ground - the form of a toe that is cut, since cutting is
-    what keeps willow and other trees from taking a reed bed; left alone, an alder and willow carr would stand at the reed
-    edge, and the map does not draw that form. A RESERVOIR'S SHORE IS REEDED BECAUSE THE
-    POND IS WORKED, not in spite of it: the obvious guess is that a maintained tameike - its bank repaired,
-    its silt dredged, its water drawn down each season - would have a margin kept clear, and the record
+    its margin grades reed, then sedge and grass, then dry ground - the form of a toe that is cut. Reed and thatch
+    grass were a crop, cut every year from ground kept for it, wetlands among it; on Lake Biwa the reed was cut in
+    winter and the stubble burned in spring, and the cutting and burning are what kept such ground from going over to
+    willow and forest. Left alone, an alder and willow carr would stand at the reed edge; the record supports both
+    forms and the map should roll between them, but so far it draws only the cut one. A RESERVOIR'S SHORE IS REEDED
+    BECAUSE THE POND IS WORKED, not in spite of it: the obvious guess is that a maintained tameike - its bank repaired,
+    its silt dredged, its water often let out after the rice harvest - would have a margin kept clear, and the record
     contradicts that. A Kagawa Prefecture study found a statistically significant POSITIVE correlation
     between the number of emergent and floating-leaf plant species (the reed and cattail belt among them) and the practice of dredging
-    silt and cutting algae, and it is the small ponds where water use has STOPPED and bank mowing has declined that are losing their plant diversity. The reeds
+    silt and cutting weed within the pond; water plants are in decline overall, abandoned management named as a cause,
+    and it is the small ponds where water use has STOPPED and bank mowing has fallen off that have been given up
+    furthest. The reeds
     are a sign of a pond in use. The EMBANKMENT is the other half of the same finding and is different
     ground: it is mown and burned and may not be cultivated, to keep the bank strong, and what grows on it
     is dry-grassland herbs. So reeds stand in the shallows and stop at the foot of the bank - which is why
-    you will not see the wet haze on a dike or a pond's raised rim.
+    you will not see the wet haze on a dike or a pond's raised rim. Whether a pond's own reed was cut as a crop, no page
+    read says - the reed harvest is attested for Lake Biwa and river reed beds, not for a tameike - so the pond's fringe
+    is drawn standing, with no cut bed, drying racks or stacks.
 
-    Note: The reclaimed-from-marsh finding, the order of the margin gradient, the reeded-shore finding, and that cutting
-    keeps trees out of a reed bed are all read; that this toe is the cut, open form rather than an alder-willow carr is
-    the map's choice between two forms the record leaves open, and that such margins were cut for thatch and fodder is
-    unsourced; the
-    embankment is mown in the record as it is bare on the map.
+    Note: The reclaimed-from-marsh finding, the order of the margin gradient, the reeded-shore finding, and the yearly
+    winter cutting that keeps trees out of a reed bed are all read; that a village cut its own toe marsh the same way is
+    carried across from thatch fields in general and Lake Biwa's reed beds, no page saying it of a village marsh; that
+    every toe is drawn in the cut, open form is a shortfall, the record supporting an alder-willow carr as well and the
+    map not yet rolling between them; that sedge was cut for fodder is unsourced; a pond's fringe shows no harvest
+    because none is read there; the embankment is mown in the record as it is bare on the map.
+
+    Caveat: that a village cut its own toe marsh the same way is carried across from thatch fields in general and Lake
+    Biwa's reed beds, no page saying it of a village marsh; that every toe is drawn in the cut, open form is a
+    shortfall, the record supporting an alder-willow carr as well and the map not yet rolling between them; that sedge
+    was cut for fodder is unsourced
 
     Name: marsh
     Covers: `marshes` - every marsh patch, whatever its role
     Label: accurate
-    Sources: aas-rice-technology, mineta-2007-tameike, tameike-jawiki, kagawa-tameike-structure, maff-tameike-shizen, nies-tameike, inamino-tameike-museum
-    Entry: research/water.html - 'Marsh - wet rice is reclaimed FROM wetland', 'The wet toe is as wide as the FAN', "A reservoir's shore is reeded, and its EMBANKMENT is mown", "Why is a reservoir's embankment bare of reeds"; research/vegetation.html - 'The marsh margin'
+    Sources: aas-rice-technology, mineta-2007-tameike, tameike-jawiki, kagawa-tameike-structure, maff-tameike-shizen, nies-tameike, inamino-tameike-museum, kayabun-kayabuki, ohmi-yoshi, biwako-visitors-yoshi-hiire, opal-biwa-yoshi-hara
+    Entry: research/water.html - 'Marsh - wet rice is reclaimed FROM wetland', 'The wet toe is as wide as the FAN', "A reservoir's shore is reeded, and its EMBANKMENT is mown", "Why is a reservoir's embankment bare of reeds", "Was the reed at a reservoir's margin cut as a crop"; research/vegetation.html - 'The marsh margin', 'Were the reed beds cut'
     """
 
     key = 'marsh'

@@ -132,17 +132,18 @@ def test_the_broad_kinds_keep_the_arrow_and_every_other_kind_gets_the_hand() -> 
 
 
 def test_explanations_hold_only_present_classes_and_present_siblings() -> None:
-    data = explanations({"windbreak", "copse", "farmhouse"})
-    assert set(data) == {"windbreak", "copse", "farmhouse"}
+    data = explanations({"windbreak", "copse", "farmhouse", "notice board"})
+    assert set(data) == {"windbreak", "copse", "farmhouse", "notice board"}
     assert data["windbreak"]["siblings"] == ["copse"], "woodland commons is absent from this map, so it is not claimed; siblings are link keys now"
     assert data["farmhouse"]["siblings"] == [], "storage shed and byre are absent"
     # the presumption of accuracy (feature 156): an accurate class announces nothing, and the liberty
     # its record discloses rides in `caveat` instead, to be shown after the what and the why
     assert data["windbreak"]["label"] == "accurate", "the classification is still recorded (constitution XII)"
     assert data["windbreak"]["lead"] == "", "an accurate class leads with what the feature is, not with a claim"
-    # the windbreak is one of the seven whose record discloses no liberty, so it shows no caveat at
-    # all (settlement-review, 2026-08-29); the copse beside it on this map does have one
-    assert data["windbreak"]["caveat"] == "", "the windbreak discloses no liberty - see test_classes"
+    # the notice board is the one class whose record discloses no liberty, so it shows no caveat at all
+    # (settlement-review, 2026-08-29); the windbreak was one too until feature 269 K3 disclosed its two forms' guesses
+    assert data["notice board"]["caveat"] == "", "the notice board discloses no liberty - see test_classes"
+    assert data["windbreak"]["caveat"] == CAVEAT_LEAD + CLASSES["windbreak"].caveat and CLASSES["windbreak"].caveat
     assert data["copse"]["caveat"] == CAVEAT_LEAD + CLASSES["copse"].caveat and CLASSES["copse"].caveat
     # the references are QUESTIONS (feature 180): the sections the entry names, linked to the local page; the
     # cited keys, the citation text and the entry pointer no longer ride on the page at all
