@@ -112,13 +112,13 @@ class ThreshingYard(Kind):
     coast of changeable autumn weather, so that the threshing could be done at home, and the drying method
     followed the climate over whole regions - so every settlement in one climate draws the same.
 
-    Note: we have rendered about half of the straw mats that covered a yard, each with a little bare ground around it, in order
-    to keep them legible: at this scale dozens of mats laid edge to edge would read as a textured floor rather
-    than as mats, so the drawing shows a smaller number to give the impression of many. The real yard at harvest
-    was covered, 40 to 60 mats of about 3 by 6 feet each on an ordinary farm and 100 to 150 on a large one. The
-    mats' size, the yard's size band and its spread are read; the rows the mats are laid in, and which side of
-    the yard the rack takes, are guesses - no source read says; the rack is drawn wider than its poles so that it
-    reads.
+    Note: we have rendered a third to a half of the straw mats that covered a yard, each with a little bare ground
+    around it, in order to keep them legible: at this scale dozens of mats laid edge to edge would read as a textured
+    floor rather than as mats, so the drawing shows a smaller number to give the impression of many. The real yard at
+    harvest was covered, 40 to 60 mats of about 3 by 6 feet each on an ordinary farm and 100 to 150 on a large one. The
+    mats' size, the yard's size band and its spread are read; the rows the mats are laid in are a guess - no source read
+    says; and where a map draws racks by the houses, which side of the yard a rack takes is a guess too, and the rack is
+    drawn wider than its poles so that it reads.
 
     Name: threshing yard
     Covers: `threshing_yards` - the floor, its mats, and the rack by the house where the harvest weather is changeable

@@ -947,3 +947,16 @@ Known open (settlement-review, 2026-09-28): four or five of the eight homestead 
 at fit zoom their culms read as grass under a tree - a draw-order question, since bamboo among the homestead's trees is
 the attested yashiki-rin form; and lane 11 stops
 about 25 ft behind a house's rear wall, the stub class recorded above.
+
+## 2026-09-28 (feature 282): the harvest yard drawn - mats over the floor, and racks by the houses; nothing placed moved
+
+Every threshing yard is now drawn as the harvest leaves it: straw mats of 3 by 6 ft laid in rows over the whole floor,
+every other row set over by half a mat, a third to a half of those that covered it (a drawing convention - the real
+yard was covered, research homesteads 'What lay in the work yard at harvest?'). The old fixed center mat and the rack
+along each yard's south edge are gone. This map DECLARES changeable harvest weather (`harvest_weather="changeable"` in
+`sawada.gen.py`): it is the pool's exhibit of racks gathered by the houses, the form the record names for a coast of
+changeable autumn weather (research homesteads 'Did a village put its drying racks by the houses by custom, or because
+of its weather?'), so each yard carries a rack along one side in its map-north half, out of the drying floor's sun. The
+weather is declared, never rolled, so the random stream is untouched: the manifest diff is `mats` and `rack` on each
+yard and `meta.harvest_weather`. The first settlement-review (2026-09-28) found the rack, drawn as an outlined box,
+read as the woodpile beside the same houses; it is now a straw-gold line with dark post dots.

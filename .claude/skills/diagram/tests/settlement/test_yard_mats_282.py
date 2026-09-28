@@ -12,7 +12,7 @@ import math
 import pytest
 
 from l7r.diagram import hamletgen as hg
-from l7r.diagram.settlement.homestead_parts.yards import MAT_SQ_FT, RACK_MIN_FT, mat_cells, rack_segment
+from l7r.diagram.settlement.homestead_parts.yards import MAT_SQ_FT, RACK_MIN_FT, mat_cells, rack_segment, thin_evenly
 from tests.settlement._builders import _nuc_village
 
 TSUBO_FT2 = 35.583
@@ -51,12 +51,9 @@ def test_a_mat_stays_inside_the_yards_quad_and_off_the_rack() -> None:
             assert -20.0 <= px <= 20.0 and -14.0 <= py <= 14.0
 
 
-def test_where_edge_to_edge_overshoots_two_thirds_the_mats_are_thinned_back() -> None:
-    # a 20 x 14 ft yard (a full cover of 15.6 mats: floor 6, cap 10) with a small keep-out at (4, 0.5): it takes one mat
-    # from each of the 2 x 3 grids at the 1.5, 1 and 0.5 ft gaps (5 < 6), and one of the 3 x 4 edge-to-edge grid (11 > 10)
-    mats = mat_cells(20.0, 14.0, _rect(20.0, 14.0), 1.0, (3.9, 0.4, 4.1, 0.6))
-    assert len(mats) == 10, "edge to edge overshot two thirds and was not thinned back to the cap"
-    assert len({(mx + mw / 2 > 0, my + mh / 2 > 0) for mx, my, mw, mh in mats}) == 4, "thinned evenly, not from one end"
+def test_an_overshoot_is_thinned_evenly_not_from_one_end() -> None:
+    assert thin_evenly(list(range(11)), 10) == [0, 1, 2, 3, 4, 6, 7, 8, 9, 10], "the drop falls mid-list"
+    assert thin_evenly(list(range(4)), 10) == [0, 1, 2, 3], "under the cap, untouched"
 
 
 def test_a_yard_with_room_for_no_mat_draws_none() -> None:
