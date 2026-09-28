@@ -109,5 +109,77 @@
     "source": "specs/276-engine-hotspots-and-test-scans/harness.py, output harness-before.json (run 2026-09-28 at HEAD before any 276 engine change, the clone diagram-inashiro, best of 3 unprofiled)",
     "observed": "2026-09-28",
     "varies": true
+  },
+  "rescue-distinct-fits": {
+    "value": 45368,
+    "unit": "fit tests",
+    "quantity": "distinct (house rect, placed count) keys among the rescue scenario's 46781 full fit tests - a verdict cache would answer almost none",
+    "source": "a probe test (scratch, not committed) wrapping Settlement._bundle_fits on the rescue-rounds scenario of tests/hamletgen/test_homesteads.py, at HEAD before any 276 engine change",
+    "observed": "2026-09-28"
+  },
+  "rescue-rejected": {
+    "value": 46686,
+    "unit": "fit tests",
+    "quantity": "rescue-scenario fit tests that returned False (95 True)",
+    "source": "a probe test (scratch, not committed) wrapping Settlement._bundle_fits on the rescue-rounds scenario of tests/hamletgen/test_homesteads.py, at HEAD before any 276 engine change",
+    "observed": "2026-09-28"
+  },
+  "rescue-reject-house-ground": {
+    "value": 33710,
+    "unit": "fit tests",
+    "quantity": "rejections whose first failing rule is the house rect on forbidden ground",
+    "source": "a probe test (scratch, not committed) wrapping Settlement._bundle_fits on the rescue-rounds scenario of tests/hamletgen/test_homesteads.py, at HEAD before any 276 engine change",
+    "observed": "2026-09-28"
+  },
+  "rescue-reject-eave-gap": {
+    "value": 3887,
+    "unit": "fit tests",
+    "quantity": "rejections whose first failing rule is the eave gap to a neighbor",
+    "source": "a probe test (scratch, not committed) wrapping Settlement._bundle_fits on the rescue-rounds scenario of tests/hamletgen/test_homesteads.py, at HEAD before any 276 engine change",
+    "observed": "2026-09-28"
+  },
+  "rescue-reject-side": {
+    "value": 2536,
+    "unit": "fit tests",
+    "quantity": "rejections whose first failing rule is the side half (bbox, garden ground, placed-box overlap)",
+    "source": "a probe test (scratch, not committed) wrapping Settlement._bundle_fits on the rescue-rounds scenario of tests/hamletgen/test_homesteads.py, at HEAD before any 276 engine change",
+    "observed": "2026-09-28"
+  },
+  "rescue-reject-grove-ground": {
+    "value": 2270,
+    "unit": "fit tests",
+    "quantity": "rejections whose first failing rule is the grove on forbidden ground",
+    "source": "a probe test (scratch, not committed) wrapping Settlement._bundle_fits on the rescue-rounds scenario of tests/hamletgen/test_homesteads.py, at HEAD before any 276 engine change",
+    "observed": "2026-09-28"
+  },
+  "rescue-reject-sun": {
+    "value": 3276,
+    "unit": "fit tests",
+    "quantity": "rejections whose first failing rule is a sun rule (corridor 1957 + yard-sun 1319)",
+    "source": "a probe test (scratch, not committed) wrapping Settlement._bundle_fits on the rescue-rounds scenario of tests/hamletgen/test_homesteads.py, at HEAD before any 276 engine change",
+    "observed": "2026-09-28"
+  },
+  "rescue-reject-yard-wall": {
+    "value": 1007,
+    "unit": "fit tests",
+    "quantity": "rejections whose first failing rule is the yard's ground (751) or the wall rule (256)",
+    "source": "a probe test (scratch, not committed) wrapping Settlement._bundle_fits on the rescue-rounds scenario of tests/hamletgen/test_homesteads.py, at HEAD before any 276 engine change",
+    "observed": "2026-09-28"
+  },
+  "perf-start-total": {
+    "value": 31.3,
+    "unit": "s",
+    "quantity": "the reference hamlet's perf snapshot, all seeds summed",
+    "source": "make perf LABEL=276-start (dev/perf-log/20260928T034653Z-276-start-diagram-inashiro.json), unmodified code",
+    "observed": "2026-09-28",
+    "varies": true
+  },
+  "perf-start-median": {
+    "value": 7.7,
+    "unit": "s",
+    "quantity": "the reference hamlet's perf snapshot, median seed",
+    "source": "make perf LABEL=276-start (dev/perf-log/20260928T034653Z-276-start-diagram-inashiro.json), unmodified code",
+    "observed": "2026-09-28",
+    "varies": true
   }
 }
