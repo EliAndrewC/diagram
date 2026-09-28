@@ -101,14 +101,17 @@ entry (T10).
 - [x] T21 The 48-seed cohort against R3's baseline
       research: rendering
       verify: DONE. DONE. make cohort N=48 on engine 9eba368c: 38/48, failing 2, 8, 23, 25, 28, 31, 35, 36, 40, 46 - each also failing on the R3 baseline, all scatter_frame_breach; seed 37 fixed; 0 farmstead_across_brook (SC-009); 3 of 48 seats off-wind (22 under the retired order).
-- [ ] T24 The second review round's findings (plan D12, D15-D18): the board where every departure passes, the priced and
+- [x] T24 The second review round's findings (plan D12, D15-D18): the board where every departure passes, the priced and
       squared crossing, the spur that reaches the field, the `seg_intersect` misuses, the frame exit, the shape
       declaration, the scrub hull, the caption on the page, the staged rolls; then the next round's doubled tails,
       empty records, over-and-back joins and the caption judged by the placer's own ladder; notes, record and
       measurement records re-measured (research R9, R10)
       research: rendering
-- [ ] T22 `make done` green on the amendment
+      verify: DONE. DONE. The review rounds' findings fixed in the placers or recorded (plan D12, D15-D23); after main's feature 276 re-laid the pool, D23 fixed the lane ends, the belt's near face (round_the_houses, 100 ft band, 1 piece on every map), the homestead fields beside the steading and the unseated fixtures; notes, research and records re-measured (make figures: 0 moved, 0 not re-measured)
+- [x] T22 `make done` green on the amendment
       research: rendering
-- [ ] T23 `settlement-review`, one agent per map, on the amended maps; findings through `escalation-check`; ledger
+      verify: DONE. DONE. make done green 2026-09-28 on engine key e9227bb5 (full suite, 100% coverage over the engine)
+- [x] T23 `settlement-review`, one agent per map, on the amended maps; findings through `escalation-check`; ledger
       rows (T12's "no review owed" was wrong: the maps' layout moved, and the reviews were owed and run)
       research: rendering
+      verify: DONE. DONE. settlement-review, one agent per map, on engine e9227bb5: PASS on all five; nitpicks fixed in the notes or accepted as known opens (make review-accept); escalation-check on the GM draft; ledger row 2026-09-28
