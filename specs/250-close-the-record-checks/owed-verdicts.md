@@ -200,3 +200,12 @@
 - MagistratesDais (buildings SECTION=010): IN-STEP - its one 010 claim, a court hall over kneeling litigants, still rests on the henan-neixiang footnote
 - Byre (homesteads SECTION=060): LABELED - the owned yard stable now says it rests on one encyclopedia sentence about wealthy Shaanxi courtyard houses, with no survey behind it
 - Cell (buildings SECTION=040): REWRITTEN - the Why: premise that great cities had separate prison compounds narrowed to Edo's Tenmacho alone, the others inside magistrates' and daikan offices
+- water_and_ways.Well (urban-features SECTION=120): IN-STEP - the aqueduct wells and the unsourced households-per-well ratio still read as the modal says
+- household.Well (urban-features SECTION=120): REWRITTEN - the Note now names the Kakunodate houses (Aoyagi, Iwahashi) where the private samurai well is read; their keys added to Sources
+- household.Well (buildings SECTION=180): IN-STEP - the size hierarchy never mentions wells
+- Barracks (buildings SECTION=180): IN-STEP - the stable-under-barracks order is still this project's reading
+- CompoundShrine (buildings SECTION=180): IN-STEP - the shrine's small size and the unranked footprints stand as worded
+- Kitchen (buildings SECTION=180): REWRITTEN - the 67-tsubo anchor is now Matsue's cited main house, not an unread figure; matsue-bukeyashiki-about added to Sources
+- OfficeHall (buildings SECTION=180): IN-STEP - the office-hall-largest departure is still labeled this project's reading
+- Residence (buildings SECTION=180): IN-STEP - only the office hall may out-measure it, still a reading
+- Stables (buildings SECTION=180): IN-STEP - the 2-4 horse stable and its stall figure are unchanged
