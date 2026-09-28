@@ -610,6 +610,7 @@ goulan	goulan
 goyoba	goyoba
 goyōba	goyoba
 grain of the paddy	field grain
+grand canal	Grand Canal
 grass carp	grass carp
 green manure	green manure
 groin	groyne
@@ -997,6 +998,8 @@ laterals	lateral
 leaf litter	forest litter
 leat	leat
 leats	leat
+legibility floor	legibility floor
+legibility floors	legibility floor
 levee	levee
 levees	levee
 li	li
