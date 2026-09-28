@@ -1429,6 +1429,7 @@ laterals	lateral
 leaf litter	forest litter
 leat	leat
 leats	leat
+leping	Leping
 levee	levee
 levees	levee
 levy storehouse	levy storehouse
@@ -1642,6 +1643,7 @@ naka-shoin	Naka-shoin
 nakaboshi	nakaboshi
 nakamon	nakamon
 nakasendo	Nakasendo
+nakasendo shukuson taigaicho	Nakasendo Shukuson Taigaicho
 nakatsugawa	Nakatsugawa
 namako	namako-tiled
 namako wall	namako-tiled
@@ -1655,6 +1657,8 @@ nanohana	rape
 nanushi	shoya
 nara period	Nara period
 nara-period	Nara period
+narai	Narai
+narai-juku	Narai
 natto	natto
 natural levee	natural levee
 natural levees	natural levee
@@ -1916,6 +1920,7 @@ rammed-earth	rammed earth
 rampart	rampart
 ramparts	rampart
 randori	randori
+raozhou	Raozhou
 rape	rape
 rapeseed	rape
 rat-guard	nezumi-gaeshi
@@ -2083,6 +2088,8 @@ seijoue	seijoue
 seisatsu	kosatsuba
 seisatsuba	kosatsuba
 sekai daihyakka jiten	Sekai Daihyakka Jiten
+seki	Seki
+seki-juku	Seki
 sekisho	sekisho
 self-watch house	jishinban
 senba-koki	thousand-tooth thresher
@@ -2194,6 +2201,7 @@ shuimen	water gate
 shuinchi	shuinchi
 shuku	shukuba
 shukuba	shukuba
+shukuson taigaicho	Nakasendo Shukuson Taigaicho
 shunde	Shunde
 shunzhi	Shunzhi
 shōwa	Showa
@@ -2774,6 +2782,8 @@ yukimi	yukimi
 yulin wei	yulin wei
 yw	yu
 yūkaku	yukaku
+zaigo-machi	zaigomachi
+zaigomachi	zaigomachi
 zaimachi	zaimachi
 zaimokuya	zaimokuya
 zama	Zama

@@ -10641,5 +10641,45 @@
   "variants": [
    "Xu Tan"
   ]
+ },
+ "Nakasendo Shukuson Taigaicho": {
+  "def": "The shogunate's survey of the post towns and villages along the Nakasendo, made by the road magistrate in 1841-1844, recording each station's length along the road and its houses.",
+  "variants": [
+   "Nakasendo Shukuson Taigaicho",
+   "Shukuson Taigaicho"
+  ]
+ },
+ "Raozhou": {
+  "def": "A Ming-Qing prefecture of six counties, one of them the county seat of Leping, whose wall was first built in 1562.",
+  "variants": [
+   "Raozhou"
+  ]
+ },
+ "Narai": {
+  "def": "A post town whose Edo-period townscape is preserved today, about 1 km long along the Narai River and 200 m across.",
+  "variants": [
+   "Narai",
+   "Narai-juku"
+  ]
+ },
+ "Seki": {
+  "def": "A post town on the Tokaido whose street of Edo-period houses is preserved today as a preservation district.",
+  "variants": [
+   "Seki",
+   "Seki-juku"
+  ]
+ },
+ "Leping": {
+  "def": "A county seat in Jiangxi, China, whose walled town and street grid a planning article describes.",
+  "variants": [
+   "Leping"
+  ]
+ },
+ "zaigomachi": {
+  "def": "A country market town of the Edo period that grew up among the villages as a center of the rural economy, rather than as a castle or post town; in the Kinai around Osaka they formed from the late 17th century, every few kilometers.",
+  "variants": [
+   "zaigomachi",
+   "zaigo-machi"
+  ]
  }
 }
