@@ -15,5 +15,6 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D7).
 - [x] T04 The threshing yard modal rewritten from 025 and 505 (D5; FR-007)
       research: rendering
       verify: DONE. threshing yard docstring rewritten from 025 and 505, Label convention with the real 40-60 and 3 x 6 ft; snapshot moved under feature 267's bar; garden sibling corrected
-- [ ] T05 Pool regenerated; settlement-review ledgered; make done; push after 269's session is told (D6, D7; FR-008)
+- [x] T05 Pool regenerated; settlement-review ledgered; make done; push after 269's session is told (D6, D7; FR-008)
       research: rendering
+      verify: DONE. DONE. Pool regenerated; settlement-review round 13 PASS on all five (engine 12b6cd282db6, gate green), ledgered in docs/review-ledger.md; spec FAITHFUL (amendment round 9), plan CLEAR; 269's sessions told 2026-09-28

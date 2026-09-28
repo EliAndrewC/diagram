@@ -1,6 +1,6 @@
 {
  "feature": "282-threshing-yard-layout",
- "plan_sha256": "0505b004231146c0a4b1cff7e979be6945d930d6e445dfc0dd2d347a87e7ca20",
+ "plan_sha256": "eec80067d420d6a402058ec39854d4658fcd88eaef34346d96dfd5401e17d9aa",
  "reviewed": "2026-09-28",
  "declared": "spec-fidelity",
  "decisions": [
