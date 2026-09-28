@@ -16,7 +16,8 @@ What each section measures:
   placement primitive - `try_place` from 60 / 120 / 240 seeds at one constant density - each with the count of full
   fit tests (`_bundle_fits` + `_envelope_blocked`, whichever the placer calls) and houses seated.
 - `seams`: `build_comb` at the comb-topology seeds, total and inside `close_seams`.
-- `track`: one reference roll (Inashiro, seed 4) with `stage_track` and `path_violations` timed inside it.
+- `track`: one reference roll (Inashiro, seed 4) with `stage_track` and its path checks timed inside it (`PathChecker.violations`
+  since feature 276; `path_violations` on the code before it).
 """
 
 from __future__ import annotations

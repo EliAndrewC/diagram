@@ -1,6 +1,6 @@
 {
  "feature": "276-engine-hotspots-and-test-scans",
- "plan_sha256": "30fcc41a25f0c3e05968282723ca0e024e36a4ec5f9573518172732054e235c3",
+ "plan_sha256": "4010f778cc2ad3e3868457822f74a14ea497ab7af3c94f96bcedd353eafa4fa5",
  "reviewed": "2026-09-28",
  "declared": "spec-fidelity",
  "decisions": [
@@ -54,17 +54,9 @@
   },
   {
    "id": "D9",
-   "summary": "FreeGround built ONCE per stage from the installed site boundary only (static ground); proposes by dropping spiral offsets / nucleated sides with a sample point in a surely-taken cell",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "The proposing shape is now right, but the index is not the one asked for. The GM approved 'a free-space index UPDATED AS HOUSES LAND' and FR-003 says 'an index of the ground already taken - built once per stage and UPDATED AS EACH BUNDLE LANDS'; D9 is built once from the static boundary and never updated, so an offset on a neighbor's ground is still generated and tested one at a time - the part that grows at city density, the request's stated purpose (the rescue probe already shows 2,536 side-half rejections; at 240 seeds the rest is neighbors). Not impossible: on the dispersed path any placed-box overlap is `_bundle_side_fits`' refusal (fit.py line 463, strict, 2 px margin), so a cell wholly inside a landed box inflated by 2 px is surely taken, exactly. Two further gaps in the same clause: (a) FR-003 names 'the slides', and `_slide` runs `_bundle_fits` per 2 px step (place.py 81) with no mention in D9 (D9a dropped `_slide` too); (b) FreeGround exists only 'from the installed site boundary', but the SC-003 city proxy (`try_place` -> `_try_place_bundle` -> `_place_bundle`, harness `dense`) installs none, so there the proposer does not exist at all. Unlabeled: the Constitution Check still says no exception is planned, and research R2 still records the free-space raster as rejected and 'an exact PRE-SCREEN' as the decision; Summary C likewise. Fix: FreeGround marks each landed bundle's box (inflated by the placed-box margin) as surely taken when the bundle lands, used as a drop on the dispersed path; on the nucleated path, where one overlap is the computed move, the same updated index answers `_envelope_blocked`'s placed-box hits (D7's grid may be that index - say so); the slides ask it before each step (a step onto a surely-taken cell ends the slide exactly as `_bundle_fits`' NO does); say what the index holds where no boundary is installed (at least the landed boxes); and bring Summary C, research R2 and the Constitution Check into line."
-  },
-  {
-   "id": "D9 (nucleated sides)",
-   "summary": "on the nucleated path every garden side's bbox with a sample point in a surely-taken cell is dropped without a test",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "The exactness claim ('the exact test it would have received refuses that point') is false in one branch. In `_place_bundle_nucleated` (place.py 146-174) a side's own bbox is asked of `_envelope_blocked` ONLY when the union envelope is refused; when `_union_clear` is True the side goes straight to `_parts_fit`, which has no ground test. The union's nine points can be clear while a side's nine points (different corners and midpoints, inside it) fall on a member that passes between the union's samples - the `_site_blocks_rect` docstring states members thinner than half a side can - so dropping that side refuses a configuration the full test accepts: the index would DECIDE, against FR-003 ('the index prunes, it never decides') and the spec's Decisions Recorded ('the same fit rules'), on every pool hamlet's path. Fix: on the nucleated path ask the index for the UNION envelope first (a surely-taken sample point makes `_union_clear` False, exactly); drop a side's pre-move bbox only in the branch where the union is refused; judge a moved bbox only at its moved position. The same-seat test's nucleated scenario should include a seat whose union is clear and a side's sample point is not."
+   "summary": "FreeGround built once per stage: static surely-taken cells where the site boundary is installed (empty otherwise, stated) plus the placed boxes at the 2 px margin, added as each bundle lands (D7 grid); asked first for every spiral offset and every _slide step (dispersed); on the nucleated path it answers _envelope_blocked placed-box hits in list order and prunes static ground only where the loop judges ground (union envelope; a side box only when the union was refused; a moved box at its moved position); same-seat tests on both paths including the union-clear, side-sample-on-taken-ground case",
+   "class": "within",
+   "why": "Both round-2 rulings resolved, checked against the code. (1) The index is now the one FR-003 and the approved analysis name: built once per stage (install_site_boundary runs once, stages.py 130) and updated as each bundle lands through the placed registry index, which follows the Indexed list across the _solve_homestead rebind. Dispersed drops are exact: a house-rect sample point in a surely-taken cell is refused by _site_blocks_rect (the house conjunct of _bundle_common_fits), and a placed-box overlap at the margin is _bundle_side_fits refusal (fit.py 463, strict, +2), both conjuncts of the order-independent _bundle_fits; the slides are covered, since _slide ends on a _bundle_fits NO (place.py 81) and grove_off_field does not touch either conjunct. The no-boundary case is stated: only the placed boxes answer, which is the part that grows with density (the request stated purpose, the city). (2) The nucleated branch now matches place.py 146-174: the union is asked first (a taken sample point makes _union_clear False, exactly as _rect_blocked would), a side box is judged only when the union was refused (line 152), ground-refused returns True before any placed-box move so a static drop never pre-empts a move, and a single placed overlap stays a move with list order kept. The index prunes, the exact test decides. Summary C, research R2 and the Constitution Check now say the same thing."
   },
   {
    "id": "D9a",
@@ -77,7 +69,7 @@
    "summary": "unraked template per (hw, hh, side, shed, nucleated) plus the household's rolled parts, translated, rake per candidate; yard size, garden jitter and bed split rolled once per household",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Round-1 D10a/D10b resolved. The rake stays per seat (_rake_parts after translation), so the homestead still turns as one piece (GM 2026-09-26). Household-keying the yard, garden jitter and bed split is implied by the GM's approved words 'the bundle shape built once per size and translated', which cannot hold while each candidate rolls a different shape; the distributions are unchanged and FR-006 guards the result. The condition is met in text: spec.md Decisions Recorded row 2 (Amendment 1), which is itself under re-review - the ruling stands on that row as written. Aside: the plan's Summary cites this as '(D4)'; it is D10."
+   "why": "Round-1 D10a/D10b resolved. The rake stays per seat (_rake_parts after translation), so the homestead still turns as one piece (GM 2026-09-26). Household-keying the yard, garden jitter and bed split is implied by the GM's approved words 'the bundle shape built once per size and translated', which cannot hold while each candidate rolls a different shape; the distributions are unchanged and FR-006 guards the result. The condition is met in text: spec.md Decisions Recorded row 2 (Amendment 1), which is itself under re-review - the ruling stands on that row as written. The Summary now cites it as D10."
   },
   {
    "id": "D20",
@@ -113,7 +105,7 @@
    "id": "D15",
    "summary": "PathChecker with PointGrid-boxed segments and boxed avoid polygons; path_violations stays the oracle",
    "class": "within",
-   "why": "FR-005, prune-only."
+   "why": "FR-005, prune-only. The oracle is the corrected, both-segments-bounded seg_intersect path_violations the spec settles (Decisions Recorded row 3, Amendment 1); the plan decides nothing further about that fix, so it needs no decision of its own here."
   },
   {
    "id": "D16",
@@ -140,5 +132,5 @@
    "why": "FR-008."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

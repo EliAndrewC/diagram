@@ -6,12 +6,70 @@ Split from settlement/rolling.py by feature 118 - see settlement/rolling/CLAUDE.
 import math
 from typing import TYPE_CHECKING, Any, cast
 
-from .._geom import FARMHOUSE_EAVE_GAP_FT, Indexed, Pt, edge_dist, point_in_poly, poly_gap, rot_rect, seg_dist, segments_cross
+from .._geom import FARMHOUSE_EAVE_GAP_FT, Indexed, PointGrid, Pt, edge_dist, point_in_poly, poly_gap, rot_rect, seg_dist, segments_cross
+from .._geom.indexes import indexed_grid
 from .._geom.primitives import FIELD_KEEPOUT_EPS, chain_distance, chain_violated, facing_chains, keepout_ring
 
 if TYPE_CHECKING:
     from ..core import Settlement
 
+
+
+# ---- feature 276, FR-003: the placed houses, indexed ONCE and extended as each lands --------------------------------
+#
+# Every scan of the house records a candidate seat makes - the eave gap, the sun corridor both ways, the gardens' sun,
+# the yard-sun conflict - walked EVERY record per candidate, so a seat cost more with each house standing: at constant
+# density the placement primitive's per-house cost grew from 0.0009 s to 0.0017 s between 60 and 240 seeds on the
+# nucleated path (specs/276 research R2). Each of those rules asks whether some part of a record lies within a reach box
+# of the candidate, so a grid of each record's EXTENT - its house's circumscribed box and every part's box - asked for
+# that reach box returns every record the rule could flag; the rule's own comparison then decides, unchanged. An
+# `Indexed` house list carries its own version, so the grid is rebuilt on any change but an append, which extends it.
+# THE ONE IN-PLACE MOVE of a record (`_solve_homestead`) bumps that version itself; a record's `geom` is complete when it
+# is appended and never edited after.
+
+
+def house_extent(rec: Any) -> tuple[float, float, float, float]:
+    """The box holding everything of a house record the fit rules read: the house at any rake, and each part."""
+    r = math.hypot(rec["w"], rec["h"]) / 2
+    x0, y0, x1, y1 = rec["x"] - r, rec["y"] - r, rec["x"] + r, rec["y"] + r
+    g = rec.get("geom") or {}
+    for key in ("yard", "grove_n", "grove_w", "shed"):
+        part = g.get(key)
+        if part is not None:
+            x0, y0 = min(x0, part[0] - part[2] / 2), min(y0, part[1] - part[3] / 2)
+            x1, y1 = max(x1, part[0] + part[2] / 2), max(y1, part[1] + part[3] / 2)
+    for part in g.get("gardens", ()):
+        x0, y0 = min(x0, part[0] - part[2] / 2), min(y0, part[1] - part[3] / 2)
+        x1, y1 = max(x1, part[0] + part[2] / 2), max(y1, part[1] + part[3] / 2)
+    return x0 - 1.0, y0 - 1.0, x1 + 1.0, y1 + 1.0
+
+
+def _extent_boxed(recs: Any) -> list[Any]:
+    return [(rec, *house_extent(rec)) for rec in recs]
+
+
+def houses_meeting(houses: Any, box: tuple[float, float, float, float]) -> list[Any]:
+    """The records of `houses` whose extent meets `box`, each once, in list order (the order the linear scans read)."""
+    def build(lst: Any) -> PointGrid:
+        grid = PointGrid()
+        grid.extend(_extent_boxed(lst))
+        return grid
+
+    def add(grid: PointGrid, tail: Any) -> None:
+        grid.extend(_extent_boxed(tail))
+
+    grid = indexed_grid(houses, "house_extents", build, add)
+    x0, y0, x1, y1 = box
+    seen: set[int] = set()
+    out = []
+    for it in grid.near((x0 + x1) / 2, (y0 + y1) / 2, max(x1 - x0, y1 - y0) / 2):
+        rec, bx0, by0, bx1, by1 = it
+        if id(rec) in seen or bx0 > x1 or bx1 < x0 or by0 > y1 or by1 < y0:
+            continue
+        seen.add(id(rec))
+        out.append(rec)
+    order = {id(rec): k for k, rec in enumerate(houses)} if len(out) > 1 else {}
+    return sorted(out, key=lambda rec: order.get(id(rec), 0))
 
 class BundleFitMixin:
     def _field_adjacent(self: Settlement, x: float, y: float) -> bool:  # type: ignore[misc]

@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in the clone `diagram-inashiro`)
 **Created**: 2026-09-28
-**Status**: AMENDED after acceptance (2026-09-28, the plan review) - re-review owed, counter reset; was FAITHFUL at round 3 of 5
+**Status**: Accepted - FAITHFUL at round 3 of 5 (2026-09-28); Amendment 1 FAITHFUL at round 3 of 5 on its reset counter (2026-09-28)
 **Request**: [`request.md`](request.md) - the GM's words verbatim, and the analysis they said yes to.
 **Predecessors**: 218 (efficient overlap checks: the index-once doctrine, `dev/performance.md`), 220 (the field
 fitted once), 222-226 (render and scatter levers), this session's quick-suite passes (gate-stamp per-file
@@ -274,3 +274,5 @@ pair); `path_violations`, FR-005's oracle, is the corrected function, so tracks 
 Round 2 of this amendment (CHANGES REQUIRED): the Decisions Recorded preamble named two of the fix's three consumers - the
 homestead brook-cut test was missing - and the fix had no row of its own; both added. SC-005's path-check baseline is
 re-taken on the corrected function, 0.139 s (m:before-track-checks-corrected-s), so its `2x` credits the index, not the fix.
+
+Round 3 of this amendment (spec-fidelity-verify, 2026-09-28): FAITHFUL.
