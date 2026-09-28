@@ -14,7 +14,6 @@ from l7r.diagram.settlement.farm_fixtures import FIXTURE_FT, PERSIMMON_CROWN_FT
 from ..consts import Poly, Pt
 from ..plan import SitePlan
 from .bamboo import Footing, _strip_blocked
-from .fields import homestead_box
 
 # FARMSTEAD FIXTURES (feature 133 T53-T59, GM 2026-08-27; research/homesteads.html "The farmstead's
 # fixtures"). Each row: the kind, the per-hamlet PREVALENCE BAND (rolled once per map from the seed -
@@ -478,6 +477,12 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
         _miss = s.M["meta"].setdefault("farm_fixtures_unseated", {})
         _miss["shrine"] = int(_miss.get("shrine", 0)) + 1
     return count
+
+
+def homestead_box(placed: Sequence[Any], x: float, y: float) -> tuple[float, float, float, float] | None:
+    """The largest reserved box (`cx, cy, w, h`) holding the house center - the steading's whole footprint."""
+    boxes = [(float(b[0]), float(b[1]), float(b[2]), float(b[3])) for b in placed if abs(x - b[0]) <= b[2] / 2 and abs(y - b[1]) <= b[3] / 2]
+    return max(boxes, key=lambda b: b[2] * b[3]) if boxes else None
 
 
 def across_the_brook(s: Settlement, house: Pt, seat: Pt) -> bool:

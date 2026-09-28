@@ -645,3 +645,22 @@ def test_the_front_row_loop_stops_once_its_share_is_seated(monkeypatch) -> None:
     stage_homesteads(s, plan)
     lo, hi = CLUSTER_DRAWN_ASPECT["round"]
     assert s.M["meta"]["seat_search"]["front"] == min(10, max(6, round(math.sqrt(10 * (lo + hi)))))
+
+
+def test_a_front_seat_is_pushed_across_a_brook_by_the_waters_reach() -> None:
+    """`water_push` (feature 261): a box whose near side a water course lies across moves along `n` past the course by its
+    clearance; a course beside the box but beyond its lateral span, or one far off, moves nothing."""
+    from l7r.diagram.hamletgen.homesteads.stages import water_push
+
+    brook = [((-100.0, 10.0), (100.0, 10.0), 5.0)]  # across the box, 10 ft past its near edge at 0
+    assert water_push(brook, (0.0, 20.0), (0.0, 1.0), 30.0, 0.0, 40.0) == 15.0
+    assert water_push([((200.0, -50.0), (200.0, 90.0), 5.0)], (0.0, 20.0), (0.0, 1.0), 30.0, 0.0, 40.0) == 0.0
+    assert water_push([((5000.0, 0.0), (5100.0, 0.0), 5.0)], (0.0, 20.0), (0.0, 1.0), 30.0, 0.0, 40.0) == 0.0
+
+
+def test_the_steading_is_the_largest_box_holding_the_house() -> None:
+    """`homestead_box`: of the reserved boxes round the house, the whole steading's - and none when no box holds it."""
+    from l7r.diagram.hamletgen.homesteads.fixtures import homestead_box
+
+    assert homestead_box([(0.0, 0.0, 10.0, 10.0), (0.0, 0.0, 100.0, 80.0), (500.0, 0.0, 400.0, 400.0)], 0.0, 0.0) == (0.0, 0.0, 100.0, 80.0)
+    assert homestead_box([(500.0, 0.0, 10.0, 10.0)], 0.0, 0.0) is None
