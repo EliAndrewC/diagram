@@ -1461,6 +1461,7 @@ kuchidome	kuchidome
 kuchidome bansho	kuchidome
 kuchidome guard post	kuchidome
 kuchidome guard posts	kuchidome
+kuchiei	kuchiei
 kuchiireya	hitoyado
 kuchimai	kuchimai
 kui	kui
@@ -2072,6 +2073,8 @@ revetted	revetment
 rhizome	rhizome
 rhizomes	rhizome
 ri	ri
+rice-transit town	rice-transit town
+rice-transit towns	rice-transit town
 rick	rick
 ricks	rick
 ridge culture	ridge culture

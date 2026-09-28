@@ -11100,5 +11100,18 @@
   "variants": [
    "hikioi"
   ]
+ },
+ "rice-transit town": {
+  "def": "A town where tax rice from many counties is gathered and forwarded toward the domain or the capital, and that keeps its own row of storehouses to hold it, separate from the magistrate's compound.",
+  "variants": [
+   "rice-transit town",
+   "rice-transit towns"
+  ]
+ },
+ "kuchiei": {
+  "def": "The coin counterpart of kuchimai: a small surcharge collected with any annual tax assessed in coin rather than rice, and used, like kuchimai, for the intendant's office.",
+  "variants": [
+   "kuchiei"
+  ]
  }
 }
