@@ -966,5 +966,4 @@ The plot a household works by its own house is its kitchen garden; no grain plot
 pass, 2026-09-28, found the house-side plot of the record is the kitchen bed, research/fields.html "Where dry
 (hatake) crops go"), so the dry crops stand in the hem along the supply canal.
 Known open (settlement-review, 2026-09-28): the field path's tip turns back 126 degrees over its last 27 ft, a J-hook in
-the grass 17-43 ft off the paddy, left where a later pass dropped the field spur (`meta.field_spur_swept`); and woodland
-stand 8 at (911, 2849), at 39% canopy with its east side open, reads as a ring rather than a stand at fit zoom.
+the grass 17-43 ft off the paddy, left where a later pass dropped the field spur (`meta.field_spur_swept`).

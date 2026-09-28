@@ -115,8 +115,9 @@ entry (T10).
       rows (T12's "no review owed" was wrong: the maps' layout moved, and the reviews were owed and run)
       research: rendering
       verify: DONE. DONE. settlement-review, one agent per map, on engine e9227bb5: PASS on all five; nitpicks fixed in the notes or accepted as known opens (make review-accept); escalation-check on the GM draft; ledger row 2026-09-28
-- [ ] T25 The homestead field retired on the research pass (plan D24): `stage_homestead_fields` and `homesteads/fields.py`
+- [x] T25 The homestead field retired on the research pass (plan D24): `stage_homestead_fields` and `homesteads/fields.py`
       removed, the pool test asks for no grain plot by a house, the research entry and the four dry-crop pop-ups rewritten,
       the notes re-measured; the gate and a settlement-review of every map
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. DONE. Research pass 2026-09-28 (sonnet reader, 12 sources): no page puts a household grain plot by its house; the house-side plot is the yashikibatake (kateisaien-jawiki, source-reader READ, source-applicability APPLICABLE-WITH-LIMITS with its limits added); quote-check VERBATIM with the translation and an absence note applied; record-format applied. Stage and homesteads/fields.py removed; test_no_household_grain_plot_is_laid_by_its_house holds 0 on all five maps (m:dry-r24-retired); gate green on engine 7e68e771; settlement-review PASS on all five; spec-fidelity FAITHFUL; plan review CLEAR (62 decisions)

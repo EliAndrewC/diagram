@@ -943,7 +943,7 @@ The rolled `elongated` shape is not what this seat draws - a drawn aspect of 1.9
 and the manifest records it as unhonored rather than claiming it. The plot a household works by its own house is its kitchen garden; no grain plot is laid beside a house (a research
 pass, 2026-09-28, found the house-side plot of the record is the kitchen bed, research/fields.html "Where dry
 (hatake) crops go"), so the dry crops stand in the hem along the supply canal; the ranks of this accretion-form hamlet (`lane_web: alleys`) stand off their exact lines by up to an eighth of a pitch either way (`RANK_DEPTH_JITTER`).
-Known open (settlement-review, 2026-09-28): five of the seven homestead bamboo stands are inked over a copse crown, so
+Known open (settlement-review, 2026-09-28): four or five of the eight homestead bamboo stands (by crown circle or by area) are inked over a copse crown, so
 at fit zoom their culms read as grass under a tree - a draw-order question, since bamboo among the homestead's trees is
 the attested yashiki-rin form; and lane 11 stops
 about 25 ft behind a house's rear wall, the stub class recorded above.
