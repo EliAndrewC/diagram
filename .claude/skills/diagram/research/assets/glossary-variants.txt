@@ -1453,6 +1453,8 @@ pit ranks	pit rank
 plankton	plankton
 plant association	plant association
 planted collar	planted collar
+pleasure quarter	pleasure quarter
+pleasure quarters	pleasure quarter
 pledged land	pledged land
 plinth	plinth
 plinths	plinth
