@@ -448,7 +448,7 @@
 
   <!-- Household storehouses (dozo), two as the Matsushiro retainer's house kept (feature 283: the shady rear the
        vegetable garden left, research buildings 230; an 8 ft alley left to the privies). Plastered, so no fire-water tub; each 12 by 18 ft, the common two
-       by three ken (the Yokota house's own is 9 by 12 ft), standing behind the house as the Higuchi house's did. -->
+       by three ken (the Yokota house kept two, 9 by 12 ft and 18 by 15 ft), standing behind the house as the Higuchi house's did. -->
   <g data-kind="storehouse">
     <rect x="520" y="160" width="54" height="36" fill="#F2EFE4" stroke="#4A3318" stroke-width="2.5"/>
     <rect x="540" y="188" width="14" height="8" fill="#4A3318" data-kind="door"/>

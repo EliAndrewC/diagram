@@ -27,7 +27,7 @@
    - shrine: several kami in one hall, each at its own altar - an attested form (R36).
    - vegetable garden (feature 283, research buildings 400 and 405): its SEAT a knob among the attested seats - west of the house, south beside the formal garden, the rear service ground, a parcel of its own - the sun ruling out every seat under six hours in the shoulder month; its SIZE a knob from a soup-greens plot (about 1,070 sq ft) to half the grounds; a SUN bed, not half-shade (the GM, 2026-09-28: "Move them all"). Drawn in rows over the ground it stands on, unscreened (no divider attested, a guess).
      This sheet: seat: the inner court, south of the karo's house, beside the inner garden; size: between the two attested forms, about 1,510 sq ft; bed: sun.
-   - rear service strip: two household storehouses (dozo) behind the house, beyond the rear yard, as at the Higuchi house; each 12 by 18 ft, the common 2 by 3 ken (the Yokota house's is 9 by 12 ft), plastered, no fire-water tub (research buildings 230); their number, two as at Matsushiro, a guess.
+   - rear service strip: two household storehouses (dozo) behind the house, beyond the rear yard, as at the Higuchi house; each 12 by 18 ft, the common 2 by 3 ken (the Yokota house kept two, 9 by 12 ft and 18 by 15 ft), plastered, no fire-water tub (research buildings 230); their number, two as the Yokota house kept, a guess for this sheet.
 
 
 ## Deliberate choices and tolerated stretches
