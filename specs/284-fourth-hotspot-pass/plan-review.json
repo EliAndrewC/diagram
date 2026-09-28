@@ -1,6 +1,6 @@
 {
  "feature": "284-fourth-hotspot-pass",
- "plan_sha256": "77301ae26748f2dfe685371898636c8d14ddede3b04ea08630d0fd3071ab693a",
+ "plan_sha256": "c3c3a1904c3e47bb8c3eeafd2fc79bf6445f1a59b1dea6c918e33ea2f57cb9ea",
  "reviewed": "2026-09-28",
  "declared": "spec-fidelity",
  "decisions": [
@@ -65,7 +65,7 @@
    "summary": "A* withdrawn on its own measurement: alone, on the merged engine, FR-004 out",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Round 3's requirement met. astarcmp/results-alone.json, re-summed here: cost-order 220.19 s and 229.08 s, A* 219.67 s (29 rolls a pass, 0 failures each) - 4.97 s under the mean against an 8.89 s same-run spread; 9 unreached over every attempt against 7 and 7, six re-rolls against four and four. The engine is main as merged (fit.py differs from 7c0c94f94 only by a comment; the harness swaps only lattice_search). The GM's willingness to let maps change was conditioned on the change allowing it to be 'significantly faster'; a lever that moves maps and strands more houses for a gain inside the noise does not serve that purpose, so R6's keep-only-beyond-the-spread rule applies. Attributed to A* alone in R6, the spec's bullet, the Decisions row and route.py's docstring. Stale: plan.md's B3 row still says 'WITHDRAWN on the rules, with B1', spec Amendment 1's SC-002 sub-bullet says 'A* on the rules, R6', and R6's opening paragraph says 'both were then withdrawn on the rules' - correct each to the measurement attribution."
+   "why": "Round 3's requirement met. astarcmp/results-alone.json, re-summed here: cost-order 220.19 s and 229.08 s, A* 219.67 s (29 rolls a pass, 0 failures each) - 4.97 s under the mean against an 8.89 s same-run spread; 9 unreached over every attempt against 7 and 7, six re-rolls against four and four. The engine is main as merged (fit.py differs from 7c0c94f94 only by a comment; the harness swaps only lattice_search). The GM's willingness to let maps change was conditioned on the change allowing it to be 'significantly faster'; a lever that moves maps and strands more houses for a gain inside the noise does not serve that purpose, so R6's keep-only-beyond-the-spread rule applies. Attributed to A* alone in R6, the spec's bullet, the Decisions row and route.py's docstring. Round 5: every stale passage named in round 4 is corrected; plan.md's B3 row no longer says 'with B1'."
   },
   {
    "id": "B2",
@@ -79,7 +79,7 @@
    "summary": "FR-004 WITHDRAWN on the rules",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "The GM allowed map changes that 'still correspond to historical norms'; the stepped plot ring and Sawada's seat off the regional wind come from the field and seat stages, which the router (first called in stage_track) does not reach, so FR-004 is shown to break the pool's rules (the GM's own condition), and the pool with the levers was about 0.6% faster. Now attributed to FR-004 alone except plan.md's B3 row ('with B1'), which should drop 'with B1'. Raise it with the GM once the work lands (CLAUDE.md, XVI)."
+   "why": "The GM allowed map changes that 'still correspond to historical norms'; the stepped plot ring and Sawada's seat off the regional wind come from the field and seat stages, which the router (first called in stage_track) does not reach, so FR-004 is shown to break the pool's rules (the GM's own condition), and the pool with the levers was about 0.6% faster. Now attributed to FR-004 alone everywhere, plan.md's B3 row included (round 5: 'its moved maps failed five gate rules, two from stages only it reaches'). Raise it with the GM once the work lands (CLAUDE.md, XVI)."
   },
   {
    "id": "B4",

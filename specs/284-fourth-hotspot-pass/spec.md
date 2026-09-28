@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in the clone `diagram-performance`)
 **Created**: 2026-09-28
-**Status**: Accepted - FAITHFUL at round 5 of 5 (2026-09-28)
+**Status**: Accepted - FAITHFUL at round 5 of 5 (2026-09-28); Amendment 1 FAITHFUL at its round 5 (2026-09-28)
 **Request**: [`request.md`](request.md) - the GM's words verbatim: take every lever 281's report priced, and in general
 "look at what is slow and then be willing to let things of that nature change if those changes would allow it to be
 significantly faster".
@@ -308,3 +308,16 @@ added under FR-011's own rule ("whatever the after-profile shows"). What changed
 - Round 4 (spec-fidelity-verify, 2026-09-28): CHANGES REQUIRED - the slowdown range, four stages left in three places, the
   harness base in Key Entities, R3's figures unlabeled. Addressed.
 - Round 5 (spec-fidelity-verify, 2026-09-28): FAITHFUL.
+- Amendment 1, round 1 (spec-fidelity, 2026-09-28): CHANGES REQUIRED - FR-003's and FR-004's withdrawals measured on engines
+  that no longer shipped; FR-006's rest dropped on an unreproducible figure; the grove draw's and the seam closing's exits
+  unmeasured or unpriced; one figure. Addressed: the lattice re-run on the engine that ships, FR-004 and A* re-measured
+  against a same-run spread, the page's rest measured to its ceiling, the grove draw timed, the seam closing's moving levers
+  priced.
+- Amendment 1, round 2 (spec-fidelity-verify): CHANGES REQUIRED - stale passages (duplicate R6-R8, the FR-003 bullet, FR-014's
+  count, SC-004's figures). Addressed. Between rounds the gate found the moved pool failing five rules with FR-004 and A* in,
+  and both were withdrawn; main merged 269 and was resolved; A6 withdrawn as slower after 269.
+- Amendment 1, round 3 (spec-fidelity-verify): CHANGES REQUIRED - SC-001 re-based without amendment, R6's labels, the moved
+  maps' entry, SC-004's keys. Addressed; A* measured alone on the merged engine and withdrawn on that.
+- Amendment 1, round 4 (spec-fidelity-verify): CHANGES REQUIRED - four passages still attributing A*'s withdrawal to the
+  rules. Addressed.
+- Amendment 1, round 5 (spec-fidelity-verify, 2026-09-28): FAITHFUL.
