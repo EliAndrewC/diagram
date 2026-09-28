@@ -315,3 +315,37 @@ def test_a_leader_ends_on_the_ink_it_names() -> None:
     on = _replace(p, leader=((60.0, 105.0), (100.5, 105.0)))
     assert sl.leader_to_ink(on, [pine]) == on, "already on the ink"
     assert sl.leader_to_ink(p, []) == p and sl.leader_to_ink(_replace(p, leader=None), [pine]).leader is None
+
+
+def test_a_stepped_point_subject_is_tried_round_each_block_largest_first(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 286: a caption naming a stepped building from outside is searched round each block, largest first, and
+    the first free seat wins (Hayakawa's RESIDENCE had none within reach of its larger block); where no block has one,
+    the cheapest stands. Its lines go to the placer at their own sizes."""
+
+    def rect_shape(x, y, w, h):
+        return sl.Shape("rect", "residence", [(x, y), (x + w, y), (x + w, y + h), (x, y + h)])
+
+    west, east, step = rect_shape(0, 0, 100, 40), rect_shape(110, 30, 80, 40), rect_shape(95, 40, 10, 10)
+    real = sl.place("x", 9.0, sl.Subject("point", tuple(west.poly)), sl.ObstacleIndex())
+    tried: list[tuple] = []
+
+    def fake(text, size, s, index, view, **kw):
+        tried.append((s.poly, kw["line_sizes"]))
+        return replace(real, cost=costs[len(tried) - 1])
+
+    monkeypatch.setattr(sl, "place", fake)
+    head = sl.Shape("text", "residence", [(0, 0)], text="RESIDENCE", size=9.0, lines=["RESIDENCE"])
+    gloss = sl.Shape("text", "residence", [(0, 0)], text="(the family)", size=6.0, lines=["(the family)"])
+    sub, view, idx = sl.Subject("point", tuple(west.poly)), (0.0, 0.0, 400.0, 300.0), sl.ObstacleIndex()
+    costs = [40.0, 0.0]
+    p = sl.place_on_blocks("RESIDENCE", head, [head, gloss], 5.0, sub, [west, east, step], idx, view, idx)
+    assert p.cost == 0.0 and [t[0] for t in tried] == [tuple(west.poly), tuple(east.poly)], "largest first; east free"
+    assert tried[0][1] == [9.0, 6.0], "each line at its own size"
+    tried.clear()
+    costs = [40.0, 30.0]
+    assert sl.place_on_blocks("RESIDENCE", head, [head], 5.0, sub, [west, east], idx, view, idx).cost == 30.0
+    assert tried[0][1] is None, "one line: the head's size"
+    tried.clear()
+    costs = [40.0]
+    sl.place_on_blocks("RESIDENCE", head, [head], 5.0, sl.Subject("area", tuple(west.poly)), [west, east], idx, view, idx)
+    assert len(tried) == 1, "an inside seat is not a block's to move"
