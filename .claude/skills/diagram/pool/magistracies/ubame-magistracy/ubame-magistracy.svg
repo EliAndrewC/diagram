@@ -731,7 +731,7 @@
     <text x="760.0" y="434.8" text-anchor="middle" font-size="10" font-style="italic" fill="#3A2E1C">inner garden</text>
   </g>
 
-  <!-- Kitchen garden: the middle of the south court, between the writing pavilion and the roji's west wall, below
+  <!-- Kitchen garden: the middle of the inner garden, between the writing pavilion and the roji's west wall, below
        Koharu's veranda (feature 283, research buildings 405: the seat is a knob and the sun decides it). The rear
        strip it stood in had no hour of sun in the shoulder month, in the shadow of the house; the west and the rear
        are all shaded here, and this is the only open ground inside the walls with its six hours, so the bed takes
@@ -856,8 +856,9 @@
   </g>
 
   <!-- Fire-water tubs (tensuioke): gutter-fed, so each sits against its building at an
-       eaves corner. Weighted to the kitchen (2). The plaster kura - tax archive and
-       charcoal store - carry none: halls burn, kura endure. -->
+       eaves corner. Weighted to the kitchen (2). The plaster kura - tax archive, charcoal store and
+       the two household storehouses - carry none: halls burn, kura endure. The shuttered wing's north-face tub moved to
+       its west face (feature 283), clearing the strip that is the service way from the postern to the rear alley. -->
   <g fill="#8FB0C6" stroke="#3A5060" stroke-width="1" data-kind="fire-water tubs">
     <!-- feature 267 pass 2: the kitchen's north tub moved from (219,324), in the postern's mouth, to beside the
          kitchen door; the bath's from (379,352) with the bath; the granary's from (358,652), in the slot against the
@@ -867,7 +868,7 @@
          face, and the karo's house's from (358,438) with their buildings -->
     <circle cx="219" cy="436" r="3.8"/>
     <circle cx="219" cy="210" r="3.8"/>
-    <circle cx="257" cy="212" r="3.8"/>
+    <circle cx="246" cy="256" r="3.8"/>
     <circle cx="246" cy="290" r="3.8"/>
     <circle cx="537" cy="232" r="3.8"/>
     <circle cx="844" cy="310" r="3.8"/>

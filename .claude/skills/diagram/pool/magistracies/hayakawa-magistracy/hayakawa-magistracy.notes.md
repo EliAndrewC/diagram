@@ -128,5 +128,5 @@
 - **boatmen's altar**: A small shrine to the water god, kept ashore by the crews who work the swift river.
 - **revetment**: The stone facing holds the bank against a swift river's floods.
 - **servants' quarters**: About ten domestic servants - cooks, grooms and cleaners - lodge in this range along the north wall, its doors on the service alley behind the house; the senior retainers keep their own houses in town, and the barracks holds only the duty watch.
-- **vegetable garden**: The household's bed stands in the south court along the divider, beyond the pond: the west and the rear of the house lie in the shade of the kitchen and the house, so the sunny south is the one seat left (research buildings 405).
+- **vegetable garden**: The household's bed stands in the inner court's garden before Hajime's own rooms, the pond and the old pines kept before the reception across the guests' path: the west and the rear of the house lie in the shade of the kitchen and the house, so the garden south of the house is the one seat left (research buildings 405).
 - **storehouse**: Two household storehouses in the shady rear, where the vegetable garden could not grow: a household kept its own storehouses, and the rear strip behind the house carried its service economy.

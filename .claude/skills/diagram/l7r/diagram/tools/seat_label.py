@@ -53,12 +53,12 @@ WEIGHT_INNER = WEIGHT_OBSTACLE / 4
 earth before a garden inside it, and a garden before a building."""
 
 WEIGHT_DARK = 2 * WEIGHT_OBSTACLE
-BUSY_FILLS: frozenset[str] = frozenset({"url(#vegetable-rows)"})
-"""Fills a name cannot be read on even as nested ground: a worked bed's rows run through the letters (feature 283 - Ubame's
-INNER COURT, its seat above the house taken by the storehouses, went onto the kitchen garden's furrows)."""
 """What covering dark ink costs - a wall, a post, a dark roof (feature 267): black caption ink cannot be read on it,
 where on light ink it can, so a caption with no free seat takes light ink first. At one weight Hayakawa's practice
 ground's name, with no free seat in its ground, lay across the compound wall."""
+BUSY_FILLS: frozenset[str] = frozenset({"url(#vegetable-rows)"})
+"""Fills a name cannot be read on even as nested ground: a worked bed's rows run through the letters (feature 283 - Ubame's
+INNER COURT, its seat above the house taken by the storehouses, went onto the kitchen garden's furrows)."""
 
 DARK = 0.3
 """Ink this dark (0-1 luma) or darker is dark to a caption."""
