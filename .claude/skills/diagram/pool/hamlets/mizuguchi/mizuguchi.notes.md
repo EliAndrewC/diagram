@@ -604,7 +604,7 @@ correct the last one - so the numbers a reader can check now come from the artif
 - windbreak: **208** clumps drawn, **38** off the page
 - copse: **29** clumps drawn
 - farmhouses: **12**
-- farmstead fixtures: bath **2**, coop **9**, pit **10**, privy **11**, woodpile **11**
+- farmstead fixtures: bath **1**, coop **11**, pit **10**, privy **11**, woodpile **11**
 - notice board at the entrance, **(1398.8, 213.4)**: **12** of 12 households' ways out pass it
 <!-- /census -->
 
