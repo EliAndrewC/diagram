@@ -102,3 +102,8 @@ but `_ok` is re-asked with a different `half` when the size roll re-tests a seat
 re-asked seat was judged at the wrong reach and Kashikawa's and Mizuguchi's woodland parcels moved. The index is now one
 per size asked (`_lines_at`), and the parcels are back on their seats byte for byte.
 
+
+**SC-013's scenarios beyond the pool** (observed 2026-09-28, method: feature 276's harness placement section run in the
+base worktree and in the clone): the rescue-rounds scenario seats 16 nucleated and 10 dispersed houses on both, the 10-
+and 20-household toys 10 and 20 on both, and every constant-density layout the same count on both paths (five-layout
+totals 281, 560 and 1133 nucleated, 191, 365 and 707 dispersed). No shortfall anywhere, new or larger.
