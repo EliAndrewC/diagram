@@ -1,35 +1,8 @@
-#!/usr/bin/env python3
-"""Briefs for feature 280's research sessions (the modern-only sweep), on feature 269's pattern (`make page-session`).
-
-    python3 specs/280-modern-only-sweep/briefs/gen.py write F1    -> writes f1-write.md, prints its path
-    python3 specs/280-modern-only-sweep/briefs/gen.py checks F1   -> reads f1-handoff.md, writes one check brief per
-                                                                     two questions, prints each path
-    python3 specs/280-modern-only-sweep/briefs/gen.py all         -> every group's write brief
-
-A write session researches ONE group of `inventory.md` (at most four questions, feature 274's cap) and writes the
-outcomes; the check sessions (two questions each, the registry keys in the last) run the record checks on bundles and
-apply them. The state between them is the handoff, never a context. The groups, their titles and their prefix ranges
-are read from `inventory.md`'s `## <G> - <title>` headings and the `Where:` line under each, so the inventory is the
-one place a group is defined.
-"""
-
-from __future__ import annotations
-
-import pathlib
-import re
-import sys
-
-HERE = pathlib.Path(__file__).resolve().parent
-FEATURE = HERE.parent
-CLONE = FEATURE.parents[1]
-SLUG = FEATURE.name
-SESSION = "diagram-supplemental-2"
-
-HEAD = """# Brief - feature 280 (the modern-only sweep), group {group}: {title}, session {what}
+# Brief - feature 280 (the modern-only sweep), group H1: homesteads: the grove and the windbreak's measure, session 1: research and write
 
 You are a FRESH session for one part of feature 280. This brief is the whole of what you need; do not read the
 feature's spec or plan to orient - everything you read stays in your context and is paid for again on every later
-turn. Work in this clone (`{clone}`); the project's CLAUDE.md files apply to you, the research record's
+turn. Work in this clone (`/diagram/.clones/diagram-supplemental-2`); the project's CLAUDE.md files apply to you, the research record's
 `CLAUDE.md` above all (it auto-loads when you read a research file).
 
 **What the feature is for.** The GM, 2026-09-28: *"We should eliminate anything which is only modern"* and *"We should
@@ -45,21 +18,21 @@ handoff; the orchestrator sends it to the owner.
 **Coordination files are read by line, never whole** (feature 274): `make lines FILE=<f> KEY=<regex>` and
 `make append FILE=<f> LINE="<text>"`. **Claims first:** `make lines FILE=/diagram/.clones/RESEARCH-CLAIMS.md
 KEY="<each page your items name>"`; skip any item whose section another session has claimed since, naming it in the
-handoff; then `make append FILE=/diagram/.clones/RESEARCH-CLAIMS.md LINE="Diagram supplemental ({session}) | 280 |
-group {group} in progress (<the sections>) | <date>"`. Read only your own lines of a handoff (`make lines
+handoff; then `make append FILE=/diagram/.clones/RESEARCH-CLAIMS.md LINE="Diagram supplemental (diagram-supplemental-2) | 280 |
+group H1 in progress (<the sections>) | <date>"`. Read only your own lines of a handoff (`make lines
 FILE=<handoff> KEY="SECTION=<yours>|KEY=<yours>"`), and add to a checks report with `make append`.
 **New registry entries and glossary terms take their prefix from `make reserve KIND=registry|glossary KEY=<k>`** (in
 `.claude/skills/diagram`), never "the highest + 10" by eye; a write session's eleventh registry key is refused - then
 follow its message (write the unreached items to `$L7R_CONTINUE` as a brief of this same shape, commit, stop).
-"""
 
-WRITE = HEAD + """
-## Your items (from `specs/{slug}/inventory.md`, group {group})
+## Your items (from `specs/280-modern-only-sweep/inventory.md`, group H1)
 
 Each names the section that makes the claim, the drawn form, why the audit thinks it modern-only, and the maps it
 touches. The kinds and maps named will be changed from your outcome by the orchestrating session, NOT by you.
 
-{items}
+- M13 **Grove size**: about 30-40 trees for each homestead, and the size-adaptive L-belt. The section says "The best hard data is a 1987 survey of Kashima" (kashima-kainyo-1987), which counted the groves standing then and does not date them (homesteads/010) - kinds: Windbreak, Copse (`greenery.py`), `groves_on_windward_side`; maps: the scripted hamlets with a windbreak. M.
+- M14 **Sun lane from belt height**: the 50 ft sun lane (WEST_SUN_FT in `hamletgen/consts.py`), set from a working belt height of about 10 m. The heights come from present-day surveys of surviving igune: kurita-2019-igune, minami-2022-igune (a 2022 CFD model of a drone-surveyed grove), minami-2024-igune and sendai-igune-list (homesteads/040) - kinds: Windbreak, Garden, ThreshingYard; maps: the scripted hamlets with a village belt. M.
+- M15 **The Tonami model homestead**: the persimmon at the center of the east work yard, and the north and west bamboo strip given to the kitchen drain and the service sheds. The section says "A model homestead the Tonami research institute drew up in 1996, whose text is on no page read, is carried here". 269's B29 touched the bamboo sides in code, not this section (homesteads/046) - kinds: Persimmon, HomesteadBamboo (`hamletgen/homesteads/bamboo.py`), the siting of Garden and ThreshingYard; maps: all scripted hamlets. S.
 
 ## The procedure (session 1: research and write)
 
@@ -70,7 +43,7 @@ touches. The kinds and maps named will be changed from your outcome by the orche
    農業全書, 百姓伝記), period illustrations (名所図会, 農業図絵, 耕作図), village records (村明細帳), archaeology, a
    museum's or prefecture's page, J-STAGE open papers, kotobank and jawiki for Japan; 天工開物, 農政全書, gazetteers
    (地方志) and the Chinese Text Project for China; and modern historians who DATE the form. Search in Japanese or
-   Chinese as well as English. Save every candidate page with `make source-pages OUT=/tmp/l7r-check/280-{low}-pages
+   Chinese as well as English. Save every candidate page with `make source-pages OUT=/tmp/l7r-check/280-h1-pages
    URLS="<u1> <u2> ..."` (one directory for the group; a second call adds to it) and grep them yourself - a page over
    20,000 characters is saved in PARTS. A source already in the registry reaches `source-reader` as
    `make check-bundle KEY=<key> WHOLE=1`. Keep a list of every search you ran (terms, language, where) - a MODERN-ONLY
@@ -90,7 +63,7 @@ touches. The kinds and maps named will be changed from your outcome by the orche
      cite the attested ones, give the search for the rest. For a degree (a size, density, count), give the premodern
      figure the map should be calibrated to, as the GM ruled for mulberry spacing.
    A search that finds nothing is an outcome, not a failure: record it and move on.
-5. **Write** on {pages}. The finding is written in the section that makes the claim: the premodern attestation cited,
+5. **Write** on homesteads/010, homesteads/040, homesteads/046, and homesteads 700-790 for a new question. The finding is written in the section that makes the claim: the premodern attestation cited,
    or the modern-only finding with its search and date, and the decision in plain words ("the maps do not draw it").
    Write it as the finding a casual reader needs, never as what the section used to say. A new question, where one is
    needed, is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in your range, opening with
@@ -105,89 +78,11 @@ touches. The kinds and maps named will be changed from your outcome by the orche
    tests/interactive/test_citations.py tests/interactive/test_sources.py tests/interactive/test_record_format.py"`, and
    `python3 scripts/check-question-size.py` from the clone root (a question and its notes stay under 20,000 bytes -
    split one along its topics).
-6. **Hand off.** Write `specs/{slug}/briefs/{low}-handoff.md`: one line per new or changed question as
+6. **Hand off.** Write `specs/280-modern-only-sweep/briefs/h1-handoff.md`: one line per new or changed question as
    `- SECTION=<page>/<NNN>` (e.g. `- SECTION=homesteads/250`), one per new registry key as `- KEY=<key>`, and one line
    per item: `M<nn> <OUTCOME>[ undated-custom] - <one sentence of what the record now says> - <what it means for the
    kinds and maps named: what the generator should stop drawing, or draw instead, if anything> - <searched: terms,
    languages, where, date> (for MODERN-ONLY and MIXED)`. Say also, per item, whether the GM ruled the form in (the
    record or the kind says so) and whether knowingly. Then anything left open and why. Commit (a message beginning
-   `280 {group}:`). Do NOT run the record checks, do NOT push - the check sessions do that in fresh contexts. Your
+   `280 H1:`). Do NOT run the record checks, do NOT push - the check sessions do that in fresh contexts. Your
    last message is one paragraph saying what you wrote.
-"""
-
-CHECK = """<!-- page-load: kind=check -->
-""" + HEAD + """
-Session 1 researched this group and committed; its handoff is `specs/{slug}/briefs/{low}-handoff.md`. You check and
-apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
-
-**Your questions:** {sections}
-**Your registry keys:** {keys}
-
-## The procedure (check, apply)
-
-1. **Check, all in one message, in the background.** For each of your questions:
-   `make check-bundle PAGE=<page> SECTION=<NNN> FOR=quote-check` for `quote-check`, and `... FOR=record-format`
-   for `record-format`, each agent naming its own MANIFEST.md and nothing else. For each of your keys:
-   `make check-bundle KEY=<key>` and `source-applicability`. An ABSENCE note that says what was searched is checked as
-   one: its search is stated, dated and specific.
-2. **Apply each report with ONE command**: `make apply-edits FROM=<the output_file its dispatch printed>` (in
-   `.claude/skills/diagram`), `SKIP=<n,n>` for a block you disagree with. Then do BY HAND only what it lists as
-   REFUSED, what you skipped, and the `EDIT: none` findings - all in ONE message of parallel `Edit` calls. A source
-   `source-applicability` rules NOT-APPLICABLE: the assertions resting on it are relabeled (absence or guess), the key
-   is listed in your report, and where that turns a PREMODERN-ATTESTED item into MODERN-ONLY, say so in the report.
-   Then `make glossary` if a term was added, `make record && make citations` and the four record tests ONCE.
-3. **Re-check ONCE, only what moved** (`make check-bundle ... NOTES=<key,key> FOR=quote-check`, one `quote-check`). A
-   PARTIAL left after it is labeled honestly in the note and left.
-4. **Commit** with a message beginning `280 {group} check:`; do not push.
-5. **Report.** Append to `specs/{slug}/briefs/{low}-checks.md` (with `make append`) one line per question and key: its
-   verdicts (quote-check, record-format, source-applicability), any outcome the checks changed, and anything left
-   open. Your last message is one paragraph.
-"""
-
-
-def groups() -> dict[str, tuple[str, str, str]]:
-    """group -> (title, where its questions go, its item lines), from `inventory.md`'s `## <G> - <title>` blocks."""
-    text = (FEATURE / "inventory.md").read_text(encoding="utf-8")
-    out = {}
-    for m in re.finditer(r"^## ([A-Z]+\d+[A-Z]?) - (.+)$", text, re.M):
-        body = text[m.end() :].split("\n## ", 1)[0]
-        where = re.search(r"^Where: (.+)$", body, re.M)
-        items = "\n".join(line for line in body.splitlines() if line.strip() and not line.startswith(("Where: ", "Holds: ")))
-        out[m.group(1)] = (m.group(2).strip(), where.group(1).strip() if where else "the existing sections the items name", items)
-    return out
-
-
-def write(group: str) -> int:
-    title, pages, items = groups()[group]
-    out = HERE / f"{group.lower()}-write.md"
-    out.write_text(WRITE.format(group=group, title=title, what="1: research and write", clone=CLONE, slug=SLUG, low=group.lower(), pages=pages, items=items, session=SESSION), encoding="utf-8")
-    print(out)
-    return 0
-
-
-def checks(group: str) -> int:
-    title, _pages, _items = groups()[group]
-    low = group.lower()
-    handoff = HERE / f"{low}-handoff.md"
-    if not handoff.is_file():
-        print(f"gen: no handoff at {handoff} - the write session did not finish", file=sys.stderr)
-        return 2
-    text = handoff.read_text(encoding="utf-8")
-    sections = list(dict.fromkeys(re.findall(r"^[ \t]*[-*][ \t]+`?SECTION=([a-z/-]+/\d{3})", text, re.M)))
-    keys = list(dict.fromkeys(re.findall(r"^[ \t]*[-*][ \t]+`?KEY=([a-z0-9][a-z0-9-]*)", text, re.M)))
-    pairs = [sections[i : i + 2] for i in range(0, len(sections), 2)] or [[]]
-    for n, pair in enumerate(pairs, 1):
-        last = n == len(pairs)
-        out = HERE / f"{low}-check-{chr(96 + n)}.md"
-        shown = ", ".join(f"PAGE={s.rsplit('/', 1)[0]} SECTION={s.rsplit('/', 1)[1]}" for s in pair) or "none"
-        out.write_text(CHECK.format(group=group, title=title, what=f"2{chr(96 + n)}: check and apply", clone=CLONE, slug=SLUG, low=low, sections=shown, keys=(", ".join(f"KEY={k}" for k in keys) or "none") if last else "none - the last group has them", session=SESSION), encoding="utf-8")
-        print(out)
-    return 0
-
-
-if __name__ == "__main__":
-    verb = sys.argv[1]
-    if verb == "all":
-        raise SystemExit(max((write(g) for g in groups()), default=0))
-    group = sys.argv[2].upper()
-    raise SystemExit(write(group) if verb == "write" else checks(group))

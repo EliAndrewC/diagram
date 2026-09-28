@@ -6,7 +6,8 @@
 
 Three phases. **Phase 1** (done in this session): seven audit agents read every record page, the kinds and knobs,
 and the pool, legacy and magistracy maps; their findings are gathered, de-duplicated and grouped in
-[`inventory.md`](inventory.md) (M01...), and the research queue is written. **Phase 2**: the queue in
+[`inventory.md`](inventory.md) (130 items, M01-M130, in 41 groups of two to four questions), and the research queue is
+written. **Phase 2**: the queue in
 [`queue.txt`](queue.txt) runs one fresh headless session per brief (`make page-session`), a WRITE session per group
 then its CHECK sessions, on 269's pattern. **Phase 3**: the eliminations, from `outcomes.md`, in the engine, the kinds
 and the maps.
