@@ -26,6 +26,26 @@ accepted for 267 with that note standing in. The rename touches 17 files: the in
 `overlap/taxonomy.py`, `tools/placement_stages.py`, the Mizuguchi and Kashikawa manifests' `ink_classes`, and the pinned
 snapshot `tests/fixtures/classes_before_189.json` (through `SINCE_189`, the renaming table the snapshot test keeps).
 
+## OPEN 2026-09-28, OWED AT CONVERSION: a village's funerary grounds (was feature 275, withdrawn)
+
+The GM, 2026-09-28: *"we just want to make sure that [when] we make village maps scripted that we do the correct
+things in the scripted generation."* So the village's own burial ground is not a feature of its own now; it is owed by
+the village tier's scripted generator when that is built (migration-plan step 5), with the rest of a village's
+funerary grounds. The design, already researched:
+- **The GM's ruling of 2026-09-27** (religion-and-death 210, 530): a village has a cremation ground and a hamlet none;
+  the country monk lives in the main village and serves its district; within its district the village alone keeps the
+  shrine, the headsman's house and the cremation ground.
+- **The cremation ground**: already drawn by the roller's village tier (`_roll_civic` -> `_roll_cremation`, feature 273):
+  530's `cremation_seat` knob, the shared `edge_seat`, six jizo. The village generator reuses it.
+- **The burial ground**: religion-and-death 280's knob (in the shrine or temple yard, or a ground of its own apart;
+  even odds; a hilltop shrine always apart) and 270's siting (a ground apart downstream, beyond the last house,
+  within ~650 ft of the middle of the houses) - feature 269's research, on main once 269 lands; sized by 160's rule in
+  the population served (the village's own households plus those of its hamlets that roll `village_ground`); seated
+  through `settlement/civic_grounds/edge_seat.py`. The cremation ground's "beside_burial" form then has something to
+  stand beside.
+- **The hamlets**: already done (feature 273, `hamletgen/burial.py`).
+Hand-rolled village maps are not edited for any of this (the GM, 2026-09-28).
+
 ## OPEN 2026-09-27, OWED AT CONVERSION: the village generator draws no cremation ground and no wayside stones
 
 Feature 272 put a village cremation ground (six stone jizo at it) and a group of wayside stones at the south lane's
