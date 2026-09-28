@@ -104,6 +104,25 @@ def test_a_third_save_after_a_retry_never_overwrites(tmp_path: pathlib.Path) -> 
     assert (out / "05-ok.example.txt").read_text(encoding="utf-8") == second
 
 
+def test_a_third_save_numbers_past_a_retried_page(tmp_path: pathlib.Path) -> None:
+    """267 G7: a retried page took 17-20 while the rows still counted 16, so the next save wrote 17-20 again."""
+    down = {"https://refuses.example/b"}
+
+    def opener(req, timeout: int = 0):  # noqa: ANN001, ANN202
+        if req.full_url in down:
+            raise urllib.error.URLError("403")
+        return _Resp(f"<html><body><p>{req.full_url}</p></body></html>".encode())
+
+    out = tmp_path / "out"
+    sp.save(["https://ok.example/a", "https://refuses.example/b"], out, sp.qv.Pages(opener=opener))
+    down.clear()
+    retried = sp.save(["https://refuses.example/b"], out, sp.qv.Pages(opener=opener))
+    assert [r["file"] for r in retried] == ["01-ok.example.txt", "03-refuses.example.txt"]
+    rows = sp.save(["https://refuses.example/c"], out, sp.qv.Pages(opener=opener))
+    assert rows[-1]["file"] == "04-refuses.example.txt", "a new page is numbered past the retried one, never onto it"
+    assert "example/b" in (out / "03-refuses.example.txt").read_text(encoding="utf-8"), "the retried page survives"
+
+
 def test_a_long_page_is_saved_in_parts_and_a_quoted_one_as_an_excerpt(tmp_path: pathlib.Path) -> None:
     """D19 (R10): a book-length saved page cost one check 200,026 characters of reading."""
     text = "".join(f"Sentence {i} of the book says little.\n" for i in range(3000))

@@ -75,10 +75,14 @@ _SHARED = [("hearth", "kitchen"), ("well", "kitchen"), ("well", "garden"), ("gar
 PARTS: dict[str, list[tuple[str, str]]] = {
     "ochiba-magistracy": _SHARED
     + [
-        ("genkan", "residence"),
+        ("genkan", "office hall"),
         ("engawa", "residence"),
-        ("residence corridor", "residence"),
         ("door", "residence"),
+        ("door", "granary"),
+        ("door", "office hall"),
+        ("door", "gatehouse"),
+        ("latrine", "servants' quarters"),
+        ("kitchen", "residence"),
         ("lord's quarters", "residence"),
         ("family quarters", "residence"),
         ("reception room", "residence"),
@@ -89,7 +93,6 @@ PARTS: dict[str, list[tuple[str, str]]] = {
         ("clerks' room", "office hall"),
         ("clerks' seats", "office hall"),
         ("kneeling positions", "hearing court"),
-        ("granary stilts", "granary"),
         ("striking posts", "practice ground"),
         ("weapon rack", "practice ground"),
         ("drying stones and bowls", "cinnabar workshop"),
@@ -99,7 +102,6 @@ PARTS: dict[str, list[tuple[str, str]]] = {
     + [
         ("stone lantern", "garden"),
         ("garden pines", "garden"),
-        ("genkan", "residence"),
         ("engawa", "residence"),
         ("residence corridor", "residence"),
         ("lord's quarters", "residence"),
@@ -110,6 +112,11 @@ PARTS: dict[str, list[tuple[str, str]]] = {
         ("shrine altar", "compound shrine"),
         ("torii", "compound shrine"),
         ("door", "guest quarters"),
+        ("door", "gatehouse"),
+        ("door", "kitchen"),
+        ("door", "office hall"),
+        ("door", "granary"),
+        ("clerks' room", "office hall"),
         ("day office", "office hall"),
         ("official study", "office hall"),
         ("clerks' seats", "office hall"),
@@ -127,7 +134,6 @@ PARTS: dict[str, list[tuple[str, str]]] = {
     "ubame-magistracy": _SHARED
     + [
         ("stone lantern", "border court"),
-        ("genkan", "residence"),
         ("engawa", "residence"),
         ("residence corridor", "residence"),
         ("door", "parley room"),
@@ -147,12 +153,12 @@ PARTS: dict[str, list[tuple[str, str]]] = {
         ("granary stilts", "granary"),
         ("striking posts", "practice ground"),
         ("weapon rack", "practice ground"),
-        ("balance beam", "weighing floor"),
+        ("steelyard", "weighing floor"),
         ("charcoal bales", "weighing floor"),
         ("parley mats", "parley room"),
         ("nakamon", "court divider"),
     ],
-    "county-magistracy-example": [("striking posts", "practice ground"), ("weapon rack", "practice ground")],
+    "county-magistracy-example": [("striking posts", "practice ground"), ("weapon rack", "practice ground"), ("clerks' room", "office hall"), ("residence corridor", "residence")],
     "ochiba-roundtrip-test": [("striking posts", "practice ground"), ("weapon rack", "practice ground")],
 }
 

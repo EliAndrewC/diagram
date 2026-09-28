@@ -51,7 +51,6 @@ def main(argv: list[str] | None = None) -> int:
             "verified-done",
             "remote-ok",
             "tooling-green",
-            "tooling-fresh",
             "cov-scope",
             "incremental",
             "rollcensus",  # feature 213: the roll census verdict after the test phase
@@ -92,11 +91,8 @@ def main(argv: list[str] | None = None) -> int:
         mods = coverage_scope(root)
         print(" ".join(["-o", "addopts=--cov=" + mods[0], *[f"--cov={m}" for m in mods[1:]]]) if mods else "-o addopts= --no-cov")
         return 0
-    if a.command == "tooling-fresh":  # exit 0 when the tooling is unchanged since the last record - the Makefile then skips collecting tests/tooling
-        rec = state.read(root)
-        return 0 if rec is not None and rec.tooling and rec.tooling == state.tooling_hash(root) else 1
     if a.command == "tooling-green":
-        print(f"tooling: recorded green for {state.record_tooling(root)[:12]} - `make quick` skips the tooling tests until the tooling changes")
+        print(f"tooling: recorded green for {state.record_tooling(root)[:12]} - the gate skips the tooling tests until the tooling changes")
         return 0
     if a.command == "verified-done":
         ok, why = state.already_verified(root)

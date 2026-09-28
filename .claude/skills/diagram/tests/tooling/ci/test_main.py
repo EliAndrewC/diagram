@@ -239,18 +239,19 @@ def test_remote_ok_passes_when_remote_is_on(roots: Path) -> None:
     assert cli.main(["remote-ok", "ci-check"]) == 0
 
 
-def test_the_tooling_freshness_subcommands_round_trip(roots: Path, capsys: pytest.CaptureFixture[str]) -> None:
-    """Feature 174: `tooling-fresh` and `tooling-green` - the pair `make quick` uses to decide
-    whether to collect `tests/tooling/` at all.
+def test_tooling_green_records_the_hash_the_gate_skips_on(roots: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    """Feature 174: `tooling-green` records the tooling hash that lets the gate skip `tests/tooling/` while the
+    tooling is unchanged. Its pair `tooling-fresh` answered the same question for `make quick`, and was retired
+    with that use on 2026-09-27 (quick no longer collects the tooling tree at all, the GM's ruling).
 
-    Both directions asserted: fresh is FALSE (exit 1) before anything is recorded, TRUE (exit 0)
-    once `tooling-green` records the hash. A test of one direction alone passes with the comparison
-    inverted, which is the whole point of the exit code.
-    """
-    assert cli.main(["tooling-fresh"]) == 1, "nothing recorded yet, so the tooling is not vouched for"
+    Both directions asserted: nothing vouches for the tooling before the record, and the record holds exactly the
+    current hash after it - one direction alone passes with the comparison inverted."""
+    before = state.read(roots)
+    assert before is None or before.tooling != state.tooling_hash(roots), "nothing recorded yet, so the tooling is not vouched for"
     assert cli.main(["tooling-green"]) == 0
     assert "recorded green" in capsys.readouterr().out
-    assert cli.main(["tooling-fresh"]) == 0, "and now it is - `make quick` may skip the tooling tests"
+    after = state.read(roots)
+    assert after is not None and after.tooling == state.tooling_hash(roots), "and now the gate may skip the tooling tests"
 
 
 def test_the_roll_census_verdict_is_routed_by_the_ci_command(roots: Path, monkeypatch: pytest.MonkeyPatch, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:

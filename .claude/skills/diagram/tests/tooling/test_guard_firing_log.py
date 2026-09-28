@@ -95,12 +95,21 @@ CASES = [
 
 @pytest.mark.parametrize(("guard", "payload", "event", "rule"), CASES, ids=[f"{c[0]}:{c[3]}" for c in CASES])
 def test_a_guard_records_the_rule_that_fired(tmp_path, guard: str, payload: str, event: str, rule: str) -> None:
+    # IN A THROWAWAY REPO, never the checkout running the suite (2026-09-27). With no `cwd` the guard ran inside
+    # the session's own clone, so the escalation case above ARMED that clone's real `.git/escalation-state.json`
+    # - its log entry went to this tmp dir, the state did not - and the session's next turn end was refused
+    # for a settlement-review nobody had dispatched. A guard that keeps state beside the repo it resolves
+    # must resolve this one.
+    work = tmp_path / "repo"
+    work.mkdir()
+    subprocess.run(["git", "init", "-q", str(work)], check=True)
     subprocess.run(
         [str(SCRIPTS / f"{guard}-hooks.sh"), "pretool"],
         input=payload,
         capture_output=True,
         text=True,
         check=False,
+        cwd=work,
         env={"PATH": "/usr/bin:/bin", "HOME": str(tmp_path), "GUARD_LOG_DIR": str(tmp_path / "log")},
     )
     entries = [json.loads(f.read_text()) for f in sorted((tmp_path / "log").glob("*.json"))]
