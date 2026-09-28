@@ -87,3 +87,18 @@ manifest compared byte for byte with the committed one): Inashiro, Kashikawa, Ku
 about 31 s. Houses 19 before and after, all plain, nucleated; every farmhouse reaches a way. Paddies 1000 and 1000,
 flooded 1 and 1, dry plots 39 and 40, lane records 12 and 13. Read by eye: the same hamlet - the cluster west of the
 field, no house inside the paddies.
+
+**The vectorized commons** (B2; observed 2026-09-28, method: every pool map regenerated, each manifest compared with the
+post-B1 one, and `commons_marks.py` over the SVGs before and after): the only manifest key that changed on any map is
+`ink_classes`, the census of drawn ink - houses, lanes, fields, woodland parcels and every `meta` field identical. The
+marks' counts (`commons-marks-before.json`, `commons-marks-after.json`): grass blades within 1.1% on every map and brush
+dots within 2.7%, the same throw counts at the same odds landing at different places. Pines moved by up to 6.5%
+(Kashikawa 310 -> 291, Sawada 292 -> 311): their code is unchanged - only the random stream they draw from moved, one draw
+later than before - and on ~300 marks the sampling spread alone is about the square root, 17 marks or 6%, so the plan's
+5% band sits below one standard deviation for this family. Recorded rather than tuned: the expected count is the old one.
+
+**A defect caught by that comparison**: the parcel seat's line index was first built once for the size the scan offers,
+but `_ok` is re-asked with a different `half` when the size roll re-tests a seat, and the reach is `pad + half` - so a
+re-asked seat was judged at the wrong reach and Kashikawa's and Mizuguchi's woodland parcels moved. The index is now one
+per size asked (`_lines_at`), and the parcels are back on their seats byte for byte.
+

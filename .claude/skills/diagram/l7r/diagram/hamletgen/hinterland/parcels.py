@@ -7,7 +7,7 @@ from collections.abc import Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, segments_cross
-from l7r.diagram.settlement._geom import PointGrid, RingIndex, boxed_grid
+from l7r.diagram.settlement._geom import PointGrid, RingIndex, boxed_grid, seg_reach_index
 
 from ..consts import Poly, Pt
 from ..plan import SitePlan
@@ -330,6 +330,10 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
             # used to be an inline `if` that only the lattice scan could evaluate, which is why the
             # jitter below could not exist: there was no way to check that a moved seat was still
             # legal. Same shape as every other "placement and its check read one source" fix here.
+            # EVERY LANE AND STREAM SEGMENT BY ITS REACH, one index per size asked (feature 278): `_ok` is re-asked with a
+            # different `half` when the size roll re-tests a seat, and the reach is `pad + half`, so each size gets its own.
+            _line_g: dict[float, PointGrid] = {}
+
             def _ok(
                 x: float,
                 y: float,
@@ -341,6 +345,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                 sx1: float = sx1,
                 sy1: float = sy1,
                 crop_g: PointGrid = crop_g,
+                line_g: dict[float, PointGrid] = _line_g,
             ) -> bool:
                 # ONE guard clause, deliberately: the window bounds and the kept-window AREA are the
                 # same question asked of a seat that may have been MOVED since the scan offered it
@@ -358,7 +363,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                     and not any(_crop_refuses((x, y), half, idx, n, sn) for idx, _bx0, _by0, _bx1, _by1 in crop_g.near(x, y))
                     and not any(math.hypot(x - kx, y - ky) < kr + half for kx, ky, kr in keep)
                     and not any(rx0 - half < x < rx1 + half and ry0 - half < y < ry1 + half for rx0, ry0, rx1, ry1 in keep_rects)
-                    and not any(_near_line((x, y), half, pts, pad) for pts, pad in lanes + streams)
+                    and not any(bx0 <= x <= bx1 and by0 <= y <= by1 and seg_dist(x, y, a, b) < reach for a, b, reach, bx0, by0, bx1, by1 in _lines_at(line_g, lanes + streams, half).near(x, y))  # `_near_line`, from the index
                     and not _wet(x, y, half)
                 )
 
@@ -647,6 +652,14 @@ def _crop_refuses(center: Pt, half: float, crop: RingIndex, normal: float = 80.0
     limit = sunny if south_of else normal
     dist = crop.edge_within(cx, cy, limit + half + 1.0)
     return dist is not None and dist - half < limit
+
+
+def _lines_at(cache: dict[float, PointGrid], lines: Any, half: float) -> PointGrid:
+    """`seg_reach_index(lines, half)`, built once per `half` into `cache` (feature 278)."""
+    grid = cache.get(half)
+    if grid is None:
+        grid = cache[half] = seg_reach_index(lines, half)
+    return grid
 
 
 def _near_line(center: Pt, half: float, pts: Sequence[Pt], pad: float) -> bool:

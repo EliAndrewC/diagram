@@ -666,3 +666,20 @@ def test_the_far_face_keeps_the_depth_across_a_right_angle_between_columns() -> 
         gap = min(math.dist(p, q) for q in far)
         assert gap >= BELT_DEPTH_FT * 0.9, (p, gap)
     assert far_envelope([(-90.0, 0.0), (0.0, 0.0), (90.0, 0.0)]) == [(-90.0, 0.0), (-60.0, 0.0), (-30.0, 0.0), (0.0, 0.0), (30.0, 0.0), (60.0, 0.0), (90.0, 0.0)]
+
+
+def test_the_parcel_line_index_is_one_per_size_asked() -> None:
+    """Feature 278: `_ok` is re-asked with a different `half` when the size roll re-tests a seat, and the reach is
+    `pad + half` - an index built for one size answered another with the wrong reach and moved a woodland parcel. Each
+    size gets its own index, and each answers as `_near_line` does."""
+    from l7r.diagram.hamletgen.hinterland.parcels import _lines_at, _near_line
+    from l7r.diagram.settlement._geom import seg_dist
+
+    lines = [([(0.0, 100.0), (200.0, 100.0)], 10.0)]
+    cache: dict = {}
+    small, big = _lines_at(cache, lines, 20.0), _lines_at(cache, lines, 60.0)
+    assert small is not big and _lines_at(cache, lines, 20.0) is small
+    for half, grid in ((20.0, small), (60.0, big)):
+        for y in (100.0, 125.0, 135.0, 160.0, 175.0):
+            got = any(bx0 <= 100.0 <= bx1 and by0 <= y <= by1 and seg_dist(100.0, y, a, b) < r for a, b, r, bx0, by0, bx1, by1 in grid.near(100.0, y))
+            assert got == _near_line((100.0, y), half, lines[0][0], 10.0), (half, y)

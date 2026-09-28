@@ -15,32 +15,42 @@ pieces; then the tooling; then the sweep, the measurement and the records.
 - [x] T02 [US2] The router's lazy lattice in `hamletgen/ways/route.py` and the recorded-request equality fixture (A1)
       research: rendering
       verify: DONE. route.py: free and band are judged on first ask; test_the_lazy_router_returns_the_whole_box_routers_paths over 14 requests recorded on ac01ffe2d (a recorder id-reuse bug was found and fixed first); ways tests 204 passed
-- [ ] T03 [US2] The doorstep index once per house in `hamletgen/ways/serve.py`, with its spy test (A2)
+- [x] T03 [US2] The doorstep index once per house in `hamletgen/ways/serve.py`, with its spy test (A2)
       research: rendering
+      verify: DONE. test_a_stragglers_doorstep_ground_is_obtained_once_per_house: at most one doorstep index per house, more standing places tried than indexes asked
 
 ## US3 - the placers stop re-deriving what does not change (P1)
 
-- [ ] T04 [P] [US3] The footbridge segment index in `settlement/city/bridges.py`, with its equality test (A3)
+- [x] T04 [P] [US3] The footbridge segment index in `settlement/city/bridges.py`, with its equality test (A3)
       research: rendering
-- [ ] T05 [P] [US3] The wells re-sort in `hamletgen/homesteads/wells.py`, with its count (A4)
+      verify: DONE. water_segment_index + _widen_for_confluence; test_the_footbridge_widening_from_its_segment_index_equals_the_scan over 600 random decks
+- [x] T05 [P] [US3] The wells re-sort in `hamletgen/homesteads/wells.py`, with its count (A4)
       research: rendering
-- [ ] T06 [P] [US3] The field: the hem pass's plot index in `waterfields/carve.py`, `_at_f`'s projected threads in `waterfields/frame.py`, with their equality tests (A5)
+      verify: DONE. wells re-sorted only when a well lands, the house-distance key memoized per seat; Kuwabata and Kashikawa manifests byte-identical (research R4)
+- [x] T06 [P] [US3] The field: the hem pass's plot index in `waterfields/carve.py`, `_at_f`'s projected threads in `waterfields/frame.py`, with their equality tests (A5)
       research: rendering
-- [ ] T07 [P] [US3] The notice board: `off_every_bed`'s segment grid, `_hard_clear`'s box index, `quad_hits_poly`'s prefilter, with their equality tests (A6)
+      verify: DONE. carve plot index grown with its hem plots, _at_f falls cached per carve; one comb built three ways gives the same plots; the non-monotone walk test
+- [x] T07 [P] [US3] The notice board: `off_every_bed`'s segment grid, `_hard_clear`'s box index, `quad_hits_poly`'s prefilter, with their equality tests (A6)
       research: rendering
-- [ ] T08 [P] [US3] The windbreak's one grid in `settlement/homestead_parts/grove_blocks.py`, with its equality test (A7)
+      verify: DONE. _hard_clear box grid, quad_hits_poly box prefilter with the full first stage, bed segment index in both probes; three equality tests
+- [x] T08 [P] [US3] The windbreak's one grid in `settlement/homestead_parts/grove_blocks.py`, with its equality test (A7)
       research: rendering
-- [ ] T09 [P] [US3] The page's bucket index in `interactive/page.py`, with its equality test (A8)
+      verify: DONE. the grove's static families in one tagged grid, the seats grid at its reach, the outline test memoized; test_grove_blocks green; windbreak 2.22 -> 1.43 s Kashikawa, 1.05 -> 0.69 s Inashiro (observed 2026-09-28)
+- [x] T09 [P] [US3] The page's bucket index in `interactive/page.py`, with its equality test (A8)
       research: rendering
-- [ ] T10 [US3] The exact pieces across the pool: every manifest they touch byte-identical against the base (SC-013's first clause)
+      verify: DONE. _BoxGrid per bucket for extents and skips, blocked buckets stop collecting; the merged scatter byte-identical to the whole-list walk
+- [x] T10 [US3] The exact pieces across the pool: every manifest they touch byte-identical against the base (SC-013's first clause)
       research: rendering
+      verify: DONE. make map of all five: Inashiro, Kashikawa, Kuwabata, Mizuguchi byte-identical (research R4)
 
 ## US4 - Sawada is rolled once, and a discarded roll is not finished (P1)
 
-- [ ] T11 [US4] Only the kept attempt is finished in `hamletgen/driver.py`, with the stubbed re-roll test (A9)
+- [x] T11 [US4] Only the kept attempt is finished in `hamletgen/driver.py`, with the stubbed re-roll test (A9)
       research: rendering
-- [ ] T12 [US4] The envelope refusal in `hamletgen/homesteads/boundary.py`, with its test; Sawada regenerated - built once, 19 households; its research entry before and after (B1)
+      verify: DONE. only the kept attempt is finished; test_only_the_attempt_kept_is_finished (kept, rejected, with and without an output path)
+- [x] T12 [US4] The envelope refusal in `hamletgen/homesteads/boundary.py`, with its test; Sawada regenerated - built once, 19 households; its research entry before and after (B1)
       research: rendering
+      verify: DONE. UnreachableGround refuses a seat deeper than the reach inside the web's hard ground; its unit test; Sawada attempt 1, 19 households, research R4
 
 ## US5 - the commons scatter runs as array operations (P2)
 

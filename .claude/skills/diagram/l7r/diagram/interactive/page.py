@@ -381,7 +381,19 @@ def merge_primitives(s: str) -> str:
             else:
                 _st = dict(at)
                 _translucent = any(float(_st.get(k, 1) or 1) < 1.0 for k in ("opacity", "fill-opacity", "stroke-opacity"))
-                joined = {"first": idx, "members": [idx], "extents": [ext], "skip": [], "blocked": False, "tag": tag, "translucent": _translucent, "outlined": _outlined(tag, _st), "ext_grid": _BoxGrid(), "ext_none": False, "skip_grid": _BoxGrid()}
+                joined = {
+                    "first": idx,
+                    "members": [idx],
+                    "extents": [ext],
+                    "skip": [],
+                    "blocked": False,
+                    "tag": tag,
+                    "translucent": _translucent,
+                    "outlined": _outlined(tag, _st),
+                    "ext_grid": _BoxGrid(),
+                    "ext_none": False,
+                    "skip_grid": _BoxGrid(),
+                }
                 _file_extent(joined, ext)
                 buckets[key] = joined
                 order.append(joined)

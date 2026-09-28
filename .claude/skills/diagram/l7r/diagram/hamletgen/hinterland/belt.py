@@ -7,7 +7,8 @@ import random
 from collections.abc import Sequence
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist
+from l7r.diagram.settlement import Settlement, point_in_poly
+from l7r.diagram.settlement._geom import RingIndex
 from l7r.diagram.sitegen.geom import crop_polys
 
 from ..consts import Poly, Pt
@@ -291,8 +292,14 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
         far = [rag((ccx + wx * (u + _far + _sun_off + back) + px * v, ccy + wy * (u + _far + _sun_off + back) + py * v), 1.0) for v, u in reversed(far_envelope(cols))]
         return near + far
 
+    # EACH CROP AS A RING INDEX, BUILT ONCE (feature 278): `fouled` walked every edge of every crop for every vertex of each
+    # candidate belt. `inside` counts the crossings `point_in_poly` counted, and `edge_within(.., 20)` is the nearest edge
+    # under 20 px - and a vertex that close to an edge is fouled either way, so a rounding difference on the edge itself
+    # cannot change the answer.
+    crop_idx = [RingIndex(c) for c in crops if len(c) >= 3]
+
     def fouled(poly: Poly) -> bool:
-        return any(point_in_poly(q[0], q[1], list(c)) or min(seg_dist(q[0], q[1], c[i2], c[(i2 + 1) % len(c)]) for i2 in range(len(c))) < 20.0 for q in poly for c in crops)
+        return any(ci.inside(q[0], q[1]) or ci.edge_within(q[0], q[1], 20.0) is not None for q in poly for ci in crop_idx)
 
     # THE LADDER STANDS BACK BEFORE IT SHRINKS. Both moves get the belt off the crop, but they cost
     # different things: standing back spends the embrace budget (a clump within 150 px of a

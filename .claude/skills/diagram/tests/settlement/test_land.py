@@ -725,3 +725,43 @@ def test_draw_furrows_writes_cut_rows_for_a_convex_plot_and_keeps_the_clip_for_a
     z2 = len(s.out)
     s._draw_furrows([(0.0, 0.0), (100.0, 0.0), (100.0, 50.0), (60.0, 50.0), (60.0, 20.0), (40.0, 20.0), (40.0, 50.0), (0.0, 50.0)], "#A98E54", 0.0)
     assert s.out[z2].startswith('<clipPath id="dry') and 'clip-path="url(#dry' in s.out[z2]
+
+
+def test_the_vectorized_grass_keeps_every_keep_out_the_point_test_kept():
+    """Feature 278 (FR-008): the grass is thrown and tested as arrays. Every tuft and dot it keeps stands where the
+    per-point test would have let it: inside the parcel, off every keep-out at the grass's lean (0), off the pond, inside
+    the frame - and no dot stands in a soft ground (woody). Each refusal occurs (non-vacuity), and the same seed throws the
+    same marks."""
+    from l7r.diagram.settlement._geom import KeepoutGrid, RingIndex
+    from l7r.diagram.settlement.land.cover import grass_scatter
+
+    parcel = [(0.0, 0.0), (600.0, 0.0), (620.0, 500.0), (300.0, 560.0), (0.0, 480.0)]
+    ring = RingIndex(parcel)
+    keep = KeepoutGrid()
+    keep.rings([[(100.0, 100.0), (220.0, 90.0), (230.0, 200.0), (110.0, 210.0)]], pad=6.0, slot=1, reach=14.0)
+    keep.segs([([(0.0, 300.0), (620.0, 330.0)], 5.0)])
+    keep.rects([(400.0, 50.0, 480.0, 120.0)], closed=True)
+    keep.circles([(500.0, 400.0, 30.0)], closed=True)
+    marsh = RingIndex([(250.0, 380.0), (380.0, 380.0), (380.0, 470.0), (250.0, 470.0)])
+    pond = (300.0, 200.0, 40.0, 25.0)
+    frame = (0.0, 0.0, 580.0, 540.0)
+    blades, marks = grass_scatter(12000, (0.0, 0.0, 620.0, 560.0), frame, ring, keep, None, pond, [marsh], [30.0], 42.0, 1.0, 278)
+    assert blades and marks, "non-vacuity: both tufts and dots"
+    tufts = {(float(b[0]), float(b[1])) for b in blades}
+    dots = [((m[0] + m[2]) / 2, (m[1] + m[3]) / 2) for m in marks]
+    # A MARK IS RECORDED TO 0.1 px, so the point it was thrown at lies within 0.05 px of it: a tuft thrown at y = 120.03,
+    # clear of a closed rect ending at 120, is recorded ON its edge. Each test asks for a clear point in that rounding cell.
+    near = [(dx, dy) for dx in (-0.05, 0.0, 0.05) for dy in (-0.05, 0.0, 0.05)]
+
+    def ok(x, y):
+        return any(
+            ring.inside(x + dx, y + dy) and not keep.hit(x + dx, y + dy, (0.0, 0.0)) and ((x + dx - pond[0]) / pond[2]) ** 2 + ((y + dy - pond[1]) / pond[3]) ** 2 > 1.0 for dx, dy in near
+        )
+
+    for x, y in [*tufts, *dots]:
+        assert frame[0] - 0.05 <= x <= frame[2] + 0.05 and frame[1] - 0.05 <= y <= frame[3] + 0.05
+        assert ok(x, y), (x, y)
+    assert not any(all(marsh.inside(x + dx, y + dy) for dx, dy in near) for x, y in dots), "no woody dot in the bog"
+    assert any(marsh.inside(x, y) for x, y in tufts), "grass grades into the soft ground"
+    assert grass_scatter(12000, (0.0, 0.0, 620.0, 560.0), frame, ring, keep, None, pond, [marsh], [30.0], 42.0, 1.0, 278) == (blades, marks)
+    assert grass_scatter(0, (0.0, 0.0, 1.0, 1.0), None, ring, keep, None, None, [], [], 42.0, 1.0, 1) == ([], [])

@@ -12,6 +12,7 @@ from ..._geom import (
     nearest_way_bearing,
     point_in_poly,
     seg_dist,
+    seg_reach_index,
     segments_cross,
     street_runs,
     way_beds,
@@ -614,21 +615,4 @@ class FixtureSitingMixin:
         return (x, y)
 
 
-def bed_segment_index(beds: Any, extra: float) -> PointGrid:
-    """Every way-bed segment as `(a, b, reach, x0, y0, x1, y1)`: its refusal distance (`bed half-width + extra`) and its
-    box widened by that distance (feature 278)."""
-    grid = PointGrid()
-    grid.extend(
-        (
-            bp[k],
-            bp[k + 1],
-            bhw + extra,
-            min(bp[k][0], bp[k + 1][0]) - bhw - extra,
-            min(bp[k][1], bp[k + 1][1]) - bhw - extra,
-            max(bp[k][0], bp[k + 1][0]) + bhw + extra,
-            max(bp[k][1], bp[k + 1][1]) + bhw + extra,
-        )
-        for bp, bhw in beds
-        for k in range(len(bp) - 1)
-    )
-    return grid
+bed_segment_index = seg_reach_index  # the verge probes' name for it (feature 278; defined with the other indexes)
