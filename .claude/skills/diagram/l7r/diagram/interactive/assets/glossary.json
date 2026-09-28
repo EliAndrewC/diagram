@@ -2205,6 +2205,7 @@
   "def": "Literally \"house elder\": the senior retainer who ran a samurai household's affairs - in a domain lord's house, the senior councillors, who decided in council and lived nearest the castle.",
   "variants": [
    "karo",
+   "karō",
    "elder house",
    "elder houses"
   ]
@@ -3008,7 +3009,8 @@
    "ote-mon",
    "otemon",
    "ote",
-   "oute"
+   "oute",
+   "Ōte"
   ]
  },
  "ote-suji": {
@@ -8248,6 +8250,19 @@
   "variants": [
    "pleasure quarter",
    "pleasure quarters"
+  ]
+ },
+ "tairo": {
+  "def": "The great elder: the shogunate's highest office, filled only at times and ranking above the Roju, with whom its holder sat in Edo castle's goyobeya to run the government.",
+  "variants": [
+   "tairo",
+   "tairō"
+  ]
+ },
+ "wakadoshiyori": {
+  "def": "The shogunate's junior elders, ranking below the Roju, who shared the goyobeya in Edo castle with them to conduct the business of government.",
+  "variants": [
+   "wakadoshiyori"
   ]
  }
 }

@@ -1002,6 +1002,7 @@ karamete-mon	karamete-mon
 karamon	Chinese-style gate
 karishiki	karishiki
 karo	karo
+karō	karo
 kashi	kashi
 kaso-dera	kaso-dera
 kasoba	kasoba
@@ -1841,6 +1842,8 @@ tagoshi kangai	tagoshi kangai
 taihu	Lower Yangzi
 taiji	Taiji
 taiping-gang	taiping-gang
+tairo	tairo
+tairō	tairo
 taiseiden	Taiseiden
 taisho	Taisho
 taishō	Taisho
@@ -2031,6 +2034,7 @@ wagon inn	wagon inn
 wagon inns	wagon inn
 wagon-inn	wagon inn
 waju	waju
+wakadoshiyori	wakadoshiyori
 wakato	wakato
 waki-honjin	waki-honjin
 walled ward	lifang
@@ -2183,6 +2187,7 @@ zushi-nikai	half-story
 ōiya	ōiya
 ōkaji	ōkaji
 ōkajiba	ōkaji
+ōte	ote-mon
 ōya	yamori
 ほ場整備	hojo seibi
 ホオノキ	hoonoki
