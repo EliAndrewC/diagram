@@ -11405,5 +11405,11 @@
   "variants": [
    "rotation period"
   ]
+ },
+ "gazetted": {
+  "def": "Officially designated by notice in a government gazette - of a forest or reserve, put under legal protection as a named protected area.",
+  "variants": [
+   "gazetted"
+  ]
  }
 }

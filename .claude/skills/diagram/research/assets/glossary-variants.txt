@@ -861,6 +861,7 @@ gate-mounds	mitsuke
 gate-rowhouse	nagayamon
 gate-throat	gate throat
 gate-town	monzen
+gazetted	gazetted
 gazetteer	gazetteer
 gazetteers	gazetteer
 gejo	degawari
