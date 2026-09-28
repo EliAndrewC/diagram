@@ -55,8 +55,9 @@ the record.
 - [x] T12 [US4] The vectorized marsh in `settlement/land/wet.py`, with its compliance and density tests and the Decisions note at the point of change (B2)
       research: rendering
       verify: DONE. marsh_scatter in land/wet.py (numpy throws, inside_many, hit_many at each kind's pads, crescents, the pond's lateral and blade-top tests, the feather); _sparse removed, its reasoning kept at the call site; test_the_vectorized_marsh_keeps_every_keep_out_and_its_density; the pond bank now the whole ring (a defect the moved throws exposed, research R2, Decisions row)
-- [ ] T13 [US1] The pool regenerated under 276's FR-006 condition: `make done` green, the rescue-rounds scenario and the toys, forms and kinds, the moved maps' research entries, `make cohort N=24` against the base's (SC-011, second half)
+- [x] T13 [US1] The pool regenerated under 276's FR-006 condition: `make done` green, the rescue-rounds scenario and the toys, forms and kinds, the moved maps' research entries, `make cohort N=24` against the base's (SC-011, second half)
       research: rendering
+      verify: DONE. pool regenerated with B1-B2: only ink_classes.marsh moved (houses, kinds, form, fields, plots, ways, marsh outlines identical - research R2); rescue-rounds 16/10, toys 10/20, density layouts equal on base and clone; make cohort N=24 24/24 on both; make done green (70 s) after fixing the stream index key and two coverage lines
 
 ## Polish
 
