@@ -184,3 +184,7 @@ question, its three options and the answer verbatim.
 **Round 4** (spec-fidelity-verify, MODE 3, 2026-09-28): FAITHFUL. The answer checked against the session transcript; the
 west-side preference was the session's own wording in an option the GM picked, so dropping it sets aside nothing the GM
 said.
+
+**Amendment rounds** (spec-fidelity-verify, 2026-09-28, after acceptance): round 1 CHANGES REQUIRED (two Decisions
+lines left stale by the round-1 building-review changes, fixed); round 2 FAITHFUL - FR-005/SC-003's amended review
+clause, the carried rear-strip findings and the shrine's map entry owed at conversion all within the GM's request.

@@ -985,4 +985,3 @@ def test_parse_svg_reads_the_fence_lines_as_segments() -> None:
     )
     plan = pa.parse_svg(text)
     assert [(s.x, s.y, s.w, s.h) for s in plan.fence_segs] == [(20.0, 20.0, 360.0, 2.0), (20.0, 20.0, 2.0, 360.0)]
-
