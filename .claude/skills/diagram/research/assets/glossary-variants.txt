@@ -1733,6 +1733,7 @@ otedori	ote-suji
 otemon	ote-mon
 otesuji	ote-suji
 ou	Ou
+ouchi	Ouchi
 out-to-out	out-to-out
 oute	ote-mon
 outer moat	outer moat
@@ -2719,6 +2720,7 @@ zushi-nikai	half-story
 ōkajiba	ōkaji
 ōnin war	Onin war
 ōte	ote-mon
+ōuchi	Ouchi
 ōya	yamori
 ほ場整備	hojo seibi
 ホオノキ	hoonoki
