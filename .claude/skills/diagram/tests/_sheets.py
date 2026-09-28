@@ -44,10 +44,10 @@ def fresh(svg: str, gen: str, generated: bool, engine_mtime: float | None = None
     if not generated:
         return svg
     mtime = newest_engine_mtime() if engine_mtime is None else engine_mtime
-    if not is_stale(svg, gen, mtime):
-        return svg
+    # the check is taken under the lock too: a worker that found the sheet fresh while another was writing it read a
+    # half-written file (feature 283 - "no rect marked id=precinct" on the county example, once, under make quick)
     with open(svg + ".lock", "w") as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
-        if is_stale(svg, gen, mtime):  # another worker may have regenerated it while this one waited
+        if is_stale(svg, gen, mtime):
             run([sys.executable, gen], check=True, env={**os.environ, "DIAGRAM_SKIP_RENDER": "1"}, cwd=SKILL)
     return svg

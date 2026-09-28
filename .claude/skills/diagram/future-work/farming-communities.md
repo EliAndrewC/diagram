@@ -100,7 +100,9 @@ fields, its foot rolls the program's second grove knob - `field line` along the 
 photograph shows, or `ragged` - with equal weights). Fill the
 region with the grove scatter the windbreak already uses (a `KeepoutGrid` of the clearing, the approach and the
 well), carry the scrub into the precinct's open ground, then seat the sacred tree beside the approach and the
-basin at the innermost arch. Measure: the region's area and canopy share, and feature 279's `STRAIGHT_RUN` on its
+basin at the innermost arch, and the keeper's kitchen garden (a `gardens` entry) on the open ground nearest the
+dwelling that gets its six hours (feature 283, `garden_sun`'s sun; Hoshigaoka's sheet draws it below the forecourt,
+west of the approach). Measure: the region's area and canopy share, and feature 279's `STRAIGHT_RUN` on its
 edge crowns (no four within 2 ft of one line), against the hand-drawn Hoshigaoka grove (form `behind and sides`, feature 279), and the `LONG_RUN` bar (no
 stretch of edge 50 ft or longer within a crown's radius of one line).
 

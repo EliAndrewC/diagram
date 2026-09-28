@@ -346,6 +346,7 @@ chugen	chugen
 chugoku	Chugoku
 chuma	chuma
 chumon-zukuri	chumon-zukuri
+chō	cho
 chōtsuke	chōtsuke
 chōzuya	temizuya
 circuit	wall circuit
@@ -825,6 +826,7 @@ fuel-and-fodder commons	commons
 fujiwara	Fujiwara-kyo
 fujiwara-kyo	Fujiwara-kyo
 fukada	fukada
+fuki	fuki
 fukugi	fukugi
 fully involved	fully-involved
 fully-involved	fully-involved
@@ -1105,6 +1107,7 @@ hoki province	Hoki
 hokke	Hokke
 hokke sect	Hokke
 hokora	hokora
+hokuriku	Hokuriku
 holding jail	holding jail
 hon-byakusho	honbyakusho
 honan	Honan
@@ -1203,6 +1206,7 @@ important cultural property	Important Cultural Property
 in-field pocket pond	pocket pond
 inari	Inari
 inashiro	Inashiro
+inekake	hazakake
 initiate	initiate
 initiates	initiate
 inkyo	inkyo
@@ -1501,6 +1505,7 @@ kokuso	kokuso
 kokuzo	kokuso
 komae	komae
 komainu	lion-dog
+komatsuna	komatsuna
 komo	komo
 komo matting	komo
 komono	komono
@@ -1681,11 +1686,9 @@ massing	massing
 master mountain	master-mountain
 master-mountain	master-mountain
 masugata	masugata
-mat	tatami
 matebajii	matebajii
 matoi	matoi
 matou	gangi
-mats	tatami
 matsu	matsu
 mayasaki	mayasaki
 meander	meander
@@ -1742,6 +1745,7 @@ mire	mire
 mirin	mirin
 mise	mise
 mitochigai	mitochigai
+mitsuba	mitsuba
 mitsuke	mitsuke
 miyaza	miyaza
 mizu-oobako	Ottelia
@@ -1812,9 +1816,11 @@ muster perimeters	muster perimeter
 myoden	myoden
 myoden landlord	myoden
 myoden landlords	myoden
+myoga	myoga
 myoji-taito	myoji-taito
 myoshu	myoshu
 myōden	myoden
+myōga	myoga
 myōshu	myoshu
 naca	NACA
 nagare-style	Nagare-style
@@ -1851,6 +1857,7 @@ nawabari	nawabari
 nawate	nawate
 naya	naya
 near-monospecific	monospecific
+negi	negi
 nehan	Nehan gate
 nehan gate	Nehan gate
 neige	neige
@@ -2255,7 +2262,9 @@ sallyport	sally port
 salvage excavation	salvage excavation
 samurai ground	buke-chi
 san no torii	ichi-no-torii
+san'in	San'in
 san'yodo	Sanyodo
+san-in	San'in
 san-no-ma	ni-no-ma
 san-no-maru	sannomaru
 san-no-torii	ichi-no-torii
@@ -2315,6 +2324,7 @@ seisatsuba	kosatsuba
 sekai daihyakka jiten	Sekai Daihyakka Jiten
 sekisho	sekisho
 self-watch house	jishinban
+senbakoki	senbakoki
 senbon torii	Senbon Torii
 sendai	Sendai
 sendai plain	Sendai
@@ -2330,6 +2340,7 @@ sentō	sento
 senzai	senzai
 separated flow	separation zone
 separation zone	separation zone
+seri	seri
 sericulture	sericulture
 ses	SES
 sess	SES
@@ -2394,6 +2405,7 @@ shirasu	oshirasu
 shirimito	shirimito
 shironameshi	shironameshi
 shiroyone senmaida	senmaida
+shiso	shiso
 shitomi	shitomi
 shitomi shutters	shitomi
 shitsuden	shitsuden
@@ -2433,6 +2445,7 @@ shuku	shukuba
 shukuba	shukuba
 shumon aratame cho	shumon aratame cho
 shunde	Shunde
+shungiku	shungiku
 shunzhi	Shunzhi
 shōwa	Showa
 shōya	shoya
@@ -2698,6 +2711,8 @@ three-bay two-corridor house	three-bay two-corridor house
 three-bay two-corridor houses	three-bay two-corridor house
 three-squads	three-squads courtyard
 three-squads courtyard	three-squads courtyard
+threshing comb	senbakoki
+threshing combs	senbakoki
 threshing yard	threshing yard
 threshing yards	threshing yard
 threshing-yard	threshing yard
@@ -2726,6 +2741,7 @@ tofuya	tofuya
 tohoku	Tohoku
 toiya	ton'ya
 toiyaba	toiyaba
+tokai	Tokai
 tokaido	Tokaido
 toki no kane	toki no kane
 tokonoma	tokonoma
@@ -2811,6 +2827,8 @@ tōhoku	Tohoku
 tōkaidō	Tokaido
 tōshukō	toshuko
 tōya	miyaza
+ubame	Ubame
+ubame's	Ubame
 ubuko	ubuko
 ubusuna	ubusuna
 ubusuna god	ubusuna

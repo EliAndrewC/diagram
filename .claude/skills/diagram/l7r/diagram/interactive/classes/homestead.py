@@ -151,31 +151,37 @@ class RetirementHouse(Kind):
 
 class ThreshingYard(Kind):
     """
-    What: A small tamped-earth work floor beside each farmhouse - swept bare, with a straw drying mat and a little
-    rack for hanging sheaves. Households measured it in straw mats: 40 to 60 of them, two mats to the tsubo,
-    so an ordinary yard is 20 to 30 tsubo and a few run past 50.
+    What: A tamped-earth work floor in front of each farmhouse, drawn as the harvest leaves it: covered in straw
+    mats. The rice was threshed here on mats, and the grain was then dried on mats spread over the whole
+    yard - a household measured its yard in them, two to the tsubo: 40 to 60 on an ordinary farm of the barley country
+    the count comes from, fewer on a rice farm, whose yard was smaller. Where the
+    harvest weather is changeable, each household also gathers its drying rack by the house, along one side of
+    the yard.
 
     Why: Threshing and drying were done per household, in the yard, and the yard needs sun: a thatched roof
     pitched at 45 degrees puts a minka's ridge at 20-22 feet, so no yard is placed in the shadow band south
-    of a neighbor's wall. Its SIZE follows the crop the household must dry, which is why every yard on this
-    map is different: each is rolled from a right-skewed spread about 18 tsubo (59.5 sq m), correlated with
-    the household - a large farm overwhelmingly has a large yard, and the occasional mismatch is a fact
-    about that farmstead.
+    of a neighbor's wall, and a rack never stands in the yard's southern half. Its SIZE follows the crop the
+    household must dry, which is why every yard on this map is different: each is rolled from a right-skewed
+    spread about 18 tsubo (59.5 sq m), correlated with the household. Whether racks stand by the houses
+    follows the weather of the country, not a village's taste: racks gathered by the house are recorded for a
+    coast of changeable autumn weather, so that the threshing could be done at home, and the drying method
+    followed the climate over whole regions - so every settlement in one climate draws the same.
 
-    Note: The size band and the spread's shape are read - Kitamoto's mat counts, and the lognormal that fits
-    Kamikanai's 1771 house histogram; the wet-rice CENTER is interpolated from the crop (rice is field-dried
-    on racks first, so a paddy household needs less floor than the barley district the mat counts come
-    from), and the sun corridor is derived from the read roof pitch.
-
-    Caveat: the wet-rice CENTER is interpolated from the crop (rice is field-dried on racks first, so a paddy
-    household needs less floor than the barley district the mat counts come from), and the sun corridor is
-    derived from the read roof pitch.
+    Note: we have rendered between a third and two thirds of the straw mats that covered a yard (a yard whose
+    outline or rack leaves no room for the last ones, a mat or two fewer), each with a little bare
+    ground around it, most laid a little askew, as by hand, in order to keep them legible: at this scale dozens of mats laid edge to edge would read as a textured
+    floor rather than as mats, so the drawing shows a smaller number to give the impression of many. The real yard at
+    harvest was covered, 40 to 60 mats of about 3 by 6 feet each on an ordinary barley-country farm and 100 to 150 on a
+    large one. The
+    mats' size, the yard's size band and its spread are read; the rows the mats are laid in are a guess - no source read
+    says; and where a map draws racks by the houses, which side of the yard a rack takes is a guess too, and the rack is
+    drawn wider than its poles so that it reads.
 
     Name: threshing yard
-    Covers: `threshing_yards`
-    Label: accurate
-    Sources: not recorded
-    Entry: research/homesteads.html - 'How big was the work yard, and how did the sizes spread'; 'The threshing yard's sun, and how far a farmhouse shades'
+    Covers: `threshing_yards` - the floor, its mats, and the rack by the house where the harvest weather is changeable
+    Label: convention
+    Sources: kitamoto-inakoki-niwa, kitamoto-mushiro-niwa, tobunken-mushiro, nishimura-makino-1959
+    Entry: research/homesteads.html - 'What lay in the work yard at harvest? Straw mats over the whole floor'; 'Did a village put its drying racks by the houses by custom, or because of its weather?'; 'How big was the work yard, and how did the sizes spread'; 'The threshing yard's sun, and how far a farmhouse shades'
     """
 
     key = 'threshing yard'

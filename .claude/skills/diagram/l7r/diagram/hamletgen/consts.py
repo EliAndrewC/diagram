@@ -357,6 +357,16 @@ POND_LAYOUTS = ("mosaic", "mosaic", "grid")
 # the back of the building", lined along the road. Neither source gives a share of villages using each, so
 # the roll is even. research/archetypes.html "What stands on a dike-pond hamlet that a paddy hamlet lacks?".
 MANURE_FORMS = ("heap", "pit")
+
+# THE HARVEST WEATHER - an ENVIRONMENT FACT the spec declares, never a roll (feature 282, FR-005). Racks gathered by
+# the house are named for the changeable-weather San'in coast, "so that it is convenient to do the threshing work within
+# the homestead" (Nishimura and Makino 1959), and the drying method followed the weather and the ground over whole
+# regions, not a village's choice - so a free roll per hamlet would let two neighbors in one climate differ, which is
+# what the GM asked us not to do (2026-09-28). `changeable` draws a rack by every house; `settled` (the default: the
+# gathered racks are one region's form - this project's decision, as the regional wind is) draws none at the house.
+# research/homesteads.html 'Did a village put its drying racks by the houses by custom, or because of its weather?'.
+HARVEST_WEATHERS = ("settled", "changeable")
+DEFAULT_HARVEST_WEATHER = "settled"
 # TWO SUPPORTABLE ANSWERS BECOME A KNOB (constitution XII), not a picked one. Both were named by a
 # settlement-review as knob candidates and the GM approved working them (feature 152, FR-005/FR-016).
 COPSE_SITINGS = ("among_the_houses", "against_the_belt")  # a village copse threading the homesteads, or

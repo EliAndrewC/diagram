@@ -295,7 +295,14 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
     _near_n = [0]  # how many of the band's vertices are its near face, recorded for the depth measure (the far face has more)
 
     def band(span_f: float, back: float) -> Poly:
-        cols = past_the_lanes(round_the_houses(trim_receding_ends(profile(span_f), BELT_DEPTH_FT), uv, BELT_NEAR_FT + _sun_off), _lanes, half * span_f / COLS, near=BELT_NEAR_FT, depth=BELT_NEAR_FT + BELT_DEPTH_FT, wet=_in_marsh)
+        cols = past_the_lanes(
+            round_the_houses(trim_receding_ends(profile(span_f), BELT_DEPTH_FT), uv, BELT_NEAR_FT + _sun_off),
+            _lanes,
+            half * span_f / COLS,
+            near=BELT_NEAR_FT,
+            depth=BELT_NEAR_FT + BELT_DEPTH_FT,
+            wet=_in_marsh,
+        )
         # 36 px, not 24. `village_grove` filters clumps against every structure and crop, and it
         # filters the near face hardest - so a belt whose POLYGON sits clearly windward can still
         # have its DRAWN clumps average back onto the cluster's own line, which is what

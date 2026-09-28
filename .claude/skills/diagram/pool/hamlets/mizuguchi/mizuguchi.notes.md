@@ -106,6 +106,7 @@ DIRECTION is not invented: it is the bearing of this map's own connector track w
 
 ### Features
 
+- **threshing yard**: This map's harvest weather is settled, the regional default, so no rack is drawn by the houses: its racks would be put up out on the paddies after the harvest, which is the seasonal map's business and not drawn here (settled weather keeping the racks off the houses is our reading of the survey, which records racks gathered by the houses only on a coast of changeable weather).
 - **burial ground**: Mizuguchi keeps none of its own: its dead lie in the main village's ground, by the shrine that is the setting's parish temple.
 - **retirement house**: Mizuguchi keeps the custom of the separate retirement house: 5 of its 12 homesteads have one, a small roof of its own a ken or two off the farmhouse's back wall or flank, its door facing away.
 
@@ -810,3 +811,12 @@ but both of the 2 drawn baths are `unjoined` (`bath_seats_drawn`) - the rolled f
 nothing here. The common house bearing sits near south (`house_bearing_deg` 7.46) with 1 of the 12 houses turned
 square to the lane instead (`house_quarter_turns`); the weir now carries a rolled form too (`weir_form: gabion`,
 against main's unset weir).
+
+## 2026-09-28 (feature 282): the harvest yard drawn as a floor of mats; nothing placed moved
+
+Every threshing yard is now drawn as the harvest leaves it: straw mats of 3 by 6 ft over the whole floor, each with a
+little bare ground around it, most turned a little as if laid by hand and nudged off their rows where the gap leaves room, and the map draws between a third and two thirds of the mats that covered it, a mat or two fewer where the yard's outline leaves no room (a drawing convention - the real yard was covered, research homesteads 'What lay in the work yard at
+harvest?'). The old fixed center mat and the rack along each yard's south edge are gone. This map declares no harvest
+weather, so it takes the regional default, settled, and draws no rack by the houses (research homesteads 'Did a village
+put its drying racks by the houses by custom, or because of its weather?'). The weather is a fact of the country, set by a map's declaration or else the regional default, and never rolled: the
+manifest diff is `mats` on each yard, `meta.harvest_weather`, and each yard's outline recorded to a thousandth (no yard moved).

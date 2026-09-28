@@ -56,6 +56,9 @@ WEIGHT_DARK = 2 * WEIGHT_OBSTACLE
 """What covering dark ink costs - a wall, a post, a dark roof (feature 267): black caption ink cannot be read on it,
 where on light ink it can, so a caption with no free seat takes light ink first. At one weight Hayakawa's practice
 ground's name, with no free seat in its ground, lay across the compound wall."""
+BUSY_FILLS: frozenset[str] = frozenset({"url(#vegetable-rows)"})
+"""Fills a name cannot be read on even as nested ground: a worked bed's rows run through the letters (feature 283 - Ubame's
+INNER COURT, its seat above the house taken by the storehouses, went onto the kitchen garden's furrows)."""
 
 DARK = 0.3
 """Ink this dark (0-1 luma) or darker is dark to a caption."""
@@ -152,6 +155,7 @@ class Shape:
     edge: float = 0.0  # a closed shape's drawn outline half-width (0 when it has none)
     texture: bool = False  # marked `data-texture` on the sheet: ink that is a feature's surface (a wing's shutter marks), not its parts
     filled: bool = False  # a closed shape painted with a fill (SVG's default fill is black), which hides what is under it
+    busy: bool = False  # painted in a banded fill (a worked bed's rows) that crosses a name's letters, however light its ground
     dark: bool = False  # drawn in dark ink - a line's stroke, a shape's fill - which black caption ink cannot be read on
 
 
@@ -243,6 +247,7 @@ def read_sheet(src: str) -> tuple[list[Shape], tuple[float, float, float, float]
                         filled=ink[1] != "none",
                         dark=_luma(ink[1]) < DARK,
                         texture=texture,
+                        busy=ink[1] in BUSY_FILLS,
                     )
                 )
         for c in el:
@@ -304,10 +309,12 @@ def classify(
             # kitchen garden, open ground inside the court), and so does ink the sheet marks `data-texture` - a
             # feature's surface, a wing's shutter marks, which a name may lie on; everything else in full - the caption's
             # own partitions too, which at a light weight lost to its building's outline and put Ubame's servants'
-            # quarters on one (round 4)
-            light = (s.kind in GROUND_KINDS and s.kind != kind) or s.texture
+            # quarters on one (round 4). Ground painted AFTER the caption is not light: it hides the name however open it
+            # is (Hayakawa's vegetable bed cut from the inner garden's corner took the garden's name, feature 283)
+            over = after is not None and i > after and s.filled and not s.line
+            light = (s.kind in GROUND_KINDS and s.kind != kind and not over and not s.busy) or s.texture
 
-            weight = WEIGHT_INNER if light else WEIGHT_TEXT if after is not None and i > after and s.filled and not s.line else WEIGHT_OBSTACLE
+            weight = WEIGHT_INNER if light else WEIGHT_TEXT if over else WEIGHT_OBSTACLE
             bands = [_band(a, b, max(s.half, 0.5)) for a, b in zip(s.poly, s.poly[1:], strict=False)] if s.line else [s.poly]
             obstacles += [Obstacle(tuple(b), weight, inner=True) for b in bands]
             continue
@@ -327,6 +334,8 @@ def classify(
             # surely as another name would (Hayakawa's weapon rack under the granary, feature 267)
             obstacles.append(Obstacle(tuple(s.poly), WEIGHT_TEXT))
 
+        elif s.busy and s.kind != kind:
+            obstacles.append(Obstacle(tuple(s.poly), WEIGHT_OBSTACLE))  # ground in rows no other name can be read on
         elif s.kind in GROUND_KINDS or _is_background(s, view):
             # a ground's drawn border is ink even where its floor is free space (Ochiba's RESIDENCE on the vegetable
             # garden's dashed edge, feature 267); the border of the ground a caption names is its own, and waived
@@ -359,12 +368,8 @@ def _band(a: Pt, b: Pt, half: float) -> Poly:
     return [(a[0] + nx, a[1] + ny), (b[0] + nx, b[1] + ny), (b[0] - nx, b[1] - ny), (a[0] - nx, a[1] - ny)]
 
 
-def subject_of(caption: Shape, shapes: list[Shape]) -> Subject | None:
-    """A caption's subject: the non-text shapes of the tagged element it sits in (its `<g data-kind>`) - or, for a
-    caption tagged on its own, the nearest drawn shape of its kind - as a point subject beside which it stands; an
-    area subject when the caption already lies inside it. None when there is nothing drawn for it to name."""
-    if not caption.kind or caption.kind == "-":
-        return None
+def own_parts(caption: Shape, shapes: list[Shape]) -> list[Shape]:
+    """The drawn shapes a caption names (see `subject_of`), empty when nothing is drawn for it."""
     own = [s for s in shapes if s.group == caption.group and s.group and s.tag != "text" and not s.leader]
     # a group naming several things (two clerks' seats, each with its label) gives a caption the shape it lies in, not
     # the group's whole extent - which set each label beside the group's middle (feature 267)
@@ -378,16 +383,29 @@ def subject_of(caption: Shape, shapes: list[Shape]) -> Subject | None:
     if not own:
         same = [s for s in shapes if s.kind == caption.kind and s.tag != "text" and not s.leader]
         if not same:
-            return None
+            return []
         # the shape of its kind the caption lies in (Ubame's shuttered wing: its name sits in the wing's rect, and the
         # nearest shape of the kind was a shutter line, which read the name as a point caption far off - feature 267)
         held = [s for s in same if s.tag == "rect" and inside(caption.center[0], caption.center[1], s.poly)]
         own = [min(held, key=lambda s: _area(s.poly))] if held else cluster_of(min(same, key=lambda s: math.dist(_mid(s.poly), caption.center)), same, 2 * caption.size)
+    return own
+
+
+def subject_of(caption: Shape, shapes: list[Shape]) -> Subject | None:
+    """A caption's subject: the non-text shapes of the tagged element it sits in (its `<g data-kind>`) - or, for a
+    caption tagged on its own, the nearest drawn shape of its kind - as a point subject beside which it stands; an
+    area subject when the caption already lies inside it. None when there is nothing drawn for it to name."""
+    if not caption.kind or caption.kind == "-":
+        return None
+    own = own_parts(caption, shapes)
+    if not own:
+        return None
     if len(own) == 1 and own[0].tag == "rect":
         poly = own[0].poly
     else:
         x0, y0, x1, y1 = bbox([p for s in own for p in s.poly])
         poly = [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
+        poly = stepped_subject(poly, own, caption.center)
     ang = math.degrees(math.atan2(poly[1][1] - poly[0][1], poly[1][0] - poly[0][0])) if len(poly) == 4 else 0.0
     area = inside(caption.center[0], caption.center[1], poly)
     # an elongated area is named ALONG its length, as a map names a river band (feature 267: Hayakawa's river, a tall
@@ -395,6 +413,50 @@ def subject_of(caption: Shape, shapes: list[Shape]) -> Subject | None:
     x0, y0, x1, y1 = bbox(poly)
     along = 90.0 if area and (y1 - y0) > ELONGATED * max(x1 - x0, 1e-9) else 0.0
     return Subject("area" if area else "point", tuple(poly), angle=along if area else ang)
+
+
+def leader_to_ink(p: Placement, parts: list[Shape]) -> Placement:
+    """A leader ends on the drawn thing it names, not on the box around its parts: a barge moored by lines and three
+    pines are boxed with empty water or ground in the box's corner, and a leader to the corner named nothing (feature
+    283 - the tax barge's and the old pines' leaders ended 5-6 ft short)."""
+    from shapely.geometry import LineString, Point, Polygon
+    from shapely.ops import nearest_points, unary_union
+
+    if p.leader is None or not parts:
+        return p
+    a = Point(p.leader[0])
+    ink = unary_union([LineString(s.poly).buffer(max(s.half, 0.5)) if s.line else Polygon(s.poly) for s in parts if len(s.poly) >= (2 if s.line else 3)])
+    if ink.is_empty or ink.distance(Point(p.leader[1])) < 1.5:
+        return p
+    tip = nearest_points(ink, a)[0]
+    d = a.distance(tip)
+    trim = min(1.0, d / 4)
+    ux, uy = (tip.x - a.x) / d, (tip.y - a.y) / d
+    return replace(p, leader=(p.leader[0], (tip.x - ux * trim, tip.y - uy * trim)))
+
+
+BLOCK_PX = 2000.0
+"""A part big enough to be a block of a building (about 220 sq ft): a notice board's legs, a sanctuary's steps or a mat
+are parts of one thing, not blocks that can stand in echelon."""
+STEPPED = 0.85
+"""How much of its box a multi-part subject must fill to be named against the box: under it the parts leave an empty
+corner (Hayakawa's residence, two blocks in echelon), and a caption and its leader set against the box land in that
+corner, on nothing (feature 283 - RESIDENCE's leader ended 4 ft short of the house, under INNER COURT)."""
+
+
+def stepped_subject(box: Poly, own: list[Shape], at: Pt) -> Poly:
+    """The outline a caption outside a multi-part subject is set against: the parts' box where they fill it, else the
+    largest part - a caption beside one block of a stepped house names the house, and a leader to it ends on it."""
+    from shapely.geometry import Polygon
+    from shapely.ops import unary_union
+
+    blocks = [s for s in own if s.tag == "rect" and _area(s.poly) >= BLOCK_PX]
+    if len(blocks) < 2 or inside(at[0], at[1], box):
+        return box
+    x0, y0, x1, y1 = bbox([p for s in blocks for p in s.poly])
+    if unary_union([Polygon(s.poly) for s in blocks]).area >= STEPPED * (x1 - x0) * (y1 - y0):
+        return box
+    return list(max(blocks, key=lambda s: _area(s.poly)).poly)
 
 
 def cluster_of(seed: Shape, same: list[Shape], reach: float) -> list[Shape]:
@@ -503,12 +565,14 @@ def seat(src: str, kinds: set[str] | None = None) -> tuple[list[Finding], list[t
                 index.add(Obstacle(tuple(_band(done.leader[0], done.leader[1], 1.0)), WEIGHT_TEXT))
 
         cw = char_w_of(head.element, head.text, head.size)
-        p = place(" ".join(lines), head.size, sub, index, view, lines=_as_head(caps, cw) if len(caps) > 1 else None, char_w=cw)
+        lead = leader_blockers(shapes, skip, placed, sub)
+        p = place(" ".join(lines), head.size, sub, index, view, lines=_as_head(caps, cw) if len(caps) > 1 else None, char_w=cw, leader_index=lead)
         p = hand_seat_if_no_better(p, caps, sub, index)
         if p.position == HAND:
             placed.append((caps, p))
             continue  # at its seat as it stands: the hand's own seat won, so nothing is rewritten or reported
 
+        p = leader_to_ink(p, own_parts(head, shapes))
         placed.append((caps, p))
         want = _line_centers(p, [c.size for c in caps], [len(c.lines) for c in caps])
         off = any(math.dist(w, c.center) > TOLERANCE for w, c in zip(want, caps, strict=True))
@@ -521,6 +585,25 @@ def seat(src: str, kinds: set[str] | None = None) -> tuple[list[Finding], list[t
         elif p.leader is not None and (have is None or max(math.dist(have.poly[0], p.leader[0]), math.dist(have.poly[-1], p.leader[1])) > TOLERANCE):
             findings.append(Finding(head.kind, head.text, "a missing or misplaced leader", p))
     return findings, placed
+
+
+GLYPH_MAX_PX = 600.0
+"""The largest drawn thing a leader may not end against, in px (a well's curb is 24 x 24): a tub, a stone, a basin -
+beside the feature a leader names, the tip would name it instead. A building is larger and is what leaders point at."""
+
+
+def leader_blockers(shapes: list[Shape], skip: set[int], placed: list[tuple[list[Shape], Placement]], sub: Subject) -> ObstacleIndex:
+    """What a caption's leader may not pass over or end against (feature 283): every other caption - those still where
+    the hand set them and those already seated - and every small glyph that is not part of what the caption names."""
+    own = list(sub.poly)
+    out = [Obstacle(tuple(s.poly), WEIGHT_TEXT) for i, s in enumerate(shapes) if s.tag == "text" and i not in skip]
+    out += [Obstacle(done.block, WEIGHT_TEXT) for _caps, done in placed]
+    out += [
+        Obstacle(tuple(s.poly), WEIGHT_OBSTACLE)
+        for s in shapes
+        if s.tag != "text" and s.filled and not s.line and not s.leader and s.kind != "door" and 0 < _area(s.poly) <= GLYPH_MAX_PX and not _box_within(s.poly, own)
+    ]
+    return ObstacleIndex(out)
 
 
 #: Width per character, in ems, of a hand sheet's captions by their face (feature 267). The standard's 0.55 holds for the

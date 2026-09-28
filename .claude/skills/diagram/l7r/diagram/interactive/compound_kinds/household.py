@@ -40,15 +40,16 @@ class Residence(Kind):
     and about 67 tsubo (about 2,380 sq ft), as restored to its Meiji plan, for a retainer of 500 to 1,000 koku; the hand sheets' wings, about 180 to
     200 ft long, are larger than either, a guess. Both massings are attested and each sheet takes one: one block is the ordinary posting's form, and a
     residence drawn in echelon reads as one its holders have added to. That a corridor joins each hall to the last
-    is this project's reading; no source read says how Katsura's echelon halls are joined. The service strip on
-    the shady rear is reasoned from the sun rule, with no source read for it, and that the residence out-measures
+    is this project's reading; no source read says how Katsura's echelon halls are joined. Of the service strip on
+    the shady rear only its storehouse, behind the house, is read (the Higuchi house); the rest is reasoned from the
+    sun rule, and that the residence out-measures
     every other domestic building is this project's own reading of the compound; no page a reader can open ranks
     the footprints. A garden standing where the court would be, between the gate and the entrance, is a guess.
     Each labeled room is a suite of several rooms compressed to one label, a schematic convenience.
 
     Caveat: That a corridor joins each hall to the last is this project's reading; no source read says how
-    Katsura's echelon halls are joined. The service strip on the shady rear is reasoned from the sun rule, with no
-    source read for it, and that the residence out-measures every other domestic building is this project's own
+    Katsura's echelon halls are joined. Of the service strip on the shady rear only its storehouse, behind the
+    house, is read (the Higuchi house); the rest is reasoned from the sun rule, and that the residence out-measures every other domestic building is this project's own
     reading of the compound; no page a reader can open ranks the footprints. A garden standing where the court
     would be, between the gate and the entrance, is a guess. Each labeled room is a suite of several rooms
     compressed to one label, a schematic convenience.
@@ -163,12 +164,11 @@ class ServantsQuarters(Kind):
     What: A long, narrow single-story range - a nagaya - where the household's domestic servants live: the
     cooks, grooms and cleaners who keep the compound running, on annual contracts.
 
-    Why: A samurai household's servants lived inside their master's walls - no page read puts them in a house
-    of their own. A large household housed them in a range along the street boundary at the front, forming
-    the wall itself, with the gate's roof running on from the range's, or in the rooms of the gate; a smaller
-    house had no range, and its few servants, most likely, slept under the main roof, in the storerooms and service rooms.
-    Here the range stands in the shady north rear, behind the residence, which is the compound's service
-    strip, backing the rear wall beside the vegetable plot and the family privy.
+    Why: A samurai household's servants lived inside their master's walls, never in houses of their own - in a
+    range along the boundary, in the rooms of the gate, or for a small household in rooms off the kitchen.
+    The shady north rear, behind the residence, is the compound's service strip, so the servants' range backs the
+    rear wall there, beside the household's storehouses and the family privy; the vegetable plot stands wherever it
+    gets its sun.
 
     Note: Servants housed inside the walls, the range along the front boundary, and a smaller house with no range are recorded findings; where that smaller house's servants slept is a guess, on no page read. The
     program classes the building's size as a guess: a nagaya for about ten servants, with no measured example
@@ -407,6 +407,33 @@ class Kennel(Kind):
     """
 
     key = "kennel"
+
+
+class Storehouse(Kind):
+    """
+    What: The household's own earth-walled storehouse, a dozo, where the family keeps its goods and the kitchen its
+    stores, standing behind the house beyond its rear garden or yard.
+
+    Why: A 150-koku retainer's house at Matsushiro keeps, with the house, a vegetable garden and two storehouses, and
+    the Takayama intendancy kept a kitchen storehouse beside its rice store. At the Higuchi house, also at Matsushiro,
+    the storehouse stands north with the main house and the rowhouse, beyond a yard behind the house, the garden
+    to the south. A household storehouse was small: the Yokota house's is 2.7 by 3.6 m, and the common size was about 2
+    by 3 ken, some 12 by 18 ft. A plastered storehouse is the one building made not to burn, so it keeps no
+    fire-water tub.
+
+    Note: The storehouse, its place behind the house and its size follow the record, drawn at the common 2 by 3 ken.
+    How many storehouses a household kept - two here, as the Yokota house kept - is a guess for any one sheet.
+
+    Caveat: How many storehouses a household kept - two here, as the Yokota house kept - is a guess for any one sheet.
+
+    Name: storehouse
+    Covers: the household storehouse and its label
+    Label: accurate
+    Sources: matsushiro-bukeyashiki, takayama-jinya-gifu, matsushiro-kankou-higuchi, kojodan-higuchi, bunka-yokota-dozo, suumo-kura-size
+    Entry: research/buildings.html - 'The shady rear is the service strip', 'Where did a residence keep its vegetable garden, and how big was it?', 'Fire discipline: halls burn, kura endure'
+    """
+
+    key = "storehouse"
 
 
 class FireWaterTubs(Kind):

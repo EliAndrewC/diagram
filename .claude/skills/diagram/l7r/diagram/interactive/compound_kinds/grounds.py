@@ -63,11 +63,13 @@ class InnerCourt(Kind):
     Note: The household inside the compound follows the record; the residence-behind-the-office order is
     Chinese regulation (Neixiang), while the Japanese pages read show no front-and-rear order - at Takayama the
     residence stood beside the office, to the west. The two-court split and the formal garden south of the
-    reception rooms follow the record. The service strip along the shady north rear is this record's own
-    reasoning from where the formal garden sat, not something a source describes.
+    reception rooms follow the record. That a household's storehouse stood behind the house is read, at the Higuchi
+    house; the rest of the service strip along the shady north rear is this record's own reasoning from where the
+    formal garden sat, not something a source describes.
 
-    Caveat: The service strip along the shady north rear is this record's own reasoning from where the formal
-    garden sat, not something a source describes.
+    Caveat: That a household's storehouse stood behind the house is read, at the Higuchi house; the rest of the
+    service strip along the shady north rear is this record's own reasoning from where the formal garden sat, not
+    something a source describes.
 
     Name: inner court
     Covers: the inner court's ground and its label
@@ -226,29 +228,58 @@ class CompoundGarden(Kind):
     key = "garden"
 
 
+class RearGarden(Kind):
+    """
+    What: A garden behind the house, in the house's shade, between it and the household's storehouses.
+
+    Why: At the Higuchi house at Matsushiro a garden lies behind the main house, and the storehouse stands beyond it;
+    the formal garden took the sunny south, and the ground behind the house carried the household's own buildings.
+
+    Note: A garden behind the house, with the storehouse beyond it, follows the record, and the map draws it as open
+    garden ground. What grew in a rear garden is a guess: no source read describes one's planting.
+
+    Caveat: What grew in a rear garden is a guess: no source read describes one's planting.
+
+    Name: rear garden
+    Covers: the rear garden and its label
+    Label: accurate
+    Sources: kojodan-higuchi, matsushiro-kankou-higuchi
+    Entry: research/buildings.html - 'The shady rear is the service strip'
+    """
+
+    key = "rear garden"
+
+
 class VegetableGarden(Kind):
     """
-    What: A vegetable garden for the household's own table, worked in the service ground behind the residence.
+    What: A vegetable garden for the household's own table, set where it gets its sun.
 
     Why: Samurai grew their own vegetables, on anything from a kitchen plot to half their grounds. The
-    Boso-no-mura house of a middle-rank samurai family has a soup-greens plot of about 1,070 sq ft, planted
-    mainly with leafy greens, on the west side of the house; at Matsushiro a 150-koku retainer's house kept
-    about half its grounds in vegetable field. The formal garden took the south side of the house, so the
-    vegetable garden lay off it.
+    Boso-no-mura house of a middle-rank samurai family, as the museum reconstructs it, has a soup-greens plot of
+    about 1,070 sq ft, planted mainly with leafy greens, on the west side of the house; at Matsushiro a 150-koku
+    retainer's house keeps about half its grounds in vegetable field today, and the Higuchi house's field lay south
+    of its pond, where its formal garden is now. A jin'ya had a vegetable garden inside its grounds, a daikan's
+    office a field of its own, and a Chinese county office listed its plot behind the residence gate after the
+    kitchen and the stable. A bed of vegetables that want full sun needs about six hours of direct sun a day.
 
-    Note: Its size is one of two attested forms, a soup-greens plot or a field over about half the grounds, and
-    each sheet takes its own. Seating it to the north of the house is a guess, reasoned from the formal garden
-    taking the sunny south: no vegetable garden north of a house was found, and the one plot whose side is given
-    lay to the west.
+    Note: At a residence or a walled compound its size is one of two attested forms, a soup-greens plot or a field
+    over about half the grounds, and each sheet takes its own; its seat is one of four attested ones - west of the
+    house, south beside the formal garden, the rear service ground, or a parcel of its own ("Where does a walled
+    compound keep its vegetable garden, and does the sun decide it?"). The sun rules out a seat where the bed gets under
+    its six hours in the autumn ("How many hours of direct sun does a kitchen bed need?"; a sheet may declare a
+    half-shade bed, which needs three). Where the west and the rear lie in the shade of the house and the kitchen, the
+    bed stands in the inner court beside the formal garden; at a country shrine it is the resident keeper's plot, near
+    the dwelling on whatever open ground gets its sun. That a household chose its seat by the sun is a guess, and so are
+    a country shrine keeper's plot's place and size: no source read places or measures one.
 
-    Caveat: Seating it to the north of the house is a guess, reasoned from the formal garden taking the sunny
-    south: no vegetable garden north of a house was found, and the one plot whose side is given lay to the west.
+    Caveat: That a household chose its seat by the sun is a guess, and so are a country shrine keeper's plot's place and
+    size: no source read places or measures one.
 
     Name: vegetable garden
     Covers: the kitchen garden's beds and label
     Label: accurate
-    Sources: boso-no-mura-takei, matsushiro-bukeyashiki, shoinzukuri-jawiki
-    Entry: research/buildings.html - 'Where did a residence keep its vegetable garden, and how big was it?', 'The shady rear is the service strip'
+    Sources: boso-no-mura-takei, matsushiro-bukeyashiki, sanada-higuchi, kasama-iwama-jinya, kotobank-kisaku-daikansho, gujin-xie-yamen, atariya-nisho
+    Entry: research/buildings.html - 'Where did a residence keep its vegetable garden, and how big was it?', 'Where does a walled compound keep its vegetable garden, and does the sun decide it?'; research/homesteads.html - 'How many hours of direct sun does a kitchen bed need?'
     """
 
     key = "vegetable garden"

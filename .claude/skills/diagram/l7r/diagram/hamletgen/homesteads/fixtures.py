@@ -116,6 +116,8 @@ def shrine_corner_local(wx: float, wy: float, ca: float, sa: float) -> Pt:
     """A world offset (wx, wy) from the house center in the house's own frame, the inverse of the seat loop's
     `hx + lx * ca - ly * sa, hy + lx * sa + ly * ca`: the household shrine's corner is rolled by compass name."""
     return (wx * ca + wy * sa, -wx * sa + wy * ca)
+
+
 # THE PERSIMMON'S SIDE (269 B14, research/homesteads/218): "the dooryard in front of the house, most often, and behind it" -
 # the front the likelier, by how much no page says, so this hamlet's front share is rolled in this band (calibrated liberty).
 PERSIMMON_FRONT_BAND = (0.60, 0.85)

@@ -128,7 +128,18 @@ def test_the_gm_s_line_between_deviation_and_convention() -> None:
     assert sorted(k for k, fc in CLASSES.items() if fc.label == "deviation") == []  # the grave island became accurate as the Chinese form (feature 267)
     # `weir` joined them on 2026-09-12 (feature 230): the bar is drawn closing the brook bank to bank
     # because a half-river closure - the common old form - is a pixel or two at a 7 ft brook.
-    assert sorted(k for k, fc in CLASSES.items() if fc.label == "convention") == ["bund beans", "homestead bamboo", "household shrine", "shared bamboo grove", "stream", "weir", "well"]
+    # `threshing yard` joined them on 2026-09-28 (feature 282): about half the straw mats that covered a harvest yard are
+    # drawn, so each reads as a mat rather than the floor as a texture.
+    assert sorted(k for k, fc in CLASSES.items() if fc.label == "convention") == [
+        "bund beans",
+        "homestead bamboo",
+        "household shrine",
+        "shared bamboo grove",
+        "stream",
+        "threshing yard",
+        "weir",
+        "well",
+    ]
     beans = CLASSES["bund beans"].label_note
     assert beans.startswith("we have rendered the bund beans as") and "50 to 125 cm" in beans and "medium-green" in beans and "not found" in beans
     well = CLASSES["well"].label_note

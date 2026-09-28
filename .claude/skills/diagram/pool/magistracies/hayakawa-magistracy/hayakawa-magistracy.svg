@@ -8,6 +8,12 @@
 
   <defs>
     <!-- Tatami-style stipple for the garden / open courtyards -->
+    <!-- a worked bed's furrows (feature 283, a map drawing convention: a vegetable bed drawn in rows so it reads
+         apart from the stippled ornamental garden it may stand beside) -->
+    <pattern id="vegetable-rows" patternUnits="userSpaceOnUse" width="8" height="8">
+      <rect width="8" height="8" fill="#CDBF95"/>
+      <rect y="2.5" width="8" height="3" fill="#8FA36A"/>
+    </pattern>
     <pattern id="garden-stipple" patternUnits="userSpaceOnUse" width="14" height="14">
       <rect width="14" height="14" fill="#BFCFA0"/>
       <circle cx="3" cy="3" r="0.8" fill="#7A8C5C"/>
@@ -113,7 +119,7 @@
       <circle cx="1113" cy="515" r="6" fill="#D9B47A" stroke="#7A5430" stroke-width="0.8"/>
       <circle cx="1113" cy="550" r="6" fill="#D9B47A" stroke="#7A5430" stroke-width="0.8"/>
       <text x="1033.4" y="394.2" text-anchor="middle" font-size="8" font-style="italic" fill="#16303F"><tspan x="1033.4" dy="0.0">tax</tspan><tspan x="1033.4" dy="9.2">barge</tspan></text>
-    <line x1="1045.1" y1="406.1" x2="1083.3" y2="444.3" stroke="#16303F" stroke-width="0.64" stroke-linecap="round" data-leader="1"/>
+    <line x1="1045.1" y1="406.1" x2="1101.2" y2="444.4" stroke="#16303F" stroke-width="0.64" stroke-linecap="round" data-leader="1"/>
     
     </g>
     <!-- boatmen's shrine (a water-god shrine, research buildings 610 / feature 267 R41), at the bank street's LAND edge
@@ -270,8 +276,13 @@
        bay is the formal reception room a residence keeps even with an office
        hall (attested at Takayama's yakutaku). Occupant room-labels kept as the
        GM's schematic convention. -->
+  <!-- the family privy, seated before the residence's name in document order (feature 283) -->
+  <g data-kind="latrine" data-part-of="residence">
+    <rect x="462" y="220" width="18" height="14" fill="#7E726A" stroke="#3A2E1C" stroke-width="0.8"/>
+    <text x="509.2" y="215.2" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">family privy</text>
+  </g>
   <g data-kind="residence">
-    <text x="452.8" y="205.8" text-anchor="middle" font-size="11" font-weight="bold" letter-spacing="2" fill="#5C4830">RESIDENCE</text>
+    <text x="600" y="216" text-anchor="middle" font-size="11" font-weight="bold" letter-spacing="2" fill="#5C4830">RESIDENCE</text>
     <!-- West block: the private end - the inner rooms with the lineage's alcove, deepest, beside the kitchen,
          and the family's rooms toward the corridor (each label is a multi-room ZONE, not one room; engawa
          veranda along the south face). The reception moved to the east block on 2026-09-27 (GM: "fix what you
@@ -366,7 +377,7 @@
   <g data-kind="garden">
     <!-- top trimmed 4 px (feature 267 pass 2: the east block moved 4 ft south for the service alley behind the house) -->
     <rect x="460" y="326" width="240" height="124" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
-    <ellipse cx="530" cy="390" rx="55" ry="26" fill="#9CB4C8" stroke="#5C7488" stroke-width="1.2" data-kind="garden pond"/>
+    <ellipse cx="650" cy="392" rx="44" ry="22" fill="#9CB4C8" stroke="#5C7488" stroke-width="1.2" data-kind="garden pond"/>
     <!-- The guest's way in: no genkan - from the middle gate a stepping-stone path (roji) across the garden to a
          stone at the zashiki's veranda (feature 267 R07, buildings 300: the Koseki house's form; Hayakawa takes it,
          Ochiba and Ubame the genkan on the office hall) -->
@@ -379,26 +390,26 @@
       <ellipse cx="592" cy="386" rx="3" ry="2"/>
       <ellipse cx="592" cy="370" rx="3" ry="2"/>
       <ellipse cx="594" cy="354" rx="3" ry="2"/>
-      <ellipse cx="600" cy="338" rx="3" ry="2"/>
-      <ellipse cx="614" cy="332" rx="3" ry="2"/>
-      <ellipse cx="625" cy="325" rx="3" ry="2"/>
-      <rect x="633" y="318.5" width="12" height="5"/>
+      <ellipse cx="598" cy="339" rx="3" ry="2"/>
+      <ellipse cx="600" cy="327" rx="3" ry="2"/>
+      <rect x="592" y="318.5" width="12" height="5"/>
     </g>
     <!-- old pines -->
     <g data-kind="garden pines">
-      <circle cx="620" cy="348" r="9" fill="#5C7050" stroke="#3A4E38" stroke-width="0.8"/>
-      <circle cx="641" cy="362" r="7" fill="#5C7050" stroke="#3A4E38" stroke-width="0.8"/>
-      <circle cx="606" cy="364" r="6" fill="#5C7050" stroke="#3A4E38" stroke-width="0.8"/>
-      <text x="670.6" y="379.2" text-anchor="middle" font-size="8" font-style="italic" fill="#3A4E38">old pines</text>
+      <circle cx="628" cy="345" r="9" fill="#5C7050" stroke="#3A4E38" stroke-width="0.8"/>
+      <circle cx="664" cy="347" r="7" fill="#5C7050" stroke="#3A4E38" stroke-width="0.8"/>
+      <circle cx="688" cy="364" r="6" fill="#5C7050" stroke="#3A4E38" stroke-width="0.8"/>
+      <text x="717.0" y="350.6" text-anchor="middle" font-size="8" font-style="italic" fill="#3A4E38"><tspan x="717.0" dy="0.0">old</tspan><tspan x="717.0" dy="9.2">pines</tspan></text>
+    <line x1="705.0" y1="344.2" x2="694.6" y2="357.2" stroke="#3A4E38" stroke-width="0.64" stroke-linecap="round" data-leader="1"/>
     </g>
     <!-- stone lanterns -->
     <g fill="#9C8C70" stroke="#5C4830" stroke-width="0.8" data-kind="stone lantern">
-      <rect x="468" y="410" width="4" height="7"/>
-      <circle cx="470" cy="407" r="3.5"/>
+      <rect x="686" y="426" width="4" height="7"/>
+      <circle cx="688" cy="423" r="3.5"/>
       <rect x="596" y="424" width="4" height="7"/>
       <circle cx="598" cy="421" r="3.5"/>
     </g>
-    <text x="620.0" y="385.5" text-anchor="middle" font-size="10" font-style="italic" fill="#3A2E1C"><tspan x="620.0" dy="0.0">inner</tspan><tspan x="620.0" dy="11.5">garden</tspan></text>
+    <text x="630.0" y="435.5" text-anchor="middle" font-size="10" font-style="italic" fill="#3A2E1C"><tspan x="630.0" dy="0.0">inner</tspan><tspan x="630.0" dy="11.5">garden</tspan></text>
   </g>
 
   <!-- Bath: a small addition on the kitchen range's east wall, 18 x 12 ft (feature 267 R09, buildings 320: a bath
@@ -426,10 +437,25 @@
   </g>
 
   <!-- Garden well -->
-  <g data-kind="well" data-part-of="garden">
-    <rect x="645" y="398" width="24" height="24" fill="#9C8C70" stroke="#5C4830" stroke-width="1.2"/>
-    <circle cx="657" cy="410" r="7" fill="#2D2A24"/>
-    <text x="682.1" y="432.4" text-anchor="middle" font-size="9" font-style="italic" fill="#3A2E1C">well</text>
+  <g data-kind="well" data-part-of="vegetable garden">
+    <!-- at the bed's south-west corner, where it waters the bed (feature 283) -->
+    <rect x="480" y="420" width="24" height="24" fill="#9C8C70" stroke="#5C4830" stroke-width="1.2"/>
+    <circle cx="492" cy="432" r="7" fill="#2D2A24"/>
+    <text x="518.4" y="434.5" text-anchor="middle" font-size="9" font-style="italic" fill="#3A2E1C">well</text>
+  </g>
+
+  <!-- Household storehouses (dozo), two as the Matsushiro retainer's house kept (feature 283: the shady rear the
+       vegetable garden left, research buildings 230; an 8 ft alley left to the privies). Plastered, so no fire-water tub; each 12 by 18 ft, the common two
+       by three ken (the Yokota house kept two, 9 by 12 ft and 18 by 15 ft), standing behind the house as the Higuchi house's did. -->
+  <g data-kind="storehouse">
+    <rect x="590" y="160" width="54" height="36" fill="#F2EFE4" stroke="#4A3318" stroke-width="2.5"/>
+    <rect x="610" y="188" width="14" height="8" fill="#4A3318" data-kind="door"/>
+    <text x="617.0" y="179.9" text-anchor="middle" font-size="7" font-weight="bold" fill="#3A2E1C">storehouse</text>
+  </g>
+  <g data-kind="storehouse">
+    <rect x="666" y="160" width="54" height="36" fill="#F2EFE4" stroke="#4A3318" stroke-width="2.5"/>
+    <rect x="712" y="183" width="8" height="12" fill="#4A3318" data-kind="door"/>
+    <text x="694.0" y="175.9" text-anchor="middle" font-size="7" font-weight="bold" fill="#3A2E1C">storehouse</text>
   </g>
 
   <!-- Rear service strip (north band behind the residence) - the shady rear was
@@ -491,23 +517,18 @@
   </g>
   <g data-kind="latrine" data-part-of="residence">
     <rect x="672" y="220" width="18" height="14" fill="#7E726A" stroke="#3A2E1C" stroke-width="0.8"/>
-    <text x="646.7" y="215.5" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830">guest privy</text>
-  </g>
-  <g data-kind="latrine" data-part-of="residence">
-    <rect x="462" y="220" width="18" height="14" fill="#7E726A" stroke="#3A2E1C" stroke-width="0.8"/>
-    <text x="515.8" y="186.2" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830"><tspan x="515.8" dy="0.0">family</tspan><tspan x="515.8" dy="9.2">privy</tspan></text>
-    <line x1="501.9" y1="198.1" x2="480.7" y2="219.3" stroke="#5C4830" stroke-width="0.64" stroke-linecap="round" data-leader="1"/>
+    <text x="703.0" y="206.8" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830"><tspan x="703.0" dy="0.0">guest</tspan><tspan x="703.0" dy="8.6">privy</tspan></text>
   </g>
 
-  <!-- Vegetable garden filling the rest of the rear strip (behind the east
-       residence block) - a vegetable plot on the shady north/service side, the
-       band the servants' quarters did not take. Labeled for what it is: the kitchen
-       is boxed into the SW service corner with no room for an adjacent plot, so the
-       compound's vegetables come from this rear plot (servant-tended) + outside via
-       the kitchen postern - normal for a compact walled magistracy (GM 2026-07). -->
+  <!-- Vegetable garden: the west part of the inner garden, before Hajime's quarters and west of the roji, the pond and
+       the old pines moved before the reception (feature 283, research buildings 405: the seat is a knob and the sun
+       decides it; building-review round 2: the bed had still taken the reception's front). The rear strip it stood in
+       had 1.5 h of sun in the shoulder month, the reception's shadow; the west and the rear are all shaded here, so the
+       inner court's garden is the one seat left; 7.5 h here, at the size knob's low end (research buildings 400). The
+       well stands at its south-west corner; servants reach it round the kitchen's west and south sides and along the strip below the karo's house. -->
   <g data-kind="vegetable garden">
-    <rect x="540" y="156" width="160" height="44" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
-    <text x="620.0" y="180.5" text-anchor="middle" font-size="9" font-style="italic" fill="#3A4E38">vegetable garden</text>
+    <rect x="466" y="326" width="110" height="88" fill="url(#vegetable-rows)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
+    <text x="521.0" y="372.5" text-anchor="middle" font-size="9" font-style="italic" fill="#3A4E38">vegetable garden</text>
   </g>
 
   <!-- Shrine grove (chinju no mori): the two standalone shrines + their approach torii

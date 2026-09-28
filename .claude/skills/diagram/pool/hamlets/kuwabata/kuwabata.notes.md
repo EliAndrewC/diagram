@@ -735,3 +735,11 @@ future-work/farming-communities.md's OPEN 2026-09-28 (269 B26, PARTIAL) entry st
 (under the 6,000 floor)", the figure from the 269-landing commit before today's review round re-rolled the pool; that
 entry's Kuwabata figure is now stale and wants a re-measurement there. The entry's title still names three maps
 short of their rolled area, so it stays open regardless - this note only corrects Kuwabata's own number.
+
+## 2026-09-28 (feature 282): the harvest weather recorded, and nothing drawn
+
+Feature 282 draws every threshing yard as a floor of straw mats and, where a map declares changeable harvest weather,
+a drying rack by each house. This hamlet threshes no rice, so it has no threshing floor (above) and neither is drawn
+here. Its manifest gains `meta.harvest_weather: settled` (the regional default, which applies where a map declares no weather;
+never rolled) and its forecourts' outlines recorded to a thousandth (none moved); neither draws anything on a map that
+inks no threshing floor.
