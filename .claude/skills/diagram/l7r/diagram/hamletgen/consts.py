@@ -509,8 +509,8 @@ FAN_ASPECTS = (0.88, 0.95, 1.0, 1.08, 1.16)
 # turn into a ditch: it is TAPPED at an intake on one bank and keeps its own course below it, so the
 # hamlet's brook now passes the fan's head and runs on down one flank to the frame.
 #
-# THE INTAKE'S FORM IS A KNOB because the record attests two and prefers neither: in old Japan "in many
-# cases no intake weir was built at all - water was taken naturally", and where the level would not serve
+# THE INTAKE'S FORM IS A KNOB (research/water.html "Is there a weir at the intake?") because the record
+# attests two and prefers neither: in old Japan "in many cases no intake weir was built at all - water was taken naturally", and where the level would not serve
 # a weir was built, of timber frames packed with stone, gabions and brushwood. The record gives no
 # proportion between them, so the roll is EVEN and that evenness is a GUESS (labeled in the entry).
 INTAKE_FORMS = ("weir", "open")

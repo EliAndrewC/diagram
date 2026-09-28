@@ -216,7 +216,7 @@ class ManureHeap(Kind):
     Covers: `farm_fixtures[kind=manure]`
     Label: guess
     Sources: jawiki-koedame, artic-pigsty-latrine
-    Entry: research/homesteads.html - 'The farmstead's fixtures'
+    Entry: research/homesteads.html - 'Where did the manure heap stand, and what went into it?'; 'The farmstead's fixtures'
     """
 
     key = 'manure heap'

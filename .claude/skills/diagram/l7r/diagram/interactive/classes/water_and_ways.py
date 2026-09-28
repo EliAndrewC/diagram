@@ -68,7 +68,7 @@ class IrrigationDitch(Kind):
     Covers: `field_ditches` whose role is not `drain` (except on a dike-pond field, whose canals are the pond canal), and `channels` not leaving a drain - the head race, the supply canals, the delivery ditches, a source-to-field feed
     Label: accurate
     Sources: tabayashi-1987, jsidre-minumadai, jsslkx-002-2021, nougyoudoboku-matsutan, bungotakada-tagoshi
-    Entry: research/water.html - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'The head-race forks', 'Where does the brook stop being a brook and become the ditch'; research/fields.html - 'Where does a field's water come from, and how is it shared out?'
+    Entry: research/water.html - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'The head-race forks', 'Where does the brook stop being a brook and become the ditch', 'Where on the brook's bank is the intake'; research/fields.html - 'Where does a field's water come from, and how is it shared out?'
     """
 
     key = "irrigation ditch"
@@ -125,7 +125,7 @@ class Weir(Kind):
     Covers: `weirs` - the bar across the brook at a weir hamlet's intake
     Label: convention
     Sources: maff-toshuko-history, jsidre-miwa-2023, jawiki-seki, japanriver-koborebanashi-21, wangzhen-nongshu-18
-    Entry: research/water.html - 'Where does the brook stop being a brook and become the ditch'
+    Entry: research/water.html - 'Is there a weir at the intake', 'Where does the brook stop being a brook and become the ditch'
     """
 
     key = "weir"

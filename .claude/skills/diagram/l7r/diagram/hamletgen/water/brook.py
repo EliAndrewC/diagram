@@ -334,7 +334,7 @@ def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
     """What stands where the head race leaves the brook - a WEIR, or nothing at all.
 
     The record attests both and gives no proportion, so `plan.intake` is rolled per map
-    (research/water.html, "Where does the brook stop being a brook and become the ditch"). On an `open`
+    (research/water.html, "Is there a weir at the intake?"). On an `open`
     hamlet the point is marked by the junction itself: the brook runs straight on and the race leaves its
     bank at an acute angle, which is a fork a reader can see. On a `weir` hamlet a bar of stone-packed
     timber crib crosses the brook, set OBLIQUE - the old weirs ran diagonally upstream from the intake
