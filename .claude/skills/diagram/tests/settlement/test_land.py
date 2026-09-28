@@ -693,7 +693,7 @@ def test_rows_cut_to_plot_writes_segments_for_a_convex_plot_and_keeps_the_clip_f
     assert s.out[z] == '<line x1="4.0" y1="30.0" x2="106.0" y2="30.0" stroke="#5C7A3E" stroke-width="2.4" opacity="0.75"/>' and "clipPath" not in "".join(s.out[z:])
     notch = [(0.0, 0.0), (100.0, 0.0), (100.0, 50.0), (60.0, 50.0), (60.0, 20.0), (40.0, 20.0), (40.0, 50.0), (0.0, 50.0)]
     z2 = len(s.out)
-    s._rows_cut_to_plot(notch, [10.0, 30.0], 'stroke="#6E8B4A" stroke-width="1.6" opacity="0.8"', "veg", cls="vegetable ground")
+    s._rows_cut_to_plot(notch, [10.0, 30.0], 'stroke="#6E8B4A" stroke-width="1.6" opacity="0.8"', "veg", cls="tea dike")
     assert s.out[z2].startswith("<clipPath id=\"veg") and s.out[z2 + 1].startswith('<g clip-path="url(#veg') and s.out[z2 + 1].count("<line") == 2
 
 

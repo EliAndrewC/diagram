@@ -702,3 +702,12 @@ connector's bed where it passes through the belt; the track still reads through.
 The village windbreak belt is now drawn in one of two forms, the `windbreak_belt` knob (research/vegetation/270): this map
 rolled `mixed_broadleaf` (meta.windbreak_belt), the Chinese village grove's form - an irregular wood of rounded broadleaf
 crowns like the woods around it, with no conifer. The belt's record counts 389 broadleaf crowns and 34 bamboo marks; no clump seat moved.
+
+## 2026-09-28 (feature 269 E9): no duck pens, and the leftover re-rolled to pond
+
+By the GM's ruling of 2026-09-28 a form attested only in modern sources is not drawn. The duck pens are retired (269 B32;
+research/archetypes/210 - the delta's ducks were herded in the fields, not penned at the fish ponds), so this map draws
+its seven pig sties and no pen. The dike-crop knob now rolls mulberry, fruit or tea (269 B34, archetypes/230); this map
+stays pinned to mulberry. The leftover knob lost its vegetable-ground form, and seed 21 now rolls `pond`: the whole block
+is dug, 29 ponds with no leftover parcel, where the three unconverted parcels drew as tilled rows before. The "What the
+GM's audit added" section above describes the map as it was on 2026-08-28.

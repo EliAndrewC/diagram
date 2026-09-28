@@ -78,12 +78,9 @@ SPEC_CLASSES = [
     "fry pond",
     "manure pit",
     "sluice gate",
-    "sugarcane dike",
-    "banana dike",
     "fruit dike",
-    "vegetable ground",
+    "tea dike",
     "pig sty",
-    "duck pen",
 ]
 
 
@@ -310,9 +307,8 @@ def test_a_sibling_pair_naming_an_unknown_class_is_refused() -> None:
         ("irrigation ditch", "drainage ditch"),
         ("pond sluice", "sluice gate"),
         ("mulberry dike", "perimeter dike"),
-        ("sugarcane dike", "perimeter dike"),
-        ("banana dike", "perimeter dike"),
         ("fruit dike", "perimeter dike"),
+        ("tea dike", "perimeter dike"),
     ],
 )
 def test_the_confusable_water_and_dike_pairs_link_both_ways(a: str, b: str) -> None:

@@ -91,3 +91,15 @@ def test_an_alley_is_drawn_at_the_LINEWORK_FLOOR_rather_than_to_true_scale() -> 
     s.alley([(100.0, 100.0), (400.0, 100.0)])
     assert len(s.M["alleys"]) == before + 1
     assert s.M["alleys"][-1]["w"] == pytest.approx(s.lw(10)), "the linework floor decides, not the true 10 ft"
+
+
+def test_an_alley_is_EARTH_with_its_line_of_drain_boards_down_the_middle() -> None:
+    """269 B40, research/cities/fabric/160: the drain boards laid in a line down a roji's middle are read, so the
+    alley's top mark is a dark board line of long dashes; the ground beside them is read nowhere, so it is drawn as
+    plain beaten earth (the hamlet lane's tread color), no longer the pale gravel with its speckle."""
+    s = _town()
+    s.alley([(100.0, 100.0), (400.0, 100.0)])
+    g = s.ground[-1]
+    assert 'stroke="#C9AE79"' in g["bed"] and "#C7BB9C" not in g["bed"], "an earth bed, not gravel"
+    assert 'stroke="#6B4F2A"' in g["top"] and 'stroke-dasharray="7,1.2"' in g["top"], "the board line, butted planks"
+    assert g["edge"] is None, "an unpaved lane has no curb"

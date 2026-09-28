@@ -368,19 +368,23 @@ KOSATSUBA_SITINGS = ("frontage", "waterside")  # the notice board on the busiest
 # 12 at the frontage optimum and called it defensible-but-off-optimum, which is exactly the shape of a
 # genuine two-answer question rather than a defect.
 
-# THE DIKE CROP - which of the dike-pond TYPES a hamlet is (feature 150, GM 2026-08-28 choosing audit A6).
-# The gazetteer office frames 桑基 (mulberry), 果基 (fruit), 蔗基 (sugar cane) and 蕉基 (banana) as a
-# succession of types across the region's history, not crops mixed on one dike; the late-1980s survey
-# carried by Ruddle & Zhong had cane dikes at 18% of the district against mulberry at 12%, while the
-# Ming-Qing heartland of Nanhai and Shunde was the silk case. Mulberry is weighted as the premodern norm
-# (a DEGREE, constitution XII); the others roll so two dike-pond hamlets can honestly differ.
-DIKE_CROPS = ("mulberry", "mulberry", "mulberry", "sugarcane", "banana", "fruit")
+# THE DIKE CROP - which dike-pond planting a hamlet is (feature 150, GM 2026-08-28 choosing audit A6; the
+# options re-read by 269 B34). research/archetypes/230: Qu Dajun (late 17th c.) has the villages' pond dikes
+# planted with fruit - lychee most, tea and mulberry next - and a modern history dates the fruit dike first
+# (mid-Ming) and the mulberry dike dominant through the Qing. So three premodern plantings: mulberry, fruit and
+# tea. The cane, banana and vegetable dikes are attested only in modern sources (one undated modern listing
+# for cane, nothing earlier than the modern surveys for banana and vegetable), and by the GM's ruling of
+# 2026-09-28 a form attested only in modern sources is not drawn - they are no longer options. The weighting
+# is a GUESS, a degree (constitution XII): mulberry the Qing norm at 3 in 6, fruit the oldest form at 2, tea,
+# named after lychee and never as a district's type, at 1.
+DIKE_CROPS = ("mulberry", "mulberry", "mulberry", "fruit", "fruit", "tea")
 
-# WHAT THE LEFTOVER PARCELS OF A WHOLESALE CONVERSION READ AS (feature 150 B2): standing rice, vegetable
-# ground (Fei: vegetables under the mulberry; the gazetteers: no rice inside a converted district), or no
-# leftover at all (every parcel a pond). Three attested states; the roll is even.
+# WHAT THE LEFTOVER PARCELS OF A WHOLESALE CONVERSION READ AS (feature 150 B2): standing rice, or no leftover
+# at all (every parcel a pond); the roll is even. A third state, tilled vegetable ground, rested on Fei's 1930s
+# silk village and the modern vegetable dike, and is retired by the GM's ruling of 2026-09-28 that a form
+# attested only in modern sources is not drawn (269 E9; research/archetypes/230).
 WATERWARD_DEPTH = 280.0  # px of wild water drawn outside a polder's dike face (feature 150 T55). Not "to the canvas edge": the crop keeps ~120 px past the content at most on this tier, so everything beyond was scattered, keep-out tested and thrown away - 18.4 s of a 40 s gen. 280 outlasts any hamlet crop measured (the tightest flank keeps 245 px of headroom), and `waterward_strips_run_off_the_frame` holds the line.
-LEFTOVER_FORMS = ("rice", "vegetables", "pond")
+LEFTOVER_FORMS = ("rice", "pond")
 POND_LAYOUT_MOSAIC = 0.5
 
 # THE SHARE OF THE BLOCK THAT CONVERTED in the end state. `apply_land_use(fraction=)` is the ECONOMIC

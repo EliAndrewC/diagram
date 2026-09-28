@@ -22,6 +22,11 @@ SNAPSHOT = pathlib.Path(__file__).resolve().parents[1] / "fixtures" / "classes_b
 #: in the snapshot or is a successor here, and the count moves with the table rather than by hand.
 SINCE_189: dict[str, tuple[str, ...]] = {
     "field ditch": ("irrigation ditch", "drainage ditch"),  # feature 230, GM 2026-09-12: the two ends of the field are two questions
+    # 269 E9, the GM 2026-09-28: a form attested only in modern sources is not drawn - retired with no successor
+    "sugarcane dike": (),
+    "banana dike": (),
+    "vegetable ground": (),
+    "duck pen": (),
 }
 #: Kinds the map draws that the snapshot's registry did not have at all.
 ADDED_SINCE_189: tuple[str, ...] = (
@@ -30,6 +35,7 @@ ADDED_SINCE_189: tuple[str, ...] = (
     "alder",  # feature 261: the belt's trees where it runs into the marsh
     "burial ground",  # feature 273: a hamlet's own burial ground, on its knob
     "retirement house",  # 269 B42: the old couple's own roof in the homestead, on the family-form knob
+    "tea dike",  # 269 E9 (B34): the attested tea dike, a third dike-crop form beside mulberry and fruit
 )  # feature 230: what stands where the head race leaves the brook; and a dike-pond's two-way canals, which the irrigation ditch mislabeled (pass 10)
 
 
@@ -101,7 +107,8 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
         kept = {k: t for k, t in was["siblings"].items() if k not in SINCE_189}
         assert {k: t for k, t in fc.siblings.items() if k in kept} == kept, key
         for retired in set(was["siblings"]) & set(SINCE_189):
-            assert set(SINCE_189[retired]) & set(fc.siblings), (key, retired)
+            if SINCE_189[retired]:  # a key retired with no successor (269 E9) leaves its pairs with nothing to name
+                assert set(SINCE_189[retired]) & set(fc.siblings), (key, retired)
         assert fc.what and fc.why and fc.label_note, key
         if fc.caveat:
             assert fc.caveat in fc.label_note, key

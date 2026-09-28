@@ -169,17 +169,17 @@ def test_the_dike_crop_and_leftover_roll_on_the_dike_pond_and_pin_elsewhere() ->
     """Feature 150 A6/B2: a dike-pond hamlet rolls its dike type and its leftover form; every other archetype is
     mulberry/rice by definition (the knobs have no meaning there and must not re-roll anything)."""
     crops = {hg.plan_site(hg.HamletSpec(name="X", seed=s, households=16, field_archetype="mulberry_dike_fishpond")).dike_crop for s in range(1, 60)}
-    assert crops == {"mulberry", "sugarcane", "banana", "fruit"}
+    assert crops == {"mulberry", "fruit", "tea"}, "the premodern plantings only (269 B34)"
     lefts = {hg.plan_site(hg.HamletSpec(name="X", seed=s, households=16, field_archetype="mulberry_dike_fishpond")).leftover for s in range(1, 40)}
-    assert lefts == {"rice", "vegetables", "pond"}
+    assert lefts == {"rice", "pond"}, "the vegetable ground retired (269 E9)"
     p = hg.plan_site(hg.HamletSpec(name="X", seed=3, households=15))
     assert (p.dike_crop, p.leftover) == ("mulberry", "rice")
-    p = hg.plan_site(hg.HamletSpec(name="X", seed=3, households=16, field_archetype="mulberry_dike_fishpond", dike_crop="banana", leftover="pond"))
-    assert (p.dike_crop, p.leftover) == ("banana", "pond")
+    p = hg.plan_site(hg.HamletSpec(name="X", seed=3, households=16, field_archetype="mulberry_dike_fishpond", dike_crop="tea", leftover="pond"))
+    assert (p.dike_crop, p.leftover) == ("tea", "pond")
     with pytest.raises(ValueError, match="dike_crop"):
-        hg.HamletSpec(name="X", seed=1, dike_crop="tea")
+        hg.HamletSpec(name="X", seed=1, dike_crop="banana")
     with pytest.raises(ValueError, match="leftover"):
-        hg.HamletSpec(name="X", seed=1, leftover="wheat")
+        hg.HamletSpec(name="X", seed=1, leftover="vegetables")
 
 
 def test_pond_stock_is_a_no_op_off_the_dike_pond() -> None:
@@ -190,7 +190,7 @@ def test_pond_stock_is_a_no_op_off_the_dike_pond() -> None:
     s = Settlement(W=400, H=400, seed=1)
     s.M["houses"] = [{"x": 100.0, "y": 100.0}]
     stage_pond_stock(s, a_plan())
-    assert "pig_sties" not in s.M and "duck_pens" not in s.M
+    assert "pig_sties" not in s.M
 
 
 def test_a_nonsense_pond_layout_is_refused() -> None:
@@ -251,10 +251,11 @@ def test_a_pond_whose_bank_cannot_hold_the_fixture_is_passed_over() -> None:
     stage_pond_stock(s, plan)
 
     declared = s.M["meta"]["pond_stock"]
-    assert declared["sties"] >= 0 and declared["pens"] >= 0
-    placed = len(s.M.get("pig_sties") or []) + len(s.M.get("duck_pens") or [])
+    assert declared["sties"] >= 0 and "pens" not in declared, "no duck pen is rolled (269 B32)"
+    placed = len(s.M.get("pig_sties") or [])
+    assert "duck_pens" not in s.M
     assert placed <= 2, "the pond whose bank is under the houses can hold nothing"
-    for rec in (s.M.get("pig_sties") or []) + (s.M.get("duck_pens") or []):
+    for rec in s.M.get("pig_sties") or []:
         assert rec.get("pond") != 0, "the pond whose bank could not hold a fixture was skipped"
 
 

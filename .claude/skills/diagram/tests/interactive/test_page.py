@@ -653,6 +653,19 @@ def test_a_lifted_box_gives_up_the_ground_a_structure_stands_on() -> None:
     assert hit_layer([sluice], ["pond sluice"], junk).count("M94.9,95.9") == 1, "a record it cannot read is skipped, not fatal"
 
 
+def test_a_record_s_auxiliary_polygon_is_held_clear_by_its_box() -> None:
+    """A glyph drawn outside its own `w` x `h` (a `poly` on the record) punches a second hole, its bounding box
+    padded the tenth of a pixel the coordinates round to; a `poly` of two points is no polygon and adds none."""
+    from l7r.diagram.interactive.page import hit_layer
+
+    sluice = '<line x1="90" y1="100" x2="110" y2="100" stroke="#37637F" stroke-width="2.4"/>'
+    rec = {"x": 100.0, "y": 100.0, "w": 10.0, "h": 8.0, "rot": 0, "poly": [[100.0, 104.0], [106.0, 104.0], [106.0, 110.0]]}
+    out = hit_layer([sluice], ["pond sluice"], {"pig_sties": [rec]})
+    assert "M99.9,103.9h6.2v6.2h-6.2Z" in out, out
+    two = {**rec, "poly": [[100.0, 104.0], [106.0, 104.0]]}
+    assert hit_layer([sluice], ["pond sluice"], {"pig_sties": [two]}).count("h6.2v6.2") == 0
+
+
 def test_a_rotated_footprint_is_held_clear_by_its_whole_box() -> None:
     """The hole is the axis-aligned box of the ROTATED glyph - a superset, so it is never smaller than
     the thing it protects."""
@@ -683,7 +696,7 @@ def test_every_keep_clear_key_makes_its_holes() -> None:
     """`HIT_KEEP_CLEAR` names manifest keys, and a key whose records carry some other shape - a well's
     `x,y,r`, a footbridge's `span`, a sluice gate's bare `x,y,rot` - yields NO hole and NO error
     (settlement-review round 3). So the count is asserted against a real manifest: one hole per record,
-    plus one per auxiliary polygon (a duck pen's `wet` apron), plus the canvas rectangle."""
+    plus one per auxiliary polygon (a `poly` apron; the duck pen's `wet` retired with it, 269 E9), plus the canvas rectangle."""
     import json
     from pathlib import Path
 
@@ -693,7 +706,7 @@ def test_every_keep_clear_key_makes_its_holes() -> None:
     for k in HIT_KEEP_CLEAR:
         assert man.get(k), f"{k} records nothing on this map, so the count below cannot see it go wrong"
     recs = [r for k in HIT_KEEP_CLEAR for r in man.get(k) or []]
-    aprons = sum(1 for r in recs for e in ("wet", "poly") if isinstance(r.get(e), list) and len(r[e]) > 2)
+    aprons = sum(1 for r in recs if isinstance(r.get("poly"), list) and len(r["poly"]) > 2)
     clip, _ = _keep_clear_clip(man)
     assert recs, "the reference dike-pond map records structures"
     assert clip.count("M") == 1 + len(recs) + aprons, f"{len(recs)} records + {aprons} aprons + the canvas"

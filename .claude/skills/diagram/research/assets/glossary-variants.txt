@@ -423,6 +423,8 @@ courses	coursing
 coursing	coursing
 coursing line	coursing
 court of the imperial stud	Court of the Imperial Stud
+courtesy name	courtesy name
+courtesy names	courtesy name
 cpc	CPC
 crenel	crenel
 crenelated	crenellated
@@ -510,6 +512,7 @@ dead space	dead ground
 declared fall	declared fall
 deep-water irrigation	deep-water irrigation
 degawari	degawari
+dejima	Dejima
 delivery ditch	delivery ditch
 delivery ditches	delivery ditch
 dem	DEM
@@ -1627,6 +1630,8 @@ loose-log drive	kanagashi
 loose-log driving	kanagashi
 louzeyuan	louzeyuan
 low stage	river stage
+low-trunk	low-trunk mulberry
+low-trunk mulberry	low-trunk mulberry
 lower mansion	lower mansion
 lower mansions	lower mansion
 lower yangtze	Lower Yangzi
@@ -2249,9 +2254,12 @@ san-no-torii	ichi-no-torii
 sanban yuan	three-squads courtyard
 sanctuaries	honden
 sanctuary	honden
+sand field	shatian
+sand fields	shatian
 sand junk	sand junk
 sand junks	sand junk
 sand sluice	sand sluice
+sand-field	shatian
 sando	sando
 sandō	sando
 sangji yutang	dike-pond

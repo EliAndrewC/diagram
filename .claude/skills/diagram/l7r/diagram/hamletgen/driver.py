@@ -24,7 +24,7 @@ from l7r.diagram.settlement import Settlement
 from l7r.diagram.sitegen.jobs import default_jobs as default_jobs  # noqa: PLC0414 - explicit re-export so `hamletgen.default_jobs` still resolves under --strict
 
 from .burial import stage_burial
-from .consts import FIELD_ARCHETYPES, REF_HOUSEHOLDS
+from .consts import DIKE_CROPS, FIELD_ARCHETYPES, LEFTOVER_FORMS, REF_HOUSEHOLDS
 from .frame import stage_crossings, stage_frame, stage_labels, stage_notice
 from .hinterland import stage_bamboo, stage_hinterland, stage_windbreak, stage_woodland
 from .homesteads import stage_appurtenances, stage_homesteads
@@ -90,7 +90,7 @@ STAGES = (
     stage_homesteads,  # the farmhouses, seated with no lane anywhere on the map
     stage_track,  # the connector and the field spur, derived from the placed houses
     stage_appurtenances,
-    stage_pond_stock,  # a dike-pond hamlet's pig sties and duck pens, on the ponds nearest the houses (feature 150 A3/A4)
+    stage_pond_stock,  # a dike-pond hamlet's pig sties, on the ponds nearest the houses (feature 150 A3; the duck pen retired, 269 B32)
     stage_burial,  # the hamlet's own burial ground at its edge (feature 273): seated against the placed houses and wells, reserving ground the web and the scrub work around
     # THE WEB RUNS LAST OF THE BUILT THINGS, after the byres, sheds and wells - not just after the
     # houses. It FILLS leftover ground, so everything that RESERVES ground has to be seated first;
@@ -587,8 +587,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap.add_argument("--archetype", choices=FIELD_ARCHETYPES, default=None, help="pin the field archetype (feature 150: the dike-pond is opt-in, like the polder)")
     ap.add_argument("--pond-layout", choices=("grid", "mosaic"), default=None, help="pin a dike-pond's arrangement (feature 150: one map per knob value is owed)")
     ap.add_argument("--manure-form", choices=("heap", "pit"), default=None, help="pin the manure fixture's form (feature 150 A2)")
-    ap.add_argument("--dike-crop", choices=("mulberry", "sugarcane", "banana", "fruit"), default=None, help="pin a dike-pond's dike planting (feature 150 A6)")
-    ap.add_argument("--leftover", choices=("rice", "vegetables", "pond"), default=None, help="pin a dike-pond's leftover parcels (feature 150 B2)")
+    ap.add_argument("--dike-crop", choices=sorted(set(DIKE_CROPS)), default=None, help="pin a dike-pond's dike planting (feature 150 A6)")
+    ap.add_argument("--leftover", choices=LEFTOVER_FORMS, default=None, help="pin a dike-pond's leftover parcels (feature 150 B2)")
     ap.add_argument("--out", default=None, help="write <out>.svg/.png/.json")
     ap.add_argument("--no-render", action="store_true")
     ap.add_argument("--batch", type=int, default=0, help="roll N hamlets from consecutive seeds and gate them all")

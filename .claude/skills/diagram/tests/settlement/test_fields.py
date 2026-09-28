@@ -822,73 +822,44 @@ def test_the_patch_seeds_are_A_HANDFUL_not_everyone_at_once() -> None:
     assert len(picked) == 2, "even a two-plot conversion has a seed to grow from"
 
 
-def test_the_leftover_form_VEGETABLES_erases_the_bund_and_tills_the_ground() -> None:
-    """Feature 150 B2, and the research behind the knob: what the leftover parcels of a wholesale
-    conversion read as. Fei records vegetables under the mulberry; the gazetteers record no rice
-    inside a converted district. So "vegetables" is not a decoration - it is one of the three
-    attested readings, and it draws TILLED EARTH with the bund erased rather than textured paddy.
-
-    Asserted against the default: the same conversion with `leftover="rice"` draws paddy, so the two
-    must differ in what they emit.
-    """
-    net = _comb(1300, 1700, (520, 220), full_or(2, 5), down_deg=90, field_fall=760, offtakes_a=(0.32, 0.7), offtakes_b=())
-    rng = __import__("random")
-
-    veg = Settlement(1400, 1800, seed=3)
-    veg.meta(name="LUV", scale="village", ftpx=1, down_deg=90)
-    veg.apply_land_use(net, "mulberry_fishpond", rng.Random(1), fraction=0.9, eligible="all", leftover="vegetables")
-
-    rice = Settlement(1400, 1800, seed=3)
-    rice.meta(name="LUR", scale="village", ftpx=1, down_deg=90)
-    rice.apply_land_use(net, "mulberry_fishpond", rng.Random(1), fraction=0.9, eligible="all", leftover="rice")
-
-    assert "vegetable ground" in "".join(str(c) for c in veg.out_cls), "the leftovers are drawn as vegetable ground"
-    assert "vegetable ground" not in "".join(str(c) for c in rice.out_cls), "which the rice form does not do"
-
-
-def test_a_SUGARCANE_dike_is_drawn_in_ROWS_ALONG_it_not_as_a_scatter() -> None:
-    """settlement-review: a scatter read as rough grass. Cane is sett-planted in furrows down the
-    bank's LENGTH, so the texture is ruled rows running with the dike - three rows of near-continuous
-    dashes, each dash following the loop's own direction.
-
-    `DIKE_CROPS` holds four forms and only mulberry had a test; this covers the one whose drawing is
-    a different SHAPE rather than a different colour.
+def test_a_TEA_dike_is_drawn_as_clipped_hedgerows_not_as_crowns() -> None:
+    """269 B34: tea is the third premodern dike planting (research/archetypes/230). A clipped tea bush reads
+    as a hedge, so its rows are runs of dark stroke, broken between bushes - a different SHAPE from the
+    mulberry's scatter of round crowns, which is what lets a reader tell the two at fit zoom.
     """
     net = _comb(1300, 1700, (520, 220), full_or(2, 5), down_deg=90, field_fall=760, offtakes_a=(0.32, 0.7), offtakes_b=())
     s = Settlement(1400, 1800, seed=3)
-    s.meta(name="LUC", scale="village", ftpx=1, down_deg=90)
-    n = s.apply_land_use(net, "mulberry_fishpond", __import__("random").Random(1), dike_crop="sugarcane")
-    mulberry = Settlement(1400, 1800, seed=3)
-    mulberry.meta(name="LUM", scale="village", ftpx=1, down_deg=90)
-    mulberry.apply_land_use(net, "mulberry_fishpond", __import__("random").Random(1))
-
+    s.meta(name="LUT", scale="village", ftpx=1, down_deg=90)
+    n = s.apply_land_use(net, "mulberry_fishpond", __import__("random").Random(1), dike_crop="tea")
+    ink = "".join(s.out)
     assert n > 0, "the conversion still happens"
-    # The crop is not recorded on the land_use row - it is a DRAWING difference, so that is what is
-    # asserted: the same conversion emits different ink for cane than for mulberry.
-    assert s.out != mulberry.out, "cane is drawn in rows along the dike, mulberry as a scatter of crowns"
+    assert s.M["meta"]["dike_crop"] == "tea"
+    assert "#3F5A2A" in ink or "#4A6630" in ink, "the hedgerow runs are drawn"
+    assert "tea dike" in "".join(str(c) for c in s.out_cls), "the bank and its bushes light as the tea dike"
 
 
 def test_every_attested_DIKE_CROP_draws_a_form_that_tells_it_from_the_others() -> None:
-    """`DIKE_CROPS` holds four distinct plantings and each is a different SHAPE at fit zoom, which is
-    the whole reason they are separate forms rather than four colours:
+    """`DIKE_CROPS` holds three distinct premodern plantings (269 B34; research/archetypes/230) and each is a
+    different SHAPE at fit zoom, which is the whole reason they are separate forms rather than colors:
 
-      - mulberry: a scatter of crowns
-      - sugarcane: ruled rows down the bank's length (a scatter read as rough grass - settlement-review)
-      - banana: STOOLS IN CLUMPS, three to five pseudostems with gaps between mats, "the form that
-        tells it from the fruit dike at fit zoom" (settlement-review)
+      - mulberry: a scatter of coppiced crowns in two rows
+      - tea: two clipped hedgerows, dark runs broken between bushes
       - fruit: an orchard's single crowns at a regular pitch
 
-    So the test is that no two draw the same ink - which is the property a reader depends on, and
-    the one a fifth crop added as a colour would break.
+    So the test is that no two draw the same ink - which is the property a reader depends on, and the one a
+    fourth crop added as a color would break. The modern cane, banana and vegetable dikes are refused.
     """
     net = _comb(1300, 1700, (520, 220), full_or(2, 5), down_deg=90, field_fall=760, offtakes_a=(0.32, 0.7), offtakes_b=())
     ink = {}
-    for crop in ("mulberry", "sugarcane", "banana", "fruit"):
+    for crop in ("mulberry", "tea", "fruit"):
         s = Settlement(1400, 1800, seed=3)
         s.meta(name=f"LU{crop}", scale="village", ftpx=1, down_deg=90)
         s.apply_land_use(net, "mulberry_fishpond", __import__("random").Random(1), dike_crop=crop)
         ink[crop] = "".join(s.out)
-    assert len(set(ink.values())) == 4, f"four crops, four distinguishable plantings: {[k for k in ink]}"
+    assert len(set(ink.values())) == 3, f"three crops, three distinguishable plantings: {[k for k in ink]}"
+    for modern in ("sugarcane", "banana", "vegetable"):
+        with pytest.raises(ValueError, match="dike_crop"):
+            Settlement(1400, 1800, seed=3).apply_land_use(net, "mulberry_fishpond", __import__("random").Random(1), dike_crop=modern)
 
 
 def test_an_unknown_dike_crop_or_leftover_form_is_REFUSED_at_the_call() -> None:
@@ -903,6 +874,8 @@ def test_an_unknown_dike_crop_or_leftover_form_is_REFUSED_at_the_call() -> None:
         s.apply_land_use(net, "mulberry_fishpond", __import__("random").Random(1), dike_crop="kiwi")
     with pytest.raises(ValueError, match="leftover"):
         s.apply_land_use(net, "mulberry_fishpond", __import__("random").Random(1), leftover="fallow")
+    with pytest.raises(ValueError, match="leftover"):  # retired with the modern vegetable dike (269 E9)
+        s.apply_land_use(net, "mulberry_fishpond", __import__("random").Random(1), leftover="vegetables")
 
 
 def test_a_dike_pond_bank_is_a_ring_around_its_water():

@@ -22,8 +22,9 @@ if TYPE_CHECKING:
     from ..core import Settlement
 
 
-# THE DIKE CROP TYPES and the highlight class each draws (feature 150 A6): one hamlet is one type.
-DIKE_CROP_CLASS = {"mulberry": "mulberry dike", "sugarcane": "sugarcane dike", "banana": "banana dike", "fruit": "fruit dike"}
+# THE DIKE CROP TYPES and the highlight class each draws (feature 150 A6; 269 B34 re-read the options - the
+# premodern plantings only, research/archetypes/230): one hamlet is one type.
+DIKE_CROP_CLASS = {"mulberry": "mulberry dike", "fruit": "fruit dike", "tea": "tea dike"}
 
 
 def line_cuts(poly: Sequence[Sequence[float]], px: float, py: float, dx: float, dy: float) -> list[tuple[float, float]] | None:
@@ -152,14 +153,14 @@ class LandUseMixin:
         # ponds so an expanded pond bank overlaps the repaint, never the reverse. Scoped to the archetype
         # case only: a partial overlay's unconverted plots are ordinary textured comb paddies already.
         # THE DIKE CROP AND THE LEFTOVERS ARE KNOBS (feature 150, GM 2026-08-28 choosing audits A6 and B2).
-        # dike_crop: mulberry (桑基, the silk case), sugarcane (蔗基), banana (蕉基) or fruit (果基) - the gazetteer
-        # office frames these as a SUCCESSION of dike-pond TYPES over the region's history, so one hamlet is one
-        # type. leftover: what an unconverted parcel reads as - standing rice, vegetable ground (Fei: vegetables
-        # under the mulberry), or none at all (the block wholly converted; the caller passes fraction 1.0).
+        # dike_crop: mulberry (桑基, the silk case), fruit (果基, the oldest) or tea - the premodern plantings
+        # (research/archetypes/230; the modern cane, banana and vegetable dikes are not drawn, the GM 2026-09-28),
+        # one hamlet one planting. leftover: what an unconverted parcel reads as - standing rice, or none at all
+        # (the block wholly converted; the caller passes fraction 1.0).
         if dike_crop not in DIKE_CROP_CLASS:
             raise ValueError(f"dike_crop {dike_crop!r} is not one of {sorted(DIKE_CROP_CLASS)}")
-        if leftover not in ("rice", "vegetables", "pond"):
-            raise ValueError(f"leftover {leftover!r} must be rice, vegetables or pond")
+        if leftover not in ("rice", "pond"):
+            raise ValueError(f"leftover {leftover!r} must be rice or pond")
         self.M["meta"]["dike_crop"] = dike_crop
         self.M["meta"]["leftover"] = leftover
         leftover_plots = self._landuse_repaint_leftovers(elig, chosen, overlay, eligible, rng, leftover=leftover)
@@ -252,11 +253,9 @@ class LandUseMixin:
         return n
 
     def _landuse_repaint_leftovers(self: Settlement, elig: list[Any], chosen: list[Any], overlay: str, eligible: str, rng: random.Random, leftover: str = "rice") -> list[Any]:  # type: ignore[misc]
-        """Repaint the unconverted plots of a WHOLESALE conversion as standing rice rather than bare outlines -
-        or, with `leftover="vegetables"` (feature 150 B2), as tilled vegetable ground in rows: Fei's silk
-        village grew its vegetables on the ground under the mulberry, and the gazetteers record NO rice
-        inside a converted district, so the residual parcel of a wholly converted block is as honestly
-        vegetable ground as paddy. Two attested forms, so a knob.
+        """Repaint the unconverted plots of a WHOLESALE conversion as standing rice rather than bare outlines.
+        (The tilled vegetable-ground form, feature 150 B2, rested on modern sources and was retired by the GM's
+        ruling of 2026-09-28, 269 E9.)
 
         Returns the leftover plots, which the land_use record reports."""
         leftover_plots: list[Any] = []
@@ -267,13 +266,6 @@ class LandUseMixin:
             for p in leftover_plots:
                 pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in p["poly"])
                 lfill = p.get("fill", "#A6C398")
-                if leftover == "vegetables":
-                    ys_ = [q[1] for q in p["poly"]]
-                    self.add(f'<polygon points="{pts}" fill="#C9B784" stroke="#C9B784" stroke-width="3" stroke-linejoin="round"/>', cls="vegetable ground")  # tilled earth, the bund erased
-                    self._rows_cut_to_plot(
-                        p["poly"], [min(ys_) + 4 + i * 6 for i in range(int((max(ys_) - min(ys_)) / 6))], 'stroke="#6E8B4A" stroke-width="1.6" opacity="0.8"', "veg", cls="vegetable ground"
-                    )
-                    continue
                 random.seed(int(sum(x for x, _ in p["poly"]) * 7 + sum(y for _, y in p["poly"]) * 13))
                 if lfill == "#93B7AC":
                     # a FLOODED leftover reads with a ROUNDED, slightly IRREGULAR waterline (GM 2026-07-23):
@@ -512,11 +504,11 @@ class LandUseMixin:
         for mx, my in walk(s_w + 0.5 * (s_b - s_w), 30.0):  # earth mottle: packed / dried patches of different ages
             mcol = rng.choice(("#A8895A", "#B79B68", "#D2BC8C", "#9C8150"))
             g.append(f'<ellipse cx="{mx + rng.uniform(-3, 3):.1f}" cy="{my + rng.uniform(-3, 3):.1f}" rx="{rng.uniform(4, 8):.1f}" ry="{rng.uniform(3, 6):.1f}" fill="{mcol}" opacity="0.35"/>')
-        # THE PLANTING BY CROP (feature 150 A6). Mulberry: two rows of coppiced bushes. Sugar cane: the cane
-        # stands in close rows the full width of the dike - three rows of short cane strokes. Banana: big
-        # clumps at ~14 ft, a stool of pseudostems with its leaf fan. Fruit (lychee, longan, citrus): standard
-        # trees at ~18 ft on the band's centerline. The pitches are drawing calibrations from each plant's
-        # habit, not surveyed dikes - labeled so in the class entries.
+        # THE PLANTING BY CROP (feature 150 A6; 269 B34). Mulberry: two rows of coppiced bushes. Tea: two clipped
+        # hedgerows of low bush, drawn as dark runs broken between bushes - the form that tells it from the mulberry's
+        # loose crowns at fit zoom. Fruit (lychee, longan, citrus): standard trees at ~18 ft on the band's centerline.
+        # The pitches are drawing calibrations from each plant's habit, not surveyed dikes (nothing read gives a
+        # spacing along a dike, archetypes/230) - labeled so in the class entries.
         if crop == "mulberry":
             for t in (0.30, 0.72):  # two planted rows across the band
                 for x, y in walk(s_w + t * (s_b - s_w), 4.4):
@@ -526,29 +518,16 @@ class LandUseMixin:
                     if near and chan_dist(jx, jy) < 3.5:
                         continue
                     g.append(f'<circle cx="{jx:.1f}" cy="{jy:.1f}" r="{r:.1f}" fill="{ccol}" opacity="0.85"/>')
-        elif crop == "sugarcane":
-            # ROWS ALONG THE DIKE: cane is sett-planted in furrows down the bank's length, so the texture is
-            # ruled rows running with the dike, not a scatter (settlement-review: a scatter read as rough
-            # grass). Three rows of near-continuous dashes, each dash the loop's own direction.
-            for t in (0.22, 0.5, 0.78):
-                pts_ = walk(s_w + t * (s_b - s_w), 3.0)
-                for (x, y), (x2, y2) in zip(pts_, pts_[1:] + pts_[:1], strict=True):
-                    if math.hypot(x2 - x, y2 - y) > 4.5 or (near and chan_dist(x, y) < 3.0):
+        elif crop == "tea":
+            # A tea bush clipped to a hedge about 3 ft wide (a GUESS from the plant's habit): each row is walked
+            # at 2.5 px, three steps drawn (a 7.5 ft run of hedge) and two left open, so the row reads as bushes
+            # butted in a line rather than as a solid band; a step across a corner of the loop is never bridged.
+            for t in (0.32, 0.70):
+                pts_ = walk(s_w + t * (s_b - s_w), 2.5)
+                for k, ((x, y), (x2, y2)) in enumerate(zip(pts_, pts_[1:] + pts_[:1], strict=True)):
+                    if k % 5 > 2 or math.hypot(x2 - x, y2 - y) > 4.0 or (near and chan_dist(x, y) < 3.0):
                         continue
-                    g.append(f'<line x1="{x:.1f}" y1="{y:.1f}" x2="{x2:.1f}" y2="{y2:.1f}" stroke="{rng.choice(("#8FA84A", "#7E9A3E"))}" stroke-width="1.4" opacity="0.9"/>')
-        elif crop == "banana":
-            # STOOLS IN CLUMPS: a banana mat is a clump of three to five pseudostems with gaps between mats,
-            # not an orchard's single crowns at a regular pitch - the form that tells it from the fruit dike
-            # at fit zoom (settlement-review).
-            for x, y in walk(s_w + 0.5 * (s_b - s_w), 13.0):
-                if near and chan_dist(x, y) < 5.0:
-                    continue
-                for _k in range(rng.randint(3, 5)):
-                    ox, oy = rng.uniform(-3.2, 3.2), rng.uniform(-3.2, 3.2)
-                    g.append(f'<circle cx="{x + ox:.1f}" cy="{y + oy:.1f}" r="{rng.uniform(1.6, 2.3):.1f}" fill="#9CBF4E" stroke="#4F6E22" stroke-width="0.6" opacity="0.92"/>')
-                for _k in range(4):  # the leaf fan of the mat
-                    a2 = rng.uniform(0, math.tau)
-                    g.append(f'<line x1="{x:.1f}" y1="{y:.1f}" x2="{x + math.cos(a2) * 5.5:.1f}" y2="{y + math.sin(a2) * 5.5:.1f}" stroke="#5E8630" stroke-width="0.8" opacity="0.7"/>')
+                    g.append(f'<line x1="{x:.1f}" y1="{y:.1f}" x2="{x2:.1f}" y2="{y2:.1f}" stroke="{rng.choice(("#3F5A2A", "#4A6630"))}" stroke-width="2.8" stroke-linecap="round" opacity="0.92"/>')
         else:  # fruit
             for x, y in walk(s_w + 0.5 * (s_b - s_w), 18.0):
                 if near and chan_dist(x, y) < 5.5:

@@ -761,7 +761,7 @@ def test_poly_seg_dist_returns_zero_when_the_two_actually_meet():
 
 
 def test_poly_seg_dist_does_not_close_an_open_polyline():
-    """feature 233: a duck pen's `wet` record is a FENCE - an open six-point polyline - not a region.
+    """feature 233: a fence (the duck pen's `wet`, retired by 269 B32) is an open polyline - not a region.
     Closing it behind our back would make a stub ending inside the fenced corner read as an overlap."""
     from l7r.diagram.settlement._geom.primitives import poly_seg_dist
 

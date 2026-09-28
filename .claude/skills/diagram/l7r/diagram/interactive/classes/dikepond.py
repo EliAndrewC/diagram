@@ -143,60 +143,6 @@ class PondSluice(Kind):
     key = 'pond sluice'
 
 
-class SugarcaneDike(Kind):
-    """
-    What: The raised dike around a fish pond planted with sugar cane in close rows - the 蔗基魚塘 type of the
-    dike-pond system, whose young leaves went to the fish and the pigs and whose refinery waste came back to the
-    pond as feed.
-
-    Why: The dike-pond types succeeded one another across the delta: mulberry, then fruit, cane and vegetables as
-    the delta urbanized and industrialized, and by the late 1980s cane dikes covered more of the district than mulberry. One hamlet
-    is one type, so a cane hamlet rolls cane on every dike.
-
-    Note: The type is read, though as a modern one - the gazetteer puts the cane dike after the mulberry dike gave way, and nothing read attests it earlier - and so is the loop as written above - the young leaves fed to fish and pigs, the old
-    ones shading the vegetable ground, the refinery waste returned to the pond. The often-repeated version of
-    that loop, in which the pressed cane's bagasse goes to the pigs, is on no page read, and the row pitch is
-    a drawing calibration from the plant's habit, not a Ming or Qing figure.
-
-    Caveat: the row pitch is a drawing calibration from the plant's habit, not a Ming or Qing figure.
-
-    Name: sugarcane dike
-    Covers: the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is sugarcane, and its cane rows
-    Label: accurate
-    Sources: gd-gazetteer-sangji, isis-dykepond, ruddle-zhong-1988, dili360-2005-sangji
-    Entry: research/archetypes.html - 'What else was planted on a pond dike besides mulberry?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'
-    """
-
-    key = 'sugarcane dike'
-
-
-class BananaDike(Kind):
-    """
-    What: The raised dike around a fish pond planted with banana stools - the 蕉基魚塘 type, the 'banana groves and
-    sea of cane' the geographers remembered of the old delta.
-
-    Why: A type of the same system, drawn as a hamlet's whole planting because the types succeeded one another
-    rather than mixing on a dike. The gazetteer office names bananas first among the fruit that took the dikes
-    as mulberry shrank under the delta's urbanization and industrialization; the magazine remembers banana
-    groves and a sea of cane in the old delta.
-
-    Note: The type is read, and by the gazetteer's account it is a modern one - no page read attests a banana
-    dike from before the mulberry dike gave way; the clump pitch and crown size are a drawing calibration from
-    the plant's habit, not a surveyed figure.
-
-    Caveat: no page read attests a banana dike from before the mulberry dike gave way; the clump pitch and
-    crown size are a drawing calibration from the plant's habit, not a surveyed figure.
-
-    Name: banana dike
-    Covers: the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is banana, and its clumps
-    Label: accurate
-    Sources: gd-gazetteer-sangji, dili360-2005-sangji
-    Entry: research/archetypes.html - 'What else was planted on a pond dike besides mulberry?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'
-    """
-
-    key = 'banana dike'
-
-
 class FruitDike(Kind):
     """
     What: The raised dike around a fish pond planted with fruit trees - the 果基魚塘 type of the dike-pond system.
@@ -222,28 +168,31 @@ class FruitDike(Kind):
     key = 'fruit dike'
 
 
-class VegetableGround(Kind):
+class TeaDike(Kind):
     """
-    What: A parcel of tilled vegetable ground in rows among the fish ponds - the one piece of the block that was
-    neither dug into a pond nor left in rice.
+    What: The raised dike around a fish pond planted with tea: low bushes, clipped to a hedge, standing in two
+    rows along the bank - a dike-pond planting beside the mulberry and the fruit.
 
-    Why: A converted block, as this map draws it, grows no rice, and Fei's silk village grew its vegetables in small gardens by the houses and in the limited space under the
-    mulberry; so the residual parcel of a converted block reads as vegetable ground as honestly as
-    paddy. The parcel takes one of three states, rolled per hamlet; no source read says which a hamlet kept.
+    Why: Qu Dajun, writing in the late seventeenth century, says the villages of Guangzhou's large counties often
+    gave up good fields to make dikes and planted them with fruit trees - lychee most, tea and mulberry next.
+    So tea stood on the delta's pond dikes in his day, and a hamlet may roll it as its dike crop, as it may
+    mulberry or fruit. One hamlet is one planting.
 
-    Note: Vegetables on a silk village's spare ground are read (Fei, under the mulberry and in house gardens); that a converted block grew no rice is this map's archetype, not a finding, no source describes a wholly converted hamlet, and the gazetteer's vegetable dike is a later stage of the dike types, not a leftover parcel; nothing says WHICH parcels carried them, so they
-    take whatever the crop dikes and the ponds leave over.
+    Note: The tea dike is read, but only named in a list: nothing read says how the bushes stood on a dike, so the
+    two clipped rows drawn here and their spacing are this project's own, and so is how often a hamlet rolls tea,
+    about one in six.
 
-    Caveat: nothing says WHICH parcels carried them, so they take whatever the crop dikes and the ponds leave over.
+    Caveat: nothing read says how the bushes stood on a dike, so the two clipped rows drawn here and their spacing
+    are this project's own, and so is how often a hamlet rolls tea, about one in six.
 
-    Name: vegetable ground
-    Covers: an unconverted parcel of a wholly converted dike-pond block, on a hamlet whose `meta.leftover` is vegetables
+    Name: tea dike
+    Covers: the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is tea, and its bushes
     Label: accurate
-    Sources: fei-1939, gd-gazetteer-sangji
-    Entry: research/archetypes.html - 'What else was planted on a pond dike besides mulberry?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'
+    Sources: guangdong-xinyu-22
+    Entry: research/archetypes.html - 'Were fruit, cane or banana dikes older than the mulberry dike? Fruit was - lychee above all'
     """
 
-    key = 'vegetable ground'
+    key = 'tea dike'
 
 
 class PigSty(Kind):
@@ -279,35 +228,6 @@ class PigSty(Kind):
     """
 
     key = 'pig sty'
-
-
-class DuckPen(Kind):
-    """
-    What: A duck pen on a fish pond: a fenced run on the dike with the duck house in it, and a fenced corner of
-    the water where the birds swim - their droppings feed the fish. Both the dry run and the fence reaching into
-    the water stand clear of the pond's own culvert.
-
-    Why: Fish-cum-duck ponds fence part of the dike as a dry run and part of the water as a wet run; ducks were
-    among the stock the Pearl-delta dike-pond loop kept to manure its ponds - a Chinese form, as the whole dike-pond hamlet is - and the droppings feed the water the same way a
-    pig shed's do. The dry run stands on the same planted collar a pig shed does - two to five meters, where a
-    modern manual asks five to ten of a dike carrying an animal shed, a ceiling it sets by the pigsties, piping
-    and traffic the dike must bear (dike-borne traffic, on this project's reading, came with commercialization), and where a Shunde
-    village's dikes ran twenty meters wide until commercial fish farming eroded them in the reform years - later than this map; nothing read gives a premodern dike's width. The fence
-    keeps off the culvert for the plain reason that a fence across the opening a pond is filled and drained
-    through would be in the way of working it.
-
-    Note: GUESS: the form is read from the modern manual; its premodern prevalence is not, and the share band is
-    the generator's - the weakest-evidenced item of the audit, drawn because the GM chose it. The clearance at
-    the culvert is a guess as well; nothing read gives a spacing along a dike.
-
-    Name: duck pen
-    Covers: every `duck_pens[]` record - a fenced dry run on the dike and a fenced wet run in the pond's corner
-    Label: guess
-    Sources: fao-ac264e, fao-ac264e-ch9, isis-dykepond
-    Entry: research/archetypes.html - "Does a pig sty have to stand back from the water, or from the pond's sluice?", 'Does a dike-pond hamlet keep pigs and ducks on its pond dikes?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'
-    """
-
-    key = 'duck pen'
 
 
 class FryPond(Kind):

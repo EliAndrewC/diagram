@@ -13,10 +13,8 @@ research/homesteads.html "Farmstead fixtures". Research and sources: research/ho
 from __future__ import annotations
 
 import math
-from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
-from ._geom import Pt
 from ._geom.overlap import rot_rect
 from ._geom.primitives import poly_seg_dist
 
@@ -152,8 +150,9 @@ class FarmFixturesMixin:
 # ---- the stock a dike-pond hamlet keeps on its ponds (feature 150 A3/A4) ---------------------------
 
 STY_FT = (8.0, 6.0)  # a simple pig shed on the dike, over the water's edge (FAO/NACA: "the simple pig shed constructed on the pond dyke")
-PEN_FT = (10.0, 6.0)  # the fenced DRY RUN of a duck pen on the dike; its WET RUN is a fenced corner of the pond
-PEN_WET_FT = 12.0  # how far the wet-run fence reaches into the water from the bank
+# NO DUCK PEN (269 B32, the GM 2026-09-28): the fenced dry and wet run is a modern fish-cum-duck form, read only
+# in the FAO/NACA manual, and a form attested only in modern sources is not drawn; premodern delta ducks were
+# herded in the rice fields, not penned at the fish ponds (research/archetypes/210).
 # NOBODY BUILDS OVER THE SLUICE NOTCH (feature 233). Room for a person to stand at the gate and lift
 # its boards - a sluice being "a protected opening in the pond dike that can be easily closed with
 # wooden boards to regulate water level" (fao-x6708e) - so about two paces. A GUESS: two source-reader
@@ -167,56 +166,26 @@ PEN_WET_FT = 12.0  # how far the wet-run fence reaches into the water from the b
 SLUICE_CLEAR_FT = 6.0
 
 
-def pen_wet_arc(cx: float, cy: float, w: float, reach: float, water: Sequence[Pt]) -> list[Pt]:
-    """A duck pen's WET RUN: the fence arc from the bank into the water, toward the pond's nearest
-    water point. Empty when the pond has no outline.
-
-    LIFTED to module level by feature 233 (the feature-146 doctrine: an inner function that is hard to
-    test gets lifted, and there is ONE body). The seat test needs the arc a CANDIDATE seat WOULD
-    produce - the arc is a function of the seat and the pond's outline - so a test that reused a placed
-    pen's recorded arc would be checking the old fence against a new seat. `duck_pen` delegates here.
-    """
-    if not water:
-        return []
-    wx, wy = min(water, key=lambda q: math.dist(q, (cx, cy)))
-    vx, vy = wx - cx, wy - cy
-    vl = math.hypot(vx, vy) or 1.0
-    ux, uy = vx / vl, vy / vl
-    px_, py_ = -uy, ux
-    arc: list[Pt] = [(cx + ux * (vl - 1) + px_ * w / 2, cy + uy * (vl - 1) + py_ * w / 2)]
-    for k in range(1, 6):
-        ang = math.pi * (k / 5)
-        arc.append((cx + ux * (vl - 1 + reach * math.sin(ang) * 0.9) + px_ * (w / 2) * math.cos(ang), cy + uy * (vl - 1 + reach * math.sin(ang) * 0.9) + py_ * (w / 2) * math.cos(ang)))
-    return arc
-
-
 class PondStockMixin:
-    def pond_fixture_fits(self: Settlement, cx: float, cy: float, rot: float, kind: str, water: Sequence[Pt] = ()) -> bool:  # type: ignore[misc]
-        """Room for a sty or a pen at this bank seat: clear of every placed footprint, every recorded
-        pond-stock fixture, and the plank crossings; the bank itself is field ground, which the
-        registries hold no structure off - that is what the seat is FOR."""
-        w, h = STY_FT if kind == "sty" else PEN_FT
-        w, h = self.px(w), self.px(h)
+    def pond_fixture_fits(self: Settlement, cx: float, cy: float, rot: float) -> bool:  # type: ignore[misc]
+        """Room for a sty at this bank seat: clear of every placed footprint, every recorded sty, and the
+        plank crossings; the bank itself is field ground, which the registries hold no structure off -
+        that is what the seat is FOR."""
+        w, h = self.px(STY_FT[0]), self.px(STY_FT[1])
         half = math.hypot(w, h) / 2 + self.px(2.0)
-        for key in ("pig_sties", "duck_pens", "houses", "farm_sheds", "byres", "retirement_houses", "wells", "kosatsuba", "footbridges"):
+        for key in ("pig_sties", "houses", "farm_sheds", "byres", "retirement_houses", "wells", "kosatsuba", "footbridges"):
             for o in self.M.get(key, []):
                 if "x" in o and math.hypot(float(o["x"]) - cx, float(o["y"]) - cy) < half + math.hypot(float(o.get("w", 6)), float(o.get("h", 6))) / 2:
                     return False
-        # AND CLEAR OF THE SLUICE (feature 233). EVERY drawn part: the shed or dry-run footprint, and
-        # for a pen the fence arc too - which is the part that was worst on the shipped map, its fence
-        # drawn straight across a feed cut. Measured to the stub SEGMENT and zero on an overlap
-        # (`poly_seg_dist`): a stub runs 19-41 ft, so its endpoint alone understates the distance, and
-        # a measure that cannot return zero scored a shed with the culvert through it at 0.13 ft.
-        parts: list[tuple[Sequence[Pt], bool]] = [(rot_rect(cx, cy, w, h, rot), True)]
-        if kind != "sty":
-            arc = pen_wet_arc(cx, cy, w, self.px(PEN_WET_FT), water)
-            if arc:
-                parts.append((arc, False))
+        # AND CLEAR OF THE SLUICE (feature 233): the shed's footprint, measured to the stub SEGMENT and zero
+        # on an overlap (`poly_seg_dist`): a stub runs 19-41 ft, so its endpoint alone understates the
+        # distance, and a measure that cannot return zero scored a shed with the culvert through it at 0.13 ft.
+        shed = rot_rect(cx, cy, w, h, rot)
         clear = self.px(SLUICE_CLEAR_FT)
         for sl in self.M.get("dikepond_sluices", []):
             a = (float(sl["a"][0]), float(sl["a"][1]))
             b = (float(sl["b"][0]), float(sl["b"][1]))
-            if any(poly_seg_dist(list(poly), a, b, closed) < clear for poly, closed in parts):
+            if poly_seg_dist(list(shed), a, b, True) < clear:
                 return False
         return True
 
@@ -237,29 +206,3 @@ class PondStockMixin:
         if pond is not None:
             rec["pond"] = pond
         self.M.setdefault("pig_sties", []).append(rec)
-
-    def duck_pen(self: Settlement, cx: float, cy: float, rot: float = 0.0, pond: int | None = None, water: Sequence[Pt] = ()) -> None:  # type: ignore[misc]
-        """A duck pen: a fenced dry run on the dike and a fenced wet run in the nearest corner of the pond
-        (FAO/NACA fish-cum-duck: "the dikes ... are partly fenced to form a dry run and part of the water
-        area or a corner of the pond is fenced ... to form a wet run")."""
-        w, h = self.px(PEN_FT[0]), self.px(PEN_FT[1])
-        x0, y0 = -w / 2, -h / 2
-        fence = "#6B5A3C"
-        g = [
-            f'<g transform="translate({cx:.1f},{cy:.1f}) rotate({rot:.2f})">',
-            f'<rect x="{x0:.1f}" y="{y0:.1f}" width="{w:.1f}" height="{h:.1f}" fill="#D9CBA0" fill-opacity="0.55" stroke="{fence}" stroke-width="0.9" stroke-dasharray="1.6,1.2"/>',  # the dry run
-            f'<rect x="{x0 + 1:.1f}" y="{y0 + 1:.1f}" width="{w * 0.3:.1f}" height="{h - 2:.1f}" fill="#A98C58" stroke="{fence}" stroke-width="0.7"/>',  # the duck house
-            "</g>",
-        ]
-        # the WET RUN: a fence arc from the bank into the water toward the pond's nearest water point
-        wet: list[list[float]] = []
-        arc = pen_wet_arc(cx, cy, w, self.px(PEN_WET_FT), water)
-        if arc:
-            pts = " ".join(f"{a:.1f},{b:.1f}" for a, b in arc)
-            g.append(f'<polyline points="{pts}" fill="none" stroke="{fence}" stroke-width="0.9" stroke-dasharray="1.6,1.2"/>')
-            wet = [[round(a, 1), round(b, 1)] for a, b in arc]
-        self.add_top("".join(g), cls="duck pen")
-        rec: dict[str, Any] = {"x": round(cx, 1), "y": round(cy, 1), "w": round(w, 1), "h": round(h, 1), "rot": round(rot, 1), "wet": wet}
-        if pond is not None:
-            rec["pond"] = pond
-        self.M.setdefault("duck_pens", []).append(rec)
