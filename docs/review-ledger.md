@@ -214,3 +214,4 @@ or a later pass found what this one should have).
 | 2026-09-28 | settlement-review | inashiro, kashikawa, kuwabata, DELTA: feature 273 round 2 | needs-work (inashiro) / pass (kashikawa, kuwabata) | the hamlet title card said no burial ground on every hamlet (fixed: it follows the roll); crowns hid graves at the rim (fixed: CEMETERY_CORE 0.9); record sources (fixed) |
 | 2026-09-28 | settlement-review | sawada, mizuguchi, DELTA: feature 273 | pass | the knob only; drawing unchanged |
 | 2026-09-28 | settlement-review | inashiro, kashikawa, kuwabata, sawada, mizuguchi, DELTA: feature 273 round 3 (2 for sawada, mizuguchi) | pass | nitpicks applied: Inashiro's Subject wording, the card's headsman spelling |
+| 2026-09-28 | settlement-review | inashiro, kashikawa, kuwabata, sawada, mizuguchi, DELTA: feature 273 after merging main | pass | kashikawa's corner field grave and burial ground coherent; kuwabata's headsman fixed; the others unchanged |
