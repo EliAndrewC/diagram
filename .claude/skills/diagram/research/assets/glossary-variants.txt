@@ -305,6 +305,8 @@ charity graveyard	charity graveyard
 charity graveyards	charity graveyard
 charity ground	charity graveyard
 charity grounds	charity graveyard
+cheng-zhu	Cheng-Zhu Neo-Confucianism
+cheng-zhu neo-confucianism	Cheng-Zhu Neo-Confucianism
 chenghua	Chenghua
 chenghuangmiao	chenghuangmiao
 chi	chi
@@ -1817,6 +1819,7 @@ neige	neige
 nembutsu	nenbutsu
 nenbutsu	nenbutsu
 nengu	nengu
+neo-confucianism	Cheng-Zhu Neo-Confucianism
 neribei	neribei
 nezumi-gaeshi	nezumi-gaeshi
 ni no torii	ichi-no-torii
