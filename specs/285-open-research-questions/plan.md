@@ -34,7 +34,7 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). Measurement: [`
 - **D7 - guesses outside the record** (FR-007). `git ls-files` under the skill, less `research/`, `tests/`, the
   tooling's logs (`dev/bypass-log/`, `dev/run-log/`, `dev/perf-log/`) and binary files; every tracked text file is
   read, the hand-drawn `pool/**/*.svg` plans included (spec-fidelity round 2). Each line carrying the whole word
-  `GUESS` is an item with file, line number and the stripped line.
+  `GUESS` or its plural `GUESSES` (as D2) is an item with file, line number and the stripped line.
 - **D5 - tests** (FR-006, SC-001, SC-002). `tests/tooling/test_open_questions.py`, loading the script as
   `test_record_prepass_and_size_table.py` loads its siblings: a fixture record in `tmp_path` (a guess in text, one in a
   comment, a lower-case guess, an absence note with its claim, a settled one, a grounds note, a convention label, two

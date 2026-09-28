@@ -1,6 +1,6 @@
 {
  "feature": "285-open-research-questions",
- "plan_sha256": "a51e9379a46e253cfa379c6c42da7e17d86493ec832fd95319e84c0c992956c3",
+ "plan_sha256": "e08f7b921ce72d15fcb039f2fdbae05fcd3bcc32cfa319edf65190af4ad544f7",
  "reviewed": "2026-09-28",
  "declared": "spec-fidelity",
  "decisions": [
@@ -8,19 +8,19 @@
    "id": "D1",
    "summary": "read only the question fragments and their notes, never the assembled or citations pages",
    "class": "within",
-   "why": "the spec's edge case and Decisions Recorded settle it; the assembled pages repeat the fragments"
+   "why": "the spec's edge case and Decisions Recorded settle it"
   },
   {
    "id": "D2-guess",
-   "summary": "a guess item is each sentence of visible (comment-stripped) text carrying GUESS or GUESSES; two labels in one sentence are one item; lower-case guess is not a label",
+   "summary": "a guess item is each sentence of visible text carrying GUESS or GUESSES; lower-case guess is not a label",
    "class": "within",
-   "why": "FR-002(a), the comment edge case, SC-001 (one sentence may carry two) and the capitals Assumption"
+   "why": "FR-002(a), the comment edge case, SC-001 and the spec's edge case now naming the plural"
   },
   {
    "id": "D2-absence",
-   "summary": "an absence item is each notes li carrying 'no publicly readable source', shown with its search record and the claim sentence that cites it; 'settled YYYY-MM-DD' makes it absence-settled",
+   "summary": "an absence item is each notes li carrying 'no publicly readable source', with its search record and claim; 'settled' makes it absence-settled",
    "class": "within",
-   "why": "FR-002(b) and FR-005; showing the claim serves the suggestion's 'the question'; the settled form is research/CLAUDE.md's ABSENCE form, and an unmatched settled note is still listed, not dropped"
+   "why": "FR-002(b) and FR-005"
   },
   {
    "id": "D2-not-items",
@@ -30,33 +30,32 @@
   },
   {
    "id": "D3-a-b",
-   "summary": "route (a) a class's Entry: resolved by research_questions; route (b) one hop of links from a question a class names",
+   "summary": "route (a) a class's Entry:; route (b) one hop of links from a question a class names",
    "class": "within",
-   "why": "FR-003 and US2 define exactly these two routes; one hop is what 'a question a class names links to it' says"
+   "why": "FR-003 and US2 define these two routes"
   },
   {
-   "id": "D3-c-min25",
-   "summary": "route (c) matches an engine .py line on the anchor or the heading's question up to its '?', but only when that question is at least 25 characters",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-003 and US2 route (c) take 'its heading or its anchor' with no length floor; the floor's premise ('a short question cannot match stray text') was not measured, and a grep of l7r/**.py (2026-09-28, this review) finds three question headings under 25 characters ('No interrogation room', 'A castle has TWO gates', 'Drawing a clan border') whose seven engine hits are all genuine citations and none stray - castle_civic.py:186 cites capitals 240 by heading only (the anchor appears nowhere), so the floor drops a real citation and would report 'no map feature found' for a question the map uses the day it carries an open item; no open item is affected today"
+   "id": "D3-c",
+   "summary": "route (c) matches an engine .py line on the anchor or the heading's question up to its '?', with no length floor",
+   "class": "within",
+   "why": "round 1 item confirmed: the 25-character floor is gone from plan.md D3 and from scripts/_open_questions.py (MIN_HEADING removed, heading_key returns any length), and the test asserts a short heading keeps its key; this is now FR-003's 'its heading or its anchor' as written. research.md R5's hit count (8) re-grepped this review and confirmed, all citations"
   },
   {
    "id": "D4",
-   "summary": "make open-questions prints counts first (per page, per kind, outside-the-record by area, totals), then the list, text only, no filters",
+   "summary": "make open-questions prints counts first, then the list, text only",
    "class": "within",
-   "why": "FR-001, FR-004 and the Assumption that it prints to the terminal"
+   "why": "FR-001, FR-004"
   },
   {
    "id": "D7",
-   "summary": "outside the record: git ls-files under the skill less research/, tests/, the three tooling logs and binaries; each line carrying the whole word GUESS is an item",
+   "summary": "outside the record: tracked text files under the skill less research/, tests/, the three tooling logs and binaries; each line carrying the whole word GUESS is an item",
    "class": "narrowing",
    "ruling": "NOT LEGITIMATE",
-   "why": "FR-007 asks for every GUESS label; R3 and D2 establish GUESSES as the plural label, and as written D7's whole-word GUESS misses five labeled lines outside the record (git grep -w GUESSES, 2026-09-28: compound.py:568 and 643, hamletgen/pondstock.py:8 and 25, county-magistracy-example.notes.md:24); the built code (_GUESS = GUESS(?:ES)?) already reads the plural, so this is the plan's text contradicting its own D2 and the spec"
+   "why": "round 1 item NOT confirmed: plan.md D7 (lines 34-37 at this digest) still reads 'Each line carrying the whole word `GUESS` is an item'; the round-1 commit touched only D3 in plan.md, and the plural was added to spec.md's edge case and to D2 (line 12), not to D7. FR-007 asks for every GUESS label and the spec's edge case now names the plural, so as written D7 misses the five GUESSES lines outside the record found in round 1; the code (_GUESS = GUESS(?:ES)?) already reads them, so the fix is D7's text only"
   },
   {
    "id": "D5",
-   "summary": "unit tests on a fixture record and one real-record test (homesteads 500 through 505, the compound.py postern, the guess count against a plain count)",
+   "summary": "unit tests on a fixture record and one real-record test",
    "class": "within",
    "why": "FR-006, SC-001, SC-002, SC-004; enforcement of the request"
   },

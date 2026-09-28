@@ -163,3 +163,15 @@ A tooling feature: it draws and states nothing on a map, so there is no renderin
   (4) RESOLVED: Key Entities define the dependent map feature by FR-003's three routes and add the guess outside
   the record. Plan D3's question-up-to-`?` match implements FR-003's "an engine file citing it" and D6 cites R1's
   dated file counts; no contradiction found.
+- Amendment pass, round 1 (spec-fidelity VERIFY, 2026-09-28): CHANGES REQUIRED - the amendment is faithful: SC-001's
+  "every visible label falls in a listed guess item" implements FR-002 given D2's sentence items, the plural label
+  (spec edge case, plan D2) is the GM's "things marked as guesses", the SCs' FR tags and tasks.md T01-T03 add nothing
+  unrequested; `make open-questions` printed `139` guess sentences, `580` absences in `2.1 s` (on this round's own
+  run). Three figures and one plan line to correct: (1) R3's `12` GUESSES does not hold by R3's own method - the
+  question fragments carry `6` (`5` visible, `1` in a comment); `12` counts the assembled pages too (`144` GUESS +
+  `5` GUESSES = `149` visible, on this round's own run); (2) R4's `123` lines outside the record (docs `6`) did not
+  reproduce: the collector as committed at 7080a0c92 and at 09968f383, and `git grep -I -c -w -E "GUESS|GUESSES"`
+  over the same paths, give `122` (buildings.md 2, dev 1, future-work 2, l7r 92, pool 25; on this round's own run);
+  (3) plan D7 still reads "the whole word `GUESS`" although D2 and the spec's edge case now make GUESSES the label
+  too and FR-007 lists "every GUESS label" (09968f383's message says D7 names the plural; it does not): D7 should
+  read "the whole word `GUESS` or `GUESSES` (D2)".
