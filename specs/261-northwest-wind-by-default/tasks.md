@@ -115,3 +115,8 @@ entry (T10).
       rows (T12's "no review owed" was wrong: the maps' layout moved, and the reviews were owed and run)
       research: rendering
       verify: DONE. DONE. settlement-review, one agent per map, on engine e9227bb5: PASS on all five; nitpicks fixed in the notes or accepted as known opens (make review-accept); escalation-check on the GM draft; ledger row 2026-09-28
+- [ ] T25 The homestead field retired on the research pass (plan D24): `stage_homestead_fields` and `homesteads/fields.py`
+      removed, the pool test asks for no grain plot by a house, the research entry and the four dry-crop pop-ups rewritten,
+      the notes re-measured; the gate and a settlement-review of every map
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited

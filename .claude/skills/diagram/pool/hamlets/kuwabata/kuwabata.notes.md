@@ -688,7 +688,7 @@ three). The belt is 169 clumps, 294
 degrees from the houses' middle, standing beyond the ring lane that runs along the windward row. This roll leaves no open
 ground the woodland scan takes, so the map draws no woodland commons. The notice board stands on the `center` knob's ground beside the ring lane, where its caption, at the board's own
 angle, fits clear of every crown. The connector leaves west, compass 274 degrees on its first leg, which the district direction reads.
-No homestead carries a dry plot of its own: the homestead field is a grain plot, and a dike-pond hamlet buys its grain in (the economy above; `GRAIN_BOUGHT_IN` in `homesteads/fields.py`), so the stage lays none here.
+A dike-pond hamlet buys its grain in (the economy above), and its comb draws no dry plot by archetype.
 The redrawn belt moved the north well 220 ft west, from the lane bend to the belt's lee edge: the seat by the lane
 stopped counting as clear of the belt, and the worst walk to a well is the same 382 ft from either seat. It also took
 away a dead-end stub that ended in the old copse and served no house, and one farmstead's coop, woodpile and persimmon

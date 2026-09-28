@@ -495,6 +495,23 @@ want to route around deficiencies in our placement algorithm... we should fix th
   every house (Mizuguchi's plots fell to 4 and its median to 157 ft again); a pure-disc near face with the columns
   densified along the profile, which left 2 ft sags where the disc steepens (sampled every 15 degrees now).
 
+### D24 - No grain plot beside a house: the homestead field retired on research (the GM, 2026-09-28)
+
+- The GM asked why dry crops now stood by the houses when the record's model is dry crops on the higher ground just
+  above the paddy water, and a vegetable garden by the house is a different thing. A search pass (2026-09-28) found
+  the house-side plot of the record is the kitchen bed: the yashikibatake is "cultivated ground for growing crops for a
+  Japanese household's own consumption" (kateisaien-jawiki, already cited by research/homesteads "How big was a
+  dooryard garden?", which puts the household's grain and bulk vegetables "out in the household's own hatake dry
+  fields, not here"). The natural-levee source puts the settlement and the dry fields on the same levee ridge, not a
+  plot per house; on a fan the dry fields lie upslope, away from the paddy. So D19's and D23's homestead field was not
+  supported, and it is removed with its stage (`stage_homestead_fields`, `homesteads/fields.py`), its fallback seats
+  and its persimmon-ring reservation. The dry crops stand in the comb's hem along the supply canal, as they did on
+  main; the research entry and the four dry-crop pop-ups now say so.
+- Inashiro's settlement-review finding of round 0ae309f0 (every dry plot across the rice, a median of 658 ft) is
+  answered by the record rather than by the drawing: a household's grain grew in its fields, not at its house. The
+  pool test that asked for a dry plot within 150 ft of the median house now asks that no grain plot stands by a house
+  (0 on every map, `m:dry-r24-retired`).
+
 ## Phases
 
 1. Engine: D1, D2, D3 with their unit tests (plan, cluster, surface); the amendment's D9-D17 with theirs.

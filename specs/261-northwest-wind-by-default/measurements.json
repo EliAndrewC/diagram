@@ -1216,9 +1216,9 @@
   "round": "merge-276",
   "value": 99,
   "unit": "ft",
-  "quantity": "the median distance from a farmhouse to the center of its nearest dry plot, the largest of the four hamlets that lay homestead fields: Inashiro 70, Kashikawa 81, Mizuguchi 80, Sawada 99 ft, with 11 / 14 / 6 / 12 homestead plots; on main's re-laid pool Mizuguchi laid 3 and its median was 157 ft",
+  "quantity": "the median distance from a farmhouse to the center of its nearest dry plot, the largest of the four hamlets that lay homestead fields: Inashiro 70, Kashikawa 81, Mizuguchi 80, Sawada 99 ft, with 11 / 14 / 6 / 12 homestead plots; on main's re-laid pool Mizuguchi laid 3 and its median was 157 ft; SUPERSEDED 2026-09-28 by plan D24: the homestead field is retired (`m:dry-r24-retired`)",
   "source": ".claude/skills/diagram/pool/hamlets/*/*.json dry_plots, houses, meta.homestead_fields",
-  "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_pool_261.py"
+  "command": "python3 specs/261-northwest-wind-by-default/measure/fixtures_and_board.py inashiro kashikawa kuwabata mizuguchi sawada"
  },
  "pool-r22-unseated": {
   "subject": "pool",
@@ -1248,5 +1248,14 @@
   "quantity": "the windbreak clumps the notes' feature-261 entry states, now equal to the Census block's drawn count (327, 65 off the page) and the manifest's village_groves windbreak clumps on the re-laid roll; the track's bearing it states is 221 degrees, the connector's first leg (lanes[1] 221.5 in the round); the entry's woodland stands are all three across the field (F2), and the hem bullet's stale parenthetical is gone (F1)",
   "source": ".claude/skills/diagram/pool/hamlets/inashiro/inashiro.json village_groves, lanes; inashiro.notes.md",
   "command": "grep -n '327 clumps over a 123-degree arc' .claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md"
+ },
+ "dry-r24-retired": {
+  "subject": "pool",
+  "round": "gm-2026-09-28",
+  "value": 0,
+  "unit": "homestead plots",
+  "quantity": "grain plots laid beside a house across the five pool hamlets after the homestead field was retired on the research pass (plan D24); the median straight-line distance from a house to its nearest dry plot is now 575 / 418 / 383 / 367 ft on Inashiro, Kashikawa, Mizuguchi and Sawada (Kuwabata draws no dry plot), the canal hem's",
+  "source": ".claude/skills/diagram/pool/hamlets/*/*.json dry_plots, meta",
+  "command": "python3 specs/261-northwest-wind-by-default/measure/fixtures_and_board.py inashiro kashikawa kuwabata mizuguchi sawada"
  }
 }
