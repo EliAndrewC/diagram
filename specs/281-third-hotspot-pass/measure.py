@@ -21,6 +21,20 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 WT = Path("/tmp/base281")
 ENGINE = Path(".claude/skills/diagram/l7r/diagram")
+# the named callee of each entry bucket (plan C's table); every bucket also records its TOTAL
+BUCKET_CALLEES: dict[str, tuple[str, ...]] = {
+    "clip": ("seg_dist",),
+    "fabric": ("RingIndex.__init__",),
+    "toll": ("dict.get",),
+    "handover": ("seg_dist",),
+    "departures": ("math.hypot",),
+    "home_bank": ("segments_cross",),
+    "stream_rect": ("seg_dist",),
+    "caption_lanes": ("seg_dist",),
+    "carve": ("_carve_sector.<locals>.edge", "StrokeIndex.clearance"),
+    "grove": ("GroveBlocks.inside", "GroveBlocks.hard"),
+    "marsh": ("KeepoutGrid.hit",),
+}
 
 
 def run(tree: Path, out: Path) -> tuple[dict, dict]:
@@ -42,6 +56,15 @@ def keys(prefix: str, times: dict, counts: dict, source: str, command: str) -> d
             out[f"{prefix}-{m}-{st.replace('_', '-')}-s"] = {"value": t, "unit": "s", "quantity": f"{st} inside that roll of {m} (summed over its builds)", "source": source, "command": command}
         for k, c in counts.get(m, {}).items():
             out[f"{prefix}-{m}-{k.replace('_', '-')}"] = {"value": c, "unit": "builds" if k == "builds" else "calls", "quantity": f"{k} over one full generate() of {m}, counted by cProfile (counts.py)", "source": source, "command": command}
+        for bucket, calls in v.get("buckets", {}).items():
+            for callee in BUCKET_CALLEES.get(bucket, ()) + ("TOTAL",):
+                out[f"{prefix}-{m}-b-{bucket.replace('_', '-')}-{callee.replace('_', '-').replace('.', '-').lower()}"] = {
+                    "value": int(calls.get(callee, 0)),
+                    "unit": "calls",
+                    "quantity": f"calls to {callee} made beneath the {bucket} entries over one roll of {m} (render off), counted by sys.monitoring (harness.py, plan C)",
+                    "source": source,
+                    "command": command,
+                }
     out[f"{prefix}-pool-roll-s"] = {"value": round(sum(v["roll_s"] for v in times.values()), 3), "unit": "s", "quantity": "the five pool hamlets' roll times summed", "source": source, "command": command}
     return out
 
