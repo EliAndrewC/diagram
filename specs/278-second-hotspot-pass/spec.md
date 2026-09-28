@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in the clone `diagram-inashiro`)
 **Created**: 2026-09-28
-**Status**: Draft (round 2)
+**Status**: Accepted - FAITHFUL at round 3 of 5 (2026-09-28)
 **Request**: [`request.md`](request.md) - the GM's words verbatim: run feature 276's exercise again - measure, find, make faster.
 **Predecessors**: 276 (the first pass: placement indexes, batched seam closing, the track's `PathChecker`, the shared
 test parses; `dev/performance.md` "Three more shapes"), 218 (the index-once doctrine; its research R2 priced the
@@ -236,3 +236,4 @@ halving is not counted twice.
   SC-013 now carries it in full (research entries before and after, no new or larger shortfall, the rescue-rounds
   scenario and the toys). The aside on `_bnd` is answered in research R2: `_at_f` is a linear per-query scan of a static
   polyline, so it joins FR-007 as a lever, with a field-stage target in SC-007.
+- Round 3 (spec-fidelity-verify, 2026-09-28): FAITHFUL.

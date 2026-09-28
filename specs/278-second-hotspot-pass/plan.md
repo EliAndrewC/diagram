@@ -73,19 +73,24 @@ byte-identical (the manifest comparison).
 
 ### A5. The field (FR-007, `waterfields/carve.py`, `waterfields/frame.py`)
 
-The hem pass's `inside_any` asks a `PointGrid` of the plots' boxes, built once per pass, then `_pip` on the hits in plot
-order (any-of is order-free). `_at_f` reads the polyline's fall values projected once per polyline object (a small
-identity-keyed cache, as `PlotGeoms` keys its geometry), keeping the same first-segment-in-order walk - so a
-non-monotone polyline answers as before. **Test**: equality of both against the scans over random plots and threads;
-the field's plots byte-identical on Sawada.
+The hem pass's `inside_any` asks a `PointGrid` of the plots' boxes, built at the start of `_hem_pass` and EXTENDED with
+each hem plot the pass appends to `plots` inside its own loop (later drain samples must see those - a grid built once
+would miss them and hem the same place twice), then `_pip` on the hits (any-of is order-free). `_at_f` reads the
+polyline's fall values from a cache OWNED BY ONE `_carve` CALL - set up at its start, cleared at its end, each entry
+holding its polyline object alive so no id can be reused while cached; the threads are not changed inside `_carve` (the
+march and clip finish before it starts) - and keeps the same first-segment-in-order walk over those values, so a
+non-monotone polyline answers as before. **Test**: equality of both against the scans over random plots and threads, a
+hem pass whose appended plot covers a later sample included; the field's plots byte-identical on Sawada.
 
 ### A6. The notice board (FR-009, `settlement/structures/fixtures/siting.py`, `settlement/houses.py`, `settlement/_geom/overlap.py`)
 
 `off_every_bed` asks a segment grid of the way beds (each segment's box widened by its half-width plus the board's
 reach); `_hard_clear` asks a `PointGrid` of the hard polygons' boxes, rebuilt when `_hard_cache_key` changes, in list
 order; `quad_hits_poly` tests only the polygon vertices inside the quad's box and the polygon edges whose box meets
-it (a vertex outside the box cannot be inside the quad; an edge whose box misses cannot cross it). **Test**: equality of
-each against its scan; Inashiro's and Sawada's board seats byte-identical.
+it (a vertex outside the box cannot be inside the quad; an edge whose box misses cannot cross it). Its FIRST stage - a
+quad corner inside the polygon - keeps the full point-in-polygon test over every edge, unchanged: containment is not
+local to the quad's box. **Test**: equality of each against its scan (a quad wholly inside a large polygon included);
+Inashiro's and Sawada's board seats byte-identical.
 
 ### A7. The windbreak's one grid (FR-010, `settlement/homestead_parts/grove_blocks.py`)
 
@@ -107,15 +112,28 @@ refuses as before. **Test**: equality of `_refused` against the scan over random
 chooses the kept attempt as now, and that one is finished once - to `out_base` or to scratch. **Test**: a stubbed build
 that strands a house on attempt 1 - the finish runs once, on the kept attempt.
 
-### B1. The envelope refusal (FR-005, `hamletgen/homesteads/boundary.py`)
+### B1. The unreachable-seat refusal (FR-005, `hamletgen/homesteads/boundary.py`)
 
-**Mechanism**: the homestead ground test refuses a house whose CENTER stands inside the field envelope - the first
-polygon of the ground `stage_web` hands the router as hard (`hard = [plan.envelope, *crops, toe, *wet]`), so a house
-there can never be reached by any way. Measured before choosing (observed 2026-09-28, method: `build()` of the four
-comb-field pool hamlets, every house tested against `plan.envelope`): the only house on any pool map inside it is
-Sawada's stranded one, so no other pool map can move. **Class**: map drawing convention - no rule is new; the roll's
-own reach rule (`farmhouses_reach_a_way`) is answered at the placer instead of after the build. **Test**: a seat inside
-the envelope is refused and one outside is not; Sawada builds once and seats 19.
+**Mechanism**: the homestead ground test refuses a house whose CENTER stands more than `WEB_REACH_FT` inside the ground
+no way may be drawn on - the union of what `stage_web` hands the router as hard (`hard = [plan.envelope, *crops,
+toe, *wet]`, `ways/web.py`) inflated by `WEB_HARD_GAP`, the margin every web lane keeps off it (the track's
+`PathChecker` keeps off the same crop). A way stands outside that union, so its nearest point to such a house is more
+than `WEB_REACH_FT` away, and `unreached_houses` - a distance test at `WEB_REACH_FT` against the served lanes - must fail
+it: the refused seat is one the reach rule is certain to fail, and no other. Built once per seat stage from the ground
+known at seating (the envelope and crops; the toe band where `toe_band()` is already asked before it is drawn; a marsh
+drawn later is simply not in it, which only refuses less), with the depth read from a prepared shapely geometry.
+
+**Measured before choosing** (observed 2026-09-28, method: `build()` of all five pool hamlets, each house's center
+tested against that union and its depth read): Sawada's stranded house stands 157.1 px deep; every other house on every
+pool map stands outside the union entirely. So Sawada's first roll seats elsewhere, and no other pool map can move.
+
+**The narrowing, recorded**: FR-005 is answered for seats that are unreachable BY CONSTRUCTION - deep in hard ground. A
+seat the web cannot reach for any other reason (hemmed in by other steadings' fabric, say) is still caught only by the
+roll's self-report after the build; `hamletgen/driver.py` records why reach is not tested at seating in general (a
+hand-rolled reach measure was tried and was wrong on five of six seeds). **Class**: map drawing convention - no new
+rule: a subset of the seats `farmhouses_reach_a_way` already fails is refused before the build instead of after it.
+**Test**: a seat deep in the union is refused; one at the union's edge (within reach) and one outside it are not;
+Sawada builds once and seats 19; Sawada's research entry gives its houses, paddies and ways before and after.
 
 ### B2. The vectorized commons (FR-008, `settlement/land/cover.py`)
 
@@ -131,7 +149,9 @@ the pool maps. The marks move (the Decisions row in the spec).
 
 - **FR-012**: `make map GEN=<the reference>` stops rolling the map twice - the render roll files its entry in the roll
   cache with the render, so the gate's reference check that follows reads it as a HIT (the implementation reads the
-  `map` and `_reference` recipes first and takes whichever of the two orderings the cache allows).
+  `map` and `_reference` recipes first and takes whichever of the two orderings the cache allows). **Proof**: the
+  build count of one `make map` on the reference (the census or a counter), one before `REGENERATED`, and the reference
+  line reading `[HIT ...]`.
 - **FR-013**: the page records a hash of the class registry it was plated from; `sync-with-main.sh sync-in` re-plates it
   (`make placement-stages`) when that hash differs from the clone's registry after a merge. The test is unchanged - it
   still reads the page a reader opens - so a class genuinely missing still turns it red (a planted test).
@@ -142,17 +162,20 @@ the pool maps. The marks move (the Decisions row in the spec).
 ### D. Measure, sweep, record (FR-015, SC-001, SC-013, SC-014)
 
 `measure.py` writes the after-keys from `make spec-harness` into `measurements.json` with its command; the pool's
-manifests are compared against the base's (`pool_counts.py`-style, plus a byte comparison for the exact pieces);
-`make cohort N=24`; `make perf LABEL=278-end` and `perf-report`; `dev/performance.md` gains the after-profile's
-residue with its levers priced.
+manifests are compared against the base's (a byte comparison for the exact pieces, the houses/paddies/ways counts for
+the moved maps); SC-013's scenarios beyond the pool - the rescue-rounds scenario and the 10- and 20-household toys
+(`tests/hamletgen/test_homesteads.py`) - seat at least as many houses as on the base, measured on both; `make cohort
+N=24`; `make perf LABEL=278-end` and `perf-report`. `dev/performance.md` gains the after-profile's residue with its
+levers priced - per stage, the finishing's external-renderer wait (4.7 s profiled over three finishes, R2) and the
+rest of the durations list among them.
 
 ## Verification per piece
 
 | piece | proves it | then |
 |---|---|---|
 | A1-A9 | its equality test; the map it touches most regenerated byte-identical | `make done` |
-| B1 | the refusal test; Sawada rolled once | `make done`, cohort |
-| B2 | compliance and density tests; each map regenerated and read | `make done`, cohort, research entries before/after |
+| B1 | the refusal test; Sawada rolled once; Sawada's research entry (houses, paddies, ways before and after) | `make done`, cohort, the rescue scenario and the toys |
+| B2 | compliance and density tests; each map regenerated and read | `make done`, cohort, research entries before/after, the rescue scenario and the toys |
 | C | each planted test | `make quick` |
 | D | the harness back to back; SC-001 to SC-014 | the push |
 

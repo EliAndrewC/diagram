@@ -1,0 +1,100 @@
+{
+ "feature": "278-second-hotspot-pass",
+ "plan_sha256": "b96c0bac20077989b4a95bfc5b2e2daaeb5895db450abd0389268a85c7710708",
+ "reviewed": "2026-09-28",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "A1",
+   "summary": "router judges free/band per cell on first ask",
+   "class": "within",
+   "why": "FR-001 as written; same predicates, same short-circuit order, start/goal preset free, in_band only reached from free cells; free/band used nowhere else in _route - exact."
+  },
+  {
+   "id": "A2",
+   "summary": "doorstep fabric_index hoisted once per house",
+   "class": "within",
+   "why": "FR-002; hard/water are not mutated in _serve_stragglers and passable is a fresh per-house list, so the memo returned the same index - exact."
+  },
+  {
+   "id": "A3",
+   "summary": "footbridge widening asks a segment grid, quad box widened by 3 px",
+   "class": "within",
+   "why": "FR-003; quad_hits_seg's reach is the constant 3.0, under is a max, identity skip kept - exact."
+  },
+  {
+   "id": "A4",
+   "summary": "wells pool re-sorted only when placed grows; key parts cached",
+   "class": "within",
+   "why": "FR-004; stable sort of an already-sorted list after pop(0) is idempotent while the key's inputs are unchanged - exact."
+  },
+  {
+   "id": "A5",
+   "summary": "hem pass inside_any via a plot grid built once per pass; _at_f from once-projected falls",
+   "class": "within",
+   "why": "FR-007 asked for it, but as written NOT exact: _hem_pass appends hem plots to `plots` inside its own loop and later samples must see them; a grid built once per pass misses them and would re-hem. The grid must be extended as each hem plot lands. The _at_f cache must be scoped to one carve (one frame, polylines held alive and unmutated), not a module-level id cache."
+  },
+  {
+   "id": "A6",
+   "summary": "notice board: bed segment grid, hard-poly box grid, quad_hits_poly trimmed",
+   "class": "within",
+   "why": "FR-009; exact for off_every_bed and _hard_clear. quad_hits_poly's FIRST stage (a quad corner inside the polygon, a ray cast) cannot be trimmed to edges meeting the quad box; the plan must say it keeps a full (or exactly equivalent indexed) point-in-polygon test."
+  },
+  {
+   "id": "A7",
+   "summary": "grove static families in one tagged KeepoutGrid, too_near separate",
+   "class": "within",
+   "why": "FR-010; hard/local/lane are static during the fill (GroveBlocks built once) and are asked per family at stands.py 375/442-445/526, so per-family verdicts from one lookup are exact."
+  },
+  {
+   "id": "A8",
+   "summary": "page bucket extents/skip carry a box grid",
+   "class": "within",
+   "why": "FR-011; _hits is inclusive box overlap or exact disc test, so box pruning (inclusive, kept in step with appends, None handled) is exact."
+  },
+  {
+   "id": "A9",
+   "summary": "only the kept attempt is finished",
+   "class": "within",
+   "why": "FR-006; unreached_houses and roll_placed are read before finish, so deferring finish to the kept attempt is the requirement as written."
+  },
+  {
+   "id": "B1",
+   "summary": "homestead ground test refuses a house whose center is inside the field envelope",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-005 asks the placer to refuse a seat the reach rule would fail. The plan substitutes 'center inside plan.envelope' on the unmeasured premise that such a house 'can never be reached by any way'. The reach rule is a distance (unreached_houses: seg_dist > WEB_REACH_FT = 100) and ways are held only WEB_HARD_GAP = 8 off the envelope, so a seat just inside the envelope edge can pass the reach rule and would be refused - a new placement rule the spec did not ask for, and the 'no rule is new' class rests on the same premise. The pool measurement shows no pool map moves, but not that the refusal equals the reach rule. Legitimate form: refuse only seats no way could reach (e.g. inside the envelope AND farther than WEB_REACH_FT from its boundary, or a measured equivalent), and record that narrowing of FR-005 to unreachable-by-construction seats (the driver records that general seat-time reach prediction failed three times)."
+  },
+  {
+   "id": "B2",
+   "summary": "commons scatter vectorized: prepared keep-out geometry per family, numpy throws, target counts kept; compliance test + density within 5%",
+   "class": "within",
+   "why": "FR-008 as written; the compliance test enforces the same keep-outs against the old deterministic conditions, and a 5% band on a stochastic count with target counts kept is a test tolerance, not a density change."
+  },
+  {
+   "id": "C-FR012",
+   "summary": "make map files the render roll into the roll cache so the reference check HITs",
+   "class": "within",
+   "why": "FR-012; the plan names no proof that the reference is rolled once (SC-012) - a count or the HIT line should be stated."
+  },
+  {
+   "id": "C-FR013",
+   "summary": "page records a registry hash; sync-in re-plates on mismatch; test unchanged with a planted missing class",
+   "class": "within",
+   "why": "FR-013's first option exactly; the test still reads the page a reader opens."
+  },
+  {
+   "id": "C-FR014",
+   "summary": "oracle runs the pattern per line holding .md over every tracked text",
+   "class": "within",
+   "why": "FR-014; the token class excludes newline and the lookbehind/\\b read a newline as a line boundary, so exact; corpus unchanged; the planted edge strings keep the proof."
+  },
+  {
+   "id": "D",
+   "summary": "harness after-figures into measurements.json, pool manifest comparison, cohort, perf bookends, dev/performance.md residue",
+   "class": "within",
+   "why": "FR-015/SC-013/SC-014; but the plan omits SC-013's rescue-rounds scenario and 10-/20-household toys and the moved maps' research entries for B1 (Sawada), and FR-015's named items (the renderer wait, the durations list)."
+  }
+ ],
+ "verdict": "BLOCKED"
+}
