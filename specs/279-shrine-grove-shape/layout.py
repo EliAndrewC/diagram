@@ -48,7 +48,7 @@ def _noisy(poly, seed=279):
         d = sum(a * math.sin(2 * math.pi * f * i / n + ph) for f, a, ph in waves)
         out.append((round(x + nx * d, 1), round(y + ny * d, 1)))
     return out
-REGIONS = [_noisy(_WOOD, 2793)]
+REGIONS = [_noisy(_WOOD, 2795)]
 REGION = [p for r in REGIONS for p in r]  # every outline point, for the bounding box
 
 
@@ -59,7 +59,7 @@ CLEAR = (272.0, 394.0, 566.0, 672.0)  # the clearing's bounding box (the frame o
 # the sanctuary behind the hall, the hall and its eaves, the kitchen garden and privy at the west gable, the
 # forecourt before the step - never a ruled rectangle (settlement-review round 2, 2026-09-27)
 _CLEAR_CORE = [(414, 400), (440, 390), (466, 400), (474, 432), (552, 440), (564, 500), (560, 560), (566, 610), (530, 648),
-               (510, 672), (492, 684), (466, 668), (440, 680), (414, 666), (390, 678), (372, 672), (350, 640), (318, 600), (276, 574), (272, 500), (276, 456), (318, 442),
+               (510, 672), (492, 684), (466, 668), (440, 680), (414, 666), (390, 678), (372, 672), (350, 640), (318, 600), (276, 574), (266, 546), (274, 520), (264, 494), (272, 470), (276, 456), (318, 442),
                (360, 432), (404, 430)]
 _cr = random.Random(2682)
 CLEAR_POLY = [(x + _cr.uniform(-5, 5), y + _cr.uniform(-5, 5)) for x, y in _CLEAR_CORE]          # the swept clearing: hall, sanctuary, garden, privy, forecourt
@@ -107,7 +107,7 @@ def clear_of(x, y, r):
         if math.hypot(x - nx, y - ny) < r + 2:
             return False
     sx, sy, sr = SACRED
-    if math.hypot(x - sx, y - sy) < r + sr:
+    if math.hypot(x - sx, y - sy) < r + sr + 40:  # the sacred tree stands apart from the wood (building-review round 3)
         return False
     wx, wy, wr = WELL
     if math.hypot(x - wx, y - wy) < r + wr:
@@ -122,8 +122,9 @@ SHEET_TEXT = []  # the sheet moves its title and scale bar clear of the wood ins
 import os
 if os.path.exists(OUT + '.labels'):
     LABELS = json.load(open(OUT + '.labels'))
-rng = random.Random(2794)
-trees = []  # (x, y, r) sheet px
+SEED_TREES = [(222.0, 506.0, 22.0), (240.0, 520.0, 20.0)]  # the west waist beside the hall: the wood runs round both flanks unbroken (reviews round 3)
+trees = [t for t in SEED_TREES if clear_of(*t)]
+rng = random.Random(279)
 # dart-throwing, big crowns first, then fill with smaller ones: canopies may touch, never overlap
 for r_lo, r_hi, tries in ((25.0, 30.0, 80000), (19.5, 25.0, 120000)):
     for _ in range(tries):
@@ -277,6 +278,9 @@ def _side(sign):
     return round(math.degrees(math.atan(a)), 1), round(resid, 1)
 meas["west_side_deg_resid"] = _side(-1)
 meas["east_side_deg_resid"] = _side(1)
+_pieces = unary_union([Point(x, y).buffer(r, 32) for x, y, r in trees])
+meas["canopy_pieces"] = len(_pieces.geoms) if hasattr(_pieces, "geoms") else 1
+meas["sacred_gap_px"] = round(min(math.hypot(x - SACRED[0], y - SACRED[1]) - r - SACRED[2] for x, y, r in trees), 1)
 meas["edge_crowns"] = m_all
 meas["straight_runs"] = len(runs)
 meas["straight_run_windows"] = runs

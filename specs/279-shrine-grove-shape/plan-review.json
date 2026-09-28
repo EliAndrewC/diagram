@@ -1,6 +1,6 @@
 {
  "feature": "279-shrine-grove-shape",
- "plan_sha256": "b6838f84d75892b8739b48c3c6fbc57728f80b55523dffa5cbe884a77fbf8af8",
+ "plan_sha256": "fad16fd753290f2a72d480a71f0094b484249069656c91c6524772dfdf42c6f9",
  "reviewed": "2026-09-28",
  "declared": "spec-fidelity",
  "decisions": [
@@ -8,43 +8,43 @@
    "id": "D1",
    "summary": "Research 129 with the paddy photograph's reading; 124 points at it; three sources registered and put through the four checks",
    "class": "within",
-   "why": "Unchanged in the diff since round 4 (8ac0e959c): FR-001-FR-003. Research 129's rule paragraph now also carries the mid-slope rule, which is D3's and is ruled there."
+   "why": "Unchanged in the diff since round 5 (87dc9c718..227de9a91): FR-001-FR-003."
   },
   {
    "id": "D2",
-   "summary": "Knob 8 grove form (behind, behind and sides, sides, all around) with the ground rule, equal weights (guess), paddy edge OPEN with the GM; program, types.json notes and the shrine grove kind restated; owed list names the knob",
+   "summary": "Knob 8 grove form (behind, behind and sides, sides, all around) with the ground rule, equal weights between two or three candidates (guess), paddy edge OPEN with the GM; program, types.json notes and the shrine grove kind restated; owed list names the knob",
    "class": "within",
-   "why": "Unchanged in the diff: FR-004, FR-007, FR-008. Not a narrowing, but D2's own text is now stale against amended D3: it says 'equal weights between two candidates', where knob 8 in programs.md (line 129) and research 129 now say 'between two or three'. The same stale 'which of two forms a slope takes is rolled' stands at HEAD in the shrine grove kind's Caveat (compound_kinds/grounds.py line 266) and the program's grove row (programs.md line 104) - wrong for Hoshigaoka itself, which rolled among three. FR-007 requires the kind's write-up updated to the new form: fix the Caveat, the row and D2's wording to 'two or three'."
+   "why": "FR-004, FR-007, FR-008. Round 5's note is resolved: D2 now says 'two or three candidates', and at HEAD the kind's Note and Caveat (interactive/compound_kinds/grounds.py lines 263, 265) and the program's grove row (programs.md line 104) say 'which of two or three forms a slope takes', agreeing with knob 8 (programs.md line 129) and D3's three-way roll."
   },
   {
    "id": "D3",
-   "summary": "Amended: the hall is mid-slope with no break of slope (the map's one terrain datum is meta.down_deg 45), so it takes both slope classes' forms, a recorded guess; the roll choice(['behind','behind and sides','sides']) on crc32(b'hoshigaoka:shrine grove form') gave behind and sides",
+   "summary": "The hall is mid-slope with no break of slope (meta.down_deg 45 the one terrain datum), so it takes both slope classes' forms, a recorded guess; the roll choice(['behind','behind and sides','sides']) on crc32(b'hoshigaoka:shrine grove form') gave behind and sides",
    "class": "within",
-   "why": "The premise is measured, not assumed: the manifest (legacy-hand-authored-pool/villages/hoshigaoka/hoshigaoka.json) carries no hill, summit or contour data, only meta.down_deg 45, so no break of slope is drawn at the hall and the survey's top-of-slope class was the unmeasured reading. The mid-slope rule fills a case the survey does not classify, is labeled a guess on research 129, knob 8 and the sheet's notes, and WIDENS the candidates rather than cutting any attested form - FR-004's 'what constrains the choice (the ground)' with a labeled gap-filler, not an exception to the request. Re-run for this review: the exact call gives 'behind and sides'. The form puts wood behind and on both sides, which the GM's question ('surrounded by trees on all sides?') leaves to the research; the research's answer (not always, on a slope) stands."
+   "why": "Unchanged in the diff since round 5; ruled within there (a labeled gap-filler that widens the candidates, FR-004)."
   },
   {
    "id": "D4",
-   "summary": "Amended: one irregular region behind the hall from the well round both flanks to ragged tips beside the forecourt's foot, real bays and spurs, floor inside the crowns, lower approach open; captions reseated by make seat-label; one layout writes map fragment, manifest record and sheet tree list",
+   "summary": "One irregular region behind the hall from the well round both flanks to ragged tips beside the forecourt's foot, real bays and spurs, floor inside the crowns, lower approach open; captions reseated; one layout writes map fragment, manifest record and sheet tree list",
    "class": "within",
-   "why": "FR-005 (sources silent on the plan, so irregular and labeled a guess), FR-006, FR-007: the region follows D3's form, and the bays and spurs answer the GM's 'very visually wrong' rectangle more fully than the plumb flanks did. Reseating captions the new wood covers is within FR-006's 'what the grove's new extent frees or covers'."
+   "why": "Unchanged in the diff since round 5: FR-005, FR-006, FR-007."
   },
   {
    "id": "D5",
-   "summary": "Amended: frozen map edited by hand; the precinct's open ground and the bare strips north and south the old reservations left (settlement-review F3) carry the map's own grass tufts and shrub dots from the open ground just west, no pines; the notes row records the wood once",
+   "summary": "Frozen map edited by hand; the precinct's open ground and the bare strips the old reservations left carry the map's own tufts and shrub dots, no pines; the notes row records the wood once",
    "class": "within",
-   "why": "FR-006 allows the scrub where the wood leaves or arrives. The strips are the old grove box's footprint showing in the scrub (the notes row and map_edit.py line 65 say so; sr1-f3 records the density brought to the neighboring field's), i.e. ground the old drawing held and the new extent frees, not a new change elsewhere on the map. Leaving out the donor's pines is a drawing choice (tiled pines read as a grid), not a requested behavior dropped."
+   "why": "Unchanged in the diff since round 5: FR-006."
   },
   {
    "id": "D6",
-   "summary": "Amended: sheet frame widened to the wood's crowns; subtitle's 'in its wood' dropped; the Grove form line as the program declares it; the precinct's open ground plain on the sheet where the map draws scrub, recorded as a map drawing convention; every grove text restated (R3 ledger)",
+   "summary": "Sheet frame widened to the wood's crowns; subtitle's 'in its wood' dropped; Grove form line as declared; open ground plain on the sheet (map drawing convention); precinct rect stays and the notes now say the wood runs past its line, measured; every grove text restated (R3 ledger)",
    "class": "within",
-   "why": "FR-007: the sheet matches the map's grove tree for tree; the scrub is not the grove, so drawing it plain and labeling that a map drawing convention is a labeled rendering decision (constitution XII), not a mismatch. The Grove form line writes the knob FR-004 declares. The one stale grove text this review found (the kind's Caveat, 'two forms') is carried under D2."
+   "why": "The one change since round 5 adds a statement to the notes that the wood overruns the precinct rectangle, with its size. That is FR-007's restating of every text that places a feature against the grove, made true of the new extent; it narrows nothing and adds no behavior."
   },
   {
    "id": "D7",
-   "summary": "Amended: STRAIGHT_RUN and LONG_RUN (a 50 ft stretch within a crown's radius of one line) measured and recorded; matches_map green; settlement-review and building-review ledgered; paddy edge and the side forms' single source to the GM through escalation-check; make done green",
+   "summary": "STRAIGHT_RUN and LONG_RUN measured and recorded, now with each outer side's wander from its best-fit line; matches_map green; settlement-review and building-review ledgered; paddy edge and the side forms' single source to the GM through escalation-check; make done green",
    "class": "within",
-   "why": "LONG_RUN is a check whose only effect is to enforce the irregular outline FR-005 and SC-002 ask for (it caught the plumb east edge STRAIGHT_RUN could not see), so it serves the request (GM 2026-09-20). Its 50 ft is a named bar, defined in research.md R2, not a measurement. The rest unchanged: SC-002, SC-003, FR-009, FR-005's escalation."
+   "why": "The wander measure added since round 5 only verifies that the old box's parallel long sides do not survive as the wood's outer edges - enforcement of the irregular outline FR-005 and SC-002 ask for and of the GM's objection to the rectangle, so it serves the request (GM 2026-09-20). No behavior rides in with it."
   }
  ],
  "verdict": "CLEAR"

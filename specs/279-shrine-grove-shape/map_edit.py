@@ -119,8 +119,14 @@ def shift(tag, dx, dy):
 # in one visible grid
 OFFSETS = [(dx, dy) for dx in (60.0, 120.0) for dy in (0.0, -140.0, 140.0)]  # whole donor tiles, no overlap: an overlap doubles the density
 new_tufts, new_styled, used = [], [], set()
-for dx, dy in OFFSETS:
+import random
+def _jit(dx, dy, bx, by):
+    # each copied mark moves a few px on its own, so no tile repeats its donor exactly (settlement-review round 3, F2)
+    r = random.Random(f"{dx},{dy},{bx},{by}")
+    return dx + r.uniform(-8, 8), dy + r.uniform(-8, 8)
+for dx0, dy0 in OFFSETS:
     for (bx, by), tags in tufts.items():
+        dx, dy = _jit(dx0, dy0, bx, by)
         x, y = bx + dx, by + dy
         key = (round(x), round(y))
         if key in used or not clear_ground(x, y, 1.5):
@@ -128,6 +134,7 @@ for dx, dy in OFFSETS:
         used.add(key)
         new_tufts += [shift(t, dx, dy) for t in tags]
     for (bx, by), t in styled:
+        dx, dy = _jit(dx0, dy0, bx, by)
         x, y = bx + dx, by + dy
         key = (round(x), round(y), t[:12])
         if key in used or not clear_ground(x, y, 3.0):

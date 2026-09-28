@@ -4,16 +4,16 @@
   "unit": "runs",
   "measured": "2026-09-28",
   "method": "the layout script (specs/279-shrine-grove-shape/layout.py) on the tree list: edge crowns (centers within a crown's radius plus 6 sheet px of a flank's outline), ordered along it; a window of four whose middle two lie within 6 sheet px (2 ft) of the line through its first and last, spanning more than 30 px, is a run",
-  "edge_crowns": 69
+  "edge_crowns": 67
  },
  "grove-trees-hoshigaoka": {
-  "value": 128,
+  "value": 134,
   "unit": "crowns",
   "measured": "2026-09-28",
   "method": "the layout script's tree list"
  },
  "grove-canopy-share-hoshigaoka": {
-  "value": 0.887,
+  "value": 0.896,
   "unit": "share of the ground the crowns may cover",
   "measured": "2026-09-28",
   "method": "4 px grid sampling inside the wood's outline, of the points not in the clearing, approach, path, well or captions"
@@ -35,9 +35,9 @@
   "answers": "92d79f1b3c1e"
  },
  "sr1-f2-one-wood": {
-  "value": 45.9,
+  "value": 55.3,
   "unit": "sheet px",
-  "quantity": "the drawn crowns' outer sides: per 20 px band from y 250 to 640, the outermost crown edge on each side (west crowns x < 440, east x > 440), a best-fit line through each side - west 4.3 deg off vertical with crowns wandering up to 69.7 px (23 ft) from it, east 2.1 deg and 45.9 px (15 ft); the smaller wander, over two crown radii (19.5 px each), is the value - neither side is a line, so the old box's parallel long sides do not survive",
+  "quantity": "the drawn crowns' outer sides: per 20 px band from y 250 to 640, the outermost crown edge on each side (west crowns x < 440, east x > 440), a best-fit line through each - west -1.1 deg off vertical with crowns wandering up to 55.3 px (18 ft) from it, east -2.1 deg and 60.3 px (20 ft); the smaller wander, over two crown radii (19.5 px each), is the value - neither side is a line, so the old box's parallel long sides do not survive",
   "source": "the tree list in specs/279-shrine-grove-shape/layout.py's output, drawn one for one as the map's shrine-grove crowns (each crown at its tree's position, radius r/6) - measured 2026-09-28",
   "observed": "2026-09-28",
   "subject": "hoshigaoka",
@@ -63,5 +63,35 @@
   "subject": "hoshigaoka",
   "verifies": "F4",
   "answers": "92d79f1b3c1e"
+ },
+ "sr3-f1-west-flank": {
+  "value": 2,
+  "unit": "canopy pieces",
+  "quantity": "the drawn crowns' union has two pieces - the wood, parted only by the footpath to the well; the west flank is unbroken beside the hall (two crowns seeded in the waist)",
+  "source": "specs/279-shrine-grove-shape/layout.py run 2026-09-28 (meas canopy_pieces), on the tree list drawn one for one as the map's shrine-grove crowns",
+  "observed": "2026-09-28",
+  "subject": "hoshigaoka",
+  "verifies": "F1",
+  "answers": "262d1955f8da"
+ },
+ "sr3-f2-scrub-tiles": {
+  "value": 1,
+  "unit": "repeated pairs",
+  "quantity": "tuft bases in the shrine-open-ground group that repeat another under the donor tile's (+60, 0) offset: 1 (and 0 under (0, +140)), each copied mark jittered up to 8 px on its own",
+  "source": "the mirror's legacy-hand-authored-pool/villages/hoshigaoka/hoshigaoka.svg, shrine-open-ground group - counted 2026-09-28",
+  "observed": "2026-09-28",
+  "subject": "hoshigaoka",
+  "verifies": "F2",
+  "answers": "262d1955f8da"
+ },
+ "sr3-f3-clearing-west": {
+  "value": 7.4,
+  "unit": "sheet px",
+  "quantity": "the swept clearing's west side now zigzags: its six west vertices alternate between x 263.7-267.3 and 277.5-280.6 over y 454-579, so no stretch runs straight",
+  "source": "specs/279-shrine-grove-shape/layout.py's clear_poly - read 2026-09-28",
+  "observed": "2026-09-28",
+  "subject": "hoshigaoka",
+  "verifies": "F3",
+  "answers": "262d1955f8da"
  }
 }
