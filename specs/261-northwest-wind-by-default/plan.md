@@ -375,7 +375,7 @@ Measured before and after in research R10.
 
 ### D20 - The belt keeps its depth across itself, and the brook turns on curves (round 97c20bc9)
 
-- The belt's far face is the fringe grown by a DISC of the belt's depth (`far_envelope` over `along_the_profile`, `BELT_DEPTH_FT` 105): a neighbor `d`
+- The belt's far face is the fringe grown by a DISC of the belt's depth (`far_envelope` over `along_the_profile`, `BELT_DEPTH_FT`, 100 ft since D23): a neighbor `d`
   across the wind counts by `depth * sqrt(1 - (d / depth)^2)` of its lead. The far face used to be the near face moved
   along the wind, which is the belt's depth only where the fringe lies square to it; where the fringe runs along the wind
   the band thinned to a sliver, and Kashikawa's westernmost steading's garden and sun lane emptied it - a hole in the
@@ -390,7 +390,8 @@ Measured before and after in research R10.
   every 30 ft), sampled in order across the wind (`far_envelope`): Sawada's belt turns a right angle between two
   columns 90 ft apart, one chord of near face, and a disc round the columns alone ran the far face parallel to it 72 ft
   away. The rag no longer moves the near face into the band (0-5 ft outward only; the far face 10 ft either way). And the
-  band is laid 105 ft deep (`BELT_DEPTH_FT`), so a square fringe draws 95-120 ft. Tried and reverted (observed
+  band was laid 105 ft deep (`BELT_DEPTH_FT`), so a square fringe drew 95-120 ft; D23 lays it 100 ft deep once the
+  split it covered was fixed at its cause. Tried and reverted (observed
   2026-09-28 on rolls not committed): sampling the far face along the profile, which folded it over the steep chord
   (Sawada in six pieces); sampling it across the wind from the columns' discs alone (Inashiro and Mizuguchi thinned,
   Kashikawa in three pieces); a 94 and a 100 ft band with an outward rag on both faces, which left Kashikawa's belt in

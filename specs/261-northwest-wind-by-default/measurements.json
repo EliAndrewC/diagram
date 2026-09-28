@@ -1237,5 +1237,16 @@
   "quantity": "non-connector lane ends that reach only the way their own far end stands on, across the pool (end_serves); on main's re-laid pool 2: Kuwabata's skeleton lane end at (2272,287) in the scrub, and Kashikawa's field spur head at (1606,1534)",
   "source": ".claude/skills/diagram/pool/hamlets/*/*.json lanes, houses, fields",
   "command": "make test-file FILE=tests/hamletgen/test_pool_261.py"
+ },
+ "inashiro-r22-notes": {
+  "verifies": "F3",
+  "subject": "inashiro",
+  "round": "bf86eb9f",
+  "answers": "bf86eb9f260f",
+  "value": 327,
+  "unit": "clumps",
+  "quantity": "the windbreak clumps the notes' feature-261 entry states, now equal to the Census block's drawn count (327, 65 off the page) and the manifest's village_groves windbreak clumps on the re-laid roll; the track's bearing it states is 221 degrees, the connector's first leg (lanes[1] 221.5 in the round); the entry's woodland stands are all three across the field (F2), and the hem bullet's stale parenthetical is gone (F1)",
+  "source": ".claude/skills/diagram/pool/hamlets/inashiro/inashiro.json village_groves, lanes; inashiro.notes.md",
+  "command": "grep -n '327 clumps over a 123-degree arc' .claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md"
  }
 }

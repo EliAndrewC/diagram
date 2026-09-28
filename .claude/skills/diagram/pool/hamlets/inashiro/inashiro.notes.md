@@ -1774,6 +1774,6 @@ within 90 ft of a farmhouse (median 71 ft), and the entrance board stands on the
 passed by all 15 households' ways out. The track leaves southwest (221 degrees), so the district direction reads
 southwest. The rolled crescent is drawn, at an aspect of 2.0. Eleven of the fifteen homesteads carry their own dry plot
 against a lee or flank side or on the ground beside it, so a house's nearest dry ground lies a median 70 ft away; the hem along the supply canal
-stays, across the rice. The woodland commons are three stands, two of them across the field from the houses: the frame they
+stays, across the rice. The woodland commons are three stands, all of them across the field from the houses: the frame they
 must fit in begins 100 ft west of the houses, and the ground on the houses' side inside it lies between their keep-out
 and the field's set-back, too narrow for a stand.
