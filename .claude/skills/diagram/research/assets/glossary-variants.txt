@@ -1408,6 +1408,8 @@ offering hall	offering hall
 offtake	offtake
 offtakes	offtake
 ofuregaki	ofuregaki
+ohaguro dobu	ohaguro-dobu
+ohaguro-dobu	ohaguro-dobu
 okabasho	okabasho
 okaji	ōkaji
 okajiba	ōkaji
@@ -1901,6 +1903,8 @@ tawed	shironameshi
 tawing	shironameshi
 tax-farming	tax-farming
 tax-free plot	tax-free plot
+tayu	tayu
+tayū	tayu
 tazuke kusayama	kusayama
 tedai	tedai
 teikaku	teikaku
@@ -2080,6 +2084,7 @@ warrens	warren
 warring states	Warring States
 warring-states	Warring States
 washe	wazi
+wasi	wazi
 watashiba	watashiba
 water duty	water duty
 water gate	water gate

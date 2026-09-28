@@ -8402,7 +8402,8 @@
   "def": "An entertainment precinct of a Song city, open to all comers, holding performance halls (goulan) among shops, teahouses and wine shops. Also called washe.",
   "variants": [
    "wazi",
-   "washe"
+   "washe",
+   "wasi"
   ]
  },
  "okabasho": {
@@ -8421,6 +8422,20 @@
   "def": "A Song state poorhouse that housed and fed widows, orphans, the old, the disabled and the destitute, set up early in the Chongning era (1102-1106) in the counties and in every sizable town.",
   "variants": [
    "juyangyuan"
+  ]
+ },
+ "tayu": {
+  "def": "A rank of courtesan in the licensed quarters of Edo-period Japan; the record's Osaka source names the tayu first among Shinmachi's more than 800 courtesans in the 1690s and 1700s.",
+  "variants": [
+   "tayu",
+   "tayū"
+  ]
+ },
+ "ohaguro-dobu": {
+  "def": "The ditch that ran around the Yoshiwara quarter of Edo, outside its high wall; together with the wall it shut the quarter off from the town.",
+  "variants": [
+   "ohaguro-dobu",
+   "ohaguro dobu"
   ]
  }
 }
