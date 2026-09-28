@@ -329,8 +329,9 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
     rolled: dict[str, SitePlan] = {}  # the plan the LAST roll built on - the kept attempt rolls last, so the report reads it
     rolled_m: dict[str, dict[str, Any]] = {}  # ...and its finished manifest, by the same argument (feature 213: the report carries it)
 
-    def _roll(avoid: Sequence[tuple[float, float]], out: str | None = None, attempt: int = 1, after: Sequence[str] = ()) -> tuple[Settlement, list[str], list[tuple[float, float]], list[str]]:
-        """Build, finish and gate once. Returns the settlement, the gate's verdict, and the seats the
+    def _roll(avoid: Sequence[tuple[float, float]], attempt: int = 1, after: Sequence[str] = ()) -> tuple[Settlement, list[str], list[tuple[float, float]], list[str]]:
+        """Build and gate once - UNFINISHED: only the attempt kept is finished, once, after the choice (feature 278, FR-006).
+        Returns the settlement, the gate's verdict, and the seats the
         GATE ITSELF names as unreached - read off its message, never recomputed. A hand-rolled
         reach measure was tried and was wrong on five of six seeds (see future-work 2b): it
         over-counted and never read zero, so anything steered by it was steered by noise."""
@@ -364,11 +365,6 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
         s2.M["meta"]["roll_failures"] = [f"farmhouses_reach_a_way[{len(_seats)}]"] if _seats else []
         s2.M["meta"]["roll_placed"] = int(rolled["plan"].placed)
         s2.M["meta"]["roll_acres"] = float(rolled["plan"].acres)
-        if out is not None:
-            s2.finish(out, render=render)
-        else:
-            with tempfile.TemporaryDirectory() as tmp:
-                s2.finish(os.path.join(tmp, "scratch"), render=False)
         # THE GENERATOR REPORTS ON ITSELF NOW (feature 166). This used to run the whole check battery
         # in-process on the finished manifest and take its verdict as the map's. There is no battery:
         # every rule it held is either a property some placer guarantees by construction, proven by
@@ -395,12 +391,15 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
     #
     # The retry is self-limiting: it runs only for a map that stranded a house, and it keeps a
     # re-roll only if the reach count got no worse.
-    # EVERY ATTEMPT FINISHES INTO ITS OWN STAGE, and only the kept one is promoted onto `out_base` (`promote`).
-    _stage = stage_for(out_base) if out_base is not None else None
-    _s, failures, seats, lines = discard_on_failure(_stage, lambda: _roll((), _stage))
-    kept_stage = _stage
+    # ONLY THE ATTEMPT KEPT IS FINISHED, into a stage that is then promoted onto `out_base` (`promote`) - so a rejected roll
+    # never touches the map's own files, nor does one that dies mid-finish (`discard_on_failure`). Every attempt used to be
+    # finished into its own stage before the choice, which paid a whole finish - render and page - for the attempt thrown
+    # away (feature 278, FR-006). The choice reads only what the build decided: the unreached seats and the households
+    # placed. The kept settlement's manifest is the report's (`rolled_m`), and finishing it completes that manifest.
+    _s, failures, seats, lines = _roll(())
+    kept_s = _s
     avoid: list[tuple[float, float]] = []
-    stale = False  # ...and whether the files on disk came from a later roll we then rejected
+    stale = False  # ...and whether a later roll was rejected, so the keeper is handed back
     attempt = kept_attempt = 1
     after: list[str] = []  # the checks that forced each re-roll, in order
     _kept_placed = int(_s.M["meta"]["roll_placed"])  # the households the kept roll seated - a re-roll may not seat fewer
@@ -420,8 +419,7 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
         avoid = avoid + seats
         after = after + ["farmhouses_reach_a_way"]
         attempt += 1
-        _stage2 = stage_for(out_base) if out_base is not None else None
-        _s2, f2, seats2, lines2 = discard_on_failure(_stage2, lambda _a=avoid, _o=_stage2, _n=attempt, _f=after: _roll(_a, _o, _n, _f))
+        _s2, f2, seats2, lines2 = _roll(avoid, attempt, after)
         # THE ACCEPT CRITERION IS THE REACH COUNT, NOT THE GATE'S TOTAL (feature 166 T03).
         #
         # It used to be `len(f2) <= len(failures)`: keep a re-roll only if the battery's WHOLE failure
@@ -444,20 +442,21 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
             failures, seats, lines, kept_attempt = f2, seats2, lines2, attempt
             _kept_placed = int(_s2.M["meta"]["roll_placed"])
             _keep_plan, _keep_m = rolled["plan"], rolled_m["M"]
-            if kept_stage is not None:
-                promote(kept_stage, None)  # the roll it replaces is discarded unseen
-            kept_stage = _stage2
+            kept_s = _s2
         else:
-            if _stage2 is not None:
-                promote(_stage2, None)
             stale = True
             break
-    if kept_stage is not None:
-        promote(kept_stage, out_base)  # the kept roll's files, and only those, reach the map's own paths
     if stale:
-        # The kept roll's files were staged, not overwritten, so there is nothing to re-emit (a re-roll of the keeper's
-        # avoid list used to put it back on disk): hand back the keeper itself.
+        # Nothing was finished before the choice, so there is nothing to re-emit (a re-roll of the keeper's avoid list used
+        # to put it back on disk): hand back the keeper itself.
         rolled["plan"], rolled_m["M"] = _keep_plan, _keep_m
+    if out_base is not None:
+        _stage = stage_for(out_base)
+        discard_on_failure(_stage, lambda: kept_s.finish(_stage, render=render))
+        promote(_stage, out_base)  # the kept roll's files, and only those, reach the map's own paths
+    else:
+        with tempfile.TemporaryDirectory() as tmp:
+            kept_s.finish(os.path.join(tmp, "scratch"), render=False)
     return Report(plan=rolled.get("plan", plan), failures=failures, path=out_base, fail_lines=lines, attempt=kept_attempt, rerolled_after=after[: kept_attempt - 1], manifest=rolled_m.get("M"))
 
 
