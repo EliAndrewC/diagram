@@ -124,6 +124,6 @@ step 5) names it.
   Two figures with a unit stand in operative sections with no measurement key and no one-shot label (feature 239,
   spec-lint check 5): (1) the Summary's grove size, `137 by 215 ft`, a measurement of the frozen map - record it
   from the map's manifest with the command that reads it and cite the key, or label it with the date observed and
-  the method; (2) SC-002's crown-to-line tolerance, "within 2 ft", a chosen bar rather than a measurement - state it
+  the method; (2) SC-002's crown-to-line tolerance, `within 2 ft`, a chosen bar rather than a measurement - state it
   as the bar it is (a backticked name, or a label saying why that tolerance) so check 5 does not read it as an
   unmeasured figure. Re-dispatch as a first reading once both carry their pointer or label.
