@@ -109,14 +109,32 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
     # two-point polyline whose truth value is exactly "the cell center is not fouled" - so every cell
     # re-derived every polygon's bounds and measured every edge; 57 of a polder's 110 s.
     _index = fabric_index(hard, WEB_HARD_GAP, walls, _plan_gap, water, 14.0)
-    free = [[not _index.fouled(to_pt(ix, iy)) for ix in range(nx)] for iy in range(ny)]
     sx, sy = min(nx - 1, max(0, round((start[0] - x0) / cell))), min(ny - 1, max(0, round((start[1] - y0) / cell)))
     gx, gy = min(nx - 1, max(0, round((goal[0] - x0) / cell))), min(ny - 1, max(0, round((goal[1] - y0) / cell)))
-    free[sy][sx] = free[gy][gx] = True  # the two given endpoints are the caller's, not the lattice's to refuse
+    # EACH CELL IS JUDGED WHEN THE SEARCH FIRST ASKS OF IT (feature 278, FR-001). The box was judged whole before the
+    # search began - every cell fouled-or-not and, where a brook is tolled, in-the-band-or-not: 358,398 and 174,118
+    # tests on Kashikawa, most of them for cells Dijkstra never reaches, because a search that finds its goal settles
+    # only the cells nearer than it. The same two questions are asked of the same cells the search reads, in the same
+    # order, so the path is the one the whole-box lattice gave.
+    free: dict[tuple[int, int], bool] = {(sx, sy): True, (gx, gy): True}  # the two given endpoints are the caller's, not the lattice's to refuse
+
+    def is_free(ix: int, iy: int) -> bool:
+        v = free.get((ix, iy))
+        if v is None:
+            v = free[(ix, iy)] = not _index.fouled(to_pt(ix, iy))
+        return v
+
     # ENTERING THE BROOK'S BAND IS A CROSSING, and a crossing is charged (`set_crossing`); only free band cells matter -
-    # everywhere but a ford the band is walled off already - so only those are asked
+    # everywhere but a ford the band is walled off already - so only those are asked, and only when reached
     _toll = float(_CROSSING["cost"])  # type: ignore[arg-type]
-    band = {(ix, iy) for iy in range(ny) for ix in range(nx) if free[iy][ix] and in_brook_band(to_pt(ix, iy))} if _toll else set()
+    band: dict[tuple[int, int], bool] = {}
+
+    def in_band(ix: int, iy: int) -> bool:  # asked only of free cells, as the whole-box set was built from them
+        v = band.get((ix, iy))
+        if v is None:
+            v = band[(ix, iy)] = in_brook_band(to_pt(ix, iy))
+        return v
+
     dist = {(sx, sy): 0.0}
     prev: dict[tuple[int, int], tuple[int, int]] = {}
     heap = [(0.0, sx, sy)]
@@ -134,8 +152,8 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
                 # planned route was not actually walkable and failed its own acceptance test a moment
                 # later, having been "found". Requiring both orthogonal neighbors makes the lattice
                 # tell the truth about what it can walk.
-                if (dx2 or dy2) and 0 <= jx < nx and 0 <= jy < ny and free[jy][jx] and (not (dx2 and dy2) or (free[iy][jx] and free[jy][ix])):
-                    nd = d + math.hypot(dx2, dy2) * cell + (_toll if (jx, jy) in band and (ix, iy) not in band else 0.0)
+                if (dx2 or dy2) and 0 <= jx < nx and 0 <= jy < ny and is_free(jx, jy) and (not (dx2 and dy2) or (is_free(jx, iy) and is_free(ix, jy))):
+                    nd = d + math.hypot(dx2, dy2) * cell + (_toll if _toll and in_band(jx, jy) and not in_band(ix, iy) else 0.0)
                     if nd < dist.get((jx, jy), 1e18):
                         dist[(jx, jy)] = nd
                         prev[(jx, jy)] = (ix, iy)
