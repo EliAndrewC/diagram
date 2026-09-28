@@ -105,7 +105,7 @@ it and the re-seating of the four failing gardens carry the request and the GM's
    fix-scope question (not moved unasked, not exempted). If the session holds that those maps are not what "hand-drawn
    diagrams" means, that is an exception to put to the GM verbatim, not a scope line in an FR.
 2. **Nothing proves the trees are counted.** The GM's question is clearance "from the trees", but the shrine sheet as
-   drawn fails on the hall alone (request.md: the hall shades the bed until about 10, 2.5 h lit in all), so a check that
+   drawn fails on the hall alone (request.md: the hall shades the bed until about 10, `2.5 h` lit in all), so a check that
    ignored the wood would pass FR-004 and SC-002 as written. FR-003 should state which drawn kinds count as a building,
    a wall and a tree - a tree including a wood or grove drawn as an area (shrine grove, garden pines, sacred tree), and
    a building every roofed kind (gatehouse, bell tower, stage, granary) - and FR-004 should add a test that a bed shaded
