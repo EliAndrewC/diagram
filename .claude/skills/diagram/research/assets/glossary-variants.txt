@@ -315,8 +315,6 @@ cloister	cloister
 cloisters	cloister
 coefficient of variation	coefficient of variation
 coke	coke
-collar	planted collar
-collars	planted collar
 collector	collector
 comb	comb
 comb fan	comb
@@ -1475,6 +1473,8 @@ louzeyuan	louzeyuan
 low stage	river stage
 lower mansion	lower mansion
 lower mansions	lower mansion
+lower residence	lower mansion
+lower residences	lower mansion
 lower yangtze	Lower Yangzi
 lower yangzi	Lower Yangzi
 lu guimeng	Lu Guimeng
@@ -1852,6 +1852,7 @@ pit ranks	pit rank
 plankton	plankton
 plant association	plant association
 planted collar	planted collar
+planted collars	planted collar
 pleasure quarter	pleasure quarter
 pleasure quarters	pleasure quarter
 pledged land	pledged land
