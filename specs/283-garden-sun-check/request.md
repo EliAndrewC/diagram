@@ -10,3 +10,10 @@ columns, shadows cast every half hour at 38N in the shoulder month (declination 
 least half its area in sun for only 2.0-2.5 hours: the hall shades it until about 10, the wood's west flank from
 about 13:00 to dusk. The engine's rules for scripted maps (39 ft open south of a bed; 50 ft clear of a tall belt west
 and southwest - research homesteads 040, 043) would not have seated it there; no check applies them to hand sheets.
+
+Measured next (observed 2026-09-28; method: the same shadow cast over every sheet's `vegetable garden` rect, buildings
+at 20 ft, walls at 1.6 m, trees at 10 m, a half-hour counted when at least half the bed is lit): Hoshigaoka shrine 2.5 h;
+Ubame 0 h, Hayakawa 0 h, Ochiba 0.5 h (strips along the north wall about 11 ft north of the residence); the county
+example 9.5 h. The GM was asked how to fix the three magistracies - move them all, shrine now and magistracies later, or
+declare half-shade beds - and answered (2026-09-28): "Move them all (Recommended)" - re-seat each magistracy garden where
+the check passes, preferring the west side of the residence (the one side the record attests), and the shrine's the same.
