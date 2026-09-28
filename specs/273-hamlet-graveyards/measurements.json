@@ -3,7 +3,7 @@
     "value": 1,
     "unit": "line",
     "quantity": "inashiro.notes.md's Subject and Features now record the hamlet's own burial ground (hamlet_burial own_ground)",
-    "source": "pool/hamlets/inashiro/inashiro.svg and .json - measured 2026-09-28 from the map's SVG (the burial ground's drawn path and marker rects) and manifest (houses, cemeteries), by the session's scratch script",
+    "source": "pool/hamlets/inashiro/inashiro.notes.md - read 2026-09-28 for the burial-ground lines",
     "observed": "2026-09-28",
     "subject": "inashiro",
     "verifies": "F1"
@@ -39,7 +39,7 @@
     "value": 1,
     "unit": "line",
     "quantity": "kashikawa.notes.md's Features block records the burial ground",
-    "source": "pool/hamlets/kashikawa/kashikawa.svg and .json - measured 2026-09-28 from the map's SVG (the burial ground's drawn path and marker rects) and manifest (houses, cemeteries), by the session's scratch script",
+    "source": "pool/hamlets/kashikawa/kashikawa.notes.md - read 2026-09-28 for the burial-ground lines",
     "observed": "2026-09-28",
     "subject": "kashikawa",
     "verifies": "F5"
@@ -57,7 +57,7 @@
     "value": 1,
     "unit": "line",
     "quantity": "kuwabata.notes.md no longer says 'no graveyard' and records the ground",
-    "source": "pool/hamlets/kuwabata/kuwabata.svg and .json - measured 2026-09-28 from the map's SVG (the burial ground's drawn path and marker rects) and manifest (houses, cemeteries), by the session's scratch script",
+    "source": "pool/hamlets/kuwabata/kuwabata.notes.md - read 2026-09-28 for the burial-ground lines",
     "observed": "2026-09-28",
     "subject": "kuwabata",
     "verifies": "F2"

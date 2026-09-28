@@ -187,7 +187,7 @@ class KeepoutsMixin:
         "castle_towers",  # yagura are roofed buildings
     )
     _CANOPY_STRUCT_KEYS = _HALO_STRUCT_KEYS + _CANOPY_EXTRA_KEYS + _CANOPY_ROOFED_KEYS
-    CEMETERY_CORE = 0.6  # the fraction of a burial ground's half-extent kept clear of crowns - a GUESS (feature 273)
+    CEMETERY_CORE = 0.9  # the fraction of a burial ground's half-extent kept clear of crowns: the grave markers reach ~0.8-0.9 of it (cemetery's grid), and at 0.6 a crown hid a whole grave on Kuwabata (settlement-review round 2) - feature 273
 
     def _canopy_keepouts(self: Settlement, bbox: tuple[float, float, float, float]) -> tuple[list[tuple[float, float, float, float]], list[tuple[float, float, float]]]:  # type: ignore[misc]
         """Every drawn BUILDING footprint (as x, y, half-w, half-h) and WELLHEAD (as x, y, r) near `bbox` -

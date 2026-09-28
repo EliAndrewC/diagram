@@ -7,6 +7,15 @@ tax-free plots, not a different kind of place, and its defects are the same defe
 This is where hamlet work goes - the paddy fabric, the lane web, homesteads and their groves, wells
 and byres, woodland and windbreaks, the notice board, and the cohort seeds that surface all of it.
 
+## OPEN 2026-09-28, OWED: no way reaches a burial ground, at any size of settlement
+
+Feature 273's settlement-reviews found that no lane or path reaches a hamlet's own burial ground (Inashiro,
+Kashikawa, Kuwabata), and no generator connects any graveyard at any tier. The record already says a path was
+there: religion-and-death 140 quotes that at the seventh-day festival of the dead "the graves and the paths to the
+graves are cleaned" (ndl-crd-nanukabon), and 190 gives the pyre "a minor funeral path". Sketch: after the burial
+ground is seated and before the lane web runs, register a way-target at the ground's edge nearest the settlement,
+so the web lays a footpath spur to it as it does to an outlying steading; the spur's width is the footpath's.
+
 ## OPEN 2026-09-27, OWED AT CONVERSION: the village generator draws no cremation ground and no wayside stones
 
 Feature 272 put a village cremation ground (six stone jizo at it) and a group of wayside stones at the south lane's

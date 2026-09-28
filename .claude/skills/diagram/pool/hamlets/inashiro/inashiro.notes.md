@@ -34,7 +34,7 @@ DIRECTION is not invented: it is the bearing of this map's own connector track w
 
 ### Features
 
-- **burial ground**: Inashiro keeps its own ground: a glade of graves in the windbreak's east arm, north-east of the houses and beside the track that runs north to the main village, the way the urns come home from its cremation ground. The land falls south, but the ground below the houses is paddy, so it stands on the nearest clear ground instead.
+- **burial ground**: Inashiro keeps its own ground: a glade of graves cut into the windbreak's east arm, north-east of the houses, a short way through the trees from the track that runs north to the main village, the way the urns come home from its cremation ground. The land falls south, but the ground below the houses is paddy.
 
 ## Why it exists
 

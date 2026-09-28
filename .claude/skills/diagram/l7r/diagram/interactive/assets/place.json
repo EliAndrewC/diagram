@@ -2,7 +2,7 @@
   "kinds": {
     "hamlet": {
       "noun": "hamlet",
-      "what": "a small outlying farming community belonging to a village district. It has no headsman of its own - the village headsman who oversees it lives in the main village - and no shrine and no burial ground; its dead go to the district's ground. A hamlet is the commonest kind of settlement there is: a domain holds {HAMLETS_PER_DOMAIN:,} of them to {VILLAGES_PER_DOMAIN} villages, and {HAMLET_SHARE} of its inhabitants live in one.",
+      "what": "a small outlying farming community belonging to a village district. It has no headsman of its own - the village headsman who oversees it lives in the main village - and no shrine and no cremation ground: its dead are burned at the main village's, and unless the hamlet keeps a burial ground of its own they lie in the village's ground. A hamlet is the commonest kind of settlement there is: a domain holds {HAMLETS_PER_DOMAIN:,} of them to {VILLAGES_PER_DOMAIN} villages, and {HAMLET_SHARE} of its inhabitants live in one.",
       "houses_noun": "farmhouses",
       "excludes_farms": false,
       "population_note": "",
@@ -10,7 +10,7 @@
     },
     "village": {
       "noun": "village",
-      "what": "the head of its village district, and the seat of the village headsman who oversees the outlying hamlets - with its own shrine, its tax-free plots and the burial ground the whole district uses. Like every village district it is peasant-only; no samurai live here.",
+      "what": "the head of its village district, and the seat of the village headsman who oversees the outlying hamlets - with its own shrine, its tax-free plots, the district's cremation ground and the burial ground that the village and those of its hamlets without their own use. Like every village district it is peasant-only; no samurai live here.",
       "houses_noun": "farmhouses",
       "excludes_farms": false,
       "population_note": "",
@@ -90,6 +90,7 @@
   },
   "collisions": {
     "household shrine": "(The little hokora in a corner of a farmstead plot is one household's own, and is a different thing from a village shrine.)",
+    "burial ground": "This one keeps its own: the small common ground at its edge, where the urns brought home from the village's cremation ground are laid.",
     "grave island": "(The mound out among the plots is a field grave, not a burial ground.)"
   },
   "basis": "the counts above are Rokugan's own arithmetic rather than a historical finding, and so is the rule that a hamlet keeps no headman - the Edo record has branch hamlets that kept their own officials and stood on a par with the parent village.",
