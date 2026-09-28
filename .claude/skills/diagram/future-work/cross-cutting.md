@@ -27,6 +27,13 @@ background shells for low memory); memory pressure on Chromium is the untested c
 The assertion now names the page's state (mode, `data-hl`, the modal, raster readiness) before and after, so the
 next natural failure says which one was wrong.
 
+MEASURED 2026-09-28 (feature 283, two failures in three loaded gates): while lit the page was in raster mode with NO
+highlight - `data-hl` empty, the paddy group's class `f f-paddy` without `on` - so the highlight was undone or never
+applied, not a slow wash. `highlight()` ignores nothing but a pinned modal (closed here) or a repeat of the current
+key; the likely undoer is the pointer event Chromium fires for the stationary mouse after the viewport shrinks, which
+runs `highlight` for what is under it. The test now re-asserts the highlight on every poll of `settles`, keeping the
+assertion's strictness; if it fails again with `on` set, the wash itself is the fault.
+
 ## The review-prereq guard matches a finding's measurement by bare id (found 2026-09-27, feature 267)
 
 `scripts/_review_prereq.py` `unverified_findings` counts a finding disposed when any `measurements.json` record has
