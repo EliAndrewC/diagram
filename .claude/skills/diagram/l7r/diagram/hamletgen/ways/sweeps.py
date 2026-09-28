@@ -6,9 +6,10 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import PointGrid, Settlement, edge_dist, seg_closest, seg_dist, seg_intersect, segments_cross
+from l7r.diagram.settlement import PointGrid, Settlement, edge_dist, point_in_poly, seg_closest, seg_dist, seg_intersect, segments_cross
 
 from ..consts import (
+    STEADING_ARRIVAL_FT,
     WEB_FABRIC_GAP,
     WEB_REACH_FT,
     Poly,
@@ -17,7 +18,22 @@ from ..consts import (
 from .checks import stream_segs
 from .clearance import _bends_badly, _clear_touch, drop_end_nubs, existing_walk, may_write
 from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _draw_web, _hits_a_steading
-from .geom import _TOUCH_GAP, _aim_off, _components, _net_reach, _reach, polyline_len, shadow_share, shadowing_lane
+from .geom import (
+    _TOUCH_GAP,
+    WorkedGround,
+    _aim_off,
+    _components,
+    _net_reach,
+    _reach,
+    end_serves,
+    memo_ground,
+    polyline_len,
+    shadow_share,
+    shadowing_lane,
+    steading_footprints,
+    worked_ground,
+    worked_ground_rings,  # noqa: F401 - re-exported: the gate test reads the sweep's own field from here
+)
 from .route import _route
 
 # HOW FAR A FOOTPATH MAY WANDER, as a multiple of its own straight-line chord. A review measured
@@ -648,15 +664,6 @@ def _keep_the_route_wide(s: Settlement, hard: list[Poly], walls: Sequence[Poly],
     return closed
 
 
-def worked_ground_rings(M: Mapping[str, Any]) -> list[list[Pt]]:
-    """The field a way may END at: the paddy's outlines AND its dry hem, which is worked ground of the same field (feature
-    261: Mizuguchi's spur crossed the brook and stopped at the hem plots between the water and the paddy, 108 ft from the
-    paddy's own outline, and was dropped as an end in open ground - the hamlet's only way to its rice). One definition,
-    read by the sweep that trims ends and by the gate that checks them."""
-    rings = [[(float(a), float(b)) for a, b in (f.get("outline") or [])] for f in (M.get("fields") or [])]
-    return rings + [[(float(a), float(b)) for a, b in (d.get("poly") or [])] for d in (M.get("dry_plots") or []) if d.get("poly")]
-
-
 def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
     """Pull back any lane end that reaches NOTHING, and empty what is left if pulling back cannot save it.
 
@@ -669,7 +676,10 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
     `_sweep_debris`'s rule to finish. A connector is exempt: it leaves the map by design."""
     lanes = s.M.get("lanes") or []
     houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])]
-    rings = worked_ground_rings(s.M) or [list(f) for f in fields]
+    # THE ONE END RULE (269 B04/B17): `end_serves`, the body the trims and the gate read - this sweep kept its own copy, and
+    # with it the 60 ft to the field the bund rule retired. `fields` stands in only where the manifest records no ground.
+    ground = memo_ground(s, "worked", worked_ground) if worked_ground_rings(s.M) else WorkedGround([list(f) for f in fields])
+    steadings = steading_footprints(s.M)
     fixed, emptied = 0, []
     for i, ln in enumerate(lanes):
         if ln.get("connector"):
@@ -685,10 +695,7 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
         ]
 
         def _reaches(q: Pt, _o: Sequence[tuple[Pt, Pt]] = others) -> bool:
-            near_way = min((seg_dist(q[0], q[1], a, b) for a, b in _o), default=float("inf"))
-            near_house = min((math.dist(q, h) for h in houses), default=float("inf"))
-            near_field = min((edge_dist(q[0], q[1], r) for r in rings if len(r) >= 3), default=float("inf"))
-            return min(near_way, near_house, near_field) <= _REACH_FT
+            return end_serves(q, _o, houses, ground, steadings)
 
         before = len(pts)
         _mine = [(float(x), float(y)) for x, y in pts]
@@ -713,30 +720,17 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
         _rest += list(zip(pts, pts[1:], strict=False))
         if any(min((seg_dist(h[0], h[1], a, b) for a, b in _rest), default=float("inf")) > _SERVE_FT for h in _served):
             # A FARMHOUSE WOULD LOSE ITS WAY, so the lane stays - and then its end must EARN its ink rather than stop in
-            # grass. The end is carried to the nearest thing worth walking to instead: the house it serves, or another way.
-            # Dropping it instead is what `generate` answers with a whole re-roll (the reference hamlet went to attempt 3
-            # and its seed +20.5%), and a re-roll is a heavy price for a tread that only needed to arrive somewhere.
+            # grass. The end is carried on to the dooryard of the house it serves (269 B17: a lane that serves a farmhouse
+            # ends at its dooryard). Dropping it instead is what `generate` answers with a whole re-roll (the reference
+            # hamlet went to attempt 3 and its seed +20.5%), and a re-roll is a heavy price for a tread that only needed to
+            # arrive somewhere.
             pts = [(float(x), float(y)) for x, y in _mine]
             for _e in (-1, 0):
                 if _reaches(pts[_e]):
                     continue
-                _tx, _ty, _td = 0.0, 0.0, float("inf")
-                for _h in houses:
-                    _d = math.dist(pts[_e], _h)
-                    if _d < _td:
-                        _tx, _ty, _td = _h[0], _h[1], _d
-                if _td > 2.0 * _REACH_FT or _td <= 0.0:
-                    continue
-                # STOP SHORT OF THE HOUSE ITSELF: the rule asks that an end come within `_REACH_FT` of something, and a
-                # tread carried to the doorstep laps the farmhouse (`features_do_not_overlap`) and becomes the nearest way
-                # the notice board would face. Nine tenths of the reach is inside the rule and clear of the wall.
-                # The fraction is always positive here and nothing guards it: this end reached NO house, which is what
-                # `_reaches` just said, so `_td` is past the whole reach and cannot be inside nine tenths of it. A
-                # `_f <= 0` guard stood here and was deleted rather than covered - it could not fire, and an unreachable
-                # branch reads to the next session as a case that happens (feature 174's rule: delete, never pragma).
-                _f = (_td - 0.9 * _REACH_FT) / _td
-                _q = (pts[_e][0] + (_tx - pts[_e][0]) * _f, pts[_e][1] + (_ty - pts[_e][1]) * _f)
-                pts = [*pts, _q] if _e == -1 else [_q, *pts]
+                _q = carry_to_dooryard(pts[_e], houses, steadings, 2.0 * _REACH_FT)
+                if _q is not None:
+                    pts = [*pts, _q] if _e == -1 else [_q, *pts]
             if [[round(x, 1), round(y, 1)] for x, y in pts] == ln["pts"]:
                 continue
             ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in pts]
@@ -750,6 +744,24 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
         fixed += 1
     s.drop_lanes(emptied)  # record and ink together - see `drop_lanes`
     return fixed
+
+
+def carry_to_dooryard(q: Pt, houses: Sequence[Pt], steadings: Sequence[Sequence[Pt]], reach: float, step: float = 2.0) -> Pt | None:
+    """Where an end at `q` stops once carried straight toward the nearest farmhouse within `reach`: the first point of the
+    walk (in `step` ft) inside `STEADING_ARRIVAL_FT` less a margin of any steading's built ground, so the tread arrives at
+    the dooryard and stops short of the wall (a tread on the doorstep laps the farmhouse, `features_do_not_overlap`).
+    None where no house is within `reach`, or the walk reaches none of it (269 B17)."""
+    near = [h for h in houses if 0.0 < math.dist(q, h) <= reach]
+    if not near:
+        return None
+    h = min(near, key=lambda c: math.dist(q, c))
+    d = math.dist(q, h)
+    stop = STEADING_ARRIVAL_FT - 4.0  # inside the arrival bar by the clip's own 4 ft step
+    for k in range(1, int(d / step) + 1):
+        p = (q[0] + (h[0] - q[0]) * k * step / d, q[1] + (h[1] - q[1]) * k * step / d)
+        if any(edge_dist(p[0], p[1], list(sp)) <= stop or point_in_poly(p[0], p[1], list(sp)) for sp in steadings):
+            return p
+    return None
 
 
 def _sweep_debris(s: Settlement) -> int:
@@ -825,7 +837,7 @@ _FINE_CELL = 3.0
 # is what opened tripwire seed 27's corridor while keeping every lane off the steadings.
 _DOUBLED_GAP_FT = 8.0  # ft: two treads nearer than this read as one smudged band with a hairline down it
 _DOUBLED_SHARE = 0.5  # ...and a lane running that close for half its own length is the doubled ink, whatever its ends do
-_REACH_FT = 60.0  # ft: `lanes_reach_something`'s own figure for an end - a way, a house or the field within this
+_REACH_FT = 60.0  # ft: `WAY_END_REACH_FT`, the reach to another way; here the reach a home-bank drop and a dooryard carry look within
 _SERVE_FT = 100.0  # ft: a way serves a house within this - `farmhouses_reach_a_way`'s own figure, so a dropped fragment never strands one
 
 

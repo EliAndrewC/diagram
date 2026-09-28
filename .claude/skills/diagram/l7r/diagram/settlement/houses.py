@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING, Any, cast
 
 from ._geom import PointGrid, Pt, boxed_polys, drawn_extent, edge_dist, indexed_grid, point_in_poly, quad_hits_poly, rot_rect, seg_dist
 from ._knobs import skeleton_layout
+from .rolling.bearing import QUARTER_TURN_SHARE, house_rot
 
 # HOW FAR A FARMHOUSE WALL STANDS OFF THE PADDY (researched 2026-08-27, feature 133 T41; the record
 # in research/homesteads.html "How close does a farmhouse stand to the paddy?"). The paddy's margin is
@@ -631,19 +632,16 @@ class HousesMixin:
     def _house_rot(self: Settlement, cx: float, cy: float) -> float:  # type: ignore[misc]
         """The rake a farmhouse seated at (cx, cy) will be DRAWN at, in degrees.
 
-        ONE DEFINITION, because the placer and the renderer must not each have their own (feature
-        121). This expression used to be written out at both farmhouse record sites, and the bundle
-        placer had no third copy at all - it cleared an AXIS-ALIGNED rect and the map then drew the
-        house raked, which is the whole of the drawn-versus-placed divergence. Measured on
-        pool/hamlets/inashiro/inashiro.json: the bundle's position and size match the drawn record to four
-        decimal places, and the rake alone pushes a corner up to 2.56 px outside the rect that was
-        cleared - which is the 2.4 px `_on_a_tread`'s own docstring reports.
+        ONE DEFINITION, because the placer and the renderer must not each have their own (feature 121): the bundle
+        placer once cleared an AXIS-ALIGNED rect and the map then drew the house raked (a corner 2.56 px outside the
+        cleared rect on Inashiro), which was the whole of the drawn-versus-placed divergence.
 
-        POSITION-SEEDED, and that is what makes the fix possible: the rake is a pure function of the
-        seat's coordinates (so it never ripples other placement - see `_hjit`), and therefore the
-        placer can know the exact quad it is going to draw BEFORE it commits to the seat. Nothing
-        about when rotation is decided had to change."""
-        return self._hjit(cx, cy, 11.0) * 10.0 - 5.0
+        POSITION-SEEDED: a pure function of the seat's coordinates (see `_hjit`), so the placer knows the exact quad
+        before it commits. A hamlet sets `_house_bearing` (269 B18, research/homesteads/240): the common bearing, the
+        lane's turn and a quarter-turned tenth (`rolling/bearing.py`); elsewhere the old +/-5 degree rake stands."""
+        if self._house_bearing is None:
+            return self._hjit(cx, cy, 11.0) * 10.0 - 5.0
+        return house_rot(self._hjit, cx, cy, self._house_bearing, self._bearing_follow, QUARTER_TURN_SHARE)
 
     def _quad(self: Settlement, cx: float, cy: float, w: float, h: float, jit: float, salt: float, level: str | None = None) -> list[Pt]:  # type: ignore[misc]
         """A slightly-IRREGULAR 4-sided polygon INSCRIBED in the (cx,cy,w,h) rect: each corner is pulled

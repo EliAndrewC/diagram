@@ -21,11 +21,12 @@ from ..consts import (
     Pt,
 )
 from ..plan import SitePlan
+from .bund import a_way_onto_the_bund, run_lanes_on_to_the_bund, worked_ground_of
 from .checks import drawn_water_segs
 from .clearance import clear_runs, clip_to_clear
 from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _homestead_polys, _margin_frame, _net_segs, _pass, _pull_back_to_service
 from .geom import _trim_to_service, polyline_len, steading_footprints
-from .joints import center_lane_ends, straighten_joints
+from .joints import center_lane_ends, meet_end_to_end, straighten_joints
 from .route import _route
 from .serve import _lay_web_lane, _serve_stragglers
 from .smooth import _STUB_REACH_FT, _smooth_web
@@ -270,7 +271,10 @@ def tidy_lane_ends(s: Settlement, envelope: Poly) -> None:
     # sees - the bar the pool's lane-end test holds - and the envelope stands well out from it on a polder, so a skeleton
     # arm into Kuwabata's scrub 481 ft from any paddy counted as reaching the field. The envelope stands in where no field
     # outline is recorded.
-    _fields = [[(float(a), float(b)) for a, b in f["outline"]] for f in s.M.get("fields") or [] if len(f.get("outline") or []) >= 3] or [list(envelope)]
+    # ...AND AN END THAT MAKES FOR THE FIELD IS CARRIED ON TO ITS BUND FIRST (269 B04/B17): the trim below counts the bund, not
+    # "within 60 ft of the field", so an end left short of it would be pulled back to a dooryard it had walked away from.
+    _ground = worked_ground_of(s, envelope)
+    run_lanes_on_to_the_bund(s, _ground)
     for _i, _ln in enumerate(list(s.M.get("lanes", []))):
         # KEPT AND NOT REACHABLE TODAY, deliberately (feature 146). Every pass that can empty a lane
         # DELETES the record with the ink (feature 145's "the husk goes with the ink"), so no husk
@@ -297,7 +301,7 @@ def tidy_lane_ends(s: Settlement, envelope: Poly) -> None:
         _kept = (
             _pull_back_to_service(_pts, _others, _final_houses, _inside, _fabric_now)
             if _ln.get("connector")
-            else _trim_to_service(_pts, _others, _final_houses, _fields, keep=_keep, steadings=_final_steadings)
+            else _trim_to_service(_pts, _others, _final_houses, _ground, keep=_keep, steadings=_final_steadings)
         )
         if len(_kept) >= 2 and polyline_len(_kept) >= _WEB_MIN_FT and _kept != _pts:
             _ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in _kept]
@@ -359,6 +363,9 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.hamletgen.ways.joints.straighten_joints
         l7r.diagram.hamletgen.ways.joints.center_lane_ends
         l7r.diagram.settlement.Settlement.trim_lane_stubs
+        l7r.diagram.hamletgen.ways.bund.run_lanes_on_to_the_bund
+        l7r.diagram.hamletgen.ways.joints.meet_end_to_end
+        l7r.diagram.hamletgen.ways.bund.a_way_onto_the_bund
     """
     _pass("cut")
     """STAGE 5b: the LANE WEB - the lanes that make every farmhouse reachable.
@@ -642,6 +649,10 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # past the connector all reshape lanes - and Kuwabata shipped a skeleton arm into the scrub that the first tidy had
     # seen as part of a longer lane. The same trim, with the same `keep` for a house whose only way a lane is.
     tidy_lane_ends(s, list(plan.envelope))
+    meet_end_to_end(s, walls)  # ...and two ends the trims left facing each other across a hand's width are joined
+    # ...AND THE PADDY IS REACHED (269 B04, research/fields/290): where no lane end stands on its bund - the spur swept, or
+    # never drawn - the nearest lane runs on to it, or a field path is drawn off the nearest lane; recorded either way
+    s.M["meta"]["field_path"] = a_way_onto_the_bund(s)
     s.M["meta"]["lane_web"] = plan.lane_web
 
 

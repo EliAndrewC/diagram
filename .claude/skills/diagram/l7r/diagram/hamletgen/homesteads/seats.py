@@ -13,7 +13,10 @@ from l7r.diagram.sitegen.geom import unit
 from ..consts import BUNDLE_PITCH, CLUSTER_ROW_SPAN, CLUSTER_SPAN_FACTOR, LANE_FRONTAGE_STANDOFF, Pt
 from ..plan import SitePlan
 
-STANDOFF_SLACK_PX = 3.0  # the +/-5 degree rake's reach past the axis-aligned box (2 px on the long side) and a pixel of margin
+# A pixel of margin and the rounding of a turn keyed on a 4 px cell (`bearing.KEY_CELL_PX`). It was the +/-5 degree rake's
+# reach past the axis-aligned box; since 269 B18 a house may turn 30 degrees or a quarter turn, and the stage measures that
+# reach per seat (`turn_the_seat`) instead of carrying it here as slack.
+STANDOFF_SLACK_PX = 3.0
 DEFAULT_HOUSE = (46.0 * 1.35, 28.0 * 1.10)  # the LARGEST nucleated house `_try_place_bundle` rolls, in px at 1 px = 1 ft; the stage passes the map's own
 
 # ---- STAGE 5: the homesteads --------------------------------------------------------------------

@@ -89,6 +89,10 @@ class Settlement(
         self._site_chains: Any = None
         self._site_corridors: Any = None
         self._free_ground: Any = None  # the static ground's surely-taken cells while a site boundary is installed (feature 276)
+        # which way the farmhouses face (269 B18, `rolling/bearing.py`): the common bearing a hamlet rolls, and the margin its
+        # lanes follow; None elsewhere, where `_house_rot` keeps the +/-5 degree rake
+        self._house_bearing: float | None = None
+        self._bearing_follow: Any = None
         self._seat_search: dict[str, int] = {
             "candidates": 0,
             "placer_calls": 0,

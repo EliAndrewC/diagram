@@ -158,11 +158,47 @@ def stage_homestead_fields(s: Settlement, plan: SitePlan) -> None:
             if not homestead_field_fits(s, ring, (float(house["x"]), float(house["y"])), lanes, streams, items, wet):
                 continue
             along = 0.0 if normal[0] == 0.0 else math.pi / 2
-            theta = along + rng.uniform(-0.6, 0.6)
+            theta = furrow_apart(along + rng.uniform(-0.6, 0.6), ring, s.M.get("dry_plots") or [])
             draw_homestead_field(s, ring, crop, theta)
             laid += 1
             break
     s.M["meta"]["homestead_fields"] = laid
+
+
+# TWO NEIGHBORING PLOTS ARE PLOUGHED BY TWO HOUSEHOLDS, so their furrows do not run the same way (`dry_plot_furrows_vary`,
+# which reads two rows within 0.10 rad as one direction). The homestead field's angle was rolled with no look at the hem
+# plot beside it, and a re-seated house (269 B18) laid one parallel to its neighbor on the comb roll. Twice the gate's
+# figure, so a plot turned just clear of it still reads as its own; the reach is one and a half plot sides, over the
+# gate's one and a quarter, for the same reason. The step is how far a clashing roll is turned per try (a convention).
+FURROW_APART_RAD = 0.20
+FURROW_NEIGHBOR_SIDES = 1.5
+FURROW_TURN_STEP_RAD = 0.25
+
+
+def _side_and_center(ring: Sequence[Any]) -> tuple[float, Pt]:
+    n = len(ring)
+    area = abs(sum(float(ring[i][0]) * float(ring[(i + 1) % n][1]) - float(ring[(i + 1) % n][0]) * float(ring[i][1]) for i in range(n))) / 2
+    return area**0.5, (sum(float(p[0]) for p in ring) / n, sum(float(p[1]) for p in ring) / n)
+
+
+def furrow_apart(theta: float, ring: Sequence[Pt], plots: Sequence[Any]) -> float:
+    """`theta`, or the nearest turn of it (in `FURROW_TURN_STEP_RAD` steps, either way) whose furrows run at least
+    `FURROW_APART_RAD` off every dry plot within `FURROW_NEIGHBOR_SIDES` mean plot sides of this one - the mean over every
+    dry plot on the map, as `dry_plot_furrows_vary` derives its own radius; `theta` itself when no turn clears them all. A
+    furrow has no head and tail, so directions compare modulo pi."""
+    side, (cx, cy) = _side_and_center(ring)
+    shaped = [(p, *_side_and_center(p["poly"])) for p in plots if p.get("theta") is not None and len(p.get("poly") or []) >= 3]
+    reach = FURROW_NEIGHBOR_SIDES * (sum(o_side for _p, o_side, _c in shaped) + side) / (len(shaped) + 1)
+    near = [float(p["theta"]) for p, _s, (ox, oy) in shaped if math.hypot(ox - cx, oy - cy) < reach]
+
+    def clear(t: float) -> bool:
+        return all(min(abs(t - o) % math.pi, math.pi - abs(t - o) % math.pi) >= FURROW_APART_RAD for o in near)
+
+    for k in range(int(math.pi / 2 / FURROW_TURN_STEP_RAD) + 1):
+        for t in (theta + k * FURROW_TURN_STEP_RAD, theta - k * FURROW_TURN_STEP_RAD):
+            if clear(t):
+                return t
+    return theta
 
 
 def homestead_field_fits(

@@ -82,6 +82,12 @@ def _field_rings(M) -> list:
     return worked_ground_rings(M)  # the sweep's own field, dry hem included (feature 261)
 
 
+def _ground(M):
+    from l7r.diagram.hamletgen.ways.geom import worked_ground
+
+    return worked_ground(M)  # the same field AS ITS BUND, with the drawn rice: an end arrives on it (269 B04)
+
+
 def _dangling_ends(M, ways) -> list:
     """Every internal lane end that reaches nothing, read through the PLACER'S OWN predicate.
 
@@ -94,12 +100,13 @@ def _dangling_ends(M, ways) -> list:
     out = []
     centers = [(float(h["x"]), float(h["y"])) for h in M.get("houses") or []]
     steadings = steading_footprints(M)
+    ground = _ground(M)
     for i, ln in enumerate(M.get("lanes") or []):
         if ln.get("connector") or i >= len(ways) or len(ways[i]) < 2:
             continue
         others = [sg for k, o in enumerate(ways) if k != i and len(o) >= 2 for sg in zip(o, o[1:], strict=False)]
         for end in (ways[i][0], ways[i][-1]):
-            if not end_serves(end, others, centers, _field_rings(M), steadings):
+            if not end_serves(end, others, centers, ground, steadings):
                 out.append((round(end[0]), round(end[1])))
     return sorted(set(out))
 

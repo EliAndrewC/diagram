@@ -286,3 +286,44 @@ def center_lane_ends(s: Settlement) -> int:
             ln["pts"] = _rounded(p)
             s.reink_lane(i)
     return moved
+
+
+# TWO ENDS THIS NEAR ARE ONE WAY WITH A HOLE IN IT: nearer than a steading's keep-out from a web lane (`WEB_FABRIC_GAP`,
+# 7 ft) plus the two treads' half-widths (3 ft for the connector, 1.5 for a footpath), so nothing a lane keeps clear of can
+# stand in the gap - and wider than `_TOUCH_GAP`, where `center_lane_ends` already sets an end on the tread it stops on.
+_MEET_FT = 11.5
+
+
+def meet_end_to_end(s: Settlement, fabric: Sequence[Poly] = ()) -> int:
+    """Close the last hole between two lane ENDS that stop within `_MEET_FT` of each other and on nothing else: the free
+    end is moved onto the other's end point, when the moved lane may be written (`may_write` - no nearer the fabric, no
+    worse bent). The connector's end is a target, never moved: its off-map run is its own job.
+
+    FOUND ON KASHIKAWA (269 E3): a straggler path and the skeleton arm stopped 9.6 ft apart end to end; the touch pass's
+    end-meets-end branch was refused its move and skipped the end, and the connector the later passes laid there stood
+    6.9 ft off it - one way in the picture, two networks at the 4 ft ink tolerance (`lanes_form_one_network`)."""
+    from .clearance import may_write
+
+    lanes: list[dict[str, Any]] = s.M.get("lanes") or []
+    closed = 0
+    for i, ln in enumerate(lanes):
+        p = _pts(ln)
+        if ln.get("connector") or len(p) < 2:
+            continue
+        for k in (0, -1):
+            q = p[k]
+            others = [(j, _pts(o)) for j, o in enumerate(lanes) if j != i and len(o.get("pts") or []) >= 2]
+            if any(seg_dist(q[0], q[1], a, b) <= _TOUCH_GAP for _j, op in others for a, b in _segs(op)):
+                continue  # already on a way
+            near = [(math.dist(q, op[e]), op[e]) for _j, op in others for e in (0, -1) if _TOUCH_GAP < math.dist(q, op[e]) <= _MEET_FT]
+            if not near:
+                continue
+            _d, to = min(near)
+            new = list(p)
+            new[k] = to
+            if may_write(p, new, float(ln.get("w") or 3.0), fabric):
+                p = new
+                ln["pts"] = _rounded(p)
+                s.reink_lane(i)
+                closed += 1
+    return closed

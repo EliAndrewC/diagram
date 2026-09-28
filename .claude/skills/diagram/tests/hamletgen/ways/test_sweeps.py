@@ -469,30 +469,33 @@ def test_a_lane_a_farmhouse_needs_keeps_an_end_that_nothing_lies_near() -> None:
     assert [ln["pts"] for ln in s.M["lanes"]] == before, "the farmhouse keeps its way, ragged end and all"
 
 
-def test_an_end_that_reaches_nothing_is_carried_to_nine_tenths_of_the_reach_of_the_house_it_serves() -> None:
-    """`_sweep_dangling_ends`' rescue arm: the lane must stay because a farmhouse would lose its way, so its
-    end is carried to the house instead of left in grass - and stops at nine tenths of the reach, clear of
-    the wall rather than on the doorstep.
+def test_an_end_that_reaches_nothing_is_carried_on_to_the_dooryard_of_the_house_it_serves() -> None:
+    """`_sweep_dangling_ends`' rescue arm: the lane must stay because a farmhouse would lose its way, so its end is carried
+    to the house instead of left in grass - and stops AT THE DOORYARD (269 B17, research/homesteads/310: a lane that serves a
+    farmhouse ends at its dooryard), inside the arrival bar of the house's footprint and clear of its wall. It used to stop
+    at nine tenths of the 60 ft reach of the house's center, 40 ft off the wall.
 
     A unit test because the pool stopped reaching it: the 227/230 merge re-packed the clusters and no shipped
     map now leaves an end between one and two reaches of its house (feature 174 - bring it up BY TESTS).
     """
-    import math
-
-    from l7r.diagram.hamletgen.consts import WAY_END_REACH_FT
+    from l7r.diagram.hamletgen.consts import STEADING_ARRIVAL_FT
     from l7r.diagram.hamletgen.ways import sweeps as _sw
+    from l7r.diagram.settlement import edge_dist, point_in_poly, rot_rect
 
     from ._builders import _StubSettlement
 
     # lane 0 is the connector (exempt, and far away); lane 1 runs past the one house it serves, both of its
-    # ends 90 ft off - past the 60 ft reach, inside twice it - so each end is pulled back to 54 ft.
+    # ends 90 ft off - past the 60 ft reach, inside twice it - so each end is carried on to the house's dooryard.
     s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 100.0)], [(500.0, 590.0), (500.0, 410.0)]], houses=[(500.0, 500.0)])
     assert _sw._sweep_dangling_ends(s) == 1, "the lane was fixed rather than dropped"
     pts = s.M["lanes"][1]["pts"]
     assert len(pts) == 4, "a vertex was added at each end"
+    wall = rot_rect(500.0, 500.0, 46.0, 28.0, 0.0)
     for q in (pts[0], pts[-1]):
-        d = math.dist((q[0], q[1]), (500.0, 500.0))
-        assert abs(d - 0.9 * WAY_END_REACH_FT) < 1.0, f"an end stands {d:.1f} ft from the house, not nine tenths of the reach"
+        assert not point_in_poly(q[0], q[1], wall), "the end stops short of the wall"
+        assert edge_dist(q[0], q[1], wall) <= STEADING_ARRIVAL_FT, f"an end stands {edge_dist(q[0], q[1], wall):.1f} ft off the house, not at its dooryard"
+    assert _sw.carry_to_dooryard((0.0, 0.0), [(500.0, 500.0)], [wall], 120.0) is None, "no house within the reach: nothing to carry to"
+    assert _sw.carry_to_dooryard((500.0, 590.0), [(500.0, 500.0)], [], 120.0) is None, "a house with no built ground to arrive at"
 
 
 def test_a_tail_run_alongside_another_way_is_cut_where_it_came_alongside() -> None:

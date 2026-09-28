@@ -1,0 +1,221 @@
+"""A way that makes for the field runs on to the bund (269 B04 and B17).
+
+research/fields/290 ("Where does the path to the fields end? On a bund, which carries it on"): the field path runs from the
+hamlet to the paddy's outer bund and joins it, however short that leaves the path; it never ends in open ground short of
+the bund and never passes through a gap in it; where no path is left to draw, the hamlet's nearest lane runs on to the bund.
+research/homesteads/310 ("How far does a village lane run past its last farmhouse?"): a lane ends at a dooryard, or runs on
+to something a reader can see - a field path, a bund, another way. That the path joins the bund at the point nearest the
+hamlet is the record's GUESS.
+
+Two passes, both after the lanes are laid: `run_lanes_on_to_the_bund` carries every lane end that has reached nothing but
+the field's neighborhood on to its edge (before the trims, which pull back an end that reaches nothing - `end_serves` counts
+the bund, and no longer counts "within 60 ft of the field"); `a_way_onto_the_bund` makes sure the paddy is reached at all,
+running the nearest lane end on, or a short field path off the nearest lane, where nothing else reaches it.
+"""
+
+from __future__ import annotations
+
+import math
+from collections.abc import Mapping, Sequence
+from typing import Any
+
+from l7r.diagram.settlement import Settlement, point_in_poly, segments_cross
+
+from ..consts import FOOTPATH_FABRIC_GAP, LANE_CLEARANCE, WAY_END_REACH_FT, Poly, Pt
+from .checks import drawn_water_segs
+from .fabric import _crosses_fabric, _hits_a_steading, _homestead_polys
+from .geom import BUND_REACH_FT, WorkedGround, end_serves, memo_ground, steading_footprints, worked_ground
+
+# The tip stops this far outside the worked ground's edge past its own half-tread, so the tread's rounded cap lies on the
+# bund line rather than on the rice (a map drawing convention; inside `BUND_REACH_FT` for every lane width drawn here).
+TIP_MARGIN_FT = 1.0
+# How far an end that reaches nothing may be carried on to the bund: the gate's own reach to another way, the distance at
+# which the old rule counted the field as reached - so an end the old rule passed as "near the field" is carried onto it.
+RUN_ON_REACH_FT = WAY_END_REACH_FT
+# A run-on may turn the path this far off the way it was walking, and no further: a path bends as it is walked, and a bund
+# behind the end is not one it runs on to (a map drawing convention, well inside the 90 degree hook `joints.py` removes).
+RUN_ON_TURN_DEG = 60.0
+# The nearest lane is sampled every this many feet when a field path must branch off it (a map drawing convention).
+BRANCH_STEP_FT = 8.0
+# The branch is drawn at the field spur's own tread (`stage_track`: width 5, worn).
+BRANCH_WIDTH = 5
+
+
+def run_on_target(q: Pt, ground: WorkedGround, half_tread: float, reach: float = RUN_ON_REACH_FT) -> Pt | None:
+    """Where an end at `q` is carried to: straight toward the nearest point of the worked ground's edge, stopped the
+    half-tread and `TIP_MARGIN_FT` outside it. None for an end already on the bund or inside the ground, or further than
+    `reach` from it. The open segment to a set's nearest point meets nothing of the set, so the run-on cannot cross a plot."""
+    if ground.inside(q):
+        return None
+    p = ground.nearest(q)
+    if p is None:
+        return None
+    d = math.dist(q, p)
+    stop = half_tread + TIP_MARGIN_FT
+    if d <= BUND_REACH_FT or d > reach:  # the arrival bar is past every stop: an end outside it is further off than its tread
+        return None
+    t = (d - stop) / d
+    return (q[0] + (p[0] - q[0]) * t, q[1] + (p[1] - q[1]) * t)
+
+
+def pulled_out_of_the_ground(pts: Sequence[Pt], ground: WorkedGround, half_tread: float) -> list[Pt]:
+    """A path whose LAST point lies inside the worked ground, cut back along itself to the first point that stands the
+    half-tread and `TIP_MARGIN_FT` clear of it - on the bund, not in the crop (Sawada's spur stopped 4 ft into the rice,
+    and 19 ft inside the outline, measured). A path that is in the ground end to end comes back as one point."""
+    out = [(float(p[0]), float(p[1])) for p in pts]
+    stop = half_tread + TIP_MARGIN_FT
+    if len(out) < 2 or not ground.inside(out[-1]):
+        return out
+    while len(out) >= 2:
+        a, b = out[-2], out[-1]
+        seg = math.dist(a, b)
+        k = 1.0
+        while k < seg:
+            c = (b[0] + (a[0] - b[0]) * k / seg, b[1] + (a[1] - b[1]) * k / seg)
+            if not ground.inside(c) and ground.dist(c) >= stop:
+                out[-1] = c
+                return out
+            k += 1.0
+        out.pop()
+    return out
+
+
+def turns_back(prev: Pt, end: Pt, tgt: Pt) -> bool:
+    """Would carrying `end` on to `tgt` turn the path more than `RUN_ON_TURN_DEG` off the way it was walking? A bund that
+    lies behind the end is not one the path runs ON to, and the turn draws a hook (`lanes_end_in_no_hook`)."""
+    u, v = (end[0] - prev[0], end[1] - prev[1]), (tgt[0] - end[0], tgt[1] - end[1])
+    nu, nv = math.hypot(*u), math.hypot(*v)
+    if nu <= 1e-9 or nv <= 1e-9:
+        return False
+    return math.degrees(math.acos(max(-1.0, min(1.0, (u[0] * v[0] + u[1] * v[1]) / (nu * nv))))) > RUN_ON_TURN_DEG
+
+
+def tip_onto_the_bund(pts: Sequence[Pt], ground: WorkedGround, half_tread: float, blocks: RunOnBlocks | None = None) -> list[Pt]:
+    """A path's LAST point set on the bund: pulled back out of the worked ground where it ends inside it, carried on to it
+    where it stops short and the way is clear, straight on (`run_on_target`, `turns_back`). Otherwise as it came."""
+    out = [(float(p[0]), float(p[1])) for p in pts]
+    if len(out) < 2:
+        return out
+    if ground.inside(out[-1]):
+        return pulled_out_of_the_ground(out, ground, half_tread)
+    tgt = run_on_target(out[-1], ground, half_tread)
+    if tgt is not None and not turns_back(out[-2], out[-1], tgt) and (blocks is None or blocks.clear(out[-1], tgt, 2.0 * half_tread)):
+        out.append(tgt)
+    return out
+
+
+class RunOnBlocks:
+    """What a run-on may not cross, read once per pass: every drawn water course (a crossing between fords needs a plank
+    this pass does not lay), the marsh and the wet toe, and the steadings' built ground at a footpath's clearance."""
+
+    def __init__(self, s: Settlement) -> None:
+        self.s = s
+        self.water = drawn_water_segs(s)
+        toe = s.toe_band()
+        self.wet: list[Poly] = [[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes") or [] if m.get("role") != "defense" and m.get("poly")]
+        if toe:
+            self.wet.append(list(toe))
+        self.fabric = [poly for poly, _own, kind in _homestead_polys(s) if kind not in ("commons", "village_groves")]
+
+    def clear(self, a: Pt, b: Pt, width: float) -> bool:
+        if any(segments_cross(a, b, c, d) for c, d in self.water):
+            return False
+        for w in self.wet:
+            if point_in_poly(b[0], b[1], w) or any(segments_cross(a, b, w[k], w[(k + 1) % len(w)]) for k in range(len(w))):
+                return False
+        # the new stretch alone, from a step off the end it grows from (that end may stand at its own dooryard's gap)
+        start = (a[0] + (b[0] - a[0]) * min(1.0, 2.0 / max(math.dist(a, b), 1e-9)), a[1] + (b[1] - a[1]) * min(1.0, 2.0 / max(math.dist(a, b), 1e-9)))
+        return not _crosses_fabric([start, b], self.fabric, FOOTPATH_FABRIC_GAP) and not _hits_a_steading(self.s, [start, b], int(width))
+
+
+def _segs_of(lanes: Sequence[Mapping[str, Any]], skip: int) -> list[tuple[Pt, Pt]]:
+    return [((float(p[0]), float(p[1])), (float(q[0]), float(q[1]))) for k, ln in enumerate(lanes) if k != skip for p, q in zip(ln.get("pts") or [], (ln.get("pts") or [])[1:], strict=False)]
+
+
+def run_lanes_on_to_the_bund(s: Settlement, ground: WorkedGround, blocks: RunOnBlocks | None = None) -> int:
+    """Pull every lane end that stands IN the worked ground back out onto its bund, and carry on to the bund every lane end
+    that reaches nothing - no way, no farmhouse, no dooryard (`end_serves`) - but
+    stands within `RUN_ON_REACH_FT` of the worked ground (269 B17: "runs on to reach something a reader can see"), where the
+    trims would otherwise pull it back. The connector is left alone - it leaves the map. Returns how many ends moved; each
+    lane's ink is rewritten with its record."""
+    lanes = s.M.get("lanes") or []
+    steadings = steading_footprints(s.M)
+    houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses") or []]
+    blocks = blocks or RunOnBlocks(s)
+    moved = 0
+    for i, ln in enumerate(lanes):
+        pts = [(float(x), float(y)) for x, y in ln.get("pts") or []]
+        if ln.get("connector") or len(pts) < 2:
+            continue
+        segs = _segs_of(lanes, i)
+        changed = False
+        half = float(ln.get("w") or 3) / 2.0
+        for _ in range(2):  # each end in turn, as the last point of the path walked toward it
+            if ground.inside(pts[-1]):
+                out = pulled_out_of_the_ground(pts, ground, half)
+                if len(out) >= 2:
+                    pts, changed = out, True
+            elif not end_serves(pts[-1], segs, houses, ground, steadings):
+                tgt = run_on_target(pts[-1], ground, half)
+                if tgt is not None and not turns_back(pts[-2], pts[-1], tgt) and blocks.clear(pts[-1], tgt, 2.0 * half):
+                    pts, changed = [*pts, tgt], True
+            pts.reverse()
+        if changed:
+            ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in pts]
+            s.reink_lane(i)
+            moved += 1
+    return moved
+
+
+def _build_paddy_ground(M: Mapping[str, Any]) -> WorkedGround:
+    rings = [[(float(a), float(b)) for a, b in (f.get("outline") or [])] for f in (M.get("fields") or [])]
+    rings += [[(float(a), float(b)) for a, b in r] for f in (M.get("fields") or []) for r in (f.get("plot_rings") or []) if len(r) >= 3]
+    return WorkedGround(rings)
+
+
+def paddy_ground(s: Settlement) -> WorkedGround:
+    """The paddy itself - the fields' outlines and their drawn rice, without the dry plots: the bund a field path joins."""
+    return memo_ground(s, "paddy", _build_paddy_ground)
+
+
+def a_way_onto_the_bund(s: Settlement, blocks: RunOnBlocks | None = None) -> str:
+    """Make sure some way JOINS the paddy's bund (269 B04, research/fields/290). Returns how it is reached, which the stage
+    records as `meta.field_path`: "joined" where a lane end already stands on it; "run_on" where the lane end nearest the
+    paddy is carried on to it; "branch" where a field path is drawn off the nearest point of the lanes; "none: ..." where
+    every way to it crosses water or the marsh - the reason a reader needs, stated rather than swallowed."""
+    paddy = paddy_ground(s)
+    if paddy.edge is None:
+        return "none: no paddy"
+    lanes = s.M.get("lanes") or []
+    live = [(i, ln) for i, ln in enumerate(lanes) if not ln.get("connector") and len(ln.get("pts") or []) >= 2]
+    ends = [(i, e, (float(ln["pts"][e][0]), float(ln["pts"][e][1]))) for i, ln in live for e in (0, -1)]
+    if any(paddy.dist(q) <= BUND_REACH_FT for _i, _e, q in ends):
+        return "joined"
+    blocks = blocks or RunOnBlocks(s)
+    for i, e, q in sorted(ends, key=lambda t: paddy.dist(t[2])):
+        tgt = run_on_target(q, paddy, float(lanes[i].get("w") or 3) / 2.0, reach=float("inf"))
+        prev = (float(lanes[i]["pts"][-2 if e == -1 else 1][0]), float(lanes[i]["pts"][-2 if e == -1 else 1][1]))
+        if tgt is not None and not turns_back(prev, q, tgt) and blocks.clear(q, tgt, float(lanes[i].get("w") or 3)):
+            pts = [(float(x), float(y)) for x, y in lanes[i]["pts"]]
+            pts = [*pts, tgt] if e == -1 else [tgt, *pts]
+            lanes[i]["pts"] = [[round(x, 1), round(y, 1)] for x, y in pts]
+            s.reink_lane(i)
+            return "run_on"
+    samples: list[Pt] = []
+    for _i, ln in live:
+        pts = [(float(x), float(y)) for x, y in ln["pts"]]
+        for a, b in zip(pts, pts[1:], strict=False):
+            n = max(1, int(math.dist(a, b) // BRANCH_STEP_FT))
+            samples.extend((a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n) for k in range(n))
+    for q in sorted(samples, key=paddy.dist):
+        tgt = run_on_target(q, paddy, BRANCH_WIDTH / 2.0, reach=float("inf"))
+        if tgt is not None and blocks.clear(q, tgt, BRANCH_WIDTH):
+            s.lane([q, tgt], width=BRANCH_WIDTH, clearance=LANE_CLEARANCE, worn=True, spur=True)
+            return "branch"
+    return "none: every straight way from the lanes to the paddy crosses water, the marsh or a steading"
+
+
+def worked_ground_of(s: Settlement, fallback: Poly) -> WorkedGround:
+    """The worked ground of the map as it stands (`worked_ground`), or `fallback` (the plan's envelope) where the manifest
+    records no field."""
+    return memo_ground(s, "worked", worked_ground) if s.M.get("fields") or s.M.get("dry_plots") else WorkedGround([list(fallback)])

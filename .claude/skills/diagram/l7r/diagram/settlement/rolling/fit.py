@@ -28,19 +28,32 @@ if TYPE_CHECKING:
 
 
 def house_extent(rec: Any) -> tuple[float, float, float, float]:
-    """The box holding everything of a house record the fit rules read: the house at any rake, and each part."""
+    """The box holding everything of a house record the fit rules read: the house at any rake, and each part as drawn."""
     r = math.hypot(rec["w"], rec["h"]) / 2
     x0, y0, x1, y1 = rec["x"] - r, rec["y"] - r, rec["x"] + r, rec["y"] + r
     g = rec.get("geom") or {}
     for key in ("yard", "grove_n", "grove_w", "shed"):
-        part = g.get(key)
+        part = part_box(g, key)
         if part is not None:
             x0, y0 = min(x0, part[0] - part[2] / 2), min(y0, part[1] - part[3] / 2)
             x1, y1 = max(x1, part[0] + part[2] / 2), max(y1, part[1] + part[3] / 2)
-    for part in g.get("gardens", ()):
+    for part in part_box(g, "gardens") or ():
         x0, y0 = min(x0, part[0] - part[2] / 2), min(y0, part[1] - part[3] / 2)
         x1, y1 = max(x1, part[0] + part[2] / 2), max(y1, part[1] + part[3] / 2)
     return x0 - 1.0, y0 - 1.0, x1 + 1.0, y1 + 1.0
+
+
+def part_box(geom: Any, key: str) -> Any:
+    """A bundle part as the fit rules read it: its box AS DRAWN, turned with its house (`_bundle_geom`'s `boxes`, 269 B18);
+    the part itself where the bundle carries no boxes (a grove arm, which is drawn unturned, or a hand-built geometry)."""
+    boxes = geom.get("boxes") or {}
+    return boxes[key] if key in boxes else geom.get(key)
+
+
+def house_box(rec: Any) -> tuple[float, float, float, float]:
+    """A placed farmhouse's box AS DRAWN, turned (269 B18) - its record's own rect where it carries no bundle."""
+    box = part_box(rec.get("geom") or {}, "house")
+    return tuple(box) if box is not None else (rec["x"], rec["y"], rec["w"], rec["h"])  # type: ignore[return-value]
 
 
 def _extent_boxed(recs: Any) -> list[Any]:
@@ -293,7 +306,7 @@ class BundleFitMixin:
         (feature 227): the house's wall rule against the paddy, its tread, the eave gap to the nearest house, the
         yard's and the gardens' sun. No ground test - every part lies inside the envelope."""
         house = geom["house"]
-        if self._wall_on_the_bund(house[0], house[1], house[2], house[3], 0.0):
+        if self._wall_on_the_bund(house[0], house[1], house[2], house[3], self._house_rot(house[0], house[1])):
             return False
         if self._parts_across_stream(geom):
             return False
@@ -318,11 +331,11 @@ class BundleFitMixin:
         if not streams:
             return False
         hx, hy = geom["house"][0], geom["house"][1]
-        parts = [geom["yard"], *geom.get("gardens", ()), geom.get("shed")]
+        parts = [part_box(geom, "yard"), *(part_box(geom, "gardens") or ()), part_box(geom, "shed")]
         # ...AND NO PART STANDS ON THE WATER ITSELF (settlement-review of Mizuguchi, feature 261): the envelope's nine-point
         # ground test let a farmhouse's wall stand on the brook's centerline, its roof drawn over the water. Each solid part
         # is held off every stream at the stream's half-width plus the corridor `_rect_on_water` keeps.
-        if any(self._rect_on_stream(r) for r in [geom["house"], *parts] if r is not None):
+        if any(self._rect_on_stream(r) for r in [part_box(geom, "house"), *parts] if r is not None):
             return True
         return any(segments_cross((hx, hy), (r[0], r[1]), poly[k], poly[k + 1]) for r in parts if r is not None for poly in streams for k in range(len(poly) - 1))
 
@@ -460,8 +473,8 @@ class BundleFitMixin:
         side = self.px(2.0)  # ...and the same margin ACROSS the corridor: the lateral overlap test is
         # `|dx| < (yard_w + house_w)/2`, and a seat that missed the placer's version by 0.35 px failed
         # the check's on a held-out cohort map. Both axes, or the disagreement just moves.
-        hx, hy, hw, hh = geom["house"]
-        yard = geom.get("yard")  # None on a no-yard bundle (feature 150): nothing of its own to keep sunny; it may still shade a neighbor's
+        hx, hy, hw, hh = part_box(geom, "house")  # every footprint here AS DRAWN, turned with its house (269 B18)
+        yard = part_box(geom, "yard")  # None on a no-yard bundle (feature 150): nothing of its own to keep sunny; it may still shade a neighbor's
         # THE NEIGHBORS' YARDS ARE READ OFF THE PLACED BUNDLES, not off `M["threshing_yards"]`.
         # Yards are not drawn until `farmsteads()` flushes, long after every house is seated, so the
         # manifest list is EMPTY while placement runs - testing it caught nothing in the direction
@@ -475,7 +488,7 @@ class BundleFitMixin:
             g = b.get("geom")
             if not g:
                 continue
-            ty = g.get("yard")  # None on a no-yard bundle (feature 150) - its GARDENS below still get their corridor
+            ty = part_box(g, "yard")  # None on a no-yard bundle (feature 150) - its GARDENS below still get their corridor
             if ty is not None and abs(ty[0] - hx) < (ty[2] + hw) / 2 + side and 0 < (hy - hh / 2) - (ty[1] + ty[3] / 2) < reach:
                 return False
             # ...NOR A NEIGHBOR'S GARDEN BEDS (feature 133 T10, GM 2026-08-25: "there is not enough
@@ -484,7 +497,7 @@ class BundleFitMixin:
             # on the reference hamlet 7 of 16 gardens had a neighbor's wall 4-38 ft to their south.
             # A kitchen garden's binding season is the same shoulder month (autumn greens, daikon)
             # as the drying yard's, so it takes the SAME corridor; research/homesteads.html.
-            for tg in g.get("gardens", ()):
+            for tg in part_box(g, "gardens") or ():
                 if abs(tg[0] - hx) < (tg[2] + hw) / 2 + side and 0 < (hy - hh / 2) - (tg[1] + tg[3] / 2) < reach:
                     return False
         # ...and this YARD must not sit in a standing house's shadow
@@ -492,8 +505,8 @@ class BundleFitMixin:
             return True
         yx, yy, yw, yh = yard
         # ...and a house that shades this yard has its north wall within `reach` south of the yard's south edge
-        near = houses_meeting(houses, (yx - yw / 2 - side, yy + yh / 2, yx + yw / 2 + side, yy + yh / 2 + reach))
-        return not any(abs(b["x"] - yx) < (b["w"] + yw) / 2 + side and 0 < (b["y"] - b["h"] / 2) - (yy + yh / 2) < reach for b in near)
+        near = [house_box(b) for b in houses_meeting(houses, (yx - yw / 2 - side, yy + yh / 2, yx + yw / 2 + side, yy + yh / 2 + reach))]
+        return not any(abs(bx - yx) < (bw + yw) / 2 + side and 0 < (by - bh / 2) - (yy + yh / 2) < reach for bx, by, bw, bh in near)
 
     def _gardens_sun_ok(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """The side-DEPENDENT half of the sun corridor: this bundle's garden bed(s) must not sit in a
@@ -509,10 +522,10 @@ class BundleFitMixin:
         # FROM THE INDEX (feature 276): a house shading a bed has its north wall within `reach` south of the bed
         return all(
             not any(
-                abs(b["x"] - gx) < (b["w"] + gw) / 2 + side and 0 < (b["y"] - b["h"] / 2) - (gy + gh / 2) < reach
-                for b in houses_meeting(houses, (gx - gw / 2 - side, gy + gh / 2, gx + gw / 2 + side, gy + gh / 2 + reach))
+                abs(bx - gx) < (bw + gw) / 2 + side and 0 < (by - bh / 2) - (gy + gh / 2) < reach
+                for bx, by, bw, bh in (house_box(b) for b in houses_meeting(houses, (gx - gw / 2 - side, gy + gh / 2, gx + gw / 2 + side, gy + gh / 2 + reach)))
             )
-            for gx, gy, gw, gh in geom["gardens"]
+            for gx, gy, gw, gh in part_box(geom, "gardens")
         )
 
     def sun_corridor(self: Settlement, feet: float) -> None:  # type: ignore[misc]
@@ -534,9 +547,9 @@ class BundleFitMixin:
         yard, a north kura, the windward grove (dispersed only), and the yard sun-corridor. Same for every
         garden side at a given position, so it is tested once per position."""
         if (
-            self._rect_blocked(geom["house"], fields=True)
-            or (geom.get("yard") is not None and self._rect_blocked(geom["yard"], fields=True))
-            or ("shed" in geom and self._rect_blocked(geom["shed"], fields=True))
+            self._rect_blocked(part_box(geom, "house"), fields=True)
+            or (geom.get("yard") is not None and self._rect_blocked(part_box(geom, "yard"), fields=True))
+            or ("shed" in geom and self._rect_blocked(part_box(geom, "shed"), fields=True))
         ):
             return False
         # THE WALL HOLDS ITS OWN FLOOR OFF THE PADDY (feature 133 T41). `_rect_blocked` refuses a house
@@ -544,7 +557,8 @@ class BundleFitMixin:
         # closest house stood 0.9 ft off while the band's own standoff held the rest at 10-13 ft.
         # `_wall_on_the_bund` (houses.py, with `HOUSE_PADDY_GAP_FT` and its research) tests the four
         # corners at the 6 ft floor; the yard and garden keep their own rules.
-        if self._wall_on_the_bund(geom["house"][0], geom["house"][1], geom["house"][2], geom["house"][3], 0.0):
+        # ...at the house's own turn, the corners it is DRAWN with (269 B18: 0.0 here stood while the rake was 5 degrees)
+        if self._wall_on_the_bund(geom["house"][0], geom["house"][1], geom["house"][2], geom["house"][3], self._house_rot(geom["house"][0], geom["house"][1])):
             return False
         if self._house_on_a_tread(geom["house"]):
             return False
@@ -574,7 +588,7 @@ class BundleFitMixin:
             return False
         if self.bound and any(not point_in_poly(vx, vy, self.bound) for vx, vy in self._rect_corners(geom["bbox"])):
             return False
-        if any(self._rect_blocked(g, fields=True) for g in geom["gardens"]):
+        if any(self._rect_blocked(g, fields=True) for g in part_box(geom, "gardens")):
             return False
         if not self._gardens_sun_ok(geom):
             return False
@@ -594,7 +608,7 @@ class BundleFitMixin:
             return cast(bool, abs(grove[0] - cyx) < (grove[2] + yard[2]) / 2 and abs(grove[1] - cyy) < (grove[3] + 22) / 2)
 
         new_groves = (geom["grove_n"], geom["grove_w"]) if "grove_n" in geom else ()
-        new_yard = geom["yard"]
+        new_yard = part_box(geom, "yard")
         # FROM THE INDEX (feature 276): a yard a new grove shades has its south edge within 22 px north of the grove's box,
         # and a grove shading the new yard meets the 22 px strip south of it - so each such record's extent meets one of
         # these boxes. Read in list order, as the scan did.
@@ -614,7 +628,7 @@ class BundleFitMixin:
             g = rec.get("geom")
             if not g:
                 continue
-            if g.get("yard") is not None and any(shades(gv, g["yard"]) for gv in new_groves):
+            if g.get("yard") is not None and any(shades(gv, part_box(g, "yard")) for gv in new_groves):
                 return True
             other_groves = (g["grove_n"], g["grove_w"]) if "grove_n" in g else ()
             if new_yard is not None and any(shades(gv, new_yard) for gv in other_groves):
@@ -631,7 +645,7 @@ class BundleFitMixin:
         # above the garden's south edge to `gh + 4` below it, so its extent meets that box.
         south = gy + gh / 2
         for rec in houses_meeting(self.M["houses"], (gx - gw / 2, south - 3, gx + gw / 2, south + gh + 4)):
-            hx, hy, hw, hh = rec["x"], rec["y"], rec["w"], rec["h"]
+            hx, hy, hw, hh = house_box(rec)
             if hy > gy + gh / 2 - 3 and abs(hx - gx) < (hw + gw) / 2 and (hy - hh / 2) - (gy + gh / 2) < gh + 4:
                 return True
         return False

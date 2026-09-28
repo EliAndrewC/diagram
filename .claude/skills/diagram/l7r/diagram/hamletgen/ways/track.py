@@ -24,14 +24,16 @@ from ..consts import (
     Pt,
 )
 from ..plan import SitePlan
+from .bund import RunOnBlocks, tip_onto_the_bund
 from .checks import PathChecker, brook_fords, drawn_water_segs, ford_crossing, gap_segments, stream_segs
 from .clearance import _HAIRPIN_DEG, clip_to_clear, route_around
 from .fabric import _crosses_fabric, _fabric_hits, _homestead_polys
-from .geom import _turn_deg, polyline_len, push_clear_of_fabric, push_out_of
+from .geom import _turn_deg, memo_ground, polyline_len, push_clear_of_fabric, push_out_of, worked_ground
 from .route import _route, set_crossing
 
 # how near the field a spur's end must stand to have reached it - `lanes_reach_something`'s own 60 ft for a lane end
 SPUR_REACH_FT = 60.0
+SPUR_WIDTH = 5  # the field spur's tread, a worn path: the web's ways are 3, the connector 6
 
 
 def spur_cut_at_the_fold(pts: Poly, envelope: Poly) -> tuple[Poly, str | None]:
@@ -343,6 +345,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.hamletgen.ways.track._cluster_gateway
         l7r.diagram.hamletgen.ways.track._thread_the_fabric
         l7r.diagram.hamletgen.cluster._fork_spur
+        l7r.diagram.hamletgen.ways.bund.tip_onto_the_bund
         l7r.diagram.hamletgen.ways.clearance.route_around
         l7r.diagram.hamletgen.ways.clearance.clip_to_clear
         l7r.diagram.settlement.Settlement.trim_off_marsh
@@ -469,12 +472,15 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     )
     _spur_pts = s.trim_off_marsh(clip_to_clear(spur, [*crops, *([toe_now] if toe_now else [])], 12.0))
     _spur_pts = _fork_spur(_spur_pts, _kept_arms)
+    # ...AND ITS TIP IS SET ON THE BUND (269 B04, research/fields/290: the path "runs from the hamlet to the paddy's outer bund
+    # and joins it ... it never ends in open ground short of the bund"). The clip leaves it 12 ft off the hem and the set-back
+    # 17 ft off an outline vertex - short of the bund - and where the rice stands proud of the outline it could stop in the
+    # rice (Sawada: 4 ft in). Carried on to the worked ground's edge, or pulled back out of it.
+    _spur_pts = tip_onto_the_bund(_spur_pts, memo_ground(s, "worked", worked_ground), SPUR_WIDTH / 2.0, RunOnBlocks(s))
     _spur_ft = sum(math.dist(_spur_pts[k], _spur_pts[k + 1]) for k in range(len(_spur_pts) - 1)) if len(_spur_pts) >= 2 else 0.0
-    # WHAT WAS LEFT OF THE SPUR IS RECORDED, drawn or not (feature 230). The floor below is right - a 20 ft
-    # stub is not a path - but a spur that fails it vanished in silence, and a reviewer asking what the nearest
-    # way to the paddy was is how the reference hamlet turned out to have none. The number says which it was:
-    # a path the clip left too short, or no path at all. Where a field path should END is the open question
-    # (`future-work/farming-communities.md`), and this is the measurement it will be answered from.
+    # WHAT WAS LEFT OF THE SPUR IS RECORDED, drawn or not (feature 230): a spur that fails the floor below vanished in
+    # silence, and a reviewer asking what the nearest way to the paddy was is how the reference hamlet turned out to have
+    # none. Where a field path ends was the open question this measured for; research/fields/290 answers it (on the bund).
     s.M["meta"]["field_spur_ft"] = round(_spur_ft, 1)
     # ...AND A SPUR THAT NO LONGER REACHES THE WEB IS NOT DRAWN. The clip takes the spur out of the crop and off
     # the marsh from BOTH ends, so what survives can be a length of path in the middle of open ground: on the
@@ -488,7 +494,10 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     # Whether it SURVIVES is decided later and elsewhere: nothing is on the map to attach to at this point in
     # the stage - not the connector, which is drawn below this, and not the web, which is two stages away - so
     # the spur is drawn on its own length and the sweeps judge it against the finished network (`sweeps.py`).
-    if _spur_ft > 20.0:
+    # THE FLOOR IS THE TREAD'S OWN WIDTH, NOT 20 FT (269 B04: "however short that leaves the path"). A run shorter than the
+    # path is wide is not a line; anything longer is the path to the rice, and a spur swept later is answered at the end of
+    # the web by the nearest lane running on to the bund (`a_way_onto_the_bund`).
+    if _spur_ft >= SPUR_WIDTH:
         # ...AND NEVER DRAWN AS AN OUT-AND-BACK (settlement-review, feature 230 pass 11). Threading the clipped spur round
         # the steadings can fold it back on itself: the reference hamlet's ran 90 ft toward the field and straight back to
         # within 14 px of where it began, the smoothing pass then rightly cut that hairpin away, and the hamlet's only path
@@ -498,7 +507,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         # field; otherwise the map says why it has no path to its rice.
         _drawn_spur, _swept = spur_cut_at_the_fold(_thread_the_fabric(s, plan, _spur_pts), plan.envelope)
         if _swept is None:
-            s.lane(_drawn_spur, width=5, clearance=LANE_CLEARANCE, worn=True, spur=True)  # flagged so neither sweep can drop the FIELD's only way
+            s.lane(_drawn_spur, width=SPUR_WIDTH, clearance=LANE_CLEARANCE, worn=True, spur=True)  # flagged so neither sweep can drop the FIELD's only way
         else:
             s.M["meta"]["field_spur_swept"] = _swept
 

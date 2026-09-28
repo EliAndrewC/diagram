@@ -213,6 +213,12 @@ def test_relax_gardens_south_nudges_an_east_shaded_garden_south():
     rec = {"x": 300, "y": 300, "w": 23, "h": 14, "geom": {"house": (300, 300, 23, 14), "yard": (300, 322, 20, 12), "gardens": list(beds)}}
     s._relax_gardens_south([rec])
     assert rec["geom"]["gardens"][0][1] > 300  # the bed moved SOUTH to clear the east tree
+    # ...and a bundle that carries its parts' drawn boxes (269 B18) moves the bed's box with the bed
+    rec = {"x": 300, "y": 300, "w": 23, "h": 14, "geom": {"house": (300, 300, 23, 14), "yard": (300, 322, 20, 12), "gardens": list(beds)}}
+    rec["geom"]["boxes"] = {"house": (300, 300, 23, 14), "yard": (300, 322, 20, 12), "shed": None, "gardens": [(320, 300, 13, 13)]}
+    s._relax_gardens_south([rec])
+    moved = rec["geom"]["gardens"][0][1] - 300
+    assert moved > 0 and rec["geom"]["boxes"]["gardens"][0][1] == 300 + moved, "the drawn box moved as far as the bed"
 
 
 # ---- _rect_blocked: the hill/pond ELLIPSE branch -------------------------------------------

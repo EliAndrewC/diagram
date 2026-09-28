@@ -162,8 +162,12 @@ class ThreshingYardsMixin:
         own center alone, as first shipped, slid it up to 3 ft along the front wall."""
         ox, oy, yw, yh = spot
         # THE EDGE THAT FACES THE HOUSE IS LEVEL (GM 2026-09-26): north on every bundled homestead, where the yard
-        # is the south front; the legacy fallback may seat it east or west, and the facing edge follows it
-        _dx, _dy = ox - hx, oy - hy
+        # is the south front; the legacy fallback may seat it east or west, and the facing edge follows it. Read in the
+        # HOUSE'S frame (269 B18): the flat quad is turned by `rot` below, so a quarter-turned homestead's yard, west of its
+        # house on the map, still has its house-facing edge on the quad's north
+        _th = math.radians(rot)
+        _mx, _my = ox - hx, oy - hy
+        _dx, _dy = _mx * math.cos(_th) + _my * math.sin(_th), -_mx * math.sin(_th) + _my * math.cos(_th)
         _facing = ("N" if _dy >= 0 else "S") if abs(_dy) >= abs(_dx) else ("W" if _dx > 0 else "E")
         flat = self._quad(ox, oy, yw, yh, 0.10, 41.0, level=_facing)
         poly = turn_about(flat, ox, oy, rot)

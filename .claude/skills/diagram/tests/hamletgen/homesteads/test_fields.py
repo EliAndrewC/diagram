@@ -166,3 +166,17 @@ def test_a_front_seat_is_pushed_across_a_brook_by_the_waters_reach() -> None:
     assert water_push(brook, (0.0, 20.0), (0.0, 1.0), 30.0, 0.0, 40.0) == 15.0
     assert water_push([((200.0, -50.0), (200.0, 90.0), 5.0)], (0.0, 20.0), (0.0, 1.0), 30.0, 0.0, 40.0) == 0.0
     assert water_push([((5000.0, 0.0), (5100.0, 0.0), 5.0)], (0.0, 20.0), (0.0, 1.0), 30.0, 0.0, 40.0) == 0.0
+
+
+def test_a_homestead_plot_is_ploughed_off_its_neighbors_furrows() -> None:
+    """`furrow_apart` (269 E3, found when the re-seated houses of B18 laid two homestead plots parallel on the reference
+    roll): a rolled angle within `FURROW_APART_RAD` of a neighbor's (modulo pi) is turned clear of it; a plot with no
+    neighbor, or one no turn can clear, keeps its roll."""
+    ring = [(0.0, 0.0), (60.0, 0.0), (60.0, 40.0), (0.0, 40.0)]
+    near = [{"poly": [[70.0, 0.0], [130.0, 0.0], [130.0, 40.0], [70.0, 40.0]], "theta": 0.05}]
+    turned = fields.furrow_apart(0.0, ring, near)
+    assert turned != 0.0 and abs(turned - 0.05) >= fields.FURROW_APART_RAD
+    assert fields.furrow_apart(0.0, ring, [{"poly": [[5000.0, 0.0], [5060.0, 0.0], [5060.0, 40.0]], "theta": 0.0}]) == 0.0
+    assert fields.furrow_apart(0.3, ring, [{"poly": [], "theta": 0.3}, {"poly": [[1, 1], [2, 2], [3, 1]]}]) == 0.3
+    crowd = [{"poly": [[70.0, 0.0], [130.0, 0.0], [130.0, 40.0], [70.0, 40.0]], "theta": k * 0.1} for k in range(-20, 21)]
+    assert fields.furrow_apart(0.0, ring, crowd) == 0.0, "no turn clears every neighbor: the roll stands"

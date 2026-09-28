@@ -18,6 +18,7 @@ Runs in the quick tier, unchanged: the tier is decided by the top-level tree (`t
 
 | file | look here when |
 |---|---|
+| `test_bund.py` | the run-on to the bund (`ways/bund.py`), `WorkedGround`, and `meet_end_to_end` (269 E3) |
 | `test_checks.py` (21) | the questions asked ABOUT a finished network - unreached houses, shared treads, crossings that land on crop or water |
 | `test_clearance.py` (125) | may a way BE here - `clear_runs`, `_clear_link`, `_clear_touch`, `may_write`, the bend and nub judgments |
 | `test_fabric.py` (210) | the settlement fabric a way must respect - `_crosses_fabric`, `_fabric_hits`, `_homestead_polys`, `_margin_frame`, `_draw_web` |
