@@ -180,6 +180,7 @@ branch house	branch house
 branch household	branch household
 branch households	branch household
 branch houses	branch house
+break of slope	break of slope
 broadcast	broadcast sowing
 broadcast oilseed stand	broadcast sowing
 broadcast sowing	broadcast sowing
@@ -955,6 +956,7 @@ horse-face	mamian
 horse-faces	mamian
 hot shoeing	hot-shoeing
 hot-shoeing	hot-shoeing
+hotoke	hotoke
 houlongshan	houlongshan
 hour of xu	hour of xu
 house chancellery	House Chancellery
@@ -1400,6 +1402,8 @@ loose-log drive	kanagashi
 loose-log driving	kanagashi
 louzeyuan	louzeyuan
 low stage	river stage
+lower break	break of slope
+lower break of slope	break of slope
 lower mansion	lower mansion
 lower mansions	lower mansion
 lower yangtze	Lower Yangzi
@@ -1450,6 +1454,8 @@ meander	meander
 meibutsu	meibutsu
 meiji	Meiji
 meireki	Meireki
+meisho zue	meisho zue
+meisho-zue	meisho zue
 meiwa	Meiwa
 meiwa era	Meiwa
 melon on the vine	melon-on-the-vine
@@ -2414,6 +2420,8 @@ unhairing	unhair
 unhairs	unhair
 unjo-gura	levy storehouse
 uogashi	uogashi
+upper break	break of slope
+upper break of slope	break of slope
 upper estate	kami-yashiki
 upper estates	kami-yashiki
 upper residence	kami-yashiki
@@ -2544,6 +2552,8 @@ yakuimon	yakuimon
 yakushi	Yakushi
 yam	yam
 yamahannoki	yamahannoki
+yamanote	Yamanote
+yamanote loop	Yamanote
 yamen	yamen
 yamen god	yamen-god
 yamen-god	yamen-god
