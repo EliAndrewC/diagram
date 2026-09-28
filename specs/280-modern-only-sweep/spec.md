@@ -122,6 +122,9 @@ modern-only - two GM rulings in conflict - does it go to the GM through `escalat
 - **SC-004** (FR-006, FR-007): every reversed GM ruling, every knowingly-ruled modern-only form and every legacy-map
   list reaches the GM after an `escalation-check` verdict.
 - **SC-005** (FR-009): every changed kind has an `entry-drift` verdict of IN-STEP.
+- **SC-007** (FR-004): every write brief assigns at most four questions by `scripts/_brief_load.py`, and every new or
+  changed section has quote-check and record-format verdicts (and each new key a source-applicability verdict) in its
+  group's checks file.
 - **SC-006** (FR-010): `git diff` over the feature touches no held section, and no 269 module before 269 lands.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
