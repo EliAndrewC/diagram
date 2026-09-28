@@ -768,11 +768,9 @@ rice across the water to the south, with the belt west of the houses on open gro
 houses' middle, over a 125-degree arc. The farmsteads moved (median 1,393 ft). The rolled round shape is drawn, at an
 aspect of 1.51. The copse is the against-the-belt form, every crown within 60 ft of the belt's lee face, on the houses' side, and the weir at the
 intake the map is named for is drawn. The connector leaves northeast (59 degrees on its first long leg) from the canvas's top, and the
-entrance board stands 40 ft out along it from where it meets the lanes - the nearest seat every way out passes whose caption stands clear -, passed by all 12 households' ways out. Six homesteads carry
-their own dry plot, against a lee or flank side or, where the packed steadings leave no room there, on the ground
-beside it, so a house's nearest dry ground lies a median 80 ft away. No household fixture stands across a lane from its
-house, and none goes unseated: the north-row house with a lane at its back and east wall stands its stack and its
-persimmon straight out from its walls, past its yard.
+entrance board stands 40 ft out along it from where it meets the lanes - the nearest seat every way out passes whose caption stands clear -, passed by all 12 households' ways out. The plot a household works by its own house is its kitchen garden; no grain plot is laid beside a house (a research
+pass, 2026-09-28, found the house-side plot of the record is the kitchen bed, research/fields.html "Where dry
+(hatake) crops go"), so the dry crops stand in the hem along the supply canal. No household fixture stands across a lane from its house, and none goes unseated.
 Known open (settlement-review, 2026-09-28): the houses reach their rice by the one plank at (986, 743), about 390 ft
 west of them - a south-row house walks about 1,000 ft to a bund 130 ft away - and the ford the engine opened at
 (1515, 738) carries no way. Whether a hamlet across a stream from its paddies kept one crossing or one per reach of

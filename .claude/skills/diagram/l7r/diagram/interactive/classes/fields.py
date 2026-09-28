@@ -132,15 +132,16 @@ class Millet(Kind):
 
     Why: The foothill border zone holds paddy, dry fields and woods together in one mosaic, and the map reads it
     as a catena: the paddy holds the flat valley bottom, and dry crops take the higher, well-drained ground the
-    water cannot command - not one strip but several places, terraces, levees, fan edges, lower slopes and above
-    all round the houses - with the woods on the slopes, by the early modern period mostly red pine, grass or
+    water cannot command - terraces, levee crests, the drier middle of a fan, lower slopes; on these maps the strip
+    along the field's high edge, just above the supply canal - with the woods on the slopes, by the early modern period mostly red pine, grass or
     bare hill rather than coppice.
 
     Note: The catena's elements - paddy, dry field, woodland - are read, and one page read puts the dry fields on
     the slopes around the settlement, for the Yoshino mountains only; that the old settlements stand on the raised
     ground that is also their dry field, with the paddy in the wet ground behind it, is read too; the rest of the
     order is this record's own reading, and one source read puts paddy round houses built on slightly higher ground
-    instead; the size of a household's plot by its house is a GUESS; that the crop stands in ridged rows at all is a
+    instead; the plot a household works by its own house is named for its own consumption, read, and no page read puts
+    grain there; that the crop stands in ridged rows at all is a
     GUESS - no page read says whether a pre-modern dry field was sown in rows or broadcast, and the only ridged rows
     found are modern; the crop MIX on any one map (how much millet against buckwheat and barley) is rolled from the
     seed and is a GUESS at the proportions.
@@ -163,21 +164,21 @@ class Buckwheat(Kind):
     What: A dry-field plot under buckwheat - the short-season crop for thin soil, sown late and taken in autumn -
     worked in ridged rows.
 
-    Why: Dry crops take the higher, well-drained ground the paddy water cannot command - not one strip but
-    several places, terraces, levees, fan edges, lower slopes and above all round the houses.
+    Why: Dry crops take the higher, well-drained ground the paddy water cannot command - terraces, levee crests,
+    the drier middle of a fan, lower slopes. On these maps that is the strip along the field's high edge, just above
+    the supply canal where the paddy water stops. The plot a household works beside its own house is its kitchen
+    garden; no source read puts its grain there.
 
     Note: The catena's elements - paddy, dry field, woodland - are read, and one page read puts the dry fields on
     the slopes around the settlement, for the Yoshino mountains only; that the dry crops take the higher ground
     above the paddy, and share the houses' raised ground, is read for alluvial lowland, where one page puts the old
     settlements and their dry fields on the natural levee and another the paddy in the wet ground behind; elsewhere
     that order is this record's own reading, and one source read puts paddy
-    round houses built on slightly higher ground instead. What is said here of the crop itself is not drawn
-    from the section this entry names; the plot laid against a homestead (or beside it, where no side has room), as long as that side and one hem row deep, is a GUESS at its size; the crop mix per map is rolled from the seed and is a GUESS at the
-    proportions.
+    round houses built on slightly higher ground instead; the plot a household works by its own house is named
+    for its own consumption, read, and no page read puts grain there. What is said here of the crop itself is not drawn from the section this entry names; the crop
+    mix per map is rolled from the seed and is a GUESS at the proportions.
 
-    Caveat: the plot laid against a homestead (or beside it, where no side has room), as long as that side and one hem
-    row deep, is a GUESS at its size;
-    the crop mix per map is rolled from the seed and is a GUESS at the proportions.
+    Caveat: the crop mix per map is rolled from the seed and is a GUESS at the proportions.
 
     Name: buckwheat
     Covers: `dry_plots[crop=buckwheat]` and their furrows
@@ -194,21 +195,21 @@ class Barley(Kind):
     What: A dry-field plot under barley - the winter grain, sown in autumn and taken in early summer - worked in
     ridged rows.
 
-    Why: Dry crops take the higher, well-drained ground the paddy water cannot command - not one strip but
-    several places, terraces, levees, fan edges, lower slopes and above all round the houses.
+    Why: Dry crops take the higher, well-drained ground the paddy water cannot command - terraces, levee crests,
+    the drier middle of a fan, lower slopes. On these maps that is the strip along the field's high edge, just above
+    the supply canal where the paddy water stops. The plot a household works beside its own house is its kitchen
+    garden; no source read puts its grain there.
 
     Note: The catena's elements - paddy, dry field, woodland - are read, and one page read puts the dry fields on
     the slopes around the settlement, for the Yoshino mountains only; that the dry crops take the higher ground
     above the paddy, and share the houses' raised ground, is read for alluvial lowland, where one page puts the old
     settlements and their dry fields on the natural levee and another the paddy in the wet ground behind; elsewhere
     that order is this record's own reading, and one source read puts paddy
-    round houses built on slightly higher ground instead. What is said here of the crop itself is not drawn
-    from the section this entry names; the plot laid against a homestead (or beside it, where no side has room), as long as that side and one hem row deep, is a GUESS at its size; the crop mix per map is rolled from the seed and is a GUESS at the
-    proportions.
+    round houses built on slightly higher ground instead; the plot a household works by its own house is named
+    for its own consumption, read, and no page read puts grain there. What is said here of the crop itself is not drawn from the section this entry names; the crop
+    mix per map is rolled from the seed and is a GUESS at the proportions.
 
-    Caveat: the plot laid against a homestead (or beside it, where no side has room), as long as that side and one hem
-    row deep, is a GUESS at its size;
-    the crop mix per map is rolled from the seed and is a GUESS at the proportions.
+    Caveat: the crop mix per map is rolled from the seed and is a GUESS at the proportions.
 
     Name: barley
     Covers: `dry_plots[crop=barley]` and their furrows
@@ -225,22 +226,22 @@ class Soy(Kind):
     What: A dry-field plot under soybean (daizu) grown as a field crop of its own, worked in ridged rows - drawn a
     soybean green against the tan and ochre grains.
 
-    Why: Dry crops take the higher, well-drained ground the paddy water cannot command - not one strip but
-    several places, terraces, levees, fan edges, lower slopes and above all round the houses; the bean fixes
-    its own nitrogen, which is why it also went along the bunds.
+    Why: Dry crops take the higher, well-drained ground the paddy water cannot command - terraces, levee crests,
+    the drier middle of a fan, lower slopes. On these maps that is the strip along the field's high edge, just above
+    the supply canal where the paddy water stops. The plot a household works beside its own house is its kitchen
+    garden; no source read puts its grain there. The bean fixes its own nitrogen, which is why it also
+    went along the bunds.
 
     Note: The catena's elements - paddy, dry field, woodland - are read, and one page read puts the dry fields on
     the slopes around the settlement, for the Yoshino mountains only; that the dry crops take the higher ground
     above the paddy, and share the houses' raised ground, is read for alluvial lowland, where one page puts the old
     settlements and their dry fields on the natural levee and another the paddy in the wet ground behind; elsewhere
     that order is this record's own reading, and one source read puts paddy
-    round houses built on slightly higher ground instead. What is said here of the crop itself is not drawn
-    from the section this entry names; the plot laid against a homestead (or beside it, where no side has room), as long as that side and one hem row deep, is a GUESS at its size; the crop mix per map is rolled from the seed and is a GUESS at the
-    proportions.
+    round houses built on slightly higher ground instead; the plot a household works by its own house is named
+    for its own consumption, read, and no page read puts grain there. What is said here of the crop itself is not drawn from the section this entry names; the crop
+    mix per map is rolled from the seed and is a GUESS at the proportions.
 
-    Caveat: the plot laid against a homestead (or beside it, where no side has room), as long as that side and one hem
-    row deep, is a GUESS at its size;
-    the crop mix per map is rolled from the seed and is a GUESS at the proportions.
+    Caveat: the crop mix per map is rolled from the seed and is a GUESS at the proportions.
 
     Name: soy
     Covers: `dry_plots[crop=soy]` and their furrows

@@ -297,7 +297,7 @@ Measured before and after in research R10.
 - The brook's walk swings across its whole band at every station (`BROOK_WANDER_STEP` 4 -> 10, the band unchanged at
   10 ft, so the frame and the skirt it is sized to are untouched), and an exit leg still on the page bends at its middle
   (`exit_bend`): Sawada's middle reach ran 872 ft within 3.1 ft of a line, 70% of its course on the page.
-- A household's own dry plot is laid against its homestead (`stage_homestead_fields`, after the ways): the levee model -
+- (RETIRED 2026-09-28 by D24) A household's own dry plot is laid against its homestead (`stage_homestead_fields`, after the ways): the levee model -
   the old settlement and its dry fields on the same raised ground, the paddy behind (research/fields.html, the catena;
   `shizen-teibo-jawiki`, `kohai-shicchi-jawiki`) - beside the canal hem, which stays as the second position. The toe
   band and the cover's cultivated extent leave these plots out, so neither moves after the seat and the router were
@@ -342,7 +342,7 @@ Measured before and after in research R10.
   seats every way out passes, the connector's win, in the siter and the frame stage's re-seat alike. A board is squared
   to the way it stands on, and Inashiro's outermost join is a one-farmstead web straggler whose verge won, so the board
   stood 87.7 degrees off the track every household walks (research/urban-features.html: broadside to the one way out).
-- The homestead field is a grain plot, so an archetype that buys its grain in lays none (`GRAIN_BOUGHT_IN`: the
+- (RETIRED 2026-09-28 by D24) The homestead field is a grain plot, so an archetype that buys its grain in lays none (`GRAIN_BOUGHT_IN`: the
   mulberry dike-fishpond, which 「abandoned rice to plant mulberry」 - research/archetypes.html; Kuwabata's GM-confirmed
   economy). Kuwabata had drawn six barley, millet and buckwheat plots.
 - A farmstead fixture is refused a seat whose line to its house crosses a lane (`across_a_lane`, the brook's line test):
@@ -478,7 +478,7 @@ want to route around deficiencies in our placement algorithm... we should fix th
   split; with its cause fixed it drew 17-24% of two faces past 120 ft, and the band goes back to 100 ft: thinnest
   84.1-89.8 ft, median 95.6-101.4, 1-16% of a face over 120 at the ends and bends, one piece on every map
   (`m:belt-r22-depth`, `m:belt-r22-pieces`).
-- **Too few homestead fields on a packed cluster** (accurate for the position: a household's dry field lay on the
+- (RETIRED 2026-09-28 by D24) **Too few homestead fields on a packed cluster** (accurate for the position: a household's dry field lay on the
   raised ground its house stood on, research/fields "Where dry (hatake) crops go"; the offset a GUESS, labeled). Main's
   placer packed Mizuguchi's steadings closer than a plot's depth, 3 of 12 households laid a plot, and the median house
   stood 157 ft from its nearest dry plot. Where no side has room flush, the plot is offered the nearest ground beside
@@ -494,6 +494,24 @@ want to route around deficiencies in our placement algorithm... we should fix th
 - Tried and reverted (observed 2026-09-28 on rolls not committed): reserving the persimmon's whole crown reach round
   every house (Mizuguchi's plots fell to 4 and its median to 157 ft again); a pure-disc near face with the columns
   densified along the profile, which left 2 ft sags where the disc steepens (sampled every 15 degrees now).
+
+### D24 - No grain plot beside a house: the homestead field retired on research (the GM, 2026-09-28)
+
+- The GM asked why dry crops now stood by the houses when the record's model is dry crops on the higher ground just
+  above the paddy water, and a vegetable garden by the house is a different thing. A search pass (2026-09-28) found
+  the house-side plot of the record is the kitchen bed: the yashikibatake is "cultivated ground for growing crops for a
+  Japanese household's own consumption" (kateisaien-jawiki, already cited by research/homesteads "How big was a
+  dooryard garden?", which puts the household's grain and bulk vegetables "out in the household's own hatake dry
+  fields, not here"). The natural-levee source puts the settlement and the dry fields on the same levee ridge, not a
+  plot per house; on a fan the dry fields lie upslope, away from the paddy. So D19's and D23's homestead field was not
+  supported - no page read puts a grain plot beside a house, and that the household's grain grew out in its fields is
+  the record's own reading, labeled a GUESS (an absence note on research/fields records the search) - and it is removed with its stage (`stage_homestead_fields`, `homesteads/fields.py`), its fallback seats
+  and its persimmon-ring reservation. The dry crops stand in the comb's hem along the supply canal, as they did on
+  main; the research entry and the four dry-crop pop-ups now say so.
+- Inashiro's settlement-review finding of round 0ae309f0 (every dry plot across the rice, a median of 658 ft, `m:inashiro-r11-dry`) is
+  answered by the record rather than by the drawing: a household's grain grew in its fields, not at its house. The
+  pool test that asked for a dry plot within 150 ft of the median house now asks that no grain plot stands by a house
+  (0 on every map, `m:dry-r24-retired`).
 
 ## Phases
 

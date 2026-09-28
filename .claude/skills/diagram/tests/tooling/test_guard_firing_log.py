@@ -37,8 +37,11 @@ CASES = [
     ("no-poll", _payload(command="command sleep 30"), "blocked", "disguised-sleep"),
     ("no-poll", _payload(command="make done  # POLL_OK: an external port"), "escaped", "poll-ok"),
     # GUARD_EDIT_OK: GM 2026-09-08 - an escaped wait whose pattern self-matches is corrected too
-    ("no-poll", _payload(command='true POLL_OK waits on a detached run; until ! pgrep -f "make page-check" >/dev/null; do sleep 5; done'), "rewrote", "escaped-self-match"),
-    ("no-poll", _payload(command='pgrep -f "make done"'), "rewrote", "self-match"),
+    ("no-poll", _payload(command='true POLL_OK waits on a detached daemon; until ! pgrep -f "cherryd --serve" >/dev/null; do sleep 5; done'), "rewrote", "escaped-self-match"),
+    ("no-poll", _payload(command='pgrep -f "cherryd"'), "rewrote", "self-match"),
+    # GUARD_EDIT_OK: 2026-09-28 (GM: "Yes please") - a wait on a make run is scoped to the asking tree, its own slug
+    ("no-poll", _payload(command='true POLL_OK waits on a detached run; until ! pgrep -f "make page-check" >/dev/null; do sleep 5; done'), "rewrote", "escaped-self-match-scoped"),
+    ("no-poll", _payload(command='pgrep -f "make done"'), "rewrote", "self-match-scoped"),
     ("make-only", _payload(command="python3 -m pytest tests/x/test_y.py --collect-only"), "blocked", "bare-pytest"),
     # feature 212: the targeted run and the wrapped entry point are REWRITTEN, and each records its rule
     ("make-only", _payload(command="python3 -m pytest tests/x/test_y.py -k foo 2>&1 | tail -3"), "rewrote", "targeted-pytest"),

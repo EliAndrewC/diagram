@@ -1,0 +1,302 @@
+{
+  "before-inashiro-route-calls": {
+    "value": 12,
+    "unit": "calls",
+    "quantity": "route_calls over one generate() of inashiro (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-inashiro-cell-fouled": {
+    "value": 40794,
+    "unit": "calls",
+    "quantity": "cell_fouled over one generate() of inashiro (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-inashiro-brook-band": {
+    "value": 20420,
+    "unit": "calls",
+    "quantity": "brook_band over one generate() of inashiro (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-inashiro-fabric-index-calls": {
+    "value": 202,
+    "unit": "calls",
+    "quantity": "fabric_index_calls over one generate() of inashiro (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-inashiro-quad-hits-seg": {
+    "value": 63674,
+    "unit": "calls",
+    "quantity": "quad_hits_seg over one generate() of inashiro (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-inashiro-carve-comb": {
+    "value": 4,
+    "unit": "calls",
+    "quantity": "carve_comb over one generate() of inashiro (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-inashiro-house-fits": {
+    "value": 8001,
+    "unit": "calls",
+    "quantity": "house_fits over one generate() of inashiro (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-inashiro-grove-too-near": {
+    "value": 60307,
+    "unit": "calls",
+    "quantity": "grove_too_near over one generate() of inashiro (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-inashiro-commons-sparse": {
+    "value": 69270,
+    "unit": "calls",
+    "quantity": "commons_sparse over one generate() of inashiro (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-inashiro-builds": {
+    "value": 1,
+    "unit": "builds",
+    "quantity": "builds over one generate() of inashiro (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-kashikawa-route-calls": {
+    "value": 33,
+    "unit": "calls",
+    "quantity": "route_calls over one generate() of kashikawa (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-kashikawa-cell-fouled": {
+    "value": 358398,
+    "unit": "calls",
+    "quantity": "cell_fouled over one generate() of kashikawa (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-kashikawa-brook-band": {
+    "value": 174118,
+    "unit": "calls",
+    "quantity": "brook_band over one generate() of kashikawa (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-kashikawa-fabric-index-calls": {
+    "value": 1023,
+    "unit": "calls",
+    "quantity": "fabric_index_calls over one generate() of kashikawa (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-kashikawa-quad-hits-seg": {
+    "value": 56504,
+    "unit": "calls",
+    "quantity": "quad_hits_seg over one generate() of kashikawa (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-kashikawa-carve-comb": {
+    "value": 3,
+    "unit": "calls",
+    "quantity": "carve_comb over one generate() of kashikawa (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-kashikawa-house-fits": {
+    "value": 9356,
+    "unit": "calls",
+    "quantity": "house_fits over one generate() of kashikawa (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-kashikawa-grove-too-near": {
+    "value": 128952,
+    "unit": "calls",
+    "quantity": "grove_too_near over one generate() of kashikawa (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-kashikawa-commons-sparse": {
+    "value": 79181,
+    "unit": "calls",
+    "quantity": "commons_sparse over one generate() of kashikawa (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-kashikawa-builds": {
+    "value": 1,
+    "unit": "builds",
+    "quantity": "builds over one generate() of kashikawa (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-kuwabata-route-calls": {
+    "value": 49,
+    "unit": "calls",
+    "quantity": "route_calls over one generate() of kuwabata (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-kuwabata-cell-fouled": {
+    "value": 331302,
+    "unit": "calls",
+    "quantity": "cell_fouled over one generate() of kuwabata (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-kuwabata-brook-band": {
+    "value": 0,
+    "unit": "calls",
+    "quantity": "brook_band over one generate() of kuwabata (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-kuwabata-fabric-index-calls": {
+    "value": 711,
+    "unit": "calls",
+    "quantity": "fabric_index_calls over one generate() of kuwabata (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-kuwabata-quad-hits-seg": {
+    "value": 823,
+    "unit": "calls",
+    "quantity": "quad_hits_seg over one generate() of kuwabata (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-kuwabata-carve-comb": {
+    "value": 0,
+    "unit": "calls",
+    "quantity": "carve_comb over one generate() of kuwabata (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-kuwabata-house-fits": {
+    "value": 1551,
+    "unit": "calls",
+    "quantity": "house_fits over one generate() of kuwabata (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-kuwabata-grove-too-near": {
+    "value": 8590,
+    "unit": "calls",
+    "quantity": "grove_too_near over one generate() of kuwabata (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-kuwabata-commons-sparse": {
+    "value": 35960,
+    "unit": "calls",
+    "quantity": "commons_sparse over one generate() of kuwabata (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-kuwabata-builds": {
+    "value": 1,
+    "unit": "builds",
+    "quantity": "builds over one generate() of kuwabata (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-mizuguchi-route-calls": {
+    "value": 20,
+    "unit": "calls",
+    "quantity": "route_calls over one generate() of mizuguchi (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-mizuguchi-cell-fouled": {
+    "value": 108216,
+    "unit": "calls",
+    "quantity": "cell_fouled over one generate() of mizuguchi (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-mizuguchi-brook-band": {
+    "value": 30324,
+    "unit": "calls",
+    "quantity": "brook_band over one generate() of mizuguchi (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-mizuguchi-fabric-index-calls": {
+    "value": 848,
+    "unit": "calls",
+    "quantity": "fabric_index_calls over one generate() of mizuguchi (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-mizuguchi-quad-hits-seg": {
+    "value": 40896,
+    "unit": "calls",
+    "quantity": "quad_hits_seg over one generate() of mizuguchi (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-mizuguchi-carve-comb": {
+    "value": 2,
+    "unit": "calls",
+    "quantity": "carve_comb over one generate() of mizuguchi (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-mizuguchi-house-fits": {
+    "value": 8792,
+    "unit": "calls",
+    "quantity": "house_fits over one generate() of mizuguchi (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-mizuguchi-grove-too-near": {
+    "value": 27932,
+    "unit": "calls",
+    "quantity": "grove_too_near over one generate() of mizuguchi (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-mizuguchi-commons-sparse": {
+    "value": 45884,
+    "unit": "calls",
+    "quantity": "commons_sparse over one generate() of mizuguchi (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-mizuguchi-builds": {
+    "value": 1,
+    "unit": "builds",
+    "quantity": "builds over one generate() of mizuguchi (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-sawada-route-calls": {
+    "value": 108,
+    "unit": "calls",
+    "quantity": "route_calls over one generate() of sawada (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-sawada-cell-fouled": {
+    "value": 1013133,
+    "unit": "calls",
+    "quantity": "cell_fouled over one generate() of sawada (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-sawada-brook-band": {
+    "value": 460131,
+    "unit": "calls",
+    "quantity": "brook_band over one generate() of sawada (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-sawada-fabric-index-calls": {
+    "value": 7071,
+    "unit": "calls",
+    "quantity": "fabric_index_calls over one generate() of sawada (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-sawada-quad-hits-seg": {
+    "value": 102092,
+    "unit": "calls",
+    "quantity": "quad_hits_seg over one generate() of sawada (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-sawada-carve-comb": {
+    "value": 8,
+    "unit": "calls",
+    "quantity": "carve_comb over one generate() of sawada (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-sawada-house-fits": {
+    "value": 21311,
+    "unit": "calls",
+    "quantity": "house_fits over one generate() of sawada (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-sawada-grove-too-near": {
+    "value": 111811,
+    "unit": "calls",
+    "quantity": "grove_too_near over one generate() of sawada (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-sawada-commons-sparse": {
+    "value": 164042,
+    "unit": "calls",
+    "quantity": "commons_sparse over one generate() of sawada (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  },
+  "before-sawada-builds": {
+    "value": 2,
+    "unit": "builds",
+    "quantity": "builds over one generate() of sawada (render off), counted by cProfile",
+    "source": "harness.py via make spec-harness, the unmodified engine at ac01ffe2d, 2026-09-28"
+  }
+}

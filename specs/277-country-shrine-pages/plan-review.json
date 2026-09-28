@@ -1,0 +1,52 @@
+{
+ "feature": "277-country-shrine-pages",
+ "plan_sha256": "24642a8ae6a757f542a06bf326aec20d1d76c8917135b6f1401f7cf7f21b1e94",
+ "reviewed": "2026-09-28",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "One module compound_kinds/shrine.py: 7 kinds the sheet draws and no magistracy does, 2 for its untagged ink (swept clearing, footpath), 7 its program names but no sheet draws; shared kinds (torii, shrine grove, well, kitchen, genkan, latrine, vegetable garden, fire-water tubs) stay in their magistracy families, written once.",
+   "class": "within",
+   "why": "Unchanged since round 1: FR-002, FR-006 and the spec's Edge Case (a shared kind written once)."
+  },
+  {
+   "id": "D2",
+   "summary": "Carry-over: each new kind takes its folded item's class and reason (dwelling and bell tower stay guess); a shared kind keeps the one label 262 gave it - the well's shared label (convention) over the shrine item's accurate.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Round 1's objection was that the shrine's differing reading of a shared kind had nowhere to go. D7 now gives it the place the spec's Edge Case names, and the diff at a95df4aca shows it landing: hoshigaoka-shrine.notes.md's Map notes carries the well's folded reason ('its water point ... Never under an arch') and its 5 ft curb (svg line 263, 15 px at 3 px = 1 ft), and the built hoshigaoka-shrine.html contains that text, so write_sheet_page reads it (page.py:983). The one thing left out is the item's 'accurate' as a second label on the well. That is not a session's carve-out: the spec forbids a second kind, one kind carries one label, and the item's reason is kept. The shared label also holds for this well as drawn, because 5 ft is larger than the 3 to 4 ft curb the shared Well note records."
+  },
+  {
+   "id": "D3",
+   "summary": "The fold: each country-shrines item becomes id, kind, band_ft plus forms, site, optional, with the item->kind map; the pack audit and programs.md resolve through the tags and the registry.",
+   "class": "within",
+   "why": "Unchanged: FR-006 as written."
+  },
+  {
+   "id": "D4",
+   "summary": "Untagged ink: background and the precinct's layout rect '-'; grove floor polygon 'shrine grove'; clearing 'swept clearing'; well path 'footpath'. Tags only.",
+   "class": "within",
+   "why": "Unchanged: FR-001, FR-005 and the pure-framing Edge Case."
+  },
+  {
+   "id": "D5",
+   "summary": "hoshigaoka-shrine.gen.py gains write_sheet_page(SVG, COMPOUND_CLASSES) and fails on an unclean census.",
+   "class": "within",
+   "why": "Unchanged: FR-003 and SC-001. The diff at a95df4aca does this: it returns 1 on unclassed or unregistered."
+  },
+  {
+   "id": "D6",
+   "summary": "test_compound_kinds.py reads every pool/country-shrines/*/ sheet; the closure covers kinds drawn or named by programs; red on a seeded fault.",
+   "class": "within",
+   "why": "Unchanged: FR-004, SC-003 and FR-006's closure. This enforces what was asked."
+  },
+  {
+   "id": "D7",
+   "summary": "hoshigaoka-shrine.notes.md gains a Map notes ### Features block, keyed by kind, for each of the 8 shared kinds the sheet draws, read off the sheet and its design notes and taking nothing from the monk's Obsidian Portal record. The shared Torii write-up's stale 20 ft becomes the 12 ft pitch, and its What and Covers name the country shrine.",
+   "class": "within",
+   "why": "The Map notes block is the spec's Edge Case in its literal form ('the page's own notes carry the difference, not a second kind'), and it goes through 262's existing mechanism rather than a new one. Checked: each of the 8 lines matches the sheet's design notes (the seven arches' reason is notes.md line 32, the GM's one-off, already captioned on the sheet at svg line 49; the grove at 137 by 215 ft is line 16; the privy, the garden and the kitchen door are lines 17 and 24; the 4 ft entry floor is line 24). The Torii edit makes the one shared write-up true for both tiers it now serves: the Edge Case says 'serves both', and a 20 ft figure the shrine's own 12 ft pitch contradicts is a defect the shrine page would open (XIV). It adds no behavior and no scope beyond the kind the request brings onto the page."
+  }
+ ],
+ "verdict": "CLEAR"
+}

@@ -1,4 +1,4 @@
-"""The Mode A kinds and the five magistracy pages they are written for (feature 262).
+"""The Mode A kinds and the pages they are written for: the five magistracies (feature 262) and the country shrines (277).
 
 The GM, 2026-09-26: *"highlight things like the outer courtyard versus the inner courtyard and see write-ups of what
 these things were and the extent to which this is indeed based on real historical research or is a thing specific
@@ -16,6 +16,7 @@ import re
 import pytest
 
 from l7r.diagram import compound
+from l7r.diagram.buildings.types import load_types
 from l7r.diagram.interactive.classes import NOT_HIGHLIGHTED, lead_sentence
 from l7r.diagram.interactive.compound_kinds import COMPOUND_CLASSES
 from l7r.diagram.interactive.notes import read_map_notes
@@ -25,6 +26,7 @@ from l7r.diagram.interactive.sources import registry_keys, research_questions
 
 SKILL = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 MAGI = os.path.join(SKILL, "pool", "magistracies")
+SHRINES = os.path.join(SKILL, "pool", "country-shrines")
 HAND = ("ochiba-magistracy", "hayakawa-magistracy", "ubame-magistracy")
 SILENT = "(no dedicated entry - recorded as silent)"
 
@@ -55,14 +57,32 @@ def _sheets() -> dict[str, str]:
 SHEETS = _sheets()
 
 
+def _shrine_sheets() -> dict[str, str]:
+    """Every country shrine the pool draws (feature 277), as SVG text: each is a tracked hand-drawn sheet."""
+    out: dict[str, str] = {}
+    for name in sorted(d for d in os.listdir(SHRINES) if os.path.isdir(os.path.join(SHRINES, d))):
+        with open(os.path.join(SHRINES, name, name + ".svg"), encoding="utf-8") as fh:
+            out[name] = fh.read()
+    return out
+
+
+SHRINE_SHEETS = _shrine_sheets()
+
+
 def test_the_pool_s_magistracies_are_the_five_this_test_reads() -> None:
     assert sorted(SHEETS) == sorted(d for d in os.listdir(MAGI) if os.path.isdir(os.path.join(MAGI, d)))
 
 
-@pytest.mark.parametrize("name", sorted(SHEETS))
+def test_the_pool_s_country_shrines_are_read() -> None:
+    """Non-vacuity: the shrine sheets the parametrized census reads are found."""
+    assert "hoshigaoka-shrine" in SHRINE_SHEETS
+
+
+@pytest.mark.parametrize("name", sorted(SHEETS) + sorted(SHRINE_SHEETS))
 def test_every_drawn_element_carries_a_kind_the_registry_knows(name: str) -> None:
-    """FR-006: ink with no kind, or a kind nobody wrote, fails naming it."""
-    got = census(SHEETS[name], COMPOUND_CLASSES)
+    """FR-006 (and feature 277's FR-004 for the country shrines): ink with no kind, or a kind nobody wrote, fails
+    naming it."""
+    got = census({**SHEETS, **SHRINE_SHEETS}[name], COMPOUND_CLASSES)
     assert got.unclassed == [], f"{name}: ink with no kind - tag it (data-kind) or rule it out (data-kind=\"-\"): {got.unclassed}"
     assert got.unregistered == [], f"{name}: kinds the registry does not know: {got.unregistered}"
 
@@ -175,9 +195,20 @@ def test_every_part_is_its_own_kind_and_lights_with_its_parent(name: str) -> Non
 
 
 def test_the_registry_is_closed_over_the_maps_it_serves() -> None:
-    """FR-007: a kind no magistracy draws is a write-up nobody can open."""
-    drawn = set().union(*(present_classes(flatten(svg)[1]) for svg in SHEETS.values()))
-    assert sorted(set(COMPOUND_CLASSES) - drawn) == []
+    """FR-007: a kind no sheet draws and no program names is a write-up nobody can open. Feature 277 widened it: a
+    program's optional item (a bell tower, a burial ground) is a kind the next sheet may draw, so its write-up is
+    held by the program that names it."""
+    drawn = set().union(*(present_classes(flatten(svg)[1]) for svg in {**SHEETS, **SHRINE_SHEETS}.values()))
+    named = {item.kind for bt in load_types() for item in bt.required if item.kind is not None}
+    assert sorted(set(COMPOUND_CLASSES) - drawn - named) == []
+
+
+def test_every_kind_a_program_names_is_registered() -> None:
+    """Feature 277's FR-006: a program item's class and reason are its kind's, so a kind the registry lacks is a
+    program item with no write-up."""
+    named = {item.kind for bt in load_types() for item in bt.required if item.kind is not None}
+    assert "sanctuary" in named  # non-vacuity: the country shrine's items are kinded
+    assert sorted(named - set(COMPOUND_CLASSES)) == []
 
 
 @pytest.mark.parametrize("key", sorted(COMPOUND_CLASSES))
