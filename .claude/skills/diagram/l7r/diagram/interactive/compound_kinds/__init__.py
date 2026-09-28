@@ -26,11 +26,11 @@ class or why (they come from here).
 from __future__ import annotations
 
 from ..classes import FeatureClass, Kind, install_siblings
-from . import grounds, household, office, particulars
+from . import grounds, household, office, particulars, shrine
 from .siblings import PAIRS
 
 #: The families in the order their kinds are listed; within a family, definition order.
-_ORDER = (grounds, office, household, particulars)
+_ORDER = (grounds, office, household, particulars, shrine)
 _KINDS: list[type[Kind]] = [k for mod in _ORDER for k in Kind.registry if k.__module__ == mod.__name__]
 
 #: Every Mode A kind, by key - the vocabulary a magistracy page is written with.

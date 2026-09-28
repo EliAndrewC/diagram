@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-28
 
-**Status**: specified; spec-fidelity round 1 CHANGES REQUIRED (1) - applied, round 2 next
+**Status**: specified; spec-fidelity round 2 CHANGES REQUIRED (1) - applied, round 3 next
 
 **Input**: the GM's request of 2026-09-28, verbatim in [`request.md`](request.md).
 
@@ -60,7 +60,8 @@ sheet with untagged ink or an unregistered kind, and on a registered kind no shr
 - **FR-005**: The drawn sheet and its PNG MUST NOT change in appearance: this feature adds tags, write-ups and a page,
   not ink.
 - **FR-006** (feature 262's FR-003a, which deferred the country-shrine tier to this feature): each `country-shrines`
-  item in `buildings/types.json` MUST name the Mode A kind it is (`id`, `kind`, `band_ft`); its classification and
+  item in `buildings/types.json` MUST name the Mode A kind it is - what stays in the item is what only the audit needs:
+  its `id`, `band_ft`, and its `forms`, `site` and `optional` where it has them, plus the `kind` it names; its classification and
   reason are stated once, in that kind's registry entry, and its label-to-kind binding is the sheet's own tag. No
   shrine item keeps a `label`, `class` or `why`. The pack audit's shrine checks and `buildings/programs.md` MUST take
   the class, the why and the item-to-feature binding from the registry and the tags. An item that names a kind no sheet
@@ -90,3 +91,5 @@ sheet with untagged ink or an unregistered kind, and on a registered kind no shr
 - Round 1 (spec-fidelity, MODE 2, 2026-09-28): CHANGES REQUIRED - the country-shrine tier's `types.json` items still
   carry their own label, class and why, the duplication the GM named; 262's FR-003a deferred exactly this fold to the
   shrine's page. Applied: FR-006, the carry-over clause in the Edge Cases, SC-004 extended to the pack audit, SC-005.
+- Round 2 (spec-fidelity-verify, MODE 3): the fold resolved but FR-006 listed only (id, kind, band_ft) - an item keeps
+  its forms, site and optional where it has them, as 262's FR-003a said. Applied.
