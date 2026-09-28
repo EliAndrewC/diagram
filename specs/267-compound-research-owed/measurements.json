@@ -25,5 +25,23 @@
   "quantity": "the Kashikawa notes carry a dated entry for the island-to-corner change, saying the older island measurements are the old form's; 2026-09-27",
   "source": "pool/hamlets/kashikawa/kashikawa.notes.md, heading '2026-09-27 - feature 267: the field grave is the corner form'",
   "command": "grep -c '2026-09-27 - feature 267: the field grave is the corner form' pool/hamlets/kashikawa/kashikawa.notes.md"
+ },
+ "kashikawa-grave-docstring-step": {
+  "value": 1,
+  "unit": "docstring",
+  "subject": "kashikawa",
+  "verifies": "F1",
+  "quantity": "the `_plot_corner_grave` docstring now says the grave is set 12-16 px in from the corner (`corner_seat`), matching the code, not 'a third of the way' (round-2 PASS nitpick F1, 2026-09-27)",
+  "source": ".claude/skills/diagram/l7r/diagram/settlement/fields/features.py, the _plot_corner_grave docstring",
+  "command": "grep -n '12-16 px in from the corner' .claude/skills/diagram/l7r/diagram/settlement/fields/features.py"
+ },
+ "kashikawa-grave-docstring-clearance": {
+  "value": 1,
+  "unit": "docstring",
+  "subject": "kashikawa",
+  "verifies": "F2",
+  "quantity": "the CORNER_MIN docstring now says the step points at the plot's centroid, so on an oblong plot the mound can stand hard against one bund, which the research's 'against its bunds' allows - no clearance overclaimed (round-2 PASS nitpick F2, 2026-09-27)",
+  "source": ".claude/skills/diagram/l7r/diagram/settlement/fields/features.py, the CORNER_MIN docstring",
+  "command": "grep -n 'hard against one bund' .claude/skills/diagram/l7r/diagram/settlement/fields/features.py"
  }
 }
