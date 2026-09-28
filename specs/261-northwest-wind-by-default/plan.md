@@ -431,9 +431,9 @@ Measured before and after in research R10.
   Inashiro's rolled crescent under round's ceiling, and 0.3 left a persimmon unseated on two maps - a knob that moves
   which map fails. Outward-only jitter was tried before that, and the back rank, standing against the band's outer edge,
   was pulled back onto one line by the placer's computed move.
-- Scoped to the accretion form, the four `back_lane` maps are unchanged and Sawada's four jittered seats moved 3-8 ft;
-  its ranks spread 17-61 ft (`m:rank-r18-spread`). Its lanes shifted with them, and seven homesteads now carry their own
-  dry plot where eleven did.
+- Scoped to the accretion form, the four `back_lane` maps are unchanged and Sawada re-seats;
+  its ranks spread 17-61 ft (`m:rank-r18-spread`). Its four seats moved 3.1-7.9 ft and its lanes shifted with them, and
+  seven homesteads now carry their own dry plot where eleven did (`m:sawada-r18-moves`).
 
 ## Phases
 

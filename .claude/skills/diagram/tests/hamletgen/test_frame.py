@@ -371,3 +371,26 @@ def test_the_board_records_its_well_distance_where_it_is_drawn() -> None:
     bare: dict = {"meta": {}}
     record_board_well(bare, 0.0, 0.0)
     assert "kosatsuba_well_ft" not in bare["meta"]
+
+
+def test_the_re_seat_asks_the_one_placer_for_each_seats_caption_level() -> None:
+    """`_caption_levels`: with a settlement that places captions, each candidate's level is the placer's answer at the
+    board's angle, against obstacles indexed once; with no label there is no index to build."""
+    from l7r.diagram.hamletgen.frame import _caption_levels
+
+    class _S:
+        def __init__(self) -> None:
+            self.indexed = 0
+
+        def label_obstacles(self):  # type: ignore[no-untyped-def]
+            self.indexed += 1
+            return "index"
+
+        def board_caption_level(self, x, y, hw, hh, rot, label, index, frame, canopy):  # type: ignore[no-untyped-def]
+            return 1 if index == "index" and x > 10 else 0
+
+    s = _S()
+    seats = [(0.0, 5.0, 5.0, 0.0), (0.0, 20.0, 5.0, 0.0)]
+    assert _caption_levels(s, seats, "notice board", None, 12.0, 5.0, None) == {seats[0]: 0, seats[1]: 1}  # type: ignore[arg-type]
+    assert s.indexed == 1
+    assert _caption_levels(s, seats, "", None, 12.0, 5.0, None) == {seats[0]: 0, seats[1]: 0}  # type: ignore[arg-type]

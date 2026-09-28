@@ -1079,8 +1079,17 @@
   "round": "31ef113b",
   "value": 17.1,
   "unit": "ft",
-  "quantity": "the tightest rank of three or more houses on Sawada, the pool's one alleys hamlet (ranks 37.0, 60.7 and 17.1 ft); Mizuguchi, back_lane, keeps its regular ranks (3.4-12 ft within a rank) by the record's planned form",
+  "quantity": "the tightest rank of three or more houses on Sawada, the pool's one alleys hamlet (ranks 37.0, 60.7 and 17.1 ft); Mizuguchi, back_lane, keeps its regular ranks (rows of 4.7, 5.2 and 40.5 ft) by the record's planned form",
   "source": ".claude/skills/diagram/pool/hamlets/sawada/sawada.json houses; .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.json houses",
   "command": "python3 specs/261-northwest-wind-by-default/measure/row_spread.py sawada mizuguchi"
+ },
+ "sawada-r18-moves": {
+  "subject": "sawada",
+  "round": "31ef113b",
+  "value": 7.9,
+  "unit": "ft",
+  "quantity": "the farthest a Sawada farmhouse moved when its rank seats took the accretion form's jitter (four moved, 3.1-7.9 ft; the rest stand where they stood at 1f2484649); meta.homestead_fields 11 -> 7",
+  "source": ".claude/skills/diagram/pool/hamlets/sawada/sawada.json houses, meta.homestead_fields; the same at commit 1f2484649",
+  "command": "python3 specs/261-northwest-wind-by-default/measure/house_moves.py 1f2484649 sawada"
  }
 }
