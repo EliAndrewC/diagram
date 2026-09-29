@@ -22,9 +22,12 @@ the Japanese evidence thin; the source `santome-shinden-jawiki` (sources page) g
 farmhouses along both sides of a road, each farm's field and woodlot in an equal strip behind it, 40 ken of frontage
 - but is a tertiary stub whose figures want a citing work.
 
-## Your question (one new question on the homesteads page; no more than four questions in all, ten new keys)
+## Your items (no more than ten new registry keys)
 
-**"How was a row village laid out?"** - for a Japanese farming settlement strung in a line (路村 rosen, 列村/列状村
+- R61 (new, homesteads page): **"How was a row village laid out?"** - see below.
+- homesteads/150: one or two sentences in its LINEAR section pointing at R61 (below).
+
+**R61, "How was a row village laid out?"** - for a Japanese farming settlement strung in a line (路村 rosen, 列村/列状村
 retsujoson, 新田集落 shinden villages, levee and hill-foot lines; East Asian parallels where the Japanese record is
 silent, marked as such):
 
@@ -46,7 +49,7 @@ class (accurate / deviation / convention / guess), and where the record supports
 those become a rolled knob. End the entry with **"What it means for a map"**: the forms a row village may take, each
 with the numbers it rests on, and which numbers are GUESSes.
 
-Also update the LINEAR section of "Does a hamlet have to be nucleated at all?" with one or two sentences pointing at the new question (its "thin"
+For homesteads/150, update its LINEAR section with one or two sentences pointing at the new question (its "thin"
 verdict stands or falls with what you find).
 
 ## The procedure (session 1: write)
