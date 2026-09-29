@@ -48,7 +48,8 @@ fixture transcripts and a throwaway git repository - never a live `claude` call 
 
 **Performance Goals**: none for the tooling; the runs' own cost is the thing measured.
 
-**Constraints**: the container memory cap (runs strictly sequential, a check for no other live run before a launch - R5); no
+**Constraints**: the container memory cap (runs strictly sequential, a check for no other live run, a working-set headroom gate and a wait on a fresh memwatch warning before every launch, and
+nothing else of the experiment beside a live run - research R5 D7); no
 engine code in the tooling (the tooling lands on the DIRECT route; task I's winner lands GATED on its own); the prompts
 byte-identical across arms.
 
