@@ -127,34 +127,48 @@ per-house groves pass every check a grove answers to.
 
 **The row village** (amendment 3)
 
-- **FR-013**: A LINEAR hamlet's farms MUST stand in a row along one line, lot against lot one farmstead's frontage
-  apart (its own frame, the grove's width - the attested 40 ken, about 240 ft, research homesteads/156), and never in
-  ranks behind the row. The line follows the ground the settlement stands on: the field's margin, the dry edge a levee,
-  dike or fan foot gives (homesteads/155: a row follows a road laid first or a landform, set by the ground, not rolled;
-  a road laid first belongs to the planned dry-field colony, which no generator draws).
-- **FR-014**: Which side of its street a row stands on MUST be a per-settlement knob, pinnable, otherwise rolled at even
-  odds: ONE side, the street between the row and its field (farmland across the road, Shimotome), or BOTH sides of the
-  street, each farm's holding behind it (Santome, Nobidome); the odds a GUESS (homesteads/155: no count of which was
-  commoner). Recorded on the map.
-- **FR-015**: A row the line cannot hold MUST grow another street parallel to the first, with its own row or rows, as a
+- **FR-013**: A LINEAR hamlet's farms MUST stand in a row along one line, never in ranks behind the row. The record
+  (homesteads/155) gives two lines, and both MUST be drawn: a STREET LAID FIRST, the farms fronting it (the planned
+  row's form, which a paddy row may borrow - the `kotobank-santome-shinden` write-up - and homesteads/150's linear
+  hamlet whose farms front a street along the road), drawn straight, as a surveyed road is; or the DRY EDGE THE GROUND
+  GIVES - a levee, a dike, a fan's foot - which the field's margin stands for on these maps (this project's reading),
+  the row curving with it. Where the site decides it the site's line is taken: flood-prone ground (FR-006) takes the
+  dike line; otherwise the line MUST be a per-settlement knob, pinnable, rolled at even odds (a GUESS: the record gives
+  no count), and recorded on the map.
+- **FR-014**: The farms along a line MUST stand one FRAME apart - the farm's grove and its ground plus the lane's room
+  between two farms' groves (homesteads/715) - a physical necessity of FR-010, since a grove farm cannot stand on a
+  narrower lot. The width this gives is a GUESS at the top of the record's range, 9 ken to 40 ken (homesteads/156); the
+  40 ken is a dry-field colony's figure and is not carried over as a paddy row's.
+- **FR-015**: Which side of its street a row stands on MUST be a per-settlement knob, pinnable, otherwise rolled at even
+  odds: ONE side, the street between the row and its field (farmland across the road, Shimotome), or BOTH sides, each
+  farm's holding behind it (Santome, Nobidome); the odds a GUESS (homesteads/155: no count of which was commoner).
+  Recorded on the map. On BOTH, the far row's holding MUST be drawn behind it in the form the record gives its line: on
+  a street laid first, a strip behind the farm (the planned row's form, which a paddy row may borrow; its crop dry field
+  and its depth a GUESS); on the dry edge, compact and near the house (a dike row's holding, homesteads/155).
+- **FR-016**: A row the line cannot hold MUST grow another street parallel to the first, with its own row or rows, as a
   planned colony grew more roads (homesteads/156) - not ranks behind a row. How many farms a line holds before the next
   street is the ground's, the count a GUESS.
-- **FR-016**: Each street MUST be drawn as one continuous way along its row, joined to the connector, a rank wider than
+- **FR-017**: Each street MUST be drawn as one continuous way along its row, joined to the connector, a rank wider than
   the lanes off it, and every farm of the row MUST reach it.
 
 **What the reviews found** (amendment 3)
 
-- **FR-017**: A farm that carries its own grove MUST draw from its own well in its dooryard, off its way in (research
-  homesteads/200: a dispersed farm carries its own water; a shared well within reach is the nucleated arrangement);
-  every farm's front door, the open side of its grove, MUST be reached by a way; and a farm's grove MUST draw bamboo
-  only where that farm rolled a household bamboo stand.
+- **FR-018**: A DISPERSED farm MUST draw from its own well in its dooryard, off its way in (homesteads/200: a dispersed
+  farm carries its own water; a shared well within reach is the nucleated arrangement). A LINEAR row's water MUST be a
+  per-settlement knob, pinnable, rolled at even odds and recorded: each farm its own well in its dooryard, or wells
+  shared along the street within reach of the farms they serve - the record rules only on the dispersed farm, and its
+  one row's wells (Santome's, few, deep and shared on a water-poor upland) do not transfer; the odds a GUESS.
+- **FR-019**: Every grove farm's front door, the open side of its grove, MUST be reached by a way; and a farm's grove MUST
+  draw bamboo only where that farm rolled a household bamboo stand.
 
 ### Key Entities
 
 - **Grove side count**: 2, 3 or 4; one per settlement; recorded on the map.
 - **Flood-prone ground**: a property of the settlement's site - pinned by the map, or set from its polder fields or
   dike-top houses (FR-006); recorded on the map.
-- **Row sides**: one or both; one per linear settlement; recorded on the map (FR-014).
+- **Row line**: a street laid first, or the dry edge; one per linear settlement; set by the site or rolled; recorded (FR-013).
+- **Row sides**: one or both; one per linear settlement; recorded on the map (FR-015).
+- **Row water**: own wells or shared wells; one per linear settlement; recorded on the map (FR-018).
 
 ## Success Criteria *(mandatory)*
 
@@ -169,11 +183,14 @@ per-house groves pass every check a grove answers to.
 - **SC-005** (FR-010, FR-011): the cohort passes (every seed's checks green, every household seated) with the three
   forms rolled and each side count present among its non-nucleated seeds; and in every non-nucleated seed every farm's
   grove plants every side its settlement rolled - no farm on fewer.
-- **SC-007** (FR-013, FR-014, FR-015, FR-016): in every linear seed of the cohort and on every linear pool map, every
-  farmhouse stands within one frame depth of a street, no farm stands behind another farm on the same side of its
-  street, each street is one continuous way, and both side values appear among the linear seeds.
-- **SC-008** (FR-017): in every non-nucleated seed and pool map every grove farm has a well of its own, not in its way in;
-  every front door is within the door reach of a way; the farms drawing grove bamboo are exactly the farms that rolled it.
+- **SC-007** (FR-013, FR-014, FR-015, FR-016, FR-017): in every linear seed of the cohort and on every linear pool map, every farmhouse stands
+  within one frame depth of a street, no farm stands behind another on the same side of its street, each street is one
+  continuous way, a BOTH row's far farms each have their holding drawn behind them, and both values of the line and of
+  the sides appear among the linear seeds.
+- **SC-008** (FR-018, FR-019): in every dispersed seed every farm has a well of its own, not in its way in; in every linear
+  seed the water knob's value is drawn (own wells, or every farm within reach of a shared well) and both values appear;
+  in every non-nucleated seed and pool map every front door is within the door reach of a way, and the farms drawing
+  grove bamboo are exactly the farms that rolled it.
 - **SC-006** (FR-012): the pool is regenerated, `make done` is green, and every regenerated pool map whose layout moved
   gets its settlement-review.
 
@@ -200,17 +217,16 @@ per-house groves pass every check a grove answers to.
   others roll": the reference hamlet (and the test baselines built on it) is pinned nucleated in its spec; Mizuguchi
   and Kashikawa take their linear roll.
 
-- **The row follows the field's margin, not a road laid first** (FR-013): homesteads/155 finds both, set by the
-  ground; the road laid first is the planned new-field colony's, a dry-field form with no generator here, so the
-  paddy hamlet's row takes the landform (accurate for a levee or dike row; the margin standing for that dry edge is
-  this project's reading).
-- **The frontage is the farmstead's own frame** (FR-013): the 40 ken Santome figure and the grove farm's frame are the
-  same order (about 240 ft); the 9 ken Ome Shinmachi row was laid narrow for a hoped-for market and carries no
-  per-farm grove, so it is not this form's value (homesteads/156, source-applicability).
-- **Sides at even odds** (FR-014): both attested, no count - a GUESS.
-- **Holdings**: the field block stays beside the row, as a dike row's holdings lie near the house (accurate); the
-  road row's strip behind each farm is not drawn - the far side's holding is the ground behind it, undrawn (a
-  deliberate deviation: the water-first field is one comb, and a paddy strip is itself a GUESS in the record).
+- **Both lines, the site's where it decides** (FR-013): a street laid first and the dry edge are both attested
+  (homesteads/155), and a paddy row may borrow the planned row's street; flood-prone ground takes the dike; elsewhere
+  even odds, a GUESS. The field's margin standing for a levee, dike or fan foot is this project's reading.
+- **One frame apart** (FR-014): a physical necessity of FR-010, the grove plus the lane's room between two groves (homesteads/715);
+  its width a GUESS at the top of the record's 9-40 ken range. The 9 ken row is not this form's value because a 9 ken
+  lot cannot hold a grove farm; the 40 ken is a dry-field colony's and does not transfer (source-applicability).
+- **Sides at even odds** (FR-015): both attested, no count - a GUESS. The far row's holding follows its line: a strip
+  behind on a street laid first (the borrowed planned form; dry field and depth a GUESS), compact near the house on the
+  dry edge.
+- **Row water** (FR-018): the record rules on the dispersed farm only; a row's water is a knob, even odds, a GUESS.
 
 ## Review history
 
@@ -230,11 +246,11 @@ non-nucleated seed plants every side its settlement rolled, so the fallback roun
 
 **Amendment 2** (2026-09-29, the GM's decision): FR-012 - the GM, asked how the pool should take the restored roll (three hamlets roll linear), chose "Keep Inashiro, let others roll (Recommended)": the reference hamlet is pinned nucleated, Mizuguchi and Kashikawa take their roll.
 
-**Amendment 3** (2026-09-29, the GM's instruction and the research it asked for): FR-013 to FR-017, SC-007, SC-008. The
+**Amendment 3** (2026-09-29, the GM's instruction and the research it asked for): FR-013 to FR-019, SC-007, SC-008. The
 linear form drew a block of groved farms three and four deep (the settlement-review of Kashikawa, NEEDS-WORK), and asked
 what a row village of such farms should look like, the GM answered: *"what it should look like should be based on our
 research and not just something that you ask me ... find out from our research what types of settlement layouts
 existed, and then have our settlements reflect the range of settlement layouts that we are able to find. And then, if
 our research is thin and we are straightforwardly unable to come up with an answer, then we make a tunable knob for the various possibilities which all seem reasonable by virtue of being in line with our other research and not contradicting anything that our research has already established."* The
-research is homesteads/155 and 156 (R6, checked). FR-017 carries the reviews' other findings (no wells; bamboo drawn on
+research is homesteads/155 and 156 (R6, checked). FR-018 and FR-019 carry the reviews' other findings (no wells; bamboo drawn on
 farms that rolled none; a door no way reached), each decided by the record.
