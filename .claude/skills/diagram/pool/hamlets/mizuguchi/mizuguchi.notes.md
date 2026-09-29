@@ -850,3 +850,25 @@ The GM's ruling of 2026-09-28 - "We should eliminate anything which is only mode
   field margin (M49, vegetation/640).
 
 Measured on this roll (2026-09-29): 12 houses; bath rooms 3 (by seat: floored_rooms 1, stable_end 2; the hamlet's seat stable_end), wood sheds 5, privies 11 (5 on the sun side), storehouses 2, bamboo stands 1, woodland stands 1; house turns 0 to 12 degrees; every declared fixture seated.
+
+## 2026-09-29 (feature 291): a row village of farms with their own groves - the layout moved
+
+The GM's ruling of 2026-09-29 made the homestead grove's sides a knob (two sides 5 in 10, three 3 in 10, a ring 2 in 10;
+flood ground rolls the ring at 4 in 10) and put the dispersed and linear forms back into the roll (5:3:2 nucleated,
+dispersed, linear). Mizuguchi's seed rolls **linear**, so this map is now a row village; the reference (Inashiro) is pinned
+nucleated and did not move.
+
+- **Every farm carries its own grove** on the sides the hamlet rolled - here **two**, the windward north and west, both the
+  deep stand (1.57 house depths, about 44 ft; homesteads/010 and 715). No village belt is drawn where the farms carry
+  their own groves (vegetation/030).
+- **The farms front a street** laid along the road, the row as long as its households (homesteads/150; the length a GUESS).
+- **A service strip, about 24 ft, stands between the house and its windward stand**, behind the back wall and off the
+  windward end, where the wood shed stands a step off the wall and the bath room is joined at the stable end. Before it,
+  every bath room this map drew stood inside the west band and the shed seats were refused (homesteads/715; a GUESS sized to
+  the shed).
+- **Two farms' groves stand at least 32 ft apart**, a lane's room, and the lanes are routed round the bands, never through
+  them (homesteads/715).
+
+Measured on this roll (2026-09-29): 12 houses, all 12 grove farms; 24 bands, all deep; bath rooms 3 (all stable_end), wood
+sheds 5, privies 11, coops 10, manure heaps 8, shrine 1 - every declared fixture seated, none inside a band; 8 lanes; no
+lane across a band; attempt 1, no farmhouse off the way network.

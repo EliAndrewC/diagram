@@ -95,3 +95,21 @@ def test_a_track_that_starts_in_a_grove_band_is_not_drawn_across_it() -> None:
     bands = [poly for poly, _owner, kind in _homestead_polys(s) if kind == "groves"]
     assert _crosses_fabric(list(run), bands, 0.0), "the run as it came crosses the band"
     assert len(out) >= 2 and not _crosses_fabric(out, bands, 0.0), "what is handed back does not"
+
+
+def test_where_no_route_rounds_the_band_the_track_keeps_its_far_part(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """The grove fallback's last resort (feature 291): with no route at all, what is kept is the run's FAR part, from its
+    far end back to where it would first enter a band - clear of every band - and the web joins the near end."""
+    from l7r.diagram.hamletgen.ways import _crosses_fabric, _homestead_polys, track
+
+    plan = a_plan()
+    plan.seat = hg.seat_cluster(plan)
+    s = _hamlet_for_ways()
+    s.M["houses"] = [{"x": 760.0, "y": 500.0 + dy, "w": 60.0, "h": 40.0, "rot": 0.0, "kind": "plain"} for dy in range(0, 401, 40)]
+    s.M["groves"] = [{"x": 700.0, "y": 700.0, "w": 40.0, "h": 80.0, "rot": 0.0, "of": [760.0, 700.0], "face": [-1, 0], "depth": "deep"}]
+    monkeypatch.setattr(track, "_route", lambda *a, **k: [])
+    run = [(700.0, 700.0), (450.0, 700.0)]
+    out = track._thread_the_fabric(s, plan, run)
+    bands = [poly for poly, _owner, kind in _homestead_polys(s) if kind == "groves"]
+    assert len(out) >= 2 and not _crosses_fabric(out, bands, 0.0)
+    assert out[-1] == run[-1], "the far end is kept where it was"
