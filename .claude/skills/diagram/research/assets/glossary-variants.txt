@@ -315,6 +315,8 @@ causeways	causeway
 celestial order	Celestial Order
 censorate	Censorate
 center-pivot	center-pivot
+centipede lane	centipede lane
+centipede lanes	centipede lane
 ceremonial gate	ceremonial gate
 ceremonial gates	ceremonial gate
 cesspit	koedame
@@ -1426,6 +1428,8 @@ jiguchi-sen	jiguchi-sen
 jin	jin
 jin'ya	jin'ya
 jinaicho	jinaicho
+jinan	Tsinan
+jinan's	Tsinan
 jingshi fangxiang zhi	Jingshi fangxiang zhi
 jingtai	Jingtai
 jingtian	jingtian
