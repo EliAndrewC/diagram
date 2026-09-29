@@ -47,7 +47,8 @@ the GM's deviation from it, and what the research found about other published or
 
 ## Success Criteria *(mandatory)*
 
-- **SC-001** (FR-001): unit tests prove the order on a subject with positions blocked in turn: above, then below, then
+- **SC-001** (FR-001, FR-002): the placer's existing unit tests of rings, costs, the fallback, leaders and inside
+  placement pass with only their expected position names changed; and unit tests prove the order on a subject with positions blocked in turn: above, then below, then
   left, then right, then the corners.
 - **SC-002** (FR-001, FR-004): on the four hand sheets (Hayakawa, Ochiba and Ubame magistracies, the Hoshigaoka shrine), no notice board's label stands at a diagonal corner where an
   adjacent position at the same ring is free.
@@ -60,8 +61,8 @@ the GM's deviation from it, and what the research found about other published or
 
 ## Decisions Recorded
 
-- **The order is the GM's as stated** - above, below, left, right. The GM also said it matches "Zoroaster's 1990s oil
-  well labeling models"; the order the research reader reported for Zoraster's third model (Bobák, Čmolík and Čadík
+- **The order is the GM's as stated** - above, below, left, right. The GM also said it matches Zoraster's oil well labeling
+  models (research.md R3); the order the research reader reported for Zoraster's third model (Bobák, Čmolík and Čadík
   2024, Table 1) is top, top right, top left, right, left, bottom right, bottom, bottom left, which differs. The GM
   stated the order twice, explicitly; it is implemented as stated. Its four-way order is a Mapbox documentation example's (top, bottom,
   left, right - an example's settings, not a stated default). Found while writing the record: the one published user
@@ -83,3 +84,8 @@ right) and raising the Zoraster attribution at hand-back is the faithful reading
 diagonals ahead of left and right, against the GM's stated purpose; nothing may say the order "follows Zoraster".
 Applying it to every point caption is within the request: the GM ruled by the kind of object, not the kind of map, and
 one placer with one order is the smaller change.
+
+**Round 2** (spec-fidelity-verify, MODE 3, 2026-09-29): FAITHFUL. The amendment corrects the Mapbox wording (an
+example's settings, not a stated default) and records the 2024 user study for hand-back without adopting its order;
+FR-001 still carries the GM's order. The plan's round 2 (MODE 4): CLEAR - D3 now puts the other published orders in the
+record, cited.
