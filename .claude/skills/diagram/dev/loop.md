@@ -577,7 +577,8 @@ gate's coverage baseline, the engine lines NO other context reaches (`specs/215-
 unique_lines.py`). The gate's Inashiro and Kuwabata reached nothing the pool sweep's own children did not; the
 three duplicates nothing at all; the rest a few lines each. So the gate READS the pool's two maps (`tests/gate/
 _pool.py`), the fan-out runs a stub producer through the pool, the child-equality proof is retired, the cache
-round trip runs on the sweep's entry, the re-roll loop runs on stand-in stages, the immune experiment perturbs
+round trip runs on the sweep's entry, the re-roll loop runs on stand-in stages (feature 287 removed the loop: a map is
+built once, its reach guaranteed where the web settles), the immune experiment perturbs
 the reference against the pool's committed manifest, and seed 43's eight lines are unit tests. **Nine rows,
 nine rolls on a warm gate, no duplicates** - the record's floor. What proves less is stated in the spec's
 FR-006, five items, each raised with the GM. What did NOT pack: seed 43's kink, which does not reproduce from

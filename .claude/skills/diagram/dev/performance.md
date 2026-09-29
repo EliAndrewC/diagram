@@ -353,7 +353,8 @@ manifests; and a harness counter keyed by FILE reads zero once a function moves 
 
 **A roll done twice.** Sawada seated a farmhouse 157 px deep inside its paddy field, where no way can ever be drawn, so the
 driver re-rolled it every time - and finished the discarded attempt first. The placer now refuses a seat deeper than any
-way's reach inside the web's hard ground (`UnreachableGround`), and the driver finishes only the attempt it keeps.
+way's reach inside the web's hard ground (`UnreachableGround`), and the driver finishes only the attempt it keeps. (Since
+feature 287 there is no second attempt: the reach is guaranteed where the web settles, and `generate` builds once.)
 
 **Vectorizing is not free.** The commons grass, thrown and tested as numpy arrays, was first SLOWER than the per-point loop
 it replaced: building a shapely shape for every keep-out on the map, per call, cost more than 16,000 in-frame points took
@@ -434,9 +435,8 @@ the same mats), the page reading the blade slots' structures instead of re-parsi
 its verge band before the rest (the roadside rule throws the rest away whenever the band holds a seat), the bamboo walked
 outward from its target, the whole-ring `edge_dist` scans asked through indexes, one link index per route, the brook toll's
 near-cell set (and one exact lever withdrawn for costing more than it saved: a crown grid per grove clump, whose few crowns are
-cheaper to walk than to file) (and one exact lever withdrawn for costing more than it saved: a crown grid per grove clump, whose few crowns are
 cheaper to walk than to file) - and a stranding re-roll resuming from a copy of the first roll taken before the seats, the stages before
-them being the same on every attempt (a re-roll 1.1-1.7 s faster).
+them being the same on every attempt (a re-roll 1.1-1.7 s faster; the resume went with the re-roll in feature 287, below).
 
 **The moving levers, and how to judge one.** A* in the router and the field's size search without its blind probe each move
 maps, and the moved maps re-roll more often. Judged by the pool and cohort seeds 1-24 rolled whole against the run-to-run
@@ -460,9 +460,41 @@ makes any of these significantly faster.
 | where | cost | why nothing was taken |
 |---|---|---|
 | the seam closing (`close_seams`) | ~2.5 profiled s on Sawada | ~800 shapely welds of ~1.2 ms each, already ranked in one array call and read from a shared tree; no scan left, and the shapes are the rule |
-| the first-roll strandings | 2 of 29 rolls pay a re-roll (the resume cuts it to the stages from the seats on) | a seat-time reach test was tried three times before and failed - reachability depends on fabric that does not exist when seats are chosen |
+| the first-roll strandings (CLOSED by feature 287: no roll re-rolls - see its section below) | 2 of 29 rolls pay a re-roll (the resume cuts it to the stages from the seats on) | a seat-time reach test was tried three times before and failed - reachability depends on fabric that does not exist when seats are chosen |
 | the commons, the blade flush, the grove fill | 0.2-0.6 s each | sums of indexed lookups; each an index already |
 | `seg_dist` over ~25 callers | 312,391 calls on Sawada, none above 0.09 s | an index per caller buys under a tenth of a second each |
+
+## Guarantees instead of re-rolls and finished-map tests (feature 287, 2026-09-29)
+
+Feature 284's two moving levers broke five finished-map rules on the pool, and the GM asked for every such rule to be
+*"guaranteed by the placement algorithm rather than just happening to work on particular seeds"*. What that did to the
+cost of a roll and of a gate (the full record: `specs/287-placer-guarantees/research.md` R5-R10):
+
+- **A map is built once.** `generate` used to re-roll a map that stranded a farmhouse, with that ground forbidden, up to
+  four times, and keep the least bad. Before the feature 8 of the 53 maps of the pool and cohort 1-48 re-rolled (11 extra
+  builds; observed 2026-09-29, method: `specs/287-placer-guarantees/p0/harness.py`, research R5). The seating now reserves
+  a corridor from every door to the exit strip against the fabric still to be laid (M3), the web's last pass
+  (`ways/settle.py`) draws the corridor for any house its lanes do not reach, and the loop, its snapshot-and-resume and
+  its choice between attempts are deleted. The acceptance sweep counts one build per roll (research R9). Eighteen
+  earlier seat-time reach tests failed because they ran before the neighbors' fabric existed; a RESERVATION against
+  that fabric is what made the seat-time answer possible.
+- **The web settles itself, and says how hard it worked.** `settle_the_web` repairs only by cutting ordinary lanes or
+  drawing reserved corridors, so it terminates; the pool's manifests record 2-3 rounds and 3-15 lanes changed
+  (`meta.web_settle`; observed 2026-09-29, method: the five committed manifests at bf705bee3). Its wall-clock seconds
+  are kept OUT of the manifest, which otherwise rewrote every pool map on each regeneration with nothing moved.
+- **One registry of what stands, indexed once.** Every footprint is recorded through one grid index (120 px cells,
+  `overlap/registry.py`), filed once as recorded and asked per candidate (constitution X clause 15); the overlap matrix
+  that one test used to read after the fact is now asked by every placer before it places.
+- **What the gate stopped paying.** 84 test functions retired with their rules guaranteed by placer unit tests: 228.6 s
+  of test time per full gate, 216.45 s of it ONE unit test - a board under one wide canopy, where the strict siter proved
+  every shaded seat by a full least-cost search before the terminal. Rebuilt as a timing probe that scene took 305.5 s
+  before and 4.6 s after the siting was indexed and ordered open seats first, the same seat (observed 2026-09-29,
+  method: a direct call in the clone and in a detached worktree, research R8). The finished-map tests themselves cost
+  10.4 s together: **a finished-map test's cost is the roll it reads, and that roll is shared**, so retiring one frees
+  little unless it was the only reader of its map.
+- **The bookends**: `287-start` total 20.9 s, median 5.2 s, worst 5.8 s (observed 2026-09-29, method: `make perf
+  LABEL=287-start` before any engine change, load 1.3); the `287-end` comparison is the feature's T89, recorded in its
+  plan.
 
 ## Memory: the spike is C buffers, not Python objects, and it lands where nothing reads it (feature 208, 2026-09-07)
 
@@ -720,7 +752,8 @@ research R2 for the after (0.2-0.6 s on the first measurement).
 
 Three things the cohort taught, each a shape to remember:
 
-- **A lattice needs a fresh phase per retry.** `generate` re-rolls a stranded map with that ground forbidden; the old
+- **A lattice needs a fresh phase per retry.** `generate` re-rolled a stranded map with that ground forbidden (until
+  feature 287, which removed the re-roll); the old
   random cloud explored new pockets by itself, the lattice kept the same survivors and re-seated the same pocket. The
   draw is salted by the count of forbidden seats.
 - **A new hard member cuts capacity somewhere.** The toe band took cohort seed 25 from 20 households to 14; the
