@@ -15,6 +15,11 @@ if TYPE_CHECKING:
 
 
 ALDER_GREENS = ("#5E7F6A", "#6B8A74")  # the alder crowns' tint (a map drawing convention, `_draw_grove`)
+# A household's bamboo stand, rolled per farmstead from its position (`_hjit(x, y, 95.0)` under this share): the presence
+# rate is a GUESS - no source gives a share; "one of several secondary species" says common but not universal
+# (hamletgen/homesteads/bamboo.py carries the full note). Here since feature 291, because a farm with its own grove carries
+# its bamboo IN that grove, so the grove drawer makes the same roll.
+HOUSEHOLD_BAMBOO_PREVALENCE = 0.6
 GROVE_CLUMP_CROWNS = 28  # the most crowns one `_draw_grove` clump throws
 GROVE_CROWN_AREA = 48.0  # sq px of clump per crown at the town grain (~one 5 m crown); scaled by (bscale / 0.82) ** 2
 
@@ -498,6 +503,7 @@ class GrovesMixin:
         mix: str = "windbreak",
         cls: str | None = None,
         tally: dict[str, int] | None = None,
+        bamboo: bool = True,
     ) -> int:
         """Draw one windbreak/grove clump as a DENSE MIXED STAND - overlapping canopies packed into a real
         grove (not a few scattered trees), of three species: tall EVERGREEN conifer (darker, larger crown - the
@@ -509,7 +515,8 @@ class GrovesMixin:
         The village belt draws one of the `windbreak_belt` knob's two forms (269 B30, vegetation/270): a 'conifer_led'
         clump draws only the lesser broadleaf and the bamboo between the belt's rows of conifers, which `_belt_ranks`
         seats for the whole belt first; 'mixed_broadleaf' is rounded broadleaf crowns in the woods' irregular size mix,
-        no conifer. `tally`, when given, counts the crowns drawn by kind.
+        no conifer. `tally`, when given, counts the crowns drawn by kind. `bamboo=False` draws no bamboo in any mix: a farm
+        grove whose household rolled no bamboo stand (feature 291).
         Distinct from the big s.forest area feature and the striped kitchen-garden bed. Species and placement
         are seeded by position (stable across regenerations). Canopy count scales with footprint area."""
         # SCOPED (2026-08-08): a homestead grove's crowns are decoration keyed to the grove itself.
@@ -534,7 +541,7 @@ class GrovesMixin:
             # items, taken from the broadleaf so the cedar backbone keeps its 38%. The dooryard and alder mixes carry none.
             # The village belt's two forms (269 B30) carry the same bamboo share; a conifer-led belt's conifers are its rows,
             # seated for the whole belt by `_belt_ranks`, so its clumps throw only the lesser crowns; a mixed broadleaf belt has none.
-            b_th = GROVE_BAMBOO_SHARE if mix in ("windbreak", *WINDBREAK_BELT_FORMS) else 0.0  # dooryard = fruit broadleaf, no conifer; alder = broadleaf only
+            b_th = GROVE_BAMBOO_SHARE if bamboo and mix in ("windbreak", *WINDBREAK_BELT_FORMS) else 0.0  # `bamboo=False`: a farm that rolled none (feature 291)  # dooryard = fruit broadleaf, no conifer; alder = broadleaf only
             c_th = b_th + 0.38 if mix == "windbreak" else b_th
             if mix == "conifer_led":
                 rows = max(0.0, (w - 4) * (h - 4)) / (self.px(RANK_ALONG_FT) * self.px(RANK_APART_FT))  # the row conifers this clump's box holds

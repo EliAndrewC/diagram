@@ -660,6 +660,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # whether the shape got stamped. It used to be derived from the presence of `cluster_shape`,
     # which stopped meaning anything the moment the shape was always declared.
     s.M["meta"]["cluster_seeding"] = "cloud" if _cloud_placed * 2 >= max(1, plan.spec.households) else "frontage"
+    s._household_bamboo = plan.bamboo in ("homestead", "both")  # type: ignore[attr-defined]  # a grove farm draws the bamboo it rolls (feature 291)
     plan.placed = s.farmsteads()
     # how many farmhouses the quarter turn took (269 B18) - measured on what was drawn, so the share is a count, not a hope
     s.M["meta"]["house_quarter_turns"] = sum(1 for h in s.M.get("houses") or [] if abs(wrap_line_deg(float(h.get("rot", 0.0)) - (s._house_bearing or 0.0))) > 45.0)

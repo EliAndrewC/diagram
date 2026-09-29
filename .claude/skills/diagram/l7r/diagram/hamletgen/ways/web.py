@@ -30,7 +30,7 @@ from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _draw_web, _homestead_polys, _ma
 from .geom import _components, _trim_to_service, polyline_len, steading_footprints
 from .joints import center_lane_ends, fold_the_connector_hairpin, meet_end_to_end, split_at_crossings, straighten_joints
 from .route import _route
-from .serve import _lay_web_lane, _serve_stragglers, front_door
+from .serve import _lay_web_lane, _serve_stragglers, front_door, lay_door_paths
 from .smooth import _STUB_REACH_FT, _smooth_web
 from .sweeps import (
     _bridge_collinear_breaks,
@@ -695,6 +695,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # (558, 1096) stood 56 ft from lane 2's end until the two became one lane, and then 104 ft from anything.
     _sweep_doubled_tails(s)  # a lane that runs on beside the way it met ends where it met it (feature 261)
     _sweep_dangling_ends(s)
+    lay_door_paths(s, hard_built, walls, list(plan.watercourses) + drawn_water)  # ...and a grove farm is reached at its front door (feature 291)
     # ...AND A LANE THAT ENDS ON ANOTHER STANDS ON ITS CENTERLINE (GM 2026-09-27): an end a few feet off it shows its round cap past the far edge.
     # A NEEDLE JOIN SQUARED HERE WAS TRIED AND REVERTED (the 269 landing, 2026-09-28): Mizuguchi's orphan join runs 35 ft
     # back along the skeleton lane at 16 degrees before meeting it, and moving its end to the foot of the vertex before it
