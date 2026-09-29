@@ -444,6 +444,36 @@ def test_every_surely_taken_cell_is_ground_the_fit_test_refuses() -> None:
         assert s._site_blocks_rect((px, py, 0.0, 0.0)), (px, py)
 
 
+def test_every_surely_clear_cell_is_ground_the_corridor_tests_pass() -> None:
+    """FreeGround's clear cells (feature 287), asked of the real boundary on the toy: any point inside one passes the
+    tests a corridor's samples are asked (`chain_violated` at gap 0 and `hit_points`) - and a corridor's verdict with the
+    raster installed is its verdict without it, over corridors that cross clear, taken and edge cells."""
+    import random
+
+    from l7r.diagram.hamletgen.homesteads.boundary import install_site_boundary
+    from l7r.diagram.settlement._geom.primitives import chain_violated
+    from l7r.diagram.settlement.rolling.access import on_site_ground
+
+    s, plan = _rescue("nucleated")
+    install_site_boundary(s, plan)
+    fg = s._free_ground
+    assert len(fg.clear) > 100, "non-vacuity: open ground makes clear cells"
+    r = random.Random(287)
+    for i, j in r.sample(sorted(fg.clear), 300):
+        px, py = fg.x0 + (i + r.random()) * fg.cell, fg.y0 + (j + r.random()) * fg.cell
+        assert not chain_violated(px, py, s._site_chains, 0.0) and not s._site_corridors.hit_points([(px, py)]), (px, py)
+    verdicts = []
+    for i, j in r.sample(sorted(fg.clear), 200):
+        a = (fg.x0 + (i + r.random()) * fg.cell, fg.y0 + (j + r.random()) * fg.cell)
+        b = (a[0] + r.uniform(-120.0, 120.0), a[1] + r.uniform(-120.0, 120.0))
+        with_raster = on_site_ground(s, a, b)
+        s._free_ground = None
+        assert on_site_ground(s, a, b) == with_raster, (a, b)
+        s._free_ground = fg
+        verdicts.append(with_raster)
+    assert 10 < sum(verdicts) < 190, "non-vacuity: corridors admitted and refused"
+
+
 def test_the_front_row_loop_stops_once_its_share_is_seated(monkeypatch) -> None:  # type: ignore[no-untyped-def]
     """`stage_homesteads`: the row's loop breaks when its share is placed, however many seats the chain still offers - here
     the chain's seats are offered twice over, and the row still takes exactly its share."""

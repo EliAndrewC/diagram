@@ -243,3 +243,27 @@ def test_a_seat_deeper_than_any_ways_reach_is_refused_and_one_within_reach_is_no
     assert s._house_unreachable((350.0, 350.0, 40.0, 26.0)) is False
     s._unreachable = ground
     assert s._house_unreachable((350.0, 350.0, 40.0, 26.0)) is True
+
+
+def test_free_ground_asks_blocks_of_cells_first_and_claims_what_asking_every_cell_claims() -> None:
+    """Feature 287: the raster is built block by block - a block the grown ground misses is all clear, one the shrunk ground
+    holds all taken, and only the cells of the rest are asked - and claims exactly the cells asking each one claims. Ground
+    lying wholly off the grid leaves every block missed and no cell to ask; no line asked is no answer."""
+    import shapely
+    from shapely.geometry import LineString, Polygon
+    from shapely.ops import unary_union
+
+    from l7r.diagram.hamletgen.homesteads.boundary import FreeGround
+
+    water = ([((0.0, 130.0), (400.0, 170.0), 12.0)], [])
+    ring = ([[(200.0, 220.0), (330.0, 220.0), (330.0, 330.0), (200.0, 330.0)]], [])
+    fg = FreeGround([], water, ring, (0.0, 0.0, 400.0, 400.0))
+    union = unary_union([Polygon(ring[0][0]), LineString([(0.0, 130.0), (400.0, 170.0)]).buffer(12.0)])
+    keys = [(i, j) for i in range(fg.nx) for j in range(fg.ny)]
+    cells = shapely.box([i * 8.0 for i, _ in keys], [j * 8.0 for _, j in keys], [(i + 1) * 8.0 for i, _ in keys], [(j + 1) * 8.0 for _, j in keys])
+    assert fg.clear == {k for k, t in zip(keys, shapely.disjoint(union.buffer(0.5), cells).tolist(), strict=True) if t}
+    assert fg.taken == {k for k, t in zip(keys, shapely.contains(union.buffer(-0.5), cells).tolist(), strict=True) if t}
+    assert len(fg.taken) > 50 and len(fg.clear) > 500, "non-vacuity: both kinds of block and edge cells"
+    away = FreeGround([], ([((900.0, 900.0), (950.0, 950.0), 5.0)], []), None, (0.0, 0.0, 100.0, 100.0))
+    assert away.taken == set() and len(away.clear) == away.nx * away.ny
+    assert away.lines_edge_points([]) == []

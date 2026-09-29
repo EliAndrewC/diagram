@@ -7,6 +7,7 @@ import pytest
 
 from l7r.diagram.hamletgen.ways import corridors as co
 from l7r.diagram.hamletgen.ways import law, settle
+from l7r.diagram.settlement import segments_cross
 
 
 class _S:
@@ -556,3 +557,58 @@ def test_seed_4_a_door_walled_in_by_its_own_fixtures_is_reached_from_the_dooryar
     settle.settle_the_web(s)
     assert law.unreached_houses(s.M) == [] and law.ends_behind(s.M) == [] and law.lanes_over_fixtures(s.M) == []
     assert co.dooryard(s.M["houses"][0]) == (300.0, 220.0) and co.dooryard({**s.M["houses"][0], "geom": {"yard": [1, 2, 3, 4]}}) == (1.0, 2.0)
+
+
+def _reference_lawful_ground(ok: settle.Lawful, run, width) -> bool:
+    """`Lawful.on_lawful_ground` as it read before the ground was indexed: every registry walked whole."""
+    if len(run) < 2 or law.hooked(run) or settle.kink_spans(run):
+        return False
+    if settle._crossing_fault({**ok.M, "lanes": [{"pts": settle._rounded(run), "w": width}]}, 0, run, ok.wet) is not None:
+        return False
+    rings = settle.open_ground_rings(ok.M)
+    crossed = any(segments_cross(p, q, r[k], r[(k + 1) % len(r)]) for p, q in zip(run, run[1:], strict=False) for r in rings for k in range(len(r)))
+    return settle.fouled_segment(run, width, ok.houses, ok.yards, ok.solid, ok.fixtures) is None and not crossed and not co.through_a_building(run, ok.buildings)
+
+
+def test_the_indexed_lawful_ground_answers_as_the_whole_registries_do() -> None:
+    """The ground half of the law reads an index built once (`corridors.GroundIndex`, dev/performance.md): it only prunes, so
+    over runs that cross the brook, a channel, a field, a dry plot and a marsh, pass a house, a yard, a byre and a fixture,
+    each near and far, it gives the verdict every registry walked whole gives - and some of each."""
+    import random
+
+    s = _S(
+        [CONN],
+        houses=[(-300.0, 300.0), (-460.0, 300.0), (400.0, 200.0)],
+        streams=[BROOK],
+        drawn_channels=[{"pts": [[-900.0, 600.0], [900.0, 650.0]], "w0": 4.0}],
+        fields=[{"outline": [[-800.0, 400.0], [-700.0, 400.0], [-700.0, 500.0], [-800.0, 500.0]]}],
+        dry_plots=[{"poly": [[300.0, -300.0], [360.0, -300.0], [360.0, -240.0], [300.0, -240.0]]}],
+        marshes=[{"poly": [[-200.0, -400.0], [-100.0, -400.0], [-150.0, -300.0]]}, {"poly": [[500.0, 500.0], [560.0, 500.0], [530.0, 560.0]], "role": "defense"}],
+        byres=[{"x": 200.0, "y": 300.0, "w": 30.0, "h": 20.0}],
+        farm_fixtures=[{"x": -250.0, "y": 200.0, "w": 8.0, "h": 8.0}],
+    )
+    s.M["meta"]["brook_fords"] = [[100.0, 100.0]]
+    s.M["threshing_yards"] = [{"poly": [[-320.0, 100.0], [-280.0, 100.0], [-280.0, 120.0], [-320.0, 120.0]], "of": [-300.0, 300.0]}]
+    ok = settle.Lawful(s)
+    rng = random.Random(7)
+    verdicts = []
+    for _ in range(400):
+        run = [(rng.uniform(-900.0, 900.0), rng.uniform(-600.0, 700.0))]
+        for _leg in range(rng.choice((1, 1, 2))):
+            run.append((run[-1][0] + rng.uniform(-300.0, 300.0), run[-1][1] + rng.uniform(-300.0, 300.0)))
+        want = _reference_lawful_ground(ok, run, 3.0)
+        assert ok.on_lawful_ground(run, 3.0) == want, run
+        verdicts.append(want)
+    assert 40 < sum(verdicts) < 360, "the runs drawn are admitted and refused both"
+    assert ok.index is ok.index, "built once"
+
+
+def test_a_run_is_squared_only_where_water_comes_within_the_squaring_reach() -> None:
+    """`Lawful.squared` is `square_run` where water comes near the run, and the run itself where none does - where the
+    squaring would change nothing."""
+    s = _S([CONN], streams=[BROOK])
+    ok = settle.Lawful(s)
+    across = [(40.0, 100.0), (160.0, 160.0)]
+    assert ok.squared(across) == settle.square_run(s.M, across) != across, "an oblique crossing is squared"
+    far = [(300.0, 100.0), (320.0, 160.0), (400.0, 170.0)]
+    assert ok.squared(far) == settle.square_run(s.M, far) == far

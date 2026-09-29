@@ -114,6 +114,17 @@ def rect_touches_stream(gc: Any, pts: Any, streams: Any, index: PointGrid | None
     return False
 
 
+def near_reaches(index: PointGrid, a: Pt, b: Pt) -> list[dict[str, Any]]:
+    """The stream reaches of `index` (`stream_segment_index`) whose widened boxes meet the box of the line a-b, as stream
+    records of one reach each - every reach the line can cross, for `crosses_a_stream` to decide on."""
+    x0, y0, x1, y1 = min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1])
+    out: dict[int, dict[str, Any]] = {}
+    for it in index.near((x0 + x1) / 2, (y0 + y1) / 2, max(x1 - x0, y1 - y0) / 2):
+        if not (it[5] < x0 or it[3] > x1 or it[6] < y0 or it[4] > y1):
+            out.setdefault(id(it), {"poly": [it[0], it[1]]})
+    return list(out.values())
+
+
 #: How far a farmhouse may stand from the field it works, in feet (feature 287, homes H03). The record gives a 6 ft MINIMUM
 #: and no maximum; it gives as a TOLERANCE a back-row house about 700 ft from the crops as "the honest back of a compact
 #: village" (research/homesteads.html, "How close does a farmhouse stand to the paddy?"). 700 is therefore the reach every
@@ -388,7 +399,23 @@ class BundleFitMixin:
         house = geom["house"]
         if not within_field_reach(self, house[0], house[1]):
             return False
-        if self._wall_on_the_bund(house[0], house[1], house[2], house[3], self._house_rot(house[0], house[1])):
+        # ...AND A CLEAR CORRIDOR FROM ITS DOOR TO THE ACCESS TREE (feature 287, plan M3's seat half): a house the tree
+        # cannot reach from its door is refused here, before it stands, instead of being found stranded on the finished
+        # map. The corridor rides on the geometry and is reserved when the house is placed (`_try_place_bundle`). ASKED
+        # FIRST, before every other rule of the parts and the share: each rule here only refuses, and the corridor reads no
+        # part but the house, the yard and the fixtures, and no seat of this household's own - so the order changes no
+        # verdict. It is the question a margin that cannot seat everyone fails (seed 44: 12,104 of 13,244 seats refused for
+        # want of a corridor, each after every other rule was asked for nothing), and the four garden sides of one seat
+        # share its search (`access_corridor`).
+        tree = getattr(self, "_access", None)
+        corridor = None
+        if tree is not None:
+            corridor = access_corridor(self, geom)
+            if corridor is None:
+                return False
+            geom["access"] = corridor
+        turn = self._turn_at(house[0], house[1])
+        if self._wall_on_the_bund(house[0], house[1], house[2], house[3], turn):
             return False
         if self._parts_across_stream(geom):
             return False
@@ -418,31 +445,18 @@ class BundleFitMixin:
             return False
         # ...AND ITS SHARE OF THE WOOD FLOOR, RESERVED (feature 287, woods W25 and plan D9): a household is admitted only
         # where it can reserve copse seats whose crowns cover the floor within reach of its house, and never where one of
-        # its parts would stand over a seat another household reserved (`homestead_parts/wood_share.py`). Asked BEFORE the
-        # corridor, which is the dearer question (seed 17: 233 of 314 s of the fit test was `access_corridor`); a corridor
-        # admitted afterwards that runs over one of the seats sends the share to be sought again with it standing.
+        # its parts would stand over a seat another household reserved (`homestead_parts/wood_share.py`) - that last, a few
+        # lookups, asked first.
         wood = self._wood
-        tree = getattr(self, "_access", None)
-        seats = None
+        if wood is not None and wood.covers_a_seat(geom):
+            return False
         if wood is not None:
-            if wood.covers_a_seat(geom):
-                return False
-            seats = wood.share(geom, self._house_rot(house[0], house[1]), tree.segs if tree is not None else ())
+            seats = wood.share(geom, turn, tree.segs if tree is not None else ())
+            # a corridor that runs over one of the seats sends the share to be sought again with the corridor standing
+            if seats is not None and tree is not None and corridor is not None and any(wood.seats_on(seats, leg) for leg in legs(corridor)):
+                seats = wood.share(geom, turn, [*tree.segs, *legs(corridor)])
             if seats is None:
                 return False
-        # ...AND A CLEAR CORRIDOR FROM ITS DOOR TO THE ACCESS TREE (feature 287, plan M3's seat half): a house the tree
-        # cannot reach from its door is refused here, before it stands, instead of being found stranded on the finished
-        # map. The corridor rides on the geometry and is reserved when the house is placed (`_try_place_bundle`).
-        if tree is not None:
-            corridor = access_corridor(self, geom)
-            if corridor is None:
-                return False
-            geom["access"] = corridor
-            if seats is not None and any(wood.seats_on(seats, leg) for leg in legs(corridor)):
-                seats = wood.share(geom, self._house_rot(house[0], house[1]), [*tree.segs, *legs(corridor)])
-                if seats is None:
-                    return False
-        if seats is not None:
             geom["wood"] = seats
         return True
 
@@ -475,7 +489,10 @@ class BundleFitMixin:
         # is held off every stream at the stream's half-width plus the corridor `_rect_on_water` keeps.
         if any(self._rect_on_stream(r) for r in [part_box(geom, "house"), *parts] if r is not None):
             return True
-        return any(crosses_a_stream((hx, hy), (r[0], r[1]), streams) for r in parts if r is not None)
+        # ...ASKED OF THE REACHES NEAR THE LINE ALONE, from the stream index `_rect_on_stream` just kept fresh: a reach the
+        # house-to-part line crosses has a box meeting the line's (seed 17: 60,000 lines each walked every reach)
+        index = self._stream_idx_cache[2]
+        return any(crosses_a_stream((hx, hy), (r[0], r[1]), near_reaches(index, (hx, hy), (r[0], r[1]))) for r in parts if r is not None)
 
     def _rect_blocked(self: Settlement, rect: Any, fields: bool) -> bool:  # type: ignore[misc]
         """Whether a bundle sub-rect lands on forbidden ground: no-build blocks, lanes, hill/pond ellipses,

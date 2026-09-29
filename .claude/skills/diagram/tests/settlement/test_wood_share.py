@@ -13,6 +13,7 @@ from l7r.diagram.settlement.homestead_parts.wood_share import (
     ReservedSeats,
     bundle_parts,
     copse_keepouts,
+    crown_cells,
     in_keepouts,
     install_wood_shares,
     well_keepout,
@@ -245,3 +246,37 @@ def test_a_corridor_admitted_over_the_households_own_seats_sends_its_share_to_be
     assert not s._parts_fit(s._bundle_geom(720.0, 520.0, 46.0, 28.0, "SE", rot=0.0)), "no room left beside the corridor: refused"
     monkeypatch.setattr(ws.WoodShares, "share", lambda self, geom, rot, corridors: None)
     assert not s._parts_fit(s._bundle_geom(720.0, 520.0, 46.0, 28.0, "SE", rot=0.0)), "no share at all: refused before the corridor is sought"
+
+
+def test_a_crowns_cells_are_the_canopy_rasters_cells() -> None:
+    """`crown_cells` finds a crown's cells a column at a time; they are exactly the cells `CanopyArea` counts for it,
+    wherever the center falls in its cell and whatever the radius."""
+    import random
+
+    rng = random.Random(5)
+    for _ in range(500):
+        x, y, r, c = rng.uniform(-50, 50), rng.uniform(-50, 50), rng.choice((rng.uniform(0.2, 30.0), 11.0, 2.0)), rng.choice((2.0, 1.5, 3.0))
+        area = CanopyArea(c)
+        area.add(x, y, r)
+        assert crown_cells(x, y, r, c) == area.cells, (x, y, r, c)
+    assert crown_cells(0.2, 0.2, 0.1, 2.0) == frozenset(), "a crown too small to hold a cell center"
+
+
+def test_a_corridor_is_barred_by_a_seat_within_the_gap_whatever_cells_it_crosses() -> None:
+    """`corridor_bars` reads only the seats' cells the strip can reach: over random corridors, short and long, it bars
+    exactly where some reserved seat stands within `lane_gap` of the line - the whole list asked seat by seat."""
+    import random
+
+    s = _open()
+    wood = install_wood_shares(s, FLOOR, REACH, 7.0)
+    rng = random.Random(9)
+    seats = [(rng.uniform(100, 1300), rng.uniform(100, 1300)) for _ in range(40)]
+    wood.seats.extend([(x, y, x, y, x, y) for x, y in seats])
+    barred = 0
+    for _ in range(400):
+        a = (rng.uniform(0, 1400), rng.uniform(0, 1400))
+        b = (a[0] + rng.uniform(-700, 700), a[1] + rng.uniform(-700, 700)) if rng.random() < 0.5 else (a[0] + rng.uniform(-60, 60), a[1] + rng.uniform(-60, 60))
+        want = any(seg_dist(x, y, a, b) < wood.lane_gap for x, y in seats)
+        assert wood.corridor_bars(a, b) == want, (a, b)
+        barred += want
+    assert 40 < barred < 360

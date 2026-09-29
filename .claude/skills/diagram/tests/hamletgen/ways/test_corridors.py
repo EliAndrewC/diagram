@@ -229,3 +229,19 @@ def test_a_house_whose_corridor_is_drawn_is_not_drawn_to_again() -> None:
     M = _tree_map(houses=[_house(300.0, 100.0)])
     M["lanes"].append({"pts": [[900.0, 900.0], [950.0, 900.0]], "w": 3, "role": co.ACCESS_ROLE, "of": [300.0, 100.0]})
     assert co.draw_corridors(_S(M)) == 0
+
+
+def test_the_ground_index_hands_back_only_what_comes_within_the_pad_in_filing_order() -> None:
+    """`GroundIndex` prunes: a part whose box comes within the pad of the run is handed back, in the order filed; water near
+    a run is found by its box; an outline edge the run crosses is found."""
+    ix = co.GroundIndex(
+        [[(100.0, -500.0), (100.0, 500.0)], [(0.0, 0.0)]],
+        [[(200.0, 200.0), (300.0, 200.0), (300.0, 300.0)]],
+        {"houses": [("b", (50.0, 50.0, 60.0, 60.0)), ("a", (0.0, 0.0, 10.0, 10.0)), ("far", (900.0, 900.0, 910.0, 910.0))]},
+    )
+    run = [(0.0, 20.0), (40.0, 20.0)]
+    assert ix.near("houses", run, 31.0) == ["b", "a"], "within 31: both near ones, filing order kept"
+    assert ix.near("houses", run, 12.0) == ["a"] and ix.near("houses", run, 5.0) == []
+    assert ix.water_near([(60.0, 0.0), (90.0, 0.0)], 12.0) and not ix.water_near([(60.0, 0.0), (90.0, 0.0)], 5.0)
+    assert not ix.open_ground([(250.0, 150.0), (250.0, 250.0)]), "into the outline"
+    assert ix.open_ground([(250.0, 150.0), (250.0, 190.0)]) and ix.open_ground([(400.0, 150.0), (400.0, 400.0)])

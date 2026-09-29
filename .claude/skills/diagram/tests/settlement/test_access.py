@@ -163,3 +163,91 @@ def test_what_stands_is_asked_once_while_nothing_of_it_changes() -> None:
     assert corridor_clear(s, (500.0, 500.0), (500.0, 300.0), geom) and len(calls) == 2, "a box placed since: asked again"
     start_tree(s, (100.0, 100.0), (0.0, 1.0), 50.0)
     assert "_corridor_memo" not in s.__dict__, "a new seating forgets"
+
+
+def test_the_bounded_gap_test_gives_the_exact_gaps_verdict() -> None:
+    """`seg_box_within` decides by one distance where it can (a box beyond the segment's widened box, a center within the
+    reach, a center past the reach by its half-diagonal) and by the exact gap otherwise - the same verdict as
+    `_seg_box_gap(...) < t` on every segment and box, each branch among them."""
+    import random
+
+    from l7r.diagram.settlement.rolling.access import seg_box_within
+
+    rng = random.Random(11)
+    hits = 0
+    for _ in range(3000):
+        a, b = (rng.uniform(0, 200), rng.uniform(0, 200)), (rng.uniform(0, 200), rng.uniform(0, 200))
+        box = (rng.uniform(0, 200), rng.uniform(0, 200), rng.uniform(1, 60), rng.uniform(1, 60))
+        t = rng.uniform(0.5, 20.0)
+        want = _seg_box_gap(a, b, box) < t
+        assert seg_box_within(a, b, box, t) == want, (a, b, box, t)
+        hits += want
+    assert 300 < hits < 2700
+
+
+def _plain_search(s, geom):  # type: ignore[no-untyped-def]
+    """`access_corridor`'s search asked straight through, strip by strip - what the shared search must return."""
+    tree = s._access
+    doors = doors_of(geom, tree.half)
+    for door in doors:
+        for q in tree.targets(door):
+            if access.math.dist(door, q) < 1e-6 or corridor_clear(s, door, q, geom):
+                return (door, q)
+    for door in doors[2:]:
+        turn = access.round_the_gable(geom, door, tree.half)
+        if corridor_clear(s, door, turn, geom):
+            for q in tree.targets(turn):
+                if access.math.dist(turn, q) < 1e-6 or corridor_clear(s, turn, q, geom):
+                    return (door, turn, q)
+    return None
+
+
+def test_the_homesteads_of_one_house_and_yard_share_the_search_and_each_gets_its_own_answer() -> None:
+    """The four sides of a seat share one search (their house and yard), and each takes the first corridor its own
+    fixtures leave clear: over fixtures laid across the first corridors, straight and round the gable, and a door on
+    the tree itself, the shared search returns what the plain search returns - a refusal included."""
+    import random
+
+    rng = random.Random(3)
+    got = []
+    for center, tree_at, out in (((720.0, 520.0), (720.0, 470.0), (0.0, -1.0)), ((700.0, 700.0), (700.0, 300.0), (1.0, 0.0)), ((700.0, 700.0), (700.0, 735.0), (1.0, 0.0))):
+        s = _open()
+        start_tree(s, tree_at, out, 300.0 if out[0] else 20.0)
+        base = s._bundle_geom(center[0], center[1], 46.0, 28.0, "SE", rot=0.0)
+        for _ in range(12):
+            geom = {**base, "boxes": {**base["boxes"], "fixtures": {f"f{k}": (center[0] + rng.uniform(-60, 60), center[1] + rng.uniform(-60, 60), 8.0, 8.0) for k in range(rng.randint(0, 3))}}}
+            want = _plain_search(s, geom)
+            assert access_corridor(s, geom) == want
+            got.append(want)
+    assert any(c is None for c in got) and any(c is not None and len(c) == 3 for c in got) and any(c is not None and len(c) == 2 for c in got)
+
+
+def test_the_indexed_targets_are_the_nearest_of_every_point_of_the_tree_in_its_order() -> None:
+    """`AccessTree.targets` reads the points along from an index; over trees of one to thirty corridors, small and large,
+    it returns what sorting every point of the tree (each corridor's nearest point, then its points along) returns."""
+    import math
+    import random
+
+    from l7r.diagram.settlement._geom import seg_closest
+
+    def plain(tree, p):  # type: ignore[no-untyped-def]
+        pts = []
+        for a, b in tree.segs:
+            pts.append(seg_closest(p[0], p[1], a, b))
+            n = int(math.dist(a, b) // access.TARGET_STEP_PX)
+            pts += [(a[0] + (b[0] - a[0]) * k / max(1, n), a[1] + (b[1] - a[1]) * k / max(1, n)) for k in range(n + 1)]
+        pts.sort(key=lambda q: math.dist(p, q))
+        return pts[: access.TARGETS_TRIED]
+
+    rng = random.Random(4)
+    for size in (1, 2, 5, 30):
+        tree = AccessTree(7.0)
+        for _ in range(size):
+            a = (rng.uniform(0, 1400), rng.uniform(0, 1400))
+            tree.add(a, (a[0] + rng.uniform(-400, 400), a[1] + rng.uniform(-400, 400)) if rng.random() < 0.8 else (a[0] + 20.0, a[1]))
+        for _ in range(60):
+            p = (round(rng.uniform(-200, 1600)), round(rng.uniform(-200, 1600)))
+            assert tree.targets(p) == plain(tree, p), (size, p)
+    tiny = AccessTree(7.0)
+    tiny.add((0.0, 0.0), (10.0, 0.0))
+    assert tiny.targets((5.0, 5.0)) == plain(tiny, (5.0, 5.0)) and len(tiny.targets((5.0, 5.0))) == 2, "a tree of fewer points than tried: every point"

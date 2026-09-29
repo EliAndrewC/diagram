@@ -216,12 +216,15 @@ class PlacerMixin:
         # at its moved position. A box the static ground refuses is one `_envelope_blocked` refuses (True, before any
         # placed box is read), so asking it first changes no verdict and never removes a move.
         _fg = getattr(self, "_free_ground", None)
-        _env = self._bundle_envelope(x, y, hw, hh, shed)
+        # THE FOUR CONFIGURATIONS BUILT ONCE (dev/performance.md): the envelope is their union, and the loop below judges
+        # each at this seat - it built all four again (seed 17: 25,000 bundles, half of them rebuilt)
+        _at = {side: self._bundle_geom(x, y, hw, hh, side, shed) for side in self._NUC_SIDES}
+        _env = self._bbox_of([g["bbox"] for g in _at.values()])
         _union_clear = not (_fg is not None and _fg.rect_refused(_env)) and self._envelope_blocked(_env) is None
         best: Any = None
         for rank, side in enumerate(self._NUC_SIDES):
             cx, cy = x, y
-            geom = self._bundle_geom(cx, cy, hw, hh, side, shed)
+            geom = _at[side]
             hit = None
             if not _union_clear:
                 self._seat_search["positions"] += 1

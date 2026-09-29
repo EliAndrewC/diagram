@@ -21,6 +21,7 @@ from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 
 from l7r.diagram.settlement import point_in_poly, rot_rect, seg_closest, seg_dist, segments_cross
+from l7r.diagram.settlement._geom.indexes import PointGrid
 from l7r.diagram.settlement.water_ways.lanes import behind_house
 
 from ..consts import WEB_CLEARANCE, Poly, Pt
@@ -154,6 +155,60 @@ def through_a_building(run: Poly, quads: Sequence[Poly]) -> bool:
         if any(segments_cross(a, b, quad[k], quad[(k + 1) % 4]) for a, b in zip(run, run[1:], strict=False) for k in range(4)):
             return True
     return False
+
+
+def _poly_box(poly: Sequence[Sequence[float]]) -> tuple[float, float, float, float]:
+    return (min(float(p[0]) for p in poly), min(float(p[1]) for p in poly), max(float(p[0]) for p in poly), max(float(p[1]) for p in poly))
+
+
+def _file_segments(grid: PointGrid, courses: Sequence[Sequence[Sequence[float]]]) -> None:
+    for course in courses:
+        pts = [(float(p[0]), float(p[1])) for p in course]
+        grid.extend((a, b, min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1])) for a, b in zip(pts, pts[1:], strict=False))
+
+
+class GroundIndex:
+    """The ground a corridor's lawful-ground test reads (`settle.Lawful.on_lawful_ground`), INDEXED ONCE per standing
+    manifest (dev/performance.md, "build the blocked ground once"): the seating asks it of every corridor it tries - seed
+    17, 1,686 runs - and each walked every water course, every field and dry-plot outline and every farmstead part.
+
+    It only PRUNES: `water_near` says whether any water segment comes within a pad of a run (no crossing fault and no
+    squaring without one), `open_ground` asks whether the run crosses an outline edge near it (`settle.open_ground_rings`), and `near` hands back
+    the parts of a registry whose boxes come within a pad of the run, in registry order - the exact tests then decide on
+    those, and a part left out stands beyond every distance they measure."""
+
+    def __init__(self, waters: Sequence[Sequence[Sequence[float]]], rings: Sequence[Sequence[Sequence[float]]], parts: Mapping[str, Sequence[tuple[Any, tuple[float, float, float, float]]]]) -> None:
+        self.water = PointGrid(64.0)
+        _file_segments(self.water, [w for w in waters if len(w) >= 2])
+        self.edges = PointGrid(64.0)
+        _file_segments(self.edges, [[*r, r[0]] for r in rings if len(r) >= 2])
+        self.parts = {k: list(v) for k, v in parts.items()}
+        self.grids: dict[str, PointGrid] = {}
+        for kind, items in self.parts.items():
+            g = self.grids[kind] = PointGrid(64.0)
+            g.extend((n, *box) for n, (_item, box) in enumerate(items))
+
+    @staticmethod
+    def _query(grid: PointGrid, run: Sequence[Pt], pad: float) -> list[Any]:
+        out: list[Any] = []
+        for a, b in zip(run, run[1:], strict=False):
+            x0, y0, x1, y1 = min(a[0], b[0]) - pad, min(a[1], b[1]) - pad, max(a[0], b[0]) + pad, max(a[1], b[1]) + pad
+            out += [it for it in grid.near((x0 + x1) / 2, (y0 + y1) / 2, max(x1 - x0, y1 - y0) / 2) if not (it[-2] < x0 or it[-4] > x1 or it[-1] < y0 or it[-3] > y1)]
+        return out
+
+    def water_near(self, run: Sequence[Pt], pad: float) -> bool:
+        """Does any water segment's box come within `pad` of a segment's box of the run? False rules out a crossing (pad 0)
+        and any vertex or leg within `pad` of the water."""
+        return bool(self._query(self.water, run, pad))
+
+    def open_ground(self, run: Sequence[Pt]) -> bool:
+        """Does the run cross no outline edge filed (a field, a dry plot, a marsh)?"""
+        return not any(segments_cross(a, b, c, d) for a, b in zip(run, run[1:], strict=False) for c, d, *_box in self._query(self.edges, [a, b], 0.0))
+
+    def near(self, kind: str, run: Sequence[Pt], pad: float) -> list[Any]:
+        """The `kind` parts whose boxes come within `pad` of the run, in the order they were filed."""
+        items = self.parts[kind]
+        return [items[n][0] for n in sorted({it[0] for it in self._query(self.grids[kind], run, pad)})]
 
 
 BOW_OFFSETS_FT = (15.0, 25.0, 40.0, 60.0)

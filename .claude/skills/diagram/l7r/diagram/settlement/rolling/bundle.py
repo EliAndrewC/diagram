@@ -101,7 +101,7 @@ class BundleGeomMixin:
 
         base: dict[str, Any] = {k: ([moved(r) for r in v] if k == "gardens" else {f: moved(r) for f, r in v.items()} if k == "fixtures" else moved(v)) for k, v in tpl.items()}
         frame = base.pop("_frame", None)
-        turn = self._house_rot(hx, hy) if rot is None else rot
+        turn = self._turn_at(hx, hy) if rot is None else rot
         self._rake_parts(base, hx, hy, turn)
         boxes: dict[str, Any] = {k: (turned_box(base[k], turn) if base.get(k) is not None else None) for k in ("house", "yard", "shed", "byre", "well")}
         boxes["gardens"] = [turned_box(g, turn) for g in base["gardens"]]
@@ -113,6 +113,15 @@ class BundleGeomMixin:
         else:  # dispersed: the grove's unraked frame with the turned yard and garden
             base["bbox"] = self._bbox_of([frame, boxes["yard"], boxes["gardens"][0], *([boxes["well"]] if boxes.get("well") else [])])
         return base
+
+    def _turn_at(self: Settlement, hx: float, hy: float) -> float:  # type: ignore[misc]
+        """`_house_rot(hx, hy)`, remembered for the last seat asked while the bearing it reads stands: the four garden sides
+        of a seat, and the fit rules after them, ask the same seat (seed 44: 60,552 turns for 5,299 seats)."""
+        key = (hx, hy, self._house_bearing, self._bearing_follow)
+        got = self.__dict__.get("_turn_memo")
+        if got is None or got[0][0] != hx or got[0][1] != hy or got[0][2] != key[2] or got[0][3] is not key[3]:
+            got = self.__dict__["_turn_memo"] = (key, self._house_rot(hx, hy))
+        return got[1]
 
     def _bundle_layout(self: Settlement, hx: float, hy: float, hw: float, hh: float, garden_side: str, shed: bool, seat: Any) -> dict[str, Any]:  # type: ignore[misc]
         """The metric layout of one homestead BUNDLE around a house centered at (hx, hy). TWO forms:

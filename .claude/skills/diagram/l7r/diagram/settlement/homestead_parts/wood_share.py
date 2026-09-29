@@ -39,7 +39,7 @@ import math
 from collections.abc import Iterable, Mapping, Sequence
 from typing import TYPE_CHECKING, Any
 
-from .._geom import CanopyArea, PointGrid, Pt, seg_dist, segments_cross
+from .._geom import PointGrid, Pt, seg_dist, segments_cross
 from ..land.wet import marsh_ground
 from ..shrines_wells.byres import BYRE_FT
 from .grove_blocks import GroveBlocks
@@ -67,9 +67,6 @@ BAR_MARGIN_PX = 0.5
 #: the placer's, not the record's.
 FOCUS_DEPTH = 0.7
 LATERAL_WEIGHT = 2.0
-
-#: How far apart a corridor is sampled for the seats near it (`corridor_bars`), in px: under the seats' index cell.
-CORRIDOR_STEP_PX = 32.0
 
 #: The strip the morning lane runs east of a garden bed, in px: `village_grove`'s `east` rectangle (24 px past the bed).
 EAST_LANE_PX = 24.0
@@ -151,6 +148,29 @@ def seat_rank(dx: float, dy: float, back: Pt, side: Pt, depth: float) -> float:
     return LATERAL_WEIGHT * u * u + (v - depth) ** 2
 
 
+def crown_cells(x: float, y: float, r: float, c: float) -> frozenset[tuple[int, int]]:
+    """The raster cells a crown at (x, y) of radius `r` covers - `CanopyArea.add`'s cells (a cell whose center lies within
+    the crown), found a column at a time: the column's span from the circle widened by a cell, its two ends then narrowed by the
+    same test `CanopyArea` makes, so the set is the one it builds without its test of every cell of the crown's box (seed 17: 124,000
+    probe crowns, a tenth of the seating)."""
+    out: list[tuple[int, int]] = []
+    r2 = r * r
+    j_lo, j_hi = int((y - r) // c), int((y + r) // c)
+    for i in range(int((x - r) // c), int((x + r) // c) + 1):
+        dx2 = ((i + 0.5) * c - x) ** 2
+        if dx2 > r2:
+            continue
+        s = math.sqrt(r2 - dx2)
+        # a cell wider than the circle's span each side (the square root's rounding cannot reach a whole cell), narrowed
+        lo, hi = max(j_lo, math.ceil((y - s) / c - 0.5) - 1), min(j_hi, math.floor((y + s) / c - 0.5) + 1)
+        while lo <= hi and dx2 + ((lo + 0.5) * c - y) ** 2 > r2:
+            lo += 1
+        while hi >= lo and dx2 + ((hi + 0.5) * c - y) ** 2 > r2:
+            hi -= 1
+        out += [(i, j) for j in range(lo, hi + 1)]
+    return frozenset(out)
+
+
 def within_reach(segs: Iterable[tuple[Pt, Pt]], p: Pt, pad: float) -> list[tuple[Pt, Pt]]:
     """The segments whose box comes within `pad` of `p` - every one that can pass within `pad` of it."""
     return [(a, b) for a, b in segs if min(a[0], b[0]) - pad <= p[0] <= max(a[0], b[0]) + pad and min(a[1], b[1]) - pad <= p[1] <= max(a[1], b[1]) + pad]
@@ -178,6 +198,8 @@ class WoodShares:
         self.bars = PointGrid(64.0)  # the keep-outs of every admitted homestead: ("c", cx, cy, r) and ("r", x0, y0, x1, y1)
         self.seats = PointGrid(64.0)  # every reserved seat
         self.cells: set[tuple[int, int]] = set()
+        # the crowns of the lattice last asked (`crowns`): the four garden sides of one seat ask the same lattice
+        self._crowns: tuple[Pt, dict[tuple[float, float], frozenset[tuple[int, int]]]] = ((math.nan, math.nan), {})
         # the shared sheds' pockets the seating reserved before any house (`reserve_commons_byres`): each a byre's keep-out
         bw, bh = s.px(BYRE_FT[0]), s.px(BYRE_FT[1])
         for x, y in getattr(s, "_byre_pockets", None) or ():
@@ -224,21 +246,31 @@ class WoodShares:
         n = int(self.reach // self.pitch)
         lattice = [(round(hx + i * self.pitch, 1), round(hy + j * self.pitch, 1)) for i in range(-n, n + 1) for j in range(-n, n + 1)]
         lattice.sort(key=lambda q: seat_rank(q[0] - hx, q[1] - hy, back, side, depth))
-        mine = CanopyArea(self.cell)
+        mine: set[tuple[int, int]] = set()
         seats: list[tuple[float, float]] = []
         for x, y in lattice:
             if self.seat_barred(x, y, (hx, hy), own, corridors, banks):
                 continue
-            probe = CanopyArea(self.cell)
-            probe.add(x, y, self.cr)
-            fresh = probe.cells - self.cells - mine.cells
+            fresh = self.crown(x, y, (hx, hy)) - self.cells - mine
             if not fresh:
                 continue
-            mine.cells |= fresh
+            mine |= fresh
             seats.append((x, y))
-            if mine.area >= self.floor:
+            if len(mine) * self.cell * self.cell >= self.floor:
                 return seats
         return None
+
+    def crown(self, x: float, y: float, anchor: Pt) -> frozenset[tuple[int, int]]:
+        """`crown_cells` of a seat at (x, y), REMEMBERED for the lattice anchored at `anchor` (a house's center) until a
+        lattice anchored elsewhere is asked: the four garden sides of one seat ask the same lattice (seed 17: 122,610
+        crowns, most of them asked again)."""
+        if self._crowns[0] != anchor:
+            self._crowns = (anchor, {})
+        memo = self._crowns[1]
+        got = memo.get((x, y))
+        if got is None:
+            got = memo[(x, y)] = crown_cells(x, y, self.cr, self.cell)
+        return got
 
     def covers_a_seat(self, geom: Mapping[str, Any]) -> bool:
         """Would this homestead's parts, admitted, stand a keep-out over a seat another household reserved?"""
@@ -254,13 +286,23 @@ class WoodShares:
 
     def corridor_bars(self, a: Pt, b: Pt) -> bool:
         """Would a corridor a-b run within `lane_gap` of a reserved seat?"""
-        # asked along the corridor every `CORRIDOR_STEP_PX`, each point padded by the gap and half a step: a seat within the
-        # gap of the line is within that of the sample nearest its foot (a whole long corridor's box read every seat in it)
-        n = max(1, int(math.dist(a, b) // CORRIDOR_STEP_PX) + 1)
-        pad = self.lane_gap + CORRIDOR_STEP_PX / 2.0
-        for k in range(n + 1):
-            px, py = a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n
-            if any(seg_dist(sx, sy, a, b) < self.lane_gap for sx, sy, *_ in self.seats.near(px, py, pad)):
+        # THE SEATS' CELLS THE STRIP CAN REACH, each asked once: a seat is filed in the one cell holding it, and a seat within
+        # the gap of the line stands in a cell whose center is within the gap and the cell's half-diagonal of it - so the
+        # cells of the corridor's widened box farther than that are passed without reading them (seed 44: 2.9 million
+        # grid lookups sampling long corridors every 32 px)
+        grid, gap = self.seats, self.lane_gap
+        c = grid.cell
+        reach = gap + c * math.sqrt(0.5)
+        i0, i1 = int((min(a[0], b[0]) - gap) // c), int((max(a[0], b[0]) + gap) // c)
+        j0, j1 = int((min(a[1], b[1]) - gap) // c), int((max(a[1], b[1]) + gap) // c)
+        if (i1 - i0 + 1) * (j1 - j0 + 1) <= len(grid.buckets):
+            cells = [(i, j) for i in range(i0, i1 + 1) for j in range(j0, j1 + 1) if (i, j) in grid.buckets]
+        else:
+            cells = [k for k in grid.buckets if i0 <= k[0] <= i1 and j0 <= k[1] <= j1]
+        for i, j in cells:
+            if seg_dist((i + 0.5) * c, (j + 0.5) * c, a, b) >= reach:
+                continue
+            if any(seg_dist(sx, sy, a, b) < gap for sx, sy, *_ in grid.buckets[(i, j)]):
                 return True
         return False
 
@@ -273,10 +315,7 @@ class WoodShares:
         """File an admitted homestead: its keep-outs, its seats and their crowns. Returns the ground the seats cover (px^2)."""
         self.file(*self.keepouts(geom))
         self.seats.extend([(x, y, x, y, x, y) for x, y in seats])
-        mine = CanopyArea(self.cell)
-        for x, y in seats:
-            mine.add(x, y, self.cr)
-        fresh = mine.cells - self.cells
+        fresh = set().union(*(crown_cells(x, y, self.cr, self.cell) for x, y in seats)) - self.cells
         self.cells |= fresh
         return len(fresh) * self.cell * self.cell
 

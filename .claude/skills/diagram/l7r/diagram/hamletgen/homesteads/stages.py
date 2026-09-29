@@ -334,7 +334,7 @@ def corridor_ground(s: Settlement) -> Callable[[list[Pt]], bool]:
     is built ONCE per standing seating (a `Lawful` over the manifest, keyed on the houses seated so far - it reads them),
     not per corridor asked: built per call it re-derived the worked ground's union of the field's plots every time."""
     from ..ways.corridors import ACCESS_WIDTH
-    from ..ways.settle import Lawful, square_run
+    from ..ways.settle import Lawful
 
     memo: dict[str, Any] = {}
     view = types.SimpleNamespace(M=s.M)
@@ -344,7 +344,7 @@ def corridor_ground(s: Settlement) -> Callable[[list[Pt]], bool]:
         key = (len(houses), id(houses[-1]) if houses else None)
         if memo.get("key") != key:
             memo["key"], memo["law"] = key, Lawful(view)
-        return bool(memo["law"].on_lawful_ground(square_run(s.M, run), ACCESS_WIDTH))
+        return bool(memo["law"].on_lawful_ground(memo["law"].squared(run), ACCESS_WIDTH))
 
     return ground
 
