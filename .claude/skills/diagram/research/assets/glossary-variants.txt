@@ -283,6 +283,7 @@ calibrated liberty	calibrated liberty
 canal corridor	canal corridor
 canal corridors	canal corridor
 cangue	cangue
+canton	Canton
 cao wei	Three Kingdoms
 caoshi	caoshi
 caravanserai	caravanserai
@@ -1270,6 +1271,8 @@ huizhou	Huizhou
 huizhou style	Hui style
 hutong	hutong
 hutongs	hutong
+huzhou	Huzhou-Jiaxing
+huzhou-jiaxing	Huzhou-Jiaxing
 hyakusho denki	Hyakusho Denki
 hyakushodai	hyakushodai
 hyakushōdai	hyakushodai
@@ -1409,6 +1412,7 @@ jiangnan	Lower Yangzi
 jiangren	Jiangren
 jiaochang	jiaochang
 jiaqing	Jiaqing
+jiaxing	Huzhou-Jiaxing
 jiegao	jiegao
 jiguchi-sen	jiguchi-sen
 jin	jin
@@ -2094,6 +2098,8 @@ nodame	nodame
 nogu benriron	Nogu benriron
 nogyo zensho	Nogyo Zensho
 nokaji	nokaji
+nong shu	Nongshu
+nongshu	Nongshu
 nongzheng quanshu	Nongzheng Quanshu
 noria	noria
 norias	noria
@@ -2415,6 +2421,8 @@ retainer terrace	row house
 retainer terraces	row house
 retirement house	inkyo
 retirement houses	inkyo
+retiring house	retiring house
+retiring houses	retiring house
 retsuson	retsuson
 return flow	return flow
 reverse-kesa	kesa
@@ -2641,7 +2649,9 @@ shell keeps	shell keep
 shelter belt	shelter belt
 shelter belts	shelter belt
 shelterbelt	shelter belt
+shen family farm manual	Shen shi nongshu
 shen kuo	Shen Kuo
+shen shi nongshu	Shen shi nongshu
 sheng	sheng
 shi	shi
 shibai-goya	shibai-goya

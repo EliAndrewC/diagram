@@ -3822,7 +3822,7 @@
   ]
  },
  "tan": {
-  "def": "A tenth of a cho, about 992 square meters: the strip a paddy was reckoned in.",
+  "def": "A tenth of a cho, about 992 square meters: the strip a paddy was reckoned in. In a Chinese farm manual the same sound is another word, a manure pit dug in the ground.",
   "variants": [
    "tan",
    "tanbu",
@@ -12893,6 +12893,41 @@
   "def": "A port town on the north coast of Kyushu, for centuries Japan's harbor for trade with the continent; today part of the city of Fukuoka.",
   "variants": [
    "Hakata"
+  ]
+ },
+ "Canton": {
+  "def": "The old European name for Guangzhou, the chief port of the Pearl River delta in south China, and the end of the British embassy's overland journey in 1793-94.",
+  "variants": [
+   "Canton"
+  ]
+ },
+ "retiring house": {
+  "def": "An old English phrase for a privy: in the 1797 embassy account, a small roadside or village privy whose tank was built so that nothing soaked away, and kept as manure.",
+  "variants": [
+   "retiring house",
+   "retiring houses"
+  ]
+ },
+ "Nongshu": {
+  "def": "Wang Zhen's farming book of 1313, a Chinese treatise on agriculture; its chapter on manuring the soil describes brick manure pits at the head of southern fields.",
+  "variants": [
+   "Nongshu",
+   "Nong shu"
+  ]
+ },
+ "Shen shi nongshu": {
+  "def": "A Ming-dynasty farm manual of the Shen family, which says cattle manure goes into a pit (tan) with water added to rot it, and that the pit must be deep and large.",
+  "variants": [
+   "Shen shi nongshu",
+   "Shen family farm manual"
+  ]
+ },
+ "Huzhou-Jiaxing": {
+  "def": "The silk-raising country on the south side of Lake Tai, named for its two prefectural cities, Huzhou and Jiaxing, in Zhejiang.",
+  "variants": [
+   "Huzhou-Jiaxing",
+   "Huzhou",
+   "Jiaxing"
   ]
  }
 }
