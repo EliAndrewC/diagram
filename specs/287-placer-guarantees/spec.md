@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in the clone `diagram-performance`)
 **Created**: 2026-09-29
-**Status**: Accepted - FAITHFUL at round 4 (2026-09-29)
+**Status**: Accepted - FAITHFUL at round 4 (2026-09-29); Amendment 1 (the criteria's FR tags) FAITHFUL at its round 1
 **Request**: [`request.md`](request.md) - the GM's words verbatim: the five rules feature 284 found, "guaranteed by the
 placement algorithm rather than just happening to work on particular seeds", and "if there are literally any other things
 of this nature where our placement algorithm is not guaranteeing correct behavior, then we should include those along with
@@ -161,3 +161,4 @@ repairs or never emits it.
 - Round 3 (spec-fidelity-verify, 2026-09-29): CHANGES REQUIRED - scope-by-owner.json stale; R2's method missing city/moat.py.
   Addressed (scope_join.py).
 - Round 4 (spec-fidelity-verify, 2026-09-29): FAITHFUL.
+- Amendment 1, round 1 (spec-fidelity-verify, 2026-09-29): FAITHFUL - the success criteria name the FRs they test.
