@@ -112,3 +112,17 @@ the Fuchu Joge pamphlet's drawing labels, which sit only in its PDF's images and
   made and painted); canon's field stones are two fists.
 - Ochiba's reception room now faces the inner garden (it faced the kitchen roof, against 'The shady rear is the
   service strip'); the genkan moved with it.
+
+## The barracks size band after the bunk rooms (feature 280 M119, 2026-09-29)
+
+The bunk rooms were taken off (modern only; the Barracks modal, `buildings.md`, Hayakawa's sheet comment). The size band
+still reads as a bunk hall's. Measurement: Hayakawa's barracks against the staff rowhouse of the record (the nagaya
+rooms the record reads). Sketch: recalibrate the band in `buildings/types.json` to the rowhouse's rooms per retainer and
+re-run `size-audit` on the sheets that draw one.
+
+## Is the receiving court "swept"? (found by feature 280, 2026-09-29)
+
+The practice ground's "swept earth" was reworded to open earth in feature 280 (M66 found the swept precinct recorded only
+in modern custom). The receiving court's modal (`compound_kinds/grounds.py`) still calls it "a swept court". Owed: a
+research pass on whether a receiving court's surface is attested swept or raked before modern times, and the modal
+reworded if not.

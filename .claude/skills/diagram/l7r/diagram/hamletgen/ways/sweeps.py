@@ -939,6 +939,22 @@ def cut_at_tail(pts: Sequence[Pt], k: int, other: Sequence[Pt], step: float = 4.
     return [*kept, (float(snap[0]), float(snap[1]))]
 
 
+def cut_keeps_network(lanes: Sequence[Mapping[str, Any]], i: int, before: Sequence[Pt], after: Sequence[Pt]) -> bool:
+    """Whether replacing lane `i`'s points `before` with `after` leaves the lanes in no more pieces at the ink tolerance
+    (`_TOUCH_GAP`) than they were. FOUND BY FEATURE 280 (Sawada, once the larger yards moved its rows): a straggler's tail
+    running beside the way it met was cut back to where it came alongside, and a third straggler that had joined that
+    tail was left 13.7 ft from anything - two lane networks, which `test_every_shipped_hamlets_lanes_are_one_network`
+    caught. A tail that carries another lane's junction is not a doubled tail; it is part of the network."""
+    ways = [[(float(x), float(y)) for x, y in (ln.get("pts") or [])] for ln in lanes]
+
+    def pieces(pts: Sequence[Pt]) -> int:
+        ws = [list(pts) if j == i else w for j, w in enumerate(ways)]
+        live = [w for w in ws if len(w) >= 2]
+        return len(set(_components(live, _TOUCH_GAP))) if len(live) > 1 else 1
+
+    return pieces(after) <= pieces(before)
+
+
 def _sweep_doubled_tails(s: Settlement) -> int:
     """A lane whose end runs ALONGSIDE another way has met that way where it first came alongside, and ends there
     (settlement-review of Kuwabata, feature 261: a join lane ran back 122 ft beside the connector, 12.7 ft apart and
@@ -963,7 +979,10 @@ def _sweep_doubled_tails(s: Settlement) -> int:
                     continue
                 k = along_tail(pts, op)
                 if k is not None:
-                    pts, changed = cut_at_tail(pts, k, op), True
+                    cut = cut_at_tail(pts, k, op)
+                    if not cut_keeps_network(lanes, i, pts, cut):
+                        continue  # the tail carries another lane's junction: cutting it would strand that lane
+                    pts, changed = cut, True
                     fixed += 1
                     break
             pts.reverse()

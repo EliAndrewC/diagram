@@ -57,10 +57,8 @@ class IrrigationDitch(Kind):
     (Bungotakada); how few ditches that form left is this record's own reading, since no page read counts
     ditches: the pages on it describe water passing from paddy to paddy, the one village page giving its merit
     as saving water, not saving digging, and keeping many weirs; prefectural and ministry papers a search
-    showed saying such districts have hardly any channels could not be read. That a ditch beside every paddy is a Meiji anachronism is likewise the record's reading of that contrast: the Ishikawa method of 1887 put each squared parcel on a channel, and the 1899 law set out to build irrigation and drainage works, not in so many words a ditch to every paddy. The widths are weaker than they look.
-    The third of a meter is a modern design MINIMUM rather than a measured ditch, and the Chinese doctrine is
-    carried by a 2021 provincial standard for consolidated farmland, so what it gives is the doctrine and not
-    a premodern layout. The national standard the record once leaned on for both is readable nowhere and is
+    showed saying such districts have hardly any channels could not be read. That a ditch beside every paddy is a Meiji anachronism is likewise the record's reading of that contrast: the Ishikawa method of 1887 put each squared parcel on a channel, and the 1899 law set out to build irrigation and drainage works, not in so many words a ditch to every paddy. The widths are drawn at true size on a ladder whose rungs are each dated before modern times: the head race's 6 ft matches the central canal of an excavated early paddy and a channel fixed by rule in 1537, and every drawn width but the drain's outfall has a width from before modern times beside it.
+    The third of a meter is a modern design MINIMUM rather than a measured ditch, though the Rites of Zhou already name a finest field channel of about a foot, and the right-angle rule is carried by the classical commentary on the Rites of Zhou, the Song polders of the Lake Tai plain and the jori grid, so the rule is premodern and not a modern standard's invention. The national standard the record once leaned on for both is readable nowhere and is
     not cited. And the Kishu attribution is the layout's, not the name's: the school is attested for river
     channelization rather than for a field plan. Nor is the shape of this one drawn from a survey: the head
     race's length from the intake to the fork follows the fan's geometry, the record giving no distance. The

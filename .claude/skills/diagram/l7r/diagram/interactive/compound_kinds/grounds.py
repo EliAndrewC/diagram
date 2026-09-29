@@ -146,7 +146,7 @@ class HearingCourt(Kind):
 
 class PracticeGround(Kind):
     """
-    What: A patch of swept earth in the outer court, marked by the gear that stands on it: the place where the
+    What: A patch of open earth in the outer court, marked by the gear that stands on it: the place where the
     compound's samurai keep up their daily practice.
 
     Why: Formal martial training belonged to the towns. A domain taught the martial arts at its school, built
@@ -176,7 +176,7 @@ class PracticeGround(Kind):
     the pages read on one, which list its buildings without one but never say it had none.
 
     Name: practice ground
-    Covers: the swept keiko patch and its label
+    Covers: the keiko patch and its label
     Label: accurate
     Sources: hanko-jawiki, hagi-meirinkan-guide, kodokan-mito-jawiki, edo-three-dojos-jawiki, jinya-jawiki, dojo-jawiki, genbukan-jawiki, kotobank-machidojo
     Entry: research/buildings.html - 'A dojo is a city institution; county training is courtyard keiko'; research/cities/government.html - 'Martial training is an URBAN institution'
@@ -203,7 +203,7 @@ class CompoundGarden(Kind):
 
     Note: The pond garden and the dry garden are both attested beside samurai rooms, and each sheet takes one;
     so are the two ways a guest reached the house. A separate small garden for the private rooms was found at no
-    posting, and sharing the one garden is read from Takayama, grander than most postings. The pond's form and
+    posting, and sharing the one garden is read from Takayama, its rooms rebuilt to an Edo-period plan of 1830 that no source says draws the garden, and carrying it from there to other, humbler postings is a guess. The pond's form and
     size are a guess: no page read gives the size of a residence garden's pond. A garden where a court
     would stand between gate and entrance, as where a guests' door opens into a guest garden, is a guess: the
     ground a guest crossed was an open court, and no page read says it was ever a garden. A fenced forecourt
@@ -292,7 +292,7 @@ class ShrineGrove(Kind):
     kept trees. Which sides of the hall it stands on follows the ground: all around on a
     rise or in the paddy plain; on a slope behind the hall, at its sides, or both.
 
-    Note: The grove as the setting of a shrine follows the record, as do the forms it takes by the ground and the village's own households answering for the shrine's cleaning; that its clearing was a swept surface is general reading with no page found. Its edge, where it meets scrub or slope, is drawn irregular, a guess, and which of two or three forms a slope takes is rolled with equal weights, a guess; everything the record holds is about a village shrine standing in its own wood, and nothing covers a grove kept inside a compound wall.
+    Note: The grove as the setting of a shrine follows the record, as do the forms it takes by the ground; that the village's own households answered for the shrine's cleaning is recorded only in modern times, and that its clearing was a swept surface is general reading with no page found, so no swept collar is drawn around the hall or its arches. Its edge, where it meets scrub or slope, is drawn irregular, a guess, and which of two or three forms a slope takes is rolled with equal weights, a guess; everything the record holds is about a village shrine standing in its own wood, and nothing covers a grove kept inside a compound wall.
 
     Caveat: Its edge, where it meets scrub or slope, is drawn irregular, a guess, and which of two or three forms a slope takes is rolled with equal weights, a guess; everything the record holds is about a village shrine standing in its own wood, and nothing covers a grove kept inside a compound wall.
 
@@ -594,11 +594,11 @@ class StrikingPosts(Kind):
     and over, on a practice ground that can be open to the sky. In its main line the post is a log a little over
     2 m long set about 70 cm into the ground, so that about 4.5 ft stands above it, struck from shoulder height
     down to the stomach. A knee-high bundle of branches laid across is found only as a present-day practice and in
-    the 1940s, so it is not drawn. A county seat draws no dojo here, and what marks its swept ground as a place of daily keiko is the
+    the 1940s, so it is not drawn. A county seat draws no dojo here, and what marks its open ground as a place of daily keiko is the
     gear that stands on it.
 
     Note: we have drawn the striking posts as small markers of where each stands rather than at their own size,
-    in order to mark the swept ground as a practice ground by its gear, the GM's convention for these plans; a
+    in order to mark the open ground as a practice ground by its gear, the GM's convention for these plans; a
     real upright post stood about 4.5 ft. The upright post is Satsuma practice, its school's founder of 1561-1643;
     carrying it to a practice ground outside that line is a guess, and so is the count.
 

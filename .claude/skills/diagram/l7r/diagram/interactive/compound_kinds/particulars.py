@@ -246,7 +246,7 @@ class WoodKamiAltar(Kind):
     Covers: the altar and its label with the "personally maintained" sublabel
     Label: deviation
     Sources: hokora-jawiki, tokushima-yashikigami, jawiki-yashikigami
-    Entry: research/religion-and-death.html - 'Torii are VOTIVE DONATIONS'; research/homesteads.html - "The farmstead's fixtures"
+    Entry: research/religion-and-death.html - 'Torii are VOTIVE DONATIONS'; research/homesteads.html - "Which farmsteads had a household shrine"
     """
 
     key = "wood-kami altar"
@@ -317,10 +317,10 @@ class TaxBarge(Kind):
 
     Note: The barge's size, inside the record's range for such a boat, and the hiring of hulls for tax rice (read for the shogunate's sea shipments; a county's grain going downriver on them is this map's reading),
     follow the record. The bales aboard are drawn about 4 ft long so that they read, where a rice bale of today's 60 kg size is about
-    2.5 ft long and 1.5 ft across, varying with what it held.
+    2.5 ft long and 1.5 ft across; no bale of the Edo period was found measured, and one scaled from what it held is guessed within a tenth of that size.
 
     Caveat: The bales aboard are drawn about 4 ft long so that they read, where a rice bale of today's 60 kg size is about 2.5 ft long
-    and 1.5 ft across, varying with what it held.
+    and 1.5 ft across; no bale of the Edo period was found measured, and one scaled from what it held is guessed within a tenth of that size.
 
     Name: tax barge
     Covers: the moored barge, its lines, its bales and its label
@@ -334,7 +334,7 @@ class TaxBarge(Kind):
 
 class BoatmensAltar(Kind):
     """
-    What: A small shrine at the head of the landing, kept by the boatmen who work the river.
+    What: A small shrine beside the landing, kept by the boatmen who work the river.
 
     Why: A boat's own guardian, the funadama, lives aboard, at the foot of the mast, and is sometimes given a shrine
     on land, and that shrine is the one drawn here. The water god's shrine that river boatmen are recorded keeping, a
@@ -342,9 +342,9 @@ class BoatmensAltar(Kind):
     before modern times, so it is not drawn.
 
     Note: The boats' guardian and its shrine on land are read. The shrine is not recorded standing at a landing
-    itself, or with a size, so its place at the head of the landing and its size are a guess.
+    itself, or with a size, so its place beside the landing and its size are a guess.
 
-    Caveat: The shrine is not recorded standing at a landing itself, or with a size, so its place at the head of the
+    Caveat: The shrine is not recorded standing at a landing itself, or with a size, so its place beside the
     landing and its size are a guess.
 
     Name: boatmen's altar
@@ -391,7 +391,7 @@ class Steelyard(Kind):
     What: The steelyard on Ubame's weighing floor where bales of charcoal are weighed before the tally is written: a
     wooden beam with a hook at one end for the bale and a weight on the other, slid along the beam until it balances.
 
-    Why: Charcoal was packed by grade rather than to one weight, so a bale is weighed at the point of sale, and
+    Why: Charcoal was packed by grade rather than to one weight, in one district at least, so a bale is taken to be weighed at the point of sale, though no source read says a dealer weighed bales at sale, and
     one account, naming no country or period, has the steelyard weighing food and everyday goods and the two-pan balance serving valuables. Japan used
     steelyards from the Edo period, in sizes that included one for a load of four of the best charcoal bales, and China's was its
     traditional market scale, built for heavy loads too.

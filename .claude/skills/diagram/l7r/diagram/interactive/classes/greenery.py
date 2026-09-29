@@ -14,7 +14,7 @@ class HomesteadBamboo(Kind):
     What: A household's own bamboo stand on its plot - a clonal thicket, in most cases of nearly one species,
     drawn as paired culm strokes with a leafy fork.
 
-    Why: Below the frost line bamboo was a matter of course in a lowland paddy hamlet - baskets, fans, food
+    Why: Below the frost line a lowland paddy hamlet could keep bamboo, and this record infers it commonly did - baskets, fans, food
     wrappings, building timber and everyday tools; on the Tonami plain bamboo stands once grew in many a farmstead's
     grove, beside the cedar that led it. Which side of the plot it stood on was done more than one way: on the Tonami
     plain with the storehouses and fruit trees to the south; by rivers and in flood-prone ground at the wet edge, its
@@ -28,8 +28,8 @@ class HomesteadBamboo(Kind):
     Note: we have rendered the bamboo stand as paired culm strokes with a leafy fork on a 7 ft grid, in order to
     show a stand that cannot be drawn at true scale: a culm is only inches across, madake at most about four inches,
     a fraction of a pixel at one foot per pixel. The stand's extent is to scale; the marks inside it are symbolic - the convention
-    Japan's own topographic legend uses. Presence below the frost line, the stand's two places (the
-    household's plot, the village-edge thicket - that one from a page's present-day observation) and the three sides
+    Japan's modern topographic legend uses, a symbol of the national survey's maps of about 1910 that no page read traces to a map before 1868; older maps drew the growth itself. Presence below the frost line, the stand's two places (the
+    household's plot, the village's own thicket, kept before modern times round its houses, on dry ground) and the three sides
     of the plot are read; the weights among the sides
     (behind the house and the windward side the likeliest), the share of farmsteads keeping one (about three in five)
     and the 22 by 16 ft strip are guesses, no page giving a share or a size.
@@ -95,7 +95,7 @@ class Windbreak(Kind):
     windward side, filling the bare lower part against the wind.
 
     Note: The grove count follows the Fujian figure (forests-2020), the density the Pearl-delta patches
-    (hu-2011-fengshui-patches), and the size the Hong Kong survey (afcd-ncsc-9-06); the water-mouth cluster's
+    (hu-2011-fengshui-patches), and the size the Hong Kong survey (afcd-ncsc-9-06), measured in modern times on groves centuries old, no older measurement being known; the water-mouth cluster's
     size and the tree counts are guesses bracketed by Korean village-grove analogues; the belt's shape follows
     the terrain and the cluster. The side it stands on follows the Japanese homestead grove, kept on the north
     and west against the northwesterly winter wind (irie-2020-igune, yashikirin-jawiki), and the GM's rulings
@@ -207,7 +207,7 @@ class WoodlandCommons(Kind):
     Note: The commons regime, the raked floor, the order of houses, fields and wood, and the stocking are read (the
     Yamaguni study, the satoyama, village-boundary and iriai-land entries, a 1910 forester's account of the Musashino
     upland, the Nagano and Tsukuba konara stands); reading "beyond the fields" as higher than the field a wood adjoins
-    is this record's reading of "the slopes around the settlement". The 1,700 a hectare is calibrated on a planted
+    is this record's reading of "the slopes around the settlement". Every stem count read was taken in the twentieth century and no record before modern times counts a worked wood's stems, so the stocking is a modern calibration with no older figure beside it; the 1,700 a hectare is calibrated on a planted
     konara stand of 29 years and on Nagano woods of 26-31 that this record reads, the report not saying so, as fuel
     woods left uncut - both a little past the age a wood was cut - so the wood may read a little more open than it
     stood, and each crown's 8-9 ft width is a guess sized from the spacing, no
@@ -239,8 +239,8 @@ class ScrubAndRoughGrazing(Kind):
     the water's edge.
 
     Note: That bund grass is cut several times a season today, and that cut land does not go over to scrub, are read;
-    that it was cut as often in the past is a guess, no page giving the old rate;
-    the 6 ft is this record's choice, no page giving one, and it is a flat-ground figure: on terraced ground the
+    that it was cut before modern times, for green manure, is read, and that it was cut as often then is a guess, no page giving the old rate;
+    the 6 ft is this record's choice, wider than the one old figure found, and it is a flat-ground figure: on terraced ground the
     kept-cut slope face below a field is wider, at times wider than the field itself, and the map does not set that
     width. The channel bank takes the same 6 ft by the GM's ruling, and that a bank was kept like a bund at all is this
     record's analogy, no page read speaking of a channel bank; nothing describes how

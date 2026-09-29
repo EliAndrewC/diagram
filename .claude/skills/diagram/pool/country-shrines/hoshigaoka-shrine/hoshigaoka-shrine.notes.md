@@ -26,7 +26,7 @@
 2. Bell tower: **absent** (the default).
 3. Dedication: **Bishamon**, the Fortune of Strength - the GM's word for this district (2026-09-20). Named on the sanctuary and nothing else of it drawn (no guardian figures at average wealth).
 4. Grove and burial-ground side: **by the map** - the grove the map now draws; the village graveyard stays 430 ft west, outside the frame.
-5. Wealth: **average** - thatch and plain timber; none of the donated stonework (guardian figures, lanterns, strength stones) and no sanctuary fence.
+5. Wealth: **average** - thatch and plain timber; none of the donated stonework (guardian figures, lanterns, strength stones).
 6. Farmers' stage: **absent** (the default; the map draws none).
 7. Sumo ring: **absent** (the default; the map draws none).
 8. Grove form: **behind and sides** (feature 279). The hall stands mid-slope, with no break of slope, so the candidates are both slope classes' forms in the knob's order; the roll is exactly `random.Random(zlib.crc32(b"hoshigaoka:shrine grove form")).choice(["behind", "behind and sides", "sides"])` - the map has no seed, so the seed is its name. (A first reading of the ground as a hall at the top of its slope rolled `sides` between two candidates; the building-review of 2026-09-28 found the map has no such break.)

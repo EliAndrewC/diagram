@@ -8,6 +8,7 @@ import glob
 import json
 import math
 import os
+import pathlib
 
 import numpy as np
 import pytest
@@ -99,9 +100,11 @@ def test_the_pool_exhibits_both_harvest_weathers() -> None:
 def test_the_oracle_sees_the_yard_the_quarter_foot_search_left_short() -> None:
     # round 8's layout drew Sawada's 31 x 22 ft yard 12 mats and its 20 x 14 ft yard 5, each a mat under a third that a
     # lattice in a window narrower than a quarter foot seats (spec-fidelity, amendment round 7); the oracle must find those
-    m = _manifest(next(g for g in GENS if g.endswith("sawada.gen.py")))
-    ftpx = float(m["meta"].get("ftpx", 1.0))
-    seen = {(round(y["w"]), round(y["h"])): y for y in m["threshing_yards"] if y.get("kind") != "forecourt"}
+    # the two yards are FROZEN (tests/fixtures/sawada_yards_282.json): feature 280 moved the yard median, so Sawada no longer
+    # draws them, and the oracle's power on these two outlines is what this test is about
+    frozen = json.loads((pathlib.Path(__file__).resolve().parents[1] / "fixtures" / "sawada_yards_282.json").read_text(encoding="utf-8"))
+    ftpx = float(frozen["ftpx"])
+    seen = {(round(y["w"]), round(y["h"])): y for y in frozen["yards"]}
     for size, old in (((31, 22), 12), ((20, 14), 5)):
         y = seen[size]
         third = math.ceil(y["w"] * y["h"] * ftpx * ftpx / MAT_SQ_FT / 3)

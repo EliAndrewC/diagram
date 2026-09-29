@@ -59,14 +59,10 @@ class MulberryDike(Kind):
     feed and fertilizer for the fish in the water beside it. A bare dike of heaped mud gullies and slumps, so every dike was planted; in
     sericulture districts that planting was mulberry.
 
-    Note: The ratio and the planting are read. The WIDTH is where the drawing parts company with the record: the
-    traditional figure is a dike of six to ten meters, and the collar drawn around each pond is about two - the
-    ground from one pond's water to the next is thirteen meters, but a canal runs down the middle of it, so it
-    is not one bank. The traditional figure also reaches us only at second hand. The ratio's ORDER is
+    Note: The ratio and the planting are read, though every page that writes the ratio as a number is modern - the oldest figure found, one township's share of fish water in 1678, is not a ratio. The traditional width is a dike of six to ten meters, and the water drawn stands about seven meters in from each parcel's edge, though a canal runs between two parcels, so two ponds' banks are not one bank. The traditional figure also reaches us only at second hand. The ratio's ORDER is
     contested - the classic prescription survives as six parts dike to four parts pond as well as the reverse,
     and seven to three is recorded where the fish had feed from beyond the dike - so the water-heavy reading drawn here is a regional one, disclosed
-    rather than the only one; measured on the map that draws them, water is 80% of the parcel ground and the
-    planted bank 20%, and about half the block once the canal corridors between the parcels count. How
+    rather than the only one; measured on the map that draws them, water is 62% of the parcel ground and the planted bank 38%, and less across the whole block once the canal corridors between the parcels count. How
     thickly mulberry stood depended on how low it was cut, along one continuum: from about one bush to a
     square foot in the Pearl River delta's root-cut planting, a figure given as current practice with no date,
     to about 300 trees a mu - one to about 24 square feet - in the late-Qing Yangtze delta, the only figure
@@ -257,14 +253,14 @@ class ManurePit(Kind):
 
     Why: The most important fertilizer on a rice-and-silk farm was human manure, and Fei's village kept it in
     pits of earthenware half buried behind the buildings, so many that the public road along the stream was
-    lined with them. Where Tohoku farms heaped theirs by the stable, the silk villages potted theirs: two
+    lined with them. Where the rice hamlet heaps its muck in the yard, the silk villages potted theirs: two
     attested forms, so each hamlet rolls one. Where the pit stood is a second choice. A 1959 survey of three
     Japanese villages found night soil kept in a tank beside the privy or in a pit out by the fields, the
     tank thought to have moved from the privy to the fields or the roadside to make manuring easier, and the
     share of households with a field pit ran from 2 of 83 in one village to 15 of 18 in another. So each
     hamlet rolls its share of field pits somewhere between almost none and most households.
 
-    Note: The form and its place behind the house are read (Fei 1939), and so are the field pit and how widely
+    Note: The form and its place behind the house are read (Fei 1939, with earthen jars sunk by farm paths and roads already in an account of China printed in 1797), and so are the field pit and how widely
     its share varied (the highest, 15 of 18, in a village whose field pits also took night soil carted in from Sendai); carrying the field pit, found in Japan, to the silk village's jar is this project's own
     step, and the drawn 3.5 ft mouth is a size the record does not give.
 
@@ -291,7 +287,7 @@ class SluiceGate(Kind):
     wooden boards to set the level - opened in drought to draw the river in, shut in flood to keep it out - and it is why the dike can be complete and the block still fed and
     drained.
 
-    Note: The form is read from the FAO pond-construction manual, and its opening in drought and shutting in flood from a Chinese account of the Jiangnan polders; the dou a Minle proverb names is taken for this sluice only by this project's guess, since no source read defines the word; the inlet-high, outfall-low placement comes from Ruddle & Zhong (1988), which has no readable copy and is not read; the 6 x 3 ft bar is drawn at the size of a whole board set, which the record does not measure; the FAO manual caps the opening itself at 0.80 m, less than half the bar.
+    Note: The board form is read only from a modern FAO pond-construction manual, which puts its sluice through a single pond's dike rather than the polder's, and its opening in drought and shutting in flood from a Chinese account of the Jiangnan polders; the dou is read as the polder's own sluice - the Minle dou of the Sangyuan polder is an old sluice gate, its name carved above its opening in 1878; the inlet-high, outfall-low placement comes from Ruddle & Zhong (1988), which has no readable copy and is not read, and no premodern source was found for it; the 6 x 3 ft bar is drawn at the size of a whole board set, which the record does not measure; the FAO manual caps the opening itself at 0.80 m, less than half the bar.
 
     Caveat: the 6 x 3 ft bar is drawn at the size of a whole board set, which the record does not measure; the FAO manual caps the opening itself at 0.80 m, less than half the bar.
 

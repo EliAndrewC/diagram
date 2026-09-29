@@ -354,7 +354,7 @@ class WeighingFloor(Kind):
     is what the weighing floor is for, and it is also why the office's hold on the trade is a written record
     rather than ownership.
 
-    Note: The weighing floor follows the record's reasoning, and its premise is read: the Japanese reference on the
+    Note: The weighing floor follows the record's reasoning - no source read says a charcoal dealer weighed the bales at sale - and its premise is read: the Japanese reference on the
     bale says it had no fixed standard size, even for rice, and that in one charcoal district (Hokkaido's Iburi,
     undated) a bale's weight was set by the charcoal's grade - one district's practice, not a rule shown to hold
     everywhere.

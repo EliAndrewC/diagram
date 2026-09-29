@@ -197,7 +197,7 @@ class Garden(Kind):
 
     Note: Presence is read; the sun rule is DERIVED from the geometry, and its east half is the GM's call, since the record finds no readable source for a bed's need of morning light - its season rests on daikon standing in
     the bed through autumn (the other autumn greens are this record's reading), and its west lane is sized to
-    a working belt of about 10 m, the low end of a surveyed band whose measured trees reach 22 m; the record
+    a working belt of about 10 m, the low end of a band read from surveys of the 1980s on, whose measured trees reach 28 m - no grove height from before 1868 was found, so the 10 m is a modern figure kept for want of an older one; the record
     fixes the bed's AREA and that it is hand-worked and irregular, but gives no proportion or row count, so
     those are drawn to read as a worked kitchen bed at this scale.
 

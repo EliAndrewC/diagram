@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-28
 
-**Status**: FAITHFUL at round 2; phase 1 (audit and research queue)
+**Status**: FAITHFUL at round 2; phase 1 (audit and research queue) and phase 2 (elimination, 2026-09-29) done
 
 **Input**: the GM's request, verbatim in [`request.md`](request.md): *"We should eliminate anything which is only
 modern"*, and *"I do also want a sweep of what we have to find anything else that is modern only"*, run *"as its own
@@ -138,8 +138,55 @@ modern-only - two GM rulings in conflict - does it go to the GM through `escalat
   modern list only, and the undated root-cut mulberry density was set aside for the dated late-Qing figure.
 - **D2 - the frozen legacy maps are not edited** (the GM's standing ruling, 2026-08-16, and 2026-09-28 on the headman's
   gate). Their modern-only forms are owed at conversion (FR-007).
-- Per candidate, filled from the handoffs: one line per outcome, labeled historically accurate, deliberate deviation,
-  map drawing convention, or guess.
+- **Per candidate**: every item's outcome, section and drawn form is a row of `outcomes.md`. One line per elimination
+  (phase 2, 2026-09-29), labeled by what the map now draws:
+- **M09 - Bund cross-section** (historically accurate): the Bund modal: a few inches high, today's standard a foot; Sources kotobank-azebiki, hattori-site-yayoiken
+- **M10 - Water depth** (historically accurate): the Paddy modal: the drained stages are premodern (Qimin yaoshu, Chen Fu), the depths modern
+- **M12 - Pond sized by command area** (guess): the m3/ha rule gone from fields/110; the scripted tameike is sized from Ikegami by households, noted as held below Chen Fu's measure (a guess)
+- **M16 - Work-yard median** (guess): YARD_MEDIAN_TSUBO 18 -> 25 (the IRRI spreading depth retired; undated-custom calibration)
+- **M18 - Farm-shed size** (historically accurate): the storehouse annex at 1.67:1 (0.46 w x 0.45 h), inside the Edo sheds' 18-27 ft; the Meiji-Taisho barns not drawn
+- **M20 - Outbuildings, the storehouse share and the heap rate** (guess): the storehouse annex on ~1 farm in 8 (KURA_SHARE 0.125, headman always); the heap's 40-70% stays a guess
+- **M21 - The firewood stack** (historically accurate): the woodpile is a wood shed only, 35-45% of farmsteads, larger houses first, 24 x 12 ft; the eaves stack and (found in passing, undated-custom) the kizuma removed
+- **M22 - The bath shed** (historically accurate): the bath is a room joined to the house, 20-30%, main door / stable end / a headman's floored rooms, 6 x 6-12 ft; the shed and corridor removed
+- **M23 - The detached privy** (guess): the privy rolled from the Kakimochi table's sixteen sizes (it was a 6 x 6 ft guess)
+- **M26 - House bearings** (historically accurate): the quarter-turned tenth removed (QUARTER_TURN_SHARE); houses turn with their lane
+- **M32 - The separated net** (historically accurate): the DrainageDitch modal: the separated net is the Minuma layout, not modern consolidation
+- **M34 - The wet toe along the collector** (historically accurate): the modern MAFF grounding of the reed edge removed (water/600, the Marsh modal); the engine reads the fan's toe, never the drain - no geometry change; reported to the GM (ruled in 2026-08-26 unknowingly)
+- **M36 - The stake-and-reed weir** (historically accurate): the weir fence woven with brushwood, not reed (the Weir modal, brook.py)
+- **M39 - Too wet to build on** (historically accurate): the well keep-out re-grounded as this project's decision (water/160, 660); the two modern well manuals marked Not cited
+- **M49 - The take-yabu** (historically accurate): the take-yabu thicket seated at the settlement's edge behind its back row, not the field margin
+- **M54 - The polder parcel** (historically accurate): the rice polder's cell 110 -> 190 ft (three mu, the 1897 fish-scale register); no pool map rolls it
+- **M55 - Dike planting rows** (historically accurate): the dikes.py comment re-pointed at Pan Jixun; no geometry
+- **M56 - The pond grid** (historically accurate): POND_LAYOUTS mosaic only; reversal of the GM's knob of 2026-08-18 reported
+- **M57 - Dike-pond sluices** (historically accurate): the per-pond sluice removed (PondSluice retired, the sty keep-clear and its gate test with it); reversal of the GM's 2026-07-22 request reported
+- **M58 - The 6:4 ratio** (historically accurate): the water inset 11 -> 23 ft: 0.62 water per parcel on Kuwabata (was 0.80)
+- **M59 - Fry ponds on the smallest parcels** (historically accurate): the fry pond no longer a 1-3 mu parcel form by share (see M60)
+- **M60 - One parcel in ten a fry pond** (historically accurate): FRY_FORMS knob: none, or a fry village (the smallest ponds up to 7/10 of the water); the one-in-ten removed
+- **M61 - The sty at the water** (historically accurate): the PigSty modal: on the pond bank as the 1639 pen; no flush-into-the-pond claim
+- **M62 - The pig shed on the dike** (historically accurate): the 5-10 m shed-dike width not a rule the maps follow (PigSty modal)
+- **M65 - The sanctuary fence** (historically accurate): the sanctuary fence dropped from the wealth knob (programs.md); no kind drew it
+- **M66 - The swept collar** (historically accurate): no swept collar at arches or graves (the clearings' collars 30 -> 0); the precinct's ground kept, not called swept (key precinct clearing); undated-custom (shrine half)
+- **M68 - One ground per village** (historically accurate): no hamlet burial ground of its own (hamlet_burial village_ground only); undated-custom
+- **M69 - The crematory's set-back** (guess): the 390 ft crematory set-back relabeled a guess (190); no scripted map draws it
+- **M70 - Cremation-ground size and fire bed** (historically accurate): the cremation ground open-air on most seats (ROOFED_SHARE 0.25), no pyre platform or hut
+- **M71 - Six stone jizo** (historically accurate): the six jizo only at a burial ground's entrance; the village cremation ground on its own draws none
+- **M75 - Set-back from water** (historically accurate): the scaled water set-backs gone: the village cremation ground keeps a bank margin only; the hamlet's own ground (which carried them) retired by M68
+- **M77 - Burial distance** (historically accurate): no set distance drawn; the village cremation's 650 ft is a search reach, relabeled; downstream kept as a drawing tie-break only (attested today only)
+- **M81 - The fence as a gift** (historically accurate): as M65
+- **M97 - Well capacity** (historically accurate): the Well modal: the Beijing figure, not the Sphere standard
+- **M104 - The charcoal cooling ground** (historically accurate): the charcoal yard's cooling apron removed from the engine; the CharcoalStore and cart-yard modals drop the cooling and 30 ft gap
+- **M105 - Bale sizes** (historically accurate): the bale notes (TaxBarge, CharcoalBales modals)
+- **M111 - The kitchen door** (historically accurate): the Door modal says nothing of who used the kitchen door
+- **M112 - The 67-tsubo house** (historically accurate): the Residence and Kitchen modals measure against the 49-tsubo house of 1794, not the 67-tsubo Meiji plan (the sheets were already at 49)
+- **M114 - The notice board at the gate** (guess): the notice board: notices at the office gate accurate (Chinese county office), the freestanding board a guess
+- **M115 - The striking bundle** (historically accurate): Ubame's striking bundle replaced by upright posts; the knob's bundle value gone; undated-custom
+- **M119 - Bunk rooms** (historically accurate): no bunk rooms (Barracks modal, buildings.md, Hayakawa's sheet comment); the size band's recalibration to the staff rowhouse recorded (future-work/compounds)
+- **M124 - Private landings** (historically accurate): the Dock modal: a private back-gate landing is modern only; Hayakawa's steps across the street stand; legacy maps' back-gate landings owed at conversion
+- **M125 - The boatmen's water-god shrine** (historically accurate): the boatmen's altar is the boats' guardian's shrine (Hayakawa sheet, modal); undated-custom
+- **The woodpile's kizuma** (found in passing; historically accurate): the stacked-wall form removed - undated modern
+  pages only (undated-custom); the woodpile is drawn as a lean-to shed.
+- **The dike-pond water inset** (guess, calibration): 23 ft, six parts water in ten on Kuwabata (0.62 measured); the
+  6:4 ratio is the record's, the inset that reaches it is calibrated on the map.
 
 ## Review history
 
