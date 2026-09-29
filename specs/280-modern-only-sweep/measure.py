@@ -85,6 +85,7 @@ ANSWERS = {
     "f280-sawada-bath-front": ("F1", "3f291ffaa17a"),
     "f280-sawada-crowns-in-bamboo": ("F3", "3f291ffaa17a"),
     "f280-kuwabata-fry-tint": ("N1", "01a5c1895393"),
+    "f280-sawada-storehouse-gray": ("F2", "7640430b4ab6"),
 }
 
 
@@ -103,6 +104,10 @@ def main(answers):
                         drawn_front=f, recorded_main_door=lf, baths=tot,
                         quantity="bath rooms whose record says main_door against those whose drawn center stands before the front wall",
                         method="each bath fixture's center in its house's frame (house rot), ly > h/2 is the front wall")])
+    svg = open(f"{POOL}/sawada/sawada.svg").read()
+    out.update([rec("f280-sawada-storehouse-gray", value=len(re.findall(r'fill="#9A968C"', svg)), unit="storehouses drawn in the solid gray", subject="sawada",
+                    storehouses=len(manifest("sawada").get("farm_sheds") or []), quantity="drawn storehouse rects filled #9A968C in sawada.svg against the manifest's farm_sheds",
+                    method='count of fill="#9A968C" in the svg')])
     fr, fp = fry_fills("kuwabata")
     out.update([rec("f280-kuwabata-fry-tint", value=fr, unit="ponds drawn in the turbid fry fill #9FA898", subject="kuwabata", fry_ponds=fp,
                     quantity="drawn pond paths filled #9FA898 in kuwabata.svg against the manifest's fry ponds",

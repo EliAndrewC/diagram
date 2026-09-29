@@ -1,0 +1,7 @@
+{
+  "utc": "2026-09-29T12:16:06Z",
+  "target": "review-accept",
+  "commit": "b23b6dca8",
+  "outcome": "permitted",
+  "why": "review-accept sawada F5: the bamboo glyph is unchanged from main and outside this feature's delta"
+}

@@ -173,6 +173,18 @@
   "measured": "2026-09-29",
   "source": "specs/280-modern-only-sweep/measure.py (run from .claude/skills/diagram)"
  },
+ "f280-sawada-storehouse-gray": {
+  "value": 1,
+  "unit": "storehouses drawn in the solid gray",
+  "subject": "sawada",
+  "storehouses": 1,
+  "quantity": "drawn storehouse rects filled #9A968C in sawada.svg against the manifest's farm_sheds",
+  "method": "count of fill=\"#9A968C\" in the svg",
+  "measured": "2026-09-29",
+  "source": "specs/280-modern-only-sweep/measure.py (run from .claude/skills/diagram)",
+  "verifies": "F2",
+  "answers": "7640430b4ab6"
+ },
  "f280-kuwabata-fry-tint": {
   "value": 22,
   "unit": "ponds drawn in the turbid fry fill #9FA898",
