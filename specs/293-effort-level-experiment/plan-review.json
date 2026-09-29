@@ -1,6 +1,6 @@
 {
  "feature": "293-effort-level-experiment",
- "plan_sha256": "47870647dc2ac5f1bf12c21b027888feb6cbc8a070e91e89a573ff9d5db1399b",
+ "plan_sha256": "8d067087a9e73189bbf93df69241689143e5f7bcbe2aaba3fa0e92323d6bf2bb",
  "reviewed": "2026-09-29",
  "declared": "spec-fidelity",
  "decisions": [
@@ -8,105 +8,110 @@
    "id": "R1-D1",
    "summary": "The arm is set with --effort, never CLAUDE_CODE_EFFORT_LEVEL; the launcher unsets the variable and records that",
    "class": "within",
-   "why": "The env variable beats frontmatter effort and would break the pinned-checker control (FR-005); --effort is the handoff's preferred mechanism."
+   "why": "FR-005 pinned-checker control; unchanged since round 1."
   },
   {
    "id": "R1-D2",
-   "summary": "Ad-hoc judging routed to a session-scoped adhoc-judge (opus, effort high) defined by an identical --agents JSON; the prompt names no effort",
+   "summary": "Every session of every run - task I's and both task R page sessions - launched with the same --agents JSON defining adhoc-judge (opus, high); the prompt and both R briefs route ad-hoc judging to it; per-session hash recorded and a differing hash refused (research R1 D2, contracts/cli.md page-session AGENTS= and effort-run step 3, plan.md, data-model agents_json_sha256)",
    "class": "within",
-   "why": "Implements FR-005 / US2 AS3 (ad-hoc checking or judging at one fixed effort in both arms); any fixed level satisfies it."
+   "why": "Round-1 item 1 resolved: the fixed ad-hoc judging effort of US2 AS3 / FR-005 now reaches task R's page sessions as well as task I."
   },
   {
-   "id": "R1-D2-reach",
-   "summary": "Only task I is launched with --agents; task R's page sessions get EFFORT only (contracts/cli.md page-session and effort-run step 3)",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-005 and US2 AS3 apply to every run. Page sessions have the Agent tool and their rules allow ad-hoc opus judging, so on task R (the task hypothesis 2 says is most effort-sensitive) ad-hoc judges run at the session effort and the adhoc-judge the briefs would name does not exist. The runner must pass the same --agents JSON (and the briefs carry the same routing instruction)."
+   "id": "R1-D2a",
+   "summary": "If --agents cannot carry effort, a committed agent file .claude/agents/adhoc-judge.md (opus, high) lands on main before START, identical in every run clone, retired after the report; the unmet branch only if that too is measured not to pin the effort",
+   "class": "within",
+   "why": "Round-1 item 2 resolved in D2a and in the Alternatives paragraph: the unmet branch of US2 AS3 is reserved for a MEASURED impossibility."
   },
   {
-   "id": "R1-D2-fallback",
-   "summary": "If --agents cannot carry effort (P0 a), go straight to the spec's measured unmet branch; a committed agent file was rejected as a permanent agent for a one-off",
+   "id": "R1-P0-a-failure",
+   "summary": "research.md R1 'MEASURE FIRST (P0)', last sentence (lines 43-44): 'If (a) fails, the spec's measured branch applies: ad-hoc judging is counted per arm and the control listed as unmet.'",
    "class": "narrowing",
    "ruling": "NOT LEGITIMATE",
-   "why": "US2 AS3's unmet branch applies only when the effort is MEASURED to be impossible to set. A defined agent file with effort frontmatter is a documented way to set it, and was rejected for cost and tidiness, which cannot justify dropping a control. Fallback must be an agent file identical across arms (committed before START or placed by the launcher), and the unmet branch only if that too fails."
+   "why": "Stale text from round 1 that contradicts D2a. P0 is the step the implementer executes, and as written a failure of (a) still goes straight to the unmet branch, skipping the agent-file fallback: the round-1 item-2 narrowing survives in the operative instruction. Rewrite it to 'If (a) fails, apply D2a (the agent file) and re-measure; the spec's measured branch applies only if that too fails.'"
   },
   {
    "id": "R1-D3",
-   "summary": "Ad-hoc dispatches not to a defined agent or adhoc-judge are counted per arm; opus ones reported as judging at session effort",
+   "summary": "Ad-hoc dispatches not to a defined agent or adhoc-judge are counted per arm AND listed with model and description; those on opus or judging by their description reported as judging at session effort",
    "class": "within",
-   "why": "Reports control failures honestly per US2 AS3/FR-012. Classifying by model is a heuristic; listing every such dispatch with its description would let the reader check it (aside, not a ruling)."
+   "why": "US2 AS3 / FR-012. The round-1 aside is taken up (data-model adhoc_dispatches)."
   },
   {
    "id": "R6-D4",
-   "summary": "Sources ledger and page cache snapshotted once; each run gets its own copy through L7R_SOURCES_HOME; winner's ledger lines appended at landing",
+   "summary": "Sources ledger and page cache snapshotted once; per-run copy through L7R_SOURCES_HOME; winner's ledger lines appended at landing",
    "class": "within",
-   "why": "Removes the order advantage US2 AS6 and the edge case worry about; cache hits still counted per run."
+   "why": "US2 AS6 and the shared-resource edge case; unchanged."
   },
   {
    "id": "R6-D5",
    "summary": "Claims file: launcher appends a release line after each R run, or a per-run copy if the rules do not read it so",
    "class": "within",
-   "why": "Keeps the second R run from seeing the question as claimed; same starting state for both arms."
+   "why": "Same starting state for both arms; unchanged."
   },
   {
-   "id": "R6-reserve-and-log",
-   "summary": "make reserve collisions accepted as numbering gaps; shared state handled in research.md, with no run-record field listing what each run found at start or wrote outside its clone",
+   "id": "R6-reserve",
+   "summary": "make reserve collisions accepted as numbering gaps",
+   "class": "within",
+   "why": "A numbering gap does not affect the comparison, and D6 now lists the prefixes each run reserved."
+  },
+  {
+   "id": "R6-D6",
+   "summary": "Run record gains shared_state {sources_snapshot_sha256, ledger_lines_appended, claims_lines_written, claims_release_line, prefixes_reserved}",
    "class": "narrowing",
    "ruling": "NOT LEGITIMATE",
-   "why": "Accepting the reserve gap is fine, but US2 AS6 and the shared-resource edge case require the RUN LOG to list what a run writes outside its clone that a later run reads and what each run found there at start. The claims release line and the reserve counter are exactly such writes. data-model's Run record carries env only; add a shared_state field (snapshot hash, claims lines, reserved prefixes)."
+   "why": "Round-1 item 3 only partly resolved. The spec's shared-resource edge case names three resources - the page cache, the sources ledger and the research claims file - and requires 'The run log records what each run found there at start'. The snapshot hash covers the first two. For the claims file the record holds only what the run WROTE, not what it FOUND: under D5's primary path every run reads the real, host-wide file, which other sessions' research queues also append to, so its state at start can differ between arms (an earlier run's claim and release, another session's claim on a nearby question). D6's own text says 'what it found at start', but no field carries it for the claims file. Add a field such as claims_at_start (the file's sha256 at launch, plus the open claims or the lines naming the run's question), or, under the per-run-copy path, the copy's hash."
   },
   {
    "id": "R7",
-   "summary": "Task R is two page sessions (write, check-and-apply) from two pre-written byte-identical briefs, launched by the runner at the arm effort, with no orchestrating top-level session",
+   "summary": "Task R is two page sessions from two byte-identical briefs, launched by the runner at the arm effort, with no orchestrating top-level session",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "FR-004 says one prompt file per task, but the spec's own FR-002/FR-003 put task R through write and check-and-apply sessions, which the project's runner takes as two briefs; each is a top-level headless session at the arm effort, which is the handoff's preferred form. The purpose (byte-identical, effort-free prompts) holds."
+   "why": "Unchanged from round 1: FR-002/FR-003 put task R through write and check-and-apply sessions; the purpose of FR-004 (byte-identical, effort-free prompts) holds."
   },
   {
    "id": "launcher",
-   "summary": "effort-run: fresh clone of /diagram reset to START under neutral id diagram-exp-<id>, refuses while another run is live or rubrics/prompts changed, task I as one full claude -p with the interactive appended prompt, bypassPermissions, session ids chosen up front",
+   "summary": "effort-run: fresh clone at START under a neutral id, sequential, refuses on changed rubrics or prompts, task I as one full claude -p, session ids chosen up front, release line after R",
    "class": "within",
-   "why": "FR-003, FR-005 (sequential, same start, same hooks), the neutral-id edge case."
+   "why": "FR-003, FR-005, US2 AS5, the neutral-id edge case."
   },
   {
    "id": "void-rerun",
-   "summary": "Exit 137 marks a run void from result.json and it is relaunched under the next id",
+   "summary": "Exit 137 marks a run void and it is relaunched under the next id",
    "class": "within",
    "why": "US2 AS5."
   },
   {
    "id": "measurement",
-   "summary": "effort-measure folds usage per message id as the census does, cross-checks result.json, reads rework from guard log, subagent transcripts, make results and git log; heuristic matches listed; usage-limit unobserved unless the GM reads it",
+   "summary": "effort-measure folds usage per message id, cross-checks result.json, reads rework from guard log, verdicts, make results and git log",
    "class": "within",
    "why": "FR-006, FR-007, SC-001."
   },
   {
    "id": "blinding",
-   "summary": "effort-blind exports outputs, strips run id, clone path, session names, trailers and arm names, labels A/B from a seed, bundle outside the repo, key in the session clone's .git, committed after grades",
+   "summary": "effort-blind strips run identifiers and arm names, A/B from a seed, bundle outside the repo, key committed after grades",
    "class": "within",
    "why": "FR-009, US3 AS2, SC-003."
   },
   {
    "id": "grader",
-   "summary": "effort-grader: opus, effort high, omitClaudeMd, Read/Grep, bundle only, registered in the tier table; GM grades the same bundle",
+   "summary": "effort-grader: opus, high, omitClaudeMd, bundle only, in the tier table; the GM grades the same bundle",
    "class": "within",
    "why": "FR-010, US3 AS3."
   },
   {
    "id": "rubric-freeze",
-   "summary": "Rubrics 0-4 anchored, weighted, pass line; committed before the first run; the launcher refuses if they changed since the freeze commit",
+   "summary": "Rubrics frozen before the first run; the launcher refuses if they changed",
    "class": "within",
    "why": "FR-008, SC-002."
   },
   {
    "id": "prompt-content",
-   "summary": "Task I prompt names Inashiro as the reference and requires perf bookends and a worktree baseline",
+   "summary": "Task I prompt names Inashiro and requires perf bookends and a worktree baseline",
    "class": "within",
-   "why": "The project's standing rules for any generator change; identical across arms and silent on effort (FR-004)."
+   "why": "The project's standing rules; identical across arms (FR-004)."
   },
   {
    "id": "landing",
-   "summary": "R winner lands after its in-run checks; I winner merged onto current main with make done and moved-map reviews there, defects recorded; losers deleted; future-work closed; report through escalation-check",
+   "summary": "Winners land (I merged onto current main under make done and moved-map reviews), losers deleted, future-work closed, report through escalation-check",
    "class": "within",
    "why": "US4 AS1-AS3, FR-014."
   }

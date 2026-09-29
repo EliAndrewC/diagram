@@ -16,7 +16,7 @@ All records are JSON in this feature directory unless said otherwise; every one 
 | `argv` | each session's full command line, as launched |
 | `env` | what the launcher set or unset: `L7R_SOURCES_HOME`, `CLAUDE_CODE_EFFORT_LEVEL` (unset), `SPECIFY_FEATURE` |
 | `agents_json_sha256` | the hash of the `--agents` JSON (R1 D2), per session - identical across every session of every run |
-| `shared_state` | R6 D6: `{sources_snapshot_sha256, ledger_lines_appended, claims_lines_written, claims_release_line, prefixes_reserved}` |
+| `shared_state` | R6 D6: `{sources_snapshot_sha256, claims_sha256_at_start, claims_lines_at_start, ledger_lines_appended, claims_lines_written, claims_release_line, prefixes_reserved}` |
 | `started`, `ended`, `pauses` | UTC times; pauses from `interventions.md` |
 | `exit`, `status` | the session exit codes; `valid` / `void` (with reason: 137, outage) |
 

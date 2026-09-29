@@ -40,8 +40,8 @@ the individual invocation", undocumented elsewhere. `CLAUDE_CODE_EFFORT_LEVEL` b
 - **MEASURE FIRST (P0)**: (a) that a `--agents` agent with `effort` in `claude -p` is dispatchable and its transcript's meta or
   records show the effort or at least the model; (b) whether a subagent transcript or `meta.json` records effort at all; (c)
   whether the Agent tool accepts an `effort` input (the statusline hint). If (c) works it is recorded and NOT used - the prompt stays
-  as D2, since steering the run's dispatch shape by effort would differ by arm. If (a) fails, the spec's measured branch applies:
-  ad-hoc judging is counted per arm and the control listed as unmet.
+  as D2, since steering the run's dispatch shape by effort would differ by arm. If (a) fails, apply D2a (the agent file) and re-measure; the spec's measured branch (ad-hoc judging counted per arm, the control
+  listed as unmet) applies only if that too fails.
 
 **Alternatives priced**: a hook in the run clones rewriting ad-hoc opus dispatches - rejected, it changes the guard set between the
 experiment and normal work; a committed agent file - the FALLBACK (D2a), not the first choice only because `--agents` needs no landing
@@ -101,7 +101,8 @@ by `effort-measure` from its `result.json`/`stderr.txt`, and re-launched with th
 - **`make reserve`** allocates registry and glossary prefixes under a host-wide lock; both runs reserve, the loser's reservations are
   simply unused numbers. Accepted, no cost but a gap in numbering.
 - **The guard log** is shared but per-firing and tagged with session and cwd (R4); nothing to isolate.
-- **D6 - the run record lists the shared state.** Each run's record carries `shared_state`: the sources snapshot's hash at start,
+- **D6 - the run record lists the shared state.** Each run's record carries `shared_state`: the sources snapshot's hash at start, the claims file's sha256 at launch with the lines naming the run's question or open against it
+  (under D5's per-run-copy path, the copy's hash),
   the ledger lines the run appended to its copy, the claims-file lines it wrote and the release line the launcher wrote, and the prefixes
   it reserved - what it found at start and what it left for a later run (spec US2 AS6, the shared-resource edge case).
 - **`make claim`**: neither run claims a feature number (the prompts say the run is a task under feature 293); a run that tries is
