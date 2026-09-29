@@ -73,7 +73,6 @@ SPEC_CLASSES = [
     # the dike-pond hamlet (feature 150, Kuwabata), recorded in the spec table like `field pond`
     "fish pond",
     "mulberry dike",
-    "pond sluice",
     "perimeter dike",
     "fry pond",
     "manure pit",
@@ -320,9 +319,7 @@ def test_a_sibling_pair_naming_an_unknown_class_is_refused() -> None:
 @pytest.mark.parametrize(
     ("a", "b"),
     [
-        ("pond sluice", "irrigation ditch"),
         ("irrigation ditch", "drainage ditch"),
-        ("pond sluice", "sluice gate"),
         ("mulberry dike", "perimeter dike"),
         ("fruit dike", "perimeter dike"),
         ("tea dike", "perimeter dike"),

@@ -29,13 +29,15 @@ class Paddy(Kind):
     that the bunds meet at T-junctions is a guess no page read states; drawing the patchwork on the western
     plains, where the jori grid ran, is a deviation; plot sizes are the map's own figures, placed inside a
     pre-modern band no page read gives; the field is shown flooded, which is one moment of a cycle that runs
-    from flooded to cracked and back; the depths behind that choice are modern extension figures, and no
-    pre-modern depth was found; the midsummer drain appears in Edo-period farm books, in some places, and before
+    from flooded to cracked and back - a cycle China's farming manuals give from the sixth century on, a paddy let out
+    to sun its roots firm after weeding and drained again before the harvest; the depths behind that choice are modern
+    extension figures, and no pre-modern depth was found; the midsummer drain appears in Edo-period farm books, in some places, and before
     the war it had spread only where water was plentiful - a field short of water kept its sheet; that the same
     limit held before modern times is this record's inference, and the week is a modern guide's, not an Edo figure.
 
     Caveat: the field is shown flooded, which is one moment of a cycle that runs from flooded to cracked and
-    back; the depths behind that choice are modern extension figures, and no pre-modern depth was found; the
+    back - a cycle China's farming manuals give from the sixth century on, a paddy let out to sun its roots firm after
+    weeding and drained again before the harvest; the depths behind that choice are modern extension figures, and no pre-modern depth was found; the
     midsummer drain appears in Edo-period farm books, in some places, and before the war it had spread only where
     water was plentiful - a field short of water kept its sheet; that the same limit held before modern times is
     this record's inference, and the week is a modern guide's, not an Edo figure.
@@ -43,7 +45,7 @@ class Paddy(Kind):
     Name: paddy
     Covers: the wet plots of every `fields[kind=paddy]` - the flooded basins
     Label: accurate
-    Sources: maff-suitou-mizu, zennoh-mizukanri, horikawa-2011-nakaboshi, doyoboshi-jawiki, guangdong-xinyu-20, pwsannong-zhusanjiao-nongyeshi
+    Sources: maff-suitou-mizu, zennoh-mizukanri, horikawa-2011-nakaboshi, doyoboshi-jawiki, qimin-yaoshu-juan2, chenfu-nongshu-juanshang, guangdong-xinyu-20, pwsannong-zhusanjiao-nongyeshi
     Entry: research/fields.html - 'Paddy plots - irregular patchwork', 'Nitrogen - a flooded paddy makes its own', 'Plot sizes', 'How deep the water actually stands', 'Was a paddy drained in midsummer before modern times?'; research/archetypes.html - 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields'
     """
 
@@ -88,8 +90,9 @@ class WetPaddy(Kind):
 
 class Bund(Kind):
     """
-    What: The aze: a puddled-mud ridge between two basins, one to two shaku wide (about one to two feet) and about a
-    foot high - outside modern works it had no fixed size, varying by region and soil. Each late spring, before
+    What: The aze: a puddled-mud ridge between two basins, one to two shaku wide (about one to two feet) and a few
+    inches high - outside modern works it had no fixed size, varying by region and soil; today's standard bund is about a
+    foot high. Each late spring, before
     transplanting, its face was stripped of weeds and plastered with kneaded mud by the hoe (azenuri), so each
     paddy holds its water. A wider walking bund ran between the plots, two to five feet across. Where bunds cross,
     the earth is piled into a lumpy node - the most-worked point in a field.
@@ -98,8 +101,9 @@ class Bund(Kind):
     at T-junctions - never two parallel ridges with idle ground between. The bund was the path of farm work
     (azemichi) and the boundary of a holding; the footplanks over the ditches serve that walking.
 
-    Note: Construction, the spring plastering and the dividing bund's width are read - the nearest measured figure
-    is two shaku, in a field replanned in 1869 - and it is drawn about a foot and a half wide, at true size; the
+    Note: Construction, the spring plastering and the dividing bund's width are read - the shogunate's survey reckoned a
+    bund at one shaku in 1726, and the small bunds of an early Yayoi paddy ran 20 to 60 cm wide and 5 to 20 cm high -
+    and it is drawn about a foot and a half wide, at true size; no height from the Edo period was found; the
     shared-wall finding is this record's derivation from how the bund is built and kept. The walking bund's two to
     five feet is a GUESS: no page read gives its width, so it is held between the two-shaku bund and the one-ken
     (six-foot) farm road of that replanned field.
@@ -110,7 +114,7 @@ class Bund(Kind):
     Name: bund
     Covers: the stroke of every paddy plot and the piled junctions between them
     Label: accurate
-    Sources: aze-standard, kato-1999-ittanbu-kukaku, kotobank-aze-sekai-daihyakka, kigosai-azenuri, kubota-azenuri-kuwa
+    Sources: kotobank-azebiki, hattori-site-yayoiken, kato-1999-ittanbu-kukaku, kotobank-aze-sekai-daihyakka, kigosai-azenuri, kubota-azenuri-kuwa, aze-standard
     Entry: research/fields.html - 'Bunds are SHARED, and the fabric is continuous', 'A bund runs on, or it turns for a reason', 'How wide is a bund, and how wide is the one a farmer walks on?'; research/water.html - 'The bund runs along the channel bank'
     """
 

@@ -125,9 +125,11 @@ class RollVillageMixin:
         `cremation_seat` - beside the village's burial ground, or on its own at the edge - at even odds, a GUESS; a
         pinned value is honored. The village draws no burial ground yet (feature 273 T06), so "beside" has nothing to
         stand beside and seats as on its own, and the manifest says so. On its own it stands at the village's edge
-        through the shared edge seat: 120 ft clear of houses and wells (the engine's pollution clearance), 30 px from
-        water (180's fixed cremation margin, exempt from the field edge), its fire bed off the shrine's approach, and
-        within ~650 ft of the middle of the houses (530); six stone jizo at it (530)."""
+        through the shared edge seat: 120 ft clear of houses and wells (the engine's pollution clearance), out of the water
+        by a bank's margin only (feature 280 M75, research/religion-and-death/180: no set-back from water is attested before
+        modern times, and the 90 ft cremation margin was a scaled guess), its fire bed off the shrine's approach, as near
+        beyond the last houses as that allows - the scan's 650 ft is how far it looks, not a distance the record gives
+        (feature 280 M77); six stone jizo at it (530, where the village has no burial ground for them to stand at)."""
         form = self.knob_pins.get("cremation_seat") or ("beside_burial", "apart")[knob_rng(self.seed, "cremation_seat").randrange(2)]
         if form not in ("beside_burial", "apart"):
             raise ValueError(f"cremation_seat: {form!r} is not one of ('beside_burial', 'apart')")
@@ -136,12 +138,12 @@ class RollVillageMixin:
             self.M["meta"]["cremation_seat_note"] = "beside the burial ground, but the village draws none yet: seated as on its own"
         across = 75.0  # the village sanmai's cleared core (cremation_ground)
         w, h = self.px(across), self.px(across * 0.7)
-        ground = EdgeGround(self, clear_px=self.px(120), stream_px=30.0, ditch_px=30.0, field_px=0.0, avoid=[(approach, self.px(30))])
+        ground = EdgeGround(self, clear_px=self.px(120), stream_px=self.px(6), ditch_px=self.px(6), field_px=0.0, avoid=[(approach, self.px(30))])
         seat = edge_seat(self, down_deg, w, h, ground, reach_px=self.px(650), step_px=self.px(10))
         if seat is None:
             self.M["meta"]["cremation_ground"] = "no seat"
             return
-        self.cremation_ground(seat[0], seat[1], jizo=True)
+        self.cremation_ground(seat[0], seat[1], jizo=False)  # on its own: the six jizo stand at a burial ground (700, M71)
 
     def _roll_knobs(self: Settlement, down_deg: float, water_kind: str) -> dict[str, Any]:  # type: ignore[misc]
         """STAGE 1 - roll the knobs (pinned -> rolled -> default). Returns them keyed as `roll_village`

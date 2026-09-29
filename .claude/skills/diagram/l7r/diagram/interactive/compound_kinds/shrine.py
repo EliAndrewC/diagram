@@ -180,26 +180,28 @@ class SacredTree(Kind):
 
 class SweptClearing(Kind):
     """
-    What: The swept ground round the building - bare earth kept clear about it, its edge ragged, with the forecourt
-    before the hall's step where the villagers gather.
+    What: The open ground of the precinct round the building - bare earth left clear of the wood about it, its edge
+    ragged, with the forecourt before the hall's step where the villagers gather.
 
-    Why: The ground at a shrine was kept swept, its wood left standing, and the parish did the sweeping;
-    swept ground spreads from where people walk and stops where they do not, so its edge is ragged, never ruled.
+    Why: A village shrine's precinct held its wood and open ground, the wood covering some or nearly all of it and the
+    rest open, and the open ground is where the hall, its sanctuary and the forecourt stand. Open ground spreads from
+    where people walk and stops where they do not, so its edge is ragged, never ruled. That the ground about a shrine
+    was swept is found only in present-day folklore that gives no date, so the map claims no sweeping.
 
-    Note: The swept ground and the parish's keeping of it are read; its ragged edge is the project's reading of how
-    such ground spreads, and the forecourt's depth is a guess from its use.
+    Note: The precinct's open ground is read; its ragged edge is the project's reading of how such ground spreads, and
+    the forecourt's depth is a guess from its use.
 
     Caveat: its ragged edge is the project's reading of how such ground spreads, and the forecourt's depth is a guess
     from its use.
 
-    Name: swept clearing
-    Covers: the swept ground and the forecourt about the building
+    Name: precinct clearing
+    Covers: the open ground and the forecourt about the building
     Label: accurate
-    Sources: chinju-no-mori-jawiki, sando-jawiki, kotobank-ujiko, ndl-crd-nanukabon
+    Sources: chinju-no-mori-jawiki, sando-jawiki
     Entry: research/religion-and-death.html - 'Is the ground around a shrine or a grave swept clear of scrub?', 'Why does that swept ground have a ragged edge?'
     """
 
-    key = "swept clearing"
+    key = "precinct clearing"
 
 
 class Footpath(Kind):

@@ -472,12 +472,12 @@ class TradesMixin:
             economy, and fire-resistant stores were built precisely because urban timber burned.
           - THE STOCK MUST STAY DRY, which is why it draws under ROOFED sheds: white charcoal
             commands its premium for an odorless, smokeless burn, and damp stock loses it.
-          - THE STOCK SELF-HEATS, which is why the yard draws an OPEN COOLING APRON set apart from
-            those sheds. Fresh charcoal absorbs oxygen fast enough to heat itself to ignition, worst
-            of all as tightly-packed FINES; the documented handling rule is to stand new charcoal in
-            the open, separate from cooled and conditioned stock, for at least 24 hours (8 days of
-            air exposure clears it). A yard that put arriving loads straight in with the conditioned
-            stock would burn down, so the apron is not decoration - it is the rule made visible.
+          - NO COOLING APRON (feature 280 M104, research/urban-features/150): the rule to stand new charcoal in the
+            open for 24 hours is today's handling guidance; the older record cools charcoal AT THE KILN - black
+            charcoal in the sealed kiln, white charcoal smothered beside it under ash and sand, late Muromachi into
+            Edo - so it reached a town cooled and baled, and the yard draws no open ground for it. Nor does any
+            measured gap round the yard stand (the 30 ft rested on modern wildfire guidance): how far it keeps from
+            houses is a GUESS.
           - THE WEIGHING FLOOR is here because the charcoal tawara had NO standard weight in the
             traditional system (unlike rice). A commodity with no standard bale cannot be traded by
             count; it must be weighed at the point of sale. That is also why the magistracy's hold on
@@ -487,8 +487,7 @@ class TradesMixin:
         Sizes are TRUE feet at the map's grain (no legibility inflation), pitched against the pool's
         other bulk-goods yards - the lumber yard's 90x60 and the dye yard's 80x52.
 
-        Records M['charcoal_yards'] with `sheds` and the `apron` rect (charcoal_yard_keeps_fire_gap,
-        settlement_has_charcoal_yard)."""
+        Records M['charcoal_yards'] with `sheds` (settlement_has_charcoal_yard)."""
         yw_, yh_ = self.px(88), self.px(58)
         g = [f'<g transform="translate({x:.0f},{y:.0f}) rotate({rot:.1f})">']
         g.append(
@@ -505,18 +504,6 @@ class TradesMixin:
             for bi_ in range(4):  # the stacked tawara bales, charcoal-dark
                 bx_ = sx_ - shw_ / 2 + self.px(5) + bi_ * self.px(8)
                 g.append(f'<rect x="{bx_:.1f}" y="{sy_ - self.px(4):.1f}" width="{self.px(5):.1f}" height="{self.px(8):.1f}" rx="1.4" fill="#2E2A26" opacity="0.9"/>')
-        # THE COOLING APRON - open ground, deliberately SET APART from the covered sheds, where a
-        # newly-arrived load stands until it has stopped taking up oxygen (the 24-hour rule above).
-        # Dashed, because it is open working ground and not a roofed room.
-        aw_, ah_ = self.px(30), self.px(20)
-        acx_, acy_ = -self.px(26), self.px(12)
-        g.append(
-            f'<rect x="{acx_ - aw_ / 2:.1f}" y="{acy_ - ah_ / 2:.1f}" width="{aw_:.1f}" height="{ah_:.1f}" rx="1.5" fill="#D2C49E" fill-opacity="0.6" stroke="#A98E54" stroke-width="0.9" stroke-dasharray="3,2"/>'
-        )
-        for ci_ in range(3):  # new loads standing apart, not yet under cover
-            g.append(
-                f'<rect x="{acx_ - aw_ / 2 + self.px(4) + ci_ * self.px(8):.1f}" y="{acy_ - self.px(3):.1f}" width="{self.px(5):.1f}" height="{self.px(6):.1f}" rx="1.2" fill="#2E2A26" opacity="0.75"/>'
-            )
         # THE WEIGHING FLOOR on the road edge, with its beam scale - the bale has no standard
         # weight, so nothing leaves this yard until it has been weighed
         wfw_, wfh_ = self.px(16), self.px(14)
@@ -528,7 +515,6 @@ class TradesMixin:
         self.add(''.join(g))
         self._trade_record("charcoal_yards", x, y, yw_, yh_, rot, label)
         self.M["charcoal_yards"][-1]["sheds"] = max(1, sheds)
-        self.M["charcoal_yards"][-1]["apron"] = [round(acx_, 1), round(acy_, 1), round(aw_, 1), round(ah_, 1)]
 
     def refining_forge(self: Settlement, x: float, y: float, rot: float = 0.0, label: str = "refining forge") -> None:  # type: ignore[misc]
         """A REFINING FORGE - an okaji 大鍛冶, where pig iron smelted out at the fuel is worked into

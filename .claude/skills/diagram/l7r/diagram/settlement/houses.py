@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Any, cast
 
 from ._geom import PointGrid, Pt, boxed_polys, drawn_extent, edge_dist, indexed_grid, point_in_poly, rot_rect, seg_dist
 from ._knobs import skeleton_layout
-from .rolling.bearing import QUARTER_TURN_SHARE, house_rot
+from .rolling.bearing import house_rot
 
 # HOW FAR A FARMHOUSE WALL STANDS OFF THE PADDY (researched 2026-08-27, feature 133 T41; the record
 # in research/homesteads.html "How close does a farmhouse stand to the paddy?"). The paddy's margin is
@@ -21,6 +21,9 @@ from .rolling.bearing import QUARTER_TURN_SHARE, house_rot
 # against the edge" as the GM expects. Real feet; `px()` scales it per tier. Held by the gate's
 # `houses_clear_of_paddies`.
 HOUSE_PADDY_GAP_FT = 6.0
+# THE STOREHOUSE ANNEX'S SHARE (feature 280 M20, research/homesteads/720): one farm in eight, the headman always (his by the
+# GM's ruling of 2026-07-21, below). A calibration on the one premodern count read, Kakimochi's 2 storehouses in 16 households.
+KURA_SHARE = 0.125
 
 if TYPE_CHECKING:
     from .core import Settlement
@@ -44,7 +47,11 @@ class HousesMixin:
         # kura footprint (ox, oy center; sw, sh) in the house's local frame, per side. WEST = a tall block on the
         # west wall (dispersed farms, where the west is free); NORTH = a wide block on the shaded back wall
         # (nucleated farms, where the garden takes the sunnier walls). Shared by the draw + the record below.
-        _sox, _soy, _ssw, _ssh = (0.0, -0.60 * h, 0.46 * w, 0.30 * h) if shed_side == "N" else (-0.64 * w, 0.0, 0.32 * w, 0.56 * h)
+        # THE NORTH ANNEX'S PROPORTIONS (feature 280 M18, research/homesteads/440): the sheds dated to the end of the Edo period
+        # run about 18-27 ft long and 1.5-1.8 times as long as deep (Hannan 3 x 2 ken; Nerima 8.17 x 4.54 m) - 0.46 of an ordinary
+        # 46 ft minka is 21 ft, and 0.45 of its 28 ft depth is 12.6 ft, 1.67 to one; the 1.8-2.4 of the Meiji-Taisho barns is not
+        # drawn. It overlaps the back wall by 0.05 h, as before, so the annex reads as joined.
+        _sox, _soy, _ssw, _ssh = (0.0, -0.675 * h, 0.46 * w, 0.45 * h) if shed_side == "N" else (-0.64 * w, 0.0, 0.32 * w, 0.56 * h)
         # EMIT WHAT WAS PLACED (feature 121, found by settlement-review on Sawada). This rounded the
         # center to whole pixels and the rake to whole DEGREES, while the placer clears and the gate
         # measure full floats - so after all of this feature's work the drawn quad was still not the
@@ -575,11 +582,11 @@ class HousesMixin:
         cleared rect on Inashiro), which was the whole of the drawn-versus-placed divergence.
 
         POSITION-SEEDED: a pure function of the seat's coordinates (see `_hjit`), so the placer knows the exact quad
-        before it commits. A hamlet sets `_house_bearing` (269 B18, research/homesteads/240): the common bearing, the
-        lane's turn and a quarter-turned tenth (`rolling/bearing.py`); elsewhere the old +/-5 degree rake stands."""
+        before it commits. A hamlet sets `_house_bearing` (269 B18, research/homesteads/240): the common bearing and the
+        lane's turn (`rolling/bearing.py`); elsewhere the old +/-5 degree rake stands."""
         if self._house_bearing is None:
             return self._hjit(cx, cy, 11.0) * 10.0 - 5.0
-        return house_rot(self._hjit, cx, cy, self._house_bearing, self._bearing_follow, QUARTER_TURN_SHARE)
+        return house_rot(self._hjit, cx, cy, self._house_bearing, self._bearing_follow)
 
     def _quad(self: Settlement, cx: float, cy: float, w: float, h: float, jit: float, salt: float, level: str | None = None) -> list[Pt]:  # type: ignore[misc]
         """A slightly-IRREGULAR 4-sided polygon INSCRIBED in the (cx,cy,w,h) rect: each corner is pulled
@@ -662,7 +669,9 @@ class HousesMixin:
             t = int(abs(x) * 53 + abs(y) * 29) % 100
             wf = 1.0 if kind == "big" else (0.9 if t < 30 else (1.12 if t >= 80 else 1.0))
             hw, hh = self.px(bw) * wf, self.px(bh) * wf
-        # a fireproof KURA storehouse is a WEALTH MARKER, not universal - it attaches to the house on ~30% of
+        # a fireproof KURA storehouse is a WEALTH MARKER, not universal - it attaches to the house on about ONE FARM IN EIGHT
+        # (feature 280 M20, research/homesteads/720: Kakimochi's count, 2 of 16 households, both powerful; the ~30% it was drawn
+        # at came from Sugiura's 1972 count, modern) of
         # plain farms (position-seeded off the SEED spot, no RNG ripple; a ruin has none). The HEADMAN always
         # has one (GM 2026-07-21): the shoya/nanushi is by definition among the village's most prosperous
         # farmers - historically the land-opening family - AND the office needs one functionally: the headman
@@ -673,7 +682,7 @@ class HousesMixin:
         # the west/sunny walls but never the shaded NORTH, so a north kura is clear of it - and its footprint is
         # RESERVED in the homestead bundle so a neighbor never lands on it. Drawn + recorded in farmsteads() so
         # it always moves WITH the house (farm_sheds_attached guards it).
-        _shed = kind == "plain" and (role == "headman" or self._hjit(x, y, 3.0) < 0.30)
+        _shed = kind == "plain" and (role == "headman" or self._hjit(x, y, 3.0) < KURA_SHARE)
         spot = self._place_bundle(x, y, hw, hh, shed=_shed)  # pack the bundle (incl. the reserved kura) near (x,y)
         if spot is None:
             return False

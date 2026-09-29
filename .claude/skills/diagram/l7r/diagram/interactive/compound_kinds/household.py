@@ -36,8 +36,9 @@ class Residence(Kind):
     Japanese pages read do not give that order, and at Takayama the residence stood beside the office, not behind
     it), the garden south of the reception rooms and the staged arrival are recorded findings, and the program
     classes the wing as accurate, its label naming a zone. Its size is the record's where a sheet follows it: a
-    samurai's main house ran about 49 tsubo (about 1,740 sq ft) for a 150-koku district magistrate
-    and about 67 tsubo (about 2,380 sq ft), as restored to its Meiji plan, for a retainer of 500 to 1,000 koku; the hand sheets' wings, about 180 to
+    samurai's main house ran about 49 tsubo (about 1,740 sq ft) for a 150-koku district magistrate in 1794, and a house
+    of about 1,000 koku before 1868 about 41 to 74 tsubo by two official measures that disagree; the 67-tsubo house once
+    cited measures a house restored to its Meiji plan and is no longer a measure; the hand sheets' wings, about 180 to
     200 ft long, are larger than either, a guess. Both massings are attested and each sheet takes one: one block is the ordinary posting's form, and a
     residence drawn in echelon reads as one its holders have added to. That a corridor joins each hall to the last
     is this project's reading; no source read says how Katsura's echelon halls are joined. Of the service strip on
@@ -237,17 +238,17 @@ class Kitchen(Kind):
     Note: The board-floored kitchen with its small doma, its one outside door, and the household's separate
     inner entrance are recorded findings. A second outside door on the kitchen, and the route by which food
     reached the rooms, are guesses wherever a plan draws them: nothing read draws either. The kitchen's own size
-    is a guess, since no page read gives a kitchen's share of its house; it is measured against a whole house of
-    about 49 tsubo (some 1,740 sq ft) at middle rank, or about 67 tsubo (some 2,380 sq ft) for a retainer of 500
-    to 1,000 koku, and a kitchen that approaches either is too big. Its weighting as the compound's worst fire
+    is a guess, since no page read gives a kitchen's share of its house; it is measured against a whole
+    house of about 49 tsubo (some 1,740 sq ft) at middle rank, a house of 1794, and a kitchen that approaches it is too
+    big; at a higher rank one house's kitchen wing was about a sixth of the house. Its weighting as the compound's worst fire
     risk, with a second water tub, is this project's reading: no page read gives the kitchen extra water or sets
     one tub to a hall as a rule.
 
     Caveat: A second outside door on the kitchen, and the route by which food reached the rooms, are guesses
     wherever a plan draws them: nothing read draws either. The kitchen's own size is a guess, since no page read
-    gives a kitchen's share of its house; it is measured against a whole house of about 49 tsubo (some 1,740 sq
-    ft) at middle rank, or about 67 tsubo (some 2,380 sq ft) for a retainer of 500 to 1,000 koku, and a kitchen
-    that approaches either is too big. Its weighting as the compound's worst fire risk, with a second water tub,
+    gives a kitchen's share of its house; it is measured against a whole
+    house of about 49 tsubo (some 1,740 sq ft) at middle rank, a house of 1794, and a kitchen that approaches it is too
+    big; at a higher rank one house's kitchen wing was about a sixth of the house. Its weighting as the compound's worst fire risk, with a second water tub,
     is this project's reading: no page read gives the kitchen extra water or sets one tub to a hall as a rule.
 
     Name: kitchen

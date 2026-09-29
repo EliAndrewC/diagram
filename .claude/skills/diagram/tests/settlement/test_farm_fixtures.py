@@ -52,31 +52,18 @@ def test_persimmon_is_one_crown_with_fruit_and_joins_the_tree_record():
     assert s.top[-1].count("#E07B22") == 4, "four fruit dots are the persimmon convention"
 
 
-def test_a_pond_fixture_will_not_stand_on_its_sluice():
-    """feature 233. Nobody builds a shed over the opening they have to reach to lift its boards - the
-    rule the engine's dike-top house placer already had ("never build over a sluice notch") and the
-    pond-stock placer did not, which is why three of Kuwabata's seven sties were drawn with a feed
-    culvert running through them."""
+def test_the_woodpile_is_a_wood_shed_and_a_rolled_size_draws_at_its_own_feet():
+    """Feature 280 M21 (research/homesteads/212, 720): the firewood is drawn in its wood shed, 24 x 12 ft, a roof with its band
+    of log ends - the open stack and the kizuma, modern-only, have no form left. A privy or bath room drawn at a size the
+    placer rolled records that size (research/homesteads/750, 740)."""
     s = Settlement(W=400, H=400, seed=1)
     s.meta(name="T", scale="hamlet", ftpx=1)
-    s.M["dikepond_sluices"] = [{"a": [100.0, 100.0], "b": [124.0, 100.0], "kind": "feed"}]
-    assert not s.pond_fixture_fits(105.0, 100.0, 0.0), "the stub runs through the shed"
-    assert not s.pond_fixture_fits(105.0, 104.0, 0.0), "clear of it, but inside the working margin"
-    assert s.pond_fixture_fits(105.0, 120.0, 0.0), "a seat further along the same bank is fine"
-    # measured to the SEGMENT, not to an endpoint: a stub is 19-41 ft long on a real map
-    assert not s.pond_fixture_fits(124.0, 103.0, 0.0), "over the middle of the stub, far from either anchor"
-
-
-def test_the_woodpile_forms_draw_at_their_own_size_and_keep_the_woodpile_class():
-    """269 B15: the woodshed (a roof with its band of log ends) and the kizuma (a long stack) are forms of the one kind."""
-    from l7r.diagram.settlement.farm_fixtures import WOODPILE_FORM_FT
-
-    s = Settlement(W=400, H=400, seed=1)
-    s.meta(name="T", scale="hamlet", ftpx=1)
-    for form in ("shed", "kizuma"):
-        s.farm_fixture("woodpile", 100.0, 100.0, rot=0.0, of=(80.0, 90.0), form=form)
-        rec = s.M["farm_fixtures"][-1]
-        assert rec["form"] == form and (rec["w"], rec["h"]) == WOODPILE_FORM_FT[form] and s.top_cls[-1] == "woodpile"
-    assert "<line" in s.top[-2] and s.top[-1].count("<circle") >= 9, "the shed's ridge; the kizuma's end grain along 24 ft"
-    with pytest.raises(ValueError, match="form"):
-        s.farm_fixture("coop", 100.0, 100.0, form="shed")
+    s.farm_fixture("woodpile", 100.0, 100.0, rot=0.0, of=(80.0, 90.0))
+    rec = s.M["farm_fixtures"][-1]
+    assert (rec["w"], rec["h"]) == (24.0, 12.0) and "form" not in rec and s.top_cls[-1] == "woodpile"
+    assert "<line" in s.top[-1] and s.top[-1].count("<circle") >= 9, "the shed's ridge and its log ends along 24 ft"
+    s.farm_fixture("privy", 200.0, 200.0, size_ft=(18.0, 12.0))
+    assert (s.M["farm_fixtures"][-1]["w"], s.M["farm_fixtures"][-1]["h"]) == (18.0, 12.0)
+    for kind, form in (("coop", "shed"), ("woodpile", "kizuma"), ("woodpile", "shed")):
+        with pytest.raises(ValueError, match="form"):
+            s.farm_fixture(kind, 100.0, 100.0, form=form)

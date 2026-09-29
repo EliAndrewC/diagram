@@ -25,6 +25,7 @@ from .consts import (
     FALL_BEARINGS,
     FAN_ASPECTS,
     FIELD_ARCHETYPES,
+    FRY_FORMS,
     GRAIN_DRIFTS,
     GROSS_ACRES_PER_HOUSEHOLD,
     HARVEST_WEATHERS,
@@ -204,6 +205,7 @@ class SitePlan:
     # thing on a watercourse that is a FEATURE rather than a runner - two waters meeting is a place - and the
     # crop deliberately ignores runners, which is how one came to be drawn 7.4 ft outside the picture.
     confluence: Pt | None = None
+    fry_form: str = "none"  # none | fry_village (feature 280 M60, `FRY_FORMS`): a dike-pond hamlet's nursery, read by `stage_polder`
 
     @property
     def fall(self) -> Pt:
@@ -313,6 +315,7 @@ def plan_site(spec: HamletSpec) -> SitePlan:
         kosatsuba_siting=spec.kosatsuba_siting or str(_roll(spec.seed, "kosatsuba_siting", KOSATSUBA_SITINGS)),
         dike_crop=(spec.dike_crop or str(_roll(spec.seed, "dike_crop", DIKE_CROPS))) if _archetype == "mulberry_dike_fishpond" else "mulberry",
         leftover=(spec.leftover or str(_roll(spec.seed, "leftover", LEFTOVER_FORMS))) if _archetype == "mulberry_dike_fishpond" else "rice",
+        fry_form=str(_roll(spec.seed, "fry_form", FRY_FORMS)) if _archetype == "mulberry_dike_fishpond" else "none",
         plot_size=spec.plot_size or str(_roll(spec.seed, "plot_size", PLOT_SIZES)),
         grain_drift=spec.grain_drift if spec.grain_drift is not None else int(_roll(spec.seed, "grain_drift", GRAIN_DRIFTS)),
         woodland_patches=spec.woodland_patches if spec.woodland_patches is not None else int(_roll(spec.seed, "woodland_patches", (2, 3, 3, 4))),

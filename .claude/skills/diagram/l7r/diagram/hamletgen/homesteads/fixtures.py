@@ -9,7 +9,7 @@ from typing import Any
 from l7r.diagram.settlement import Settlement, seg_dist, segments_cross
 from l7r.diagram.settlement._geom import boxed_ring_hit
 from l7r.diagram.settlement._knobs import knob_rng
-from l7r.diagram.settlement.farm_fixtures import FIXTURE_FT, PERSIMMON_CROWN_FT, WOODPILE_FORM_FT
+from l7r.diagram.settlement.farm_fixtures import FIXTURE_FT, PERSIMMON_CROWN_FT
 
 from ..consts import Poly, Pt
 from ..plan import SitePlan
@@ -24,22 +24,21 @@ from .bamboo import Footing, _strip_blocked
 #   privy    READ  an independent outbuilding was "普通" (Nipponica) - near-universal; FOUR attested seats
 #                  (research/homesteads/260, 269 B10): under the eaves by the stable, a separate outhouse in
 #                  the yard, the front yard, inside the barn - rolled per house, the weights per hamlet
-#   woodpile READ  three forms (research/homesteads/212, 269 B15): a woodshed (Boso-no-Mura; the Shonai plain),
-#                  a KIZUMA stacked along the inside of the windbreak on its windward side (the Isawa plain), and
-#                  the open stack against the house wall (the GUESS) - a knob rolled per hamlet (`WOODPILE_FORMS`);
-#                  the kizuma only where the homestead has the windbreak at its back, else the eaves stack.
-#                  Sugiura counts 0.76 SHEDS per household (a mean count, so an upper bound on the share of
-#                  households owning one - feature 211); the stack's wall is a GUESS (the back wall or the kura's)
+#   woodpile READ  a WOOD SHED of its own (research/homesteads/212 and 720, feature 280 M21): Hasuda 1824 ("many"
+#                  houses), Kakimochi 6 of 16 households, commonly 4 x 2 ken - so about four farmsteads in ten, the
+#                  larger houses first, 24 x 12 ft. The open stack under the eaves (a present-day page only) and the
+#                  kizuma along the windbreak (undated modern pages only) are MODERN-ONLY and are not drawn
+#                  (feature 280, 2026-09-29; the GM's ruling of 2026-09-28: "eliminate anything which is only modern")
 #   manure   READ  in Han China the latrine stood over the pigsty (AIC) - muck and privy are one
 #                  cluster; in Japan the pit stood "near the stable, under the eaves" (SUMMARY-ONLY);
 #                  so the heap is seated beyond the privy; the share is a GUESS (Sugiura: a SHED on 0.24).
 #                  The PIT form (night soil) has two attested seats (research/homesteads/260, 269 B11): beside
 #                  the privy, or a field pit at a field edge or roadside - the field share rolled per hamlet
-#   bath     READ  the goemon-buro "was used widely in self-sufficient farm villages" (Mizumaki); Sugiura:
-#                  a bath SHED on 0.29, IN the house on 0.53 - two forms, so only the shed share is drawn.
-#                  The shed share ran 0-80% by village (Sugiura 1977: Tono 80%, Inawashiro 33%, Shiokawa
-#                  none), so the band is (0.0, 0.80); seated in the FRONT YARD or joined to the house by a
-#                  CORRIDOR - two forms, a knob (research/homesteads/214, 269 B12)
+#   bath     READ  a ROOM JOINED TO THE MAIN HOUSE, not a shed (research/homesteads/740, feature 280 M22): the Nikko
+#                  house-plan registers put a bath of 1-2 tsubo in 2-3 houses in 10 by 1824 and 1842, beside the main
+#                  door or at the far end of the stable wing, and in a few (mostly headmen's) joined to the floored rooms;
+#                  a bath as a building of its own is found only in the twentieth century (Sugiura's 0.29 sheds, the
+#                  Tohoku reconstructions' 0-80%), so the shed is not drawn. The band is (0.20, 0.30); the seat a knob
 #   coop     READ  "farmers in most regions of China managed to keep a pig and some chickens in their
 #                  yard" (Animals through Chinese History); a ground-level enclosure (Qimin Yaoshu);
 #                  Buck 1921-25 counts chickens on 82% of 2,866 farms, so the band is centered there
@@ -62,9 +61,9 @@ from .bamboo import Footing, _strip_blocked
 # (the H1 table: Kashikawa drew 8 heaps for a declared 0.442 of 20, Inashiro 12 heaps for 0.531 of 15).
 FIXTURE_BANDS: dict[str, tuple[float, float]] = {
     "privy": (0.85, 0.95),
-    "woodpile": (0.75, 0.95),
+    "woodpile": (0.35, 0.45),  # a wood shed on about four farmsteads in ten (Kakimochi 6 of 16; research/homesteads/720)
     "manure": (0.40, 0.70),
-    "bath": (0.0, 0.80),  # none to four farms in five: Shiokawa 0%, Inawashiro 33%, Tono 80% (research/homesteads/214)
+    "bath": (0.20, 0.30),  # two or three houses in ten, 1824 and 1842 (research/homesteads/740); the old 0-0.80 was the twentieth century's sheds
     "coop": (0.72, 0.92),  # centered on Buck's 82% (research/homesteads/215); +/-0.10 is calibrated liberty, a GUESS
     "shrine": (0.03, 0.08),
     "persimmon": (0.80, 0.95),
@@ -88,12 +87,34 @@ PIT_FIELD_SHARE_BAND = (0.02, 0.85)
 PIT_FIELD_REACH_FT = 160.0  # how far from the house the field or road edge is looked for: the household's NEAREST paddy or road (GUESS)
 _PIT_EDGE_CLEAR_FT = 8.0  # off the paddy's edge: the placer's 6 ft paddy margin plus two (the pit stands on the bund-side ground)
 _PIT_CANDIDATES = 8  # the nearest edge points tried, nearest first
-# THE BATH SHED'S TWO SEATS (269 B12, research/homesteads/214): the front yard (Sugiura 1977, northern Miyagi) or joined to
-# the house by a short corridor (the Meiji housing-improvement interview) - two forms, a KNOB rolled per hamlet at even odds
-# (the odds a GUESS). The back wall or a flank is only the fallback, a GUESS.
-BATH_SEATS = ("front_yard", "corridor")
-BATH_CORRIDOR_FT = 6.0  # the corridor's length, wall to shed: one ken (GUESS - no page gives it)
-BATH_CORRIDOR_W_FT = 3.0  # its width, half a ken (GUESS)
+# THE BATH ROOM'S THREE SEATS (feature 280 M22, research/homesteads/740): joined to the main house beside its main door, at
+# the far end of its stable wing (the house's -x end, where the doma and its stable are), or joined to its floored rooms (the
+# +x end) - three attested places, so a KNOB rolled per hamlet between the two common ones; the third, "found in only a few
+# houses, most of them headmen's", is the headman's seat. The odds are a GUESS. The room abuts the wall: joined, not beside.
+BATH_SEATS = ("main_door", "stable_end")
+BATH_DEPTH_FT = 6.0  # a room of 6 by 6 to 6 by 12 ft (1-2 tsubo, research/homesteads/740): one ken out from the wall ...
+BATH_LENGTH_FT = (6.0, 12.0)  # ... and one to two ken along it, rolled per house (the spread a calibration on the registers' 1-2 tsubo)
+# THE PRIVY'S SIZE (feature 280, research/homesteads/750): each homestead's privy is one of the sixteen of the Kakimochi table
+# (Meiji 18, read back to the last years of the shogunate), frontage by depth in feet at 6 ft to the ken - each as likely as
+# the next. A calibration against one village's table; the old 6 x 6 ft one-ken module was a GUESS.
+PRIVY_SIZES_FT: tuple[tuple[float, float], ...] = (
+    (27.0, 15.0),
+    (6.0, 5.0),
+    (12.0, 6.0),
+    (18.0, 12.0),
+    (15.0, 12.0),
+    (15.0, 9.0),
+    (24.0, 12.0),
+    (24.0, 12.0),
+    (5.0, 5.0),
+    (24.0, 12.0),
+    (18.0, 12.0),
+    (15.0, 9.0),
+    (9.0, 6.0),
+    (24.0, 12.0),
+    (24.0, 12.0),
+    (6.0, 6.0),
+)
 PRIVY_SUN_MIN_FT = 18.0  # the sun-side search starts at the house wall and steps out; measured free ground begins 24-32 ft
 # 48, NOT 72 (settlement-review 2026-08-29, acceptance). At 72 ft the search walked the privy out past
 # its own work yard and, in a cluster where the next farmhouse is 50 ft away, out of its own homestead
@@ -122,17 +143,7 @@ def shrine_corner_local(wx: float, wy: float, ca: float, sa: float) -> Pt:
 # the front the likelier, by how much no page says, so this hamlet's front share is rolled in this band (calibrated liberty).
 PERSIMMON_FRONT_BAND = (0.60, 0.85)
 _PERSIMMON_STEPS_FT = (10.0, 20.0)  # the same bearings a step out, and two, when the first ring is taken (feature 261)
-# THE WOODPILE'S FORM (269 B15, research/homesteads/212): "the woodpile's form is a knob ... the weights are a guess" - so even.
-WOODPILE_FORMS = ("shed", "kizuma", "eaves")
-_WOODSHED_STEP_FT = 6.0  # the woodshed stands one ken off the wall it serves, a building of its own (GUESS)
-# THE KIZUMA NEEDS THE HOMESTEAD'S OWN WINDBREAK: the belt counts as this homestead's when its inner edge is within this
-# reach of the house wall and lies to windward - within 67.5 degrees of the wind's bearing, the windward octant and half of
-# each neighbor. Both are GUESSES: the Isawa plain's windbreak stood "on its northwest side" of every homestead; a hamlet's one
-# belt is only the homestead's where it stands at that yard's back, not across the cluster.
-KIZUMA_REACH_FT = 40.0
-_KIZUMA_WINDWARD_COS = math.cos(math.radians(67.5))
-_KIZUMA_GAP_FT = 1.0  # stepped this far out of the belt's line toward the house, so the stack stands at its edge
-_WIND_VEC = {k: (math.sin(math.radians(b)), -math.cos(math.radians(b))) for k, b in (("N", 0), ("NE", 45), ("E", 90), ("SE", 135), ("S", 180), ("SW", 225), ("W", 270), ("NW", 315))}
+_WOODSHED_STEP_FT = 6.0  # the wood shed stands one ken off the wall it serves, a building of its own (GUESS: where on the plot no page says)
 _WALL_GAP_FT = 3.5  # the review measured -0.3 ft at 3.0 against the drawn wall; half a foot of true daylight
 _SALT = {"privy": 101.0, "manure": 102.0, "woodpile": 103.0, "bath": 104.0, "coop": 105.0, "shrine": 106.0, "persimmon": 107.0}
 
@@ -248,7 +259,7 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
     s.M["meta"]["farm_fixtures"] = dict(shares)
     privy_weights = privy_seat_weights(s.seed)
     s.M["meta"]["privy_seats"] = dict(privy_weights)
-    bath_seat = BATH_SEATS[knob_rng(s.seed, "bath_seat").randrange(len(BATH_SEATS))]
+    bath_seat = BATH_SEATS[knob_rng(s.seed, "bath_seat").randrange(len(BATH_SEATS))]  # the headman's is joined to his floored rooms
     s.M["meta"]["bath_seat"] = bath_seat
     pit_field_share = 0.0
     if plan.manure_form == "pit":
@@ -280,17 +291,15 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
     n_h = len(houses)
     targets = {k: max(round(shares[k] * n_h), mins.get(k, 0)) for k in FIXTURE_BANDS}
     s.M["meta"]["farm_fixtures_target"] = dict(targets)
-    chosen = {k: set(sorted(range(n_h), key=lambda i, _k=k: s._hjit(float(houses[i]["x"]), float(houses[i]["y"]), _SALT[_k]))[: targets[k]]) for k in FIXTURE_BANDS}
+    chosen = {k: set(sorted(range(n_h), key=lambda i, _k=k: fixture_order_key(s, houses[i], _k))[: targets[k]]) for k in FIXTURE_BANDS}
     have = dict.fromkeys(FIXTURE_BANDS, 0)
     owned: set[tuple[str, int]] = set()
     privy_seat: dict[int, tuple[float, float]] = {}  # a house's privy, so a heap passed to it later still lies beyond it
-    woodpile_form = WOODPILE_FORMS[knob_rng(s.seed, "woodpile_form").randrange(len(WOODPILE_FORMS))]
-    s.M["meta"]["woodpile_form"] = woodpile_form
+
     _flo, _fhi = PERSIMMON_FRONT_BAND
     persimmon_front = round(_flo + knob_rng(s.seed, "persimmon_front").random() * (_fhi - _flo), 3)
     s.M["meta"]["persimmon_front_share"] = persimmon_front
-    belt_line = belt_edge(plan.belt) if woodpile_form == "kizuma" and len(plan.belt) >= 3 else None
-    wind = _WIND_VEC.get(s._windward(), _WIND_VEC["NW"])
+
     # THE PASS THAT MAKES UP THE COUNT (T61's floor, GM 2026-08-27: "a min number of something which may or may not appear";
     # since 269 fc:2261 every count): after the rolled pass, any kind short of its count is offered to the houses that lack
     # it, in positional order, until the count is met or every house has been tried. A shrine with no seat used to pass to
@@ -339,14 +348,13 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                     owned.add((kind, i))
                     break
                 continue
-            _ft = WOODPILE_FORM_FT["shed"] if kind == "woodpile" and woodpile_form == "shed" else FIXTURE_FT[kind]
+            _ft = fixture_size_ft(s, kind, hx, hy)
             w, d = px(_ft[0]), px(_ft[1])  # along the wall, out from it
             field_table: list[tuple[float, float, float, float]] = []  # a field pit's seats (269 B11), tried first and never offset
             roadside: dict[int, bool] = {}  # which of them stands by a road rather than a field, keyed by the seat's id
-            kizuma_table: list[tuple[float, float, float, float, float]] = []  # a kizuma's seats (269 B15), each with its own bearing
-            corridor_table: list[tuple[float, float, float, float]] = []  # a corridor bath's seats (269 B12), tried first
+
             sun_table: list[tuple[float, float, float, float]] = []  # the privy's sun-side search, when rolled, tried first
-            # THE ATTESTED SEATS INSIDE THE STEADING (269 B10/B12): the privy's four seats and a front-yard bath, tested past the
+            # THE ATTESTED SEATS INSIDE THE STEADING (269 B10; feature 280 M22): the privy's four seats and the bath room, tested past the
             # homestead BUNDLE boxes as the yard ring is. Tested against them - as every recorded seat was - the bundle, whose edges
             # are the house's own walls, refused every seat before or beside the house: measured on the first roll of this
             # change, no privy on the five pool maps took the front or stable seat and no front-yard bath stood in front.
@@ -457,7 +465,7 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                     # researched rule is only that the heap lies BEYOND the privy; how far beyond is ours,
                     # and real yards vary. Jittered off the homestead's own position so it is stable for a
                     # given farmstead and differs between them.
-                    _pout = px(FIXTURE_FT["privy"][1]) / 2 + g + d / 2 + px(9.0) * (s._hjit(hx, hy, 102.4) - 0.5)
+                    _pout = px(fixture_size_ft(s, "privy", hx, hy)[1]) / 2 + g + d / 2 + px(9.0) * (s._hjit(hx, hy, 102.4) - 0.5)
                     seats = [
                         (plx, ply + out_ * _pout, w, d),
                         (plx + w * 1.1, ply, w, d),
@@ -517,33 +525,14 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                 else:
                     seats.insert(0, (-(hw * 0.46 / 2 + g + d / 2), -hh * 0.6, d, w))  # beside the back kura
                 seats += [(hw / 2 + g + d / 2, hh * 0.1, d, w), (-(hw / 2 + g + d / 2), hh * 0.1, d, w), (hw / 2 + g + d / 2, -hh * 0.3, d, w), (-(hw / 2 + g + d / 2), -hh * 0.3, d, w)]
-                if woodpile_form == "shed":  # THE WOODSHED (269 B15): the same walls, a ken further out - a building of its own
-                    _st = px(_WOODSHED_STEP_FT)
-                    seats = [(lx + math.copysign(_st, lx) * (abs(lx) > hw / 2), ly + math.copysign(_st, ly) * (abs(lx) <= hw / 2), cw, ch) for lx, ly, cw, ch in seats]
-                elif belt_line is not None:  # THE KIZUMA (269 B15): along the windbreak's inner edge, where it is this yard's
-                    _kw, _kd = px(WOODPILE_FORM_FT["kizuma"][0]), px(WOODPILE_FORM_FT["kizuma"][1])
-                    _kreach = math.hypot(hw / 2, hh / 2) + px(KIZUMA_REACH_FT)
-                    for _kx, _ky, _ka in kizuma_seats(belt_line, hx, hy, _kreach, wind, _kw, _kd / 2 + px(_KIZUMA_GAP_FT)):
-                        _ddx, _ddy = _kx - hx, _ky - hy
-                        kizuma_table.append((_ddx * ca + _ddy * sa, -_ddx * sa + _ddy * ca, _kw, _kd, _ka))
+                # THE WOOD SHED (feature 280 M21): the same walls, a ken further out - a building of its own
+                _st = px(_WOODSHED_STEP_FT)
+                seats = [(lx + math.copysign(_st, lx) * (abs(lx) > hw / 2), ly + math.copysign(_st, ly) * (abs(lx) <= hw / 2), cw, ch) for lx, ly, cw, ch in seats]
             elif kind == "bath":
-                # THE HAMLET'S BATH FORM FIRST (269 B12, `BATH_SEATS`): out in the front yard beside the work yard, or a
-                # corridor's length off the house - the back corner or the flank away from the shed, where the indoor bath
-                # of Sugiura's Miyagi houses stood in the NE corner. The old back-wall and flank seats stay as fallbacks.
-                if bath_seat == "front_yard":
-                    yard_lead = beside_the_yard(h, hx, hy, ca, sa, g, w, d)
-                    _fr = hh / 2 + g + d / 2
-                    yard_lead += [(hw * 0.35, _fr, w, d), (-hw * 0.35, _fr, w, d), (hw * 0.35, _fr + px(8.0), w, d), (-hw * 0.35, _fr + px(8.0), w, d)]
-                else:
-                    _cl = px(BATH_CORRIDOR_FT)
-                    corridor_table = [(hw / 2 + _cl + d / 2, -hh * 0.25, d, w), (hw * 0.3, -(hh / 2 + _cl + d / 2), w, d), (-hw * 0.3, -(hh / 2 + _cl + d / 2), w, d)]
-                seats = [
-                    (-hw * 0.3, -(hh / 2 + g + d / 2), w, d),
-                    (-(hw / 2 + g + d / 2), hh * 0.2, d, w),
-                    (hw / 2 + g + d / 2, -hh * 0.3, d, w),
-                    (-hw * 0.3, -(hh / 2 + g + d * 1.5 + g), w, d),
-                    (hw * 0.3, -(hh / 2 + g + d * 1.5 + g), w, d),
-                ]
+                # THE BATH ROOM (feature 280 M22, `bath_room_seats`): joined to the house - against its wall, no gap - at the
+                # hamlet's seat, then at the other attested seats; it is never a building standing off in the yard.
+                yard_lead = bath_room_seats("floored_rooms" if h.get("role") == "headman" else bath_seat, hw, hh, w, d)
+                seats = []
             elif kind == "coop":
                 # ...and the back seat is not DEAD CENTRE on the wall, which is the stamp itself: at
                 # x = 0.0 exactly, a coop taking it stands at bearing 0 from its house on every farmstead
@@ -593,9 +582,11 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                 # wall as far as out, into the lane or the neighbor's bed at a crowded corner, while Mizuguchi's north-row
                 # house had open ground straight out past its yard and seated no woodpile.
                 _rungs += [(_o, 0.0, _ring) for _o in (px(8.0) * _k for _k in (1, 2, 3, 4))] + [(0.0, _o, _ring) for _o in (px(8.0) * _k for _k in (1, 2, 3, 4))]
-            _lead: list[tuple[float, float, Sequence[tuple[float, ...]]]] = [(0.0, 0.0, _t) for _t in (kizuma_table, field_table, corridor_table, sun_table, yard_lead) if _t]
+            if kind == "bath":  # a room joined to the house has no seat out in the yard: no rung walks it away from the wall
+                _rungs = []
+            _lead: list[tuple[float, float, Sequence[tuple[float, ...]]]] = [(0.0, 0.0, _t) for _t in (field_table, sun_table, yard_lead) if _t]
             _rungs = _lead + _rungs
-            _strict_ids = {id(seats), id(kizuma_table), id(field_table), id(corridor_table), id(sun_table)}
+            _strict_ids = {id(seats), id(field_table), id(sun_table)}
             _seated = False
             for _ox, _oy, _table in _rungs:
                 if _seated:
@@ -605,9 +596,7 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                     lx = lx + (_ox if lx >= 0 else -_ox)
                     ly = ly + (_oy if ly >= 0 else -_oy)
                     cx, cy = hx + lx * ca - ly * sa, hy + lx * sa + ly * ca
-                    # the drawn rect's bbox: raked with the house, or at a kizuma's own bearing along the windbreak (269 B15)
-                    _ca, _sa = (abs(math.cos(math.radians(_seat[4]))), abs(math.sin(math.radians(_seat[4])))) if len(_seat) > 4 else (ca, sa)
-                    ext = abs(cw * _ca) + abs(ch * _sa), abs(cw * _sa) + abs(ch * _ca)
+                    ext = abs(cw * ca) + abs(ch * sa), abs(cw * sa) + abs(ch * ca)  # the drawn rect's bbox, raked with the house
                     if (
                         _strip_blocked(s, cx, cy, ext[0], ext[1], hx, hy, fields, marsh, pond, lanes, footing, frozenset() if id(_table) in _strict_ids else bundles)
                         or across_the_brook(s, (hx, hy), (cx, cy))
@@ -619,30 +608,14 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                         or (kind == "shrine" and nearer_own_house((lx, ly, cw, ch), hx, hy, ca, sa, [(float(q["x"]), float(q["y"])) for q in houses if q is not h])[0] == 1)
                     ):
                         continue
-                    _walk: tuple[float, float, float, float, float, float] | None = None
-                    if _table is corridor_table:  # the corridor's own ground must be clear too (269 B12)
-                        _clx, _cly, _cww, _cwh = corridor_rect(lx, ly, hw, hh, px(BATH_CORRIDOR_FT), px(BATH_CORRIDOR_W_FT))
-                        _wx, _wy = hx + _clx * ca - _cly * sa, hy + _clx * sa + _cly * ca
-                        _wext = abs(_cww * ca) + abs(_cwh * sa), abs(_cww * sa) + abs(_cwh * ca)
-                        # TESTED SHORT OF THE WALL IT MEETS: `_strip_blocked` keeps a 2 px margin round every placed box, and
-                        # the steading's bundle box shares the house's back and flank walls - measured on the first roll, every
-                        # corridor on Inashiro, Kashikawa and Mizuguchi was refused by its own steading. The shed itself is
-                        # tested in full above.
-                        _tlx, _tly, _tw, _th = corridor_rect(lx, ly, hw, hh, px(BATH_CORRIDOR_FT), px(BATH_CORRIDOR_W_FT), trim=3.0)
-                        _text = abs(_tw * ca) + abs(_th * sa), abs(_tw * sa) + abs(_th * ca)
-                        if _strip_blocked(s, hx + _tlx * ca - _tly * sa, hy + _tlx * sa + _tly * ca, _text[0], _text[1], hx, hy, fields, marsh, pond, lanes, footing):
-                            continue
-                        _walk = (_wx, _wy, _cww, _cwh, _wext[0], _wext[1])
                     spin = 90.0 if (cw, ch) == (d, w) and w != d else 0.0  # a flank seat turns the glyph to lie ALONG the wall (review at T99: stacks stood end-on)
-                    _rot = _seat[4] if len(_seat) > 4 else rot + spin
-                    s.farm_fixture(kind, cx, cy, rot=_rot, of=(hx, hy), form=fixture_form(kind, plan.manure_form, woodpile_form, _table is kizuma_table))
+                    s.farm_fixture(kind, cx, cy, rot=rot + spin, of=(hx, hy), form=fixture_form(kind, plan.manure_form), size_ft=_ft)
                     ring = [(cx - ext[0] / 2, cy - ext[1] / 2), (cx + ext[0] / 2, cy - ext[1] / 2), (cx + ext[0] / 2, cy + ext[1] / 2), (cx - ext[0] / 2, cy + ext[1] / 2)]
                     s.placed.append((cx, cy, ext[0], ext[1]))
                     s.block_polys.append(ring)
                     if _table is field_table:
                         s.M["farm_fixtures"][-1]["seat"] = "roadside" if roadside.get(id(_seat)) else "field_edge"
-                    if _walk is not None:
-                        _corridor(s, _walk, rot, s.M["farm_fixtures"][-1])
+
                     if kind == "privy":
                         privy_at = privy_seat[i] = (lx, ly)
                     count += 1
@@ -657,42 +630,44 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
     short = {k: targets[k] - have[k] for k in targets if have[k] < targets[k]}
     if short:
         s.M["meta"]["farm_fixtures_unseated"] = short
-    record_drawn_forms(s.M)
+    s.M["meta"]["bath_seats_drawn"] = {"joined": sum(1 for r in s.M.get("farm_fixtures", []) if r.get("kind") == "bath")}
     return count
 
 
-def record_drawn_forms(m: dict[str, Any]) -> None:
-    """Beside each rolled form knob, what the sheet DRAWS: the woodpiles by form and the baths by seat. A knob names the
-    hamlet's form; a homestead with no seat for it falls back (no belt within reach for a kizuma, no clear corridor for a
-    joined bath), and the settlement-reviews at the 269 landing found Kuwabata declaring kizuma with fifteen eaves stacks
-    drawn and Mizuguchi declaring corridor baths with none - a declaration the drawing did not bear out."""
-    rows = m.get("farm_fixtures") or []
-    piles = [str(r.get("form") or "eaves") for r in rows if r.get("kind") == "woodpile"]
-    baths = ["corridor" if r.get("corridor") else "unjoined" for r in rows if r.get("kind") == "bath"]
-    m["meta"]["woodpile_forms_drawn"] = {f: piles.count(f) for f in sorted(set(piles))}
-    m["meta"]["bath_seats_drawn"] = {f: baths.count(f) for f in sorted(set(baths))}
+def fixture_order_key(s: Settlement, h: Mapping[str, Any], kind: str) -> tuple[float, float]:
+    """Which houses take a kind's count first (269 fc:2261): the positional roll, lowest first - except the WOOD SHED, which
+    goes to the larger houses first (research/homesteads/720: "the storehouse and the sheds go to the larger houses first"),
+    the roll breaking ties among houses of one size."""
+    roll = s._hjit(float(h["x"]), float(h["y"]), _SALT[kind])
+    if kind == "woodpile":
+        return (-float(h["w"]) * float(h["h"]), roll)
+    return (0.0, roll)
 
 
-def corridor_rect(lx: float, ly: float, hw: float, hh: float, cl: float, cw: float, trim: float = 0.0) -> tuple[float, float, float, float]:
-    """The corridor joining a bath shed seated at (lx, ly) in the house frame to the house wall it faces (269 B12), as
-    (center x, center y, along x, along y): a flank seat's corridor runs across the gap to the side wall, any other seat's
-    to the back or front wall. `cl` is the corridor's length, `cw` its width; `trim` cuts that much off its wall end (the
-    clearance test's version, which must not meet the house it joins)."""
-    if abs(lx) > hw / 2:
-        return (math.copysign(hw / 2 + trim + (cl - trim) / 2, lx), ly, cl - trim, cw)
-    return (lx, math.copysign(hh / 2 + trim + (cl - trim) / 2, ly), cw, cl - trim)
+def fixture_size_ft(s: Settlement, kind: str, hx: float, hy: float) -> tuple[float, float]:
+    """A fixture's size in real feet, (along its wall, out from it): the privy one of the Kakimochi table's sixteen and the
+    bath room 6 ft out by 6-12 ft along, each rolled off the house's own position (feature 280, research/homesteads/750 and
+    740); every other kind its one size in `FIXTURE_FT`."""
+    if kind == "privy":
+        return PRIVY_SIZES_FT[int(s._hjit(hx, hy, 101.3) * len(PRIVY_SIZES_FT)) % len(PRIVY_SIZES_FT)]
+    if kind == "bath":
+        lo, hi = BATH_LENGTH_FT
+        return (round(lo + (hi - lo) * s._hjit(hx, hy, 104.3)), BATH_DEPTH_FT)
+    return FIXTURE_FT[kind]
 
 
-def beside_the_yard(h: Mapping[str, Any], hx: float, hy: float, ca: float, sa: float, g: float, w: float, d: float) -> list[tuple[float, float, float, float]]:
-    """Seats in the house frame for a shed "in the front yard beside the work yard" (269 B12, research/homesteads/214): a wall
-    gap off either side of this steading's threshing yard (`geom.yard`, its center and size in the house's own frame), level
-    with its middle and then with its outer edge. Empty for a house that recorded no yard."""
-    yard = yard_local(h, hx, hy, ca, sa)
-    if yard is None:
-        return []
-    ylx, yly, yw, yh = yard
-    side = yw / 2 + g + w / 2
-    return [(ylx + sx * side, yly + oy, w, d) for oy in (0.0, yh / 2 - d / 2) for sx in (1.0, -1.0)]
+def bath_room_seats(first: str, hw: float, hh: float, w: float, d: float) -> list[tuple[float, float, float, float]]:
+    """The bath room's seats in the house frame (feature 280 M22, research/homesteads/740), `first` tried first then the
+    other attested seats: beside the MAIN DOOR (the front wall, either side of the door at its middle), at the far end of
+    the STABLE WING (the -x end wall, where the doma and its stable are), or joined to the FLOORED ROOMS (the +x end wall).
+    Each abuts its wall - a room of the house, not a building beside it."""
+    front, side = hh / 2 + d / 2, hw / 2 + d / 2
+    table = {
+        "main_door": [(hw * 0.22 + w / 2, front, w, d), (-(hw * 0.22 + w / 2), front, w, d)],
+        "stable_end": [(-side, 0.0, d, w), (-side, -hh * 0.25, d, w), (-side, hh * 0.25, d, w)],
+        "floored_rooms": [(side, 0.0, d, w), (side, -hh * 0.25, d, w), (side, hh * 0.25, d, w)],
+    }
+    return table[first] + [q for k, v in table.items() if k != first for q in v]
 
 
 def yard_local(h: Mapping[str, Any], hx: float, hy: float, ca: float, sa: float) -> tuple[float, float, float, float] | None:
@@ -722,59 +697,11 @@ def persimmon_seats(yard: tuple[float, float, float, float] | None, reach: float
     return seats + [(lx * (reach + st) / reach, ly * (reach + st) / reach) for st in steps for lx, ly in ring]
 
 
-def fixture_form(kind: str, manure_form: str | None, woodpile_form: str, kizuma: bool) -> str | None:
-    """The attested form a fixture is drawn in: the manure PIT on a pit hamlet (feature 150); the WOODSHED on a shed hamlet,
-    or the KIZUMA where one was seated along the windbreak (269 B15); None for the plain glyph (the eaves stack included)."""
+def fixture_form(kind: str, manure_form: str | None) -> str | None:
+    """The attested form a fixture is drawn in: the manure PIT on a pit hamlet (feature 150); None for the plain glyph."""
     if kind == "manure":
         return "pit" if manure_form == "pit" else None
-    if kind == "woodpile":
-        return "kizuma" if kizuma else ("shed" if woodpile_form == "shed" else None)
     return None
-
-
-def belt_edge(belt: Sequence[Pt]) -> Any:
-    """The windbreak belt's outline as one line (269 B15), built once per pass - the kizuma stands along it."""
-    from shapely import LineString
-
-    return LineString([*belt, belt[0]])
-
-
-def kizuma_seats(line: Any, hx: float, hy: float, reach: float, wind: Pt, length: float, step: float) -> list[tuple[float, float, float]]:
-    """World seats `(x, y, bearing in degrees)` for a KIZUMA (269 B15, research/homesteads/212): the firewood "stacked along
-    the windbreak" on the homestead's windward side. The belt's edge point nearest the house, and a stack's length along the
-    edge either way, each kept only when it is within `reach` of the house center and to windward of it (within 67.5 degrees
-    of `wind`, the unit vector toward where the wind comes from); stepped `step` from the edge toward the house, the stack
-    lying along the edge. Empty when the belt is not this homestead's windbreak."""
-    from shapely import Point
-
-    here = Point(hx, hy)
-    if line.distance(here) > reach:
-        return []
-    t0 = line.project(here)
-    out: list[tuple[float, float, float]] = []
-    for dt in (0.0, -length * 1.1, length * 1.1):
-        q = line.interpolate(t0 + dt)
-        vx, vy = q.x - hx, q.y - hy
-        dist = math.hypot(vx, vy)
-        if dist <= step or dist > reach or (vx * wind[0] + vy * wind[1]) / dist < _KIZUMA_WINDWARD_COS:
-            continue
-        a, b = line.interpolate(t0 + dt - 1.0), line.interpolate(t0 + dt + 1.0)
-        k = step / dist
-        out.append((q.x - vx * k, q.y - vy * k, math.degrees(math.atan2(b.y - a.y, b.x - a.x))))
-    return out
-
-
-def _corridor(s: Settlement, walk: tuple[float, float, float, float, float, float], rot: float, rec: dict[str, Any]) -> None:
-    """Draw and reserve the covered corridor to a bath shed (269 B12) - a plain roofed strip in the shed's own colors - and
-    note it on the shed's record, so a reader of the manifest sees the form that was drawn."""
-    wx, wy, cww, cwh, ex, ey = walk
-    s.add_top(
-        f'<g transform="translate({wx:.1f},{wy:.1f}) rotate({rot:.2f})"><rect x="{-cww / 2:.1f}" y="{-cwh / 2:.1f}" width="{cww:.1f}" height="{cwh:.1f}" fill="#A98C58" stroke="#5A4326" stroke-width="0.8"/></g>',
-        cls="bathhouse",
-    )
-    s.placed.append((wx, wy, ex, ey))
-    s.block_polys.append([(wx - ex / 2, wy - ey / 2), (wx + ex / 2, wy - ey / 2), (wx + ex / 2, wy + ey / 2), (wx - ex / 2, wy + ey / 2)])
-    rec["corridor"] = {"x": round(wx, 1), "y": round(wy, 1), "w": round(cww, 1), "h": round(cwh, 1), "rot": round(rot, 1)}
 
 
 def homestead_box(placed: Sequence[Any], x: float, y: float) -> tuple[float, float, float, float] | None:

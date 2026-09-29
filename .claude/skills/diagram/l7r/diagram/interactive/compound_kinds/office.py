@@ -253,8 +253,8 @@ class Gatehouse(Kind):
 
 class Barracks(Kind):
     """
-    What: A plain long building divided into bunk rooms, where the compound's working platoon and its duty
-    watch lodge.
+    What: A plain long rowhouse divided into dwellings, where the compound's working platoon and its duty
+    watch lodge - a few unmarried men sharing a unit, the lowest servants in a common room; no bunks.
 
     Why: Rural intendants' offices most likely housed their staff on the grounds - Takayama's kept a rowhouse for its storehouse keepers - though for the rest of the staff the record does not
     say so; it was the great city magistrate's offices that lodged their constables in a district of their
@@ -267,7 +267,9 @@ class Barracks(Kind):
     city magistrate's office, the separate constables' district and the magistrate's own residence inside the office are attested. That the barracks outranks the stable is
     this project's own reading, since no readable source ranks a compound's buildings by footprint. The
     building's size, about 20 to 70 ft by 10 to 40 ft, is a guess taken from the plan vocabulary's range, and
-    how many live in it follows how the posting houses its staff.
+    how many live in it follows how the posting houses its staff. A warrior's rowhouse divided into dwellings is read
+    (an Edo duty rowhouse of 1860, three retainers to a unit); no page read puts a bed or bunk in one before modern
+    times, the first barracks with beds found being the Meiji army's of 1873.
 
     Caveat: The building's size, about 20 to 70 ft by 10 to 40 ft, is a guess taken from the plan vocabulary's
     range, and how many live in it follows how the posting houses its staff.
@@ -297,12 +299,13 @@ class BenchNoticeBoard(Kind):
 
     Note: The board and its roadside seat follow the record, which sets it before the gate of village
     officials' houses, though no page read puts a post town's board at its transport office; that every town and village kept one is a reading of the
-    sources, not their words. That the bench keeps a board of its own, apart from the kosatsuba where the town
-    posts the state's standing law, is this project's own division; the record finds only the settlement's
-    board.
+    sources, not their words. Notices at an office's own gate are read too, before modern times - a Ming and Qing county
+    office posted edicts, its own notices and bans on the splayed walls at its gate. A freestanding board at the gate,
+    rather than the gate's walls, is a guess joined from the Chinese walls and the Japanese village officials' boards;
+    no board at a Japanese intendant's office was found.
 
-    Caveat: That the bench keeps a board of its own, apart from the kosatsuba where the town posts the state's
-    standing law, is this project's own division; the record finds only the settlement's board.
+    Caveat: A freestanding board at the gate, rather than the gate's walls, is a guess joined from the Chinese walls and
+    the Japanese village officials' boards; no board at a Japanese intendant's office was found.
 
     Name: notice board
     Covers: the board outside the main gate and its label

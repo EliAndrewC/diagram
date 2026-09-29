@@ -147,13 +147,17 @@ def test_the_dike_pond_is_a_declared_archetype_laid_to_a_cardinal_fall() -> None
         assert plan.down_deg in hg.CARDINAL_BEARINGS
 
 
-def test_a_dike_pond_rolls_its_arrangement_and_a_rice_polder_is_the_grid() -> None:
-    """Two attested forms roll (`POND_LAYOUTS`); the rice polder never rolls, so every polder_grid
-    map is byte-identical to before the knob existed."""
+def test_a_dike_pond_is_the_mosaic_and_a_rice_polder_is_the_grid() -> None:
+    """Feature 280 M56 (research/archetypes/130): the pond grid is a modern aerial view, so a dike-pond rolls the mosaic only
+    (`POND_LAYOUTS`); the rice polder never rolls. A spec may still name the grid - the engine's dial is kept. And the fry
+    form (feature 280 M60, `FRY_FORMS`) rolls both attested forms on a dike-pond and is none elsewhere."""
     rolled = {hg.plan_site(hg.HamletSpec(name="X", seed=s, households=16, field_archetype="mulberry_dike_fishpond")).pond_layout for s in range(1, 40)}
-    assert rolled == {"grid", "mosaic"}
+    assert rolled == {"mosaic"}
+    fry = {hg.plan_site(hg.HamletSpec(name="X", seed=s, households=16, field_archetype="mulberry_dike_fishpond")).fry_form for s in range(1, 40)}
+    assert fry == {"none", "fry_village"} and hg.plan_site(hg.HamletSpec(name="X", seed=3, households=16)).fry_form == "none"
     assert all(hg.plan_site(hg.HamletSpec(name="X", seed=s, households=16, field_archetype="polder_grid")).pond_layout == "grid" for s in range(1, 12))
-    assert hg.plan_site(hg.HamletSpec(name="X", seed=3, households=16, field_archetype="mulberry_dike_fishpond", pond_layout="grid")).pond_layout == "grid"
+    with pytest.raises(ValueError, match="pond_layout"):
+        hg.HamletSpec(name="X", seed=3, households=16, field_archetype="mulberry_dike_fishpond", pond_layout="grid")
 
 
 def test_the_manure_form_rolls_both_ways_and_pins() -> None:

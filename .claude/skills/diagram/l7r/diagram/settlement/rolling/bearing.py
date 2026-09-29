@@ -1,11 +1,14 @@
-"""Which way a farmhouse faces (269 B18): the village's common bearing, the spread about it, and the quarter-turned tenth.
+"""Which way a farmhouse faces (269 B18): the village's common bearing and the spread about it, following its lane.
 
 research/homesteads/240 ("Why do a village's farmhouses face different ways ..."): a survey of 27 villages found each
 village's main houses spread over its commonest compass point and the point either side of it - three of sixteen, some
 67 degrees - the neighboring bearings arising where the roads curve; 87% faced within that spread and 11% were turned to
 the right. The rule the map follows: each farmhouse is turned from its village's common bearing, south or near it, by up
-to about 30 degrees either way, most by much less and following the lane it stands on where the lane curves; about one in
-ten is turned a quarter turn to one side, and its yard and garden beds turn with it (the GM's ruling of 2026-09-26).
+to about 30 degrees either way, most by much less and following the lane it stands on where the lane curves, and its yard
+and garden beds turn with it (the GM's ruling of 2026-09-26). THE QUARTER-TURNED TENTH IS NOT DRAWN (feature 280 M26,
+research/homesteads/780): the survey's right-turned 11% is a count of 1974-1984 with no count before 1868 beside it, while
+the cause the survey gives for the smaller turns - streets curving along the slope - is attested in an Okinawan village laid
+out in 1736, so the turn follows the lane and no house is turned a quarter away.
 
 POSITION-PURE, as the rake always was (`Settlement._house_rot`): the placer must know the exact quad it will draw before
 it commits a seat, so every term here is a function of the seat's coordinates and of what the map held before the first
@@ -23,12 +26,7 @@ from .._geom import PointGrid, Pt, turn_about
 # ATTESTED (homesteads/240): three points of the compass span some 67 degrees, so a house may stand about 30 degrees from
 # its neighbors' common bearing and still face with them.
 BEARING_SPREAD_DEG = 30.0
-# ATTESTED share (homesteads/240: 11% turned to the right); drawing that class as ONE quarter turn is the record's GUESS -
-# the survey's right-turned class runs over several compass points.
-QUARTER_TURN_SHARE = 0.10
-# To the RIGHT: a house facing south that turns to its right faces west, and +90 in `rot_rect`'s sense (SVG's `rotate`,
-# y down) carries the yard from the south front to the west.
-QUARTER_TURN_DEG = 90.0
+
 # GUESS (homesteads/240: "how the turns spread inside that range is a GUESS", "most by much less"): a triangular spread of
 # +-12 degrees about the lane's own bearing - its mode at the lane, one house in four more than 6 degrees off it - so a
 # village reads as turned by eye rather than surveyed, and the 30 degree edge is reached where the lane itself curves.
@@ -123,17 +121,15 @@ class MarginBearing:
         return turn * max(0.0, min(1.0, (FOLLOW_REACH_PX - d) / (FOLLOW_REACH_PX - FOLLOW_FULL_PX)))
 
 
-def house_rot(jit: Callable[[float, float, float], float], x: float, y: float, common: float, follow: Callable[[float, float], float] | None, share: float) -> float:
+def house_rot(jit: Callable[[float, float, float], float], x: float, y: float, common: float, follow: Callable[[float, float], float] | None) -> float:
     """The full turn a farmhouse seated at (x, y) is drawn at, in degrees: the village's common bearing, the lane's turn
     and the house's own by-eye spread (together held inside `BEARING_SPREAD_DEG` by `soft_limit`, so turns that would run
-    past the edge spread under it rather than all standing on it), and a quarter turn on one house in
-    `1 / share`. `jit` is the settlement's position-seeded draw (`Settlement._hjit`)."""
+    past the edge spread under it rather than all standing on it). `jit` is the settlement's position-seeded draw
+    (`Settlement._hjit`)."""
     kx, ky = round(x / KEY_CELL_PX) * KEY_CELL_PX, round(y / KEY_CELL_PX) * KEY_CELL_PX
     spread = (jit(kx, ky, 11.0) + jit(kx, ky, 14.0) - 1.0) * BEARING_JITTER_DEG  # triangular: most houses near the lane
     lane = follow(x, y) if follow is not None else 0.0
-    rake = soft_limit(lane + spread, BEARING_SPREAD_DEG)
-    quarter = QUARTER_TURN_DEG if jit(kx, ky, 13.0) < share else 0.0
-    return common + rake + quarter
+    return common + soft_limit(lane + spread, BEARING_SPREAD_DEG)
 
 
 def turned_box(rect: Any, rot: float) -> tuple[float, float, float, float]:

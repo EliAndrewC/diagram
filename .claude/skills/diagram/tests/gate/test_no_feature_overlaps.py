@@ -95,21 +95,11 @@ def _pond_stock_parts(M):
         yield rot_rect(s["x"], s["y"], s["w"], s["h"], s["rot"]), True
 
 
-def test_no_pond_fixture_stands_on_its_ponds_sluice(polder) -> None:
-    """feature 233. The GM, reading this map, asked whether the pig sties would stand as close to the
-    pond sluices as they did: three of seven had a feed culvert drawn THROUGH the shed and one duck
-    pen's fence crossed one. The research says the shed belongs at the water - the manure is the pond's
-    feed - so the fixtures were not moved back from it; they were moved off the culvert, because nobody
-    builds over the opening they must reach to lift its boards."""
-    from l7r.diagram.settlement._geom.primitives import poly_seg_dist
-    from l7r.diagram.settlement.farm_fixtures import SLUICE_CLEAR_FT
-
+def test_no_pond_is_cut_by_a_sluice_of_its_own(polder) -> None:
+    """Feature 280 M57 (research/archetypes/150): a sluice through each pond's dike is a modern manual's form, so the dike-pond
+    block draws none - only the polder's own gates."""
     _plan, M = polder
-    stubs = [((float(d["a"][0]), float(d["a"][1])), (float(d["b"][0]), float(d["b"][1]))) for d in M["dikepond_sluices"]]
-    parts = list(_pond_stock_parts(M))
-    assert stubs and parts, f"nothing to judge: {len(stubs)} stubs, {len(parts)} drawn parts"
-    worst = min(poly_seg_dist(list(poly), a, b, closed) for poly, closed in parts for a, b in stubs)
-    assert worst >= SLUICE_CLEAR_FT, f"a pond fixture stands {worst:.2f} ft from a sluice stub, inside the {SLUICE_CLEAR_FT} ft margin"
+    assert M.get("dikeponds") and "dikepond_sluices" not in M
 
 
 def test_every_pond_fixture_keeps_to_the_near_half_of_its_pond(polder) -> None:

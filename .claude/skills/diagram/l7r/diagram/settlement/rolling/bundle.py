@@ -174,7 +174,7 @@ class BundleGeomMixin:
             base["gardens"] = beds  # 1 bed normally; 2 (flanking / stacked / side-by-side) when fragmented
             base["garden"] = beds[0]  # primary bed (kept for the shading score + back-compat)
             if shed:  # a north-wall kura, reserved so a neighbor never lands on it
-                base["shed"] = (hx, hy - 0.60 * hh, 0.46 * hw, 0.30 * hh)
+                base["shed"] = (hx, hy - 0.675 * hh, 0.46 * hw, 0.45 * hh)  # the drawn annex (`house`, feature 280 M18: 1.67 to one)
             return base  # raked and boxed by `_bundle_geom`, per seat
         # DISPERSED farmstead (the shipped ring-village behavior): the windward GROVE as an L (an N
         # band + a W band, for the default NW wind), sized so the grove footprint is ~6x the house. The

@@ -455,20 +455,26 @@ def test_comb_base_fill_noops_on_an_empty_net():
     assert "empty" not in s.M.get("comb_floors", {})
 
 
-def test_apply_land_use_leaves_a_lone_pond_ungated():
-    # a dike-pond with NO adjacent canal (<46 px) and NO neighbor pond within reach (<52 px) gets no sluice -
-    # the defensive cap that stops a lone basin drawing a giant culvert across bare ground to a distant pond.
-    s = Settlement(2000, 2000, seed=1)
-    s.meta(field_archetype="mulberry_dike_fishpond")
-    net = {
-        "plots": [
-            {"poly": [(100, 100), (200, 100), (200, 200), (100, 200)], "low": True},
-            {"poly": [(1500, 1500), (1600, 1500), (1600, 1600), (1500, 1600)], "low": True},  # far from the other pond
-        ],
-        "channels": [{"pts": [(1900, 100), (1950, 150)]}],  # a canal far from BOTH ponds
-    }
-    s.apply_land_use(net, "mulberry_fishpond", random.Random(1), fraction=1.0, eligible="all")
-    assert s.M.get("dikepond_sluices") == []  # both basins ungated: no canal near, no neighbor near
+def test_a_fry_village_takes_the_smallest_ponds_up_to_its_share_and_no_pond_is_sluiced():
+    """Feature 280 M57/M60 (research/archetypes/150, 200): a fry village's fry ponds are its smallest, their area within
+    seven tenths of the block's ponds; an ordinary hamlet has none; and no pond is cut by a sluice of its own."""
+    from l7r.diagram.settlement.fields.landuse import FRY_VILLAGE_SHARE, fry_pond_ids
+
+    def sq(x: float, side: float) -> dict:
+        return {"poly": [(x, 100.0), (x + side, 100.0), (x + side, 100.0 + side), (x, 100.0 + side)], "low": True}
+
+    plots = [sq(100.0, 40.0), sq(300.0, 50.0), sq(500.0, 60.0), sq(700.0, 100.0)]
+    area = lambda poly: float(abs(sum(poly[i][0] * poly[(i + 1) % len(poly)][1] - poly[(i + 1) % len(poly)][0] * poly[i][1] for i in range(len(poly))))) / 2  # noqa: E731
+    got = fry_pond_ids(plots, area, FRY_VILLAGE_SHARE)
+    assert got == {id(plots[0]), id(plots[1]), id(plots[2])}, "the three small ponds are 7,700 of 17,700 sq ft; the big one would pass 0.7"
+    assert fry_pond_ids(plots, area, 0.0) == set()
+    for form, fry in (("none", 0), ("fry_village", 3)):
+        s = Settlement(2000, 2000, seed=1)
+        s.meta(field_archetype="mulberry_dike_fishpond")
+        net = {"plots": [dict(p) for p in plots], "channels": [{"pts": [(1900, 100), (1950, 150)]}]}
+        s.apply_land_use(net, "mulberry_fishpond", random.Random(1), fraction=1.0, eligible="all", fry_form=form)
+        assert s.M["meta"]["fry_form"] == form and sum(d["kind"] == "fry" for d in s.M["dikeponds"]) == fry
+        assert "dikepond_sluices" not in s.M
 
 
 def test_apply_land_use_reanchor_leaves_a_placeholder_slot():

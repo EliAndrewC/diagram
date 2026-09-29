@@ -1,9 +1,11 @@
 """A SEAT AT THE SETTLEMENT'S EDGE for a ground that must stand apart from the houses (feature 273).
 
-Two grounds are placed this way: a hamlet's own burial ground (the scripted hamlet generator) and a village's
-cremation ground (the roller's village tier). Each stands beyond the last house, clear of the houses and wells by its
-own distance, set back from water by the record's drawn bands, as near the houses as those allow and, among equally
-near seats, nearest the fall line - below the houses where it can. The machinery is shared so the two cannot drift
+A village's cremation ground (the roller's village tier) is placed this way; a hamlet's own burial ground was too, until
+feature 280 (M68) found it attested only in twentieth-century records. A ground stands beyond the last house, clear of
+the houses and wells by its own distance, out of the water by the caller's bank margin (feature 280 M75: the scaled
+set-backs from water once drawn are attested in no period), as near the houses as those allow and, among equally near
+seats, nearest the fall line - a drawing order among seats that clear, not a custom (the downstream side is attested in
+today's villages only, research/religion-and-death/270). The machinery is shared so the two cannot drift
 (the tiers' rule: MOVE, never copy). Research: research/religion-and-death.html "Where do a hamlet's dead lie?",
 "Does a village burn its own dead, and where is its cremation ground?", "How far from water does a burial ground lie?".
 

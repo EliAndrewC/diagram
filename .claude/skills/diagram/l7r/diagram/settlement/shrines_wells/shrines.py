@@ -213,7 +213,9 @@ class ShrineHallsMixin:
                 bm: float = self.px(28) + 4.0
                 self.block_polys.append([(tx - s2 - bm, ty - s2 * 0.5 - bm), (tx + s2 + bm, ty - s2 * 0.5 - bm), (tx + s2 + bm, ty + s2 + bm), (tx - s2 - bm, ty + s2 + bm)])
                 self._torii(tx, ty)
-                self._clear_ground(tx, ty + 2, max(2 * s2 + 4, 10), max(s2 * 1.3, 8), 30)  # a swept collar under the arch + its sando approach
+                # NO SWEPT COLLAR UNDER THE ARCH (feature 280 M66, research/religion-and-death/130): no page read gives swept
+                # ground round a shrine's arches before modern times; the arch clears only its own footing
+                self._clear_ground(tx, ty + 2, max(2 * s2 + 4, 10), max(s2 * 1.3, 8), 0)
         self.add(f'<rect x="{x - w / 2:.0f}" y="{y - h / 2:.0f}" width="{w}" height="{h}" rx="3" fill="#C9876C" stroke="{edge}" stroke-width="2"/>')
         self.add(f'<rect x="{x - w / 2:.0f}" y="{y - h / 2:.0f}" width="{w}" height="9" fill="#A03020"/>')
         self.add(f'<rect x="{x - w / 2:.0f}" y="{y + h / 2 - 9:.0f}" width="{w}" height="9" fill="#A03020"/>')
@@ -232,7 +234,11 @@ class ShrineHallsMixin:
         # merchant seat its edge into the hall's pad.
         bm = max(34 * self.bscale, 22.0)
         self.block_polys.append([(x - w / 2 - bm, y - h / 2 - bm), (x + w / 2 + bm, y - h / 2 - bm), (x + w / 2 + bm, y + h / 2 + bm), (x - w / 2 - bm, y + h / 2 + bm)])
-        self._clear_ground(x, y, w, h, 58)  # the swept shrine precinct - scrub kept off the tended keidai (the grove, if any, is separate)
+        # THE PRECINCT'S OWN GROUND, not a swept collar (feature 280 M66): a village shrine's precinct ran 150-650 tsubo in
+        # the Edo returns (research/religion-and-death/760), grove and open ground, and the commons' scrub is kept off it;
+        # that it was swept is found only in undated modern folklore (130), so no swept band is claimed. Its 58 px reach is
+        # the precinct's extent at the legacy grain, a GUESS (the grove, if any, is separate)
+        self._clear_ground(x, y, w, h, 58)
         if label:
             self.label(x, self._hall_caption_y(x, y, w, h, label, label_below, seats_t), label, HALL_CAPTION_FS, weight="bold", color=edge)
             # RESERVE the caption's own ground (GM 2026-07-27). Every gen that draws a hall had been

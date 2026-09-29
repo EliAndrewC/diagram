@@ -50,16 +50,15 @@ def test_tanning_yard_stream_variant_draws_staking_frames():
 
 
 # ---- feature 016: the charcoal district's trade works -------------------------------------------
-def test_charcoal_yard_records_its_sheds_and_its_cooling_apron():
-    """The apron is part of the record's contract, not decoration: charcoal self-heats, so a yard
-    must have open ground to stand a fresh load apart from the conditioned stock. `sheds` floors at
-    one - a yard with no roof over the conditioned stock is not a charcoal yard."""
+def test_charcoal_yard_records_its_sheds_and_no_cooling_apron():
+    """Feature 280 M104 (research/urban-features/150): charcoal was cooled at the kiln before it reached a town, so the yard
+    draws no cooling apron. `sheds` floors at one - a yard with no roof over its stock is not a charcoal yard."""
     s = _town()
     s.charcoal_yard(400, 400, rot=-17, sheds=2)
     s.charcoal_yard(700, 700, sheds=0)  # floored
     a, b = s.M["charcoal_yards"]
     assert a["sheds"] == 2 and b["sheds"] == 1
-    assert len(a["apron"]) == 4 and a["w"] == 88 and a["h"] == 58
+    assert "apron" not in a and a["w"] == 88 and a["h"] == 58, "no cooling apron (feature 280 M104): charcoal was cooled at the kiln"
     assert a["label"] == "charcoal yard" and a["rot"] == -17.0
 
 

@@ -19,33 +19,33 @@ class Farmhouse(Kind):
     never on the bund. HOW that access is delivered is not settled: alleys cut off the spine, each household
     having made its own way to the road, and a laid-out back lane serving a regular row are both attested, so
     this map rolls between the two forms per settlement and guarantees only that every farmhouse is served.
-    No two farmhouses face exactly the same way. A survey of the houses of 27 Okinawan villages found 87% of them
-    facing within three points of the compass about their village's commonest bearing, and about one in ten turned
-    to the right of it. So each settlement rolls a common bearing near south, each house stands up to about 30
-    degrees off it - most by much less, turning with the lane and the field edge it stands on - and about one
-    farmhouse in ten is turned a quarter turn to the right. Its work yard and garden beds turn with it: the GM
-    ruled that they always line up with their house.
+    No two farmhouses face exactly the same way. A survey of the houses of 27 Okinawan villages found most of them
+    facing within three points of the compass about their village's commonest bearing, the smaller turns where the
+    streets curve along the slope - and streets curving along the contours are seen in a village laid out in 1736. So
+    each settlement rolls a common bearing near south, and each house turns a little with the lane and the field edge it
+    stands on, never more than about 30 degrees; no house is turned a quarter away. Its work yard and garden beds turn
+    with it: the GM ruled that they always line up with their house. About one farm in eight carries a storehouse
+    against its back wall, the headman's always.
 
     Note: Placement follows the read record; that every house in a nucleated cluster is reached by a lane, and the alleys-off-the-spine form, are paraphrased from a morphology literature no public page carries, and the back lane is read only for planned English villages. The setback from the paddy is stated in feet by no source:
     it is built from a bund width that is sourced (one to two shaku), a levee path and an eave overhang that
     are both unsourced GUESSES, and one part that is
     read for a house facing a watercourse and extended to the paddy by this record, so the 6 ft floor beneath
     it is a soft threshold rather than a measured minimum - and the map draws 10 to 13 ft, well clear of it,
-    close enough that the household works its own ground. How the turns spread inside the surveyed range, drawing
-    the survey's right-turned tenth as one quarter turn when its class runs over several compass points, and rolling
-    the common bearing within about 11 degrees of due south are guesses; the survey counts one island region's
-    villages, in 1985.
+    close enough that the household works its own ground. No count of house bearings from before 1868 was found: the
+    survey is one island region's houses in 1985, and the one tenth it found turned to the right is not drawn. How far a
+    house turns with its lane, and rolling the common bearing within about 11 degrees of due south, are guesses.
 
     Caveat: the 6 ft floor beneath it is a soft threshold rather than a measured minimum - and the map draws
-    10 to 13 ft, well clear of it, close enough that the household works its own ground. How the turns spread
-    inside the surveyed range, drawing the survey's right-turned tenth as one quarter turn when its class runs over
-    several compass points, and rolling the common bearing within about 11 degrees of due south are guesses; the
-    survey counts one island region's villages, in 1985.
+    10 to 13 ft, well clear of it, close enough that the household works its own ground. No count of house bearings from
+    before 1868 was found: the survey is one island region's houses in 1985, and the one tenth it found turned to the
+    right is not drawn. How far a house turns with its lane, and rolling the common bearing within about 11 degrees of
+    due south, are guesses.
 
     Name: farmhouse
     Covers: `houses` - the dwelling of each household
     Label: accurate
-    Sources: sugiura-1973-fuzoku, sakamoto-tsubaki-1985-omoya-muki
+    Sources: sakamoto-tsubaki-1985-omoya-muki, yamamoto-2014-koshijo-shuraku, oamishirasato-choshi-kaoku
     Entry: research/homesteads.html - 'What stood on a farmstead - the inventory', 'How close does a farmhouse stand to the paddy', 'Is every farmhouse reached by a lane', 'Why do a village's farmhouses face different ways'
     """
 
@@ -54,24 +54,25 @@ class Farmhouse(Kind):
 
 class StorageShed(Kind):
     """
-    What: A roofed outbuilding for storage - grain, straw, tools, fuel. Some stand as a lean-to against the
-    farmhouse, some free in the yard; storage either way.
+    What: A roofed storehouse against the back of the farmhouse, for grain, straw and tools, on the larger farms.
 
-    Why: A July 1972 survey of 87 households in three Miyagi hamlets counted 4.4 outbuildings per household -
-    firewood shed, straw shed, barn, work shed, storehouse - so a farmstead with only its house would be the
-    anomaly. The count drawn here is a band below that snow-country figure, because the temperate lowland
-    hamlet this map draws kept fewer.
+    Why: Before modern times a farmstead carried far fewer outbuildings than the twentieth century's counts: a village
+    count of 1885, which its historian reads back to the last years of the shogunate, gives about one and a half
+    besides the privy, with a storehouse on only two farms in sixteen, both powerful households. So a storehouse
+    stands against about one farmhouse in eight, the headman's always. Its size follows the two storage sheds dated to
+    the end of the Edo period, about 18 to 27 ft long and one and a half to nearly twice as long as deep.
 
-    Note: Presence and the mean count per household read (Sugiura 1973 - an upper bound on the share of households keeping one); the drawn count per household is deliberately set below the
-    source's Tohoku figure, which is a colder and better-stocked district than this one.
+    Note: The count and the sheds' sizes are read (the Kakimochi count; the Hannan and Nerima sheds); the count is one
+    village's, so the share is a calibration, and drawing the storehouse joined to the house's back wall is a guess.
+    The larger barns of 1883-1926, and the 4.4 outbuildings a household of a 1972 survey, are not drawn.
 
-    Caveat: the drawn count per household is deliberately set below the source's Tohoku figure, which is a colder
-    and better-stocked district than this one.
+    Caveat: the count is one village's, so the share is a calibration, and drawing the storehouse joined to the house's
+    back wall is a guess.
 
     Name: storage shed
-    Covers: `houses[].shed` (the lean-to against a farmhouse) and `farm_sheds` (the detached sheds of the same household)
+    Covers: `houses[].shed` (the storehouse against a farmhouse) and `farm_sheds` (its record)
     Label: accurate
-    Sources: sugiura-1973-fuzoku
+    Sources: oamishirasato-choshi-kaoku, koshigaya-shishi-noumin-jukyo, bunka-minami-naya, nerima-mitome-naya
     Entry: research/homesteads.html - 'What stood on a farmstead - the inventory, with numbers'
     """
 
@@ -153,19 +154,18 @@ class ThreshingYard(Kind):
     """
     What: A tamped-earth work floor in front of each farmhouse, drawn as the harvest leaves it: covered in straw
     mats. The rice was threshed here on mats, and the grain was then dried on mats spread over the whole
-    yard - a household measured its yard in them, two to the tsubo: 40 to 60 on an ordinary farm of the barley country
-    the count comes from, fewer on a rice farm, whose yard was smaller. Where the
+    yard - a household measured its yard in them, two to the tsubo: about 50 on an ordinary farm. Where the
     harvest weather is changeable, each household also gathers its drying rack by the house, along one side of
     the yard.
 
     Why: Threshing and drying were done per household, in the yard, and the yard needs sun: a thatched roof
     pitched at 45 degrees puts a minka's ridge at 20-22 feet, so no yard is placed in the shadow band south
-    of a neighbor's wall, and a rack never stands in the yard's southern half. Its SIZE follows the crop the
-    household must dry, which is why every yard on this map is different: each is rolled from a right-skewed
-    spread about 18 tsubo (59.5 sq m), correlated with the household. Whether racks stand by the houses
-    follows the weather of the country, not a village's taste: racks gathered by the house are recorded for a
-    coast of changeable autumn weather, so that the threshing could be done at home, and the drying method
-    followed the climate over whole regions - so every settlement in one climate draws the same.
+    of a neighbor's wall, and a rack never stands in the yard's southern half. Every yard on this map is different:
+    each is rolled from a right-skewed spread about 25 tsubo, correlated with the household - the barley country's
+    count and, in a rice district, a museum's count of about fifty mats a farm for drying the grain. Whether racks stand
+    by the houses follows the weather of the country, not a village's taste: racks gathered by the house are recorded for
+    a coast of changeable autumn weather, so that the threshing could be done at home, and the drying method followed the
+    climate over whole regions - so every settlement in one climate draws the same.
 
     Note: we have rendered between a third and two thirds of the straw mats that covered a yard (a yard whose
     outline or rack leaves no room for the last ones, a mat or two fewer), each with a little bare
@@ -173,7 +173,8 @@ class ThreshingYard(Kind):
     floor rather than as mats, so the drawing shows a smaller number to give the impression of many. The real yard at
     harvest was covered, 40 to 60 mats of about 3 by 6 feet each on an ordinary barley-country farm and 100 to 150 on a
     large one. The
-    mats' size, the yard's size band and its spread are read; the rows the mats are laid in are a guess - no source read
+    mats' size and the yard's spread are read; the yard's size rests on two undated records of remembered practice, a
+    calibration the GM may re-sort; the rows the mats are laid in are a guess - no source read
     says; and where a map draws racks by the houses, which side of the yard a rack takes is a guess too, and the rack is
     drawn wider than its poles so that it reads.
 
@@ -218,28 +219,30 @@ class Privy(Kind):
     What: The household privy - on a farm, the urinal and the privy were one small building standing apart from
     the main house.
 
-    Why: The common case: the Nipponica entry calls the detached privy the norm, and a 1959 survey of farm
-    households in three villages found more than nine in ten with an outdoor privy, so the map draws one on 85 to
-    95 of every 100 homesteads - though three prewar Tohoku villages ran from 85% of farms down to none. The record finds it in four places: under the eaves by the stable beside the
-    entrance, a separate outhouse in the yard, the front yard of the main house, and - at several farms of one
-    Miyagi village - inside the barn, a tub sunk in its floor with boards laid across it. Each house rolls its
-    seat among the four, and on most houses a seat on the sunny side is tried first.
+    Why: The common case, before modern times as after: most houses of one village in 1824 had a privy outside the
+    main house, and every one of another village's sixteen households did; a 1959 survey of farm households in three
+    villages found more than nine in ten with an outdoor privy. So the map draws one on 85 to 95 of every 100
+    homesteads. The record finds it in four places: under the eaves by the stable beside the entrance, a separate
+    outhouse in the yard, the front yard of the main house, and - at several farms of one Miyagi village - inside the
+    barn, a tub sunk in its floor with boards laid across it. Each house rolls its seat among the four, and on most
+    houses a seat on the sunny side is tried first. Its size is one of the sixteen the village count gives, from 5 by 5
+    ft to 27 by 15 ft, most 18 by 12 ft or smaller.
 
-    Note: Presence, the detached form and the four seats are read (kotobank, sinyoken, Suzuki 1959, Sugiura). How
-    often each seat is drawn is a guess, each hamlet re-weighting them from its seed, and so is where in the yard
-    the separate outhouse stands; a privy inside the barn is a tub under its floor, which cannot be seen from
-    above, so it is drawn as the privy against the barn's outer wall - a map drawing convention; the 6 x 6 ft
-    footprint is a guess - no readable page gives a privy's size.
+    Note: Presence, the detached form, the four seats and the sizes are read (Hasuda 1824, the Kakimochi count, Suzuki
+    1959, Sugiura). How often each seat is drawn is a guess, each hamlet re-weighting them from its seed, and so is where
+    in the yard the separate outhouse stands; a privy inside the barn is a tub under its floor, which cannot be seen from
+    above, so it is drawn as the privy against the barn's outer wall - a map drawing convention; the size is one
+    village's table, a calibration.
 
     Caveat: How often each seat is drawn is a guess, each hamlet re-weighting them from its seed, and so is where
     in the yard the separate outhouse stands; a privy inside the barn is a tub under its floor, which cannot be
     seen from above, so it is drawn as the privy against the barn's outer wall - a map drawing convention; the
-    6 x 6 ft footprint is a guess - no readable page gives a privy's size.
+    size is one village's table, a calibration.
 
     Name: privy
     Covers: `farm_fixtures[kind=privy]`
     Label: accurate
-    Sources: kotobank-benjo, sinyoken-madori, sugiura-1973-fuzoku, suzuki-1959-noson-benjo, sugiura-1977-tohoku
+    Sources: koshigaya-shishi-noumin-jukyo, oamishirasato-choshi-kaoku, suzuki-1959-noson-benjo, sugiura-1977-tohoku, sinyoken-madori
     Entry: research/homesteads.html - 'Where did the privy stand, and where was its night soil kept?', 'The farmstead's fixtures'
     """
 
@@ -248,25 +251,27 @@ class Privy(Kind):
 
 class Woodpile(Kind):
     """
-    What: The household's fuel, split logs and charcoal, kept in one of three forms: a woodshed of its own, a long
-    stack along the inside of the windbreak, or an open stack head-high against the house wall.
+    What: The household's firewood, kept in a wood shed of its own: a roofed shed a step off the house, its open front
+    showing the log ends.
 
-    Why: Firewood and charcoal were the fuel, and Sugiura counted about three firewood sheds for every four
-    farmhouses built before 1944. The record holds three forms: the woodshed, which a reconstructed Boso farmstead keeps and which
-    marked the farmsteads of the cold Shonai plain; the kizuma of the Isawa plain in Iwate, the firewood stacked
-    along the windbreak on a homestead's windward side, filling the gaps under the grove's lower branches; and the
-    open stack against the house. Each hamlet rolls one form. The kizuma is drawn only where a homestead has the
-    windbreak at its back, and the open stack where it does not.
+    Why: Firewood was the fuel, and before modern times it was kept in a shed: in one village's house-by-house record
+    of 1824 many houses had a firewood shed standing apart from the main house, and in another village's count, which
+    its historian reads back to the last years of the shogunate, six households of sixteen had one, most of them 4 by 2
+    ken. So a wood shed stands on about four farmsteads in ten, the larger houses first, 24 by 12 ft. An open stack
+    against the house wall is found only on a present-day page, and the stack along the windbreak only in descriptions
+    of today and of farms of the past with no date, so neither is drawn.
 
-    Note: The woodshed and the kizuma are read; the open stack against the back wall or the kura, the one form
-    attested nowhere, is a guess, and so are the even odds between the three, how near the windbreak must stand
-    to count as the homestead's own (40 ft), the stack's head-high height (modern stacking practice) and the sizes -
-    the woodshed 12 x 9 ft, the kizuma 24 ft long, the open stack 10 ft.
+    Note: The shed, its share and its size are read (Hasuda 1824, the Kakimochi count); the share is one village's, a
+    calibration, and where on the plot the shed stands - a step off the back wall or a flank - is a guess.
+
+    Caveat: the share is one village's, a calibration, and where on the plot the shed stands - a step off the back wall
+    or a flank - is a guess.
+
 
     Name: woodpile
-    Covers: `farm_fixtures[kind=woodpile]`
-    Label: guess
-    Sources: boso-no-mura-kigoya, 326woods-stack, sugiura-1973-fuzoku, suido-ishizue-kizuma, sugiura-1977-tohoku, sato-1962-haichi
+    Covers: `farm_fixtures[kind=woodpile]` - the wood shed
+    Label: accurate
+    Sources: boso-no-mura-kigoya, koshigaya-shishi-noumin-jukyo, oamishirasato-choshi-kaoku
     Entry: research/homesteads.html - 'Where was the firewood stacked, and how big was the pile?'; 'The farmstead's fixtures'
     """
 
@@ -302,33 +307,27 @@ class ManureHeap(Kind):
 
 class Bathhouse(Kind):
     """
-    What: A small bath shed - the iron goemon-buro tub under its own roof - out in the front yard, or against the
-    house and joined to it by a short covered corridor.
+    What: A small bath room joined to the farmhouse - the tub under the house's own roof line, at its main door or
+    at the far end of its stable wing.
 
-    Why: The cauldron bath was widely used in self-sufficient farm villages. How many farms had a bath shed
-    differed from village to village: reconstructions of three Tohoku villages before the war put it on four farms
-    in five in Tono, one in three in Inawashiro and none in Shiokawa, and a survey of three hamlets in one Miyagi
-    town found about three in ten. So each hamlet rolls its share between none and four in five, and the rest bathe indoors, unseen. A prewar
-    housing report puts the bath in the front yard of the main house in northern Miyagi, and an architectural
-    historian describes the Meiji farmhouse bath kept apart from the house, sometimes joined to it by a corridor;
-    each hamlet rolls one of the two forms.
+    Why: Before 1868 the bath was part of the house, not a shed: house-plan registers of villages on the shogun's road
+    to Nikko show a bath of one or two tsubo in two or three houses in ten by 1824 and 1842, beside the main door or
+    beyond the stable wing, and in a few - most of them headmen's - joined to the floored rooms. A bath standing as a
+    building of its own is found only in the twentieth century. So a bath room is drawn on two or three farms in ten,
+    6 ft out from the wall and 6 to 12 ft along it; each hamlet rolls the main door or the stable wing's end, and a
+    headman's bath is joined to his floored rooms.
 
-    Note: The use, the village-by-village shares and the front-yard seat are read. The village shares are a
-    reconstruction its author thinks runs high, and which printed column gives the Miyagi town's three in ten is this
-    project's unconfirmed reading; the corridor form rests on one interview, which leaves open whether its
-    'farmhouses are like that' takes in the corridor; the odds between the two forms, the corridor's one-ken length,
-    the back wall or a flank where neither seat has room, and the 6 x 6 ft size are guesses.
+    Note: The share, the size and the three places are read (Tsuda's reading of the Nikko registers); the odds between
+    the places are a guess, and so is giving the floored-room seat to the headman; the tub drawn in it is the map's mark
+    for what the room is.
 
-    Caveat: The village shares are a reconstruction its author thinks runs high, and which printed column gives the
-    Miyagi town's three in ten is this project's unconfirmed reading; the corridor form rests on one interview, which
-    leaves open whether its 'farmhouses are like that' takes in the corridor; the odds between the two forms, the
-    corridor's one-ken length, the back wall or a flank where neither seat has room, and the 6 x 6 ft size are
-    guesses.
+    Caveat: the odds between the places are a guess, and so is giving the floored-room seat to the headman; the tub
+    drawn in it is the map's mark for what the room is.
 
     Name: bathhouse
-    Covers: `farm_fixtures[kind=bath]`
+    Covers: `farm_fixtures[kind=bath]` - the bath room joined to the house
     Label: accurate
-    Sources: mizumaki-goemonburo, sugiura-1973-fuzoku, sugiura-1977-tohoku, mizu-no-bunka-11-furo
+    Sources: tsuda-1991-nikko-shasan-minka, mizumaki-goemonburo
     Entry: research/homesteads.html - 'Did a farmhouse have a bath shed, and where did it stand?'; 'The farmstead's fixtures'
     """
 
@@ -346,13 +345,13 @@ class HenCoop(Kind):
     Each hamlet rolls its share around the survey's 82%, between about seven and nine farmsteads in ten.
 
     Note: Presence, the ground form and the square plan are read (Buck, Cambridge, the Qimin Yaoshu, the Zhengzhou
-    coop). The survey's 1920s count stands in for the late empire, as the Cambridge chapter's figures do, and the
-    band's width about it is calibrated liberty; the 5 x 5 ft size and the seat at the house's flank or back wall are
-    guesses - the record says only 'in their yard'.
+    coop). The survey's count was made in the 1920s, and what was seen before 1912 agrees with it; the band's width
+    about it is calibrated liberty; the 5 x 5 ft size and the seat at the house's flank or back wall are guesses -
+    the record says only 'in their yard'.
 
-    Caveat: The survey's 1920s count stands in for the late empire, as the Cambridge chapter's figures do, and the
-    band's width about it is calibrated liberty; the 5 x 5 ft size and the seat at the house's flank or back wall are
-    guesses - the record says only 'in their yard'.
+    Caveat: The survey's count was made in the 1920s, and what was seen before 1912 agrees with it; the band's width
+    about it is calibrated liberty; the 5 x 5 ft size and the seat at the house's flank or back wall are guesses -
+    the record says only 'in their yard'.
 
     Name: hen coop
     Covers: `farm_fixtures[kind=coop]`
@@ -398,16 +397,16 @@ class Persimmon(Kind):
     them around the homestead, and the tree shades the house in summer. The farm villages of the past had an old
     giant persimmon in the dooryard of every house, and one is remembered in the bamboo grove behind a house, so the
     tree stands in front of the house, most often, or behind it, each hamlet rolling how often each. Its crown is
-    about 23 ft across, a full-grown tree's.
+    drawn about 23 ft across.
 
     Note: Presence and the two sides are read (toyoko, a newspaper history of the Fuyu persimmon, Sato on fruit trees
-    in the front yard). The crown is a modern horticultural reference's full-grown size, which fits the old giants
-    better than an ordinary tree; how much likelier the front is, the seat at the edge of the work yard, and the
-    share drawn - 80 to 95 of every 100 homesteads, against the sources' every dooryard - are guesses.
+    in the front yard). The crown is a modern horticultural reference's full-grown size, a guess: no record from before
+    1868 gives an ordinary dooryard persimmon's crown. How much likelier the front is, the seat at the edge of the work
+    yard, and the share drawn - 80 to 95 of every 100 homesteads, against the sources' every dooryard - are guesses.
 
-    Caveat: The crown is a modern horticultural reference's full-grown size, which fits the old giants better than an
-    ordinary tree; how much likelier the front is, the seat at the edge of the work yard, and the share drawn - 80 to
-    95 of every 100 homesteads, against the sources' every dooryard - are guesses.
+    Caveat: The crown is a modern horticultural reference's full-grown size, a guess: no record from before 1868 gives an
+    ordinary dooryard persimmon's crown. How much likelier the front is, the seat at the edge of the work yard, and the
+    share drawn - 80 to 95 of every 100 homesteads, against the sources' every dooryard - are guesses.
 
     Name: persimmon
     Covers: `persimmons` - the dooryard persimmon tree
@@ -421,37 +420,31 @@ class Persimmon(Kind):
 
 class BurialGround(Kind):
     """
-    What: A small common burial ground at the hamlet's edge - an irregular patch of earth set with low stone
-    markers and a taller memorial stone or two.
+    What: A village's burial ground - an irregular patch of earth set with low stone markers and a taller memorial stone
+    or two. A hamlet draws none: its dead lie in the village's ground.
 
-    Why: The district's cremation ground is the main village's, and its country monk performs the rites. Where
-    the bones then lie, the history gives two answers: by the hamlet's own houses - a hamlet's burial ground at
-    its edge, the ground its inhabitants hold in common, the two-grave custom's burial grave on common land - or at
-    the parish temple, which in this setting is the village's shrine. So some hamlets keep a ground of their own,
-    holding the urns brought home from the village's cremation ground, and some bury in the village's. That ground
-    lies in the village shrine's own yard or, in other villages, as a ground of its own downstream of the houses and
-    beyond the last of them, never upstream, within about 650 ft of the middle of the houses; it is sized to
-    everyone it serves, at 7.5 to 18 sq ft for each inhabitant.
+    Why: The district's cremation ground is the main village's, and its country monk performs the rites. A graveyard
+    held by a settlement itself is found at the end of the Edo period, but as one form among an individual's, a
+    lineage's and a temple's, and the dead went more often to temple graves; that every hamlet kept a ground of its own
+    rests only on twentieth-century records, so a hamlet draws none and its dead lie with the village's. That ground
+    lies in the village shrine's own yard or, in other villages, as a ground of its own just beyond the last of the
+    houses; no set distance from them is drawn, none being found from before modern times. It is sized to everyone it
+    serves, at 7.5 to 18 sq ft for each inhabitant, with a death rate of about 25 to 30 in a thousand a year, inside what
+    Edo village registers give.
 
-    Note: Both answers are read, and so are the village ground's two forms and its downstream side. Which form a
-    village's ground takes, the shrine's yard or a ground of its own, is rolled at even odds, and those odds are a
-    guess; the village ground's 650 ft is the surveyed distance of the graves a two-grave village visited, carried
-    over to an urn ground, and its size is this project's own reckoning from a death rate and a reuse period no page
-    gives; which answer a hamlet takes is rolled at even odds, and those odds are a guess; the size is the band the
-    record reckons for a hamlet's full-body ground, 750 to 2,450 sq ft, which overstates an urn ground, so it is a
-    guess; so is its outline, and its keeping 60 ft from houses and wells.
+    Note: The village's ground and its two forms are read. Which form a village's ground takes, the shrine's yard or a
+    ground of its own, is rolled at even odds, and those odds are a guess; its size is this project's reckoning from the
+    Edo death rates and a reuse period no page gives; that its dead lie downstream of the houses is attested in today's
+    villages only, and the map claims no side.
 
     Caveat: Which form a village's ground takes, the shrine's yard or a ground of its own, is rolled at even odds, and
-    those odds are a guess; the village ground's 650 ft is the surveyed distance of the graves a two-grave village
-    visited, carried over to an urn ground, and its size is this project's own reckoning from a death rate and a reuse
-    period no page gives; which answer a hamlet takes is rolled at even odds, and those odds are a guess; the size is the band the
-    record reckons for a hamlet's full-body ground, 750 to 2,450 sq ft, which overstates an urn ground, so it is a
-    guess; so is its outline, and its keeping 60 ft from houses and wells.
+    those odds are a guess; its size is this project's reckoning from the Edo death rates and a reuse period no page
+    gives; that its dead lie downstream of the houses is attested in today's villages only, and the map claims no side.
 
     Name: burial ground
-    Covers: `cemeteries` - the hamlet's own burial ground
+    Covers: `cemeteries` - a village's burial ground
     Label: accurate
-    Sources: kofukuroman-sanmai, bochi-jawiki, kotobank-ryobosei, haka-jawiki, danka-jawiki, oikawa-2008-kikaijima, nakajima-2006-huizhou, kawazoe-2010-ryobosei, takeuchi-2017-bochi-hosei, meiji-1884-bochi-saimoku
+    Sources: kofukuroman-sanmai, bochi-jawiki, kotobank-ryobosei, haka-jawiki, danka-jawiki, takeuchi-2017-bochi-hosei, kaf2-kinsei-bo, tsuya-kurosu-tokugawa-mortality
     Entry: research/religion-and-death.html - 'Where do a hamlet's dead lie?'; 'How much ground does a village burial ground need, and whose dead lie in it?'; 'How far from its houses does a village bury its dead, and on which side?'; 'Does a village bury in its temple's yard, in a ground of its own, or in its fields?'
     """
 

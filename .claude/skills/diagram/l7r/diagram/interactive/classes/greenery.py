@@ -46,23 +46,27 @@ class HomesteadBamboo(Kind):
 
 class SharedBambooGrove(Kind):
     """
-    What: A bamboo thicket standing on its own at the field margin, cut in moderation and renewed from its shoots.
+    What: A bamboo thicket standing on its own at the settlement's edge, on dry ground behind its houses, cut in
+    moderation and renewed from its shoots.
 
     Why: The record gives bamboo two places: the household's own strip, and the take-yabu as a stand of its own
-    at the village edge, where the plain meets the worked hills. The record supports both, so whether a hamlet's
+    round the settlement - an early-Edo screen paints settlements ringed by bamboo groves, the villages of one Kyoto
+    district managed bamboo groves through the Edo period, and a sixth-century Chinese manual wants bamboo on high,
+    dry ground. The record supports both, so whether a hamlet's
     bamboo stands in its farmsteads, in a thicket of its own, or both is rolled per settlement rather than the project
     picking one.
 
     Note: we have rendered the shared grove with the same stand-level glyph as a homestead stand - paired culm
     strokes on a 7 ft grid - in order to show it at all: a culm is only inches across, madake at most about four
     inches, and cannot be drawn at one foot per pixel. The grove's extent is to scale; the marks are symbolic.
-    Bamboo below the frost line and its two places are read, though the page placing the thicket at the plain's
-    edge describes the present day; that it was cut like a coppice is this record's likeness, no page making it.
+    Bamboo below the frost line and its two places are read; which side of the settlement the thicket takes, and
+    that it was held in common, are guesses; that it was cut like a coppice is this record's likeness, no page making
+    it.
 
     Name: shared bamboo grove
-    Covers: `bamboo_stands` with any role other than homestead - the take-yabu at the field margin
+    Covers: `bamboo_stands` with any role other than homestead - the take-yabu at the settlement's edge
     Label: convention
-    Sources: chikurin-jawiki, take-jawiki, satoyama-enwiki, phyllostachys-enwiki
+    Sources: chikurin-jawiki, take-jawiki, nagaokakyo-take-nishiyama, nagaokakyo-take-takenoko, qimin-yaoshu-zhongzhu, phyllostachys-enwiki
     Entry: research/vegetation.html - 'Bamboo: how common, and where it stood', 'How is bamboo drawn, when one culm is too small to see?'
     """
 
@@ -274,7 +278,8 @@ class Marsh(Kind):
     and it is the small ponds where water use has STOPPED and bank mowing has fallen off that have been given up
     furthest. The reeds
     are a sign of a pond in use. The EMBANKMENT is the other half of the same finding and is different
-    ground: it is mown and burned and may not be cultivated, to keep the bank strong, and what grows on it
+    ground: a dry, firm bank kept for its strength and not cultivated - turfed or trodden before modern times, a Chinese
+    classic's commentary already keeping the water plants off it, and mown and burned today - and what grows on it
     is dry-grassland herbs. So reeds stand in the shallows and stop at the foot of the bank - which is why
     you will not see the wet haze on a dike or a pond's raised rim. Whether a pond's own reed was cut as a crop, no page
     read says - the reed harvest is attested for Lake Biwa and river reed beds, not for a tameike - so the pond's fringe
@@ -285,7 +290,8 @@ class Marsh(Kind):
     carried across from thatch fields in general and Lake Biwa's reed beds, no page saying it of a village marsh; that
     every toe is drawn in the cut, open form is a shortfall, the record supporting an alder-willow carr as well and the
     map not yet rolling between them; that sedge was cut for fodder is unsourced; a pond's fringe shows no harvest
-    because none is read there; the embankment is mown in the record as it is bare on the map.
+    because none is read there; the embankment's mowing and burning are present-day management, the reed-free bank
+    itself older.
 
     Caveat: that a village cut its own toe marsh the same way is carried across from thatch fields in general and Lake
     Biwa's reed beds, no page saying it of a village marsh; that every toe is drawn in the cut, open form is a

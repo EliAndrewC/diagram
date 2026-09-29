@@ -467,16 +467,16 @@ class CartYard(Kind):
 
     Why: In this setting wagons and carts use the roads between towns, so a compound that ships or receives bulk
     goods - rice bales, charcoal - has a cart gate, a cart yard and a lane a cart can use. A compound keeps such
-    open ground as a working feature, not as slack. Fresh charcoal absorbs oxygen fast enough to heat itself to
-    ignition, so a charcoal store is set apart from the working yard across open ground; the record derives
-    about 30 ft as the gap to keep, roughly one flame-height clear of a burning stack.
+    open ground as a working feature, not as slack. Charcoal was cooled at the kiln before it came to a store, and
+    no measured gap round a charcoal store is found before modern times, so the yard is working ground, not a fire
+    gap of a set width.
 
     Note: carts at a county compound are the setting's own departure from Edo Japan, where carts were kept to the
     towns and barred from the highways to the end of the shogunate, though the hand cart, its bed about 8 by 2.5
     ft, spread through the castle towns and beyond them by late Edo; the GM's notes put wagons and carts on the
     roads between towns. The apron's 15 to 20 ft width is this record's own calibration, which no source read
-    states, and the 30 ft gap is this record's own derivation from its own one-flame-height rule of thumb, which no
-    page read supports (the published rule, four flame heights, is for people, not timber).
+    states; how far a store stands from other buildings is a guess, the 30 ft once derived here resting on modern
+    fire guidance.
 
     Name: cart yard
     Covers: the loading apron inside the cart gate
@@ -587,23 +587,20 @@ class GardenPines(Kind):
 
 class StrikingPosts(Kind):
     """
-    What: Standing timbers on the practice ground (tategi), struck hard with a wooden sword in drill - either
-    upright posts or a bundle of branches laid across at knee height - drawn as small location markers with
-    their label.
+    What: Standing timbers on the practice ground (tategi), upright posts struck hard with a wooden sword in drill,
+    drawn as small location markers with their label.
 
     Why: The swordsmanship of Satsuma trains by striking a standing timber from left and right with a shout, over
     and over, on a practice ground that can be open to the sky. In its main line the post is a log a little over
     2 m long set about 70 cm into the ground, so that about 4.5 ft stands above it, struck from shoulder height
-    down to the stomach; a branch line strikes a bundle of a dozen or more long thin branches laid at knee
-    height. A county seat draws no dojo here, and what marks its swept ground as a place of daily keiko is the
+    down to the stomach. A knee-high bundle of branches laid across is found only as a present-day practice and in
+    the 1940s, so it is not drawn. A county seat draws no dojo here, and what marks its swept ground as a place of daily keiko is the
     gear that stands on it.
 
     Note: we have drawn the striking posts as small markers of where each stands rather than at their own size,
     in order to mark the swept ground as a practice ground by its gear, the GM's convention for these plans; a
-    real upright post stood about 4.5 ft, and the bundle lay at knee height. The two forms are both attested and
-    each sheet takes one: the upright post as Satsuma practice, the bundle only as a present-day practice whose
-    school and region its one source does not name. Carrying either to a practice ground outside those lines is
-    a guess, and so is the count.
+    real upright post stood about 4.5 ft. The upright post is Satsuma practice, its school's founder of 1561-1643;
+    carrying it to a practice ground outside that line is a guess, and so is the count.
 
     Name: striking posts
     Covers: the standing posts on the practice ground and their label
@@ -678,7 +675,8 @@ class Door(Kind):
 
     Why: Every building has a way in. A samurai house had three: the formal entrance for guests, an inner
     entrance for the family and the household to come and go by, and the kitchen door, the one way in from
-    outside to the kitchen, by its earth floor, where, on a plan drawn for a fictional house of the period, those of lower status came and went. A guest's arrival
+    outside to the kitchen, by its earth floor - a door the dictionaries date from 1666; who came in by it is told only
+    by pages of today, so the map says nothing of it. A guest's arrival
     comes across open ground to its door; a servants' row turns its doors inward, into the compound; and a
     plastered storehouse keeps outer doors faced in earth and plaster so that fire cannot get in.
 

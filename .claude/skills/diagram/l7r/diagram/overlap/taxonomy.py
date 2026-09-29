@@ -105,8 +105,8 @@ _OVERLAP_STRUCTS = (
     "tanning_yards",
     # the charcoal district's trade works (feature 016). For OVERLAP purposes these are ordinary
     # solid premises like any other; what is special about them is a SEPARATION rule each
-    # (charcoal_yard_keeps_fire_gap, refining_forge_stands_off_dwellings), which is a different
-    # shape and lives in its own check rather than in this registry.
+    # (refining_forge_stands_off_dwellings; the charcoal yard's 30 ft gap was retired by feature 280 M104, a modern figure),
+    # which is a different shape and lives in its own check rather than in this registry.
     "charcoal_yards",
     "refining_forges",
     # martial training (GM 2026-07-25): the state hall and the private dojos - solid compounds like

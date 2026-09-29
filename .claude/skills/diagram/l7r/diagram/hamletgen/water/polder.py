@@ -183,6 +183,7 @@ def stage_polder(s: Settlement, plan: SitePlan) -> None:
             eligible="all",
             dike_crop=plan.dike_crop,
             leftover=plan.leftover,
+            fry_form=plan.fry_form,
         )
     # THE PERIMETER DIKE - the defining polder feature, and the reason a polder is a polder: an
     # irregular hand-piled earthwork band following the water edge in organic bends (fish-scale

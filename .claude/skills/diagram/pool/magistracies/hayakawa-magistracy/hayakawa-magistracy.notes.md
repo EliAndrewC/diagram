@@ -29,7 +29,7 @@
    - hearing court: ROOFED, floored with river cobbles (R22); straw mats for the accused, the plaintiff and the village officials (R23); the cell 12 by 10 ft (R24).
    - garden: a pond garden (R30); the striking posts upright (R34).
    - clerks: their room is a room of the office hall (R20) - the freestanding duty room is gone.
-   - landing: steps cut in the revetment across a bank street from the east gate (R42) - the timber pier is gone; the boatmen's shrine is a water-god (suijin) shrine (R41).
+   - landing: steps cut in the revetment across a bank street from the east gate (R42) - the timber pier is gone; the boatmen's shrine is the boats' guardian (funadama) given a shrine on land (R41; feature 280 M125: the water-god form rested on a record of 1928 and later, and boatmen keeping one before modern times was found on no page, so it is no longer the sheet's).
    - vegetable garden (feature 283, research buildings 400 and 405): its SEAT a knob among the attested seats - west of the house, south beside the formal garden, the rear service ground, a parcel of its own - the sun ruling out every seat under six hours in the shoulder month; its SIZE a knob from a soup-greens plot (about 1,070 sq ft) to half the grounds; a SUN bed, not half-shade (the GM, 2026-09-28: "Move them all"). Drawn in rows over the ground it stands on, unscreened (no divider attested, a guess).
      This sheet: seat: the inner court's garden, before Hajime's quarters, west of the roji - the court's garden front divided, the reception keeping the pond and the old pines and the bed taking the master's own front (a guess: no source read says which rooms a bed fronted, and a bed beyond the ornamental ground, as round 1 drew it, took the reception's front); size: the soup-greens plot; bed: sun.
    - rear service strip: two household storehouses (dozo) across the 8 ft service alley behind the house, each 12 by 18 ft, the common 2 by 3 ken (the Yokota house kept two, 9 by 12 ft and 18 by 15 ft), plastered, no fire-water tub (research buildings 230); their number, two as the Yokota house kept, a guess for this sheet.
@@ -126,7 +126,7 @@
 - **granary**: Raised on posts against rats and the damp of the river bank; its door is on the face toward the bale yard and the landing gate.
 - **tax barge**: A hired boatman's barge, carrying the grain to Nagahara city under the office's seals.
 - **river watch**: The watch looks for boats slipping downriver past Nagahara's tariff gates.
-- **boatmen's altar**: A small shrine to the water god, kept ashore by the crews who work the swift river.
+- **boatmen's altar**: A small shrine ashore to the boats' guardian, the funadama, kept by the crews who work the swift river.
 - **revetment**: The stone facing holds the bank against a swift river's floods.
 - **servants' quarters**: About ten domestic servants - cooks, grooms and cleaners - lodge in this range along the north wall, its doors on the service alley behind the house; the senior retainers keep their own houses in town, and the barracks holds only the duty watch.
 - **vegetable garden**: The household's bed stands in the inner court's garden before Hajime's own rooms, the pond and the old pines kept before the reception across the guests' path: the west and the rear of the house lie in the shade of the kitchen and the house, so the garden south of the house is the one seat left.

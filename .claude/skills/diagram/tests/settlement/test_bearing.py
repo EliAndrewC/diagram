@@ -51,18 +51,20 @@ def test_the_margin_bearing_reads_the_lane_line_a_house_stands_on() -> None:
     assert B.MarginBearing(square, 0.0).nearest(200.0, -150.0) is not None
 
 
-def test_the_house_turn_is_common_bearing_lane_and_spread_within_thirty_and_a_quarter_on_the_tenth() -> None:
-    mid = lambda x, y, salt: 0.5  # noqa: E731 - a draw at the middle: no spread, no quarter turn
-    low = lambda x, y, salt: 0.0  # noqa: E731 - the bottom of every draw: the widest spread, and a quarter turn
-    assert B.house_rot(mid, 10.0, 10.0, 5.0, None, B.QUARTER_TURN_SHARE) == pytest.approx(5.0)
+def test_the_house_turn_is_common_bearing_lane_and_spread_within_thirty_and_never_a_quarter_turn() -> None:
+    """Feature 280 M26 (research/homesteads/780): the quarter-turned tenth rests only on a modern count, so no draw turns a
+    house a quarter away - the widest draw is the spread's edge, held under thirty degrees."""
+    mid = lambda x, y, salt: 0.5  # noqa: E731 - a draw at the middle: no spread
+    low = lambda x, y, salt: 0.0  # noqa: E731 - the bottom of every draw: the widest spread
+    assert B.house_rot(mid, 10.0, 10.0, 5.0, None) == pytest.approx(5.0)
     lim = lambda d: B.soft_limit(d, B.BEARING_SPREAD_DEG)  # noqa: E731
-    assert B.house_rot(mid, 10.0, 10.0, 5.0, lambda x, y: 12.0, B.QUARTER_TURN_SHARE) == pytest.approx(5.0 + lim(12.0)), "the lane's turn"
-    assert B.BEARING_SPREAD_DEG - 1.0 < B.house_rot(mid, 10.0, 10.0, 0.0, lambda x, y: 80.0, B.QUARTER_TURN_SHARE) < B.BEARING_SPREAD_DEG, "held under the spread"
-    assert B.house_rot(low, 10.0, 10.0, 0.0, None, B.QUARTER_TURN_SHARE) == pytest.approx(B.QUARTER_TURN_DEG + lim(-B.BEARING_JITTER_DEG))
-    assert B.house_rot(low, 10.0, 10.0, 0.0, None, 0.0) == pytest.approx(lim(-B.BEARING_JITTER_DEG)), "no share, no quarter turn"
+    assert B.house_rot(mid, 10.0, 10.0, 5.0, lambda x, y: 12.0) == pytest.approx(5.0 + lim(12.0)), "the lane's turn"
+    assert B.BEARING_SPREAD_DEG - 1.0 < B.house_rot(mid, 10.0, 10.0, 0.0, lambda x, y: 80.0) < B.BEARING_SPREAD_DEG, "held under the spread"
+    assert B.house_rot(low, 10.0, 10.0, 0.0, None) == pytest.approx(lim(-B.BEARING_JITTER_DEG)), "the widest draw, and no quarter turn"
+    assert not hasattr(B, "QUARTER_TURN_SHARE")
     # the draw keys on the seat's 4 ft cell: a seat moved a pixel keeps its turn
     seen = []
-    B.house_rot(lambda x, y, salt: seen.append((x, y)) or 0.5, 101.3, 58.9, 0.0, None, 0.1)
+    B.house_rot(lambda x, y, salt: seen.append((x, y)) or 0.5, 101.3, 58.9, 0.0, None)
     assert all(x % B.KEY_CELL_PX == 0 and y % B.KEY_CELL_PX == 0 for x, y in seen)
 
 
@@ -79,7 +81,7 @@ def test_a_hamlet_house_takes_the_bearing_rule_and_every_other_map_keeps_the_old
     s = _nuc_village()
     assert s._house_bearing is None and -5.0 <= s._house_rot(123.0, 456.0) < 5.0
     s._house_bearing = 4.0
-    assert s._house_rot(123.0, 456.0) == pytest.approx(B.house_rot(s._hjit, 123.0, 456.0, 4.0, None, B.QUARTER_TURN_SHARE))
+    assert s._house_rot(123.0, 456.0) == pytest.approx(B.house_rot(s._hjit, 123.0, 456.0, 4.0, None))
 
 
 def test_the_bundle_boxes_are_the_drawn_parts_turned_and_the_parts_keep_their_true_size() -> None:
@@ -100,15 +102,12 @@ def test_the_bundle_boxes_are_the_drawn_parts_turned_and_the_parts_keep_their_tr
     assert house_box({"x": 1.0, "y": 2.0, "w": 3.0, "h": 4.0, "geom": turned}) == tuple(turned["boxes"]["house"])
 
 
-def test_a_quarter_turned_homestead_draws_its_yard_beside_the_house_with_the_edge_toward_it_level(monkeypatch) -> None:
-    """The GM's ruling of 2026-09-26 (homesteads/240): a yard and its beds always line up with their house. A quarter turn
-    carries the yard from the south front round to the west, and its edge toward the house stays straight - the level
-    edge is chosen in the house's frame, not the map's."""
-    from l7r.diagram.settlement import houses as H
-
-    monkeypatch.setattr(H, "QUARTER_TURN_SHARE", 1.0)
+def test_a_quarter_turned_homestead_draws_its_yard_beside_the_house_with_the_edge_toward_it_level() -> None:
+    """The GM's ruling of 2026-09-26 (homesteads/240): a yard and its beds always line up with their house. A village whose
+    common bearing is a quarter turn carries the yard from the south front round to the west, and its edge toward the house
+    stays straight - the level edge is chosen in the house's frame, not the map's."""
     s = _nuc_village()
-    s._house_bearing = 0.0
+    s._house_bearing = 90.0
     n = 0
     for gx in range(380, 640, 100):
         for gy in range(200, 720, 90):

@@ -349,13 +349,12 @@
     <rect x="714" y="620" width="152" height="76" fill="url(#keiko-earth)" stroke="#A8875A" stroke-width="1" stroke-dasharray="4 3"/>
     <text font-size="9" font-style="italic" fill="#3A2E1C">practice ground</text>
     <g data-kind="striking posts">
-      <!-- a knee-high BUNDLE of a dozen or more branches laid on supports, ~5 ft long (feature 267 R34, buildings
-           560). A GUESS at a period post: the record attests the adult bundle only as present-day practice, its school
-           and region unnamed, and its one writer holds the older form a children's exercise of one to a few branches
-           (feature 267 pass 2; this comment called it "the other Satsuma form") -->
-      <rect x="742" y="670" width="15" height="4" fill="#7A5430" stroke="#4A3318" stroke-width="0.6"/>
-      <line x1="742" y1="672" x2="757" y2="672" stroke="#4A3318" stroke-width="0.4"/>
-      <text font-size="7" font-style="italic" fill="#5C4830">striking bundle</text>
+      <!-- two UPRIGHT striking posts, the Jigen-ryu form (buildings 560), drawn as location markers as the other sheets
+           draw theirs. Feature 280 M115: the knee-high bundle of branches this sheet drew (feature 267 R34) is attested
+           only as present-day practice and at Iwama in the 1940s, so it is not drawn -->
+      <circle cx="744" cy="672" r="2" fill="#7A5430" stroke="#4A3318" stroke-width="0.8"/>
+      <circle cx="756" cy="668" r="2" fill="#7A5430" stroke="#4A3318" stroke-width="0.8"/>
+      <text font-size="7" font-style="italic" fill="#5C4830"><tspan>striking</tspan><tspan>posts</tspan></text>
     </g>
     <!-- weapon rack standing at the practice ground's south edge (feature 267 pass 2: it stood flush on the
          rowhouse's south face, where the third household's door now opens; a rack at a practice ground's edge is a

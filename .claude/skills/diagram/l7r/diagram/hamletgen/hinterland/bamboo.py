@@ -16,8 +16,11 @@ from .parcels import _parcel_outline
 
 # THE BAMBOO STANDS (feature 133 T47/T48, GM 2026-08-27; research/vegetation.html "Bamboo: how common, where
 # it stood, and how to show it"). Two attested forms, the `bamboo` knob's values: the THICKET (take-yabu),
-# ONE communal stand at the village edge held and cut under the village's rules like its coppice, seated
-# here on the cluster's shady side; and HOUSEHOLD bamboo, a small strip on each farmstead that keeps one
+# ONE stand at the settlement's edge, seated here on dry ground just beyond the cluster's back (north) row - not at
+# the field margin: feature 280 M49 (research/vegetation/640) finds a bamboo thicket round the settlement before modern
+# times (an early-Edo screen, the Nagaokakyo bamboo villages, the Qimin yaoshu's high dry ground), while the field
+# margin's shady end rested on a present-day page; which side of the cluster, and that the stand is held in common,
+# are GUESSES; and HOUSEHOLD bamboo, a small strip on each farmstead that keeps one
 # (`household_bamboo` in homesteads.py, seated with the sheds and gardens). The thicket's size is a working
 # harvested stand in real feet; a stand under the legibility floor does not read at fit zoom.
 BAMBOO_THICKET_FT = (84.0, 58.0)
@@ -121,14 +124,7 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
     north = min(hy)
     top = sorted(houses, key=lambda o: o["y"])[:3]
     home_target = (sum(float(o["x"]) for o in top) / len(top), north - px(40.0))
-    env = [(float(a), float(b)) for a, b in plan.envelope]
-    if env:
-        ecx, ecy = sum(q[0] for q in env) / len(env), sum(q[1] for q in env) / len(env)
-        near = min(env, key=lambda q: math.hypot(q[0] - home_target[0], q[1] - north))
-        d = math.hypot(near[0] - ecx, near[1] - ecy) or 1.0
-        thicket_target = (near[0] + (near[0] - ecx) / d * px(50.0), near[1] + (near[1] - ecy) / d * px(50.0))
-    else:
-        thicket_target = home_target  # pragma: no cover - a hamlet always has its field [174: KEPT, not deletable - an else branch that binds thicket_target]
+    thicket_target = home_target  # the settlement's edge, on the dry ground behind its back row (feature 280 M49)
     rects: list[tuple[float, float, float, float, float]] = []  # (x, y, w, h, pad)
     for key, pad in (("houses", 10.0), ("threshing_yards", 8.0), ("gardens", 8.0), ("farm_sheds", 8.0), ("byres", 8.0), ("retirement_houses", 10.0), ("wells", 14.0), ("kosatsuba", 12.0)):
         for o in s.M.get(key, []):
