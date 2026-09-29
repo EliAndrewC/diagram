@@ -11,7 +11,7 @@ import math
 from collections import defaultdict
 from dataclasses import dataclass
 
-from .geom import Poly, Pt, bbox, centroid, inside, poly_gap, poly_seg_gap
+from .geom import Poly, Pt, bbox, centroid, inside, poly_gap, poly_seg_gap, seg_dist
 from .standard import WAY_NOTCH, WEIGHT_WAY
 
 CIVIC_GROUPS = frozenset({"ministry", "governor", "temple"})
@@ -36,7 +36,10 @@ class Obstacle:
     such ink, so none of its obstacles sets it. `keep` is a gap the obstacle asks for itself, when larger than the
     caption's own: a placed caption keeps its OWN clearance from the next one, so a small name set beside a large one
     keeps the large one's gap (feature 286 - by the small name's gap alone, Hayakawa's RESIDENCE stood 4.3 px from
-    `family privy`, inside its own 5.5)."""
+    `family privy`, inside its own 5.5). `soft` marks ink a caption may be set on when no seat is free - a hand sheet's
+    light roofs and nested ground (standard.py, "WHAT IS AN OVERLAP"); every other obstacle is an overlap the placer
+    never draws (feature 287, D10). `circle` (x, y, r) says the obstacle is that disc - a tree crown - measured as a
+    disc; `poly` is then its box (feature 287, labels L7)."""
 
     poly: tuple[Pt, ...]
     weight: float
@@ -44,14 +47,18 @@ class Obstacle:
     named: bool = False
     inner: bool = False
     keep: float = 0.0
+    soft: bool = False
+    circle: tuple[float, float, float] | None = None
 
 
 @dataclass(frozen=True)
 class Way:
-    """A lane, road, stream or ditch: a polyline a caption may cross at `WEIGHT_WAY`, with its drawn half-width."""
+    """A lane, road, stream or ditch: a polyline a caption may cross at `WEIGHT_WAY`, with its drawn half-width. A `soft`
+    way may be crossed when no seat is free (a hand sheet's road); crossing any other is an overlap (feature 287, D10)."""
 
     pts: tuple[Pt, ...]
     half_width: float
+    soft: bool = False
 
 
 def _cells(box: tuple[float, float, float, float]) -> list[tuple[int, int]]:
@@ -92,16 +99,29 @@ class ObstacleIndex:
             for c in _cells(box):
                 self._segs[c].append((wid, a, b))
 
-    def cost(self, block: Poly, clear: float, subject: Poly | None = None, text: str = "", civic: bool = False) -> float:
-        """The weight a caption set on `block` covers: every obstacle it comes within `clear` of, except its own subject
-        and any built feature of a group its `text` names (FR-014), plus `WEIGHT_WAY` per way it crosses. `civic` says
-        the caption's SUBJECT is a named civic building, which keeps every other named civic building at full weight."""
+    def cost(self, block: Poly, clear: float, subject: Poly | None = None, text: str = "", civic: bool = False, own_gap: float | None = None) -> float:
+        """The weight a caption set on `block` covers (`score`'s first half)."""
+        return self.score(block, clear, subject, text, civic, own_gap)[0]
+
+    def score(self, block: Poly, clear: float, subject: Poly | None = None, text: str = "", civic: bool = False, own_gap: float | None = None) -> tuple[float, bool]:
+        """The weight a caption set on `block` covers - every obstacle it comes within `clear` of, except its own subject
+        and any built feature of a group its `text` names (FR-014), plus `WEIGHT_WAY` per way it crosses - and whether
+        any of it is an OVERLAP (an obstacle or way not `soft`; feature 287, D10). `civic` says the caption's SUBJECT is
+        a named civic building, which keeps every other named civic building at full weight.
+
+        `own_gap` is the block's gap to its own POINT subject (feature 287, labels L6: the standard's ASSOCIATION). An
+        obstacle outside the subject standing as near the block as the subject does, or nearer, counts too: a caption
+        as close to a neighbor as to what it names is not plainly its subject's. At the preferred offset this closes the
+        tie (a neighbor exactly one offset off). The placer passes it for a seat with no leader (`placer._score`)."""
         x0, y0, x1, y1 = bbox(block)
         level = level_rect(block)
-        cells = _cells((x0 - clear, y0 - clear, x1 + clear, y1 + clear))
+        own_lim = own_gap + 1e-6 if own_gap is not None else -math.inf
+        reach = max(clear, own_lim)
+        cells = _cells((x0 - reach, y0 - reach, x1 + reach, y1 + reach))
         seen: set[int] = set()
         words = text.lower()
         total = 0.0
+        hard = False
         for c in cells:
             for i in self._ob.get(c, ()):
                 if i in seen:
@@ -111,21 +131,41 @@ class ObstacleIndex:
                 need = max(clear, o.keep)
                 bx0, by0, bx1, by1 = self._boxes[i]
                 box_gap = math.hypot(max(0.0, bx0 - x1, x0 - bx1), max(0.0, by0 - y1, y0 - by1))
-                if box_gap >= need - 1e-6:
+                if box_gap >= need - 1e-6 and box_gap > own_lim:
                     continue  # the boxes' gap bounds the outlines' from below: clear by the boxes, clear (feature 286)
                 if not o.weight or (o.group and o.group in words and not (civic and o.named and o.group in CIVIC_GROUPS)) or (subject is not None and not o.inner and part_of(o.poly, subject)):
                     continue
-                # two level rectangles are their boxes, so the boxes' gap is theirs (feature 286: the outline test was
-                # nine tenths of placing a hand sheet's captions)
-                gap = box_gap if level and self._level[i] else poly_gap(block, list(o.poly))
-                if gap < need - 1e-6:  # strict: a seat exactly one offset off is clear (plan P6)
+                # a disc is measured as a disc; two level rectangles are their boxes, so the boxes' gap is theirs (feature
+                # 286: the outline test was nine tenths of placing a hand sheet's captions)
+                gap = circle_gap(block, o.circle) if o.circle is not None else (box_gap if level and self._level[i] else poly_gap(block, list(o.poly)))
+                near = gap < need - 1e-6  # strict: a seat exactly one offset off is clear (plan P6)...
+                if not near and gap <= own_lim and subject is not None:
+                    cx, cy = centroid(o.poly)
+                    near = not inside(cx, cy, subject)  # ...unless its own subject stands no nearer (the association)
+                if near:
                     total += o.weight
+                    hard = hard or not o.soft
         crossed: set[int] = set()
         for c in cells:
             for wid, a, b in self._segs.get(c, ()):
                 if wid not in crossed and poly_seg_gap(block, a, b) < self.ways[wid].half_width + WAY_NOTCH:
                     crossed.add(wid)
-        return total + WEIGHT_WAY * len(crossed)
+                    hard = hard or not self.ways[wid].soft
+        return total + WEIGHT_WAY * len(crossed), hard
+
+
+def circle_gap(block: Poly, circle: tuple[float, float, float]) -> float:
+    """The gap between a caption's block and a disc (x, y, r): 0 when they meet."""
+    x, y, r = circle
+    if inside(x, y, block):
+        return 0.0
+    edge = min(seg_dist((x, y), a, b) for a, b in zip(block, [*block[1:], block[0]], strict=True))
+    return max(0.0, edge - r)
+
+
+def circle_obstacle(x: float, y: float, r: float, weight: float, group: str | None = None) -> Obstacle:
+    """A disc as an obstacle - a tree crown (feature 287, labels L7): its box files it, the disc measures it."""
+    return Obstacle(((x - r, y - r), (x + r, y - r), (x + r, y + r), (x - r, y + r)), weight, group, circle=(x, y, r))
 
 
 def level_rect(poly: tuple[Pt, ...] | Poly) -> bool:

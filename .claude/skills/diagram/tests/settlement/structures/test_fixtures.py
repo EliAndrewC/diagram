@@ -50,22 +50,6 @@ def test_place_punishment_spot_skips_a_degenerate_route_segment():
     assert s.place_punishment_spot() is not None
 
 
-def test_caption_lane_clearance_reads_a_tread_through_the_caption_box():
-    """Three verdicts, and only the middle one is reached by a rolled map. A lane VERTEX inside the box
-    is the worst case and returns a negative clearance (the tread's own half-width); a lane CROSSING an
-    edge without a vertex inside is zero clearance; a lane passing well clear is measured."""
-    s = Settlement(1000, 1000, seed=1)
-    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
-    s.M["lanes"] = [{"pts": [[500, 500], [520, 500]], "w": 4}]  # both vertices inside the box
-    assert s.caption_lane_clearance(510, 500, 40.0) == -2.0
-
-    s.M["lanes"] = [{"pts": [[400, 500], [700, 500]], "w": 4}]  # crosses the box, no vertex inside
-    assert s.caption_lane_clearance(510, 500, 40.0) == -2.0, "a crossing tread is zero clearance, less its half-width"
-
-    s.M["lanes"] = [{"pts": [[400, 900], [700, 900]], "w": 4}]
-    assert s.caption_lane_clearance(510, 500, 40.0) > 100.0, "well clear, and measured"
-
-
 def test_a_notice_board_with_no_caption_is_sitable_anywhere():
     """`_sitable` ranks a board position by whether its caption could find a seat there. A board with no
     caption to place has nothing to rank, so every position is equally good - the arm no pool map takes,
@@ -79,7 +63,8 @@ def test_a_notice_board_with_no_caption_is_sitable_anywhere():
 
 def test_a_notice_board_hemmed_on_every_side_still_gets_its_caption():
     """A board with nowhere clear to put its caption is still placed and still labeled (feature 266, the GM: "we'll
-    treat labels as mandatory") - every seat covers a building, and the seat covering the fewest wins."""
+    treat labels as mandatory") - and, every seat covering a building, never over one (feature 287, D10): its number
+    on the board, its words in the sheet's key."""
     s = Settlement(1000, 1000, seed=1)
     s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
     for dx in range(-150, 151, 30):
@@ -94,6 +79,7 @@ def test_a_notice_board_hemmed_on_every_side_still_gets_its_caption():
     assert len(seat) == 1, "the caption is drawn all the same"
     rec = s.M["labels"][-1]
     assert rec[6] == [494.0, 497.5, 506.0, 502.5], "it records the board it names"
+    assert s.M["caption_key"] == [[1, "notice board"]] and rec[5] == "1", "its number on the board, its words in the key"
 
 
 def test_the_board_can_be_sited_on_a_manifest_that_records_runs_but_no_lane_records() -> None:

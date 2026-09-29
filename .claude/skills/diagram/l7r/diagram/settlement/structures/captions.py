@@ -10,9 +10,8 @@ from typing import TYPE_CHECKING, Any
 from l7r.diagram.interactive.tags import ClsTag
 from l7r.diagram.overlap.taxonomy import _LABEL_GROUP
 
-from ...labels import CIVIC_GROUPS, Obstacle, ObstacleIndex, Placement, Subject, Way, place
-from ...labels.geom import bbox as _bbox
-from ...labels.geom import rect, seg_closest
+from ...labels import CIVIC_GROUPS, Obstacle, ObstacleIndex, Placement, Subject, Way, circle_obstacle, place, referent_box
+from ...labels.geom import rect
 from ...labels.standard import WEIGHT_OBSTACLE
 from .._geom import (
     LAND,
@@ -21,9 +20,13 @@ from .._geom import (
     Pt,
     label_aabb,
     label_quad,
+    label_tilt,
+    linear_tilt,
+    linear_tilt_full,
     seg_dist,
     torii_halfbox,
 )
+from ..finish import caption_record_box
 
 # Ground cover and land parcels a caption may stand on - not blockers (see `label_blocker_quads`).
 CAPTION_FEATURE_GAP = 4.0
@@ -77,24 +80,30 @@ def stroke_quad(a: Pt, b: Pt, half: float) -> Poly:
 
 def subject_ref(subject: Subject, p: Placement) -> tuple[float, float, float, float]:
     """The referent box a caption records (element [6]): the subject's box, or for a LINE subject the drawn road across
-    from where the caption landed - the box `label_hugs_its_referent` measures the gap against."""
-    if subject.kind == "point":
-        # the subject's UNROTATED box - its extents in its own frame, about its center - the record's standing
-        # convention (`_record_label`'s note: it keeps `label_hugs_its_referent` conservative)
-        a = math.radians(subject.angle)
-        u, v = (math.cos(a), math.sin(a)), (-math.sin(a), math.cos(a))
-        c = (sum(q[0] for q in subject.poly) / len(subject.poly), sum(q[1] for q in subject.poly) / len(subject.poly))
-        su = max(abs((q[0] - c[0]) * u[0] + (q[1] - c[1]) * u[1]) for q in subject.poly)
-        sv = max(abs((q[0] - c[0]) * v[0] + (q[1] - c[1]) * v[1]) for q in subject.poly)
-        return (c[0] - su, c[1] - sv, c[0] + su, c[1] + sv)
-    if subject.kind == "area":
-        return _bbox(subject.poly)
-    cx = sum(q[0] for q in p.block) / len(p.block)
-    cy = sum(q[1] for q in p.block) / len(p.block)
-    pts = list(subject.poly)
-    q = min((seg_closest((cx, cy), a, b) for a, b in zip(pts, pts[1:], strict=False)), key=lambda c: math.dist(c, (cx, cy)))
-    h = subject.half_width
-    return (q[0] - h, q[1] - h, q[0] + h, q[1] + h)
+    from where the caption landed - the box `label_hugs_its_referent` measures the gap against. The placer's own
+    `referent_box`, the one the hug is held to (feature 287, labels L10)."""
+    return referent_box(subject, p.block)
+
+
+def tree_crown_discs(M: Any) -> list[tuple[float, float, float]]:
+    """Every DRAWN tree crown as (x, y, r): `tree_crowns`, the flat list the drawer writes as it paints, or - for a
+    manifest with none recorded - the grove clumps at their nominal radius (see `fixtures.siting.canopy_index`, which
+    files the same list for the board's siting)."""
+    flat = M.get("tree_crowns") or []
+    items = [(float(flat[i]), float(flat[i + 1]), float(flat[i + 2])) for i in range(0, len(flat) - 2, 3)]
+    if not items:
+        items = [(float(c[0]), float(c[1]), float(g.get("r") or 0.0)) for g in (M.get("village_groves") or []) if isinstance(g, dict) for c in (g.get("clumps") or [])]
+    return items
+
+
+def pending_caption_quad(payload: Sequence[Any]) -> Poly:
+    """The drawn quad of a queued `text` caption (`label()`'s own payload), from the arithmetic `label()` will draw it by:
+    its record box (`caption_record_box`, its fixed lines or the one line) turned by its tilt (feature 287, labels L4: a
+    probe made at siting time sees every caption the label phase will draw before this one)."""
+    x, y, text, size, anchor, _it, _wt, _co, _ref, rot, linear, full_tilt, _wrap, _cls, lines, angle = payload
+    tilt = angle if angle is not None else ((linear_tilt_full(rot) if full_tilt else linear_tilt(rot)) if linear else label_tilt(rot))
+    box = caption_record_box(text, list(lines) if lines else [text], x, y, size, anchor)
+    return label_quad([*box, 0, text, None, tilt])
 
 
 if TYPE_CHECKING:
@@ -213,6 +222,30 @@ class CaptionProbesMixin:
         if getattr(self, "_road_label", None):
             self._finish_road_label()  # feature 145: the Imperial-road caption, a town/city feature, lives in structures/ground.py
             self._road_label: Any = None  # declared Any at structures/ground.py; re-declared for the checker (the attribute is conditional)
+        if self.M.get("caption_key"):
+            self._draw_caption_key()
+
+    def _draw_caption_key(self: Settlement) -> None:  # type: ignore[misc]
+        """THE SHEET'S KEY (feature 287, D10): the words of every caption the placer found no seat for, each after the
+        number its mark carries on the map - a map drawing convention (a legend's numbered notes). Set on a card over
+        blank ground or cover inside the view where one is free (`_blank_label_spot`), else in a band grown under the
+        map, as the title's band is grown over it - the key is sheet furniture and owes the map no ground."""
+        rows = [f"{n}  {text}".replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;") for n, text in self.M["caption_key"]]
+        size, pad = 9.0, 6.0
+        w = max(len(r) for r in rows) * size * 0.55 + 2 * pad
+        h = len(rows) * size * 1.15 + 2 * pad
+        vx0, vy0, vw, vh = self.view if self.view else (0, 0, self.W, self.H)
+        spot = self._blank_label_spot(vx0, vy0, vw, vh, w, h, cover_ok=True)
+        if spot is None:
+            band = h + 16
+            self.M["meta"].setdefault("neatline", [round(v, 1) for v in (vx0, vy0, vw, vh)])  # the band is outside the map (`neatline_clip`)
+            self.set_view(vx0, vy0, vw, vh + band)
+            self.M["meta"]["key_band"] = round(band, 1)
+            spot = (vx0 + 16, vy0 + vh + 8)
+        x0, y0 = spot
+        self.M["caption_key_card"] = [round(x0, 1), round(y0, 1), round(x0 + w, 1), round(y0 + h, 1)]
+        body = "".join(f'<text x="{x0 + pad:.0f}" y="{y0 + pad + (i + 0.8) * size * 1.15:.0f}" font-size="{size:g}" fill="#2D2A24">{r}</text>' for i, r in enumerate(rows))
+        self.add_label(f'<g><rect x="{x0:.0f}" y="{y0:.0f}" width="{w:.0f}" height="{h:.0f}" rx="4" fill="#F7F0DC" stroke="#8C7A55" stroke-width="1"/>{body}</g>', cls="-")
 
     # WHICH METHOD DRAWS EACH QUEUED KIND. An ordered-data row rather than a derived one (clause 14's
     # carve-out): it states a DECISION - that a kosatsuba's seat is searched in the phase while a
@@ -231,8 +264,23 @@ class CaptionProbesMixin:
             self._label_index = self.label_obstacles()
         view = self.M["meta"].get("view")
         frame = (view[0], view[1], view[0] + view[2], view[1] + view[3]) if view else None
-        p = place(text, size, subject, self._label_index, frame)
+        return self._draw_placement(text, subject, place(text, size, subject, self._label_index, frame), size, italic, weight, color, cls, markup)
+
+    def _draw_placement(  # type: ignore[misc]
+        self: Settlement, text: str, subject: Subject, p: Placement, size: float, italic: bool, weight: str, color: str, cls: ClsTag, markup: bool = False
+    ) -> Placement:
+        """Draw one caption where the placer put it - its words, its leader, or (with no seat on the sheet, feature 287
+        D10) its numbered mark on what it names, the words going to the sheet's key - and add it to the phase's index.
+        A caption whose seat was PROVED before the phase (the notice board's, labels L4) is drawn here verbatim."""
+        if self._label_index is None:
+            self._label_index = self.label_obstacles()
         ref = subject_ref(subject, p)
+        if p.keyed:
+            key = self.M.setdefault("caption_key", [])
+            key.append([len(key) + 1, text])
+            self.label(p.x, p.y, str(len(key)), size, weight="bold", color=color, ref=ref, cls=cls, lines=[str(len(key))], angle=0.0)
+            self._label_index.add(Obstacle(p.block, WEIGHT_OBSTACLE))
+            return p
         if markup:
             z = self.add_label(
                 f'<text x="{p.x:.0f}" y="{p.y:.0f}" text-anchor="middle" font-size="{size:g}" font-weight="bold" fill="#33301E" letter-spacing="1.5" paint-order="stroke" stroke="{LAND}" stroke-width="3.5">{text}</text>'
@@ -282,6 +330,18 @@ class CaptionProbesMixin:
             for a, b in zip(ring_pts, ring_pts[1:], strict=False):
                 obstacles.append(Obstacle(tuple(stroke_quad(a, b, half)), WEIGHT_OBSTACLE))
         obstacles += [Obstacle(tuple(label_quad(lb)), WEIGHT_OBSTACLE) for lb in self.M["labels"] if len(lb) > 3]
+        # EVERY DRAWN TREE CROWN (feature 287, labels L7): a caption's halo biting a crown was judged only AFTER the placer
+        # had chosen (`board_caption_level`), so the probed seat and the drawn one could differ. A crown is an obstacle
+        # like a roof; a caption naming trees may lie on its own kind (the `grove` group)
+        obstacles += [circle_obstacle(x, y, r, WEIGHT_OBSTACLE, "grove") for x, y, r in tree_crown_discs(self.M)]
+        # ...AND EVERY CAPTION STILL QUEUED (feature 287, labels L4): a probe made before the label phase - the board's
+        # siter - sees the fixed-seat captions and the proved board captions the phase will draw, so the seat it proves is
+        # the seat the phase can draw. During the phase the queue has been drained into it, so this adds nothing there.
+        for kind, payload in getattr(self, "_label_queue", []):
+            if kind == "text":
+                obstacles.append(Obstacle(tuple(pending_caption_quad(payload)), WEIGHT_OBSTACLE))
+            elif kind == "kosatsuba" and len(payload) > 6 and payload[6] is not None:
+                obstacles.append(Obstacle(payload[6].block, WEIGHT_OBSTACLE))
         if self.M.get("title"):
             x0, y0, x1, y1 = self.M["title"]["bbox"]
             obstacles.append(Obstacle(((x0, y0), (x1, y0), (x1, y1), (x0, y1)), WEIGHT_OBSTACLE))

@@ -1,4 +1,4 @@
-"""Feature 284's exact pieces, each against a copy of the form it replaced: the board's lazy caption choice (A3), the bamboo
+"""Feature 284's exact pieces, each against a copy of the form it replaced: the bamboo
 search walked outward (A4), the fabric crossing's box prefilters and the ring test (A5), and the grove draw's crown grid
 (A6). Each index or ordering PRUNES; the old test DECIDES (`dev/performance.md`)."""
 
@@ -12,33 +12,6 @@ from l7r.diagram.hamletgen.ways.fabric import _crosses_fabric
 from l7r.diagram.hamletgen.ways.geom import ring_within
 from l7r.diagram.settlement._geom import CrownIndex, edge_dist, seg_dist, segments_cross
 from l7r.diagram.settlement.shrines_wells.woods import TreeStandsMixin
-from l7r.diagram.settlement.structures.fixtures.siting import BOARD_CAPTION_TOP, board_choice
-
-
-def _old_choice(seats, level):
-    fits = {id(c): level(c) for c in seats}
-    fitting = [c for c in seats if fits[id(c)] == max(fits.values())]
-    in_the_open = [c for c in fitting if not c[7]] or fitting
-    return max(in_the_open, key=lambda c: (fits[id(c)], c[5] is not None, c[1]))
-
-
-def test_the_lazy_board_choice_is_the_full_choice() -> None:
-    """A3: over random candidate sets - ties on score, shaded and open seats, caption levels 0 to the top - the lazy walk
-    picks the very seat (the same object) the full evaluation picks, and asks fewer levels when a top seat is open."""
-    rng = random.Random(2843)
-    asked_less = 0
-    for _ in range(400):
-        seats = [(0, rng.choice((1.0, 2.0, 3.0, rng.uniform(0, 5))), 0.0, 0.0, 0.0, rng.choice((None, 0, 1)), 0.0, rng.random() < 0.4) for _ in range(rng.randint(1, 14))]
-        levels = {id(c): rng.choice((0, 1, 1, BOARD_CAPTION_TOP, BOARD_CAPTION_TOP)) for c in seats}
-        calls: list[int] = []
-
-        def level(c, calls=calls, levels=levels):
-            calls.append(1)
-            return levels[id(c)]
-
-        assert board_choice(seats, level) is _old_choice(seats, lambda c, levels=levels: levels[id(c)])
-        asked_less += len(calls) < len(seats)
-    assert asked_less, "non-vacuity: the walk stopped early somewhere"
 
 
 def test_the_bamboo_walk_outward_finds_the_scans_seat() -> None:

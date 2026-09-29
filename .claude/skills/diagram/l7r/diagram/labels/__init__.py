@@ -11,7 +11,11 @@ from .obstacles import CIVIC_GROUPS as CIVIC_GROUPS
 from .obstacles import Obstacle as Obstacle
 from .obstacles import ObstacleIndex as ObstacleIndex
 from .obstacles import Way as Way
+from .obstacles import circle_obstacle as circle_obstacle
 from .placer import Placement as Placement
 from .placer import Subject as Subject
+from .placer import caption_clears_ways as caption_clears_ways
+from .placer import hug_gap as hug_gap
 from .placer import place as place
+from .placer import referent_box as referent_box
 from .standard import upright as upright

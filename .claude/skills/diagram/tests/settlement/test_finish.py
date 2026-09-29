@@ -75,14 +75,6 @@ def test_title_falls_back_to_the_corner_when_no_blank_space():
     assert s.M["title"]["bbox"][0] == 30  # fell back to view left + 30
 
 
-def test_title_without_a_view_centers_on_the_canvas():
-    s = _crop_settlement()  # no set_view -> self.view is None
-    s.M["fields"] = [{"outline": [[-10, -10], [2010, -10], [2010, 1510], [-10, 1510]]}]  # full-canvas cover -> no gap
-    s.title("Y")
-    tb = s.M["title"]["bbox"]
-    assert abs((tb[0] + tb[2]) / 2 - 1000) < 2  # centered on W/2 = 1000
-
-
 def test_text_width_measures_the_render_font_and_falls_back(monkeypatch):
     # the placard pads symmetrically because the width is MEASURED in the render font (DejaVu Serif
     # Bold, what resvg substitutes for serif) - 'Akagahara' measured ~180px where the old estimate

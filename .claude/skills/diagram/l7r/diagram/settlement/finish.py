@@ -46,6 +46,55 @@ def caption_record_box(text: str, lines: Sequence[str], x: float, y: float, size
     return (x0_, cy_ - half, x0_ + w_, cy_ + half)
 
 
+Box = tuple[float, float, float, float]
+
+
+def _shown(parcel: Box, view: Sequence[float]) -> Box | None:
+    """The part of a parcel's box (x0, y0, x1, y1) the view (x, y, w, h) shows, or None."""
+    vx, vy, vw, vh = view
+    s = (max(vx, parcel[0]), max(vy, parcel[1]), min(vx + vw, parcel[2]), min(vy + vh, parcel[3]))
+    return s if s[2] > s[0] and s[3] > s[1] else None
+
+
+def scatter_overhang(frame: Box, parcel: Box, view: Sequence[float]) -> list[float] | None:
+    """THE ONE PREDICATE of `no_shipped_hamlet_breaches_its_scatter_frame` (feature 287, water W52): how far, per side
+    (left, top, right, bottom), the view shows a scatter's parcel past the frame the scatter was thrown within - positive
+    is a strip that may hold no scatter - or None where the view shows none of the parcel (a frame too small for ground the
+    view never reaches is no breach)."""
+    s = _shown(parcel, view)
+    if s is None:
+        return None
+    return [frame[0] - s[0], frame[1] - s[1], s[2] - frame[2], s[3] - frame[3]]
+
+
+def scatter_strips(frame: Box, parcel: Box, view: Sequence[float]) -> list[Box]:
+    """The strips of a scatter's parcel the view shows past its frame, as boxes - where a re-throw goes (water W52)."""
+    s = _shown(parcel, view)
+    if s is None:
+        return []
+    out: list[Box] = []
+    if frame[0] > s[0]:
+        out.append((s[0], s[1], min(frame[0], s[2]), s[3]))
+    if frame[1] > s[1]:
+        out.append((s[0], s[1], s[2], min(frame[1], s[3])))
+    if frame[2] < s[2]:
+        out.append((max(frame[2], s[0]), s[1], s[2], s[3]))
+    if frame[3] < s[3]:
+        out.append((s[0], max(frame[3], s[1]), s[2], s[3]))
+    return out
+
+
+def neatline_clip(ink: list[str], ink_cls: list[ClsTag], neat: Sequence[float] | None) -> tuple[list[str], list[ClsTag]]:
+    """The map's ink - every layer under the labels, the `<svg>` header first - clipped at the NEATLINE (x, y, w, h) where
+    the sheet grew a title band the map owes nothing to (feature 287, labels L14): a title panel outside the map frame, a
+    map drawing convention. Unchanged where no neatline is recorded. The wrappers draw no ink and carry no class."""
+    if not neat:
+        return ink, ink_cls
+    x, y, w, h = neat
+    head = f'<defs><clipPath id="neatline"><rect x="{x:g}" y="{y:g}" width="{w:g}" height="{h:g}"/></clipPath></defs><g clip-path="url(#neatline)">'
+    return [ink[0], head, *ink[1:], "</g>"], [ink_cls[0], None, *ink_cls[1:], None]
+
+
 _ELEMENT_OPACITY = re.compile(r"<(line|circle|ellipse|rect|polygon|path)\b([^>]*?) opacity=\"([^\"]*)\"([^>]*)/>")
 
 
@@ -306,8 +355,8 @@ class FinishMixin:
         rendered window for a spot where the box clears every feature (buildings, fields, water, groves,
         the pond), scanning top-first so the title lands high when it can. Records the placed box in M['title']
         so `title_clear_of_features` can verify it. Call AFTER crop_to_content, so the search runs over the
-        framed window. Falls back to the top-left of the view (or the canvas center) only if the map is too full
-        to find any gap.
+        framed window. Where the map is too full to find any gap, a corner that hides nothing but cover, and failing
+        that a band grown on the sheet for it (`_title_band`) - over nothing, never over a feature (feature 287, L14).
 
         SCALE BAR (GM 2026-07-20: every settlement map shows its scale, matching the Mode A compound
         sheets): the bar spans 100 map-px, which is a round real distance at every rung of the GM's
@@ -346,28 +395,15 @@ class FinishMixin:
             )  # blank first; cover (a belt, a wood) as the last resort before the corner (feature 137 T06)
         if spot:
             px0, py0 = spot
-        elif self.view:
-            # MAP TOO FULL: the four corners, first one that hides nothing but cover, else the top-left
-            # (feature 137 T06 - seed 13's top-left corner was a dry plot while its bottom-right was scrub)
+        else:
+            # MAP TOO FULL: the four corners, first one that hides nothing but cover (feature 137 T06 - seed 13's top-left
+            # corner was a dry plot while its bottom-right was scrub). A map with no view is framed by its whole canvas -
+            # a town canvas IS its view (Hirameki) - and takes the same rungs; the old canvas-center fallback set the
+            # placard over whatever stood there (feature 287, labels L14)
             obs = self._title_obstacles(cover_ok=True)
             corners = [(vx0 + 30, vy0 + 16), (vx0 + vw - bw - 30, vy0 + 16), (vx0 + 30, vy0 + vh - bh - 16), (vx0 + vw - bw - 30, vy0 + vh - bh - 16)]
             clean = next(((cx, cy) for cx, cy in corners if self._box_clear(cx, cy, cx + bw, cy + bh, obs)), None)
-            if clean is not None:
-                px0, py0 = clean
-            else:
-                # THE TITLE BAND, the last rung (feature 137 T06): every corner hides a plot (seed 13's dry hem
-                # rings the whole view). The title is not a feature of the place and owes it no ground, so
-                # the sheet grows a band above the map sized to the placard, declared in meta so
-                # `crop_hugs_content` allows exactly that much on the north edge, and the placard sits in
-                # it - over nothing, unless a feature runs off the frame there, which the check still reports.
-                band = bh + 32
-                vy0 -= band
-                vh += band
-                self.set_view(vx0, vy0, vw, vh)
-                self.M["meta"]["title_band"] = round(band, 1)
-                px0, py0 = vx0 + 30, vy0 + 16
-        else:
-            px0, py0 = self.W / 2 - bw / 2, 22
+            px0, py0 = clean if clean is not None else self._title_band(vx0, vy0, vw, vh, bw, bh, obs)
         y = py0 + PAD  # the text block's top, inside the card
         pcx = px0 + bw / 2  # the placard's axis: the name AND the scale bar center on it (GM 2026-07-21)
         self.M["title"] = {
@@ -417,6 +453,41 @@ class FinishMixin:
         )
         self.add_label(f'<text x="{(bx0 + bx1) / 2:.0f}" y="{by + 17:.0f}" text-anchor="middle" font-size="12" fill="#3A2E1C">{bar_ft} ft</text>', cls="-")
         self.add_label(f'<text x="{(bx0 + bx1) / 2:.0f}" y="{by + 31:.0f}" text-anchor="middle" font-size="10" font-style="italic" fill="#5C4830">(1 px = {self.ftpx:g} ft)</text>', cls="-")
+
+    def _title_band(self: Settlement, vx0: float, vy0: float, vw: float, vh: float, bw: float, bh: float, obs: BoxObstacles) -> Pt:  # type: ignore[misc]
+        """THE TITLE BAND, the last rung (feature 137 T06; feature 287, labels L14): every corner hides a plot (seed 13's
+        dry hem rings the whole view). The title is not a feature of the place and owes it no ground, so the sheet grows
+        a band sized to the placard - declared in meta so `crop_hugs_content` allows exactly that much - and the placard
+        sits in it OVER NOTHING. The band shows the canvas past the frame, where a lane or a stream running off the map
+        still draws, so the placard's x is SCANNED along the band with the test every other rung uses (`_box_clear`); then
+        the band under the map; and where a way crosses the whole of both, the map's ink is clipped at the frame it had
+        (`meta.neatline`: a title panel outside the map's neatline - a map drawing convention), which leaves the band
+        blank by construction. Returns the placard's top-left."""
+        band = bh + 32
+        for north in (True, False):
+            y = vy0 - band + 16 if north else vy0 + vh + 16
+            x = vx0 + 30
+            while x + bw <= vx0 + vw - 30:
+                if self._box_clear(x, y, x + bw, y + bh, obs):
+                    self.set_view(vx0, vy0 - band if north else vy0, vw, vh + band)
+                    self.M["meta"]["title_band"] = round(band, 1)
+                    if not north:
+                        self.M["meta"]["title_band_side"] = "south"
+                    return (x, y)
+                x += 8
+        self.M["meta"]["neatline"] = [round(v, 1) for v in (vx0, vy0, vw, vh)]
+        self.set_view(vx0, vy0 - band, vw, vh + band)
+        self.M["meta"]["title_band"] = round(band, 1)
+        return (vx0 + 30, vy0 - band + 16)
+
+    def title_clear(self: Settlement) -> bool:  # type: ignore[misc]
+        """THE ONE PREDICATE of `title_clear_of_features` (feature 287, labels L14): the placard clears every feature it may
+        not cover (`_title_obstacles(cover_ok=True)`) - or stands wholly outside the neatline the map's ink is clipped at."""
+        x0, y0, x1, y1 = self.M["title"]["placard"]
+        neat = self.M["meta"].get("neatline")
+        if neat and (y1 <= neat[1] or y0 >= neat[1] + neat[3] or x1 <= neat[0] or x0 >= neat[0] + neat[2]):
+            return True
+        return self._box_clear(x0, y0, x1, y1, self._title_obstacles(cover_ok=True))
 
     def _title_obstacles(self: Settlement, cover_ok: bool = False, planned: Any = ()) -> BoxObstacles:  # type: ignore[misc]
         """Feature footprints a title must clear, indexed for box queries (feature 222) from (rects, polys, lines). Solid buildings/plots -> rects;
@@ -598,8 +669,12 @@ class FinishMixin:
         self.flush_tree_stands()
         self.flush_blade_groups()
         # THE PREDICTION IS VERIFIED, NEVER TRUSTED (feature 224 FR-002): the view against the tightest frame any scatter
-        # threw within; a view reaching past it means a strip inside the frame may hold no scatter - a visible defect,
-        # recorded here as `scatter_frame_breach` (the overhang per side), asserted absent over the pool by the gate.
+        # threw within; a view reaching past it means a strip inside the frame may hold no scatter - a visible defect.
+        # REPAIRED WHERE THE VIEW IS FINAL (feature 287, water W52): a scatter whose thrower registered a re-throw
+        # (`_scatter_rethrows`, by its index in `_scatter_frames`) is thrown again into exactly the strips the view shows
+        # past its frame (`scatter_strips`), and its frame then covers them; what no re-throw covers is recorded as
+        # `scatter_frame_breach` (the overhang per side), asserted absent over the pool by the gate. A title panel beyond a
+        # neatline is not the map, so the view measured is the neatline where one is recorded.
         if self._scatter_frames:
             _tight = (
                 max(f[0] for f, _b in self._scatter_frames),
@@ -608,17 +683,24 @@ class FinishMixin:
                 min(f[3] for f, _b in self._scatter_frames),
             )
             self.M["meta"]["scatter_frame"] = [round(v, 1) for v in _tight]
-            if self.view:
-                # PER SCATTER, ON THE GROUND IT COVERED: the breach is where the view shows part of a parcel the frame kept
-                # the throw out of - a frame too small for a parcel the view never reaches is no breach (the 48-map
-                # cohort's first run flagged the marsh's early frame against a title band the marsh never neared).
-                _vx, _vy, _vw, _vh = self.view
+            _view = self.M["meta"].get("neatline") or self.view
+            if _view:
                 _over = [-1e9, -1e9, -1e9, -1e9]
-                for (_f0, _f1, _f2, _f3), (_p0, _p1, _p2, _p3) in self._scatter_frames:
-                    _s0, _s1, _s2, _s3 = max(_vx, _p0), max(_vy, _p1), min(_vx + _vw, _p2), min(_vy + _vh, _p3)
-                    if _s2 <= _s0 or _s3 <= _s1:
-                        continue  # the parcel lies outside the view
-                    _over = [max(_over[0], _f0 - _s0), max(_over[1], _f1 - _s1), max(_over[2], _s2 - _f2), max(_over[3], _s3 - _f3)]
+                for _k, (_frame, _parcel) in enumerate(self._scatter_frames):
+                    _rethrow = getattr(self, "_scatter_rethrows", {}).get(_k)
+                    _strips = scatter_strips(_frame, _parcel, _view)
+                    if _rethrow is not None and _strips:
+                        for _strip in _strips:
+                            _rethrow(_strip)
+                        _frame = (
+                            min(_frame[0], *(s[0] for s in _strips)),
+                            min(_frame[1], *(s[1] for s in _strips)),
+                            max(_frame[2], *(s[2] for s in _strips)),
+                            max(_frame[3], *(s[3] for s in _strips)),
+                        )
+                    _side = scatter_overhang(_frame, _parcel, _view)
+                    if _side is not None:
+                        _over = [max(a, b) for a, b in zip(_over, _side, strict=True)]
                 if max(_over) > -1e9:
                     _over = [round(v, 1) for v in _over]
                     self.M["meta"]["scatter_frame_overhang"] = _over  # left, top, right, bottom: positive = the view shows ground a throw was kept out of
@@ -758,8 +840,9 @@ class FinishMixin:
         if self.view:  # crop the viewBox to the requested window
             ox, oy, vw, vh = self.view
             self.out[0] = self.out[0].replace(f'viewBox="0 0 {self.W} {self.H}"', f'viewBox="{ox} {oy} {vw} {vh}"')
-        body = [fold_element_opacity(b) for b in self.out + self.walls + self.top + self.toplabels] + ['</svg>']  # WALLS over lanes; TOP furniture; LABEL text topmost
-        body_cls: list[ClsTag] = self.out_cls + self.walls_cls + self.top_cls + self.toplabels_cls + [None]
+        ink, ink_cls = neatline_clip(self.out + self.walls + self.top, self.out_cls + self.walls_cls + self.top_cls, self.M["meta"].get("neatline"))
+        body = [fold_element_opacity(b) for b in ink + self.toplabels] + ['</svg>']  # WALLS over lanes; TOP furniture; LABEL text topmost
+        body_cls: list[ClsTag] = ink_cls + self.toplabels_cls + [None]
         if len(body_cls) != len(body):  # the side-list drifted from the stream - a stream write that bypassed add()
             raise RuntimeError(f"feature-class side list out of step with the record streams: {len(body_cls)} tags for {len(body)} strings")
         with open(basepath + '.svg', 'w') as f:
@@ -793,7 +876,12 @@ class FinishMixin:
             meta=self.M["meta"],
             manifest=self.M,
             with_raster=rendering,
-            blade_starts={i: got[1] for i, b in enumerate(self.out) if (got := self._blade_starts.get(id(b))) is not None and got[0] is b},
+            # (an index into `body`: the neatline's wrapper, where there is one, stands after the header)
+            blade_starts={
+                i + (1 if i and len(ink) > len(self.out) + len(self.walls) + len(self.top) else 0): got[1]
+                for i, b in enumerate(self.out)
+                if (got := self._blade_starts.get(id(b))) is not None and got[0] is b
+            },
         )
         # WRITTEN WHOLE, THEN MOVED INTO PLACE (feature 261): the gate reads a pool map's manifest in one worker
         # while another re-rolls it, and an in-place write let a reader see it half-written - measured as a

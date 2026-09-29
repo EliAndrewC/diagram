@@ -1,6 +1,8 @@
 """Split from the 1,152-line `tests/settlement/test_structures.py` by feature 174 - see this
 directory's CLAUDE.md for the index. Tests for `settlement/structures/captions.py`."""
 
+import pytest
+
 from tests.settlement._builders import _town
 
 
@@ -112,3 +114,59 @@ def test_the_one_placers_index_sees_every_family_the_map_draws():
     assert not any(o.poly and max(q[0] for q in o.poly) - min(q[0] for q in o.poly) > 800 for o in idx.obstacles), "ground cover is free space"
     walls = [o for o in idx.obstacles if abs(o.poly[0][1] - o.poly[1][1]) < 1e-6 and 90 < o.poly[0][1] < 110]
     assert walls, "the rampart's runs are obstacles"
+
+
+def test_the_index_holds_every_crown_and_every_caption_still_queued():
+    """Feature 287, labels L7 and L4: every drawn tree crown is an obstacle, measured as a disc and waived for a caption
+    naming trees - from `tree_crowns`, or the grove clumps where no crown is recorded; and every caption still QUEUED
+    (a fixed-seat `text` caption, a proved board caption) is one, so a probe made before the label phase sees what the
+    phase will draw. During the phase the queue is drained, and it adds nothing."""
+    from l7r.diagram.labels import Placement
+
+    s = _town()
+    s.M["tree_crowns"] = [100.0, 100.0, 12.0, 200.0, 100.0, 9.0]
+    s.label(400, 400, "a fixed seat", 9, rot=30.0)
+    s.label(400, 300, "a line", 9, rot=72.0, linear=True)
+    s.label(400, 200, "a full tilt", 9, rot=72.0, linear=True, full_tilt=True)
+    s.label(400, 100, "placed", 9, lines=["placed"], angle=10.0)
+    proved = Placement(600.0, 600.0, 0.0, ("notice board",), ((590.0, 595.0), (610.0, 595.0), (610.0, 605.0), (590.0, 605.0)), 0, 0, "upper right", 0.0, None)
+    s._label_queue.append(("kosatsuba", (0.0, 0.0, 0.0, 12.0, 5.0, "notice board", proved)))
+    s._label_queue.append(("kosatsuba", (0.0, 0.0, 0.0, 12.0, 5.0, "notice board", None)))
+    s.field_name_label("Higashi-da", (0, 0, 10, 10))
+    idx = s.label_obstacles()
+    crowns = [o for o in idx.obstacles if o.circle is not None]
+    assert [(o.circle, o.group) for o in crowns] == [((100.0, 100.0, 12.0), "grove"), ((200.0, 100.0, 9.0), "grove")]
+    pending = [o for o in idx.obstacles if o.circle is None and o.group is None and not o.named]
+    assert any(abs(sum(q[0] for q in o.poly) / 4 - 400.0) < 1 and abs(sum(q[1] for q in o.poly) / 4 - (400.0 - 9 * 0.275)) < 1 for o in pending), "the fixed seat's own box"
+    assert any(o.poly == proved.block for o in pending), "the proved board caption"
+    g = _town()
+    g.M["village_groves"] = [{"clumps": [[50, 60]], "r": 14}, "not a record"]
+    assert [o.circle for o in g.label_obstacles().obstacles if o.circle is not None] == [(50.0, 60.0, 14.0)], "the clumps, where no crown is recorded"
+
+
+def test_a_caption_with_no_seat_goes_in_the_key_on_a_card_or_in_a_band():
+    """Feature 287, D10: the placer found no seat - its number is drawn on what it names, its words in the sheet's key:
+    on a card over blank ground inside the view where there is room, else in a band grown under the map, outside the
+    neatline its ink is clipped at."""
+    from l7r.diagram.labels import Subject
+    from l7r.diagram.labels.geom import rect
+
+    s = _town()
+    s.set_view(0, 0, 1000, 1000)
+    s.M["buildings"] = [{"x": 500, "y": 500, "w": 20, "h": 20, "kind": "merchant"}]
+    s.M["fire_towers"] = [{"x": 500, "y": 500, "w": 400, "h": 400}]  # ink every seat within the hug covers (the title's search does not read it)
+    s._captions.append(("a warehouse & store", Subject("point", tuple(rect(500.0, 500.0, 10.0, 10.0))), 9, False, "normal", "#333"))
+    s.place_labels()
+    assert s.M["caption_key"] == [[1, "a warehouse & store"]]
+    assert any(lb[5] == "1" and lb[6] for lb in s.M["labels"]), "the mark, recording what it names"
+    card = s.M["caption_key_card"]
+    assert card[2] <= 1000 and card[3] <= 1000 and "key_band" not in s.M["meta"], "a card inside the view"
+    assert any("1  a warehouse &amp; store" in t for t in s.toplabels)
+    full = _town()
+    full.set_view(0, 0, 200, 200)
+    full.M["fields"] = [{"outline": [[-10, -10], [210, -10], [210, 210], [-10, 210]]}]
+    full.M["buildings"] = [{"x": 100, "y": 100, "w": 20, "h": 20, "kind": "merchant"}, {"x": 100, "y": 100, "w": 190, "h": 190, "kind": "yard"}]
+    full._captions.append(("stores", Subject("point", tuple(rect(100.0, 100.0, 10.0, 10.0))), 9, False, "normal", "#333"))
+    full.place_labels()
+    assert full.M["meta"]["key_band"] > 0 and full.M["meta"]["neatline"] == [0, 0, 200, 200]
+    assert full.M["meta"]["view"][3] == pytest.approx(200 + full.M["meta"]["key_band"], abs=0.1) and full.M["caption_key_card"][1] >= 200

@@ -54,12 +54,14 @@ D8_HAND_SEATS = frozenset(
 )
 """Spec D8: the 33 functions whose 47 hand-seated calls stay until their tier is scripted. It only ever shrinks."""
 
-PHASE_DRAWERS = frozenset({("structures/captions.py", "_draw_queued_label"), ("structures/captions.py", "_draw_seated_caption")})
-"""The label phase's two drawers: one replays a D8 hand seat, the other draws what the placer chose."""
+PHASE_DRAWERS = frozenset({("structures/captions.py", "_draw_queued_label"), ("structures/captions.py", "_draw_placement")})
+"""The label phase's two drawers: one replays a D8 hand seat, the other draws what the placer chose (feature 287: a seat
+the placer chose in the phase, or one the board's siter proved before it)."""
 
-RAW_TEXT_SETTLEMENT = frozenset({("finish.py", "label"), ("finish.py", "title"), ("structures/captions.py", "_draw_seated_caption")})
+RAW_TEXT_SETTLEMENT = frozenset({("finish.py", "label"), ("finish.py", "title"), ("structures/captions.py", "_draw_placement"), ("structures/captions.py", "_draw_caption_key")})
 """Where the settlement engine may write `<text` itself: the caption primitive, the title placard (not a caption - it names
-no feature), and the field-name markup the placer seats."""
+no feature), the field-name markup the placer seats, and the sheet's key (feature 287, D10 - the words of the captions
+the placer found no seat for, each after its mark's number: sheet furniture like the title)."""
 
 RAW_TEXT_COMPOUND = {"plain": 1, "emit_svg": 2}
 """`compound.py`'s own `<text`: the title and draft note (`plain`) and the two scale-bar lines. Every caption it draws is

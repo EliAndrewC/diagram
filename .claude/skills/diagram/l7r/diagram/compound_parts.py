@@ -6,6 +6,7 @@ down, clear of every one of them and of what was seated before it.
 
 from __future__ import annotations
 
+import math
 from collections.abc import Callable
 
 from .compound_model import (
@@ -22,11 +23,13 @@ from .compound_model import (
     GATE_POST_W_FT,
     KINDS,
     LATRINE_WELL_FT,
+    NOTICE_BOARD_MAX_FT,
     PRIVY_FT,
     ROOF_POST_BAY_FT,
     ROOF_POST_FT,
     ROOFED_ZONES,
     STONE_STEP_FT,
+    TUB_MAX_GAP_FT,
     WALL_INK_FT,
     BuildingSpec,
     CompoundProgram,
@@ -333,6 +336,26 @@ def _roomiest(points: list[tuple[float, float]], boxes: list[Box]) -> tuple[floa
     return max(points, key=room)
 
 
+TUB_R_FT = 3.8 / FTPX
+"""A fire-water tub's drawn radius, in feet (the `<circle r="3.8">` the draft draws)."""
+
+
+def tub_by_its_eaves(tub: tuple[float, float], host: Box) -> bool:
+    """THE ONE PREDICATE of `fire_water_adrift` on a generated sheet (feature 287, homes H29b): a tub's drawn circle stands
+    within `TUB_MAX_GAP_FT` of the building whose gutter feeds it. The tub's seat is offered only where it holds."""
+    x, y = tub
+    dx = max(host[0] - x, x - host[2], 0.0)
+    dy = max(host[1] - y, y - host[3], 0.0)
+    return float(math.hypot(dx, dy)) - TUB_R_FT <= TUB_MAX_GAP_FT
+
+
+def board_by_the_gate(env: Envelope, board: Box) -> bool:
+    """THE ONE PREDICATE of `notice_board_adrift` on a generated sheet (feature 287, homes H29b): the compound's notice board
+    stands within `NOTICE_BOARD_MAX_FT` of the main gate's opening."""
+    gl, gr = _gate_interval(env)
+    return _gap(board, (gl, env.h_ft - 1.0, gr, env.h_ft + 1.0)) <= NOTICE_BOARD_MAX_FT
+
+
 def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callable[..., str], caption: Callable[..., str], ox: float, oy: float) -> list[str]:
     """The program's point features, seated by the composition (feature 254): fire-water tubs at every
     wooden building's court face (two at the kitchen), a well at the kitchen, the garden and the stables,
@@ -352,7 +375,15 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
     taken.append((0.0, env.divider_ft - DIVIDER_INK_FT / 2, env.w_ft, env.divider_ft + DIVIDER_INK_FT / 2))
     by_name = {p.spec.name: p for p in result.placed}
 
-    def seat(p: Placed, size: float, fracs: tuple[float, ...], offs: tuple[float, ...], side: str = "", avoid: tuple[Box, ...] = (), block: tuple[Box, ...] = ()) -> tuple[float, float] | None:
+    def seat(
+        p: Placed,
+        size: float,
+        fracs: tuple[float, ...],
+        offs: tuple[float, ...],
+        side: str = "",
+        avoid: tuple[Box, ...] = (),
+        block: tuple[Box, ...] = (),
+    ) -> tuple[float, float] | None:
         """The center of a `size`-square feature against a side of `p` (its court face unless `side` names another):
         the first clear (frac, off) - clear of `block` too - and at least LATRINE_WELL_FT off every `avoid` box."""
         nx, ny, fx, fy, length = _face(p, side or _court_side(p))
@@ -472,6 +503,9 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
             # (the west or north end before the east or south: the example's kitchen's east end faces the closed slot
             # north of its corridor to the house, its west end the servants' yard)
             tub = tub or seat(p, 2.6, toward_court, (2.5,), ends[1]) or seat(p, 2.6, toward_court, (2.5,), ends[0])
+            # EVERY SEAT OFFERED STANDS BY ITS EAVES (feature 287, homes H29b): 2.5 ft off the face is inside the gutter's
+            # reach by construction - held here by the rule's one predicate, the number the pack audit registers
+            assert tub is None or tub_by_its_eaves(tub, (p.x_ft, p.y_ft, p.x2, p.y2)), "a tub seated past its eaves"
             if tub:
                 tubs.append(tub)
     _roji_parts(program, result, taken, rect, parts, ox, oy)
@@ -496,6 +530,7 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
         tx, ty = _roomiest(tubs, taken)
         caption("point", tx - 1.27, ty - 1.27, 2.54, 2.54, "fire-water tubs", 7, True, "#3A5060", "fire-water tubs")
     gl, _gr = _gate_interval(env)
+    assert board_by_the_gate(env, (gl - 14.0, env.h_ft + 3.0, gl - 8.0, env.h_ft + 4.5)), "the board stands 8 ft west of the gate, by construction"
     parts.append(rect(gl - 14.0, env.h_ft + 3.0, 6.0, 1.5, "#4A3318", "#2D2A24", 0.6, "", "notice board"))
     caption("point", gl - 14.0, env.h_ft + 3.0, 6.0, 1.5, "notice board", 7, True, "#3A2E1C", "notice board")
     return parts

@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import os
 import sys
+from dataclasses import replace
 
 from .buildings.types import load_types
 from .compound_model import (
@@ -50,7 +51,7 @@ from .compound_model import (
     _kind_attr,
 )
 from .compound_parts import _clerk_seats, _court_side, _dais, _engawa, _gate_posts, _lattice, _mats, _middle_gate, _point_features, _rear_band, _roof_posts, _wall_runs
-from .labels import Obstacle, ObstacleIndex, Subject
+from .labels import Obstacle, ObstacleIndex, Placement, Subject
 from .labels import place as place_caption
 from .labels.standard import CHAR_W_EM, WEIGHT_OBSTACLE
 from .labels.svg import caption_svg, leader_svg
@@ -181,16 +182,44 @@ def place(program: CompoundProgram) -> PlaceResult:
     each building in priority order - rank 1 before rank 2, then N/S before E/W before divider,
     then highest `order`, then largest - hugging its wall and sliding past the gate, the courts,
     and every building already down. Corners go to the N/S rows; short E/W and divider buildings
-    flow around them instead of blocking a whole corner they do not occupy."""
-    result = PlaceResult()
+    flow around them instead of blocking a whole corner they do not occupy.
+
+    NO BUILDING IS LEFT IN OVERFLOW (feature 287, homes H29a): a building that runs off its wall grows the walled
+    interior along that wall by its own length and a fire-gap, and the placement is run again - within the compound size
+    the program states (`max_w_ft`, `max_h_ft`). A program asking for more than that much compound holds is refused here,
+    naming the building (plan D7: the composer is seedless, so this is an impossible input refused before any sheet
+    exists, never a sheet drawn with a building off its wall). The result carries the envelope it was placed in."""
     env = program.envelope
-    for spec in sorted(program.buildings, key=lambda s: (s.rank, _wall_tier(s.wall), -s.order, -(s.w_ft * s.h_ft))):
-        placed = _place_one(env, spec, program.spine, result.placed)
-        if placed is None:
-            result.overflow.append(spec)
-        else:
-            result.placed.append(placed)
-    return result
+    while True:
+        result = PlaceResult(envelope=env)
+        for spec in sorted(program.buildings, key=lambda s: (s.rank, _wall_tier(s.wall), -s.order, -(s.w_ft * s.h_ft))):
+            placed = _place_one(env, spec, program.spine, result.placed)
+            if placed is None:
+                result.overflow.append(spec)
+            else:
+                result.placed.append(placed)
+        if not result.overflow:
+            return result
+        grown = _grown(env, result.overflow[0], program)
+        if grown is None:
+            spec = result.overflow[0]
+            raise ValueError(
+                f"{program.title}: {spec.name!r} ({spec.w_ft:g} x {spec.h_ft:g} ft, {spec.court} {spec.wall}) finds no seat on its wall inside the compound the program allows - "
+                "shrink the building, move it, or state a larger compound (max_w_ft / max_h_ft)"
+            )
+        env = grown
+
+
+def _grown(env: Envelope, spec: BuildingSpec, program: CompoundProgram) -> Envelope | None:
+    """The envelope grown along the overflowing building's wall by its own length and a fire-gap, or None past the
+    compound size the program states (or where it states none, or where length cannot help: a building beside the gate)."""
+    if spec.beside_gate:
+        return None
+    if spec.wall in ("N", "S", "divider"):
+        w = env.w_ft + spec.w_ft + FIRE_GAP_FT
+        return replace(env, w_ft=w) if program.max_w_ft is not None and w <= program.max_w_ft else None
+    h = env.h_ft + spec.h_ft + FIRE_GAP_FT
+    return replace(env, h_ft=h) if program.max_h_ft is not None and h <= program.max_h_ft else None
 
 
 # ---- SVG emit (feet -> px at FTPX; a composed DRAFT the GM refines) -----------------------
@@ -239,26 +268,105 @@ CAPTION_ROOM = 40.0
 the notice board outside the gate. The canvas grows to hug whatever is placed there."""
 
 
+CAPTION_GROWTHS = 3
+"""How many `CAPTION_ROOM` steps the draft's foot may grow for a caption with no clean seat (feature 287, labels L15) -
+past that the program itself is refused (plan D7)."""
+
+CAPTION_REPAIR_EM = 2.0
+"""How near a stranded caption's subject a seated caption must stand to be lifted for it, in ems of the stranded caption
+plus that caption's own length - `labels.hand_sheet.REPAIR`, the hand sheets' repair, on the generated sheets."""
+
+Request = tuple[str, Subject, float, bool, str, str]
+
+
 def _seat_captions(
-    requests: list[tuple[str, Subject, float, bool, str, str]], obstacles: list[Obstacle], frame: tuple[float, float, float, float], late: dict[int, list[Obstacle]] | None = None
+    requests: list[Request], obstacles: list[Obstacle], frame: tuple[float, float, float, float], late: dict[int, list[Obstacle]] | None = None, title: str = ""
 ) -> tuple[list[str], float]:
     """Place every requested caption by the ONE placer (feature 266), in order, each an obstacle to the next, and write
     it - with its leader when the standard gives it one (FR-005). `late[i]` are obstacles that join the index once
     caption i is seated: ground only that caption may stand on (a roofed court's floor is its own caption's, and no
-    other caption stands under its roof). Returns the strings and the lowest point drawn."""
-    index = ObstacleIndex(obstacles)
+    other caption stands under its roof). Returns the strings and the lowest point drawn.
+
+    NO CAPTION LIES ON A FEATURE IT DOES NOT NAME (feature 287, labels L15; plan D7): each is placed STRICTLY - a free
+    seat or none (`place(strict=True)`). A caption with none has one seated neighbor lifted and the pair re-seated
+    (`_repair`, the hand sheets' repair), then the draft's foot is grown by `CAPTION_ROOM` and the whole set placed
+    again; a program whose caption has no clean seat after that is refused at composition, naming the caption - the
+    composer is seedless, so this is an impossible program, refused before any sheet exists."""
+    stuck = 0
+    for grow in range(CAPTION_GROWTHS + 1):
+        seats, stuck_at = _seat_all(requests, obstacles, (frame[0], frame[1], frame[2], frame[3] + grow * CAPTION_ROOM), late or {})
+        if stuck_at is None:
+            break
+        stuck = stuck_at
+    else:
+        raise ValueError(f"{title}: the caption {requests[stuck][0]!r} has no seat clear of every feature, even with a neighbor lifted and the sheet grown - change the program")
     out: list[str] = []
     foot = 0.0
-    for i, (text, subject, size, italic, fill, kind) in enumerate(requests):
-        p = place_caption(text, size, subject, index, frame)
+    for (_text, _subject, size, italic, fill, kind), p in zip(requests, seats, strict=True):
         out.append(caption_svg(p, size, ' font-style="italic"' if italic else ' font-weight="bold"', fill, kind))
         if p.leader is not None:
             out.append(leader_svg(p, size, fill, kind))
-        index.add(Obstacle(p.block, WEIGHT_OBSTACLE))
-        for ob in (late or {}).get(i, []):
-            index.add(ob)
         foot = max(foot, *(q[1] for q in p.block))
     return out, foot
+
+
+def _caption_index(obstacles: list[Obstacle], seats: list[Placement], late: dict[int, list[Obstacle]], lifted: int | None = None, subject: Subject | None = None) -> ObstacleIndex:
+    """The index a caption is placed against: the drawn features, every caption seated (but a `lifted` one) and the late
+    ground of every caption seated. For an AREA caption the features holding its area are waived - a room's name lies in
+    its building by necessity, as the hand sheets waive the building holding a named room (feature 267)."""
+    index = ObstacleIndex([o for o in obstacles if subject is None or subject.kind != "area" or not _holds(o.poly, subject.poly)])
+    for k, p in enumerate(seats):
+        if k != lifted:
+            index.add(Obstacle(p.block, WEIGHT_OBSTACLE))
+        for ob in late.get(k, []):
+            index.add(ob)
+    return index
+
+
+def _holds(outer: tuple[tuple[float, float], ...], inner: tuple[tuple[float, float], ...]) -> bool:
+    """Does `outer`'s box hold `inner`'s, and more than it (1 px of slack)?"""
+    a, b = _box(outer), _box(inner)
+    return a[0] <= b[0] + 1 and a[1] <= b[1] + 1 and a[2] >= b[2] - 1 and a[3] >= b[3] - 1 and (a[2] - a[0]) * (a[3] - a[1]) > (b[2] - b[0]) * (b[3] - b[1]) + 1
+
+
+def _seat_all(requests: list[Request], obstacles: list[Obstacle], frame: tuple[float, float, float, float], late: dict[int, list[Obstacle]]) -> tuple[list[Placement], int | None]:
+    """Every caption placed strictly in order, repaired where stranded; the placements, and the first caption no repair
+    frees (None when all are seated)."""
+    seats: list[Placement] = []
+    for i, (text, subject, size, *_style) in enumerate(requests):
+        p = place_caption(text, size, subject, _caption_index(obstacles, seats, late, subject=subject), frame, strict=True) or _repair(i, requests, obstacles, seats, late, frame)
+        if p is None:
+            return seats, i
+        seats.append(p)
+    return seats, None
+
+
+def _repair(i: int, requests: list[Request], obstacles: list[Obstacle], seats: list[Placement], late: dict[int, list[Obstacle]], frame: tuple[float, float, float, float]) -> Placement | None:
+    """Caption `i`, stranded, seated with one neighbor lifted and the neighbor re-seated after it - both on free seats, or
+    neither moves (feature 286's repair, `labels.hand_sheet.repair`, on the generated sheets). The neighbors tried are
+    the seated captions standing within `CAPTION_REPAIR_EM` ems plus their own length of the stranded caption's subject."""
+    text, subject, size, *_style = requests[i]
+    sx0, sy0, sx1, sy1 = _box(subject.poly)
+    for j, done in enumerate(seats):
+        bx0, by0, bx1, by1 = _box(done.block)
+        reach = CAPTION_REPAIR_EM * size + max(bx1 - bx0, by1 - by0)
+        if max(bx0 - sx1, sx0 - bx1, by0 - sy1, sy0 - by1, 0.0) > reach:
+            continue
+        pi = place_caption(text, size, subject, _caption_index(obstacles, seats, late, lifted=j, subject=subject), frame, strict=True)
+        if pi is None:
+            continue
+        jt, js, jsize, *_jstyle = requests[j]
+        index = _caption_index(obstacles, seats, late, lifted=j, subject=js)
+        index.add(Obstacle(pi.block, WEIGHT_OBSTACLE))
+        pj = place_caption(jt, jsize, js, index, frame, strict=True)
+        if pj is not None:
+            seats[j] = pj
+            return pi
+    return None
+
+
+def _box(poly: tuple[tuple[float, float], ...]) -> tuple[float, float, float, float]:
+    return min(q[0] for q in poly), min(q[1] for q in poly), max(q[0] for q in poly), max(q[1] for q in poly)
 
 
 _DEFS = (
@@ -285,7 +393,10 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 7
     """Build a composed draft SVG (feet -> px). Not a final map - the GM refines it.
 
     The parchment margin is the checklist's ~15-25 px (7 ft = 21 px; `viewbox_cropped` holds every
-    sheet to it, the drafts included since feature 254); the top adds the title band and the scale bar."""
+    sheet to it, the drafts included since feature 254); the top adds the title band and the scale bar. The compound is
+    drawn at the envelope its buildings were placed in (`PlaceResult.envelope`, feature 287 H29a)."""
+    if result.envelope is not None and result.envelope != program.envelope:
+        program = replace(program, envelope=result.envelope)
     env = program.envelope
     ox = margin_ft * FTPX
     oy = (margin_ft + 8.0) * FTPX
@@ -478,7 +589,7 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 7
     # stands outside the gate, 21 px from the canvas's foot, where no caption fits beside it - the old draft's caption
     # hung past the edge and was clipped. So the placer is given room below, and the canvas then grows to hug what it
     # placed there.
-    seated, foot = _seat_captions(requests, obstacles, (0.0, 0.0, cw, ch + CAPTION_ROOM), late)
+    seated, foot = _seat_captions(requests, obstacles, (0.0, 0.0, cw, ch + CAPTION_ROOM), late, program.title)
     parts += seated
     if foot + margin_ft * FTPX > ch:
         grown = foot + margin_ft * FTPX
@@ -687,11 +798,10 @@ def main(argv: list[str] | None = None) -> int:
     out = args[0] if args else os.path.join("pool", _EXAMPLE_TIER, "county-magistracy-example", "county-magistracy-example.svg")
     program = county_magistracy_program()
     result = place(program)
+    svg = emit_svg(program, result)  # composed BEFORE the file is opened: a refused program leaves no emptied draft behind
     with open(out, "w", encoding="utf-8") as fh:
-        fh.write(emit_svg(program, result))
-    print(f"wrote {out}: {len(result.placed)} buildings placed, {len(result.overflow)} overflow")
-    for spec in result.overflow:
-        print(f"  OVERFLOW (did not fit its wall): {spec.name} ({spec.w_ft:.0f}x{spec.h_ft:.0f} ft, {spec.court} {spec.wall})")
+        fh.write(svg)
+    print(f"wrote {out}: {len(result.placed)} buildings placed")  # `place` refuses a program that overflows (feature 287)
     return 0
 
 

@@ -2,7 +2,7 @@
 
 from typing import TYPE_CHECKING
 
-from ....labels import Subject
+from ....labels import Placement, Subject
 from ....labels.geom import rect
 from ..._geom import label_tilt, tilt_caption_seat
 from ..._knobs import KOSATSUBA_MARKER_MIN_PX
@@ -43,7 +43,7 @@ class BoardsMixin:
             self.label(_lx, _ly, label, 9, italic=True, color="#7A5A30", rot=_t)
         return z
 
-    def kosatsuba(self: Settlement, x: float, y: float, rot: float = 0.0, label: str = "notice board") -> int:  # type: ignore[misc]
+    def kosatsuba(self: Settlement, x: float, y: float, rot: float = 0.0, label: str = "notice board", placement: Placement | None = None) -> int:  # type: ignore[misc]
         """The KOSATSUBA - the settlement's official notice board: a small roofed frame posting
         the state's STANDING LAW (edicts, porter/packhorse rate tables, ban lists). Sited at the
         most TRAFFICKED public point - the highway frontage, the main street by the gate, a
@@ -74,7 +74,11 @@ class BoardsMixin:
         floor NEVER shrinks a board, so hamlets and towns (1 ft/px) still draw the true 12x5 px;
         only village and city grain lift. The manifest keeps the TRUE w/h (so a size audit reads
         real feet) and records the drawn box as vw/vh, which is what the overlap checks and the
-        placement reservation use - the pixels that can actually collide."""
+        placement reservation use - the pixels that can actually collide.
+
+        `placement` is the caption's seat when the siter PROVED it (feature 287, labels L4: `place_kosatsuba` keeps only
+        a board whose caption the one placer seats clean, and hands that seat on): the label phase draws it verbatim
+        rather than searching again. A board posted by hand passes none, and the phase seats its caption."""
         w, h = self.px(12), self.px(5)
         k = max(1.0, KOSATSUBA_MARKER_MIN_PX / w)  # marker floor, aspect preserved
         vw, vh = w * k, h * k
@@ -94,10 +98,10 @@ class BoardsMixin:
             # separate phase than the labels for the map are placed"*). Unlike a `text` caption, whose
             # feature has already chosen its seat, a board's seat is SEARCHED - so the search has to
             # run when the map is finished, not when the plank goes in.
-            self._label_queue.append(("kosatsuba", (x, y, rot, vw, vh, label)))
+            self._label_queue.append(("kosatsuba", (x, y, rot, vw, vh, label, placement)))
         return z
 
-    def _draw_board_caption(self: Settlement, x: float, y: float, rot: float, vw: float, vh: float, label: str) -> None:  # type: ignore[misc]
+    def _draw_board_caption(self: Settlement, x: float, y: float, rot: float, vw: float, vh: float, label: str, placement: Placement | None = None) -> None:  # type: ignore[misc]
         """Seat and draw one notice board's caption, in the LABEL PHASE (feature 157), by the ONE placer (feature 266).
 
         The board is a POINT subject: its drawn, rotated footprint and its angle. Everything else - the ranked side,
@@ -106,5 +110,18 @@ class BoardsMixin:
         decided in `l7r.diagram.labels` (research/presentation, "Where does a caption sit"). The 560-line search that
         stood here, with its own annulus, ladder, lane target and half-way pull, is gone with the hand-built rules it
         encoded."""
-        subject = Subject("point", tuple(rect(x, y, vw / 2, vh / 2, rot)), angle=rot)
-        self._draw_seated_caption(label, subject, 8, True, "normal", "#7A5A30", "notice board")  # the caption shares the board's class (feature 134 FR-006)
+        subject = board_subject(x, y, rot, vw, vh)
+        if placement is not None:  # the seat the siter proved (feature 287, labels L4) - drawn as proved, not searched again
+            self._draw_placement(label, subject, placement, BOARD_CAPTION_SIZE, True, "normal", "#7A5A30", "notice board")
+            return
+        self._draw_seated_caption(label, subject, BOARD_CAPTION_SIZE, True, "normal", "#7A5A30", "notice board")  # the caption shares the board's class (feature 134 FR-006)
+
+
+BOARD_CAPTION_SIZE = 8
+"""The notice board's caption size - the one the siter proves a seat at and the label phase draws at."""
+
+
+def board_subject(x: float, y: float, rot: float, vw: float, vh: float) -> Subject:
+    """The board as the one placer's POINT subject: its drawn, rotated footprint and its angle - one body for the siter's
+    proof and the label phase's drawing (feature 287, labels L4)."""
+    return Subject("point", tuple(rect(x, y, vw / 2, vh / 2, rot)), angle=rot)
