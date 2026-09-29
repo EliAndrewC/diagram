@@ -273,3 +273,12 @@ are taken where the mechanism lands, before anything depends on it: the belt cas
 seats D2 refuses (with P3's corridor and capacity), and the board terminal (with P6's strict caption predicate). Seed 31's
 yard over a paddy is not measured separately: homes H44 guarantees the yard clear of every paddy as drawn whatever it reads
 today, and P9's sweep checks it.
+
+## R6 - The maps as the work moves them (2026-09-29)
+
+**After M2 (T05: the brook rounded once, before the homesteads)** (observed 2026-09-29, method: `make maps SCOPE=all`, each
+manifest compared with the one committed before): Inashiro, Kashikawa and Mizuguchi re-seat (houses, lanes and what stands
+among them move, since the seats now read the finished course); Sawada moves only its site boundary's record; Kuwabata is
+unchanged. Every map seats every household in one roll. The pool's rule tests then fail two rules on Mizuguchi -
+`test_an_entrance_board_stands_at_the_entrance` and `test_every_lane_crosses_the_brook_square` - both rules this feature
+guarantees (labels, P6; ways, P4); the regressed state stays in the clone until they land.
