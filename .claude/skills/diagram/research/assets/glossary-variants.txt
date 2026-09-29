@@ -756,6 +756,8 @@ feather	feather
 feathered	feather
 feathering	feather
 feathers	feather
+feedlot	feedlot
+feedlots	feedlot
 fen	fen
 feng shui	feng shui
 fengshui	feng shui
