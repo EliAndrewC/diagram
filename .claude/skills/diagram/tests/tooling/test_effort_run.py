@@ -92,7 +92,9 @@ def _init(w: dict, seed: int = 7) -> dict:
 
 def _run_args(w: dict, task: str, run: str = "e1", arm: str = "xhigh", ws_gb: float = 2.0) -> argparse.Namespace:
     cg = _cgroup(w["tmp"] / f"cg-{run}-{ws_gb}", int((ws_gb + 1) * er.GB), er.GB)
-    return argparse.Namespace(task=task, run=run, arm=arm, order=1, origin=str(w["origin"]), clones=str(w["tmp"] / "clones"), claims=str(w["claims"]), cgroup=str(cg), events=str(w["events"]), host_diag="")
+    return argparse.Namespace(
+        task=task, run=run, arm=arm, order=1, origin=str(w["origin"]), clones=str(w["tmp"] / "clones"), claims=str(w["claims"]), cgroup=str(cg), events=str(w["events"]), host_diag=""
+    )
 
 
 def test_init_records_what_every_run_shares_once(world: dict) -> None:
@@ -214,13 +216,61 @@ def test_the_command_line_refuses_and_reports(world: dict, capsys: pytest.Captur
     assert "REFUSED" in capsys.readouterr().err
     a = _run_args(world, "R", run="e7")
     assert (
-        er.main(["run", "--task", "R", "--run", "e7", "--arm", "medium", "--order", "1", "--origin", a.origin, "--clones", a.clones, "--claims", a.claims, "--cgroup", a.cgroup, "--events", a.events, "--host-diag", ""])
+        er.main(
+            [
+                "run",
+                "--task",
+                "R",
+                "--run",
+                "e7",
+                "--arm",
+                "medium",
+                "--order",
+                "1",
+                "--origin",
+                a.origin,
+                "--clones",
+                a.clones,
+                "--claims",
+                a.claims,
+                "--cgroup",
+                a.cgroup,
+                "--events",
+                a.events,
+                "--host-diag",
+                "",
+            ]
+        )
         == 0
     )
     assert "e7 started (R)" in capsys.readouterr().out
     (world["fdir"] / "runs" / "e7.json").write_text(json.dumps({"ended": "done"}))
     assert (
-        er.main(["run", "--task", "I", "--run", "e8", "--arm", "xhigh", "--order", "2", "--origin", a.origin, "--clones", a.clones, "--claims", a.claims, "--cgroup", a.cgroup, "--events", a.events, "--host-diag", ""])
+        er.main(
+            [
+                "run",
+                "--task",
+                "I",
+                "--run",
+                "e8",
+                "--arm",
+                "xhigh",
+                "--order",
+                "2",
+                "--origin",
+                a.origin,
+                "--clones",
+                a.clones,
+                "--claims",
+                a.claims,
+                "--cgroup",
+                a.cgroup,
+                "--events",
+                a.events,
+                "--host-diag",
+                "",
+            ]
+        )
         == 0
     )
     assert "transcript" in capsys.readouterr().out
@@ -244,8 +294,7 @@ def test_with_the_shared_figure_the_gate_reads_it_and_a_raw_warning_does_not_blo
     cg = pathlib.Path(_run_args(world, "I", ws_gb=4.4).cgroup)
     (world["events"] / "12.txt").write_text("LOW MEMORY WARNING")
     why, reading = er.refusal(exp, world["fdir"], "I", cg, world["events"], time.time(), shared=int(4.2 * er.GB))
-    assert why == "" and reading == {"source": "shared-slice", "working_set_gb": 4.2, "offset_gb": 0.0,
-                                     "threshold_gb": er.THRESHOLD_GB, "fresh_warning": ""}
+    assert why == "" and reading == {"source": "shared-slice", "working_set_gb": 4.2, "offset_gb": 0.0, "threshold_gb": er.THRESHOLD_GB, "fresh_warning": ""}
     why, _ = er.refusal(exp, world["fdir"], "I", cg, world["events"], time.time(), shared=int(4.6 * er.GB))
     assert "4.6 GB (shared-slice)" in why
     why, reading = er.refusal(exp, world["fdir"], "I", cg, world["events"], time.time())
