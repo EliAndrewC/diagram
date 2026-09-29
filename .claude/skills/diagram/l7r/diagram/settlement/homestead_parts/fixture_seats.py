@@ -26,6 +26,7 @@ from __future__ import annotations
 import math
 from collections.abc import Callable, Iterable, Iterator, Mapping, Sequence
 from dataclasses import dataclass
+from functools import lru_cache
 from itertools import chain
 from typing import Any
 
@@ -103,8 +104,13 @@ def fixture_size(kind: str, forms: FixtureForms, px: Callable[[float], float]) -
 
 
 def clears(r: Rect, taken: Sequence[Rect], gap: float) -> bool:
-    """Does `r` stand clear of every rect in `taken` by `gap`?"""
-    return all(abs(r[0] - t[0]) >= (r[2] + t[2]) / 2 + gap or abs(r[1] - t[1]) >= (r[3] + t[3]) / 2 + gap for t in taken)
+    """Does `r` stand clear of every rect in `taken` by `gap` - apart by the two half-sizes and the gap on one axis at
+    least? A plain loop that stops at the first rect it meets (the seating asks it 1.3 million times a map, seed 44)."""
+    rx, ry, rw, rh = r[0], r[1], r[2], r[3]
+    for t in taken:  # noqa: SIM110 - a loop, not all() over a generator: the generator was half this test's cost
+        if abs(rx - t[0]) < (rw + t[2]) / 2 + gap and abs(ry - t[1]) < (rh + t[3]) / 2 + gap:
+            return False
+    return True
 
 
 def steading_rects(hw: float, hh: float, kura_side: str | None) -> list[Rect]:
@@ -215,11 +221,32 @@ def lay_fixtures(
 
 
 def _first(seats: Iterable[Rect], taken: Sequence[Rect], g: float) -> Rect | None:
-    return next((q for q in seats if clears(q, taken, g)), None)
+    """The first of `seats` that `clears` every rect in `taken` by `g` - its test written inline (73,000 searches a map)."""
+    rects = [(t[0], t[1], t[2], t[3]) for t in taken]
+    for q in seats:
+        qx, qy, qw, qh = q[0], q[1], q[2], q[3]
+        for tx, ty, tw, th in rects:
+            if abs(qx - tx) < (qw + tw) / 2 + g and abs(qy - ty) < (qh + th) / 2 + g:  # `clears`, the same arithmetic
+                break
+        else:
+            return q
+    return None
 
 
 def _trunk(crown: Rect, px: Callable[[float], float]) -> Rect:
     return (crown[0], crown[1], px(TRUNK_FT), px(TRUNK_FT))
+
+
+@lru_cache(maxsize=64)
+def _sun_sector(w: float, d: float, radii: tuple[float, ...]) -> tuple[Rect, ...]:
+    """The privy's sun-side seats, SE to S (112.5 to 202.5 degrees, every 7.5), at each of `radii` (px), nearest first - the
+    same for every household of one privy size, so built once (seed 44: 73,000 privies each built 91 seats)."""
+    sun: list[Rect] = []
+    for rr in radii:
+        for b in range(1125, 2026, 75):  # 112.5 to 202.5 degrees, tenths
+            bd = math.radians(b / 10.0)
+            sun.append((rr * math.sin(bd), -rr * math.cos(bd), w, d))
+    return tuple(sun)
 
 
 def _seats(
@@ -239,12 +266,7 @@ def _seats(
         # sector walked nearest first - bearings in the house's frame, where its front is the south it was seated facing
         if roll(SALT[kind] + 0.25) >= PRIVY_SUNNY_SHARE:
             return attested
-        sun: list[Rect] = []
-        for r_ft in range(int(PRIVY_SUN_MIN_FT), int(PRIVY_SUN_MAX_FT) + 1, 4):
-            for b in range(1125, 2026, 75):  # 112.5 to 202.5 degrees, tenths
-                rr, bd = px(float(r_ft)), math.radians(b / 10.0)
-                sun.append((rr * math.sin(bd), -rr * math.cos(bd), w, d))
-        return sun + attested
+        return [*_sun_sector(w, d, tuple(px(float(r_ft)) for r_ft in range(int(PRIVY_SUN_MIN_FT), int(PRIVY_SUN_MAX_FT) + 1, 4))), *attested]
     if kind == "manure":
         if privy is None:
             return [(hw * 0.3, -(hh / 2 + g + d / 2), w, d), (hw / 2 + g + d / 2, hh * 0.3, d, w)]

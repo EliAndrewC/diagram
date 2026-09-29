@@ -13,8 +13,9 @@ The corridor is a RESERVATION, not a way: the web draws a way along it where its
 
 from __future__ import annotations
 
+import heapq
 import math
-from collections.abc import Iterator
+from collections.abc import Iterable, Iterator
 from typing import TYPE_CHECKING, Any
 
 from .._geom import PointGrid, Pt, seg_closest, seg_dist, segments_cross
@@ -76,17 +77,20 @@ def seg_box_within(a: Pt, b: Pt, box: Any, t: float) -> bool:
 class AccessTree:
     """The reserved corridors: segments `(a, b)` a footpath wide (`half` either side), indexed by their widened boxes."""
 
-    __slots__ = ("_targets", "grid", "half", "segs")
+    __slots__ = ("_along", "_targets", "grid", "half", "segs")
 
     def __init__(self, half: float) -> None:
         self.half = half
         self.segs: list[tuple[Pt, Pt]] = []
         self.grid = PointGrid(128.0)
         self._targets: dict[Pt, list[Pt]] = {}  # `targets`, remembered while no corridor is added
+        self._along: list[list[Pt]] = []  # each corridor's points every `TARGET_STEP_PX`
 
     def add(self, a: Pt, b: Pt) -> None:
         self.segs.append((a, b))
         self._targets = {}
+        n = int(math.dist(a, b) // TARGET_STEP_PX)
+        self._along.append([(a[0] + (b[0] - a[0]) * k / max(1, n), a[1] + (b[1] - a[1]) * k / max(1, n)) for k in range(n + 1)])
         h = self.half
         self.grid.extend([(a, b, min(a[0], b[0]) - h, min(a[1], b[1]) - h, max(a[0], b[0]) + h, max(a[1], b[1]) + h)])
 
@@ -108,13 +112,14 @@ class AccessTree:
         got = self._targets.get(p)
         if got is not None:
             return got
+        # each corridor's points along are the tree's, not the door's: laid out once per corridor (`_along`); the nearest
+        # `TARGETS_TRIED` taken as a stable sort's first ones would be (`heapq.nsmallest`, whose ties keep list order)
         pts: list[Pt] = []
-        for a, b in self.segs:
+        for (a, b), along in zip(self.segs, self._along, strict=True):
             pts.append(seg_closest(p[0], p[1], a, b))
-            n = int(math.dist(a, b) // TARGET_STEP_PX)
-            pts += [(a[0] + (b[0] - a[0]) * k / max(1, n), a[1] + (b[1] - a[1]) * k / max(1, n)) for k in range(n + 1)]
-        pts.sort(key=lambda q: math.dist(p, q))
-        got = self._targets[p] = pts[:TARGETS_TRIED]
+            pts += along
+        dist = math.dist
+        got = self._targets[p] = heapq.nsmallest(TARGETS_TRIED, pts, key=lambda q: dist(p, q))
         return got
 
 
@@ -189,16 +194,16 @@ def fixtures_clear(s: Settlement, a: Pt, b: Pt, own: Any) -> bool:
     return not any(seg_box_within(a, b, box if kind != "persimmon" else (box[0], box[1], trunk, trunk), half) for kind, box in ((own.get("boxes") or {}).get("fixtures") or {}).items())
 
 
-def standing_clear(s: Settlement, a: Pt, b: Pt) -> bool:
+def standing_clear(s: Settlement, a: Pt, b: Pt, memo: dict[Any, Any] | None = None) -> bool:
     """The half of `corridor_clear` that reads only what already stands - the reserved seats, the placed boxes, the site's
     ground and the ways' ground test - REMEMBERED while nothing of it changes (the placed boxes, the tree, the seats and
     the houses the ground test reads): the four garden sides of one seat ask the same doors of the same targets, and seed 14
     spent 136 of its 215 s asking them again (361,575 calls)."""
-    memo = _standing_memo(s)
+    memo = _standing_memo(s)[1] if memo is None else memo  # a caller asking many lines at one state hands its memo in
     key = (round(a[0], 3), round(a[1], 3), round(b[0], 3), round(b[1], 3))
-    hit = memo[1].get(key)
+    hit = memo.get(key)
     if hit is None:
-        hit = memo[1][key] = _standing_clear(s, a, b)
+        hit = memo[key] = _standing_clear(s, a, b)
     return hit
 
 
@@ -241,7 +246,7 @@ def _standing_clear(s: Settlement, a: Pt, b: Pt) -> bool:
     return lawful_ground(s, a, b)
 
 
-def site_edge_samples(s: Settlement, a: Pt, b: Pt) -> list[Pt] | None:
+def site_edge_samples(s: Settlement, a: Pt, b: Pt) -> Iterable[Pt] | None:
     """The corridor a-b's samples, every `SAMPLE_PX`, that the site's raster (`FreeGround`, built with the boundary from the
     same ground) leaves to be asked: None where one stands in a surely taken cell (the tests refuse it), and the samples
     in a surely clear cell left out (the tests pass them). Every sample where no raster is installed. Read from the lines
@@ -251,13 +256,13 @@ def site_edge_samples(s: Settlement, a: Pt, b: Pt) -> list[Pt] | None:
     if fg is None:
         return [(a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n) for k in range(n + 1)]
     if getattr(s, "_access", None) is None:  # no seating under way: nothing primed, nothing to remember
-        alone: list[Pt] | None = fg.lines_edge_points([(a, b, n)])[0]
+        alone: Iterable[Pt] | None = fg.lines_edge_points([(a, b, n)])[0]
         return alone
     memo = _standing_memo(s)[1]
     key = ("site", a, b)
     if key not in memo:
         memo[key] = fg.lines_edge_points([(a, b, n)])[0]
-    edge: list[Pt] | None = memo[key]
+    edge: Iterable[Pt] | None = memo[key]
     return edge
 
 
@@ -273,7 +278,7 @@ def prime_site(s: Settlement, segs: list[tuple[Pt, Pt]]) -> None:
         memo[("site", a, b)] = edge
 
 
-def site_samples_clear(s: Settlement, pts: list[Pt]) -> bool:
+def site_samples_clear(s: Settlement, pts: Iterable[Pt]) -> bool:
     """Do these points stand on ground the site boundary admits - not on the field's side of a chord, not within a water
     course's clearance, not inside the outline of the other ground?"""
     chains, corr = getattr(s, "_site_chains", None), getattr(s, "_site_corridors", None)
@@ -360,7 +365,7 @@ def _house_candidates(s: Settlement, tree: AccessTree, geom: Any) -> Iterator[tu
 
     def clear(a: Pt, b: Pt) -> bool:
         # a strip the site's raster refused (`prime_site`) is refused by the standing ground before anything is asked
-        return memo.get(("site", a, b), ()) is not None and house_clear(a, b, geom) and standing_clear(s, a, b)
+        return memo.get(("site", a, b), ()) is not None and house_clear(a, b, geom) and standing_clear(s, a, b, memo)
 
     for door in doors:
         for q in tree.targets(door):

@@ -267,3 +267,32 @@ def test_free_ground_asks_blocks_of_cells_first_and_claims_what_asking_every_cel
     away = FreeGround([], ([((900.0, 900.0), (950.0, 950.0), 5.0)], []), None, (0.0, 0.0, 100.0, 100.0))
     assert away.taken == set() and len(away.clear) == away.nx * away.ny
     assert away.lines_edge_points([]) == []
+
+
+def test_the_lines_asked_together_answer_as_each_sample_asked_alone() -> None:
+    """`FreeGround.lines_edge_points` asks many lines of the raster in one array: a line is refused where one of its
+    samples stands in a taken cell, and otherwise hands back exactly its samples in neither a taken nor a clear cell - the
+    samples asked one by one, off the grid included."""
+    import random
+
+    from l7r.diagram.hamletgen.homesteads.boundary import FreeGround
+
+    fg = FreeGround([], ([((0.0, 130.0), (400.0, 170.0), 12.0)], []), ([[(200.0, 220.0), (330.0, 220.0), (330.0, 330.0), (200.0, 330.0)]], []), (0.0, 0.0, 400.0, 400.0))
+    rng = random.Random(6)
+    lines = []
+    for _ in range(300):
+        a = (rng.uniform(-50, 450), rng.uniform(-50, 450))
+        b = (a[0] + rng.uniform(-200, 200), a[1] + rng.uniform(-200, 200))
+        lines.append((a, b, max(1, int(((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2) ** 0.5 / 8))))
+    got = fg.lines_edge_points(lines)
+    refused = 0
+    for (a, b, n), edge in zip(lines, got, strict=True):
+        pts = [(a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n) for k in range(n + 1)]
+        cells = [(int((x - fg.x0) // fg.cell), int((y - fg.y0) // fg.cell)) for x, y in pts]
+        if any(c in fg.taken for c in cells):
+            assert edge is None
+            refused += 1
+            continue
+        want = [p for p, c in zip(pts, cells, strict=True) if c not in fg.clear]
+        assert edge is not None and list(edge) == want and len(edge) == len(want)
+    assert 30 < refused < 270

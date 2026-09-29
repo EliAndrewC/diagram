@@ -790,3 +790,22 @@ def test_the_stream_index_is_rebuilt_when_the_courses_change_and_kept_while_they
     assert s._rect_on_stream(rect) is True and s._stream_idx_cache is not kept
     s.M["streams"] = [{"poly": [(900, 300), (900, 500)], "w": 9}, {"poly": [(0, 0), (1, 1)], "w": 4}]  # a new list, same length
     assert s._rect_on_stream(rect) is False
+
+
+def test_a_bundles_parts_are_turned_and_boxed_as_the_turn_helpers_turn_and_box_them() -> None:
+    """`_bundle_geom` takes its turn's cosine and sine once for every part: each part's center is where `turn_about` carries
+    it and each box is `turned_box`'s, at several turns - and the yard, rolled once per seat, is the same for every side."""
+    from l7r.diagram.settlement._geom import turn_about
+    from l7r.diagram.settlement.rolling.bearing import turned_box
+
+    s = _nuc_village()
+    for rot in (0.0, 7.5, -23.0, 90.0):
+        for side in s._NUC_SIDES:
+            flat = s._bundle_geom(500.0, 500.0, 46.0, 28.0, side, True, rot=0.0)
+            geom = s._bundle_geom(500.0, 500.0, 46.0, 28.0, side, True, rot=rot)
+            for k in ("yard", "shed"):
+                ((x, y),) = turn_about([(flat[k][0], flat[k][1])], 500.0, 500.0, rot)
+                assert geom[k] == (x, y, flat[k][2], flat[k][3])
+                assert geom["boxes"][k] == turned_box(geom[k], rot)
+            assert [turned_box(g, rot) for g in geom["gardens"]] == geom["boxes"]["gardens"]
+            assert geom["yard"][2:] == s._bundle_geom(500.0, 500.0, 46.0, 28.0, "SE", True, rot=rot)["yard"][2:]

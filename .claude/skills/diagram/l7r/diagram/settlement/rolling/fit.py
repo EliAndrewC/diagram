@@ -349,7 +349,9 @@ class BundleFitMixin:
         x0, y0, x1, y1 = cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2
         pts = ((x0, y0), (x1, y0), (x1, y1), (x0, y1), (cx, y0), (x1, cy), (cx, y1), (x0, cy), (cx, cy))
         chains, corr = self._site_chains, self._site_corridors
-        if any(chain_violated(px, py, chains, 0.0) for px, py in pts):
+        # a point in a cell the site's raster knows clear passes the chains (`FreeGround`, built from the same chains)
+        fg = self._free_ground
+        if any(chain_violated(px, py, chains, 0.0) for px, py in (pts if fg is None else [p for p in pts if not fg.point_clear(p[0], p[1])])):
             return True
         return bool(corr.hit_points(pts) or corr.hit_center(cx, cy))
 
@@ -397,7 +399,11 @@ class BundleFitMixin:
         (feature 227): the house's wall rule against the paddy, its tread, the eave gap to the nearest house, the
         yard's and the gardens' sun. No ground test - every part lies inside the envelope."""
         house = geom["house"]
-        if not within_field_reach(self, house[0], house[1]):
+        # the four garden sides of a seat stand one house: its reach to the field is asked once (`_reach_memo`)
+        _rm = self.__dict__.get("_reach_memo")
+        if _rm is None or _rm[0] != house[0] or _rm[1] != house[1] or _rm[2] is not self._site_chains:
+            _rm = self.__dict__["_reach_memo"] = (house[0], house[1], self._site_chains, within_field_reach(self, house[0], house[1]))
+        if not _rm[3]:
             return False
         # ...AND A CLEAR CORRIDOR FROM ITS DOOR TO THE ACCESS TREE (feature 287, plan M3's seat half): a house the tree
         # cannot reach from its door is refused here, before it stands, instead of being found stranded on the finished

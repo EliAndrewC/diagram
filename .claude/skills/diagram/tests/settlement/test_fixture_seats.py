@@ -101,3 +101,25 @@ def test_the_retirement_house_stands_off_the_back_wall_or_a_flank_in_its_rolled_
     east = _lay(("retirement",), roll=0.5, ground=(YARD,), roofs=(HOUSE,))["retirement"]
     assert back[1] < -HH / 2 and (back[2], back[3]) == (18.0, 15.0)
     assert east[0] > HW / 2 and (east[2], east[3]) == (15.0, 18.0), "turned along its flank"
+
+
+def test_the_first_clear_seat_and_the_sun_sector_answer_as_they_were_written() -> None:
+    """`_first` writes `clears` inline and `_sun_sector` builds the privy's sun seats once: over random seats and parts the
+    first clear seat is the one the plain scan finds (none included), and the sector is the list built seat by seat."""
+    import math
+    import random
+
+    rng = random.Random(8)
+    found = 0
+    for _ in range(400):
+        taken = [(rng.uniform(-40, 40), rng.uniform(-40, 40), rng.uniform(2, 40), rng.uniform(2, 40)) for _ in range(rng.randint(0, 6))]
+        seats = [(rng.uniform(-60, 60), rng.uniform(-60, 60), rng.uniform(2, 12), rng.uniform(2, 12)) for _ in range(rng.randint(0, 12))]
+        g = rng.choice((0.0, 3.5))
+        want = next((q for q in seats if all(abs(q[0] - t[0]) >= (q[2] + t[2]) / 2 + g or abs(q[1] - t[1]) >= (q[3] + t[3]) / 2 + g for t in taken)), None)
+        assert fs._first(seats, taken, g) == want
+        assert all(fs.clears(q, taken, g) == all(abs(q[0] - t[0]) >= (q[2] + t[2]) / 2 + g or abs(q[1] - t[1]) >= (q[3] + t[3]) / 2 + g for t in taken) for q in seats)
+        found += want is not None
+    assert 40 < found < 400
+    radii = (18.0, 22.0, 26.0)
+    plain = [(rr * math.sin(math.radians(b / 10.0)), -rr * math.cos(math.radians(b / 10.0)), 4.0, 5.0) for rr in radii for b in range(1125, 2026, 75)]
+    assert list(fs._sun_sector(4.0, 5.0, radii)) == plain

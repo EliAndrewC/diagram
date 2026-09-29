@@ -81,6 +81,12 @@ def _ellipse_poly(cx: float, cy: float, rx: float, ry: float) -> list[tuple[floa
 Seg = tuple[tuple[float, float], tuple[float, float], float]
 
 
+def _prepare(geom: Any) -> None:
+    import shapely
+
+    shapely.prepare(geom)
+
+
 def site_boundary(s: Settlement, seat: tuple[float, float]) -> tuple[list[list[Any]], tuple[list[Seg], list[Seg]], tuple[list[list[tuple[float, float]]], list[list[tuple[float, float]]]]]:
     """`(chains, (water, registered), (rings, holes))` for the homestead stage, from every geometry the bundle's fit test reads
     (spec FR-001): the area members unioned and reduced to the chains facing `seat`; the water obstacles and the
@@ -147,12 +153,19 @@ def site_boundary(s: Settlement, seat: tuple[float, float]) -> tuple[list[list[A
     fields = [Polygon([(float(v[0]), float(v[1])) for v in poly]) for poly in s.field_polys if len(poly) >= 3]
     fields = [f if f.is_valid else f.buffer(0) for f in fields]
     covered = unary_union([*fields, *([blob] if blob is not None and not blob.is_empty else [])]) if fields or (blob is not None and not blob.is_empty) else None
+    # the cultivated ground grown by a clearance is built ONCE per clearance, prepared, and asked of every segment kept at
+    # it (seed 44: 6,702 buffers of the whole union, one per segment, for a handful of clearances)
+    grown: dict[float, Any] = {}
     for dest, courses in ((water, [(poly, float(hw)) for poly, hw, _bbox in s._water_obstacles()]), (registered, [(pts, float(clr)) for pts, clr, *_ in s.corridors if len(pts) >= 2])):
         for pts, clr in courses:
             for k in range(len(pts) - 1):
                 a, b = (float(pts[k][0]), float(pts[k][1])), (float(pts[k + 1][0]), float(pts[k + 1][1]))
-                if covered is not None and covered.buffer(clr).covers(LineString([a, b])):
-                    continue
+                if covered is not None:
+                    if clr not in grown:
+                        grown[clr] = covered.buffer(clr)
+                        _prepare(grown[clr])
+                    if grown[clr].covers(LineString([a, b])):
+                        continue
                 dest.append((a, b, clr))
     corridors = (water, registered)
     return chains, corridors, (rings, holes)
@@ -221,6 +234,22 @@ def _vertex_grid(ring: Any) -> PointGrid:
 
 #: The side of a block of `FreeGround` cells asked as one box before its cells are (`FreeGround.__init__`), in cells.
 _BLOCK_CELLS = 8
+
+
+class EdgeSamples:
+    """A line's samples the raster left to be asked (`FreeGround.lines_edge_points`), kept as arrays and turned into points
+    only when they are asked: most corridors are refused by something else first."""
+
+    __slots__ = ("xs", "ys")
+
+    def __init__(self, xs: Any, ys: Any) -> None:
+        self.xs, self.ys = xs, ys
+
+    def __iter__(self) -> Any:
+        return zip(self.xs.tolist(), self.ys.tolist(), strict=True)
+
+    def __len__(self) -> int:
+        return len(self.xs)
 
 
 class FreeGround:
@@ -307,7 +336,11 @@ class FreeGround:
     def point_taken(self, x: float, y: float) -> bool:
         return (int((x - self.x0) // self.cell), int((y - self.y0) // self.cell)) in self.taken
 
-    def lines_edge_points(self, lines: Any) -> list[list[tuple[float, float]] | None]:
+    def point_clear(self, x: float, y: float) -> bool:
+        """Does (x, y) stand in a cell every point of which the site's ground tests pass?"""
+        return (int((x - self.x0) // self.cell), int((y - self.y0) // self.cell)) in self.clear
+
+    def lines_edge_points(self, lines: Any) -> list[EdgeSamples | None]:
         """For each line `(a, b, n)`, its `n + 1` points `a + (b - a) * k / n`: None where one stands in a surely taken
         cell, else those standing in neither a taken nor a clear cell - the only ones the ground tests must still be asked
         of. Every line asked of the raster in one array: the seating asks a homestead's whole corridor search at once
@@ -331,11 +364,10 @@ class FreeGround:
         refused = np.bincount(line[st == 1], minlength=len(lines)) > 0
         line, xs, ys, st = self._samples(np, ax, ay, dx, dy, ns, np.nonzero(~refused)[0], 1)
         refused |= np.bincount(line[st == 1], minlength=len(lines)) > 0
-        edge = np.nonzero((st == 0) & ~refused[line])[0]
-        out: list[list[tuple[float, float]] | None] = [None if r else [] for r in refused.tolist()]
-        for n_, x, y in zip(line[edge].tolist(), xs[edge].tolist(), ys[edge].tolist(), strict=True):
-            out[n_].append((x, y))  # type: ignore[union-attr]  # a refused line's samples were left out above
-        return out
+        edge = np.nonzero(st == 0)[0]
+        ex, ey = xs[edge], ys[edge]
+        cut = np.searchsorted(line[edge], np.arange(len(lines) + 1)).tolist()  # the samples are in line order
+        return [None if r else EdgeSamples(ex[cut[n] : cut[n + 1]], ey[cut[n] : cut[n + 1]]) for n, r in enumerate(refused.tolist())]
 
     def _samples(self, np: Any, ax: Any, ay: Any, dx: Any, dy: Any, ns: Any, which: Any, step: int) -> tuple[Any, Any, Any, Any]:
         """The samples `k = 0, step, 2 step, ...` (up to `n`) of the lines `which`: (their line, x, y, raster state)."""

@@ -3,12 +3,11 @@
 Split from settlement/rolling.py by feature 118 - see settlement/rolling/CLAUDE.md for the index.
 """
 
+import math
 from typing import TYPE_CHECKING, Any
 
-from .._geom import turn_about
 from ..homestead_parts.fixture_seats import FixtureForms, lay_fixtures
 from ..shrines_wells.byres import BYRE_FT, YARD_SHED_GAP_FT, byre_part
-from .bearing import turned_box
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -103,9 +102,17 @@ class BundleGeomMixin:
         frame = base.pop("_frame", None)
         turn = self._turn_at(hx, hy) if rot is None else rot
         self._rake_parts(base, hx, hy, turn)
-        boxes: dict[str, Any] = {k: (turned_box(base[k], turn) if base.get(k) is not None else None) for k in ("house", "yard", "shed", "byre", "well")}
-        boxes["gardens"] = [turned_box(g, turn) for g in base["gardens"]]
-        boxes["fixtures"] = {f: turned_box(r, turn) for f, r in (base.get("fixtures") or {}).items()}
+        # `turned_box` for every part, its turn's cosine and sine taken once (the same arithmetic, part by part)
+        _th = math.radians(turn)
+        _c, _s = abs(math.cos(_th)), abs(math.sin(_th))
+
+        def tbox(r: Any) -> tuple[float, float, float, float]:
+            x, y, w, h = float(r[0]), float(r[1]), float(r[2]), float(r[3])
+            return (x, y, w * _c + h * _s, w * _s + h * _c)
+
+        boxes: dict[str, Any] = {k: (tbox(base[k]) if base.get(k) is not None else None) for k in ("house", "yard", "shed", "byre", "well")}
+        boxes["gardens"] = [tbox(g) for g in base["gardens"]]
+        boxes["fixtures"] = {f: tbox(r) for f, r in (base.get("fixtures") or {}).items()}
         base["boxes"] = boxes
         if frame is None:  # nucleated: every part, as drawn
             rects = [r for r in (boxes["house"], boxes["yard"], *boxes["gardens"], boxes.get("shed"), boxes.get("byre"), boxes.get("well"), *boxes["fixtures"].values()) if r is not None]
@@ -134,7 +141,12 @@ class BundleGeomMixin:
         gap = self.px(3)  # 3 ft between a house and its yard/garden, at this map's ftpx
         gw, gh = 0.48 * hw, 0.85 * hh  # garden - tight to the house, scales with wealth
         sx, sy = seat  # the rolls key on the household's seat (see `_bundle_geom`)
-        yw, yh = self._yard_dims(hw, hh, sx, sy)  # threshing/drying yard - the rolled area (homestead_parts._yard_area_ft2); the placer reserves exactly what gets drawn
+        # the yard is the household's, the same for the four garden sides of its seat: rolled once per (size, seat)
+        _yk = (hw, hh, sx, sy)
+        _ym = self.__dict__.get("_yard_memo")
+        if _ym is None or _ym[0] != _yk:
+            _ym = self.__dict__["_yard_memo"] = (_yk, self._yard_dims(hw, hh, sx, sy))
+        yw, yh = _ym[1]  # threshing/drying yard - the rolled area (homestead_parts._yard_area_ft2); the placer reserves exactly what gets drawn
         if not getattr(self, "_nucleated", False):
             # CAP the DISPERSED appurtenances too, same doctrine as the nucleated branch below: a BIG house
             # (the 46x28 px headman) keeps an ORDINARY farm's garden/yard, not ones scaled to the grand
@@ -269,9 +281,13 @@ class BundleGeomMixin:
         time, and every fit test the placer runs reads the moved centers - the ground cleared is the ground drawn.
         The grove arms are not moved: they are drawn unraked."""
 
+        # `turn_about` for every part, its turn's cosine and sine taken once (the same arithmetic, part by part)
+        th = math.radians(rot or 0.0)
+        c, sn = math.cos(th), math.sin(th)
+
         def turned(r: Any) -> Any:
-            ((x, y),) = turn_about([(r[0], r[1])], hx, hy, rot)
-            return (x, y, r[2], r[3])
+            px, py = r[0], r[1]
+            return (hx + (px - hx) * c - (py - hy) * sn, hy + (px - hx) * sn + (py - hy) * c, r[2], r[3])
 
         if base.get("yard") is not None:
             base["yard"] = turned(base["yard"])
