@@ -11,7 +11,7 @@ map's values, 2 already test a placer on constructed inputs, and 118 assert a pl
 others; for 34 nothing in the placer prevents a violation. Those 87 are this feature's scope, grouped below by the
 placer the census names as the owner (the last placer whose decision can break the rule).
 
-| owner | test | the rule | now | sketch |
+| owner | test | the rule | now | sketch (observed 2026-09-29, method: the census readers, `census.json`) |
 |---|---|---|---|---|
 | `hamletgen/water/brook.py` | `test_no_brook_folds_back_on_itself` | No vertex of the brook's drawn course turns it by more than 100 degrees. | partial | In feed_brook, refuse an approach bearing (the 15-swing loop) whose entry into the sluice plus the first skirt leg turns more than the limit, and move on to the next swing. Or run unfold over the whole assembled course while holding the tap vertex. GM 2026-08-26 / FR-017. |
 | `hamletgen/water/brook.py` | `test_no_brook_runs_ruled_along_the_frame` | No stretch of brook within 80 ft of the view's edge runs level along that edge (within 4 ft) for more than 150 ft. | no | The frame is decided later (stage_frame, crop_to_content with brook_beside_the_field as extra), so hold the course to the same box the reservation predicts. Break at the first station the box binds, not only after half the stations. Bend or turn any exit leg that runs parallel to, and within 80 ft of, a box edge. Or assert it in stage_frame and widen the crop. GM 2026-08-26 (Sawada: 'makes it look like a mistake'). |
@@ -101,7 +101,7 @@ placer the census names as the owner (the last placer whose decision can break t
 | `waterfields/furrows.py` | `test_dry_plots_share_a_row_direction_within_a_tract_and_change_it_at_the_seams` | Neighboring dry plots of one tract may not differ by more than 2x the in-tract turn; neighbors across a tract seam must differ by more than ~6 deg. | partial | Seams are forced only against the previous tract in sequence. Unguarded: the fork-triangle band (_comb_dry_and_beans' second _dry_fields call, tract0 offset) against first-band tracts it abuts, and non-consecutive tracts that end up spatially adjacent. Force a seam against every tract whose plots neighbor the new one (spatial adjacency, as the gate reads it). Research fields/180. |
 | `waterfields/seams/plots.py` | `test_a_bund_does_not_build_a_flight_of_steps` | No plot ring may carry more than one bund step (jog) - no staircase walls. | no | _absorb PREFERS a weld that adds no jog but falls back to the least-jogged weld (`_jogged` branch), and _unjog REPAIRS steps but refuses a trade that would break another rule, leaving the step. Nothing refuses a ring with >1 step. Make >1 step a refusal in _absorb (treat a jog-adding weld like a needle: try _open_to / the next host) and add a terminal check after _unjog that sends a remaining staircase to the scrap path. GM 2026-08-18 on Inashiro. |
 
-**Findings beyond the owners.** `stage_crossings` / `square_crossings` rewrite the lanes after the web and the woods
+**Findings beyond the owners** (observed 2026-09-29, method: the census readers). `stage_crossings` / `square_crossings` rewrite the lanes after the web and the woods
 with no re-check (group 3). Where a placer and its test measure different things - the wells' spacing (center to center
 against edge to edge), the eave gap on a quarter-turned house (rotated quads against boxes), the field pond's 3 px inset,
 the flooded tint's deduplicated ring - the guarantee is written against the rule, and the test and the placer read one
