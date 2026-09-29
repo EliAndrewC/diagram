@@ -389,6 +389,9 @@ climbing kiln	noborigama
 climbing kilns	noborigama
 cloister	cloister
 cloisters	cloister
+clonal	clonal
+clone	clonal
+clones	clonal
 closed canopy	closed-canopy
 closed-canopy	closed-canopy
 coefficient of variation	coefficient of variation
@@ -1900,6 +1903,9 @@ mise	mise
 mitochigai	mitochigai
 mitsuba	mitsuba
 mitsuke	mitsuke
+mitsumata	mitsumata
+mitsumata field	mitsumata
+mitsumata fields	mitsumata
 miyaza	miyaza
 mizu-oobako	Ottelia
 mizugaki	mizugaki
