@@ -304,3 +304,24 @@ def test_a_woods_short_of_the_floor_is_topped_up_among_the_houses() -> None:
     assert copse and all(min(math.dist(c, h) for h in hs) <= COPSE_HOUSE_REACH_FT for c in copse)
     assert stages.homestead_wood_drawn(s) >= HOMESTEAD_WOOD_FT2[0] and s.M["meta"]["homestead_wood_ft2"]["drawn"] >= HOMESTEAD_WOOD_FT2[0]
     assert stages.homestead_wood_drawn(Settlement(W=100, H=100, seed=1)) == 0.0
+
+
+def test_every_households_reserved_share_is_planted_though_no_belt_stands() -> None:
+    """Woods W25 / plan D9: two households (too few for a belt) that reserved their shares of the floor at seating
+    (`wood_share`). Without the reservation the stage plants nothing; with it every reserved seat is a copse clump."""
+    from l7r.diagram.hamletgen.hinterland import stages
+
+    plan = a_plan()
+    plan.belt = []
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    s.meta(name="W", scale="hamlet", ftpx=1, down_deg=90, windward="N")
+    s.M["houses"] = [{"x": 500.0, "y": 800.0, "w": 30.0, "h": 24.0, "rot": 0}, {"x": 800.0, "y": 800.0, "w": 30.0, "h": 24.0, "rot": 0}]
+    stages.stage_windbreak(s, plan)
+    assert not s.M["village_groves"], "non-vacuity: no belt and no reservation, no wood"
+    seats = {0: [[480.0, 750.0], [510.0, 748.0]], 1: [[790.0, 750.0], [820.0, 752.0]]}
+    for k, h in enumerate(s.M["houses"]):
+        h["wood_share"] = {"seats": seats[k], "r": 11.0, "ft2": 900}
+    assert stages.reserved_seats(s) == [(480.0, 750.0), (510.0, 748.0), (790.0, 750.0), (820.0, 752.0)]
+    stages.stage_windbreak(s, plan)
+    copse = [c for g in s.M["village_groves"] if g["role"] == "copse" for c in g["clumps"]]
+    assert all(q in copse for v in seats.values() for q in v)

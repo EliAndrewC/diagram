@@ -290,6 +290,56 @@ def test_a_copse_over_a_belt_crown_stands_clear_of_its_canopy() -> None:
     assert all(math.dist(c, (640.0, 640.0)) >= 14.0 + 0.9 * 22.0 * s.bscale for c in cop)
 
 
+# ---- W25: every household's reserved share of the wood floor stands ---------------------------------------------------
+
+
+def test_the_belt_leaves_a_reserved_seat_free_and_the_copse_plants_it() -> None:
+    """Woods W25 / plan D9, the violating case: a household's reserved copse seat stands inside the belt's band, where the
+    belt would plant a clump that displaces it. Handed the seat (`keep_off`), the belt stands off it by the copse's own
+    displacement reach (`reserved_seat_keepouts`); the copse, handed it (`seats`), plants it though its `near` - the
+    against-the-belt siting's lee - lies nowhere near it."""
+    from l7r.diagram.settlement.homestead_parts.stands import reserved_seat_keepouts
+
+    band = [(200.0, 400.0), (1000.0, 400.0), (1000.0, 560.0), (200.0, 560.0)]
+    seat = (600.0, 480.0)
+    houses = [{"x": 600.0, "y": 900.0, "w": 30.0, "h": 24.0, "rot": 0}]
+    free = _hamlet()
+    free.M["houses"] = [dict(h) for h in houses]
+    free.village_grove(band, role="windbreak")
+    (_x, _y, r) = reserved_seat_keepouts([seat], 28.0 * free.bscale, free.bscale)[0]
+    assert any(math.dist(c, seat) < r for c in free.M["village_groves"][0]["clumps"]), "non-vacuity: the belt takes the seat"
+    s = _hamlet()
+    s.M["houses"] = [dict(h) for h in houses]
+    s.village_grove(band, role="windbreak", keep_off=[seat])
+    belt = s.M["village_groves"][0]["clumps"]
+    assert belt and all(math.dist(c, seat) >= r for c in belt)
+    s.village_grove([(500.0, 400.0), (700.0, 400.0), (700.0, 560.0), (500.0, 560.0)], role="copse", dense=False, near=([(100.0, 100.0)], 10.0), seats=[seat])
+    assert s.M["village_groves"][-1]["clumps"] == [list(seat)]
+
+
+def test_a_copse_plants_its_reserved_seats_first_and_never_drops_one() -> None:
+    """Woods W25, the violating case: four reserved seats strewn to the corners of a wide box, where the copse's own clumps
+    gather round one house - as stragglers the stocking drop (woods W15) would take them out first. Every seat is
+    recorded, and no clump of the copse's own grid stands within half a crown of one."""
+    seats = [(150.0, 150.0), (1050.0, 150.0), (150.0, 1050.0), (650.0, 600.0)]
+    pad = 11.0 * _hamlet().bscale + 4.0
+    assert not grove_stocked(seats + [(600.0, 560.0)], 900.0 + 2 * pad, 900.0 + 2 * pad), "non-vacuity: the seats are stragglers"
+    s = _hamlet()
+    s.M["houses"] = [{"x": 600.0, "y": 600.0, "w": 30.0, "h": 24.0, "rot": 0}]
+    s.village_grove([(100.0, 100.0), (1100.0, 100.0), (1100.0, 1100.0), (100.0, 1100.0)], role="copse", dense=False, near=([(600.0, 600.0)], 90.0), seats=seats)
+    cl = [tuple(c) for c in s.M["village_groves"][0]["clumps"]]
+    own = [c for c in cl if c not in seats]
+    assert all(q in cl for q in seats) and own, "every seat stands, beside the copse's own clumps"
+    assert all(math.dist(c, q) >= 11.0 * s.bscale for c in own for q in seats)
+
+
+def test_the_stocking_drop_stops_at_the_kept_clumps() -> None:
+    """Woods W25 beside W15: a scatter of kept clumps alone is left whole - no kept clump is a straggler."""
+    corners = [(0.0, 0.0), (600.0, 0.0), (0.0, 600.0)]
+    assert stocked_copse(corners, 15.0, frozenset(corners)) == corners
+    assert stocked_copse(corners + [(900.0, 900.0)], 15.0, frozenset(corners)) == corners
+
+
 def test_no_grove_clump_stands_over_a_stream_through_its_band() -> None:
     """Woods W23: a stream through a belt band - no recorded clump within the stream's half-width and a clump's radius."""
     from l7r.diagram.settlement import seg_dist

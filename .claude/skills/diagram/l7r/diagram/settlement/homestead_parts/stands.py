@@ -1,7 +1,7 @@
 """Split from settlement/homestead_parts.py by feature 173 - see this package's CLAUDE.md for the index."""
 
 import math
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 from typing import TYPE_CHECKING, Any
 
 from .._geom import CanopyArea, point_in_poly
@@ -103,6 +103,16 @@ def deep_marsh(rings: Any, margin: float) -> list[list[tuple[float, float]]]:
     return out
 
 
+def reserved_seat_keepouts(seats: Sequence[tuple[float, float]], clump: float, bs: float) -> list[tuple[float, float, float]]:
+    """THE ONE PREDICATE of a grove leaving a reserved copse seat free (feature 287, woods W25), as keep-out discs: a clump
+    of `clump` stands off each seat by the copse's own displacement test (`village_grove`'s `occ_grove`: the other grove's
+    recorded radius plus 0.9 of the copse's clump), `BAR_MARGIN_PX` stricter, so the copse finds the seat undisplaced."""
+    from .wood_share import BAR_MARGIN_PX, COPSE_CLUMP_BS
+
+    r = round(clump / 2, 1) + COPSE_CLUMP_BS * bs * 0.90 + BAR_MARGIN_PX
+    return [(float(x), float(y), r) for x, y in seats]
+
+
 def grove_stocked(clumps: Any, w: float, h: float, floor: float = 1.5) -> bool:
     """THE ONE PREDICATE of `test_every_recorded_grove_holds_trees` (feature 287, woods W15): a recorded grove holds at least
     `floor` clumps per 100,000 sq px of its recorded w x h - a grove that declares an extent and draws almost nothing in it
@@ -110,17 +120,21 @@ def grove_stocked(clumps: Any, w: float, h: float, floor: float = 1.5) -> bool:
     return w * h <= 0 or len(clumps) * 1e5 / (w * h) >= floor
 
 
-def stocked_copse(clumps: list[tuple[float, float]], pad: float) -> list[tuple[float, float]]:
+def stocked_copse(clumps: list[tuple[float, float]], pad: float, kept: frozenset[tuple[float, float]] = frozenset()) -> list[tuple[float, float]]:
     """A copse's clumps with its stragglers dropped - the clump farthest from the clumps' centroid, one at a time - until
     the extent the copse is recorded at (its clumps' box grown by `pad`) is `grove_stocked` (feature 287, woods W15). It
-    terminates: one clump's extent is a square of `2 * pad`, far above the floor."""
+    terminates: one clump's extent is a square of `2 * pad`, far above the floor. A clump in `kept` - a household's
+    reserved share of the wood floor (woods W25) - is never a straggler: the drop stops when only kept clumps are left."""
     out = list(clumps)
     while len(out) > 1:
         xs, ys = [c[0] for c in out], [c[1] for c in out]
         if grove_stocked(out, max(xs) - min(xs) + 2 * pad, max(ys) - min(ys) + 2 * pad):
             break
         mx, my = sum(xs) / len(out), sum(ys) / len(out)
-        del out[max(range(len(out)), key=lambda k: math.hypot(out[k][0] - mx, out[k][1] - my))]
+        loose = [k for k in range(len(out)) if out[k] not in kept]
+        if not loose:
+            break
+        del out[max(loose, key=lambda k: math.hypot(out[k][0] - mx, out[k][1] - my))]
     return out
 
 
@@ -210,6 +224,8 @@ class StandsMixin:
         wind: tuple[float, float] | None = None,
         page: Callable[[list[tuple[float, float]]], tuple[float, float, float, float]] | None = None,
         reach: float | None = None,
+        seats: Sequence[tuple[float, float]] | None = None,
+        keep_off: Sequence[tuple[float, float]] | None = None,
     ) -> int:
         """A COMMUNAL village grove - the Chinese *fengshui* forest (风水林). Unlike the per-house *yashikirin*,
         a NUCLEATED village shelters behind ONE village-scale grove, in three roles (see research/vegetation.html 'What are the village's three groves' 'Village
@@ -229,7 +245,10 @@ class StandsMixin:
         is drawn (a footprint entirely over houses/crops draws nothing and records nothing). `area` (px^2) is the canopy
         the stand is filled TO: seating stops once its clumps cover it, and a second pass offers more seats where the first
         fell short (269 B26, the copse sized by the homesteads' woods). `wind` (toward where the wind comes from), given for the
-        windbreak, trims the belt's ends until it bears on the wind's quarter as a hook (`trim_to_the_wind`). Returns the
+        windbreak, trims the belt's ends until it bears on the wind's quarter as a hook (`trim_to_the_wind`). `seats` are the
+        households' reserved shares of the wood floor (feature 287, woods W25; `wood_share`), planted FIRST, each through the
+        same rejection chain but `near` (each stands within its own house's reach by construction), and never dropped as a
+        straggler; `keep_off` are those seats for a grove that must leave them free (`reserved_seat_keepouts`). Returns the
         count."""
         xs = [p[0] for p in poly]
         ys = [p[1] for p in poly]
@@ -312,6 +331,12 @@ class StandsMixin:
         # clump - a clump is a bare [x, y] pair)
         occ_grove = [(cl[0], cl[1], float(g.get("r") or 0.0) + clump * 0.90) for g in self.M.get("village_groves", []) for cl in (g.get("clumps") or [])]
         occ += occ_grove
+        # ...AND OFF EVERY HOUSEHOLD'S RESERVED SHARE OF THE WOOD FLOOR (feature 287, woods W25; plan D9): another grove's
+        # clump stands where the copse's crown at a reserved seat would not be displaced by it, so the seat stands when the
+        # copse is planted. A local keep-out: the belt flows round it as round a shed. (The copse's own clumps keep half a
+        # crown off the seats instead - `held` below - since the seats are its own.)
+        if keep_off and role != "copse":
+            occ += reserved_seat_keepouts(keep_off, clump, bs)
         # ... and keep trees OFF the lanes / streets / road - and every TRUNK the clump will draw off the tread, not only its seat
         # (feature 287, woods W21 and homes H43): a crown is thrown anywhere in the clump's box and a belt's row conifer a few
         # feet past it (`crown_reach`), so the seat keeps at least that reach beyond the tread, and no trunk the clump draws
@@ -512,20 +537,31 @@ class StandsMixin:
         def _goal_met() -> bool:
             return area is not None and canopy.area >= area
 
-        def _seat(jx: float, jy: float) -> None:
+        # the reserved seats (woods W25): a clump of the grove's own grid keeps half a crown off each, as the gap fill keeps
+        # off a clump already down, so no crown is stacked on a household's share
+        held: Seats | None = None
+        if seats:
+            held = Seats(clump * 0.5)
+            for _p in seats:
+                held.add(round(float(_p[0]), 1), round(float(_p[1]), 1))
+
+        def _seat(jx: float, jy: float, reserved: bool = False) -> None:
             """One grid seat through the rejection chain: a HARD blocker drops it, a LOCAL one re-seats it (see below).
             DECIDED AT THE RECORD'S GRAIN (feature 287, woods W01, W03, W05): the seat is rounded to the 0.1 px the manifest
             records before any test is asked of it, so the point every rule reads - the reach, the bank, the marsh, the alder -
-            is the point the placer admitted, and no margin stands in for the rounding."""
+            is the point the placer admitted, and no margin stands in for the rounding. A `reserved` seat is a household's
+            share of the wood floor: its reach is its own house's (`wood_share`), so `near` is not asked of it, and the grid's
+            other seats keep off it (`held`)."""
             jx, jy = round(jx, 1), round(jy, 1)
-            if blocks.hard(jx, jy) or (_near is not None and not _near.too_near(jx, jy)):
+            _far = (lambda x, y: False) if reserved else (lambda x, y: (_near is not None and not _near.too_near(x, y)) or (held is not None and held.too_near(x, y)))
+            if blocks.hard(jx, jy) or _far(jx, jy):
                 return
             if blocks.local(jx, jy) or blocks.lane(jx, jy):
                 _alt = _reseat(jx, jy, require_interior=not blocks.local(jx, jy))
                 if _alt is None:
                     return
                 jx, jy = round(_alt[0], 1), round(_alt[1], 1)
-                if blocks.hard(jx, jy) or blocks.local(jx, jy) or blocks.lane(jx, jy) or (_near is not None and not _near.too_near(jx, jy)):
+                if blocks.hard(jx, jy) or blocks.local(jx, jy) or blocks.lane(jx, jy) or _far(jx, jy):
                     return  # the re-seat's point, at the record's grain, is asked again - a rounding can carry it over an edge
             seated.append((jx, jy))
             clumps.append([round(jx, 1), round(jy, 1)])
@@ -533,6 +569,12 @@ class StandsMixin:
             near_clumps.add(round(jx, 1), round(jy, 1))
             canopy.add(jx, jy, cr)
 
+        # THE HOUSEHOLDS' RESERVED SHARES STAND FIRST (feature 287, woods W25; plan D9): each seat the seating reserved for a
+        # household's share of the wood floor is planted before the grid offers a single seat, so no goal the grid fills to
+        # and no clump of its own can take the seat's ground first, and the stragglers' drop below never takes one out.
+        for _p in seats or ():
+            _seat(float(_p[0]), float(_p[1]), reserved=True)
+        kept = frozenset(seated)
         for iy in range(ny + 1):
             for ix in range(nx + 1):
                 gx = x0 + ix * (x1 - x0) / nx
@@ -772,7 +814,7 @@ class StandsMixin:
         elif role == "windbreak" and wind is not None and len(seated) > 1:
             seated = trim_to_the_wind(seated, _houses, wind)
         if role == "copse" and len(seated) > 1:
-            seated = stocked_copse(seated, clump / 2 + 4.0)
+            seated = stocked_copse(seated, clump / 2 + 4.0, kept)
         clumps = [[x, y] for x, y in seated]  # the seats are at the record's grain (W01), so the record is the ink
         # A BELT CROWN IN THE MARSH IS ALDER (feature 261, Sawada's belt on its toe's reed edge): the record's woody stage at
         # a reed margin is alder or willow (research/vegetation.html, the marsh margin), and alder is the tree of a

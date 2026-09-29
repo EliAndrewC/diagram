@@ -26,6 +26,12 @@ LEE_BAND_FT = 40.0  # ft: the width across the wind of one band of the belt, abo
 LEE_DEPTH_FT = 30.0  # ft: a crown's depth, the lee face's thickness in each band
 
 
+def reserved_seats(s: Settlement) -> list[tuple[float, float]]:
+    """Every household's reserved share of the wood floor, as the seats its record carries (`wood_share`, feature 287,
+    woods W25; plan D9), in the houses' order."""
+    return [(float(p[0]), float(p[1])) for h in s.M.get("houses") or [] for p in (h.get("wood_share") or {}).get("seats") or ()]
+
+
 def lee_face(clumps: Sequence[tuple[float, float]], wind: tuple[float, float]) -> list[tuple[float, float]]:
     """The belt crowns on its LEE face - in each `LEE_BAND_FT` band across the wind, those within `LEE_DEPTH_FT` of the
     band's most leeward crown (settlement-review of Mizuguchi, feature 261).
@@ -293,6 +299,7 @@ def plant_the_belt(s: Settlement, plan: SitePlan) -> None:
         wind=wind_unit(plan.windward),
         page=belt_page(s, plan, round(14.0 * s.bscale, 1)),
         reach=float(_reach) if _reach else None,
+        keep_off=reserved_seats(s),  # every household's share of the wood floor stands free for the copse (woods W25)
     )
 
 
@@ -307,9 +314,10 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.hamletgen.hinterland.frame.title_pocket
         l7r.diagram.settlement.Settlement.village_grove
     """
-    if not plan.belt:
+    _seats = reserved_seats(s)
+    if not plan.belt and not _seats:
         return
-    _dented = dent_around(plan.belt, title_pocket(s, plan))
+    _dented = dent_around(plan.belt or [], title_pocket(s, plan))
     # The COPSE fills the leafy gaps AMONG the homes, over the house cloud. That is only reasonable
     # ground because `stage_homesteads` now bounds every seat to the cluster band: over a cloud with
     # a strewn farmstead in it, this became a scatter across 1,446 x 1,244 px - a wood over the whole
@@ -376,12 +384,23 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     _wood_ft2 = sum(homestead_wood_ft2(s._hjit(float(h["x"]), float(h["y"]), 210.0)) for h in houses)
     _ft2 = s.px(1.0) ** 2  # px^2 per sq ft
     _copse_goal = max(0.0, _wood_ft2 * _ft2 - wood_canopy(s, ("windbreak",)))
-    s.village_grove(_box, role="copse", dense=False, reserved=title_pocket(s, plan), near=_copse_near, area=_copse_goal)  # the map's name has ground reserved; the copse honors it like the belt does
+    # ...EVERY HOUSEHOLD'S RESERVED SHARE FIRST (feature 287, woods W25; plan D9): the seats the seating reserved for each
+    # household's share of the floor (`wood_share`) are planted before any other clump, on either siting - each within its
+    # own house's dooryard reach, not the siting's `near` - and the goal counts them, so the grid fills only the rest.
+    s.village_grove(
+        _box, role="copse", dense=False, reserved=title_pocket(s, plan), near=_copse_near, area=_copse_goal, seats=_seats
+    )  # the map's name has ground reserved; the copse honors it like the belt does
     # ...AND NEVER UNDER THE REGISTER'S FLOOR (feature 287, woods W25; plan D9): where the belt and the copse together draw
     # less than `HOMESTEAD_WOOD_FT2`'s smallest household a homestead, the shortfall is topped up as the homesteads' own
     # windward trees - in the belt's lee, between it and the houses, each within the dooryard copse's reach of a farmhouse
     # on its own bank (so the dooryard rule, woods W02, holds of every clump on either siting). Nothing is relaxed: every
     # seat faces the copse's own tests, and a site the ground cannot hold is the homestead bundle's to reserve (D9).
+    # SINCE THE RESERVED SEATS ARE PLANTED FIRST (above; the belt keeps off them, `reserved_seat_keepouts`) this top-up fired
+    # on none of cohort 1-60 nor Inashiro (the lowest drawn wood 9,917 sq ft a homestead). It is NOT yet retired, because the
+    # reservation does not yet hold the floor by itself: the web's lanes and the title's pocket still take reserved seats
+    # (measured on cohort 1-12: 21-90 seats a map to a lane, 0-17 to the pocket, 17% of all seats over 1-60, leaving the
+    # planted seats 4,712-5,635 sq ft a homestead - the belt makes up the rest). It retires when the registry of
+    # reservations (plan M8) keeps those two off the seats.
     if houses and homestead_wood_drawn(s) < HOMESTEAD_WOOD_FT2[0]:
         _lee = [(float(c[0]), float(c[1])) for g in s.M.get("village_groves") or [] if g.get("role") == "windbreak" for c in g.get("clumps") or []]
         _lx = [x for x, _y in _lee] + xs
