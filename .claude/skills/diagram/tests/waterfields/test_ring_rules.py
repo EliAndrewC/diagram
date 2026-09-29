@@ -148,7 +148,9 @@ def test_a_ring_under_the_grave_island_is_found() -> None:
 def test_ring_violations_names_every_rule_broken() -> None:
     assert ring_violations(SQUARE, RingContext()) == set()
     assert ring_violations(SQUARE, RingContext(cell=1600.0, g=2.0)) == set()
-    assert ring_violations(NEEDLE, RingContext(cell=1000.0, g=2.0)) == {"needle", "dart", "width"}
+    # the working width (W26) and the dart (W27) are recorded, not enforced - the research contradicts both (T13)
+    assert ring_violations(NEEDLE, RingContext(cell=1000.0, g=2.0)) == {"needle"}
+    assert narrow(NEEDLE, 2.0) and dart(NEEDLE, 1000.0), "though the needle breaks both recorded rules"
     assert ring_violations(BOWTIE, RingContext(cell=1000.0)) == {"crossing", "area"}
     assert ring_violations(ARROW, RingContext()) == {"arrowhead"}
     assert ring_violations(TWO_STEPS, RingContext(g=2.0)) == {"steps"}
@@ -159,3 +161,32 @@ def test_ring_violations_names_every_rule_broken() -> None:
         graves=[(50.0, 50.0, 5.0)],
     )
     assert ring_violations([[50.0, 49.5], [60.0, 50.5], [60.0, 100.0], [50.0, 100.0]], ctx) == {"stroke", "collector", "pond", "grave"}
+
+
+def test_the_fan_context_is_the_one_the_gate_reads_off_the_manifest() -> None:
+    """`fan_context` builds a fan's RingContext from the engine's channels exactly as `_comb_record_ditches` records
+    them (0.1 px points and widths, a repeated point dropped) and the cell as `_comb_record_field` records it - so the
+    seam pass and the gate ask the rules of one context. The drain is the collector; every other supply role a stroke."""
+    from l7r.diagram.waterfields.ring_rules import as_recorded, fan_context
+
+    channels = [
+        {"pts": [(0.04, 50.02), (0.05, 50.03), (200.0, 50.0)], "w": 10.04, "role": "main"},
+        {"pts": [(0.0, 150.0), (200.0, 150.0)], "w": 3.0, "w_tail": 5.46, "role": "drain"},
+        {"pts": [(0.0, 150.0)], "w": 3.0, "role": "drain"},  # a drain with no course is no collector
+        {"pts": [(0.0, 90.0), (5.0, 90.0)], "w": 2.0, "role": "hairline"},  # no supply role, not a stroke
+    ]
+    ctx = fan_context(channels, 2.0, 1234.56, ponds=[(1, 2, 3, 4)], graves=[(5, 6, 7)])
+    assert ctx.cell == 1234.6 and ctx.g == 2.0
+    assert [s.pts for s in ctx.supplies] == [[(0.0, 50.0), (200.0, 50.0)]] and ctx.supplies[0].w0 == 10.0
+    assert ctx.drains == [([(0.0, 150.0), (200.0, 150.0)], 2.75)]
+    assert ctx.ponds == [(1.0, 2.0, 3.0, 4.0)] and ctx.graves == [(5.0, 6.0, 7.0)]
+    assert fan_context([], None, None).cell is None
+    assert as_recorded([(1.04, 2.06)]) == [(1.0, 2.1)]
+
+
+def test_a_collector_edge_away_from_the_drain_is_passed_over() -> None:
+    """The collector rule's bounding-box prefilter decides nothing: an edge with an end outside the drain's reach is not
+    measured, and an edge running across the drain is still found."""
+    drains = collector_strokes([{"poly": [[0.0, 50.0], [200.0, 50.0]], "w": 6.0}])
+    assert collector_crossings(_box(20.0, 60.0, 80.0, 90.0), drains) == []
+    assert collector_crossings([[20.0, 50.5], [80.0, 49.5], [80.0, 90.0], [20.0, 90.0]], drains) == [(20, 50)]

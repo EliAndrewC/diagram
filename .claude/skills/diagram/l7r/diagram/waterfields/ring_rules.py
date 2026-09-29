@@ -8,10 +8,14 @@ rule is written once, at the GATE's own threshold: the finished-map test calls i
 ring (the seam pass, water design W16-W28) refuses any candidate for which `ring_violations` is non-empty.
 
 EACH BODY IS THE TEST BODY IT REPLACES, thresholds and all (`tests/gate/test_paddy_fabric.py`,
-`tests/gate/test_bunds_and_dikes.py`, `tests/gate/test_water_junctions.py`). The four rules no finished-map test
-asserts yet - the working width (W26), the dart (W27), the arrowhead (W25) and the grave island (W28) - are
-written from the water design's mechanism; the width and dart thresholds are GUESSES (labeled at each constant)
-until their research pass (task T13) sets them.
+`tests/gate/test_bunds_and_dikes.py`, `tests/gate/test_water_junctions.py`). The rules no finished-map test asserts
+yet - the arrowhead (W25) and the grave island (W28) - are written from the water design's mechanism.
+
+TWO RULES ARE WRITTEN DOWN AND NOT ENFORCED: the working width (W26) and the dart (W27). Their research pass (feature
+287, T13, 2026-09-29) read `research/fields/` and found the record CONTRADICTS both rather than being silent - see
+`BASIN_MIN_WIDTH_FT` and `DART_MIN_APEX` for the passages. A rule the research contradicts is recorded, not enforced
+(the lead's ruling for T13), so `ring_violations` does not ask `narrow` or `dart`; each stays a named predicate here,
+tested, so the measurement is one call away if the GM rules otherwise.
 
 Rings are judged AS RECORDED: the manifest rounds to 0.1 px, and a caller that judges a candidate ring rounds it
 the same way first, so the placer and the manifest see one ring.
@@ -31,12 +35,12 @@ from .banks import (
     _GATE_CHEVRON_SOLIDITY,
     _GATE_MIN_APEX,
     _GATE_MIN_AREA,
+    StrokeIndex,
     dedup_ring,
     is_chevron,
     jog_vertices,
     pointed_ring,
     polyline_cum,
-    supply_bank_clearance,
 )
 from .frame import BANK_MARGIN, Poly, Pt, _pip, _poly_area
 
@@ -71,21 +75,36 @@ COLLECTOR_REACH = 0.5
 and the edge is longer than the stroke is wide - it starts one side of the drain and ends the other."""
 
 BASIN_MIN_WIDTH_FT = 12.0
-"""GUESS (water W26, pending the T13 research pass): a basin must be wide enough to stand in and puddle, measured as
-its working width, area / the longer side of its minimum rotated rectangle. The settlement-review on Kashikawa
-(future-work 'the paddy area floor cannot see WIDTH') put the line 'somewhere in the 12-16 ft band' and found a 5.9 ft
-basin drawing as a doubled bund; 12 ft is the band's lower edge, the least that stops that defect. Research
-fields/024 warns that a width floor is the wrong rule at a fan toe, so the number is owed its research pass before any
-placer enforces it."""
+"""NOT ENFORCED - the research contradicts the rule (water W26; decision class: deliberate deviation from the design row,
+recorded here, in `ring_violations` and in the feature's report). The number is still a GUESS: the settlement-review on
+Kashikawa (future-work 'the paddy area floor cannot see WIDTH') put a line 'somewhere in the 12-16 ft band' after a 5.9 ft
+basin drew as a doubled bund, and 12 ft is that band's lower edge.
+
+THE RESEARCH PASS (T13, 2026-09-29) searched `research/fields/` for a stated basin width. It found no width floor, and two
+entries that argue against one: fields/023 ('A basin never tapers to a point') - "So the rule is deliberately NOT a minimum
+plot width - that would have been the obvious rule and it would have been wrong", on the strength of Shiroyone Senmaida's
+basins (about 18 m2 each, the smallest half a meter square) and terrace beds "usually 2-6 m in width" - and fields/024
+('Minimum basin SIZE'), which prices and declines an absolute floor "in the same way and for the same reason that a
+minimum plot WIDTH is the wrong rule for a fan toe". A 12 ft floor would condemn a 2 m (6.6 ft) terrace bed the record
+calls usual. What the review saw - two bunds a few feet apart - is the doubled bund, which `_shed_necks` and
+`_visible_parts` already open at half the width floor; that stays the fabric's answer."""
 
 DART_MAX_CELL = 0.75
-"""GUESS (water W27, pending the T13 research pass): a basin under ~0.75 of its design cell carrying a tip under
-`DART_MIN_APEX` reads as a dart. From the review's measurements (future-work 'A tip-angle companion to the area
-floor'): Mizuguchi's arrowhead at 0.69 cell, and sharp tips on basins of 0.55-0.72 cell."""
+"""NOT ENFORCED, with `DART_MIN_APEX` (water W27): a basin under ~0.75 of its design cell carrying a tip under
+`DART_MIN_APEX` would read as a dart. A GUESS from the review's measurements (future-work 'A tip-angle companion to the
+area floor'): Mizuguchi's arrowhead at 0.69 cell, and sharp tips on basins of 0.55-0.72 cell."""
 
 DART_MIN_APEX = 30.0
-"""GUESS (water W27, with `DART_MAX_CELL`): the review measured 27.4 / 27.6 / 30.4 deg tips on the darts and asked
-for a floor of ~25-30 deg; 30 is the top of that band."""
+"""NOT ENFORCED - the research contradicts the rule (water W27; deliberate deviation from the design row, recorded). The
+review measured 27.4 / 27.6 / 30.4 deg tips and asked for a floor of ~25-30 deg; 30 is the top of that band (GUESS).
+
+THE RESEARCH PASS (T13, 2026-09-29) found the record answers it: fields/023 sets where a taper stops being workable -
+"at a 7.5 degree apex a plot is 5 ft wide 40 ft back from its point ... At 25 degrees the same wedge is 17 ft wide 40 ft
+back, which is a workable bunded strip" - so a 27-30 deg tip is inside what the record calls workable, and the carve
+already refuses under 25 (`_TOE_MIN_APEX`). And fields/025 ('The arrowhead') records the review's own request for a
+tip-angle floor on the motivating Mizuguchi ring and that "the measurement said no" (min apex 38.3 deg raw, solidity
+0.878: "an ordinary irregular basin - which is what the fabric is supposed to be full of"); the shape the review meant
+is the arrowhead, pointed AND notched, which `arrowhead` below enforces (W25)."""
 
 CHEVRON_APEX = _GATE_CHEVRON_APEX
 CHEVRON_SOLIDITY = _GATE_CHEVRON_SOLIDITY
@@ -188,13 +207,15 @@ def arrowhead(ring: Sequence[Sequence[float]]) -> bool:
 @dataclass(frozen=True)
 class SupplyStroke:
     """One supply canal or delivery ditch as the bank rule reads it: centerline, head and tail widths, arc lengths,
-    and the bounding box grown by the stroke's reach (a prefilter that prunes and decides nothing)."""
+    the bounding box grown by the stroke's reach (a prefilter that prunes and decides nothing), and its segment grid
+    (`banks.StrokeIndex`, which answers `supply_bank_clearance` to the bit wherever the rule can act)."""
 
     pts: Poly
     w0: float
     w1: float
     cum: list[float]
     box: tuple[float, float, float, float]
+    index: StrokeIndex
 
 
 def supply_strokes(ditches: Sequence[dict[str, Any]]) -> list[SupplyStroke]:
@@ -209,7 +230,8 @@ def supply_strokes(ditches: Sequence[dict[str, Any]]) -> list[SupplyStroke]:
         w1 = float(fd.get("w_tail", w0))
         reach = max(w0, w1) / 2 + BANK_MARGIN + 1.0
         box = (min(p[0] for p in pts) - reach, max(p[0] for p in pts) + reach, min(p[1] for p in pts) - reach, max(p[1] for p in pts) + reach)
-        out.append(SupplyStroke(pts, w0, w1, polyline_cum(pts), box))
+        cum = polyline_cum(pts)
+        out.append(SupplyStroke(pts, w0, w1, cum, box, StrokeIndex(pts, w0, w1, cum, reach)))
     return out
 
 
@@ -233,7 +255,9 @@ def supply_intrusions(ring: Sequence[Sequence[float]], strokes: Sequence[SupplyS
             for k in range(steps + 1):
                 t = k / steps
                 x, y = ax + t * (bx - ax), ay + t * (by - ay)
-                gap, halfw, past, _foot, _nrm = supply_bank_clearance((x, y), s.pts, s.w0, s.w1, s.cum)
+                # `supply_bank_clearance`, from the stroke's segment grid: exact wherever the verdict below can fire,
+                # since that needs a gap under the reach the grid was built for (`StrokeIndex`'s own argument)
+                gap, halfw, past, _foot, _nrm = s.index.clearance((x, y), exact=False)
                 if not past and gap < halfw + BANK_MARGIN - STROKE_ROUNDING_PX:
                     out.append((round(x), round(y)))
                     break
@@ -259,9 +283,16 @@ def collector_crossings(ring: Sequence[Sequence[float]], drains: Sequence[tuple[
     out: list[tuple[int, int]] = []
     n = len(ring)
     for pts, half in drains:
+        # A PREFILTER THAT DECIDES NOTHING (constitution X clause 15): an edge end within `half * COLLECTOR_REACH` of the
+        # centerline lies inside the centerline's box grown by that reach, so an edge with either end outside it is skipped.
+        reach = half * COLLECTOR_REACH
+        x0, x1 = min(p[0] for p in pts) - reach, max(p[0] for p in pts) + reach
+        y0, y1 = min(p[1] for p in pts) - reach, max(p[1] for p in pts) + reach
         for k in range(n):
             a = (float(ring[k][0]), float(ring[k][1]))
             b = (float(ring[(k + 1) % n][0]), float(ring[(k + 1) % n][1]))
+            if not (x0 <= a[0] <= x1 and y0 <= a[1] <= y1 and x0 <= b[0] <= x1 and y0 <= b[1] <= y1):
+                continue
             if (
                 min(_seg_dist(a, pts[i], pts[i + 1]) for i in range(len(pts) - 1)) < half * COLLECTOR_REACH
                 and min(_seg_dist(b, pts[i], pts[i + 1]) for i in range(len(pts) - 1)) < half * COLLECTOR_REACH
@@ -299,10 +330,66 @@ class RingContext:
     drains: list[tuple[Poly, float]] = field(default_factory=list)
     ponds: list[tuple[float, float, float, float]] = field(default_factory=list)
     graves: list[tuple[float, float, float]] = field(default_factory=list)
+    _supply_reach: Any = field(default=None, repr=False, compare=False)
+
+    def near_supply(self, ring: Sequence[Sequence[float]]) -> bool:
+        """Whether `ring`'s bund comes within reach of any supply stroke - a PREFILTER that decides nothing (constitution
+        X clause 15). A bund point the stroke rule flags is nearer the centerline than the local half-width plus
+        `BANK_MARGIN`, and the local half-width never exceeds the wider end's, so every such point lies inside the union
+        of the strokes buffered by that much (plus a pixel of slack); a ring whose outline misses the union has none.
+        The union is built once per context and prepared, so each ring asks it in one call - measured on a 911-plot
+        hamlet fan, the stroke rule's 3 px walk over every ring cost 0.86 s and this answers the far ones for nearly none."""
+        if not self.supplies:
+            return False
+        import shapely
+        from shapely.geometry import LineString
+
+        if self._supply_reach is None:
+            self._supply_reach = shapely.union_all([LineString(s.pts).buffer(max(s.w0, s.w1) / 2 + BANK_MARGIN + 1.0) for s in self.supplies])
+            shapely.prepare(self._supply_reach)
+        pts = [(float(p[0]), float(p[1])) for p in ring]
+        return bool(self._supply_reach.intersects(LineString([*pts, *pts[:1]])))
+
+
+def fan_context(
+    channels: Sequence[dict[str, Any]],
+    g: float | None,
+    cell: float | None,
+    ponds: Sequence[Sequence[float]] = (),
+    graves: Sequence[Sequence[float]] = (),
+) -> RingContext:
+    """The context a fan's rings are judged in, built from the ENGINE's channels (`pts`, `w`, `w_tail`, `role`) exactly
+    as `_comb_record_ditches` will record them - points and widths rounded to 0.1 px, a point repeating its predecessor
+    dropped - and the design cell as `_comb_record_field` records it. So the placer's context and the gate's (which
+    reads the recorded `field_ditches` and `cell`) are one: supply strokes are every channel but the drain, and the
+    collector is the drain."""
+
+    def recorded(c: dict[str, Any]) -> dict[str, Any]:
+        pts = [q for i, q in enumerate(c["pts"]) if i == 0 or math.dist(q, c["pts"][i - 1]) > 0.05]
+        return {"poly": [(round(float(x), 1), round(float(y), 1)) for x, y in pts], "w": round(float(c["w"]), 1), "w_tail": round(float(c["w_tail"] if "w_tail" in c else c["w"]), 1)}
+
+    supplies = [recorded(c) for c in channels if c.get("role") in ("main", "branch")]
+    drains = [recorded(c) for c in channels if c.get("role") == "drain" and len(c.get("pts") or ()) >= 2]
+    return RingContext(
+        cell=round(float(cell), 1) if cell else None,
+        g=g,
+        supplies=supply_strokes(supplies),
+        drains=collector_strokes(drains),
+        ponds=[(float(p[0]), float(p[1]), float(p[2]), float(p[3])) for p in ponds],
+        graves=[(float(d[0]), float(d[1]), float(d[2])) for d in graves],
+    )
+
+
+def as_recorded(ring: Sequence[Sequence[float]]) -> Poly:
+    """`ring` as the manifest records it (`plot_rings`): every vertex rounded to 0.1 px, nothing else changed."""
+    return [(round(float(p[0]), 1), round(float(p[1]), 1)) for p in ring]
 
 
 def ring_violations(ring: Sequence[Sequence[float]], ctx: RingContext) -> set[str]:
-    """Every rule `ring` breaks, by name - empty for a ring a placer may write."""
+    """Every rule `ring` breaks, by name - empty for a ring a placer may write.
+
+    NOT ASKED: `narrow` (W26) and `dart` (W27) - the research contradicts both (see `BASIN_MIN_WIDTH_FT` and
+    `DART_MIN_APEX`), so they are recorded rules, not enforced ones."""
     out = set()
     if needle(ring):
         out.add("needle")
@@ -310,17 +397,11 @@ def ring_violations(ring: Sequence[Sequence[float]], ctx: RingContext) -> set[st
         out.add("crossing")
     if arrowhead(ring):
         out.add("arrowhead")
-    if ctx.cell:
-        if too_small(ring, ctx.cell):
-            out.add("area")
-        if dart(ring, ctx.cell):
-            out.add("dart")
-    if ctx.g:
-        if staircase(ring, ctx.g):
-            out.add("steps")
-        if narrow(ring, ctx.g):
-            out.add("width")
-    if supply_intrusions(ring, ctx.supplies):
+    if ctx.cell and too_small(ring, ctx.cell):
+        out.add("area")
+    if ctx.g and staircase(ring, ctx.g):
+        out.add("steps")
+    if ctx.near_supply(ring) and supply_intrusions(ring, ctx.supplies):
         out.add("stroke")
     if collector_crossings(ring, ctx.drains):
         out.add("collector")

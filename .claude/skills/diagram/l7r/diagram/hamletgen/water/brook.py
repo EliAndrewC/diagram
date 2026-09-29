@@ -9,9 +9,9 @@ from __future__ import annotations
 import math
 import random
 import re
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 
-from l7r.diagram.settlement import Settlement, knob_rng
+from l7r.diagram.settlement import Settlement, knob_rng, point_in_poly
 from l7r.diagram.settlement._geom import fillet_polyline
 from l7r.diagram.settlement._knobs import Knob, register_knob
 from l7r.diagram.sitegen.geom import crosses_poly, unit
@@ -32,6 +32,28 @@ from ..consts import (
     Pt,
 )
 from ..plan import SitePlan
+from .brook_rules import (
+    AXIS_EPS_DEG,
+    BEND_DIP_FT,
+    BROOK_DRAWN_W,
+    LEVEL_TOL_FT,
+    RULED_TOL_FT,
+    _dist_to_course,
+    axis_segments,
+    bar_on_race,
+    course_enters,
+    crosses_mid_run,
+    ditch_strokes,
+    ends_off_canvas,
+    level_runs_any_view,
+    max_turn_deg,
+    monotone_down,
+    reserved_box,
+    ruled_excess,
+    tap_index,
+    to_edge,
+    turn_deg,
+)
 
 # THE WEIR'S FORM (269 B22; research/water/300): a fence of stakes and woven reed, a frame of stakes and logs packed
 # with clay, a crib of timber packed with stone, or a course of stone-filled baskets, each drawn at its own thickness
@@ -106,27 +128,36 @@ def _v_within(u: float, floor: float, want: float, d: Pt, p: Pt, box: tuple[floa
     return max(floor, hi)
 
 
-def unfold(course: Poly, limit_deg: float) -> Poly:
+def unfold(course: Poly, limit_deg: float, hold: Sequence[Pt] = ()) -> Poly:
     """The course with every vertex that turns it more than `limit_deg` taken out, repeated until none does.
 
     A NATURAL BROOK DOES NOT DOUBLE BACK (feature 261, settlement-review of Sawada): where the last stations are held
     against the frame box and the corner-cutting pass re-clamps its points onto the same edge, the exit leaves from a
     point behind the one before it and the course folds - 123 degrees, 51 ft inside the sheet, drawn as an acute V. The
     exit block above already guards the heading it starts on; this holds the property itself on the finished course,
-    whatever produced the fold. Dropping the vertex keeps the ends and the order of everything else."""
+    whatever produced the fold. Dropping the vertex keeps the ends and the order of everything else.
+
+    A HELD vertex (`hold` - the tap, feature 287 water:W01) is never the one dropped: where it is the fold, the free
+    vertex before it goes instead (the approach's last wobble), else the one after it. A fold between two held vertices
+    has nothing to drop and stays; the brook's placer judges the result and takes its next candidate."""
     out = list(course)
+    held = {(float(x), float(y)) for x, y in hold}
     changed = True
     while changed and len(out) > 2:
         changed = False
         for i in range(1, len(out) - 1):
-            ax, ay = out[i][0] - out[i - 1][0], out[i][1] - out[i - 1][1]
-            bx, by = out[i + 1][0] - out[i][0], out[i + 1][1] - out[i][1]
-            na, nb = math.hypot(ax, ay), math.hypot(bx, by)
-            if na and nb and math.degrees(math.acos(max(-1.0, min(1.0, (ax * bx + ay * by) / (na * nb))))) > limit_deg:
-                del out[i]
+            if turn_deg(out[i - 1], out[i], out[i + 1]) <= limit_deg:
+                continue
+            k = next((j for j in (i, i - 1, i + 1) if 0 < j < len(out) - 1 and out[j] not in held), None)
+            if k is not None:
+                del out[k]
                 changed = True
                 break
     return out
+
+
+SETTLE_PASSES = 8  # the bounded repair's passes (plan D5: each ruled-run bend halves the run, so a handful suffices)
+RULED_BENDS_PER_PASS = 8  # ...and the ruled runs bent within one pass, each re-read after the last bend
 
 
 def finished_course(course: Sequence[Pt], w: float, taps: Sequence[Pt] = ()) -> Poly:
@@ -388,6 +419,214 @@ def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = ()
     )  # the tap run: two cut points on the fall; the segment that leaves it is nudged off an axis like any other (feature 261: Sawada's drew exactly vertical below its tap)
 
 
+def brook_violations(course: Sequence[Pt], plan: SitePlan, sluice: Pt, ditches: Sequence[Poly] = ()) -> list[str]:
+    """Which of the brook's rules the DRAWN course (`finished_course` of `course`) breaks - empty for a course the placer
+    may take. One predicate per rule: W01 `max_turn_deg`, W02 `level_runs_along_frame` over the whole canvas, W03
+    `ruled_excess`, W04 `axis_segments`, W06 `course_enters`, W07 `ends_off_canvas` (the off-map source), W08
+    `crosses_mid_run`, W11 `monotone_down` below the tap."""
+    fin = finished_course(course, BROOK_DRAWN_W, [sluice])
+    W, H = float(plan.W), float(plan.H)
+    box = reserved_box(course, plan)
+    run, bound, _a, _b = ruled_excess(fin, W, H, box)
+    checks = {
+        "fold": max_turn_deg(fin) > BROOK_MAX_TURN_DEG,
+        "level": bool(level_runs_any_view(fin, W, H, box)),
+        "ruled": run > bound,
+        "axis": bool(axis_segments(fin, [sluice])),
+        "enters": course_enters(fin, [plan.envelope]),
+        "source": not ends_off_canvas(fin, W, H, ends=(0,)),
+        "crosses": any(crosses_mid_run(fin, d) for d in ditches),
+        "climbs": not monotone_down(fin[tap_index(fin, [sluice]) :], plan.fall, slack=BEND_DIP_FT),
+    }
+    return [k for k, bad in checks.items() if bad]
+
+
+def _pinned(course: Sequence[Pt], sluice: Pt) -> tuple[int, set[int]]:
+    """(the tap's index, the vertices a repair may not move): the ends, the tap and the tap run's two points below it -
+    the stride on the fall the head race's offtake angle is measured along."""
+    tap = tap_index(course, [sluice])
+    return tap, {0, len(course) - 1, tap, tap + 1, tap + 2}
+
+
+def axes_off(course: Sequence[Pt], away: Pt, sluice: Pt, fall: Pt, eps: float = AXIS_EPS_DEG) -> Poly:
+    """Every segment of a wander stride or more tilted off the screen axes, the tap run excepted (water:W04) - over the
+    WHOLE course, the approach's last leg into the tap included (Inashiro's 1.2 degree leg, which `_off_the_axes` on the
+    approach alone never saw). No ceiling on the tilt: the 11 px cap `_off_the_axes` keeps left a long off-map exit leg
+    on the axis.
+
+    A segment the flank's normal (`away`) turns is tilted by moving its far end across the fall - its near end where the
+    far one is pinned (the tap: so the head race keeps its mouth). A segment lying ACROSS the fall, which `away` cannot
+    turn, is tilted down the fall instead: its far end moved down it, or its near end up it, whichever leaves its
+    neighbor still running downhill (water:W11) - the step round a ditch's tail lies across the fall, and turning it
+    about its own normal made the course climb (the W08 unit case)."""
+    out = list(course)
+    tap, pinned = _pinned(out, sluice)
+    u = lambda q: q[0] * fall[0] + q[1] * fall[1]  # noqa: E731
+    for i in range(len(out) - 1):
+        a, b = out[i], out[i + 1]
+        L = math.dist(a, b)
+        deg = math.degrees(math.atan2(b[1] - a[1], b[0] - a[0])) % 90.0
+        if i in (tap, tap + 1) or L < BROOK_WANDER_STEP or min(deg, 90.0 - deg) >= eps:
+            continue
+        ux, uy = (b[0] - a[0]) / L, (b[1] - a[1]) / L
+        cross = abs(away[0] * uy - away[1] * ux)
+        step = L * math.tan(math.radians(2.0 * eps))
+        if cross >= 0.3:
+            k = i + 1 if i + 1 not in pinned else i
+            moves = [(k, away[0] * step / cross, away[1] * step / cross)] if k not in pinned else []
+        else:  # across the fall: down it at the far end, or up it at the near end, where the neighbor keeps its descent
+            slack_b = u(out[i + 2]) - u(b) if i + 2 < len(out) else math.inf
+            slack_a = u(a) - u(out[i - 1]) if i > 0 else math.inf
+            moves = [(k, sg * fall[0] * step, sg * fall[1] * step) for k, sg, slack in ((i + 1, 1.0, slack_b), (i, -1.0, slack_a)) if k not in pinned and slack > step]
+        for k, mx, my in moves[:1]:
+            out[k] = (out[k][0] + mx, out[k][1] + my)
+    return out
+
+
+def bend_at(course: Sequence[Pt], span: Sequence[Pt], need: Callable[[Pt], tuple[float, float]], away: Pt, sluice: Pt, envelope: Sequence[Pt], cap: float = math.inf) -> Poly:
+    """`course` with one bend inserted in the run `span` (drawn-course points): at the middle of the LONGEST segment lying
+    along it (the tap run excepted), set ACROSS THE FALL (`away`, the flank's normal) by the smaller of the two offsets
+    `need(base)` gives - the two that clear the run's reference line on either side - whose point is not in the field,
+    and no more than half the segment, so the bend turns the course gently. The longest segment, because a bend on a
+    short one is a spike the fillet rounds back inside the tolerance or `unfold` takes out (cohort seed 2: a brook pinned
+    to the frame box in 8-70 ft legs kept its level run through every pass). Set along `away`: the caller passes the
+    flank's normal, so the bend moves no vertex up or down the fall and the course below the tap stays monotone
+    (water:W11) - or, for a run lying ACROSS the fall, which no bend across it can break (the step round the fan's head
+    on the W08 unit case: 280 ft straight), the fall itself, a dip of a bend's depth that `BEND_DIP_FT` allows."""
+    tap, _pinned_ = _pinned(course, sluice)
+    along = [k for k in range(len(course) - 1) if k not in (tap, tap + 1) and _dist_to_course(((course[k][0] + course[k + 1][0]) / 2, (course[k][1] + course[k + 1][1]) / 2), span) <= 8.0]
+    for k in sorted(along, key=lambda q: -math.dist(course[q], course[q + 1])):
+        a, b = course[k], course[k + 1]
+        base = ((a[0] + b[0]) / 2.0, (a[1] + b[1]) / 2.0)
+        for off in sorted(need(base), key=abs):  # the smaller of the two bends first
+            q = (base[0] + away[0] * off, base[1] + away[1] * off)
+            if abs(off) <= min(math.dist(a, b) / 2.0, cap) and not point_in_poly(q[0], q[1], list(envelope)):
+                return [*course[: k + 1], q, *course[k + 1 :]]
+    return list(course)
+
+
+def bend_runs(course: Sequence[Pt], plan: SitePlan, sluice: Pt, away: Pt) -> Poly:
+    """One bend for each level run along the canvas (water:W02) and for the straightest run where it is over its bound
+    (water:W03), each at the run's middle, judged on the drawn course. A level run's bend clears the level by twice its
+    tolerance and a foot; a ruled run's bend clears the chord by its tolerance and a foot and a half - so each bend
+    breaks the run it was set in, halving a ruled run, and the repair's passes bound how many it takes."""
+    W, H = float(plan.W), float(plan.H)
+    out = list(course)
+    # EVERY run over its bound, re-read after each bend - a course can carry several (cohort seed 13: three ruled runs of
+    # ~500 ft, one per exit leg and one abreast of the field), and one bend a pass left the third standing when the passes
+    # ran out. The level runs first, the longest of them first; then the straightest run, while it is over its bound.
+    for _ in range(RULED_BENDS_PER_PASS):
+        fin = finished_course(out, BROOK_DRAWN_W, [sluice])
+        runs = level_runs_any_view(fin, W, H, reserved_box(out, plan))
+        if not runs:
+            break
+        axis, i, j, _run = max(runs, key=lambda r: r[3])
+        v = away if abs(away[axis]) >= 0.3 else plan.fall  # a level the flank's normal cannot leave is left down the fall
+        bent = bend_at(out, fin[i : j + 1], level_offsets(fin[i][axis], axis, v), v, sluice, plan.envelope, BEND_DIP_FT if v is plan.fall else math.inf)
+        if bent == out:
+            break  # no segment along it takes a bend; the placer's judgment refuses the candidate
+        out = bent
+    for _ in range(RULED_BENDS_PER_PASS):
+        fin = finished_course(out, BROOK_DRAWN_W, [sluice])
+        run, bound, a, b = ruled_excess(fin, W, H, reserved_box(out, plan))
+        if run <= bound:
+            break
+        v = away if abs(away[0] * (b[1] - a[1]) - away[1] * (b[0] - a[0])) >= 0.3 * run else plan.fall  # a run ACROSS the fall bends down it
+        out = bend_at(out, [a, b], chord_offsets(a, b, v), v, sluice, plan.envelope, BEND_DIP_FT if v is plan.fall else math.inf)
+    return out
+
+
+def level_offsets(level: float, axis: int, away: Pt) -> Callable[[Pt], tuple[float, float]]:
+    """For a level run held at `level` on `axis`: the two offsets along `away` that set a point `LEVEL_TOL_FT` and a foot
+    and a half off that level, either side (water:W02) - measured from the run's own level, not the point's, so the bend
+    breaks the run from its first vertex."""
+    av = away[axis] if abs(away[axis]) >= 0.3 else math.copysign(0.3, away[axis] or 1.0)
+    return lambda p: ((level + LEVEL_TOL_FT + 1.5 - p[axis]) / av, (level - LEVEL_TOL_FT - 1.5 - p[axis]) / av)
+
+
+def chord_offsets(a: Pt, b: Pt, away: Pt) -> Callable[[Pt], tuple[float, float]]:
+    """For a straight run on the chord a-b: the two offsets along `away` that set a point `RULED_TOL_FT` and a foot and a
+    half off the chord's line, either side (water:W03), measured from the line, not from the course under the point."""
+    L = math.dist(a, b) or 1.0
+    n = (-(b[1] - a[1]) / L, (b[0] - a[0]) / L)
+    an = away[0] * n[0] + away[1] * n[1]
+    an = an if abs(an) >= 0.3 else math.copysign(0.3, an or 1.0)
+    side = lambda p: (p[0] - a[0]) * n[0] + (p[1] - a[1]) * n[1]  # noqa: E731
+    return lambda p: ((RULED_TOL_FT + 1.5 - side(p)) / an, (-RULED_TOL_FT - 1.5 - side(p)) / an)
+
+
+def clear_of_field(course: Sequence[Pt], envelope: Sequence[Pt], away: Pt, sluice: Pt, step: float = 6.0, limit: int = 60) -> Poly:
+    """Every segment of `course` that runs into the field moved out of it, across the fall on the flank (`away`), its
+    free ends a step at a time until it clears (water:W06). The skirt's profile floors each station outside the crop, but
+    the cut points between stations are floored against a narrow window, and a lobe between two of them still took the
+    course through the rice (cohort seed 12: eight drawn vertices inside the envelope). Across the fall, so no vertex
+    moves up or down it (water:W11); the tap run and the ends are not moved - the tap run stands at the fan's head, where
+    the head race leaves it, and is the intake itself."""
+    out = list(course)
+    ring = list(envelope)
+    tap, pinned = _pinned(out, sluice)
+    for k in range(len(out) - 1):
+        free = [q for q in (k, k + 1) if q not in pinned]
+        for _ in range(limit if free else 0):
+            inside = [q for q in (k, k + 1) if point_in_poly(out[q][0], out[q][1], ring)]
+            # a crossing counts only where both ends are free to answer for it: the leg into the tap is the intake itself
+            if not ([q for q in inside if q not in pinned] or (len(free) == 2 and k + 1 != tap and crosses_poly(out[k], out[k + 1], ring))):
+                break
+            for q in free:
+                out[q] = (out[q][0] + away[0] * step, out[q][1] + away[1] * step)
+    return out
+
+
+def settle_course(course: Sequence[Pt], plan: SitePlan, sluice: Pt) -> Poly:
+    """THE BOUNDED REPAIR (feature 287, water:W01-W04): off the axes, unfolded with the tap held, the level and ruled runs
+    bent, off the axes again - to a fixed point, at most `SETTLE_PASSES` times. Off the axes runs LAST: unfold deleting a
+    vertex makes a new segment, and a segment made after the nudge was the hole the axis rule fell through."""
+    away = (-plan.fall[1] * plan.brook_side, plan.fall[0] * plan.brook_side)  # the flank's outward normal, as `brook_skirt`'s
+    out = list(course)
+    for _ in range(SETTLE_PASSES):
+        before = out
+        out = unfold(axes_off(clear_of_field(out, plan.envelope, away, sluice), away, sluice, plan.fall), BROOK_MAX_TURN_DEG, hold=[sluice])
+        out = axes_off(bend_runs(out, plan, sluice, away), away, sluice, plan.fall)
+        if out == before:
+            break
+    return out
+
+
+def approach_legs(plan: SitePlan, sluice: Pt, th: float, run: float) -> Poly | None:
+    """The approach on bearing `th` (radians, from the tap upslope): the off-map source, its bowed midpoint and three
+    wandering points into the tap - or None where its chord runs through the rice.
+
+    THE SOURCE IS OFF THE CANVAS BY CONSTRUCTION (water:W07): the run is `run` or the distance to the canvas edge along
+    the bearing and 60 more, whichever is longer, as the exit sizes its span from the edge - a fixed 420 ft stopped on the
+    map on a canvas wider than that."""
+    d = (math.cos(th), math.sin(th))
+    run = max(run, to_edge(sluice, d, float(plan.W), float(plan.H)) + 60.0)
+    up = (sluice[0] + d[0] * run, sluice[1] + d[1] * run)
+    mid = ((up[0] + sluice[0]) / 2 - d[1] * 26, (up[1] + sluice[1]) / 2 + d[0] * 26)
+    near = (sluice[0] + d[0] * 40, sluice[1] + d[1] * 40)  # the last 40 px is the intake itself
+    if crosses_poly(up, mid, plan.envelope) or crosses_poly(mid, near, plan.envelope):
+        return None
+    # the APPROACH wanders too. It was one ruled 420 ft line into the tap - 211 ft of it in frame, and
+    # the reviewer counted it among the third of the course with no meander at all; a brook that is a
+    # stream below its tap and a drawn line above it is not one brook.
+    wob = knob_rng(plan.spec.seed, "brook_approach")
+    legs = [up, mid]
+    for t in (0.45, 0.68, 0.86):
+        qx, qy = mid[0] + (sluice[0] - mid[0]) * t, mid[1] + (sluice[1] - mid[1]) * t
+        j = wob.uniform(-16.0, 16.0)
+        legs.append((qx - d[1] * j, qy + d[0] * j))
+    # ...and off the screen axes, as the course below the tap is (`_off_the_axes`): Inashiro's approach drew a leg
+    # 49 ft at 1.2 degrees off vertical (feature 261, found beside Sawada's tap-leaving segment). The nudge moves a
+    # leg's far end across the approach, never the sluice, so the tap stays where the head race leaves it.
+    return _off_the_axes(legs, (-d[1], d[0]))
+
+
+def outside_stretches(plan: SitePlan, ditches: Sequence[Poly]) -> list[Poly]:
+    """The stretches of the net's ditches that run outside the field's envelope, as two-point rings for `brook_skirt`'s
+    profile - the delivery tails and the collector's end a brook passing the fan must go round (water:W08)."""
+    return [[a, b] for d in ditches for a, b in zip(d, d[1:], strict=False) if not point_in_poly((a[0] + b[0]) / 2, (a[1] + b[1]) / 2, list(plan.envelope))]
+
+
 def feed_brook(plan: SitePlan, sluice: Pt, crop: Sequence[Poly] = (), run: float = 420.0) -> Poly:
     """The brook: down off the high ground to the intake, and ON PAST the fan to leave the map.
 
@@ -400,39 +639,82 @@ def feed_brook(plan: SitePlan, sluice: Pt, crop: Sequence[Poly] = (), run: float
     coming straight down the fall line then clips it (`streams_avoid_fields`, which is right to object -
     a stream does not run through a flooded paddy). Bearings are tried outward from straight-upslope, so
     the brook stays as close to the fall line as the field allows. The last 40 px into the intake is
-    legitimately against the crop and is not tested."""
+    legitimately against the crop and is not tested.
+
+    EVERY RULE OF THE BROOK IS DECIDED HERE (feature 287): each candidate - a bearing, and the skirt as laid or, where
+    that crosses a ditch mid-run, laid round the ditches' outside stretches - is repaired (`settle_course`) and taken
+    only where `brook_violations` finds nothing on the course as drawn. THE LAST CANDIDATE goes round the field
+    (`around_the_field`): from straight up the fall, the shortest course that keeps half a skirt clear of the rice - the
+    route this loop promises when every bearing is blocked, repaired like any other. The other flank is NOT a
+    candidate, though the design proposed it: the head race and the fan's trim were carved for the rolled flank before
+    the brook is laid (`plan.head_deg`, `fit.py`), so a brook on the other side would run where the race leaves."""
     dx, dy = plan.fall
     base = math.degrees(math.atan2(-dy, -dx))  # upslope
+    ditches = ditch_strokes(plan)
+    skirt = brook_skirt(plan, sluice, plan.brook_side, crop)
+    if any(crosses_mid_run(finished_course([sluice, *skirt], BROOK_DRAWN_W, [sluice]), d) for d in ditches):
+        # the skirt as laid crosses a ditch mid-run, and no bearing of the approach moves the skirt: lay it again round
+        # the ditches' outside stretches rather than judge fifteen approaches on a skirt that cannot pass
+        skirt = brook_skirt(plan, sluice, plan.brook_side, [*crop, *outside_stretches(plan, ditches)])
     for swing in sorted((10.0 * k for k in range(-7, 8)), key=abs):
-        th = math.radians(base + swing)
-        up = (sluice[0] + math.cos(th) * run, sluice[1] + math.sin(th) * run)
-        mid = ((up[0] + sluice[0]) / 2 - math.sin(th) * 26, (up[1] + sluice[1]) / 2 + math.cos(th) * 26)
-        near = (sluice[0] + math.cos(th) * 40, sluice[1] + math.sin(th) * 40)  # the last 40 px is the intake itself
-        if not (crosses_poly(up, mid, plan.envelope) or crosses_poly(mid, near, plan.envelope)):
-            # the APPROACH wanders too. It was one ruled 420 ft line into the tap - 211 ft of it in frame, and
-            # the reviewer counted it among the third of the course with no meander at all; a brook that is a
-            # stream below its tap and a drawn line above it is not one brook.
-            wob = knob_rng(plan.spec.seed, "brook_approach")
-            legs = [up, mid]
-            for t in (0.45, 0.68, 0.86):
-                qx, qy = mid[0] + (sluice[0] - mid[0]) * t, mid[1] + (sluice[1] - mid[1]) * t
-                j = wob.uniform(-16.0, 16.0)
-                legs.append((qx - math.sin(th) * j, qy + math.cos(th) * j))
-            # ...and off the screen axes, as the course below the tap is (`_off_the_axes`): Inashiro's approach drew a leg
-            # 49 ft at 1.2 degrees off vertical (feature 261, found beside Sawada's tap-leaving segment). The nudge moves a
-            # leg's far end across the approach, never the sluice, so the tap stays where the head race leaves it.
-            legs = _off_the_axes(legs, (-math.sin(th), math.cos(th)))
-            return [*legs, sluice, *brook_skirt(plan, sluice, plan.brook_side, crop)]
-    up = (
-        sluice[0] - dx * run,
-        sluice[1] - dy * run,
-    )  # pragma: no cover - a fan head never blocks all fifteen [174: KEPT, not deletable - the loop's terminal; without it the function returns None where a route is promised]
-    return [
-        up,
-        ((up[0] + sluice[0]) / 2 + dy * 26, (up[1] + sluice[1]) / 2 - dx * 26),
-        sluice,
-        *brook_skirt(plan, sluice, plan.brook_side, crop),
-    ]  # pragma: no cover - the same unreachable fallback, one line down [174: KEPT, not deletable - part of that same terminal return]
+        legs = approach_legs(plan, sluice, math.radians(base + swing), run)
+        if legs is None:
+            continue
+        course = settle_course([*legs, sluice, *skirt], plan, sluice)
+        if not brook_violations(course, plan, sluice, ditches):
+            return course
+    reach = max(run, to_edge(sluice, (-dx, -dy), float(plan.W), float(plan.H)) + 60.0)
+    path = around_the_field(plan.envelope, (sluice[0] - dx * reach, sluice[1] - dy * reach), sluice)
+    if len(path) == 1:  # the way straight up the fall is clear: bowed at its middle as every approach is, off the axis
+        path = [path[0], ((path[0][0] + sluice[0]) / 2 + dy * 26, (path[0][1] + sluice[1]) / 2 - dx * 26)]
+    return settle_course([*path, sluice, *skirt], plan, sluice)
+
+
+def around_the_field(envelope: Sequence[Pt], start: Pt, goal: Pt, pad: float = BROOK_SKIRT / 2.0, intake: float = 40.0) -> Poly:
+    """The shortest course from `start` to `goal` (the tap) that stays `pad` clear of the field, the tap excluded -
+    everything up to it, as a polyline (water:W06, the approach's last candidate).
+
+    A visibility graph over the corners of the field grown by `pad`: a leg is allowed where it does not enter that
+    ground, and the leg into the tap where only its last `intake` ft does - the intake itself, against the crop by
+    design. `ways.clearance.route_around`, the design's choice, is the lane router's and was measured failing here: on a
+    lobe over the tap it pushed the approach's end back INTO the lobe. A tap the field closes round on every side has no
+    such course; `head_sluice` seats the tap at the fan's head, so that is input the fit never makes, and the straight
+    course is returned for the placer's judgment to refuse."""
+    from shapely.geometry import LineString, Polygon  # noqa: PLC0415 - bound on first use
+
+    field = Polygon(envelope).buffer(0)
+    core = field.buffer(pad - 0.5, join_style="mitre")
+    nodes = [start, *[(float(x), float(y)) for x, y in list(field.buffer(pad, join_style="mitre").exterior.coords)[:-1]], goal]
+    last = len(nodes) - 1
+
+    def clear(i: int, j: int) -> bool:
+        seg = LineString([nodes[i], nodes[j]])
+        if j == last:  # the leg into the tap: its last `intake` ft is the intake
+            if seg.length <= intake:
+                return True
+            cut = seg.interpolate(seg.length - intake)
+            seg = LineString([nodes[i], (cut.x, cut.y)])
+        return not seg.intersects(core)
+
+    best = {0: 0.0}
+    prev: dict[int, int] = {}
+    todo = set(range(len(nodes)))
+    while True:  # Dijkstra over a graph of tens of nodes: the nearest unsettled node, settled in turn
+        i = min((k for k in todo if k in best), key=best.__getitem__, default=None)
+        if i is None or i == last:
+            break
+        todo.discard(i)
+        for j in todo:
+            nd = best[i] + math.dist(nodes[i], nodes[j])
+            if nd < best.get(j, math.inf) and clear(i, j):
+                best[j], prev[j] = nd, i
+    if last not in prev:
+        return [start]  # enclosed on every side - see the docstring
+    path, k = [], last
+    while k in prev:
+        k = prev[k]
+        path.append(nodes[k])
+    return path[::-1]
 
 
 def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
@@ -471,14 +753,30 @@ def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
     # leaves at `OFFTAKE_DEG`, so its opening cuts the bank over `w / sin(offtake)` - about 10 ft at Kashikawa's 6 ft race -
     # and a bar set a pixel below the junction stood IN that opening, with a third of the mouth in the tailwater. The bar
     # clears half the opening as well as its own half-thickness.
-    _mouth = (float(plan.net["channels"][0].get("w", 6.0)) if plan.net and plan.net.get("channels") else 6.0) / max(math.sin(math.radians(OFFTAKE_DEG)), 0.2)
-    cx, cy = sluice[0] + hx * (half_t + _mouth / 2.0 + 1.0), sluice[1] + hy * (half_t + _mouth / 2.0 + 1.0)  # below the mouth, not in it
-    poly = [
-        (cx + ax * half + hx * half_t, cy + ay * half + hy * half_t),
-        (cx - ax * half + hx * half_t, cy - ay * half + hy * half_t),
-        (cx - ax * half - hx * half_t, cy - ay * half - hy * half_t),
-        (cx + ax * half - hx * half_t, cy + ay * half - hy * half_t),
-    ]
+    _race = next((c for c in (plan.net or {}).get("channels") or [] if c.get("role") == "main"), None) or next(iter((plan.net or {}).get("channels") or []), None)
+    _race_w = float(_race.get("w", 6.0)) if _race else 6.0
+    _mouth = _race_w / max(math.sin(math.radians(OFFTAKE_DEG)), 0.2)
+    # ...AND ITS ROOT KEYS INTO THE BANK CLEAR OF THE RACE (feature 287, water:W09; future-work "The weir's root lands on the
+    # head race's mouth"): set below the mouth by the opening alone, the bar's intake-bank end - which the skew carries
+    # further downstream and out past the bank - still lay on the race, 17% of the bar on all three weir maps, reading as a
+    # gate across the ditch. The bar steps down the brook, a foot at a time, from that first seat to the first where none of
+    # it lies on the race's stroke (`bar_on_race`): the root then keys into the bank at the mouth's downstream lip, the mouth
+    # still in the pool the weir raises (pass 10's rule) and not under the bar. The race leaves at `OFFTAKE_DEG` and the
+    # bar's end at the skew, so the two diverge and a clear seat exists within a few bar-lengths; the design row's "upstream
+    # lip" would have put the mouth in the tailwater, which pass 10 measured and refused.
+    _race_pts = [(float(x), float(y)) for x, y in _race["pts"]] if _race else []
+    off = half_t + _mouth / 2.0 + 1.0  # below the mouth, not in it
+    while True:
+        cx, cy = sluice[0] + hx * off, sluice[1] + hy * off
+        poly = [
+            (cx + ax * half + hx * half_t, cy + ay * half + hy * half_t),
+            (cx - ax * half + hx * half_t, cy - ay * half + hy * half_t),
+            (cx - ax * half - hx * half_t, cy - ay * half - hy * half_t),
+            (cx + ax * half - hx * half_t, cy + ay * half - hy * half_t),
+        ]
+        if bar_on_race(poly, _race_pts, _race_w) <= 1e-9:  # the race is a finite stroke, so a seat past its end always clears it
+            break
+        off += 1.0
     s.M.setdefault("weirs", []).append(
         {
             "x": round(cx, 1),

@@ -191,8 +191,15 @@ class CombMixin:
         self.comb_base_fill(net, name)
 
         self._comb_draw_hem(net, source, name)
+        # THE IN-FIELD FEATURES ARE SEATED BEFORE THE PADDIES ARE DRAWN, AND INKED AFTER THEM (feature 287, water W28): a
+        # grave carves the rings the paddies are drawn from, so the paddies must be drawn from the carved rings; the
+        # features' own ink is held and emitted where it always was, over the paddies.
+        _feature_ink: list[tuple[str, str]] = []
+        self._paddy_features(net, _feature_ink)
         self._comb_draw_paddies(net, name)
         self.bund_junctions(net["plots"], name)
+        for _svg, _cls in _feature_ink:
+            self.add(_svg, cls=_cls)
         # WATER-HONEST BEADS, the draw-site half (GM 2026-08-15: "fix the water-buried beads so
         # the record stays honest"; settlement-review found 40 of Inashiro's 727 recorded beads
         # invisible under water paint). `_bund_beans` already drops plot-buried beads and beads
@@ -201,11 +208,13 @@ class CombMixin:
         # interior, so their geometry must exist before the bead line commits; it draws from its
         # own seeded rng, so the move ripples no stream), then every bead inside the source pond
         # or a pocket pond is dropped BEFORE drawing and recording, so dots and manifest agree.
-        self._paddy_features(net)
         sluice = net["channels"][0]["pts"][0]
         pond_rec = self._comb_draw_source(net, source, sluice)
         self._comb_draw_ditches(net)
         self._comb_record_ditches(net, name)
+        # ...AND THE HAIRLINE FEED IS RECORDED BEFORE THE BEADS ARE DROPPED (feature 287, water W33): it is water the bead
+        # drop reads (`M["channels"]`), and recorded after the drop it could lay a bead under its own stroke.
+        self._comb_source_channel(net, name, source, sluice, pond_rec, join_head)
         # ...AND THE DITCHES ARE RECORDED BEFORE THE FIELD IS (feature 230). The field record carries the bead
         # POINTS, so a bead dropped after it is dropped from the picture and not from the manifest - which is
         # the drift `bunds_and_dikes` exists to catch, and which is how a bead under a drain's wide tail came
@@ -224,7 +233,6 @@ class CombMixin:
         # source kind "cascade" = the field is fed plot-to-plot from an UPSTREAM field (the caller
         # records its own connector channel with to={"kind":"field",...}), so no hairline is added -
         # its frm={"kind":"stream"} anchor would dangle with no stream at the sluice.
-        self._comb_source_channel(net, name, source, sluice, pond_rec, join_head)
         _fringe = self._pending_fringe  # see `_comb_draw_source`: the reeds keep off water that exists
         if _fringe:
             self._pending_fringe = None
@@ -383,10 +391,18 @@ class CombMixin:
         # bead nearer than `half` to a segment stands inside that segment's box widened by `half`, so the segments whose
         # widened box holds the bead are every one that can drown it, and the same `seg_dist` decides.
         _water_idx = seg_reach_index(_water, 0.0)
+        # A GRAVE CARVED INTO THE FIELD (feature 287, water W28) takes its mound's ground out from under the bunds the beads
+        # were laid along, and may weld or bare a carved piece: a bead on the mound, or on a stretch of bund no ring now
+        # has, is dropped. Only where a grave was carved, so every other field's beads are judged exactly as before.
+        _graves = net.get("grave_discs") or []
+        _bunds = seg_reach_index([([*p["poly"], p["poly"][0]], 1.0) for p in net["plots"] if len(p["poly"]) >= 3], 0.0) if _graves else None
 
         def _dry(q: tuple[float, float]) -> bool:
-            return all(((q[0] - _wx) / _wrx) ** 2 + ((q[1] - _wy) / _wry) ** 2 > 1.0 for _wx, _wy, _wrx, _wry in _bw) and not any(
-                x0 <= q[0] <= x1 and y0 <= q[1] <= y1 and seg_dist(q[0], q[1], a, b) < half for a, b, half, x0, y0, x1, y1 in _water_idx.near(q[0], q[1])
+            return (
+                all(((q[0] - _wx) / _wrx) ** 2 + ((q[1] - _wy) / _wry) ** 2 > 1.0 for _wx, _wy, _wrx, _wry in _bw)
+                and not any(x0 <= q[0] <= x1 and y0 <= q[1] <= y1 and seg_dist(q[0], q[1], a, b) < half for a, b, half, x0, y0, x1, y1 in _water_idx.near(q[0], q[1]))
+                and all(math.hypot(q[0] - gx, q[1] - gy) >= gr for gx, gy, gr in _graves)
+                and (_bunds is None or any(x0 <= q[0] <= x1 and y0 <= q[1] <= y1 and seg_dist(q[0], q[1], a, b) <= tol for a, b, tol, x0, y0, x1, y1 in _bunds.near(q[0], q[1])))
             )
 
         net["bund_bean_runs"] = [part for run in net["bund_bean_runs"] for part in bead_runs(run, _dry)]

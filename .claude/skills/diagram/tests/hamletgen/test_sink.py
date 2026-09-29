@@ -277,3 +277,167 @@ def test_a_pond_exactly_back_along_the_heading_has_no_bisector_to_leave_on() -> 
     assert back[0] == (100.0, 100.0) and back[-1] == (0.0, 100.0)
     assert all(abs(q[1] - 100.0) < 1e-6 for q in back), "with no bisector the run lies on the chord itself"
     assert all(math.dist(q, (0.0, 100.0)) <= math.dist(back[0], (0.0, 100.0)) + 1e-6 for q in back), "and never climbs away from the pond"
+
+
+# ---- feature 287: every sink rule decided where the route is chosen (water:W10, W11, W12, W49) -------------------------
+
+
+def test_a_run_downhill_keeps_a_fifth_of_its_travel_on_the_fall() -> None:
+    """water:W10: the channel test's rule, lifted - net travel down the fall of at least a fifth of its length."""
+    fall = (0.0, 1.0)
+    assert hg.sink.runs_downhill([(0.0, 0.0), (100.0, 30.0)], fall)
+    assert not hg.sink.runs_downhill([(0.0, 0.0), (100.0, 10.0)], fall), "a near-level ditch that merely descends"
+    assert not hg.sink.runs_downhill([(0.0, 0.0), (0.0, -50.0)], fall)
+    assert hg.sink.runs_downhill([(5.0, 5.0), (9.0, 9.0), (5.0, 5.0)], fall), "no net travel: nothing to judge"
+
+
+def test_a_confluence_the_drain_would_reach_on_the_level_is_refused() -> None:
+    """water:W10: a brook passing 250-700 ft along the collector's line and only 30 ft down it. Its points have fallen the
+    20 ft a junction needs, but a ditch to any of them runs down the fall by less than a fifth of its length - the
+    level ditch the channel rule forbids. A brook passing below the outfall is still joined, and the run to it is
+    downhill."""
+    plan = a_plan()
+    out = (700.0, 1010.0)
+    plan.brook = [(950.0, 1040.0), (1400.0, 1060.0), (1800.0, 1070.0), (2200.0, 1080.0)]
+    assert hg.brook_join(plan, out) is None
+    plan.brook = [(760.0, 1040.0), (760.0, 1400.0), (760.0, 2000.0)]
+    q = hg.brook_join(plan, out)
+    assert q is not None and hg.sink.runs_downhill([out, q], plan.fall)
+
+
+def test_the_pond_seat_refuses_a_sway_whose_ditch_would_run_level(monkeypatch: pytest.MonkeyPatch) -> None:
+    """water:W10/W11: the pond's ditch ends at its center, and a seat whose ditch the channel rule refuses is no seat - the
+    next sway is taken. By construction the first is never refused; the refusal is made to fire."""
+    plan = a_plan()
+    calls: list[int] = []
+    real = hg.sink.runs_downhill
+    monkeypatch.setattr(hg.sink, "runs_downhill", lambda course, fall, frac=0.2: bool(calls.append(1)) or len(calls) > 1 and real(course, fall, frac))
+    back, sway = hg.sink.pond_seat(plan, (700.0, 1010.0), 60.0, 40.0)
+    assert sway != 0.0 and len(calls) == 2
+
+
+def _u_field_stage(monkeypatch: pytest.MonkeyPatch) -> tuple[Any, list[tuple[list[tuple[float, float]], str]], tuple[float, float]]:
+    """A field closing round the outfall on every side a searched route could take: the collector ends in a slot cut into
+    a block of rice 1,200 ft wide and 750 deep, and runs east along the fall's contour."""
+    plan = a_plan()
+    plan.water_sink = "offmap"
+    plan.W, plan.H = 3000, 3000
+    plan.envelope = [(900.0, 950.0), (1480.0, 950.0), (1480.0, 1010.0), (1520.0, 1010.0), (1520.0, 950.0), (2100.0, 950.0), (2100.0, 1700.0), (900.0, 1700.0)]
+    plan.brook = []
+    drawn: list[tuple[list[tuple[float, float]], str]] = []
+    out = (1500.0, 1005.0)
+    monkeypatch.setattr(hg.sink, "drain_outfall", lambda s_, name: out)
+    monkeypatch.setattr(hg.sink, "drain_heading", lambda s_, name: (1.0, 0.0))
+    monkeypatch.setattr(hg.sink, "drain_run", lambda s_, pts, to: drawn.append((list(pts), to)))
+    return plan, drawn, out
+
+
+def test_where_no_searched_route_is_clean_the_constructed_route_is_drawn_and_breaks_no_rule(monkeypatch: pytest.MonkeyPatch) -> None:
+    """water:W12, the least-bad route's case constructed: every bearing at every junction distance runs into the rice, climbs
+    or kinks. The old stage drew the least-bad of them; the stage now draws the route round the field's hull, which
+    passes every refusal - on along the collector, round the hull down the fall, and off the canvas."""
+    plan, drawn, out = _u_field_stage(monkeypatch)
+    anchored_out = (1476.0, 1005.0)  # backed up the collector until it stands in the field, as the stage does
+    heading = (1.0, 0.0)
+    th = math.radians(90.0)
+    bis = hg.sink.unit(heading[0] + math.cos(th), heading[1] + math.sin(th))
+    probe = [anchored_out, (anchored_out[0] + bis[0] * 70.0, anchored_out[1] + bis[1] * 70.0), (anchored_out[0], 3200.0)]
+    assert hg.sink.route_refusals(plan, anchored_out, heading, True, probe, []), "a searched route is refused"
+    built: list[int] = []
+    real = hg.sink.hull_route
+    monkeypatch.setattr(hg.sink, "hull_route", lambda *a, **k: bool(built.append(1)) or real(*a, **k))
+    hg.sink.stage_sink(Settlement(W=plan.W, H=plan.H, seed=1), plan)
+    assert built == [1], "every searched route was refused: the constructed one is drawn"
+    route, to = drawn[0]
+    assert to == "offmap" and route == plan.sink_brook
+    assert hg.sink.route_refusals(plan, route[0], heading, True, route, []) == []
+    assert not (0.0 <= route[-1][0] <= plan.W and 0.0 <= route[-1][1] <= plan.H), "it leaves the canvas"
+
+
+def test_the_constructed_route_meets_a_brook_across_it_as_a_confluence() -> None:
+    """water:W08/W12: where the brook lies across the constructed route, the run ends on the brook - a confluence, never a
+    crossing."""
+    plan = a_plan()
+    plan.W, plan.H = 3000, 3000
+    brook = [(0.0, 1500.0), (3000.0, 1520.0)]
+    route, to = hg.sink.hull_route(plan, (700.0, 990.0), (0.0, 1.0), brook)
+    assert to == "stream" and abs(route[-1][1] - 1500.0) < 30.0
+    assert not hg.sink.crosses_mid_run(brook, route)
+
+
+def test_a_constructed_route_from_outside_the_hull_starts_on_its_nearest_edge() -> None:
+    plan = a_plan()
+    plan.W, plan.H = 3000, 3000
+    route, to = hg.sink.hull_route(plan, (1200.0, 700.0), (1.0, 0.0), [])
+    assert to == "offmap" and hg.sink.runs_downhill(route, plan.fall)
+    assert math.dist(route[1], (1012.0, 700.0)) < 1.0
+
+
+def test_the_route_refusals_name_each_rule() -> None:
+    plan = a_plan()
+    out = (700.0, 990.0)
+    kinked = [out, (700.0, 1100.0), (700.0, 3200.0)]
+    assert "kink" in hg.sink.route_refusals(plan, out, (1.0, 0.0), True, kinked, [])
+    assert "field" in hg.sink.route_refusals(plan, out, (0.0, 1.0), False, [(700.0, 300.0), (700.0, 1100.0), (700.0, 3200.0)], [])
+    assert {"uphill", "upstream"} <= set(hg.sink.route_refusals(plan, out, (0.0, -1.0), True, [out, (700.0, 300.0), (700.0, -500.0)], []))
+    assert "brook" in hg.sink.route_refusals(plan, out, (0.0, 1.0), True, kinked, [(500.0, 1500.0), (900.0, 1500.0)])
+    assert hg.sink.route_refusals(plan, out, (0.0, 1.0), True, kinked, []) == []
+
+
+def test_the_drawn_brook_is_the_finished_course_at_the_head_races_tap() -> None:
+    plan = a_plan()
+    s = Settlement(W=plan.W, H=plan.H, seed=1)
+    assert hg.sink.drawn_brook(s, plan) == []
+    plan.brook = [(700.0, 100.0), (700.0, 300.0), (900.0, 600.0), (900.0, 900.0)]
+    s.M["channels"].append({"poly": [[700.0, 300.0], [760.0, 380.0]], "frm": {"kind": "stream"}})
+    drawn = hg.sink.drawn_brook(s, plan)
+    assert (700.0, 300.0) in drawn and len(drawn) > len(plan.brook)
+
+
+def test_a_pond_sink_draws_a_ditch_ending_on_the_pond(monkeypatch: pytest.MonkeyPatch) -> None:
+    """water:W49: a drainage pond has the drain's ditch ending on it - `pond_run` ends at the pond's center."""
+    plan = a_plan()
+    plan.water_sink = "pond"
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    s.meta(name="Test", scale="hamlet", ftpx=1)
+    monkeypatch.setattr(hg.sink, "drain_outfall", lambda s_, name: (700.0, 1010.0))
+    monkeypatch.setattr(hg.sink, "drain_heading", lambda s_, name: (1.0, 0.0))
+    hg.sink.lay_sink(s, plan)
+    pond = s.M["pond"]
+    assert s.M["meta"]["pond_role"] == "drainage"
+    ends = [c["poly"][-1] for c in s.M["channels"] if (c.get("to") or {}).get("kind") == "pond"]
+    assert ends and all(((e[0] - pond[0]) / pond[2]) ** 2 + ((e[1] - pond[1]) / pond[3]) ** 2 <= 1.0 for e in ends)
+    assert all(hg.sink.runs_downhill(c["poly"], plan.fall) for c in s.M["channels"])
+
+
+def test_a_clean_searched_route_is_drawn_as_it_always_was(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The first searched route that passes every refusal is the one drawn - the constructed route is only the terminal."""
+    plan = a_plan()
+    plan.water_sink = "offmap"
+    plan.brook = []
+    drawn: list[tuple[list[tuple[float, float]], str]] = []
+    monkeypatch.setattr(hg.sink, "drain_outfall", lambda s_, name: (700.0, 990.0))
+    monkeypatch.setattr(hg.sink, "drain_heading", lambda s_, name: (1.0, 0.0))
+    monkeypatch.setattr(hg.sink, "drain_run", lambda s_, pts, to: drawn.append((list(pts), to)))
+    hg.sink.stage_sink(Settlement(W=plan.W, H=plan.H, seed=1), plan)
+    route, to = drawn[0]
+    assert to == "offmap" and len(route) == 3 and hg.sink.route_refusals(plan, route[0], (1.0, 0.0), True, route, []) == []
+
+
+def test_the_constructed_route_ends_on_a_brook_across_it_and_records_the_confluence(monkeypatch: pytest.MonkeyPatch) -> None:
+    plan, drawn, _out = _u_field_stage(monkeypatch)
+    plan.brook = [(0.0, 2400.0), (1500.0, 2420.0), (3000.0, 2440.0)]
+    hg.sink.stage_sink(Settlement(W=plan.W, H=plan.H, seed=1), plan)
+    route, to = drawn[0]
+    assert to == "stream" and plan.confluence == route[-1]
+
+
+def test_the_constructed_route_runs_on_down_the_fall_until_it_is_downhill() -> None:
+    """A hull walk that carries the run far across the fall: the leg off the canvas is lengthened until the whole run is
+    downhill by the channel rule."""
+    plan = a_plan()
+    plan.W, plan.H = 3000, 1100
+    plan.envelope = [(100.0, 900.0), (2900.0, 900.0), (2900.0, 1000.0), (100.0, 950.0)]
+    route, to = hg.sink.hull_route(plan, (150.0, 925.0), (1.0, 0.0), [])
+    assert to == "offmap" and hg.sink.runs_downhill(route, plan.fall)
+    assert route[-1][1] > plan.H + 260.0 + 300.0, "lengthened past its first reach"

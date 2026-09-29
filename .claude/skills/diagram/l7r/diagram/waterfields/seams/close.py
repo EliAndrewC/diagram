@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import math
 import random
-from collections.abc import Callable
+from collections.abc import Callable, Collection
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds the runtime ones
@@ -26,12 +26,13 @@ from ..banks import (
     cell_area,
     dedup_ring,
     is_chevron,
+    jog_vertices,
     pointed_ring,
     tapers_to_a_point,
 )
-from ..frame import Poly, _Frame
+from ..frame import Poly, Pt, _Frame
 from ..palette import FLOODED, RICE_GREENS
-from ..ring_rules import needle
+from ..ring_rules import MAX_STEPS, RingContext, as_recorded, fan_context, needle, ring_violations
 from .geoms import GeomTree, ring_polygons
 from .plots import _plant, _unjog
 from .pockets import MIN_PLOT_SIDE, _absorb, _despike_many, _outside_command, _parts, _ring, _water
@@ -84,10 +85,15 @@ def close_seams(
     a_pts: Poly,
     dpts: Poly,
     bank: Callable[[float], float],
+    supply_banks: bool = True,
 ) -> None:
     """Plant or absorb every scrap of bare ground the carve left inside the command area, so that
     each basin's bund is shared with whatever lies on the other side of it. Mutates `plots` in
-    place: absorbed neighbors get a new `poly`, planted pockets are appended."""
+    place: absorbed neighbors get a new `poly`, planted pockets are appended.
+
+    `supply_banks`: the carve hemmed its bunds onto the supply strokes (`build_comb(supply_banks=True)`, which every
+    scripted hamlet passes), so the ring rules hold them to the stroke rule (W16). A comb carved without it - the legacy
+    gens' opt-out, which the gate also exempts (`carve_comb`) - is held to every other ring rule."""
     _load_shapely()
     if not plots or len(envelope) < 3:
         return
@@ -222,8 +228,17 @@ def close_seams(
     # can revisit a vertex exactly once rounded. Two shipped that way on the reference hamlet (#29 and
     # #303, a 2 px needle each, ink-invisible under the bund stroke, and not a simple polygon for any
     # shape metric). This pass consumes no randomness, so the plot count and the RNG are untouched.
-    _shed_necks(plots, 1.25 * g, 15.0 * g)
+    # EVERY RING RULE, JUDGED WHERE THE RINGS ARE DECIDED (feature 287, water W16-W27). The context is the one the gate
+    # builds from the manifest - the supply and collector strokes as `_comb_record_ditches` records them, the design cell
+    # as `_comb_record_field` records it, this map's grain - so the trades below and the sweep after them ask the rules
+    # the finished-map tests ask, at the tests' own thresholds (`waterfields/ring_rules.py`).
+    ctx = fan_context(channels if supply_banks else [c for c in channels if c.get("role") == "drain"], g, cell_area(plot_across, row_step))
+    _shed_necks(plots, 1.25 * g, 15.0 * g, ctx)
     _repair_crossing_rings(plots, rounded=True)
+    # ...AND THE LAST WORD (water W16-W24): every ring that still breaks a rule - a carved ring no step touched, a weld
+    # the ladder had no clean host for, a staircase - is welded into a neighbor, split, or left bare under the fan floor.
+    # Nothing after this line reshapes a ring, so what leaves this pass is what the rules were asked of.
+    hold_ring_rules(plots, ctx)
     # A POINTED SLIVER MUST NOT WEAR THE WATER TINT - the same rule `_sector_closing_rank` applies
     # when it carves one, and for the same reason: a blue plot tapering to a needle reads as a tiny
     # triangular pond at fit zoom, not as a leveled basin. The carve's own demotion judges the quad
@@ -445,7 +460,7 @@ def _span(shape: Any) -> float:
     return max(math.dist(c[0], c[1]), math.dist(c[1], c[2])) if len(c) >= 4 else 0.0
 
 
-def _shed_necks(plots: list[dict[str, Any]], neck: float, min_len: float) -> None:
+def _shed_necks(plots: list[dict[str, Any]], neck: float, min_len: float, ctx: RingContext | None = None) -> None:
     """Hand a basin's thin tail to the neighbor it runs along, so two bunds a few feet apart become one.
 
     A NECK IS A DOUBLED BUND (settlement-review, feature 230 pass 11). Fitting the fan at its true size carves some basins
@@ -453,7 +468,11 @@ def _shed_necks(plots: list[dict[str, Any]], neck: float, min_len: float) -> Non
     main at the old size - and on the page that is two bunds side by side with a sliver of paddy between. The tail is
     what a morphological opening at half the floor (`neck`) removes; each tail at least `min_len` long is given to the
     plot it shares the most edge with, and the trade is kept only when both plots stay valid, simple, unpointed rings.
-    Ground is conserved: what one plot loses the other gains."""
+    Ground is conserved: what one plot loses the other gains.
+
+    AND ONLY WHEN BOTH RINGS KEEP EVERY RING RULE (feature 287, water W16/W21/W23): given `ctx`, a trade whose giver or
+    taker would break any rule in `ring_rules.ring_violations` is not taken - the giver shrunk under the area floor, a
+    taker grown into a supply stroke or up a flight of steps. The step is refused and both plots stand as they were."""
     _load_shapely()
 
     def _may_have_a_tail(shape: Polygon) -> bool:
@@ -510,6 +529,8 @@ def _shed_necks(plots: list[dict[str, Any]], neck: float, min_len: float) -> Non
                     continue
                 if _long_tail(Polygon(gj).buffer(0)) or pointed_ring(gi, _GATE_MIN_APEX) or pointed_ring(gj, _GATE_MIN_APEX):
                     continue
+                if ctx is not None and (ring_violations(gi, ctx) or ring_violations(gj, ctx)):
+                    continue
                 plots[i]["poly"], plots[best]["poly"] = gi, gj
                 traded = True
                 shapes[i], shapes[best] = Polygon(gi).buffer(0), Polygon(gj).buffer(0)
@@ -555,3 +576,132 @@ def _repair_crossing_rings(plots: list[dict[str, Any]], rounded: bool = False) -
             judged = as_judged(_cand)
             ok[k] = len(judged) >= 3 and Polygon(judged).is_valid
     plots[:] = [_p for k, _p in enumerate(plots) if len(_p["poly"]) >= 3 and ok[k]]
+
+
+# A STAIRCASE IS CUT AT MOST THIS MANY TIMES. Each cut takes one step off a ring and hands back two rings with fewer
+# steps between them, so a ring with n steps needs n - 1 cuts; 32 is far past any ring the pool carries (the worst the
+# record names is cohort seed 12's four) and exists only so a degenerate ring cannot loop.
+_SPLIT_LIMIT = 32
+
+
+def hold_ring_rules(plots: list[dict[str, Any]], ctx: RingContext, only: Collection[int] | None = None) -> None:
+    """The seam pass's last word on the rings (feature 287, water W16-W27): after it, every plot ring - judged AS THE
+    MANIFEST RECORDS IT, rounded to 0.1 px - keeps every rule `ring_rules.ring_violations` asks in `ctx`.
+
+    A ring that breaks one is not kept as it stands, whatever made it (a carved ring no seam step touched, a weld the
+    ladder had no clean host for, a repair). Its ground goes one of three ways, in this order:
+
+    1. SPLIT, where the ring is a staircase (W23, one of the GM's five): cut along the line that continues the step's
+       hop across the basin - the GM's own description of the right form, the wall "continuing on and meeting at the
+       four way intersection" instead of going "sharply to the left before going down" (Inashiro, 2026-08-18). Each part
+       that keeps every rule is a basin of its own.
+    2. WELDED into the neighbor it shares the most bund with, when the union keeps every rule - research/fields 'Bunds
+       are shared': the odd scrap is "taken into the basin beside it rather than walled off on its own".
+    3. BARE, under the fan floor `comb_base_fill` draws - "the odd corner left unpaddied" the same research describes,
+       which the Sawada review confirmed invisible in ink (`pockets._absorb`'s last branch).
+
+    Never a violating ring kept because nothing better was found (FR-005). No draw from any random stream: split parts
+    keep their parent's fill, so the count of plots may change but no color re-rolls. `only` confines the judgment to the plots
+    it names (a later stage that reshaped a few rings - the grave island's carve - asks of those alone); welds still reach
+    any neighbor."""
+    _load_shapely()
+    bad = [k for k in (range(len(plots)) if only is None else sorted(only)) if ring_violations(as_recorded(plots[k]["poly"]), ctx)]
+    if not bad:
+        return
+    scraps: list[Polygon] = []
+    added: list[dict[str, Any]] = []
+    gone: set[int] = set()
+    for k in bad:
+        p = plots[k]
+        ring = as_recorded(p["poly"])
+        pieces = [q for part in (_parts(Polygon(ring).buffer(0)) if len(ring) >= 3 else []) for q in (_split_steps(part, ctx) if ctx.g else [part])]
+        kept = [q for q in pieces if not ring_violations(_ring(q), ctx)]
+        scraps += [q for q in pieces if q not in kept]
+        if kept:
+            p["poly"] = _ring(kept[0])
+            added += [{**p, "poly": _ring(q)} for q in kept[1:]]
+        else:
+            gone.add(k)
+    plots[:] = [p for k, p in enumerate(plots) if k not in gone] + added
+    geoms: list[Any] = ring_polygons([p["poly"] for p in plots])
+    tree = GeomTree(geoms)
+    for scrap in sorted(scraps, key=lambda q: (round(q.bounds[0], 1), round(q.bounds[1], 1))):
+        _weld_within_rules(scrap, plots, geoms, tree, ctx)
+
+
+def _weld_within_rules(scrap: Polygon, plots: list[dict[str, Any]], geoms: list[Any], tree: GeomTree, ctx: RingContext) -> bool:
+    """Weld `scrap` into the plot it shares the most bund with, among those whose union keeps every ring rule; False,
+    and the scrap left bare, when none does. The union is taken as `_absorb` takes it - the scrap grown by 0.02 px so
+    two polygons that only touch merge, and simplified at 0.05 px only when that stays a simple polygon."""
+    reach = scrap.buffer(0.4)
+    grown = scrap.buffer(0.02)
+    ranked = sorted((-geoms[j].boundary.intersection(reach).length, j) for j in tree.near(scrap.bounds, pad=1.0))
+    for neg, j in ranked:
+        if neg >= 0.0:
+            break  # sorted: every host after this one shares no bund with the scrap either
+        merged = geoms[j].union(grown).buffer(0)
+        if not isinstance(merged, Polygon) or merged.interiors:
+            continue
+        simplified = merged.simplify(0.05)
+        candidate = simplified if isinstance(simplified, Polygon) and simplified.is_valid and not simplified.interiors else merged
+        ring = _ring(candidate)
+        if ring_violations(ring, ctx):
+            continue
+        plots[j]["poly"] = ring
+        geoms[j] = Polygon(ring).buffer(0)
+        tree.replaced(j)
+        return True
+    return False
+
+
+def _split_steps(poly: Polygon, ctx: RingContext) -> list[Polygon]:
+    """`poly` cut, one step at a time, until no part carries more than `ring_rules.MAX_STEPS` sideways steps (W23).
+
+    Each cut continues a step's hop across the basin (`_cut_on_hop`). WHICH HOP: a staircase of even treads and risers
+    reads both ways - each tread is also the hop between two risers - so every hop is tried and the cut kept is the one
+    leaving the fewest parts that break a rule other than the steps still to be cut, then the one whose smallest part is
+    largest (first on a tie, in ring order): the cut that makes basins, not scraps - a riser carried across the whole
+    basin, not a tread shaved off it. A ring none of whose hops can be cut is handed back whole, and the caller judges it
+    as it stands - a staircase goes to the scrap path, never onto the map."""
+    g = float(ctx.g or 0.0)
+    done: list[Polygon] = []
+    todo = [poly]
+    for _ in range(_SPLIT_LIMIT):
+        if not todo:
+            break
+        q = todo.pop()
+        hops = jog_vertices(_ring(q), g)
+        cuts = [cut for b, c in hops for cut in [_cut_on_hop(q, b, c)] if cut] if len(hops) > MAX_STEPS else []
+        if cuts:
+            todo += min(cuts, key=lambda cut: (sum(1 for part in cut if ring_violations(_ring(part), ctx) - {"steps"}), -min(part.area for part in cut)))
+        else:
+            done.append(q)
+    return done + todo
+
+
+def _cut_on_hop(poly: Polygon, b: Pt, c: Pt) -> list[Polygon]:
+    """`poly` split along its hop `b`-`c` continued into the basin until it meets the far bund - or [] where it cannot be.
+
+    The hop runs between a wall and the same wall resumed a few feet over, so exactly one of its two ends is the reflex
+    corner the basin's floor lies beyond: the knife starts there and runs on, in the hop's own direction, to where it
+    first leaves the basin. That is the wall the step should have been - carried straight on to the junction."""
+    from shapely.geometry import LineString as _Line
+    from shapely.geometry import Point as _Point
+    from shapely.ops import split
+
+    x0, y0, x1, y1 = poly.bounds
+    far = 2.0 * math.hypot(x1 - x0, y1 - y0) + 10.0
+    for s, r in ((b, c), (c, b)):
+        length = math.dist(s, r)  # never zero: `jog_vertices` names a hop only when it has length
+        ux, uy = (r[0] - s[0]) / length, (r[1] - s[1]) / length
+        if not poly.contains(_Point(r[0] + 0.5 * ux, r[1] + 0.5 * uy)):
+            continue  # this end's continuation runs outside the basin: the other end is the reflex corner
+        inside = _Line([r, (r[0] + far * ux, r[1] + far * uy)]).intersection(poly)
+        runs = sorted((q for q in getattr(inside, "geoms", [inside]) if isinstance(q, _Line) and not q.is_empty), key=lambda q: q.distance(_Point(r)))
+        for first in runs[:1]:  # the stretch that starts at the corner - a concave basin can be re-entered further on
+            reach = max(math.dist(r, q) for q in first.coords)
+            knife = _Line([r, (r[0] + (reach + 1.0) * ux, r[1] + (reach + 1.0) * uy)])
+            parts = _parts(split(poly, knife))
+            if len(parts) >= 2:
+                return parts
+    return []

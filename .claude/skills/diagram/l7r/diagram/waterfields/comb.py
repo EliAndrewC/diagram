@@ -36,8 +36,10 @@ from .frame import (
     _Thread,
     chan_px,
 )
+from .furrows import STEEP_SPREAD_RAD, settle_tract_seams
 from .seams import close_seams
 from .seams.pockets import _outside_command, _water
+from .trunks import DRAIN_MIN_LEG, anchor_trunk_ends
 
 _SHAPELY_LOADED = False
 
@@ -94,6 +96,7 @@ class CombCarve:
     grain_drift: float
     grain: float
     fan_middle: str = "cleared"  # 269 B07: see `fan_toe_hem`
+    supply_banks: bool = False  # the carve hemmed its bunds onto the supply strokes, so the seam pass holds them to the stroke rule
 
     @property
     def net(self) -> dict[str, Any]:
@@ -206,6 +209,7 @@ def carve_comb(
     )
 
     envelope = _comb_floor_and_winding(plots, threads, a_pts, dpts, F)
+    anchor_trunk_ends(channels, envelope, W, H)  # no main or collector end left in bare ground (feature 287, water W15)
 
     _comb_toe_and_hem(plots, dpts, down_deg, plot_across, row_step, grain)
     return CombCarve(
@@ -233,6 +237,7 @@ def carve_comb(
         grain_drift=grain_drift,
         grain=grain,
         fan_middle=fan_middle,
+        supply_banks=supply_banks,
     )
 
 
@@ -262,7 +267,7 @@ def finish_comb(c: CombCarve) -> dict[str, Any]:
     # reconciling the fan before it would have its work undone. Ungated: the hand-authored pool is
     # FROZEN since 2026-08-16, so a new rule no longer needs a byte-stability escape (the retired
     # `grain != 1.0` gate on the old wedge filler was exactly that).
-    close_seams(R, F, plots, envelope, grain, channels, plot_across, row_step, a_pts, dpts, drain_bank)
+    close_seams(R, F, plots, envelope, grain, channels, plot_across, row_step, a_pts, dpts, drain_bank, supply_banks=c.supply_banks)
     acres = sum(_poly_area(p["poly"]) for p in plots) * 4 / 43560  # 1px=2ft -> 4 sq ft/px^2
 
     dry_plots, dry_acres, bund_bean_runs = _comb_dry_and_beans(
@@ -286,6 +291,7 @@ def finish_comb(c: CombCarve) -> dict[str, Any]:
         # computing `paddy_grain(ftpx)` for itself would hold a textured fan to a cell it never
         # aimed at.
         "cell": cell_area(plot_across, row_step),
+        "supply_banks": c.supply_banks,  # the rings hem onto the supply strokes, so a later carve holds them to the stroke rule
         "channels": channels,
         "plots": plots,
         "threads": threads,
@@ -690,10 +696,17 @@ def _comb_drain(R: random.Random, F: _Frame, threads: list[_Thread], W: float, H
         yc = F.to_xy(uc, a_fit + b_fit * uc)[1]
         if yc > H - 40:
             a_fit -= (yc - (H - 40)) / max(0.35, abs(F.d[1]))
+    # THE HEAD ON THE FITTED LINE, NO SAMPLE WITHIN `DRAIN_MIN_LEG` OF THE OUTFALL (feature 287, water W13/W14; the why is
+    # at `trunks.DRAIN_MIN_LEG`): a jittered head could sit below a lone ditch's outfall, and a sample 2 px short of it
+    # hooked the last leg. Every draw is still taken, the unused ones discarded, so the random stream is unmoved.
     duf = []
     u = lo_u
     while u < hi_u:
-        duf.append((u, a_fit + b_fit * u + R.uniform(-6, 6)))
+        jitter = R.uniform(-6, 6)
+        if u == lo_u:
+            duf.append((u, a_fit + b_fit * u))
+        elif u < hi_u - DRAIN_MIN_LEG:
+            duf.append((u, a_fit + b_fit * u + jitter))
         u += R.uniform(120, 170)
     duf.append((hi_u, a_fit + b_fit * hi_u))  # the outfall point (drain's downhill end)
     duf.sort(key=lambda q: q[0])
@@ -956,6 +969,8 @@ def _comb_dry_and_beans(
                 supply=_supply_strokes,
                 tract0=1 + max((p["tract"] for p in dry_plots), default=-1),
             )  # thinner than the a-side hem: it only needs to cover the fork triangle, and a full-depth band crowds the farmhouse ring off the fan's visible edge
+    if furrow_spread >= STEEP_SPREAD_RAD:  # the patchwork's seams read tract against tract, both bands (feature 287, W35)
+        settle_tract_seams(dry_plots)
     dry_acres = sum(_poly_area(p["poly"]) for p in dry_plots) * 4 / 43560
     return dry_plots, dry_acres, _bund_beans(R, plots, bean_frac, channels=channels)
 

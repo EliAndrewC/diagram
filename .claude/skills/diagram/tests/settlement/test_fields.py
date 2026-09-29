@@ -285,13 +285,17 @@ def test_paddy_features_cover_every_archetype_branch():
     (pond / rock / grave-island each both ways), plus the dike-pond early return. Also confirms each glyph
     draws and records its manifest key. Synthetic net: 6 plots, the first 3 flagged low
     (44 x 34 px - roomy enough that the fit-to-polygon shrink in _plot_pond accepts them)."""
-    net = {"plots": [{"poly": [(float(i * 50), 0.0), (float(i * 50 + 44), 0.0), (float(i * 50 + 44), 34.0), (float(i * 50), 34.0)], "low": i < 3, "fill": "#A6C398"} for i in range(6)]}
+
+    def fresh() -> dict:  # a grave carves the plots it is seated among (feature 287, W28), so each roll gets its own
+        return {"plots": [{"poly": [(float(i * 50), 0.0), (float(i * 50 + 44), 0.0), (float(i * 50 + 44), 34.0), (float(i * 50), 34.0)], "low": i < 3, "fill": "#A6C398"} for i in range(6)]}
+
+    net = fresh()
     seen = {"field_ponds": 0, "field_rocks": 0, "field_graves": 0}
     for arch in ("valley_paddy", "contour_terraces", "polder_grid", "ribbon_valley", "mulberry_dike_fishpond"):
         for seed in range(40):
             s = Settlement(1200, 1200, seed=seed)
             s.meta(name="P", scale="village", ftpx=1, down_deg=90, field_archetype=arch)
-            s._paddy_features(net)
+            s._paddy_features(fresh())
             for k in seen:
                 seen[k] += len(s.M.get(k, []))
     # every glyph type got drawn at least once across the sweep (so all three _plot_* methods are covered)
@@ -324,12 +328,11 @@ def test_the_field_grave_takes_either_attested_form_and_a_corner_grave_stays_in_
     assert turning_corners(notched) == [0, 2, 3, 4], "the collinear side vertex is no corner"
     assert turning_corners([(0.0, 0.0), (1.0, 0.0), (2.0, 0.0)], 181.0) == [0, 1, 2], "every vertex when none turns"
     assert corner_seat(square, 6) == corner_seat(square, 2), "the vertex index wraps"
-    net = {"plots": [{"poly": square, "low": False, "fill": "#A6C398"}]}
     found = {}
     for seed in range(200):
         s = Settlement(1200, 1200, seed=seed)
         s.meta(name="G", scale="village", ftpx=1, down_deg=90, field_archetype="valley_paddy")
-        s._paddy_features(net)
+        s._paddy_features({"plots": [{"poly": list(square), "low": False, "fill": "#A6C398"}]})
         for g in s.M.get("field_graves", []):
             found.setdefault(g.get("form", "island"), g)
     assert set(found) == {"island", "corner"}, found
