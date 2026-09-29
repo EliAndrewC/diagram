@@ -214,3 +214,9 @@ def test_a_settlement_rolls_and_records_its_sides_when_no_plan_did() -> None:
     f = Settlement(400, 400, seed=7)
     f.meta(name="C", scale="village", flood_ground=True, grove_sides=4, grove_flank=1)
     assert f._grove_sides() == 4 and f._grove_flank() == 1
+
+
+def test_a_garden_record_with_no_box_is_skipped() -> None:
+    M = _manifest(2)
+    M["gardens"].append({"x": 1.0, "y": 2.0, "of": [0.0, 0.0]})
+    assert gardens_east_shaded(M) == []

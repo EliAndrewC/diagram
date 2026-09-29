@@ -93,6 +93,8 @@ def gardens_east_shaded(M: Mapping[str, Any]) -> list[tuple[Pt, Mapping[str, Any
     reach = EAST_REACH_PX * bscale
     out = []
     for gd in M.get("gardens") or ():
+        if not all(k in gd for k in ("x", "y", "w", "h")):  # a record with no box has no east edge to shade
+            continue
         gx1 = gd["x"] + gd["w"] / 2
         gy0, gy1 = gd["y"] - gd["h"] / 2, gd["y"] + gd["h"] / 2
         for g in M.get("groves") or ():
