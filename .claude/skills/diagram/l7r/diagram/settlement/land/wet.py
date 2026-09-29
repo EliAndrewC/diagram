@@ -165,24 +165,38 @@ def _clipped_to_open_ground(poly: Any, dikes: Any, fields: Any = (), pond: Any =
 
     Returns the largest remaining piece's exterior. Records carry ONE ring, so several pieces cannot all
     be kept; with the block filled, a second piece can only arise where a single `marsh()` call wraps the
-    block on two flanks and is cut in half by it, and each flank is its own call. Falls back to the input
-    whenever shapely returns nothing usable, so a degenerate outline cannot lose a feature."""
+    block on two flanks and is cut in half by it, and each flank is its own call.
+
+    NEVER THE INPUT (feature 287, woods W07). This used to hand the outline back whenever shapely returned nothing usable,
+    "so a degenerate outline cannot lose a feature" - which drew and recorded the marsh OVER the block and the fields it
+    exists to be subtracted from. Now an invalid outline or cut is repaired (`make_valid`) and the difference taken again;
+    a marsh with no open ground left, or one no repair can clip, is None - no marsh here - and the caller draws and records
+    nothing (`meta.marsh_dropped`)."""
     _load_shapely()
     rings = [list(dk["outline"]) for dk in dikes if len(dk.get("outline") or []) >= 3]
     rings += [list(f) for f in fields if len(f) >= 3]
     if not rings and not pond:
         return poly
-    try:
-        keep = ShapelyPolygon([(float(a), float(b)) for a, b in poly]).buffer(0)
-        cuts = [_filled(r) for r in rings]
-        if pond:
-            cuts.append(_ellipse(pond))
-        out = keep.difference(unary_union(cuts))
-    except ValueError, GEOSException:
-        return poly
+    out = None
+    for repair in (False, True):
+        try:
+            keep = ShapelyPolygon([(float(a), float(b)) for a, b in poly]).buffer(0)
+            cuts = [_filled(r) for r in rings]
+            if pond:
+                cuts.append(_ellipse(pond))
+            if repair:  # the second try: every piece made valid, the way `buffer(0)` cannot always
+                from shapely import make_valid  # noqa: PLC0415 - the repair path only
+
+                keep, cuts = make_valid(keep), [make_valid(c) for c in cuts]
+            out = keep.difference(unary_union(cuts))
+            break
+        except ValueError, GEOSException:
+            continue
+    if out is None:
+        return None
     parts = [g for g in getattr(out, "geoms", [out]) if not g.is_empty and g.geom_type == "Polygon"]
     if not parts:
-        return poly
+        return None
     best = max(parts, key=lambda g: g.area)
     return _keyholed(best)
 
@@ -275,6 +289,30 @@ def marsh_ground(M: Any, only: Any = None, but: Any = ()) -> list[list[Pt]]:
     return out
 
 
+def offer_rethrow(s: Any, k: int, rethrow: Any) -> None:
+    """Hand the view's decider a scatter's re-throw (feature 287, M6 and water W52): `rethrow(strip)` throws the scatter
+    registered at index `k` of `s._scatter_frames` again into the box `strip` (x0, y0, x1, y1). Kept only where the caller
+    opened `s._scatter_catchup` (a dict) - a hamlet's `stage_hinterland`, before the marsh it throws before the view is
+    decided - and nowhere else, so a closure over the settlement never outlives the stage that asked for it (a deep copy
+    of the settlement, as the placement-stages plates take, would share it)."""
+    reg = vars(s).get("_scatter_catchup")
+    if isinstance(reg, dict):
+        reg[k] = rethrow
+
+
+def throw_again(strip: Any, parcel: Any, throw: Any) -> None:
+    """A scatter's `throw(x0, y0, x1, y1, frame)` over the part of `strip` inside its `parcel`'s box, with no frame (the
+    strip is the frame), on the global stream seeded from the strip and restored after - so a re-throw moves nothing drawn
+    later, as every scatter here keeps its own draws (feature 287, M6)."""
+    sx0, sy0, sx1, sy1 = max(strip[0], parcel[0]), max(strip[1], parcel[1]), min(strip[2], parcel[2]), min(strip[3], parcel[3])
+    if sx1 <= sx0 or sy1 <= sy0:
+        return
+    st = random.getstate()
+    random.seed(int(abs(sx0) * 5 + abs(sy0) * 7 + round(sx1 - sx0) * 11 + round(sy1 - sy0) * 13))
+    throw(sx0, sy0, sx1, sy1, None)
+    random.setstate(st)
+
+
 def bank_rings(dikeponds: Any, near: Any) -> list[list[tuple[float, float]]]:
     """Every fish pond's mulberry bank near the marsh, WHOLE - each ring as drawn, never thinned (feature 281; the reason is
     at the call in `marsh`). Lifted to module level so a test can hold the whole ring without a scatter to throw into it."""
@@ -318,6 +356,9 @@ class WetGroundMixin:
             self.field_polys if _outside else (),
             self.M.get("pond") if role == "pond_fringe" else None,
         )
+        if poly is None:  # no open ground outside the block, the fields and the water: no marsh here (woods W07)
+            self.M["meta"].setdefault("marsh_dropped", []).append({"role": role, "why": "no open ground left"})
+            return
         # ...AND THE RECORD IS THE GROUND THE REEDS ARE DRAWN ON (feature 287, M7): the outline less every area the scatter
         # below refuses - the padded paddies, the no-build blocks, the swept clearings, `avoid` - one ring (`drawn_ground`).
         # The scatter is thrown over the same bounding box and thinned by the same feather as before, and a mark is kept only
@@ -332,7 +373,6 @@ class WetGroundMixin:
         ys = [p[1] for p in poly]
         x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
         bs = self.bscale
-        area = (x1 - x0) * (y1 - y0)
         st = random.getstate()
         random.seed(int(abs(x0) * 5 + abs(y0) * 7 + round(x1 - x0)))
         # THE FEATHER CANNOT BE WIDER THAN THE BAND IT FEATHERS (settlement-review 2026-08-29). The reeds
@@ -446,30 +486,42 @@ class WetGroundMixin:
         # over the water. The radius is rolled BEFORE the test only here: rolling it first everywhere would
         # re-roll every marsh on every map, which is why the widest radius is used below.
         _tint_r = min(MARSH_TINT_R, max(6.0, _half * 0.6)) if role == "pond_fringe" else MARSH_TINT_R
-        _fr = self._scatter_frame  # a throw outside the predicted frame is skipped before the keep-out test (feature 224; the note in cover.py)
+
+        def _throw(bx0: float, by0: float, bx1: float, by1: float, fr: Any) -> None:
+            """The tint, the tufts and the glints over the box, at the marsh's own density per area, a throw outside `fr`
+            skipped before the keep-out test (feature 224; the note in cover.py). The whole parcel's box at the first throw
+            (the counts are then the parcel's own, draw for draw); a strip of it on a re-throw (`throw_again`)."""
+            barea = (bx1 - bx0) * (by1 - by0)
+            for _ in range(int(barea / (360 * bs * bs))):  # faint WET TINT: soft translucent blue-green patches (feathered, no hard edge)
+                gx, gy = random.uniform(bx0, bx1), random.uniform(by0, by1)
+                if fr is not None and not (fr[0] <= gx <= fr[2] and fr[1] <= gy <= fr[3]):
+                    continue
+                if _sparse(gx, gy, 0.9, _tint_r * bs):  # the WIDEST tint radius, not this circle's: the radius is drawn after the test, and drawing it first would re-roll every marsh on every map
+                    continue
+                _r = random.uniform(min(15.0, _tint_r * 0.6), _tint_r) * bs
+                marks.append((gx - _r, gy - _r, gx + _r, gy + _r, f'<circle cx="{gx:.1f}" cy="{gy:.1f}" r="{_r:.1f}" fill="#9FBBAE" fill-opacity="0.14"/>'))
+            for _ in range(int(barea / (150 * bs * bs))):  # SPARSE reed / sedge tufts + the odd standing-water glint (thin, not a solid reedbed)
+                gx, gy = random.uniform(bx0, bx1), random.uniform(by0, by1)
+                if fr is not None and not (fr[0] <= gx <= fr[2] and fr[1] <= gy <= fr[3]):
+                    continue
+                if _sparse(gx, gy, 0.7, MARSH_TUFT_R * bs, blade_up=MARSH_TUFT_R * bs):  # a tuft's blades reach this far UP; see `blade_up`
+                    continue
+                if random.random() < 0.12:  # a standing-water glint
+                    _rx, _ry = random.uniform(2.6, 4.6) * bs, random.uniform(1.2, 2.0) * bs
+                    marks.append((gx - _rx, gy - _ry, gx + _rx, gy + _ry, f'<ellipse cx="{gx:.1f}" cy="{gy:.1f}" rx="{_rx:.1f}" ry="{_ry:.1f}" fill="#C2D6CE" fill-opacity="0.85"/>'))
+                else:  # a reed tuft: a few fine near-VERTICAL blades, taller than dry grass
+                    for _ in range(4):
+                        a, bl = random.uniform(-0.2, 0.2), random.uniform(4.0, 7.0) * bs
+                        blades.append((f"{gx:.1f}", f"{gy:.1f}", f"{gx + math.sin(a) * bl:.1f}", f"{gy - math.cos(a) * bl:.1f}"))
+
+        _fr = self._scatter_frame
+        _throw(x0, y0, x1, y1, _fr)
         if _fr is not None:
             self._scatter_frames.append((_fr, (x0, y0, x1, y1)))
-        for _ in range(int(area / (360 * bs * bs))):  # faint WET TINT: soft translucent blue-green patches (feathered, no hard edge)
-            gx, gy = random.uniform(x0, x1), random.uniform(y0, y1)
-            if _fr is not None and not (_fr[0] <= gx <= _fr[2] and _fr[1] <= gy <= _fr[3]):
-                continue
-            if _sparse(gx, gy, 0.9, _tint_r * bs):  # the WIDEST tint radius, not this circle's: the radius is drawn after the test, and drawing it first would re-roll every marsh on every map
-                continue
-            _r = random.uniform(min(15.0, _tint_r * 0.6), _tint_r) * bs
-            marks.append((gx - _r, gy - _r, gx + _r, gy + _r, f'<circle cx="{gx:.1f}" cy="{gy:.1f}" r="{_r:.1f}" fill="#9FBBAE" fill-opacity="0.14"/>'))
-        for _ in range(int(area / (150 * bs * bs))):  # SPARSE reed / sedge tufts + the odd standing-water glint (thin, not a solid reedbed)
-            gx, gy = random.uniform(x0, x1), random.uniform(y0, y1)
-            if _fr is not None and not (_fr[0] <= gx <= _fr[2] and _fr[1] <= gy <= _fr[3]):
-                continue
-            if _sparse(gx, gy, 0.7, MARSH_TUFT_R * bs, blade_up=MARSH_TUFT_R * bs):  # a tuft's blades reach this far UP; see `blade_up`
-                continue
-            if random.random() < 0.12:  # a standing-water glint
-                _rx, _ry = random.uniform(2.6, 4.6) * bs, random.uniform(1.2, 2.0) * bs
-                marks.append((gx - _rx, gy - _ry, gx + _rx, gy + _ry, f'<ellipse cx="{gx:.1f}" cy="{gy:.1f}" rx="{_rx:.1f}" ry="{_ry:.1f}" fill="#C2D6CE" fill-opacity="0.85"/>'))
-            else:  # a reed tuft: a few fine near-VERTICAL blades, taller than dry grass
-                for _ in range(4):
-                    a, bl = random.uniform(-0.2, 0.2), random.uniform(4.0, 7.0) * bs
-                    blades.append((f"{gx:.1f}", f"{gy:.1f}", f"{gx + math.sin(a) * bl:.1f}", f"{gy - math.cos(a) * bl:.1f}"))
+            # ...AND THE THROW IS OFFERED AGAIN once the view is decided (feature 287, M6 and water W52): a marsh laid before
+            # the decision threw inside a PREDICTION, and the view decided after it reached 87 px past that on cohort seed 8.
+            # The caller that decides the view hands each strip past the prediction back here (`throw_again`).
+            offer_rethrow(self, len(self._scatter_frames) - 1, lambda strip: throw_again(strip, (x0, y0, x1, y1), _throw))
         self._blade_groups.append((self.add("", cls="marsh"), "#6E9377", blades))  # flushed at finish, the off-map blades culled (feature 223); an empty bucket is harmless
         self._mark_groups.append((self.add(''.join(g), cls="marsh"), marks))  # `g` holds nothing today; the marks are flushed into this slot at finish
         random.setstate(st)
@@ -518,11 +570,14 @@ class WetGroundMixin:
                     break
                 a, b = out[-2], out[-1]
                 d = math.hypot(b[0] - a[0], b[1] - a[1])
-                if d <= 30.0:  # this whole leg is wet: drop it, unless dropping it would leave no way at all
+                if d <= 30.0:  # this whole leg is wet: drop it
                     if len(out) > 2:
                         out.pop()
                         continue
-                    break
+                    # ...AND A WAY WHOLLY IN THE REEDS IS NO WAY (feature 287, woods W09): with its last leg wet and nothing
+                    # left to drop, it used to ship the soaked end - the one thing this function exists to prevent. The
+                    # caller's own no-way path runs instead (an arm or a spur of fewer than two points is not drawn).
+                    return []
                 out[-1] = (b[0] - (b[0] - a[0]) / d * 24.0, b[1] - (b[1] - a[1]) / d * 24.0)
             out.reverse()
         return out

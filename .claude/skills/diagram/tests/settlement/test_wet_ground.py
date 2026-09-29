@@ -157,15 +157,15 @@ def test_an_unbuildable_band_measures_zero_rather_than_propagating(monkeypatch) 
     assert wet._band_half_width(square, None, "toe") == 0.0
 
 
-def test_a_clip_that_would_remove_everything_returns_the_polygon_unchanged() -> None:
-    """A marsh polygon wholly inside the dikes has nothing left after the subtraction. Handing back
-    an empty record would erase the feature from the manifest; handing back the original leaves it
-    visible and lets the checks report it, which is this engine's standing trade."""
+def test_a_clip_that_would_remove_everything_is_no_marsh() -> None:
+    """Woods W07 (feature 287): a marsh polygon wholly inside the dikes has nothing left after the subtraction, and it is
+    no marsh - never the outline handed back, which drew and recorded the reeds over the block they are subtracted from."""
     from l7r.diagram.settlement.land.wet import _clipped_to_open_ground
 
     poly = [(10.0, 10.0), (20.0, 10.0), (20.0, 20.0), (10.0, 20.0)]
     swallowing = [{"outline": [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]}]
-    assert _clipped_to_open_ground(poly, swallowing) == poly
+    assert _clipped_to_open_ground(poly, swallowing) is None
+    assert _clipped_to_open_ground(poly, [], fields=[[(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]]) is None, "wholly in a field"
     # a dike record with no usable outline contributes no ring, and with nothing to cut the outline
     # comes straight back rather than being run through shapely for nothing
     assert _clipped_to_open_ground(poly, [{"outline": [(0.0, 0.0), (1.0, 1.0)]}]) == poly
@@ -216,16 +216,40 @@ def test_keyholing_skips_a_hole_too_small_to_walk() -> None:
     assert _keyholed(_Degenerate()) == [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]
 
 
-def test_an_outline_shapely_cannot_build_is_returned_unclipped() -> None:
-    """Feature 174: the `except (ValueError, GEOSException)` path - refuse to clip rather than fail.
-
-    A two-point ring is not a polygon, so `ShapelyPolygon` raises before any difference is taken. The
-    contract is that the caller gets its own outline back untouched, not an exception and not an
-    empty result - a marsh that cannot be clipped is still a marsh.
-    """
+def test_an_outline_shapely_cannot_build_is_no_marsh() -> None:
+    """Woods W07 (feature 287): the `except (ValueError, GEOSException)` path. A two-point ring is not a polygon, so
+    `ShapelyPolygon` raises on the first try and again on the repair - and an outline no repair can clip is no marsh,
+    never the unclipped outline (which would stand over the block)."""
     poly = [(0.0, 0.0), (10.0, 0.0)]
     dikes = [{"outline": [(0.0, 0.0), (5.0, 0.0), (5.0, 5.0)]}]
-    assert _clipped_to_open_ground(poly, dikes) == poly, "the outline is handed back as it came in"
+    assert _clipped_to_open_ground(poly, dikes) is None
+
+
+def test_a_clip_that_fails_once_is_repaired_and_taken_again(monkeypatch) -> None:
+    """Woods W07: a GEOS error on the first difference is not the end - every piece is made valid and the difference
+    taken again, so a bow-tie outline lapping a dike block comes back as a valid ring outside the block."""
+    from shapely.errors import GEOSException
+    from shapely.geometry import Polygon
+
+    from l7r.diagram.settlement.land import wet
+
+    wet._load_shapely()
+    real = wet.unary_union
+    calls: list[int] = []
+
+    def _once(parts):  # type: ignore[no-untyped-def]
+        calls.append(1)
+        if len(calls) == 1:
+            raise GEOSException("TopologyException: side location conflict")
+        return real(parts)
+
+    monkeypatch.setattr(wet, "unary_union", _once)
+    bowtie = [(0.0, 0.0), (200.0, 100.0), (200.0, 0.0), (0.0, 100.0)]  # crosses itself at (100, 50)
+    block = [{"outline": [(150.0, -10.0), (260.0, -10.0), (260.0, 110.0), (150.0, 110.0)]}]
+    got = wet._clipped_to_open_ground(bowtie, block)
+    assert len(calls) > 1 and got is not None, "the repair took the difference the first try could not"
+    ring = Polygon(got)
+    assert ring.is_valid and ring.area > 0 and max(p[0] for p in got) <= 150.0 + 1e-6, "outside the block"
 
 
 def test_the_hard_ground_sweep_SKIPS_a_ditch_that_carries_no_path() -> None:

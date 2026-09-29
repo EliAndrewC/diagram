@@ -253,7 +253,11 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
     # fringe leads it, and keeps the whole band on the windward half where a back-village grove
     # belongs. The median, not the mean: one house pushed far upwind should not drag the wall out.
     u_sorted = sorted(u for u, _v in uv)
-    u_floor = u_sorted[len(u_sorted) // 2]
+    # ...AND NEVER BEHIND THE CLUSTER'S CENTER (feature 287, woods W18): where the median house stands downwind of the
+    # houses' centroid (a cluster lying diagonally to the wind), a column floored at the median could still lay its band
+    # level with the centroid. At 0 the band's near face stands `BELT_NEAR_FT` windward of the centroid in every column, so
+    # the planted belt starts on the wind's quarter and `trim_to_the_wind` only shortens its hook.
+    u_floor = max(u_sorted[len(u_sorted) // 2], 0.0)
 
     def profile(span_f: float) -> list[tuple[float, float]]:
         """(v, u) of the windward fringe, sampled in columns across the wind."""

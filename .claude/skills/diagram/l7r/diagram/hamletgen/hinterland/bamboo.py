@@ -103,6 +103,19 @@ def nearest_fitting(target: Pt, reach: float, step: float, fits: Callable[[float
     return None
 
 
+BAMBOO_SAMPLE_FT = 14.0
+"""How far apart a bamboo stand's samples stand across its rect (feature 287, woods W24). A way is refused within its
+half-width and 10 ft of a sample, so a tread anywhere in the rect lies within 14 / sqrt(2) = 9.9 ft of a sample and under
+that reach: a map drawing convention - the density is the geometry's, not a fact about bamboo."""
+
+
+def stand_samples(cx: float, cy: float, hw: float, hh: float, step: float) -> list[Pt]:
+    """The points a stand's rect (center, half-extents) is asked at: its corners and edges, and a grid through it no more
+    than `step` apart on either axis (feature 287, woods W24)."""
+    nx, ny = max(2, math.ceil(2.0 * hw / step)), max(2, math.ceil(2.0 * hh / step))
+    return [(cx - hw + 2.0 * hw * i / nx, cy - hh + 2.0 * hh * j / ny) for i in range(nx + 1) for j in range(ny + 1)]
+
+
 def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
     """Where the hamlet's bamboo stands go, per the `bamboo` knob - SCANNED, like the coppice patches.
 
@@ -166,9 +179,14 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
     def _blocked(x: float, y: float) -> bool:
         return bamboo_blocked_indexed(x, y, (s.W, s.H), tp, index, pond, px(30.0))
 
+    # ...ASKED OVER THE WHOLE STAND, NOT ITS PERIMETER (feature 287, woods W24): a 5 x 3 grid 29 ft apart let a lane cross
+    # the stand between two rows. The samples stand `BAMBOO_SAMPLE_FT` apart, so every point of the rect lies within
+    # `BAMBOO_SAMPLE_FT / sqrt(2)` of one, under the lane's refusal reach (its half-width and 10 ft): a tread that enters the
+    # stand is always seen
+    _sample = px(BAMBOO_SAMPLE_FT)
+
     def _fits(cx: float, cy: float, hw: float, hh: float) -> bool:
-        samples = [(cx + dx * hw, cy + dy * hh) for dx in (-1.0, -0.5, 0.0, 0.5, 1.0) for dy in (-1.0, 0.0, 1.0)]
-        return not any(_blocked(x, y) for x, y in samples)
+        return not any(_blocked(x, y) for x, y in stand_samples(cx, cy, hw, hh, _sample))
 
     out: list[Poly] = []
     for _form in forms:

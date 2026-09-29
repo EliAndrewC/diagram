@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 from l7r.diagram.settlement import Settlement
 
 from ..plan import SitePlan
@@ -161,6 +163,72 @@ def scatter_frame(s: Settlement, plan: SitePlan) -> tuple[float, float, float, f
     return (min(xs) - grow, min(ys) - grow - TITLE_BAND_ALLOWANCE, max(xs) + grow, max(ys) + grow)
 
 
+def throw_to_the_view(s: Settlement, frame: tuple[float, float, float, float]) -> None:
+    """Every scatter thrown before the view was decided, thrown again into the strips of its parcel past the frame it
+    predicted and inside `frame` - the scatter frame of the DECIDED view (`scatter_frame` once `plan.view` is set) - and its
+    frame then recorded as `frame` (feature 287, M6 and water W52). So the scatter and the view agree by construction: the
+    marsh is laid before the decision (the title pocket's search and the woodland scan read it) and thrown within a
+    prediction of the view, and on cohort seed 8 the decided view reached 87 px past that prediction's foot - a strip of
+    marsh with no reeds, which `finish` recorded as `scatter_frame_breach`. The re-throws are those the throwers offered
+    (`land.wet.offer_rethrow`) while `stage_hinterland` held `s._scatter_catchup` open; it is closed here, so no closure over
+    the settlement outlives the stage."""
+    from l7r.diagram.settlement.finish import scatter_strips  # noqa: PLC0415 - the one strip computation, kept beside its use
+
+    reg = vars(s).pop("_scatter_catchup", None) or {}
+    fx0, fy0, fx1, fy1 = frame
+    for k, rethrow in sorted(reg.items()):
+        old, parcel = s._scatter_frames[k]
+        for strip in scatter_strips(old, parcel, (fx0, fy0, fx1 - fx0, fy1 - fy0)):
+            rethrow(strip)
+        s._scatter_frames[k] = (frame, parcel)
+
+
+TITLE_POCKET_CLEAR_FT = 40.0
+"""How far the title's pocket keeps from a feature GLYPH (feature 287, water W58; future-work, "The burial ground beside the
+title placard": Kashikawa's burial glyph stood 23 ft left of the placard on its center line and read as its ornament). A
+GUESS, and a map drawing convention rather than a fact about a place: no page gives a figure for how far a cartouche stands
+from a symbol, and 40 ft is a little under twice the distance that read wrong."""
+
+#: The manifest keys whose records are feature GLYPHS a title must not read as ornamented by - the burial ground, a shrine
+#: or temple, a wellhead, the notice board, a torii. Ground (a clearing, a field, cover) is not a glyph.
+TITLE_GLYPH_KEYS = ("cemeteries", "religious", "shrines", "wells", "kosatsuba")
+
+
+def pocket_clear_of_features(pocket: tuple[float, float, float, float], M: Any, clearance: float) -> bool:
+    """THE ONE PREDICATE of the title pocket's keep-clear (feature 287, water W58): the pocket (x0, y0, x1, y1), grown by
+    `clearance` each way, meets no feature glyph's box (`TITLE_GLYPH_KEYS`, a record's `w`/`h` or its drawn radius) and
+    no torii (recorded as a bare point, its glyph about 38 x 28)."""
+    x0, y0, x1, y1 = pocket[0] - clearance, pocket[1] - clearance, pocket[2] + clearance, pocket[3] + clearance
+    boxes: list[tuple[float, float, float, float]] = []
+    for k in TITLE_GLYPH_KEYS:
+        for o in M.get(k) or []:
+            if "x" not in o:
+                continue
+            hw = float(o.get("w", 2.0 * float(o.get("vr", o.get("r", 8.0))))) / 2.0
+            hh = float(o.get("h", 2.0 * float(o.get("vr", o.get("r", 8.0))))) / 2.0
+            boxes.append((float(o["x"]) - hw, float(o["y"]) - hh, float(o["x"]) + hw, float(o["y"]) + hh))
+    boxes += [(float(t[0]) - 19.0, float(t[1]) - 10.0, float(t[0]) + 19.0, float(t[1]) + 18.0) for t in M.get("torii") or []]
+    return not any(bx0 < x1 and bx1 > x0 and by0 < y1 and by1 > y0 for bx0, by0, bx1, by1 in boxes)
+
+
+def clear_pocket_spot(s: Settlement, window: tuple[float, float, float, float], w: float, h: float, planned: Any, clearance: float) -> tuple[float, float] | None:
+    """The first box of `w` x `h` in `window` (x, y, w, h), scanned as `title()` scans (`Settlement._blank_label_spot`: 22 px
+    in from the window, a 24 px step, top to bottom and left to right), that clears every title obstacle AND keeps
+    `clearance` from every feature glyph (`pocket_clear_of_features`) - the pocket search's own scan, so the keep-clear is
+    decided where the pocket is chosen (feature 287, water W58). None where no box does."""
+    obs = s._title_obstacles(planned=planned)
+    vx0, vy0, vw, vh = window
+    y = vy0 + 22.0
+    while y + h <= vy0 + vh - 22.0:
+        x = vx0 + 22.0
+        while x + w <= vx0 + vw - 22.0:
+            if s._box_clear(x, y, x + w, y + h, obs) and pocket_clear_of_features((x, y, x + w, y + h), s.M, clearance):
+                return (x, y)
+            x += 24.0
+        y += 24.0
+    return None
+
+
 def title_pocket(s: Settlement, plan: SitePlan, w: float = 300.0, h: float = 190.0) -> tuple[float, float, float, float]:
     """Ground held back so the map has somewhere to put its NAME.
 
@@ -193,7 +261,10 @@ def title_pocket(s: Settlement, plan: SitePlan, w: float = 300.0, h: float = 190
     # because this runs after the water, the crops, the houses and the hinterland and before the
     # only two things left that could fill it (the coppice and the grove).
     _planned = [list(plan.belt)] if plan.belt else []  # the belt is not drawn yet; see `_title_obstacles(planned=...)`
-    spot = s._blank_label_spot(x0, y0, x1 - x0, y1 - y0, w, h, planned=_planned)
+    # ...AND KEPT CLEAR OF THE FEATURE GLYPHS by `TITLE_POCKET_CLEAR_FT` (feature 287, water W58): the same scan, asked the
+    # keep-clear as well, so a pocket beside the burial ground is refused for the next one (`clear_pocket_spot`)
+    _clear = s.px(TITLE_POCKET_CLEAR_FT)
+    spot = clear_pocket_spot(s, (x0, y0, x1 - x0, y1 - y0), w, h, _planned, _clear)
     if spot is None:
         # A SMALLER POCKET BEFORE NONE (feature 150 T50 fallout, Kuwabata seed 21): with a sixteenth house
         # on the sheet's right flank the 300 x 190 reservation found no home, nothing was held back, the
@@ -201,7 +272,7 @@ def title_pocket(s: Settlement, plan: SitePlan, w: float = 300.0, h: float = 190
         # that corner ON the grove (`title_clear_of_features`). The placard itself is ~195 x 106, so a
         # 210 x 120 pocket is still a real reservation; only when even that fails is nothing reserved.
         w, h = 210.0, 120.0
-        spot = s._blank_label_spot(x0, y0, x1 - x0, y1 - y0, w, h, planned=_planned)
+        spot = clear_pocket_spot(s, (x0, y0, x1 - x0, y1 - y0), w, h, _planned, _clear)
     if spot is None:
         # THE SHEET HAS NO ROOM FOR ITS NAME (feature 150 T50 fallout, Kuwabata seed 21): with the cluster
         # seated clear of the reed fringe, the houses, the fringe and the connector left no blank box the
@@ -224,7 +295,7 @@ def title_pocket(s: Settlement, plan: SitePlan, w: float = 300.0, h: float = 190
         for _px, _py0, _out in ((_cx0, _cy0 - _bh - 8, -1.0), (_cx1 - _bw, _cy0 - _bh - 8, -1.0), (_cx0, _cy1 + 8, 1.0), (_cx1 - _bw, _cy1 + 8, 1.0)):
             for _shift in (0.0, 16.0, 32.0, 48.0):
                 _py = _py0 + _out * _shift
-                _ok = s._box_clear(_px, _py, _px + _bw, _py + _bh, _obs)
+                _ok = s._box_clear(_px, _py, _px + _bw, _py + _bh, _obs) and pocket_clear_of_features((_px, _py, _px + _bw, _py + _bh), s.M, _clear)
                 _tries.append([round(_px, 1), round(_py, 1), round(_px + _bw, 1), round(_py + _bh, 1), float(_ok)])
                 if _ok:
                     plan.title_pocket = (_px, _py, _px + _bw, _py + _bh)

@@ -8,6 +8,7 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, segments_cross
 from l7r.diagram.settlement._geom import PointGrid, RingIndex, boxed_grid, seg_reach_index
+from l7r.diagram.settlement.land.cover import WOODLAND_MIN_CROWNS, ring_center
 from l7r.diagram.settlement.land.wet import marsh_ground
 
 from ..consts import Poly, Pt
@@ -74,6 +75,18 @@ def parcel_bbox_ok(x: float, y: float, hw: float, hh: float, bc: float, bs: floa
     bw, bh = abs(hw * bc) + abs(hh * bs), abs(hw * bs) + abs(hh * bc)
     inside = max(0.0, min(x + bw, fx1) - max(x - bw, fx0)) * max(0.0, min(y + bh, fy1) - max(y - bh, fy0))
     return inside >= WOODLAND_BBOX_FLOOR * (2.0 * bw) * (2.0 * bh)
+
+
+def parcel_inside_share(ring: Sequence[Pt], frame: tuple[float, float, float, float]) -> float:
+    """The share of a parcel's DRAWN ring's bounding box inside `frame` (x0, y0, x1, y1) - the gate's own measure
+    (`test_a_woodland_commons_is_mostly_inside_the_picture`, over the view). ONE PREDICATE (feature 287, FR-003; woods
+    W14): `parcel_bbox_ok` measures the rotated RECTANGLE the ring is drawn inside, whose box is not the ring's, so the
+    scan asks this of the ring it is about to draw as well."""
+    xs = [float(p[0]) for p in ring]
+    ys = [float(p[1]) for p in ring]
+    box = max(1e-9, (max(xs) - min(xs)) * (max(ys) - min(ys)))
+    inter = max(0.0, min(max(xs), frame[2]) - max(min(xs), frame[0])) * max(0.0, min(max(ys), frame[3]) - max(min(ys), frame[1]))
+    return inter / box
 
 
 def fit_square_parcel(half: float, floor_half: float, fits: Any) -> float | None:
@@ -551,7 +564,8 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                 # same AREA reaches sqrt(2.2) further along its long axis than the square did, so the
                 # candidate is tested at that reach and the rotation cannot buy ground.
                 for _cand in (max(half * _f, _COMMONS_FLOOR_FT / 2.0), max(half * 0.84, _COMMONS_FLOOR_FT / 2.0)):
-                    if _ok(jx, jy, _cand):
+                    # the jitter moves a seat off the row check it passed, so the moved seat is asked the row rule too (woods W04)
+                    if _ok(jx, jy, _cand) and not in_a_ruled_line((jx, jy), centers):
                         x, y, half_used = jx, jy, _cand
                         break
                     if _ok(x, y, _cand):
@@ -660,6 +674,22 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                 # probes can still put most of the drawn ring in the wet - so the ring is asked `parcel_wet_share`, the one
                 # predicate the gate reads too, and a wet ring is refused for the next scored seat
                 if parcel_wet_share(_ring, marshes) > WET_SHARE_CAP:
+                    continue
+                # ...AND THE RING THAT IS DRAWN IS ON THE PAGE, by the rule's own measure (woods W14): the rotated rectangle's box
+                # passed above, and the ring inside it has a box of its own. The frame is the view as it stands (`frame_bounds`),
+                # which the decided view contains - only the belt's face is added after this - so the share can only grow
+                if parcel_inside_share(_ring, (_fx0, _fy0, _fx1, _fy1)) < WOODLAND_BBOX_FLOOR:
+                    continue
+                # ...AND IT HAS ROOM FOR A WOOD (woods W13): the crowns the ring is sure of on the commons' own keep-outs, as
+                # `commons` will stock it (`woodland_room`) - a ring mostly over the padded crop is not offered as a wood
+                if len(s.woodland_room(_ring)) < WOODLAND_MIN_CROWNS:
+                    continue
+                # ...AND THE POINT THE RECORD CARRIES STANDS IN NO ROW (feature 287, woods W04). The seat above was asked the row
+                # rule, but the commons record carries the drawn RING's box center (`ring_center`), which the ring's wander moves
+                # off the seat - a third point nobody had asked. So the rule is asked of exactly that point against the points
+                # the parcels already chosen will carry, in the order they are drawn and recorded; a ring in a row is refused
+                # for the next scored seat, and a map whose ground offers none draws fewer parcels (the count is a target).
+                if in_a_ruled_line(ring_center(_ring), [ring_center(c) for c in chosen]):
                     continue
                 chosen.append(_ring)
                 centers.append((x, y, size * (1.15 + 1.35 * s._hjit(x, y, 74.0))))

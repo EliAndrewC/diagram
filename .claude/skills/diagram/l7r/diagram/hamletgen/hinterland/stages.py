@@ -15,7 +15,7 @@ from ..homesteads import farmstead_fixtures, household_bamboo
 from ..plan import SitePlan
 from .bamboo import bamboo_seats
 from .belt import belt_polygon
-from .frame import frame_bounds, frame_for, scatter_frame, title_pocket
+from .frame import frame_bounds, frame_for, scatter_frame, throw_to_the_view, title_pocket
 from .parcels import CROP_MARGIN, open_ground_patches
 
 # ---- STAGE 7: the ground between everything ------------------------------------------------------
@@ -39,6 +39,34 @@ def lee_face(clumps: Sequence[tuple[float, float]], wind: tuple[float, float]) -
     for c in clumps:
         bands.setdefault(int((c[0] * -wy + c[1] * wx) // LEE_BAND_FT), []).append((c[0] * wx + c[1] * wy, c))
     return [c for band in bands.values() for u, c in band if u <= min(v for v, _ in band) + LEE_DEPTH_FT]
+
+
+_COMPASS = ("N", "NE", "E", "SE", "S", "SW", "W", "NW")
+
+
+def woodland_offsheet(plan: SitePlan) -> dict[str, Any]:
+    """The record a roll carries when its worked wood stands OFF the sheet (feature 287, plan D11 - a DEPARTURE, raised with
+    the GM): the wood's bearing from the settlement - up the fall, the nearest hill beyond the fields where
+    research/vegetation/220 puts a village's fuel wood ("houses, then fields, then the hill and wild land beyond") - as a
+    compass point and in degrees, and the parcels rolled.
+
+    WHY A RECORD AND NOT A PARCEL. Where no legal ground for a parcel lies inside the sheet (Sawada and Kashikawa rolled
+    none), the ways to draw one ON it all change what the feature is: a parcel that sets the frame (against the GM's frame
+    rule - the commons never set it), a parcel under the legibility floor, or one on the crop's set-back. The wood is not
+    missing - the record says it is beyond the sheet's edge, and which way. The alternative forms were priced in the woods
+    design (`specs/287-placer-guarantees/design/design-woods.json`, `impossible`); the GM chooses between them."""
+    ux, uy = -plan.fall[0], -plan.fall[1]
+    deg = math.degrees(math.atan2(ux, -uy)) % 360.0  # compass: 0 = north, screen y points down
+    return {"bearing": _COMPASS[int((deg + 22.5) // 45.0) % 8], "bearing_deg": round(deg, 1), "parcels": plan.woodland_patches}
+
+
+def woodland_on_the_sheet(s: Settlement, plan: SitePlan, polys: list[Any]) -> list[Any]:
+    """The parcels the scan found, as they are - and where it found none of the parcels the plan rolled, the wood recorded
+    beyond the sheet with its bearing (`meta.woodland_offsheet`, plan D11), so a roll either draws a wood or says where
+    it stands."""
+    if plan.woodland_patches and not polys:
+        s.M["meta"]["woodland_offsheet"] = woodland_offsheet(plan)
+    return polys
 
 
 def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
@@ -81,8 +109,9 @@ def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
     # THE SCATTER THROWS ONLY INSIDE A PREDICTED FRAME (feature 224): set before each scatter from what is known then -
     # the marsh before the coppice and the pocket exist, the commons after them - and kept for finish()'s breach record.
     s._scatter_frame = scatter_frame(s, plan)
+    vars(s)["_scatter_catchup"] = {}  # the marsh offers its re-throw here; `throw_to_the_view` takes it once the view is decided (M6)
     s.hinterland(commons=False)
-    plan.woodland_polys = open_ground_patches(s, plan, plan.woodland_patches)
+    plan.woodland_polys = woodland_on_the_sheet(s, plan, open_ground_patches(s, plan, plan.woodland_patches))
     # ...and the bamboo stands (T47), seated now for the same reason: a stand is a wood, and the
     # scrub keeps out of it. Drawn by `stage_bamboo`, after the belt.
     farmstead_fixtures(s, plan, s.M.get("houses", []))  # T53-T59: the privies, woodpiles, heaps, baths, coops, shrines, persimmons - before the bamboo, which keeps off them
@@ -98,8 +127,13 @@ def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
     plant_the_belt(s, plan)
     plan.view = frame_for(s, plan)
     s._scatter_frame = scatter_frame(s, plan)
+    throw_to_the_view(s, s._scatter_frame)  # ...and the marsh, thrown within a PREDICTION of the view, fills what the decided one shows past it
 
     s.hinterland(marsh=False, soft_extra=[*([plan.belt] if plan.belt else []), *plan.woodland_polys, *plan.bamboo_polys])
+    # ...AND NO HOLES IN THE COUNTRYSIDE (feature 287, woods W11): over the decided view, the ground nothing covers - the
+    # parcels and the bamboo still to be drawn counted as cover - is clothed as rough grazing until it is at most the rule's
+    # share (`fill_the_holes`, asking `bare_cells`, the rule's one predicate). The stages after this only add cover.
+    s.fill_the_holes(plan.view, [*plan.woodland_polys, *plan.bamboo_polys])
     s._scatter_frame = None  # the later scatters (a stand's understory, a hand call) throw whole
 
 
@@ -240,7 +274,7 @@ def plant_the_belt(s: Settlement, plan: SitePlan) -> None:
         _fx0, _fx1 = (min(_fx0, min(_bxs) - 30.0), _fx1) if _wx < 0 else (_fx0, max(_fx1, max(_bxs) + 30.0))
     if abs(_wy) > 1e-6:
         _fy0, _fy1 = (min(_fy0, min(_bys) - 30.0), _fy1) if _wy < 0 else (_fy0, max(_fy1, max(_bys) + 30.0))
-    s.village_grove(_dented, role="windbreak", within=(_fx0, _fy0, _fx1, _fy1), face_margin=CROP_MARGIN, reserved=_tp)
+    s.village_grove(_dented, role="windbreak", within=(_fx0, _fy0, _fx1, _fy1), face_margin=CROP_MARGIN, reserved=_tp, wind=plan.wind)
 
 
 def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
@@ -299,10 +333,11 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     # ...AND ON ITS OWN BANK: a clump near a house across the brook is not among the houses (settlement-review of Kashikawa,
     # feature 261: three clumps stood across the water from every farmhouse, within reach only as the crow flies)
     _brook = [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for f in s.M.get("streams") or [] for a, b in zip(f.get("poly") or [], (f.get("poly") or [])[1:], strict=False)]
-    # ...A HAIR INSIDE THE REACH (269 E2): the manifest records a clump to 0.1 px, so a clump the placer seats at the reach's
-    # very edge can read as beyond it - Kashikawa's clump at (1069.3, 1011.6) stood 89.99 ft from its house as placed and
-    # 90.01 as recorded. The same placement-side margin `CANOPY_PAD` keeps for a crown against a wall.
-    _copse_near: tuple[Any, ...] = ([(float(x), float(y)) for x, y in zip(xs, ys, strict=False)], s.px(COPSE_HOUSE_REACH_FT) - 0.1, _brook)
+    # ...AT THE REACH ITSELF (feature 287, woods W01): the manifest records a clump to 0.1 px, and Kashikawa's clump at
+    # (1069.3, 1011.6) stood 89.99 ft from its house as placed and 90.01 as recorded (269 E2), which a 0.1 px margin here
+    # covered. `village_grove` now decides every seat at the record's grain, so the point it asks the reach of is the point
+    # the manifest carries, and no margin stands in for the rounding.
+    _copse_near: tuple[Any, ...] = ([(float(x), float(y)) for x, y in zip(xs, ys, strict=False)], s.px(COPSE_HOUSE_REACH_FT), _brook)
     if plan.copse_siting == "against_the_belt" and _dented:
         # the belt's own footprint, stood off the houses so the two stands read as one wood at its back
         _bx = [q[0] for q in _dented]

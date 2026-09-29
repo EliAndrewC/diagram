@@ -4,10 +4,10 @@ import math
 from typing import TYPE_CHECKING, Any
 
 from .._geom import CanopyArea, point_in_poly
-from ..land.wet import marsh_ground
+from ..land.wet import MARSH_FEATHER_BS, marsh_ground
 from ._helpers import _BELT_GAP_FT, _belt_axis
 from .grove_blocks import GroveBlocks, Seats
-from .groves import bamboo_mark
+from .groves import RANK_JITTER_FT, bamboo_mark
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -16,6 +16,110 @@ if TYPE_CHECKING:
 _GAP_MEMORY = True
 """The windbreak gap fill skips a gap that seated nothing (feature 281, FR-008); off only in the test that proves the
 clumps are unchanged."""
+
+
+def crown_reach(clump: float, jitter: float = 0.0) -> float:
+    """How far from its clump's seat a crown's trunk can be drawn (feature 287, woods W21 and homes H43): `_draw_grove`
+    throws each crown inside the clump's box less 2 px a side, and a conifer-led belt's row trunk stands inside a clump's
+    box and moves up to `jitter` each way (`_belt_ranks`) - so the box's half-diagonal, grown by the jitter."""
+    return (clump / 2.0 - 2.0 + jitter) * math.sqrt(2.0)
+
+
+def trunk_on_tread(x: float, y: float, lanes: Any) -> bool:
+    """THE ONE PREDICATE of "no tree is planted in a path" (`test_no_tree_is_planted_in_a_path`; feature 287, woods W21 and
+    homes H43): a trunk at (x, y) stands on a lane's TREAD - within the lane's own half-width of its centerline, the width
+    read from the lane (GM 2026-09-12: a trunk beside a footpath is what a path looks like; one inside it is a tree in the
+    path). `lanes` are manifest lane records (`pts`, `w`)."""
+    from .._geom import seg_dist
+
+    return any(
+        seg_dist(x, y, (float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) < float(ln.get("w", 6)) / 2.0
+        for ln in lanes
+        for a, b in zip(ln.get("pts") or [], (ln.get("pts") or [])[1:], strict=False)
+    )
+
+
+BELT_BEARING_MAX_DEG = 45.0  # the belt's center within this of the wind's quarter, seen from the cluster's center
+BELT_SUBTENSE_MAX_DEG = 200.0  # ...and its crowns round the cluster on one or two sides: a hook, never a ring
+
+
+def belt_bearing_and_subtense(clumps: Any, houses: Any, wind: tuple[float, float]) -> tuple[float, float]:
+    """THE ONE PREDICATE of `test_every_pool_hamlet_has_its_belt_on_the_regional_northwest` (feature 287, woods W18), as
+    (how far the belt's center bears off the wind's quarter, how many degrees its crowns subtend round the cluster), both
+    seen from the houses' centroid. `wind` points toward where the wind comes from (the regional northwest on every pool
+    hamlet). research/vegetation, "Does a shelter belt wrap the settlement?": the record's shape is a hook on the windward
+    side, one or two sides of the houses, never round them."""
+    cx = sum(float(h["x"]) for h in houses) / len(houses)
+    cy = sum(float(h["y"]) for h in houses) / len(houses)
+    bx = sum(float(c[0]) for c in clumps) / len(clumps)
+    by = sum(float(c[1]) for c in clumps) / len(clumps)
+    off = abs((math.degrees(math.atan2(bx - cx, -(by - cy))) - math.degrees(math.atan2(wind[0], -wind[1])) + 180.0) % 360.0 - 180.0)
+    angs = sorted(math.degrees(math.atan2(float(c[0]) - cx, -(float(c[1]) - cy))) % 360.0 for c in clumps)
+    gap = max([b - a for a, b in zip(angs, angs[1:], strict=False)] + [angs[0] + 360.0 - angs[-1]])
+    return off, 360.0 - gap
+
+
+def trim_to_the_wind(clumps: list[tuple[float, float]], houses: Any, wind: tuple[float, float]) -> list[tuple[float, float]]:
+    """The belt's seats with END crowns taken off until it bears within `BELT_BEARING_MAX_DEG` of the wind's quarter and
+    subtends at most `BELT_SUBTENSE_MAX_DEG` round the cluster (feature 287, woods W18 - repaired where it is planted, not
+    checked after). The ends are the two crowns either side of the widest angular gap round the cluster, and the one lying
+    farther round from the wind's bearing goes first: that shortens the hook and draws the belt's center toward the wind at
+    once, and it never opens a hole inside a run, so the depth and the continuity of what stays are untouched. Converges -
+    at worst on the crowns nearest the wind's bearing, the belt's middle stretch (a single crown subtends nothing)."""
+    if not houses:
+        return list(clumps)
+    out = list(clumps)
+    cx = sum(float(h["x"]) for h in houses) / len(houses)
+    cy = sum(float(h["y"]) for h in houses) / len(houses)
+    home = math.degrees(math.atan2(wind[0], -wind[1])) % 360.0
+    while len(out) > 1:
+        off, sub = belt_bearing_and_subtense(out, houses, wind)
+        if off <= BELT_BEARING_MAX_DEG and sub <= BELT_SUBTENSE_MAX_DEG:
+            break
+        ang = sorted(((math.degrees(math.atan2(c[0] - cx, -(c[1] - cy))) % 360.0, k) for k, c in enumerate(out)))
+        gaps = [(ang[(i + 1) % len(ang)][0] - ang[i][0]) % 360.0 for i in range(len(ang))]
+        i = max(range(len(ang)), key=lambda j: gaps[j])
+        ends = (ang[i][1], ang[(i + 1) % len(ang)][1])  # the last crown before the widest gap, and the first after it
+        far = max(ends, key=lambda k: abs((math.degrees(math.atan2(out[k][0] - cx, -(out[k][1] - cy))) - home + 180.0) % 360.0 - 180.0))
+        del out[far]
+    return out
+
+
+def deep_marsh(rings: Any, margin: float) -> list[list[tuple[float, float]]]:
+    """The marsh deeper than its reed margin: each ring inset by `margin` (feature 287, woods W06). Woody cover stands on
+    the dry ground above the marsh and its reed MARGIN carries alder (research/vegetation.html, the marsh margin), so a
+    grove clump may be based in the margin - drawn as alder - and never deeper. A ring the inset empties has no deep
+    ground; a ring the inset splits gives each piece."""
+    from shapely.geometry import Polygon
+
+    out: list[list[tuple[float, float]]] = []
+    for ring in rings:
+        if len(ring) < 3:
+            continue
+        g = Polygon([(float(q[0]), float(q[1])) for q in ring]).buffer(0).buffer(-margin)
+        out += [[(float(x), float(y)) for x, y in part.exterior.coords[:-1]] for part in getattr(g, "geoms", [g]) if part.geom_type == "Polygon" and not part.is_empty]
+    return out
+
+
+def grove_stocked(clumps: Any, w: float, h: float, floor: float = 1.5) -> bool:
+    """THE ONE PREDICATE of `test_every_recorded_grove_holds_trees` (feature 287, woods W15): a recorded grove holds at least
+    `floor` clumps per 100,000 sq px of its recorded w x h - a grove that declares an extent and draws almost nothing in it
+    leaves the dooryards it should have greened bare."""
+    return w * h <= 0 or len(clumps) * 1e5 / (w * h) >= floor
+
+
+def stocked_copse(clumps: list[tuple[float, float]], pad: float) -> list[tuple[float, float]]:
+    """A copse's clumps with its stragglers dropped - the clump farthest from the clumps' centroid, one at a time - until
+    the extent the copse is recorded at (its clumps' box grown by `pad`) is `grove_stocked` (feature 287, woods W15). It
+    terminates: one clump's extent is a square of `2 * pad`, far above the floor."""
+    out = list(clumps)
+    while len(out) > 1:
+        xs, ys = [c[0] for c in out], [c[1] for c in out]
+        if grove_stocked(out, max(xs) - min(xs) + 2 * pad, max(ys) - min(ys) + 2 * pad):
+            break
+        mx, my = sum(xs) / len(out), sum(ys) / len(out)
+        del out[max(range(len(out)), key=lambda k: math.hypot(out[k][0] - mx, out[k][1] - my))]
+    return out
 
 
 class BankNear:
@@ -101,6 +205,7 @@ class StandsMixin:
         reserved: tuple[float, float, float, float] | None = None,
         near: tuple[Any, ...] | None = None,
         area: float | None = None,
+        wind: tuple[float, float] | None = None,
     ) -> int:
         """A COMMUNAL village grove - the Chinese *fengshui* forest (风水林). Unlike the per-house *yashikirin*,
         a NUCLEATED village shelters behind ONE village-scale grove, in three roles (see research/vegetation.html 'What are the village's three groves' 'Village
@@ -119,7 +224,9 @@ class StandsMixin:
         copse = bamboo + fruit, no conifer). Recorded in M['village_groves'] (bbox + role + poly) IF any clump
         is drawn (a footprint entirely over houses/crops draws nothing and records nothing). `area` (px^2) is the canopy
         the stand is filled TO: seating stops once its clumps cover it, and a second pass offers more seats where the first
-        fell short (269 B26, the copse sized by the homesteads' woods). Returns the count."""
+        fell short (269 B26, the copse sized by the homesteads' woods). `wind` (toward where the wind comes from), given for the
+        windbreak, trims the belt's ends until it bears on the wind's quarter as a hook (`trim_to_the_wind`). Returns the
+        count."""
         xs = [p[0] for p in poly]
         ys = [p[1] for p in poly]
         x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
@@ -201,7 +308,11 @@ class StandsMixin:
         # clump - a clump is a bare [x, y] pair)
         occ_grove = [(cl[0], cl[1], float(g.get("r") or 0.0) + clump * 0.90) for g in self.M.get("village_groves", []) for cl in (g.get("clumps") or [])]
         occ += occ_grove
-        corr = self._corridor_buffers(clump * 0.45 + 4)  # ... and keep trees OFF the lanes / streets / road
+        # ... and keep trees OFF the lanes / streets / road - and every TRUNK the clump will draw off the tread, not only its seat
+        # (feature 287, woods W21 and homes H43): a crown is thrown anywhere in the clump's box and a belt's row conifer a few
+        # feet past it (`crown_reach`), so the seat keeps at least that reach beyond the tread, and no trunk the clump draws
+        # can stand on it (`trunk_on_tread`). 0.45 x clump + 4 fell 0.4 px short of the belt's own crowns at the box corner
+        corr = self._corridor_buffers(max(clump * 0.45 + 4, crown_reach(clump, self.px(RANK_JITTER_FT) if role == "windbreak" else 0.0)))
         cr = clump / 2
         # ... and OUT of the SOUTHERN sun-corridor of every threshing yard + garden (a tree just south of them
         # blocks the drying/growing sun - +y is south). A touch wider than the check so it stays strictly clear.
@@ -261,7 +372,11 @@ class StandsMixin:
             # cleared ground there, so the outline is not the drawn marsh. The crops' padded keep-out was tried before that
             # and was worse still. The copse is the grove the review measured, and the parcels' own marsh keep-out is the
             # precedent it asked for.
-            dikes=[dk["outline"] for dk in self.M.get("dikes", [])] + (marsh_ground(self.M) if role == "copse" else []),
+            # ...AND EVERY OTHER GROVE KEEPS OUT OF THE MARSH DEEPER THAN ITS REED MARGIN (feature 287, woods W06): the outline
+            # that took Sawada's belt from 179 crowns to 104 was the wrong one - it ran under ground drawn dry - and since M7 the
+            # record IS the drawn marsh, so the belt is held to it too, with the margin (`MARSH_FEATHER_BS`, the reeds' own
+            # thinning band) left to it: a belt clump based in the margin is drawn as alder, one deeper is not seated
+            dikes=[dk["outline"] for dk in self.M.get("dikes", [])] + (marsh_ground(self.M) if role == "copse" else deep_marsh(marsh_ground(self.M), MARSH_FEATHER_BS * bs)),
             water=[(wl, whw + cr) for wl, whw in water_lines],
             corridors=corr,
             circles=occ,
@@ -394,14 +509,20 @@ class StandsMixin:
             return area is not None and canopy.area >= area
 
         def _seat(jx: float, jy: float) -> None:
-            """One grid seat through the rejection chain: a HARD blocker drops it, a LOCAL one re-seats it (see below)."""
+            """One grid seat through the rejection chain: a HARD blocker drops it, a LOCAL one re-seats it (see below).
+            DECIDED AT THE RECORD'S GRAIN (feature 287, woods W01, W03, W05): the seat is rounded to the 0.1 px the manifest
+            records before any test is asked of it, so the point every rule reads - the reach, the bank, the marsh, the alder -
+            is the point the placer admitted, and no margin stands in for the rounding."""
+            jx, jy = round(jx, 1), round(jy, 1)
             if blocks.hard(jx, jy) or (_near is not None and not _near.too_near(jx, jy)):
                 return
             if blocks.local(jx, jy) or blocks.lane(jx, jy):
                 _alt = _reseat(jx, jy, require_interior=not blocks.local(jx, jy))
                 if _alt is None:
                     return
-                jx, jy = _alt
+                jx, jy = round(_alt[0], 1), round(_alt[1], 1)
+                if blocks.hard(jx, jy) or blocks.local(jx, jy) or blocks.lane(jx, jy) or (_near is not None and not _near.too_near(jx, jy)):
+                    return  # the re-seat's point, at the record's grain, is asked again - a rounding can carry it over an edge
             seated.append((jx, jy))
             clumps.append([round(jx, 1), round(jy, 1)])
             near_seats.add(jx, jy)
@@ -560,7 +681,7 @@ class StandsMixin:
                         _inside = []
                         for _k in range(33):
                             _d = _d0 + (_d1 - _d0) * _k / 32
-                            _qx, _qy = _col * _wv[0] + _d * _perp[0], _col * _wv[1] + _d * _perp[1]
+                            _qx, _qy = round(_col * _wv[0] + _d * _perp[0], 1), round(_col * _wv[1] + _d * _perp[1], 1)  # the record's grain (W01)
                             if blocks.inside(_qx, _qy):
                                 _inside.append((_qx, _qy))
                         for _qx, _qy in _inside[len(_inside) // 2 :] + _inside[: len(_inside) // 2]:  # the band's middle outward
@@ -616,13 +737,23 @@ class StandsMixin:
         # The trim is not gone - it MOVED to `Settlement.set_view`, the first moment the real page is
         # known. Everything the `within` window admits is drawn here (ink past the page is clipped by the
         # render, which is the documented behavior for a communal grove - see the note at `set_view`'s
-        # frame list), and the RECORD is partitioned against the actual view once there is one.
-        _offpage: list[Any] = []
+        # frame list), and the RECORD is partitioned against the actual view once there is one. (The `_offpage` list this
+        # trim left behind, empty ever since, is gone with it - feature 287, woods W20.)
+        # THE BELT BEARS ON THE WIND'S QUARTER AS A HOOK, repaired here, before a crown is inked (feature 287, woods W18):
+        # its end crowns are taken off until its center bears within 45 degrees of the wind and it subtends no more than 200
+        # round the houses (`trim_to_the_wind`, asked by the same predicate the rule's test reads). A COPSE is held to its own
+        # stocking the same way (woods W15): its stragglers are dropped until the extent it is recorded at holds its clumps.
+        if role == "windbreak" and wind is not None and len(seated) > 1:
+            seated = trim_to_the_wind(seated, self.M.get("houses") or [], wind)
+        if role == "copse" and len(seated) > 1:
+            seated = stocked_copse(seated, clump / 2 + 4.0)
+        clumps = [[x, y] for x, y in seated]  # the seats are at the record's grain (W01), so the record is the ink
         # A BELT CROWN IN THE MARSH IS ALDER (feature 261, Sawada's belt on its toe's reed edge): the record's woody stage at
         # a reed margin is alder or willow (research/vegetation.html, the marsh margin), and alder is the tree of a
         # wetland's fertile edge, so where the windbreak's ground runs into the recorded marsh its trees are drawn as one
         _wet = marsh_ground(self.M, only=("toe", "waterside")) if role == "windbreak" else []
         alder = 0
+        alder_clumps: list[list[float]] = []  # which seats are drawn as alder, so a recount after the page is known reads them (woods W05)
         bamboo = 0  # the bamboo marks inked low under the windbreak's crowns (269 B29, `_draw_grove`)
         # THE VILLAGE BELT IS DRAWN IN ITS ROLLED FORM (269 B30, `windbreak_belt`; research/vegetation/270): conifer-led, its
         # rows of conifers laid along the belt as drawn and seated before the clumps' lesser crowns, then painted over them
@@ -638,6 +769,7 @@ class StandsMixin:
             # class in the vocabulary yet and stays unclassed so the census reports it
             if any(point_in_poly(jx, jy, w) for w in _wet):
                 alder += 1
+                alder_clumps.append([jx, jy])
                 self._draw_grove(jx, jy, clump, clump, face=(0, -1), mix="alder", cls="alder")
                 continue
             bamboo += self._draw_grove(jx, jy, clump, clump, face=(0, -1), mix=form or mix, cls={"windbreak": "windbreak", "copse": "copse"}.get(role), tally=crowns)
@@ -677,8 +809,9 @@ class StandsMixin:
                     "role": role,
                     "r": round(clump / 2, 1),
                     "clumps": clumps,
-                    "clumps_offpage": (_offpage if face_margin is not None and clumps else []),  # actual drawn clump centers + radius, for groves_clear_of_lanes
+                    "clumps_offpage": [],  # filled by `set_view`'s partition, the first moment the page is known
                     "alder": alder,  # of the clumps, those standing in the marsh and drawn as alder (feature 261)
+                    "alder_clumps": alder_clumps,  # ...and which they are, for the recount once the page is known (feature 287, woods W05)
                     "bamboo": bamboo,  # bamboo marks inked in the gaps and along the edge (269 B29; 0 outside the windbreak mix)
                     "form": form,  # the village belt's rolled form (269 B30, meta.windbreak_belt); None off the belt
                     "crowns": crowns,  # the crowns drawn, by kind (conifer / broadleaf; the alder clumps are not counted)
