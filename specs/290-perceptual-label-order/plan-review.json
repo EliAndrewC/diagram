@@ -1,0 +1,39 @@
+{
+ "feature": "290-perceptual-label-order",
+ "plan_sha256": "b1ace1e0a83205ece2db2de2c98ce01c9be90cdb892d90d3c7288318bb5f9cab",
+ "reviewed": "2026-09-29",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "POSITIONS is PerceptPPO's eight in its order; the two 'slightly' positions dropped; comment cites the study and Table 1",
+   "class": "within",
+   "why": "The GM: 'follow the published standard rather than deviate'; FR-001 and the accepted spec's Decisions already settle dropping the 'slightly' positions (the standard as published)."
+  },
+  {
+   "id": "D2",
+   "summary": "_extended_cands walks above, below, right, left (right before left)",
+   "class": "within",
+   "why": "FR-002; keeping 289's left-before-right would keep part of the deviation the GM dropped."
+  },
+  {
+   "id": "D3",
+   "summary": "Record entry says the maps follow the readers' order, cited; textbook and other orders kept as context; the deviation's ruling note and the small-drawn-object absence note removed; Evidence comment and registry 'Used for' updated",
+   "class": "within",
+   "why": "The GM: 'the record can still call it a standard instead of a deviation'; FR-003. The two removed notes existed only to ground the deviation, so removing them is what 'no longer call it a deviation' requires, not a narrowing."
+  },
+  {
+   "id": "D4",
+   "summary": "The four hand sheets regenerated; tests updated with the order",
+   "class": "within",
+   "why": "FR-004 and SC-001/SC-003; the tests enforce the requested order."
+  },
+  {
+   "id": "D5",
+   "summary": "make quick then make done",
+   "class": "within",
+   "why": "SC-002 names make done green; ordinary verification of the requested change."
+  }
+ ],
+ "verdict": "CLEAR"
+}

@@ -7,9 +7,9 @@ leader line ties them back. The standard, in the order it decides:
 
 1. NEARER FIRST (QGIS's default, "Prefer closer labels"): every candidate at the preferred offset - every ranked
    position, every line layout - is tried before any seat a ring further out.
-2. Within a ring, the RANKED POSITIONS (`standard.POSITIONS`: directly above, below, left and right first - the GM's
-   deviation from the standard's corners-first order, feature 289 - then the standard's own), then fewer lines before
-   more (the GM's wrap rule).
+2. Within a ring, the RANKED POSITIONS (`standard.POSITIONS`: the user-tested order of Bobák, Čmolík and Čadík 2024 -
+   above, below, right, then the corners on the right, left, the corners on the left; feature 290), then fewer lines
+   before more (the GM's wrap rule).
 3. FREE SPACE WINS: the first candidate that covers nothing is taken. Only when nothing in reach is free does the
    caption go where it covers the least weight - it is never dropped (the GM: "we'll treat labels as mandatory").
 4. A caption not at the preferred offset is no longer directly beside its feature, so a LEADER line joins it back
@@ -219,7 +219,7 @@ def _extended_cands(text: str, size: float, subject: Subject, lines: list[str] |
                         ring, rank, name, (c[0] + s * (su + bw) * u[0] + side * (sv + bh + g) * v[0], c[1] + s * (su + bw) * u[1] + side * (sv + bh + g) * v[1]), ang, tuple(ln), (bw, bh), size
                     )
                     rank += 1
-            for name, side in (("left", -1.0), ("right", 1.0)):  # left before right, as in `POSITIONS` (feature 289)
+            for name, side in (("right", 1.0), ("left", -1.0)):  # right before left, as in `POSITIONS` (feature 290)
                 for s in slides:
                     yield _Cand(
                         ring, rank, name, (c[0] + side * (su + bw + g) * u[0] + s * (sv + bh) * v[0], c[1] + side * (su + bw + g) * u[1] + s * (sv + bh) * v[1]), ang, tuple(ln), (bw, bh), size
