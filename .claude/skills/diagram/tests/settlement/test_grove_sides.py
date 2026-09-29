@@ -239,6 +239,12 @@ def test_the_garden_relax_steers_clear_of_a_neighbors_whole_homestead() -> None:
     s.meta(name="V", scale="village", ftpx=2)
     s.grove_rects = [(340, 300, 16, 40)]
     shaded = {"x": 300, "y": 300, "w": 23, "h": 14, "geom": {"house": (300, 300, 23, 14), "yard": (300, 322, 20, 12), "gardens": [(320, 300, 12, 12)]}}
-    other = {"x": 600, "y": 600, "w": 23, "h": 14, "geom": {"house": (600, 600, 23, 14), "yard": (600, 622, 20, 12), "gardens": [(620, 600, 12, 12)], "groves": [(600, 570, 40, 20)], "grove_faces": [((0, -1), "deep")]}}
+    other = {
+        "x": 600,
+        "y": 600,
+        "w": 23,
+        "h": 14,
+        "geom": {"house": (600, 600, 23, 14), "yard": (600, 622, 20, 12), "gardens": [(620, 600, 12, 12)], "groves": [(600, 570, 40, 20)], "grove_faces": [((0, -1), "deep")]},
+    }
     s._relax_gardens_south([shaded, other])
     assert shaded["geom"]["gardens"][0][1] > 300
