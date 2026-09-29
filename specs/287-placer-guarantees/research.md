@@ -305,3 +305,9 @@ Decisions review and for what goes to the GM once the work runs.
   board moves from its entrance to the center: the knob now resolves only over placements the map can site.
 - **The fan envelope's fold (seed 27)**: an outline the floor trim folds is reduced to its largest valid polygon at the
   outline's making (`ring_rules.simple_outline`), keeping all the fan's ground; historically neutral (a drawing repair).
+- **water:W36, the winter-crop knob narrowed to what the site can feed** (as D4 narrows the cluster shape): a form is
+  offered only where its coarse-grain need fits the ground the map draws for it. Measured over cohort 1-60 and four pool
+  hamlets: every wild fan (44) offers both forms; every cleared fan (20, Kashikawa and Sawada among them) offers `barley`
+  only, since its dry ground is the toe strip alone (2.5-5.2 acres against a need of 8.5-17). Cost: the bare-winter form
+  never appears on a cleared fan. Alternative priced: a deep reserve on cleared ground (no research places it). Chosen by
+  the session; for the Decisions review.

@@ -1,5 +1,5 @@
 """269 E4: the dry hem's rows set tract by tract (B06, `waterfields/furrows.py`), and a fan's dry band on its toe (B07,
-`fan_toe_hem` in `waterfields/comb.py`)."""
+`fan_toe_hem` in `waterfields/hem.py`)."""
 
 from __future__ import annotations
 
@@ -7,9 +7,9 @@ import math
 import random
 
 from l7r.diagram.waterfields.carve import _dry_fields
-from l7r.diagram.waterfields.comb import FAN_TOE_FROM, fan_toe_hem, middle_reserve
 from l7r.diagram.waterfields.frame import _Frame
 from l7r.diagram.waterfields.furrows import STEEP_SPREAD_RAD, TRACT_COLUMNS, TRACT_LEAN_RAD, TRACT_PLOT_TURN_RAD, TRACT_SEAM_MIN_RAD, furrow_turn, tract_ways
+from l7r.diagram.waterfields.hem import FAN_TOE_FROM, fan_toe_hem, middle_reserve, middle_stretch, overlaps_any, toe_cut
 
 
 def test_furrow_turn_is_modulo_a_half_turn() -> None:
@@ -109,12 +109,41 @@ def test_a_tract_hemmed_in_on_every_heading_joins_its_nearest_neighbor() -> None
         assert len({round(p["theta"], 9) for p in plots if p["tract"] == t}) == 1, "a joined tract takes its host's heading"
 
 
-def test_a_wild_fan_holds_its_middle_in_reserve_nearest_the_toe_first() -> None:
-    """Feature 287, W36: the middle's hem plots are not lost but held back for the coarse-grain top-up, ordered down the
-    fall from the toe's edge up toward the head (`middle_reserve`)."""
+def test_the_middle_stretch_is_the_canals_run_above_the_toe() -> None:
     F = _Frame(90.0)
-    paddies = [{"poly": [(0.0, 0.0), (100.0, 0.0), (100.0, 900.0)]}]
-    hem = [{"poly": [(0.0, y), (10.0, y), (10.0, y + 10.0), (0.0, y + 10.0)]} for y in (95.0, 400.0, 595.0, 605.0, 850.0, 300.0)]
-    reserve = middle_reserve(hem, F, (0.0, 0.0), paddies)
-    assert [d["poly"][0][1] for d in reserve] == [400.0, 300.0, 95.0], "the complement of the toe, nearest the toe first"
-    assert not {id(d) for d in reserve} & {id(d) for d in fan_toe_hem(hem, F, (0.0, 0.0), paddies)}
+    assert middle_stretch(F, [(0.0, 0.0), (0.0, 400.0), (0.0, 900.0)], 600.0) == [(0.0, 0.0), (0.0, 400.0), (0.0, 600.0)]
+    assert middle_stretch(F, [(0.0, 0.0), (0.0, 400.0)], 600.0) == [(0.0, 0.0), (0.0, 400.0)], "a canal that never reaches the toe is all middle"
+    assert middle_stretch(F, [(0.0, 700.0), (0.0, 900.0)], 600.0) == [], "a canal wholly on the toe has no middle"
+
+
+def test_a_wild_fan_offers_its_whole_middle_deep_off_the_paddy_and_the_drawn_strip_nearest_the_toe_first() -> None:
+    """Feature 287, W36: the reserve is the wild middle cleared to the canvas edge, not a strip - and the violating cases
+    are dropped: a plot on the fan's own paddy, a plot on a dry plot already drawn."""
+    F = _Frame(90.0)  # the fall runs down the page; the canal runs down x = 1000, upslope is -x
+    canal = [(1000.0, 0.0), (1000.0, 1500.0)]
+    paddies = [{"poly": [(1010.0, 0.0), (1400.0, 0.0), (1400.0, 1500.0), (1010.0, 1500.0)]}]
+    toe_cut_f = toe_cut(F, (1000.0, 0.0), paddies)
+    assert toe_cut_f is not None and abs(toe_cut_f - 1000.0) < 1e-6
+    drawn = [{"poly": [(700.0, 850.0), (990.0, 850.0), (990.0, 990.0), (700.0, 990.0)]}]  # a strip plot already drawn in the middle
+    reserve = middle_reserve(random.Random(3), F, canal, (1000.0, 0.0), paddies, drawn, 2000.0, 1600.0, [], 1.0, 1.1, 0.0, [], 5)
+    assert reserve, "the middle is offered"
+    xs = [x for d in reserve for x, _y in d["poly"]]
+    assert min(xs) < 100.0, "cleared deep: out toward the canvas edge, not a strip"
+    assert all(max(x for x, _y in d["poly"]) <= 1000.5 for d in reserve), "nothing on the fan's own paddy"
+    assert not any(overlaps_any(d["poly"], [drawn[0]["poly"]]) for d in reserve), "nothing on the drawn strip"
+    falls = [sum(y for _x, y in d["poly"]) / 4 for d in reserve]
+    assert falls == sorted(falls, reverse=True) and max(falls) < toe_cut_f, "the middle only, nearest the toe first"
+    assert min(d["tract"] for d in reserve) == 5
+    assert middle_reserve(random.Random(3), F, canal, (1000.0, 2000.0), paddies, [], 2000.0, 1600.0, [], 1.0, 1.1, 0.0, [], 0) == [], "no fall, no middle"
+
+
+def test_a_wild_comb_draws_its_toe_strip_and_hands_the_whole_middle_over_as_its_reserve() -> None:
+    """The finish end to end (feature 287, W36): a wild fan's drawn dry plots are the toe's strip and the fork band, the
+    middle comes back as `dry_reserve`, and no reserve plot lies on a drawn one or on the paddy."""
+    from l7r.diagram.waterfields.comb import carve_comb, finish_comb
+
+    wild = finish_comb(carve_comb(2400, 2400, (300.0, 300.0), 5, down_deg=90, grain=2.0, furrow_spread=1.4, fan_middle="wild"))
+    assert wild["dry_reserve"] and wild["fan_middle"] == "wild"
+    taken = [d["poly"] for d in wild["dry_plots"]] + [p["poly"] for p in wild["plots"]]
+    assert not any(overlaps_any(d["poly"], taken) for d in wild["dry_reserve"])
+    assert finish_comb(carve_comb(2400, 2400, (300.0, 300.0), 5, down_deg=90, grain=2.0))["dry_reserve"] == [], "a cleared fan holds nothing back"

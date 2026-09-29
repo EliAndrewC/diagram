@@ -21,7 +21,7 @@ from .._geom import (
     seg_dist,
     seg_reach_index,
 )
-from .._knobs import _centroid, _sharp_corners, _toward
+from .._knobs import _centroid, _sharp_corners, _toward, resolve_knob
 from ..land.wet import pond_fringe_ring
 from ..water_ways.water import ditch_style
 from .grain import SQ_FT_PER_ACRE, dry_need_acres, poly_area, top_up
@@ -344,22 +344,31 @@ class CombMixin:
             self.dry_polys.append(p["poly"])
 
     def _coarse_grain_top_up(self: Settlement, net: dict[str, Any], drawn_px2: float, refused: Callable[[Poly], bool]) -> list[dict[str, Any]]:  # type: ignore[misc]
-        """The reserve plots a wild fan middle's hem adds to the drawn band so it holds the coarse-grain need (feature 287,
-        W36; `grain.py`, research/fields.html fields/165): none where the hamlet grows its barley on its drained paddy over
-        the winter and that covers the need, the middle's plots nearest the toe first where it does not. A generated
-        comb hamlet only - it alone rolls `fan_middle`; the hamlet's form and its accounting go in the meta."""
+        """The reserve plots a wild fan middle adds to the drawn strip so it holds the coarse-grain need (feature 287, W36;
+        `grain.py`, research/fields.html fields/165): none where the hamlet grows its barley on its drained paddy over the
+        winter and that covers the need, the middle's plots nearest the toe first where it does not. The winter crop is
+        rolled only among the forms this ground can feed (`WINTER_CROP`'s typing rule), so the band returned holds the
+        need by construction. A generated comb hamlet only - it alone rolls `fan_middle`; the form and the acreage go in the meta."""
         from l7r.diagram.waterfields import FLOODED
 
         meta = self.M["meta"]
         if meta.get("generated_by") != "hamletgen" or "fan_middle" not in meta or "dry_reserve" not in net:
             return []
-        form = self.resolve("winter_crop")
         ft2 = float(meta.get("ftpx") or 1.0) ** 2 / SQ_FT_PER_ACRE
         drained = sum(poly_area(p["poly"]) for p in net.get("plots", []) if p.get("fill") != FLOODED) * ft2
-        need = dry_need_acres(int(meta.get("households") or 0), drained, form)
-        added = top_up(drawn_px2, net["dry_reserve"], need / ft2, refused)
-        dry = (drawn_px2 + sum(poly_area(p["poly"]) for p in added)) * ft2
-        meta.update(winter_crop=form, coarse_grain_dry_need_acres=round(need, 2), coarse_grain_dry_acres=round(dry, 2), coarse_grain_short_acres=round(max(0.0, need - dry), 2))
+        offered = [p for p in net["dry_reserve"] if not refused(p["poly"])]
+        households = int(meta.get("households") or 0)
+        room = (drawn_px2 + sum(poly_area(p["poly"]) for p in offered)) * ft2
+        form = resolve_knob("winter_crop", self.seed, {**self.knob_context(), "grain_households": households, "grain_drained_acres": drained, "grain_room_acres": room}, self.knob_pins)
+        self._resolved_knobs["winter_crop"] = form
+        need = dry_need_acres(households, drained, form)
+        added = top_up(drawn_px2, offered, need / ft2, refused)
+        meta.update(
+            winter_crop=form,
+            coarse_grain_room_acres=round(room, 2),
+            coarse_grain_dry_need_acres=round(need, 2),
+            coarse_grain_dry_acres=round((drawn_px2 + sum(poly_area(p["poly"]) for p in added)) * ft2, 2),
+        )
         return added
 
     def _comb_draw_paddies(self: Settlement, net: dict[str, Any], name: str = "") -> None:  # type: ignore[misc]

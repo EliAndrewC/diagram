@@ -7,6 +7,10 @@ paddy grow a second crop over the winter?"): a double-cropped hamlet grew its ba
 the rice harvests; a single-cropped one grew it in dry fields. On a fan whose middle is still wild (`fan_middle`,
 fields/160) the dry band holds only the toe's stretch, so a single-cropped hamlet's band is TOPPED UP into the middle,
 nearest the toe first, until it holds the need - the middle cleared as far as the hamlet's grain needed and no further.
+The knob is rolled only among the forms the site can feed (`_grows_on_this_ground`), so the band holds the need by
+construction. Measured over cohort 1-60 and the pool (2026-09-29): the whole wild middle holds 36-124 acres against needs
+of 8.5-17, so both forms are offered on every wild fan; a CLEARED fan's strip holds 2.5-5.2 acres, so it is offered
+barley only - which its drained paddy (1.21-1.37 acres a household against a 0.85 need) always covers.
 
 Classes (the four labels, research/CLAUDE.md):
 - the two forms, winter barley on the drained paddy and dry fields: historically ACCURATE (fields/300, fields/165);
@@ -18,14 +22,27 @@ Classes (the four labels, research/CLAUDE.md):
 
 from __future__ import annotations
 
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 
 from .._knobs import Knob, register_knob
 
+
 # THE WINTER CROP (research/fields.html fields/300): "Two forms are attested, so this is a knob, rolled per settlement: one
 # whose paddies carry a winter crop, and one whose paddies lie bare over the winter." An even weight is a GUESS.
-WINTER_CROP = register_knob(Knob("winter_crop", ["barley", "none"], default="none", weights={"barley": 0.5, "none": 0.5}))
+#
+# NARROWED TO WHAT THE SITE ALLOWS (feature 287, W36; as plan D4 narrowed the cluster shape): a form is offered only where
+# the ground can grow the grain it leaves to dry fields - "none" only where the toe's strip and the whole wild middle
+# (`waterfields/hem.py` `middle_reserve`) hold the whole need, "barley" only where they hold what the drained paddy
+# leaves. The draw puts the hamlet's households, its drained acres and that room in the context; a context without them
+# (anything else that resolves the knob) offers both. A site that allows neither is a loud error, never a short band.
+def _grows_on_this_ground(form: str, context: Mapping[str, Any]) -> bool:
+    if "grain_room_acres" not in context:
+        return True
+    return dry_need_acres(int(context["grain_households"]), float(context["grain_drained_acres"]), form) <= float(context["grain_room_acres"])
+
+
+WINTER_CROP = register_knob(Knob("winter_crop", ["barley", "none"], default="none", typing_rule=_grows_on_this_ground, weights={"barley": 0.5, "none": 0.5}))
 
 # THE COARSE-GRAIN NEED, in acres of dry field per household (fields/165). The sizing rule (fields/110) gives ~0.8-1.0
 # tan of gross paddy a person for rice's two-thirds of the diet, which is the engine's 1.3 acres a household

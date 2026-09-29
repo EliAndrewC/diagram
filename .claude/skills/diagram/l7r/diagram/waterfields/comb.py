@@ -11,7 +11,7 @@ if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds
     from shapely.ops import unary_union
 
 from .banks import _TOE_MIN_APEX, _TOE_MIN_AREA, _TOE_MIN_THICKNESS, cell_area, dedup_ring, floor_overhang, hem_to_bank, is_chevron, pointed_ring, round_channel_joints
-from .carve import _bund_beans, _carve, _dry_fields
+from .carve import _carve
 from .frame import (
     CANAL_A_FT,
     CANAL_B_FT,
@@ -36,7 +36,7 @@ from .frame import (
     _Thread,
     chan_px,
 )
-from .furrows import STEEP_SPREAD_RAD, settle_tract_seams
+from .hem import _comb_dry_and_beans  # the dry hem and the wild middle's reserve, split out at the 1,000-line bar (feature 287, W36)
 from .ring_rules import simple_outline
 from .seams import close_seams
 from .seams.pockets import _outside_command, _water
@@ -903,98 +903,3 @@ def _comb_floor_and_winding(plots: list[dict[str, Any]], threads: list[_Thread],
             pl["poly"] = _merged
     plots[:] = [pl for pl in plots if _signed_area(pl["poly"]) > 0]
     return envelope
-
-
-def _comb_dry_and_beans(
-    R: random.Random,
-    F: _Frame,
-    a_pts: Poly,
-    bc: _Thread,
-    plots: list[dict[str, Any]],
-    channels: list[dict[str, Any]],
-    W: float,
-    H: float,
-    dry_keepout: Sequence[tuple[float, float, float]],
-    dry_band: tuple[float, float],
-    bean_frac: float,
-    grain: float,
-    furrow_spread: float,
-    grain_drift: float,
-    fan_middle: str,
-    fork: Pt,
-) -> tuple[list[dict[str, Any]], float, list[Poly], list[dict[str, Any]]]:
-    """DRY FIELDS (hatake) on the uncommanded upslope margin above the supply canal, and
-    BUND BEANS (azemame) beaded along a fraction of the paddy bunds - see research/fields.html 'What a bund bean actually looks like'."""
-    # The hem's stand-off is derived from the SUPPLY strokes' drawn banks (`CANAL_BERM_FT`), so the
-    # drawn channels have to be in hand - they are, because this pass runs after `_comb_canal_pieces`
-    # and after `round_channel_joints`, i.e. against the geometry that will actually be painted.
-    _supply_strokes = [c for c in channels if c.get("role") != "drain"]
-    dry_plots = _dry_fields(R, F, a_pts, W, H, dry_keepout, band=dry_band, g=grain, furrow_spread=furrow_spread, grain_drift=grain_drift, supply=_supply_strokes)
-    hem = list(dry_plots)  # the a-side hem whole: a wild middle's share is split off AFTER the seams are settled (feature 287, W36)
-    if grain != 1.0:
-        # the INTER-ARM FORK TRIANGLE (coarse grains only): the ground between the two supply
-        # canals just below the fork is commanded by neither (it sits upslope of canal B), and
-        # on a village map the scrub matrix textures it - a city map has no scrub, so it read
-        # as the blank wedge the GM circled at every fan head (2026-07-21). Historically it is
-        # prime dry-crop ground beside the head-race, so quilt it: a second hem band along
-        # canal B's SUPPLY stretch, whose upslope normal points INTO the triangle. Village
-        # maps skip this (byte-stability; their scrub already covers the same ground).
-        # ...and the band spans only the stretch that BORDERS the triangle: up to bc's first
-        # offtake, where the paddy bc itself commands begins. When canal B carries offtakes
-        # (every scripted row since 2026-08-16), running the band to ditch_f strings hem plots
-        # along ground that is now carved RICE - Cohort-41 dropped a soy plot square on the
-        # paddy and its delivery ditch that way. With no offtakes the two bounds coincide.
-        _bc_tri_f = min(list(getattr(bc, "offtake_fs", []) or []) + [bc.ditch_f])
-        _bc_supply = [p for p in bc.pts if F.to_uf(*p)[1] <= _bc_tri_f]
-        if len(_bc_supply) >= 2:
-            dry_plots += _dry_fields(
-                R,
-                F,
-                _bc_supply,
-                W,
-                H,
-                dry_keepout,
-                band=(dry_band[0] * 0.6, dry_band[1] * 0.6),
-                g=grain,
-                furrow_spread=furrow_spread,
-                grain_drift=grain_drift,
-                supply=_supply_strokes,
-                tract0=1 + max((p["tract"] for p in dry_plots), default=-1),
-            )  # thinner than the a-side hem: it only needs to cover the fork triangle, and a full-depth band crowds the farmhouse ring off the fan's visible edge
-    if furrow_spread >= STEEP_SPREAD_RAD:  # the patchwork's seams read tract against tract, both bands (feature 287, W35)
-        settle_tract_seams(dry_plots)
-    reserve = middle_reserve(hem, F, fork, plots) if fan_middle == "wild" else []  # settled above with its neighbors (W36)
-    dry_plots = [d for d in dry_plots if all(d is not r for r in reserve)]
-    dry_acres = sum(_poly_area(p["poly"]) for p in dry_plots) * 4 / 43560
-    return dry_plots, dry_acres, _bund_beans(R, plots, bean_frac, channels=channels), reserve
-
-
-# WHERE A FAN'S DRY BAND LIES (269 B07; research/fields.html 'Where dry (hatake) crops go - the topographic catena',
-# fields/160). On an alluvial fan the middle, where the river sinks underground, is too short of water for paddy and was
-# often left as coppice or wild ground until late in the early modern period, while the spring-fed toe was settled early
-# with paddy beside it. The record calls that a tendency, not a rule - in old heartlands fans were cleared from early
-# times - so it is a KNOB, `fan_middle` (hamletgen/water/fit.py): "wild" draws the hem only on the toe's stretch of the fan's edge and
-# holds the middle's in reserve for the coarse-grain top-up (`middle_reserve`, fields/165), "cleared" hems the whole canal. The comb IS
-# the fan (apex the division point, toe the collector), so the stretch is read along the fall from the fork to the lowest paddy; the fork-triangle
-# band is the fan's HEAD and stays. FAN_TOE_FROM: where the toe begins, a share of that fall - the record gives no proportions, equal thirds is a GUESS.
-FAN_TOE_FROM = 2.0 / 3.0
-
-
-def fan_toe_hem(dry_plots: list[dict[str, Any]], F: _Frame, fork: Pt, plots: Sequence[dict[str, Any]]) -> list[dict[str, Any]]:
-    """The hem plots whose center lies `FAN_TOE_FROM` or more down the fall from the fork to the lowest paddy (the toe's); all where none falls."""
-    f0 = F.to_uf(*fork)[1]
-    f1 = max((F.to_uf(float(v[0]), float(v[1]))[1] for p in plots for v in p["poly"]), default=f0)
-    if f1 - f0 <= 0:
-        return dry_plots
-    cut = f0 + (f1 - f0) * FAN_TOE_FROM
-    return [d for d in dry_plots if F.to_uf(*_ring_mean(d["poly"]))[1] >= cut]
-
-
-def middle_reserve(hem: list[dict[str, Any]], F: _Frame, fork: Pt, plots: Sequence[dict[str, Any]]) -> list[dict[str, Any]]:
-    """A wild middle's hem plots (`fan_toe_hem`'s complement), nearest the toe first - the top-up's order, a GUESS (W36, `fields/grain.py`)."""
-    toe = {id(d) for d in fan_toe_hem(hem, F, fork, plots)}
-    return sorted((d for d in hem if id(d) not in toe), key=lambda d: -F.to_uf(*_ring_mean(d["poly"]))[1])
-
-
-def _ring_mean(ring: Sequence[Pt]) -> Pt:  # where `fan_toe_hem` reads a hem plot to stand
-    return sum(v[0] for v in ring) / len(ring), sum(v[1] for v in ring) / len(ring)

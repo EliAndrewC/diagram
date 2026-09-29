@@ -7,9 +7,11 @@ from __future__ import annotations
 
 from typing import Any
 
+import pytest
+
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement._knobs import KNOBS
-from l7r.diagram.settlement.fields.grain import COARSE_GRAIN_ACRES_PER_HOUSEHOLD, SQ_FT_PER_ACRE, dry_need_acres, poly_area, top_up
+from l7r.diagram.settlement.fields.grain import COARSE_GRAIN_ACRES_PER_HOUSEHOLD, dry_need_acres, poly_area, top_up
 from l7r.diagram.waterfields import FLOODED
 
 
@@ -70,7 +72,7 @@ def test_a_single_cropped_wild_fan_tops_its_dry_band_up_to_the_need_off_the_broo
     s._comb_draw_hem(net, source)
     assert _drawn(s) == {(1000.0, 1000.0), (400.0, 100.0)}, "the brook plot is skipped, and one reserve plot meets the need"
     meta = s.M["meta"]
-    assert meta["winter_crop"] == "none" and meta["coarse_grain_short_acres"] == 0.0
+    assert meta["winter_crop"] == "none"
     assert meta["coarse_grain_dry_acres"] >= meta["coarse_grain_dry_need_acres"] == round(2 * COARSE_GRAIN_ACRES_PER_HOUSEHOLD, 2)
 
 
@@ -89,13 +91,31 @@ def test_a_wet_paddy_carries_no_winter_barley_so_the_band_is_topped_up_all_the_s
     assert (400.0, 100.0) in _drawn(s), "the blue plot is shitsuden, too wet for barley"
 
 
-def test_a_need_the_ground_cannot_hold_draws_every_offered_plot_and_records_the_shortfall() -> None:
+def test_the_knob_offers_only_the_forms_this_ground_can_feed() -> None:
+    """The violating case: ten households need 8.5 acres of dry field, and the toe and the middle offered hold 3.7. Bare
+    over the winter is never rolled there; with the drained paddy's barley the need left is nil and the band holds it."""
+    knob = KNOBS["winter_crop"]
+    ctx = {"grain_households": 10, "grain_drained_acres": 20.0, "grain_room_acres": 3.7}
+    assert knob.allowed(ctx) == ["barley"]
+    assert knob.allowed({**ctx, "grain_drained_acres": 1.0}) == [], "neither form: the roll is a loud error, never a short band"
+    assert knob.allowed({**ctx, "grain_room_acres": 9.0}) == ["barley", "none"]
+    assert knob.allowed({}) == ["barley", "none"], "a context without the site's figures offers both"
+
+
+def test_a_hamlet_whose_ground_cannot_feed_it_unwatered_rolls_the_winter_crop() -> None:
+    s = Settlement(2000, 2000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, generated_by="hamletgen", households=10, fan_middle="wild")
+    net, source = _net("#7FA35A")
+    net["plots"] = [{"poly": _sq(1300.0, 1300.0, 700.0), "fill": "#7FA35A"}]  # 11.2 acres drained: covers 8.5
+    s._comb_draw_hem(net, source)
+    assert s.M["meta"]["winter_crop"] == "barley" and s.M["meta"]["coarse_grain_dry_need_acres"] == 0.0
+
+
+def test_pinning_a_form_the_ground_cannot_feed_is_refused_loudly() -> None:
     s = _hamlet(10, "none")
     net, source = _net("#7FA35A")
-    s._comb_draw_hem(net, source)
-    assert _drawn(s) == {(1000.0, 1000.0), (400.0, 100.0), (700.0, 100.0), (1000.0, 100.0)}
-    short = s.M["meta"]["coarse_grain_short_acres"]
-    assert abs(short - (10 * COARSE_GRAIN_ACRES_PER_HOUSEHOLD - 4 * 40_000.0 / SQ_FT_PER_ACRE)) < 0.01
+    with pytest.raises(ValueError, match="typing rule"):
+        s._comb_draw_hem(net, source)
 
 
 def test_a_map_the_generator_did_not_make_is_not_topped_up() -> None:
