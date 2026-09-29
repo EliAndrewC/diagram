@@ -22,7 +22,10 @@ things of this nature"* included, and the tests no longer needed afterwards reti
 
 The scope, from three sources (research R1-R3): every placement rule asserted on a finished map (a census of the tests: 118
 rules); every placer fallback that knowingly emits a compromise of a recorded rule (a census of the engine's code); and every
-violation already on record but excused (a test's skip list, a strict xfail, a future-work entry). Each becomes a guarantee
+violation already on record but excused (a test's skip list, a strict xfail, a future-work entry). Research R1 counts
+118 placement rules asserted on finished maps; R2 finds 30 placer fallbacks that break a stated rule when their branch runs
+(of 148 read); R3 finds 58 violations on record and not fixed (of 116 items read). They overlap, and the plan joins them by
+owning placer. Each becomes a guarantee
 made where the placer decides - so no roll of any spec can produce the violation - with a unit test of that placer; and the
 finished-map tests it makes unnecessary are retired.
 
