@@ -30,6 +30,7 @@ def test_a_metric_figure_in_our_own_prose_owes_its_conversion_and_a_quotation_ne
     assert [f.split(" - ")[0] for f in found] == ["11 to 28 m", "12 m"], found
     assert sp.unconverted("<p>a 5 min walk, 8.5 ft of crown</p>") == [], "minutes and feet are not metric figures"
     assert sp.unconverted("<p>2 ha (~5 acres) and 3 km (~2 miles)</p>") == []
+    assert sp.unconverted("<p>a mat of 90 x 180 cm (~3 x 6 ft)</p>") == [], "a dimension converts as a dimension"
 
 
 def test_every_lead_line_is_listed_as_a_question_or_a_statement_with_its_body() -> None:

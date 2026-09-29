@@ -461,7 +461,7 @@ POLDER_CELL_FT = 110.0
 # kayabuki thatch must be pitched 45 deg or steeper to shed rain, putting the ridge ~20 ft up, and
 # at 38N in the 10th month that throws 39 ft of shadow by 9am. Lowering the asked pitch would put
 # houses inside each other's drying shadow - a defect against the rule, arriving disguised as a
-# density win. (research/homesteads.html, "The threshing yard's sun"; specs/121 research.md D2.)
+# density win. (research/rendering/homesteads.html, "How our maps draw the work yards"; specs/121 research.md D2.)
 #
 # THE HONEST WAY TO GET MORE DENSITY HERE is what real yashiki lots did: STAGGER east-west rather
 # than space rows further apart.

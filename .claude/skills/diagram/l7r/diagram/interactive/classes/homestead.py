@@ -173,8 +173,7 @@ class ThreshingYard(Kind):
     floor rather than as mats, so the drawing shows a smaller number to give the impression of many. The real yard at
     harvest was covered, 40 to 60 mats of about 3 by 6 feet each on an ordinary barley-country farm and 100 to 150 on a
     large one. The
-    mats' size and the yard's spread are read; the yard's size rests on two undated records of remembered practice, a
-    calibration the GM may re-sort; the rows the mats are laid in are a guess - no source read
+    mats' size and the yard's spread are read; the yard's size rests on two undated records of remembered practice, a calibration and this project's choice; the rows the mats are laid in are a guess - no source read
     says; and where a map draws racks by the houses, which side of the yard a rack takes is a guess too, and the rack is
     drawn wider than its poles so that it reads.
 
@@ -182,7 +181,7 @@ class ThreshingYard(Kind):
     Covers: `threshing_yards` - the floor, its mats, and the rack by the house where the harvest weather is changeable
     Label: convention
     Sources: kitamoto-inakoki-niwa, kitamoto-mushiro-niwa, tobunken-mushiro, nishimura-makino-1959
-    Entry: research/homesteads.html - 'What lay in the work yard at harvest? Straw mats over the whole floor'; 'Did a village put its drying racks by the houses by custom, or because of its weather?'; 'How big was the work yard, and how did the sizes spread'; 'The threshing yard's sun, and how far a farmhouse shades'
+    Entry: research/homesteads.html - 'Threshing and drying yards at farmhouses (niwa)'; 'Did a village put its drying racks by the houses by custom, or because of its weather?'; research/rendering/homesteads.html - 'How our maps draw the work yards'
     """
 
     key = 'threshing yard'

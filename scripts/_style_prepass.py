@@ -41,7 +41,7 @@ METRIC = re.compile(
     r"(km2|km|ha|m2|cm|mm|m|kilometers?|hectares?|meters?|centimeters?|millimeters?|square meters?)(?![\w])"
 )
 #: The conversion the guide asks for, right after the figure: `(~36-92 ft)`, `(~4 in)`, `(~2.5 acres)`, `(~120 sq ft)`.
-CONVERTED = re.compile(r"^\s*\(~[\d,.\-\s]+(?:ft|in|acres?|sq ft|square feet|miles?)\b")
+CONVERTED = re.compile(r"^\s*\(~[\d,.\-\sx]+(?:ft|in|acres?|sq ft|square feet|miles?)\b")  # `(~3 x 6 ft)` too
 _COMMENT = re.compile(r"<!--.*?-->", re.S)
 #: Quoted text keeps its source's own units: a GM ruling in `<q>`, a source's words in corner brackets or quotes.
 _QUOTED = re.compile(r"<q>.*?</q>|「.*?」|&quot;.*?&quot;|\"[^\"]*\"", re.S)

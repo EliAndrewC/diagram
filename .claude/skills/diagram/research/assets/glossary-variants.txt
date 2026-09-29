@@ -1996,7 +1996,6 @@ muen	muenzuka
 muen-zuka	muenzuka
 muenbotoke	muenzuka
 muenzuka	muenzuka
-mugi	mugi
 mukaibansho	mukaibansho
 mukakusha	mukakusha
 mulberry plot-fish ponds	dike-pond
@@ -2122,6 +2121,7 @@ ninomaru	ninomaru
 ninsokusashi	ninsokusashi
 nippo jisho	Nippo Jisho
 nipponica	Nipponica
+niwa	niwa
 noborigama	noborigama
 nodame	nodame
 nogu benriron	Nogu benriron
@@ -2773,7 +2773,6 @@ shōya	shoya
 si	SI
 siberian high	Siberian high
 siege mining	siege mining
-sigma	sigma
 siheyuan	siheyuan
 siku quanshu	Siku Quanshu
 sill	sill

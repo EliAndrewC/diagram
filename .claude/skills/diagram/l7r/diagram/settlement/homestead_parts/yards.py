@@ -466,7 +466,7 @@ class ThreshingYardsMixin:
         return True
 
     # THE WORK YARD IS ROLLED FROM A LOGNORMAL, CORRELATED WITH THE HOUSEHOLD (GM 2026-08-28, feature
-    # 134 T49; research/homesteads.html "How big was the work yard, and how did the sizes spread").
+    # 134 T49; research/homesteads.html "Threshing and drying yards at farmhouses (niwa)").
     #
     # The record, in one line: Kitamoto's households stated their yard in straw mats - 40-60 mats
     # usually, over 100 for a few, two mats to the tsubo - so 20-30 tsubo (66-99 sq m) ordinarily and

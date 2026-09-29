@@ -2820,12 +2820,6 @@
    "muen"
   ]
  },
- "mugi": {
-  "def": "Barley and the other dry-field grains, whose whole crop is spread on the yard to dry, so a barley district's yards run larger than a rice hamlet's.",
-  "variants": [
-   "mugi"
-  ]
- },
  "murataka": {
   "def": "A village's assessed yield in koku, the number its tax was set from.",
   "variants": [
@@ -3619,12 +3613,6 @@
    "shukuba",
    "yi network",
    "yizhan"
-  ]
- },
- "sigma": {
-  "def": "The width of a lognormal spread: the larger it is, the further the biggest and smallest cases run from the median.",
-  "variants": [
-   "sigma"
   ]
  },
  "siheyuan": {
@@ -13100,6 +13088,12 @@
   "def": "The year Japan began to modernize: the Meiji Restoration ended the Edo period, and in the decades after it railways, new crops and fertilizers, land reform and new ways of building changed the countryside so much that a survey or photograph from after 1868 is often poor evidence for the landscape before it. That is why the research keeps asking what stood before 1868 - the maps show the countryside as it was before then.",
   "variants": [
    "1868"
+  ]
+ },
+ "niwa": {
+  "def": "A Japanese farmhouse's work yard - the open ground beside the house where the harvest was threshed and the grain dried on straw mats, commonly measured by the number of mats it held.",
+  "variants": [
+   "niwa"
   ]
  }
 }
