@@ -10876,5 +10876,13 @@
   "variants": [
    "Suitengu"
   ]
+ },
+ "throw-across weir": {
+  "def": "A weir made of logs laid across a river, with thinner logs, branches and gravel set against them; in a flood the crossing logs are taken out so that the river runs on past the intake instead of breaking its gates and banks. The one at Hamura turns the Tama river into the Tamagawa aqueduct.",
+  "variants": [
+   "throw-across weir",
+   "nagewatashi weir",
+   "nagewatashi-zeki"
+  ]
  }
 }

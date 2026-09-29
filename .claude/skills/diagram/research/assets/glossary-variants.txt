@@ -1673,6 +1673,8 @@ nagaya-mon	nagayamon
 nagayamon	nagayamon
 nageshi	nageshi
 nagewatashi	nagewatashi
+nagewatashi weir	throw-across weir
+nagewatashi-zeki	throw-across weir
 naginata	naginata
 nago	nago
 naka-bori	middle moat
@@ -2510,6 +2512,7 @@ threshing yards	threshing yard
 threshing-yard	threshing yard
 through-passage	through-passage plan
 through-passage plan	through-passage plan
+throw-across weir	throw-across weir
 throwing	throwing
 tian'geng	bund
 tiangeng	bund
