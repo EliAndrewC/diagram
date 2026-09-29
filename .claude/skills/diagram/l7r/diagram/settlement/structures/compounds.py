@@ -153,17 +153,17 @@ class CompoundsMixin:
                 if len(_words) >= 2:
                     _top, _bot = " ".join(_words[:-1]), _words[-1]
                     _fs = max(7.0, min(11.0, (w * 0.8) / (max(len(_top), len(_bot), 1) * 0.55)))
-                    self.label(x, y - h * 0.12, _top, _fs, weight="bold", rot=_t)
-                    self.label(x, y + h * 0.16, _bot, _fs, weight="bold", rot=_t)
+                    self.label(x, y - h * 0.12, _top, _fs, weight="bold", ref=(x - hw, y - hh, x + hw, y + hh), rot=_t)
+                    self.label(x, y + h * 0.16, _bot, _fs, weight="bold", ref=(x - hw, y - hh, x + hw, y + hh), rot=_t)
                 else:
                     _fs = max(6.5, min(14.0, (w * 0.82) / (max(len(str(label)), 1) * 0.55)))
-                    self.label(x, y, label, _fs, weight="bold", rot=_t)
+                    self.label(x, y, label, _fs, weight="bold", ref=(x - hw, y - hh, x + hw, y + hh), rot=_t)
             else:
                 _seat = label_xy or (tilt_caption_seat(x, y, rot, _t, w / 2, h / 2, 12, above=True) if _t else (x, min(ys) - 12))
-                self.label(*_seat, label, 14, weight="bold", rot=_t)
+                self.label(*_seat, label, 14, weight="bold", ref=(x - hw, y - hh, x + hw, y + hh), rot=_t)
         if sublabel:
             _s2 = tilt_caption_seat(x, y, rot, _t, w / 2, h / 2, 18) if _t else (x, max(ys) + 18)
-            self.label(*_s2, sublabel, 9, italic=True, rot=_t)
+            self.label(*_s2, sublabel, 9, italic=True, ref=(x - hw, y - hh, x + hw, y + hh), rot=_t)
 
     def _estate_wall_clear(self: Settlement, x: float, y: float, w: float, h: float, marg: float = 2.5) -> bool:  # type: ignore[misc]
         """Whether a walled compound's PERIMETER at (x,y,w,h) stays off recorded water (canals,

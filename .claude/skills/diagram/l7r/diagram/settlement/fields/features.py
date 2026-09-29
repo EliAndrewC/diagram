@@ -505,4 +505,4 @@ class FieldFeaturesMixin:
         # LABELED (GM 2026-07-21): the pond is a culturally specific feature that does not read by
         # itself (the GM asked "what is that?" of an unlabeled one - the don't-label-the-obvious rule cuts the
         # OTHER way here). Placed off the arc side, away from the village (crescent_pond_labeled gates it).
-        self.label(cx - fx * (r + 16), cy - fy * (r + 16) + 4, "geomantic pond", 11, italic=True, color="#4C6478")
+        self.label(cx - fx * (r + 16), cy - fy * (r + 16) + 4, "geomantic pond", 11, italic=True, color="#4C6478", ref=(cx - r, cy - r, cx + r, cy + r))

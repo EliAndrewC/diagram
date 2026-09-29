@@ -779,6 +779,8 @@ def test_the_generated_sheets_fixtures_stand_by_their_rules() -> None:
     assert (cm.TUB_MAX_GAP_FT, cm.NOTICE_BOARD_MAX_FT) == (TUB_MAX_GAP_FT, NOTICE_BOARD_MAX_FT)
     host = (0.0, 0.0, 30.0, 20.0)
     assert cp.tub_by_its_eaves((15.0, 22.5), host) and not cp.tub_by_its_eaves((15.0, 26.0), host)
+    # the CENTER is measured, as the audit measures it: a tub 4 ft off its eaves (its circle's edge 2.7 ft off) is adrift
+    assert not cp.tub_by_its_eaves((15.0, 24.0), host)
     env = _env()
     gl, _gr = c._gate_interval(env)
     assert cp.board_by_the_gate(env, (gl - 14.0, env.h_ft + 3.0, gl - 8.0, env.h_ft + 4.5))

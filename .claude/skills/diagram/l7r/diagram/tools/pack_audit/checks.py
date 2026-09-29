@@ -5,16 +5,21 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass
 
+from ...compound_model import NOTICE_BOARD_MAX_FT as NOTICE_BOARD_MAX_FT
+from ...compound_model import TUB_MAX_GAP_FT as TUB_MAX_GAP_FT
+from ...compound_parts import board_by_a_gate, tub_by_its_eaves
 from .grids import FTPX
 from .parse import WALL_KIND, WALL_STROKE, ParsedPlan, Rect
 
-TUB_MAX_GAP_FT: float = 3.5  # a wall-hugging tub sits ~1.7-2 ft from a wall (its own radius + eaves);
-# beyond this it is adrift in the court with no roof draining into it.
+# TUB_MAX_GAP_FT (3.5): a wall-hugging tub sits ~1.7-2 ft from a wall (its own radius + eaves); beyond this it is adrift
+# in the court with no roof draining into it. NOTICE_BOARD_MAX_FT (20): a notice board must sit within this of a gate
+# opening to be read. Both numbers AND both rules are the engine's (feature 287, homes H29b): the compound draft seats its
+# tubs and its board by `tub_by_its_eaves` / `board_by_a_gate`, and `fire_water_adrift` / `notice_board_adrift` below
+# call the same two predicates, so a generated sheet cannot seat what this audit would flag.
 TUB_WELL_MIN_PX: float = 1.0  # a fire-water tub overlapping a well glyph by more than this sits ON it
 TUB_BLDG_MIN_PX: float = 0.5  # ...and reaching this far past a building's edge, it is drawn INTO the
 OCCLUSION_MIN_PX: float = 3.0  # a later feature must cover at least this much of a foreground item to count
 # (privy, door, board, hearth, stilt, mat) - foreground that belongs ABOVE the fills.
-NOTICE_BOARD_MAX_FT: float = 20.0  # a notice board must sit within this of a gate opening to be read
 PASSAGE_DEPTH_PX: float = 9.0  # the gateway zone reaches 3 ft in front of and behind the wall ink -
 # a stone set just inside or just outside the masonry is still in the track a cart drives through
 PASSAGE_CLEAR_MIN_PX: float = 0.5  # sub-pixel contact is a flush jamb (a gate post abutting the
@@ -53,8 +58,14 @@ def _point_rect_dist(px: float, py: float, r: Rect) -> float:
     return math.hypot(dx, dy)
 
 
-def fire_water_adrift(plan: ParsedPlan, max_gap_ft: float = TUB_MAX_GAP_FT) -> list[TubAdrift]:
-    """Fire-water tubs sitting farther than max_gap_ft from any building.
+def _ft_box(r: Rect) -> tuple[float, float, float, float]:
+    """A sheet rect as the engine's feet box (x0, y0, x1, y1) - what the H29b predicates measure."""
+    return (r.x / FTPX, r.y / FTPX, r.x2 / FTPX, r.y2 / FTPX)
+
+
+def fire_water_adrift(plan: ParsedPlan) -> list[TubAdrift]:
+    """Fire-water tubs sitting farther than TUB_MAX_GAP_FT from any building - a tub no building's eaves hold by the
+    engine's `tub_by_its_eaves`, the one predicate the compound draft seats its tubs by.
 
     A tensuioke is fed by roof runoff (gutter -> downspout -> tub at the wall base), so every
     tub must sit against a building. Unlike a court's open space (a judgment call), this is a
@@ -63,10 +74,10 @@ def fire_water_adrift(plan: ParsedPlan, max_gap_ft: float = TUB_MAX_GAP_FT) -> l
     out: list[TubAdrift] = []
     for t in plan.tubs:
         cx, cy = t.x + t.w / 2, t.y + t.h / 2
+        if any(tub_by_its_eaves((cx / FTPX, cy / FTPX), _ft_box(b)) for b in plan.buildings):
+            continue
         gaps = [_point_rect_dist(cx, cy, b) for b in plan.buildings]
-        gap_ft = (min(gaps) if gaps else float("inf")) / FTPX
-        if gap_ft > max_gap_ft:
-            out.append(TubAdrift(cx, cy, gap_ft))
+        out.append(TubAdrift(cx, cy, (min(gaps) if gaps else float("inf")) / FTPX))
     out.sort(key=lambda t: t.gap_ft, reverse=True)
     return out
 
@@ -317,7 +328,7 @@ def main_gate_passage_ft(plan: ParsedPlan) -> float | None:
     return across / FTPX
 
 
-def notice_board_adrift(plan: ParsedPlan, max_ft: float = NOTICE_BOARD_MAX_FT) -> list[MisplacedBoard]:
+def notice_board_adrift(plan: ParsedPlan) -> list[MisplacedBoard]:
     """A notice board (kosatsu) is read where people pass, so it must sit at a gate. Flag any notice
     board farther than max_ft from the nearest wall gate opening.
 
@@ -335,9 +346,9 @@ def notice_board_adrift(plan: ParsedPlan, max_ft: float = NOTICE_BOARD_MAX_FT) -
     for r in plan.fills:
         if plan.label_kinds.get(r.pos) != "notice board":
             continue
-        d = min(_point_rect_dist(ox, oy, r) for ox, oy in ops) / FTPX  # nearest edge of the board
-        if d > max_ft:
-            out.append(MisplacedBoard(r.x + r.w / 2, r.y + r.h / 2, d))
+        if board_by_a_gate(_ft_box(r), [(ox / FTPX, oy / FTPX) for ox, oy in ops]):  # the engine's one predicate (H29b)
+            continue
+        out.append(MisplacedBoard(r.x + r.w / 2, r.y + r.h / 2, min(_point_rect_dist(ox, oy, r) for ox, oy in ops) / FTPX))
     return out
 
 

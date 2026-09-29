@@ -299,7 +299,9 @@ class DikeMixin:
             houses = self.M.get("houses", [])
             hx = sum(h["x"] for h in houses) / len(houses) if houses else cx
             best = max(outer_s, key=lambda p: (p[1] < cy) * 1000 - abs(p[0] - cx) - (200 if (p[0] - cx) * (hx - cx) > 0 else 0))
-            self.label(best[0], best[1] - 8, label, 10, italic=True, color="#6B5836")
+            self.label(
+                best[0], best[1] - 8, label, 10, italic=True, color="#6B5836", ref=(min(p[0] for p in outer_s), min(p[1] for p in outer_s), max(p[0] for p in outer_s), max(p[1] for p in outer_s))
+            )
 
     def dike_gates(self: Settlement, span_ft: float = 6.0) -> int:  # type: ignore[misc]
         """A sluice gate at every cut of every perimeter dike (feature 150, GM 2026-08-28 choosing audit A7).

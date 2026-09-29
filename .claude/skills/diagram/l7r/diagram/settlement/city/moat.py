@@ -186,7 +186,7 @@ class MoatMixin:
             # a sluice reads as a bare black bar at fit zoom (GM 2026-08-09) - most of a real
             # gate IS in the water, so the word does the explaining, not the drawing
             lx_, ly_ = label_xy if label_xy else (x, y - 13)
-            self.label(lx_, ly_, label, 9, italic=True, color="#3A352C")
+            self.label(lx_, ly_, label, 9, italic=True, color="#3A352C", ref=(x - 5.4 * _sk, y - 4.2, x + 5.4 * _sk, y + 2.0))
         return z
 
     def inwall_drain_outfall(self: Settlement, drain_pts: Any, moat_bias: Pt = (0.0, 0.0), field_name: str = "") -> list[Pt]:  # type: ignore[misc]

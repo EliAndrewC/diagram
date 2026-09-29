@@ -272,5 +272,5 @@ class WaterfrontMixin:
             th = math.radians(rot)
             aabb_h = abs(math.sin(th)) * length + abs(math.cos(th)) * width
             lx, ly = label_xy if label_xy else (x, y + aabb_h / 2 + 12)
-            self.label(lx, ly, label, 9, italic=True, color="#5A4326")
+            self.label(lx, ly, label, 9, italic=True, color="#5A4326", ref=(x - length / 2, y - width / 2, x + length / 2, y + width / 2))
         return z

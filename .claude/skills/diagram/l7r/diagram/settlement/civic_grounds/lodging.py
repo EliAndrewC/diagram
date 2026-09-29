@@ -86,7 +86,7 @@ class LodgingMixin:
         bm = 30  # block a RECT + a building-half margin so dwellings keep clear, like the manor
         self.block_polys.append([(x0 - bm, y0 - bm), (x0 + w + bm, y0 - bm), (x0 + w + bm, y0 + h + bm), (x0 - bm, y0 + h + bm)])
         if label:
-            self.label(x, y0 + h + 19 if label_below else y0 - 10, label, 11, italic=True, color="#5A4A30")
+            self.label(x, y0 + h + 19 if label_below else y0 - 10, label, 11, italic=True, color="#5A4A30", ref=(x0, y0, x0 + w, y0 + h))
 
     def inn(self: Settlement, x: float, y: float, w: Any = None, h: Any = None, rot: float = 0, form: str | None = None) -> None:  # type: ignore[misc]
         """A prominent caravan INN - larger and grander than a flophouse, lodging the merchants, drivers
@@ -216,4 +216,4 @@ class LodgingMixin:
         for sx, sy, sw, sh, r, label in pending:
             self._stable_yard(sx, sy, sw, sh, r=r)
             if label:
-                self.label(sx, sy, label, 11, italic=True, color="#6B5A3C")
+                self.label(sx, sy, label, 11, italic=True, color="#6B5A3C", ref=(sx - r, sy - r, sx + r, sy + r))

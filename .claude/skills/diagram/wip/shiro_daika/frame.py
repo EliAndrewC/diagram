@@ -133,7 +133,7 @@ s.road(
 )
 # the same road is Imperial on BOTH sides of the city (GM 2026-08-09) - the run toward Shiro
 # Kyo carries its own caption, tilted along the branch per the linear rule
-s.label(1170, 66, "Imperial Road", 11, italic=True, color="#6E5B38", rot=195, linear=True)
+s.label(1170, 66, "Imperial Road", 11, italic=True, color="#6E5B38", ref=(1040, 92, 1200, 108), rot=195, linear=True)  # ref: the road's (1200, 92)-(1040, 108) leg it names
 s.road([(2387, 1390), (2385, 1313), (EGATE[0], EGATE[1]), (2820, 1240), (3200, 1150)])  # east, to the Fox lands - the first leg runs INSIDE the gate to join the ring road (gate_roads_join_the_ring)
 # the karamete approach is the STRAIGHT CONTINUATION of the north gate's street (GM 2026-08-09:
 # the first cut hung it off the diagonal mid-slope and the two beds read as overlapping roads):

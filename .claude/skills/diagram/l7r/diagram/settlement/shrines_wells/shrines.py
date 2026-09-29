@@ -234,7 +234,7 @@ class ShrineHallsMixin:
         self.block_polys.append([(x - w / 2 - bm, y - h / 2 - bm), (x + w / 2 + bm, y - h / 2 - bm), (x + w / 2 + bm, y + h / 2 + bm), (x - w / 2 - bm, y + h / 2 + bm)])
         self._clear_ground(x, y, w, h, 58)  # the swept shrine precinct - scrub kept off the tended keidai (the grove, if any, is separate)
         if label:
-            self.label(x, self._hall_caption_y(x, y, w, h, label, label_below, seats_t), label, HALL_CAPTION_FS, weight="bold", color=edge)
+            self.label(x, self._hall_caption_y(x, y, w, h, label, label_below, seats_t), label, HALL_CAPTION_FS, weight="bold", color=edge, ref=(x - w / 2, y - h / 2, x + w / 2, y + h / 2))
             # RESERVE the caption's own ground (GM 2026-07-27). Every gen that draws a hall had been
             # hand-writing a block_poly under its caption - Tango's Benten and Nagahara's Bishamon each
             # carry one, re-seated by hand every time the hall moved - and the moment _hall_caption_y
@@ -254,4 +254,4 @@ class ShrineHallsMixin:
             _lp = max(14 * self.bscale, 8.0)  # half a dwelling past the recorded box, which is already ~13% wider than the drawn glyphs
             self.block_polys.append([(_lb[0] - _lp, _lb[1] - _lp), (_lb[2] + _lp, _lb[1] - _lp), (_lb[2] + _lp, _lb[3] + _lp), (_lb[0] - _lp, _lb[3] + _lp)])
         if sublabel:
-            self.label(x, y + h / 2 + 16, sublabel, 9, italic=True, color=edge)
+            self.label(x, y + h / 2 + 16, sublabel, 9, italic=True, color=edge, ref=(x - w / 2, y - h / 2, x + w / 2, y + h / 2))

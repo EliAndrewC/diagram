@@ -328,4 +328,4 @@ class LanesMixin:
         )
         if label:
             mid = pts[len(pts) // 2]
-            self.label(mid[0] + 38, mid[1], label, 11, italic=True, color="#5A4326")
+            self.label(mid[0] + 38, mid[1], label, 11, italic=True, color="#5A4326", ref=(min(p[0] for p in pts), min(p[1] for p in pts), max(p[0] for p in pts), max(p[1] for p in pts)))

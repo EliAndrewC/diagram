@@ -572,7 +572,7 @@ def _write_page(out_dir: str, rows: list[dict[str, Any]], spec: HamletSpec) -> s
         '<div class="wrap">',
         "<h1>Hamlet placement order</h1>",
         f'<p class="lede">{escape(spec.name)}, rolled one stage at a time. Each plate is the map as it stands '
-        f"after that stage and nothing later - the same build (the driver's first roll), snapshotted {len(STAGES)} times. "
+        f"after that stage and nothing later - the one build the driver makes (nothing is re-rolled), snapshotted {len(STAGES)} times. "
         "Every word on this page is read from the code: a stage's explanation is its docstring, and the steps under it "
         "are the functions the docstring names as its algorithm, each shown in its own words, with its OWN plate wherever "
         "that step put something on the map - so a stage is not one picture of fifteen decisions. A step with no plate "

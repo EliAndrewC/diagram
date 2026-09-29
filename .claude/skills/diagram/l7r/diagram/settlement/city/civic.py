@@ -33,5 +33,5 @@ class CityCivicMixin:
         if label:
             # ~0.36 x the font size below the compound's center puts the glyphs' OPTICAL middle on
             # it (a baseline sits under the x-height, so centering the baseline rides high).
-            self.label(x, y + GOVERNOR_CAPTION_FS * 0.36, label, GOVERNOR_CAPTION_FS, weight="bold")
+            self.label(x, y + GOVERNOR_CAPTION_FS * 0.36, label, GOVERNOR_CAPTION_FS, weight="bold", ref=(x - w / 2, y - h / 2, x + w / 2, y + h / 2))
         return self.M["governor_mansion"]

@@ -32,7 +32,7 @@ def test_place_punishment_spot_probes_for_a_clear_caption_seat():
     # that are clear of every building but would bury another label
     for _ly in range(240, 390, 9):
         for _lx in range(210, 820, 55):
-            s.label(_lx, _ly, "riverside quarter", 9)
+            s.label(_lx, _ly, "riverside quarter", 9, ref=(_lx - 20, _ly - 4, _lx + 20, _ly + 4))
     spot = s.place_punishment_spot()
     assert spot is not None and s.M["punishment_spots"]
     s.place_labels()  # feature 157: the LABEL PHASE draws the queued caption

@@ -107,7 +107,7 @@ class FuneraryGroundsMixin:
             # label_xy slides the caption ALONG the plot it names (it must still hug it) - a parish
             # graveyard often sits shoulder to shoulder with its temple, and the two captions can meet
             _lx, _ly = label_xy if label_xy else (cx, ly)
-            self.label(_lx, _ly, label, 11, italic=True, color="#6B5A3C")
+            self.label(_lx, _ly, label, 11, italic=True, color="#6B5A3C", ref=(cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2))
 
     def _ward_fence_cap(self: Settlement, a: Any, b: Any, tol: float = 16) -> int | None:  # type: ignore[misc]
         """If the axis-aligned wall segment a-b runs ALONG a neighborhood (ward) fence, re-stamp the
@@ -185,7 +185,7 @@ class FuneraryGroundsMixin:
             # caption. At its old 12pt it came out the LOUDEST body text on a city sheet once the
             # temple halls dropped to 9 - above the governor's yamen at 11, whose compound is 525x300
             # ft - which is the size-by-rank ladder the whole change exists to remove.
-            self.label(cx, ly, label, HALL_CAPTION_FS, weight="bold", italic=True, color="#3A352C")
+            self.label(cx, ly, label, HALL_CAPTION_FS, weight="bold", italic=True, color="#3A352C", ref=(x0, y0, x1, y1))
 
     def cremation_ground(self: Settlement, cx: float, cy: float, label: str = "cremation ground", label_above: bool = False, jizo: bool = False) -> None:  # type: ignore[misc]
         """The CREMATORY (kasoba) - where the dead are burned before their bones are interred. Smoke, fire
@@ -235,7 +235,7 @@ class FuneraryGroundsMixin:
         m = 8
         self.block_polys.append([(cx - crx - m, cy - cry - m), (cx + crx + m, cy - cry - m), (cx + crx + m, cy + cry + m), (cx - crx - m, cy + cry + m)])
         if label:
-            self.label(cx, cy - cry - 8 if label_above else cy + cry + 14, label, 11, italic=True, color="#6B5A3C")
+            self.label(cx, cy - cry - 8 if label_above else cy + cry + 14, label, 11, italic=True, color="#6B5A3C", ref=(cx - crx, cy - cry, cx + crx, cy + cry))
 
     def ossuary(self: Settlement, cx: float, cy: float, label: str = "pauper ossuary mound") -> None:  # type: ignore[misc]
         """A PAUPER OSSUARY MOUND - a communal earthen mound where the bones of the poor and the
@@ -260,4 +260,4 @@ class FuneraryGroundsMixin:
         m = 8
         self.block_polys.append([(cx - orx - m, cy - ory - m), (cx + orx + m, cy - ory - m), (cx + orx + m, cy + ory + m), (cx - orx - m, cy + ory + m)])
         if label:
-            self.label(cx, cy + ory + 12, label, 11, italic=True, color="#6B5A3C")
+            self.label(cx, cy + ory + 12, label, 11, italic=True, color="#6B5A3C", ref=(cx - orx, cy - ory, cx + orx, cy + ory))

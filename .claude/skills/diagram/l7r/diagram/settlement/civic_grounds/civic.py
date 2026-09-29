@@ -144,9 +144,28 @@ class CivicWorksMixin:
                 # subjects may carry the whole angle - linear_tilt_full - where the old clamp
                 # would have gone level past 45 deg, and label_tilt's building fold would have
                 # laid perpendicular text ACROSS the kura)
-                self.label(x + gsa * loff, y - gca * loff, label, 11, italic=True, color="#6B5A3C", rot=rot, linear=True, full_tilt=True)
+                self.label(
+                    x + gsa * loff,
+                    y - gca * loff,
+                    label,
+                    11,
+                    italic=True,
+                    color="#6B5A3C",
+                    ref=(min(s["x"] - s["w"] / 2 for s in stores), min(s["y"] - s["h"] / 2 for s in stores), max(s["x"] + s["w"] / 2 for s in stores), max(s["y"] + s["h"] / 2 for s in stores)),
+                    rot=rot,
+                    linear=True,
+                    full_tilt=True,
+                )
             else:
-                self.label(x, y - h / 2 - 10, label, 11, italic=True, color="#6B5A3C")
+                self.label(
+                    x,
+                    y - h / 2 - 10,
+                    label,
+                    11,
+                    italic=True,
+                    color="#6B5A3C",
+                    ref=(min(s["x"] - s["w"] / 2 for s in stores), min(s["y"] - s["h"] / 2 for s in stores), max(s["x"] + s["w"] / 2 for s in stores), max(s["y"] + s["h"] / 2 for s in stores)),
+                )
         return stores
 
     def merchant_storehouses(self: Settlement, count: int = 6, kw: Any = None, kh: Any = None) -> int:  # type: ignore[misc]

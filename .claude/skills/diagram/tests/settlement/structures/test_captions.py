@@ -48,7 +48,7 @@ def test_the_label_phase_defers_every_caption_and_drains_once():
     labeled a second time by `finish()`."""
     s = _town()
     n_before = len(s.M["labels"])
-    s.label(500, 500, "gate market", 9)
+    s.label(500, 500, "gate market", 9, ref=(490, 490, 510, 510))
     assert len(s.M["labels"]) == n_before, "a caption must not be drawn before the label phase"
     assert s._label_queue[-1][0] == "text"
     s.place_labels()
@@ -63,7 +63,7 @@ def test_a_withdrawn_feature_drops_its_queued_caption():
     re-seats a board the frame cannot hold. It drops the MOST RECENT request of that kind, and asking
     for a kind that was never queued is a no-op rather than an error (feature 157)."""
     s = _town()
-    s.label(500, 500, "first", 9)
+    s.label(500, 500, "first", 9, ref=(490, 490, 510, 510))
     s._label_queue.append(("kosatsuba", (1.0, 2.0, 0.0, 12.0, 5.0, "notice board", False, None)))
     s._label_queue.append(("kosatsuba", (3.0, 4.0, 0.0, 12.0, 5.0, "notice board", False, None)))
     s.discard_queued_label("kosatsuba")
@@ -125,10 +125,10 @@ def test_the_index_holds_every_crown_and_every_caption_still_queued():
 
     s = _town()
     s.M["tree_crowns"] = [100.0, 100.0, 12.0, 200.0, 100.0, 9.0]
-    s.label(400, 400, "a fixed seat", 9, rot=30.0)
-    s.label(400, 300, "a line", 9, rot=72.0, linear=True)
-    s.label(400, 200, "a full tilt", 9, rot=72.0, linear=True, full_tilt=True)
-    s.label(400, 100, "placed", 9, lines=["placed"], angle=10.0)
+    s.label(400, 400, "a fixed seat", 9, ref=(380, 405, 420, 425), rot=30.0)
+    s.label(400, 300, "a line", 9, ref=(380, 305, 420, 325), rot=72.0, linear=True)
+    s.label(400, 200, "a full tilt", 9, ref=(380, 205, 420, 225), rot=72.0, linear=True, full_tilt=True)
+    s.label(400, 100, "placed", 9, ref=(380, 105, 420, 125), lines=["placed"], angle=10.0)
     proved = Placement(600.0, 600.0, 0.0, ("notice board",), ((590.0, 595.0), (610.0, 595.0), (610.0, 605.0), (590.0, 605.0)), 0, 0, "upper right", 0.0, None)
     s._label_queue.append(("kosatsuba", (0.0, 0.0, 0.0, 12.0, 5.0, "notice board", proved)))
     s._label_queue.append(("kosatsuba", (0.0, 0.0, 0.0, 12.0, 5.0, "notice board", None)))

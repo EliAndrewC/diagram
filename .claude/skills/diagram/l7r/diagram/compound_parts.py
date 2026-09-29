@@ -6,8 +6,7 @@ down, clear of every one of them and of what was seated before it.
 
 from __future__ import annotations
 
-import math
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 
 from .compound_model import (
     BATH_H_FT,
@@ -336,24 +335,25 @@ def _roomiest(points: list[tuple[float, float]], boxes: list[Box]) -> tuple[floa
     return max(points, key=room)
 
 
-TUB_R_FT = 3.8 / FTPX
-"""A fire-water tub's drawn radius, in feet (the `<circle r="3.8">` the draft draws)."""
-
-
 def tub_by_its_eaves(tub: tuple[float, float], host: Box) -> bool:
-    """THE ONE PREDICATE of `fire_water_adrift` on a generated sheet (feature 287, homes H29b): a tub's drawn circle stands
-    within `TUB_MAX_GAP_FT` of the building whose gutter feeds it. The tub's seat is offered only where it holds."""
-    x, y = tub
-    dx = max(host[0] - x, x - host[2], 0.0)
-    dy = max(host[1] - y, y - host[3], 0.0)
-    return float(math.hypot(dx, dy)) - TUB_R_FT <= TUB_MAX_GAP_FT
+    """THE ONE PREDICATE of `fire_water_adrift` (feature 287, homes H29b), in feet: a fire-water tub's CENTER stands within
+    `TUB_MAX_GAP_FT` of the building whose gutter feeds it. The draft's tub seat asserts it of every seat it offers, and
+    the pack audit (`tools/pack_audit/checks.py:fire_water_adrift`) calls it on every tub of every sheet, generated or hand
+    drawn - one rule, one measure. (Until wave 4a this measured the drawn circle's EDGE, 1.27 ft looser than the audit's
+    center measure, so a seat 3.5-4.8 ft off its eaves passed the placer and failed the audit.)"""
+    return _gap((tub[0], tub[1], tub[0], tub[1]), host) <= TUB_MAX_GAP_FT
+
+
+def board_by_a_gate(board: Box, openings: Sequence[tuple[float, float]]) -> bool:
+    """THE ONE PREDICATE of `notice_board_adrift` (feature 287, homes H29b), in feet: a notice board is read where people
+    pass, so the nearest edge of its box stands within `NOTICE_BOARD_MAX_FT` of the middle of a gate opening. The pack
+    audit calls it with every opening it reads off a sheet's ink; the draft (`board_by_the_gate`) with its main gate."""
+    return any(_gap((ox, oy, ox, oy), board) <= NOTICE_BOARD_MAX_FT for ox, oy in openings)
 
 
 def board_by_the_gate(env: Envelope, board: Box) -> bool:
-    """THE ONE PREDICATE of `notice_board_adrift` on a generated sheet (feature 287, homes H29b): the compound's notice board
-    stands within `NOTICE_BOARD_MAX_FT` of the main gate's opening."""
-    gl, gr = _gate_interval(env)
-    return _gap(board, (gl, env.h_ft - 1.0, gr, env.h_ft + 1.0)) <= NOTICE_BOARD_MAX_FT
+    """`board_by_a_gate` at the draft's main gate, whose opening is centered on the south wall (`_gate_interval`)."""
+    return board_by_a_gate(board, [(env.w_ft / 2, env.h_ft)])
 
 
 def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callable[..., str], caption: Callable[..., str], ox: float, oy: float) -> list[str]:

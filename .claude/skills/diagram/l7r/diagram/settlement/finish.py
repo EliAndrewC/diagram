@@ -172,7 +172,7 @@ class FinishMixin:
     # ---- annotation
 
     def _record_label(  # type: ignore[misc]
-        self: Settlement, x: float, y: float, text: str, size: float, anchor: str, z: int, ref: Sequence[float] | None = None, rot: float = 0.0, box: tuple[float, float, float, float] | None = None
+        self: Settlement, x: float, y: float, text: str, size: float, anchor: str, z: int, ref: Sequence[float], rot: float = 0.0, box: tuple[float, float, float, float] | None = None
     ) -> None:
         w = len(text) * size * 0.55  # rough serif advance; slightly generous so near-misses flag
         x0 = x - w / 2 if anchor == "middle" else (x - w if anchor == "end" else x)
@@ -182,21 +182,20 @@ class FinishMixin:
         # a one-line caption passes none and records exactly what it always did.
         bx0, by0, bx1, by1 = box if box is not None else (x0, y - size * 0.8, x0 + w, y + size * 0.25)
         rec: list[Any] = [round(bx0, 1), round(by0, 1), round(bx1, 1), round(by1, 1), z, text]
-        if ref is not None or rot:
-            # THE REFERENT IS THE SUBJECT'S UNROTATED FOOTPRINT, which for a rotated subject is not
-            # what is drawn (settlement-review, Kuwabata 2026-08-29): the notice board records
-            # `[2388.2, 556.6, 2400.2, 561.6]` - 12 x 5 axis-aligned - while the plank is drawn at
-            # rot 151.9, whose true rotated AABB is 13.2 x 10.1. Both `label_hugs_its_referent` and
-            # `caption_stands_beside_its_referent` therefore measure against a box smaller than the
-            # glyph. The error is CONSERVATIVE in both directions - a smaller referent means a
-            # smaller "beside" bound and a larger measured hug gap - so nothing passes that should
-            # fail, which is why this is a note and not a change: widening it would loosen two live
-            # rules to fix an inaccuracy that only ever tightens them.
-            # element [6]: the box of the ONE feature this caption names, recorded only by the
-            # standoff-ladder path (`place_caption` / the road label). A district caption names an
-            # AREA, not a thing, so it carries no referent and `label_hugs_its_referent` skips it.
-            # (Recorded as null when only a tilt follows - the elements are positional.)
-            rec.append([round(float(v), 1) for v in ref] if ref is not None else None)
+        # THE REFERENT IS THE SUBJECT'S UNROTATED FOOTPRINT, which for a rotated subject is not
+        # what is drawn (settlement-review, Kuwabata 2026-08-29): the notice board records
+        # `[2388.2, 556.6, 2400.2, 561.6]` - 12 x 5 axis-aligned - while the plank is drawn at
+        # rot 151.9, whose true rotated AABB is 13.2 x 10.1. Both `label_hugs_its_referent` and
+        # `caption_stands_beside_its_referent` therefore measure against a box smaller than the
+        # glyph. The error is CONSERVATIVE in both directions - a smaller referent means a
+        # smaller "beside" bound and a larger measured hug gap - so nothing passes that should
+        # fail, which is why this is a note and not a change: widening it would loosen two live
+        # rules to fix an inaccuracy that only ever tightens them.
+        # element [6]: the box of the ONE feature this caption names - on EVERY caption (feature
+        # 287, labels L9: `ref` is a required argument of `label()`, so no caller can draw a
+        # caption without it). A district or quarter caption names an AREA, and records the
+        # area's box, which it stands inside.
+        rec.append([round(float(v), 1) for v in ref])
         if rot:
             # element [7]: the caption's TILT in degrees (see label_tilt) - present ONLY when
             # nonzero, so every level caption's record stays byte-identical to the pre-tilt
@@ -215,7 +214,8 @@ class FinishMixin:
         italic: bool = False,
         weight: str = "normal",
         color: str = "#2D2A24",
-        ref: Sequence[float] | None = None,
+        *,
+        ref: Sequence[float],
         rot: float = 0.0,
         linear: bool = False,
         full_tilt: bool = False,
@@ -224,6 +224,12 @@ class FinishMixin:
         lines: Sequence[str] | None = None,
         angle: float | None = None,
     ) -> None:
+        # EVERY CAPTION NAMES ITS SUBJECT (feature 287, labels L9). `ref` - the (x0, y0, x1, y1) box of the one
+        # feature the caption names, or of the area a district caption stands in - is a REQUIRED keyword, so a
+        # caption with no subject is a TypeError at its call site rather than a record the gate has to find;
+        # an explicit None or a malformed box is refused here the same way.
+        if ref is None or len(ref) != 4:
+            raise TypeError(f"label({text!r}): a caption must name its subject - ref is the (x0, y0, x1, y1) box of what it names, got {ref!r}")
         # NOTHING IS DRAWN UNTIL THE LABEL PHASE (feature 157, GM 2026-08-29). Every caption queues
         # here and is drawn by `place_labels()` after the last map feature is placed, because *"how
         # we place labels will always depend on what else is on the map"*. The queue keeps CALL
@@ -457,7 +463,8 @@ class FinishMixin:
     def _title_band(self: Settlement, vx0: float, vy0: float, vw: float, vh: float, bw: float, bh: float, obs: BoxObstacles) -> Pt:  # type: ignore[misc]
         """THE TITLE BAND, the last rung (feature 137 T06; feature 287, labels L14): every corner hides a plot (seed 13's
         dry hem rings the whole view). The title is not a feature of the place and owes it no ground, so the sheet grows
-        a band sized to the placard - declared in meta so `crop_hugs_content` allows exactly that much - and the placard
+        a band sized to the placard - declared in meta (`title_band`, `title_band_side`), so the manifest says how much of
+        the view is sheet rather than map - and the placard
         sits in it OVER NOTHING. The band shows the canvas past the frame, where a lane or a stream running off the map
         still draws, so the placard's x is SCANNED along the band with the test every other rung uses (`_box_clear`); then
         the band under the map; and where a way crosses the whole of both, the map's ink is clipped at the frame it had

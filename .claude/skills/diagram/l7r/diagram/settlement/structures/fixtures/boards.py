@@ -40,7 +40,7 @@ class BoardsMixin:
         if label:
             _t = label_tilt(rot)
             _lx, _ly = tilt_caption_seat(x, y, rot, _t, h, h, 14) if _t else (x, y + h + 14)
-            self.label(_lx, _ly, label, 9, italic=True, color="#7A5A30", rot=_t)
+            self.label(_lx, _ly, label, 9, italic=True, color="#7A5A30", ref=(x - h, y - h, x + h, y + h), rot=_t)
         return z
 
     def kosatsuba(self: Settlement, x: float, y: float, rot: float = 0.0, label: str = "notice board", placement: Placement | None = None) -> int:  # type: ignore[misc]

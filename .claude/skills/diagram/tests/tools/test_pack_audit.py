@@ -348,6 +348,25 @@ def test_fire_water_adrift_flags_far_and_passes_near() -> None:
     assert adrift[0].x == 220
 
 
+def test_the_tub_and_board_checks_call_the_engines_one_predicate(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 287, homes H29b: the audit's two siting checks are the engine's predicates - `tub_by_its_eaves` and
+    `board_by_a_gate`, which the compound draft seats its tubs and board by - called in feet on the sheet's own rects.
+    A tub 4 ft off its eaves (its circle's edge 2.7 ft off) is adrift by both; and swapping the engine's predicate
+    out changes the audit's verdict, so the audit holds no second copy of the rule."""
+    from l7r.diagram import compound_parts as cp
+    from l7r.diagram.tools.pack_audit import checks
+
+    assert checks.tub_by_its_eaves is cp.tub_by_its_eaves and checks.board_by_a_gate is cp.board_by_a_gate
+    tub = pa.parse_svg(_svg(_rect(0, 0, 300, 300, COURT), _rect(0, 0, 100, 100, "#DDB87A"), _tubgroup('<circle cx="112" cy="50" r="5"/>')))
+    assert [round(t.gap_ft, 1) for t in pa.fire_water_adrift(tub)] == [4.0]
+    assert not cp.tub_by_its_eaves((112 / 3, 50 / 3), (0.0, 0.0, 100 / 3, 100 / 3))
+    board = pa.parse_svg(_svg(_rect(0, 0, 400, 400, COURT), _wallgroup((0, 400, 180, 400), (220, 400, 400, 400)), _board(50, 60)))
+    assert pa.notice_board_adrift(board)
+    monkeypatch.setattr(checks, "tub_by_its_eaves", lambda _t, _h: True)
+    monkeypatch.setattr(checks, "board_by_a_gate", lambda _b, _o: True)
+    assert pa.fire_water_adrift(tub) == [] and pa.notice_board_adrift(board) == []
+
+
 def test_fire_water_adrift_with_no_buildings_flags_every_tub() -> None:
     adrift = pa.fire_water_adrift(pa.parse_svg(_svg(_rect(0, 0, 300, 300, COURT), _tubgroup('<circle cx="50" cy="50" r="5"/>'))))
     assert len(adrift) == 1 and adrift[0].gap_ft == float("inf")

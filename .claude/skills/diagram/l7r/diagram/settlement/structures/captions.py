@@ -396,7 +396,7 @@ class CaptionProbesMixin:
         italic: bool,
         weight: str,
         color: str,
-        ref: Sequence[float] | None,
+        ref: Sequence[float],
         rot: float,
         linear: bool,
         full_tilt: bool,
@@ -408,7 +408,7 @@ class CaptionProbesMixin:
         """Draw one queued `text` caption - `label()`'s own arguments, replayed with the phase open. A hand-seated
         caption changes the map under the placer's index, so the index is rebuilt at the next seated caption."""
         self._label_index: ObstacleIndex | None = None
-        self.label(x, y, text, size, anchor, italic, weight, color, ref, rot, linear, full_tilt, wrap, cls, lines, angle)
+        self.label(x, y, text, size, anchor, italic, weight, color, ref=ref, rot=rot, linear=linear, full_tilt=full_tilt, wrap=wrap, cls=cls, lines=lines, angle=angle)
 
     def discard_queued_label(self: Settlement, kind: str) -> None:  # type: ignore[misc]
         """Drop the most recent queued caption of `kind` - the UNDO for a feature that was placed and

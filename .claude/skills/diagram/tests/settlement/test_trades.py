@@ -114,7 +114,7 @@ def test_border_line_caption_defaults_to_the_lines_midpoint_and_is_registered():
     n = len(s.M["labels"])
     s.border_line([(900, 0), (900, 400), (900, 800)], label="the Fox border")
     assert len(s.M["labels"]) == n + 1
-    assert s.M["labels"][-1][-1] == "the Fox border"
+    assert s.M["labels"][-1][5] == "the Fox border" and s.M["labels"][-1][6] == [900.0, 0.0, 900.0, 800.0], "the caption names the line it marks"
     s2 = _town()
     m = len(s2.M["labels"])
     s2.border_line([(900, 0), (900, 800)], label="pinned", label_xy=(700, 300))
@@ -135,4 +135,4 @@ def test_trade_caption_tilts_and_rotates_its_reserved_band():
     s2 = _town()
     s2.brewery(500, 500, rot=90)
     s2.place_labels()  # feature 157: the LABEL PHASE
-    assert len(s2.M["labels"][-1]) == 6  # square rotation: the level path, byte-identical record
+    assert len(s2.M["labels"][-1]) == 7  # square rotation: the level path - the box, the text and its subject, no tilt
