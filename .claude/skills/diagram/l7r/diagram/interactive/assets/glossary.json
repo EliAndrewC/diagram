@@ -10532,7 +10532,8 @@
  "shumon aratame cho": {
   "def": "The yearly religious-investigation register of an Edo-period village, listing every household and its members with their ages and relations; historians read household sizes from it.",
   "variants": [
-   "shumon aratame cho"
+   "shumon aratame cho",
+   "shumon aratame"
   ]
  },
  "myoshu": {
@@ -12919,6 +12920,48 @@
    "Huzhou-Jiaxing",
    "Huzhou",
    "Jiaxing"
+  ]
+ },
+ "Tenmei": {
+  "def": "An era of Japan's Edo period, in the 1780s. The Tenmei famine of that decade was one of the Edo period's three great famines, with Kyoho and Tenpo.",
+  "variants": [
+   "Tenmei",
+   "Tenmei era",
+   "Tenmei famine"
+  ]
+ },
+ "Mutsu": {
+  "def": "An old province of Japan in the far north-east of Honshu, the main island.",
+  "variants": [
+   "Mutsu",
+   "Mutsu province"
+  ]
+ },
+ "Shinano": {
+  "def": "An old province of Japan in the central mountains of Honshu, today's Nagano.",
+  "variants": [
+   "Shinano",
+   "Shinano province"
+  ]
+ },
+ "Izumi": {
+  "def": "An old province of Japan on Osaka Bay, south of today's Osaka.",
+  "variants": [
+   "Izumi",
+   "Izumi province"
+  ]
+ },
+ "Hizen": {
+  "def": "An old province of Japan in north-western Kyushu, today's Saga and Nagasaki.",
+  "variants": [
+   "Hizen",
+   "Hizen province"
+  ]
+ },
+ "Honjo": {
+  "def": "A district of Edo east of the Sumida River, today part of Tokyo's Sumida ward.",
+  "variants": [
+   "Honjo"
   ]
  }
 }
