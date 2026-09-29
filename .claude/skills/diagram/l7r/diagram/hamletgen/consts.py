@@ -331,17 +331,18 @@ POLDER_ARCHETYPES = ("polder_grid", "mulberry_dike_fishpond")
 # - a DIKE-POND's ponds were 0.4-0.6 ha oblongs (Ruddle & Zhong / FAO; CAVEAT in the note: the
 #   sizes are Republican-to-1980s surveys of the traditional landscape, not Ming/Qing documents),
 #   so a ~160 ft module with a merge-heavy mix ((0.10, 0.0, 0.60): mostly 160x320 ft ~0.48 ha 1:2
-#   ponds, a square ~2.4-mu minority) and ~40 ft mulberry dikes ((20, 20)). THE WATER SHARE (feature 280 M58,
+#   ponds, a square ~2.4-mu minority), the grid's ~22 ft gaps ((11, 11)), and each pond's water inset 23 ft inside its
+#   parcel (`settlement/fields/landuse.py` `DIKEPOND_WATER_INSET`). THE WATER SHARE (feature 280 M58,
 #   research/archetypes/610): every page that writes the water-to-dike split as a number (6:4, 7:3, 4:6) is modern, and
 #   the oldest figures are Qu Dajun's for Jiujiang in 1678 - read together (a GUESS, this record's arithmetic) water to
-#   dike about 5:3 - so a parcel is calibrated to about 6 parts water in 10 (a 160 x 320 parcel ~66%, a square ~56%);
-#   the 22 ft dikes it replaced left 76-80% water per parcel, wetter than any figure read in any period. The dike's
+#   dike about 5:3 - so a parcel is calibrated to about 6 parts water in 10 (0.62 measured on Kuwabata, 2026-09-29);
+#   the 11 ft inset it replaced left 80% water per parcel, wetter than any figure read in any period. The dike's
 #   width itself has no premodern figure (the 6-10 m once cited is a modern manual's): it follows from the share.
 # `fit_polder` scales the GRID to the acreage and never the cell, so these calibrations hold
 # whatever the household count asks for.
 POLDER_FABRIC: dict[str, dict[str, Any]] = {
     "polder_grid": {"cell": 190.0, "parcel_mix": (0.52, 0.16, 0.12), "gap": (1.5, 4.0)},
-    "mulberry_dike_fishpond": {"cell": 160.0, "parcel_mix": (0.10, 0.0, 0.60), "gap": (20.0, 20.0)},
+    "mulberry_dike_fishpond": {"cell": 160.0, "parcel_mix": (0.10, 0.0, 0.60), "gap": (11.0, 11.0)},
 }
 
 # THE POND LAYOUT - ONE ATTESTED FORM AT POND SCALE (feature 280 M56, research/archetypes/130): the grid is attested for

@@ -25,6 +25,11 @@ if TYPE_CHECKING:
 # THE DIKE CROP TYPES and the highlight class each draws (feature 150 A6; 269 B34 re-read the options - the
 # premodern plantings only, research/archetypes/230): one hamlet is one type.
 DIKE_CROP_CLASS = {"mulberry": "mulberry dike", "fruit": "fruit dike", "tea": "tea dike"}
+# THE POND'S WATER INSET INSIDE ITS PARCEL (feature 280 M58, research/archetypes/610): 23 ft of planted dike round the
+# water leaves about six parts in ten of a parcel water, the reading of Qu Dajun's figures for Jiujiang (1678) - the
+# oldest there are; every ratio written as a number is modern. It was 11 ft, which left 80%, wetter than any figure read.
+DIKEPOND_WATER_INSET = 23.0
+
 # A FRY VILLAGE'S NURSERY SHARE (feature 280 M60, research/archetypes/200): Qu Dajun (1678) has seven parts in ten of the pond
 # water at Jiujiang raising fry. Read as a share of the block's pond AREA - the record's reading, the smallest ponds first.
 FRY_VILLAGE_SHARE = 0.7
@@ -379,7 +384,7 @@ class LandUseMixin:
                 _s2 = max(0.7, 1.0 - (pen + 1.0) / max(1.0, _dm))
                 qpoly = [(cx + (qx - cx) * _s2, cy + (qy - cy) * _s2) for qx, qy in qpoly]
             bd, bpoly = self._rounded_pond(qpoly, inset=0.0, reach=8.0, rng=rng)
-            wd, wpoly = self._rounded_pond(qpoly, inset=11.0, reach=16.0, rng=rng)
+            wd, wpoly = self._rounded_pond(qpoly, inset=DIKEPOND_WATER_INSET, reach=16.0, rng=rng)
             # THE BANK IS A RING, NOT A DISK UNDER THE POND (feature 228, GM 2026-09-12, on Kuwabata's page: hovering
             # the mulberry dike "lights up not only the Mulberry Dyke itself, but the fish ponds Inside each Mulberry
             # dike ... basically the same behavior that we give to the perimeter dyke"). One path, the bank outline
@@ -415,7 +420,7 @@ class LandUseMixin:
         bushes with ~4-6 ft crowns in dense rows (~1 bush per 10-20 sq ft - hundreds per pond), so at
         1 px = 1 ft honest "actual trees" ARE a packed dot band; the crowns here are r 2.2-3.6 px at ~6 px
         in-row spacing (the loose end of the attested 3-5 ft, for pixel separation), never inflated glyphs.
-        Rows are homothetic loops between the water inset (11 px) and the bank edge (the true parcel line);
+        Rows are homothetic loops between the water inset (`DIKEPOND_WATER_INSET`) and the bank edge (the true parcel line);
         everything clips to the bank path, so a crown may overhang the water edge (organic) but never
         spills onto the polder floor. BUSHES KEEP CLEAR OF THE CANALS (GM 2026-07-23, refined 2026-07-24):
         the bush TRUNK stays off the canal - any crown whose CENTER lies within 3.5 px of a channel
@@ -427,9 +432,9 @@ class LandUseMixin:
         n = len(poly)
         mids = [((poly[i][0] + poly[(i + 1) % n][0]) / 2, (poly[i][1] + poly[(i + 1) % n][1]) / 2) for i in range(n)]
         apo = sum(math.hypot(mx - cx, my - cy) for mx, my in mids) / n
-        if apo <= 12.0:
+        if apo <= DIKEPOND_WATER_INSET + 1.0:
             return  # a parcel too small to hold the water inset has no bank to plant
-        s_w = max(0.4, 1.0 - 11.0 / apo)  # the water-edge homothety (matches _rounded_pond's inset=11)
+        s_w = max(0.4, 1.0 - DIKEPOND_WATER_INSET / apo)  # the water-edge homothety (matches _rounded_pond's inset)
         s_b = 1.0  # the bank edge is the TRUE parcel line (the canal at the toe bounds the bank)
         cid = self._cid("mb")
         g = [f'<clipPath id="{cid}"><path d="{bank_d}"/></clipPath>', f'<g clip-path="url(#{cid})">']

@@ -747,3 +747,39 @@ inks no threshing floor.
 ## 2026-09-28 (feature 269 landing, review rounds 1-4): the findings left open
 
 The landing's settlement-reviews left three defects visible on this map, each recorded with its measurement and sketch in `future-work/farming-communities.md` and accepted in the review dispositions: lane 2 runs east to (2054, 40) and turns 15 ft north to the connector's start, and the connector runs back west beside it for about 126 ft (`fold_the_connector_hairpin` would meet them as a T, but `may_write` refuses the move here); the north row's east house at (2148, 63) is reached only past its neighbor's yard, 96 ft from the nearest lane, inside the 100 ft reach; and 7 of the 15 eaves woodpiles stand 10.5-22.9 ft off any wall. The typed windbreak counts in the entries above describe their own rolls; the census block is the drawn count.
+
+## 2026-09-29 (feature 280): the modern-only forms taken off the map - the layout moved
+
+The GM's ruling of 2026-09-28 - "We should eliminate anything which is only modern" - and feature 280's sweep of the record
+(specs/280-modern-only-sweep/outcomes.md) moved what this map draws on every farmstead:
+
+- **The bath is a room joined to the house**, not a shed (M22, research homesteads/740: a bath of one or two tsubo in two or three
+  houses in ten by 1824-1842, beside the main door or at the far end of the stable wing; a bath standing on its own is found only in
+  the twentieth century). Drawn on 20-30% of homesteads, 6 ft out from the wall and 6-12 ft along it, abutting the wall; the hamlet's
+  seat main_door, a headman's joined to his floored rooms.
+- **The firewood is a wood shed**, 24 x 12 ft, on about four farmsteads in ten, the larger houses first (M21, homesteads/212 and 720:
+  Hasuda 1824 and the Kakimochi count). The open stack under the eaves (a present-day page only) and the kizuma along the windbreak
+  (undated modern pages only) are no longer drawn.
+- **The privy's size** is one of the sixteen of the Kakimochi table (homesteads/750), rolled per homestead; it was a 6 x 6 ft guess.
+- **The storehouse against the farmhouse** on about one farm in eight, the headman's always, at the Edo sheds' proportion, about 1.67
+  to one (M18, M20: Kakimochi's 2 storehouses in 16 households; the ~30% it was drawn at was the 1972 count's).
+- **The work yard's median is 25 tsubo** (M16, homesteads/020: the 18-tsubo crop derivation rested on IRRI's modern 2.5 cm spreading
+  depth; 25 is the Okayama ~50 mats a farm and Kitamoto's band - two undated records of remembered practice, a calibration).
+- **No farmhouse is turned a quarter away** (M26, homesteads/780): the right-turned tenth rests only on the 1974-1984 count; each
+  house still turns a little with its lane, inside the survey's three compass points.
+- **Where the hamlet's dead lie** is recorded as the village's ground (`meta.hamlet_burial`), nothing drawn (M68, religion-and-death/155:
+  a hamlet's own ground rests only on twentieth-century records).
+- **The take-yabu thicket**, where the hamlet rolls one, stands at the settlement's edge behind its back row, on dry ground, not at the
+  field margin (M49, vegetation/640).
+
+Measured on this roll (2026-09-29): 16 houses; bath rooms 5, wood sheds 7, privies 14, storehouses 4, bamboo stands 8; house turns -3 to 18 degrees; every declared fixture seated.
+
+And on the pond block:
+
+- **No sluice through each pond's own dike** (M57, archetypes/150: defined only by the FAO training manual); the polder's own gates stay.
+  The sty's keep-clear of the sluice (feature 233) went with it.
+- **The mosaic only** (M56, archetypes/130: a uniform chessboard of ponds is today's aerial view); this map was the mosaic already.
+- **Each pond's water inset 23 ft inside its parcel**, so about six parts in ten of a parcel are water (M58, archetypes/610: the oldest
+  figures, Qu Dajun's for Jiujiang in 1678; every numeric ratio is modern) - measured 0.62 over 29 ponds, against 0.80 before.
+- **The fry form rolled `fry_village`** (M60, archetypes/200): a fry village of the Jiujiang kind, its smallest ponds nursery water up to
+  seven tenths of the pond area - 22 fry ponds, 0.63 of the water. The one parcel in ten drawn before is on no page read.

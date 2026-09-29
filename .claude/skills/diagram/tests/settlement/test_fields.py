@@ -532,7 +532,7 @@ def test_mulberry_rows_crowns_avoid_channels():
 
 
 def test_mulberry_rows_skips_a_parcel_too_small_to_plant():
-    # fourth pass: a parcel whose apothem cannot hold the 11 px water inset has no bank to plant - the
+    # fourth pass: a parcel whose apothem cannot hold the water inset (`DIKEPOND_WATER_INSET`) has no bank to plant - the
     # helper draws nothing rather than wrapping crown rows around a degenerate loop.
     s = Settlement(400, 400, seed=1)
     before = len(s.out)
@@ -828,11 +828,13 @@ def test_the_patch_seeds_are_A_HANDFUL_not_everyone_at_once() -> None:
     assert len(picked) == 2, "even a two-plot conversion has a seed to grow from"
 
 
-def test_a_TEA_dike_is_drawn_as_clipped_hedgerows_not_as_crowns() -> None:
+def test_a_TEA_dike_is_drawn_as_clipped_hedgerows_not_as_crowns(monkeypatch: pytest.MonkeyPatch) -> None:
     """269 B34: tea is the third premodern dike planting (research/archetypes/230). A clipped tea bush reads
     as a hedge, so its rows are runs of dark stroke, broken between bushes - a different SHAPE from the
     mulberry's scatter of round crowns, which is what lets a reader tell the two at fit zoom.
     """
+    # the toy comb's plots are small; the crop's glyph is the subject, not feature 280's deeper water inset (M58)
+    monkeypatch.setattr(__import__("l7r.diagram.settlement.fields.landuse", fromlist=["x"]), "DIKEPOND_WATER_INSET", 11.0)
     net = _comb(1300, 1700, (520, 220), full_or(2, 5), down_deg=90, field_fall=760, offtakes_a=(0.32, 0.7), offtakes_b=())
     s = Settlement(1400, 1800, seed=3)
     s.meta(name="LUT", scale="village", ftpx=1, down_deg=90)
@@ -844,7 +846,7 @@ def test_a_TEA_dike_is_drawn_as_clipped_hedgerows_not_as_crowns() -> None:
     assert "tea dike" in "".join(str(c) for c in s.out_cls), "the bank and its bushes light as the tea dike"
 
 
-def test_every_attested_DIKE_CROP_draws_a_form_that_tells_it_from_the_others() -> None:
+def test_every_attested_DIKE_CROP_draws_a_form_that_tells_it_from_the_others(monkeypatch: pytest.MonkeyPatch) -> None:
     """`DIKE_CROPS` holds three distinct premodern plantings (269 B34; research/archetypes/230) and each is a
     different SHAPE at fit zoom, which is the whole reason they are separate forms rather than colors:
 
@@ -855,6 +857,8 @@ def test_every_attested_DIKE_CROP_draws_a_form_that_tells_it_from_the_others() -
     So the test is that no two draw the same ink - which is the property a reader depends on, and the one a
     fourth crop added as a color would break. The modern cane, banana and vegetable dikes are refused.
     """
+    # the toy comb's plots are small; the crop's glyph is the subject, not feature 280's deeper water inset (M58)
+    monkeypatch.setattr(__import__("l7r.diagram.settlement.fields.landuse", fromlist=["x"]), "DIKEPOND_WATER_INSET", 11.0)
     net = _comb(1300, 1700, (520, 220), full_or(2, 5), down_deg=90, field_fall=760, offtakes_a=(0.32, 0.7), offtakes_b=())
     ink = {}
     for crop in ("mulberry", "tea", "fruit"):

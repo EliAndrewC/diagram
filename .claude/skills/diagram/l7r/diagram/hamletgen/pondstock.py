@@ -20,13 +20,14 @@ import math
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, knob_rng
+from l7r.diagram.settlement.fields.landuse import DIKEPOND_WATER_INSET
 
 from .consts import Pt
 from .plan import SitePlan
 
 # The per-hamlet share band, as a fraction of households - a GUESS (see the module docstring).
 STY_SHARE = (0.25, 0.50)
-BANK_INSET_FT = 5.5  # half the ~11 ft bank between the parcel edge (the canal) and the water inset
+BANK_INSET_FT = DIKEPOND_WATER_INSET / 2  # half the bank between the parcel edge (the canal) and the water inset (feature 280 M58)
 
 
 def _centroid(poly: list[Any]) -> Pt:

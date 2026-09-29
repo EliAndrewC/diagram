@@ -990,3 +990,29 @@ read as the woodpile beside the same houses; it is now a straw-gold line with da
 ## 2026-09-28 (feature 269 landing, review rounds 2-3): the belt's south-west arm trimmed
 
 The review rounds re-laid the windbreak: its south-west end column fell back about 766 ft downwind of its neighbor, and the band followed it into an arm one row deep lying along the wind; the belt now ends at the column before (`trim_receding_ends`), and every stretch left is a belt's depth across. The homestead woods drawn fell with the arm (`meta.homestead_wood_ft2`, still inside the record's range). The household shrine stands at its house's south-west corner. The counts typed in the landing entry above, and in any dated correction before it, describe the rolls they were written against; the census block above is the count this map draws, and the manifest keys named here are the rest.
+
+## 2026-09-29 (feature 280): the modern-only forms taken off the map - the layout moved
+
+The GM's ruling of 2026-09-28 - "We should eliminate anything which is only modern" - and feature 280's sweep of the record
+(specs/280-modern-only-sweep/outcomes.md) moved what this map draws on every farmstead:
+
+- **The bath is a room joined to the house**, not a shed (M22, research homesteads/740: a bath of one or two tsubo in two or three
+  houses in ten by 1824-1842, beside the main door or at the far end of the stable wing; a bath standing on its own is found only in
+  the twentieth century). Drawn on 20-30% of homesteads, 6 ft out from the wall and 6-12 ft along it, abutting the wall; the hamlet's
+  seat main_door, a headman's joined to his floored rooms.
+- **The firewood is a wood shed**, 24 x 12 ft, on about four farmsteads in ten, the larger houses first (M21, homesteads/212 and 720:
+  Hasuda 1824 and the Kakimochi count). The open stack under the eaves (a present-day page only) and the kizuma along the windbreak
+  (undated modern pages only) are no longer drawn.
+- **The privy's size** is one of the sixteen of the Kakimochi table (homesteads/750), rolled per homestead; it was a 6 x 6 ft guess.
+- **The storehouse against the farmhouse** on about one farm in eight, the headman's always, at the Edo sheds' proportion, about 1.67
+  to one (M18, M20: Kakimochi's 2 storehouses in 16 households; the ~30% it was drawn at was the 1972 count's).
+- **The work yard's median is 25 tsubo** (M16, homesteads/020: the 18-tsubo crop derivation rested on IRRI's modern 2.5 cm spreading
+  depth; 25 is the Okayama ~50 mats a farm and Kitamoto's band - two undated records of remembered practice, a calibration).
+- **No farmhouse is turned a quarter away** (M26, homesteads/780): the right-turned tenth rests only on the 1974-1984 count; each
+  house still turns a little with its lane, inside the survey's three compass points.
+- **Where the hamlet's dead lie** is recorded as the village's ground (`meta.hamlet_burial`), nothing drawn (M68, religion-and-death/155:
+  a hamlet's own ground rests only on twentieth-century records).
+- **The take-yabu thicket**, where the hamlet rolls one, stands at the settlement's edge behind its back row, on dry ground, not at the
+  field margin (M49, vegetation/640).
+
+Measured on this roll (2026-09-29): 19 houses; bath rooms 5, wood sheds 8, privies 17, storehouses 1, bamboo stands 6; house turns -11 to 5 degrees; every declared fixture seated.
