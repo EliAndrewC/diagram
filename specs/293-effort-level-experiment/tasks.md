@@ -35,18 +35,18 @@ the freeze (Phase 3), the freeze before the first run, the runs one at a time.
 - [x] T08 [US2] The R6 D5 check: does the page-session rules' reading of the claims file treat the release line as the end of a claim; if not, the per-run copy by env override, tested
       research: rendering
       verify: DONE. the claims question settled in R-write.md (lines for 293 not written by the run are not claims on its work); research R6 D5
-- [ ] T09 [US2] Record `START`; confirm both future-work entries open at `START` and no burial-ground way on main (R8); read the shared cgroup's working set through host-diag (R5 D7 revised - the gate's primary figure); re-measure the working-set-to-memwatch offset at a memwatch warning for the fallback (the event's figure beside a working-set reading in its minute; the larger of it and the recorded 0.9 GB is used), and record the working set on a quiet host (R5 D7: a quiet reading plus the offset above the threshold goes to the GM before any run); snapshot the sources ledger and cache and record its hash; draw `SEED` and derive the order (task 1's arms from the seed, task 2's the other way round); the first lines of `interventions.md`
+- [x] T09 [US2] Record `START`; confirm both future-work entries open at `START` and no burial-ground way on main (R8); read the shared cgroup's working set through host-diag (R5 D7 revised - the gate's primary figure); re-measure the working-set-to-memwatch offset at a memwatch warning for the fallback (the event's figure beside a working-set reading in its minute; the larger of it and the recorded 0.9 GB is used), and record the working set on a quiet host (R5 D7: a quiet reading plus the offset above the threshold goes to the GM before any run); snapshot the sources ledger and cache and record its hash; draw `SEED` and derive the order (task 1's arms from the seed, task 2's the other way round); the first lines of `interventions.md`
       research: rendering
-      verify: `interventions.md` carries START, the snapshot hash, SEED and the four runs' order
+      verify: DONE. experiment.json: START 1044b0372, SEED 853050, order R xhigh/medium, I medium/xhigh; snapshot ledger sha 8b2c60bb; fallback offset 1.9 GB; shared working set 5.87 GB (gate can open); both entries open, 287 T46 open - interventions.md
 
 ## Phase 3 - the freeze (before the first run)
 
-- [ ] T10 [US3] `rubrics/research.md` and `rubrics/implementation.md` with the criteria FR-008 names, 0-4 anchored scales, weights, pass lines; committed, the commit recorded as the freeze
+- [x] T10 [US3] `rubrics/research.md` and `rubrics/implementation.md` with the criteria FR-008 names, 0-4 anchored scales, weights, pass lines; committed, the commit recorded as the freeze
       research: rendering
-      verify: both files committed before any `runs/*.json` exists (`git log` order)
-- [ ] T11 [US2] `prompts/R-write.md`, `prompts/R-check.md` (one question, the servants' quarters, in the project's brief shape; stop at the record, the Ubame sheet untouched), `prompts/I.md` (the burial-ground footpath, hamlets only, Inashiro the reference, baseline in a detached worktree, bookends, stop at a green `make done` without pushing); each naming no effort; the `adhoc-judge` routing sentence in all three; committed with the rubrics
+      verify: DONE. rubrics committed in 1044b0372 (START), before any runs/*.json; hashes in experiment.json, the launcher refuses a changed file
+- [x] T11 [US2] `prompts/R-write.md`, `prompts/R-check.md` (one question, the servants' quarters, in the project's brief shape; stop at the record, the Ubame sheet untouched), `prompts/I.md` (the burial-ground footpath, hamlets only, Inashiro the reference, baseline in a detached worktree, bookends, stop at a green `make done` without pushing); each naming no effort; the `adhoc-judge` routing sentence in all three; committed with the rubrics
       research: rendering
-      verify: `grep -i -E 'medium|xhigh|effort'` over `prompts/` finds nothing; the hashes recorded
+      verify: DONE. prompts committed in 1044b0372; no word of effort, medium or xhigh in any (plan review CLEAR); hashes in experiment.json
 
 ## Phase 4 - the runs (one at a time, each measured before the next)
 
