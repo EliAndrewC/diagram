@@ -19,7 +19,12 @@ _ID = re.compile(r'\sid="([^"]+)"')
 def _pages() -> list[pathlib.Path]:
     root = pathlib.Path(RESEARCH_DIR)
     # the citations pages (feature 211) are record pages: their notes link out and back, and their works sections link keys
-    return sorted(root.glob("*.html")) + [root / c for c in collection_pages(str(root))] + sorted((root / "citations").glob("*.html")) + [root / "citations" / c for c in collection_pages(str(root / "citations"))]
+    return (
+        sorted(root.glob("*.html"))
+        + [root / c for c in collection_pages(str(root))]
+        + sorted((root / "citations").glob("*.html"))
+        + [root / "citations" / c for c in collection_pages(str(root / "citations"))]
+    )
 
 
 _IDS: dict[tuple[str, int, int], set[str]] = {}

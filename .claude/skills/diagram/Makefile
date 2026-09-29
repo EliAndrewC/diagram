@@ -1093,6 +1093,10 @@ record-prepass: ## [project] the session notes and vocabulary candidates a patte
 # GUARD_EDIT_OK: feature 251 - SECTION= scopes the new record-prepass operation to one section; no guard changes.
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_record_prepass.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" $(if $(SECTION),--section "$(SECTION)",)
 
+translation-owed: ## [project] the translated quotations new or changed since the merge base - each owes a translation-check   [PAGE=homesteads SECTION=010]
+# GUARD_EDIT_OK: feature 292 - a new read-only operation (which translations owe their check); no guard changes.
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_translation_owed.py" --root "$$(git rev-parse --show-toplevel)" $(if $(PAGE),--page "$(PAGE)" --section "$(SECTION)",)
+
 style-prepass: ## [project] the style guide's mechanical half for one question - metric figures with no feet, and every lead line to rule on - run BEFORE record-style   PAGE=homesteads SECTION=010
 ##  PAGE=<name> SECTION=<question>   the question (its file prefix or heading text)
 # GUARD_EDIT_OK: feature 292 - a new read-only operation (the style prepass record-style is handed); no guard changes.

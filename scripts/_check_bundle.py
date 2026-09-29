@@ -189,12 +189,23 @@ def copy(src: pathlib.Path, out: pathlib.Path, name: str | None = None) -> str:
 #: `record-format`, the word list for `quote-check`. `FOR=<agent>` keeps only that agent's parts; the question and
 #: its notes are always in, and `all` (the default) is every part, as before.
 PARTS = {
-    "quote-check": {"quote"},
-    "record-format": {"prepass", "variants"},
+    "quote-check": {"quote", "notes"},
+    "record-format": {"prepass", "variants", "notes"},
     "entry-drift": {"kind"},
     "record-style": {"style", "styleprepass", "variants"},
-    "all": {"quote", "prepass", "variants", "registry", "kind"},
+    "translation-check": {"translations"},
+    "all": {"quote", "prepass", "variants", "registry", "kind", "notes"},
 }
+#: FEATURE 292 (GM 2026-09-29, approving the session's proposal): the question's NOTES are a part of their own. The
+#: quote-check reads them whole and record-format rules on their words; entry-drift compares a modal with the prose and
+#: record-style judges the prose, so neither is handed them - record-style only when it audits a merge (`--extra`, the
+#: old sections, whose notes it must account for). The notes a check is handed carry each original's PLACEHOLDER, never
+#: the original (`record/originals.py`): only `translation-check` reads the originals, and only the pairs owed one.
+#: And the quote-check reads notes in BATCHES of at most `NOTES_BUDGET` bytes - the question-size cap counts prose only
+#: since 292, so this is where a large topic's notes are bounded: at 12,000 bytes a batch plus its excerpt stays within
+#: what the old 20,000-byte cap on prose + notes allowed one check to read (on 2026-09-29 the median notes file was
+#: 4,838 bytes, the 90th percentile 8,599, and one over 12,000 - the merged grove topic's 13,637).
+NOTES_BUDGET = 12_000
 #: The style guide `record-style` judges against (feature 292) - handed in the bundle, so the agent reads the one copy
 #: the writers read rather than a paraphrase of it in its contract.
 STYLE = pathlib.Path(".claude/skills/diagram/research/STYLE.md")
@@ -220,6 +231,8 @@ def entry_bundle(root: pathlib.Path, page: str, section: str, out: pathlib.Path,
         (out / "kind.txt").write_text(f"class {kind}  ({found_kind[0]})\n\n{found_kind[1]}\n", encoding="utf-8")
         rows.append(("kind.txt", found_kind[0], f"for entry-drift: the modal `{kind}` - its docstring, which IS what the map says"))
     for rel in fragments:
+        if rel.endswith(".notes.html") and "notes" not in PARTS[for_] and not (for_ == "record-style" and extra):
+            continue
         what = "the question's footnotes" if rel.endswith(".notes.html") else "the question, as its reader meets it"
         name = copy(root / rel, out)
         if notes:
@@ -256,6 +269,13 @@ def entry_bundle(root: pathlib.Path, page: str, section: str, out: pathlib.Path,
         code, text = run_script("_style_prepass.py", [page, "--root", str(root), "--section", section], root)
         (out / "style-prepass.txt").write_text(text, encoding="utf-8")
         rows.append(("style-prepass.txt", f"make style-prepass PAGE={page} SECTION={section}", "for record-style: the metric figures with no conversion (each a FAIL) and every lead line to rule on"))
+        if code:
+            print(text, file=sys.stderr)
+            return code
+    if "translations" in want:
+        code, text = run_script("_translation_owed.py", ["--root", str(root), "--page", page, "--section", section], root)
+        (out / "translations.txt").write_text(text, encoding="utf-8")
+        rows.append(("translations.txt", f"make translation-owed PAGE={page} SECTION={section}", "for translation-check: each owed translated quotation, its translation and its original"))
         if code:
             print(text, file=sys.stderr)
             return code
@@ -425,7 +445,35 @@ def main(argv: list[str] | None = None) -> int:
     if args.print_notes:
         return print_notes(root, args.page.removesuffix(".html"), args.section, wanted)
     out = pathlib.Path(args.out or DEFAULT_ROOT / f"{slug(args.page)}-{slug(args.section)}{'' if args.for_ == 'all' else '-' + args.for_}")
-    return entry_bundle(root, args.page.removesuffix(".html"), args.section, out, args.extra, not args.no_quotes, args.kind, wanted, args.for_)
+    page = args.page.removesuffix(".html")
+    batches = [] if wanted or args.for_ != "quote-check" else note_batches(root, page, args.section)
+    if len(batches) > 1:
+        print(f"check-bundle: the notes are over {NOTES_BUDGET:,} bytes - {len(batches)} quote-check bundles, one agent each:")
+        codes = [entry_bundle(root, page, args.section, out / f"batch-{i}", args.extra, not args.no_quotes, args.kind, frozenset(b), args.for_)
+                 for i, b in enumerate(batches, start=1)]
+        return max(codes)
+    return entry_bundle(root, page, args.section, out, args.extra, not args.no_quotes, args.kind, wanted, args.for_)
+
+
+def note_batches(root: pathlib.Path, page: str, section: str) -> list[list[str]]:
+    """The question's note keys in runs of at most `NOTES_BUDGET` bytes of notes each, in note order (a single note
+    over the budget is a run of its own). One run when they fit - the ordinary bundle."""
+    sys.path.insert(0, str(HERE))
+    from _hm_record import fragments_for  # noqa: PLC0415
+
+    batches: list[list[str]] = [[]]
+    size = 0
+    for rel in fragments_for(page, section, str(root)):
+        if not rel.endswith(".notes.html"):
+            continue
+        for m in _NOTE_LI.finditer((root / rel).read_text(encoding="utf-8")):
+            n = len(m.group(0).encode("utf-8"))
+            if batches[-1] and size + n > NOTES_BUDGET:
+                batches.append([])
+                size = 0
+            batches[-1].append(m.group(1))
+            size += n
+    return [b for b in batches if b]
 
 
 if __name__ == "__main__":

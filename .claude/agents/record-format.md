@@ -78,6 +78,10 @@ was 55-65% of a check's context and five to twelve times what the check read of 
 250, research R1). A defined agent launches without those files (feature 256); this is how it stays
 without them. Everything you need is in the bundle or on the web.
 
+**A translated quotation's original is not in the notes you read** (feature 292): where it stood is a placeholder,
+`<span class="orig" data-orig="..."></span>`, and the reader meets the original collapsed behind a click. Rule on the
+translation's words; the placeholder is not a SESSION NOTE and the absent original is not a defect.
+
 **If your dispatch names no bundle**, say so on the first line of your report and read the fragment
 paths it names instead - a question's `research/<page>/NNN-<heading id>.html` and the `.notes.html`
 beside it - and never an assembled page (`research/<page>.html`, `research/citations/<page>.html`,

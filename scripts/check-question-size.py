@@ -1,13 +1,19 @@
 #!/usr/bin/env python3
-"""A research question, with its notes, stays under a size cap - checked on the questions a change touches (feature 250 D14).
+"""A research question's PROSE stays under a size cap - checked on the questions a change touches (feature 250 D14; prose only
+since feature 292).
 
 WHY. Feature 258 split the record into one file per question, but nothing bounded how large one question could grow,
 and a check reads a whole question: on feature 250's fourth measured page one question of 23,000 bytes (its prose and
 its notes) doubled what the `quote-check` on it read against the page before (research R5). The GM, 2026-09-26: do it,
 and pick the size from the measurements.
 
-THE CAP: 20,000 bytes, question file plus notes file - the record's 90th percentile when set (288 questions, median
-6,750), about 5,000 tokens, which a check reads in one turn with room to spare. It is applied to what a change
+THE CAP: 20,000 bytes of the question file - set as the record's 90th percentile of question plus notes (288 questions,
+median 6,750), about 5,000 tokens, which a check reads in one turn with room to spare. SINCE FEATURE 292 THE NOTES DO NOT
+COUNT (GM 2026-09-29, approving the session's proposal): every check and every editing session reads a question's prose
+whole, but only the quote-check reads its notes whole, and it is handed them in batches (`_check_bundle.py`,
+`NOTES_BUDGET`) - so the notes are bounded where they are read, and a merged topic (feature 292's reorganization) may
+carry as many notes as its findings need. The originals of translated quotations (`.originals.html`) are not counted
+either: only the translation check reads them. It is applied to what a change
 TOUCHES, not to the whole record: 23 questions were over it when it landed, and each is split when its page is next
 worked, by the session that knows it. A question over it is split along its topics - a finding stays with the decision
 it drove - into questions of their own, each with its heading and `Sources:` line, and the sentences that join them
@@ -28,21 +34,27 @@ import sys
 CAP = 20_000
 RECORD = pathlib.Path(".claude/skills/diagram/research")
 _QUESTION = re.compile(r"^[0-9]{3}-.+\.html$")
+#: A question's companion files, beside it: its notes and the originals of its translated quotations.
+COMPANIONS = (".notes.html", ".originals.html")
 
 
 def is_question(path: pathlib.Path) -> bool:
     parts = path.parts
-    return (_QUESTION.match(path.name) is not None and "sources" not in parts and "citations" not in parts
-            and "assets" not in parts)
+    return (_QUESTION.match(path.name) is not None and not path.name.endswith(COMPANIONS) and "sources" not in parts
+            and "citations" not in parts and "assets" not in parts)
 
 
 def question_of(path: pathlib.Path) -> pathlib.Path:
-    return path.with_name(path.name[: -len(".notes.html")] + ".html") if path.name.endswith(".notes.html") else path
+    """A question's notes or originals file -> the question it belongs to; a question is itself."""
+    for suffix in COMPANIONS:
+        if path.name.endswith(suffix):
+            return path.with_name(path.name[: -len(suffix)] + ".html")
+    return path
 
 
 def size(question: pathlib.Path) -> int:
-    notes = question.with_name(question.name[:-5] + ".notes.html")
-    return question.stat().st_size + (notes.stat().st_size if notes.exists() else 0)
+    """The question's prose, in bytes - its notes and originals are not counted (feature 292)."""
+    return question.stat().st_size
 
 
 def changed(root: pathlib.Path) -> list[pathlib.Path]:
@@ -55,7 +67,7 @@ def changed(root: pathlib.Path) -> list[pathlib.Path]:
 
 def every(root: pathlib.Path) -> list[pathlib.Path]:
     return sorted(q.relative_to(root) for q in (root / RECORD).rglob("[0-9][0-9][0-9]-*.html")
-                  if not q.name.endswith(".notes.html") and is_question(q.relative_to(root)))
+                  if is_question(q.relative_to(root)))
 
 
 def main(argv: list[str]) -> int:
@@ -64,12 +76,12 @@ def main(argv: list[str]) -> int:
         over = sorted(((size(root / q), q) for q in every(root) if size(root / q) > CAP), reverse=True)
         for n, q in over:
             print(f"{n:>7,}  {q}")
-        print(f"{len(over)} question(s) over {CAP:,} bytes (question + notes)")
+        print(f"{len(over)} question(s) over {CAP:,} bytes of prose")
         return 0
     over = [(size(root / q), q) for q in changed(root) if size(root / q) > CAP]
     for n, q in over:
-        print(f"question-size: {q} is {n:,} bytes with its notes, over the {CAP:,} cap - split it along its topics (a finding stays "
-              "with its decision; each part its own question, heading and Sources line; the joins point, they do not restate). "
+        print(f"question-size: {q} is {n:,} bytes of prose, over the {CAP:,} cap - split it along its topics (a finding stays "
+              "with its decision; each part its own question and heading; the joins point, they do not restate). "
               "Why and how: docs/research-record-rules.md, 'A question has a size'.", file=sys.stderr)
     return 1 if over else 0
 

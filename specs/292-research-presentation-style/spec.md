@@ -86,6 +86,13 @@ the pilot; the GM reads the pages in this feature's clone.
   section refuses the build. The grove topic's map bullets and its rule of the map moved there.
 - **FR-018** (GM 2026-09-29): no paragraph, and no bullet's own text, runs over 150 words - a mechanical check in the
   style prepass; the rule of the map becomes a (nested) list.
+- **FR-019** (GM 2026-09-29): the question-size cap counts prose only; the quote-check is handed a large question's notes
+  in bundles of at most 12,000 bytes; `record-style` (except in a merge audit) and `entry-drift` are not handed notes.
+- **FR-020** (GM 2026-09-29): a translated quotation's original is stored apart from its note (`NNN-<id>.originals.html`),
+  moved there by `make record` from a note written inline, put back by the assembly, and shown collapsed behind a click
+  in the hover and on the citations page; no check but `translation-check` reads an original, and that check runs only
+  on the pairs `make translation-owed` names (new or changed since the merge base). The whole record is converted - a
+  conversion proved lossless: every assembled page, the originals' wrapper removed, equals its bytes before.
 - **FR-011**: The GM's sign-off on the guide and the check MUST be an open task, and the sweep's tasks MUST NOT be
   written or started before it is ticked.
 

@@ -32,7 +32,12 @@ def _all_pages() -> list[pathlib.Path]:
     root = pathlib.Path(RESEARCH_DIR)
     # the citations pages (feature 211) are record pages a reader meets: the works write-ups and the notes are under
     # every rule here except the Grounds/Evidence one (they are not findings)
-    return sorted(root.glob("*.html")) + [root / c for c in collection_pages(str(root))] + sorted((root / "citations").glob("*.html")) + [root / "citations" / c for c in collection_pages(str(root / "citations"))]
+    return (
+        sorted(root.glob("*.html"))
+        + [root / c for c in collection_pages(str(root))]
+        + sorted((root / "citations").glob("*.html"))
+        + [root / "citations" / c for c in collection_pages(str(root / "citations"))]
+    )
 
 
 def _finding_files() -> list[pathlib.Path]:

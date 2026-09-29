@@ -16,9 +16,7 @@ def _record(tmp: pathlib.Path, about: str = "homesteads.html#groves") -> pathlib
     (tmp / "homesteads").mkdir()
     (tmp / "homesteads" / "010-groves.html").write_text('<h2 id="groves">Groves</h2>\n<p>history</p>\n', encoding="utf-8")
     (tmp / "rendering" / "homesteads").mkdir(parents=True)
-    (tmp / "rendering" / "homesteads" / "010-drawn.html").write_text(
-        f'<h2 id="drawn">Drawn</h2>\n<!-- about: {about} -->\n<p>maps</p>\n', encoding="utf-8"
-    )
+    (tmp / "rendering" / "homesteads" / "010-drawn.html").write_text(f'<h2 id="drawn">Drawn</h2>\n<!-- about: {about} -->\n<p>maps</p>\n', encoding="utf-8")
     (tmp / "rendering" / "homesteads" / "_front.html").write_text("<!-- about: nowhere.html#x -->", encoding="utf-8")
     return tmp
 

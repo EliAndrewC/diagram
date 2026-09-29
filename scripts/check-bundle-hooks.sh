@@ -28,8 +28,8 @@ CB_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 . "$CB_HERE/_guardlog.sh"
 
 #: the checks whose contract reads a bundle (`.claude/agents/<name>.md`, "Read the BUNDLE")
-# GUARD_EDIT_OK: feature 292 - record-style is a new bundle-reading check; it is added to the list, nothing is loosened.
-CHECKS="quote-check record-format source-applicability source-reader entry-drift record-style"
+# GUARD_EDIT_OK: feature 292 - record-style and translation-check are new bundle-reading checks; added to the list, nothing is loosened.
+CHECKS="quote-check record-format source-applicability source-reader entry-drift record-style translation-check"
 
 pretool() {
   local verdict kind detail reason
@@ -63,7 +63,7 @@ for path in paths:
         # the excerpt around already-quoted passages is for source-applicability (no apostrophe: this is single-quoted)
         cmds.append(f"make check-bundle KEY={k.group(1)}" + (" WHOLE=1" if atype == "source-reader" else ""))
     elif m:
-        cmds.append(f"make check-bundle PAGE={m.group(1)} SECTION={m.group(2)}" + (" FOR=record-style" if atype == "record-style" else ""))
+        cmds.append(f"make check-bundle PAGE={m.group(1)} SECTION={m.group(2)}" + (f" FOR={atype}" if atype in ("record-style", "translation-check") else ""))
 cmds = list(dict.fromkeys(cmds)) or ["make check-bundle PAGE=<page> SECTION=<question>   (or KEY=<registry key>)"]
 print("\x1frefuse\x1f" + atype + "\x1e" + "\x1e".join(cmds))
 ' 2>/dev/null)" || exit 0

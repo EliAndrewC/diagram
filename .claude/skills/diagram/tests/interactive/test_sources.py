@@ -13,7 +13,19 @@ import re
 
 from l7r.diagram.interactive.citations import citations_page
 from l7r.diagram.interactive.citations import research_pages as _record_pages
-from l7r.diagram.interactive.sources import RESEARCH_DIR, RESEARCH_PAGES, _sections, citation_lines, footnote_sources, link_target, not_read, registry_entries, research_questions, research_sources, section_sources
+from l7r.diagram.interactive.sources import (
+    RESEARCH_DIR,
+    RESEARCH_PAGES,
+    _sections,
+    citation_lines,
+    footnote_sources,
+    link_target,
+    not_read,
+    registry_entries,
+    research_questions,
+    research_sources,
+    section_sources,
+)
 
 
 def test_an_entry_may_name_a_research_file_one_directory_down() -> None:
@@ -177,4 +189,3 @@ def test_a_section_with_no_roster_takes_its_sources_from_its_footnotes(tmp_path:
     assert research_sources("research/p.html - 'Rostered'", str(tmp_path)) == ["c-3"]
     assert footnote_sources("<p>no references</p>", str(tmp_path / "p.html")) == []
     assert footnote_sources(ref.format(1), str(tmp_path / "missing" / "p.html")) == [], "an unreadable citations page yields nothing"
-

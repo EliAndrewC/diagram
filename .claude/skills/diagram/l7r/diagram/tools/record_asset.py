@@ -17,7 +17,7 @@ from __future__ import annotations
 import argparse
 import sys
 
-from l7r.diagram.interactive.record.store import RecordError, check, record_pages, write_fragments, write_pages
+from l7r.diagram.interactive.record.store import RecordError, check, record_pages, split_originals, write_fragments, write_pages
 from l7r.diagram.interactive.sources import RESEARCH_DIR
 
 
@@ -47,7 +47,7 @@ def _split(name: str, research_dir: str) -> int:
 
 
 def _check(research_dir: str) -> int:
-    stale = check(research_dir)
+    stale = check(research_dir) + [f"{p} (an original still inline - `make record` moves it)" for p in split_originals(research_dir, write=False)]
     if stale:
         print("record: STALE - run `make record`:\n  " + "\n  ".join(stale), file=sys.stderr)
         return 1
@@ -60,6 +60,9 @@ def _write(page: str, research_dir: str) -> int:
     the files `check` compares. This wrote the research page alone until 2026-09-26, so a new footnote left
     `citations/<page>.html` stale with no command that would rewrite it: `CHECK=1` and the gate named it,
     and `make record` answered "wrote 0 page(s)"."""
+    moved = split_originals(research_dir)
+    if moved:
+        print(f"record: moved the originals of {len(moved)} notes file(s) into their .originals.html (feature 292)")
     pages = [_page_rel(page)] if page else record_pages(research_dir)
     written = sum(write_pages(page_rel, research_dir) for page_rel in pages)
     print(f"record: wrote {written} page(s)")

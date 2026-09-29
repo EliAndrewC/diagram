@@ -171,6 +171,33 @@ def test_each_check_gets_only_its_own_parts(tmp_path: pathlib.Path) -> None:
     assert cb.main(["ways", "--section", "010", "--out", str(rs), "--no-quotes", "--for", "record-style", "--root", str(REPO)]) == 0
     names = {p.relative_to(rs).as_posix() for p in rs.rglob("*") if p.is_file()}
     assert {"STYLE.md", "style-prepass.txt", "glossary-variants.txt"} <= names and "prepass.txt" not in names, "feature 292: record-style reads the guide itself, and its own prepass"
+    assert not any(n.endswith(".notes.html") for n in names), "feature 292: record-style judges prose - no notes unless it audits a merge"
+    rsx = tmp_path / "rsx"
+    old = REPO / ".claude/skills/diagram/research/ways" / next(n for n in names if n.endswith(".html") and n[:3].isdigit())
+    assert cb.main(["ways", "--section", "010", "--out", str(rsx), "--no-quotes", "--for", "record-style", "--extra", str(old), "--root", str(REPO)]) == 0
+    assert any(p.name.endswith(".notes.html") for p in rsx.iterdir()), "a merge audit accounts for the notes, so it is handed them"
+    ed = tmp_path / "ed"
+    assert cb.main(["ways", "--section", "010", "--out", str(ed), "--no-quotes", "--for", "entry-drift", "--root", str(REPO)]) == 0
+    assert not any(p.name.endswith(".notes.html") for p in ed.iterdir()), "entry-drift compares a modal with the prose"
+    tc = tmp_path / "tc"
+    assert cb.main(["homesteads", "--section", "010", "--out", str(tc), "--no-quotes", "--for", "translation-check", "--root", str(REPO)]) == 0
+    assert (tc / "translations.txt").read_text(encoding="utf-8").startswith("translation-owed: "), "the owed pairs, nothing else"
+    assert not any(p.name.endswith(".notes.html") for p in tc.iterdir())
+
+
+def test_a_quote_check_on_notes_over_the_budget_is_split_into_batches(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 292: the size cap counts prose only, so a large topic's notes are bounded where they are read - the
+    quote-check gets them in runs of at most `NOTES_BUDGET` bytes, one bundle (and one agent) each."""
+    monkeypatch.setattr(cb, "NOTES_BUDGET", 1_000)
+    batches = cb.note_batches(REPO, "homesteads", "010")
+    assert len(batches) > 1 and len({k for b in batches for k in b}) == sum(len(b) for b in batches), "every note once"
+    out = tmp_path / "qc"
+    assert cb.main(["homesteads", "--section", "010", "--out", str(out), "--no-quotes", "--for", "quote-check", "--root", str(REPO)]) == 0
+    assert {p.name for p in out.iterdir()} == {f"batch-{i}" for i in range(1, len(batches) + 1)}
+    notes = (out / "batch-1").glob("*.notes.html")
+    assert all('data-orig="' in n.read_text(encoding="utf-8") or "original:" not in n.read_text(encoding="utf-8") for n in notes), "no original in a check's notes"
+    monkeypatch.setattr(cb, "NOTES_BUDGET", 10**9)
+    assert len(cb.note_batches(REPO, "homesteads", "010")) == 1
 
 
 def test_a_mode_a_compound_kind_is_a_modal_the_drift_bundle_can_find() -> None:

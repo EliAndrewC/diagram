@@ -93,7 +93,8 @@ def fragments_for(page: str, section: str, root: str) -> list[str]:
     forms = {section.casefold(), section.casefold().replace(" ", "-")}
     out = []
     for entry in sorted(os.listdir(here)):
-        if not entry.endswith(".html") or entry.startswith("_") or entry.endswith(".notes.html"):
+        # GUARD_EDIT_OK: feature 292 - a question's originals file (.originals.html) is not a question; nothing loosened.
+        if not entry.endswith(".html") or entry.startswith("_") or entry.endswith((".notes.html", ".originals.html")):
             continue
         if section and not any(f in entry.casefold() for f in forms):
             continue

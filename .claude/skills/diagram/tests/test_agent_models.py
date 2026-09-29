@@ -45,7 +45,8 @@ TIERS: dict[str, tuple[str, str]] = {
     "source-reader": ("opus", "high"),  # Sonnet tried and missed: research R5
     "quote-check": ("opus", "medium"),
     "entry-drift": ("opus", "medium"),
-    "record-style": ("opus", "high"),  # feature 292: judgment about prose, no seeded downgrade run yet
+    "record-style": ("opus", "high"),
+    "translation-check": ("opus", "medium"),  # feature 292: judgment of meaning; no seeded downgrade run yet  # feature 292: judgment about prose, no seeded downgrade run yet
     "escalation-check": ("opus", "medium"),
     "spec-fidelity-verify": ("opus", "high"),  # medium tried and missed: research R5
     "spec-fidelity": ("opus", "high"),

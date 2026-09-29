@@ -62,8 +62,10 @@ same findings"; a TIER downgrade is proved by seeded runs on known findings, thr
 
 ## A question has a size (feature 250 D14, GM 2026-09-26)
 
-A question with its notes stays under 20,000 bytes (`scripts/check-question-size.py`; `make quick` fails on one a
-change touched; `make question-sizes` lists all). One over it is split along its topics: a finding stays with the
+A question's PROSE stays under 20,000 bytes (`scripts/check-question-size.py`; `make quick` fails on one a
+change touched; `make question-sizes` lists all). Its notes and originals are not counted since feature 292: the notes
+are bounded where they are read - `make check-bundle ... FOR=quote-check` splits them into bundles of at most 12,000
+bytes, one agent each - and `record-style` and `entry-drift` are not handed them. One over it is split along its topics: a finding stays with the
 decision it drove; each part is its own question with its heading, `Sources:` line and notes; the joins POINT at each
 other, never restate each other's evidence. A split that would strip a finding of what it needs is not made - it is
 raised instead.
@@ -120,7 +122,12 @@ passage it rests on, VERBATIM including the source's own spelling and dashes (th
 quoted spans). A foreign passage is quoted in English translation, marked: `「English」 (translated from the
 Japanese by this project; original: 「原文」)` - the translation follows house style, the original follows the note.
 The note names the language and the translator; a source's own English needs no note; the original is the
-checker's anchor, never a second quote. The same form holds in body prose and in a `SOURCES.html` entry. A section's
+checker's anchor, never a second quote. **The original is stored apart** (feature 292, GM 2026-09-29): write the note
+the natural way, original inline, and `make record` moves each `original: 「...」` run into the question's
+`NNN-<id>.originals.html` beside its notes, leaving a placeholder; the assembly puts it back, and the page shows it
+collapsed behind a click. No check but `translation-check` reads an original (the quote-check meets one only where the
+script could not match it on the page), and `translation-check` runs only on the pairs `make translation-owed` names -
+a translation or an original new or changed since the merge base. The same form holds in body prose and in a `SOURCES.html` entry. A section's
 `<p><strong>Sources:</strong> ...</p>` roster, where it still has one, has every key quoted by a footnote in that section,
 and a key with nothing to quote leaves the roster; a section restyled under `STYLE.md` has none, and its sources are
 the keys its footnotes cite. Nothing is quoted from memory.

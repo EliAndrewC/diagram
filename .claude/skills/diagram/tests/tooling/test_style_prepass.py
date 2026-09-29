@@ -25,10 +25,7 @@ def test_a_metric_figure_in_our_own_prose_owes_its_conversion_and_a_quotation_ne
     """GM 2026-09-29: *"any time we expressed something in meters, then we also convert it to feet ... this rule about
     units only applies to text that we ourselves write"* - so the source's own words, in corner brackets, a `<q>` or a
     comment, are never listed, and a figure already carrying `(~N ft)` or `(~N in)` is not."""
-    html = (
-        "<p>Trees 11 to 28 m tall, about 15 m (~49 ft) on average, trunks 10 cm (~4 in) across, a hall 12 m wide."
-        "<!-- 30 m in a comment --> Its source: 「28 m」 and <q>5 m</q>.</p>"
-    )
+    html = "<p>Trees 11 to 28 m tall, about 15 m (~49 ft) on average, trunks 10 cm (~4 in) across, a hall 12 m wide.<!-- 30 m in a comment --> Its source: 「28 m」 and <q>5 m</q>.</p>"
     found = sp.unconverted(html)
     assert [f.split(" - ")[0] for f in found] == ["11 to 28 m", "12 m"], found
     assert sp.unconverted("<p>a 5 min walk, 8.5 ft of crown</p>") == [], "minutes and feet are not metric figures"

@@ -229,7 +229,7 @@ def _fragments_line(hit: Sequence[str]) -> str:
         if not heading:
             continue
         out += [f for f in fragments_for(page.removesuffix(".html"), heading, os.getcwd())
-                if not f.endswith(".notes.html")]
+                if not f.endswith((".notes.html", ".originals.html"))]
     return ("\n      read: " + ", ".join(dict.fromkeys(out))) if out else ""
 
 

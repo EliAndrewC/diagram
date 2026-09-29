@@ -127,7 +127,7 @@ def questions(root: Path) -> list[Question]:
     base = root / SKILL / "research"
     out = []
     for path in sorted(base.rglob("*.html")):
-        if path.name.endswith(".notes.html") or not _FRAGMENT.match(path.name):
+        if path.name.endswith((".notes.html", ".originals.html")) or not _FRAGMENT.match(path.name):
             continue
         q = read_question(path, root)
         if q is not None:

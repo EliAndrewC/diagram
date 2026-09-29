@@ -57,6 +57,7 @@ def collection_pages(research_dir: str = RESEARCH_DIR) -> list[str]:
         out += sorted(f"{c}/{f}" for f in os.listdir(d) if f.endswith(".html")) if os.path.isdir(d) else []
     return out
 
+
 _KEY = re.compile(r"`([a-z0-9][a-z0-9-]*)`")
 #: A research page the entry names - `research/water.html`, or one level down, `research/cities/fabric.html`.
 #: The one-level form was added in feature 180 (spec FR-012a): the pattern could not match a

@@ -15,7 +15,7 @@ import re
 
 from l7r.diagram.interactive.record import citations_side as cite
 from l7r.diagram.interactive.record import fragments as frag
-from l7r.diagram.interactive.record import xref
+from l7r.diagram.interactive.record import originals, xref
 from l7r.diagram.interactive.record.assemble import assemble
 from l7r.diagram.interactive.record.notes import allocate, merge, notes_of, number_references
 from l7r.diagram.interactive.record.split import Entry, Page, Section, split
@@ -132,11 +132,13 @@ def _ordered_sections(where: str, names: list[str]) -> list[str]:
     known = {frag.FRONT, frag.TAIL, frag.CITATIONS_FRONT, frag.CITATIONS_MID, frag.CITATIONS_TAIL}
     ordered = frag.ordered(names)
     for name in names:
-        if name in known or name in ordered or name.endswith(frag.NOTES_SUFFIX):
+        if name in known or name in ordered or name.endswith((frag.NOTES_SUFFIX, frag.ORIGINALS_SUFFIX)):
             continue
         if os.path.isdir(os.path.join(where, name)) or not name.endswith(".html"):
             continue  # an entries directory, checked with its section
-        raise RecordError(f"{where}/{name}: not a fragment name. A page directory holds {frag.FRONT}, {frag.TAIL}, <prefix>-<heading id>.html and their .notes.html, and nothing else")
+        raise RecordError(
+            f"{where}/{name}: not a fragment name. A page directory holds {frag.FRONT}, {frag.TAIL}, <prefix>-<heading id>.html and their .notes.html and .originals.html, and nothing else"
+        )
     seen: dict[int, str] = {}
     for name in ordered:
         at = frag.position_of(name)
@@ -183,6 +185,30 @@ def _first_difference(want: str, got: str) -> str:
 # ---------------------------------------------------------------- stage 3: the notes
 
 
+def split_originals(record_dir: str = RESEARCH_DIR, *, write: bool = True) -> list[str]:
+    """Move every original still written inline in a question's notes into its `.originals.html` (feature 292,
+    `originals.py`); returns the notes files that had one. With `write=False` it only reports - the check."""
+    moved = []
+    for page_rel in record_pages(record_dir):
+        where = os.path.join(record_dir, frag.page_dir(page_rel))
+        if not os.path.isdir(where):
+            continue
+        for name in frag.ordered(os.listdir(where)):
+            notes_path = os.path.join(where, frag.notes_file(name))
+            if not os.path.isfile(notes_path):
+                continue
+            orig_path = os.path.join(where, frag.originals_file(name))
+            text, stored = _read(notes_path) or "", _read(orig_path) or ""
+            new_text, new_stored = originals.split(text, stored)
+            if new_text == text:
+                continue
+            moved.append(os.path.relpath(notes_path, record_dir))
+            if write:
+                _write_if_changed(notes_path, new_text)
+                _write_if_changed(orig_path, new_stored)
+    return moved
+
+
 def has_notes(page_rel: str, record_dir: str = RESEARCH_DIR) -> bool:
     """Has this page's citations side been moved into fragments yet? A stage that has not landed is
     not a failure, so every reader below asks first."""
@@ -199,7 +225,17 @@ def read_notes(page_rel: str, record_dir: str = RESEARCH_DIR) -> dict[str, str]:
         if not os.path.isfile(notes_path):
             continue
         with open(notes_path, encoding="utf-8") as fh:
-            per_question.append((f"{where}/{frag.notes_file(name)}", notes_of(fh.read(), f"{where}/{name}")))
+            text = fh.read()
+        orig_path = os.path.join(root, frag.originals_file(name))
+        if os.path.isfile(orig_path):  # feature 292: the originals are stored apart and put back, wrapped, here
+            with open(orig_path, encoding="utf-8") as fh:
+                try:
+                    text = originals.restore(text, fh.read())
+                except KeyError as e:
+                    raise RecordError(f"{where}/{frag.notes_file(name)}: {e.args[0]}") from None
+        elif originals.has_placeholder(text):
+            raise RecordError(f"{where}/{frag.notes_file(name)}: a note holds an original's placeholder and {frag.originals_file(name)} is missing")
+        per_question.append((f"{where}/{frag.notes_file(name)}", notes_of(text, f"{where}/{name}")))
     return merge(per_question)
 
 
