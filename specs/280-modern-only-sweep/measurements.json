@@ -1,17 +1,16 @@
 {
  "f280-inashiro-crowns-in-bamboo": {
-  "value": 1,
+  "value": 0,
   "unit": "crowns centered in a bamboo stand",
   "subject": "inashiro",
-  "stands": 9,
+  "stands": 8,
   "crowns": 1050,
   "quantity": "drawn crowns (manifest tree_crowns, the drawn ink) whose center lies inside a drawn bamboo stand's outline",
   "method": "point-in-polygon of every tree_crowns center against every bamboo_stands poly",
   "measured": "2026-09-29",
   "source": "specs/280-modern-only-sweep/measure.py (run from .claude/skills/diagram)",
   "verifies": "F1",
-  "answers": "3f291ffaa17a",
-  "note": "the one crown left is a windbreak conifer drawn over its homestead stand, the belt order feature 269 B30 records; no copse crown"
+  "answers": "3f291ffaa17a"
  },
  "f280-inashiro-persimmons-in-bamboo": {
   "value": 0,
@@ -34,8 +33,7 @@
   "measured": "2026-09-29",
   "source": "specs/280-modern-only-sweep/measure.py (run from .claude/skills/diagram)",
   "verifies": "F4",
-  "answers": "3f291ffaa17a",
-  "note": "no bath is recorded main_door off the front wall"
+  "answers": "3f291ffaa17a"
  },
  "f280-kashikawa-crowns-in-bamboo": {
   "value": 0,
@@ -185,8 +183,7 @@
   "measured": "2026-09-29",
   "source": "specs/280-modern-only-sweep/measure.py (run from .claude/skills/diagram)",
   "verifies": "N1",
-  "answers": "01a5c1895393",
-  "note": "the fill is #9FA898, grayer toward water, beside the grow-out #93B7AC and the polder grass #A6C398"
+  "answers": "01a5c1895393"
  },
  "f280-inashiro-subject-burial": {
   "value": 0,

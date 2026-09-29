@@ -74,6 +74,20 @@ def rec(key, **kw):
     return key, kw
 
 
+# which review finding each record verifies, and the verdict round it answers
+ANSWERS = {
+    "f280-inashiro-crowns-in-bamboo": ("F1", "3f291ffaa17a"),
+    "f280-inashiro-subject-burial": ("F2", "3f291ffaa17a"),
+    "f280-inashiro-bath-front": ("F4", "3f291ffaa17a"),
+    "f280-mizuguchi-crowns-in-bamboo": ("F1", "3f291ffaa17a"),
+    "f280-kashikawa-crowns-in-bamboo": ("F1", "3f291ffaa17a"),
+    "f280-kashikawa-persimmons-in-bamboo": ("F1", "3f291ffaa17a"),
+    "f280-sawada-bath-front": ("F1", "3f291ffaa17a"),
+    "f280-sawada-crowns-in-bamboo": ("F3", "3f291ffaa17a"),
+    "f280-kuwabata-fry-tint": ("N1", "01a5c1895393"),
+}
+
+
 def main(answers):
     out = {}
     for n in ("inashiro", "kashikawa", "mizuguchi", "sawada", "kuwabata"):
@@ -96,10 +110,9 @@ def main(answers):
     notes = open(f"{POOL}/inashiro/inashiro.notes.md").read().split("**Kanji triangle**")[0]
     out.update([rec("f280-inashiro-subject-burial", value=int("own_ground" in notes or "burial ground of its own" in notes), unit="stale own-ground claims",
                     subject="inashiro", quantity="the notes' subject paragraph claiming a burial ground of its own", method="text search above the kanji triangle")])
-    for k, v in out.items():
-        a = answers.get(v["subject"])
-        if a:
-            v["answers"] = a
+    for k, (finding, key) in {**ANSWERS, **answers}.items():
+        if k in out:
+            out[k].update(verifies=finding, answers=key)
     json.dump(out, open("../../../specs/280-modern-only-sweep/measurements.json", "w"), indent=1, ensure_ascii=False)
     for k, v in out.items():
         print(k, v["value"], {x: v[x] for x in ("stands", "drawn_front", "recorded_main_door", "baths", "fry_ponds") if x in v})

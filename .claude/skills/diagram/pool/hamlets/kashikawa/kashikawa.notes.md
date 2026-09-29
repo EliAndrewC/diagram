@@ -1022,8 +1022,8 @@ The GM's ruling of 2026-09-28 - "We should eliminate anything which is only mode
 
 - **The bath is a room joined to the house**, not a shed (M22, research homesteads/740: a bath of one or two tsubo in two or three
   houses in ten by 1824-1842, beside the main door or at the far end of the stable wing; a bath standing on its own is found only in
-  the twentieth century). Drawn on 20-30% of homesteads, 6 ft out from the wall and 6-12 ft along it, abutting the wall; the hamlet's
-  seat stable_end, a headman's joined to his floored rooms.
+  the twentieth century). Drawn on 20-30% of homesteads, 6 ft out from the wall and 6-12 ft along it, abutting the wall; the hamlet's rolled
+  seat stable_end (tried first; the seat each bath took is in the measured line below), a headman's joined to his floored rooms.
 - **The firewood is a wood shed**, 24 x 12 ft, on about four farmsteads in ten, the larger houses first (M21, homesteads/212 and 720:
   Hasuda 1824 and the Kakimochi count). The open stack under the eaves (a present-day page only) and the kizuma along the windbreak
   (undated modern pages only) are no longer drawn.

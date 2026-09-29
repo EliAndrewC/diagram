@@ -6,11 +6,11 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, seg_dist, segments_cross
+from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, segments_cross
 from l7r.diagram.settlement._geom import PointGrid, boxed_grid, boxed_ring_hit, boxed_rings, boxed_segs
 from l7r.diagram.settlement.rolling.bearing import turned_box
 
-from ..consts import Poly
+from ..consts import Poly, Pt
 from ..plan import SitePlan
 
 # HOUSEHOLD BAMBOO (feature 133 T48, GM 2026-08-27; research/vegetation.html "Bamboo: how common, where it
@@ -107,7 +107,7 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
                 d = math.hypot(lx0, ly0) or 1.0
                 lx, ly = lx0 + lx0 / d * k * sh, ly0 + ly0 / d * k * sh
                 cx, cy = hx + lx * ca - ly * sa, hy + lx * sa + ly * ca
-                if _strip_blocked(s, cx, cy, cw, ch, hx, hy, fields, marsh, pond, lanes, footing):
+                if _strip_blocked(s, cx, cy, cw, ch, hx, hy, fields, marsh, pond, lanes, footing) or in_belt(plan.belt, cx, cy, cw, ch):
                     continue
                 ring = [(cx - cw / 2, cy - ch / 2), (cx + cw / 2, cy - ch / 2), (cx + cw / 2, cy + ch / 2), (cx - cw / 2, cy + ch / 2)]
                 out.append(ring)
@@ -117,6 +117,16 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
                 seated = True
                 break
     return out
+
+
+def in_belt(belt: Sequence[Pt] | None, cx: float, cy: float, cw: float, ch: float) -> bool:
+    """Does a household strip centered (cx, cy), cw x ch, reach into the windbreak belt (its center or a corner inside)? The
+    stands are drawn after the belt's crowns, so a strip in the belt painted its culms over the conifers - the reverse of the
+    belt's own order, conifers over the bamboo between them (269 B30; settlement-review of Inashiro, feature 280)."""
+    if not belt or len(belt) < 3:
+        return False
+    pts = [(cx, cy)] + [(cx + sx * cw / 2, cy + sy * ch / 2) for sx in (-1.0, 1.0) for sy in (-1.0, 1.0)]
+    return any(point_in_poly(x, y, list(belt)) for x, y in pts)
 
 
 class Footing:

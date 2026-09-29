@@ -24,6 +24,7 @@ HOUSE_PADDY_GAP_FT = 6.0
 # THE STOREHOUSE ANNEX'S SHARE (feature 280 M20, research/homesteads/720): one farm in eight, the headman always (his by the
 # GM's ruling of 2026-07-21, below). A calibration on the one premodern count read, Kakimochi's 2 storehouses in 16 households.
 KURA_SHARE = 0.125
+STOREHOUSE_GRAY = "#9A968C"
 
 if TYPE_CHECKING:
     from .core import Settlement
@@ -49,7 +50,8 @@ class HousesMixin:
         # (nucleated farms, where the garden takes the sunnier walls). Shared by the draw + the record below.
         # THE NORTH ANNEX'S PROPORTIONS (feature 280 M18, research/homesteads/440): the sheds dated to the end of the Edo period
         # run about 18-27 ft long and 1.5-1.8 times as long as deep (Hannan 3 x 2 ken; Nerima 8.17 x 4.54 m) - 0.46 of an ordinary
-        # 46 ft minka is 21 ft, and 0.45 of its 28 ft depth is 12.6 ft, 1.67 to one; the 1.8-2.4 of the Meiji-Taisho barns is not
+        # 46 ft minka is 21 ft, and 0.45 of its 28 ft depth is 12.6 ft, 1.67 to one (a 40 ft house gives 1.46, just under the band -
+        # future-work); the 1.8-2.4 of the Meiji-Taisho barns is not
         # drawn. It overlaps the back wall by 0.05 h, as before, so the annex reads as joined.
         _sox, _soy, _ssw, _ssh = (0.0, -0.675 * h, 0.46 * w, 0.45 * h) if shed_side == "N" else (-0.64 * w, 0.0, 0.32 * w, 0.56 * h)
         # EMIT WHAT WAS PLACED (feature 121, found by settlement-review on Sawada). This rounded the
@@ -62,7 +64,9 @@ class HousesMixin:
         # this: every check reads the manifest, never the SVG.
         g = [f'<g transform="translate({cx:.1f},{cy:.1f}) rotate({rot:.2f})">']
         if shed and kind == "plain":
-            g.append(f'<rect x="{_sox - _ssw / 2:.1f}" y="{_soy - _ssh / 2:.1f}" width="{_ssw:.1f}" height="{_ssh:.1f}" rx="2" fill="{dark}" stroke="{edge}" stroke-width="1.1"/>')
+            # THE SOLID GRAY STOREHOUSE (research/homesteads, 'distinct from the solid gray storehouse'): drawn in the house's roof
+            # color it read as a rear wing of an L-shaped farmhouse once feature 280 made it a block (settlement-review of Sawada)
+            g.append(f'<rect x="{_sox - _ssw / 2:.1f}" y="{_soy - _ssh / 2:.1f}" width="{_ssw:.1f}" height="{_ssh:.1f}" rx="2" fill="{STOREHOUSE_GRAY}" stroke="{edge}" stroke-width="1.1"/>')
         g.append(f'<rect x="{x0:.1f}" y="{y0:.1f}" width="{w}" height="{h / 2:.1f}" fill="{dark}"/>')
         g.append(f'<rect x="{x0:.1f}" y="0" width="{w}" height="{h / 2:.1f}" fill="{light}"/>')
         dash = ' stroke-dasharray="5,3"' if kind == "abandoned" else ''

@@ -909,3 +909,12 @@ def test_strip_blocked_refuses_another_farmhouse_as_drawn() -> None:
     blocked = hg.homesteads._strip_blocked
     assert blocked(s, 500, 500, 30, 20, 300, 300, [], [], None, []) is True, "a neighbor's house"
     assert blocked(s, 500, 500, 30, 20, 500, 500, [], [], None, []) is False, "its own house is excused"
+
+
+def test_a_household_strip_keeps_out_of_the_windbreak_belt() -> None:
+    """Feature 280 (settlement-review of Inashiro): a strip seated in the belt painted its culms over the conifers."""
+    from l7r.diagram.hamletgen.homesteads.bamboo import in_belt
+
+    belt = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]
+    assert in_belt(belt, 50.0, 50.0, 10.0, 10.0) and in_belt(belt, 104.0, 50.0, 10.0, 10.0), "inside, or a corner reaching in"
+    assert not in_belt(belt, 200.0, 50.0, 10.0, 10.0) and not in_belt(None, 50.0, 50.0, 10.0, 10.0) and not in_belt([(0.0, 0.0)], 1, 1, 1, 1)
