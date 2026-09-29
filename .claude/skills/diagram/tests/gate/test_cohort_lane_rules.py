@@ -23,10 +23,9 @@ corner that neither the chord nor the knee can take.
 
 from __future__ import annotations
 
-import math
-
 import pytest
 
+from l7r.diagram.hamletgen.ways import law
 from tests import rolls
 from tests.gate import _pool
 
@@ -34,37 +33,13 @@ from tests.gate import _pool
 # is in the tier above the gate since feature 216 (tests/soak/test_seed_43_kink.py) and Polder 12 since 219
 # (tests/soak/test_polder_fall_0.py): a roll that carries no coverage line of its own is not the gate's to make.
 COHORT = tuple(rolls.COVERAGE)
-DOUBLE_BACK_DEG = 140.0
-BEND_RUN_FT = 40.0
 
 
 def _kinks(M) -> list[tuple[str, int, int]]:
-    """The `lanes_bend_like_paths` predicate: a turn past 140 deg doubles back, and two real turns inside
-    40 ft is a kink rather than a bend. Stated here rather than imported from the reference module so this
-    test reads on its own; the two are held together by both asserting the reference roll is clean."""
-    bad: list[tuple[str, int, int]] = []
-    for ln in M.get("lanes") or []:
-        if ln.get("connector"):
-            continue
-        p = [(float(a), float(b)) for a, b in (ln.get("pts") or [])]
-        if len(p) < 3:
-            continue
-        turns: list[tuple[int, float]] = []
-        for k in range(1, len(p) - 1):
-            v1 = (p[k][0] - p[k - 1][0], p[k][1] - p[k - 1][1])
-            v2 = (p[k + 1][0] - p[k][0], p[k + 1][1] - p[k][1])
-            n1, n2 = math.hypot(*v1), math.hypot(*v2)
-            if n1 < 1e-6 or n2 < 1e-6:
-                continue
-            deg = math.degrees(math.acos(max(-1.0, min(1.0, (v1[0] * v2[0] + v1[1] * v2[1]) / (n1 * n2)))))
-            if deg >= DOUBLE_BACK_DEG:
-                bad.append(("doubles back", round(p[k][0]), round(p[k][1])))
-            elif deg >= 50.0:
-                turns.append((k, deg))
-        for (ka, _da), (kb, _db) in zip(turns, turns[1:], strict=False):
-            if sum(math.dist(p[j], p[j + 1]) for j in range(ka, kb)) <= BEND_RUN_FT:
-                bad.append(("kinks", round(p[ka][0]), round(p[ka][1])))
-    return bad
+    """The `lanes_bend_like_paths` predicate: a turn past 140 deg doubles back, and two real turns inside 40 ft is a kink
+    rather than a bend. It was stated here, a copy of the reference module's, the two held together only by both asserting
+    the reference roll clean; since feature 287 (M1) both read the lane law's ONE predicate (`law.lanes_that_kink`)."""
+    return law.lanes_that_kink(M)
 
 
 @pytest.mark.rolls_map

@@ -17,6 +17,7 @@ import os
 import pytest
 
 from l7r.diagram.hamletgen.consts import BROOK_MAX_TURN_DEG, BROOK_WANDER_STEP, COPSE_BELT_REACH_FT, COPSE_HOUSE_REACH_FT
+from l7r.diagram.hamletgen.ways import law
 from l7r.diagram.settlement import segments_cross
 from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_ENTRANCE_REACH_FT, KOSATSUBA_HANDOVER_BAND_FT, departure_routes, kosatsuba_anchor, routes_missed
 from l7r.diagram.settlement.structures.fixtures._helpers import KOSATSUBA_ANCHOR_BAND_FT
@@ -36,13 +37,6 @@ def _brooks(m: dict) -> list[list[tuple[float, float]]]:
     return [[(float(p[0]), float(p[1])) for p in s["poly"]] for s in m.get("streams", []) if len(s.get("poly", ())) >= 2]
 
 
-def _crossing(a: tuple[float, float], b: tuple[float, float], c: tuple[float, float], d: tuple[float, float]) -> tuple[float, float]:
-    """Where segment a-b meets segment c-d (they are known to cross)."""
-    den = (b[0] - a[0]) * (d[1] - c[1]) - (b[1] - a[1]) * (d[0] - c[0])
-    t = ((c[0] - a[0]) * (d[1] - c[1]) - (c[1] - a[1]) * (d[0] - c[0])) / den
-    return a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1])
-
-
 def test_the_pool_has_a_brook_to_cross() -> None:
     brooked = [g for g in GENS if _brooks(_manifest(g))]
     assert len(brooked) >= 3, "non-vacuity: most scripted hamlets carry a brook"
@@ -52,16 +46,8 @@ def test_the_pool_has_a_brook_to_cross() -> None:
 def test_every_way_across_the_brook_is_bridged(gen: str) -> None:
     """FR-011 / SC-008: a way that crosses the brook crosses on a drawn deck - a bridge within its own span of the
     crossing point."""
-    m = _manifest(gen)
-    for brook in _brooks(m):
-        for lane in m.get("lanes", []):
-            pts = [(float(p[0]), float(p[1])) for p in lane.get("pts") or []]
-            for a, b in zip(pts, pts[1:], strict=False):
-                for c, d in zip(brook, brook[1:], strict=False):
-                    if not segments_cross(a, b, c, d):
-                        continue
-                    x, y = _crossing(a, b, c, d)
-                    assert any(math.hypot(br["x"] - x, br["y"] - y) <= float(br.get("span", 20.0)) for br in m.get("bridges", [])), f"a way crosses the brook at ({x:.0f}, {y:.0f}) with no bridge"
+    unbridged = law.unbridged_crossings(_manifest(gen))
+    assert not unbridged, f"a way crosses the brook at {unbridged[:4]} with no bridge"
 
 
 @pytest.mark.parametrize("gen", GENS, ids=IDS)
@@ -133,16 +119,12 @@ def test_a_way_reaches_the_field(gen: str) -> None:
     """FR-012 / SC-008: at least one of the hamlet's own ways (not the track out) comes within the 60 ft `lanes_reach_something`
     asks of the field - its paddy or its dry hem, which is the same worked ground. Inashiro, Kashikawa and Mizuguchi, whose
     houses stand across the brook from their rice, each lost that way at one step of this feature."""
-    from l7r.diagram.settlement import seg_dist
-
     m = _manifest(gen)
     if not _brooks(m):
         pytest.skip("no brook stands between this hamlet and its field (FR-012 is about the crossing)")
-    rings = [f["outline"] for f in m.get("fields", []) if f.get("outline")] + [d["poly"] for d in m.get("dry_plots") or [] if d.get("poly")]
-    assert rings, "non-vacuity: the map has a field"
-    pts = [(float(x), float(y)) for ln in m["lanes"] if not ln.get("connector") for x, y in ln["pts"]]
-    near = min(seg_dist(p[0], p[1], r[i], r[(i + 1) % len(r)]) for p in pts for r in rings for i in range(len(r)))
-    assert near <= 60.0, f"the nearest way stops {near:.0f} ft from the field"
+    assert [f for f in m.get("fields", []) if f.get("outline")] or [d for d in m.get("dry_plots") or [] if d.get("poly")], "non-vacuity: the map has a field"
+    near = law.field_reach_ft(m)
+    assert not law.field_unreached(m), f"the nearest way stops {near:.0f} ft from the field"
 
 
 @pytest.mark.parametrize("gen", GENS, ids=IDS)
@@ -184,23 +166,14 @@ def test_the_ways_cross_the_brook_only_at_fords_and_never_over_and_back(gen: str
     """FR-011 (settlement-reviews of Kashikawa and Mizuguchi, feature 261): every crossing of the brook by a way stands at a
     ford, and no way crosses it an even number of times - out at one crossing and home at the next is two planks for
     nothing; and no lane record is an empty husk or a tail doubled along another way."""
-    from l7r.diagram.hamletgen.ways.sweeps import _DOUBLED_DEG, along_tail
-    from l7r.diagram.settlement import seg_intersect
-
     m = _manifest(gen)
-    lanes = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in m["lanes"]]
-    assert all(len(p) >= 2 and sum(math.dist(a, b) for a, b in zip(p, p[1:], strict=False)) >= 1.0 for p in lanes), "a lane record that draws nothing"
-    for i, p in enumerate(lanes):
-        if m["lanes"][i].get("connector"):
-            continue
-        assert not any(j != i and len(o) >= 2 and along_tail(p, o, deg=_DOUBLED_DEG) is not None for j, o in enumerate(lanes)), f"lane {i}'s end runs on beside another way"
-    fords = m["meta"].get("brook_fords") or []
-    for brook in _brooks(m):
-        for p in lanes:
-            hits = [seg_intersect(a, b, c, d) for a, b in zip(p, p[1:], strict=False) for c, d in zip(brook, brook[1:], strict=False) if segments_cross(a, b, c, d)]
-            assert len(hits) < 2, f"a way crosses the brook {len(hits)} times"
-            for x in hits:
-                assert x is not None and min(math.dist(x, f) for f in fords) <= 45.0, f"a crossing at ({x[0]:.0f}, {x[1]:.0f}) stands off every ford"
+    assert not law.husks(m), "a lane record that draws nothing"
+    tails = law.doubled_tails(m)
+    assert not tails, f"lane {tails[0] if tails else ''}'s end runs on beside another way"
+    twice = law.over_and_back(m)
+    assert not twice, f"a way crosses the brook {twice[0][1] if twice else 0} times"
+    off = law.off_ford_crossings(m)  # at FORD_HALF, the router's one ford constant - the old 45 ft slack is gone (287 M1)
+    assert not off, f"a crossing at {off[:4]} stands off every ford"
 
 
 @pytest.mark.parametrize("gen", GENS, ids=IDS)
@@ -264,45 +237,26 @@ def test_every_way_out_crosses_the_brook_at_most_once(gen: str) -> None:
     m = _manifest(gen)
     routes = departure_routes(m)
     assert routes, "non-vacuity: the map has ways out"
-    for brook in _brooks(m):
-        for r in routes:
-            n = sum(1 for a, b in zip(r, r[1:], strict=False) for c, d in zip(brook, brook[1:], strict=False) if segments_cross(a, b, c, d))
-            assert n <= 1, f"the way out from ({r[0][0]:.0f}, {r[0][1]:.0f}) crosses the brook {n} times"
+    twice = law.way_outs_crossing(m, routes)
+    assert not twice, f"the way(s) out from {twice[:4]} (x, y, crossings) cross the brook more than once"
 
 
 @pytest.mark.parametrize("gen", GENS, ids=IDS)
 def test_no_lane_ends_in_a_hook(gen: str) -> None:
     """No lane ends in a hook - a last leg of `_HOOK_FT` or less turning back `_HOOK_DEG` or more (the GM, 2026-09-26; the
     settlement-review of Sawada, feature 261, found one drawn by the doubled-tail cut, after the pass that takes them off)."""
-    from l7r.diagram.hamletgen.ways.joints import _HOOK_DEG, _HOOK_FT
-
     m = _manifest(gen)
     assert m["lanes"], "non-vacuity: the map has lanes"
-    for ln in m["lanes"]:
-        p = [(float(x), float(y)) for x, y in ln["pts"]]
-        for a, b, c in ((p[-3], p[-2], p[-1]), (p[2], p[1], p[0])) if len(p) >= 3 else ():
-            u, v = (b[0] - a[0], b[1] - a[1]), (c[0] - b[0], c[1] - b[1])
-            nu, nv = math.hypot(*u), math.hypot(*v)
-            turn = math.degrees(math.acos(max(-1.0, min(1.0, (u[0] * v[0] + u[1] * v[1]) / (nu * nv))))) if nu and nv else 0.0
-            assert not (nv <= _HOOK_FT and turn >= _HOOK_DEG), f"a lane ends in a {nv:.1f} ft hook turning {turn:.0f} degrees at ({c[0]:.0f}, {c[1]:.0f})"
+    hooks = law.hooked_ends(m)
+    assert not hooks, f"a lane ends in a hook at {hooks[:4]}"
 
 
 @pytest.mark.parametrize("gen", GENS, ids=IDS)
 def test_every_lane_crosses_a_drawn_channel_square(gen: str) -> None:
     """A plank crosses its ditch square rather than obliquely (research ways/030) - the channels as well as the brook
     (settlement-review of Mizuguchi, feature 261: a lane over the head-race lay 44 degrees off square)."""
-    from l7r.diagram.hamletgen.ways.checks import FORD_SQUARE_TOL_DEG
-
-    m = _manifest(gen)
-    for c in m.get("drawn_channels") or []:
-        cp = [(float(q[0]), float(q[1])) for q in c["pts"]]
-        for ln in m["lanes"]:
-            p = [(float(x), float(y)) for x, y in ln["pts"]]
-            for a, b in zip(p, p[1:], strict=False):
-                for u, v in zip(cp, cp[1:], strict=False):
-                    if segments_cross(a, b, u, v):
-                        t = math.degrees(math.atan2(b[1] - a[1], b[0] - a[0]) - math.atan2(v[1] - u[1], v[0] - u[0])) % 180.0
-                        assert abs(90.0 - t) <= FORD_SQUARE_TOL_DEG, f"a lane crosses a channel {abs(90.0 - t):.0f} degrees off square"
+    oblique = law.oblique_crossings(_manifest(gen), "channel")
+    assert not oblique, f"a lane crosses a channel off square (x, y, degrees off): {oblique[:4]}"
 
 
 @pytest.mark.parametrize("gen", GENS, ids=IDS)
@@ -464,17 +418,8 @@ def test_every_lane_crosses_the_brook_square(gen: str) -> None:
     """Every lane crosses the brook square, within `FORD_SQUARE_TOL_DEG` (settlement-review of Kashikawa, round 03cf6a84:
     a lane bent 3 ft inside the water and its plank lay 44 degrees off square; the channel test above did not read the
     streams)."""
-    from l7r.diagram.hamletgen.ways.checks import FORD_SQUARE_TOL_DEG
-
-    m = _manifest(gen)
-    for brook in _brooks(m):
-        for ln in m["lanes"]:
-            p = [(float(x), float(y)) for x, y in ln["pts"]]
-            for a, b in zip(p, p[1:], strict=False):
-                for u, v in zip(brook, brook[1:], strict=False):
-                    if segments_cross(a, b, u, v):
-                        t = math.degrees(math.atan2(b[1] - a[1], b[0] - a[0]) - math.atan2(v[1] - u[1], v[0] - u[0])) % 180.0
-                        assert abs(90.0 - t) <= FORD_SQUARE_TOL_DEG, f"a lane crosses the brook {abs(90.0 - t):.0f} degrees off square"
+    oblique = law.oblique_crossings(_manifest(gen), "brook")
+    assert not oblique, f"a lane crosses the brook off square (x, y, degrees off): {oblique[:4]}"
 
 
 @pytest.mark.parametrize("gen", GENS, ids=IDS)
@@ -482,26 +427,10 @@ def test_no_lane_end_is_served_only_by_the_way_it_left(gen: str) -> None:
     """A lane end reaches something other than the way its own far end stands on (settlement-review of Mizuguchi, round
     176042d3: a lane left the connector, ran 61 ft past its house and stopped in the grass, counted as arriving because it
     was still within reach of the connector it had left). Asked of the engine's own `end_serves`."""
-    from l7r.diagram.hamletgen.ways.geom import _TOUCH_GAP, end_serves, steading_footprints, worked_ground
-
     m = _manifest(gen)
-    houses = [(float(h["x"]), float(h["y"])) for h in m["houses"]]
-    fields = worked_ground(m)  # the bund, not the outline within 60 ft (269 B04)
-    steadings = steading_footprints(m)
-    lanes = [[(float(x), float(y)) for x, y in ln["pts"]] for ln in m["lanes"] if not ln.get("connector") and len(ln.get("pts") or []) >= 2]
-    allsegs = [(a, b) for ln in m["lanes"] for a, b in zip([tuple(map(float, q)) for q in ln["pts"]], [tuple(map(float, q)) for q in ln["pts"]][1:], strict=False)]
-    assert lanes, "non-vacuity: the map has lanes"
-    for p in lanes:
-        own = set(zip(p, p[1:], strict=False))
-        for end, other in ((p[-1], p[0]), (p[0], p[-1])):
-            segs = [sg for sg in allsegs if sg not in own and segments_dist(other, sg) > _TOUCH_GAP]
-            assert end_serves(end, segs, houses, fields, steadings), f"the lane end at ({end[0]:.0f}, {end[1]:.0f}) reaches only the way it left"
-
-
-def segments_dist(q: tuple[float, float], sg: tuple[tuple[float, float], tuple[float, float]]) -> float:
-    from l7r.diagram.settlement import seg_dist
-
-    return seg_dist(q[0], q[1], sg[0], sg[1])
+    assert [ln for ln in m["lanes"] if not ln.get("connector") and len(ln.get("pts") or []) >= 2], "non-vacuity: the map has lanes"
+    dangling = law.dangling_ends(m)
+    assert not dangling, f"the lane end(s) at {dangling[:4]} reach only the way they left"
 
 
 def test_a_house_beyond_the_reach_of_every_lane_has_no_way_out() -> None:

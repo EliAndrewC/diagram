@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 import math
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Mapping, Sequence
+from typing import Any
 
 from l7r.diagram.settlement import Settlement, edge_dist, rot_rect, seg_closest, seg_dist, segments_cross
 from l7r.diagram.sitegen.geom import centroid, unit
@@ -242,8 +243,14 @@ def _hits_a_steading(s: Settlement, pts: Poly, width: int) -> bool:
     # corners. The first cut of this helper used a quad-versus-segment overlap at half the tolerance, and
     # so passed paths the gate still failed: same intent, different window, which is exactly the drift
     # the rule exists to stop.
+    return house_hit(pts, width, s.M.get("houses") or [])
+
+
+def house_hit(pts: Poly, width: float, houses: Sequence[Mapping[str, Any]]) -> bool:
+    """`_hits_a_steading`'s body on plain records (feature 287, M1): the lane law (`law.fouls_fabric`) asks it of a
+    manifest's houses, the web pass of the settlement's - one predicate, read by both."""
     half = width / 2.0 + 2.0
-    for h in s.M.get("houses") or []:
+    for h in houses:
         quad = rot_rect(float(h["x"]), float(h["y"]), float(h["w"]), float(h["h"]), float(h.get("rot", 0.0)))
         probes = [*quad, (float(h["x"]), float(h["y"]))]
         for i in range(len(pts) - 1):

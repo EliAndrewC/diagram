@@ -25,6 +25,7 @@ import math
 
 import pytest
 
+from l7r.diagram.hamletgen.ways import law
 from tests import rolls
 from tests.gate import _pool
 
@@ -85,20 +86,14 @@ def test_every_deck_is_long_enough_to_land_on_dry_ground(rolled) -> None:
     _plan, M = rolled
     bridges = M.get("bridges") or []
     assert bridges, "the roll built no crossing, so this rule would judge nothing"
-    courses = [([(float(p[0]), float(p[1])) for p in d["poly"]], max(float(d.get("w", 3.0)), float(d.get("w_tail", 3.0)))) for d in (M.get("field_ditches") or [])]
-    courses += [([(float(p[0]), float(p[1])) for p in c["poly"]], float(c.get("w", 3.0))) for c in (M.get("channels") or [])]
-    courses += [([(float(p[0]), float(p[1])) for p in s["poly"]], float(s.get("w", 6.0))) for s in (M.get("streams") or [])]
-    assert courses, "the roll drew no watercourse for a deck to span"
-    short = []
-    for b in bridges:
-        bx, by, span = float(b["x"]), float(b["y"]), float(b["span"])
-        near = min(((_poly_dist((bx, by), poly), w) for poly, w in courses), key=lambda t: t[0])
-        if near[0] > 40.0:
-            continue  # this deck is not over one of the recorded courses
-        # the span must clear the water's full width with a landing each side
-        if span < near[1]:
-            short.append((round(bx), round(by), round(span, 1), round(near[1], 1)))
+    assert M.get("field_ditches") or M.get("channels") or M.get("streams"), "the roll drew no watercourse for a deck to span"
+    # the span must clear the water's full width with a landing each side (`law.short_decks`, the rule's one predicate)
+    short = law.short_decks(M)
     assert not short, f"deck(s) shorter than the water they cross (x, y, span, water width): {short[:4]}"
+    # ...and every crossing a way makes is one the placer's own solve seats: grown, then skewed toward square, until every
+    # corner clears the whole crossed course (`law.undeckable_crossings` -> `crossing_deck` -> `_deck_corners_clear`)
+    undeckable = law.undeckable_crossings(M)
+    assert not undeckable, f"crossing(s) where no deck seats: {undeckable[:4]}"
 
 
 def test_every_plank_crosses_a_supply_ditch_and_never_the_collector(rolled) -> None:
@@ -123,16 +118,8 @@ def test_every_plank_crosses_a_supply_ditch_and_never_the_collector(rolled) -> N
     assert M["meta"].get("field_footbridges"), "this roll does not plank its ditches, so the rule does not apply to it"
     planks = [b for b in (M.get("bridges") or []) if b.get("foot")]
     assert planks, "the roll planked nothing, so this rule would judge nothing"
-    supply = [([(float(p[0]), float(p[1])) for p in d["poly"]], d.get("role")) for d in (M.get("field_ditches") or [])]
-    assert any(r in ("main", "branch") for _p, r in supply), "the roll drew no supply ditch"
-    stranded, on_drain = [], []
-    for b in planks:
-        pt = (float(b["x"]), float(b["y"]))
-        near = min(((_poly_dist(pt, poly), role) for poly, role in supply if len(poly) >= 2), key=lambda t: t[0])
-        if near[0] >= 24.0:
-            stranded.append((round(pt[0]), round(pt[1])))
-        elif near[1] not in ("main", "branch"):
-            on_drain.append((round(pt[0]), round(pt[1]), near[1]))
+    assert any(d.get("role") in ("main", "branch") for d in (M.get("field_ditches") or [])), "the roll drew no supply ditch"
+    stranded, on_drain = law.plank_faults(M)
     assert not stranded, f"plank(s) cross no recorded ditch at all: {stranded[:4]}"
     assert not on_drain, f"plank(s) laid over the collector rather than a supply ditch: {on_drain[:4]}"
 

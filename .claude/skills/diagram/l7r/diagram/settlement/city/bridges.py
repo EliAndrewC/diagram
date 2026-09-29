@@ -120,6 +120,38 @@ def seat_deck(p: Pt, rot: float, span: float, rw: float, wpts: Any, need: float,
     return rot, span, False
 
 
+def crossing_deck(ra: Pt, rb: Pt, rw: float, wa: Pt, wb: Pt, ww: float, wpts: Any, ftpx: float) -> tuple[Pt, float, float, bool]:
+    """The deck `bridges()` lays where the way segment `ra`-`rb` (width `rw`) crosses the water segment `wa`-`wb` of the
+    course `wpts` (width `ww`): (crossing point, rotation, span, seated). The two segments are known to cross.
+
+    LIFTED OUT OF `bridges` (feature 287, M1) so the lane law (`hamletgen/ways/law.py:deck_seats`) asks the SAME question
+    the placer answers, rather than a restatement of it: one predicate per rule, read by the placer and by its test.
+
+    The span SOLVES the oblique crossing (GM 2026-08-09: the old flat +28px slack was eaten by obliquity and left deck
+    CORNERS at the water's edge). Along the deck the water is ww/sin wide, the deck's own width adds rw*|cos|/sin before a
+    corner clears the bank, and past that every corner runs LANDING_FT of real feet onto dry ground (see the constant for the
+    research). sin is clamped: segments_cross guarantees a genuine crossing, but a near-parallel graze would otherwise ask
+    for an absurd deck.
+
+    ...AND THE DECK IS GROWN UNTIL ITS CORNERS ACTUALLY CLEAR THE WATER (2026-08-12). The formula above solves the crossing
+    against the ONE segment the way cuts, and clamps sin at 0.25 so a near-parallel graze cannot ask for an absurd deck.
+    Both are reasonable and both under-size a deck where the watercourse BENDS near the crossing: the check
+    (`bridges_span_their_water`) measures every corner against the whole crossed POLYLINE, so a neighboring segment curving
+    back toward a corner is water the formula never saw. Rather than model that, ask the same question the check asks and
+    lengthen until the answer is yes (`seat_deck`)."""
+    # segments_cross is True only for a genuine (non-parallel) crossing, so seg_intersect always returns a point here
+    p = cast(Pt, seg_intersect(ra, rb, wa, wb))
+    rot = math.degrees(math.atan2(rb[1] - ra[1], rb[0] - ra[0]))
+    _rl = math.hypot(rb[0] - ra[0], rb[1] - ra[1]) or 1.0
+    _wl = math.hypot(wb[0] - wa[0], wb[1] - wa[1]) or 1.0
+    _cs = ((rb[0] - ra[0]) * (wb[0] - wa[0]) + (rb[1] - ra[1]) * (wb[1] - wa[1])) / (_rl * _wl)
+    _sn = max(math.sqrt(max(0.0, 1.0 - _cs * _cs)), 0.25)
+    _span = (ww + rw * abs(_cs)) / _sn + 2 * LANDING_FT / ftpx
+    _need = ww / 2 + CARRIED_LANDING_FLOOR_FT / ftpx  # the check's own carried-way floor
+    rot_used, span, seated = seat_deck(p, rot, _span, rw, wpts, _need, (wa, wb))
+    return p, rot_used, span, seated
+
+
 # THE DITCH CROSSING'S FORM IS A KNOB (269 B21; research/water/290, "What crosses a farm ditch - a plank, a log, or earth
 # over logs?"). Three forms of crossing over small water are attested and the record cannot say which was laid over a
 # paddy ditch: a SINGLE LOG (or one board, the same object in the Chinese definition), LOGS UNDER TRODDEN EARTH (the
@@ -222,35 +254,8 @@ class BridgesMixin:
                     for j in range(len(wpts) - 1):
                         wa, wb = tuple(wpts[j]), tuple(wpts[j + 1])
                         if segments_cross(ra, rb, wa, wb):
-                            # segments_cross is True only for a genuine (non-parallel) crossing, so
-                            # seg_intersect always returns a point here
-                            p = cast(Pt, seg_intersect(ra, rb, wa, wb))
-                            rot = math.degrees(math.atan2(rb[1] - ra[1], rb[0] - ra[0]))
-                            # The span SOLVES the oblique crossing (GM 2026-08-09: the old flat
-                            # +28px slack was eaten by obliquity and left deck CORNERS at the
-                            # water's edge). Along the deck the water is ww/sin wide, the deck's
-                            # own width adds rw*|cos|/sin before a corner clears the bank, and
-                            # past that every corner runs LANDING_FT of real feet onto dry
-                            # ground (see the constant for the research). sin is clamped:
-                            # segments_cross guarantees a genuine crossing, but a near-parallel
-                            # graze would otherwise ask for an absurd deck.
-                            _rl = math.hypot(rb[0] - ra[0], rb[1] - ra[1]) or 1.0
-                            _wl = math.hypot(wb[0] - wa[0], wb[1] - wa[1]) or 1.0
-                            _cs = ((rb[0] - ra[0]) * (wb[0] - wa[0]) + (rb[1] - ra[1]) * (wb[1] - wa[1])) / (_rl * _wl)
-                            _sn = max(math.sqrt(max(0.0, 1.0 - _cs * _cs)), 0.25)
-                            _span = (ww + rw * abs(_cs)) / _sn + 2 * LANDING_FT / self.ftpx
-                            # ...AND THE DECK IS GROWN UNTIL ITS CORNERS ACTUALLY CLEAR THE WATER
-                            # (2026-08-12). The formula above solves the crossing against the ONE
-                            # segment the way cuts, and clamps sin at 0.25 so a near-parallel graze
-                            # cannot ask for an absurd deck. Both are reasonable and both under-size
-                            # a deck where the watercourse BENDS near the crossing: the check
-                            # (`bridges_span_their_water`) measures every corner against the whole
-                            # crossed POLYLINE, so a neighboring segment curving back toward a
-                            # corner is water the formula never saw. Rather than model that, ask the
-                            # same question the check asks and lengthen until the answer is yes.
-                            _need = ww / 2 + CARRIED_LANDING_FLOOR_FT / self.ftpx  # the check's own carried-way floor
-
-                            _rot_used, _span, _seated = seat_deck(p, rot, _span, rw, wpts, _need, (wa, wb))
+                            # the crossing SOLVED, never eyeballed - lifted to `crossing_deck` (feature 287) so the lane law asks the same question
+                            p, _rot_used, _span, _seated = crossing_deck(ra, rb, rw, wa, wb, ww, wpts, self.ftpx)
                             # ONE DECK PER CROSSING PLACE. Two ways that cross the same ditch a few
                             # feet apart each ask for a bridge, and the two decks are then drawn on
                             # top of one another - `features_do_not_overlap` reports it as

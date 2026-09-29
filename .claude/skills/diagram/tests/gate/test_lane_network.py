@@ -26,23 +26,14 @@ import os
 
 import pytest
 
-from l7r.diagram.hamletgen.ways.geom import _TOUCH_GAP, _components, end_serves, steading_footprints
+from l7r.diagram.hamletgen.ways import law
 from tests import rolls
 from tests.gate import _pool
 
 SPEC = rolls.REFERENCE  # the pool's brief (feature 215)
 
-JOIN_TOL = 4.0
-"""How near a lane end must come to another lane before the two count as one network. The web's own join
-tolerance; a looser bar would call a near-miss a junction, which is the failure the rule exists to catch."""
-
-DOUBLE_BACK_DEG = 140.0
-"""A turn this sharp is a path doubling back on itself - nobody walks that. Below it a lane is bending,
-which is what a worn line does around an obstacle."""
-
-BEND_RUN_FT = 40.0
-"""Two real turns closer together than this is a kink rather than a bend: a walker rounding something
-takes one arc, not a zig and an immediate zag."""
+# THE RULES' THRESHOLDS LIVE WITH THE RULES (feature 287, M1): the join tolerance, the double-back turn and the bend's run
+# are `law.JOIN_TOL`, `law.DOUBLE_BACK_DEG` and `law.BEND_RUN_FT`, beside the predicates every test below calls.
 
 
 def _seg_dist(px: float, py: float, a, b) -> float:
@@ -82,33 +73,15 @@ def _field_rings(M) -> list:
     return worked_ground_rings(M)  # the sweep's own field, dry hem included (feature 261)
 
 
-def _ground(M):
-    from l7r.diagram.hamletgen.ways.geom import worked_ground
-
-    return worked_ground(M)  # the same field AS ITS BUND, with the drawn rice: an end arrives on it (269 B04)
-
-
-def _dangling_ends(M, ways) -> list:
-    """Every internal lane end that reaches nothing, read through the PLACER'S OWN predicate.
-
-    `end_serves` is the body `_trim_to_service` trims with, which is what makes this a check on the
-    placer rather than a second opinion about it (the skill's standing rule: "placement and its check
-    must read the SAME source"). It had been a restatement, and it drifted twice - at the bar, which
-    feature 227 fixed with `WAY_END_REACH_FT`, and then at what ARRIVAL is: both sides measured a
-    farmhouse by its center and neither could see the garden fence a tread had actually stopped at,
-    which is what `STEADING_ARRIVAL_FT` answers."""
-    out = []
-    centers = [(float(h["x"]), float(h["y"])) for h in M.get("houses") or []]
-    steadings = steading_footprints(M)
-    ground = _ground(M)
-    for i, ln in enumerate(M.get("lanes") or []):
-        if ln.get("connector") or i >= len(ways) or len(ways[i]) < 2:
-            continue
-        others = [sg for k, o in enumerate(ways) if k != i and len(o) >= 2 for sg in zip(o, o[1:], strict=False)]
-        for end in (ways[i][0], ways[i][-1]):
-            if not end_serves(end, others, centers, ground, steadings):
-                out.append((round(end[0]), round(end[1])))
-    return sorted(set(out))
+def _dangling_ends(M) -> list:
+    """Every internal lane end that reaches nothing, read through the lane law's predicate (`law.dangling_ends`, feature
+    287 M1), which asks the PLACER'S OWN `end_serves` - the body `_trim_to_service` trims with, which is what makes this a
+    check on the placer rather than a second opinion about it (the skill's standing rule: "placement and its check must
+    read the SAME source"). It had been a restatement, and it drifted twice - at the bar, which feature 227 fixed with
+    `WAY_END_REACH_FT`, and then at what ARRIVAL is: both sides measured a farmhouse by its center and neither could see
+    the garden fence a tread had actually stopped at, which is what `STEADING_ARRIVAL_FT` answers. Since 287 the other
+    ways are asked less the one at the lane's own far end (the pool test's stronger set, one predicate for both)."""
+    return law.dangling_ends(M)
 
 
 def test_every_lane_belongs_to_one_network(lanes) -> None:
@@ -116,22 +89,9 @@ def test_every_lane_belongs_to_one_network(lanes) -> None:
     the settlement. A lane in its own component is a path that starts nowhere a walker can reach - it is
     ink drawn where a path would look right, which is the difference between a map of a place and a
     picture of one."""
-    M, ways = lanes
-    parent = list(range(len(ways)))
-
-    def find(i: int) -> int:
-        while parent[i] != i:
-            parent[i] = parent[parent[i]]
-            i = parent[i]
-        return i
-
-    for i in range(len(ways)):
-        for j in range(i + 1, len(ways)):
-            touch = any(_min_dist(q, ways[j]) <= JOIN_TOL for q in (ways[i][0], ways[i][-1])) or any(_min_dist(q, ways[i]) <= JOIN_TOL for q in (ways[j][0], ways[j][-1]))
-            if touch:
-                parent[find(i)] = find(j)
-    roots = {find(i) for i in range(len(ways))}
-    assert len(roots) == 1, f"the lanes fall into {len(roots)} disconnected networks - you cannot walk between them"
+    M, _ways_all = lanes
+    n = law.lane_networks(M)
+    assert n == 1, f"the lanes fall into {n} disconnected networks - you cannot walk between them"
 
 
 def test_no_lane_doubles_back_or_kinks(lanes) -> None:
@@ -139,28 +99,7 @@ def test_no_lane_doubles_back_or_kinks(lanes) -> None:
     itself, and it does not zig and immediately zag. Both shapes read as a routing artifact rather than as
     ground somebody walks, which is exactly what they are when they appear."""
     M, _ways_all = lanes
-    bad = []
-    for ln in M.get("lanes") or []:
-        if ln.get("connector"):
-            continue
-        p = [(float(a), float(b)) for a, b in (ln.get("pts") or [])]
-        if len(p) < 3:
-            continue
-        turns = []
-        for k in range(1, len(p) - 1):
-            v1 = (p[k][0] - p[k - 1][0], p[k][1] - p[k - 1][1])
-            v2 = (p[k + 1][0] - p[k][0], p[k + 1][1] - p[k][1])
-            n1, n2 = math.hypot(*v1), math.hypot(*v2)
-            if n1 < 1e-6 or n2 < 1e-6:
-                continue
-            deg = math.degrees(math.acos(max(-1.0, min(1.0, (v1[0] * v2[0] + v1[1] * v2[1]) / (n1 * n2)))))
-            if deg >= DOUBLE_BACK_DEG:
-                bad.append(("doubles back", round(p[k][0]), round(p[k][1])))
-            elif deg >= 50.0:
-                turns.append((k, deg))
-        for (ka, _da), (kb, _db) in zip(turns, turns[1:], strict=False):
-            if sum(math.dist(p[j], p[j + 1]) for j in range(ka, kb)) <= BEND_RUN_FT:
-                bad.append(("kinks", round(p[ka][0]), round(p[ka][1])))
+    bad = law.lanes_that_kink(M)
     assert not bad, f"lane(s) do not bend like paths: {bad[:4]}"
 
 
@@ -169,24 +108,9 @@ def test_no_two_lanes_meet_end_to_end_in_a_fold_and_no_lane_ends_in_a_hook(lanes
     one lane turning back at the point the next begins - is refused here, and so is a hook at a lane's end (GM
     2026-09-26: *"they are not going to walk in one direction and then turn at a 30-degree angle to keep
     walking"*). The joint rule and the hook thresholds are the engine's own (`hamletgen/ways/joints.py`)."""
-    from l7r.diagram.hamletgen.ways.geom import _turn_deg
-    from l7r.diagram.hamletgen.ways.joints import _HOOK_DEG, _HOOK_FT, joints, oriented
-
     M, _ways_all = lanes
-    web = M.get("lanes") or []
-    folds = []
-    for i, ei, j, ej in joints(web):
-        x, y = oriented(web, i, ei, j, ej)
-        if _turn_deg(x[-2], x[-1], y[1]) >= DOUBLE_BACK_DEG:
-            folds.append((round(x[-1][0]), round(x[-1][1])))
-    hooks = []
-    for ln in web:
-        p = [(float(a), float(b)) for a, b in (ln.get("pts") or [])]
-        if ln.get("connector") or len(p) < 3:
-            continue
-        for q in (p, p[::-1]):
-            if math.dist(q[-2], q[-1]) <= _HOOK_FT and _turn_deg(q[-3], q[-2], q[-1]) >= _HOOK_DEG:
-                hooks.append((round(q[-2][0]), round(q[-2][1])))
+    folds = law.folded_joints(M.get("lanes") or [])
+    hooks = law.hooked_ends(M)  # every lane, the connector included - the stricter of the two tests' readings (287 M1)
     assert not folds, f"two lanes meet end to end and double back at {folds[:4]}"
     assert not hooks, f"a lane ends in a hook at {hooks[:4]}"
 
@@ -195,9 +119,9 @@ def test_every_lane_end_reaches_something_worth_walking_to(lanes) -> None:
     """`lanes_reach_something`. A path exists because somebody had a reason to go there. An end that meets
     no other way, no house and no field is a line that stops in open ground, and there is nothing at the
     end of it for anyone to have worn the path to."""
-    M, ways = lanes
+    M, _ways_all = lanes
     assert (M.get("houses") or []) and any(len(o) >= 2 for o in _field_rings(M)), "the roll drew no house or no outlined field"
-    dangling = _dangling_ends(M, ways)
+    dangling = _dangling_ends(M)
     assert not dangling, f"lane end(s) stop in open ground at {dangling[:4]} - nothing wore that path"
 
 
@@ -206,24 +130,9 @@ def test_a_lane_does_not_break_mid_run(lanes) -> None:
     resumes on the far side, which on the page reads as a path that vanishes and reappears. The physical
     claim is simpler than the geometry: ground either carries a path or it does not, and a gap in the ink
     with nothing in the gap is the drawing forgetting to finish the line."""
-    M, ways = lanes
-    solid = []
-    for key in ("houses", "farm_sheds", "byres"):
-        for r in M.get(key) or []:
-            if "x" in r and "w" in r:
-                hw, hh = r["w"] / 2, r["h"] / 2
-                solid.append((r["x"] - hw, r["y"] - hh, r["x"] + hw, r["y"] + hh))
-    assert solid, "the roll placed nothing solid, so a break would have nothing to be explained by"
-    gaps = []
-    for p in ways:
-        for i in range(len(p) - 1):
-            gap = math.dist(p[i], p[i + 1])
-            if gap <= 60.0:
-                continue
-            mid = ((p[i][0] + p[i + 1][0]) / 2, (p[i][1] + p[i + 1][1]) / 2)
-            if not any(x0 <= mid[0] <= x1 and y0 <= mid[1] <= y1 for x0, y0, x1, y1 in solid):
-                continue
-            gaps.append((round(mid[0]), round(mid[1])))
+    M, _ways_all = lanes
+    assert law.solid_boxes(M), "the roll placed nothing solid, so a break would have nothing to be explained by"
+    gaps = law.breaks_mid_run(M)
     assert not gaps, f"lane(s) run straight through something solid at {gaps[:4]}"
 
 
@@ -232,21 +141,10 @@ def test_a_farmhouse_discharges_one_lane_end_not_three(lanes) -> None:
     is for. What it may not do is let one farmhouse absolve three separate lane ends, because then the
     fabric grows a fan of stubs all pointing at the same door and the settlement reads as a diagram of
     frontage rather than as ground."""
-    M, ways = lanes
-    houses = M.get("houses") or []
-    assert houses, "the roll placed no house"
-    fronted: dict[int, int] = {}
-    for i, ln in enumerate(M.get("lanes") or []):
-        if ln.get("connector") or i >= len(ways) or len(ways[i]) < 2:
-            continue
-        for end in (ways[i][0], ways[i][-1]):
-            if min((_min_dist(end, o) for k, o in enumerate(ways) if k != i and len(o) >= 2), default=1e9) <= JOIN_TOL:
-                continue  # it met another way; that end is discharged by the junction
-            best = min(range(len(houses)), key=lambda h: math.hypot(end[0] - houses[h]["x"], end[1] - houses[h]["y"]))
-            if math.hypot(end[0] - houses[best]["x"], end[1] - houses[best]["y"]) <= 80.0:
-                fronted[best] = fronted.get(best, 0) + 1
-    assert fronted, "no lane end fronted a house, so this rule judged nothing"
-    greedy = {h: n for h, n in fronted.items() if n > 2}
+    M, _ways_all = lanes
+    assert M.get("houses") or [], "the roll placed no house"
+    assert law.fronted_ends(M), "no lane end fronted a house, so this rule judged nothing"
+    greedy = law.doorstep_ends(M)
     assert not greedy, f"house(s) discharge more than two lane ends apiece: {greedy}"
 
 
@@ -294,11 +192,10 @@ def test_every_shipped_hamlets_lanes_are_one_network_at_the_ink_tolerance(manife
     costs nothing to ask of every map."""
     with open(manifest) as fh:
         M = json.load(fh)
-    ways = [[(float(x), float(y)) for x, y in ln["pts"]] for ln in M.get("lanes") or [] if len(ln.get("pts") or []) >= 2]
-    if len(ways) < 2:
+    if sum(1 for ln in M.get("lanes") or [] if len(ln.get("pts") or []) >= 2) < 2:
         pytest.skip("fewer than two lanes")
-    comp = _components(ways, _TOUCH_GAP)
-    assert len(set(comp)) == 1, f"{os.path.basename(manifest)}: {len(set(comp))} lane networks at {_TOUCH_GAP} ft"
+    n = law.lane_networks(M)
+    assert n == 1, f"{os.path.basename(manifest)}: {n} lane networks at {law.JOIN_TOL} ft"
 
 
 @pytest.mark.parametrize("manifest", sorted(glob.glob(os.path.join(_POOL, "hamlets", "*", "*.json"))), ids=os.path.basename)
@@ -314,5 +211,5 @@ def test_every_shipped_hamlets_lane_ends_reach_something(manifest: str) -> None:
     if not any(len(p) >= 2 for p in ways):
         pytest.skip("no drawn lane")
     assert M.get("houses"), f"{os.path.basename(manifest)} records no house, so the end rule would judge nothing"
-    dangling = _dangling_ends(M, ways)
+    dangling = _dangling_ends(M)
     assert not dangling, f"{os.path.basename(manifest)}: lane end(s) reach nothing at {dangling[:4]}"
