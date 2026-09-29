@@ -539,6 +539,8 @@ dry-field conversion	kanden
 ds/m	dS/m
 dujiangyan	Dujiangyan
 dunhuang	Dunhuang
+duty cycle	duty cycle
+duty cycles	duty cycle
 duty of water	water duty
 dwarf bamboo	sasa
 dōba	dōba
@@ -953,6 +955,7 @@ high-volatile	volatiles
 hikae-no-ma	hikae-no-ma
 hikan	hikan
 hikiri-ichi	hikiri-ichi
+hill-and-plain castle	hill-and-plain castle
 hill-style	tsukiyama
 hinin	hinin
 hinoki	hinoki
@@ -967,6 +970,7 @@ hipped roof	hip roof
 hipposandal	hipposandal
 hipposandals	hipposandal
 hirakata	hirakata
+hirayamajiro	hill-and-plain castle
 hirazamurai	heishi
 hiro	hiro
 hiroen	hiroen
@@ -1081,6 +1085,7 @@ important cultural landscape	Important Cultural Landscape
 important cultural landscapes	Important Cultural Landscape
 important cultural properties	Important Cultural Property
 important cultural property	Important Cultural Property
+in spate	spate
 inari	Inari
 inashiro	Inashiro
 initiate	initiate
@@ -1564,6 +1569,8 @@ micro-highs	micro-high
 midaidokoro	midaidokoro
 middle moat	middle moat
 middle moats	middle moat
+military commissioner	military commissioner
+military commissioners	military commissioner
 mimizuka	ear mound
 miner's	siege mining
 ming	Ming dynasty
@@ -1898,6 +1905,8 @@ preceptor	preceptor
 preceptors	preceptor
 precinct	precinct
 precincts	precinct
+prefect	prefect
+prefects	prefect
 prefectural cities	prefectural city
 prefectural city	prefectural city
 prefecture	prefectural city
@@ -2273,6 +2282,9 @@ sotobori	sotobori
 south town magistrate	town magistrate
 southern song	Song dynasty
 sozu	sōzu
+spate	spate
+special historic site	Special Historic Site
+special historic sites	Special Historic Site
 species richness	species richness
 sphere	Sphere
 spillway	spillway
@@ -2783,6 +2795,7 @@ yokogi	yokogi
 yokogi-uchi	yokogi
 yomadori	four-room type
 yonin	yonin
+yonnomaru	yonnomaru
 yoriai	yoriai
 yoriai-rank	yoriai
 yoriai-seki	yoriai-seki

@@ -10758,5 +10758,53 @@
    "clay-mill",
    "tsuchiusu"
   ]
+ },
+ "yonnomaru": {
+  "def": "The fourth bailey of a castle, lying beyond the sannomaru; Hirosaki Castle had one among its six baileys.",
+  "variants": [
+   "yonnomaru"
+  ]
+ },
+ "hill-and-plain castle": {
+  "def": "A castle built on a low hill rising from a plain, its inner baileys on the rise and its outer baileys spread over the flat ground around it - a type between the mountain castle and the flat-ground castle.",
+  "variants": [
+   "hill-and-plain castle",
+   "hirayamajiro"
+  ]
+ },
+ "Special Historic Site": {
+  "def": "The highest grade of Japan's national designation of historic sites, above an ordinary Historic Site, given to those judged of the greatest significance.",
+  "variants": [
+   "Special Historic Site",
+   "Special Historic Sites"
+  ]
+ },
+ "duty cycle": {
+  "def": "How much of the time a gate stands open, shut or partway between. A wet moat's gates rest partly raised and are trimmed a few inches, rather than being switched open and shut.",
+  "variants": [
+   "duty cycle",
+   "duty cycles"
+  ]
+ },
+ "spate": {
+  "def": "A river in flood after heavy rain, running high and carrying a heavy load of silt. Canal and moat intakes were wound down or rested while it lasted.",
+  "variants": [
+   "spate",
+   "in spate"
+  ]
+ },
+ "prefect": {
+  "def": "In imperial China, the official who governed a prefecture and its seat city, including public works such as dredging the city moat.",
+  "variants": [
+   "prefect",
+   "prefects"
+  ]
+ },
+ "military commissioner": {
+  "def": "In Song China, a regional official with charge of a frontier circuit's defense and civil affairs (Chinese jinglüe shi). At Guangzhou this included the city's moat.",
+  "variants": [
+   "military commissioner",
+   "military commissioners"
+  ]
  }
 }
