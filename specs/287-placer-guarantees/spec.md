@@ -15,10 +15,16 @@ property no single placer owned became a seed test on a cached roll - the tests 
 Feature 166 left one kind of rule outside the placers: a property of a FINISHED map, asserted by a test that rolls or reads a
 map and checks the result. Such a rule holds on the seeds the tests roll; nothing stops the next seed, or any change that
 moves a map, from breaking it - feature 284's field-search lever moved the pool's maps within every tolerance and five of
-these rules broke. A census of every test that reads a generated map (research R1: 195 tests, five readers) found 118
-placement rules asserted that way: the placer already makes a violation impossible for 31; for 53 it guards some cases and
-not others; for 34 nothing prevents a violation. This feature makes each of those 87 a guarantee of the placer that decides
-it - the five of 284 among them - so that no roll of any spec can produce the violation.
+these rules broke. And the generator still checks one rule on the finished map itself and re-rolls on it (a stranded
+farmhouse), which is a check, not a guarantee. The GM: *"make it so that it is impossible for those things to happen ...
+guaranteed by the placement algorithm rather than just happening to work on particular seeds"*, with *"literally any other
+things of this nature"* included, and the tests no longer needed afterwards retired.
+
+The scope, from three sources (research R1-R3): every placement rule asserted on a finished map (a census of the tests: 118
+rules); every placer fallback that knowingly emits a compromise of a recorded rule (a census of the engine's code); and every
+violation already on record but excused (a test's skip list, a strict xfail, a future-work entry). Each becomes a guarantee
+made where the placer decides - so no roll of any spec can produce the violation - with a unit test of that placer; and the
+finished-map tests it makes unnecessary are retired.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -31,75 +37,104 @@ repairs or never emits it.
 
 **Acceptance Scenarios**:
 
-1. **Given** any of the 87 rules, **When** its owning placer is given inputs that would have produced a violation, **Then**
+1. **Given** any rule in scope, **When** its owning placer is given inputs that would have produced a violation, **Then**
    the placer's output does not violate the rule, and a unit test of the placer shows it.
-2. **Given** the pool and a cohort rolled under perturbations that move every map (feature 284's withdrawn A* router and
-   field-search lever, applied as probes), **When** every finished-map rule is checked, **Then** none fails.
+2. **Given** the pool and cohort seeds 1-48 rolled under perturbations that move every map (feature 284's withdrawn A*
+   router and field-search lever, applied as probes), **When** every placement rule is checked, **Then** none fails, and no
+   roll needed a re-roll to get there.
 
 ### User Story 2 - What a later stage does cannot undo an earlier guarantee (Priority: P1)
 
 **Acceptance Scenarios**:
 
 1. **Given** a stage that rewrites what an earlier placer drew (the census names `stage_crossings` / `square_crossings`,
-   which rewrite the lanes after the web and the woods), **When** it runs, **Then** every guarantee the earlier placers
-   made about what it rewrites still holds.
+   which rewrite the lanes after the web and the woods; `round_the_brooks`, which reshapes the brook after the woods),
+   **When** it runs, **Then** every guarantee the earlier placers made about what it rewrites still holds.
+
+### User Story 3 - The tests cost what the guarantees need (Priority: P2)
+
+**Acceptance Scenarios**:
+
+1. **Given** a finished-map test whose rule a placer now guarantees with its own unit test, **When** the feature lands,
+   **Then** the finished-map test is retired, and the gate no longer rolls or reads a map for it.
 
 ### Edge Cases
 
-- A placer that has no legal candidate left: it does not emit a violating one. What it does instead - drop the feature, draw
-  it smaller, or place it by a stated fallback - is decided per rule and recorded (FR-005).
-- A rule that is several placers' joint result: one owner (the last placer whose decision can break it) holds the guarantee,
-  and the earlier ones do not break it after the owner has run.
-- A hand-drawn map (the legacy pool, a hand Mode A sheet): no placer made it, so no placer can guarantee it; only the
-  generated sheets are in scope (research R1's Mode A row).
+- A placer with no legal candidate left does not emit a violating one. What it does instead is decided per rule and
+  recorded (FR-005).
+- A rule several placers produce jointly: one owner (the last placer whose decision can break it) holds the guarantee, and
+  no placer after it can break it (FR-002).
+- Hand-drawn geometry (the legacy pool; a hand Mode A sheet's buildings) was made by no placer and is out of scope. What a
+  placer puts ON a hand sheet - the captions the one caption placer seats (feature 266) - is in scope. The rows this puts
+  out: the hand-drawing half of `tests/test_mode_a_sheets.py::test_every_mode_a_sheet_passes_its_checks` (the two generated
+  sheets are in).
+- A tier no live generator produces (the town and city tiers, whose maps are frozen legacy exhibits): its code places
+  nothing that ships, so its fallbacks are recorded in the census but not converted; a live generator's code is in scope
+  whatever module it lives in.
 
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
 
-- **FR-001 Every rule in research R1's table becomes a guarantee of its owner.** For each of the 87 rows, the owning placer
-  (or, where the census names several, the last whose decision can break the rule) is changed so that its output cannot
-  violate the rule: it refuses the violating candidate and takes the next, repairs the result, or constrains the candidate
-  set so no violating candidate is offered. A rule found `partial` is completed for the cases the census found unguarded.
-- **FR-002 A later stage cannot undo a guarantee.** A stage that rewrites what an earlier placer drew either re-applies the
-  earlier guarantees to what it rewrites, or is moved before the placer whose guarantee it could break.
-- **FR-003 The placer and its test read one predicate.** Where the census found a placer and its test measuring different
-  things (the wells' spacing, the eave gap on a turned house, the field pond's inset, the flooded tint's ring, and any other
-  found in the work), the rule is written once and both read it; where they disagree, the research or the GM's ruling behind
-  the rule decides which reading is right.
-- **FR-004 Each guarantee has a unit test on constructed inputs**, including the input that would have produced the
-  violation, proving the placer refuses, repairs or cannot emit it (the engine's rule since 166: a rule about a map is a test
-  of the placer that makes it).
-- **FR-005 No fallback emits a violation.** Where a placer runs out of legal candidates, what it does is decided per rule and
-  recorded at the point of change and in the Decisions table - never "emit the least-bad violating one", which the census
-  found in several placers (the sink's least-bad off-map route among them).
-- **FR-006 The finished-map tests stay, as end-to-end witnesses.** Each of the 118 keeps its test; after this feature a
-  failure of one means a placer's guarantee is broken, not that a seed was unlucky.
-- **FR-007 The census is taken again at the end** over the same tests plus any added, by the same method, and every map-rule
-  reads `yes` - its placer's mechanism cited.
-- **FR-008 Maps may move.** A guarantee that changes what a placer emits moves maps; that is within the GM's standing ruling
-  (map changes within the rules are wanted). Every moved pool map is regenerated, keeps its households, forms and kinds,
-  and passes every rule; its before and after is recorded in the research.
+- **FR-001 Every rule in scope becomes a guarantee of its owner.** The scope is research R1's placement rules (every
+  map-rule row - the 118, not only those the census read as unguarded, since a reader's `yes` is a judgment and one was
+  wrong: the copse's bank), R2's placer fallbacks and R3's excused violations, and it names these five explicitly, whatever
+  any census verdict: `test_a_bund_does_not_build_a_flight_of_steps`, `test_no_three_woodland_parcels_stand_in_a_ruled_row`,
+  `test_every_copse_clump_stands_on_the_bank_of_a_house_within_reach`,
+  `test_no_brook_segment_lies_on_a_screen_axis_but_the_tap_run`, `test_every_pool_hamlet_has_its_belt_on_the_regional_northwest`.
+  A row that bundles several rules is one guarantee and one test per rule. The owning placer is changed so its output cannot
+  violate the rule: it refuses the violating candidate and takes the next, repairs the result, or constrains the candidates
+  so no violating one is offered.
+- **FR-002 The guarantee is made where the placer decides.** A check of a finished manifest or SVG that triggers a
+  whole-map re-roll, a raise or a retry does not count: `generate`'s re-roll loop on `farmhouses_reach_a_way` is replaced by
+  the seat and way placers guaranteeing that every seated farmhouse is reached, and no census sketch that says "feed it to the
+  driver's re-roll" or "check the finished map and raise" is taken as written. A stage that rewrites what an earlier placer
+  drew re-applies the earlier guarantees to what it rewrites, or moves before the placer whose guarantee it could break.
+- **FR-003 The placer and its test read one predicate.** Where a placer and its test measure different things (the wells'
+  spacing, the eave gap on a turned house, the field pond's inset, the flooded tint's ring, the woodland's dry-ground sample,
+  the drip lines, and any other found in the work), the rule is written once and both read it; where they disagree, the
+  research or the GM's ruling behind the rule decides which reading is right.
+- **FR-004 Each rule has a unit test of its owning placer** on constructed inputs, including the input that would have
+  produced the violation, proving the placer refuses, repairs or cannot emit it - every rule in scope, the 118 included.
+- **FR-005 No fallback emits a violation.** Where a placer runs out of legal candidates, what it does is decided per rule
+  and recorded at the point of change and in the Decisions table - never "keep the least-bad violating one". Every such
+  fallback R2 finds is converted.
+- **FR-006 Excused violations end.** Each test-side carve-out that excuses a known violation (the `ACREAGE_SHORT` seeds, the
+  seed-43 strict xfail, and any R3 finds) is removed and the test asserts the rule on those seeds; a carve-out that is part
+  of the rule itself (the polder's cell band) stays.
+- **FR-007 The tests no longer needed are retired** (the GM, 2026-09-29: *"retire any unit tests which are no longer
+  necessary after this refactor, especially ones which impact performance without any longer being needed to guarantee
+  correctness"*). A finished-map test whose rule its placer now guarantees, with the placer's own unit test proving it, is
+  retired; the rolls and roster rows only it needed go with it. What the gate keeps is recorded with its reason; the
+  end-to-end proof is SC-003's sweep, run at acceptance.
+- **FR-008 The census is taken again at the end**, over the same selection by a re-runnable script (`census_select.py`) and
+  the same judgment, and every placement rule reads guaranteed - its placer's mechanism cited.
+- **FR-009 Maps may move.** A guarantee that changes what a placer emits moves maps, within the GM's standing ruling (map
+  changes within the rules are wanted). Every moved pool map is regenerated, keeps its households, forms and kinds, and
+  passes every rule; its before and after is recorded in the research.
 
 ## Success Criteria *(mandatory)*
 
-- **SC-001** (FR-001, FR-007): the closing census reads `yes` on every map-rule test (118, and any added), each with its
-  placer's mechanism named; 0 `partial`, 0 `no`.
-- **SC-002** (FR-004): every one of the 87 rules has a unit test of its owning placer on constructed inputs that include a
+- **SC-001** (FR-001, FR-008): the closing census reads guaranteed on every placement rule, each with its placer's
+  mechanism named; none partial, none unguarded; every R2 fallback converted; every R3 excuse removed.
+- **SC-002** (FR-004): every rule in scope has a unit test of its owning placer on constructed inputs that include a
   violating case.
-- **SC-003** (US1 scenario 2): the pool and cohort seeds 1-48 rolled with feature 284's A* router and field-search lever
-  applied as probes (neither ships) pass every finished-map rule - the perturbation that broke five rules in 284 breaks none.
-- **SC-004** (FR-008): `make done` green; every live pool map regenerates and passes every rule; `make cohort N=24` shows no
-  newly failing seed against main; every moved map's before and after is in the research.
-- **SC-005** (constitution VI): `make perf-report` against the feature's start bookend; an increase owes its record, as
-  every feature's does.
+- **SC-003** (US1 scenario 2): the pool and cohort seeds 1-48, rolled plain and again with feature 284's A* router and
+  field-search lever applied as probes (neither ships), pass every placement rule, and no roll re-rolls.
+- **SC-004** (FR-006, FR-009): `make done` green; every live pool map regenerates and passes every rule; `make cohort
+  N=24` shows zero failing seeds on any placement rule (not merely none newly failing); every moved map's before and after
+  is in the research.
+- **SC-005** (FR-007): the gate's test phase does not get slower for the guarantees - the finished-map tests retired, what
+  remains of them recorded with its reason, and the gate's cost measured before and after (`make audit`).
+- **SC-006** (constitution VI): `make perf-report` against the feature's start bookend; an increase owes its record.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
-| The finished-map tests stay as end-to-end witnesses beside the placer tests | map drawing convention (a test policy: both kinds of proof) | FR-006 | this spec |
+| A finished-map test whose rule its placer guarantees is retired; SC-003's sweep is the end-to-end proof at acceptance | map drawing convention (a test policy) | the GM, 2026-09-29 | FR-007 |
 | Per-rule fallbacks when a placer runs out of legal candidates | decided per rule in the plan | FR-005 | each point of change |
+| The town and city tiers' fallbacks recorded, not converted: no live generator produces those tiers | map drawing convention (scope) | Edge Cases | research R2 |
 
 ## Assumptions
 

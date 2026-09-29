@@ -18,3 +18,9 @@ The GM:
 > so that each and every one of them is guaranteed by the placement algorithm rather than just happening to work on
 > particular seeds. also if there are literally any other things of this nature where our placement algorithm is not
 > guaranteeing correct behavior, then we should include those along with this feature as well. Thanks.
+
+## The GM, on starting the work (2026-09-29)
+
+> Sounds great, please work on feature 287 and take it start to finish until all placement rules are guaranteed by the
+> placer.  Make sure to retire any unit tests which are no longer necessary after this refactor, especially ones which
+> impact performance without any longer being needed to guarantee correctness.
